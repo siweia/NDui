@@ -1,0 +1,21 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+<Script file="modules\Damage.lua"/>
+<Script file="modules\Threat.lua"/>
+<Script file="modules\Healing.lua"/>
+<Script file="modules\Overhealing.lua"/>
+<Script file="modules\TotalHealing.lua"/>
+<Script file="modules\DamageTaken.lua"/>
+<Script file="modules\Deaths.lua"/>
+<Script file="modules\Debuffs.lua"/>
+<Script file="modules\Dispels.lua"/>
+<Script file="modules\Interrupts.lua"/>
+<Script file="modules\Enemies.lua"/>
+<Script file="modules\Power.lua"/>
+<Script file="modules\CC.lua"/>
+<Script file="modules\Tweaks.lua"/>
+<Script file="modules\Themes.lua"/>
+
+</Ui>
+

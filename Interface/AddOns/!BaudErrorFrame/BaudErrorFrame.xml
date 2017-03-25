@@ -1,0 +1,383 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+	<Script file="BaudErrorFrame.lua"/>
+	<Button name="BaudErrorFrameEntryTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="1" y="16"/>
+		</Size>
+		<Anchors>
+			<Anchor point="LEFT">
+				<Offset>
+					<AbsDimension x="13"/>
+				</Offset>
+			</Anchor>
+			<Anchor point="RIGHT">
+				<Offset>
+					<AbsDimension x="-13"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="$parentText" setAllPoints="true" justifyH="LEFT" inherits="GameFontHighlight"/>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnClick>
+				BaudErrorFrameEntry_OnClick(self);
+			</OnClick>
+		</Scripts>
+	</Button>
+	<Button name="BaudErrorFrameMinimapButton" frameStrata="DIALOG" parent="UIParent" movable="true" hidden="true" inherits="MiniMapButtonTemplate">
+		<Size>
+			<AbsDimension x="25" y="25"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentIcon">
+					<Size>
+						<AbsDimension x="20" y="20"/>
+					</Size>
+					<Anchors>
+						<Anchor point="CENTER">
+							<Offset>
+								<AbsDimension x="-1" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<FontString name="BaudErrorFrameMinimapCount" font="fonts\ARKai_T.TTF" outline="false" monochrome="false" text="">
+					<Color r="0.39" g="0.58" b="0.92" a="0.8"/>
+					<FontHeight>
+						<AbsValue val="18"/>
+					</FontHeight>
+					<Anchors>
+						<Anchor point="CENTER" relativeTo="$parentIcon">
+							<Offset>
+								<AbsDimension y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				self:RegisterForClicks("LeftButtonUp");
+				self:SetFrameLevel(self:GetFrameLevel()+1);
+			</OnLoad>
+			<OnEnter>
+				BaudErrorFrameMinimapButton_OnEnter(self);
+			</OnEnter>
+			<OnLeave>
+				BaudErrorFrameMinimapButton_OnLeave(self);
+			</OnLeave>
+			<OnClick>
+				BaudErrorFrame:Show();
+			</OnClick>
+			<OnUpdate>
+				BaudErrorFrameMinimapButton_OnUpdate(self);
+			</OnUpdate>
+		</Scripts>
+	</Button>
+	<Frame name="BaudErrorFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true">
+		<Size>
+			<AbsDimension x="600" y="500"/>
+		</Size>
+		<Anchors>
+		<Anchor point="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Background" tile="false">
+			<Color r="0" g="0" b="0" a="0.8"/>
+			<BackgroundInsets>
+				<AbsInset left="-1" right="-1" top="-1" bottom="-1"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="0"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="1"/>
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture name="$parentHeader" file="" alpha="0">
+					<Size>
+						<AbsDimension x="300" y="64"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension y="5"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<FontString inherits="GameFontNormal" text="SHOW_LUA_ERRORS">
+					<Anchors>
+						<Anchor point="TOP" relativeTo="$parentHeader">
+							<Offset>
+								<AbsDimension y="-14"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame name="$parentListScrollBox">
+				<Size>
+					<AbsDimension x="1" y="148"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="40" y="-40"/>
+						</Offset>
+					</Anchor>
+					<Anchor point="RIGHT">
+						<Offset>
+							<AbsDimension x="-40"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Background" tile="true">
+					<EdgeSize>
+						<AbsValue val="1"/>
+					</EdgeSize>
+					<BackgroundInsets>
+						<AbsInset left="-1" right="-1" top="-1" bottom="-1"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="$parentTitle" inherits="GameFontNormal" text="ERRORS">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="1"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<ScrollFrame name="$parentScrollBar" inherits="FauxScrollFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset>
+									<AbsDimension x="0" y="-4"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset>
+									<AbsDimension x="-26" y="4"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnVerticalScroll>
+								FauxScrollFrame_OnVerticalScroll(16, BaudErrorFrameScrollBar_Update);
+							</OnVerticalScroll>
+						</Scripts>
+					</ScrollFrame>
+					<Frame name="$parentHighlight" hidden="true">
+						<Size>
+							<AbsDimension x="1" y="16"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT">
+								<Offset>
+									<AbsDimension x="8"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="RIGHT">
+								<Offset>
+									<AbsDimension x="-8"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture name="$parentTexture" file="Interface\Buttons\UI-Listbox-Highlight2"/>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad>
+								getglobal(self:GetName().."Texture"):SetVertexColor(0.5,0.5,0);
+							</OnLoad>
+						</Scripts>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						self:SetBackdropBorderColor(0.37, 0.3, 0.3);
+						self.Entries = 8;
+						for Index = 1, self.Entries do
+							CreateFrame("Button",self:GetName().."Entry"..Index,self,"BaudErrorFrameEntryTemplate"):SetPoint("TOP",0,6-16*Index);
+						end
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<Frame name="$parentDetailScrollBox">
+				<Size>
+					<AbsDimension x="500" y="258"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="40" y="40"/>
+						</Offset>
+					</Anchor>
+					<Anchor point="RIGHT">
+						<Offset>
+							<AbsDimension x="-40"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Background" tile="true">
+					<EdgeSize>
+						<AbsValue val="1"/>
+					</EdgeSize>
+					<BackgroundInsets>
+						<AbsInset left="-1" right="-1" top="-1" bottom="-1"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="$parentTitle" inherits="GameFontNormal" text="QUEST_DESCRIPTION">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="1"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<ScrollFrame name="BaudErrorFrameDetailScrollFrame" inherits="UIPanelScrollFrameTemplate">
+						<Size>
+							<AbsDimension x="1" y="250"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset>
+									<AbsDimension x="8" y="-4"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset>
+									<AbsDimension x="-26" y="4"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<ScrollChild>
+							<EditBox name="BaudErrorFrameEditBox" autoFocus="false" multiLine="true">
+								<Size>
+									<AbsDimension x="466" y="250"/>
+								</Size>
+								<TextInsets>
+									<AbsInset left="4" right="4" top="4" bottom="4"/>
+								</TextInsets>
+								<FontString inherits="ChatFontNormal"/>
+								<Scripts>
+									<OnTextChanged>
+										BaudErrorFrameEditBox_OnTextChanged(self);
+									</OnTextChanged>
+									<OnTextSet>
+										BaudErrorFrameEditBox_OnTextSet();
+									</OnTextSet>
+									<OnEscapePressed>
+										self:ClearFocus();
+									</OnEscapePressed>
+								</Scripts>
+							</EditBox>
+						</ScrollChild>
+						<Scripts>
+							<OnLoad>
+								ScrollFrame_OnLoad(self);
+								self.scrollBarHideable = 1;
+								getglobal(self:GetName().."ScrollBar"):Hide();
+							</OnLoad>
+						</Scripts>
+					</ScrollFrame>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						self:SetBackdropBorderColor(0.37, 0.3, 0.3);
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<Button name="$parentReloadUIButton" inherits="GameMenuButtonTemplate" text="RELOADUI">
+				<Size>
+					<AbsDimension x="100" y="21"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="50" y="16"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						ReloadUI();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentCloseButton" inherits="GameMenuButtonTemplate" text="CLOSE">
+				<Size>
+					<AbsDimension x="100" y="21"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-50" y="16"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						self:GetParent():Hide();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentClearButton" inherits="GameMenuButtonTemplate" text="CLEAR_ALL">
+				<Size>
+					<AbsDimension x="100" y="21"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parentCloseButton" relativePoint="LEFT">
+						<Offset>
+							<AbsDimension x="-5"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						BaudErrorFrameClearButton_OnClick(self);
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				BaudErrorFrame_OnLoad(self);
+				self:SetBackdropBorderColor(0.37, 0.3, 0.3);
+			</OnLoad>
+			<OnEvent>
+				BaudErrorFrame_OnEvent();
+			</OnEvent>
+			<OnShow>
+				BaudErrorFrame_OnShow();
+			</OnShow>
+			<OnHide>
+				BaudErrorFrame_OnHide();
+			</OnHide>
+		</Scripts>
+	</Frame>
+</Ui>

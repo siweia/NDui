@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="PartyDungeons.lua"/>
+	<Script file="BrokenIsles.lua"/>
+	<Script file="TheEmeraldNightmare.lua"/>
+	<Script file="TrialofValor.lua"/>
+	<Script file="TheNighthold.lua"/>
+</Ui>

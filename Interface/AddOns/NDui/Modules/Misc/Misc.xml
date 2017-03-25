@@ -1,0 +1,11 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Misc.lua"/>
+	<Script file="Alerts.lua"/>
+	<Script file="Durability.lua"/>
+	<Script file="ExpRep.lua"/>
+	<Script file="Mail.lua"/>
+	<Script file="MissingStats.lua"/>
+	<Script file="OrderHall.lua"/>
+	<Script file="GuildInfobar.lua"/>
+	<Script file="Focuser.lua"/>
+</Ui>
