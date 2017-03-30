@@ -68,6 +68,7 @@ tinsert(C.themes["Aurora"], function()
 			"InterfaceOptionsSocialPanelFriendRequests",
 			"InterfaceOptionsSocialPanelShowToastWindow",
 			"InterfaceOptionsSocialPanelEnableTwitter",
+			"InterfaceOptionsSocialPanelAutoAcceptQuickJoinRequests",
 			"InterfaceOptionsActionBarsPanelBottomLeft",
 			"InterfaceOptionsActionBarsPanelBottomRight",
 			"InterfaceOptionsActionBarsPanelRight",

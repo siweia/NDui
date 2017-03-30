@@ -65,6 +65,7 @@ end)
 
 -- Artifact Power Calculate
 SlashCmdList["NDUI_ARTI_CALCULATOR"] = function(arg)
+	if not HasArtifactEquipped() then return end
 	local total, low, high = 0, 1, 0
 	if arg == "" then
 		print(DB.InfoColor.."------------------------")
@@ -75,7 +76,6 @@ SlashCmdList["NDUI_ARTI_CALCULATOR"] = function(arg)
 		print(DB.InfoColor.."------------------------")
 		return
 	elseif strlower(arg) == strlower("total") then
-		if not HasArtifactEquipped() then return end
 		local _, _, _, _, totalXP, pointsSpent = C_ArtifactUI.GetEquippedArtifactInfo()
 		total, high = totalXP, pointsSpent
 	elseif string.find(arg, "-") then
@@ -86,8 +86,9 @@ SlashCmdList["NDUI_ARTI_CALCULATOR"] = function(arg)
 	else
 		return
 	end
+	local artifactTier = select(13, C_ArtifactUI.GetEquippedArtifactInfo())
 	for i = low-1, high-1 do
-		total = total + C_ArtifactUI.GetCostForPointAtRank(i)
+		total = total + C_ArtifactUI.GetCostForPointAtRank(i, artifactTier)
 	end
 	print(DB.InfoColor.."------------------------")
 	print(ARTIFACT_POWER, DB.InfoColor..total)
@@ -207,10 +208,13 @@ NDui:EventFrame("UNIT_SPELLCAST_SUCCEEDED"):SetScript("OnEvent", function(self, 
 
 	if not GetSpecialization() then return end
 	local _, name = GetSpecializationInfo(GetSpecialization())
-	local hasSet, _, hasEquipped = GetEquipmentSetInfoByName(name)
-	if name and hasSet and not hasEquipped then
-		C_Timer.After(.1, function() EquipmentManager_EquipSet(name) end)
-		print(format(DB.InfoColor..EQUIPMENT_SETS, name))
+	local setID = C_EquipmentSet.GetEquipmentSetID(name)
+	if name and setID then
+		local _, _, _, hasEquipped = C_EquipmentSet.GetEquipmentSetInfo(setID)
+		if not hasEquipped then
+			C_EquipmentSet.UseEquipmentSet(setID)
+			print(format(DB.InfoColor..EQUIPMENT_SETS, name))
+		end
 	else
 		for i = 1, GetNumEquipmentSets() do
 			local name, _, _, isEquipped = GetEquipmentSetInfo(i)

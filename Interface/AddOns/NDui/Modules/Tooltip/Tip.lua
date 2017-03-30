@@ -347,6 +347,7 @@ NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(_, _, addon)
 			FriendsMenuXPSecureMenuBackdrop,
 			QuestScrollFrame.StoryTooltip,
 			GeneralDockManagerOverflowButtonList,
+			ReputationParagonTooltip,
 		}
 		for _, f in pairs(tooltips) do
 			if f then
@@ -410,24 +411,20 @@ NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(_, _, addon)
 			end
 		end)
 
-		hooksecurefunc("TaskPOI_OnEnter", function(self)
-			local percent = C_TaskQuest.GetQuestProgressBarInfo(self.questID)
-			if percent then
-				local bar = WorldMapTaskTooltipStatusBar
-				for i = 1, 6 do
-					select(i, bar.Bar:GetRegions()):SetAlpha(0)
+		local bars = {WorldMapTaskTooltipStatusBar, ReputationParagonTooltipStatusBar}
+		for _, bar in pairs(bars) do
+			if not bar.styled then
+				for i = 1, 7 do
+					select(i, bar.Bar:GetRegions()):Hide()
 				end
-				bar.Bar.Label:SetAlpha(1)
-				if not bar.newBg then
-					bar.Bar:DisableDrawLayer("BACKGROUND")
-					bar.Bar:SetStatusBarTexture(DB.normTex)
-					local bg = select(7, bar.Bar:GetRegions())
-					bar.newBg = B.CreateBG(bg, 3)
-					B.CreateBD(bar.newBg, .2)
-				end
-				bar.newBg:SetParent(bar)
+				bar.Bar:SetStatusBarTexture(DB.normTex)
+				bar.Bar.Label:Show()
+				local bg = select(7, bar.Bar:GetRegions())
+				local newBg = B.CreateBG(bg, 3)
+				B.CreateBD(newBg, .3)
+				bar.styled = true
 			end
-		end)
+		end
 
 		-- Pet Tooltip
 		PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
@@ -539,6 +536,26 @@ NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(_, _, addon)
 				f:HookScript("OnShow", style)
 			end
 		end
+
+	elseif addon == "Blizzard_Contribution" then
+		local gt = {
+			ContributionTooltip,
+			ContributionBuffTooltip,
+		}
+		for _, f in pairs(gt) do
+			if f then
+				f:HookScript("OnShow", extrastyle)
+			end
+		end
+		ContributionBuffTooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
+
+	elseif addon == "Blizzard_EncounterJournal" then
+		local f = EncounterJournalTooltip
+		if f then
+			f:HookScript("OnShow", style)
+		end
+		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
+		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 end)
 

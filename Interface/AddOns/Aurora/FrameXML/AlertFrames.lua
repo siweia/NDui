@@ -123,6 +123,16 @@ tinsert(C.themes["Aurora"], function()
 				frame.Background:SetTexture("")
 				frame.IconBorder:SetTexture("")
 			end
+		elseif frame.queue == HonorAwardedAlertSystem then
+			if not frame.bg then
+				frame.bg = F.CreateBDFrame(frame)
+				frame.bg:SetPoint("TOPLEFT", 8, -8)
+				frame.bg:SetPoint("BOTTOMRIGHT", -8, 8)
+
+				F.ReskinIcon(frame.Icon)
+				frame.Background:SetTexture("")
+				frame.IconBorder:SetTexture("")
+			end
 		elseif frame.queue == NewRecipeLearnedAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
@@ -319,7 +329,7 @@ tinsert(C.themes["Aurora"], function()
 	end)
 
 	-- BonusRollMoneyWonFrame
-	hooksecurefunc("MoneyWonAlertFrame_SetUp", function(f)	
+	hooksecurefunc("MoneyWonAlertFrame_SetUp", function(f)
 		if not f.bg then
 			f.bg = F.CreateBDFrame(f) 
 			f.bg:SetPoint("TOPLEFT", 5, -5)

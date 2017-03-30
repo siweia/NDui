@@ -300,50 +300,8 @@ local function UpdateAuraIcon(button, unit, index, filter, customIcon)
 	button:Show()
 end
 
-local function IsPlayerAura(spellID)
-	local name = GetSpellInfo(spellID)
-	local isBuff, _, _, _, _, _, _, _, _, _, buffID = UnitBuff("player", name)
-	local isDebuff, _, _, _, _, _, _, _, _, _, debuffID = UnitDebuff("player", name)
-	if isBuff and buffID == spellID then
-		return true
-	elseif isDebuff and debuffID == spellID then
-		return true
-	end
-end
-
-local function IsRaidModeUnit(unit)
-	if NDuiDB["Nameplate"]["RaidMode"] and UnitIsPlayer(unit) and UnitReaction(unit, "player") >= 5 and not UnitIsUnit(unit, "player") then
-		return true
-	end
-end
-
-local function IsSmartNamePlate(unitFrame)
-	local unit = unitFrame.displayedUnit
-	if NDuiDB["Nameplate"]["SmartNames"] and IsRaidModeUnit(unit) and unitFrame.iconnumber == 0 and not UnitIsUnit("target", unit) then
-		return true
-	end
-end
-
 local function AuraFilter(caster, spellID, unit)
-	if NDuiDB["Nameplate"]["RaidMode"] and C.RaidAuras[spellID] then
-		if C.RaidAuras[spellID] == "none" then
-			return true
-		elseif C.RaidAuras[spellID] == "compare" then
-			if NDuiDB["Nameplate"]["Matching"] then
-				if IsPlayerAura(spellID) then
-					return true, 1
-				else
-					return true, 2
-				end
-			else
-				return true
-			end
-		elseif IsPlayerAura(C.RaidAuras[spellID]) then
-			return true
-		end
-	elseif IsRaidModeUnit(unit) then
-		return false
-	elseif caster == "player" then
+	if caster == "player" then
 		--1:none, 2:all, 3:white, 4:black, 5:aurawatch
 		if NDuiDB["Nameplate"]["AuraFilter"] == 1 then
 			return false
@@ -438,20 +396,13 @@ local function UpdateBuffs(unitFrame)
 		unitFrame.icons[1]:SetPoint("BOTTOMLEFT", iconsFrame, "BOTTOM", -((NDuiDB["Nameplate"]["AuraSize"] + 4)*count - 4)/2, 0)
 	end
 	for index = i, #unitFrame.icons do unitFrame.icons[index]:Hide() end
-
-	-- Hide Names while not activated
-	if IsSmartNamePlate(unitFrame) then
-		unitFrame:Hide()
-	else
-		unitFrame:Show()
-	end
 end
 
 -- Unitframe
 local classtex = {
 	rare = {"Interface\\MINIMAP\\ObjectIconsAtlas", .67, .72, .34, .39},
 	elite = {"Interface\\MINIMAP\\Minimap_skull_elite", 0, 1, 0, 1},
-	rareelite = {"Interface\\MINIMAP\\ObjectIconsAtlas", .73, .79, .33, .39},
+	rareelite = {"Interface\\MINIMAP\\ObjectIconsAtlas", .398, .463, .926, .992},
 	worldboss = {"Interface\\MINIMAP\\ObjectIconsAtlas", .07, .13, .27, .33},
 }
 
@@ -474,8 +425,6 @@ local function UpdateName(unitFrame)
 	if name then
 		if UnitIsUnit(unit, "player") then
 			unitFrame.name:SetText("")
-		elseif IsRaidModeUnit(unit) then
-			unitFrame.name:SetText(level..B.HexRGB(B.UnitColor(unit))..name)
 		else
 			unitFrame.name:SetText(level..name)
 		end
@@ -594,9 +543,9 @@ local function UpdateCastBar(unitFrame)
 		cb.colored = true
 	end
 
-	-- Disable Castbar on PlayerPlate and RaidMode
+	-- Disable Castbar on PlayerPlate
 	local unit = unitFrame.displayedUnit
-	if UnitIsUnit(unit, "player") or IsRaidModeUnit(unit) then
+	if UnitIsUnit(unit, "player") then
 		unit = nil
 	end
 	CastingBarFrame_SetUnit(cb, unit, false, true)
@@ -617,19 +566,9 @@ local function UpdateSelectionHighlight(unitFrame)
 	if UnitIsUnit(unit, "target") and not UnitIsUnit(unit, "player") then
 		if arrow then arrow:Show() end
 		if glow then glow:Show() end
-		if IsRaidModeUnit(unit) then
-			if line then line:Show() end
-		end
 	else
 		if arrow then arrow:Hide() end
 		if glow then glow:Hide() end
-		if line then line:Hide() end
-	end
-
-	if IsSmartNamePlate(unitFrame) then
-		unitFrame:Hide()
-	else
-		unitFrame:Show()
 	end
 
 	if NDuiDB["Nameplate"]["Arrow"] then
@@ -637,7 +576,7 @@ local function UpdateSelectionHighlight(unitFrame)
 			if unitFrame.iconnumber > 5 then
 				arrow:SetPoint("BOTTOM", unitFrame.name, "TOP", 0, NDuiDB["Nameplate"]["AuraSize"]*2 + 3)
 			else
-				arrow:SetPoint("BOTTOM", unitFrame.name, "TOP", 0, NDuiDB["Nameplate"]["AuraSize"]*unitFrame.iconsFrame:GetScale() + 3)
+				arrow:SetPoint("BOTTOM", unitFrame.name, "TOP", 0, NDuiDB["Nameplate"]["AuraSize"] + 3)
 			end
 		else
 			arrow:SetPoint("BOTTOM", unitFrame.name, "TOP", 0, 0)
@@ -658,11 +597,7 @@ local function UpdateRaidTarget(unitFrame)
 		icon:Hide()
 	end
 
-	if IsRaidModeUnit(unit) then
-		rtf:SetPoint("TOP", unitFrame, "BOTTOM", -35, 30)
-	else
-		rtf:SetPoint("TOP", unitFrame.name, "LEFT", -15, 15)
-	end
+	rtf:SetPoint("TOP", unitFrame.name, "LEFT", -15, 15)
 end
 
 local function UpdateNamePlateEvents(unitFrame)
@@ -701,27 +636,6 @@ local function UpdateInVehicle(unitFrame)
 	end
 end
 
-local function UpdateRaidMode(unitFrame)
-	if not NDuiDB["Nameplate"]["RaidMode"] then return end
-
-	local unit = unitFrame.displayedUnit
-	if IsRaidModeUnit(unit) then
-		unitFrame.healthBar:Hide()
-		unitFrame.iconsFrame:SetScale(NDuiDB["Nameplate"]["AuraScale"])
-	else
-		unitFrame.healthBar:Show()
-		unitFrame.iconsFrame:SetScale(1)
-	end
-end
-
-local function BlockAddons()
-	if DBM and DBM.Nameplate then
-		function DBM.Nameplate:SupportedNPMod()
-			return true
-		end
-	end
-end
-
 local function UpdateAll(unitFrame)
 	UpdateInVehicle(unitFrame)
 	local unit = unitFrame.displayedUnit
@@ -734,7 +648,6 @@ local function UpdateAll(unitFrame)
 		UpdateHealth(unitFrame)
 		UpdateBuffs(unitFrame)
 		UpdateRaidTarget(unitFrame)
-		UpdateRaidMode(unitFrame)
 		if C.ShowPowerUnit[UnitName(unit)] then
 			UpdatePower(unitFrame)
 		end
@@ -838,17 +751,7 @@ local function HideBlizzard()
 	SetCVar("nameplateOverlapH", .5)
 	SetCVar("nameplateOverlapV", .7)
 	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
-
 	C_NamePlate.SetNamePlateFriendlyClickThrough(false)
-	if NDuiDB["Nameplate"]["RaidMode"] then
-		SetCVar("nameplateShowFriends", 1)
-		SetCVar("nameplateShowFriendlyMinions", 0)
-		if NDuiDB["Nameplate"]["ClickThrough"] then
-			C_NamePlate.SetNamePlateFriendlyClickThrough(true)
-		end
-	else
-		SetCVar("nameplateShowFriends", 0)
-	end
 
 	-- No more smallplates
 	local checkBox = InterfaceOptionsNamesPanelUnitNameplatesMakeLarger
@@ -863,7 +766,6 @@ local function OnUnitFactionChanged(unit)
 	if namePlate then
 		UpdateName(namePlate.UnitFrame)
 		UpdateHealthColor(namePlate.UnitFrame)
-		UpdateRaidMode(namePlate.UnitFrame)
 	end
 end
 
@@ -897,7 +799,7 @@ local function OnNamePlateCreated(namePlate)
 	local cicon = hp:CreateTexture(nil, "OVERLAY")
 	cicon:SetPoint("LEFT", hp, "TOPLEFT", 0, 2)
 	cicon:SetSize(15, 15)
-	cicon:SetAlpha(.7)
+	cicon:SetAlpha(.75)
 	unitFrame.creatureIcon = cicon
 
 	local cb = CreateFrame("StatusBar", nil, unitFrame)
@@ -963,16 +865,6 @@ local function OnNamePlateCreated(namePlate)
 		glow:SetBackdropBorderColor(1, 1, 1)
 		glow:SetFrameLevel(0)
 		unitFrame.glowBorder = glow
-
-		if NDuiDB["Nameplate"]["RaidMode"] then
-			local line = unitFrame:CreateTexture(nil, "ARTWORK")
-			line:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
-			line:SetTexCoord(0, .66, .25, .28)
-			line:SetVertexColor(1, 1, 1)
-			line:SetPoint("TOP", unitFrame.name, "BOTTOM", 0, -2)
-			line:SetSize(85, 5)
-			unitFrame.underLine = line
-		end
 	end
 
 	local icons = CreateFrame("Frame", nil, unitFrame)
@@ -1008,7 +900,6 @@ local function NamePlates_OnEvent(self, event, ...)
 	local arg1 = ...
 	if event == "VARIABLES_LOADED" then
 		HideBlizzard()
-		BlockAddons()
 		RedrawManaBar()
 		NamePlates_UpdateNamePlateOptions()
 	elseif event == "NAME_PLATE_CREATED" then
@@ -1023,10 +914,6 @@ local function NamePlates_OnEvent(self, event, ...)
 		NamePlates_UpdateNamePlateOptions()
 	elseif event == "UNIT_FACTION" then
 		OnUnitFactionChanged(arg1)
-	elseif NDuiDB["Nameplate"]["RaidMode"] and event == "UNIT_AURA" and arg1 == "player" then
-		for _, namePlate in pairs(C_NamePlate.GetNamePlates()) do
-			UpdateBuffs(namePlate.UnitFrame)
-		end
 	end
 end
 
@@ -1038,5 +925,4 @@ EventFrame:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
 EventFrame:RegisterEvent("RAID_TARGET_UPDATE")
 EventFrame:RegisterEvent("DISPLAY_SIZE_CHANGED")
 EventFrame:RegisterEvent("UNIT_FACTION")
-EventFrame:RegisterEvent("UNIT_AURA")
 EventFrame:SetScript("OnEvent", NamePlates_OnEvent)

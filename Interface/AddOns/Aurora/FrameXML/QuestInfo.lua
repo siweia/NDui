@@ -84,6 +84,9 @@ tinsert(C.themes["Aurora"], function()
 		bu.Icon:SetTexCoord(.08, .92, .08, .92)
 		bu.Icon:SetDrawLayer("BACKGROUND", 1)
 		F.CreateBG(bu.Icon, 1)
+		if bu.IconBorder then
+			bu.IconBorder:SetAlpha(0)
+		end
 
 		local bg = F.CreateBDFrame(bu, .25)
 		bg:SetPoint("TOPLEFT", bu, 1, 1)

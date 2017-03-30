@@ -2048,8 +2048,11 @@ C.AuraWatchList = {
 				--腐蚀术
 				{AuraID = 146739, UnitID = "focus", Caster = "player"},
 				--痛苦无常
-				{AuraID =  30108, UnitID = "focus", Caster = "player"},
-				{AuraID = 233490, UnitID = "focus", Caster = "player"},
+				{AuraID = 233490, UnitID = "target", Caster = "player"},
+				{AuraID = 233496, UnitID = "target", Caster = "player"},
+				{AuraID = 233497, UnitID = "target", Caster = "player"},
+				{AuraID = 233498, UnitID = "target", Caster = "player"},
+				{AuraID = 233499, UnitID = "target", Caster = "player"},
 				--末日灾祸
 				{AuraID =    603, UnitID = "focus", Caster = "player"},
 				--献祭

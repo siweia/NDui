@@ -261,7 +261,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		for _, reward in pairs(button.Rewards) do
 			reward:GetRegions():Hide()
 			reward.Icon:SetTexCoord(.08, .92, .08, .92)
-			reward.IconBorder:Hide()
+			reward.IconBorder:SetAlpha(0)
 			F.CreateBG(reward.Icon)
 			reward:ClearAllPoints()
 			reward:SetPoint("TOPRIGHT", -4, -4)

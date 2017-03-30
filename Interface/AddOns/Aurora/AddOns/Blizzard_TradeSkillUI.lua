@@ -31,8 +31,13 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 
 	-- Recipe List
 	local recipe = TradeSkillFrame.RecipeList
-	F.ReskinTab(recipe.LearnedTab)
-	F.ReskinTab(recipe.UnlearnedTab)
+	for i = 1, #recipe.Tabs do
+		local tab = recipe.Tabs[i]
+		for i = 1, 6 do
+			select(i, tab:GetRegions()):SetAlpha(0)
+		end
+	end
+
 	TradeSkillFrame.RecipeInset:Hide()
 	F.ReskinScroll(recipe.scrollBar)
 
@@ -54,10 +59,11 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	end
 	select(1, details.CreateMultipleInputBox:GetRegions()):Show()
 	local contents = details.Contents
-	contents.ResultIcon.Background:Hide()
 	hooksecurefunc(contents.ResultIcon, "SetNormalTexture", function(self)
 		if not self.styled then
 			F.ReskinIcon(self:GetNormalTexture())
+			self.IconBorder:SetAlpha(0)
+			self.ResultBorder:SetAlpha(0)
 			self.styled = true
 		end
 	end)

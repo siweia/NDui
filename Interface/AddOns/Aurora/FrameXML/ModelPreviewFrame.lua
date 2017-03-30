@@ -9,13 +9,11 @@ tinsert(C.themes["Aurora"], function()
 
 	F.ReskinPortraitFrame(ModelPreviewFrame, true)
 	F.Reskin(ModelPreviewFrame.CloseButton)
-	F.ReskinArrow(Display.Model.RotateLeftButton, "left")
-	F.ReskinArrow(Display.Model.RotateRightButton, "right")
 
-	local bg = F.CreateBDFrame(Display.Model, .25)
+	F.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")
+	F.ReskinArrow(Display.ModelScene.RotateRightButton, "right")
+
+	local bg = F.CreateBDFrame(Display.ModelScene, .25)
 	bg:SetPoint("TOPLEFT", -1, 0)
 	bg:SetPoint("BOTTOMRIGHT", 2, -2)
-
-	Display.Model.RotateLeftButton:SetPoint("TOPRIGHT", Display.Model, "BOTTOM", -5, -10)
-	Display.Model.RotateRightButton:SetPoint("TOPLEFT", Display.Model, "BOTTOM", 5, -10)
 end)

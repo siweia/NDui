@@ -57,8 +57,8 @@ function module:Expbar()
 			self:Show()
 			Rest:Hide()
 		elseif HasArtifactEquipped() then
-			local _, _, _, _, totalXP, pointsSpent = C_ArtifactUI.GetEquippedArtifactInfo()
-			local _, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+			local _, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 			self:SetStatusBarColor(.9, .8, .6)
 			self:SetMinMaxValues(0, xpForNextPoint)
 			self:SetValue(xp)
@@ -71,8 +71,8 @@ function module:Expbar()
 
 		-- Available ArtfactPoint
 		if HasArtifactEquipped() then
-			local _, _, _, _, totalXP, pointsSpent = C_ArtifactUI.GetEquippedArtifactInfo()
-			local num = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+			local num = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 			if num > 0 then newPoint:SetAlpha(1) end
 		end
 	end
@@ -133,14 +133,10 @@ function module:Expbar()
 		end
 
 		if HasArtifactEquipped() then
-			local _, _, name, _, totalXP, pointsSpent = C_ArtifactUI.GetEquippedArtifactInfo()
-			local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+			local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+			local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 			GameTooltip:AddLine(" ")
-			if pointsSpent > 34 then
-				GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent).." "..L["Paragon"]..(pointsSpent - 34)..")", 0,.6,1)
-			else
-				GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
-			end
+			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
 			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(totalXP).." ("..num..")", .6,.8,1, 1,1,1)
 			GameTooltip:AddDoubleLine(L["Next Trait"], BreakUpLargeNumbers(xp).."/"..BreakUpLargeNumbers(xpForNextPoint).." ("..floor(xp/xpForNextPoint*100).."%)", .6,.8,1, 1,1,1)
 		end

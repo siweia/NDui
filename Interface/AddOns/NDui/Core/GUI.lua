@@ -97,10 +97,6 @@ local defaultSettings = {
 	},
 	Nameplate = {
 		Enable = true,
-		RaidMode = false,
-		ClickThrough = true,
-		Matching = true,
-		AuraScale = 2,
 		ColorBorder = false,
 		PlayerAura = false,
 		maxAuras = 5,
@@ -116,7 +112,6 @@ local defaultSettings = {
 		Distance = 42,
 		Width = 100,
 		Height = 5,
-		SmartNames = false,
 	},
 	Skins = {
 		DBM = true,
@@ -301,12 +296,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[6] = {
 		{1, "Nameplate", "Enable", L["Enable Nameplate"]},
-		{},--blank
-		{1, "Nameplate", "RaidMode", "|cffff8000"..L["Nameplate RaidMode"]},
-		{1, "Nameplate", "Matching", "|cff00ff00"..L["RaidMode Matching"], true},
-		{1, "Nameplate", "SmartNames", L["RaidMode SmartNames"]},
-		{1, "Nameplate", "ClickThrough", L["RaidMode ClickThrough"]},
-		{3, "Nameplate", "AuraScale", L["RaidMode AuraScale"], true, {1, 2, 1}},
 		{},--blank
 		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
 		{1, "Nameplate", "PlayerAura", L["PlayerPlate Aura"], true},

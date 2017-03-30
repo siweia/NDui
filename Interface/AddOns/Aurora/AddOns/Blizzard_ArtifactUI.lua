@@ -12,14 +12,13 @@ C.themes["Blizzard_ArtifactUI"] = function()
 	end
 	ArtifactFrame.Background:Hide()
 	ArtifactFrame.PerksTab.BackgroundBack:Hide()
-	ArtifactFrame.PerksTab.BackgroundBackShadow:Hide()
 	ArtifactFrame.PerksTab.HeaderBackground:Hide()
 	ArtifactFrame.PerksTab.TitleContainer.Background:SetAlpha(0)
 	ArtifactFrame.PerksTab.Model:SetAlpha(.5)
 	ArtifactFrame.PerksTab.Model.BackgroundFront:Hide()
-	ArtifactFrame.ForgeBadgeFrame.ForgeClassBadgeIcon:Hide()
 	ArtifactFrame.ForgeBadgeFrame.ForgeLevelBackground:SetAlpha(0)
 	ArtifactFrame.ForgeBadgeFrame.ForgeLevelBackgroundBlack:SetAlpha(0)
+	ArtifactFrame.ForgeBadgeFrame.ItemIcon:Hide()
 	ArtifactFrame.AppearancesTab.Background:Hide()
 
 	-- Appearance

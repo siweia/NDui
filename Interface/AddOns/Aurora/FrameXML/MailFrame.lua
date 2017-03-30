@@ -23,6 +23,7 @@ tinsert(C.themes["Aurora"], function()
 	F.Reskin(OpenMailDeleteButton)
 	F.Reskin(OpenMailCancelButton)
 	F.Reskin(OpenMailReportSpamButton)
+	F.Reskin(OpenAllMail)
 	F.ReskinInput(SendMailNameEditBox, 20)
 	F.ReskinInput(SendMailSubjectEditBox)
 	F.ReskinInput(SendMailMoneyGold)
@@ -71,6 +72,7 @@ tinsert(C.themes["Aurora"], function()
 		local bu = _G["MailItem"..i.."Button"]
 		local st = _G["MailItem"..i.."ButtonSlot"]
 		local ic = _G["MailItem"..i.."Button".."Icon"]
+		local bd = _G["MailItem"..i.."Button".."IconBorder"]
 		local line = select(3, _G["MailItem"..i]:GetRegions())
 
 		local a, b = it:GetRegions()
@@ -82,6 +84,7 @@ tinsert(C.themes["Aurora"], function()
 		st:Hide()
 		line:Hide()
 		ic:SetTexCoord(.08, .92, .08, .92)
+		bd:SetAlpha(0)
 
 		local bg = CreateFrame("Frame", nil, bu)
 		bg:SetPoint("TOPLEFT", -1.2, 1.2)

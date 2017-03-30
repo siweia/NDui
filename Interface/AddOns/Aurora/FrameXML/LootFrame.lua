@@ -18,6 +18,7 @@ tinsert(C.themes["Aurora"], function()
 
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
+			bu.IconBorder:SetAlpha(0)
 
 			local bd = CreateFrame("Frame", nil, bu)
 			bd:SetPoint("TOPLEFT")

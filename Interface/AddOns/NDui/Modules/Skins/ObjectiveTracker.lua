@@ -30,7 +30,7 @@ do
 end
 
 function module:QuestTracker()
-	-- Questblock click enhant
+	--[[ Questblock click enhant
 	hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(block)
 		local questLogIndex = block.questLogIndex
 		if IsControlKeyDown() then
@@ -53,7 +53,7 @@ function module:QuestTracker()
 		elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then
 			QuestMapQuestOptions_ShareQuest(self.questID)
 		end
-	end)
+	end)]]
 
 	-- Show quest color and level
 	local function Showlevel()

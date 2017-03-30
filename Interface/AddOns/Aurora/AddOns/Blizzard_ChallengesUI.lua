@@ -13,7 +13,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 
 	local angryStyle
 	ChallengesFrame:HookScript("OnShow", function()
-		for i = 1, 9 do
+		for i = 1, 12 do
 			local bu = ChallengesFrame.DungeonIcons[i]
 			if bu and not bu.styled then
 				bu:GetRegions():Hide()

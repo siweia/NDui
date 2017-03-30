@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: |cff0080ffSkada|r
 ## Title-zhCN: |cff0080ffSkada|r 战斗统计
 ## Title-zhTW: |cff0080ffSkada|r 戰鬥統計
@@ -6,7 +6,7 @@
 ## Notes-zhTW: 模組化的傷害統計。
 ## Notes-zhCN: 模块化伤害统计。
 ## Author: Zarnivoop
-## Version: 1.6.5
+## Version: 1.6.6
 ## SavedVariables: SkadaDB
 ## SavedVariablesPerCharacter: SkadaPerCharDB
 
