@@ -876,7 +876,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		ally:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(ally)
 
-		for i = 1, 2 do
+		for i = 1, 3 do
 			if not self.AbilitiesFrame.Equipment then return end
 			local equip = self.AbilitiesFrame.Equipment[i]
 			equip.Border:Hide()

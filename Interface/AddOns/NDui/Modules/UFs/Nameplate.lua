@@ -400,9 +400,9 @@ end
 
 -- Unitframe
 local classtex = {
-	rare = {"Interface\\MINIMAP\\ObjectIconsAtlas", .67, .72, .34, .39},
+	rare = {"Interface\\MINIMAP\\ObjectIconsAtlas", .398, .463, .725, .79},
 	elite = {"Interface\\MINIMAP\\Minimap_skull_elite", 0, 1, 0, 1},
-	rareelite = {"Interface\\MINIMAP\\ObjectIconsAtlas", .398, .463, .926, .992},
+	rareelite = {"Interface\\MINIMAP\\ObjectIconsAtlas", .398, .463, .926, .991},
 	worldboss = {"Interface\\MINIMAP\\ObjectIconsAtlas", .07, .13, .27, .33},
 }
 

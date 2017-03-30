@@ -19,8 +19,8 @@ local function SetTooltip(self)
 		if UnitLevel("player") < MAX_PLAYER_LEVEL then
 			GameTooltip:AddLine(" ")
 		end
-		local _, _, name, _, totalXP, pointsSpent = C_ArtifactUI.GetEquippedArtifactInfo()
-		local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+		local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
 		GameTooltip:AddDoubleLine(ARTIFACT_POWER, totalXP.." ("..num..")", .6,.8,1, 1,1,1)
 		GameTooltip:AddDoubleLine(L["Next Trait"], xp.."/"..xpForNextPoint.." ("..floor(xp/xpForNextPoint*100).."%)", .6,.8,1, 1,1,1)
@@ -65,8 +65,8 @@ local function Update(self, event, owner)
 			end
 		end
 	elseif HasArtifactEquipped() then
-		local _, _, _, _, totalXP, pointsSpent = C_ArtifactUI.GetEquippedArtifactInfo()
-		local _, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+		local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+		local _, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		experience:SetStatusBarColor(.9, .8, .6)
 		experience:SetMinMaxValues(0, xpForNextPoint)
 		experience:SetValue(xp)
