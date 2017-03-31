@@ -1,6 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ChallengesUI"] = function()
+	local ChallengesFrame = ChallengesFrame
+
 	ChallengesFrameInset:DisableDrawLayer("BORDER")
 	ChallengesFrameInsetBg:Hide()
 	for i = 1, 2 do
@@ -56,4 +58,9 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			end
 		end
 	end)
+
+	-- Fix blizz
+	ChallengesFrame.WeeklyBest:ClearAllPoints()
+	ChallengesFrame.WeeklyBest:SetPoint("TOP", 0, -5)
+	ChallengesFrame.GuildBest:SetPoint("TOPLEFT", ChallengesFrame.WeeklyBest.Child.Star, "BOTTOMRIGHT", -16, 30)
 end
