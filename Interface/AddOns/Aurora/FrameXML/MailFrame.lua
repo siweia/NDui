@@ -78,19 +78,13 @@ tinsert(C.themes["Aurora"], function()
 		local a, b = it:GetRegions()
 		a:Hide()
 		b:Hide()
-
 		bu:SetCheckedTexture(C.media.checked)
 
 		st:Hide()
 		line:Hide()
 		ic:SetTexCoord(.08, .92, .08, .92)
 		bd:SetAlpha(0)
-
-		local bg = CreateFrame("Frame", nil, bu)
-		bg:SetPoint("TOPLEFT", -1.2, 1.2)
-		bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
-		bg:SetFrameLevel(bu:GetFrameLevel()-1)
-		F.CreateBD(bg, 0)
+		F.CreateBDFrame(bu)
 	end
 
 	for i = 1, ATTACHMENTS_MAX_SEND do

@@ -243,4 +243,8 @@ function module:Mailbox()
 		F.Reskin(OpenAllButton3)
 		F.Reskin(OpenAllButton4)
 	end
+
+	-- Hide Blizz
+	OpenAllMail:Hide()
+	OpenAllMail:UnregisterAllEvents()
 end

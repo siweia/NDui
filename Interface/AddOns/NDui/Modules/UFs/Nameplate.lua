@@ -636,6 +636,14 @@ local function UpdateInVehicle(unitFrame)
 	end
 end
 
+local function BlockAddons()
+	if DBM and DBM.Nameplate then
+		function DBM.Nameplate:SupportedNPMod()
+			return true
+		end
+	end
+end
+
 local function UpdateAll(unitFrame)
 	UpdateInVehicle(unitFrame)
 	local unit = unitFrame.displayedUnit
@@ -900,6 +908,7 @@ local function NamePlates_OnEvent(self, event, ...)
 	local arg1 = ...
 	if event == "VARIABLES_LOADED" then
 		HideBlizzard()
+		BlockAddons()
 		RedrawManaBar()
 		NamePlates_UpdateNamePlateOptions()
 	elseif event == "NAME_PLATE_CREATED" then

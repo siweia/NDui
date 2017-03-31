@@ -860,7 +860,7 @@ lib.FloatingCombatText = function(self)
 		B.Mover(fcf, L["CombatText"], "TargetCombatText", {"BOTTOM", self, "TOPRIGHT", 0, 120})
 	end
 
-	for i = 1, 8 do
+	for i = 1, 10 do
 		fcf[i] = fcf:CreateFontString("$parentText", "OVERLAY", "CombatTextFontOutline")
 	end
 

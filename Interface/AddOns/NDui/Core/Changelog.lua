@@ -2,15 +2,14 @@ local B, C, L, DB = unpack(select(2, ...))
 if DB.Client ~= "zhCN" then return end
 
 local hx = {
-	"更新支持7.2；",
-	"经验条更新；",
-	"神器能量计算工具更新；",
 	"Aurora更新；",
-	"自动换装更新；",
-	"GameTooltip更新；",
-	"姓名板更新；",
-	"地图数据更新；",
-	"Skada更新。",
+	"姓名板稀有材质更新；",
+	"头像的经验条更新；",
+	"姓名板继续屏蔽DBM；",
+	"背包的史诗钥石正确显示ID及品质；",
+	"部分设置调整；",
+	"邮箱调整；",
+	"修复任务列表的快速放弃功能。",
 }
 
 local function changelog()

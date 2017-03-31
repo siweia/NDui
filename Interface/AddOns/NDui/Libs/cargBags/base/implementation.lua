@@ -321,7 +321,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice = GetItemInfo(clink)
 		i.texture = i.texture or texture
 		-- battle pet info must be extracted from the itemlink
-		if (clink:find("battlepet")) then
+		if clink:find("battlepet") then
 			if not(L) then
 				L = cargBags:GetLocalizedTypes()
 			end
@@ -330,6 +330,16 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.type = L["Battle Pets"]
 			i.rarity = tonumber(rarity) or 0
 			i.id = tonumber(id) or 0
+			i.name = name
+			i.minLevel = level
+			i.link = clink
+		elseif clink:find("keystone") then
+			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
+			local  _, _, level = strmatch(data, "(%w+):(%d+):(%d+)")
+			local id = select(10, GetContainerItemInfo(bagID, slotID))
+			i.type = GetItemInfo(id)
+			i.rarity = i.quality
+			i.id = id
 			i.name = name
 			i.minLevel = level
 			i.link = clink

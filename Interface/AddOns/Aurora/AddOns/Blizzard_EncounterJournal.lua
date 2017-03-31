@@ -530,21 +530,21 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- ItemSetsFrame
 
-	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "UpdateList", function()
-		local itemSets = EncounterJournal.LootJournal.ItemSetsFrame.buttons
-		for i = 1, #itemSets do
-			local itemSet = itemSets[i]
-			itemSet.ItemLevel:SetTextColor(1, 1, 1)
-			itemSet.Background:Hide()
+	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "UpdateList", function(self)
+		local buttons = self.buttons
+		for i = 1, #buttons do
+			local button = buttons[i]
+			button.ItemLevel:SetTextColor(1, 1, 1)
+			button.Background:Hide()
 
-			if not itemSet.bg then
-				itemSet.bg = F.CreateBDFrame(itemSet, .25)
+			if not button.bg then
+				button.bg = F.CreateBDFrame(button, .25)
 			end
 
-			local items = itemSet.ItemButtons
+			local items = button.ItemButtons
 			for j = 1, #items do
 				local item = items[j]
-				item.Border:Hide()
+				item.Border:SetAlpha(0)
 				item.Icon:SetPoint("TOPLEFT", 1, -1)
 				item.Icon:SetTexCoord(.08, .92, .08, .92)
 				item.Icon:SetDrawLayer("OVERLAY")

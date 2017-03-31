@@ -81,6 +81,7 @@ local function attachItemTooltip(self)
 				end
 			end
 		end
+		if link:find("keystone") then id = 138019 end
 		if id then addLine(self, id, types.item) end
 	end
 end

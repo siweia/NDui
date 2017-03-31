@@ -513,12 +513,28 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	F.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	F.ReskinInput(WardrobeCollectionFrameSearchBox)
+
 	for index = 1, 2 do
 		local tab = _G["WardrobeCollectionFrameTab"..index]
 		for i = 1, 6 do
 			select(i, tab:GetRegions()):SetAlpha(0)
 		end
+		tab:SetHighlightTexture("")
+		tab.bg = F.CreateBDFrame(tab, .25)
+		tab.bg:SetPoint("TOPLEFT", 3, -3)
+		tab.bg:SetPoint("BOTTOMRIGHT", -3, -1)
 	end
+	hooksecurefunc("WardrobeCollectionFrame_SetTab", function(tabID)
+		for index = 1, 2 do
+			local tab = _G["WardrobeCollectionFrameTab"..index]
+			if tabID == index then
+				tab.bg:SetBackdropColor(r, g, b, .2)
+			else
+				tab.bg:SetBackdropColor(0, 0, 0, .2)
+			end
+		end
+	end)
+
 	F.ReskinArrow(WardrobeCollectionFrame.ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
 	F.ReskinArrow(WardrobeCollectionFrame.ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
 	WardrobeCollectionFrame.ItemsCollectionFrame.BGCornerTopLeft:SetAlpha(0)
@@ -533,7 +549,8 @@ C.themes["Blizzard_Collections"] = function()
 	progressBar:SetStatusBarTexture(C.media.backdrop)
 	F.CreateBDFrame(progressBar, .25)
 
-	-- ItemSets
+	-- ItemSetsCollection
+
 	local SetsCollectionFrame = WardrobeCollectionFrame.SetsCollectionFrame
 	SetsCollectionFrame.LeftInset:Hide()
 	SetsCollectionFrame.RightInset:Hide()
@@ -544,36 +561,16 @@ C.themes["Blizzard_Collections"] = function()
 	for i = 1, #ScrollFrame.buttons do
 		local bu = ScrollFrame.buttons[i]
 		bu.Background:Hide()
-		bu.SelectedTexture:SetTexture("")
 		bu.HighlightTexture:SetTexture("")
+		F.ReskinIcon(bu.Icon)
 
-		local bg = CreateFrame("Frame", nil, bu)
-		bg:SetPoint("TOPLEFT", 0, -1)
-		bg:SetPoint("BOTTOMRIGHT", 0, 1)
-		bg:SetFrameLevel(bu:GetFrameLevel()-1)
-		F.CreateBD(bg, .25)
-
-		bu.bg = bg
-		bu.Icon.bg = F.ReskinIcon(bu.Icon)
+		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
+		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+		bu.SelectedTexture:ClearAllPoints()
+		bu.SelectedTexture:SetPoint("TOPLEFT", 1, -2)
+		bu.SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
+		F.CreateBDFrame(bu.SelectedTexture, .25)
 	end
-
-	hooksecurefunc(ScrollFrame, "Update", function(self)
-		local buttons = self.buttons
-		for i = 1, #buttons do
-			local bu = buttons[i]
-			if bu.SelectedTexture:IsShown() then
-				bu.bg:SetBackdropColor(r, g, b, .25)
-			else
-				bu.bg:SetBackdropColor(0, 0, 0, .25)
-			end
-
-			if bu.IconCover:IsShown() then
-				bu.Icon.bg:SetVertexColor(0, 0, 0, .7)
-			else
-				bu.Icon.bg:SetVertexColor(1, 1, 1)
-			end
-		end
-	end)
 
 	local DetailsFrame = SetsCollectionFrame.DetailsFrame
 	DetailsFrame.ModelFadeTexture:Hide()
@@ -582,17 +579,13 @@ C.themes["Blizzard_Collections"] = function()
 
 	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(self, itemFrame)
 		local ic = itemFrame.Icon
-		if not itemFrame.skinned then
+		if not itemFrame.styled then
 			ic:SetTexCoord(.08, .92, .08, .92)
-			ic.bg = F.CreateBDFrame(ic)
-			itemFrame.skinned = true
+			F.CreateBDFrame(ic)
+			itemFrame.IconBorder:Hide()
+			itemFrame.IconBorder.Show = F.dummy
+			itemFrame.styled = true
 		end
-
-		local quality
-		if itemFrame.collected then
-			quality = C_TransmogCollection.GetSourceInfo(itemFrame.sourceID).quality
-		end
-		SetItemButtonQuality(itemFrame, quality, itemFrame.sourceID)
 	end)
 
 	-- [[ Wardrobe ]]

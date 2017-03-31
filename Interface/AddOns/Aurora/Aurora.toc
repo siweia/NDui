@@ -68,7 +68,6 @@ FrameXML\LootFrame.lua
 FrameXML\LootHistory.lua
 FrameXML\MailFrame.lua
 FrameXML\MerchantFrame.lua
-FrameXML\ModelPreviewFrame.lua
 FrameXML\NavigationBar.lua
 FrameXML\PaperDollFrame.lua
 FrameXML\ProductChoiceFrame.lua
@@ -91,5 +90,6 @@ FrameXML\WorldMapFrame.lua
 FrameXML\WorldStateFrame.lua
 
 SharedXML\AddonList.lua
+SharedXML\ModelPreviewFrame.lua
 
 Other\ChatBubbles.lua

@@ -30,6 +30,7 @@ tinsert(C.themes["Aurora"], function()
 	end
 
 	local function isChatBubble(frame)
+		if frame:IsForbidden() then return end
 		if frame:GetName() then return end
 		local region = frame:GetRegions()
 		if region and region:IsObjectType("Texture") then

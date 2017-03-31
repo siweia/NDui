@@ -30,30 +30,17 @@ do
 end
 
 function module:QuestTracker()
-	--[[ Questblock click enhant
-	hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(block)
-		local questLogIndex = block.questLogIndex
-		if IsControlKeyDown() then
-			local items = GetAbandonQuestItems()
-			if items then
-				StaticPopup_Hide("ABANDON_QUEST")
-				StaticPopup_Show("ABANDON_QUEST_WITH_ITEMS", GetAbandonQuestName(), items)
-			else
-				StaticPopup_Hide("ABANDON_QUEST_WITH_ITEMS")
-				StaticPopup_Show("ABANDON_QUEST", GetAbandonQuestName())
-			end
+	-- Questblock click enhant
+	local function QuestHook(id)
+		local questLogIndex = GetQuestLogIndexByID(id)
+		if IsControlKeyDown() and CanAbandonQuest(id) then
+			QuestMapQuestOptions_AbandonQuest(id)
 		elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then
-			QuestLogPushQuest(questLogIndex)
+			QuestMapQuestOptions_ShareQuest(id)
 		end
-	end)
-	hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self)
-		local questLogIndex = GetQuestLogIndexByID(self.questID)
-		if IsControlKeyDown() then
-			QuestMapQuestOptions_AbandonQuest(self.questID)
-		elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then
-			QuestMapQuestOptions_ShareQuest(self.questID)
-		end
-	end)]]
+	end
+	hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(self, block) QuestHook(block.id) end)
+	hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
 
 	-- Show quest color and level
 	local function Showlevel()

@@ -268,11 +268,11 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	OrderHallTalentFramePortraitFrame:Hide()
 
 	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function()
-		for i = 34, 38 do
+		for i = 34, 41 do
 			select(i, OrderHallTalentFrame:GetRegions()):SetAlpha(0)
 		end
 
-		for i = 5, 15 do
+		for i = 5, 18 do
 			local bu = select(i, OrderHallTalentFrame:GetChildren())
 			if not bu.styled then
 				bu.Icon:SetTexCoord(.08, .92, .08, .92)
