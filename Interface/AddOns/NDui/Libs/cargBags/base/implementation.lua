@@ -310,23 +310,23 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	local clink = GetContainerItemLink(bagID, slotID)
 
 	if(clink) then
-		i.texture, i.count, i.locked, i.quality, i.readable = GetContainerItemInfo(bagID, slotID)
+		i.texture, i.count, i.locked, i.quality = GetContainerItemInfo(bagID, slotID)
 		i.cdStart, i.cdFinish, i.cdEnable = GetContainerItemCooldown(bagID, slotID)
 		i.isQuestItem, i.questID, i.questActive = GetContainerItemQuestInfo(bagID, slotID)
 		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
+		i.id = GetContainerItemID(bagID, slotID)
 
-		-- *edits by Lars "Goldpaw" Norberg for WoW 5.0.4 (MoP)
-		-- last return value here, "texture", doesn't show for battle pets
 		local texture
 		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice = GetItemInfo(clink)
 		i.texture = i.texture or texture
-		-- battle pet info must be extracted from the itemlink
+		i.rarity = i.rarity or i.quality
+
 		if clink:find("battlepet") then
 			if not(L) then
 				L = cargBags:GetLocalizedTypes()
 			end
 			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
-			local  _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
+			local _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
 			i.type = L["Battle Pets"]
 			i.rarity = tonumber(rarity) or 0
 			i.id = tonumber(id) or 0
@@ -335,12 +335,9 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.link = clink
 		elseif clink:find("keystone") then
 			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
-			local  _, _, level = strmatch(data, "(%w+):(%d+):(%d+)")
-			local id = select(10, GetContainerItemInfo(bagID, slotID))
-			i.type = GetItemInfo(id)
-			i.rarity = i.quality
-			i.id = id
-			i.name = name
+			local _, _, level = strmatch(data, "(%w+):(%d+):(%d+)")
+			i.id = i.id or 138019
+			i.name, _, _, _, _, i.type, i.subType, i.stackCount, i.equipLoc = GetItemInfo(i.id)
 			i.minLevel = level
 			i.link = clink
 		end

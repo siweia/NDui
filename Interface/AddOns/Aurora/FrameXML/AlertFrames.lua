@@ -95,8 +95,8 @@ tinsert(C.themes["Aurora"], function()
 		elseif frame.queue == LootUpgradeAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", 10, -10)
-				frame.bg:SetPoint("BOTTOMRIGHT", -10, 10)
+				frame.bg:SetPoint("TOPLEFT", 10, -13)
+				frame.bg:SetPoint("BOTTOMRIGHT", -12, 11)
 
 				F.ReskinIcon(frame.Icon)
 				frame.Icon:SetDrawLayer("BORDER", 5)
