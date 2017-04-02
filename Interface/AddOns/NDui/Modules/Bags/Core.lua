@@ -142,7 +142,7 @@ function module:OnLogin()
 
 		if NDuiDB["Bags"]["Artifact"] then
 			self.Artifact:SetAlpha(0)
-			if rarity and rarity == LE_ITEM_QUALITY_ARTIFACT then
+			if (rarity and rarity == LE_ITEM_QUALITY_ARTIFACT) or (item.id and item.id == 138019) then
 				self.Artifact:SetAlpha(1)
 			end
 		end

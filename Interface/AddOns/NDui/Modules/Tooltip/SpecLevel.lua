@@ -51,18 +51,15 @@ end
 
 --- Scan Item Level ---
 local lvlPattern = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
-local ItemDB, scanTip = {}
+local ItemDB = {}
 function NDui:GetItemLevel(link, quality)
 	if ItemDB[link] and quality ~= 6 then return ItemDB[link] end
 
-	if not scanTip then
-		scanTip = CreateFrame("GameTooltip", "NDuiScantip", nil, "GameTooltipTemplate")
- 		scanTip:SetOwner(UIParent, "ANCHOR_NONE")
-	end
-	scanTip:ClearLines()
+	local scanTip = _G["NDuiScantip"] or CreateFrame("GameTooltip", "NDuiScantip", nil, "GameTooltipTemplate")
+	scanTip:SetOwner(UIParent, "ANCHOR_NONE")
  	scanTip:SetHyperlink(link)
 
-	for i = 2, scanTip:NumLines() do
+	for i = 2, 5 do
 		local textLine = _G["NDuiScantipTextLeft"..i]
 		if textLine and textLine:GetText() then
 			local level = strmatch(textLine:GetText(), lvlPattern)

@@ -50,6 +50,13 @@ function module:Expbar()
 					min, max, value = 0, 1, 1
 				end
 				standing = 5
+			elseif C_Reputation.IsFactionParagon(factionID) then
+				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+				min, max, value = 0, threshold, currentValue
+			else
+				if standing == MAX_REPUTATION_REACTION then
+					min, max, value = 0, 1, 1
+				end
 			end
 			self:SetStatusBarColor(FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b, .85)
 			self:SetMinMaxValues(min, max)
@@ -105,11 +112,20 @@ function module:Expbar()
 				end
 				standingtext = friendTextLevel
 			else
+				if standing == MAX_REPUTATION_REACTION then
+					max = min + 1e3
+					value = max - 1
+				end
 				standingtext = GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))
 			end
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(name, 0,.6,1)
 			GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", .6,.8,1, 1,1,1)
+
+			if C_Reputation.IsFactionParagon(factionID) then
+				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+				GameTooltip:AddDoubleLine(L["ParagonRep"], currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+			end
 		end
 
 		if IsWatchingHonorAsXP() then
@@ -136,7 +152,11 @@ function module:Expbar()
 			local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 			local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
+			if pointsSpent > 51 then
+				GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent).." "..L["Paragon"]..(pointsSpent - 34)..")", 0,.6,1)
+			else
+				GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
+			end
 			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(totalXP).." ("..num..")", .6,.8,1, 1,1,1)
 			GameTooltip:AddDoubleLine(L["Next Trait"], BreakUpLargeNumbers(xp).."/"..BreakUpLargeNumbers(xpForNextPoint).." ("..floor(xp/xpForNextPoint*100).."%)", .6,.8,1, 1,1,1)
 		end

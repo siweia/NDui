@@ -1,10 +1,10 @@
-local _, ns = ...
-local oUF = ns.oUF or oUF
+local B, C, L, DB = unpack(select(2, ...))
+local oUF = NDui.oUF or oUF
 
 if not oUF then return end
 
 local function tooltip(self)
-	GameTooltip:SetOwner(self, 'ANCHOR_TOP', 0, 5)
+	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 5)
 	GameTooltip:ClearLines()
 	local name, standing, min, max, value, factionID = GetWatchedFactionInfo()
 	local friendID, _, _, _, _, _, friendTextLevel, _, nextFriendThreshold = GetFriendshipReputation(factionID)
@@ -19,10 +19,19 @@ local function tooltip(self)
 		end
 		standingtext = friendTextLevel
 	else
+		if standing == MAX_REPUTATION_REACTION then
+			max = min + 1e3
+			value = max - 1
+		end
 		standingtext = GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))
 	end
 	GameTooltip:AddLine(name, 0,.6,1)
 	GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", .6,.8,1, 1,1,1)
+	if C_Reputation.IsFactionParagon(factionID) then
+		local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+		GameTooltip:AddDoubleLine(L["ParagonRep"], currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+	end
+
 	GameTooltip:Show()
 end
 
@@ -30,7 +39,7 @@ local function update(self, event, unit)
 	local bar = self.Reputation
 	if(not GetWatchedFactionInfo()) then return bar:Hide() end
 
-	local name, id, min, max, value, factionID = GetWatchedFactionInfo()
+	local name, standing, min, max, value, factionID = GetWatchedFactionInfo()
 	local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 	if friendID then
 		if nextFriendThreshold then
@@ -38,7 +47,14 @@ local function update(self, event, unit)
 		else
 			min, max, value = 0, 1, 1
 		end
-		id = 5
+		standing = 5
+	elseif C_Reputation.IsFactionParagon(factionID) then
+		local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+		min, max, value = 0, threshold, currentValue
+	else
+		if standing == MAX_REPUTATION_REACTION then
+			min, max, value = 0, 1, 1
+		end
 	end
 	bar:SetMinMaxValues(min, max)
 	bar:SetValue(value)
@@ -46,28 +62,28 @@ local function update(self, event, unit)
 
 	if(bar.Text) then
 		if(bar.OverrideText) then
-			bar:OverrideText(min, max, value, name, id)
+			bar:OverrideText(min, max, value, name, standing)
 		else
-			bar.Text:SetFormattedText('%d / %d - %s', value - min, max - min, name)
+			bar.Text:SetFormattedText("%d / %d - %s", value - min, max - min, name)
 		end
 	end
 
-	if(bar.PostUpdate) then bar.PostUpdate(self, event, unit, bar, min, max, value, name, id) end
+	if(bar.PostUpdate) then bar.PostUpdate(self, event, unit, bar, min, max, value, name, standing) end
 end
 
 local function enable(self, unit)
 	local bar = self.Reputation
-	if(bar and unit == 'player') then
+	if(bar and unit == "player") then
 		if(not bar:GetStatusBarTexture()) then
 			bar:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
 		end
 
-		self:RegisterEvent('UPDATE_FACTION', update)
+		self:RegisterEvent("UPDATE_FACTION", update)
 
 		if(bar.Tooltip) then
 			bar:EnableMouse(true)
-			bar:HookScript('OnLeave', GameTooltip_Hide)
-			bar:HookScript('OnEnter', tooltip)
+			bar:HookScript("OnLeave", GameTooltip_Hide)
+			bar:HookScript("OnEnter", tooltip)
 		end
 
 		return true
@@ -76,8 +92,8 @@ end
 
 local function disable(self)
 	if(self.Reputation) then
-		self:UnregisterEvent('UPDATE_FACTION', update)
+		self:UnregisterEvent("UPDATE_FACTION", update)
 	end
 end
 
-oUF:AddElement('Reputation', update, enable, disable)
+oUF:AddElement("Reputation", update, enable, disable)

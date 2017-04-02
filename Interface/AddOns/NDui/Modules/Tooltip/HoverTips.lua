@@ -1,7 +1,7 @@
 local B, C, L, DB = unpack(select(2, ...))
 
 local orig1, orig2, GameTooltip = {}, {}, GameTooltip
-local linktypes = {item = true, enchant = true, spell = true, quest = true, unit = true, talent = true, achievement = true, glyph = true, instancelock = true, currency = true}
+local linktypes = {item = true, enchant = true, spell = true, quest = true, unit = true, talent = true, achievement = true, glyph = true, instancelock = true, currency = true, keystone = true}
 
 local function OnHyperlinkEnter(frame, link, ...)
 	local linktype = link:match("^([^:]+)")
