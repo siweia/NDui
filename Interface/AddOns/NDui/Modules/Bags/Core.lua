@@ -364,16 +364,3 @@ function module:OnLogin()
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 	SetInsertItemsLeftToRight(false)
 end
-
--- Fix Empty Toolip
-NDui:EventFrame("BAG_UPDATE_DELAYED"):SetScript("OnEvent", function()
-	local done
-	if BagsMain and BagsMain:IsShown() and GameTooltip:IsShown() then
-		GameTooltip:HookScript("OnTooltipCleared", function(self)
-			if not done and self:NumLines() == 0 and self:IsShown() then
-				self:Hide()
-				done = true
-			end
-		end)
-	end
-end)
