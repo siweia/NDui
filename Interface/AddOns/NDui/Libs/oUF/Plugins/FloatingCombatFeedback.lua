@@ -197,8 +197,8 @@ local function Update(self, event, ...)
 	if text then
 		local string = GetAvailableString(fcf)
 
-		string:SetFormattedText("|T%s:18:18:-10:-5:64:64:5:59:5:59|t%s", texture, text..(critMark and "*" or ""))
-		string:SetTextHeight(fcf.fontHeight * multiplier)
+		string:SetFont(DB.Font[1], fcf.fontHeight * multiplier, DB.Font[3])
+		string:SetFormattedText("|T%s:18:18:-2:0:64:64:5:59:5:59|t%s", texture, (critMark and "*" or "")..text)
 		string:SetTextColor(color.r, color.g, color.b)
 		string.elapsed = 0
 		string.scrollHeight = fcf.scrollHeight

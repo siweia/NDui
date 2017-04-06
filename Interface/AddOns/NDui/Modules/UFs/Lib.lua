@@ -861,10 +861,11 @@ lib.FloatingCombatText = function(self)
 	end
 
 	for i = 1, 10 do
-		fcf[i] = fcf:CreateFontString("$parentText", "OVERLAY", "CombatTextFontOutline")
+		fcf[i] = self:CreateFontString(nil, "OVERLAY")
 	end
 
 	fcf.xOffset = 60
+	fcf.fontHeight = 18
 	fcf.showPets = NDuiDB["UFs"]["PetCombatText"]
 	fcf.showHots = NDuiDB["UFs"]["HotsDots"]
 	fcf.abbreviateNumbers = true
