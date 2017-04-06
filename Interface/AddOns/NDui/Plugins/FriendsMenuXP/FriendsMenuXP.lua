@@ -382,14 +382,16 @@ function FriendsMenuXP_ChatFrame_OnHyperlinkShow(self, playerString, text, butto
         local _, presenceID = playerString:match("^BNplayer:([^:]*):([^:]*):")
         if presenceID then
 			local _, _, _, _, _, gameID = BNGetFriendInfoByID(presenceID)
-			local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-			if CanCooperateWithGameAccount(gameID) then
-				if IsAltKeyDown() then
-					hideDefaultMenu(button)
-					BNInviteFriend(gameID)
-				elseif IsControlKeyDown() then
-					hideDefaultMenu(button)
-					GuildInvite(charName.."-"..realmName)
+			if gameID then
+				local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+				if CanCooperateWithGameAccount(gameID) then
+					if IsAltKeyDown() then
+						hideDefaultMenu(button)
+						BNInviteFriend(gameID)
+					elseif IsControlKeyDown() then
+						hideDefaultMenu(button)
+						GuildInvite(charName.."-"..realmName)
+					end
 				end
 			end
         end
