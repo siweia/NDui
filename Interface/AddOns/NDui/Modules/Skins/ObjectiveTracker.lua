@@ -157,6 +157,25 @@ function module:QuestTracker()
 	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 
+	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
+		local progressBar = line.ProgressBar
+		local bar = progressBar.Bar
+
+		if not bar.styled then
+			for i = 1, 6 do
+				select(i, bar:GetRegions()):Hide()
+			end
+			bar:SetStatusBarTexture(DB.normTex)
+			bar.Label:Show()
+			local oldBg = select(5, bar:GetRegions())
+			local bg = B.CreateBG(oldBg, 3)
+			B.CreateBD(bg)
+			B.CreateTex(bg)
+
+			bar.styled = true
+		end
+	end)
+
 	-- Reskin Blocks
 	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
 		block.NormalBG:SetTexture("")
