@@ -861,7 +861,7 @@ lib.FloatingCombatText = function(self)
 	end
 
 	for i = 1, 10 do
-		fcf[i] = self:CreateFontString(nil, "OVERLAY")
+		fcf[i] = self:CreateFontString("$parentText", "OVERLAY")
 	end
 
 	fcf.xOffset = 60
