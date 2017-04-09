@@ -6,7 +6,7 @@ tinsert(C.themes["Aurora"], function()
 			select(i, frame:GetRegions()):Hide()
 		end
 
-		--F.CreateBD(frame)
+		if AuroraConfig.tooltips then F.CreateBD(frame) end
 	end
 
 	local function restyleGarrisonFollowerAbilityTooltipTemplate(frame)
@@ -19,7 +19,7 @@ tinsert(C.themes["Aurora"], function()
 		icon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(icon)
 
-		--F.CreateBD(frame)
+		if AuroraConfig.tooltips then F.CreateBD(frame) end
 	end
 
 	restyleGarrisonFollowerTooltipTemplate(GarrisonFollowerTooltip)

@@ -200,7 +200,10 @@ C.themes["Blizzard_PVPUI"] = function()
 	ConquestFrame.RatedBGHeader:Hide()
 	ConquestFrame.ShadowOverlay:Hide()
 
-	--F.CreateBD(ConquestTooltip)
+	if AuroraConfig.tooltips then
+		F.CreateBD(ConquestTooltip)
+		F.CreateBD(PVPRewardTooltip)
+	end
 
 	local ConquestFrameButton_OnEnter = function(self)
 		ConquestTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT", 1, 0)

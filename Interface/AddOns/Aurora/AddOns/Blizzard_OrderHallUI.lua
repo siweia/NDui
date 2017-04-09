@@ -253,6 +253,15 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	zonesupport.Follower1.PortraitFrame.Empty:SetColorTexture(0,0,0)
 	zonesupport.Follower1.PortraitFrame.Empty:SetAllPoints(zonesupport.Follower1.PortraitFrame.Portrait)
 
+	-- Orderhall tooltips
+
+	if AuroraConfig.tooltips then
+		GarrisonFollowerAbilityWithoutCountersTooltip:DisableDrawLayer("BACKGROUND")
+		GarrisonFollowerMissionAbilityWithoutCountersTooltip:DisableDrawLayer("BACKGROUND")
+		F.CreateBDFrame(GarrisonFollowerAbilityWithoutCountersTooltip)
+		F.CreateBDFrame(GarrisonFollowerMissionAbilityWithoutCountersTooltip)
+	end
+
 	-- Talent Frame
 
 	F.ReskinClose(OrderHallTalentFrameCloseButton)

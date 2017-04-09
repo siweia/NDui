@@ -29,4 +29,14 @@ C.themes["Blizzard_Contribution"] = function()
 			reward.styled = true
 		end
 	end)
+
+	-- Tooltips
+	if AuroraConfig.tooltips then
+		ContributionTooltip:SetBackdrop(nil)
+		ContributionBuffTooltip:DisableDrawLayer("BACKGROUND")
+		F.CreateBDFrame(ContributionTooltip)
+		F.CreateBDFrame(ContributionBuffTooltip)
+		ContributionBuffTooltip.Icon:SetTexCoord(.08, .92, .08, .92)
+		ContributionBuffTooltip.Border:SetAlpha(0)
+	end
 end

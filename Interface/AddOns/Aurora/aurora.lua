@@ -906,7 +906,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				local menu = _G["DropDownList"..i.."MenuBackdrop"]
 				local backdrop = _G["DropDownList"..i.."Backdrop"]
 				if not backdrop.reskinned then
-					--F.CreateBD(menu)
+					if AuroraConfig.tooltips then
+						F.CreateBD(menu)
+					end
 					F.CreateBD(backdrop)
 					F.CreateSD(backdrop)
 					backdrop.reskinned = true
