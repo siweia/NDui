@@ -588,6 +588,13 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end)
 
+	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
+	for i = 1, 34 do
+		select(i, SetsTransmogFrame:GetRegions()):Hide()
+	end
+	F.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
+	F.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
+
 	-- [[ Wardrobe ]]
 
 	local WardrobeFrame = WardrobeFrame
