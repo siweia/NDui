@@ -162,6 +162,8 @@ function module:QuestTracker()
 		local bar = progressBar.Bar
 
 		if not bar.styled then
+			bar:ClearAllPoints()
+			bar:SetPoint("LEFT")
 			for i = 1, 6 do
 				select(i, bar:GetRegions()):Hide()
 			end
