@@ -40,16 +40,17 @@ tinsert(C.themes["Aurora"], function()
 		questTexture:SetSize(1, 1)
 
 		border:SetTexture(C.media.backdrop)
-		border:SetPoint("TOPLEFT", -1, 1)
-		border:SetPoint("BOTTOMRIGHT", 1, -1)
+		border.SetTexture = F.dummy
+		border:SetPoint("TOPLEFT", -1.2, 1.2)
+		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 		border:SetDrawLayer("BACKGROUND", 1)
 
-		searchOverlay:SetPoint("TOPLEFT", -1, 1)
-		searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
+		searchOverlay:SetPoint("TOPLEFT", -1.2, 1.2)
+		searchOverlay:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
-		bu:SetHighlightTexture("")
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 
@@ -71,17 +72,18 @@ tinsert(C.themes["Aurora"], function()
 
 		bag:SetNormalTexture("")
 		bag:SetPushedTexture("")
-		bag:SetHighlightTexture("")
+		bag:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		highlightFrame:GetRegions():SetTexture(C.media.checked)
 
 		border:SetTexture(C.media.backdrop)
-		border:SetPoint("TOPLEFT", -1, 1)
-		border:SetPoint("BOTTOMRIGHT", 1, -1)
+		border.SetTexture = F.dummy
+		border:SetPoint("TOPLEFT", -1.2, 1.2)
+		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 		border:SetDrawLayer("BACKGROUND", 1)
 
-		searchOverlay:SetPoint("TOPLEFT", -1, 1)
-		searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
+		searchOverlay:SetPoint("TOPLEFT", -1.2, 1.2)
+		searchOverlay:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 
 		bag.icon:SetTexCoord(.08, .92, .08, .92)
 
