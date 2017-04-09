@@ -548,6 +548,7 @@ NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(_, _, addon)
 			end
 		end
 		ContributionBuffTooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
+		ContributionBuffTooltip.Border:SetAlpha(0)
 
 	elseif addon == "Blizzard_EncounterJournal" then
 		local f = EncounterJournalTooltip
