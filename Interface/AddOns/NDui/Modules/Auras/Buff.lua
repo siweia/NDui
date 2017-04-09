@@ -14,6 +14,7 @@ TempEnchant2:ClearAllPoints()
 TempEnchant2:SetPoint("TOPRIGHT", TempEnchant1, "TOPLEFT", -padding, 0)
 TempEnchant3:ClearAllPoints()
 TempEnchant3:SetPoint("TOPRIGHT", TempEnchant2, "TOPLEFT", -padding, 0)
+TempEnchant3:Hide()
 
 local function styleButton(bu)
 	if not bu or (bu and bu.styled) then return end
