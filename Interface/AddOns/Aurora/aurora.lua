@@ -75,7 +75,7 @@ local CreateTex = function(f)
 end
 
 F.CreateSD = function(f)
-	if not C.defaults["shadow"] then return end
+	if not AuroraConfig.shadow then return end
 	if f.Shadow then return end
 	f.Shadow = CreateFrame("Frame", nil, f)
 	f.Shadow:SetPoint("TOPLEFT", f, -2, 2)
