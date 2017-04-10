@@ -79,8 +79,8 @@ C.themes["Blizzard_GuildBankUI"] = function()
 			border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 			border:SetDrawLayer("BACKGROUND")
 
-			searchOverlay:SetPoint("TOPLEFT", -1, 1)
-			searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
+			searchOverlay:SetPoint("TOPLEFT", -1.2, 1.2)
+			searchOverlay:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 			F.CreateBDFrame(bu, .25)
 		end
 	end
@@ -101,6 +101,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		local nt = _G["GuildBankTab"..i.."ButtonNormalTexture"]
 
 		bu:SetPushedTexture("")
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		tb:GetRegions():Hide()
 		nt:SetAlpha(0)
 
