@@ -89,6 +89,15 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
+				--节拍器
+				{AuraID = 225719, UnitID = "player"},
+				--黑暗低语
+				{AuraID = 225774, UnitID = "player"},
+				{AuraID = 225776, UnitID = "player"},
+				--地狱火之书
+				{AuraID = 215816, UnitID = "player"},
+				--罗宁护腕
+				{AuraID = 208081, UnitID = "player"},
 				--回归打击
 				{AuraID = 225736, UnitID = "player"},
 				--苏拉玛套装，爆击
