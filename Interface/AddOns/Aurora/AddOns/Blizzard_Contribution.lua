@@ -23,6 +23,7 @@ C.themes["Blizzard_Contribution"] = function()
 		if not reward.styled then
 			reward.RewardName:SetTextColor(1, 1, 1)
 			reward.Icon:SetTexCoord(.08, .92, .08, .92)
+			reward.Icon.SetTexCoord = F.dummy
 			reward.Border:Hide()
 			F.CreateBDFrame(reward.Icon)
 

@@ -221,7 +221,7 @@ function module:Mailbox()
 				tooltip:AddLine(L["Attach List"])
 				for key, value in pairs(items) do
 					itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(key)
-					r, g, b = GetItemQualityColor(itemQuality)
+					r, g, b = GetItemQualityColor(itemQuality or 1)
 					tooltip:AddDoubleLine(" |T"..itemTexture..":12:12:0:0:50:50:4:46:4:46|t "..itemName, value, r, g, b)
 				end
 				tooltip:Show()
