@@ -115,7 +115,7 @@ function module:DBMSkin()
 				if not name.styled then
 					name:ClearAllPoints()
 					name:SetPoint("LEFT", frame, "LEFT", 2, 8)
-					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.8, 8)
+					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.85, 8)
 					name.SetPoint = B.Dummy
 					name:SetFont(DB.Font[1], 14, "OUTLINE")
 					name.SetFont = B.Dummy

@@ -40,7 +40,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 212647, 4)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 213621, 5)
 
 BOSS = 1762
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 206480)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 206480, 4)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 206365)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 212795, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 216040, 5)
