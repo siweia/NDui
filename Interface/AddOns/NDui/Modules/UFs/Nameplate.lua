@@ -478,6 +478,16 @@ local function UpdatePower(unitFrame)
 	unitFrame.power:SetText(perc_text)
 end
 
+local CustomUnits = {}
+local function CreateUnitTable()
+	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
+
+	local list = {string.split(" ", NDuiDB["Nameplate"]["UnitList"])}
+	for _, value in pairs(list) do
+		CustomUnits[value] = true
+	end
+end
+
 local function IsTapDenied(unitFrame)
 	return UnitIsTapDenied(unitFrame.unit) and not UnitPlayerControlled(unitFrame.unit)
 end
@@ -486,12 +496,15 @@ local function UpdateHealthColor(unitFrame)
 	local hp = unitFrame.healthBar
 	local unit = unitFrame.displayedUnit or unitFrame.unit
 	local status = UnitThreatSituation("player", unit)
+	local name = GetUnitName(unit, false) or UNKNOWN
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if UnitIsPlayer(unit) and UnitReaction(unit, "player") >= 5 then
+		if CustomUnits and CustomUnits[name] then
+			r, g, b = 0, .8, .3
+		elseif UnitIsPlayer(unit) and UnitReaction(unit, "player") >= 5 then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then
 				r, g, b = B.UnitColor(unit)
 			else
@@ -908,6 +921,7 @@ local function NamePlates_OnEvent(self, event, ...)
 	local arg1 = ...
 	if event == "VARIABLES_LOADED" then
 		HideBlizzard()
+		CreateUnitTable()
 		BlockAddons()
 		RedrawManaBar()
 		NamePlates_UpdateNamePlateOptions()
