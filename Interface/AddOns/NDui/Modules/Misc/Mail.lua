@@ -203,28 +203,29 @@ function module:Mailbox()
 	end)
 
 	hooksecurefunc("InboxFrameItem_OnEnter", function(self)
-		local tooltip = GameTooltip
 		local items = {}
-		wipe(items)
+
 		local itemAttached = select(8, GetInboxHeaderInfo(self.index))
 		if itemAttached then
-			local itemName, itemTexture, itemCount, itemQuality, itemid, r, g, b
 			for attachID = 1, 12 do
-				itemName, _, _, itemCount = GetInboxItem(self.index, attachID)
+				local _, _, _, itemCount = GetInboxItem(self.index, attachID)
 				if itemCount and itemCount > 0 then
-					_, itemid = strsplit(":", GetInboxItemLink(self.index, attachID))
+					local _, itemid = strsplit(":", GetInboxItemLink(self.index, attachID))
 					itemid = tonumber(itemid)
 					items[itemid] = (items[itemid] or 0) + itemCount
 				end
 			end
+
 			if itemAttached > 1 then
-				tooltip:AddLine(L["Attach List"])
+				GameTooltip:AddLine(L["Attach List"])
 				for key, value in pairs(items) do
-					itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(key)
-					r, g, b = GetItemQualityColor(itemQuality or 1)
-					tooltip:AddDoubleLine(" |T"..itemTexture..":12:12:0:0:50:50:4:46:4:46|t "..itemName, value, r, g, b)
+					local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(key)
+					if itemName then
+						local r, g, b = GetItemQualityColor(itemQuality)
+						GameTooltip:AddDoubleLine(" |T"..itemTexture..":12:12:0:0:50:50:4:46:4:46|t "..itemName, value, r, g, b)
+					end
 				end
-				tooltip:Show()
+				GameTooltip:Show()
 			end
 		end
 	end)
