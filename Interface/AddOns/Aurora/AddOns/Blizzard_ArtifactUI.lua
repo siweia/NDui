@@ -34,6 +34,7 @@ C.themes["Blizzard_ArtifactUI"] = function()
 			slot.Border:SetAlpha(0)
 			F.CreateBDFrame(slot)
 
+			slot.Background:Hide()
 			slot.SwatchTexture:SetTexCoord(.2, .8, .2, .8)
 			slot.SwatchTexture:SetAllPoints()
 			slot.HighlightTexture:SetColorTexture(1, 1, 1, .25)
