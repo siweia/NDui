@@ -309,7 +309,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"]},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"], true},
 		{1, "Nameplate", "TankMode", L["Tank Mode"]},
-		{1, "Nameplate", "CustomUnitColor", L["CustomUnitColor"], true},
+		{1, "Nameplate", "CustomUnitColor", "|cff00cc4c"..L["CustomUnitColor"], true},
 		{1, "Nameplate", "Arrow", L["Show Arrow"]},
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"]},
 		{2, "Nameplate", "UnitList", L["UnitColor List"], true},
