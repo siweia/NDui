@@ -448,6 +448,7 @@ local function HelloWorld()
 		c1.." /mm "..c2..L["Help Info6"],
 		c1.." /rl "..c2..L["Help Info7"],
 		c1.." /arc "..c2..L["Help Info8"],
+		c1.." /kro "..c2..L["Help Info13"],
 		c1.." /ncl "..c2..L["Help Info9"],
 	}
 	for index, line in pairs(lines) do
