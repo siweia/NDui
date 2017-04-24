@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(select(2, ...))
 -- AlreadyKnown, by villiv
 -- NDui MOD
 -----------------------------
-local COLOR = { r = 0.1, g = 1.0, b = 0.1, }
+local COLOR = { r = .1, g = 1, b = .1, }
 
 local tooltip = CreateFrame("GameTooltip")
 tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
@@ -11,8 +11,8 @@ tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 local IsAlreadyKnown
 do
 	local knowns = {}
-	local consumable, glyph, recipe, miscallaneous = AUCTION_CATEGORY_CONSUMABLES, AUCTION_CATEGORY_GLYPHS, AUCTION_CATEGORY_RECIPES, AUCTION_CATEGORY_MISCELLANEOUS
-	local knowables = { [consumable] = true, [glyph] = true, [recipe] = true, [miscallaneous] = true }
+	local consumable, recipe, misc = LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_RECIPE, LE_ITEM_CLASS_MISCELLANEOUS
+	local knowables = { [consumable] = true, [recipe] = true, [misc] = true }
 
 	local lines = {}
 	for i = 1, 40 do
@@ -24,8 +24,8 @@ do
 		if not itemLink then return end
 		local itemID = itemLink:match("item:(%d+):")
 		if knowns[itemID] then return true end
-		local _, _, _, _, _, itemType = GetItemInfo(itemLink)
-		if not knowables[itemType] then return end
+		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(itemLink)
+		if not name or not knowables[itemClassID] then return end
 		tooltip:ClearLines()
 		tooltip:SetHyperlink(itemLink)
 		for i = 1, tooltip:NumLines() do
@@ -47,10 +47,10 @@ local function MerchantFrame_UpdateMerchantInfo()
 		local button = _G["MerchantItem"..i.."ItemButton"]
 		if button and button:IsShown() then
 			local _, _, _, _, numAvailable, isUsable = GetMerchantItemInfo(index)
-			if (isUsable and IsAlreadyKnown(GetMerchantItemLink(index))) then
+			if isUsable and IsAlreadyKnown(GetMerchantItemLink(index)) then
 				local r, g, b = COLOR.r, COLOR.g, COLOR.b
 				if numAvailable == 0 then
-					r, g, b = r * 0.5, g * 0.5, b * 0.5
+					r, g, b = r*.5, g*.5, b*.5
 				end
 				SetItemButtonTextureVertexColor(button, r, g, b)
 			end
@@ -84,10 +84,10 @@ local function GuildBankFrame_Update()
 		local index = mod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
 		if index == 0 then index = NUM_SLOTS_PER_GUILDBANK_GROUP end
 
-		local button = _G["GuildBankColumn"..math.ceil((i - 0.5) / NUM_SLOTS_PER_GUILDBANK_GROUP).."Button"..index]
+		local button = _G["GuildBankColumn"..math.ceil((i - .5) / NUM_SLOTS_PER_GUILDBANK_GROUP).."Button"..index]
 		if button and button:IsShown() then
 			local texture, _, locked = GetGuildBankItemInfo(tab, i)
-			if texture and not locked then
+			if texture and not locked then	
 				if IsAlreadyKnown(GetGuildBankItemLink(tab, i)) then
 					SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
 				else
@@ -112,9 +112,9 @@ local function AuctionFrameBrowse_Update()
 		local index = offset + i
 		if index > numItems then return end
 
-		local texture = _G["BrowseButton" .. i .. "ItemIconTexture"]
+		local texture = _G["BrowseButton"..i.."ItemIconTexture"]
 		if texture and texture:IsShown() then
-			local _, _, _, _, canUse =  GetAuctionItemInfo("list", index)
+			local _, _, _, _, canUse = GetAuctionItemInfo("list", index)
 			if canUse and IsAlreadyKnown(GetAuctionItemLink("list", index)) then
 				texture:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
 			end
@@ -129,10 +129,10 @@ local function AuctionFrameBid_Update()
 		local index = offset + i
 		if index > numItems then return end
 
-		local texture = _G["BidButton" .. i .. "ItemIconTexture"]
-		if ( texture and texture:IsShown() ) then
-			local _, _, _, _, canUse =  GetAuctionItemInfo("bidder", index)
-			if ( canUse and IsAlreadyKnown(GetAuctionItemLink("bidder", index)) ) then
+		local texture = _G["BidButton"..i.."ItemIconTexture"]
+		if texture and texture:IsShown() then
+			local _, _, _, _, canUse = GetAuctionItemInfo("bidder", index)
+			if canUse and IsAlreadyKnown(GetAuctionItemLink("bidder", index)) then
 				texture:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
 			end
 		end
@@ -146,13 +146,13 @@ local function AuctionFrameAuctions_Update()
 		local index = offset + i
 		if index > numItems then return end
 
-		local texture = _G["AuctionsButton" .. i .. "ItemIconTexture"]
+		local texture = _G["AuctionsButton"..i.."ItemIconTexture"]
 		if texture and texture:IsShown() then
 			local _, _, _, _, canUse, _, _, _, _, _, _, _, saleStatus = GetAuctionItemInfo("owner", index)
 			if canUse and IsAlreadyKnown(GetAuctionItemLink("owner", index)) then
 				local r, g, b = COLOR.r, COLOR.g, COLOR.b
 				if saleStatus == 1 then
-					r, g, b = r * 0.5, g * 0.5, b * 0.5
+					r, g, b = r*.5, g*.5, b*.5
 				end
 				texture:SetVertexColor(r, g, b)
 			end
