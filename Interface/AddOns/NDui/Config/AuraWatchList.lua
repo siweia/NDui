@@ -494,6 +494,7 @@ C.AuraWatchList = {
 				--冰霜印记
 				{AuraID = 212531, UnitID = "player"},
 				{AuraID = 212587, UnitID = "player"},
+				{AuraID = 212647, UnitID = "player"},
 				--灼热烙印
 				{AuraID = 213148, UnitID = "player"},
 				--奥术迷雾
