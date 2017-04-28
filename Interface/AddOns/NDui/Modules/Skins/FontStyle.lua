@@ -80,6 +80,8 @@ function module:FontStyle()
 
 	-- Refont RaidFrame Health
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
+		if frame:IsForbidden() then return end
+
 		local options = DefaultCompactUnitFrameSetupOptions
 		frame.statusText:ClearAllPoints()
 		frame.statusText:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 3, options.height/3 - 5)
