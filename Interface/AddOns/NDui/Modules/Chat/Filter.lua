@@ -35,7 +35,9 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 	local keywords = {string.split(" ", NDuiDB["Chat"]["FilterList"])}
 	for _, value in pairs(keywords) do
 		if value ~= "" then
-			FilterList[value] = true
+			if not FilterList[value] then
+				FilterList[value] = true
+			end
 		end
 	end
 
@@ -46,6 +48,7 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 			match = match + 1
 		end
 	end
+
 	if match >= NDuiDB["Chat"]["Matches"] then
 		return true
 	end
