@@ -494,8 +494,8 @@ end
 
 local function UpdateHealthColor(unitFrame)
 	local hp = unitFrame.healthBar
-	local unit = unitFrame.displayedUnit or unitFrame.unit
-	local status = UnitThreatSituation("player", unit)
+	local unit = unitFrame.displayedUnit
+	local status = UnitThreatSituation("player", unit) or false
 	local name = GetUnitName(unit, false) or UNKNOWN
 	local r, g, b
 
