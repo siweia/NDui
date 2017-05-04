@@ -62,4 +62,6 @@ infoL = {
 	["Bronze Invasion"] = "Bronze Invasion",
 	["Mean One"] = "Feast of Winter Veil",
 	["Blingtron"] = "Blingtron Daily Gift",
+	["Legion Invasion"] = "Legion Invasion",
+	["Next Invasion"] = "Next Invasion",
 }

@@ -62,4 +62,6 @@ infoL = {
 	["Bronze Invasion"] = "要塞入侵 - 青銅",
 	["Mean One"] = "冬幕節日常",
 	["Blingtron"] = "布靈登每日禮包",
+	["Legion Invasion"] = "軍團突襲",
+	["Next Invasion"] = "下一次突襲",
 }

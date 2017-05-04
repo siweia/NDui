@@ -75,10 +75,57 @@ if cfg.Time == true then
 		end
 	end
 
+	-- Data
 	local months = {
 		MONTH_JANUARY, MONTH_FEBRUARY, MONTH_MARCH,	MONTH_APRIL, MONTH_MAY, MONTH_JUNE,
 		MONTH_JULY, MONTH_AUGUST, MONTH_SEPTEMBER, MONTH_OCTOBER, MONTH_NOVEMBER, MONTH_DECEMBER,
 	}
+
+	local bonus = {
+		43892, 43893, 43894,	--Order Resources
+		43895, 43896, 43897,	--Gold
+		43510,					--Orderhall
+	}
+	local bonusname = GetCurrencyInfo(1273)
+
+	local keystone = GetItemInfo(138019)
+	local questlist = {
+		{name = keystone, id = 44554},
+		{name = infoL["Blingtron"], id = 34774},
+		{name = infoL["Mean One"], id = 6983},
+		{name = "TBC"..infoL["Timewarped"], id = 40168},
+		{name = "WLK"..infoL["Timewarped"], id = 40173},
+		{name = "CTM"..infoL["Timewarped"], id = 40786},
+		{name = "MOP"..infoL["Timewarped"], id = 45799},
+	}
+
+	local invas = {
+		{quest = 38482, name = infoL["Platinum Invasion"]},
+		{quest = 37640, name = infoL["Gold Invasion"]},
+		{quest = 37639, name = infoL["Silver Invasion"]},
+		{quest = 37638, name = infoL["Bronze Invasion"]},
+	}
+
+	local tanaan = {
+		{name = infoL["Deathtalon"], id = 39287},
+		{name = infoL["Terrorfist"], id = 39288},
+		{name = infoL["Doomroller"], id = 39289},
+		{name = infoL["Vengeance"], id = 39290},
+	}
+
+	-- Check Legion Status
+	local GetAreaPOITimeLeft = C_WorldMap.GetAreaPOITimeLeft
+	local zonePOIIds = {5177, 5178, 5210, 5175}
+	local zoneNames = {1024, 1017, 1018, 1015}
+	local function OnInvasion()
+		for i = 1, #zonePOIIds do
+			local timeLeftMinutes = GetAreaPOITimeLeft(zonePOIIds[i])
+			if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then
+				return timeLeftMinutes, GetMapNameByID(zoneNames[i])
+			end
+		end
+	end
+
 	Stat:SetScript("OnEnter", function(self)
 		RequestRaidInfo()
 
@@ -135,18 +182,12 @@ if cfg.Time == true then
 
 		-- Quests
 		title = false
-		local bonus = {
-			43892, 43893, 43894,	--Order Resources
-			43895, 43896, 43897,	--Gold
-			43510,					--Orderhall
-		}
 		local count = 0
 		for _, id in pairs(bonus) do
 			if IsQuestFlaggedCompleted(id) then
 				count = count + 1
 			end
 		end
-		local bonusname = GetCurrencyInfo(1273)
 		if count > 0 then
 			AddTitle(QUESTS_LABEL)
 			local r,g,b
@@ -154,16 +195,6 @@ if cfg.Time == true then
 			GameTooltip:AddDoubleLine(bonusname, count.." / 3", 1,1,1, r,g,b)
 		end
 
-		local keystone = GetItemInfo(138019)
-		local questlist = {
-			{name = keystone, id = 44554},
-			{name = infoL["Blingtron"], id = 34774},
-			{name = infoL["Mean One"], id = 6983},
-			{name = "TBC"..infoL["Timewarped"], id = 40168},
-			{name = "WLK"..infoL["Timewarped"], id = 40173},
-			{name = "CTM"..infoL["Timewarped"], id = 40786},
-			{name = "MOP"..infoL["Timewarped"], id = 45799},
-		}
 		for _, index in pairs(questlist) do
 			if index.name and IsQuestFlaggedCompleted(index.id) then
 				AddTitle(QUESTS_LABEL)
@@ -171,12 +202,6 @@ if cfg.Time == true then
 			end
 		end
 
-		local invas = {
-			{quest = 38482, name = infoL["Platinum Invasion"]},
-			{quest = 37640, name = infoL["Gold Invasion"]},
-			{quest = 37639, name = infoL["Silver Invasion"]},
-			{quest = 37638, name = infoL["Bronze Invasion"]},
-		}
 		for _, v in pairs(invas) do
 			if v.quest and IsQuestFlaggedCompleted(v.quest) then
 				AddTitle(QUESTS_LABEL)
@@ -187,12 +212,6 @@ if cfg.Time == true then
 
 		-- Tanaan rares
 		title = false
-		local tanaan = {
-			{name = infoL["Deathtalon"], id = 39287},
-			{name = infoL["Terrorfist"], id = 39288},
-			{name = infoL["Doomroller"], id = 39289},
-			{name = infoL["Vengeance"], id = 39290},
-		}
 		for _, boss in pairs(tanaan) do
 			if boss.name and IsQuestFlaggedCompleted(boss.id) then
 				AddTitle(infoL["Tanaan"])
@@ -200,6 +219,36 @@ if cfg.Time == true then
 			end
 		end
 
+		-- Legion Invasion
+		title = false
+
+		local nextTime
+		if OnInvasion() then
+			local timeLeft = OnInvasion()
+			local elapsed = 360 - timeLeft
+			local startTime = time() - elapsed*60
+			nextTime = date("%m/%d %H:%M", startTime + 66600)
+			diminfo.prevInvasion = startTime
+		elseif diminfo.prevInvasion then
+			local elapsed = time() - diminfo.prevInvasion
+			while elapsed > 66600 do
+				elapsed = elapsed - 66600
+			end
+			nextTime = date("%m/%d %H:%M", 66600 - elapsed + time())
+		end
+
+		if nextTime then
+			AddTitle(infoL["Legion Invasion"])
+			if OnInvasion() then
+				local timeLeft, zoneName = OnInvasion()
+				local r,g,b
+				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+				GameTooltip:AddDoubleLine(zoneName, format("%d:%2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+			end
+			GameTooltip:AddDoubleLine(infoL["Next Invasion"], nextTime, 1,1,1, 1,1,1)
+		end
+
+		-- Help Info
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
 		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["Toggle Calendar"], 1,1,1, .6,.8,1)
 		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["Toggle Clock"], 1,1,1, .6,.8,1)
