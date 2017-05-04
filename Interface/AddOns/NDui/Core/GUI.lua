@@ -63,6 +63,7 @@ local defaultSettings = {
 		Dispellable = false,
 		InstanceAuras = true,
 		DebuffBorder = true,
+		SpecRaidPos = false,
 		RaidClassColor = false,
 		HorizonRaid = false,
 		RaidScale = 1,
@@ -271,6 +272,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidFrame", L["UFs RaidFrame"]},
 		{},--blank
 		{1, "UFs", "SimpleMode", L["Simple RaidFrame"]},
+		{},--blank
+		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"], true},
 		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},

@@ -280,6 +280,7 @@ oUF:Factory(function(self)
 		local numGroups = NDuiDB["UFs"]["NumGroups"]
 		local horizon = NDuiDB["UFs"]["HorizonRaid"]
 		local scale = NDuiDB["UFs"]["RaidScale"]
+		local raidMover
 
 		if NDuiDB["UFs"]["SimpleMode"] then
 			local function CreateGroup(name, i)
@@ -320,7 +321,7 @@ oUF:Factory(function(self)
 			end
 
 			local group = CreateGroup("oUF_Raid", groupFilter)
-			B.Mover(group, L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 140*scale, 30*20*scale)
+			raidMover = B.Mover(group, L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 140*scale, 30*20*scale)
 		else
 			local function CreateGroup(name, i)
 				local group = self:SpawnHeader(name, nil, "solo,party,raid",
@@ -351,9 +352,9 @@ oUF:Factory(function(self)
 				groups[i] = CreateGroup("oUF_Raid"..i, i)
 				if i == 1 then
 					if horizon then
-						B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 84*5*scale, 40*numGroups*scale)
+						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 84*5*scale, 40*numGroups*scale)
 					else
-						B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 85*numGroups*scale, 42*5*scale)
+						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 85*numGroups*scale, 42*5*scale)
 					end
 				else
 					if horizon then
@@ -363,6 +364,29 @@ oUF:Factory(function(self)
 					end
 				end
 			end
+		end
+
+		if raidMover then
+			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
+
+			NDui:EventFrame({"UNIT_SPELLCAST_SUCCEEDED", "PLAYER_ENTERING_WORLD"}):SetScript("OnEvent", function(self, event, ...)
+				local unit, _, _, _, spellID = ...
+				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
+					if not GetSpecialization() then return end
+					local specIndex = GetSpecialization()
+					if not NDuiDB["Mover"]["RaidPos"..specIndex] then
+						NDuiDB["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
+					end
+					raidMover:ClearAllPoints()
+					raidMover:SetPoint(unpack(NDuiDB["Mover"]["RaidPos"..specIndex]))
+				end
+			end)
+
+			raidMover:HookScript("OnDragStop", function()
+				if not GetSpecialization() then return end
+				local specIndex = GetSpecialization()
+				NDuiDB["Mover"]["RaidPos"..specIndex] = NDuiDB["Mover"]["RaidFrame"]
+			end)
 		end
 	end
 end)
