@@ -329,6 +329,8 @@ C.AuraWatchList = {
 				{AuraID = 192082, UnitID = "player"},
 				--大地图腾
 				{AuraID = 201633, UnitID = "player"},
+				--先祖护佑
+				{AuraID = 207498, UnitID = "player"},
 				--圣光护盾
 				{AuraID = 204150, UnitID = "player"},
 			},
