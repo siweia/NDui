@@ -271,14 +271,13 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	[4] = {
 		{1, "UFs", "RaidFrame", L["UFs RaidFrame"]},
 		{},--blank
-		{1, "UFs", "SimpleMode", L["Simple RaidFrame"]},
-		{},--blank
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"], true},
 		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
 		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
+		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
 		{},--blank
 		{1, "UFs", "AutoRes", L["UFs AutoRes"]},
 		{1, "UFs", "DebuffBorder", L["Auras Border"], true},
