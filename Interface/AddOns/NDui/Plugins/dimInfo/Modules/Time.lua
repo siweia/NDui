@@ -113,7 +113,7 @@ if cfg.Time == true then
 		{name = infoL["Vengeance"], id = 39290},
 	}
 
-	-- Check Legion Status
+	-- Check Invasion Status
 	local GetAreaPOITimeLeft = C_WorldMap.GetAreaPOITimeLeft
 	local zonePOIIds = {5177, 5178, 5210, 5175}
 	local zoneNames = {1024, 1017, 1018, 1015}
@@ -243,7 +243,7 @@ if cfg.Time == true then
 				local timeLeft, zoneName = OnInvasion()
 				local r,g,b
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-				GameTooltip:AddDoubleLine(zoneName, format("%d:%2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+				GameTooltip:AddDoubleLine(zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 			end
 			GameTooltip:AddDoubleLine(infoL["Next Invasion"], nextTime, 1,1,1, 1,1,1)
 		end
