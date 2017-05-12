@@ -51,6 +51,9 @@ local UNIT_SPELLCAST_START = function(self, event, unit)
 	if(castbar.Text) then castbar.Text:SetText(text) end
 	if(castbar.Icon) then castbar.Icon:SetTexture(texture) end
 	if(castbar.Time) then castbar.Time:SetText() end
+	if(castbar.Icon.Shadow) then
+		castbar.Icon.Shadow:SetShown(castbar.Icon:IsShown() and castbar.Icon:GetTexture() ~= nil)
+	end
 
 	local shield = castbar.Shield
 	if(shield and notInterruptible) then

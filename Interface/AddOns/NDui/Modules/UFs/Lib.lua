@@ -313,15 +313,10 @@ lib.gen_castbar = function(f)
     txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
 
     local i = s:CreateTexture(nil, "ARTWORK")							-- castbar icon
-    i:SetSize(s:GetHeight() + 1, s:GetHeight() + 1)
+    i:SetSize(s:GetHeight(), s:GetHeight())
     i:SetPoint("RIGHT", s, "LEFT", -5, 0)
     i:SetTexCoord(unpack(DB.TexCoord))
-
-    local ibg = CreateFrame("Frame", nil, s)							-- castbar icon shadow
-    ibg:SetFrameLevel(0)
-    ibg:SetPoint("TOPLEFT", i, "TOPLEFT", -1, 1)
-    ibg:SetPoint("BOTTOMRIGHT", i, "BOTTOMRIGHT", 1, -1)
-	B.CreateSD(ibg, 2, 3)
+	B.CreateSD(i, 3, 3)
 
     if f.mystyle == "player" then
 		local z = s:CreateTexture(nil,"OVERLAY")

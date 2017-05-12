@@ -18,6 +18,7 @@ local channelingTicks = {
 	[GetSpellInfo(12051)] = 3, 		-- evocation
 	[GetSpellInfo(205021)] = 12,
 }
+
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
@@ -30,6 +31,7 @@ f:SetScript("OnEvent", function(self)
 
 	channelingTicks[GetSpellInfo(47540)] = penance
 end)
+
 local ticks = {}
 cast.setBarTicks = function(castBar, ticknum)
 	if ticknum and ticknum > 0 then
@@ -52,6 +54,7 @@ cast.setBarTicks = function(castBar, ticknum)
 		end
 	end
 end
+
 cast.OnCastbarUpdate = function(self, elapsed)
 	if not self.Lag then self.Lag = 0 end
 	if GetNetStats() == 0 then return end
@@ -88,11 +91,13 @@ cast.OnCastbarUpdate = function(self, elapsed)
 		end
 	end
 end
+
 cast.OnCastSent = function(self, event, unit, spell, rank)
 	if not self.Castbar.SafeZone then return end
 	self.Castbar.SafeZone.sendTime = GetTime()
 	self.Castbar.SafeZone.castSent = true
 end
+
 cast.PostCastStart = function(self, unit, name, rank, text)
 	local pcolor = {255/255, 128/255, 128/255}
 	local interruptcb = {95/255, 182/255, 255/255}
@@ -129,6 +134,7 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 		self:SetStatusBarColor(pcolor[1], pcolor[2], pcolor[3], 1)
 	end
 end
+
 cast.PostCastStop = function(self, unit, name, rank, castid)
 	if not self.fadeOut then 
 		self:SetStatusBarColor(unpack(self.CompleteColor))
@@ -137,11 +143,13 @@ cast.PostCastStop = function(self, unit, name, rank, castid)
 	self:SetValue(self.max)
 	self:Show()
 end
+
 cast.PostChannelStop = function(self, unit, name, rank)
 	self.fadeOut = true
 	self:SetValue(0)
 	self:Show()
 end
+
 cast.PostCastFailed = function(self, event, unit, name, rank, castid)
 	self:SetStatusBarColor(unpack(self.FailColor))
 	self:SetValue(self.max)
@@ -150,4 +158,5 @@ cast.PostCastFailed = function(self, event, unit, name, rank, castid)
 	end
 	self:Show()
 end
+
 ns.cast = cast
