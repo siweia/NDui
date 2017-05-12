@@ -186,6 +186,10 @@ C.AuraWatchList = {
 				{AuraID = 230259, UnitID = "target", Caster = "player"},
 				--阳光坍缩
 				{AuraID = 225746, UnitID = "target", Caster = "player"},
+				--抗磨联军的调和
+				{AuraID = 242583, UnitID = "player"},
+				{AuraID = 242584, UnitID = "player"},
+				{AuraID = 242586, UnitID = "player"},
 		------>WOD附魔
 				--血环之印
 				{AuraID = 173322, UnitID = "player"},
