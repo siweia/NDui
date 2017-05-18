@@ -1,5 +1,10 @@
 Skada.versions = {
     {
+        id = "1.6.7",
+        title = "Skada 1.6.7",
+        message = "Added new Buffs and Debuffs overview modes, showing spells used. Clicking a spell shows the corresponding players.<br/>"
+    },
+    {
         id = "1.6.4",
         title = "Skada 1.6.4",
         message = "Added a new update frequency option.<br/>Added a new notification system (LibNotify) to display version information unobtrusively."
