@@ -129,6 +129,7 @@ function module:QuestTracker()
 			bar.BarFrame2:Hide()
 			bar.BarFrame3:Hide()
 			bar.BarBG:Hide()
+			bar.BarGlow:Hide()
 			bar.IconBG:SetTexture("")
 
 			bar:SetPoint("LEFT", 22, 0)
