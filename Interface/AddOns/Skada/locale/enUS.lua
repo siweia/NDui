@@ -481,7 +481,13 @@ L["Holy power gain sources"] = true
 L["Runic power gain sources"] = true
 L["Power gains"] = true
 L["Focus gained"] = true
+L["Fury gained"] = true
+L["Pain gained"] = true
+L["Soul Shards gained"] = true
 L["Focus gain sources"] = true
+L["Fury gain sources"] = true
+L["Pain gain sources"] = true
+L["Soul Shards gain sources"] = true
 
 L["Minimum"] = true
 L["Maximum"] = true
@@ -498,3 +504,6 @@ L["Animate bar changes smoothly rather than immediately."] = true
 
 L["Update frequency"] = true
 L["How often windows are updated. Shorter for faster updates. Increases CPU usage."] = true
+
+L["Buffs"] = true
+L["Debuffs"] = true

@@ -62,6 +62,7 @@ L["Boss fights will be kept with this on, and non-boss fights are discarded."] =
 L["Broker display"] = "Broker顯示"
 L["Buff spell list"] = "增益法術列表"
 L["Buff uptimes"] = "增益持續時間"
+L["Buffs"] = "增益"
 L["Buttons"] = "按鈕"
 L["CC"] = "控場"
 L["CC breakers"] = "控場破除者"
@@ -425,3 +426,4 @@ L["Window height"] = "視窗的高度"
 L["Windows"] = "視窗"
 L["Wipe mode"] = "清除模組"
 L["Yes"] = "是"
+

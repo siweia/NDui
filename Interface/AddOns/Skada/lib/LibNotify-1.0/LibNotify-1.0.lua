@@ -7,10 +7,6 @@ local pairs = pairs
 local unpack = unpack
 local tinsert, tremove = table.insert, table.remove
 
-local instructions = "Left-click for details, right-click to dismiss."
---local locale = GetLocale()
---Todo: translate
-
 local storage = {}
 local icons = {}
 local queue = {}
@@ -21,18 +17,59 @@ local frame = nil
 local content = nil
 local messageframe = nil
 
+local html = nil
+local clickfunc = nil
+
+local leftclick = "Left-click for details."
+local rightclick = "Right-click to dismiss."
+local defaultfont = [[Fonts\FRIZQT__.TTF]]
+
+local locale = GetLocale()
+if locale == "ruRU" then
+    leftclick = "щелкните левой кнопкой для подробностей."
+    rightclick = "Нажмите право увольнять."
+    defaultfont = [[Fonts\FRIZQT___CYR.TTF]]
+end
+if locale == "zhCN" then
+    leftclick = "点击左边了解详情。"
+    rightclick = "点击右键即可关闭。"
+    defaultfont = [[Fonts\ARKai_T.ttf]]
+end
+if locale == "zhTW" then
+    leftclick = "點擊左邊了解詳情。"
+    rightclick = "點擊右鍵即可關閉。"
+    defaultfont = [[Fonts\ARKai_T.ttf]]
+end
+if locale == "deDE" then
+    leftclick = "Klicken Sie für Details links."
+    rightclick = "Klicken Sie rechts, um zu entlassen."
+end
+if locale == "frFR" then
+    leftclick = "Cliquez pour plus de détails."
+    rightclick = "Cliquez à droite pour fermer."
+end
+if locale == "itIT" then
+    leftclick = "Clicca per vedere i dettagli."
+    rightclick = "Fare clic destro per chiudere."
+end
+
+if locale == "esES" then
+    leftclick = "Haz click para ver los detalles."
+    rightclick = "Haga clic derecho para cerrar."
+end
+
 lib.data = {
     defaulticon = "Interface\\Icons\\Inv_misc_book_02",
     notice = {
         title = {
             color = {1, 1, 1, 1},
             size = 16,
-            font = [[Fonts\FRIZQT__.TTF]]
+            font = defaultfont
         },
         message = {
             color = {0.8, 0.8, 0.3, 1},
             size = 9,
-            font = [[Fonts\FRIZQT__.TTF]]
+            font = defaultfont
         },
         backdrop = {
             bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark",
@@ -48,7 +85,7 @@ lib.data = {
             RIGHT = 500, 
         },
         size = {
-            width = 300,
+            width = 350,
             height = 50
         }
     },
@@ -56,12 +93,12 @@ lib.data = {
         title = {
             color = {1, 1, 1, 0},
             size = 22,
-            font = [[Fonts\FRIZQT__.TTF]]
+            font = defaultfont
         },
         message = {
             color = {1, 1, 1, 0},
             size = 12,
-            font = [[Fonts\FRIZQT__.TTF]]
+            font = defaultfont
         },
         backdrop = {
             bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark",
@@ -84,11 +121,21 @@ local mixins = {"Notify", "NotifyOnce", "SetNotifyStorage", "SetNotifyIcon"}
 
 local function note_to_html(note)
     local html = "<html><body>"
+    local is_empty = true
     for _, item in ipairs(note) do
-        html = html .. "<h1>" .. item.title .. "</h1><p>" .. item.message .. "</p><br/>"
+        if item.message and type(item.message) == "string" then
+            html = html .. "<h1>" .. item.title .. "</h1><p>" .. item.message .. "</p><br/>"
+            is_empty = false
+        else
+            html = html .. "<h1>" .. item.title .. "</h1><br/>"
+        end
     end
     html = html .. "</body></html>"
-    return html
+    if is_empty then
+        return nil
+    else
+        return html
+    end
 end
 
 local function popNotifications()
@@ -107,14 +154,43 @@ local function popNotifications()
         frame:SetPoint("BOTTOMRIGHT", -25, 25)
         frame:SetFrameStrata("DIALOG")
         frame:Hide()
+        
+        local anim = frame:CreateAnimationGroup()
+        anim:SetToFinalAlpha(true)
+        frame.fader = anim:CreateAnimation("Alpha")
+        anim:SetScript("OnFinished", function()
+                if frame:GetAlpha() == 0 then
+                    frame:Hide()
+                    popNotifications()
+                end
+            end)
+        
+        frame.fadeIn = function()
+            anim:Pause()
+            frame.fader:SetFromAlpha(0.0)
+            frame.fader:SetToAlpha(1.0)
+            frame.fader:SetDuration(0.5)
+            anim:Play()
+            frame:Show()
+        end
 
+        frame.fadeOut = function()
+            anim:Pause()
+            frame.fader:SetFromAlpha(1.0)
+            frame.fader:SetToAlpha(0.0)
+            frame.fader:SetDuration(0.5)
+            anim:Play()
+        end
+            
         local titlestring = frame:CreateFontString(nil, "ARTWORK", "ChatFontNormal")
         titlestring:SetTextColor(unpack(style.title.color))
         titlestring:SetFont(style.title.font, style.title.size)
-        titlestring:SetWordWrap(false)
+        --titlestring:SetWordWrap(false)
+        titlestring:SetMaxLines(2)
         titlestring:SetJustifyH("LEFT")
         titlestring:SetPoint("LEFT", 50, 0)
-        titlestring:SetPoint("TOP", 0, -2)
+        titlestring:SetPoint("TOP", 0, 2)
+        titlestring:SetWidth(style.size.width - 50)
         titlestring:SetHeight(40)
         
 		local icon = frame:CreateTexture(nil, "OVERLAY")
@@ -130,22 +206,29 @@ local function popNotifications()
         messagestring:SetWordWrap(false)
         messagestring:SetPoint("LEFT", 50, 0)
         messagestring:SetPoint("BOTTOM", 0, 0)
-        messagestring:SetHeight(20)
+        messagestring:SetHeight(18)
 
         local close = CreateFrame("Button", nil, frame)
         close:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
         close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight", "ADD")
         close:SetSize(25, 25)
-        close:SetPoint("RIGHT", frame, "RIGHT", -2, -2)
-        close:SetPoint("TOP", frame, "TOP", -2, -2)
+        close:SetPoint("RIGHT", frame, "RIGHT", 2, 2)
+        close:SetPoint("TOP", frame, "TOP", 2, 2)
         close:SetScript("OnClick", function(f)
-            f:GetParent():Hide() 
-            popNotifications()
+            --f:Hide()
+            frame:fadeOut()
         end)
         
         frame:EnableMouse(true)
         frame:SetScript("OnMouseDown", function(f, btn) 
             if btn == "LeftButton" then
+                if clickfunc then
+                    clickfunc()
+                    return
+                end
+                if not html then
+                    return
+                end
                 if not messageframe then
                     style = lib.data.popup
                     messageframe = CreateFrame("Frame", nil, UIParent)
@@ -215,8 +298,8 @@ local function popNotifications()
                 messageframe:Show()
             end
             if btn == "RightButton" then
-                frame:Hide()
-                popNotifications()
+                --frame:Hide()
+                frame:fadeOut()
             end
         end)
         
@@ -226,12 +309,30 @@ local function popNotifications()
     end
     
     frame.titlestring:SetText(note[1].title)
-    frame.messagestring:SetText(instructions)
-    html = note_to_html(note)
+
+    html = nil
+    clickfunc = nil
+    if type(note[1].message) == "string" then
+        html = note_to_html(note)
+    elseif type(note[1].message) == "function" then
+        clickfunc = note[1].message
+    end
     
+    -- If title is truncated, and we don't have a message/func already, show full title as message.
+    if not html and not clickfunc and frame.titlestring:IsTruncated() then
+        html = note[1].title
+    end
+    
+    if html then
+        frame.messagestring:SetText(leftclick .. ' ' .. rightclick)
+    else
+        frame.messagestring:SetText(rightclick)
+    end
+        
     frame.icon:SetTexture(note[1].icon or lib.data.defaulticon)
     frame.icon:SetSize(lib.data.notice.size.height-8, lib.data.notice.size.height-8)
-    frame:Show()
+    --frame:Show()
+    frame:fadeIn()
 end
 
 local function add_notifications(self, once, ...)
