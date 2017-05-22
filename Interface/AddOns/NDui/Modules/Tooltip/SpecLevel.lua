@@ -209,7 +209,6 @@ local function ScanUnit(unit, forced)
 
 		if not (IsShiftKeyDown() or forced) then
 			if cachedGear and cachedSpec then return end
-			if UnitAffectingCombat("player") then return end
 		end
 
 		if not UnitIsVisible(unit) then return end
