@@ -13,7 +13,7 @@ function module:OnLogin()
 	self:Focuser()
 	self:Mailbox()
 	self:MissingStats()
-	self:ShowDurability()
+	self:ShowItemLevel()
 	self:BeamTool()
 
 	-- Hide Bossbanner
