@@ -5,6 +5,8 @@ local module = NDui:GetModule("Misc")
 	给角色属性面板添加额外的数据，同时使其支持滚动，防止数据溢出。
 ]]
 function module:MissingStats()
+	if not NDuiDB["Misc"]["MissingStats"] then return end
+
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)
 	statPanel:SetPoint("TOP", 0, -5)

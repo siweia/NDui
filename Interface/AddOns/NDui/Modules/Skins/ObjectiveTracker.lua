@@ -67,6 +67,9 @@ function module:QuestTracker()
 	end
 	hooksecurefunc("QuestLogQuests_Update", Showlevel)
 
+	-- ObjectiveTracker Skin
+	if not NDuiDB["Skins"]["TrackerSkin"] then return end
+
 	-- Reskin QuestIcons
 	local function reskinQuestIcon(self, block)
 		local itemButton = block.itemButton
