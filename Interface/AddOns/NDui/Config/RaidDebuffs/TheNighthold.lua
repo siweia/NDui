@@ -59,6 +59,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 218502)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 218809, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 218342, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 220114)		-- achievement
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 219235)
 
 BOSS = 1732
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 206936)

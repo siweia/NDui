@@ -172,6 +172,10 @@ C.AuraWatchList = {
 				{AuraID = 191629, UnitID = "player"},
 				{AuraID = 191630, UnitID = "player"},
 				{AuraID = 191631, UnitID = "player"},
+				--无尽暗影恐惧石
+				{AuraID = 238499, UnitID = "player"},
+				{AuraID = 238500, UnitID = "player"},
+				{AuraID = 238501, UnitID = "player"},
 				--PVP饰品，+敏捷
 				{AuraID = 190026, UnitID = "player"},
 				--PVP饰品，+全能
