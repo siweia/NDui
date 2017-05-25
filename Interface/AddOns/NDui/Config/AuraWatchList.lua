@@ -176,6 +176,8 @@ C.AuraWatchList = {
 				{AuraID = 238499, UnitID = "player"},
 				{AuraID = 238500, UnitID = "player"},
 				{AuraID = 238501, UnitID = "player"},
+				--咬一口
+				{AuraID = 228461, UnitID = "player"},
 				--PVP饰品，+敏捷
 				{AuraID = 190026, UnitID = "player"},
 				--PVP饰品，+全能
@@ -194,6 +196,7 @@ C.AuraWatchList = {
 				{AuraID = 242583, UnitID = "player"},
 				{AuraID = 242584, UnitID = "player"},
 				{AuraID = 242586, UnitID = "player"},
+				{AuraID = 243096, UnitID = "player"},
 		------>WOD附魔
 				--血环之印
 				{AuraID = 173322, UnitID = "player"},
