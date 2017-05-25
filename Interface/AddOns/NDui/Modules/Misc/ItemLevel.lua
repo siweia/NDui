@@ -58,15 +58,11 @@ function module:ShowItemLevel()
 		end
 	})
 
-	local function RefreshData(self, event)
-		local unit, getString = "player", myString
-		if event == "INSPECT_READY" then
-			unit, getString = InspectFrame and InspectFrame.unit, tarString
-		end
+	local function SetupItemLevel(unit, strType)
 		if not unit then return end
 
 		for slot, id in pairs(SLOTIDS) do
-			local str = getString[slot]
+			local str = strType[slot]
 			if not str then return end
 			str:SetText("")
 
@@ -85,12 +81,19 @@ function module:ShowItemLevel()
 	end
 
 	hooksecurefunc("PaperDollItemSlotButton_OnShow", function(self)
-		if not self.init then
-			RefreshData()
-			self.init = true
+		SetupItemLevel("player", myString)
+	end)
+
+	hooksecurefunc("PaperDollItemSlotButton_OnEvent", function(self, event, id)
+		if event == "PLAYER_EQUIPMENT_CHANGED" and self:GetID() == id then
+			SetupItemLevel("player", myString)
 		end
 	end)
 
-	local f = NDui:EventFrame({"PLAYER_EQUIPMENT_CHANGED", "INSPECT_READY"})
-	f:SetScript("OnEvent", RefreshData)
+	NDui:EventFrame("INSPECT_READY"):SetScript("OnEvent", function(self, event, ...)
+		local guid = ...
+		if InspectFrame and InspectFrame.unit and UnitGUID(InspectFrame.unit) == guid then
+			SetupItemLevel(InspectFrame.unit, tarString)
+		end
+	end)
 end
