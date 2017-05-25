@@ -7,15 +7,12 @@ local module = NDui:GetModule("Misc")
 local lvlPattern = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
 local ItemDB = {}
 function NDui:GetUnitItemInfo(unit, slot)
-    if not UnitExists(unit) then return end
+	local link = GetInventoryItemLink(unit, slot)
+	if ItemDB[link] then return ItemDB[link] end
 
 	local tip = _G["NDuiUnitTip"] or CreateFrame("GameTooltip", "NDuiUnitTip", nil, "GameTooltipTemplate")
     tip:SetOwner(UIParent, "ANCHOR_NONE")
     tip:SetInventoryItem(unit, slot)
-
-    local link = GetInventoryItemLink(unit, slot) or select(2, tip:GetItem())
-    if not link then return end
-	if ItemDB[link] then return ItemDB[link] end
 
 	for i = 2, 5 do
 		local textLine = _G["NDuiUnitTipTextLeft"..i]
@@ -59,7 +56,7 @@ function module:ShowItemLevel()
 	})
 
 	local function SetupItemLevel(unit, strType)
-		if not unit then return end
+		if not UnitExists(unit) then return end
 
 		for slot, id in pairs(SLOTIDS) do
 			local str = strType[slot]
