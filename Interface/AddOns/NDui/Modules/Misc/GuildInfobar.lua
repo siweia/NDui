@@ -145,7 +145,7 @@ local function RefreshData()
 	for i = 1, total do
 		local name, _, rank, level, _, zone, _, _, connected, status, class, _, _, mobile = GetGuildRosterInfo(i)
 		if connected or mobile then
-			if mobile then
+			if mobile and not connected then
 				zone = REMOTE_CHAT
 				if status == 1 then
 					status = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:-2:-2:16:16:0:16:0:16|t"
