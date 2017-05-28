@@ -90,8 +90,10 @@ tinsert(C.themes["Aurora"], function()
 					playerFrame.styled = true
 				end
 				local colour = C.classcolours[select(2, UnitClass(playerFrame.Name:GetText()))]
-				playerFrame.Name:SetTextColor(colour.r, colour.g, colour.b)
-				playerFrame.Highlight:SetVertexColor(colour.r, colour.g, colour.b, .2)
+				if colour then
+					playerFrame.Name:SetTextColor(colour.r, colour.g, colour.b)
+					playerFrame.Highlight:SetVertexColor(colour.r, colour.g, colour.b, .2)
+				end
 			else
 				break
 			end
