@@ -11,8 +11,8 @@ function NDui:GetUnitItemInfo(unit, slot)
 	if ItemDB[link] then return ItemDB[link] end
 
 	local tip = _G["NDuiUnitTip"] or CreateFrame("GameTooltip", "NDuiUnitTip", nil, "GameTooltipTemplate")
-    tip:SetOwner(UIParent, "ANCHOR_NONE")
-    tip:SetInventoryItem(unit, slot)
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	tip:SetInventoryItem(unit, slot)
 
 	for i = 2, 5 do
 		local textLine = _G["NDuiUnitTipTextLeft"..i]

@@ -10,6 +10,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	if event == "PLAYER_ENTERING_WORLD" then
 		-- Force Settings
+		if not BigWigs3DB then return end
 		BigWigs3DB["namespaces"]["BigWigs_Plugins_Bars"]["profiles"]["Default"]["font"] = DB.Font[1]
 		BigWigs3DB["namespaces"]["BigWigs_Plugins_Bars"]["profiles"]["Default"]["fontSize"] = DB.Font[2]
 		BigWigs3DB["namespaces"]["BigWigs_Plugins_Bars"]["profiles"]["Default"]["outline"] = DB.Font[3]
