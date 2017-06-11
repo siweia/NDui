@@ -12,7 +12,7 @@ function module:Focuser()
 	end
 
 	local function CreateFrame_Hook(type, name, parent, template)
-		if (name and name.lower and (name:lower():find("compactraidframe"))) or template == "SecureUnitButtonTemplate" then
+		if name and template == "SecureUnitButtonTemplate" then
 			SetFocusHotkey(_G[name])
 		end
 	end
