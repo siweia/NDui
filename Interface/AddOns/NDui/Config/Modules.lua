@@ -1,54 +1,54 @@
--- Configure ����ҳ��
+-- Configure 配置页面
 local _, C, _, _ = unpack(select(2, ...))
 
--- BUFF/DEBUFF���
+-- BUFF/DEBUFF相关
 C.Auras = {
-	IconSize		= 32,											-- BUFFͼ���С
-	IconsPerRow		= 14,											-- BUFFÿ�и���
-	Spacing			= 6,											-- BUFFͼ����
-	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -10, -5},	-- BUFFλ��
+	IconSize		= 32,											-- BUFF图标大小
+	IconsPerRow		= 14,											-- BUFF每行个数
+	Spacing			= 6,											-- BUFF图标间距
+	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -10, -5},	-- BUFF位置
 
-	BHPos			= {"CENTER", UIParent, "CENTER", 0, -200},		-- ѪDK����Ĭ��λ��
-	StaggerPos		= {"CENTER", UIParent, "CENTER", 0, -220},		-- ̹ɮ����Ĭ��λ��
-	TotemsPos		= {"CENTER", UIParent, "CENTER", 0, -190},		-- ͼ������Ĭ��λ��
-	MarksmanPos		= {"CENTER", UIParent, "CENTER", 0, -190},		-- ���������Ĭ��λ��
-	FamiliarPos		= {"BOTTOMLEFT", UIParent, 480, 270},			-- �·�ħ��Ĭ��λ��
-	StatuePos		= {"BOTTOMLEFT", UIParent, 480, 270},			-- ��ɮ����Ĭ��λ��
+	BHPos			= {"CENTER", UIParent, "CENTER", 0, -200},		-- 血DK助手默认位置
+	StaggerPos		= {"CENTER", UIParent, "CENTER", 0, -220},		-- 坦僧工具默认位置
+	TotemsPos		= {"CENTER", UIParent, "CENTER", 0, -190},		-- 图腾助手默认位置
+	MarksmanPos		= {"CENTER", UIParent, "CENTER", 0, -190},		-- 射击猎助手默认位置
+	FamiliarPos		= {"BOTTOMLEFT", UIParent, 480, 270},			-- 奥法魔宠默认位置
+	StatuePos		= {"BOTTOMLEFT", UIParent, 480, 270},			-- 武僧雕像默认位置
 }
 
--- ͷ�����
+-- 头像相关
 C.UFs = {
-	Playercb		= {"BOTTOM", UIParent, "BOTTOM", 16, 175},		-- ���ʩ����Ĭ��λ��
-	PlayercbSize	= {300, 20},									-- ���ʩ�����ߴ�
-	Targetcb		= {"BOTTOM", UIParent, "BOTTOM", 16, 335},		-- Ŀ��ʩ����Ĭ��λ��
-	TargetcbSize	= {280, 20},									-- Ŀ��ʩ�����ߴ�
-	Focuscb			= {"CENTER", UIParent, "CENTER", 10, 200},		-- ����ʩ����Ĭ��λ��
-	FocuscbSize		= {320, 20},									-- ����ʩ�����ߴ�
+	Playercb		= {"BOTTOM", UIParent, "BOTTOM", 16, 175},		-- 玩家施法条默认位置
+	PlayercbSize	= {300, 20},									-- 玩家施法条尺寸
+	Targetcb		= {"BOTTOM", UIParent, "BOTTOM", 16, 335},		-- 目标施法条默认位置
+	TargetcbSize	= {280, 20},									-- 目标施法条尺寸
+	Focuscb			= {"CENTER", UIParent, "CENTER", 10, 200},		-- 焦点施法条默认位置
+	FocuscbSize		= {320, 20},									-- 焦点施法条尺寸
 
-	PlayerPos		= {"TOPRIGHT", UIParent, "BOTTOM", -200, 300},	-- ��ҿ���Ĭ��λ��
-	TargetPos		= {"TOPLEFT", UIParent, "BOTTOM", 200, 300},	-- Ŀ�����Ĭ��λ��
-	ToTPos			= {"BOTTOM", UIParent, "BOTTOM", 136, 241},		-- Ŀ���Ŀ�����Ĭ��λ��
-	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 241},	-- �������Ĭ��λ��
-	FocusPos		= {"LEFT", UIParent, "LEFT", 5, -150},			-- �������Ĭ��λ��
-	FoTPos			= {"LEFT", UIParent, "LEFT", 210, -150},		-- ����Ŀ�����Ĭ��λ��
+	PlayerPos		= {"TOPRIGHT", UIParent, "BOTTOM", -200, 300},	-- 玩家框体默认位置
+	TargetPos		= {"TOPLEFT", UIParent, "BOTTOM", 200, 300},	-- 目标框体默认位置
+	ToTPos			= {"BOTTOM", UIParent, "BOTTOM", 136, 241},		-- 目标的目标框体默认位置
+	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 241},	-- 宠物框体默认位置
+	FocusPos		= {"LEFT", UIParent, "LEFT", 5, -150},			-- 焦点框体默认位置
+	FoTPos			= {"LEFT", UIParent, "LEFT", 210, -150},		-- 焦点目标框体默认位置
 
-	BarPoint		= {"TOPLEFT", 12, 4},							-- ��Դ��λ�ã�������ͷ��Ϊ��׼��
-	BarSize			= {150, 5},										-- ��Դ���ĳߴ磨��������
-	BarMargin		= 2,											-- ��Դ�����
+	BarPoint		= {"TOPLEFT", 12, 4},							-- 资源条位置（以自身头像为基准）
+	BarSize			= {150, 5},										-- 资源条的尺寸（宽，长）
+	BarMargin		= 3,											-- 资源条间隔
 }
 
--- С��ͼ
+-- 小地图
 C.Minimap = {
-	Pos				= {"TOPRIGHT", UIParent, "TOPRIGHT", -7, -7},	-- С��ͼλ��
+	Pos				= {"TOPRIGHT", UIParent, "TOPRIGHT", -7, -7},	-- 小地图位置
 }
 
--- ������Ƥ��
+-- 美化及皮肤
 C.Skins = {
-	MicroMenuPos 	= {"BOTTOM", UIParent, "BOTTOM", 0, 2.5},		-- ΢�Ͳ˵�����
-	RMPos  			= {"TOP", UIParent, "TOP", 0, 0},				-- �Ŷӹ���Ĭ������
+	MicroMenuPos 	= {"BOTTOM", UIParent, "BOTTOM", 0, 2.5},		-- 微型菜单坐标
+	RMPos  			= {"TOP", UIParent, "TOP", 0, 0},				-- 团队工具默认坐标
 }
 
--- �����ʾ��
+-- 鼠标提示框
 C.Tooltips = {
-	TipPos 	= {"BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -55, 230},	-- �����ʾ��Ĭ��λ��
+	TipPos 	= {"BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -55, 230},	-- 鼠标提示框默认位置
 }
