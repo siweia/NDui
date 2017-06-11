@@ -62,6 +62,7 @@ function module:QuestTracker()
 				titleButton.Text:SetText(text)
 				titleButton.Text:SetPoint("TOPLEFT", 24, -5)
 				titleButton.Text:SetWidth(216)
+				titleButton.Text:SetWordWrap(false)
 			end
 		end
 	end
