@@ -61,7 +61,7 @@ f:SetScript("OnEvent", function(self)
 				if not id then return end
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
 				GameTooltip:ClearLines()
-				GameTooltip:SetSpellByID(id or icons[slot])
+				GameTooltip:SetSpellByID(id)
 				GameTooltip:Show()
 			end)
 			Totem:SetScript("OnLeave", GameTooltip_Hide)
