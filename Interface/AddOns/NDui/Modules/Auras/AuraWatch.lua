@@ -149,7 +149,7 @@ local function BuildICON(iconSize)
 	Frame.Cooldown:SetAllPoints()
 	Frame.Cooldown:SetReverse(true)
 
-	Frame.Count = B.CreateFS(Frame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
+	Frame.Count = B.CreateFS(Frame.Cooldown, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
 	Frame.Spellname = B.CreateFS(Frame, 14, "", false, "BOTTOM", 0, -3)
 
 	if NDuiDB["AuraWatch"]["Hint"] then
