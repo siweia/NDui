@@ -151,6 +151,8 @@ C.AuraWatchList = {
 				{AuraID = 215648, UnitID = "player"},
 				--军团之眼
 				{AuraID = 230152, UnitID = "player"},
+				--坍缩之影
+				{AuraID = 215476, UnitID = "player"},
 				--净化的远古祝福
 				{AuraID = 222517, UnitID = "player"},
 				{AuraID = 222518, UnitID = "player"},
