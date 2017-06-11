@@ -194,7 +194,7 @@ local function Update(self, event, ...)
 		color = colors.HEAL
 	end
 
-	if text then
+	if text and texture then
 		local string = GetAvailableString(fcf)
 
 		string:SetFont(DB.Font[1], fcf.fontHeight * multiplier, DB.Font[3])
