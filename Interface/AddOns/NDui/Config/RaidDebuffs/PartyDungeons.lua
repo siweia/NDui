@@ -94,6 +94,8 @@ module:RegisterDebuff(TIER, 721, 0, 196838, 5)
 module:RegisterDebuff(TIER, 721, 0, 193765)
 module:RegisterDebuff(TIER, 721, 0, 197966)
 module:RegisterDebuff(TIER, 721, 0, 198190, 5)
+module:RegisterDebuff(TIER, 721, 0, 196497)
+module:RegisterDebuff(TIER, 721, 0, 193743)
 
 -- The Arcway (726)
 module:RegisterDebuff(TIER, 726, 0, 209858)

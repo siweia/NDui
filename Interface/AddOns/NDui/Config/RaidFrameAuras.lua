@@ -3,7 +3,6 @@ local module = NDui:RegisterModule("RaidFrameAuras")
 
 local TIER, BOSS = 1, 1
 local RaidBuffs, RaidDebuffs = {}, {}
-local testIndex = false
 
 -- 团队框体职业相关Buffs
 local RaidBuffs = {
@@ -95,27 +94,12 @@ function module:RegisterDebuff(tierID, instID, bossID, spellID, level)
 	else
 		level = 2
 	end
-	RaidDebuffs[instName][spellID] = level
-
-	if testIndex == instID then
-		SlashCmdList["NDUI_DUMPSPELL"](spellID)
-	end
+	RaidDebuffs[spellID] = {instName, spellID, level}
 end
 
 function module:OnLogin()
-	--[[
-		团队框体Debuffs添加格式：
-		self:RegisterDebuff(TIER, 副本ID, BOSS, 法术ID，Debuff优先级)
-
-		以下方为例，代表的是在<暗夜要塞>里添加<法术ID>219223，<优先级>为5，大于待驱散的魔法效果；
-		待驱散的魔法效果的优先级为4，你添加的要以此为基准；
-		当你没有填写副本ID时，默认优先级为2；当多个存在时，只能显示优先级最高的Debuff。
-		TIER和BOSS不用管它，副本ID的话，常用的有翡翠梦魇768，暗夜要塞786。
-	]]
-	-- 自定义团队框体Debuffs
-	self:RegisterDebuff(TIER, 786, BOSS, 219223, 5)
-
 	-- Copy Table
+	B.CopyTable(NDuiADB["RaidDebuffs"], RaidDebuffs)
 	C.RaidAuraWatch = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
 end

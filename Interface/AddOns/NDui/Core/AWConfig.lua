@@ -52,6 +52,7 @@ local function CreatePanel()
 		OnAccept = function()
 			NDuiDB["AuraWatchList"] = {}
 			NDuiDB["InternalCD"] = {}
+			NDuiADB["RaidDebuffs"] = {}
 			ReloadUI()
 		end,
 		whileDead = 1,
@@ -128,7 +129,7 @@ local function CreatePanel()
 		bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
 		local list = CreateFrame("Frame", nil, dd)
 		list:SetPoint("TOP", dd, "BOTTOM")
-		B.CreateBD(list, .3)
+		B.CreateBD(list, .7)
 		bu:SetScript("OnShow", function() list:Hide() end)
 		bu:SetScript("OnClick", function()
 			PlaySound("gsTitleOptionOK")
@@ -219,38 +220,20 @@ local function CreatePanel()
 	local function SortBars(index)
 		local num, onLeft, onRight = 1, 1, 1
 		for k, v in pairs(barTable[index]) do
-			if index ~= 10 then
-				if NDuiDB["AuraWatchList"][index][k] ~= nil then
-					local bar = barTable[index][k]
-					if num == 1 then
-						bar:SetPoint("TOPLEFT", 10, -10)
-					elseif num > 1 and num/2 ~= floor(num/2) then
-						bar:SetPoint("TOPLEFT", 10, -10 - 35*onLeft)
-						onLeft = onLeft + 1
-					elseif num == 2 then
-						bar:SetPoint("TOPLEFT", 295, -10)
-					elseif num > 2 and num/2 == floor(num/2) then
-						bar:SetPoint("TOPLEFT", 295, -10 - 35*onRight)
-						onRight = onRight + 1
-					end
-					num = num + 1
+			if (index < 10 and NDuiDB["AuraWatchList"][index][k] ~= nil) or (index == 10 and NDuiDB["InternalCD"][k] ~= nil) or (index == 11 and NDuiADB["RaidDebuffs"][k] ~= nil) then
+				local bar = barTable[index][k]
+				if num == 1 then
+					bar:SetPoint("TOPLEFT", 10, -10)
+				elseif num > 1 and num/2 ~= floor(num/2) then
+					bar:SetPoint("TOPLEFT", 10, -10 - 35*onLeft)
+					onLeft = onLeft + 1
+				elseif num == 2 then
+					bar:SetPoint("TOPLEFT", 295, -10)
+				elseif num > 2 and num/2 == floor(num/2) then
+					bar:SetPoint("TOPLEFT", 295, -10 - 35*onRight)
+					onRight = onRight + 1
 				end
-			else
-				if NDuiDB["InternalCD"][k] ~= nil then
-					local bar = barTable[index][k]
-					if num == 1 then
-						bar:SetPoint("TOPLEFT", 10, -10)
-					elseif num > 1 and num/2 ~= floor(num/2) then
-						bar:SetPoint("TOPLEFT", 10, -10 - 35*onLeft)
-						onLeft = onLeft + 1
-					elseif num == 2 then
-						bar:SetPoint("TOPLEFT", 295, -10)
-					elseif num > 2 and num/2 == floor(num/2) then
-						bar:SetPoint("TOPLEFT", 295, -10 - 35*onRight)
-						onRight = onRight + 1
-					end
-					num = num + 1
-				end
+				num = num + 1
 			end
 		end
 	end
@@ -365,6 +348,53 @@ local function CreatePanel()
 		SortBars(index)
 	end
 
+	local function AddRaidDebuffs(parent, index, data)
+		local instName, spellID, priority = unpack(data)
+		local name, _, texture = GetSpellInfo(spellID)
+
+		local bar = CreateFrame("Frame", nil, parent)
+		bar:SetSize(280, 30)
+		B.CreateBD(bar, .3)
+		barTable[index][spellID] = bar
+
+		local icon = CreateFrame("Frame", nil, bar)
+		icon:SetSize(20, 20)
+		icon:SetPoint("LEFT", 5, 0)
+		B.CreateIF(icon, true)
+		icon.Icon:SetTexture(texture)
+		icon:SetScript("OnEnter", function()
+			GameTooltip:ClearLines()
+			GameTooltip:SetOwner(icon, "ANCHOR_RIGHT", 0, 3)
+			GameTooltip:SetSpellByID(spellID)
+			GameTooltip:Show()
+		end)
+		icon:SetScript("OnLeave", GameTooltip_Hide)
+
+		local close = CreateFrame("Button", nil, bar)
+		close:SetSize(20, 20)
+		close:SetPoint("RIGHT", -5, 0)
+		close.Icon = close:CreateTexture(nil, "ARTWORK")
+		close.Icon:SetAllPoints()
+		close.Icon:SetTexture("Interface\\BUTTONS\\UI-GroupLoot-Pass-Up")
+		close:SetHighlightTexture(close.Icon:GetTexture())
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			NDuiADB["RaidDebuffs"][spellID] = nil
+			barTable[index][spellID] = nil
+			SortBars(index)
+		end)
+
+		local prioString = B.CreateFS(bar, 14, priority, false, "LEFT", 30, 0)
+		prioString:SetTextColor(0, 1, 0)
+		local spellName = B.CreateFS(bar, 14, name, false, "LEFT", 40, 0)
+		spellName:SetWidth(120)
+		spellName:SetJustifyH("LEFT")
+		local instance = B.CreateFS(bar, 14, instName, false, "RIGHT", -35, 0)
+		instance:SetTextColor(.6, .8, 1)
+
+		SortBars(index)
+	end
+
 	-- Main
 	if not NDuiDB["AuraWatchList"] then NDuiDB["AuraWatchList"] = {} end
 	if not NDuiDB["InternalCD"] then NDuiDB["InternalCD"] = {} end
@@ -379,6 +409,13 @@ local function CreatePanel()
 		L["Raid Buff"],			-- 8 RaidBuff
 		L["Raid Debuff"],		-- 9 RaidDebuff
 		L["InternalCD"],		-- 10 InternalCD
+		L["RaidFrame Debuffs"],	-- 11 RaidFrame Debuffs
+	}
+	local instList = {
+		[1] = EJ_GetInstanceInfo(768),
+		[2] = EJ_GetInstanceInfo(861),
+		[3] = EJ_GetInstanceInfo(786),
+		[4] = EJ_GetInstanceInfo(875),
 	}
 	local tabs = {}
 	for i, group in pairs(groups) do
@@ -390,12 +427,16 @@ local function CreatePanel()
 		tabs[i]:SetSize(130, 30)
 		B.CreateBD(tabs[i], .3)
 		local label = B.CreateFS(tabs[i], 15, group, true, "LEFT", 10, 0)
-		label:SetTextColor(1, .8, 0)
+		if i < 11 then
+			label:SetTextColor(1, .8, 0)
+		else
+			label:SetTextColor(.6, .8, 1)
+		end
 		tabs[i].Page = CreatePage(group)
 		tabs[i].List = CreateScroll(tabs[i].Page)
 
 		local Option = {}
-		if i ~= 10 then
+		if i < 10 then
 			for k, _ in pairs(NDuiDB["AuraWatchList"][i]) do
 				AddAura(tabs[i].List.Child, i, NDuiDB["AuraWatchList"][i][k])
 			end
@@ -431,13 +472,20 @@ local function CreatePanel()
 					end
 				end)
 			end
-		else
+		elseif i == 10 then
 			for k, _ in pairs(NDuiDB["InternalCD"]) do
 				AddInternal(tabs[i].List.Child, i, NDuiDB["InternalCD"][k])
 			end
-			Option[12] = CreateEditbox(tabs[10].Page, L["IntID*"], 20, -30, L["IntID Intro"])
-			Option[13] = CreateEditbox(tabs[10].Page, L["Duration*"], 140, -30, L["Duration Intro"])
-			Option[14] = CreateEditbox(tabs[10].Page, L["ItemID"], 260, -30, L["ItemID Intro"])
+			Option[12] = CreateEditbox(tabs[i].Page, L["IntID*"], 20, -30, L["IntID Intro"])
+			Option[13] = CreateEditbox(tabs[i].Page, L["Duration*"], 140, -30, L["Duration Intro"])
+			Option[14] = CreateEditbox(tabs[i].Page, L["ItemID"], 260, -30, L["ItemID Intro"])
+		elseif i == 11 then
+			for k, _ in pairs(NDuiADB["RaidDebuffs"]) do
+				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][k])
+			end
+			Option[15] = CreateDropdown(tabs[i].Page, L["Instance*"], 20, -30, {instList[1], instList[2], instList[3], instList[4]}, L["Instance Intro"])
+			Option[16] = CreateEditbox(tabs[i].Page, "ID*", 140, -30, L["ID Intro"])
+			Option[17] = CreateEditbox(tabs[i].Page, L["Priority"], 260, -30, L["Priority Intro"])
 		end
 
 		local clear = CreateFrame("Button", nil, tabs[i].Page)
@@ -447,11 +495,13 @@ local function CreatePanel()
 		B.CreateBC(clear)
 		B.CreateFS(clear, 14, KEY_NUMLOCK_MAC, true)
 		clear:SetScript("OnClick", function()
-			if i ~= 10 then
+			if i < 10 then
 				for j = 1, 11 do ClearEdit(Option[j]) end
 				for j = 2, 11 do Option[j]:Hide() end
-			else
+			elseif i == 10 then
 				for j = 12, 14 do ClearEdit(Option[j]) end
+			elseif i == 11 then
+				for j = 15, 17 do ClearEdit(Option[j]) end
 			end
 		end)
 
@@ -463,7 +513,7 @@ local function CreatePanel()
 		B.CreateBC(add)
 		B.CreateFS(add, 14, ADD, true)
 		add:SetScript("OnClick", function()
-			if i ~= 10 then
+			if i < 10 then
 				local typeID, spellID, unitID, slotID, totemID = Option[1].Text:GetText(), tonumber(Option[2]:GetText()), Option[3].Text:GetText()
 				for i = 1, #Option[10].Selection do
 					if Option[10].Selection[i].selected then slotID = slotTable[i] break end
@@ -482,7 +532,7 @@ local function CreatePanel()
 				NDuiDB["AuraWatchList"][i][realID] = {typeID, realID, unitID, Option[4].Text:GetText(), tonumber(Option[5]:GetText()), Option[6]:GetChecked(), Option[7]:GetChecked(), Option[7]:GetChecked(), Option[9]:GetText()}
 				AddAura(tabs[i].List.Child, i, NDuiDB["AuraWatchList"][i][realID])
 				for i = 1, 11 do ClearEdit(Option[i]) end
-			else
+			elseif i == 10 then
 				local intID, duration, itemID = tonumber(Option[12]:GetText()), tonumber(Option[13]:GetText()), tonumber(Option[14]:GetText())
 				if not intID or not duration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 				if intID and not GetSpellInfo(intID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
@@ -491,6 +541,15 @@ local function CreatePanel()
 				NDuiDB["InternalCD"][intID] = {intID, duration, itemID}
 				AddInternal(tabs[i].List.Child, i, NDuiDB["InternalCD"][intID])
 				for i = 12, 14 do ClearEdit(Option[i]) end
+			elseif i == 11 then
+				local instName, spellID, level = Option[15].Text:GetText(), tonumber(Option[16]:GetText()), tonumber(Option[17]:GetText()) or 2
+				if not instName or not spellID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
+				if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				if NDuiADB["RaidDebuffs"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+
+				NDuiADB["RaidDebuffs"][spellID] = {instName, spellID, level}
+				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][spellID])
+				for i = 15, 17 do ClearEdit(Option[i]) end
 			end
 		end)
 

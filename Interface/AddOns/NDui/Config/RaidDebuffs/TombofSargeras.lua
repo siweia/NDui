@@ -2,7 +2,7 @@ local module = NDui:GetModule("RaidFrameAuras")
 if not module then return end
 
 local TIER = 7 -- Legion
-local INSTANCE = 875 -- 萨墓
+local INSTANCE = 875 -- 萨格拉斯之墓
 local BOSS
 
 BOSS = 1862 -- 格罗斯
