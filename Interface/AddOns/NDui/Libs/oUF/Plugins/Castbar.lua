@@ -40,7 +40,7 @@ cast.setBarTicks = function(castBar, ticknum)
 			if not ticks[k] then
 				ticks[k] = castBar:CreateTexture(nil, "OVERLAY")
 				ticks[k]:SetTexture("Interface\\Addons\\NDui\\Media\\normTex")
-				ticks[k]:SetVertexColor(0, 0, 0, 0.7)
+				ticks[k]:SetVertexColor(0, 0, 0, .7)
 				ticks[k]:SetWidth(1.2)
 				ticks[k]:SetHeight(castBar:GetHeight())
 			end
@@ -61,6 +61,12 @@ cast.OnCastbarUpdate = function(self, elapsed)
 	local currentTime = GetTime()
 	if self.casting or self.channeling then
 		local parent = self:GetParent()
+		local decimal
+		if parent.mystyle == "nameplate" then
+			decimal = "%.1f"
+		else
+			decimal = "%.2f"
+		end
 		local duration = self.casting and self.duration + elapsed or self.duration - elapsed
 		if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
 			self.casting = nil
@@ -69,20 +75,20 @@ cast.OnCastbarUpdate = function(self, elapsed)
 		end
 		if parent.unit == "player" then
 			if self.delay ~= 0 then
-				self.Time:SetFormattedText("%.2f | |cffff0000%.2f|r", duration, self.casting and self.max + self.delay or self.max - self.delay)
+				self.Time:SetFormattedText(decimal.." | |cffff0000"..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
 			else
-				self.Time:SetFormattedText("%.2f | %.2f", duration, self.max)
+				self.Time:SetFormattedText(decimal.." | "..decimal, duration, self.max)
 				if self.SafeZone and self.SafeZone.timeDiff ~= 0 then self.Lag:SetFormattedText("%d ms", self.SafeZone.timeDiff * 1000) end
 			end
 		else
-			self.Time:SetFormattedText("%.2f | %.2f", duration, self.casting and self.max + self.delay or self.max - self.delay)
+			self.Time:SetFormattedText(decimal.." | "..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
 		end
 		self.duration = duration
 		self:SetValue(duration)
 		self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
 	else
 		self.Spark:Hide()
-		local alpha = self:GetAlpha() - 0.02
+		local alpha = self:GetAlpha() - .02
 		if alpha > 0 then
 			self:SetAlpha(alpha)
 		else
@@ -116,7 +122,7 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 		if sf.castSent == true then
 			sf.timeDiff = GetTime() - sf.sendTime
 			sf.timeDiff = sf.timeDiff > self.max and self.max or sf.timeDiff
-			sf:SetWidth(self:GetWidth() * (sf.timeDiff + 0.001) / self.max)
+			sf:SetWidth(self:GetWidth() * (sf.timeDiff + .001) / self.max)
 			sf:Show()
 			sf.castSent = false
 		end
@@ -128,7 +134,7 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 			self.channelingTicks = channelingTicks[spell] or 0
 			cast.setBarTicks(self, self.channelingTicks)
 		end
-	elseif (unit == "target" or unit == "focus") and not self.notInterruptible then
+	elseif (unit == "target" or unit == "focus" or unit:match("nameplate")) and not self.notInterruptible then
 		self:SetStatusBarColor(interruptcb[1], interruptcb[2], interruptcb[3], 1)
 	else
 		self:SetStatusBarColor(pcolor[1], pcolor[2], pcolor[3], 1)

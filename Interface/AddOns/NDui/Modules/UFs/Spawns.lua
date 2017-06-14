@@ -1,138 +1,134 @@
 local B, C, L, DB = unpack(select(2, ...))
-local lib = NDui.lib
 local oUF = NDui.oUF or oUF
+local UF = NDui:GetModule("UnitFrames")
 
--- Create UFs
+-- Units
 local function CreatePlayerStyle(self)
 	self.mystyle = "player"
-	lib.init(self)
 	self:SetSize(245, 24)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_ppstrings(self)
-	lib.gen_castbar(self)
-	lib.gen_RaidMark(self)
-	lib.gen_InfoIcons(self)
-	lib.gen_Resting(self)
-	lib.gen_portrait(self)
-	lib.HealPrediction(self)
-	lib.FloatingCombatText(self)
-	if NDuiDB["UFs"]["AddPower"] then lib.genAddPower(self) end
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreatePowerText(self)
+	UF:CreatePortrait(self)
+	UF:CreateCastBar(self)
+	UF:CreateMirrorBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateIcons(self)
+	UF:CreatePrediction(self)
+	UF:CreateFCT(self)
+	UF:CreateClassPower(self)
+
+	if NDuiDB["UFs"]["AddPower"] then UF:CreateAddPower(self) end
 	if NDuiDB["UFs"]["ExpRep"] then
-		lib.Experience(self)
-		lib.Reputation(self)
+		UF:CreateExpBar(self)
+		UF:CreateRepBar(self)
 	end
-	if NDuiDB["UFs"]["PlayerDebuff"] then lib.createDebuffs(self) end
-	if NDuiDB["UFs"]["Totems"] then lib.TotemBars(self) end
-	if NDuiDB["UFs"]["ResourceBar"] then
-		lib.genRunes(self)
-		lib.genResourcebar(self)
-	end
-	if NDuiDB["UFs"]["SwingBar"] then lib.genSwing(self) end
+	if NDuiDB["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
+	if NDuiDB["UFs"]["SwingBar"] then UF:CreateSwing(self) end
 end
 
 local function CreateTargetStyle(self)
 	self.mystyle = "target"
-	lib.init(self)
 	self:SetSize(245, 24)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_ppstrings(self)
-	lib.gen_castbar(self)
-	lib.gen_mirrorcb(self)
-	lib.gen_RaidMark(self)
-	lib.gen_InfoIcons(self)
-	lib.addQuestIcon(self)
-	lib.addPhaseIcon(self)
-	lib.createAuras(self)
-	lib.gen_portrait(self)
-	lib.HealPrediction(self)
-	lib.FloatingCombatText(self)
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreatePowerText(self)
+	UF:CreatePortrait(self)
+	UF:CreateCastBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateIcons(self)
+	UF:CreatePrediction(self)
+	UF:CreateFCT(self)
+	UF:CreateAuras(self)
 end
 
 local function CreateFocusStyle(self)
 	self.mystyle = "focus"
-	lib.init(self)
 	self:SetSize(200, 22)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_ppstrings(self)
-	lib.gen_castbar(self)
-	lib.gen_RaidMark(self)
-	lib.gen_InfoIcons(self)
-	lib.createAuras(self)
-	lib.gen_portrait(self)
-	lib.HealPrediction(self)
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreatePowerText(self)
+	UF:CreatePortrait(self)
+	UF:CreateCastBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateIcons(self)
+	UF:CreatePrediction(self)
+	UF:CreateAuras(self)
 end
 
 local function CreateToTStyle(self)
 	self.mystyle = "tot"
-	lib.init(self)
 	self:SetSize(120, 18)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_RaidMark(self)
-	if NDuiDB["UFs"]["ToTAuras"] then lib.createAuras(self) end
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateRaidMark(self)
+
+	if NDuiDB["UFs"]["ToTAuras"] then UF:CreateAuras(self) end
 end
 
 local function CreateFocusTargetStyle(self)
 	self.mystyle = "focustarget"
-	lib.init(self)
 	self:SetSize(120, 18)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_RaidMark(self)
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateRaidMark(self)
 end
 
 local function CreatePetStyle(self)
 	self.mystyle = "pet"
-	lib.init(self)
 	self:SetSize(120, 18)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_castbar(self)	--Hide Vehicle castbar
-	lib.gen_RaidMark(self)
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateCastBar(self)
+	UF:CreateRaidMark(self)
 end
 
 local function CreateBossStyle(self)
 	self.mystyle = "boss"
 	self:SetSize(150, 22)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_ppstrings(self)
-	lib.gen_castbar(self)
-	lib.gen_RaidMark(self)
-	lib.AltPowerBar(self)
-	lib.createBuffs(self)
-	lib.createDebuffs(self)
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreatePowerText(self)
+	UF:CreateCastBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateAltPower(self)
+	UF:CreateBuffs(self)
+	UF:CreateDebuffs(self)
 end
 
 local function CreateArenaStyle(self)
-	self.mystyle = "oUF_Arena"
+	self.mystyle = "arena"
 	self:SetSize(150, 22)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_castbar(self)
-	lib.gen_RaidMark(self)
-	lib.createBuffs(self)
-	lib.createDebuffs(self)
-	lib.gen_portrait(self)
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateCastBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateBuffs(self)
+	UF:CreateDebuffs(self)
 end
 
 local function CreateRaidStyle(self)
@@ -140,23 +136,23 @@ local function CreateRaidStyle(self)
 	self.Range = {
 		insideAlpha = 1, outsideAlpha = .35,
 	}
-	lib.init(self)
-	lib.gen_hpbar(self)
-	lib.gen_hpstrings(self)
-	lib.gen_highlight(self)
-	lib.gen_ppbar(self)
-	lib.gen_InfoIcons(self)
-	lib.gen_RaidMark(self)
-	lib.RaidElements(self)
-	lib.HealPrediction(self)
-	lib.CreateTargetBorder(self)
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateIcons(self)
+	UF:CreateTargetBorder(self)
+	UF:CreateRaidIcons(self)
+	UF:CreatePrediction(self)
+
 	if not NDuiDB["UFs"]["SimpleMode"] then
-		lib.genRaidDebuffs(self)
-		lib.createAuras(self)
+		UF:CreateRaidDebuffs(self)
+		UF:CreateAuras(self)
 	end
 end
 
--- Spawn Units
 oUF:RegisterStyle("Player", CreatePlayerStyle)
 oUF:RegisterStyle("Target", CreateTargetStyle)
 oUF:RegisterStyle("ToT", CreateToTStyle)
@@ -164,41 +160,53 @@ oUF:RegisterStyle("Focus", CreateFocusStyle)
 oUF:RegisterStyle("FocusTarget", CreateFocusTargetStyle)
 oUF:RegisterStyle("Pet", CreatePetStyle)
 oUF:RegisterStyle("Boss", CreateBossStyle)
-oUF:RegisterStyle("oUF_Arena", CreateArenaStyle)
+oUF:RegisterStyle("Arena", CreateArenaStyle)
 oUF:RegisterStyle("Raid", CreateRaidStyle)
+oUF:RegisterStyle("Nameplates", UF.CreatePlates)
 
-oUF:Factory(function(self)
+-- Spawns
+function UF:OnLogin()
+	if NDuiDB["Nameplate"]["Enable"] then
+		self:SetupCVars()
+		self:BlockAddons()
+		self:CreateUnitTable()
+		self:CreatePowerUnitTable()
+
+		oUF:SetActiveStyle("Nameplates")
+		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
+	end
+
 	if not NDuiDB["UFs"]["Enable"] then return end
 
-	self:SetActiveStyle("Player")
-	local player = self:Spawn("player", "oUF_Player")
+	oUF:SetActiveStyle("Player")
+	local player = oUF:Spawn("player", "oUF_Player")
 	B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos, 245, 30)
 
-	self:SetActiveStyle("Target")
-	local target = self:Spawn("Target", "oUF_Target")
+	oUF:SetActiveStyle("Target")
+	local target = oUF:Spawn("target", "oUF_Target")
 	B.Mover(target, L["TargetUF"], "TargetUF", C.UFs.TargetPos, 245, 30)
 
-	self:SetActiveStyle("ToT")
-	local targettarget = self:Spawn("targettarget", "oUF_tot")
+	oUF:SetActiveStyle("ToT")
+	local targettarget = oUF:Spawn("targettarget", "oUF_ToT")
 	B.Mover(targettarget, L["TotUF"], "TotUF", C.UFs.ToTPos, 120, 30)
 
-	self:SetActiveStyle("Pet")
-	local pet = self:Spawn("pet", "oUF_pet")
+	oUF:SetActiveStyle("Pet")
+	local pet = oUF:Spawn("pet", "oUF_Pet")
 	B.Mover(pet, L["PetUF"], "PetUF", C.UFs.PetPos, 120, 30)
 
-	self:SetActiveStyle("Focus")
-	local focus = self:Spawn("focus", "oUF_focus")
+	oUF:SetActiveStyle("Focus")
+	local focus = oUF:Spawn("focus", "oUF_Focus")
 	B.Mover(focus, L["FocusUF"], "FocusUF", C.UFs.FocusPos, 200, 30)
 
-	self:SetActiveStyle("FocusTarget")
-	local focustarget = self:Spawn("focustarget", "oUF_focustarget")
+	oUF:SetActiveStyle("FocusTarget")
+	local focustarget = oUF:Spawn("focustarget", "oUF_FocusTarget")
 	B.Mover(focustarget, L["FotUF"], "FotUF", C.UFs.FoTPos, 120, 30)
 
-  	if NDuiDB["UFs"]["Boss"] then
-		self:SetActiveStyle("Boss")
+	if NDuiDB["UFs"]["Boss"] then
+		oUF:SetActiveStyle("Boss")
 		local boss = {}
 		for i = 1, MAX_BOSS_FRAMES do
-			boss[i] = self:Spawn("boss"..i, "oUF_Boss"..i)
+			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
 			if i == 1 then
 				B.Mover(boss[i], L["Boss1"], "Boss1", {"RIGHT", UIParent, "RIGHT", -100, -90}, 150, 30)
 			else
@@ -208,10 +216,10 @@ oUF:Factory(function(self)
 	end
 
 	if NDuiDB["UFs"]["Arena"] then
-		self:SetActiveStyle("oUF_Arena")
+		oUF:SetActiveStyle("Arena")
 		local arena = {}
 		for i = 1, 5 do
-			arena[i] = self:Spawn("arena"..i, "oUF_Arena"..i)
+			arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
 			if i == 1 then
 				B.Mover(arena[i], L["Arena1"], "Arena1", {"TOP", UIParent, "BOTTOM", 500, 550}, 150, 30)
 			else
@@ -234,7 +242,7 @@ oUF:Factory(function(self)
 		end
 
 		local f = NDui:EventFrame({"PLAYER_ENTERING_WORLD", "ARENA_PREP_OPPONENT_SPECIALIZATIONS", "ARENA_OPPONENT_UPDATE"})
-		f:SetScript("OnEvent", function(self, event)
+		f:SetScript("OnEvent", function(_, event)
 			if event == "ARENA_OPPONENT_UPDATE" then
 				for i = 1, 5 do
 					bars[i]:Hide()
@@ -275,7 +283,7 @@ oUF:Factory(function(self)
 		CompactRaidFrameManager:Hide()
 
 		-- Group Styles
-		self:SetActiveStyle("Raid")
+		oUF:SetActiveStyle("Raid")
 
 		local numGroups = NDuiDB["UFs"]["NumGroups"]
 		local horizon = NDuiDB["UFs"]["HorizonRaid"]
@@ -284,7 +292,7 @@ oUF:Factory(function(self)
 
 		if NDuiDB["UFs"]["SimpleMode"] then
 			local function CreateGroup(name, i)
-				local group = self:SpawnHeader(name, nil, "solo,party,raid",
+				local group = oUF:SpawnHeader(name, nil, "solo,party,raid",
 				"showPlayer", true,
 				"showSolo", false,
 				"showParty", true,
@@ -324,7 +332,7 @@ oUF:Factory(function(self)
 			raidMover = B.Mover(group, L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 140*scale, 30*20*scale)
 		else
 			local function CreateGroup(name, i)
-				local group = self:SpawnHeader(name, nil, "solo,party,raid",
+				local group = oUF:SpawnHeader(name, nil, "solo,party,raid",
 				"showPlayer", true,
 				"showSolo", false,
 				"showParty", true,
@@ -369,7 +377,7 @@ oUF:Factory(function(self)
 		if raidMover then
 			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
 
-			NDui:EventFrame({"UNIT_SPELLCAST_SUCCEEDED", "PLAYER_ENTERING_WORLD"}):SetScript("OnEvent", function(self, event, ...)
+			NDui:EventFrame({"UNIT_SPELLCAST_SUCCEEDED", "PLAYER_ENTERING_WORLD"}):SetScript("OnEvent", function(_, event, ...)
 				local unit, _, _, _, spellID = ...
 				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
 					if not GetSpecialization() then return end
@@ -389,4 +397,4 @@ oUF:Factory(function(self)
 			end)
 		end
 	end
-end)
+end

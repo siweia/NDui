@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Tags.lua"/>
-	<Script file="Lib.lua"/>
+	<Script file="Functions.lua"/>
 	<Script file="Raid.lua"/>
-	<Script file="Core.lua"/>
-	<Script file="Nameplate.lua"/>
+	<Script file="NPs.lua"/>
+	<Script file="Spawns.lua"/>
 </Ui>

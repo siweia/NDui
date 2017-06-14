@@ -243,8 +243,8 @@ local Update = function(self, event, unit)
 			local debuffs = rd.Debuffs or {}
 			if IsInInstance() then
 				local instName = GetInstanceInfo()
-				if debuffs[instName] then
-					prio = debuffs[instName][spellId]
+				if debuffs[spellId] and debuffs[spellId][1] == instName then
+					prio = debuffs[spellId][3]
 				end
 			end
 			-- Test

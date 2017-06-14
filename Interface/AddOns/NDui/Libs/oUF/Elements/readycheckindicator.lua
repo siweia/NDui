@@ -1,4 +1,4 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
 local function OnFinished(self)
@@ -10,8 +10,8 @@ local function OnFinished(self)
 	end
 end
 
-local Update = function(self, event)
-	local element = self.ReadyCheck
+local function Update(self, event)
+	local element = self.ReadyCheckIndicator
 
 	if(element.PreUpdate) then
 		element:PreUpdate()
@@ -21,11 +21,11 @@ local Update = function(self, event)
 	local status = GetReadyCheckStatus(unit)
 	if(UnitExists(unit) and status) then
 		if(status == 'ready') then
-			element:SetTexture(element.readyTexture or READY_CHECK_READY_TEXTURE)
+			element:SetTexture(element.readyTexture)
 		elseif(status == 'notready') then
-			element:SetTexture(element.notReadyTexture or READY_CHECK_NOT_READY_TEXTURE)
+			element:SetTexture(element.notReadyTexture)
 		else
-			element:SetTexture(element.waitingTexture or READY_CHECK_WAITING_TEXTURE)
+			element:SetTexture(element.waitingTexture)
 		end
 
 		element.status = status
@@ -37,7 +37,7 @@ local Update = function(self, event)
 
 	if(event == 'READY_CHECK_FINISHED') then
 		if(element.status == 'waiting') then
-			element:SetTexture(element.notReadyTexture or READY_CHECK_NOT_READY_TEXTURE)
+			element:SetTexture(element.notReadyTexture)
 		end
 
 		element.Animation:Play()
@@ -48,19 +48,23 @@ local Update = function(self, event)
 	end
 end
 
-local Path = function(self, ...)
-	return (self.ReadyCheck.Override or Update) (self, ...)
+local function Path(self, ...)
+	return (self.ReadyCheckIndicator.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate')
 end
 
-local Enable = function(self, unit)
-	local element = self.ReadyCheck
+local function Enable(self, unit)
+	local element = self.ReadyCheckIndicator
 	if(element and (unit and (unit:sub(1, 5) == 'party' or unit:sub(1,4) == 'raid'))) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
+
+		element.readyTexture = element.readyTexture or READY_CHECK_READY_TEXTURE
+		element.notReadyTexture = element.notReadyTexture or READY_CHECK_NOT_READY_TEXTURE
+		element.waitingTexture = element.waitingTexture or READY_CHECK_WAITING_TEXTURE
 
 		local AnimationGroup = element:CreateAnimationGroup()
 		AnimationGroup:HookScript('OnFinished', OnFinished)
@@ -80,8 +84,8 @@ local Enable = function(self, unit)
 	end
 end
 
-local Disable = function(self)
-	local element = self.ReadyCheck
+local function Disable(self)
+	local element = self.ReadyCheckIndicator
 	if(element) then
 		element:Hide()
 
@@ -91,4 +95,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement('ReadyCheck', Path, Enable, Disable)
+oUF:AddElement('ReadyCheckIndicator', Path, Enable, Disable)

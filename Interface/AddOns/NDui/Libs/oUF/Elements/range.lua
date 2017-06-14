@@ -1,4 +1,4 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
 local _FRAMES = {}
@@ -6,37 +6,45 @@ local OnRangeFrame
 
 local UnitInRange, UnitIsConnected = UnitInRange, UnitIsConnected
 
--- updating of range.
+local function Update(self, event)
+	local element = self.Range
+	local unit = self.unit
+
+	if(element.PreUpdate) then
+		element:PreUpdate()
+	end
+
+	local inRange, checkedRange
+	local connected = UnitIsConnected(unit)
+	if(connected) then
+		inRange, checkedRange = UnitInRange(unit)
+		if(checkedRange and not inRange) then
+			self:SetAlpha(element.outsideAlpha)
+		else
+			self:SetAlpha(element.insideAlpha)
+		end
+	else
+		self:SetAlpha(element.insideAlpha)
+	end
+
+	if(element.PostUpdate) then
+		return element:PostUpdate(self, inRange, checkedRange, connected)
+	end
+end
+
+local function Path(self, ...)
+	return (self.Range.Override or Update) (self, ...)
+end
+
+-- Internal updating method
 local timer = 0
-local OnRangeUpdate = function(self, elapsed)
+local function OnRangeUpdate(_, elapsed)
 	timer = timer + elapsed
 
 	if(timer >= .20) then
 		for _, object in next, _FRAMES do
 			if(object:IsShown()) then
-				local range = object.Range
-				if(UnitIsConnected(object.unit)) then
-					local inRange, checkedRange = UnitInRange(object.unit)
-					if(checkedRange and not inRange) then
-						if(range.Override) then
-							range.Override(object, 'outside')
-						else
-							object:SetAlpha(range.outsideAlpha)
-						end
-					else
-						if(range.Override) then
-							range.Override(object, 'inside')
-						elseif(object:GetAlpha() ~= range.insideAlpha) then
-							object:SetAlpha(range.insideAlpha)
-						end
-					end
-				else
-					if(range.Override) then
-						range.Override(object, 'offline')
-					elseif(object:GetAlpha() ~= range.insideAlpha) then
-						object:SetAlpha(range.insideAlpha)
-					end
-				end
+				Path(object, 'OnUpdate')
 			end
 		end
 
@@ -44,32 +52,35 @@ local OnRangeUpdate = function(self, elapsed)
 	end
 end
 
-local Enable = function(self)
-	local range = self.Range
-	if(range and range.insideAlpha and range.outsideAlpha) then
-		table.insert(_FRAMES, self)
+local function Enable(self)
+	local element = self.Range
+	if(element) then
+		element.__owner = self
+		element.insideAlpha = element.insideAlpha or 1
+		element.outsideAlpha = element.outsideAlpha or 0.55
 
 		if(not OnRangeFrame) then
-			OnRangeFrame = CreateFrame"Frame"
-			OnRangeFrame:SetScript("OnUpdate", OnRangeUpdate)
+			OnRangeFrame = CreateFrame('Frame')
+			OnRangeFrame:SetScript('OnUpdate', OnRangeUpdate)
 		end
 
+		table.insert(_FRAMES, self)
 		OnRangeFrame:Show()
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	local range = self.Range
-	if(range) then
-		for k, frame in next, _FRAMES do
+local function Disable(self)
+	local element = self.Range
+	if(element) then
+		for index, frame in next, _FRAMES do
 			if(frame == self) then
-				table.remove(_FRAMES, k)
+				table.remove(_FRAMES, index)
 				break
 			end
 		end
-		self:SetAlpha(1)
+		self:SetAlpha(element.insideAlpha)
 
 		if(#_FRAMES == 0) then
 			OnRangeFrame:Hide()

@@ -1,42 +1,52 @@
 local B, C, L, DB = unpack(select(2, ...))
-local oUF = NDui.oUF or oUF
-local lib = NDui.lib
+local UF = NDui:GetModule("UnitFrames")
 
--- Raid Frame
-lib.RaidElements = function(self)
-	local check = self:CreateTexture(nil, "OVERLAY")
+-- RaidFrame Elements
+function UF:CreateRaidIcons(self)
+	local parent = CreateFrame("Frame", nil, self)
+	parent:SetAllPoints()
+	parent:SetFrameLevel(self:GetFrameLevel() + 2)
+
+	local check = parent:CreateTexture(nil, "OVERLAY")
 	check:SetSize(16, 16)
 	check:SetPoint("CENTER")
-	self.ReadyCheck = check
+	self.ReadyCheckIndicator = check
 
-	local resurrect = self:CreateTexture(nil, "OVERLAY")
+	local resurrect = parent:CreateTexture(nil, "OVERLAY")
 	resurrect:SetSize(20, 20)
 	resurrect:SetPoint("CENTER", self, 1, 0)
-	self.ResurrectIcon = resurrect
+	self.ResurrectIndicator = resurrect
+
+	local role = parent:CreateTexture(nil, "OVERLAY")
+	role:SetSize(12, 12)
+	role:SetPoint("TOPLEFT", 12, 8)
+	self.RaidRoleIndicator = role
 end
 
-local function UpdateTargetBorder(self, event, unit)
+local function UpdateTargetBorder(self)
 	if UnitIsUnit("target", self.unit) then
 		self.TargetBorder:Show()
 	else
 		self.TargetBorder:Hide()
 	end
 end
-lib.CreateTargetBorder = function(self)
+
+function UF:CreateTargetBorder(self)
 	self.TargetBorder = B.CreateBG(self, 2)
 	self.TargetBorder:SetBackdrop({edgeFile = DB.bdTex, edgeSize = 1.2})
 	self.TargetBorder:SetBackdropBorderColor(.7, .7, .7)
-	self.TargetBorder:Hide()
 	self.TargetBorder:SetPoint("BOTTOMRIGHT", self.Power, 2, -2)
+	self.TargetBorder:Hide()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetBorder)
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", UpdateTargetBorder)
 end
 
-lib.genRaidDebuffs = function(self)
+function UF:CreateRaidDebuffs(self)
 	local bu = CreateFrame("Frame", nil, self)
 	local size = 18*NDuiDB["UFs"]["RaidScale"]
 	bu:SetSize(size, size)
 	bu:SetPoint("TOPRIGHT", -10, -2)
+	bu:SetFrameLevel(self:GetFrameLevel() + 3)
 	B.CreateSD(bu, 2, 2)
 
 	bu.icon = bu:CreateTexture(nil, "ARTWORK")
@@ -46,9 +56,9 @@ lib.genRaidDebuffs = function(self)
 	bu.time = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
 
 	bu.ShowDispellableDebuff = true
-	if not NDuiDB["UFs"]["NoTooltip"] then bu.EnableTooltip = true end
-	if NDuiDB["UFs"]["DebuffBorder"] then bu.ShowDebuffBorder = true end
-	if NDuiDB["UFs"]["Dispellable"] then bu.FilterDispellableDebuff = true end
+	bu.EnableTooltip = not NDuiDB["UFs"]["NoTooltip"]
+	bu.ShowDebuffBorder = NDuiDB["UFs"]["DebuffBorder"]
+	bu.FilterDispellableDebuff = NDuiDB["UFs"]["Dispellable"]
 	if NDuiDB["UFs"]["InstanceAuras"] then bu.Debuffs = C.RaidDebuffs end
 	self.RaidDebuffs = bu
 end

@@ -183,7 +183,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
         if level then
 			local boss
-            if level == -1 then boss = "|cffff0000Boss|r" end
+            if level == -1 then boss = "|cffff0000??|r" end
 
             local diff = GetCreatureDifficultyColor(level)
             local classify = UnitClassification(unit)

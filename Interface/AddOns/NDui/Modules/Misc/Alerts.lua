@@ -87,7 +87,8 @@ function module:InterruptAlert()
 end
 
 --[[
-	A tool for Krosus, need reveiwed.
+	向左走向右走
+	克洛苏斯给没脑子的助手
 ]]
 function module:BeamTool()
 	local f
