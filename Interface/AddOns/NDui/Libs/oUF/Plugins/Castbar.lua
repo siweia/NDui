@@ -104,7 +104,7 @@ cast.OnCastSent = function(self, event, unit, spell, rank)
 	self.Castbar.SafeZone.castSent = true
 end
 
-cast.PostCastStart = function(self, unit, name, rank, text)
+cast.PostCastStart = function(self, unit, name, castID, spellID)
 	local pcolor = {255/255, 128/255, 128/255}
 	local interruptcb = {95/255, 182/255, 255/255}
 	self:SetAlpha(1.0)
@@ -139,9 +139,16 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 	else
 		self:SetStatusBarColor(pcolor[1], pcolor[2], pcolor[3], 1)
 	end
+
+	-- Fix for empty icon
+	local texture = GetSpellTexture(spellID)
+	if not texture then
+		texture = 136243
+		if self.Icon then self.Icon:SetTexture(texture) end
+	end
 end
 
-cast.PostCastStop = function(self, unit, name, rank, castid)
+cast.PostCastStop = function(self, unit, spellname, castID, spellID)
 	if not self.fadeOut then 
 		self:SetStatusBarColor(unpack(self.CompleteColor))
 		self.fadeOut = true
@@ -150,13 +157,13 @@ cast.PostCastStop = function(self, unit, name, rank, castid)
 	self:Show()
 end
 
-cast.PostChannelStop = function(self, unit, name, rank)
+cast.PostChannelStop = function(self, unit, name, spellID)
 	self.fadeOut = true
 	self:SetValue(0)
 	self:Show()
 end
 
-cast.PostCastFailed = function(self, event, unit, name, rank, castid)
+cast.PostCastFailed = function(self, event, unit, name, castID, spellID)
 	self:SetStatusBarColor(unpack(self.FailColor))
 	self:SetValue(self.max)
 	if not self.fadeOut then
