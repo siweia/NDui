@@ -251,56 +251,56 @@ function UF:CreateCastBar(self)
 	if self.mystyle ~= "nameplate" and not NDuiDB["UFs"]["Castbars"] then return end
 
 	local cbColor = {95/255, 182/255, 255/255}
-    local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.mystyle, self)
-    cb:SetHeight(20)
-    cb:SetWidth(self:GetWidth() - 22)
-    cb:SetStatusBarTexture(DB.normTex)
-    cb:SetStatusBarColor(95/255, 182/255, 255/255, 1)
-    cb:SetFrameLevel(1)
+	local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.mystyle, self)
+	cb:SetHeight(20)
+	cb:SetWidth(self:GetWidth() - 22)
+	cb:SetStatusBarTexture(DB.normTex)
+	cb:SetStatusBarColor(95/255, 182/255, 255/255, 1)
+	cb:SetFrameLevel(1)
 	B.CreateBD(cb, .5, .1)
 	B.CreateSD(cb, 3, 3)
 	B.CreateTex(cb)
 
-    if self.mystyle == "player" then
+	if self.mystyle == "player" then
 		cb:SetSize(unpack(C.UFs.PlayercbSize))
 		cb.Mover = B.Mover(cb, L["Player Castbar"], "PlayerCB", C.UFs.Playercb, cb:GetWidth(), 32)
-    elseif self.mystyle == "target" then
+	elseif self.mystyle == "target" then
 		cb:SetSize(unpack(C.UFs.TargetcbSize))
 		cb.Mover = B.Mover(cb, L["Target Castbar"], "TargetCB", C.UFs.Targetcb, cb:GetWidth(), 32)
 	elseif self.mystyle == "focus" then
 		cb:SetSize(unpack(C.UFs.FocuscbSize))
 		cb.Mover = B.Mover(cb, L["Focus Castbar"], "FocusCB", C.UFs.Focuscb, cb:GetWidth(), 32)
-    elseif self.mystyle == "boss" or self.mystyle == "arena" then
-	    cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -10)
+	elseif self.mystyle == "boss" or self.mystyle == "arena" then
+		cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -10)
 		cb:SetSize(134, 10)
 	elseif self.mystyle == "nameplate" then
 		cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 		cb:SetSize(self:GetWidth(), 5)
 	end
 
-    cb.CastingColor = cbColor
-    cb.ChannelingColor = cbColor
-    cb.CompleteColor = {20/255, 208/255, 0/255}
-    cb.FailColor = {255/255, 12/255, 0/255}
+	cb.CastingColor = cbColor
+	cb.ChannelingColor = cbColor
+	cb.CompleteColor = {20/255, 208/255, 0/255}
+	cb.FailColor = {255/255, 12/255, 0/255}
 
-    local spark = cb:CreateTexture(nil, "OVERLAY")											-- castbar spark
-    spark:SetBlendMode("ADD")
-    spark:SetAlpha(0.5)
-    spark:SetHeight(cb:GetHeight()*2.5)
+	local spark = cb:CreateTexture(nil, "OVERLAY")											-- castbar spark
+	spark:SetBlendMode("ADD")
+	spark:SetAlpha(0.5)
+	spark:SetHeight(cb:GetHeight()*2.5)
 
-    local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "LEFT", 2, 0)		-- spell name
-    name:SetJustifyH("LEFT")
+	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "LEFT", 2, 0)		-- spell name
+	name:SetJustifyH("LEFT")
 
-    local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)	-- spell time
-    name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
+	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)	-- spell time
+	name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
 
-    local icon = cb:CreateTexture(nil, "ARTWORK")											-- castbar icon
+	local icon = cb:CreateTexture(nil, "ARTWORK")											-- castbar icon
 	icon:SetSize(cb:GetHeight(), cb:GetHeight())
-    icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
-    icon:SetTexCoord(unpack(DB.TexCoord))
+	icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
+	icon:SetTexCoord(unpack(DB.TexCoord))
 	B.CreateSD(icon, 3, 3)
 
-    if self.mystyle == "player" then
+	if self.mystyle == "player" then
 		local safe = cb:CreateTexture(nil,"OVERLAY")
 		safe:SetTexture(DB.normTex)
 		safe:SetVertexColor(1, 0.1, 0, .6)
@@ -314,26 +314,26 @@ function UF:CreateCastBar(self)
 		lag:Hide()
 		cb.Lag = lag
 		self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", cast.OnCastSent)
-    elseif self.mystyle == "nameplate" then
+	elseif self.mystyle == "nameplate" then
 		local iconSize = self.Health:GetHeight() + cb:GetHeight() + 5
 		icon:SetSize(iconSize, iconSize)
 		name:SetPoint("LEFT", cb, "BOTTOMLEFT", 0, -3)
 		timer:SetPoint("RIGHT", cb, "BOTTOMRIGHT", 0, -3)
 	end
 
-    cb.OnUpdate = cast.OnCastbarUpdate
-    cb.PostCastStart = cast.PostCastStart
-    cb.PostChannelStart = cast.PostCastStart
-    cb.PostCastStop = cast.PostCastStop
-    cb.PostChannelStop = cast.PostChannelStop
-    cb.PostCastFailed = cast.PostCastFailed
-    cb.PostCastInterrupted = cast.PostCastFailed
+	cb.OnUpdate = cast.OnCastbarUpdate
+	cb.PostCastStart = cast.PostCastStart
+	cb.PostChannelStart = cast.PostCastStart
+	cb.PostCastStop = cast.PostCastStop
+	cb.PostChannelStop = cast.PostChannelStop
+	cb.PostCastFailed = cast.PostCastFailed
+	cb.PostCastInterrupted = cast.PostCastFailed
 
-    self.Castbar = cb
-    self.Castbar.Text = name
-    self.Castbar.Time = timer
-    self.Castbar.Icon = icon
-    self.Castbar.Spark = spark
+	self.Castbar = cb
+	self.Castbar.Text = name
+	self.Castbar.Time = timer
+	self.Castbar.Icon = icon
+	self.Castbar.Spark = spark
 end
 
 function UF:CreateMirrorBar(self)

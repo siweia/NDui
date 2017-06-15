@@ -163,7 +163,7 @@ local function CreatePlates(self, unit)
 		end
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 
-		local cicon = self.Health:CreateTexture(nil, "OVERLAY")
+		local cicon = self:CreateTexture(nil, "OVERLAY")
 		cicon:SetPoint("LEFT", self, "TOPLEFT", 0, 2)
 		cicon:SetSize(15, 15)
 		cicon:SetAlpha(.75)
@@ -177,10 +177,10 @@ end
 UF.CreatePlates = CreatePlates
 
 local classtex = {
-	rare = {"Interface\\MINIMAP\\ObjectIconsAtlas", .398, .463, .725, .79},
+	rare = {"Interface\\MINIMAP\\ObjectIcons", .391, .487, .644, .74},
 	elite = {"Interface\\MINIMAP\\Minimap_skull_elite", 0, 1, 0, 1},
-	rareelite = {"Interface\\MINIMAP\\ObjectIconsAtlas", .398, .463, .926, .991},
-	worldboss = {"Interface\\MINIMAP\\ObjectIconsAtlas", .07, .13, .27, .33},
+	rareelite = {"Interface\\MINIMAP\\ObjectIcons", .754, .875, .624, .749},
+	worldboss = {"Interface\\MINIMAP\\ObjectIcons", .879, 1, .754, .879},
 }
 
 local function enableElement(self, name, element)
