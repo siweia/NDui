@@ -99,6 +99,7 @@ end
 
 function module:OnLogin()
 	-- Copy Table
+	if not NDuiADB["RaidDebuffs"] then NDuiADB["RaidDebuffs"] = {} end
 	B.CopyTable(NDuiADB["RaidDebuffs"], RaidDebuffs)
 	C.RaidAuraWatch = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
