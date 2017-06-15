@@ -273,9 +273,9 @@ function UF:CreateCastBar(self)
     elseif self.mystyle == "boss" or self.mystyle == "arena" then
 	    cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -10)
 		cb:SetSize(134, 10)
-	elseif self.mystyle == "nameplate" and self.unit ~= "player" then
+	elseif self.mystyle == "nameplate" then
 		cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
-		cb:SetSize(140, 5)
+		cb:SetSize(self:GetWidth(), 5)
 	end
 
     cb.CastingColor = cbColor
