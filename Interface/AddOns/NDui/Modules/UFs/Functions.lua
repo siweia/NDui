@@ -248,7 +248,7 @@ function UF:CreateRaidMark(self)
 end
 
 function UF:CreateCastBar(self)
-	if not NDuiDB["UFs"]["Castbars"] then return end
+	if self.mystyle ~= "nameplate" and not NDuiDB["UFs"]["Castbars"] then return end
 
 	local cbColor = {95/255, 182/255, 255/255}
     local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.mystyle, self)
