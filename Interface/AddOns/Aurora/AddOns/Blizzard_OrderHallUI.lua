@@ -275,28 +275,33 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	ClassHallTalentInset:Hide()
 	OrderHallTalentFramePortrait:Hide()
 	OrderHallTalentFramePortraitFrame:Hide()
+	F.Reskin(OrderHallTalentFrame.BackButton)
 
 	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function()
-		for i = 34, 41 do
+		for i = 34, OrderHallTalentFrame:GetNumRegions() do
 			select(i, OrderHallTalentFrame:GetRegions()):SetAlpha(0)
 		end
 
-		for i = 6, 19 do
+		for i = 1, OrderHallTalentFrame:GetNumChildren() do
 			local bu = select(i, OrderHallTalentFrame:GetChildren())
-			if not bu.styled then
-				bu.Icon:SetTexCoord(.08, .92, .08, .92)
-				bu.Border:SetAlpha(0)
-				bu.Highlight:SetColorTexture(1, 1, 1, .25)
-				bu.bg = F.CreateBDFrame(bu.Border)
-				bu.bg:SetPoint("TOPLEFT", -1.2, 1.2)
-				bu.bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
-				bu.styled = true
-			end
+			if bu.Icon then
+				if not bu.styled then
+					bu.Icon:SetTexCoord(.08, .92, .08, .92)
+					bu.Border:SetAlpha(0)
+					bu.Highlight:SetColorTexture(1, 1, 1, .25)
+					bu.bg = F.CreateBDFrame(bu.Border)
+					bu.bg:SetPoint("TOPLEFT", -1.2, 1.2)
+					bu.bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+					bu.styled = true
+				end
 
-			if bu.talent.selected then
-				bu.bg:SetBackdropBorderColor(1, 1, 0)
-			else
-				bu.bg:SetBackdropBorderColor(0, 0, 0)
+				if bu and bu.talent then
+					if bu.talent.selected then
+						bu.bg:SetBackdropBorderColor(1, 1, 0)
+					else
+						bu.bg:SetBackdropBorderColor(0, 0, 0)
+					end
+				end
 			end
 		end
 	end)

@@ -15,6 +15,9 @@ tinsert(C.themes["Aurora"], function()
 		count:SetDrawLayer("OVERLAY")
 		na:SetColorTexture(0, 0, 0, .25)
 		na:SetSize(118, 39)
+		if button.IconBorder then
+			button.IconBorder:SetAlpha(0)
+		end
 
 		if cta then
 			cta:SetAlpha(0)
