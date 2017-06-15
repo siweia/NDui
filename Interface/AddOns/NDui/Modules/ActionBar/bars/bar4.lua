@@ -85,7 +85,7 @@ function Bar:CreateBar4()
 	end
 
 	--fix annoying visibility
-	local f = NDui:EventFrame({"UNIT_EXITING_VEHICLE", "PET_BATTLE_CLOSE"})
+	local f = NDui:EventFrame({"UNIT_EXITING_VEHICLE", "PET_BATTLE_CLOSE", "UNIT_EXITED_VEHICLE"})
 	f:SetScript("OnEvent", function(self, event)
 		InterfaceOptions_UpdateMultiActionBars()
 		self:UnregisterEvent(event)
