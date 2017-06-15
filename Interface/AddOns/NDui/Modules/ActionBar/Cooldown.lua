@@ -4,7 +4,7 @@ local module = NDui:RegisterModule("Cooldown")
 function module:OnLogin()
 	if not NDuiDB["Actionbar"]["Cooldown"] then return end
 
-	local FONT_SIZE = 18 
+	local FONT_SIZE = 19
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
 	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 	local ICON_SIZE = 36

@@ -364,8 +364,11 @@ local function postCreateIcon(element, button)
 	button.cd:SetReverse(true)
 
 	local fontSize = element.fontSize or element.size*.6
-	local count = B.CreateFS(button.cd, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
-	button.count = count
+
+	local parentFrame = CreateFrame("Frame", nil, button)
+	parentFrame:SetAllPoints()
+	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
+	button.count = B.CreateFS(parentFrame, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
 
 	button.icon:SetTexCoord(unpack(DB.TexCoord))
 	button.icon:SetDrawLayer("ARTWORK")
