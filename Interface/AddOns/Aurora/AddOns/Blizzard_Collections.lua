@@ -542,9 +542,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	local progressBar = WardrobeCollectionFrame.progressBar
 	progressBar:DisableDrawLayer("BACKGROUND")
-	for i = 1, 3 do
-		select(i, progressBar:GetRegions()):Hide()
-	end
+	select(2, progressBar:GetRegions()):Hide()
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(C.media.backdrop)
 	F.CreateBDFrame(progressBar, .25)

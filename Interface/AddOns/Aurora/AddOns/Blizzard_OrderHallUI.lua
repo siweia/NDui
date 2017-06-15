@@ -281,7 +281,7 @@ C.themes["Blizzard_OrderHallUI"] = function()
 			select(i, OrderHallTalentFrame:GetRegions()):SetAlpha(0)
 		end
 
-		for i = 5, 18 do
+		for i = 6, 19 do
 			local bu = select(i, OrderHallTalentFrame:GetChildren())
 			if not bu.styled then
 				bu.Icon:SetTexCoord(.08, .92, .08, .92)

@@ -91,5 +91,6 @@ FrameXML\WorldStateFrame.lua
 
 SharedXML\AddonList.lua
 SharedXML\ModelPreviewFrame.lua
+SharedXML\SharedBasicControls.lua
 
 Other\ChatBubbles.lua
