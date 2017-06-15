@@ -2,17 +2,11 @@ local B, C, L, DB = unpack(select(2, ...))
 if DB.Client ~= "zhCN" then return end
 
 local hx = {
-	"角色页面装等获取优化；",
-	"技能监视列表更新；",
-	"更新支持新oUF库；",
-	"头像支持治疗量吸收盾显示；",
-	"姓名板现在基于oUF框架；",
-	"UI缩放调整；",
-	"提高技能监视法术层数的层级；",
-	"添加萨墓的RaidDebuffs；",
 	"部分错误修正；",
-	"技能监视的控制台添加对团队框体法术的支持；",
-	"Aurora更新。",
+	"姓名板的施法条长度调整；",
+	"添加聊天泡泡的材质；",
+	"Aurora部分模块调整；",
+	"修复法术图标的层级异常。",
 }
 
 local function changelog()

@@ -3,7 +3,7 @@
 ## Credits: Elv, Haleth, Haste, Leatrix, Loshine, Neavo, Paopao001, Qulight, Ray, zork
 ## Author: Siweia
 ## Notes: Core of NDui
-## Version: v0.7 (7.2)
+## Version: v0.8 (7.2)
 ## SavedVariables: diminfo, NDuiADB
 ## SavedVariablesPerCharacter: NDuiDB
 
