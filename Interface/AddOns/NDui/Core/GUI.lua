@@ -98,6 +98,7 @@ local defaultSettings = {
 		Enable = true,
 		ColorBorder = false,
 		PlayerAura = false,
+		AllAuras = true,
 		maxAuras = 5,
 		AuraSize = 20,
 		FriendlyCC = false,
@@ -300,6 +301,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
 		{1, "Nameplate", "PlayerAura", L["PlayerPlate Aura"], true},
+		{1, "Nameplate", "AllAuras", L["Show All Auras"]},
 		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
 		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
 		{},--blank
