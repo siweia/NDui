@@ -1,6 +1,6 @@
 ﻿## Interface: 70200
 ## Version: NDui Mod
-## Author: Gentoo/Asem/聂荣/才人/大爱无疆/Suse/我真的是上帝/Siweia
+## Author: Gentoo/Asem/聂荣/才人/大爱无疆/Suse/我真的是上帝
 ## Title: |cff0080ffQuest Notifier|r
 ## Title-zhCN: |cff0080ffQuest Notifier|r 任务通报
 ## Title-zhTW: |cff0080ffQuest Notifier|r 任務通報
