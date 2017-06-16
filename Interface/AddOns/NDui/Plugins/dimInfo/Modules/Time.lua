@@ -82,9 +82,10 @@ if cfg.Time == true then
 	}
 
 	local bonus = {
-		43892, 43893, 43894,	--Order Resources
-		43895, 43896, 43897,	--Gold
-		43510,					--Orderhall
+		43892, 43893, 43894,	-- Order Resources
+		43895, 43896, 43897,	-- Gold
+		47851, 47864, 47865,	-- Honor Coins
+		43510,					-- Orderhall
 	}
 	local bonusname = GetCurrencyInfo(1273)
 
