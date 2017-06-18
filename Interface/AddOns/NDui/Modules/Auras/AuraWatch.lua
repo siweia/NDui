@@ -84,6 +84,19 @@ local function ConvertTable()
 	InsertData(IntCD.List, myTable[10])
 end
 
+local function CheckAuraList()
+	for _, a in pairs(C.AuraWatchList) do
+		for _, b in pairs(a) do
+			for _, c in pairs(b.List) do
+				if c.AuraID then
+					local exists = GetSpellInfo(c.AuraID)
+					if not exists then print("|cffFF0000Invalid spellID:|r "..c.AuraID) end
+				end
+			end
+		end
+	end
+end
+
 local function BuildAuraList()
 	AuraList = C.AuraWatchList["ALL"] and C.AuraWatchList["ALL"] or {}
 	for key, _ in pairs(C.AuraWatchList) do
@@ -281,6 +294,7 @@ end
 
 local function Init()
 	ConvertTable()
+	CheckAuraList()
 	BuildAuraList()
 	BuildUnitIDTable()
 	BuildAura()

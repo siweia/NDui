@@ -267,8 +267,6 @@ C.AuraWatchList = {
 				{AuraID =    408, UnitID = "player"},
 				--撕扯
 				{AuraID =  47481, UnitID = "player"},
-				--沉默
-				{AuraID =  55021, UnitID = "player"},
 				--割碎
 				{AuraID =  22570, UnitID = "player"},
 				--断筋
@@ -312,8 +310,6 @@ C.AuraWatchList = {
 				{AuraID =  29166, UnitID = "player"},
 				--五气归元
 				{AuraID = 115310, UnitID = "player"},
-				--蟠龙之息
-				{AuraID = 157535, UnitID = "player"},
 				--作茧缚命
 				{AuraID = 116849, UnitID = "player"},
 				--保护祝福
@@ -324,8 +320,6 @@ C.AuraWatchList = {
 				{AuraID =   1044, UnitID = "player"},
 				--破咒祝福
 				{AuraID = 204018, UnitID = "player"},
-				--拯救祝福
-				{AuraID =   1038, UnitID = "player"},
 				--铁木树皮
 				{AuraID = 102342, UnitID = "player"},
 				--守护之魂
@@ -712,8 +706,6 @@ C.AuraWatchList = {
 				{AuraID = 193526, UnitID = "target"},
 				--不灭决心
 				{AuraID = 104773, UnitID = "target"},
-				--黑暗交易
-				{AuraID = 110913, UnitID = "target"},
 				--闪避
 				{AuraID =   5277, UnitID = "target"},
 				--还击
@@ -878,8 +870,6 @@ C.AuraWatchList = {
 				{AuraID = 194223, UnitID = "player"},
 				--沉睡者之怒
 				{AuraID = 200851, UnitID = "player"},
-				--乌索尔的印记
-				{AuraID = 192083, UnitID = "player"},
 				--血污毛皮
 				{AuraID = 201671, UnitID = "player", Combat = true},
 				--裂伤
@@ -1014,8 +1004,6 @@ C.AuraWatchList = {
 				{AuraID = 117526, UnitID = "target"},
 				--易伤
 				{AuraID = 187131, UnitID = "target", Caster = "player"},
-				--死亡之眼
-				{AuraID = 213424, UnitID = "target", Caster = "player"},
 				--精确瞄准
 				{AuraID = 199803, UnitID = "target", Caster = "player"},
 				--猎人印记
@@ -1090,10 +1078,6 @@ C.AuraWatchList = {
 				{AuraID = 190931, UnitID = "player"},
 				--雄鹰守护
 				{AuraID = 186289, UnitID = "player"},
-				--动物本能
-				{AuraID = 204321, UnitID = "player"},
-				{AuraID = 204324, UnitID = "player"},
-				{AuraID = 204333, UnitID = "player"},
 				--莫克纳萨战术
 				{AuraID = 201081, UnitID = "player"},
 				--喷毒眼镜蛇
@@ -1128,8 +1112,6 @@ C.AuraWatchList = {
 				{AuraID =   3355, UnitID = "focus", Caster = "player"},
 				--易伤
 				{AuraID = 187131, UnitID = "focus", Caster = "player"},
-				--死亡之眼
-				{AuraID = 213424, UnitID = "focus", Caster = "player"},
 				--精确瞄准
 				{AuraID = 199803, UnitID = "focus", Caster = "player"},
 			},
@@ -1191,9 +1173,7 @@ C.AuraWatchList = {
 			Mode = "ICON",
 			IconSize = 36,
 			Pos = DebuffPoint,
-			List = {		
-				--燃烧(火)
-				{AuraID =  83853, UnitID = "target", Caster = "player"},
+			List = {
 				--点燃(火)
 				{AuraID =  12654, UnitID = "target", Caster = "player"},
 				--炎爆术(火)
@@ -1222,8 +1202,6 @@ C.AuraWatchList = {
 				{AuraID = 212792, UnitID = "target", Caster = "player"},
 				--寒冰新星
 				{AuraID = 157997, UnitID = "target", Caster = "player"},
-				--冻结
-				{AuraID = 111340, UnitID = "target", Caster = "player"},
 				--奥术侵蚀
 				{AuraID = 210134, UnitID = "target", Caster = "player"},
 				--冰川尖刺
@@ -1265,8 +1243,6 @@ C.AuraWatchList = {
 				{AuraID =  12472, UnitID = "player"},
 				--寒冰指
 				{AuraID =  44544, UnitID = "player"},
-				--冰冷智慧
-				{AuraID =  57761, UnitID = "player"},
 				--强化隐形术
 				{AuraID = 113862, UnitID = "player"},
 				--炽烈之咒
@@ -1593,8 +1569,6 @@ C.AuraWatchList = {
 				{AuraID = 201898, UnitID = "player"},
 				--灼热之手
 				{AuraID = 215785, UnitID = "player"},
-				--石拳
-				{AuraID = 218825, UnitID = "player"},
 				--降雨
 				{AuraID = 215864, UnitID = "player"},
 				--元素集中
@@ -1661,8 +1635,6 @@ C.AuraWatchList = {
 			IconSize = 22,
 			Pos = BuffPoint,
 			List = {
-				--光明圣印
-				{AuraID = 202273, UnitID = "player"},
 				--奉献
 				{AuraID = 188370, UnitID = "player"},
 			},
@@ -2036,8 +2008,6 @@ C.AuraWatchList = {
 				{AuraID = 104773, UnitID = "player"},
 				--痛上加痛
 				{AuraID = 199281, UnitID = "player"},
-				--法力分流
-				{AuraID = 196104, UnitID = "player"},
 				--暗影启迪
 				{AuraID = 196606, UnitID = "player"},
 				--爆燃冲刺
@@ -2200,8 +2170,6 @@ C.AuraWatchList = {
 				{AuraID = 185422, UnitID = "player"},
 				--死亡标记
 				{AuraID = 212283, UnitID = "player"},
-				--暗影笼罩
-				{AuraID = 206237, UnitID = "player"},
 				--隐秘刀刃
 				{AuraID = 202754, UnitID = "player"},
 				--冲动
@@ -2617,8 +2585,6 @@ C.AuraWatchList = {
 				{AuraID = 224509, UnitID = "target", Caster = "player"},
 				--锋锐之刺
 				{AuraID = 210003, UnitID = "target", Caster = "player"},
-				--狩猎烙印
-				{AuraID = 218640, UnitID = "target", Caster = "player"},
 				--悲苦咒符
 				{AuraID = 207685, UnitID = "target", Caster = "player"},
 			},
@@ -2667,8 +2633,6 @@ C.AuraWatchList = {
 			IconSize = 35,
 			Pos = FocusPoint,
 			List = {
-				--狩猎烙印
-				{AuraID = 218640, UnitID = "focus", Caster = "player"},
 			},
 		},
 		{	Name = "Spell Cooldown",
