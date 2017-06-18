@@ -358,13 +358,7 @@ end
 
 -- Auras Relevant
 local function postCreateIcon(element, button)
-	element.disableCooldown = false
-	button.cd.noOCC = false
-	button.cd.noCooldownCount = true
-	button.cd:SetReverse(true)
-
 	local fontSize = element.fontSize or element.size*.6
-
 	local parentFrame = CreateFrame("Frame", nil, button)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
@@ -377,6 +371,7 @@ local function postCreateIcon(element, button)
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .3)
 	button.HL:SetAllPoints()
+	button.cd:SetReverse(true)
 end
 
 local function postUpdateIcon(element, unit, button, index)
