@@ -85,9 +85,20 @@ function Bar:CreateBar4()
 	end
 
 	--fix annoying visibility
-	local f = NDui:EventFrame({"UNIT_EXITING_VEHICLE", "PET_BATTLE_CLOSE", "UNIT_EXITED_VEHICLE"})
+	local f = NDui:EventFrame({"UNIT_EXITING_VEHICLE", "PET_BATTLE_CLOSE"})
 	f:SetScript("OnEvent", function(self, event)
-		InterfaceOptions_UpdateMultiActionBars()
-		self:UnregisterEvent(event)
+		if event == "PLAYER_REGEN_ENABLED" then
+			InterfaceOptions_UpdateMultiActionBars()
+			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			self:UnregisterEvent(self.savedEvent)
+		else
+			if InCombatLockdown() then
+				self:RegisterEvent("PLAYER_REGEN_ENABLED")
+				self.savedEvent = event
+			else
+				InterfaceOptions_UpdateMultiActionBars()
+				self:UnregisterEvent(event)
+			end
+		end
 	end)
 end
