@@ -219,7 +219,7 @@ local function CreatePanel()
 	local barTable = {}
 	local function SortBars(index)
 		local num, onLeft, onRight = 1, 1, 1
-		for k, v in pairs(barTable[index]) do
+		for k in pairs(barTable[index]) do
 			if (index < 10 and NDuiDB["AuraWatchList"][index][k] ~= nil) or (index == 10 and NDuiDB["InternalCD"][k] ~= nil) or (index == 11 and NDuiADB["RaidDebuffs"][k] ~= nil) then
 				local bar = barTable[index][k]
 				if num == 1 then
@@ -542,12 +542,13 @@ local function CreatePanel()
 				AddInternal(tabs[i].List.Child, i, NDuiDB["InternalCD"][intID])
 				for i = 12, 14 do ClearEdit(Option[i]) end
 			elseif i == 11 then
-				local instName, spellID, level = Option[15].Text:GetText(), tonumber(Option[16]:GetText()), tonumber(Option[17]:GetText()) or 2
+				local instName, spellID, priority = Option[15].Text:GetText(), tonumber(Option[16]:GetText()), tonumber(Option[17]:GetText())
 				if not instName or not spellID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 				if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 				if NDuiADB["RaidDebuffs"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-				NDuiADB["RaidDebuffs"][spellID] = {instName, spellID, level}
+				priority = (priority and priority < 0 and 0) or (not priority and 2)
+				NDuiADB["RaidDebuffs"][spellID] = {instName, spellID, priority}
 				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][spellID])
 				for i = 15, 17 do ClearEdit(Option[i]) end
 			end

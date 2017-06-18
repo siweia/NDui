@@ -94,19 +94,30 @@ function module:RegisterDebuff(tierID, instID, bossID, spellID, level)
 	if not instName then print("Invalid instance ID: "..instID) return end
 
 	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end
-	if level then
-		if level < 0 then level = 0 end
-		if level > 5 then level = 5 end
+	if level and level > 6 then
+		level = 6
 	else
 		level = 2
 	end
-	RaidDebuffs[spellID] = {instName, spellID, level}
+
+	RaidDebuffs[instName][spellID] = level
 end
 
 function module:OnLogin()
-	-- Copy Table
+	-- Convert table
 	if not NDuiADB["RaidDebuffs"] then NDuiADB["RaidDebuffs"] = {} end
-	B.CopyTable(NDuiADB["RaidDebuffs"], RaidDebuffs)
+	local newTable = {}
+	for _, value in pairs(NDuiADB["RaidDebuffs"]) do
+		if value then
+			local instName, spellID, priority = unpack(value)
+
+			if not newTable[instName] then newTable[instName] = {} end
+			newTable[instName][spellID] = priority
+		end
+	end
+	B.CopyTable(newTable, RaidDebuffs)
+
+	-- Copy table
 	C.RaidAuraWatch = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
 end
