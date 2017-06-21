@@ -119,6 +119,61 @@ local function UpdateTargetMark(self)
 	end
 end
 
+local function UpdateQuestUnit(self, unit)
+	if not NDuiDB["Nameplate"]["QuestIcon"] or unit == "player" then return end
+
+	local isObjectiveQuest, isProgressQuest
+	local unitTip = _G["NDuiQuestUnitTip"] or CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
+	unitTip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	unitTip:SetUnit(unit)
+
+	for i = 3, unitTip:NumLines() do
+		local textLine = _G["NDuiQuestUnitTipTextLeft"..i]
+		local text = textLine:GetText()
+		if textLine and text then
+			local r, g, b = textLine:GetTextColor()
+			if r > .99 and g > .82 and b == 0 then
+				isProgressQuest = true
+			else
+				local unitName, progress = strmatch(text, "^ ([^ ]-) ?%-(.+)$")
+				if unitName and (unitName == "" or unitName == UnitName("player")) and progress then
+					local current, goal = strmatch(progress, "(%d+)/(%d+)")
+					if current and goal and current ~= goal then
+						isObjectiveQuest = true
+					end
+				end
+			end
+		end
+	end
+
+	if isObjectiveQuest or isProgressQuest then
+		self.questIcon:Show()
+	else
+		self.questIcon:Hide()
+	end
+end
+
+local classify = {
+	rare = {.7, .7, .7},
+	elite = {1, 1, 0},
+	rareelite = {1, .1, .1},
+	worldboss = {0, 1, 0},
+}
+
+local function UpdateUnitClassify(self, unit)
+	local class = UnitClassification(unit)
+	if self.creatureIcon then
+		if class and classify[class] then
+			local r, g, b = unpack(classify[class])
+			self.creatureIcon:SetVertexColor(r, g, b)
+			self.creatureIcon:Show()
+		else
+			self.creatureIcon:Hide()
+		end
+	end
+end
+
+-- Create Nameplates
 local function CreatePlates(self, unit)
 	self.mystyle = "nameplate"
 	if unit:match("nameplate") then
@@ -165,10 +220,20 @@ local function CreatePlates(self, unit)
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 
 		local cicon = self:CreateTexture(nil, "OVERLAY")
-		cicon:SetPoint("LEFT", self, "TOPLEFT", 0, 2)
-		cicon:SetSize(15, 15)
-		cicon:SetAlpha(.75)
+		cicon:SetPoint("LEFT", self, "TOPLEFT", 1, 1)
+		cicon:SetSize(12, 12)
+		cicon:SetTexture("Interface\\MINIMAP\\ObjectIcons")
+		cicon:SetTexCoord(.391, .487, .644, .74)
 		self.creatureIcon = cicon
+
+		if NDuiDB["Nameplate"]["QuestIcon"] then
+			local qicon = self:CreateTexture(nil, "OVERLAY")
+			qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
+			qicon:SetSize(20, 20)
+			qicon:SetTexture(DB.questTex)
+			qicon:Hide()
+			self.questIcon = qicon
+		end
 
 		local threatIndicator = CreateFrame("Frame", nil, self)
 		self.ThreatIndicator = threatIndicator
@@ -176,13 +241,6 @@ local function CreatePlates(self, unit)
 	end
 end
 UF.CreatePlates = CreatePlates
-
-local classtex = {
-	rare = {"Interface\\MINIMAP\\ObjectIcons", .391, .487, .644, .74},
-	elite = {"Interface\\MINIMAP\\Minimap_skull_elite", 0, 1, 0, 1},
-	rareelite = {"Interface\\MINIMAP\\ObjectIcons", .754, .875, .624, .749},
-	worldboss = {"Interface\\MINIMAP\\ObjectIcons", .879, 1, .754, .879},
-}
 
 local function enableElement(self, name, element)
 	if not self:IsElementEnabled(name) then
@@ -198,20 +256,10 @@ local function disableElement(self, name)
 end
 
 local function UpdatePlates(self, event, unit)
-	-- Update Mark
+	-- Update Elements
 	UpdateTargetMark(self)
-
-	-- Unit Classification
-	local class = UnitClassification(unit)
-	if self.creatureIcon then
-		if class and classtex[class] then
-			local tex, a, b, c, d = unpack(classtex[class])
-			self.creatureIcon:SetTexture(tex)
-			self.creatureIcon:SetTexCoord(a, b, c, d)
-		else
-			self.creatureIcon:SetTexture(nil)
-		end
-	end
+	UpdateQuestUnit(self, unit)
+	UpdateUnitClassify(self, unit)
 
 	-- Update PlayerPlate
 	if event == "NAME_PLATE_UNIT_ADDED" then

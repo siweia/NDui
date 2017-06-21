@@ -242,7 +242,7 @@ function UF:CreateRaidMark(self)
 	else
 		ri:SetPoint("TOPRIGHT", self, "TOPRIGHT", -30, 10)
 	end
-	local size = retVal(self, 14, 13, 12, 18)
+	local size = retVal(self, 14, 13, 12, 20)
     ri:SetSize(size, size)
     self.RaidTargetIndicator = ri
 end

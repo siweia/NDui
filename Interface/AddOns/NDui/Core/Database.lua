@@ -27,6 +27,7 @@ DB.eyeTex = "Interface\\Minimap\\Raid_Icon"		-- blue: \\Dungeon_Icon
 DB.garrTex = "Interface\\HelpFrame\\HelpIcon-ReportLag"
 DB.copyTex = "Interface\\Buttons\\UI-GuildButton-PublicNote-Up"
 DB.binTex = "Interface\\HelpFrame\\ReportLagIcon-Loot"
+DB.questTex = "Interface\\BUTTONS\\AdventureGuideMicrobuttonAlert"
 DB.TexCoord = {.08, .92, .08, .92}
 DB.textures = {
     normal		= Media.."ActionBar\\gloss",
