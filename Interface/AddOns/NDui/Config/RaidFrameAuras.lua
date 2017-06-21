@@ -91,6 +91,7 @@ local RaidBuffs = {
 
 function module:RegisterDebuff(tierID, instID, bossID, spellID, level)
 	local instName = EJ_GetInstanceInfo(instID)
+	--local bossName = EJ_GetEncounterInfo(bossID)
 	if not instName then print("Invalid instance ID: "..instID) return end
 
 	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end

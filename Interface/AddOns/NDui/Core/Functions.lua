@@ -348,7 +348,7 @@ end
 B.CopyTable = function(source, target)
 	for key, value in pairs(source) do
 		if type(value) == "table" then
-			target[key] = {}
+			if not target[key] then target[key] = {} end
 			for k, v in pairs(value) do
 				target[key][k] = value[k]
 			end

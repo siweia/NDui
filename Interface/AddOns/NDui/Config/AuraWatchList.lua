@@ -579,6 +579,127 @@ C.AuraWatchList = {
 				{AuraID = 210339, UnitID = "player"},
 				--消散力场
 				{AuraID = 206985, UnitID = "player"},
+		-->萨格拉斯之墓
+			--格罗斯
+				--碎裂星辰
+				{AuraID = 233272, UnitID = "player"},
+				--燃烧护甲
+				{AuraID = 231363, UnitID = "player"},
+				--熔化护甲
+				{AuraID = 234264, UnitID = "player"},
+				--彗星冲撞
+				{AuraID = 230345, UnitID = "player"},
+			--恶魔审判庭
+				--骨锯
+				{AuraID = 248741, UnitID = "player"},
+				--回响之痛
+				{AuraID = 233983, UnitID = "player"},
+				--无法忍受的折磨
+				{AuraID = 233430, UnitID = "player"},
+				--窒息之暗
+				{AuraID = 233901, UnitID = "player"},
+				--灵魂腐蚀
+				{AuraID = 248713, UnitID = "player"},
+			--哈亚坦
+				--灵魂腐蚀
+				{AuraID = 248713, UnitID = "player"},
+				--强制突袭
+				{AuraID = 234016, UnitID = "player"},
+				--滴水
+				{AuraID = 241573, UnitID = "player"},
+				--锯齿创伤
+				{AuraID = 231998, UnitID = "player"},
+				--浸透
+				{AuraID = 231770, UnitID = "player"},
+				--水之爆发
+				{AuraID = 231729, UnitID = "player"},
+				--病态锁定
+				{AuraID = 241600, UnitID = "player"},
+			--月之姐妹
+				--月蚀之拥
+				{AuraID = 233263, UnitID = "player", value = true},
+				--急速射击
+				{AuraID = 236596, UnitID = "player"},
+				--月光信标
+				{AuraID = 236712, UnitID = "player"},
+				--月光之火
+				{AuraID = 239264, UnitID = "player"},
+				--月灼
+				{AuraID = 236519, UnitID = "player"},
+				--无形
+				{AuraID = 236550, UnitID = "player"},
+				--灵体射击
+				{AuraID = 236305, UnitID = "player"},
+				--星界易伤
+				{AuraID = 236330, UnitID = "player"},
+			--主母萨斯琳
+				--雷霆震击
+				{AuraID = 230362, UnitID = "player"},
+				--痛苦负担
+				{AuraID = 230201, UnitID = "player"},
+				--昏暗隐匿
+				{AuraID = 230959, UnitID = "player"},
+				--多头蛇酸液
+				{AuraID = 232754, UnitID = "player"},
+				--污染墨汁
+				{AuraID = 232913, UnitID = "player"},
+				--美味的增益鱼
+				{AuraID = 239375, UnitID = "player"},
+				{AuraID = 239362, UnitID = "player"},
+			--绝望的聚合体
+				--灵魂锁链
+				{AuraID = 236361, UnitID = "player"},
+				--粉碎意志
+				{AuraID = 236340, UnitID = "player"},
+				--破碎尖叫
+				{AuraID = 236515, UnitID = "player"},
+				{AuraID = 238418, UnitID = "player"},
+				--灵魂束缚
+				{AuraID = 236459, UnitID = "player"},
+				--苦痛之矛
+				{AuraID = 238442, UnitID = "player"},
+				--枯萎
+				{AuraID = 236138, UnitID = "player"},
+				{AuraID = 236131, UnitID = "player"},
+				--折磨哀嚎
+				{AuraID = 236011, UnitID = "player"},
+				{AuraID = 238018, UnitID = "player"},
+			--戒卫侍女
+				--光明灌注
+				{AuraID = 235213, UnitID = "player"},
+				--邪能灌注
+				{AuraID = 235240, UnitID = "player"},
+				--动荡的灵魂
+				{AuraID = 243276, UnitID = "player"},
+				--恶魔活力
+				{AuraID = 235538, UnitID = "player"},
+				--造物者之赐
+				{AuraID = 235534, UnitID = "player"},
+				--艾格文的结界
+				{AuraID = 241593, UnitID = "player"},
+				--邪能残留
+				{AuraID = 238408, UnitID = "player"},
+				--光明残留
+				{AuraID = 238028, UnitID = "player"},
+				--反冲
+				{AuraID = 248812, UnitID = "player"},
+				--碎片爆发
+				{AuraID = 248801, UnitID = "player"},
+				--复仇的灵魂
+				{AuraID = 241729, UnitID = "player"},
+			--堕落的化身
+				--释放混沌
+				{AuraID = 234059, UnitID = "player"},
+				--风蚀
+				{AuraID = 236494, UnitID = "player"},
+				--黑暗印记
+				{AuraID = 239739, UnitID = "player"},
+				--漆黑之风
+				{AuraID = 242017, UnitID = "player"},
+				--被污染的矩阵
+				{AuraID = 240746, UnitID = "player"},
+				--被污染的精华
+				{AuraID = 240728, UnitID = "player"},
 			},
 		},
 		{	Name = "Warning",
@@ -650,6 +771,45 @@ C.AuraWatchList = {
 				{AuraID = 221863, UnitID = "target"},
 				--保护，小姐姐前小怪
 				{AuraID = 221524, UnitID = "target"},
+			-->萨格拉斯之墓
+				--骨锯
+				{AuraID = 233441, UnitID = "target"},
+				--折磨喷发
+				{AuraID = 239135, UnitID = "target"},
+				--邪能狂风
+				{AuraID = 235230, UnitID = "target"},
+				--苦痛重塑
+				{AuraID = 241521, UnitID = "target"},
+				--强制突袭
+				{AuraID = 234128, UnitID = "target"},
+				--严寒打击
+				{AuraID = 233429, UnitID = "target"},
+				--硬化之壳
+				{AuraID = 240315, UnitID = "target"},
+				--激怒
+				{AuraID = 247781, UnitID = "target"},
+				--发脾气
+				{AuraID = 241590, UnitID = "target"},
+				--愤怒
+				{AuraID = 241594, UnitID = "target"},
+				--月蚀之拥
+				{AuraID = 233264, UnitID = "target", value = true},
+				--致命尖叫
+				{AuraID = 236697, UnitID = "target"},
+				--骨牢护甲
+				{AuraID = 236513, UnitID = "target"},
+				--造物者之怒
+				{AuraID = 234891, UnitID = "target"},
+				--泰坦之壁
+				{AuraID = 235028, UnitID = "target", value = true},
+				--净化协议
+				{AuraID = 241008, UnitID = "target", value = true},
+				--故障
+				{AuraID = 233739, UnitID = "target"},
+				--矩阵强化
+				{AuraID = 233961, UnitID = "target"},
+				--邪能灌注
+				{AuraID = 236684, UnitID = "target"},
 			-->PLAYER
 				--痛苦压制
 				{AuraID =  33206, UnitID = "target"},
