@@ -16,6 +16,7 @@ local RaidDebuffsIgnore = {}
 
 local auraFilters = {
 	["HARMFUL"] = true,
+	["HELPFUL"] = true,
 }
 
 local DispellColor = {

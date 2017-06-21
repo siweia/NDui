@@ -700,6 +700,31 @@ C.AuraWatchList = {
 				{AuraID = 240746, UnitID = "player"},
 				--被污染的精华
 				{AuraID = 240728, UnitID = "player"},
+			--基尔加丹
+				--末日之雨
+				{AuraID = 234310, UnitID = "player"},
+				--邪爪
+				{AuraID = 245509, UnitID = "player"},
+				--暗影映像：爆发
+				{AuraID = 236710, UnitID = "player"},
+				--暗影映像：哀嚎
+				{AuraID = 236378, UnitID = "player"},
+				--末日之雹
+				{AuraID = 240916, UnitID = "player"},
+				--欺诈者的遮蔽
+				{AuraID = 236555, UnitID = "player"},
+				--窒息之影
+				{AuraID = 241822, UnitID = "player", Value = true},
+				--伊利丹的无目凝视
+				{AuraID = 241721, UnitID = "player"},
+				--燃烧
+				{AuraID = 240262, UnitID = "player"},
+				--暗影映像：绝望
+				{AuraID = 237590, UnitID = "player"},
+				--萦绕的希望
+				{AuraID = 243621, UnitID = "player"},
+				--萦绕的哀嚎
+				{AuraID = 243624, UnitID = "player"},
 			},
 		},
 		{	Name = "Warning",
@@ -810,6 +835,14 @@ C.AuraWatchList = {
 				{AuraID = 233961, UnitID = "target"},
 				--邪能灌注
 				{AuraID = 236684, UnitID = "target"},
+				--虚空强风
+				{AuraID = 244834, UnitID = "target"},
+				--爆发
+				{AuraID = 235974, UnitID = "target"},
+				--悲伤之嚎
+				{AuraID = 241564, UnitID = "target"},
+				--波涛起伏
+				{AuraID = 241606, UnitID = "target"},
 			-->PLAYER
 				--痛苦压制
 				{AuraID =  33206, UnitID = "target"},
