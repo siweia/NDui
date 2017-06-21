@@ -90,14 +90,11 @@ function Bar:CreateBar4()
 		if event == "PLAYER_REGEN_ENABLED" then
 			InterfaceOptions_UpdateMultiActionBars()
 			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-			self:UnregisterEvent(self.savedEvent)
 		else
 			if InCombatLockdown() then
 				self:RegisterEvent("PLAYER_REGEN_ENABLED")
-				self.savedEvent = event
 			else
 				InterfaceOptions_UpdateMultiActionBars()
-				self:UnregisterEvent(event)
 			end
 		end
 	end)
