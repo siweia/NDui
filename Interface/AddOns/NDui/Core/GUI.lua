@@ -654,7 +654,7 @@ local function OpenGUI()
 	B.CreateBD(f)
 	B.CreateTex(f)
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
-	B.CreateFS(f, 16, DB.Version, false, "TOP", 0, -30)
+	B.CreateFS(f, 16, DB.Version.." ("..DB.Support..")", false, "TOP", 0, -30)
 
 	local close = CreateFrame("Button", nil, f)
 	close:SetPoint("BOTTOMRIGHT", -20, 15)
