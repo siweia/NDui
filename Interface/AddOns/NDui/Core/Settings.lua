@@ -18,7 +18,7 @@ end)
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")
-print("|cff00ff00  LEG|c00ffff00 "..DB.Version.." |c0000ff00"..L["Version Info1"])
+print("|cff00ff00  LEG|c00ffff00 "..DB.Version.." ("..DB.Support..") |c0000ff00"..L["Version Info1"])
 print("|c0000ff00  "..L["Version Info2"].."|c00ffff00 /ndui |c0000ff00"..L["Version Info3"])
 print("|cff70C0F5------------------------")
 

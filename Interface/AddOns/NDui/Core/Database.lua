@@ -1,5 +1,6 @@
 local _, _, L, DB = unpack(select(2, ...))
 DB.Version = GetAddOnMetadata("NDui", "Version")
+DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 
 -- Colors
@@ -28,6 +29,7 @@ DB.garrTex = "Interface\\HelpFrame\\HelpIcon-ReportLag"
 DB.copyTex = "Interface\\Buttons\\UI-GuildButton-PublicNote-Up"
 DB.binTex = "Interface\\HelpFrame\\ReportLagIcon-Loot"
 DB.questTex = "Interface\\BUTTONS\\AdventureGuideMicrobuttonAlert"
+DB.creditTex = "Interface\\HelpFrame\\HelpIcon-KnowledgeBase"
 DB.TexCoord = {.08, .92, .08, .92}
 DB.textures = {
     normal		= Media.."ActionBar\\gloss",

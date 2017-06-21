@@ -1,9 +1,10 @@
 ## Interface: 70200
 ## Title: |cff0080ffNDui|r
-## Credits: Elv, Haleth, Haste, Leatrix, Loshine, Neavo, Paopao001, Qulight, Ray, zork
+## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, Loshine, Neavo, Paopao001, Qulight, Ray, Zork.
 ## Author: Siweia
 ## Notes: Core of NDui
-## Version: v0.8 (7.2)
+## Version: 1.0.0
+## X-Support: 7.2.5
 ## SavedVariables: diminfo, NDuiADB
 ## SavedVariablesPerCharacter: NDuiDB
 
