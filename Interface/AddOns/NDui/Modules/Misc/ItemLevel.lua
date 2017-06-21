@@ -4,29 +4,6 @@ local module = NDui:GetModule("Misc")
 --[[
 	在角色面板显示装备等级
 ]]
-local lvlPattern = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
-local ItemDB = {}
-function NDui:GetUnitItemInfo(unit, slot)
-	local link = GetInventoryItemLink(unit, slot)
-	if ItemDB[link] then return ItemDB[link] end
-
-	local tip = _G["NDuiUnitTip"] or CreateFrame("GameTooltip", "NDuiUnitTip", nil, "GameTooltipTemplate")
-	tip:SetOwner(UIParent, "ANCHOR_NONE")
-	tip:SetInventoryItem(unit, slot)
-
-	for i = 2, 5 do
-		local textLine = _G["NDuiUnitTipTextLeft"..i]
-		if textLine and textLine:GetText() then
-			local level = strmatch(textLine:GetText(), lvlPattern)
-			if level then
-				ItemDB[link] = tonumber(level)
-				break
-			end
-		end
-	end
-	return ItemDB[link]
-end
-
 function module:ShowItemLevel()
 	if not NDuiDB["Misc"]["ItemLevel"] then return end
 
@@ -66,7 +43,6 @@ function module:ShowItemLevel()
 			local link = GetInventoryItemLink(unit, id)
 			if link and id ~= 4 then
 				local _, _, quality, level = GetItemInfo(link)
-				--level = NDui:GetUnitItemInfo(unit, id) or level
 				level = NDui:GetItemLevel(link, quality) or level
 
 				if level and level > 1 and quality then
