@@ -89,6 +89,8 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
+				--灭绝引擎
+				{AuraID = 242612, UnitID = "player"},
 				--节拍器
 				{AuraID = 225719, UnitID = "player"},
 				--黑暗低语
