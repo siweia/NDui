@@ -29,7 +29,9 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 231729, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 241600)
 
 BOSS = 1903 -- 月之姐妹
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 233263)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 234996)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 234995)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 233263, 2)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236596, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236712)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 239264)
