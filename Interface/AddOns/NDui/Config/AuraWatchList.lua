@@ -659,7 +659,7 @@ C.AuraWatchList = {
 				--灵魂束缚
 				{AuraID = 236459, UnitID = "player"},
 				--苦痛之矛
-				{AuraID = 238442, UnitID = "player"},
+				{AuraID = 238442, UnitID = "player", Value = true},
 				--枯萎
 				{AuraID = 236138, UnitID = "player"},
 				{AuraID = 236131, UnitID = "player"},
@@ -2550,6 +2550,8 @@ C.AuraWatchList = {
 				{AuraID = 211805, UnitID = "player"},
 				--冰龙吐息
 				{AuraID = 152279, UnitID = "player"},
+				--冷酷之心
+				{AuraID = 235599, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
