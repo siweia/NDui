@@ -83,7 +83,9 @@ local function Update(self, event, unit, powerType)
 				end
 			end
 		else
+			for i = 1, 5 do element[i]:SetValue(1) end
 			element[6]:Hide()
+
 			if cur <= 5 then
 				for i = 1, 5 do
 					if i <= cur then

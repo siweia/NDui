@@ -28,14 +28,14 @@ end
 
 -- Elements
 function UF:CreateHeader(self)
-    local hl = self:CreateTexture(nil, "OVERLAY")
-    hl:SetAllPoints()
-    hl:SetTexture("Interface\\PETBATTLES\\PetBattle-SelectedPetGlow")
+	local hl = self:CreateTexture(nil, "OVERLAY")
+	hl:SetAllPoints()
+	hl:SetTexture("Interface\\PETBATTLES\\PetBattle-SelectedPetGlow")
 	hl:SetTexCoord(0, 1, .5, 1)
-    hl:SetVertexColor(.6, .6, .6)
-    hl:SetBlendMode("ADD")
-    hl:Hide()
-    self.Highlight = hl
+	hl:SetVertexColor(.6, .6, .6)
+	hl:SetBlendMode("ADD")
+	hl:Hide()
+	self.Highlight = hl
 
 	self:RegisterForClicks("AnyUp")
 	self:SetScript("OnEnter", function()
@@ -49,19 +49,19 @@ function UF:CreateHeader(self)
 end
 
 function UF:CreateHealthBar(self)
-    local health = CreateFrame("StatusBar", nil, self)
-    health:SetPoint("TOP", 0, 0)
+	local health = CreateFrame("StatusBar", nil, self)
+	health:SetPoint("TOP", 0, 0)
 	health:SetHeight(self:GetHeight())
-    health:SetWidth(self:GetWidth())
-    health:SetStatusBarTexture(DB.normTex)
+	health:SetWidth(self:GetWidth())
+	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
 	B.CreateSD(health, 3, 3)
 	B.SmoothBar(health)
 
-    local bg = health:CreateTexture(nil, "BACKGROUND")
-    bg:SetAllPoints()
-    bg:SetTexture(DB.bdTex)
+	local bg = health:CreateTexture(nil, "BACKGROUND")
+	bg:SetAllPoints()
+	bg:SetTexture(DB.bdTex)
 	bg:SetVertexColor(.6, .6, .6)
 	bg.multiplier = .25
 
@@ -76,14 +76,14 @@ function UF:CreateHealthBar(self)
 	health.frequentUpdates = true
 
 	self.Health = health
-    self.Health.bg = bg
+	self.Health.bg = bg
 end
 
 function UF:CreateHealthText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints()
 
-    local name = B.CreateFS(textFrame, retVal(self, 12, 12, 12, 11), "", false, "LEFT", 3, -1)
+	local name = B.CreateFS(textFrame, retVal(self, 12, 12, 12, 11), "", false, "LEFT", 3, -1)
 	name:SetJustifyH("LEFT")
 	if self.mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
@@ -109,7 +109,7 @@ function UF:CreateHealthText(self)
 		self:Tag(name, "[color][name]")
 	end
 
-    local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 12), "", false, "RIGHT", -3, -1)
+	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 12), "", false, "RIGHT", -3, -1)
 	if self.mystyle == "raid" then
 		hpval:SetPoint("RIGHT", -3, -7)
 		if NDuiDB["UFs"]["HealthPerc"] then
@@ -137,9 +137,9 @@ function UF:CreatePowerBar(self)
 	B.CreateSD(power, 3, 3)
 	B.SmoothBar(power)
 
-    local bg = power:CreateTexture(nil, "BACKGROUND")
-    bg:SetAllPoints()
-    bg:SetTexture(DB.normTex)
+	local bg = power:CreateTexture(nil, "BACKGROUND")
+	bg:SetAllPoints()
+	bg:SetTexture(DB.normTex)
 	bg.multiplier = .25
 
 	if (self.mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (self.mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) or self.mystyle == "nameplate" then
@@ -152,15 +152,15 @@ function UF:CreatePowerBar(self)
 	end
 	power.frequentUpdates = true
 
-    self.Power = power
-    self.Power.bg = bg
+	self.Power = power
+	self.Power.bg = bg
 end
 
 function UF:CreatePowerText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Power)
 
-    local ppval = B.CreateFS(textFrame, retVal(self, 14, 12, 12), "", false, "RIGHT", -3, 2)
+	local ppval = B.CreateFS(textFrame, retVal(self, 14, 12, 12), "", false, "RIGHT", -3, 2)
 	self:Tag(ppval, "[color][power]")
 end
 
@@ -179,7 +179,7 @@ function UF:CreatePortrait(self)
 end
 
 function UF:CreateIcons(self)
-    if self.mystyle == "player" then
+	if self.mystyle == "player" then
 		local combat = self:CreateTexture(nil, "OVERLAY")
 		combat:SetSize(20, 20)
 		combat:SetPoint("BOTTOMLEFT", -10, -3)
@@ -196,7 +196,7 @@ function UF:CreateIcons(self)
 		rest:SetVertexColor(.6, .8, 1)
 		self.RestingIndicator = rest
 
-    elseif self.mystyle == "target" then
+	elseif self.mystyle == "target" then
 		local phase = self:CreateTexture(nil, "OVERLAY")
 		phase:SetPoint("TOP", self, 0, 12)
 		phase:SetSize(22, 22)
@@ -217,24 +217,24 @@ function UF:CreateIcons(self)
 	ri:SetSize(12, 12)
 	self.GroupRoleIndicator = ri
 
-    local li = self:CreateTexture(nil, "OVERLAY")
-    li:SetPoint("TOPLEFT", self, 0, 8)
-    li:SetSize(12, 12)
-    self.LeaderIndicator = li
+	local li = self:CreateTexture(nil, "OVERLAY")
+	li:SetPoint("TOPLEFT", self, 0, 8)
+	li:SetSize(12, 12)
+	self.LeaderIndicator = li
 
-    local ai = self:CreateTexture(nil, "OVERLAY")
-    ai:SetPoint("TOPLEFT", self, 0, 8)
-    ai:SetSize(12, 12)
-    self.AssistantIndicator = ai
+	local ai = self:CreateTexture(nil, "OVERLAY")
+	ai:SetPoint("TOPLEFT", self, 0, 8)
+	ai:SetSize(12, 12)
+	self.AssistantIndicator = ai
 
-    local ml = self:CreateTexture(nil, "OVERLAY")
-    ml:SetPoint("LEFT", li, "RIGHT")
-    ml:SetSize(12, 12)
-    self.MasterLooterIndicator = ml
+	local ml = self:CreateTexture(nil, "OVERLAY")
+	ml:SetPoint("LEFT", li, "RIGHT")
+	ml:SetSize(12, 12)
+	self.MasterLooterIndicator = ml
 end
 
 function UF:CreateRaidMark(self)
-    local ri = self:CreateTexture(nil, "OVERLAY")
+	local ri = self:CreateTexture(nil, "OVERLAY")
 	if self.mystyle == "raid" then
 		ri:SetPoint("TOP", self, 0, 10)
 	elseif self.mystyle == "nameplate" then
@@ -243,8 +243,8 @@ function UF:CreateRaidMark(self)
 		ri:SetPoint("TOPRIGHT", self, "TOPRIGHT", -30, 10)
 	end
 	local size = retVal(self, 14, 13, 12, 20)
-    ri:SetSize(size, size)
-    self.RaidTargetIndicator = ri
+	ri:SetSize(size, size)
+	self.RaidTargetIndicator = ri
 end
 
 function UF:CreateCastBar(self)
@@ -337,7 +337,7 @@ function UF:CreateCastBar(self)
 end
 
 function UF:CreateMirrorBar(self)
-    for _, bar in pairs({"MirrorTimer1", "MirrorTimer2", "MirrorTimer3"}) do   
+	for _, bar in pairs({"MirrorTimer1", "MirrorTimer2", "MirrorTimer3"}) do   
 		_G[bar]:GetRegions():Hide()
 		_G[bar.."Border"]:Hide()
 		_G[bar]:SetParent(UIParent)
@@ -353,7 +353,7 @@ function UF:CreateMirrorBar(self)
 		_G[bar.."Text"]:SetPoint("CENTER")
 		_G[bar.."StatusBar"]:SetAllPoints(_G[bar])
 		B.CreateSD(_G[bar], 3, 3)
-    end
+	end
 end
 
 -- Auras Relevant
@@ -471,27 +471,27 @@ function UF:CreateAuras(self)
 end
 
 function UF:CreateBuffs(self)
-    local bu = CreateFrame("Frame", nil, self)
+	local bu = CreateFrame("Frame", nil, self)
 	bu.size = 20
-    bu.spacing = 5
-    bu.onlyShowPlayer = false
-    bu:SetHeight((bu.size + bu.spacing) * 4)
-    bu:SetWidth(self:GetWidth())
-    if self.mystyle == "target" then
+	bu.spacing = 5
+	bu.onlyShowPlayer = false
+	bu:SetHeight((bu.size + bu.spacing) * 4)
+	bu:SetWidth(self:GetWidth())
+	if self.mystyle == "target" then
 		bu:SetPoint("TOP", self, "TOP", 0, 51)
 		bu.initialAnchor = "TOPLEFT"
 		bu["growth-x"] = "RIGHT"
 		bu["growth-y"] = "UP"
-	    bu.num = 10
-    elseif self.mystyle == "player" then
-	    bu.size = 28
+		bu.num = 10
+	elseif self.mystyle == "player" then
+		bu.size = 28
 		bu:SetPoint("TOPRIGHT", UIParent,  -180, -10)
 		bu.initialAnchor = "TOPRIGHT"
 		bu["growth-x"] = "LEFT"
 		bu["growth-y"] = "DOWN"
 		bu.num = 40
-    elseif self.mystyle == "boss" or self.mystyle == "arena" then
-	    bu.size = 22
+	elseif self.mystyle == "boss" or self.mystyle == "arena" then
+		bu.size = 22
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-x"] = "RIGHT"
@@ -499,21 +499,21 @@ function UF:CreateBuffs(self)
 		bu.num = 10
 	else
 		bu.num = 0
-    end
-    bu.PostCreateIcon = postCreateIcon
-    bu.PostUpdateIcon = postUpdateIcon
+	end
+	bu.PostCreateIcon = postCreateIcon
+	bu.PostUpdateIcon = postUpdateIcon
 
-    self.Buffs = bu
+	self.Buffs = bu
 end
 
 function UF:CreateDebuffs(self)
-    local bu = CreateFrame("Frame", nil, self)
-    bu.size = 20
+	local bu = CreateFrame("Frame", nil, self)
+	bu.size = 20
 	bu.num = 18
 	bu.onlyShowPlayer = false
-    bu.spacing = 5
-    bu:SetHeight((bu.size + bu.spacing) * 4)
-    bu:SetWidth(self:GetWidth())
+	bu.spacing = 5
+	bu:SetHeight((bu.size + bu.spacing) * 4)
+	bu:SetWidth(self:GetWidth())
 	if self.mystyle == "target" then
 		bu:SetPoint("TOP", self, "TOP", 0, 25)
 		bu.initialAnchor = "TOPLEFT"
@@ -524,10 +524,10 @@ function UF:CreateDebuffs(self)
 		bu.initialAnchor = "BOTTOMRIGHT"
 		bu["growth-x"] = "LEFT"
 		bu["growth-y"] = "DOWN"
-	    bu.size = 22
+		bu.size = 22
 		bu.spacing = 6
 	elseif self.mystyle == "boss" or self.mystyle == "arena" then
-	    bu.size = 26
+		bu.size = 26
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, -1)
 		bu.initialAnchor = "TOPRIGHT"
 		bu.onlyShowPlayer = true
@@ -537,10 +537,10 @@ function UF:CreateDebuffs(self)
 	else
 		bu.num = 0
 	end
-    bu.PostCreateIcon = postCreateIcon
-    bu.PostUpdateIcon = postUpdateIcon
+	bu.PostCreateIcon = postCreateIcon
+	bu.PostUpdateIcon = postUpdateIcon
 
-    self.Debuffs = bu
+	self.Debuffs = bu
 end
 
 -- Class Powers
@@ -563,19 +563,15 @@ local function postUpdateClassPower(element, cur, max, diff, event)
 end
 
 function UF:CreateClassPower(self)
-	local bar = CreateFrame("Frame", "oUF_ClassPowerBar", self)
-	bar:SetSize(width, height)
-	bar:SetPoint(unpack(C.UFs.BarPoint))
-
 	local bars = {}
 	for i = 1, 6 do
-		bars[i] = CreateFrame("StatusBar", nil, bar)
+		bars[i] = CreateFrame("StatusBar", nil, self)
 		bars[i]:SetHeight(height)
 		bars[i]:SetWidth((width - 5*margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		B.CreateSD(bars[i], 3, 3)
 		if i == 1 then
-			bars[i]:SetPoint("LEFT")
+			bars[i]:SetPoint(unpack(C.UFs.BarPoint))
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", margin, 0)
 		end
@@ -707,15 +703,15 @@ function UF:CreatePrediction(self)
 	oag:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -5, 2)
 	oag:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -5, -2)
 
-    local hab = CreateFrame("StatusBar", nil, self)
-    hab:SetPoint("TOP")
-    hab:SetPoint("BOTTOM")
-    hab:SetPoint("RIGHT", self.Health:GetStatusBarTexture())
-    hab:SetWidth(self.Health:GetWidth())
-    hab:SetReverseFill(true)
-    hab:SetStatusBarTexture(DB.normTex)
-    hab:SetStatusBarColor(0, .5, .8, .5)
-    hab:Hide()
+	local hab = CreateFrame("StatusBar", nil, self)
+	hab:SetPoint("TOP")
+	hab:SetPoint("BOTTOM")
+	hab:SetPoint("RIGHT", self.Health:GetStatusBarTexture())
+	hab:SetWidth(self.Health:GetWidth())
+	hab:SetReverseFill(true)
+	hab:SetStatusBarTexture(DB.normTex)
+	hab:SetStatusBarColor(0, .5, .8, .5)
+	hab:Hide()
 
 	self.HealPredictionAndAbsorb = {
 		myBar = mhpb,
@@ -750,9 +746,9 @@ function UF:CreateAddPower(self)
 	B.CreateSD(bar, 3, 3)
 	bar.colorPower = true
 
-    local b = bar:CreateTexture(nil, "BACKGROUND")
-    b:SetAllPoints()
-    b:SetTexture(DB.normTex)
+	local b = bar:CreateTexture(nil, "BACKGROUND")
+	b:SetAllPoints()
+	b:SetTexture(DB.normTex)
 	b.multiplier = .3
 	local t = B.CreateFS(bar, 12, "", false, "CENTER", 1, -3)
 

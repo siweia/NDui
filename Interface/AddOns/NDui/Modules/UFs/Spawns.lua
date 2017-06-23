@@ -19,8 +19,8 @@ local function CreatePlayerStyle(self)
 	UF:CreateIcons(self)
 	UF:CreatePrediction(self)
 	UF:CreateFCT(self)
-	UF:CreateClassPower(self)
 
+	if NDuiDB["UFs"]["ClassPower"] then UF:CreateClassPower(self) end
 	if NDuiDB["UFs"]["AddPower"] then UF:CreateAddPower(self) end
 	if NDuiDB["UFs"]["ExpRep"] then
 		UF:CreateExpBar(self)
@@ -171,6 +171,7 @@ function UF:OnLogin()
 		self:BlockAddons()
 		self:CreateUnitTable()
 		self:CreatePowerUnitTable()
+		self:CreateClassBar()
 
 		oUF:SetActiveStyle("Nameplates")
 		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
