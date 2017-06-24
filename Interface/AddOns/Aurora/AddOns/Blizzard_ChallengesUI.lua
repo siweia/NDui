@@ -1,6 +1,25 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ChallengesUI"] = function()
+	-- Reskin Affixes
+	local function AffixesSetup(parent)
+		for i, frame in ipairs(parent) do
+			frame.Border:Hide()
+			frame.Portrait:SetTexture(nil)
+			if not frame.bg then
+				frame.bg = F.ReskinIcon(frame.Portrait)
+			end
+
+			if frame.info then
+				frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
+			elseif frame.affixID then
+				local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
+				frame.Portrait:SetTexture(filedataid)
+			end
+		end
+	end
+
+	-- Reskin ChallengsFrame
 	local ChallengesFrame = ChallengesFrame
 
 	ChallengesFrameInset:DisableDrawLayer("BORDER")
@@ -30,6 +49,10 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			select(1, scheduel:GetRegions()):Hide()
 			select(3, scheduel:GetRegions()):Hide()
 			F.CreateBD(scheduel, .3)
+
+			for i = 1, 4 do
+				AffixesSetup(scheduel.Entries[i].Affixes)
+			end
 			angryStyle = true
 		end
 	end)
@@ -44,22 +67,6 @@ C.themes["Blizzard_ChallengesUI"] = function()
 		self.InstructionBackground:SetAlpha(0)
 	end)
 
-	local function AffixesSetup(parent)
-		for i, frame in ipairs(parent) do
-			frame.Border:Hide()
-			frame.Portrait:SetTexture(nil)
-			if not frame.bg then
-				frame.bg = F.ReskinIcon(frame.Portrait)
-			end
-
-			if frame.info then
-				frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
-			elseif frame.affixID then
-				local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
-				frame.Portrait:SetTexture(filedataid)
-			end
-		end
-	end
 	hooksecurefunc(keystone, "OnKeystoneSlotted", function(self) AffixesSetup(self.Affixes) end)
 	hooksecurefunc(ChallengesFrame.WeeklyBest, "SetUp", function(self) AffixesSetup(self.Child.Affixes) end)
 
