@@ -148,6 +148,7 @@ local ignoreGossipNPC = {
 	[84268] = true, -- Lieutenant Thorn (Alliance)
 	[84511] = true, -- Lieutenant Thorn (Alliance)
 	[84684] = true, -- Lieutenant Thorn (Alliance)
+	[117871] = true, -- War Councilor Victoria (Class Challenges @ Broken Shore)
 }
 
 local rogueClassHallInsignia = {
