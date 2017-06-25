@@ -621,7 +621,7 @@ C.AuraWatchList = {
 				{AuraID = 241600, UnitID = "player"},
 			--月之姐妹
 				--月蚀之拥
-				{AuraID = 233263, UnitID = "player", value = true},
+				{AuraID = 233263, UnitID = "player", Value = true},
 				--急速射击
 				{AuraID = 236596, UnitID = "player"},
 				--月光信标
@@ -823,7 +823,7 @@ C.AuraWatchList = {
 				--愤怒
 				{AuraID = 241594, UnitID = "target"},
 				--月蚀之拥
-				{AuraID = 233264, UnitID = "target", value = true},
+				{AuraID = 233264, UnitID = "target", Value = true},
 				--致命尖叫
 				{AuraID = 236697, UnitID = "target"},
 				--骨牢护甲
@@ -831,9 +831,9 @@ C.AuraWatchList = {
 				--造物者之怒
 				{AuraID = 234891, UnitID = "target"},
 				--泰坦之壁
-				{AuraID = 235028, UnitID = "target", value = true},
+				{AuraID = 235028, UnitID = "target", Value = true},
 				--净化协议
-				{AuraID = 241008, UnitID = "target", value = true},
+				{AuraID = 241008, UnitID = "target", Value = true},
 				--故障
 				{AuraID = 233739, UnitID = "target"},
 				--矩阵强化
