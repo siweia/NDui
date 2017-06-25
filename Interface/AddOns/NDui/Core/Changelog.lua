@@ -2,9 +2,13 @@ local B, C, L, DB = unpack(select(2, ...))
 if DB.Client ~= "zhCN" then return end
 
 local hx = {
-	"团队框体的DEBUFF位置不再错误的显示BUFF；",
-	"头像的资源条调整；",
-	"玩家姓名板的资源条现在是独立的。",
+	"Aurora更新对AngryKeystones日程表的美化；",
+	"聊天背景会跟随聊天框的上下拉升变化；",
+	"优化团队框体快速战复的功能；",
+	"动作条调整；",
+	"更新技能监视列表；",
+	"更新萨墓的团队框体法术；",
+	"背包细节微调。",
 }
 
 local function changelog()
