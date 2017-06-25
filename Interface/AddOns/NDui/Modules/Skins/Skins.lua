@@ -17,7 +17,7 @@ function module:OnLogin()
 	-- BOTTOMLEFT
 	local Linfobar = CreateFrame("Frame", nil, UIParent)
 	Linfobar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 3)
-	B.CreateGF(Linfobar, 450, 220, "Horizontal", 0, 0, 0, .6, 0)
+	B.CreateGF(Linfobar, 450, ChatFrame1:GetHeight() + 30, "Horizontal", 0, 0, 0, .6, 0)
 	local Linfobar1 = CreateFrame("Frame", nil, Linfobar)
 	Linfobar1:SetPoint("BOTTOM", Linfobar, "TOP")
 	B.CreateGF(Linfobar1, 450, 1, "Horizontal", cr, cg, cb, .7, 0)
@@ -27,6 +27,11 @@ function module:OnLogin()
 	local Linfobar3 = CreateFrame("Frame", nil, Linfobar)
 	Linfobar3:SetPoint("TOP", Linfobar, "BOTTOM")
 	B.CreateGF(Linfobar3, 450, 1, "Horizontal", cr, cg, cb, .7, 0)
+	ChatFrame1Tab:HookScript("OnMouseUp", function(self, arg1)
+		if arg1 == "LeftButton" then
+			Linfobar:SetHeight(ChatFrame1:GetHeight() + 30)
+		end
+	end)
 
 	-- BOTTOMRIGHT
 	local Rinfobar = CreateFrame("Frame", nil, UIParent)
