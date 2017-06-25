@@ -915,7 +915,7 @@ C.AuraWatchList = {
 				{AuraID = 188499, UnitID = "target"},
 				{AuraID = 210152, UnitID = "target"},
 				--混乱之刃
-				{AuraID = 211048, UnitID = "target"},
+				{AuraID = 247938, UnitID = "target"},
 				--疾影
 				{AuraID = 212800, UnitID = "target"},
 				--恶魔变形
