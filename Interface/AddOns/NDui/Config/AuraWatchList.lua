@@ -1,4 +1,4 @@
-﻿local _, C, L, _ = unpack(select(2, ...))
+local _, C, L, _ = unpack(select(2, ...))
 --[[
 	>>>自定义添加时，要注意格式，注意逗号，注意字母大小写<<<
 	ALL下面是对全职业通用的设置，其他情况请在自己职业下添加。当你添加时，要注意是否重复。
@@ -541,6 +541,8 @@ C.AuraWatchList = {
 				{AuraID = 218304, UnitID = "player"},
 				--黑夜的召唤
 				{AuraID = 218809, UnitID = "player"},
+				--离子爆炸
+				{AuraID = 218780, UnitID = "player"},
 			--占星师艾塔乌斯
 				--日冕喷射
 				{AuraID = 206464, UnitID = "player"},
@@ -668,11 +670,12 @@ C.AuraWatchList = {
 				{AuraID = 238018, UnitID = "player"},
 			--戒卫侍女
 				--光明灌注
-				{AuraID = 235213, UnitID = "player"},
+				{AuraID = 235213, UnitID = "player", Text = L["AW Light"]},
 				--邪能灌注
-				{AuraID = 235240, UnitID = "player"},
+				{AuraID = 235240, UnitID = "player", Text = L["AW Fel"]},
 				--动荡的灵魂
 				{AuraID = 243276, UnitID = "player"},
+				{AuraID = 235138, UnitID = "player"},
 				--恶魔活力
 				{AuraID = 235538, UnitID = "player"},
 				--造物者之赐

@@ -62,8 +62,8 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 236011, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 238018, 5)
 
 BOSS = 1897 -- 戒卫侍女
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 235213)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 235240)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 235213, 1)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 235240, 1)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 243276)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 235538)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 235534)
