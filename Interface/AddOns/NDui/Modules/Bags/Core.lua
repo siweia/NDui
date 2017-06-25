@@ -75,7 +75,7 @@ function module:OnLogin()
 
 		self.Icon:SetAllPoints()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
-		self.Count:SetPoint("BOTTOMRIGHT", 2, 0)
+		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
 		self.Count:SetFont(unpack(DB.Font))
 
 		self.Border = CreateFrame("Frame", nil, self)
@@ -111,7 +111,7 @@ function module:OnLogin()
 		end
 
 		if NDuiDB["Bags"]["BagsiLvl"] then
-			self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 2, 0)
+			self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 1)
 		end
 	end
 
@@ -176,7 +176,7 @@ function module:OnLogin()
 	local MyContainer = Bags:GetContainerClass()
 	function MyContainer:OnContentsChanged()
 		self:SortButtons("bagSlot")
-		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 6, 10, -10)
+		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 7, 10, -10)
 		self:SetSize(width + 20, height + 45)
 	end
 
