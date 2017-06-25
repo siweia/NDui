@@ -1,76 +1,76 @@
 local _, C, _, _ = unpack(select(2, ...))
 
 --[[
-	ËµÃ÷£º
-	Èç¹û¶Ôlua²»ÁË½â£¬Çë¹Ø±Õ´ËÒ³Ãæ¡£
-	ÓÉÓÚÕ½¶·ÖÐÏÔÒþ»áµ¼ÖÂÎÛÈ¾ÒÔ¼°ÎÞ·¨ÅÅÕ½³¡µÄÎÊÌâ£¬ÏÔÒþ½«Ö»Ö§³ÖÊó±êÐüÍ£¡£
-	nilÎª½ûÓÃ£¬barFaderÎªÆôÓÃ¡£ÐÞ¸ÄÊ±×¢Òâ´óÐ¡Ð´¡£
+	è¯´æ˜Žï¼š
+	å¦‚æžœå¯¹luaä¸äº†è§£ï¼Œè¯·å…³é—­æ­¤é¡µé¢ã€‚
+	ç”±äºŽæˆ˜æ–—ä¸­æ˜¾éšä¼šå¯¼è‡´æ±¡æŸ“ä»¥åŠæ— æ³•æŽ’æˆ˜åœºçš„é—®é¢˜ï¼Œæ˜¾éšå°†åªæ”¯æŒé¼ æ ‡æ‚¬åœã€‚
+	nilä¸ºç¦ç”¨ï¼ŒbarFaderä¸ºå¯ç”¨ã€‚ä¿®æ”¹æ—¶æ³¨æ„å¤§å°å†™ã€‚
 ]]
 
--- ¶¯×÷ÌõÏ¸½Úµ÷Õû
-local barFader = {						-- ¶¯×÷ÌõÏÔÒþÉèÖÃ
-	fadeInAlpha = 1,					-- ÏÔÊ¾Ê±µÄÍ¸Ã÷¶È
-	fadeInDuration = .3,				-- ÏÔÊ¾ºÄÊ±
-	fadeOutAlpha = 0,					-- ½¥ÒþºóµÄÍ¸Ã÷¶È
-	fadeOutDuration = .8,				-- ½¥ÒþºÄÊ±
-	fadeOutDelay = .5,					-- ÑÓ³Ù½¥Òþ
+-- åŠ¨ä½œæ¡ç»†èŠ‚è°ƒæ•´
+local barFader = {						-- åŠ¨ä½œæ¡æ˜¾éšè®¾ç½®
+	fadeInAlpha = 1,					-- æ˜¾ç¤ºæ—¶çš„é€æ˜Žåº¦
+	fadeInDuration = .3,				-- æ˜¾ç¤ºè€—æ—¶
+	fadeOutAlpha = 0,					-- æ¸éšåŽçš„é€æ˜Žåº¦
+	fadeOutDuration = .8,				-- æ¸éšè€—æ—¶
+	fadeOutDelay = .5,					-- å»¶è¿Ÿæ¸éš
 }
 
 C.bars = {
-	userplaced				= true,		-- Ê¹Æä¿ÉÍ¨¹ýÓÎÏ·ÄÚÃüÁîÒÆ¶¯
+	userplaced				= true,		-- ä½¿å…¶å¯é€šè¿‡æ¸¸æˆå†…å‘½ä»¤ç§»åŠ¨
 
-	-- BAR1 Ö÷¶¯×÷Ìõ£¨ÏÂ£©
+	-- BAR1 ä¸»åŠ¨ä½œæ¡ï¼ˆä¸‹ï¼‰
 	bar1 = {
-		scale           	= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size				= 34,		-- Í¼±ê´óÐ¡
-		fader				= nil,		-- Êó±êÐüÍ£ÏÔÒþ
+		scale           	= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size				= 34,		-- å›¾æ ‡å¤§å°
+		fader				= nil,		-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- BAR2 Ö÷¶¯×÷Ìõ£¨ÉÏ£©
+    -- BAR2 ä¸»åŠ¨ä½œæ¡ï¼ˆä¸Šï¼‰
     bar2 = {
-		scale          		= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size           		= 34,		-- Í¼±ê´óÐ¡
-		fader				= nil,		-- Êó±êÐüÍ£ÏÔÒþ
+		scale          		= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size           		= 34,		-- å›¾æ ‡å¤§å°
+		fader				= nil,		-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- BAR3 Ö÷¶¯×÷ÌõÁ½²à
+    -- BAR3 ä¸»åŠ¨ä½œæ¡ä¸¤ä¾§
     bar3 = {
-		scale           	= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size        	    = 32,		-- Í¼±ê´óÐ¡
-		fader				= nil,		-- Êó±êÐüÍ£ÏÔÒþ
+		scale           	= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size        	    = 32,		-- å›¾æ ‡å¤§å°
+		fader				= nil,		-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- BAR4 ÓÒ±ß¶¯×÷Ìõ1
+    -- BAR4 å³è¾¹åŠ¨ä½œæ¡1
     bar4 = {
-		scale           	= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size           		= 32,		-- Í¼±ê´óÐ¡
-		fader				= barFader,	-- Êó±êÐüÍ£ÏÔÒþ
+		scale           	= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size           		= 32,		-- å›¾æ ‡å¤§å°
+		fader				= barFader,	-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- BAR5 ÓÒ±ß¶¯×÷Ìõ2
+    -- BAR5 å³è¾¹åŠ¨ä½œæ¡2
     bar5 = {
-		scale          		= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size				= 32,		-- Í¼±ê´óÐ¡
-		fader				= barFader, -- Êó±êÐüÍ£ÏÔÒþ
+		scale          		= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size				= 32,		-- å›¾æ ‡å¤§å°
+		fader				= barFader, -- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- PETBAR ³èÎï¶¯×÷Ìõ
+    -- PETBAR å® ç‰©åŠ¨ä½œæ¡
     petbar = {
-		scale           	= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size	            = 26,		-- Í¼±ê´óÐ¡
-		fader				= nil,		-- Êó±êÐüÍ£ÏÔÒþ
+		scale           	= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size	            = 26,		-- å›¾æ ‡å¤§å°
+		fader				= nil,		-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- STANCE + POSSESSBAR ×ËÌ¬Ìõ
+    -- STANCE + POSSESSBAR å§¿æ€æ¡
     stancebar = {
-		scale           	= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size          		= 30,		-- Í¼±ê´óÐ¡
-		fader				= nil,		-- Êó±êÐüÍ£ÏÔÒþ
+		scale           	= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size          		= 30,		-- å›¾æ ‡å¤§å°
+		fader				= nil,		-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- EXTRABAR ¶îÍâ¶¯×÷Ìõ
+    -- EXTRABAR é¢å¤–åŠ¨ä½œæ¡
     extrabar = {
-		scale          		= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size    	        = 56,		-- Í¼±ê´óÐ¡
-		fader				= nil,		-- Êó±êÐüÍ£ÏÔÒþ
+		scale          		= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size    	        = 56,		-- å›¾æ ‡å¤§å°
+		fader				= nil,		-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
-    -- VEHICLE EXIT Àë¿ªÔØ¾ß°´Å¥
+    -- VEHICLE EXIT ç¦»å¼€è½½å…·æŒ‰é’®
     leave_vehicle 			= {
-		scale           	= 1,		-- ÒÔ1Îª»ù×¼Ôö´ó/Ëõ·Å
-		size          		= 32,		-- Í¼±ê´óÐ¡
-		fader				= nil,		-- Êó±êÐüÍ£ÏÔÒþ
+		scale           	= 1,		-- ä»¥1ä¸ºåŸºå‡†å¢žå¤§/ç¼©æ”¾
+		size          		= 32,		-- å›¾æ ‡å¤§å°
+		fader				= nil,		-- é¼ æ ‡æ‚¬åœæ˜¾éš
     },
 }
