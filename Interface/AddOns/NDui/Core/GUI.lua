@@ -26,7 +26,6 @@ local defaultSettings = {
 		ReverseSort = false,
 	},
 	Auras = {
-		Familiar = true,
 		Reminder = true,
 		Stagger = true,
 		BloodyHell = true,
@@ -292,7 +291,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "AuraWatch", "Hint", L["AuraWatch Tooltip"]},
 		{},--blank
 		{1, "Auras", "Reminder", L["Enable Reminder"]},
-		{1, "Auras", "Familiar", L["Enable Familiar"]},
 		{1, "Auras", "BloodyHell", L["Enable BloodyHell"]},
 		{1, "Auras", "Stagger", L["Enable Stagger"]},
 		{1, "Auras", "Statue", L["Enable Statue"]},

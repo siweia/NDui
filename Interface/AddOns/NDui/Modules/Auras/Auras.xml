@@ -6,7 +6,6 @@
 	<Script file="Stagger.lua"/>
 	<Script file="Totems.lua"/>
 	<Script file="AuraWatch.lua"/>
-	<Script file="ArcaneFamiliar.lua"/>
 	<Script file="Marksman.lua"/>
 	<Script file="MonkStatue.lua"/>
 </Ui>
