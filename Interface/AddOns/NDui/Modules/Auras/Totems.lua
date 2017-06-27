@@ -65,6 +65,7 @@ f:SetScript("OnEvent", function(self)
 				GameTooltip:Show()
 			end)
 			Totem:SetScript("OnLeave", GameTooltip_Hide)
+
 			Totem:SetScript("OnUpdate", function(self, elapsed)
 				local Time = start + dur - GetTime()
 				if Time > 0 and Time < .8 then
@@ -73,14 +74,6 @@ f:SetScript("OnEvent", function(self)
 					ActionButton_HideOverlayGlow(Totem)
 				end
 			end)
-
-			-- Blizzard dislocation debug
-			if totem[2]:GetAlpha() == 1 then debugCheck = true end
-			if debugCheck then
-				totem[1]:SetAttribute("macrotext", "/click TotemFrameTotem2 RightButton")
-			else
-				totem[1]:SetAttribute("macrotext", "/click TotemFrameTotem1 RightButton")
-			end
 		end
 	end
 end)
