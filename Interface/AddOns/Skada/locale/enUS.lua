@@ -507,3 +507,7 @@ L["How often windows are updated. Shorter for faster updates. Increases CPU usag
 
 L["Buffs"] = true
 L["Debuffs"] = true
+
+L["Healing: Personal HPS"] = true
+L["Healing: Raid HPS"] = true
+L["RHPS"] = true

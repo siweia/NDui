@@ -468,6 +468,21 @@ Skada:AddLoadableModule("Healing", nil, function(Skada, L)
 
 		Skada:AddMode(self, L["Healing"])
 		Skada:AddMode(healingtaken, L["Healing"])
+            
+		Skada:AddFeed(L["Healing: Personal HPS"], function()
+			if Skada.current then
+				local player = Skada:find_player(Skada.current, UnitGUID("player"))
+				if player then
+					return Skada:FormatNumber(getHPS(Skada.current, player)).." "..L["HPS"]
+				end
+			end
+		end)
+		Skada:AddFeed(L["Healing: Raid HPS"], function()
+			if Skada.current then
+				return Skada:FormatNumber(getRaidHPS(Skada.current)).." "..L["RHPS"]
+			end
+		end)
+            
 	end
 
 	function mod:OnDisable()
