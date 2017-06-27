@@ -283,18 +283,17 @@ function UF:CreateCastBar(self)
 	cb.CompleteColor = {20/255, 208/255, 0/255}
 	cb.FailColor = {255/255, 12/255, 0/255}
 
-	local spark = cb:CreateTexture(nil, "OVERLAY")											-- castbar spark
+	local spark = cb:CreateTexture(nil, "OVERLAY")
 	spark:SetBlendMode("ADD")
 	spark:SetAlpha(0.5)
 	spark:SetHeight(cb:GetHeight()*2.5)
 
-	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "LEFT", 2, 0)		-- spell name
+	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)
+	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "LEFT", 2, 0)
 	name:SetJustifyH("LEFT")
-
-	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)	-- spell time
 	name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
 
-	local icon = cb:CreateTexture(nil, "ARTWORK")											-- castbar icon
+	local icon = cb:CreateTexture(nil, "ARTWORK")
 	icon:SetSize(cb:GetHeight(), cb:GetHeight())
 	icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
 	icon:SetTexCoord(unpack(DB.TexCoord))
@@ -319,6 +318,12 @@ function UF:CreateCastBar(self)
 		icon:SetSize(iconSize, iconSize)
 		name:SetPoint("LEFT", cb, "BOTTOMLEFT", 0, -3)
 		timer:SetPoint("RIGHT", cb, "BOTTOMRIGHT", 0, -3)
+
+		local shield = cb:CreateTexture(nil, "OVERLAY")
+		shield:SetAtlas("nameplates-InterruptShield")
+		shield:SetSize(15, 15)
+		shield:SetPoint("CENTER", 0, -5)
+		cb.Shield = shield
 	end
 
 	cb.OnUpdate = cast.OnCastbarUpdate
