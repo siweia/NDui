@@ -1288,6 +1288,10 @@ C.AuraWatchList = {
 				{AuraID = 235712, UnitID = "player", Combat = true},
 				--哨兵视野，橙腰
 				{AuraID = 208913, UnitID = "player"},
+				--致命瞄准
+				{AuraID = 242243, UnitID = "player"},
+				--蛇语者之舌
+				{AuraID = 248085, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
