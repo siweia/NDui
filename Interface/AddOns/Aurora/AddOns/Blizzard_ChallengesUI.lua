@@ -50,8 +50,10 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			select(3, scheduel:GetRegions()):Hide()
 			F.CreateBD(scheduel, .3)
 
-			for i = 1, 4 do
-				AffixesSetup(scheduel.Entries[i].Affixes)
+			if scheduel.Entries then
+				for i = 1, 4 do
+					AffixesSetup(scheduel.Entries[i].Affixes)
+				end
 			end
 			angryStyle = true
 		end
