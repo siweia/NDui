@@ -30,6 +30,7 @@ DB.copyTex = "Interface\\Buttons\\UI-GuildButton-PublicNote-Up"
 DB.binTex = "Interface\\HelpFrame\\ReportLagIcon-Loot"
 DB.questTex = "Interface\\BUTTONS\\AdventureGuideMicrobuttonAlert"
 DB.creditTex = "Interface\\HelpFrame\\HelpIcon-KnowledgeBase"
+DB.newItemFlash = "Interface\\Cooldown\\star4"
 DB.TexCoord = {.08, .92, .08, .92}
 DB.textures = {
     normal		= Media.."ActionBar\\gloss",

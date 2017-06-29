@@ -113,6 +113,33 @@ function module:OnLogin()
 		if NDuiDB["Bags"]["BagsiLvl"] then
 			self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 1)
 		end
+
+		if NDuiDB["Bags"]["NewItemGlow"] then
+			local flash = self:CreateTexture(nil, "ARTWORK")
+			flash:SetTexture(DB.newItemFlash)
+			flash:SetPoint("TOPLEFT", -20, 20)
+			flash:SetPoint("BOTTOMRIGHT", 20, -20)
+			flash:SetBlendMode("ADD")
+			flash:SetAlpha(0)
+			local anim = flash:CreateAnimationGroup()
+			anim:SetLooping("REPEAT")
+			anim.rota = anim:CreateAnimation("Rotation")
+			anim.rota:SetDuration(1)
+			anim.rota:SetDegrees(-90)
+			anim.fader = anim:CreateAnimation("Alpha")
+			anim.fader:SetFromAlpha(0)
+			anim.fader:SetToAlpha(.5)
+			anim.fader:SetDuration(.5)
+			anim.fader:SetSmoothing("OUT")
+			anim.fader2 = anim:CreateAnimation("Alpha")
+			anim.fader2:SetStartDelay(1)
+			anim.fader2:SetFromAlpha(.5)
+			anim.fader2:SetToAlpha(0)
+			anim.fader2:SetDuration(1.2)
+			anim.fader2:SetSmoothing("OUT")
+
+			self.anim = anim
+		end
 	end
 
 	function MyButton:OnUpdate(item)

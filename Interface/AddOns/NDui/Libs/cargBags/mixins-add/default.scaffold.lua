@@ -63,9 +63,9 @@ local function ItemButton_Update(self, item)
 
 	if self.ShowNewItems then
 		if C_NewItems.IsNewItem(item.bagID, item.slotID) then
-			ActionButton_ShowOverlayGlow(self)
+			self.anim:Play()
 		else
-			ActionButton_HideOverlayGlow(self)
+			if self.anim:IsPlaying() then self.anim:Stop() end
 		end
 	end
 
@@ -118,7 +118,7 @@ end
 
 local function ItemButton_OnEnter(self, item)
 	if self.ShowNewItems then
-		ActionButton_HideOverlayGlow(self)
+		if self.anim:IsPlaying() then self.anim:Stop() end
 	end
 end
 
