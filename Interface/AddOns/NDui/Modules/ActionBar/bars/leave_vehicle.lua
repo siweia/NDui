@@ -19,48 +19,29 @@ function Bar:CreateLeaveVehicle()
 	frame:SetScale(cfg.scale)
 
 	--the button
-	local button = CreateFrame("Button", "NDui_LeaveVehicleButton", frame)
+	local button = CreateFrame("CheckButton", "NDui_LeaveVehicleButton", frame, "ActionButtonTemplate, SecureHandlerClickTemplate")
 	table.insert(buttonList, button) --add the button object to the list
 	button:SetSize(cfg.size, cfg.size)
 	button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 	button:RegisterForClicks("AnyUp")
-	button:SetNormalTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
-	button:SetPushedTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
-	button:SetHighlightTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
-	local nt = button:GetNormalTexture()
-	local pu = button:GetPushedTexture()
-	local hi = button:GetHighlightTexture()
-	nt:SetTexCoord(.0859375, .1679688, .359375, .4414063)
-	pu:SetTexCoord(.001953125, .08398438, .359375, .4414063)
-	hi:SetTexCoord(.6152344, .6972656, .359375, .4414063)
-	hi:SetBlendMode("ADD")
+	button.icon:SetTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
+	button.icon:SetTexCoord(.0859375, .1679688, .359375, .4414063)
+	button:SetNormalTexture(nil)
 
-	-- leave the taxi/vehicle
-	local function UpdateVisible()
-		if CanExitVehicle() then
-			button:Show()
-			button:GetNormalTexture():SetVertexColor(1, 1, 1)
-			button:EnableMouse(true)
-		else
-			button:Hide()
-		end
+	local function onClick(self)
+		if UnitOnTaxi("player") then TaxiRequestEarlyLanding() else VehicleExit() end
+		self:SetChecked(false)
 	end
-	button:SetScript("OnClick", function(self)
-		if UnitOnTaxi("player") then
-			TaxiRequestEarlyLanding()
-			self:GetNormalTexture():SetVertexColor(1, 0, 0)
-			self:EnableMouse(false)
-		else
-			VehicleExit()
-		end
-	end)
+	button:SetScript("OnClick", onClick)
 	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
 	button:SetScript("OnLeave", GameTooltip_Hide)
-	hooksecurefunc("MainMenuBarVehicleLeaveButton_Update", UpdateVisible)
 
-	--frame is visibile when no vehicle ui is visible
-	frame.frameVisibility = "[petbattle] hide; show"
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
+	--frame visibility
+	frame.frameVisibility = "[canexitvehicle]c;[mounted]m;n"
+	RegisterStateDriver(frame, "exit", frame.frameVisibility)
+
+	frame:SetAttribute("_onstate-exit", [[ if CanExitVehicle() then self:Show() else self:Hide() end ]])
+	if not CanExitVehicle() then frame:Hide() end
 
 	--create drag frame and drag functionality
 	if C.bars.userplaced then

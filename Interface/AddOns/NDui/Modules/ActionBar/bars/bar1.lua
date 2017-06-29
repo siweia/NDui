@@ -16,13 +16,10 @@ function module:OnLogin()
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 24}
 	frame:SetScale(cfg.scale)
 
-	--move the buttons into position and reparent them
-	MainMenuBarArtFrame:SetParent(frame)
-	MainMenuBarArtFrame:EnableMouse(false)
-
 	for i = 1, num do
 		local button = _G["ActionButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
+		button:SetParent(frame)
 		button:SetSize(cfg.size, cfg.size)
 		button:ClearAllPoints()
 		if i == 1 then
@@ -88,6 +85,6 @@ function module:OnLogin()
 	self:CreateLeaveVehicle()
 	self:CreatePetbar()
 	self:CreateStancebar()
-	self:HideBlizzard()
+	self:HideBlizz()
 	self:ReskinBars()
 end
