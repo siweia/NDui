@@ -48,9 +48,12 @@ end
 
 NDui:EventFrame("PLAYER_ENTERING_WORLD"):SetScript("OnEvent", function(self)
 	self:UnregisterAllEvents()
-
+	if HelloWorld then return end
 	if not NDuiADB["Changelog"] then NDuiADB["Changelog"] = {} end
-	if (not HelloWorld) and NDuiADB["Changelog"].Version ~= DB.Version then
+
+	local old1, old2, old3 = string.split(".", NDuiADB["Changelog"].Version or "")
+	local cur1, cur2, cur3 = string.split(".", DB.Version)
+	if old1 ~= cur1 or old2 ~= cur2 then
 		changelog()
 		NDuiADB["Changelog"].Version = DB.Version
 	end
