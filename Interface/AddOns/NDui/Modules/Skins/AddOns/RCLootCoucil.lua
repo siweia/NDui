@@ -22,8 +22,11 @@ function module:RCLootCoucil()
 	end
 
 	local function ReskinButton(bu)
-		B.CreateBC(bu)
-		B.CreateBD(bu, .3)
+		if not bu.styled then
+			B.CreateBC(bu)
+			B.CreateBD(bu, .3)
+			bu.styled = true
+		end
 	end
 
 	local function TableChecking()
@@ -73,17 +76,12 @@ function module:RCLootCoucil()
 		B.CreateBD(DefaultRCLootFrame.content)
 		B.CreateTex(DefaultRCLootFrame.content)
 
-		local i = 1
-		local bu = select(i, DefaultRCLootFrame.content:GetChildren())
-		while bu do
-			bu.icon:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
-			for j = 1, 4 do
-				ReskinButton(bu.buttons[j])
+		for _, entry in pairs(loot.EntryManager.entries) do
+			entry.icon:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+			for i = 1, 4 do
+				ReskinButton(entry.buttons[i])
 			end
-			bu.timeoutBar:SetStatusBarTexture(DB.normTex)
-
-			i = i + 1
-			bu = select(i, DefaultRCLootFrame.content:GetChildren())
+			entry.timeoutBar:SetStatusBarTexture(DB.normTex)
 		end
 	end)
 
