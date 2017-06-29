@@ -2,13 +2,14 @@ local B, C, L, DB = unpack(select(2, ...))
 if DB.Client ~= "zhCN" then return end
 
 local hx = {
-	"Aurora更新对AngryKeystones日程表的美化；",
-	"聊天背景会跟随聊天框的上下拉升变化；",
-	"优化团队框体快速战复的功能；",
-	"动作条调整；",
-	"更新技能监视列表；",
-	"更新萨墓的团队框体法术；",
-	"背包细节微调。",
+	"技能监视更新；",
+	"团队框体法术更新；",
+	"姓名板施法条不可打断时添加护盾显示；",
+	"Skada更新到1.6.8；",
+	"图腾助手调整；",
+	"RCLootCoucil皮肤更新对新版本的支持；",
+	"Aurora部分模块调整；",
+	"动作条调整。",
 }
 
 local function changelog()
