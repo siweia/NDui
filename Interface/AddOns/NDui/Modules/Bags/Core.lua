@@ -137,6 +137,7 @@ function module:OnLogin()
 			anim.fader2:SetToAlpha(0)
 			anim.fader2:SetDuration(1.2)
 			anim.fader2:SetSmoothing("OUT")
+			self:HookScript("OnHide", function() if anim:IsPlaying() then anim:Stop() end end)
 
 			self.anim = anim
 		end
