@@ -150,8 +150,8 @@ function module:ReflectingAlert()
 		if spell ~= 163219 then return end
 		if UnitInRaid(unit) or UnitInParty(unit) then
 			local unitName = GetUnitName(unit)
-			local itemLink = select(2, GetItemInfo(112384))
-			SendChatMessage(format(L["Reflecting Prism"], unitName, itemLink), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
+			local name, itemLink = GetItemInfo(112384)
+			SendChatMessage(format(L["Reflecting Prism"], unitName, itemLink or name), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
 	end)
 end
@@ -164,8 +164,8 @@ function module:SwapingAlert()
 		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
 		if eventType ~= "SPELL_CAST_SUCCESS" or spellID ~= 161399 then return end
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
-			local itemLink = select(2, GetItemInfo(111820))
-			SendChatMessage(format(L["Swapblaster"], sourceName, destName, itemLink), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
+			local name, itemLink = GetItemInfo(111820)
+			SendChatMessage(format(L["Swapblaster"], sourceName, destName, itemLink or name), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
 	end)
 end
