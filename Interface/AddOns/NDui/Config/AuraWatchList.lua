@@ -2061,8 +2061,6 @@ C.AuraWatchList = {
 				{AuraID = 197937, UnitID = "player"},
 				--虚空形态
 				{AuraID = 194249, UnitID = "player"},
-				--命运多舛
-				{AuraID = 194249, UnitID = "player"},
 				--虚空射线
 				{AuraID = 205372, UnitID = "player"},
 				--能量灌注
