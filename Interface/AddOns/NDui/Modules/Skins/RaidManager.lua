@@ -214,6 +214,7 @@ function module:CreateRM()
 						end
 					end
 					if not HasBuff then
+						name = strsplit("-", name)	-- remove realm name
 						table.insert(NoBuff[j], name)
 					end
 				end
