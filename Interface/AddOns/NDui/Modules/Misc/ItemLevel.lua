@@ -43,7 +43,7 @@ function module:ShowItemLevel()
 			local link = GetInventoryItemLink(unit, id)
 			if link and id ~= 4 then
 				local _, _, quality, level = GetItemInfo(link)
-				level = NDui:GetItemLevel(link, quality) or level
+				level = GetDetailedItemLevelInfo(link) or level
 
 				if level and level > 1 and quality then
 					local color = BAG_ITEM_QUALITY_COLORS[quality]
