@@ -24,6 +24,7 @@ local defaultSettings = {
 		Artifact = true,
 		NewItemGlow = true,
 		ReverseSort = false,
+		PreferPower = 1,
 	},
 	Auras = {
 		Reminder = true,
@@ -166,6 +167,8 @@ local defaultSettings = {
 		HideTalking = true,
 		HideBanner = true,
 		PetFilter = true,
+		ReflectingAlert = false,
+		SwapingAlert = false,
 	},
 	Settings = {
 		LockUIScale = false,
@@ -206,8 +209,8 @@ local tabList = {
 	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
-	L["Auras"],
 	L["Nameplate"],
+	L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
@@ -238,7 +241,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
 		{1, "Bags", "Artifact", L["Bags Artifact"], true},
 		{1, "Bags", "NewItemGlow", L["Bags NewItemGlow"]},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"], true},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
+		{4, "Bags", "PreferPower", L["AP Preference"], true, {}},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -287,18 +291,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "NoTooltip", L["NoTooltip Auras"]},
 	},
 	[5] = {
-		{1, "AuraWatch", "Enable", L["Enable AuraWatch"]},
-		{1, "AuraWatch", "Hint", L["AuraWatch Tooltip"]},
-		{},--blank
-		{1, "Auras", "Reminder", L["Enable Reminder"]},
-		{1, "Auras", "BloodyHell", L["Enable BloodyHell"]},
-		{1, "Auras", "Stagger", L["Enable Stagger"]},
-		{1, "Auras", "Statue", L["Enable Statue"]},
-		{1, "Auras", "Totems", L["Enable Totems"]},
-		{1, "Auras", "DestroyTotems", L["Destroy Totems"], true},
-		{1, "Auras", "Marksman", L["Enable Marksman"]},
-	},
-	[6] = {
 		{1, "Nameplate", "Enable", L["Enable Nameplate"]},
 		{},--blank
 		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
@@ -323,12 +315,26 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "Width", L["NP Width"], false, {50, 150, 0}},
 		{3, "Nameplate", "Height", L["NP Height"], true, {5, 15, 0}},
 	},
+	[6] = {
+		{1, "AuraWatch", "Enable", L["Enable AuraWatch"]},
+		{1, "AuraWatch", "Hint", L["AuraWatch Tooltip"]},
+		{},--blank
+		{1, "Auras", "Reminder", L["Enable Reminder"]},
+		{1, "Auras", "BloodyHell", L["Enable BloodyHell"]},
+		{1, "Auras", "Stagger", L["Enable Stagger"]},
+		{1, "Auras", "Statue", L["Enable Statue"]},
+		{1, "Auras", "Totems", L["Enable Totems"]},
+		{1, "Auras", "DestroyTotems", L["Destroy Totems"], true},
+		{1, "Auras", "Marksman", L["Enable Marksman"]},
+	},
 	[7] = {
 		{1, "Skins", "RM", L["Raid Manger"]},
 		{},--blank
 		{1, "Skins", "RMRune", L["Runes Check"]},
 		{1, "Skins", "EasyMarking", L["Easy Mark"], true},
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
+		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"], true},
+		{1, "Misc", "SwapingAlert", L["Swaping Alert"]},
 		{2, "Skins", "DBMCount", L["Countdown Sec"]},
 		{},--blank
 		{1, "Chat", "Invite", L["Whisper Invite"]},
@@ -684,6 +690,18 @@ local function OpenGUI()
 		StaticPopup_Show("RELOAD_NDUI")
 	end)
 
+	-- PreUpdate Power Preference
+	do
+		local specList = optionList[2][7][6]
+		tinsert(specList, NONE)
+		for i = 1, 4 do
+			local spec, name = GetSpecializationInfo(i)
+			if spec then
+				tinsert(specList, name)
+			end
+		end
+	end
+
 	for i, name in pairs(tabList) do
 		guiTab[i] = CreateTab(i, name)
 
@@ -753,7 +771,7 @@ local function OpenGUI()
 	end)
 
 	-- Toggle AuraWatch Console
-	local aura = CreateFrame("Button", nil, guiPage[5])
+	local aura = CreateFrame("Button", nil, guiPage[6])
 	aura:SetSize(150, 30)
 	aura:SetPoint("TOPLEFT", 340, -50)
 	B.CreateBD(aura, .3)
