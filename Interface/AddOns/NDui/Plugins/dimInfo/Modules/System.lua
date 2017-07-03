@@ -135,8 +135,8 @@ if cfg.System == true then
 			else
 				StaticPopup_Show("CPUUSAGE")
 			end
+			self:GetScript("OnEnter")(self)
 		end
-		self:GetScript("OnEnter")(self)
 	end)
 	Stat:SetScript("OnUpdate", Update) 
 end

@@ -58,6 +58,7 @@ local ignoreQuestNPC = {
 	[101462] = true,	-- Reaves
 	[43929] = true,		-- 4000
 	[106655] = true,	-- Legendary Item Upgrade
+	[14847] = true,		-- DarkMoon
 }
 
 local function GetQuestLogQuests(onlyComplete)

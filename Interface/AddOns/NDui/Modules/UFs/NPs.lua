@@ -16,6 +16,11 @@ function UF:SetupCVars()
 	SetCVar("nameplateOverlapV", .7)
 	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateOccludedAlphaMult", .3)
+	SetCVar("namePlateMinScale", .8)
+	SetCVar("namePlateMaxScale", .8)
+	SetCVar("nameplateSelectedScale", 1)
+	SetCVar("nameplateLargerScale", 1)
+	C_NamePlate.SetNamePlateSelfClickThrough(false)
 end
 
 function UF:BlockAddons()
@@ -113,16 +118,16 @@ local function UpdateTargetMark(self)
 	if not mark then return end
 
 	if UnitIsUnit(self.unit, "target") and not UnitIsUnit(self.unit, "player") then
-		mark:Show()
+		mark:SetAlpha(1)
 	else
-		mark:Hide()
+		mark:SetAlpha(0)
 	end
 end
 
 local function UpdateQuestUnit(self, unit)
 	if not NDuiDB["Nameplate"]["QuestIcon"] or unit == "player" then return end
 	local name, instType, instID = GetInstanceInfo()
-	if name and (instType == "raid" or instID == 8) then self.questIcon:Hide() return end
+	if name and (instType == "raid" or instID == 8) then self.questIcon:SetAlpha(0) return end
 
 	local isObjectiveQuest, isProgressQuest
 	local unitTip = _G["NDuiQuestUnitTip"] or CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
@@ -149,9 +154,9 @@ local function UpdateQuestUnit(self, unit)
 	end
 
 	if isObjectiveQuest or isProgressQuest then
-		self.questIcon:Show()
+		self.questIcon:SetAlpha(1)
 	else
-		self.questIcon:Hide()
+		self.questIcon:SetAlpha(0)
 	end
 end
 
@@ -168,9 +173,9 @@ local function UpdateUnitClassify(self, unit)
 		if class and classify[class] then
 			local r, g, b = unpack(classify[class])
 			self.creatureIcon:SetVertexColor(r, g, b)
-			self.creatureIcon:Show()
+			self.creatureIcon:SetAlpha(1)
 		else
-			self.creatureIcon:Hide()
+			self.creatureIcon:SetAlpha(0)
 		end
 	end
 end
@@ -393,7 +398,7 @@ local function CreatePlates(self, unit)
 			arrow:SetSize(50, 50)
 			arrow:SetTexture(DB.arrowTex)
 			arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
-			arrow:Hide()
+			arrow:SetAlpha(0)
 			self.targetMark = arrow
 		else
 			local glow = CreateFrame("Frame", nil, self)
@@ -402,7 +407,7 @@ local function CreatePlates(self, unit)
 			glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
 			glow:SetBackdropBorderColor(1, 1, 1)
 			glow:SetFrameLevel(0)
-			glow:Hide()
+			glow:SetAlpha(0)
 			self.targetMark = glow
 		end
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
@@ -412,6 +417,7 @@ local function CreatePlates(self, unit)
 		cicon:SetSize(12, 12)
 		cicon:SetTexture("Interface\\MINIMAP\\ObjectIcons")
 		cicon:SetTexCoord(.391, .487, .644, .74)
+		cicon:SetAlpha(0)
 		self.creatureIcon = cicon
 
 		if NDuiDB["Nameplate"]["QuestIcon"] then
@@ -419,7 +425,7 @@ local function CreatePlates(self, unit)
 			qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
 			qicon:SetSize(20, 20)
 			qicon:SetTexture(DB.questTex)
-			qicon:Hide()
+			qicon:SetAlpha(0)
 			self.questIcon = qicon
 		end
 

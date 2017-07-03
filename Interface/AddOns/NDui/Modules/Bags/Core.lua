@@ -146,7 +146,7 @@ function module:OnLogin()
 			local protect = self:CreateTexture(nil, "ARTWORK")
 			protect:SetTexture("Interface\\PETBATTLES\\DeadPetIcon")
 			protect:SetAllPoints()
-			protect:Hide()
+			protect:SetAlpha(0)
 			self.powerProtect = protect
 		end
 	end
@@ -223,9 +223,9 @@ function module:OnLogin()
 
 		if self.powerProtect then
 			if isPowerInWrongSpec() and item.type == AUCTION_CATEGORY_CONSUMABLES and item.id ~= 147717 and item.link and isArtifactPower(item.link) then
-				self.powerProtect:Show()
+				self.powerProtect:SetAlpha(1)
 			else
-				self.powerProtect:Hide()
+				self.powerProtect:SetAlpha(0)
 			end
 		end
 	end
