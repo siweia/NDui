@@ -89,6 +89,8 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
+				--醒神宝典
+				{AuraID = 243942, UnitID = "player"},
 				--灭绝引擎
 				{AuraID = 242612, UnitID = "player"},
 				--节拍器
@@ -1288,10 +1290,12 @@ C.AuraWatchList = {
 				{AuraID = 235712, UnitID = "player", Combat = true},
 				--哨兵视野，橙腰
 				{AuraID = 208913, UnitID = "player"},
-				--致命瞄准
-				{AuraID = 242243, UnitID = "player"},
-				--蛇语者之舌
+				--蛇语者之舌，橙胸
 				{AuraID = 248085, UnitID = "player"},
+				--致命瞄准，射击2T20
+				{AuraID = 242243, UnitID = "player"},
+				--精准，射击4T20
+				{AuraID = 246153, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
@@ -2557,6 +2561,8 @@ C.AuraWatchList = {
 				{AuraID = 152279, UnitID = "player"},
 				--冷酷之心
 				{AuraID = 235599, UnitID = "player"},
+				--食尸鬼主宰，2T20
+				{AuraID = 246995, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
