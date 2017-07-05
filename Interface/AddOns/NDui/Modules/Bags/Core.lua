@@ -215,7 +215,7 @@ function module:OnLogin()
 		if NDuiDB["Bags"]["BagsiLvl"] then
 			self.iLvl:SetText("")
 			if item.link and (rarity and rarity > 1) and (item.level and item.level > 0) and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= "" and item.equipLoc ~= "INVTYPE_TABARD" and item.equipLoc ~= "INVTYPE_BODY")) then
-				local level = GetDetailedItemLevelInfo(item.link)
+				local level = NDui:GetItemLevel(item.link, rarity)
 				self.iLvl:SetText(level)
 				self.iLvl:SetTextColor(color.r, color.g, color.b)
 			end
