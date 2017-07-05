@@ -167,34 +167,26 @@ hooksecurefunc("AuctionFrame_LoadUI", function()
 end)
 
 -- Drag AltPowerbar
-PlayerPowerBarAlt:SetMovable(true)
-PlayerPowerBarAlt:SetClampedToScreen(true)
-PlayerPowerBarAlt:SetScript("OnMouseDown", function(self)
-	if IsShiftKeyDown() then self:StartMoving() end
-end)
-PlayerPowerBarAlt:SetScript("OnMouseUp", function(self)
-	self:StopMovingOrSizing()
-end)
-function UnitPowerBarAlt_OnEnter(self)
-	local statusFrame = self.statusFrame
-	if statusFrame.enabled then
-		statusFrame:Show()
-		UnitPowerBarAltStatus_UpdateText(statusFrame)
-	end
-	GameTooltip_SetDefaultAnchor(GameTooltip, self)
-	GameTooltip:SetText(self.powerName, 1, 1, 1)
-	GameTooltip:AddLine(self.powerTooltip, nil, nil, nil, true)
-	GameTooltip:AddLine("-------------------", .5, .5, .5)
-	GameTooltip:AddLine(L["Drag by Shift"], .6, .8, 1)
-	GameTooltip:Show()
+do
+	local bar = _G.PlayerPowerBarAlt
+	local mover = CreateFrame("Frame", "NDuiAltBarMover", bar)
+	mover:SetPoint("CENTER", UIParent, 0, -200)
+	mover:SetSize(20, 20)
+	B.CreateMF(bar, mover)
+	hooksecurefunc(bar, "SetPoint", function(_, _, parent)
+		if parent ~= mover then
+			bar:ClearAllPoints()
+			bar:SetPoint("CENTER", mover)
+		end
+	end)
+	hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
+		local statusFrame = self.statusFrame
+		if statusFrame.enabled then
+			statusFrame:Show()
+			statusFrame.Hide = statusFrame.Show
+		end
+	end)
 end
-hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
-	local statusFrame = self.statusFrame
-	if statusFrame.enabled then
-		statusFrame:Show()
-		statusFrame.Hide = statusFrame.Show
-	end
-end)
 
 -- Autoequip in Spec-changing
 NDui:EventFrame("UNIT_SPELLCAST_SUCCEEDED"):SetScript("OnEvent", function(self, event, ...)
@@ -229,24 +221,29 @@ NDui:EventFrame("UNIT_SPELLCAST_SUCCEEDED"):SetScript("OnEvent", function(self, 
 end)
 
 -- Get Naked
-local function UnequipItemInSlot(i)
-	local action = EquipmentManager_UnequipItemInSlot(i)
-	EquipmentManager_RunAction(action)
-end
-local naked = CreateFrame("Button", nil, CharacterFrameInsetRight)
-naked:SetSize(29, 30)
-naked:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
-B.CreateIF(naked, true)
-naked.Icon:SetTexture("Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH")
-B.CreateGT(naked, "ANCHOR_RIGHT", L["Get Naked"])
-naked:SetScript("OnDoubleClick", function()
-	for i = 1, 17 do
-		local texture = GetInventoryItemTexture("player", i)
-		if texture then
-			UnequipItemInSlot(i) 
-		end
+do
+	local CharacterFrameInsetRight, PaperDollSidebarTab1 = _G.CharacterFrameInsetRight, _G.PaperDollSidebarTab1
+	local EquipmentManager_UnequipItemInSlot, EquipmentManager_RunAction = _G.EquipmentManager_UnequipItemInSlot, _G.EquipmentManager_RunAction
+	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
+	bu:SetSize(29, 30)
+	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
+	B.CreateIF(bu, true)
+	bu.Icon:SetTexture("Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH")
+	B.CreateGT(bu, "ANCHOR_RIGHT", L["Get Naked"])
+
+	local function UnequipItemInSlot(i)
+		local action = EquipmentManager_UnequipItemInSlot(i)
+		EquipmentManager_RunAction(action)
 	end
-end)
+	bu:SetScript("OnDoubleClick", function()
+		for i = 1, 17 do
+			local texture = GetInventoryItemTexture("player", i)
+			if texture then
+				UnequipItemInSlot(i) 
+			end
+		end
+	end)
+end
 
 -- ALT+RightClick to buy a stack
 local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
@@ -283,7 +280,7 @@ end
 -- Auto screenshot when achieved
 local function TakeScreen(delay, func, ...)
 	local waitTable = {}
-	local waitFrame = CreateFrame("Frame", nil, UIParent)
+	local waitFrame = _G["TakeScreenWaitFrame"] or CreateFrame("Frame", "TakeScreenWaitFrame", UIParent)
 	waitFrame:SetScript("OnUpdate", function(self, elapse)
 		local count = #waitTable
 		local i = 1
@@ -353,51 +350,59 @@ NDui:EventFrame({"ADDON_LOADED", "PLAYER_ENTERING_WORLD"}):SetScript("OnEvent", 
 end)
 
 -- Extend Instance
-local extend = CreateFrame("Button", nil, RaidInfoFrame)
-extend:SetPoint("TOPRIGHT", -35, -5)
-extend:SetSize(25, 25)
-B.CreateIF(extend, true)
-extend.Icon:SetTexture(GetSpellTexture(80353))
-B.CreateGT(extend, "ANCHOR_RIGHT", L["Extend Instance"], "system")
-extend:SetScript("OnMouseUp", function(_, btn)
-	for i = 1, GetNumSavedInstances() do
-		local _, _, _, _, _, extended, _, isRaid = GetSavedInstanceInfo(i)
-		if isRaid then
-			if btn == "LeftButton" then
-				if not extended then
-					SetSavedInstanceExtend(i, true)		-- extend
-				end
-			else
-				if extended then
-					SetSavedInstanceExtend(i, false)	-- cancel
+do
+	local RaidInfoFrame = _G.RaidInfoFrame
+	local bu = CreateFrame("Button", nil, RaidInfoFrame)
+	bu:SetPoint("TOPRIGHT", -35, -5)
+	bu:SetSize(25, 25)
+	B.CreateIF(bu, true)
+	bu.Icon:SetTexture(GetSpellTexture(80353))
+	B.CreateGT(bu, "ANCHOR_RIGHT", L["Extend Instance"], "system")
+
+	bu:SetScript("OnMouseUp", function(_, btn)
+		for i = 1, GetNumSavedInstances() do
+			local _, _, _, _, _, extended, _, isRaid = GetSavedInstanceInfo(i)
+			if isRaid then
+				if btn == "LeftButton" then
+					if not extended then
+						SetSavedInstanceExtend(i, true)		-- extend
+					end
+				else
+					if extended then
+						SetSavedInstanceExtend(i, false)	-- cancel
+					end
 				end
 			end
 		end
-	end
-	RequestRaidInfo()
-	RaidInfoFrame_Update()
-end)
+		RequestRaidInfo()
+		RaidInfoFrame_Update()
+	end)
+end
 
 -- Repoint Vehicle
-local Mover = CreateFrame("Button", "NDuiVehicleSeatMover", VehicleSeatIndicator)
-Mover:SetPoint("BOTTOMRIGHT", UIParent, -360, 30)
-Mover:SetSize(22, 22)
-Mover:SetFrameStrata("HIGH")
-Mover.Icon = Mover:CreateTexture(nil, "ARTWORK")
-Mover.Icon:SetAllPoints()
-Mover.Icon:SetTexture(DB.gearTex)
-Mover.Icon:SetTexCoord(0, .5, 0, .5)
-Mover:SetHighlightTexture(DB.gearTex)
-Mover:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-B.CreateGT(Mover, "ANCHOR_TOP", L["Toggle"], "system")
-B.CreateMF(Mover)
-hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(_, _, parent)
-	if parent ~= Mover then
-		VehicleSeatIndicator:ClearAllPoints()
-		VehicleSeatIndicator:SetClampedToScreen(true)
-		VehicleSeatIndicator:SetPoint("BOTTOMRIGHT", Mover, "BOTTOMLEFT", -5, 0)
-	end
-end)
+do
+	local indicator = _G.VehicleSeatIndicator
+	local mover = CreateFrame("Button", "NDuiVehicleSeatMover", indicator)
+	mover:SetPoint("BOTTOMRIGHT", UIParent, -360, 30)
+	mover:SetSize(22, 22)
+	mover:SetFrameStrata("HIGH")
+	mover.Icon = mover:CreateTexture(nil, "ARTWORK")
+	mover.Icon:SetAllPoints()
+	mover.Icon:SetTexture(DB.gearTex)
+	mover.Icon:SetTexCoord(0, .5, 0, .5)
+	mover:SetHighlightTexture(DB.gearTex)
+	mover:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
+	B.CreateGT(mover, "ANCHOR_TOP", L["Toggle"], "system")
+	B.CreateMF(mover)
+
+	hooksecurefunc(indicator, "SetPoint", function(_, _, parent)
+		if parent ~= mover then
+			indicator:ClearAllPoints()
+			indicator:SetClampedToScreen(true)
+			indicator:SetPoint("BOTTOMRIGHT", mover, "BOTTOMLEFT", -5, 0)
+		end
+	end)
+end
 
 -- Fix Drag Collections taint
 NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(self, event, addon)

@@ -7,10 +7,10 @@ local minimize = tracker.HeaderMenu.MinimizeButton
 
 do
 	-- Move Tracker Frame
-	local Mover = CreateFrame("Frame", "NDuiQuestMover", tracker)
-	Mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -30, -25)
-	Mover:SetSize(50, 50)
-	B.CreateMF(minimize, Mover)
+	local mover = CreateFrame("Frame", "NDuiQuestMover", tracker)
+	mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -30, -25)
+	mover:SetSize(50, 50)
+	B.CreateMF(minimize, mover)
 	minimize:SetFrameStrata("HIGH")
 	minimize:HookScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOP")
@@ -21,9 +21,9 @@ do
 	minimize:HookScript("OnLeave", GameTooltip_Hide)
 
 	hooksecurefunc(tracker, "SetPoint", function(_, _, parent)
-		if parent ~= Mover then
+		if parent ~= mover then
 			tracker:ClearAllPoints()
-			tracker:SetPoint("TOPRIGHT", Mover, "CENTER", 15, 15)
+			tracker:SetPoint("TOPRIGHT", mover, "CENTER", 15, 15)
 			tracker:SetHeight(GetScreenHeight() - 400)
 		end
 	end)
