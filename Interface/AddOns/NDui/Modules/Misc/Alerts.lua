@@ -141,6 +141,9 @@ function module:BeamTool()
 	SLASH_NDUI_BEAMTOOL1 = "/kro"
 end
 
+--[[
+	骂那些用反光棱镜的臭傻逼
+]]
 function module:ReflectingAlert()
 	if not NDuiDB["Misc"]["ReflectingAlert"] then return end
 
@@ -156,6 +159,9 @@ function module:ReflectingAlert()
 	end)
 end
 
+--[[
+	工程移形换影装置使用通报
+]]
 function module:SwapingAlert()
 	if not NDuiDB["Misc"]["SwapingAlert"] then return end
 
