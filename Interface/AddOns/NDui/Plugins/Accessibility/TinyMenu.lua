@@ -4,17 +4,17 @@ local B, C, L, DB = unpack(select(2, ...))
 -- NDui MOD
 --------------------
 local UnitPopupButtonsExtra = {
-    ["ARMORY"] = { text = L["Armory"] },
-    ["SEND_WHO"] = { text = L["Query Detail"] },
-    ["NAME_COPY"] = { text = L["Name Copy"] },
-    ["GUILD_ADD"] = { text = L["Guild Invite"] },
-    ["FRIEND_ADD"] = { text = L["Add Friend"] },
-    ["QUICK_REPORT"] = { text = L["Report Spam"] },
+	["ARMORY"] = { text = L["Armory"] },
+	["SEND_WHO"] = { text = L["Query Detail"] },
+	["NAME_COPY"] = { text = L["Name Copy"] },
+	["GUILD_ADD"] = { text = L["Guild Invite"] },
+	["FRIEND_ADD"] = { text = L["Add Friend"] },
+	["QUICK_REPORT"] = { text = L["Report Spam"] },
 }
 
 for k, v in pairs(UnitPopupButtonsExtra) do
-    v.dist = 0
-    UnitPopupButtons[k] = v
+	v.dist = 0
+	UnitPopupButtons[k] = v
 end
 
 tinsert(UnitPopupMenus["FRIEND"], 1, "QUICK_REPORT")
@@ -34,61 +34,61 @@ tinsert(UnitPopupMenus["GUILD"], 1, "NAME_COPY")
 tinsert(UnitPopupMenus["GUILD"], 1, "FRIEND_ADD")
 
 local function urlencode(s)
-    s = string.gsub(s, "([^%w%.%- ])", function(c)
+	s = string.gsub(s, "([^%w%.%- ])", function(c)
 		return format("%%%02X", string.byte(c))
 	end)
-    return string.gsub(s, " ", "+")
+	return string.gsub(s, " ", "+")
 end
 
 local function gethost()
 	local host
 	if GetLocale() == "zhCN" then
-        host = "http://www.battlenet.com.cn/wow/zh/character/"
-    elseif GetLocale() == "zhTW" then
-        host = "https://worldofwarcraft.com/zh-tw/character/"
-    else
+		host = "http://www.battlenet.com.cn/wow/zh/character/"
+	elseif GetLocale() == "zhTW" then
+		host = "https://worldofwarcraft.com/zh-tw/character/"
+	else
 		host = ("http://worldofwarcraft.com/en-%s/character/"):format(GetCVar("portal"))
 	end
-    return host
+	return host
 end
 
 local function popupClick(self, info)
-    local editBox
-    local name, server = UnitName(info.unit)
-    if info.value == "ARMORY" then
-        local armory = gethost() .. urlencode(server or GetRealmName()) .. "/" .. urlencode(name) .. "/advanced"
-        editBox = ChatEdit_ChooseBoxForSend()
-        ChatEdit_ActivateChat(editBox)
-        editBox:SetText(armory)
-        editBox:HighlightText()
-    elseif info.value == "NAME_COPY" then
-        editBox = ChatEdit_ChooseBoxForSend()
-        local hasText = (editBox:GetText() ~= "")
-        ChatEdit_ActivateChat(editBox)
-        editBox:Insert(name)
-        if not hasText then editBox:HighlightText() end
-    end
+	local editBox
+	local name, server = UnitName(info.unit)
+	if info.value == "ARMORY" then
+		local armory = gethost() .. urlencode(server or GetRealmName()) .. "/" .. urlencode(name) .. "/advanced"
+		editBox = ChatEdit_ChooseBoxForSend()
+		ChatEdit_ActivateChat(editBox)
+		editBox:SetText(armory)
+		editBox:HighlightText()
+	elseif info.value == "NAME_COPY" then
+		editBox = ChatEdit_ChooseBoxForSend()
+		local hasText = (editBox:GetText() ~= "")
+		ChatEdit_ActivateChat(editBox)
+		editBox:Insert(name)
+		if not hasText then editBox:HighlightText() end
+	end
 end
 
 hooksecurefunc("UnitPopup_ShowMenu", function(dropdownMenu, which, unit, name, userData)
-    if UIDROPDOWNMENU_MENU_LEVEL > 1 then return end
-    if unit and (unit == "target" or string.find(unit, "party")) then
-        local info
-        if UnitIsPlayer(unit) then
-            info = UIDropDownMenu_CreateInfo()
-            info.text = UnitPopupButtonsExtra["ARMORY"].text
-            info.arg1 = {value="ARMORY",unit=unit}
-            info.func = popupClick
-            info.notCheckable = true
-            UIDropDownMenu_AddButton(info)
-        end
-        info = UIDropDownMenu_CreateInfo()
-        info.text = UnitPopupButtonsExtra["NAME_COPY"].text
-        info.arg1 = {value="NAME_COPY",unit=unit}
-        info.func = popupClick
-        info.notCheckable = true
-        UIDropDownMenu_AddButton(info)
-    end
+	if UIDROPDOWNMENU_MENU_LEVEL > 1 then return end
+	if unit and (unit == "target" or string.find(unit, "party")) then
+		local info
+		if UnitIsPlayer(unit) then
+			info = UIDropDownMenu_CreateInfo()
+			info.text = UnitPopupButtonsExtra["ARMORY"].text
+			info.arg1 = {value="ARMORY",unit=unit}
+			info.func = popupClick
+			info.notCheckable = true
+			UIDropDownMenu_AddButton(info)
+		end
+		info = UIDropDownMenu_CreateInfo()
+		info.text = UnitPopupButtonsExtra["NAME_COPY"].text
+		info.arg1 = {value="NAME_COPY",unit=unit}
+		info.func = popupClick
+		info.notCheckable = true
+		UIDropDownMenu_AddButton(info)
+	end
 end)
 
 hooksecurefunc("UnitPopup_OnClick", function(self)
@@ -97,29 +97,29 @@ hooksecurefunc("UnitPopup_OnClick", function(self)
 	local server = UIDROPDOWNMENU_INIT_MENU.server
 	local lineID = UIDROPDOWNMENU_INIT_MENU.lineID
 	local fullname = name
-    local editBox
+	local editBox
 	if server and (not unit or UnitRealmRelationship(unit) ~= LE_REALM_RELATION_SAME) then
 		fullname = name .. "-" .. server
 	end
-    if self.value == "ARMORY" then
-        local armory = gethost() .. urlencode(server or GetRealmName()) .. "/" .. urlencode(name) .. "/advanced"
-        editBox = ChatEdit_ChooseBoxForSend()
-        ChatEdit_ActivateChat(editBox)
-        editBox:SetText(armory)
-        editBox:HighlightText()
-    elseif self.value == "NAME_COPY" then
-        editBox = ChatEdit_ChooseBoxForSend()
-        local hasText = (editBox:GetText() ~= "")
-        ChatEdit_ActivateChat(editBox)
-        editBox:Insert(fullname)
-        if not hasText then editBox:HighlightText() end
-    elseif self.value == "FRIEND_ADD" then
-        AddFriend(fullname)
-    elseif self.value == "SEND_WHO" then
-        SendWho("n-"..name)
-    elseif self.value == "GUILD_ADD" then
-        GuildInvite(fullname)
+	if self.value == "ARMORY" then
+		local armory = gethost() .. urlencode(server or GetRealmName()) .. "/" .. urlencode(name) .. "/advanced"
+		editBox = ChatEdit_ChooseBoxForSend()
+		ChatEdit_ActivateChat(editBox)
+		editBox:SetText(armory)
+		editBox:HighlightText()
+	elseif self.value == "NAME_COPY" then
+		editBox = ChatEdit_ChooseBoxForSend()
+		local hasText = (editBox:GetText() ~= "")
+		ChatEdit_ActivateChat(editBox)
+		editBox:Insert(fullname)
+		if not hasText then editBox:HighlightText() end
+	elseif self.value == "FRIEND_ADD" then
+		AddFriend(fullname)
+	elseif self.value == "SEND_WHO" then
+		SendWho("n-"..name)
+	elseif self.value == "GUILD_ADD" then
+		GuildInvite(fullname)
 	elseif self.value == "QUICK_REPORT" then
 		ReportPlayer(PLAYER_REPORT_TYPE_SPAM, lineID)
-    end
+	end
 end)
