@@ -8,22 +8,14 @@ local function FaderOnFinished(self)
 	self.__owner:SetAlpha(self.finAlpha)
 end
 
-local function FaderOnUpdate(self)
-	self.__owner:SetAlpha(self.__animFrame:GetAlpha())
-end
-
 local function CreateFaderAnimation(frame)
 	if frame.fader then return end
-	local animFrame = CreateFrame("Frame",nil,frame)
-	animFrame.__owner = frame
-	frame.fader = animFrame:CreateAnimationGroup()
+	frame.fader = frame:CreateAnimationGroup()
 	frame.fader.__owner = frame
-	frame.fader.__animFrame = animFrame
 	frame.fader.direction = nil
-	frame.fader.setToFinalAlpha = false
+	frame.fader.setToFinalAlpha = false --test if this will NOT apply the alpha to all regions
 	frame.fader.anim = frame.fader:CreateAnimation("Alpha")
 	frame.fader:HookScript("OnFinished", FaderOnFinished)
-	frame.fader:HookScript("OnUpdate", FaderOnUpdate)
 end
 
 local function StartFadeIn(frame)

@@ -34,7 +34,7 @@ function module:OnLogin()
 			Bags = "bank",
 			Movable = true,
 		})
-		f.bank:SetFilter(onlyBank, true) 
+		f.bank:SetFilter(onlyBank, true)
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -20, 0)
 		f.bank:Hide()
 
@@ -44,7 +44,7 @@ function module:OnLogin()
 			Bags = "bankreagent",
 			Movable = true,
 		})
-		f.reagent:SetFilter(onlyReagent, true) 
+		f.reagent:SetFilter(onlyReagent, true)
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
 	end
@@ -283,7 +283,7 @@ function module:OnLogin()
 			self:SetMovable(true)
 			self:RegisterForClicks("LeftButton")
 			self:SetScript("OnMouseDown", function()
-				self:ClearAllPoints() 
+				self:ClearAllPoints()
 				self:StartMoving()
 			end)
 			self:SetScript("OnMouseUp", self.StopMovingOrSizing)

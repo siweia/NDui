@@ -33,11 +33,11 @@ DB.creditTex = "Interface\\HelpFrame\\HelpIcon-KnowledgeBase"
 DB.newItemFlash = "Interface\\Cooldown\\star4"
 DB.TexCoord = {.08, .92, .08, .92}
 DB.textures = {
-    normal		= Media.."ActionBar\\gloss",
-    flash		= Media.."ActionBar\\flash",
-    pushed		= Media.."ActionBar\\pushed",
-    checked		= Media.."ActionBar\\checked",
-    equipped	= Media.."ActionBar\\gloss",
+	normal		= Media.."ActionBar\\gloss",
+	flash		= Media.."ActionBar\\flash",
+	pushed		= Media.."ActionBar\\pushed",
+	checked		= Media.."ActionBar\\checked",
+	equipped	= Media.."ActionBar\\gloss",
 }
 DB.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:14:12:0:-1:512:512:12:66:230:307|t "
 DB.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:14:12:0:-1:512:512:12:66:333:411|t "
