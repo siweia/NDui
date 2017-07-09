@@ -834,6 +834,8 @@ C.AuraWatchList = {
 				{AuraID = 234891, UnitID = "target"},
 				--泰坦之壁
 				{AuraID = 235028, UnitID = "target", Value = true},
+				--造物者之怒
+				{AuraID = 237339, UnitID = "target"},
 				--净化协议
 				{AuraID = 241008, UnitID = "target", Value = true},
 				--故障
