@@ -181,7 +181,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 				end
 			else
 				if not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(arg2) then
-					InviteUnit(arg2)
+					InviteToGroup(arg2)
 				end
 			end
 		end

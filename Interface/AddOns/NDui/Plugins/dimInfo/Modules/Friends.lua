@@ -62,7 +62,7 @@ if cfg.Friends == true then
 	}
 
 	local function inviteClick(self, arg1, arg2)
-		InviteUnit(arg1)
+		InviteToGroup(arg1)
 		DropDownList1:Hide()
 	end
 

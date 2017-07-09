@@ -61,7 +61,7 @@ local orig = ChatFrame_OnHyperlinkShow
 function ChatFrame_OnHyperlinkShow(frame, link, text, button)
     local type, value = link:match("(%a+):(.+)")
 	if IsAltKeyDown() and type == "player" then
-		InviteUnit(value:match("([^:]+)"))
+		InviteToGroup(value:match("([^:]+)"))
 	elseif IsModifierKeyDown() and type == "BNplayer" then
 		local _, bnID = value:match("([^:]*):([^:]*):")
 		if not bnID then return end

@@ -108,7 +108,7 @@ local function CreateRoster(i)
 					editBox:HighlightText()
 				end
 			else
-				InviteUnit(name)
+				InviteToGroup(name)
 			end
 		else
 			if btn == "LeftButton" then return end
