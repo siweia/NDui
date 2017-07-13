@@ -42,9 +42,9 @@ end
 
 local function gethost()
 	local host
-	if GetLocale() == "zhCN" then
+	if DB.Client == "zhCN" then
 		host = "http://www.battlenet.com.cn/wow/zh/character/"
-	elseif GetLocale() == "zhTW" then
+	elseif DB.Client == "zhTW" then
 		host = "https://worldofwarcraft.com/zh-tw/character/"
 	else
 		host = ("http://worldofwarcraft.com/en-%s/character/"):format(GetCVar("portal"))
@@ -62,11 +62,16 @@ local function popupClick(self, info)
 		editBox:SetText(armory)
 		editBox:HighlightText()
 	elseif info.value == "NAME_COPY" then
-		editBox = ChatEdit_ChooseBoxForSend()
-		local hasText = (editBox:GetText() ~= "")
-		ChatEdit_ActivateChat(editBox)
-		editBox:Insert(name)
-		if not hasText then editBox:HighlightText() end
+		if SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
+			SendMailNameEditBox:SetText(name)
+			SendMailNameEditBox:HighlightText()
+		else
+			editBox = ChatEdit_ChooseBoxForSend()
+			local hasText = (editBox:GetText() ~= "")
+			ChatEdit_ActivateChat(editBox)
+			editBox:Insert(name)
+			if not hasText then editBox:HighlightText() end
+		end
 	end
 end
 
@@ -77,14 +82,14 @@ hooksecurefunc("UnitPopup_ShowMenu", function(dropdownMenu, which, unit, name, u
 		if UnitIsPlayer(unit) then
 			info = UIDropDownMenu_CreateInfo()
 			info.text = UnitPopupButtonsExtra["ARMORY"].text
-			info.arg1 = {value="ARMORY",unit=unit}
+			info.arg1 = {value = "ARMORY", unit = unit}
 			info.func = popupClick
 			info.notCheckable = true
 			UIDropDownMenu_AddButton(info)
 		end
 		info = UIDropDownMenu_CreateInfo()
 		info.text = UnitPopupButtonsExtra["NAME_COPY"].text
-		info.arg1 = {value="NAME_COPY",unit=unit}
+		info.arg1 = {value = "NAME_COPY", unit = unit}
 		info.func = popupClick
 		info.notCheckable = true
 		UIDropDownMenu_AddButton(info)
@@ -108,11 +113,16 @@ hooksecurefunc("UnitPopup_OnClick", function(self)
 		editBox:SetText(armory)
 		editBox:HighlightText()
 	elseif self.value == "NAME_COPY" then
-		editBox = ChatEdit_ChooseBoxForSend()
-		local hasText = (editBox:GetText() ~= "")
-		ChatEdit_ActivateChat(editBox)
-		editBox:Insert(fullname)
-		if not hasText then editBox:HighlightText() end
+		if SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
+			SendMailNameEditBox:SetText(name)
+			SendMailNameEditBox:HighlightText()
+		else
+			editBox = ChatEdit_ChooseBoxForSend()
+			local hasText = (editBox:GetText() ~= "")
+			ChatEdit_ActivateChat(editBox)
+			editBox:Insert(fullname)
+			if not hasText then editBox:HighlightText() end
+		end
 	elseif self.value == "FRIEND_ADD" then
 		AddFriend(fullname)
 	elseif self.value == "SEND_WHO" then
