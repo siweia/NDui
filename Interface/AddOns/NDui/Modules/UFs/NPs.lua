@@ -351,12 +351,11 @@ function UF:CreateClassBar()
 		if (RequireSpec and RequireSpec ~= GetSpecialization()) or (RequirePower and RequirePower ~= UnitPowerType("player")) then
 			self:UnregisterEvent("UNIT_POWER_FREQUENT")
 			self:UnregisterEvent("UNIT_MAXPOWER")
-			self:Hide()
+			for i = 1, 6 do bars[i]:Hide() end
 		else
 			self:RegisterEvent("UNIT_POWER_FREQUENT")
 			self:RegisterEvent("UNIT_MAXPOWER")
 			UpdateClassPower(self)
-			self:Show()
 		end
 	end
 
