@@ -117,9 +117,9 @@ local function Update(self, event, unit, powerType)
 						element[i]:SetValue(0)
 					end
 				end
+				UpdateColor(element, powerType)
 			end
 
-			UpdateColor(element, powerType)
 			element.__max = max
 		end
 	end
