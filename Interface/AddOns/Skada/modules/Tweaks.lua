@@ -1,9 +1,17 @@
--- Various silly tweaks needed to keep up with Blizzard's shenanigans. Not added to core because they may not be needed forever.
+-- Various silly tweaks needed to keep up with Blizzard's shenanigans. Not added to core because they may not be needed/relevant forever.
 Skada:AddLoadableModule("Tweaks", "Various tweaks to get around deficiences and problems in the game's combat logs. Carries a small performance penalty.", function(Skada, L)
 	if Skada.db.profile.modulesBlocked.Tweaks then return end
 
+    local band = bit.band
+        
+    -- Cache variables
     local boms = {}
     local stormlashes = {}
+    local akaarisource = nil
+    local lastpet = {}
+    local assignedhatis = {}
+        
+    local PET_FLAG = COMBATLOG_OBJECT_TYPE_PET
         
     local orig = Skada.cleuFrame:GetScript("OnEvent")
     Skada.cleuFrame:SetScript("OnEvent", function(frame, event, timestamp, eventtype, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, ...)
@@ -11,6 +19,30 @@ Skada:AddLoadableModule("Tweaks", "Various tweaks to get around deficiences and 
         -- Only perform these modifications if we are already in combat
         if Skada.current then
             local firstArg = select(1, ...)
+            
+            -- Hati (7.0, BM hunter artifact)
+            if band(srcFlags, PET_FLAG) ~= 0 then
+                lastpet.timestamp = timestamp
+                lastpet.srcGUID = srcGUID
+            elseif srcName == 'Hati' and not assignedhatis[srcGUID] then
+                if lastpet.timestamp == timestamp then
+                    local owner = Skada:GetPetOwner(lastpet.srcGUID)
+                    if owner then
+                        Skada:AssignPet(owner.id, owner.name, srcGUID)
+                        assignedhatis[srcGUID] = true
+                    end
+                end
+            end
+                    
+            -- Akaari's Soul (7.0, Rogue artifact)
+            if (firstArg == 185438 or firstArg == 145424) and eventtype == 'SPELL_DAMAGE' then
+                akaarisource = srcGUID
+            end
+            if firstArg == 220893 and akaarisource then
+                srcGUID = UnitGUID(akaarisource)
+                srcName = UnitName(akaarisource)
+                akaarisource = nil
+            end
 
             -- Greater Blessing of Might (7.0)
             if firstArg == 205729 and eventtype == 'SPELL_DAMAGE' then

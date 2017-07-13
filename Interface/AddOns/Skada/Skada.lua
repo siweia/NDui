@@ -760,7 +760,7 @@ local function slashHandler(param)
 			end
 		end
 	elseif param == "test" then
-		Skada:OpenMenu()
+		Skada:Notify("test")
 	elseif param == "reset" then
 		Skada:Reset()
 	elseif param == "newsegment" then
@@ -1888,6 +1888,10 @@ end)
 
 function Skada:AssignPet(ownerguid, ownername, petguid)
 	pets[petguid] = {id = ownerguid, name = ownername}
+end
+
+function Skada:GetPetOwner(petguid)
+	return pets[petguid]
 end
 
 function Skada:ENCOUNTER_START(encounterId, encounterName)
