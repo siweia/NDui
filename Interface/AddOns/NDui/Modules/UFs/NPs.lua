@@ -181,7 +181,7 @@ local function UpdateUnitClassify(self, unit)
 end
 
 function UF:CreateClassBar()
-	local ClassPowerID, ClassPowerType, RequireSpec, RequirePower, RequireSpell
+	local ClassPowerID, ClassPowerType, RequireSpec, RequirePower
 	-- Data
 	if DB.MyClass == "MONK" then
 		ClassPowerID = SPELL_POWER_CHI
@@ -197,6 +197,10 @@ function UF:CreateClassBar()
 	elseif DB.MyClass == "ROGUE" or DB.MyClass == "DRUID" then
 		ClassPowerID = SPELL_POWER_COMBO_POINTS
 		ClassPowerType = "COMBO_POINTS"
+
+		if DB.MyClass == "DRUID" then
+			RequirePower = SPELL_POWER_ENERGY
+		end
 	elseif DB.MyClass == "MAGE" then
 		ClassPowerID = SPELL_POWER_ARCANE_CHARGES
 		ClassPowerType = "ARCANE_CHARGES"
@@ -233,135 +237,151 @@ function UF:CreateClassBar()
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", margin, 0)
 		end
-		bars[i]:Hide()
 	end
 
-	-- Event OnUpdate
-	bar:RegisterEvent("PLAYER_ENTERING_WORLD")
+	-- Update bars
+	local function UpdateClassPower(self, event, unit, powerType)
+		if event and (unit ~= "player" or powerType ~= ClassPowerType) then return end
+
+		local cur = UnitPower("player", ClassPowerID)
+		local max = UnitPowerMax("player", ClassPowerID)
+		local mod = UnitPowerDisplayMod(ClassPowerID)
+		local oldMax
+
+		cur = mod == 0 and 0 or cur / mod
+		if ClassPowerType == "SOUL_SHARDS" and GetSpecialization() ~= SPEC_WARLOCK_DESTRUCTION then
+			cur = cur - cur % 1
+		end
+
+		local numActive = cur + 0.9
+		if max <= 6 then
+			for i = 1, max do
+				if(i > numActive) then
+					bars[i]:Hide()
+					bars[i]:SetValue(0)
+				else
+					bars[i]:Show()
+					bars[i]:SetValue(cur - i + 1)
+				end
+			end
+		else
+			for i = 1, 5 do bars[i]:SetValue(1) end
+			bars[6]:Hide()
+
+			if cur <= 5 then
+				for i = 1, 5 do
+					if i <= cur then
+						bars[i]:Show()
+					else
+						bars[i]:Hide()
+					end
+					bars[i]:SetStatusBarColor(1, .96, .41)
+				end
+			else
+				for i = 1, 5 do
+					bars[i]:Show()
+				end
+				for i = 1, cur - 5 do
+					bars[i]:SetStatusBarColor(1, 0, 0)
+				end
+				for i = cur - 4, 5 do
+					bars[i]:SetStatusBarColor(1, .96, .41)
+				end
+			end
+		end
+
+		oldMax = self.__max
+		if(max ~= oldMax) then
+			if(max < oldMax) then
+				for i = max + 1, oldMax do
+					if bars[i] then
+						bars[i]:Hide()
+						bars[i]:SetValue(0)
+					end
+				end
+			end
+			if max <= 6 then
+				for i = 1, 6 do
+					bars[i]:SetWidth((width - (max-1)*margin)/max)
+					bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
+				end
+			else
+				for i = 1, 5 do
+					bars[i]:SetWidth((width - 4*margin)/5)
+				end
+				bars[6]:Hide()
+			end
+
+			self.__max = max
+		end
+	end
+
+	local function UpdateRune(self, event, runeID, energized)
+		local rune = bars[runeID]
+		if not rune then return end
+
+		if UnitHasVehicleUI("player") then
+			rune:Hide()
+		else
+			local start, duration, runeReady = GetRuneCooldown(runeID)
+			if not start then return end
+
+			if energized or runeReady then
+				rune:SetMinMaxValues(0, 1)
+				rune:SetValue(1)
+				rune:SetScript("OnUpdate", nil)
+				rune:SetAlpha(1)
+			else
+				rune.duration = GetTime() - start
+				rune.max = duration
+				rune:SetMinMaxValues(0, duration)
+				rune:SetValue(0)
+				rune:SetScript("OnUpdate", function(self, elapsed)
+					local duration = self.duration + elapsed
+					self.duration = duration
+					self:SetValue(duration)
+				end)
+				rune:SetAlpha(.7)
+			end
+			rune:Show()
+		end
+	end
+
+	local function UpdateVisibility(self)
+		if (RequireSpec and RequireSpec ~= GetSpecialization()) or (RequirePower and RequirePower ~= UnitPowerType("player")) then
+			self:UnregisterEvent("UNIT_POWER_FREQUENT")
+			self:UnregisterEvent("UNIT_MAXPOWER")
+			self:Hide()
+		else
+			self:RegisterEvent("UNIT_POWER_FREQUENT")
+			self:RegisterEvent("UNIT_MAXPOWER")
+			UpdateClassPower(self)
+			self:Show()
+		end
+	end
+
+	-- OnEvent
+	if DB.MyClass == "DEATHKNIGHT" then
+		bar:RegisterEvent("RUNE_POWER_UPDATE")
+	else
+		bar:RegisterEvent("PLAYER_ENTERING_WORLD")
+		bar:RegisterEvent("UNIT_POWER_FREQUENT")
+		bar:RegisterEvent("UNIT_MAXPOWER")
+		if RequireSpec then
+			bar:RegisterEvent("PLAYER_TALENT_UPDATE")
+		end
+		if RequirePower then
+			bar:RegisterEvent("UNIT_DISPLAYPOWER")
+		end
+	end
 	bar:SetScript("OnEvent", function(self, event, ...)
-		if event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent(event)
-			if DB.MyClass == "DEATHKNIGHT" then
-				self:RegisterEvent("RUNE_POWER_UPDATE")
-			else
-				self:RegisterEvent("UNIT_POWER_FREQUENT")
-				self:RegisterEvent("UNIT_MAXPOWER")
-				if RequireSpec then
-					self:RegisterEvent("PLAYER_TALENT_UPDATE")
-				end
-			end
-		elseif GetCVar("nameplateShowSelf") == "1" then
-			if event == "RUNE_POWER_UPDATE" then
-				if UnitHasVehicleUI("player") then
-					self:Hide()
-				else
-					local runeID, energized = ...
-					local rune = bars[runeID]
-					local start, duration, runeReady = GetRuneCooldown(runeID)
-					if not start then return end
-
-					if energized or runeReady then
-						rune:SetMinMaxValues(0, 1)
-						rune:SetValue(1)
-						rune:SetScript("OnUpdate", nil)
-						rune:SetAlpha(1)
-					else
-						rune.duration = GetTime() - start
-						rune.max = duration
-						rune:SetMinMaxValues(0, duration)
-						rune:SetValue(0)
-						rune:SetScript("OnUpdate", function(self, elapsed)
-							local duration = self.duration + elapsed
-							self.duration = duration
-							self:SetValue(duration)
-						end)
-						rune:SetAlpha(.7)
-					end
-					self:Show()
-				end
-			else
-				if RequireSpec and RequireSpec ~= GetSpecialization() then
-					for i = 1, 6 do bars[i]:Hide() end
-					self:Hide()
-					return
-				end
-
-				local unit, powerType = ...
-				if unit ~= "player" or powerType ~= ClassPowerType then return end
-
-				local cur = UnitPower("player", ClassPowerID)
-				local max = UnitPowerMax("player", ClassPowerID)
-				local mod = UnitPowerDisplayMod(ClassPowerID)
-				local oldMax
-
-				cur = mod == 0 and 0 or cur / mod
-				if ClassPowerType == 'SOUL_SHARDS' and GetSpecialization() ~= SPEC_WARLOCK_DESTRUCTION then
-					cur = cur - cur % 1
-				end
-
-				local numActive = cur + 0.9
-				if max <= 6 then
-					for i = 1, max do
-						if(i > numActive) then
-							bars[i]:Hide()
-							bars[i]:SetValue(0)
-						else
-							bars[i]:Show()
-							bars[i]:SetValue(cur - i + 1)
-						end
-					end
-				else
-					for i = 1, 5 do bars[i]:SetValue(1) end
-					bars[6]:Hide()
-
-					if cur <= 5 then
-						for i = 1, 5 do
-							if i <= cur then
-								bars[i]:Show()
-							else
-								bars[i]:Hide()
-							end
-							bars[i]:SetStatusBarColor(1, .96, .41)
-						end
-					else
-						for i = 1, 5 do
-							bars[i]:Show()
-						end
-						for i = 1, cur - 5 do
-							bars[i]:SetStatusBarColor(1, 0, 0)
-						end
-						for i = cur - 4, 5 do
-							bars[i]:SetStatusBarColor(1, .96, .41)
-						end
-					end
-				end
-
-				oldMax = self.__max
-				if(max ~= oldMax) then
-					if(max < oldMax) then
-						for i = max + 1, oldMax do
-							if bars[i] then
-								bars[i]:Hide()
-								bars[i]:SetValue(0)
-							end
-						end
-					end
-					if max <= 6 then
-						for i = 1, 6 do
-							bars[i]:SetWidth((width - (max-1)*margin)/max)
-							bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
-						end
-					else
-						for i = 1, 5 do
-							bars[i]:SetWidth((width - 4*margin)/5)
-						end
-						bars[6]:Hide()
-					end
-
-					self.__max = max
-				end
-				self:Show()
-			end
+		if GetCVar("nameplateShowSelf") ~= "1" then return end
+		if event == "RUNE_POWER_UPDATE" then
+			UpdateRune(self, event, ...)
+		elseif event == "UNIT_POWER_FREQUENT" or event == "UNIT_MAXPOWER" then
+			UpdateClassPower(self, event, ...)
+		elseif event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" or event == "UNIT_DISPLAYPOWER" then
+			UpdateVisibility(self)
 		end
 	end)
 end
