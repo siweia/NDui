@@ -428,3 +428,67 @@ end)
 InterfaceOptionsFrameCancel:SetScript("OnClick", function()
     InterfaceOptionsFrameOkay:Click()
 end)
+
+-- Roll Gold
+do
+	if DB.Client ~= "zhCN" then return end
+	local maxGold, maxPacks, curGold, remainGold
+	local keyword, goldList, index, finish = "#1", {}, 1, true
+	local f = CreateFrame("Frame")
+
+	local function sendMsg(msg)
+		SendChatMessage(msg, "GUILD")
+		--print(msg)
+	end
+
+	local function randomRoll(gold)
+		local cur = math.random(1, gold)
+		gold = gold - cur
+		return cur, gold
+	end
+
+	local function finishRoll()
+		finish = true
+		remainGold = nil
+		index = 1
+		goldList = {}
+		f:UnregisterAllEvents()
+	end
+
+	f:SetScript("OnEvent", function(self, event, ...)
+		if finish then return end
+		local msg, author = ...
+		if msg == keyword and not goldList[author] then
+			if maxPacks == 1 then
+				sendMsg(maxGold.."金都被"..author.."抢走了", "GUILD")
+				finishRoll()
+			elseif index == maxPacks then
+				goldList[author] = remainGold
+				sendMsg("所有的金币都已经被抢完，分别是：")
+				local text = ""
+				for k, v in pairs(goldList) do
+					text = text..k..": "..v.."金 "
+				end
+				sendMsg(text)
+				finishRoll()
+			else
+				curGold, remainGold = randomRoll(remainGold or maxGold)
+				goldList[author] = curGold
+				sendMsg(author.."抢到了"..curGold.."金。")
+				index = index + 1
+			end
+		end
+	end)
+
+	SlashCmdList["ROLLGOLD"] = function(arg)
+		if not arg then return end
+		local max, num = string.split(" ", tostring(arg))
+		maxGold = tonumber(max)
+		maxPacks = tonumber(num) or 1
+		if maxPacks > 10 then maxPacks = 10 end
+		finish = false
+		f:RegisterEvent("CHAT_MSG_GUILD")
+		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入#1来抢吧。", "GUILD")
+	end
+	SLASH_ROLLGOLD1 = "/groll"
+end
