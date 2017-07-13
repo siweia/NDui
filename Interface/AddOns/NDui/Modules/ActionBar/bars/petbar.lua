@@ -19,8 +19,8 @@ function Bar:CreatePetbar()
 	frame:SetScale(cfg.scale)
 
 	--move the buttons into position and reparent them
-	PetActionBarFrame:SetParent(frame)
-	PetActionBarFrame:EnableMouse(false)
+	_G.PetActionBarFrame:SetParent(frame)
+	_G.PetActionBarFrame:EnableMouse(false)
 
 	for i = 1, num do
 		local button = _G["PetActionButton"..i]
