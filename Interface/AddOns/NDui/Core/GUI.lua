@@ -175,6 +175,7 @@ local defaultSettings = {
 		SetScale = .8,
 		GUIScale = 1,
 		Format = 1,
+		VersionCheck = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -412,16 +413,18 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
 		{1, "Misc", "HideErrors", L["Hide Error"]},
 		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
+		{},--blank
 		{1, "Misc", "RareAlerter", L["Rare Alert"]},
 		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 	},
 	[13] = {
+		{1, "Settings", "VersionCheck", L["Version Check"]},
+		{},--blank
 		{3, "Settings", "SetScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
 		{1, "Settings", "LockUIScale", L["Lock UIScale"], true},
 		{},--blank
 		{3, "Settings", "GUIScale", L["GUI Scale"], false, {.5, 1.5, 1}},
-		{},--blank
-		{4, "Settings", "Format", L["Numberize"], false, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
+		{4, "Settings", "Format", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 	},
 }
 

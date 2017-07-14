@@ -17,6 +17,7 @@ function module:OnLogin()
 	self:BeamTool()
 	self:ReflectingAlert()
 	self:SwapingAlert()
+	self:VersionCheck()
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
