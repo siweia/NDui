@@ -1,6 +1,6 @@
 --[[
 Name: LibBossIDs-1.0
-Revision: $Revision: 100 $
+Revision: $Revision: 104 $
 Author: Elsia
 Website: http://www.wowace.com/addons/libbossids-1-0/
 Documentation:
@@ -10,7 +10,7 @@ Dependencies: LibStub
 License: Public Domain, Absolutely no Warranty.
 ]]
 
-local MAJOR, MINOR = "LibBossIDs-1.0", "$Revision: 100 $"
+local MAJOR, MINOR = "LibBossIDs-1.0", "$Revision: 104 $"
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
@@ -563,19 +563,19 @@ local BossIDs = {
 	-- Hellfire Citadel (Draenor)
 	-------------------------------------------------------------------------------
 	-- Hellbreach
-	[95068]	= true,	-- Hellfire Assault - Siegemaster Mar'tak
+	[90019]	= true,	-- Hellfire Assault - Siegemaster Mar'tak
 	[90284]	= true,	-- Iron Reaver
-	[90776]	= true,	-- Kormrok
+	[90435]	= true,	-- Kormrok
 	-- Halls of Blood
 	[90378]	= true,	-- Kilrogg Deadeye
 	[92144]	= true,	-- Hellfire High Council - Dia Darkwhisper
 	[92146]	= true,	-- Hellfire High Council - Gurtogg Bloodboil
-	[93713]	= true,	-- Hellfire High Council - Blademaster Jubei'thos
-	[91809]	= true,	-- Gorefiend
+	[92142]	= true,	-- Hellfire High Council - Blademaster Jubei'thos
+	[90199]	= true,	-- Gorefiend
 	-- Bastion of Shadows
-	[95067]	= true,	-- Shadow-Lord Iskar
-	[90296]	= true,	-- Socrethar the Eternal - Soulbound Construct
-	[93439]	= true,	-- Tyrant Velhari
+	[90316]	= true,	-- Shadow-Lord Iskar
+	[92330]	= true,	-- Socrethar the Eternal - Soulbound Construct
+	[90269]	= true,	-- Tyrant Velhari
 	-- Destructor’s Rise
 	[89890]	= true,	-- Fel Lord Zakuun
 	[93068]	= true,	-- Xhul'horac
@@ -1451,6 +1451,25 @@ local BossIDs = {
 	[26723]	= true,	-- Keristrasza
 
 	-------------------------------------------------------------------------------
+	-- The Nighthold
+	-------------------------------------------------------------------------------
+	-- Arcing Aqueducts (W1)
+	[102263] = true, -- Skorpyron
+	[104415] = true, -- Chronomatic Anomaly
+	[104288] = true, -- Trilliax
+
+	-- Royal Athenaeum
+	[107699] = true, -- Spellblade Aluriel
+	[103758] = true, -- Star Augur Etraeus
+	[104528] = true, -- High Botanist Tel'arn
+	-- Nightspire
+	[101002] = true, -- Krosus
+	[103685] = true, -- Tichondrius
+	[110965] = true, -- Elisande
+	-- Betrayer’s Rise
+	[105503] = true, -- Gul'dan
+
+	-------------------------------------------------------------------------------
 	-- The Oculus
 	-------------------------------------------------------------------------------
 	[27654]	= true,	-- Drakos the Interrogator
@@ -1521,6 +1540,26 @@ local BossIDs = {
 	[69473]	= true,	-- Ra-den <Fallen Keeper of Storms>
 
 	-------------------------------------------------------------------------------
+	-- Tomb of Sargeras 7.2.5
+	-------------------------------------------------------------------------------
+	-- The Gates of Hell
+	[115844]	= true,	-- Goroth
+	[116407]	= true,	-- Harjatan
+	[115767]	= true,	-- Mistress Sassz'ine
+
+	-- Wailing Halls
+	[120996]	= true,	-- Demonic Inquisition (Atrigan only)
+	[118523]	= true,	-- Sisters of the Moon (Kasparian only)
+	[118460]	= true,	-- The Desolate Host (Engine of Souls only)
+
+	-- Chamber of the Avatar
+	[118289]	= true,	-- Maiden of Vigilance
+	[120436]	= true,	-- Fallen Avatar
+
+	-- Deceiver's Fall
+	[117269]	= true,	-- Kil'jaeden
+
+	-------------------------------------------------------------------------------
 	-- Trial of the Champion
 	-------------------------------------------------------------------------------
 	-- Alliance
@@ -1588,6 +1627,13 @@ local BossIDs = {
 	[34497]	= true,	-- Fjola Lightbane
 	[34496]	= true,	-- Eydis Darkbane
 	[34564]	= true,	-- Anub'arak (Trial of the Crusader)
+
+	-------------------------------------------------------------------------------
+	-- Trial of Valor 7.2
+	-------------------------------------------------------------------------------
+	[114263] = true, -- Odyn
+	[114537] = true, -- Helya
+	[114323] = true, -- Guarm
 
 	-------------------------------------------------------------------------------
 	-- Uldaman

@@ -511,3 +511,10 @@ L["Debuffs"] = true
 L["Healing: Personal HPS"] = true
 L["Healing: Raid HPS"] = true
 L["RHPS"] = true
+
+L["Friendly Fire"] = true
+L["List of players damaged"] = true
+L["List of damaging spells"] = true
+L["spells"] = true
+L["targets"] = true
+L["Shows damage done on players by friendly players."] = true

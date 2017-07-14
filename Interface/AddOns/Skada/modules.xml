@@ -16,6 +16,7 @@
 <Script file="modules\CC.lua"/>
 <Script file="modules\Tweaks.lua"/>
 <Script file="modules\Themes.lua"/>
+<Script file="modules\FriendlyFire.lua"/>
 
 </Ui>
 
