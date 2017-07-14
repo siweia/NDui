@@ -38,8 +38,10 @@ local function Update(self, event, unit)
 	local healAbsorb = UnitGetTotalHealAbsorbs(unit) or 0
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit)
 
+	local overHealAbsorb = false
 	if(health < healAbsorb) then
 		healAbsorb = health
+		overHealAbsorb = true
 	end
 
 	if(health - healAbsorb + allIncomingHeal > maxHealth * hp.maxOverflow) then
@@ -82,9 +84,20 @@ local function Update(self, event, unit)
 		previousTexture = UpdateFillBar(self, previousTexture, hp.absorbBar, absorb)
 	end
 	if hp.healAbsorbBar then
-		hp.healAbsorbBar:SetMinMaxValues(0, maxHealth)
-		hp.healAbsorbBar:SetValue(healAbsorb)
-		hp.healAbsorbBar:Show()
+		if healAbsorb > 0 then
+			hp.healAbsorbBar:SetMinMaxValues(0, maxHealth)
+			hp.healAbsorbBar:SetValue(healAbsorb)
+			hp.healAbsorbBar:Show()
+		else
+			hp.healAbsorbBar:Hide()
+		end
+	end
+	if hp.overHealAbsorbGlow then
+		if overHealAbsorb then
+			hp.overHealAbsorbGlow:Show()
+		else
+			hp.overHealAbsorbGlow:Hide()
+		end
 	end
 
 	if(hp.PostUpdate) then

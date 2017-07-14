@@ -716,7 +716,13 @@ function UF:CreatePrediction(self)
 	hab:SetReverseFill(true)
 	hab:SetStatusBarTexture(DB.normTex)
 	hab:SetStatusBarColor(0, .5, .8, .5)
-	hab:Hide()
+
+	local ohg = self:CreateTexture(nil, "ARTWORK", nil, 1)
+	ohg:SetWidth(15)
+	ohg:SetTexture("Interface\\RaidFrame\\Absorb-Overabsorb")
+	ohg:SetBlendMode("ADD")
+	ohg:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", 5, 2)
+	ohg:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMLEFT", 5, -2)
 
 	self.HealPredictionAndAbsorb = {
 		myBar = mhpb,
@@ -725,6 +731,7 @@ function UF:CreatePrediction(self)
 		absorbBarOverlay = abbo,
 		overAbsorbGlow = oag,
 		healAbsorbBar = hab,
+		overHealAbsorbGlow = ohg,
 		maxOverflow = 1,
 	}
 end
