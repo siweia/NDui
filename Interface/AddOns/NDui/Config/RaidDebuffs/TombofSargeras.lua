@@ -38,7 +38,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 239264)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236519)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236550)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236305, 5)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 236330)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 236330, 5)
 
 BOSS = 1861 -- 主母萨丝琳
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 230362)

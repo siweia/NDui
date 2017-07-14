@@ -95,8 +95,8 @@ function module:RegisterDebuff(tierID, instID, bossID, spellID, level)
 	if not instName then print("Invalid instance ID: "..instID) return end
 
 	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end
-	if level and level > 6 then
-		level = 6
+	if level then
+		if level > 6 then level = 6 end
 	else
 		level = 2
 	end
