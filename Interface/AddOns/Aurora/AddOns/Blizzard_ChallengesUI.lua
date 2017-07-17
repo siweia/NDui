@@ -4,7 +4,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 	-- Reskin Affixes
 	local function AffixesSetup(parent)
 		for i, frame in ipairs(parent) do
-			frame.Border:Hide()
+			frame.Border:SetAlpha(0)
 			frame.Portrait:SetTexture(nil)
 			if not frame.bg then
 				frame.bg = F.ReskinIcon(frame.Portrait)
@@ -37,7 +37,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 		for i = 1, 12 do
 			local bu = ChallengesFrame.DungeonIcons[i]
 			if bu and not bu.styled then
-				bu:GetRegions():Hide()
+				bu:GetRegions():SetAlpha(0)
 				bu.Icon:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBD(bu, .3)
 				bu.styled = true
@@ -46,8 +46,8 @@ C.themes["Blizzard_ChallengesUI"] = function()
 
 		if IsAddOnLoaded("AngryKeystones") and not angryStyle then
 			local scheduel = select(6, ChallengesFrame:GetChildren())
-			select(1, scheduel:GetRegions()):Hide()
-			select(3, scheduel:GetRegions()):Hide()
+			select(1, scheduel:GetRegions()):SetAlpha(0)
+			select(3, scheduel:GetRegions()):SetAlpha(0)
 			F.CreateBD(scheduel, .3)
 
 			if scheduel.Entries then
