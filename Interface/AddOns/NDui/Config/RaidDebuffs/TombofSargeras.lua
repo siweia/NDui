@@ -29,16 +29,17 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 231729, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 241600)
 
 BOSS = 1903 -- 月之姐妹
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 234996, 1)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 234995, 1)
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 234996, 1)
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 234995, 1)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 233263, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236596, 5)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 236712)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 236712, 6)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 239264)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 236519)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 236519, 5)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 236603)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236550)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236305, 5)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 236330, 5)
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 236330, 5)
 
 BOSS = 1861 -- 主母萨丝琳
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 230362)
@@ -62,8 +63,8 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 236011, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 238018, 5)
 
 BOSS = 1897 -- 戒卫侍女
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 235213, 1)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 235240, 1)
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 235213, 1)
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 235240, 1)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 243276)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 235538)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 235534)
