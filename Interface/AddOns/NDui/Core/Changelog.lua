@@ -42,12 +42,8 @@ local function changelog()
 		offset = offset + 20
 	end
 	f:SetSize(400, 60 + offset)
-	local close = CreateFrame("Button", nil, f)
+	local close = B.CreateButton(f, 20, 20, "X")
 	close:SetPoint("TOPRIGHT", -10, -10)
-	close:SetSize(20, 20)
-	B.CreateBD(close, .3)
-	B.CreateFS(close, 12, "X", true)
-	B.CreateBC(close)
 	close:SetScript("OnClick", function(self) f:Hide() end)
 end
 

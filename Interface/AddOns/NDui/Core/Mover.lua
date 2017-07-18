@@ -85,16 +85,12 @@ local function CreateConsole()
 	lable:SetTextColor(1, .8, 0)
 	local bu, text = {}, {LOCK, CANCEL, L["Grids"], RESET}
 	for i = 1, 4 do
-		bu[i] = CreateFrame("Button", nil, f)
-		bu[i]:SetSize(70, 30)
+		bu[i] = B.CreateButton(f, 70, 30, text[i])
 		if i == 1 then
 			bu[i]:SetPoint("BOTTOMLEFT", 5, 5)
 		else
 			bu[i]:SetPoint("LEFT", bu[i-1], "RIGHT", 2, 0)
 		end
-		B.CreateBD(bu[i], .3, 2)
-		B.CreateBC(bu[i])
-		B.CreateFS(bu[i], 14, text[i], true)
 	end
 	-- Lock
 	bu[1]:SetScript("OnClick", function()

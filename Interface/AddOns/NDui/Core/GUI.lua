@@ -71,6 +71,7 @@ local defaultSettings = {
 		CombatText = true,
 		HotsDots = true,
 		PetCombatText = true,
+		RaidClickSets = false,
 	},
 	Chat = {
 		Sticky = false,
@@ -285,11 +286,13 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
 		{},--blank
-		{1, "UFs", "AutoRes", L["UFs AutoRes"]},
+		{1, "UFs", "NoTooltip", L["NoTooltip Auras"]},
 		{1, "UFs", "DebuffBorder", L["Auras Border"], true},
 		{1, "UFs", "Dispellable", L["Dispellable Only"]},
 		{1, "UFs", "InstanceAuras", L["Instance Auras"], true},
-		{1, "UFs", "NoTooltip", L["NoTooltip Auras"]},
+		{},--blank
+		{1, "UFs", "RaidClickSets", L["Enable ClickSets"]},
+		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", L["Enable Nameplate"]},
@@ -475,53 +478,45 @@ local function CreateOption(i)
 		local type, key, value, name, horizon, data = unpack(option)
 		-- Checkboxes
 		if type == 1 then
-			local cb = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+			local cb = B.CreateCheckBox(parent)
 			if horizon then
 				cb:SetPoint("TOPLEFT", 330, -offset + 35)
 			else
 				cb:SetPoint("TOPLEFT", 20, -offset)
 				offset = offset + 35
 			end
-			B.CreateCB(cb)
 			B.CreateFS(cb, 14, name, false, "LEFT", 30, 0)
 			cb:SetChecked(NDuiDB[key][value])
 			cb:SetScript("OnClick", function()
 				NDuiDB[key][value] = cb:GetChecked()
 			end)
-		-- Ediebox
+		-- Editbox
 		elseif type == 2 then
-			local e = CreateFrame("EditBox", nil, parent)
-			e:SetAutoFocus(false)
-			e:SetSize(200, 30)
-			e:SetMaxLetters(200)
-			e:SetTextInsets(10, 10, 0, 0)
-			e:SetFontObject(GameFontHighlight)
+			local eb = B.CreateEditBox(parent, 200, 30)
+			eb:SetMaxLetters(200)
 			if horizon then
-				e:SetPoint("TOPLEFT", 345, -offset + 50)
+				eb:SetPoint("TOPLEFT", 345, -offset + 50)
 			else
-				e:SetPoint("TOPLEFT", 35, -offset - 20)
+				eb:SetPoint("TOPLEFT", 35, -offset - 20)
 				offset = offset + 70
 			end
-			e:SetText(NDuiDB[key][value])
-			B.CreateBD(e, .3)
-			e:SetScript("OnEscapePressed", function()
-				e:ClearFocus()
-				e:SetText(NDuiDB[key][value])
+			eb:SetText(NDuiDB[key][value])
+			eb:HookScript("OnEscapePressed", function()
+				eb:SetText(NDuiDB[key][value])
 			end)
-			e:SetScript("OnEnterPressed", function()
-				e:ClearFocus()
-				NDuiDB[key][value] = e:GetText()
+			eb:HookScript("OnEnterPressed", function()
+				NDuiDB[key][value] = eb:GetText()
 			end)
-			e:SetScript("OnEnter", function(self)
+			eb:SetScript("OnEnter", function(self)
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 				GameTooltip:ClearLines()
 				GameTooltip:AddLine(L["Tips"])
 				GameTooltip:AddLine(L["EdieBox Tip"], .6,.8,1)
 				GameTooltip:Show()
 			end)
-			e:SetScript("OnLeave", GameTooltip_Hide)
+			eb:SetScript("OnLeave", GameTooltip_Hide)
 
-			local label = B.CreateFS(e, 14, name, false, "CENTER", 0, 25)
+			local label = B.CreateFS(eb, 14, name, false, "CENTER", 0, 25)
 			label:SetTextColor(1, .8, 0)
 		-- Slider
 		elseif type == 3 then
@@ -561,36 +556,19 @@ local function CreateOption(i)
 			slider:SetBlendMode("ADD")
 		-- Dropdown
 		elseif type == 4 then
-			local drop = CreateFrame("Frame", nil, parent)
+			local dd = B.CreateDropDown(parent, 200, 30, data)
 			if horizon then
-				drop:SetPoint("TOPLEFT", 345, -offset + 50)
+				dd:SetPoint("TOPLEFT", 345, -offset + 50)
 			else
-				drop:SetPoint("TOPLEFT", 35, -offset - 20)
+				dd:SetPoint("TOPLEFT", 35, -offset - 20)
 				offset = offset + 70
 			end
-			drop:SetSize(200, 30)
-			B.CreateBD(drop, .3)		
-			local t = B.CreateFS(drop, 14, data[NDuiDB[key][value]])
-			local b = CreateFrame("Button", nil, drop)
-			b:SetPoint("LEFT", drop, "RIGHT")
-			b:SetSize(22, 22)
-			b.Icon = b:CreateTexture(nil, "ARTWORK")
-			b.Icon:SetAllPoints()
-			b.Icon:SetTexture(DB.gearTex)
-			b.Icon:SetTexCoord(0, .5, 0, .5)
-			b:SetHighlightTexture(DB.gearTex)
-			b:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-			local l = CreateFrame("Frame", nil, drop)
-			l:SetPoint("TOP", drop, "BOTTOM")
-			B.CreateBD(l, .7)
-			b:SetScript("OnShow", function() l:Hide() end)
-			local label = B.CreateFS(drop, 14, name, false, "CENTER", 0, 25)
-			label:SetTextColor(1, .8, 0)
+			dd.Text:SetText(data[NDuiDB[key][value]])
 
-			local opt = {}
-			local function selectOpt(i)
+			local opt = dd.options
+			dd.button:HookScript("OnClick", function()
 				for num = 1, #data do
-					if num == i then
+					if num == NDuiDB[key][value] then
 						opt[num]:SetBackdropColor(1, .8, 0, .3)
 						opt[num].checked = true
 					else
@@ -598,35 +576,15 @@ local function CreateOption(i)
 						opt[num].checked = false
 					end
 				end
-				NDuiDB[key][value] = i
-				t:SetText(data[i])
+			end)
+			for i in pairs(data) do
+				opt[i]:HookScript("OnClick", function()
+					NDuiDB[key][value] = i
+				end)
 			end
-			for i, j in pairs(data) do
-				opt[i] = CreateFrame("Button", nil, l)
-				opt[i]:SetPoint("TOPLEFT", 5, -5 - (i-1)*30)
-				opt[i]:SetSize(190, 30)
-				B.CreateBD(opt[i], .1)
-				B.CreateFS(opt[i], 14, j, false, "LEFT", 8, 0)
-				opt[i]:SetScript("OnClick", function(self)
-					PlaySound("gsTitleOptionOK")
-					selectOpt(i)
-					l:Hide()
-				end)
-				opt[i]:SetScript("OnEnter", function(self)
-					if self.checked then return end
-					self:SetBackdropColor(1, 1, 1, .3)
-				end)
-				opt[i]:SetScript("OnLeave", function(self)
-					if self.checked then return end
-					self:SetBackdropColor(0, 0, 0, .3)
-				end)
-				b:SetScript("OnClick", function()
-					PlaySound("gsTitleOptionOK")
-					ToggleFrame(l)
-					selectOpt(NDuiDB[key][value])
-				end)
-				l:SetSize(200, i*30 + 10)
-			end
+
+			local label = B.CreateFS(dd, 14, name, false, "CENTER", 0, 25)
+			label:SetTextColor(1, .8, 0)
 		-- String
 		elseif type == 5 then
 			local fs = parent:CreateFontString(nil, "OVERLAY")
@@ -666,22 +624,14 @@ local function OpenGUI()
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
 	B.CreateFS(f, 16, DB.Version.." ("..DB.Support..")", false, "TOP", 0, -30)
 
-	local close = CreateFrame("Button", nil, f)
+	local close = B.CreateButton(f, 80, 20, CLOSE)
 	close:SetPoint("BOTTOMRIGHT", -20, 15)
-	close:SetSize(80, 20)
 	close:SetFrameLevel(3)
-	B.CreateBD(close, .3)
-	B.CreateBC(close)
-	B.CreateFS(close, 14, CLOSE, true)
 	close:SetScript("OnClick", function() f:Hide() end)
 
-	local ok = CreateFrame("Button", nil, f)
+	local ok = B.CreateButton(f, 80, 20, OKAY)
 	ok:SetPoint("RIGHT", close, "LEFT", -10, 0)
-	ok:SetSize(80, 20)
 	ok:SetFrameLevel(3)
-	B.CreateBD(ok, .3)
-	B.CreateBC(ok)
-	B.CreateFS(ok, 14, OKAY, true)
 	ok:SetScript("OnClick", function()
 		local scale = NDuiDB["Settings"]["SetScale"]
 		if scale < .65 then
@@ -724,12 +674,8 @@ local function OpenGUI()
 		CreateOption(i)
 	end
 
-	local reset = CreateFrame("Button", nil, f)
+	local reset = B.CreateButton(f, 120, 20, L["NDui Reset"])
 	reset:SetPoint("BOTTOMLEFT", 25, 15)
-	reset:SetSize(120, 20)
-	B.CreateBD(reset, .3)
-	B.CreateBC(reset)
-	B.CreateFS(reset, 14, L["NDui Reset"], true)
 	StaticPopupDialogs["RESET_NDUI"] = {
 		text = L["Reset NDui Check"],
 		button1 = YES,
@@ -773,13 +719,18 @@ local function OpenGUI()
 		end
 	end)
 
+	-- Toggle RaidFrame ClickSets
+	local clickSet = B.CreateButton(guiPage[4], 150, 30, L["Add ClickSets"])
+	clickSet:SetPoint("TOPLEFT", 40, -440)
+	clickSet:SetScript("OnClick", function()
+		f:Hide()
+		SlashCmdList["NDUI_AWCONFIG"]()
+		_G["NDui_AWConfigTab12"]:Click()
+	end)
+
 	-- Toggle AuraWatch Console
-	local aura = CreateFrame("Button", nil, guiPage[6])
-	aura:SetSize(150, 30)
+	local aura = B.CreateButton(guiPage[6], 150, 30, L["Add AuraWatch"])
 	aura:SetPoint("TOPLEFT", 340, -50)
-	B.CreateBD(aura, .3)
-	B.CreateBC(aura)
-	B.CreateFS(aura, 14, L["Add AuraWatch"], true)
 	aura:SetScript("OnClick", function()
 		f:Hide()
 		SlashCmdList["NDUI_AWCONFIG"]()

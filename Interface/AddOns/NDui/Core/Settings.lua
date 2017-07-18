@@ -364,18 +364,10 @@ local function YesTutor()
 	body:SetWordWrap(true)
 	local foot = B.CreateFS(tutor, 12, "", false, "BOTTOM", 0, 10)
 
-	local pass = CreateFrame("Button", nil, tutor)
+	local pass = B.CreateButton(tutor, 50, 20, L["Skip"])
 	pass:SetPoint("BOTTOMLEFT", 10, 10)
-	pass:SetSize(50, 20)
-	B.CreateBD(pass, .3)
-	B.CreateFS(pass, 12, L["Skip"], true)
-	B.CreateBC(pass)
-	local apply = CreateFrame("Button", nil, tutor)
+	local apply = B.CreateButton(tutor, 50, 20, APPLY)
 	apply:SetPoint("BOTTOMRIGHT", -10, 10)
-	apply:SetSize(50, 20)
-	B.CreateBD(apply, .3)
-	B.CreateFS(apply, 12, APPLY, true)
-	B.CreateBC(apply)
 
 	local titles = {L["Default Settings"], UI_SCALE, L["ChatFrame"], L["Skins"], L["Tips"]}
 	local function RefreshText(page)
@@ -452,7 +444,7 @@ local function HelloWorld()
 	local c1, c2 = "|c00FFFF00", "|c0000FF00"
 	local lines = {
 		c1.." /aw "..c2..L["Help Info4"],
-		c1.." /awc "..c2..L["Help Info12"],
+		c1.." /ww "..c2..L["Help Info12"],
 		c1.." /hb "..c2..L["Help Info5"],
 		c1.." /mm "..c2..L["Help Info6"],
 		c1.." /rl "..c2..L["Help Info7"],
@@ -466,20 +458,13 @@ local function HelloWorld()
 
 	B.CreateFS(welcome, 12, L["Help Info10"], false, "TOPLEFT", 20, -310)
 	B.CreateFS(welcome, 12, L["Help Info11"], false, "TOPLEFT", 20, -330)
-	local close = CreateFrame("Button", nil, welcome)
+
+	local close = B.CreateButton(welcome, 20, 20, "X")
 	close:SetPoint("TOPRIGHT", -10, -10)
-	close:SetSize(20, 20)
-	B.CreateBD(close, .3)
-	B.CreateFS(close, 12, "X", true)
-	B.CreateBC(close)
 	close:SetScript("OnClick", function() welcome:Hide() end)
 
-	local goTutor = CreateFrame("Button", nil, welcome)
+	local goTutor = B.CreateButton(welcome, 100, 20, L["Tutorial"])
 	goTutor:SetPoint("BOTTOM", 0, 10)
-	goTutor:SetSize(100, 20)
-	B.CreateBD(goTutor, .3)
-	B.CreateFS(goTutor, 12, L["Tutorial"], true)
-	B.CreateBC(goTutor)
 	goTutor:SetScript("OnClick", function() welcome:Hide() YesTutor() end)
 end
 SlashCmdList["NDUI"] = function() HelloWorld() end

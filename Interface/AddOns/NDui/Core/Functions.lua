@@ -357,3 +357,105 @@ B.CopyTable = function(source, target)
 		end
 	end
 end
+
+-- GUI APIs
+B.CreateButton = function(parent, width, height, text, fontSize)
+	local bu = CreateFrame("Button", nil, parent)
+	bu:SetSize(width, height)
+	B.CreateBD(bu, .3)
+	B.CreateBC(bu)
+	B.CreateFS(bu, fontSize or 14, text, true)
+
+	return bu
+end
+
+B.CreateCheckBox = function(parent)
+	local cb = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+	B.CreateCB(cb)
+
+	cb.Type = "CheckBox"
+	return cb
+end
+
+B.CreateEditBox = function(parent, width, height)
+	local eb = CreateFrame("EditBox", nil, parent)
+	eb:SetSize(width, height)
+	eb:SetAutoFocus(false)
+	eb:SetTextInsets(10, 10, 0, 0)
+	eb:SetFontObject(GameFontHighlight)
+	B.CreateBD(eb, .3)
+	eb:SetScript("OnEscapePressed", function()
+		eb:ClearFocus()
+	end)
+	eb:SetScript("OnEnterPressed", function()
+		eb:ClearFocus()
+	end)
+
+	eb.Type = "EditBox"
+	return eb
+end
+
+B.CreateDropDown = function(parent, width, height, data)
+	local dd = CreateFrame("Frame", nil, parent)
+	dd:SetSize(width, height)
+	B.CreateBD(dd, .3)
+	dd.Text = B.CreateFS(dd, 14, "")
+	dd.options = {}
+
+	local bu = CreateFrame("Button", nil, dd)
+	bu:SetPoint("LEFT", dd, "RIGHT", -2, 0)
+	bu:SetSize(22, 22)
+	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
+	bu.Icon:SetAllPoints()
+	bu.Icon:SetTexture(DB.gearTex)
+	bu.Icon:SetTexCoord(0, .5, 0, .5)
+	bu:SetHighlightTexture(DB.gearTex)
+	bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
+	local list = CreateFrame("Frame", nil, dd)
+	list:SetPoint("TOP", dd, "BOTTOM")
+	B.CreateBD(list, .7)
+	bu:SetScript("OnShow", function() list:Hide() end)
+	bu:SetScript("OnClick", function()
+		PlaySound("gsTitleOptionOK")
+		ToggleFrame(list)
+	end)
+	dd.button = bu
+
+	local opt, index = {}, 0
+	for i, j in pairs(data) do
+		opt[i] = CreateFrame("Button", nil, list)
+		opt[i]:SetPoint("TOPLEFT", 5, -5 - (i-1)*height)
+		opt[i]:SetSize(width - 10, height)
+		B.CreateBD(opt[i], .3)
+		B.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
+		opt[i]:SetScript("OnClick", function(self)
+			PlaySound("gsTitleOptionOK")
+			for num = 1, #opt do
+				if num == i then
+					opt[num]:SetBackdropColor(1, .8, 0, .3)
+					opt[num].selected = true
+				else
+					opt[num]:SetBackdropColor(0, 0, 0, .3)
+					opt[num].selected = false
+				end
+			end
+			dd.Text:SetText(j)
+			list:Hide()
+		end)
+		opt[i]:SetScript("OnEnter", function(self)
+			if self.selected then return end
+			self:SetBackdropColor(1, 1, 1, .3)
+		end)
+		opt[i]:SetScript("OnLeave", function(self)
+			if self.selected then return end
+			self:SetBackdropColor(0, 0, 0, .3)
+		end)
+
+		dd.options[i] = opt[i]
+		index = index + 1
+	end
+	list:SetSize(width, index*height + 10)
+
+	dd.Type = "DropDown"
+	return dd
+end

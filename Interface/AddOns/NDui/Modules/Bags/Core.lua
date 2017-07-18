@@ -312,9 +312,8 @@ function module:OnLogin()
 		tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT",0,0)
 		B.CreateFS(infoFrame, 12, SEARCH, true, "LEFT", 0, 1)
 
-		local SortButton = CreateFrame("Button", nil, self)
+		local SortButton = B.CreateButton(self, 60, 20, L["Sort"])
 		SortButton:SetPoint("BOTTOMLEFT", 5, 7)
-		SortButton:SetSize(60, 20)
 		SortButton:SetScript("OnClick", function()
 			if name == "Bank" then
 				SortBankBags()
@@ -333,17 +332,10 @@ function module:OnLogin()
 				end
 			end
 		end)
-		B.CreateBD(SortButton, .3)
-		B.CreateBC(SortButton)
-		B.CreateFS(SortButton, 12, L["Sort"], true)
 
-		local closebutton = CreateFrame("Button", nil, self)
+		local closebutton = B.CreateButton(self, 20, 20, "X")
 		closebutton:SetPoint("BOTTOMRIGHT", -5, 7)
-		closebutton:SetSize(20, 20)
 		closebutton:SetScript("OnClick", CloseAllBags)
-		B.CreateBD(closebutton, .3)
-		B.CreateBC(closebutton)
-		B.CreateFS(closebutton, 14, "X", true)
 
 		if name == "Main" or name == "Bank" then
 			local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
@@ -360,9 +352,8 @@ function module:OnLogin()
 			B.CreateBD(bg)
 			B.CreateTex(bg)
 
-			local bagToggle = CreateFrame("Button", nil, self)
+			local bagToggle = B.CreateButton(self, 60, 20, BAGSLOT)
 			bagToggle:SetPoint("LEFT", SortButton, "RIGHT", 6, 0)
-			bagToggle:SetSize(60, 20)
 			bagToggle:SetScript("OnClick", function()
 				if self.BagBar:IsShown() then
 					self.BagBar:Hide()
@@ -370,16 +361,13 @@ function module:OnLogin()
 					self.BagBar:Show()
 				end
 			end)
-			B.CreateBD(bagToggle, .3)
-			B.CreateBC(bagToggle)
-			B.CreateFS(bagToggle, 12, BAGSLOT, true)
 
 			if name == "Bank" then
 				bg:SetPoint("TOPLEFT", -10, 10)
 				bg:SetPoint("BOTTOMRIGHT", 10, -10)
-				local switch = CreateFrame("Button", nil, self)
+
+				local switch = B.CreateButton(self, 70, 20, REAGENT_BANK)
 				switch:SetPoint("LEFT", bagToggle, "RIGHT", 6, 0)
-				switch:SetSize(70, 20)
 				switch:RegisterForClicks("AnyUp")
 				switch:SetScript("OnClick", function(self, button)
 					if not IsReagentBankUnlocked() then
@@ -395,22 +383,14 @@ function module:OnLogin()
 						end
 					end
 				end)
-				B.CreateBD(switch, .3)
-				B.CreateBC(switch)
-				B.CreateFS(switch, 12, REAGENT_BANK, true)
 			end
 		elseif name == "Reagent" then
-			local deposit = CreateFrame("Button", nil, self)
+			local deposit = B.CreateButton(self, 100, 20, REAGENTBANK_DEPOSIT)
 			deposit:SetPoint("LEFT", SortButton, "RIGHT", 6, 0)
-			deposit:SetSize(100, 20)
 			deposit:SetScript("OnClick", DepositReagentBank)
-			B.CreateBD(deposit, .3)
-			B.CreateBC(deposit)
-			B.CreateFS(deposit, 12, REAGENTBANK_DEPOSIT, true)
 
-			local switch = CreateFrame("Button", nil, self)
+			local switch = B.CreateButton(self, 70, 20, BANK)
 			switch:SetPoint("LEFT", deposit, "RIGHT", 6, 0)
-			switch:SetSize(70, 20)
 			switch:SetScript("OnClick", function()
 				PlaySound("igCharacterInfoTab")
 				ReagentBankFrame:Hide()
@@ -418,9 +398,6 @@ function module:OnLogin()
 				f.reagent:Hide()
 				f.bank:Show()
 			end)
-			B.CreateBD(switch, .3)
-			B.CreateBC(switch)
-			B.CreateFS(switch, 12, BANK, true)
 		end
 
 		-- Add Sound

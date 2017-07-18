@@ -18,33 +18,21 @@ local function CreatePanel()
 	f:SetFrameStrata("HIGH")
 	tinsert(UISpecialFrames, "NDui_AWConfig")
 
-	f.Close = CreateFrame("Button", nil, f)
+	f.Close = B.CreateButton(f, 80, 20, CLOSE)
 	f.Close:SetPoint("BOTTOMRIGHT", -20, 15)
-	f.Close:SetSize(80, 20)
-	B.CreateBD(f.Close, .3)
-	B.CreateBC(f.Close)
-	B.CreateFS(f.Close, 14, CLOSE, true)
 	f.Close:SetScript("OnClick", function()
 		f:Hide()
 	end)
 
-	f.Complete = CreateFrame("Button", nil, f)
+	f.Complete = B.CreateButton(f, 80, 20, OKAY)
 	f.Complete:SetPoint("RIGHT", f.Close, "LEFT", -10, 0)
-	f.Complete:SetSize(80, 20)
-	B.CreateBD(f.Complete, .3)
-	B.CreateBC(f.Complete)
-	B.CreateFS(f.Complete, 14, OKAY, true)
 	f.Complete:SetScript("OnClick", function()
 		f:Hide()
 		StaticPopup_Show("RELOAD_NDUI")
 	end)
 
-	f.Reset = CreateFrame("Button", nil, f)
+	f.Reset = B.CreateButton(f, 120, 20, L["NDui Reset"])
 	f.Reset:SetPoint("BOTTOMLEFT", 25, 15)
-	f.Reset:SetSize(120, 20)
-	B.CreateBD(f.Reset, .3)
-	B.CreateBC(f.Reset)
-	B.CreateFS(f.Reset, 14, L["NDui Reset"], true)
 	StaticPopupDialogs["RESET_NDUI_AWLIST"] = {
 		text = L["Reset your AuraWatch List?"],
 		button1 = YES,
@@ -53,6 +41,7 @@ local function CreatePanel()
 			NDuiDB["AuraWatchList"] = {}
 			NDuiDB["InternalCD"] = {}
 			NDuiADB["RaidDebuffs"] = {}
+			NDuiDB["RaidClickSets"] = {}
 			ReloadUI()
 		end,
 		whileDead = 1,
@@ -78,100 +67,28 @@ local function CreatePanel()
 	end
 
 	local function CreateEditbox(parent, text, x, y, tip)
-		local eb = CreateFrame("EditBox", nil, parent)
-		eb:SetAutoFocus(false)
-		eb:SetSize(90, 30)
-		eb:SetMaxLetters(8)
-		eb:SetTextInsets(10, 10, 0, 0)
-		eb:SetFontObject(GameFontHighlight)
+		local eb = B.CreateEditBox(parent, 90, 30)
 		eb:SetPoint("TOPLEFT", x, y)
-		B.CreateBD(eb, .3)
+		eb:SetMaxLetters(8)
 		CreateLabel(eb, text, tip)
-		eb:SetScript("OnEscapePressed", function()
-			eb:ClearFocus()
-		end)
-		eb:SetScript("OnEnterPressed", function()
-			eb:ClearFocus()
-		end)
 
-		eb.Type = "EditBox"
 		return eb
 	end
 
 	local function CreateCheckBox(parent, text, x, y, tip)
-		local cb = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+		local cb = B.CreateCheckBox(parent)
 		cb:SetPoint("TOPLEFT", x, y)
 		cb:SetHitRectInsets(-5, -5, -5, -5)
-		B.CreateCB(cb)
 		CreateLabel(cb, text, tip)
 
-		cb.Type = "CheckBox"
 		return cb
 	end
 
-	local function CreateDropdown(parent, text, x, y, options, tip)
-		local dd = CreateFrame("Frame", nil, parent)
+	local function CreateDropdown(parent, text, x, y, data, tip, width, height)
+		local dd = B.CreateDropDown(parent, width or 90, height or 30, data)
 		dd:SetPoint("TOPLEFT", x, y)
-		dd:SetSize(90, 30)
-		B.CreateBD(dd, .3)
-		dd.Text = B.CreateFS(dd, 14, "")
-		dd.Selection = {}
 		CreateLabel(dd, text, tip)
 
-		local bu = CreateFrame("Button", nil, dd)
-		bu:SetPoint("LEFT", dd, "RIGHT", -2, 0)
-		bu:SetSize(22, 22)
-		bu.Icon = bu:CreateTexture(nil, "ARTWORK")
-		bu.Icon:SetAllPoints()
-		bu.Icon:SetTexture(DB.gearTex)
-		bu.Icon:SetTexCoord(0, .5, 0, .5)
-		bu:SetHighlightTexture(DB.gearTex)
-		bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-		local list = CreateFrame("Frame", nil, dd)
-		list:SetPoint("TOP", dd, "BOTTOM")
-		B.CreateBD(list, .7)
-		bu:SetScript("OnShow", function() list:Hide() end)
-		bu:SetScript("OnClick", function()
-			PlaySound("gsTitleOptionOK")
-			ToggleFrame(list)
-		end)
-
-		local opt, index = {}, 0
-		for i, j in pairs(options) do
-			opt[i] = CreateFrame("Button", nil, list)
-			opt[i]:SetPoint("TOPLEFT", 5, -5 - (i-1)*30)
-			opt[i]:SetSize(80, 30)
-			B.CreateBD(opt[i], .3)
-			B.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
-			opt[i]:SetScript("OnClick", function(self)
-				PlaySound("gsTitleOptionOK")
-				for index = 1, #opt do
-					if index == i then
-						opt[index]:SetBackdropColor(1, .8, 0, .3)
-						opt[index].selected = true
-					else
-						opt[index]:SetBackdropColor(0, 0, 0, .3)
-						opt[index].selected = false
-					end
-				end
-				dd.Text:SetText(j)
-				list:Hide()
-			end)
-			opt[i]:SetScript("OnEnter", function(self)
-				if self.selected then return end
-				self:SetBackdropColor(1, 1, 1, .3)
-			end)
-			opt[i]:SetScript("OnLeave", function(self)
-				if self.selected then return end
-				self:SetBackdropColor(0, 0, 0, .3)
-			end)
-
-			dd.Selection[i] = opt[i]
-			index = index + 1
-		end
-		list:SetSize(90, index*30 + 10)
-
-		dd.Type = "DropDown"
 		return dd
 	end
 
@@ -183,8 +100,8 @@ local function CreatePanel()
 			element:SetChecked(false)
 		elseif element.Type == "DropDown" then
 			element.Text:SetText("")
-			for i = 1, #element.Selection do
-				element.Selection[i].selected = false
+			for i = 1, #element.options do
+				element.options[i].selected = false
 			end
 		end
 	end
@@ -220,7 +137,7 @@ local function CreatePanel()
 	local function SortBars(index)
 		local num, onLeft, onRight = 1, 1, 1
 		for k in pairs(barTable[index]) do
-			if (index < 10 and NDuiDB["AuraWatchList"][index][k] ~= nil) or (index == 10 and NDuiDB["InternalCD"][k] ~= nil) or (index == 11 and NDuiADB["RaidDebuffs"][k] ~= nil) then
+			if (index < 10 and NDuiDB["AuraWatchList"][index][k]) or (index == 10 and NDuiDB["InternalCD"][k]) or (index == 11 and NDuiADB["RaidDebuffs"][k]) or (index == 12 and NDuiDB["RaidClickSets"][k]) then
 				local bar = barTable[index][k]
 				if num == 1 then
 					bar:SetPoint("TOPLEFT", 10, -10)
@@ -395,21 +312,70 @@ local function CreatePanel()
 		SortBars(index)
 	end
 
+	local function AddRaidClickSets(parent, index, data)
+		local key, modKey, spellID = unpack(data)
+		local name, _, texture = GetSpellInfo(spellID)
+		local value = modKey..key
+
+		local bar = CreateFrame("Frame", nil, parent)
+		bar:SetSize(280, 30)
+		B.CreateBD(bar, .3)
+		barTable[index][value] = bar
+
+		local icon = CreateFrame("Frame", nil, bar)
+		icon:SetSize(20, 20)
+		icon:SetPoint("LEFT", 5, 0)
+		B.CreateIF(icon, true)
+		icon.Icon:SetTexture(texture)
+		icon:SetScript("OnEnter", function()
+			GameTooltip:ClearLines()
+			GameTooltip:SetOwner(icon, "ANCHOR_RIGHT", 0, 3)
+			GameTooltip:SetSpellByID(spellID)
+			GameTooltip:Show()
+		end)
+		icon:SetScript("OnLeave", GameTooltip_Hide)
+
+		local close = CreateFrame("Button", nil, bar)
+		close:SetSize(20, 20)
+		close:SetPoint("RIGHT", -5, 0)
+		close.Icon = close:CreateTexture(nil, "ARTWORK")
+		close.Icon:SetAllPoints()
+		close.Icon:SetTexture("Interface\\BUTTONS\\UI-GroupLoot-Pass-Up")
+		close:SetHighlightTexture(close.Icon:GetTexture())
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			NDuiDB["RaidClickSets"][value] = nil
+			barTable[index][value] = nil
+			SortBars(index)
+		end)
+
+		local spellName = B.CreateFS(bar, 14, name, false, "LEFT", 30, 0)
+		spellName:SetWidth(120)
+		spellName:SetJustifyH("LEFT")
+		local key1 = B.CreateFS(bar, 14, key, false, "RIGHT", -35, 0)
+		local key2 = B.CreateFS(bar, 14, modKey, false, "RIGHT", -35, 0)
+		key2:SetPoint("RIGHT", key1, "LEFT", -5, 0)
+		key2:SetTextColor(.6, .8, 1)
+
+		SortBars(index)
+	end
+
 	-- Main
 	if not NDuiDB["AuraWatchList"] then NDuiDB["AuraWatchList"] = {} end
 	if not NDuiDB["InternalCD"] then NDuiDB["InternalCD"] = {} end
 	local groups = {
-		L["Player Aura"],		-- 1 PlayerBuff
-		L["Special Aura"],		-- 2 SPECIAL
-		L["Target Aura"],		-- 3 TargetDebuff
-		L["Warning"],			-- 4 Warning
-		L["Focus Aura"],		-- 5 FOCUS
-		L["Spell Cooldown"],	-- 6 CD
-		L["Enchant Aura"],		-- 7 Enchant
-		L["Raid Buff"],			-- 8 RaidBuff
-		L["Raid Debuff"],		-- 9 RaidDebuff
-		L["InternalCD"],		-- 10 InternalCD
-		L["RaidFrame Debuffs"],	-- 11 RaidFrame Debuffs
+		L["Player Aura"],			-- 1 PlayerBuff
+		L["Special Aura"],			-- 2 SPECIAL
+		L["Target Aura"],			-- 3 TargetDebuff
+		L["Warning"],				-- 4 Warning
+		L["Focus Aura"],			-- 5 FOCUS
+		L["Spell Cooldown"],		-- 6 CD
+		L["Enchant Aura"],			-- 7 Enchant
+		L["Raid Buff"],				-- 8 RaidBuff
+		L["Raid Debuff"],			-- 9 RaidDebuff
+		L["InternalCD"],			-- 10 InternalCD
+		L["RaidFrame Debuffs"],		-- 11 RaidFrame Debuffs
+		L["RaidFrame ClickSets"],	-- 12 RaidFrame ClickSets
 	}
 	local instList = {
 		[1] = EJ_GetInstanceInfo(768),
@@ -422,7 +388,7 @@ local function CreatePanel()
 		if not NDuiDB["AuraWatchList"][i] then NDuiDB["AuraWatchList"][i] = {} end
 		barTable[i] = {}
 
-		tabs[i] = CreateFrame("Button", nil, f)
+		tabs[i] = CreateFrame("Button", "$parentTab"..i, f)
 		tabs[i]:SetPoint("TOPLEFT", 20, -40 - i*30)
 		tabs[i]:SetSize(130, 30)
 		B.CreateBD(tabs[i], .3)
@@ -437,8 +403,8 @@ local function CreatePanel()
 
 		local Option = {}
 		if i < 10 then
-			for k, _ in pairs(NDuiDB["AuraWatchList"][i]) do
-				AddAura(tabs[i].List.Child, i, NDuiDB["AuraWatchList"][i][k])
+			for _, v in pairs(NDuiDB["AuraWatchList"][i]) do
+				AddAura(tabs[i].List.Child, i, v)
 			end
 			Option[1] = CreateDropdown(tabs[i].Page, L["Type*"], 20, -30, {"AuraID", "SpellID", "SlotID", "TotemID"}, L["Type Intro"])
 			Option[2] = CreateEditbox(tabs[i].Page, "ID*", 140, -30, L["ID Intro"])
@@ -454,8 +420,8 @@ local function CreatePanel()
 
 			for i = 2, 11 do Option[i]:Hide() end
 
-			for i = 1, #Option[1].Selection do
-				Option[1].Selection[i]:HookScript("OnClick", function()
+			for i = 1, #Option[1].options do
+				Option[1].options[i]:HookScript("OnClick", function()
 					for i = 2, 11 do
 						Option[i]:Hide()
 						ClearEdit(Option[i])
@@ -473,27 +439,46 @@ local function CreatePanel()
 				end)
 			end
 		elseif i == 10 then
-			for k, _ in pairs(NDuiDB["InternalCD"]) do
-				AddInternal(tabs[i].List.Child, i, NDuiDB["InternalCD"][k])
+			for _, v in pairs(NDuiDB["InternalCD"]) do
+				AddInternal(tabs[i].List.Child, i, v)
 			end
 			Option[12] = CreateEditbox(tabs[i].Page, L["IntID*"], 20, -30, L["IntID Intro"])
 			Option[13] = CreateEditbox(tabs[i].Page, L["Duration*"], 140, -30, L["Duration Intro"])
 			Option[14] = CreateEditbox(tabs[i].Page, L["ItemID"], 260, -30, L["ItemID Intro"])
 		elseif i == 11 then
-			for k, _ in pairs(NDuiADB["RaidDebuffs"]) do
-				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][k])
+			for _, v in pairs(NDuiADB["RaidDebuffs"]) do
+				AddRaidDebuffs(tabs[i].List.Child, i, v)
 			end
-			Option[15] = CreateDropdown(tabs[i].Page, L["Instance*"], 20, -30, {instList[1], instList[2], instList[3], instList[4]}, L["Instance Intro"])
-			Option[16] = CreateEditbox(tabs[i].Page, "ID*", 140, -30, L["ID Intro"])
-			Option[17] = CreateEditbox(tabs[i].Page, L["Priority"], 260, -30, L["Priority Intro"])
+			Option[15] = CreateDropdown(tabs[i].Page, L["Instance*"], 20, -30, {instList[1], instList[2], instList[3], instList[4]}, L["Instance Intro"], 150, 30)
+			Option[16] = CreateEditbox(tabs[i].Page, "ID*", 200, -30, L["ID Intro"])
+			Option[17] = CreateEditbox(tabs[i].Page, L["Priority"], 320, -30, L["Priority Intro"])
+		elseif i == 12 then
+			for _, v in pairs(NDuiDB["RaidClickSets"]) do
+				AddRaidClickSets(tabs[i].List.Child, i, v)
+			end
+			Option[18] = CreateEditbox(tabs[i].Page, "ID*", 20, -30, L["ID Intro"])
+			Option[19] = CreateDropdown(tabs[i].Page, L["Key*"], 140, -30, {KEY_BUTTON1, KEY_BUTTON2, KEY_BUTTON4, KEY_BUTTON5}, L["Key Intro"], 110, 30)
+			Option[20] = CreateDropdown(tabs[i].Page, L["Modified Key"], 280, -30, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"])
+
+			local reset = B.CreateButton(tabs[i].Page, 70, 25, RESET)
+			reset:SetPoint("TOPRIGHT", -200, -90)
+			StaticPopupDialogs["RESET_NDUI_CLICKSETS"] = {
+				text = L["Reset your click sets?"],
+				button1 = YES,
+				button2 = NO,
+				OnAccept = function()
+					NDuiDB["RaidClickSets"] = nil
+					ReloadUI()
+				end,
+				whileDead = 1,
+			}
+			reset:SetScript("OnClick", function()
+				StaticPopup_Show("RESET_NDUI_CLICKSETS")
+			end)
 		end
 
-		local clear = CreateFrame("Button", nil, tabs[i].Page)
+		local clear = B.CreateButton(tabs[i].Page, 70, 25, KEY_NUMLOCK_MAC)
 		clear:SetPoint("TOPRIGHT", -120, -90)
-		clear:SetSize(70, 25)
-		B.CreateBD(clear, .3)
-		B.CreateBC(clear)
-		B.CreateFS(clear, 14, KEY_NUMLOCK_MAC, true)
 		clear:SetScript("OnClick", function()
 			if i < 10 then
 				for j = 1, 11 do ClearEdit(Option[j]) end
@@ -502,24 +487,22 @@ local function CreatePanel()
 				for j = 12, 14 do ClearEdit(Option[j]) end
 			elseif i == 11 then
 				for j = 15, 17 do ClearEdit(Option[j]) end
+			elseif i== 12 then
+				for j = 18, 20 do ClearEdit(Option[j]) end
 			end
 		end)
 
 		local slotTable = {6, 11, 12, 13, 14, 15}
-		local add = CreateFrame("Button", nil, tabs[i].Page)
+		local add = B.CreateButton(tabs[i].Page, 70, 25, ADD)
 		add:SetPoint("TOPRIGHT", -40, -90)
-		add:SetSize(70, 25)
-		B.CreateBD(add, .3)
-		B.CreateBC(add)
-		B.CreateFS(add, 14, ADD, true)
 		add:SetScript("OnClick", function()
 			if i < 10 then
 				local typeID, spellID, unitID, slotID, totemID = Option[1].Text:GetText(), tonumber(Option[2]:GetText()), Option[3].Text:GetText()
-				for i = 1, #Option[10].Selection do
-					if Option[10].Selection[i].selected then slotID = slotTable[i] break end
+				for i = 1, #Option[10].options do
+					if Option[10].options[i].selected then slotID = slotTable[i] break end
 				end
-				for i = 1, #Option[11].Selection do
-					if Option[11].Selection[i].selected then totemID = i break end
+				for i = 1, #Option[11].options do
+					if Option[11].options[i].selected then totemID = i break end
 				end
 
 				if not typeID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Choose a Type"]) return end
@@ -551,6 +534,18 @@ local function CreatePanel()
 				NDuiADB["RaidDebuffs"][spellID] = {instName, spellID, priority}
 				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][spellID])
 				for i = 15, 17 do ClearEdit(Option[i]) end
+			elseif i == 12 then
+				local spellID, key, modKey = tonumber(Option[18]:GetText()), Option[19].Text:GetText(), Option[20].Text:GetText()
+				if not spellID or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
+				if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				if not modKey or modKey == NONE then modKey = "" end
+				local value = modKey..key
+				if value == KEY_BUTTON1 or value == "SHIFT"..KEY_BUTTON1 then UIErrorsFrame:AddMessage(DB.InfoColor..L["Forbidden ClickSet"]) return end
+				if NDuiDB["RaidClickSets"][value] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
+
+				NDuiDB["RaidClickSets"][value] = {key, modKey, spellID}
+				AddRaidClickSets(tabs[i].List.Child, i, NDuiDB["RaidClickSets"][value])
+				for i = 18, 20 do ClearEdit(Option[i]) end
 			end
 		end)
 
@@ -597,3 +592,4 @@ SlashCmdList["NDUI_AWCONFIG"] = function()
 	CreatePanel()
 end
 SLASH_NDUI_AWCONFIG1 = "/awc"
+SLASH_NDUI_AWCONFIG2 = "/ww"

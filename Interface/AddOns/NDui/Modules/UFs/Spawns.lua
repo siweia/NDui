@@ -146,6 +146,7 @@ local function CreateRaidStyle(self)
 	UF:CreateTargetBorder(self)
 	UF:CreateRaidIcons(self)
 	UF:CreatePrediction(self)
+	UF:CreateClickSets(self)
 
 	if not NDuiDB["UFs"]["SimpleMode"] then
 		UF:CreateRaidDebuffs(self)
@@ -176,6 +177,9 @@ function UF:OnLogin()
 		oUF:SetActiveStyle("Nameplates")
 		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
 	end
+
+	-- Default Clicksets for RaidFrame
+	self:DefaultClickSets()
 
 	if not NDuiDB["UFs"]["Enable"] then return end
 

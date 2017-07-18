@@ -114,12 +114,8 @@ function module:BeamTool()
 		end)
 
 		local function CreateBu(anchor, text)
-			local bu = CreateFrame("Button", nil, f)
-			bu:SetSize(40, 40)
+			local bu = B.CreateButton(f, 40, 40, text, 20)
 			bu:SetPoint(anchor)
-			B.CreateFS(bu, 20, text)
-			B.CreateBD(bu, .3)
-			B.CreateBC(bu)
 			bu:SetScript("OnClick", function()
 				f.text:SetText(text)
 				if text == "左" then
@@ -181,13 +177,14 @@ end
 ]]
 function module:VersionCheck()
 	if not NDuiDB["Settings"]["VersionCheck"] then return end
+	if not NDuiADB["DetectVersion"] then NDuiADB["DetectVersion"] = DB.Version end
+	if not IsInGuild() then return end
 
 	NDui:EventFrame("CHAT_MSG_ADDON"):SetScript("OnEvent", function(self, event, ...)
 		local prefix, msg, distType, sender = ...
 		if distType ~= "GUILD" then return end
 
 		if prefix == "NDuiVersionCheck" then
-			if not NDuiADB["DetectVersion"] then NDuiADB["DetectVersion"] = DB.Version end
 			local a1, a2, a3 = string.split(".", msg)
 			local c1, c2, c3 = string.split(".", NDuiADB["DetectVersion"])
 			if a1 > c1 or a2 > c2 or a3 > c3 then
