@@ -475,8 +475,8 @@ do
 			else
 				curGold, remainGold = randomRoll(remainGold or maxGold)
 				goldList[author] = curGold
-				sendMsg(author.."抢到了"..curGold.."金。")
 				index = index + 1
+				sendMsg(author.."抢到了"..curGold.."金。")
 			end
 		end
 	end)
