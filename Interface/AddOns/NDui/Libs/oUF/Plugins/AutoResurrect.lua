@@ -35,10 +35,10 @@ local function macroBody(class)
 	body = "/stopmacro [@mouseover,nodead]\n"
 
 	if class == "HUNTER" then
-		local name1 = GetSpellInfo(126393)	--魁麟
-		body = body.."/cast [@mouseover,help,dead] "..name1.."\n"
-		local name2 = GetSpellInfo(159931)	--鹤
-		body = body.."/cast [@mouseover,help,dead] "..name2.."; "
+		local res1 = GetSpellInfo(126393)	--魁麟
+		local res2 = GetSpellInfo(159931)	--鹤
+		local res3 = GetSpellInfo(159956)	--蛾
+		local resMacro = "/cast [@mouseover,help,dead]"..res1.."\n/cast [@mouseover,help,dead]"..res2.."\n/cast [@mouseover,help,dead]"..res3
 	elseif class == "WARLOCK" then
 		local name = GetSpellInfo(20707)	--灵魂石
 		body = body.."/cast [@mouseover,help,dead] "..name.."; "
