@@ -38,7 +38,7 @@ local function macroBody(class)
 		local res1 = GetSpellInfo(126393)	--魁麟
 		local res2 = GetSpellInfo(159931)	--鹤
 		local res3 = GetSpellInfo(159956)	--蛾
-		local resMacro = "/cast [@mouseover,help,dead]"..res1.."\n/cast [@mouseover,help,dead]"..res2.."\n/cast [@mouseover,help,dead]"..res3
+		body = body.."/cast [@mouseover,help,dead]"..res1.."\n/cast [@mouseover,help,dead]"..res2.."\n/cast [@mouseover,help,dead]"..res3.."; "
 	elseif class == "WARLOCK" then
 		local name = GetSpellInfo(20707)	--灵魂石
 		body = body.."/cast [@mouseover,help,dead] "..name.."; "
