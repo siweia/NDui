@@ -89,6 +89,8 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
+				--苦痛之矛
+				{AuraID = 243644, UnitID = "player"},
 				--醒神宝典
 				{AuraID = 243942, UnitID = "player"},
 				--灭绝引擎
@@ -2480,8 +2482,6 @@ C.AuraWatchList = {
 				{AuraID =  55095, UnitID = "target", Caster = "player"},
 				--恶性瘟疫
 				{AuraID = 191587, UnitID = "target", Caster = "player"},
-				--心脏打击
-				{AuraID = 206930, UnitID = "target", Caster = "player"},
 				--黑暗命令
 				{AuraID =  56222, UnitID = "target", Caster = "player"},
 				--寒冰锁链
