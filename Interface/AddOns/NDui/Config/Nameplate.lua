@@ -2,6 +2,7 @@ local _, C, _, _ = unpack(select(2, ...))
 
 -- 法术白名单
 C.WhiteList = {
+	[117405]	= true,		-- 束缚射击
 	-- 种族技能
 	[28730] 	= true,		-- 奥术洪流
 	[20549] 	= true,		-- 战争践踏

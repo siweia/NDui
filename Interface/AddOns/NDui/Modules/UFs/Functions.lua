@@ -368,6 +368,7 @@ local function postCreateIcon(element, button)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
 	button.count = B.CreateFS(parentFrame, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
+	button.cd:SetReverse(true)
 
 	button.icon:SetTexCoord(unpack(DB.TexCoord))
 	button.icon:SetDrawLayer("ARTWORK")
@@ -376,7 +377,6 @@ local function postCreateIcon(element, button)
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .3)
 	button.HL:SetAllPoints()
-	button.cd:SetReverse(true)
 end
 
 local function postUpdateIcon(element, unit, button, index)
@@ -419,7 +419,7 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, _, caste
 		elseif C.BlackList and C.BlackList[spellID] then
 			return false
 		else
-			return (NDuiDB["Nameplate"]["AllAuras"] and nameplateShowAll) or (caster == "player" or caster == "pet" or caster == "vehicle")
+			return (NDuiDB["Nameplate"]["AllAuras"] and nameplateShowAll) or nameplateShowSelf and (caster == "player" or caster == "pet" or caster == "vehicle")
 		end
 	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
 		return true
