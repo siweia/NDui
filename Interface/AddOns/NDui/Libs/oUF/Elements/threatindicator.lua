@@ -22,7 +22,11 @@ local function Update(self, event, unit)
 	local r, g, b
 	if(status and status > 0) then
 		r, g, b = GetThreatStatusColor(status)
-		element:SetVertexColor(r, g, b)
+
+		if(element.SetVertexColor) then
+			element:SetVertexColor(r, g, b)
+		end
+
 		element:Show()
 	else
 		element:Hide()
