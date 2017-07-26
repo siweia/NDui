@@ -7,18 +7,22 @@ function Bar:CreateBar3()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 	local layout = NDuiDB["Actionbar"]["Style"]
-	if layout == 4 then cfg = C.bars.bar2 end
+	if layout > 3 then cfg = C.bars.bar2 end
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "NDui_ActionBar3", UIParent, "SecureHandlerStateTemplate")
-	if layout ~= 4 then
-		frame:SetWidth(19*cfg.size + 17*margin + 2*padding)
-		frame:SetHeight(2*cfg.size + margin + 2*padding)
-		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 26}
-	else
+	if layout == 4 then
 		frame:SetWidth(num*cfg.size + (num-1)*margin + 2*padding)
 		frame:SetHeight(cfg.size + 2*padding)
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 96}
+	elseif layout == 5 then
+		frame:SetWidth(6*cfg.size + 5*margin + 2*padding)
+		frame:SetHeight(2*cfg.size + margin + 2*padding)
+		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 216, 24}
+	else
+		frame:SetWidth(19*cfg.size + 17*margin + 2*padding)
+		frame:SetHeight(2*cfg.size + margin + 2*padding)
+		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 26}
 	end
 	frame:SetScale(cfg.scale)
 
@@ -32,18 +36,18 @@ function Bar:CreateBar3()
 		button:SetSize(cfg.size, cfg.size)
 		button:ClearAllPoints()
 		if i == 1 then
-			if layout ~= 4 then
-				button:SetPoint("TOPLEFT", frame, padding, -padding)
-			else
+			if layout == 4 then
 				button:SetPoint("LEFT", frame, padding, 0)
+			else
+				button:SetPoint("TOPLEFT", frame, padding, -padding)
 			end
-		elseif layout ~= 4 and i == 4 then
+		elseif (i == 4 and layout < 4) or (i == 7 and layout == 5) then
 			local previous = _G["MultiBarBottomRightButton1"]
 			button:SetPoint("TOP", previous, "BOTTOM", 0, -margin)
-		elseif layout ~= 4 and i == 7 then
+		elseif i == 7 and layout < 4 then
 			local previous = _G["MultiBarBottomRightButton3"]
 			button:SetPoint("LEFT", previous, "RIGHT", 13*cfg.size+13*margin, 0)
-		elseif layout ~= 4 and i == 10 then
+		elseif i == 10 and layout < 4 then
 			local previous = _G["MultiBarBottomRightButton7"]
 			button:SetPoint("TOP", previous, "BOTTOM", 0, -margin)
 		else

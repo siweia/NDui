@@ -10,11 +10,7 @@ function Bar:CreateBar4()
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "NDui_ActionBar4", UIParent, "SecureHandlerStateTemplate")
-	if layout == 1 or layout == 4 then
-		frame:SetWidth(cfg.size + 2*padding)
-		frame:SetHeight(num*cfg.size + (num-1)*margin + 2*padding)
-		frame.Pos = {"RIGHT", UIParent, "RIGHT", -1, 0}
-	elseif layout == 2 then
+	if layout == 2 then
 		frame:SetWidth(25*cfg.size + 25*margin + 2*padding)
 		frame:SetHeight(2*cfg.size + margin + 2*padding)
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 26}
@@ -22,6 +18,10 @@ function Bar:CreateBar4()
 		frame:SetWidth(4*cfg.size + 3*margin + 2*padding)
 		frame:SetHeight(3*cfg.size + 2*margin + 2*padding)
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 395, 26}
+	else
+		frame:SetWidth(cfg.size + 2*padding)
+		frame:SetHeight(num*cfg.size + (num-1)*margin + 2*padding)
+		frame.Pos = {"RIGHT", UIParent, "RIGHT", -1, 0}
 	end
 	frame:SetScale(cfg.scale)
 
@@ -34,14 +34,7 @@ function Bar:CreateBar4()
 		table.insert(buttonList, button) --add the button object to the list
 		button:SetSize(cfg.size, cfg.size)
 		button:ClearAllPoints()
-		if layout == 1 or layout == 4 then
-			if i == 1 then
-				button:SetPoint("TOPRIGHT", frame, -padding, -padding)
-			else
-				local previous = _G["MultiBarRightButton"..i-1]
-				button:SetPoint("TOP", previous, "BOTTOM", 0, -margin)
-			end
-		elseif layout == 2 then
+		if layout == 2 then
 			if i == 1 then
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
 			elseif i == 4 then
@@ -66,6 +59,13 @@ function Bar:CreateBar4()
 			else
 				local previous = _G["MultiBarRightButton"..i-1]
 				button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
+			end
+		else
+			if i == 1 then
+				button:SetPoint("TOPRIGHT", frame, -padding, -padding)
+			else
+				local previous = _G["MultiBarRightButton"..i-1]
+				button:SetPoint("TOP", previous, "BOTTOM", 0, -margin)
 			end
 		end
 	end

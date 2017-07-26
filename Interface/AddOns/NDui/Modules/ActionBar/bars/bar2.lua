@@ -6,12 +6,17 @@ local padding, margin = 2, 2
 function Bar:CreateBar2()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
+	local layout = NDuiDB["Actionbar"]["Style"]
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "NDui_ActionBar2", UIParent, "SecureHandlerStateTemplate")
 	frame:SetWidth(num*cfg.size + (num-1)*margin + 2*padding)
 	frame:SetHeight(cfg.size + 2*padding)
-	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 60}
+	if layout == 5 then
+		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", -108, 60}
+	else
+		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 60}
+	end
 	frame:SetScale(cfg.scale)
 
 	--move the buttons into position and reparent them
