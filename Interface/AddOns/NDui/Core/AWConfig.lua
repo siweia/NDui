@@ -66,10 +66,10 @@ local function CreatePanel()
 		frame:SetScript("OnLeave", GameTooltip_Hide)
 	end
 
-	local function CreateEditbox(parent, text, x, y, tip)
-		local eb = B.CreateEditBox(parent, 90, 30)
+	local function CreateEditbox(parent, text, x, y, tip, width, height)
+		local eb = B.CreateEditBox(parent, width or 90, height or 30)
 		eb:SetPoint("TOPLEFT", x, y)
-		eb:SetMaxLetters(8)
+		eb:SetMaxLetters(255)
 		CreateLabel(eb, text, tip)
 
 		return eb
@@ -236,13 +236,7 @@ local function CreatePanel()
 		icon:SetPoint("LEFT", 5, 0)
 		B.CreateIF(icon, true)
 		icon.Icon:SetTexture(texture)
-		icon:SetScript("OnEnter", function()
-			GameTooltip:ClearLines()
-			GameTooltip:SetOwner(icon, "ANCHOR_RIGHT", 0, 3)
-			GameTooltip:SetSpellByID(intID)
-			GameTooltip:Show()
-		end)
-		icon:SetScript("OnLeave", GameTooltip_Hide)
+		B.CreateAT(icon, "ANCHOR_RIGHT", intID)
 
 		local close = CreateFrame("Button", nil, bar)
 		close:SetSize(20, 20)
@@ -279,13 +273,7 @@ local function CreatePanel()
 		icon:SetPoint("LEFT", 5, 0)
 		B.CreateIF(icon, true)
 		icon.Icon:SetTexture(texture)
-		icon:SetScript("OnEnter", function()
-			GameTooltip:ClearLines()
-			GameTooltip:SetOwner(icon, "ANCHOR_RIGHT", 0, 3)
-			GameTooltip:SetSpellByID(spellID)
-			GameTooltip:Show()
-		end)
-		icon:SetScript("OnLeave", GameTooltip_Hide)
+		B.CreateAT(icon, "ANCHOR_RIGHT", spellID)
 
 		local close = CreateFrame("Button", nil, bar)
 		close:SetSize(20, 20)
@@ -312,28 +300,37 @@ local function CreatePanel()
 		SortBars(index)
 	end
 
+	local textIndex = {
+		["target"] = TARGET,
+		["focus"] = SET_FOCUS,
+		["follow"] = FOLLOW,
+	}
 	local function AddRaidClickSets(parent, index, data)
-		local key, modKey, spellID = unpack(data)
-		local name, _, texture = GetSpellInfo(spellID)
-		local value = modKey..key
+		local key, modKey, value = unpack(data)
+		local clickSet = modKey..key
+		local name, texture
+		if tonumber(value) then
+			name, _, texture = GetSpellInfo(value)
+		else
+			name = textIndex[value] or MACRO
+			texture = 136243
+		end
 
 		local bar = CreateFrame("Frame", nil, parent)
 		bar:SetSize(280, 30)
 		B.CreateBD(bar, .3)
-		barTable[index][value] = bar
+		barTable[index][clickSet] = bar
 
 		local icon = CreateFrame("Frame", nil, bar)
 		icon:SetSize(20, 20)
 		icon:SetPoint("LEFT", 5, 0)
 		B.CreateIF(icon, true)
 		icon.Icon:SetTexture(texture)
-		icon:SetScript("OnEnter", function()
-			GameTooltip:ClearLines()
-			GameTooltip:SetOwner(icon, "ANCHOR_RIGHT", 0, 3)
-			GameTooltip:SetSpellByID(spellID)
-			GameTooltip:Show()
-		end)
-		icon:SetScript("OnLeave", GameTooltip_Hide)
+		if tonumber(value) then
+			B.CreateAT(icon, "ANCHOR_RIGHT", value)
+		else
+			B.CreateGT(icon, "ANCHOR_RIGHT", value, "system")
+		end
 
 		local close = CreateFrame("Button", nil, bar)
 		close:SetSize(20, 20)
@@ -344,8 +341,8 @@ local function CreatePanel()
 		close:SetHighlightTexture(close.Icon:GetTexture())
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			NDuiDB["RaidClickSets"][value] = nil
-			barTable[index][value] = nil
+			NDuiDB["RaidClickSets"][clickSet] = nil
+			barTable[index][clickSet] = nil
 			SortBars(index)
 		end)
 
@@ -353,9 +350,10 @@ local function CreatePanel()
 		spellName:SetWidth(120)
 		spellName:SetJustifyH("LEFT")
 		local key1 = B.CreateFS(bar, 14, key, false, "RIGHT", -35, 0)
+		key1:SetTextColor(.6, .8, 1)
 		local key2 = B.CreateFS(bar, 14, modKey, false, "RIGHT", -35, 0)
 		key2:SetPoint("RIGHT", key1, "LEFT", -5, 0)
-		key2:SetTextColor(.6, .8, 1)
+		key2:SetTextColor(0, 1, 0)
 
 		SortBars(index)
 	end
@@ -456,9 +454,9 @@ local function CreatePanel()
 			for _, v in pairs(NDuiDB["RaidClickSets"]) do
 				AddRaidClickSets(tabs[i].List.Child, i, v)
 			end
-			Option[18] = CreateEditbox(tabs[i].Page, "ID*", 20, -30, L["ID Intro"])
-			Option[19] = CreateDropdown(tabs[i].Page, L["Key*"], 140, -30, {KEY_BUTTON1, KEY_BUTTON2, KEY_BUTTON4, KEY_BUTTON5}, L["Key Intro"], 110, 30)
-			Option[20] = CreateDropdown(tabs[i].Page, L["Modified Key"], 280, -30, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"])
+			Option[18] = CreateEditbox(tabs[i].Page, L["Action*"], 20, -30, L["Action Intro"], 110, 30)
+			Option[19] = CreateDropdown(tabs[i].Page, L["Key*"], 160, -30, {KEY_BUTTON1, KEY_BUTTON2, KEY_BUTTON3, KEY_BUTTON4, KEY_BUTTON5}, L["Key Intro"], 110, 30)
+			Option[20] = CreateDropdown(tabs[i].Page, L["Modified Key"], 300, -30, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 110, 30)
 
 			local reset = B.CreateButton(tabs[i].Page, 70, 25, RESET)
 			reset:SetPoint("TOPRIGHT", -200, -90)
@@ -535,16 +533,16 @@ local function CreatePanel()
 				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][spellID])
 				for i = 15, 17 do ClearEdit(Option[i]) end
 			elseif i == 12 then
-				local spellID, key, modKey = tonumber(Option[18]:GetText()), Option[19].Text:GetText(), Option[20].Text:GetText()
-				if not spellID or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-				if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				local value, key, modKey = Option[18]:GetText(), Option[19].Text:GetText(), Option[20].Text:GetText()
+				if not value or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
+				if tonumber(value) and not GetSpellInfo(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				if (not tonumber(value)) and value ~= "target" and value ~= "focus" and value ~= "follow" then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
 				if not modKey or modKey == NONE then modKey = "" end
-				local value = modKey..key
-				if value == KEY_BUTTON1 or value == "SHIFT"..KEY_BUTTON1 then UIErrorsFrame:AddMessage(DB.InfoColor..L["Forbidden ClickSet"]) return end
-				if NDuiDB["RaidClickSets"][value] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
+				local clickSet = modKey..key
+				if NDuiDB["RaidClickSets"][clickSet] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
 
-				NDuiDB["RaidClickSets"][value] = {key, modKey, spellID}
-				AddRaidClickSets(tabs[i].List.Child, i, NDuiDB["RaidClickSets"][value])
+				NDuiDB["RaidClickSets"][clickSet] = {key, modKey, value}
+				AddRaidClickSets(tabs[i].List.Child, i, NDuiDB["RaidClickSets"][clickSet])
 				for i = 18, 20 do ClearEdit(Option[i]) end
 			end
 		end)

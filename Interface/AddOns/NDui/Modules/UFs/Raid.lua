@@ -64,66 +64,73 @@ function UF:CreateRaidDebuffs(self)
 end
 
 local keyList = {
-	[1] = {KEY_BUTTON1, "ALT", "ALT-%s1"},			-- ALT+左键
-	[2] = {KEY_BUTTON1, "CTRL", "CTRL-%s1"},		-- CTRL+左键
+	[1] = {KEY_BUTTON1, "", "%s1"},					-- 左键
+	[2] = {KEY_BUTTON1, "ALT", "ALT-%s1"},			-- ALT+左键
+	[3] = {KEY_BUTTON1, "CTRL", "CTRL-%s1"},		-- CTRL+左键
+	[4] = {KEY_BUTTON1, "SHIFT", "SHIFT-%s1"},		-- SHIFT+左键
 
-	[3] = {KEY_BUTTON2, "", "%s2"},					-- 右键
-	[4] = {KEY_BUTTON2, "ALT", "ALT-%s2"},			-- ALT+右键
-	[5] = {KEY_BUTTON2, "CTRL", "CTRL-%s2"},		-- CTRL+右键
-	[6] = {KEY_BUTTON2, "SHIFT", "SHIFT-%s2"},		-- SHIFT+右键
+	[5] = {KEY_BUTTON2, "", "%s2"},					-- 右键
+	[6] = {KEY_BUTTON2, "ALT", "ALT-%s2"},			-- ALT+右键
+	[7] = {KEY_BUTTON2, "CTRL", "CTRL-%s2"},		-- CTRL+右键
+	[8] = {KEY_BUTTON2, "SHIFT", "SHIFT-%s2"},		-- SHIFT+右键
 
-	[7] = {KEY_BUTTON4, "", "%s4"},					-- 鼠标键4
-	[8] = {KEY_BUTTON4, "ALT", "ALT-%s4"},			-- ALT+鼠标键4
-	[9] = {KEY_BUTTON4, "CTRL", "CTRL-%s4"},		-- CTRL+鼠标键4
-	[10] = {KEY_BUTTON4, "SHIFT", "SHIFT-%s4"},		-- SHIFT+鼠标键4
+	[9] = {KEY_BUTTON3, "", "%s3"},					-- 中键
+	[10] = {KEY_BUTTON3, "ALT", "ALT-%s3"},			-- ALT+中键
+	[11] = {KEY_BUTTON3, "CTRL", "CTRL-%s3"},		-- CTRL+中键
+	[12] = {KEY_BUTTON3, "SHIFT", "SHIFT-%s3"},		-- SHIFT+中键
 
-	[11] = {KEY_BUTTON5, "", "%s5"},				-- 鼠标键5
-	[12] = {KEY_BUTTON5, "ALT", "ALT-%s5"},			-- ALT+鼠标键5
-	[13] = {KEY_BUTTON5, "CTRL", "CTRL-%s5"},		-- CTRL+鼠标键5
-	[14] = {KEY_BUTTON5, "SHIFT", "SHIFT-%s5"},		-- SHIFT+鼠标键5
+	[13] = {KEY_BUTTON4, "", "%s4"},				-- 鼠标键4
+	[14] = {KEY_BUTTON4, "ALT", "ALT-%s4"},			-- ALT+鼠标键4
+	[15] = {KEY_BUTTON4, "CTRL", "CTRL-%s4"},		-- CTRL+鼠标键4
+	[16] = {KEY_BUTTON4, "SHIFT", "SHIFT-%s4"},		-- SHIFT+鼠标键4
+
+	[17] = {KEY_BUTTON5, "", "%s5"},				-- 鼠标键5
+	[18] = {KEY_BUTTON5, "ALT", "ALT-%s5"},			-- ALT+鼠标键5
+	[19] = {KEY_BUTTON5, "CTRL", "CTRL-%s5"},		-- CTRL+鼠标键5
+	[20] = {KEY_BUTTON5, "SHIFT", "SHIFT-%s5"},		-- SHIFT+鼠标键5
 }
 
 local defaultSpellList = {
 	["DRUID"] = {
-		[1] = 88423,		-- 驱散
-		[2] = 50769,		-- 复活
-		[3] = 774,			-- 回春术
-		[4] = 33763,		-- 生命绽放
+		[2] = 88423,		-- 驱散
+		[3] = 50769,		-- 复活
+		[5] = 774,			-- 回春术
+		[6] = 33763,		-- 生命绽放
 	},
 	["HUNTER"] = {
-		[4] = 34477,		-- 误导
+		[6] = 34477,		-- 误导
 	},
 	["ROGUE"] = {
-		[4] = 57934,		-- 嫁祸
+		[6] = 57934,		-- 嫁祸
 	},
 	["WARRIOR"] = {
-		[4] = 3411,			-- 援护
+		[6] = 3411,			-- 援护
 	},
 	["SHAMAN"] = {
-		[1] = 77130,		-- 驱散
-		[2] = 2008,			-- 复活
-		[3] = 61295,		-- 激流
-		[4] = 546,			-- 水上行走
+		[2] = 77130,		-- 驱散
+		[3] = 2008,			-- 复活
+		[5] = 61295,		-- 激流
+		[6] = 546,			-- 水上行走
 	},
 	["PALADIN"] = {
-		[1] = 4987,			-- 驱散
-		[2] = 7328,			-- 复活
-		[3] = 20476,		-- 神圣震击
-		[4] = 1022,			-- 保护祝福
+		[2] = 4987,			-- 驱散
+		[3] = 7328,			-- 复活
+		[5] = 20476,		-- 神圣震击
+		[6] = 1022,			-- 保护祝福
 	},
 	["PRIEST"] = {
-		[1] = 527,			-- 驱散
-		[2] = 2006,			-- 复活
-		[3] = 17,			-- 真言术盾
-		[4] = 1706,			-- 漂浮术
+		[2] = 527,			-- 驱散
+		[3] = 2006,			-- 复活
+		[5] = 17,			-- 真言术盾
+		[6] = 1706,			-- 漂浮术
 	},
 	["MONK"] = {
-		[1] = 115450,		-- 驱散
-		[2] = 115178,		-- 复活
-		[3] = 119611,		-- 复苏之雾
+		[2] = 115450,		-- 驱散
+		[3] = 115178,		-- 复活
+		[5] = 119611,		-- 复苏之雾
 	},
 	["MAGE"] = {
-		[4] = 130,			-- 缓落
+		[6] = 130,			-- 缓落
 	},
 	["DEMONHUNTER"] = {
 	},
@@ -147,18 +154,28 @@ local function setupClickSets(self, ...)
 	if not self.clickSets then self.clickSets = {} end
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
-		local key, modKey, spellID = unpack(data)
-		if self.clickSets[modKey..key] then return end
+		local key, modKey, value = unpack(data)
+		if key == KEY_BUTTON1 and modKey == "SHIFT" then self.focuser = true end
 
 		for _, v in pairs(keyList) do
 			if v[1] == key and v[2] == modKey then
-				local name = GetSpellInfo(spellID)
-				self:SetAttribute(format(v[3], "type"), "spell")
-				self:SetAttribute(format(v[3], "spell"), name)
-				self.clickSets[modKey..key] = true
+				if tonumber(value) then
+					local name = GetSpellInfo(value)
+					self:SetAttribute(format(v[3], "type"), "spell")
+					self:SetAttribute(format(v[3], "spell"), name)
+				elseif value == "target" then
+					self:SetAttribute(format(v[3], "type"), "target")
+				elseif value == "focus" then
+					self:SetAttribute(format(v[3], "type"), "focus")
+				elseif value == "follow" then
+					self:SetAttribute(format(v[3], "type"), "macro")
+					self:SetAttribute(format(v[3], "macrotext"), "/follow mouseover")
+				end
 			end
 		end
-	end	
+	end
+	self:RegisterForClicks("AnyDown")
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 end
 
 function UF:CreateClickSets(self)

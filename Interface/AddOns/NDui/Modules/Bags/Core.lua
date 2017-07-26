@@ -310,7 +310,7 @@ function module:OnLogin()
 		local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 		tagDisplay:SetFont(unpack(DB.Font))
 		tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT",0,0)
-		B.CreateFS(infoFrame, 12, SEARCH, true, "LEFT", 0, 1)
+		B.CreateFS(infoFrame, 14, SEARCH, true, "LEFT", 0, 1)
 
 		local SortButton = B.CreateButton(self, 60, 20, L["Sort"])
 		SortButton:SetPoint("BOTTOMLEFT", 5, 7)

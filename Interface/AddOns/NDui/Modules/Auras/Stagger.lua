@@ -76,7 +76,7 @@ f:SetScript("OnEvent", function(self, event)
 				bu[1]:SetAlpha(1)
 				bu[1].CD:SetCooldown(0, 0)
 			end
-			B.CreateAT(bu[1], 214326)
+			B.CreateAT(bu[1], "ANCHOR_BOTTOM", 214326)
 		else
 			bu[1]:SetAlpha(.5)
 			bu[1].CD:SetCooldown(0, 0)
@@ -91,7 +91,7 @@ f:SetScript("OnEvent", function(self, event)
 			else
 				bu[2]:SetAlpha(.5)
 			end
-			B.CreateAT(bu[2], 115072)
+			B.CreateAT(bu[2], "ANCHOR_BOTTOM", 115072)
 		end
 
 		-- Ironskin Brew
@@ -107,7 +107,7 @@ f:SetScript("OnEvent", function(self, event)
 				ClearChargeCooldown(bu[3])
 				bu[3].CD:SetReverse(true)
 				bu[3].CD:SetCooldown(exp - dur, dur)
-				B.CreateAT(bu[3], name)
+				B.CreateAT(bu[3], "ANCHOR_BOTTOM", name)
 				ActionButton_ShowOverlayGlow(bu[3])
 			else
 				bu[3].Count:ClearAllPoints()
@@ -124,7 +124,7 @@ f:SetScript("OnEvent", function(self, event)
 					ClearChargeCooldown(bu[3])
 					bu[3].CD:SetCooldown(0, 0)
 				end
-				B.CreateAT(bu[3], 115308)
+				B.CreateAT(bu[3], "ANCHOR_BOTTOM", 115308)
 				ActionButton_HideOverlayGlow(bu[3])
 			end
 		end

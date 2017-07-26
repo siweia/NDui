@@ -102,9 +102,9 @@ B.CreateGT = function(f, anchor, text, color)
 	end)
 	f:SetScript("OnLeave", GameTooltip_Hide)
 end
-B.CreateAT = function(f, value)
+B.CreateAT = function(f, anchor, value)
 	f:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
+		GameTooltip:SetOwner(self, anchor)
 		GameTooltip:ClearLines()
 		if type(value) == "string" then
 			GameTooltip:SetUnitAura("player", value)
