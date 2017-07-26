@@ -205,6 +205,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	Cooldown:ClearAllPoints()
 	Cooldown:SetPoint("TOPRIGHT", -1, -1)
 	Cooldown:SetPoint("BOTTOMLEFT", 1, 1)
+	Cooldown:SetReverse(false)
 	Cooldown:Hide()
 	self.Cooldown = Cooldown
 
