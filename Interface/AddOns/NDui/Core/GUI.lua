@@ -552,7 +552,7 @@ local function CreateOption(i)
 			bd:SetFrameStrata("BACKGROUND")
 			B.CreateBD(bd, .3)
 			local slider = select(4, s:GetRegions())
-			slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+			slider:SetTexture(DB.sparkTex)
 			slider:SetBlendMode("ADD")
 		-- Dropdown
 		elseif type == 4 then

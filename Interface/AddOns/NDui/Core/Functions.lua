@@ -209,7 +209,7 @@ B.CreateSB = function(f, spark, r, g, b)
 	B.CreateTex(f.BG)
 	if spark then
 		f.Spark = f:CreateTexture(nil, "OVERLAY")
-		f.Spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+		f.Spark:SetTexture(DB.sparkTex)
 		f.Spark:SetBlendMode("ADD")
 		f.Spark:SetAlpha(.8)
 		f.Spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
