@@ -419,7 +419,7 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, _, caste
 		elseif C.BlackList and C.BlackList[spellID] then
 			return false
 		else
-			return (NDuiDB["Nameplate"]["AllAuras"] and nameplateShowAll) or nameplateShowSelf and (caster == "player" or caster == "pet" or caster == "vehicle")
+			return (NDuiDB["Nameplate"]["AllAuras"] and nameplateShowAll) or (caster == "player" or caster == "pet" or caster == "vehicle")
 		end
 	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
 		return true
