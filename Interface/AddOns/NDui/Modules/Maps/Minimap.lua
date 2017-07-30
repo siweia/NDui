@@ -1,6 +1,5 @@
 ﻿local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:RegisterModule("Minimap")
-local _G, Minimap = _G, Minimap
 
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
@@ -285,6 +284,33 @@ function module:RecycleBin()
 	end)
 end
 
+function module:WhoPingsMyMap()
+	if not NDuiDB["Map"]["WhoPings"] then return end
+
+	local f = CreateFrame("Frame", nil, Minimap)
+	f:SetAllPoints()
+	f:SetAlpha(0)
+	f.text = B.CreateFS(f, 12, "", false, "TOP", 0, -3)
+
+	local anim = f:CreateAnimationGroup()
+	anim.fader = anim:CreateAnimation("Alpha")
+	anim.fader:SetFromAlpha(1)
+	anim.fader:SetToAlpha(0)
+	anim.fader:SetDuration(4)
+	anim.fader:SetSmoothing("OUT")
+
+	NDui:EventFrame("MINIMAP_PING"):SetScript("OnEvent", function(_, _, unit)
+		local class = select(2, UnitClass(unit))
+		local r, g, b = B.ClassColor(class)
+		local name = GetUnitName(unit)
+
+		anim:Stop()
+		f.text:SetText(name)
+		f.text:SetTextColor(r, g, b)
+		anim:Play()
+	end)
+end
+
 function module:OnLogin()
 	-- Shape and Position
 	function GetMinimapShape() return "SQUARE" end
@@ -356,4 +382,5 @@ function module:OnLogin()
 	self:CreatePulse()
 	self:ReskinRegions()
 	self:RecycleBin()
+	self:WhoPingsMyMap()
 end
