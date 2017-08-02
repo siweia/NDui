@@ -8,7 +8,7 @@ local minimize = tracker.HeaderMenu.MinimizeButton
 do
 	-- Move Tracker Frame
 	local mover = CreateFrame("Frame", "NDuiQuestMover", tracker)
-	mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -30, -25)
+	mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -60, -25)
 	mover:SetSize(50, 50)
 	B.CreateMF(minimize, mover)
 	minimize:SetFrameStrata("HIGH")

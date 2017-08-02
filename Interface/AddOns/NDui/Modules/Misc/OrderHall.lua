@@ -5,7 +5,7 @@ local B, C, L, DB = unpack(select(2, ...))
 ]]
 local hall = CreateFrame("Frame", "NDuiOrderHallIcon", UIParent)
 hall:SetSize(50, 50)
-hall:SetPoint("TOPLEFT", 30, -30)
+hall:SetPoint("TOP", 0, -30)
 hall:SetFrameStrata("HIGH")
 hall:Hide()
 B.CreateMF(hall)
