@@ -72,6 +72,7 @@ local defaultSettings = {
 		HotsDots = true,
 		PetCombatText = true,
 		RaidClickSets = false,
+		ThreatBorder = false,
 	},
 	Chat = {
 		Sticky = false,
@@ -232,9 +233,10 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{4, "Actionbar", "Style", L["Actionbar Style"], true, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
 		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"]},
-		{1, "Actionbar", "Macro", L["Actionbar Macro"]},
+		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
 		{1, "Actionbar", "Count", L["Actionbar Item Counts"]},
-		{1, "Actionbar", "Classcolor", L["ClassColor BG"]},
+		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
+		{},--blank
 		{1, "Actionbar", "Cooldown", L["Show Cooldown"]},
 		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"], true},
 	},
@@ -285,7 +287,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
 		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
-		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
+		{1, "UFs", "ThreatBorder", "|cffee0000"..L["RaidFrame ThreatBorder"]},
+		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"], true},
 		{},--blank
 		{1, "UFs", "NoTooltip", L["NoTooltip Auras"]},
 		{1, "UFs", "DebuffBorder", L["Auras Border"], true},

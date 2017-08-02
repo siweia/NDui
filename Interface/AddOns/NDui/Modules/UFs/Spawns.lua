@@ -150,6 +150,7 @@ local function CreateRaidStyle(self)
 	UF:CreateRaidDebuffs(self)
 
 	if not NDuiDB["UFs"]["SimpleMode"] then UF:CreateAuras(self) end
+	if NDuiDB["UFs"]["ThreatBorder"] then UF:CreateThreatBorder(self) end
 end
 
 oUF:RegisterStyle("Player", CreatePlayerStyle)

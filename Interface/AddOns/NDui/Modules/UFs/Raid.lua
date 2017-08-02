@@ -32,13 +32,36 @@ local function UpdateTargetBorder(self)
 end
 
 function UF:CreateTargetBorder(self)
-	self.TargetBorder = B.CreateBG(self, 2)
-	self.TargetBorder:SetBackdrop({edgeFile = DB.bdTex, edgeSize = 1.2})
-	self.TargetBorder:SetBackdropBorderColor(.7, .7, .7)
-	self.TargetBorder:SetPoint("BOTTOMRIGHT", self.Power, 2, -2)
-	self.TargetBorder:Hide()
+	local border = B.CreateBG(self, 2)
+	border:SetBackdrop({edgeFile = DB.bdTex, edgeSize = 1.2})
+	border:SetBackdropBorderColor(.7, .7, .7)
+	border:SetPoint("BOTTOMRIGHT", self.Power, 2, -2)
+	border:Hide()
+
+	self.TargetBorder = border
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetBorder)
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", UpdateTargetBorder)
+end
+
+local function UpdateThreatBorder(self, event, unit)
+	if self.unit ~= unit then return end
+
+	unit = unit or self.unit
+	local element = self.ThreatBorder
+	local status = UnitThreatSituation(unit)
+
+	if status and status > 0 then
+		local r, g, b = GetThreatStatusColor(status)
+		element:SetBackdropBorderColor(r, g, b)
+	else
+		element:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
+function UF:CreateThreatBorder(self)
+	self.ThreatBorder = self.Health.Shadow
+	self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", UpdateThreatBorder)
+	self:RegisterEvent("UNIT_THREAT_LIST_UPDATE", UpdateThreatBorder)
 end
 
 function UF:CreateRaidDebuffs(self)
