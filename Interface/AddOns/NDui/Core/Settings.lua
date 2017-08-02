@@ -237,6 +237,7 @@ local function ForceSkadaOptions()
 				["tooltippos"] = "topleft",
 				["reset"] = {
 					["instance"] = 3,
+					["join"] = 1,
 				},
 			},
 		},
