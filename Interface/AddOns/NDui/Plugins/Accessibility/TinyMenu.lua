@@ -43,7 +43,7 @@ end
 local function gethost()
 	local host
 	if DB.Client == "zhCN" then
-		host = "http://www.battlenet.com.cn/wow/zh/character/"
+		host = "https://www.wowchina.com/zh-cn/character/"
 	elseif DB.Client == "zhTW" then
 		host = "https://worldofwarcraft.com/zh-tw/character/"
 	else
