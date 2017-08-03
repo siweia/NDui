@@ -72,7 +72,7 @@ local defaultSettings = {
 		HotsDots = true,
 		PetCombatText = true,
 		RaidClickSets = false,
-		ThreatBorder = false,
+		ThreatBorder = true,
 	},
 	Chat = {
 		Sticky = false,

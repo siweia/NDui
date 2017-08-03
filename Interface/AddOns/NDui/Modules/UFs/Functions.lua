@@ -130,7 +130,7 @@ end
 function UF:CreatePowerBar(self)
 	local power = CreateFrame("StatusBar", nil, self)
 	power:SetStatusBarTexture(DB.normTex)
-	power:SetHeight(retVal(self, 4, 3, 3, 4))
+	power:SetHeight(retVal(self, 4, 3, 2, 4))
 	power:SetWidth(self:GetWidth())
 	power:SetPoint("TOP", self, "BOTTOM", 0, -3)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)

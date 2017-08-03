@@ -50,7 +50,7 @@ local function UpdateThreatBorder(self, event, unit)
 	local element = self.ThreatBorder
 	local status = UnitThreatSituation(unit)
 
-	if status and status > 0 then
+	if status and status > 1 then
 		local r, g, b = GetThreatStatusColor(status)
 		element:SetBackdropBorderColor(r, g, b)
 	else
