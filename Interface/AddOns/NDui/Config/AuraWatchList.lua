@@ -1101,6 +1101,10 @@ C.AuraWatchList = {
 				{AuraID = 202425, UnitID = "player"},
 				--星界和谐，奶德2T19
 				{AuraID = 232378, UnitID = "player"},
+				--加尼尔的精华，奶德神器
+				{AuraID = 208253, UnitID = "player"},
+				--枭兽狂乱
+				{AuraID = 157228, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
