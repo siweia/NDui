@@ -1105,6 +1105,14 @@ C.AuraWatchList = {
 				{AuraID = 208253, UnitID = "player"},
 				--枭兽狂乱
 				{AuraID = 157228, UnitID = "player"},
+				--翡翠捕梦者
+				{AuraID = 224706, UnitID = "player"},
+				--星界加速
+				{AuraID = 242232, UnitID = "player"},
+				--欧奈斯的直觉
+				{AuraID = 209406, UnitID = "player"},
+				--欧奈斯的自负
+				{AuraID = 209407, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
