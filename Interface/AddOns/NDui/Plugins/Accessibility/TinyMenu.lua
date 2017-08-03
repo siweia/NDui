@@ -56,7 +56,7 @@ local function popupClick(self, info)
 	local editBox
 	local name, server = UnitName(info.unit)
 	if info.value == "ARMORY" then
-		local armory = gethost() .. urlencode(server or GetRealmName()) .. "/" .. urlencode(name) .. "/advanced"
+		local armory = gethost()..urlencode(server or GetRealmName()).."/"..urlencode(name)
 		editBox = ChatEdit_ChooseBoxForSend()
 		ChatEdit_ActivateChat(editBox)
 		editBox:SetText(armory)
