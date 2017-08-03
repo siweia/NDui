@@ -201,7 +201,7 @@ local function ScanUnit(unit, forced)
 	else
 		if (not unit) or (UnitGUID(unit) ~= currentGUID) or (not UnitIsPlayer(unit)) then return end
 		cachedGear = GearDB[currentGUID]
-		cachedSpec = SpecDB[currentGUID]
+		cachedSpec = UnitSpec(unit) or SpecDB[currentGUID]
 
 		if cachedGear or forced then
 			SetUnitInfo(cachedGear or LFG_LIST_LOADING, cachedSpec)
