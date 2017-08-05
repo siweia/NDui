@@ -252,7 +252,6 @@ function module:OnLogin()
 		self:SetSize(width + 20, height + 45)
 	end
 
-	local PickupContainerItem = _G.PickupContainerItem
 	local function ReverseSort()
 		C_Timer.After(.5, function()
 			for bag = 0, 4 do

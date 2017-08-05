@@ -169,15 +169,14 @@ end)
 
 -- Drag AltPowerbar
 do
-	local bar = _G.PlayerPowerBarAlt
-	local mover = CreateFrame("Frame", "NDuiAltBarMover", bar)
+	local mover = CreateFrame("Frame", "NDuiAltBarMover", PlayerPowerBarAlt)
 	mover:SetPoint("CENTER", UIParent, 0, -200)
 	mover:SetSize(20, 20)
-	B.CreateMF(bar, mover)
-	hooksecurefunc(bar, "SetPoint", function(_, _, parent)
+	B.CreateMF(PlayerPowerBarAlt, mover)
+	hooksecurefunc(PlayerPowerBarAlt, "SetPoint", function(_, _, parent)
 		if parent ~= mover then
-			bar:ClearAllPoints()
-			bar:SetPoint("CENTER", mover)
+			PlayerPowerBarAlt:ClearAllPoints()
+			PlayerPowerBarAlt:SetPoint("CENTER", mover)
 		end
 	end)
 	hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
@@ -223,8 +222,6 @@ end)
 
 -- Get Naked
 do
-	local CharacterFrameInsetRight, PaperDollSidebarTab1 = _G.CharacterFrameInsetRight, _G.PaperDollSidebarTab1
-	local EquipmentManager_UnequipItemInSlot, EquipmentManager_RunAction = _G.EquipmentManager_UnequipItemInSlot, _G.EquipmentManager_RunAction
 	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
 	bu:SetSize(29, 30)
 	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
@@ -313,7 +310,7 @@ end)
 
 -- Faster Looting
 local tDelay = 0
-local function FastLoot()
+NDui:EventFrame("LOOT_READY"):SetScript("OnEvent", function()
 	if not NDuiDB["Misc"]["FasterLoot"] then return end
 	if GetTime() - tDelay >= .3 then
 		tDelay = GetTime()
@@ -324,8 +321,7 @@ local function FastLoot()
 			tDelay = GetTime()
 		end
 	end
-end
-NDui:EventFrame("LOOT_READY"):SetScript("OnEvent", FastLoot)
+end)
 
 -- Hide TalkingFrame
 local function NoTalkingHeads(self)
@@ -352,7 +348,6 @@ end)
 
 -- Extend Instance
 do
-	local RaidInfoFrame = _G.RaidInfoFrame
 	local bu = CreateFrame("Button", nil, RaidInfoFrame)
 	bu:SetPoint("TOPRIGHT", -35, -5)
 	bu:SetSize(25, 25)
@@ -382,8 +377,7 @@ end
 
 -- Repoint Vehicle
 do
-	local indicator = _G.VehicleSeatIndicator
-	local mover = CreateFrame("Button", "NDuiVehicleSeatMover", indicator)
+	local mover = CreateFrame("Button", "NDuiVehicleSeatMover", VehicleSeatIndicator)
 	mover:SetPoint("BOTTOMRIGHT", UIParent, -360, 30)
 	mover:SetSize(22, 22)
 	mover:SetFrameStrata("HIGH")
@@ -396,11 +390,11 @@ do
 	B.CreateGT(mover, "ANCHOR_TOP", L["Toggle"], "system")
 	B.CreateMF(mover)
 
-	hooksecurefunc(indicator, "SetPoint", function(_, _, parent)
+	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(_, _, parent)
 		if parent ~= mover then
-			indicator:ClearAllPoints()
-			indicator:SetClampedToScreen(true)
-			indicator:SetPoint("BOTTOMRIGHT", mover, "BOTTOMLEFT", -5, 0)
+			VehicleSeatIndicator:ClearAllPoints()
+			VehicleSeatIndicator:SetClampedToScreen(true)
+			VehicleSeatIndicator:SetPoint("BOTTOMRIGHT", mover, "BOTTOMLEFT", -5, 0)
 		end
 	end)
 end
@@ -431,8 +425,7 @@ InterfaceOptionsFrameCancel:SetScript("OnClick", function()
 end)
 
 -- Roll Gold
-do
-	if DB.Client ~= "zhCN" then return end
+if DB.Client == "zhCN" then
 	local maxGold, maxPacks, curGold, remainGold
 	local keyword, goldList, index, finish = "#1", {}, 1, true
 	local f = CreateFrame("Frame")
@@ -492,4 +485,14 @@ do
 		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入#1来抢吧。", "GUILD")
 	end
 	SLASH_ROLLGOLD1 = "/groll"
+end
+
+-- Fix blizz LFGList error in zhCN
+if DB.Client == "zhCN" then
+	StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
+		text = "针对此项活动，你的队伍人数已满，将被移出列表。",
+		button1 = OKAY,
+		timeout = 0,
+		whileDead = 1,
+	}
 end
