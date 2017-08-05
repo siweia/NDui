@@ -44,13 +44,12 @@ function UF:CreateTargetBorder(self)
 end
 
 local function UpdateThreatBorder(self, event, unit)
-	if self.unit ~= unit then return end
+	if unit ~= self.unit then return end
 
-	unit = unit or self.unit
-	local element = self.ThreatBorder
+	local element = self.Health.Shadow
 	local status = UnitThreatSituation(unit)
 
-	if status and status > 1 then
+	if status and status > 0 then
 		local r, g, b = GetThreatStatusColor(status)
 		element:SetBackdropBorderColor(r, g, b)
 	else
@@ -59,9 +58,9 @@ local function UpdateThreatBorder(self, event, unit)
 end
 
 function UF:CreateThreatBorder(self)
-	self.ThreatBorder = self.Health.Shadow
-	self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", UpdateThreatBorder)
-	self:RegisterEvent("UNIT_THREAT_LIST_UPDATE", UpdateThreatBorder)
+	local threatIndicator = CreateFrame("Frame", nil, self)
+	self.ThreatIndicator = threatIndicator
+	self.ThreatIndicator.Override = UpdateThreatBorder
 end
 
 function UF:CreateRaidDebuffs(self)
