@@ -40,6 +40,7 @@ function module:Expbar()
 			else
 				Rest:Hide()
 			end
+			if IsXPUserDisabled() then self:SetStatusBarColor(.7, 0, 0) end
 		elseif GetWatchedFactionInfo() then
 			local _, standing, min, max, value, factionID = GetWatchedFactionInfo()
 			local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
