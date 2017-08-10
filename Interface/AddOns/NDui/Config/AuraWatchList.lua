@@ -651,6 +651,10 @@ C.AuraWatchList = {
 				{AuraID = 232754, UnitID = "player"},
 				--污染墨汁
 				{AuraID = 232913, UnitID = "player"},
+				--吞噬之饥
+				{AuraID = 230384, UnitID = "player"},
+				{AuraID = 230920, UnitID = "player"},
+				{AuraID = 234661, UnitID = "player"},
 				--美味的增益鱼
 				{AuraID = 239375, UnitID = "player"},
 				{AuraID = 239362, UnitID = "player"},
