@@ -34,6 +34,7 @@ tinsert(UnitPopupMenus["GUILD"], 1, "NAME_COPY")
 tinsert(UnitPopupMenus["GUILD"], 1, "FRIEND_ADD")
 
 local function urlencode(s)
+	if not s then return end
 	s = string.gsub(s, "([^%w%.%- ])", function(c)
 		return format("%%%02X", string.byte(c))
 	end)
