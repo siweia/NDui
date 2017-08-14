@@ -30,7 +30,7 @@ tinsert(C.themes["Aurora"], function()
 	end
 
 	hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", function()
-		for i = 1, LFD_MAX_REWARDS do
+		for i = 1, 3 do
 			local button = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i]
 
 			if button and not button.styled then
