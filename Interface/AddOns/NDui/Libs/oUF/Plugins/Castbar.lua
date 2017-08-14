@@ -81,7 +81,11 @@ cast.OnCastbarUpdate = function(self, elapsed)
 				if self.SafeZone and self.SafeZone.timeDiff ~= 0 then self.Lag:SetFormattedText("%d ms", self.SafeZone.timeDiff * 1000) end
 			end
 		else
-			self.Time:SetFormattedText(decimal.." | "..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
+			if duration > 1e5 then
+				self.Time:SetText("∞ | ∞")
+			else
+				self.Time:SetFormattedText(decimal.." | "..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
+			end
 		end
 		self.duration = duration
 		self:SetValue(duration)
