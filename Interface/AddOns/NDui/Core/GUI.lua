@@ -172,6 +172,7 @@ local defaultSettings = {
 		PetFilter = true,
 		ReflectingAlert = false,
 		SwapingAlert = false,
+		SistersAlert = false,
 	},
 	Settings = {
 		LockUIScale = false,
@@ -338,11 +339,13 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	[7] = {
 		{1, "Skins", "RM", L["Raid Manger"]},
 		{},--blank
-		{1, "Skins", "RMRune", L["Runes Check"]},
-		{1, "Skins", "EasyMarking", L["Easy Mark"], true},
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
 		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"], true},
 		{1, "Misc", "SwapingAlert", L["Swaping Alert"]},
+		{1, "Misc", "SistersAlert", L["SistersAlert Alert"], true},
+		{},--blank
+		{1, "Skins", "RMRune", L["Runes Check"]},
+		{1, "Skins", "EasyMarking", L["Easy Mark"], true},
 		{2, "Skins", "DBMCount", L["Countdown Sec"]},
 		{},--blank
 		{1, "Chat", "Invite", L["Whisper Invite"]},

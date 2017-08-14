@@ -205,3 +205,33 @@ function module:VersionCheck()
 	RegisterAddonMessagePrefix("NDuiVersionCheck")
 	SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 end
+
+--[[
+	通报M月之姐妹的星界易伤情况
+]]
+function module:SistersAlert()
+	if not NDuiDB["Misc"]["SistersAlert"] then return end
+
+	local data = {}
+	local tarSpell = 236330
+	local myID = UnitGUID("player")
+
+	NDui:EventFrame("COMBAT_LOG_EVENT_UNFILTERED"):SetScript("OnEvent", function(_, _, ...)
+		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
+
+		local _, eventType, _, _, sourceName, _, _, destGUID, _, _, _, spellID = ...
+		if eventType == "SPELL_DAMAGE" and spellID == 234998 and destGUID == myID then
+			local name, _, _, count = UnitDebuff("player", GetSpellInfo(tarSpell))
+			if not name then return end
+			if not data[sourceName] then data[sourceName] = {} end
+			if count == 0 then count = 1 end
+			tinsert(data[sourceName], count)
+		elseif eventType == "SPELL_AURA_REMOVED" and spellID == tarSpell and destGUID == myID then
+			SendChatMessage("------------", "RAID")
+			for player, value in pairs(data) do
+				SendChatMessage(player..": "..table.concat(value, ", "), "RAID")
+			end
+			data = {}
+		end
+	end)
+end
