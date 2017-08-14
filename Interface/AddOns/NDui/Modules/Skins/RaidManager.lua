@@ -278,6 +278,14 @@ function module:CreateRM()
 					SlashCmdList["DEADLYBOSSMODS"]("pull 0")
 				end
 				reset = not reset
+			elseif IsAddOnLoaded("BigWigs") then
+				if not SlashCmdList["BIGWIGSPULL"] then LoadAddOn("BigWigs_Plugins") end
+				if reset then
+					SlashCmdList["BIGWIGSPULL"](NDuiDB["Skins"]["DBMCount"])
+				else
+					SlashCmdList["BIGWIGSPULL"]("0")
+				end
+				reset = not reset
 			else
 				UIErrorsFrame:AddMessage(DB.InfoColor..L["DBM Required"])
 			end
