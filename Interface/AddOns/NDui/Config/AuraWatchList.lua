@@ -89,7 +89,9 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
-				--苦痛之矛
+				--猫头鹰
+				{AuraID = 242570, UnitID = "player"},
+				--幽魂香炉
 				{AuraID = 243644, UnitID = "player"},
 				--醒神宝典
 				{AuraID = 243942, UnitID = "player"},
