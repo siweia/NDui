@@ -24,7 +24,7 @@ local function addLine(self, id, type, noadd)
 		elseif GetItemCount(id) > 0 then
 			self:AddDoubleLine(BAGSLOT..":", format(DB.InfoColor.."%s|r", GetItemCount(id)))
 		end
-		if select(8, GetItemInfo(id)) and select(8, GetItemInfo(id)) >1 then
+		if select(8, GetItemInfo(id)) and select(8, GetItemInfo(id)) > 1 then
 			self:AddDoubleLine(L["Stack Cap"]..":", format(DB.InfoColor.."%s|r", select(8, GetItemInfo(id))))
 		end
 	end
