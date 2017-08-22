@@ -14,6 +14,9 @@ function Bar:RangeOnUpdate(elapsed)
 end
 
 function Bar:RangeUpdate()
+	local bar = self:GetParent():GetParent()
+	if bar and bar:GetAlpha() == 0 then return end
+
 	local icon = self.icon
 	local normalTexture = self.NormalTexture
     local ID = self.action
