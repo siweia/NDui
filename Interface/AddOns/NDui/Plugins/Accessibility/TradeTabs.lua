@@ -130,7 +130,6 @@ local function updateSelection(self)
 	if not self.CD then
 		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
 		self.CD:SetAllPoints()
-		self.CD:SetReverse(true)
 	end
 	local start, duration = GetSpellCooldown(self.spell)
 	if duration and duration > 1.5 then	-- not for GCD
