@@ -1976,6 +1976,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- Pet battle queue popup
 
 		F.CreateBD(PetBattleQueueReadyFrame)
+		F.CreateSD(PetBattleQueueReadyFrame)
 		F.CreateBG(PetBattleQueueReadyFrame.Art)
 		F.Reskin(PetBattleQueueReadyFrame.AcceptButton)
 		F.Reskin(PetBattleQueueReadyFrame.DeclineButton)
