@@ -173,6 +173,7 @@ function UF:DefaultClickSets()
 end
 
 local function setupClickSets(self, ...)
+	if InCombatLockdown() then return end
 	if not self.clickSets then self.clickSets = {} end
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do

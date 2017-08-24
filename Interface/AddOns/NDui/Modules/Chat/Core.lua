@@ -1,23 +1,7 @@
 local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:RegisterModule("Chat")
 
--- Hook default elements
-hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
-	if selected then
-		self:SetAlpha(1)
-		self:GetFontString():SetTextColor(1, .8, 0)
-	else
-		self:GetFontString():SetTextColor(.5, .5, .5)
-		self:SetAlpha(.3)
-	end
-end)
-FCF_FadeInChatFrame = function(self) self.hasBeenFaded = true end
-FCF_FadeOutChatFrame = function(self) self.hasBeenFaded = false end
-
-for i = 1, 15 do
-	CHAT_FONT_HEIGHTS[i] = i + 9
-end
-
+-- Hide elements
 ChatFrameMenuButton.Show = B.Dummy
 ChatFrameMenuButton:Hide()
 QuickJoinToastButton.Show = B.Dummy
@@ -30,19 +14,20 @@ BNToastFrame:HookScript("OnShow", function(self)
 end)
 
 -- Reskin Chat
+local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local function skinChat(self)
 	if not self or (self and self.styled) then return end
 
 	local name = self:GetName()
 	self:SetClampRectInsets(0, 0, 0, 0)
-	self:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
+	self:SetMaxResize(maxWidth, maxHeight)
 	self:SetMinResize(100, 50)
 	self:SetFont(unpack(DB.Font))
 	self:SetShadowColor(0, 0, 0, 0)
 
 	local frame = _G[name.."ButtonFrame"]
 	frame:Hide()
-	frame.Show = B.Dummy
+	frame:HookScript("OnShow", frame.Hide)
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
@@ -54,8 +39,6 @@ local function skinChat(self)
 	for i = 3, 8 do
 		select(i, eb:GetRegions()):SetAlpha(0)
 	end
-	eb:HookScript("OnEditFocusGained", function() eb:Show() end)
-	eb:HookScript("OnEditFocusLost", function() eb:Hide() end)
 
 	local lang = _G[name.."EditBoxLanguage"]
 	lang:GetRegions():SetAlpha(0)
@@ -92,13 +75,31 @@ for i = 1, NUM_CHAT_WINDOWS do
 end
 
 hooksecurefunc("FCF_OpenTemporaryWindow", function()
-	for _, chatFrameName in pairs(CHAT_FRAMES) do
+	for _, chatFrameName in next, CHAT_FRAMES do
 		local frame = _G[chatFrameName]
 		if frame.isTemporary then
 			skinChat(frame)
 		end
 	end
 end)
+
+-- Tabs alpha and color
+hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
+	if selected then
+		self:SetAlpha(1)
+		self:GetFontString():SetTextColor(1, .8, 0)
+	else
+		self:GetFontString():SetTextColor(.5, .5, .5)
+		self:SetAlpha(.3)
+	end
+end)
+FCF_FadeInChatFrame = function(self) self.hasBeenFaded = true end
+FCF_FadeOutChatFrame = function(self) self.hasBeenFaded = false end
+
+-- Font size
+for i = 1, 15 do
+	CHAT_FONT_HEIGHTS[i] = i + 9
+end
 
 -- Swith channels by Tab
 local cycles = {
