@@ -4,7 +4,6 @@ local module = NDui:RegisterModule("Misc")
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
 ]]
--- Add elements
 function module:OnLogin()
 	self:SoloInfo()
 	self:RareAlert()
@@ -496,4 +495,25 @@ if DB.Client == "zhCN" then
 		timeout = 0,
 		whileDead = 1,
 	}
+end
+
+-- Quickjoin for worldquests
+do
+	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", function(self, button)
+		if self.module.ShowWorldQuests then
+			if button == "MiddleButton" then
+				LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
+			end
+		end
+	end)
+
+	for i = 1, 10 do
+		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
+		if bu then
+			bu:HookScript("OnDoubleClick", function()
+				LFGListFrame.SearchPanel.SignUpButton:Click()
+				LFGListApplicationDialog.SignUpButton:Click()
+			end)
+		end
+	end
 end
