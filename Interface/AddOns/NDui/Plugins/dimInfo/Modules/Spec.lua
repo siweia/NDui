@@ -67,7 +67,7 @@ if cfg.Spec == true then
 			GameTooltip:AddDoubleLine(" ", init.Colored..spec[i])
 		end
 
-		if UnitLevel('player') == 110 then
+		if UnitLevel("player") == 110 then
 			local _, _, texture = GetCurrencyInfo(104)
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, 1,1,1)
