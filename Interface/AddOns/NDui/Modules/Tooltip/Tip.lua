@@ -153,7 +153,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 				end
 			end
 
-			local unitGuild, tmp, tmp2 = GetGuildInfo(unit)
+			local unitGuild, tmp, tmp2, guildRealm = GetGuildInfo(unit)
 			local text = GameTooltipTextLeft2:GetText()
 			if tmp then
 				tmp2 = tmp2 + 1
@@ -162,7 +162,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 				else
 					GameTooltipTextLeft2:SetText("<"..text..">  "..tmp.."("..tmp2..")")
 				end
-				if IsInGuild() and unitGuild == GetGuildInfo("player") then
+				if IsInGuild() and unitGuild == GetGuildInfo("player") and not guildRealm then
 					GameTooltipTextLeft2:SetTextColor(.25, 1, .25)
 				else
 					GameTooltipTextLeft2:SetTextColor(1, .1, .8)
