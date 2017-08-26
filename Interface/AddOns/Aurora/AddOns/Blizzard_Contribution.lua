@@ -22,8 +22,8 @@ C.themes["Blizzard_Contribution"] = function()
 		if not self.styled then
 			self.RewardName:SetTextColor(1, 1, 1)
 			self.Icon:SetTexCoord(.08, .92, .08, .92)
-			self.Icon.SetTexCoord = F.dummy
 			self.Border:Hide()
+			self:GetRegions():Hide()
 			F.CreateBDFrame(self.Icon)
 
 			self.styled = true
