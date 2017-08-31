@@ -49,7 +49,46 @@ C.themes["Blizzard_DebugTools"] = function()
 		"DialogBG",
 	}
 
-	for i=1, #texs do
+	for i = 1, #texs do
 		_G["EventTraceFrame"..texs[i]]:SetTexture(nil)
 	end
+
+	-- Table Attribute Display
+
+	local function reskinTableAttribute(frame)
+		F.CreateBD(frame)
+		F.CreateSD(frame)
+		F.ReskinClose(frame.CloseButton)
+		F.ReskinCheck(frame.VisibilityButton)
+		F.ReskinCheck(frame.HighlightButton)
+		F.ReskinCheck(frame.DynamicUpdateButton)
+		F.ReskinInput(frame.FilterBox)
+
+		F.ReskinArrow(frame.OpenParentButton, "up")
+		F.ReskinArrow(frame.NavigateBackwardButton, "left")
+		F.ReskinArrow(frame.NavigateForwardButton, "right")
+		F.ReskinArrow(frame.DuplicateButton, "up")
+
+		frame.NavigateBackwardButton:ClearAllPoints()
+		frame.NavigateBackwardButton:SetPoint("LEFT", frame.OpenParentButton, "RIGHT")
+		frame.NavigateForwardButton:ClearAllPoints()
+		frame.NavigateForwardButton:SetPoint("LEFT", frame.NavigateBackwardButton, "RIGHT")
+		frame.DuplicateButton:ClearAllPoints()
+		frame.DuplicateButton:SetPoint("LEFT", frame.NavigateForwardButton, "RIGHT")
+
+		for i = 1, 10 do
+			select(i, frame:GetRegions()):Hide()
+		end
+
+		for i = 1, 8 do
+			select(i, frame.ScrollFrameArt:GetRegions()):Hide()
+		end
+		F.CreateBD(frame.ScrollFrameArt, .3)
+	end
+
+	reskinTableAttribute(TableAttributeDisplay)
+
+	hooksecurefunc(TableInspectorMixin, "InspectTable", function(self)
+		reskinTableAttribute(self)
+	end)
 end
