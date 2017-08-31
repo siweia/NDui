@@ -74,6 +74,8 @@ function module:InterruptAlert()
 		if not IsInGroup() then return end
 		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
+			if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") then return end
+
 			local function SendChatMsg(infoText)
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 			end
