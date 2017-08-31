@@ -144,6 +144,7 @@ local function ForceDBMOptions()
 				["Scale"] = 1,
 				["HugeScale"] = 1,
 				["ExpandUpwards"] = true,
+				["ExpandUpwardsLarge"] = true,
 				["BarXOffset"] = 0,
 				["BarYOffset"] = 15,
 				["TimerPoint"] = "LEFT",
