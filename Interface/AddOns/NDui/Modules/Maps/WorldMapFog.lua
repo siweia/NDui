@@ -126,6 +126,9 @@ local zones = {
 	["Stormheim"] = {"AggrammarsVault:199:185:361:210", "BlackbeakOverlook:297:210:154:129", "Dreadwake:215:247:457:412", "Dreyrgrot:132:145:689:266", "Greywatch:173:163:648:339", "HallsOfValor:252:280:585:372",	"Haustvald:200:174:612:187", "Hrydshal:631:315:0:353", "MawOfNashal:509:251:17:0", "Morheim:150:180:741:313", "Nastrondir:241:194:345:95", "QatchmansRock:135:162:623:81",	"Runewood:194:214:592:226", "ShieldsRest:289:172:689:0", "SkoldAshil:177:169:506:345", "StormsReach:180:160:510:118", "TalonRest:291:208:316:282",	"TideskornHarbor:205:199:479:183", "Valdisdall:186:158:522:288", "WeepingBluffs:386:314:56:185",},
 	["Suramar"] = {"Ambervale:222:311:132:179", "CrimsonThicket:327:381:492:0", "Falanaar:248:317:23:136", "FelsoulHold:289:363:183:305", "GrandPromenade:355:291:344:285", "Jandvik:419:538:583:0", "MoonguardStronghold:480:245:58:0", "MoonwhisperGulch:428:316:201:0", "RuinsOfEluneeth:221:224:264:226", "SuramarCity:470:337:390:331", "Telanor:387:372:327:0",},
 	["Valsharah"] = {"Andutalah:241:240:587:250", "BlackrookHold:250:253:262:175", "BradensBrook:311:244:259:275", "DreamGrove:294:364:283:0",	"GloamingReef:239:301:136:274",	"GroveOfCenarius:171:150:457:351", "Lorlathil:177:156:467:413",	"MoonclawVale:254:281:549:380",	"Shalanir:326:360:419:0", "Smolderhide:341:188:324:480", "TempleOfElune:216:219:459:240", "Thastalah:218:168:342:416",},
+	["ArgusCore"] = {"DefiledPath:626:385:293:0", "FelfireArmory:660:668:0:0", "Terminus:467:430:535:238",},
+	["ArgusMacAree"] = {"Conservatory:313:353:498:111", "RuinsOfOronaar:265:310:278:284", "SeatOfTriumvirate:463:519:265:54", "Shadowguard:498:461:0:0", "Triumvirates:284:264:410:375", "UpperTerrace:701:323:0:0",},
+	["ArgusSurface"] = {"AnnihilanPits:296:336:371:178", "KrokulHovel:307:304:428:364", "Nathraxas:835:422:167:0", "PetrifiedForest:445:379:557:289", "ShatteredFields:498:530:37:138",},
 }
 
 -- Initialise counters
