@@ -37,8 +37,7 @@ tinsert(C.themes["Aurora"], function()
 
 	-- [[ Size up / down buttons ]]
 
-	for _, buttonName in pairs{"WorldMapFrameSizeUpButton", "WorldMapFrameSizeDownButton"} do
-		local button = _G[buttonName]
+	for _, button in pairs{WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton, WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MinimizeButton} do
 
 		button:SetSize(17, 17)
 		button:ClearAllPoints()
@@ -80,7 +79,7 @@ tinsert(C.themes["Aurora"], function()
 		vline:SetSize(1, 7)
 		tinsert(button.pixels, vline)
 
-		if buttonName == "WorldMapFrameSizeUpButton" then
+		if button == WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton then
 			hline:SetPoint("TOP", 1, -4)
 			vline:SetPoint("RIGHT", -4, 1)
 		else
