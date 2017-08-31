@@ -102,20 +102,26 @@ tinsert(C.themes["Aurora"], function()
 
 	-- Bonus roll
 
-	BonusRollFrame.Background:SetAlpha(0)
-	BonusRollFrame.IconBorder:Hide()
-	BonusRollFrame.BlackBackgroundHoist.Background:Hide()
-	BonusRollFrame.SpecRing:SetAlpha(0)
-	BonusRollFrame.SpecIcon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBDFrame(BonusRollFrame.SpecIcon)
+	do
+		local frame = BonusRollFrame
 
-	BonusRollFrame.PromptFrame.Icon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBG(BonusRollFrame.PromptFrame.Icon)
+		frame.Background:SetAlpha(0)
+		frame.IconBorder:Hide()
+		frame.BlackBackgroundHoist.Background:Hide()
+		frame.SpecRing:SetAlpha(0)
+		frame.SpecIcon:SetTexCoord(.08, .92, .08, .92)
+		local bg = F.CreateBDFrame(frame.SpecIcon)
+		frame:HookScript("OnShow", function()
+			bg:SetShown(frame.SpecIcon:IsShown() and frame.SpecIcon:GetTexture() ~= nil)
+		end)
 
-	BonusRollFrame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
-
-	F.CreateBD(BonusRollFrame)
-	F.CreateBDFrame(BonusRollFrame.PromptFrame.Timer, .25)
+		frame.PromptFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(frame.PromptFrame.Icon)
+		frame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
+		F.CreateBD(frame)
+		F.CreateSD(frame)
+		F.CreateBDFrame(frame.PromptFrame.Timer, .25)
+	end
 
 	-- Loot Roll Frame
 

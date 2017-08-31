@@ -133,6 +133,21 @@ tinsert(C.themes["Aurora"], function()
 		bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 101, -1)
 	end
 
+	-- Title Reward
+	do
+		local frame = QuestInfoPlayerTitleFrame
+		local icon = frame.Icon
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBDFrame(icon)
+		for i = 2, 4 do
+			select(i, frame:GetRegions()):Hide()
+		end
+		local bg = F.CreateBDFrame(frame, .25)
+		bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)
+		bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 220, -1)
+	end
+
 	-- [[ Change text colours ]]
 
 	hooksecurefunc(QuestInfoRequiredMoneyText, "SetTextColor", function(self, r, g, b)
