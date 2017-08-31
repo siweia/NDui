@@ -52,6 +52,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 239362, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 230384, 6)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 230920, 6)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 234661, 6)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 234332, 6)
 
 BOSS = 1896 -- 绝望的聚合体
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236361)
