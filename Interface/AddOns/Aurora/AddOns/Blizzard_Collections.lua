@@ -186,6 +186,11 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
 	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
 
+	PetJournalSummonRandomFavoritePetButtonBorder:Hide()
+	PetJournalSummonRandomFavoritePetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	PetJournalSummonRandomFavoritePetButton:SetPushedTexture("")
+	F.CreateBG(PetJournalSummonRandomFavoritePetButton)
+
 	-- Favourite mount button
 
 	MountJournalSummonRandomFavoriteButtonBorder:Hide()
