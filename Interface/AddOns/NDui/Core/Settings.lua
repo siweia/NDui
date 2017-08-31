@@ -383,7 +383,7 @@ local function YesTutor()
 		if currentPage > 3 then pass:Hide() end
 		currentPage = currentPage + 1
 		RefreshText(currentPage)
-		PlaySound("igQuestLogOpen")
+		PlaySound(SOUNDKIT.IG_QUEST_LOG_OPEN)
 	end)
 	apply:SetScript("OnClick", function()
 		pass:Show()
@@ -413,7 +413,7 @@ local function YesTutor()
 
 		currentPage = currentPage + 1
 		RefreshText(currentPage)
-		PlaySound("igQuestLogOpen")
+		PlaySound(SOUNDKIT.IG_QUEST_LOG_OPEN)
 	end)
 end
 

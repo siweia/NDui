@@ -116,7 +116,7 @@ function module:MicroMenu()
 			end
 		end},
 		{"micro_gm", false, HELP_BUTTON, function() ToggleFrame(HelpFrame) end},
-		{"micro_settings", false, MAIN_MENU, function() ToggleFrame(GameMenuFrame) PlaySound("igMiniMapOpen") end},
+		{"micro_settings", false, MAIN_MENU, function() ToggleFrame(GameMenuFrame) PlaySound(SOUNDKIT.IG_MINIMAP_OPEN) end},
 		{"micro_bags", true, key(BAGSLOT, "OPENALLBAGS"), function() ToggleAllBags() end},
 	}
 	for _, info in pairs(buttonInfo) do self:CreateMMB(menubar, info) end

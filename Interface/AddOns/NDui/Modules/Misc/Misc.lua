@@ -305,7 +305,7 @@ end)
 
 -- RC in MasterSound
 NDui:EventFrame("READY_CHECK"):SetScript("OnEvent", function()
-	PlaySound("ReadyCheck", "master")
+	PlaySound(SOUNDKIT.READY_CHECK, "master")
 end)
 
 -- Faster Looting

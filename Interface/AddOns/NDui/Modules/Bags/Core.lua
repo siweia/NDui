@@ -372,7 +372,7 @@ function module:OnLogin()
 					if not IsReagentBankUnlocked() then
 						StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 					else
-						PlaySound("igCharacterInfoTab")
+						PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 						ReagentBankFrame:Show()
 						BankFrame.selectedTab = 2
 						f.reagent:Show()
@@ -391,7 +391,7 @@ function module:OnLogin()
 			local switch = B.CreateButton(self, 70, 20, BANK)
 			switch:SetPoint("LEFT", deposit, "RIGHT", 6, 0)
 			switch:SetScript("OnClick", function()
-				PlaySound("igCharacterInfoTab")
+				PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 				ReagentBankFrame:Hide()
 				BankFrame.selectedTab = 1
 				f.reagent:Hide()
@@ -400,8 +400,8 @@ function module:OnLogin()
 		end
 
 		-- Add Sound
-		self:HookScript("OnShow", function() PlaySound("igBackPackOpen") end)
-		self:HookScript("OnHide", function() PlaySound("igBackPackClose") end)
+		self:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
+		self:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 	end
 
 	-- Fix Containter Bug

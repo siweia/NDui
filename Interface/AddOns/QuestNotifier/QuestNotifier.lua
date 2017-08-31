@@ -167,7 +167,7 @@ function QN_OnEvent(event)
 							end
 						end
 						if QN_Settings.Sound == true then
-							PlaySound("AlarmClockWarning3", "master")
+							PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, "master")
 						end
 						UIErrorsFrame:AddMessage(QN_ItemColorMsg)
 					end

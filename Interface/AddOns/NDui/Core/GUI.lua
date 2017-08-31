@@ -479,7 +479,7 @@ local function CreateTab(i, name)
 	label:SetTextColor(1, .8, 0)
 
 	tab:SetScript("OnClick", function(self)
-		PlaySound("gsTitleOptionOK")
+		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
 		SelectTab(i)
 	end)
 	tab:SetScript("OnEnter", function(self)
@@ -772,7 +772,7 @@ end)
 gui:SetScript("OnClick", function()
 	OpenGUI()
 	HideUIPanel(GameMenuFrame)
-	PlaySound("igMainMenuOption")
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 end)
 
 -- Aurora Reskin
