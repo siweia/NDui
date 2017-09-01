@@ -312,6 +312,7 @@ QuickQuest:Register("QUEST_PROGRESS", function()
 	if(IsQuestCompletable()) then
 		local _, _, worldQuest = GetQuestTagInfo(GetQuestID())
 		if worldQuest then return end
+		if GetNPCID() == 119388 then return end
 
 		local requiredItems = GetNumQuestItems()
 		if(requiredItems > 0) then
