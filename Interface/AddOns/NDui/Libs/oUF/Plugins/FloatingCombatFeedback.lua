@@ -12,7 +12,7 @@ local pairs = pairs
 local cos, sin, mmax = cos, sin, math.max
 local tremove, tinsert = table.remove, table.insert
 
-local BreakUpLargeNumbers = BreakUpLargeNumbers
+local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
 local MY_PET_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 local MY_VEHICLE_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN)
 
@@ -44,7 +44,7 @@ local schoolColors = {
 	[SCHOOL_MASK_ARCANE]	= {r = 1.00, g = 0.50, b = 1.00},	-- 0x40 or 64
 }
 
-local function RemoveString(self, i, string)
+local function removeString(self, i, string)
 	tremove(self.FeedbackToAnimate, i)
 	string:SetText(nil)
 	string:SetAlpha(0)
@@ -53,41 +53,33 @@ local function RemoveString(self, i, string)
 	return string
 end
 
-local function GetAvailableString(self)
-	for i = 1, self.maxStrings do
+local function getAvailableString(self)
+	for i = 1, self.__max do
 		if not self[i]:IsShown() then
 			return self[i]
 		end
 	end
 
-	return RemoveString(self, 1, self.FeedbackToAnimate[1])
+	return removeString(self, 1, self.FeedbackToAnimate[1])
 end
 
-local function FountainScroll(self)
-	local x = self.x + self.side * 65 * (1 - cos(90 * self.elapsed / self.scrollTime))
-	local y = self.y + self.yDirection * 65 * sin(90 * self.elapsed / self.scrollTime)
-
-	return x, y
+local function fountainScroll(self)
+	return self.x + self.xDirection * self.scrollHeight * (1 - cos(90 * self.elapsed / self.scrollTime)),
+		self.y + self.yDirection * self.scrollHeight * sin(90 * self.elapsed / self.scrollTime)
 end
 
-local function StandardScroll(self)
-	local x = self.x
-	local y = self.y + self.yDirection * self.scrollHeight * self.elapsed / self.scrollTime
-
-	return x, y
+local function standardScroll(self)
+	return self.x, self.y + self.yDirection * self.scrollHeight * self.elapsed / self.scrollTime
 end
 
-local function SetScrolling(self, elapsed)
-	local x, y
-
+local function onUpdate(self, elapsed)
 	for index, string in pairs(self.FeedbackToAnimate) do
 		if string.elapsed >= string.scrollTime then
-			RemoveString(self, index, string)
+			removeString(self, index, string)
 		else
 			string.elapsed = string.elapsed + elapsed
-			x, y = self.scrollFunction(string)
 
-			string:SetPoint("CENTER", self, "CENTER", x, y)
+			string:SetPoint("CENTER", self, "CENTER", self.Scroll(string))
 
 			if (string.elapsed >= self.fadeout) then
 				string:SetAlpha(mmax(1 - (string.elapsed - self.fadeout) / (self.scrollTime - self.fadeout), 0))
@@ -100,9 +92,9 @@ local function SetScrolling(self, elapsed)
 	end
 end
 
-local function OnShow(self)
+local function onShow(self)
 	for index, string in pairs(self.FeedbackToAnimate) do
-		RemoveString(self, index, string)
+		removeString(self, index, string)
 	end
 end
 
@@ -120,7 +112,7 @@ local eventFilter = {
 	["SPELL_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell"},
 }
 
-local function GetFloatingIconTexture(iconType, spellID, isPet)
+local function getFloatingIconTexture(iconType, spellID, isPet)
 	local texture
 	if iconType == "spell" then
 		texture = GetSpellTexture(spellID)
@@ -137,7 +129,7 @@ local function GetFloatingIconTexture(iconType, spellID, isPet)
 end
 
 local function Update(self, event, ...)
-	local fcf = self.FloatingCombatFeedback
+	local element = self.FloatingCombatFeedback
 	local multiplier = 1
 	local text, color, texture, critMark
 	local unit = self.unit
@@ -147,30 +139,30 @@ local function Update(self, event, ...)
 		local isPlayer = UnitGUID("player") == sourceGUID
 		local atTarget = UnitGUID("target") == destGUID
 		local atPlayer = UnitGUID("player") == destGUID
-		local isVehicle = fcf.showPets and sourceFlags == MY_VEHICLE_FLAGS
-		local isPet = fcf.showPets and sourceFlags == MY_PET_FLAGS
+		local isVehicle = element.showPets and sourceFlags == MY_VEHICLE_FLAGS
+		local isPet = element.showPets and sourceFlags == MY_PET_FLAGS
 
 		if (unit == "target" and (isPlayer or isPet or isVehicle) and atTarget) or (unit == "player" and atPlayer) then
 			local value = eventFilter[eventType]
 			if not value then return end
 
 			if value.suffix == "DAMAGE" then
-				if value.isPeriod and not fcf.showHots then return end
+				if value.isPeriod and not element.showHots then return end
 
 				local amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(value.index, ...)
-				texture = GetFloatingIconTexture(value.iconType, spellID, isPet)
-				text = "-"..(fcf.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
+				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
+				text = "-"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
 
 				if critical or crushing then
 					multiplier = 1.25
 					critMark = true
 				end
 			elseif value.suffix == "HEAL" then
-				if value.isPeriod and not fcf.showHots then return end
+				if value.isPeriod and not element.showHots then return end
 
 				local amount, overhealing, absorbed, critical = select(value.index, ...)
-				texture = GetFloatingIconTexture(value.iconType, spellID)
-				text = "+"..(fcf.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
+				texture = getFloatingIconTexture(value.iconType, spellID)
+				text = "+"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
 
 				if critical then
 					multiplier = 1.25
@@ -178,7 +170,7 @@ local function Update(self, event, ...)
 				end
 			elseif value.suffix == "MISS" then
 				local missType, isOffHand, amountMissed = select(value.index, ...)
-				texture = GetFloatingIconTexture(value.iconType, spellID, isPet)
+				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = _G["COMBAT_TEXT_"..missType]
 			end
 
@@ -195,28 +187,30 @@ local function Update(self, event, ...)
 	end
 
 	if text and texture then
-		local string = GetAvailableString(fcf)
+		local string = getAvailableString(element)
 
-		string:SetFont(DB.Font[1], fcf.fontHeight * multiplier, DB.Font[3])
+		string:SetFont(DB.Font[1], element.fontHeight * multiplier, DB.Font[3])
 		string:SetFormattedText("|T%s:18:18:-2:0:64:64:5:59:5:59|t%s", texture, (critMark and "*" or "")..text)
 		string:SetTextColor(color.r, color.g, color.b)
 		string.elapsed = 0
-		string.scrollHeight = fcf.scrollHeight
-		string.scrollTime = fcf.scrollTime
-		string.side = fcf.side
-		string.yDirection = fcf.yDirection
-		string.x = fcf.xOffset * string.side
-		string.y = fcf.yOffset * string.yDirection
-		string:SetPoint("CENTER", fcf, "CENTER", string.x, string.y)
+		string.scrollHeight = element.scrollHeight
+		string.scrollTime = element.scrollTime
+		string.xDirection = element.xDirection
+		string.yDirection = element.yDirection
+		string.x = element.xOffset * string.xDirection
+		string.y = element.yOffset * string.yDirection
+		string:SetPoint("CENTER", element, "CENTER", string.x, string.y)
 		string:SetAlpha(1)
 		string:Show()
 
-		tinsert(fcf.FeedbackToAnimate, string)
+		tinsert(element.FeedbackToAnimate, string)
 
-		fcf.side = fcf.side * -1
+		element.xDirection = element.xDirection * -1
 
-		if not fcf:GetScript("OnUpdate") then
-			fcf:SetScript("OnUpdate", SetScrolling)
+		if not element:GetScript("OnUpdate") then
+			element.Scroll = element.mode == "Fountain" and fountainScroll or standardScroll
+
+			element:SetScript("OnUpdate", onUpdate)
 		end
 	end
 end
@@ -230,37 +224,37 @@ local function ForceUpdate(element)
 end
 
 local function Enable(self, unit)
-	local fcf = self.FloatingCombatFeedback
+	local element = self.FloatingCombatFeedback
 
-	if not fcf then return end
+	if not element then return end
 
-	fcf.__owner = self
-	fcf.maxStrings = #fcf
-	fcf.side = 1
-	fcf.scrollHeight = 160
-	fcf.scrollTime = fcf.scrollTime or 2
-	fcf.fadeout = fcf.scrollTime / 3
-	fcf.yDirection = fcf.yDirection or 1
-	fcf.fontHeight = fcf.fontHeight or 18
-	fcf.abbreviateNumbers = fcf.abbreviateNumbers
-	fcf.ForceUpdate = ForceUpdate
-	fcf.FeedbackToAnimate = {}
+	element.__owner = self
+	element.__max = #element
+	element.xDirection = 1
+	element.scrollHeight = 160
+	element.scrollTime = element.scrollTime or 2
+	element.fadeout = element.scrollTime / 3
+	element.yDirection = element.yDirection or 1
+	element.fontHeight = element.fontHeight or 18
+	element.abbreviateNumbers = element.abbreviateNumbers
+	element.ForceUpdate = ForceUpdate
+	element.FeedbackToAnimate = {}
 
-	if fcf.mode == "Fountain" then
-		fcf.scrollFunction = FountainScroll
-		fcf.xOffset = fcf.xOffset or 6
-		fcf.yOffset = fcf.yOffset or 8
+	if element.mode == "Fountain" then
+		element.Scroll = fountainScroll
+		element.xOffset = element.xOffset or 6
+		element.yOffset = element.yOffset or 8
 	else
-		fcf.scrollFunction = StandardScroll
-		fcf.xOffset = fcf.xOffset or 30
-		fcf.yOffset = fcf.yOffset or 8
+		element.Scroll = standardScroll
+		element.xOffset = element.xOffset or 30
+		element.yOffset = element.yOffset or 8
 	end
 
-	for i = 1, fcf.maxStrings do
-		fcf[i]:Hide()
+	for i = 1, element.__max do
+		element[i]:Hide()
 	end
 
-	fcf:HookScript("OnShow", OnShow)
+	element:HookScript("OnShow", onShow)
 
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path)
 	if unit == "player" then
@@ -272,9 +266,9 @@ local function Enable(self, unit)
 end
 
 local function Disable(self)
-	local fcf = self.FloatingCombatFeedback
+	local element = self.FloatingCombatFeedback
 
-	if fcf then
+	if element then
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_DISABLED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Path)

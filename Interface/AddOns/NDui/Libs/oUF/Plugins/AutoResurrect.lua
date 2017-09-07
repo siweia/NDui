@@ -60,26 +60,23 @@ local function macroBody(class)
 end
 
 local function setupAttribute(self, class)
+	if InCombatLockdown() then return end
+
 	if classList[class] and not IsAddOnLoaded("Clique") then
 		self:SetAttribute("*type3", "macro")
 		self:SetAttribute("macrotext3", macroBody(class))
-		return true
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 	end
 end
 
-local delay = CreateFrame("Frame")
 local Enable = function(self)
 	local _, class = UnitClass("player")
 	if not class or not NDuiDB["UFs"]["AutoRes"] then return end
 
-	if not InCombatLockdown() then
-		setupAttribute(self, class)
+	if InCombatLockdown() then
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupAttribute)
 	else
-		delay:RegisterEvent("PLAYER_REGEN_ENABLED")
-		delay:SetScript("OnEvent", function()
-			setupAttribute(self, class)
-			delay:UnregisterAllEvents()
-		end)
+		setupAttribute(self, class)
 	end
 end
 
@@ -87,6 +84,7 @@ local Disable = function(self)
 	if NDuiDB["UFs"]["AutoRes"] then return end
 
 	self:SetAttribute("*type3", nil)
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 end
 
 oUF:AddElement("AutoResurrect", nil, Enable, Disable)
