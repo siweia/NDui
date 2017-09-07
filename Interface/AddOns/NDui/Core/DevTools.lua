@@ -78,6 +78,12 @@ SlashCmdList["NDUI_GETFONT"] = function(msg)
 end
 SLASH_NDUI_GETFONT1 = "/nff"
 
+SlashCmdList["NDUI_DEV"] = function()
+	UIParentLoadAddOn("Blizzard_Console")
+	DeveloperConsole:Toggle()
+end
+SLASH_NDUI_DEV1 = "/ndev"
+
 -- Grids
 local grid
 local boxSize = 32
