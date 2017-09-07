@@ -316,6 +316,18 @@ tinsert(C.themes["Aurora"], function()
 				frame.shine:SetTexture("")
 				frame.glow:SetTexture("")
 			end
+		elseif frame.queue == InvasionAlertSystem then
+			if not frame.bg then
+				frame.bg = F.CreateBDFrame(frame)
+				frame.bg:SetPoint("TOPLEFT", 6, -6)
+				frame.bg:SetPoint("BOTTOMRIGHT", -6, 6)
+				F.CreateSD(frame.bg)
+
+				select(1, frame:GetRegions()):Hide()
+				local icon = select(2, frame:GetRegions())
+				icon:SetTexCoord(.08, .92, .08, .92)
+				F.CreateBDFrame(icon)
+			end
 		end
 
 		fixAnim(frame)

@@ -132,6 +132,7 @@ tinsert(C.themes["Aurora"], function()
 				frame.Border:SetAlpha(0)
 				frame.Background:SetAlpha(0)
 				frame.bg = F.CreateBDFrame(frame)
+				F.CreateSD(frame.bg)
 
 				frame.Timer.Bar:SetTexture(C.media.backdrop)
 				frame.Timer.Bar:SetVertexColor(1, .8, 0)
@@ -151,7 +152,7 @@ tinsert(C.themes["Aurora"], function()
 			if frame:IsShown() then
 				local _, _, _, quality = GetLootRollItemInfo(frame.rollID)
 				local color = BAG_ITEM_QUALITY_COLORS[quality]
-				frame.bg:SetBackdropBorderColor(color.r*.6, color.g*.6, color.b*.6)
+				frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
 		end
 	end)
