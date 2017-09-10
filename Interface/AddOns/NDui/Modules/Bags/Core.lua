@@ -269,7 +269,8 @@ function module:OnLogin()
 
 	function MyContainer:OnCreate(name, settings)
 		self.Settings = settings
-		B.CreateBD(self, .6)
+		B.CreateBD(self, .5, -1)
+		B.CreateSD(self, 3, 3)
 		B.CreateTex(self)
 
 		self:SetParent(settings.Parent or Bags)
