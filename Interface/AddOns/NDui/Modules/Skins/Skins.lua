@@ -55,17 +55,17 @@ function module:OnLogin()
 	-- MICROMENU
 	if NDuiDB["Skins"]["MenuLine"] then
 		local mmbottomL = CreateFrame("Frame", nil, UIParent)
-		mmbottomL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", -1, 2)
+		mmbottomL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 3)
 		B.CreateGF(mmbottomL, 230, 1, "Horizontal", cr, cg, cb, 0, .7)
 		local mmbottomR = CreateFrame("Frame", nil, UIParent)
-		mmbottomR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 1, 2)
+		mmbottomR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 3)
 		B.CreateGF(mmbottomR, 230, 1, "Horizontal", cr, cg, cb, .7, 0)
 
 		local mmtopL = CreateFrame("Frame", nil, UIParent)
-		mmtopL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", -1, 23)
+		mmtopL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 24)
 		B.CreateGF(mmtopL, 260, 1, "Horizontal", cr, cg, cb, 0, .7)
 		local mmtopR = CreateFrame("Frame", nil, UIParent)
-		mmtopR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 1, 23)
+		mmtopR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 24)
 		B.CreateGF(mmtopR, 260, 1, "Horizontal", cr, cg, cb, .7, 0)
 	end
 
@@ -75,7 +75,7 @@ function module:OnLogin()
 
 	if NDuiDB["Skins"]["BarLine"] then
 		local MactionbarL = CreateFrame("Frame", nil, UIParent)
-		MactionbarL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", -1, 4)
+		MactionbarL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 4)
 		B.CreateGF(MactionbarL, 250, basic, "Horizontal", 0, 0, 0, 0, .5)
 		local MactionbarL1 = CreateFrame("Frame", nil, MactionbarL)
 		MactionbarL1:SetPoint("BOTTOMRIGHT", MactionbarL, "TOPRIGHT")
@@ -83,7 +83,7 @@ function module:OnLogin()
 		RegisterStateDriver(MactionbarL, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 
 		local MactionbarR = CreateFrame("Frame", nil, UIParent)
-		MactionbarR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 1, 4)
+		MactionbarR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 4)
 		B.CreateGF(MactionbarR, 250, basic, "Horizontal", 0, 0, 0, .5, 0)
 		local MactionbarR1 = CreateFrame("Frame", nil, MactionbarR)
 		MactionbarR1:SetPoint("BOTTOMLEFT", MactionbarR, "TOPLEFT")
@@ -92,7 +92,7 @@ function module:OnLogin()
 
 		-- OVERRIDEBAR
 		local OverbarL = CreateFrame("Frame", nil, UIParent)
-		OverbarL:SetPoint("BOTTOM", UIParent, "BOTTOM", -101, 4)
+		OverbarL:SetPoint("BOTTOM", UIParent, "BOTTOM", -100, 4)
 		B.CreateGF(OverbarL, 200, 57, "Horizontal", 0, 0, 0, 0, .5)
 		local OverbarL1 = CreateFrame("Frame", nil, OverbarL)
 		OverbarL1:SetPoint("BOTTOM", OverbarL, "TOP")
@@ -100,7 +100,7 @@ function module:OnLogin()
 		RegisterStateDriver(OverbarL, "visibility", "[petbattle]hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 
 		local OverbarR = CreateFrame("Frame", nil, UIParent)
-		OverbarR:SetPoint("BOTTOM", UIParent, "BOTTOM", 101, 4)
+		OverbarR:SetPoint("BOTTOM", UIParent, "BOTTOM", 100, 4)
 		B.CreateGF(OverbarR, 200, 57, "Horizontal", 0, 0, 0, .5, 0)
 		local OverbarR1 = CreateFrame("Frame", nil, OverbarR)
 		OverbarR1:SetPoint("BOTTOM", OverbarR, "TOP")

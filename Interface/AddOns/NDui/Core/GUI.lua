@@ -623,7 +623,7 @@ local function CreateOption(i)
 		else
 			local l = CreateFrame("Frame", nil, parent)
 			l:SetPoint("TOPLEFT", 25, -offset - 12)
-			B.CreateGF(l, 550, .5, "Horizontal", .7, .7, .7, .7, 0)
+			B.CreateGF(l, 550, 2, "Horizontal", .7, .7, .7, .7, 0)
 			offset = offset + 35
 		end
 	end

@@ -195,7 +195,7 @@ function module:RecycleBin()
 	B.CreateGF(bottomLine, 220, 1, "Horizontal", r, g, b, 0, .7)
 	local rightLine = CreateFrame("Frame", nil, bin)
 	rightLine:SetPoint("LEFT", bin, "RIGHT", 0, 0)
-	B.CreateGF(rightLine, 1, 36, "Vertical", r, g, b, .7, .7)
+	B.CreateGF(rightLine, 1, 40, "Vertical", r, g, b, .7, .7)
 	bin:SetFrameStrata("LOW")
 
 	local function clickFunc()
