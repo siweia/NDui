@@ -1,9 +1,11 @@
 local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:GetModule("Skins")
-local cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b
 
 local buttonList = {}
 function module:CreateMMB(parent, data)
+	local cr, cg, cb = 0, 0, 0
+	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b end
+
 	local texture, onside, tip, func = unpack(data)
 	local width, offset = 24, 0
 	if onside then width, offset = 35, 6 end
@@ -12,22 +14,23 @@ function module:CreateMMB(parent, data)
 	tinsert(buttonList, bu)
 	bu:SetSize(width, 20)
 	bu:SetFrameStrata("BACKGROUND")
-	B.CreateBD(bu, 0)
-	bu:SetBackdropBorderColor(0, 0, 0, 0)
+	B.CreateGT(bu, "ANCHOR_TOP", tip)
+
 	local icon = bu:CreateTexture(nil, "ARTWORK")
 	icon:SetPoint("CENTER", offset, 0)
 	icon:SetSize(50, 50)
 	icon:SetTexture(DB.Micro..texture)
 	icon:SetVertexColor(cr, cg, cb)
-	B.CreateGT(bu, "ANCHOR_TOP", tip)
-	bu:HookScript("OnEnter", function(self)
-		self:SetBackdropColor(0, 0, 0, 1)
-		self:SetBackdropBorderColor(0, 0, 0, 1)
-	end)
-	bu:HookScript("OnLeave", function(self)
-		self:SetBackdropColor(0, 0, 0, 0)
-		self:SetBackdropBorderColor(0, 0, 0, 0)
-	end)
+
+	local bg = B.CreateBG(bu, 0)
+	B.CreateBD(bg)
+	bg:Hide()
+	if not NDuiDB["Skins"]["ClassLine"] then
+		bg:SetBackdropColor(1, 1, 1, .5)
+		bg:SetBackdropBorderColor(1, 1, 1)
+	end
+	bu:HookScript("OnEnter", function() bg:Show() end)
+	bu:HookScript("OnLeave", function() bg:Hide() end)
 	bu:SetScript("OnClick", func)
 end
 
