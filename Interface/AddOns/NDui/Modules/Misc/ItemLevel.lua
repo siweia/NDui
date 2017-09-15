@@ -8,9 +8,9 @@ function module:ShowItemLevel()
 	if not NDuiDB["Misc"]["ItemLevel"] then return end
 
 	local SLOTIDS = {}
-    for _, slot in pairs({"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand", "SecondaryHand"}) do
-        SLOTIDS[slot] = GetInventorySlotInfo(slot.."Slot")
-    end
+	for _, slot in pairs({"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand", "SecondaryHand"}) do
+		SLOTIDS[slot] = GetInventorySlotInfo(slot.."Slot")
+	end
 
 	local myString = setmetatable({}, {
 		__index = function(t, i)
