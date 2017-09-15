@@ -81,6 +81,7 @@ function module:FontStyle()
 	ReskinFont(System_IME, 16)
 	ReskinFont(Fancy24Font, 24)
 	ReskinFont(SplashHeaderFont, 24)
+	ReskinFont(ChatBubbleFont, 13)
 
 	-- Refont RaidFrame Health
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
