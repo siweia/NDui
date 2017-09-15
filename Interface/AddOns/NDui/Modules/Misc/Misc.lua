@@ -511,8 +511,12 @@ do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
 		if bu then
 			bu:HookScript("OnDoubleClick", function()
-				LFGListFrame.SearchPanel.SignUpButton:Click()
-				LFGListApplicationDialog.SignUpButton:Click()
+				if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
+					LFGListFrame.SearchPanel.SignUpButton:Click()
+				end
+				if LFGListApplicationDialog.SignUpButton:IsEnabled() then
+					LFGListApplicationDialog.SignUpButton:Click()
+				end
 			end)
 		end
 	end
