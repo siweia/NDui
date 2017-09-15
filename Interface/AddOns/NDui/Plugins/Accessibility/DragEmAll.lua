@@ -66,7 +66,7 @@ local lodFrames = {
 	Blizzard_AchievementUI		= { ["AchievementFrame"] = false, ["AchievementFrameHeader"] = true, ["AchievementFrameCategoriesContainer"] = "AchievementFrame", ["AchievementFrame.searchResults"] = false },
 	Blizzard_AdventureMap		= { ["AdventureMapQuestChoiceDialog"] = false },
 	Blizzard_ArchaeologyUI		= { ["ArchaeologyFrame"] = false },
-	Blizzard_ArtifactUI			= { ["ArtifactFrame.BorderFrame"] = true, ["ArtifactRelicForgeFrame"] = false },
+	Blizzard_ArtifactUI			= { ["ArtifactFrame"] = false, ["ArtifactRelicForgeFrame"] = false },
 	Blizzard_AuctionUI			= { ["AuctionFrame"] = false },
 	Blizzard_BarbershopUI		= { ["BarberShopFrame"] = false },
 	Blizzard_BindingUI			= { ["KeyBindingFrame"] = false },
