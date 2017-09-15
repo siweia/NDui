@@ -123,12 +123,12 @@ tinsert(C.themes["Aurora"], function()
 
 		tab.bg = CreateFrame("Frame", nil, tab)
 		tab.bg:SetPoint("TOPLEFT", 2, -3)
-		tab.bg:SetPoint("BOTTOMRIGHT", 0, -1)
+		tab.bg:SetPoint("BOTTOMRIGHT", 0, -2)
 		tab.bg:SetFrameLevel(0)
 		F.CreateBD(tab.bg)
 
-		tab.Hider:SetPoint("TOPLEFT", tab.bg, 1, -1)
-		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -1, 1)
+		tab.Hider:SetPoint("TOPLEFT", tab.bg, 1.2, -1.2)
+		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -1.2, 1.2)
 	end
 
 	-- [[ Equipment manager ]]

@@ -73,6 +73,7 @@ tinsert(C.themes["Aurora"], function()
 
 	F.CreateBD(MasterLooterFrame)
 	F.ReskinClose(select(3, MasterLooterFrame:GetChildren()))
+	F.CreateSD(MasterLooterFrame)
 
 	hooksecurefunc("MasterLooterFrame_UpdatePlayers", function()
 		for i = 1, MAX_RAID_MEMBERS do
@@ -133,7 +134,7 @@ tinsert(C.themes["Aurora"], function()
 				frame.Border:SetAlpha(0)
 				frame.Background:SetAlpha(0)
 				frame.bg = F.CreateBDFrame(frame)
-				F.CreateSD(frame.bg)
+				F.CreateSD(frame)
 
 				frame.Timer.Bar:SetTexture(C.media.backdrop)
 				frame.Timer.Bar:SetVertexColor(1, .8, 0)

@@ -119,6 +119,7 @@ tinsert(C.themes["Aurora"], function()
 	npcbd:SetPoint("BOTTOM", QuestNPCModelTextScrollFrame)
 	npcbd:SetFrameLevel(0)
 	F.CreateBD(npcbd)
+	F.CreateSD(npcbd)
 
 	local npcLine = CreateFrame("Frame", nil, QuestNPCModel)
 	npcLine:SetPoint("BOTTOMLEFT", 0, -1)

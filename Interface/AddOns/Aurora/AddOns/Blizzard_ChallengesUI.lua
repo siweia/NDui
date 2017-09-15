@@ -34,7 +34,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 
 	local angryStyle
 	ChallengesFrame:HookScript("OnShow", function()
-		for i = 1, 12 do
+		for i = 1, 13 do
 			local bu = ChallengesFrame.DungeonIcons[i]
 			if bu and not bu.styled then
 				bu:GetRegions():SetAlpha(0)

@@ -31,8 +31,6 @@ C.themes["Blizzard_Calendar"] = function()
 		local hl = bu:GetHighlightTexture()
 		hl:SetVertexColor(r, g, b, .2)
 		hl.SetAlpha = F.dummy
-		hl:SetPoint("TOPLEFT", -1, 1)
-		hl:SetPoint("BOTTOMRIGHT")
 	end
 
 	for i = 1, 7 do
