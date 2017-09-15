@@ -62,6 +62,7 @@ local ignoreQuestNPC = {
 	[14847] = true,		-- DarkMoon
 	[119388] = true,	-- 酋长哈顿
 	[114719] = true,	-- 商人塞林
+	[121263] = true,	-- 大技师罗姆尔
 }
 
 local function GetQuestLogQuests(onlyComplete)
