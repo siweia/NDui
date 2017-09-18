@@ -313,7 +313,8 @@ QuickQuest:Register("QUEST_PROGRESS", function()
 	if(IsQuestCompletable()) then
 		local _, _, worldQuest = GetQuestTagInfo(GetQuestID())
 		if worldQuest then return end
-		if GetNPCID() == 119388 then return end
+		-- 阿古斯的随从兑换
+		if GetNPCID() == 119388 or GetNPCID() == 127037 then return end
 
 		local requiredItems = GetNumQuestItems()
 		if(requiredItems > 0) then
