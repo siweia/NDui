@@ -273,6 +273,7 @@ gui:SetScript("OnEvent", function(self, _, addon)
 
 	-- fill 'old' table
 	copyTable(AuroraConfig, old)
+	AuroraConfig.enableFont = false
 
 	F.CreateBD(gui)
 	F.CreateSD(gui)
