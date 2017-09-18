@@ -49,24 +49,25 @@ tinsert(C.themes["Aurora"], function()
 				frame.OldAchievement:SetTexture("")
 				frame.GuildBorder:SetTexture("")
 				frame.Icon.Bling:SetTexture("")
+
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
 			frame.Background:SetTexture("")
 			frame.Icon.Overlay:SetTexture("")
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 			-- otherwise it hides
 			frame.Shield.Points:Show()
 			frame.Shield.Icon:Show()
 		elseif frame.queue == CriteriaAlertSystem then
 			if not frame.bg then
-				local icon = frame.Icon.Texture
 				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", icon, -6, 5)
-				frame.bg:SetPoint("BOTTOMRIGHT", icon, 236, -5)
+				frame.bg:SetPoint("TOPLEFT", frame, -18, 5)
+				frame.bg:SetPoint("BOTTOMRIGHT", frame, 18, -1)
 				F.CreateSD(frame.bg)
 
+				frame.Icon:SetScale(.8)
 				frame.Unlocked:SetTextColor(1, 1, 1)
-				F.ReskinIcon(icon)
+				F.ReskinIcon(frame.Icon.Texture)
 				frame.Background:SetTexture("")
 				frame.Icon.Bling:SetTexture("")
 				frame.Icon.Overlay:SetTexture("")
@@ -116,22 +117,11 @@ tinsert(C.themes["Aurora"], function()
 			end
 			frame.BaseQualityBorder:SetTexture("")
 			frame.UpgradeQualityBorder:SetTexture("")
-		elseif frame.queue == MoneyWonAlertSystem then
+		elseif frame.queue == MoneyWonAlertSystem or frame.queue == HonorAwardedAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", 8, -8)
-				frame.bg:SetPoint("BOTTOMRIGHT", -8, 8)
-				F.CreateSD(frame.bg)
-
-				F.ReskinIcon(frame.Icon)
-				frame.Background:SetTexture("")
-				frame.IconBorder:SetTexture("")
-			end
-		elseif frame.queue == HonorAwardedAlertSystem then
-			if not frame.bg then
-				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", 8, -8)
-				frame.bg:SetPoint("BOTTOMRIGHT", -8, 8)
+				frame.bg:SetPoint("TOPLEFT", 7, -7)
+				frame.bg:SetPoint("BOTTOMRIGHT", -7, 7)
 				F.CreateSD(frame.bg)
 
 				F.ReskinIcon(frame.Icon)
@@ -146,18 +136,18 @@ tinsert(C.themes["Aurora"], function()
 				F.CreateSD(frame.bg)
 
 				frame:GetRegions():SetTexture("")
-				frame.Icon:SetDrawLayer("ARTWORK")
-				F.CreateBG(frame.Icon)
+				frame.Icon:SetMask(nil)
+				frame.Icon:SetTexCoord(.08, .92, .08, .92)
+				F.CreateBDFrame(frame.Icon)
+
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
-			frame.Icon:SetMask(nil)
-			frame.Icon:SetTexCoord(.08, .92, .08, .92)
 		elseif frame.queue == WorldQuestCompleteAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 3, -9)
-				frame.bg:SetPoint("BOTTOMRIGHT", -8, 6)
+				frame.bg:SetPoint("BOTTOMRIGHT", -3, 6)
 				F.CreateSD(frame.bg)
 
 				frame.QuestTexture:SetTexCoord(.08, .92, .08, .92)
@@ -171,20 +161,21 @@ tinsert(C.themes["Aurora"], function()
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 8, -8)
-				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
+				frame.bg:SetPoint("BOTTOMRIGHT", -8, 11)
 				F.CreateSD(frame.bg)
 
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(frame.Icon)
 				frame:GetRegions():Hide()
+
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 		elseif frame.queue == GarrisonFollowerAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", 19, -9)
-				frame.bg:SetPoint("BOTTOMRIGHT", -16, 15)
+				frame.bg:SetPoint("TOPLEFT", 15, -2)
+				frame.bg:SetPoint("BOTTOMRIGHT", -15, 15)
 				F.CreateSD(frame.bg)
 				frame.Arrows.ArrowsAnim:HookScript("OnPlay", fixParentbg)
 				frame.Arrows.ArrowsAnim:HookScript("OnFinished", fixParentbg)
@@ -192,45 +183,60 @@ tinsert(C.themes["Aurora"], function()
 				frame:GetRegions():Hide()
 				select(5, frame:GetRegions()):Hide()
 				F.ReskinGarrisonPortrait(frame.PortraitFrame)
+
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
 			frame.FollowerBG:SetTexture("")
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 		elseif frame.queue == GarrisonMissionAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 8, -8)
 				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
 				F.CreateSD(frame.bg)
+
+				frame.Background:Hide()
+				frame.IconBG:Hide()
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
-			frame.Background:Hide()
-			frame.IconBG:Hide()
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 		elseif frame.queue == GarrisonShipMissionAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 8, -8)
 				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
 				F.CreateSD(frame.bg)
+
+				frame.Background:Hide()
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
-			frame.Background:Hide()
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
-		elseif frame.queue == GarrisonBuildingAlertSystem then
+		elseif frame.queue == GarrisonShipFollowerAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 8, -8)
 				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
 				F.CreateSD(frame.bg)
 
+				frame.Background:Hide()
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
+			end
+		elseif frame.queue == GarrisonBuildingAlertSystem then
+			if not frame.bg then
+				frame.bg = F.CreateBDFrame(frame)
+				frame.bg:SetPoint("TOPLEFT", 9, -9)
+				frame.bg:SetPoint("BOTTOMRIGHT", -9, 11)
+				F.CreateSD(frame.bg)
+
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				frame.Icon:SetDrawLayer("ARTWORK")
 				F.CreateBG(frame.Icon)
 				frame:GetRegions():Hide()
+
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 		elseif frame.queue == DigsiteCompleteAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
@@ -239,9 +245,9 @@ tinsert(C.themes["Aurora"], function()
 				F.CreateSD(frame.bg)
 
 				frame:GetRegions():Hide()
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 		elseif frame.queue == GuildChallengeAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
@@ -250,10 +256,10 @@ tinsert(C.themes["Aurora"], function()
 				F.CreateSD(frame.bg)
 
 				F.CreateBG(GuildChallengeAlertFrameEmblemBackground)
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
+				frame.EmblemBorder:SetTexture("")
 			end
-			frame.glow:SetTexture("")
-			frame.shine:SetTexture("")
-			frame.EmblemBorder:SetTexture("")
 		elseif frame.queue == DungeonCompletionAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
@@ -263,15 +269,12 @@ tinsert(C.themes["Aurora"], function()
 
 				frame.dungeonTexture:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(frame.dungeonTexture)
+				frame:DisableDrawLayer("Border")
+				frame.heroicIcon:SetTexture("")
+
+				frame.glowFrame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
-			frame.raidArt:SetTexture("")
-			frame.dungeonArt1:SetTexture("")
-			frame.dungeonArt2:SetTexture("")
-			frame.dungeonArt3:SetTexture("")
-			frame.dungeonArt4:SetTexture("")
-			frame.heroicIcon:SetTexture("")
-			frame.glowFrame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 		elseif frame.queue == ScenarioAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
@@ -283,9 +286,10 @@ tinsert(C.themes["Aurora"], function()
 				F.CreateBDFrame(frame.dungeonTexture)
 				select(1, frame:GetRegions()):Hide()
 				select(3, frame:GetRegions()):Hide()
+
+				frame.glowFrame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 			end
-			frame.glowFrame.glow:SetTexture("")
-			frame.shine:SetTexture("")
 		elseif frame.queue == LegendaryItemAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
