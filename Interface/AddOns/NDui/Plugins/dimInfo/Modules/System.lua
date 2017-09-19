@@ -39,7 +39,7 @@ if cfg.System == true then
 			else
 				fpscolor = "|cffD80909"
 			end
-			Text:SetText(fpscolor..floor(GetFramerate()).."|r".."Fps "..colorlatency(lat).."|r".."Ms")
+			Text:SetText(fpscolor..floor(GetFramerate()).."|r".."fps "..colorlatency(lat).."|r".."ms")
 			int = .8
 		end
 	end
