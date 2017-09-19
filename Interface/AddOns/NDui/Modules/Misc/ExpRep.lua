@@ -158,8 +158,8 @@ function module:Expbar()
 			else
 				GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
 			end
-			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(totalXP).." ("..num..")", .6,.8,1, 1,1,1)
-			GameTooltip:AddDoubleLine(L["Next Trait"], BreakUpLargeNumbers(xp).."/"..BreakUpLargeNumbers(xpForNextPoint).." ("..floor(xp/xpForNextPoint*100).."%)", .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(ARTIFACT_POWER, B.Numb(totalXP).." ("..num..")", .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(L["Next Trait"], B.Numb(xp).."/"..B.Numb(xpForNextPoint).." ("..floor(xp/xpForNextPoint*100).."%)", .6,.8,1, 1,1,1)
 		end
 		GameTooltip:Show()
 	end
