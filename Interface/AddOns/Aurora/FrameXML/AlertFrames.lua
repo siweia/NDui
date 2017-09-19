@@ -49,7 +49,6 @@ tinsert(C.themes["Aurora"], function()
 				frame.OldAchievement:SetTexture("")
 				frame.GuildBorder:SetTexture("")
 				frame.Icon.Bling:SetTexture("")
-
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
@@ -136,13 +135,12 @@ tinsert(C.themes["Aurora"], function()
 				F.CreateSD(frame.bg)
 
 				frame:GetRegions():SetTexture("")
-				frame.Icon:SetMask(nil)
-				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(frame.Icon)
-
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
+			frame.Icon:SetMask(nil)
+			frame.Icon:SetTexCoord(.08, .92, .08, .92)
 		elseif frame.queue == WorldQuestCompleteAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
@@ -167,7 +165,6 @@ tinsert(C.themes["Aurora"], function()
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(frame.Icon)
 				frame:GetRegions():Hide()
-
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
@@ -183,6 +180,8 @@ tinsert(C.themes["Aurora"], function()
 				frame:GetRegions():Hide()
 				select(5, frame:GetRegions()):Hide()
 				F.ReskinGarrisonPortrait(frame.PortraitFrame)
+				frame.PortraitFrame:ClearAllPoints()
+				frame.PortraitFrame:SetPoint("TOPLEFT", 22, -8)
 
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
@@ -233,7 +232,6 @@ tinsert(C.themes["Aurora"], function()
 				frame.Icon:SetDrawLayer("ARTWORK")
 				F.CreateBG(frame.Icon)
 				frame:GetRegions():Hide()
-
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
@@ -271,7 +269,6 @@ tinsert(C.themes["Aurora"], function()
 				F.CreateBDFrame(frame.dungeonTexture)
 				frame:DisableDrawLayer("Border")
 				frame.heroicIcon:SetTexture("")
-
 				frame.glowFrame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
@@ -286,7 +283,6 @@ tinsert(C.themes["Aurora"], function()
 				F.CreateBDFrame(frame.dungeonTexture)
 				select(1, frame:GetRegions()):Hide()
 				select(3, frame:GetRegions()):Hide()
-
 				frame.glowFrame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
