@@ -232,22 +232,27 @@ function module:DBMSkin()
 		end
 	end
 
-	-- mwahahahah, eat this ugly DBM.
 	hooksecurefunc(DBT, "CreateBar", SkinBars)
 	hooksecurefunc(DBM.BossHealth, "Show", SkinBossTitle)
 	hooksecurefunc(DBM.BossHealth, "AddBoss", SkinBoss)
 	hooksecurefunc(DBM.BossHealth, "UpdateSettings", SkinBoss)
 
 	local function SkinRange(self)
-		if not self.styled and DBMRangeCheckRadar then
-			local bg = CreateFrame("Frame", nil, DBMRangeCheckRadar)
-			bg:SetPoint("TOPLEFT", DBMRangeCheckRadar, "TOPLEFT", -2, 2)
-			bg:SetPoint("BOTTOMRIGHT", DBMRangeCheckRadar, "BOTTOMRIGHT", 2, -2)
-			bg:SetFrameLevel(0)
-			B.CreateBD(bg)
-			B.CreateTex(DBMRangeCheckRadar)
-			DBMRangeCheckRadar.text:SetFont(DBMRangeCheckRadar.text:GetFont(), 16, "OUTLINE")
-			self.styled = true
+		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
+			local bg = B.CreateBG(DBMRangeCheckRadar, 2)
+			B.CreateBD(bg, .3)
+			B.CreateTex(bg)
+
+			DBMRangeCheckRadar.styled = true
+		end
+
+		if DBMRangeCheck and not DBMRangeCheck.styled then
+			B.CreateBD(DBMRangeCheck)
+			B.CreateTex(DBMRangeCheck)
+			DBMRangeCheck.SetBackdropColor = B.Dummy
+			DBMRangeCheck.SetBackdropBorderColor = B.Dummy
+
+			DBMRangeCheck.styled = true
 		end
 	end
 	hooksecurefunc(DBM.RangeCheck, "Show", SkinRange)
@@ -255,9 +260,11 @@ function module:DBMSkin()
 	if DBM.InfoFrame then
 		DBM.InfoFrame:Show(5, "test")
 		DBM.InfoFrame:Hide()
-		DBMInfoFrame:HookScript("OnShow",function(self)
-			B.CreateBD(DBMInfoFrame, .6, 3)
-			B.CreateTex(DBMInfoFrame)
+		DBMInfoFrame:HookScript("OnShow", function(self)
+			if not self.Tex then
+				B.CreateBD(self, .6, 3)
+				B.CreateTex(self)
+			end
 		end)
 	end
 
