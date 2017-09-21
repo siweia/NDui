@@ -171,8 +171,8 @@ tinsert(C.themes["Aurora"], function()
 		elseif frame.queue == GarrisonFollowerAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", 15, -2)
-				frame.bg:SetPoint("BOTTOMRIGHT", -15, 15)
+				frame.bg:SetPoint("TOPLEFT", 16, -3)
+				frame.bg:SetPoint("BOTTOMRIGHT", -16, 16)
 				F.CreateSD(frame.bg)
 				frame.Arrows.ArrowsAnim:HookScript("OnPlay", fixParentbg)
 				frame.Arrows.ArrowsAnim:HookScript("OnFinished", fixParentbg)
