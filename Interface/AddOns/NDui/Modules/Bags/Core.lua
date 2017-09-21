@@ -162,7 +162,7 @@ function module:OnLogin()
 		for i = 2, 5 do
 			local textLine = _G["NDuiPowerTipTextLeft"..i]
 			if textLine and textLine:GetText() then
-				local isPower = strmatch(textLine:GetText(), _G.ARTIFACT_POWER)
+				local isPower = string.find(textLine:GetText(), _G.ARTIFACT_POWER)
 				if isPower then
 					PowerDB[link] = true
 					break

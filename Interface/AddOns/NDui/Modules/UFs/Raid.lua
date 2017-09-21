@@ -174,13 +174,12 @@ end
 
 local function setupClickSets(self, ...)
 	if InCombatLockdown() then return end
-	if not self.clickSets then self.clickSets = {} end
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
 		local key, modKey, value = unpack(data)
 		if key == KEY_BUTTON1 and modKey == "SHIFT" then self.focuser = true end
 
-		for _, v in pairs(keyList) do
+		for _, v in ipairs(keyList) do
 			if v[1] == key and v[2] == modKey then
 				if tonumber(value) then
 					local name = GetSpellInfo(value)
@@ -194,9 +193,11 @@ local function setupClickSets(self, ...)
 					self:SetAttribute(format(v[3], "type"), "macro")
 					self:SetAttribute(format(v[3], "macrotext"), "/follow mouseover")
 				end
+				break
 			end
 		end
 	end
+
 	self:RegisterForClicks("AnyDown")
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 end
