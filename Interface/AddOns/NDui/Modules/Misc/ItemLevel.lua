@@ -4,6 +4,28 @@ local module = NDui:GetModule("Misc")
 --[[
 	在角色面板显示装备等级
 ]]
+local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
+local ItemDB = {}
+function NDui:GetUnitItemLevel(link, unit, index)
+	if ItemDB[link] then return ItemDB[link] end
+
+	local tip = _G["NDuiItemLevelTooltip"] or CreateFrame("GameTooltip", "NDuiItemLevelTooltip", nil, "GameTooltipTemplate")
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+ 	tip:SetInventoryItem(unit, index)
+
+	for i = 2, 5 do
+		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
+		local hasLevel = string.find(text, itemLevelString)
+		if hasLevel then
+			local level = string.match(text, "(%d+)%)?$")
+			ItemDB[link] = tonumber(level)
+			break
+		end
+	end
+
+	return ItemDB[link]
+end
+
 function module:ShowItemLevel()
 	if not NDuiDB["Misc"]["ItemLevel"] then return end
 
@@ -35,15 +57,15 @@ function module:ShowItemLevel()
 	local function SetupItemLevel(unit, strType)
 		if not UnitExists(unit) then return end
 
-		for slot, id in pairs(SLOTIDS) do
+		for slot, index in pairs(SLOTIDS) do
 			local str = strType[slot]
 			if not str then return end
 			str:SetText("")
 
-			local link = GetInventoryItemLink(unit, id)
-			if link and id ~= 4 then
+			local link = GetInventoryItemLink(unit, index)
+			if link and index ~= 4 then
 				local _, _, quality, level = GetItemInfo(link)
-				level = NDui:GetItemLevel(link, quality) or level
+				level = NDui:GetUnitItemLevel(link, unit, index) or level
 
 				if level and level > 1 and quality then
 					local color = BAG_ITEM_QUALITY_COLORS[quality]
