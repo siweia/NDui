@@ -264,6 +264,8 @@ function module:DBMSkin()
 			if not self.Tex then
 				B.CreateBD(self, .6, 3)
 				B.CreateTex(self)
+				self.SetBackdropColor = B.Dummy
+				self.SetBackdropBorderColor = B.Dummy
 			end
 		end)
 	end
