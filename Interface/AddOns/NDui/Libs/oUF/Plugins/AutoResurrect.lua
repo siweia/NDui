@@ -59,24 +59,23 @@ local function macroBody(class)
 	return body
 end
 
-local function setupAttribute(self, class)
+local function setupAttribute(self)
 	if InCombatLockdown() then return end
 
-	if classList[class] and not IsAddOnLoaded("Clique") then
+	if classList[DB.MyClass] and not IsAddOnLoaded("Clique") then
 		self:SetAttribute("*type3", "macro")
-		self:SetAttribute("macrotext3", macroBody(class))
+		self:SetAttribute("macrotext3", macroBody(DB.MyClass))
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 	end
 end
 
 local Enable = function(self)
-	local _, class = UnitClass("player")
-	if not class or not NDuiDB["UFs"]["AutoRes"] then return end
+	if not NDuiDB["UFs"]["AutoRes"] then return end
 
 	if InCombatLockdown() then
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupAttribute)
 	else
-		setupAttribute(self, class)
+		setupAttribute(self)
 	end
 end
 
