@@ -6,8 +6,8 @@ local module = NDui:GetModule("Misc")
 ]]
 local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
 local ItemDB = {}
-function NDui:GetUnitItemLevel(link, unit, index)
-	if ItemDB[link] then return ItemDB[link] end
+function module:GetUnitItemLevel(link, unit, index, quality)
+	if ItemDB[link] and quality ~= 6 then return ItemDB[link] end
 
 	local tip = _G["NDuiItemLevelTooltip"] or CreateFrame("GameTooltip", "NDuiItemLevelTooltip", nil, "GameTooltipTemplate")
 	tip:SetOwner(UIParent, "ANCHOR_NONE")
@@ -22,7 +22,6 @@ function NDui:GetUnitItemLevel(link, unit, index)
 			break
 		end
 	end
-
 	return ItemDB[link]
 end
 
@@ -65,7 +64,7 @@ function module:ShowItemLevel()
 			local link = GetInventoryItemLink(unit, index)
 			if link and index ~= 4 then
 				local _, _, quality, level = GetItemInfo(link)
-				level = NDui:GetUnitItemLevel(link, unit, index) or level
+				level = self:GetUnitItemLevel(link, unit, index, quality) or level
 
 				if level and level > 1 and quality then
 					local color = BAG_ITEM_QUALITY_COLORS[quality]
