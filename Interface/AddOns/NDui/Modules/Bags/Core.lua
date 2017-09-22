@@ -160,13 +160,11 @@ function module:OnLogin()
 		tip:SetHyperlink(link)
 
 		for i = 2, 5 do
-			local textLine = _G["NDuiPowerTipTextLeft"..i]
-			if textLine and textLine:GetText() then
-				local isPower = string.find(textLine:GetText(), _G.ARTIFACT_POWER)
-				if isPower then
-					PowerDB[link] = true
-					break
-				end
+			local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
+			local isPower = string.find(text, _G.ARTIFACT_POWER)
+			if isPower then
+				PowerDB[link] = true
+				break
 			end
 		end
 		return PowerDB[link]
@@ -178,6 +176,27 @@ function module:OnLogin()
 		if spec and spec + 1 ~= NDuiDB["Bags"]["PreferPower"] then
 			return true
 		end
+	end
+
+	local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
+	local ItemDB = {}
+	local function GetBagItemLevel(link, bag, slot)
+		if ItemDB[link] then return ItemDB[link] end
+
+		local tip = _G["NDuiBagItemTooltip"] or CreateFrame("GameTooltip", "NDuiBagItemTooltip", nil, "GameTooltipTemplate")
+		tip:SetOwner(UIParent, "ANCHOR_NONE")
+		tip:SetBagItem(bag, slot)
+
+		for i = 2, 5 do
+			local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
+			local hasLevel = string.find(text, itemLevelString)
+			if hasLevel then
+				local level = string.match(text, "(%d+)%)?$")
+				ItemDB[link] = tonumber(level)
+				break
+			end
+		end
+		return ItemDB[link]
 	end
 
 	function MyButton:OnUpdate(item)
@@ -215,7 +234,7 @@ function module:OnLogin()
 		if NDuiDB["Bags"]["BagsiLvl"] then
 			self.iLvl:SetText("")
 			if item.link and (rarity and rarity > 1) and (item.level and item.level > 0) and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= "" and item.equipLoc ~= "INVTYPE_TABARD" and item.equipLoc ~= "INVTYPE_BODY")) then
-				local level = NDui:GetItemLevel(item.link, rarity)
+				local level = GetBagItemLevel(item.link, item.bagID, item.slotID)
 				self.iLvl:SetText(level)
 				self.iLvl:SetTextColor(color.r, color.g, color.b)
 			end
