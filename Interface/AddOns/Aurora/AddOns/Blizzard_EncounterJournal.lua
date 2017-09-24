@@ -264,107 +264,66 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- [[ Search results ]]
 
-	EncounterJournalSearchResultsBg:Hide()
-	for i = 3, 11 do
-		select(i, EncounterJournalSearchResults:GetRegions()):Hide()
+	for i = 1, 6 do
+		select(i, EncounterJournalSearchBox.searchPreviewContainer:GetRegions()):Hide()
 	end
 
-	F.CreateBD(EncounterJournalSearchResults)
-	EncounterJournalSearchResults:SetBackdropColor(.15, .15, .15, .9)
-
-	local function resultOnEnter(self)
-		self.hl:Show()
-	end
-
-	local function resultOnLeave(self)
-		self.hl:Hide()
-	end
-
-	local function styleSearchButton(result, index)
-		if index == 1 then
-			result:SetPoint("TOPLEFT", EncounterJournalSearchBox, "BOTTOMLEFT", 0, 1)
-			result:SetPoint("TOPRIGHT", EncounterJournalSearchBox, "BOTTOMRIGHT", -5, 1)
-		else
-			result:SetPoint("TOPLEFT", EncounterJournalSearchBox["sbutton"..index-1], "BOTTOMLEFT", 0, 1)
-			result:SetPoint("TOPRIGHT", EncounterJournalSearchBox["sbutton"..index-1], "BOTTOMRIGHT", 0, 1)
-		end
-
-		result:SetNormalTexture("")
-		result:SetPushedTexture("")
-		result:SetHighlightTexture("")
-
-		local hl = result:CreateTexture(nil, "BACKGROUND")
-		hl:SetAllPoints()
-		hl:SetTexture(C.media.backdrop)
-		hl:SetVertexColor(r, g, b, .2)
-		hl:Hide()
-		result.hl = hl
-
-		F.CreateBD(result)
-		result:SetBackdropColor(.1, .1, .1, .9)
-
+	local function styleSearchButton(result)
+		select(1, result:GetRegions()):SetAlpha(0)
 		if result.icon then
-			result:GetRegions():Hide() -- icon frame
-
-			result.icon:SetTexCoord(.08, .92, .08, .92)
-
-			local bg = F.CreateBG(result.icon)
-			bg:SetDrawLayer("BACKGROUND", 1)
+			select(2, result:GetRegions()):SetAlpha(0)
+			select(3, result:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+			F.ReskinIcon(select(3, result:GetRegions()))
+			select(5, result:GetRegions()):SetAlpha(0)
+			select(6, result:GetRegions()):SetAlpha(0)
+		else
+			select(3, result:GetRegions()):SetAlpha(0)
+			select(4, result:GetRegions()):SetAlpha(0)
 		end
+		F.CreateBD(result)
+		F.CreateSD(result)
 
-		result:HookScript("OnEnter", resultOnEnter)
-		result:HookScript("OnLeave", resultOnLeave)
+		result:SetHighlightTexture(C.media.backdrop)
+		local hl = result:GetHighlightTexture()
+		hl:SetVertexColor(r, g, b, .2)
+		hl:SetPoint("TOPLEFT", 1, -2)
+		hl:SetPoint("BOTTOMRIGHT", -1, 1)
 	end
 
 	for i = 1, 5 do
-		styleSearchButton(EncounterJournalSearchBox["sbutton"..i], i)
+		styleSearchButton(EncounterJournalSearchBox["sbutton"..i])
+	end
+	styleSearchButton(EncounterJournalSearchBox.showAllResults)
+
+	do
+		local result = EncounterJournalSearchResults
+		result:SetPoint("BOTTOMLEFT", EncounterJournal, "BOTTOMRIGHT", 30, 0)
+
+		for i = 3, 11 do
+			select(i, EncounterJournalSearchResults:GetRegions()):Hide()
+		end
+		local bg = F.CreateBDFrame(result)
+		bg:SetPoint("TOPLEFT", -10, 0)
+		bg:SetPoint("BOTTOMRIGHT")
+		F.CreateSD(bg)
+
+		for i = 1, 9 do
+			local bu = _G["EncounterJournalSearchResultsScrollFrameButton"..i]
+			F.CreateBD(bu, .25)
+			bu:SetNormalTexture("")
+			bu:GetRegions():Hide()
+			F.ReskinIcon(bu.icon)
+			bu.icon.SetTexCoord = F.dummy
+
+			bu:SetHighlightTexture(C.media.backdrop)
+			local hl = bu:GetHighlightTexture()
+			hl:SetVertexColor(r, g, b, .2)
+			hl:SetPoint("TOPLEFT", 1, -2)
+			hl:SetPoint("BOTTOMRIGHT", -1, 1)
+		end
 	end
 
-	styleSearchButton(EncounterJournalSearchBox.showAllResults, 6)
-
-	hooksecurefunc("EncounterJournal_SearchUpdate", function()
-		local scrollFrame = EncounterJournal.searchResults.scrollFrame
-		local offset = HybridScrollFrame_GetOffset(scrollFrame)
-		local results = scrollFrame.buttons
-		local result, index
-
-		local numResults = EJ_GetNumSearchResults()
-
-		for i = 1, #results do
-			result = results[i]
-			index = offset + i
-
-			if index <= numResults then
-				if not result.styled then
-					result:SetNormalTexture("")
-					result:SetPushedTexture("")
-					result:GetRegions():Hide()
-
-					result.resultType:SetTextColor(1, 1, 1)
-					result.path:SetTextColor(1, 1, 1)
-
-					F.CreateBG(result.icon)
-
-					result.styled = true
-				end
-
-				if result.icon:GetTexCoord() == 0 then
-					result.icon:SetTexCoord(.08, .92, .08, .92)
-				end
-			end
-		end
-	end)
-
-	hooksecurefunc(EncounterJournal.searchResults.scrollFrame, "update", function(self)
-		for i = 1, #self.buttons do
-			local result = self.buttons[i]
-
-			if result.icon:GetTexCoord() == 0 then
-				result.icon:SetTexCoord(.08, .92, .08, .92)
-			end
-		end
-	end)
-
+	EncounterJournalSearchResultsBg:Hide()
 	F.ReskinClose(EncounterJournalSearchResultsCloseButton)
 	F.ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
 
