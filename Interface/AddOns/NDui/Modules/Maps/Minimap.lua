@@ -152,17 +152,10 @@ function module:RecycleBin()
 	local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
 
 	local buttons = {}
-	local blackList = { 
-		["MiniMapTracking"] = true,
-		["MiniMapVoiceChatFrame"] = true,
-		["MiniMapWorldMapButton"] = true,
+	local blackList = {
 		["MiniMapLFGFrame"] = true,
-		["MinimapZoomIn"] = true,
-		["MinimapZoomOut"] = true,
-		["MiniMapMailFrame"] = true,
 		["BattlefieldMinimap"] = true,
 		["MinimapBackdrop"] = true,
-		["GameTimeFrame"] = true,
 		["TimeManagerClockButton"] = true,
 		["FeedbackUIButton"] = true,
 		["HelpOpenTicketButton"] = true,
@@ -216,7 +209,7 @@ function module:RecycleBin()
 							local texture = region:GetTexture()
 							if (string.find(texture, "Interface\\CharacterFrame") or string.find(texture, "Interface\\Minimap")) then
 								region:SetTexture(nil)
-							elseif texture == 136430 or texture == 136467 then 
+							elseif texture == 136430 or texture == 136467 then
 								region:SetTexture(nil)
 							end
 							region:ClearAllPoints()
