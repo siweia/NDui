@@ -343,7 +343,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Auras", "Marksman", L["Enable Marksman"]},
 	},
 	[7] = {
-		{1, "Skins", "RM", L["Raid Manger"]},
+		{1, "Skins", "EasyMarking", L["Easy Mark"]},
 		{},--blank
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"], true},
@@ -351,8 +351,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "SwapingAlert", L["Swaping Alert"], true},
 		{1, "Misc", "SistersAlert", L["SistersAlert Alert"]},
 		{},--blank
-		{1, "Skins", "RMRune", L["Runes Check"]},
-		{1, "Skins", "EasyMarking", L["Easy Mark"], true},
+		{1, "Skins", "RM", L["Raid Manger"]},
+		{1, "Skins", "RMRune", L["Runes Check"], true},
 		{2, "Skins", "DBMCount", L["Countdown Sec"]},
 		{},--blank
 		{1, "Chat", "Invite", L["Whisper Invite"]},
