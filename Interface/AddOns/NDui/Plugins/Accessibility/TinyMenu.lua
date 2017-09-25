@@ -5,11 +5,11 @@ local B, C, L, DB = unpack(select(2, ...))
 --------------------
 local UnitPopupButtonsExtra = {
 	["ARMORY"] = { text = L["Armory"] },
-	["SEND_WHO"] = { text = L["Query Detail"] },
-	["NAME_COPY"] = { text = L["Name Copy"] },
+	["SEND_WHO"] = { text = PLAYER_MESSAGES },
+	["NAME_COPY"] = { text = COPY_NAME },
 	["GUILD_ADD"] = { text = L["Guild Invite"] },
-	["FRIEND_ADD"] = { text = L["Add Friend"] },
-	["QUICK_REPORT"] = { text = L["Report Spam"] },
+	["FRIEND_ADD"] = { text = ADD_FRIEND },
+	["QUICK_REPORT"] = { text = REPORT_VERBAL_HARASSMENT },
 	["SHOW_PET"] = { text = PET_SHOW_IN_JOURNAL },
 }
 
