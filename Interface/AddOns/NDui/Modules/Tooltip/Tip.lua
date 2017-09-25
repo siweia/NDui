@@ -406,24 +406,21 @@ NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(_, _, addon)
 				tex:SetTexture(DB.normTex)
 				bd:Hide()
 				local bg = B.CreateBG(bd)
-				B.CreateBD(bg, .2)
+				B.CreateBD(bg, .3)
+
 				bar.styled = true
 			end
 		end)
 
 		local bars = {WorldMapTaskTooltipStatusBar, ReputationParagonTooltipStatusBar}
 		for _, bar in pairs(bars) do
-			if not bar.styled then
-				for i = 1, 7 do
-					select(i, bar.Bar:GetRegions()):Hide()
-				end
-				bar.Bar:SetStatusBarTexture(DB.normTex)
-				bar.Bar.Label:Show()
-				local bg = select(7, bar.Bar:GetRegions())
-				local newBg = B.CreateBG(bg, 3)
-				B.CreateBD(newBg, .3)
-				bar.styled = true
+			for i = 1, 5 do
+				select(i, bar.Bar:GetRegions()):SetTexture("")
 			end
+			select(7, bar.Bar:GetRegions()):Hide()
+			bar.Bar:SetStatusBarTexture(DB.normTex)
+			B.CreateBD(bar, .3, 2)
+			bar:SetSize(219, 19)
 		end
 
 		-- Pet Tooltip
