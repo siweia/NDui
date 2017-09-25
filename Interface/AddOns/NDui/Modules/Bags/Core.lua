@@ -151,25 +151,6 @@ function module:OnLogin()
 		end
 	end
 
-	local PowerDB = {}
-	local function isArtifactPower(link)
-		if PowerDB[link] then return true end
-
-		local tip = _G["NDuiPowerTip"] or CreateFrame("GameTooltip", "NDuiPowerTip", nil, "GameTooltipTemplate")
-		tip:SetOwner(UIParent, "ANCHOR_NONE")
-		tip:SetHyperlink(link)
-
-		for i = 2, 5 do
-			local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-			local isPower = string.find(text, _G.ARTIFACT_POWER)
-			if isPower then
-				PowerDB[link] = true
-				break
-			end
-		end
-		return PowerDB[link]
-	end
-
 	local function isPowerInWrongSpec()
 		if NDuiDB["Bags"]["PreferPower"] == 1 then return end
 		local spec = GetSpecialization()
@@ -241,7 +222,7 @@ function module:OnLogin()
 		end
 
 		if self.powerProtect then
-			if isPowerInWrongSpec() and item.type == AUCTION_CATEGORY_CONSUMABLES and item.id ~= 147717 and item.link and isArtifactPower(item.link) then
+			if isPowerInWrongSpec() and item.type == AUCTION_CATEGORY_CONSUMABLES and item.id ~= 147717 and item.link and IsArtifactPowerItem(item.link) then
 				self.powerProtect:SetAlpha(1)
 			else
 				self.powerProtect:SetAlpha(0)
