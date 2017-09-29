@@ -64,6 +64,8 @@ local function popupClick(self, info)
 		editBox:SetText(armory)
 		editBox:HighlightText()
 	elseif info.value == "NAME_COPY" then
+		if server and server ~= "" then name = name.."-"..server end
+
 		if SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
 			SendMailNameEditBox:SetText(name)
 			SendMailNameEditBox:HighlightText()
