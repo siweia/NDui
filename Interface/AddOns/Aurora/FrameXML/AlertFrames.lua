@@ -50,8 +50,8 @@ tinsert(C.themes["Aurora"], function()
 				frame.GuildBorder:SetTexture("")
 				frame.Icon.Bling:SetTexture("")
 				frame.glow:SetTexture("")
-				frame.shine:SetTexture("")
 			end
+			frame.shine:SetTexture("")
 			frame.Background:SetTexture("")
 			frame.Icon.Overlay:SetTexture("")
 			-- otherwise it hides
@@ -360,7 +360,6 @@ tinsert(C.themes["Aurora"], function()
 			fixAnim(f)
 
 			f.shine:SetTexture("")
-			f.glow:SetTexture("")
 			f.Icon:SetDrawLayer("BORDER")
 			f.Icon:SetTexCoord(.08, .92, .08, .92)
 			F.CreateBG(f.Icon)
@@ -372,6 +371,7 @@ tinsert(C.themes["Aurora"], function()
 			f.SpecIcon.bg:SetShown(f.SpecIcon:IsShown() and f.SpecIcon:GetTexture() ~= nil)
 		end
 
+		f.glow:SetTexture("")
 		f.Background:SetTexture("")
 		f.PvPBackground:SetTexture("")
 		f.BGAtlas:SetTexture("")			
