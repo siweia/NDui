@@ -799,8 +799,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				local hl = button:GetHighlightTexture()
 				hl:SetColorTexture(r, g, b, .1)
 				hl:ClearAllPoints()
-				hl:SetPoint("TOPLEFT", button,"TOPLEFT",1, -1)
-				hl:SetPoint("BOTTOMRIGHT",button, "BOTTOMRIGHT",-1, 1)
+				hl:SetPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
+				hl:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
 
 				if portrait then
 					F.ReskinGarrisonPortrait(portrait)
