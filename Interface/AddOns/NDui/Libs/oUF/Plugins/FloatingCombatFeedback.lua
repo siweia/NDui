@@ -99,16 +99,16 @@ local function onShow(self)
 end
 
 local eventFilter = {
-	["SWING_DAMAGE"] = {suffix = "DAMAGE", index = 12, iconType = "swing"},
-	["RANGE_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "range"},
+	["SWING_DAMAGE"] = {suffix = "DAMAGE", index = 12, iconType = "swing", autoAttack = true},
+	["RANGE_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "range", autoAttack = true},
 	["SPELL_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell"},
 	["SPELL_PERIODIC_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell", isPeriod = true},
 
 	["SPELL_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell"},
 	["SPELL_PERIODIC_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell", isPeriod = true},
 
-	["SWING_MISSED"] = {suffix = "MISS", index = 12, iconType = "swing"},
-	["RANGE_MISSED"] = {suffix = "MISS", index = 15, iconType = "range"},
+	["SWING_MISSED"] = {suffix = "MISS", index = 12, iconType = "swing", autoAttack = true},
+	["RANGE_MISSED"] = {suffix = "MISS", index = 15, iconType = "range", autoAttack = true},
 	["SPELL_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell"},
 }
 
@@ -147,6 +147,7 @@ local function Update(self, event, ...)
 			if not value then return end
 
 			if value.suffix == "DAMAGE" then
+				if value.autoAttack and not element.showAutoAttack then return end
 				if value.isPeriod and not element.showHots then return end
 
 				local amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(value.index, ...)
@@ -180,10 +181,12 @@ local function Update(self, event, ...)
 		texture = ""
 		text = _G.ENTERING_COMBAT
 		color = colors.WOUND
+		multiplier = 1.25
 	elseif event == "PLAYER_REGEN_ENABLED" then
 		texture = ""
 		text = _G.LEAVING_COMBAT
 		color = colors.HEAL
+		multiplier = 1.25
 	end
 
 	if text and texture then

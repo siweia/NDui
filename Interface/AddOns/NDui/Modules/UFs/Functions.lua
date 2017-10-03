@@ -823,6 +823,7 @@ function UF:CreateFCT(self)
 	fcf.fontHeight = 18
 	fcf.showPets = NDuiDB["UFs"]["PetCombatText"]
 	fcf.showHots = NDuiDB["UFs"]["HotsDots"]
+	fcf.showAutoAttack = NDuiDB["UFs"]["AutoAttack"]
 	fcf.abbreviateNumbers = true
 	self.FloatingCombatFeedback = fcf
 
