@@ -937,6 +937,8 @@ C.AuraWatchList = {
 				--恶魔变形
 				{AuraID = 162264, UnitID = "target"},
 				{AuraID = 187827, UnitID = "target"},
+				--业报之触
+				{AuraID = 125174, UnitID = "target"},
 				--爱情光线
 				{AuraID = 171607, UnitID = "target"},
 			},

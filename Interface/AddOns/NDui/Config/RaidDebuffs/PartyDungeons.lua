@@ -182,3 +182,8 @@ module:RegisterDebuff(TIER, 860, 0, 228829)
 module:RegisterDebuff(TIER, 900, 0, 209858)
 module:RegisterDebuff(TIER, 900, 0, 240559)
 module:RegisterDebuff(TIER, 900, 0, 240443)
+
+-- Cathedral of Eternal Night (945)
+module:RegisterDebuff(TIER, 945, 0, 209858)
+module:RegisterDebuff(TIER, 945, 0, 240559)
+module:RegisterDebuff(TIER, 945, 0, 240443)
