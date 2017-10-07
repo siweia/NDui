@@ -272,8 +272,9 @@ gui:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "Aurora" then return end
 
 	-- fill 'old' table
-	copyTable(AuroraConfig, old)
+	AuroraConfig.tooltips = false
 	AuroraConfig.enableFont = false
+	copyTable(AuroraConfig, old)
 
 	F.CreateBD(gui)
 	F.CreateSD(gui)
