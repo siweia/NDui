@@ -8,7 +8,7 @@ function module:Mailbox()
 	if not NDuiDB["Misc"]["Mail"] then return end
 
 	local deletedelay, t, mailIndex, mailItemIndex = .5, 0, 1, 0
-	local button1, button2, button3, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail
+	local button1, button2, button3, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening
 
 	InboxNextPageButton:SetScript("OnClick", function()
 		mailIndex = mailIndex + 1
