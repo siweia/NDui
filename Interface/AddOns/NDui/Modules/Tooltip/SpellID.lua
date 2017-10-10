@@ -101,10 +101,10 @@ hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
 	if id then addLine(self, id, types.currency) end
 end)
 hooksecurefunc(GameTooltip, "SetCurrencyByID", function(self, id)
-   if id then addLine(self, id, types.currency) end
+	if id then addLine(self, id, types.currency) end
 end)
 hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
-   if id then addLine(self, id, types.currency) end
+	if id then addLine(self, id, types.currency) end
 end)
 
 -- Castby

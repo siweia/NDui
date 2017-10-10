@@ -1,6 +1,6 @@
 local B, C, L, DB = unpack(select(2, ...))
 
-local function InsertPetIcon(self, petType)
+local function insertPetIcon(self, petType)
 	if not self.petIcon then
 		local f = self:CreateTexture(nil, "OVERLAY")
 		f:SetPoint("TOPRIGHT", -5, -5)
@@ -25,7 +25,7 @@ local function addPetInfo(self)
 	if not UnitIsBattlePet(unit) then return end
 
 	-- Pet Species icon
-	InsertPetIcon(self, UnitBattlePetType(unit))
+	insertPetIcon(self, UnitBattlePetType(unit))
 
 	-- Pet ID
 	local speciesID = UnitBattlePetSpeciesID(unit)

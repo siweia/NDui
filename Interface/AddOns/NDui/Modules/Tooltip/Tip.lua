@@ -55,11 +55,11 @@ local function hideLines(self)
 end
 
 local function getTarget(unit)
-    if UnitIsUnit(unit, "player") then
-        return ("|cffff0000%s|r"):format(">"..string.upper(YOU).."<")
-    else
-        return B.HexRGB(B.UnitColor(unit))..UnitName(unit).."|r"
-    end
+	if UnitIsUnit(unit, "player") then
+		return ("|cffff0000%s|r"):format(">"..string.upper(YOU).."<")
+	else
+		return B.HexRGB(B.UnitColor(unit))..UnitName(unit).."|r"
+	end
 end
 
 local function InsertFactionFrame(self, faction)
@@ -110,15 +110,15 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	hideLines(self)
 
 	local unit = getUnit(self)
-    if UnitExists(unit) then
-        local hexColor = B.HexRGB(B.UnitColor(unit))
-        local ricon = GetRaidTargetIndex(unit)
-        if ricon then
-            local text = GameTooltipTextLeft1:GetText()
-            GameTooltipTextLeft1:SetFormattedText(("%s %s"), ICON_LIST[ricon].."18|t", text)
-        end
+	if UnitExists(unit) then
+		local hexColor = B.HexRGB(B.UnitColor(unit))
+		local ricon = GetRaidTargetIndex(unit)
+		if ricon then
+			local text = GameTooltipTextLeft1:GetText()
+			GameTooltipTextLeft1:SetFormattedText(("%s %s"), ICON_LIST[ricon].."18|t", text)
+		end
 
-        if UnitIsPlayer(unit) then
+		if UnitIsPlayer(unit) then
 			local unitName
 			if NDuiDB["Tooltip"]["HideTitle"] and NDuiDB["Tooltip"]["HideRealm"] then
 				unitName = UnitName(unit)
@@ -173,7 +173,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		local line1 = GameTooltipTextLeft1:GetText()
 		GameTooltipTextLeft1:SetFormattedText("%s", hexColor..line1)
 
-        local alive = not UnitIsDeadOrGhost(unit)
+		local alive = not UnitIsDeadOrGhost(unit)
 		local level
 		if UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) then
 			level = UnitBattlePetLevel(unit)
@@ -181,49 +181,49 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			level = UnitLevel(unit)
 		end
 
-        if level then
+		if level then
 			local boss
-            if level == -1 then boss = "|cffff0000??|r" end
+			if level == -1 then boss = "|cffff0000??|r" end
 
-            local diff = GetCreatureDifficultyColor(level)
-            local classify = UnitClassification(unit)
-            local textLevel = ("%s%s%s|r"):format(B.HexRGB(diff), boss or ("%d"):format(level), classification[classify] or "")
+			local diff = GetCreatureDifficultyColor(level)
+			local classify = UnitClassification(unit)
+			local textLevel = ("%s%s%s|r"):format(B.HexRGB(diff), boss or ("%d"):format(level), classification[classify] or "")
 			local tiptextLevel
 			for i = 2, self:NumLines() do
-                local tiptext = _G["GameTooltipTextLeft"..i]
+				local tiptext = _G["GameTooltipTextLeft"..i]
 				local linetext = tiptext:GetText()
 				if(linetext and linetext:find(LEVEL)) then
 					tiptextLevel = tiptext
 				end
-            end
+			end
 
 			local creature = not UnitIsPlayer(unit) and UnitCreatureType(unit) or ""
-            local unitClass = UnitIsPlayer(unit) and ("%s %s"):format(UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or ""
+			local unitClass = UnitIsPlayer(unit) and ("%s %s"):format(UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or ""
 			if(tiptextLevel) then
 				tiptextLevel:SetFormattedText(("%s %s%s %s"), textLevel, creature, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 			end
-        end
+		end
 
-        if UnitExists(unit.."target") then
+		if UnitExists(unit.."target") then
 			local tarRicon = GetRaidTargetIndex(unit.."target")
 			local tar = ("%s%s"):format((tarRicon and ICON_LIST[tarRicon].."10|t") or "", getTarget(unit.."target"))
 			self:AddLine(TARGET..": "..tar)
-        end
+		end
 
 		if alive then
 			GameTooltipStatusBar:SetStatusBarColor(B.UnitColor(unit))
 		else
 			GameTooltipStatusBar:Hide()
 		end
-    else
-        GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
-    end
+	else
+		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
+	end
 
-    if GameTooltipStatusBar:IsShown() then
-        GameTooltipStatusBar:ClearAllPoints()
-        GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 3, 2)
-        GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -3, 2)
-    end
+	if GameTooltipStatusBar:IsShown() then
+		GameTooltipStatusBar:ClearAllPoints()
+		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 3, 2)
+		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -3, 2)
+	end
 end)
 
 GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
@@ -234,11 +234,12 @@ B.CreateBD(bg, .7)
 B.CreateTex(bg)
 
 GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
-    if not value then return end
-    local min, max = self:GetMinMaxValues()
-    if (value < min) or (value > max) then return end
+	if not value then return end
+	local min, max = self:GetMinMaxValues()
+	if (value < min) or (value > max) then return end
+
 	local unit = getUnit(GameTooltip)
-    if UnitExists(unit) then
+	if UnitExists(unit) then
 		min, max = UnitHealth(unit), UnitHealthMax(unit)
 		if not self.text then
 			self.text = B.CreateFS(self, 12, "")
@@ -251,7 +252,7 @@ end)
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	local frame = GetMouseFocus()
-    if NDuiDB["Tooltip"]["Cursor"] then
+	if NDuiDB["Tooltip"]["Cursor"] then
 		if parent then
 			tooltip:SetOwner(parent, "ANCHOR_CURSOR_RIGHT")
 		end
@@ -260,9 +261,9 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 		if parent then
 			tooltip:SetOwner(parent, "ANCHOR_NONE")
 		end
-        tooltip:SetPoint(unpack(C.Tooltips.TipPos))
-    end
-    tooltip.default = 1
+		tooltip:SetPoint(unpack(C.Tooltips.TipPos))
+	end
+	tooltip.default = 1
 end)
 
 local function style(frame)
@@ -300,16 +301,16 @@ local function style(frame)
 		end
 	end
 
-    if frame.NumLines and frame:NumLines() > 0 then
-        for index = 1, frame:NumLines() do
-            if index == 1 then
-                _G[frame:GetName().."TextLeft"..index]:SetFont(DB.TipFont[1], DB.TipFont[2] + 2, DB.TipFont[3])
-            else
-                _G[frame:GetName().."TextLeft"..index]:SetFont(unpack(DB.TipFont))
-            end
-            _G[frame:GetName().."TextRight"..index]:SetFont(unpack(DB.TipFont))
-        end
-    end
+	if frame.NumLines and frame:NumLines() > 0 then
+		for index = 1, frame:NumLines() do
+			if index == 1 then
+				_G[frame:GetName().."TextLeft"..index]:SetFont(DB.TipFont[1], DB.TipFont[2] + 2, DB.TipFont[3])
+			else
+				_G[frame:GetName().."TextLeft"..index]:SetFont(unpack(DB.TipFont))
+			end
+			_G[frame:GetName().."TextRight"..index]:SetFont(unpack(DB.TipFont))
+		end
+	end
 end
 
 local function extrastyle(f)
