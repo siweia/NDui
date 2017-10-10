@@ -45,7 +45,7 @@ BOSS = 1861 -- 主母萨丝琳
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 230362)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 230201, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 230959)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 232754)
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 232754)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 232913)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 239375, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 239362, 5)
@@ -88,6 +88,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 240746, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 240728, 5)
 
 BOSS = 1898 -- 基尔加丹
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 235222) --BOSS前小怪
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 234310)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 245509, 2)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 236710, 3)
