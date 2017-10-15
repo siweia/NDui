@@ -20,8 +20,8 @@ function Bar:CreateBar2()
 	frame:SetScale(cfg.scale)
 
 	--move the buttons into position and reparent them
-	_G.MultiBarBottomLeft:SetParent(frame)
-	_G.MultiBarBottomLeft:EnableMouse(false)
+	MultiBarBottomLeft:SetParent(frame)
+	MultiBarBottomLeft:EnableMouse(false)
 
 	for i = 1, num do
 		local button = _G["MultiBarBottomLeftButton"..i]

@@ -15,14 +15,14 @@ function Bar:CreateExtrabar()
 	frame:SetScale(cfg.scale)
 
 	--move the buttons into position and reparent them
-	_G.ExtraActionBarFrame:SetParent(frame)
-	_G.ExtraActionBarFrame:EnableMouse(false)
-	_G.ExtraActionBarFrame:ClearAllPoints()
-	_G.ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
-	_G.ExtraActionBarFrame.ignoreFramePositionManager = true
+	ExtraActionBarFrame:SetParent(frame)
+	ExtraActionBarFrame:EnableMouse(false)
+	ExtraActionBarFrame:ClearAllPoints()
+	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
+	ExtraActionBarFrame.ignoreFramePositionManager = true
 
 	--the extra button
-	local button = _G.ExtraActionButton1
+	local button = ExtraActionButton1
 	table.insert(buttonList, button) --add the button object to the list
 	button:SetSize(cfg.size,cfg.size)
 

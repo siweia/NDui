@@ -26,8 +26,8 @@ function Bar:CreateBar4()
 	frame:SetScale(cfg.scale)
 
 	--move the buttons into position and reparent them
-	_G.MultiBarRight:SetParent(frame)
-	_G.MultiBarRight:EnableMouse(false)
+	MultiBarRight:SetParent(frame)
+	MultiBarRight:EnableMouse(false)
 
 	for i = 1, num do
 		local button = _G["MultiBarRightButton"..i]
@@ -97,6 +97,7 @@ function Bar:CreateBar4()
 				f.savedEvent = event
 			else
 				InterfaceOptions_UpdateMultiActionBars()
+				self:UnregisterEvent(event)
 			end
 		end
 	end)

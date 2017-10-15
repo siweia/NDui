@@ -22,8 +22,11 @@ function Bar:CreateStancebar()
 	--STANCE BAR
 
 	--move the buttons into position and reparent them
-	_G.StanceBarFrame:SetParent(frame)
-	_G.StanceBarFrame:EnableMouse(false)
+	StanceBarFrame:SetParent(frame)
+	StanceBarFrame:EnableMouse(false)
+	StanceBarLeft:SetTexture(nil)
+	StanceBarMiddle:SetTexture(nil)
+	StanceBarRight:SetTexture(nil)
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
@@ -41,8 +44,10 @@ function Bar:CreateStancebar()
 	--POSSESS BAR
 
 	--move the buttons into position and reparent them
-	_G.PossessBarFrame:SetParent(frame)
-	_G.PossessBarFrame:EnableMouse(false)
+	PossessBarFrame:SetParent(frame)
+	PossessBarFrame:EnableMouse(false)
+	PossessBackground1:SetTexture(nil)
+	PossessBackground2:SetTexture(nil)
 
 	for i = 1, NUM_POSSESS_SLOTS do
 		local button = _G["PossessButton"..i]
