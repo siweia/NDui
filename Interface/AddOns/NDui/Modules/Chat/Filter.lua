@@ -83,6 +83,11 @@ at:SetScript("OnEvent", function(self, event, ...)
 end)
 hooksecurefunc("BNToastFrame_Show", function()
 	if at.checker == true then
+		BNToastFrameIconTexture:SetTexCoord(0.75, 1, 0, 0.5)
+		BNToastFrameTopLine:Hide()
+		BNToastFrameMiddleLine:Hide()
+		BNToastFrameBottomLine:Hide()
+		BNToastFrameDoubleLine:Show()
 		local hexColor = B.HexRGB(B.ClassColor(at.class))
 		BNToastFrameDoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
 		at.checker = false
