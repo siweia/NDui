@@ -514,7 +514,7 @@ do
 				if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
 					LFGListFrame.SearchPanel.SignUpButton:Click()
 				end
-				if LFGListApplicationDialog.SignUpButton:IsEnabled() then
+				if LFGListApplicationDialog:IsShown() and LFGListApplicationDialog.SignUpButton:IsEnabled() then
 					LFGListApplicationDialog.SignUpButton:Click()
 				end
 			end)
