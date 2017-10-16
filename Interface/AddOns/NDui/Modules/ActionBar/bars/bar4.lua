@@ -85,7 +85,7 @@ function Bar:CreateBar4()
 	end
 
 	--fix annoying visibility
-	local f = NDui:EventFrame({"UNIT_EXITING_VEHICLE", "PET_BATTLE_CLOSE"})
+	local f = NDui:EventFrame({"UNIT_EXITING_VEHICLE", "UNIT_EXITED_VEHICLE", "PET_BATTLE_CLOSE", "PET_BATTLE_OVER"})
 	f:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_REGEN_ENABLED" then
 			InterfaceOptions_UpdateMultiActionBars()
