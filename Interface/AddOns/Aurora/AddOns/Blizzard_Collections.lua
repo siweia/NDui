@@ -584,10 +584,19 @@ C.themes["Blizzard_Collections"] = function()
 		local ic = itemFrame.Icon
 		if not itemFrame.styled then
 			ic:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBDFrame(ic)
 			itemFrame.IconBorder:Hide()
 			itemFrame.IconBorder.Show = F.dummy
+			ic.bg = F.CreateBDFrame(ic)
+
 			itemFrame.styled = true
+		end
+
+		if itemFrame.collected then
+			local quality = C_TransmogCollection.GetSourceInfo(itemFrame.sourceID).quality
+			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+			ic.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+		else
+			ic.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end)
 

@@ -493,22 +493,28 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local buttons = self.buttons
 		for i = 1, #buttons do
 			local button = buttons[i]
-			button.ItemLevel:SetTextColor(1, 1, 1)
-			button.Background:Hide()
 
-			if not button.bg then
-				button.bg = F.CreateBDFrame(button, .25)
-			end
+			if not button.styled then
+				button.ItemLevel:SetTextColor(1, 1, 1)
+				button.Background:Hide()
+				F.CreateBDFrame(button, .25)
 
-			local items = button.ItemButtons
-			for j = 1, #items do
-				local item = items[j]
-				item.Border:SetAlpha(0)
-				item.Icon:SetPoint("TOPLEFT", 1, -1)
-				item.Icon:SetTexCoord(.08, .92, .08, .92)
-				item.Icon:SetDrawLayer("OVERLAY")
-				F.CreateBG(item.Icon)
+				button.styled = true
 			end
+		end
+	end)
+
+	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(self, button)
+		if not button.styled then
+			button.Border:SetAlpha(0)
+			button.Icon:SetTexCoord(.08, .92, .08, .92)
+			button.bg = F.CreateBDFrame(button.Icon)
+
+			local _, _, quality = GetItemInfo(button.itemID)
+			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+			button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+
+			button.styled = true
 		end
 	end)
 end
