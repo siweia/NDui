@@ -53,6 +53,7 @@ function module:Expbar()
 				standing = 5
 			elseif C_Reputation.IsFactionParagon(factionID) then
 				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+				currentValue = mod(currentValue, threshold)
 				min, max, value = 0, threshold, currentValue
 			else
 				if standing == MAX_REPUTATION_REACTION then
@@ -125,7 +126,9 @@ function module:Expbar()
 
 			if C_Reputation.IsFactionParagon(factionID) then
 				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
-				GameTooltip:AddDoubleLine(L["ParagonRep"], currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+				local paraCount = floor(currentValue/threshold)
+				currentValue = mod(currentValue, threshold)
+				GameTooltip:AddDoubleLine(L["ParagonRep"]..paraCount, currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
 			end
 		end
 
