@@ -78,7 +78,7 @@ function module:RCLootCoucil()
 
 		for _, entry in pairs(loot.EntryManager.entries) do
 			entry.icon:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
-			for i = 1, 4 do
+			for i = 1, #entry.buttons do
 				ReskinButton(entry.buttons[i])
 			end
 			entry.timeoutBar:SetStatusBarTexture(DB.normTex)
