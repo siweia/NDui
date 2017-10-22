@@ -21,7 +21,7 @@ local function StaggerGo()
 		bu[i] = CreateFrame("Frame", nil, UIParent)
 		bu[i]:SetSize(IconSize, IconSize)
 		bu[i]:SetFrameStrata("HIGH")
-		B.CreateIF(bu[i], true)
+		B.CreateIF(bu[i])
 		bu[i].Icon:SetTexture(GetSpellTexture(spells[i]))
 		bu[i].Count = B.CreateFS(bu[i], 16, "")
 		bu[i].Count:SetPoint("BOTTOMRIGHT", 4, -2)
@@ -76,7 +76,6 @@ f:SetScript("OnEvent", function(self, event)
 				bu[1]:SetAlpha(1)
 				bu[1].CD:SetCooldown(0, 0)
 			end
-			B.CreateAT(bu[1], "ANCHOR_BOTTOM", 214326)
 		else
 			bu[1]:SetAlpha(.5)
 			bu[1].CD:SetCooldown(0, 0)
@@ -91,7 +90,6 @@ f:SetScript("OnEvent", function(self, event)
 			else
 				bu[2]:SetAlpha(.5)
 			end
-			B.CreateAT(bu[2], "ANCHOR_BOTTOM", 115072)
 		end
 
 		-- Ironskin Brew
@@ -107,7 +105,6 @@ f:SetScript("OnEvent", function(self, event)
 				ClearChargeCooldown(bu[3])
 				bu[3].CD:SetReverse(true)
 				bu[3].CD:SetCooldown(exp - dur, dur)
-				B.CreateAT(bu[3], "ANCHOR_BOTTOM", name)
 				ActionButton_ShowOverlayGlow(bu[3])
 			else
 				bu[3].Count:ClearAllPoints()
@@ -124,7 +121,6 @@ f:SetScript("OnEvent", function(self, event)
 					ClearChargeCooldown(bu[3])
 					bu[3].CD:SetCooldown(0, 0)
 				end
-				B.CreateAT(bu[3], "ANCHOR_BOTTOM", 115308)
 				ActionButton_HideOverlayGlow(bu[3])
 			end
 		end
