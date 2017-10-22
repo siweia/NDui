@@ -521,3 +521,34 @@ do
 		end
 	end
 end
+
+-- Select target when click on raid units
+do
+	local function fixRaidGroupButton()
+		for i = 1, 40 do
+			local bu = _G["RaidGroupButton"..i]
+			if bu and bu.unit and not bu.clickFixed then
+				bu:SetAttribute("type", "target")
+				bu:SetAttribute("unit", bu.unit)
+
+				bu.clickFixed = true
+			end
+		end
+	end
+
+	NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(self, event, addon)
+		if event == "ADDON_LOADED" and addon == "Blizzard_RaidUI" then
+			if not InCombatLockdown() then
+				fixRaidGroupButton()
+				self:UnregisterAllEvents()
+			else
+				self:RegisterEvent("PLAYER_REGEN_ENABLED")
+			end
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			if RaidGroupButton1 and RaidGroupButton1:GetAttribute("type") ~= "target" then
+				fixRaidGroupButton()
+				self:UnregisterAllEvents()
+			end
+		end
+	end)
+end
