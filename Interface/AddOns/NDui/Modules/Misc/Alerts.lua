@@ -165,11 +165,11 @@ function module:SwapingAlert()
 
 	NDui:EventFrame("COMBAT_LOG_EVENT_UNFILTERED"):SetScript("OnEvent", function(_, _, ...)
 		if not IsInGroup() then return end
-		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
+		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, spellName = ...
 		if eventType ~= "SPELL_CAST_SUCCESS" or spellID ~= 161399 then return end
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
 			local name, itemLink = GetItemInfo(111820)
-			SendChatMessage(format(L["Swapblaster"], sourceName, destName, itemLink or name), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
+			SendChatMessage(format(L["Swapblaster"], sourceName, destName, itemLink or name or spellName), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
 	end)
 end
