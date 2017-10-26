@@ -86,7 +86,7 @@ end
 
 hooksecurefunc("UnitPopup_ShowMenu", function(dropdownMenu, which, unit, name, userData)
 	if UIDROPDOWNMENU_MENU_LEVEL > 1 then return end
-	if unit and (unit == "target" or string.find(unit, "party")) then
+	if unit and (unit == "target" or string.find(unit, "party") or string.find(unit, "raid")) then
 		local info
 		if UnitIsPlayer(unit) then
 			info = UIDropDownMenu_CreateInfo()
