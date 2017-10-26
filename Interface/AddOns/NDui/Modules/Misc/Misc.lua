@@ -15,7 +15,7 @@ function module:OnLogin()
 	self:ShowItemLevel()
 	self:BeamTool()
 	self:ReflectingAlert()
-	self:SwapingAlert()
+	self:SwappingAlert()
 	self:VersionCheck()
 	self:SistersAlert()
 

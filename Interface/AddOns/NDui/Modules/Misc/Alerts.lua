@@ -160,7 +160,7 @@ end
 --[[
 	工程移形换影装置使用通报
 ]]
-function module:SwapingAlert()
+function module:SwappingAlert()
 	if not NDuiDB["Misc"]["SwapingAlert"] then return end
 
 	NDui:EventFrame("COMBAT_LOG_EVENT_UNFILTERED"):SetScript("OnEvent", function(_, _, ...)
