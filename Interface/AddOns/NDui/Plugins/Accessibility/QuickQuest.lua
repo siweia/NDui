@@ -64,6 +64,7 @@ local ignoreQuestNPC = {
 	[114719] = true,	-- 商人塞林
 	[121263] = true,	-- 大技师罗姆尔
 	[126954] = true,	-- 图拉扬
+	[124312] = true,	-- 图拉扬
 }
 
 local function GetQuestLogQuests(onlyComplete)
@@ -315,7 +316,7 @@ QuickQuest:Register("QUEST_PROGRESS", function()
 		local _, _, worldQuest = GetQuestTagInfo(GetQuestID())
 		if worldQuest then return end
 		-- 阿古斯的随从兑换
-		if GetNPCID() == 119388 or GetNPCID() == 127037 or GetNPCID() == 126954 then return end
+		if GetNPCID() == 119388 or GetNPCID() == 127037 or GetNPCID() == 126954 or GetNPCID() == 124312 then return end
 
 		local requiredItems = GetNumQuestItems()
 		if(requiredItems > 0) then
