@@ -2,7 +2,6 @@
 local module = NDui:GetModule("Chat")
 
 function module:ChannelRename()
-	local gsub = _G.string.gsub
 	for i = 1, NUM_CHAT_WINDOWS do
 		if ( i ~= 2 ) then
 			local f = _G["ChatFrame"..i]
