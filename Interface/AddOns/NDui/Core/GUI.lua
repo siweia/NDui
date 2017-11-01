@@ -376,7 +376,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
 		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
-		{2, "Chat", "FilterList", L["Filter List"], true},
+		{2, "Chat", "FilterList", L["Filter List"], true, nil, function() B.genFilterList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
@@ -501,7 +501,7 @@ local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
 	for _, option in pairs(optionList[i]) do
-		local type, key, value, name, horizon, data = unpack(option)
+		local type, key, value, name, horizon, data, callBack = unpack(option)
 		-- Checkboxes
 		if type == 1 then
 			local cb = B.CreateCheckBox(parent)
@@ -532,6 +532,7 @@ local function CreateOption(i)
 			end)
 			eb:HookScript("OnEnterPressed", function()
 				NDuiDB[key][value] = eb:GetText()
+				if callBack then callBack() end
 			end)
 			eb:SetScript("OnEnter", function(self)
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")

@@ -1,9 +1,50 @@
 local B, C, L, DB = unpack(select(2, ...))
+local module = NDui:GetModule("Chat")
+
+NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_LOGOUT"}):SetScript("OnEvent", function(self, event)
+	if not NDuiADB["ChatFilter"] then NDuiADB["ChatFilter"] = "" end
+	if not NDuiADB["ChatAt"] then NDuiADB["ChatAt"] = "" end
+	if not NDuiADB["Timestamp"] then NDuiADB["Timestamp"] = false end
+
+	if event == "PLAYER_LOGIN" then
+		NDuiDB["Chat"]["FilterList"] = NDuiADB["ChatFilter"]
+		NDuiDB["Chat"]["AtList"] = NDuiADB["ChatAt"]
+		NDuiDB["Chat"]["Timestamp"] = NDuiADB["Timestamp"]
+	elseif event == "PLAYER_LOGOUT" then
+		NDuiADB["ChatFilter"] = NDuiDB["Chat"]["FilterList"]
+		NDuiADB["ChatAt"] = NDuiDB["Chat"]["AtList"]
+		NDuiADB["Timestamp"] = NDuiDB["Chat"]["Timestamp"]
+	end
+
+	-- Timestamp
+	local greyStamp = DB.GreyColor.."[%H:%M:%S]|r "
+	if NDuiDB["Chat"]["Timestamp"] then
+		SetCVar("showTimestamps", greyStamp)
+	else
+		if GetCVar("showTimestamps") == greyStamp then
+			SetCVar("showTimestamps", "none")
+		end
+	end
+end)
 
 --[[
 	修改自NoGoldSeller，强迫症患者只能接受这个低占用的。
 ]]
 local FilterList = {}
+local function genFilterList()
+	if not NDuiDB["Chat"]["FilterList"] then NDuiDB["Chat"]["FilterList"] = NDuiADB["ChatFilter"] end
+
+	local keywords = {string.split(" ", NDuiDB["Chat"]["FilterList"])}
+	for _, value in pairs(keywords) do
+		if value ~= "" then
+			if not FilterList[value] then
+				FilterList[value] = true
+			end
+		end
+	end
+end
+B.genFilterList = genFilterList
+
 local function genChatFilter(self, event, msg, author, _, _, _, flag)
 	if not NDuiDB["Chat"]["EnableFilter"] then return end
 
@@ -32,15 +73,6 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 		msg = gsub(msg, symbol, "")
 	end
 
-	local keywords = {string.split(" ", NDuiDB["Chat"]["FilterList"])}
-	for _, value in pairs(keywords) do
-		if value ~= "" then
-			if not FilterList[value] then
-				FilterList[value] = true
-			end
-		end
-	end
-
 	local match = 0
 	for keyword, _ in pairs(FilterList) do
 		local _, count = gsub(msg, keyword, "")
@@ -53,12 +85,17 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 		return true
 	end
 end
-ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_ADDON", genChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
+
+function module:ChatFilter()
+	genFilterList()
+
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genChatFilter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_ADDON", genChatFilter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
+end
 
 --[[
 	公会频道有人@时提示你
@@ -92,33 +129,5 @@ hooksecurefunc("BNToastFrame_Show", function()
 		local hexColor = B.HexRGB(B.ClassColor(at.class))
 		BNToastFrameDoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
 		at.checker = false
-	end
-end)
-
--- Savedvariables Accountwide
-local f = NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_LOGOUT"})
-f:SetScript("OnEvent", function(self, event)
-	if not NDuiADB["ChatFilter"] then NDuiADB["ChatFilter"] = "" end
-	if not NDuiADB["ChatAt"] then NDuiADB["ChatAt"] = "" end
-	if not NDuiADB["Timestamp"] then NDuiADB["Timestamp"] = false end
-
-	if event == "PLAYER_LOGIN" then
-		NDuiDB["Chat"]["FilterList"] = NDuiADB["ChatFilter"]
-		NDuiDB["Chat"]["AtList"] = NDuiADB["ChatAt"]
-		NDuiDB["Chat"]["Timestamp"] = NDuiADB["Timestamp"]
-	elseif event == "PLAYER_LOGOUT" then
-		NDuiADB["ChatFilter"] = NDuiDB["Chat"]["FilterList"]
-		NDuiADB["ChatAt"] = NDuiDB["Chat"]["AtList"]
-		NDuiADB["Timestamp"] = NDuiDB["Chat"]["Timestamp"]
-	end
-
-	-- Timestamp
-	local greyStamp = DB.GreyColor.."[%H:%M:%S]|r "
-	if NDuiDB["Chat"]["Timestamp"] then
-		SetCVar("showTimestamps", greyStamp)
-	else
-		if GetCVar("showTimestamps") == greyStamp then
-			SetCVar("showTimestamps", "none")
-		end
 	end
 end)

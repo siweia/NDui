@@ -234,6 +234,7 @@ function module:OnLogin()
 	end
 
 	-- Add Elements
+	self:ChatFilter()
 	self:ChannelRename()
 	self:Chatbar()
 	self:ChatCopy()
