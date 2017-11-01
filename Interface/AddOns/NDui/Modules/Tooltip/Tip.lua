@@ -192,14 +192,14 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			for i = 2, self:NumLines() do
 				local tiptext = _G["GameTooltipTextLeft"..i]
 				local linetext = tiptext:GetText()
-				if(linetext and linetext:find(LEVEL)) then
+				if linetext and linetext:find(LEVEL) then
 					tiptextLevel = tiptext
 				end
 			end
 
 			local creature = not UnitIsPlayer(unit) and UnitCreatureType(unit) or ""
 			local unitClass = UnitIsPlayer(unit) and ("%s %s"):format(UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or ""
-			if(tiptextLevel) then
+			if tiptextLevel then
 				tiptextLevel:SetFormattedText(("%s %s%s %s"), textLevel, creature, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 			end
 		end
