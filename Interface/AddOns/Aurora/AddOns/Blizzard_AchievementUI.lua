@@ -285,7 +285,8 @@ C.themes["Blizzard_AchievementUI"] = function()
 		_G[bu.."HeaderLeft"]:SetAlpha(0)
 		_G[bu.."HeaderMiddle"]:SetAlpha(0)
 		_G[bu.."HeaderRight"]:SetAlpha(0)
-		select(8, _G[bu]:GetRegions()):SetColorTexture(r, g, b, .25)
+		_G[bu]:GetHighlightTexture():SetColorTexture(r, g, b, .25)
+		_G[bu]:GetHighlightTexture():SetBlendMode("BLEND")
 	end
 
 	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 25)
