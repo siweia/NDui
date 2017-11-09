@@ -91,6 +91,8 @@ C.AuraWatchList = {
 		------>LEG饰品
 				--超能奥术
 				{AuraID = 254161, UnitID = "player"},
+				--克罗塔的护盾
+				{AuraID = 228323, UnitID = "player", Value = true},
 				--猫头鹰
 				{AuraID = 242570, UnitID = "player"},
 				--幽魂香炉
