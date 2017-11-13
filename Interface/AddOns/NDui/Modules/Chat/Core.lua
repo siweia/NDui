@@ -176,9 +176,11 @@ f:SetScript("OnEvent", function(self, event, ...)
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
 				local gameID = select(6, BNGetFriendInfoByID(arg3))
-				local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-				if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(charName.."-"..realmName)) then
-					BNInviteFriend(gameID)
+				if gameID then
+					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+					if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(charName.."-"..realmName)) then
+						BNInviteFriend(gameID)
+					end
 				end
 			else
 				if not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(arg2) then
