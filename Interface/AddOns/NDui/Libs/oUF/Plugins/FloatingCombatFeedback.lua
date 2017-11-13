@@ -110,6 +110,17 @@ local eventFilter = {
 	["SWING_MISSED"] = {suffix = "MISS", index = 12, iconType = "swing", autoAttack = true},
 	["RANGE_MISSED"] = {suffix = "MISS", index = 15, iconType = "range", autoAttack = true},
 	["SPELL_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell"},
+
+	["ENVIRONMENTAL_DAMAGE"] = {suffix = "ENVIRONMENT", index = 12, iconType = "env"},
+}
+
+local envTexture = {
+	["Drowning"] = "spell_shadow_demonbreath",
+	["Falling"] = "ability_rogue_quickrecovery",
+	["Fatigue"] = "ability_creature_cursed_05",
+	["Fire"] = "spell_fire_fire",
+	["Lava"] = "ability_rhyolith_lavapool",
+	["Slime"] = "inv_misc_slime_02",
 }
 
 local function getFloatingIconTexture(iconType, spellID, isPet)
@@ -124,7 +135,11 @@ local function getFloatingIconTexture(iconType, spellID, isPet)
 		end
 	elseif iconType == "range" then
 		texture = GetSpellTexture(75)
+	elseif iconType == "env" then
+		texture = envTexture[spellID] or "ability_creature_cursed_05"
+		texture = "Interface\\Icons\\"..texture
 	end
+
 	return texture
 end
 
@@ -173,6 +188,10 @@ local function Update(self, event, ...)
 				local missType, isOffHand, amountMissed = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = _G["COMBAT_TEXT_"..missType]
+			elseif value.suffix == "ENVIRONMENT" then
+				local envType, amount, overkill, school = select(value.index, ...)
+				texture = getFloatingIconTexture(value.iconType, envType)
+				text = "-"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
 			end
 
 			color = schoolColors[school] or schoolColors[0]
