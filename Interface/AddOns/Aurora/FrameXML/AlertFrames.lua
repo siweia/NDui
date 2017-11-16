@@ -49,9 +49,8 @@ tinsert(C.themes["Aurora"], function()
 				frame.OldAchievement:SetTexture("")
 				frame.GuildBorder:SetTexture("")
 				frame.Icon.Bling:SetTexture("")
-				frame.glow:SetTexture("")
 			end
-			frame.shine:SetTexture("")
+			frame.glow:SetTexture("")
 			frame.Background:SetTexture("")
 			frame.Icon.Overlay:SetTexture("")
 			-- otherwise it hides
