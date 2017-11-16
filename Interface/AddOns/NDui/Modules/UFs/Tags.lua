@@ -123,12 +123,12 @@ oUF.Tags.Methods["nphp"] = function(unit)
 	if per == 100 then return end
 
 	local color
-	if per <= 50 and per >= 35 then
-		color = B.HexRGB(1, .9, .3)
-	elseif per < 35 and per >= 20 then
-		color = B.HexRGB(1, .5, 0)
-	elseif per < 20 then
+	if per < 20 then
 		color = B.HexRGB(1, .1, .1)
+	elseif per < 35 then
+		color = B.HexRGB(1, .5, 0)
+	elseif per < 50 then
+		color = B.HexRGB(1, .9, .3)
 	else
 		color = B.HexRGB(1, 1, 1)
 	end
