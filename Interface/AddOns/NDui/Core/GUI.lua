@@ -88,6 +88,7 @@ local defaultSettings = {
 		EasyResize = true,
 		EnableFilter = true,
 		Matches = 1,
+		BlockAddonAlert = true,
 	},
 	Map = {
 		Coord = true,
@@ -103,7 +104,6 @@ local defaultSettings = {
 	Nameplate = {
 		Enable = true,
 		ColorBorder = false,
-		PlayerAura = false,
 		AllAuras = true,
 		maxAuras = 5,
 		AuraSize = 22,
@@ -121,6 +121,7 @@ local defaultSettings = {
 		UnitList = "",
 		ShowUnitPower = true,
 		ShowPowerList = "",
+		VerticalSpacing = .7,
 	},
 	Skins = {
 		DBM = true,
@@ -313,8 +314,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "Enable", L["Enable Nameplate"]},
 		{},--blank
 		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
-		{1, "Nameplate", "PlayerAura", L["PlayerPlate Aura"], true},
-		{1, "Nameplate", "AllAuras", L["Show All Auras"]},
+		{1, "Nameplate", "AllAuras", L["Show All Auras"], true},
 		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
 		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
 		{},--blank
@@ -329,10 +329,11 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "Arrow", L["Show Arrow"], true},
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"]},
 		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"], true},
-		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"], false, {0, 1, 1}},
+		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"], false, {.5, 1.5, 1}},
 		{3, "Nameplate", "Distance", L["Nameplate Distance"], true, {20, 100, 0}},
 		{3, "Nameplate", "Width", L["NP Width"], false, {50, 150, 0}},
 		{3, "Nameplate", "Height", L["NP Height"], true, {5, 15, 0}},
+		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"], false, {0, 1, 1}},
 	},
 	[6] = {
 		{1, "AuraWatch", "Enable", L["Enable AuraWatch"]},
@@ -375,6 +376,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{2, "Chat", "AtList", L["@List"]},
 		{},--blank
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
+		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
 		{2, "Chat", "FilterList", L["Filter List"], true, nil, function() B.genFilterList() end},
 	},
