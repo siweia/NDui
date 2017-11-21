@@ -86,6 +86,20 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 	end
 end
 
+local addonBlockList = {"任务进度提示%s?[:：]", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD"}
+local function genAddonBlock(self, event, msg, author, _, _, _, flag)
+	if not NDuiDB["Chat"]["BlockAddonAlert"] then return end
+
+	local name = Ambiguate(author, "none")
+	if UnitIsUnit(name, "player") then return end
+
+	for _, word in ipairs(addonBlockList) do
+		if msg:find(word) then
+			return true
+		end
+	end
+end
+
 function module:ChatFilter()
 	genFilterList()
 
@@ -93,8 +107,16 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genChatFilter)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_ADDON", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
+
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
 end
 
 --[[
