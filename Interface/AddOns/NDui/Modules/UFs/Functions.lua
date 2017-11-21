@@ -413,7 +413,7 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, _, caste
 			return true
 		end
 	elseif style == "nameplate" then
-		if UnitIsUnit("player", unit) and not NDuiDB["Nameplate"]["PlayerAura"] then return end
+		if UnitIsUnit("player", unit) then return end
 		if C.WhiteList and C.WhiteList[spellID] then
 			return true
 		elseif C.BlackList and C.BlackList[spellID] then

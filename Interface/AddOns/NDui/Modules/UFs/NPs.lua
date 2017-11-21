@@ -13,7 +13,7 @@ function UF:SetupCVars()
 	end
 	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
 	SetCVar("nameplateOverlapH", .5)
-	SetCVar("nameplateOverlapV", .7)
+	SetCVar("nameplateOverlapV", NDuiDB["Nameplate"]["VerticalSpacing"])
 	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateOccludedAlphaMult", .3)
 	SetCVar("namePlateMinScale", .8)
