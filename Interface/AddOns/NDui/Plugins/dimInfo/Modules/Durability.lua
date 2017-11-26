@@ -118,13 +118,13 @@ if cfg.Durability == true then
 						guildMoney = GetGuildBankMoney()
 					end
 					if guildMoney >= cost and CanGuildBankRepair() then
-					   RepairAllItems(1)
-					   print(format("|cff99CCFF"..infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
-					   return
+						RepairAllItems(1)
+						print(format("|cff99CCFF"..infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
+						return
 					elseif guildMoney == 0 and IsGuildLeader() then
-					   RepairAllItems(1)
-					   print(format("|cff99CCFF"..infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
-					   return
+						RepairAllItems(1)
+						print(format("|cff99CCFF"..infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
+						return
 					end
 				end
 				if money > cost then
