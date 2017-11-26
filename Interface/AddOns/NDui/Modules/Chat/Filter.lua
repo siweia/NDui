@@ -32,9 +32,7 @@ end)
 ]]
 local FilterList = {}
 local function genFilterList()
-	if not NDuiDB["Chat"]["FilterList"] then NDuiDB["Chat"]["FilterList"] = NDuiADB["ChatFilter"] end
-
-	local keywords = {string.split(" ", NDuiDB["Chat"]["FilterList"])}
+	local keywords = {string.split(" ", NDuiDB["Chat"]["FilterList"] or "")}
 	for _, value in pairs(keywords) do
 		if value ~= "" then
 			if not FilterList[value] then
@@ -86,7 +84,7 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 	end
 end
 
-local addonBlockList = {"任务进度提示%s?[:：]", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD"}
+local addonBlockList = {"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell"}
 local function genAddonBlock(self, event, msg, author, _, _, _, flag)
 	if not NDuiDB["Chat"]["BlockAddonAlert"] then return end
 
