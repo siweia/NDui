@@ -5,7 +5,7 @@ local IsUsableAction = _G.IsUsableAction
 local IsActionInRange = _G.IsActionInRange
 local ActionHasRange = _G.ActionHasRange
 
-function Bar:RangeOnUpdate(elapsed)
+function Bar:RangeOnUpdate()
 	if not self.rangeTimer then return end
 
 	if self.rangeTimer == TOOLTIP_UPDATE_TIME then
