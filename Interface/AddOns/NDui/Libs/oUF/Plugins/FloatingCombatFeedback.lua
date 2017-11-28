@@ -7,7 +7,7 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, "oUF FloatingCombatFeedback was unable to locate oUF install")
 
-local _G = _G
+local _G = getfenv(0)
 local pairs = pairs
 local cos, sin, mmax = cos, sin, math.max
 local tremove, tinsert = table.remove, table.insert
