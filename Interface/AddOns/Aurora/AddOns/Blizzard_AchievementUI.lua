@@ -438,4 +438,18 @@ C.themes["Blizzard_AchievementUI"] = function()
 			hl:SetPoint("BOTTOMRIGHT", -1, 1)
 		end
 	end
+
+	for i = 1, 20 do
+		local bu = "AchievementFrameComparisonStatsContainerButton"..i
+		_G[bu.."BG"]:Hide()
+		_G[bu.."BG"].Show = F.dummy
+		_G[bu.."HeaderLeft"]:SetAlpha(0)
+		_G[bu.."HeaderMiddle"]:SetAlpha(0)
+		_G[bu.."HeaderRight"]:SetAlpha(0)
+		_G[bu.."HeaderLeft2"]:SetAlpha(0)
+		_G[bu.."HeaderMiddle2"]:SetAlpha(0)
+		_G[bu.."HeaderRight2"]:SetAlpha(0)
+	end
+	F.ReskinScroll(AchievementFrameComparisonStatsContainerScrollBar)
+	AchievementFrameComparisonWatermark:SetAlpha(0)
 end
