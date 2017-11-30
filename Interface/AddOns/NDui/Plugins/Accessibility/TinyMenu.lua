@@ -66,7 +66,11 @@ local function popupClick(self, info)
 	elseif info.value == "NAME_COPY" then
 		if server and server ~= "" then name = name.."-"..server end
 
-		if SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
+		if IsControlKeyDown() and LFGListPVEStub and not UnitIsPlayer(info.unit) then
+			PVEFrame_ShowFrame("GroupFinderFrame", LFGListPVEStub)
+			LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
+			LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, name)
+		elseif SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
 			SendMailNameEditBox:SetText(name)
 			SendMailNameEditBox:HighlightText()
 		else
