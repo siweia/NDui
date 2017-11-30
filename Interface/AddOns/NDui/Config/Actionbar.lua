@@ -11,7 +11,7 @@ local _, C, _, _ = unpack(select(2, ...))
 local barFader = {						-- 动作条显隐设置
 	fadeInAlpha = 1,					-- 显示时的透明度
 	fadeInDuration = .3,				-- 显示耗时
-	fadeOutAlpha = .05,					-- 渐隐后的透明度
+	fadeOutAlpha = .1,					-- 渐隐后的透明度
 	fadeOutDuration = .8,				-- 渐隐耗时
 	fadeOutDelay = .5,					-- 延迟渐隐
 }
