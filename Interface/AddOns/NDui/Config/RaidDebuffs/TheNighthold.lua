@@ -1,10 +1,3 @@
-------------------------------------------------------------
--- TheNighthold.lua
---
--- Abin
--- 2019/09/13
-------------------------------------------------------------
-
 local module = NDui:GetModule("RaidFrameAuras")
 if not module then return end
 
