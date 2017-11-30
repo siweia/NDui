@@ -79,17 +79,17 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 249686)	-- 轰鸣屠戮
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 246698)	-- 破坏
 
 BOSS = 1983 -- 瓦里玛萨斯
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 243968)	-- 烈焰折磨
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 243977)	-- 冰霜折磨
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 243980)	-- 邪能折磨
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 243973)	-- 暗影折磨
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243968)	-- 烈焰折磨
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243977)	-- 冰霜折磨
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243980)	-- 邪能折磨
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243973)	-- 暗影折磨
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 243961)	-- 哀难
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244005)	-- 黑暗裂隙
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244094)	-- 冥魂之拥
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248732)	-- 毁灭回响
 
 BOSS = 1986 -- 破坏魔女巫会
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 253753)	-- 恐惧
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 253753)	-- 恐惧
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244899)	-- 火焰打击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 245634)	-- 飞旋的军刀
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 253520)	-- 爆裂冲击
