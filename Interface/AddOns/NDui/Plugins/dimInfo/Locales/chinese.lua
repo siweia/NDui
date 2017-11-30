@@ -1,6 +1,7 @@
-﻿if GetLocale() ~= "zhCN" then return end
+﻿local _, ns = ...
+if GetLocale() ~= "zhCN" then return end
 
-infoL = {
+ns.infoL = {
 	["NFG"] = "不使用公修",
 	["Total"] = "总计",
 	["Used"] = "使用",
@@ -64,4 +65,5 @@ infoL = {
 	["Blingtron"] = "布林顿每日礼包",
 	["Legion Invasion"] = "军团突袭",
 	["Next Invasion"] = "下一次突袭",
+	["Search Invasion Group"] = "搜索侵入点队伍",
 }

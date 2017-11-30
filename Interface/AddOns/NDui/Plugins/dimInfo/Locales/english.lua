@@ -1,6 +1,7 @@
-﻿--if GetLocale() ~= "enUS" then return end
+﻿local _, ns = ...
+--if GetLocale() ~= "enUS" then return end
 
-infoL = {
+ns.infoL = {
 	["NFG"] = "Not From Guild",
 	["Total"] = "Total",
 	["Used"] = "Used",
@@ -64,4 +65,5 @@ infoL = {
 	["Blingtron"] = "Blingtron Daily Gift",
 	["Legion Invasion"] = "Legion Invasion",
 	["Next Invasion"] = "Next Invasion",
+	["Search Invasion Group"] = "Search Invasion Group",
 }

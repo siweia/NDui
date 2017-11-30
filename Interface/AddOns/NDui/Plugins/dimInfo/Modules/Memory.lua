@@ -1,4 +1,4 @@
-﻿local addon, ns = ...
+﻿local _, ns = ...
 local cfg = ns.cfg
 local init = ns.init
 
@@ -90,7 +90,7 @@ if cfg.Memory == true then
 		if btn == "LeftButton" then
 			local before = gcinfo()
 			collectgarbage("collect")
-			print(format("|cff66C6FF%s:|r %s", infoL["Garbage collected"], formatMem(before - gcinfo())))
+			print(format("|cff66C6FF%s:|r %s", ns.infoL["Garbage collected"], formatMem(before - gcinfo())))
 			RefreshMemory()
 		elseif btn == "RightButton" then
 			diminfo.AutoCollect = not diminfo.AutoCollect
@@ -128,16 +128,16 @@ if cfg.Memory == true then
 			end
 			if #memoryTable > cfg.MaxAddOns then
 				local numHidden = #memoryTable - cfg.MaxAddOns
-				GameTooltip:AddDoubleLine(format("%d %s (%s)", numHidden, infoL["Hidden"], infoL["Shift"]), formatMem(hiddenMemory), .6,.8,1, .6,.8,1)
+				GameTooltip:AddDoubleLine(format("%d %s (%s)", numHidden, ns.infoL["Hidden"], ns.infoL["Shift"]), formatMem(hiddenMemory), .6,.8,1, .6,.8,1)
 			end
 		end
 		GameTooltip:AddLine(" ")
 
-		GameTooltip:AddDoubleLine(infoL["Default UI Memory Usage:"], formatMem(gcinfo() - totalMemory), .6,.8,1, 1,1,1)
-		GameTooltip:AddDoubleLine(infoL["Total Memory Usage:"], formatMem(collectgarbage("count")), .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(ns.infoL["Default UI Memory Usage:"], formatMem(gcinfo() - totalMemory), .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(ns.infoL["Total Memory Usage:"], formatMem(collectgarbage("count")), .6,.8,1, 1,1,1)
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["ManulCollect"], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["AutoCollect"]..": "..(diminfo.AutoCollect and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.LeftButton..ns.infoL["ManulCollect"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.RightButton..ns.infoL["AutoCollect"]..": "..(diminfo.AutoCollect and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 

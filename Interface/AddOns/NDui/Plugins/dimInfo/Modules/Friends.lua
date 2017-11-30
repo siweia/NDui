@@ -1,4 +1,4 @@
-﻿local addon, ns = ...
+﻿local _, ns = ...
 local cfg = ns.cfg
 local init = ns.init
 
@@ -58,7 +58,7 @@ if cfg.Friends == true then
 				{ text = "|cffFF0000"..AFK.."|r", checked = function() return checkStatus()[3] end, func = function() if not IsChatAFK() then SendChatMessage("", "AFK") end end},
 			},
 		},
-		{text = infoL["BN Info"], notCheckable = true, func = function() StaticPopup_Show("SET_BN_BROADCAST") end},
+		{text = ns.infoL["BN Info"], notCheckable = true, func = function() StaticPopup_Show("SET_BN_BROADCAST") end},
 	}
 
 	local function inviteClick(self, arg1, arg2)
@@ -80,8 +80,8 @@ if cfg.Friends == true then
 		return (c.r and format("|cff%02x%02x%02x", c.r * 255, c.g * 255, c.b * 255))
 	end
 
-	local worldOfWarcraftString = infoL["WoW"]
-	local battleNetString = infoL["BN"]
+	local worldOfWarcraftString = ns.infoL["WoW"]
+	local battleNetString = ns.infoL["BN"]
 	local activezone, inactivezone = {r=.3, g=1, b=.3}, {r=.65, g=.65, b=.65}
 	local friendTable, BNTable = {}, {}
 	local friendOnline, friendOffline = gsub(ERR_FRIEND_ONLINE_SS, "\124Hplayer:%%s\124h%[%%s%]\124h", ""), gsub(ERR_FRIEND_OFFLINE_S, "%%s", "")
@@ -225,7 +225,7 @@ if cfg.Friends == true then
 		GameTooltip:AddDoubleLine(FRIENDS_LIST, format("%s: %s/%s", GUILD_ONLINE_LABEL, totalonline, totalfriends), 0,.6,1, 0,.6,1)
 		if totalonline == 0 then
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(infoL["No Online"], 1,1,1)
+			GameTooltip:AddLine(ns.infoL["No Online"], 1,1,1)
 		end
 		if onlineFriends > 0 then
 			GameTooltip:AddLine(" ")
@@ -271,8 +271,8 @@ if cfg.Friends == true then
 			end
 		end
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["Show Friends"], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["Show Menus"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.LeftButton..ns.infoL["Show Friends"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.RightButton..ns.infoL["Show Menus"], 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 
 		self:RegisterEvent("MODIFIER_STATE_CHANGED")

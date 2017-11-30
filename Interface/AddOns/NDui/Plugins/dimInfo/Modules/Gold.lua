@@ -1,4 +1,4 @@
-﻿local addon, ns = ...
+﻿local _, ns = ...
 local cfg = ns.cfg
 local init = ns.init
 
@@ -58,7 +58,7 @@ if cfg.Gold == true then
 		diminfo.totalGold[myRealm][myName] = {GetMoney(), myClass}
 	end
 	StaticPopupDialogs["RESETGOLD"] = {
-		text = infoL["Are you sure to reset the gold count?"],
+		text = ns.infoL["Are you sure to reset the gold count?"],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = RESETGOLD,
@@ -95,18 +95,18 @@ if cfg.Gold == true then
 		GameTooltip:AddLine(CURRENCY, 0,.6,1)
 		GameTooltip:AddLine(" ")
 
-		GameTooltip:AddLine(infoL["Session"], .6,.8,1)
-		GameTooltip:AddDoubleLine(infoL["Earned:"], GetMoneyString(Profit), 1,1,1, 1,1,1)
-		GameTooltip:AddDoubleLine(infoL["Spent:"], GetMoneyString(Spent), 1,1,1, 1,1,1)
+		GameTooltip:AddLine(ns.infoL["Session"], .6,.8,1)
+		GameTooltip:AddDoubleLine(ns.infoL["Earned:"], GetMoneyString(Profit), 1,1,1, 1,1,1)
+		GameTooltip:AddDoubleLine(ns.infoL["Spent:"], GetMoneyString(Spent), 1,1,1, 1,1,1)
 		if Profit < Spent then
-			GameTooltip:AddDoubleLine(infoL["Deficit:"], GetMoneyString(Spent-Profit), 1,0,0, 1,1,1)
+			GameTooltip:AddDoubleLine(ns.infoL["Deficit:"], GetMoneyString(Spent-Profit), 1,0,0, 1,1,1)
 		elseif Profit > Spent then
-			GameTooltip:AddDoubleLine(infoL["Profit:"], GetMoneyString(Profit-Spent), 0,1,0, 1,1,1)
+			GameTooltip:AddDoubleLine(ns.infoL["Profit:"], GetMoneyString(Profit-Spent), 0,1,0, 1,1,1)
 		end
 		GameTooltip:AddLine(" ")
 
 		local totalGold = 0
-		GameTooltip:AddLine(infoL["Character"]..": ", .6,.8,1)
+		GameTooltip:AddLine(ns.infoL["Character"]..": ", .6,.8,1)
 		local thisRealmList = diminfo.totalGold[myRealm]
 		for k, v in pairs(thisRealmList) do
 			local gold, class = unpack(v)
@@ -114,7 +114,7 @@ if cfg.Gold == true then
 			totalGold = totalGold + gold
 		end
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(infoL["Server"]..": ", .6,.8,1)
+		GameTooltip:AddLine(ns.infoL["Server"]..": ", .6,.8,1)
 		GameTooltip:AddDoubleLine(TOTAL..": ", GetGoldString(totalGold), 1,1,1, 1,1,1)
 
 		for i = 1, GetNumWatchedTokens() do
@@ -134,9 +134,9 @@ if cfg.Gold == true then
 			end
 		end
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["CurrencyPanel"], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["AutoSell Junk"]..": "..(diminfo.AutoSell and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", "CTRL+"..init.RightButton..infoL["Reset Gold"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.LeftButton..ns.infoL["CurrencyPanel"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.RightButton..ns.infoL["AutoSell Junk"]..": "..(diminfo.AutoSell and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", "CTRL+"..init.RightButton..ns.infoL["Reset Gold"], 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", GameTooltip_Hide)
@@ -177,7 +177,7 @@ if cfg.Gold == true then
 
 		local firstRun = sellJunkTicker and sellJunkTicker._remainingIterations == 200
 		if firstRun and c > 0 then
-			print(format("|cff99CCFF"..infoL["Selljunk Calculate"]..":|r %s", GetMoneyString(c)))
+			print(format("|cff99CCFF"..ns.infoL["Selljunk Calculate"]..":|r %s", GetMoneyString(c)))
 		elseif c == 0 then
 			StopSelling()
 		end

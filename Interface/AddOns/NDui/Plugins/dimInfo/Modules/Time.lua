@@ -1,4 +1,4 @@
-local addon, ns = ...
+local _, ns = ...
 local cfg = ns.cfg
 local init = ns.init
 
@@ -25,53 +25,53 @@ if cfg.Time == true then
 				Min = date("%M")
 				if GetCVar("timeMgrUseMilitaryTime") == "1" then
 					if pendingCalendarInvites > 0 then
-					Text:SetText("|cffFF0000"..Hr24..":"..Min)
-				else
-					Text:SetText(Hr24..":"..Min)
-				end
-			else
-				if Hr24 >= 12 then
-					if pendingCalendarInvites > 0 then
-						Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."pm|r")
+						Text:SetText("|cffFF0000"..Hr24..":"..Min)
 					else
-						Text:SetText(Hr..":"..Min..init.Colored.."pm|r")
+						Text:SetText(Hr24..":"..Min)
 					end
 				else
-					if pendingCalendarInvites > 0 then
-						Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."am|r")
+					if Hr24 >= 12 then
+						if pendingCalendarInvites > 0 then
+							Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."pm|r")
+						else
+							Text:SetText(Hr..":"..Min..init.Colored.."pm|r")
+						end
 					else
-						Text:SetText(Hr..":"..Min..init.Colored.."am|r")
+						if pendingCalendarInvites > 0 then
+							Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."am|r")
+						else
+							Text:SetText(Hr..":"..Min..init.Colored.."am|r")
+						end
+					end
+				end
+			else
+				Hr, Min = GetGameTime()
+				if Min < 10 then Min = "0"..Min end
+				if GetCVar("timeMgrUseMilitaryTime") == "1" then
+					if pendingCalendarInvites > 0 then			
+						Text:SetText("|cffFF0000"..Hr..":"..Min.."|cffffffff|r")
+					else
+						Text:SetText(Hr..":"..Min.."|cffffffff|r")
+					end
+				else
+					if Hr >= 12 then
+						if Hr > 12 then Hr = Hr - 12 end
+						if pendingCalendarInvites > 0 then
+							Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."pm|r")
+						else
+							Text:SetText(Hr..":"..Min..init.Colored.."pm|r")
+						end
+					else
+						if Hr == 0 then Hr = 12 end
+						if pendingCalendarInvites > 0 then
+							Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."am|r")
+						else
+							Text:SetText(Hr..":"..Min..init.Colored.."am|r")
+						end
 					end
 				end
 			end
-		else
-			Hr, Min = GetGameTime()
-			if Min < 10 then Min = "0"..Min end
-			if GetCVar("timeMgrUseMilitaryTime") == "1" then
-				if pendingCalendarInvites > 0 then			
-					Text:SetText("|cffFF0000"..Hr..":"..Min.."|cffffffff|r")
-				else
-					Text:SetText(Hr..":"..Min.."|cffffffff|r")
-				end
-			else
-				if Hr >= 12 then
-					if Hr > 12 then Hr = Hr - 12 end
-					if pendingCalendarInvites > 0 then
-						Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."pm|r")
-					else
-						Text:SetText(Hr..":"..Min..init.Colored.."pm|r")
-					end
-				else
-					if Hr == 0 then Hr = 12 end
-					if pendingCalendarInvites > 0 then
-						Text:SetText("|cffFF0000"..Hr..":"..Min..init.Colored.."am|r")
-					else
-						Text:SetText(Hr..":"..Min..init.Colored.."am|r")
-					end
-				end
-			end
-		end
-		int = 1
+			int = 1
 		end
 	end
 
@@ -92,26 +92,26 @@ if cfg.Time == true then
 	local keystone = GetItemInfo(138019)
 	local questlist = {
 		{name = keystone, id = 44554},
-		{name = infoL["Blingtron"], id = 34774},
-		{name = infoL["Mean One"], id = 6983},
-		{name = "TBC"..infoL["Timewarped"], id = 40168},
-		{name = "WLK"..infoL["Timewarped"], id = 40173},
-		{name = "CTM"..infoL["Timewarped"], id = 40786},
-		{name = "MOP"..infoL["Timewarped"], id = 45799},
+		{name = ns.infoL["Blingtron"], id = 34774},
+		{name = ns.infoL["Mean One"], id = 6983},
+		{name = "TBC"..ns.infoL["Timewarped"], id = 40168},
+		{name = "WLK"..ns.infoL["Timewarped"], id = 40173},
+		{name = "CTM"..ns.infoL["Timewarped"], id = 40786},
+		{name = "MOP"..ns.infoL["Timewarped"], id = 45799},
 	}
 
 	local invas = {
-		{quest = 38482, name = infoL["Platinum Invasion"]},
-		{quest = 37640, name = infoL["Gold Invasion"]},
-		{quest = 37639, name = infoL["Silver Invasion"]},
-		{quest = 37638, name = infoL["Bronze Invasion"]},
+		{quest = 38482, name = ns.infoL["Platinum Invasion"]},
+		{quest = 37640, name = ns.infoL["Gold Invasion"]},
+		{quest = 37639, name = ns.infoL["Silver Invasion"]},
+		{quest = 37638, name = ns.infoL["Bronze Invasion"]},
 	}
 
 	local tanaan = {
-		{name = infoL["Deathtalon"], id = 39287},
-		{name = infoL["Terrorfist"], id = 39288},
-		{name = infoL["Doomroller"], id = 39289},
-		{name = infoL["Vengeance"], id = 39290},
+		{name = ns.infoL["Deathtalon"], id = 39287},
+		{name = ns.infoL["Terrorfist"], id = 39288},
+		{name = ns.infoL["Doomroller"], id = 39289},
+		{name = ns.infoL["Vengeance"], id = 39290},
 	}
 
 	-- Check Invasion Status
@@ -215,7 +215,7 @@ if cfg.Time == true then
 		title = false
 		for _, boss in pairs(tanaan) do
 			if boss.name and IsQuestFlaggedCompleted(boss.id) then
-				AddTitle(infoL["Tanaan"])
+				AddTitle(ns.infoL["Tanaan"])
 				GameTooltip:AddDoubleLine(boss.name, BOSS_DEAD, 1,1,1, 1,0,0)
 			end
 		end
@@ -239,20 +239,20 @@ if cfg.Time == true then
 		end
 
 		if nextTime then
-			AddTitle(infoL["Legion Invasion"])
+			AddTitle(ns.infoL["Legion Invasion"])
 			if OnInvasion() then
 				local timeLeft, zoneName = OnInvasion()
 				local r,g,b
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 				GameTooltip:AddDoubleLine(zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 			end
-			GameTooltip:AddDoubleLine(infoL["Next Invasion"], nextTime, 1,1,1, 1,1,1)
+			GameTooltip:AddDoubleLine(ns.infoL["Next Invasion"], nextTime, 1,1,1, 1,1,1)
 		end
 
 		-- Help Info
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["Toggle Calendar"], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["Toggle Clock"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.LeftButton..ns.infoL["Toggle Calendar"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.RightButton..ns.infoL["Toggle Clock"], 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 

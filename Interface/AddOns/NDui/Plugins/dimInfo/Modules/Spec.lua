@@ -1,4 +1,4 @@
-﻿local addon, ns = ...
+﻿local _, ns = ...
 local cfg = ns.cfg
 local init = ns.init
 
@@ -86,8 +86,8 @@ if cfg.Spec == true then
 		end
 
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["SpecPanel"], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["Change Spec"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.LeftButton..ns.infoL["SpecPanel"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.RightButton..ns.infoL["Change Spec"], 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", GameTooltip_Hide)

@@ -1,4 +1,4 @@
-local addon, ns = ...
+local _, ns = ...
 local cfg = ns.cfg
 local init = ns.init
 
@@ -19,16 +19,16 @@ if cfg.Durability == true then
 		[3] = {5, INVTYPE_CHEST, 1000},
 		[4] = {6, INVTYPE_WAIST, 1000},
 		[5] = {9, INVTYPE_WRIST, 1000},
-		[6] = {10, infoL["Hands"], 1000},
+		[6] = {10, ns.infoL["Hands"], 1000},
 		[7] = {7, INVTYPE_LEGS, 1000},
-		[8] = {8, infoL["Feet"], 1000},
+		[8] = {8, ns.infoL["Feet"], 1000},
 		[9] = {16, INVTYPE_WEAPONMAINHAND, 1000},
 		[10] = {17, INVTYPE_WEAPONOFFHAND, 1000}
 	}
 
 	local inform = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
 	inform:SetPoint("BOTTOM", Text, "TOP", 0, 23)
-	inform.Text:SetText(infoL["Low Durability"])
+	inform.Text:SetText(ns.infoL["Low Durability"])
 	inform:Hide()
 
 	local Total = 0
@@ -55,9 +55,9 @@ if cfg.Durability == true then
 		end
 
 		if Total > 0 then
-			Text:SetText(format(gsub("[color]%d|r%%"..infoL["D"], "%[color%]", (init.gradient(floor(localSlots[1][3]*100)/100))), floor(localSlots[1][3]*100)))
+			Text:SetText(format(gsub("[color]%d|r%%"..ns.infoL["D"], "%[color%]", (init.gradient(floor(localSlots[1][3]*100)/100))), floor(localSlots[1][3]*100)))
 		else
-			Text:SetText(infoL["D"]..": "..init.Colored..NONE)
+			Text:SetText(ns.infoL["D"]..": "..init.Colored..NONE)
 		end
 		Total = 0
 	end
@@ -79,7 +79,7 @@ if cfg.Durability == true then
 	local repairlist = {
 		[0] = "|cffff5555"..VIDEO_OPTIONS_DISABLED,
 		[1] = "|cff55ff55"..VIDEO_OPTIONS_ENABLED,
-		[2] = "|cffffff55"..infoL["NFG"]
+		[2] = "|cffffff55"..ns.infoL["NFG"]
 	}
 	Stat:SetScript("OnEnter", function(self)
 		local total, equipped = GetAverageItemLevel()
@@ -98,8 +98,8 @@ if cfg.Durability == true then
 		end
 
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["PlayerPanel"], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["AutoRepair"]..": "..repairlist[diminfo.RepairType], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.LeftButton..ns.infoL["PlayerPanel"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.RightButton..ns.infoL["AutoRepair"]..": "..repairlist[diminfo.RepairType], 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", GameTooltip_Hide)
@@ -108,7 +108,7 @@ if cfg.Durability == true then
 	local g = CreateFrame("Frame")
 	g:RegisterEvent("MERCHANT_SHOW")
 	g:SetScript("OnEvent", function()
-		if (diminfo.RepairType ~= 0 and CanMerchantRepair()) then
+		if diminfo.RepairType ~= 0 and CanMerchantRepair() then
 			local cost = GetRepairAllCost()
 			if cost > 0 then
 				local money = GetMoney()
@@ -119,19 +119,19 @@ if cfg.Durability == true then
 					end
 					if guildMoney >= cost and CanGuildBankRepair() then
 						RepairAllItems(1)
-						print(format("|cff99CCFF"..infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
+						print(format("|cff99CCFF"..ns.infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
 						return
 					elseif guildMoney == 0 and IsGuildLeader() then
 						RepairAllItems(1)
-						print(format("|cff99CCFF"..infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
+						print(format("|cff99CCFF"..ns.infoL["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
 						return
 					end
 				end
 				if money > cost then
 					RepairAllItems()
-					print(format("|cff99CCFF"..infoL["Repair cost"]..":|r %s", GetMoneyString(cost)))
+					print(format("|cff99CCFF"..ns.infoL["Repair cost"]..":|r %s", GetMoneyString(cost)))
 				else
-					print("|cff99CCFF"..infoL["Go farm newbie"].."|r")
+					print("|cff99CCFF"..ns.infoL["Go farm newbie"].."|r")
 				end
 			end
 		end

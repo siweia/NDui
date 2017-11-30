@@ -1,4 +1,4 @@
-local addon, ns = ...
+local _, ns = ...
 local cfg = ns.cfg
 local init = ns.init
 
@@ -23,15 +23,19 @@ if cfg.Positions == true then
 		neutral = {format(FACTION_CONTROLLED_TERRITORY,FACTION_STANDING_LABEL4), {1, .93, .76}}
 	}
 
+	local subzone, zone, pvp
 	local coordX, coordY = 0, 0
-	local function formatCoords() return format("%.1f, %.1f", coordX*100, coordY*100) end
+
+	local function formatCoords()
+		return format("%.1f, %.1f", coordX*100, coordY*100)
+	end
 
 	local function OnEvent()
 		subzone, zone, pvp = GetSubZoneText(), GetZoneText(), {GetZonePVPInfo()}
 		if not pvp[1] then pvp[1] = "neutral" end
-		local r,g,b = unpack(colorT[pvp[1]][2])
+		local r, g, b = unpack(colorT[pvp[1]][2])
 		Text:SetText((subzone ~= "") and subzone or zone)
-		Text:SetTextColor(r,g,b)
+		Text:SetTextColor(r, g, b)
 	end
 
 	Stat:RegisterEvent("ZONE_CHANGED")
@@ -58,17 +62,20 @@ if cfg.Positions == true then
 		GameTooltip:AddLine(format("%s |cffffffff(%s)", zone, formatCoords()), 0,.6,1, 1,1,1)
 
 		if pvp[1] and not IsInInstance() then
-			local r,g,b = unpack(colorT[pvp[1]][2])
+			local r, g, b = unpack(colorT[pvp[1]][2])
 			if subzone and subzone ~= zone then 
 				GameTooltip:AddLine(" ")
-				GameTooltip:AddLine(subzone,r,g,b)
+				GameTooltip:AddLine(subzone, r, g, b)
 			end
-			GameTooltip:AddLine(format(colorT[pvp[1]][1], pvp[3] or ""), r,g,b)
+			GameTooltip:AddLine(format(colorT[pvp[1]][1], pvp[3] or ""), r, g, b)
 		end
 
 		GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-		GameTooltip:AddDoubleLine(" ", init.LeftButton..infoL["WorldMap"], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(" ", init.RightButton..infoL["Send My Pos"], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(" ", init.LeftButton..ns.infoL["WorldMap"], 1,1,1, .6,.8,1)
+		if GetCurrentMapAreaID() >= 1190 and GetCurrentMapAreaID() <= 1201 then
+			GameTooltip:AddDoubleLine(" ", init.ScrollButton..ns.infoL["Search Invasion Group"], 1,1,1, .6,.8,1)
+		end
+		GameTooltip:AddDoubleLine(" ", init.RightButton..ns.infoL["Send My Pos"], 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", function()
@@ -78,8 +85,12 @@ if cfg.Positions == true then
 	Stat:SetScript("OnMouseUp", function(_, btn)
 		if btn == "LeftButton" then
 			ToggleFrame(WorldMapFrame)
+		elseif btn == "MiddleButton" and GetCurrentMapAreaID() >= 1190 and GetCurrentMapAreaID() <= 1201 then
+			PVEFrame_ShowFrame("GroupFinderFrame", LFGListPVEStub)
+			LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
+			LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, zone)
 		else
-			ChatFrame_OpenChat(format("%s: %s (%s)", infoL["My Position"], zone, formatCoords()), chatFrame)
+			ChatFrame_OpenChat(format("%s: %s (%s)", ns.infoL["My Position"], zone, formatCoords()), chatFrame)
 		end
 	end)
 end

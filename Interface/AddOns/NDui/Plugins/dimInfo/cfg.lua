@@ -2,7 +2,7 @@
 -- dimInfo, by Loshine
 -- NDui MOD
 -------------------------
-local addon, ns = ...
+local _, ns = ...
 local cfg = CreateFrame("Frame")
 if not diminfo then diminfo = {} end
 
@@ -45,6 +45,7 @@ local classc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2, UnitClass("p
 init.Colored = ("|cff%.2x%.2x%.2x"):format(classc.r * 255, classc.g * 255, classc.b * 255)
 init.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:14:12:0:-1:512:512:12:66:230:307|t "
 init.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:14:12:0:-1:512:512:12:66:333:411|t "
+init.ScrollButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:14:12:0:-1:512:512:12:66:127:204|t "
 
 init.gradient = function(perc)
 	perc = perc > 1 and 1 or perc < 0 and 0 or perc -- Stay between 0-1
