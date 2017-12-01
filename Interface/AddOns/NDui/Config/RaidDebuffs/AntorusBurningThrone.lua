@@ -85,7 +85,7 @@ BOSS = 1983 -- 瓦里玛萨斯
 --module:RegisterDebuff(TIER, INSTANCE, BOSS, 243973)	-- 暗影折磨
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 243961)	-- 哀难
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244005)	-- 黑暗裂隙
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 244094)	-- 冥魂之拥
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 244094, 5)	-- 冥魂之拥
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248732)	-- 毁灭回响
 
 BOSS = 1986 -- 破坏魔女巫会

@@ -812,6 +812,8 @@ C.AuraWatchList = {
 				{AuraID = 244042, UnitID = "player"},
 				--毁灭回响
 				{AuraID = 248732, UnitID = "player"},
+				--冥魂之拥
+				{AuraID = 244094, UnitID = "player", Text = L["Get Out"]},
 			--破坏魔女巫会
 				--火焰打击
 				{AuraID = 244899, UnitID = "player"},
