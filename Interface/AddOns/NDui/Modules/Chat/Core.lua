@@ -93,8 +93,8 @@ hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
 		self:SetAlpha(.3)
 	end
 end)
-FCF_FadeInChatFrame = function(self) self.hasBeenFaded = true end
-FCF_FadeOutChatFrame = function(self) self.hasBeenFaded = false end
+CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = .3
+DEFAULT_CHATFRAME_ALPHA = 0
 
 -- Font size
 for i = 1, 15 do
@@ -240,6 +240,7 @@ function module:OnLogin()
 	self:ChannelRename()
 	self:Chatbar()
 	self:ChatCopy()
+	self:UrlCopy()
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
