@@ -79,26 +79,26 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 249686)	-- 轰鸣屠戮
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 246698)	-- 破坏
 
 BOSS = 1983 -- 瓦里玛萨斯
---module:RegisterDebuff(TIER, INSTANCE, BOSS, 243968)	-- 烈焰折磨
---module:RegisterDebuff(TIER, INSTANCE, BOSS, 243977)	-- 冰霜折磨
---module:RegisterDebuff(TIER, INSTANCE, BOSS, 243980)	-- 邪能折磨
---module:RegisterDebuff(TIER, INSTANCE, BOSS, 243973)	-- 暗影折磨
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 243961)	-- 哀难
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244005)	-- 黑暗裂隙
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244094, 5)	-- 冥魂之拥
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248732)	-- 毁灭回响
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243968)	-- 烈焰折磨
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243977)	-- 冰霜折磨
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243980)	-- 邪能折磨
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 243973)	-- 暗影折磨
 
 BOSS = 1986 -- 破坏魔女巫会
---module:RegisterDebuff(TIER, INSTANCE, BOSS, 253753)	-- 恐惧
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244899)	-- 火焰打击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 245634)	-- 飞旋的军刀
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 253520)	-- 爆裂冲击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 253020)	-- 黑暗风暴
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 245518)	-- 快速冻结
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 245586)	-- 冷凝之血
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 253697)	-- 冰霜之球
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 250757)	-- 宇宙之光
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 250097)	-- 阿曼苏尔的诡诈
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 253753)	-- 恐惧
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 253697)	-- 冰霜之球
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 250097)	-- 阿曼苏尔的诡诈
 
 BOSS = 1984 -- 阿格拉玛
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 245990)	-- 泰沙拉克之触
@@ -126,3 +126,6 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 252616)	-- 宇宙道标
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 257299)	-- 怒火余烬
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 258039)	-- 死亡之镰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 256899)	-- 灵魂引爆
+
+BOSS = 0	-- 小怪
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 249297)	-- 重构之焰

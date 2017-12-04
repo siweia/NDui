@@ -882,6 +882,8 @@ C.AuraWatchList = {
 				{AuraID = 192133, UnitID = "target"},
 				--地窟眼球易伤
 				{AuraID = 194333, UnitID = "target"},
+				--黑暗笼罩，执政团鲁拉
+				{AuraID = 254020, UnitID = "target"},
 			-->翡翠梦魇
 				--梦魇之怒
 				{AuraID = 215234, UnitID = "target"},
@@ -1000,6 +1002,10 @@ C.AuraWatchList = {
 				{AuraID = 253021, UnitID = "target"},
 				--永恒之刃
 				{AuraID = 255478, UnitID = "target"},
+				--宇宙之剑
+				{AuraID = 255496, UnitID = "target"},
+				--物理易伤
+				{AuraID = 255418, UnitID = "target"},
 			-->PLAYER
 				--痛苦压制
 				{AuraID =  33206, UnitID = "target"},
