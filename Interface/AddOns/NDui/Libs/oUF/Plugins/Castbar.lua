@@ -1,5 +1,5 @@
-local addon, ns = ...
-local cast = CreateFrame("Frame")  
+local _, ns = ...
+local cast = CreateFrame("Frame")
 
 local channelingTicks = {
 	-- warlock
@@ -109,8 +109,6 @@ cast.OnCastSent = function(self, event, unit, spell, rank)
 end
 
 cast.PostCastStart = function(self, unit, name, castID, spellID)
-	local pcolor = {255/255, 128/255, 128/255}
-	local interruptcb = {95/255, 182/255, 255/255}
 	self:SetAlpha(1.0)
 	self.Spark:Show()
 	self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
@@ -138,10 +136,8 @@ cast.PostCastStart = function(self, unit, name, castID, spellID)
 			self.channelingTicks = channelingTicks[spell] or 0
 			cast.setBarTicks(self, self.channelingTicks)
 		end
-	elseif (unit == "target" or unit == "focus" or unit:match("nameplate")) and not self.notInterruptible then
-		self:SetStatusBarColor(interruptcb[1], interruptcb[2], interruptcb[3], 1)
-	else
-		self:SetStatusBarColor(pcolor[1], pcolor[2], pcolor[3], 1)
+	elseif not UnitIsUnit(unit, "player") and self.notInterruptible then
+		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
 	end
 
 	-- Fix for empty icon
@@ -149,6 +145,14 @@ cast.PostCastStart = function(self, unit, name, castID, spellID)
 	if not texture then
 		texture = 136243
 		if self.Icon then self.Icon:SetTexture(texture) end
+	end
+end
+
+cast.PostUpdateInterruptible = function(self, unit)
+	if not UnitIsUnit(unit, "player") and self.notInterruptible then
+		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
+	else
+		self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
 	end
 end
 

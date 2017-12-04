@@ -250,12 +250,10 @@ end
 function UF:CreateCastBar(self)
 	if self.mystyle ~= "nameplate" and not NDuiDB["UFs"]["Castbars"] then return end
 
-	local cbColor = {95/255, 182/255, 255/255}
 	local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.mystyle, self)
 	cb:SetHeight(20)
 	cb:SetWidth(self:GetWidth() - 22)
 	cb:SetStatusBarTexture(DB.normTex)
-	cb:SetStatusBarColor(95/255, 182/255, 255/255, 1)
 	cb:SetFrameLevel(1)
 	B.CreateBD(cb, .5, .1)
 	B.CreateSD(cb, 3, 3)
@@ -278,10 +276,11 @@ function UF:CreateCastBar(self)
 		cb:SetSize(self:GetWidth(), 5)
 	end
 
-	cb.CastingColor = cbColor
-	cb.ChannelingColor = cbColor
-	cb.CompleteColor = {20/255, 208/255, 0/255}
-	cb.FailColor = {255/255, 12/255, 0/255}
+	cb.CastingColor = {.3, .7, 1}
+	cb.ChannelingColor = {.3, .7, 1}
+	cb.notInterruptibleColor = {1, .5, .5}
+	cb.CompleteColor = {.1, .8, 0}
+	cb.FailColor = {1, .1, 0}
 
 	local spark = cb:CreateTexture(nil, "OVERLAY")
 	spark:SetBlendMode("ADD")
@@ -333,6 +332,8 @@ function UF:CreateCastBar(self)
 	cb.PostChannelStop = cast.PostChannelStop
 	cb.PostCastFailed = cast.PostCastFailed
 	cb.PostCastInterrupted = cast.PostCastFailed
+	cb.PostCastInterruptible = cast.PostUpdateInterruptible
+	cb.PostCastNotInterruptible = cast.PostUpdateInterruptible
 
 	self.Castbar = cb
 	self.Castbar.Text = name
