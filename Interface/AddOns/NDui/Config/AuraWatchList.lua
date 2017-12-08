@@ -772,6 +772,10 @@ C.AuraWatchList = {
 				{AuraID = 248815, UnitID = "player"},
 				--荒芜凝视
 				{AuraID = 244768, UnitID = "player"},
+				--暗影触痕
+				{AuraID = 244055, UnitID = "player", Text = L["Shadow Side"]},
+				--烈焰触痕
+				{AuraID = 244054, UnitID = "player", Text = L["Fire Side"]},
 			--安托兰统帅议会
 				--熵能爆裂
 				{AuraID = 253290, UnitID = "player"},
@@ -1971,6 +1975,8 @@ C.AuraWatchList = {
 				{AuraID = 173184, UnitID = "player"},	--精通
 				--冰怒
 				{AuraID = 210714, UnitID = "player"},
+				--暴雨图腾
+				{AuraID = 157504, UnitID = "player", Value = true},
 			},
 		},
 		{	Name = "Focus Aura",
