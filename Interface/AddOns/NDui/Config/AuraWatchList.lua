@@ -89,6 +89,10 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
+				--裂隙世界法典
+				{AuraID = 252545, UnitID = "player", Value = true},
+				{AuraID = 251938, UnitID = "player"},
+				{AuraID = 256415, UnitID = "player"},
 				--超能奥术
 				{AuraID = 254161, UnitID = "player"},
 				--克罗塔的护盾
@@ -352,6 +356,10 @@ C.AuraWatchList = {
 				{AuraID = 207498, UnitID = "player"},
 				--圣光护盾
 				{AuraID = 204150, UnitID = "player"},
+				--吸血光环
+				{AuraID = 238698, UnitID = "player"},
+				--幻影打击
+				{AuraID = 209426, UnitID = "player"},
 			},
 		},
 		{	Name = "Raid Debuff",
@@ -2993,8 +3001,6 @@ C.AuraWatchList = {
 				--刃舞
 				{AuraID = 188499, UnitID = "player"},
 				{AuraID = 210152, UnitID = "player"},
-				--幻影打击
-				{AuraID = 209426, UnitID = "player"},
 				--强化结界
 				{AuraID = 218256, UnitID = "player"},
 				--恶魔尖刺
