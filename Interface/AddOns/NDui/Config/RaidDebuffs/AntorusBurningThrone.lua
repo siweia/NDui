@@ -21,14 +21,14 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 244091)	-- 烧焦
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248815)	-- 点燃
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 254429)	-- 黑暗压迫
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248819)	-- 虹吸腐蚀
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 244055)	-- 暗影触痕
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 244054)	-- 烈焰触痕
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 244055)	-- 暗影触痕
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 244054)	-- 烈焰触痕
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 245022)	-- 炽然
 
 BOSS = 1997	-- 安托兰统帅议会
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 257974)	-- 混乱脉冲
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244892)	-- 弱点攻击
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 253290)	-- 熵能爆裂
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 253290)	-- 熵能爆裂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244737)	-- 震荡手雷
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244748)	-- 震晕
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244172)	-- 灵能突袭
