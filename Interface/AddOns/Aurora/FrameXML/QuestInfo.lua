@@ -64,10 +64,12 @@ tinsert(C.themes["Aurora"], function()
 				numVisibleObjectives = numVisibleObjectives + 1
 				local objective = objectivesTable[numVisibleObjectives]
 
-				if finished then
-					objective:SetTextColor(.9, .9, .9)
-				else
-					objective:SetTextColor(1, 1, 1)
+				if objective then
+					if finished then
+						objective:SetTextColor(.9, .9, .9)
+					else
+						objective:SetTextColor(1, 1, 1)
+					end
 				end
 			end
 		end
