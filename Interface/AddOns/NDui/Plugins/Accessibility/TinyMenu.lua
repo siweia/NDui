@@ -135,7 +135,7 @@ hooksecurefunc("UnitPopup_OnClick", function(self)
 		editBox:HighlightText()
 	elseif self.value == "NAME_COPY" then
 		if SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
-			SendMailNameEditBox:SetText(name)
+			SendMailNameEditBox:SetText(fullname)
 			SendMailNameEditBox:HighlightText()
 		else
 			editBox = ChatEdit_ChooseBoxForSend()
