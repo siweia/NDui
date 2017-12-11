@@ -31,7 +31,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 244892)	-- 弱点攻击
 --module:RegisterDebuff(TIER, INSTANCE, BOSS, 253290)	-- 熵能爆裂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244737)	-- 震荡手雷
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244748)	-- 震晕
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 244172)	-- 灵能突袭
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 244172, 5)	-- 灵能突袭
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 253306)	-- 灵能创伤
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244910)	-- 邪能护盾
 
