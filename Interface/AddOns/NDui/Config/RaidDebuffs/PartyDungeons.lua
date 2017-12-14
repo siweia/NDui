@@ -143,6 +143,7 @@ module:RegisterDebuff(TIER, 740, 0, 198079)
 module:RegisterDebuff(TIER, 740, 0, 214002)
 module:RegisterDebuff(TIER, 740, 0, 200084)
 module:RegisterDebuff(TIER, 740, 0, 200261)
+module:RegisterDebuff(TIER, 740, 0, 197546)
 
 -- 重返卡拉赞 (860)	
 module:RegisterDebuff(TIER, 860, 0, 209858)
