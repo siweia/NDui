@@ -2940,8 +2940,6 @@ C.AuraWatchList = {
 				{AuraID = 207693, UnitID = "player"},
 				--献祭光环
 				{AuraID = 178740, UnitID = "player"},
-				--涅墨西斯
-				{AuraID = 208608, UnitID = "player"},
 			},
 		},
 		{	Name = "Target Aura",
@@ -3003,7 +3001,7 @@ C.AuraWatchList = {
 				--势如破竹
 				{AuraID = 208628, UnitID = "player"},
 				--混乱之刃
-				{AuraID = 211048, UnitID = "player"},
+				{AuraID = 247938, UnitID = "player"},
 				--刃舞
 				{AuraID = 188499, UnitID = "player"},
 				{AuraID = 210152, UnitID = "player"},
@@ -3015,6 +3013,8 @@ C.AuraWatchList = {
 				{AuraID = 212988, UnitID = "player"},
 				--灵魂屏障
 				{AuraID = 227225, UnitID = "player", Value = true},
+				--涅墨西斯
+				{AuraID = 208579, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
