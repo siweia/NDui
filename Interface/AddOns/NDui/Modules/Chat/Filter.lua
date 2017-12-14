@@ -84,7 +84,7 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 	end
 end
 
-local addonBlockList = {"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "%*%*.+%*%*"}
+local addonBlockList = {"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*"}
 local function genAddonBlock(self, event, msg, author, _, _, _, flag)
 	if not NDuiDB["Chat"]["BlockAddonAlert"] then return end
 
@@ -108,6 +108,7 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", genAddonBlock)
