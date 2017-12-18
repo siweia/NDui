@@ -182,6 +182,7 @@ local defaultSettings = {
 		ReflectingAlert = false,
 		SwapingAlert = false,
 		SistersAlert = false,
+		AntoranBlast = false,
 	},
 	Settings = {
 		LockUIScale = false,
@@ -355,6 +356,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"]},
 		{1, "Misc", "SwapingAlert", L["Swaping Alert"], true},
 		{1, "Misc", "SistersAlert", L["SistersAlert Alert"]},
+		{1, "Misc", "AntoranBlast", L["AntoranBlast Alert"], true},
 		{},--blank
 		{1, "Skins", "RM", L["Raid Manger"]},
 		{1, "Skins", "RMRune", L["Runes Check"], true},
