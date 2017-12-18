@@ -121,9 +121,9 @@ function module:FontStyle()
 				local mini = _G["AchievementFrameMiniAchievement"..index]
 				while mini do
 					if not mini.fontStyled then
-						mini.points:SetWidth(20)
+						mini.points:SetWidth(22)
 						mini.points:ClearAllPoints()
-						mini.points:SetPoint("BOTTOMRIGHT", 0, 2)
+						mini.points:SetPoint("BOTTOMRIGHT", 2, 2)
 						mini.fontStyled = true
 					end
 
