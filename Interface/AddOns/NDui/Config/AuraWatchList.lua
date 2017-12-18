@@ -55,6 +55,8 @@ C.InternalCD = {
 	List = {
 		--塞弗斯的秘密
 		{IntID = 208052, Duration = 30, ItemID = 132452},
+		--萨瓦迪卡
+		{IntID = 207472, Duration = 30, ItemID = 132444},
 	},
 }
 
@@ -89,6 +91,9 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
+				--影灼之牙
+				{AuraID = 253307, UnitID = "player"},
+				{AuraID = 253308, UnitID = "player"},
 				--裂隙世界法典
 				{AuraID = 252545, UnitID = "player", Value = true},
 				{AuraID = 251938, UnitID = "player"},
@@ -215,44 +220,12 @@ C.AuraWatchList = {
 				{AuraID = 242584, UnitID = "player"},
 				{AuraID = 242586, UnitID = "player"},
 				{AuraID = 243096, UnitID = "player"},
-		------>WOD附魔
-				--血环之印
-				{AuraID = 173322, UnitID = "player"},
-				--雷神之印
-				{AuraID = 159234, UnitID = "player"},
-				--战歌之印
-				{AuraID = 159675, UnitID = "player"},
-				--霜狼之印
-				{AuraID = 159676, UnitID = "player"},
-				--影月之印
-				{AuraID = 159678, UnitID = "player"},
-				--黑石之印
-				{AuraID = 159679, UnitID = "player"},
-				--瞄准镜
-				{AuraID = 156055, UnitID = "player"},--溅射
-				{AuraID = 156060, UnitID = "player"},--爆击
-				{AuraID = 173288, UnitID = "player"},--精通
-				--橙戒
-				{AuraID = 177161, UnitID = "player"},--敏捷690
-				{AuraID = 177172, UnitID = "player"},--敏捷710
-				{AuraID = 177159, UnitID = "player"},--智力690
-				{AuraID = 177176, UnitID = "player"},--智力710
-				{AuraID = 177160, UnitID = "player"},--力量690
-				{AuraID = 177175, UnitID = "player"},--力量710
+		------>WOD
 				{AuraID = 187616, UnitID = "player"},--尼萨姆斯，智力
 				{AuraID = 187617, UnitID = "player"},--萨克图斯，坦克
 				{AuraID = 187618, UnitID = "player"},--伊瑟拉鲁斯，治疗
 				{AuraID = 187619, UnitID = "player"},--索拉苏斯，力量
 				{AuraID = 187620, UnitID = "player"},--玛鲁斯，敏捷
-		------>WOD药水以及饰品
-				--德拉诺敏捷
-				{AuraID = 156423, UnitID = "player"},
-				--德拉诺智力
-				{AuraID = 156426, UnitID = "player"},
-				--德拉诺力量
-				{AuraID = 156428, UnitID = "player"},
-				--德拉诺护甲
-				{AuraID = 156430, UnitID = "player"},
 				--炼金石
 				{AuraID =  60233, UnitID = "player"},--敏捷
 				{AuraID =  60229, UnitID = "player"},--力量
@@ -2587,6 +2560,8 @@ C.AuraWatchList = {
 				{AuraID = 195627, UnitID = "player"},
 				--装死
 				{AuraID =  45182, UnitID = "player"},
+				--敏锐大师
+				{AuraID =  31665, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
@@ -2972,12 +2947,15 @@ C.AuraWatchList = {
 				{AuraID = 207407, UnitID = "target", Caster = "player"},
 				--烈火烙印
 				{AuraID = 207744, UnitID = "target", Caster = "player"},
+				{AuraID = 207771, UnitID = "target", Caster = "player"},
 				--幽魂炸弹
 				{AuraID = 224509, UnitID = "target", Caster = "player"},
 				--锋锐之刺
 				{AuraID = 210003, UnitID = "target", Caster = "player"},
 				--悲苦咒符
 				{AuraID = 207685, UnitID = "target", Caster = "player"},
+				--邪能爆发
+				{AuraID = 211881, UnitID = "target", Caster = "player"},
 			},
 		},
 		{	Name = "Special Aura",
@@ -3007,14 +2985,29 @@ C.AuraWatchList = {
 				{AuraID = 210152, UnitID = "player"},
 				--强化结界
 				{AuraID = 218256, UnitID = "player"},
+				--灵魂盛宴
+				{AuraID = 207693, UnitID = "player"},
 				--恶魔尖刺
 				{AuraID = 203819, UnitID = "player"},
 				--痛苦使者
 				{AuraID = 212988, UnitID = "player"},
 				--灵魂屏障
 				{AuraID = 227225, UnitID = "player", Value = true},
+				--虹吸能量
+				{AuraID = 218561, UnitID = "player", Value = true},
 				--涅墨西斯
 				{AuraID = 208579, UnitID = "player"},
+				{AuraID = 208605, UnitID = "player"},
+				{AuraID = 208607, UnitID = "player"},
+				{AuraID = 208608, UnitID = "player"},
+				{AuraID = 208609, UnitID = "player"},
+				{AuraID = 208610, UnitID = "player"},
+				{AuraID = 208611, UnitID = "player"},
+				{AuraID = 208612, UnitID = "player"},
+				{AuraID = 208613, UnitID = "player"},
+				{AuraID = 208614, UnitID = "player"},
+				--剑刃扭转
+				{AuraID = 247253, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
