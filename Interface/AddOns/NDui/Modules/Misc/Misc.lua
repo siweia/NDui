@@ -455,7 +455,7 @@ if DB.Client == "zhCN" then
 		local msg, author = ...
 		if msg == keyword and not goldList[author] then
 			if maxPacks == 1 then
-				sendMsg(maxGold.."金都被"..author.."抢走了", "GUILD")
+				sendMsg(maxGold.."金都被"..author.."抢走了")
 				finishRoll()
 			elseif index == maxPacks then
 				goldList[author] = remainGold
@@ -483,7 +483,7 @@ if DB.Client == "zhCN" then
 		if maxPacks > 10 then maxPacks = 10 end
 		finish = false
 		f:RegisterEvent("CHAT_MSG_GUILD")
-		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入#1来抢吧。", "GUILD")
+		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入#1来抢吧。")
 	end
 	SLASH_ROLLGOLD1 = "/groll"
 end

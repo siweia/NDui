@@ -523,7 +523,7 @@ local function SortBars()
 	end
 end
 
-local function UpdateIntFrame(IntID, ItemID, Duration, Text)
+local function UpdateIntFrame(IntID, ItemID, Duration)
 	local Frame = BuildBAR(IntCD.BarWidth, IntCD.IconSize)
 	if Frame then
 		Frame:Show()
@@ -540,7 +540,6 @@ local function UpdateIntFrame(IntID, ItemID, Duration, Text)
 		Frame.type = 1
 		Frame.spellID = IntID
 	end
-	if text then name = text end
 	if Frame.Icon then Frame.Icon:SetTexture(icon) end
 	if Frame.Count then Frame.Count:SetText(nil) end
 	if Frame.Cooldown then
