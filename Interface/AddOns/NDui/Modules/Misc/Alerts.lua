@@ -246,17 +246,20 @@ function module:AntoranBlast()
 	if not NDuiDB["Misc"]["AntoranBlast"] then return end
 
 	local names = {}
+	local cache = {}
 	NDui:EventFrame({"COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_REGEN_DISABLED"}):SetScript("OnEvent", function(_, event, ...)
 		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
 
 		if event == "PLAYER_REGEN_DISABLED" then
 			names = {}
+			cache = {}
 		else
 			local _, eventType, _, sourceGUID, sourceName, _, _, destGUID, destName, _, _, spellID = ...
-			if eventType == "SPELL_DAMAGE" and spellID == 245121 and not GetPlayerInfoByGUID(sourceGUID) then
+			if eventType == "SPELL_DAMAGE" and spellID == 245121 and not GetPlayerInfoByGUID(sourceGUID) and not cache[sourceGUID] then
 				if not names[destName] then names[destName] = 0 end
 				names[destName] = names[destName] + 1
-				SendChatMessage(destName.."  踩雷"..names[destName], "RAID")
+				SendChatMessage(destName.."  "..L["Spotted"]..names[destName], "RAID")
+				cache[sourceGUID] = true
 			end
 		end
 	end)
