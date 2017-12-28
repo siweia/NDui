@@ -240,7 +240,7 @@ end
 
 
 --[[
-	通报安托兰议会踩雷的CSB，待测
+	通报安托兰议会踩雷的CSB
 ]]
 function module:AntoranBlast()
 	if not NDuiDB["Misc"]["AntoranBlast"] then return end
