@@ -1251,6 +1251,11 @@ C.AuraWatchList = {
 				{AuraID = 209406, UnitID = "player"},
 				--欧奈斯的自负
 				{AuraID = 209407, UnitID = "player"},
+				--T21
+				{AuraID = 252752, UnitID = "player"}, --野德
+				{AuraID = 253434, UnitID = "player"}, --奶德
+				{AuraID = 252767, UnitID = "player"}, --鸟德
+				{AuraID = 253575, UnitID = "player"}, --熊德
 			},
 		},
 		{	Name = "Focus Aura",
