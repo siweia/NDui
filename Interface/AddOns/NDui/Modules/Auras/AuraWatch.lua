@@ -586,7 +586,7 @@ local function UpdateInt(self, event, ...)
 		if value.IntID then
 			local _, eventType, _, _, sourceName, _, _, _, _, _, _, spellID = ...
 			if value.IntID == spellID and eventList[eventType] and sourceName == UnitName("player") then
-				UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.Text)
+				UpdateIntFrame(value.IntID, value.ItemID, value.Duration)
 			end
 		end
 	end
