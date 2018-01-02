@@ -91,6 +91,25 @@ C.AuraWatchList = {
 				--搏击伟哥
 				{AuraID = 230039, UnitID = "player"},
 		------>LEG饰品
+			-->泰坦之路系列饰品
+				--阿格拉玛的信念
+				{AuraID = 256816, UnitID = "player"},
+				--阿曼苏尔的预见
+				{AuraID = 256818, UnitID = "player"},
+				--高戈奈斯的活力
+				{AuraID = 256820, UnitID = "player"},
+				{AuraID = 256821, UnitID = "player"},
+				--艾欧娜尔的怜悯
+				{AuraID = 256823, UnitID = "player"},
+				{AuraID = 256824, UnitID = "player"},
+				--卡兹格罗斯的勇气
+				{AuraID = 256826, UnitID = "player"},
+				--诺甘农的威能
+				{AuraID = 256828, UnitID = "player"},
+				--高沙拉克的回响
+				{AuraID = 253327, UnitID = "player"},
+				--虚空之拥
+				{AuraID = 253808, UnitID = "player"},
 				--影灼之牙
 				{AuraID = 253307, UnitID = "player"},
 				{AuraID = 253308, UnitID = "player"},
@@ -2259,7 +2278,11 @@ C.AuraWatchList = {
 				{AuraID = 211440, UnitID = "player"},
 				{AuraID = 211442, UnitID = "player"},
 				--救赎之魂
-				{AuraID = 27827, UnitID = "player"},
+				{AuraID =  27827, UnitID = "player"},
+				--T21
+				{AuraID = 252848, UnitID = "player"}, --戒律
+				{AuraID = 253437, UnitID = "player"}, --神圣2
+				{AuraID = 253443, UnitID = "player"}, --神圣4
 			},
 		},
 		{	Name = "Focus Aura",

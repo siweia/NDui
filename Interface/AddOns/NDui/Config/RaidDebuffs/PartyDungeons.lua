@@ -105,6 +105,7 @@ module:RegisterDebuff(TIER, 726, 0, 196805, 5)
 module:RegisterDebuff(TIER, 726, 0, 195362, 1)
 module:RegisterDebuff(TIER, 726, 0, 211543)
 module:RegisterDebuff(TIER, 726, 0, 203957)
+module:RegisterDebuff(TIER, 726, 0, 211756)
 
 
 -- 黑心林地 (762)
