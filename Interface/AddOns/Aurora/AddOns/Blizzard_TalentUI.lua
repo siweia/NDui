@@ -240,8 +240,11 @@ C.themes["Blizzard_TalentUI"] = function()
 	hooksecurefunc("TalentFrame_Update", function()
 		for i = 1, MAX_TALENT_TIERS do
 			for j = 1, NUM_TALENT_COLUMNS do
+				local _, _, _, selected, _, _, _, _, _, _, known = GetTalentInfo(i, j, 1)
 				local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
-				if bu.knownSelection:IsShown() then
+				if known then
+					bu.bg:SetBackdropColor(r, g, b, .7)
+				elseif selected then
 					bu.bg:SetBackdropColor(r, g, b, .25)
 				else
 					bu.bg:SetBackdropColor(0, 0, 0, .25)
