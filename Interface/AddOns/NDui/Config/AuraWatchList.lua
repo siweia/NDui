@@ -117,6 +117,11 @@ C.AuraWatchList = {
 				{AuraID = 252545, UnitID = "player", Value = true},
 				{AuraID = 251938, UnitID = "player"},
 				{AuraID = 256415, UnitID = "player"},
+				--注射器
+				{AuraID = 253260, UnitID = "player"}, --三维
+				{AuraID = 253261, UnitID = "player"}, --急速
+				{AuraID = 255744, UnitID = "player"}, --精通
+				{AuraID = 255742, UnitID = "player"}, --暴击
 				--超能奥术
 				{AuraID = 254161, UnitID = "player"},
 				--克罗塔的护盾
@@ -1008,8 +1013,14 @@ C.AuraWatchList = {
 				{AuraID = 255478, UnitID = "target"},
 				--宇宙之剑
 				{AuraID = 255496, UnitID = "target"},
-				--物理易伤
-				{AuraID = 255418, UnitID = "target"},
+				--星灵易伤
+				{AuraID = 255418, UnitID = "target"},	--物理
+				{AuraID = 255425, UnitID = "target"},	--冰霜
+				{AuraID = 255430, UnitID = "target"},	--暗影
+				{AuraID = 255429, UnitID = "target"},	--火焰
+				{AuraID = 255419, UnitID = "target"},	--神圣
+				{AuraID = 255422, UnitID = "target"},	--自然
+				{AuraID = 255433, UnitID = "target"},	--奥术
 			-->PLAYER
 				--痛苦压制
 				{AuraID =  33206, UnitID = "target"},
@@ -3036,6 +3047,8 @@ C.AuraWatchList = {
 				{AuraID = 208614, UnitID = "player"},
 				--剑刃扭转
 				{AuraID = 247253, UnitID = "player"},
+				--浩劫T21
+				{AuraID = 252165, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
