@@ -523,7 +523,7 @@ local function SortBars()
 	end
 end
 
-local function UpdateIntFrame(IntID, ItemID, Duration)
+local function UpdateIntFrame(intID, itemID, duration)
 	local Frame = BuildBAR(IntCD.BarWidth, IntCD.IconSize)
 	if Frame then
 		Frame:Show()
@@ -531,41 +531,41 @@ local function UpdateIntFrame(IntID, ItemID, Duration)
 		SortBars()
 	end
 	local name, icon
-	if ItemID then
-		name, _, _, _, _, _, _, _, _, icon = GetItemInfo(ItemID)
+	if itemID then
+		name, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemID)
 		Frame.type = 2
-		Frame.spellID = ItemID
+		Frame.spellID = itemID
 	else
-		name, _, icon = GetSpellInfo(IntID)
+		name, _, icon = GetSpellInfo(intID)
 		Frame.type = 1
-		Frame.spellID = IntID
+		Frame.spellID = intID
 	end
 	if Frame.Icon then Frame.Icon:SetTexture(icon) end
 	if Frame.Count then Frame.Count:SetText(nil) end
 	if Frame.Cooldown then
 		Frame.Cooldown:SetReverse(true)
-		Frame.Cooldown:SetCooldown(GetTime(), Duration)
+		Frame.Cooldown:SetCooldown(GetTime(), duration)
 	end
 	if Frame.Spellname then Frame.Spellname:SetText(name) end
 	if Frame.Statusbar then
-		Frame.Statusbar:SetMinMaxValues(0, Duration)
+		Frame.Statusbar:SetMinMaxValues(0, duration)
 		Frame.Timer = 0
 		Frame:SetScript("OnUpdate", function(self, elapsed)
 			self.Timer = self.Timer + elapsed
-			local timer = Duration - self.Timer
-			if timer > 60 then
-				if self.Time then self.Time:SetFormattedText("%d:%.2d", timer/60, timer%60) end
-				self.Statusbar:SetValue(timer)
-				self.Statusbar.Spark:Show()
-			elseif timer > 0 and timer < 60 then
-				if self.Time then self.Time:SetFormattedText("%.1f", timer) end
-				self.Statusbar:SetValue(timer)
-				self.Statusbar.Spark:Show()
-			else
+			local timer = duration - self.Timer
+			if timer < 0 then
 				self:SetScript("OnUpdate", nil)
 				self:Hide()
 				tremove(IntTable, self.ID)
 				SortBars()
+			elseif timer < 60 then
+				if self.Time then self.Time:SetFormattedText("%.1f", timer) end
+				self.Statusbar:SetValue(timer)
+				self.Statusbar.Spark:Show()
+			else
+				if self.Time then self.Time:SetFormattedText("%d:%.2d", timer/60, timer%60) end
+				self.Statusbar:SetValue(timer)
+				self.Statusbar.Spark:Show()
 			end
 		end)
 	end

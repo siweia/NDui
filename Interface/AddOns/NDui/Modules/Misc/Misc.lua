@@ -483,7 +483,7 @@ if DB.Client == "zhCN" then
 		if maxPacks > 10 then maxPacks = 10 end
 		finish = false
 		f:RegisterEvent("CHAT_MSG_GUILD")
-		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入#1来抢吧。")
+		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入 "..keyword.." 来抢吧。")
 	end
 	SLASH_ROLLGOLD1 = "/groll"
 end
