@@ -50,12 +50,14 @@ local function updateHotkey(self, actionButtonType)
 	}
 	for _, value in pairs(replaces) do
 		text = gsub(text, value[1], value[2])
-    end
-    if ho:GetText() == RANGE_INDICATOR then
-        ho:SetText("")
-    else
-        ho:SetText(text)
-    end
+	end
+
+	-- might be unnecessary, need reviewed
+	if ho:GetText() == RANGE_INDICATOR then
+		ho:SetText("")
+	else
+		ho:SetText(text)
+	end
 end
 NDui.UpdateHotkey = updateHotkey
 
