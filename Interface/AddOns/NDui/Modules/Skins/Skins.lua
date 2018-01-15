@@ -9,7 +9,7 @@ function module:OnLogin()
 	if NDuiDB["Skins"]["InfobarLine"] then
 		local Tinfobar = CreateFrame("Frame", nil, UIParent)
 		Tinfobar:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 0, -3)
-		B.CreateGF(Tinfobar, 600, 15, "Horizontal", 0, 0, 0, .5, 0)
+		B.CreateGF(Tinfobar, 600, 18, "Horizontal", 0, 0, 0, .5, 0)
 		local Tinfobar1 = CreateFrame("Frame", nil, Tinfobar)
 		Tinfobar1:SetPoint("BOTTOM", Tinfobar, "TOP")
 		B.CreateGF(Tinfobar1, 600, 1, "Horizontal", cr, cg, cb, .7, 0)
@@ -22,7 +22,7 @@ function module:OnLogin()
 	if NDuiDB["Skins"]["ChatLine"] then
 		local Linfobar = CreateFrame("Frame", nil, UIParent)
 		Linfobar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 3)
-		B.CreateGF(Linfobar, 453, ChatFrame1:GetHeight() + 30, "Horizontal", 0, 0, 0, .6, 0)
+		B.CreateGF(Linfobar, 453, ChatFrame1:GetHeight() + 30, "Horizontal", 0, 0, 0, .5, 0)
 		local Linfobar1 = CreateFrame("Frame", nil, Linfobar)
 		Linfobar1:SetPoint("BOTTOM", Linfobar, "TOP")
 		B.CreateGF(Linfobar1, 453, 1, "Horizontal", cr, cg, cb, .7, 0)
@@ -43,13 +43,13 @@ function module:OnLogin()
 	if NDuiDB["Skins"]["InfobarLine"] then
 		local Rinfobar = CreateFrame("Frame", nil, UIParent)
 		Rinfobar:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", 0, 3)
-		B.CreateGF(Rinfobar, 450, 18, "Horizontal", 0, 0, 0, 0, .6)
+		B.CreateGF(Rinfobar, 450, 18, "Horizontal", 0, 0, 0, 0, .5)
 		local Rinfobar1 = CreateFrame("Frame", nil, Rinfobar)
 		Rinfobar1:SetPoint("BOTTOM", Rinfobar, "TOP")
-		B.CreateGF(Rinfobar1, 450, 1, "Horizontal", cr, cg, cb, 0, .6)
+		B.CreateGF(Rinfobar1, 450, 1, "Horizontal", cr, cg, cb, 0, .7)
 		local Rinfobar2 = CreateFrame("Frame", nil, Rinfobar)
 		Rinfobar2:SetPoint("TOP", Rinfobar, "BOTTOM")
-		B.CreateGF(Rinfobar2, 450, 1, "Horizontal", cr, cg, cb, 0, .6)
+		B.CreateGF(Rinfobar2, 450, 1, "Horizontal", cr, cg, cb, 0, .7)
 	end
 
 	-- MICROMENU
@@ -133,6 +133,7 @@ function module:LoadWithAddOn(addonName, value, func)
 				self:UnregisterAllEvents()
 				return
 			end
+			func()
 			self:UnregisterEvent(event)
 		elseif event == "ADDON_LOADED" and addon == addonName then
 			func()
