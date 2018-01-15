@@ -437,7 +437,7 @@ if DB.Client == "zhCN" then
 	end
 
 	local function randomRoll(gold)
-		local cur = math.random(1, gold)
+		local cur = math.random(1, gold - (maxPacks-index))
 		gold = gold - cur
 		return cur, gold
 	end
