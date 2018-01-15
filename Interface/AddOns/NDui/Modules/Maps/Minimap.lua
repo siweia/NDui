@@ -308,13 +308,16 @@ end
 
 function module:OnLogin()
 	-- Shape and Position
+	local scale = NDuiDB["Map"]["MinmapScale"]
 	function GetMinimapShape() return "SQUARE" end
-	Minimap:ClearAllPoints()
-	Minimap:SetPoint(unpack(C.Minimap.Pos))
 	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
-	MinimapCluster:SetScale(NDuiDB["Map"]["MinmapScale"])
+	MinimapCluster:SetScale(scale)
 	DropDownList1:SetClampedToScreen(true)
+
+	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos, Minimap:GetWidth()*scale, Minimap:GetHeight()*scale)
+	Minimap:ClearAllPoints()
+	Minimap:SetPoint("TOPRIGHT", mover)
 
 	-- ClockFrame
 	if NDuiDB["Map"]["Clock"] then

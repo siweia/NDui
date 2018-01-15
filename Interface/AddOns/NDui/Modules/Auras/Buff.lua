@@ -1,20 +1,26 @@
 local B, C, L, DB = unpack(select(2, ...))
+local module = NDui:RegisterModule("Auras")
 
-local _G, BuffFrame = _G, BuffFrame
+local BuffFrame = BuffFrame
 local IconsPerRow, IconSize, padding = C.Auras.IconsPerRow, C.Auras.IconSize - 2, C.Auras.Spacing
+local BuffAnchor
 
-local BuffAnchor = CreateFrame("Frame", "NDuiBuffFrame", UIParent)
-BuffAnchor:SetPoint(unpack(C.Auras.BuffPos))
-BuffAnchor:SetSize(IconSize, IconSize)
-BuffFrame.ignoreFramePositionManager = true
+function module:OnLogin()
+	BuffAnchor = CreateFrame("Frame", "NDuiBuffFrame", UIParent)
+	BuffAnchor:SetSize(IconSize, IconSize)
+	local mover = B.Mover(BuffAnchor, "Buffs/Debuffs", "BuffAnchor", C.Auras.BuffPos, IconSize*IconsPerRow, IconSize*6)
+	BuffAnchor:ClearAllPoints()
+	BuffAnchor:SetPoint("TOPRIGHT", mover)
 
-TempEnchant1:ClearAllPoints()
-TempEnchant1:SetPoint("TOPRIGHT", BuffAnchor)
-TempEnchant2:ClearAllPoints()
-TempEnchant2:SetPoint("TOPRIGHT", TempEnchant1, "TOPLEFT", -padding, 0)
-TempEnchant3:ClearAllPoints()
-TempEnchant3:SetPoint("TOPRIGHT", TempEnchant2, "TOPLEFT", -padding, 0)
-TempEnchant3:Hide()
+	TempEnchant1:ClearAllPoints()
+	TempEnchant1:SetPoint("TOPRIGHT", BuffAnchor)
+	TempEnchant2:ClearAllPoints()
+	TempEnchant2:SetPoint("TOPRIGHT", TempEnchant1, "TOPLEFT", -padding, 0)
+	TempEnchant3:ClearAllPoints()
+	TempEnchant3:SetPoint("TOPRIGHT", TempEnchant2, "TOPLEFT", -padding, 0)
+	TempEnchant3:Hide()
+	BuffFrame.ignoreFramePositionManager = true
+end
 
 local function styleButton(bu)
 	if not bu or (bu and bu.styled) then return end
@@ -94,7 +100,7 @@ local function ReskinDebuffs(self, i)
 
 	debuff:ClearAllPoints()
 	if i == 1 then
-		debuff:SetPoint("TOPRIGHT", BuffAnchor, 0, -130)
+		debuff:SetPoint("TOPRIGHT", BuffAnchor, 0, -140)
 	elseif i == IconsPerRow + 1 then
 		debuff:SetPoint("TOP", _G["DebuffButton1"], "BOTTOM", 0, -12)
 	elseif i < IconsPerRow*2 + 1 then
