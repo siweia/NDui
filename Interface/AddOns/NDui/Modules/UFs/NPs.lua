@@ -134,7 +134,7 @@ local function UpdateQuestUnit(self, unit)
 	unitTip:SetOwner(WorldFrame, "ANCHOR_NONE")
 	unitTip:SetUnit(unit)
 
-	for i = 3, unitTip:NumLines() do
+	for i = 2, unitTip:NumLines() do
 		local textLine = _G["NDuiQuestUnitTipTextLeft"..i]
 		local text = textLine:GetText()
 		if textLine and text then
