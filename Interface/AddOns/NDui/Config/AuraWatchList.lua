@@ -56,7 +56,9 @@ C.InternalCD = {
 		--塞弗斯的秘密
 		{IntID = 208052, Duration = 30, ItemID = 132452},
 		--萨瓦迪卡
-		{IntID = 207472, Duration = 30, ItemID = 132444},
+		--{IntID = 207472, Duration = 30, ItemID = 132444},
+		--践踏
+		{IntID = 240447, Duration = 20},
 	},
 }
 
@@ -244,25 +246,21 @@ C.AuraWatchList = {
 				{AuraID = 242584, UnitID = "player"},
 				{AuraID = 242586, UnitID = "player"},
 				{AuraID = 243096, UnitID = "player"},
-		------>WOD
-				{AuraID = 187616, UnitID = "player"},--尼萨姆斯，智力
-				{AuraID = 187617, UnitID = "player"},--萨克图斯，坦克
-				{AuraID = 187618, UnitID = "player"},--伊瑟拉鲁斯，治疗
-				{AuraID = 187619, UnitID = "player"},--索拉苏斯，力量
-				{AuraID = 187620, UnitID = "player"},--玛鲁斯，敏捷
 				--炼金石
-				{AuraID =  60233, UnitID = "player"},--敏捷
-				{AuraID =  60229, UnitID = "player"},--力量
-				{AuraID =  60234, UnitID = "player"},--智力
-			---->传家宝饰品
-				--力量
-				{AuraID = 201405, UnitID = "player"},
-				--敏捷
-				{AuraID = 201408, UnitID = "player"},
-				--智力
-				{AuraID = 201410, UnitID = "player"},
-				--坦克
-				{AuraID = 202052, UnitID = "player", Value = true},
+				{AuraID =  60233, UnitID = "player"}, --敏捷
+				{AuraID =  60229, UnitID = "player"}, --力量
+				{AuraID =  60234, UnitID = "player"}, --智力
+			---->旧版本
+				{AuraID = 187616, UnitID = "player"}, --尼萨姆斯，智力
+				{AuraID = 187617, UnitID = "player"}, --萨克图斯，坦克
+				{AuraID = 187618, UnitID = "player"}, --伊瑟拉鲁斯，治疗
+				{AuraID = 187619, UnitID = "player"}, --索拉苏斯，力量
+				{AuraID = 187620, UnitID = "player"}, --玛鲁斯，敏捷
+				--传家宝饰品
+				{AuraID = 201405, UnitID = "player"}, --力量
+				{AuraID = 201408, UnitID = "player"}, --敏捷
+				{AuraID = 201410, UnitID = "player"}, --智力
+				{AuraID = 202052, UnitID = "player", Value = true}, --坦克
 			},
 		},
 		{	Name = "Raid Buff",
@@ -1014,13 +1012,13 @@ C.AuraWatchList = {
 				--宇宙之剑
 				{AuraID = 255496, UnitID = "target"},
 				--星灵易伤
-				{AuraID = 255418, UnitID = "target"},	--物理
-				{AuraID = 255425, UnitID = "target"},	--冰霜
-				{AuraID = 255430, UnitID = "target"},	--暗影
-				{AuraID = 255429, UnitID = "target"},	--火焰
-				{AuraID = 255419, UnitID = "target"},	--神圣
-				{AuraID = 255422, UnitID = "target"},	--自然
-				{AuraID = 255433, UnitID = "target"},	--奥术
+				{AuraID = 255418, UnitID = "target", Text = SPELL_SCHOOL0_NAME}, --物理
+				{AuraID = 255419, UnitID = "target", Text = SPELL_SCHOOL1_NAME}, --神圣
+				{AuraID = 255429, UnitID = "target", Text = SPELL_SCHOOL2_NAME}, --火焰
+				{AuraID = 255422, UnitID = "target", Text = SPELL_SCHOOL3_NAME}, --自然
+				{AuraID = 255425, UnitID = "target", Text = SPELL_SCHOOL4_NAME}, --冰霜
+				{AuraID = 255430, UnitID = "target", Text = SPELL_SCHOOL5_NAME}, --暗影
+				{AuraID = 255433, UnitID = "target", Text = SPELL_SCHOOL6_NAME}, --奥术
 			-->PLAYER
 				--痛苦压制
 				{AuraID =  33206, UnitID = "target"},
@@ -1049,9 +1047,9 @@ C.AuraWatchList = {
 				--法术反射
 				{AuraID =  23920, UnitID = "target"},
 				--升腾
-				{AuraID = 114050, UnitID = "target"},	--元素
-				{AuraID = 114051, UnitID = "target"},	--增强
-				{AuraID = 114052, UnitID = "target"},	--恢复
+				{AuraID = 114050, UnitID = "target"}, --元素
+				{AuraID = 114051, UnitID = "target"}, --增强
+				{AuraID = 114052, UnitID = "target"}, --恢复
 				--守护之魂
 				{AuraID =  47788, UnitID = "target"},
 				--圣佑术
@@ -1067,10 +1065,10 @@ C.AuraWatchList = {
 				--保护祝福
 				{AuraID =   1022, UnitID = "target"},
 				--复仇之怒
-				{AuraID =  31842, UnitID = "target"},	--神圣
-				{AuraID =  31884, UnitID = "target"},	--惩戒
+				{AuraID =  31842, UnitID = "target"}, --神圣
+				{AuraID =  31884, UnitID = "target"}, --惩戒
 				--以眼还眼
-				{AuraID = 205191, UnitID = "target"},	--惩戒
+				{AuraID = 205191, UnitID = "target"}, --惩戒
 				--狂野怒火
 				{AuraID =  19574, UnitID = "target"},
 				--百发百中
@@ -1944,9 +1942,9 @@ C.AuraWatchList = {
 				--先祖指引
 				{AuraID = 108281, UnitID = "player"},
 				--升腾
-				{AuraID = 114050, UnitID = "player"},	--元素
-				{AuraID = 114051, UnitID = "player"},	--增强
-				{AuraID = 114052, UnitID = "player"},	--恢复
+				{AuraID = 114050, UnitID = "player"}, --元素
+				{AuraID = 114051, UnitID = "player"}, --增强
+				{AuraID = 114052, UnitID = "player"}, --恢复
 				--幽魂步
 				{AuraID =  58875, UnitID = "player"},
 				--星界转移
@@ -1978,9 +1976,9 @@ C.AuraWatchList = {
 				--风暴守护者
 				{AuraID = 205495, UnitID = "player"},
 				--元素冲击
-				{AuraID = 118522, UnitID = "player"},	--爆击
-				{AuraID = 173183, UnitID = "player"},	--急速
-				{AuraID = 173184, UnitID = "player"},	--精通
+				{AuraID = 118522, UnitID = "player"}, --爆击
+				{AuraID = 173183, UnitID = "player"}, --急速
+				{AuraID = 173184, UnitID = "player"}, --精通
 				--冰怒
 				{AuraID = 210714, UnitID = "player"},
 				--暴雨图腾
@@ -3049,6 +3047,8 @@ C.AuraWatchList = {
 				{AuraID = 247253, UnitID = "player"},
 				--浩劫T21
 				{AuraID = 252165, UnitID = "player"},
+				--无尽吸血
+				{AuraID = 216758, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
