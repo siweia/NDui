@@ -5,7 +5,7 @@ function module:ChatCopy()
 	local lines = {}
 	local frame = CreateFrame("Frame", "NDuiChatCopy", UIParent)
 	frame:SetPoint("CENTER", UIParent, "CENTER")
-	frame:SetSize(500, 400)
+	frame:SetSize(700, 400)
 	frame:Hide()
 	frame:SetFrameStrata("DIALOG")
 	B.CreateMF(frame)
