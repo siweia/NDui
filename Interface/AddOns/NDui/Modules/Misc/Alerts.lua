@@ -178,9 +178,15 @@ end
 	NDui版本过期提示
 ]]
 function module:VersionCheck()
+
 	if not NDuiDB["Settings"]["VersionCheck"] then return end
 	if not NDuiADB["DetectVersion"] then NDuiADB["DetectVersion"] = DB.Version end
 	if not IsInGuild() then return end
+
+	local f = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
+	f:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 20, 70)
+	f.Text:SetText("")
+	f:Hide()
 
 	NDui:EventFrame("CHAT_MSG_ADDON"):SetScript("OnEvent", function(self, event, ...)
 		local prefix, msg, distType, sender = ...
@@ -196,7 +202,8 @@ function module:VersionCheck()
 			if not self.checked then
 				local b1, b2, b3 = string.split(".", DB.Version)
 				if c1 > b1 or c2 > b2 then
-					print(format(L["Outdated NDui"], NDuiADB["DetectVersion"]))
+					f.Text:SetText(format(L["Outdated NDui"], NDuiADB["DetectVersion"]))
+					f:Show()
 				elseif c1 < b1 or c2 < b2 then
 					SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 				end
@@ -247,10 +254,10 @@ function module:AntoranBlast()
 
 	local names = {}
 	local cache = {}
-	NDui:EventFrame({"COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_REGEN_DISABLED"}):SetScript("OnEvent", function(_, event, ...)
+	NDui:EventFrame({"COMBAT_LOG_EVENT_UNFILTERED", "ENCOUNTER_END"}):SetScript("OnEvent", function(_, event, ...)
 		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
 
-		if event == "PLAYER_REGEN_DISABLED" then
+		if event == "ENCOUNTER_END" then
 			names = {}
 			cache = {}
 		else
