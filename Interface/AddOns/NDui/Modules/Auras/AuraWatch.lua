@@ -530,7 +530,7 @@ local function UpdateIntFrame(intID, itemID, duration)
 		tinsert(IntTable, Frame)
 		SortBars()
 	end
-	local name, icon
+	local name, icon, _
 	if itemID then
 		name, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemID)
 		Frame.type = 2
@@ -577,15 +577,14 @@ local eventList = {
 	["SPELL_AURA_APPLIED"] = true,
 	["SPELL_AURA_REFRESH"] = true,
 	["SPELL_ENERGIZE"] = true,
-	--["SPELL_CAST_SUCCESS"] = true,
 	["SPELL_SUMMON"] = true,
 }
 
 local function UpdateInt(self, event, ...)
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
-			local _, eventType, _, _, sourceName, _, _, _, _, _, _, spellID = ...
-			if value.IntID == spellID and eventList[eventType] and sourceName == UnitName("player") then
+			local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID = ...
+			if value.IntID == spellID and eventList[eventType] and (sourceName and sourceName == UnitName("player") or destName == UnitName("player")) then
 				UpdateIntFrame(value.IntID, value.ItemID, value.Duration)
 			end
 		end
