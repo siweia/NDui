@@ -26,7 +26,11 @@ function module:OnLogin()
 
 		local function isItemEquipment(item)
 			if not NDuiDB["Bags"]["ItemFilter"] then return end
-			return item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.equipLoc ~= "")
+			if NDuiDB["Bags"]["ItemSetFilter"] then
+				return item.isInSet
+			else
+				return item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.equipLoc ~= "")
+			end
 		end
 
 		local function isItemConsumble(item)
@@ -342,7 +346,11 @@ function module:OnLogin()
 			B.CreateFS(self, 14, ARTIFACT_POWER, true, "TOPLEFT", 8, -8)
 			return
 		elseif name == "Equipment" or name == "BankEquipment" then
-			B.CreateFS(self, 14, BAG_FILTER_EQUIPMENT, true, "TOPLEFT", 8, -8)
+			if NDuiDB["Bags"]["ItemSetFilter"] then
+				B.CreateFS(self, 14, L["Equipement Set"], true, "TOPLEFT", 8, -8)
+			else
+				B.CreateFS(self, 14, BAG_FILTER_EQUIPMENT, true, "TOPLEFT", 8, -8)
+			end
 			return
 		elseif name == "Consumble" or name == "BankConsumble" then
 			B.CreateFS(self, 14, BAG_FILTER_CONSUMABLES, true, "TOPLEFT", 8, -8)
