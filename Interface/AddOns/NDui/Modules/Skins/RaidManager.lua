@@ -269,8 +269,16 @@ function module:CreateRM()
 			ScanBuff()
 		elseif button == "LeftButton" then
 			if InCombatLockdown() then return end
+			if not (IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid()))) then
+				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
+				return
+			end
 			DoReadyCheck()
 		else
+			if not (IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid()))) then
+				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
+				return
+			end
 			if IsAddOnLoaded("DBM-Core") then
 				if reset then
 					SlashCmdList["DEADLYBOSSMODS"]("pull "..NDuiDB["Skins"]["DBMCount"])
