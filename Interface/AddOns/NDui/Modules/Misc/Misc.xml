@@ -6,6 +6,5 @@
 	<Script file="Mail.lua"/>
 	<Script file="MissingStats.lua"/>
 	<Script file="OrderHall.lua"/>
-	<Script file="GuildInfobar.lua"/>
 	<Script file="Focuser.lua"/>
 </Ui>
