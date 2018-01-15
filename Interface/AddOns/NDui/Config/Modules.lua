@@ -6,7 +6,7 @@ C.Auras = {
 	IconSize		= 32,											-- BUFF图标大小
 	IconsPerRow		= 14,											-- BUFF每行个数
 	Spacing			= 6,											-- BUFF图标间距
-	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -10, -5},	-- BUFF位置
+	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -10, -5},	-- BUFF默认位置
 
 	BHPos			= {"CENTER", UIParent, "CENTER", 0, -200},		-- 血DK助手默认位置
 	StaggerPos		= {"CENTER", UIParent, "CENTER", 0, -220},		-- 坦僧工具默认位置
@@ -39,16 +39,42 @@ C.UFs = {
 
 -- 小地图
 C.Minimap = {
-	Pos				= {"TOPRIGHT", UIParent, "TOPRIGHT", -7, -7},	-- 小地图位置
+	Pos				= {"TOPRIGHT", UIParent, "TOPRIGHT", -7, -7},	-- 小地图默认位置
 }
 
 -- 美化及皮肤
 C.Skins = {
-	MicroMenuPos 	= {"BOTTOM", UIParent, "BOTTOM", 0, 2.5},		-- 微型菜单坐标
+	MicroMenuPos 	= {"BOTTOM", UIParent, "BOTTOM", 0, 2.5},		-- 微型菜单默认坐标
 	RMPos  			= {"TOP", UIParent, "TOP", 0, 0},				-- 团队工具默认坐标
 }
 
 -- 鼠标提示框
 C.Tooltips = {
 	TipPos 	= {"BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -55, 230},	-- 鼠标提示框默认位置
+}
+
+-- 信息条
+C.Infobar = {
+	Guild	 		= true,											-- 公会信息
+	GuildPos 		= {"TOPLEFT", UIParent, 15, -6},					-- 公会信息位置
+	Friends 		= true,											-- 好友模块
+	FriendsPos 		= {"TOPLEFT", UIParent, 100, -6},				-- 好友模块位置
+	System			= true,											-- 帧数/延迟
+	SystemPos		= {"TOPLEFT", UIParent, 190, -6},				-- 帧数/延迟位置
+	Memory			= true,											-- 内存占用
+	MemoryPos		= {"TOPLEFT", UIParent, 310, -6},				-- 内存占用位置
+	MaxAddOns		= 20,											-- 插件信息显示数量
+	Location		= true,											-- 区域信息
+	LocationPos		= {"TOPLEFT", UIParent, 400, -6},				-- 区域信息位置
+
+	Spec			= true,											-- 天赋专精
+	SpecPos			= {"BOTTOMRIGHT", UIParent, -310, 6},			-- 天赋专精位置
+	Durability		= true,											-- 耐久度
+	DurabilityPos	= {"BOTTOM", UIParent, "BOTTOMRIGHT", -230, 6},	-- 耐久度位置
+	Gold			= true,											-- 金币信息
+	GoldPos			= {"BOTTOM", UIParent, "BOTTOMRIGHT", -125, 6}, -- 金币信息位置
+	Time			= true,											-- 时间信息
+	TimePos			= {"BOTTOMRIGHT", UIParent, -15, 6},			-- 时间信息位置
+
+	Fonts			= {STANDARD_TEXT_FONT, 13, "OUTLINE"},			-- 字体
 }
