@@ -8,4 +8,5 @@
 	<Include file="Tooltip\Tooltip.xml"/>
 	<Include file="UFs\UFs.xml"/>
 	<Include file="Misc\Misc.xml"/>
+	<Include file="Infobar\Infobar.xml"/>
 </Ui>
