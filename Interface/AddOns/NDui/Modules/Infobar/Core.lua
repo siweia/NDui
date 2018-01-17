@@ -39,6 +39,6 @@ end
 function module:OnLogin()
 	if not self.modules then return end
 	for _, info in pairs(self.modules) do
-		module:LoadInfobar(info)
+		self:LoadInfobar(info)
 	end
 end

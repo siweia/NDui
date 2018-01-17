@@ -26,6 +26,7 @@ local defaultSettings = {
 		ReverseSort = false,
 		PreferPower = 1,
 		ItemFilter = true,
+		ItemSetFilter = false,
 	},
 	Auras = {
 		Reminder = true,

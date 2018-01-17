@@ -29,6 +29,7 @@ info.eventList = {
 
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
+		if NDuiADB["AutoSell"] == nil then NDuiADB["AutoSell"] = true end
 		oldMoney = GetMoney()
 		self:UnregisterEvent(event)
 	end

@@ -175,7 +175,7 @@ function module:DBMSkin()
 			local prev		 	= _G[format("DBM_BossHealth_Bar_%d", count-1)]	
 
 			if (count == 1) then
-				local	_, anch, _ ,_, _ = bar:GetPoint()
+				local _, anch, _ = bar:GetPoint()
 				bar:ClearAllPoints()
 				if DBM_AllSavedOptions.HealthFrameGrowUp then
 					bar:SetPoint("BOTTOM", anch, "TOP" , 0 , 12)
