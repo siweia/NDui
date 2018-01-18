@@ -37,7 +37,10 @@ tinsert(C.themes["Aurora"], function()
 		F.CreateBD(frame)
 		F.CreateSD(frame)
 
-		F.Reskin(frame["button"..j])
+		for j = 1, 4 do
+			F.Reskin(frame["button"..j])
+		end
+
 		F.ReskinClose(close)
 
 		close.minimize = close:CreateTexture(nil, "OVERLAY")
