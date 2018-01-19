@@ -1582,6 +1582,16 @@ C.AuraWatchList = {
 				{AuraID = 157981, UnitID = "target", Caster = "player"},
 				--变形术
 				{AuraID =    118, UnitID = "target", Caster = "player"},
+				{AuraID =  28271, UnitID = "target", Caster = "player"},
+				{AuraID =  28272, UnitID = "target", Caster = "player"},
+				{AuraID =  61305, UnitID = "target", Caster = "player"},
+				{AuraID =  61721, UnitID = "target", Caster = "player"},
+				{AuraID =  61780, UnitID = "target", Caster = "player"},
+				{AuraID = 126819, UnitID = "target", Caster = "player"},
+				{AuraID = 161353, UnitID = "target", Caster = "player"},
+				{AuraID = 161354, UnitID = "target", Caster = "player"},
+				{AuraID = 161355, UnitID = "target", Caster = "player"},
+				{AuraID = 161372, UnitID = "target", Caster = "player"},
 				--冰霜新星
 				{AuraID =    122, UnitID = "target", Caster = "player"},
 				--冰霜之环
@@ -1900,7 +1910,10 @@ C.AuraWatchList = {
 				{AuraID = 207400, UnitID = "target", Caster = "player"},
 				--妖术
 				{AuraID =  51514, UnitID = "target", Caster = "player"},
-				{AuraID = 196942, UnitID = "target", Caster = "player"},
+				{AuraID = 210873, UnitID = "target", Caster = "player"},
+				{AuraID = 211004, UnitID = "target", Caster = "player"},
+				{AuraID = 211010, UnitID = "target", Caster = "player"},
+				{AuraID = 211015, UnitID = "target", Caster = "player"},
 				--激流
 				{AuraID =  61295, UnitID = "target", Caster = "player"},
 				--烈焰震击
@@ -1994,7 +2007,10 @@ C.AuraWatchList = {
 			List = {
 				--妖术
 				{AuraID =  51514, UnitID = "focus", Caster = "player"},
-				{AuraID = 196942, UnitID = "focus", Caster = "player"},
+				{AuraID = 210873, UnitID = "focus", Caster = "player"},
+				{AuraID = 211004, UnitID = "focus", Caster = "player"},
+				{AuraID = 211010, UnitID = "focus", Caster = "player"},
+				{AuraID = 211015, UnitID = "focus", Caster = "player"},
 			},
 		},
 		{	Name = "Spell Cooldown",
