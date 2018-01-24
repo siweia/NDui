@@ -12,7 +12,6 @@ function module:SoloInfo()
 		[556] = 2,		-- 塞塔克大厅，乌鸦
 		[575] = 2,		-- 乌特加德之巅，蓝龙
 		[585] = 2,		-- 魔导师平台，白鸡
-		[603] = 4,		-- 奥杜尔，飞机头
 		[631] = 6,		-- 冰冠堡垒，无敌
 	}
 
@@ -178,7 +177,6 @@ end
 	NDui版本过期提示
 ]]
 function module:VersionCheck()
-
 	if not NDuiDB["Settings"]["VersionCheck"] then return end
 	if not NDuiADB["DetectVersion"] then NDuiADB["DetectVersion"] = DB.Version end
 	if not IsInGuild() then return end
@@ -271,3 +269,27 @@ function module:AntoranBlast()
 		end
 	end)
 end
+--[[
+	local names = {}
+	local cache = {}
+	local previous = 0
+	NDui:EventFrame({"COMBAT_LOG_EVENT_UNFILTERED", "ENCOUNTER_END"}):SetScript("OnEvent", function(_, event, ...)
+		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
+
+		if event == "ENCOUNTER_END" then
+			names = {}
+			cache = {}
+			previous = 0
+		else
+			local times, eventType, _, sourceGUID, sourceName, _, _, destGUID, destName, _, _, spellID = ...
+			if eventType == "SPELL_DAMAGE" and spellID == 246779 and not GetPlayerInfoByGUID(sourceGUID) and not cache[times] then
+				if times - previous > 0.2 then
+					if not names[destName] then names[destName] = 0 end
+					names[destName] = names[destName] + 1
+					SendChatMessage(destName.."  撞球"..names[destName], "RAID")
+					previous = times
+				end
+				cache[times] = true
+			end
+		end
+	end)]]
