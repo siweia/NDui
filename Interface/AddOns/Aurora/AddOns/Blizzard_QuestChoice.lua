@@ -38,7 +38,7 @@ C.themes["Blizzard_QuestChoice"] = function()
 		F.Reskin(option.OptionButton)
 	end
 
-	hooksecurefunc("QuestChoiceFrame_ShowRewards", function(numOptions)
+	hooksecurefunc(QuestChoiceFrame, "ShowRewards", function(self, numOptions)
 		for i = 1, numOptions do
 			local rewards = QuestChoiceFrame["Option"..i].Rewards
 			rewards.Item.bg:SetBackdropBorderColor(rewards.Item.IconBorder:GetVertexColor())
