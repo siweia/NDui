@@ -92,18 +92,18 @@ function module:OnLogin()
 
 		-- OVERRIDEBAR
 		local OverbarL = CreateFrame("Frame", nil, UIParent)
-		OverbarL:SetPoint("BOTTOM", UIParent, "BOTTOM", -100, 4)
+		OverbarL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 4)
 		B.CreateGF(OverbarL, 200, 57, "Horizontal", 0, 0, 0, 0, .5)
 		local OverbarL1 = CreateFrame("Frame", nil, OverbarL)
-		OverbarL1:SetPoint("BOTTOM", OverbarL, "TOP")
+		OverbarL1:SetPoint("BOTTOMRIGHT", OverbarL, "TOPRIGHT")
 		B.CreateGF(OverbarL1, 200, 1, "Horizontal", cr, cg, cb, 0, .7)
 		RegisterStateDriver(OverbarL, "visibility", "[petbattle]hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 
 		local OverbarR = CreateFrame("Frame", nil, UIParent)
-		OverbarR:SetPoint("BOTTOM", UIParent, "BOTTOM", 100, 4)
+		OverbarR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 4)
 		B.CreateGF(OverbarR, 200, 57, "Horizontal", 0, 0, 0, .5, 0)
 		local OverbarR1 = CreateFrame("Frame", nil, OverbarR)
-		OverbarR1:SetPoint("BOTTOM", OverbarR, "TOP")
+		OverbarR1:SetPoint("BOTTOMLEFT", OverbarR, "TOPLEFT")
 		B.CreateGF(OverbarR1, 200, 1, "Horizontal", cr, cg, cb, .7, 0)
 		RegisterStateDriver(OverbarR, "visibility", "[petbattle]hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 	end
