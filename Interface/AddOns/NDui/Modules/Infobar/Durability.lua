@@ -18,7 +18,7 @@ local localSlots = {
 }
 
 local inform = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
-inform:SetPoint("BOTTOM", Text, "TOP", 0, 23)
+inform:SetPoint("BOTTOM", info, "TOP", 0, 23)
 inform.Text:SetText(L["Low Durability"])
 inform:Hide()
 
