@@ -66,8 +66,11 @@ local tanaan = {
 }
 
 -- Check Invasion Status
-local zonePOIIds = {5177, 5178, 5210, 5175}
-local zoneNames = {1024, 1017, 1018, 1015}
+local zonePOIIds = {5175, 5210, 5177, 5178}
+local zoneNames = {1015, 1018, 1024, 1017}
+local timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}
+local baseTime = 1517274000 -- 1/30 9:00 [1]
+
 local function onInvasion()
 	for i = 1, #zonePOIIds do
 		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
@@ -75,6 +78,16 @@ local function onInvasion()
 			return timeLeftMinutes, GetMapNameByID(zoneNames[i])
 		end
 	end
+end
+
+local function whereToGo(nextTime)
+	local elapsed = nextTime - baseTime
+	local round = 1
+	while elapsed >= 66600 do
+		elapsed = elapsed - 66600
+		round = round + 1
+	end
+	return GetMapNameByID(zoneNames[timeTable[mod(round, 12)]])
 end
 
 info.onEnter = function(self)
@@ -86,14 +99,14 @@ info.onEnter = function(self)
 	local w, m, d, y = CalendarGetDate()
 	GameTooltip:AddLine(format(FULLDATE, CALENDAR_WEEKDAY_NAMES[w], months[m], d, y), 0,.6,1)
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_LOCALTIME, GameTime_GetLocalTime(true), .6,.8,1 ,1,1,1)
-	GameTooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, GameTime_GetGameTime(true), .6,.8,1 ,1,1,1)
+	GameTooltip:AddDoubleLine(L["Local Time"], GameTime_GetLocalTime(true), .6,.8,1 ,1,1,1)
+	GameTooltip:AddDoubleLine(L["Realm Time"], GameTime_GetGameTime(true), .6,.8,1 ,1,1,1)
 
 	local title
 	local function addTitle(text)
 		if not title then
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(text, .6,.8,1)
+			GameTooltip:AddLine(text..":", .6,.8,1)
 			title = true
 		end
 	end
@@ -172,32 +185,17 @@ info.onEnter = function(self)
 
 	-- Legion Invasion
 	title = false
+	addTitle(L["Legion Invasion"])
 
-	local nextTime
+	local elapsed = mod(time() - baseTime, 66600)
+	local nextTime = 66600 - elapsed + time()
 	if onInvasion() then
-		local timeLeft = onInvasion()
-		local elapsed = 360 - timeLeft
-		local startTime = time() - elapsed*60
-		nextTime = date("%m/%d %H:%M", startTime + 66600)
-		NDuiADB["prevInvasion"] = startTime
-	elseif NDuiADB["prevInvasion"] then
-		local elapsed = time() - NDuiADB["prevInvasion"]
-		while elapsed > 66600 do
-			elapsed = elapsed - 66600
-		end
-		nextTime = date("%m/%d %H:%M", 66600 - elapsed + time())
+		local timeLeft, zoneName = onInvasion()
+		local r,g,b
+		if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+		GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 	end
-
-	if nextTime then
-		addTitle(L["Legion Invasion"])
-		if onInvasion() then
-			local timeLeft, zoneName = onInvasion()
-			local r,g,b
-			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-			GameTooltip:AddDoubleLine(zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
-		end
-		GameTooltip:AddDoubleLine(L["Next Invasion"], nextTime, 1,1,1, 1,1,1)
-	end
+	GameTooltip:AddDoubleLine(L["Next Invasion"]..whereToGo(nextTime), date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
 
 	-- Help Info
 	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
