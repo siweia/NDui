@@ -11,9 +11,13 @@ local B, C, _, DB = unpack(select(2, ...))
 	/getnpc, get npc name and id
 ]]
 
-C.Debug = function()
-	if UnitName("player") ~= "寧德" then return end
-	print("pass")
+local dev = {"寧德"}
+C.isDeveloper = function()
+	for _, name in pairs(dev) do
+		if UnitName("player") == name then
+			return true
+		end
+	end
 end
 
 -- Commands

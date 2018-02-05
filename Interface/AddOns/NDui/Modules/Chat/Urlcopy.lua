@@ -48,11 +48,11 @@ function module:UrlCopy()
 			text = string.gsub(text, "(%s?)([_%w-%.~-]+@[_%w-]+%.[_%w-%.]+)(%s?)", highlighturl)
 		end
 
-		frame.am(frame,text,...)
+		frame.am(frame, text, ...)
 	end
 
 	for i = 1, NUM_CHAT_WINDOWS do
-		if ( i ~= 2 ) then
+		if i ~= 2 then
 			local cf = _G["ChatFrame"..i]
 			cf.am = cf.AddMessage
 			cf.AddMessage = searchforurl
