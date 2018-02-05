@@ -59,7 +59,7 @@ info.onMouseUp = function(self, button)
 	if button == "LeftButton" then
 		local before = gcinfo()
 		collectgarbage("collect")
-		print(format("|cff66C6FF%s:|r %s", L["Garbage collected"], formatMemory(before - gcinfo())))
+		print(format("|cff66C6FF%s:|r %s", L["Collect Memory"], formatMemory(before - gcinfo())))
 		updateMemory()
 	elseif button == "RightButton" then
 		NDuiADB["AutoCollect"] = not NDuiADB["AutoCollect"]
@@ -71,7 +71,7 @@ info.onEnter = function(self)
 	local totalMemory = updateMemory()
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
-	GameTooltip:AddDoubleLine(format("%s:", ADDONS), formatMemory(totalMemory), 0,.6,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(ADDONS, formatMemory(totalMemory), 0,.6,1, .6,.8,1)
 	GameTooltip:AddLine(" ")
 
 	local maxAddOns = math.min(C.Infobar.MaxAddOns, #memoryTable)
@@ -105,8 +105,8 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(L["Default UI Memory Usage:"], formatMemory(gcinfo() - totalMemory), .6,.8,1, 1,1,1)
 	GameTooltip:AddDoubleLine(L["Total Memory Usage:"], formatMemory(collectgarbage("count")), .6,.8,1, 1,1,1)
 	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["ManulCollect"], 1,1,1, .6,.8,1)
-	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["AutoCollect"]..": "..(NDuiADB["AutoCollect"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Collect Memory"], 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Auto Collect"]..": "..(NDuiADB["AutoCollect"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 end
 

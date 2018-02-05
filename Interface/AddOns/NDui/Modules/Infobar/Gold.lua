@@ -86,17 +86,17 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 
 	GameTooltip:AddLine(L["Session"], .6,.8,1)
-	GameTooltip:AddDoubleLine(L["Earned:"], GetMoneyString(profit), 1,1,1, 1,1,1)
-	GameTooltip:AddDoubleLine(L["Spent:"], GetMoneyString(spent), 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(L["Earned"], GetMoneyString(profit), 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(L["Spent"], GetMoneyString(spent), 1,1,1, 1,1,1)
 	if profit < spent then
-		GameTooltip:AddDoubleLine(L["Deficit:"], GetMoneyString(spent-profit), 1,0,0, 1,1,1)
+		GameTooltip:AddDoubleLine(L["Deficit"], GetMoneyString(spent-profit), 1,0,0, 1,1,1)
 	elseif profit > spent then
-		GameTooltip:AddDoubleLine(L["Profit:"], GetMoneyString(profit-spent), 0,1,0, 1,1,1)
+		GameTooltip:AddDoubleLine(L["Profit"], GetMoneyString(profit-spent), 0,1,0, 1,1,1)
 	end
 	GameTooltip:AddLine(" ")
 
 	local totalGold = 0
-	GameTooltip:AddLine(L["Character"]..": ", .6,.8,1)
+	GameTooltip:AddLine(L["Character"], .6,.8,1)
 	local thisRealmList = NDuiADB["totalGold"][myRealm]
 	for k, v in pairs(thisRealmList) do
 		local gold, class = unpack(v)
@@ -104,14 +104,13 @@ info.onEnter = function(self)
 		totalGold = totalGold + gold
 	end
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine(L["Server"]..": ", .6,.8,1)
-	GameTooltip:AddDoubleLine(TOTAL..": ", getGoldString(totalGold), 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(TOTAL..":", getGoldString(totalGold), .6,.8,1, 1,1,1)
 
 	for i = 1, GetNumWatchedTokens() do
 		local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
 		if name and i == 1 then
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(CURRENCY,.6,.8,1)
+			GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
 		end
 		if name and count then
 			local _, _, _, _, _, total = GetCurrencyInfo(currencyID)
@@ -124,7 +123,7 @@ info.onEnter = function(self)
 		end
 	end
 	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["CurrencyPanel"], 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Currency Panel"], 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", "CTRL+"..DB.RightButton..L["Reset Gold"], 1,1,1, .6,.8,1)
 	GameTooltip:Show()
