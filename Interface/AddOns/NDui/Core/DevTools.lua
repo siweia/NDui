@@ -140,27 +140,25 @@ end
 
 local function Grid_Show()
 	if not grid then
-        Grid_Create()
+		Grid_Create()
 	elseif grid.boxSize ~= boxSize then
-        grid:Hide()
-        Grid_Create()
-    else
+		grid:Hide()
+		Grid_Create()
+	else
 		grid:Show()
 	end
 end
 
 local isAligning = false
 SlashCmdList["TOGGLEGRID"] = function(arg)
-    if isAligning or arg == "1" then
-        if grid then
-			grid:Hide()
-		end
-        isAligning = false
-    else
-        boxSize = (math.ceil((tonumber(arg) or boxSize) / 32) * 32)
+	if isAligning or arg == "1" then
+		if grid then grid:Hide() end
+		isAligning = false
+	else
+		boxSize = (math.ceil((tonumber(arg) or boxSize) / 32) * 32)
 		if boxSize > 256 then boxSize = 256 end    
-        Grid_Show()
-        isAligning = true
-    end
+		Grid_Show()
+		isAligning = true
+	end
 end
 SLASH_TOGGLEGRID1 = "/ng"
