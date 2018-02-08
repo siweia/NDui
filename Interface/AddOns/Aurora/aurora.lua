@@ -197,13 +197,13 @@ end
 F.ReskinScroll = function(f)
 	local frame = f:GetName()
 
-	local track = (f.trackBG or f.Background) or (_G[frame.."Track"] or _G[frame.."BG"])
+	local track = (f.trackBG or f.Background or f.Track) or (_G[frame.."Track"] or _G[frame.."BG"])
 	if track then track:Hide() end
-	local top = (f.ScrollBarTop or f.Top) or _G[frame.."Top"]
+	local top = (f.ScrollBarTop or f.Top or f.ScrollUpBorder) or _G[frame.."Top"]
 	if top then top:Hide() end
-	local middle = (f.ScrollBarMiddle or f.Middle) or _G[frame.."Middle"]
+	local middle = (f.ScrollBarMiddle or f.Middle or f.Border) or _G[frame.."Middle"]
 	if middle then middle:Hide() end
-	local bottom = (f.ScrollBarBottom or f.Bottom) or _G[frame.."Bottom"]
+	local bottom = (f.ScrollBarBottom or f.Bottom or f.ScrollDownBorder) or _G[frame.."Bottom"]
 	if bottom then bottom:Hide() end
 
 	local bu = (f.ThumbTexture or f.thumbTexture) or _G[frame.."ThumbTexture"]
