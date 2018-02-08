@@ -65,6 +65,7 @@ local lodFrames = {
 	-- AddonName = { list of frames, same syntax as above }
 	Blizzard_AchievementUI		= { ["AchievementFrame"] = false, ["AchievementFrameHeader"] = true, ["AchievementFrameCategoriesContainer"] = "AchievementFrame", ["AchievementFrame.searchResults"] = false },
 	Blizzard_AdventureMap		= { ["AdventureMapQuestChoiceDialog"] = false },
+	Blizzard_AlliedRacesUI		= { ["AlliedRacesFrame"] = false },
 	Blizzard_ArchaeologyUI		= { ["ArchaeologyFrame"] = false },
 	Blizzard_ArtifactUI			= { ["ArtifactFrame"] = false, ["ArtifactRelicForgeFrame"] = false },
 	Blizzard_AuctionUI			= { ["AuctionFrame"] = false },
