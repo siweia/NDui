@@ -13,7 +13,7 @@ C.Auras = {
 	TotemsPos		= {"CENTER", UIParent, "CENTER", 0, -190},		-- 图腾助手默认位置
 	MarksmanPos		= {"CENTER", UIParent, "CENTER", 0, -190},		-- 射击猎助手默认位置
 	FamiliarPos		= {"BOTTOMLEFT", UIParent, 480, 270},			-- 奥法魔宠默认位置
-	StatuePos		= {"BOTTOMLEFT", UIParent, 480, 270},			-- 武僧雕像默认位置
+	StatuePos		= {"TOPRIGHT", UIParent, "BOTTOM", -460, 300},	-- 武僧雕像默认位置
 }
 
 -- 头像相关
