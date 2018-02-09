@@ -26,7 +26,7 @@ oUF.Tags.Methods["power"] = function(unit)
 	local per = oUF.Tags.Methods["perpp"](unit).."%" or 0
 	if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
 		if min ~= max then
-			if UnitPowerType("player") == 0 then
+			if UnitPowerType(unit) == 0 then
 				return B.Numb(min).." | "..per
 			else
 				return B.Numb(min)
