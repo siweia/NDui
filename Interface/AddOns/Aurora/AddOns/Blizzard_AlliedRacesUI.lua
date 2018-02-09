@@ -11,7 +11,7 @@ C.themes["Blizzard_AlliedRacesUI"] = function()
 	select(2, AlliedRacesFrame.ModelFrame:GetRegions()):Hide()
 
 	AlliedRacesFrame:HookScript("OnShow", function(self)
-		local parent = AlliedRacesFrame.RaceInfoFrame.ScrollFrame.Child
+		local parent = self.RaceInfoFrame.ScrollFrame.Child
 		for i = 1, parent:GetNumChildren() do
 			local bu = select(i, parent:GetChildren())
 
