@@ -12,12 +12,12 @@ function module:CreateRM()
 	B.Mover(header, L["Raid Tool"], "RaidManager", C.Skins.RMPos)
 	header:RegisterEvent("GROUP_ROSTER_UPDATE")
 	header:RegisterEvent("PLAYER_ENTERING_WORLD")
-	header:SetScript("OnEvent", function()
-		header:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	header:SetScript("OnEvent", function(self)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		if IsInGroup() then
-			header:Show()
+			self:Show()
 		else
-			header:Hide()
+			self:Hide()
 		end
 	end)
 
@@ -305,7 +305,7 @@ function module:CreateRM()
 	}
 
 	local buttons = {
-		{L["Goup Disband"], function()
+		{TEAM_DISBAND, function()
 			if UnitIsGroupLeader("player") then
 				StaticPopup_Show("Group_Disband")
 			else
@@ -316,6 +316,7 @@ function module:CreateRM()
 			if UnitIsGroupLeader("player") and not HasLFGRestrictions() and GetNumGroupMembers() <= 5 then
 				if IsInRaid() then ConvertToParty() else ConvertToRaid() end
 				menu:Hide()
+				menu:SetScript("OnUpdate", nil)
 			else
 				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
 			end
