@@ -34,19 +34,19 @@ info.onUpdate = function(self, elapsed)
 	end
 end
 
-local usageTable = {}
-
+local usageTable, startTime = {}
 local function retrieveUsage()
 	wipe(usageTable)
 	UpdateAddOnCPUUsage()
 
-	local total, count = 0, 0
+	local count = 0
+	local passTime = max(GetTime() - startTime, .01)
 	for i = 1, GetNumAddOns() do
 		if IsAddOnLoaded(i) then
-			local usage = GetAddOnCPUUsage(i)
 			count = count + 1
+			local usage = GetAddOnCPUUsage(i)
+			usage = format("%.2f", usage/passTime)
 			usageTable[count] = {select(2, GetAddOnInfo(i)), usage}
-			total = total + usage
 		end
 	end
 
@@ -55,8 +55,21 @@ local function retrieveUsage()
 			return a[2] > b[2]
 		end
 	end)
+end
 
-	return total
+info.eventList = {
+	"PLAYER_ENTERING_WORLD"
+}
+
+info.onEvent = function(self, event, arg1)
+	if event == "PLAYER_ENTERING_WORLD" then
+		self:UnregisterEvent(event)
+		C_Timer.After(.25, function()
+			startTime = GetTime() - .01
+		end)
+	elseif event == "MODIFIER_STATE_CHANGED" and arg1 == "LSHIFT" then
+		self:GetScript("OnEnter")(self)
+	end
 end
 
 info.onEnter = function(self)
@@ -65,22 +78,12 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(L["System"], 0,.6,1)
 	GameTooltip:AddLine(" ")
 
-	if GetCVar("scriptProfile") == "1" then
-		local totalUsage = retrieveUsage() + .0001
-		local maxAddOns = math.min(C.Infobar.MaxAddOns, #usageTable)
-		if IsShiftKeyDown() then
-			maxAddOns = #usageTable
-		end
+	if GetCVarBool("scriptProfile") then
+		retrieveUsage()
 
+		local maxAddOns = IsShiftKeyDown() and #usageTable or min(C.Infobar.MaxAddOns, #usageTable)
 		for i = 1, maxAddOns do
-			local percent = usageTable[i][2]/totalUsage * 100
-			local color = percent <= 1 and {0, 1} -- 0 - 1
-				or percent <= 5 and {.75, 1} -- 1 - 5
-				or percent <= 10 and {1, 1} -- 5 - 10
-				or percent <= 25 and {1, .75} -- 10 - 25
-				or percent <= 50 and {1, .5} -- 25 - 50
-				or {1, .1} -- 50 +
-			GameTooltip:AddDoubleLine(usageTable[i][1], format("%.2f%s", percent, " %"), 1, 1, 1, color[1], color[2], 0)
+			GameTooltip:AddDoubleLine(usageTable[i][1], usageTable[i][2].." ms/s", 1,1,1, 0,1,0)
 		end
 
 		local hiddenUsage = 0
@@ -90,7 +93,7 @@ info.onEnter = function(self)
 			end
 			if #usageTable > C.Infobar.MaxAddOns then
 				local numHidden = #usageTable - C.Infobar.MaxAddOns
-				GameTooltip:AddDoubleLine(format("%d %s (%s)", numHidden, L["Hidden"], L["Shift"]), format("%.2f%s", hiddenUsage/totalUsage*100, " %"), .6,.8,1, .6,.8,1)
+				GameTooltip:AddDoubleLine(format("%d %s (%s)", numHidden, L["Hidden"], L["Hold Shift"]), hiddenUsage.." ms/s", .6,.8,1, .6,.8,1)
 			end
 		end
 		GameTooltip:AddLine(" ")
@@ -100,30 +103,36 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(L["Home Latency"]..":", colorLatency(latencyHome).."|r MS", .6,.8,1, 1,1,1)
 	GameTooltip:AddDoubleLine(L["World Latency"]..":", colorLatency(latencyWorld).."|r MS", .6,.8,1, 1,1,1)
 	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["CPU Usage"]..": "..(GetCVar("scriptProfile") == "1" and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED), 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["CPU Usage"]..": "..(GetCVarBool("scriptProfile") and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
+
+	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 end
 
-info.onLeave = function() GameTooltip:Hide() end
+info.onLeave = function(self)
+	GameTooltip:Hide()
+	self:UnregisterEvent("MODIFIER_STATE_CHANGED")
+end
 
 StaticPopupDialogs["CPUUSAGE"] = {
-	text = L["Toggle CPU Usage"],
+	text = L["ReloadUI Required"],
 	button1 = APPLY,
 	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
 	OnAccept = function() ReloadUI() end,
 	whileDead = 1,
 }
 
-local status = GetCVar("scriptProfile")
+local status = GetCVarBool("scriptProfile")
 info.onMouseUp = function(self, button)
 	if button ~= "RightButton" then return end
 
-	if GetCVar("scriptProfile") == "0" then
-		SetCVar("scriptProfile", 1)
-	else
+	if GetCVarBool("scriptProfile") then
 		SetCVar("scriptProfile", 0)
+	else
+		SetCVar("scriptProfile", 1)
 	end
-	if GetCVar("scriptProfile") == status then
+
+	if GetCVarBool("scriptProfile") == status then
 		StaticPopup_Hide("CPUUSAGE")
 	else
 		StaticPopup_Show("CPUUSAGE")
