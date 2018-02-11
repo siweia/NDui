@@ -196,8 +196,8 @@ info.onEnter = function(self)
 
 	-- Help Info
 	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
-	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Toggle Calendar"], 1,1,1, .6,.8,1)
-	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Toggle Clock"], 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Toggle Calendar"].." ", 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Toggle Clock"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 end
 

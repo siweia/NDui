@@ -63,7 +63,7 @@ C.Infobar = {
 	SystemPos		= {"TOPLEFT", UIParent, 190, -6},				-- 帧数/延迟位置
 	Memory			= true,											-- 内存占用
 	MemoryPos		= {"TOPLEFT", UIParent, 310, -6},				-- 内存占用位置
-	MaxAddOns		= 20,											-- 插件信息显示数量
+	MaxAddOns		= 12,											-- 插件信息显示数量
 	Location		= true,											-- 区域信息
 	LocationPos		= {"TOPLEFT", UIParent, 400, -6},				-- 区域信息位置
 
