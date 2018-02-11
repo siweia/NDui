@@ -302,7 +302,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
 		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
-		{1, "UFs", "ThreatBorder", "|cffee0000"..L["RaidFrame ThreatBorder"]},
+		{1, "UFs", "ThreatBorder", L["RaidFrame ThreatBorder"]},
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"], true},
 		{},--blank
 		{1, "UFs", "NoTooltip", L["NoTooltip Auras"]},
