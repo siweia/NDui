@@ -153,19 +153,19 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 				end
 			end
 
-			local unitGuild, tmp, tmp2, guildRealm = GetGuildInfo(unit)
+			local unitGuild, rank, rankIndex, guildRealm = GetGuildInfo(unit)
 			local text = GameTooltipTextLeft2:GetText()
-			if tmp then
-				tmp2 = tmp2 + 1
+			if rank then
+				rankIndex = rankIndex + 1
 				if NDuiDB["Tooltip"]["HideRank"] then
 					GameTooltipTextLeft2:SetText("<"..text..">")
 				else
-					GameTooltipTextLeft2:SetText("<"..text..">  "..tmp.."("..tmp2..")")
+					GameTooltipTextLeft2:SetText("<"..text..">  "..rank.."("..rankIndex..")")
 				end
 				if IsInGuild() and unitGuild == GetGuildInfo("player") and not guildRealm then
 					GameTooltipTextLeft2:SetTextColor(.25, 1, .25)
 				else
-					GameTooltipTextLeft2:SetTextColor(1, .1, .8)
+					GameTooltipTextLeft2:SetTextColor(.6, .8, 1)
 				end
 			end
 		end
