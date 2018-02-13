@@ -327,7 +327,7 @@ function UF:CreateCastBar(self)
 
 	cb.OnUpdate = cast.OnCastbarUpdate
 	cb.PostCastStart = cast.PostCastStart
-	cb.PostChannelStart = cast.PostCastStart
+	cb.PostChannelStart = cast.PostChannelStart
 	cb.PostCastStop = cast.PostCastStop
 	cb.PostChannelStop = cast.PostChannelStop
 	cb.PostCastFailed = cast.PostCastFailed
@@ -374,6 +374,7 @@ local function postCreateIcon(element, button)
 	button.icon:SetTexCoord(unpack(DB.TexCoord))
 	button.icon:SetDrawLayer("ARTWORK")
 	B.CreateSD(button, 2, 2)
+	button.overlay:SetTexture(nil)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .3)
@@ -381,7 +382,7 @@ local function postCreateIcon(element, button)
 end
 
 local function postUpdateIcon(element, unit, button, index)
-	local _, _, _, _, _, duration = UnitAura(unit, index, button.filter)
+	local _, _, _, _, debuffType, duration = UnitAura(unit, index, button.filter)
 	if duration then button.Shadow:Show() end
 
 	local style = element:GetParent().mystyle
@@ -395,6 +396,13 @@ local function postUpdateIcon(element, unit, button, index)
 		button.icon:SetDesaturated(true)
 	else
 		button.icon:SetDesaturated(false)
+	end
+
+	if element.showDebuffType and button.isDebuff then
+		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
+		button.Shadow:SetBackdropBorderColor(color[1], color[2], color[3])
+	else
+		button.Shadow:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
