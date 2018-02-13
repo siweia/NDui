@@ -75,7 +75,7 @@ local defaultSettings = {
 		AutoAttack = true,
 		PetCombatText = true,
 		RaidClickSets = false,
-		ThreatBorder = true,
+		ShowTeamIndex = false,
 	},
 	Chat = {
 		Sticky = false,
@@ -288,7 +288,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AddPower", L["UFs ExtraMana"], true},
 		{1, "UFs", "ExpRep", L["UFs Expbar"]},
 		{},--blank
-		{1, "UFs", "CombatText", "|cff00ff00"..L["UFs CombatText"]},
+		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
 		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"], true},
 		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
 		{1, "UFs", "PetCombatText", L["CombatText ShowPets"], true},
@@ -296,13 +296,13 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	[4] = {
 		{1, "UFs", "RaidFrame", L["UFs RaidFrame"]},
 		{},--blank
-		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
-		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"], true},
-		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
+		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
+		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
+		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"], true},
 		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
-		{1, "UFs", "ThreatBorder", L["RaidFrame ThreatBorder"]},
+		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"], true},
 		{},--blank
 		{1, "UFs", "NoTooltip", L["NoTooltip Auras"]},
