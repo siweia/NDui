@@ -648,6 +648,9 @@ do
 
 	-- The remainder of this scope is a temporary fix for issue #404,
 	-- regarding vehicle support on headers for the Antorus raid instance.
+	-- Track changes to SecureButton_GetModifiedUnit, this hack should be
+	-- removed when UnitTargetsVehicleInRaidUI is added to it. Supposedly,
+	-- it should happen in 8.x.
 	local isHacked = false
 	local shouldHack
 
@@ -665,19 +668,11 @@ do
 	end
 
 	local eventHandler = CreateFrame('Frame')
-	eventHandler:RegisterEvent('PLAYER_LOGIN')
 	eventHandler:RegisterEvent('ZONE_CHANGED_NEW_AREA')
+	eventHandler:RegisterEvent('PLAYER_ENTERING_WORLD')
 	eventHandler:RegisterEvent('PLAYER_REGEN_ENABLED')
 	eventHandler:SetScript('OnEvent', function(_, event)
-		if(event == 'PLAYER_LOGIN') then
-			local _, _, _, _, _, _, _, id = GetInstanceInfo()
-			if(id == 1712) then
-				initialConfigFunction = initialConfigFunctionTemp:format(0)
-
-				-- This is here for layouts that don't use oUF:Factory
-				toggleHeaders(false)
-			end
-		elseif(event == 'ZONE_CHANGED_NEW_AREA') then
+		if(event == 'ZONE_CHANGED_NEW_AREA') then
 			local _, _, _, _, _, _, _, id = GetInstanceInfo()
 			if(id == 1712 and not isHacked) then
 				initialConfigFunction = initialConfigFunctionTemp:format(0)
@@ -687,7 +682,7 @@ do
 				else
 					shouldHack = true
 				end
-			elseif(isHacked) then
+			elseif(id ~= 1712 and isHacked) then
 				initialConfigFunction = initialConfigFunctionTemp:format(1)
 
 				if(not InCombatLockdown()) then
@@ -695,6 +690,17 @@ do
 				else
 					shouldHack = false
 				end
+			end
+		elseif(event == 'PLAYER_ENTERING_WORLD') then
+			local _, _, _, _, _, _, _, id = GetInstanceInfo()
+			if(id == 1712 and not isHacked) then
+				initialConfigFunction = initialConfigFunctionTemp:format(0)
+
+				toggleHeaders(false)
+			elseif(id ~= 1712 and isHacked) then
+				initialConfigFunction = initialConfigFunctionTemp:format(1)
+
+				toggleHeaders(true)
 			end
 		elseif(event == 'PLAYER_REGEN_ENABLED') then
 			if(isHacked and shouldHack == false) then

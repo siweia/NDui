@@ -102,13 +102,13 @@ cast.OnCastbarUpdate = function(self, elapsed)
 	end
 end
 
-cast.OnCastSent = function(self, event, unit, spell, rank)
+cast.OnCastSent = function(self)
 	if not self.Castbar.SafeZone then return end
 	self.Castbar.SafeZone.sendTime = GetTime()
 	self.Castbar.SafeZone.castSent = true
 end
 
-cast.PostCastStart = function(self, unit, name, castID, spellID)
+cast.PostCastStart = function(self, unit, name, _, spellID)
 	self:SetAlpha(1.0)
 	self.Spark:Show()
 	self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
@@ -148,6 +148,10 @@ cast.PostCastStart = function(self, unit, name, castID, spellID)
 	end
 end
 
+cast.PostChannelStart = function(self, unit, name, spellID)
+	cast.PostCastStart(self, unit, name, _, spellID)
+end
+
 cast.PostUpdateInterruptible = function(self, unit)
 	if not UnitIsUnit(unit, "player") and self.notInterruptible then
 		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
@@ -156,7 +160,7 @@ cast.PostUpdateInterruptible = function(self, unit)
 	end
 end
 
-cast.PostCastStop = function(self, unit, spellname, castID, spellID)
+cast.PostCastStop = function(self, unit, spellname, _, spellID)
 	if not self.fadeOut then 
 		self:SetStatusBarColor(unpack(self.CompleteColor))
 		self.fadeOut = true
@@ -171,7 +175,7 @@ cast.PostChannelStop = function(self, unit, name, spellID)
 	self:Show()
 end
 
-cast.PostCastFailed = function(self, event, unit, name, castID, spellID)
+cast.PostCastFailed = function(self, event, unit, name, _, spellID)
 	self:SetStatusBarColor(unpack(self.FailColor))
 	self:SetValue(self.max)
 	if not self.fadeOut then

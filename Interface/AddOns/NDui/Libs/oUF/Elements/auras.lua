@@ -65,7 +65,7 @@ local function customFilter(element, unit, button, name)
 end
 
 local function updateIcon(element, unit, index, offset, filter, isDebuff, visible)
-	local name, rank, texture, count, dispelType, duration, expiration, caster, isStealable,
+	local name, rank, texture, count, debuffType, duration, expiration, caster, isStealable,
 		nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,
 		timeMod, effect1, effect2, effect3 = UnitAura(unit, index, filter)
 
@@ -85,7 +85,7 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 		button.isPlayer = caster == 'player' or caster == 'vehicle'
 
 		local show = (element.CustomFilter or customFilter) (element, unit, button, name, rank, texture,
-			count, dispelType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID,
+			count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID,
 			canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
 
 		if(show) then
@@ -103,9 +103,9 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 
 			if(button.overlay) then
 				if((isDebuff and element.showDebuffType) or (not isDebuff and element.showBuffType) or element.showType) then
-					local color = DebuffTypeColor[dispelType] or DebuffTypeColor.none
+					local color = element.__owner.colors.debuff[debuffType] or element.__owner.colors.debuff.none
 
-					button.overlay:SetVertexColor(color.r, color.g, color.b)
+					button.overlay:SetVertexColor(color[1], color[2], color[3])
 					button.overlay:Show()
 				else
 					button.overlay:Hide()
@@ -131,7 +131,7 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 			button:Show()
 
 			if(element.PostUpdateIcon) then
-				element:PostUpdateIcon(unit, button, index, position)
+				element:PostUpdateIcon(unit, button, index, position, duration, expiration, debuffType, isStealable)
 			end
 
 			return VISIBLE
