@@ -8,6 +8,7 @@ function module:CreateRM()
 	header:SetSize(120, 30)
 	header:SetFrameLevel(2)
 	B.CreateBD(header)
+	B.CreateTex(header)
 	B.CreateBC(header, .5)
 	B.Mover(header, L["Raid Tool"], "RaidManager", C.Skins.RMPos)
 	header:RegisterEvent("GROUP_ROSTER_UPDATE")
@@ -85,7 +86,11 @@ function module:CreateRM()
 			local charges, _, started, duration = GetSpellCharges(20484)
 			if charges then
 				local timer = duration - (GetTime() - started)
-				self.Timer:SetFormattedText("%d:%02d", floor(timer/60), timer%60)
+				if timer < 0 then
+					self.Timer:SetText("--:--")
+				else
+					self.Timer:SetFormattedText("%d:%.2d", timer/60, timer%60)
+				end
 				self.Count:SetText(charges)
 				if charges == 0 then
 					self.Count:SetTextColor(1, 0, 0)
@@ -110,9 +115,10 @@ function module:CreateRM()
 	marker:SetParent(header)
 	marker:SetSize(30, 30)
 	marker:GetNormalTexture():SetVertexColor(DB.cc.r, DB.cc.g, DB.cc.b)
-	marker.SetNormalTexture = function() end
-	marker.SetPushedTexture = function() end
+	marker.SetNormalTexture = B.Dummy
+	marker.SetPushedTexture = B.Dummy
 	B.CreateBD(marker)
+	B.CreateTex(marker)
 	B.CreateBC(marker, .5)
 	marker:HookScript("OnMouseUp", function(self, btn)
 		self:SetBackdropColor(0, 0, 0, .5)
@@ -124,6 +130,7 @@ function module:CreateRM()
 	checker:SetPoint("LEFT", header, "RIGHT", 0, 0)
 	checker:SetSize(30, 30)
 	B.CreateBD(checker)
+	B.CreateTex(checker)
 	B.CreateFS(checker, 16, "!", true)
 	B.CreateBC(checker, .5)
 
@@ -189,7 +196,14 @@ function module:CreateRM()
 				if #NoBuff[i] >= numPlayer then
 					sendMsg(L["Lack"]..BuffName[i]..": "..ALL..PLAYER)
 				else
-					sendMsg(L["Lack"]..BuffName[i]..": "..table.concat(NoBuff[i], ", "))
+					local str = L["Lack"]..BuffName[i]..": "
+					for j = 1, #NoBuff[i] do
+						str = str..NoBuff[i][j]..(j < #NoBuff[i] and ", " or "")
+						if #str > 230 then
+							sendMsg(str)
+							str = ""
+						end
+					end
 				end
 			end
 		end
@@ -218,10 +232,10 @@ function module:CreateRM()
 
 	local reset = true
 	checker:RegisterForClicks("AnyUp")
-	checker:SetScript("OnClick", function(self, button)
-		if button == "RightButton" then
+	checker:SetScript("OnClick", function(_, btn)
+		if btn == "RightButton" then
 			scanBuff()
-		elseif button == "LeftButton" then
+		elseif btn == "LeftButton" then
 			if InCombatLockdown() then return end
 			if IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid())) then
 				DoReadyCheck()
