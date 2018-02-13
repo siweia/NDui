@@ -65,8 +65,8 @@ info.onEvent = function(self)
 	end
 end
 
-info.onMouseUp = function(self, button)
-	if button == "RightButton" then
+info.onMouseUp = function(self, btn)
+	if btn == "RightButton" then
 		NDuiADB["RepairType"] = NDuiADB["RepairType"] + 1
 		if NDuiADB["RepairType"] == 3 then NDuiADB["RepairType"] = 0 end
 		self:GetScript("OnEnter")(self)

@@ -62,10 +62,10 @@ StaticPopupDialogs["RESETGOLD"] = {
 	whileDead = 1,
 }
 
-info.onMouseUp = function(self, button)
-	if IsControlKeyDown() and button == "RightButton" then
+info.onMouseUp = function(self, btn)
+	if IsControlKeyDown() and btn == "RightButton" then
 		StaticPopup_Show("RESETGOLD")
-	elseif button == "RightButton" then
+	elseif btn == "RightButton" then
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
 		self:GetScript("OnEnter")(self)
 	else

@@ -96,9 +96,9 @@ local function clickFunc(i, isLoot, isPet)
 	DropDownList1:Hide()
 end
 
-info.onMouseUp = function(self, button)
+info.onMouseUp = function(self, btn)
 	if not GetSpecialization() then return end
-	if button == "LeftButton" then
+	if btn == "LeftButton" then
 		ToggleTalentFrame(2)
 	else
 		menuList[2].menuList = {{}, {}, {}, {}}

@@ -28,7 +28,7 @@ function module:ChatCopy()
 	editBox:SetScript("OnEscapePressed", function(f) f:GetParent():GetParent():Hide() f:SetText("") end)
 	scrollArea:SetScrollChild(editBox)
 
-	local function copyFunc(self, btn)
+	local function copyFunc()
 		local cf = SELECTED_DOCK_FRAME
 		local _, size = cf:GetFont()
 		FCF_SetChatWindowFontSize(cf, cf, .01)

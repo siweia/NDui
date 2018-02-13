@@ -27,14 +27,14 @@ function module:Chatbar()
 
 	-- Create Chatbars
 	local buttonInfo = {
-		{1, 1, 1, SAY.."/"..YELL, function(self, btn)
+		{1, 1, 1, SAY.."/"..YELL, function(_, btn)
 			if btn == "RightButton" then
 				ChatFrame_OpenChat("/y ", chatFrame)
 			else
 				ChatFrame_OpenChat("/s ", chatFrame)
 			end
 		end},
-		{1, .5, 1, WHISPER, function(self, btn)
+		{1, .5, 1, WHISPER, function(_, btn)
 			if btn == "RightButton" then   
 				ChatFrame_ReplyTell(chatFrame)
 				if not editBox:IsVisible() or editBox:GetAttribute("chatType") ~= "WHISPER" then
@@ -50,14 +50,14 @@ function module:Chatbar()
 			end
 		end},
 		{.65, .65, 1, PARTY, function() ChatFrame_OpenChat("/p ", chatFrame) end},
-		{1, .5, 0, INSTANCE.."/"..RAID, function(self, btn)
+		{1, .5, 0, INSTANCE.."/"..RAID, function()
 			if IsPartyLFG() then
 				ChatFrame_OpenChat("/i ", chatFrame)
 			else
 				ChatFrame_OpenChat("/raid ", chatFrame)
 			end
 		end},
-		{.25, 1, .25, GUILD.."/"..OFFICER, function(self, btn)
+		{.25, 1, .25, GUILD.."/"..OFFICER, function(_, btn)
 			if btn == "RightButton" and CanEditOfficerNote() then
 				ChatFrame_OpenChat("/o ", chatFrame)
 			else
@@ -100,7 +100,7 @@ function module:Chatbar()
 		IsInChannel()
 		NDui:EventFrame("CHANNEL_UI_UPDATE"):SetScript("OnEvent", IsInChannel)
 
-		wc:SetScript("OnClick", function(self, btn)
+		wc:SetScript("OnClick", function(_, btn)
 			if wc.inChannel then
 				if btn == "RightButton" then
 					LeaveChannelByName(channelName)

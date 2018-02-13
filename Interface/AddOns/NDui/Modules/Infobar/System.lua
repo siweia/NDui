@@ -123,8 +123,8 @@ StaticPopupDialogs["CPUUSAGE"] = {
 }
 
 local status = GetCVarBool("scriptProfile")
-info.onMouseUp = function(self, button)
-	if button ~= "RightButton" then return end
+info.onMouseUp = function(self, btn)
+	if btn ~= "RightButton" then return end
 
 	if GetCVarBool("scriptProfile") then
 		SetCVar("scriptProfile", 0)

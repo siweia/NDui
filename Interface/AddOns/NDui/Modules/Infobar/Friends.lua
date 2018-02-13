@@ -107,7 +107,7 @@ info.onEvent = function(self, event, arg1)
 
 	local _, onlineFriends = GetNumFriends()
 	local _, onlineBNet = BNGetNumFriends()
-	info.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, onlineFriends + onlineBNet))
+	self.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, onlineFriends + onlineBNet))
 	updateRequest = false
 end
 
@@ -188,8 +188,8 @@ info.onLeave = function(self)
 	self:UnregisterEvent("MODIFIER_STATE_CHANGED")
 end
 
-info.onMouseUp = function(_, button)
-	if button ~= "LeftButton" then return end
+info.onMouseUp = function(_, btn)
+	if btn ~= "LeftButton" then return end
 	GameTooltip:Hide()
 	ToggleFriendsFrame()
 end

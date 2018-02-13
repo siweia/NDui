@@ -138,7 +138,7 @@ local function updateSelection(self)
 end
 
 local function createClickStopper(button)
-	local f = CreateFrame("Frame",nil,button)
+	local f = CreateFrame("Frame", nil, button)
 	f:SetAllPoints(button)
 	f:EnableMouse(true)
 	f:SetScript("OnEnter", onEnter)

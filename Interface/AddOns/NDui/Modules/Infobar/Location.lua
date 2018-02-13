@@ -75,10 +75,10 @@ info.onLeave = function()
 	GameTooltip:Hide()
 end
 
-info.onMouseUp = function(_, button)
-	if button == "LeftButton" then
+info.onMouseUp = function(_, btn)
+	if btn == "LeftButton" then
 		ToggleFrame(WorldMapFrame)
-	elseif button == "MiddleButton" and GetCurrentMapAreaID() >= 1190 and GetCurrentMapAreaID() <= 1201 then
+	elseif btn == "MiddleButton" and GetCurrentMapAreaID() >= 1190 and GetCurrentMapAreaID() <= 1201 then
 		PVEFrame_ShowFrame("GroupFinderFrame", LFGListPVEStub)
 		LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
 		LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, zone)

@@ -203,8 +203,8 @@ end
 
 info.onLeave = function() GameTooltip:Hide() end
 
-info.onMouseUp = function(_, button)
-	if button == "RightButton"  then				
+info.onMouseUp = function(_, btn)
+	if btn == "RightButton" then				
 		ToggleTimeManager()
 	else
 		ToggleCalendar()

@@ -64,7 +64,7 @@ local function createRoster(i)
 	local button = CreateFrame("Button", nil, roster)
 	button:SetSize(312, 22)
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
-	button.HL:SetAllPoints(button)
+	button.HL:SetAllPoints()
 	button.HL:SetColorTexture(r, g, b, .2)
 
 	button.level = B.CreateFS(button, 13, "Level", false)

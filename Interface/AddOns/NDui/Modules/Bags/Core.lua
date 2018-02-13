@@ -433,7 +433,7 @@ function module:OnLogin()
 				local switch = B.CreateButton(self, 70, 20, REAGENT_BANK)
 				switch:SetPoint("LEFT", bagToggle, "RIGHT", 6, 0)
 				switch:RegisterForClicks("AnyUp")
-				switch:SetScript("OnClick", function(self, button)
+				switch:SetScript("OnClick", function(_, btn)
 					if not IsReagentBankUnlocked() then
 						StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 					else
@@ -442,9 +442,7 @@ function module:OnLogin()
 						BankFrame.selectedTab = 2
 						f.reagent:Show()
 						f.bank:Hide()
-						if button == "RightButton" then
-							DepositReagentBank()
-						end
+						if btn == "RightButton" then DepositReagentBank() end
 					end
 				end)
 			end

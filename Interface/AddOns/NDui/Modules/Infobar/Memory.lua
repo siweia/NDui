@@ -49,19 +49,19 @@ info.onUpdate = function(self, elapsed)
 				total = total + usage
 			end
 		end
-		info.text:SetText(formatMemory(total, true))
+		self.text:SetText(formatMemory(total, true))
 
 		self.timer = 0
 	end
 end
 
-info.onMouseUp = function(self, button)
-	if button == "LeftButton" then
+info.onMouseUp = function(self, btn)
+	if btn == "LeftButton" then
 		local before = gcinfo()
 		collectgarbage()
 		print(format("|cff66C6FF%s:|r %s", L["Collect Memory"], formatMemory(before - gcinfo())))
 		updateMemory()
-	elseif button == "RightButton" then
+	elseif btn == "RightButton" then
 		NDuiADB["AutoCollect"] = not NDuiADB["AutoCollect"]
 	end
 	self:GetScript("OnEnter")(self)
