@@ -463,6 +463,10 @@ if DB.Client == "zhCN" then
 				local text = ""
 				for k, v in pairs(goldList) do
 					text = text..k..": "..v.."金 "
+					if #text > 212 then	-- 255-13*3-4=212
+						sendMsg(text)
+						text = ""
+					end
 				end
 				sendMsg(text)
 				finishRoll()
@@ -521,6 +525,14 @@ do
 			end)
 		end
 	end
+
+	hooksecurefunc("LFGListEntryCreation_Show", function(self)
+		local searchBox = LFGListFrame.SearchPanel.SearchBox
+		if searchBox:GetText() ~= "" then
+			C_LFGList.CreateListing(16, searchBox:GetText(), 0, 0, "", searchBox:GetText(), true)
+			searchBox:SetText("")
+		end
+	end)
 end
 
 -- Select target when click on raid units
