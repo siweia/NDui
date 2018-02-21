@@ -66,7 +66,7 @@ local function UpdateColor(element, unit)
 		r, g, b = .7, .7, .7
 	else
 		if UnitIsUnit("player", unit) then	-- PlayerPlate
-			r, g, b = B.UnitColor(unit)
+			r, g, b = 0, .9, 0
 		elseif CustomUnits and CustomUnits[name] then
 			r, g, b = 0, .8, .3
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
@@ -263,6 +263,7 @@ function UF:CreateClassBar()
 					bars[i]:Show()
 					bars[i]:SetValue(cur - i + 1)
 				end
+				bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
 			end
 		else
 			for i = 1, 5 do bars[i]:SetValue(1) end
@@ -275,7 +276,7 @@ function UF:CreateClassBar()
 					else
 						bars[i]:Hide()
 					end
-					bars[i]:SetStatusBarColor(1, .96, .41)
+					bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
 				end
 			else
 				for i = 1, 5 do
@@ -285,7 +286,7 @@ function UF:CreateClassBar()
 					bars[i]:SetStatusBarColor(1, 0, 0)
 				end
 				for i = cur - 4, 5 do
-					bars[i]:SetStatusBarColor(1, .96, .41)
+					bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
 				end
 			end
 		end
@@ -303,7 +304,6 @@ function UF:CreateClassBar()
 			if max <= 6 then
 				for i = 1, 6 do
 					bars[i]:SetWidth((width - (max-1)*margin)/max)
-					bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
 				end
 			else
 				for i = 1, 5 do
@@ -374,7 +374,7 @@ function UF:CreateClassBar()
 		end
 	end
 	bar:SetScript("OnEvent", function(self, event, ...)
-		if GetCVar("nameplateShowSelf") ~= "1" then return end
+		if not GetCVarBool("nameplateShowSelf") then return end
 		if event == "RUNE_POWER_UPDATE" then
 			UpdateRune(self, event, ...)
 		elseif event == "UNIT_POWER_FREQUENT" or event == "UNIT_MAXPOWER" then

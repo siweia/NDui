@@ -50,9 +50,7 @@ end
 
 function UF:CreateHealthBar(self)
 	local health = CreateFrame("StatusBar", nil, self)
-	health:SetPoint("TOP", 0, 0)
-	health:SetHeight(self:GetHeight())
-	health:SetWidth(self:GetWidth())
+	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
