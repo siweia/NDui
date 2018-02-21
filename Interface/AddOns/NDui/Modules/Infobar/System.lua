@@ -83,7 +83,7 @@ info.onEnter = function(self)
 
 		local maxAddOns = IsShiftKeyDown() and #usageTable or min(C.Infobar.MaxAddOns, #usageTable)
 		for i = 1, maxAddOns do
-			GameTooltip:AddDoubleLine(usageTable[i][1], usageTable[i][2].." ms/s", 1,1,1, 0,1,0)
+			GameTooltip:AddDoubleLine(usageTable[i][1], usageTable[i][2].." MS/s", 1,1,1, 0,1,0)
 		end
 
 		local hiddenUsage = 0
@@ -93,7 +93,7 @@ info.onEnter = function(self)
 			end
 			if #usageTable > C.Infobar.MaxAddOns then
 				local numHidden = #usageTable - C.Infobar.MaxAddOns
-				GameTooltip:AddDoubleLine(format("%d %s (%s)", numHidden, L["Hidden"], L["Hold Shift"]), hiddenUsage.." ms/s", .6,.8,1, .6,.8,1)
+				GameTooltip:AddDoubleLine(format("%d %s (%s)", numHidden, L["Hidden"], L["Hold Shift"]), hiddenUsage.." MS/s", .6,.8,1, .6,.8,1)
 			end
 		end
 		GameTooltip:AddLine(" ")
