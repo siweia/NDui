@@ -204,6 +204,7 @@ function module:CreateRM()
 							str = ""
 						end
 					end
+					sendMsg(str)
 				end
 			end
 		end
