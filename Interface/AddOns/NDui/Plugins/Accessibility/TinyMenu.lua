@@ -11,6 +11,7 @@ local UnitPopupButtonsExtra = {
 	["FRIEND_ADD"] = { text = ADD_FRIEND },
 	["QUICK_REPORT"] = { text = REPORT_VERBAL_HARASSMENT },
 	["SHOW_PET"] = { text = PET_SHOW_IN_JOURNAL },
+	["RARE_SEARCH"] = { text = FIND_A_GROUP },
 }
 
 for k, v in pairs(UnitPopupButtonsExtra) do
@@ -66,11 +67,7 @@ local function popupClick(self, info)
 	elseif info.value == "NAME_COPY" then
 		if server and server ~= "" then name = name.."-"..server end
 
-		if IsControlKeyDown() and LFGListPVEStub and not UnitIsPlayer(info.unit) then
-			PVEFrame_ShowFrame("GroupFinderFrame", LFGListPVEStub)
-			LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
-			LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, name)
-		elseif SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
+		if SendMailNameEditBox and SendMailNameEditBox:IsVisible() then
 			SendMailNameEditBox:SetText(name)
 			SendMailNameEditBox:HighlightText()
 		else
@@ -80,6 +77,10 @@ local function popupClick(self, info)
 			editBox:Insert(name)
 			if not hasText then editBox:HighlightText() end
 		end
+	elseif info.value == "RARE_SEARCH" then
+		PVEFrame_ShowFrame("GroupFinderFrame", LFGListPVEStub)
+		LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
+		LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, name)
 	elseif info.value == "SHOW_PET" then
 		if not CollectionsJournal then CollectionsJournal_LoadUI() end
 		if not CollectionsJournal:IsShown() then ShowUIPanel(CollectionsJournal) end
@@ -103,6 +104,13 @@ hooksecurefunc("UnitPopup_ShowMenu", function(dropdownMenu, which, unit, name, u
 			info = UIDropDownMenu_CreateInfo()
 			info.text = UnitPopupButtonsExtra["SHOW_PET"].text
 			info.arg1 = {value = "SHOW_PET", unit = unit}
+			info.func = popupClick
+			info.notCheckable = true
+			UIDropDownMenu_AddButton(info)
+		elseif UnitClassification(unit) == "rareelite" and LFGListPVEStub then
+			info = UIDropDownMenu_CreateInfo()
+			info.text = UnitPopupButtonsExtra["RARE_SEARCH"].text
+			info.arg1 = {value = "RARE_SEARCH", unit = unit}
 			info.func = popupClick
 			info.notCheckable = true
 			UIDropDownMenu_AddButton(info)
