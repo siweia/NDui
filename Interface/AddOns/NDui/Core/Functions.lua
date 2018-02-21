@@ -281,15 +281,8 @@ B.Dummy = function() end
 
 -- Smoothy
 local smoothing = {}
-local function Smooth(self, value)
-	if value ~= self:GetValue() or value == 0 then
-		smoothing[self] = value
-	else
-		smoothing[self] = nil
-	end
-end
-local SmoothUpdate = CreateFrame("Frame")
-SmoothUpdate:SetScript("OnUpdate", function()
+local f = CreateFrame("Frame")
+f:SetScript("OnUpdate", function()
 	local limit = 30/GetFramerate()
 	for bar, value in pairs(smoothing) do
 		local cur = bar:GetValue()
@@ -298,16 +291,24 @@ SmoothUpdate:SetScript("OnUpdate", function()
 			new = value
 		end
 		bar:SetValue_(new)
-		if (cur == value or math.abs(new - value) < .01) then
-			bar:SetValue_(value)
+		if cur == value or math.abs(new - value) < 1 then
 			smoothing[bar] = nil
+			bar:SetValue_(value)
 		end
 	end
 end)
+
 B.SmoothBar = function(bar)
 	if not bar.SetValue_ then
 		bar.SetValue_ = bar.SetValue
-		bar.SetValue = Smooth
+		bar.SetValue = function(self, value)
+			if value ~= self:GetValue() or value == 0 then
+				smoothing[self] = value
+			else
+				smoothing[self] = nil
+				self:SetValue_(value)
+			end
+		end
 	end
 end
 
