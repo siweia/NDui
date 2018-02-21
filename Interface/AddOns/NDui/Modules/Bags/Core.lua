@@ -42,9 +42,10 @@ function module:OnLogin()
 		local bagArtifactPower = function(item) return isItemInBag(item) and isItemArtifactPower(item) end
 		local bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 		local bagConsumble = function(item) return isItemInBag(item) and isItemConsumble(item) end
-		local onlyBank = function(item) return isItemInBank(item) and not isItemArtifactPower(item) and not isItemEquipment(item) and not isItemConsumble(item) end
+		local onlyBank = function(item) return isItemInBank(item) and not isItemArtifactPower(item) and not isItemEquipment(item) and item.rarity ~= LE_ITEM_QUALITY_LEGENDARY and not isItemConsumble(item) end
 		local bankArtifactPower = function(item) return isItemInBank(item) and isItemArtifactPower(item) end
-		local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
+		local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) and item.rarity ~= LE_ITEM_QUALITY_LEGENDARY end
+		local bankLegendary = function(item) return isItemInBank(item) and item.rarity == LE_ITEM_QUALITY_LEGENDARY end
 		local bankConsumble = function(item) return isItemInBank(item) and isItemConsumble(item) end
 		local onlyReagent = function(item) return item.bagID == -3 end
 
@@ -85,6 +86,10 @@ function module:OnLogin()
 		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankequipment"})
 		f.bankEquipment:SetFilter(bankEquipment, true)
 		f.bankEquipment:SetParent(f.bank)
+
+		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "banklegendary"})
+		f.bankLegendary:SetFilter(bankLegendary, true)
+		f.bankLegendary:SetParent(f.bank)
 	end
 
 	function Backpack:OnBankOpened()
@@ -293,7 +298,7 @@ function module:OnLogin()
 		end
 
 		local bankAnchor = f.bank
-		for _, bag in ipairs({f.bankArtifactPower, f.bankEquipment, f.bankConsumble}) do
+		for _, bag in ipairs({f.bankArtifactPower, f.bankEquipment, f.bankLegendary, f.bankConsumble}) do
 			if bag:GetHeight() > 45 then
 				bag:Show()
 			else
@@ -338,6 +343,8 @@ function module:OnLogin()
 
 		if name == "Main" or name == "Bank" or name == "Reagent" then
 			B.CreateMF(self)
+		elseif string.find(name, "Bank") then
+			B.CreateMF(self, f.bank)
 		else
 			B.CreateMF(self, f.main)
 		end
@@ -351,6 +358,9 @@ function module:OnLogin()
 			else
 				B.CreateFS(self, 14, BAG_FILTER_EQUIPMENT, true, "TOPLEFT", 8, -8)
 			end
+			return
+		elseif name == "BankLegendary" then
+			B.CreateFS(self, 14, LOOT_JOURNAL_LEGENDARIES, true, "TOPLEFT", 8, -8)
 			return
 		elseif name == "Consumble" or name == "BankConsumble" then
 			B.CreateFS(self, 14, BAG_FILTER_CONSUMABLES, true, "TOPLEFT", 8, -8)
