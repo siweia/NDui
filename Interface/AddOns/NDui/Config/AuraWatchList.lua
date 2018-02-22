@@ -371,6 +371,8 @@ C.AuraWatchList = {
 				{AuraID = 240559, UnitID = "player"},
 				--爆裂
 				{AuraID = 240443, UnitID = "player"},
+				--气体泡泡
+				{AuraID = 193018, UnitID = "player", Value = true},
 		-->卡拉赞
 			--夜之魇
 				--燃魂
@@ -858,6 +860,8 @@ C.AuraWatchList = {
 				{AuraID = 255199, UnitID = "player"},
 				--宇宙射线
 				{AuraID = 252729, UnitID = "player"},
+				--灵魂爆发
+				{AuraID = 250669, UnitID = "player", Text = L["Get Out"]},
 			},
 		},
 		{	Name = "Warning",
