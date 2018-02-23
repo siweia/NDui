@@ -112,6 +112,8 @@ C.AuraWatchList = {
 				{AuraID = 253327, UnitID = "player"},
 				--虚空之拥
 				{AuraID = 253808, UnitID = "player"},
+				--萨瓦迪卡
+				{AuraID = 207472, UnitID = "player", Value = true, Combat = true},
 				--影灼之牙
 				{AuraID = 253307, UnitID = "player"},
 				{AuraID = 253308, UnitID = "player"},

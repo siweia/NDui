@@ -31,7 +31,13 @@ function UF:BlockAddons()
 	end
 end
 
-local CustomUnits = {}
+local CustomUnits = {
+	["Fel Explosive"] = true,
+	["邪能炸药"] = true,
+	["魔化炸彈"] = true,
+	["深渊追猎者"] = true,
+	["尖啸反舌鸟"] = true,
+}
 function UF:CreateUnitTable()
 	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
 
