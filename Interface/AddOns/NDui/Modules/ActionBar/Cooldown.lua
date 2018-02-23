@@ -136,7 +136,7 @@ function module:OnLogin()
 		end
 	end
 
-	NDui:EventFrame("ACTIONBAR_UPDATE_COOLDOWN"):SetScript("OnEvent", function()
+	NDui:EventFrame{"ACTIONBAR_UPDATE_COOLDOWN"}:SetScript("OnEvent", function()
 		for cooldown in pairs(active) do
 			Cooldown_Update(cooldown)
 		end

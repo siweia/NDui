@@ -245,7 +245,7 @@ function UF:OnLogin()
 			bars[i].SpecClass = B.CreateFS(bars[i].Health, 12, "")
 		end
 
-		local f = NDui:EventFrame({"PLAYER_ENTERING_WORLD", "ARENA_PREP_OPPONENT_SPECIALIZATIONS", "ARENA_OPPONENT_UPDATE"})
+		local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "ARENA_PREP_OPPONENT_SPECIALIZATIONS", "ARENA_OPPONENT_UPDATE"}
 		f:SetScript("OnEvent", function(_, event)
 			if event == "ARENA_OPPONENT_UPDATE" then
 				for i = 1, 5 do
@@ -391,7 +391,7 @@ function UF:OnLogin()
 		if raidMover then
 			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
 
-			NDui:EventFrame({"UNIT_SPELLCAST_SUCCEEDED", "PLAYER_ENTERING_WORLD"}):SetScript("OnEvent", function(_, event, ...)
+			NDui:EventFrame{"UNIT_SPELLCAST_SUCCEEDED", "PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(_, event, ...)
 				local unit, _, _, _, spellID = ...
 				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
 					if not GetSpecialization() then return end

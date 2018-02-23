@@ -61,7 +61,7 @@ local function CheckRole()
 		end
 	end
 end
-NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}):SetScript("OnEvent", CheckRole)
+NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}:SetScript("OnEvent", CheckRole)
 
 -- Raidbuff Checklist
 DB.BuffList = {

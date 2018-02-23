@@ -25,19 +25,15 @@ function ns:GetModule(name)
 	return self.modules[name]
 end
 
-function ns:EventFrame(event)
+function ns:EventFrame(events)
 	local f = CreateFrame("Frame")
-	if type(event) == "table" then
-		for _, v in pairs(event) do
-			f:RegisterEvent(v)
-		end
-	else
+	for _, event in pairs(events) do
 		f:RegisterEvent(event)
 	end
 	return f
 end
 
-ns:EventFrame("PLAYER_LOGIN"):SetScript("OnEvent", function()
+ns:EventFrame{"PLAYER_LOGIN"}:SetScript("OnEvent", function()
 	for _, module in pairs(ns.initQueue) do
 		module:OnLogin()
 	end

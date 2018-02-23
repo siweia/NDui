@@ -57,7 +57,7 @@ function module:OnLogin()
 		end
 	end
 
-	NDui:EventFrame("WORLD_MAP_UPDATE"):SetScript("OnEvent", function(self)
+	NDui:EventFrame{"WORLD_MAP_UPDATE"}:SetScript("OnEvent", function(self)
 		if WorldMapFrame:IsVisible() then
 			self.elapsed = .1
 			self:SetScript("OnUpdate", UpdateCoords)

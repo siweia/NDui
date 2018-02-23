@@ -55,7 +55,7 @@ local function AddCalculateIcon()
 	B.CreateGT(ar, "ANCHOR_RIGHT", L["Arch Count"], "system")
 	ar:SetScript("OnMouseUp", CalculateArches)
 end
-NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(self, event, addon)
+NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
 	if addon == "Blizzard_ArchaeologyUI" then
 		AddCalculateIcon()
 		-- Repoint Bar
@@ -128,7 +128,7 @@ local erList = {
 	[SPELL_FAILED_TARGET_AURASTATE] = true,
 	[ERR_NO_ATTACK_TARGET] = true,
 }
-NDui:EventFrame("UI_ERROR_MESSAGE"):SetScript("OnEvent", function(self, event, _, error)
+NDui:EventFrame{"UI_ERROR_MESSAGE"}:SetScript("OnEvent", function(self, event, _, error)
 	if not NDuiDB["Misc"]["HideErrors"] then return end
 	if InCombatLockdown() and erList[error] then
 		UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
@@ -190,7 +190,7 @@ do
 end
 
 -- Autoequip in Spec-changing
-NDui:EventFrame("UNIT_SPELLCAST_SUCCEEDED"):SetScript("OnEvent", function(self, event, ...)
+NDui:EventFrame{"UNIT_SPELLCAST_SUCCEEDED"}:SetScript("OnEvent", function(self, event, ...)
 	if not NDuiDB["Misc"]["Autoequip"] then
 		self:UnregisterAllEvents()
 		return
@@ -299,19 +299,19 @@ local function TakeScreen(delay, func, ...)
 	end)
 	tinsert(waitTable, {delay, func, {...}})
 end
-NDui:EventFrame("ACHIEVEMENT_EARNED"):SetScript("OnEvent", function()
+NDui:EventFrame{"ACHIEVEMENT_EARNED"}:SetScript("OnEvent", function()
 	if not NDuiDB["Misc"]["Screenshot"] then return end
 	TakeScreen(1, Screenshot)
 end)
 
 -- RC in MasterSound
-NDui:EventFrame("READY_CHECK"):SetScript("OnEvent", function()
+NDui:EventFrame{"READY_CHECK"}:SetScript("OnEvent", function()
 	PlaySound(SOUNDKIT.READY_CHECK, "master")
 end)
 
 -- Faster Looting
 local tDelay = 0
-NDui:EventFrame("LOOT_READY"):SetScript("OnEvent", function()
+NDui:EventFrame{"LOOT_READY"}:SetScript("OnEvent", function()
 	if not NDuiDB["Misc"]["FasterLoot"] then return end
 	if GetTime() - tDelay >= .3 then
 		tDelay = GetTime()
@@ -332,7 +332,7 @@ local function NoTalkingHeads(self)
 	TalkingHeadFrame.ignoreFramePositionManager = true
 	self:UnregisterAllEvents()
 end
-NDui:EventFrame({"ADDON_LOADED", "PLAYER_ENTERING_WORLD"}):SetScript("OnEvent", function(self, event, addon)
+NDui:EventFrame{"ADDON_LOADED", "PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self, event, addon)
 	if not NDuiDB["Misc"]["HideTalking"] then
 		self:UnregisterAllEvents()
 		return
@@ -401,7 +401,7 @@ do
 end
 
 -- Fix Drag Collections taint
-NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(self, event, addon)
+NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
 	if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
 		CollectionsJournal:HookScript("OnShow", function()
 			if not self.init then
@@ -528,8 +528,9 @@ do
 
 	hooksecurefunc("LFGListEntryCreation_Show", function(self)
 		local searchBox = LFGListFrame.SearchPanel.SearchBox
-		if searchBox:GetText() ~= "" then
-			C_LFGList.CreateListing(16, searchBox:GetText(), 0, 0, "", searchBox:GetText(), true)
+		local searchText = searchBox:GetText()
+		if searchText ~= "" then
+			C_LFGList.CreateListing(self.selectedActivity, searchText, 0, 0, "", searchText, true)
 			searchBox:SetText("")
 		end
 	end)
@@ -549,7 +550,7 @@ do
 		end
 	end
 
-	NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(self, event, addon)
+	NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
 		if event == "ADDON_LOADED" and addon == "Blizzard_RaidUI" then
 			if not InCombatLockdown() then
 				fixRaidGroupButton()

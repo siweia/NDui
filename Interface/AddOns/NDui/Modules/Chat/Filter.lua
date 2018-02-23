@@ -1,7 +1,7 @@
 local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:GetModule("Chat")
 
-NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_LOGOUT"}):SetScript("OnEvent", function(self, event)
+NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_LOGOUT"}:SetScript("OnEvent", function(self, event)
 	if not NDuiADB["ChatFilter"] then NDuiADB["ChatFilter"] = "" end
 	if not NDuiADB["ChatAt"] then NDuiADB["ChatAt"] = "" end
 	if not NDuiADB["Timestamp"] then NDuiADB["Timestamp"] = false end
@@ -121,7 +121,7 @@ end
 --[[
 	公会频道有人@时提示你
 ]]
-local at = NDui:EventFrame("CHAT_MSG_GUILD")
+local at = NDui:EventFrame{"CHAT_MSG_GUILD"}
 at:SetScript("OnEvent", function(self, event, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
 	local list = {string.split(" ", NDuiDB["Chat"]["AtList"])}

@@ -608,7 +608,7 @@ local function CleanUp()
 end
 
 -- Event
-local f = NDui:EventFrame({"PLAYER_ENTERING_WORLD", "COMBAT_LOG_EVENT_UNFILTERED"})
+local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "COMBAT_LOG_EVENT_UNFILTERED"}
 f:SetScript("OnEvent", function(self, event, ...)
 	if not NDuiDB["AuraWatch"]["Enable"] then return end
 	if event == "PLAYER_ENTERING_WORLD" then

@@ -88,7 +88,7 @@ local function ForceUIScale()
 		end
 	end
 
-	NDui:EventFrame("UI_SCALE_CHANGED"):SetScript("OnEvent", function()
+	NDui:EventFrame{"UI_SCALE_CHANGED"}:SetScript("OnEvent", function()
 		if scale < .65 then
 			RestoreUIScale(scale)
 		end

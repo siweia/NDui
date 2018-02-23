@@ -61,7 +61,7 @@ local function BloodyHell()
 	B.Mover(bar, L["BloodyHell"], "BloodyHell", C.Auras.BHPos, bar:GetWidth(), 30)
 end
 
-local f = NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"})
+local f = NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}
 f:SetScript("OnEvent", function(self, event, ...)
 	if not NDuiDB["Auras"]["BloodyHell"] then return end
 

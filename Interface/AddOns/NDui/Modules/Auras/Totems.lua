@@ -32,7 +32,7 @@ local function TotemsGo()
 end
 
 -- Function
-local f = NDui:EventFrame({"PLAYER_ENTERING_WORLD", "PLAYER_TOTEM_UPDATE"})
+local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "PLAYER_TOTEM_UPDATE"}
 f:SetScript("OnEvent", function(self)
 	if not NDuiDB["Auras"]["Totems"] then
 		self:UnregisterAllEvents()

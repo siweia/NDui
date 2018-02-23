@@ -16,7 +16,7 @@ local function StatueGo()
 	B.Mover(bu, L["Statue"], "Statue", C.Auras.StatuePos, IconSize, IconSize)
 end
 
-local f = NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"})
+local f = NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}
 f:SetScript("OnEvent", function(self, event)
 	if not NDuiDB["Auras"]["Statue"] then
 		self:UnregisterAllEvents()

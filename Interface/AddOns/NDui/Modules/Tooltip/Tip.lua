@@ -321,7 +321,7 @@ local function extrastyle(f)
 	end
 end
 
-NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(_, _, addon)
+NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("Aurora") then
 		FrameStackTooltip:HookScript("OnShow", style)
 		EventTraceTooltip:HookScript("OnShow", style)

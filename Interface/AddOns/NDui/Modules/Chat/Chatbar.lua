@@ -98,7 +98,7 @@ function module:Chatbar()
 			end
 		end
 		IsInChannel()
-		NDui:EventFrame("CHANNEL_UI_UPDATE"):SetScript("OnEvent", IsInChannel)
+		NDui:EventFrame{"CHANNEL_UI_UPDATE"}:SetScript("OnEvent", IsInChannel)
 
 		wc:SetScript("OnClick", function(_, btn)
 			if wc.inChannel then

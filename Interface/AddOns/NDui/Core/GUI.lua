@@ -197,7 +197,7 @@ local defaultSettings = {
 	},
 }
 
-NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(self, event, addon)
+NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
 	if addon ~= "NDui" then return end
 	self:UnregisterEvent("ADDON_LOADED")
 	if not NDuiDB["LEGION"] then
@@ -740,7 +740,7 @@ local function OpenGUI()
 	end)
 	credit:SetScript("OnLeave", GameTooltip_Hide)
 
-	NDui:EventFrame("PLAYER_REGEN_DISABLED"):SetScript("OnEvent", function(self, event)
+	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
 				f:Hide()

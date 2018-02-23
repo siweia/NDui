@@ -106,7 +106,7 @@ end
 info.onLeave = function() GameTooltip:Hide() end
 
 -- Auto repair
-NDui:EventFrame("MERCHANT_SHOW"):SetScript("OnEvent", function()
+NDui:EventFrame{"MERCHANT_SHOW"}:SetScript("OnEvent", function()
 	if NDuiADB["RepairType"] ~= 0 and CanMerchantRepair() then
 		local cost = GetRepairAllCost()
 		if cost > 0 then

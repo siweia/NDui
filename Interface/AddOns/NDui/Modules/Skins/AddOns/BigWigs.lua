@@ -1,7 +1,7 @@
 local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:GetModule("Skins")
 
-local f = NDui:EventFrame({"PLAYER_ENTERING_WORLD", "ADDON_LOADED"})
+local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "ADDON_LOADED"}
 f:SetScript("OnEvent", function(self, event, addon)
 	if not NDuiDB["Skins"]["Bigwigs"] or not IsAddOnLoaded("BigWigs") then
 		self:UnregisterAllEvents()

@@ -117,7 +117,7 @@ function module:FontStyle()
 
 	-- Achievement ShieldPoints, GuildRoster LevelText
 	local styledIndex = 0
-	NDui:EventFrame("ADDON_LOADED"):SetScript("OnEvent", function(self, event, addon)
+	NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
 		if addon == "Blizzard_AchievementUI" then
 			hooksecurefunc("AchievementObjectives_DisplayProgressiveAchievement", function()
 				local index = 1

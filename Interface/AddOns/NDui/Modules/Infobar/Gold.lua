@@ -132,7 +132,7 @@ end
 info.onLeave = function() GameTooltip:Hide() end
 
 -- Auto sell junk
-local f = NDui:EventFrame({"MERCHANT_SHOW", "MERCHANT_CLOSED"})
+local f = NDui:EventFrame{"MERCHANT_SHOW", "MERCHANT_CLOSED"}
 local sellJunkTicker
 
 local function stopSelling()

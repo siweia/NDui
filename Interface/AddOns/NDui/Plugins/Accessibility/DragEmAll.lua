@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(select(2, ...))
 -- NDui MOD
 --------------------------
 local _G = _G
-local addon = NDui:EventFrame({"PLAYER_LOGIN", "ADDON_LOADED"})
+local addon = NDui:EventFrame{"PLAYER_LOGIN", "ADDON_LOADED"}
 local frames = {
 	-- ["FrameName"] = true (the parent frame should be moved) or false (the frame itself should be moved)
 	-- for child frames (i.e. frames that don't have a name, but only a parentKey="XX" use

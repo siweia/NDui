@@ -34,7 +34,7 @@ local function StaggerGo()
 	B.Mover(bar, L["Stagger"], "Stagger", C.Auras.StaggerPos, bar:GetWidth(), 20)
 end
 
-local f = NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"})
+local f = NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}
 f:SetScript("OnEvent", function(self, event)
 	if not NDuiDB["Auras"]["Stagger"] then
 		self:UnregisterAllEvents()

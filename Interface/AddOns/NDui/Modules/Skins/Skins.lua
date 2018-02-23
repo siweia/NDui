@@ -122,7 +122,7 @@ function module:OnLogin()
 end
 
 function module:LoadWithAddOn(addonName, value, func)
-	NDui:EventFrame({"ADDON_LOADED", "PLAYER_ENTERING_WORLD"}):SetScript("OnEvent", function(self, event, addon)
+	NDui:EventFrame{"ADDON_LOADED", "PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self, event, addon)
 		if not NDuiDB["Skins"][value] then
 			self:UnregisterAllEvents()
 			return

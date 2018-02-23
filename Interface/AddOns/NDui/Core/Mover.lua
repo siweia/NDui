@@ -111,7 +111,7 @@ local function CreateConsole()
 		StaticPopup_Show("RESET_MOVER")
 	end)
 
-	NDui:EventFrame("PLAYER_REGEN_DISABLED"):SetScript("OnEvent", function(self, event)
+	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
 				f:Hide()

@@ -35,7 +35,7 @@ function module:Focuser()
 	f:SetAttribute("macrotext", "/focus mouseover")
 	SetOverrideBindingClick(FocuserButton, true, modifier.."-BUTTON"..mouseButton, "FocuserButton")
 
-	local delay = NDui:EventFrame({"PLAYER_REGEN_ENABLED", "GROUP_ROSTER_UPDATE", "PLAYER_ENTERING_WORLD"})
+	local delay = NDui:EventFrame{"PLAYER_REGEN_ENABLED", "GROUP_ROSTER_UPDATE", "PLAYER_ENTERING_WORLD"}
 	delay:SetScript("OnEvent", function()
 		if event == "PLAYER_REGEN_ENABLED" then
 			for frame in pairs(pending) do

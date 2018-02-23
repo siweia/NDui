@@ -32,7 +32,7 @@ local function MarksmanGo()
 	B.Mover(bar, L["Marksman"], "Marksman", C.Auras.MarksmanPos, bar:GetWidth(), 30)
 end
 
-local f = NDui:EventFrame({"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"})
+local f = NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}
 f:SetScript("OnEvent", function(self, event)
 	if not NDuiDB["Auras"]["Marksman"] then
 		self:UnregisterAllEvents()

@@ -85,7 +85,7 @@ function module:ShowItemLevel()
 		end
 	end)
 
-	NDui:EventFrame("INSPECT_READY"):SetScript("OnEvent", function(self, event, ...)
+	NDui:EventFrame{"INSPECT_READY"}:SetScript("OnEvent", function(self, event, ...)
 		local guid = ...
 		if InspectFrame and InspectFrame.unit and UnitGUID(InspectFrame.unit) == guid then
 			SetupItemLevel(InspectFrame.unit, tarString)

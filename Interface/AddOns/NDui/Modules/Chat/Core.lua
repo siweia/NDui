@@ -166,7 +166,7 @@ hooksecurefunc("FloatingChatFrame_OnMouseScroll", function(self, dir)
 end)
 
 -- Autoinvite by whisper
-local f = NDui:EventFrame({"CHAT_MSG_WHISPER", "CHAT_MSG_BN_WHISPER"})
+local f = NDui:EventFrame{"CHAT_MSG_WHISPER", "CHAT_MSG_BN_WHISPER"}
 f:SetScript("OnEvent", function(self, event, ...)
 	if not NDuiDB["Chat"]["Invite"] then return end
 

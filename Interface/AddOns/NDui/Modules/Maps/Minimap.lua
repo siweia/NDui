@@ -17,7 +17,7 @@ function module:CreatePulse()
 	anim.fader:SetDuration(1)
 	anim.fader:SetSmoothing("OUT")
 
-	local f = NDui:EventFrame({"PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED", "CALENDAR_UPDATE_PENDING_INVITES", "UPDATE_PENDING_MAIL"})
+	local f = NDui:EventFrame{"PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED", "CALENDAR_UPDATE_PENDING_INVITES", "UPDATE_PENDING_MAIL"}
 	f:SetScript("OnEvent", function(_, event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			MBG:SetBackdropBorderColor(1, 0, 0)
@@ -97,7 +97,7 @@ function module:ReskinRegions()
 	B.CreateTex(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
-	local f = NDui:EventFrame({"CALENDAR_UPDATE_PENDING_INVITES", "PLAYER_ENTERING_WORLD"})
+	local f = NDui:EventFrame{"CALENDAR_UPDATE_PENDING_INVITES", "PLAYER_ENTERING_WORLD"}
 	f:SetScript("OnEvent", function()
 		if NDuiDB["Map"]["Invite"] and CalendarGetNumPendingInvites() > 0 then
 			Invt:Show()
@@ -294,7 +294,7 @@ function module:WhoPingsMyMap()
 	anim.fader:SetSmoothing("OUT")
 	anim.fader:SetStartDelay(3)
 
-	NDui:EventFrame("MINIMAP_PING"):SetScript("OnEvent", function(_, _, unit)
+	NDui:EventFrame{"MINIMAP_PING"}:SetScript("OnEvent", function(_, _, unit)
 		local class = select(2, UnitClass(unit))
 		local r, g, b = B.ClassColor(class)
 		local name = GetUnitName(unit)
