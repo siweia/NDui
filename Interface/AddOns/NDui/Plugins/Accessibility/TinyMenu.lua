@@ -107,7 +107,7 @@ hooksecurefunc("UnitPopup_ShowMenu", function(dropdownMenu, which, unit, name, u
 			info.func = popupClick
 			info.notCheckable = true
 			UIDropDownMenu_AddButton(info)
-		elseif UnitClassification(unit) == "rareelite" and LFGListPVEStub then
+		elseif (UnitLevel(unit) < 0 and UnitClassification(unit) == "elite" or UnitClassification(unit) == "rareelite") and LFGListPVEStub then
 			info = UIDropDownMenu_CreateInfo()
 			info.text = UnitPopupButtonsExtra["RARE_SEARCH"].text
 			info.arg1 = {value = "RARE_SEARCH", unit = unit}
