@@ -23,6 +23,27 @@ function module:CreateRM()
 	end)
 
 	-- Role counts
+	local function getRaidMaxGroup()
+		local _, instType, difficulty = GetInstanceInfo()
+		if (instType == "party" or instType == "scenario") and not IsInRaid() then
+			return 1
+		elseif instType ~= "raid" then
+			return 8
+		elseif difficulty == 8 or difficulty == 1 or difficulty == 2 or difficulty == 24 then
+			return 1
+		elseif difficulty == 14 or difficulty == 15 then
+			return 6
+		elseif difficulty == 16 then
+			return 4
+		elseif difficulty == 3 or difficulty == 5 then
+			return 2
+		elseif difficulty == 9 then
+			return 8
+		else
+			return 5
+		end
+	end
+
 	local roleTexCoord = {
 		{.5, .75, 0, 1},
 		{.75, 1, 0, 1},
@@ -54,9 +75,10 @@ function module:CreateRM()
 			totalHEALER = 0,
 			totalDAMAGER = 0,
 		}
+		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do
-			local _, _, _, _, _, _, _, online, _, _, _, assignedRole = GetRaidRosterInfo(i)
-			if online and assignedRole ~= "NONE" then
+			local name, _, subgroup, _, _, _, _, online, isDead, _, _, assignedRole = GetRaidRosterInfo(i)
+			if name and online and subgroup <= maxgroup and not isDead and assignedRole ~= "NONE" then
 				raidCounts["total"..assignedRole] = raidCounts["total"..assignedRole] + 1
 			end
 		end
@@ -121,8 +143,12 @@ function module:CreateRM()
 	B.CreateTex(marker)
 	B.CreateBC(marker, .5)
 	marker:HookScript("OnMouseUp", function(self, btn)
+		if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
+			if btn == "RightButton" then ClearRaidMarker() end
+		else
+			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
+		end
 		self:SetBackdropColor(0, 0, 0, .5)
-		if btn == "RightButton" then ClearRaidMarker() end
 	end)
 
 	-- Buff checker
@@ -134,34 +160,13 @@ function module:CreateRM()
 	B.CreateFS(checker, 16, "!", true)
 	B.CreateBC(checker, .5)
 
-	local function getRaidMaxGroup()
-		local _, instType, difficulty = GetInstanceInfo()
-		if (instType == "party" or instType == "scenario") and not IsInRaid() then
-			return 1
-		elseif instType ~= "raid" then
-			return 8
-		elseif difficulty == 8 or difficulty == 1 or difficulty == 2 or difficulty == 24 then
-			return 1
-		elseif difficulty == 14 or difficulty == 15 then
-			return 6
-		elseif difficulty == 16 then
-			return 4
-		elseif difficulty == 3 or difficulty == 5 then
-			return 2
-		elseif difficulty == 9 then
-			return 8
-		else
-			return 5
-		end	
-	end
-
 	local BuffName = {L["Flask"], L["Food"], RUNES}
 	local function scanBuff()
 		local NoBuff, numPlayer = {}, 0
 		for i = 1, 3 do NoBuff[i] = {} end
+		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do
 			local name, _, subgroup, _, _, class, _, online, isDead = GetRaidRosterInfo(i)
-			local maxgroup = getRaidMaxGroup()
 			if name and online and subgroup <= maxgroup and not isDead then
 				numPlayer = numPlayer + 1
 				for j = 1, 3 do
@@ -363,7 +368,18 @@ function module:CreateRM()
 			text:SetText(CONVERT_TO_RAID)
 		end
 	end
-	header:SetScript("OnClick", function() ToggleFrame(menu) updateText(bu[2].text) end)
+	header:RegisterForClicks("AnyUp")
+	header:SetScript("OnClick", function(_, btn)
+		if btn == "LeftButton" then
+			ToggleFrame(menu)
+			updateText(bu[2].text)
+		end
+	end)
+	header:SetScript("OnDoubleClick", function(_, btn)
+		if btn == "RightButton" and not IsInInstance() then
+			LeaveParty()
+		end
+	end)
 
 	-- Easymarking
 	local menuFrame = CreateFrame("Frame", "NDui_EastMarking", UIParent, "UIDropDownMenuTemplate")
