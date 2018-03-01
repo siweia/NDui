@@ -7,4 +7,5 @@
 	<Script file="MissingStats.lua"/>
 	<Script file="OrderHall.lua"/>
 	<Script file="Focuser.lua"/>
+	<Script file="QuickJoin.lua"/>
 </Ui>
