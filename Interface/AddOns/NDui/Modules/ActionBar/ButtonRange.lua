@@ -21,8 +21,7 @@ function Bar:RangeUpdate()
 
 	local icon = self.icon
 	local normalTexture = self.NormalTexture
-    local ID = self.action
-
+	local ID = self.action
 	if not ID then return end
 
 	local IsUsable, NotEnoughMana = IsUsableAction(ID)

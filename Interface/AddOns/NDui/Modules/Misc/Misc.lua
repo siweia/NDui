@@ -5,20 +5,13 @@ local module = NDui:RegisterModule("Misc")
 	Miscellaneous 各种有用没用的小玩意儿
 ]]
 function module:OnLogin()
-	self:SoloInfo()
-	self:RareAlert()
-	self:InterruptAlert()
+	self:AddAlerts()
 	self:Expbar()
 	self:Focuser()
 	self:Mailbox()
 	self:MissingStats()
 	self:ShowItemLevel()
-	self:BeamTool()
-	self:ReflectingAlert()
-	self:SwappingAlert()
-	self:VersionCheck()
-	self:SistersAlert()
-	self:AntoranBlast()
+	self:QuickJoin()
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
@@ -490,50 +483,6 @@ if DB.Client == "zhCN" then
 		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入 "..keyword.." 来抢吧。")
 	end
 	SLASH_ROLLGOLD1 = "/groll"
-end
-
--- Fix blizz LFGList error in zhCN
-if DB.Client == "zhCN" then
-	StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
-		text = "针对此项活动，你的队伍人数已满，将被移出列表。",
-		button1 = OKAY,
-		timeout = 0,
-		whileDead = 1,
-	}
-end
-
--- Quickjoin for worldquests
-do
-	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", function(self, button)
-		if self.module.ShowWorldQuests then
-			if button == "MiddleButton" then
-				LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
-			end
-		end
-	end)
-
-	for i = 1, 10 do
-		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
-		if bu then
-			bu:HookScript("OnDoubleClick", function()
-				if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
-					LFGListFrame.SearchPanel.SignUpButton:Click()
-				end
-				if LFGListApplicationDialog:IsShown() and LFGListApplicationDialog.SignUpButton:IsEnabled() then
-					LFGListApplicationDialog.SignUpButton:Click()
-				end
-			end)
-		end
-	end
-
-	hooksecurefunc("LFGListEntryCreation_Show", function(self)
-		local searchBox = LFGListFrame.SearchPanel.SearchBox
-		local searchText = searchBox:GetText()
-		if searchText ~= "" then
-			C_LFGList.CreateListing(self.selectedActivity, searchText, 0, 0, "", searchText, true)
-			searchBox:SetText("")
-		end
-	end)
 end
 
 -- Select target when click on raid units

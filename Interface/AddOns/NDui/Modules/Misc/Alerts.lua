@@ -1,10 +1,23 @@
 local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:GetModule("Misc")
 
+function module:AddAlerts()
+	self:SoloInfo()
+	self:RareAlert()
+	self:InterruptAlert()
+	self:BeamTool()
+	self:ReflectingAlert()
+	self:SwappingAlert()
+	self:VersionCheck()
+	self:SistersAlert()
+	self:AntoranBlast()
+end
+
 --[[
 	SoloInfo是一个告知你当前副本难度的小工具，防止我有时候单刷时进错难度了。
 	instList左侧是副本ID，你可以使用"/getid"命令来获取当前副本的ID；右侧的是副本难度，常用的一般是：2为5H，4为25普通，6为25H。
 ]]
+
 function module:SoloInfo()
 	if not NDuiDB["Misc"]["SoloInfo"] then return end
 

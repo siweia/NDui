@@ -11,7 +11,6 @@ local UnitPopupButtonsExtra = {
 	["FRIEND_ADD"] = { text = ADD_FRIEND },
 	["QUICK_REPORT"] = { text = REPORT_VERBAL_HARASSMENT },
 	["SHOW_PET"] = { text = PET_SHOW_IN_JOURNAL },
-	["RARE_SEARCH"] = { text = FIND_A_GROUP },
 }
 
 for k, v in pairs(UnitPopupButtonsExtra) do
@@ -55,7 +54,7 @@ local function gethost()
 	return host
 end
 
-local function popupClick(self, info)
+local function popupClick(_, info)
 	local editBox
 	local name, server = UnitName(info.unit)
 	if info.value == "ARMORY" then
@@ -77,10 +76,6 @@ local function popupClick(self, info)
 			editBox:Insert(name)
 			if not hasText then editBox:HighlightText() end
 		end
-	elseif info.value == "RARE_SEARCH" then
-		PVEFrame_ShowFrame("GroupFinderFrame", LFGListPVEStub)
-		LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
-		LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, name)
 	elseif info.value == "SHOW_PET" then
 		if not CollectionsJournal then CollectionsJournal_LoadUI() end
 		if not CollectionsJournal:IsShown() then ShowUIPanel(CollectionsJournal) end
@@ -89,7 +84,7 @@ local function popupClick(self, info)
 	end
 end
 
-hooksecurefunc("UnitPopup_ShowMenu", function(dropdownMenu, which, unit, name, userData)
+hooksecurefunc("UnitPopup_ShowMenu", function(_, _, unit)
 	if UIDROPDOWNMENU_MENU_LEVEL > 1 then return end
 	if unit and (unit == "target" or string.find(unit, "party") or string.find(unit, "raid")) then
 		local info
@@ -104,13 +99,6 @@ hooksecurefunc("UnitPopup_ShowMenu", function(dropdownMenu, which, unit, name, u
 			info = UIDropDownMenu_CreateInfo()
 			info.text = UnitPopupButtonsExtra["SHOW_PET"].text
 			info.arg1 = {value = "SHOW_PET", unit = unit}
-			info.func = popupClick
-			info.notCheckable = true
-			UIDropDownMenu_AddButton(info)
-		elseif (UnitLevel(unit) < 0 and UnitClassification(unit) == "elite" or UnitClassification(unit) == "rareelite") and LFGListPVEStub then
-			info = UIDropDownMenu_CreateInfo()
-			info.text = UnitPopupButtonsExtra["RARE_SEARCH"].text
-			info.arg1 = {value = "RARE_SEARCH", unit = unit}
 			info.func = popupClick
 			info.notCheckable = true
 			UIDropDownMenu_AddButton(info)
