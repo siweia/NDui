@@ -162,4 +162,8 @@ function module:QuickJoin()
 			self.Name:SetTextColor(0, 1, 0)
 		end
 	end)
+
+	hooksecurefunc("LFGListInviteDialog_Accept", function()
+		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
+	end)
 end
