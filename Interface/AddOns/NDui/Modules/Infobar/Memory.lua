@@ -21,8 +21,8 @@ local function updateMemory()
 	local total, count = 0, 0
 	for i = 1, GetNumAddOns() do
 		if IsAddOnLoaded(i) then
-			local usage = GetAddOnMemoryUsage(i)
 			count = count + 1
+			local usage = GetAddOnMemoryUsage(i)
 			memoryTable[count] = {select(2, GetAddOnInfo(i)), usage}
 			total = total + usage
 		end

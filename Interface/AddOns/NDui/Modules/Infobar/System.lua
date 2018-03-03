@@ -44,8 +44,7 @@ local function retrieveUsage()
 	for i = 1, GetNumAddOns() do
 		if IsAddOnLoaded(i) then
 			count = count + 1
-			local usage = GetAddOnCPUUsage(i)
-			usage = format("%.2f", usage/passTime)
+			local usage = format("%.2f", GetAddOnCPUUsage(i)/passTime)
 			usageTable[count] = {select(2, GetAddOnInfo(i)), usage}
 		end
 	end
