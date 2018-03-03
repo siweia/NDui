@@ -99,8 +99,7 @@ C.AuraWatchList = {
 				--阿曼苏尔的预见
 				{AuraID = 256818, UnitID = "player"},
 				--高戈奈斯的活力
-				{AuraID = 256820, UnitID = "player"},
-				{AuraID = 256821, UnitID = "player"},
+				{AuraID = 256833, UnitID = "player"},
 				--艾欧娜尔的怜悯
 				{AuraID = 256823, UnitID = "player"},
 				{AuraID = 256824, UnitID = "player"},
