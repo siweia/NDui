@@ -960,6 +960,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	GarrisonShipyardFrame.MissionTab.MissionList.CompleteDialog:GetRegions():Hide()
 	F.Reskin(GarrisonShipyardFrame.MissionTab.MissionList.CompleteDialog.BorderFrame.ViewButton)
 
+	select(11, GarrisonShipyardFrame.MissionComplete.BonusRewards:GetRegions()):SetTextColor(1, .8, 0)
+	F.Reskin(GarrisonShipyardFrame.MissionComplete.NextMissionButton)
+
 	-- [[ Addon supports ]]
 
 	do
