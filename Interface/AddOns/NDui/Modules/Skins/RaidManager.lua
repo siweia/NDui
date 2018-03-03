@@ -148,7 +148,6 @@ function module:CreateRM()
 		else
 			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
 		end
-		self:SetBackdropColor(0, 0, 0, .5)
 	end)
 
 	-- Buff checker
@@ -223,7 +222,7 @@ function module:CreateRM()
 		end
 	end
 
-	checker:SetScript("OnEnter", function(self)
+	checker:HookScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(L["Raid Tool"], 0,.6,1)
@@ -232,7 +231,6 @@ function module:CreateRM()
 		GameTooltip:AddLine(DB.ScrollButton..DB.InfoColor..L["Count Down"])
 		GameTooltip:AddLine(DB.RightButton..DB.InfoColor..L["Check Status"])
 		GameTooltip:Show()
-		self:SetBackdropBorderColor(DB.cc.r, DB.cc.g, DB.cc.b, 1)
 	end)
 	checker:HookScript("OnLeave", GameTooltip_Hide)
 
