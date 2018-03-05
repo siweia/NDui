@@ -151,14 +151,14 @@ local MeleeChange = function(self, event, unit)
 		OffhandID = NewOffhandID
 	else
 		if ohspeed then
-			if swingMH.speed ~= mhspeed then
+			if swingMH.speed and swingMH.speed ~= mhspeed then
 				local percentage = ((swingMH.max or 10) - now) / (swingMH.speed)
 				swingMH.min = now - mhspeed * (1 - percentage)
 				swingMH.max = now + mhspeed * percentage
 				swingMH:SetMinMaxValues(swingMH.min, swingMH.max)
 				swingMH.speed = mhspeed
 			end
-			if swingOH.speed ~= ohspeed then
+			if swingOH.speed and swingOH.speed ~= ohspeed then
 				local percentage = ((swingOH.max or 10)- now) / (swingOH.speed)
 				swingOH.min = now - ohspeed * (1 - percentage)
 				swingOH.max = now + ohspeed * percentage
@@ -166,7 +166,7 @@ local MeleeChange = function(self, event, unit)
 				swingOH.speed = ohspeed
 			end
 		else
-			if swing.speed ~= mhspeed then
+			if swing.max and swing.speed ~= mhspeed then
 				local percentage = (swing.max - now) / (swing.speed)
 				swing.min = now - mhspeed * (1 - percentage)
 				swing.max = now + mhspeed * percentage
