@@ -155,7 +155,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
 			local guildName, rank, rankIndex, guildRealm = GetGuildInfo(unit)
 			local text = GameTooltipTextLeft2:GetText()
-			if rank then
+			if rank and text then
 				rankIndex = rankIndex + 1
 				if NDuiDB["Tooltip"]["HideRank"] then
 					GameTooltipTextLeft2:SetText("<"..text..">")
