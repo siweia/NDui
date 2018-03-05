@@ -38,14 +38,19 @@ function module:OnLogin()
 			return item.type == AUCTION_CATEGORY_CONSUMABLES and item.rarity > LE_ITEM_QUALITY_POOR or item.type == AUCTION_CATEGORY_ITEM_ENHANCEMENT
 		end
 
+		local function isItemLegendary(item)
+			if not NDuiDB["Bags"]["ItemFilter"] then return end
+			return item.rarity == LE_ITEM_QUALITY_LEGENDARY
+		end
+
 		local onlyBags = function(item) return isItemInBag(item) and not isItemArtifactPower(item) and not isItemEquipment(item) and not isItemConsumble(item) end
 		local bagArtifactPower = function(item) return isItemInBag(item) and isItemArtifactPower(item) end
 		local bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 		local bagConsumble = function(item) return isItemInBag(item) and isItemConsumble(item) end
-		local onlyBank = function(item) return isItemInBank(item) and not isItemArtifactPower(item) and not isItemEquipment(item) and item.rarity ~= LE_ITEM_QUALITY_LEGENDARY and not isItemConsumble(item) end
+		local onlyBank = function(item) return isItemInBank(item) and not isItemArtifactPower(item) and not isItemEquipment(item) and not isItemLegendary(item) and not isItemConsumble(item) end
 		local bankArtifactPower = function(item) return isItemInBank(item) and isItemArtifactPower(item) end
-		local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) and item.rarity ~= LE_ITEM_QUALITY_LEGENDARY end
-		local bankLegendary = function(item) return isItemInBank(item) and item.rarity == LE_ITEM_QUALITY_LEGENDARY end
+		local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) and not isItemLegendary(item) end
+		local bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 		local bankConsumble = function(item) return isItemInBank(item) and isItemConsumble(item) end
 		local onlyReagent = function(item) return item.bagID == -3 end
 
