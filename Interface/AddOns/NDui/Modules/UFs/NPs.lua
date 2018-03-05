@@ -35,6 +35,7 @@ local CustomUnits = {
 	["Fel Explosive"] = true,
 	["邪能炸药"] = true,
 	["魔化炸彈"] = true,
+	["海拉加尔观雾者"] = true,
 	["深渊追猎者"] = true,
 	["尖啸反舌鸟"] = true,
 }
