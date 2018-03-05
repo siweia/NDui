@@ -57,7 +57,7 @@ local defaultSettings = {
 		StealableBuff = true,
 		SwingBar = false,
 		SwingTimer = false,
-		RaidFrame = false,
+		RaidFrame = true,
 		AutoRes = true,
 		NumGroups = 6,
 		SimpleMode = false,
@@ -455,7 +455,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Settings", "VersionCheck", L["Version Check"]},
 		{},--blank
 		{3, "Settings", "SetScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
-		{1, "Settings", "LockUIScale", L["Lock UIScale"], true},
+		{1, "Settings", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
 		{3, "Settings", "GUIScale", L["GUI Scale"], false, {.5, 1.5, 1}},
 		{4, "Settings", "Format", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
