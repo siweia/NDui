@@ -5,6 +5,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 
 	F.SetBD(AuctionFrame, 2, -10, 0, 10)
 	F.CreateBD(AuctionProgressFrame)
+	F.CreateSD(AuctionProgressFrame)
 
 	AuctionProgressBar:SetStatusBarTexture(C.media.backdrop)
 	local ABBD = CreateFrame("Frame", nil, AuctionProgressBar)
