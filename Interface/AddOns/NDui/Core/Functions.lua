@@ -364,7 +364,7 @@ B.CreateButton = function(parent, width, height, text, fontSize)
 	bu:SetSize(width, height)
 	B.CreateBD(bu, .3)
 	B.CreateBC(bu)
-	B.CreateFS(bu, fontSize or 14, text, true)
+	bu.text = B.CreateFS(bu, fontSize or 14, text, true)
 
 	return bu
 end
