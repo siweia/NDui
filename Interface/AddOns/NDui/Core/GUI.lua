@@ -39,7 +39,7 @@ local defaultSettings = {
 	},
 	AuraWatch = {
 		Enable = true,
-		Hint = true,
+		ClickThrough = false,
 	},
 	UFs = {
 		Enable = true,
@@ -69,7 +69,7 @@ local defaultSettings = {
 		HorizonRaid = false,
 		RaidScale = 1,
 		HealthPerc = false,
-		NoTooltip = false,
+		AurasClickThrough = false,
 		CombatText = true,
 		HotsDots = true,
 		AutoAttack = true,
@@ -305,7 +305,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"], true},
 		{},--blank
-		{1, "UFs", "NoTooltip", L["NoTooltip Auras"]},
+		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "DebuffBorder", L["Auras Border"], true},
 		{1, "UFs", "Dispellable", L["Dispellable Only"]},
 		{1, "UFs", "InstanceAuras", L["Instance Auras"], true},
@@ -340,7 +340,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[6] = {
 		{1, "AuraWatch", "Enable", L["Enable AuraWatch"]},
-		{1, "AuraWatch", "Hint", L["AuraWatch Tooltip"]},
+		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"]},
 		{},--blank
 		{1, "Auras", "Reminder", L["Enable Reminder"]},
 		{1, "Auras", "BloodyHell", L["Enable BloodyHell"]},
