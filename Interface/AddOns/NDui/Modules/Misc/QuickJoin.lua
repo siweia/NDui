@@ -141,8 +141,17 @@ function module:QuickJoin()
 		local searchBox = LFGListFrame.SearchPanel.SearchBox
 		local searchText = searchBox:GetText()
 		if searchText ~= "" then
-			local name = englishName[tonumber(unitGUID)]	-- make sure everyone can join us
-			local description = unitGUID and "NDui #NPCID"..unitGUID..(name and " #"..name or "") or "NDui"
+			local mapName = GetMapInfo()
+			local invaName = C_Scenario.GetInfo()
+			local description
+			if mapName and mapName:match("InvasionPoint") and invaName then
+				local name = mapName:gsub("InvasionPoint", "")
+				description = "NDui"..(name and " #Invasion Point: "..name or "")
+			else
+				local name = englishName[tonumber(unitGUID)]
+				description = unitGUID and "NDui #NPCID"..unitGUID..(name and " #"..name or "") or "NDui"
+			end
+
 			C_LFGList.CreateListing(self.selectedActivity, searchText, 0, 0, "", description, true)
 			searchBox:SetText("")
 			unitGUID = nil
@@ -152,7 +161,7 @@ function module:QuickJoin()
 	local old_LFGListEntryCreation_GetAutoCreateDataQuest = LFGListEntryCreation_GetAutoCreateDataQuest
 	function LFGListEntryCreation_GetAutoCreateDataQuest(self)
 		local activityID, name, itemLevel, honorLevel, voiceChatInfo, description, autoAccept, privateGroup, questID = old_LFGListEntryCreation_GetAutoCreateDataQuest(self)
-		description = "NDui "..description
+		description = "NDui #ID"..questID.." #"..description
 		return activityID, name, itemLevel, honorLevel, voiceChatInfo, description, autoAccept, privateGroup, questID
 	end
 
