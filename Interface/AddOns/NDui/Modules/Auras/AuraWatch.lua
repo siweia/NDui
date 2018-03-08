@@ -169,7 +169,7 @@ local function BuildICON(iconSize)
 	Frame.Spellname = B.CreateFS(parentFrame, 14, "", false, "BOTTOM", 0, -3)
 	Frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
 
-	if NDuiDB["AuraWatch"]["Hint"] then
+	if not NDuiDB["AuraWatch"]["ClickThrough"] then
 		Frame:EnableMouse(true)
 		Frame.HL = Frame:CreateTexture(nil, "HIGHLIGHT")
 		Frame.HL:SetColorTexture(1, 1, 1, .3)
@@ -219,7 +219,7 @@ local function BuildBAR(barWidth, iconSize)
 	Frame.Spellname:SetWidth(Frame.Statusbar:GetWidth()*.6)
 	Frame.Spellname:SetJustifyH("LEFT")
 
-	if NDuiDB["AuraWatch"]["Hint"] then
+	if not NDuiDB["AuraWatch"]["ClickThrough"] then
 		Frame:EnableMouse(true)
 		Frame.HL = Frame:CreateTexture(nil, "HIGHLIGHT")
 		Frame.HL:SetColorTexture(1, 1, 1, .3)
