@@ -146,6 +146,11 @@ function module:CreateRM()
 	rcFrame:RegisterEvent("READY_CHECK_FINISHED")
 	rcFrame:SetScript("OnEvent", function(self, event)
 		if event == "READY_CHECK_FINISHED" then
+			if count == total then
+				rc:SetTextColor(0, 1, 0)
+			else
+				rc:SetTextColor(1, 0, 0)
+			end
 			C_Timer.After(5, function()
 				self:Hide()
 				rc:SetText("")
@@ -166,12 +171,7 @@ function module:CreateRM()
 				end
 			end
 			rc:SetText(count.." / "..total)
-
-			if count == total then
-				rc:SetTextColor(0, 1, 0)
-			else
-				rc:SetTextColor(1, 0, 0)
-			end
+			rc:SetTextColor(1, 1, 0)
 		end
 	end)
 	rcFrame:SetScript("OnMouseUp", function(self) self:Hide() end)
