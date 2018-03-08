@@ -289,13 +289,14 @@ C.themes["Blizzard_AchievementUI"] = function()
 		_G[bu]:GetHighlightTexture():SetBlendMode("BLEND")
 	end
 
-	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 25)
+	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 26)
 
 	local headerbg = CreateFrame("Frame", nil, AchievementFrameComparisonHeader)
 	headerbg:SetPoint("TOPLEFT", 20, -20)
 	headerbg:SetPoint("BOTTOMRIGHT", -28, -5)
 	headerbg:SetFrameLevel(AchievementFrameComparisonHeader:GetFrameLevel()-1)
-	F.CreateBD(headerbg, .25)
+	F.CreateBD(headerbg)
+	F.CreateSD(headerbg)
 
 	local summaries = {AchievementFrameComparisonSummaryPlayer, AchievementFrameComparisonSummaryFriend}
 
