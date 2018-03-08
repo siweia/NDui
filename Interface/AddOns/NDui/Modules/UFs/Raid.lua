@@ -64,8 +64,9 @@ function UF:CreateThreatBorder(self)
 end
 
 function UF:CreateRaidDebuffs(self)
-	local bu = CreateFrame("Frame", nil, self)
 	local size = 18*NDuiDB["UFs"]["RaidScale"]
+
+	local bu = CreateFrame("Frame", nil, self)
 	bu:SetSize(size, size)
 	bu:SetPoint("TOPRIGHT", -10, -2)
 	bu:SetFrameLevel(self:GetFrameLevel() + 3)
@@ -78,7 +79,7 @@ function UF:CreateRaidDebuffs(self)
 	bu.time = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
 
 	bu.ShowDispellableDebuff = true
-	bu.EnableTooltip = not NDuiDB["UFs"]["NoTooltip"]
+	bu.EnableTooltip = not NDuiDB["UFs"]["AurasClickThrough"]
 	bu.ShowDebuffBorder = NDuiDB["UFs"]["DebuffBorder"]
 	bu.FilterDispellableDebuff = NDuiDB["UFs"]["Dispellable"]
 	if NDuiDB["UFs"]["InstanceAuras"] then bu.Debuffs = C.RaidDebuffs end

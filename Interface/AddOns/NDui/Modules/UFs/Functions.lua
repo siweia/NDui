@@ -463,6 +463,7 @@ function UF:CreateAuras(self)
 		bu.spacing = 2
 		bu.size = 14*NDuiDB["UFs"]["RaidScale"]
 		bu.gap = false
+		bu.EnableTooltip = not NDuiDB["UFs"]["AurasClickThrough"]
 	elseif self.mystyle == "nameplate" then
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 20)
 		bu.numTotal = NDuiDB["Nameplate"]["maxAuras"]
