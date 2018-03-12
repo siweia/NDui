@@ -839,3 +839,27 @@ function UF:CreateFCT(self)
 	SetCVar("enableFloatingCombatText", 0)
 	InterfaceOptionsCombatPanelEnableFloatingCombatText:Hide()
 end
+
+local function postUpdateFaction(self)
+	local _, instanceType = IsInInstance()
+	local faction = UnitFactionGroup(self.unit)
+	if faction and faction ~= "Neutral" and instanceType ~= "arena" then
+		self.factionIndicator.Icon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..faction)
+		self.factionIndicator:Show()
+	else
+		self.factionIndicator:Hide()
+	end
+end
+
+function UF:CreateFactionIcon(self)
+	local bu = CreateFrame("Frame", nil, self)
+	bu:SetSize(30, 30)
+	bu:SetPoint("LEFT", self, "RIGHT", 5, -2)
+	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
+	bu.Icon:SetAllPoints()
+
+	self.factionIndicator = bu
+	self:RegisterEvent("ARENA_OPPONENT_UPDATE", postUpdateFaction)
+	self:RegisterEvent("UNIT_NAME_UPDATE", postUpdateFaction)
+	postUpdateFaction(self)
+end
