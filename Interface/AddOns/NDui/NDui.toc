@@ -3,7 +3,7 @@
 ## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, Lightspark, Loshine, Neavo, Paopao001, Qulight, Ray, Rubgrsch, Zork.
 ## Author: Siweia
 ## Notes: NDui Core
-## Version: 2.11.4
+## Version: 2.12.0
 ## X-Support: 7.3.5
 ## SavedVariables: NDuiADB
 ## SavedVariablesPerCharacter: NDuiDB
