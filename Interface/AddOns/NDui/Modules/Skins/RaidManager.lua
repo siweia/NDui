@@ -171,7 +171,11 @@ function module:CreateRM()
 				end
 			end
 			rc:SetText(count.." / "..total)
-			rc:SetTextColor(1, 1, 0)
+			if count == total then
+				rc:SetTextColor(0, 1, 0)
+			else
+				rc:SetTextColor(1, 1, 0)
+			end
 		end
 	end)
 	rcFrame:SetScript("OnMouseUp", function(self) self:Hide() end)
