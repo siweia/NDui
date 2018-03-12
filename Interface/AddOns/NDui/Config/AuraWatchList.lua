@@ -1495,6 +1495,8 @@ C.AuraWatchList = {
 				{AuraID = 242243, UnitID = "player"},
 				--精准，射击4T20
 				{AuraID = 246153, UnitID = "player"},
+				--狙击
+				{AuraID = 203155, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
