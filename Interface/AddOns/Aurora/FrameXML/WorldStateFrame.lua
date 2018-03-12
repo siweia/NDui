@@ -10,6 +10,7 @@ tinsert(C.themes["Aurora"], function()
 	WorldStateScoreFrameTab1:SetPoint("TOPLEFT", WorldStateScoreFrame, "BOTTOMLEFT", 5, 2)
 	WorldStateScoreFrameTab2:SetPoint("LEFT", WorldStateScoreFrameTab1, "RIGHT", -15, 0)
 	WorldStateScoreFrameTab3:SetPoint("LEFT", WorldStateScoreFrameTab2, "RIGHT", -15, 0)
+	WorldStateScoreFrame.XPBar.Frame:Hide()
 
 	for i = 1, 3 do
 		F.ReskinTab(_G["WorldStateScoreFrameTab"..i])
@@ -25,48 +26,58 @@ tinsert(C.themes["Aurora"], function()
 	hooksecurefunc("UIParent_ManageFramePositions", function()
 		if not NUM_EXTENDED_UI_FRAMES then return end
 		for i = 1, NUM_EXTENDED_UI_FRAMES do
-			local barname = "WorldStateCaptureBar"..i
-			local bar = _G[barname]
-
+			local bar = _G["WorldStateCaptureBar"..i]
 			if bar and bar:IsVisible() then
 				bar:ClearAllPoints()
 				bar:SetPoint("TOP", UIParent, "TOP", 0, -120)
+
 				if not bar.skinned then
-					local left = _G[barname.."LeftBar"]
-					local right = _G[barname.."RightBar"]
-					local middle = _G[barname.."MiddleBar"]
+					bar.BarBackground:Hide()
 
-					left:SetTexture(C.media.backdrop)
-					right:SetTexture(C.media.backdrop)
-					middle:SetTexture(C.media.backdrop)
-					left:SetDrawLayer("BORDER")
-					middle:SetDrawLayer("ARTWORK")
-					right:SetDrawLayer("BORDER")
+					local bg = F.CreateBDFrame(bar)
+					bg:SetPoint("TOPLEFT", 25, -7)
+					bg:SetPoint("BOTTOMRIGHT", -25, 7)
 
-					left:SetGradient("VERTICAL", .1, .4, .9, .2, .6, 1)
-					right:SetGradient("VERTICAL", .7, .1, .1, .9, .2, .2)
-					middle:SetGradient("VERTICAL", .8, .8, .8, 1, 1, 1)
+					local left = bar:CreateTexture()
+					left:SetTexture("Interface\\WorldStateFrame\\AllianceFlag")
+					left:SetPoint("LEFT", -5, 0)
+					left:SetSize(32, 32)
+					bar.newLeftFaction = left
 
-					_G[barname.."RightLine"]:SetAlpha(0)
-					_G[barname.."LeftLine"]:SetAlpha(0)
-					select(4, bar:GetRegions()):Hide()
-					_G[barname.."LeftIconHighlight"]:SetAlpha(0)
-					_G[barname.."RightIconHighlight"]:SetAlpha(0)
+					local right = bar:CreateTexture()
+					right:SetTexture("Interface\\WorldStateFrame\\HordeFlag")
+					right:SetPoint("RIGHT", 5, 0)
+					right:SetSize(32, 32)
+					bar.newRightFaction = right
 
-					bar.bg = bar:CreateTexture(nil, "BACKGROUND")
-					bar.bg:SetPoint("TOPLEFT", left, -1, 1)
-					bar.bg:SetPoint("BOTTOMRIGHT", right, 1, -1)
-					bar.bg:SetTexture(C.media.backdrop)
-					bar.bg:SetVertexColor(0, 0, 0)
+					bar.RightLine:SetColorTexture(0, 0, 0)
+					bar.RightLine:SetSize(2, 9)
+					bar.LeftLine:SetColorTexture(0, 0, 0)
+					bar.LeftLine:SetSize(2, 9)
 
-					bar.bgmiddle = CreateFrame("Frame", nil, bar)
-					bar.bgmiddle:SetPoint("TOPLEFT", middle, -1, 1)
-					bar.bgmiddle:SetPoint("BOTTOMRIGHT", middle, 1, -1)
-					F.CreateBD(bar.bgmiddle, 0)
+					bar.LeftIconHighlight:SetTexture("Interface\\WorldStateFrame\\HordeFlagFlash")
+					bar.LeftIconHighlight:SetAllPoints(left)
+					bar.RightIconHighlight:SetTexture("Interface\\WorldStateFrame\\HordeFlagFlash")
+					bar.RightIconHighlight:SetAllPoints(right)
 
 					bar.skinned = true
 				end
 			end
+		end
+	end)
+
+	hooksecurefunc(ExtendedUI["CAPTUREPOINT"], "update", function(id)
+		local bar = _G["WorldStateCaptureBar"..id]
+		if bar.style == "LFD_BATTLEFIELD" then
+			bar.newLeftFaction:SetTexture("Interface\\WorldStateFrame\\ColumnIcon-FlagCapture2")
+			bar.newRightFaction:SetTexture("Interface\\WorldStateFrame\\ColumnIcon-FlagCapture2")
+			bar.newRightFaction:SetDesaturated(true)
+			bar.newRightFaction:SetVertexColor(.75, .5, 1)
+		else
+			bar.newLeftFaction:SetTexture("Interface\\WorldStateFrame\\AllianceFlag")
+			bar.newRightFaction:SetTexture("Interface\\WorldStateFrame\\HordeFlag")
+			bar.newRightFaction:SetDesaturated(false)
+			bar.newRightFaction:SetVertexColor(1, 1, 1)
 		end
 	end)
 end)
