@@ -3,17 +3,14 @@ local module = NDui:GetModule("Chat")
 
 function module:UrlCopy()
 	local foundurl = false
-	local function colorconvert(text, color)
-		return DB.InfoColor..text.."|r"
+
+	local function linkconvert(text, type, value)
+		return "|H"..type..":"..tostring(value).."|h"..DB.InfoColor..text.."|r|h"
 	end
 
-	local function linkconvert(text, type, value, color)
-		return "|H"..type..":"..tostring(value).."|h"..colorconvert(text, color or "ffffff").."|h"
-	end
-
-	local function highlighturl(before, url, after)
+	local function highlighturl(_, url)
 		foundurl = true
-		return " "..linkconvert("["..url.."]", "url", url, color).." "
+		return " "..linkconvert("["..url.."]", "url", url).." "
 	end
 
 	local function searchforurl(frame, text, ...)
