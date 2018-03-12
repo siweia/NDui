@@ -161,7 +161,7 @@ function module:ReflectingAlert()
 		if not IsInGroup() then return end
 		local unit, spellName, _, _, spell = ...
 		if spell ~= 163219 then return end
-		if UnitInRaid(unit) and unit:match("raid") or UnitInParty(unit) and unit:match("party") then
+		if unit:match("raid") or unit:match("party") and not UnitInRaid(unit) then
 			local unitName = GetUnitName(unit)
 			local name, itemLink = GetItemInfo(112384)
 			SendChatMessage(format(L["Reflecting Prism"], unitName, itemLink or name), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
