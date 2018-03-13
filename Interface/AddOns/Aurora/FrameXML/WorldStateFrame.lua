@@ -68,6 +68,8 @@ tinsert(C.themes["Aurora"], function()
 
 	hooksecurefunc(ExtendedUI["CAPTUREPOINT"], "update", function(id)
 		local bar = _G["WorldStateCaptureBar"..id]
+		if not (bar.newLeftFaction and bar.newRightFaction) then return end
+
 		if bar.style == "LFD_BATTLEFIELD" then
 			bar.newLeftFaction:SetTexture("Interface\\WorldStateFrame\\ColumnIcon-FlagCapture2")
 			bar.newRightFaction:SetTexture("Interface\\WorldStateFrame\\ColumnIcon-FlagCapture2")
