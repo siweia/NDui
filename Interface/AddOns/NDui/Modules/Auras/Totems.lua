@@ -24,7 +24,8 @@ local function TotemsGo()
 		totem[i].Icon:SetTexture(GetSpellTexture(icons[i]))
 		totem[i]:SetAlpha(.3)
 		if NDuiDB["Auras"]["DestroyTotems"] then
-			totem[i]:SetAttribute("type", "macro")
+			totem[i]:RegisterForClicks("RightButtonUp")
+			totem[i]:SetAttribute("type2", "macro")
 			totem[i]:SetAttribute("macrotext", "/click TotemFrameTotem"..SHAMAN_TOTEM_PRIORITIES[i].." RightButton")
 		end
 	end
