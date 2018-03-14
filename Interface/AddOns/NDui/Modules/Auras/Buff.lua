@@ -23,7 +23,7 @@ function module:OnLogin()
 end
 
 local function styleButton(bu)
-	if not bu or (bu and bu.styled) then return end
+	if not bu or bu.styled then return end
 	local name = bu:GetName()
 
 	local border = _G[name.."Border"]
@@ -93,21 +93,35 @@ local function ReskinTempEnchant()
 end
 hooksecurefunc("TemporaryEnchantFrame_Update", ReskinTempEnchant)
 
-local function ReskinDebuffs(self, i)
-	local debuff = _G["DebuffButton"..i]
-	local previous = _G["DebuffButton"..(i-1)]
+local function ReskinDebuffs(buttonName, i)
+	local debuff = _G[buttonName..i]
+	local previous = _G[buttonName..(i-1)]
 	styleButton(debuff)
 
 	debuff:ClearAllPoints()
 	if i == 1 then
 		debuff:SetPoint("TOPRIGHT", BuffAnchor, 0, -140)
 	elseif i == IconsPerRow + 1 then
-		debuff:SetPoint("TOP", _G["DebuffButton1"], "BOTTOM", 0, -12)
+		debuff:SetPoint("TOP", _G[buttonName.."1"], "BOTTOM", 0, -12)
 	elseif i < IconsPerRow*2 + 1 then
 		debuff:SetPoint("RIGHT", previous, "LEFT", -padding, 0)
 	end
 end
 hooksecurefunc("DebuffButton_UpdateAnchors", ReskinDebuffs)
+
+local function updateDebuffBorder(buttonName, index, filter)
+	local unit = PlayerFrame.unit
+	local name, _, _, _, debuffType = UnitAura(unit, index, filter)
+	if not name then return end
+	local bu = _G[buttonName..index]
+	if not (bu and bu.Shadow) then return end
+
+	if filter == "HARMFUL" then
+		local color = DebuffTypeColor[debuffType or "none"]
+		bu.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+	end
+end
+hooksecurefunc("AuraButton_Update", updateDebuffBorder)
 
 local function FlashOnEnd(self, elapsed)
 	if self.timeLeft < 10 then
