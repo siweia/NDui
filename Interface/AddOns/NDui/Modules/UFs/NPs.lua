@@ -11,16 +11,20 @@ function UF:SetupCVars()
 		SetCVar("nameplateOtherTopInset", -1)
 		SetCVar("nameplateOtherBottomInset", -1)
 	end
-	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
 	SetCVar("nameplateOverlapH", .5)
 	SetCVar("nameplateOverlapV", NDuiDB["Nameplate"]["VerticalSpacing"])
+	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
+
 	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
-	SetCVar("nameplateOccludedAlphaMult", .3)
+	SetCVar("nameplateMaxAlpha", NDuiDB["Nameplate"]["MinAlpha"])
+	SetCVar("nameplateSelectedAlpha", 1)
+	SetCVar("nameplateOccludedAlphaMult", .4)
+
 	SetCVar("namePlateMinScale", .8)
 	SetCVar("namePlateMaxScale", .8)
 	SetCVar("nameplateSelectedScale", 1)
 	SetCVar("nameplateLargerScale", 1)
-	C_NamePlate.SetNamePlateSelfClickThrough(false)
+	SetCVar("nameplateSelfScale", .75)
 end
 
 function UF:BlockAddons()
@@ -487,18 +491,15 @@ local function UpdatePlates(self, event, unit)
 	-- Update PlayerPlate
 	if event == "NAME_PLATE_UNIT_ADDED" then
 		if UnitIsUnit(unit, "player") then
-			self:SetScale(.75)
 			self.nameFrame:Hide()
 			enableElement(self, "Power", self.Power)
 			disableElement(self, "Castbar")
 		else
-			self:SetScale(1)
 			self.nameFrame:Show()
 			disableElement(self, "Power")
 			enableElement(self, "Castbar", self.Castbar)
 		end
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
-		self:SetScale(1)
 		self.nameFrame:Hide()
 		disableElement(self, "Power")
 		disableElement(self, "Castbar")
