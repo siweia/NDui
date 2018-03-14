@@ -193,18 +193,17 @@ function UF:CreateIcons(self)
 		rest:SetTexCoord(.445, .55, .648, .905)
 		rest:SetVertexColor(.6, .8, 1)
 		self.RestingIndicator = rest
-
 	elseif self.mystyle == "target" then
-		local phase = self:CreateTexture(nil, "OVERLAY")
-		phase:SetPoint("TOP", self, 0, 12)
-		phase:SetSize(22, 22)
-		self.PhaseIndicator = phase
-
 		local quest = self:CreateTexture(nil, "OVERLAY")
 		quest:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 8)
 		quest:SetSize(16, 16)
 		self.QuestIndicator = quest
 	end
+
+	local phase = self:CreateTexture(nil, "OVERLAY")
+	phase:SetPoint("TOP", self, 0, 12)
+	phase:SetSize(22, 22)
+	self.PhaseIndicator = phase
 
 	local ri = self:CreateTexture(nil, "OVERLAY")
 	if self.mystyle == "raid" then
@@ -433,47 +432,57 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, _, caste
 	end
 end
 
+local function auraIconSize(w, n, s)
+	return (w-(n-1)*s)/n
+end
+
 function UF:CreateAuras(self)
 	local bu = CreateFrame("Frame", nil, self)
-	bu:SetHeight(41)
-	bu:SetWidth(self:GetWidth())
 	bu.gap = true
+	bu.initialAnchor = "TOPLEFT"
 	bu["growth-y"] = "DOWN"
+	bu.spacing = 5
 	if self.mystyle == "target" then
-		bu:SetPoint("BOTTOMLEFT", self, 0, -48)
+		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -15)
 		bu.numBuffs = 20
 		bu.numDebuffs = 15
-		bu.spacing = 6
-		bu.size = 22
+		bu.iconsPerRow = 9
 	elseif self.mystyle == "tot" then
-		bu:SetPoint("LEFT", self, "LEFT", 0, -12)
+		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -5)
 		bu.numBuffs = 0
 		bu.numDebuffs = 10
-		bu.spacing = 5
-		bu.size = 19
+		bu.iconsPerRow = 5
 	elseif self.mystyle == "focus" then
-		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, 3)
+		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -15)
 		bu.numBuffs = 0
-		bu.numDebuffs = 8
-		bu.spacing = 7
-		bu.size = 26
+		bu.numDebuffs = 14
+		bu.iconsPerRow = 7
 	elseif self.mystyle == "raid" then
-		bu:SetPoint("BOTTOMLEFT", self, 2, 0)
+		bu:SetPoint("BOTTOMLEFT", self, 2, -2)
 		bu.numTotal = 6
 		bu.spacing = 2
-		bu.size = 14*NDuiDB["UFs"]["RaidScale"]
+		bu.iconsPerRow = 6
 		bu.gap = false
 		bu.EnableTooltip = not NDuiDB["UFs"]["AurasClickThrough"]
 	elseif self.mystyle == "nameplate" then
+		bu.initialAnchor = "BOTTOMLEFT"
+		bu["growth-y"] = "UP"
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 20)
 		bu.numTotal = NDuiDB["Nameplate"]["maxAuras"]
 		bu.spacing = 3
-		bu["growth-y"] = "UP"
 		bu.size = NDuiDB["Nameplate"]["AuraSize"]
 		bu.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 		bu.gap = false
 		bu.disableMouse = true
 	end
+
+	local width = self:GetWidth()
+	local maxAuras = bu.numTotal or bu.numBuffs + bu.numDebuffs
+	local maxLines = bu.iconsPerRow and floor(maxAuras/bu.iconsPerRow + .5) or 2
+	bu.size = bu.iconsPerRow and auraIconSize(width, bu.iconsPerRow, bu.spacing) or bu.size
+	bu:SetWidth(width)
+	bu:SetHeight((bu.size + bu.spacing) * maxLines)
+
 	bu.showStealableBuffs = NDuiDB["UFs"]["StealableBuff"]
 	bu.CustomFilter = customFilter
 	bu.PostCreateIcon = postCreateIcon
@@ -485,34 +494,20 @@ end
 
 function UF:CreateBuffs(self)
 	local bu = CreateFrame("Frame", nil, self)
-	bu.size = 20
+	bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+	bu.initialAnchor = "BOTTOMLEFT"
+	bu["growth-x"] = "RIGHT"
+	bu["growth-y"] = "UP"
+	bu.num = 12
 	bu.spacing = 5
+	bu.iconsPerRow = 6
 	bu.onlyShowPlayer = false
-	bu:SetHeight((bu.size + bu.spacing) * 4)
+
+	local width = self:GetWidth()
+	bu.size = auraIconSize(width, bu.iconsPerRow, bu.spacing)
 	bu:SetWidth(self:GetWidth())
-	if self.mystyle == "target" then
-		bu:SetPoint("TOP", self, "TOP", 0, 51)
-		bu.initialAnchor = "TOPLEFT"
-		bu["growth-x"] = "RIGHT"
-		bu["growth-y"] = "UP"
-		bu.num = 10
-	elseif self.mystyle == "player" then
-		bu.size = 28
-		bu:SetPoint("TOPRIGHT", UIParent,  -180, -10)
-		bu.initialAnchor = "TOPRIGHT"
-		bu["growth-x"] = "LEFT"
-		bu["growth-y"] = "DOWN"
-		bu.num = 40
-	elseif self.mystyle == "boss" or self.mystyle == "arena" then
-		bu.size = 22
-		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
-		bu.initialAnchor = "BOTTOMLEFT"
-		bu["growth-x"] = "RIGHT"
-		bu["growth-y"] = "UP"
-		bu.num = 10
-	else
-		bu.num = 0
-	end
+	bu:SetHeight((bu.size + bu.spacing) * floor(bu.num/bu.iconsPerRow + .5))
+
 	bu.PostCreateIcon = postCreateIcon
 	bu.PostUpdateIcon = postUpdateIcon
 
@@ -521,35 +516,27 @@ end
 
 function UF:CreateDebuffs(self)
 	local bu = CreateFrame("Frame", nil, self)
-	bu.size = 20
-	bu.num = 18
-	bu.onlyShowPlayer = false
 	bu.spacing = 5
-	bu:SetHeight((bu.size + bu.spacing) * 4)
-	bu:SetWidth(self:GetWidth())
-	if self.mystyle == "target" then
-		bu:SetPoint("TOP", self, "TOP", 0, 25)
-		bu.initialAnchor = "TOPLEFT"
-		bu["growth-x"] = "RIGHT"
-		bu["growth-y"] = "UP"
-	elseif self.mystyle == "player" then
-		bu:SetPoint("BOTTOMRIGHT", self, 0, -48)
-		bu.initialAnchor = "BOTTOMRIGHT"
-		bu["growth-x"] = "LEFT"
-		bu["growth-y"] = "DOWN"
-		bu.size = 22
-		bu.spacing = 6
+	bu.initialAnchor = "BOTTOMRIGHT"
+	bu["growth-x"] = "LEFT"
+	bu["growth-y"] = "DOWN"
+	if self.mystyle == "player" then
+		bu:SetPoint("BOTTOMRIGHT", self.Power, 0, -48)
+		bu.onlyShowPlayer = false
+		bu.num = 14
+		bu.iconsPerRow = 7
 	elseif self.mystyle == "boss" or self.mystyle == "arena" then
-		bu.size = 26
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, -1)
-		bu.initialAnchor = "TOPRIGHT"
 		bu.onlyShowPlayer = true
-		bu["growth-x"] = "LEFT"
-		bu["growth-y"] = "DOWN"
-		bu.num = 10
-	else
-		bu.num = 0
+		bu.num = 12
+		bu.iconsPerRow = 6
 	end
+
+	local width = self:GetWidth()
+	bu.size = auraIconSize(width, bu.iconsPerRow, bu.spacing)
+	bu:SetWidth(self:GetWidth())
+	bu:SetHeight((bu.size + bu.spacing) * floor(bu.num/bu.iconsPerRow + .5))
+
 	bu.PostCreateIcon = postCreateIcon
 	bu.PostUpdateIcon = postUpdateIcon
 
