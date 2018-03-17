@@ -172,7 +172,7 @@ local function startSelling()
 	end
 end
 
-f:SetScript("OnEvent", function(self, event, _, arg1)
+f:SetScript("OnEvent", function(_, event, _, arg1)
 	if not NDuiADB["AutoSell"] then return end
 	if event == "MERCHANT_SHOW" then
 		if IsShiftKeyDown() then return end

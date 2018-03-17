@@ -169,7 +169,7 @@ function module:PetBattleUI()
 
 		local nextFrame = 1
 		for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
-			local _, _, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
+			local _, _, _, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
 			if (isBuff and self.displayBuffs) or (not isBuff and self.displayDebuffs) then
 				local frame = self.frames[nextFrame]
 				frame.DebuffBorder:Hide()

@@ -9,7 +9,6 @@ function module:RCLootCoucil()
 	local session = parent:GetModule("RCSessionFrame")
 	local loot = parent:GetModule("RCLootFrame")
 	local voting = parent:GetModule("RCVotingFrame")
-	local history = parent:GetModule("RCLootHistory")
 
 	local function ClearAllRegions(frame)
 		if not frame then return end

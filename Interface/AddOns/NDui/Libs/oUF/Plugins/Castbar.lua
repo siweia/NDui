@@ -49,7 +49,7 @@ cast.setBarTicks = function(castBar, ticknum)
 			ticks[k]:Show()
 		end
 	else
-		for k, v in pairs(ticks) do
+		for _, v in pairs(ticks) do
 			v:Hide()
 		end
 	end
@@ -58,7 +58,7 @@ end
 cast.OnCastbarUpdate = function(self, elapsed)
 	if not self.Lag then self.Lag = 0 end
 	if GetNetStats() == 0 then return end
-	local currentTime = GetTime()
+
 	if self.casting or self.channeling then
 		local parent = self:GetParent()
 		local decimal
@@ -108,7 +108,7 @@ cast.OnCastSent = function(self)
 	self.Castbar.SafeZone.castSent = true
 end
 
-cast.PostCastStart = function(self, unit, name, _, spellID)
+cast.PostCastStart = function(self, unit, _, _, spellID)
 	self:SetAlpha(1.0)
 	self.Spark:Show()
 	self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
@@ -160,7 +160,7 @@ cast.PostUpdateInterruptible = function(self, unit)
 	end
 end
 
-cast.PostCastStop = function(self, unit, spellname, _, spellID)
+cast.PostCastStop = function(self)
 	if not self.fadeOut then 
 		self:SetStatusBarColor(unpack(self.CompleteColor))
 		self.fadeOut = true
@@ -169,13 +169,13 @@ cast.PostCastStop = function(self, unit, spellname, _, spellID)
 	self:Show()
 end
 
-cast.PostChannelStop = function(self, unit, name, spellID)
+cast.PostChannelStop = function(self)
 	self.fadeOut = true
 	self:SetValue(0)
 	self:Show()
 end
 
-cast.PostCastFailed = function(self, event, unit, name, _, spellID)
+cast.PostCastFailed = function(self)
 	self:SetStatusBarColor(unpack(self.FailColor))
 	self:SetValue(self.max)
 	if not self.fadeOut then

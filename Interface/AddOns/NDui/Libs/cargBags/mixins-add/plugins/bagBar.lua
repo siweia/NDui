@@ -108,7 +108,7 @@ function BagButton:OnEnter()
 
 	if(hlFunction) then
 		if(self.bar.isGlobal) then
-			for i, container in pairs(self.implementation.contByID) do
+			for _, container in pairs(self.implementation.contByID) do
 				container:ApplyToButtons(highlight, hlFunction, self.bagID)
 			end
 		else
@@ -130,7 +130,7 @@ function BagButton:OnLeave()
 
 	if(hlFunction) then
 		if(self.bar.isGlobal) then
-			for i, container in pairs(self.implementation.contByID) do
+			for _, container in pairs(self.implementation.contByID) do
 				container:ApplyToButtons(highlight, hlFunction)
 			end
 		else
@@ -160,7 +160,7 @@ function BagButton:OnClick()
 		self.hidden = not self.hidden
 
 		if(self.bar.isGlobal) then
-			for i, container in pairs(container.implementation.contByID) do
+			for _, container in pairs(container.implementation.contByID) do
 				container:SetFilter(self.filter, self.hidden)
 				container.implementation:OnEvent("BAG_UPDATE", self.bagID)
 			end
@@ -177,20 +177,20 @@ function BagButton:OnDragStart()
 end
 
 -- Updating the icons
-local function updater(self, event)
-	for i, button in pairs(self.buttons) do
+local function updater(self)
+	for _, button in pairs(self.buttons) do
 		button:Update()
 	end
 end
 
-local function onLock(self, event, bagID, slotID)
+local function onLock(self, _, bagID, slotID)
 	if(bagID == -1 and slotID > NUM_BANKGENERIC_SLOTS) then
 		bagID, slotID = ContainerIDToInventoryID(slotID-NUM_BANKGENERIC_SLOTS+NUM_BAG_SLOTS)
 	end
 	
 	if(slotID) then return end
 
-	for i, button in pairs(self.buttons) do
+	for _, button in pairs(self.buttons) do
 		if(button.invID == bagID) then
 			return button:Update()
 		end

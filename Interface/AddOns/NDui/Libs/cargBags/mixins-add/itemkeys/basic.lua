@@ -22,7 +22,7 @@ DESCRIPTION:
 	A few simple item keys, mostly ones resulting through pattern matching
 ]]
 
-local parent, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
 
 -- Returns the numeric item id (12345)

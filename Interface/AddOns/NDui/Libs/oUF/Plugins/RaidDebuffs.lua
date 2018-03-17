@@ -6,8 +6,7 @@ local B, C, L, DB = unpack(select(2, ...))
 local _, ns = ...
 local oUF = ns.oUF
 
-local CleanseName = GetSpellInfo(4987)
-
+local class = DB.MyClass
 local bossDebuffPrio = 9999999
 local invalidPrio = -1
 
@@ -68,34 +67,27 @@ do
 	DispellFilter = dispellClasses[class] or {}
 end
 
-local function CheckSpec(tree)
-	local activeGroup = GetActiveSpecGroup()
-	if activeGroup and GetSpecialization(false, false, activeGroup) then
-		return tree == GetSpecialization(false, false, activeGroup)
-	end
-end
-
 local function CheckSpecs()
 	if class == "DRUID" then
-		if CheckSpec(4) then
+		if GetSpecialization() == 4 then
 			DispellFilter.Magic = true
 		else
 			DispellFilter.Magic = false
 		end
 	elseif class == "MONK" then
-		if CheckSpec(2) then
+		if GetSpecialization() == 2 then
 			DispellFilter.Magic = true
 		else
 			DispellFilter.Magic = false
 		end
 	elseif class == "PALADIN" then
-		if CheckSpec(1)then
+		if GetSpecialization() == 1 then
 			DispellFilter.Magic = true
 		else
 			DispellFilter.Magic = false
 		end
 	elseif class == "PRIEST" then
-		if CheckSpec(3) then
+		if GetSpecialization() == 3 then
 			DispellFilter.Magic = false
 			DispellFilter.Disease = false
 		else
@@ -103,7 +95,7 @@ local function CheckSpecs()
 			DispellFilter.Disease = true
 		end
 	elseif class == "SHAMAN" then
-		if CheckSpec(3) then
+		if GetSpecialization() == 3 then
 			DispellFilter.Magic = true
 		else
 			DispellFilter.Magic = false
@@ -130,7 +122,7 @@ end
 
 local UpdateDebuffFrame = function(rd)
 	if rd.index and rd.type and rd.filter then
-		local name, rank, icon, count, debuffType, duration, expirationTime, _, _, _, spellId, _, isBossDebuff = UnitAura(rd.__owner.unit, rd.index, rd.filter)
+		local _, _, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(rd.__owner.unit, rd.index, rd.filter)
 
 		if rd.icon then
 			rd.icon:SetTexture(icon)
@@ -199,7 +191,7 @@ local UpdateDebuffFrame = function(rd)
 	end
 end
 
-local Update = function(self, event, unit)
+local Update = function(self, _, unit)
 	if unit ~= self.unit then return end
 	local rd = self.RaidDebuffs
 	rd.priority = invalidPrio
@@ -208,7 +200,7 @@ local Update = function(self, event, unit)
 		local i = 0
 		while(true) do
 			i = i + 1
-			local name, rank, icon, count, debuffType, duration, expirationTime, _, _, _, spellId, _, isBossDebuff = UnitAura(unit, i, filter)
+			local name, _, _, _, debuffType, _, _, _, _, _, spellId, _, isBossDebuff = UnitAura(unit, i, filter)
 			if not name then break end
 
 			if rd.ShowBossDebuff and isBossDebuff then

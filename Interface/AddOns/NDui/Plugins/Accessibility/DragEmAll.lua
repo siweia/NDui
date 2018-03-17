@@ -54,7 +54,7 @@ local frames = {
 
 -- Frame Existing Check
 local function IsFrameExists()
-	for k, v in pairs(frames) do
+	for k in pairs(frames) do
 		local name = _G[k]
 		if not name then print("Frame not found:", k) end
 	end
@@ -108,7 +108,7 @@ end
 function addon:ADDON_LOADED(name)
 	local frameList = lodFrames[name]
 	if frameList then
-		self:HookFrames(frameList, name)
+		self:HookFrames(frameList)
 	end
 end
 
@@ -127,7 +127,7 @@ local function MouseUpHandler(frame, button)
 	end
 end
 
-function addon:HookFrames(list, arg)
+function addon:HookFrames(list)
 	for name, child in pairs(list) do
 		self:HookFrame(name, child)
 	end
@@ -137,7 +137,6 @@ function addon:HookFrame(name, moveParent)
 	-- find frame
 	-- name may contain dots for children, e.g. ReforgingFrame.InvisibleButton
 	local frame = _G
-	local s
 	for s in string.gmatch(name, "%w+") do
 		if frame then
 			frame = frame[s]

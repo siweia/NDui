@@ -150,7 +150,7 @@ local function Update(self, event, ...)
 	local unit = self.unit
 
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local _, eventType, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, spellID, spellName, school = ...
+		local _, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = ...
 		local isPlayer = UnitGUID("player") == sourceGUID
 		local atTarget = UnitGUID("target") == destGUID
 		local atPlayer = UnitGUID("player") == destGUID
@@ -165,7 +165,7 @@ local function Update(self, event, ...)
 				if value.autoAttack and not element.showAutoAttack then return end
 				if value.isPeriod and not element.showHots then return end
 
-				local amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(value.index, ...)
+				local amount, _, _, _, _, _, critical, _, crushing = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = "-"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
 
@@ -176,7 +176,7 @@ local function Update(self, event, ...)
 			elseif value.suffix == "HEAL" then
 				if value.isPeriod and not element.showHots then return end
 
-				local amount, overhealing, absorbed, critical = select(value.index, ...)
+				local amount, _, _, critical = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID)
 				text = "+"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
 
@@ -185,11 +185,11 @@ local function Update(self, event, ...)
 					critMark = true
 				end
 			elseif value.suffix == "MISS" then
-				local missType, isOffHand, amountMissed = select(value.index, ...)
+				local missType = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = _G["COMBAT_TEXT_"..missType]
 			elseif value.suffix == "ENVIRONMENT" then
-				local envType, amount, overkill, school = select(value.index, ...)
+				local envType, amount = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, envType)
 				text = "-"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
 			end

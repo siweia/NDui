@@ -53,7 +53,7 @@ local function OnHyperlinkEnter(frame, link, ...)
 	if orig1[frame] then return orig1[frame](frame, link, ...) end
 end
 
-local function OnHyperlinkLeave(frame, link, ...)
+local function OnHyperlinkLeave(frame, _, ...)
 	BattlePetTooltip:Hide()
 	GameTooltip:Hide()
 

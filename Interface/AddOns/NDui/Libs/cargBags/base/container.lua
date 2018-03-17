@@ -118,7 +118,7 @@ end
 	@param ... Arguments which are passed to the function
 ]]
 function Container:ApplyToButtons(func, ...)
-	for i, button in pairs(self.buttons) do
+	for _, button in pairs(self.buttons) do
 		func(button, ...)
 	end
 end

@@ -26,7 +26,7 @@ DEPENDENCIES:
 	base-add/filters.sieve.lua
 ]]
 
-local addon, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
 local Container = cargBags.classes.Container
 local Implementation = cargBags.classes.Implementation
@@ -37,7 +37,7 @@ local defaultFilters = {
 	b = function(i, arg) return i.bindOn and i.bindOn:match(arg) end,
 	q = function(i, arg) return i.rarity == tonumber(arg) end,
 	bag = function(i, arg) return i.bagID == tonumber(arg) end,
-	quest = function(i, arg) return i.isQuestItem end,
+	quest = function(i) return i.isQuestItem end,
 
 	_default = "n",
 }

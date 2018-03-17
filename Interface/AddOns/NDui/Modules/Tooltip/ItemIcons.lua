@@ -12,7 +12,7 @@ end
 local function newTooltipHooker(method, func)
 	return function(tooltip)
 		local modified = false
-		tooltip:HookScript("OnTooltipCleared", function(self, ...)
+		tooltip:HookScript("OnTooltipCleared", function()
 			modified = false
 		end)
 		tooltip:HookScript(method, function(self, ...)
@@ -24,15 +24,15 @@ local function newTooltipHooker(method, func)
 	end
 end
 
-local hookItem = newTooltipHooker("OnTooltipSetItem", function(self, ...)
-	local name, link = self:GetItem()
+local hookItem = newTooltipHooker("OnTooltipSetItem", function(self)
+	local _, link = self:GetItem()
 	if link then
 		setTooltipIcon(self, GetItemIcon(link))
 	end
 end)
 
-local hookSpell = newTooltipHooker("OnTooltipSetSpell", function(self, ...)
-	local name, rank, id = self:GetSpell()
+local hookSpell = newTooltipHooker("OnTooltipSetSpell", function(self)
+	local _, _, id = self:GetSpell()
 	if id then
 		setTooltipIcon(self, GetSpellTexture(id))
 	end

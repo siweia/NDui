@@ -308,7 +308,7 @@ local function CreatePanel()
 	local function AddRaidClickSets(parent, index, data)
 		local key, modKey, value = unpack(data)
 		local clickSet = modKey..key
-		local name, texture
+		local name, texture, _
 		if tonumber(value) then
 			name, _, texture = GetSpellInfo(value)
 		else

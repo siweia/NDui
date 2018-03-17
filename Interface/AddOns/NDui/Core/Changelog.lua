@@ -43,7 +43,7 @@ local function changelog()
 	f:SetSize(400, 60 + offset)
 	local close = B.CreateButton(f, 20, 20, "X")
 	close:SetPoint("TOPRIGHT", -10, -10)
-	close:SetScript("OnClick", function(self) f:Hide() end)
+	close:SetScript("OnClick", function() f:Hide() end)
 end
 
 NDui:EventFrame{"PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self)
@@ -51,8 +51,8 @@ NDui:EventFrame{"PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self)
 	if HelloWorld then return end
 	if not NDuiADB["Changelog"] then NDuiADB["Changelog"] = {} end
 
-	local old1, old2, old3 = string.split(".", NDuiADB["Changelog"].Version or "")
-	local cur1, cur2, cur3 = string.split(".", DB.Version)
+	local old1, old2 = string.split(".", NDuiADB["Changelog"].Version or "")
+	local cur1, cur2 = string.split(".", DB.Version)
 	if old1 ~= cur1 or old2 ~= cur2 then
 		changelog()
 		NDuiADB["Changelog"].Version = DB.Version

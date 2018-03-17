@@ -81,7 +81,7 @@ local function loadPetFilter()
 	end
 end
 
-NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, _, addon)
 	if not NDuiDB["Misc"]["PetFilter"] then
 		self:UnregisterAllEvents()
 		return

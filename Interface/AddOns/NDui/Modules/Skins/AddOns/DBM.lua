@@ -149,7 +149,7 @@ function module:DBMSkin()
 	end
 	hooksecurefunc(DBT, "CreateBar", SkinBars)
 
-	local function SkinRange(self)
+	local function SkinRange()
 		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
 			local bg = B.CreateBG(DBMRangeCheckRadar, 2)
 			B.CreateBD(bg, .3)

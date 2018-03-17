@@ -1,6 +1,5 @@
 ﻿local B, C, L, DB = unpack(select(2, ...))
 local oUF = NDui.oUF or oUF
-local UF = NDui:RegisterModule("UnitFrames")
 
 oUF.Tags.Methods["hp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
@@ -152,7 +151,6 @@ end
 oUF.Tags.Events["nppp"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
 oUF.Tags.Methods["nplevel"] = function(unit)
-	local class = UnitClassification(unit)
 	local level = UnitLevel(unit)
 
 	if level and level ~= UnitLevel("player") then

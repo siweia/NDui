@@ -31,9 +31,6 @@ DESCRIPTION
 local _, ns = ...
 local cargBags = ns.cargBags
 
-local Implementation = cargBags.classes.Implementation
-local Container = cargBags.classes.Container
-
 local bagStrings = {
 	["backpack"]		= { 0 },
 	["bags"]			= { 1, 2, 3, 4 },

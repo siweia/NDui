@@ -83,7 +83,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 		bars:RegisterBarStyle("NDui", {
 			apiVersion = 1,
 			version = 1,
-			GetSpacing = function(bar) return 14 end,
+			GetSpacing = function() return 14 end,
 			ApplyStyle = styleBar,
 			BarStopped = removeStyle,
 			GetStyleName = function() return "NDui" end,

@@ -244,7 +244,7 @@ end)
 
 QuickQuest:Register("QUEST_ACCEPT_CONFIRM", AcceptQuest)
 
-QuickQuest:Register("QUEST_ACCEPTED", function(id)
+QuickQuest:Register("QUEST_ACCEPTED", function()
 	if(QuestFrame:IsShown() and QuestGetAutoAccept()) then
 		CloseQuest()
 	end

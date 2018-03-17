@@ -25,10 +25,8 @@ DEPENDENCIES
 	mixins/api-common.lua
 ]]
 
-local addon, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
-
-local function noop() end
 
 local function ItemButton_Scaffold(self)
 	self:SetSize(37, 37)
@@ -108,7 +106,7 @@ local function ItemButton_UpdateQuest(self, item)
 	if(self.OnUpdateQuest) then self:OnUpdateQuest(item) end
 end
 
-local function ItemButton_OnEnter(self, item)
+local function ItemButton_OnEnter(self)
 	if self.ShowNewItems then
 		if self.anim:IsPlaying() then self.anim:Stop() end
 	end

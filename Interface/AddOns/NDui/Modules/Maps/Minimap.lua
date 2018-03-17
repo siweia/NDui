@@ -72,7 +72,7 @@ function module:ReskinRegions()
 
 	-- Difficulty Flags
 	local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
-	for k, v in pairs(flags) do
+	for _, v in pairs(flags) do
 		local flag = _G[v]
 		flag:ClearAllPoints()
 		flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
@@ -197,7 +197,7 @@ function module:RecycleBin()
 	end
 
 	local function CollectRubbish()
-		for i, child in ipairs({Minimap:GetChildren()}) do
+		for _, child in ipairs({Minimap:GetChildren()}) do
 			local name = child:GetName()
 			if name and not blackList[name] and not strupper(name):match("HANDYNOTES") then
 				if child:GetObjectType() == "Button" or strupper(name):match("BUTTON") then
@@ -249,7 +249,7 @@ function module:RecycleBin()
 	local function SortRubbish()
 		if #buttons == 0 then return end
 		local lastbutton
-		for k, button in pairs(buttons) do
+		for _, button in pairs(buttons) do
 			if button:IsShown() then
 				button:ClearAllPoints()
 				if not lastbutton then

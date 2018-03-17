@@ -1,7 +1,7 @@
 local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:GetModule("Chat")
 
-NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_LOGOUT"}:SetScript("OnEvent", function(self, event)
+NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_LOGOUT"}:SetScript("OnEvent", function(_, event)
 	if not NDuiADB["ChatFilter"] then NDuiADB["ChatFilter"] = "" end
 	if not NDuiADB["ChatAt"] then NDuiADB["ChatAt"] = "" end
 	if not NDuiADB["Timestamp"] then NDuiADB["Timestamp"] = false end
@@ -43,7 +43,7 @@ local function genFilterList()
 end
 B.genFilterList = genFilterList
 
-local function genChatFilter(self, event, msg, author, _, _, _, flag)
+local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	if not NDuiDB["Chat"]["EnableFilter"] then return end
 
 	local name = Ambiguate(author, "none")
@@ -85,7 +85,7 @@ local function genChatFilter(self, event, msg, author, _, _, _, flag)
 end
 
 local addonBlockList = {"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*"}
-local function genAddonBlock(self, event, msg, author, _, _, _, flag)
+local function genAddonBlock(_, _, msg, author)
 	if not NDuiDB["Chat"]["BlockAddonAlert"] then return end
 
 	local name = Ambiguate(author, "none")
@@ -122,7 +122,7 @@ end
 	公会频道有人@时提示你
 ]]
 local at = NDui:EventFrame{"CHAT_MSG_GUILD"}
-at:SetScript("OnEvent", function(self, event, ...)
+at:SetScript("OnEvent", function(_, _, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
 	local list = {string.split(" ", NDuiDB["Chat"]["AtList"])}
 	local name = UnitName("player")

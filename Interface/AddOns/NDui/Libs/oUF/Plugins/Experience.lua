@@ -81,7 +81,7 @@ local function Update(self, event, owner)
 	end
 end
 
-local function Enable(self, unit)
+local function Enable(self)
 	local experience = self.Experience
 	if(experience) then
 		local Update = experience.Update or Update
@@ -123,10 +123,6 @@ local function Disable(self)
 
 		if(experience.Rested) then
 			self:UnregisterEvent('UPDATE_EXHAUSTION', Update)
-		end
-
-		if(hunterPlayer) then
-			self:UnregisterEvent('UNIT_PET_EXPERIENCE', Update)
 		end
 	end
 end

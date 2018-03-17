@@ -22,7 +22,7 @@ function module:Focuser()
 		end
 	end
 
-	local function CreateFrame_Hook(type, name, parent, template)
+	local function CreateFrame_Hook(_, name, _, template)
 		if name and template == "SecureUnitButtonTemplate" then
 			SetFocusHotkey(_G[name])
 		end
@@ -36,7 +36,7 @@ function module:Focuser()
 	SetOverrideBindingClick(FocuserButton, true, modifier.."-BUTTON"..mouseButton, "FocuserButton")
 
 	local delay = NDui:EventFrame{"PLAYER_REGEN_ENABLED", "GROUP_ROSTER_UPDATE", "PLAYER_ENTERING_WORLD"}
-	delay:SetScript("OnEvent", function()
+	delay:SetScript("OnEvent", function(_, event)
 		if event == "PLAYER_REGEN_ENABLED" then
 			for frame in pairs(pending) do
 				SetFocusHotkey(frame)

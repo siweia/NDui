@@ -8,7 +8,7 @@ function module:Mailbox()
 	if not NDuiDB["Misc"]["Mail"] then return end
 
 	local deletedelay, t, mailIndex, mailItemIndex = .5, 0, 1, 0
-	local button1, button2, button3, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening
+	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening
 
 	InboxNextPageButton:SetScript("OnClick", function()
 		mailIndex = mailIndex + 1
@@ -111,11 +111,11 @@ function module:Mailbox()
 		skipMail = false
 	end
 
-	local function OpenAll_OnEvent(frame, event, arg1, arg2)
+	local function OpenAll_OnEvent(_, event, _, arg)
 		if event == "UI_ERROR_MESSAGE" then
-			if arg2 == ERR_INV_FULL then
+			if arg == ERR_INV_FULL then
 				StopOpening()
-			elseif arg2 == ERR_ITEM_MAX_COUNT then
+			elseif arg == ERR_ITEM_MAX_COUNT then
 				skipMail = true
 			end
 		elseif event == "MAIL_CLOSED" then
@@ -145,26 +145,26 @@ function module:Mailbox()
 		return button
 	end
 
-	button1 = CreatButton("OpenAllButton1", InboxFrame, L["Collect All"], 80, 28, "TOPLEFT", "InboxFrame", "TOPLEFT", 50, -35)
+	button1 = CreatButton(nil, InboxFrame, L["Collect All"], 80, 28, "TOPLEFT", "InboxFrame", "TOPLEFT", 50, -35)
 	button1:RegisterEvent("MAIL_CLOSED")
 	button1:SetScript("OnClick", OpenAll)
 	button1:SetScript("OnEvent", OpenAll_OnEvent)
 
-	button2 = CreatButton("OpenAllButton2", InboxFrame, L["Collect Gold"], 80, 28, "LEFT", button1, "RIGHT", 15, 0)
+	button2 = CreatButton(nil, InboxFrame, L["Collect Gold"], 80, 28, "LEFT", button1, "RIGHT", 15, 0)
 	button2:SetScript("OnClick", function() takingOnlyCash = true OpenAll() end)
 	button2:SetScript("OnEnter", TotalCash_OnEnter)
 	button2:SetScript("OnUpdate", function(self) if GameTooltip:IsOwned(self) then TotalCash_OnEnter(self) end end)
 	button2:SetScript("OnLeave", GameTooltip_Hide)
 
-	button3 = CreatButton("OpenAllButton3", OpenMailFrame, L["Collect Letters"], 82, 22, "RIGHT", "OpenMailReplyButton", "LEFT", 0, 0)
+	button3 = CreatButton(nil, OpenMailFrame, L["Collect Letters"], 82, 22, "RIGHT", "OpenMailReplyButton", "LEFT", 0, 0)
 	button3:SetScript("OnClick", function() onlyCurrentMail = true OpenAll() end)
 	button3:SetScript("OnEvent", OpenAll_OnEvent)
 
-	button4 = CreatButton("OpenAllButton4", InboxFrame, REFRESH, 60, 28, "LEFT", button2, "RIGHT", 15, 0)
+	button4 = CreatButton(nil, InboxFrame, REFRESH, 60, 28, "LEFT", button2, "RIGHT", 15, 0)
 	button4:SetScript("OnClick", function() CheckInbox() end)
 
-	local function deleteClick(self, button, down)
-		selectedID = self.id + (InboxFrame.pageNum-1)*7
+	local function deleteClick(self)
+		local selectedID = self.id + (InboxFrame.pageNum-1)*7
 		if InboxItemCanDelete(selectedID) then
 			DeleteInboxItem(selectedID)
 		else
@@ -239,10 +239,10 @@ function module:Mailbox()
 	-- Aurora Reskin
 	if IsAddOnLoaded("Aurora") then
 		local F = unpack(Aurora)
-		F.Reskin(OpenAllButton1)
-		F.Reskin(OpenAllButton2)
-		F.Reskin(OpenAllButton3)
-		F.Reskin(OpenAllButton4)
+		F.Reskin(button1)
+		F.Reskin(button2)
+		F.Reskin(button3)
+		F.Reskin(button4)
 	end
 
 	-- Hide Blizz

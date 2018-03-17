@@ -192,7 +192,7 @@ function module:CreateRM()
 	B.CreateBD(marker)
 	B.CreateTex(marker)
 	B.CreateBC(marker, .5)
-	marker:HookScript("OnMouseUp", function(self, btn)
+	marker:HookScript("OnMouseUp", function(_, btn)
 		if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
 			if btn == "RightButton" then ClearRaidMarker() end
 		else
@@ -215,7 +215,7 @@ function module:CreateRM()
 		for i = 1, 3 do NoBuff[i] = {} end
 		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do
-			local name, _, subgroup, _, _, class, _, online, isDead = GetRaidRosterInfo(i)
+			local name, _, subgroup, _, _, _, _, online, isDead = GetRaidRosterInfo(i)
 			if name and online and subgroup <= maxgroup and not isDead then
 				numPlayer = numPlayer + 1
 				for j = 1, 3 do

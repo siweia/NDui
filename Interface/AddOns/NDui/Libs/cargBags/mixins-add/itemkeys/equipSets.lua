@@ -23,7 +23,7 @@ DESCRIPTION
 DEPENDENCIES
 	mixins-add/itemkeys/basic.lua
 ]]
-local parent, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
 
 local ItemKeys = cargBags.itemKeys
@@ -39,7 +39,7 @@ local function initUpdater()
 			local name = GetEquipmentSetInfo(setID)
 			local items = GetEquipmentSetItemIDs(name)
 
-			for slot, id in pairs(items) do
+			for _, id in pairs(items) do
 				setItems[id] = setID
 			end
 		end

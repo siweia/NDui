@@ -199,7 +199,7 @@ local defaultSettings = {
 
 NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
 	if addon ~= "NDui" then return end
-	self:UnregisterEvent("ADDON_LOADED")
+	self:UnregisterEvent(event)
 	if not NDuiDB["LEGION"] then
 		NDuiDB = {}
 		NDuiDB["LEGION"] = true
@@ -463,7 +463,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 }
 
 local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
-local guiTab, guiPage, f, x, y = {}, {}
+local guiTab, guiPage, f = {}, {}
 
 local function SelectTab(i)
 	for num = 1, #tabList do
@@ -487,7 +487,7 @@ local function CreateTab(i, name)
 	local label = B.CreateFS(tab, 15, name, false, "LEFT", 10, 0)
 	label:SetTextColor(1, .8, 0)
 
-	tab:SetScript("OnClick", function(self)
+	tab:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
 		SelectTab(i)
 	end)
@@ -563,7 +563,7 @@ local function CreateOption(i)
 			s:SetWidth(190)
 			s:SetMinMaxValues(min, max)
 			s:SetValue(NDuiDB[key][value])
-			s:SetScript("OnValueChanged", function(self, v)
+			s:SetScript("OnValueChanged", function(_, v)
 				local current = tonumber(format("%."..step.."f", v))
 				NDuiDB[key][value] = current
 				_G[s:GetName().."Text"]:SetText(current)
@@ -758,7 +758,7 @@ local function OpenGUI()
 	clickSet:SetScript("OnClick", function()
 		f:Hide()
 		SlashCmdList["NDUI_AWCONFIG"]()
-		_G["NDui_AWConfigTab12"]:Click()
+		NDui_AWConfigTab12:Click()
 	end)
 
 	-- Toggle AuraWatch Console

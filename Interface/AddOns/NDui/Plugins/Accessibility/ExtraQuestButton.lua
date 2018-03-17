@@ -130,7 +130,7 @@ local onAttributeChanged = [[
 
 function ExtraQuestButton:BAG_UPDATE_COOLDOWN()
 	if(self:IsShown() and self:IsEnabled()) then
-		local start, duration, enable = GetItemCooldown(self.itemID)
+		local start, duration = GetItemCooldown(self.itemID)
 		if(duration > 0) then
 			self.Cooldown:SetCooldown(start, duration)
 			self.Cooldown:Show()
@@ -230,7 +230,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 end
 
 local worldQuests = {}
-function ExtraQuestButton:QUEST_REMOVED(event, questID)
+function ExtraQuestButton:QUEST_REMOVED(_, questID)
 	if(worldQuests[questID]) then
 		worldQuests[questID] = nil
 
@@ -238,7 +238,7 @@ function ExtraQuestButton:QUEST_REMOVED(event, questID)
 	end
 end
 
-function ExtraQuestButton:QUEST_ACCEPTED(event, questLogIndex, questID)
+function ExtraQuestButton:QUEST_ACCEPTED(_, questLogIndex, questID)
 	if(questID and not IsQuestBounty(questID) and IsQuestTask(questID)) then
 		local _, _, worldQuestType = GetQuestTagInfo(questID)
 		if(worldQuestType and not worldQuests[questID]) then

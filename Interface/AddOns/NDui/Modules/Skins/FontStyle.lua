@@ -96,7 +96,7 @@ function module:FontStyle()
 		frame.statusText:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -3, options.height/3 - 5)
 
 		if not frame.fontStyled then
-			local fontName, fontSize, fontFlags = frame.statusText:GetFont()
+			local fontName, fontSize = frame.statusText:GetFont()
 			frame.statusText:SetFont(fontName, fontSize, "OUTLINE")
 			frame.statusText:SetTextColor(.7, .7, .7)
 			frame.statusText:SetShadowColor(0, 0, 0, 0)
@@ -117,7 +117,7 @@ function module:FontStyle()
 
 	-- Achievement ShieldPoints, GuildRoster LevelText
 	local styledIndex = 0
-	NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+	NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, _, addon)
 		if addon == "Blizzard_AchievementUI" then
 			hooksecurefunc("AchievementObjectives_DisplayProgressiveAchievement", function()
 				local index = 1

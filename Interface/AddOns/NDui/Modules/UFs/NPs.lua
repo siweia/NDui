@@ -1,5 +1,4 @@
 local B, C, L, DB = unpack(select(2, ...))
-local cast = NDui.cast
 local UF = NDui:GetModule("UnitFrames")
 
 -- Init
@@ -122,7 +121,7 @@ local function UpdateColor(element, unit)
 	end
 end
 
-local function UpdateThreatColor(self, event, unit)
+local function UpdateThreatColor(self, _, unit)
 	if unit ~= self.unit then return end
 	UpdateColor(self.Health, unit)
 end
@@ -330,7 +329,7 @@ function UF:CreateClassBar()
 		end
 	end
 
-	local function UpdateRune(self, event, runeID, energized)
+	local function UpdateRune(_, _, runeID, energized)
 		local rune = bars[runeID]
 		if not rune then return end
 

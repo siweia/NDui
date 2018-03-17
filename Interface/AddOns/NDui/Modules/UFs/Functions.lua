@@ -1,7 +1,7 @@
 local B, C, L, DB = unpack(select(2, ...))
 local cast = NDui.cast
 local oUF = NDui.oUF or oUF
-local UF = NDui:GetModule("UnitFrames")
+local UF = NDui:RegisterModule("UnitFrames")
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
@@ -339,7 +339,7 @@ function UF:CreateCastBar(self)
 	self.Castbar.Spark = spark
 end
 
-function UF:CreateMirrorBar(self)
+function UF:CreateMirrorBar()
 	for _, bar in pairs({"MirrorTimer1", "MirrorTimer2", "MirrorTimer3"}) do   
 		_G[bar]:GetRegions():Hide()
 		_G[bar.."Border"]:Hide()
@@ -403,13 +403,13 @@ local function postUpdateIcon(element, unit, button, index)
 	end
 end
 
-local function postUpdateGapIcon(element, unit, icon)
+local function postUpdateGapIcon(_, _, icon)
 	if icon.Shadow and icon.Shadow:IsShown() then
 		icon.Shadow:Hide()
 	end
 end
 
-local function customFilter(element, unit, button, name, _, _, _, _, _, _, caster, _, nameplateShowSelf, spellID, _, _, _, nameplateShowAll)
+local function customFilter(element, unit, button, name, _, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
 	local style = element:GetParent().mystyle
 	if style == "raid" then
 		local auraList = C.RaidAuraWatch[DB.MyClass]
@@ -547,7 +547,7 @@ end
 local margin = C.UFs.BarMargin
 local width, height = unpack(C.UFs.BarSize)
 
-local function postUpdateClassPower(element, cur, max, diff, event)
+local function postUpdateClassPower(element, _, max, diff, event)
 	if(diff or event == "ClassPowerEnable") then
 		if max <= 6 then
 			for i = 1, 6 do
@@ -593,7 +593,7 @@ function UF:CreateClassPower(self)
 	end
 end
 
-local function postUpdateAltPower(element, unit, cur, min, max)
+local function postUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local perc = math.floor((cur/max)*100)
 		if perc < 35 then
@@ -652,8 +652,8 @@ function UF:CreateExpBar(self)
 	self.Experience = bar
 end
 
-local function postUpdateRepColor(element, event, unit, bar)
-	local name, id, _, _, _, factionID = GetWatchedFactionInfo()
+local function postUpdateRepColor(_, _, _, bar)
+	local _, id, _, _, _, factionID = GetWatchedFactionInfo()
 	local friendID = GetFriendshipReputation(factionID)
 	if friendID then id = 5 end		
 	bar:SetStatusBarColor(FACTION_BAR_COLORS[id].r, FACTION_BAR_COLORS[id].g, FACTION_BAR_COLORS[id].b)
@@ -731,7 +731,7 @@ function UF:CreatePrediction(self)
 	}
 end
 
-local function postUpdateAddPower(element, unit, cur, max)
+local function postUpdateAddPower(element, _, cur, max)
 	if element.Text then
 		local perc = cur/max * 100
 		if perc == 100 then

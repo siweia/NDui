@@ -123,7 +123,7 @@ local function updateDebuffBorder(buttonName, index, filter)
 end
 hooksecurefunc("AuraButton_Update", updateDebuffBorder)
 
-local function FlashOnEnd(self, elapsed)
+local function FlashOnEnd(self)
 	if self.timeLeft < 10 then
 		self:SetAlpha(BuffFrame.BuffAlphaValue)
 	else

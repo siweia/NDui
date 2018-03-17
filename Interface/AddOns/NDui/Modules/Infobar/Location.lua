@@ -91,6 +91,6 @@ info.onMouseUp = function(_, btn)
 		LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
 		LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, zone)
 	elseif btn == "RightButton" then
-		ChatFrame_OpenChat(format("%s: %s (%s)", L["My Position"], zone, formatCoords()), chatFrame)
+		ChatFrame_OpenChat(format("%s: %s (%s)", L["My Position"], zone, formatCoords()), SELECTED_DOCK_FRAME)
 	end
 end

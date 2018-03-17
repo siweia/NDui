@@ -116,7 +116,7 @@ local function ForceChatSettings()
 	"WHISPER","PARTY","PARTY_LEADER","RAID","RAID_LEADER","RAID_WARNING","INSTANCE_CHAT",
 	"INSTANCE_CHAT_LEADER","CHANNEL1","CHANNEL2","CHANNEL3","CHANNEL4","CHANNEL5","CHANNEL6","CHANNEL7",
 	}	
-	for i, v in ipairs(channels) do
+	for _, v in ipairs(channels) do
 		ToggleChatColorNamesByClassGroup(true, v)
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)

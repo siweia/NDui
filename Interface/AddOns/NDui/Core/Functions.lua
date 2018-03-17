@@ -349,7 +349,7 @@ B.CopyTable = function(source, target)
 	for key, value in pairs(source) do
 		if type(value) == "table" then
 			if not target[key] then target[key] = {} end
-			for k, v in pairs(value) do
+			for k in pairs(value) do
 				target[key][k] = value[k]
 			end
 		else
@@ -428,7 +428,7 @@ B.CreateDropDown = function(parent, width, height, data)
 		opt[i]:SetSize(width - 10, height)
 		B.CreateBD(opt[i], .3)
 		B.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
-		opt[i]:SetScript("OnClick", function(self)
+		opt[i]:SetScript("OnClick", function()
 			PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
 			for num = 1, #opt do
 				if num == i then

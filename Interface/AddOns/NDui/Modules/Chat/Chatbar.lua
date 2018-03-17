@@ -41,7 +41,7 @@ function module:Chatbar()
 					ChatFrame_OpenChat("/w ", chatFrame)
 				end
 			else   
-				if(UnitExists("target") and UnitName("target") and UnitIsPlayer("target") and GetDefaultLanguage("player") == GetDefaultLanguage("target") )then
+				if UnitExists("target") and UnitName("target") and UnitIsPlayer("target") and GetDefaultLanguage("player") == GetDefaultLanguage("target") then
 					local name = GetUnitName("target", true)
 					ChatFrame_OpenChat("/w "..name.." ", chatFrame)
 				else

@@ -126,7 +126,7 @@ local function CreateConsole()
 	end)
 end
 
-SlashCmdList["NDUI_MOVER"] = function(msg)
+SlashCmdList["NDUI_MOVER"] = function()
 	if InCombatLockdown() then
 		UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 		return

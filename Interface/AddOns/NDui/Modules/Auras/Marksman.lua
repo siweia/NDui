@@ -194,7 +194,7 @@ f:SetScript("OnEvent", function(self, event)
 				bu[5].Count:SetText("")
 				bu[5].Icon:SetTexture(GetSpellTexture(198670))
 			else
-				local name, _, _, count, _, duration, expire = UnitBuff("player", GetSpellInfo(223138))
+				local name, _, _, _, _, duration, expire = UnitBuff("player", GetSpellInfo(223138))
 				if name then
 					bu[5]:SetAlpha(1)
 					bu[5].CD:SetCooldown(expire-duration, duration)

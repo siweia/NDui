@@ -103,12 +103,12 @@ end
 
 -- Swith channels by Tab
 local cycles = {
-	{ chatType = "SAY", use = function(self, editbox) return 1 end },
-    { chatType = "PARTY", use = function(self, editbox) return IsInGroup() end },
-    { chatType = "RAID", use = function(self, editbox) return IsInRaid() end },
-    { chatType = "INSTANCE_CHAT", use = function(self, editbox) return IsPartyLFG() end },
-    { chatType = "GUILD", use = function(self, editbox) return IsInGuild() end },
-	{ chatType = "CHANNEL", use = function(self, editbox)
+	{ chatType = "SAY", use = function() return 1 end },
+    { chatType = "PARTY", use = function() return IsInGroup() end },
+    { chatType = "RAID", use = function() return IsInRaid() end },
+    { chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
+    { chatType = "GUILD", use = function() return IsInGuild() end },
+	{ chatType = "CHANNEL", use = function(_, editbox)
 		if DB.Client ~= "zhCN" then return false end
 		local channels, inWorldChannel, number = {GetChannelList()}
 		for i = 1, #channels do
@@ -125,7 +125,7 @@ local cycles = {
 			return false
 		end
 	end },
-    { chatType = "SAY", use = function(self, editbox) return 1 end },
+    { chatType = "SAY", use = function() return 1 end },
 }
 
 hooksecurefunc("ChatEdit_CustomTabPressed", function(self)
@@ -167,7 +167,7 @@ end)
 
 -- Autoinvite by whisper
 local f = NDui:EventFrame{"CHAT_MSG_WHISPER", "CHAT_MSG_BN_WHISPER"}
-f:SetScript("OnEvent", function(self, event, ...)
+f:SetScript("OnEvent", function(_, event, ...)
 	if not NDuiDB["Chat"]["Invite"] then return end
 
 	local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
@@ -220,15 +220,15 @@ function module:OnLogin()
 
 	-- Easy Resizing
 	if NDuiDB["Chat"]["EasyResize"] then
-		ChatFrame1Tab:HookScript("OnMouseDown", function(self, arg1)
-			if arg1 == "LeftButton" then
+		ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
+			if btn == "LeftButton" then
 				if select(8, GetChatWindowInfo(1)) then
 					ChatFrame1:StartSizing("TOP")
 				end
 			end
 		end)
-		ChatFrame1Tab:SetScript("OnMouseUp", function(self, arg1)
-			if arg1 == "LeftButton" then
+		ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
+			if btn == "LeftButton" then
 				ChatFrame1:StopMovingOrSizing()
 				FCF_SavePositionAndDimensions(ChatFrame1)
 			end

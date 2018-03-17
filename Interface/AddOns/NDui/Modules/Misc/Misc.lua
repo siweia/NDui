@@ -48,7 +48,7 @@ local function AddCalculateIcon()
 	B.CreateGT(ar, "ANCHOR_RIGHT", L["Arch Count"], "system")
 	ar:SetScript("OnMouseUp", CalculateArches)
 end
-NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, _, addon)
 	if addon == "Blizzard_ArchaeologyUI" then
 		AddCalculateIcon()
 		-- Repoint Bar
@@ -121,7 +121,7 @@ local erList = {
 	[SPELL_FAILED_TARGET_AURASTATE] = true,
 	[ERR_NO_ATTACK_TARGET] = true,
 }
-NDui:EventFrame{"UI_ERROR_MESSAGE"}:SetScript("OnEvent", function(self, event, _, error)
+NDui:EventFrame{"UI_ERROR_MESSAGE"}:SetScript("OnEvent", function(_, _, _, error)
 	if not NDuiDB["Misc"]["HideErrors"] then return end
 	if InCombatLockdown() and erList[error] then
 		UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
@@ -139,7 +139,7 @@ hooksecurefunc("AuctionFrame_LoadUI", function()
 			for i = 1, NUM_BROWSE_TO_DISPLAY do
 				local index = offset + i + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page)
 				if index <= numBatchAuctions + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page) then
-					local name, _, count, _, _, _, _, _, _, buyoutPrice, bidAmount =  GetAuctionItemInfo("list", offset + i)
+					local name, _, _, _, _, _, _, _, _, buyoutPrice, bidAmount =  GetAuctionItemInfo("list", offset + i)
 					local alpha = .5
 					local color = "yellow"
 					if name then
@@ -185,7 +185,7 @@ end
 -- Autoequip in Spec-changing
 NDui:EventFrame{"UNIT_SPELLCAST_SUCCEEDED"}:SetScript("OnEvent", function(self, event, ...)
 	if not NDuiDB["Misc"]["Autoequip"] then
-		self:UnregisterAllEvents()
+		self:UnregisterEvent(event)
 		return
 	end
 
@@ -273,7 +273,7 @@ end
 local function TakeScreen(delay, func, ...)
 	local waitTable = {}
 	local waitFrame = _G["TakeScreenWaitFrame"] or CreateFrame("Frame", "TakeScreenWaitFrame", UIParent)
-	waitFrame:SetScript("OnUpdate", function(self, elapse)
+	waitFrame:SetScript("OnUpdate", function(_, elapse)
 		local count = #waitTable
 		local i = 1
 		while (i <= count) do
@@ -443,7 +443,7 @@ if DB.Client == "zhCN" then
 		f:UnregisterAllEvents()
 	end
 
-	f:SetScript("OnEvent", function(self, event, ...)
+	f:SetScript("OnEvent", function(_, _, ...)
 		if finish then return end
 		local msg, author = ...
 		if msg == keyword and not goldList[author] then

@@ -120,7 +120,7 @@ info.onEnter = function(self)
 	if not updateRequest then
 		if numFriends > 0 then buildFriendTable(numFriends) end
 		if numBNet > 0 then buildBNetTable(numBNet) end
-		updateRequestr = true
+		updateRequest = true
 	end
 
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
@@ -137,7 +137,6 @@ info.onEnter = function(self)
 			GameTooltip:AddLine(wowString, 0,.6,1)
 			for i = 1, #friendTable do
 				local name, level, class, area, connected, status = unpack(friendTable[i])
-				local zoneColor, classColor, levelColor
 				if connected then
 					local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
 					local levelColor = B.HexRGB(GetQuestDifficultyColor(level))
@@ -151,7 +150,7 @@ info.onEnter = function(self)
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(bnetString, 0,.6,1)
 			for i = 1, #bnetTable do
-				local bnetID, accountName, charName, gameID, client, isOnline, status, realmName, class, infoText = unpack(bnetTable[i])
+				local _, accountName, charName, gameID, client, isOnline, status, realmName, class, infoText = unpack(bnetTable[i])
 
 				if isOnline then
 					local zoneColor, realmColor = inactiveZone, inactiveZone

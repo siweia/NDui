@@ -159,7 +159,7 @@ function module:ReflectingAlert()
 
 	NDui:EventFrame{"UNIT_SPELLCAST_SUCCEEDED"}:SetScript("OnEvent", function(_, _, ...)
 		if not IsInGroup() then return end
-		local unit, spellName, _, _, spell = ...
+		local unit, _, _, _, spell = ...
 		if spell ~= 163219 then return end
 		if unit:match("raid") or unit:match("party") and not UnitInRaid(unit) then
 			local unitName = GetUnitName(unit)
@@ -199,8 +199,8 @@ function module:VersionCheck()
 	f.Text:SetText("")
 	f:Hide()
 
-	NDui:EventFrame{"CHAT_MSG_ADDON"}:SetScript("OnEvent", function(self, event, ...)
-		local prefix, msg, distType, sender = ...
+	NDui:EventFrame{"CHAT_MSG_ADDON"}:SetScript("OnEvent", function(self, _, ...)
+		local prefix, msg, distType = ...
 		if distType ~= "GUILD" then return end
 
 		if prefix == "NDuiVersionCheck" then
@@ -211,7 +211,7 @@ function module:VersionCheck()
 			end
 
 			if not self.checked then
-				local b1, b2, b3 = string.split(".", DB.Version)
+				local b1, b2 = string.split(".", DB.Version)
 				if tonumber(c1) > tonumber(b1) or tonumber(c2) > tonumber(b2) then
 					f.Text:SetText(format(L["Outdated NDui"], NDuiADB["DetectVersion"]))
 					f:Show()
@@ -272,7 +272,7 @@ function module:AntoranBlast()
 			names = {}
 			cache = {}
 		else
-			local _, eventType, _, sourceGUID, sourceName, _, _, destGUID, destName, _, _, spellID = ...
+			local _, eventType, _, sourceGUID, _, _, _, _, destName, _, _, spellID = ...
 			if eventType == "SPELL_DAMAGE" and spellID == 245121 and not GetPlayerInfoByGUID(sourceGUID) and not cache[sourceGUID] then
 				if not names[destName] then names[destName] = 0 end
 				names[destName] = names[destName] + 1

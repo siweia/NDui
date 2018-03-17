@@ -6,7 +6,7 @@ function module:ExtraCDSkin()
 	if not NDuiDB["Skins"]["ExtraCD"] then return end
 
 	local ExtraCD = ExtraCD
-	hooksecurefunc(ExtraCD, "CreateIcon", function(self, order, bar)
+	hooksecurefunc(ExtraCD, "CreateIcon", function(_, order, bar)
 		local btn = bar.btns[order]
 		local backdrop = btn:GetBackdrop()
 		local icon = backdrop.bgFile

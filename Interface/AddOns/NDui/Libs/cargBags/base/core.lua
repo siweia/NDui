@@ -70,13 +70,12 @@ function cargBags:GetImplementation(name)
 end
 
 local function toggleBag(forceopen)	cargBags.blizzard:Toggle(forceopen)	end
-local function toggleNoForce()		cargBags.blizzard:Toggle()			end
-local function openBag()				cargBags.blizzard:Show()			end
-local function closeBag()				cargBags.blizzard:Hide()			end
+local function toggleNoForce() cargBags.blizzard:Toggle() end
+local function closeBag() cargBags.blizzard:Hide() end
 
 --- Overwrites Blizzards Bag-Toggle-Functions with the implementation's ones
 --  @param name <string> The name of the implementation [optional]
-function cargBags:ReplaceBlizzard(name)
+function cargBags:ReplaceBlizzard(name, arg1)
 	local impl = arg1 and cargBags:GetImplementation(name) or self.blizzard
 	self.blizzard = impl
 
@@ -111,7 +110,7 @@ end
 --  @param event <string> the name of the event [default: "BAG_UPDATE"]
 --  @param ... arguments of the event [optional]
 function cargBags:FireEvent(force, event, ...)
-	for name, impl in pairs(self.classes.Implementation.instances) do
+	for _, impl in pairs(self.classes.Implementation.instances) do
 		if(force or impl:IsShown()) then
 			impl:OnEvent(event or "BAG_UPDATE", ...)
 		end

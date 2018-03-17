@@ -37,7 +37,7 @@ end)
 
 -- make it only split stacks with shift-rightclick if the TradeSkillFrame is open
 -- shift-leftclick should be reserved for the search box
-hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(self, button)
+hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(_, button)
 	if TradeSkillFrame and TradeSkillFrame:IsShown() then
 		if button == "LeftButton" then
 			StackSplitFrame:Hide()
@@ -45,19 +45,10 @@ hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(self, button
 	end
 end)
 
-hooksecurefunc("MerchantItemButton_OnModifiedClick", function(self, button)
+hooksecurefunc("MerchantItemButton_OnModifiedClick", function(_, button)
 	if TradeSkillFrame and TradeSkillFrame:IsShown() then
 		if button == "LeftButton" then
 			StackSplitFrame:Hide()
 		end
 	end
 end)
-
--- temp fix Blizzard bug for when clicking header items
-local oldGetRecipeLink = C_TradeSkillUI.GetRecipeLink
-
-function C_TradeSkillUI.GetRecipeLink(recipeID)
-	if recipeID then
-		return oldGetRecipeLink(recipeID)
-	end
-end

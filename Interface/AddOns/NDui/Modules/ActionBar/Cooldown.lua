@@ -8,15 +8,7 @@ function module:OnLogin()
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
 	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 	local ICON_SIZE = 36
-
 	local GetTime = GetTime
-	local min = math.min
-	local floor = math.floor
-	local format = string.format
-
-	local round = function(x)
-		return floor(x + 0.5)
-	end
 
 	-- stops the timer
 	local function Timer_Stop(self)
@@ -31,18 +23,18 @@ function module:OnLogin()
 	end
 
 	-- adjust font size whenever the timer's parent size changes, hide if it gets too tiny
-	local function Timer_OnSizeChanged(self, width, height)
-		local fontScale = round(width) / ICON_SIZE
-		if (fontScale == self.fontScale) then return end
+	local function Timer_OnSizeChanged(self, width)
+		local fontScale = floor(width + 0.5) / ICON_SIZE
+		if fontScale == self.fontScale then return end
 		self.fontScale = fontScale
 
-		if (fontScale < MIN_SCALE) then
+		if fontScale < MIN_SCALE then
 			self:Hide()
 		else
 			self.text:SetFont(DB.Font[1], fontScale * FONT_SIZE, DB.Font[3])
 			self.text:SetShadowColor(0, 0, 0, 0)
 
-			if (self.enabled) then
+			if self.enabled then
 				Timer_ForceUpdate(self)
 			end
 		end
@@ -50,11 +42,11 @@ function module:OnLogin()
 
 	-- update timer text, if it needs to be, hide the timer if done
 	local function Timer_OnUpdate(self, elapsed)
-		if (self.nextUpdate > 0) then
+		if self.nextUpdate > 0 then
 			self.nextUpdate = self.nextUpdate - elapsed
 		else
 			local remain = self.duration - (GetTime() - self.start)
-			if (remain > 0) then
+			if remain > 0 then
 				local time, nextUpdate = B.FormatTime(remain)
 				self.text:SetText(time)
 				self.nextUpdate = nextUpdate
@@ -80,7 +72,7 @@ function module:OnLogin()
 		timer.text = text
 
 		Timer_OnSizeChanged(timer, scaler:GetSize())
-		scaler:SetScript("OnSizeChanged", function(self, ...) 
+		scaler:SetScript("OnSizeChanged", function(_, ...) 
 			Timer_OnSizeChanged(timer, ...) 
 		end)
 
@@ -90,16 +82,16 @@ function module:OnLogin()
 
 	local function Timer_Start(self, start, duration)
 		if self:IsForbidden() then return end
-		if (self.noOCC) then return end
+		if self.noOCC then return end
 
-		if (start > 0 and duration > MIN_DURATION) then
+		if start > 0 and duration > MIN_DURATION then
 			local timer = self.timer or Timer_Create(self)
 			timer.start = start
 			timer.duration = duration
 			timer.enabled = true
 			timer.nextUpdate = 0
 
-			if (timer.fontScale >= MIN_SCALE) then 
+			if timer.fontScale >= MIN_SCALE then 
 				timer:Show() 
 			end
 		else
@@ -119,7 +111,7 @@ function module:OnLogin()
 		active[self] = nil
 	end
 
-	local function Cooldown_ShouldUpdateTimer(self, start, duration)
+	local function Cooldown_ShouldUpdateTimer(self, start)
 		local timer = self.timer
 		if not timer then
 			return true
@@ -129,9 +121,9 @@ function module:OnLogin()
 
 	local function Cooldown_Update(self)
 		local button = self:GetParent()
-		local start, duration, enable = GetActionCooldown(button.action)
+		local start, duration = GetActionCooldown(button.action)
 
-		if Cooldown_ShouldUpdateTimer(self, start, duration) then
+		if Cooldown_ShouldUpdateTimer(self, start) then
 			Timer_Start(self, start, duration)
 		end
 	end
@@ -152,7 +144,7 @@ function module:OnLogin()
 	end
 
 	if _G["ActionBarButtonEventsFrame"].frames then
-		for i, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
+		for _, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
 			ActionButton_Register(frame)
 		end
 	end

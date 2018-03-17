@@ -102,7 +102,7 @@ end
 
 local function CreateButtonFrameFader(frame, buttonList, faderConfig)
 	CreateFrameFader(frame, faderConfig)
-	for i, button in next, buttonList do
+	for _, button in next, buttonList do
 		if not button.__faderParent then
 			button.__faderParent = frame
 			button:HookScript("OnEnter", OffFrameHandler)

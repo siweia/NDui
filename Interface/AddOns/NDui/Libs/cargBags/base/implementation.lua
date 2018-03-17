@@ -17,7 +17,7 @@
 	along with cargBags; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ]]
-local addon, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
 
 --[[!
@@ -328,7 +328,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.minLevel = level
 			i.link = clink
 		elseif clink:find("keystone") then
-			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
+			local data = strmatch(clink, "|H(.-)|h(.-)|h")
 			local _, _, level = strmatch(data, "(%w+):(%d+):(%d+)")
 			i.id = i.id or 138019
 			i.name, _, _, _, _, i.type, i.subType, i.stackCount, i.equipLoc = GetItemInfo(i.id)
@@ -404,7 +404,7 @@ end
 	@param slotID <number> [optional]
 	@callback Container:OnBagUpdate(bagID, slotID)
 ]]
-function Implementation:BAG_UPDATE(event, bagID, slotID)
+function Implementation:BAG_UPDATE(_, bagID, slotID)
 	if(bagID and slotID) then
 		self:UpdateSlot(bagID, slotID)
 	elseif(bagID) then
@@ -429,7 +429,7 @@ end
 	Fired when the item cooldowns need to be updated
 	@param bagID <number> [optional]
 ]]
-function Implementation:BAG_UPDATE_COOLDOWN(event, bagID)
+function Implementation:BAG_UPDATE_COOLDOWN(_, bagID)
 	if(bagID) then
 		for slotID=1, GetContainerNumSlots(bagID) do
 			local button = self:GetButton(bagID, slotID)
@@ -439,8 +439,8 @@ function Implementation:BAG_UPDATE_COOLDOWN(event, bagID)
 			end
 		end
 	else
-		for id, container in pairs(self.contByID) do
-			for i, button in pairs(container.buttons) do
+		for _, container in pairs(self.contByID) do
+			for _, button in pairs(container.buttons) do
 				local item = self:GetItemInfo(button.bagID, button.slotID)
 				button:UpdateCooldown(item)
 			end
@@ -453,7 +453,7 @@ end
 	@param bagID <number>
 	@param slotID <number> [optional]
 ]]
-function Implementation:ITEM_LOCK_CHANGED(event, bagID, slotID)
+function Implementation:ITEM_LOCK_CHANGED(_, bagID, slotID)
 	if(not slotID) then return end
 
 	local button = self:GetButton(bagID, slotID)
@@ -493,9 +493,9 @@ end
 --[[
 	Fired when the quest log of a unit changes
 ]]
-function Implementation:UNIT_QUEST_LOG_CHANGED(event)
-	for id, container in pairs(self.contByID) do
-		for i, button in pairs(container.buttons) do
+function Implementation:UNIT_QUEST_LOG_CHANGED()
+	for _, container in pairs(self.contByID) do
+		for _, button in pairs(container.buttons) do
 			local item = self:GetItemInfo(button.bagID, button.slotID)
 			button:UpdateQuest(item)
 		end

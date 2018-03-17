@@ -1,9 +1,6 @@
 local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:RegisterModule("RaidFrameAuras")
 
-local TIER, BOSS = 1, 1
-local RaidBuffs, RaidDebuffs = {}, {}
-
 -- 团队框体职业相关Buffs
 local RaidBuffs = {
 	["ALL"] = {			-- 全职业
@@ -90,9 +87,9 @@ local RaidBuffs = {
 	},
 }
 
-function module:RegisterDebuff(tierID, instID, bossID, spellID, level)
+local RaidDebuffs = {}
+function module:RegisterDebuff(_, instID, _, spellID, level)
 	local instName = EJ_GetInstanceInfo(instID)
-	--local bossName = EJ_GetEncounterInfo(bossID)
 	if not instName then print("Invalid instance ID: "..instID) return end
 
 	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end

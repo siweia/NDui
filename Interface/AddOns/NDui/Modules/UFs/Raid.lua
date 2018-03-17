@@ -43,7 +43,7 @@ function UF:CreateTargetBorder(self)
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", UpdateTargetBorder)
 end
 
-local function UpdateThreatBorder(self, event, unit)
+local function UpdateThreatBorder(self, _, unit)
 	if unit ~= self.unit then return end
 
 	local element = self.Health.Shadow
@@ -173,7 +173,7 @@ function UF:DefaultClickSets()
 	end
 end
 
-local function setupClickSets(self, ...)
+local function setupClickSets(self)
 	if InCombatLockdown() then return end
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do

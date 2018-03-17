@@ -136,7 +136,7 @@ local function MakeMoveHandle(Frame, Text, key, Pos)
 	MoveHandle:EnableMouse(true)
 	MoveHandle:SetMovable(true)
 	MoveHandle:RegisterForDrag("LeftButton")
-	MoveHandle:SetScript("OnDragStart", function(self) MoveHandle:StartMoving() end)
+	MoveHandle:SetScript("OnDragStart", function() MoveHandle:StartMoving() end)
 	MoveHandle:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
 		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
@@ -302,7 +302,7 @@ local function Init()
 end
 
 -- UpdateCD
-local function UpdateCDFrame(index, name, icon, start, duration, bool, type, id, charges)
+local function UpdateCDFrame(index, name, icon, start, duration, _, type, id, charges)
 	local Frame = Aura[index][Aura[index].Index]
 	if Frame then Frame:Show() end
 	if Frame.Icon then Frame.Icon:SetTexture(icon) end
@@ -322,7 +322,7 @@ local function UpdateCDFrame(index, name, icon, start, duration, bool, type, id,
 		Frame.duration = duration
 		Frame.start = start
 		Frame.Timer = 0
-		Frame:SetScript("OnUpdate", function(self, elapsed)
+		Frame:SetScript("OnUpdate", function(self)
 			self.Timer = self.start + self.duration - GetTime()
 			if self.Timer < 0 then
 				if self.Time then self.Time:SetText("N/A") end
@@ -405,7 +405,7 @@ local function UpdateAuraFrame(index, UnitID, name, icon, count, duration, expir
 		Frame.duration = duration
 		Frame.expires = expires
 		Frame.Timer = 0
-		Frame:SetScript("OnUpdate", function(self, elapsed)
+		Frame:SetScript("OnUpdate", function(self)
 			self.Timer = self.expires-GetTime()
 			if self.Timer < 0 then
 				if self.Time then self.Time:SetText("N/A") end
@@ -435,7 +435,7 @@ end
 
 local function AuraFilter(spellID, UnitID, index, bool)
 	for KEY, VALUE in pairs(AuraList) do
-		for key, value in pairs(VALUE.List) do
+		for _, value in pairs(VALUE.List) do
 			if value.AuraID == spellID and value.UnitID == UnitID then
 				if bool then
 					local name, _, icon, count, _, duration, expires, caster, _, _, _, _, _, _, _, _, number = UnitBuff(value.UnitID, index)
@@ -580,7 +580,7 @@ local eventList = {
 	["SPELL_SUMMON"] = true,
 }
 
-local function UpdateInt(self, event, ...)
+local function UpdateInt(_, _, ...)
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
 			local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID = ...
@@ -633,7 +633,6 @@ end
 f:SetScript("OnUpdate", onUpdate)
 
 -- Test
-local TestFlag = true
 SlashCmdList.AuraWatch = function(msg)
 	if msg:lower() == "move" then
 		f:SetScript("OnUpdate", nil)

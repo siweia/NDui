@@ -57,7 +57,7 @@ local function setTagString(self, tagString)
 	self.tagString = tagString
 	for tag in tagString:gmatch("%[([^%]:]+):?.-]") do
 		if(self.tagEvents[tag]) then
-			for k, event in pairs(self.tagEvents[tag]) do
+			for _, event in pairs(self.tagEvents[tag]) do
 				self.implementation:RegisterEvent(event, self, updater)
 			end
 		end
@@ -115,7 +115,7 @@ tagPool["item"] = function(self, item)
 end
 
 tagPool["currency"] = function(self, id)
-	local name, count, icon, itemid = GetBackpackCurrencyInfo(id)
+	local _, count, icon = GetBackpackCurrencyInfo(id)
 
 	if(count) then
 		return count .. createIcon(icon, self.iconValues)

@@ -62,7 +62,7 @@ GameTooltip:HookScript("OnTooltipSetSpell", function(self)
 	local id = select(3, self:GetSpell())
 	if id then addLine(self, id, types.spell) end
 end)
-hooksecurefunc("SetItemRef", function(link, ...)
+hooksecurefunc("SetItemRef", function(link)
 	local id = tonumber(link:match("spell:(%d+)"))
 	if id then addLine(ItemRefTooltip, id, types.spell) end
 end)

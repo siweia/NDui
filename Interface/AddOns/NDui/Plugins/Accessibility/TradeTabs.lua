@@ -46,13 +46,13 @@ function TradeTabs:OnEvent(event, addon)
 end
 
 local function buildSpellList()
-	local p1, p2, arch, fishing, cooking, firstaid = GetProfessions()
+	local p1, p2, _, _, cooking, firstaid = GetProfessions()
 	local profs = {p1, p2, cooking, firstaid}
 	local tradeSpells = {}
 	local extras = 0
 
 	for _, prof in pairs(profs) do
-		local name, icon, _, _, abilities, offset, skillLine = GetProfessionInfo(prof)
+		local _, _, _, _, abilities, offset, skillLine = GetProfessionInfo(prof)
 		if whitelist[skillLine] then
 			if onlyPrimary[skillLine] then
 				abilities = 1

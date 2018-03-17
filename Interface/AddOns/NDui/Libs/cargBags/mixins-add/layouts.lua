@@ -23,7 +23,7 @@ DESCRIPTION
 DEPENDENCIES
 	mixins/api-common.lua
 ]]
-local addon, ns = ...
+local _, ns = ...
 local layouts = ns.cargBags.classes.Container.layouts
 
 function layouts.grid(self, columns, spacing, xOffset, yOffset)

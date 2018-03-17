@@ -6,8 +6,6 @@ local classification = {
 	rareelite = " |cffff99cc"..L["Rare"].."|r ".."|cffcc8800"..ELITE.."|r",
 	worldboss = " |cffff0000"..BOSS.."|r",
 }
-local find = string.find
-local format = string.format
 local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
 local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
 
@@ -343,9 +341,6 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 			WorldMapTooltip,
 			WorldMapCompareTooltip1,
 			WorldMapCompareTooltip2,
-			WorldMapCompareTooltip3,
-			FriendsMenuXPMenuBackdrop,
-			FriendsMenuXPSecureMenuBackdrop,
 			QuestScrollFrame.StoryTooltip,
 			GeneralDockManagerOverflowButtonList,
 			ReputationParagonTooltip,
@@ -379,7 +374,7 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 		end
 
 		-- DropdownMenu
-		hooksecurefunc("UIDropDownMenu_CreateFrames", function(level, index)
+		hooksecurefunc("UIDropDownMenu_CreateFrames", function()
 			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
 				local menu = _G["DropDownList"..i.."MenuBackdrop"]
 				if menu and not menu.styled then

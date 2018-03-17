@@ -26,7 +26,7 @@ function module:SkadaSkin()
 		StripOptions(options)
 	end
 
-	for k, options in pairs(Skada.options.args.windows.args) do
+	for _, options in pairs(Skada.options.args.windows.args) do
 		if options.type == "group" then
 			StripOptions(options.args)
 		end
@@ -44,7 +44,6 @@ function module:SkadaSkin()
 		skada.SetFrameLevel = B.Dummy
 		skada:SetBackdrop(nil)
 
-		local color = win.db.title.color
 		win.bargroup.button:SetBackdropColor(1, 1, 1, 0)
 
 		if not skada.shadow then
