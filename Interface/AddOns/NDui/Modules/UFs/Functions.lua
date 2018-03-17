@@ -846,7 +846,7 @@ function UF:CreateFactionIcon(self)
 	bu.Icon:SetAllPoints()
 
 	self.factionIndicator = bu
+	self:RegisterEvent("UNIT_AURA", postUpdateFaction)	-- need reviewed
 	self:RegisterEvent("ARENA_OPPONENT_UPDATE", postUpdateFaction)
 	self:RegisterEvent("UNIT_NAME_UPDATE", postUpdateFaction)
-	postUpdateFaction(self)
 end
