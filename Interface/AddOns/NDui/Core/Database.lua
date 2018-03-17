@@ -81,6 +81,18 @@ DB.BuffList = {
 
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
+	MAGE = {
+		[GetSpellInfo(205022)] = {		-- 奥术魔宠
+			["spells"] = {
+				[210126] = true,
+			},
+			["requirespell"] = 205022,
+			["tree"] = 1,
+			["combat"] = true,
+			["instance"] = true,
+			["pvp"] = true,
+		},
+	},
 	DRUID = {
 		[GetSpellInfo(202360)] = {		-- 远古祝福
 			["spells"] = {
@@ -95,7 +107,7 @@ DB.ReminderBuffs = {
 		},
 	},
 	SHAMAN = {
-		[L["Lightning Shield"]] = {		-- 闪电之盾
+		[GetSpellInfo(192106)] = {		-- 闪电之盾
 			["spells"] = {
 				[192106] = true,
 			},
