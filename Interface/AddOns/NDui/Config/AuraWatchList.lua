@@ -2162,6 +2162,8 @@ C.AuraWatchList = {
 				{AuraID = 152262, UnitID = "player"},
 				--神圣马驹
 				{AuraID = 221883, UnitID = "player"},
+				--正义裁决
+				{AuraID = 238996, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
