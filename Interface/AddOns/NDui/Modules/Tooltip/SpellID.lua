@@ -1,12 +1,12 @@
 local B, C, L, DB = unpack(select(2, ...))
 
 local types = {
-	spell       = SPELLS..ID..":",
-	item        = ITEMS..ID..":",
-	quest       = QUESTS_LABEL..ID..":",
-	talent      = TALENT..ID..":",
-	achievement = ACHIEVEMENTS..ID..":",
-	currency 	= CURRENCY..ID..":",
+	spell = SPELLS.."ID:",
+	item = ITEMS.."ID:",
+	quest = QUESTS_LABEL.."ID:",
+	talent = TALENT.."ID:",
+	achievement = ACHIEVEMENTS.."ID:",
+	currency = CURRENCY.."ID:",
 }
 
 local function addLine(self, id, type, noadd)
