@@ -58,7 +58,6 @@ local ignoreQuestNPC = {
 	[108868] = true,	-- Hunter's order hall
 	[101462] = true,	-- Reaves
 	[43929] = true,		-- 4000
-	[106655] = true,	-- Legendary Item Upgrade
 	[14847] = true,		-- DarkMoon
 	[119388] = true,	-- 酋长哈顿
 	[114719] = true,	-- 商人塞林
