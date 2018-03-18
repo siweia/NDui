@@ -458,7 +458,7 @@ function UF:CreateAuras(self)
 		bu.numDebuffs = 14
 		bu.iconsPerRow = 7
 	elseif self.mystyle == "raid" then
-		bu:SetPoint("BOTTOMLEFT", self, 2, -2)
+		bu:SetPoint("BOTTOMLEFT", self, 2, 0)
 		bu.numTotal = 6
 		bu.spacing = 2
 		bu.iconsPerRow = 6
