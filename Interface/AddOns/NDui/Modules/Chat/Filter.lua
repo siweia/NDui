@@ -84,7 +84,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	end
 end
 
-local addonBlockList = {"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*"}
+local addonBlockList = {"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*", "<iLvl>"}
 local function genAddonBlock(_, _, msg, author)
 	if not NDuiDB["Chat"]["BlockAddonAlert"] then return end
 
