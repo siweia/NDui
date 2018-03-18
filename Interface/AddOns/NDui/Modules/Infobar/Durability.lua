@@ -51,6 +51,7 @@ info.onEvent = function(self)
 	end
 	sort(localSlots, function(a, b) return a[3] < b[3] end)
 
+	inform:Hide()
 	for i = 1, 10 do
 		if localSlots[i][3] < .25 then
 			inform:Show()
