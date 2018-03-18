@@ -443,7 +443,6 @@ local function HelloWorld()
 
 	local c1, c2 = "|c00FFFF00", "|c0000FF00"
 	local lines = {
-		c1.." /aw "..c2..L["Help Info4"],
 		c1.." /ww "..c2..L["Help Info12"],
 		c1.." /hb "..c2..L["Help Info5"],
 		c1.." /mm "..c2..L["Help Info6"],

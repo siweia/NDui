@@ -111,6 +111,40 @@ local function CreateConsole()
 		StaticPopup_Show("RESET_MOVER")
 	end)
 
+	do
+		local frame = CreateFrame("Frame", nil, f)
+		frame:SetPoint("TOP", f, "BOTTOM")
+		frame:SetSize(296, 65)
+		B.CreateBD(frame)
+		B.CreateTex(frame)
+		local lable = B.CreateFS(frame, 15, L["Toggle AuraWatch"], false, "TOP", 0, -10)
+		lable:SetTextColor(1, .8, 0)
+
+		local bu, text = {}, {UNLOCK, LOCK, RESET}
+		for i = 1, 3 do
+			bu[i] = B.CreateButton(frame, 94, 30, text[i])
+			if i == 1 then
+				bu[i]:SetPoint("BOTTOMLEFT", 5, 5)
+			else
+				bu[i]:SetPoint("LEFT", bu[i-1], "RIGHT", 2, 0)
+			end
+		end
+		-- UNLOCK
+		bu[1]:SetScript("OnClick", function()
+			SlashCmdList.AuraWatch("move")
+		end)
+		-- Lock
+		bu[2]:SetScript("OnClick", function()
+			f:Hide()
+			LockElements()
+			SlashCmdList.AuraWatch("lock")
+		end)
+		-- RESET
+		bu[3]:SetScript("OnClick", function()
+			StaticPopup_Show("RESET_AURAWATCH_MOVER")
+		end)
+	end
+
 	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
