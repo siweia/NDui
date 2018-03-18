@@ -358,6 +358,17 @@ local function CreatePanel()
 		SortBars(index)
 	end
 
+	local function CreateGroupSwitcher(parent, index)
+		local bu = B.CreateCheckBox(parent)
+		bu:SetHitRectInsets(-100, 0, 0, 0)
+		bu:SetPoint("TOPRIGHT", -40, -145)
+		bu:SetChecked(NDuiDB["AuraWatchList"]["Switcher"..index])
+		bu:SetScript("OnClick", function()
+			NDuiDB["AuraWatchList"]["Switcher"..index] = bu:GetChecked()
+		end)
+		B.CreateFS(bu, 15, "|cffff0000"..L["AW Switcher"], false, "RIGHT", -25, 0)
+	end
+
 	-- Main
 	if not NDuiDB["AuraWatchList"] then NDuiDB["AuraWatchList"] = {} end
 	if not NDuiDB["InternalCD"] then NDuiDB["InternalCD"] = {} end
@@ -455,9 +466,9 @@ local function CreatePanel()
 			for _, v in pairs(NDuiDB["RaidClickSets"]) do
 				AddRaidClickSets(tabs[i].List.Child, i, v)
 			end
-			Option[18] = CreateEditbox(tabs[i].Page, L["Action*"], 20, -30, L["Action Intro"], 110, 30)
-			Option[19] = CreateDropdown(tabs[i].Page, L["Key*"], 160, -30, {KEY_BUTTON1, KEY_BUTTON2, KEY_BUTTON3, KEY_BUTTON4, KEY_BUTTON5}, L["Key Intro"], 110, 30)
-			Option[20] = CreateDropdown(tabs[i].Page, L["Modified Key"], 300, -30, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 110, 30)
+			Option[18] = CreateEditbox(tabs[i].Page, L["Action*"], 20, -30, L["Action Intro"], 200, 30)
+			Option[19] = CreateDropdown(tabs[i].Page, L["Key*"], 250, -30, {KEY_BUTTON1, KEY_BUTTON2, KEY_BUTTON3, KEY_BUTTON4, KEY_BUTTON5}, L["Key Intro"], 110, 30)
+			Option[20] = CreateDropdown(tabs[i].Page, L["Modified Key"], 390, -30, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 110, 30)
 
 			local reset = B.CreateButton(tabs[i].Page, 70, 25, RESET)
 			reset:SetPoint("TOPRIGHT", -200, -90)
@@ -537,7 +548,7 @@ local function CreatePanel()
 				local value, key, modKey = Option[18]:GetText(), Option[19].Text:GetText(), Option[20].Text:GetText()
 				if not value or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 				if tonumber(value) and not GetSpellInfo(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-				if (not tonumber(value)) and value ~= "target" and value ~= "focus" and value ~= "follow" then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
+				if (not tonumber(value)) and value ~= "target" and value ~= "focus" and value ~= "follow" and not value:match("/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
 				if not modKey or modKey == NONE then modKey = "" end
 				local clickSet = modKey..key
 				if NDuiDB["RaidClickSets"][clickSet] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
@@ -570,7 +581,11 @@ local function CreatePanel()
 			self:SetBackdropColor(0, 0, 0, .3)
 		end)
 	end
-	
+
+	for i = 1, 10 do
+		CreateGroupSwitcher(tabs[i].Page, i)
+	end
+
 	tabs[1]:Click()
 
 	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
@@ -590,5 +605,4 @@ SlashCmdList["NDUI_AWCONFIG"] = function()
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	CreatePanel()
 end
-SLASH_NDUI_AWCONFIG1 = "/awc"
-SLASH_NDUI_AWCONFIG2 = "/ww"
+SLASH_NDUI_AWCONFIG1 = "/ww"

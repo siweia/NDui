@@ -48,40 +48,44 @@ local function ConvertTable()
 		end
 	end
 
-	local function InsertData(target, data)
-		for _, v in pairs(data) do
-			tinsert(target, v)
+	local function InsertData(index, target)
+		if NDuiDB["AuraWatchList"]["Switcher"..index] then
+			wipe(target)
+		else
+			for _, v in pairs(myTable[index]) do
+				tinsert(target, v)
+			end
 		end
 	end
 
 	for _, v in pairs(C.AuraWatchList[DB.MyClass]) do
 		if v.Name == "Player Aura" then
-			InsertData(v.List, myTable[1])
+			InsertData(1, v.List)
 		elseif v.Name == "Target Aura" then
-			InsertData(v.List, myTable[3])
+			InsertData(3, v.List)
 		elseif v.Name == "Special Aura" then
-			InsertData(v.List, myTable[2])
+			InsertData(2, v.List)
 		elseif v.Name == "Focus Aura" then
-			InsertData(v.List, myTable[5])
+			InsertData(5, v.List)
 		elseif v.Name == "Spell Cooldown" then
-			InsertData(v.List, myTable[6])
+			InsertData(6, v.List)
 		end
 	end
 
 	for _, v in pairs(C.AuraWatchList["ALL"]) do
 		if v.Name == "Enchant Aura" then
-			InsertData(v.List, myTable[7])
+			InsertData(7, v.List)
 		elseif v.Name == "Raid Buff" then
-			InsertData(v.List, myTable[8])
+			InsertData(8, v.List)
 		elseif v.Name == "Raid Debuff" then
-			InsertData(v.List, myTable[9])
+			InsertData(9, v.List)
 		elseif v.Name == "Warning" then
-			InsertData(v.List, myTable[4])
+			InsertData(4, v.List)
 		end
 	end
 
 	-- Fill InternalCD List
-	InsertData(IntCD.List, myTable[10])
+	InsertData(10, IntCD.List)
 end
 
 local function CheckAuraList()
@@ -128,10 +132,11 @@ local function MakeMoveHandle(Frame, Text, key, Pos)
 	MoveHandle:SetFrameStrata("HIGH")
 	B.CreateBD(MoveHandle)
 	B.CreateFS(MoveHandle, 12, Text)
-	if not NDuiDB["AuraWatch"][key] then 
+	if not NDuiDB["AuraWatchMover"] then NDuiDB["AuraWatchMover"] = {} end
+	if not NDuiDB["AuraWatchMover"][key] then 
 		MoveHandle:SetPoint(unpack(Pos))
 	else
-		MoveHandle:SetPoint(unpack(NDuiDB["AuraWatch"][key]))
+		MoveHandle:SetPoint(unpack(NDuiDB["AuraWatchMover"][key]))
 	end
 	MoveHandle:EnableMouse(true)
 	MoveHandle:SetMovable(true)
@@ -140,7 +145,7 @@ local function MakeMoveHandle(Frame, Text, key, Pos)
 	MoveHandle:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
 		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
-		NDuiDB["AuraWatch"][key] = {AnchorF, "UIParent", AnchorT, X, Y}
+		NDuiDB["AuraWatchMover"][key] = {AnchorF, "UIParent", AnchorT, X, Y}
 	end)
 	MoveHandle:Hide()
 	Frame:SetPoint("CENTER", MoveHandle)
@@ -632,7 +637,17 @@ local onUpdate = function(self, elapsed)
 end
 f:SetScript("OnUpdate", onUpdate)
 
--- Test
+-- Mover
+StaticPopupDialogs["RESET_AURAWATCH_MOVER"] = {
+	text = L["Reset AuraWatch Mover Confirm"],
+	button1 = OKAY,
+	button2 = CANCEL,
+	OnAccept = function()
+		wipe(NDuiDB["AuraWatchMover"])
+		ReloadUI()
+	end,
+}
+
 SlashCmdList.AuraWatch = function(msg)
 	if msg:lower() == "move" then
 		f:SetScript("OnUpdate", nil)
@@ -669,16 +684,5 @@ SlashCmdList.AuraWatch = function(msg)
 			IntCD.MoveHandle:Hide()
 			IntTable[1]:Hide()
 		end
-	elseif msg:lower() == "reset" then
-		wipe(NDuiDB["AuraWatch"])
-		ReloadUI()
-	else
-		print("|cff70C0F5------------------------")
-		print("|cff0080ffAuraWatch |cff70C0F5"..COMMAND..":")
-		print("|c0000ff00/aw move |cff70C0F5"..UNLOCK)
-		print("|c0000ff00/aw lock |cff70C0F5"..LOCK)
-		print("|c0000ff00/aw reset |cff70C0F5"..RESET)
-		print("|cff70C0F5------------------------")
 	end
 end
-SLASH_AuraWatch1 = "/aw"
