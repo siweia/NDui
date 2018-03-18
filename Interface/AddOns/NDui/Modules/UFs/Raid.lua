@@ -138,7 +138,7 @@ local defaultSpellList = {
 	["PALADIN"] = {
 		[2] = 4987,			-- 驱散
 		[3] = 7328,			-- 复活
-		[5] = 20476,		-- 神圣震击
+		[5] = 20473,		-- 神圣震击
 		[6] = 1022,			-- 保护祝福
 	},
 	["PRIEST"] = {
@@ -193,6 +193,9 @@ local function setupClickSets(self)
 				elseif value == "follow" then
 					self:SetAttribute(format(v[3], "type"), "macro")
 					self:SetAttribute(format(v[3], "macrotext"), "/follow mouseover")
+				elseif value:match("/") then
+					self:SetAttribute(format(v[3], "type"), "macro")
+					self:SetAttribute(format(v[3], "macrotext"), value)
 				end
 				break
 			end
