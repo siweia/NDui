@@ -835,7 +835,7 @@ C.AuraWatchList = {
 				--飞旋的军刀
 				{AuraID = 245634, UnitID = "player"},
 				--冷凝之血
-				{AuraID = 245586, UnitID = "player"},
+				{AuraID = 245586, UnitID = "player", Value = true},
 				--黑暗风暴
 				{AuraID = 253020, UnitID = "player"},
 				--爆裂脉冲
