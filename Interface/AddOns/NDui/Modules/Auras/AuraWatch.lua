@@ -665,7 +665,7 @@ SlashCmdList.AuraWatch = function(msg)
 			end
 			value[1].MoveHandle:Show()
 		end
-		if IntCD.MoveHandle then
+		if IntCD.MoveHandle and IntTable[1] then
 			IntCD.MoveHandle:Show()
 			IntTable[1]:SetScript("OnUpdate", nil)
 			IntTable[1]:Show()
@@ -680,7 +680,7 @@ SlashCmdList.AuraWatch = function(msg)
 			value[1].MoveHandle:Hide()
 		end
 		f:SetScript("OnUpdate", onUpdate)
-		if IntCD.MoveHandle then
+		if IntCD.MoveHandle and IntTable[1] then
 			IntCD.MoveHandle:Hide()
 			IntTable[1]:Hide()
 		end
