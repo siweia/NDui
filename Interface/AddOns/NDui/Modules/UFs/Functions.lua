@@ -517,11 +517,11 @@ end
 function UF:CreateDebuffs(self)
 	local bu = CreateFrame("Frame", nil, self)
 	bu.spacing = 5
-	bu.initialAnchor = "BOTTOMRIGHT"
+	bu.initialAnchor = "TOPRIGHT"
 	bu["growth-x"] = "LEFT"
 	bu["growth-y"] = "DOWN"
 	if self.mystyle == "player" then
-		bu:SetPoint("BOTTOMRIGHT", self.Power, 0, -48)
+		bu:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -15)
 		bu.onlyShowPlayer = false
 		bu.num = 14
 		bu.iconsPerRow = 7
