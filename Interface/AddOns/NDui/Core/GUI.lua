@@ -61,7 +61,7 @@ local defaultSettings = {
 		AutoRes = true,
 		NumGroups = 6,
 		SimpleMode = false,
-		Dispellable = false,
+		Dispellable = true,
 		InstanceAuras = true,
 		DebuffBorder = true,
 		SpecRaidPos = false,
@@ -755,6 +755,7 @@ local function OpenGUI()
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4], 150, 30, L["Add ClickSets"])
 	clickSet:SetPoint("TOPLEFT", 40, -440)
+	clickSet.text:SetTextColor(1, .8, 0)
 	clickSet:SetScript("OnClick", function()
 		f:Hide()
 		SlashCmdList["NDUI_AWCONFIG"]()
@@ -764,6 +765,7 @@ local function OpenGUI()
 	-- Toggle AuraWatch Console
 	local aura = B.CreateButton(guiPage[6], 150, 30, L["Add AuraWatch"])
 	aura:SetPoint("TOPLEFT", 340, -50)
+	aura.text:SetTextColor(1, .8, 0)
 	aura:SetScript("OnClick", function()
 		f:Hide()
 		SlashCmdList["NDUI_AWCONFIG"]()
