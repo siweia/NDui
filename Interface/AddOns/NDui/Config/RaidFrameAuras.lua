@@ -4,9 +4,9 @@ local module = NDui:RegisterModule("RaidFrameAuras")
 -- 团队框体职业相关Buffs
 local RaidBuffs = {
 	["ALL"] = {			-- 全职业
+		-- Buffs
 		[27827] = true,		-- 救赎之魂
 		[98008] = true,		-- 灵魂链接
-		[192082] = true,	-- 狂风
 		[1022] = true,		-- 保护祝福
 		[204018] = true,	-- 破咒祝福
 		[204150] = true,	-- 圣光护盾
@@ -16,14 +16,12 @@ local RaidBuffs = {
 		[33206] = true,		-- 痛苦压制
 		[102342] = true,	-- 铁木树皮
 		[209426] = true,	-- 黑暗
-		[77761] = true,		-- 狂奔怒吼
-		[77764] = true,		-- 狂奔怒吼
-		[87023] = true,		-- 灸灼
 		[45438] = true,		-- 冰箱
 		[186265] = true,	-- 灵龟守护
 		[642] = true,		-- 圣盾术
+		-- Debuffs
 		[123981] = true,	-- 永劫不复
-
+		[87023] = true,		-- 灸灼
 		[57723] = true,		-- 筋疲力尽
 		[57724] = true,		-- 心满意足
 		[80354] = true,		-- 时空错位

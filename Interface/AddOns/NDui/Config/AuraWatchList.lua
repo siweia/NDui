@@ -56,7 +56,7 @@ C.InternalCD = {
 		--塞弗斯的秘密
 		{IntID = 208052, Duration = 30, ItemID = 132452},
 		--萨瓦迪卡
-		--{IntID = 207472, Duration = 30, ItemID = 132444},
+		{IntID = 207472, Duration = 30, ItemID = 132444},
 		--践踏
 		{IntID = 240447, Duration = 20},
 	},
@@ -2220,6 +2220,8 @@ C.AuraWatchList = {
 				{AuraID = 121557, UnitID = "player"},
 				--身心合一
 				{AuraID = 214121, UnitID = "player"},
+				--救赎
+				{AuraID = 194384, UnitID = "player"},
 			},
 		},
 		{	Name = "Target Aura",
@@ -2321,6 +2323,8 @@ C.AuraWatchList = {
 				{AuraID = 252848, UnitID = "player"}, --戒律
 				{AuraID = 253437, UnitID = "player"}, --神圣2
 				{AuraID = 253443, UnitID = "player"}, --神圣4
+				--戒律法袍
+				{AuraID = 216135, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
