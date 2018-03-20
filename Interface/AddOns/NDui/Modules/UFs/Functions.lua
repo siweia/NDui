@@ -463,7 +463,7 @@ function UF:CreateAuras(self)
 		bu.spacing = 2
 		bu.iconsPerRow = 6
 		bu.gap = false
-		bu.EnableTooltip = not NDuiDB["UFs"]["AurasClickThrough"]
+		bu.disableMouse = NDuiDB["UFs"]["AurasClickThrough"]
 	elseif self.mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-y"] = "UP"
