@@ -498,7 +498,7 @@ function UF:CreateBuffs(self)
 	bu.initialAnchor = "BOTTOMLEFT"
 	bu["growth-x"] = "RIGHT"
 	bu["growth-y"] = "UP"
-	bu.num = 12
+	bu.num = 6
 	bu.spacing = 5
 	bu.iconsPerRow = 6
 	bu.onlyShowPlayer = false
