@@ -393,6 +393,17 @@ local function CreatePanel()
 		[4] = EJ_GetInstanceInfo(875),
 		[5] = EJ_GetInstanceInfo(946),
 	}
+	local preSet = {
+		[1] = {1, true},
+		[2] = {1, true},
+		[3] = {2, true},
+		[4] = {2, false},
+		[5] = {3, true},
+		[6] = {1, false},
+		[7] = {1, false},
+		[8] = {1, false},
+		[9] = {1, false},
+	}
 	local tabs = {}
 	for i, group in pairs(groups) do
 		if not NDuiDB["AuraWatchList"][i] then NDuiDB["AuraWatchList"][i] = {} end
@@ -428,17 +439,19 @@ local function CreatePanel()
 			Option[10] = CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15]}, L["Slot Intro"])
 			Option[11] = CreateDropdown(tabs[i].Page, L["Totem*"], 140, -30, {L["TotemSlot"].."1", L["TotemSlot"].."2", L["TotemSlot"].."3", L["TotemSlot"].."4"}, L["Totem Intro"])
 
-			for i = 2, 11 do Option[i]:Hide() end
+			for j = 2, 11 do Option[j]:Hide() end
 
-			for i = 1, #Option[1].options do
-				Option[1].options[i]:HookScript("OnClick", function()
-					for i = 2, 11 do
-						Option[i]:Hide()
-						ClearEdit(Option[i])
+			for j = 1, #Option[1].options do
+				Option[1].options[j]:HookScript("OnClick", function()
+					for k = 2, 11 do
+						Option[k]:Hide()
+						ClearEdit(Option[k])
 					end
 
 					if Option[1].Text:GetText() == "AuraID" then
-						for j = 2, 9 do Option[j]:Show() end
+						for k = 2, 9 do Option[k]:Show() end
+						Option[3].options[preSet[i][1]]:Click()
+						if preSet[i][2] then Option[4].options[1]:Click() end
 					elseif Option[1].Text:GetText() == "SpellID" then
 						Option[2]:Show()
 					elseif Option[1].Text:GetText() == "SlotID" then
