@@ -193,7 +193,7 @@ C.AuraWatchList = {
 				--赛福斯的秘密(通用戒指)
 				{AuraID = 208052, UnitID = "player"},
 				--诺甘农的预见
-				{AuraID = 236430, UnitID = "player"},
+				{AuraID = 236380, UnitID = "player", Combat = true},
 				--吸血传染
 				{AuraID = 221805, UnitID = "player"},
 				--坍缩，戒指
@@ -1856,6 +1856,8 @@ C.AuraWatchList = {
 				{AuraID = 201009, UnitID = "player"},
 				--石之心（橙戒）
 				{AuraID = 225947, UnitID = "player"},
+				--浴血奋战
+				{AuraID = 12292, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
