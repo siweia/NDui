@@ -376,7 +376,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "NoFade", L["Chat Nofade"], true},
 		{1, "Chat", "Timestamp", L["Timestamp"]},
 		{1, "Chat", "EasyResize", L["Resizing"], true},
-		{2, "Chat", "AtList", L["@List"]},
+		{2, "Chat", "AtList", L["@List"], false, nil, function() B.genChatAtList() end},
 		{},--blank
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},

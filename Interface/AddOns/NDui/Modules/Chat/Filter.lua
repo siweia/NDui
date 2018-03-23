@@ -55,15 +55,11 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 		return
 	else
 		for i = 1, GetNumFriends() do
-			if author == GetFriendInfo(i) then
-				return
-			end
+			if author == GetFriendInfo(i) then return end
 		end
 		for i = 1, BNGetNumFriends() do
 			local _, _, battleTag, _, charName, _, client = BNGetFriendInfo(i)
-			if author == BNet_GetValidatedCharacterName(charName, battleTag, client) then
-				return
-			end
+			if author == BNet_GetValidatedCharacterName(charName, battleTag, client) then return end
 		end
 	end
 
@@ -98,8 +94,50 @@ local function genAddonBlock(_, _, msg, author)
 	end
 end
 
+
+--[[
+	公会频道有人@时提示你
+]]
+local chatAtList, at = {}, {}
+local function genChatAtList()
+	local list = {string.split(" ", NDuiDB["Chat"]["AtList"] or "")}
+	local name = UnitName("player")
+	tinsert(list, name)
+	chatAtList = list
+end
+B.genChatAtList = genChatAtList
+
+local function chatAtMe(_, _, ...)
+	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
+	for _, word in pairs(chatAtList) do
+		if word ~= "" then
+			if msg:lower():match("@"..word:lower()) then
+				at.checker = true
+				at.author = author
+				at.class = select(2, GetPlayerInfoByGUID(guid))
+				BNToastFrame_AddToast()
+			end
+		end
+	end
+end
+
+hooksecurefunc("BNToastFrame_Show", function()
+	if at.checker == true then
+		BNToastFrame:SetHeight(50)
+		BNToastFrameIconTexture:SetTexCoord(.75, 1, 0, .5)
+		BNToastFrameTopLine:Hide()
+		BNToastFrameMiddleLine:Hide()
+		BNToastFrameBottomLine:Hide()
+		BNToastFrameDoubleLine:Show()
+		local hexColor = B.HexRGB(B.ClassColor(at.class))
+		BNToastFrameDoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
+		at.checker = false
+	end
+end)
+
 function module:ChatFilter()
 	genFilterList()
+	genChatAtList()
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
@@ -115,39 +153,6 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
+
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
 end
-
---[[
-	公会频道有人@时提示你
-]]
-local at = NDui:EventFrame{"CHAT_MSG_GUILD"}
-at:SetScript("OnEvent", function(_, _, ...)
-	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
-	local list = {string.split(" ", NDuiDB["Chat"]["AtList"])}
-	local name = UnitName("player")
-	tinsert(list, name)
-
-	for _, word in pairs(list) do
-		if word ~= "" then
-			if msg:lower():match("@"..word:lower()) then
-				at.checker = true
-				at.author = author
-				at.class = select(2, GetPlayerInfoByGUID(guid))
-				BNToastFrame_AddToast()
-			end
-		end
-	end
-end)
-hooksecurefunc("BNToastFrame_Show", function()
-	if at.checker == true then
-		BNToastFrame:SetHeight(50)
-		BNToastFrameIconTexture:SetTexCoord(.75, 1, 0, .5)
-		BNToastFrameTopLine:Hide()
-		BNToastFrameMiddleLine:Hide()
-		BNToastFrameBottomLine:Hide()
-		BNToastFrameDoubleLine:Show()
-		local hexColor = B.HexRGB(B.ClassColor(at.class))
-		BNToastFrameDoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
-		at.checker = false
-	end
-end)
