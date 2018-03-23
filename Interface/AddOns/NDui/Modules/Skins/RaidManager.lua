@@ -161,8 +161,8 @@ function module:CreateRM()
 			self:Show()
 			local maxgroup = getRaidMaxGroup()
 			for i = 1, GetNumGroupMembers() do
-				local name, _, subgroup = GetRaidRosterInfo(i)
-				if name and subgroup <= maxgroup then
+				local name, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
+				if name and online and subgroup <= maxgroup then
 					total = total + 1
 					local status = GetReadyCheckStatus(name)
 					if status and status == "ready" then
