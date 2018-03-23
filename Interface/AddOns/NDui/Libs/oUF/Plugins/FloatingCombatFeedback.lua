@@ -143,6 +143,16 @@ local function getFloatingIconTexture(iconType, spellID, isPet)
 	return texture
 end
 
+local function formatNumber(self, amount)
+	local element = self.FloatingCombatFeedback
+
+	if element.abbreviateNumbers then
+		return B.Numb(amount)
+	else
+		return BreakUpLargeNumbers(amount)
+	end
+end
+
 local function Update(self, event, ...)
 	local element = self.FloatingCombatFeedback
 	local multiplier = 1
@@ -167,7 +177,7 @@ local function Update(self, event, ...)
 
 				local amount, _, _, _, _, _, critical, _, crushing = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
-				text = "-"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
+				text = "-"..formatNumber(self, amount)
 
 				if critical or crushing then
 					multiplier = 1.25
@@ -176,9 +186,14 @@ local function Update(self, event, ...)
 			elseif value.suffix == "HEAL" then
 				if value.isPeriod and not element.showHots then return end
 
-				local amount, _, _, critical = select(value.index, ...)
+				local amount, overhealing, _, critical = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID)
-				text = "+"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
+				local overhealText = ""
+				if overhealing > 0 then
+					amount = amount - overhealing
+					overhealText = " ("..formatNumber(self, overhealing)..")"
+				end
+				text = "+"..formatNumber(self, amount)..overhealText
 
 				if critical then
 					multiplier = 1.25
@@ -191,7 +206,7 @@ local function Update(self, event, ...)
 			elseif value.suffix == "ENVIRONMENT" then
 				local envType, amount = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, envType)
-				text = "-"..(element.abbreviateNumbers and B.Numb(amount) or BreakUpLargeNumbers(amount))
+				text = "-"..formatNumber(self, amount)
 			end
 
 			color = schoolColors[school] or schoolColors[0]
