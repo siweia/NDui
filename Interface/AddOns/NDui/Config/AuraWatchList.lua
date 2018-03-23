@@ -1857,7 +1857,11 @@ C.AuraWatchList = {
 				--石之心（橙戒）
 				{AuraID = 225947, UnitID = "player"},
 				--浴血奋战
-				{AuraID = 12292, UnitID = "player"},
+				{AuraID =  12292, UnitID = "player"},
+				--龙鳞
+				{AuraID = 203581, UnitID = "player"},
+				--破坏者
+				{AuraID = 227744, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
