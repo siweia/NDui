@@ -285,8 +285,7 @@ function module:CreateRM()
 	checker:HookScript("OnLeave", GameTooltip_Hide)
 
 	local reset = true
-	checker:RegisterForClicks("AnyUp")
-	checker:SetScript("OnClick", function(_, btn)
+	checker:HookScript("OnMouseDown", function(_, btn)
 		if btn == "RightButton" then
 			scanBuff()
 		elseif btn == "LeftButton" then
