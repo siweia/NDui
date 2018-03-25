@@ -6,7 +6,7 @@ C.Auras = {
 	IconSize		= 32,											-- BUFF图标大小
 	IconsPerRow		= 14,											-- BUFF每行个数
 	Spacing			= 6,											-- BUFF图标间距
-	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -10, -5},	-- BUFF默认位置
+	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, -5},	-- BUFF默认位置
 
 	BHPos			= {"CENTER", UIParent, "CENTER", 0, -200},		-- 血DK助手默认位置
 	StaggerPos		= {"CENTER", UIParent, "CENTER", 0, -220},		-- 坦僧工具默认位置
