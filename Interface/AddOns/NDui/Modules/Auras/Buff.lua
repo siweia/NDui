@@ -8,9 +8,9 @@ local BuffAnchor
 function module:OnLogin()
 	BuffAnchor = CreateFrame("Frame", "NDuiBuffFrame", UIParent)
 	BuffAnchor:SetSize(IconSize, IconSize)
-	local mover = B.Mover(BuffAnchor, "Buffs/Debuffs", "BuffAnchor", C.Auras.BuffPos, IconSize*IconsPerRow, IconSize*6)
+	BuffAnchor.mover = B.Mover(BuffAnchor, "Buffs/Debuffs", "BuffAnchor", C.Auras.BuffPos, IconSize*IconsPerRow, IconSize*6)
 	BuffAnchor:ClearAllPoints()
-	BuffAnchor:SetPoint("TOPRIGHT", mover)
+	BuffAnchor:SetPoint("TOPRIGHT", BuffAnchor.mover)
 
 	TempEnchant1:ClearAllPoints()
 	TempEnchant1:SetPoint("TOPRIGHT", BuffAnchor)
@@ -22,9 +22,12 @@ function module:OnLogin()
 	BuffFrame.ignoreFramePositionManager = true
 end
 
-local function styleButton(bu)
+local function styleButton(bu, isDebuff)
 	if not bu or bu.styled then return end
 	local name = bu:GetName()
+
+	local iconSize, fontSize = IconSize, DB.Font[2]
+	if isDebuff then iconSize, fontSize = IconSize + 5, DB.Font[2] + 2 end
 
 	local border = _G[name.."Border"]
 	if border then border:Hide() end
@@ -37,15 +40,15 @@ local function styleButton(bu)
 	local duration = _G[name.."Duration"]
 	duration:ClearAllPoints()
 	duration:SetPoint("TOP", bu, "BOTTOM", 2, 2)
-	duration:SetFont(unpack(DB.Font))
+	duration:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
 	local count = _G[name.."Count"]
 	count:ClearAllPoints()
 	count:SetParent(bu)
 	count:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -1, -3)
-	count:SetFont(unpack(DB.Font))
+	count:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
-	bu:SetSize(IconSize, IconSize)
+	bu:SetSize(iconSize, iconSize)
 	bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
 	bu.HL:SetColorTexture(1, 1, 1, .3)
 	bu.HL:SetAllPoints(icon)
@@ -96,11 +99,11 @@ hooksecurefunc("TemporaryEnchantFrame_Update", ReskinTempEnchant)
 local function ReskinDebuffs(buttonName, i)
 	local debuff = _G[buttonName..i]
 	local previous = _G[buttonName..(i-1)]
-	styleButton(debuff)
+	styleButton(debuff, true)
 
 	debuff:ClearAllPoints()
 	if i == 1 then
-		debuff:SetPoint("TOPRIGHT", BuffAnchor, 0, -140)
+		debuff:SetPoint("TOPRIGHT", BuffAnchor.mover, "BOTTOMRIGHT", 0, 10)
 	elseif i == IconsPerRow + 1 then
 		debuff:SetPoint("TOP", _G[buttonName.."1"], "BOTTOM", 0, -12)
 	elseif i < IconsPerRow*2 + 1 then
