@@ -1864,6 +1864,10 @@ C.AuraWatchList = {
 				{AuraID = 227744, UnitID = "player"},
 				--战术优势
 				{AuraID = 209484, UnitID = "player"},
+				--粉碎防御
+				{AuraID = 248625, UnitID = "player"},
+				--杀心骤起
+				{AuraID = 248622, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
