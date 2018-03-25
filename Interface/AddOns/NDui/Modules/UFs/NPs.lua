@@ -38,9 +38,10 @@ local CustomUnits = {
 	["Fel Explosive"] = true,
 	["邪能炸药"] = true,
 	["魔化炸彈"] = true,
-	["海拉加尔观雾者"] = true,
-	["深渊追猎者"] = true,
-	["尖啸反舌鸟"] = true,
+	[EJ_GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
+	[EJ_GetSectionInfo(14595)] = true,	-- 深渊追猎者
+	[EJ_GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
+	[EJ_GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
 }
 function UF:CreateUnitTable()
 	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
