@@ -32,35 +32,39 @@ end)
 ]]
 local FilterList = {}
 local function genFilterList()
-	local keywords = {string.split(" ", NDuiDB["Chat"]["FilterList"] or "")}
-	for _, value in pairs(keywords) do
-		if value ~= "" then
-			if not FilterList[value] then
-				FilterList[value] = true
+	FilterList = {string.split(" ", NDuiDB["Chat"]["FilterList"] or "")}
+end
+B.genFilterList = genFilterList
+
+local friendsList = {}
+NDui:EventFrame{"FRIENDLIST_UPDATE", "BN_FRIEND_INFO_CHANGED"}:SetScript("OnEvent", function()
+	friendsList = {}
+
+	for i = 1, GetNumFriends() do
+		local name = GetFriendInfo(i)
+		if name then
+			friendsList[Ambiguate(name, "none")] = true
+		end
+	end
+
+	for i = 1, select(2, BNGetNumFriends()) do
+		for j = 1, BNGetNumFriendGameAccounts(i) do
+			local _, characterName, client, realmName = BNGetFriendGameAccountInfo(i, j)
+			if client == BNET_CLIENT_WOW then
+				friendsList[Ambiguate(characterName.."-"..realmName, "none")] = true
 			end
 		end
 	end
-end
-B.genFilterList = genFilterList
+end)
 
 local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	if not NDuiDB["Chat"]["EnableFilter"] then return end
 
 	local name = Ambiguate(author, "none")
-	if UnitIsUnit(name, "player") then
+	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
-	elseif B.UnitInGuild(author) or UnitInRaid(author) or UnitInParty(author) then
+	elseif B.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or friendsList[name] then
 		return
-	elseif event == "CHAT_MSG_WHISPER" and flag == "GM" then
-		return
-	else
-		for i = 1, GetNumFriends() do
-			if author == GetFriendInfo(i) then return end
-		end
-		for i = 1, BNGetNumFriends() do
-			local _, _, battleTag, _, charName, _, client = BNGetFriendInfo(i)
-			if author == BNet_GetValidatedCharacterName(charName, battleTag, client) then return end
-		end
 	end
 
 	for _, symbol in ipairs(DB.Symbols) do
@@ -68,10 +72,12 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	end
 
 	local match = 0
-	for keyword, _ in pairs(FilterList) do
-		local _, count = gsub(msg, keyword, "")
-		if count > 0 then
-			match = match + 1
+	for _, keyword in pairs(FilterList) do
+		if keyword ~= "" then
+			local _, count = gsub(msg, keyword, "")
+			if count > 0 then
+				match = match + 1
+			end
 		end
 	end
 
@@ -100,10 +106,9 @@ end
 ]]
 local chatAtList, at = {}, {}
 local function genChatAtList()
-	local list = {string.split(" ", NDuiDB["Chat"]["AtList"] or "")}
+	chatAtList = {string.split(" ", NDuiDB["Chat"]["AtList"] or "")}
 	local name = UnitName("player")
-	tinsert(list, name)
-	chatAtList = list
+	tinsert(chatAtList, name)
 end
 B.genChatAtList = genChatAtList
 
