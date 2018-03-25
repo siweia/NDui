@@ -266,8 +266,8 @@ function UF:CreateCastBar(self)
 		cb:SetSize(unpack(C.UFs.FocuscbSize))
 		cb.Mover = B.Mover(cb, L["Focus Castbar"], "FocusCB", C.UFs.Focuscb, cb:GetWidth(), 32)
 	elseif self.mystyle == "boss" or self.mystyle == "arena" then
-		cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -10)
-		cb:SetSize(134, 10)
+		cb:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -8)
+		cb:SetSize(self:GetWidth(), 10)
 	elseif self.mystyle == "nameplate" then
 		cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 		cb:SetSize(self:GetWidth(), 5)
@@ -283,17 +283,23 @@ function UF:CreateCastBar(self)
 	spark:SetBlendMode("ADD")
 	spark:SetAlpha(0.5)
 	spark:SetHeight(cb:GetHeight()*2.5)
+	cb.Spark = spark
 
 	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)
+	cb.Time = timer
+
 	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "LEFT", 2, 0)
 	name:SetJustifyH("LEFT")
 	name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
+	cb.Text = name
 
-	local icon = cb:CreateTexture(nil, "ARTWORK")
-	icon:SetSize(cb:GetHeight(), cb:GetHeight())
-	icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
-	icon:SetTexCoord(unpack(DB.TexCoord))
-	B.CreateSD(icon, 3, 3)
+	if self.mystyle ~= "boss" and self.mystyle ~= "arena" then
+		cb.Icon = cb:CreateTexture(nil, "ARTWORK")
+		cb.Icon:SetSize(cb:GetHeight(), cb:GetHeight())
+		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
+		cb.Icon:SetTexCoord(unpack(DB.TexCoord))
+		B.CreateSD(cb.Icon, 3, 3)
+	end
 
 	if self.mystyle == "player" then
 		local safe = cb:CreateTexture(nil,"OVERLAY")
@@ -310,8 +316,6 @@ function UF:CreateCastBar(self)
 		cb.Lag = lag
 		self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", cast.OnCastSent)
 	elseif self.mystyle == "nameplate" then
-		local iconSize = self.Health:GetHeight() + cb:GetHeight() + 5
-		icon:SetSize(iconSize, iconSize)
 		name:SetPoint("LEFT", cb, "BOTTOMLEFT", 0, -3)
 		timer:SetPoint("RIGHT", cb, "BOTTOMRIGHT", 0, -3)
 
@@ -320,6 +324,9 @@ function UF:CreateCastBar(self)
 		shield:SetSize(15, 15)
 		shield:SetPoint("CENTER", 0, -5)
 		cb.Shield = shield
+
+		local iconSize = self.Health:GetHeight() + cb:GetHeight() + 5
+		cb.Icon:SetSize(iconSize, iconSize)
 	end
 
 	cb.OnUpdate = cast.OnCastbarUpdate
@@ -333,10 +340,6 @@ function UF:CreateCastBar(self)
 	cb.PostCastNotInterruptible = cast.PostUpdateInterruptible
 
 	self.Castbar = cb
-	self.Castbar.Text = name
-	self.Castbar.Time = timer
-	self.Castbar.Icon = icon
-	self.Castbar.Spark = spark
 end
 
 function UF:CreateMirrorBar()
@@ -443,7 +446,7 @@ function UF:CreateAuras(self)
 	bu["growth-y"] = "DOWN"
 	bu.spacing = 5
 	if self.mystyle == "target" then
-		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -15)
+		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -10)
 		bu.numBuffs = 20
 		bu.numDebuffs = 15
 		bu.iconsPerRow = 9
@@ -453,7 +456,7 @@ function UF:CreateAuras(self)
 		bu.numDebuffs = 10
 		bu.iconsPerRow = 5
 	elseif self.mystyle == "focus" then
-		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -15)
+		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -10)
 		bu.numBuffs = 0
 		bu.numDebuffs = 14
 		bu.iconsPerRow = 7
@@ -521,15 +524,15 @@ function UF:CreateDebuffs(self)
 	bu["growth-x"] = "LEFT"
 	bu["growth-y"] = "DOWN"
 	if self.mystyle == "player" then
-		bu:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -15)
+		bu:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -10)
 		bu.onlyShowPlayer = false
 		bu.num = 14
 		bu.iconsPerRow = 7
 	elseif self.mystyle == "boss" or self.mystyle == "arena" then
-		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, -1)
+		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 		bu.onlyShowPlayer = true
-		bu.num = 12
-		bu.iconsPerRow = 6
+		bu.num = 10
+		bu.iconsPerRow = 5
 	end
 
 	local width = self:GetWidth()
@@ -608,15 +611,9 @@ end
 
 function UF:CreateAltPower(self)
 	local bar = CreateFrame("StatusBar", nil, self)
-	bar:SetHeight(4)
 	bar:SetStatusBarTexture(DB.normTex)
-	if self.unit == "boss" then
-		bar:SetPoint("BOTTOM", self, "TOP", 0, -2)
-		bar:SetWidth(self:GetWidth() - 30)
-	else
-		bar:SetPoint("TOP", self.Power, "BOTTOM", 0, -2)
-		bar:SetWidth(self:GetWidth())
-	end
+	bar:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
+	bar:SetSize(self:GetWidth(), 2)
 	B.CreateBD(bar, .5, .1)
 	B.CreateSD(bar, 3, 3)
 

@@ -1,6 +1,6 @@
-local _, ns = ...
-local cast = CreateFrame("Frame")
+local B, C, L, DB = unpack(select(2, ...))
 
+local cast = CreateFrame("Frame")
 local channelingTicks = {
 	-- warlock
 	[GetSpellInfo(755)] = 3, 		-- health funnel
@@ -19,13 +19,9 @@ local channelingTicks = {
 	[GetSpellInfo(205021)] = 12,
 }
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_ENTERING_WORLD")
-f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-f:SetScript("OnEvent", function(self)
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	local myclass, penance = select(2, UnitClass("player")), 3
-	if myclass == "PRIEST" and IsPlayerSpell(193134) then -- Enhanced Mind Flay
+NDui:EventFrame{"PLAYER_LOGIN", "ACTIVE_TALENT_GROUP_CHANGED"}:SetScript("OnEvent", function()
+	local penance = 3
+	if DB.MyClass == "PRIEST" and IsPlayerSpell(193134) then -- Enhanced Mind Flay
 		penance = 4
 	end
 
@@ -39,7 +35,7 @@ cast.setBarTicks = function(castBar, ticknum)
 		for k = 1, ticknum do
 			if not ticks[k] then
 				ticks[k] = castBar:CreateTexture(nil, "OVERLAY")
-				ticks[k]:SetTexture("Interface\\Addons\\NDui\\Media\\normTex")
+				ticks[k]:SetTexture(DB.normTex)
 				ticks[k]:SetVertexColor(0, 0, 0, .7)
 				ticks[k]:SetWidth(1.2)
 				ticks[k]:SetHeight(castBar:GetHeight())
@@ -60,20 +56,18 @@ cast.OnCastbarUpdate = function(self, elapsed)
 	if GetNetStats() == 0 then return end
 
 	if self.casting or self.channeling then
-		local parent = self:GetParent()
-		local decimal
-		if parent.mystyle == "nameplate" then
-			decimal = "%.1f"
-		else
-			decimal = "%.2f"
-		end
+		local mystyle = self:GetParent().mystyle
+		local decimal = "%.2f"
+		if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then decimal = "%.1f" end
+
 		local duration = self.casting and self.duration + elapsed or self.duration - elapsed
 		if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
 			self.casting = nil
 			self.channeling = nil
 			return
 		end
-		if parent.unit == "player" then
+
+		if mystyle == "player" then
 			if self.delay ~= 0 then
 				self.Time:SetFormattedText(decimal.." | |cffff0000"..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
 			else
@@ -109,9 +103,10 @@ cast.OnCastSent = function(self)
 end
 
 cast.PostCastStart = function(self, unit, _, _, spellID)
-	self:SetAlpha(1.0)
+	self:SetAlpha(1)
 	self.Spark:Show()
 	self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
+
 	if unit == "vehicle" then 
 		self.SafeZone:Hide()
 		self.Lag:Hide()
@@ -119,8 +114,8 @@ cast.PostCastStart = function(self, unit, _, _, spellID)
 		if GetNetStats() == 0 then return end
 		local sf = self.SafeZone
 		if not sf then return end
+
 		sf.timeDiff = 0
-		self.Lag:SetText("")
 		if sf.castSent == true then
 			sf.timeDiff = GetTime() - sf.sendTime
 			sf.timeDiff = sf.timeDiff > self.max and self.max or sf.timeDiff
@@ -128,7 +123,16 @@ cast.PostCastStart = function(self, unit, _, _, spellID)
 			sf:Show()
 			sf.castSent = false
 		end
-		if not UnitInVehicle("player") then sf:Show() self.Lag:Show() else sf:Hide() self.Lag:Hide() end
+
+		self.Lag:SetText("")
+		if not UnitInVehicle("player") then
+			sf:Show()
+			self.Lag:Show()
+		else
+			sf:Hide()
+			self.Lag:Hide()
+		end
+
 		if self.casting then
 			cast.setBarTicks(self, 0)
 		else
@@ -184,4 +188,4 @@ cast.PostCastFailed = function(self)
 	self:Show()
 end
 
-ns.cast = cast
+NDui.cast = cast
