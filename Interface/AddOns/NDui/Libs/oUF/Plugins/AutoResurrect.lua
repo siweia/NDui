@@ -3,8 +3,7 @@
 -- NDui MOD
 --------------------------------
 local B, C, L, DB = unpack(select(2, ...))
-local _, ns = ...
-local oUF = ns.oUF
+local oUF = NDui.oUF or oUF
 
 local classList = {
 	["DEATHKNIGHT"] = {

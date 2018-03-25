@@ -3,8 +3,7 @@
 -- NDui MOD
 -----------------------------------------------
 local B, C, L, DB = unpack(select(2, ...))
-local _, ns = ...
-local oUF = ns.oUF or oUF
+local oUF = NDui.oUF or oUF
 assert(oUF, "oUF FloatingCombatFeedback was unable to locate oUF install")
 
 local _G = getfenv(0)

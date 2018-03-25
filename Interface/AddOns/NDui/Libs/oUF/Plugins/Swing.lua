@@ -2,8 +2,7 @@
 -- oUF_Swing, by p3lim
 -- NDui MOD
 -------------------------
-local _, ns = ...
-local oUF = oUF or ns.oUF
+local oUF = NDui.oUF or oUF
 
 local meleeing
 local rangeing
