@@ -92,12 +92,16 @@ local function CreateConsole()
 			bu[i]:SetPoint("LEFT", bu[i-1], "RIGHT", 2, 0)
 		end
 	end
-	-- Lock
-	bu[1]:SetScript("OnClick", function()
+
+	local function lockAllElements()
 		f:Hide()
 		LockElements()
 		SlashCmdList["TOGGLEGRID"]("1")
-	end)
+		SlashCmdList.AuraWatch("lock")
+	end
+
+	-- Lock
+	bu[1]:SetScript("OnClick", lockAllElements)
 	-- Cancel
 	bu[2]:SetScript("OnClick", function()
 		StaticPopup_Show("CANCEL_MOVER")
@@ -134,11 +138,7 @@ local function CreateConsole()
 			SlashCmdList.AuraWatch("move")
 		end)
 		-- Lock
-		bu[2]:SetScript("OnClick", function()
-			f:Hide()
-			LockElements()
-			SlashCmdList.AuraWatch("lock")
-		end)
+		bu[2]:SetScript("OnClick", lockAllElements)
 		-- RESET
 		bu[3]:SetScript("OnClick", function()
 			StaticPopup_Show("RESET_AURAWATCH_MOVER")
@@ -148,8 +148,7 @@ local function CreateConsole()
 	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
-				f:Hide()
-				LockElements()
+				lockAllElements()
 				self:RegisterEvent("PLAYER_REGEN_ENABLED")
 			end
 		else
