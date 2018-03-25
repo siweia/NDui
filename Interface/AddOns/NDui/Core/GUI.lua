@@ -73,6 +73,7 @@ local defaultSettings = {
 		CombatText = true,
 		HotsDots = true,
 		AutoAttack = true,
+		FCTOverHealing = false,
 		PetCombatText = true,
 		RaidClickSets = false,
 		ShowTeamIndex = false,
@@ -289,8 +290,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ExpRep", L["UFs Expbar"]},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
-		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"], true},
 		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
+		{1, "UFs", "FCTOverHealing", L["CombatText OverHealing"], true},
+		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"]},
 		{1, "UFs", "PetCombatText", L["CombatText ShowPets"], true},
 	},
 	[4] = {

@@ -193,6 +193,7 @@ local function Update(self, event, ...)
 					amount = amount - overhealing
 					overhealText = " ("..formatNumber(self, overhealing)..")"
 				end
+				if amount == 0 and not element.showOverHealing then return end
 				text = "+"..formatNumber(self, amount)..overhealText
 
 				if critical then
