@@ -81,7 +81,7 @@ function UF:CreateHealthText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints()
 
-	local name = B.CreateFS(textFrame, retVal(self, 12, 12, 12, 11), "", false, "LEFT", 3, -1)
+	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 11), "", false, "LEFT", 3, -1)
 	name:SetJustifyH("LEFT")
 	if self.mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
@@ -96,7 +96,7 @@ function UF:CreateHealthText(self)
 	end
 
 	if self.mystyle == "player" then
-		self:Tag(name, "  [color][name]")
+		self:Tag(name, " [color][name]")
 	elseif self.mystyle == "target" then
 		self:Tag(name, "[fulllevel] [color][name][afkdnd]")
 	elseif self.mystyle == "focus" then
@@ -158,7 +158,7 @@ function UF:CreatePowerText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Power)
 
-	local ppval = B.CreateFS(textFrame, retVal(self, 14, 12, 12), "", false, "RIGHT", -3, 2)
+	local ppval = B.CreateFS(textFrame, retVal(self, 14, 13, 12), "", false, "RIGHT", -3, 2)
 	self:Tag(ppval, "[color][power]")
 end
 
@@ -179,15 +179,15 @@ end
 function UF:CreateIcons(self)
 	if self.mystyle == "player" then
 		local combat = self:CreateTexture(nil, "OVERLAY")
+		combat:SetPoint("CENTER", self, "BOTTOMLEFT")
 		combat:SetSize(20, 20)
-		combat:SetPoint("BOTTOMLEFT", -10, -3)
 		combat:SetTexture("Interface\\WORLDSTATEFRAME\\CombatSwords")
 		combat:SetTexCoord(0, .5, 0, .5)
 		combat:SetVertexColor(.8, 0, 0)
 		self.CombatIndicator = combat
 
 		local rest = self:CreateTexture(nil, "OVERLAY")
-		rest:SetPoint("TOPLEFT", -12, 2)
+		rest:SetPoint("CENTER", self, "LEFT", -2, 4)
 		rest:SetSize(18, 18)
 		rest:SetTexture("Interface\\PLAYERFRAME\\DruidEclipse")
 		rest:SetTexCoord(.445, .55, .648, .905)
@@ -819,6 +819,7 @@ function UF:CreateFCT(self)
 	fcf.showPets = NDuiDB["UFs"]["PetCombatText"]
 	fcf.showHots = NDuiDB["UFs"]["HotsDots"]
 	fcf.showAutoAttack = NDuiDB["UFs"]["AutoAttack"]
+	fcf.showOverHealing = NDuiDB["UFs"]["FCTOverHealing"]
 	fcf.abbreviateNumbers = true
 	self.FloatingCombatFeedback = fcf
 
