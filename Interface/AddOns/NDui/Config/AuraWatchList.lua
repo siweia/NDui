@@ -873,7 +873,7 @@ C.AuraWatchList = {
 			Interval = 5,
 			Mode = "ICON",
 			IconSize = 42,
-			Pos = {"BOTTOMLEFT", UIParent, "BOTTOM", 200, 390},
+			Pos = {"BOTTOMLEFT", UIParent, "BOTTOM", 200, 370},
 			List = {
 			-->勇气试练
 				--奥丁，弧光风暴
@@ -1739,6 +1739,9 @@ C.AuraWatchList = {
 				{AuraID = 202602, UnitID = "player"},
 				--战争疤痕
 				{AuraID = 200954, UnitID = "player"},
+				--报复
+				{AuraID = 202573, UnitID = "player"},
+				{AuraID = 202574, UnitID = "player"},
 			},
 		},	
 		{	Name = "Target Aura",
@@ -1811,9 +1814,6 @@ C.AuraWatchList = {
 				{AuraID = 107574, UnitID = "player"},
 				--腾跃步伐
 				{AuraID = 202164, UnitID = "player"},
-				--维金斯
-				{AuraID = 202573, UnitID = "player"},
-				{AuraID = 202574, UnitID = "player"},
 				--破坏者
 				{AuraID = 152277, UnitID = "player"},
 				--激怒
@@ -1862,6 +1862,8 @@ C.AuraWatchList = {
 				{AuraID = 203581, UnitID = "player"},
 				--破坏者
 				{AuraID = 227744, UnitID = "player"},
+				--战术优势
+				{AuraID = 209484, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
@@ -2852,6 +2854,12 @@ C.AuraWatchList = {
 				{AuraID = 202090, UnitID = "player"},
 				--复苏之雾
 				{AuraID = 119611, UnitID = "player"},
+				--治疗之风
+				{AuraID = 195381, UnitID = "player"},
+				--利涉大川
+				{AuraID = 213177, UnitID = "player"},
+				--脚步轻盈
+				{AuraID = 199407, UnitID = "player"},
 			},
 		},
 		{	Name = "Target Aura",
@@ -2896,6 +2904,8 @@ C.AuraWatchList = {
 				{AuraID = 191840, UnitID = "target", Caster = "player"},
 				--赤精之歌
 				{AuraID = 198909, UnitID = "target", Caster = "player"},
+				--氤氲之雾
+				{AuraID = 124682, UnitID = "target", Caster = "player"},
 			},
 		},
 		{	Name = "Special Aura",
@@ -2921,6 +2931,7 @@ C.AuraWatchList = {
 				{AuraID = 152173, UnitID = "player"},
 				--壮胆酒
 				{AuraID = 120954, UnitID = "player"},
+				{AuraID = 243435, UnitID = "player"},
 				--铁骨酒
 				{AuraID = 215479, UnitID = "player"},
 				--酒有余香
@@ -2944,6 +2955,10 @@ C.AuraWatchList = {
 				{AuraID = 116841, UnitID = "player"},
 				--转化力量
 				{AuraID = 195321, UnitID = "player"},
+				--氤氲之雾
+				{AuraID = 124682, UnitID = "player", Caster = "player"},
+				--胆略
+				{AuraID = 213341, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
