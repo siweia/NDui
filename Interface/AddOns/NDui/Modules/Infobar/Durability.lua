@@ -22,6 +22,14 @@ inform:SetPoint("BOTTOM", info, "TOP", 0, 23)
 inform.Text:SetText(L["Low Durability"])
 inform:Hide()
 
+local function isLowDurability()
+	for i = 1, 10 do
+		if localSlots[i][3] < .25 then
+			return true
+		end
+	end
+end
+
 local function gradientColor(perc)
 	perc = perc > 1 and 1 or perc < 0 and 0 or perc -- Stay between 0-1
 	local seg, relperc = math.modf(perc*2)
@@ -34,37 +42,45 @@ info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD",
 }
 
-info.onEvent = function(self)
+info.onEvent = function(self, event)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	if not NDuiADB["RepairType"] then NDuiADB["RepairType"] = 1 end
 
-	local numSlots = 0
-	for i = 1, 10 do
-		if GetInventoryItemLink("player", localSlots[i][1]) then
-			local current, max = GetInventoryItemDurability(localSlots[i][1])
-			if current then 
-				localSlots[i][3] = current/max
-				numSlots = numSlots + 1
-			end
-		else
-			localSlots[i][3] = 1000
-		end
-	end
-	sort(localSlots, function(a, b) return a[3] < b[3] end)
-
-	inform:Hide()
-	for i = 1, 10 do
-		if localSlots[i][3] < .25 then
-			inform:Show()
-			break
-		end
-	end
-
-	if numSlots > 0 then
-		self.text:SetText(format(gsub("[color]%d|r%%"..L["D"], "%[color%]", (gradientColor(floor(localSlots[1][3]*100)/100))), floor(localSlots[1][3]*100)))
+	if event == "PLAYER_REGEN_ENABLED" then
+		self:UnregisterEvent(event)
+		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
+		if isLowDurability() then inform:Show() end
 	else
-		self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
+		local numSlots = 0
+		for i = 1, 10 do
+			if GetInventoryItemLink("player", localSlots[i][1]) then
+				local current, max = GetInventoryItemDurability(localSlots[i][1])
+				if current then 
+					localSlots[i][3] = current/max
+					numSlots = numSlots + 1
+				end
+			else
+				localSlots[i][3] = 1000
+			end
+		end
+		sort(localSlots, function(a, b) return a[3] < b[3] end)
+
+		if isLowDurability() then inform:Show() else inform:Hide() end
+
+		if numSlots > 0 then
+			self.text:SetText(format(gsub("[color]%d|r%%"..L["D"], "%[color%]", (gradientColor(floor(localSlots[1][3]*100)/100))), floor(localSlots[1][3]*100)))
+		else
+			self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
+		end
 	end
 end
+
+inform.CloseButton:HookScript("OnClick", function()
+	if InCombatLockdown() then
+		info:UnregisterAllEvents()
+		info:RegisterEvent("PLAYER_REGEN_ENABLED")
+	end
+end)
 
 info.onMouseUp = function(self, btn)
 	if btn == "RightButton" then
