@@ -53,12 +53,8 @@ function UF:CreateUnitTable()
 end
 
 C.ShowPowerList = {
-	["Scrubber"] = true,
-	["清扫器"] = true,
-	["清掃者"] = true,
-	["Ember of Taeshalach"] = true,
-	["泰沙拉克的余烬"] = true,
-	["泰夏拉克燼火"] = true,
+	[EJ_GetSectionInfo(13015)] = true,	-- 清扫器
+	[EJ_GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
 }
 function UF:CreatePowerUnitTable()
 	if not NDuiDB["Nameplate"]["ShowUnitPower"] then return end
