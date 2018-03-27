@@ -22,6 +22,24 @@ inform:SetPoint("BOTTOM", info, "TOP", 0, 23)
 inform.Text:SetText(L["Low Durability"])
 inform:Hide()
 
+local function getItemDurability()
+	local numSlots = 0
+	for i = 1, 10 do
+		if GetInventoryItemLink("player", localSlots[i][1]) then
+			local current, max = GetInventoryItemDurability(localSlots[i][1])
+			if current then 
+				localSlots[i][3] = current/max
+				numSlots = numSlots + 1
+			end
+		else
+			localSlots[i][3] = 1000
+		end
+	end
+	sort(localSlots, function(a, b) return a[3] < b[3] end)
+
+	return numSlots
+end
+
 local function isLowDurability()
 	for i = 1, 10 do
 		if localSlots[i][3] < .25 then
@@ -49,35 +67,23 @@ info.onEvent = function(self, event)
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent(event)
 		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
+		getItemDurability()
 		if isLowDurability() then inform:Show() end
 	else
-		local numSlots = 0
-		for i = 1, 10 do
-			if GetInventoryItemLink("player", localSlots[i][1]) then
-				local current, max = GetInventoryItemDurability(localSlots[i][1])
-				if current then 
-					localSlots[i][3] = current/max
-					numSlots = numSlots + 1
-				end
-			else
-				localSlots[i][3] = 1000
-			end
-		end
-		sort(localSlots, function(a, b) return a[3] < b[3] end)
-
-		if isLowDurability() then inform:Show() else inform:Hide() end
-
+		local numSlots = getItemDurability()
 		if numSlots > 0 then
 			self.text:SetText(format(gsub("[color]%d|r%%"..L["D"], "%[color%]", (gradientColor(floor(localSlots[1][3]*100)/100))), floor(localSlots[1][3]*100)))
 		else
 			self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
 		end
+
+		if isLowDurability() then inform:Show() else inform:Hide() end
 	end
 end
 
 inform.CloseButton:HookScript("OnClick", function()
 	if InCombatLockdown() then
-		info:UnregisterAllEvents()
+		info:UnregisterEvent("UPDATE_INVENTORY_DURABILITY")
 		info:RegisterEvent("PLAYER_REGEN_ENABLED")
 	end
 end)
