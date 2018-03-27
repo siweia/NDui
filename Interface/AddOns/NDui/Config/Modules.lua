@@ -3,9 +3,9 @@ local _, C, _, _ = unpack(select(2, ...))
 
 -- BUFF/DEBUFF相关
 C.Auras = {
-	IconSize		= 32,											-- BUFF图标大小
+	IconSize		= 32,											-- BUFF及相关职业助手图标大小
 	IconsPerRow		= 14,											-- BUFF每行个数
-	Spacing			= 6,											-- BUFF图标间距
+	Spacing			= 5,											-- BUFF图标间距
 	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, -5},	-- BUFF默认位置
 
 	BHPos			= {"CENTER", UIParent, "CENTER", 0, -200},		-- 血DK助手默认位置

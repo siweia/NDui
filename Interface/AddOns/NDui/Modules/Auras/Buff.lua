@@ -2,22 +2,22 @@ local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:RegisterModule("Auras")
 
 local BuffFrame = BuffFrame
-local IconsPerRow, IconSize, padding = C.Auras.IconsPerRow, C.Auras.IconSize - 2, C.Auras.Spacing
+local IconsPerRow, IconSize, margin, offset = C.Auras.IconsPerRow, C.Auras.IconSize - 2, C.Auras.Spacing, 12
 local BuffAnchor
 
 function module:OnLogin()
 	BuffAnchor = CreateFrame("Frame", "NDuiBuffFrame", UIParent)
 	BuffAnchor:SetSize(IconSize, IconSize)
-	BuffAnchor.mover = B.Mover(BuffAnchor, "Buffs/Debuffs", "BuffAnchor", C.Auras.BuffPos, IconSize*IconsPerRow, IconSize*6)
+	BuffAnchor.mover = B.Mover(BuffAnchor, "Buffs/Debuffs", "BuffAnchor", C.Auras.BuffPos, (IconSize + margin)*IconsPerRow, (IconSize + offset)*3)
 	BuffAnchor:ClearAllPoints()
 	BuffAnchor:SetPoint("TOPRIGHT", BuffAnchor.mover)
 
 	TempEnchant1:ClearAllPoints()
 	TempEnchant1:SetPoint("TOPRIGHT", BuffAnchor)
 	TempEnchant2:ClearAllPoints()
-	TempEnchant2:SetPoint("TOPRIGHT", TempEnchant1, "TOPLEFT", -padding, 0)
+	TempEnchant2:SetPoint("TOPRIGHT", TempEnchant1, "TOPLEFT", -margin, 0)
 	TempEnchant3:ClearAllPoints()
-	TempEnchant3:SetPoint("TOPRIGHT", TempEnchant2, "TOPLEFT", -padding, 0)
+	TempEnchant3:SetPoint("TOPRIGHT", TempEnchant2, "TOPLEFT", -margin, 0)
 	TempEnchant3:Hide()
 	BuffFrame.ignoreFramePositionManager = true
 end
@@ -71,17 +71,17 @@ local function ReskinBuffs()
 		buff:ClearAllPoints()
 		if index > 1 and mod(index, IconsPerRow) == 1 then
 			if index == IconsPerRow + 1 then
-				buff:SetPoint("TOP", BuffAnchor, "BOTTOM", 0, -12)
+				buff:SetPoint("TOP", BuffAnchor, "BOTTOM", 0, -offset)
 			else
-				buff:SetPoint("TOP", aboveBuff, "BOTTOM", 0, -12)
+				buff:SetPoint("TOP", aboveBuff, "BOTTOM", 0, -offset)
 			end
 			aboveBuff = buff
 		elseif numBuffs == 1 and slack == 0 then
 			buff:SetPoint("TOPRIGHT", BuffAnchor)
 		elseif numBuffs == 1 and slack > 0 then
-			buff:SetPoint("TOPRIGHT", _G["TempEnchant"..slack], "TOPLEFT", -padding, 0)
+			buff:SetPoint("TOPRIGHT", _G["TempEnchant"..slack], "TOPLEFT", -margin, 0)
 		else
-			buff:SetPoint("RIGHT", previousBuff, "LEFT", -padding, 0)
+			buff:SetPoint("RIGHT", previousBuff, "LEFT", -margin, 0)
 		end
 		previousBuff = buff
 	end
@@ -103,11 +103,11 @@ local function ReskinDebuffs(buttonName, i)
 
 	debuff:ClearAllPoints()
 	if i == 1 then
-		debuff:SetPoint("TOPRIGHT", BuffAnchor.mover, "BOTTOMRIGHT", 0, 10)
+		debuff:SetPoint("TOPRIGHT", BuffAnchor.mover, "BOTTOMRIGHT", 0, -offset)
 	elseif i == IconsPerRow + 1 then
-		debuff:SetPoint("TOP", _G[buttonName.."1"], "BOTTOM", 0, -12)
+		debuff:SetPoint("TOP", _G[buttonName.."1"], "BOTTOM", 0, -offset)
 	elseif i < IconsPerRow*2 + 1 then
-		debuff:SetPoint("RIGHT", previous, "LEFT", -padding, 0)
+		debuff:SetPoint("RIGHT", previous, "LEFT", -margin, 0)
 	end
 end
 hooksecurefunc("DebuffButton_UpdateAnchors", ReskinDebuffs)
