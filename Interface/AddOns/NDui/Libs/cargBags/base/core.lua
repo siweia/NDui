@@ -27,6 +27,7 @@ local global = GetAddOnMetadata(parent, 'X-cargBags')
 --  class-generation, helper-functions and the Blizzard-replacement
 local cargBags = CreateFrame("Button")
 
+
 ns.cargBags = cargBags
 if(global) then
 	_G[global] = cargBags
@@ -75,8 +76,8 @@ local function closeBag() cargBags.blizzard:Hide() end
 
 --- Overwrites Blizzards Bag-Toggle-Functions with the implementation's ones
 --  @param name <string> The name of the implementation [optional]
-function cargBags:ReplaceBlizzard(name, arg1)
-	local impl = arg1 and cargBags:GetImplementation(name) or self.blizzard
+function cargBags:ReplaceBlizzard(name)
+	local impl = name and cargBags:GetImplementation(name) or self.blizzard
 	self.blizzard = impl
 
 	-- Can we maybe live without hooking ToggleBag(id)?

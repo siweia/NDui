@@ -63,12 +63,15 @@ function module:OnLogin()
 
 		f.artifactPower = MyContainer:New("ArtifactPower", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "artifactpower"})
 		f.artifactPower:SetFilter(bagArtifactPower, true)
+		f.artifactPower:SetParent(f.main)
 
 		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "consumble"})
 		f.consumble:SetFilter(bagConsumble, true)
+		f.consumble:SetParent(f.main)
 
 		f.equipment = MyContainer:New("Equipment", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "equipment"})
 		f.equipment:SetFilter(bagEquipment, true)
+		f.equipment:SetParent(f.main)
 
 		f.bank = MyContainer:New("Bank", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bank"})
 		f.bank:SetFilter(onlyBank, true)
@@ -344,33 +347,31 @@ function module:OnLogin()
 		self:SetParent(settings.Parent or Backpack)
 		self:SetFrameStrata("HIGH")
 		self:SetClampedToScreen(true)
-		self:SetScale(NDuiDB["Bags"]["BagsScale"])
 
 		if name == "Main" or name == "Bank" or name == "Reagent" then
+			self:SetScale(NDuiDB["Bags"]["BagsScale"])
 			B.CreateMF(self)
-		elseif string.find(name, "Bank") then
+		elseif name:match("^Bank%a+") then
 			B.CreateMF(self, f.bank)
 		else
 			B.CreateMF(self, f.main)
 		end
 
-		if name == "ArtifactPower" or name == "BankArtifactPower" then
-			B.CreateFS(self, 14, ARTIFACT_POWER, true, "TOPLEFT", 8, -8)
-			return
-		elseif name == "Equipment" or name == "BankEquipment" then
+		local label
+		if name:match("ArtifactPower$") then
+			label = ARTIFACT_POWER
+		elseif name:match("Equipment$") then
 			if NDuiDB["Bags"]["ItemSetFilter"] then
-				B.CreateFS(self, 14, L["Equipement Set"], true, "TOPLEFT", 8, -8)
+				label = L["Equipement Set"]
 			else
-				B.CreateFS(self, 14, BAG_FILTER_EQUIPMENT, true, "TOPLEFT", 8, -8)
+				label = BAG_FILTER_EQUIPMENT
 			end
-			return
 		elseif name == "BankLegendary" then
-			B.CreateFS(self, 14, LOOT_JOURNAL_LEGENDARIES, true, "TOPLEFT", 8, -8)
-			return
-		elseif name == "Consumble" or name == "BankConsumble" then
-			B.CreateFS(self, 14, BAG_FILTER_CONSUMABLES, true, "TOPLEFT", 8, -8)
-			return
+			label = LOOT_JOURNAL_LEGENDARIES
+		elseif name:match("Consumble$") then
+			label = BAG_FILTER_CONSUMABLES
 		end
+		if label then B.CreateFS(self, 14, label, true, "TOPLEFT", 8, -8) return end
 
 		local infoFrame = CreateFrame("Button", nil, self)
 		infoFrame:SetPoint("BOTTOMRIGHT", -50, 0)
