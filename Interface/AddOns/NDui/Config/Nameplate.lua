@@ -5,9 +5,10 @@ C.WhiteList = {
 	-- Buffs
 	[642]		= true,		-- 圣盾术
 	[1022]		= true,		-- 保护之手
+	[23920]		= true,		-- 法术反射
 	[45438]		= true,		-- 寒冰屏障
 	[186265]	= true,		-- 灵龟守护
-	-- Teammate debuffs
+	-- Debuffs
 	[2094]		= true,		-- 致盲
 	[117405]	= true,		-- 束缚射击
 	[127797]	= true,		-- 乌索尔旋风
@@ -16,7 +17,7 @@ C.WhiteList = {
 	[107079] 	= true,		-- 震山掌
 	-- Mythic dungeons
 	[226510]	= true,		-- 血池
-	[229495]	= true,		-- 象棋易伤
+	[229489]	= true,		-- 象棋国王免伤
 	[226285]	= true,		-- 恶魔飞升，驱散
 	-- Raids
 	[207327]	= true,		-- 净化毁灭，崔利艾克斯

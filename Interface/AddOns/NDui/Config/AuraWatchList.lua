@@ -377,6 +377,8 @@ C.AuraWatchList = {
 				{AuraID = 240443, UnitID = "player"},
 				--气体泡泡
 				{AuraID = 193018, UnitID = "player", Value = true},
+				--振作
+				{AuraID = 230087, UnitID = "player"},
 		-->卡拉赞
 			--夜之魇
 				--燃魂
