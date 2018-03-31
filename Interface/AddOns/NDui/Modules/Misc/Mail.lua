@@ -8,7 +8,7 @@ function module:Mailbox()
 	if not NDuiDB["Misc"]["Mail"] then return end
 
 	local deletedelay, t, mailIndex, mailItemIndex = .5, 0, 1, 0
-	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening
+	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening, inboxItems
 
 	InboxNextPageButton:SetScript("OnClick", function()
 		mailIndex = mailIndex + 1
@@ -203,7 +203,7 @@ function module:Mailbox()
 	end)
 
 	hooksecurefunc("InboxFrameItem_OnEnter", function(self)
-		local items = {}
+		inboxItems = {}
 
 		local itemAttached = select(8, GetInboxHeaderInfo(self.index))
 		if itemAttached then
@@ -212,13 +212,13 @@ function module:Mailbox()
 				if itemCount and itemCount > 0 then
 					local _, itemid = strsplit(":", GetInboxItemLink(self.index, attachID))
 					itemid = tonumber(itemid)
-					items[itemid] = (items[itemid] or 0) + itemCount
+					inboxItems[itemid] = (inboxItems[itemid] or 0) + itemCount
 				end
 			end
 
 			if itemAttached > 1 then
 				GameTooltip:AddLine(L["Attach List"])
-				for key, value in pairs(items) do
+				for key, value in pairs(inboxItems) do
 					local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(key)
 					if itemName then
 						local r, g, b = GetItemQualityColor(itemQuality)

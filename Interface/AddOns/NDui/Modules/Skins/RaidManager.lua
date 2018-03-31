@@ -64,17 +64,15 @@ function module:CreateRM()
 		role[i].text:SetPoint("CENTER", role[i], "RIGHT", 12, 0)
 	end
 
+	local raidCounts
 	roleFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
 	roleFrame:RegisterEvent("UPDATE_ACTIVE_BATTLEFIELD")
 	roleFrame:RegisterEvent("UNIT_FLAGS")
 	roleFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
 	roleFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	roleFrame:SetScript("OnEvent", function()
-		local raidCounts = {
-			totalTANK = 0,
-			totalHEALER = 0,
-			totalDAMAGER = 0,
-		}
+		raidCounts = {totalTANK = 0, totalHEALER = 0, totalDAMAGER = 0}
+
 		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do
 			local name, _, subgroup, _, _, _, _, online, isDead, _, _, assignedRole = GetRaidRosterInfo(i)
@@ -209,10 +207,39 @@ function module:CreateRM()
 	B.CreateFS(checker, 16, "!", true)
 	B.CreateBC(checker, .5)
 
-	local BuffName = {L["Flask"], L["Food"], RUNES}
+	local BuffName, NoBuff, numPlayer = {L["Flask"], L["Food"], RUNES}
+
+	local debugMode = false
+	local function sendMsg(text)
+		if debugMode then
+			print(text)
+		else
+			SendChatMessage(text, IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
+		end
+	end
+
+	local function sendResult(i)
+		if #NoBuff[i] > 0 then
+			if #NoBuff[i] >= numPlayer then
+				sendMsg(L["Lack"]..BuffName[i]..": "..ALL..PLAYER)
+			else
+				local str = L["Lack"]..BuffName[i]..": "
+				for j = 1, #NoBuff[i] do
+					str = str..NoBuff[i][j]..(j < #NoBuff[i] and ", " or "")
+					if #str > 230 then
+						sendMsg(str)
+						str = ""
+					end
+				end
+				sendMsg(str)
+			end
+		end
+	end
+
 	local function scanBuff()
-		local NoBuff, numPlayer = {}, 0
+		NoBuff, numPlayer = {}, 0
 		for i = 1, 3 do NoBuff[i] = {} end
+
 		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do
 			local name, _, subgroup, _, _, _, _, online, isDead = GetRaidRosterInfo(i)
@@ -236,32 +263,6 @@ function module:CreateRM()
 			end
 		end
 		if not NDuiDB["Skins"]["RMRune"] then NoBuff[3] = {} end
-
-		local debugMode = false
-		local function sendMsg(text)
-			if debugMode then
-				print(text)
-			else
-				SendChatMessage(text, IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
-			end
-		end
-		local function sendResult(i)
-			if #NoBuff[i] > 0 then
-				if #NoBuff[i] >= numPlayer then
-					sendMsg(L["Lack"]..BuffName[i]..": "..ALL..PLAYER)
-				else
-					local str = L["Lack"]..BuffName[i]..": "
-					for j = 1, #NoBuff[i] do
-						str = str..NoBuff[i][j]..(j < #NoBuff[i] and ", " or "")
-						if #str > 230 then
-							sendMsg(str)
-							str = ""
-						end
-					end
-					sendMsg(str)
-				end
-			end
-		end
 
 		if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 then
 			sendMsg(L["Buffs Ready"])

@@ -26,6 +26,20 @@ local function applyBackground(bu)
 end
 
 --update hotkey func
+local replaces = {
+	{"(Mouse Button )", "M"},
+	{"(鼠标按键)", "M"},
+	{"(滑鼠按鍵)", "M"},
+	{"(a%-)", "a"},
+	{"(c%-)", "c"},
+	{"(s%-)", "s"},
+	{KEY_BUTTON3, "M3"},
+	{KEY_MOUSEWHEELUP, "MU"},
+	{KEY_MOUSEWHEELDOWN, "MD"},
+	{KEY_SPACE, "Sp"},
+	{CAPSLOCK_KEY_TEXT, "CL"},
+}
+
 local function updateHotkey(self)
 	local ho = _G[self:GetName().."HotKey"]
 	if ho and ho:IsShown() and not NDuiDB["Actionbar"]["Hotkeys"] then
@@ -35,19 +49,7 @@ local function updateHotkey(self)
 
 	local text = ho:GetText()
 	if not text then return end
-	local replaces = {
-		{"(Mouse Button )", "M"},
-		{"(鼠标按键)", "M"},
-		{"(滑鼠按鍵)", "M"},
-		{"(a%-)", "a"},
-		{"(c%-)", "c"},
-		{"(s%-)", "s"},
-		{KEY_BUTTON3, "M3"},
-		{KEY_MOUSEWHEELUP, "MU"},
-		{KEY_MOUSEWHEELDOWN, "MD"},
-		{KEY_SPACE, "Sp"},
-		{CAPSLOCK_KEY_TEXT, "CL"},
-	}
+
 	for _, value in pairs(replaces) do
 		text = gsub(text, value[1], value[2])
 	end

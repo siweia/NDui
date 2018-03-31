@@ -1,6 +1,7 @@
 local _, ns = ...
 local ycc = ns.ycc
 
+local columnTable
 hooksecurefunc("WhoList_Update", function()
 	local whoOffset = FauxScrollFrame_GetOffset(WhoListScrollFrame)
 	local playerZone = GetRealZoneText()
@@ -19,7 +20,7 @@ hooksecurefunc("WhoList_Update", function()
 			if guild == playerGuild then guild = "|cff00ff00"..guild end
 			if race == playerRace then race = "|cff00ff00"..race end
 
-			local columnTable = {zone, guild, race}
+			columnTable = {zone, guild, race}
 			local c = ycc.classColorRaw[classFileName]
 			nameText:SetTextColor(c.r, c.g, c.b)
 			levelText:SetText(ycc.diffColor[level]..level)

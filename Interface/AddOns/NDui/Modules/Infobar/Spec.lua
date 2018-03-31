@@ -47,34 +47,28 @@ info.onEnter = function(self)
 
 	local _, specName, _, specIcon = GetSpecializationInfo(GetSpecialization())
 	GameTooltip:AddLine(addIcon(specIcon).." "..specName, 1,1,1)
-	local spec = {}
+
 	for t = 1, MAX_TALENT_TIERS do
 		for c = 1, 3 do
 			local _, name, icon, selected = GetTalentInfo(t, c, 1)
 			if selected then
-				table.insert(spec, name.." "..addIcon(icon))
+				GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
 			end
 		end
-	end
-	for i = 1, #spec do
-		GameTooltip:AddDoubleLine(" ", DB.MyColor..spec[i])
 	end
 
 	if UnitLevel("player") == 110 then
 		local _, _, texture = GetCurrencyInfo(104)
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, 1,1,1)
-		local pvp = {}
+
 		for t = 1, MAX_PVP_TALENT_TIERS do
 			for c = 1, 3 do
 				local _, name, icon, selected, _, _, unlocked = GetPvpTalentInfo(t, c, 1)
 				if selected and unlocked then
-					table.insert(pvp, name.." "..addIcon(icon))
+					GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
 				end
 			end
-		end
-		for i = 1, #pvp do
-			GameTooltip:AddDoubleLine(" ", DB.MyColor..pvp[i])
 		end
 	end
 

@@ -79,11 +79,11 @@ function module:Chatbar()
 
 	-- WORLD CHANNEL
 	if DB.Client == "zhCN" or DB.Client == "zhTW" then
-		local channelName, channelID = L["World Channel Name"]
+		local channelName, channelID, channels = L["World Channel Name"]
 		local wc = AddButton(0, .8, 1, L["World Channel"])
 
 		local function IsInChannel()
-			local channels = {GetChannelList()}
+			channels = {GetChannelList()}
 			for i = 1, #channels do
 				if channels[i] == channelName then
 					wc.inChannel = true

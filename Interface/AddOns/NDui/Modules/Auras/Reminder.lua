@@ -1,7 +1,8 @@
 local B, C, L, DB = unpack(select(2, ...))
 
 local tab = DB.ReminderBuffs[DB.MyClass]
-if not tab then tab = {} end
+if not tab then return end
+
 local function OnEvent(self)
 	if UnitLevel("player") < 10 then return end
 	local group = tab[self.id]

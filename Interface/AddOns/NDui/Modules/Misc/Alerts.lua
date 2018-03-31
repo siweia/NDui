@@ -88,13 +88,15 @@ function module:InterruptAlert()
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
 			if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") then return end
 
-			local function SendChatMsg(infoText)
-				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
-			end
+			local infoText
 			if eventType == "SPELL_INTERRUPT" then
-				SendChatMsg(L["Interrupt"])
+				infoText = L["Interrupt"]
 			elseif eventType == "SPELL_STOLEN" then
-				SendChatMsg(L["Steal"])
+				infoText = L["Steal"]
+			end
+
+			if infoText then
+				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 			end
 		end
 	end)

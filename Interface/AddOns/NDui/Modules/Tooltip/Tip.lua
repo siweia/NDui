@@ -277,14 +277,9 @@ local function style(frame)
 		frame.bg = bg
 
 		-- other gametooltip-like support
-		local function getBackdrop() return bg:GetBackdrop() end
-		frame.GetBackdrop = getBackdrop
-
-		local function getBackdropColor() return 0, 0, 0, .7 end
-		frame.GetBackdropColor = getBackdropColor
-
-		local function getBackdropBorderColor() return 0, 0, 0 end
-		frame.GetBackdropBorderColor = getBackdropBorderColor
+		frame.GetBackdrop = function() return bg:GetBackdrop() end
+		frame.GetBackdropColor = function() return 0, 0, 0, .7 end
+		frame.GetBackdropBorderColor = function() return 0, 0, 0 end
 	end
 
 	frame.bg:SetBackdropBorderColor(0, 0, 0)

@@ -270,8 +270,9 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 end
 
 -- Auto screenshot when achieved
+local waitTable
 local function TakeScreen(delay, func, ...)
-	local waitTable = {}
+	waitTable = {}
 	local waitFrame = _G["TakeScreenWaitFrame"] or CreateFrame("Frame", "TakeScreenWaitFrame", UIParent)
 	waitFrame:SetScript("OnUpdate", function(_, elapse)
 		local count = #waitTable

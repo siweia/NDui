@@ -5,7 +5,7 @@ local B, C, L, DB = unpack(select(2, ...))
 ---------------------------------
 
 --- Variables ---
-local GearDB, SpecDB, currentUNIT, currentGUID = {}, {}
+local GearDB, SpecDB, currentUNIT, currentGUID, weapon = {}, {}
 local gearPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 
@@ -76,16 +76,16 @@ local function UnitGear(unit)
 	local class = select(2, UnitClass(unit))
 	local ilvl, boa, total, haveWeapon, twohand = 0, 0, 0, 0, 0
 	local delay, mainhand, offhand, hasArtifact
-	local weapon = {0, 0}
+	weapon = {0, 0}
 
 	for i = 1, 17 do
-		if (i ~= 4) then
+		if i ~= 4 then
 			local itemTexture = GetInventoryItemTexture(unit, i)
 
 			if itemTexture then
 				local itemLink = GetInventoryItemLink(unit, i)
 
-				if (not itemLink) then
+				if not itemLink then
 					delay = true
 				else
 					local _, _, quality, level, _, _, _, _, slot = GetItemInfo(itemLink)
@@ -136,7 +136,7 @@ local function UnitGear(unit)
 		end
 	end
 
-	if (not delay) then
+	if not delay then
 		if unit == "player" then
 			ilvl = select(2, GetAverageItemLevel())
 		else
@@ -159,8 +159,8 @@ local function UnitGear(unit)
 			ilvl = total / 16
 		end
 
-		if (ilvl > 0) then ilvl = string.format("%d", ilvl) end
-		if (boa > 0) then ilvl = ilvl.." |cff00ccff("..boa..HEIRLOOMS..")" end
+		if ilvl > 0 then ilvl = string.format("%d", ilvl) end
+		if boa > 0 then ilvl = ilvl.." |cff00ccff("..boa..HEIRLOOMS..")" end
 	else
 		ilvl = nil
 	end
@@ -173,7 +173,7 @@ local function UnitSpec(unit)
 	if (not unit) or (UnitGUID(unit) ~= currentGUID) then return end
 
 	local specName
-	if (unit == "player") then
+	if unit == "player" then
 		local specIndex = GetSpecialization()
 		if specIndex then
 			specName = select(2, GetSpecializationInfo(specIndex))
@@ -216,7 +216,7 @@ local function ScanUnit(unit, forced)
 		SetUnitInfo(LFG_LIST_LOADING, cachedSpec or LFG_LIST_LOADING)
 
 		local lastRequest = GetTime() - (f.lastUpdate or 0)
-		if (lastRequest >= 1.5) then
+		if lastRequest >= 1.5 then
 			f.nextUpdate = 0
 		else
 			f.nextUpdate = 1.5 - lastRequest
@@ -227,14 +227,14 @@ end
 
 --- Handle Events ---
 f:SetScript("OnEvent", function(self, event, ...)
-	if (event == "UNIT_INVENTORY_CHANGED") then
+	if event == "UNIT_INVENTORY_CHANGED" then
 		local unit = ...
-		if (UnitGUID(unit) == currentGUID) then
+		if UnitGUID(unit) == currentGUID then
 			ScanUnit(unit, true)
 		end
-	elseif (event == "INSPECT_READY") then
+	elseif event == "INSPECT_READY" then
 		local guid = ...
-		if (guid == currentGUID) then
+		if guid == currentGUID then
 			local spec = UnitSpec(currentUNIT)
 			SpecDB[guid] = spec
 
@@ -253,7 +253,7 @@ end)
 
 f:SetScript("OnUpdate", function(self, elapsed)
 	self.nextUpdate = (self.nextUpdate or 0) - elapsed
-	if (self.nextUpdate > 0) then return end
+	if self.nextUpdate > 0 then return end
 	self:Hide()
 	ClearInspectPlayer()
 

@@ -167,12 +167,14 @@ end)
 
 -- Autoinvite by whisper
 local f = NDui:EventFrame{"CHAT_MSG_WHISPER", "CHAT_MSG_BN_WHISPER"}
-f:SetScript("OnEvent", function(_, event, ...)
+f:SetScript("OnEvent", function(self, event, ...)
 	if not NDuiDB["Chat"]["Invite"] then return end
+	if not self.whisperList then
+		self.whisperList = {string.split(" ", NDuiDB["Chat"]["Keyword"])}
+	end
 
 	local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
-	local list = {string.split(" ", NDuiDB["Chat"]["Keyword"])}
-	for _, word in pairs(list) do
+	for _, word in pairs(self.whisperList) do
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
 				local gameID = select(6, BNGetFriendInfoByID(arg3))
