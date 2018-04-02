@@ -2,22 +2,27 @@ local B, C, L, DB = unpack(select(2, ...))
 local module = NDui:RegisterModule("Auras")
 
 local BuffFrame = BuffFrame
-local IconsPerRow, IconSize, margin, offset = C.Auras.IconsPerRow, C.Auras.IconSize - 2, C.Auras.Spacing, 12
-local BuffAnchor
+local buffsPerRow, buffSize, margin, offset = C.Auras.IconsPerRow, C.Auras.IconSize - 2, C.Auras.Spacing, 12
+local debuffsPerRow, debuffSize = C.Auras.IconsPerRow - 4, C.Auras.IconSize + 3
+local parentFrame, buffAnchor, debuffAnchor
 
 function module:OnLogin()
-	BuffAnchor = CreateFrame("Frame", "NDuiBuffFrame", UIParent)
-	BuffAnchor:SetSize(IconSize, IconSize)
-	BuffAnchor.mover = B.Mover(BuffAnchor, "Buffs/Debuffs", "BuffAnchor", C.Auras.BuffPos, (IconSize + margin)*IconsPerRow, (IconSize + offset)*3)
-	BuffAnchor:ClearAllPoints()
-	BuffAnchor:SetPoint("TOPRIGHT", BuffAnchor.mover)
+	parentFrame = CreateFrame("Frame", nil, UIParent)
+	parentFrame:SetSize(buffSize, buffSize)
+	buffAnchor = B.Mover(parentFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos, (buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
+	debuffAnchor = B.Mover(parentFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -offset}, (debuffSize + margin)*debuffsPerRow, (debuffSize + offset)*2)
+	parentFrame:ClearAllPoints()
+	parentFrame:SetPoint("TOPRIGHT", buffAnchor)
 
-	TempEnchant1:ClearAllPoints()
-	TempEnchant1:SetPoint("TOPRIGHT", BuffAnchor)
-	TempEnchant2:ClearAllPoints()
-	TempEnchant2:SetPoint("TOPRIGHT", TempEnchant1, "TOPLEFT", -margin, 0)
-	TempEnchant3:ClearAllPoints()
-	TempEnchant3:SetPoint("TOPRIGHT", TempEnchant2, "TOPLEFT", -margin, 0)
+	for i = 1, 3 do
+		local enchant = _G["TempEnchant"..i]
+		enchant:ClearAllPoints()
+		if i == 1 then
+			enchant:SetPoint("TOPRIGHT", buffAnchor)
+		else
+			enchant:SetPoint("TOPRIGHT", _G["TempEnchant"..(i-1)], "TOPLEFT", -margin, 0)
+		end
+	end
 	TempEnchant3:Hide()
 	BuffFrame.ignoreFramePositionManager = true
 end
@@ -26,8 +31,8 @@ local function styleButton(bu, isDebuff)
 	if not bu or bu.styled then return end
 	local name = bu:GetName()
 
-	local iconSize, fontSize = IconSize, DB.Font[2]
-	if isDebuff then iconSize, fontSize = IconSize + 5, DB.Font[2] + 2 end
+	local iconSize, fontSize = buffSize, DB.Font[2]
+	if isDebuff then iconSize, fontSize = debuffSize, DB.Font[2] + 2 end
 
 	local border = _G[name.."Border"]
 	if border then border:Hide() end
@@ -57,7 +62,7 @@ local function styleButton(bu, isDebuff)
 	bu.styled = true
 end
 
-local function ReskinBuffs()
+local function reskinBuffs()
 	local buff, previousBuff, aboveBuff, index
 	local numBuffs = 0
 	local slack = BuffFrame.numEnchants
@@ -69,15 +74,15 @@ local function ReskinBuffs()
 		numBuffs = numBuffs + 1
 		index = numBuffs + slack
 		buff:ClearAllPoints()
-		if index > 1 and mod(index, IconsPerRow) == 1 then
-			if index == IconsPerRow + 1 then
-				buff:SetPoint("TOP", BuffAnchor, "BOTTOM", 0, -offset)
+		if index > 1 and mod(index, buffsPerRow) == 1 then
+			if index == buffsPerRow + 1 then
+				buff:SetPoint("TOP", parentFrame, "BOTTOM", 0, -offset)
 			else
 				buff:SetPoint("TOP", aboveBuff, "BOTTOM", 0, -offset)
 			end
 			aboveBuff = buff
 		elseif numBuffs == 1 and slack == 0 then
-			buff:SetPoint("TOPRIGHT", BuffAnchor)
+			buff:SetPoint("TOPRIGHT", buffAnchor)
 		elseif numBuffs == 1 and slack > 0 then
 			buff:SetPoint("TOPRIGHT", _G["TempEnchant"..slack], "TOPLEFT", -margin, 0)
 		else
@@ -86,31 +91,30 @@ local function ReskinBuffs()
 		previousBuff = buff
 	end
 end
-hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", ReskinBuffs)
+hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", reskinBuffs)
 
-local function ReskinTempEnchant()
+local function reskinTempEnchant()
 	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 		local bu = _G["TempEnchant"..i]
 		styleButton(bu)
 	end
 end
-hooksecurefunc("TemporaryEnchantFrame_Update", ReskinTempEnchant)
+hooksecurefunc("TemporaryEnchantFrame_Update", reskinTempEnchant)
 
-local function ReskinDebuffs(buttonName, i)
+local function reskinDebuffs(buttonName, i)
 	local debuff = _G[buttonName..i]
-	local previous = _G[buttonName..(i-1)]
 	styleButton(debuff, true)
 
 	debuff:ClearAllPoints()
-	if i == 1 then
-		debuff:SetPoint("TOPRIGHT", BuffAnchor.mover, "BOTTOMRIGHT", 0, -offset)
-	elseif i == IconsPerRow + 1 then
-		debuff:SetPoint("TOP", _G[buttonName.."1"], "BOTTOM", 0, -offset)
-	elseif i < IconsPerRow*2 + 1 then
-		debuff:SetPoint("RIGHT", previous, "LEFT", -margin, 0)
+	if i > 1 and mod(i, debuffsPerRow) == 1 then
+		debuff:SetPoint("TOP", _G[buttonName..(i-debuffsPerRow)], "BOTTOM", 0, -offset)
+	elseif i == 1 then
+		debuff:SetPoint("TOPRIGHT", debuffAnchor)
+	else
+		debuff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -margin, 0)
 	end
 end
-hooksecurefunc("DebuffButton_UpdateAnchors", ReskinDebuffs)
+hooksecurefunc("DebuffButton_UpdateAnchors", reskinDebuffs)
 
 local function updateDebuffBorder(buttonName, index, filter)
 	local unit = PlayerFrame.unit
@@ -126,11 +130,11 @@ local function updateDebuffBorder(buttonName, index, filter)
 end
 hooksecurefunc("AuraButton_Update", updateDebuffBorder)
 
-local function FlashOnEnd(self)
+local function flashOnEnd(self)
 	if self.timeLeft < 10 then
 		self:SetAlpha(BuffFrame.BuffAlphaValue)
 	else
 		self:SetAlpha(1)
 	end
 end
-hooksecurefunc("AuraButton_OnUpdate", FlashOnEnd)
+hooksecurefunc("AuraButton_OnUpdate", flashOnEnd)
