@@ -10,9 +10,10 @@ local function StatueGo()
 	bu = CreateFrame("Button", nil, UIParent, "SecureActionButtonTemplate")
 	bu:SetSize(IconSize, IconSize)
 	B.CreateIF(bu, true)
-	bu:RegisterForClicks("RightButtonUp")
+	bu:RegisterForClicks("AnyUp")
+	bu:SetAttribute("type1", "macro")
 	bu:SetAttribute("type2", "macro")
-	bu:SetAttribute("macrotext", "/click TotemFrameTotem1 RightButton")
+	bu:SetAttribute("macrotext2", "/click TotemFrameTotem1 RightButton")
 
 	B.Mover(bu, L["Statue"], "Statue", C.Auras.StatuePos, IconSize, IconSize)
 end
@@ -29,11 +30,15 @@ f:SetScript("OnEvent", function(self, event)
 			StatueGo()
 			bu:SetAlpha(.3)
 			bu.CD:SetCooldown(0, 0)
+			local statue
 			if IsPlayerSpell(115313) then
 				bu.Icon:SetTexture(GetSpellTexture(115313))
+				statue = GetSpellInfo(115313)
 			else
 				bu.Icon:SetTexture(GetSpellTexture(115315))
+				statue = GetSpellInfo(115315)
 			end
+			bu:SetAttribute("macrotext1", "/tar "..statue)
 			self:RegisterEvent("PLAYER_TOTEM_UPDATE")
 		else
 			if bu then bu:Hide() end
