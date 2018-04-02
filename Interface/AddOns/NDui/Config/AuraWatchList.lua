@@ -2965,6 +2965,8 @@ C.AuraWatchList = {
 				{AuraID = 124682, UnitID = "player", Caster = "player"},
 				--胆略
 				{AuraID = 213341, UnitID = "player"},
+				--皇帝的容电皮甲
+				{AuraID = 235054, UnitID = "player"},
 			},
 		},
 		{	Name = "Focus Aura",
