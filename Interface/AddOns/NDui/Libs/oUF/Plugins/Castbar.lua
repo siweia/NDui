@@ -56,7 +56,7 @@ cast.OnCastbarUpdate = function(self, elapsed)
 	if GetNetStats() == 0 then return end
 
 	if self.casting or self.channeling then
-		local mystyle = self:GetParent().mystyle
+		local mystyle = self.__owner.mystyle
 		local decimal = "%.2f"
 		if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then decimal = "%.1f" end
 
@@ -67,7 +67,7 @@ cast.OnCastbarUpdate = function(self, elapsed)
 			return
 		end
 
-		if mystyle == "player" then
+		if self.__owner.unit == "player" then
 			if self.delay ~= 0 then
 				self.Time:SetFormattedText(decimal.." | |cffff0000"..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
 			else

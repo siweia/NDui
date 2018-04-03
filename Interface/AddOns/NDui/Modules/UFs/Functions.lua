@@ -385,7 +385,7 @@ local function postUpdateIcon(element, unit, button, index)
 	local _, _, _, _, debuffType, duration = UnitAura(unit, index, button.filter)
 	if duration then button.Shadow:Show() end
 
-	local style = element:GetParent().mystyle
+	local style = element.__owner.mystyle
 	if style == "nameplate" then
 		button:SetSize(element.size, element.size - 4)
 	else
@@ -413,7 +413,7 @@ local function postUpdateGapIcon(_, _, icon)
 end
 
 local function customFilter(element, unit, button, name, _, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
-	local style = element:GetParent().mystyle
+	local style = element.__owner.mystyle
 	if style == "raid" then
 		local auraList = C.RaidAuraWatch[DB.MyClass]
 		if auraList and auraList[spellID] and button.isPlayer then
