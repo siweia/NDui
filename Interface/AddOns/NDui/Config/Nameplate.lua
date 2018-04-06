@@ -17,6 +17,7 @@ C.WhiteList = {
 	[107079] 	= true,		-- 震山掌
 	-- Mythic dungeons
 	[226510]	= true,		-- 血池
+	[227909]	= true,		-- 幽灵陷阱
 	[229489]	= true,		-- 象棋国王免伤
 	[226285]	= true,		-- 恶魔飞升，驱散
 	-- Raids
