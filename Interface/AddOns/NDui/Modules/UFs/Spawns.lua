@@ -181,103 +181,103 @@ function UF:OnLogin()
 	-- Default Clicksets for RaidFrame
 	self:DefaultClickSets()
 
-	if not NDuiDB["UFs"]["Enable"] then return end
+	if NDuiDB["UFs"]["Enable"] then
+		oUF:SetActiveStyle("Player")
+		local player = oUF:Spawn("player", "oUF_Player")
+		B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos, 245, 30)
 
-	oUF:SetActiveStyle("Player")
-	local player = oUF:Spawn("player", "oUF_Player")
-	B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos, 245, 30)
+		oUF:SetActiveStyle("Target")
+		local target = oUF:Spawn("target", "oUF_Target")
+		B.Mover(target, L["TargetUF"], "TargetUF", C.UFs.TargetPos, 245, 30)
 
-	oUF:SetActiveStyle("Target")
-	local target = oUF:Spawn("target", "oUF_Target")
-	B.Mover(target, L["TargetUF"], "TargetUF", C.UFs.TargetPos, 245, 30)
+		oUF:SetActiveStyle("ToT")
+		local targettarget = oUF:Spawn("targettarget", "oUF_ToT")
+		B.Mover(targettarget, L["TotUF"], "TotUF", C.UFs.ToTPos, 120, 30)
 
-	oUF:SetActiveStyle("ToT")
-	local targettarget = oUF:Spawn("targettarget", "oUF_ToT")
-	B.Mover(targettarget, L["TotUF"], "TotUF", C.UFs.ToTPos, 120, 30)
+		oUF:SetActiveStyle("Pet")
+		local pet = oUF:Spawn("pet", "oUF_Pet")
+		B.Mover(pet, L["PetUF"], "PetUF", C.UFs.PetPos, 120, 30)
 
-	oUF:SetActiveStyle("Pet")
-	local pet = oUF:Spawn("pet", "oUF_Pet")
-	B.Mover(pet, L["PetUF"], "PetUF", C.UFs.PetPos, 120, 30)
+		oUF:SetActiveStyle("Focus")
+		local focus = oUF:Spawn("focus", "oUF_Focus")
+		B.Mover(focus, L["FocusUF"], "FocusUF", C.UFs.FocusPos, 200, 30)
 
-	oUF:SetActiveStyle("Focus")
-	local focus = oUF:Spawn("focus", "oUF_Focus")
-	B.Mover(focus, L["FocusUF"], "FocusUF", C.UFs.FocusPos, 200, 30)
+		oUF:SetActiveStyle("FocusTarget")
+		local focustarget = oUF:Spawn("focustarget", "oUF_FocusTarget")
+		B.Mover(focustarget, L["FotUF"], "FotUF", C.UFs.FoTPos, 120, 30)
 
-	oUF:SetActiveStyle("FocusTarget")
-	local focustarget = oUF:Spawn("focustarget", "oUF_FocusTarget")
-	B.Mover(focustarget, L["FotUF"], "FotUF", C.UFs.FoTPos, 120, 30)
-
-	if NDuiDB["UFs"]["Boss"] then
-		oUF:SetActiveStyle("Boss")
-		local boss = {}
-		for i = 1, MAX_BOSS_FRAMES do
-			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
-			if i == 1 then
-				B.Mover(boss[i], L["Boss1"], "Boss1", {"TOP", UIParent, "BOTTOM", 550, 550}, 150, 30)
-			else
-				B.Mover(boss[i], L["Boss"..i], "Boss"..i, {"BOTTOM", boss[i-1], "TOP", 0, 50}, 150, 30)
-			end
-		end
-	end
-
-	if NDuiDB["UFs"]["Arena"] then
-		oUF:SetActiveStyle("Arena")
-		local arena = {}
-		for i = 1, 5 do
-			arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
-			if i == 1 then
-				B.Mover(arena[i], L["Arena1"], "Arena1", {"RIGHT", UIParent, "RIGHT", -100, -90}, 150, 30)
-			else
-				B.Mover(arena[i], L["Arena"..i], "Arena"..i, {"BOTTOM", arena[i-1], "TOP", 0, 50}, 150, 30)
-			end
-		end
-
-		local bars = {}
-		for i = 1, 5 do
-			local bar = CreateFrame("Frame", nil, UIParent)
-			bar:SetAllPoints(arena[i])
-			B.CreateSD(bar, 3, 3)
-			bar:Hide()
-
-			bar.Health = CreateFrame("StatusBar", nil, bar)
-			bar.Health:SetAllPoints()
-			bar.Health:SetStatusBarTexture(DB.normTex)
-			bar.Health:SetStatusBarColor(.3, .3, .3)
-			bar.SpecClass = B.CreateFS(bar.Health, 12, "")
-
-			bars[i] = bar
-		end
-
-		local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "ARENA_PREP_OPPONENT_SPECIALIZATIONS", "ARENA_OPPONENT_UPDATE"}
-		f:SetScript("OnEvent", function(_, event)
-			if event == "ARENA_OPPONENT_UPDATE" then
-				for i = 1, 5 do
-					bars[i]:Hide()
-				end
-			else
-				local numOpps = GetNumArenaOpponentSpecs()
-				if numOpps > 0 then
-					for i = 1, 5 do
-						local s = GetArenaOpponentSpec(i)
-						local _, spec, class
-						if s and s > 0 then 
-							_, spec, _, _, _, class = GetSpecializationInfoByID(s)
-						end
-						if i <= numOpps and class and spec then
-							bars[i].Health:SetStatusBarColor(B.ClassColor(class))
-							bars[i].SpecClass:SetText(spec.."  -  "..LOCALIZED_CLASS_NAMES_MALE[class] or "UNKNOWN")
-							bars[i]:Show()
-						else
-							bars[i]:Hide()
-						end
-					end
+		if NDuiDB["UFs"]["Boss"] then
+			oUF:SetActiveStyle("Boss")
+			local boss = {}
+			for i = 1, MAX_BOSS_FRAMES do
+				boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
+				if i == 1 then
+					B.Mover(boss[i], L["Boss1"], "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, 150, 30)
 				else
+					B.Mover(boss[i], L["Boss"..i], "Boss"..i, {"BOTTOM", boss[i-1], "TOP", 0, 50}, 150, 30)
+				end
+			end
+		end
+
+		if NDuiDB["UFs"]["Arena"] then
+			oUF:SetActiveStyle("Arena")
+			local arena = {}
+			for i = 1, 5 do
+				arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
+				if i == 1 then
+					B.Mover(arena[i], L["Arena1"], "Arena1", {"RIGHT", UIParent, "RIGHT", -120, -90}, 150, 30)
+				else
+					B.Mover(arena[i], L["Arena"..i], "Arena"..i, {"BOTTOM", arena[i-1], "TOP", 0, 50}, 150, 30)
+				end
+			end
+
+			local bars = {}
+			for i = 1, 5 do
+				local bar = CreateFrame("Frame", nil, UIParent)
+				bar:SetAllPoints(arena[i])
+				B.CreateSD(bar, 3, 3)
+				bar:Hide()
+
+				bar.Health = CreateFrame("StatusBar", nil, bar)
+				bar.Health:SetAllPoints()
+				bar.Health:SetStatusBarTexture(DB.normTex)
+				bar.Health:SetStatusBarColor(.3, .3, .3)
+				bar.SpecClass = B.CreateFS(bar.Health, 12, "")
+
+				bars[i] = bar
+			end
+
+			local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "ARENA_PREP_OPPONENT_SPECIALIZATIONS", "ARENA_OPPONENT_UPDATE"}
+			f:SetScript("OnEvent", function(_, event)
+				if event == "ARENA_OPPONENT_UPDATE" then
 					for i = 1, 5 do
 						bars[i]:Hide()
 					end
+				else
+					local numOpps = GetNumArenaOpponentSpecs()
+					if numOpps > 0 then
+						for i = 1, 5 do
+							local s = GetArenaOpponentSpec(i)
+							local _, spec, class
+							if s and s > 0 then 
+								_, spec, _, _, _, class = GetSpecializationInfoByID(s)
+							end
+							if i <= numOpps and class and spec then
+								bars[i].Health:SetStatusBarColor(B.ClassColor(class))
+								bars[i].SpecClass:SetText(spec.."  -  "..LOCALIZED_CLASS_NAMES_MALE[class] or "UNKNOWN")
+								bars[i]:Show()
+							else
+								bars[i]:Hide()
+							end
+						end
+					else
+						for i = 1, 5 do
+							bars[i]:Hide()
+						end
+					end
 				end
-			end
-		end)
+			end)
+		end
 	end
 
 	if NDuiDB["UFs"]["RaidFrame"] then
