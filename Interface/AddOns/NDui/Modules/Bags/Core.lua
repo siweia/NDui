@@ -289,7 +289,7 @@ function module:OnLogin()
 		local offset = -35
 		if self.name == "Main" or self.name == "Bank" or self.name == "Reagent" then offset = -10 end
 
-		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 7, 10, offset)
+		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 10, offset)
 		self:SetSize(width + 20, height + 45)
 
 		local anchor = f.main
