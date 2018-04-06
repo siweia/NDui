@@ -1,5 +1,5 @@
 ﻿local B, C, L, DB = unpack(select(2, ...))
-local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, C.InternalCD
+local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, {}
 local MaxFrame = 12	-- Max Tracked Auras
 
 -- Init
@@ -81,11 +81,11 @@ local function ConvertTable()
 			InsertData(9, v.List)
 		elseif v.Name == "Warning" then
 			InsertData(4, v.List)
+		elseif v.Name == "InternalCD" then
+			InsertData(10, v.List)
+			IntCD = v
 		end
 	end
-
-	-- Fill InternalCD List
-	InsertData(10, IntCD.List)
 end
 
 local function CheckAuraList()
@@ -103,8 +103,8 @@ end
 
 local function BuildAuraList()
 	AuraList = C.AuraWatchList["ALL"] and C.AuraWatchList["ALL"] or {}
-	for key, _ in pairs(C.AuraWatchList) do
-		if key == DB.MyClass then
+	for class in pairs(C.AuraWatchList) do
+		if class == DB.MyClass then
 			for _, value in pairs(C.AuraWatchList[DB.MyClass]) do
 				tinsert(AuraList, value)
 			end
@@ -279,7 +279,7 @@ local function Pos()
 			local Frame = VALUE[i]
 			if i == 1 then
 				Frame:SetPoint("CENTER", Frame.MoveHandle)
-			elseif value.IconsPerRow and i == value.IconsPerRow + 1 then
+			elseif value.Name == "Target Aura" and i == 7 then
 				Frame:SetPoint("BOTTOM", VALUE[1], "TOP", 0, value.Interval)
 			else
 				if value.Direction:lower() == "right" then
@@ -586,6 +586,7 @@ local eventList = {
 }
 
 local function UpdateInt(_, _, ...)
+	if not IntCD.List then return end
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
 			local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID = ...
