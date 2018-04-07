@@ -146,28 +146,6 @@ function module:SkadaSkin()
 	Skada.options.args.generaloptions.args.numberformat = nil
 
 	function Skada:FormatNumber(number)
-		if number then
-			if NDuiDB["Settings"]["Format"] == 1 then
-				if number >= 1e9 then
-					return ("%02.2fb"):format(number / 1e9)
-				elseif number > 1e6 then
-					return ("%02.2fm"):format(number / 1e6)
-				elseif number > 1e3 then
-					return ("%02.1fk"):format(number / 1e3)
-				else
-					return math.floor(number)
-				end
-			elseif NDuiDB["Settings"]["Format"] == 2 then
-				if number > 1e8 then
-					return ("%02.2f"..L["NumberCap2"]):format(number / 1e8)
-				elseif number > 1e4 then
-					return ("%02.1f"..L["NumberCap1"]):format(number / 1e4)
-				else
-					return math.floor(number)
-				end
-			else
-				return math.floor(number)
-			end
-		end
+		if number then return B.Numb(number) end
 	end
 end
