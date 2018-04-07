@@ -1,5 +1,5 @@
 local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("RaidFrameAuras")
+local module = NDui:RegisterModule("AurasTable")
 
 -- 团队框体职业相关Buffs
 local RaidBuffs = {

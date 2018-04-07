@@ -1,4 +1,5 @@
 local B, C, L, DB = unpack(select(2, ...))
+local module = NDui:GetModule("AurasTable")
 --[[
 	>>>自定义添加时，要注意格式，注意逗号，注意字母大小写<<<
 	ALL下面是对全职业通用的设置，其他情况请在自己职业下添加。当你添加时，要注意是否重复。
@@ -1072,4 +1073,4 @@ local list = {
 	},
 }
 
-C.AddNewAuraWatch("ALL", list)
+module:AddNewAuraWatch("ALL", list)

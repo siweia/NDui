@@ -5,7 +5,7 @@
 -- 2016/11/10
 ------------------------------------------------------------
 
-local module = NDui:GetModule("RaidFrameAuras")
+local module = NDui:GetModule("AurasTable")
 if not module then return end
 
 local TIER = 7 -- Legion

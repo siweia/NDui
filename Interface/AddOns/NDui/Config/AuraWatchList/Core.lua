@@ -1,4 +1,5 @@
 local B, C, L, DB = unpack(select(2, ...))
+local module = NDui:GetModule("AurasTable")
 
 local groups = {
 	-- groups name = direction, interval, mode, iconsize, position, barwidth
@@ -14,7 +15,7 @@ local groups = {
 	["InternalCD"] = {"UP", 5, "BAR", 18, C.Auras.InternalPos, 150},
 }
 
-local function AddNewAuraWatch(class, list)
+function module:AddNewAuraWatch(class, list)
 	if not C.AuraWatchList then C.AuraWatchList = {} end
 	if not C.AuraWatchList[class] then C.AuraWatchList[class] = {} end
 
@@ -33,4 +34,3 @@ local function AddNewAuraWatch(class, list)
 		tinsert(C.AuraWatchList[class], newList)
 	end
 end
-C.AddNewAuraWatch = AddNewAuraWatch

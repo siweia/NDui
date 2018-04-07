@@ -1,4 +1,5 @@
 local B, C, L, DB = unpack(select(2, ...))
+local module = NDui:GetModule("AurasTable")
 
 -- 牧师的法术监控
 local list = {
@@ -121,4 +122,4 @@ local list = {
 	},
 }
 
-C.AddNewAuraWatch("PRIEST", list)
+module:AddNewAuraWatch("PRIEST", list)
