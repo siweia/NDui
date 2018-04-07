@@ -219,18 +219,22 @@ end
 -- Numberize
 B.Numb = function(n)
 	if NDuiDB["Settings"]["Format"] == 1 then
-		if n >= 1e9 then
+		if n >= 1e12 then
+			return ("%.2ft"):format(n / 1e12)
+		elseif n >= 1e9 then
 			return ("%.2fb"):format(n / 1e9)
 		elseif n >= 1e6 then
-			return ("%.1fm"):format(n / 1e6)
+			return ("%.2fm"):format(n / 1e6)
 		elseif n >= 1e3 then
 			return ("%.1fk"):format(n / 1e3)
 		else
 			return ("%.0f"):format(n)
 		end
 	elseif NDuiDB["Settings"]["Format"] == 2 then
-		if n >= 1e8 then
-			return ("%.1f"..L["NumberCap2"]):format(n / 1e8)
+		if n >= 1e12 then
+			return ("%.2f"..L["NumberCap3"]):format(n / 1e12)
+		elseif n >= 1e8 then
+			return ("%.2f"..L["NumberCap2"]):format(n / 1e8)
 		elseif n >= 1e4 then
 			return ("%.1f"..L["NumberCap1"]):format(n / 1e4)
 		else
