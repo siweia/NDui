@@ -84,7 +84,6 @@ local function ConvertTable()
 		elseif v.Name == "InternalCD" then
 			InsertData(10, v.List)
 			IntCD = v
-			wipe(v.List)
 		end
 	end
 end
