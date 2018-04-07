@@ -286,7 +286,7 @@ function module:OnLogin()
 	function MyContainer:OnContentsChanged()
 		self:SortButtons("bagSlot")
 
-		local offset = -35
+		local offset = -32
 		if self.name == "Main" or self.name == "Bank" or self.name == "Reagent" then offset = -10 end
 
 		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 10, offset)
