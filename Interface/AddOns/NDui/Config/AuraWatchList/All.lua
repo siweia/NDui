@@ -164,6 +164,8 @@ local list = {
 		{AuraID = 208052, UnitID = "player"},
 		--诺甘农的预见
 		{AuraID = 236380, UnitID = "player", Combat = true},
+		--警戒栖木
+		{AuraID = 242066, UnitID = "player"},
 		--吸血传染
 		{AuraID = 221805, UnitID = "player"},
 		--坍缩，戒指
