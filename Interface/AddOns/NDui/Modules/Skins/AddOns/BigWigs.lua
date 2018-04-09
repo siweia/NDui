@@ -21,16 +21,16 @@ f:SetScript("OnEvent", function(self, event, addon)
 		local bars = BigWigs:GetPlugin("Bars", true)
 
 		local function removeStyle(bar)
-			bar:SetHeight(14)
 			bar.candyBarBackdrop:Hide()
+			local height = bar:Get("bigwigs:restoreheight")
+			if height then
+				bar:SetHeight(height)
+			end
 
 			local tex = bar:Get("bigwigs:restoreicon")
 			if tex then
-				local icon = bar.candyBarIconFrame
-				icon:ClearAllPoints()
-				icon:SetPoint("TOPLEFT")
-				icon:SetPoint("BOTTOMLEFT")
 				bar:SetIcon(tex)
+				bar:Set("bigwigs:restoreicon", nil)
 				bar.candyBarIconFrameBackdrop:Hide()
 			end
 
@@ -43,7 +43,9 @@ f:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		local function styleBar(bar)
-			bar:SetHeight(10)
+			local height = bar:GetHeight()
+			bar:Set("bigwigs:restoreheight", height)
+			bar:SetHeight(height/2)
 			bar:SetTexture(DB.normTex)
 
 			local bd = bar.candyBarBackdrop
@@ -54,14 +56,18 @@ f:SetScript("OnEvent", function(self, event, addon)
 			bd:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 3, -3)
 			bd:Show()
 
-			if bars.db.profile.icon then
+			local tex = bar:GetIcon()
+			if tex then
 				local icon = bar.candyBarIconFrame
-				local tex = icon.icon
 				bar:SetIcon(nil)
 				icon:SetTexture(tex)
-				icon:ClearAllPoints()
-				icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
-				icon:SetSize(20, 20)
+				icon:Show()
+				if bar.iconPosition == "RIGHT" then
+					icon:SetPoint("BOTTOMLEFT", bar, "BOTTOMRIGHT", 5, 0)
+				else
+					icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
+				end
+				icon:SetSize(height, height)
 				bar:Set("bigwigs:restoreicon", tex)
 
 				local iconBd = bar.candyBarIconFrameBackdrop
@@ -82,8 +88,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 		bars:RegisterBarStyle("NDui", {
 			apiVersion = 1,
-			version = 1,
-			GetSpacing = function() return 14 end,
+			version = 2,
+			GetSpacing = function(bar) return bar:GetHeight()+5 end,
 			ApplyStyle = styleBar,
 			BarStopped = removeStyle,
 			GetStyleName = function() return "NDui" end,
