@@ -36,8 +36,6 @@
 	<Script file="elements\raidroleindicator.lua"/>
 
 	<Script file='Plugins\Castbar.lua' />
-	<Script file='Plugins\Experience.lua' />
-	<Script file='Plugins\Reputation.lua' />
 	<Script file='Plugins\Swing.lua' />
 	<Script file='Plugins\AutoResurrect.lua' />
 	<Script file='Plugins\RaidDebuffs.lua' />
