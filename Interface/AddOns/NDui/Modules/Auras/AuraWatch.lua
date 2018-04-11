@@ -11,7 +11,9 @@ local function ConvertTable()
 		if type(v[1]) == "number" then
 			newTable.IntID = v[1]
 			newTable.Duration = v[2]
-			newTable.ItemID = v[3]
+			if v[3] == "OnCastSuccess" then newTable.OnSuccess = true end
+			newTable.UnitID = v[4]
+			newTable.ItemID = v[5]
 		else
 			if v[1] == "AuraID" then newTable.AuraID = v[2]
 			elseif v[1] == "SpellID" then newTable.SpellID = v[2]
@@ -528,7 +530,7 @@ local function SortBars()
 	end
 end
 
-local function UpdateIntFrame(intID, itemID, duration)
+local function UpdateIntFrame(intID, itemID, duration, unitID, unitName)
 	local Frame = BuildBAR(IntCD.BarWidth, IntCD.IconSize)
 	if Frame then
 		Frame:Show()
@@ -551,7 +553,10 @@ local function UpdateIntFrame(intID, itemID, duration)
 		Frame.Cooldown:SetReverse(true)
 		Frame.Cooldown:SetCooldown(GetTime(), duration)
 	end
-	if Frame.Spellname then Frame.Spellname:SetText(name) end
+	if Frame.Spellname then
+		if unitID == "All" then name = unitName end
+		Frame.Spellname:SetText(name)
+	end
 	if Frame.Statusbar then
 		Frame.Statusbar:SetMinMaxValues(0, duration)
 		Frame.Timer = 0
@@ -577,21 +582,34 @@ local function UpdateIntFrame(intID, itemID, duration)
 end
 
 local eventList = {
-	["SPELL_DAMAGE"] = true,
-	["SPELL_HEAL"] = true,
 	["SPELL_AURA_APPLIED"] = true,
 	["SPELL_AURA_REFRESH"] = true,
-	["SPELL_ENERGIZE"] = true,
-	["SPELL_SUMMON"] = true,
 }
 
+local function isUnitWeNeed(value, sourceName, destName)
+	if not value.UnitID then value.UnitID = "Player" end
+	if value.UnitID == "All" then
+		if sourceName and (UnitInRaid(sourceName) or UnitInParty(sourceName)) then
+			return true
+		end
+	elseif value.UnitID == "Player" then
+		if sourceName and sourceName == UnitName("player") or destName == UnitName("player") then
+			return true
+		end
+	end
+end
+
+local cache = {}
 local function UpdateInt(_, _, ...)
 	if not IntCD.List then return end
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
-			local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID = ...
-			if value.IntID == spellID and eventList[eventType] and (sourceName and sourceName == UnitName("player") or destName == UnitName("player")) then
-				UpdateIntFrame(value.IntID, value.ItemID, value.Duration)
+			local timestamp, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID = ...
+			if (value.OnSuccess and eventType == "SPELL_CAST_SUCCESS") or (not value.OnSuccess and eventList[eventType]) then
+				if value.IntID == spellID and isUnitWeNeed(value, sourceName, destName) and cache[timestamp] ~= spellID then
+					UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, (sourceName or destName))
+					cache[timestamp] = spellID
+				end
 			end
 		end
 	end

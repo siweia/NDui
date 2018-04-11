@@ -220,7 +220,7 @@ local function CreatePanel()
 	end
 
 	local function AddInternal(parent, index, data)
-		local intID, duration, itemID = unpack(data)
+		local intID, duration, trigger, unit, itemID = unpack(data)
 		local name, _, texture = GetSpellInfo(intID)
 		if itemID then
 			name = GetItemInfo(itemID)
@@ -255,6 +255,7 @@ local function CreatePanel()
 		spellName:SetWidth(180)
 		spellName:SetJustifyH("LEFT")
 		B.CreateFS(bar, 14, duration, false, "RIGHT", -30, 0)
+		B.CreateGT(bar, "ANCHOR_TOP", L["Trigger"]..trigger.." - "..unit, "system")
 
 		SortBars(index)
 	end
@@ -467,21 +468,23 @@ local function CreatePanel()
 			end
 			Option[12] = CreateEditbox(tabs[i].Page, L["IntID*"], 20, -30, L["IntID Intro"])
 			Option[13] = CreateEditbox(tabs[i].Page, L["Duration*"], 140, -30, L["Duration Intro"])
-			Option[14] = CreateEditbox(tabs[i].Page, L["ItemID"], 260, -30, L["ItemID Intro"])
+			Option[14] = CreateDropdown(tabs[i].Page, L["Trigger"].."*", 260, -30, {"OnAuraGain", "OnCastSuccess"}, L["Trigger Intro"], 130, 30)
+			Option[15] = CreateDropdown(tabs[i].Page, L["Unit*"], 420, -30, {"Player", "All"}, L["Trigger Unit Intro"])
+			Option[16] = CreateEditbox(tabs[i].Page, L["ItemID"], 20, -95, L["ItemID Intro"])
 		elseif i == 11 then
 			for _, v in pairs(NDuiADB["RaidDebuffs"]) do
 				AddRaidDebuffs(tabs[i].List.Child, i, v)
 			end
-			Option[15] = CreateDropdown(tabs[i].Page, L["Instance*"], 20, -30, {instList[1], instList[2], instList[3], instList[4], instList[5]}, L["Instance Intro"], 150, 30)
-			Option[16] = CreateEditbox(tabs[i].Page, "ID*", 200, -30, L["ID Intro"])
-			Option[17] = CreateEditbox(tabs[i].Page, L["Priority"], 320, -30, L["Priority Intro"])
+			Option[17] = CreateDropdown(tabs[i].Page, L["Instance*"], 20, -30, {instList[1], instList[2], instList[3], instList[4], instList[5]}, L["Instance Intro"], 150, 30)
+			Option[18] = CreateEditbox(tabs[i].Page, "ID*", 200, -30, L["ID Intro"])
+			Option[19] = CreateEditbox(tabs[i].Page, L["Priority"], 320, -30, L["Priority Intro"])
 		elseif i == 12 then
 			for _, v in pairs(NDuiDB["RaidClickSets"]) do
 				AddRaidClickSets(tabs[i].List.Child, i, v)
 			end
-			Option[18] = CreateEditbox(tabs[i].Page, L["Action*"], 20, -30, L["Action Intro"], 200, 30)
-			Option[19] = CreateDropdown(tabs[i].Page, L["Key*"], 250, -30, {KEY_BUTTON1, KEY_BUTTON2, KEY_BUTTON3, KEY_BUTTON4, KEY_BUTTON5}, L["Key Intro"], 110, 30)
-			Option[20] = CreateDropdown(tabs[i].Page, L["Modified Key"], 390, -30, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 110, 30)
+			Option[20] = CreateEditbox(tabs[i].Page, L["Action*"], 20, -30, L["Action Intro"], 200, 30)
+			Option[21] = CreateDropdown(tabs[i].Page, L["Key*"], 250, -30, {KEY_BUTTON1, KEY_BUTTON2, KEY_BUTTON3, KEY_BUTTON4, KEY_BUTTON5}, L["Key Intro"], 110, 30)
+			Option[22] = CreateDropdown(tabs[i].Page, L["Modified Key"], 390, -30, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 110, 30)
 
 			local reset = B.CreateButton(tabs[i].Page, 70, 25, RESET)
 			reset:SetPoint("TOPRIGHT", -200, -90)
@@ -507,11 +510,11 @@ local function CreatePanel()
 				for j = 1, 11 do ClearEdit(Option[j]) end
 				for j = 2, 11 do Option[j]:Hide() end
 			elseif i == 10 then
-				for j = 12, 14 do ClearEdit(Option[j]) end
+				for j = 12, 16 do ClearEdit(Option[j]) end
 			elseif i == 11 then
-				for j = 15, 17 do ClearEdit(Option[j]) end
+				for j = 17, 19 do ClearEdit(Option[j]) end
 			elseif i== 12 then
-				for j = 18, 20 do ClearEdit(Option[j]) end
+				for j = 20, 22 do ClearEdit(Option[j]) end
 			end
 		end)
 
@@ -539,16 +542,16 @@ local function CreatePanel()
 				AddAura(tabs[i].List.Child, i, NDuiDB["AuraWatchList"][i][realID])
 				for i = 1, 11 do ClearEdit(Option[i]) end
 			elseif i == 10 then
-				local intID, duration, itemID = tonumber(Option[12]:GetText()), tonumber(Option[13]:GetText()), tonumber(Option[14]:GetText())
-				if not intID or not duration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
+				local intID, duration, trigger, unit, itemID = tonumber(Option[12]:GetText()), tonumber(Option[13]:GetText()), Option[14].Text:GetText(), Option[15].Text:GetText(), tonumber(Option[16]:GetText())
+				if not intID or not duration or not trigger or not unit then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 				if intID and not GetSpellInfo(intID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 				if NDuiDB["InternalCD"][intID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-				NDuiDB["InternalCD"][intID] = {intID, duration, itemID}
+				NDuiDB["InternalCD"][intID] = {intID, duration, trigger, unit, itemID}
 				AddInternal(tabs[i].List.Child, i, NDuiDB["InternalCD"][intID])
-				for i = 12, 14 do ClearEdit(Option[i]) end
+				for i = 12, 16 do ClearEdit(Option[i]) end
 			elseif i == 11 then
-				local instName, spellID, priority = Option[15].Text:GetText(), tonumber(Option[16]:GetText()), tonumber(Option[17]:GetText())
+				local instName, spellID, priority = Option[17].Text:GetText(), tonumber(Option[18]:GetText()), tonumber(Option[19]:GetText())
 				if not instName or not spellID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 				if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 				if NDuiADB["RaidDebuffs"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
@@ -556,9 +559,9 @@ local function CreatePanel()
 				priority = (priority and priority < 0 and 0) or (not priority and 2)
 				NDuiADB["RaidDebuffs"][spellID] = {instName, spellID, priority}
 				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][spellID])
-				for i = 15, 17 do ClearEdit(Option[i]) end
+				for i = 17, 19 do ClearEdit(Option[i]) end
 			elseif i == 12 then
-				local value, key, modKey = Option[18]:GetText(), Option[19].Text:GetText(), Option[20].Text:GetText()
+				local value, key, modKey = Option[20]:GetText(), Option[21].Text:GetText(), Option[22].Text:GetText()
 				if not value or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 				if tonumber(value) and not GetSpellInfo(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 				if (not tonumber(value)) and value ~= "target" and value ~= "focus" and value ~= "follow" and not value:match("/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
@@ -568,7 +571,7 @@ local function CreatePanel()
 
 				NDuiDB["RaidClickSets"][clickSet] = {key, modKey, value}
 				AddRaidClickSets(tabs[i].List.Child, i, NDuiDB["RaidClickSets"][clickSet])
-				for i = 18, 20 do ClearEdit(Option[i]) end
+				for i = 20, 22 do ClearEdit(Option[i]) end
 			end
 		end)
 
