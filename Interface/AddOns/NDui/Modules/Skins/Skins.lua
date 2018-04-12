@@ -119,6 +119,7 @@ function module:OnLogin()
 	self:ExtraCDSkin()
 	self:RCLootCoucil()
 	self:SkadaSkin()
+	self:BigWigsSkin()
 end
 
 function module:LoadWithAddOn(addonName, value, func)
