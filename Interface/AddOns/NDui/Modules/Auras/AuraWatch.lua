@@ -1,5 +1,5 @@
 ﻿local B, C, L, DB = unpack(select(2, ...))
-local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, {}
+local AuraList, Aura, UnitIDTable, IntTable, IntCD, newTable = {}, {}, {}, {}, {}, {}
 local MaxFrame = 12	-- Max Tracked Auras
 
 -- Init
@@ -7,7 +7,7 @@ local function ConvertTable()
 	if not NDuiDB["AuraWatchList"] then return end
 
 	local function DataAnalyze(v)
-		local newTable = {}
+		newTable = {}
 		if type(v[1]) == "number" then
 			newTable.IntID = v[1]
 			newTable.Duration = v[2]
@@ -530,14 +530,14 @@ local function SortBars()
 	end
 end
 
-local function UpdateIntFrame(intID, itemID, duration, unitID, unitName)
+local function UpdateIntFrame(intID, itemID, duration, unitID, guid)
 	local Frame = BuildBAR(IntCD.BarWidth, IntCD.IconSize)
 	if Frame then
 		Frame:Show()
 		tinsert(IntTable, Frame)
 		SortBars()
 	end
-	local name, icon, _
+	local name, icon, _, class
 	if itemID then
 		name, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemID)
 		Frame.type = 2
@@ -547,17 +547,21 @@ local function UpdateIntFrame(intID, itemID, duration, unitID, unitName)
 		Frame.type = 1
 		Frame.spellID = intID
 	end
+	if unitID == "All" then
+		_, class, _, _, _, name = GetPlayerInfoByGUID(guid)
+		if UnitGUID(guid) ~= UnitGUID("player") then name = "*"..name end
+	else
+		class = DB.MyClass
+	end
 	if Frame.Icon then Frame.Icon:SetTexture(icon) end
 	if Frame.Count then Frame.Count:SetText(nil) end
 	if Frame.Cooldown then
 		Frame.Cooldown:SetReverse(true)
 		Frame.Cooldown:SetCooldown(GetTime(), duration)
 	end
-	if Frame.Spellname then
-		if unitID == "All" then name = unitName end
-		Frame.Spellname:SetText(name)
-	end
+	if Frame.Spellname then Frame.Spellname:SetText(name) end
 	if Frame.Statusbar then
+		Frame.Statusbar:SetStatusBarColor(B.ClassColor(class))
 		Frame.Statusbar:SetMinMaxValues(0, duration)
 		Frame.Timer = 0
 		Frame:SetScript("OnUpdate", function(self, elapsed)
@@ -604,15 +608,16 @@ local function UpdateInt(_, _, ...)
 	if not IntCD.List then return end
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
-			local timestamp, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID = ...
+			local timestamp, eventType, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellID = ...
 			if (value.OnSuccess and eventType == "SPELL_CAST_SUCCESS") or (not value.OnSuccess and eventList[eventType]) then
 				if value.IntID == spellID and isUnitWeNeed(value, sourceName, destName) and cache[timestamp] ~= spellID then
-					UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, (sourceName or destName))
+					UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, sourceGUID)
 					cache[timestamp] = spellID
 				end
 			end
 		end
 	end
+	if #cache > 666 then cache = {} end
 end
 
 -- CleanUp
