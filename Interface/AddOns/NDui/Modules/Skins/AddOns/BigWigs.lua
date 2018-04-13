@@ -77,19 +77,26 @@ function module:BigWigsSkin()
 		bar.candyBarDuration:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
 	end
 
-	NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
-		if addon == "BigWigs_Plugins" then
-			local bars = BigWigs:GetPlugin("Bars", true)
-			bars:RegisterBarStyle("NDui", {
-				apiVersion = 1,
-				version = 2,
-				GetSpacing = function(bar) return bar:GetHeight()+5 end,
-				ApplyStyle = styleBar,
-				BarStopped = removeStyle,
-				GetStyleName = function() return "NDui" end,
-			})
+	local function registerStyle()
+		local bars = BigWigs:GetPlugin("Bars", true)
+		bars:RegisterBarStyle("NDui", {
+			apiVersion = 1,
+			version = 2,
+			GetSpacing = function(bar) return bar:GetHeight()+5 end,
+			ApplyStyle = styleBar,
+			BarStopped = removeStyle,
+			GetStyleName = function() return "NDui" end,
+		})
+	end
 
-			self:UnregisterEvent(event)
-		end
-	end)
+	if IsAddOnLoaded("BigWigs_Plugins") then
+		registerStyle()
+	else
+		NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+			if addon == "BigWigs_Plugins" then
+				registerStyle()
+				self:UnregisterEvent(event)
+			end
+		end)
+	end
 end

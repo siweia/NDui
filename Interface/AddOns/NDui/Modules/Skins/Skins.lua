@@ -130,12 +130,11 @@ function module:LoadWithAddOn(addonName, value, func)
 		end
 
 		if event == "PLAYER_ENTERING_WORLD" then
-			if not IsAddOnLoaded(addonName) then
-				self:UnregisterAllEvents()
-				return
-			end
-			func()
 			self:UnregisterEvent(event)
+			if IsAddOnLoaded(addonName) then
+				func()
+				self:UnregisterAllEvents()
+			end
 		elseif event == "ADDON_LOADED" and addon == addonName then
 			func()
 			self:UnregisterAllEvents()
