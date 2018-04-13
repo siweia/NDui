@@ -7,7 +7,7 @@ function module:ChannelRename()
 			local f = _G["ChatFrame"..i]
 			local am = f.AddMessage
 			f.AddMessage = function(frame, text, ...)
-				if text:find(INTERFACE_ACTION_BLOCKED) and not C.isDeveloper() then return end
+				if text:find(INTERFACE_ACTION_BLOCKED) and not B.isDeveloper() then return end
 				if NDuiDB["Chat"]["Oldname"] then
 					text = text:gsub("|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
 					text = text:gsub("|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")

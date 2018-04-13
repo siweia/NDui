@@ -12,7 +12,7 @@ local B, C, _, DB = unpack(select(2, ...))
 ]]
 
 local dev = {"寧德"}
-C.isDeveloper = function()
+B.isDeveloper = function()
 	for _, name in pairs(dev) do
 		if UnitName("player") == name then
 			return true
