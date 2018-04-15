@@ -209,9 +209,9 @@ function UF:OnLogin()
 			for i = 1, MAX_BOSS_FRAMES do
 				boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
 				if i == 1 then
-					B.Mover(boss[i], L["Boss1"], "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, 150, 30)
+					B.Mover(boss[i], L["BossFrame"]..i, "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, 150, 30)
 				else
-					B.Mover(boss[i], L["Boss"..i], "Boss"..i, {"BOTTOM", boss[i-1], "TOP", 0, 50}, 150, 30)
+					B.Mover(boss[i], L["BossFrame"]..i, "Boss"..i, {"BOTTOM", boss[i-1], "TOP", 0, 50}, 150, 30)
 				end
 			end
 		end
@@ -222,9 +222,9 @@ function UF:OnLogin()
 			for i = 1, 5 do
 				arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
 				if i == 1 then
-					B.Mover(arena[i], L["Arena1"], "Arena1", {"RIGHT", UIParent, "RIGHT", -120, -90}, 150, 30)
+					B.Mover(arena[i], L["ArenaFrame"]..i, "Arena1", {"RIGHT", UIParent, "RIGHT", -120, -90}, 150, 30)
 				else
-					B.Mover(arena[i], L["Arena"..i], "Arena"..i, {"BOTTOM", arena[i-1], "TOP", 0, 50}, 150, 30)
+					B.Mover(arena[i], L["ArenaFrame"]..i, "Arena"..i, {"BOTTOM", arena[i-1], "TOP", 0, 50}, 150, 30)
 				end
 			end
 
