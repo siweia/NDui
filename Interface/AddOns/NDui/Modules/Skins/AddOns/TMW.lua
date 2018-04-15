@@ -3,7 +3,7 @@ local module = NDui:GetModule("Skins")
 
 local function ReskinTMW()
 	TMW.Classes.Icon:PostHookMethod("OnNewInstance", function(self)
-		B.CreateSD(self, 3, 3)
+		B.CreateSD(self, 2, 2)
 	end)
 
 	TMW.Classes.IconModule_Texture:PostHookMethod("OnNewInstance", function(self)
