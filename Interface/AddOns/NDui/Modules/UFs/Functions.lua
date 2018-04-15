@@ -415,15 +415,17 @@ end
 local function customFilter(element, unit, button, name, _, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 	if style == "raid" then
-		local auraList = C.RaidAuraWatch[DB.MyClass]
+		local auraList = C.RaidBuffs[DB.MyClass]
 		if auraList and auraList[spellID] and button.isPlayer then
 			return true
-		elseif C.RaidAuraWatch["ALL"][spellID] then
+		elseif C.RaidBuffs["ALL"][spellID] then
 			return true
 		end
 	elseif style == "nameplate" then
 		if UnitIsUnit("player", unit) then return end
-		if C.WhiteList and C.WhiteList[spellID] then
+		if UnitName(unit) == EJ_GetSectionInfo(15903) and spellID == 146739 and B.isDeveloper() then
+			return true
+		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
 		elseif C.BlackList and C.BlackList[spellID] then
 			return false

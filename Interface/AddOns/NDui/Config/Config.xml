@@ -2,7 +2,7 @@
 	<Script file="Actionbar.lua"/>
 	<Script file="Modules.lua"/>
 	<Script file="Nameplate.lua"/>
-	<Script file="RaidFrameAuras.lua"/>
+	<Script file="AurasTable.lua"/>
 	<Include file="AuraWatchList\AuraWatchList.xml"/>
-	<Include file="RaidDebuffs\RaidDebuffs.xml"/>
+	<Include file="RaidFrameAuras\RaidFrameAuras.xml"/>
 </Ui>

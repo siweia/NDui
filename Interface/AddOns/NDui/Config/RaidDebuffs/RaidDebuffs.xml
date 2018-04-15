@@ -1,9 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="PartyDungeons.lua"/>
-	<Script file="BrokenIsles.lua"/>
-	<Script file="TheEmeraldNightmare.lua"/>
-	<Script file="TrialofValor.lua"/>
-	<Script file="TheNighthold.lua"/>
-	<Script file="TombofSargeras.lua"/>
-	<Script file="AntorusBurningThrone.lua"/>
-</Ui>
