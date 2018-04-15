@@ -371,8 +371,6 @@ local function CreatePanel()
 	end
 
 	-- Main
-	if not NDuiDB["AuraWatchList"] then NDuiDB["AuraWatchList"] = {} end
-	if not NDuiDB["InternalCD"] then NDuiDB["InternalCD"] = {} end
 	local groups = {
 		L["Player Aura"],			-- 1 PlayerBuff
 		L["Special Aura"],			-- 2 SPECIAL
