@@ -8,6 +8,7 @@ local module = NDui:GetModule("Misc")
 	3.目标为稀有精英或世界BOSS时，右键点击框体可寻找队伍
 	4.点击创建队伍时自动填写上次在搜索框的内容
 	5.高亮由NDui创建的队伍
+	6.自动隐藏部分窗口
 ]]
 
 function module:QuickJoin()
@@ -172,5 +173,13 @@ function module:QuickJoin()
 
 	hooksecurefunc("LFGListInviteDialog_Accept", function()
 		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
+	end)
+
+	hooksecurefunc("StaticPopup_Show", function(which)
+		if which == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
+			C_Timer.After(1, function()
+				StaticPopup_Hide(which)
+			end)
+		end
 	end)
 end
