@@ -75,7 +75,7 @@ local function ConvertTable()
 		end
 	end
 
-	for _, v in pairs(C.AuraWatchList["ALL"]) do
+	for i, v in pairs(C.AuraWatchList["ALL"]) do
 		if v.Name == "Enchant Aura" then
 			InsertData(7, v.List)
 		elseif v.Name == "Raid Buff" then
@@ -87,6 +87,7 @@ local function ConvertTable()
 		elseif v.Name == "InternalCD" then
 			InsertData(10, v.List)
 			IntCD = v
+			tremove(C.AuraWatchList["ALL"], i)
 		end
 	end
 end
@@ -105,7 +106,7 @@ local function CheckAuraList()
 end
 
 local function BuildAuraList()
-	AuraList = C.AuraWatchList["ALL"] and C.AuraWatchList["ALL"] or {}
+	AuraList = C.AuraWatchList["ALL"] or {}
 	for class in pairs(C.AuraWatchList) do
 		if class == DB.MyClass then
 			for _, value in pairs(C.AuraWatchList[class]) do
@@ -548,7 +549,7 @@ local function UpdateIntFrame(intID, itemID, duration, unitID, guid)
 		Frame.type = 1
 		Frame.spellID = intID
 	end
-	if unitID == "All" then
+	if unitID:lower() == "all" then
 		_, class, _, _, _, name = GetPlayerInfoByGUID(guid)
 		if UnitGUID(guid) ~= UnitGUID("player") then name = "*"..name end
 	else
