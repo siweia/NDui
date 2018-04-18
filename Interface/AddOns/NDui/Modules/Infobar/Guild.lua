@@ -17,7 +17,7 @@ infoFrame:Hide()
 local gName = B.CreateFS(infoFrame, 18, "Guild", true, "TOPLEFT", 15, -10)
 local gOnline = B.CreateFS(infoFrame, 13, "Online", false, "TOPLEFT", 15, -35)
 local gApps = B.CreateFS(infoFrame, 13, "Applications", false, "TOPRIGHT", -15, -35)
-local gRank = B.CreateFS(infoFrame, 13, "Rank", false, "TOPLEFT", 15, -55)
+local gRank = B.CreateFS(infoFrame, 13, "Rank", false, "TOPLEFT", 15, -51)
 
 local bu = {}
 local width = {30, 35, 126, 126}
@@ -39,10 +39,11 @@ B.CreateFS(bu[2], 13, CLASS_ABBR)
 B.CreateFS(bu[3], 13, NAME, false, "LEFT", 5, 0)
 B.CreateFS(bu[4], 13, ZONE, false, "RIGHT", -5, 0)
 
+B.CreateFS(infoFrame, 13, DB.LineString, false, "BOTTOMRIGHT", -12, 58)
 local whspInfo = DB.InfoColor..DB.RightButton..L["Whisper"]
-B.CreateFS(infoFrame, 13, whspInfo, false, "BOTTOMRIGHT", -15, 50)
+B.CreateFS(infoFrame, 13, whspInfo, false, "BOTTOMRIGHT", -15, 42)
 local copyInfo = DB.InfoColor.."ALT +"..DB.LeftButton..L["Copy Name"]
-B.CreateFS(infoFrame, 13, copyInfo, false, "BOTTOMRIGHT", -15, 30)
+B.CreateFS(infoFrame, 13, copyInfo, false, "BOTTOMRIGHT", -15, 26)
 local invtInfo = DB.InfoColor.."ALT +"..DB.RightButton..L["Invite"]
 B.CreateFS(infoFrame, 13, invtInfo, false, "BOTTOMRIGHT", -15, 10)
 
@@ -62,7 +63,7 @@ scrollFrame:SetScrollChild(roster)
 local guildTable, frames, previous = {}, {}, 0
 local function createRoster(i)
 	local button = CreateFrame("Button", nil, roster)
-	button:SetSize(312, 22)
+	button:SetSize(312, 20)
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetAllPoints()
 	button.HL:SetColorTexture(r, g, b, .2)
@@ -71,7 +72,7 @@ local function createRoster(i)
 	button.level:SetPoint("TOP", button, "TOPLEFT", 16, -4)
 	button.class = button:CreateTexture(nil, "ARTWORK")
 	button.class:SetPoint("LEFT", 35, 0)
-	button.class:SetSize(18, 18)
+	button.class:SetSize(16, 16)
 	button.class:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
 	button.name = B.CreateFS(button, 13, "Name", false, "LEFT", 65, 0)
 	button.name:SetPoint("RIGHT", button, "LEFT", 185, 0)

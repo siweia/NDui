@@ -101,7 +101,7 @@ info.onEnter = function(self)
 	local _, _, latencyHome, latencyWorld = GetNetStats()
 	GameTooltip:AddDoubleLine(L["Home Latency"]..":", colorLatency(latencyHome).."|r MS", .6,.8,1, 1,1,1)
 	GameTooltip:AddDoubleLine(L["World Latency"]..":", colorLatency(latencyWorld).."|r MS", .6,.8,1, 1,1,1)
-	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
+	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["CPU Usage"]..": "..(GetCVarBool("scriptProfile") and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 

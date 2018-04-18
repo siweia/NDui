@@ -195,7 +195,7 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(L["Next Invasion"]..whereToGo(nextTime), date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
 
 	-- Help Info
-	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
+	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Toggle Calendar"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Toggle Clock"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()

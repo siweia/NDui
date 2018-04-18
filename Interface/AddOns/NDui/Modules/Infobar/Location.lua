@@ -58,7 +58,7 @@ info.onEnter = function(self)
 			end
 		end)
 	end
-	GameTooltip:AddLine(format("%s |cffffffff(%s)", zone, formatCoords()), 0,.6,1, 1,1,1)
+	GameTooltip:AddLine(format("%s |cffffffff(%s)", zone, formatCoords()), 0,.6,1)
 
 	if pvp[1] and not IsInInstance() then
 		local r, g, b = unpack(zoneInfo[pvp[1]][2])
@@ -69,7 +69,7 @@ info.onEnter = function(self)
 		GameTooltip:AddLine(format(zoneInfo[pvp[1]][1], pvp[3] or ""), r, g, b)
 	end
 
-	GameTooltip:AddDoubleLine(" ", "--------------", 1,1,1, .5,.5,.5)
+	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["WorldMap"].." ", 1,1,1, .6,.8,1)
 	if isInvasionPoint() then
 		GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["Search Invasion Group"].." ", 1,1,1, .6,.8,1)
