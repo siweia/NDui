@@ -426,34 +426,39 @@ B.CreateDropDown = function(parent, width, height, data)
 	dd.button = bu
 
 	local opt, index = {}, 0
+	local function optOnClick(self)
+		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+		for i = 1, #opt do
+			if self == opt[i] then
+				opt[i]:SetBackdropColor(1, .8, 0, .3)
+				opt[i].selected = true
+			else
+				opt[i]:SetBackdropColor(0, 0, 0, .3)
+				opt[i].selected = false
+			end
+		end
+		dd.Text:SetText(self.text)
+		list:Hide()
+	end
+	local function optOnEnter(self)
+		if self.selected then return end
+		self:SetBackdropColor(1, 1, 1, .3)
+	end
+	local function optOnLeave(self)
+		if self.selected then return end
+		self:SetBackdropColor(0, 0, 0, .3)
+	end
+
 	for i, j in pairs(data) do
 		opt[i] = CreateFrame("Button", nil, list)
 		opt[i]:SetPoint("TOPLEFT", 5, -5 - (i-1)*height)
 		opt[i]:SetSize(width - 10, height)
 		B.CreateBD(opt[i], .3)
 		B.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
-		opt[i]:SetScript("OnClick", function()
-			PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
-			for num = 1, #opt do
-				if num == i then
-					opt[num]:SetBackdropColor(1, .8, 0, .3)
-					opt[num].selected = true
-				else
-					opt[num]:SetBackdropColor(0, 0, 0, .3)
-					opt[num].selected = false
-				end
-			end
-			dd.Text:SetText(j)
-			list:Hide()
-		end)
-		opt[i]:SetScript("OnEnter", function(self)
-			if self.selected then return end
-			self:SetBackdropColor(1, 1, 1, .3)
-		end)
-		opt[i]:SetScript("OnLeave", function(self)
-			if self.selected then return end
-			self:SetBackdropColor(0, 0, 0, .3)
-		end)
+		opt[i].text = j
+		opt[i]:SetScript("OnClick", optOnClick)
+		opt[i]:SetScript("OnEnter", optOnEnter)
+		opt[i]:SetScript("OnLeave", optOnLeave)
 
 		dd.options[i] = opt[i]
 		index = index + 1

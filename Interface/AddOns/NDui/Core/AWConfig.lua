@@ -404,6 +404,28 @@ local function CreatePanel()
 		[9] = {1, false},
 	}
 	local tabs = {}
+	local function tabOnClick(self)
+		for i = 1, #tabs do
+			if self == tabs[i] then
+				tabs[i].Page:Show()
+				tabs[i]:SetBackdropColor(r, g, b, .3)
+				tabs[i].selected = true
+			else
+				tabs[i].Page:Hide()
+				tabs[i]:SetBackdropColor(0, 0, 0, .3)
+				tabs[i].selected = false
+			end
+		end
+	end
+	local function tabOnEnter(self)
+		if self.selected then return end
+		self:SetBackdropColor(r, g, b, .3)
+	end
+	local function tabOnLeave(self)
+		if self.selected then return end
+		self:SetBackdropColor(0, 0, 0, .3)
+	end
+
 	for i, group in pairs(groups) do
 		if not NDuiDB["AuraWatchList"][i] then NDuiDB["AuraWatchList"][i] = {} end
 		barTable[i] = {}
@@ -573,27 +595,9 @@ local function CreatePanel()
 			end
 		end)
 
-		tabs[i]:SetScript("OnClick", function()
-			for index = 1, #tabs do
-				if i == index then
-					tabs[index].Page:Show()
-					tabs[index]:SetBackdropColor(r, g, b, .3)
-					tabs[index].selected = true
-				else
-					tabs[index].Page:Hide()
-					tabs[index]:SetBackdropColor(0, 0, 0, .3)
-					tabs[index].selected = false
-				end
-			end
-		end)
-		tabs[i]:SetScript("OnEnter", function(self)
-			if self.selected then return end
-			self:SetBackdropColor(r, g, b, .3)
-		end)
-		tabs[i]:SetScript("OnLeave", function(self)
-			if self.selected then return end
-			self:SetBackdropColor(0, 0, 0, .3)
-		end)
+		tabs[i]:SetScript("OnClick", tabOnClick)
+		tabs[i]:SetScript("OnEnter", tabOnEnter)
+		tabs[i]:SetScript("OnLeave", tabOnLeave)
 	end
 
 	for i = 1, 10 do
