@@ -607,6 +607,7 @@ end
 
 local cache = {}
 local function UpdateInt(_, _, ...)
+	if not IntCD.List then return end
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
 			local timestamp, eventType, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellID = ...
