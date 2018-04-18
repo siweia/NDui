@@ -327,9 +327,9 @@ function UF:OnLogin()
 			elseif numGroups == 6 then
 				groupFilter = "1,2,3,4,5,6"
 			elseif numGroups == 7 then
-				groupFilter = "1,2,3,4,5,7"
+				groupFilter = "1,2,3,4,5,6,7"
 			elseif numGroups == 8 then
-				groupFilter = "1,2,3,4,5,8"
+				groupFilter = "1,2,3,4,5,6,7,8"
 			end
 
 			local group = CreateGroup("oUF_Raid", groupFilter)
