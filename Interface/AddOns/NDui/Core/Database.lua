@@ -7,12 +7,13 @@ DB.Client = GetLocale()
 DB.MyClass = select(2, UnitClass("player"))
 DB.cc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[DB.MyClass]
 DB.MyColor = format("|cff%02x%02x%02x", DB.cc.r*255, DB.cc.g*255, DB.cc.b*255)
-DB.InfoColor = "|cff70C0F5"
-DB.GreyColor = "|cffB5B5B5"
+DB.InfoColor = "|cff70c0f5"
+DB.GreyColor = "|cff808080"
 
 -- Fonts
 DB.Font = {STANDARD_TEXT_FONT, 12, "OUTLINE"}
 DB.TipFont = {GameTooltipText:GetFont(), 14, "OUTLINE"}
+DB.LineString = DB.GreyColor.."---------------"
 
 -- Textures
 local Media = "Interface\\Addons\\NDui\\Media\\"
@@ -20,7 +21,7 @@ DB.bdTex = "Interface\\ChatFrame\\ChatFrameBackground"
 DB.glowTex = Media.."glowTex"
 DB.normTex = Media.."normTex"
 DB.bgTex = Media.."bgTex"
-DB.Micro = Media.."MicroMenu\\"
+DB.MicroTex = Media.."MicroMenu\\micro_"
 DB.arrowTex = Media.."NeonRedArrow"
 DB.mailTex = "Interface\\Minimap\\Tracking\\Mailbox"
 DB.gearTex = "Interface\\WorldMap\\Gear_64"
