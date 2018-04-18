@@ -53,10 +53,10 @@ function module:SkadaSkin()
 			B.CreateBD(skada.shadow, .5, 3)
 			B.CreateTex(skada.shadow)
 
-			local Cskada = B.CreateButton(skada, 20, 100, ">", 18)
+			local Cskada = B.CreateButton(skada, 20, 80, ">", 18)
 			Cskada:SetPoint("RIGHT", skada, "LEFT", 0, 0)
 			B.CreateTex(Cskada)
-			local Oskada = B.CreateButton(UIParent, 20, 100, "<", 18)
+			local Oskada = B.CreateButton(UIParent, 20, 80, "<", 18)
 			Oskada:Hide()
 			Oskada:SetPoint("RIGHT", skada, "RIGHT", 5, 0)
 			B.CreateTex(Oskada)
@@ -100,8 +100,8 @@ function module:SkadaSkin()
 		if #windows == 1 then
 			EmbedWindow(windows[1], 320, 18, 198, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], 320, 18, 127,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 159)
-			EmbedWindow(windows[2], 320, 18, 127,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
+			EmbedWindow(windows[1], 320, 18, 108,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 140)
+			EmbedWindow(windows[2], 320, 18, 108,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
 		end
 	end
 
