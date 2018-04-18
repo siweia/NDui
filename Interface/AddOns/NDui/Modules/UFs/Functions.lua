@@ -167,7 +167,7 @@ function UF:CreatePortrait(self)
 
 	local portrait = CreateFrame("PlayerModel", nil, self.Health)
 	portrait:SetAllPoints()
-	portrait:SetAlpha(.1)
+	portrait:SetAlpha(.2)
 	self.Portrait = portrait
 
 	self.Health.bg:ClearAllPoints()
