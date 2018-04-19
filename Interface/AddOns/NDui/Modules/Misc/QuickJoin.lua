@@ -114,7 +114,7 @@ function module:QuickJoin()
 		end
 	end
 
-	local unitGUID
+	local npcID
 	hooksecurefunc("UnitPopup_ShowMenu", function(_, _, unit)
 		if UIDROPDOWNMENU_MENU_LEVEL > 1 then return end
 		if unit and unit == "target" and (UnitLevel(unit) < 0 and UnitClassification(unit) == "elite" or UnitClassification(unit) == "rareelite") then
@@ -128,7 +128,7 @@ function module:QuickJoin()
 
 				local guid = UnitGUID(unit)
 				if guid then
-					unitGUID = select(6, strsplit("-", guid))
+					npcID = select(6, strsplit("-", guid))
 				end
 			end
 			info.notCheckable = true
@@ -147,13 +147,13 @@ function module:QuickJoin()
 				local name = mapName:gsub("InvasionPoint", "")
 				description = "NDui"..(name and " #Invasion Point: "..name or "")
 			else
-				local name = englishName[tonumber(unitGUID)]
-				description = unitGUID and "NDui #NPCID"..unitGUID..(name and " #"..name or "") or "NDui"
+				local name = englishName[tonumber(npcID)]
+				description = npcID and "NDui #NPCID"..npcID..(name and " #"..name or "") or "NDui"
 			end
 
 			C_LFGList.CreateListing(self.selectedActivity, searchText, 0, 0, "", description, true)
 			searchBox:SetText("")
-			unitGUID = nil
+			npcID = nil
 		end
 	end)
 
