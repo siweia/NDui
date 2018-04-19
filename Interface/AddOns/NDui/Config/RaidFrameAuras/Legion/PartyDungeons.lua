@@ -33,6 +33,7 @@ module:RegisterDebuff(TIER, 707, 0, 202658)
 module:RegisterDebuff(TIER, 707, 0, 202608)
 module:RegisterDebuff(TIER, 707, 0, 193956)
 module:RegisterDebuff(TIER, 707, 0, 192028)
+module:RegisterDebuff(TIER, 707, 0, 192519)
 
 -- 紫罗兰监狱 (777)
 module:RegisterDebuff(TIER, 777, 0, 201476)
