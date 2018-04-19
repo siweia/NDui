@@ -11,15 +11,6 @@ local function CreateMicroButton(parent, data)
 	tinsert(buttonList, bu)
 	bu:SetSize(22, 22)
 	bu:SetFrameStrata("BACKGROUND")
-	bu:SetHighlightTexture(DB.MicroTex..texture)
-	bu:GetHighlightTexture():SetTexCoord(unpack(texcoord))
-	if NDuiDB["Skins"]["ClassLine"] then
-		bu:GetHighlightTexture():SetVertexColor(r, g, b)
-	else
-		bu:GetHighlightTexture():SetVertexColor(1, 1, 1)
-	end
-	bu:GetHighlightTexture():SetPoint("TOPLEFT", 2, -2)
-	bu:GetHighlightTexture():SetPoint("BOTTOMRIGHT", -2, 3)
 	bu:SetScript("OnClick", func)
 	B.CreateGT(bu, "ANCHOR_TOP", tip)
 
@@ -33,6 +24,16 @@ local function CreateMicroButton(parent, data)
 	icon:SetTexture(DB.MicroTex..texture)
 	icon:SetTexCoord(unpack(texcoord))
 	icon:SetVertexColor(r, g, b)
+
+	bu:SetHighlightTexture(DB.MicroTex..texture)
+	local highlight = bu:GetHighlightTexture()
+	highlight:SetAllPoints(icon)
+	highlight:SetTexCoord(unpack(texcoord))
+	if NDuiDB["Skins"]["ClassLine"] then
+		highlight:SetVertexColor(r, g, b)
+	else
+		highlight:SetVertexColor(1, 1, 1)
+	end
 end
 
 function module:MicroMenu()
@@ -51,9 +52,9 @@ function module:MicroMenu()
 
 	-- Generate Buttons
 	local buttonInfo = {
-		{"player", {51/256, 141/256, 83/256, 173/256}, MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0"), function() ToggleFrame(CharacterFrame) end},
-		{"spellbook", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK"), function() ToggleFrame(SpellBookFrame) end},
-		{"talents", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(TALENTS_BUTTON, "TOGGLETALENTS"), function()
+		{"player", {51/256, 141/256, 86/256, 173/256}, MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0"), function() ToggleFrame(CharacterFrame) end},
+		{"spellbook", {83/256, 173/256, 86/256, 173/256}, MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK"), function() ToggleFrame(SpellBookFrame) end},
+		{"talents", {83/256, 173/256, 86/256, 173/256}, MicroButtonTooltipText(TALENTS_BUTTON, "TOGGLETALENTS"), function()
 			if not PlayerTalentFrame then LoadAddOn("Blizzard_TalentUI") end
 			if UnitLevel("player") < SHOW_SPEC_LEVEL then
 				UIErrorsFrame:AddMessage(DB.InfoColor..format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, SHOW_SPEC_LEVEL))
@@ -62,8 +63,8 @@ function module:MicroMenu()
 			end
 		end},
 		{"achievements", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT"), function() ToggleAchievementFrame() end},
-		{"quests", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG"), function() ToggleFrame(WorldMapFrame) end},
-		{"guild", {83/256, 173/256, 83/256, 173/256}, IsInGuild() and MicroButtonTooltipText(GUILD, "TOGGLEGUILDTAB") or MicroButtonTooltipText(LOOKINGFORGUILD, "TOGGLEGUILDTAB"), function()
+		{"quests", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG"), function() ToggleFrame(WorldMapFrame) end},
+		{"guild", {83/256, 173/256, 80/256, 167/256}, IsInGuild() and MicroButtonTooltipText(GUILD, "TOGGLEGUILDTAB") or MicroButtonTooltipText(LOOKINGFORGUILD, "TOGGLEGUILDTAB"), function()
 			if IsTrialAccount() then
 				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_GUILD_TRIAL_ACCOUNT_TRIAL)
 			elseif faction == "Neutral" then
@@ -110,7 +111,7 @@ function module:MicroMenu()
 				ToggleStoreUI()
 			end
 		end},
-		{"gm", {83/256, 173/256, 83/256, 173/256}, HELP_BUTTON, function() ToggleFrame(HelpFrame) end},
+		{"gm", {83/256, 173/256, 80/256, 170/256}, HELP_BUTTON, function() ToggleFrame(HelpFrame) end},
 		{"settings", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU"), function() ToggleFrame(GameMenuFrame) PlaySound(SOUNDKIT.IG_MINIMAP_OPEN) end},
 		{"bags", {47/256, 137/256, 83/256, 173/256}, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS"), function() ToggleAllBags() end},
 	}
