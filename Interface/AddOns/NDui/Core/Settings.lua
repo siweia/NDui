@@ -24,6 +24,7 @@ print("|cff70C0F5------------------------")
 
 -- Tuitorial
 local function ForceDefaultSettings()
+	SetCVar("ActionButtonUseKeyDown", 1)
 	SetCVar("autoLootDefault", 1)
 	SetCVar("alwaysCompareItems", 0)
 	SetCVar("useCompactPartyFrames", 1)
