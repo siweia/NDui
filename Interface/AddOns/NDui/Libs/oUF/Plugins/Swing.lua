@@ -204,9 +204,10 @@ local RangedChange = function(self, _, unit)
 	end
 end
 
+local rangeText1, rangeText2 = GetSpellInfo(75), GetSpellInfo(5019)
 local Ranged = function(self, _, unit, spellName)
 	if unit ~= "player" then return end
-	if spellName ~= GetSpellInfo(75) and spellName ~= GetSpellInfo(5019) then return end
+	if spellName ~= rangeText1 and spellName ~= rangeText2 then return end
 
 	local bar = self.Swing
 	local swing = bar.Twohand

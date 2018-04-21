@@ -18,6 +18,12 @@ local function StatueGo()
 	B.Mover(bu, L["Statue"], "Statue", C.Auras.StatuePos, IconSize, IconSize)
 end
 
+-- localizaed
+local serpentStatue = GetSpellInfo(115313)
+local serpentStatueTex = GetSpellTexture(115313)
+local oxStatue = GetSpellInfo(115315)
+local oxStatueTex = GetSpellTexture(115315)
+
 local f = NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}
 f:SetScript("OnEvent", function(self, event)
 	if not NDuiDB["Auras"]["Statue"] then
@@ -32,11 +38,11 @@ f:SetScript("OnEvent", function(self, event)
 			bu.CD:SetCooldown(0, 0)
 			local statue
 			if IsPlayerSpell(115313) then
-				bu.Icon:SetTexture(GetSpellTexture(115313))
-				statue = GetSpellInfo(115313)
+				bu.Icon:SetTexture(serpentStatueTex)
+				statue = serpentStatue
 			else
-				bu.Icon:SetTexture(GetSpellTexture(115315))
-				statue = GetSpellInfo(115315)
+				bu.Icon:SetTexture(oxStatueTex)
+				statue = oxStatue
 			end
 			bu:SetAttribute("macrotext1", "/tar "..statue)
 			self:RegisterEvent("PLAYER_TOTEM_UPDATE")

@@ -61,6 +61,12 @@ local function BloodyHell()
 	B.Mover(bar, L["BloodyHell"], "BloodyHell", C.Auras.BHPos, bar:GetWidth(), 30)
 end
 
+-- localized spell name
+local spellBone = GetSpellInfo(195181)
+local spellShield = GetSpellInfo(77535)
+local spellShell = GetSpellInfo(48707)
+local spellVampiric = GetSpellInfo(55233)
+
 local f = NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}
 f:SetScript("OnEvent", function(self, event, ...)
 	if not NDuiDB["Auras"]["BloodyHell"] then return end
@@ -132,8 +138,8 @@ f:SetScript("OnEvent", function(self, event, ...)
 		bar:SetAlpha(1)
 		local icons, boneCount = bar.icons, 0
 		if not cur then cur = UnitPower("player") end
-		local hasBone, _, _, boneStack, _, boneDur, boneExp = UnitBuff("player", GetSpellInfo(195181))
-		local hasShield, _, _, _, _, shieldDur, shieldExp, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", GetSpellInfo(77535))
+		local hasBone, _, _, boneStack, _, boneDur, boneExp = UnitBuff("player", spellBone)
+		local hasShield, _, _, _, _, shieldDur, shieldExp, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShield)
 
 		if hasBone and boneStack >= 5 and IsPlayerSpell(219786) then
 			boneCount = floor(cur/40)
@@ -185,7 +191,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 		end
 
 		do
-			local name, _, _, _, _, dur, expire, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", GetSpellInfo(48707))
+			local name, _, _, _, _, dur, expire, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShell)
 			local start, duration = GetSpellCooldown(48707)
 			icons[4].Count:SetText("")
 			if name then
@@ -202,7 +208,7 @@ f:SetScript("OnEvent", function(self, event, ...)
 		end
 
 		do
-			local name, _, _, _, _, dur, expire = UnitBuff("player", GetSpellInfo(55233))
+			local name, _, _, _, _, dur, expire = UnitBuff("player", spellVampiric)
 			local start, duration = GetSpellCooldown(55233)
 			if name then
 				icons[5]:SetAlpha(1)

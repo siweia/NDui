@@ -19,13 +19,16 @@ local channelingTicks = {
 	[GetSpellInfo(205021)] = 12,
 }
 
-NDui:EventFrame{"PLAYER_LOGIN", "ACTIVE_TALENT_GROUP_CHANGED"}:SetScript("OnEvent", function()
-	local penance = 3
-	if DB.MyClass == "PRIEST" and IsPlayerSpell(193134) then -- Enhanced Mind Flay
-		penance = 4
+local penance = GetSpellInfo(47540)
+NDui:EventFrame{"PLAYER_LOGIN", "ACTIVE_TALENT_GROUP_CHANGED"}:SetScript("OnEvent", function(self)
+	if DB.MyClass ~= "PRIEST" then
+		self:UnregisterAllEvents()
+		return
 	end
 
-	channelingTicks[GetSpellInfo(47540)] = penance
+	local numTicks = 3
+	if IsPlayerSpell(193134) then numTicks = 4 end	-- Enhanced Mind Flay
+	channelingTicks[penance] = numTicks
 end)
 
 local ticks = {}

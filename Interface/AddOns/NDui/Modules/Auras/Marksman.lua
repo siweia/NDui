@@ -32,6 +32,20 @@ local function MarksmanGo()
 	B.Mover(bar, L["Marksman"], "Marksman", C.Auras.MarksmanPos, bar:GetWidth(), 30)
 end
 
+-- localized
+local blackArrowTex = GetSpellTexture(194599)
+local vulnurable = GetSpellInfo(187131)
+local trueAim = GetSpellInfo(199803)
+local trueAimTex = GetSpellTexture(199803)
+local locknload = GetSpellInfo(194594)
+local locknloadTex = GetSpellTexture(194594)
+local hunterMark = GetSpellInfo(185365)
+local markingTarget = GetSpellInfo(223138)
+local markingTargetTex = GetSpellTexture(223138)
+local trueShot = GetSpellInfo(193526)
+local sidewindersTex = GetSpellTexture(214579)
+local piercingShotTex = GetSpellTexture(198670)
+
 local f = NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}
 f:SetScript("OnEvent", function(self, event)
 	if not NDuiDB["Auras"]["Marksman"] then
@@ -76,7 +90,7 @@ f:SetScript("OnEvent", function(self, event)
 	else
 		-- Vulnerable
 		do
-			local name, _, _, _, _, duration, expire, caster = UnitDebuff("target", GetSpellInfo(187131))
+			local name, _, _, _, _, duration, expire, caster = UnitDebuff("target", vulnurable)
 			if name and caster == "player" then
 				bu[1]:SetAlpha(1)
 				bu[1].CD:SetCooldown(expire-duration, duration)
@@ -98,9 +112,9 @@ f:SetScript("OnEvent", function(self, event)
 					bu[2].CD:SetCooldown(0, 0)
 				end
 				bu[2].Count:SetText("")
-				bu[2].Icon:SetTexture(GetSpellTexture(194599))
+				bu[2].Icon:SetTexture(blackArrowTex)
 			elseif IsPlayerSpell(199527) then
-				local name, _, _, count, _, duration, expire = UnitDebuff("target", GetSpellInfo(199803))
+				local name, _, _, count, _, duration, expire = UnitDebuff("target", trueAim)
 				if name then
 					bu[2]:SetAlpha(1)
 					bu[2].CD:SetCooldown(expire-duration, duration)
@@ -110,9 +124,9 @@ f:SetScript("OnEvent", function(self, event)
 					bu[2].CD:SetCooldown(0, 0)
 					bu[2].Count:SetText("")
 				end
-				bu[2].Icon:SetTexture(GetSpellTexture(199803))
+				bu[2].Icon:SetTexture(trueAimTex)
 			else
-				local name, _, _, count, _, duration, expire = UnitBuff("player", GetSpellInfo(194594))
+				local name, _, _, count, _, duration, expire = UnitBuff("player", locknload)
 				if name then
 					bu[2]:SetAlpha(1)
 					bu[2].CD:SetCooldown(expire-duration, duration)
@@ -122,7 +136,7 @@ f:SetScript("OnEvent", function(self, event)
 					bu[2].CD:SetCooldown(0, 0)
 					bu[2].Count:SetText("")
 				end
-				bu[2].Icon:SetTexture(GetSpellTexture(194594))
+				bu[2].Icon:SetTexture(locknloadTex)
 			end
 		end
 
@@ -145,7 +159,7 @@ f:SetScript("OnEvent", function(self, event)
 
 		-- Marked Shot
 		do
-			local name, _, _, _, _, duration, expire, caster = UnitDebuff("target", GetSpellInfo(185365))
+			local name, _, _, _, _, duration, expire, caster = UnitDebuff("target", hunterMark)
 			if name and caster == "player" then
 				bu[4]:SetAlpha(1)
 				bu[4].CD:SetCooldown(expire-duration, duration)
@@ -172,8 +186,8 @@ f:SetScript("OnEvent", function(self, event)
 					bu[5].CD:SetCooldown(0, 0)
 				end
 
-				local hasBuff1 = UnitBuff("player", GetSpellInfo(223138))	-- Marking Targets
-				local hasBuff2 = UnitBuff("player", GetSpellInfo(193526))	-- Trueshot
+				local hasBuff1 = UnitBuff("player", markingTarget)	-- Marking Targets
+				local hasBuff2 = UnitBuff("player", trueShot)		-- Trueshot
 				if charges == maxCharges or hasBuff1 or hasBuff2 then
 					bu[5].Count:SetTextColor(1, 0, 0)
 					bu[5]:SetAlpha(1)
@@ -181,7 +195,7 @@ f:SetScript("OnEvent", function(self, event)
 					bu[5].Count:SetTextColor(1, 1, 1)
 					bu[5]:SetAlpha(.5)
 				end
-				bu[5].Icon:SetTexture(GetSpellTexture(214579))
+				bu[5].Icon:SetTexture(sidewindersTex)
 			elseif IsPlayerSpell(198670) then
 				local start, duration = GetSpellCooldown(198670)
 				if start and duration > 1.5 then
@@ -192,9 +206,9 @@ f:SetScript("OnEvent", function(self, event)
 					bu[5].CD:SetCooldown(0, 0)
 				end
 				bu[5].Count:SetText("")
-				bu[5].Icon:SetTexture(GetSpellTexture(198670))
+				bu[5].Icon:SetTexture(piercingShotTex)
 			else
-				local name, _, _, _, _, duration, expire = UnitBuff("player", GetSpellInfo(223138))
+				local name, _, _, _, _, duration, expire = UnitBuff("player", markingTarget)
 				if name then
 					bu[5]:SetAlpha(1)
 					bu[5].CD:SetCooldown(expire-duration, duration)
@@ -203,7 +217,7 @@ f:SetScript("OnEvent", function(self, event)
 					bu[5].CD:SetCooldown(0, 0)
 				end
 				bu[5].Count:SetText("")
-				bu[5].Icon:SetTexture(GetSpellTexture(223138))
+				bu[5].Icon:SetTexture(markingTargetTex)
 			end
 		end
 	end

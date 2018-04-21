@@ -236,6 +236,7 @@ function module:SistersAlert()
 
 	local data = {}
 	local tarSpell = 236330
+	local tarSpellName = GetSpellInfo(tarSpell)
 	local myID = UnitGUID("player")
 
 	NDui:EventFrame{"COMBAT_LOG_EVENT_UNFILTERED"}:SetScript("OnEvent", function(_, _, ...)
@@ -243,7 +244,7 @@ function module:SistersAlert()
 
 		local _, eventType, _, _, sourceName, _, _, destGUID, _, _, _, spellID = ...
 		if eventType == "SPELL_DAMAGE" and spellID == 234998 and destGUID == myID then
-			local name, _, _, count = UnitDebuff("player", GetSpellInfo(tarSpell))
+			local name, _, _, count = UnitDebuff("player", tarSpellName)
 			if not name then return end
 			if not data[sourceName] then data[sourceName] = {} end
 			if count == 0 then count = 1 end
