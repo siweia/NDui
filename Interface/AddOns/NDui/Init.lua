@@ -35,7 +35,11 @@ end
 
 ns:EventFrame{"PLAYER_LOGIN"}:SetScript("OnEvent", function()
 	for _, module in pairs(ns.initQueue) do
-		module:OnLogin()
+		if module.OnLogin then
+			module:OnLogin()
+		else
+			print("Module <"..module.name.."> not registered.")
+		end
 	end
 end)
 
