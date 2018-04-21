@@ -611,11 +611,10 @@ local function UpdateInt(_, _, ...)
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
 			local timestamp, eventType, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellID = ...
-			if (value.OnSuccess and eventType == "SPELL_CAST_SUCCESS") or (not value.OnSuccess and eventList[eventType]) then
-				if value.IntID == spellID and isUnitWeNeed(value, sourceName, destName) and cache[timestamp] ~= spellID then
-					UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, sourceGUID)
-					cache[timestamp] = spellID
-				end
+			if value.IntID == spellID and isUnitWeNeed(value, sourceName, destName) and cache[timestamp] ~= spellID and
+				(value.OnSuccess and eventType == "SPELL_CAST_SUCCESS" or eventList[eventType]) then
+				UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, sourceGUID)
+				cache[timestamp] = spellID
 			end
 		end
 	end
@@ -674,6 +673,7 @@ StaticPopupDialogs["RESET_AURAWATCH_MOVER"] = {
 	end,
 }
 
+local texture = GetSpellTexture(2825)
 SlashCmdList.AuraWatch = function(msg)
 	if msg:lower() == "move" then
 		f:SetScript("OnUpdate", nil)
@@ -683,7 +683,7 @@ SlashCmdList.AuraWatch = function(msg)
 					value[i]:SetScript("OnUpdate", nil)
 					value[i]:Show()
 				end
-				if value[i].Icon then value[i].Icon:SetTexture(GetSpellTexture(2825)) end
+				if value[i].Icon then value[i].Icon:SetTexture(texture) end
 				if value[i].Count then value[i].Count:SetText("") end
 				if value[i].Time then value[i].Time:SetText("59") end
 				if value[i].Statusbar then value[i].Statusbar:SetValue(1) end
@@ -703,7 +703,7 @@ SlashCmdList.AuraWatch = function(msg)
 			UpdateIntFrame(2825, nil, 0, "player")
 			UpdateIntFrame(2825, nil, 0, "player")
 			UpdateIntFrame(2825, nil, 0, "player")
-			for i = 1, 6 do
+			for i = 1, #IntTable do
 				IntTable[i]:SetScript("OnUpdate", nil)
 				IntTable[i]:Show()
 				IntTable[i].Spellname:SetText("")
@@ -720,7 +720,7 @@ SlashCmdList.AuraWatch = function(msg)
 		f:SetScript("OnUpdate", onUpdate)
 		if IntCD.MoveHandle then
 			IntCD.MoveHandle:Hide()
-			for i = 1, 6 do
+			for i = 1, #IntTable do
 				if IntTable[i] then IntTable[i]:Hide() end
 			end
 			wipe(IntTable)
