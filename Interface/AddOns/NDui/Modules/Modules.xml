@@ -9,5 +9,4 @@
 	<Include file="UFs\UFs.xml"/>
 	<Include file="Misc\Misc.xml"/>
 	<Include file="Infobar\Infobar.xml"/>
-	<Include file="Lumos\Lumos.xml"/>
 </Ui>
