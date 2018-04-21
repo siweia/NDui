@@ -111,6 +111,7 @@ local list = {
 		{AuraID = 242066, UnitID = "player"},	-- 警戒栖木
 		{AuraID = 221805, UnitID = "player"},	-- 吸血传染
 		{AuraID = 214572, UnitID = "player"},	-- 暗夜井能量
+		{AuraID = 214624, UnitID = "player", Value = true},		-- 督军的坚韧
 		{AuraID = 214577, UnitID = "player", Value = true},		-- 暗夜井能量
 		{AuraID = 214423, UnitID = "player", Value = true},		-- 山峰形态，+护盾
 		{AuraID = 228323, UnitID = "player", Value = true},		-- 克罗塔的护盾
