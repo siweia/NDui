@@ -12,13 +12,14 @@ local B, C, _, DB = unpack(select(2, ...))
 ]]
 
 local dev = {"寧德"}
-B.isDeveloper = function()
+local function isDeveloper()
 	for _, name in pairs(dev) do
 		if UnitName("player") == name then
 			return true
 		end
 	end
 end
+DB.isDeveloper = isDeveloper()
 
 -- Commands
 SlashCmdList["RELOADUI"] = function() ReloadUI() end

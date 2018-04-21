@@ -412,18 +412,18 @@ local function postUpdateGapIcon(_, _, icon)
 	end
 end
 
+local spellName = EJ_GetSectionInfo(15903)
 local function customFilter(element, unit, button, name, _, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 	if style == "raid" then
-		local auraList = C.RaidBuffs[DB.MyClass]
-		if auraList and auraList[spellID] and button.isPlayer then
+		if C.RaidBuffs[DB.MyClass] and C.RaidBuffs[DB.MyClass][spellID] and button.isPlayer then
 			return true
 		elseif C.RaidBuffs["ALL"][spellID] then
 			return true
 		end
 	elseif style == "nameplate" then
 		if UnitIsUnit("player", unit) then return end
-		if UnitName(unit) == EJ_GetSectionInfo(15903) and spellID == 146739 and B.isDeveloper() then
+		if UnitName(unit) == spellName and spellID == 146739 and DB.isDeveloper then
 			return true
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
