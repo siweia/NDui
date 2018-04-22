@@ -124,6 +124,9 @@ local function styleActionButton(bu)
 	if fob then fob:SetTexture(nil) end
 	if fobs then fobs:SetTexture(nil) end
 	bo:SetTexture(nil) --hide the border (plain ugly, sry blizz)
+	--new action glow
+	local nat = bu.NewActionTexture
+	if nat then nat:SetTexture(nil) end
 	--hotkey
 	ho:SetFont(unpack(DB.Font))
 	ho:ClearAllPoints()
