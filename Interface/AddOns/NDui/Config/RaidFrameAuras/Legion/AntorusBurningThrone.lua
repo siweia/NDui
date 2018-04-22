@@ -106,7 +106,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 254452)	-- 饕餮烈焰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244736)	-- 烈焰之迹
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244291)	-- 破敌者
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 255060)	-- 强化破敌者
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 247079)	-- 强化撕裂烈焰
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 247079, 5)	-- 强化撕裂烈焰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 244912)	-- 烈焰喷薄
 
 BOSS = 2031 -- 寂灭者阿古斯
