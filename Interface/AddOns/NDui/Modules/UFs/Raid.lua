@@ -198,7 +198,7 @@ local function setupClickSets(self)
 	end
 
 	self:RegisterForClicks("AnyDown")
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED", setupClickSets)
 end
 
 function UF:CreateClickSets(self)

@@ -69,7 +69,7 @@ local function setupAttribute(self)
 	if classList[DB.MyClass] and not IsAddOnLoaded("Clique") then
 		self:SetAttribute("*type3", "macro")
 		self:SetAttribute("macrotext3", macroBody(DB.MyClass))
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED", setupAttribute)
 	end
 end
 
@@ -87,7 +87,7 @@ local Disable = function(self)
 	if NDuiDB["UFs"]["AutoRes"] then return end
 
 	self:SetAttribute("*type3", nil)
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED", setupAttribute)
 end
 
 oUF:AddElement("AutoResurrect", nil, Enable, Disable)
