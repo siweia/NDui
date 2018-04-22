@@ -42,6 +42,7 @@ local function UnlockElements()
 		end
 	end
 	B.CopyTable(NDuiDB["Mover"], BackupTable)
+	f:Show()
 end
 
 local function LockElements()
@@ -49,6 +50,9 @@ local function LockElements()
 		local mover = MoverList[i]
 		mover:Hide()
 	end
+	f:Hide()
+	SlashCmdList["TOGGLEGRID"]("1")
+	SlashCmdList.AuraWatch("lock")
 end
 
 StaticPopupDialogs["RESET_MOVER"] = {
@@ -73,7 +77,7 @@ StaticPopupDialogs["CANCEL_MOVER"] = {
 
 -- Mover Console
 local function CreateConsole()
-	if f then f:Show() return end
+	if f then return end
 
 	f = CreateFrame("Frame", nil, UIParent)
 	f:SetPoint("TOP", 0, -150)
@@ -93,15 +97,8 @@ local function CreateConsole()
 		end
 	end
 
-	local function lockAllElements()
-		f:Hide()
-		LockElements()
-		SlashCmdList["TOGGLEGRID"]("1")
-		SlashCmdList.AuraWatch("lock")
-	end
-
 	-- Lock
-	bu[1]:SetScript("OnClick", lockAllElements)
+	bu[1]:SetScript("OnClick", LockElements)
 	-- Cancel
 	bu[2]:SetScript("OnClick", function()
 		StaticPopup_Show("CANCEL_MOVER")
@@ -138,7 +135,7 @@ local function CreateConsole()
 			SlashCmdList.AuraWatch("move")
 		end)
 		-- Lock
-		bu[2]:SetScript("OnClick", lockAllElements)
+		bu[2]:SetScript("OnClick", LockElements)
 		-- RESET
 		bu[3]:SetScript("OnClick", function()
 			StaticPopup_Show("RESET_AURAWATCH_MOVER")
@@ -148,11 +145,10 @@ local function CreateConsole()
 	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
-				lockAllElements()
+				LockElements()
 				self:RegisterEvent("PLAYER_REGEN_ENABLED")
 			end
 		else
-			f:Show()
 			UnlockElements()
 			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		end

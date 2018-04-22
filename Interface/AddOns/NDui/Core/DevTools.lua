@@ -22,7 +22,7 @@ end
 DB.isDeveloper = isDeveloper()
 
 -- Commands
-SlashCmdList["RELOADUI"] = function() ReloadUI() end
+SlashCmdList["RELOADUI"] = ReloadUI
 SLASH_RELOADUI1 = "/rl"
 
 SlashCmdList["NDUI_ENUMTIP"] = function()

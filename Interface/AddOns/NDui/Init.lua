@@ -1,28 +1,26 @@
 -- Initial
-local _, ns = ...
+local addonName, ns = ...
 ns[1] = {}			-- B, Basement
 ns[2] = {}			-- C, Config
 ns[3] = {}			-- L, LocaleDB
 ns[4] = {}			-- DB, DataBase
-ns.modules = {}		-- Addon Modules
-ns.initQueue = {}	-- Initialize Queue
 NDuiADB = NDuiADB or {}
 NDuiDB = NDuiDB or {}
 
-function ns:RegisterModule(name, ...)
-	if self.modules[name] then print("Module <"..name.."> has been registered.") return end
-	local module = {}
-	module.name = name
-	module.func = ...
+-- Modules
+local modules = {}
 
-	self.modules[name] = module
-	tinsert(ns.initQueue, module)
-	return module
+function ns:RegisterModule(name)
+	if modules[name] then print("Module <"..name.."> has been registered.") return end
+	modules[name] = {}
+
+	return modules[name]
 end
 
 function ns:GetModule(name)
-	if not self.modules[name] then print("Module <"..name.."> not found.") return end
-	return self.modules[name]
+	if not modules[name] then print("Module <"..name.."> does not exist.") return end
+
+	return modules[name]
 end
 
 function ns:EventFrame(events)
@@ -30,17 +28,18 @@ function ns:EventFrame(events)
 	for _, event in pairs(events) do
 		f:RegisterEvent(event)
 	end
+
 	return f
 end
 
 ns:EventFrame{"PLAYER_LOGIN"}:SetScript("OnEvent", function()
-	for _, module in pairs(ns.initQueue) do
+	for name, module in pairs(modules) do
 		if module.OnLogin then
 			module:OnLogin()
 		else
-			print("Module <"..module.name.."> not registered.")
+			print("Module <"..name.."> does not loaded.")
 		end
 	end
 end)
 
-NDui = ns
+_G[addonName] = ns
