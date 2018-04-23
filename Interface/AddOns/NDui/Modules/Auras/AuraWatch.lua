@@ -612,7 +612,7 @@ local function UpdateInt(_, _, ...)
 		if value.IntID then
 			local timestamp, eventType, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellID = ...
 			if value.IntID == spellID and isUnitWeNeed(value, sourceName, destName) and cache[timestamp] ~= spellID and
-				(value.OnSuccess and eventType == "SPELL_CAST_SUCCESS" or eventList[eventType]) then
+				((value.OnSuccess and eventType == "SPELL_CAST_SUCCESS") or (not value.OnSuccess and eventList[eventType])) then
 				UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, sourceGUID)
 				cache[timestamp] = spellID
 			end
