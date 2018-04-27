@@ -397,7 +397,7 @@ local function CreatePanel()
 		[2] = {1, true},
 		[3] = {2, true},
 		[4] = {2, false},
-		[5] = {3, true},
+		[5] = {3, false},
 		[6] = {1, false},
 		[7] = {1, false},
 		[8] = {1, false},
