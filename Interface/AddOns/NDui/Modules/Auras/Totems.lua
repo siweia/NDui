@@ -4,11 +4,19 @@ if DB.MyClass ~= "SHAMAN" then return end
 -- Style
 local Totembar, totem = CreateFrame("Frame", nil, UIParent), {}
 local icons = {
-	[1] = 120217, -- Fire
-	[2] = 120218, -- Earth
-	[3] = 120214, -- Water
-	[4] = 120219, -- Air
+	[1] = GetSpellTexture(120217), -- Fire
+	[2] = GetSpellTexture(120218), -- Earth
+	[3] = GetSpellTexture(120214), -- Water
+	[4] = GetSpellTexture(120219), -- Air
 }
+
+local function totemOnEnter(self)
+	if not self.spellID then return end
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
+	GameTooltip:ClearLines()
+	GameTooltip:SetSpellByID(self.spellID)
+	GameTooltip:Show()
+end
 
 local function TotemsGo()
 	Totembar:SetSize(C.Auras.IconSize, C.Auras.IconSize)
@@ -21,15 +29,27 @@ local function TotemsGo()
 			totem[i]:SetPoint("LEFT", totem[i-1], "RIGHT", 5, 0)
 		end
 		B.CreateIF(totem[i], true)
-		totem[i].Icon:SetTexture(GetSpellTexture(icons[i]))
+		totem[i].Icon:SetTexture(icons[i])
 		totem[i]:SetAlpha(.3)
 		if NDuiDB["Auras"]["DestroyTotems"] then
 			totem[i]:RegisterForClicks("RightButtonUp")
 			totem[i]:SetAttribute("type2", "macro")
 			totem[i]:SetAttribute("macrotext", "/click TotemFrameTotem"..SHAMAN_TOTEM_PRIORITIES[i].." RightButton")
 		end
+
+		totem[i]:SetScript("OnEnter", totemOnEnter)
+		totem[i]:SetScript("OnLeave", GameTooltip_Hide)
 	end
 	B.Mover(Totembar, L["Totembar"], "Totems", C.Auras.TotemsPos, 140, 32)
+end
+
+local function updateGlow(self)
+	local timer = self.start + self.dur - GetTime()
+	if timer > 0 and timer < .8 then
+		ActionButton_ShowOverlayGlow(self)
+	else
+		ActionButton_HideOverlayGlow(self)
+	end
 end
 
 -- Function
@@ -46,35 +66,23 @@ f:SetScript("OnEvent", function(self)
 	if self.styled then
 		for slot = 1, 4 do
 			local haveTotem, name, start, dur, icon = GetTotemInfo(slot)
-			local id = select(7, GetSpellInfo(name))
+			local spellID = select(7, GetSpellInfo(name))
 			local Totem = totem[slot]
+			Totem.start = start
+			Totem.dur = dur
+			Totem.spellID = haveTotem and spellID
+
 			if haveTotem and dur > 0 then
 				Totem:SetAlpha(1)
 				Totem.Icon:SetTexture(icon)
 				Totem.CD:SetCooldown(start, dur)
+				Totem:SetScript("OnUpdate", updateGlow)
 			else
 				Totem:SetAlpha(.3)
-				Totem.Icon:SetTexture(GetSpellTexture(icons[slot]))
+				Totem.Icon:SetTexture(icons[slot])
 				Totem.CD:SetCooldown(0, 0)
+				Totem:SetScript("OnUpdate", nil)
 			end
-
-			Totem:SetScript("OnEnter", function(self)
-				if not id then return end
-				GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
-				GameTooltip:ClearLines()
-				GameTooltip:SetSpellByID(id)
-				GameTooltip:Show()
-			end)
-			Totem:SetScript("OnLeave", GameTooltip_Hide)
-
-			Totem:SetScript("OnUpdate", function()
-				local Time = start + dur - GetTime()
-				if Time > 0 and Time < .8 then
-					ActionButton_ShowOverlayGlow(Totem)
-				else
-					ActionButton_HideOverlayGlow(Totem)
-				end
-			end)
 		end
 	end
 end)
