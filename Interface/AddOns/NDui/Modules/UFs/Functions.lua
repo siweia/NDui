@@ -405,6 +405,21 @@ local function postUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 	end
 end
 
+local function bolsterPreUpdate(element)
+	element.bolster = 0
+	element.bolsterIndex = nil
+end
+
+local function bolsterPostUpdate(element)
+	if not element.bolsterIndex then return end
+	for _, button in pairs(element) do
+		if button == element.bolsterIndex then
+			button.count:SetText(element.bolster)
+			return
+		end
+	end
+end
+
 local function postUpdateGapIcon(_, _, icon)
 	if icon.Shadow and icon.Shadow:IsShown() then
 		icon.Shadow:Hide()
@@ -421,8 +436,15 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, _, caste
 			return true
 		end
 	elseif style == "nameplate" then
-		if UnitIsUnit("player", unit) then return end
-		if UnitName(unit) == unitName and spellID == 146739 and DB.isDeveloper then
+		if UnitIsUnit("player", unit) then
+			return false
+		elseif name and spellID == 209859 then
+			element.bolster = element.bolster + 1
+			if not element.bolsterIndex then
+				element.bolsterIndex = button
+				return true
+			end
+		elseif UnitName(unit) == unitName and spellID == 146739 and DB.isDeveloper then
 			return true
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
@@ -478,6 +500,8 @@ function UF:CreateAuras(self)
 		bu.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 		bu.gap = false
 		bu.disableMouse = true
+		bu.PreUpdate = bolsterPreUpdate
+		bu.PostUpdate = bolsterPostUpdate
 	end
 
 	local width = self:GetWidth()
