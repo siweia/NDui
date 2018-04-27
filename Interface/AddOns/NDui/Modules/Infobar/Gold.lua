@@ -133,14 +133,13 @@ info.onLeave = function() GameTooltip:Hide() end
 
 -- Auto sell junk
 local f = NDui:EventFrame{"MERCHANT_SHOW", "MERCHANT_CLOSED"}
-local sellCount, stop = 0, true
+local sellCount, stop, cache = 0, true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
 
 local function stopSelling(tell)
 	stop = true
-	if sellCount == 0 then return end
-	if tell then
-		print(format("|cff99CCFF"..L["Selljunk Calculate"]..":|r %s", GetMoneyString(sellCount)))
+	if sellCount > 0 and tell then
+		print(format("|cff99CCFF%s|r %s", L["Selljunk Calculate"], GetMoneyString(sellCount)))
 	end
 	sellCount = 0
 end
@@ -154,9 +153,10 @@ local function startSelling()
 			if link then
 				local price = select(11, GetItemInfo(link))
 				local _, count, _, quality = GetContainerItemInfo(bag, slot)
-				if quality == 0 and price > 0 then
-					UseContainerItem(bag, slot)
+				if quality == 0 and price > 0 and not cache["b"..bag.."s"..slot] then
 					sellCount = sellCount + price*count
+					cache["b"..bag.."s"..slot] = true
+					UseContainerItem(bag, slot)
 					C_Timer.After(.2, startSelling)
 					return
 				end
@@ -172,6 +172,7 @@ f:SetScript("OnEvent", function(_, event, ...)
 	if event == "MERCHANT_SHOW" then
 		if IsShiftKeyDown() then return end
 		stop = false
+		wipe(cache)
 		startSelling()
 		f:RegisterEvent("UI_ERROR_MESSAGE")
 	elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
