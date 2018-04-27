@@ -8,20 +8,11 @@ local function applyBackground(bu)
 
 	bu.bg = B.CreateBG(bu, 2)
 	B.CreateBD(bu.bg)
+	B.CreateTex(bu.bg)
 	if NDuiDB["Actionbar"]["Classcolor"] then
 		bu.bg:SetBackdropColor(DB.cc.r, DB.cc.g, DB.cc.b, .25)
 	else
 		bu.bg:SetBackdropColor(.2, .2, .2, .25)
-	end
-
-	if bu.__faderParent then
-		bu.__faderParent.fader:HookScript("OnFinished", function()
-			if NDuiDB["Actionbar"]["Classcolor"] then
-				bu.bg:SetBackdropColor(DB.cc.r, DB.cc.g, DB.cc.b, .2)
-			else
-				bu.bg:SetBackdropColor(.2, .2, .2, .2)
-			end
-		end)
 	end
 end
 
