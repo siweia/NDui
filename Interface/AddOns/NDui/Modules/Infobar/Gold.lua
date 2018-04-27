@@ -133,54 +133,50 @@ info.onLeave = function() GameTooltip:Hide() end
 
 -- Auto sell junk
 local f = NDui:EventFrame{"MERCHANT_SHOW", "MERCHANT_CLOSED"}
-local sellJunkTicker
+local sellCount, stop = 0, true
+local errorText = _G.ERR_VENDOR_DOESNT_BUY
 
-local function stopSelling()
-	if sellJunkTicker then
-		sellJunkTicker:Cancel()
-		sellJunkTicker = nil
+local function stopSelling(tell)
+	stop = true
+	if sellCount == 0 then return end
+	if tell then
+		print(format("|cff99CCFF"..L["Selljunk Calculate"]..":|r %s", GetMoneyString(sellCount)))
 	end
-	f:UnregisterEvent("UI_ERROR_MESSAGE")
+	sellCount = 0
 end
 
 local function startSelling()
-	local c = 0
-	for b = 0, 4 do
-		for s = 1, GetContainerNumSlots(b) do
-			local l = GetContainerItemLink(b, s)
-			if l then
-				local price = select(11, GetItemInfo(l))
-				local _, count, _, quality = GetContainerItemInfo(b, s)
+	if stop then return end
+	for bag = 0, 4 do
+		for slot = 1, GetContainerNumSlots(bag) do
+			if stop then return end
+			local link = GetContainerItemLink(bag, slot)
+			if link then
+				local price = select(11, GetItemInfo(link))
+				local _, count, _, quality = GetContainerItemInfo(bag, slot)
 				if quality == 0 and price > 0 then
-					c = c + price*count
-					if MerchantFrame:IsShown() then
-						UseContainerItem(b, s)
-					else
-						stopSelling()
-						return
-					end
+					UseContainerItem(bag, slot)
+					sellCount = sellCount + price*count
+					C_Timer.After(.2, startSelling)
+					return
 				end
 			end
 		end
 	end
-
-	local firstRun = sellJunkTicker and sellJunkTicker._remainingIterations == 200
-	if firstRun and c > 0 then
-		print(format("|cff99CCFF"..L["Selljunk Calculate"]..":|r %s", GetMoneyString(c)))
-	elseif c == 0 then
-		stopSelling()
-	end
 end
 
-f:SetScript("OnEvent", function(_, event, _, arg1)
+f:SetScript("OnEvent", function(_, event, ...)
 	if not NDuiADB["AutoSell"] then return end
+
+	local _, arg = ...
 	if event == "MERCHANT_SHOW" then
 		if IsShiftKeyDown() then return end
-		sellJunkTicker = C_Timer.NewTicker(.2, startSelling, 200)
+		stop = false
+		startSelling()
 		f:RegisterEvent("UI_ERROR_MESSAGE")
-	elseif event == "UI_ERROR_MESSAGE" and arg1 == ERR_VENDOR_DOESNT_BUY then
-		stopSelling()
+	elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
+		stopSelling(false)
 	elseif event == "MERCHANT_CLOSED" then
-		stopSelling()
+		stopSelling(true)
 	end
 end)
