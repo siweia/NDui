@@ -8,12 +8,13 @@ NDuiADB = NDuiADB or {}
 NDuiDB = NDuiDB or {}
 
 -- Modules
-local modules = {}
+local modules, initQueue = {}, {}
 
 function ns:RegisterModule(name)
 	if modules[name] then print("Module <"..name.."> has been registered.") return end
 	modules[name] = {}
 
+	tinsert(initQueue, modules[name])
 	return modules[name]
 end
 
@@ -33,7 +34,7 @@ function ns:EventFrame(events)
 end
 
 ns:EventFrame{"PLAYER_LOGIN"}:SetScript("OnEvent", function()
-	for name, module in pairs(modules) do
+	for _, module in pairs(initQueue) do
 		if module.OnLogin then
 			module:OnLogin()
 		else
