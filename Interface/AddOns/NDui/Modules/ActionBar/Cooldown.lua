@@ -84,12 +84,6 @@ function module:OnLogin()
 		if self:IsForbidden() then return end
 		if self.noOCC then return end
 
-		if self and self:GetEffectiveAlpha() > 0 then
-			self:Show()
-		else
-			self:Hide()
-		end
-
 		if start > 0 and duration > MIN_DURATION then
 			local timer = self.timer or Timer_Create(self)
 			timer.start = start
