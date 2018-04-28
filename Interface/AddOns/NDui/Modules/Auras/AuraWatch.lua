@@ -533,6 +533,8 @@ local function SortBars()
 end
 
 local function UpdateIntFrame(intID, itemID, duration, unitID, guid)
+	if not UIParent:IsShown() then return end
+
 	local Frame = BuildBAR(IntCD.BarWidth, IntCD.IconSize)
 	if Frame then
 		Frame:Show()
