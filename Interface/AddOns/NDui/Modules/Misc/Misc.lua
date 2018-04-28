@@ -415,9 +415,27 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon
 end)
 
 -- Temporary PVP queue taint fix
-InterfaceOptionsFrameCancel:SetScript("OnClick", function()
-    InterfaceOptionsFrameOkay:Click()
-end)
+do
+	InterfaceOptionsFrameCancel:SetScript("OnClick", function()
+		InterfaceOptionsFrameOkay:Click()
+	end)
+
+	if not UIDROPDOWNMENU_VALUE_PATCH_VERSION then
+		UIDROPDOWNMENU_VALUE_PATCH_VERSION = 1
+		hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
+			if UIDROPDOWNMENU_VALUE_PATCH_VERSION ~= 1 then return end
+			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
+				for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
+					local b = _G["DropDownList"..i.."Button"..j]
+					while not issecurevariable(b, "value") do
+						b.value = nil
+						j, b["fx"..j] = j + 1
+					end
+				end
+			end
+		end)
+	end
+end
 
 -- Roll Gold
 if DB.Client == "zhCN" then
