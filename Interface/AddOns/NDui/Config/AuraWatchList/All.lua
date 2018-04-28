@@ -503,6 +503,7 @@ local list = {
 		{AuraID = 228611, UnitID = "target"},	-- 小怪，幽灵怒火
 	-- 大秘
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
+		{AuraID = 244621, UnitID = "target"},	-- 虚空裂隙，执政团尾王
 		{AuraID = 192132, UnitID = "target"},	-- 英灵殿赫娅
 		{AuraID = 192133, UnitID = "target"},	-- 英灵殿赫娅
 		{AuraID = 194333, UnitID = "target"},	-- 地窟眼球易伤
