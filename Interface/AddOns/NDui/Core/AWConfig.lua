@@ -558,7 +558,7 @@ local function CreatePanel()
 				local realID = spellID or slotID or totemID
 				if NDuiDB["AuraWatchList"][i][realID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-				NDuiDB["AuraWatchList"][i][realID] = {typeID, realID, unitID, Option[4].Text:GetText(), tonumber(Option[5]:GetText()), Option[6]:GetChecked(), Option[7]:GetChecked(), Option[7]:GetChecked(), Option[9]:GetText()}
+				NDuiDB["AuraWatchList"][i][realID] = {typeID, realID, unitID, Option[4].Text:GetText(), tonumber(Option[5]:GetText()), Option[6]:GetChecked(), Option[7]:GetChecked(), Option[8]:GetChecked(), Option[9]:GetText()}
 				AddAura(tabs[i].List.Child, i, NDuiDB["AuraWatchList"][i][realID])
 				for i = 1, 11 do ClearEdit(Option[i]) end
 			elseif i == 10 then
