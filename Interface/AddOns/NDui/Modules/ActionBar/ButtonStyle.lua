@@ -314,7 +314,13 @@ function Bar:ReskinBars()
 		flash = {file = DB.textures.flash},
 		pushedTexture = {file = DB.textures.pushed},
 		checkedTexture = {file = DB.textures.checked},
-		highlightTexture = {file = ""},
+		highlightTexture = {
+			file = "",
+			points = {
+				{"TOPLEFT", 1, -1},
+				{"BOTTOMRIGHT", -1, 1},
+			},
+		},
 		cooldown = {
 			points = {
 				{"TOPLEFT", 0, 0},
