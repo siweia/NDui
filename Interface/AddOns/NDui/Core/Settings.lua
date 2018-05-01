@@ -74,7 +74,7 @@ local function ForceUIScale()
 		NDuiDB["Settings"]["SetScale"] = scale
 	end
 
-	if scale < .65 then
+	if scale < .64 then
 		UIParent:SetScale(scale)
 	else
 		SetCVar("uiScale", scale)
