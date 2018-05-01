@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 --[[
 	QuickJoin 优化系统自带的预创建功能

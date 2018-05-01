@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Skins")
 
 function module:FontStyle()
 	if not IsAddOnLoaded("Aurora") then return end
@@ -117,7 +118,7 @@ function module:FontStyle()
 
 	-- Achievement ShieldPoints, GuildRoster LevelText
 	local styledIndex = 0
-	NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, _, addon)
+	local function updateAchievement(event, addon)
 		if addon == "Blizzard_AchievementUI" then
 			hooksecurefunc("AchievementObjectives_DisplayProgressiveAchievement", function()
 				local index = 1
@@ -160,8 +161,9 @@ function module:FontStyle()
 			styledIndex = styledIndex + 1
 		end
 
-		if styledIndex == 2 then self:UnregisterAllEvents() end
-	end)
+		if styledIndex == 2 then B:UnregisterEvent(event, updateAchievement) end
+	end
+	B:RegisterEvent("ADDON_LOADED", updateAchievement)
 
 	-- WhoFrame LevelText
 	hooksecurefunc("WhoList_Update", function()

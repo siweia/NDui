@@ -1,5 +1,6 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Maps")
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Maps")
 
 function module:OnLogin()
 	local WorldMapDetailFrame, WorldMapTitleButton, WorldMapFrame, WorldMapFrameTutorialButton = _G.WorldMapDetailFrame, _G.WorldMapTitleButton, _G.WorldMapFrame, _G.WorldMapFrameTutorialButton
@@ -49,6 +50,7 @@ function module:OnLogin()
 		end
 	end
 
+	local updater = CreateFrame("Frame")
 	local function UpdateCoords(self, elapsed)
 		self.elapsed = self.elapsed - elapsed
 		if self.elapsed <= 0 then
@@ -57,13 +59,13 @@ function module:OnLogin()
 		end
 	end
 
-	NDui:EventFrame{"WORLD_MAP_UPDATE"}:SetScript("OnEvent", function(self)
+	B:RegisterEvent("WORLD_MAP_UPDATE", function()
 		if WorldMapFrame:IsVisible() then
-			self.elapsed = .1
-			self:SetScript("OnUpdate", UpdateCoords)
+			updater.elapsed = .1
+			updater:SetScript("OnUpdate", UpdateCoords)
 		else
-			self.elapsed = nil
-			self:SetScript("OnUpdate", nil)
+			updater.elapsed = nil
+			updater:SetScript("OnUpdate", nil)
 		end
 	end)
 end

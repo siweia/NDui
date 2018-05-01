@@ -1,7 +1,8 @@
-local B, C, L, DB = unpack(select(2, ...))
-local cast = NDui.cast
-local oUF = NDui.oUF or oUF
-local UF = NDui:RegisterModule("UnitFrames")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
+local cast = ns.cast
+local UF = B:RegisterModule("UnitFrames")
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
@@ -665,7 +666,7 @@ function UF:CreateExpRepBar(self)
 	rest:SetOrientation("VERTICAL")
 	bar.restBar = rest
 
-	local module = NDui:GetModule("Misc")
+	local module = B:GetModule("Misc")
 	module:SetupScript(bar)
 end
 

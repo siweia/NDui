@@ -1,7 +1,8 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.Gold then return end
 
-local module = NDui:GetModule("Infobar")
+local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GoldPos)
 
 local profit, spent, oldMoney = 0, 0, 0
@@ -131,8 +132,7 @@ end
 
 info.onLeave = function() GameTooltip:Hide() end
 
--- Auto sell junk
-local f = NDui:EventFrame{"MERCHANT_SHOW", "MERCHANT_CLOSED"}
+-- Auto selljunk
 local sellCount, stop, cache = 0, true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
 
@@ -165,19 +165,20 @@ local function startSelling()
 	end
 end
 
-f:SetScript("OnEvent", function(_, event, ...)
+local function updateSelling(event, ...)
 	if not NDuiADB["AutoSell"] then return end
 
 	local _, arg = ...
 	if event == "MERCHANT_SHOW" then
 		if IsShiftKeyDown() then return end
 		stop = false
-		wipe(cache)
 		startSelling()
-		f:RegisterEvent("UI_ERROR_MESSAGE")
+		B:RegisterEvent("UI_ERROR_MESSAGE", updateSelling)
 	elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
 		stopSelling(false)
 	elseif event == "MERCHANT_CLOSED" then
 		stopSelling(true)
 	end
-end)
+end
+B:RegisterEvent("MERCHANT_SHOW", updateSelling)
+B:RegisterEvent("MERCHANT_CLOSED", updateSelling)

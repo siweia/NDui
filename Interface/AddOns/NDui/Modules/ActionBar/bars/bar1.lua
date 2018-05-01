@@ -1,11 +1,12 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Actionbar")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Actionbar")
 local cfg = C.bars.bar1
-local padding, margin = 2, 2
 
 function module:OnLogin()
 	if not NDuiDB["Actionbar"]["Enable"] then return end
 
+	local padding, margin = 2, 2
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 	local layout = NDuiDB["Actionbar"]["Style"]
@@ -46,7 +47,7 @@ function module:OnLogin()
 
 	--create the mouseover functionality
 	if cfg.fader then
-		NDui.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
 	--fix stupid blizzard

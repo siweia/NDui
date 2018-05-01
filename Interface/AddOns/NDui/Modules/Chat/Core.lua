@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Chat")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Chat")
 
 -- Hide elements
 ChatFrameMenuButton.Show = B.Dummy
@@ -166,32 +167,34 @@ hooksecurefunc("FloatingChatFrame_OnMouseScroll", function(self, dir)
 end)
 
 -- Autoinvite by whisper
-local f = NDui:EventFrame{"CHAT_MSG_WHISPER", "CHAT_MSG_BN_WHISPER"}
-f:SetScript("OnEvent", function(self, event, ...)
+function module:WhipserInvite()
 	if not NDuiDB["Chat"]["Invite"] then return end
-	if not self.whisperList then
-		self.whisperList = {string.split(" ", NDuiDB["Chat"]["Keyword"])}
-	end
 
-	local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
-	for _, word in pairs(self.whisperList) do
-		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
-			if event == "CHAT_MSG_BN_WHISPER" then
-				local gameID = select(6, BNGetFriendInfoByID(arg3))
-				if gameID then
-					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-					if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(charName.."-"..realmName)) then
-						BNInviteFriend(gameID)
+	local whisperList = {string.split(" ", NDuiDB["Chat"]["Keyword"])}
+
+	local function onChatWhisper(event, ...)
+		local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
+		for _, word in pairs(whisperList) do
+			if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
+				if event == "CHAT_MSG_BN_WHISPER" then
+					local gameID = select(6, BNGetFriendInfoByID(arg3))
+					if gameID then
+						local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(charName.."-"..realmName)) then
+							BNInviteFriend(gameID)
+						end
 					end
-				end
-			else
-				if not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(arg2) then
-					InviteToGroup(arg2)
+				else
+					if not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(arg2) then
+						InviteToGroup(arg2)
+					end
 				end
 			end
 		end
 	end
-end)
+	B:RegisterEvent("CHAT_MSG_WHISPER", onChatWhisper)
+	B:RegisterEvent("CHAT_MSG_BN_WHISPER", onChatWhisper)
+end
 
 function module:OnLogin()
 	-- Default
@@ -237,12 +240,14 @@ function module:OnLogin()
 		end)
 	end
 
+
 	-- Add Elements
 	self:ChatFilter()
 	self:ChannelRename()
 	self:Chatbar()
 	self:ChatCopy()
 	self:UrlCopy()
+	self:WhipserInvite()
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end

@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 --------------------------------
 -- ExtraQuestButton, by p3lim
 -- NDui MOD
@@ -355,7 +356,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 	else
 		HotKey:Hide()
 	end
-	if NDuiDB["Actionbar"]["Enable"] then NDui.UpdateHotkey(self) end
+	if NDuiDB["Actionbar"]["Enable"] then B.UpdateHotKey(self) end
 
 	if(InCombatLockdown()) then
 		self.attribute = self.itemName

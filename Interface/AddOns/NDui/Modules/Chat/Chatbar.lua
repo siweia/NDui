@@ -1,5 +1,6 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Chat")
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Chat")
 
 function module:Chatbar()
 	local chatFrame = SELECTED_DOCK_FRAME
@@ -98,7 +99,7 @@ function module:Chatbar()
 			end
 		end
 		IsInChannel()
-		NDui:EventFrame{"CHANNEL_UI_UPDATE"}:SetScript("OnEvent", IsInChannel)
+		B:RegisterEvent("CHANNEL_UI_UPDATE", IsInChannel)
 
 		wc:SetScript("OnClick", function(_, btn)
 			if wc.inChannel then

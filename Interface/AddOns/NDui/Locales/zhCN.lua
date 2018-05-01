@@ -1,4 +1,5 @@
-local _, _, L, _ = unpack(select(2, ...))
+local _, ns = ...
+local _, _, L = unpack(ns)
 if GetLocale() ~= "zhCN" then return end
 
 L["From"] = "来自"

@@ -1,5 +1,6 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Minimap")
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Minimap")
 
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
@@ -17,8 +18,7 @@ function module:CreatePulse()
 	anim.fader:SetDuration(1)
 	anim.fader:SetSmoothing("OUT")
 
-	local f = NDui:EventFrame{"PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED", "CALENDAR_UPDATE_PENDING_INVITES", "UPDATE_PENDING_MAIL"}
-	f:SetScript("OnEvent", function(_, event)
+	local function updateMinimapAnim(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			MBG:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
@@ -31,7 +31,12 @@ function module:CreatePulse()
 				MBG:SetBackdropBorderColor(0, 0, 0)
 			end
 		end
-	end)
+	end
+	B:RegisterEvent("PLAYER_REGEN_ENABLED", updateMinimapAnim)
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", updateMinimapAnim)
+	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
+	B:RegisterEvent("UPDATE_PENDING_MAIL", updateMinimapAnim)
+
 	MiniMapMailFrame:HookScript("OnHide", function()
 		if InCombatLockdown() then return end
 		anim:Stop()
@@ -97,18 +102,21 @@ function module:ReskinRegions()
 	B.CreateTex(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
-	local f = NDui:EventFrame{"CALENDAR_UPDATE_PENDING_INVITES", "PLAYER_ENTERING_WORLD"}
-	f:SetScript("OnEvent", function()
+	local function updateInviteVisibility()
 		if NDuiDB["Map"]["Invite"] and CalendarGetNumPendingInvites() > 0 then
 			Invt:Show()
 		else
 			Invt:Hide()
 		end
-	end)
+	end
+	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
+
 	Invt:SetScript("OnClick", function(_, btn)
-		Invt:UnregisterAllEvents()
 		Invt:Hide()
 		if btn == "LeftButton" then ToggleCalendar() end
+		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
 	end)
 
 	-- Micro Button Alerts
@@ -294,7 +302,7 @@ function module:WhoPingsMyMap()
 	anim.fader:SetSmoothing("OUT")
 	anim.fader:SetStartDelay(3)
 
-	NDui:EventFrame{"MINIMAP_PING"}:SetScript("OnEvent", function(_, _, unit)
+	B:RegisterEvent("MINIMAP_PING", function(_, unit)
 		local class = select(2, UnitClass(unit))
 		local r, g, b = B.ClassColor(class)
 		local name = GetUnitName(unit)

@@ -1,5 +1,6 @@
 -- Configure 配置页面
-local _, C, _, _ = unpack(select(2, ...))
+local _, ns = ...
+local _, C = unpack(ns)
 
 -- BUFF/DEBUFF相关
 C.Auras = {

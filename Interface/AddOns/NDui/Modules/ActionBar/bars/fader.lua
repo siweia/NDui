@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 ----------------------------
 -- rLib: framefader, zork
 ----------------------------
@@ -108,7 +109,7 @@ local function CreateFrameFader(frame, faderConfig)
 	FrameHandler(frame)
 end
 
-local function CreateButtonFrameFader(frame, buttonList, faderConfig)
+function B.CreateButtonFrameFader(frame, buttonList, faderConfig)
 	CreateFrameFader(frame, faderConfig)
 	for _, button in next, buttonList do
 		if not button.__faderParent then
@@ -118,4 +119,3 @@ local function CreateButtonFrameFader(frame, buttonList, faderConfig)
 		end
 	end
 end
-NDui.CreateButtonFrameFader = CreateButtonFrameFader

@@ -1,4 +1,6 @@
-local _, _, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+
 DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
@@ -62,7 +64,8 @@ local function CheckRole()
 		end
 	end
 end
-NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}:SetScript("OnEvent", CheckRole)
+B:RegisterEvent("PLAYER_LOGIN", CheckRole)
+B:RegisterEvent("PLAYER_TALENT_UPDATE", CheckRole)
 
 -- Raidbuff Checklist
 DB.BuffList = {

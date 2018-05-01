@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 function module:AddAlerts()
 	self:SoloInfo()
@@ -28,7 +29,7 @@ function module:SoloInfo()
 		[631] = 6,		-- 冰冠堡垒，无敌
 	}
 
-	local f = NDui:EventFrame{"ZONE_CHANGED_NEW_AREA", "PLAYER_DIFFICULTY_CHANGED", "PLAYER_ENTERING_WORLD"}
+	local f = CreateFrame("Frame", nil, UIParent)
 	f:SetPoint("CENTER", UIParent, "CENTER", 0, 120)
 	f:SetSize(150, 70)
 	f:Hide()
@@ -36,8 +37,9 @@ function module:SoloInfo()
 	B.CreateTex(f)
 	f.Text = B.CreateFS(f, 12, "")
 	f.Text:SetWordWrap(true)
+	f:SetScript("OnMouseUp", function() f:Hide() end)
 
-	f:SetScript("OnEvent", function()
+	local function updateAlert()
 		local name, _, instType, diffname, _, _, _, id = GetInstanceInfo()
 		if IsInInstance() and instType ~= 24 then
 			if instList[id] and instList[id] ~= instType then
@@ -49,8 +51,11 @@ function module:SoloInfo()
 		else
 			f:Hide()
 		end
-	end)
-	f:SetScript("OnMouseUp", function() f:Hide() end)
+	end
+
+	B:RegisterEvent("ZONE_CHANGED_NEW_AREA", updateAlert)
+	B:RegisterEvent("PLAYER_DIFFICULTY_CHANGED", updateAlert)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateAlert)
 end
 
 --[[
@@ -60,7 +65,8 @@ function module:RareAlert()
 	if not NDuiDB["Misc"]["RareAlerter"] then return end
 
 	local cache = {}
-	NDui:EventFrame{"VIGNETTE_ADDED"}:SetScript("OnEvent", function(_, _, id)
+	local function updateAlert(_, ...)
+		local id = ...
 		if id and not cache[id] then
 			local _, _, name, icon = C_Vignettes.GetVignetteInfoFromInstanceID(id)
 			local left, right, top, bottom = GetObjectIconTextureCoords(icon)
@@ -72,7 +78,10 @@ function module:RareAlert()
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
 			cache[id] = true
 		end
-	end)
+		if #cache > 666 then cache = {} end
+	end
+
+	B:RegisterEvent("VIGNETTE_ADDED", updateAlert)
 end
 
 --[[
@@ -82,7 +91,7 @@ end
 function module:InterruptAlert()
 	if not NDuiDB["Misc"]["Interrupt"] then return end
 
-	NDui:EventFrame{"COMBAT_LOG_EVENT_UNFILTERED"}:SetScript("OnEvent", function(_, _, ...)
+	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
 		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
@@ -99,7 +108,9 @@ function module:InterruptAlert()
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 			end
 		end
-	end)
+	end
+
+	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
 end
 
 --[[
@@ -159,7 +170,7 @@ end
 function module:ReflectingAlert()
 	if not NDuiDB["Misc"]["ReflectingAlert"] then return end
 
-	NDui:EventFrame{"UNIT_SPELLCAST_SUCCEEDED"}:SetScript("OnEvent", function(_, _, ...)
+	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
 		local unit, _, _, _, spell = ...
 		if spell ~= 163219 then return end
@@ -168,7 +179,9 @@ function module:ReflectingAlert()
 			local name, itemLink = GetItemInfo(112384)
 			SendChatMessage(format(L["Reflecting Prism"], unitName, itemLink or name), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
-	end)
+	end
+
+	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", updateAlert)
 end
 
 --[[
@@ -177,7 +190,7 @@ end
 function module:SwappingAlert()
 	if not NDuiDB["Misc"]["SwapingAlert"] then return end
 
-	NDui:EventFrame{"COMBAT_LOG_EVENT_UNFILTERED"}:SetScript("OnEvent", function(_, _, ...)
+	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
 		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, spellName = ...
 		if eventType ~= "SPELL_CAST_SUCCESS" or spellID ~= 161399 then return end
@@ -185,7 +198,9 @@ function module:SwappingAlert()
 			local name, itemLink = GetItemInfo(111820)
 			SendChatMessage(format(L["Swapblaster"], sourceName, destName, itemLink or name or spellName), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
-	end)
+	end
+
+	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
 end
 
 --[[
@@ -201,7 +216,8 @@ function module:VersionCheck()
 	f.Text:SetText("")
 	f:Hide()
 
-	NDui:EventFrame{"CHAT_MSG_ADDON"}:SetScript("OnEvent", function(self, _, ...)
+	local checked
+	local function compareVersion(_, ...)
 		local prefix, msg, distType = ...
 		if distType ~= "GUILD" then return end
 
@@ -212,7 +228,7 @@ function module:VersionCheck()
 				NDuiADB["DetectVersion"] = msg
 			end
 
-			if not self.checked then
+			if not checked then
 				local b1, b2 = string.split(".", DB.Version)
 				if tonumber(c1) > tonumber(b1) or tonumber(c2) > tonumber(b2) then
 					f.Text:SetText(format(L["Outdated NDui"], NDuiADB["DetectVersion"]))
@@ -220,10 +236,12 @@ function module:VersionCheck()
 				elseif tonumber(c1) < tonumber(b1) or tonumber(c2) < tonumber(b2) then
 					SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 				end
-				self.checked = true
+				checked = true
 			end
 		end
-	end)
+	end
+
+	B:RegisterEvent("CHAT_MSG_ADDON", compareVersion)
 	RegisterAddonMessagePrefix("NDuiVersionCheck")
 	SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 end
@@ -239,7 +257,7 @@ function module:SistersAlert()
 	local tarSpellName = GetSpellInfo(tarSpell)
 	local myID = UnitGUID("player")
 
-	NDui:EventFrame{"COMBAT_LOG_EVENT_UNFILTERED"}:SetScript("OnEvent", function(_, _, ...)
+	local function updateAlert(_, ...)
 		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
 
 		local _, eventType, _, _, sourceName, _, _, destGUID, _, _, _, spellID = ...
@@ -256,7 +274,9 @@ function module:SistersAlert()
 			end
 			data = {}
 		end
-	end)
+	end
+
+	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
 end
 
 
@@ -266,22 +286,23 @@ end
 function module:AntoranBlast()
 	if not NDuiDB["Misc"]["AntoranBlast"] then return end
 
-	local names = {}
-	local cache = {}
-	NDui:EventFrame{"COMBAT_LOG_EVENT_UNFILTERED", "ENCOUNTER_END"}:SetScript("OnEvent", function(_, event, ...)
+	local names, cache = {}, {}
+	local function updateAlert(event, ...)
 		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
 
-		if event == "ENCOUNTER_END" then
-			names = {}
-			cache = {}
-		else
-			local _, eventType, _, sourceGUID, _, _, _, _, destName, _, _, spellID = ...
-			if eventType == "SPELL_DAMAGE" and spellID == 245121 and not GetPlayerInfoByGUID(sourceGUID) and not cache[sourceGUID] then
-				if not names[destName] then names[destName] = 0 end
-				names[destName] = names[destName] + 1
-				SendChatMessage(destName.."  "..L["Spotted"]..names[destName], "RAID")
-				cache[sourceGUID] = true
-			end
+		local _, eventType, _, sourceGUID, _, _, _, _, destName, _, _, spellID = ...
+		if eventType == "SPELL_DAMAGE" and spellID == 245121 and not GetPlayerInfoByGUID(sourceGUID) and not cache[sourceGUID] then
+			if not names[destName] then names[destName] = 0 end
+			names[destName] = names[destName] + 1
+			SendChatMessage(destName.."  "..L["Spotted"]..names[destName], "RAID")
+			cache[sourceGUID] = true
 		end
-	end)
+	end
+
+	local function emptyData()
+		names, cache = {}, {}
+	end
+
+	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
+	B:RegisterEvent("ENCOUNTER_END", emptyData)
 end

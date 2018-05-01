@@ -1,7 +1,9 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Chat")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Chat")
 
-NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_LOGOUT"}:SetScript("OnEvent", function(_, event)
+-- Account-wide settings
+local function accountSettings(event)
 	if not NDuiADB["ChatFilter"] then NDuiADB["ChatFilter"] = "" end
 	if not NDuiADB["ChatAt"] then NDuiADB["ChatAt"] = "" end
 	if not NDuiADB["Timestamp"] then NDuiADB["Timestamp"] = false end
@@ -25,7 +27,9 @@ NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_LOGOUT"}:SetScript("OnEvent", function(_
 			SetCVar("showTimestamps", "none")
 		end
 	end
-end)
+end
+B:RegisterEvent("PLAYER_LOGIN", accountSettings)
+B:RegisterEvent("PLAYER_LOGOUT", accountSettings)
 
 --[[
 	修改自NoGoldSeller，强迫症患者只能接受这个低占用的。
@@ -37,7 +41,7 @@ end
 B.genFilterList = genFilterList
 
 local friendsList = {}
-NDui:EventFrame{"FRIENDLIST_UPDATE", "BN_FRIEND_INFO_CHANGED"}:SetScript("OnEvent", function()
+local function updateFriends()
 	friendsList = {}
 
 	for i = 1, GetNumFriends() do
@@ -55,7 +59,9 @@ NDui:EventFrame{"FRIENDLIST_UPDATE", "BN_FRIEND_INFO_CHANGED"}:SetScript("OnEven
 			end
 		end
 	end
-end)
+end
+B:RegisterEvent("FRIENDLIST_UPDATE", updateFriends)
+B:RegisterEvent("BN_FRIEND_INFO_CHANGED", updateFriends)
 
 local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	if not NDuiDB["Chat"]["EnableFilter"] then return end

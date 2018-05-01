@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 -- Default Settings
 local defaultSettings = {
@@ -198,9 +199,8 @@ local defaultSettings = {
 	},
 }
 
-NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+local function applySettings(event, addon)
 	if addon ~= "NDui" then return end
-	self:UnregisterEvent(event)
 	if not NDuiDB["LEGION"] then
 		NDuiDB = {}
 		NDuiDB["LEGION"] = true
@@ -218,7 +218,9 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon
 			if NDuiDB[i] == nil then NDuiDB[i] = j end
 		end
 	end
-end)
+	B:UnregisterEvent(event, applySettings)
+end
+B:RegisterEvent("ADDON_LOADED", applySettings)
 
 -- Config
 local tabList = {
@@ -742,17 +744,18 @@ local function OpenGUI()
 	end)
 	credit:SetScript("OnLeave", GameTooltip_Hide)
 
-	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
+	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
 				f:Hide()
-				self:RegisterEvent("PLAYER_REGEN_ENABLED")
+				B:RegisterEvent("PLAYER_REGEN_ENABLED", showLater)
 			end
 		else
 			f:Show()
-			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			B:UnregisterEvent(event, showLater)
 		end
-	end)
+	end
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4], 150, 30, L["Add ClickSets"])

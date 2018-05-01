@@ -1,4 +1,5 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local AuraList, Aura, UnitIDTable, IntTable, IntCD, newTable = {}, {}, {}, {}, {}, {}
 local MaxFrame = 12	-- Max Tracked Auras
 
@@ -319,10 +320,11 @@ local function UpdateCDFrame(index, name, icon, start, duration, _, type, id, ch
 		Frame.Cooldown:SetReverse(false)
 		if charges and charges > 0 then
 			StartChargeCooldown(Frame, start, duration)
-			Frame.Cooldown:SetCooldown(0, 0)
+			Frame.Cooldown:Hide()
 		else
 			ClearChargeCooldown(Frame)
 			Frame.Cooldown:SetCooldown(start, duration)
+			Frame.Cooldown:Show()
 		end
 	end
 	if Frame.Count then Frame.Count:SetText(charges) end
@@ -608,7 +610,7 @@ local function isUnitWeNeed(value, sourceName, destName)
 end
 
 local cache = {}
-local function UpdateInt(_, _, ...)
+local function UpdateInt(_, ...)
 	if not IntCD.List then return end
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
@@ -640,16 +642,18 @@ local function CleanUp()
 end
 
 -- Event
-local f = NDui:EventFrame{"PLAYER_LOGIN", "COMBAT_LOG_EVENT_UNFILTERED"}
-f:SetScript("OnEvent", function(self, event, ...)
+local function onEvent(event, ...)
 	if not NDuiDB["AuraWatch"]["Enable"] then return end
-	if event == "PLAYER_LOGIN" then
+	if event == "PLAYER_ENTERING_WORLD" then
 		Init()
 		if not IntCD.MoveHandle then UpdateIntFrame(2825, nil, 0, "player") end
+		B:UnregisterEvent(event, onEvent)
 	else
-		UpdateInt(self, event, ...)
+		UpdateInt(event, ...)
 	end
-end)
+end
+B:RegisterEvent("PLAYER_LOGIN", onEvent)
+B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", onEvent)
 
 local onUpdate = function(self, elapsed)
 	self.Timer = (self.Timer or 0) + elapsed
@@ -662,6 +666,7 @@ local onUpdate = function(self, elapsed)
 		end
 	end
 end
+local f = CreateFrame("Frame")
 f:SetScript("OnUpdate", onUpdate)
 
 -- Mover

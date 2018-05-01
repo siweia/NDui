@@ -1,4 +1,6 @@
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 if not module then return end
 
 local TIER = 7 -- Legion

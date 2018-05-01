@@ -1,10 +1,11 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 --------------------------
 -- DragEmAll, by emelio
 -- NDui MOD
 --------------------------
-local _G = _G
-local addon = NDui:EventFrame{"PLAYER_LOGIN", "ADDON_LOADED"}
+local _G = getfenv(0)
+
 local frames = {
 	-- ["FrameName"] = true (the parent frame should be moved) or false (the frame itself should be moved)
 	-- for child frames (i.e. frames that don't have a name, but only a parentKey="XX" use
@@ -97,20 +98,7 @@ local lodFrames = {
 	Blizzard_WarboardUI			= { ["WarboardQuestChoiceFrame"] = false },
 }
 
-local parentFrame = {}
-local hooked = {}
-
-function addon:PLAYER_LOGIN()
-	self:HookFrames(frames)
-	IsFrameExists()
-end
-
-function addon:ADDON_LOADED(name)
-	local frameList = lodFrames[name]
-	if frameList then
-		self:HookFrames(frameList)
-	end
-end
+local parentFrame, hooked = {}, {}
 
 local function MouseDownHandler(frame, button)
 	frame = parentFrame[frame] or frame
@@ -127,13 +115,20 @@ local function MouseUpHandler(frame, button)
 	end
 end
 
-function addon:HookFrames(list)
-	for name, child in pairs(list) do
-		self:HookFrame(name, child)
+local function HookScript(frame, script, handler)
+	if not frame.GetScript then return end
+	local oldHandler = frame:GetScript(script)
+	if oldHandler then
+		frame:SetScript(script, function(...)
+			handler(...)
+			oldHandler(...)
+		end)
+	else
+		frame:SetScript(script, handler)
 	end
 end
 
-function addon:HookFrame(name, moveParent)
+local function HookFrame(name, moveParent)
 	-- find frame
 	-- name may contain dots for children, e.g. ReforgingFrame.InvisibleButton
 	local frame = _G
@@ -168,23 +163,28 @@ function addon:HookFrame(name, moveParent)
 		frame:EnableMouse(true)
 		frame:SetMovable(true)
 		frame:SetClampedToScreen(false)
-		self:HookScript(frame, "OnMouseDown", MouseDownHandler)
-		self:HookScript(frame, "OnMouseUp", MouseUpHandler)
+		HookScript(frame, "OnMouseDown", MouseDownHandler)
+		HookScript(frame, "OnMouseUp", MouseUpHandler)
 		hooked[name] = true
 	end
 end
 
-function addon:HookScript(frame, script, handler)
-	if not frame.GetScript then return end
-	local oldHandler = frame:GetScript(script)
-	if oldHandler then
-		frame:SetScript(script, function(...)
-			handler(...)
-			oldHandler(...)
-		end)
-	else
-		frame:SetScript(script, handler)
+local function HookFrames(list)
+	for name, child in pairs(list) do
+		HookFrame(name, child)
 	end
 end
 
-addon:SetScript("OnEvent", function(f, e, ...) f[e](f, ...) end)
+local function InitSetup()
+	HookFrames(frames)
+	IsFrameExists()
+end
+
+local function AddonLoaded(_, name)
+	local frameList = lodFrames[name]
+	if frameList then
+		HookFrames(frameList)
+	end
+end
+B:RegisterEvent("PLAYER_LOGIN", InitSetup)
+B:RegisterEvent("ADDON_LOADED", AddonLoaded)

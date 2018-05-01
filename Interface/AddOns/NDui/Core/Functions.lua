@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b
 
 -- Gradient Frame
@@ -176,19 +177,21 @@ B.CreateMF = function(f, parent)
 end
 
 -- Icon Style
-B.CreateIF = function(f, HL)
+B.CreateIF = function(f, mouse, cd)
 	B.CreateSD(f, 3, 3)
 	f.Icon = f:CreateTexture(nil, "ARTWORK")
 	f.Icon:SetAllPoints()
 	f.Icon:SetTexCoord(unpack(DB.TexCoord))
-	f.CD = CreateFrame("Cooldown", nil, f, "CooldownFrameTemplate")
-	f.CD:SetAllPoints()
-	f.CD:SetReverse(true)
-	if HL then
+	if mouse then
 		f:EnableMouse(true)
 		f.HL = f:CreateTexture(nil, "HIGHLIGHT")
 		f.HL:SetColorTexture(1, 1, 1, .3)
 		f.HL:SetAllPoints(f.Icon)
+	end
+	if cd then
+		f.CD = CreateFrame("Cooldown", nil, f, "CooldownFrameTemplate")
+		f.CD:SetAllPoints()
+		f.CD:SetReverse(true)
 	end
 end
 

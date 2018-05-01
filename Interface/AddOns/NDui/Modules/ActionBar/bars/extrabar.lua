@@ -1,9 +1,10 @@
-local B, C, L, DB = unpack(select(2, ...))
-local Bar = NDui:GetModule("Actionbar")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local Bar = B:GetModule("Actionbar")
 local cfg = C.bars.extrabar
-local padding, margin = 10, 5
 
 function Bar:CreateExtrabar()
+	local padding, margin = 10, 5
 	local num = 1
 	local buttonList = {}
 
@@ -37,6 +38,6 @@ function Bar:CreateExtrabar()
 
 	--create the mouseover functionality
 	if cfg.fader then
-		NDui.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 end

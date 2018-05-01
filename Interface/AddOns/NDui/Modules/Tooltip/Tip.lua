@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -314,7 +315,7 @@ local function extrastyle(f)
 	end
 end
 
-NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
+B:RegisterEvent("ADDON_LOADED", function(_, addon)
 	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("Aurora") then
 		FrameStackTooltip:HookScript("OnShow", style)
 		EventTraceTooltip:HookScript("OnShow", style)

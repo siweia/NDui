@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Settings")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Settings")
 
 -- Increase Chat History
 for i = 1, 50 do
@@ -88,7 +89,7 @@ local function ForceUIScale()
 		end
 	end
 
-	NDui:EventFrame{"UI_SCALE_CHANGED"}:SetScript("OnEvent", function()
+	B:RegisterEvent("UI_SCALE_CHANGED", function()
 		if scale < .65 then
 			RestoreUIScale(scale)
 		end

@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("AurasTable")
 
 local groups = {
 	-- groups name = direction, interval, mode, iconsize, position, barwidth

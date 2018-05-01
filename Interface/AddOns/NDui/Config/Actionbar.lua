@@ -1,4 +1,5 @@
-local _, C, _, _ = unpack(select(2, ...))
+local _, ns = ...
+local _, C = unpack(ns)
 
 --[[
 	说明：

@@ -2,8 +2,9 @@
 -- oUF_FloatingCombatFeedback, by lightspark
 -- NDui MOD
 -----------------------------------------------
-local B, C, L, DB = unpack(select(2, ...))
-local oUF = NDui.oUF or oUF
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
 assert(oUF, "oUF FloatingCombatFeedback was unable to locate oUF install")
 
 local _G = getfenv(0)

@@ -1,6 +1,7 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Bags")
-local cargBags = NDui.cargBags
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Bags")
+local cargBags = ns.cargBags
 
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end

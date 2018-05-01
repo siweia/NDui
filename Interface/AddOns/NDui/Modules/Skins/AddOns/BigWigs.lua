@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Skins")
 
 function module:BigWigsSkin()
 	if not NDuiDB["Skins"]["Bigwigs"] or not IsAddOnLoaded("BigWigs") then return end
@@ -92,11 +93,12 @@ function module:BigWigsSkin()
 	if IsAddOnLoaded("BigWigs_Plugins") then
 		registerStyle()
 	else
-		NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+		local function loadStyle(event, addon)
 			if addon == "BigWigs_Plugins" then
 				registerStyle()
-				self:UnregisterEvent(event)
+				B:UnregisterEvent(event, loadStyle)
 			end
-		end)
+		end
+		B:RegisterEvent("ADDON_LOADED", loadStyle)
 	end
 end
