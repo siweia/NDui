@@ -12,10 +12,12 @@ local modules, initQueue = {}, {}
 
 function ns:RegisterModule(name)
 	if modules[name] then print("Module <"..name.."> has been registered.") return end
-	modules[name] = {}
+	local module = {}
+	module.name = name
+	modules[name] = module
 
-	tinsert(initQueue, modules[name])
-	return modules[name]
+	tinsert(initQueue, module)
+	return module
 end
 
 function ns:GetModule(name)
@@ -38,7 +40,7 @@ ns:EventFrame{"PLAYER_LOGIN"}:SetScript("OnEvent", function()
 		if module.OnLogin then
 			module:OnLogin()
 		else
-			print("Module <"..name.."> does not loaded.")
+			print("Module <"..module.name.."> does not loaded.")
 		end
 	end
 end)
