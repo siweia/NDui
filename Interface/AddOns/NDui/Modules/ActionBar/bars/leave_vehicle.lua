@@ -27,6 +27,7 @@ function Bar:CreateLeaveVehicle()
 	button.icon:SetTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
 	button.icon:SetTexCoord(.0859375, .1679688, .359375, .4414063)
 	button:SetNormalTexture(nil)
+	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
 
 	local function onClick(self)
 		if UnitOnTaxi("player") then TaxiRequestEarlyLanding() else VehicleExit() end

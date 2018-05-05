@@ -8,12 +8,15 @@ function module:ChannelRename()
 			local am = f.AddMessage
 			f.AddMessage = function(frame, text, ...)
 				if text:find(INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
+
+				local r, g, b = ...
+				if text:find(L["Tell"].." |Hplayer.+%]") then r, g, b = .6, .6, .6 end
 				if NDuiDB["Chat"]["Oldname"] then
 					text = text:gsub("|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
 					text = text:gsub("|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")
-					return am(frame, text, ...)
+					return am(frame, text, r, g, b)
 				else
-					return am(frame, text:gsub("|h%[(%d+)%..-%]|h", "|h[%1]|h"), ...)
+					return am(frame, text:gsub("|h%[(%d+)%..-%]|h", "|h[%1]|h"), r, g, b)
 				end
 			end
 		end
