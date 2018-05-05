@@ -251,8 +251,8 @@ end
 -- Color code
 B.HexRGB = function(r, g, b)
 	if r then
-		if (type(r) == "table") then
-			if(r.r) then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
+		if type(r) == "table" then
+			if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
 		end
 		return ("|cff%02x%02x%02x"):format(r*255, g*255, b*255)
 	end
