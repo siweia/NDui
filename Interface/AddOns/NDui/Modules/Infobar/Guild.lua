@@ -125,17 +125,17 @@ local function refreshData()
 			if mobile and not connected then
 				zone = REMOTE_CHAT
 				if status == 1 then
-					status = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:-2:-2:16:16:0:16:0:16|t"
+					status = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t"
 				elseif status == 2 then
-					status = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:-2:-2:16:16:0:16:0:16|t"
+					status = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"
 				else
 					status = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)
 				end
 			else
 				if status == 1 then
-					status = "|T"..FRIENDS_TEXTURE_AFK..":14:14:-2:-2:16:16:0:16:0:16|t"
+					status = DB.AFKTex
 				elseif status == 2 then
-					status = "|T"..FRIENDS_TEXTURE_DND..":14:14:-2:-2:16:16:0:16:0:16|t"
+					status = DB.DNDTex
 				else
 					status = " "
 				end
