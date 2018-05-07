@@ -8,6 +8,8 @@ function module:ChannelRename()
 			local am = f.AddMessage
 			f.AddMessage = function(frame, text, ...)
 				if text:find(INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
+				text = text:gsub(CHAT_FLAG_AFK, DB.AFKTex)
+				text = text:gsub(CHAT_FLAG_DND, DB.DNDTex)
 
 				local r, g, b = ...
 				if text:find(L["Tell"].." |Hplayer.+%]") then r, g, b = .6, .6, .6 end
@@ -35,10 +37,6 @@ function module:ChannelRename()
 	--say / yell
 	CHAT_SAY_GET = "%s "
 	CHAT_YELL_GET = "%s "
-
-	--flags
-	CHAT_FLAG_AFK = DB.AFKTex
-	CHAT_FLAG_DND = DB.DNDTex
 
 	if NDuiDB["Chat"]["Oldname"] then return end
 	--guild
