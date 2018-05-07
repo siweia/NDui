@@ -8,12 +8,6 @@ local info = module:RegisterInfobar(C.Infobar.FriendsPos)
 local friendTable, bnetTable, updateRequest = {}, {}
 local wowString, bnetString = L["WoW"], L["BN"]
 local activeZone, inactiveZone = {r=.3, g=1, b=.3}, {r=.7, g=.7, b=.7}
-
-local flags = {
-	" |T"..FRIENDS_TEXTURE_AFK..":14:14:-2:-2:16:16:0:16:0:16|t",
-	" |T"..FRIENDS_TEXTURE_DND..":14:14:-2:-2:16:16:0:16:0:16|t",
-}
-
 local classList = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 	classList[v] = k
@@ -26,9 +20,9 @@ local function buildFriendTable(num)
 		local name, level, class, area, connected, status = GetFriendInfo(i)
 		if connected then
 			if status == CHAT_FLAG_AFK then
-				status = flags[1]
+				status = DB.AFKTex
 			elseif status == CHAT_FLAG_DND then
-				status = flags[2]
+				status = DB.DNDTex
 			else
 				status = ""
 			end
@@ -60,9 +54,9 @@ local function buildBNetTable(num)
 
 			local status, infoText = ""
 			if isAFK or isGameAFK then
-				status = flags[1]
+				status = DB.AFKTex
 			elseif isDND or isGameBusy then
-				status = flags[2]
+				status = DB.DNDTex
 			else
 				status = ""
 			end

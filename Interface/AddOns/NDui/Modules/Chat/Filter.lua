@@ -158,7 +158,7 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genChatFilter)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genChatFilter)
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genAddonBlock)
