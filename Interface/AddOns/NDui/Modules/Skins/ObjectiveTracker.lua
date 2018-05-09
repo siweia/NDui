@@ -145,7 +145,12 @@ function module:QuestTracker()
 			bg:SetPoint("BOTTOMRIGHT", bar, 3, -3)
 			B.CreateBD(bg)
 			B.CreateTex(bg)
-			if bar.AnimIn then	-- Fix bg opacity
+
+			if progressBar.FullBarFlare1 then
+				progressBar.FullBarFlare1.FlareAnim.Play = B.Dummy
+				progressBar.FullBarFlare2.FlareAnim.Play = B.Dummy
+			end
+			if bar.AnimIn then
 				bar.AnimIn:HookScript("OnFinished", function() bg:SetBackdropColor(0, 0, 0, .5) end)
 			end
 
