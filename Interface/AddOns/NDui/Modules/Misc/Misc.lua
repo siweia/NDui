@@ -420,16 +420,20 @@ do
 		InterfaceOptionsFrameOkay:Click()
 	end)
 
-	if not UIDROPDOWNMENU_VALUE_PATCH_VERSION then
-		UIDROPDOWNMENU_VALUE_PATCH_VERSION = 1
+	-- https://www.townlong-yak.com/bugs/afKy4k-HonorFrameLoadTaint
+	if (UIDROPDOWNMENU_VALUE_PATCH_VERSION or 0) < 2 then
+		UIDROPDOWNMENU_VALUE_PATCH_VERSION = 2
 		hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
-			if UIDROPDOWNMENU_VALUE_PATCH_VERSION ~= 1 then return end
+			if UIDROPDOWNMENU_VALUE_PATCH_VERSION ~= 2 then return end
+
 			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
 				for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
 					local b = _G["DropDownList"..i.."Button"..j]
-					while not issecurevariable(b, "value") do
+					if not (issecurevariable(b, "value") or b:IsShown()) then
 						b.value = nil
-						j, b["fx"..j] = j + 1
+						repeat
+							j, b["fx" .. j] = j+1
+						until issecurevariable(b, "value")
 					end
 				end
 			end
