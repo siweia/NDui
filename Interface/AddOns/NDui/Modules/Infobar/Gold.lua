@@ -172,6 +172,7 @@ local function updateSelling(event, ...)
 	if event == "MERCHANT_SHOW" then
 		if IsShiftKeyDown() then return end
 		stop = false
+		wipe(cache)
 		startSelling()
 		B:RegisterEvent("UI_ERROR_MESSAGE", updateSelling)
 	elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
