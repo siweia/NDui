@@ -170,14 +170,14 @@ end
 function module:ReflectingAlert()
 	if not NDuiDB["Misc"]["ReflectingAlert"] then return end
 
+	local name, itemLink = GetItemInfo(112384)
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
 		local unit, _, _, _, spell = ...
 		if spell ~= 163219 then return end
 		if unit:match("raid") or unit:match("party") and not UnitInRaid(unit) then
 			local unitName = GetUnitName(unit)
-			local name, itemLink = GetItemInfo(112384)
-			SendChatMessage(format(L["Reflecting Prism"], unitName, itemLink or name), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
+			SendChatMessage(format(L["Reflecting Prism"], unitName, itemLink or name or ""), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
 	end
 
@@ -190,12 +190,12 @@ end
 function module:SwappingAlert()
 	if not NDuiDB["Misc"]["SwapingAlert"] then return end
 
+	local name, itemLink = GetItemInfo(111820)
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
 		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, spellName = ...
 		if eventType ~= "SPELL_CAST_SUCCESS" or spellID ~= 161399 then return end
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
-			local name, itemLink = GetItemInfo(111820)
 			SendChatMessage(format(L["Swapblaster"], sourceName, destName, itemLink or name or spellName), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
 	end
@@ -278,7 +278,6 @@ function module:SistersAlert()
 
 	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
 end
-
 
 --[[
 	通报安托兰议会踩雷的CSB
