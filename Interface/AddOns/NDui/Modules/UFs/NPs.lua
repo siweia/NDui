@@ -397,7 +397,7 @@ function UF:CreateClassBar()
 end
 
 -- Create Nameplates
-local function CreatePlates(self, unit)
+function UF:CreatePlates(unit)
 	self.mystyle = "nameplate"
 	if unit:match("nameplate") then
 		self:SetSize(NDuiDB["Nameplate"]["Width"] * 1.4, NDuiDB["Nameplate"]["Height"])
@@ -464,7 +464,6 @@ local function CreatePlates(self, unit)
 		self.ThreatIndicator.Override = UpdateThreatColor
 	end
 end
-UF.CreatePlates = CreatePlates
 
 local function enableElement(self, name, element)
 	if not self:IsElementEnabled(name) then
@@ -479,7 +478,7 @@ local function disableElement(self, name)
 	end
 end
 
-local function UpdatePlates(self, event, unit)
+function UF:PostUpdatePlates(event, unit)
 	-- Update Elements
 	UpdateTargetMark(self)
 	UpdateQuestUnit(self, unit)
@@ -521,4 +520,3 @@ local function UpdatePlates(self, event, unit)
 		bar:Hide()
 	end
 end
-UF.PostUpdatePlates = UpdatePlates
