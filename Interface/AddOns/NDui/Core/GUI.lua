@@ -360,16 +360,16 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "EasyMarking", L["Easy Mark"]},
 		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
 		{},--blank
+		{1, "Chat", "Invite", L["Whisper Invite"]},
+		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
+		{2, "Chat", "Keyword", L["Whisper Keyword"]},
+		{},--blank
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"], true},
 		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"]},
 		{1, "Misc", "SwapingAlert", L["Swaping Alert"], true},
 		{1, "Misc", "SistersAlert", L["SistersAlert Alert"]},
 		{1, "Misc", "AntoranBlast", L["AntoranBlast Alert"], true},
-		{},--blank
-		{1, "Chat", "Invite", L["Whisper Invite"]},
-		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
-		{2, "Chat", "Keyword", L["Whisper Keyword"]},
 	},
 	[8] = {
 		{1, "Chat", "Lock", L["Lock Chat"]},
