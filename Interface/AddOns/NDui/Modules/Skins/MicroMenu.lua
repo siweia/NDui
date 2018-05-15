@@ -13,7 +13,7 @@ local function CreateMicroButton(parent, data)
 	bu:SetSize(22, 22)
 	bu:SetFrameStrata("BACKGROUND")
 	bu:SetScript("OnClick", func)
-	B.CreateGT(bu, "ANCHOR_TOP", tip)
+	B:AddTooltip(bu, "ANCHOR_TOP", tip)
 
 	local icon = bu:CreateTexture(nil, "ARTWORK")
 	if texture == "encounter" then

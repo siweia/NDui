@@ -48,7 +48,7 @@ do
 		ar:SetSize(35, 35)
 		B.CreateIF(ar, true)
 		ar.Icon:SetTexture("Interface\\ICONS\\Ability_Iyyokuk_Calculate")
-		B.CreateGT(ar, "ANCHOR_RIGHT", L["Arch Count"], "system")
+		B:AddTooltip(ar, "ANCHOR_RIGHT", L["Arch Count"], "system")
 		ar:SetScript("OnMouseUp", CalculateArches)
 	end
 
@@ -252,7 +252,7 @@ do
 	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
 	B.CreateIF(bu, true)
 	bu.Icon:SetTexture("Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH")
-	B.CreateGT(bu, "ANCHOR_RIGHT", L["Get Naked"])
+	B:AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
 
 	local function UnequipItemInSlot(i)
 		local action = EquipmentManager_UnequipItemInSlot(i)
@@ -410,7 +410,7 @@ do
 	bu:SetSize(25, 25)
 	B.CreateIF(bu, true)
 	bu.Icon:SetTexture(GetSpellTexture(80353))
-	B.CreateGT(bu, "ANCHOR_RIGHT", L["Extend Instance"], "system")
+	B:AddTooltip(bu, "ANCHOR_RIGHT", L["Extend Instance"], "system")
 
 	bu:SetScript("OnMouseUp", function(_, btn)
 		for i = 1, GetNumSavedInstances() do
@@ -444,7 +444,7 @@ do
 	mover.Icon:SetTexCoord(0, .5, 0, .5)
 	mover:SetHighlightTexture(DB.gearTex)
 	mover:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-	B.CreateGT(mover, "ANCHOR_TOP", L["Toggle"], "system")
+	B:AddTooltip(mover, "ANCHOR_TOP", L["Toggle"], "system")
 	B.CreateMF(mover)
 
 	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(_, _, parent)

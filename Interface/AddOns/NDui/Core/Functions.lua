@@ -9,7 +9,6 @@ B.CreateGF = function(f, w, h, o, r, g, b, a1, a2)
 	local gf = f:CreateTexture(nil, "BACKGROUND")
 	gf:SetAllPoints()
 	gf:SetTexture(DB.normTex)
-	gf:SetVertexColor(r, g, b)
 	gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
 end
 
@@ -87,29 +86,20 @@ B.CreateFS = function(f, size, text, classcolor, anchor, x, y)
 end
 
 -- GameTooltip
-B.CreateGT = function(f, anchor, text, color)
-	f:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, anchor)
+function B:AddTooltip(f, anchor, text, color)
+	f:SetScript("OnEnter", function()
+		GameTooltip:SetOwner(f, anchor)
 		GameTooltip:ClearLines()
-		if color == "class" then
-			GameTooltip:AddLine(text, cr, cg, cb)
-		elseif color == "system" then
-			GameTooltip:AddLine(text, 1, .8, 0)
-		else
-			GameTooltip:AddLine(text, 1, 1, 1)
-		end
-		GameTooltip:Show()
-	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
-end
-B.CreateAT = function(f, anchor, value)
-	f:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, anchor)
-		GameTooltip:ClearLines()
-		if type(value) == "string" then
-			GameTooltip:SetUnitAura("player", value)
-		else
+		if tonumber(text) then
 			GameTooltip:SetSpellByID(value)
+		else
+			local r, g, b = 1, 1, 1
+			if color == "class" then
+				r, g, b = cr, cg, cb
+			elseif color == "system" then
+				r, g, b = 1, .8, 0
+			end
+			GameTooltip:AddLine(text, r, g, b)
 		end
 		GameTooltip:Show()
 	end)

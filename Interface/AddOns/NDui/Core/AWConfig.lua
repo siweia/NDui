@@ -237,7 +237,7 @@ local function CreatePanel()
 		icon:SetPoint("LEFT", 5, 0)
 		B.CreateIF(icon, true)
 		icon.Icon:SetTexture(texture)
-		B.CreateAT(icon, "ANCHOR_RIGHT", intID)
+		B:AddTooltip(icon, "ANCHOR_RIGHT", intID)
 
 		local close = CreateFrame("Button", nil, bar)
 		close:SetSize(20, 20)
@@ -256,7 +256,7 @@ local function CreatePanel()
 		spellName:SetWidth(180)
 		spellName:SetJustifyH("LEFT")
 		B.CreateFS(bar, 14, duration, false, "RIGHT", -30, 0)
-		B.CreateGT(bar, "ANCHOR_TOP", L["Trigger"]..trigger.." - "..unit, "system")
+		B:AddTooltip(bar, "ANCHOR_TOP", L["Trigger"]..trigger.." - "..unit, "system")
 
 		SortBars(index)
 	end
@@ -275,7 +275,7 @@ local function CreatePanel()
 		icon:SetPoint("LEFT", 5, 0)
 		B.CreateIF(icon, true)
 		icon.Icon:SetTexture(texture)
-		B.CreateAT(icon, "ANCHOR_RIGHT", spellID)
+		B:AddTooltip(icon, "ANCHOR_RIGHT", spellID)
 
 		local close = CreateFrame("Button", nil, bar)
 		close:SetSize(20, 20)
@@ -328,11 +328,7 @@ local function CreatePanel()
 		icon:SetPoint("LEFT", 5, 0)
 		B.CreateIF(icon, true)
 		icon.Icon:SetTexture(texture)
-		if tonumber(value) then
-			B.CreateAT(icon, "ANCHOR_RIGHT", value)
-		else
-			B.CreateGT(icon, "ANCHOR_RIGHT", value, "system")
-		end
+		B:AddTooltip(icon, "ANCHOR_RIGHT", value, "system")
 
 		local close = CreateFrame("Button", nil, bar)
 		close:SetSize(20, 20)

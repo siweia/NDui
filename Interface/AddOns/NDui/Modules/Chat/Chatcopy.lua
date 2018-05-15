@@ -60,7 +60,7 @@ function module:ChatCopy()
 	copy.Icon:SetAllPoints()
 	copy.Icon:SetTexture(DB.copyTex)
 	copy:SetScript("OnDoubleClick", copyFunc)
-	B.CreateGT(copy, "ANCHOR_RIGHT", L["Chat Copy"], "system")
+	B:AddTooltip(copy, "ANCHOR_RIGHT", L["Chat Copy"], "system")
 	copy:HookScript("OnEnter", function() copy:SetAlpha(1) end)
 	copy:HookScript("OnLeave", function() copy:SetAlpha(.2) end)
 

@@ -198,7 +198,7 @@ function module:Mailbox()
 				b.delete.texture:SetTexCoord(1, 0, 0, 1)
 				b.delete.id = i
 				b.delete:SetScript("OnClick", deleteClick)
-				B.CreateGT(b.delete, "ANCHOR_RIGHT", DELETE, "system")
+				B:AddTooltip(b.delete, "ANCHOR_RIGHT", DELETE, "system")
 			end
 		end
 	end)
