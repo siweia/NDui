@@ -652,10 +652,10 @@ local function onEvent(event, ...)
 		UpdateInt(event, ...)
 	end
 end
-B:RegisterEvent("PLAYER_LOGIN", onEvent)
+B:RegisterEvent("PLAYER_ENTERING_WORLD", onEvent)
 B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", onEvent)
 
-local onUpdate = function(self, elapsed)
+local function onUpdate(self, elapsed)
 	self.Timer = (self.Timer or 0) + elapsed
 	if self.Timer > .1 then
 		self.Timer = 0
