@@ -458,16 +458,17 @@ end
 
 -- Fix Drag Collections taint
 do
+	local done
 	local function setupMisc(event, addon)
 		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
 			CollectionsJournal:HookScript("OnShow", function()
-				if not self.init then
+				if not done then
 					if InCombatLockdown() then
 						B:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
 					else
 						B.CreateMF(CollectionsJournal)
 					end
-					self.init = true
+					done = true
 				end
 			end)
 			B:UnregisterEvent(event, setupMisc)

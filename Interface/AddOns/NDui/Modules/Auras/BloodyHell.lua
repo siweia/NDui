@@ -233,7 +233,7 @@ local function checkSpec(event)
 		B:RegisterEvent("UNIT_POWER_FREQUENT", updatePower)
 		B:RegisterEvent("RUNE_POWER_UPDATE", updateRune)
 		B:RegisterEvent("SPELL_UPDATE_COOLDOWN", updateSpells)
-		B:RegisterUnitEvent("UNIT_AURA", updateSpells, "player")
+		B:RegisterEvent("UNIT_AURA", updateSpells, "player")
 	else
 		if bar then bar:Hide() end
 		B:UnregisterEvent("UNIT_POWER_FREQUENT", updatePower)
