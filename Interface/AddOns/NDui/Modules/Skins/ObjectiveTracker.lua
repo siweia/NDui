@@ -243,7 +243,7 @@ function module:QuestTracker()
 	if IsAddOnLoaded("Aurora") then
 		local F = unpack(Aurora)
 		F.ReskinExpandOrCollapse(minimize)
-		minimize:SetSize(18, 18)
+		minimize:GetNormalTexture():SetAlpha(0)
 		minimize.plus:Hide()
 		hooksecurefunc("ObjectiveTracker_Collapse", function() minimize.plus:Show() end)
 		hooksecurefunc("ObjectiveTracker_Expand", function() minimize.plus:Hide() end)

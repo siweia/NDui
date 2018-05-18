@@ -18,11 +18,6 @@ tinsert(C.themes["Aurora"], function()
 			F.ReskinCheck(button.enableButton)
 			F.ReskinExpandOrCollapse(button.expandOrCollapseButton)
 		end
-		if LFGCollapseList[dungeonID] then
-			button.expandOrCollapseButton.plus:Show()
-		else
-			button.expandOrCollapseButton.plus:Hide()
-		end
 
 		button.enableButton:GetCheckedTexture():SetDesaturated(true)
 	end)

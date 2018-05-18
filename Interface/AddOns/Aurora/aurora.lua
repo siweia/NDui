@@ -507,29 +507,47 @@ local function clearExpandOrCollapse(f)
 	f.minus:SetVertexColor(1, 1, 1)
 end
 
-F.colourExpandOrCollapse = colourExpandOrCollapse
-F.clearExpandOrCollapse = clearExpandOrCollapse
+local function SetupTexture(self, texture)
+    if self.settingTexture then return end
+    self.settingTexture = true
+    self:SetNormalTexture("")
+
+    if texture and texture ~= "" then
+        if texture:find("Plus") then
+            self.plus:Show()
+        elseif texture:find("Minus") then
+            self.plus:Hide()
+        end
+        self.bg:Show()
+    else
+        self.bg:Hide()
+    end
+    self.settingTexture = nil
+end
 
 F.ReskinExpandOrCollapse = function(f)
-	f:SetSize(13, 13)
+    f:SetHighlightTexture("")
+    f:SetPushedTexture("")
 
-	F.Reskin(f, true)
-	f.SetNormalTexture = F.dummy
+	local bg = F.CreateBDFrame(f)
+    bg:ClearAllPoints()
+    bg:SetSize(13, 13)
+    bg:SetPoint("TOPLEFT", f:GetNormalTexture())
+    f.bg = bg
 
-	f.minus = f:CreateTexture(nil, "OVERLAY")
-	f.minus:SetSize(7, 2)
-	f.minus:SetPoint("CENTER")
-	f.minus:SetTexture(C.media.backdrop)
-	f.minus:SetVertexColor(1, 1, 1)
+    f.minus = bg:CreateTexture(nil, "OVERLAY")
+    f.minus:SetSize(7, 2)
+    f.minus:SetPoint("CENTER")
+    f.minus:SetColorTexture(1, 1, 1)
 
-	f.plus = f:CreateTexture(nil, "OVERLAY")
-	f.plus:SetSize(2, 7)
-	f.plus:SetPoint("CENTER")
-	f.plus:SetTexture(C.media.backdrop)
-	f.plus:SetVertexColor(1, 1, 1)
+    f.plus = bg:CreateTexture(nil, "OVERLAY")
+    f.plus:SetSize(2, 7)
+    f.plus:SetPoint("CENTER")
+    f.plus:SetColorTexture(1, 1, 1)
 
 	f:HookScript("OnEnter", colourExpandOrCollapse)
 	f:HookScript("OnLeave", clearExpandOrCollapse)
+    hooksecurefunc(f, "SetNormalTexture", SetupTexture)
 end
 
 F.SetBD = function(f, x, y, x2, y2)

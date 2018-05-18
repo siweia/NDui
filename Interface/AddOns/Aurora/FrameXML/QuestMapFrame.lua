@@ -84,6 +84,15 @@ tinsert(C.themes["Aurora"], function()
 	-- Scroll frame
 
 	F.ReskinScroll(DetailsFrame.ScrollFrame.ScrollBar)
+    hooksecurefunc("QuestLogQuests_Update", function()
+        for _, questLogHeader in pairs(QuestMapFrame.QuestsFrame.Contents.Headers) do
+            if not questLogHeader.styled then
+                F.ReskinExpandOrCollapse(questLogHeader)
+                questLogHeader.styled = true
+            end
+            questLogHeader:SetHighlightTexture("")
+        end
+    end)
 
 	-- Complete quest frame
 	CompleteQuestFrame:GetRegions():SetAlpha(0)
