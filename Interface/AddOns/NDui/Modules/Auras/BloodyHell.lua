@@ -89,7 +89,7 @@ local function updatePower()
 	updateVisibility()
 end
 
-local function updateRune(_, _, ...)
+local function updateRune(_, ...)
 	local rid = ...
 	local rune = bar.runes
 	local start, duration, runeReady = GetRuneCooldown(rid)
