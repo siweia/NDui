@@ -56,11 +56,11 @@ hooksecurefunc(GameTooltip, "SetHyperlink", onSetHyperlink)
 
 -- Spells
 hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
-	local id = select(11, UnitAura(...))
+	local id = select(10, UnitAura(...))
 	if id then addLine(self, id, types.spell) end
 end)
 GameTooltip:HookScript("OnTooltipSetSpell", function(self)
-	local id = select(3, self:GetSpell())
+	local id = select(2, self:GetSpell())
 	if id then addLine(self, id, types.spell) end
 end)
 hooksecurefunc("SetItemRef", function(link)
@@ -110,7 +110,7 @@ end)
 
 -- Castby
 local function SetCaster(self, unit, index, filter)
-	local _, _, _, _, _, _, _, unitCaster = UnitAura(unit, index, filter)
+	local unitCaster = select(7, UnitAura(unit, index, filter))
 	if unitCaster then
 		local name = GetUnitName(unitCaster, true)
 		local hexColor = B.HexRGB(B.UnitColor(unitCaster))
