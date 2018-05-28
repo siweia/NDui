@@ -449,7 +449,7 @@ local function AuraFilter(spellID, UnitID, index, bool)
 		for _, value in pairs(VALUE.List) do
 			if value.AuraID == spellID and value.UnitID == UnitID then
 				if bool then
-					local name, _, icon, count, _, duration, expires, caster, _, _, _, _, _, _, _, _, number = UnitBuff(value.UnitID, index)
+					local name, icon, count, _, duration, expires, caster, _, _, _, _, _, _, _, _, number = UnitBuff(value.UnitID, index)
 					if value.Combat and not InCombatLockdown() then return false end
 					if value.Caster and value.Caster:lower() ~= caster then return false end
 					if value.Stack and count and value.Stack > count then return false end
@@ -469,7 +469,7 @@ local function AuraFilter(spellID, UnitID, index, bool)
 					if value.Timeless then duration, expires = 0, 0 end
 					return KEY, value.UnitID, name, icon, count, duration, expires, index, "HELPFUL"
 				else
-					local name, _, icon, count, _, duration, expires, caster, _, _, _, _, _, _, _, _, number = UnitDebuff(value.UnitID, index)
+					local name, icon, count, _, duration, expires, caster, _, _, _, _, _, _, _, _, number = UnitDebuff(value.UnitID, index)
 					if value.Combat and not InCombatLockdown() then return false end
 					if value.Caster and value.Caster:lower() ~= caster then return false end
 					if value.Stack and count and value.Stack > count then return false end
@@ -498,14 +498,14 @@ end
 local function UpdateAura(UnitID)
 	local index = 1
     while true do
-		local name, _, _, _, _, _, _, _, _, _, spellID = UnitBuff(UnitID, index)
+		local name, _, _, _, _, _, _, _, _, spellID = UnitBuff(UnitID, index)
 		if not name then break end
 		if AuraFilter(spellID, UnitID, index, true) then UpdateAuraFrame(AuraFilter(spellID, UnitID, index, true)) end
 		index = index + 1
 	end
 	local index = 1
     while true do
-		local name, _, _, _, _, _, _, _, _, _, spellID = UnitDebuff(UnitID, index)
+		local name, _, _, _, _, _, _, _, _, spellID = UnitDebuff(UnitID, index)
 		if not name then break end
 		if AuraFilter(spellID, UnitID, index, false) then UpdateAuraFrame(AuraFilter(spellID, UnitID, index, false)) end
 		index = index + 1
