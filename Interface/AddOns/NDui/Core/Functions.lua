@@ -143,10 +143,7 @@ B.CreateCB = function(f, a)
 	hl:SetPoint("BOTTOMRIGHT", -5, 5)
 	hl:SetVertexColor(cr, cg, cb, .2)
 
-	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", 4, -4)
-	bd:SetPoint("BOTTOMRIGHT", -4, 4)
-	bd:SetFrameLevel(f:GetFrameLevel() - 1)
+	local bd = B.CreateBG(f, -4)
 	B.CreateBD(bd, a, 2)
 
 	local ch = f:GetCheckedTexture()
