@@ -1,34 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Auras")
-
-function module:SpellReminder()
-	local info = DB.ReminderBuffs[DB.MyClass]
-	if not info then return end
-
-	local iconSize, spacing = C.Auras.IconSize + 8, C.Auras.Spacing
-	local parentFrame = CreateFrame("Frame", nil, UIParent)
-	parentFrame:SetPoint("CENTER", -220, 130)
-	parentFrame:SetSize(iconSize, iconSize)
-
-	local index = 0
-	local button = {}
-	for name, data in pairs(info) do
-		local bu = CreateFrame("Frame", nil, parentFrame)
-		bu:SetSize(iconSize, iconSize)
-		bu:SetPoint("LEFT", index*(iconSize + spacing))
-		B.CreateIF(bu)
-
-		index = index + 1
-		parentFrame:SetWidth(iconSize*index)
-		button[name] = bu
-	end
-
-	local function UpdateReminder()
-
-	end
-end
-
+if not hehelele then return end
 local tab = DB.ReminderBuffs[DB.MyClass]
 if not tab then return end
 
@@ -124,7 +97,7 @@ local function OnEvent(self)
 			for buff, value in pairs(group.spells) do
 				if value == true then
 					local name = GetSpellInfo(buff)
-					local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
+					local _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 					if personal and personal == true then
 						if (name and icon and unitCaster == "player") then
 							self:Hide()
@@ -145,7 +118,7 @@ local function OnEvent(self)
 			for buff, value in pairs(group.spells) do
 				if value == true then
 					local name = GetSpellInfo(buff)
-					local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
+					local _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 					if (name and icon and unitCaster == "player") then
 						self:Show()
 						B.CreateFS(self, 14, CANCEL.." "..self.id, true, "BOTTOM", 0, -18)
