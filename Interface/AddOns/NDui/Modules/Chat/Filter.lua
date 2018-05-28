@@ -136,7 +136,7 @@ local function chatAtMe(_, _, ...)
 	end
 end
 
-hooksecurefunc("BNToastFrame_Show", function()
+hooksecurefunc(BNToastFrame, "ShowToast", function()
 	if at.checker == true then
 		BNToastFrame:SetHeight(50)
 		BNToastFrameIconTexture:SetTexCoord(.75, 1, 0, .5)
@@ -169,5 +169,5 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
 
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHIPSER", chatAtMe)
 end

@@ -3,10 +3,18 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
 
 -- Hide elements
-ChatFrameMenuButton.Show = B.Dummy
-ChatFrameMenuButton:Hide()
-QuickJoinToastButton.Show = B.Dummy
-QuickJoinToastButton:Hide()
+local buttons = {
+	ChatFrameMenuButton,
+	QuickJoinToastButton,
+	--ChatFrameChannelButton,
+	--ChatFrameToggleVoiceDeafenButton,
+	--ChatFrameToggleVoiceMuteButton,
+}
+for _, bu in next, buttons do
+	bu:Hide()
+	bu.Show = B.Dummy
+end
+
 BNToastFrame:SetClampedToScreen(true)
 BNToastFrame:SetClampRectInsets(-15, 15, 15, -15)
 BNToastFrame:HookScript("OnShow", function(self)
@@ -67,6 +75,10 @@ local function skinChat(self)
 	select(8, tab:GetRegions()):SetTexture(nil)
 	select(9, tab:GetRegions()):SetTexture(nil)
 	select(10, tab:GetRegions()):SetTexture(nil)
+
+	self.ScrollBar.Show = self.ScrollBar.Hide
+	self.ScrollToBottomButton:Hide()
+	self.ScrollToBottomButton.Show = B.Dummy
 
 	self.styled = true
 end
@@ -201,6 +213,9 @@ function module:OnLogin()
 	SetCVar("chatStyle", "classic")
 	InterfaceOptionsSocialPanelChatStyle:Hide()
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
+	CombatLogQuickButtonFrame_Custom:ClearAllPoints()
+	CombatLogQuickButtonFrame_Custom:SetPoint("TOPLEFT", ChatFrame2, "TOPLEFT")
+	CombatLogQuickButtonFrame_Custom.SetPoint = B.Dummy
 
 	-- Sticky
 	if not NDuiDB["Chat"]["Sticky"] then
