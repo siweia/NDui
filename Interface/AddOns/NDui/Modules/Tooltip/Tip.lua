@@ -340,6 +340,7 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 			QuestScrollFrame.StoryTooltip,
 			GeneralDockManagerOverflowButtonList,
 			ReputationParagonTooltip,
+			QuestScrollFrame.WarCampaignTooltip,
 		}
 		for _, f in pairs(tooltips) do
 			if f then
