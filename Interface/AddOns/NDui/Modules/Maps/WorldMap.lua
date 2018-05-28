@@ -3,31 +3,36 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Maps")
 
 function module:OnLogin()
-	local WorldMapDetailFrame, WorldMapTitleButton, WorldMapFrame, WorldMapFrameTutorialButton = _G.WorldMapDetailFrame, _G.WorldMapTitleButton, _G.WorldMapFrame, _G.WorldMapFrameTutorialButton
-	local formattext = DB.MyColor..": %.1f, %.1f"
+	local WorldMapFrame = _G.WorldMapFrame
+	local BorderFrame = WorldMapFrame.BorderFrame
+	local mapBody = WorldMapFrame:GetCanvasContainer()
+	local formatText = DB.MyColor..": %.1f, %.1f"
+	local scale = mapBody:GetEffectiveScale()
+	local width, height, mapID = mapBody:GetWidth(), mapBody:GetHeight()
 
 	-- Default Settings
-	SetCVar("lockedWorldMap", 0)
-	WorldMapFrameTutorialButton:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
-	WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"])
-	hooksecurefunc("WorldMap_ToggleSizeUp", function()
-		if InCombatLockdown() then return end
-		WorldMapFrame:SetScale(1)
-	end)
-	hooksecurefunc("WorldMap_ToggleSizeDown", function()
+	BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
+	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"]) end
+	hooksecurefunc(WorldMapFrame, "Minimize", function()
 		if InCombatLockdown() then return end
 		WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"])
+	end)
+	hooksecurefunc(WorldMapFrame, "Maximize", function()
+		if InCombatLockdown() then return end
+		WorldMapFrame:SetScale(1)
 	end)
 
 	-- Generate Coords
 	if not NDuiDB["Map"]["Coord"] then return end
-	local player = B.CreateFS(WorldMapTitleButton, 14, "", false, "TOPLEFT", 50, -6)
-	local cursor = B.CreateFS(WorldMapTitleButton, 14, "", false, "TOPLEFT", 180, -6)
-	local width, height = WorldMapDetailFrame:GetWidth(), WorldMapDetailFrame:GetHeight()
-	local scale = WorldMapDetailFrame:GetEffectiveScale()
+	local player = B.CreateFS(BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
+	local cursor = B.CreateFS(BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
+
+	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function()
+		width, height = mapBody:GetWidth(), mapBody:GetHeight()
+	end)
 
 	local function CursorCoords()
-		local left, top = WorldMapDetailFrame:GetLeft() or 0, WorldMapDetailFrame:GetTop() or 0
+		local left, top = mapBody:GetLeft() or 0, mapBody:GetTop() or 0
 		local x, y = GetCursorPosition()
 		local cx = (x/scale - left) / width
 		local cy = (top - y/scale) / height
@@ -37,16 +42,17 @@ function module:OnLogin()
 
 	local function CoordsUpdate(player, cursor)
 		local cx, cy = CursorCoords()
-		local px, py = GetPlayerMapPosition("player")
 		if cx and cy then
-			cursor:SetFormattedText(MOUSE_LABEL..formattext, 100 * cx, 100 * cy)
+			cursor:SetFormattedText(MOUSE_LABEL..formatText, 100 * cx, 100 * cy)
 		else
 			cursor:SetText(MOUSE_LABEL..DB.MyColor..": --, --")
 		end
-		if not px or px == 0 or py == 0 then
+
+		local position = C_Map.GetPlayerMapPosition(mapID, "player")
+		if not position or (position.x == 0 and position.y == 0) then
 			player:SetText(PLAYER..DB.MyColor..": --, --")
 		else
-			player:SetFormattedText(PLAYER..formattext, 100 * px, 100 * py)
+			player:SetFormattedText(PLAYER..formatText, 100 * position.x, 100 * position.y)
 		end
 	end
 
@@ -59,7 +65,9 @@ function module:OnLogin()
 		end
 	end
 
-	B:RegisterEvent("WORLD_MAP_UPDATE", function()
+	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
+		mapID = self:GetMapID()
+
 		if WorldMapFrame:IsVisible() then
 			updater.elapsed = .1
 			updater:SetScript("OnUpdate", UpdateCoords)
