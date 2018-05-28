@@ -77,7 +77,7 @@ end
 local function updateSpells()
 	-- Vulnerable
 	do
-		local name, _, _, _, _, duration, expire, caster = UnitDebuff("target", vulnurable)
+		local name, _, _, _, duration, expire, caster = UnitDebuff("target", vulnurable)
 		if name and caster == "player" then
 			bu[1]:SetAlpha(1)
 			bu[1].CD:SetCooldown(expire-duration, duration)
@@ -103,7 +103,7 @@ local function updateSpells()
 			bu[2].Count:SetText("")
 			bu[2].Icon:SetTexture(blackArrowTex)
 		elseif IsPlayerSpell(199527) then
-			local name, _, _, count, _, duration, expire = UnitDebuff("target", trueAim)
+			local name, _, count, _, duration, expire = UnitDebuff("target", trueAim)
 			if name then
 				bu[2]:SetAlpha(1)
 				bu[2].CD:SetCooldown(expire-duration, duration)
@@ -116,7 +116,7 @@ local function updateSpells()
 			end
 			bu[2].Icon:SetTexture(trueAimTex)
 		else
-			local name, _, _, count, _, duration, expire = UnitBuff("player", locknload)
+			local name, _, count, _, duration, expire = UnitBuff("player", locknload)
 			if name then
 				bu[2]:SetAlpha(1)
 				bu[2].CD:SetCooldown(expire-duration, duration)
@@ -151,7 +151,7 @@ local function updateSpells()
 
 	-- Marked Shot
 	do
-		local name, _, _, _, _, duration, expire, caster = UnitDebuff("target", hunterMark)
+		local name, _, _, _, duration, expire, caster = UnitDebuff("target", hunterMark)
 		if name and caster == "player" then
 			bu[4]:SetAlpha(1)
 			bu[4].CD:SetCooldown(expire-duration, duration)
@@ -203,7 +203,7 @@ local function updateSpells()
 			bu[5].Count:SetText("")
 			bu[5].Icon:SetTexture(piercingShotTex)
 		else
-			local name, _, _, _, _, duration, expire = UnitBuff("player", markingTarget)
+			local name, _, _, _, duration, expire = UnitBuff("player", markingTarget)
 			if name then
 				bu[5]:SetAlpha(1)
 				bu[5].CD:SetCooldown(expire-duration, duration)
@@ -249,6 +249,7 @@ local function checkSpec(event)
 end
 
 function module:Marksman()
+	if not hehelele then return end
 	if not NDuiDB["Auras"]["Marksman"] then return end
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkSpec)

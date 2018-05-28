@@ -132,8 +132,8 @@ local function updateSpells()
 	bar:SetAlpha(1)
 	local icons, boneCount = bar.icons, 0
 	if not cur then cur = UnitPower("player") end
-	local hasBone, _, _, boneStack, _, boneDur, boneExp = UnitBuff("player", spellBone)
-	local hasShield, _, _, _, _, shieldDur, shieldExp, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShield)
+	local hasBone, _, boneStack, _, boneDur, boneExp = UnitBuff("player", spellBone)
+	local hasShield, _, _, _, shieldDur, shieldExp, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShield)
 
 	if hasBone and boneStack >= 5 and IsPlayerSpell(219786) then
 		boneCount = floor(cur/40)
@@ -188,7 +188,7 @@ local function updateSpells()
 	end
 
 	do
-		local name, _, _, _, _, dur, expire, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShell)
+		local name, _, _, _, dur, expire, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShell)
 		local start, duration = GetSpellCooldown(48707)
 		icons[4].Count:SetText("")
 		if name then
@@ -207,7 +207,7 @@ local function updateSpells()
 	end
 
 	do
-		local name, _, _, _, _, dur, expire = UnitBuff("player", spellVampiric)
+		local name, _, _, _, dur, expire = UnitBuff("player", spellVampiric)
 		local start, duration = GetSpellCooldown(55233)
 		if name then
 			icons[5]:SetAlpha(1)
@@ -250,6 +250,7 @@ local function checkSpec(event)
 end
 
 function module:BloodyHell()
+	if not hehelele then return end
 	if not NDuiDB["Auras"]["BloodyHell"] then return end
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkSpec)

@@ -80,7 +80,7 @@ local function updateSpells()
 
 	-- Ironskin Brew
 	do
-		local name, _, _, _, _, dur, exp = UnitBuff("player", ironskinBrew)
+		local name, _, _, _, dur, exp = UnitBuff("player", ironskinBrew)
 		local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(115308)
 		local start, duration = GetSpellCooldown(115308)
 		bu[3].Count:SetText(charges)
@@ -116,9 +116,9 @@ local function updateSpells()
 	-- Stagger
 	do
 		local Per
-		local name, _, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", lightStagger, "", "HARMFUL")
-		if (not name) then name, _, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", moderateStagger, "", "HARMFUL") end
-		if (not name) then name, _, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", heavyStagger, "", "HARMFUL") end
+		local name, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", lightStagger, "", "HARMFUL")
+		if (not name) then name, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", moderateStagger, "", "HARMFUL") end
+		if (not name) then name, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", heavyStagger, "", "HARMFUL") end
 		if name and value > 0 and duration > 0 then
 			Per = UnitStagger("player") / UnitHealthMax("player") * 100
 			bar:SetAlpha(1)
@@ -179,6 +179,7 @@ local function checkSpec(event)
 end
 
 function module:Stagger()
+	if not hehelele then return end
 	if not NDuiDB["Auras"]["Stagger"] then return end
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkSpec)
