@@ -28,7 +28,7 @@ tinsert(C.themes["Aurora"], function()
 		end
 	end
 
-	hooksecurefunc("AlertFrame_StopOutAnimation", fixBg)
+	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
 
 	-- AlertFrames
 	hooksecurefunc(AlertFrame, "AddAlertFrame", function(self, frame)

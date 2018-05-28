@@ -514,9 +514,10 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- [[ WardrobeCollectionFrame ]]
 
-	for i = 1, 35 do
-		select(i, WardrobeCollectionFrame.ItemsCollectionFrame:GetRegions()):Hide()
-	end
+	local WardrobeCollectionFrame = WardrobeCollectionFrame
+	local ItemsCollectionFrame = WardrobeCollectionFrame.ItemsCollectionFrame
+
+	F.StripTextures(ItemsCollectionFrame)
 	F.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	F.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	F.ReskinInput(WardrobeCollectionFrameSearchBox)
@@ -531,6 +532,7 @@ C.themes["Blizzard_Collections"] = function()
 		tab.bg:SetPoint("TOPLEFT", 3, -3)
 		tab.bg:SetPoint("BOTTOMRIGHT", -3, -1)
 	end
+
 	hooksecurefunc("WardrobeCollectionFrame_SetTab", function(tabID)
 		for index = 1, 2 do
 			local tab = _G["WardrobeCollectionFrameTab"..index]
@@ -542,10 +544,10 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end)
 
-	F.ReskinArrow(WardrobeCollectionFrame.ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
-	F.ReskinArrow(WardrobeCollectionFrame.ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
-	WardrobeCollectionFrame.ItemsCollectionFrame.BGCornerTopLeft:SetAlpha(0)
-	WardrobeCollectionFrame.ItemsCollectionFrame.BGCornerTopRight:SetAlpha(0)
+	F.ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
+	F.ReskinArrow(ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
+	ItemsCollectionFrame.BGCornerTopLeft:SetAlpha(0)
+	ItemsCollectionFrame.BGCornerTopRight:SetAlpha(0)
 
 	local progressBar = WardrobeCollectionFrame.progressBar
 	progressBar:DisableDrawLayer("BACKGROUND")

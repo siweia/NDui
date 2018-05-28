@@ -70,8 +70,8 @@ tinsert(C.themes["Aurora"], function()
 		popout:HookScript("OnLeave", colourPopout)
 	end
 
-	select(11, CharacterMainHandSlot:GetRegions()):Hide()
-	select(11, CharacterSecondaryHandSlot:GetRegions()):Hide()
+	select(13, CharacterMainHandSlot:GetRegions()):Hide()
+	select(13, CharacterSecondaryHandSlot:GetRegions()):Hide()
 
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)
 		-- also fires for bag slots, we don't want that

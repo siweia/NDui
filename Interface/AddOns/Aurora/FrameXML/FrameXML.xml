@@ -9,6 +9,7 @@
 	<Script file="Fonts.lua"/>
 	<Script file="GameTooltip.lua"/>
 	<Script file="GarrisonFollowerTooltip.lua"/>
+	<Script file="HelpFrame.lua"/>
 	<Script file="InterfaceOptionsFrame.lua"/>
 	<Script file="LFDFrame.lua"/>
 	<Script file="LFGFrame.lua"/>

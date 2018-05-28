@@ -63,60 +63,33 @@ C.themes["Blizzard_TalentUI"] = function()
 		F.CreateBG(scrollChild.specIcon)
 
 		local roleIcon = scrollChild.roleIcon
-
 		roleIcon:SetTexture(C.media.roleIcons)
-
-		local left = scrollChild:CreateTexture(nil, "OVERLAY")
-		left:SetWidth(1.2)
-		left:SetTexture(C.media.backdrop)
-		left:SetVertexColor(0, 0, 0)
-		left:SetPoint("TOPLEFT", roleIcon, 3, -3)
-		left:SetPoint("BOTTOMLEFT", roleIcon, 3, 4)
-
-		local right = scrollChild:CreateTexture(nil, "OVERLAY")
-		right:SetWidth(1.2)
-		right:SetTexture(C.media.backdrop)
-		right:SetVertexColor(0, 0, 0)
-		right:SetPoint("TOPRIGHT", roleIcon, -3, -3)
-		right:SetPoint("BOTTOMRIGHT", roleIcon, -3, 4)
-
-		local top = scrollChild:CreateTexture(nil, "OVERLAY")
-		top:SetHeight(1.2)
-		top:SetTexture(C.media.backdrop)
-		top:SetVertexColor(0, 0, 0)
-		top:SetPoint("TOPLEFT", roleIcon, 3, -3)
-		top:SetPoint("TOPRIGHT", roleIcon, -3, -3)
-
-		local bottom = scrollChild:CreateTexture(nil, "OVERLAY")
-		bottom:SetHeight(1.2)
-		bottom:SetTexture(C.media.backdrop)
-		bottom:SetVertexColor(0, 0, 0)
-		bottom:SetPoint("BOTTOMLEFT", roleIcon, 3, 4)
-		bottom:SetPoint("BOTTOMRIGHT", roleIcon, -3, 4)
+		local bg = F.CreateBDFrame(roleIcon, 1)
+		bg:SetPoint("TOPLEFT", roleIcon, 3, -2)
+		bg:SetPoint("BOTTOMRIGHT", roleIcon, -3, 4)
 	end
 
 	hooksecurefunc("PlayerTalentFrame_UpdateSpecFrame", function(self, spec)
 		local playerTalentSpec = GetSpecialization(nil, self.isPet, PlayerSpecTab2:GetChecked() and 2 or 1)
 		local shownSpec = spec or playerTalentSpec or 1
-
 		local id, _, _, icon = GetSpecializationInfo(shownSpec, nil, self.isPet)
 		local scrollChild = self.spellsScroll.child
-
 		scrollChild.specIcon:SetTexture(icon)
 
 		local index = 1
 		local bonuses
+		local bonusesIncrement = 1
 		if self.isPet then
 			bonuses = {GetSpecializationSpells(shownSpec, nil, self.isPet, true)}
+			bonusesIncrement = 2
 		else
-			bonuses = SPEC_SPELLS_DISPLAY[id]
+			bonuses = C_SpecializationInfo.GetSpellsDisplay(id)
 		end
 
 		if bonuses then
-			for i = 1, #bonuses, 2 do
+			for i = 1, #bonuses, bonusesIncrement do
 				local frame = scrollChild["abilityButton"..index]
 				local _, icon = GetSpellTexture(bonuses[i])
-
 				frame.icon:SetTexture(icon)
 				frame.subText:SetTextColor(.75, .75, .75)
 
@@ -127,7 +100,6 @@ C.themes["Blizzard_TalentUI"] = function()
 
 					frame.styled = true
 				end
-
 				index = index + 1
 			end
 		end
@@ -174,36 +146,10 @@ C.themes["Blizzard_TalentUI"] = function()
 			bg:SetDrawLayer("BORDER")
 
 			local roleIcon = bu.roleIcon
-
 			roleIcon:SetTexture(C.media.roleIcons)
-
-			local left = bu:CreateTexture(nil, "OVERLAY")
-			left:SetWidth(1.2)
-			left:SetTexture(C.media.backdrop)
-			left:SetVertexColor(0, 0, 0)
-			left:SetPoint("TOPLEFT", roleIcon, 2, -2)
-			left:SetPoint("BOTTOMLEFT", roleIcon, 2, 3)
-
-			local right = bu:CreateTexture(nil, "OVERLAY")
-			right:SetWidth(1.2)
-			right:SetTexture(C.media.backdrop)
-			right:SetVertexColor(0, 0, 0)
-			right:SetPoint("TOPRIGHT", roleIcon, -2, -2)
-			right:SetPoint("BOTTOMRIGHT", roleIcon, -2, 3)
-
-			local top = bu:CreateTexture(nil, "OVERLAY")
-			top:SetHeight(1.2)
-			top:SetTexture(C.media.backdrop)
-			top:SetVertexColor(0, 0, 0)
-			top:SetPoint("TOPLEFT", roleIcon, 2, -2)
-			top:SetPoint("TOPRIGHT", roleIcon, -2, -2)
-
-			local bottom = bu:CreateTexture(nil, "OVERLAY")
-			bottom:SetHeight(1.2)
-			bottom:SetTexture(C.media.backdrop)
-			bottom:SetVertexColor(0, 0, 0)
-			bottom:SetPoint("BOTTOMLEFT", roleIcon, 2, 3)
-			bottom:SetPoint("BOTTOMRIGHT", roleIcon, -2, 3)
+			local bg = F.CreateBDFrame(roleIcon, 1)
+			bg:SetPoint("TOPLEFT", roleIcon, 2, -1)
+			bg:SetPoint("BOTTOMRIGHT", roleIcon, -3, 3)
 		end
 	end
 
@@ -287,65 +233,39 @@ C.themes["Blizzard_TalentUI"] = function()
 
 	-- PVP Talents
 
-	PlayerTalentFramePVPTalents.XPBar.Frame:Hide()
-	PlayerTalentFramePVPTalents.XPBar.Bar.Background:Hide()
-	F.CreateBDFrame(PlayerTalentFramePVPTalents.XPBar.Bar.Background)
-	F.Reskin(PlayerTalentFramePVPTalents.XPBar.PrestigeReward.Accept)
-	PlayerTalentFramePVPTalents.PortraitBackground:SetAlpha(0)
-	PlayerTalentFramePVPTalents.SmallWreath:SetAlpha(0)
-	for i = 1, 8 do
-		select(i, PlayerTalentFramePVPTalents.Talents:GetRegions()):Hide()
-	end
-	for i = 1, MAX_PVP_TALENT_TIERS do
-		local row = PlayerTalentFramePVPTalents.Talents["Tier"..i]
-		row.Bg:Hide()
-		row.TopLine:SetDesaturated(true)
-		row.TopLine:SetVertexColor(r, g, b)
-		row.BottomLine:SetDesaturated(true)
-		row.BottomLine:SetVertexColor(r, g, b)
+	F.Reskin(PlayerTalentFrameTalentsPvpTalentButton)
+	PlayerTalentFrameTalentsPvpTalentButton:SetSize(20, 20)
 
-		for j = 1, 3 do
-			local bu = row["Talent"..j]
-			bu.learnSelection:SetAlpha(0)
-			bu.knownSelection:SetAlpha(0)
-			bu.LeftCap:Hide()
-			bu.RightCap:Hide()
-			bu.Cover:SetAlpha(0)
-			bu:SetHighlightTexture("")
-			bu.Slot:SetAlpha(0)
-			bu.Icon:SetDrawLayer("ARTWORK")
-			bu.Icon:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBG(bu.Icon)
+	local talentList = PlayerTalentFrameTalentsPvpTalentFrameTalentList
+	talentList:ClearAllPoints()
+	talentList:SetPoint("LEFT", PlayerTalentFrame, "RIGHT", 2, 0)
+	F.StripTextures(talentList)
+	F.CreateBD(talentList)
+	F.CreateSD(talentList)
 
-			bu.bg = CreateFrame("Frame", nil, bu)
-			bu.bg:SetPoint("TOPLEFT", 10, 0)
-			bu.bg:SetPoint("BOTTOMRIGHT")
-			bu.bg:SetFrameLevel(bu:GetFrameLevel()-1)
-			F.CreateBD(bu.bg, .25)
+	PlayerTalentFrameTalentsPvpTalentFrameTalentListInset:SetAlpha(0)
+	F.StripTextures(PlayerTalentFrameTalentsPvpTalentFrame)
+	F.StripTextures(PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollChild)
+	F.ReskinScroll(PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollBar)
+
+	local function updatePVPTalent(self)
+		if not self.styled then
+			self.Icon:SetTexCoord(.1, .9, .1, .9)
+			F.CreateBDFrame(self.Icon)
+			F.CreateBDFrame(self, .25)
+			self:GetRegions():SetAlpha(0)
+			self:SetHighlightTexture("")
+			self.SelectedOtherOverlay:SetAlpha(0)
+			self.Selected:SetColorTexture(r, g, b, .25)
+			self.styled = true
 		end
 	end
-	hooksecurefunc("PVPTalentFrame_Update", function()
-		for i = 1, MAX_PVP_TALENT_TIERS do
-			for j = 1, 3 do
-				local bu = PlayerTalentFramePVPTalents.Talents["Tier"..i]["Talent"..j]
-				if bu.knownSelection:IsShown() then
-					bu.bg:SetBackdropColor(r, g, b, .25)
-				else
-					bu.bg:SetBackdropColor(0, 0, 0, .25)
-				end
-			end
-		end
-	end)
 
-	-- PrestigeLevelDialog
+	for i = 1, 10 do
+		local bu = _G["PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameButton"..i]
+		hooksecurefunc(bu, "Update", updatePVPTalent)
+	end
 
-	local dialog = PVPTalentPrestigeLevelDialog
-	F.ReskinPortraitFrame(dialog)
-	F.Reskin(dialog.Accept)
-	F.Reskin(dialog.Cancel)
-	F.ReskinClose(dialog.CloseButton)
-	dialog.MaxLevelReward.Frame:SetAlpha(0)
-	dialog.MaxLevelReward.Icon:SetTexCoord(.08, .92, .08, .92)
-	dialog.MaxLevelReward.Icon.SetTexCoord = F.dummy
-	F.CreateBDFrame(dialog.MaxLevelReward.Icon)
+	local bu = select(4, PlayerTalentFrameTalentsPvpTalentFrameTalentList:GetChildren())
+	F.Reskin(bu)
 end

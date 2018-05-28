@@ -65,7 +65,7 @@ tinsert(C.themes["Aurora"], function()
 			end
 		end
 	end)
-
+--[[
 	hooksecurefunc(ExtendedUI["CAPTUREPOINT"], "update", function(id)
 		local bar = _G["WorldStateCaptureBar"..id]
 		if not (bar.newLeftFaction and bar.newRightFaction) then return end
@@ -81,5 +81,5 @@ tinsert(C.themes["Aurora"], function()
 			bar.newRightFaction:SetDesaturated(false)
 			bar.newRightFaction:SetVertexColor(1, 1, 1)
 		end
-	end)
+	end)]]
 end)

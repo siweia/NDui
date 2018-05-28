@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: |cff0080ffAurora|r
 ## Title-zhCN: |cff0080ffAurora|r 材质美化
 ## Title-zhTW: |cff0080ffAurora|r 材質美化

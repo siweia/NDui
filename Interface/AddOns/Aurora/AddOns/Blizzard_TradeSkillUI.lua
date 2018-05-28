@@ -56,16 +56,16 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 		recipe.Tabs[2].bg:SetBackdropColor(r, g, b, .2)
 	end)
 
-    hooksecurefunc(recipe, "RefreshDisplay", function(self)
-        for i = 1, #self.buttons do
-            local tradeSkillButton = self.buttons[i]
-            if not tradeSkillButton.styled then
-                F.ReskinExpandOrCollapse(tradeSkillButton)
-                tradeSkillButton.styled = true
-            end
-            tradeSkillButton:SetHighlightTexture("")
-        end
-    end)
+	hooksecurefunc(recipe, "RefreshDisplay", function(self)
+		for i = 1, #self.buttons do
+			local tradeSkillButton = self.buttons[i]
+			if not tradeSkillButton.styled then
+				F.ReskinExpandOrCollapse(tradeSkillButton)
+				tradeSkillButton.styled = true
+			end
+			tradeSkillButton:SetHighlightTexture("")
+		end
+	end)
 
 	-- Recipe Details
 

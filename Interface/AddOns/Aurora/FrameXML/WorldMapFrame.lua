@@ -3,37 +3,26 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["Aurora"], function()
 	local r, g, b = C.r, C.g, C.b
 
-	local WorldMapFrame = WorldMapFrame
+	local WorldMapFrame = _G.WorldMapFrame
 	local BorderFrame = WorldMapFrame.BorderFrame
 
-	WorldMapFrame.UIElementsFrame.CloseQuestPanelButton:GetRegions():Hide()
-	WorldMapFrame.UIElementsFrame.OpenQuestPanelButton:GetRegions():Hide()
-	BorderFrame.Bg:Hide()
-	select(2, BorderFrame:GetRegions()):Hide()
-	BorderFrame.portrait:SetTexture("")
-	BorderFrame.portraitFrame:SetTexture("")
-	for i = 5, 7 do
-		select(i, BorderFrame:GetRegions()):SetAlpha(0)
-	end
-	BorderFrame.TopTileStreaks:SetTexture("")
-	for i = 10, 14 do
-		select(i, BorderFrame:GetRegions()):Hide()
-	end
-	BorderFrame.ButtonFrameEdge:Hide()
-	BorderFrame.InsetBorderTop:Hide()
-	BorderFrame.Inset.Bg:Hide()
-	BorderFrame.Inset:DisableDrawLayer("BORDER")
+	F.StripTextures(WorldMapFrame)
+	F.StripTextures(BorderFrame)
+	WorldMapFramePortrait:SetAlpha(0)
+	WorldMapFramePortraitFrame:SetAlpha(0)
+	F.SetBD(WorldMapFrame, 1, 0, -3, 2)
+	WorldMapFrameTopLeftCorner:SetAlpha(0)
+	BorderFrame.Tutorial.Ring:Hide()
+	F.ReskinClose(WorldMapFrameCloseButton)
 
-	F.SetBD(BorderFrame, 1, 0, -3, 2)
-	F.ReskinClose(BorderFrame.CloseButton)
-	F.ReskinArrow(WorldMapFrame.UIElementsFrame.CloseQuestPanelButton, "left")
-	F.ReskinArrow(WorldMapFrame.UIElementsFrame.OpenQuestPanelButton, "right")
-	F.ReskinDropDown(WorldMapLevelDropDown)
-	F.ReskinNavBar(WorldMapFrameNavBar)
+	F.Reskin(WorldMapFrameHomeButton)
+	WorldMapFrameHomeButtonLeft:Hide()
+	F.StripTextures(WorldMapFrame.NavBar)
+	WorldMapFrame.NavBar.overlay:Hide()
 
-	BorderFrame.CloseButton:SetPoint("TOPRIGHT", -9, -6)
-
-	WorldMapLevelDropDown:SetPoint("TOPLEFT", -14, 2)
+	F.ReskinDropDown(WorldMapFrame.overlayFrames[1])
+	WorldMapFrame.overlayFrames[2].Border:Hide()
+	WorldMapFrame.overlayFrames[2].Background:Hide()
 
 	-- [[ Size up / down buttons ]]
 
@@ -64,19 +53,19 @@ tinsert(C.themes["Aurora"], function()
 		for i = 1, 8 do
 			local tex = button:CreateTexture()
 			tex:SetColorTexture(1, 1, 1)
-			tex:SetSize(1, 1)
+			tex:SetSize(2, 2)
 			tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
 			tinsert(button.pixels, tex)
 		end
 
 		local hline = button:CreateTexture()
 		hline:SetColorTexture(1, 1, 1)
-		hline:SetSize(7, 1)
+		hline:SetSize(7, 2)
 		tinsert(button.pixels, hline)
 
 		local vline = button:CreateTexture()
 		vline:SetColorTexture(1, 1, 1)
-		vline:SetSize(1, 7)
+		vline:SetSize(2, 7)
 		tinsert(button.pixels, vline)
 
 		if button == WorldMapFrame.BorderFrame.MaximizeMinimizeFrame.MaximizeButton then
@@ -90,40 +79,4 @@ tinsert(C.themes["Aurora"], function()
 		button:SetScript("OnEnter", colourArrow)
 		button:SetScript("OnLeave", clearArrow)
 	end
-
-	-- [[ Misc ]]
-
-	WorldMapFrameTutorialButton.Ring:Hide()
-	WorldMapFrameTutorialButton:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, 12)
-
-	do
-		local topLine = WorldMapFrame.UIElementsFrame:CreateTexture()
-		topLine:SetColorTexture(0, 0, 0)
-		topLine:SetHeight(1)
-		topLine:SetPoint("TOPLEFT", 0, 1)
-		topLine:SetPoint("TOPRIGHT", 1, 1)
-
-		local rightLine = WorldMapFrame.UIElementsFrame:CreateTexture()
-		rightLine:SetColorTexture(0, 0, 0)
-		rightLine:SetWidth(1)
-		rightLine:SetPoint("BOTTOMRIGHT", 1, 0)
-		rightLine:SetPoint("TOPRIGHT", 1, 1)
-	end
-
-	-- [[ Tracking options ]]
-
-	local TrackingOptions = WorldMapFrame.UIElementsFrame.TrackingOptionsButton
-
-	TrackingOptions:GetRegions():Hide()
-	TrackingOptions.Background:Hide()
-	TrackingOptions.IconOverlay:SetTexture("")
-	TrackingOptions.Button.Border:Hide()
-
-	-- Battlefield Minimap
-
-	for i = 1, 9 do
-		select(i, OpacityFrame:GetRegions()):Hide()
-	end
-	F.SetBD(OpacityFrame)
-	F.ReskinSlider(OpacityFrameSlider)
 end)

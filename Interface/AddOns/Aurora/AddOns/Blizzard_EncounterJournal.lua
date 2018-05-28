@@ -508,10 +508,10 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		if not button.styled then
 			button.Border:SetAlpha(0)
 			button.Icon:SetTexCoord(.08, .92, .08, .92)
-			button.bg = F.CreateBDFrame(button.Icon)
 
-			local _, _, quality = GetItemInfo(button.itemID)
+			local quality = select(3, GetItemInfo(button.itemID))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+			button.bg = F.CreateBDFrame(button.Icon)
 			button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 
 			button.styled = true

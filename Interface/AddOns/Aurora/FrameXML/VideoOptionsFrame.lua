@@ -41,20 +41,14 @@ tinsert(C.themes["Aurora"], function()
 		F.CreateBD(AudioOptionsSoundPanelPlayback, .25)
 		F.CreateBD(AudioOptionsSoundPanelHardware, .25)
 		F.CreateBD(AudioOptionsSoundPanelVolume, .25)
-		F.CreateBD(AudioOptionsVoicePanelTalking, .25)
-		F.CreateBD(AudioOptionsVoicePanelBinding, .25)
-		F.CreateBD(AudioOptionsVoicePanelListening, .25)
 
 		AudioOptionsSoundPanelPlaybackTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelPlayback, "TOPLEFT", 5, 2)
 		AudioOptionsSoundPanelHardwareTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelHardware, "TOPLEFT", 5, 2)
 		AudioOptionsSoundPanelVolumeTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelVolume, "TOPLEFT", 5, 2)
-		AudioOptionsVoicePanelTalkingTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelTalking, "TOPLEFT", 5, 2)
-		AudioOptionsVoicePanelListeningTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
 
 		local dropdowns = {
 			"Display_DisplayModeDropDown",
 			"Display_ResolutionDropDown",
-			"Display_RefreshDropDown",
 			"Display_PrimaryMonitorDropDown",
 			"Display_AntiAliasingDropDown",
 			"Display_VerticalSyncDropDown",
@@ -82,26 +76,32 @@ tinsert(C.themes["Aurora"], function()
 			"RaidGraphics_OutlineModeDropDown",
 			"Advanced_BufferingDropDown",
 			"Advanced_LagDropDown",
-			"Advanced_HardwareCursorDropDown",
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",
 			"Advanced_ResampleQualityDropDown",
 			"Advanced_PhysicsInteractionDropDown",
+			"Advanced_AdapterDropDown",
 			"AudioOptionsSoundPanelHardwareDropDown",
 			"AudioOptionsSoundPanelSoundChannelsDropDown",
 			"AudioOptionsSoundPanelSoundCacheSizeDropDown",
-			"AudioOptionsVoicePanelInputDeviceDropDown",
-			"AudioOptionsVoicePanelChatModeDropDown",
-			"AudioOptionsVoicePanelOutputDeviceDropDown",
+			"AudioOptionsVoicePanelOutputDeviceDropdown",
+			"AudioOptionsVoicePanelMicDeviceDropdown",
+			"AudioOptionsVoicePanelChatModeDropdown",
 			"InterfaceOptionsLanguagesPanelLocaleDropDown",
 			"InterfaceOptionsLanguagesPanelAudioLocaleDropDown"
 		}
 		for i = 1, #dropdowns do
-			F.ReskinDropDown(_G[dropdowns[i]])
+			local dropdown = _G[dropdowns[i]]
+			if not dropdown then
+				print(dropdowns[i], "not found.")
+			else
+				F.ReskinDropDown(dropdown)
+			end
 		end
 
 		local sliders = {
+			"Display_RenderScaleSlider",
 			"Graphics_Quality",
 			"Graphics_ViewDistanceSlider",
 			"Graphics_EnvironmentalDetailSlider",
@@ -113,21 +113,25 @@ tinsert(C.themes["Aurora"], function()
 			"Advanced_UIScaleSlider",
 			"Advanced_MaxFPSSlider",
 			"Advanced_MaxFPSBKSlider",
-			"Advanced_RenderScaleSlider",
 			"Advanced_GammaSlider",
+			"Advanced_ContrastSlider",
+			"Advanced_BrightnessSlider",
 			"AudioOptionsSoundPanelMasterVolume",
 			"AudioOptionsSoundPanelSoundVolume",
 			"AudioOptionsSoundPanelMusicVolume",
 			"AudioOptionsSoundPanelAmbienceVolume",
 			"AudioOptionsSoundPanelDialogVolume",
-			"AudioOptionsVoicePanelMicrophoneVolume",
-			"AudioOptionsVoicePanelSpeakerVolume",
-			"AudioOptionsVoicePanelSoundFade",
-			"AudioOptionsVoicePanelMusicFade",
-			"AudioOptionsVoicePanelAmbienceFade"
+			"AudioOptionsVoicePanelVoiceChatVolume",
+			"AudioOptionsVoicePanelVoiceChatMicVolume",
+			"AudioOptionsVoicePanelVoiceChatMicSensitivity",
 		}
 		for i = 1, #sliders do
-			F.ReskinSlider(_G[sliders[i]])
+			local slider = _G[sliders[i]]
+			if not slider then
+				print(sliders[i], "not found.")
+			else
+				F.ReskinSlider(slider)
+			end
 		end
 
 		local checkboxes = {
@@ -136,7 +140,7 @@ tinsert(C.themes["Aurora"], function()
 			"Advanced_MaxFPSCheckBox",
 			"Advanced_MaxFPSBKCheckBox",
 			"Advanced_ShowHDModels",
-			"Advanced_DesktopGamma",
+			"Advanced_LockCursorToScreen",
 			"NetworkOptionsPanelOptimizeSpeed",
 			"NetworkOptionsPanelUseIPv6",
 			"NetworkOptionsPanelAdvancedCombatLogging",
@@ -154,18 +158,31 @@ tinsert(C.themes["Aurora"], function()
 			"AudioOptionsSoundPanelReverb",
 			"AudioOptionsSoundPanelHRTF",
 			"AudioOptionsSoundPanelEnableDSPs",
-			"AudioOptionsVoicePanelEnableVoice",
-			"AudioOptionsVoicePanelEnableMicrophone",
-			"AudioOptionsVoicePanelPushToTalkSound"
 		}
 		for i = 1, #checkboxes do
-			F.ReskinCheck(_G[checkboxes[i]])
+			local checkbox = _G[checkboxes[i]]
+			if not checkbox then
+				print(checkboxes[i], "not found.")
+			else
+				F.ReskinCheck(checkbox)
+			end
 		end
 
-		F.Reskin(RecordLoopbackSoundButton)
-		F.Reskin(PlayLoopbackSoundButton)
-		F.Reskin(AudioOptionsVoicePanelChatMode1KeyBindingButton)
+		local testInputDevie = AudioOptionsVoicePanelTestInputDevice
+		F.Reskin(testInputDevie.ToggleTest)
+		F.StripTextures(testInputDevie.VUMeter)
+		testInputDevie.VUMeter.Status:SetStatusBarTexture(C.media.backdrop)
+		local bg = F.CreateBDFrame(testInputDevie.VUMeter, .3)
+		bg:SetPoint("TOPLEFT", 4, -4)
+		bg:SetPoint("BOTTOMRIGHT", -4, 4)
 
 		styledOptions = true
+	end)
+
+	hooksecurefunc("AudioOptionsVoicePanel_InitializeCommunicationModeUI", function(self)
+		if not self.styled then
+			F.Reskin(self.PushToTalkKeybindButton)
+			self.styled = true
+		end
 	end)
 end)
