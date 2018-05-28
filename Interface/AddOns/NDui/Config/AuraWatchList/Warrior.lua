@@ -6,7 +6,6 @@ local module = B:GetModule("AurasTable")
 local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 32216, UnitID = "player"},	-- 胜利
-		{AuraID = 122510, UnitID = "player"},	-- 最后通牒
 		{AuraID = 202602, UnitID = "player"},	-- 投入战斗
 		{AuraID = 200954, UnitID = "player"},	-- 战争疤痕
 		{AuraID = 202573, UnitID = "player"},	-- 报复
@@ -39,7 +38,6 @@ local list = {
 		{AuraID = 23920, UnitID = "player"},	-- 法术反射
 		{AuraID = 18499, UnitID = "player"},	-- 狂暴之怒
 		{AuraID = 188783, UnitID = "player"},	-- 维库之力
-		{AuraID = 204488, UnitID = "player"},	-- 怒火聚焦
 		{AuraID = 207982, UnitID = "player"},	-- 怒火聚焦
 		{AuraID = 132404, UnitID = "player"},	-- 盾牌格挡
 		{AuraID = 202289, UnitID = "player"},	-- 狂暴复兴

@@ -594,7 +594,7 @@ local list = {
 		{AuraID = 1022, UnitID = "target"},		-- 保护祝福
 		{AuraID = 19574, UnitID = "target"},	-- 狂野怒火
 		{AuraID = 23920, UnitID = "target"},	-- 法术反射
-		{AuraID = 31842, UnitID = "target"},	-- 复仇之怒 神圣
+		--{AuraID = 31842, UnitID = "target"},	-- 复仇之怒 神圣
 		{AuraID = 31884, UnitID = "target"},	-- 复仇之怒 惩戒
 		{AuraID = 33206, UnitID = "target"},	-- 痛苦压制
 		{AuraID = 45438, UnitID = "target"},	-- 寒冰屏障

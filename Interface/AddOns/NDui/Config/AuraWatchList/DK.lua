@@ -46,7 +46,6 @@ local list = {
 		{AuraID = 194844, UnitID = "player"},	-- 白骨风暴
 		{AuraID = 207127, UnitID = "player"},	-- 饥饿符文刃
 		{AuraID = 207256, UnitID = "player"},	-- 湮灭
-		{AuraID = 207290, UnitID = "player"},	-- 邪恶狂乱
 		{AuraID = 207319, UnitID = "player"},	-- 血肉之盾
 		{AuraID = 215711, UnitID = "player"},	-- 夺魂
 		{AuraID = 218100, UnitID = "player"},	-- 亵渎

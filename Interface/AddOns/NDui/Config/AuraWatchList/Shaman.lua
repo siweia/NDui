@@ -32,7 +32,6 @@ local list = {
 		{AuraID = 79206, UnitID = "player"},	-- 灵魂行者的恩赐
 		{AuraID = 73685, UnitID = "player"},	-- 生命释放
 		{AuraID = 58875, UnitID = "player"},	-- 幽魂步
-		{AuraID = 16246, UnitID = "player"},	-- 元素集中
 		{AuraID = 77762, UnitID = "player"},	-- 熔岩奔腾
 		{AuraID = 208416, UnitID = "player"},	-- 十万火急
 		{AuraID = 207527, UnitID = "player"},	-- 迷雾幽灵
@@ -51,7 +50,6 @@ local list = {
 		{AuraID = 199055, UnitID = "player"},	-- 毁灭释放
 		{AuraID = 201898, UnitID = "player"},	-- 风歌
 		{AuraID = 215785, UnitID = "player"},	-- 灼热之手
-		{AuraID = 215864, UnitID = "player"},	-- 降雨
 		{AuraID = 191877, UnitID = "player"},	-- 漩涡之力
 		{AuraID = 205495, UnitID = "player"},	-- 风暴守护者
 		{AuraID = 118522, UnitID = "player"},	-- 元素冲击 爆击

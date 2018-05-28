@@ -20,6 +20,7 @@ local list = {
 		{AuraID = 160007, UnitID = "player"},	-- 上升气流（双头龙）
 		{AuraID = 227272, UnitID = "player"},	-- 灵巧打击
 		{AuraID = 194386, UnitID = "player", Combat = true},	-- 乱射
+		{AuraID = 164273, UnitID = "player", Combat = true},	-- 独来独往
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 3355, UnitID = "target", Caster = "player"},		-- 冰冻陷阱
@@ -32,10 +33,7 @@ local list = {
 		{AuraID = 118253, UnitID = "target", Caster = "player"},	-- 毒蛇钉刺
 		{AuraID = 194599, UnitID = "target", Caster = "player"},	-- 黑箭
 		{AuraID = 131894, UnitID = "target", Caster = "player"},	-- 夺命黑鸦
-		{AuraID = 206505, UnitID = "target", Caster = "player"},	-- 夺命黑鸦
-		{AuraID = 187131, UnitID = "target", Caster = "player"},	-- 易伤
 		{AuraID = 199803, UnitID = "target", Caster = "player"},	-- 精确瞄准
-		{AuraID = 185365, UnitID = "target", Caster = "player"},	-- 猎人印记
 		{AuraID = 185855, UnitID = "target", Caster = "player"},	-- 裂痕
 		{AuraID = 195645, UnitID = "target", Caster = "player"},	-- 摔绊
 		{AuraID = 194279, UnitID = "target", Caster = "player"},	-- 铁蒺藜
@@ -48,6 +46,7 @@ local list = {
 		{AuraID = 206755, UnitID = "target", Caster = "player"},	-- 游侠之网
 		{AuraID = 224729, UnitID = "target", Caster = "player"},	-- 爆裂射击
 		{AuraID = 213691, UnitID = "target", Caster = "player"},	-- 驱散射击
+		{AuraID = 257284, UnitID = "target"},						-- 猎人印记
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 19574, UnitID = "player"},	-- 狂野怒火
@@ -60,7 +59,6 @@ local list = {
 		{AuraID = 207094, UnitID = "pet"},		-- 泰坦之雷
 		{AuraID = 217200, UnitID = "pet"},		-- 凶猛狂暴
 		{AuraID = 193526, UnitID = "player"},	-- 百发百中
-		{AuraID = 223138, UnitID = "player"},	-- 标记目标
 		{AuraID = 193530, UnitID = "player"},	-- 野性守护
 		{AuraID = 185791, UnitID = "player"},	-- 荒野呼唤
 		{AuraID = 190931, UnitID = "player"},	-- 猫鼬之怒
@@ -75,6 +73,11 @@ local list = {
 		{AuraID = 246153, UnitID = "player"},	-- 精准，射击4T20
 		{AuraID = 203155, UnitID = "player"},	-- 狙击
 		{AuraID = 235712, UnitID = "player", Combat = true},	-- 回转稳定，橙手
+		{AuraID = 264735, UnitID = "player"},	-- 优胜劣汰
+		{AuraID = 272790, UnitID = "pet"},		-- 狂暴
+		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
+		{AuraID = 260395, UnitID = "player"},	-- 致命射击
+		{AuraID = 269502, UnitID = "player"},	-- 致命射击
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱
@@ -82,8 +85,6 @@ local list = {
 		{AuraID = 118253, UnitID = "focus", Caster = "player"},	-- 毒蛇钉刺
 		{AuraID = 194599, UnitID = "focus", Caster = "player"},	-- 黑箭
 		{AuraID = 131894, UnitID = "focus", Caster = "player"},	-- 夺命黑鸦
-		{AuraID = 206505, UnitID = "focus", Caster = "player"},	-- 夺命黑鸦
-		{AuraID = 187131, UnitID = "focus", Caster = "player"},	-- 易伤
 		{AuraID = 199803, UnitID = "focus", Caster = "player"},	-- 精确瞄准
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组

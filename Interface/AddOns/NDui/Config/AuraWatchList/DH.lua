@@ -38,7 +38,6 @@ local list = {
 		{AuraID = 247938, UnitID = "player"},	-- 混乱之刃
 		{AuraID = 188499, UnitID = "player"},	-- 刃舞
 		{AuraID = 210152, UnitID = "player"},	-- 刃舞
-		{AuraID = 218256, UnitID = "player"},	-- 强化结界
 		{AuraID = 207693, UnitID = "player"},	-- 灵魂盛宴
 		{AuraID = 203819, UnitID = "player"},	-- 恶魔尖刺
 		{AuraID = 212988, UnitID = "player"},	-- 痛苦使者
