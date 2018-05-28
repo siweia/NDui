@@ -131,7 +131,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", reskinDebuffs)
 
 local function updateDebuffBorder(buttonName, index, filter)
 	local unit = PlayerFrame.unit
-	local name, _, _, _, debuffType = UnitAura(unit, index, filter)
+	local name, _, _, debuffType = UnitAura(unit, index, filter)
 	if not name then return end
 	local bu = _G[buttonName..index]
 	if not (bu and bu.Shadow) then return end
