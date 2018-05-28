@@ -16,6 +16,7 @@ local linktypes = {
 	keystone = true,
 }
 
+local sectionInfo
 local function OnHyperlinkEnter(frame, link, ...)
 	local linktype = link:match("^([^:]+)")
 	if linktype and linktype == "battlepet" then
@@ -33,7 +34,8 @@ local function OnHyperlinkEnter(frame, link, ...)
 			name, description = EJ_GetEncounterInfo(id)
 			idString = BOSS.."ID:"
 		elseif idType == "2" then
-			name, description, _, icon = EJ_GetSectionInfo(id)
+			sectionInfo = C_EncounterJournal.GetSectionInfo(id)
+			name, description, icon = sectionInfo.title, sectionInfo.description, sectionInfo.abilityIcon
 			name = icon and "|T"..icon..":20:20:0:0:64:64:5:59:5:59:20|t "..name or name
 			idString = L["Section"].."ID:"
 		end
