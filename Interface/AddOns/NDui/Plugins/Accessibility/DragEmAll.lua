@@ -14,6 +14,7 @@ local frames = {
 	-- Blizz Frames
 	["AddonList"] = false,
 	["AudioOptionsFrame"] = false,
+	["ChannelFrame"] = false,
 	["DressUpFrame"] = false,
 	["FriendsFrame"] = false,
 	["GameMenuFrame"] = false,
@@ -48,6 +49,7 @@ local frames = {
 	["TutorialFrame"] = false,
 	["VideoOptionsFrame"] = false,
 	["WorldStateScoreFrame"] = false,
+	["WorldMapFrame"] = false,
 
 	-- Other AddOns
 	["BaudErrorFrame"] = false,
@@ -76,6 +78,7 @@ local lodFrames = {
 	Blizzard_Calendar			= { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true },
 	Blizzard_ChallengesUI		= { ["ChallengesKeystoneFrame"] = false },
 	Blizzard_Collections		= { ["WardrobeFrame"] = false, ["WardrobeOutfitEditFrame"] = false },
+	Blizzard_Communities		= { ["CommunitiesFrame"] = false },
 	Blizzard_EncounterJournal	= { ["EncounterJournal"] = false },
 	Blizzard_FlightMap			= { ["FlightMapFrame"] = false },
 	Blizzard_GarrisonUI			= { ["GarrisonLandingPage"] = false, ["GarrisonMissionFrame"] = false, ["GarrisonBuildingFrame"] = false, ["GarrisonRecruiterFrame"] = false, ["GarrisonRecruitSelectFrame"] = false, ["GarrisonCapacitiveDisplayFrame"] = false, ["GarrisonShipyardFrame"] = false,},
