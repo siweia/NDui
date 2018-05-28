@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+if not hehelele then return end
 -----------------------------------------------------------------
 -- Fog of war on World Map(module from LeatrixPlus by Leatrix)
 -----------------------------------------------------------------
@@ -133,7 +134,8 @@ local zones = {
 }
 
 -- Initialise counters
-local WorldMapDetailFrame, WorldMapTitleButton, WorldMapFrame = _G.WorldMapDetailFrame, _G.WorldMapTitleButton, _G.WorldMapFrame
+local WorldMapFrame = _G.WorldMapFrame
+local mapBody = WorldMapFrame:GetCanvasContainer()
 local createdtex, texcount = 0, 0
 -- Create local texture table
 local MapTex = {}
@@ -167,7 +169,7 @@ local function RefMap()
 		-- Create the textures
 		if neededtex > createdtex then
 			for j = createdtex + 1, neededtex do
-				MapTex[j] = WorldMapDetailFrame:CreateTexture(nil, "ARTWORK")
+				MapTex[j] = mapBody:CreateTexture(nil, "ARTWORK")
 			end
 			createdtex = neededtex
 		end
@@ -212,7 +214,7 @@ local function RefMap()
 				texture:SetHeight(texturepxheight)
 				texture:SetTexCoord(0, texturepxwidth / texturefilewidth, 0, texturepxheight / texturefileheight)
 				texture:ClearAllPoints()
-				texture:SetPoint("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", offsetx + (256 * (k - 1)), -(offsety + (256 * (j - 1))))
+				texture:SetPoint("TOPLEFT", mapBody, "TOPLEFT", offsetx + (256 * (k - 1)), -(offsety + (256 * (j - 1))))
 				texture:SetTexture(texturename..(((j - 1) * numtexwide) + k))
 				texture:Show()
 			end
@@ -221,9 +223,10 @@ local function RefMap()
 end
 
 -- Create checkbox
-local frame = CreateFrame("CheckButton", "FogCheckBox", WorldMapTitleButton, "OptionsCheckButtonTemplate")
-frame:SetPoint("TOPRIGHT", WorldMapTitleButton, -230, -2)
+local frame = CreateFrame("CheckButton", "FogCheckBox", WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
+frame:SetPoint("TOPRIGHT", -250, 0)
 frame:SetSize(26, 26)
+frame:SetHitRectInsets(0, -10, 0, 0)
 B.CreateCB(FogCheckBox)
 frame.text = B.CreateFS(frame, 14, L["Remove Fog"], false, "LEFT", 25, 0)
 
@@ -247,7 +250,7 @@ frame:SetScript("OnShow", function()
 end)
 
 -- Update map
-hooksecurefunc("WorldMapFrame_Update", function()
+hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
 	if WorldMapFrame:IsShown() and NDuiDB["Map"]["HideFog"] then
 		RefMap()
 	end
