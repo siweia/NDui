@@ -8,7 +8,7 @@ local info = module:RegisterInfobar(C.Infobar.TimePos)
 info.onUpdate = function(self, elapsed)
 	self.timer = (self.timer or 0) + elapsed
 	if self.timer > 1 then
-		local color = CalendarGetNumPendingInvites() > 0 and "|cffFF0000" or ""
+		local color = C_Calendar.GetNumPendingInvites() > 0 and "|cffFF0000" or ""
 
 		local hour, minute
 		if GetCVarBool("timeMgrUseLocalTime") then
@@ -68,15 +68,16 @@ local tanaan = {
 
 -- Check Invasion Status
 local zonePOIIds = {5175, 5210, 5177, 5178}
-local zoneNames = {1015, 1018, 1024, 1017}
+local zoneNames = {630, 641, 650, 634}
 local timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}
 local baseTime = 1517274000 -- 1/30 9:00 [1]
 
 local function onInvasion()
 	for i = 1, #zonePOIIds do
-		local timeLeftMinutes = C_WorldMap.GetAreaPOITimeLeft(zonePOIIds[i])
+		local timeLeftMinutes = C_AreaPoiInfo.GetAreaPOITimeLeft(zonePOIIds[i])
 		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then
-			return timeLeftMinutes, GetMapNameByID(zoneNames[i])
+			local mapInfo = C_Map.GetMapInfo(zoneNames[i])
+			return timeLeftMinutes, mapInfo.name
 		end
 	end
 end
@@ -85,7 +86,8 @@ local function whereToGo(nextTime)
 	local elapsed = nextTime - baseTime
 	local round = mod(floor(elapsed / 66600) + 1, 12)
 	if round == 0 then round = 12 end
-	return GetMapNameByID(zoneNames[timeTable[round]])
+	local mapInfo = C_Map.GetMapInfo(zoneNames[timeTable[round]])
+	return mapInfo.name
 end
 
 info.onEnter = function(self)
@@ -94,7 +96,8 @@ info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint("BOTTOMRIGHT", UIParent, -15, 30)
 	GameTooltip:ClearLines()
-	local w, m, d, y = CalendarGetDate()
+	local today = C_Calendar.GetDate()
+	local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
 	GameTooltip:AddLine(format(FULLDATE, CALENDAR_WEEKDAY_NAMES[w], months[m], d, y), 0,.6,1)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(L["Local Time"], GameTime_GetLocalTime(true), .6,.8,1 ,1,1,1)

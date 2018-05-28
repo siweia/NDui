@@ -37,10 +37,11 @@ info.onEvent = function(self)
 	self.text:SetTextColor(r, g, b)
 end
 
+local mapInfo
 local function isInvasionPoint()
-	local mapName = GetMapInfo()
+	mapInfo = C_Map.GetMapInfo(C_Map.GetBestMapForUnit("player"))
 	local invaName = C_Scenario.GetInfo()
-	if mapName and mapName:match("InvasionPoint") and invaName then
+	if mapInfo and mapInfo.name:match("InvasionPoint") and invaName then
 		return true
 	end
 end
@@ -49,15 +50,18 @@ info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
 
-	if GetPlayerMapPosition("player") then
+	local position = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
+	if position then
 		self:SetScript("OnUpdate", function(self, elapsed)
 			self.timer = (self.timer or 0) + elapsed
 			if self.timer > .1 then
-				coordX, coordY = GetPlayerMapPosition("player")
+				coordX, coordY = position.x, position.y
 				self:GetScript("OnEnter")(self)
 				self.timer = 0
 			end
 		end)
+	else
+		coordX, coordY = 0, 0
 	end
 	GameTooltip:AddLine(format("%s |cffffffff(%s)", zone, formatCoords()), 0,.6,1)
 

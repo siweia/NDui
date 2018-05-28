@@ -57,7 +57,7 @@ info.onEnter = function(self)
 			end
 		end
 	end
-
+--[[
 	if UnitLevel("player") == 110 then
 		local _, _, texture = GetCurrencyInfo(104)
 		GameTooltip:AddLine(" ")
@@ -71,7 +71,7 @@ info.onEnter = function(self)
 				end
 			end
 		end
-	end
+	end]]
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["SpecPanel"].." ", 1,1,1, .6,.8,1)
@@ -81,12 +81,12 @@ end
 
 info.onLeave = function() GameTooltip:Hide() end
 
-local function clickFunc(i, isLoot, isPet)
+local function clickFunc(i, isLoot)
 	if not i then return end
 	if isLoot then
 		SetLootSpecialization(i)
 	else
-		SetSpecialization(i, isPet)
+		SetSpecialization(i)
 	end
 	DropDownList1:Hide()
 end
@@ -118,29 +118,6 @@ info.onMouseUp = function(self, btn)
 			else
 				specList[i] = nil
 				lootList[i+1] = nil
-			end
-		end
-
-		do
-			local _, myclass = UnitClass("player")
-			if myclass == "HUNTER" and IsPetActive() then
-				menuList[4] = {text = PET..SPECIALIZATION, hasArrow = true, notCheckable = true}
-				menuList[4].menuList = {{}, {}, {}}
-				local petList = menuList[4].menuList
-				local spec = GetSpecializationInfo(GetSpecialization(false, true), false, true)
-				for i = 1, 3 do
-					local id, name = GetSpecializationInfo(i, false, true)
-					petList[i].text = name
-					if id == spec then
-						petList[i].func = function() clickFunc() end
-						petList[i].checked = true
-					else
-						petList[i].func = function() clickFunc(i, false, true) end
-						petList[i].checked = false
-					end
-				end
-			else
-				menuList[4] = nil
 			end
 		end
 
