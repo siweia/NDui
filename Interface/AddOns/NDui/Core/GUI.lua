@@ -199,7 +199,9 @@ local defaultSettings = {
 	},
 }
 
-local function applySettings(event, addon)
+local loader = CreateFrame("Frame")
+loader:RegisterEvent("ADDON_LOADED")
+loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
 	if not NDuiDB["LEGION"] then
 		NDuiDB = {}
@@ -218,9 +220,8 @@ local function applySettings(event, addon)
 			if NDuiDB[i] == nil then NDuiDB[i] = j end
 		end
 	end
-	B:UnregisterEvent(event, applySettings)
-end
-B:RegisterEvent("ADDON_LOADED", applySettings)
+	self:UnregisterAllEvents()
+end)
 
 -- Config
 local tabList = {
@@ -587,9 +588,9 @@ local function CreateOption(i)
 			bd:SetPoint("BOTTOMRIGHT", -15, 3)
 			bd:SetFrameStrata("BACKGROUND")
 			B.CreateBD(bd, .3)
-			local slider = select(4, s:GetRegions())
-			slider:SetTexture(DB.sparkTex)
-			slider:SetBlendMode("ADD")
+			local thumb = _G[s:GetName().."Thumb"]
+			thumb:SetTexture(DB.sparkTex)
+			thumb:SetBlendMode("ADD")
 		-- Dropdown
 		elseif type == 4 then
 			local dd = B.CreateDropDown(parent, 200, 30, data)
