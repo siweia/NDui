@@ -1,0 +1,15 @@
+## Interface: 80000
+## Title: |cff0080ffAuroraClassic|r
+## Title-zhCN: |cff0080ffAuroraClassic|r 材质美化
+## Title-zhTW: |cff0080ffAuroraClassic|r 材質美化
+## Notes: WoW UIs in Aurora Classic.
+## Author: Haleth/Lightsword/Siweia
+## Version: 0.0.2
+## SavedVariables: AuroraConfig
+
+Aurora.lua
+GUI.lua
+
+AddOns\AddOns.xml
+FrameXML\FrameXML.xml
+SharedXML\SharedXML.xml
