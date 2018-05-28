@@ -52,7 +52,7 @@ oUF.Tags.Methods["color"] = function(unit)
 		return B.HexRGB(1, 1, 1)
 	end
 end
-oUF.Tags.Events["color"] = "UNIT_REACTION UNIT_HEALTH UNIT_CONNECTION"
+oUF.Tags.Events["color"] = "UNIT_HEALTH UNIT_CONNECTION"
 
 oUF.Tags.Methods["afkdnd"] = function(unit) 
 	return UnitIsAFK(unit) and "|cffCFCFCF <"..AFK..">|r" or UnitIsDND(unit) and "|cffCFCFCF <"..DND..">|r" or ""
@@ -176,4 +176,4 @@ oUF.Tags.Methods["altpower"] = function(unit)
 		return ("%s%%"):format(math.floor(cur/max*100+.5))
 	end
 end
-oUF.Tags.Events["altpower"] = "UNIT_POWER"
+oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"

@@ -35,14 +35,18 @@ function UF:BlockAddons()
 	end
 end
 
+local function sectionInfo(id)
+	return C_EncounterJournal.GetSectionInfo(id).title
+end
+
 local CustomUnits = {
 	["Fel Explosive"] = true,
 	["邪能炸药"] = true,
 	["魔化炸彈"] = true,
-	[EJ_GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
-	[EJ_GetSectionInfo(14595)] = true,	-- 深渊追猎者
-	[EJ_GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
-	[EJ_GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
+	[sectionInfo(14544)] = true,	-- 海拉加尔观雾者
+	[sectionInfo(14595)] = true,	-- 深渊追猎者
+	[sectionInfo(16588)] = true,	-- 尖啸反舌鸟
+	[sectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
 }
 function UF:CreateUnitTable()
 	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
@@ -54,8 +58,8 @@ function UF:CreateUnitTable()
 end
 
 C.ShowPowerList = {
-	[EJ_GetSectionInfo(13015)] = true,	-- 清扫器
-	[EJ_GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
+	[sectionInfo(13015)] = true,	-- 清扫器
+	[sectionInfo(15903)] = true,	-- 泰沙拉克的余烬
 }
 function UF:CreatePowerUnitTable()
 	if not NDuiDB["Nameplate"]["ShowUnitPower"] then return end

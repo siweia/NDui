@@ -224,11 +224,6 @@ function UF:CreateIcons(self)
 	ai:SetPoint("TOPLEFT", self, 0, 8)
 	ai:SetSize(12, 12)
 	self.AssistantIndicator = ai
-
-	local ml = self:CreateTexture(nil, "OVERLAY")
-	ml:SetPoint("LEFT", li, "RIGHT")
-	ml:SetSize(12, 12)
-	self.MasterLooterIndicator = ml
 end
 
 function UF:CreateRaidMark(self)
@@ -427,8 +422,8 @@ local function postUpdateGapIcon(_, _, icon)
 	end
 end
 
-local unitName = EJ_GetSectionInfo(15903)
-local function customFilter(element, unit, button, name, _, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
+local unitName = C_EncounterJournal.GetSectionInfo(15903).title
+local function customFilter(element, unit, button, name, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 	if style == "raid" then
 		if C.RaidBuffs[DB.MyClass] and C.RaidBuffs[DB.MyClass][spellID] and button.isPlayer then
@@ -727,7 +722,7 @@ function UF:CreatePrediction(self)
 end
 
 local function postUpdateAddPower(element, _, cur, max)
-	if element.Text then
+	if element.Text and max > 0 then
 		local perc = cur/max * 100
 		if perc == 100 then
 			perc = ""
