@@ -240,8 +240,8 @@ function module:QuestTracker()
 	end)
 
 	-- Minimize Button
-	if IsAddOnLoaded("Aurora") then
-		local F = unpack(Aurora)
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
 		F.ReskinExpandOrCollapse(minimize)
 		minimize:GetNormalTexture():SetAlpha(0)
 		minimize.plus:Hide()

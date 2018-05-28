@@ -316,11 +316,13 @@ local function extrastyle(f)
 end
 
 B:RegisterEvent("ADDON_LOADED", function(_, addon)
-	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("Aurora") then
+	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("AuroraClassic") then
 		FrameStackTooltip:HookScript("OnShow", style)
 		EventTraceTooltip:HookScript("OnShow", style)
 
 	elseif addon == "NDui" then
+		if IsAddOnLoaded("AuroraClassic") then AuroraConfig.tooltips = false end
+
 		local tooltips = {
 			ChatMenu,
 			EmoteMenu,
@@ -551,8 +553,8 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 end)
 
 -- Reskin Closebutton
-if IsAddOnLoaded("Aurora") then
-	local F, C = unpack(Aurora)
+if IsAddOnLoaded("AuroraClassic") then
+	local F, C = unpack(AuroraClassic)
 	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)

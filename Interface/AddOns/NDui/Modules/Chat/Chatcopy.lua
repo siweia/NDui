@@ -65,8 +65,8 @@ function module:ChatCopy()
 	copy:HookScript("OnLeave", function() copy:SetAlpha(.2) end)
 
 	-- Aurora Reskin
-	if IsAddOnLoaded("Aurora") then
-		local F = unpack(Aurora)
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
 		F.ReskinClose(frame.close)
 		F.ReskinScroll(ChatCopyScrollFrameScrollBar)
 	end

@@ -123,8 +123,8 @@ local function CreatePanel()
 		scroll:SetPoint("BOTTOMLEFT", 10, 10)
 		B.CreateBD(scroll, .2)
 		B.CreateFS(scroll, 15, L["AuraWatch List"], false, "TOPLEFT", 5, 20)
-		if IsAddOnLoaded("Aurora") then
-			local F = unpack(Aurora)
+		if IsAddOnLoaded("AuroraClassic") then
+			local F = unpack(AuroraClassic)
 			F.ReskinScroll(scroll.ScrollBar)
 		end
 

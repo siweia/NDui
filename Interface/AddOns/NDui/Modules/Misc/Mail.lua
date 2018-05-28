@@ -238,8 +238,8 @@ function module:Mailbox()
 	end
 
 	-- Aurora Reskin
-	if IsAddOnLoaded("Aurora") then
-		local F = unpack(Aurora)
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
 		F.Reskin(button1)
 		F.Reskin(button2)
 		F.Reskin(button3)

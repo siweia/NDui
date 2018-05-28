@@ -161,8 +161,8 @@ function TradeTabs:CreateTab(i, parent, spellID)
 
 	button:SetNormalTexture(texture)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	if IsAddOnLoaded("Aurora") then
-		local F, C = unpack(Aurora)
+	if IsAddOnLoaded("AuroraClassic") then
+		local F, C = unpack(AuroraClassic)
 		button:SetCheckedTexture(C.media.checked)
 		button:GetRegions():Hide()
 		F.CreateBG(button)

@@ -704,8 +704,8 @@ local function OpenGUI()
 		guiPage[i].child = CreateFrame("Frame", nil, guiPage[i])
 		guiPage[i].child:SetSize(610, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
-		if IsAddOnLoaded("Aurora") then
-			local F = unpack(Aurora)
+		if IsAddOnLoaded("AuroraClassic") then
+			local F = unpack(AuroraClassic)
 			F.ReskinScroll(guiPage[i].ScrollBar)
 		end
 
@@ -795,7 +795,7 @@ gui:SetScript("OnClick", function()
 end)
 
 -- Aurora Reskin
-if IsAddOnLoaded("Aurora") then
-	local F = unpack(Aurora)
+if IsAddOnLoaded("AuroraClassic") then
+	local F = unpack(AuroraClassic)
 	F.Reskin(gui)
 end
