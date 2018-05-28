@@ -65,15 +65,19 @@ function module:RareAlert()
 	if not NDuiDB["Misc"]["RareAlerter"] then return end
 
 	local cache = {}
-	local function updateAlert(_, ...)
-		local id = ...
+	local function updateAlert(_, id)
 		if id and not cache[id] then
-			local _, _, name, icon = C_Vignettes.GetVignetteInfoFromInstanceID(id)
-			local left, right, top, bottom = GetObjectIconTextureCoords(icon)
-			local tex = "|TInterface\\Minimap\\ObjectIconsAtlas:0:0:0:0:256:256:"..(left*256)..":"..(right*256)..":"..(top*256)..":"..(bottom*256).."|t"
-			UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(name or ""))
+			local info = C_VignetteInfo.GetVignetteInfo(id)
+			if not info then return end
+			local filename, width, height, txLeft, txRight, txTop, txBottom = GetAtlasInfo(info.atlasName)
+			if not filename then return end
+
+			local atlasWidth = width/(txRight-txLeft)
+			local atlasHeight = height/(txBottom-txTop)
+			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 			if NDuiDB["Misc"]["AlertinChat"] then
-				print("  -> "..DB.InfoColor..L["Rare Found"]..tex..(name or ""))
+				print("  -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 			end
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
 			cache[id] = true
@@ -81,7 +85,7 @@ function module:RareAlert()
 		if #cache > 666 then cache = {} end
 	end
 
-	B:RegisterEvent("VIGNETTE_ADDED", updateAlert)
+	B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", updateAlert)
 end
 
 --[[
@@ -234,7 +238,7 @@ function module:VersionCheck()
 					f.Text:SetText(format(L["Outdated NDui"], NDuiADB["DetectVersion"]))
 					f:Show()
 				elseif tonumber(c1) < tonumber(b1) or tonumber(c2) < tonumber(b2) then
-					SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
+					C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 				end
 				checked = true
 			end
@@ -242,8 +246,8 @@ function module:VersionCheck()
 	end
 
 	B:RegisterEvent("CHAT_MSG_ADDON", compareVersion)
-	RegisterAddonMessagePrefix("NDuiVersionCheck")
-	SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
+	C_ChatInfo.RegisterAddonMessagePrefix("NDuiVersionCheck")
+	C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 end
 
 --[[
@@ -262,7 +266,7 @@ function module:SistersAlert()
 
 		local _, eventType, _, _, sourceName, _, _, destGUID, _, _, _, spellID = ...
 		if eventType == "SPELL_DAMAGE" and spellID == 234998 and destGUID == myID then
-			local name, _, _, count = UnitDebuff("player", tarSpellName)
+			local name, _, count = UnitDebuff("player", tarSpellName)
 			if not name then return end
 			if not data[sourceName] then data[sourceName] = {} end
 			if count == 0 then count = 1 end
