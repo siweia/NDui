@@ -219,15 +219,15 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent("UPDATE_BINDINGS")
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN")
 	self:RegisterEvent("BAG_UPDATE_DELAYED")
-	self:RegisterEvent("WORLD_MAP_UPDATE")
+	--self:RegisterEvent("WORLD_MAP_UPDATE")
 	self:RegisterEvent("QUEST_LOG_UPDATE")
 	self:RegisterEvent("QUEST_POI_UPDATE")
 	self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
 	self:RegisterEvent("QUEST_ACCEPTED")
-
+--[[
 	if(not WorldMapFrame:IsShown()) then
 		SetMapToCurrentZone()
-	end
+	end]]
 end
 
 local worldQuests = {}
