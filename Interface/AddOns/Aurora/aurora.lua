@@ -20,16 +20,18 @@ local F, C = unpack(select(2, ...))
 
 -- [[ Constants and settings ]]
 
+local mediaPath = "Interface\\AddOns\\Aurora\\media\\"
+
 C.media = {
-	["arrowUp"] = "Interface\\AddOns\\Aurora\\media\\arrow-up-active",
-	["arrowDown"] = "Interface\\AddOns\\Aurora\\media\\arrow-down-active",
-	["arrowLeft"] = "Interface\\AddOns\\Aurora\\media\\arrow-left-active",
-	["arrowRight"] = "Interface\\AddOns\\Aurora\\media\\arrow-right-active",
+	["arrowUp"] = mediaPath.."arrow-up-active",
+	["arrowDown"] = mediaPath.."arrow-down-active",
+	["arrowLeft"] = mediaPath.."arrow-left-active",
+	["arrowRight"] = mediaPath.."arrow-right-active",
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
-	["checked"] = "Interface\\AddOns\\Aurora\\media\\CheckButtonHilight",
+	["checked"] = mediaPath.."CheckButtonHilight",
 	["font"] = STANDARD_TEXT_FONT,
-	["gradient"] = "Interface\\AddOns\\Aurora\\media\\gradient",
-	["roleIcons"] = "Interface\\Addons\\Aurora\\media\\UI-LFG-ICON-ROLES",
+	["gradient"] = mediaPath.."gradient",
+	["roleIcons"] = mediaPath.."UI-LFG-ICON-ROLES",
 }
 
 C.defaults = {
@@ -68,7 +70,7 @@ local CreateTex = function(f)
 	if f.Tex then return end
 	f.Tex = f:CreateTexture(nil, "BACKGROUND", nil, 1)
 	f.Tex:SetAllPoints()
-	f.Tex:SetTexture("Interface\\Addons\\NDui\\Media\\bgTex", true, true)
+	f.Tex:SetTexture(mediaPath.."bgTex", true, true)
 	f.Tex:SetHorizTile(true)
 	f.Tex:SetVertTile(true)
 	f.Tex:SetBlendMode("ADD")
@@ -80,7 +82,7 @@ F.CreateSD = function(f)
 	f.Shadow = CreateFrame("Frame", nil, f)
 	f.Shadow:SetPoint("TOPLEFT", f, -2, 2)
 	f.Shadow:SetPoint("BOTTOMRIGHT", f, 2, -2)
-	f.Shadow:SetBackdrop({edgeFile = "Interface\\Addons\\NDui\\Media\\glowTex", edgeSize = 3})
+	f.Shadow:SetBackdrop({edgeFile = mediaPath.."glowTex", edgeSize = 3})
 	f.Shadow:SetBackdropBorderColor(0, 0, 0)
 	CreateTex(f)
 	return f.Shadow
@@ -420,7 +422,7 @@ F.ReskinArrow = function(f, direction)
 	dis:SetDrawLayer("OVERLAY")
 
 	local tex = f:CreateTexture(nil, "ARTWORK")
-	tex:SetTexture("Interface\\AddOns\\Aurora\\media\\arrow-"..direction.."-active")
+	tex:SetTexture(mediaPath.."arrow-"..direction.."-active")
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
 	f.bgTex = tex
