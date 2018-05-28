@@ -44,7 +44,7 @@ function module:QuestTracker()
 	hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
 
 	-- Show quest color and level
-	local function Showlevel()
+	--[[local function Showlevel()
 		if ENABLE_COLORBLIND_MODE == "1" then return end
 		local numEntries = GetNumQuestLogEntries()
 		local titleIndex = 1
@@ -67,7 +67,7 @@ function module:QuestTracker()
 			end
 		end
 	end
-	hooksecurefunc("QuestLogQuests_Update", Showlevel)
+	hooksecurefunc("QuestLogQuests_Update", Showlevel)]]
 
 	-- ObjectiveTracker Skin
 	if not NDuiDB["Skins"]["TrackerSkin"] then return end
