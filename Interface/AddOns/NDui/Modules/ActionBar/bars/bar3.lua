@@ -70,4 +70,15 @@ function Bar:CreateBar3()
 	if cfg.fader then
 		B:CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
+
+	--fix stupid blizzard
+	local function ToggleButtonGrid()
+		if InCombatLockdown() then return end
+		local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
+		for _, button in next, buttonList do
+			button:SetAttribute("showgrid", showgrid)
+			ActionButton_ShowGrid(button)
+		end
+	end
+	hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
 end
