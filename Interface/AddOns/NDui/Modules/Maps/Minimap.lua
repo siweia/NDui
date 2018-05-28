@@ -23,7 +23,7 @@ function module:CreatePulse()
 			MBG:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
 		elseif not InCombatLockdown() then
-			if CalendarGetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
+			if C_Calendar.GetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
 				MBG:SetBackdropBorderColor(1, 1, 0)
 				anim:Play()
 			else
@@ -103,7 +103,7 @@ function module:ReskinRegions()
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
 	local function updateInviteVisibility()
-		if NDuiDB["Map"]["Invite"] and CalendarGetNumPendingInvites() > 0 then
+		if NDuiDB["Map"]["Invite"] and C_Calendar.GetNumPendingInvites() > 0 then
 			Invt:Show()
 		else
 			Invt:Hide()
@@ -370,7 +370,6 @@ function module:OnLogin()
 		"MinimapZoneTextButton",
 		"MinimapZoomOut",
 		"MinimapZoomIn",
-		"MiniMapVoiceChatFrame",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
 		"MiniMapTracking",
