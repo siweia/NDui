@@ -2,26 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
 
--- Hide elements
-local buttons = {
-	ChatFrameMenuButton,
-	QuickJoinToastButton,
-	--ChatFrameChannelButton,
-	--ChatFrameToggleVoiceDeafenButton,
-	--ChatFrameToggleVoiceMuteButton,
-}
-for _, bu in next, buttons do
-	bu:Hide()
-	bu.Show = B.Dummy
-end
-
-BNToastFrame:SetClampedToScreen(true)
-BNToastFrame:SetClampRectInsets(-15, 15, 15, -15)
-BNToastFrame:HookScript("OnShow", function(self)
-	self:ClearAllPoints()
-	self:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 0, 25)
-end)
-
 -- Reskin Chat
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local function skinChat(self)
@@ -209,6 +189,27 @@ function module:WhipserInvite()
 end
 
 function module:OnLogin()
+	-- Hide elements
+	local buttons = {
+		ChatFrameMenuButton,
+		QuickJoinToastButton,
+		--ChatFrameChannelButton,
+		--ChatFrameToggleVoiceDeafenButton,
+		--ChatFrameToggleVoiceMuteButton,
+	}
+	for _, bu in next, buttons do
+		bu:Hide()
+		bu.Show = B.Dummy
+	end
+
+	-- ToastFrames
+	BNToastFrame:SetClampedToScreen(true)
+	BNToastFrame:SetClampRectInsets(-15, 15, 15, -15)
+	hooksecurefunc(BNToastFrame, "ShowToast", function(self)
+		self:ClearAllPoints()
+		self:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 0, 25)
+	end)
+
 	-- Default
 	SetCVar("chatStyle", "classic")
 	InterfaceOptionsSocialPanelChatStyle:Hide()
@@ -254,7 +255,6 @@ function module:OnLogin()
 			end
 		end)
 	end
-
 
 	-- Add Elements
 	self:ChatFilter()
