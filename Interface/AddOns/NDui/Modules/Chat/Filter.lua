@@ -130,22 +130,23 @@ local function chatAtMe(_, _, ...)
 				at.checker = true
 				at.author = author
 				at.class = select(2, GetPlayerInfoByGUID(guid))
-				BNToastFrame_AddToast()
+				BNToastFrame:AddToast(BN_TOAST_TYPE_NEW_INVITE)
 			end
 		end
 	end
 end
 
-hooksecurefunc(BNToastFrame, "ShowToast", function()
+hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 	if at.checker == true then
-		BNToastFrame:SetHeight(50)
-		BNToastFrameIconTexture:SetTexCoord(.75, 1, 0, .5)
-		BNToastFrameTopLine:Hide()
-		BNToastFrameMiddleLine:Hide()
-		BNToastFrameBottomLine:Hide()
-		BNToastFrameDoubleLine:Show()
+		self:SetHeight(50)
+		self.IconTexture:SetTexCoord(.75, 1, 0, .5)
+		self.TopLine:Hide()
+		self.MiddleLine:Hide()
+		self.BottomLine:Hide()
+		self.DoubleLine:Show()
+
 		local hexColor = B.HexRGB(B.ClassColor(at.class))
-		BNToastFrameDoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
+		self.DoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
 		at.checker = false
 	end
 end)
@@ -169,5 +170,5 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
 
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHIPSER", chatAtMe)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
 end
