@@ -2,9 +2,9 @@
 ## Title: |cff0080ffAuroraClassic|r
 ## Title-zhCN: |cff0080ffAuroraClassic|r 材质美化
 ## Title-zhTW: |cff0080ffAuroraClassic|r 材質美化
-## Notes: WoW UIs in Aurora Classic.
+## Notes: Classical Aurora Style for WoW UIs.
 ## Author: Haleth/Lightsword/Siweia
-## Version: 0.0.2
+## Version: 0.2.0
 ## SavedVariables: AuroraConfig
 
 Aurora.lua
