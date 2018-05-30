@@ -499,18 +499,9 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 			GarrisonMissionMechanicFollowerCounterTooltip,
 			GarrisonShipyardMapMissionTooltip,
 			GarrisonBonusAreaTooltip,
-			GarrisonBuildingFrame.BuildingLevelTooltip
-		}
-		for _, f in pairs(gt) do
-			if f then
-				f:HookScript("OnShow", extrastyle)
-			end
-		end
-
-	elseif addon == "Blizzard_OrderHallUI" then
-		local gt = {
+			GarrisonBuildingFrame.BuildingLevelTooltip,
 			GarrisonFollowerAbilityWithoutCountersTooltip,
-			GarrisonFollowerMissionAbilityWithoutCountersTooltip,
+			GarrisonFollowerMissionAbilityWithoutCountersTooltip
 		}
 		for _, f in pairs(gt) do
 			if f then
