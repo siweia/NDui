@@ -82,33 +82,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	end)
 
 	do
-		local left = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
-		left:SetWidth(1.2)
-		left:SetTexture(C.media.backdrop)
-		left:SetVertexColor(0, 0, 0)
-		left:SetPoint("TOPLEFT", 9, -7)
-		left:SetPoint("BOTTOMLEFT", 9, 10)
-
-		local right = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
-		right:SetWidth(1.2)
-		right:SetTexture(C.media.backdrop)
-		right:SetVertexColor(0, 0, 0)
-		right:SetPoint("TOPRIGHT", -8, -7)
-		right:SetPoint("BOTTOMRIGHT", -8, 10)
-
-		local top = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
-		top:SetHeight(1.2)
-		top:SetTexture(C.media.backdrop)
-		top:SetVertexColor(0, 0, 0)
-		top:SetPoint("TOPLEFT", 9, -7)
-		top:SetPoint("TOPRIGHT", -8, -7)
-
-		local bottom = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
-		bottom:SetHeight(1.2)
-		bottom:SetTexture(C.media.backdrop)
-		bottom:SetVertexColor(0, 0, 0)
-		bottom:SetPoint("BOTTOMLEFT", 9, 10)
-		bottom:SetPoint("BOTTOMRIGHT", -8, 10)
+		local bg = F.CreateBDFrame(LFGDungeonReadyDialogRoleIcon, 1)
+		bg:SetPoint("TOPLEFT", 9, -7)
+		bg:SetPoint("BOTTOMRIGHT", -8, 10)
 	end
 
 	hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
@@ -175,7 +151,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		roleButton.cover:SetTexture(C.media.roleIcons)
 		roleButton:SetNormalTexture(C.media.roleIcons)
-
 		roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
 
 		for i = 1, 2 do
@@ -246,36 +221,11 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		roleButton.cover:SetTexture(C.media.roleIcons)
 		roleButton:SetNormalTexture(C.media.roleIcons)
-
 		checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
 
-		local left = roleButton:CreateTexture(nil, "OVERLAY")
-		left:SetWidth(1.2)
-		left:SetTexture(C.media.backdrop)
-		left:SetVertexColor(0, 0, 0)
-		left:SetPoint("TOPLEFT", roleButton, 9, -7)
-		left:SetPoint("BOTTOMLEFT", roleButton, 9, 11)
-
-		local right = roleButton:CreateTexture(nil, "OVERLAY")
-		right:SetWidth(1.2)
-		right:SetTexture(C.media.backdrop)
-		right:SetVertexColor(0, 0, 0)
-		right:SetPoint("TOPRIGHT", roleButton, -9, -7)
-		right:SetPoint("BOTTOMRIGHT", roleButton, -9, 11)
-
-		local top = roleButton:CreateTexture(nil, "OVERLAY")
-		top:SetHeight(1.2)
-		top:SetTexture(C.media.backdrop)
-		top:SetVertexColor(0, 0, 0)
-		top:SetPoint("TOPLEFT", roleButton, 9, -7)
-		top:SetPoint("TOPRIGHT", roleButton, -9, -7)
-
-		local bottom = roleButton:CreateTexture(nil, "OVERLAY")
-		bottom:SetHeight(1.2)
-		bottom:SetTexture(C.media.backdrop)
-		bottom:SetVertexColor(0, 0, 0)
-		bottom:SetPoint("BOTTOMLEFT", roleButton, 9, 11)
-		bottom:SetPoint("BOTTOMRIGHT", roleButton, -9, 11)
+		local bg = F.CreateBDFrame(roleButton, 1)
+		bg:SetPoint("TOPLEFT", roleButton, 9, -7)
+		bg:SetPoint("BOTTOMRIGHT", roleButton, -9, 11)
 
 		F.ReskinCheck(checkButton)
 	end
@@ -291,33 +241,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			roleButton.texture:SetTexture(C.media.roleIcons)
 			roleButton.statusIcon:SetDrawLayer("OVERLAY", 2)
 
-			local left = roleButton:CreateTexture(nil, "OVERLAY")
-			left:SetWidth(1.2)
-			left:SetTexture(C.media.backdrop)
-			left:SetVertexColor(0, 0, 0)
-			left:SetPoint("TOPLEFT", 7, -6)
-			left:SetPoint("BOTTOMLEFT", 7, 8)
-
-			local right = roleButton:CreateTexture(nil, "OVERLAY")
-			right:SetWidth(1.2)
-			right:SetTexture(C.media.backdrop)
-			right:SetVertexColor(0, 0, 0)
-			right:SetPoint("TOPRIGHT", -7, -6)
-			right:SetPoint("BOTTOMRIGHT", -7, 8)
-
-			local top = roleButton:CreateTexture(nil, "OVERLAY")
-			top:SetHeight(1.2)
-			top:SetTexture(C.media.backdrop)
-			top:SetVertexColor(0, 0, 0)
-			top:SetPoint("TOPLEFT", 7, -6)
-			top:SetPoint("TOPRIGHT", -7, -6)
-
-			local bottom = roleButton:CreateTexture(nil, "OVERLAY")
-			bottom:SetHeight(1.2)
-			bottom:SetTexture(C.media.backdrop)
-			bottom:SetVertexColor(0, 0, 0)
-			bottom:SetPoint("BOTTOMLEFT", 7, 8)
-			bottom:SetPoint("BOTTOMRIGHT", -7, 8)
+			local bg = F.CreateBDFrame(roleButton, 1)
+			bg:SetPoint("TOPLEFT", 7, -6)
+			bg:SetPoint("BOTTOMRIGHT", -7, 8)
 		end
 	end
 

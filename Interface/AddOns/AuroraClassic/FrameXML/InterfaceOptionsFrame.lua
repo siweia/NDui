@@ -197,12 +197,4 @@ tinsert(C.themes["AuroraClassic"], function()
 			end
 		end
 	end)
-
-	hooksecurefunc("OptionsListButtonToggle_OnClick", function(self)
-		if self:GetParent().element.collapsed then
-			self.plus:Show()
-		else
-			self.plus:Hide()
-		end
-	end)
 end)

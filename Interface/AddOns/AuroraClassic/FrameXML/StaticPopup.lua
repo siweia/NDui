@@ -110,4 +110,12 @@ tinsert(C.themes["AuroraClassic"], function()
 			end
 		end
 	end)
+
+	-- Pet battle queue popup
+
+	F.CreateBD(PetBattleQueueReadyFrame)
+	F.CreateSD(PetBattleQueueReadyFrame)
+	F.CreateBG(PetBattleQueueReadyFrame.Art)
+	F.Reskin(PetBattleQueueReadyFrame.AcceptButton)
+	F.Reskin(PetBattleQueueReadyFrame.DeclineButton)
 end)

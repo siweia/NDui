@@ -82,6 +82,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			"Advanced_ResampleQualityDropDown",
 			"Advanced_PhysicsInteractionDropDown",
 			"Advanced_AdapterDropDown",
+			"Advanced_GraphicsAPIDropDown",
 			"AudioOptionsSoundPanelHardwareDropDown",
 			"AudioOptionsSoundPanelSoundChannelsDropDown",
 			"AudioOptionsSoundPanelSoundCacheSizeDropDown",

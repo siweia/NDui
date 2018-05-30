@@ -162,9 +162,6 @@ tooltipsBox:SetPoint("TOPLEFT", bagsBox, "BOTTOMLEFT", 0, -8)
 local shadowBox = createToggleBox(gui, "shadow", L["Shadow Border"])
 shadowBox:SetPoint("LEFT", tooltipsBox, "RIGHT", 110, 0)
 
-local mmbbox = createToggleBox(gui, "mmb", L["Minimap Button"])
-mmbbox:SetPoint("LEFT", shadowBox, "RIGHT", 110, 0)
-
 local appearance = addSubCategory(gui, L["Appearance"])
 appearance:SetPoint("TOPLEFT", tooltipsBox, "BOTTOMLEFT", 0, -30)
 
@@ -203,53 +200,8 @@ reloadButton:SetSize(128, 25)
 reloadButton:SetText(RELOADUI)
 
 local credits = gui:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-credits:SetText("Aurora by Lightsword @ Argent Dawn - EU / Haleth on wowinterface.com")
+credits:SetText("Aurora Classic by Lightsword, Haleth, Siweia.")
 credits:SetPoint("BOTTOM", 0, 40)
-
-local mmb = CreateFrame("Button", "AuroraMinimapButton", Minimap)
-mmb:SetPoint("BOTTOMLEFT", -15, 20)
-mmb:SetSize(32, 32)
-mmb:SetMovable(true)
-mmb:SetUserPlaced(true)
-mmb:RegisterForDrag("LeftButton")
-mmb.Icon = mmb:CreateTexture(nil, "ARTWORK")
-mmb.Icon:SetPoint("TOPLEFT", -5, 5)
-mmb.Icon:SetPoint("BOTTOMRIGHT", 5, -5)
-mmb.Icon:SetTexture("Interface\\Store\\category-icon-featured")
-mmb:SetHighlightTexture("Interface\\Store\\category-icon-featured")
-mmb:SetScript("OnEnter", function()
-	GameTooltip:ClearLines()
-	GameTooltip:Hide()
-	GameTooltip:SetOwner(mmb, "ANCHOR_LEFT")
-	GameTooltip:ClearLines()
-	GameTooltip:AddLine("Aurora", 1, 1, 1)
-	GameTooltip:Show()
-end)
-mmb:SetScript("OnLeave", GameTooltip_Hide)
-mmb:SetScript("OnClick", function() ToggleFrame(gui) end)
-mmb:SetScript("OnDragStart", function(self)
-	self:SetScript("OnUpdate", function()
-		local mx, my = Minimap:GetCenter()
-		local px, py = GetCursorPosition()
-		local scale = Minimap:GetEffectiveScale()
-		px, py = px / scale, py / scale
-		
-		local angle = math.atan2(py - my, px - mx)
-		local x, y, q = math.cos(angle), math.sin(angle), 1
-		if x < 0 then q = q + 1 end
-		if y > 0 then q = q + 2 end
-
-		local diagRadius = math.sqrt(2*(80)^2)-10
-		x = math.max(-80, math.min(x*diagRadius, 80))
-		y = math.max(-80, math.min(y*diagRadius, 80))
-
-		self:ClearAllPoints()
-		self:SetPoint("CENTER", Minimap, "CENTER", x, y)
-	end)
-end)
-mmb:SetScript("OnDragStop", function(self)
-	self:SetScript("OnUpdate", nil)
-end)
 
 -- add event handlers
 
@@ -263,8 +215,6 @@ local guiRefresh = function()
 	if not colourBox:GetChecked() then
 		colourButton:Disable()
 	end
-
-	mmb:SetShown(AuroraConfig.mmb)
 end
 
 gui:RegisterEvent("ADDON_LOADED")
@@ -300,7 +250,6 @@ end
 
 local guiOkay = function()
 	copyTable(AuroraConfig, old)
-	mmb:SetShown(AuroraConfig.mmb)
 	gui:Hide()
 end
 

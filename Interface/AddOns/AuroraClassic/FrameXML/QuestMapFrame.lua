@@ -12,7 +12,8 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	QuestMapFrame.VerticalSeparator:SetAlpha(0)
 	QuestScrollFrame.Background:SetAlpha(0)
-	QuestScrollFrame.DetailFrame.BottomDetail:Hide()
+	QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
+	QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
 
 	if AuroraConfig.tooltips then
 		F.CreateBD(QuestScrollFrame.StoryTooltip)

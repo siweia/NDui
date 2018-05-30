@@ -1,6 +1,9 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
+	GameFontBlackMedium:SetTextColor(1, 1, 1)
+	CoreAbilityFont:SetTextColor(1, 1, 1)
+
 	if AuroraConfig.enableFont then
 		local locale = GetLocale()
 		local font = C.media.font
@@ -117,6 +120,5 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		-- Why?
 		HelpFrameKnowledgebaseNavBarHomeButtonText:SetFont(font, 12)
-		WorldMapFrameNavBarHomeButtonText:SetFont(font, 12)
 	end
 end)

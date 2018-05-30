@@ -147,6 +147,13 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(GearManagerDialogPopupOkay)
 	F.Reskin(GearManagerDialogPopupCancel)
 	F.ReskinInput(GearManagerDialogPopupEditBox)
+	F.ReskinScroll(PaperDollTitlesPaneScrollBar)
+	F.ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
+	PaperDollSidebarTabs:GetRegions():Hide()
+	select(2, PaperDollSidebarTabs:GetRegions()):Hide()
+	select(6, PaperDollEquipmentManagerPaneEquipSet:GetRegions()):Hide()
+	F.Reskin(PaperDollEquipmentManagerPaneEquipSet)
+	F.Reskin(PaperDollEquipmentManagerPaneSaveSet)
 
 	for i = 1, NUM_GEARSET_ICONS_SHOWN do
 		local bu = _G["GearManagerDialogPopupButton"..i]
@@ -186,4 +193,36 @@ tinsert(C.themes["AuroraClassic"], function()
 			sets = true
 		end
 	end)
+
+	local titles = false
+	hooksecurefunc("PaperDollTitlesPane_Update", function()
+		if titles == false then
+			for i = 1, 17 do
+				_G["PaperDollTitlesPaneButton"..i]:DisableDrawLayer("BACKGROUND")
+			end
+			titles = true
+		end
+	end)
+
+	hooksecurefunc("PaperDollFrame_SetLevel", function()
+		local primaryTalentTree = GetSpecialization()
+		local classDisplayName, class = UnitClass("player")
+		local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or C.classcolours[class]
+		local classColorString = format("ff%.2x%.2x%.2x", classColor.r * 255, classColor.g * 255, classColor.b * 255)
+		local specName, _
+
+		if primaryTalentTree then
+			_, specName = GetSpecializationInfo(primaryTalentTree, nil, nil, nil, UnitSex("player"))
+		end
+
+		if specName and specName ~= "" then
+			CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), classColorString, specName, classDisplayName)
+		else
+			CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), classColorString, classDisplayName)
+		end
+	end)
+
+	PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
+	PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
+	GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
 end)

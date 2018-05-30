@@ -50,12 +50,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
-		if LFGCollapseList[dungeonID] then
-			button.expandOrCollapseButton.plus:Show()
-		else
-			button.expandOrCollapseButton.plus:Hide()
-		end
-
 		button.enableButton:GetCheckedTexture():SetDesaturated(true)
 	end)
 end)

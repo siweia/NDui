@@ -193,59 +193,19 @@ tinsert(C.themes["AuroraClassic"], function()
 			for _, roleButton in pairs({self.TankIcon, self.HealerIcon, self.DamagerIcon}) do
 				roleButton:SetTexture(C.media.roleIcons)
 
-				local left = self:CreateTexture(nil, "OVERLAY")
-				left:SetWidth(1.2)
-				left:SetTexture(C.media.backdrop)
-				left:SetVertexColor(0, 0, 0)
-
-				local right = self:CreateTexture(nil, "OVERLAY")
-				right:SetWidth(1.2)
-				right:SetTexture(C.media.backdrop)
-				right:SetVertexColor(0, 0, 0)
-
-				local top = self:CreateTexture(nil, "OVERLAY")
-				top:SetHeight(1.2)
-				top:SetTexture(C.media.backdrop)
-				top:SetVertexColor(0, 0, 0)
-
-				local bottom = self:CreateTexture(nil, "OVERLAY")
-				bottom:SetHeight(1.2)
-				bottom:SetTexture(C.media.backdrop)
-				bottom:SetVertexColor(0, 0, 0)
-
+				local bg = F.CreateBDFrame(self, 1)
 				if roleButton == self.TankIcon then
 					roleButton:SetTexCoord(0, .24, .25, .5)
-
-					left:SetPoint("TOPLEFT", roleButton, 2, -3)
-					left:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
-					right:SetPoint("TOPRIGHT", roleButton, -1, -3)
-					right:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
-					top:SetPoint("TOPLEFT", roleButton, 2, -2)
-					top:SetPoint("TOPRIGHT", roleButton, -1, -2)
-					bottom:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
-					bottom:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+					bg:SetPoint("TOPLEFT", roleButton, 2, -3)
+					bg:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
 				elseif roleButton == self.HealerIcon then
 					roleButton:SetTexCoord(.249, .5, 0.003, .243)
-
-					left:SetPoint("TOPLEFT", roleButton, 2, -1)
-					left:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
-					right:SetPoint("TOPRIGHT", roleButton, -1, -1)
-					right:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
-					top:SetPoint("TOPLEFT", roleButton, 2, -1)
-					top:SetPoint("TOPRIGHT", roleButton, -1, -1)
-					bottom:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
-					bottom:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+					bg:SetPoint("TOPLEFT", roleButton, 2, -1)
+					bg:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
 				else
 					roleButton:SetTexCoord(.25, .5, .25, .5)
-
-					left:SetPoint("TOPLEFT", roleButton, 2, -3)
-					left:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
-					right:SetPoint("TOPRIGHT", roleButton, -1, -3)
-					right:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
-					top:SetPoint("TOPLEFT", roleButton, 2, -2)
-					top:SetPoint("TOPRIGHT", roleButton, -1, -2)
-					bottom:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
-					bottom:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+					bg:SetPoint("TOPLEFT", roleButton, 2, -3)
+					bg:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
 				end
 			end
 
@@ -295,37 +255,10 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(LFGListInviteDialog.DeclineButton)
 	F.Reskin(LFGListInviteDialog.AcknowledgeButton)
 
-	do
-		local RoleIcon = LFGListInviteDialog.RoleIcon
+	local RoleIcon = LFGListInviteDialog.RoleIcon
+	RoleIcon:SetTexture(C.media.roleIcons)
 
-		RoleIcon:SetTexture(C.media.roleIcons)
-
-		local left = LFGListInviteDialog:CreateTexture(nil, "OVERLAY")
-		left:SetWidth(1.2)
-		left:SetTexture(C.media.backdrop)
-		left:SetVertexColor(0, 0, 0)
-		left:SetPoint("TOPLEFT", RoleIcon, 8, -6)
-		left:SetPoint("BOTTOMLEFT", RoleIcon, 8, 10)
-
-		local right = LFGListInviteDialog:CreateTexture(nil, "OVERLAY")
-		right:SetWidth(1.2)
-		right:SetTexture(C.media.backdrop)
-		right:SetVertexColor(0, 0, 0)
-		right:SetPoint("TOPRIGHT", RoleIcon, -8, -6)
-		right:SetPoint("BOTTOMRIGHT", RoleIcon, -8, 10)
-
-		local top = LFGListInviteDialog:CreateTexture(nil, "OVERLAY")
-		top:SetHeight(1.2)
-		top:SetTexture(C.media.backdrop)
-		top:SetVertexColor(0, 0, 0)
-		top:SetPoint("TOPLEFT", RoleIcon, 8, -6)
-		top:SetPoint("TOPRIGHT", RoleIcon, -8, -6)
-
-		local bottom = LFGListInviteDialog:CreateTexture(nil, "OVERLAY")
-		bottom:SetHeight(1.2)
-		bottom:SetTexture(C.media.backdrop)
-		bottom:SetVertexColor(0, 0, 0)
-		bottom:SetPoint("BOTTOMLEFT", RoleIcon, 8, 10)
-		bottom:SetPoint("BOTTOMRIGHT", RoleIcon, -8, 10)
-	end
+	local bg = F.CreateBDFrame(LFGListInviteDialog, 1)
+	bg:SetPoint("TOPLEFT", RoleIcon, 8, -6)
+	bg:SetPoint("BOTTOMRIGHT", RoleIcon, -8, 10)
 end)

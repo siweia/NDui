@@ -16,6 +16,10 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.CreateBD(HelpFrameGM_ResponseScrollFrame2, .25)
 	F.CreateBD(HelpFrameReportBugScrollFrame, .25)
 	F.CreateBD(HelpFrameSubmitSuggestionScrollFrame, .25)
+	F.CreateBD(ReportCheatingDialogCommentFrame, .25)
+	for i = 1, 9 do
+		select(i, ReportCheatingDialogCommentFrame:GetRegions()):Hide()
+	end
 
 	local scrolls = {
 		"HelpFrameKnowledgebaseScrollFrameScrollBar",
@@ -120,4 +124,11 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.CreateBD(BrowserSettingsTooltip)
 	F.Reskin(BrowserSettingsTooltip.CacheButton)
 	F.Reskin(BrowserSettingsTooltip.CookiesButton)
+	F.Reskin(ReportCheatingDialogReportButton)
+	F.Reskin(ReportCheatingDialogCancelButton)
+
+	F.CreateBD(TicketStatusFrameButton)
+	F.CreateSD(TicketStatusFrameButton)
+	F.CreateBD(ReportCheatingDialog)
+	F.CreateSD(ReportCheatingDialog)
 end)

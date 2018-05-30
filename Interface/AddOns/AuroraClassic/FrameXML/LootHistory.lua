@@ -87,7 +87,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 
 		frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())
-		frame.ToggleButton.plus:SetShown(not expanded)
 	end)
 
 	-- [[ Player frame ]]

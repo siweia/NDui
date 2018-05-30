@@ -205,4 +205,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	QuestInfoRewardsFrame.spellHeaderPool:Acquire():SetVertexColor(1, 1, 1)
 	QuestInfoRewardsFrame.spellHeaderPool:Acquire().SetVertexColor = F.dummy
+
+	QuestFont:SetTextColor(1, 1, 1)
 end)

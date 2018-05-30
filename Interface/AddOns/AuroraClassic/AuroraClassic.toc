@@ -4,7 +4,7 @@
 ## Title-zhTW: |cff0080ffAuroraClassic|r 材質美化
 ## Notes: Classical Aurora Style for WoW UIs.
 ## Author: Haleth/Lightsword/Siweia
-## Version: 0.2.0
+## Version: 1.0.0
 ## SavedVariables: AuroraConfig
 
 Aurora.lua

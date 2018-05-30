@@ -20,6 +20,8 @@ C.themes["Blizzard_AdventureMap"] = function()
 			if bu then
 				bu.Icon:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(bu.Icon)
+				local bg = F.CreateBDFrame(bu.Icon, .25)
+				bg:SetPoint("BOTTOMRIGHT")
 				bu.ItemNameBG:Hide()
 			end
 		end
