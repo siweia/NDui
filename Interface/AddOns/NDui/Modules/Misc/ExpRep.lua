@@ -42,6 +42,13 @@ local function UpdateBar(bar)
 		bar:SetMinMaxValues(min, max)
 		bar:SetValue(value)
 		bar:Show()
+	elseif C_AzeriteItem.HasActiveAzeriteItem() then
+		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
+		bar:SetStatusBarColor(.9, .8, .6)
+		bar:SetMinMaxValues(0, totalLevelXP)
+		bar:SetValue(xp)
+		bar:Show()
 	elseif HasArtifactEquipped() then
 		local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local _, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
@@ -130,6 +137,17 @@ local function UpdateTooltip(bar)
 		GameTooltip:AddDoubleLine(HONOR_POINTS..LEVEL..level, text, .6,.8,1, 1,1,1)
 	end
 
+	if C_AzeriteItem.HasActiveAzeriteItem() then
+		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
+		local azeriteItemName = azeriteItem:GetItemName()
+		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(C_AzeriteItem.FindActiveAzeriteItem())
+		local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 0,.6,1)
+		GameTooltip:AddDoubleLine(ARTIFACT_POWER, B.Numb(xp).."/"..B.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", .6,.8,1, 1,1,1)
+	end
+
 	if HasArtifactEquipped() then
 		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
@@ -156,6 +174,7 @@ function module:SetupScript(bar)
 		"UNIT_INVENTORY_CHANGED",
 		"ENABLE_XP_GAIN",
 		"DISABLE_XP_GAIN",
+		"AZERITE_ITEM_EXPERIENCE_CHANGED",
 	}
 	for _, event in pairs(bar.eventList) do
 		bar:RegisterEvent(event)
