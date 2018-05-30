@@ -80,5 +80,5 @@ function Bar:CreateBar3()
 			ActionButton_ShowGrid(button)
 		end
 	end
-	hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
+	hooksecurefunc("MultiActionBar_UpdateGrid", ToggleButtonGrid)
 end
