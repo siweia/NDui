@@ -244,8 +244,8 @@ function module:QuestTracker()
 		local F = unpack(AuroraClassic)
 		F.ReskinExpandOrCollapse(minimize)
 		minimize:GetNormalTexture():SetAlpha(0)
-		minimize.plus:Hide()
-		hooksecurefunc("ObjectiveTracker_Collapse", function() minimize.plus:Show() end)
-		hooksecurefunc("ObjectiveTracker_Expand", function() minimize.plus:Hide() end)
+		minimize.expTex:SetTexCoord(0.5625, 1, 0, 0.4375)
+		hooksecurefunc("ObjectiveTracker_Collapse", function() minimize.expTex:SetTexCoord(0, 0.4375, 0, 0.4375) end)
+		hooksecurefunc("ObjectiveTracker_Expand", function() minimize.expTex:SetTexCoord(0.5625, 1, 0, 0.4375) end)
 	end
 end
