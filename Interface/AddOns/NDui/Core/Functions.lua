@@ -86,9 +86,9 @@ B.CreateFS = function(f, size, text, classcolor, anchor, x, y)
 end
 
 -- GameTooltip
-function B:AddTooltip(f, anchor, text, color)
-	f:SetScript("OnEnter", function()
-		GameTooltip:SetOwner(f, anchor)
+function B:AddTooltip(anchor, text, color)
+	self:SetScript("OnEnter", function()
+		GameTooltip:SetOwner(self, anchor)
 		GameTooltip:ClearLines()
 		if tonumber(text) then
 			GameTooltip:SetSpellByID(value)
@@ -103,7 +103,16 @@ function B:AddTooltip(f, anchor, text, color)
 		end
 		GameTooltip:Show()
 	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
+	self:SetScript("OnLeave", GameTooltip_Hide)
+end
+
+function B:StripTextures()
+	for i = 1, self:GetNumRegions() do
+		local region = select(i, self:GetRegions())
+		if region and region:GetObjectType() == "Texture" then
+			region:SetTexture("")
+		end
+	end
 end
 
 -- Button Color

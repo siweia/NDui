@@ -19,7 +19,7 @@ function module:Chatbar()
 		bu.Icon:SetVertexColor(r, g, b)
 		bu:SetHitRectInsets(0, 0, -8, -8)
 		bu:RegisterForClicks("AnyUp")
-		if text then B:AddTooltip(bu, "ANCHOR_TOP", B.HexRGB(r, g, b)..text) end
+		if text then B.AddTooltip(bu, "ANCHOR_TOP", B.HexRGB(r, g, b)..text) end
 		if func then bu:SetScript("OnClick", func) end
 
 		tinsert(buttonList, bu)

@@ -11,16 +11,6 @@ function module:RCLootCoucil()
 	local loot = parent:GetModule("RCLootFrame")
 	local voting = parent:GetModule("RCVotingFrame")
 
-	local function ClearAllRegions(frame)
-		if not frame then return end
-		for i = 1, frame:GetNumRegions() do
-			local region = select(i, frame:GetRegions())
-			if region and region:GetObjectType() == "Texture" then
-				region:Hide()
-			end
-		end
-	end
-
 	local function ReskinButton(bu)
 		if not bu.styled then
 			B.CreateBC(bu)
@@ -33,7 +23,7 @@ function module:RCLootCoucil()
 		for i = 1, 5 do
 			local scroll = _G["ScrollTable"..i]
 			if scroll and not scroll.styled then
-				ClearAllRegions(scroll)
+				B.StripTextures(scroll)
 				B.CreateBD(scroll)
 				scroll.styled = true
 			end
@@ -59,8 +49,8 @@ function module:RCLootCoucil()
 	end
 
 	hooksecurefunc(session, "Show", function()
-		ClearAllRegions(DefaultRCSessionSetupFrame.content)
-		ClearAllRegions(DefaultRCSessionSetupFrame.title)
+		B.StripTextures(DefaultRCSessionSetupFrame.content)
+		B.StripTextures(DefaultRCSessionSetupFrame.title)
 		B.CreateBD(DefaultRCSessionSetupFrame)
 		B.CreateCB(DefaultRCSessionSetupFrameToggle)
 
@@ -72,7 +62,7 @@ function module:RCLootCoucil()
 	end)
 
 	hooksecurefunc(loot, "Show", function()
-		ClearAllRegions(DefaultRCLootFrame.title)
+		B.StripTextures(DefaultRCLootFrame.title)
 		B.CreateBD(DefaultRCLootFrame.content)
 		B.CreateTex(DefaultRCLootFrame.content)
 
@@ -87,8 +77,8 @@ function module:RCLootCoucil()
 
 	hooksecurefunc(voting, "Show", function()
 		local frame = DefaultRCLootCouncilFrame
-		ClearAllRegions(frame.title)
-		ClearAllRegions(frame.content)
+		B.StripTextures(frame.title)
+		B.StripTextures(frame.content)
 		B.CreateBD(frame.content)
 		B.CreateTex(frame.content)
 		ReskinButton(frame.abortBtn)

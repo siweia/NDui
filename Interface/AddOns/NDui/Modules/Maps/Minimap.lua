@@ -182,7 +182,7 @@ function module:RecycleBin()
 	bu.Icon:SetAllPoints()
 	bu.Icon:SetTexture(DB.binTex)
 	bu:SetHighlightTexture(DB.binTex)
-	B:AddTooltip(bu, "ANCHOR_LEFT", L["Minimap RecycleBin"], "white")
+	B.AddTooltip(bu, "ANCHOR_LEFT", L["Minimap RecycleBin"], "white")
 
 	local bin = CreateFrame("Frame", "RecycleBinFrame", UIParent)
 	bin:SetPoint("RIGHT", bu, "LEFT", -3, -6)
