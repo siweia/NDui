@@ -13,6 +13,8 @@ local function skinChat(self)
 	self:SetMinResize(100, 50)
 	self:SetFont(unpack(DB.Font))
 	self:SetShadowColor(0, 0, 0, 0)
+	self:SetClampRectInsets(0, 0, 0, 0)
+	self:SetClampedToScreen(false)
 
 	local frame = _G[name.."ButtonFrame"]
 	frame:Hide()
@@ -56,42 +58,12 @@ local function skinChat(self)
 	select(9, tab:GetRegions()):SetTexture(nil)
 	select(10, tab:GetRegions()):SetTexture(nil)
 
+	self.ScrollBar:Hide()
 	self.ScrollBar.Show = self.ScrollBar.Hide
 	self.ScrollToBottomButton:Hide()
 	self.ScrollToBottomButton.Show = B.Dummy
 
 	self.styled = true
-end
-
-for i = 1, NUM_CHAT_WINDOWS do
-	skinChat(_G["ChatFrame"..i])
-end
-
-hooksecurefunc("FCF_OpenTemporaryWindow", function()
-	for _, chatFrameName in next, CHAT_FRAMES do
-		local frame = _G[chatFrameName]
-		if frame.isTemporary then
-			skinChat(frame)
-		end
-	end
-end)
-
--- Tabs alpha and color
-hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
-	if selected then
-		self:SetAlpha(1)
-		self:GetFontString():SetTextColor(1, .8, 0)
-	else
-		self:GetFontString():SetTextColor(.5, .5, .5)
-		self:SetAlpha(.3)
-	end
-end)
-CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = .3
-DEFAULT_CHATFRAME_ALPHA = 0
-
--- Font size
-for i = 1, 15 do
-	CHAT_FONT_HEIGHTS[i] = i + 9
 end
 
 -- Swith channels by Tab
@@ -189,34 +161,43 @@ function module:WhipserInvite()
 end
 
 function module:OnLogin()
-	-- Hide elements
-	local buttons = {
-		ChatFrameMenuButton,
-		QuickJoinToastButton,
-		--ChatFrameChannelButton,
-		--ChatFrameToggleVoiceDeafenButton,
-		--ChatFrameToggleVoiceMuteButton,
-	}
-	for _, bu in next, buttons do
-		bu:Hide()
-		bu.Show = B.Dummy
+	for i = 1, NUM_CHAT_WINDOWS do
+		skinChat(_G["ChatFrame"..i])
 	end
 
-	-- ToastFrames
-	BNToastFrame:SetClampedToScreen(true)
-	BNToastFrame:SetClampRectInsets(-15, 15, 15, -15)
-	hooksecurefunc(BNToastFrame, "ShowToast", function(self)
-		self:ClearAllPoints()
-		self:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 0, 25)
+	hooksecurefunc("FCF_OpenTemporaryWindow", function()
+		for _, chatFrameName in next, CHAT_FRAMES do
+			local frame = _G[chatFrameName]
+			if frame.isTemporary then
+				skinChat(frame)
+			end
+		end
 	end)
+
+	-- Tabs alpha and color
+	hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
+		if selected then
+			self:SetAlpha(1)
+			self:GetFontString():SetTextColor(1, .8, 0)
+		else
+			self:GetFontString():SetTextColor(.5, .5, .5)
+			self:SetAlpha(.3)
+		end
+	end)
+	CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = .3
+	DEFAULT_CHATFRAME_ALPHA = 0
+
+	-- Font size
+	for i = 1, 15 do
+		CHAT_FONT_HEIGHTS[i] = i + 9
+	end
 
 	-- Default
 	SetCVar("chatStyle", "classic")
 	InterfaceOptionsSocialPanelChatStyle:Hide()
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
-	CombatLogQuickButtonFrame_Custom:ClearAllPoints()
-	CombatLogQuickButtonFrame_Custom:SetPoint("TOPLEFT", ChatFrame2, "TOPLEFT")
-	CombatLogQuickButtonFrame_Custom.SetPoint = B.Dummy
+	ChatFrameMenuButton:Hide()
+	ChatFrameMenuButton.Show = ChatFrameMenuButton.Hide
 
 	-- Sticky
 	if not NDuiDB["Chat"]["Sticky"] then
