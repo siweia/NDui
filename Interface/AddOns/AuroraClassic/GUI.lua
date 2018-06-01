@@ -17,7 +17,6 @@ if locale == "zhCN" then
 	L["Button Gradient"] = "按键颜色渐变"
 	L["Opacity"] = "背景透明度*"
 	L["Reload Text"] = "不带星号(*)的设置需要重载插件后生效。"
-	L["Minimap Button"] = "小地图按钮*"
 elseif locale == "zhTW" then
 	L["Features"] = "模塊"
 	L["Bags"] = "背包"
@@ -32,7 +31,6 @@ elseif locale == "zhTW" then
 	L["Button Gradient"] = "按鍵顏色漸變"
 	L["Opacity"] = "背景透明度*"
 	L["Reload Text"] = "不帶星標(*)的設置需要重載插件後生效。"
-	L["Minimap Button"] = "小地圖按鈕*"
 else
 	L["Features"] = "Features"
 	L["Bags"] = "Bags"
@@ -47,7 +45,6 @@ else
 	L["Button Gradient"] = "Button Gradient Color"
 	L["Opacity"] = "Backdrop Opactiy*"
 	L["Reload Text"] = "Settings not marked with an asterisk (*) require a UI reload."
-	L["Minimap Button"] = "Minimap Button*"
 end
 
 -- [[ Options UI ]]
