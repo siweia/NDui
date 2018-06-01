@@ -177,6 +177,17 @@ function UF:CreatePortrait(self)
 	self.Health.bg:SetParent(self)
 end
 
+local roleTexCoord = {
+	["TANK"] = {.5, .75, 0, 1},
+	["HEALER"] = {.75, 1, 0, 1},
+	["DAMAGER"] = {.25, .5, 0, 1},
+}
+local function postUpdateRole(element, role)
+	if element:IsShown() then
+		element:SetTexCoord(unpack(roleTexCoord[role]))
+	end
+end
+
 function UF:CreateIcons(self)
 	if self.mystyle == "player" then
 		local combat = self:CreateTexture(nil, "OVERLAY")
@@ -213,6 +224,8 @@ function UF:CreateIcons(self)
 		ri:SetPoint("TOPRIGHT", self, 0, 8)
 	end
 	ri:SetSize(12, 12)
+	ri:SetTexture("Interface\\LFGFrame\\LFGROLE")
+	ri.PostUpdate = postUpdateRole
 	self.GroupRoleIndicator = ri
 
 	local li = self:CreateTexture(nil, "OVERLAY")
