@@ -84,8 +84,8 @@ C.themes["Blizzard_Communities"] = function()
 	F.ReskinScroll(dialog.ScrollFrame.ScrollBar)
 
 	-- Roster
-	F.StripTextures(CommunitiesFrame.MemberList.InsetFrame)
-	F.CreateBD(CommunitiesFrame.MemberList.InsetFrame, .25)
+	CommunitiesFrame.MemberList.InsetFrame:Hide()
+	F.CreateBDFrame(CommunitiesFrame.MemberList.ListScrollFrame, .25)
 	F.StripTextures(CommunitiesFrame.MemberList.ColumnDisplay)
 	F.ReskinDropDown(CommunitiesFrame.GuildMemberListDropDownMenu)
 	F.ReskinScroll(CommunitiesFrame.MemberList.ListScrollFrame.scrollBar)
@@ -93,14 +93,52 @@ C.themes["Blizzard_Communities"] = function()
 	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
 	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
 
+	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.CommunitiesSettingsButton)
+	F.StripTextures(CommunitiesSettingsDialog)
+	F.SetBD(CommunitiesSettingsDialog)
+	F.Reskin(CommunitiesSettingsDialog.ChangeAvatarButton)
+	F.Reskin(CommunitiesSettingsDialog.Accept)
+	F.Reskin(CommunitiesSettingsDialog.Delete)
+	F.Reskin(CommunitiesSettingsDialog.Cancel)
+	F.ReskinInput(CommunitiesSettingsDialog.NameEdit)
+	F.ReskinInput(CommunitiesSettingsDialog.ShortNameEdit)
+	F.StripTextures(CommunitiesSettingsDialog.Description)
+	F.CreateBDFrame(CommunitiesSettingsDialog.Description, .25)
+	F.StripTextures(CommunitiesSettingsDialog.MessageOfTheDay)
+	F.CreateBDFrame(CommunitiesSettingsDialog.MessageOfTheDay, .25)
+
+	local function updateNameFrame(self)
+		if not self.expanded then return end
+		if not self.bg then
+			self.bg = F.CreateBG(self.Class)
+		end
+		local memberInfo = self:GetMemberInfo()
+		if memberInfo and memberInfo.classID then
+			local classInfo = C_CreatureInfo.GetClassInfo(memberInfo.classID)
+			if classInfo then
+				local tcoords = CLASS_ICON_TCOORDS[classInfo.classFile]
+				self.Class:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
+			end
+		end
+	end
+
 	hooksecurefunc(CommunitiesFrame.MemberList, "RefreshLayout", function(self)
 		for i = 1, self.ColumnDisplay:GetNumChildren() do
 			local child = select(i, self.ColumnDisplay:GetChildren())
 			if not child.styled then
 				F.StripTextures(child)
 				F.CreateBDFrame(child, .25)
-
 				child.styled = true
+			end
+		end
+
+		for _, button in ipairs(self.ListScrollFrame.buttons or {}) do
+			if button and not button.hooked then
+				hooksecurefunc(button, "RefreshExpandedColumns", updateNameFrame)
+				button.hooked = true
+			end
+			if button and button.bg then
+				button.bg:SetShown(button.Class:IsShown())
 			end
 		end
 	end)
@@ -168,6 +206,12 @@ C.themes["Blizzard_Communities"] = function()
 	CommunitiesFrameGuildDetailsFrame.InsetBorderBottomLeft:SetAlpha(0)
 	CommunitiesFrameGuildDetailsFrame.InsetBorderBottomRight:SetAlpha(0)
 
+	hooksecurefunc("CommunitiesGuildNewsButton_SetNews", function(button)
+		if button.header:IsShown() then
+			button.header:SetAlpha(0)
+		end
+	end)
+
 	F.StripTextures(CommunitiesGuildNewsFiltersFrame)
 	CommunitiesGuildNewsFiltersFrameBg:Hide()
 	F.SetBD(CommunitiesGuildNewsFiltersFrame)
@@ -184,4 +228,6 @@ C.themes["Blizzard_Communities"] = function()
 	F.ReskinScroll(CommunitiesGuildLogFrameScrollBar)
 	F.StripTextures(CommunitiesGuildLogFrame.Container)
 	F.CreateBDFrame(CommunitiesGuildLogFrame.Container, .25)
+	local closeButton = select(3, CommunitiesGuildLogFrame:GetChildren())
+	F.Reskin(closeButton)
 end
