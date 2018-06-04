@@ -40,6 +40,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		for j = 1, 4 do
 			F.Reskin(frame["button"..j])
 		end
+		F.Reskin(frame["extraButton"])
 
 		F.ReskinClose(close)
 
