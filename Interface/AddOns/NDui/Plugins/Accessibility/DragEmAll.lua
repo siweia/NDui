@@ -80,7 +80,7 @@ local lodFrames = {
 	Blizzard_Calendar			= { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true },
 	Blizzard_ChallengesUI		= { ["ChallengesKeystoneFrame"] = false },
 	Blizzard_Collections		= { ["WardrobeFrame"] = false, ["WardrobeOutfitEditFrame"] = false },
-	Blizzard_Communities		= { ["CommunitiesFrame"] = false },
+	Blizzard_Communities		= { ["CommunitiesFrame"] = false, ["CommunitiesSettingsDialog"] = false },
 	Blizzard_EncounterJournal	= { ["EncounterJournal"] = false },
 	Blizzard_FlightMap			= { ["FlightMapFrame"] = false },
 	Blizzard_GarrisonUI			= { ["GarrisonLandingPage"] = false, ["GarrisonMissionFrame"] = false, ["GarrisonBuildingFrame"] = false, ["GarrisonRecruiterFrame"] = false, ["GarrisonRecruitSelectFrame"] = false, ["GarrisonCapacitiveDisplayFrame"] = false, ["GarrisonShipyardFrame"] = false, ["BFAMissionFrame"] = false,},
