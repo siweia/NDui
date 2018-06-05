@@ -178,23 +178,26 @@ C.themes["Blizzard_GuildUI"] = function()
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(bu.icon)
 	end
-
 	GuildPerksContainerButton1:SetPoint("LEFT", -1, 0)
 
-	for _, bu in pairs(GuildRewardsContainer.buttons) do
-		bu:SetNormalTexture("")
+	hooksecurefunc("GuildRewards_Update", function()
+		local buttons = GuildRewardsContainer.buttons
+		for i = 1, #buttons do
+			local bu = buttons[i]
+			if not bu.bg then
+				bu:SetNormalTexture("")
+				bu:SetHighlightTexture("")
+				F.ReskinIcon(bu.icon)
+				bu.disabledBG:Hide()
+				bu.disabledBG.Show = F.dummy
 
-		bu:SetHighlightTexture("")
-		bu.disabledBG:SetTexture("")
-
-		local bg = F.CreateBDFrame(bu, .25)
-		bg:ClearAllPoints()
-		bg:SetPoint("TOPLEFT", 1, -1)
-		bg:SetPoint("BOTTOMRIGHT", 0, 0)
-
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(bu.icon)
-	end
+				bu.bg = F.CreateBDFrame(bu, .25)
+				bu.bg:ClearAllPoints()
+				bu.bg:SetPoint("TOPLEFT", 1, -1)
+				bu.bg:SetPoint("BOTTOMRIGHT", 0, 0)
+			end
+		end
+	end)
 
 	local UpdateIcons = function()
 		local index
