@@ -65,16 +65,13 @@ function module:MicroMenu()
 		end},
 		{"achievements", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT"), function() ToggleAchievementFrame() end},
 		{"quests", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG"), function() ToggleFrame(WorldMapFrame) end},
-		{"guild", {83/256, 173/256, 80/256, 167/256}, IsInGuild() and MicroButtonTooltipText(GUILD, "TOGGLEGUILDTAB") or MicroButtonTooltipText(LOOKINGFORGUILD, "TOGGLEGUILDTAB"), function()
+		{"guild", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLEGUILDTAB"), function()
 			if IsTrialAccount() then
-				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_GUILD_TRIAL_ACCOUNT_TRIAL)
+				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_RESTRICTED_ACCOUNT_TRIAL)
 			elseif faction == "Neutral" then
 				UIErrorsFrame:AddMessage(DB.InfoColor..FEATURE_NOT_AVAILBLE_PANDAREN)
-			elseif IsInGuild() then
-				if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
-				ToggleFrame(GuildFrame)
 			else
-				ToggleGuildFinder()
+				ToggleGuildFrame()
 			end
 		end},
 		{"pvp", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4"), function()
