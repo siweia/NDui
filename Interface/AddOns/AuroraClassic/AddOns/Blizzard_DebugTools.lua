@@ -84,6 +84,7 @@ C.themes["Blizzard_DebugTools"] = function()
 			select(i, frame.ScrollFrameArt:GetRegions()):Hide()
 		end
 		F.CreateBD(frame.ScrollFrameArt, .3)
+		F.ReskinScroll(frame.LinesScrollFrame.ScrollBar)
 	end
 
 	reskinTableAttribute(TableAttributeDisplay)
