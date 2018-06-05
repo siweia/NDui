@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 if DB.Client ~= "zhCN" then return end
+if DB.Support == "BfA Beta" then return end
 
 local hx = {
 	"更新部分技能监控；",
