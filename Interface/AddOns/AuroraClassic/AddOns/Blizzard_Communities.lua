@@ -18,9 +18,15 @@ C.themes["Blizzard_Communities"] = function()
 	CommunitiesFrame.GuildFinderFrame.InsetFrame:Hide()
 	F.Reskin(CommunitiesFrame.GuildFinderFrame.FindAGuildButton)
 
+	F.StripTextures(CommunitiesFrame.InvitationFrame)
+	F.CreateBD(CommunitiesFrame.InvitationFrame, .25)
+	CommunitiesFrame.InvitationFrame.InsetFrame:Hide()
+	F.Reskin(CommunitiesFrame.InvitationFrame.AcceptButton)
+	F.Reskin(CommunitiesFrame.InvitationFrame.DeclineButton)
+
+	F.StripTextures(CommunitiesFrameCommunitiesList)
 	CommunitiesFrameCommunitiesList.InsetFrame:Hide()
 	CommunitiesFrameCommunitiesList.FilligreeOverlay:Hide()
-	CommunitiesFrameCommunitiesList.Bg:Hide()
 	F.ReskinScroll(CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar)
 	CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar.Background:Hide()
 
@@ -49,8 +55,7 @@ C.themes["Blizzard_Communities"] = function()
 	for _, name in next, {"ChatTab", "RosterTab", "GuildBenefitsTab", "GuildInfoTab"} do
 		local tab = CommunitiesFrame[name]
 		tab:GetRegions():Hide()
-		tab.Icon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBDFrame(tab.Icon)
+		F.ReskinIcon(tab.Icon)
 		tab:SetCheckedTexture(C.media.checked)
 		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	end
@@ -58,30 +63,103 @@ C.themes["Blizzard_Communities"] = function()
 	-- ChatTab
 	F.Reskin(CommunitiesFrame.InviteButton)
 	F.StripTextures(CommunitiesFrame.Chat.InsetFrame)
-	do
-		local bg = F.CreateBDFrame(CommunitiesFrame.Chat.InsetFrame, .25)
-		bg:SetPoint("BOTTOMRIGHT", -1, -3)
-	end
 	F.ReskinScroll(CommunitiesFrame.Chat.MessageFrame.ScrollBar)
 	F.StripTextures(CommunitiesFrame.ChatEditBox)
+	local bg1 = F.CreateBDFrame(CommunitiesFrame.Chat.InsetFrame, .25)
+	bg1:SetPoint("BOTTOMRIGHT", -1, 22)
+	local bg2 = F.CreateBDFrame(CommunitiesFrame.ChatEditBox, 0)
+	F.CreateGradient(bg2)
+	bg2:SetPoint("TOPLEFT", -2, -5)
+	bg2:SetPoint("BOTTOMRIGHT", 2, 5)
+
 	do
-		local bg = F.CreateBDFrame(CommunitiesFrame.ChatEditBox, 0)
-		F.CreateGradient(bg)
-		bg:SetPoint("TOPLEFT", -2, -5)
-		bg:SetPoint("BOTTOMRIGHT", 2, 5)
+		local dialog = CommunitiesFrame.NotificationSettingsDialog
+		F.StripTextures(dialog)
+		dialog.BG:Hide()
+		F.SetBD(dialog)
+		F.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
+		F.Reskin(dialog.OkayButton)
+		F.Reskin(dialog.CancelButton)
+		F.ReskinCheck(dialog.ScrollFrame.Child.QuickJoinButton)
+		dialog.ScrollFrame.Child.QuickJoinButton:SetSize(25, 25)
+		F.Reskin(dialog.ScrollFrame.Child.AllButton)
+		F.Reskin(dialog.ScrollFrame.Child.NoneButton)
+		F.ReskinScroll(dialog.ScrollFrame.ScrollBar)
+
+		hooksecurefunc(dialog, "Refresh", function(self)
+			local frame = self.ScrollFrame.Child
+			for i = 1, frame:GetNumChildren() do
+				local child = select(i, frame:GetChildren())
+				if child.StreamName and not child.styled then
+					F.ReskinRadio(child.ShowNotificationsButton)
+					F.ReskinRadio(child.HideNotificationsButton)
+
+					child.styled = true
+				end
+			end
+		end)
 	end
 
-	local dialog = CommunitiesFrame.NotificationSettingsDialog
-	F.StripTextures(dialog)
-	dialog.BG:Hide()
-	F.SetBD(dialog)
-	F.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
-	F.Reskin(dialog.OkayButton)
-	F.Reskin(dialog.CancelButton)
-	F.ReskinCheck(dialog.ScrollFrame.Child.QuickJoinButton)
-	F.Reskin(dialog.ScrollFrame.Child.AllButton)
-	F.Reskin(dialog.ScrollFrame.Child.NoneButton)
-	F.ReskinScroll(dialog.ScrollFrame.ScrollBar)
+	do
+		local dialog = CommunitiesFrame.EditStreamDialog
+		F.StripTextures(dialog)
+		F.SetBD(dialog)
+		F.StripTextures(dialog.NameEdit)
+		local bg = F.CreateBDFrame(dialog.NameEdit, .25)
+		bg:SetPoint("TOPLEFT", -3, -3)
+		bg:SetPoint("BOTTOMRIGHT", -4, 3)
+		F.StripTextures(dialog.Description)
+		F.CreateBDFrame(dialog.Description, .25)
+		F.ReskinCheck(dialog.TypeCheckBox)
+		F.Reskin(dialog.Accept)
+		F.Reskin(dialog.Cancel)
+	end
+
+	do
+		local dialog = CommunitiesTicketManagerDialog
+		F.StripTextures(dialog)
+		F.SetBD(dialog)
+		dialog.Background:Hide()
+		F.ReskinInput(dialog.LinkBox)
+		F.Reskin(dialog.Copy)
+		F.Reskin(dialog.Close)
+		F.ReskinArrow(dialog.MaximizeButton, "down")
+		F.ReskinDropDown(dialog.ExpiresDropDownMenu)
+		F.ReskinDropDown(dialog.UsesDropDownMenu)
+		F.Reskin(dialog.GenerateLinkButton)
+
+		dialog.InviteManager.ArtOverlay:Hide()
+		F.StripTextures(dialog.InviteManager.ColumnDisplay)
+		dialog.InviteManager.ListScrollFrame.Background:Hide()
+		F.ReskinScroll(dialog.InviteManager.ListScrollFrame.scrollBar)
+		dialog.InviteManager.ListScrollFrame.scrollBar.Background:Hide()
+
+		hooksecurefunc(dialog, "Update", function(self)
+			local column = self.InviteManager.ColumnDisplay
+			for i = 1, column:GetNumChildren() do
+				local child = select(i, column:GetChildren())
+				if not child.styled then
+					F.StripTextures(child)
+					F.CreateBDFrame(child, .25)
+
+					child.styled = true
+				end
+			end
+
+			local buttons = self.InviteManager.ListScrollFrame.buttons
+			for i = 1, #buttons do
+				local button = buttons[i]
+				if not button.styled then
+					F.Reskin(button.CopyLinkButton)
+					button.CopyLinkButton.Background:Hide()
+					F.Reskin(button.RevokeButton)
+					button.RevokeButton:SetSize(18, 18)
+
+					button.styled = true
+				end
+			end
+		end)
+	end
 
 	-- Roster
 	CommunitiesFrame.MemberList.InsetFrame:Hide()
@@ -92,20 +170,55 @@ C.themes["Blizzard_Communities"] = function()
 	CommunitiesFrame.MemberList.ListScrollFrame.scrollBar.Background:Hide()
 	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
 	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
-
 	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.CommunitiesSettingsButton)
-	F.StripTextures(CommunitiesSettingsDialog)
-	F.SetBD(CommunitiesSettingsDialog)
-	F.Reskin(CommunitiesSettingsDialog.ChangeAvatarButton)
-	F.Reskin(CommunitiesSettingsDialog.Accept)
-	F.Reskin(CommunitiesSettingsDialog.Delete)
-	F.Reskin(CommunitiesSettingsDialog.Cancel)
-	F.ReskinInput(CommunitiesSettingsDialog.NameEdit)
-	F.ReskinInput(CommunitiesSettingsDialog.ShortNameEdit)
-	F.StripTextures(CommunitiesSettingsDialog.Description)
-	F.CreateBDFrame(CommunitiesSettingsDialog.Description, .25)
-	F.StripTextures(CommunitiesSettingsDialog.MessageOfTheDay)
-	F.CreateBDFrame(CommunitiesSettingsDialog.MessageOfTheDay, .25)
+
+	do
+		local dialog = CommunitiesSettingsDialog
+		F.StripTextures(dialog)
+		F.SetBD(dialog)
+		F.Reskin(dialog.ChangeAvatarButton)
+		F.Reskin(dialog.Accept)
+		F.Reskin(dialog.Delete)
+		F.Reskin(dialog.Cancel)
+		F.ReskinInput(dialog.NameEdit)
+		F.ReskinInput(dialog.ShortNameEdit)
+		F.StripTextures(dialog.Description)
+		F.CreateBDFrame(dialog.Description, .25)
+		F.StripTextures(dialog.MessageOfTheDay)
+		F.CreateBDFrame(dialog.MessageOfTheDay, .25)
+	end
+
+	do
+		local dialog = CommunitiesAvatarPickerDialog
+		F.StripTextures(dialog)
+		F.SetBD(dialog)
+		select(9, dialog:GetRegions()):Hide()
+		CommunitiesAvatarPickerDialogTop:Hide()
+		CommunitiesAvatarPickerDialogMiddle:Hide()
+		CommunitiesAvatarPickerDialogBottom:Hide()
+		F.ReskinScroll(CommunitiesAvatarPickerDialogScrollBar)
+		F.Reskin(dialog.OkayButton)
+		F.Reskin(dialog.CancelButton)
+
+		hooksecurefunc(CommunitiesAvatarPickerDialog.ScrollFrame, "Refresh", function(self)
+			for i = 1, 5 do
+				for j = 1, 6 do
+					local avatarButton = self.avatarButtons[i][j]
+					if avatarButton:IsShown() and not avatarButton.bg then
+						avatarButton.bg = F.ReskinIcon(avatarButton.Icon)
+						avatarButton.Selected:SetTexture("")
+						avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+					end
+
+					if avatarButton.Selected:IsShown() then
+						avatarButton.bg:SetVertexColor(r, g, b)
+					else
+						avatarButton.bg:SetVertexColor(0, 0, 0)
+					end
+				end
+			end
+		end)
+	end
 
 	local function updateNameFrame(self)
 		if not self.expanded then return end
@@ -128,6 +241,7 @@ C.themes["Blizzard_Communities"] = function()
 			if not child.styled then
 				F.StripTextures(child)
 				F.CreateBDFrame(child, .25)
+
 				child.styled = true
 			end
 		end
@@ -155,8 +269,7 @@ C.themes["Blizzard_Communities"] = function()
 		for i = 1, #buttons do
 			local button = buttons[i]
 			if button and button:IsShown() and not button.bg then
-				button.Icon:SetTexCoord(.08, .92, .08, .92)
-				F.CreateBG(button.Icon)
+				F.ReskinIcon(button.Icon)
 				for i = 1, 4 do
 					select(i, button:GetRegions()):SetAlpha(0)
 				end
@@ -173,10 +286,10 @@ C.themes["Blizzard_Communities"] = function()
 			local button = buttons[i]
 			if button then
 				if not button.bg then
-					button.Icon:SetTexCoord(.08, .92, .08, .92)
-					F.CreateBG(button.Icon)
+					F.ReskinIcon(button.Icon)
 					select(6, button:GetRegions()):SetAlpha(0)
 					select(7, button:GetRegions()):SetAlpha(0)
+
 					button.bg = F.CreateBDFrame(button, .25)
 					button.bg:SetPoint("TOPLEFT", button.Icon, 0, 1)
 					button.bg:SetPoint("BOTTOMRIGHT", 0, 3)
@@ -191,11 +304,9 @@ C.themes["Blizzard_Communities"] = function()
 	F.StripTextures(CommunitiesFrameGuildDetailsFrameInfo)
 	F.StripTextures(CommunitiesFrameGuildDetailsFrameNews)
 	F.ReskinScroll(CommunitiesFrameGuildDetailsFrameInfoMOTDScrollFrameScrollBar)
-	do
-		local bg = F.CreateBDFrame(CommunitiesFrameGuildDetailsFrameInfoMOTDScrollFrame, .25)
-		bg:SetPoint("TOPLEFT", 0, 3)
-		bg:SetPoint("BOTTOMRIGHT", 0, -4)
-	end
+	local bg3 = F.CreateBDFrame(CommunitiesFrameGuildDetailsFrameInfoMOTDScrollFrame, .25)
+	bg3:SetPoint("TOPLEFT", 0, 3)
+	bg3:SetPoint("BOTTOMRIGHT", 0, -4)
 	F.ReskinScroll(CommunitiesFrameGuildDetailsFrameInfoScrollBar)
 	F.CreateBDFrame(CommunitiesFrameGuildDetailsFrameInfo.DetailsFrame, .25)
 	F.ReskinScroll(CommunitiesFrameGuildDetailsFrameNewsContainer.ScrollBar)
