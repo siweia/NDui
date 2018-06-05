@@ -249,8 +249,10 @@ info.onLeave = function()
 end
 
 info.onMouseUp = function()
+	if not IsInGuild() then return end
 	infoFrame:Hide()
-	ToggleGuildFrame()
+	if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
+	ToggleFrame(GuildFrame)
 end
 
 infoFrame:SetScript("OnLeave", function(self)
