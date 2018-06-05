@@ -211,13 +211,12 @@ end
 
 -- Autoequip in Spec-changing
 do
-	local function setupMisc(event, ...)
+	local function setupMisc(event, unit, _, spellID)
 		if not NDuiDB["Misc"]["Autoequip"] then
 			B:UnregisterEvent(event, setupMisc)
 			return
 		end
 
-		local unit, _, _, _, spellID = ...
 		if unit ~= "player" or spellID ~= 200749 then return end
 		local _, _, id = GetInstanceInfo()
 		if id == 8 then return end
@@ -232,7 +231,7 @@ do
 				print(format(DB.InfoColor..EQUIPMENT_SETS, name))
 			end
 		else
-			for i = 1, GetNumEquipmentSets() do
+			for i = 1, C_EquipmentSet.GetNumEquipmentSets() do
 				local name, _, _, isEquipped = GetEquipmentSetInfo(i)
 				if isEquipped then
 					print(format(DB.InfoColor..EQUIPMENT_SETS, name))
