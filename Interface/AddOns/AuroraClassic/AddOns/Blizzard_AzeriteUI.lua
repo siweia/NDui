@@ -8,5 +8,6 @@ C.themes["Blizzard_AzeriteUI"] = function()
 	AzeriteEmpoweredItemUIPortraitFrame:Hide()
 	F.StripTextures(AzeriteEmpoweredItemUI.BorderFrame)
 	AzeriteEmpoweredItemUITopBorder:Hide()
-	AzeriteEmpoweredItemUI.BackgroundFrame.Bg:Hide()
+	AzeriteEmpoweredItemUI.ClipFrame.BackgroundFrame.Bg:Hide()
+	AzeriteEmpoweredItemUI.ClipFrame.BackgroundFrame.KeyOverlay.Shadow:Hide()
 end
