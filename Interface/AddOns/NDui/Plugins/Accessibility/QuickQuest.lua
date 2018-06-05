@@ -9,7 +9,7 @@ local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "Options
 mono:SetPoint("TOPRIGHT", -150, 0)
 mono:SetSize(26, 26)
 mono:SetHitRectInsets(0, -10, 0, 0)
-B.CreateCB(mono)
+B.CreateCB(mono, .25)
 mono.text = B.CreateFS(mono, 14, L["Auto Quest"], false, "LEFT", 25, 0)
 mono:RegisterEvent("PLAYER_LOGIN")
 mono:SetScript("OnEvent", function(self)
