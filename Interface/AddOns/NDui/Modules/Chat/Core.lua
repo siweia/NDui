@@ -37,13 +37,6 @@ local function skinChat(self)
 	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 28, 0)
 	B.CreateBD(lang)
 	B.CreateTex(lang)
-	lang:HookScript("OnMouseUp", function(_, btn)
-		if btn == "RightButton" then
-			ChatMenu:ClearAllPoints()
-			ChatMenu:SetPoint("BOTTOMRIGHT", eb, 0, 30)
-			ToggleFrame(ChatMenu)
-		end
-	end)
 
 	local tab = _G[name.."Tab"]
 	tab:SetAlpha(1)
@@ -196,8 +189,6 @@ function module:OnLogin()
 	SetCVar("chatStyle", "classic")
 	InterfaceOptionsSocialPanelChatStyle:Hide()
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
-	ChatFrameMenuButton:Hide()
-	ChatFrameMenuButton.Show = ChatFrameMenuButton.Hide
 
 	-- Sticky
 	if not NDuiDB["Chat"]["Sticky"] then
