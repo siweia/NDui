@@ -435,7 +435,6 @@ local function postUpdateGapIcon(_, _, icon)
 	end
 end
 
-local unitName = C_EncounterJournal.GetSectionInfo(15903).title
 local function customFilter(element, unit, button, name, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 	if style == "raid" then
@@ -453,8 +452,6 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 				element.bolsterIndex = button
 				return true
 			end
-		elseif UnitName(unit) == unitName and spellID == 146739 and DB.isDeveloper then
-			return true
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
 		elseif C.BlackList and C.BlackList[spellID] then
