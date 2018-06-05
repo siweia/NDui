@@ -4,17 +4,20 @@ local module = B:GetModule("Chat")
 
 function module:ChatCopy()
 	-- Custom ChatMenu
-	local frame = CreateFrame("Frame", "NDuiChatMenu", UIParent)
-	frame:SetSize(25, 100)
-	frame:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 10, 0)
-	frame:Hide()
+	local menu = CreateFrame("Frame", nil, UIParent)
+	menu:SetSize(25, 100)
+	menu:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 10, 0)
+	menu:SetShown(NDuiDB["Chat"]["ChatMenu"])
 
+	ChatFrameMenuButton:ClearAllPoints()
+	ChatFrameMenuButton:SetPoint("TOP", menu)
+	ChatFrameMenuButton:SetParent(menu)
 	ChatFrameChannelButton:ClearAllPoints()
-	ChatFrameChannelButton:SetPoint("TOP", frame)
-	ChatFrameChannelButton:SetParent(frame)
-	ChatFrameToggleVoiceDeafenButton:SetParent(frame)
-	ChatFrameToggleVoiceMuteButton:SetParent(frame)
-	QuickJoinToastButton:SetParent(frame)
+	ChatFrameChannelButton:SetPoint("TOP", ChatFrameMenuButton, "BOTTOM", 0, -2)
+	ChatFrameChannelButton:SetParent(menu)
+	ChatFrameToggleVoiceDeafenButton:SetParent(menu)
+	ChatFrameToggleVoiceMuteButton:SetParent(menu)
+	QuickJoinToastButton:SetParent(menu)
 	ChatAlertFrame:ClearAllPoints()
 	ChatAlertFrame:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 5, 25)
 
@@ -67,12 +70,8 @@ function module:ChatCopy()
 				frame:Hide()
 			end
 		elseif btn == "RightButton" then
-			if not NDuiChatMenu then
-				ChatButtonCollecter()
-				NDuiChatMenu:Show()
-			else
-				ToggleFrame(NDuiChatMenu)
-			end
+			ToggleFrame(menu)
+			NDuiDB["Chat"]["ChatMenu"] = menu:IsShown()
 		end
 	end
 
