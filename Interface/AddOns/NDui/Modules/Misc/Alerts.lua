@@ -175,9 +175,8 @@ function module:ReflectingAlert()
 	if not NDuiDB["Misc"]["ReflectingAlert"] then return end
 
 	local name, itemLink = GetItemInfo(112384)
-	local function updateAlert(_, ...)
+	local function updateAlert(_, unit, _, spell)
 		if not IsInGroup() then return end
-		local unit, _, _, _, spell = ...
 		if spell ~= 163219 then return end
 		if unit:match("raid") or unit:match("party") and not UnitInRaid(unit) then
 			local unitName = GetUnitName(unit)
