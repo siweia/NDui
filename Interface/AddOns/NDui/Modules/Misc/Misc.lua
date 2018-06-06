@@ -232,7 +232,7 @@ do
 			end
 		else
 			for i = 1, C_EquipmentSet.GetNumEquipmentSets() do
-				local name, _, _, isEquipped = GetEquipmentSetInfo(i)
+				local name, _, _, isEquipped = C_EquipmentSet.GetEquipmentSetInfo(i)
 				if isEquipped then
 					print(format(DB.InfoColor..EQUIPMENT_SETS, name))
 					break
