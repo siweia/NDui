@@ -666,14 +666,6 @@ function F:ReskinGarrisonPortrait()
 	end
 end
 
-function F:ReskinGarrMaterial()
-	self.MaterialFrame.Icon:SetTexCoord(.08, .92, .08, .92)
-	self.MaterialFrame:GetRegions():Hide()
-	local bg = F.CreateBDFrame(self.MaterialFrame, .25)
-	bg:SetPoint("TOPLEFT", 5, -5)
-	bg:SetPoint("BOTTOMRIGHT", -5, 6)
-end
-
 function F:ReskinIcon()
 	self:SetTexCoord(.08, .92, .08, .92)
 	return F.CreateBG(self)

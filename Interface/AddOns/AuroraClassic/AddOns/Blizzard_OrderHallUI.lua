@@ -52,98 +52,21 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	end
 
 	local FollowerTab = OrderHallMissionFrame.FollowerTab
+
 	FollowerTab:DisableDrawLayer("BORDER")
-	do
-		local xpBar = FollowerTab.XPBar
-		select(1, xpBar:GetRegions()):Hide()
-		xpBar.XPLeft:Hide()
-		xpBar.XPRight:Hide()
-		select(4, xpBar:GetRegions()):Hide()
-		xpBar:SetStatusBarTexture(C.media.backdrop)
-		F.CreateBDFrame(xpBar)
-	end
+	F.ReskinXPBar(FollowerTab)
 
 	-- Mission UI
 
-	for i = 1, 2 do
-		local tab = _G["OrderHallMissionFrameMissionsTab"..i]
-		tab.Left:Hide()
-		tab.Middle:Hide()
-		tab.Right:Hide()
-		tab.SelectedLeft:SetTexture("")
-		tab.SelectedMid:SetTexture("")
-		tab.SelectedRight:SetTexture("")
-		F.CreateBD(tab, .25)
-	end
-	OrderHallMissionFrameMissionsTab1:SetBackdropColor(r, g, b, .2)
+	F.ReskinMissionTabs("OrderHallMissionFrameMissionsTab")
 
 	local MissionList = OrderHallMissionFrame.MissionTab.MissionList
-	local buttons = MissionList.listScroll.buttons
-	for i = 1, #buttons do
-		local button = buttons[i]
 
-		for i = 1, 12 do
-			local rareOverlay = button.RareOverlay
-			local rareText = button.RareText
-			select(i, button:GetRegions()):Hide()
-			F.CreateBD(button, .25)
-
-			rareText:ClearAllPoints()
-			rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
-			rareOverlay:SetDrawLayer("BACKGROUND")
-			rareOverlay:SetTexture(C.media.backdrop)
-			rareOverlay:ClearAllPoints()
-			rareOverlay:SetAllPoints()
-			rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
-		end
-	end
+	F.ReskinMissionList(MissionList)
 
 	local MissionPage = OrderHallMissionFrame.MissionTab.MissionPage
-	for i = 1, 15 do
-		select(i, MissionPage:GetRegions()):Hide()
-	end
-	select(18, MissionPage:GetRegions()):Hide()
-	select(19, MissionPage:GetRegions()):Hide()
-	select(20, MissionPage:GetRegions()):Hide()
-	MissionPage.StartMissionButton.Flash:SetTexture("")
-	F.Reskin(MissionPage.StartMissionButton)
-	F.ReskinClose(MissionPage.CloseButton)
-	MissionPage.CloseButton:ClearAllPoints()
-	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
-	select(4, MissionPage.Stage:GetRegions()):Hide()
-	select(5, MissionPage.Stage:GetRegions()):Hide()
-	MissionPage.CostFrame.CostIcon:SetTexCoord(.08, .92, .08, .92)
-	do
-		local bg = CreateFrame("Frame", nil, MissionPage.Stage)
-		bg:SetPoint("TOPLEFT", 4, 1)
-		bg:SetPoint("BOTTOMRIGHT", -4, -1)
-		bg:SetFrameLevel(MissionPage.Stage:GetFrameLevel() - 1)
-		F.CreateBD(bg)
 
-		local overlay = MissionPage.Stage:CreateTexture()
-		overlay:SetDrawLayer("ARTWORK", 3)
-		overlay:SetAllPoints(bg)
-		overlay:SetColorTexture(0, 0, 0, .5)
-
-		local iconbg = select(16, MissionPage:GetRegions())
-		iconbg:ClearAllPoints()
-		iconbg:SetPoint("TOPLEFT", 3, -1)
-	end
-
-	for i = 1, 3 do
-		local follower = MissionPage.Followers[i]
-		follower:GetRegions():Hide()
-		F.CreateBD(follower, .25)
-
-		follower.PortraitFrame.Highlight:Hide()
-		follower.PortraitFrame.PortraitFeedbackGlow:Hide()
-		follower.PortraitFrame.PortraitRing:SetAlpha(0)
-		follower.PortraitFrame.PortraitRingQuality:SetAlpha(0)
-		follower.PortraitFrame.LevelBorder:SetAlpha(0)
-		follower.PortraitFrame.Level:SetText("")
-		follower.PortraitFrame.Empty:SetColorTexture(0,0,0)
-		follower.PortraitFrame.Empty:SetAllPoints(follower.PortraitFrame.Portrait)
-	end
+	F.ReskinMissionPage(MissionPage)
 
 	local buffFrame = MissionPage.BuffsFrame
 	buffFrame.BuffsBG:Hide()
@@ -171,26 +94,6 @@ C.themes["Blizzard_OrderHallUI"] = function()
 			num = num + 1
 			mec = enemy[num]
 		end
-	end
-
-	local rewardFrame = MissionPage.RewardsFrame
-	for i = 1, 10 do
-		select(i, rewardFrame:GetRegions()):Hide()
-	end
-	F.CreateBD(rewardFrame, .25)
-
-	local item = rewardFrame.OvermaxItem
-	item.Icon:SetDrawLayer("BORDER", 1)
-	F.ReskinIcon(item.Icon)
-
-	for i = 1, 2 do
-		local reward = MissionPage.RewardsFrame.Rewards[i]
-		local icon = reward.Icon
-		reward.BG:Hide()
-		icon:SetDrawLayer("BORDER", 1)
-		F.ReskinIcon(icon)
-		reward.ItemBurst:SetDrawLayer("BORDER", 2)
-		F.CreateBD(reward, .15)
 	end
 
 	-- Mission Complete Page

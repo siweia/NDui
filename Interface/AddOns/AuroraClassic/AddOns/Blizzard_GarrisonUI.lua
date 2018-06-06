@@ -1,5 +1,127 @@
 local F, C = unpack(select(2, ...))
 
+do
+	function F:ReskinMissionPage()
+		F.StripTextures(self)
+		self.StartMissionButton.Flash:SetTexture("")
+		F.Reskin(self.StartMissionButton)
+		F.ReskinClose(self.CloseButton)
+
+		self.CloseButton:ClearAllPoints()
+		self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+		select(4, self.Stage:GetRegions()):Hide()
+		select(5, self.Stage:GetRegions()):Hide()
+
+		local bg = CreateFrame("Frame", nil, self.Stage)
+		bg:SetPoint("TOPLEFT", 4, 1)
+		bg:SetPoint("BOTTOMRIGHT", -4, -1)
+		bg:SetFrameLevel(self.Stage:GetFrameLevel() - 1)
+		F.CreateBD(bg)
+		local overlay = self.Stage:CreateTexture()
+		overlay:SetDrawLayer("ARTWORK", 3)
+		overlay:SetAllPoints(bg)
+		overlay:SetColorTexture(0, 0, 0, .5)
+		local iconbg = select(16, self:GetRegions())
+		iconbg:ClearAllPoints()
+		iconbg:SetPoint("TOPLEFT", 3, -1)
+
+		for i = 1, 3 do
+			local follower = self.Followers[i]
+			follower:GetRegions():Hide()
+			F.CreateBD(follower, .25)
+
+			follower.PortraitFrame.Highlight:Hide()
+			follower.PortraitFrame.PortraitFeedbackGlow:Hide()
+			follower.PortraitFrame.PortraitRing:SetAlpha(0)
+			follower.PortraitFrame.PortraitRingQuality:SetAlpha(0)
+			follower.PortraitFrame.LevelBorder:SetAlpha(0)
+			follower.PortraitFrame.Level:SetText("")
+			follower.PortraitFrame.Empty:SetColorTexture(0,0,0)
+			follower.PortraitFrame.Empty:SetAllPoints(follower.PortraitFrame.Portrait)
+		end
+
+		for i = 1, 10 do
+			select(i, self.RewardsFrame:GetRegions()):Hide()
+		end
+		F.CreateBD(self.RewardsFrame, .25)
+
+		for i = 1, 2 do
+			local reward = self.RewardsFrame.Rewards[i]
+			local icon = reward.Icon
+
+			reward.BG:Hide()
+			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetDrawLayer("BORDER", 1)
+			F.CreateBG(icon)
+			reward.ItemBurst:SetDrawLayer("BORDER", 2)
+			F.CreateBD(reward, .15)
+		end
+
+		local env = self.Stage.MissionEnvIcon
+		env.Texture:SetDrawLayer("BORDER", 1)
+		F.ReskinIcon(env.Texture)
+
+		local item = self.RewardsFrame.OvermaxItem
+		item.Icon:SetDrawLayer("BORDER", 1)
+		F.ReskinIcon(item.Icon)
+
+		local cost = self.CostFrame
+		F.ReskinIcon(cost.CostIcon)
+	end
+
+	function F:ReskinMissionTabs()
+		for i = 1, 2 do
+			local tab = _G[self..i]
+			F.StripTextures(tab)
+			F.CreateBD(tab, .25)
+			if i == 1 then
+				tab:SetBackdropColor(r, g, b, .2)
+			end
+		end
+	end
+
+	function F:ReskinXPBar()
+		local xpBar = self.XPBar
+		xpBar:GetRegions():Hide()
+		xpBar.XPLeft:Hide()
+		xpBar.XPRight:Hide()
+		select(4, xpBar:GetRegions()):Hide()
+		xpBar:SetStatusBarTexture(C.media.backdrop)
+		F.CreateBDFrame(xpBar, .25)
+	end
+
+	function F:ReskinGarrMaterial()
+		self.MaterialFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+		self.MaterialFrame:GetRegions():Hide()
+		local bg = F.CreateBDFrame(self.MaterialFrame, .25)
+		bg:SetPoint("TOPLEFT", 5, -5)
+		bg:SetPoint("BOTTOMRIGHT", -5, 6)
+	end
+
+	function F:ReskinMissionList()
+		local buttons = self.listScroll.buttons
+		for i = 1, #buttons do
+			local button = buttons[i]
+			if not button.styled then
+				local rareOverlay = button.RareOverlay
+				local rareText = button.RareText
+
+				F.StripTextures(button)
+				F.CreateBD(button, .25)
+
+				rareText:ClearAllPoints()
+				rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
+				rareOverlay:SetDrawLayer("BACKGROUND")
+				rareOverlay:SetTexture(C.media.backdrop)
+				rareOverlay:SetAllPoints()
+				rareOverlay:SetVertexColor(.098, .537, .969, .2)
+
+				button.styled = true
+			end
+		end
+	end
+end
+
 C.themes["Blizzard_GarrisonUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
@@ -151,7 +273,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local Confirmation = GarrisonBuildingFrame.Confirmation
 
 	Confirmation:GetRegions():Hide()
-
 	F.CreateBD(Confirmation)
 
 	F.Reskin(Confirmation.CancelButton)
@@ -192,31 +313,28 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		F.ReskinGarrisonPortrait(CapacitiveDisplay.ShipmentIconFrame.Follower)
 	end
 
-	do
-		local reagentIndex = 1
+	local reagentIndex = 1
+	hooksecurefunc("GarrisonCapacitiveDisplayFrame_Update", function(self)
+		local reagents = CapacitiveDisplay.Reagents
 
-		hooksecurefunc("GarrisonCapacitiveDisplayFrame_Update", function(self)
-			local reagents = CapacitiveDisplay.Reagents
+		local reagent = reagents[reagentIndex]
+		while reagent do
+			reagent.NameFrame:SetAlpha(0)
 
-			local reagent = reagents[reagentIndex]
-			while reagent do
-				reagent.NameFrame:SetAlpha(0)
+			reagent.Icon:SetTexCoord(.08, .92, .08, .92)
+			reagent.Icon:SetDrawLayer("BORDER")
+			F.CreateBG(reagent.Icon)
 
-				reagent.Icon:SetTexCoord(.08, .92, .08, .92)
-				reagent.Icon:SetDrawLayer("BORDER")
-				F.CreateBG(reagent.Icon)
+			local bg = CreateFrame("Frame", nil, reagent)
+			bg:SetPoint("TOPLEFT")
+			bg:SetPoint("BOTTOMRIGHT", 0, 2)
+			bg:SetFrameLevel(reagent:GetFrameLevel() - 1)
+			F.CreateBD(bg, .25)
 
-				local bg = CreateFrame("Frame", nil, reagent)
-				bg:SetPoint("TOPLEFT")
-				bg:SetPoint("BOTTOMRIGHT", 0, 2)
-				bg:SetFrameLevel(reagent:GetFrameLevel() - 1)
-				F.CreateBD(bg, .25)
-
-				reagentIndex = reagentIndex + 1
-				reagent = reagents[reagentIndex]
-			end
-		end)
-	end
+			reagentIndex = reagentIndex + 1
+			reagent = reagents[reagentIndex]
+		end
+	end)
 
 	-- [[ Landing page ]]
 
@@ -301,7 +419,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local unselectedTab = Report.unselectedTab
 
 		unselectedTab:SetHeight(36)
-
 		unselectedTab:SetNormalTexture("")
 		unselectedTab.selectedTex:Hide()
 		self:SetNormalTexture("")
@@ -314,7 +431,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	FollowerList:GetRegions():Hide()
 	select(2, FollowerList:GetRegions()):Hide()
-
 	F.ReskinInput(FollowerList.SearchBox)
 
 	local scrollFrame = FollowerList.listScroll
@@ -327,7 +443,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	FollowerList:GetRegions():Hide()
 	select(2, FollowerList:GetRegions()):Hide()
-
 	F.ReskinInput(FollowerList.SearchBox)
 
 	local scrollFrame = FollowerList.listScroll
@@ -338,35 +453,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local FollowerTab = GarrisonLandingPage.FollowerTab
 
-	do
-		local xpBar = FollowerTab.XPBar
-
-		select(1, xpBar:GetRegions()):Hide()
-		xpBar.XPLeft:Hide()
-		xpBar.XPRight:Hide()
-		select(4, xpBar:GetRegions()):Hide()
-
-		xpBar:SetStatusBarTexture(C.media.backdrop)
-
-		F.CreateBDFrame(xpBar)
-	end
+	F.ReskinXPBar(FollowerTab)
 
 	-- Ship follower tab
 
 	local FollowerTab = GarrisonLandingPage.ShipFollowerTab
 
-	do
-		local xpBar = FollowerTab.XPBar
-
-		select(1, xpBar:GetRegions()):Hide()
-		xpBar.XPLeft:Hide()
-		xpBar.XPRight:Hide()
-		select(4, xpBar:GetRegions()):Hide()
-
-		xpBar:SetStatusBarTexture(C.media.backdrop)
-
-		F.CreateBDFrame(xpBar)
-	end
+	F.ReskinXPBar(FollowerTab)
 
 	for i = 1, 2 do
 		local trait = FollowerTab.Traits[i]
@@ -423,30 +516,14 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinInput(FollowerList.SearchBox)
 	F.ReskinScroll(FollowerList.listScroll.scrollBar)
 
-	local MissionTab = GarrisonMissionFrame.MissionTab
-
 	-- Mission list
 
+	local MissionTab = GarrisonMissionFrame.MissionTab
 	local MissionList = MissionTab.MissionList
 
+	F.ReskinMissionTabs("GarrisonMissionFrameMissionsTab")
 	MissionList:DisableDrawLayer("BORDER")
-
 	F.ReskinScroll(MissionList.listScroll.scrollBar)
-
-	for i = 1, 2 do
-		local tab = _G["GarrisonMissionFrameMissionsTab"..i]
-
-		tab.Left:Hide()
-		tab.Middle:Hide()
-		tab.Right:Hide()
-		tab.SelectedLeft:SetTexture("")
-		tab.SelectedMid:SetTexture("")
-		tab.SelectedRight:SetTexture("")
-
-		F.CreateBD(tab, .25)
-	end
-
-	GarrisonMissionFrameMissionsTab1:SetBackdropColor(r, g, b, .2)
 
 	hooksecurefunc("GarrisonMissonListTab_SetSelected", function(tab, isSelected)
 		if isSelected then
@@ -459,28 +536,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinGarrMaterial(MissionList)
 	F.Reskin(MissionList.CompleteDialog.BorderFrame.ViewButton)
 
-	local buttons = MissionList.listScroll.buttons
-	for i = 1, #buttons do
-		local button = buttons[i]
-
-		for i = 1, 12 do
-			local rareOverlay = button.RareOverlay
-			local rareText = button.RareText
-
-			select(i, button:GetRegions()):Hide()
-
-			F.CreateBD(button, .25)
-
-			rareText:ClearAllPoints()
-			rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
-
-			rareOverlay:SetDrawLayer("BACKGROUND")
-			rareOverlay:SetTexture(C.media.backdrop)
-			rareOverlay:ClearAllPoints()
-			rareOverlay:SetAllPoints()
-			rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
-		end
-	end
+	hooksecurefunc(MissionList, "Update", F.ReskinMissionList)
 
 	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards, numRewards)
 		if IsAddOnLoaded("GarrisonMaster") then return end
@@ -502,92 +558,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- Mission page
 
-	local MissionPage = MissionTab.MissionPage
-
-	for i = 1, 15 do
-		select(i, MissionPage:GetRegions()):Hide()
-	end
-	select(18, MissionPage:GetRegions()):Hide()
-	select(19, MissionPage:GetRegions()):Hide()
-	select(20, MissionPage:GetRegions()):Hide()
-	MissionPage.StartMissionButton.Flash:SetTexture("")
-
-	F.Reskin(MissionPage.StartMissionButton)
-	F.ReskinClose(MissionPage.CloseButton)
-
-	MissionPage.CloseButton:ClearAllPoints()
-	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
-
-	select(4, MissionPage.Stage:GetRegions()):Hide()
-	select(5, MissionPage.Stage:GetRegions()):Hide()
-
-	do
-		local bg = CreateFrame("Frame", nil, MissionPage.Stage)
-		bg:SetPoint("TOPLEFT", 4, 1)
-		bg:SetPoint("BOTTOMRIGHT", -4, -1)
-		bg:SetFrameLevel(MissionPage.Stage:GetFrameLevel() - 1)
-		F.CreateBD(bg)
-
-		local overlay = MissionPage.Stage:CreateTexture()
-		overlay:SetDrawLayer("ARTWORK", 3)
-		overlay:SetAllPoints(bg)
-		overlay:SetColorTexture(0, 0, 0, .5)
-
-		local iconbg = select(16, MissionPage:GetRegions())
-		iconbg:ClearAllPoints()
-		iconbg:SetPoint("TOPLEFT", 3, -1)
-	end
-
-	for i = 1, 3 do
-		local follower = MissionPage.Followers[i]
-		follower:GetRegions():Hide()
-		F.CreateBD(follower, .25)
-
-		follower.PortraitFrame.Highlight:Hide()
-		follower.PortraitFrame.PortraitFeedbackGlow:Hide()
-		follower.PortraitFrame.PortraitRing:SetAlpha(0)
-		follower.PortraitFrame.PortraitRingQuality:SetAlpha(0)
-		follower.PortraitFrame.LevelBorder:SetAlpha(0)
-		follower.PortraitFrame.Level:SetText("")
-		follower.PortraitFrame.Empty:SetColorTexture(0,0,0)
-		follower.PortraitFrame.Empty:SetAllPoints(follower.PortraitFrame.Portrait)
-	end
-
-	local function onAssignFollowerToMission(self, frame)
-		frame.PortraitFrame.LevelBorder:SetAlpha(0)
-	end
-
-	local function onRemoveFollowerFromMission(self, frame)
-		if frame.PortraitFrame.squareBG then
-			frame.PortraitFrame.squareBG:Hide()
-		end
-	end
-
-	hooksecurefunc(GarrisonMissionFrame, "AssignFollowerToMission", onAssignFollowerToMission)
-	hooksecurefunc(GarrisonMissionFrame, "RemoveFollowerFromMission", onRemoveFollowerFromMission)
-
-	for i = 1, 10 do
-		select(i, MissionPage.RewardsFrame:GetRegions()):Hide()
-	end
-
-	F.CreateBD(MissionPage.RewardsFrame, .25)
-
-	for i = 1, 2 do
-		local reward = MissionPage.RewardsFrame.Rewards[i]
-		local icon = reward.Icon
-
-		reward.BG:Hide()
-
-		icon:SetTexCoord(.08, .92, .08, .92)
-		icon:SetDrawLayer("BORDER", 1)
-		F.CreateBG(icon)
-
-		reward.ItemBurst:SetDrawLayer("BORDER", 2)
-
-		F.CreateBD(reward, .15)
-	end
-
-	local buffFrame = MissionPage.BuffsFrame
+	local buffFrame = MissionTab.MissionPage.BuffsFrame
 	buffFrame.BuffsBG:Hide()
 	hooksecurefunc(GarrisonMissionFrame, "UpdateMissionData", function()
 		local buffIndex = 1
@@ -603,28 +574,25 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	local env = MissionPage.Stage.MissionEnvIcon
-	env.Texture:SetDrawLayer("BORDER", 1)
-	F.ReskinIcon(env.Texture)
+	F.ReskinMissionPage(MissionTab.MissionPage)
+
+	local function onAssignFollowerToMission(self, frame)
+		frame.PortraitFrame.LevelBorder:SetAlpha(0)
+	end
+	local function onRemoveFollowerFromMission(self, frame)
+		if frame.PortraitFrame.squareBG then
+			frame.PortraitFrame.squareBG:Hide()
+		end
+	end
+	hooksecurefunc(GarrisonMissionFrame, "AssignFollowerToMission", onAssignFollowerToMission)
+	hooksecurefunc(GarrisonMissionFrame, "RemoveFollowerFromMission", onRemoveFollowerFromMission)
 
 	-- Follower tab
 
 	local FollowerTab = GarrisonMissionFrame.FollowerTab
 
 	FollowerTab:DisableDrawLayer("BORDER")
-
-	do
-		local xpBar = FollowerTab.XPBar
-
-		select(1, xpBar:GetRegions()):Hide()
-		xpBar.XPLeft:Hide()
-		xpBar.XPRight:Hide()
-		select(4, xpBar:GetRegions()):Hide()
-
-		xpBar:SetStatusBarTexture(C.media.backdrop)
-
-		F.CreateBDFrame(xpBar)
-	end
+	F.ReskinXPBar(FollowerTab)
 
 	for _, item in pairs({FollowerTab.ItemWeapon, FollowerTab.ItemArmor}) do
 		local icon = item.Icon
@@ -820,7 +788,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	hooksecurefunc(GarrisonMissionFrameFollowers, "UpdateData", onUpdateData)
 	hooksecurefunc(GarrisonLandingPageFollowerList, "UpdateData", onUpdateData)
 	hooksecurefunc(GarrisonFollowerList, "UpdateData", onUpdateData)
-	hooksecurefunc(BFAMissionFrameFollowers, "UpdateData", onUpdateData)
 
 	hooksecurefunc("GarrisonFollowerButton_AddAbility", function(self, index)
 		local ability = self.Abilities[index]
@@ -883,7 +850,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	hooksecurefunc(GarrisonMissionFrame.FollowerList, "ShowFollower", onShowFollower)
 	hooksecurefunc(GarrisonLandingPageFollowerList, "ShowFollower", onShowFollower)
 	hooksecurefunc(GarrisonFollowerList, "ShowFollower", onShowFollower)
-	hooksecurefunc(BFAMissionFrameFollowers, "ShowFollower", onShowFollower)
 
 	-- [[ Shipyard ]]
 
@@ -933,20 +899,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinGarrMaterial(GarrisonShipyardFrameFollowers)
 
 	local shipyardTab = GarrisonShipyardFrame.FollowerTab
+
 	shipyardTab:DisableDrawLayer("BORDER")
-	
-	do
-		local xpBar = shipyardTab.XPBar
-
-		select(1, xpBar:GetRegions()):Hide()
-		xpBar.XPLeft:Hide()
-		xpBar.XPRight:Hide()
-		select(4, xpBar:GetRegions()):Hide()
-
-		xpBar:SetStatusBarTexture(C.media.backdrop)
-
-		F.CreateBDFrame(xpBar)
-	end
+	F.ReskinXPBar(shipyardTab)
 
 	F.ReskinClose(GarrisonShipyardFrame.BorderFrame.CloseButton2)
 	F.ReskinTab(GarrisonShipyardFrameTab1)
@@ -975,20 +930,20 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinTab(BFAMissionFrameTab2)
 	F.ReskinTab(BFAMissionFrameTab3)
 
-	for i = 1, 2 do
-		local tab = _G["BFAMissionFrameMissionsTab"..i]
-		F.StripTextures(tab)
-		F.CreateBD(tab, .25)
-	end
-	BFAMissionFrameMissionsTab1:SetBackdropColor(r, g, b, .2)
+	-- Missions
+	F.ReskinMissionTabs("BFAMissionFrameMissionsTab")
+	F.ReskinMissionPage(BFAMissionFrame.MissionTab.MissionPage)
+	hooksecurefunc(BFAMissionFrameMissions, "Update", F.ReskinMissionList)
+	hooksecurefunc(BFAMissionFrameFollowers, "UpdateData", onUpdateData)
+	hooksecurefunc(BFAMissionFrameFollowers, "ShowFollower", onShowFollower)
 
 	-- FollowerTab
-
 	F.StripTextures(BFAMissionFrameFollowers)
 	F.ReskinInput(BFAMissionFrameFollowers.SearchBox)
 	F.ReskinScroll(BFAMissionFrameFollowersListScrollFrameScrollBar)
 	F.ReskinGarrMaterial(BFAMissionFrameFollowers)
 	F.StripTextures(BFAMissionFrame.FollowerTab)
+	F.ReskinXPBar(BFAMissionFrame.FollowerTab)
 
 	-- MapTab
 	BFAMissionFrame.MapTab.ScrollContainer.Child.TiledBackground:Hide()
@@ -996,6 +951,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- [[ Addon supports ]]
 
 	do
+		local MissionPage = GarrisonMissionFrame.MissionTab.MissionPage
 		local skinIndex = 0
 		local f = CreateFrame("Frame")
 		f:RegisterEvent("ADDON_LOADED")
