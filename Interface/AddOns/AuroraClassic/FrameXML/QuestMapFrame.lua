@@ -8,43 +8,60 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- [[ Quest scroll frame ]]
 
 	local QuestScrollFrame = QuestScrollFrame
+	local campaignHeader = QuestScrollFrame.Contents.WarCampaignHeader
 	local StoryHeader = QuestScrollFrame.Contents.StoryHeader
 
 	QuestMapFrame.VerticalSeparator:SetAlpha(0)
 	QuestScrollFrame.Background:SetAlpha(0)
 	QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
 	QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
+	QuestScrollFrame.Contents.Separator:SetAlpha(0)
 
 	if AuroraConfig.tooltips then
 		F.CreateBD(QuestScrollFrame.StoryTooltip)
+		F.CreateBD(QuestScrollFrame.WarCampaignTooltip)
 	end
 	F.ReskinScroll(QuestScrollFrame.ScrollBar)
 
-	-- Story header
+	for _, header in next, {campaignHeader, StoryHeader} do
+		header.Background:SetAlpha(0)
 
-	StoryHeader.Background:SetAlpha(0)
-
-	do
-		local bg = F.CreateBDFrame(StoryHeader, .25)
+		local bg = F.CreateBDFrame(header, .25)
 		bg:SetPoint("TOPLEFT", 0, -1)
 		bg:SetPoint("BOTTOMRIGHT", -4, 0)
+		if header == campaignHeader then
+			local newTex = bg:CreateTexture(nil, "OVERLAY")
+			newTex:SetPoint("TOPRIGHT", -20, -5)
+			newTex:SetSize(50, 50)
+			newTex:SetBlendMode("ADD")
+			newTex:SetAlpha(0)
+			header.newTex = newTex
+		end
 
-		local hl = StoryHeader.HighlightTexture
-
+		local hl = header.HighlightTexture
 		hl:SetTexture(C.media.backdrop)
 		hl:SetVertexColor(r, g, b, .2)
-		hl:SetPoint("TOPLEFT", 1, -2)
-		hl:SetPoint("BOTTOMRIGHT", -5, 1)
+		hl:SetAllPoints(bg)
 		hl:SetDrawLayer("BACKGROUND")
 		hl:Hide()
+		header:HookScript("OnEnter", function() hl:Show() end)
+		header:HookScript("OnLeave", function() hl:Hide(0) end)
+	end
 
-		StoryHeader:HookScript("OnEnter", function()
-			hl:Show()
-		end)
-
-		StoryHeader:HookScript("OnLeave", function()
-			hl:Hide(0)
-		end)
+	local idToTexture = {
+		[261] = "Interface\\FriendsFrame\\PlusManz-Alliance",
+		[262] = "Interface\\FriendsFrame\\PlusManz-Horde",
+	}
+	local function UpdateCampaignHeader()
+		campaignHeader.newTex:SetAlpha(0)
+		if campaignHeader:IsShown() then
+			local warCampaignInfo = C_CampaignInfo.GetCampaignInfo(C_CampaignInfo.GetCurrentCampaignID())
+			local textureID = warCampaignInfo.uiTextureKitID
+			if textureID and idToTexture[textureID] then
+				campaignHeader.newTex:SetTexture(idToTexture[textureID])
+				campaignHeader.newTex:SetAlpha(.7)
+			end
+		end
 	end
 
 	-- [[ Quest details ]]
@@ -84,6 +101,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- Scroll frame
 
 	hooksecurefunc("QuestLogQuests_Update", function()
+		UpdateCampaignHeader()
+
 		for i = 6, QuestMapFrame.QuestsFrame.Contents:GetNumChildren() do
 			local child = select(i, QuestMapFrame.QuestsFrame.Contents:GetChildren())
 			if child.ButtonText then
