@@ -136,23 +136,18 @@ function module:QuestTracker()
 			bar.BarBG:Hide()
 			bar.BarGlow:Hide()
 			bar.IconBG:SetTexture("")
+			BonusObjectiveTrackerProgressBar_PlayFlareAnim = B.Dummy
 
 			bar:SetPoint("LEFT", 22, 0)
 			bar:SetStatusBarTexture(DB.normTex)
 			bar:SetStatusBarColor(r*.8, g*.8, b*.8)
+			B.SmoothBar(bar)
+
 			local bg = B.CreateBG(progressBar)
 			bg:SetPoint("TOPLEFT", bar, -3, 3)
 			bg:SetPoint("BOTTOMRIGHT", bar, 3, -3)
 			B.CreateBD(bg)
 			B.CreateTex(bg)
-
-			if progressBar.FullBarFlare1 then
-				progressBar.FullBarFlare1.FlareAnim.Play = B.Dummy
-				progressBar.FullBarFlare2.FlareAnim.Play = B.Dummy
-			end
-			if bar.AnimIn then
-				bar.AnimIn:HookScript("OnFinished", function() bg:SetBackdropColor(0, 0, 0, .5) end)
-			end
 
 			icon:SetMask(nil)
 			icon:SetTexCoord(unpack(DB.TexCoord))
@@ -177,6 +172,7 @@ function module:QuestTracker()
 		if not bar.styled then
 			bar:ClearAllPoints()
 			bar:SetPoint("LEFT")
+			B.SmoothBar(bar)
 			for i = 1, 6 do
 				select(i, bar:GetRegions()):Hide()
 			end
