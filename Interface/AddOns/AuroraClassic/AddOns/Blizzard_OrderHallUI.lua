@@ -61,41 +61,11 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	F.ReskinMissionTabs("OrderHallMissionFrameMissionsTab")
 
 	local MissionList = OrderHallMissionFrame.MissionTab.MissionList
-
 	F.ReskinMissionList(MissionList)
 
 	local MissionPage = OrderHallMissionFrame.MissionTab.MissionPage
-
 	F.ReskinMissionPage(MissionPage)
 	F.ReskinMissionComplete(OrderHallMissionFrame)
-
-	local buffFrame = MissionPage.BuffsFrame
-	buffFrame.BuffsBG:Hide()
-	hooksecurefunc(GarrisonMission, "UpdateMissionData", function()
-		local buffIndex = 1
-		local buff = buffFrame.Buffs[buffIndex]
-		while buff do
-			if not buff.styled then
-				buff.Icon:SetDrawLayer("BORDER", 1)
-				F.ReskinIcon(buff.Icon)
-				buff.styled = true
-			end
-			buffIndex = buffIndex + 1
-			buff = buffFrame.Buffs[buffIndex]
-		end
-	end)
-
-	for i = 1, 3 do
-		local num = 1
-		local enemy = MissionPage.Enemies[i].Mechanics
-		local mec = enemy[num]
-		while mec do
-			mec.Icon:SetDrawLayer("BORDER", 1)
-			F.ReskinIcon(mec.Icon)
-			num = num + 1
-			mec = enemy[num]
-		end
-	end
 
 	-- Add Ally
 

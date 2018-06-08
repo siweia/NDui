@@ -133,6 +133,20 @@ do
 		F.CreateBD(bonusRewards, .25)
 		F.Reskin(missionComplete.NextMissionButton)
 	end
+
+	function F:ReskinFollowerTab()
+		for i = 1, 2 do
+			local trait = self.Traits[i]
+			trait.Border:Hide()
+			F.ReskinIcon(trait.Portrait)
+
+			local equipment = self.EquipmentFrame.Equipment[i]
+			equipment.BG:Hide()
+			equipment.Border:Hide()
+
+			F.ReskinIcon(equipment.Icon)
+		end
+	end
 end
 
 C.themes["Blizzard_GarrisonUI"] = function()
@@ -287,7 +301,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	Confirmation:GetRegions():Hide()
 	F.CreateBD(Confirmation)
-
 	F.Reskin(Confirmation.CancelButton)
 	F.Reskin(Confirmation.BuildButton)
 	F.Reskin(Confirmation.UpgradeButton)
@@ -320,7 +333,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	do
 		local icon = CapacitiveDisplay.ShipmentIconFrame.Icon
-
 		icon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(icon)
 		F.ReskinGarrisonPortrait(CapacitiveDisplay.ShipmentIconFrame.Follower)
@@ -381,9 +393,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local buttons = scrollFrame.buttons
 	for i = 1, #buttons do
 		local button = buttons[i]
-
 		button.BG:Hide()
-
 		local bg = CreateFrame("Frame", nil, button)
 		bg:SetPoint("TOPLEFT")
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
@@ -403,14 +413,12 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	for _, tab in pairs({Report.InProgress, Report.Available}) do
 		tab:SetHighlightTexture("")
-
 		tab.Text:ClearAllPoints()
 		tab.Text:SetPoint("CENTER")
 
 		local bg = CreateFrame("Frame", nil, tab)
 		bg:SetFrameLevel(tab:GetFrameLevel() - 1)
 		F.CreateBD(bg, .25)
-
 		F.CreateGradient(bg)
 
 		local selectedTex = bg:CreateTexture(nil, "BACKGROUND")
@@ -430,7 +438,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	hooksecurefunc("GarrisonLandingPageReport_SetTab", function(self)
 		local unselectedTab = Report.unselectedTab
-
 		unselectedTab:SetHeight(36)
 		unselectedTab:SetNormalTexture("")
 		unselectedTab.selectedTex:Hide()
@@ -473,20 +480,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local FollowerTab = GarrisonLandingPage.ShipFollowerTab
 
 	F.ReskinXPBar(FollowerTab)
-
-	for i = 1, 2 do
-		local trait = FollowerTab.Traits[i]
-
-		trait.Border:Hide()
-		F.ReskinIcon(trait.Portrait)
-
-		local equipment = FollowerTab.EquipmentFrame.Equipment[i]
-
-		equipment.BG:Hide()
-		equipment.Border:Hide()
-
-		F.ReskinIcon(equipment.Icon)
-	end
+	F.ReskinFollowerTab(FollowerTab)
 
 	-- [[ Mission UI ]]
 
@@ -557,35 +551,44 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- Mission page
 
-	local buffFrame = MissionTab.MissionPage.BuffsFrame
-	buffFrame.BuffsBG:Hide()
-	hooksecurefunc(GarrisonMissionFrame, "UpdateMissionData", function()
-		local buffIndex = 1
-		local buff = buffFrame.Buffs[buffIndex]
-		while buff do
-			if not buff.styled then
-				buff.Icon:SetDrawLayer("BORDER", 1)
-				F.ReskinIcon(buff.Icon)
-				buff.styled = true
-			end
-			buffIndex = buffIndex + 1
-			buff = buffFrame.Buffs[buffIndex]
-		end
-	end)
-
 	F.ReskinMissionPage(MissionTab.MissionPage)
 	F.ReskinMissionComplete(GarrisonMissionFrame)
 
-	local function onAssignFollowerToMission(self, frame)
+	hooksecurefunc(GarrisonMission, "AssignFollowerToMission", function(self, frame)
 		frame.PortraitFrame.LevelBorder:SetAlpha(0)
-	end
-	local function onRemoveFollowerFromMission(self, frame)
+	end)
+
+	hooksecurefunc(GarrisonMission, "RemoveFollowerFromMission", function(self, frame)
 		if frame.PortraitFrame.squareBG then
 			frame.PortraitFrame.squareBG:Hide()
 		end
-	end
-	hooksecurefunc(GarrisonMissionFrame, "AssignFollowerToMission", onAssignFollowerToMission)
-	hooksecurefunc(GarrisonMissionFrame, "RemoveFollowerFromMission", onRemoveFollowerFromMission)
+	end)
+
+	hooksecurefunc(GarrisonMission, "SetEnemies", function(_, missionPage, enemies)
+		for i = 1, #enemies do
+			local frame = missionPage.Enemies[i]
+			if frame:IsShown() and not frame.styled then
+				for j = 1, #frame.Mechanics do
+					local mechanic = frame.Mechanics[j]
+					F.ReskinIcon(mechanic.Icon)
+				end
+				frame.styled = true
+			end
+		end
+	end)
+
+	hooksecurefunc(GarrisonMission, "UpdateMissionData", function(_, missionPage)
+		local buffsFrame = missionPage.BuffsFrame
+		if buffsFrame:IsShown() then
+			for i = 1, #buffsFrame.Buffs do
+				local buff = buffsFrame.Buffs[i]
+				if not buff.styled then
+					F.ReskinIcon(buff.Icon)
+					buff.styled = true
+				end
+			end
+		end
+	end)
 
 	-- Follower tab
 
@@ -596,9 +599,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	for _, item in pairs({FollowerTab.ItemWeapon, FollowerTab.ItemArmor}) do
 		local icon = item.Icon
-
 		item.Border:Hide()
-
 		icon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(icon)
 
@@ -616,19 +617,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 
 		local color = BAG_ITEM_QUALITY_COLORS[followerInfo.quality]
-
 		portraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 		portraitFrame.squareBG:Show()
-	end)
-
-	hooksecurefunc(GarrisonFollowerMission, "AssignFollowerToMission", function(self, frame)
-		frame.PortraitFrame.LevelBorder:SetAlpha(0)
-	end)
-
-	hooksecurefunc(GarrisonFollowerMission, "RemoveFollowerFromMission", function(self, frame)
-		if frame.PortraitFrame.squareBG then
-			frame.PortraitFrame.squareBG:Hide()
-		end
 	end)
 
 	-- Mechanic tooltip
@@ -674,7 +664,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end
 	GarrisonRecruitSelectFrame.TitleText:Show()
 	GarrisonRecruitSelectFrame.GarrCorners:Hide()
-
 	F.CreateBD(GarrisonRecruitSelectFrame)
 	F.ReskinClose(GarrisonRecruitSelectFrame.CloseButton)
 
@@ -683,7 +672,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local FollowerList = GarrisonRecruitSelectFrame.FollowerList
 
 	FollowerList:DisableDrawLayer("BORDER")
-
 	F.ReskinScroll(FollowerList.listScroll.scrollBar)
 	F.ReskinInput(FollowerList.SearchBox)
 
@@ -692,12 +680,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local FollowerSelection = GarrisonRecruitSelectFrame.FollowerSelection
 
 	FollowerSelection:DisableDrawLayer("BORDER")
-
 	for i = 1, 3 do
 		local recruit = FollowerSelection["Recruit"..i]
-
 		F.ReskinGarrisonPortrait(recruit.PortraitFrame)
-
 		F.Reskin(recruit.HireRecruits)
 	end
 
@@ -707,7 +692,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		for i = 1, 3 do
 			local recruit = FollowerSelection["Recruit"..i]
 			local portrait = recruit.PortraitFrame
-
 			portrait.squareBG:SetBackdropBorderColor(portrait.LevelBorder:GetVertexColor())
 		end
 	end)
@@ -725,7 +709,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		left.Texture:Hide()
 		right.Texture:Hide()
-
 		F.ReskinArrow(left, "left")
 		F.ReskinArrow(right, "right")
 		left:SetSize(35, 35)
@@ -794,7 +777,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		if not ability.styled then
 			local icon = ability.Icon
-
 			icon:SetSize(19, 19)
 			icon:SetTexCoord(.08, .92, .08, .92)
 			F.CreateBG(icon)
@@ -853,29 +835,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- [[ Shipyard ]]
 
+	local GarrisonShipyardFrame = GarrisonShipyardFrame
+
 	if AuroraConfig.tooltips then
 		F.CreateBD(GarrisonShipyardMapMissionTooltip)
 	end
-
-	-- Follower tab
-
-	local FollowerTab = GarrisonShipyardFrame.FollowerTab
-
-	for i = 1, 2 do
-		local trait = FollowerTab.Traits[i]
-
-		trait.Border:Hide()
-		F.ReskinIcon(trait.Portrait)
-
-		local equipment = FollowerTab.EquipmentFrame.Equipment[i]
-
-		equipment.BG:Hide()
-		equipment.Border:Hide()
-
-		F.ReskinIcon(equipment.Icon)
-	end
-
-	-- GarrisonShipyardFrame
 
 	for i = 1, 14 do
 		select(i, GarrisonShipyardFrame.BorderFrame:GetRegions()):Hide()
@@ -899,9 +863,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinGarrMaterial(GarrisonShipyardFrameFollowers)
 
 	local shipyardTab = GarrisonShipyardFrame.FollowerTab
-
 	shipyardTab:DisableDrawLayer("BORDER")
 	F.ReskinXPBar(shipyardTab)
+	F.ReskinFollowerTab(shipyardTab)
 
 	F.ReskinClose(GarrisonShipyardFrame.BorderFrame.CloseButton2)
 	F.ReskinTab(GarrisonShipyardFrameTab1)
@@ -929,6 +893,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinTab(BFAMissionFrameTab1)
 	F.ReskinTab(BFAMissionFrameTab2)
 	F.ReskinTab(BFAMissionFrameTab3)
+	BFAMissionFrame.MapTab.ScrollContainer.Child.TiledBackground:Hide()
 
 	-- Missions
 	F.ReskinMissionTabs("BFAMissionFrameMissionsTab")
@@ -946,9 +911,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinGarrMaterial(BFAMissionFrameFollowers)
 	F.StripTextures(BFAMissionFrame.FollowerTab)
 	F.ReskinXPBar(BFAMissionFrame.FollowerTab)
-
-	-- MapTab
-	BFAMissionFrame.MapTab.ScrollContainer.Child.TiledBackground:Hide()
 
 	-- [[ Addon supports ]]
 
