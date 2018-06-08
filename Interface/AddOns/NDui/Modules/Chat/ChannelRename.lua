@@ -29,7 +29,7 @@ function module:ChannelRename()
 	ERR_FRIEND_ONLINE_SS = ERR_FRIEND_ONLINE_SS:gsub("%]%|h", "]|h|cff00c957")
 	ERR_FRIEND_OFFLINE_S = ERR_FRIEND_OFFLINE_S:gsub("%%s", "%%s|cffff7f50")
 
-	--whisper  
+	--whisper
 	CHAT_WHISPER_INFORM_GET = L["Tell"].." %s "
 	CHAT_WHISPER_GET = L["From"].." %s "
 	CHAT_BN_WHISPER_INFORM_GET = L["Tell"].." %s "
