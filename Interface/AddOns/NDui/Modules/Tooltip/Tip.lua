@@ -227,12 +227,15 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	end
 end)
 
-GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
-GameTooltipStatusBar:SetHeight(5)
-B.CreateSD(GameTooltipStatusBar, 3, 3)
-local bg = B.CreateBG(GameTooltipStatusBar, 3)
-B.CreateBD(bg, .7)
-B.CreateTex(bg)
+-- Tooltip statusbars
+do
+	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
+	GameTooltipStatusBar:SetHeight(5)
+	B.CreateSD(GameTooltipStatusBar, 3, 3)
+	local bg = B.CreateBG(GameTooltipStatusBar, 3)
+	B.CreateBD(bg, .7)
+	B.CreateTex(bg)
+end
 
 GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
 	if not value then return end
@@ -251,6 +254,33 @@ GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
 	end
 end)
 
+hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
+	if self.statusBarPool then
+		local bar = self.statusBarPool:Acquire()
+		if bar and not bar.styled then
+			local _, bd, tex = bar:GetRegions()
+			tex:SetTexture(DB.normTex)
+			bd:Hide()
+			local bg = B.CreateBG(bd)
+			B.CreateBD(bg, .25)
+
+			bar.styled = true
+		end
+	end
+end)
+
+hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
+	if self.progressBarPool then
+		local bar = self.progressBarPool:Acquire()
+		B.StripTextures(bar.Bar)
+		select(7, bar.Bar:GetRegions()):Hide()
+		bar.Bar:SetStatusBarTexture(DB.normTex)
+		B.CreateBD(bar, .25, 2)
+		bar:SetSize(219, 19)
+	end
+end)
+
+-- Anchor and mover
 local mover
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	if NDuiDB["Tooltip"]["Cursor"] then
@@ -265,55 +295,58 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	end
 end)
 
-local function style(frame)
-	if not frame then return end
-	frame:SetScale(NDuiDB["Tooltip"]["Scale"])
-
-	if not frame.bg then
-		frame:SetBackdrop(nil)
-		local bg = B.CreateBG(frame, 0)
-		bg:SetFrameLevel(frame:GetFrameLevel())
+-- Tooltip skin
+local function style(self)
+	if not self.bg then
+		self:SetBackdrop(nil)
+		local bg = B.CreateBG(self, 0)
+		bg:SetFrameLevel(self:GetFrameLevel())
 		B.CreateBD(bg, .7)
 		B.CreateTex(bg)
-		frame.bg = bg
+		self.bg = bg
 
 		-- other gametooltip-like support
-		frame.GetBackdrop = function() return bg:GetBackdrop() end
-		frame.GetBackdropColor = function() return 0, 0, 0, .7 end
-		frame.GetBackdropBorderColor = function() return 0, 0, 0 end
+		self.GetBackdrop = function() return bg:GetBackdrop() end
+		self.GetBackdropColor = function() return 0, 0, 0, .7 end
+		self.GetBackdropBorderColor = function() return 0, 0, 0 end
 	end
 
-	frame.bg:SetBackdropBorderColor(0, 0, 0)
-	if NDuiDB["Tooltip"]["ClassColor"] and frame.GetItem then
-		local _, item = frame:GetItem()
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+	if NDuiDB["Tooltip"]["ClassColor"] and self.GetItem then
+		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
 		end
 	end
 
-	if frame.NumLines and frame:NumLines() > 0 then
-		for index = 1, frame:NumLines() do
+	if self.NumLines and self:NumLines() > 0 then
+		for index = 1, self:NumLines() do
 			if index == 1 then
-				_G[frame:GetName().."TextLeft"..index]:SetFont(DB.TipFont[1], DB.TipFont[2] + 2, DB.TipFont[3])
+				_G[self:GetName().."TextLeft"..index]:SetFont(DB.TipFont[1], DB.TipFont[2] + 2, DB.TipFont[3])
 			else
-				_G[frame:GetName().."TextLeft"..index]:SetFont(unpack(DB.TipFont))
+				_G[self:GetName().."TextLeft"..index]:SetFont(unpack(DB.TipFont))
 			end
-			_G[frame:GetName().."TextRight"..index]:SetFont(unpack(DB.TipFont))
+			_G[self:GetName().."TextRight"..index]:SetFont(unpack(DB.TipFont))
 		end
 	end
 end
 
-local function extrastyle(f)
-	if not f.styled then
-		f:DisableDrawLayer("BACKGROUND")
-		style(f)
-		f.styled = true
+local function extrastyle(self)
+	if not self.styled then
+		self:DisableDrawLayer("BACKGROUND")
+		style(self)
+
+		self.styled = true
 	end
 end
+
+hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+	self:SetBackdrop(nil)
+end)
 
 B:RegisterEvent("ADDON_LOADED", function(_, addon)
 	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("AuroraClassic") then
@@ -329,6 +362,7 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 			LanguageMenu,
 			VoiceMacroMenu,
 			GameTooltip,
+			EmbeddedItemTooltip,
 			ItemRefTooltip,
 			ItemRefShoppingTooltip1,
 			ItemRefShoppingTooltip2,
@@ -392,31 +426,6 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 		-- IME
 		local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
 		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
-
-		-- Tooltip StatusBar
-		hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
-			local bar = _G[self:GetName().."StatusBar"..self.shownStatusBars]
-			if bar and not bar.styled then
-				local _, bd, tex = bar:GetRegions()
-				tex:SetTexture(DB.normTex)
-				bd:Hide()
-				local bg = B.CreateBG(bd)
-				B.CreateBD(bg, .3)
-
-				bar.styled = true
-			end
-		end)
-
-		local bars = {WorldMapTaskTooltipStatusBar, ReputationParagonTooltipStatusBar}
-		for _, bar in pairs(bars) do
-			for i = 1, 5 do
-				select(i, bar.Bar:GetRegions()):SetTexture("")
-			end
-			select(7, bar.Bar:GetRegions()):Hide()
-			bar.Bar:SetStatusBarTexture(DB.normTex)
-			B.CreateBD(bar, .3, 2)
-			bar:SetSize(219, 19)
-		end
 
 		-- Pet Tooltip
 		PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
