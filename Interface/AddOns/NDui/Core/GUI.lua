@@ -152,7 +152,6 @@ local defaultSettings = {
 		CombatHide = false,
 		Cursor = false,
 		ClassColor = false,
-		Scale = 1,
 		HideTitle = false,
 		HideRealm = false,
 		HideRank = false,
@@ -425,7 +424,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
 		{1, "Tooltip", "Cursor", L["Follow Cursor"]},
 		{1, "Tooltip", "ClassColor", L["Classcolor Border"], true},
-		{3, "Tooltip", "Scale", L["Tooltip Scale"], false, {.5, 1.5, 1}},
 		{},--blank
 		{1, "Tooltip", "HideTitle", L["Hide Title"]},
 		{1, "Tooltip", "HideRealm", L["Hide Realm"], true},
