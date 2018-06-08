@@ -72,7 +72,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	BonusFrame.WorldBattlesTexture:Hide()
 	BonusFrame.ShadowOverlay:Hide()
 
-	for _, bonusButton in pairs({"RandomBGButton", "LargeBattlegroundButton", "Arena1Button", "BrawlButton"}) do
+	for _, bonusButton in pairs({"RandomBGButton", "RandomEpicBGButton", "Arena1Button", "BrawlButton"}) do
 		local bu = BonusFrame[bonusButton]
 		local reward = bu.Reward
 
@@ -88,9 +88,8 @@ C.themes["Blizzard_PVPUI"] = function()
 		end
 	end
 
-	HonorFrame.XPBar.Frame:Hide()
-	HonorFrame.XPBar.Bar.Background:Hide()
-	F.CreateBDFrame(HonorFrame.XPBar.Bar.Background)
+	F.StripTextures(HonorFrame.ConquestBar)
+	F.CreateBDFrame(HonorFrame.ConquestBar, .25)
 
 	-- Role buttons
 
@@ -180,9 +179,8 @@ C.themes["Blizzard_PVPUI"] = function()
 	end
 
 	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
-	ConquestFrame.XPBar.Frame:Hide()
-	ConquestFrame.XPBar.Bar.Background:Hide()
-	F.CreateBDFrame(ConquestFrame.XPBar.Bar.Background)
+	F.StripTextures(ConquestFrame.ConquestBar)
+	F.CreateBDFrame(ConquestFrame.ConquestBar, .25)
 
 	-- Main style
 

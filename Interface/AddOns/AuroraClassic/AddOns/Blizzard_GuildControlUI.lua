@@ -14,9 +14,8 @@ C.themes["Blizzard_GuildControlUI"] = function()
 		select(i, GuildControlUIRankBankFrameInset:GetRegions()):Hide()
 	end
 
-	GuildControlUIRankSettingsFrameChatBg:SetAlpha(0)
+	GuildControlUIRankSettingsFrameOfficerBg:SetAlpha(0)
 	GuildControlUIRankSettingsFrameRosterBg:SetAlpha(0)
-	GuildControlUIRankSettingsFrameInfoBg:SetAlpha(0)
 	GuildControlUIRankSettingsFrameBankBg:SetAlpha(0)
 	GuildControlUITopBg:Hide()
 	GuildControlUIHbar:Hide()
@@ -94,9 +93,11 @@ C.themes["Blizzard_GuildControlUI"] = function()
 		end
 	end)
 
+	F.ReskinCheck(GuildControlUIRankSettingsFrameOfficerCheckbox)
 	for i = 1, 20 do
-		if i ~= 14 then
-			F.ReskinCheck(_G["GuildControlUIRankSettingsFrameCheckbox"..i])
+		local checbox = _G["GuildControlUIRankSettingsFrameCheckbox"..i]
+		if checbox then
+			F.ReskinCheck(checbox)
 		end
 	end
 
