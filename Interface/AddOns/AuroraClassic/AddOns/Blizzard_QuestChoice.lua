@@ -23,6 +23,7 @@ C.themes["Blizzard_QuestChoice"] = function()
 		option.Artwork:SetTexCoord(0.140625, 0.84375, 0.2265625, 0.78125)
 		option.Artwork:SetSize(180, 71)
 		option.Artwork:SetPoint("TOP", 0, -20)
+		F.CreateBDFrame(option.Artwork)
 		option.OptionText:SetTextColor(.9, .9, .9)
 
 		item.Name:SetTextColor(1, 1, 1)
@@ -35,12 +36,13 @@ C.themes["Blizzard_QuestChoice"] = function()
 			cu.Icon:SetTexCoord(.08, .92, .08, .92)
 			F.CreateBDFrame(cu.Icon)
 		end
-		F.Reskin(option.OptionButton)
+		F.Reskin(option.OptionButtonsContainer.OptionButton1)
+		F.Reskin(option.OptionButtonsContainer.OptionButton2)
 	end
 
-	hooksecurefunc(QuestChoiceFrame, "ShowRewards", function(self, numOptions)
-		for i = 1, numOptions do
-			local rewards = QuestChoiceFrame["Option"..i].Rewards
+	hooksecurefunc(QuestChoiceFrame, "ShowRewards", function(self)
+		for i = 1, self.numActiveOptionFrames do
+			local rewards = self["Option"..i].Rewards
 			rewards.Item.bg:SetBackdropBorderColor(rewards.Item.IconBorder:GetVertexColor())
 			rewards.Item.IconBorder:Hide()
 		end
