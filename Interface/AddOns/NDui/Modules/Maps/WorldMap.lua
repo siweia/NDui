@@ -9,6 +9,7 @@ function module:OnLogin()
 	local formatText = DB.MyColor..": %.1f, %.1f"
 	local scale = mapBody:GetEffectiveScale()
 	local width, height, mapID = mapBody:GetWidth(), mapBody:GetHeight()
+	local position
 
 	-- Default Settings
 	BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
@@ -31,6 +32,10 @@ function module:OnLogin()
 		width, height = mapBody:GetWidth(), mapBody:GetHeight()
 	end)
 
+	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
+		mapID = self:GetMapID()
+	end)
+
 	local function CursorCoords()
 		local left, top = mapBody:GetLeft() or 0, mapBody:GetTop() or 0
 		local x, y = GetCursorPosition()
@@ -48,32 +53,28 @@ function module:OnLogin()
 			cursor:SetText(MOUSE_LABEL..DB.MyColor..": --, --")
 		end
 
-		local position = C_Map.GetPlayerMapPosition(mapID, "player")
+		position = C_Map.GetPlayerMapPosition(mapID, "player")
 		if not position or (position.x == 0 and position.y == 0) then
 			player:SetText(PLAYER..DB.MyColor..": --, --")
 		else
 			player:SetFormattedText(PLAYER..formatText, 100 * position.x, 100 * position.y)
+			wipe(position)
+		end
+	end
+
+	local function UpdateCoords(self, elapsed)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed > .1 then
+			CoordsUpdate(player, cursor)
+			self.elapsed = 0
 		end
 	end
 
 	local updater = CreateFrame("Frame")
-	local function UpdateCoords(self, elapsed)
-		self.elapsed = self.elapsed - elapsed
-		if self.elapsed <= 0 then
-			self.elapsed = .1
-			CoordsUpdate(player, cursor)
-		end
-	end
+	updater:SetScript("OnUpdate", UpdateCoords)
+	updater:Hide()
 
-	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
-		mapID = self:GetMapID()
-
-		if WorldMapFrame:IsVisible() then
-			updater.elapsed = .1
-			updater:SetScript("OnUpdate", UpdateCoords)
-		else
-			updater.elapsed = nil
-			updater:SetScript("OnUpdate", nil)
-		end
-	end)
+	local function updaterVisibility(self) updater:SetShown(self:IsShown()) end
+	WorldMapFrame:HookScript("OnShow", updaterVisibility)
+	WorldMapFrame:HookScript("OnHide", updaterVisibility)
 end

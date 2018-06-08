@@ -17,6 +17,7 @@ local zoneInfo = {
 
 local subzone, zone, pvp
 local coordX, coordY = 0, 0
+local mapInfo, position
 
 local function formatCoords()
 	return format("%.1f, %.1f", coordX*100, coordY*100)
@@ -37,7 +38,6 @@ info.onEvent = function(self)
 	self.text:SetTextColor(r, g, b)
 end
 
-local mapInfo
 local function isInvasionPoint()
 	mapInfo = C_Map.GetMapInfo(C_Map.GetBestMapForUnit("player"))
 	local invaName = C_Scenario.GetInfo()
@@ -50,7 +50,7 @@ info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
 
-	local position = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
+	position = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
 	if position then
 		self:SetScript("OnUpdate", function(self, elapsed)
 			self.timer = (self.timer or 0) + elapsed
