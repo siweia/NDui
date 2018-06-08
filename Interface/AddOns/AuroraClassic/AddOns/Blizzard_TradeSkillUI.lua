@@ -58,12 +58,20 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 
 	hooksecurefunc(recipe, "RefreshDisplay", function(self)
 		for i = 1, #self.buttons do
-			local tradeSkillButton = self.buttons[i]
-			if not tradeSkillButton.styled then
-				F.ReskinExpandOrCollapse(tradeSkillButton)
-				tradeSkillButton.styled = true
+			local button = self.buttons[i]
+			if not button.styled then
+				F.ReskinExpandOrCollapse(button)
+				if button.SubSkillRankBar then
+					local bar = button.SubSkillRankBar
+					F.StripTextures(bar)
+					bar:SetStatusBarTexture(C.media.backdrop)
+					bar:SetPoint("RIGHT", -6, 0)
+					F.CreateBDFrame(bar, .25)
+				end
+
+				button.styled = true
 			end
-			tradeSkillButton:SetHighlightTexture("")
+			button:SetHighlightTexture("")
 		end
 	end)
 
