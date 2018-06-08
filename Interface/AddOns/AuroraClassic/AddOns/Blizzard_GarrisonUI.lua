@@ -120,6 +120,19 @@ do
 			end
 		end
 	end
+
+	function F:ReskinMissionComplete()
+		local missionComplete = self.MissionComplete
+		local bonusRewards = missionComplete.BonusRewards
+		select(11, bonusRewards:GetRegions()):SetTextColor(1, .8, 0)
+		bonusRewards.Saturated:Hide()
+		bonusRewards.Saturated.Show = F.dummy
+		for i = 1, 9 do
+			select(i, bonusRewards:GetRegions()):SetAlpha(0)
+		end
+		F.CreateBD(bonusRewards, .25)
+		F.Reskin(missionComplete.NextMissionButton)
+	end
 end
 
 C.themes["Blizzard_GarrisonUI"] = function()
@@ -490,22 +503,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinClose(GarrisonMissionFrame.CloseButton)
 	F.ReskinTab(GarrisonMissionFrameTab1)
 	F.ReskinTab(GarrisonMissionFrameTab2)
-
 	GarrisonMissionFrameTab1:ClearAllPoints()
 	GarrisonMissionFrameTab1:SetPoint("BOTTOMLEFT", 11, -40)
-
-	-- Mission Complete Page
-
-	local missionComplete = GarrisonMissionFrame.MissionComplete
-	local bonusRewards = missionComplete.BonusRewards
-	select(11, bonusRewards:GetRegions()):SetTextColor(1, .8, 0)
-	bonusRewards.Saturated:Hide()
-	bonusRewards.Saturated.Show = F.dummy
-	for i = 1, 9 do
-		select(i, bonusRewards:GetRegions()):SetAlpha(0)
-	end
-	F.CreateBD(bonusRewards, .25)
-	F.Reskin(missionComplete.NextMissionButton)
 
 	-- Follower list
 
@@ -575,6 +574,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end)
 
 	F.ReskinMissionPage(MissionTab.MissionPage)
+	F.ReskinMissionComplete(GarrisonMissionFrame)
 
 	local function onAssignFollowerToMission(self, frame)
 		frame.PortraitFrame.LevelBorder:SetAlpha(0)
@@ -933,6 +933,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Missions
 	F.ReskinMissionTabs("BFAMissionFrameMissionsTab")
 	F.ReskinMissionPage(BFAMissionFrame.MissionTab.MissionPage)
+	F.ReskinMissionComplete(BFAMissionFrame)
+	F.Reskin(BFAMissionFrameMissions.CompleteDialog.BorderFrame.ViewButton)
 	hooksecurefunc(BFAMissionFrameMissions, "Update", F.ReskinMissionList)
 	hooksecurefunc(BFAMissionFrameFollowers, "UpdateData", onUpdateData)
 	hooksecurefunc(BFAMissionFrameFollowers, "ShowFollower", onShowFollower)

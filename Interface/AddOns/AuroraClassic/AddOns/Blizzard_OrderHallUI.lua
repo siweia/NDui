@@ -67,6 +67,7 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	local MissionPage = OrderHallMissionFrame.MissionTab.MissionPage
 
 	F.ReskinMissionPage(MissionPage)
+	F.ReskinMissionComplete(OrderHallMissionFrame)
 
 	local buffFrame = MissionPage.BuffsFrame
 	buffFrame.BuffsBG:Hide()
@@ -95,19 +96,6 @@ C.themes["Blizzard_OrderHallUI"] = function()
 			mec = enemy[num]
 		end
 	end
-
-	-- Mission Complete Page
-
-	local missionComplete = OrderHallMissionFrame.MissionComplete
-	local bonusRewards = missionComplete.BonusRewards
-	select(11, bonusRewards:GetRegions()):SetTextColor(1, .8, 0)
-	bonusRewards.Saturated:Hide()
-	bonusRewards.Saturated.Show = F.dummy
-	for i = 1, 9 do
-		select(i, bonusRewards:GetRegions()):SetAlpha(0)
-	end
-	F.CreateBD(bonusRewards, .25)
-	F.Reskin(missionComplete.NextMissionButton)
 
 	-- Add Ally
 
