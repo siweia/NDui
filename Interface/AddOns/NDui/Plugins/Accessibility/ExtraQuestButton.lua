@@ -198,8 +198,8 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	HotKey:SetPoint("TOP", 0, -5)
 	self.HotKey = HotKey
 
-	local Count = self:CreateFontString("$parentCount", nil, "NumberFontNormal")
-	Count:SetPoint("BOTTOMRIGHT", -7, 7)
+	local Count = self:CreateFontString("$parentCount", nil, "NumberFont_Shadow_Med")
+	Count:SetPoint("BOTTOMRIGHT", -3, 3)
 	self.Count = Count
 
 	local Cooldown = CreateFrame("Cooldown", "$parentCooldown", self, "CooldownFrameTemplate")
