@@ -38,6 +38,7 @@
 	<Script file="Blizzard_PVPUI.lua"/>
 	<Script file="Blizzard_QuestChoice.lua"/>
 	<Script file="Blizzard_RaidUI.lua"/>
+	<Script file="Blizzard_ScrappingMachineUI.lua"/>
 	<Script file="Blizzard_TalentUI.lua"/>
 	<Script file="Blizzard_TimeManager.lua"/>
 	<Script file="Blizzard_TokenUI.lua"/>
