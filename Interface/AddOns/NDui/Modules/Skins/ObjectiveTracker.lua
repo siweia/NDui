@@ -44,30 +44,25 @@ function module:QuestTracker()
 	hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
 
 	-- Show quest color and level
-	--[[local function Showlevel()
+	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
 		if ENABLE_COLORBLIND_MODE == "1" then return end
-		local numEntries = GetNumQuestLogEntries()
-		local titleIndex = 1
-		for i = 1, numEntries do
-			local title, level, _, isHeader, _, isComplete, frequency, questID = GetQuestLogTitle(i)
-			local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
-			if title and (not isHeader) and titleButton.questID == questID then
-				titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0)
-				titleIndex = titleIndex + 1
-				local text = "["..level.."] "..title
+
+		for button in pairs(QuestScrollFrame.titleFramePool.activeObjects) do
+			if title and not isHeader and button.questID == questID then
+				local title = "["..level.."] "..title
 				if isComplete then
-					text = "|cffff78ff"..text
+					title = "|cffff78ff"..title
 				elseif frequency == LE_QUEST_FREQUENCY_DAILY then
-					text = "|cff3399ff"..text
+					title = "|cff3399ff"..title
 				end
-				titleButton.Text:SetText(text)
-				titleButton.Text:SetPoint("TOPLEFT", 24, -5)
-				titleButton.Text:SetWidth(216)
-				titleButton.Text:SetWordWrap(false)
+				button.Text:SetText(title)
+				button.Text:SetPoint("TOPLEFT", 24, -5)
+				button.Text:SetWidth(216)
+				button.Text:SetWordWrap(false)
 			end
 		end
 	end
-	hooksecurefunc("QuestLogQuests_Update", Showlevel)]]
+	hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
 
 	-- ObjectiveTracker Skin
 	if not NDuiDB["Skins"]["TrackerSkin"] then return end
