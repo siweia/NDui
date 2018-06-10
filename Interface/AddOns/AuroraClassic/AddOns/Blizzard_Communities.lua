@@ -223,7 +223,7 @@ C.themes["Blizzard_Communities"] = function()
 	local function updateNameFrame(self)
 		if not self.expanded then return end
 		if not self.bg then
-			self.bg = F.CreateBG(self.Class)
+			self.bg = F.CreateBDFrame(self.Class)
 		end
 		local memberInfo = self:GetMemberInfo()
 		if memberInfo and memberInfo.classID then
@@ -235,7 +235,7 @@ C.themes["Blizzard_Communities"] = function()
 		end
 	end
 
-	hooksecurefunc(CommunitiesFrame.MemberList, "RefreshLayout", function(self)
+	hooksecurefunc(CommunitiesFrame.MemberList, "RefreshListDisplay", function(self)
 		for i = 1, self.ColumnDisplay:GetNumChildren() do
 			local child = select(i, self.ColumnDisplay:GetChildren())
 			if not child.styled then
@@ -249,6 +249,17 @@ C.themes["Blizzard_Communities"] = function()
 		for _, button in ipairs(self.ListScrollFrame.buttons or {}) do
 			if button and not button.hooked then
 				hooksecurefunc(button, "RefreshExpandedColumns", updateNameFrame)
+				if button.ProfessionHeader then
+					local header = button.ProfessionHeader
+					for i = 1, 3 do
+						select(i, header:GetRegions()):Hide()
+					end
+					F.CreateBDFrame(header, .45)
+					header:SetHighlightTexture(C.media.backdrop)
+					header:GetHighlightTexture():SetVertexColor(r, g, b, .25)
+					F.CreateBDFrame(header.Icon)
+				end
+
 				button.hooked = true
 			end
 			if button and button.bg then
