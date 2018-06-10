@@ -14,7 +14,11 @@ local list = {
 		{AuraID = 118922, UnitID = "player"},	-- 迅疾如风
 		{AuraID = 164857, UnitID = "player"},	-- 生存专家
 		{AuraID = 186258, UnitID = "player"},	-- 猎豹守护
-		{AuraID = 120694, UnitID = "player"},	-- 凶暴野兽
+		{AuraID = 246152, UnitID = "player"},	-- 倒刺射击
+		{AuraID = 246851, UnitID = "player"},	-- 倒刺射击
+		{AuraID = 246852, UnitID = "player"},	-- 倒刺射击
+		{AuraID = 246853, UnitID = "player"},	-- 倒刺射击
+		{AuraID = 246854, UnitID = "player"},	-- 倒刺射击
 		{AuraID = 203924, UnitID = "player"},	-- 守护屏障
 		{AuraID = 197161, UnitID = "player"},	-- 灵龟守护回血
 		{AuraID = 160007, UnitID = "player"},	-- 上升气流（双头龙）
@@ -78,6 +82,7 @@ local list = {
 		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
 		{AuraID = 260395, UnitID = "player"},	-- 致命射击
 		{AuraID = 269502, UnitID = "player"},	-- 致命射击
+		{AuraID = 281036, UnitID = "player"},	-- 凶暴野兽
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱
