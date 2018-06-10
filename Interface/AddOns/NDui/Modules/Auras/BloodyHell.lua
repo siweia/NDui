@@ -63,9 +63,8 @@ local function BloodyHell()
 end
 
 local function lookingForBuff(spell)
-	local name, count, dur, exp, value, _
 	for i = 1, 32 do
-		name, _, count, _, dur, exp, _, _, _, spellID, _, _, _, _, _, value = UnitBuff("player", i)
+		local name, _, count, _, dur, exp, _, _, _, spellID, _, _, _, _, _, value = UnitBuff("player", i)
 		if name and spellID == spell then
 			return name, count, dur, exp, value
 		end
