@@ -35,18 +35,20 @@ local function StaggerGo()
 	B.Mover(bar, L["Stagger"], "Stagger", C.Auras.StaggerPos, bar:GetWidth(), 20)
 end
 
--- localized
-local ironskinBrew = GetSpellInfo(215479)
-local lightStagger = GetSpellInfo(124275)
-local lightStaggerTex = GetSpellTexture(124275)
-local moderateStagger = GetSpellInfo(124274)
-local heavyStagger = GetSpellInfo(124273)
-
 local function updateVisibility()
 	if InCombatLockdown() then return end
 	if bar then bar:SetAlpha(.1) end
 	for i = 1, 4 do
 		if bu[i] then bu[i]:SetAlpha(.1) end
+	end
+end
+
+local function lookingForAura(spell, filter)
+	for index = 1, 32 do
+		local name, _, _, _, dur, exp, _, _, _, spellID = UnitAura("player", index, filter)
+		if name and spellID == spell then
+			return name, dur, exp
+		end
 	end
 end
 
@@ -80,7 +82,7 @@ local function updateSpells()
 
 	-- Ironskin Brew
 	do
-		local name, _, _, _, dur, exp = UnitBuff("player", ironskinBrew)
+		local name, dur, exp = lookingForAura(215479, "HELPFUL")
 		local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(115308)
 		local start, duration = GetSpellCooldown(115308)
 		bu[3].Count:SetText(charges)
@@ -115,28 +117,35 @@ local function updateSpells()
 
 	-- Stagger
 	do
-		local Per
-		local name, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", lightStagger, "", "HARMFUL")
-		if (not name) then name, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", moderateStagger, "", "HARMFUL") end
-		if (not name) then name, icon, _, _, duration, expire, _, _, _, _, _, _, _, _, _, value = UnitAura("player", heavyStagger, "", "HARMFUL") end
-		if name and value > 0 and duration > 0 then
-			Per = UnitStagger("player") / UnitHealthMax("player") * 100
+		local cur = UnitStagger("player") or 0
+		local max = UnitHealthMax("player")
+		local perc = cur / max
+		local name, dur, exp = lookingForAura(124275, "HARMFUL")
+		if not name then name, dur, exp = lookingForAura(124274, "HARMFUL") end
+		if not name then name, dur, exp = lookingForAura(124273, "HARMFUL") end
+
+		if name and cur > 0 and dur > 0 then
 			bar:SetAlpha(1)
 			bu[4]:SetAlpha(1)
-			bu[4].Icon:SetTexture(icon)
-			bu[4].CD:SetCooldown(expire - 10, 10)
+			bu[4].CD:SetCooldown(exp - dur, dur)
 			bu[4].CD:Show()
 		else
-			value = 0
-			Per = 0
 			bar:SetAlpha(.5)
 			bu[4]:SetAlpha(.5)
-			bu[4].Icon:SetTexture(lightStaggerTex)
 			bu[4].CD:Hide()
 		end
-		bar:SetValue(Per)
-		bar.Count:SetText(DB.InfoColor..B.Numb(value).." "..DB.MyColor..B.Numb(Per).."%")
-		if UnitAura("player", heavyStagger, "", "HARMFUL") then
+		bar:SetValue(perc * 100)
+		bar.Count:SetText(DB.InfoColor..B.Numb(cur).." "..DB.MyColor..B.Numb(perc * 100).."%")
+
+		if perc >= .6 then
+			bu[4].Icon:SetTexture(GetSpellTexture(124273))
+		elseif perc >= .3 then
+			bu[4].Icon:SetTexture(GetSpellTexture(124274))
+		else
+			bu[4].Icon:SetTexture(GetSpellTexture(124275))
+		end
+
+		if bu[4].Icon:GetTexture() == heavyStagger then
 			ActionButton_ShowOverlayGlow(bu[4])
 		else
 			ActionButton_HideOverlayGlow(bu[4])
@@ -179,7 +188,6 @@ local function checkSpec(event)
 end
 
 function module:Stagger()
-	if not hehelele then return end
 	if not NDuiDB["Auras"]["Stagger"] then return end
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkSpec)
