@@ -196,7 +196,18 @@ local function UpdateUnitClassify(self, unit)
 end
 
 function UF:CreateClassBar()
+	local SPEC_MAGE_ARCANE = SPEC_MAGE_ARCANE or 1
+	local SPEC_MONK_WINDWALKER = SPEC_MONK_WINDWALKER or 3
+	local SPEC_PALADIN_RETRIBUTION = SPEC_PALADIN_RETRIBUTION or 3
+	local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION or 3
+	local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
+	local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
+	local SPELL_POWER_SOUL_SHARDS = Enum.PowerType.SoulShards or 7
+	local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower or 9
+	local SPELL_POWER_CHI = Enum.PowerType.Chi or 12
+	local SPELL_POWER_ARCANE_CHARGES = Enum.PowerType.ArcaneCharges or 16
 	local ClassPowerID, ClassPowerType, RequireSpec, RequirePower
+
 	-- Data
 	if DB.MyClass == "MONK" then
 		ClassPowerID = SPELL_POWER_CHI
