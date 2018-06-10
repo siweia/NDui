@@ -2,37 +2,38 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Auras")
 
+local cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b
 local IconSize = C.Auras.IconSize + 3
 local bar, cur, maxPower
 local function BloodyHell()
 	if bar then bar:Show() return end
 
 	bar = CreateFrame("StatusBar", nil, UIParent)
-	bar:SetSize(IconSize*5+20, 8)
+	bar:SetSize(IconSize*5+20, 7)
 	bar:SetPoint("CENTER")
 	bar:SetFrameStrata("HIGH")
-	B.CreateSB(bar, true)
+	B.CreateSB(bar, true, .14, .5, 1)
+	B.SmoothBar(bar)
 	bar:SetMinMaxValues(0, 10)
 	bar:SetValue(0)
 
-	bar.Power = B.CreateFS(bar, 16, "", false, "CENTER", 0, -6)
+	bar.Power = B.CreateFS(bar, 18, "", false, "CENTER", 0, -6)
 
-	bar.Shield = B.CreateFS(bar, 16, "")
+	bar.Shield = B.CreateFS(bar, 18, "")
 	bar.Shield:ClearAllPoints()
 	bar.Shield:SetPoint("RIGHT", bar, "LEFT", -5, 8)
 	bar.Shield:SetTextColor(1, .8, 0)
 
-	bar.Count = B.CreateFS(bar, 16, "")
+	bar.Count = B.CreateFS(bar, 18, "")
 	bar.Count:ClearAllPoints()
 	bar.Count:SetPoint("LEFT", bar, "RIGHT", 5, 8)
-	bar.Count:SetTextColor(.14, .5, 1)
+	bar.Count:SetTextColor(cr, cg, cb)
 
 	local runes = {}
 	for i = 1, 6 do
 		runes[i] = CreateFrame("StatusBar", nil, bar)
-		runes[i]:SetSize((bar:GetWidth()-15)/6, 6)
+		runes[i]:SetSize((bar:GetWidth()-15)/6, 7)
 		B.CreateSB(runes[i])
-		runes[i]:SetStatusBarColor(.14, .5, 1)
 		if i == 1 then
 			runes[i]:SetPoint("BOTTOMLEFT", bar, "TOPLEFT", 0, 5)
 		else
@@ -41,7 +42,7 @@ local function BloodyHell()
 	end
 	bar.runes = runes
 
-	local spells = {49998, 195181, 205223, 48707, 55233}
+	local spells = {49998, 195181, 49028, 48707, 55233}
 	local icons = {}
 	for i = 1, 5 do
 		icons[i] = CreateFrame("Frame", nil, bar)
@@ -61,11 +62,15 @@ local function BloodyHell()
 	B.Mover(bar, L["BloodyHell"], "BloodyHell", C.Auras.BHPos, bar:GetWidth(), 30)
 end
 
--- localized spell name
-local spellBone = GetSpellInfo(195181)
-local spellShield = GetSpellInfo(77535)
-local spellShell = GetSpellInfo(48707)
-local spellVampiric = GetSpellInfo(55233)
+local function lookingForBuff(spell)
+	local name, count, dur, exp, value, _
+	for i = 1, 32 do
+		name, _, count, _, dur, exp, _, _, _, spellID, _, _, _, _, _, value = UnitBuff("player", i)
+		if name and spellID == spell then
+			return name, count, dur, exp, value
+		end
+	end
+end
 
 local function updateVisibility()
 	if InCombatLockdown() then return end
@@ -128,18 +133,39 @@ local function updateRune(_, ...)
 	updateVisibility()
 end
 
+local function AddSpellGroup(i, buff, cd, showValue)
+	local icons = bar.icons
+	local name, _, dur, expire, value = lookingForBuff(buff)
+	local start, duration = GetSpellCooldown(cd)
+	if name then
+		icons[i]:SetAlpha(1)
+		icons[i].CD:SetCooldown(expire-dur, dur)
+		icons[i].CD:Show()
+	elseif start and duration > 1.5 then
+		icons[i]:SetAlpha(.5)
+		icons[i].CD:SetCooldown(start, duration)
+		icons[i].CD:Show()
+	else
+		icons[i]:SetAlpha(1)
+		icons[i].CD:Hide()
+	end
+	if showValue then
+		if name then
+			icons[4].Count:SetText(B.Numb(value))
+		else
+			icons[4].Count:SetText("")
+		end
+	end
+end
+
 local function updateSpells()
 	bar:SetAlpha(1)
 	local icons, boneCount = bar.icons, 0
 	if not cur then cur = UnitPower("player") end
-	local hasBone, _, boneStack, _, boneDur, boneExp = UnitBuff("player", spellBone)
-	local hasShield, _, _, _, shieldDur, shieldExp, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShield)
+	local hasBone, boneStack, boneDur, boneExp = lookingForBuff(195181)
+	local hasShield, _, shieldDur, shieldExp, value = lookingForBuff(77535)
 
-	if hasBone and boneStack >= 5 and IsPlayerSpell(219786) then
-		boneCount = floor(cur/40)
-	else
-		boneCount = floor(cur/45)
-	end
+	boneCount = floor(cur/45)
 	icons[1].Count:SetText(boneCount)
 
 	if hasShield then
@@ -172,56 +198,9 @@ local function updateSpells()
 		icons[2].CD:Hide()
 	end
 
-	if IsPlayerSpell(205223) then
-		local start, duration = GetSpellCooldown(205223)
-		if start and duration > 1.5 then
-			icons[3]:SetAlpha(.5)
-			icons[3].CD:SetCooldown(start, duration)
-			icons[3].CD:Show()
-		else
-			icons[3]:SetAlpha(1)
-			icons[3].CD:Hide()
-		end
-	else
-		icons[3]:SetAlpha(.5)
-		icons[3].CD:Hide()
-	end
-
-	do
-		local name, _, _, _, dur, expire, _, _, _, _, _, _, _, _, _, value = UnitBuff("player", spellShell)
-		local start, duration = GetSpellCooldown(48707)
-		icons[4].Count:SetText("")
-		if name then
-			icons[4]:SetAlpha(1)
-			icons[4].CD:SetCooldown(expire-dur, dur)
-			icons[4].CD:Show()
-			icons[4].Count:SetText(B.Numb(value))
-		elseif start and duration > 1.5 then
-			icons[4]:SetAlpha(.5)
-			icons[4].CD:SetCooldown(start, duration)
-			icons[4].CD:Show()
-		else
-			icons[4]:SetAlpha(1)
-			icons[4].CD:Hide()
-		end
-	end
-
-	do
-		local name, _, _, _, dur, expire = UnitBuff("player", spellVampiric)
-		local start, duration = GetSpellCooldown(55233)
-		if name then
-			icons[5]:SetAlpha(1)
-			icons[5].CD:SetCooldown(expire-dur, dur)
-			icons[5].CD:Show()
-		elseif start and duration > 1.5 then
-			icons[5]:SetAlpha(.5)
-			icons[5].CD:SetCooldown(start, duration)
-			icons[5].CD:Show()
-		else
-			icons[5]:SetAlpha(1)
-			icons[5].CD:Hide()
-		end
-	end
+	AddSpellGroup(3, 81256, 49028)
+	AddSpellGroup(4, 48707, 48707, true)
+	AddSpellGroup(5, 55233, 55233)
 
 	updateVisibility()
 end
@@ -250,7 +229,6 @@ local function checkSpec(event)
 end
 
 function module:BloodyHell()
-	if not hehelele then return end
 	if not NDuiDB["Auras"]["BloodyHell"] then return end
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkSpec)
