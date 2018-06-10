@@ -72,6 +72,7 @@ local function updateTotem()
 			Totem.Icon:SetTexture(icons[slot])
 			Totem.CD:Hide()
 			Totem:SetScript("OnUpdate", nil)
+			ActionButton_HideOverlayGlow(Totem)
 		end
 	end
 end
