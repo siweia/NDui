@@ -59,6 +59,9 @@ do
 			["Magic"] = false,
 			["Curse"] = true,
 		},
+		["MAGE"] = {
+			["Curse"] = true,
+		},
 	}
 
 	DispellFilter = dispellClasses[class] or {}
