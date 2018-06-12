@@ -96,65 +96,75 @@ DB.BuffList = {
 
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
-	MAGE = {
-		[GetSpellInfo(205022)] = {		-- 奥术魔宠
-			["spells"] = {
-				[210126] = true,
+	HUNTER = {
+		{	spells = {	-- 独来独往
+				[164273] = true,
 			},
-			["requirespell"] = 205022,
-			["tree"] = 1,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			depend = 155228,
+			spec = 2,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
-	DRUID = {
-		[GetSpellInfo(202360)] = {		-- 远古祝福
-			["spells"] = {
-				[202737] = true,
-				[202739] = true,
+	MAGE = {
+		{	spells = {	-- 奥术魔宠
+				[210126] = true,
 			},
-			["requirespell"] = 202360,
-			["tree"] = 1,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			depend = 205022,
+			spec = 1,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {	-- 奥术智慧
+				[1459] = true,
+			},
+			depend = 1459,
+			instance = true,
+		},
+	},
+	PRIEST = {
+		{	spells = {	-- 真言术耐
+				[21562] = true,
+			},
+			depend = 21562,
+			instance = true,
+		},
+	},
+	WARRIOR = {
+		{	spells = {	-- 战斗怒吼
+				[6673] = true,
+			},
+			depend = 6673,
+			instance = true,
 		},
 	},
 	SHAMAN = {
-		[GetSpellInfo(192106)] = {		-- 闪电之盾
-			["spells"] = {
+		{	spells = {	-- 闪电之盾
 				[192106] = true,
 			},
-			["requirespell"] = 192106,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			depend = 192106,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 	ROGUE = {
-		[L["Damage Poison"]] = {		-- 伤害类毒药
-			["spells"] = {
-				[2823] = true,			-- 致命药膏
+		{	spells = {	-- 伤害类毒药
+				[2823] = true,		-- 致命药膏
+				[8679] = true,		-- 致伤药膏
 			},
-			["negate_spells"] = {
-				[8679] = true,			-- 致伤药膏
-				[200802] = true,		-- 苦痛毒液
-			},
-			["tree"] = 1,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			spec = 1,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
-		[L["Effect Poison"]] = { 		-- 效果类毒药
-			["spells"] = {
-				[3408] = true,   		-- 减速药膏
+		{	spells = {	-- 效果类毒药
+				[3408] = true,		-- 减速药膏
 			},
-			["negate_spells"] = {
-				[108211] = true, 		-- 吸血药膏
-			},
-			["tree"] = 1,
-			["pvp"] = true,
+			spec = 1,
+			pvp = true,
 		},
 	},
 }

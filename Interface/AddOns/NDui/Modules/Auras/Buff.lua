@@ -38,6 +38,7 @@ function module:OnLogin()
 	elseif DB.MyClass == "SHAMAN" then
 		self:Totems()
 	end
+	self:InitReminder()
 end
 
 local function styleButton(bu, isDebuff)
