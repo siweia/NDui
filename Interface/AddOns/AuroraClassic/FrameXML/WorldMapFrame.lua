@@ -16,11 +16,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinMinMax(BorderFrame.MaximizeMinimizeFrame)
 	F.ReskinClose(WorldMapFrameCloseButton)
 
-	F.Reskin(WorldMapFrameHomeButton)
-	WorldMapFrameHomeButtonLeft:Hide()
-	F.StripTextures(WorldMapFrame.NavBar)
-	WorldMapFrame.NavBar.overlay:Hide()
-
 	F.ReskinDropDown(WorldMapFrame.overlayFrames[1])
 	WorldMapFrame.overlayFrames[2].Border:Hide()
 	WorldMapFrame.overlayFrames[2].Background:Hide()

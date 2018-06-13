@@ -626,12 +626,16 @@ function F:ReskinFilterButton()
 end
 
 function F:ReskinNavBar()
+	if self.navBarStyled then return end
+
+	local homeButton = self.homeButton
 	local overflowButton = self.overflowButton
+
 	self:GetRegions():Hide()
 	self:DisableDrawLayer("BORDER")
 	self.overlay:Hide()
-	self.homeButton:GetRegions():Hide()
-	F.Reskin(self.homeButton)
+	homeButton:GetRegions():Hide()
+	F.Reskin(homeButton)
 	F.Reskin(overflowButton, true)
 
 	local tex = overflowButton:CreateTexture(nil, "ARTWORK")
@@ -642,6 +646,8 @@ function F:ReskinNavBar()
 
 	overflowButton:HookScript("OnEnter", textureOnEnter)
 	overflowButton:HookScript("OnLeave", textureOnLeave)
+
+	self.navBarStyled = true
 end
 
 function F:ReskinGarrisonPortrait()

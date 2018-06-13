@@ -49,10 +49,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	F.StripTextures(HelpFrameKnowledgebase)
 	F.ReskinInput(HelpFrameKnowledgebaseSearchBox)
-	F.StripTextures(HelpFrameKnowledgebaseNavBar)
-	HelpFrameKnowledgebaseNavBar.overlay:Hide()
-	F.Reskin(HelpFrameKnowledgebaseNavBarHomeButton)
-	HelpFrameKnowledgebaseNavBarHomeButtonLeft:Hide()
 
 	select(3, HelpFrameReportBug:GetChildren()):Hide()
 	select(3, HelpFrameSubmitSuggestion:GetChildren()):Hide()
