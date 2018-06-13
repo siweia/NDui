@@ -41,19 +41,19 @@ tinsert(C.themes["AuroraClassic"], function()
 		slot:SetNormalTexture("")
 		slot:SetPushedTexture("")
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		slot.SetHighlightTexture = F.dummy
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
 
 		border:SetPoint("TOPLEFT", -1.2, 1.2)
 		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 		border:SetDrawLayer("BACKGROUND")
 		F.CreateBDFrame(slot, .25)
-		local popout = slot.popoutButton
 
+		local popout = slot.popoutButton
 		popout:SetNormalTexture("")
 		popout:SetHighlightTexture("")
 
 		local arrow = popout:CreateTexture(nil, "OVERLAY")
-
 		if slot.verticalFlyout then
 			arrow:SetSize(13, 8)
 			arrow:SetTexture(C.media.arrowDown)
@@ -63,7 +63,6 @@ tinsert(C.themes["AuroraClassic"], function()
 			arrow:SetTexture(C.media.arrowRight)
 			arrow:SetPoint("LEFT", slot, "RIGHT", -1, 0)
 		end
-
 		popout.arrow = arrow
 
 		popout:HookScript("OnEnter", clearPopout)

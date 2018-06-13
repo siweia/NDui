@@ -207,7 +207,7 @@ C.themes["Blizzard_Communities"] = function()
 					if avatarButton:IsShown() and not avatarButton.bg then
 						avatarButton.bg = F.ReskinIcon(avatarButton.Icon)
 						avatarButton.Selected:SetTexture("")
-						avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+						avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 					end
 
 					if avatarButton.Selected:IsShown() then
