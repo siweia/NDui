@@ -547,8 +547,19 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 		if f then
 			f:HookScript("OnShow", style)
 		end
-		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
-		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(DB.TexCoord))
+		f.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
+		f.Item2.icon:SetTexCoord(unpack(DB.TexCoord))
+
+	elseif addon == "Blizzard_Calendar" then
+		local gt = {
+			CalendarContextMenu,
+			CalendarInviteStatusContextMenu,
+		}
+		for _, f in pairs(gt) do
+			if f then
+				f:HookScript("OnShow", style)
+			end
+		end
 	end
 end)
 
