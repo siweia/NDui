@@ -144,6 +144,11 @@ function module:OnLogin()
 		self.Quest = B.CreateFS(self, 30, "!", false, "LEFT", 3, 0)
 		self.Quest:SetTextColor(1, .8, 0)
 
+		self.Azerite = self:CreateTexture(nil, "ARTWORK")
+		self.Azerite:SetAtlas("AzeriteIconFrame")
+		self.Azerite:SetPoint("TOPLEFT", -2, 2)
+		self.Azerite:SetPoint("BOTTOMRIGHT", 2, -2)
+
 		if NDuiDB["Bags"]["Artifact"] then
 			self.Artifact = self:CreateTexture(nil, "ARTWORK")
 			self.Artifact:SetAtlas("collections-icon-favorites")
@@ -155,50 +160,32 @@ function module:OnLogin()
 			self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 1)
 		end
 
-		if NDuiDB["Bags"]["NewItemGlow"] then
-			local flash = self:CreateTexture(nil, "ARTWORK")
-			flash:SetTexture(DB.newItemFlash)
-			flash:SetPoint("TOPLEFT", -20, 20)
-			flash:SetPoint("BOTTOMRIGHT", 20, -20)
-			flash:SetBlendMode("ADD")
-			flash:SetAlpha(0)
-			local anim = flash:CreateAnimationGroup()
-			anim:SetLooping("REPEAT")
-			anim.rota = anim:CreateAnimation("Rotation")
-			anim.rota:SetDuration(1)
-			anim.rota:SetDegrees(-90)
-			anim.fader = anim:CreateAnimation("Alpha")
-			anim.fader:SetFromAlpha(0)
-			anim.fader:SetToAlpha(.5)
-			anim.fader:SetDuration(.5)
-			anim.fader:SetSmoothing("OUT")
-			anim.fader2 = anim:CreateAnimation("Alpha")
-			anim.fader2:SetStartDelay(.5)
-			anim.fader2:SetFromAlpha(.5)
-			anim.fader2:SetToAlpha(0)
-			anim.fader2:SetDuration(1.2)
-			anim.fader2:SetSmoothing("OUT")
-			self:HookScript("OnHide", function() if anim:IsPlaying() then anim:Stop() end end)
+		local flash = self:CreateTexture(nil, "ARTWORK")
+		flash:SetTexture(DB.newItemFlash)
+		flash:SetPoint("TOPLEFT", -20, 20)
+		flash:SetPoint("BOTTOMRIGHT", 20, -20)
+		flash:SetBlendMode("ADD")
+		flash:SetAlpha(0)
+		local anim = flash:CreateAnimationGroup()
+		anim:SetLooping("REPEAT")
+		anim.rota = anim:CreateAnimation("Rotation")
+		anim.rota:SetDuration(1)
+		anim.rota:SetDegrees(-90)
+		anim.fader = anim:CreateAnimation("Alpha")
+		anim.fader:SetFromAlpha(0)
+		anim.fader:SetToAlpha(.5)
+		anim.fader:SetDuration(.5)
+		anim.fader:SetSmoothing("OUT")
+		anim.fader2 = anim:CreateAnimation("Alpha")
+		anim.fader2:SetStartDelay(.5)
+		anim.fader2:SetFromAlpha(.5)
+		anim.fader2:SetToAlpha(0)
+		anim.fader2:SetDuration(1.2)
+		anim.fader2:SetSmoothing("OUT")
+		self:HookScript("OnHide", function() if anim:IsPlaying() then anim:Stop() end end)
+		self.anim = anim
 
-			self.anim = anim
-		end
-
-		if NDuiDB["Bags"]["PreferPower"] > 1 then
-			local protect = self:CreateTexture(nil, "ARTWORK")
-			protect:SetTexture("Interface\\PETBATTLES\\DeadPetIcon")
-			protect:SetAllPoints()
-			protect:SetAlpha(0)
-
-			self.powerProtect = protect
-		end
-	end
-
-	local function isPowerInWrongSpec()
-		if NDuiDB["Bags"]["PreferPower"] == 1 then return end
-		local spec = GetSpecialization()
-		if spec and spec + 1 ~= NDuiDB["Bags"]["PreferPower"] then
-			return true
-		end
+		self.ShowNewItems = true
 	end
 
 	local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
@@ -223,42 +210,44 @@ function module:OnLogin()
 	end
 
 	function MyButton:OnUpdate(item)
-		self.Junk:SetAlpha(0)
 		if item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 and MerchantFrame:IsShown() then
 			self.Junk:SetAlpha(1)
+		else
+			self.Junk:SetAlpha(0)
 		end
 
-		self.ShowNewItems = NDuiDB["Bags"]["NewItemGlow"]
+		if item.link and C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) then
+			self.Azerite:SetAlpha(1)
+		else
+			self.Azerite:SetAlpha(0)
+		end
 
 		if NDuiDB["Bags"]["Artifact"] then
-			self.Artifact:SetAlpha(0)
 			if item.rarity == LE_ITEM_QUALITY_ARTIFACT or item.id == 138019 then
 				self.Artifact:SetAlpha(1)
+			else
+				self.Artifact:SetAlpha(0)
 			end
 		end
 
 		if NDuiDB["Bags"]["BagsiLvl"] then
-			self.iLvl:SetText("")
 			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= "" and item.equipLoc ~= "INVTYPE_TABARD" and item.equipLoc ~= "INVTYPE_BODY" and item.equipLoc ~= "INVTYPE_BAG")) then
 				local level = GetBagItemLevel(item.link, item.bagID, item.slotID) or item.level
 				local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 				self.iLvl:SetText(level)
 				self.iLvl:SetTextColor(color.r, color.g, color.b)
-			end
-		end
-
-		if self.powerProtect then
-			if isPowerInWrongSpec() and IsArtifactPowerItem(item.id) then
-				self.powerProtect:SetAlpha(1)
 			else
-				self.powerProtect:SetAlpha(0)
+				self.iLvl:SetText("")
 			end
 		end
 	end
 
 	function MyButton:OnUpdateQuest(item)
-		self.Quest:SetAlpha(0)
-		if item.questID and not item.questActive then self.Quest:SetAlpha(1) end
+		if item.questID and not item.questActive then
+			self.Quest:SetAlpha(1)
+		else
+			self.Quest:SetAlpha(0)
+		end
 
 		if item.questID or item.isQuestItem then
 			self.BG:SetBackdropBorderColor(.8, .8, 0)
