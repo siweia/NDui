@@ -102,9 +102,7 @@ DB.ReminderBuffs = {
 			},
 			depend = 155228,
 			spec = 2,
-			combat = true,
 			instance = true,
-			pvp = true,
 		},
 	},
 	MAGE = {

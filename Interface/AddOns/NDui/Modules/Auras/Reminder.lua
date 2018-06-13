@@ -13,7 +13,7 @@ local function UpdateReminder(cfg)
 	local combat = cfg.combat
 	local instance = cfg.instance
 	local pvp = cfg.pvp
-	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true, false, false, false
+	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true
 	local inInst, instType = IsInInstance()
 
 	if depend and not IsPlayerSpell(depend) then isPlayerSpell = false end
