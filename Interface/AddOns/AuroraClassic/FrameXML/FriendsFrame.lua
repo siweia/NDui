@@ -97,6 +97,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	whoBg:SetPoint("BOTTOMRIGHT", -1, 1)
 	whoBg:SetFrameLevel(WhoFrameEditBoxInset:GetFrameLevel()-1)
 	F.CreateBD(whoBg, .25)
+	F.CreateGradient(whoBg)
 
 	F.ReskinPortraitFrame(FriendsFrame, true)
 	F.Reskin(FriendsFrameAddFriendButton)

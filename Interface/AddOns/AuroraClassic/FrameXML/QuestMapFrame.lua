@@ -25,6 +25,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	for _, header in next, {campaignHeader, StoryHeader} do
 		header.Background:SetAlpha(0)
+		header.HighlightTexture:Hide()
 
 		local bg = F.CreateBDFrame(header, .25)
 		bg:SetPoint("TOPLEFT", 0, -1)
@@ -38,14 +39,12 @@ tinsert(C.themes["AuroraClassic"], function()
 			header.newTex = newTex
 		end
 
-		local hl = header.HighlightTexture
-		hl:SetTexture(C.media.backdrop)
-		hl:SetVertexColor(r, g, b, .2)
-		hl:SetAllPoints(bg)
-		hl:SetDrawLayer("BACKGROUND")
-		hl:Hide()
-		header:HookScript("OnEnter", function() hl:Show() end)
-		header:HookScript("OnLeave", function() hl:Hide(0) end)
+		header:HookScript("OnEnter", function()
+			bg:SetBackdropColor(r, g, b, .25)
+		end)
+		header:HookScript("OnLeave", function()
+			bg:SetBackdropColor(0, 0, 0, .25)
+		end)
 	end
 
 	local idToTexture = {
