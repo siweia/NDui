@@ -175,6 +175,7 @@ local list = {
 		{AuraID = 2825, UnitID = "player"},		-- 嗜血
 		{AuraID = 32182, UnitID = "player"},	-- 英勇
 		{AuraID = 80353, UnitID = "player"},	-- 时间扭曲
+		{AuraID = 264667, UnitID = "player"},	-- 原始狂怒
 		{AuraID = 90355, UnitID = "player"},	-- 熔岩犬：远古狂乱
 		{AuraID = 160452, UnitID = "player"},	-- 虚空鳐：虚空之风
 		{AuraID = 178207, UnitID = "player"},	-- 鼓
