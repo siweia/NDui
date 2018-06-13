@@ -14,13 +14,13 @@ function module:OnLogin()
 	-- Default Settings
 	BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"]) end
-	hooksecurefunc(WorldMapFrame, "Minimize", function()
+	hooksecurefunc(WorldMapFrame, "Minimize", function(self)
 		if InCombatLockdown() then return end
-		WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"])
+		self:SetScale(NDuiDB["Map"]["MapScale"])
 	end)
-	hooksecurefunc(WorldMapFrame, "Maximize", function()
+	hooksecurefunc(WorldMapFrame, "Maximize", function(self)
 		if InCombatLockdown() then return end
-		WorldMapFrame:SetScale(1)
+		self:SetScale(1)
 	end)
 
 	-- Generate Coords
