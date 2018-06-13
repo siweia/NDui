@@ -23,9 +23,7 @@ local defaultSettings = {
 		BankWidth = 14,
 		BagsiLvl = true,
 		Artifact = true,
-		NewItemGlow = true,
 		ReverseSort = false,
-		PreferPower = 1,
 		ItemFilter = true,
 		ItemSetFilter = false,
 	},
@@ -260,11 +258,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
 		{1, "Bags", "Artifact", L["Bags Artifact"], true},
-		{1, "Bags", "NewItemGlow", L["Bags NewItemGlow"]},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
-		{4, "Bags", "PreferPower", L["AP Preference"], true, {}},
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"]},
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -678,18 +674,6 @@ local function OpenGUI()
 		f:Hide()
 		StaticPopup_Show("RELOAD_NDUI")
 	end)
-
-	-- PreUpdate Power Preference
-	do
-		local specList = optionList[2][7][6]
-		tinsert(specList, NONE)
-		for i = 1, 4 do
-			local spec, name = GetSpecializationInfo(i)
-			if spec then
-				tinsert(specList, name)
-			end
-		end
-	end
 
 	for i, name in pairs(tabList) do
 		guiTab[i] = CreateTab(i, name)
