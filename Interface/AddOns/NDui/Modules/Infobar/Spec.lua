@@ -57,21 +57,19 @@ info.onEnter = function(self)
 			end
 		end
 	end
---[[
-	if UnitLevel("player") == 110 then
-		local _, _, texture = GetCurrencyInfo(104)
+
+	if UnitLevel("player") >= SHOW_PVP_TALENT_LEVEL then
+		local texture = select(3, GetCurrencyInfo(104))
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, 1,1,1)
 
-		for t = 1, MAX_PVP_TALENT_TIERS do
-			for c = 1, 3 do
-				local _, name, icon, selected, _, _, unlocked = GetPvpTalentInfo(t, c, 1)
-				if selected and unlocked then
-					GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
-				end
+		for _, talentID in next, C_SpecializationInfo.GetAllSelectedPvpTalentIDs() do
+			local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
+			if name and unlocked then
+				GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
 			end
 		end
-	end]]
+	end
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["SpecPanel"].." ", 1,1,1, .6,.8,1)
