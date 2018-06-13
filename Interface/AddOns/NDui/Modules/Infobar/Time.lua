@@ -28,11 +28,6 @@ info.onUpdate = function(self, elapsed)
 end
 
 -- Data
-local months = {
-	MONTH_JANUARY, MONTH_FEBRUARY, MONTH_MARCH,	MONTH_APRIL, MONTH_MAY, MONTH_JUNE,
-	MONTH_JULY, MONTH_AUGUST, MONTH_SEPTEMBER, MONTH_OCTOBER, MONTH_NOVEMBER, MONTH_DECEMBER,
-}
-
 local bonus = {
 	43892, 43893, 43894,	-- Order Resources
 	43895, 43896, 43897,	-- Gold
@@ -98,7 +93,7 @@ info.onEnter = function(self)
 	GameTooltip:ClearLines()
 	local today = C_Calendar.GetDate()
 	local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
-	GameTooltip:AddLine(format(FULLDATE, CALENDAR_WEEKDAY_NAMES[w], months[m], d, y), 0,.6,1)
+	GameTooltip:AddLine(format(FULLDATE, CALENDAR_WEEKDAY_NAMES[w], CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), 0,.6,1)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(L["Local Time"], GameTime_GetLocalTime(true), .6,.8,1 ,1,1,1)
 	GameTooltip:AddDoubleLine(L["Realm Time"], GameTime_GetGameTime(true), .6,.8,1 ,1,1,1)
