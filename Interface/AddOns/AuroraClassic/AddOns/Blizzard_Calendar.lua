@@ -50,6 +50,9 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarCreateEventFrameButtonBackground:Hide()
 	CalendarCreateEventMassInviteButtonBorder:Hide()
 	CalendarCreateEventCreateButtonBorder:Hide()
+	CalendarCreateEventIcon:SetTexCoord(.08, .92, .08, .92)
+	CalendarCreateEventIcon.SetTexCoord = F.dummy
+	F.CreateBG(CalendarCreateEventIcon)
 	CalendarEventPickerTitleFrameBackgroundLeft:Hide()
 	CalendarEventPickerTitleFrameBackgroundMiddle:Hide()
 	CalendarEventPickerTitleFrameBackgroundRight:Hide()
@@ -72,21 +75,22 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarFilterFrameLeft:Hide()
 	CalendarFilterFrameMiddle:Hide()
 	CalendarFilterFrameRight:Hide()
-		CalendarMassInviteFrameDivider:Hide()
 
 	F.SetBD(CalendarFrame, 12, 0, -9, 4)
-	F.CreateBD(CalendarViewEventFrame)
-	F.CreateBD(CalendarViewHolidayFrame)
-	F.CreateBD(CalendarViewRaidFrame)
-	F.CreateBD(CalendarCreateEventFrame)
 	F.CreateBD(CalendarClassTotalsButton)
-	F.CreateBD(CalendarTexturePickerFrame)
 	F.CreateBD(CalendarViewEventInviteList, .25)
 	F.CreateBD(CalendarViewEventDescriptionContainer, .25)
 	F.CreateBD(CalendarCreateEventInviteList, .25)
 	F.CreateBD(CalendarCreateEventDescriptionContainer, .25)
 	F.CreateBD(CalendarEventPickerFrame, .25)
-	F.CreateBD(CalendarMassInviteFrame)
+
+	local frames = {
+		CalendarViewEventFrame, CalendarViewHolidayFrame, CalendarViewRaidFrame, CalendarCreateEventFrame, CalendarTexturePickerFrame, CalendarMassInviteFrame
+	}
+	for _, frame in next, frames do
+		F.CreateBD(frame)
+		F.CreateSD(frame)
+	end
 
 	CalendarWeekdaySelectedTexture:SetDesaturated(true)
 	CalendarWeekdaySelectedTexture:SetVertexColor(r, g, b)
@@ -144,7 +148,7 @@ C.themes["Blizzard_Calendar"] = function()
 		F.CreateBD(hline)
 	end
 
-	if not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop")) then
+	if AuroraConfig.tooltips then
 		local tooltips = {CalendarContextMenu, CalendarInviteStatusContextMenu}
 
 		for _, tooltip in pairs(tooltips) do
@@ -175,15 +179,19 @@ C.themes["Blizzard_Calendar"] = function()
 	line:SetVertexColor(0, 0, 0)
 
 	CalendarMassInviteFrame:ClearAllPoints()
-	CalendarMassInviteFrame:SetPoint("BOTTOMLEFT", CalendarCreateEventCreateButton, "TOPRIGHT", 10, 0)
+	CalendarMassInviteFrame:SetPoint("BOTTOMLEFT", CalendarCreateEventFrame, "BOTTOMRIGHT", 28, 0)
 
 	CalendarTexturePickerFrame:ClearAllPoints()
-	CalendarTexturePickerFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", 311, -24)
+	CalendarTexturePickerFrame:SetPoint("TOPLEFT", CalendarCreateEventFrame, "TOPRIGHT", 28, 0)
 
-	local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton", "CalendarMassInviteGuildAcceptButton"}
+	local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton", "CalendarMassInviteAcceptButton"}
 	for i = 1, #cbuttons do
 		local cbutton = _G[cbuttons[i]]
-		F.Reskin(cbutton)
+		if not cbutton then
+			print(cbuttons[i])
+		else
+			F.Reskin(cbutton)
+		end
 	end
 
 	CalendarViewEventAcceptButton.flashTexture:SetTexture("")
@@ -206,11 +214,12 @@ C.themes["Blizzard_Calendar"] = function()
 	F.ReskinDropDown(CalendarCreateEventMinuteDropDown)
 	F.ReskinDropDown(CalendarCreateEventAMPMDropDown)
 	F.ReskinDropDown(CalendarCreateEventDifficultyOptionDropDown)
-	F.ReskinDropDown(CalendarMassInviteGuildRankMenu)
+	F.ReskinDropDown(CalendarMassInviteCommunityDropDown)
+	F.ReskinDropDown(CalendarMassInviteRankMenu)
 	F.ReskinInput(CalendarCreateEventTitleEdit)
 	F.ReskinInput(CalendarCreateEventInviteEdit)
-	F.ReskinInput(CalendarMassInviteGuildMinLevelEdit)
-	F.ReskinInput(CalendarMassInviteGuildMaxLevelEdit)
+	F.ReskinInput(CalendarMassInviteMinLevelEdit)
+	F.ReskinInput(CalendarMassInviteMaxLevelEdit)
 	F.ReskinArrow(CalendarPrevMonthButton, "left")
 	F.ReskinArrow(CalendarNextMonthButton, "right")
 	CalendarPrevMonthButton:SetSize(19, 19)

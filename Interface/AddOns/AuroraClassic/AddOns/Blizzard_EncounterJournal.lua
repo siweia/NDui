@@ -453,16 +453,12 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	-- [[ Loot Journal ]]
 
 	EncounterJournal.LootJournal:GetRegions():Hide()
-	F.ReskinDropDown(LootJournalViewDropDown)
 	F.ReskinScroll(EncounterJournal.LootJournal.ItemSetsFrame.scrollBar)
-	F.ReskinScroll(EncounterJournal.LootJournal.LegendariesFrame.scrollBar)
 
 	local buttons = {
 		EncounterJournalEncounterFrameInfoDifficulty,
 		EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
 		EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
-		EncounterJournal.LootJournal.LegendariesFrame.ClassButton,
-		EncounterJournal.LootJournal.LegendariesFrame.SlotButton,
 		EncounterJournal.LootJournal.ItemSetsFrame.ClassButton,
 	}
 	for _, btn in pairs(buttons) do
@@ -473,18 +469,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		btn.DownRight:SetAlpha(0)
 		btn.HighLeft:SetAlpha(0)
 		btn.HighRight:SetAlpha(0)
-	end
-
-	-- LegendariesFrame
-
-	local items = {EncounterJournal.LootJournal.LegendariesFrame.buttons, EncounterJournal.LootJournal.LegendariesFrame.rightSideButtons}
-	for _, bu in ipairs(items) do
-		for i = 1, #bu do
-			F.Reskin(bu[i])
-			bu[i].Background:Hide()
-			bu[i].Icon:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBDFrame(bu[i].Icon)
-		end
 	end
 
 	-- ItemSetsFrame
@@ -505,16 +489,14 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	end)
 
 	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(self, button)
-		if not button.styled then
+		if not button.bg then
 			button.Border:SetAlpha(0)
 			button.Icon:SetTexCoord(.08, .92, .08, .92)
-
-			local quality = select(3, GetItemInfo(button.itemID))
-			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			button.bg = F.CreateBDFrame(button.Icon)
-			button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-
-			button.styled = true
 		end
+
+		local quality = select(3, GetItemInfo(button.itemID))
+		local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+		button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end)
 end
