@@ -7,7 +7,7 @@ local info = module:RegisterInfobar(C.Infobar.GuildPos)
 
 local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
 local infoFrame = CreateFrame("Frame", "NDuiGuildInfobar", info)
-infoFrame:SetSize(335, 540)
+infoFrame:SetSize(335, 495)
 infoFrame:SetPoint("TOPLEFT", UIParent, 15, -30)
 infoFrame:SetClampedToScreen(true)
 infoFrame:SetFrameStrata("TOOLTIP")
@@ -49,8 +49,8 @@ local invtInfo = DB.InfoColor.."ALT +"..DB.RightButton..L["Invite"]
 B.CreateFS(infoFrame, 13, invtInfo, false, "BOTTOMRIGHT", -15, 10)
 
 local scrollFrame = CreateFrame("ScrollFrame", nil, infoFrame, "UIPanelScrollFrameTemplate")
-scrollFrame:SetSize(312, 375)
-scrollFrame:SetPoint("CENTER", 0, -15)
+scrollFrame:SetSize(312, 320)
+scrollFrame:SetPoint("TOPLEFT", 10, -100)
 scrollFrame.ScrollBar:Hide()
 scrollFrame.ScrollBar.Show = B.Dummy
 scrollFrame:SetScript("OnMouseWheel", function(_, delta)
