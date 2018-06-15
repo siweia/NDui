@@ -16,10 +16,6 @@ local function skinChat(self)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 
-	local frame = _G[name.."ButtonFrame"]
-	frame:Hide()
-	frame:HookScript("OnShow", frame.Hide)
-
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
 	eb:ClearAllPoints()
@@ -44,17 +40,23 @@ local function skinChat(self)
 	tabFs:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
 	tabFs:SetShadowColor(0, 0, 0, 0)
 	tabFs:SetTextColor(1, .8, 0)
-	for i = 1, 6 do
-		select(i, tab:GetRegions()):SetTexture(nil)
+	for i = 1, 10 do
+		if i ~= 7 then
+			select(i, tab:GetRegions()):SetTexture(nil)
+		end
 	end
-	select(8, tab:GetRegions()):SetTexture(nil)
-	select(9, tab:GetRegions()):SetTexture(nil)
-	select(10, tab:GetRegions()):SetTexture(nil)
 
-	self.ScrollBar:Hide()
-	self.ScrollBar.Show = self.ScrollBar.Hide
-	self.ScrollToBottomButton:Hide()
-	self.ScrollToBottomButton.Show = B.Dummy
+	hooksecurefunc(tab, "SetAlpha", function(self, alpha)
+		if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
+			self:SetAlpha(1)
+		elseif alpha < .6 then
+			self:SetAlpha(.6)
+		end
+	end)
+
+	B.HideObject(self.buttonFrame)
+	B.HideObject(self.ScrollBar)
+	B.HideObject(self.ScrollToBottomButton)
 
 	self.styled = true
 end
@@ -167,18 +169,13 @@ function module:OnLogin()
 		end
 	end)
 
-	-- Tabs alpha and color
 	hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
 		if selected then
-			self:SetAlpha(1)
 			self:GetFontString():SetTextColor(1, .8, 0)
 		else
 			self:GetFontString():SetTextColor(.5, .5, .5)
-			self:SetAlpha(.3)
 		end
 	end)
-	CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = .3
-	DEFAULT_CHATFRAME_ALPHA = 0
 
 	-- Font size
 	for i = 1, 15 do

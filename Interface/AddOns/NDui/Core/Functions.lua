@@ -280,7 +280,22 @@ B.UnitColor = function(unit)
 end
 
 -- Disable function
-B.Dummy = function() end
+B.HiddenFrame = CreateFrame("Frame")
+B.HiddenFrame:Hide()
+
+function B:HideObject()
+	if self.UnregisterAllEvents then
+		self:UnregisterAllEvents()
+		self:SetParent(B.HiddenFrame)
+	else
+		self.Show = self.Hide
+	end
+	self:Hide()
+end
+
+function B:Dummy()
+	return
+end
 
 -- Smoothy
 local smoothing = {}
