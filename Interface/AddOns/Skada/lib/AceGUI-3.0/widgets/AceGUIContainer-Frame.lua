@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 Frame Container
 -------------------------------------------------------------------------------]]
-local Type, Version = "Frame", 25
+local Type, Version = "Frame", 26
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -21,7 +21,7 @@ local CreateFrame, UIParent = CreateFrame, UIParent
 Scripts
 -------------------------------------------------------------------------------]]
 local function Button_OnClick(frame)
-	PlaySound(PlaySoundKitID and "gsTitleOptionExit" or 799) -- SOUNDKIT.GS_TITLE_OPTION_EXIT
+	PlaySound(799) -- SOUNDKIT.GS_TITLE_OPTION_EXIT
 	frame.obj:Hide()
 end
 

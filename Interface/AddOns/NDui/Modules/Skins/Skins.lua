@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Skins")
 
 function module:OnLogin()
 	local cr, cg, cb = 0, 0, 0
@@ -123,21 +124,21 @@ function module:OnLogin()
 end
 
 function module:LoadWithAddOn(addonName, value, func)
-	NDui:EventFrame{"ADDON_LOADED", "PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self, event, addon)
-		if not NDuiDB["Skins"][value] then
-			self:UnregisterAllEvents()
-			return
-		end
+	local function loadFunc(event, addon)
+		if not NDuiDB["Skins"][value] then return end
 
 		if event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent(event)
+			B:UnregisterEvent(event, loadFunc)
 			if IsAddOnLoaded(addonName) then
 				func()
-				self:UnregisterAllEvents()
+				B:UnregisterEvent("ADDON_LOADED", loadFunc)
 			end
 		elseif event == "ADDON_LOADED" and addon == addonName then
 			func()
-			self:UnregisterAllEvents()
+			B:UnregisterEvent(event, loadFunc)
 		end
-	end)
+	end
+
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", loadFunc)
+	B:RegisterEvent("ADDON_LOADED", loadFunc)
 end

@@ -1,11 +1,12 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Actionbar")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Actionbar")
 local cfg = C.bars.bar1
-local padding, margin = 2, 2
 
 function module:OnLogin()
 	if not NDuiDB["Actionbar"]["Enable"] then return end
 
+	local padding, margin = 2, 2
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 	local layout = NDuiDB["Actionbar"]["Style"]
@@ -46,7 +47,7 @@ function module:OnLogin()
 
 	--create the mouseover functionality
 	if cfg.fader then
-		NDui.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		B:CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
 	--fix stupid blizzard
@@ -61,7 +62,7 @@ function module:OnLogin()
 	hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
 
 	--_onstate-page state driver
-	local actionPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1" 
+	local actionPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
 	local buttonName = "ActionButton"
 	for i, button in next, buttonList do
 		frame:SetFrameRef(buttonName..i, button)

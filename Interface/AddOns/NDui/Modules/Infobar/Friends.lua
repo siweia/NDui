@@ -1,7 +1,8 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.Friends then return end
 
-local module = NDui:GetModule("Infobar")
+local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.FriendsPos)
 
 local friendTable, bnetTable, updateRequest = {}, {}
@@ -84,9 +85,6 @@ info.eventList = {
 	"BN_FRIEND_ACCOUNT_ONLINE",
 	"BN_FRIEND_ACCOUNT_OFFLINE",
 	"BN_FRIEND_INFO_CHANGED",
-	"BN_FRIEND_TOON_ONLINE",
-	"BN_FRIEND_TOON_OFFLINE",
-	"BN_TOON_NAME_UPDATED",
 	"FRIENDLIST_UPDATE",
 	"PLAYER_ENTERING_WORLD",
 	"CHAT_MSG_SYSTEM",

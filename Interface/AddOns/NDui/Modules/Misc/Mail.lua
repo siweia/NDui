@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 --[[
 	一个简易的邮箱插件，修改自OpenAll
@@ -197,7 +198,7 @@ function module:Mailbox()
 				b.delete.texture:SetTexCoord(1, 0, 0, 1)
 				b.delete.id = i
 				b.delete:SetScript("OnClick", deleteClick)
-				B.CreateGT(b.delete, "ANCHOR_RIGHT", DELETE, "system")
+				B.AddTooltip(b.delete, "ANCHOR_RIGHT", DELETE, "system")
 			end
 		end
 	end)
@@ -237,8 +238,8 @@ function module:Mailbox()
 	end
 
 	-- Aurora Reskin
-	if IsAddOnLoaded("Aurora") then
-		local F = unpack(Aurora)
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
 		F.Reskin(button1)
 		F.Reskin(button2)
 		F.Reskin(button3)

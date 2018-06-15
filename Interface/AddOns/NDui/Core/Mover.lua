@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 -- Frame Mover
 local MoverList, BackupTable, f = {}, {}
@@ -142,17 +143,18 @@ local function CreateConsole()
 		end)
 	end
 
-	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
+	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
 				LockElements()
-				self:RegisterEvent("PLAYER_REGEN_ENABLED")
+				B:RegisterEvent("PLAYER_REGEN_ENABLED", showLater)
 			end
 		else
 			UnlockElements()
-			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			B:UnregisterEvent(event, showLater)
 		end
-	end)
+	end
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 end
 
 SlashCmdList["NDUI_MOVER"] = function()

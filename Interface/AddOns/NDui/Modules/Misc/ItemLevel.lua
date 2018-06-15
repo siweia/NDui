@@ -1,5 +1,6 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 --[[
 	在角色面板显示装备等级
@@ -85,7 +86,7 @@ function module:ShowItemLevel()
 		end
 	end)
 
-	NDui:EventFrame{"INSPECT_READY"}:SetScript("OnEvent", function(_, _, ...)
+	B:RegisterEvent("INSPECT_READY", function(_, ...)
 		local guid = ...
 		if InspectFrame and InspectFrame.unit and UnitGUID(InspectFrame.unit) == guid then
 			SetupItemLevel(InspectFrame.unit, tarString)

@@ -1,7 +1,8 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.Location then return end
 
-local module = NDui:GetModule("Infobar")
+local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.LocationPos)
 
 local zoneInfo = {
@@ -16,6 +17,7 @@ local zoneInfo = {
 
 local subzone, zone, pvp
 local coordX, coordY = 0, 0
+local mapInfo, position
 
 local function formatCoords()
 	return format("%.1f, %.1f", coordX*100, coordY*100)
@@ -37,9 +39,9 @@ info.onEvent = function(self)
 end
 
 local function isInvasionPoint()
-	local mapName = GetMapInfo()
+	mapInfo = C_Map.GetMapInfo(C_Map.GetBestMapForUnit("player"))
 	local invaName = C_Scenario.GetInfo()
-	if mapName and mapName:match("InvasionPoint") and invaName then
+	if mapInfo and mapInfo.name:match("InvasionPoint") and invaName then
 		return true
 	end
 end
@@ -48,15 +50,18 @@ info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
 
-	if GetPlayerMapPosition("player") then
+	position = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
+	if position then
 		self:SetScript("OnUpdate", function(self, elapsed)
 			self.timer = (self.timer or 0) + elapsed
 			if self.timer > .1 then
-				coordX, coordY = GetPlayerMapPosition("player")
+				coordX, coordY = position.x, position.y
 				self:GetScript("OnEnter")(self)
 				self.timer = 0
 			end
 		end)
+	else
+		coordX, coordY = 0, 0
 	end
 	GameTooltip:AddLine(format("%s |cffffffff(%s)", zone, formatCoords()), 0,.6,1)
 

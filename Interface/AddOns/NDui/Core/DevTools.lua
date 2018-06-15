@@ -1,4 +1,5 @@
-local B, C, _, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 --[[
 	NDui DevTools:
@@ -11,7 +12,7 @@ local B, C, _, DB = unpack(select(2, ...))
 	/getnpc, get npc name and id
 ]]
 
-local dev = {"寧德"}
+local dev = {"寧德", "Hunnie"}
 local function isDeveloper()
 	for _, name in pairs(dev) do
 		if UnitName("player") == name then

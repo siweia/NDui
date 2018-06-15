@@ -1,7 +1,8 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.System then return end
 
-local module = NDui:GetModule("Infobar")
+local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.SystemPos)
 
 local function colorLatency(latency)

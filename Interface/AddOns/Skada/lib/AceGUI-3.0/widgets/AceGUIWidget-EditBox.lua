@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 EditBox Widget
 -------------------------------------------------------------------------------]]
-local Type, Version = "EditBox", 26
+local Type, Version = "EditBox", 27
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -73,7 +73,7 @@ local function EditBox_OnEnterPressed(frame)
 	local value = frame:GetText()
 	local cancel = self:Fire("OnEnterPressed", value)
 	if not cancel then
-		PlaySound(PlaySoundKitID and "igMainMenuOptionCheckBoxOn" or 856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
+		PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
 		HideButton(self)
 	end
 end

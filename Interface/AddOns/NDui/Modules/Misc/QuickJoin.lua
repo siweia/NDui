@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 --[[
 	QuickJoin 优化系统自带的预创建功能
@@ -175,11 +176,22 @@ function module:QuickJoin()
 		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
 	end)
 
+	local function hideInSecond(frame)
+		C_Timer.After(1, function()
+			StaticPopup_Hide(frame)
+			StaticPopupSpecial_Hide(frame)
+		end)
+	end
+
 	hooksecurefunc("StaticPopup_Show", function(which)
 		if which == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
-			C_Timer.After(1, function()
-				StaticPopup_Hide(which)
-			end)
+			hideInSecond(which)
+		end
+	end)
+
+	hooksecurefunc("LFGListInviteDialog_Show", function(self)
+		if self.informational then
+			hideInSecond(self)
 		end
 	end)
 end

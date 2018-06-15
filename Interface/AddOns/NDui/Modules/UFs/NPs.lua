@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local UF = NDui:GetModule("UnitFrames")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local UF = B:GetModule("UnitFrames")
 
 -- Init
 function UF:SetupCVars()
@@ -34,14 +35,18 @@ function UF:BlockAddons()
 	end
 end
 
+local function sectionInfo(id)
+	return C_EncounterJournal.GetSectionInfo(id).title
+end
+
 local CustomUnits = {
 	["Fel Explosive"] = true,
 	["邪能炸药"] = true,
 	["魔化炸彈"] = true,
-	[EJ_GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
-	[EJ_GetSectionInfo(14595)] = true,	-- 深渊追猎者
-	[EJ_GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
-	[EJ_GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
+	[sectionInfo(14544)] = true,	-- 海拉加尔观雾者
+	[sectionInfo(14595)] = true,	-- 深渊追猎者
+	[sectionInfo(16588)] = true,	-- 尖啸反舌鸟
+	[sectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
 }
 function UF:CreateUnitTable()
 	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
@@ -53,8 +58,8 @@ function UF:CreateUnitTable()
 end
 
 C.ShowPowerList = {
-	[EJ_GetSectionInfo(13015)] = true,	-- 清扫器
-	[EJ_GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
+	[sectionInfo(13015)] = true,	-- 清扫器
+	[sectionInfo(15903)] = true,	-- 泰沙拉克的余烬
 }
 function UF:CreatePowerUnitTable()
 	if not NDuiDB["Nameplate"]["ShowUnitPower"] then return end
@@ -191,7 +196,18 @@ local function UpdateUnitClassify(self, unit)
 end
 
 function UF:CreateClassBar()
+	local SPEC_MAGE_ARCANE = SPEC_MAGE_ARCANE or 1
+	local SPEC_MONK_WINDWALKER = SPEC_MONK_WINDWALKER or 3
+	local SPEC_PALADIN_RETRIBUTION = SPEC_PALADIN_RETRIBUTION or 3
+	local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION or 3
+	local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
+	local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
+	local SPELL_POWER_SOUL_SHARDS = Enum.PowerType.SoulShards or 7
+	local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower or 9
+	local SPELL_POWER_CHI = Enum.PowerType.Chi or 12
+	local SPELL_POWER_ARCANE_CHARGES = Enum.PowerType.ArcaneCharges or 16
 	local ClassPowerID, ClassPowerType, RequireSpec, RequirePower
+
 	-- Data
 	if DB.MyClass == "MONK" then
 		ClassPowerID = SPELL_POWER_CHI
@@ -396,7 +412,7 @@ function UF:CreateClassBar()
 end
 
 -- Create Nameplates
-local function CreatePlates(self, unit)
+function UF:CreatePlates(unit)
 	self.mystyle = "nameplate"
 	if unit:match("nameplate") then
 		self:SetSize(NDuiDB["Nameplate"]["Width"] * 1.4, NDuiDB["Nameplate"]["Height"])
@@ -463,7 +479,6 @@ local function CreatePlates(self, unit)
 		self.ThreatIndicator.Override = UpdateThreatColor
 	end
 end
-UF.CreatePlates = CreatePlates
 
 local function enableElement(self, name, element)
 	if not self:IsElementEnabled(name) then
@@ -478,7 +493,7 @@ local function disableElement(self, name)
 	end
 end
 
-local function UpdatePlates(self, event, unit)
+function UF:PostUpdatePlates(event, unit)
 	-- Update Elements
 	UpdateTargetMark(self)
 	UpdateQuestUnit(self, unit)
@@ -520,4 +535,3 @@ local function UpdatePlates(self, event, unit)
 		bar:Hide()
 	end
 end
-UF.PostUpdatePlates = UpdatePlates

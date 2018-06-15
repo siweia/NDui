@@ -1,3 +1,27 @@
+--[[
+# Element: Raid Role Indicator
+
+Handles the visibility and updating of an indicator based on the unit's raid assignment (main tank or main assist).
+
+## Widget
+
+RaidRoleIndicator - A `Texture` representing the unit's raid assignment.
+
+## Notes
+
+This element updates by changing the texture.
+
+## Examples
+
+    -- Position and size
+    local RaidRoleIndicator = self:CreateTexture(nil, 'OVERLAY')
+    RaidRoleIndicator:SetSize(16, 16)
+    RaidRoleIndicator:SetPoint('TOPLEFT')
+
+    -- Register it with oUF
+    self.RaidRoleIndicator = RaidRoleIndicator
+--]]
+
 local _, ns = ...
 local oUF = ns.oUF
 
@@ -9,6 +33,11 @@ local function Update(self, event)
 
 	local element = self.RaidRoleIndicator
 
+	--[[ Callback: RaidRoleIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the RaidRoleIndicator element
+	--]]
 	if(element.PreUpdate) then
 		element:PreUpdate()
 	end
@@ -28,12 +57,25 @@ local function Update(self, event)
 
 	element:SetShown(isShown)
 
+	--[[ Callback: RaidRoleIndicator:PostUpdate(role)
+	Called after the element has been updated.
+
+	* self - the RaidRoleIndicator element
+	* role - the unit's raid assignment (string?)['MAINTANK', 'MAINASSIST']
+	--]]
 	if(element.PostUpdate) then
 		return element:PostUpdate(role)
 	end
 end
 
 local function Path(self, ...)
+	--[[ Override: RaidRoleIndicator.Override(self, event, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
 	return (self.RaidRoleIndicator.Override or Update)(self, ...)
 end
 

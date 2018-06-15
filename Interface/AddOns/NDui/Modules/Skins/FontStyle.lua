@@ -1,8 +1,11 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Skins")
 
 function module:FontStyle()
-	if not IsAddOnLoaded("Aurora") then return end
+	if not IsAddOnLoaded("AuroraClassic") then return end
+	AuroraConfig.enableFont = false
+
 	if not NDuiDB["Skins"]["FontFlag"] then return end
 
 	local function ReskinFont(font, size, white)
@@ -75,7 +78,6 @@ function module:FontStyle()
 	ReskinFont(Tooltip_Med, 13)
 	ReskinFont(Tooltip_Small, 12)
 	ReskinFont(HelpFrameKnowledgebaseNavBarHomeButtonText, 15)
-	ReskinFont(WorldMapFrameNavBarHomeButtonText, 15)
 	ReskinFont(Game12Font, 12)
 	ReskinFont(Game16Font, 16)
 	ReskinFont(Game18Font, 18)
@@ -117,7 +119,7 @@ function module:FontStyle()
 
 	-- Achievement ShieldPoints, GuildRoster LevelText
 	local styledIndex = 0
-	NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, _, addon)
+	local function updateAchievement(event, addon)
 		if addon == "Blizzard_AchievementUI" then
 			hooksecurefunc("AchievementObjectives_DisplayProgressiveAchievement", function()
 				local index = 1
@@ -160,8 +162,9 @@ function module:FontStyle()
 			styledIndex = styledIndex + 1
 		end
 
-		if styledIndex == 2 then self:UnregisterAllEvents() end
-	end)
+		if styledIndex == 2 then B:UnregisterEvent(event, updateAchievement) end
+	end
+	B:RegisterEvent("ADDON_LOADED", updateAchievement)
 
 	-- WhoFrame LevelText
 	hooksecurefunc("WhoList_Update", function()

@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 --------------------------------
 -- ExtraQuestButton, by p3lim
 -- NDui MOD
@@ -197,8 +198,8 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	HotKey:SetPoint("TOP", 0, -5)
 	self.HotKey = HotKey
 
-	local Count = self:CreateFontString("$parentCount", nil, "NumberFontNormal")
-	Count:SetPoint("TOPLEFT", 7, -7)
+	local Count = self:CreateFontString("$parentCount", nil, "NumberFont_Shadow_Med")
+	Count:SetPoint("BOTTOMRIGHT", -3, 3)
 	self.Count = Count
 
 	local Cooldown = CreateFrame("Cooldown", "$parentCooldown", self, "CooldownFrameTemplate")
@@ -218,15 +219,15 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent("UPDATE_BINDINGS")
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN")
 	self:RegisterEvent("BAG_UPDATE_DELAYED")
-	self:RegisterEvent("WORLD_MAP_UPDATE")
+	--self:RegisterEvent("WORLD_MAP_UPDATE")
 	self:RegisterEvent("QUEST_LOG_UPDATE")
 	self:RegisterEvent("QUEST_POI_UPDATE")
 	self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
 	self:RegisterEvent("QUEST_ACCEPTED")
-
+--[[
 	if(not WorldMapFrame:IsShown()) then
 		SetMapToCurrentZone()
-	end
+	end]]
 end
 
 local worldQuests = {}
@@ -355,7 +356,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 	else
 		HotKey:Hide()
 	end
-	if NDuiDB["Actionbar"]["Enable"] then NDui.UpdateHotkey(self) end
+	if NDuiDB["Actionbar"]["Enable"] then B.UpdateHotKey(self) end
 
 	if(InCombatLockdown()) then
 		self.attribute = self.itemName

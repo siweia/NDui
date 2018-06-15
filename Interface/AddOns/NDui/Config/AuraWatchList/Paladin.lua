@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 -- 圣骑士的法术监控
 local list = {
@@ -29,7 +30,6 @@ local list = {
 		{AuraID = 642, UnitID = "player"},		-- 圣盾术
 		{AuraID = 31821, UnitID = "player"},	-- 光环掌握
 		{AuraID = 31884, UnitID = "player"},	-- 复仇之怒
-		{AuraID = 31842, UnitID = "player"},	-- 复仇之怒
 		{AuraID = 31850, UnitID = "player"},	-- 炽热防御者
 		{AuraID = 54149, UnitID = "player"},	-- 圣光灌注
 		{AuraID = 86659, UnitID = "player"},	-- 远古列王守卫
@@ -39,7 +39,6 @@ local list = {
 		{AuraID = 209785, UnitID = "player"},	-- 正义之火
 		{AuraID = 217020, UnitID = "player"},	-- 狂热
 		{AuraID = 205191, UnitID = "player"},	-- 以眼还眼
-		{AuraID = 224668, UnitID = "player"},	-- 圣洁怒火
 		{AuraID = 221885, UnitID = "player"},	-- 神圣马驹
 		{AuraID = 200652, UnitID = "player"},	-- 提尔的拯救
 		{AuraID = 214202, UnitID = "player"},	-- 律法之则

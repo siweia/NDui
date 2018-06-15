@@ -1,6 +1,7 @@
-local B, C, L, DB = unpack(select(2, ...))
-local oUF = NDui.oUF or oUF
-local UF = NDui:GetModule("UnitFrames")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
+local UF = B:GetModule("UnitFrames")
 
 -- Units
 local function CreatePlayerStyle(self)
@@ -244,12 +245,9 @@ function UF:OnLogin()
 				bars[i] = bar
 			end
 
-			local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "ARENA_PREP_OPPONENT_SPECIALIZATIONS", "ARENA_OPPONENT_UPDATE"}
-			f:SetScript("OnEvent", function(_, event)
+			local function UpdateArenaPreps(event)
 				if event == "ARENA_OPPONENT_UPDATE" then
-					for i = 1, 5 do
-						bars[i]:Hide()
-					end
+					for i = 1, 5 do bars[i]:Hide() end
 				else
 					local numOpps = GetNumArenaOpponentSpecs()
 					if numOpps > 0 then
@@ -268,12 +266,13 @@ function UF:OnLogin()
 							end
 						end
 					else
-						for i = 1, 5 do
-							bars[i]:Hide()
-						end
+						for i = 1, 5 do bars[i]:Hide() end
 					end
 				end
-			end)
+			end
+			B:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateArenaPreps)
+			B:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", UpdateArenaPreps)
+			B:RegisterEvent("ARENA_OPPONENT_UPDATE", UpdateArenaPreps)
 		end
 	end
 
@@ -389,7 +388,7 @@ function UF:OnLogin()
 		if raidMover then
 			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
 
-			NDui:EventFrame{"UNIT_SPELLCAST_SUCCEEDED", "PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(_, event, ...)
+			local function UpdateSpecPos(event, ...)
 				local unit, _, _, _, spellID = ...
 				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
 					if not GetSpecialization() then return end
@@ -400,7 +399,9 @@ function UF:OnLogin()
 					raidMover:ClearAllPoints()
 					raidMover:SetPoint(unpack(NDuiDB["Mover"]["RaidPos"..specIndex]))
 				end
-			end)
+			end
+			B:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateSpecPos)
+			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos)
 
 			raidMover:HookScript("OnDragStop", function()
 				if not GetSpecialization() then return end

@@ -1,7 +1,8 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.Spec then return end
 
-local module = NDui:GetModule("Infobar")
+local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.SpecPos)
 
 local function addIcon(texture)
@@ -57,17 +58,15 @@ info.onEnter = function(self)
 		end
 	end
 
-	if UnitLevel("player") == 110 then
-		local _, _, texture = GetCurrencyInfo(104)
+	if UnitLevel("player") >= SHOW_PVP_TALENT_LEVEL then
+		local texture = select(3, GetCurrencyInfo(104))
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, 1,1,1)
 
-		for t = 1, MAX_PVP_TALENT_TIERS do
-			for c = 1, 3 do
-				local _, name, icon, selected, _, _, unlocked = GetPvpTalentInfo(t, c, 1)
-				if selected and unlocked then
-					GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
-				end
+		for _, talentID in next, C_SpecializationInfo.GetAllSelectedPvpTalentIDs() do
+			local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
+			if name and unlocked then
+				GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
 			end
 		end
 	end
@@ -80,12 +79,12 @@ end
 
 info.onLeave = function() GameTooltip:Hide() end
 
-local function clickFunc(i, isLoot, isPet)
+local function clickFunc(i, isLoot)
 	if not i then return end
 	if isLoot then
 		SetLootSpecialization(i)
 	else
-		SetSpecialization(i, isPet)
+		SetSpecialization(i)
 	end
 	DropDownList1:Hide()
 end
@@ -117,29 +116,6 @@ info.onMouseUp = function(self, btn)
 			else
 				specList[i] = nil
 				lootList[i+1] = nil
-			end
-		end
-
-		do
-			local _, myclass = UnitClass("player")
-			if myclass == "HUNTER" and IsPetActive() then
-				menuList[4] = {text = PET..SPECIALIZATION, hasArrow = true, notCheckable = true}
-				menuList[4].menuList = {{}, {}, {}}
-				local petList = menuList[4].menuList
-				local spec = GetSpecializationInfo(GetSpecialization(false, true), false, true)
-				for i = 1, 3 do
-					local id, name = GetSpecializationInfo(i, false, true)
-					petList[i].text = name
-					if id == spec then
-						petList[i].func = function() clickFunc() end
-						petList[i].checked = true
-					else
-						petList[i].func = function() clickFunc(i, false, true) end
-						petList[i].checked = false
-					end
-				end
-			else
-				menuList[4] = nil
 			end
 		end
 

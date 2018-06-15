@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 -- Default Settings
 local defaultSettings = {
@@ -22,9 +23,7 @@ local defaultSettings = {
 		BankWidth = 14,
 		BagsiLvl = true,
 		Artifact = true,
-		NewItemGlow = true,
 		ReverseSort = false,
-		PreferPower = 1,
 		ItemFilter = true,
 		ItemSetFilter = false,
 	},
@@ -98,7 +97,7 @@ local defaultSettings = {
 		Clock = false,
 		CombatPulse = true,
 		HideFog = true,
-		MapScale = 1.1,
+		MapScale = 1,
 		MinmapScale = 1.4,
 		ShowRecycleBin = true,
 		WhoPings = true,
@@ -151,7 +150,6 @@ local defaultSettings = {
 		CombatHide = false,
 		Cursor = false,
 		ClassColor = false,
-		Scale = 1,
 		HideTitle = false,
 		HideRealm = false,
 		HideRank = false,
@@ -198,9 +196,10 @@ local defaultSettings = {
 	},
 }
 
-NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+local loader = CreateFrame("Frame")
+loader:RegisterEvent("ADDON_LOADED")
+loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
-	self:UnregisterEvent(event)
 	if not NDuiDB["LEGION"] then
 		NDuiDB = {}
 		NDuiDB["LEGION"] = true
@@ -218,6 +217,7 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon
 			if NDuiDB[i] == nil then NDuiDB[i] = j end
 		end
 	end
+	self:UnregisterAllEvents()
 end)
 
 -- Config
@@ -258,11 +258,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
 		{1, "Bags", "Artifact", L["Bags Artifact"], true},
-		{1, "Bags", "NewItemGlow", L["Bags NewItemGlow"]},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
-		{4, "Bags", "PreferPower", L["AP Preference"], true, {}},
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"]},
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -358,16 +356,16 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "EasyMarking", L["Easy Mark"]},
 		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
 		{},--blank
+		{1, "Chat", "Invite", L["Whisper Invite"]},
+		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
+		{2, "Chat", "Keyword", L["Whisper Keyword"]},
+		{},--blank
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"], true},
 		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"]},
 		{1, "Misc", "SwapingAlert", L["Swaping Alert"], true},
 		{1, "Misc", "SistersAlert", L["SistersAlert Alert"]},
 		{1, "Misc", "AntoranBlast", L["AntoranBlast Alert"], true},
-		{},--blank
-		{1, "Chat", "Invite", L["Whisper Invite"]},
-		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
-		{2, "Chat", "Keyword", L["Whisper Keyword"]},
 	},
 	[8] = {
 		{1, "Chat", "Lock", L["Lock Chat"]},
@@ -422,7 +420,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
 		{1, "Tooltip", "Cursor", L["Follow Cursor"]},
 		{1, "Tooltip", "ClassColor", L["Classcolor Border"], true},
-		{3, "Tooltip", "Scale", L["Tooltip Scale"], false, {.5, 1.5, 1}},
 		{},--blank
 		{1, "Tooltip", "HideTitle", L["Hide Title"]},
 		{1, "Tooltip", "HideRealm", L["Hide Realm"], true},
@@ -585,9 +582,9 @@ local function CreateOption(i)
 			bd:SetPoint("BOTTOMRIGHT", -15, 3)
 			bd:SetFrameStrata("BACKGROUND")
 			B.CreateBD(bd, .3)
-			local slider = select(4, s:GetRegions())
-			slider:SetTexture(DB.sparkTex)
-			slider:SetBlendMode("ADD")
+			local thumb = _G[s:GetName().."Thumb"]
+			thumb:SetTexture(DB.sparkTex)
+			thumb:SetBlendMode("ADD")
 		-- Dropdown
 		elseif type == 4 then
 			local dd = B.CreateDropDown(parent, 200, 30, data)
@@ -678,18 +675,6 @@ local function OpenGUI()
 		StaticPopup_Show("RELOAD_NDUI")
 	end)
 
-	-- PreUpdate Power Preference
-	do
-		local specList = optionList[2][7][6]
-		tinsert(specList, NONE)
-		for i = 1, 4 do
-			local spec, name = GetSpecializationInfo(i)
-			if spec then
-				tinsert(specList, name)
-			end
-		end
-	end
-
 	for i, name in pairs(tabList) do
 		guiTab[i] = CreateTab(i, name)
 
@@ -701,8 +686,8 @@ local function OpenGUI()
 		guiPage[i].child = CreateFrame("Frame", nil, guiPage[i])
 		guiPage[i].child:SetSize(610, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
-		if IsAddOnLoaded("Aurora") then
-			local F = unpack(Aurora)
+		if IsAddOnLoaded("AuroraClassic") then
+			local F = unpack(AuroraClassic)
 			F.ReskinScroll(guiPage[i].ScrollBar)
 		end
 
@@ -742,17 +727,18 @@ local function OpenGUI()
 	end)
 	credit:SetScript("OnLeave", GameTooltip_Hide)
 
-	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
+	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
 				f:Hide()
-				self:RegisterEvent("PLAYER_REGEN_ENABLED")
+				B:RegisterEvent("PLAYER_REGEN_ENABLED", showLater)
 			end
 		else
 			f:Show()
-			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			B:UnregisterEvent(event, showLater)
 		end
-	end)
+	end
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4], 150, 30, L["Add ClickSets"])
@@ -791,7 +777,7 @@ gui:SetScript("OnClick", function()
 end)
 
 -- Aurora Reskin
-if IsAddOnLoaded("Aurora") then
-	local F = unpack(Aurora)
+if IsAddOnLoaded("AuroraClassic") then
+	local F = unpack(AuroraClassic)
 	F.Reskin(gui)
 end

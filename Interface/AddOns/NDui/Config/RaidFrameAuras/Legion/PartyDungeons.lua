@@ -1,5 +1,6 @@
-local module = NDui:GetModule("AurasTable")
-if not module then return end
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 local TIER = 7 -- Legion
 
@@ -147,6 +148,7 @@ module:RegisterDebuff(TIER, 740, 0, 214002)
 module:RegisterDebuff(TIER, 740, 0, 200084)
 module:RegisterDebuff(TIER, 740, 0, 200261)
 module:RegisterDebuff(TIER, 740, 0, 197546)
+module:RegisterDebuff(TIER, 740, 0, 200248)
 
 -- 重返卡拉赞 (860)	
 module:RegisterDebuff(TIER, 860, 0, 209858)

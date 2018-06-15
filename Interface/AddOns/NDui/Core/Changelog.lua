@@ -1,5 +1,7 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if DB.Client ~= "zhCN" then return end
+if DB.Support == "BfA Beta" then return end
 
 local hx = {
 	"更新部分技能监控；",
@@ -52,8 +54,7 @@ local function changelog()
 	close:SetScript("OnClick", function() f:Hide() end)
 end
 
-NDui:EventFrame{"PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self)
-	self:UnregisterAllEvents()
+local function compareToShow(event)
 	if HelloWorld then return end
 	if not NDuiADB["Changelog"] then NDuiADB["Changelog"] = {} end
 
@@ -63,7 +64,10 @@ NDui:EventFrame{"PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self)
 		changelog()
 		NDuiADB["Changelog"].Version = DB.Version
 	end
-end)
+
+	B:UnregisterEvent(event, compareToShow)
+end
+B:RegisterEvent("PLAYER_ENTERING_WORLD", compareToShow)
 
 SlashCmdList["NDUICHANGELOG"] = function()
 	if not NDuiChangeLog then changelog() else NDuiChangeLog:Show() end

@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 --[[
 	>>>自定义添加时，要注意格式，注意逗号，注意字母大小写<<<
 	ALL下面是对全职业通用的设置，其他情况请在自己职业下添加。当你添加时，要注意是否重复。
@@ -174,6 +175,7 @@ local list = {
 		{AuraID = 2825, UnitID = "player"},		-- 嗜血
 		{AuraID = 32182, UnitID = "player"},	-- 英勇
 		{AuraID = 80353, UnitID = "player"},	-- 时间扭曲
+		{AuraID = 264667, UnitID = "player"},	-- 原始狂怒
 		{AuraID = 90355, UnitID = "player"},	-- 熔岩犬：远古狂乱
 		{AuraID = 160452, UnitID = "player"},	-- 虚空鳐：虚空之风
 		{AuraID = 178207, UnitID = "player"},	-- 鼓
@@ -488,7 +490,9 @@ local list = {
 		-- 寂灭者阿古斯
 		{AuraID = 248499, UnitID = "player"},	-- 巨镰横扫
 		{AuraID = 253903, UnitID = "player"},	-- 天空之力
+		{AuraID = 258646, UnitID = "player"},	-- 天空之赐
 		{AuraID = 253901, UnitID = "player"},	-- 海洋之力
+		{AuraID = 258647, UnitID = "player"},	-- 海洋之赐
 		{AuraID = 255199, UnitID = "player"},	-- 阿格拉玛的化身
 		{AuraID = 252729, UnitID = "player"},	-- 宇宙射线
 		{AuraID = 248396, UnitID = "player", Text = L["Get Out"]},	-- 灵魂凋零
@@ -591,7 +595,7 @@ local list = {
 		{AuraID = 1022, UnitID = "target"},		-- 保护祝福
 		{AuraID = 19574, UnitID = "target"},	-- 狂野怒火
 		{AuraID = 23920, UnitID = "target"},	-- 法术反射
-		{AuraID = 31842, UnitID = "target"},	-- 复仇之怒 神圣
+		--{AuraID = 31842, UnitID = "target"},	-- 复仇之怒 神圣
 		{AuraID = 31884, UnitID = "target"},	-- 复仇之怒 惩戒
 		{AuraID = 33206, UnitID = "target"},	-- 痛苦压制
 		{AuraID = 45438, UnitID = "target"},	-- 寒冰屏障

@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Infobar")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Infobar")
 
 function module:RegisterInfobar(point)
 	if not self.modules then self.modules = {} end

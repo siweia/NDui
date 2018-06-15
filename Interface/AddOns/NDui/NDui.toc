@@ -1,10 +1,10 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: |cff0080ffNDui|r
 ## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, Lightspark, Loshine, Neavo, Paopao001, Qulight, Ray, Rubgrsch, Zork.
 ## Author: Siweia
 ## Notes: More than an UI.
-## Version: 2.16.1
-## X-Support: 7.3.5
+## Version: 2.16.18
+## X-Support: BfA Beta
 ## X-Website: http://bbs.nga.cn/read.php?tid=5483616
 ## SavedVariables: NDuiADB
 ## SavedVariablesPerCharacter: NDuiDB

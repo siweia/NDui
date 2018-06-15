@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b
 
 -- Gradient Frame
@@ -8,7 +9,6 @@ B.CreateGF = function(f, w, h, o, r, g, b, a1, a2)
 	local gf = f:CreateTexture(nil, "BACKGROUND")
 	gf:SetAllPoints()
 	gf:SetTexture(DB.normTex)
-	gf:SetVertexColor(r, g, b)
 	gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
 end
 
@@ -86,33 +86,33 @@ B.CreateFS = function(f, size, text, classcolor, anchor, x, y)
 end
 
 -- GameTooltip
-B.CreateGT = function(f, anchor, text, color)
-	f:SetScript("OnEnter", function(self)
+function B:AddTooltip(anchor, text, color)
+	self:SetScript("OnEnter", function()
 		GameTooltip:SetOwner(self, anchor)
 		GameTooltip:ClearLines()
-		if color == "class" then
-			GameTooltip:AddLine(text, cr, cg, cb)
-		elseif color == "system" then
-			GameTooltip:AddLine(text, 1, .8, 0)
-		else
-			GameTooltip:AddLine(text, 1, 1, 1)
-		end
-		GameTooltip:Show()
-	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
-end
-B.CreateAT = function(f, anchor, value)
-	f:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, anchor)
-		GameTooltip:ClearLines()
-		if type(value) == "string" then
-			GameTooltip:SetUnitAura("player", value)
-		else
+		if tonumber(text) then
 			GameTooltip:SetSpellByID(value)
+		else
+			local r, g, b = 1, 1, 1
+			if color == "class" then
+				r, g, b = cr, cg, cb
+			elseif color == "system" then
+				r, g, b = 1, .8, 0
+			end
+			GameTooltip:AddLine(text, r, g, b)
 		end
 		GameTooltip:Show()
 	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
+	self:SetScript("OnLeave", GameTooltip_Hide)
+end
+
+function B:StripTextures()
+	for i = 1, self:GetNumRegions() do
+		local region = select(i, self:GetRegions())
+		if region and region:GetObjectType() == "Texture" then
+			region:SetTexture("")
+		end
+	end
 end
 
 -- Button Color
@@ -148,14 +148,11 @@ B.CreateCB = function(f, a)
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(DB.bdTex)
 	local hl = f:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 5, -5)
-	hl:SetPoint("BOTTOMRIGHT", -5, 5)
-	hl:SetVertexColor(cr, cg, cb, .2)
+	hl:SetPoint("TOPLEFT", 6, -6)
+	hl:SetPoint("BOTTOMRIGHT", -6, 6)
+	hl:SetVertexColor(cr, cg, cb, .25)
 
-	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", 4, -4)
-	bd:SetPoint("BOTTOMRIGHT", -4, 4)
-	bd:SetFrameLevel(f:GetFrameLevel() - 1)
+	local bd = B.CreateBG(f, -4)
 	B.CreateBD(bd, a, 2)
 
 	local ch = f:GetCheckedTexture()
@@ -176,19 +173,21 @@ B.CreateMF = function(f, parent)
 end
 
 -- Icon Style
-B.CreateIF = function(f, HL)
+B.CreateIF = function(f, mouse, cd)
 	B.CreateSD(f, 3, 3)
 	f.Icon = f:CreateTexture(nil, "ARTWORK")
 	f.Icon:SetAllPoints()
 	f.Icon:SetTexCoord(unpack(DB.TexCoord))
-	f.CD = CreateFrame("Cooldown", nil, f, "CooldownFrameTemplate")
-	f.CD:SetAllPoints()
-	f.CD:SetReverse(true)
-	if HL then
+	if mouse then
 		f:EnableMouse(true)
 		f.HL = f:CreateTexture(nil, "HIGHLIGHT")
 		f.HL:SetColorTexture(1, 1, 1, .3)
 		f.HL:SetAllPoints(f.Icon)
+	end
+	if cd then
+		f.CD = CreateFrame("Cooldown", nil, f, "CooldownFrameTemplate")
+		f.CD:SetAllPoints()
+		f.CD:SetReverse(true)
 	end
 end
 
@@ -281,7 +280,22 @@ B.UnitColor = function(unit)
 end
 
 -- Disable function
-B.Dummy = function() end
+B.HiddenFrame = CreateFrame("Frame")
+B.HiddenFrame:Hide()
+
+function B:HideObject()
+	if self.UnregisterAllEvents then
+		self:UnregisterAllEvents()
+		self:SetParent(B.HiddenFrame)
+	else
+		self.Show = self.Hide
+	end
+	self:Hide()
+end
+
+function B:Dummy()
+	return
+end
 
 -- Smoothy
 local smoothing = {}

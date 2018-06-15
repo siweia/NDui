@@ -1,7 +1,8 @@
-local B, C, L, DB = unpack(select(2, ...))
-local cast = NDui.cast
-local oUF = NDui.oUF or oUF
-local UF = NDui:RegisterModule("UnitFrames")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
+local cast = ns.cast
+local UF = B:RegisterModule("UnitFrames")
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
@@ -176,6 +177,17 @@ function UF:CreatePortrait(self)
 	self.Health.bg:SetParent(self)
 end
 
+local roleTexCoord = {
+	["TANK"] = {.5, .75, 0, 1},
+	["HEALER"] = {.75, 1, 0, 1},
+	["DAMAGER"] = {.25, .5, 0, 1},
+}
+local function postUpdateRole(element, role)
+	if element:IsShown() then
+		element:SetTexCoord(unpack(roleTexCoord[role]))
+	end
+end
+
 function UF:CreateIcons(self)
 	if self.mystyle == "player" then
 		local combat = self:CreateTexture(nil, "OVERLAY")
@@ -212,6 +224,8 @@ function UF:CreateIcons(self)
 		ri:SetPoint("TOPRIGHT", self, 0, 8)
 	end
 	ri:SetSize(12, 12)
+	ri:SetTexture("Interface\\LFGFrame\\LFGROLE")
+	ri.PostUpdate = postUpdateRole
 	self.GroupRoleIndicator = ri
 
 	local li = self:CreateTexture(nil, "OVERLAY")
@@ -223,11 +237,6 @@ function UF:CreateIcons(self)
 	ai:SetPoint("TOPLEFT", self, 0, 8)
 	ai:SetSize(12, 12)
 	self.AssistantIndicator = ai
-
-	local ml = self:CreateTexture(nil, "OVERLAY")
-	ml:SetPoint("LEFT", li, "RIGHT")
-	ml:SetSize(12, 12)
-	self.MasterLooterIndicator = ml
 end
 
 function UF:CreateRaidMark(self)
@@ -426,8 +435,7 @@ local function postUpdateGapIcon(_, _, icon)
 	end
 end
 
-local unitName = EJ_GetSectionInfo(15903)
-local function customFilter(element, unit, button, name, _, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
+local function customFilter(element, unit, button, name, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 	if style == "raid" then
 		if C.RaidBuffs[DB.MyClass] and C.RaidBuffs[DB.MyClass][spellID] and button.isPlayer then
@@ -444,8 +452,6 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, _, caste
 				element.bolsterIndex = button
 				return true
 			end
-		elseif UnitName(unit) == unitName and spellID == 146739 and DB.isDeveloper then
-			return true
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
 		elseif C.BlackList and C.BlackList[spellID] then
@@ -665,7 +671,7 @@ function UF:CreateExpRepBar(self)
 	rest:SetOrientation("VERTICAL")
 	bar.restBar = rest
 
-	local module = NDui:GetModule("Misc")
+	local module = B:GetModule("Misc")
 	module:SetupScript(bar)
 end
 
@@ -726,7 +732,7 @@ function UF:CreatePrediction(self)
 end
 
 local function postUpdateAddPower(element, _, cur, max)
-	if element.Text then
+	if element.Text and max > 0 then
 		local perc = cur/max * 100
 		if perc == 100 then
 			perc = ""
