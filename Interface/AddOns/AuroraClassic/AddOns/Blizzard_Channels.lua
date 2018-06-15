@@ -81,4 +81,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(VoiceChatPromptActivateChannel.AcceptButton)
 	F.CreateBD(VoiceChatChannelActivatedNotification)
 	F.CreateSD(VoiceChatChannelActivatedNotification)
+
+	F.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
+	F.ReskinSlider(UnitPopupVoiceSpeakerVolume.Slider)
 end)
