@@ -210,7 +210,7 @@ function module:OnLogin()
 	end
 
 	function MyButton:OnUpdate(item)
-		if item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 and MerchantFrame:IsShown() then
+		if MerchantFrame:IsShown() and item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 then
 			self.Junk:SetAlpha(1)
 		else
 			self.Junk:SetAlpha(0)
