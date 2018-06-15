@@ -153,14 +153,14 @@ local function formatNumber(self, amount)
 	end
 end
 
-local function Update(self, event, ...)
+local function Update(self, event)
 	local element = self.FloatingCombatFeedback
 	local multiplier = 1
 	local text, color, texture, critMark
 	local unit = self.unit
 
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local _, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = ...
+		local _, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = CombatLogGetCurrentEventInfo()
 		local isPlayer = UnitGUID("player") == sourceGUID
 		local atTarget = UnitGUID("target") == destGUID
 		local atPlayer = UnitGUID("player") == destGUID
@@ -175,7 +175,7 @@ local function Update(self, event, ...)
 				if value.autoAttack and not element.showAutoAttack then return end
 				if value.isPeriod and not element.showHots then return end
 
-				local amount, _, _, _, _, _, critical, _, crushing = select(value.index, ...)
+				local amount, _, _, _, _, _, critical, _, crushing = select(value.index, CombatLogGetCurrentEventInfo())
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = "-"..formatNumber(self, amount)
 
@@ -186,7 +186,7 @@ local function Update(self, event, ...)
 			elseif value.suffix == "HEAL" then
 				if value.isPeriod and not element.showHots then return end
 
-				local amount, overhealing, _, critical = select(value.index, ...)
+				local amount, overhealing, _, critical = select(value.index, CombatLogGetCurrentEventInfo())
 				texture = getFloatingIconTexture(value.iconType, spellID)
 				local overhealText = ""
 				if overhealing > 0 then
@@ -201,11 +201,11 @@ local function Update(self, event, ...)
 					critMark = true
 				end
 			elseif value.suffix == "MISS" then
-				local missType = select(value.index, ...)
+				local missType = select(value.index, CombatLogGetCurrentEventInfo())
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = _G["COMBAT_TEXT_"..missType]
 			elseif value.suffix == "ENVIRONMENT" then
-				local envType, amount = select(value.index, ...)
+				local envType, amount = select(value.index, CombatLogGetCurrentEventInfo())
 				texture = getFloatingIconTexture(value.iconType, envType)
 				text = "-"..formatNumber(self, amount)
 			end
