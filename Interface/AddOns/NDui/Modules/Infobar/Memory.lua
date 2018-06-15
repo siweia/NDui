@@ -62,10 +62,8 @@ info.onMouseUp = function(self, btn)
 		collectgarbage()
 		print(format("|cff66C6FF%s:|r %s", L["Collect Memory"], formatMemory(before - gcinfo())))
 		updateMemory()
-	elseif btn == "RightButton" then
-		NDuiADB["AutoCollect"] = not NDuiADB["AutoCollect"]
+		self:GetScript("OnEnter")(self)
 	end
-	self:GetScript("OnEnter")(self)
 end
 
 info.onEnter = function(self)
@@ -103,7 +101,6 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(L["Total Memory Usage:"], formatMemory(collectgarbage("count")), .6,.8,1, 1,1,1)
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Collect Memory"].." ", 1,1,1, .6,.8,1)
-	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Auto Collect"]..": "..(NDuiADB["AutoCollect"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
@@ -128,7 +125,7 @@ end
 local f = CreateFrame("Frame")
 f:RegisterAllEvents()
 f:SetScript("OnEvent", function(_, event)
-	if InCombatLockdown() or not NDuiADB["AutoCollect"] then return end
+	if InCombatLockdown() then return end
 	f.events = (f.events or 0) + 1
 	if f.events > 6000 or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_REGEN_ENABLED" then
 		collectgarbage()
