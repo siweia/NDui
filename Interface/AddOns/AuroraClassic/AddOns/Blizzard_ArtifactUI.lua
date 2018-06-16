@@ -47,13 +47,4 @@ C.themes["Blizzard_ArtifactUI"] = function()
 			slot.Selected:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 		end
 	end
-
-	-- Forge Frame
-
-	for i = 1, 28 do
-		select(i, ArtifactRelicForgeFrame:GetRegions()):SetAlpha(0)
-	end
-	F.SetBD(ArtifactRelicForgeFrame)
-	F.ReskinClose(ArtifactRelicForgeFrameCloseButton)
-	ArtifactRelicForgeFrame.PreviewRelicCover:SetAlpha(0)
 end
