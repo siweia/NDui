@@ -168,7 +168,6 @@ local defaultSettings = {
 		RareAlerter = true,
 		AlertinChat = false,
 		Focuser = true,
-		Autoequip = true,
 		ExpRep = true,
 		Screenshot = false,
 		TradeTab = true,
@@ -440,7 +439,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MissingStats", L["Show MissingStats"], true},
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"]},
 		{1, "Misc", "FasterLoot", L["Faster Loot"], true},
-		{1, "Misc", "Autoequip", L["Auto Equip"]},
 		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},

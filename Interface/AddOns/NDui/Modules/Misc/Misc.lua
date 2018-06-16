@@ -209,41 +209,6 @@ do
 	end)
 end
 
--- Autoequip in Spec-changing
-do
-	local function setupMisc(event, unit, _, spellID)
-		if not NDuiDB["Misc"]["Autoequip"] then
-			B:UnregisterEvent(event, setupMisc)
-			return
-		end
-
-		if unit ~= "player" or spellID ~= 200749 then return end
-		local _, _, id = GetInstanceInfo()
-		if id == 8 then return end
-
-		if not GetSpecialization() then return end
-		local _, name = GetSpecializationInfo(GetSpecialization())
-		local setID = C_EquipmentSet.GetEquipmentSetID(name)
-		if name and setID then
-			local _, _, _, hasEquipped = C_EquipmentSet.GetEquipmentSetInfo(setID)
-			if not hasEquipped then
-				C_EquipmentSet.UseEquipmentSet(setID)
-				print(format(DB.InfoColor..EQUIPMENT_SETS, name))
-			end
-		else
-			for i = 1, C_EquipmentSet.GetNumEquipmentSets() do
-				local name, _, _, isEquipped = C_EquipmentSet.GetEquipmentSetInfo(i)
-				if isEquipped then
-					print(format(DB.InfoColor..EQUIPMENT_SETS, name))
-					break
-				end
-			end
-		end
-	end
-
-	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", setupMisc)
-end
-
 -- Get Naked
 do
 	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
