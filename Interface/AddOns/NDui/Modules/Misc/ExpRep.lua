@@ -51,7 +51,7 @@ local function UpdateBar(bar)
 		bar:Show()
 	elseif HasArtifactEquipped() then
 		local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-		local _, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+		local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		bar:SetStatusBarColor(.9, .8, .6)
 		bar:SetMinMaxValues(0, xpForNextPoint)
 		bar:SetValue(xp)
@@ -65,7 +65,7 @@ local function UpdateBar(bar)
 		bar.newPoint:SetAlpha(0)
 		if HasArtifactEquipped() then
 			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-			local num = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+			local num = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 			if num > 0 then bar.newPoint:SetAlpha(1) end
 		end
 	end
@@ -150,7 +150,7 @@ local function UpdateTooltip(bar)
 
 	if HasArtifactEquipped() then
 		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-		local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		GameTooltip:AddLine(" ")
 		if pointsSpent > 51 then
 			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent).." "..L["Paragon"]..(pointsSpent - 51)..")", 0,.6,1)
