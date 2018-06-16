@@ -65,7 +65,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			arrowButton.Art:Hide()
 			arrowButton:SetHighlightTexture("")
 
-			if not arrowButton:IsShown() then
+			if not (navButton.listFunc and not self.oldStyle) then
 				arrowButton = CreateFrame("Button", nil, navButton)
 				arrowButton:SetAllPoints()
 			end
