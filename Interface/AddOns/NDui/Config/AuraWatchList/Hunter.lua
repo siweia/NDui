@@ -83,6 +83,7 @@ local list = {
 		{AuraID = 260395, UnitID = "player"},	-- 致命射击
 		{AuraID = 269502, UnitID = "player"},	-- 致命射击
 		{AuraID = 281036, UnitID = "player"},	-- 凶暴野兽
+		{AuraID = 54216, UnitID = "player"},	-- 主人的召唤
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱
