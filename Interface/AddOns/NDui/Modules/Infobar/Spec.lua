@@ -39,6 +39,7 @@ info.onEvent = function(self)
 	end
 end
 
+local pvpTalents
 info.onEnter = function(self)
 	if not GetSpecialization() then return end
 	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 15)
@@ -59,16 +60,21 @@ info.onEnter = function(self)
 	end
 
 	if UnitLevel("player") >= SHOW_PVP_TALENT_LEVEL then
-		local texture = select(3, GetCurrencyInfo(104))
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, 1,1,1)
+		pvpTalents = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
 
-		for _, talentID in next, C_SpecializationInfo.GetAllSelectedPvpTalentIDs() do
-			local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
-			if name and unlocked then
-				GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
+		if #pvpTalents > 0 then
+			local texture = select(3, GetCurrencyInfo(104))
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, 1,1,1)
+			for _, talentID in next, pvpTalents do
+				local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
+				if name and unlocked then
+					GameTooltip:AddDoubleLine(" ", DB.MyColor..name.." "..addIcon(icon))
+				end
 			end
 		end
+
+		wipe(pvpTalents)
 	end
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
