@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local _, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("PanelTemplates_DeselectTab", function(tab)

@@ -58,7 +58,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		F.ReskinInput(copper)
 	end
 
-	hooksecurefunc("StaticPopup_Show", function(which, text_arg1, text_arg2, data)
+	hooksecurefunc("StaticPopup_Show", function(which, _, _, data)
 		local info = StaticPopupDialogs[which]
 
 		if not info then return end

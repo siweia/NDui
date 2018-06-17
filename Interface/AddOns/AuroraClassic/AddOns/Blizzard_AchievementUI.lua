@@ -155,7 +155,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("AchievementObjectives_DisplayCriteria", function(objectivesFrame, id)
+	hooksecurefunc("AchievementObjectives_DisplayCriteria", function(_, id)
 		for i = 1, GetAchievementNumCriteria(id) do
 			local name = _G["AchievementFrameCriteria"..i.."Name"]
 			if name and select(2, name:GetTextColor()) == 0 then
@@ -236,7 +236,6 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 	for i = 1, 12 do
 		local bu = _G["AchievementFrameSummaryCategoriesCategory"..i]
-		local bar = bu:GetStatusBarTexture()
 		local label = _G["AchievementFrameSummaryCategoriesCategory"..i.."Label"]
 
 		_G["AchievementFrameSummaryCategoriesCategory"..i.."Left"]:Hide()

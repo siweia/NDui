@@ -163,7 +163,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end)
 	end
 
-	hooksecurefunc("EncounterJournal_ToggleHeaders", function(self)
+	hooksecurefunc("EncounterJournal_ToggleHeaders", function()
 		local index = 1
 		local header = _G["EncounterJournalInfoHeader"..index]
 		while header do
@@ -201,7 +201,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 	end)
 
-	hooksecurefunc("EncounterJournal_SetUpOverview", function(self, role, index)
+	hooksecurefunc("EncounterJournal_SetUpOverview", function(self, _, index)
 		local header = self.overviews[index]
 		if not header.styled then
 			header.flashAnim.Play = F.dummy
@@ -223,7 +223,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 	end)
 
-	hooksecurefunc("EncounterJournal_SetBullets", function(object, description)
+	hooksecurefunc("EncounterJournal_SetBullets", function(object)
 		local parent = object:GetParent()
 
 		if parent.Bullets then
@@ -488,7 +488,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 	end)
 
-	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(self, button)
+	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(_, button)
 		if not button.bg then
 			button.Border:SetAlpha(0)
 			button.Icon:SetTexCoord(.08, .92, .08, .92)

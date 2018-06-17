@@ -86,7 +86,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local pane = CharacterStatsPane
 	pane.ClassBackground:Hide()
 	local category = {pane.ItemLevelCategory, pane.AttributesCategory, pane.EnhancementsCategory}
-	for k, v in pairs(category) do
+	for _, v in pairs(category) do
 		v.Background:Hide()
 		F.CreateGradient(v)
 		F.CreateBD(v, 0)

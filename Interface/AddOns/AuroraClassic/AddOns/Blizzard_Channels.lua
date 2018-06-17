@@ -1,8 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	local r, g, b = C.r, C.g, C.b
-
 	F.StripTextures(ChannelFrame)
 	F.SetBD(ChannelFrame)
 	F.ReskinClose(ChannelFrameCloseButton)

@@ -145,13 +145,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local function onUpdateData(self)
 		local followerFrame = self:GetParent()
-		local followers = followerFrame.FollowerList.followers
-		local followersList = followerFrame.FollowerList.followersList
-		local numFollowers = #followersList
 		local scrollFrame = followerFrame.FollowerList.listScroll
-		local offset = HybridScrollFrame_GetOffset(scrollFrame)
 		local buttons = scrollFrame.buttons
-		local numButtons = #buttons
 
 		for i = 1, #buttons do
 			local button = buttons[i].Follower
@@ -192,10 +187,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end
 
-	local function onShowFollower(self, followerId)
-		local followerList = self
-		local self = self.followerTab
-
+	local function onShowFollower(followerList)
+		local self = followerList.followerTab
 		local abilities = self.AbilitiesFrame.Abilities
 
 		if self.numAbilitiesStyled == nil then
@@ -466,7 +459,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end
 
 	local reagentIndex = 1
-	hooksecurefunc("GarrisonCapacitiveDisplayFrame_Update", function(self)
+	hooksecurefunc("GarrisonCapacitiveDisplayFrame_Update", function()
 		local reagents = CapacitiveDisplay.Reagents
 
 		local reagent = reagents[reagentIndex]
@@ -634,7 +627,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards, numRewards)
+	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, _, numRewards)
 		if self.numRewardsStyled == nil then
 			self.numRewardsStyled = 0
 		end
@@ -650,11 +643,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc(GarrisonMission, "AssignFollowerToMission", function(self, frame)
+	hooksecurefunc(GarrisonMission, "AssignFollowerToMission", function(_, frame)
 		frame.PortraitFrame.LevelBorder:SetAlpha(0)
 	end)
 
-	hooksecurefunc(GarrisonMission, "RemoveFollowerFromMission", function(self, frame)
+	hooksecurefunc(GarrisonMission, "RemoveFollowerFromMission", function(_, frame)
 		if frame.PortraitFrame.squareBG then
 			frame.PortraitFrame.squareBG:Hide()
 		end
@@ -856,7 +849,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local allyPortrait = combatAlly.InProgress.PortraitFrame
 	F.ReskinGarrisonPortrait(allyPortrait)
-	OrderHallMissionFrame:HookScript("OnShow", function(self)
+	OrderHallMissionFrame:HookScript("OnShow", function()
 		if allyPortrait:IsShown() then
 			allyPortrait.squareBG:SetBackdropBorderColor(allyPortrait.PortraitRingQuality:GetVertexColor())
 		end

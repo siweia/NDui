@@ -6,11 +6,11 @@ tinsert(C.themes["AuroraClassic"], function()
 	ChatConfigFrameHeader:SetAlpha(0)
 	ChatConfigFrameHeader:SetPoint("TOP", ChatConfigFrame, 0, 0)
 
-	hooksecurefunc("ChatConfig_CreateCheckboxes", function(frame, checkBoxTable, checkBoxTemplate)
+	hooksecurefunc("ChatConfig_CreateCheckboxes", function(frame, checkBoxTable)
 		if frame.styled then return end
 
 		frame:SetBackdrop(nil)
-		for index, value in ipairs(checkBoxTable) do
+		for index in ipairs(checkBoxTable) do
 			local checkBoxName = frame:GetName().."CheckBox"..index
 			local checkbox = _G[checkBoxName]
 
@@ -31,7 +31,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		frame.styled = true
 	end)
 
-	hooksecurefunc("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable, checkBoxTemplate, subCheckBoxTemplate)
+	hooksecurefunc("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
 		if frame.styled then return end
 
 		for index, value in ipairs(checkBoxTable) do
@@ -39,7 +39,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			F.ReskinCheck(_G[checkBoxName])
 
 			if value.subTypes then
-				for k, v in ipairs(value.subTypes) do
+				for k in ipairs(value.subTypes) do
 					F.ReskinCheck(_G[checkBoxName.."_"..k])
 				end
 			end
@@ -48,11 +48,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		frame.styled = true
 	end)
 
-	hooksecurefunc("ChatConfig_CreateColorSwatches", function(frame, swatchTable, swatchTemplate)
+	hooksecurefunc("ChatConfig_CreateColorSwatches", function(frame, swatchTable)
 		if frame.styled then return end
 
 		frame:SetBackdrop(nil)
-		for index, value in ipairs(swatchTable) do
+		for index in ipairs(swatchTable) do
 			local swatchName = frame:GetName().."Swatch"..index
 			local swatch = _G[swatchName]
 

@@ -38,10 +38,5 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	F.Reskin(SideDressUpModelResetButton)
 	F.ReskinClose(SideDressUpModelCloseButton)
-
-	SideDressUpModel.bg = CreateFrame("Frame", nil, SideDressUpModel)
-	SideDressUpModel.bg:SetPoint("TOPLEFT", 0, 1)
-	SideDressUpModel.bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	SideDressUpModel.bg:SetFrameLevel(SideDressUpModel:GetFrameLevel()-1)
-	F.CreateBD(SideDressUpModel.bg)
+	F.CreateBDFrame(SideDressUpModel)
 end)

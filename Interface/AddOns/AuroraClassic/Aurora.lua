@@ -732,12 +732,12 @@ C.themes["AuroraClassic"] = {}
 
 local Skin = CreateFrame("Frame")
 Skin:RegisterEvent("ADDON_LOADED")
-Skin:SetScript("OnEvent", function(self, event, addon)
+Skin:SetScript("OnEvent", function(_, _, addon)
 	if addon == "AuroraClassic" then
 		-- [[ Load Variables ]]
 
 		-- remove deprecated or corrupt variables
-		for key, value in pairs(AuroraConfig) do
+		for key in pairs(AuroraConfig) do
 			if C.defaults[key] == nil then
 				AuroraConfig[key] = nil
 			end
@@ -748,7 +748,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if AuroraConfig[key] == nil then
 				if type(value) == "table" then
 					AuroraConfig[key] = {}
-					for k, v in pairs(value) do
+					for k in pairs(value) do
 						AuroraConfig[key][k] = value[k]
 					end
 				else

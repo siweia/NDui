@@ -47,7 +47,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 	end)
 
 	local function AffixesSetup(self)
-		for i, frame in ipairs(self.Affixes) do
+		for _, frame in ipairs(self.Affixes) do
 			frame.Border:SetTexture(nil)
 			frame.Portrait:SetTexture(nil)
 			if not frame.bg then

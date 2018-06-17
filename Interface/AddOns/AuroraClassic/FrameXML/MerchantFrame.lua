@@ -76,7 +76,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		for i = 1, MERCHANT_ITEMS_PER_PAGE do
 			local index = ((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i
 			if index <= numMerchantItems then
-				local name, texture, price, stackCount, numAvailable, isUsable, extendedCost = GetMerchantItemInfo(index)
+				local _, _, price, _, _, _, extendedCost = GetMerchantItemInfo(index)
 				if extendedCost and (price <= 0) then
 					_G["MerchantItem"..i.."AltCurrencyFrame"]:SetPoint("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 35)
 				end

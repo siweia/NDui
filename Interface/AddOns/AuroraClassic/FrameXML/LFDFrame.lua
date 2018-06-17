@@ -17,7 +17,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- this fixes right border of second reward being cut off
 	LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
 
-	hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button, dungeonID)
+	hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button)
 		if not button.expandOrCollapseButton.styled then
 			F.ReskinCheck(button.enableButton)
 			F.ReskinExpandOrCollapse(button.expandOrCollapseButton)

@@ -118,11 +118,11 @@ tinsert(C.themes["AuroraClassic"], function()
 			button.styled = true
 		end
 
-		local name, texturePath, quantity
+		local _, texturePath
 		if rewardType == "reward" then
-			name, texturePath, quantity = GetLFGDungeonRewardInfo(dungeonID, rewardIndex);
+			_, texturePath = GetLFGDungeonRewardInfo(dungeonID, rewardIndex);
 		elseif rewardType == "shortage" then
-			name, texturePath, quantity = GetLFGDungeonShortageRewardInfo(dungeonID, rewardArg, rewardIndex);
+			_, texturePath = GetLFGDungeonShortageRewardInfo(dungeonID, rewardArg, rewardIndex);
 		end
 		if texturePath then
 			button.texture:SetTexture(texturePath)

@@ -199,10 +199,10 @@ C.themes["Blizzard_GuildUI"] = function()
 		end
 	end)
 
-	local UpdateIcons = function()
+	local function UpdateIcons()
 		local index
 		local offset = HybridScrollFrame_GetOffset(GuildRosterContainer)
-		local totalMembers, onlineMembers, onlineAndMobileMembers = GetNumGuildMembers()
+		local totalMembers, _, onlineAndMobileMembers = GetNumGuildMembers()
 		local visibleMembers = onlineAndMobileMembers
 		local numbuttons = #GuildRosterContainer.buttons
 		if GetGuildRosterShowOffline() then

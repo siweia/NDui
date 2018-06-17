@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_Communities"] = function()
 	local r, g, b = C.r, C.g, C.b
-	local frame = CommunitiesFrame
+	local CommunitiesFrame = CommunitiesFrame
 
 	F.StripTextures(CommunitiesFrame)
 	F.SetBD(CommunitiesFrame)

@@ -70,7 +70,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
 
-	hooksecurefunc(QuestProgressRequiredMoneyText, "SetTextColor", function(self, r, g, b)
+	hooksecurefunc(QuestProgressRequiredMoneyText, "SetTextColor", function(self, r)
 		if r == 0 then
 			self:SetTextColor(.8, .8, .8)
 		elseif r == .2 then

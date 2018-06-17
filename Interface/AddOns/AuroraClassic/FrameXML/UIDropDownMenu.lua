@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["AuroraClassic"], function()
 	local r, g, b = C.r, C.g, C.b
 
-	hooksecurefunc("UIDropDownMenu_CreateFrames", function(level, index)
+	hooksecurefunc("UIDropDownMenu_CreateFrames", function()
 		for i = 1, _G.UIDROPDOWNMENU_MAXLEVELS do
 			local menu = _G["DropDownList"..i.."MenuBackdrop"]
 			local backdrop = _G["DropDownList"..i.."Backdrop"]

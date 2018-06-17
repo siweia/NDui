@@ -199,9 +199,9 @@ C.themes["Blizzard_Collections"] = function()
 	F.CreateBG(MountJournalSummonRandomFavoriteButton)
 
 	do
-		local movedButton = false
+		local movedButton
 		MountJournal:HookScript("OnShow", function()
-			if not InCombatLockdown() then
+			if not InCombatLockdown() and not movedButton then
 				MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -7, -32)
 				movedButton = true
 			end
@@ -433,7 +433,7 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, "left")
 	F.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, "right")
 
-	hooksecurefunc(HeirloomsJournal, "UpdateButton", function(self, button)
+	hooksecurefunc(HeirloomsJournal, "UpdateButton", function(_, button)
 		button.level:SetFontObject("GameFontWhiteSmall")
 		button.special:SetTextColor(1, .8, 0)
 	end)
@@ -584,7 +584,7 @@ C.themes["Blizzard_Collections"] = function()
 	DetailsFrame.IconRowBackground:Hide()
 	F.ReskinFilterButton(DetailsFrame.VariantSetsButton, "Down")
 
-	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(self, itemFrame)
+	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(_, itemFrame)
 		local ic = itemFrame.Icon
 		if not itemFrame.styled then
 			ic:SetTexCoord(.08, .92, .08, .92)
@@ -710,12 +710,12 @@ do
 			HPetOption:HookScript("OnShow", function(self)
 				if not self.reskin then
 					local bu = {"Reset", "Help", "UpdateStone"}
-					for k, v in pairs(bu) do
+					for _, v in pairs(bu) do
 						F.Reskin(_G["HPetOption"..v])
 					end
 
 					local box = {"Message", "OnlyInPetInfo", "MiniTip", "Sound", "FastForfeit", "OtherTooltip", "HighGlow", "AutoSaveAbility", "ShowBandageButton", "ShowHideID", "PetGrowInfo", "BreedIDStyle", "PetGreedInfo", "PetBreedInfo", "ShowBreedID", "EnemyAbility", "LockAbilitys", "ShowAbilitysName", "OtherAbility", "AllyAbility"}
-					for k, v in pairs(box) do
+					for _, v in pairs(box) do
 						F.ReskinCheck(_G["HPetOption"..v])
 					end
 					F.ReskinSlider(_G["HPetOptionAbilitysScale"])

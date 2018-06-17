@@ -45,7 +45,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	hooksecurefunc("NavBar_Initialize", F.ReskinNavBar)
 
-	hooksecurefunc("NavBar_AddButton", function(self, buttonData)
+	hooksecurefunc("NavBar_AddButton", function(self)
 		F.ReskinNavBar(self)
 
 		local navButton = self.navList[#self.navList]

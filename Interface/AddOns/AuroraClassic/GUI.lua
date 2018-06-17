@@ -57,7 +57,7 @@ local function copyTable(source, target)
 	for key, value in pairs(source) do
 		if type(value) == "table" then
 			target[key] = {}
-			for k, v in pairs(value) do
+			for k in pairs(value) do
 				target[key][k] = value[k]
 			end
 		else

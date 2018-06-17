@@ -3,7 +3,6 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_PVPUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
-	local PVPUIFrame = PVPUIFrame
 	local PVPQueueFrame = PVPQueueFrame
 	local HonorFrame = HonorFrame
 	local ConquestFrame = ConquestFrame
@@ -143,11 +142,8 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Conquest Frame
 
-	local Inset = ConquestFrame.Inset
-	local ConquestBar = ConquestFrame.ConquestBar
-
 	for i = 1, 9 do
-		select(i, Inset:GetRegions()):Hide()
+		select(i, ConquestFrame.Inset:GetRegions()):Hide()
 	end
 	ConquestFrame.RatedBGTexture:Hide()
 	ConquestFrame.ShadowOverlay:Hide()

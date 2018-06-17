@@ -49,7 +49,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		F.ReskinExpandOrCollapse(_G["LFRQueueFrameSpecificListButton"..i].expandOrCollapseButton)
 	end
 
-	hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
+	hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button)
 		button.enableButton:GetCheckedTexture():SetDesaturated(true)
 	end)
 end)

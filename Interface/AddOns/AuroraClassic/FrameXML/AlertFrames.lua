@@ -31,7 +31,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
 
 	-- AlertFrames
-	hooksecurefunc(AlertFrame, "AddAlertFrame", function(self, frame)
+	hooksecurefunc(AlertFrame, "AddAlertFrame", function(_, frame)
 		if frame.queue == AchievementAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)

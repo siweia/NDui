@@ -4,7 +4,7 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
 	local styled
-	hooksecurefunc("LookingForGuildFrame_CreateUIElements", function(self)
+	hooksecurefunc("LookingForGuildFrame_CreateUIElements", function()
 		if styled then return end
 
 		F.StripTextures(LookingForGuildFrame)
