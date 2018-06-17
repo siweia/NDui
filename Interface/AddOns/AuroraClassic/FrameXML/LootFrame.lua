@@ -18,6 +18,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
+			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			bu.IconBorder:SetAlpha(0)
 
 			local bd = CreateFrame("Frame", nil, bu)
@@ -30,7 +31,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			ic.bg = F.CreateBG(ic)
 		end
 
-		if select(6, GetLootSlotInfo(index)) then
+		if select(7, GetLootSlotInfo(index)) then
 			ic.bg:SetVertexColor(1, 1, 0)
 		else
 			ic.bg:SetVertexColor(0, 0, 0)
