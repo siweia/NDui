@@ -15,9 +15,8 @@ local zoneInfo = {
 	neutral = {format(FACTION_CONTROLLED_TERRITORY, FACTION_STANDING_LABEL4), {1, .93, .76}}
 }
 
-local subzone, zone, pvp
+local subzone, zone, pvp, position
 local coordX, coordY = 0, 0
-local mapInfo, position
 
 local function formatCoords()
 	return format("%.1f, %.1f", coordX*100, coordY*100)
@@ -39,9 +38,9 @@ info.onEvent = function(self)
 end
 
 local function isInvasionPoint()
-	mapInfo = C_Map.GetMapInfo(C_Map.GetBestMapForUnit("player"))
+	local mapID = C_Map.GetBestMapForUnit("player")
 	local invaName = C_Scenario.GetInfo()
-	if mapInfo and mapInfo.name:match("InvasionPoint") and invaName then
+	if mapID and mapID >= 921 and mapID <= 926 and invaName then
 		return true
 	end
 end
