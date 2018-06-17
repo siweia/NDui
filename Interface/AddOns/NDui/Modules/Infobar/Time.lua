@@ -81,8 +81,7 @@ local function whereToGo(nextTime)
 	local elapsed = nextTime - baseTime
 	local round = mod(floor(elapsed / 66600) + 1, 12)
 	if round == 0 then round = 12 end
-	local mapInfo = C_Map.GetMapInfo(zoneNames[timeTable[round]])
-	return mapInfo.name
+	return C_Map.GetMapInfo(zoneNames[timeTable[round]]).name
 end
 
 info.onEnter = function(self)
