@@ -251,7 +251,7 @@ end)
 
 -- Update map
 hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
-	if WorldMapFrame:IsShown() and NDuiDB["Map"]["HideFog"] then
+	if self:IsShown() and NDuiDB["Map"]["HideFog"] then
 		RefMap()
 	end
 end)

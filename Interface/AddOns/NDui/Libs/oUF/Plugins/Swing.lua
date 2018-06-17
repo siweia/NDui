@@ -205,7 +205,6 @@ local RangedChange = function(self, _, unit)
 	end
 end
 
-local rangeText1, rangeText2 = GetSpellInfo(75), GetSpellInfo(5019)
 local Ranged = function(self, _, unit, _, spellID)
 	if unit ~= "player" then return end
 	--if spellName ~= rangeText1 and spellName ~= rangeText2 then return end
@@ -288,7 +287,7 @@ local Melee = function(self)
 	lasthit = GetTime()
 end
 
-local ParryHaste = function(self, _, _, subevent, ...)
+local ParryHaste = function(self)
 	local _, subevent, _, _, _, _, tarGUID, _, missType = CombatLogGetCurrentEventInfo()
 
 	if tarGUID ~= UnitGUID("player") then return end

@@ -36,7 +36,7 @@ end
 local function ApplyPoints(self, points)
 	if not points then return end
 	self:ClearAllPoints()
-	for i, point in next, points do
+	for _, point in next, points do
 		self:SetPoint(unpack(point))
 	end
 end
@@ -171,7 +171,6 @@ function B:StyleActionButton(button, cfg)
 	local flash = _G[buttonName.."Flash"]
 	local flyoutBorder = _G[buttonName.."FlyoutBorder"]
 	local flyoutBorderShadow = _G[buttonName.."FlyoutBorderShadow"]
-	local flyoutArrow = _G[buttonName.."FlyoutArrow"]
 	local hotkey = _G[buttonName.."HotKey"]
 	local count = _G[buttonName.."Count"]
 	local name = _G[buttonName.."Name"]
@@ -188,6 +187,7 @@ function B:StyleActionButton(button, cfg)
 
 	--hide stuff
 	if floatingBG then floatingBG:Hide() end
+	if NewActionTexture then NewActionTexture:SetTexture(nil) end
 
 	--backdrop
 	SetupBackdrop(button)

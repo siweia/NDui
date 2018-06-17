@@ -57,7 +57,7 @@ function module:ChatCopy()
 				frame:Show()
 				local ct = 1
 				for i = 1, cf:GetNumMessages() do
-					local message, r, g, b = cf:GetMessageInfo(i)
+					local message = cf:GetMessageInfo(i)
 					lines[ct] = tostring(message)
 					ct = ct + 1
 				end
