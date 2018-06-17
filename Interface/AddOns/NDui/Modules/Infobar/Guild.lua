@@ -107,7 +107,7 @@ local function createRoster(i)
 end
 
 local function refreshData()
-	if not NDuiDB["Misc"].Sortby then NDuiDB["Misc"].Sortby = 1 end
+	if not NDuiADB["GuildSortBy"] then NDuiADB["GuildSortBy"] = 1 end
 
 	wipe(guildTable)
 	GuildRoster()
@@ -176,10 +176,10 @@ end
 local function applyData()
 	sort(guildTable, function(a, b)
 		if a and b then
-			if NDuiDB["Misc"].SortOrder then
-				return a[NDuiDB["Misc"].Sortby] < b[NDuiDB["Misc"].Sortby]
+			if NDuiADB["GuildSortOrder"] then
+				return a[NDuiADB["GuildSortBy"]] < b[NDuiADB["GuildSortBy"]]
 			else
-				return a[NDuiDB["Misc"].Sortby] > b[NDuiDB["Misc"].Sortby]
+				return a[NDuiADB["GuildSortBy"]] > b[NDuiADB["GuildSortBy"]]
 			end
 		end
 	end)
@@ -204,8 +204,8 @@ end
 
 for i = 1, 4 do
 	bu[i]:SetScript("OnClick", function()
-		NDuiDB["Misc"].Sortby = i
-		NDuiDB["Misc"].SortOrder = not NDuiDB["Misc"].SortOrder
+		NDuiADB["GuildSortBy"] = i
+		NDuiADB["GuildSortOrder"] = not NDuiADB["GuildSortOrder"]
 		applyData()
 	end)
 end
