@@ -182,6 +182,8 @@ local defaultSettings = {
 		SwapingAlert = false,
 		SistersAlert = false,
 		AntoranBlast = false,
+		QuestNotifier = false,
+		QuestProgress = false,
 	},
 	Settings = {
 		LockUIScale = false,
@@ -359,10 +361,15 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
 		{2, "Chat", "Keyword", L["Whisper Keyword"]},
 		{},--blank
+		{1, "Misc", "QuestNotifier", L["QuestNotifier"]},
+		{1, "Misc", "QuestProgress", L["QuestProgress"], true},
+		{1, "Misc", "RareAlerter", L["Rare Alert"]},
+		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"], true},
 		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"]},
 		{1, "Misc", "SwapingAlert", L["Swaping Alert"], true},
+		{},--blank
 		{1, "Misc", "SistersAlert", L["SistersAlert Alert"]},
 		{1, "Misc", "AntoranBlast", L["AntoranBlast Alert"], true},
 	},
@@ -444,9 +451,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
 		{1, "Misc", "HideErrors", L["Hide Error"]},
 		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
-		{},--blank
-		{1, "Misc", "RareAlerter", L["Rare Alert"]},
-		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 	},
 	[13] = {
 		{1, "Settings", "VersionCheck", L["Version Check"]},
