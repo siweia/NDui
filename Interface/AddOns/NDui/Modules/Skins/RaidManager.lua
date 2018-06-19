@@ -208,7 +208,9 @@ function module:CreateRM()
 	B.CreateFS(checker, 16, "!", true)
 	B.CreateBC(checker, .5)
 
-	local BuffName, NoBuff, numPlayer = {L["Flask"], L["Food"], SPELL_STAT4_NAME, RAID_BUFF_2, RAID_BUFF_3, RUNES}
+	local BuffName, numPlayer = {L["Flask"], L["Food"], SPELL_STAT4_NAME, RAID_BUFF_2, RAID_BUFF_3, RUNES}
+	local NoBuff, numGroups = {}, 6
+	for i = 1, numGroups do NoBuff[i] = {} end
 
 	local debugMode = false
 	local function sendMsg(text)
@@ -237,11 +239,9 @@ function module:CreateRM()
 		end
 	end
 
-	local numGroups = 6
-
 	local function scanBuff()
-		NoBuff, numPlayer = {}, 0
-		for i = 1, numGroups do NoBuff[i] = {} end
+		for i = 1, numGroups do wipe(NoBuff[i]) end
+		numPlayer = 0
 
 		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do
