@@ -174,8 +174,6 @@ function ExtraQuestButton:PLAYER_LOGIN()
 
 	self:SetSize(ExtraActionButton1:GetSize())
 	self:SetScale(ExtraActionButton1:GetScale())
-	self:SetPushedTexture(DB.textures.pushed)
-	self:GetPushedTexture():SetBlendMode("ADD")
 	self:SetScript("OnLeave", GameTooltip_Hide)
 	self:SetClampedToScreen(true)
 	self:SetToplevel(true)
@@ -183,6 +181,12 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self.updateTimer = 0
 	self.rangeTimer = 0
 	self:Hide()
+
+	self:SetPushedTexture(DB.textures.pushed)
+	local push = self:GetPushedTexture()
+	push:SetBlendMode("ADD")
+	push:SetPoint("TOPLEFT", -1, 1)
+	push:SetPoint("BOTTOMRIGHT", 1, -1)
 
 	local Icon = self:CreateTexture("$parentIcon", "ARTWORK")
 	Icon:SetAllPoints()
@@ -203,9 +207,8 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self.Count = Count
 
 	local Cooldown = CreateFrame("Cooldown", "$parentCooldown", self, "CooldownFrameTemplate")
-	Cooldown:ClearAllPoints()
-	Cooldown:SetPoint("TOPRIGHT", -1, -1)
-	Cooldown:SetPoint("BOTTOMLEFT", 1, 1)
+	Cooldown:SetPoint("TOPLEFT", -1, 1)
+	Cooldown:SetPoint("BOTTOMRIGHT", 1, -1)
 	Cooldown:SetReverse(false)
 	Cooldown:Hide()
 	self.Cooldown = Cooldown
@@ -219,15 +222,10 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent("UPDATE_BINDINGS")
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN")
 	self:RegisterEvent("BAG_UPDATE_DELAYED")
-	--self:RegisterEvent("WORLD_MAP_UPDATE")
 	self:RegisterEvent("QUEST_LOG_UPDATE")
 	self:RegisterEvent("QUEST_POI_UPDATE")
 	self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
 	self:RegisterEvent("QUEST_ACCEPTED")
---[[
-	if(not WorldMapFrame:IsShown()) then
-		SetMapToCurrentZone()
-	end]]
 end
 
 local worldQuests = {}
