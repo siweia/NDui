@@ -13,6 +13,7 @@ function module:OnLogin()
 	self:MissingStats()
 	self:ShowItemLevel()
 	self:QuickJoin()
+	self:QuestNotifier()
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
