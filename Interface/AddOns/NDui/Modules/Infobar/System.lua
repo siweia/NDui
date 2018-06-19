@@ -30,11 +30,11 @@ info.onUpdate = function(self, elapsed)
 	if self.timer > 1 then
 		if NDuiADB["ShowFPS"] then
 			local fps = floor(GetFramerate())
-			self.text:SetText(colorFPS(fps).."|rFPS ")
+			self.text:SetText(L["FPS"]..": "..colorFPS(fps))
 		else
 			local _, _, latencyHome, latencyWorld = GetNetStats()
 			local latency = math.max(latencyHome, latencyWorld)
-			self.text:SetText(colorLatency(latency).."|rMS")
+			self.text:SetText(L["Latency"]..": "..colorLatency(latency))
 		end
 
 		self.timer = 0
