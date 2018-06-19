@@ -73,12 +73,12 @@ C.Infobar = {
 	Friends 		= true,												-- 好友模块
 	FriendsPos 		= {"TOPLEFT", UIParent, 105, -6},					-- 好友模块位置
 	System			= true,												-- 帧数/延迟
-	SystemPos		= {"TOPLEFT", UIParent, 195, -6},					-- 帧数/延迟位置
+	SystemPos		= {"TOPLEFT", UIParent, 190, -6},					-- 帧数/延迟位置
 	Memory			= true,												-- 内存占用
 	MemoryPos		= {"TOPLEFT", UIParent, 285, -6},					-- 内存占用位置
 	MaxAddOns		= 12,												-- 插件信息显示数量
 	Location		= true,												-- 区域信息
-	LocationPos		= {"TOPLEFT", UIParent, 375, -6},					-- 区域信息位置
+	LocationPos		= {"TOPLEFT", UIParent, 380, -6},					-- 区域信息位置
 
 	Spec			= true,												-- 天赋专精
 	SpecPos			= {"BOTTOMRIGHT", UIParent, -310, 6},				-- 天赋专精位置
