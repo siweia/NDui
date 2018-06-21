@@ -26,6 +26,26 @@ tinsert(C.themes["AuroraClassic"], function()
 		self.arrow:SetVertexColor(1, 1, 1)
 	end
 
+	local function UpdateAzeriteItem(self)
+		if not self.styled then
+			self.AzeriteTexture:SetAlpha(0)
+			self.RankFrame.Texture:SetTexture("")
+			self.RankFrame.Label:ClearAllPoints()
+			self.RankFrame.Label:SetPoint("TOPLEFT", self, 2, -1)
+			self.RankFrame.Label:SetTextColor(1, .5, 0)
+
+			self.styled = true
+		end
+		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		self:GetHighlightTexture():SetAllPoints()
+	end
+
+	local function UpdateAzeriteEmpoweredItem(self)
+		self.AzeriteTexture:SetAtlas("AzeriteIconFrame")
+		self.AzeriteTexture:SetAllPoints()
+		self.AzeriteTexture:SetDrawLayer("BORDER", 1)
+	end
+
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
@@ -67,6 +87,9 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		popout:HookScript("OnEnter", clearPopout)
 		popout:HookScript("OnLeave", colourPopout)
+
+		hooksecurefunc(slot, "DisplayAsAzeriteItem", UpdateAzeriteItem)
+		hooksecurefunc(slot, "DisplayAsAzeriteEmpoweredItem", UpdateAzeriteEmpoweredItem)
 	end
 
 	select(13, CharacterMainHandSlot:GetRegions()):Hide()
