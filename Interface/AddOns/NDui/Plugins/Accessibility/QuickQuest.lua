@@ -68,6 +68,7 @@ local ignoreQuestNPC = {
 	[124312] = true,	-- 图拉扬
 	[103792] = true,	-- 格里伏塔
 	[101880] = true,	-- 泰克泰克
+	[141584] = true,	-- 祖尔温
 }
 
 local function GetQuestLogQuests(onlyComplete)
