@@ -44,20 +44,16 @@ for _, tooltip in pairs{GameTooltip, ItemRefTooltip} do
 	hookSpell(tooltip)
 end
 
--- WorldQuest Tooltip
-hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", function(self)
-	if self.Icon then
-		self.Icon:SetTexCoord(unpack(DB.TexCoord))
-		self.IconBorder:Hide()
-	end
-end)
-_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |cffffffff%2$d|r %3$s"
+-- Tooltip rewards icon
+_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |cffffffff%2$s|r %3$s"
 _G.BONUS_OBJECTIVE_REWARD_FORMAT = "|T%1$s:16:16:"..newString.."|t %2$s"
 
--- PVPReward Tooltip
-hooksecurefunc("EmbeddedItemTooltip_SetItemByID", function(self)
+local function ReskinRewardIcon(self)
 	if self.Icon then
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 		self.IconBorder:Hide()
 	end
-end)
+end
+hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", ReskinRewardIcon)
+hooksecurefunc("EmbeddedItemTooltip_SetItemByID", ReskinRewardIcon)
+hooksecurefunc("QuestUtils_AddQuestCurrencyRewardsToTooltip", function(_, _, self) ReskinRewardIcon(self) end)
