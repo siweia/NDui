@@ -18,11 +18,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	local function createBackdrop(parent, texture)
-		parent.bg = F.CreateBDFrame(parent)
-		parent.bg:SetAllPoints(texture)
-	end
-
 	local function toggleBackdrop(bu, show)
 		if show then
 			bu.bg:Show()
@@ -90,19 +85,21 @@ tinsert(C.themes["AuroraClassic"], function()
 			if bu:IsShown() and x then
 				local hl = _G["DropDownList"..level.."Button"..j.."Highlight"]
 				local check = _G["DropDownList"..level.."Button"..j.."Check"]
-
 				hl:SetPoint("TOPLEFT", -x + 1, 0)
 				hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
 
 				if not bu.bg then
-					createBackdrop(bu, check)
+					bu.bg = F.CreateBDFrame(bu)
+					bu.bg:ClearAllPoints()
+					bu.bg:SetPoint("CENTER", check)
+					bu.bg:SetSize(12, 12)
 					hl:SetColorTexture(r, g, b, .2)
-					_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
 
 					local arrow = _G["DropDownList"..level.."Button"..j.."ExpandArrow"]
 					arrow:SetNormalTexture(C.media.arrowRight)
 					arrow:SetSize(8, 8)
 				end
+				_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
 
 				if not bu.notCheckable then
 					toggleBackdrop(bu, true)
