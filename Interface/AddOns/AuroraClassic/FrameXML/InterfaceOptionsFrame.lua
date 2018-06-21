@@ -73,6 +73,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			"InterfaceOptionsActionBarsPanelBottomRight",
 			"InterfaceOptionsActionBarsPanelRight",
 			"InterfaceOptionsActionBarsPanelRightTwo",
+			"InterfaceOptionsActionBarsPanelStackRightBars",
 			"InterfaceOptionsActionBarsPanelLockActionBars",
 			"InterfaceOptionsActionBarsPanelAlwaysShowActionBars",
 			"InterfaceOptionsActionBarsPanelCountdownCooldowns",

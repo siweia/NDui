@@ -102,7 +102,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 
 		local sliders = {
-			"Display_RenderScaleSlider",
 			"Graphics_Quality",
 			"Graphics_ViewDistanceSlider",
 			"Graphics_EnvironmentalDetailSlider",
@@ -117,6 +116,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			"Advanced_GammaSlider",
 			"Advanced_ContrastSlider",
 			"Advanced_BrightnessSlider",
+			"Advanced_RenderScaleSlider",
 			"AudioOptionsSoundPanelMasterVolume",
 			"AudioOptionsSoundPanelSoundVolume",
 			"AudioOptionsSoundPanelMusicVolume",
@@ -141,7 +141,6 @@ tinsert(C.themes["AuroraClassic"], function()
 			"Advanced_MaxFPSCheckBox",
 			"Advanced_MaxFPSBKCheckBox",
 			"Advanced_ShowHDModels",
-			"Advanced_LockCursorToScreen",
 			"NetworkOptionsPanelOptimizeSpeed",
 			"NetworkOptionsPanelUseIPv6",
 			"NetworkOptionsPanelAdvancedCombatLogging",
@@ -158,7 +157,6 @@ tinsert(C.themes["AuroraClassic"], function()
 			"AudioOptionsSoundPanelSoundInBG",
 			"AudioOptionsSoundPanelReverb",
 			"AudioOptionsSoundPanelHRTF",
-			"AudioOptionsSoundPanelEnableDSPs",
 		}
 		for i = 1, #checkboxes do
 			local checkbox = _G[checkboxes[i]]
