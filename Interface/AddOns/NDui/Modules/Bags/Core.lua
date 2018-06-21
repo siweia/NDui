@@ -20,9 +20,10 @@ function module:OnLogin()
 			return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11
 		end
 
-		local function isItemArtifactPower(item)
+		local function isAzeriteArmor(item)
 			if not NDuiDB["Bags"]["ItemFilter"] then return end
-			return IsArtifactPowerItem(item.id)
+			if not item.link then return end
+			return C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link)
 		end
 
 		local function isItemEquipment(item)
@@ -44,14 +45,14 @@ function module:OnLogin()
 			return item.rarity == LE_ITEM_QUALITY_LEGENDARY
 		end
 
-		local onlyBags = function(item) return isItemInBag(item) and not isItemArtifactPower(item) and not isItemEquipment(item) and not isItemConsumble(item) end
-		local bagArtifactPower = function(item) return isItemInBag(item) and isItemArtifactPower(item) end
+		local onlyBags = function(item) return isItemInBag(item) and not isItemEquipment(item) and not isItemConsumble(item) end
+		local bagAzeriteItem = function(item) return isItemInBag(item) and isAzeriteArmor(item) end
 		local bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 		local bagConsumble = function(item) return isItemInBag(item) and isItemConsumble(item) end
-		local onlyBank = function(item) return isItemInBank(item) and not isItemArtifactPower(item) and not isItemEquipment(item) and not isItemLegendary(item) and not isItemConsumble(item) end
-		local bankArtifactPower = function(item) return isItemInBank(item) and isItemArtifactPower(item) end
-		local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) and not isItemLegendary(item) end
+		local onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemConsumble(item) end
+		local bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
 		local bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
+		local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
 		local bankConsumble = function(item) return isItemInBank(item) and isItemConsumble(item) end
 		local onlyReagent = function(item) return item.bagID == -3 end
 
@@ -62,17 +63,17 @@ function module:OnLogin()
 		f.main:SetFilter(onlyBags, true)
 		f.main:SetPoint("BOTTOMRIGHT", -100, 150)
 
-		f.artifactPower = MyContainer:New("ArtifactPower", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "artifactpower"})
-		f.artifactPower:SetFilter(bagArtifactPower, true)
-		f.artifactPower:SetParent(f.main)
-
-		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "consumble"})
-		f.consumble:SetFilter(bagConsumble, true)
-		f.consumble:SetParent(f.main)
+		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "azeriteitem"})
+		f.azeriteItem:SetFilter(bagAzeriteItem, true)
+		f.azeriteItem:SetParent(f.main)
 
 		f.equipment = MyContainer:New("Equipment", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "equipment"})
 		f.equipment:SetFilter(bagEquipment, true)
 		f.equipment:SetParent(f.main)
+
+		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "consumble"})
+		f.consumble:SetFilter(bagConsumble, true)
+		f.consumble:SetParent(f.main)
 
 		f.bank = MyContainer:New("Bank", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bank"})
 		f.bank:SetFilter(onlyBank, true)
@@ -84,21 +85,21 @@ function module:OnLogin()
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
 
-		f.bankArtifactPower = MyContainer:New("BankArtifactPower", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankartifactpower"})
-		f.bankArtifactPower:SetFilter(bankArtifactPower, true)
-		f.bankArtifactPower:SetParent(f.bank)
+		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankazeriteitem"})
+		f.bankAzeriteItem:SetFilter(bankAzeriteItem, true)
+		f.bankAzeriteItem:SetParent(f.bank)
 
-		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankconsumble"})
-		f.bankConsumble:SetFilter(bankConsumble, true)
-		f.bankConsumble:SetParent(f.bank)
+		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "banklegendary"})
+		f.bankLegendary:SetFilter(bankLegendary, true)
+		f.bankLegendary:SetParent(f.bank)
 
 		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankequipment"})
 		f.bankEquipment:SetFilter(bankEquipment, true)
 		f.bankEquipment:SetParent(f.bank)
 
-		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "banklegendary"})
-		f.bankLegendary:SetFilter(bankLegendary, true)
-		f.bankLegendary:SetParent(f.bank)
+		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankconsumble"})
+		f.bankConsumble:SetFilter(bankConsumble, true)
+		f.bankConsumble:SetParent(f.bank)
 	end
 
 	function Backpack:OnBankOpened()
@@ -146,8 +147,7 @@ function module:OnLogin()
 
 		self.Azerite = self:CreateTexture(nil, "ARTWORK")
 		self.Azerite:SetAtlas("AzeriteIconFrame")
-		self.Azerite:SetPoint("TOPLEFT", -2, 2)
-		self.Azerite:SetPoint("BOTTOMRIGHT", 2, -2)
+		self.Azerite:SetAllPoints()
 
 		if NDuiDB["Bags"]["Artifact"] then
 			self.Artifact = self:CreateTexture(nil, "ARTWORK")
@@ -283,7 +283,7 @@ function module:OnLogin()
 		self:SetSize(width + 20, height + 45)
 
 		local anchor = f.main
-		for _, bag in ipairs({f.artifactPower, f.equipment, f.consumble}) do
+		for _, bag in ipairs({f.azeriteItem, f.equipment, f.consumble}) do
 			if bag:GetHeight() > 45 then
 				bag:Show()
 			else
@@ -296,7 +296,7 @@ function module:OnLogin()
 		end
 
 		local bankAnchor = f.bank
-		for _, bag in ipairs({f.bankArtifactPower, f.bankEquipment, f.bankLegendary, f.bankConsumble}) do
+		for _, bag in ipairs({f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble}) do
 			if bag:GetHeight() > 45 then
 				bag:Show()
 			else
@@ -348,8 +348,8 @@ function module:OnLogin()
 		end
 
 		local label
-		if name:match("ArtifactPower$") then
-			label = ARTIFACT_POWER
+		if name:match("AzeriteItem$") then
+			label = L["Azerite Armor"]
 		elseif name:match("Equipment$") then
 			if NDuiDB["Bags"]["ItemSetFilter"] then
 				label = L["Equipement Set"]
