@@ -2,7 +2,6 @@ local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_OrderHallUI"] = function()
 	-- Orderhall tooltips
-
 	if AuroraConfig.tooltips then
 		GarrisonFollowerAbilityWithoutCountersTooltip:DisableDrawLayer("BACKGROUND")
 		GarrisonFollowerMissionAbilityWithoutCountersTooltip:DisableDrawLayer("BACKGROUND")
@@ -11,7 +10,6 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	end
 
 	-- Talent Frame
-
 	F.ReskinClose(OrderHallTalentFrameCloseButton)
 	for i = 1, 15 do
 		select(i, OrderHallTalentFrame:GetRegions()):Hide()
@@ -24,6 +22,8 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	OrderHallTalentFramePortrait:Hide()
 	OrderHallTalentFramePortraitFrame:Hide()
 	F.Reskin(OrderHallTalentFrame.BackButton)
+	OrderHallTalentFrame.CurrencyIcon:SetTexCoord(.08, .92, .08, .92)
+	F.CreateBDFrame(OrderHallTalentFrame.CurrencyIcon)
 
 	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function()
 		for i = 34, OrderHallTalentFrame:GetNumRegions() do

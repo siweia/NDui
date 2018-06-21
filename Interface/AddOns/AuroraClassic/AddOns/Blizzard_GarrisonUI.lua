@@ -232,9 +232,15 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	function F:ReskinMissionFrame()
 		F.StripTextures(self)
 		F.SetBD(self)
+		F.StripTextures(self.CloseButton)
 		F.ReskinClose(self.CloseButton)
 		self.GarrCorners:Hide()
 		if self.ClassHallIcon then self.ClassHallIcon:Hide() end
+		if self.Topper then self.Topper:SetAtlas(UnitFactionGroup("player").."Frame-Header") end
+		if self.TitleScroll then
+			F.StripTextures(self.TitleScroll)
+			select(4, self.TitleScroll:GetRegions()):SetTextColor(1, .8, 0)
+		end
 		for i = 1, 3 do
 			local tab = _G[self:GetName().."Tab"..i]
 			if tab then F.ReskinTab(tab) end
