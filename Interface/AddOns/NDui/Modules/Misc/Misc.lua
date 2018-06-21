@@ -68,42 +68,6 @@ do
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
--- Artifact Power Calculate
-do
-	SlashCmdList["NDUI_ARTI_CALCULATOR"] = function(arg)
-		if not HasArtifactEquipped() then return end
-		local total, low, high = 0, 1, 0
-		if arg == "" then
-			print(DB.InfoColor.."------------------------")
-			print(L["ArtiCal Help"])
-			print("/arc total "..DB.InfoColor..L["ArtiCal TotalCount"])
-			print("/arc 23 "..DB.InfoColor..L["ArtiCal LevelNumb"])
-			print("/arc 10-25 "..DB.InfoColor..L["ArtiCal LevelCount"])
-			print(DB.InfoColor.."------------------------")
-			return
-		elseif strlower(arg) == strlower("total") then
-			local _, _, _, _, totalXP, pointsSpent = C_ArtifactUI.GetEquippedArtifactInfo()
-			total, high = totalXP, pointsSpent
-		elseif string.find(arg, "-") then
-			low, high = string.split("-", arg)
-			low = low + 1
-		elseif tonumber(arg) then
-			low, high = arg, arg
-		else
-			return
-		end
-		local artifactTier = select(13, C_ArtifactUI.GetEquippedArtifactInfo())
-		for i = low-1, high-1 do
-			total = total + C_ArtifactUI.GetCostForPointAtRank(i, artifactTier)
-		end
-		print(DB.InfoColor.."------------------------")
-		print(ARTIFACT_POWER, DB.InfoColor..BreakUpLargeNumbers(total))
-		print(DB.InfoColor.."------------------------")
-	end
-
-	SLASH_NDUI_ARTI_CALCULATOR1 = "/arc"
-end
-
 -- Hide errors in combat
 do
 	local erList = {
