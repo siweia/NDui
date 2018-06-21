@@ -560,6 +560,12 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 				f:HookScript("OnShow", style)
 			end
 		end
+
+	elseif addon == "Blizzard_IslandsQueueUI" then
+		local f = IslandsQueueFrameTooltip
+		f:GetParent():GetParent():HookScript("OnShow", style)
+		f:GetParent().IconBorder:SetAlpha(0)
+		f:GetParent().Icon:SetTexCoord(.08, .92, .08, .92)
 	end
 end)
 
