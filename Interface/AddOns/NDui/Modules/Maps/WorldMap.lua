@@ -2,6 +2,27 @@
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Maps")
 
+local mapRects = {}
+local tempVec2D = CreateVector2D(0, 0)
+
+function module:GetPlayerMapPos(mapID)
+	tempVec2D.x, tempVec2D.y = UnitPosition("player")
+	if not tempVec2D.x then return end
+
+	local mapRect = mapRects[mapID]
+	if not mapRect then
+		mapRect = {}
+		mapRect[1] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
+		mapRect[2] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
+		mapRect[2]:Subtract(mapRect[1])
+
+		mapRects[mapID] = mapRect
+	end
+	tempVec2D:Subtract(mapRect[1])
+
+	return (tempVec2D.y/mapRect[2].y), (tempVec2D.x/mapRect[2].x)
+end
+
 function module:OnLogin()
 	local WorldMapFrame = _G.WorldMapFrame
 	local BorderFrame = WorldMapFrame.BorderFrame
@@ -9,7 +30,6 @@ function module:OnLogin()
 	local formatText = DB.MyColor..": %.1f, %.1f"
 	local scale = mapBody:GetEffectiveScale()
 	local width, height, mapID = mapBody:GetWidth(), mapBody:GetHeight()
-	local position
 
 	-- Default Settings
 	BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
@@ -48,17 +68,16 @@ function module:OnLogin()
 	local function CoordsUpdate(player, cursor)
 		local cx, cy = CursorCoords()
 		if cx and cy then
-			cursor:SetFormattedText(MOUSE_LABEL..formatText, 100 * cx, 100 * cy)
+			cursor:SetFormattedText(L["Mouse"]..formatText, 100 * cx, 100 * cy)
 		else
-			cursor:SetText(MOUSE_LABEL..DB.MyColor..": --, --")
+			cursor:SetText(L["Mouse"]..DB.MyColor..": --, --")
 		end
 
-		position = C_Map.GetPlayerMapPosition(mapID, "player")
-		if not position or (position.x == 0 and position.y == 0) then
+		local x, y = self:GetPlayerMapPos(mapID)
+		if not x or (x == 0 and y == 0) then
 			player:SetText(PLAYER..DB.MyColor..": --, --")
 		else
-			player:SetFormattedText(PLAYER..formatText, 100 * position.x, 100 * position.y)
-			wipe(position)
+			player:SetFormattedText(PLAYER..formatText, 100 * x, 100 * y)
 		end
 	end
 

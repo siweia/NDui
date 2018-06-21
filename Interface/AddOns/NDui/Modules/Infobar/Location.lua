@@ -4,6 +4,7 @@ if not C.Infobar.Location then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.LocationPos)
+local moduleMap = B:GetModule("Maps")
 
 local zoneInfo = {
 	sanctuary = {SANCTUARY_TERRITORY, {.41, .8, .94}},
@@ -15,7 +16,7 @@ local zoneInfo = {
 	neutral = {format(FACTION_CONTROLLED_TERRITORY, FACTION_STANDING_LABEL4), {1, .93, .76}}
 }
 
-local subzone, zone, pvp, position
+local subzone, zone, pvp
 local coordX, coordY = 0, 0
 
 local function formatCoords()
@@ -49,12 +50,12 @@ info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
 
-	position = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
-	if position then
+	local x, y = moduleMap:GetPlayerMapPos(C_Map.GetBestMapForUnit("player"))
+	if x then
 		self:SetScript("OnUpdate", function(self, elapsed)
 			self.timer = (self.timer or 0) + elapsed
 			if self.timer > .1 then
-				coordX, coordY = position.x, position.y
+				coordX, coordY = x, y
 				self:GetScript("OnEnter")(self)
 				self.timer = 0
 			end
