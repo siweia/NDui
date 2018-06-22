@@ -49,7 +49,7 @@ _G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |c
 _G.BONUS_OBJECTIVE_REWARD_FORMAT = "|T%1$s:16:16:"..newString.."|t %2$s"
 
 local function ReskinRewardIcon(self)
-	if self.Icon then
+	if self and self.Icon then
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 		self.IconBorder:Hide()
 	end
