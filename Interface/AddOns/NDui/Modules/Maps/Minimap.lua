@@ -48,10 +48,11 @@ function module:ReskinRegions()
 	-- Garrison
 	GarrisonLandingPageMinimapButton:ClearAllPoints()
 	GarrisonLandingPageMinimapButton:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
-	GarrisonLandingPageMinimapButton:SetScale(.55)
-	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(bu)
-		bu:GetNormalTexture():SetTexture(DB.garrTex)
-		bu:GetPushedTexture():SetTexture(DB.garrTex)
+	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(self)
+		self:GetNormalTexture():SetTexture(DB.garrTex)
+		self:GetPushedTexture():SetTexture(DB.garrTex)
+		self:GetHighlightTexture():SetTexture(DB.garrTex)
+		self:SetSize(30,30)
 	end)
 
 	-- QueueStatus Button
