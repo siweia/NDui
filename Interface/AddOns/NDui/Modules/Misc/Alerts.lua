@@ -82,7 +82,7 @@ function module:RareAlert()
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
 			cache[id] = true
 		end
-		if #cache > 666 then cache = {} end
+		if #cache > 666 then wipe(cache) end
 	end
 
 	B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", updateAlert)
@@ -275,7 +275,7 @@ function module:SistersAlert()
 			for player, value in pairs(data) do
 				SendChatMessage(player..": "..table.concat(value, ", "), "RAID")
 			end
-			data = {}
+			wipe(data)
 		end
 	end
 
@@ -302,7 +302,8 @@ function module:AntoranBlast()
 	end
 
 	local function emptyData()
-		names, cache = {}, {}
+		wipe(names)
+		wipe(cache)
 	end
 
 	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)

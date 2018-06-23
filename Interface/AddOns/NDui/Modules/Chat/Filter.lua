@@ -42,7 +42,7 @@ B.genFilterList = genFilterList
 
 local friendsList = {}
 local function updateFriends()
-	friendsList = {}
+	wipe(friendsList)
 
 	for i = 1, GetNumFriends() do
 		local name = GetFriendInfo(i)

@@ -113,7 +113,7 @@ function module:SkadaSkin()
 	Skada.CreateWindow_ = Skada.CreateWindow
 	function Skada:CreateWindow(name, db)
 		Skada:CreateWindow_(name, db)
-		windows = {}
+		wipe(windows)
 		for _, window in ipairs(Skada:GetWindows()) do
 			tinsert(windows, window)
 		end
@@ -123,7 +123,7 @@ function module:SkadaSkin()
 	Skada.DeleteWindow_ = Skada.DeleteWindow
 	function Skada:DeleteWindow(name)
 		Skada:DeleteWindow_(name)
-		windows = {}
+		wipe(windows)
 		for _, window in ipairs(Skada:GetWindows()) do
 			tinsert(windows, window)
 		end

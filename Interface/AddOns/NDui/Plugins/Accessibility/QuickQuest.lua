@@ -23,7 +23,7 @@ end)
 local QuickQuest = CreateFrame("Frame")
 QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
-local choiceQueue, quests
+local quests, choiceQueue = {}
 
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
@@ -72,7 +72,8 @@ local ignoreQuestNPC = {
 }
 
 local function GetQuestLogQuests(onlyComplete)
-	quests = {}
+	wipe(quests)
+
 	for index = 1, GetNumQuestLogEntries() do
 		local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
 		if(not isHeader) then

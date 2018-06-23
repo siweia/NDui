@@ -622,7 +622,7 @@ local function UpdateInt(_, ...)
 			end
 		end
 	end
-	if #cache > 666 then cache = {} end
+	if #cache > 666 then wipe(cache) end
 end
 
 -- CleanUp

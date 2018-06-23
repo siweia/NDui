@@ -8,8 +8,8 @@ local module = B:GetModule("Misc")
 function module:Mailbox()
 	if not NDuiDB["Misc"]["Mail"] then return end
 
-	local deletedelay, t, mailIndex, mailItemIndex = .5, 0, 1, 0
-	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening, inboxItems
+	local deletedelay, t, mailIndex, mailItemIndex, inboxItems = .5, 0, 1, 0, {}
+	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening
 
 	InboxNextPageButton:SetScript("OnClick", function()
 		mailIndex = mailIndex + 1
@@ -204,7 +204,7 @@ function module:Mailbox()
 	end)
 
 	hooksecurefunc("InboxFrameItem_OnEnter", function(self)
-		inboxItems = {}
+		wipe(inboxItems)
 
 		local itemAttached = select(8, GetInboxHeaderInfo(self.index))
 		if itemAttached then

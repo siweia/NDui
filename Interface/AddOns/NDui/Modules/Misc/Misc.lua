@@ -236,9 +236,9 @@ end
 
 -- Auto screenshot when achieved
 do
-	local waitTable
+	local waitTable = {}
 	local function TakeScreen(delay, func, ...)
-		waitTable = {}
+		wipe(waitTable)
 		local waitFrame = _G["TakeScreenWaitFrame"] or CreateFrame("Frame", "TakeScreenWaitFrame", UIParent)
 		waitFrame:SetScript("OnUpdate", function(_, elapse)
 			local count = #waitTable
@@ -458,7 +458,7 @@ if DB.Client == "zhCN" then
 		finish = true
 		remainGold = nil
 		index = 1
-		goldList = {}
+		wipe(goldList)
 		f:UnregisterAllEvents()
 	end
 
