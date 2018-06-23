@@ -20,7 +20,7 @@ function module:GetPlayerMapPos(mapID)
 	end
 	tempVec2D:Subtract(mapRect[1])
 
-	return (tempVec2D.y/mapRect[2].y), (tempVec2D.x/mapRect[2].x)
+	return tempVec2D.y/mapRect[2].y, tempVec2D.x/mapRect[2].x
 end
 
 function module:OnLogin()
@@ -30,9 +30,9 @@ function module:OnLogin()
 	local formatText = DB.MyColor..": %.1f, %.1f"
 	local scale = mapBody:GetEffectiveScale()
 	local width, height, mapID = mapBody:GetWidth(), mapBody:GetHeight()
-
-	-- Default Settings
 	BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
+
+	-- Scaling
 	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"]) end
 	hooksecurefunc(WorldMapFrame, "Minimize", function(self)
 		if InCombatLockdown() then return end
@@ -51,9 +51,12 @@ function module:OnLogin()
 	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function()
 		width, height = mapBody:GetWidth(), mapBody:GetHeight()
 	end)
-
 	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
-		mapID = self:GetMapID()
+		if self:GetMapID() == C_Map.GetBestMapForUnit("player") then
+			mapID = self:GetMapID()
+		else
+			mapID = nil
+		end
 	end)
 
 	local function CursorCoords()
@@ -73,11 +76,15 @@ function module:OnLogin()
 			cursor:SetText(L["Mouse"]..DB.MyColor..": --, --")
 		end
 
-		local x, y = self:GetPlayerMapPos(mapID)
-		if not x or (x == 0 and y == 0) then
+		if not mapID then
 			player:SetText(PLAYER..DB.MyColor..": --, --")
 		else
-			player:SetFormattedText(PLAYER..formatText, 100 * x, 100 * y)
+			local x, y = self:GetPlayerMapPos(mapID)
+			if not x or (x == 0 and y == 0) then
+				player:SetText(PLAYER..DB.MyColor..": --, --")
+			else
+				player:SetFormattedText(PLAYER..formatText, 100 * x, 100 * y)
+			end
 		end
 	end
 
@@ -93,7 +100,9 @@ function module:OnLogin()
 	updater:SetScript("OnUpdate", UpdateCoords)
 	updater:Hide()
 
-	local function updaterVisibility(self) updater:SetShown(self:IsShown()) end
-	WorldMapFrame:HookScript("OnShow", updaterVisibility)
-	WorldMapFrame:HookScript("OnHide", updaterVisibility)
+	local function isUpdating(self)
+		updater:SetShown(self:IsShown())
+	end
+	WorldMapFrame:HookScript("OnShow", isUpdating)
+	WorldMapFrame:HookScript("OnHide", isUpdating)
 end
