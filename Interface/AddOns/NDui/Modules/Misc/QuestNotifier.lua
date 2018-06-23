@@ -2,65 +2,23 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Misc")
 
-local questList = {}
-local function getQuestList()
-	questList = {}
-
-	for i = 1, GetNumQuestLogEntries() do
-		local title, level, _, isHeader, _, isComplete, frequency, questID = GetQuestLogTitle(i)
-		if not title then break end
-		if not isHeader then
-			questList[questID] = {
-				title = title,
-				level = level,
-				isComplete = isComplete,
-				frequency = frequency,
-				link = GetQuestLink(questID),
-				object = {},
-			}
-
-			for j = 1, GetNumQuestLeaderBoards(i) do
-				local text = GetQuestLogLeaderBoard(j, i)
-				if text then
-					local needs, object = strsplit(" ", text)
-					local cur, max = strsplit("/", needs)
-					if cur and max then
-						questList[questID].object[j] = {
-							object = object,
-							cur = tonumber(cur),
-							max = tonumber(max)
-						}
-					end
-				end
-			end
-		end
-	end
-
-	return questList
-end
-
-local previous, current
 local debugMode = false
+local completedQuest, initComplete = {}
 
-local function acceptText(data, daily)
+local function acceptText(link, daily)
 	if daily then
-		return format("%s: [%s][%s]%s", L["AcceptQuest"], data.level, data.frequency, data.link)
+		return format("%s: [%s]%s", L["AcceptQuest"], DAILY, link)
 	else
-		return format("%s: [%s]%s", L["AcceptQuest"], data.level, data.link)
+		return format("%s: %s", L["AcceptQuest"], link)
 	end
 end
 
-local function progressText(data, object)
-	return format("%s%s: %s %s/%s", data.link, L["Progress"], object.object, object.cur, object.max)
-end
-
-local function completeText(data)
-	return format("[%s]%s %s", data.level, data.link, QUEST_COMPLETE)
+local function completeText(link)
+	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, "Master")
+	return format("%s %s", link, QUEST_COMPLETE)
 end
 
 local function sendQuestMsg(msg)
-	if not NDuiDB["Misc"]["QuestNotifier"] then return end
-
 	if debugMode and DB.isDeveloper then
 		print(msg)
 	elseif IsPartyLFG() then
@@ -72,39 +30,83 @@ local function sendQuestMsg(msg)
 	end
 end
 
-local function questLogUpdate()
-	current = getQuestList()
+local function getPattern(pattern)
+	pattern = string.gsub(pattern, "%(", "%%%1")
+	pattern = string.gsub(pattern, "%)", "%%%1")
+	pattern = string.gsub(pattern, "%%%d?$?.", "(.+)")
+	return format("^%s$", pattern)
+end
 
-	for questID, currentdata in pairs(current) do
-		if previous[questID] then
-			local previousData = previous[questID]
-			if not previousData.isComplete then
-				if currentdata.title and previousData.title then
-					if currentdata.isComplete == 1 then
-						sendQuestMsg(completeText(currentdata))
-						PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, "Master")
-					elseif NDuiDB["Misc"]["QuestProgress"] then
-						for i = 1, #currentdata.object do
-							local previousObj = previousData.object[i]
-							local currentObj = currentdata.object[i]
-							if previousObj and currentObj and currentObj.cur > previousObj.cur then
-								sendQuestMsg(progressText(currentdata, currentObj))
-							end
-						end
-					end
+local questMatches = {
+	["Found"] = getPattern(ERR_QUEST_ADD_FOUND_SII),
+	["Item"] = getPattern(ERR_QUEST_ADD_ITEM_SII),
+	["Kill"] = getPattern(ERR_QUEST_ADD_KILL_SII),
+	["PKill"] = getPattern(ERR_QUEST_ADD_PLAYER_KILL_SII),
+	["ObjectiveComplete"] = getPattern(ERR_QUEST_OBJECTIVE_COMPLETE_S),
+	["QuestComplete"] = getPattern(ERR_QUEST_COMPLETE_S),
+	["QuestFailed"] = getPattern(ERR_QUEST_FAILED_S),
+}
+
+local function FindQuestProgress(_, _, msg)
+	for _, pattern in pairs(questMatches) do
+		if msg:match(pattern) then
+			local _, _, _, cur, max = string.find(msg, "(.*)[:：]%s*([-%d]+)%s*/%s*([-%d]+)%s*$")
+			cur, max = tonumber(cur), tonumber(max)
+			if max > 10 then
+				if mod(cur, floor(max/5)) == 0 then
+					sendQuestMsg(msg)
 				end
+			else
+				sendQuestMsg(msg)
 			end
-		else
-			sendQuestMsg(acceptText(currentdata, currentdata.frequency == LE_QUEST_FREQUENCY_DAILY))
+			break
 		end
 	end
+end
 
-	previous = current
+local function FindQuestAccept(_, questLogIndex, questID)
+	local title, _, _, _, _, _, frequency = GetQuestLogTitle(questLogIndex)
+	local link = GetQuestLink(questID)
+	if title then
+		sendQuestMsg(acceptText(link, frequency == LE_QUEST_FREQUENCY_DAILY))
+	end
+end
+
+local function FindQuestComplete()
+	for i = 1, GetNumQuestLogEntries() do
+		local title, _, _, _, _, isComplete, _, questID = GetQuestLogTitle(i)
+		local link = GetQuestLink(questID)
+		if title and isComplete and not completedQuest[questID] then
+			if initComplete then
+				sendQuestMsg(completeText(link))
+			end
+			completedQuest[questID] = true
+		end
+	end
+end
+
+local function FindWorldQuestComplete(_, questID)
+	if QuestUtils_IsQuestWorldQuest(questID) then
+		local title = C_TaskQuest.GetQuestInfoByQuestID(questID)
+		local link = GetQuestLink(questID)
+		if title and not completedQuest[questID] then
+			sendQuestMsg(completeText(link))
+			completedQuest[questID] = true
+		end
+	end
 end
 
 function module:QuestNotifier()
 	if IsAddOnLoaded("QuestNotifier") then return end
+	if not NDuiDB["Misc"]["QuestNotifier"] then return end
 
-	previous = getQuestList()
-	B:RegisterEvent("QUEST_LOG_UPDATE", questLogUpdate)
+	FindQuestComplete()
+	initComplete = true
+
+	B:RegisterEvent("QUEST_ACCEPTED", FindQuestAccept)
+	B:RegisterEvent("QUEST_LOG_UPDATE", FindQuestComplete)
+	B:RegisterEvent("QUEST_TURNED_IN", FindWorldQuestComplete)
+	if NDuiDB["Misc"]["QuestProgress"] then
+		B:RegisterEvent("UI_INFO_MESSAGE", FindQuestProgress)
+	end
 end
