@@ -455,3 +455,5 @@ L["Trigger Intro"] = "\nAdd trigger on cooldown timer.\n\nOnAuraGain: Trigger ti
 L["Trigger Unit Intro"] = "\nSet unit for trigger.\n\nPlayer: only monitor player's spells or auras.\n\nAll: monitor all members' spells and auras from your raid or group."
 L["Azerite Armor"] = "Azerite Armor"
 L["Mouse"] = "Mouse"
+L["PlayerNP"] = "Pensonal Resourcebar"
+L["Enable PlayerPlate"] = "Show Pensonal Resource"

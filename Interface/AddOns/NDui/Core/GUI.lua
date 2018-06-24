@@ -76,6 +76,7 @@ local defaultSettings = {
 		PetCombatText = true,
 		RaidClickSets = false,
 		ShowTeamIndex = false,
+		ShowPlayerPlate = false,
 	},
 	Chat = {
 		Sticky = false,
@@ -316,6 +317,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", L["Enable Nameplate"]},
+		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"], true},
 		{},--blank
 		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
 		{1, "Nameplate", "AllAuras", L["Show All Auras"], true},

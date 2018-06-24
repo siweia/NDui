@@ -455,3 +455,5 @@ L["Trigger Intro"] = "\n為該法術設置觸發器。\n\nOnAuraGain：當你獲
 L["Trigger Unit Intro"] = "\n為觸發器設置監控的目標單位。\n\nPlayer: 只監控玩家自身的技能法術；\n\nAll: 監控所有處於團隊/隊伍中玩家的技能法術。"
 L["Azerite Item"] = "艾澤萊晶岩護甲"
 L["Mouse"] = "滑鼠"
+L["PlayerNP"] = "個人資源條"
+L["Enable PlayerPlate"] = "顯示個人資源條"
