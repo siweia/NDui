@@ -52,7 +52,7 @@ local function FindQuestProgress(_, _, msg)
 		if msg:match(pattern) then
 			local _, _, _, cur, max = string.find(msg, "(.*)[:：]%s*([-%d]+)%s*/%s*([-%d]+)%s*$")
 			cur, max = tonumber(cur), tonumber(max)
-			if max > 10 then
+			if cur and max and max >= 10 then
 				if mod(cur, floor(max/5)) == 0 then
 					sendQuestMsg(msg)
 				end
