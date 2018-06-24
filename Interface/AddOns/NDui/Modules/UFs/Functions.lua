@@ -19,7 +19,7 @@ local function retVal(self, val1, val2, val3, val4)
 	elseif self.mystyle == "focus" then
 		return val2
 	else
-		if self.mystyle == "nameplate" and val4 then
+		if (self.mystyle == "nameplate" or self.mystyle == "PlayerPlate") and val4 then
 			return val4
 		else
 			return val3
@@ -141,7 +141,7 @@ function UF:CreatePowerBar(self)
 	bg:SetTexture(DB.normTex)
 	bg.multiplier = .25
 
-	if (self.mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (self.mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) or self.mystyle == "nameplate" then
+	if (self.mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (self.mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) or self.mystyle == "PlayerPlate" then
 		power.colorPower = true
 	else
 		power.colorClass = true
@@ -597,6 +597,11 @@ local function postUpdateClassPower(element, _, max, diff, event)
 end
 
 function UF:CreateClassPower(self)
+	if self.mystyle == "PlayerPlate" then
+		width = 200
+		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 5}
+	end
+
 	local bars = {}
 	for i = 1, 6 do
 		bars[i] = CreateFrame("StatusBar", nil, self)

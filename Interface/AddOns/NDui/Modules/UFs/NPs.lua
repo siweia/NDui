@@ -18,13 +18,18 @@ function UF:SetupCVars()
 	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateMaxAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateSelectedAlpha", 1)
-	SetCVar("nameplateOccludedAlphaMult", .4)
 
 	SetCVar("namePlateMinScale", .8)
 	SetCVar("namePlateMaxScale", .8)
 	SetCVar("nameplateSelectedScale", 1)
 	SetCVar("nameplateLargerScale", 1)
-	SetCVar("nameplateSelfScale", .75)
+	SetCVar("nameplateSelfScale", 1)
+
+	SetCVar("nameplateShowSelf", 0)
+	InterfaceOptionsNamesPanelUnitNameplatesPersonalResource:SetAlpha(0)
+	InterfaceOptionsNamesPanelUnitNameplatesPersonalResource:SetScale(.0001)
+	InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy:SetAlpha(0)
+	InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy:SetScale(.0001)
 end
 
 function UF:BlockAddons()
@@ -80,8 +85,8 @@ local function UpdateColor(element, unit)
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if UnitIsUnit("player", unit) then	-- PlayerPlate
-			r, g, b = 0, .9, 0
+		if element:GetParent().mystyle == "PlayerPlate" then
+			r, g, b = 0, .8, 0
 		elseif CustomUnits and CustomUnits[name] then
 			r, g, b = 0, .8, .3
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
@@ -195,222 +200,6 @@ local function UpdateUnitClassify(self, unit)
 	end
 end
 
-function UF:CreateClassBar()
-	local SPEC_MAGE_ARCANE = SPEC_MAGE_ARCANE or 1
-	local SPEC_MONK_WINDWALKER = SPEC_MONK_WINDWALKER or 3
-	local SPEC_PALADIN_RETRIBUTION = SPEC_PALADIN_RETRIBUTION or 3
-	local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION or 3
-	local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
-	local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
-	local SPELL_POWER_SOUL_SHARDS = Enum.PowerType.SoulShards or 7
-	local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower or 9
-	local SPELL_POWER_CHI = Enum.PowerType.Chi or 12
-	local SPELL_POWER_ARCANE_CHARGES = Enum.PowerType.ArcaneCharges or 16
-	local ClassPowerID, ClassPowerType, RequireSpec, RequirePower
-
-	-- Data
-	if DB.MyClass == "MONK" then
-		ClassPowerID = SPELL_POWER_CHI
-		ClassPowerType = "CHI"
-		RequireSpec = SPEC_MONK_WINDWALKER
-	elseif DB.MyClass == "PALADIN" then
-		ClassPowerID = SPELL_POWER_HOLY_POWER
-		ClassPowerType = "HOLY_POWER"
-		RequireSpec = SPEC_PALADIN_RETRIBUTION
-	elseif DB.MyClass == "WARLOCK" then
-		ClassPowerID = SPELL_POWER_SOUL_SHARDS
-		ClassPowerType = "SOUL_SHARDS"
-	elseif DB.MyClass == "ROGUE" or DB.MyClass == "DRUID" then
-		ClassPowerID = SPELL_POWER_COMBO_POINTS
-		ClassPowerType = "COMBO_POINTS"
-
-		if DB.MyClass == "DRUID" then
-			RequirePower = SPELL_POWER_ENERGY
-		end
-	elseif DB.MyClass == "MAGE" then
-		ClassPowerID = SPELL_POWER_ARCANE_CHARGES
-		ClassPowerType = "ARCANE_CHARGES"
-		RequireSpec = SPEC_MAGE_ARCANE
-	elseif DB.MyClass == "DEATHKNIGHT" then
-		ClassPowerID = true
-	end
-	if not ClassPowerID then return end
-
-	-- Create Bar
-	local width, height, margin = NDuiDB["Nameplate"]["Width"] * 1.4, 5, 3
-	local colorTable = {
-		["MONK"] = {0, 1, .59},
-		["WARLOCK"] = {.58, .51, .79},
-		["MAGE"] = {.41, .8, .94},
-		["PALADIN"] = {.88, .88, .06},
-		["ROGUE"] = {.88, .88, .06},
-		["DRUID"] = {.88, .88, .06},
-		["DEATHKNIGHT"] = {.77, .12, .23},
-	}
-
-	local bar, bars = CreateFrame("Frame", "NDui_NPClassPower", UIParent), {}
-	bar:SetSize(width, height)
-	bar.__max = 6
-	for i = 1, bar.__max do
-		bars[i] = CreateFrame("StatusBar", nil, bar)
-		bars[i]:SetHeight(height)
-		bars[i]:SetWidth((width - 5*margin) / 6)
-		bars[i]:SetStatusBarTexture(DB.normTex)
-		bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass] or {1, 1, 1}))
-		B.CreateSD(bars[i], 3, 3)
-		if i == 1 then
-			bars[i]:SetPoint("LEFT")
-		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", margin, 0)
-		end
-	end
-
-	-- Update bars
-	local function UpdateClassPower(self, event, unit, powerType)
-		if event and (unit ~= "player" or powerType ~= ClassPowerType) then return end
-
-		local cur = UnitPower("player", ClassPowerID)
-		local max = UnitPowerMax("player", ClassPowerID)
-		local mod = UnitPowerDisplayMod(ClassPowerID)
-		local oldMax
-
-		cur = mod == 0 and 0 or cur / mod
-		if ClassPowerType == "SOUL_SHARDS" and GetSpecialization() ~= SPEC_WARLOCK_DESTRUCTION then
-			cur = cur - cur % 1
-		end
-
-		local numActive = cur + 0.9
-		if max <= 6 then
-			for i = 1, max do
-				if(i > numActive) then
-					bars[i]:Hide()
-					bars[i]:SetValue(0)
-				else
-					bars[i]:Show()
-					bars[i]:SetValue(cur - i + 1)
-				end
-				bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
-			end
-		else
-			for i = 1, 5 do bars[i]:SetValue(1) end
-			bars[6]:Hide()
-
-			if cur <= 5 then
-				for i = 1, 5 do
-					if i <= cur then
-						bars[i]:Show()
-					else
-						bars[i]:Hide()
-					end
-					bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
-				end
-			else
-				for i = 1, 5 do
-					bars[i]:Show()
-				end
-				for i = 1, cur - 5 do
-					bars[i]:SetStatusBarColor(1, 0, 0)
-				end
-				for i = cur - 4, 5 do
-					bars[i]:SetStatusBarColor(unpack(colorTable[DB.MyClass]))
-				end
-			end
-		end
-
-		oldMax = self.__max
-		if(max ~= oldMax) then
-			if(max < oldMax) then
-				for i = max + 1, oldMax do
-					if bars[i] then
-						bars[i]:Hide()
-						bars[i]:SetValue(0)
-					end
-				end
-			end
-			if max <= 6 then
-				for i = 1, 6 do
-					bars[i]:SetWidth((width - (max-1)*margin)/max)
-				end
-			else
-				for i = 1, 5 do
-					bars[i]:SetWidth((width - 4*margin)/5)
-				end
-				bars[6]:Hide()
-			end
-
-			self.__max = max
-		end
-	end
-
-	local function UpdateRune(_, _, runeID, energized)
-		local rune = bars[runeID]
-		if not rune then return end
-
-		if UnitHasVehicleUI("player") then
-			rune:Hide()
-		else
-			local start, duration, runeReady = GetRuneCooldown(runeID)
-			if not start then return end
-
-			if energized or runeReady then
-				rune:SetMinMaxValues(0, 1)
-				rune:SetValue(1)
-				rune:SetScript("OnUpdate", nil)
-				rune:SetAlpha(1)
-			else
-				rune.duration = GetTime() - start
-				rune.max = duration
-				rune:SetMinMaxValues(0, duration)
-				rune:SetValue(0)
-				rune:SetScript("OnUpdate", function(self, elapsed)
-					local duration = self.duration + elapsed
-					self.duration = duration
-					self:SetValue(duration)
-				end)
-				rune:SetAlpha(.7)
-			end
-			rune:Show()
-		end
-	end
-
-	local function UpdateVisibility(self)
-		if (RequireSpec and RequireSpec ~= GetSpecialization()) or (RequirePower and RequirePower ~= UnitPowerType("player")) then
-			self:UnregisterEvent("UNIT_POWER_FREQUENT")
-			self:UnregisterEvent("UNIT_MAXPOWER")
-			for i = 1, 6 do bars[i]:Hide() end
-		else
-			self:RegisterEvent("UNIT_POWER_FREQUENT")
-			self:RegisterEvent("UNIT_MAXPOWER")
-			UpdateClassPower(self)
-		end
-	end
-
-	-- OnEvent
-	if DB.MyClass == "DEATHKNIGHT" then
-		bar:RegisterEvent("RUNE_POWER_UPDATE")
-	else
-		bar:RegisterEvent("PLAYER_ENTERING_WORLD")
-		bar:RegisterEvent("UNIT_POWER_FREQUENT")
-		bar:RegisterEvent("UNIT_MAXPOWER")
-		if RequireSpec then
-			bar:RegisterEvent("PLAYER_TALENT_UPDATE")
-		end
-		if RequirePower then
-			bar:RegisterEvent("UNIT_DISPLAYPOWER")
-		end
-	end
-	bar:SetScript("OnEvent", function(self, event, ...)
-		if not GetCVarBool("nameplateShowSelf") then return end
-		if event == "RUNE_POWER_UPDATE" then
-			UpdateRune(self, event, ...)
-		elseif event == "UNIT_POWER_FREQUENT" or event == "UNIT_MAXPOWER" then
-			UpdateClassPower(self, event, ...)
-		elseif event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" or event == "UNIT_DISPLAYPOWER" then
-			UpdateVisibility(self)
-		end
-	end)
-end
-
 -- Create Nameplates
 function UF:CreatePlates(unit)
 	self.mystyle = "nameplate"
@@ -432,7 +221,6 @@ function UF:CreatePlates(unit)
 		UF:CreateRaidMark(self)
 		UF:CreatePrediction(self)
 		UF:CreateAuras(self)
-		UF:CreatePowerBar(self)
 
 		self.powerText = B.CreateFS(self, 15, "", false, "LEFT", 0, 0)
 		self.powerText:SetPoint("LEFT", self, "RIGHT", 2, 0)
@@ -480,58 +268,40 @@ function UF:CreatePlates(unit)
 	end
 end
 
-local function enableElement(self, name, element)
-	if not self:IsElementEnabled(name) then
-		self:EnableElement(name)
-		element:ForceUpdate()
-	end
-end
-
-local function disableElement(self, name)
-	if self:IsElementEnabled(name) then
-		self:DisableElement(name)
-	end
-end
-
 function UF:PostUpdatePlates(event, unit)
-	-- Update Elements
 	UpdateTargetMark(self)
 	UpdateQuestUnit(self, unit)
 	UpdateUnitClassify(self, unit)
+end
 
-	-- Update PlayerPlate
-	if event == "NAME_PLATE_UNIT_ADDED" then
-		if UnitIsUnit(unit, "player") then
-			self.nameFrame:Hide()
-			enableElement(self, "Power", self.Power)
-			disableElement(self, "Castbar")
-		else
-			self.nameFrame:Show()
-			disableElement(self, "Power")
-			enableElement(self, "Castbar", self.Castbar)
-		end
-	elseif event == "NAME_PLATE_UNIT_REMOVED" then
-		self.nameFrame:Hide()
-		disableElement(self, "Power")
-		disableElement(self, "Castbar")
+-- Player Nameplate
+local function PlateVisibility(self, event)
+	if event == "PLAYER_REGEN_DISABLED" then
+		UIFrameFadeIn(self, .3, self:GetAlpha(), 1)
+	else
+		UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
 	end
+end
 
-	-- Update ClassPowerBar
-	local bar = NDui_NPClassPower
-	if not bar then return end
-	if GetCVar("nameplateShowSelf") == "0" then return end
+function UF:CreatePlayerPlate()
+	self.mystyle = "PlayerPlate"
+	self:SetSize(180, 8)
+	self:EnableMouse(false)
 
-	if event == "NAME_PLATE_UNIT_ADDED" and UnitIsUnit(unit, "player") then
-		local namePlatePlayer = C_NamePlate.GetNamePlateForUnit("player")
-		if namePlatePlayer then
-			if bar:GetParent() ~= self then
-				bar:SetParent(self)
-				bar:ClearAllPoints()
-				bar:SetPoint("BOTTOM", self.Health, "TOP", 0, 3)
-			end
-			bar:Show()
-		end
-	elseif event == "NAME_PLATE_UNIT_REMOVED" and UnitIsUnit(unit, "player") then
-		bar:Hide()
-	end
+	local health = CreateFrame("StatusBar", nil, self)
+	health:SetAllPoints()
+	health:SetFrameLevel(self:GetFrameLevel() - 2)
+	B.CreateSB(health)
+	B.SmoothBar(health)
+	self.Health = health
+	self.Health.frequentUpdates = true
+	self.Health.UpdateColor = UpdateColor
+
+	UF:CreatePowerBar(self)
+	UF:CreatePrediction(self)
+	UF:CreateClassPower(self)
+
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility)
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", PlateVisibility)
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
 end

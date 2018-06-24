@@ -162,6 +162,7 @@ oUF:RegisterStyle("Boss", CreateBossStyle)
 oUF:RegisterStyle("Arena", CreateArenaStyle)
 oUF:RegisterStyle("Raid", CreateRaidStyle)
 oUF:RegisterStyle("Nameplates", UF.CreatePlates)
+oUF:RegisterStyle("PlayerPlate", UF.CreatePlayerPlate)
 
 -- Spawns
 function UF:OnLogin()
@@ -170,10 +171,15 @@ function UF:OnLogin()
 		self:BlockAddons()
 		self:CreateUnitTable()
 		self:CreatePowerUnitTable()
-		self:CreateClassBar()
 
 		oUF:SetActiveStyle("Nameplates")
 		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
+
+		if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+			oUF:SetActiveStyle("PlayerPlate")
+			local plate = oUF:Spawn("player", "oUF_PlayerPlate")
+			B.Mover(plate, L["PlayerNP"], "PlayerPlate", C.UFs.PlayerPlate, 180, 20)
+		end
 	end
 
 	-- Default Clicksets for RaidFrame
