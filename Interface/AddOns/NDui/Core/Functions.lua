@@ -106,15 +106,6 @@ function B:AddTooltip(anchor, text, color)
 	self:SetScript("OnLeave", GameTooltip_Hide)
 end
 
-function B:StripTextures()
-	for i = 1, self:GetNumRegions() do
-		local region = select(i, self:GetRegions())
-		if region and region:GetObjectType() == "Texture" then
-			region:SetTexture("")
-		end
-	end
-end
-
 -- Button Color
 B.CreateBC = function(f, a)
 	f:SetNormalTexture("")
@@ -293,8 +284,22 @@ function B:HideObject()
 	self:Hide()
 end
 
+function B:StripTextures()
+	for i = 1, self:GetNumRegions() do
+		local region = select(i, self:GetRegions())
+		if region and region:GetObjectType() == "Texture" then
+			region:SetTexture("")
+		end
+	end
+end
+
 function B:Dummy()
 	return
+end
+
+function B:HideOption()
+	self:SetAlpha(0)
+	self:SetScale(.0001)
 end
 
 -- Smoothy
