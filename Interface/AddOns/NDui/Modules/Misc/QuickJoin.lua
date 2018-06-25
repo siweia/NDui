@@ -57,19 +57,6 @@ function module:QuickJoin()
 			UIDropDownMenu_AddButton(info)
 		end
 	end)
---[[
-	local old_LFGListUtil_GetQuestDescription = LFGListUtil_GetQuestDescription
-	function LFGListUtil_GetQuestDescription(questID)
-		local description = old_LFGListUtil_GetQuestDescription(questID)
-		return "NDui #ID"..questID.." #"..description
-	end
-
-	hooksecurefunc("LFGListSearchEntry_Update", function(self)
-		local comment = select(4, C_LFGList.GetSearchResultInfo(self.resultID))
-		if comment and comment:match("NDui") then
-			self.Name:SetTextColor(0, 1, 0)
-		end
-	end)]]
 
 	hooksecurefunc("LFGListInviteDialog_Accept", function()
 		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
