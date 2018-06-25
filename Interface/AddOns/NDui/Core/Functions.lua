@@ -91,7 +91,7 @@ function B:AddTooltip(anchor, text, color)
 		GameTooltip:SetOwner(self, anchor)
 		GameTooltip:ClearLines()
 		if tonumber(text) then
-			GameTooltip:SetSpellByID(value)
+			GameTooltip:SetSpellByID(text)
 		else
 			local r, g, b = 1, 1, 1
 			if color == "class" then
