@@ -29,7 +29,7 @@ local classList = {
 	["WARLOCK"] = {
 		combat = GetSpellInfo(20707),	-- Soulstone
 	},
-	["HUNTER"] = {},
+	--["HUNTER"] = {},	-- blz has removed hunter res
 }
 
 local hunterRes = {
