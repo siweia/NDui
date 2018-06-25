@@ -64,8 +64,8 @@ local function ForceRaidFrame()
 end
 
 local function ForceUIScale()
-	Advanced_UseUIScale:Hide()
-	Advanced_UIScaleSlider:Hide()
+	B.HideOption(Advanced_UseUIScale)
+	B.HideOption(Advanced_UIScaleSlider)
 	SetCVar("useUiScale", 1)
 	local scale = NDuiDB["Settings"]["SetScale"]
 	if NDuiDB["Settings"]["LockUIScale"] then
@@ -396,6 +396,7 @@ local function YesTutor()
 		elseif currentPage == 2 then
 			NDuiDB["Settings"]["LockUIScale"] = true
 			ForceUIScale()
+			NDuiDB["Settings"]["LockUIScale"] = false
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
 		elseif currentPage == 3 then
 			ForceChatSettings()
