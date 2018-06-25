@@ -78,7 +78,7 @@ function module:ChatCopy()
 	local copy = CreateFrame("Button", nil, UIParent)
 	copy:SetPoint("BOTTOMLEFT", 370, 30)
 	copy:SetSize(20, 20)
-	copy:SetAlpha(.3)
+	copy:SetAlpha(.5)
 	copy.Icon = copy:CreateTexture(nil, "ARTWORK")
 	copy.Icon:SetAllPoints()
 	copy.Icon:SetTexture(DB.copyTex)
@@ -86,7 +86,7 @@ function module:ChatCopy()
 	copy:SetScript("OnClick", copyFunc)
 	B.AddTooltip(copy, "ANCHOR_RIGHT", L["Chat Copy"])
 	copy:HookScript("OnEnter", function() copy:SetAlpha(1) end)
-	copy:HookScript("OnLeave", function() copy:SetAlpha(.3) end)
+	copy:HookScript("OnLeave", function() copy:SetAlpha(.5) end)
 
 	-- Aurora Reskin
 	if IsAddOnLoaded("AuroraClassic") then
