@@ -7,8 +7,7 @@ local module = B:GetModule("Misc")
 	1.鼠标中键点击所追踪的任务进行搜索
 	2.双击搜索结果，快速申请
 	3.目标为稀有精英或世界BOSS时，右键点击框体可寻找队伍
-	4.高亮由NDui创建的队伍
-	5.自动隐藏部分窗口
+	4.自动隐藏部分窗口
 ]]
 
 function module:QuickJoin()
@@ -58,7 +57,7 @@ function module:QuickJoin()
 			UIDropDownMenu_AddButton(info)
 		end
 	end)
-
+--[[
 	local old_LFGListUtil_GetQuestDescription = LFGListUtil_GetQuestDescription
 	function LFGListUtil_GetQuestDescription(questID)
 		local description = old_LFGListUtil_GetQuestDescription(questID)
@@ -70,7 +69,7 @@ function module:QuickJoin()
 		if comment and comment:match("NDui") then
 			self.Name:SetTextColor(0, 1, 0)
 		end
-	end)
+	end)]]
 
 	hooksecurefunc("LFGListInviteDialog_Accept", function()
 		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
