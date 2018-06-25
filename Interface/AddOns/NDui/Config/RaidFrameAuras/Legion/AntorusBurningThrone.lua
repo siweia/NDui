@@ -1,7 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("AurasTable")
-if not module then return end
 
 local TIER = 7 -- Legion
 local INSTANCE = 946 -- 燃烧王座
