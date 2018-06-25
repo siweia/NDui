@@ -23,6 +23,9 @@ function Bar:CreateBar5()
 	--move the buttons into position and reparent them
 	MultiBarLeft:SetParent(frame)
 	MultiBarLeft:EnableMouse(false)
+	hooksecurefunc(MultiBarLeft, "SetScale", function(self, scale)
+		if scale < 1 then self:SetScale(1) end
+	end)
 
 	for i = 1, num do
 		local button = _G["MultiBarLeftButton"..i]
