@@ -184,7 +184,7 @@ function module:OnLogin()
 
 	-- Default
 	SetCVar("chatStyle", "classic")
-	InterfaceOptionsSocialPanelChatStyle:Hide()
+	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Sticky
@@ -193,37 +193,20 @@ function module:OnLogin()
 		ChatTypeInfo["BN_WHISPER"].sticky = 0
 	end
 
-	-- Fading
-	if NDuiDB["Chat"]["NoFade"] then
-		for i = 1, 50 do
-			if _G["ChatFrame"..i] then
-				_G["ChatFrame"..i]:SetFading(false)
+	-- Easy Resizing
+	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
+		if btn == "LeftButton" then
+			if select(8, GetChatWindowInfo(1)) then
+				ChatFrame1:StartSizing("TOP")
 			end
 		end
-		hooksecurefunc("FCF_OpenTemporaryWindow", function()
-			local cf = FCF_GetCurrentChatFrame():GetName() or nil
-			if cf then
-				_G[cf]:SetFading(false)
-			end
-		end)
-	end
-
-	-- Easy Resizing
-	if NDuiDB["Chat"]["EasyResize"] then
-		ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
-			if btn == "LeftButton" then
-				if select(8, GetChatWindowInfo(1)) then
-					ChatFrame1:StartSizing("TOP")
-				end
-			end
-		end)
-		ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
-			if btn == "LeftButton" then
-				ChatFrame1:StopMovingOrSizing()
-				FCF_SavePositionAndDimensions(ChatFrame1)
-			end
-		end)
-	end
+	end)
+	ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
+		if btn == "LeftButton" then
+			ChatFrame1:StopMovingOrSizing()
+			FCF_SavePositionAndDimensions(ChatFrame1)
+		end
+	end)
 
 	-- Add Elements
 	self:ChatFilter()
