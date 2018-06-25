@@ -388,6 +388,7 @@ local function CreatePanel()
 		[3] = EJ_GetInstanceInfo(786),
 		[4] = EJ_GetInstanceInfo(875),
 		[5] = EJ_GetInstanceInfo(946),
+		[6] = EJ_GetInstanceInfo(1031),
 	}
 	local preSet = {
 		[1] = {1, true},
@@ -492,9 +493,13 @@ local function CreatePanel()
 			for _, v in pairs(NDuiADB["RaidDebuffs"]) do
 				AddRaidDebuffs(tabs[i].List.Child, i, v)
 			end
-			Option[17] = CreateDropdown(tabs[i].Page, L["Instance*"], 20, -30, {instList[1], instList[2], instList[3], instList[4], instList[5]}, L["Instance Intro"], 150, 30)
-			Option[18] = CreateEditbox(tabs[i].Page, "ID*", 200, -30, L["ID Intro"])
-			Option[19] = CreateEditbox(tabs[i].Page, L["Priority"], 320, -30, L["Priority Intro"])
+			local instTable = {}
+			for _, inst in ipairs(instList) do
+				tinsert(instTable, inst)
+			end
+			Option[17] = CreateDropdown(tabs[i].Page, L["Instance*"], 20, -30, instTable, L["Instance Intro"], 200, 30)
+			Option[18] = CreateEditbox(tabs[i].Page, "ID*", 250, -30, L["ID Intro"])
+			Option[19] = CreateEditbox(tabs[i].Page, L["Priority"], 370, -30, L["Priority Intro"])
 		elseif i == 12 then
 			for _, v in pairs(NDuiDB["RaidClickSets"]) do
 				AddRaidClickSets(tabs[i].List.Child, i, v)
