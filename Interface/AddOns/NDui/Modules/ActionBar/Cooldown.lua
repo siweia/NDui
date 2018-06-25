@@ -153,5 +153,5 @@ function module:OnLogin()
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)
-	InterfaceOptionsActionBarsPanelCountdownCooldowns:Hide()
+	B.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
 end

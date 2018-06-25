@@ -26,10 +26,8 @@ function UF:SetupCVars()
 	SetCVar("nameplateSelfScale", 1)
 
 	SetCVar("nameplateShowSelf", 0)
-	InterfaceOptionsNamesPanelUnitNameplatesPersonalResource:SetAlpha(0)
-	InterfaceOptionsNamesPanelUnitNameplatesPersonalResource:SetScale(.0001)
-	InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy:SetAlpha(0)
-	InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy:SetScale(.0001)
+	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
+	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
 end
 
 function UF:BlockAddons()

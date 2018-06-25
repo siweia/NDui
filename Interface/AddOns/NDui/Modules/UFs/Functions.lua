@@ -830,7 +830,7 @@ function UF:CreateFCT(self)
 
 	-- Default CombatText
 	SetCVar("enableFloatingCombatText", 0)
-	InterfaceOptionsCombatPanelEnableFloatingCombatText:Hide()
+	B.HideOption(InterfaceOptionsCombatPanelEnableFloatingCombatText)
 end
 
 local function postUpdateFaction(self)
