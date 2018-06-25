@@ -52,7 +52,7 @@ function module:ReskinRegions()
 		self:GetNormalTexture():SetTexture(DB.garrTex)
 		self:GetPushedTexture():SetTexture(DB.garrTex)
 		self:GetHighlightTexture():SetTexture(DB.garrTex)
-		self:SetSize(30,30)
+		self:SetSize(30, 30)
 	end)
 
 	-- QueueStatus Button

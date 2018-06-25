@@ -241,7 +241,7 @@ local Update = function(self, _, unit)
 				end
 			end
 			-- Test
-			--local debuffs = {[11196]=1}
+			--local debuffs = {[264689]=1}
 			--local prio = debuffs[spellId]
 
 			if not RaidDebuffsIgnore[spellId] and prio and (prio > rd.priority) then
