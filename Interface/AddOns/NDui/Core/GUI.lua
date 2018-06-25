@@ -475,8 +475,8 @@ local function SelectTab(i)
 	end
 end
 
-local function CreateTab(i, name)
-	local tab = CreateFrame("Button", nil, NDuiGUI)
+local function CreateTab(parent, i, name)
+	local tab = CreateFrame("Button", nil, parent)
 	tab:SetPoint("TOPLEFT", 20, -30*i - 20)
 	tab:SetSize(130, 30)
 	B.CreateBD(tab, .3)
@@ -673,7 +673,7 @@ local function OpenGUI()
 	end)
 
 	for i, name in pairs(tabList) do
-		guiTab[i] = CreateTab(i, name)
+		guiTab[i] = CreateTab(f, i, name)
 
 		guiPage[i] = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
 		guiPage[i]:SetPoint("TOPLEFT", 160, -50)

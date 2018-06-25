@@ -145,7 +145,7 @@ local function updateSpells()
 			bu[4].Icon:SetTexture(GetSpellTexture(124275))
 		end
 
-		if bu[4].Icon:GetTexture() == heavyStagger then
+		if bu[4].Icon:GetTexture() == GetSpellTexture(124273) then
 			ActionButton_ShowOverlayGlow(bu[4])
 		else
 			ActionButton_HideOverlayGlow(bu[4])

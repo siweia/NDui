@@ -24,8 +24,11 @@ local hx = {
 	"任务栏皮肤调整。",
 }
 
+local f
 local function changelog()
-	local f = CreateFrame("Frame", "NDuiChangeLog", UIParent)
+	if f then f:Show() return end
+
+	f = CreateFrame("Frame", "NDuiChangeLog", UIParent)
 	f:SetPoint("CENTER")
 	f:SetScale(1.2)
 	f:SetFrameStrata("HIGH")
@@ -69,7 +72,5 @@ local function compareToShow(event)
 end
 B:RegisterEvent("PLAYER_ENTERING_WORLD", compareToShow)
 
-SlashCmdList["NDUICHANGELOG"] = function()
-	if not NDuiChangeLog then changelog() else NDuiChangeLog:Show() end
-end
-SLASH_NDUICHANGELOG1 = '/ncl'
+SlashCmdList["NDUICHANGELOG"] = changelog
+SLASH_NDUICHANGELOG1 = "/ncl"
