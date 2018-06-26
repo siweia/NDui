@@ -174,6 +174,18 @@ C.themes["Blizzard_Communities"] = function()
 	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
 	F.Reskin(CommunitiesFrame.CommunitiesControlFrame.CommunitiesSettingsButton)
 
+	local detailFrame = CommunitiesFrame.GuildMemberDetailFrame
+	F.StripTextures(detailFrame)
+	F.SetBD(detailFrame)
+	detailFrame.BackBackground:Hide()
+	F.ReskinClose(detailFrame.CloseButton)
+	F.Reskin(detailFrame.RemoveButton)
+	F.Reskin(detailFrame.GroupInviteButton)
+	F.StripTextures(detailFrame.NoteBackground)
+	F.CreateBDFrame(detailFrame.NoteBackground, .25)
+	detailFrame:ClearAllPoints()
+	detailFrame:SetPoint("LEFT", CommunitiesFrame, "RIGHT", 3, 40)
+
 	do
 		local dialog = CommunitiesSettingsDialog
 		F.StripTextures(dialog)
