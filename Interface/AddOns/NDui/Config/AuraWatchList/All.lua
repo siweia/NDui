@@ -48,6 +48,9 @@ local list = {
 		{AuraID = 26297, UnitID = "player"},	-- 狂暴 巨魔
 		{AuraID = 20572, UnitID = "player"},	-- 血性狂怒 兽人
 		{AuraID = 33697, UnitID = "player"},	-- 血性狂怒 兽人
+		-- 艾泽里特特质
+		{AuraID = 273685, UnitID = "player"},	-- 缜密计谋
+		{AuraID = 273714, UnitID = "player"},	-- 争分夺秒
 		-- LEG药水附魔
 		{AuraID = 188027, UnitID = "player"},	-- 致命优雅，远程
 		{AuraID = 188028, UnitID = "player"},	-- 上古战神，近战
@@ -157,7 +160,7 @@ local list = {
 		{AuraID =  60233, UnitID = "player"},	-- 敏捷
 		{AuraID =  60229, UnitID = "player"},	-- 力量
 		{AuraID =  60234, UnitID = "player"},	-- 智力
-		-- 旧版本
+		-- WoD橙戒
 		{AuraID = 187616, UnitID = "player"},	-- 尼萨姆斯，智力
 		{AuraID = 187617, UnitID = "player"},	-- 萨克图斯，坦克
 		{AuraID = 187618, UnitID = "player"},	-- 伊瑟拉鲁斯，治疗
