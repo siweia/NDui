@@ -318,8 +318,8 @@ local itemBlacklist = {
 
 QuickQuest:Register("QUEST_PROGRESS", function()
 	if(IsQuestCompletable()) then
-		local _, _, worldQuest = GetQuestTagInfo(GetQuestID())
-		if worldQuest then return end
+		local id, _, worldQuest = GetQuestTagInfo(GetQuestID())
+		if id == 153 or worldQuest then return end
 		-- 阿古斯的随从兑换
 		if GetNPCID() == 119388 or GetNPCID() == 127037 or GetNPCID() == 126954 or GetNPCID() == 124312 then return end
 
