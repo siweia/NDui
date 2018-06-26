@@ -83,9 +83,7 @@ local function UpdateColor(element, unit)
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if element:GetParent().mystyle == "PlayerPlate" then
-			r, g, b = 0, .8, 0
-		elseif CustomUnits and CustomUnits[name] then
+		if CustomUnits and CustomUnits[name] then
 			r, g, b = 0, .8, .3
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then
@@ -286,15 +284,7 @@ function UF:CreatePlayerPlate()
 	self:SetSize(180, 8)
 	self:EnableMouse(false)
 
-	local health = CreateFrame("StatusBar", nil, self)
-	health:SetAllPoints()
-	health:SetFrameLevel(self:GetFrameLevel() - 2)
-	B.CreateSB(health)
-	B.SmoothBar(health)
-	self.Health = health
-	self.Health.frequentUpdates = true
-	self.Health.UpdateColor = UpdateColor
-
+	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)

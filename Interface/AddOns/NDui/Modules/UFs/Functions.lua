@@ -64,7 +64,9 @@ function UF:CreateHealthBar(self)
 	bg:SetVertexColor(.6, .6, .6)
 	bg.multiplier = .25
 
-	if (self.mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (self.mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) then
+	if self.mystyle == "PlayerPlate" then
+		health.colorHealth = true
+	elseif (self.mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (self.mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) then
 		health.colorClass = true
 		health.colorTapping = true
 		health.colorReaction = true
