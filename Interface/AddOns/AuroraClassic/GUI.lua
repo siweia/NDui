@@ -1,4 +1,4 @@
-local F, C = unpack(AuroraClassic)
+local F, C = unpack(select(2, ...))
 
 -- [[ Localizations ]]
 
@@ -99,12 +99,12 @@ end
 -- create frames/widgets
 
 local oncall = CreateFrame("Frame", "AuroraCallingFrame", UIParent)
-oncall.name = "Aurora"
+oncall.name = "AuroraClassic"
 InterfaceOptions_AddCategory(oncall)
 
 local header = oncall:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 header:SetPoint("TOPLEFT", 20, -26)
-header:SetText("|cff0080ffAurora|r "..GetAddOnMetadata("AuroraClassic", "Version"))
+header:SetText("|cff0080ffAuroraClassic|r "..GetAddOnMetadata("AuroraClassic", "Version"))
 
 local bu = CreateFrame("Button", nil, oncall, "UIPanelButtonTemplate")
 bu:SetSize(120, 25)
@@ -116,7 +116,7 @@ bu:SetScript("OnClick", function()
 end)
 
 local gui = CreateFrame("Frame", "AuroraOptions", UIParent)
-gui.name = "Aurora"
+gui.name = "AuroraClassic"
 gui:SetSize(640, 550)
 gui:SetPoint("CENTER")
 gui:Hide()
@@ -139,7 +139,7 @@ default:SetText(DEFAULTS)
 
 local title = gui:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 title:SetPoint("TOPLEFT", 36, -26)
-title:SetText("|cff0080ffAurora|r "..GetAddOnMetadata("AuroraClassic", "Version"))
+title:SetText("|cff0080ffAuroraClassic|r "..GetAddOnMetadata("AuroraClassic", "Version").." |cffffffff("..COMMAND.." /ac)")
 
 local features = addSubCategory(gui, L["Features"])
 features:SetPoint("TOPLEFT", 16, -80)
@@ -197,7 +197,7 @@ reloadButton:SetSize(128, 25)
 reloadButton:SetText(RELOADUI)
 
 local credits = gui:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-credits:SetText("Aurora Classic by Lightsword, Haleth, Siweia.")
+credits:SetText("AuroraClassic by Lightsword, Haleth, Siweia.")
 credits:SetPoint("BOTTOM", 0, 40)
 
 -- add event handlers
@@ -308,4 +308,4 @@ end)
 SlashCmdList.AURORA = function()
 	ToggleFrame(gui)
 end
-SLASH_AURORA1 = "/aurora"
+SLASH_AURORA1 = "/ac"
