@@ -272,10 +272,16 @@ end
 
 -- Player Nameplate
 local function PlateVisibility(self, event)
-	if event == "PLAYER_REGEN_DISABLED" then
-		UIFrameFadeIn(self, .3, self:GetAlpha(), 1)
+	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
+		UIFrameFadeIn(self.Health, .3, self.Health:GetAlpha(), 1)
+		UIFrameFadeIn(self.Health.bg, .3, self.Health:GetAlpha(), 1)
+		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
+		UIFrameFadeIn(self.Power.bg, .3, self.Power:GetAlpha(), 1)
 	else
-		UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), 0)
+		UIFrameFadeOut(self.Health.bg, 2, self.Health:GetAlpha(), 0)
+		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), 0)
+		UIFrameFadeOut(self.Power.bg, 2, self.Power:GetAlpha(), 0)
 	end
 end
 
@@ -289,7 +295,9 @@ function UF:CreatePlayerPlate()
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility)
 	self:RegisterEvent("PLAYER_REGEN_DISABLED", PlateVisibility)
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
+	self:RegisterEvent("UNIT_ENTERED_VEHICLE", PlateVisibility)
+	self:RegisterEvent("UNIT_EXITED_VEHICLE", PlateVisibility)
 end
