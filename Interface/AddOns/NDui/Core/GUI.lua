@@ -50,8 +50,6 @@ local defaultSettings = {
 		Boss = true,
 		Arena = true,
 		Castbars = true,
-		ClassPower = true,
-		AddPower = true,
 		StealableBuff = true,
 		SwingBar = false,
 		SwingTimer = false,
@@ -94,7 +92,6 @@ local defaultSettings = {
 		Invite = true,
 		Clock = false,
 		CombatPulse = true,
-		HideFog = true,
 		MapScale = 1,
 		MinmapScale = 1.4,
 		ShowRecycleBin = true,
@@ -281,8 +278,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SmoothColor", L["Smoothcolor HpBar"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
-		{1, "UFs", "ClassPower", L["UFs ClassPower"]},
-		{1, "UFs", "AddPower", L["UFs ExtraMana"], true},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
 		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
@@ -323,7 +318,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowUnitPower", "|cff70c0f5"..L["ShowUnitPower"], true},
 		{2, "Nameplate", "UnitList", L["UnitColor List"]},
 		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"], true},
-		{},--blank
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"]},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"], true},
 		{1, "Nameplate", "TankMode", L["Tank Mode"]},
