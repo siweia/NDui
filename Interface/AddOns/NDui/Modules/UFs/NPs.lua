@@ -273,15 +273,15 @@ end
 -- Player Nameplate
 local function PlateVisibility(self, event)
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
-		UIFrameFadeIn(self.Health, .3, self.Health:GetAlpha(), 1)
-		UIFrameFadeIn(self.Health.bg, .3, self.Health:GetAlpha(), 1)
-		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
-		UIFrameFadeIn(self.Power.bg, .3, self.Power:GetAlpha(), 1)
+		UIFrameFadeIn(self, .3, self:GetAlpha(), 1)
+		--UIFrameFadeIn(self.Health.bg, .3, self.Health:GetAlpha(), 1)
+		--UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
+		--UIFrameFadeIn(self.Power.bg, .3, self.Power:GetAlpha(), 1)
 	else
-		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), 0)
-		UIFrameFadeOut(self.Health.bg, 2, self.Health:GetAlpha(), 0)
-		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), 0)
-		UIFrameFadeOut(self.Power.bg, 2, self.Power:GetAlpha(), 0)
+		UIFrameFadeOut(self, 2, self:GetAlpha(), .1)
+		--UIFrameFadeOut(self.Health.bg, 2, self.Health:GetAlpha(), 0)
+		--UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), 0)
+		--UIFrameFadeOut(self.Power.bg, 2, self.Power:GetAlpha(), 0)
 	end
 end
 
@@ -292,7 +292,6 @@ function UF:CreatePlayerPlate()
 
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
-	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
