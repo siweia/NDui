@@ -64,7 +64,7 @@ function module:MicroMenu()
 			end
 		end},
 		{"achievements", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT"), function() ToggleAchievementFrame() end},
-		{"quests", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG"), function() ToggleFrame(WorldMapFrame) end},
+		{"quests", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG"), function() ToggleQuestLog() end},
 		{"guild", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLEGUILDTAB"), function()
 			if IsTrialAccount() then
 				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_RESTRICTED_ACCOUNT_TRIAL)

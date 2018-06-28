@@ -536,11 +536,3 @@ do
 
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
-
--- Temporary fix for GuildControlUI error
-do
-	GuildControlUIRankSettingsFrameChatLabel = CreateFrame("Frame", nil, UIParent)
-	GuildControlUIRankSettingsFrameChatLabel:Hide()
-	GuildControlUIRankSettingsFrameInfoLabel = CreateFrame("Frame", nil, UIParent)
-	GuildControlUIRankSettingsFrameInfoLabel:Hide()
-end
