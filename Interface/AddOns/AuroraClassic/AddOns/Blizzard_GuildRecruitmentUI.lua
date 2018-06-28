@@ -38,7 +38,6 @@ C.themes["Blizzard_GuildRecruitmentUI"] = function()
 	F.StripTextures(CommunitiesGuildRecruitmentFrameRecruitment.CommentFrame.CommentInputFrame)
 	F.CreateBDFrame(CommunitiesGuildRecruitmentFrameRecruitment.CommentFrame.CommentInputFrame, .25)
 
-	F.ReskinScroll(CommunitiesGuildRecruitmentFrameApplicantsContainer.ScrollBar)
 	F.Reskin(CommunitiesGuildRecruitmentFrameApplicants.InviteButton)
 	F.Reskin(CommunitiesGuildRecruitmentFrameApplicants.MessageButton)
 	F.Reskin(CommunitiesGuildRecruitmentFrameApplicants.DeclineButton)
