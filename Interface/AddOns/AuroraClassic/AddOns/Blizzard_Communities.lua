@@ -112,6 +112,7 @@ C.themes["Blizzard_Communities"] = function()
 		F.CreateBDFrame(dialog.Description, .25)
 		F.ReskinCheck(dialog.TypeCheckBox)
 		F.Reskin(dialog.Accept)
+		F.Reskin(dialog.Delete)
 		F.Reskin(dialog.Cancel)
 	end
 
