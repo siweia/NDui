@@ -52,6 +52,7 @@ local function UpdateBar(bar)
 	elseif HasArtifactEquipped() then
 		local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+		xp = xpForNextPoint == 0 and 0 or xp
 		bar:SetStatusBarColor(.9, .8, .6)
 		bar:SetMinMaxValues(0, xpForNextPoint)
 		bar:SetValue(xp)
@@ -158,7 +159,8 @@ local function UpdateTooltip(bar)
 			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
 		end
 		GameTooltip:AddDoubleLine(ARTIFACT_POWER, B.Numb(totalXP).." ("..num..")", .6,.8,1, 1,1,1)
-		GameTooltip:AddDoubleLine(L["Next Trait"], B.Numb(xp).."/"..B.Numb(xpForNextPoint).." ("..floor(xp/xpForNextPoint*100).."%)", .6,.8,1, 1,1,1)
+		local perc = xpForNextPoint ~= 0 and " ("..floor(xp/xpForNextPoint*100).."%)" or ""
+		GameTooltip:AddDoubleLine(L["Next Trait"], B.Numb(xp).."/"..B.Numb(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
 	end
 	GameTooltip:Show()
 end
