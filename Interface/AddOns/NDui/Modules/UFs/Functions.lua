@@ -600,7 +600,7 @@ end
 
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
-		width = 200
+		width = self:GetWidth()
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 5}
 	end
 
@@ -754,7 +754,7 @@ end
 
 function UF:CreateAddPower(self)
 	local bar = CreateFrame("StatusBar", nil, self)
-	bar:SetSize(100, 4)
+	bar:SetSize(150, 4)
 	bar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 	bar:SetStatusBarTexture(DB.normTex)
 	B.CreateSD(bar, 3, 3)
