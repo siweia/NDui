@@ -131,7 +131,11 @@ end
 function UF:CreatePowerBar(self)
 	local power = CreateFrame("StatusBar", nil, self)
 	power:SetStatusBarTexture(DB.normTex)
-	power:SetHeight(retVal(self, 4, 3, 2, 4))
+	if self.mystyle == "PlayerPlate" then
+		power:SetHeight(self:GetHeight())
+	else
+		power:SetHeight(retVal(self, 4, 3, 2, 4))
+	end
 	power:SetWidth(self:GetWidth())
 	power:SetPoint("TOP", self, "BOTTOM", 0, -3)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
@@ -600,8 +604,8 @@ end
 
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
-		width = self:GetWidth()
-		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 5}
+		width, height = self:GetWidth(), self:GetHeight()*2 + 3
+		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 
 	local bars = {}
