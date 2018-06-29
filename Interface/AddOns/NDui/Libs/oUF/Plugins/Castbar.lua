@@ -4,9 +4,9 @@ local B, C, L, DB = unpack(ns)
 local cast = CreateFrame("Frame")
 local channelingTicks = {
 	-- warlock
-	[GetSpellInfo(755)] = 3, 		-- health funnel
-	[GetSpellInfo(198590)] = 6, 	-- drain soul
-	[GetSpellInfo(193439)] = 3, 	-- demon fury
+	[GetSpellInfo(755)] = 3,		-- health funnel
+	[GetSpellInfo(198590)] = 5,		-- drain soul
+	[GetSpellInfo(234153)] = 5,		-- drain life
 	-- druid
 	[GetSpellInfo(740)] = 4,		-- Tranquility
 	-- priest
