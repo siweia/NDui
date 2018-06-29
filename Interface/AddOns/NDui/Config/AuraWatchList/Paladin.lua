@@ -6,6 +6,7 @@ local module = B:GetModule("AurasTable")
 local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 188370, UnitID = "player"},	-- 奉献
+		{AuraID = 197561, UnitID = "player"},	-- 复仇者的勇气
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 853, UnitID = "target", Caster = "player"},		-- 制裁之锤
@@ -48,9 +49,14 @@ local list = {
 		{AuraID = 132403, UnitID = "player"},	-- 正义盾击
 		{AuraID = 152262, UnitID = "player"},	-- 炽天使
 		{AuraID = 221883, UnitID = "player"},	-- 神圣马驹
-		{AuraID = 238996, UnitID = "player"},	-- 正义裁决
 		{AuraID = 184662, UnitID = "player", Value = true},	-- 复仇之盾
 		{AuraID = 209388, UnitID = "player", Value = true},	-- 秩序堡垒
+		{AuraID = 267611, UnitID = "player"},	-- 正义裁决
+		{AuraID = 271581, UnitID = "player"},	-- 神圣审判
+		{AuraID = 114250, UnitID = "player"},	-- 无私自愈
+		{AuraID = 84963, UnitID = "player"},	-- 异端裁决
+		{AuraID = 280375, UnitID = "player"},	-- 多面防御
+		{AuraID = 216331, UnitID = "player"},	-- 复仇十字军
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 53563, UnitID = "focus", Caster = "player"},	-- 圣光道标

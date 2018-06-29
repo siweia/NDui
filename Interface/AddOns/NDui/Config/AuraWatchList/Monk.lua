@@ -58,6 +58,9 @@ local list = {
 		{AuraID = 213341, UnitID = "player"},	-- 胆略
 		{AuraID = 235054, UnitID = "player"},	-- 皇帝的容电皮甲
 		{AuraID = 124682, UnitID = "player", Caster = "player"},	-- 氤氲之雾
+		{AuraID = 261769, UnitID = "player"},	-- 铁布衫
+		{AuraID = 195630, UnitID = "player"},	-- 醉拳大师
+		{AuraID = 115295, UnitID = "player", Value = true},			-- 金钟罩
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 115078, UnitID = "focus", Caster = "player"},		-- 分筋错骨

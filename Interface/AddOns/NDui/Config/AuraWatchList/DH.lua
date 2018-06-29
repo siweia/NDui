@@ -26,6 +26,7 @@ local list = {
 		{AuraID = 207685, UnitID = "target", Caster = "player"},	-- 悲苦咒符
 		{AuraID = 211881, UnitID = "target", Caster = "player"},	-- 邪能爆发
 		{AuraID = 247456, UnitID = "target", Caster = "player"},	-- 脆弱
+		{AuraID = 258860, UnitID = "target", Caster = "player"},	-- 黑暗鞭笞
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 162264, UnitID = "player"},	-- 恶魔变形
@@ -56,6 +57,7 @@ local list = {
 		{AuraID = 216758, UnitID = "player"},	-- 无尽吸血
 		{AuraID = 227225, UnitID = "player", Value = true},	-- 灵魂屏障
 		{AuraID = 218561, UnitID = "player", Value = true},	-- 虹吸能量
+		{AuraID = 258920, UnitID = "player"},	-- 献祭光环
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 	},

@@ -30,6 +30,7 @@ local list = {
 		{AuraID = 191748, UnitID = "target", Caster = "player"},	-- 诸界之灾
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
+		{AuraID = 48265, UnitID = "pet"},		-- 死亡脚步
 		{AuraID = 63560, UnitID = "pet"},		-- 黑暗突变
 		{AuraID = 55233, UnitID = "player"},	-- 吸血鬼之血
 		{AuraID = 48707, UnitID = "player"},	-- 反魔法护罩
@@ -57,6 +58,13 @@ local list = {
 		{AuraID = 246995, UnitID = "player"},	-- 食尸鬼主宰，2T20
 		{AuraID = 193320, UnitID = "player", Value = true},	-- 永恒脐带
 		{AuraID = 219809, UnitID = "player", Value = true},	-- 墓石
+		{AuraID = 48743, UnitID = "player", Value = true},	-- 天灾契约
+		{AuraID = 115989, UnitID = "player"},	-- 黑暗虫群
+		{AuraID = 212552, UnitID = "player"},	-- 幻影步
+		{AuraID = 207289, UnitID = "player"},	-- 邪恶狂乱
+		{AuraID = 273947, UnitID = "player"},	-- 鲜血禁闭
+		{AuraID = 253595, UnitID = "player", Combat = true},	-- 酷寒突袭
+		{AuraID = 281209, UnitID = "player", Combat = true},	-- 冷酷之心
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 55078, UnitID = "focus", Caster = "player"},	-- 血之疫病

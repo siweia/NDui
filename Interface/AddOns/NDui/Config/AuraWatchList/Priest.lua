@@ -34,6 +34,7 @@ local list = {
 		{AuraID = 204213, UnitID = "target", Caster = "player"},	-- 净化邪恶
 		{AuraID = 17, UnitID = "target", Caster = "player", Value = true},		-- 真言术：盾
 		{AuraID = 208772, UnitID = "target", Caster = "player", Value = true},	-- 惩击
+		{AuraID = 271466, UnitID = "target", Caster = "player", Value = true},	-- 微光屏障
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 27827, UnitID = "player"},	-- 救赎之魂
@@ -60,6 +61,7 @@ local list = {
 		{AuraID = 253437, UnitID = "player"},	-- T21神圣2
 		{AuraID = 253443, UnitID = "player"},	-- T21神圣4
 		{AuraID = 216135, UnitID = "player"},	-- 戒律法袍
+		{AuraID = 271466, UnitID = "player"},	-- 微光屏障
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 139, UnitID = "focus", Caster = "player"},	-- 恢复

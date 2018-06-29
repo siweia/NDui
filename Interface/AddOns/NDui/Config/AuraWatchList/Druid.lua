@@ -90,6 +90,8 @@ local list = {
 		{AuraID = 253575, UnitID = "player"}, 	-- T21熊德
 		{AuraID = 201671, UnitID = "player", Combat = true},	-- 血污毛皮
 		{AuraID = 203975, UnitID = "player", Combat = true},	-- 大地守卫者
+		{AuraID = 252216, UnitID = "player"}, 	-- 猛虎冲刺
+		{AuraID = 279709, UnitID = "player"}, 	-- 星辰领主
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 774, UnitID = "focus", Caster = "player"},	-- 回春术
