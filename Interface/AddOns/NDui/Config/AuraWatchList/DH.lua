@@ -6,7 +6,6 @@ local module = B:GetModule("AurasTable")
 local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 207693, UnitID = "player"},	-- 灵魂盛宴
-		{AuraID = 178740, UnitID = "player"},	-- 献祭光环
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 198813, UnitID = "target", Caster = "player"},	-- 复仇回避
@@ -55,8 +54,9 @@ local list = {
 		{AuraID = 247253, UnitID = "player"},	-- 剑刃扭转
 		{AuraID = 252165, UnitID = "player"},	-- 浩劫T21
 		{AuraID = 216758, UnitID = "player"},	-- 无尽吸血
-		{AuraID = 227225, UnitID = "player", Value = true},	-- 灵魂屏障
+		{AuraID = 263648, UnitID = "player", Value = true},	-- 灵魂壁障
 		{AuraID = 218561, UnitID = "player", Value = true},	-- 虹吸能量
+		{AuraID = 178740, UnitID = "player"},	-- 献祭光环
 		{AuraID = 258920, UnitID = "player"},	-- 献祭光环
 	},
 	["Focus Aura"] = {		-- 焦点光环组
