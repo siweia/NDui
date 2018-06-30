@@ -97,6 +97,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			"InterfaceOptionsMousePanelInvertMouse",
 			"InterfaceOptionsMousePanelEnableMouseSpeed",
 			"InterfaceOptionsMousePanelClickToMove",
+			"InterfaceOptionsMousePanelLockCursorToScreen",
 			"InterfaceOptionsAccessibilityPanelMovePad",
 			"InterfaceOptionsAccessibilityPanelCinematicSubtitles",
 			"InterfaceOptionsAccessibilityPanelColorblindMode"
