@@ -340,7 +340,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Auras", "Statue", L["Enable Statue"]},
 		{1, "Auras", "Totems", L["Enable Totems"]},
 		{1, "Auras", "DestroyTotems", L["Destroy Totems"], true},
-		{1, "Auras", "Marksman", L["Enable Marksman"]},
+		--{1, "Auras", "Marksman", L["Enable Marksman"]},
 	},
 	[7] = {
 		{1, "Skins", "RM", L["Raid Manger"]},
