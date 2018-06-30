@@ -22,7 +22,7 @@ local function CreatePlayerStyle(self)
 	UF:CreateMirrorBar()
 	UF:CreateAddPower(self)
 
-	if not NDuiDB["Nameplate"]["ShowPlayerPlate"] then UF:CreateClassPower(self) end
+	if not NDuiDB["Nameplate"]["Enable"] or not NDuiDB["Nameplate"]["ShowPlayerPlate"] then UF:CreateClassPower(self) end
 	if not NDuiDB["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 	if NDuiDB["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
 	if NDuiDB["UFs"]["SwingBar"] then UF:CreateSwing(self) end

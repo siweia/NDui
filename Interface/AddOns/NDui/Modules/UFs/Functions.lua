@@ -19,7 +19,7 @@ local function retVal(self, val1, val2, val3, val4)
 	elseif self.mystyle == "focus" then
 		return val2
 	else
-		if (self.mystyle == "nameplate" or self.mystyle == "PlayerPlate") and val4 then
+		if self.mystyle == "nameplate" and val4 then
 			return val4
 		else
 			return val3
