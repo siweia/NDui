@@ -64,7 +64,7 @@ local list = {
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 115078, UnitID = "focus", Caster = "player"},		-- 分筋错骨
-		{AuraID = 119611, UnitID = "target", Caster = "player"},	-- 复苏之雾
+		{AuraID = 119611, UnitID = "focus", Caster = "player"},	-- 复苏之雾
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
 		{SlotID = 13, UnitID = "player"},		-- 饰品1
