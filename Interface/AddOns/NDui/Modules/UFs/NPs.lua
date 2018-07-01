@@ -273,9 +273,21 @@ end
 -- Player Nameplate
 local function PlateVisibility(self, event)
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
-		UIFrameFadeIn(self, .3, self:GetAlpha(), 1)
+		for i = 1, self:GetNumChildren() do
+			local child = select(i, self:GetChildren())
+			if child:IsShown() then
+				UIFrameFadeIn(child, .3, child:GetAlpha(), 1)
+			end
+			UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), 1)
+		end
 	else
-		UIFrameFadeOut(self, 2, self:GetAlpha(), .1)
+		for i = 1, self:GetNumChildren() do
+			local child = select(i, self:GetChildren())
+			if child:IsShown() then
+				UIFrameFadeOut(child, 2, child:GetAlpha(), .1)
+			end
+			UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), .1)
+		end
 	end
 end
 
