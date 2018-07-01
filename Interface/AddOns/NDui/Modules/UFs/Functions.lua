@@ -391,6 +391,10 @@ local function postCreateIcon(element, button)
 	B.CreateSD(button, 2, 2)
 	button.overlay:SetTexture(nil)
 
+	button.stealable:SetTexture(DB.textures.pushed)
+	button.stealable:SetPoint("TOPLEFT", -2, 2)
+	button.stealable:SetPoint("BOTTOMRIGHT", 2, -2)
+
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .3)
 	button.HL:SetAllPoints()
@@ -443,7 +447,13 @@ end
 
 local function customFilter(element, unit, button, name, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
-	if style == "raid" then
+	if name and spellID == 209859 then
+		element.bolster = element.bolster + 1
+		if not element.bolsterIndex then
+			element.bolsterIndex = button
+			return true
+		end
+	elseif style == "raid" then
 		if C.RaidBuffs[DB.MyClass] and C.RaidBuffs[DB.MyClass][spellID] and button.isPlayer then
 			return true
 		elseif C.RaidBuffs["ALL"][spellID] then
@@ -452,12 +462,6 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 	elseif style == "nameplate" then
 		if UnitIsUnit("player", unit) then
 			return false
-		elseif name and spellID == 209859 then
-			element.bolster = element.bolster + 1
-			if not element.bolsterIndex then
-				element.bolsterIndex = button
-				return true
-			end
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
 		elseif C.BlackList and C.BlackList[spellID] then
@@ -512,8 +516,6 @@ function UF:CreateAuras(self)
 		bu.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 		bu.gap = false
 		bu.disableMouse = true
-		bu.PreUpdate = bolsterPreUpdate
-		bu.PostUpdate = bolsterPostUpdate
 	end
 
 	local width = self:GetWidth()
@@ -528,6 +530,8 @@ function UF:CreateAuras(self)
 	bu.PostCreateIcon = postCreateIcon
 	bu.PostUpdateIcon = postUpdateIcon
 	bu.PostUpdateGapIcon = postUpdateGapIcon
+	bu.PreUpdate = bolsterPreUpdate
+	bu.PostUpdate = bolsterPostUpdate
 
 	self.Auras = bu
 end
