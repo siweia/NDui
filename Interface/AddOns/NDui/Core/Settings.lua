@@ -113,11 +113,11 @@ local function ForceChatSettings()
 	for i = 1, 10 do
 		local cf = _G["ChatFrame"..i]
 		FCF_SetWindowAlpha(cf, 0)
-		ChatFrame_RemoveMessageGroup(cf,"CHANNEL")
+		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
 	end
-	local channels = {"SAY","EMOTE","YELL","GUILD","OFFICER","GUILD_ACHIEVEMENT","ACHIEVEMENT",
-	"WHISPER","PARTY","PARTY_LEADER","RAID","RAID_LEADER","RAID_WARNING","INSTANCE_CHAT",
-	"INSTANCE_CHAT_LEADER","CHANNEL1","CHANNEL2","CHANNEL3","CHANNEL4","CHANNEL5","CHANNEL6","CHANNEL7",
+	local channels = {"SAY", "EMOTE", "YELL", "GUILD", "OFFICER", "GUILD_ACHIEVEMENT", "ACHIEVEMENT",
+	"WHISPER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "RAID_WARNING", "INSTANCE_CHAT",
+	"INSTANCE_CHAT_LEADER", "CHANNEL1", "CHANNEL2", "CHANNEL3", "CHANNEL4", "CHANNEL5", "CHANNEL6", "CHANNEL7",
 	}	
 	for _, v in ipairs(channels) do
 		ToggleChatColorNamesByClassGroup(true, v)
