@@ -37,12 +37,50 @@ local function CreateMicroButton(parent, data)
 	end
 end
 
+local function ReanchorAlert()
+	if TalentMicroButtonAlert then
+		TalentMicroButtonAlert:ClearAllPoints()
+		TalentMicroButtonAlert:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -220, 40)
+		TalentMicroButtonAlert:SetScript("OnMouseUp", function()
+			if not PlayerTalentFrame then LoadAddOn("Blizzard_TalentUI") end
+			ToggleFrame(PlayerTalentFrame)
+		end)
+	end
+
+	if EJMicroButtonAlert then
+		EJMicroButtonAlert:ClearAllPoints()
+		EJMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 40, 40)
+		EJMicroButtonAlert:SetScript("OnMouseUp", function()
+			if not EncounterJournal then LoadAddOn("Blizzard_EncounterJournal") end
+			ToggleFrame(EncounterJournal)
+		end)
+	end
+
+	if CollectionsMicroButtonAlert then
+		CollectionsMicroButtonAlert:ClearAllPoints()
+		CollectionsMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 65, 40)
+		CollectionsMicroButtonAlert:SetScript("OnMouseUp", function()
+			if not CollectionsJournal then LoadAddOn("Blizzard_Collections") end
+			ToggleFrame(CollectionsJournal)
+			CollectionsJournal_SetTab(CollectionsJournal, 2)
+		end)
+	end
+
+	if CharacterMicroButtonAlert then
+		CharacterMicroButtonAlert:ClearAllPoints()
+		CharacterMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", -175, 40)
+		CharacterMicroButtonAlert.SetPoint = B.Dummy
+	end
+end
+
 function module:MicroMenu()
 	-- Taint Fix
 	ToggleAllBags()
 	ToggleAllBags()
 	ToggleFrame(SpellBookFrame)
 	ToggleFrame(SpellBookFrame)
+
+	ReanchorAlert()
 
 	if not NDuiDB["Skins"]["MicroMenu"] then return end
 

@@ -120,35 +120,6 @@ function module:ReskinRegions()
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
 	end)
 
-	-- Micro Button Alerts
-	if TalentMicroButtonAlert then
-		TalentMicroButtonAlert:ClearAllPoints()
-		TalentMicroButtonAlert:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -220, 40)
-		TalentMicroButtonAlert:SetScript("OnMouseUp", function()
-			if not PlayerTalentFrame then LoadAddOn("Blizzard_TalentUI") end
-			ToggleFrame(PlayerTalentFrame)
-		end)
-	end
-
-	if EJMicroButtonAlert then
-		EJMicroButtonAlert:ClearAllPoints()
-		EJMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 40, 40)
-		EJMicroButtonAlert:SetScript("OnMouseUp", function()
-			if not EncounterJournal then LoadAddOn("Blizzard_EncounterJournal") end
-			ToggleFrame(EncounterJournal)
-		end)
-	end
-
-	if CollectionsMicroButtonAlert then
-		CollectionsMicroButtonAlert:ClearAllPoints()
-		CollectionsMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 65, 40)
-		CollectionsMicroButtonAlert:SetScript("OnMouseUp", function()
-			if not CollectionsJournal then LoadAddOn("Blizzard_Collections") end
-			ToggleFrame(CollectionsJournal)
-			CollectionsJournal_SetTab(CollectionsJournal, 2)
-		end)
-	end
-
 	if TicketStatusFrame then
 		TicketStatusFrame:ClearAllPoints()
 		TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", -400, -20)
