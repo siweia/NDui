@@ -57,8 +57,9 @@ function module:QuestTracker()
 				end
 				button.Text:SetText(title)
 				button.Text:SetPoint("TOPLEFT", 24, -5)
-				button.Text:SetWidth(216)
+				button.Text:SetWidth(205)
 				button.Text:SetWordWrap(false)
+				button.Check:SetPoint("LEFT", button.Text, button.Text:GetWrappedWidth(), 0)
 			end
 		end
 	end
