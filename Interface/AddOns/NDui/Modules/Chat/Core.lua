@@ -8,10 +8,11 @@ local function skinChat(self)
 	if not self or (self and self.styled) then return end
 
 	local name = self:GetName()
+	local fontSize = select(2, self:GetFont())
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetMaxResize(maxWidth, maxHeight)
 	self:SetMinResize(100, 50)
-	self:SetFont(unpack(DB.Font))
+	self:SetFont(DB.Font[1], fontSize, DB.Font[3])
 	self:SetShadowColor(0, 0, 0, 0)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
