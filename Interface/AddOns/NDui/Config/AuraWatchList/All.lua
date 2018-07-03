@@ -51,6 +51,7 @@ local list = {
 		-- 艾泽里特特质
 		{AuraID = 273685, UnitID = "player"},	-- 缜密计谋
 		{AuraID = 273714, UnitID = "player"},	-- 争分夺秒
+		{AuraID = 274443, UnitID = "player"},	-- 死亡之舞
 		-- LEG药水附魔
 		{AuraID = 188027, UnitID = "player"},	-- 致命优雅，远程
 		{AuraID = 188028, UnitID = "player"},	-- 上古战神，近战
