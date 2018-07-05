@@ -591,17 +591,24 @@ end
 local margin = C.UFs.BarMargin
 local width, height = unpack(C.UFs.BarSize)
 
-local function postUpdateClassPower(element, _, max, diff, event)
-	if(diff or event == "ClassPowerEnable") then
-		if max <= 6 then
+local function postUpdateClassPower(element, cur, max, diff, powerType, event)
+	if diff or event == "ClassPowerEnable" then
+		for i = 1, 6 do
+			element[i]:SetWidth((width - (max-1)*margin)/max)
+		end
+	end
+
+	if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+		if (powerType == "COMBO_POINTS" or powerType == "HOLY_POWER") and element.__owner.unit ~= "vehicle" and cur == max then
 			for i = 1, 6 do
-				element[i]:SetWidth((width - (max-1)*margin)/max)
+				if element[i]:IsShown() then
+					ActionButton_ShowOverlayGlow(element[i].glow)
+				end
 			end
 		else
-			for i = 1, 5 do
-				element[i]:SetWidth((width - (5-1)*margin)/5)
+			for i = 1, 6 do
+				ActionButton_HideOverlayGlow(element[i].glow)
 			end
-			element[6]:Hide()
 		end
 	end
 end
@@ -614,7 +621,7 @@ function UF:CreateClassPower(self)
 
 	local bars = {}
 	for i = 1, 6 do
-		bars[i] = CreateFrame("StatusBar", nil, self)
+		bars[i] = CreateFrame("StatusBar", nil, self.Health)
 		bars[i]:SetHeight(height)
 		bars[i]:SetWidth((width - 5*margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
@@ -630,6 +637,12 @@ function UF:CreateClassPower(self)
 			bars[i].bg:SetAllPoints()
 			bars[i].bg:SetTexture(DB.normTex)
 			bars[i].bg.multiplier = .2
+		end
+
+		if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+			bars[i].glow = CreateFrame("Frame", nil, bars[i])
+			bars[i].glow:SetPoint("TOPLEFT", -3, 2)
+			bars[i].glow:SetPoint("BOTTOMRIGHT", 3, -2)
 		end
 	end
 
