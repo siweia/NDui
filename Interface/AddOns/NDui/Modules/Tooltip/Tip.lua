@@ -112,6 +112,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	if UnitExists(unit) then
 		local hexColor = B.HexRGB(B.UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
+		if ricon and ricon > 8 then ricon = nil end
 		if ricon then
 			local text = GameTooltipTextLeft1:GetText()
 			GameTooltipTextLeft1:SetFormattedText(("%s %s"), ICON_LIST[ricon].."18|t", text)
@@ -207,6 +208,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
 		if UnitExists(unit.."target") then
 			local tarRicon = GetRaidTargetIndex(unit.."target")
+			if tarRicon and tarRicon > 8 then tarRicon = nil end
 			local tar = ("%s%s"):format((tarRicon and ICON_LIST[tarRicon].."10|t") or "", getTarget(unit.."target"))
 			self:AddLine(TARGET..": "..tar)
 		end
