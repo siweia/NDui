@@ -76,7 +76,7 @@ local function FindQuestComplete()
 	for i = 1, GetNumQuestLogEntries() do
 		local title, _, _, _, _, isComplete, _, questID = GetQuestLogTitle(i)
 		local link = GetQuestLink(questID)
-		local _, _, worldQuest = GetQuestTagInfo(questID)
+		local worldQuest = select(3, GetQuestTagInfo(questID))
 		if title and isComplete and not completedQuest[questID] and not worldQuest then
 			if initComplete then
 				sendQuestMsg(completeText(link))
