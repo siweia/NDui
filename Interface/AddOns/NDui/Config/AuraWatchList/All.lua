@@ -52,6 +52,14 @@ local list = {
 		{AuraID = 273685, UnitID = "player"},	-- 缜密计谋
 		{AuraID = 273714, UnitID = "player"},	-- 争分夺秒
 		{AuraID = 274443, UnitID = "player"},	-- 死亡之舞
+		{AuraID = 280433, UnitID = "player"},	-- 呼啸狂沙
+		{AuraID = 268953, UnitID = "player", Text = RAID_BUFF_6},	-- 元素回旋 爆击
+		{AuraID = 268954, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
+		{AuraID = 268955, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
+		{AuraID = 268956, UnitID = "player", Text = RAID_BUFF_8},	-- 全能
+		{AuraID = 280780, UnitID = "player"},	-- 战斗荣耀
+		{AuraID = 280787, UnitID = "player"},	-- 反击之怒
+		{AuraID = 279928, UnitID = "player"},	-- 大地链接
 		-- LEG药水附魔
 		{AuraID = 188027, UnitID = "player"},	-- 致命优雅，远程
 		{AuraID = 188028, UnitID = "player"},	-- 上古战神，近战
