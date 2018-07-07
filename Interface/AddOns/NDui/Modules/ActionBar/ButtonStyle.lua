@@ -293,9 +293,12 @@ function B:StyleAllActionButtons(cfg)
 	SpellFlyoutHorizontalBackground:SetTexture(nil)
 	SpellFlyoutVerticalBackground:SetTexture(nil)
 	local function checkForFlyoutButtons()
-		local NUM_FLYOUT_BUTTONS = 13
-		for i = 1, NUM_FLYOUT_BUTTONS do
-			B:StyleActionButton(_G["SpellFlyoutButton"..i], cfg)
+		local i = 1
+		local button = _G["SpellFlyoutButton"..i]
+		while button and button:IsShown() do
+			B:StyleActionButton(button, cfg)
+			i = i + 1
+			button = _G["SpellFlyoutButton"..i]
 		end
 	end
 	SpellFlyout:HookScript("OnShow", checkForFlyoutButtons)
