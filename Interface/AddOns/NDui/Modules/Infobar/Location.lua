@@ -4,7 +4,6 @@ if not C.Infobar.Location then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.LocationPos)
-local moduleMap = B:GetModule("Maps")
 
 local zoneInfo = {
 	sanctuary = {SANCTUARY_TERRITORY, {.41, .8, .94}},
@@ -46,23 +45,27 @@ local function isInvasionPoint()
 	end
 end
 
+local function UpdateCoords(self, elapsed)
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed > .1 then
+		RunScript("InfobarCoords = C_Map.GetPlayerMapPosition(0, 'player')")
+		if InfobarCoords then
+			coordX, coordY = InfobarCoords.x, InfobarCoords.y
+		else
+			coordX, coordY = 0, 0
+			self:SetScript("OnUpdate", nil)
+		end
+		self:GetScript("OnEnter")(self)
+
+		self.elapsed = 0
+	end
+end
+
 info.onEnter = function(self)
+	self:SetScript("OnUpdate", UpdateCoords)
+
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
-
-	local x, y = moduleMap:GetPlayerMapPos(C_Map.GetBestMapForUnit("player"))
-	if x then
-		self:SetScript("OnUpdate", function(self, elapsed)
-			self.timer = (self.timer or 0) + elapsed
-			if self.timer > .1 then
-				coordX, coordY = x, y
-				self:GetScript("OnEnter")(self)
-				self.timer = 0
-			end
-		end)
-	else
-		coordX, coordY = 0, 0
-	end
 	GameTooltip:AddLine(format("%s |cffffffff(%s)", zone, formatCoords()), 0,.6,1)
 
 	if pvp[1] and not IsInInstance() then
@@ -83,8 +86,8 @@ info.onEnter = function(self)
 	GameTooltip:Show()
 end
 
-info.onLeave = function()
-	info:SetScript("OnUpdate", nil)
+info.onLeave = function(self)
+	self:SetScript("OnUpdate", nil)
 	GameTooltip:Hide()
 end
 
