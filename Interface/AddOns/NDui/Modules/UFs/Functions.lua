@@ -569,6 +569,7 @@ function UF:CreateDebuffs(self)
 		bu.onlyShowPlayer = false
 		bu.num = 14
 		bu.iconsPerRow = 7
+		bu.showDebuffType = true
 	elseif self.mystyle == "boss" or self.mystyle == "arena" then
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 		bu.onlyShowPlayer = true
