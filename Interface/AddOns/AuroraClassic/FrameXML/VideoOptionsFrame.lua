@@ -102,6 +102,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 
 		local sliders = {
+			"Display_RenderScaleSlider",
 			"Graphics_Quality",
 			"Graphics_ViewDistanceSlider",
 			"Graphics_EnvironmentalDetailSlider",
@@ -116,7 +117,6 @@ tinsert(C.themes["AuroraClassic"], function()
 			"Advanced_GammaSlider",
 			"Advanced_ContrastSlider",
 			"Advanced_BrightnessSlider",
-			"Advanced_RenderScaleSlider",
 			"AudioOptionsSoundPanelMasterVolume",
 			"AudioOptionsSoundPanelSoundVolume",
 			"AudioOptionsSoundPanelMusicVolume",
