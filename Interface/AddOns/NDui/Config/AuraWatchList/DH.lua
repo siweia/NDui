@@ -1,11 +1,11 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 -- DH的法术监控
 local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 207693, UnitID = "player"},	-- 灵魂盛宴
-		{AuraID = 178740, UnitID = "player"},	-- 献祭光环
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 198813, UnitID = "target", Caster = "player"},	-- 复仇回避
@@ -25,6 +25,7 @@ local list = {
 		{AuraID = 207685, UnitID = "target", Caster = "player"},	-- 悲苦咒符
 		{AuraID = 211881, UnitID = "target", Caster = "player"},	-- 邪能爆发
 		{AuraID = 247456, UnitID = "target", Caster = "player"},	-- 脆弱
+		{AuraID = 258860, UnitID = "target", Caster = "player"},	-- 黑暗鞭笞
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 162264, UnitID = "player"},	-- 恶魔变形
@@ -37,7 +38,6 @@ local list = {
 		{AuraID = 247938, UnitID = "player"},	-- 混乱之刃
 		{AuraID = 188499, UnitID = "player"},	-- 刃舞
 		{AuraID = 210152, UnitID = "player"},	-- 刃舞
-		{AuraID = 218256, UnitID = "player"},	-- 强化结界
 		{AuraID = 207693, UnitID = "player"},	-- 灵魂盛宴
 		{AuraID = 203819, UnitID = "player"},	-- 恶魔尖刺
 		{AuraID = 212988, UnitID = "player"},	-- 痛苦使者
@@ -54,8 +54,10 @@ local list = {
 		{AuraID = 247253, UnitID = "player"},	-- 剑刃扭转
 		{AuraID = 252165, UnitID = "player"},	-- 浩劫T21
 		{AuraID = 216758, UnitID = "player"},	-- 无尽吸血
-		{AuraID = 227225, UnitID = "player", Value = true},	-- 灵魂屏障
+		{AuraID = 263648, UnitID = "player", Value = true},	-- 灵魂壁障
 		{AuraID = 218561, UnitID = "player", Value = true},	-- 虹吸能量
+		{AuraID = 178740, UnitID = "player"},	-- 献祭光环
+		{AuraID = 258920, UnitID = "player"},	-- 献祭光环
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 	},

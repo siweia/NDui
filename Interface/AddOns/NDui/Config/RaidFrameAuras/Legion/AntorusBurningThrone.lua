@@ -1,5 +1,6 @@
-local module = NDui:GetModule("AurasTable")
-if not module then return end
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 local TIER = 7 -- Legion
 local INSTANCE = 946 -- 燃烧王座
@@ -113,10 +114,10 @@ BOSS = 2031 -- 寂灭者阿古斯
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248167)	-- 死亡之雾
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248396)	-- 灵魂凋零
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248499)	-- 巨镰横扫
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 258646)	-- 天空之赐
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 253903)	-- 天空之力
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 258647)	-- 海洋之赐
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 253901)	-- 海洋之力
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 258646)	-- 天空之赐
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 253903)	-- 天空之力
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 258647)	-- 海洋之赐
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 253901)	-- 海洋之力
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 250669)	-- 灵魂爆发
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 251570)	-- 灵魂炸弹
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 255199)	-- 阿格拉玛的化身

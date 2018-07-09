@@ -102,7 +102,7 @@
 		</Backdrop>
 		<Layers>
 			<Layer level="ARTWORK">
-				<Texture name="$parentHeader" file="" alpha="0">
+				<Texture name="$parentHeader" alpha="0">
 					<Size>
 						<AbsDimension x="300" y="64"/>
 					</Size>

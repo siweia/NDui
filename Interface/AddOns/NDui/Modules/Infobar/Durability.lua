@@ -1,7 +1,8 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.Durability then return end
 
-local module = NDui:GetModule("Infobar")
+local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.DurabilityPos)
 
 local localSlots = {
@@ -129,8 +130,12 @@ end
 info.onLeave = function() GameTooltip:Hide() end
 
 -- Auto repair
-NDui:EventFrame{"MERCHANT_SHOW"}:SetScript("OnEvent", function()
-	if NDuiADB["RepairType"] ~= 0 and CanMerchantRepair() then
+local isShown
+local function autoRepair(event)
+	if event == "MERCHANT_SHOW" and not isShown then
+		isShown = true
+		if NDuiADB["RepairType"] == 0 or not CanMerchantRepair() then return end
+
 		local cost = GetRepairAllCost()
 		if cost > 0 then
 			local money = GetMoney()
@@ -139,23 +144,22 @@ NDui:EventFrame{"MERCHANT_SHOW"}:SetScript("OnEvent", function()
 				if guildMoney > GetGuildBankMoney() then
 					guildMoney = GetGuildBankMoney()
 				end
-				if guildMoney >= cost and CanGuildBankRepair() then
+				if guildMoney >= cost and CanGuildBankRepair() or guildMoney == 0 and IsGuildLeader() then
 					RepairAllItems(1)
-					print(format("|cff99CCFF"..L["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
-					return
-				elseif guildMoney == 0 and IsGuildLeader() then
-					RepairAllItems(1)
-					print(format("|cff99CCFF"..L["Repair cost covered by G-Bank"]..":|r %s", GetMoneyString(cost)))
-					return
+					print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(cost)))
+				end
+			else
+				if money > cost then
+					RepairAllItems()
+					print(format(DB.InfoColor.."%s:|r %s", L["Repair cost"], GetMoneyString(cost)))
+				else
+					print(DB.InfoColor..L["Repair error"])
 				end
 			end
-
-			if money > cost then
-				RepairAllItems()
-				print(format("|cff99CCFF"..L["Repair cost"]..":|r %s", GetMoneyString(cost)))
-			else
-				print("|cff99CCFF"..L["Go farm newbie"].."|r")
-			end
 		end
+	elseif event == "MERCHANT_CLOSED" then
+		isShown = false
 	end
-end)
+end
+B:RegisterEvent("MERCHANT_SHOW", autoRepair)
+B:RegisterEvent("MERCHANT_CLOSED", autoRepair)

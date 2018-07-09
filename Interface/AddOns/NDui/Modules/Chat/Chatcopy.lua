@@ -1,10 +1,30 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Chat")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Chat")
 
 function module:ChatCopy()
+	-- Custom ChatMenu
+	local menu = CreateFrame("Frame", nil, UIParent)
+	menu:SetSize(25, 100)
+	menu:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 10, 0)
+	menu:SetShown(NDuiDB["Chat"]["ChatMenu"])
+
+	ChatFrameMenuButton:ClearAllPoints()
+	ChatFrameMenuButton:SetPoint("TOP", menu)
+	ChatFrameMenuButton:SetParent(menu)
+	ChatFrameChannelButton:ClearAllPoints()
+	ChatFrameChannelButton:SetPoint("TOP", ChatFrameMenuButton, "BOTTOM", 0, -2)
+	ChatFrameChannelButton:SetParent(menu)
+	ChatFrameToggleVoiceDeafenButton:SetParent(menu)
+	ChatFrameToggleVoiceMuteButton:SetParent(menu)
+	QuickJoinToastButton:SetParent(menu)
+	ChatAlertFrame:ClearAllPoints()
+	ChatAlertFrame:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 5, 25)
+
+	-- Chat Copy
 	local lines = {}
 	local frame = CreateFrame("Frame", "NDuiChatCopy", UIParent)
-	frame:SetPoint("CENTER", UIParent, "CENTER")
+	frame:SetPoint("CENTER")
 	frame:SetSize(700, 400)
 	frame:Hide()
 	frame:SetFrameStrata("DIALOG")
@@ -28,44 +48,49 @@ function module:ChatCopy()
 	editBox:SetScript("OnEscapePressed", function(f) f:GetParent():GetParent():Hide() f:SetText("") end)
 	scrollArea:SetScrollChild(editBox)
 
-	local function copyFunc()
-		local cf = SELECTED_DOCK_FRAME
-		local _, size = cf:GetFont()
-		FCF_SetChatWindowFontSize(cf, cf, .01)
-		local ct = 1
-		for i = select("#", cf.FontStringContainer:GetRegions()), 1, -1 do
-			local region = select(i, cf.FontStringContainer:GetRegions())
-			if region:GetObjectType() == "FontString" then
-				if region:GetText() ~= nil then
-					lines[ct] = tostring(region:GetText())
+	local function copyFunc(_, btn)
+		if btn == "LeftButton" then
+			if not frame:IsShown() then
+				local cf = SELECTED_DOCK_FRAME
+				local _, size = cf:GetFont()
+				FCF_SetChatWindowFontSize(cf, cf, .01)
+				frame:Show()
+				local ct = 1
+				for i = 1, cf:GetNumMessages() do
+					local message = cf:GetMessageInfo(i)
+					lines[ct] = tostring(message)
 					ct = ct + 1
 				end
+				local lineCt = ct - 1
+				local text = table.concat(lines, "\n", 1, lineCt)
+				FCF_SetChatWindowFontSize(cf, cf, size)
+				editBox:SetText(text)
+				wipe(lines)
+			else
+				frame:Hide()
 			end
+		elseif btn == "RightButton" then
+			ToggleFrame(menu)
+			NDuiDB["Chat"]["ChatMenu"] = menu:IsShown()
 		end
-		local lineCt = ct - 1
-		local text = table.concat(lines, "\n", 1, lineCt)
-		FCF_SetChatWindowFontSize(cf, cf, size)
-		frame:Show()
-		editBox:SetText(text)
-		editBox:HighlightText(0)
-		wipe(lines)
 	end
 
 	local copy = CreateFrame("Button", nil, UIParent)
 	copy:SetPoint("BOTTOMLEFT", 370, 30)
 	copy:SetSize(20, 20)
-	copy:SetAlpha(.2)
+	copy:SetAlpha(.5)
 	copy.Icon = copy:CreateTexture(nil, "ARTWORK")
 	copy.Icon:SetAllPoints()
 	copy.Icon:SetTexture(DB.copyTex)
-	copy:SetScript("OnDoubleClick", copyFunc)
-	B.CreateGT(copy, "ANCHOR_RIGHT", L["Chat Copy"], "system")
+	copy:RegisterForClicks("AnyUp")
+	copy:SetScript("OnClick", copyFunc)
+	B.AddTooltip(copy, "ANCHOR_RIGHT", L["Chat Copy"])
 	copy:HookScript("OnEnter", function() copy:SetAlpha(1) end)
-	copy:HookScript("OnLeave", function() copy:SetAlpha(.2) end)
+	copy:HookScript("OnLeave", function() copy:SetAlpha(.5) end)
 
 	-- Aurora Reskin
-	if IsAddOnLoaded("Aurora") then
-		local F = unpack(Aurora)
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
 		F.ReskinClose(frame.close)
 		F.ReskinScroll(ChatCopyScrollFrameScrollBar)
 	end

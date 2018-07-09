@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Auras")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Auras")
 
 local BuffFrame = BuffFrame
 local buffsPerRow, buffSize, margin, offset = C.Auras.IconsPerRow, C.Auras.IconSize - 2, C.Auras.Spacing, 12
@@ -25,6 +26,19 @@ function module:OnLogin()
 	end
 	TempEnchant3:Hide()
 	BuffFrame.ignoreFramePositionManager = true
+
+	-- Elements
+	if DB.MyClass == "DEATHKNIGHT" then
+		self:BloodyHell()
+	elseif DB.MyClass == "HUNTER" then
+		self:Marksman()
+	elseif DB.MyClass == "MONK" then
+		self:Stagger()
+		self:MonkStatue()
+	elseif DB.MyClass == "SHAMAN" then
+		self:Totems()
+	end
+	self:InitReminder()
 end
 
 local function styleButton(bu, isDebuff)
@@ -118,7 +132,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", reskinDebuffs)
 
 local function updateDebuffBorder(buttonName, index, filter)
 	local unit = PlayerFrame.unit
-	local name, _, _, _, debuffType = UnitAura(unit, index, filter)
+	local name, _, _, debuffType = UnitAura(unit, index, filter)
 	if not name then return end
 	local bu = _G[buttonName..index]
 	if not (bu and bu.Shadow) then return end
@@ -138,3 +152,49 @@ local function flashOnEnd(self)
 	end
 end
 hooksecurefunc("AuraButton_OnUpdate", flashOnEnd)
+
+local function formatAuraTime(seconds)
+	local d, h, m, str = 0, 0, 0
+	if seconds >= 86400 then
+		d = seconds/86400
+		seconds = seconds%86400
+	end
+	if seconds >= 3600 then
+		h = seconds/3600
+		seconds = seconds%3600
+	end
+	if seconds >= 60 then
+		m = seconds/60
+		seconds = seconds%60
+	end
+	if d > 0 then
+		str = format("%d"..DB.MyColor.."d", d)
+	elseif h > 0 then
+		str = format("%d"..DB.MyColor.."h", h)
+	elseif m >= 10 then
+		str = format("%d"..DB.MyColor.."m", m)
+	elseif m > 0 and m < 10 then
+		str = format("%d:%.2d", m, seconds)
+	else
+		if seconds <= 5 then
+			str = format("|cffff0000%.1f|r", seconds) -- red
+		elseif seconds <= 10 then
+			str = format("|cffffff00%.1f|r", seconds) -- yellow
+		else
+			str = format("%d"..DB.MyColor.."s", seconds)
+		end
+	end
+
+	return str
+end
+
+hooksecurefunc("AuraButton_UpdateDuration", function(button, timeLeft)
+	local duration = button.duration
+	if SHOW_BUFF_DURATIONS == "1" and timeLeft then
+		duration:SetText(formatAuraTime(timeLeft))
+		duration:SetVertexColor(1, 1, 1)
+		duration:Show()
+	else
+		duration:Hide()
+	end
+end)

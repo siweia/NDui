@@ -2,8 +2,9 @@
 -- FreebAutoRez, by Freebaser
 -- NDui MOD
 --------------------------------
-local B, C, L, DB = unpack(select(2, ...))
-local oUF = NDui.oUF or oUF
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
 
 local classList = {
 	["DEATHKNIGHT"] = {
@@ -28,7 +29,7 @@ local classList = {
 	["WARLOCK"] = {
 		combat = GetSpellInfo(20707),	-- Soulstone
 	},
-	["HUNTER"] = {},
+	--["HUNTER"] = {},	-- blz has removed hunter res
 }
 
 local hunterRes = {

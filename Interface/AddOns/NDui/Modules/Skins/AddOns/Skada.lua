@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Skins")
 
 function module:SkadaSkin()
 	if not NDuiDB["Skins"]["Skada"] then return end
@@ -100,8 +101,8 @@ function module:SkadaSkin()
 		if #windows == 1 then
 			EmbedWindow(windows[1], 320, 18, 198, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], 320, 18, 108,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 140)
-			EmbedWindow(windows[2], 320, 18, 108,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
+			EmbedWindow(windows[1], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 141)
+			EmbedWindow(windows[2], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
 		end
 	end
 
@@ -112,7 +113,7 @@ function module:SkadaSkin()
 	Skada.CreateWindow_ = Skada.CreateWindow
 	function Skada:CreateWindow(name, db)
 		Skada:CreateWindow_(name, db)
-		windows = {}
+		wipe(windows)
 		for _, window in ipairs(Skada:GetWindows()) do
 			tinsert(windows, window)
 		end
@@ -122,7 +123,7 @@ function module:SkadaSkin()
 	Skada.DeleteWindow_ = Skada.DeleteWindow
 	function Skada:DeleteWindow(name)
 		Skada:DeleteWindow_(name)
-		windows = {}
+		wipe(windows)
 		for _, window in ipairs(Skada:GetWindows()) do
 			tinsert(windows, window)
 		end

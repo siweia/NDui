@@ -1,11 +1,12 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 local cast = CreateFrame("Frame")
 local channelingTicks = {
 	-- warlock
-	[GetSpellInfo(755)] = 3, 		-- health funnel
-	[GetSpellInfo(198590)] = 6, 	-- drain soul
-	[GetSpellInfo(193439)] = 3, 	-- demon fury
+	[GetSpellInfo(755)] = 3,		-- health funnel
+	[GetSpellInfo(198590)] = 5,		-- drain soul
+	[GetSpellInfo(234153)] = 5,		-- drain life
 	-- druid
 	[GetSpellInfo(740)] = 4,		-- Tranquility
 	-- priest
@@ -19,20 +20,19 @@ local channelingTicks = {
 	[GetSpellInfo(205021)] = 12,
 }
 
-local penance = GetSpellInfo(47540)
-NDui:EventFrame{"PLAYER_LOGIN", "ACTIVE_TALENT_GROUP_CHANGED"}:SetScript("OnEvent", function(self)
-	if DB.MyClass ~= "PRIEST" then
-		self:UnregisterAllEvents()
-		return
+if DB.MyClass == "PRIEST" then
+	local penance = GetSpellInfo(47540)
+	local function updateTicks()
+		local numTicks = 3
+		if IsPlayerSpell(193134) then numTicks = 4 end	-- Enhanced Mind Flay
+		channelingTicks[penance] = numTicks
 	end
-
-	local numTicks = 3
-	if IsPlayerSpell(193134) then numTicks = 4 end	-- Enhanced Mind Flay
-	channelingTicks[penance] = numTicks
-end)
+	B:RegisterEvent("PLAYER_LOGIN", updateTicks)
+	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", updateTicks)
+end
 
 local ticks = {}
-cast.setBarTicks = function(castBar, ticknum)
+local function setBarTicks(castBar, ticknum)
 	if ticknum and ticknum > 0 then
 		local delta = castBar:GetWidth() / ticknum
 		for k = 1, ticknum do
@@ -137,11 +137,11 @@ cast.PostCastStart = function(self, unit, _, _, spellID)
 		end
 
 		if self.casting then
-			cast.setBarTicks(self, 0)
+			setBarTicks(self, 0)
 		else
 			local spell = UnitChannelInfo(unit)
 			self.channelingTicks = channelingTicks[spell] or 0
-			cast.setBarTicks(self, self.channelingTicks)
+			setBarTicks(self, self.channelingTicks)
 		end
 	elseif not UnitIsUnit(unit, "player") and self.notInterruptible then
 		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
@@ -191,4 +191,4 @@ cast.PostCastFailed = function(self)
 	self:Show()
 end
 
-NDui.cast = cast
+ns.cast = cast

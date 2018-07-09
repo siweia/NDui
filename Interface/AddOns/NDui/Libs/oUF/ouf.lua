@@ -726,7 +726,7 @@ Used to create a single unit frame and apply the currently active style to it.
 * overrideName - unique global name to use for the unit frame. Defaults to an auto-generated name based on the unit
                  (string?)
 --]]
-function oUF:Spawn(unit, overrideName)
+function oUF:Spawn(unit, overrideName, noHandle)
 	argcheck(unit, 2, 'string')
 	if(not style) then return error('Unable to create frame. No styles have been registered.') end
 
@@ -736,7 +736,9 @@ function oUF:Spawn(unit, overrideName)
 	local object = CreateFrame('Button', name, oUF_PetBattleFrameHider, 'SecureUnitButtonTemplate')
 	Private.UpdateUnits(object, unit)
 
-	self:DisableBlizzard(unit)
+	if not noHandle then
+		self:DisableBlizzard(unit)
+	end
 	walkObject(object, unit)
 
 	object:SetAttribute('unit', unit)

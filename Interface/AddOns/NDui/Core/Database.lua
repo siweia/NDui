@@ -1,4 +1,6 @@
-local _, _, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+
 DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
@@ -64,7 +66,8 @@ local function CheckRole()
 		end
 	end
 end
-NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_TALENT_UPDATE"}:SetScript("OnEvent", CheckRole)
+B:RegisterEvent("PLAYER_LOGIN", CheckRole)
+B:RegisterEvent("PLAYER_TALENT_UPDATE", CheckRole)
 
 -- Raidbuff Checklist
 DB.BuffList = {
@@ -77,72 +80,90 @@ DB.BuffList = {
 	[2] = {     -- 进食充分
 		104273, -- 250敏捷，BUFF名一致
 	},
-	[3] = {     -- 符文
+	[3] = {     -- 10%智力
+		1459,
+	},
+	[4] = {     -- 10%耐力
+		21562,
+	},
+	[5] = {     -- 10%攻强
+		6673,
+	},
+	[6] = {     -- 符文
 		224001,
+		270058,
 	},
 }
 
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
-	MAGE = {
-		[GetSpellInfo(205022)] = {		-- 奥术魔宠
-			["spells"] = {
-				[210126] = true,
+	HUNTER = {
+		{	spells = {	-- 独来独往
+				[164273] = true,
 			},
-			["requirespell"] = 205022,
-			["tree"] = 1,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			depend = 155228,
+			spec = 2,
+			instance = true,
 		},
 	},
-	DRUID = {
-		[GetSpellInfo(202360)] = {		-- 远古祝福
-			["spells"] = {
-				[202737] = true,
-				[202739] = true,
+	MAGE = {
+		{	spells = {	-- 奥术魔宠
+				[210126] = true,
 			},
-			["requirespell"] = 202360,
-			["tree"] = 1,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			depend = 205022,
+			spec = 1,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {	-- 奥术智慧
+				[1459] = true,
+			},
+			depend = 1459,
+			instance = true,
+		},
+	},
+	PRIEST = {
+		{	spells = {	-- 真言术耐
+				[21562] = true,
+			},
+			depend = 21562,
+			instance = true,
+		},
+	},
+	WARRIOR = {
+		{	spells = {	-- 战斗怒吼
+				[6673] = true,
+			},
+			depend = 6673,
+			instance = true,
 		},
 	},
 	SHAMAN = {
-		[GetSpellInfo(192106)] = {		-- 闪电之盾
-			["spells"] = {
+		{	spells = {	-- 闪电之盾
 				[192106] = true,
 			},
-			["requirespell"] = 192106,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			depend = 192106,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 	ROGUE = {
-		[L["Damage Poison"]] = {		-- 伤害类毒药
-			["spells"] = {
-				[2823] = true,			-- 致命药膏
+		{	spells = {	-- 伤害类毒药
+				[2823] = true,		-- 致命药膏
+				[8679] = true,		-- 致伤药膏
 			},
-			["negate_spells"] = {
-				[8679] = true,			-- 致伤药膏
-				[200802] = true,		-- 苦痛毒液
-			},
-			["tree"] = 1,
-			["combat"] = true,
-			["instance"] = true,
-			["pvp"] = true,
+			spec = 1,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
-		[L["Effect Poison"]] = { 		-- 效果类毒药
-			["spells"] = {
-				[3408] = true,   		-- 减速药膏
+		{	spells = {	-- 效果类毒药
+				[3408] = true,		-- 减速药膏
 			},
-			["negate_spells"] = {
-				[108211] = true, 		-- 吸血药膏
-			},
-			["tree"] = 1,
-			["pvp"] = true,
+			spec = 1,
+			pvp = true,
 		},
 	},
 }

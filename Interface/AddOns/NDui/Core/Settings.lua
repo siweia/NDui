@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Settings")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Settings")
 
 -- Increase Chat History
 for i = 1, 50 do
@@ -25,6 +26,7 @@ print("|cff70C0F5------------------------")
 -- Tuitorial
 local function ForceDefaultSettings()
 	SetCVar("ActionButtonUseKeyDown", 1)
+	--SetCVar("SpellQueueWindow", 250)
 	SetCVar("autoLootDefault", 1)
 	SetCVar("alwaysCompareItems", 0)
 	SetCVar("useCompactPartyFrames", 1)
@@ -62,8 +64,8 @@ local function ForceRaidFrame()
 end
 
 local function ForceUIScale()
-	Advanced_UseUIScale:Hide()
-	Advanced_UIScaleSlider:Hide()
+	B.HideOption(Advanced_UseUIScale)
+	B.HideOption(Advanced_UIScaleSlider)
 	SetCVar("useUiScale", 1)
 	local scale = NDuiDB["Settings"]["SetScale"]
 	if NDuiDB["Settings"]["LockUIScale"] then
@@ -88,7 +90,7 @@ local function ForceUIScale()
 		end
 	end
 
-	NDui:EventFrame{"UI_SCALE_CHANGED"}:SetScript("OnEvent", function()
+	B:RegisterEvent("UI_SCALE_CHANGED", function()
 		if scale < .65 then
 			RestoreUIScale(scale)
 		end
@@ -111,11 +113,11 @@ local function ForceChatSettings()
 	for i = 1, 10 do
 		local cf = _G["ChatFrame"..i]
 		FCF_SetWindowAlpha(cf, 0)
-		ChatFrame_RemoveMessageGroup(cf,"CHANNEL")
+		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
 	end
-	local channels = {"SAY","EMOTE","YELL","GUILD","OFFICER","GUILD_ACHIEVEMENT","ACHIEVEMENT",
-	"WHISPER","PARTY","PARTY_LEADER","RAID","RAID_LEADER","RAID_WARNING","INSTANCE_CHAT",
-	"INSTANCE_CHAT_LEADER","CHANNEL1","CHANNEL2","CHANNEL3","CHANNEL4","CHANNEL5","CHANNEL6","CHANNEL7",
+	local channels = {"SAY", "EMOTE", "YELL", "GUILD", "OFFICER", "GUILD_ACHIEVEMENT", "ACHIEVEMENT",
+	"WHISPER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "RAID_WARNING", "INSTANCE_CHAT",
+	"INSTANCE_CHAT_LEADER", "CHANNEL1", "CHANNEL2", "CHANNEL3", "CHANNEL4", "CHANNEL5", "CHANNEL6", "CHANNEL7",
 	}	
 	for _, v in ipairs(channels) do
 		ToggleChatColorNamesByClassGroup(true, v)
@@ -394,6 +396,7 @@ local function YesTutor()
 		elseif currentPage == 2 then
 			NDuiDB["Settings"]["LockUIScale"] = true
 			ForceUIScale()
+			NDuiDB["Settings"]["LockUIScale"] = false
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
 		elseif currentPage == 3 then
 			ForceChatSettings()
@@ -448,7 +451,6 @@ local function HelloWorld()
 		c1.." /hb "..c2..L["Help Info5"],
 		c1.." /mm "..c2..L["Help Info6"],
 		c1.." /rl "..c2..L["Help Info7"],
-		c1.." /arc "..c2..L["Help Info8"],
 		c1.." /kro "..c2..L["Help Info13"],
 		c1.." /ncl "..c2..L["Help Info9"],
 	}

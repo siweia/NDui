@@ -1,3 +1,49 @@
+--[[
+# Element: ClassPower
+
+Handles the visibility and updating of the player's class resources (like Chi Orbs or Holy Power) and combo points.
+
+## Widget
+
+ClassPower - An `table` consisting of as many StatusBars as the theoretical maximum return of [UnitPowerMax](http://wowprogramming.com/docs/api/UnitPowerMax.html).
+
+## Sub-Widgets
+
+.bg - A `Texture` used as a background. It will inherit the color of the main StatusBar.
+
+## Sub-Widget Options
+
+.multiplier - Used to tint the background based on the widget's R, G and B values. Defaults to 1 (number)[0-1]
+
+## Notes
+
+A default texture will be applied if the sub-widgets are StatusBars and don't have a texture set.
+If the sub-widgets are StatusBars, their minimum and maximum values will be set to 0 and 1 respectively.
+
+Supported class powers:
+  - All     - Combo Points
+  - Mage    - Arcane Charges
+  - Monk    - Chi Orbs
+  - Paladin - Holy Power
+  - Warlock - Soul Shards
+
+## Examples
+
+    local ClassPower = {}
+    for index = 1, 10 do
+        local Bar = CreateFrame('StatusBar', nil, self)
+
+        -- Position and size.
+        Bar:SetSize(16, 16)
+        Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', (index - 1) * Bar:GetWidth(), 0)
+
+        ClassPower[index] = Bar
+    end
+
+    -- Register with oUF
+    self.ClassPower = ClassPower
+--]]
+
 local _, ns = ...
 local oUF = ns.oUF
 
@@ -8,12 +54,12 @@ local SPEC_MAGE_ARCANE = SPEC_MAGE_ARCANE or 1
 local SPEC_MONK_WINDWALKER = SPEC_MONK_WINDWALKER or 3
 local SPEC_PALADIN_RETRIBUTION = SPEC_PALADIN_RETRIBUTION or 3
 local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION or 3
-local SPELL_POWER_ENERGY = SPELL_POWER_ENERGY or 3
-local SPELL_POWER_COMBO_POINTS = SPELL_POWER_COMBO_POINTS or 4
-local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS or 7
-local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER or 9
-local SPELL_POWER_CHI = SPELL_POWER_CHI or 12
-local SPELL_POWER_ARCANE_CHARGES = SPELL_POWER_ARCANE_CHARGES or 16
+local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
+local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
+local SPELL_POWER_SOUL_SHARDS = Enum.PowerType.SoulShards or 7
+local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower or 9
+local SPELL_POWER_CHI = Enum.PowerType.Chi or 12
+local SPELL_POWER_ARCANE_CHARGES = Enum.PowerType.ArcaneCharges or 16
 
 -- sourced from FrameXML/TargetFrame.lua
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS or 5
@@ -46,6 +92,11 @@ local function Update(self, event, unit, powerType)
 
 	local element = self.ClassPower
 
+	--[[ Callback: ClassPower:PreUpdate(event)
+	Called before the element has been updated.
+
+	* self  - the ClassPower element
+	]]
 	if(element.PreUpdate) then
 		element:PreUpdate()
 	end
@@ -72,39 +123,13 @@ local function Update(self, event, unit, powerType)
 		end
 
 		local numActive = cur + 0.9
-		if max <= 6 then
-			for i = 1, max do
-				if(i > numActive) then
-					element[i]:Hide()
-					element[i]:SetValue(0)
-				else
-					element[i]:Show()
-					element[i]:SetValue(cur - i + 1)
-				end
-			end
-		else
-			for i = 1, 5 do element[i]:SetValue(1) end
-			element[6]:Hide()
-
-			if cur <= 5 then
-				for i = 1, 5 do
-					if i <= cur then
-						element[i]:Show()
-					else
-						element[i]:Hide()
-					end
-					element[i]:SetStatusBarColor(1, .96, .41)
-				end
+		for i = 1, max do
+			if(i > numActive) then
+				element[i]:Hide()
+				element[i]:SetValue(0)
 			else
-				for i = 1, 5 do
-					element[i]:Show()
-				end
-				for i = 1, cur - 5 do
-					element[i]:SetStatusBarColor(1, 0, 0)
-				end
-				for i = cur - 4, 5 do
-					element[i]:SetStatusBarColor(1, .96, .41)
-				end
+				element[i]:Show()
+				element[i]:SetValue(cur - i + 1)
 			end
 		end
 
@@ -112,24 +137,37 @@ local function Update(self, event, unit, powerType)
 		if(max ~= oldMax) then
 			if(max < oldMax) then
 				for i = max + 1, oldMax do
-					if element[i] then
-						element[i]:Hide()
-						element[i]:SetValue(0)
-					end
+					element[i]:Hide()
+					element[i]:SetValue(0)
 				end
-				UpdateColor(element, powerType)
 			end
 
 			element.__max = max
 		end
 	end
+	--[[ Callback: ClassPower:PostUpdate(cur, max, hasMaxChanged, powerType)
+	Called after the element has been updated.
 
+	* self          - the ClassPower element
+	* cur           - the current amount of power (number)
+	* max           - the maximum amount of power (number)
+	* hasMaxChanged - indicates whether the maximum amount has changed since the last update (boolean)
+	* powerType     - the active power type (string)
+	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(cur, max, oldMax ~= max, event)
+		return element:PostUpdate(cur, max, oldMax ~= max, powerType, event)
 	end
 end
 
 local function Path(self, ...)
+	--[[ Override: ClassPower.Override(self, event, unit, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
 	return (self.ClassPower.Override or Update) (self, ...)
 end
 
@@ -159,6 +197,12 @@ local function Visibility(self, event, unit)
 	local powerType = unit == 'vehicle' and 'COMBO_POINTS' or ClassPowerType
 
 	if(shouldEnable) then
+		--[[ Override: ClassPower:UpdateColor(powerType)
+		Used to completely override the internal function for updating the widgets' colors.
+
+		* self      - the ClassPower element
+		* powerType - the active power type (string)
+		--]]
 		(element.UpdateColor or UpdateColor) (element, powerType)
 	end
 
@@ -172,6 +216,13 @@ local function Visibility(self, event, unit)
 end
 
 local function VisibilityPath(self, ...)
+	--[[ Override: ClassPower.OverrideVisibility(self, event, unit)
+	Used to completely override the internal visibility function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	--]]
 	return (self.ClassPower.OverrideVisibility or Visibility) (self, ...)
 end
 

@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 --[[
 	给角色属性面板添加额外的数据，同时使其支持滚动，防止数据溢出。

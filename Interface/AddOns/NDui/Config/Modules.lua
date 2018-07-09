@@ -1,5 +1,6 @@
 -- Configure 配置页面
-local _, C, _, _ = unpack(select(2, ...))
+local _, ns = ...
+local _, C = unpack(ns)
 
 -- BUFF/DEBUFF相关
 C.Auras = {
@@ -43,6 +44,7 @@ C.UFs = {
 	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 241},		-- 宠物框体默认位置
 	FocusPos		= {"LEFT", UIParent, "LEFT", 5, -150},				-- 焦点框体默认位置
 	FoTPos			= {"LEFT", UIParent, "LEFT", 210, -150},			-- 焦点目标框体默认位置
+	PlayerPlate		= {"BOTTOM", UIParent, "BOTTOM", 0, 280},			-- 玩家姓名板默认位置
 
 	BarPoint		= {"TOPLEFT", 12, 4},								-- 资源条位置（以自身头像为基准）
 	BarSize			= {150, 5},											-- 资源条的尺寸（宽，长）
@@ -70,14 +72,14 @@ C.Infobar = {
 	Guild	 		= true,												-- 公会信息
 	GuildPos 		= {"TOPLEFT", UIParent, 15, -6},					-- 公会信息位置
 	Friends 		= true,												-- 好友模块
-	FriendsPos 		= {"TOPLEFT", UIParent, 100, -6},					-- 好友模块位置
+	FriendsPos 		= {"TOPLEFT", UIParent, 105, -6},					-- 好友模块位置
 	System			= true,												-- 帧数/延迟
 	SystemPos		= {"TOPLEFT", UIParent, 190, -6},					-- 帧数/延迟位置
 	Memory			= true,												-- 内存占用
-	MemoryPos		= {"TOPLEFT", UIParent, 310, -6},					-- 内存占用位置
+	MemoryPos		= {"TOPLEFT", UIParent, 285, -6},					-- 内存占用位置
 	MaxAddOns		= 12,												-- 插件信息显示数量
 	Location		= true,												-- 区域信息
-	LocationPos		= {"TOPLEFT", UIParent, 400, -6},					-- 区域信息位置
+	LocationPos		= {"TOPLEFT", UIParent, 380, -6},					-- 区域信息位置
 
 	Spec			= true,												-- 天赋专精
 	SpecPos			= {"BOTTOMRIGHT", UIParent, -310, 6},				-- 天赋专精位置

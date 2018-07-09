@@ -1,3 +1,41 @@
+--[[
+# Element: Ready Check Indicator
+
+Handles the visibility and updating of an indicator based on the unit's ready check status.
+
+## Widget
+
+ReadyCheckIndicator - A `Texture` representing ready check status.
+
+## Notes
+
+This element updates by changing the texture.
+Default textures will be applied if the layout does not provide custom ones. See Options.
+
+## Options
+
+.finishedTime    - For how many seconds the icon should stick after a check has completed. Defaults to 10 (number).
+.fadeTime        - For how many seconds the icon should fade away after the stick duration has completed. Defaults to
+                   1.5 (number).
+.readyTexture    - Path to an alternate texture for the ready check 'ready' status.
+.notReadyTexture - Path to an alternate texture for the ready check 'notready' status.
+.waitingTexture  - Path to an alternate texture for the ready check 'waiting' status.
+
+## Attributes
+
+.status - the unit's ready check status (string?)['ready', 'noready', 'waiting']
+
+## Examples
+
+    -- Position and size
+    local ReadyCheckIndicator = self:CreateTexture(nil, 'OVERLAY')
+    ReadyCheckIndicator:SetSize(16, 16)
+    ReadyCheckIndicator:SetPoint('TOP')
+
+    -- Register with oUF
+    self.ReadyCheckIndicator = ReadyCheckIndicator
+--]]
+
 local _, ns = ...
 local oUF = ns.oUF
 
@@ -5,6 +43,11 @@ local function OnFinished(self)
 	local element = self:GetParent()
 	element:Hide()
 
+	--[[ Callback: ReadyCheckIndicator:PostUpdateFadeOut()
+	Called after the element has been faded out.
+
+	* self - the ReadyCheckIndicator element
+	--]]
 	if(element.PostUpdateFadeOut) then
 		element:PostUpdateFadeOut()
 	end
@@ -13,6 +56,11 @@ end
 local function Update(self, event)
 	local element = self.ReadyCheckIndicator
 
+	--[[ Callback: ReadyCheckIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the ReadyCheckIndicator element
+	--]]
 	if(element.PreUpdate) then
 		element:PreUpdate()
 	end
@@ -43,12 +91,25 @@ local function Update(self, event)
 		element.Animation:Play()
 	end
 
+	--[[ Callback: ReadyCheckIndicator:PostUpdate(status)
+	Called after the element has been updated.
+
+	* self   - the ReadyCheckIndicator element
+	* status - the unit's ready check status (string?)['ready', 'notready', 'waiting']
+	--]]
 	if(element.PostUpdate) then
 		return element:PostUpdate(status)
 	end
 end
 
 local function Path(self, ...)
+	--[[ Override: ReadyCheckIndicator.Override(self, event, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
 	return (self.ReadyCheckIndicator.Override or Update) (self, ...)
 end
 

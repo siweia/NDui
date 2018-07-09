@@ -1,9 +1,10 @@
-local B, C, L, DB = unpack(select(2, ...))
-local Bar = NDui:GetModule("Actionbar")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local Bar = B:GetModule("Actionbar")
 local cfg = C.bars.petbar
-local padding, margin = 2, 3
 
 function Bar:CreatePetbar()
+	local padding, margin = 2, 3
 	local num = NUM_PET_ACTION_SLOTS
 	local buttonList = {}
 
@@ -51,6 +52,6 @@ function Bar:CreatePetbar()
 
 	--create the mouseover functionality
 	if cfg.fader then
-		NDui.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 end

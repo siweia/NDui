@@ -1,223 +1,214 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b
 
 -- Gradient Frame
-B.CreateGF = function(f, w, h, o, r, g, b, a1, a2)
-	f:SetSize(w, h)
-	f:SetFrameStrata("BACKGROUND")
-	local gf = f:CreateTexture(nil, "BACKGROUND")
+function B:CreateGF(w, h, o, r, g, b, a1, a2)
+	self:SetSize(w, h)
+	self:SetFrameStrata("BACKGROUND")
+	local gf = self:CreateTexture(nil, "BACKGROUND")
 	gf:SetAllPoints()
 	gf:SetTexture(DB.normTex)
-	gf:SetVertexColor(r, g, b)
 	gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
 end
 
 -- Create Backdrop
-B.CreateBD = function(f, a, s)
-	f:SetBackdrop({
+function B:CreateBD(a, s)
+	self:SetBackdrop({
 		bgFile = DB.bdTex, edgeFile = DB.glowTex, edgeSize = s or 3,
 		insets = {left = s or 3, right = s or 3, top = s or 3, bottom = s or 3},
 	})
-	f:SetBackdropColor(0, 0, 0, a or .5)
-	f:SetBackdropBorderColor(0, 0, 0)
+	self:SetBackdropColor(0, 0, 0, a or .5)
+	self:SetBackdropBorderColor(0, 0, 0)
 end
 
 -- Create Shadow
-B.CreateSD = function(f, m, s)
-	if f.Shadow then return end
-	local frame = f
-	if f:GetObjectType() == "Texture" then frame = f:GetParent() end
+function B:CreateSD(m, s)
+	if self.Shadow then return end
+
+	local frame = self
+	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
 
-	f.Shadow = CreateFrame("Frame", nil, frame)
-	f.Shadow:SetPoint("TOPLEFT", f, -m, m)
-	f.Shadow:SetPoint("BOTTOMRIGHT", f, m, -m)
-	f.Shadow:SetBackdrop({
-		edgeFile = DB.glowTex, edgeSize = s })
-	f.Shadow:SetBackdropBorderColor(0, 0, 0, 1)
-	f.Shadow:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
-	return f.Shadow
+	self.Shadow = CreateFrame("Frame", nil, frame)
+	self.Shadow:SetPoint("TOPLEFT", self, -m, m)
+	self.Shadow:SetPoint("BOTTOMRIGHT", self, m, -m)
+	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = s})
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, 1)
+	self.Shadow:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
+
+	return self.Shadow
 end
 
 -- Create Background
-B.CreateBG = function(f, m)
-	local frame = f
-	if f:GetObjectType() == "Texture" then frame = f:GetParent() end
-	local offset = m
-	if not m then offset = 1.2 end
+function B:CreateBG(offset)
+	local frame = self
+	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
+	offset = offset or 1.2
 	local lvl = frame:GetFrameLevel()
 
 	local bg = CreateFrame("Frame", nil, frame)
-	bg:SetPoint("TOPLEFT", f, -offset, offset)
-	bg:SetPoint("BOTTOMRIGHT", f, offset, -offset)
+	bg:SetPoint("TOPLEFT", self, -offset, offset)
+	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
 	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
 	return bg
 end
 
 -- Create Skin
-B.CreateTex = function(f)
-	if f.Tex then return end
-	local frame = f
-	if f:GetObjectType() == "Texture" then frame = f:GetParent() end
+function B:CreateTex()
+	if self.Tex then return end
 
-	f.Tex = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
-	f.Tex:SetAllPoints()
-	f.Tex:SetTexture(DB.bgTex, true, true)
-	f.Tex:SetHorizTile(true)
-	f.Tex:SetVertTile(true)
-	f.Tex:SetBlendMode("ADD")
+	local frame = self
+	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
+
+	self.Tex = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
+	self.Tex:SetAllPoints(self)
+	self.Tex:SetTexture(DB.bgTex, true, true)
+	self.Tex:SetHorizTile(true)
+	self.Tex:SetVertTile(true)
+	self.Tex:SetBlendMode("ADD")
 end
 
 -- Frame Text
-B.CreateFS = function(f, size, text, classcolor, anchor, x, y)
-	local fs = f:CreateFontString(nil, "OVERLAY")
+function B:CreateFS(size, text, classcolor, anchor, x, y)
+	local fs = self:CreateFontString(nil, "OVERLAY")
 	fs:SetFont(DB.Font[1], size, DB.Font[3])
 	fs:SetText(text)
 	fs:SetWordWrap(false)
-	if classcolor then
-		fs:SetTextColor(cr, cg, cb)
-	end
+	if classcolor then fs:SetTextColor(cr, cg, cb) end
 	if anchor and x and y then
 		fs:SetPoint(anchor, x, y)
 	else
 		fs:SetPoint("CENTER", 1, 0)
 	end
+
 	return fs
 end
 
 -- GameTooltip
-B.CreateGT = function(f, anchor, text, color)
-	f:SetScript("OnEnter", function(self)
+function B:AddTooltip(anchor, text, color)
+	self:SetScript("OnEnter", function()
 		GameTooltip:SetOwner(self, anchor)
 		GameTooltip:ClearLines()
-		if color == "class" then
-			GameTooltip:AddLine(text, cr, cg, cb)
-		elseif color == "system" then
-			GameTooltip:AddLine(text, 1, .8, 0)
+		if tonumber(text) then
+			GameTooltip:SetSpellByID(text)
 		else
-			GameTooltip:AddLine(text, 1, 1, 1)
+			local r, g, b = 1, 1, 1
+			if color == "class" then
+				r, g, b = cr, cg, cb
+			elseif color == "system" then
+				r, g, b = 1, .8, 0
+			end
+			GameTooltip:AddLine(text, r, g, b)
 		end
 		GameTooltip:Show()
 	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
-end
-B.CreateAT = function(f, anchor, value)
-	f:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, anchor)
-		GameTooltip:ClearLines()
-		if type(value) == "string" then
-			GameTooltip:SetUnitAura("player", value)
-		else
-			GameTooltip:SetSpellByID(value)
-		end
-		GameTooltip:Show()
-	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
+	self:SetScript("OnLeave", GameTooltip_Hide)
 end
 
 -- Button Color
-B.CreateBC = function(f, a)
-	f:SetNormalTexture("")
-	f:SetHighlightTexture("")
-	f:SetPushedTexture("")
-	f:SetDisabledTexture("")
+function B:CreateBC(a)
+	self:SetNormalTexture("")
+	self:SetHighlightTexture("")
+	self:SetPushedTexture("")
+	self:SetDisabledTexture("")
 
-	if f.Left then f.Left:SetAlpha(0) end
-	if f.Middle then f.Middle:SetAlpha(0) end
-	if f.Right then f.Right:SetAlpha(0) end
-	if f.LeftSeparator then f.LeftSeparator:Hide() end
-	if f.RightSeparator then f.RightSeparator:Hide() end
+	if self.Left then self.Left:SetAlpha(0) end
+	if self.Middle then self.Middle:SetAlpha(0) end
+	if self.Right then self.Right:SetAlpha(0) end
+	if self.LeftSeparator then self.LeftSeparator:Hide() end
+	if self.RightSeparator then self.RightSeparator:Hide() end
 
-	f:SetScript("OnEnter", function()
-		f:SetBackdropBorderColor(cr, cg, cb, 1)
+	self:SetScript("OnEnter", function()
+		self:SetBackdropBorderColor(cr, cg, cb, 1)
 	end)
-	f:SetScript("OnLeave", function()
-		f:SetBackdropBorderColor(0, 0, 0, 1)
+	self:SetScript("OnLeave", function()
+		self:SetBackdropBorderColor(0, 0, 0, 1)
 	end)
-	f:SetScript("OnMouseDown", function()
-		f:SetBackdropColor(cr, cg, cb, a or .3)
+	self:SetScript("OnMouseDown", function()
+		self:SetBackdropColor(cr, cg, cb, a or .3)
 	end)
-	f:SetScript("OnMouseUp", function()
-		f:SetBackdropColor(0, 0, 0, a or .3)
+	self:SetScript("OnMouseUp", function()
+		self:SetBackdropColor(0, 0, 0, a or .3)
 	end)
 end
 
 -- Checkbox
-B.CreateCB = function(f, a)
-	f:SetNormalTexture("")
-	f:SetPushedTexture("")
-	f:SetHighlightTexture(DB.bdTex)
-	local hl = f:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 5, -5)
-	hl:SetPoint("BOTTOMRIGHT", -5, 5)
-	hl:SetVertexColor(cr, cg, cb, .2)
+function B:CreateCB(a)
+	self:SetNormalTexture("")
+	self:SetPushedTexture("")
+	self:SetHighlightTexture(DB.bdTex)
+	local hl = self:GetHighlightTexture()
+	hl:SetPoint("TOPLEFT", 6, -6)
+	hl:SetPoint("BOTTOMRIGHT", -6, 6)
+	hl:SetVertexColor(cr, cg, cb, .25)
 
-	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", 4, -4)
-	bd:SetPoint("BOTTOMRIGHT", -4, 4)
-	bd:SetFrameLevel(f:GetFrameLevel() - 1)
+	local bd = B.CreateBG(self, -4)
 	B.CreateBD(bd, a, 2)
 
-	local ch = f:GetCheckedTexture()
+	local ch = self:GetCheckedTexture()
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(cr, cg, cb)
 end
 
 -- Movable Frame
-B.CreateMF = function(f, parent)
-	local frame = parent or f
+function B:CreateMF(parent)
+	local frame = parent or self
 	frame:SetMovable(true)
 	frame:SetUserPlaced(true)
 	frame:SetClampedToScreen(true)
-	f:EnableMouse(true)
-	f:RegisterForDrag("LeftButton")
-	f:SetScript("OnDragStart", function() frame:StartMoving() end)
-	f:SetScript("OnDragStop", function() frame:StopMovingOrSizing() end)
+
+	self:EnableMouse(true)
+	self:RegisterForDrag("LeftButton")
+	self:SetScript("OnDragStart", function() frame:StartMoving() end)
+	self:SetScript("OnDragStop", function() frame:StopMovingOrSizing() end)
 end
 
 -- Icon Style
-B.CreateIF = function(f, HL)
-	B.CreateSD(f, 3, 3)
-	f.Icon = f:CreateTexture(nil, "ARTWORK")
-	f.Icon:SetAllPoints()
-	f.Icon:SetTexCoord(unpack(DB.TexCoord))
-	f.CD = CreateFrame("Cooldown", nil, f, "CooldownFrameTemplate")
-	f.CD:SetAllPoints()
-	f.CD:SetReverse(true)
-	if HL then
-		f:EnableMouse(true)
-		f.HL = f:CreateTexture(nil, "HIGHLIGHT")
-		f.HL:SetColorTexture(1, 1, 1, .3)
-		f.HL:SetAllPoints(f.Icon)
+function B:CreateIF(mouse, cd)
+	B.CreateSD(self, 3, 3)
+	self.Icon = self:CreateTexture(nil, "ARTWORK")
+	self.Icon:SetAllPoints()
+	self.Icon:SetTexCoord(unpack(DB.TexCoord))
+	if mouse then
+		self:EnableMouse(true)
+		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
+		self.HL:SetColorTexture(1, 1, 1, .3)
+		self.HL:SetAllPoints(self.Icon)
+	end
+	if cd then
+		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
+		self.CD:SetAllPoints()
+		self.CD:SetReverse(true)
 	end
 end
 
 -- Statusbar
-B.CreateSB = function(f, spark, r, g, b)
-	f:SetStatusBarTexture(DB.normTex)
+function B:CreateSB(spark, r, g, b)
+	self:SetStatusBarTexture(DB.normTex)
 	if r and g and b then
-		f:SetStatusBarColor(r, g, b)
+		self:SetStatusBarColor(r, g, b)
 	else
-		f:SetStatusBarColor(cr, cg, cb)
+		self:SetStatusBarColor(cr, cg, cb)
 	end
-	B.CreateSD(f, 3, 3)
-	f.BG = f:CreateTexture(nil, "BACKGROUND")
-	f.BG:SetAllPoints()
-	f.BG:SetTexture(DB.normTex)
-	f.BG:SetVertexColor(0, 0, 0, .5)
-	B.CreateTex(f.BG)
+	B.CreateSD(self, 3, 3)
+	self.BG = self:CreateTexture(nil, "BACKGROUND")
+	self.BG:SetAllPoints()
+	self.BG:SetTexture(DB.normTex)
+	self.BG:SetVertexColor(0, 0, 0, .5)
+	B.CreateTex(self.BG)
 	if spark then
-		f.Spark = f:CreateTexture(nil, "OVERLAY")
-		f.Spark:SetTexture(DB.sparkTex)
-		f.Spark:SetBlendMode("ADD")
-		f.Spark:SetAlpha(.8)
-		f.Spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
-		f.Spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -10)
+		self.Spark = self:CreateTexture(nil, "OVERLAY")
+		self.Spark:SetTexture(DB.sparkTex)
+		self.Spark:SetBlendMode("ADD")
+		self.Spark:SetAlpha(.8)
+		self.Spark:SetPoint("TOPLEFT", self:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
+		self.Spark:SetPoint("BOTTOMRIGHT", self:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -10)
 	end
 end
 
 -- Numberize
-B.Numb = function(n)
+function B.Numb(n)
 	if NDuiDB["Settings"]["Format"] == 1 then
 		if n >= 1e12 then
 			return ("%.2ft"):format(n / 1e12)
@@ -246,7 +237,7 @@ B.Numb = function(n)
 end
 
 -- Color code
-B.HexRGB = function(r, g, b)
+function B.HexRGB(r, g, b)
 	if r then
 		if type(r) == "table" then
 			if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
@@ -255,13 +246,13 @@ B.HexRGB = function(r, g, b)
 	end
 end
 
-B.ClassColor = function(class)
+function B.ClassColor(class)
 	local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
 	if not color then return 1, 1, 1 end
 	return color.r, color.g, color.b
 end
 
-B.UnitColor = function(unit)
+function B.UnitColor(unit)
 	local r, g, b = 1, 1, 1
 	if UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
@@ -281,7 +272,36 @@ B.UnitColor = function(unit)
 end
 
 -- Disable function
-B.Dummy = function() end
+B.HiddenFrame = CreateFrame("Frame")
+B.HiddenFrame:Hide()
+
+function B:HideObject()
+	if self.UnregisterAllEvents then
+		self:UnregisterAllEvents()
+		self:SetParent(B.HiddenFrame)
+	else
+		self.Show = self.Hide
+	end
+	self:Hide()
+end
+
+function B:StripTextures()
+	for i = 1, self:GetNumRegions() do
+		local region = select(i, self:GetRegions())
+		if region and region:GetObjectType() == "Texture" then
+			region:SetTexture("")
+		end
+	end
+end
+
+function B:Dummy()
+	return
+end
+
+function B:HideOption()
+	self:SetAlpha(0)
+	self:SetScale(.0001)
+end
 
 -- Smoothy
 local smoothing = {}
@@ -302,10 +322,10 @@ f:SetScript("OnUpdate", function()
 	end
 end)
 
-B.SmoothBar = function(bar)
-	if not bar.SetValue_ then
-		bar.SetValue_ = bar.SetValue
-		bar.SetValue = function(self, value)
+function B:SmoothBar()
+	if not self.SetValue_ then
+		self.SetValue_ = self.SetValue
+		self.SetValue = function(_, value)
 			if value ~= self:GetValue() or value == 0 then
 				smoothing[self] = value
 			else
@@ -317,10 +337,10 @@ B.SmoothBar = function(bar)
 end
 
 -- Guild Check
-B.UnitInGuild = function(unit)
+function B.UnitInGuild(unitName)
 	for i = 1, GetNumGuildMembers() do
 		local name = GetGuildRosterInfo(i)
-		if name and name == unit then
+		if name and name == unitName then
 			return true
 		end
 	end
@@ -328,8 +348,9 @@ B.UnitInGuild = function(unit)
 end
 
 -- Timer Format
-B.FormatTime = function(s)
+function B.FormatTime(s)
 	local day, hour, minute = 86400, 3600, 60
+
 	if s >= day then
 		return format("%d"..DB.MyColor.."d", s/day), s % day
 	elseif s >= hour then
@@ -344,12 +365,13 @@ B.FormatTime = function(s)
 		end
 	elseif s < 10 then
 		return format("|cffffff00%d|r", s), s - floor(s)
+	else
+		return format("|cffcccc33%d|r", s), s - floor(s)
 	end
-	return format("|cffcccc33%d|r", s), s - floor(s)
 end
 
 -- Table Backup
-B.CopyTable = function(source, target)
+function B.CopyTable(source, target)
 	for key, value in pairs(source) do
 		if type(value) == "table" then
 			if not target[key] then target[key] = {} end
@@ -363,8 +385,8 @@ B.CopyTable = function(source, target)
 end
 
 -- GUI APIs
-B.CreateButton = function(parent, width, height, text, fontSize)
-	local bu = CreateFrame("Button", nil, parent)
+function B:CreateButton(width, height, text, fontSize)
+	local bu = CreateFrame("Button", nil, self)
 	bu:SetSize(width, height)
 	B.CreateBD(bu, .3)
 	B.CreateBC(bu)
@@ -373,16 +395,16 @@ B.CreateButton = function(parent, width, height, text, fontSize)
 	return bu
 end
 
-B.CreateCheckBox = function(parent)
-	local cb = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+function B:CreateCheckBox()
+	local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
 	B.CreateCB(cb)
 
 	cb.Type = "CheckBox"
 	return cb
 end
 
-B.CreateEditBox = function(parent, width, height)
-	local eb = CreateFrame("EditBox", nil, parent)
+function B:CreateEditBox(width, height)
+	local eb = CreateFrame("EditBox", nil, self)
 	eb:SetSize(width, height)
 	eb:SetAutoFocus(false)
 	eb:SetTextInsets(10, 10, 0, 0)
@@ -399,8 +421,8 @@ B.CreateEditBox = function(parent, width, height)
 	return eb
 end
 
-B.CreateDropDown = function(parent, width, height, data)
-	local dd = CreateFrame("Frame", nil, parent)
+function B:CreateDropDown(width, height, data)
+	local dd = CreateFrame("Frame", nil, self)
 	dd:SetSize(width, height)
 	B.CreateBD(dd, .3)
 	dd.Text = B.CreateFS(dd, 14, "")
