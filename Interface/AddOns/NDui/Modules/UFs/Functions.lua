@@ -831,7 +831,7 @@ end
 function UF:CreateFCT(self)
 	if not NDuiDB["UFs"]["CombatText"] then return end
 
-	local fcf = CreateFrame("Frame", "oUF_CombatTextFrame", self)
+	local fcf = CreateFrame("Frame", "oUF_CombatTextFrame", UIParent)
 	fcf:SetSize(32, 32)
 	if self.mystyle == "player" then
 		B.Mover(fcf, L["CombatText"], "PlayerCombatText", {"BOTTOM", self, "TOPLEFT", 0, 120})
