@@ -831,7 +831,8 @@ end
 function UF:CreateFCT(self)
 	if not NDuiDB["UFs"]["CombatText"] then return end
 
-	local fcf = CreateFrame("Frame", "oUF_CombatTextFrame", UIParent)
+	local parentFrame = CreateFrame("Frame", nil, UIParent)
+	local fcf = CreateFrame("Frame", "oUF_CombatTextFrame", parentFrame)
 	fcf:SetSize(32, 32)
 	if self.mystyle == "player" then
 		B.Mover(fcf, L["CombatText"], "PlayerCombatText", {"BOTTOM", self, "TOPLEFT", 0, 120})
@@ -840,7 +841,7 @@ function UF:CreateFCT(self)
 	end
 
 	for i = 1, 36 do
-		fcf[i] = self:CreateFontString("$parentText", "OVERLAY")
+		fcf[i] = parentFrame:CreateFontString("$parentText", "OVERLAY")
 	end
 
 	fcf.xOffset = 60
