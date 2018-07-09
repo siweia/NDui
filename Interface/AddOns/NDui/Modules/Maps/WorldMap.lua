@@ -2,6 +2,27 @@
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Maps")
 
+local mapRects = {}
+local tempVec2D = CreateVector2D(0, 0)
+
+function module:GetPlayerMapPos(mapID)
+	tempVec2D.x, tempVec2D.y = UnitPosition("player")
+	if not tempVec2D.x then return end
+
+	local mapRect = mapRects[mapID]
+	if not mapRect then
+		mapRect = {}
+		mapRect[1] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
+		mapRect[2] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
+		mapRect[2]:Subtract(mapRect[1])
+
+		mapRects[mapID] = mapRect
+	end
+	tempVec2D:Subtract(mapRect[1])
+
+	return tempVec2D.y/mapRect[2].y, tempVec2D.x/mapRect[2].x
+end
+
 function module:OnLogin()
 	-- Scaling
 	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"]) end
@@ -25,6 +46,15 @@ function module:OnLogin()
 	local scale, width, height = mapBody:GetEffectiveScale(), mapBody:GetWidth(), mapBody:GetHeight()
 	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function()
 		width, height = mapBody:GetWidth(), mapBody:GetHeight()
+	end)
+
+	local mapID
+	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
+		if self:GetMapID() == C_Map.GetBestMapForUnit("player") then
+			mapID = self:GetMapID()
+		else
+			mapID = nil
+		end
 	end)
 
 	local function CursorCoords()
@@ -51,24 +81,21 @@ function module:OnLogin()
 				cursor:SetText(CoordsFormat(L["Mouse"], true))
 			end
 
-			RunScript("NDuiMapCoords = C_Map.GetPlayerMapPosition(0, 'player')")
-			if NDuiMapCoords then
-				player:SetFormattedText(CoordsFormat(PLAYER), 100 * NDuiMapCoords.x, 100 * NDuiMapCoords.y)
-			else
+			if not mapID then
 				player:SetText(CoordsFormat(PLAYER, true))
+			else
+				local x, y = module:GetPlayerMapPos(mapID)
+				if not x or (x == 0 and y == 0) then
+					player:SetText(CoordsFormat(PLAYER, true))
+				else
+					player:SetFormattedText(CoordsFormat(PLAYER), 100 * x, 100 * y)
+				end
 			end
 
 			self.elapsed = 0
 		end
 	end
 
-	local updater = CreateFrame("Frame")
-	updater:SetScript("OnUpdate", UpdateCoords)
-	updater:Hide()
-
-	local function isUpdating(self)
-		updater:SetShown(self:IsShown())
-	end
-	WorldMapFrame:HookScript("OnShow", isUpdating)
-	WorldMapFrame:HookScript("OnHide", isUpdating)
+	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
+	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
 end
