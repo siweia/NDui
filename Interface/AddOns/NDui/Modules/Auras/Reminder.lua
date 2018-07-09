@@ -44,7 +44,7 @@ local function AddReminder(cfg)
 		frame.Icon:SetTexture(GetSpellTexture(spell))
 		break
 	end
-	frame.text = B.CreateFS(frame, 14, L["Lack"], false, "TOP", 0, 15)
+	frame.text = B.CreateFS(frame, 14, L["Lack"], false, "TOP", 1, 15)
 	frame:Hide()
 	cfg.frame = frame
 
