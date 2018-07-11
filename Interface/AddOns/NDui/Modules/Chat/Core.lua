@@ -3,7 +3,9 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
 
 -- Reskin Chat
+local maxLines = 1024
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
+
 local function skinChat(self)
 	if not self or (self and self.styled) then return end
 
@@ -16,6 +18,9 @@ local function skinChat(self)
 	self:SetShadowColor(0, 0, 0, 0)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
+	if self:GetMaxLines() < maxLines then
+		self:SetMaxLines(maxLines)
+	end
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
