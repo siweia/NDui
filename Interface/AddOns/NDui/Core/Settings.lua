@@ -2,21 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
 
--- Increase Chat History
-for i = 1, 50 do
-	if _G["ChatFrame"..i] and _G["ChatFrame"..i]:GetMaxLines() ~= 1024 then
-		_G["ChatFrame"..i]:SetMaxLines(1024)
-	end
-end
-hooksecurefunc("FCF_OpenTemporaryWindow", function()
-	local cf = FCF_GetCurrentChatFrame():GetName() or nil
-	if cf then
-		if (_G[cf]:GetMaxLines() ~= 1024) then
-			_G[cf]:SetMaxLines(1024)
-		end
-	end
-end)
-
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")
 print("|cff00ff00  LEG|c00ffff00 "..DB.Version.." ("..DB.Support..") |c0000ff00"..L["Version Info1"])
@@ -67,13 +52,13 @@ local function ForceUIScale()
 	B.HideOption(Advanced_UseUIScale)
 	B.HideOption(Advanced_UIScaleSlider)
 	SetCVar("useUiScale", 1)
-	local scale = NDuiDB["Settings"]["SetScale"]
+	local scale = NDuiDB["Settings"]["UIScale"]
 	if NDuiDB["Settings"]["LockUIScale"] then
 		if GetCurrentResolution() ~= 0 then
 			scale = .8*768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")
 		end
-		if scale < .5 then scale = .5 end
-		NDuiDB["Settings"]["SetScale"] = scale
+		if scale < .64 then scale = .64 end
+		NDuiDB["Settings"]["UIScale"] = scale
 	end
 
 	if scale < .64 then

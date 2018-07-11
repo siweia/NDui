@@ -183,7 +183,7 @@ local defaultSettings = {
 	},
 	Settings = {
 		LockUIScale = false,
-		SetScale = .8,
+		UIScale = .8,
 		GUIScale = 1,
 		Format = 1,
 		VersionCheck = true,
@@ -446,7 +446,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	[13] = {
 		{1, "Settings", "VersionCheck", L["Version Check"]},
 		{},--blank
-		{3, "Settings", "SetScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
+		{3, "Settings", "UIScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
 		{1, "Settings", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
 		{3, "Settings", "GUIScale", L["GUI Scale"], false, {.5, 1.5, 1}},
@@ -658,7 +658,7 @@ local function OpenGUI()
 	ok:SetPoint("RIGHT", close, "LEFT", -10, 0)
 	ok:SetFrameLevel(3)
 	ok:SetScript("OnClick", function()
-		local scale = NDuiDB["Settings"]["SetScale"]
+		local scale = NDuiDB["Settings"]["UIScale"]
 		if scale < .64 then
 			UIParent:SetScale(scale)
 		else
