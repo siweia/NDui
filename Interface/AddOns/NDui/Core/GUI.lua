@@ -45,7 +45,7 @@ local defaultSettings = {
 		Portrait = true,
 		ClassColor = false,
 		SmoothColor = false,
-		PlayerDebuff = false,
+		PlayerDebuff = true,
 		ToTAuras = false,
 		Boss = true,
 		Arena = true,
@@ -74,6 +74,7 @@ local defaultSettings = {
 		RaidClickSets = false,
 		ShowTeamIndex = false,
 		ShowPlayerPlate = false,
+		SortRunes = true,
 	},
 	Chat = {
 		Sticky = false,
@@ -278,6 +279,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SmoothColor", L["Smoothcolor HpBar"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
+		{1, "UFs", "SortRunes", L["Sort Runes"]},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
 		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
