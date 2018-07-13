@@ -97,15 +97,6 @@ DB.BuffList = {
 
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
-	HUNTER = {
-		{	spells = {	-- 独来独往
-				[164273] = true,
-			},
-			depend = 155228,
-			spec = 2,
-			instance = true,
-		},
-	},
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,
@@ -167,6 +158,3 @@ DB.ReminderBuffs = {
 		},
 	},
 }
-
--- Filter Chat symbols
-DB.Symbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "-"}
