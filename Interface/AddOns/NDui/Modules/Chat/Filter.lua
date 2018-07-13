@@ -34,6 +34,10 @@ B:RegisterEvent("PLAYER_LOGOUT", accountSettings)
 --[[
 	修改自NoGoldSeller，强迫症患者只能接受这个低占用的。
 ]]
+
+-- Filter Chat symbols
+local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "-"}
+
 local FilterList = {}
 local function genFilterList()
 	FilterList = {string.split(" ", NDuiDB["Chat"]["FilterList"] or "")}
@@ -73,7 +77,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 		return
 	end
 
-	for _, symbol in ipairs(DB.Symbols) do
+	for _, symbol in ipairs(msgSymbols) do
 		msg = gsub(msg, symbol, "")
 	end
 
