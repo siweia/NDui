@@ -35,7 +35,4 @@ function Bar:HideBlizz()
 		frame:UnregisterAllEvents()
 		DisableAllScripts(frame)
 	end
-
-	MainMenuBar.ignoreFramePositionManager = true
-	MainMenuBarArtFrame.RightEndCap.GetRight = function() return 1 end
 end

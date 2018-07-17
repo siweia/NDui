@@ -476,19 +476,6 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 			end
 		end)
 
-		-- Addon Supports
-		if IsAddOnLoaded("MeetingStone") then
-			local tips = {
-				NetEaseGUI20_Tooltip51,
-				NetEaseGUI20_Tooltip52,
-			}
-			for _, f in pairs(tips) do
-				if f then
-					f:HookScript("OnShow", style)
-				end
-			end
-		end
-
 	elseif addon == "Blizzard_Collections" then
 		local pet = {
 			PetJournalPrimaryAbilityTooltip,
