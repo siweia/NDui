@@ -219,24 +219,34 @@ function module:VersionCheck()
 	f.Text:SetText("")
 	f:Hide()
 
+	local function CompareVersion(new, old)
+		local new1, new2 = string.split(".", new)
+		new1, new2 = tonumber(new1), tonumber(new2)
+		local old1, old2 = string.split(".", old)
+		old1, old2 = tonumber(old1), tonumber(old2)
+		if new1 > old1 or new2 > old2 then
+			return "IsNew"
+		elseif new1 < old1 or new2 < old2 then
+			return "IsOld"
+		end
+	end
+
 	local checked
-	local function compareVersion(_, ...)
+	local function UpdateVersionCheck(_, ...)
 		local prefix, msg, distType = ...
 		if distType ~= "GUILD" then return end
 
 		if prefix == "NDuiVersionCheck" then
-			local a1, a2, a3 = string.split(".", msg)
-			local c1, c2, c3 = string.split(".", NDuiADB["DetectVersion"])
-			if tonumber(a1) > tonumber(c1) or tonumber(a2) > tonumber(c2) or tonumber(a3) > tonumber(c3) then
+			if CompareVersion(msg, NDuiADB["DetectVersion"]) == "IsNew" then
 				NDuiADB["DetectVersion"] = msg
 			end
 
 			if not checked then
-				local b1, b2 = string.split(".", DB.Version)
-				if tonumber(c1) > tonumber(b1) or tonumber(c2) > tonumber(b2) then
+				local status = CompareVersion(NDuiADB["DetectVersion"], DB.Version)
+				if status == "IsNew" then
 					f.Text:SetText(format(L["Outdated NDui"], NDuiADB["DetectVersion"]))
 					f:Show()
-				elseif tonumber(c1) < tonumber(b1) or tonumber(c2) < tonumber(b2) then
+				elseif status == "IsOld" then
 					C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 				end
 				checked = true
@@ -244,7 +254,7 @@ function module:VersionCheck()
 		end
 	end
 
-	B:RegisterEvent("CHAT_MSG_ADDON", compareVersion)
+	B:RegisterEvent("CHAT_MSG_ADDON", UpdateVersionCheck)
 	C_ChatInfo.RegisterAddonMessagePrefix("NDuiVersionCheck")
 	C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 end
