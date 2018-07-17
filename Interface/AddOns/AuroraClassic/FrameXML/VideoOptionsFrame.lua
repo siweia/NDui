@@ -140,7 +140,6 @@ tinsert(C.themes["AuroraClassic"], function()
 			"Advanced_UseUIScale",
 			"Advanced_MaxFPSCheckBox",
 			"Advanced_MaxFPSBKCheckBox",
-			"Advanced_ShowHDModels",
 			"NetworkOptionsPanelOptimizeSpeed",
 			"NetworkOptionsPanelUseIPv6",
 			"NetworkOptionsPanelAdvancedCombatLogging",
