@@ -197,9 +197,9 @@ local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
-	if not NDuiDB["LEGION"] then
+	if not NDuiDB["BFA"] then
 		NDuiDB = {}
-		NDuiDB["LEGION"] = true
+		NDuiDB["BFA"] = true
 	end
 
 	for i, j in pairs(defaultSettings) do
