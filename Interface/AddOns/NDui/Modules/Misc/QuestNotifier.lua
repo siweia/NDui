@@ -7,9 +7,9 @@ local completedQuest, initComplete = {}
 
 local function acceptText(link, daily)
 	if daily then
-		return format("%s: [%s]%s", L["AcceptQuest"], DAILY, link)
+		return format("%s [%s]%s", L["AcceptQuest"], DAILY, link)
 	else
-		return format("%s: %s", L["AcceptQuest"], link)
+		return format("%s %s", L["AcceptQuest"], link)
 	end
 end
 
