@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Skins")
 
 function module:CreateRM()
 	if not NDuiDB["Skins"]["RM"] then return end
@@ -207,7 +208,9 @@ function module:CreateRM()
 	B.CreateFS(checker, 16, "!", true)
 	B.CreateBC(checker, .5)
 
-	local BuffName, NoBuff, numPlayer = {L["Flask"], L["Food"], RUNES}
+	local BuffName, numPlayer = {L["Flask"], L["Food"], SPELL_STAT4_NAME, RAID_BUFF_2, RAID_BUFF_3, RUNES}
+	local NoBuff, numGroups = {}, 6
+	for i = 1, numGroups do NoBuff[i] = {} end
 
 	local debugMode = false
 	local function sendMsg(text)
@@ -237,22 +240,25 @@ function module:CreateRM()
 	end
 
 	local function scanBuff()
-		NoBuff, numPlayer = {}, 0
-		for i = 1, 3 do NoBuff[i] = {} end
+		for i = 1, numGroups do wipe(NoBuff[i]) end
+		numPlayer = 0
 
 		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do
 			local name, _, subgroup, _, _, _, _, online, isDead = GetRaidRosterInfo(i)
 			if name and online and subgroup <= maxgroup and not isDead then
 				numPlayer = numPlayer + 1
-				for j = 1, 3 do
+				for j = 1, numGroups do
 					local HasBuff
 					local buffTable = DB.BuffList[j]
 					for k = 1, #buffTable do
-						local buffname = GetSpellInfo(buffTable[k])
-						if UnitAura(name, buffname) then
-							HasBuff = true
-							break
+						local buffName = GetSpellInfo(buffTable[k])
+						for index = 1, 32 do
+							local currentBuff = UnitAura(name, index)
+							if currentBuff and currentBuff == buffName then
+								HasBuff = true
+								break
+							end
 						end
 					end
 					if not HasBuff then
@@ -262,14 +268,14 @@ function module:CreateRM()
 				end
 			end
 		end
-		if not NDuiDB["Skins"]["RMRune"] then NoBuff[3] = {} end
+		if not NDuiDB["Skins"]["RMRune"] then NoBuff[numGroups] = {} end
 
-		if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 then
+		if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and #NoBuff[6] == 0 then
 			sendMsg(L["Buffs Ready"])
 		else
 			sendMsg(L["Raid Buff Check"])
-			for i = 1, 2 do sendResult(i) end
-			if NDuiDB["Skins"]["RMRune"] then sendResult(3) end
+			for i = 1, 5 do sendResult(i) end
+			if NDuiDB["Skins"]["RMRune"] then sendResult(numGroups) end
 		end
 	end
 

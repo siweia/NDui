@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Skins")
 
 local buttonList = {}
 local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
@@ -12,7 +13,7 @@ local function CreateMicroButton(parent, data)
 	bu:SetSize(22, 22)
 	bu:SetFrameStrata("BACKGROUND")
 	bu:SetScript("OnClick", func)
-	B.CreateGT(bu, "ANCHOR_TOP", tip)
+	B.AddTooltip(bu, "ANCHOR_TOP", tip)
 
 	local icon = bu:CreateTexture(nil, "ARTWORK")
 	if texture == "encounter" then
@@ -36,12 +37,50 @@ local function CreateMicroButton(parent, data)
 	end
 end
 
+local function ReanchorAlert()
+	if TalentMicroButtonAlert then
+		TalentMicroButtonAlert:ClearAllPoints()
+		TalentMicroButtonAlert:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -220, 40)
+		TalentMicroButtonAlert:SetScript("OnMouseUp", function()
+			if not PlayerTalentFrame then LoadAddOn("Blizzard_TalentUI") end
+			ToggleFrame(PlayerTalentFrame)
+		end)
+	end
+
+	if EJMicroButtonAlert then
+		EJMicroButtonAlert:ClearAllPoints()
+		EJMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 40, 40)
+		EJMicroButtonAlert:SetScript("OnMouseUp", function()
+			if not EncounterJournal then LoadAddOn("Blizzard_EncounterJournal") end
+			ToggleFrame(EncounterJournal)
+		end)
+	end
+
+	if CollectionsMicroButtonAlert then
+		CollectionsMicroButtonAlert:ClearAllPoints()
+		CollectionsMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 65, 40)
+		CollectionsMicroButtonAlert:SetScript("OnMouseUp", function()
+			if not CollectionsJournal then LoadAddOn("Blizzard_Collections") end
+			ToggleFrame(CollectionsJournal)
+			CollectionsJournal_SetTab(CollectionsJournal, 2)
+		end)
+	end
+
+	if CharacterMicroButtonAlert then
+		CharacterMicroButtonAlert:ClearAllPoints()
+		CharacterMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", -175, 40)
+		CharacterMicroButtonAlert.SetPoint = B.Dummy
+	end
+end
+
 function module:MicroMenu()
 	-- Taint Fix
 	ToggleAllBags()
 	ToggleAllBags()
 	ToggleFrame(SpellBookFrame)
 	ToggleFrame(SpellBookFrame)
+
+	ReanchorAlert()
 
 	if not NDuiDB["Skins"]["MicroMenu"] then return end
 
@@ -63,17 +102,14 @@ function module:MicroMenu()
 			end
 		end},
 		{"achievements", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT"), function() ToggleAchievementFrame() end},
-		{"quests", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG"), function() ToggleFrame(WorldMapFrame) end},
-		{"guild", {83/256, 173/256, 80/256, 167/256}, IsInGuild() and MicroButtonTooltipText(GUILD, "TOGGLEGUILDTAB") or MicroButtonTooltipText(LOOKINGFORGUILD, "TOGGLEGUILDTAB"), function()
+		{"quests", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG"), function() ToggleQuestLog() end},
+		{"guild", {83/256, 173/256, 80/256, 167/256}, MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLEGUILDTAB"), function()
 			if IsTrialAccount() then
-				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_GUILD_TRIAL_ACCOUNT_TRIAL)
+				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_RESTRICTED_ACCOUNT_TRIAL)
 			elseif faction == "Neutral" then
 				UIErrorsFrame:AddMessage(DB.InfoColor..FEATURE_NOT_AVAILBLE_PANDAREN)
-			elseif IsInGuild() then
-				if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
-				ToggleFrame(GuildFrame)
 			else
-				ToggleGuildFinder()
+				ToggleGuildFrame()
 			end
 		end},
 		{"pvp", {83/256, 173/256, 83/256, 173/256}, MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4"), function()

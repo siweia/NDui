@@ -1,7 +1,9 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Chat")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Chat")
 
-NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_LOGOUT"}:SetScript("OnEvent", function(_, event)
+-- Account-wide settings
+local function accountSettings(event)
 	if not NDuiADB["ChatFilter"] then NDuiADB["ChatFilter"] = "" end
 	if not NDuiADB["ChatAt"] then NDuiADB["ChatAt"] = "" end
 	if not NDuiADB["Timestamp"] then NDuiADB["Timestamp"] = false end
@@ -25,11 +27,17 @@ NDui:EventFrame{"PLAYER_LOGIN", "PLAYER_LOGOUT"}:SetScript("OnEvent", function(_
 			SetCVar("showTimestamps", "none")
 		end
 	end
-end)
+end
+B:RegisterEvent("PLAYER_LOGIN", accountSettings)
+B:RegisterEvent("PLAYER_LOGOUT", accountSettings)
 
 --[[
 	修改自NoGoldSeller，强迫症患者只能接受这个低占用的。
 ]]
+
+-- Filter Chat symbols
+local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "-"}
+
 local FilterList = {}
 local function genFilterList()
 	FilterList = {string.split(" ", NDuiDB["Chat"]["FilterList"] or "")}
@@ -37,8 +45,8 @@ end
 B.genFilterList = genFilterList
 
 local friendsList = {}
-NDui:EventFrame{"FRIENDLIST_UPDATE", "BN_FRIEND_INFO_CHANGED"}:SetScript("OnEvent", function()
-	friendsList = {}
+local function updateFriends()
+	wipe(friendsList)
 
 	for i = 1, GetNumFriends() do
 		local name = GetFriendInfo(i)
@@ -55,7 +63,9 @@ NDui:EventFrame{"FRIENDLIST_UPDATE", "BN_FRIEND_INFO_CHANGED"}:SetScript("OnEven
 			end
 		end
 	end
-end)
+end
+B:RegisterEvent("FRIENDLIST_UPDATE", updateFriends)
+B:RegisterEvent("BN_FRIEND_INFO_CHANGED", updateFriends)
 
 local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	if not NDuiDB["Chat"]["EnableFilter"] then return end
@@ -67,7 +77,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 		return
 	end
 
-	for _, symbol in ipairs(DB.Symbols) do
+	for _, symbol in ipairs(msgSymbols) do
 		msg = gsub(msg, symbol, "")
 	end
 
@@ -124,22 +134,23 @@ local function chatAtMe(_, _, ...)
 				at.checker = true
 				at.author = author
 				at.class = select(2, GetPlayerInfoByGUID(guid))
-				BNToastFrame_AddToast()
+				BNToastFrame:AddToast(BN_TOAST_TYPE_NEW_INVITE)
 			end
 		end
 	end
 end
 
-hooksecurefunc("BNToastFrame_Show", function()
+hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 	if at.checker == true then
-		BNToastFrame:SetHeight(50)
-		BNToastFrameIconTexture:SetTexCoord(.75, 1, 0, .5)
-		BNToastFrameTopLine:Hide()
-		BNToastFrameMiddleLine:Hide()
-		BNToastFrameBottomLine:Hide()
-		BNToastFrameDoubleLine:Show()
+		self:SetHeight(50)
+		self.IconTexture:SetTexCoord(.75, 1, 0, .5)
+		self.TopLine:Hide()
+		self.MiddleLine:Hide()
+		self.BottomLine:Hide()
+		self.DoubleLine:Show()
+
 		local hexColor = B.HexRGB(B.ClassColor(at.class))
-		BNToastFrameDoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
+		self.DoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
 		at.checker = false
 	end
 end)

@@ -1,11 +1,10 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Buff.lua"/>
-	<Script file="BuffFormat.lua"/>
 	<Script file="Reminder.lua"/>
 	<Script file="BloodyHell.lua"/>
 	<Script file="Stagger.lua"/>
 	<Script file="Totems.lua"/>
 	<Script file="AuraWatch.lua"/>
-	<Script file="Marksman.lua"/>
+	<Script file="HunterTool.lua"/>
 	<Script file="MonkStatue.lua"/>
 </Ui>

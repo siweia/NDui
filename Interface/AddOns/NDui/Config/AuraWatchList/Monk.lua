@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 -- 武僧的法术监控
 local list = {
@@ -57,10 +58,13 @@ local list = {
 		{AuraID = 213341, UnitID = "player"},	-- 胆略
 		{AuraID = 235054, UnitID = "player"},	-- 皇帝的容电皮甲
 		{AuraID = 124682, UnitID = "player", Caster = "player"},	-- 氤氲之雾
+		{AuraID = 261769, UnitID = "player"},	-- 铁布衫
+		{AuraID = 195630, UnitID = "player"},	-- 醉拳大师
+		{AuraID = 115295, UnitID = "player", Value = true},			-- 金钟罩
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 115078, UnitID = "focus", Caster = "player"},		-- 分筋错骨
-		{AuraID = 119611, UnitID = "target", Caster = "player"},	-- 复苏之雾
+		{AuraID = 119611, UnitID = "focus", Caster = "player"},	-- 复苏之雾
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
 		{SlotID = 13, UnitID = "player"},		-- 饰品1

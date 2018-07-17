@@ -1,9 +1,10 @@
-local B, C, L, DB = unpack(select(2, ...))
-local Bar = NDui:GetModule("Actionbar")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local Bar = B:GetModule("Actionbar")
 local cfg = C.bars.bar4
-local padding, margin = 2, 2
 
 function Bar:CreateBar4()
+	local padding, margin = 2, 2
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 	local layout = NDuiDB["Actionbar"]["Style"]
@@ -28,6 +29,9 @@ function Bar:CreateBar4()
 	--move the buttons into position and reparent them
 	MultiBarRight:SetParent(frame)
 	MultiBarRight:EnableMouse(false)
+	hooksecurefunc(MultiBarRight, "SetScale", function(self, scale)
+		if scale < 1 then self:SetScale(1) end
+	end)
 
 	for i = 1, num do
 		local button = _G["MultiBarRightButton"..i]
@@ -81,24 +85,20 @@ function Bar:CreateBar4()
 
 	--create the mouseover functionality
 	if NDuiDB["Actionbar"]["Bar4Fade"] then
-		NDui.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
 	--fix annoying visibility
-	local f = NDui:EventFrame{"UNIT_EXITING_VEHICLE", "UNIT_EXITED_VEHICLE", "PET_BATTLE_CLOSE", "PET_BATTLE_OVER"}
-	f:SetScript("OnEvent", function(self, event)
-		if event == "PLAYER_REGEN_ENABLED" then
-			InterfaceOptions_UpdateMultiActionBars()
-			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-			self:UnregisterEvent(f.savedEvent)
+	local function updateVisibility(event)
+		if InCombatLockdown() then
+			B:RegisterEvent("PLAYER_REGEN_ENABLED", updateVisibility)
 		else
-			if InCombatLockdown() then
-				self:RegisterEvent("PLAYER_REGEN_ENABLED")
-				f.savedEvent = event
-			else
-				InterfaceOptions_UpdateMultiActionBars()
-				self:UnregisterEvent(event)
-			end
+			InterfaceOptions_UpdateMultiActionBars()
+			B:UnregisterEvent(event, updateVisibility)
 		end
-	end)
+	end
+	B:RegisterEvent("UNIT_EXITING_VEHICLE", updateVisibility)
+	B:RegisterEvent("UNIT_EXITED_VEHICLE", updateVisibility)
+	B:RegisterEvent("PET_BATTLE_CLOSE", updateVisibility)
+	B:RegisterEvent("PET_BATTLE_OVER", updateVisibility)
 end

@@ -1,10 +1,12 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 -- 圣骑士的法术监控
 local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 188370, UnitID = "player"},	-- 奉献
+		{AuraID = 197561, UnitID = "player"},	-- 复仇者的勇气
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 853, UnitID = "target", Caster = "player"},		-- 制裁之锤
@@ -29,7 +31,6 @@ local list = {
 		{AuraID = 642, UnitID = "player"},		-- 圣盾术
 		{AuraID = 31821, UnitID = "player"},	-- 光环掌握
 		{AuraID = 31884, UnitID = "player"},	-- 复仇之怒
-		{AuraID = 31842, UnitID = "player"},	-- 复仇之怒
 		{AuraID = 31850, UnitID = "player"},	-- 炽热防御者
 		{AuraID = 54149, UnitID = "player"},	-- 圣光灌注
 		{AuraID = 86659, UnitID = "player"},	-- 远古列王守卫
@@ -39,7 +40,6 @@ local list = {
 		{AuraID = 209785, UnitID = "player"},	-- 正义之火
 		{AuraID = 217020, UnitID = "player"},	-- 狂热
 		{AuraID = 205191, UnitID = "player"},	-- 以眼还眼
-		{AuraID = 224668, UnitID = "player"},	-- 圣洁怒火
 		{AuraID = 221885, UnitID = "player"},	-- 神圣马驹
 		{AuraID = 200652, UnitID = "player"},	-- 提尔的拯救
 		{AuraID = 214202, UnitID = "player"},	-- 律法之则
@@ -49,9 +49,14 @@ local list = {
 		{AuraID = 132403, UnitID = "player"},	-- 正义盾击
 		{AuraID = 152262, UnitID = "player"},	-- 炽天使
 		{AuraID = 221883, UnitID = "player"},	-- 神圣马驹
-		{AuraID = 238996, UnitID = "player"},	-- 正义裁决
 		{AuraID = 184662, UnitID = "player", Value = true},	-- 复仇之盾
 		{AuraID = 209388, UnitID = "player", Value = true},	-- 秩序堡垒
+		{AuraID = 267611, UnitID = "player"},	-- 正义裁决
+		{AuraID = 271581, UnitID = "player"},	-- 神圣审判
+		{AuraID = 114250, UnitID = "player"},	-- 无私自愈
+		{AuraID = 84963, UnitID = "player"},	-- 异端裁决
+		{AuraID = 280375, UnitID = "player"},	-- 多面防御
+		{AuraID = 216331, UnitID = "player"},	-- 复仇十字军
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 53563, UnitID = "focus", Caster = "player"},	-- 圣光道标

@@ -1,3 +1,70 @@
+-- Credits: Vika, Cladhaire, Tekkub
+--[[
+# Element: Tags
+
+Provides a system for text-based display of information by binding a tag string to a font string widget which in turn is
+tied to a unit frame.
+
+## Widget
+
+A FontString to hold a tag string. Unlike other elements, this widget must not have a preset name.
+
+## Notes
+
+A `Tag` is a Lua string consisting of a function name surrounded by square brackets. The tag will be replaced by the
+output of the function and displayed as text on the font string widget with that the tag has been registered. Literals
+can be pre- or appended by separating them with a `>` before or `<` after the function name. The literals will be only
+displayed when the function returns a non-nil value. I.e. `"[perhp<%]"` will display the current health as a percentage
+of the maximum health followed by the % sign.
+
+A `Tag String` is a Lua string consisting of one or multiple tags with optional literals between them. Each tag will be
+updated individually and the output will follow the tags order. Literals will be displayed in the output string
+regardless of whether the surrounding tag functions return a value. I.e. `"[curhp]/[maxhp]"` will resolve to something
+like `2453/5000`.
+
+A `Tag Function` is used to replace a single tag in a tag string by its output. A tag function receives only two
+arguments - the unit and the realUnit of the unit frame used to register the tag (see Options for further details). The
+tag function is called when the unit frame is shown or when a specified event has fired. It the tag is registered on an
+eventless frame (i.e. one holding the unit "targettarget"), then the tag function is called in a set time interval.
+
+A number of built-in tag functions exist. The layout can also define its own tag functions by adding them to the
+`oUF.Tags.Methods` table. The events upon which the function will be called are specified in a white-space separated
+list added to the `oUF.Tags.Events` table. Should an event fire without unit information, then it should also be listed
+in the `oUF.Tags.SharedEvents` table as follows: `oUF.Tags.SharedEvents.EVENT_NAME = true`.
+
+## Options
+
+.overrideUnit    - if specified on the font string widget, the frame's realUnit will be passed as the second argument to
+                   every tag function whose name is contained in the relevant tag string. Otherwise the second argument
+                   is always nil (boolean)
+.frequentUpdates - defines how often the correspondig tag function(s) should be called. This will override the events for
+                   the tag(s), if any. If the value is a number, it is taken as a time interval in seconds. If the value
+                   is a boolean, the time interval is set to 0.5 seconds (number or boolean)
+
+## Attributes
+
+.parent - the unit frame on which the tag has been registered
+
+## Examples
+
+    -- define the tag function
+    oUF.Tags.Methods['mylayout:threatname'] = function(unit, realUnit)
+        local color = _TAGS['threatcolor'](unit)
+        local name = _TAGS['name'](unit, realUnit)
+        return string.format('%s%s|r', color, name)
+    end
+
+    -- add the events
+    oUF.Tags.Events['mylayout:threatname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE'
+
+    -- create the text widget
+    local info = self.Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
+    info:SetPoint('LEFT')
+
+    -- register the tag on the text widget with oUF
+    self:Tag(info, '[mylayout:threatname]')
+--]]
+
 local _, ns = ...
 local oUF = ns.oUF
 
@@ -264,15 +331,15 @@ local tagStrings = {
 	end]],
 
 	['curmana'] = [[function(unit)
-		return UnitPower(unit, SPELL_POWER_MANA)
+		return UnitPower(unit, Enum.PowerType.Mana)
 	end]],
 
 	['maxmana'] = [[function(unit)
-		return UnitPowerMax(unit, SPELL_POWER_MANA)
+		return UnitPowerMax(unit, Enum.PowerType.Mana)
 	end]],
 
 	['soulshards'] = [[function()
-		local num = UnitPower('player', SPELL_POWER_SOUL_SHARDS)
+		local num = UnitPower('player', Enum.PowerType.SoulShards)
 		if(num > 0) then
 			return num
 		end
@@ -280,7 +347,7 @@ local tagStrings = {
 
 	['holypower'] = [[function()
 		if(GetSpecialization() == SPEC_PALADIN_RETRIBUTION) then
-			local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
+			local num = UnitPower('player', Enum.PowerType.HolyPower)
 			if(num > 0) then
 				return num
 			end
@@ -289,7 +356,7 @@ local tagStrings = {
 
 	['chi'] = [[function()
 		if(GetSpecialization() == SPEC_MONK_WINDWALKER) then
-			local num = UnitPower('player', SPELL_POWER_CHI)
+			local num = UnitPower('player', Enum.PowerType.Chi)
 			if(num > 0) then
 				return num
 			end
@@ -298,7 +365,7 @@ local tagStrings = {
 
 	['arcanecharges'] = [[function()
 		if(GetSpecialization() == SPEC_MAGE_ARCANE) then
-			local num = UnitPower('player', SPELL_POWER_ARCANE_CHARGES)
+			local num = UnitPower('player', Enum.PowerType.ArcaneCharges)
 			if(num > 0) then
 				return num
 			end
@@ -399,18 +466,18 @@ local tagEvents = {
 	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
 	['shortclassification'] = 'UNIT_CLASSIFICATION_CHANGED',
 	['group']               = 'GROUP_ROSTER_UPDATE',
-	['curpp']               = 'UNIT_POWER',
+	['curpp']               = 'UNIT_POWER_UPDATE',
 	['maxpp']               = 'UNIT_MAXPOWER',
-	['missingpp']           = 'UNIT_MAXPOWER UNIT_POWER',
-	['perpp']               = 'UNIT_MAXPOWER UNIT_POWER',
+	['missingpp']           = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
+	['perpp']               = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
 	['offline']             = 'UNIT_HEALTH UNIT_CONNECTION',
 	['status']              = 'UNIT_HEALTH PLAYER_UPDATE_RESTING UNIT_CONNECTION',
-	['curmana']             = 'UNIT_POWER UNIT_MAXPOWER',
-	['maxmana']             = 'UNIT_POWER UNIT_MAXPOWER',
-	['soulshards']          = 'UNIT_POWER',
-	['holypower']           = 'UNIT_POWER SPELLS_CHANGED',
-	['chi']                 = 'UNIT_POWER SPELLS_CHANGED',
-	['arcanecharges']       = 'UNIT_POWER SPELLS_CHANGED',
+	['curmana']             = 'UNIT_POWER_UPDATE UNIT_MAXPOWER',
+	['maxmana']             = 'UNIT_POWER_UPDATE UNIT_MAXPOWER',
+	['soulshards']          = 'UNIT_POWER_UPDATE',
+	['holypower']           = 'UNIT_POWER_UPDATE SPELLS_CHANGED',
+	['chi']                 = 'UNIT_POWER_UPDATE SPELLS_CHANGED',
+	['arcanecharges']       = 'UNIT_POWER_UPDATE SPELLS_CHANGED',
 	['powercolor']          = 'UNIT_DISPLAYPOWER',
 }
 
@@ -427,9 +494,9 @@ local frame = CreateFrame('Frame')
 frame:SetScript('OnEvent', function(self, event, unit)
 	local strings = events[event]
 	if(strings) then
-		for _, fontstring in next, strings do
-			if(fontstring:IsVisible() and (unitlessEvents[event] or fontstring.parent.unit == unit)) then
-				fontstring:UpdateTag()
+		for _, fs in next, strings do
+			if(fs:IsVisible() and (unitlessEvents[event] or fs.parent.unit == unit or (fs.extraUnits and fs.extraUnits[unit]))) then
+				fs:UpdateTag()
 			end
 		end
 	end
@@ -515,14 +582,15 @@ local tagPool = {}
 local funcPool = {}
 local tmp = {}
 
---[[ Tags: frame:Tag(fs, tagstr)
+--[[ Tags: frame:Tag(fs, tagstr, ...)
 Used to register a tag on a unit frame.
 
 * self   - the unit frame on which to register the tag
 * fs     - the font string to display the tag (FontString)
 * tagstr - the tag string (string)
+* ...    - additional optional unitID(s) the tag should update for
 --]]
-local function Tag(self, fs, tagstr)
+local function Tag(self, fs, tagstr, ...)
 	if(not fs or not tagstr) then return end
 
 	if(not self.__tags) then
@@ -683,6 +751,17 @@ local function Tag(self, fs, tagstr)
 		createOnUpdate(timer)
 	else
 		registerEvents(fs, tagstr)
+
+		if(...) then
+			if(not fs.extraUnits) then
+				fs.extraUnits = {}
+			end
+
+			for index = 1, select('#', ...) do
+				local unit = select(index, ...)
+				fs.extraUnits[unit] = true
+			end
+		end
 	end
 
 	table.insert(self.__tags, fs)

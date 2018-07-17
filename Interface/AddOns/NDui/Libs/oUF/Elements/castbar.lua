@@ -1,3 +1,80 @@
+--[[
+# Element: Castbar
+
+Handles the visibility and updating of spell castbars.
+Based upon oUF_Castbar by starlon.
+
+## Widget
+
+Castbar - A `StatusBar` to represent spell cast/channel progress.
+
+## Sub-Widgets
+
+.Text     - A `FontString` to represent spell name.
+.Icon     - A `Texture` to represent spell icon.
+.Time     - A `FontString` to represent spell duration.
+.Shield   - A `Texture` to represent if it's possible to interrupt or spell steal.
+.SafeZone - A `Texture` to represent latency.
+
+## Notes
+
+A default texture will be applied to the StatusBar and Texture widgets if they don't have a texture or a color set.
+
+## Options
+
+.timeToHold - indicates for how many seconds the castbar should be visible after a _FAILED or _INTERRUPTED
+              event. Defaults to 0 (number)
+
+## Examples
+
+    -- Position and size
+    local Castbar = CreateFrame('StatusBar', nil, self)
+    Castbar:SetSize(20, 20)
+    Castbar:SetPoint('TOP')
+    Castbar:SetPoint('LEFT')
+    Castbar:SetPoint('RIGHT')
+
+    -- Add a background
+    local Background = Castbar:CreateTexture(nil, 'BACKGROUND')
+    Background:SetAllPoints(Castbar)
+    Background:SetTexture(1, 1, 1, .5)
+
+    -- Add a spark
+    local Spark = Castbar:CreateTexture(nil, 'OVERLAY')
+    Spark:SetSize(20, 20)
+    Spark:SetBlendMode('ADD')
+
+    -- Add a timer
+    local Time = Castbar:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
+    Time:SetPoint('RIGHT', Castbar)
+
+    -- Add spell text
+    local Text = Castbar:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
+    Text:SetPoint('LEFT', Castbar)
+
+    -- Add spell icon
+    local Icon = Castbar:CreateTexture(nil, 'OVERLAY')
+    Icon:SetSize(20, 20)
+    Icon:SetPoint('TOPLEFT', Castbar, 'TOPLEFT')
+
+    -- Add Shield
+    local Shield = Castbar:CreateTexture(nil, 'OVERLAY')
+    Shield:SetSize(20, 20)
+    Shield:SetPoint('CENTER', Castbar)
+
+    -- Add safezone
+    local SafeZone = Castbar:CreateTexture(nil, 'OVERLAY')
+
+    -- Register it with oUF
+    Castbar.bg = Background
+    Castbar.Spark = Spark
+    Castbar.Time = Time
+    Castbar.Text = Text
+    Castbar.Icon = Icon
+    Castbar.Shield = Shield
+    Castbar.SafeZone = SafeZone
+    self.Castbar = Castbar
+--]]
 local _, ns = ...
 local oUF = ns.oUF
 
@@ -23,7 +100,7 @@ local function UNIT_SPELLCAST_START(self, event, unit)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
-	local name, _, text, texture, startTime, endTime, _, castID, notInterruptible, spellID = UnitCastingInfo(unit)
+	local name, text, texture, startTime, endTime, _, castID, notInterruptible, spellID = UnitCastingInfo(unit)
 	if(not name) then
 		return element:Hide()
 	end
@@ -63,13 +140,22 @@ local function UNIT_SPELLCAST_START(self, event, unit)
 		updateSafeZone(element)
 	end
 
+	--[[ Callback: Castbar:PostCastStart(unit, name, castID, spellID)
+	Called after the element has been updated upon a spell cast start.
+
+	* self    - the Castbar widget
+	* unit    - unit for which the update has been triggered (string)
+	* name    - name of the spell being cast (string)
+	* castID  - unique identifier of the current spell cast (string)
+	* spellID - spell identifier of the spell being cast (number)
+	--]]
 	if(element.PostCastStart) then
 		element:PostCastStart(unit, name, castID, spellID)
 	end
 	element:Show()
 end
 
-local function UNIT_SPELLCAST_FAILED(self, event, unit, spellname, _, castID, spellID)
+local function UNIT_SPELLCAST_FAILED(self, event, unit, castID, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
@@ -86,12 +172,21 @@ local function UNIT_SPELLCAST_FAILED(self, event, unit, spellname, _, castID, sp
 	element.notInterruptible = nil
 	element.holdTime = element.timeToHold or 0
 
+	--[[ Callback: Castbar:PostCastFailed(unit, name, castID, spellID)
+	Called after the element has been updated upon a failed spell cast.
+
+	* self    - the Castbar widget
+	* unit    - unit for which the update has been triggered (string)
+	* name    - name of the failed spell (string)
+	* castID  - unique identifier of the failed spell cast (string)
+	* spellID - spell identifier of the failed spell (number)
+	--]]
 	if(element.PostCastFailed) then
-		return element:PostCastFailed(unit, spellname, castID, spellID)
+		return element:PostCastFailed(unit, GetSpellInfo(spellID), castID, spellID)
 	end
 end
 
-local function UNIT_SPELLCAST_INTERRUPTED(self, event, unit, spellname, _, castID, spellID)
+local function UNIT_SPELLCAST_INTERRUPTED(self, event, unit, castID, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
@@ -108,8 +203,17 @@ local function UNIT_SPELLCAST_INTERRUPTED(self, event, unit, spellname, _, castI
 	element.channeling = nil
 	element.holdTime = element.timeToHold or 0
 
+	--[[ Callback: Castbar:PostCastInterrupted(unit, name, castID, spellID)
+	Called after the element has been updated upon an interrupted spell cast.
+
+	* self    - the Castbar widget
+	* unit    - unit for which the update has been triggered (string)
+	* name    - name of the interrupted spell (string)
+	* castID  - unique identifier of the interrupted spell cast (string)
+	* spellID - spell identifier of the interrupted spell (number)
+	--]]
 	if(element.PostCastInterrupted) then
-		return element:PostCastInterrupted(unit, spellname, castID, spellID)
+		return element:PostCastInterrupted(unit, GetSpellInfo(spellID), castID, spellID)
 	end
 end
 
@@ -124,6 +228,12 @@ local function UNIT_SPELLCAST_INTERRUPTIBLE(self, event, unit)
 
 	element.notInterruptible = nil
 
+	--[[ Callback: Castbar:PostCastInterruptible(unit)
+	Called after the element has been updated when a spell cast has become interruptible.
+
+	* self - the Castbar widget
+	* unit - unit for which the update has been triggered (string)
+	--]]
 	if(element.PostCastInterruptible) then
 		return element:PostCastInterruptible(unit)
 	end
@@ -140,16 +250,22 @@ local function UNIT_SPELLCAST_NOT_INTERRUPTIBLE(self, event, unit)
 
 	element.notInterruptible = true
 
+	--[[ Callback: Castbar:PostCastNotInterruptible(unit)
+	Called after the element has been updated when a spell cast has become non-interruptible.
+
+	* self - the Castbar widget
+	* unit - unit for which the update has been triggered (string)
+	--]]
 	if(element.PostCastNotInterruptible) then
 		return element:PostCastNotInterruptible(unit)
 	end
 end
 
-local function UNIT_SPELLCAST_DELAYED(self, event, unit, _, _, _, spellID)
+local function UNIT_SPELLCAST_DELAYED(self, event, unit, _, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
-	local name, _, _, _, startTime, _, _, castID = UnitCastingInfo(unit)
+	local name, _, _, startTime, _, _, castID = UnitCastingInfo(unit)
 	if(not startTime or not element:IsShown()) then return end
 
 	local duration = GetTime() - (startTime / 1000)
@@ -160,12 +276,21 @@ local function UNIT_SPELLCAST_DELAYED(self, event, unit, _, _, _, spellID)
 
 	element:SetValue(duration)
 
+	--[[ Callback: Castbar:PostCastDelayed(unit, name, castID, spellID)
+	Called after the element has been updated when a spell cast has been delayed.
+
+	* self    - the Castbar widget
+	* unit    - unit that the update has been triggered (string)
+	* name    - name of the delayed spell (string)
+	* castID  - unique identifier of the delayed spell cast (string)
+	* spellID - spell identifier of the delayed spell (number)
+	--]]
 	if(element.PostCastDelayed) then
 		return element:PostCastDelayed(unit, name, castID, spellID)
 	end
 end
 
-local function UNIT_SPELLCAST_STOP(self, event, unit, spellname, _, castID, spellID)
+local function UNIT_SPELLCAST_STOP(self, event, unit, castID, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
@@ -176,16 +301,25 @@ local function UNIT_SPELLCAST_STOP(self, event, unit, spellname, _, castID, spel
 	element.casting = nil
 	element.notInterruptible = nil
 
+	--[[ Callback: Castbar:PostCastStop(unit, name, castID, spellID)
+	Called after the element has been updated when a spell cast has finished.
+
+	* self    - the Castbar widget
+	* unit    - unit for which the update has been triggered (string)
+	* name    - name of the spell (string)
+	* castID  - unique identifier of the finished spell cast (string)
+	* spellID - spell identifier of the spell (number)
+	--]]
 	if(element.PostCastStop) then
-		return element:PostCastStop(unit, spellname, castID, spellID)
+		return element:PostCastStop(unit, GetSpellInfo(spellID), castID, spellID)
 	end
 end
 
-local function UNIT_SPELLCAST_CHANNEL_START(self, event, unit, _, _, _, spellID)
+local function UNIT_SPELLCAST_CHANNEL_START(self, event, unit, _, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
-	local name, _, _, texture, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
+	local name, _, texture, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
 	if(not name) then
 		return
 	end
@@ -231,17 +365,25 @@ local function UNIT_SPELLCAST_CHANNEL_START(self, event, unit, _, _, _, spellID)
 		updateSafeZone(element)
 	end
 
+	--[[ Callback: Castbar:PostChannelStart(unit, name, spellID)
+	Called after the element has been updated upon a spell channel start.
+
+	* self    - the Castbar widget
+	* unit    - unit for which the update has been triggered (string)
+	* name    - name of the channeled spell (string)
+	* spellID - spell identifier of the channeled spell (number)
+	--]]
 	if(element.PostChannelStart) then
 		element:PostChannelStart(unit, name, spellID)
 	end
 	element:Show()
 end
 
-local function UNIT_SPELLCAST_CHANNEL_UPDATE(self, event, unit, _, _, _, spellID)
+local function UNIT_SPELLCAST_CHANNEL_UPDATE(self, event, unit, _, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
-	local name, _, _, _, startTime, endTime = UnitChannelInfo(unit)
+	local name, _, _, startTime, endTime = UnitChannelInfo(unit)
 	if(not name or not element:IsShown()) then
 		return
 	end
@@ -255,12 +397,20 @@ local function UNIT_SPELLCAST_CHANNEL_UPDATE(self, event, unit, _, _, _, spellID
 	element:SetMinMaxValues(0, element.max)
 	element:SetValue(duration)
 
+	--[[ Callback: Castbar:PostChannelUpdate(unit, name, spellID)
+	Called after the element has been updated after a channeled spell has been delayed or interrupted.
+
+	* self    - the Castbar widget
+	* unit    - unit for which the update has been triggered (string)
+	* name    - name of the channeled spell (string)
+	* spellID - spell identifier of the channeled spell (number)
+	--]]
 	if(element.PostChannelUpdate) then
 		return element:PostChannelUpdate(unit, name, spellID)
 	end
 end
 
-local function UNIT_SPELLCAST_CHANNEL_STOP(self, event, unit, spellname, _, _, spellID)
+local function UNIT_SPELLCAST_CHANNEL_STOP(self, event, unit, _, spellID)
 	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local element = self.Castbar
@@ -268,8 +418,16 @@ local function UNIT_SPELLCAST_CHANNEL_STOP(self, event, unit, spellname, _, _, s
 		element.channeling = nil
 		element.notInterruptible = nil
 
+		--[[ Callback: Castbar:PostChannelUpdate(unit, name, spellID)
+		Called after the element has been updated after a channeled spell has been completed.
+
+		* self    - the Castbar widget
+		* unit    - unit for which the update has been triggered (string)
+		* name    - name of the channeled spell (string)
+		* spellID - spell identifier of the channeled spell (number)
+		--]]
 		if(element.PostChannelStop) then
-			return element:PostChannelStop(unit, spellname, spellID)
+			return element:PostChannelStop(unit, GetSpellInfo(spellID), spellID)
 		end
 	end
 end

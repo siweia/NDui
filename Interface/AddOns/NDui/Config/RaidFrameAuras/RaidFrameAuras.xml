@@ -7,4 +7,6 @@
 	<Script file="Legion\TheNighthold.lua"/>
 	<Script file="Legion\TombofSargeras.lua"/>
 	<Script file="Legion\AntorusBurningThrone.lua"/>
+	<Script file="BfA\Party-BfA.lua"/>
+	<Script file="BfA\Uldir.lua"/>
 </Ui>

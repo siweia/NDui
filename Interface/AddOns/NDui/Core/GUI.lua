@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 -- Default Settings
 local defaultSettings = {
@@ -22,9 +23,7 @@ local defaultSettings = {
 		BankWidth = 14,
 		BagsiLvl = true,
 		Artifact = true,
-		NewItemGlow = true,
 		ReverseSort = false,
-		PreferPower = 1,
 		ItemFilter = true,
 		ItemSetFilter = false,
 	},
@@ -34,7 +33,7 @@ local defaultSettings = {
 		BloodyHell = true,
 		Totems = true,
 		DestroyTotems = true,
-		Marksman = true,
+		HunterTool = true,
 		Statue = true,
 	},
 	AuraWatch = {
@@ -46,14 +45,11 @@ local defaultSettings = {
 		Portrait = true,
 		ClassColor = false,
 		SmoothColor = false,
-		PlayerDebuff = false,
+		PlayerDebuff = true,
 		ToTAuras = false,
 		Boss = true,
 		Arena = true,
-		ExpRep = false,
 		Castbars = true,
-		ClassPower = true,
-		AddPower = true,
 		StealableBuff = true,
 		SwingBar = false,
 		SwingTimer = false,
@@ -77,6 +73,8 @@ local defaultSettings = {
 		PetCombatText = true,
 		RaidClickSets = false,
 		ShowTeamIndex = false,
+		ShowPlayerPlate = false,
+		SortRunes = true,
 	},
 	Chat = {
 		Sticky = false,
@@ -86,8 +84,6 @@ local defaultSettings = {
 		Keyword = "raid",
 		Oldname = false,
 		GuildInvite = true,
-		NoFade = false,
-		EasyResize = true,
 		EnableFilter = true,
 		Matches = 1,
 		BlockAddonAlert = true,
@@ -97,8 +93,7 @@ local defaultSettings = {
 		Invite = true,
 		Clock = false,
 		CombatPulse = true,
-		HideFog = true,
-		MapScale = 1.1,
+		MapScale = 1,
 		MinmapScale = 1.4,
 		ShowRecycleBin = true,
 		WhoPings = true,
@@ -151,7 +146,6 @@ local defaultSettings = {
 		CombatHide = false,
 		Cursor = false,
 		ClassColor = false,
-		Scale = 1,
 		HideTitle = false,
 		HideRealm = false,
 		HideRank = false,
@@ -170,7 +164,6 @@ local defaultSettings = {
 		RareAlerter = true,
 		AlertinChat = false,
 		Focuser = true,
-		Autoequip = true,
 		ExpRep = true,
 		Screenshot = false,
 		TradeTab = true,
@@ -185,10 +178,12 @@ local defaultSettings = {
 		SwapingAlert = false,
 		SistersAlert = false,
 		AntoranBlast = false,
+		QuestNotifier = false,
+		QuestProgress = false,
 	},
 	Settings = {
 		LockUIScale = false,
-		SetScale = .8,
+		UIScale = .8,
 		GUIScale = 1,
 		Format = 1,
 		VersionCheck = true,
@@ -198,12 +193,13 @@ local defaultSettings = {
 	},
 }
 
-NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon)
+local loader = CreateFrame("Frame")
+loader:RegisterEvent("ADDON_LOADED")
+loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
-	self:UnregisterEvent(event)
-	if not NDuiDB["LEGION"] then
+	if not NDuiDB["BFA"] then
 		NDuiDB = {}
-		NDuiDB["LEGION"] = true
+		NDuiDB["BFA"] = true
 	end
 
 	for i, j in pairs(defaultSettings) do
@@ -218,6 +214,7 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(self, event, addon
 			if NDuiDB[i] == nil then NDuiDB[i] = j end
 		end
 	end
+	self:UnregisterAllEvents()
 end)
 
 -- Config
@@ -258,11 +255,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
 		{1, "Bags", "Artifact", L["Bags Artifact"], true},
-		{1, "Bags", "NewItemGlow", L["Bags NewItemGlow"]},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
-		{4, "Bags", "PreferPower", L["AP Preference"], true, {}},
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"]},
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -284,10 +279,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SmoothColor", L["Smoothcolor HpBar"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
-		{},--blank
-		{1, "UFs", "ClassPower", L["UFs ClassPower"]},
-		{1, "UFs", "AddPower", L["UFs ExtraMana"], true},
-		{1, "UFs", "ExpRep", L["UFs Expbar"]},
+		{1, "UFs", "SortRunes", L["Sort Runes"]},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
 		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
@@ -317,6 +309,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", L["Enable Nameplate"]},
+		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"], true},
 		{},--blank
 		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
 		{1, "Nameplate", "AllAuras", L["Show All Auras"], true},
@@ -327,7 +320,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowUnitPower", "|cff70c0f5"..L["ShowUnitPower"], true},
 		{2, "Nameplate", "UnitList", L["UnitColor List"]},
 		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"], true},
-		{},--blank
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"]},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"], true},
 		{1, "Nameplate", "TankMode", L["Tank Mode"]},
@@ -350,7 +342,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Auras", "Statue", L["Enable Statue"]},
 		{1, "Auras", "Totems", L["Enable Totems"]},
 		{1, "Auras", "DestroyTotems", L["Destroy Totems"], true},
-		{1, "Auras", "Marksman", L["Enable Marksman"]},
+		{1, "Auras", "HunterTool", L["Enable HunterTool"]},
 	},
 	[7] = {
 		{1, "Skins", "RM", L["Raid Manger"]},
@@ -358,16 +350,21 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "EasyMarking", L["Easy Mark"]},
 		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
 		{},--blank
+		{1, "Chat", "Invite", L["Whisper Invite"]},
+		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
+		{2, "Chat", "Keyword", L["Whisper Keyword"]},
+		{},--blank
+		{1, "Misc", "QuestNotifier", L["QuestNotifier"]},
+		{1, "Misc", "QuestProgress", L["QuestProgress"], true},
+		{1, "Misc", "RareAlerter", L["Rare Alert"]},
+		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"], true},
 		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"]},
 		{1, "Misc", "SwapingAlert", L["Swaping Alert"], true},
+		{},--blank
 		{1, "Misc", "SistersAlert", L["SistersAlert Alert"]},
 		{1, "Misc", "AntoranBlast", L["AntoranBlast Alert"], true},
-		{},--blank
-		{1, "Chat", "Invite", L["Whisper Invite"]},
-		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
-		{2, "Chat", "Keyword", L["Whisper Keyword"]},
 	},
 	[8] = {
 		{1, "Chat", "Lock", L["Lock Chat"]},
@@ -375,10 +372,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Freedom", L["Language Filter"]},
 		{1, "Chat", "Sticky", L["Chat Sticky"], true},
 		{1, "Chat", "Oldname", L["Default Channel"]},
-		{1, "Chat", "NoFade", L["Chat Nofade"], true},
 		{1, "Chat", "Timestamp", L["Timestamp"]},
-		{1, "Chat", "EasyResize", L["Resizing"], true},
-		{2, "Chat", "AtList", L["@List"], false, nil, function() B.genChatAtList() end},
+		{2, "Chat", "AtList", L["@List"], true, nil, function() B.genChatAtList() end},
 		{},--blank
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
@@ -422,7 +417,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
 		{1, "Tooltip", "Cursor", L["Follow Cursor"]},
 		{1, "Tooltip", "ClassColor", L["Classcolor Border"], true},
-		{3, "Tooltip", "Scale", L["Tooltip Scale"], false, {.5, 1.5, 1}},
 		{},--blank
 		{1, "Tooltip", "HideTitle", L["Hide Title"]},
 		{1, "Tooltip", "HideRealm", L["Hide Realm"], true},
@@ -443,20 +437,16 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MissingStats", L["Show MissingStats"], true},
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"]},
 		{1, "Misc", "FasterLoot", L["Faster Loot"], true},
-		{1, "Misc", "Autoequip", L["Auto Equip"]},
 		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
 		{1, "Misc", "HideErrors", L["Hide Error"]},
 		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
-		{},--blank
-		{1, "Misc", "RareAlerter", L["Rare Alert"]},
-		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 	},
 	[13] = {
 		{1, "Settings", "VersionCheck", L["Version Check"]},
 		{},--blank
-		{3, "Settings", "SetScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
+		{3, "Settings", "UIScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
 		{1, "Settings", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
 		{3, "Settings", "GUIScale", L["GUI Scale"], false, {.5, 1.5, 1}},
@@ -481,8 +471,8 @@ local function SelectTab(i)
 	end
 end
 
-local function CreateTab(i, name)
-	local tab = CreateFrame("Button", nil, NDuiGUI)
+local function CreateTab(parent, i, name)
+	local tab = CreateFrame("Button", nil, parent)
 	tab:SetPoint("TOPLEFT", 20, -30*i - 20)
 	tab:SetSize(130, 30)
 	B.CreateBD(tab, .3)
@@ -585,9 +575,9 @@ local function CreateOption(i)
 			bd:SetPoint("BOTTOMRIGHT", -15, 3)
 			bd:SetFrameStrata("BACKGROUND")
 			B.CreateBD(bd, .3)
-			local slider = select(4, s:GetRegions())
-			slider:SetTexture(DB.sparkTex)
-			slider:SetBlendMode("ADD")
+			local thumb = _G[s:GetName().."Thumb"]
+			thumb:SetTexture(DB.sparkTex)
+			thumb:SetBlendMode("ADD")
 		-- Dropdown
 		elseif type == 4 then
 			local dd = B.CreateDropDown(parent, 200, 30, data)
@@ -668,7 +658,7 @@ local function OpenGUI()
 	ok:SetPoint("RIGHT", close, "LEFT", -10, 0)
 	ok:SetFrameLevel(3)
 	ok:SetScript("OnClick", function()
-		local scale = NDuiDB["Settings"]["SetScale"]
+		local scale = NDuiDB["Settings"]["UIScale"]
 		if scale < .64 then
 			UIParent:SetScale(scale)
 		else
@@ -678,20 +668,8 @@ local function OpenGUI()
 		StaticPopup_Show("RELOAD_NDUI")
 	end)
 
-	-- PreUpdate Power Preference
-	do
-		local specList = optionList[2][7][6]
-		tinsert(specList, NONE)
-		for i = 1, 4 do
-			local spec, name = GetSpecializationInfo(i)
-			if spec then
-				tinsert(specList, name)
-			end
-		end
-	end
-
 	for i, name in pairs(tabList) do
-		guiTab[i] = CreateTab(i, name)
+		guiTab[i] = CreateTab(f, i, name)
 
 		guiPage[i] = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
 		guiPage[i]:SetPoint("TOPLEFT", 160, -50)
@@ -701,8 +679,8 @@ local function OpenGUI()
 		guiPage[i].child = CreateFrame("Frame", nil, guiPage[i])
 		guiPage[i].child:SetSize(610, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
-		if IsAddOnLoaded("Aurora") then
-			local F = unpack(Aurora)
+		if IsAddOnLoaded("AuroraClassic") then
+			local F = unpack(AuroraClassic)
 			F.ReskinScroll(guiPage[i].ScrollBar)
 		end
 
@@ -742,17 +720,18 @@ local function OpenGUI()
 	end)
 	credit:SetScript("OnLeave", GameTooltip_Hide)
 
-	NDui:EventFrame{"PLAYER_REGEN_DISABLED"}:SetScript("OnEvent", function(self, event)
+	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
 				f:Hide()
-				self:RegisterEvent("PLAYER_REGEN_ENABLED")
+				B:RegisterEvent("PLAYER_REGEN_ENABLED", showLater)
 			end
 		else
 			f:Show()
-			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			B:UnregisterEvent(event, showLater)
 		end
-	end)
+	end
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4], 150, 30, L["Add ClickSets"])
@@ -791,7 +770,7 @@ gui:SetScript("OnClick", function()
 end)
 
 -- Aurora Reskin
-if IsAddOnLoaded("Aurora") then
-	local F = unpack(Aurora)
+if IsAddOnLoaded("AuroraClassic") then
+	local F = unpack(AuroraClassic)
 	F.Reskin(gui)
 end

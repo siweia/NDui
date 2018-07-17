@@ -1,3 +1,37 @@
+--[[
+# Element: Portraits
+
+Handles the updating of the unit's portrait.
+
+## Widget
+
+Portrait - A `PlayerModel` or a `Texture` used to represent the unit's portrait.
+
+## Notes
+
+A question mark model will be used if the widget is a PlayerModel and the client doesn't have the model information for
+the unit.
+
+## Examples
+
+    -- 3D Portrait
+    -- Position and size
+    local Portrait = CreateFrame('PlayerModel', nil, self)
+    Portrait:SetSize(32, 32)
+    Portrait:SetPoint('RIGHT', self, 'LEFT')
+
+    -- Register it with oUF
+    self.Portrait = Portrait
+
+    -- 2D Portrait
+    local Portrait = self:CreateTexture(nil, 'OVERLAY')
+    Portrait:SetSize(32, 32)
+    Portrait:SetPoint('RIGHT', self, 'LEFT')
+
+    -- Register it with oUF
+    self.Portrait = Portrait
+--]]
+
 local _, ns = ...
 local oUF = ns.oUF
 
@@ -6,6 +40,12 @@ local function Update(self, event, unit)
 
 	local element = self.Portrait
 
+	--[[ Callback: Portrait:PreUpdate(unit)
+	Called before the element has been updated.
+
+	* self - the Portrait element
+	* unit - the unit for which the update has been triggered (string)
+	--]]
 	if(element.PreUpdate) then element:PreUpdate(unit) end
 
 	local guid = UnitGUID(unit)
@@ -33,12 +73,25 @@ local function Update(self, event, unit)
 		element.state = isAvailable
 	end
 
+	--[[ Callback: Portrait:PostUpdate(unit)
+	Called after the element has been updated.
+
+	* self - the Portrait element
+	* unit - the unit for which the update has been triggered (string)
+	--]]
 	if(element.PostUpdate) then
 		return element:PostUpdate(unit)
 	end
 end
 
 local function Path(self, ...)
+	--[[ Override: Portrait.Override(self, event, unit)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	--]]
 	return (self.Portrait.Override or Update) (self, ...)
 end
 
@@ -54,6 +107,7 @@ local function Enable(self, unit)
 
 		self:RegisterEvent('UNIT_MODEL_CHANGED', Path)
 		self:RegisterEvent('UNIT_PORTRAIT_UPDATE', Path)
+		self:RegisterEvent('PORTRAITS_UPDATED', Path)
 		self:RegisterEvent('UNIT_CONNECTION', Path)
 
 		-- The quest log uses PARTY_MEMBER_{ENABLE,DISABLE} to handle updating of
@@ -79,6 +133,7 @@ local function Disable(self)
 
 		self:UnregisterEvent('UNIT_MODEL_CHANGED', Path)
 		self:UnregisterEvent('UNIT_PORTRAIT_UPDATE', Path)
+		self:UnregisterEvent('PORTRAITS_UPDATED', Path)
 		self:UnregisterEvent('PARTY_MEMBER_ENABLE', Path)
 		self:UnregisterEvent('UNIT_CONNECTION', Path)
 	end

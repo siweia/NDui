@@ -1,10 +1,11 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
-local targetTable
+local targetTable = {}
 local function ScanTargets(unit)
 	if not IsInGroup() then return end
 
-	targetTable = {}
+	wipe(targetTable)
 	for i = 1, GetNumGroupMembers() do
 		local member = (IsInRaid() and "raid"..i or "party"..i)
 		if UnitIsUnit(unit, member.."target") and not UnitIsUnit("player", member) and not UnitIsDeadOrGhost(member) then

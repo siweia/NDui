@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 -- 团队框体职业相关Buffs
 local list = {
@@ -26,7 +27,9 @@ local list = {
 		[80354] = true,		-- 时空错位
 		[95809] = true,		-- 疯狂
 		[123981] = true,	-- 永劫不复
+		[209261] = true,	-- 未被污染的邪能
 		[160455] = true,	-- 疲倦
+		[264689] = true,	-- 疲倦
 	},
 	["DRUID"] = {		-- 德鲁伊
 		[774] = true,		-- 回春

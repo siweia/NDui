@@ -1,6 +1,7 @@
-local B, C, L, DB = unpack(select(2, ...))
-local oUF = NDui.oUF or oUF
-local UF = NDui:GetModule("UnitFrames")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
+local UF = B:GetModule("UnitFrames")
 
 -- Units
 local function CreatePlayerStyle(self)
@@ -19,10 +20,10 @@ local function CreatePlayerStyle(self)
 	UF:CreatePrediction(self)
 	UF:CreateFCT(self)
 	UF:CreateMirrorBar()
+	UF:CreateAddPower(self)
 
-	if NDuiDB["UFs"]["ClassPower"] then UF:CreateClassPower(self) end
-	if NDuiDB["UFs"]["AddPower"] then UF:CreateAddPower(self) end
-	if NDuiDB["UFs"]["ExpRep"] then UF:CreateExpRepBar(self) end
+	if not NDuiDB["Nameplate"]["Enable"] or not NDuiDB["Nameplate"]["ShowPlayerPlate"] then UF:CreateClassPower(self) end
+	if not NDuiDB["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 	if NDuiDB["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
 	if NDuiDB["UFs"]["SwingBar"] then UF:CreateSwing(self) end
 end
@@ -161,6 +162,7 @@ oUF:RegisterStyle("Boss", CreateBossStyle)
 oUF:RegisterStyle("Arena", CreateArenaStyle)
 oUF:RegisterStyle("Raid", CreateRaidStyle)
 oUF:RegisterStyle("Nameplates", UF.CreatePlates)
+oUF:RegisterStyle("PlayerPlate", UF.CreatePlayerPlate)
 
 -- Spawns
 function UF:OnLogin()
@@ -169,10 +171,15 @@ function UF:OnLogin()
 		self:BlockAddons()
 		self:CreateUnitTable()
 		self:CreatePowerUnitTable()
-		self:CreateClassBar()
 
 		oUF:SetActiveStyle("Nameplates")
 		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
+
+		if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+			oUF:SetActiveStyle("PlayerPlate")
+			local plate = oUF:Spawn("player", "oUF_PlayerPlate", true)
+			B.Mover(plate, L["PlayerNP"], "PlayerPlate", C.UFs.PlayerPlate, plate:GetWidth(), 20)
+		end
 	end
 
 	-- Default Clicksets for RaidFrame
@@ -244,12 +251,9 @@ function UF:OnLogin()
 				bars[i] = bar
 			end
 
-			local f = NDui:EventFrame{"PLAYER_ENTERING_WORLD", "ARENA_PREP_OPPONENT_SPECIALIZATIONS", "ARENA_OPPONENT_UPDATE"}
-			f:SetScript("OnEvent", function(_, event)
+			local function UpdateArenaPreps(event)
 				if event == "ARENA_OPPONENT_UPDATE" then
-					for i = 1, 5 do
-						bars[i]:Hide()
-					end
+					for i = 1, 5 do bars[i]:Hide() end
 				else
 					local numOpps = GetNumArenaOpponentSpecs()
 					if numOpps > 0 then
@@ -268,12 +272,13 @@ function UF:OnLogin()
 							end
 						end
 					else
-						for i = 1, 5 do
-							bars[i]:Hide()
-						end
+						for i = 1, 5 do bars[i]:Hide() end
 					end
 				end
-			end)
+			end
+			B:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateArenaPreps)
+			B:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", UpdateArenaPreps)
+			B:RegisterEvent("ARENA_OPPONENT_UPDATE", UpdateArenaPreps)
 		end
 	end
 
@@ -389,7 +394,7 @@ function UF:OnLogin()
 		if raidMover then
 			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
 
-			NDui:EventFrame{"UNIT_SPELLCAST_SUCCEEDED", "PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(_, event, ...)
+			local function UpdateSpecPos(event, ...)
 				local unit, _, _, _, spellID = ...
 				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
 					if not GetSpecialization() then return end
@@ -400,7 +405,9 @@ function UF:OnLogin()
 					raidMover:ClearAllPoints()
 					raidMover:SetPoint(unpack(NDuiDB["Mover"]["RaidPos"..specIndex]))
 				end
-			end)
+			end
+			B:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateSpecPos)
+			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos)
 
 			raidMover:HookScript("OnDragStop", function()
 				if not GetSpecialization() then return end

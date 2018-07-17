@@ -1,33 +1,26 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Chat")
-
--- Hide elements
-ChatFrameMenuButton.Show = B.Dummy
-ChatFrameMenuButton:Hide()
-QuickJoinToastButton.Show = B.Dummy
-QuickJoinToastButton:Hide()
-BNToastFrame:SetClampedToScreen(true)
-BNToastFrame:SetClampRectInsets(-15, 15, 15, -15)
-BNToastFrame:HookScript("OnShow", function(self)
-	self:ClearAllPoints()
-	self:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 0, 25)
-end)
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Chat")
 
 -- Reskin Chat
+local maxLines = 1024
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
+
 local function skinChat(self)
 	if not self or (self and self.styled) then return end
 
 	local name = self:GetName()
+	local fontSize = select(2, self:GetFont())
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetMaxResize(maxWidth, maxHeight)
 	self:SetMinResize(100, 50)
-	self:SetFont(unpack(DB.Font))
+	self:SetFont(DB.Font[1], fontSize, DB.Font[3])
 	self:SetShadowColor(0, 0, 0, 0)
-
-	local frame = _G[name.."ButtonFrame"]
-	frame:Hide()
-	frame:HookScript("OnShow", frame.Hide)
+	self:SetClampRectInsets(0, 0, 0, 0)
+	self:SetClampedToScreen(false)
+	if self:GetMaxLines() < maxLines then
+		self:SetMaxLines(maxLines)
+	end
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
@@ -46,13 +39,6 @@ local function skinChat(self)
 	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 28, 0)
 	B.CreateBD(lang)
 	B.CreateTex(lang)
-	lang:HookScript("OnMouseUp", function(_, btn)
-		if btn == "RightButton" then
-			ChatMenu:ClearAllPoints()
-			ChatMenu:SetPoint("BOTTOMRIGHT", eb, 0, 30)
-			ToggleFrame(ChatMenu)
-		end
-	end)
 
 	local tab = _G[name.."Tab"]
 	tab:SetAlpha(1)
@@ -60,45 +46,25 @@ local function skinChat(self)
 	tabFs:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
 	tabFs:SetShadowColor(0, 0, 0, 0)
 	tabFs:SetTextColor(1, .8, 0)
-	for i = 1, 6 do
-		select(i, tab:GetRegions()):SetTexture(nil)
-	end
-	select(8, tab:GetRegions()):SetTexture(nil)
-	select(9, tab:GetRegions()):SetTexture(nil)
-	select(10, tab:GetRegions()):SetTexture(nil)
-
-	self.styled = true
-end
-
-for i = 1, NUM_CHAT_WINDOWS do
-	skinChat(_G["ChatFrame"..i])
-end
-
-hooksecurefunc("FCF_OpenTemporaryWindow", function()
-	for _, chatFrameName in next, CHAT_FRAMES do
-		local frame = _G[chatFrameName]
-		if frame.isTemporary then
-			skinChat(frame)
+	for i = 1, 10 do
+		if i ~= 7 then
+			select(i, tab:GetRegions()):SetTexture(nil)
 		end
 	end
-end)
 
--- Tabs alpha and color
-hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
-	if selected then
-		self:SetAlpha(1)
-		self:GetFontString():SetTextColor(1, .8, 0)
-	else
-		self:GetFontString():SetTextColor(.5, .5, .5)
-		self:SetAlpha(.3)
-	end
-end)
-CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = .3
-DEFAULT_CHATFRAME_ALPHA = 0
+	hooksecurefunc(tab, "SetAlpha", function(self, alpha)
+		if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
+			self:SetAlpha(1)
+		elseif alpha < .6 then
+			self:SetAlpha(.6)
+		end
+	end)
 
--- Font size
-for i = 1, 15 do
-	CHAT_FONT_HEIGHTS[i] = i + 9
+	B.HideObject(self.buttonFrame)
+	B.HideObject(self.ScrollBar)
+	B.HideObject(self.ScrollToBottomButton)
+
+	self.styled = true
 end
 
 -- Swith channels by Tab
@@ -166,37 +132,65 @@ hooksecurefunc("FloatingChatFrame_OnMouseScroll", function(self, dir)
 end)
 
 -- Autoinvite by whisper
-local f = NDui:EventFrame{"CHAT_MSG_WHISPER", "CHAT_MSG_BN_WHISPER"}
-f:SetScript("OnEvent", function(self, event, ...)
+function module:WhipserInvite()
 	if not NDuiDB["Chat"]["Invite"] then return end
-	if not self.whisperList then
-		self.whisperList = {string.split(" ", NDuiDB["Chat"]["Keyword"])}
-	end
 
-	local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
-	for _, word in pairs(self.whisperList) do
-		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
-			if event == "CHAT_MSG_BN_WHISPER" then
-				local gameID = select(6, BNGetFriendInfoByID(arg3))
-				if gameID then
-					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-					if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(charName.."-"..realmName)) then
-						BNInviteFriend(gameID)
+	local whisperList = {string.split(" ", NDuiDB["Chat"]["Keyword"])}
+
+	local function onChatWhisper(event, ...)
+		local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
+		for _, word in pairs(whisperList) do
+			if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
+				if event == "CHAT_MSG_BN_WHISPER" then
+					local gameID = select(6, BNGetFriendInfoByID(arg3))
+					if gameID then
+						local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(charName.."-"..realmName)) then
+							BNInviteFriend(gameID)
+						end
 					end
-				end
-			else
-				if not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(arg2) then
-					InviteToGroup(arg2)
+				else
+					if not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(arg2) then
+						InviteToGroup(arg2)
+					end
 				end
 			end
 		end
 	end
-end)
+	B:RegisterEvent("CHAT_MSG_WHISPER", onChatWhisper)
+	B:RegisterEvent("CHAT_MSG_BN_WHISPER", onChatWhisper)
+end
 
 function module:OnLogin()
+	for i = 1, NUM_CHAT_WINDOWS do
+		skinChat(_G["ChatFrame"..i])
+	end
+
+	hooksecurefunc("FCF_OpenTemporaryWindow", function()
+		for _, chatFrameName in next, CHAT_FRAMES do
+			local frame = _G[chatFrameName]
+			if frame.isTemporary then
+				skinChat(frame)
+			end
+		end
+	end)
+
+	hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
+		if selected then
+			self:GetFontString():SetTextColor(1, .8, 0)
+		else
+			self:GetFontString():SetTextColor(.5, .5, .5)
+		end
+	end)
+
+	-- Font size
+	for i = 1, 15 do
+		CHAT_FONT_HEIGHTS[i] = i + 9
+	end
+
 	-- Default
 	SetCVar("chatStyle", "classic")
-	InterfaceOptionsSocialPanelChatStyle:Hide()
+	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Sticky
@@ -205,37 +199,20 @@ function module:OnLogin()
 		ChatTypeInfo["BN_WHISPER"].sticky = 0
 	end
 
-	-- Fading
-	if NDuiDB["Chat"]["NoFade"] then
-		for i = 1, 50 do
-			if _G["ChatFrame"..i] then
-				_G["ChatFrame"..i]:SetFading(false)
+	-- Easy Resizing
+	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
+		if btn == "LeftButton" then
+			if select(8, GetChatWindowInfo(1)) then
+				ChatFrame1:StartSizing("TOP")
 			end
 		end
-		hooksecurefunc("FCF_OpenTemporaryWindow", function()
-			local cf = FCF_GetCurrentChatFrame():GetName() or nil
-			if cf then
-				_G[cf]:SetFading(false)
-			end
-		end)
-	end
-
-	-- Easy Resizing
-	if NDuiDB["Chat"]["EasyResize"] then
-		ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
-			if btn == "LeftButton" then
-				if select(8, GetChatWindowInfo(1)) then
-					ChatFrame1:StartSizing("TOP")
-				end
-			end
-		end)
-		ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
-			if btn == "LeftButton" then
-				ChatFrame1:StopMovingOrSizing()
-				FCF_SavePositionAndDimensions(ChatFrame1)
-			end
-		end)
-	end
+	end)
+	ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
+		if btn == "LeftButton" then
+			ChatFrame1:StopMovingOrSizing()
+			FCF_SavePositionAndDimensions(ChatFrame1)
+		end
+	end)
 
 	-- Add Elements
 	self:ChatFilter()
@@ -243,6 +220,7 @@ function module:OnLogin()
 	self:Chatbar()
 	self:ChatCopy()
 	self:UrlCopy()
+	self:WhipserInvite()
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end

@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 --[[
 	一个简易的邮箱插件，修改自OpenAll
@@ -7,8 +8,8 @@ local module = NDui:GetModule("Misc")
 function module:Mailbox()
 	if not NDuiDB["Misc"]["Mail"] then return end
 
-	local deletedelay, t, mailIndex, mailItemIndex = .5, 0, 1, 0
-	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening, inboxItems
+	local deletedelay, t, mailIndex, mailItemIndex, inboxItems = .5, 0, 1, 0, {}
+	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening
 
 	InboxNextPageButton:SetScript("OnClick", function()
 		mailIndex = mailIndex + 1
@@ -197,13 +198,13 @@ function module:Mailbox()
 				b.delete.texture:SetTexCoord(1, 0, 0, 1)
 				b.delete.id = i
 				b.delete:SetScript("OnClick", deleteClick)
-				B.CreateGT(b.delete, "ANCHOR_RIGHT", DELETE, "system")
+				B.AddTooltip(b.delete, "ANCHOR_RIGHT", DELETE, "system")
 			end
 		end
 	end)
 
 	hooksecurefunc("InboxFrameItem_OnEnter", function(self)
-		inboxItems = {}
+		wipe(inboxItems)
 
 		local itemAttached = select(8, GetInboxHeaderInfo(self.index))
 		if itemAttached then
@@ -237,8 +238,8 @@ function module:Mailbox()
 	end
 
 	-- Aurora Reskin
-	if IsAddOnLoaded("Aurora") then
-		local F = unpack(Aurora)
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
 		F.Reskin(button1)
 		F.Reskin(button2)
 		F.Reskin(button3)

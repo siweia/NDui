@@ -1,12 +1,13 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.Guild then return end
 
-local module = NDui:GetModule("Infobar")
+local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GuildPos)
 
 local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
 local infoFrame = CreateFrame("Frame", "NDuiGuildInfobar", info)
-infoFrame:SetSize(335, 540)
+infoFrame:SetSize(335, 495)
 infoFrame:SetPoint("TOPLEFT", UIParent, 15, -30)
 infoFrame:SetClampedToScreen(true)
 infoFrame:SetFrameStrata("TOOLTIP")
@@ -48,8 +49,8 @@ local invtInfo = DB.InfoColor.."ALT +"..DB.RightButton..L["Invite"]
 B.CreateFS(infoFrame, 13, invtInfo, false, "BOTTOMRIGHT", -15, 10)
 
 local scrollFrame = CreateFrame("ScrollFrame", nil, infoFrame, "UIPanelScrollFrameTemplate")
-scrollFrame:SetSize(312, 375)
-scrollFrame:SetPoint("CENTER", 0, -15)
+scrollFrame:SetSize(312, 320)
+scrollFrame:SetPoint("TOPLEFT", 10, -100)
 scrollFrame.ScrollBar:Hide()
 scrollFrame.ScrollBar.Show = B.Dummy
 scrollFrame:SetScript("OnMouseWheel", function(_, delta)
@@ -106,7 +107,7 @@ local function createRoster(i)
 end
 
 local function refreshData()
-	if not NDuiDB["Misc"].Sortby then NDuiDB["Misc"].Sortby = 1 end
+	if not NDuiADB["GuildSortBy"] then NDuiADB["GuildSortBy"] = 1 end
 
 	wipe(guildTable)
 	GuildRoster()
@@ -175,10 +176,10 @@ end
 local function applyData()
 	sort(guildTable, function(a, b)
 		if a and b then
-			if NDuiDB["Misc"].SortOrder then
-				return a[NDuiDB["Misc"].Sortby] < b[NDuiDB["Misc"].Sortby]
+			if NDuiADB["GuildSortOrder"] then
+				return a[NDuiADB["GuildSortBy"]] < b[NDuiADB["GuildSortBy"]]
 			else
-				return a[NDuiDB["Misc"].Sortby] > b[NDuiDB["Misc"].Sortby]
+				return a[NDuiADB["GuildSortBy"]] > b[NDuiADB["GuildSortBy"]]
 			end
 		end
 	end)
@@ -203,8 +204,8 @@ end
 
 for i = 1, 4 do
 	bu[i]:SetScript("OnClick", function()
-		NDuiDB["Misc"].Sortby = i
-		NDuiDB["Misc"].SortOrder = not NDuiDB["Misc"].SortOrder
+		NDuiADB["GuildSortBy"] = i
+		NDuiADB["GuildSortOrder"] = not NDuiADB["GuildSortOrder"]
 		applyData()
 	end)
 end
@@ -248,8 +249,10 @@ info.onLeave = function()
 end
 
 info.onMouseUp = function()
+	if not IsInGuild() then return end
 	infoFrame:Hide()
-	ToggleGuildFrame()
+	if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
+	ToggleFrame(GuildFrame)
 end
 
 infoFrame:SetScript("OnLeave", function(self)

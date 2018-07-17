@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("AurasTable")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("AurasTable")
 
 -- 萨满的法术监控
 local list = {
@@ -8,6 +9,8 @@ local list = {
 		{AuraID = 195222, UnitID = "player"},	-- 风暴之鞭
 		{AuraID = 198293, UnitID = "player"},	-- 疾风
 		{AuraID = 197211, UnitID = "player"},	-- 空气之怒
+		{AuraID = 260881, UnitID = "player"},	-- 幽灵狼
+		{AuraID = 192106, UnitID = "player"},	-- 闪电护盾
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 61295, UnitID = "target", Caster = "player"},		-- 激流
@@ -24,6 +27,7 @@ local list = {
 		{AuraID = 196840, UnitID = "target", Caster = "player"},	-- 冰霜震击
 		{AuraID = 207778, UnitID = "target", Caster = "player"},	-- 蒺藜
 		{AuraID = 207400, UnitID = "target", Caster = "player"},	-- 先祖活力
+		{AuraID = 269808, UnitID = "target", Caster = "player"},	-- 元素外露
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 73920, UnitID = "player"},	-- 治疗之雨
@@ -31,7 +35,6 @@ local list = {
 		{AuraID = 79206, UnitID = "player"},	-- 灵魂行者的恩赐
 		{AuraID = 73685, UnitID = "player"},	-- 生命释放
 		{AuraID = 58875, UnitID = "player"},	-- 幽魂步
-		{AuraID = 16246, UnitID = "player"},	-- 元素集中
 		{AuraID = 77762, UnitID = "player"},	-- 熔岩奔腾
 		{AuraID = 208416, UnitID = "player"},	-- 十万火急
 		{AuraID = 207527, UnitID = "player"},	-- 迷雾幽灵
@@ -50,7 +53,6 @@ local list = {
 		{AuraID = 199055, UnitID = "player"},	-- 毁灭释放
 		{AuraID = 201898, UnitID = "player"},	-- 风歌
 		{AuraID = 215785, UnitID = "player"},	-- 灼热之手
-		{AuraID = 215864, UnitID = "player"},	-- 降雨
 		{AuraID = 191877, UnitID = "player"},	-- 漩涡之力
 		{AuraID = 205495, UnitID = "player"},	-- 风暴守护者
 		{AuraID = 118522, UnitID = "player"},	-- 元素冲击 爆击
@@ -58,6 +60,12 @@ local list = {
 		{AuraID = 173184, UnitID = "player"},	-- 元素冲击 精通
 		{AuraID = 210714, UnitID = "player"},	-- 冰怒
 		{AuraID = 157504, UnitID = "player", Value = true},	-- 暴雨图腾
+		{AuraID = 280615, UnitID = "player"},	-- 迅捷洪流
+		{AuraID = 273323, UnitID = "player"},	-- 闪电护盾超载
+		{AuraID = 272737, UnitID = "player"},	-- 无穷力量
+		{AuraID = 260734, UnitID = "player"},	-- 元素宗师
+		{AuraID = 263806, UnitID = "player"},	-- 呼啸狂风
+		{AuraID = 191634, UnitID = "player"},	-- 风暴守护者
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 51514, UnitID = "focus", Caster = "player"},	-- 妖术

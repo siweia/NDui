@@ -6,7 +6,7 @@
 --
 
 local DBICON10 = "LibDBIcon-1.0"
-local DBICON10_MINOR = 34 -- Bump on changes
+local DBICON10_MINOR = 36 -- Bump on changes
 if not LibStub then error(DBICON10 .. " requires LibStub.") end
 local ldb = LibStub("LibDataBroker-1.1", true)
 if not ldb then error(DBICON10 .. " requires LibDataBroker-1.1.") end
@@ -18,6 +18,7 @@ lib.objects = lib.objects or {}
 lib.callbackRegistered = lib.callbackRegistered or nil
 lib.callbacks = lib.callbacks or LibStub("CallbackHandler-1.0"):New(lib)
 lib.notCreated = lib.notCreated or {}
+lib.tooltip = lib.tooltip or CreateFrame("GameTooltip", "LibDBIconTooltip", UIParent, "GameTooltipTemplate")
 
 function lib:IconCallback(event, name, key, value)
 	if lib.objects[name] then
@@ -58,10 +59,10 @@ local function onEnter(self)
 	if self.isMoving then return end
 	local obj = self.dataObject
 	if obj.OnTooltipShow then
-		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:SetPoint(getAnchors(self))
-		obj.OnTooltipShow(GameTooltip)
-		GameTooltip:Show()
+		lib.tooltip:SetOwner(self, "ANCHOR_NONE")
+		lib.tooltip:SetPoint(getAnchors(self))
+		obj.OnTooltipShow(lib.tooltip)
+		lib.tooltip:Show()
 	elseif obj.OnEnter then
 		obj.OnEnter(self)
 	end
@@ -69,7 +70,7 @@ end
 
 local function onLeave(self)
 	local obj = self.dataObject
-	GameTooltip:Hide()
+	lib.tooltip:Hide()
 	if obj.OnLeave then obj.OnLeave(self) end
 end
 
@@ -137,7 +138,7 @@ do
 		self.icon:UpdateCoord()
 		self:SetScript("OnUpdate", onUpdate)
 		self.isMoving = true
-		GameTooltip:Hide()
+		lib.tooltip:Hide()
 	end
 end
 

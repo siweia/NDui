@@ -2,8 +2,9 @@
 -- oUF_RaidDebuffs, by yleaf
 -- NDui MOD
 -------------------------------
-local B, C, L, DB = unpack(select(2, ...))
-local oUF = NDui.oUF or oUF
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
 
 local class = DB.MyClass
 local bossDebuffPrio = 9999999
@@ -56,6 +57,9 @@ do
 		},
 		["SHAMAN"] = {
 			["Magic"] = false,
+			["Curse"] = true,
+		},
+		["MAGE"] = {
 			["Curse"] = true,
 		},
 	}
@@ -118,7 +122,7 @@ end
 
 local UpdateDebuffFrame = function(rd)
 	if rd.index and rd.type and rd.filter then
-		local _, _, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(rd.__owner.unit, rd.index, rd.filter)
+		local _, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(rd.__owner.unit, rd.index, rd.filter)
 
 		if rd.icon then
 			rd.icon:SetTexture(icon)
@@ -196,7 +200,7 @@ local Update = function(self, _, unit)
 		local i = 0
 		while(true) do
 			i = i + 1
-			local name, _, _, _, debuffType, _, _, _, _, _, spellId, _, isBossDebuff = UnitAura(unit, i, filter)
+			local name, _, _, debuffType, _, _, _, _, _, spellId, _, isBossDebuff = UnitAura(unit, i, filter)
 			if not name then break end
 
 			if rd.ShowBossDebuff and isBossDebuff then
@@ -237,7 +241,7 @@ local Update = function(self, _, unit)
 				end
 			end
 			-- Test
-			--local debuffs = {[11196]=1}
+			--local debuffs = {[264689]=1}
 			--local prio = debuffs[spellId]
 
 			if not RaidDebuffsIgnore[spellId] and prio and (prio > rd.priority) then

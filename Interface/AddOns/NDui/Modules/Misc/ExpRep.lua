@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Misc")
 
 --[[
 	一个工具条用来替代系统的经验条、声望条、神器经验等等
@@ -41,9 +42,17 @@ local function UpdateBar(bar)
 		bar:SetMinMaxValues(min, max)
 		bar:SetValue(value)
 		bar:Show()
+	elseif C_AzeriteItem.HasActiveAzeriteItem() then
+		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
+		bar:SetStatusBarColor(.9, .8, .6)
+		bar:SetMinMaxValues(0, totalLevelXP)
+		bar:SetValue(xp)
+		bar:Show()
 	elseif HasArtifactEquipped() then
 		local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-		local _, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+		local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+		xp = xpForNextPoint == 0 and 0 or xp
 		bar:SetStatusBarColor(.9, .8, .6)
 		bar:SetMinMaxValues(0, xpForNextPoint)
 		bar:SetValue(xp)
@@ -57,7 +66,7 @@ local function UpdateBar(bar)
 		bar.newPoint:SetAlpha(0)
 		if HasArtifactEquipped() then
 			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-			local num = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+			local num = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 			if num > 0 then bar.newPoint:SetAlpha(1) end
 		end
 	end
@@ -129,9 +138,20 @@ local function UpdateTooltip(bar)
 		GameTooltip:AddDoubleLine(HONOR_POINTS..LEVEL..level, text, .6,.8,1, 1,1,1)
 	end
 
+	if C_AzeriteItem.HasActiveAzeriteItem() then
+		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
+		local azeriteItemName = azeriteItem:GetItemName()
+		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(C_AzeriteItem.FindActiveAzeriteItem())
+		local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 0,.6,1)
+		GameTooltip:AddDoubleLine(ARTIFACT_POWER, B.Numb(xp).."/"..B.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", .6,.8,1, 1,1,1)
+	end
+
 	if HasArtifactEquipped() then
 		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-		local num, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		GameTooltip:AddLine(" ")
 		if pointsSpent > 51 then
 			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent).." "..L["Paragon"]..(pointsSpent - 51)..")", 0,.6,1)
@@ -139,7 +159,8 @@ local function UpdateTooltip(bar)
 			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
 		end
 		GameTooltip:AddDoubleLine(ARTIFACT_POWER, B.Numb(totalXP).." ("..num..")", .6,.8,1, 1,1,1)
-		GameTooltip:AddDoubleLine(L["Next Trait"], B.Numb(xp).."/"..B.Numb(xpForNextPoint).." ("..floor(xp/xpForNextPoint*100).."%)", .6,.8,1, 1,1,1)
+		local perc = xpForNextPoint ~= 0 and " ("..floor(xp/xpForNextPoint*100).."%)" or ""
+		GameTooltip:AddDoubleLine(L["Next Trait"], B.Numb(xp).."/"..B.Numb(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
 	end
 	GameTooltip:Show()
 end
@@ -155,6 +176,7 @@ function module:SetupScript(bar)
 		"UNIT_INVENTORY_CHANGED",
 		"ENABLE_XP_GAIN",
 		"DISABLE_XP_GAIN",
+		"AZERITE_ITEM_EXPERIENCE_CHANGED",
 	}
 	for _, event in pairs(bar.eventList) do
 		bar:RegisterEvent(event)

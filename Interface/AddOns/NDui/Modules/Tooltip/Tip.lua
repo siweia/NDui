@@ -1,4 +1,5 @@
-local B, C, L, DB = unpack(select(2, ...))
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -111,6 +112,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	if UnitExists(unit) then
 		local hexColor = B.HexRGB(B.UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
+		if ricon and ricon > 8 then ricon = nil end
 		if ricon then
 			local text = GameTooltipTextLeft1:GetText()
 			GameTooltipTextLeft1:SetFormattedText(("%s %s"), ICON_LIST[ricon].."18|t", text)
@@ -206,6 +208,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
 		if UnitExists(unit.."target") then
 			local tarRicon = GetRaidTargetIndex(unit.."target")
+			if tarRicon and tarRicon > 8 then tarRicon = nil end
 			local tar = ("%s%s"):format((tarRicon and ICON_LIST[tarRicon].."10|t") or "", getTarget(unit.."target"))
 			self:AddLine(TARGET..": "..tar)
 		end
@@ -226,12 +229,15 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	end
 end)
 
-GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
-GameTooltipStatusBar:SetHeight(5)
-B.CreateSD(GameTooltipStatusBar, 3, 3)
-local bg = B.CreateBG(GameTooltipStatusBar, 3)
-B.CreateBD(bg, .7)
-B.CreateTex(bg)
+-- Tooltip statusbars
+do
+	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
+	GameTooltipStatusBar:SetHeight(5)
+	B.CreateSD(GameTooltipStatusBar, 3, 3)
+	local bg = B.CreateBG(GameTooltipStatusBar, 3)
+	B.CreateBD(bg, .7)
+	B.CreateTex(bg)
+end
 
 GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
 	if not value then return end
@@ -250,6 +256,33 @@ GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
 	end
 end)
 
+hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
+	if self.statusBarPool then
+		local bar = self.statusBarPool:Acquire()
+		if bar and not bar.styled then
+			local _, bd, tex = bar:GetRegions()
+			tex:SetTexture(DB.normTex)
+			bd:Hide()
+			local bg = B.CreateBG(bd)
+			B.CreateBD(bg, .25)
+
+			bar.styled = true
+		end
+	end
+end)
+
+hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
+	if self.progressBarPool then
+		local bar = self.progressBarPool:Acquire()
+		B.StripTextures(bar.Bar)
+		select(7, bar.Bar:GetRegions()):Hide()
+		bar.Bar:SetStatusBarTexture(DB.normTex)
+		B.CreateBD(bar, .25, 2)
+		bar:SetSize(219, 19)
+	end
+end)
+
+-- Anchor and mover
 local mover
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	if NDuiDB["Tooltip"]["Cursor"] then
@@ -264,68 +297,74 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 	end
 end)
 
-local function style(frame)
-	if not frame then return end
-	frame:SetScale(NDuiDB["Tooltip"]["Scale"])
-
-	if not frame.bg then
-		frame:SetBackdrop(nil)
-		local bg = B.CreateBG(frame, 0)
-		bg:SetFrameLevel(frame:GetFrameLevel())
+-- Tooltip skin
+local function style(self)
+	if not self.bg then
+		self:SetBackdrop(nil)
+		local bg = B.CreateBG(self, 0)
+		bg:SetFrameLevel(self:GetFrameLevel())
 		B.CreateBD(bg, .7)
 		B.CreateTex(bg)
-		frame.bg = bg
+		self.bg = bg
 
 		-- other gametooltip-like support
-		frame.GetBackdrop = function() return bg:GetBackdrop() end
-		frame.GetBackdropColor = function() return 0, 0, 0, .7 end
-		frame.GetBackdropBorderColor = function() return 0, 0, 0 end
+		self.GetBackdrop = function() return bg:GetBackdrop() end
+		self.GetBackdropColor = function() return 0, 0, 0, .7 end
+		self.GetBackdropBorderColor = function() return 0, 0, 0 end
 	end
 
-	frame.bg:SetBackdropBorderColor(0, 0, 0)
-	if NDuiDB["Tooltip"]["ClassColor"] and frame.GetItem then
-		local _, item = frame:GetItem()
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+	if NDuiDB["Tooltip"]["ClassColor"] and self.GetItem then
+		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
 		end
 	end
 
-	if frame.NumLines and frame:NumLines() > 0 then
-		for index = 1, frame:NumLines() do
+	if self.NumLines and self:NumLines() > 0 then
+		for index = 1, self:NumLines() do
 			if index == 1 then
-				_G[frame:GetName().."TextLeft"..index]:SetFont(DB.TipFont[1], DB.TipFont[2] + 2, DB.TipFont[3])
+				_G[self:GetName().."TextLeft"..index]:SetFont(DB.TipFont[1], DB.TipFont[2] + 2, DB.TipFont[3])
 			else
-				_G[frame:GetName().."TextLeft"..index]:SetFont(unpack(DB.TipFont))
+				_G[self:GetName().."TextLeft"..index]:SetFont(unpack(DB.TipFont))
 			end
-			_G[frame:GetName().."TextRight"..index]:SetFont(unpack(DB.TipFont))
+			_G[self:GetName().."TextRight"..index]:SetFont(unpack(DB.TipFont))
 		end
 	end
 end
 
-local function extrastyle(f)
-	if not f.styled then
-		f:DisableDrawLayer("BACKGROUND")
-		style(f)
-		f.styled = true
+local function extrastyle(self)
+	if not self.styled then
+		self:DisableDrawLayer("BACKGROUND")
+		style(self)
+
+		self.styled = true
 	end
 end
 
-NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
-	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("Aurora") then
+hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+	self:SetBackdrop(nil)
+end)
+
+B:RegisterEvent("ADDON_LOADED", function(_, addon)
+	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("AuroraClassic") then
 		FrameStackTooltip:HookScript("OnShow", style)
 		EventTraceTooltip:HookScript("OnShow", style)
 
 	elseif addon == "NDui" then
+		if IsAddOnLoaded("AuroraClassic") then AuroraConfig.tooltips = false end
+
 		local tooltips = {
 			ChatMenu,
 			EmoteMenu,
 			LanguageMenu,
 			VoiceMacroMenu,
 			GameTooltip,
+			EmbeddedItemTooltip,
 			ItemRefTooltip,
 			ItemRefShoppingTooltip1,
 			ItemRefShoppingTooltip2,
@@ -339,6 +378,8 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 			QuestScrollFrame.StoryTooltip,
 			GeneralDockManagerOverflowButtonList,
 			ReputationParagonTooltip,
+			QuestScrollFrame.WarCampaignTooltip,
+			NamePlateTooltip,
 		}
 		for _, f in pairs(tooltips) do
 			if f then
@@ -389,31 +430,6 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 		local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
 		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
 
-		-- Tooltip StatusBar
-		hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
-			local bar = _G[self:GetName().."StatusBar"..self.shownStatusBars]
-			if bar and not bar.styled then
-				local _, bd, tex = bar:GetRegions()
-				tex:SetTexture(DB.normTex)
-				bd:Hide()
-				local bg = B.CreateBG(bd)
-				B.CreateBD(bg, .3)
-
-				bar.styled = true
-			end
-		end)
-
-		local bars = {WorldMapTaskTooltipStatusBar, ReputationParagonTooltipStatusBar}
-		for _, bar in pairs(bars) do
-			for i = 1, 5 do
-				select(i, bar.Bar:GetRegions()):SetTexture("")
-			end
-			select(7, bar.Bar:GetRegions()):Hide()
-			bar.Bar:SetStatusBarTexture(DB.normTex)
-			B.CreateBD(bar, .3, 2)
-			bar:SetSize(219, 19)
-		end
-
 		-- Pet Tooltip
 		PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
 		PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
@@ -460,19 +476,6 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 			end
 		end)
 
-		-- Addon Supports
-		if IsAddOnLoaded("MeetingStone") then
-			local tips = {
-				NetEaseGUI20_Tooltip51,
-				NetEaseGUI20_Tooltip52,
-			}
-			for _, f in pairs(tips) do
-				if f then
-					f:HookScript("OnShow", style)
-				end
-			end
-		end
-
 	elseif addon == "Blizzard_Collections" then
 		local pet = {
 			PetJournalPrimaryAbilityTooltip,
@@ -495,18 +498,9 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 			GarrisonMissionMechanicFollowerCounterTooltip,
 			GarrisonShipyardMapMissionTooltip,
 			GarrisonBonusAreaTooltip,
-			GarrisonBuildingFrame.BuildingLevelTooltip
-		}
-		for _, f in pairs(gt) do
-			if f then
-				f:HookScript("OnShow", extrastyle)
-			end
-		end
-
-	elseif addon == "Blizzard_OrderHallUI" then
-		local gt = {
+			GarrisonBuildingFrame.BuildingLevelTooltip,
 			GarrisonFollowerAbilityWithoutCountersTooltip,
-			GarrisonFollowerMissionAbilityWithoutCountersTooltip,
+			GarrisonFollowerMissionAbilityWithoutCountersTooltip
 		}
 		for _, f in pairs(gt) do
 			if f then
@@ -543,14 +537,31 @@ NDui:EventFrame{"ADDON_LOADED"}:SetScript("OnEvent", function(_, _, addon)
 		if f then
 			f:HookScript("OnShow", style)
 		end
-		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
-		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(DB.TexCoord))
+		f.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
+		f.Item2.icon:SetTexCoord(unpack(DB.TexCoord))
+
+	elseif addon == "Blizzard_Calendar" then
+		local gt = {
+			CalendarContextMenu,
+			CalendarInviteStatusContextMenu,
+		}
+		for _, f in pairs(gt) do
+			if f then
+				f:HookScript("OnShow", style)
+			end
+		end
+
+	elseif addon == "Blizzard_IslandsQueueUI" then
+		local f = IslandsQueueFrameTooltip
+		f:GetParent():GetParent():HookScript("OnShow", style)
+		f:GetParent().IconBorder:SetAlpha(0)
+		f:GetParent().Icon:SetTexCoord(.08, .92, .08, .92)
 	end
 end)
 
 -- Reskin Closebutton
-if IsAddOnLoaded("Aurora") then
-	local F, C = unpack(Aurora)
+if IsAddOnLoaded("AuroraClassic") then
+	local F, C = unpack(AuroraClassic)
 	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)

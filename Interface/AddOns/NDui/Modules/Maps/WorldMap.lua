@@ -1,32 +1,68 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Maps")
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Maps")
+
+local mapRects = {}
+local tempVec2D = CreateVector2D(0, 0)
+
+function module:GetPlayerMapPos(mapID)
+	tempVec2D.x, tempVec2D.y = UnitPosition("player")
+	if not tempVec2D.x then return end
+
+	local mapRect = mapRects[mapID]
+	if not mapRect then
+		mapRect = {}
+		mapRect[1] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
+		mapRect[2] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
+		mapRect[2]:Subtract(mapRect[1])
+
+		mapRects[mapID] = mapRect
+	end
+	tempVec2D:Subtract(mapRect[1])
+
+	return tempVec2D.y/mapRect[2].y, tempVec2D.x/mapRect[2].x
+end
 
 function module:OnLogin()
-	local WorldMapDetailFrame, WorldMapTitleButton, WorldMapFrame, WorldMapFrameTutorialButton = _G.WorldMapDetailFrame, _G.WorldMapTitleButton, _G.WorldMapFrame, _G.WorldMapFrameTutorialButton
-	local formattext = DB.MyColor..": %.1f, %.1f"
-
-	-- Default Settings
-	SetCVar("lockedWorldMap", 0)
-	WorldMapFrameTutorialButton:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
-	WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"])
-	hooksecurefunc("WorldMap_ToggleSizeUp", function()
+	-- Scaling
+	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"]) end
+	hooksecurefunc(WorldMapFrame, "Minimize", function(self)
 		if InCombatLockdown() then return end
-		WorldMapFrame:SetScale(1)
+		self:SetScale(NDuiDB["Map"]["MapScale"])
 	end)
-	hooksecurefunc("WorldMap_ToggleSizeDown", function()
+	hooksecurefunc(WorldMapFrame, "Maximize", function(self)
 		if InCombatLockdown() then return end
-		WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"])
+		self:SetScale(1)
 	end)
+	-- cursor fix, need reviewed
+	if NDuiDB["Map"]["MapScale"] > 1 then
+		RunScript("WorldMapFrame.ScrollContainer.GetCursorPosition=function(f) local x,y=MapCanvasScrollControllerMixin.GetCursorPosition(f);local s=WorldMapFrame:GetScale();return x/s,y/s;end")
+	end
 
 	-- Generate Coords
 	if not NDuiDB["Map"]["Coord"] then return end
-	local player = B.CreateFS(WorldMapTitleButton, 14, "", false, "TOPLEFT", 50, -6)
-	local cursor = B.CreateFS(WorldMapTitleButton, 14, "", false, "TOPLEFT", 180, -6)
-	local width, height = WorldMapDetailFrame:GetWidth(), WorldMapDetailFrame:GetHeight()
-	local scale = WorldMapDetailFrame:GetEffectiveScale()
+
+	local player = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
+	local cursor = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
+	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
+
+	local mapBody = WorldMapFrame:GetCanvasContainer()
+	local scale, width, height = mapBody:GetEffectiveScale(), mapBody:GetWidth(), mapBody:GetHeight()
+	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function()
+		width, height = mapBody:GetWidth(), mapBody:GetHeight()
+	end)
+
+	local mapID
+	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
+		if self:GetMapID() == C_Map.GetBestMapForUnit("player") then
+			mapID = self:GetMapID()
+		else
+			mapID = nil
+		end
+	end)
 
 	local function CursorCoords()
-		local left, top = WorldMapDetailFrame:GetLeft() or 0, WorldMapDetailFrame:GetTop() or 0
+		local left, top = mapBody:GetLeft() or 0, mapBody:GetTop() or 0
 		local x, y = GetCursorPosition()
 		local cx = (x/scale - left) / width
 		local cy = (top - y/scale) / height
@@ -34,36 +70,36 @@ function module:OnLogin()
 		return cx, cy
 	end
 
-	local function CoordsUpdate(player, cursor)
-		local cx, cy = CursorCoords()
-		local px, py = GetPlayerMapPosition("player")
-		if cx and cy then
-			cursor:SetFormattedText(MOUSE_LABEL..formattext, 100 * cx, 100 * cy)
-		else
-			cursor:SetText(MOUSE_LABEL..DB.MyColor..": --, --")
-		end
-		if not px or px == 0 or py == 0 then
-			player:SetText(PLAYER..DB.MyColor..": --, --")
-		else
-			player:SetFormattedText(PLAYER..formattext, 100 * px, 100 * py)
-		end
+	local function CoordsFormat(owner, none)
+		local text = none and ": --, --" or ": %.1f, %.1f"
+		return owner..DB.MyColor..text
 	end
 
 	local function UpdateCoords(self, elapsed)
-		self.elapsed = self.elapsed - elapsed
-		if self.elapsed <= 0 then
-			self.elapsed = .1
-			CoordsUpdate(player, cursor)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed > .1 then
+			local cx, cy = CursorCoords()
+			if cx and cy then
+				cursor:SetFormattedText(CoordsFormat(L["Mouse"]), 100 * cx, 100 * cy)
+			else
+				cursor:SetText(CoordsFormat(L["Mouse"], true))
+			end
+
+			if not mapID then
+				player:SetText(CoordsFormat(PLAYER, true))
+			else
+				local x, y = module:GetPlayerMapPos(mapID)
+				if not x or (x == 0 and y == 0) then
+					player:SetText(CoordsFormat(PLAYER, true))
+				else
+					player:SetFormattedText(CoordsFormat(PLAYER), 100 * x, 100 * y)
+				end
+			end
+
+			self.elapsed = 0
 		end
 	end
 
-	NDui:EventFrame{"WORLD_MAP_UPDATE"}:SetScript("OnEvent", function(self)
-		if WorldMapFrame:IsVisible() then
-			self.elapsed = .1
-			self:SetScript("OnUpdate", UpdateCoords)
-		else
-			self.elapsed = nil
-			self:SetScript("OnUpdate", nil)
-		end
-	end)
+	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
+	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
 end

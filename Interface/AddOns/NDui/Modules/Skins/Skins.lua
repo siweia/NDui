@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Skins")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Skins")
 
 function module:OnLogin()
 	local cr, cg, cb = 0, 0, 0
@@ -9,29 +10,29 @@ function module:OnLogin()
 	if NDuiDB["Skins"]["InfobarLine"] then
 		local Tinfobar = CreateFrame("Frame", nil, UIParent)
 		Tinfobar:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 0, -3)
-		B.CreateGF(Tinfobar, 600, 18, "Horizontal", 0, 0, 0, .5, 0)
+		B.CreateGF(Tinfobar, 550, 18, "Horizontal", 0, 0, 0, .5, 0)
 		local Tinfobar1 = CreateFrame("Frame", nil, Tinfobar)
 		Tinfobar1:SetPoint("BOTTOM", Tinfobar, "TOP")
-		B.CreateGF(Tinfobar1, 600, 1, "Horizontal", cr, cg, cb, .7, 0)
+		B.CreateGF(Tinfobar1, 550, 1, "Horizontal", cr, cg, cb, .7, 0)
 		local Tinfobar2 = CreateFrame("Frame", nil, Tinfobar)
 		Tinfobar2:SetPoint("TOP", Tinfobar, "BOTTOM")
-		B.CreateGF(Tinfobar2, 600, 1, "Horizontal", cr, cg, cb, .7, 0)
+		B.CreateGF(Tinfobar2, 550, 1, "Horizontal", cr, cg, cb, .7, 0)
 	end
 
 	-- BOTTOMLEFT
 	if NDuiDB["Skins"]["ChatLine"] then
 		local Linfobar = CreateFrame("Frame", nil, UIParent)
 		Linfobar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 3)
-		B.CreateGF(Linfobar, 453, ChatFrame1:GetHeight() + 30, "Horizontal", 0, 0, 0, .5, 0)
+		B.CreateGF(Linfobar, 450, ChatFrame1:GetHeight() + 30, "Horizontal", 0, 0, 0, .5, 0)
 		local Linfobar1 = CreateFrame("Frame", nil, Linfobar)
 		Linfobar1:SetPoint("BOTTOM", Linfobar, "TOP")
-		B.CreateGF(Linfobar1, 453, 1, "Horizontal", cr, cg, cb, .7, 0)
+		B.CreateGF(Linfobar1, 450, 1, "Horizontal", cr, cg, cb, .7, 0)
 		local Linfobar2 = CreateFrame("Frame", nil, Linfobar)
 		Linfobar2:SetPoint("BOTTOM", Linfobar, "BOTTOM", 0, 18)
-		B.CreateGF(Linfobar2, 453, 1, "Horizontal", cr, cg, cb, .7, 0)
+		B.CreateGF(Linfobar2, 450, 1, "Horizontal", cr, cg, cb, .7, 0)
 		local Linfobar3 = CreateFrame("Frame", nil, Linfobar)
 		Linfobar3:SetPoint("TOP", Linfobar, "BOTTOM")
-		B.CreateGF(Linfobar3, 453, 1, "Horizontal", cr, cg, cb, .7, 0)
+		B.CreateGF(Linfobar3, 450, 1, "Horizontal", cr, cg, cb, .7, 0)
 		ChatFrame1Tab:HookScript("OnMouseUp", function(_, btn)
 			if btn == "LeftButton" then
 				Linfobar:SetHeight(ChatFrame1:GetHeight() + 30)
@@ -56,17 +57,17 @@ function module:OnLogin()
 	if NDuiDB["Skins"]["MenuLine"] then
 		local mmbottomL = CreateFrame("Frame", nil, UIParent)
 		mmbottomL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 3)
-		B.CreateGF(mmbottomL, 230, 1, "Horizontal", cr, cg, cb, 0, .7)
+		B.CreateGF(mmbottomL, 210, 1, "Horizontal", cr, cg, cb, 0, .7)
 		local mmbottomR = CreateFrame("Frame", nil, UIParent)
 		mmbottomR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 3)
-		B.CreateGF(mmbottomR, 230, 1, "Horizontal", cr, cg, cb, .7, 0)
+		B.CreateGF(mmbottomR, 210, 1, "Horizontal", cr, cg, cb, .7, 0)
 
 		local mmtopL = CreateFrame("Frame", nil, UIParent)
 		mmtopL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 24)
-		B.CreateGF(mmtopL, 260, 1, "Horizontal", cr, cg, cb, 0, .7)
+		B.CreateGF(mmtopL, 230, 1, "Horizontal", cr, cg, cb, 0, .7)
 		local mmtopR = CreateFrame("Frame", nil, UIParent)
 		mmtopR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 24)
-		B.CreateGF(mmtopR, 260, 1, "Horizontal", cr, cg, cb, .7, 0)
+		B.CreateGF(mmtopR, 230, 1, "Horizontal", cr, cg, cb, .7, 0)
 	end
 
 	-- ACTIONBAR
@@ -123,21 +124,21 @@ function module:OnLogin()
 end
 
 function module:LoadWithAddOn(addonName, value, func)
-	NDui:EventFrame{"ADDON_LOADED", "PLAYER_ENTERING_WORLD"}:SetScript("OnEvent", function(self, event, addon)
-		if not NDuiDB["Skins"][value] then
-			self:UnregisterAllEvents()
-			return
-		end
+	local function loadFunc(event, addon)
+		if not NDuiDB["Skins"][value] then return end
 
 		if event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent(event)
+			B:UnregisterEvent(event, loadFunc)
 			if IsAddOnLoaded(addonName) then
 				func()
-				self:UnregisterAllEvents()
+				B:UnregisterEvent("ADDON_LOADED", loadFunc)
 			end
 		elseif event == "ADDON_LOADED" and addon == addonName then
 			func()
-			self:UnregisterAllEvents()
+			B:UnregisterEvent(event, loadFunc)
 		end
-	end)
+	end
+
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", loadFunc)
+	B:RegisterEvent("ADDON_LOADED", loadFunc)
 end

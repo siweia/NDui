@@ -1,5 +1,6 @@
-﻿local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Minimap")
+﻿local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Minimap")
 
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
@@ -17,13 +18,12 @@ function module:CreatePulse()
 	anim.fader:SetDuration(1)
 	anim.fader:SetSmoothing("OUT")
 
-	local f = NDui:EventFrame{"PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED", "CALENDAR_UPDATE_PENDING_INVITES", "UPDATE_PENDING_MAIL"}
-	f:SetScript("OnEvent", function(_, event)
+	local function updateMinimapAnim(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			MBG:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
 		elseif not InCombatLockdown() then
-			if CalendarGetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
+			if C_Calendar.GetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
 				MBG:SetBackdropBorderColor(1, 1, 0)
 				anim:Play()
 			else
@@ -31,7 +31,12 @@ function module:CreatePulse()
 				MBG:SetBackdropBorderColor(0, 0, 0)
 			end
 		end
-	end)
+	end
+	B:RegisterEvent("PLAYER_REGEN_ENABLED", updateMinimapAnim)
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", updateMinimapAnim)
+	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
+	B:RegisterEvent("UPDATE_PENDING_MAIL", updateMinimapAnim)
+
 	MiniMapMailFrame:HookScript("OnHide", function()
 		if InCombatLockdown() then return end
 		anim:Stop()
@@ -43,10 +48,11 @@ function module:ReskinRegions()
 	-- Garrison
 	GarrisonLandingPageMinimapButton:ClearAllPoints()
 	GarrisonLandingPageMinimapButton:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
-	GarrisonLandingPageMinimapButton:SetScale(.55)
-	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(bu)
-		bu:GetNormalTexture():SetTexture(DB.garrTex)
-		bu:GetPushedTexture():SetTexture(DB.garrTex)
+	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(self)
+		self:GetNormalTexture():SetTexture(DB.garrTex)
+		self:GetPushedTexture():SetTexture(DB.garrTex)
+		self:GetHighlightTexture():SetTexture(DB.garrTex)
+		self:SetSize(30, 30)
 	end)
 
 	-- QueueStatus Button
@@ -97,48 +103,22 @@ function module:ReskinRegions()
 	B.CreateTex(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
-	local f = NDui:EventFrame{"CALENDAR_UPDATE_PENDING_INVITES", "PLAYER_ENTERING_WORLD"}
-	f:SetScript("OnEvent", function()
-		if NDuiDB["Map"]["Invite"] and CalendarGetNumPendingInvites() > 0 then
+	local function updateInviteVisibility()
+		if NDuiDB["Map"]["Invite"] and C_Calendar.GetNumPendingInvites() > 0 then
 			Invt:Show()
 		else
 			Invt:Hide()
 		end
-	end)
+	end
+	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
+
 	Invt:SetScript("OnClick", function(_, btn)
-		Invt:UnregisterAllEvents()
 		Invt:Hide()
 		if btn == "LeftButton" then ToggleCalendar() end
+		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
 	end)
-
-	-- Micro Button Alerts
-	if TalentMicroButtonAlert then
-		TalentMicroButtonAlert:ClearAllPoints()
-		TalentMicroButtonAlert:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -220, 40)
-		TalentMicroButtonAlert:SetScript("OnMouseUp", function()
-			if not PlayerTalentFrame then LoadAddOn("Blizzard_TalentUI") end
-			ToggleFrame(PlayerTalentFrame)
-		end)
-	end
-
-	if EJMicroButtonAlert then
-		EJMicroButtonAlert:ClearAllPoints()
-		EJMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 40, 40)
-		EJMicroButtonAlert:SetScript("OnMouseUp", function()
-			if not EncounterJournal then LoadAddOn("Blizzard_EncounterJournal") end
-			ToggleFrame(EncounterJournal)
-		end)
-	end
-
-	if CollectionsMicroButtonAlert then
-		CollectionsMicroButtonAlert:ClearAllPoints()
-		CollectionsMicroButtonAlert:SetPoint("BOTTOM", UIParent, "BOTTOM", 65, 40)
-		CollectionsMicroButtonAlert:SetScript("OnMouseUp", function()
-			if not CollectionsJournal then LoadAddOn("Blizzard_Collections") end
-			ToggleFrame(CollectionsJournal)
-			CollectionsJournal_SetTab(CollectionsJournal, 2)
-		end)
-	end
 
 	if TicketStatusFrame then
 		TicketStatusFrame:ClearAllPoints()
@@ -174,7 +154,7 @@ function module:RecycleBin()
 	bu.Icon:SetAllPoints()
 	bu.Icon:SetTexture(DB.binTex)
 	bu:SetHighlightTexture(DB.binTex)
-	B.CreateGT(bu, "ANCHOR_LEFT", L["Minimap RecycleBin"], "white")
+	B.AddTooltip(bu, "ANCHOR_LEFT", L["Minimap RecycleBin"], "white")
 
 	local bin = CreateFrame("Frame", "RecycleBinFrame", UIParent)
 	bin:SetPoint("RIGHT", bu, "LEFT", -3, -6)
@@ -294,7 +274,7 @@ function module:WhoPingsMyMap()
 	anim.fader:SetSmoothing("OUT")
 	anim.fader:SetStartDelay(3)
 
-	NDui:EventFrame{"MINIMAP_PING"}:SetScript("OnEvent", function(_, _, unit)
+	B:RegisterEvent("MINIMAP_PING", function(_, unit)
 		local class = select(2, UnitClass(unit))
 		local r, g, b = B.ClassColor(class)
 		local name = GetUnitName(unit)
@@ -362,7 +342,6 @@ function module:OnLogin()
 		"MinimapZoneTextButton",
 		"MinimapZoomOut",
 		"MinimapZoomIn",
-		"MiniMapVoiceChatFrame",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
 		"MiniMapTracking",

@@ -1,5 +1,6 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:RegisterModule("Cooldown")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Cooldown")
 
 function module:OnLogin()
 	if not NDuiDB["Actionbar"]["Cooldown"] then return end
@@ -128,7 +129,7 @@ function module:OnLogin()
 		end
 	end
 
-	NDui:EventFrame{"ACTIONBAR_UPDATE_COOLDOWN"}:SetScript("OnEvent", function()
+	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", function()
 		for cooldown in pairs(active) do
 			Cooldown_Update(cooldown)
 		end
@@ -152,5 +153,5 @@ function module:OnLogin()
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)
-	InterfaceOptionsActionBarsPanelCountdownCooldowns:Hide()
+	B.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
 end

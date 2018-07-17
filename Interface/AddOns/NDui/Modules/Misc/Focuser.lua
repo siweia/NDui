@@ -1,10 +1,11 @@
-local B, C, L, DB = unpack(select(2, ...))
-local module = NDui:GetModule("Misc")
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
+local module = B:GetModule("Misc")
 
 function module:Focuser()
 	if not NDuiDB["Misc"]["Focuser"] then return end
 
-	local oUF = NDui.oUF or oUF
 	local modifier = "shift" -- shift, alt or ctrl
 	local mouseButton = "1" -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb buttons if there are any
 	local pending = {}
@@ -35,8 +36,7 @@ function module:Focuser()
 	f:SetAttribute("macrotext", "/focus mouseover")
 	SetOverrideBindingClick(FocuserButton, true, modifier.."-BUTTON"..mouseButton, "FocuserButton")
 
-	local delay = NDui:EventFrame{"PLAYER_REGEN_ENABLED", "GROUP_ROSTER_UPDATE", "PLAYER_ENTERING_WORLD"}
-	delay:SetScript("OnEvent", function(_, event)
+	local function setupHotkey(event)
 		if event == "PLAYER_REGEN_ENABLED" then
 			for frame in pairs(pending) do
 				SetFocusHotkey(frame)
@@ -46,5 +46,8 @@ function module:Focuser()
 				SetFocusHotkey(object)
 			end
 		end
-	end)
+	end
+	B:RegisterEvent("PLAYER_REGEN_ENABLED", setupHotkey)
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", setupHotkey)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", setupHotkey)
 end

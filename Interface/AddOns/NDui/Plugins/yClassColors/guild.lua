@@ -45,14 +45,14 @@ local function update()
 	end
 end
 
-local loaded = false
-hooksecurefunc("GuildFrame_LoadUI", function()
-	if loaded then
-		return
-	else
-		loaded = true
-		hooksecurefunc("GuildRoster_SetView", setview)
-		hooksecurefunc("GuildRoster_Update", update)
-		hooksecurefunc(GuildRosterContainer, "update", update)
-	end
+local loaded = CreateFrame("Frame")
+loaded:RegisterEvent("ADDON_LOADED")
+loaded:SetScript("OnEvent", function(self, event, addon)
+	if addon ~= "Blizzard_GuildUI" then return end
+
+	hooksecurefunc("GuildRoster_SetView", setview)
+	hooksecurefunc("GuildRoster_Update", update)
+	hooksecurefunc(GuildRosterContainer, "update", update)
+
+	self:UnregisterEvent(event)
 end)
