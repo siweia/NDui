@@ -4,7 +4,7 @@ local module = B:RegisterModule("Settings")
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")
-print("|cff00ff00  LEG|c00ffff00 "..DB.Version.." ("..DB.Support..") |c0000ff00"..L["Version Info1"])
+print("|cff00ff00  "..DB.Support.."|c00ffff00 "..DB.Version.." |c0000ff00"..L["Version Info1"])
 print("|c0000ff00  "..L["Version Info2"].."|c00ffff00 /ndui |c0000ff00"..L["Version Info3"])
 print("|cff70C0F5------------------------")
 
@@ -51,16 +51,17 @@ end
 local function ForceUIScale()
 	B.HideOption(Advanced_UseUIScale)
 	B.HideOption(Advanced_UIScaleSlider)
-	SetCVar("useUiScale", 1)
+
 	local scale = NDuiDB["Settings"]["UIScale"]
 	if NDuiDB["Settings"]["LockUIScale"] then
-		if GetCurrentResolution() ~= 0 then
-			scale = .8*768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")
-		end
-		if scale < .64 then scale = .64 end
+		scale = 768/DB.ScreenHeight * .8
+		local minScale = .64
+		if DB.ScreenHeight > 1080 then minScale = .5 end
+		if scale < minScale then scale = minScale end
 		NDuiDB["Settings"]["UIScale"] = scale
 	end
 
+	SetCVar("useUiScale", 1)
 	if scale < .64 then
 		UIParent:SetScale(scale)
 	else
@@ -76,12 +77,10 @@ local function ForceUIScale()
 	end
 
 	B:RegisterEvent("UI_SCALE_CHANGED", function()
-		if scale < .65 then
-			RestoreUIScale(scale)
-		end
+		if scale < .64 then RestoreUIScale(scale) end
 
 		C_Timer.After(1, function()
-			if scale < .65 and UIParent:GetScale() ~= scale then
+			if scale < .64 and UIParent:GetScale() ~= scale then
 				RestoreUIScale(scale)
 			end
 		end)
@@ -95,20 +94,13 @@ local function ForceChatSettings()
 	ChatFrame1:SetWidth(380)
 	ChatFrame1:SetHeight(190)
     ChatFrame1:SetUserPlaced(true)
-	for i = 1, 10 do
+	for i = 1, NUM_CHAT_WINDOWS do
 		local cf = _G["ChatFrame"..i]
-		FCF_SetWindowAlpha(cf, 0)
 		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
-	end
-	local channels = {"SAY", "EMOTE", "YELL", "GUILD", "OFFICER", "GUILD_ACHIEVEMENT", "ACHIEVEMENT",
-	"WHISPER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "RAID_WARNING", "INSTANCE_CHAT",
-	"INSTANCE_CHAT_LEADER", "CHANNEL1", "CHANNEL2", "CHANNEL3", "CHANNEL4", "CHANNEL5", "CHANNEL6", "CHANNEL7",
-	}	
-	for _, v in ipairs(channels) do
-		ToggleChatColorNamesByClassGroup(true, v)
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 	FCF_SetLocked(ChatFrame1, true)
+
 	NDuiDB["Chat"]["Lock"] = true
 end
 
@@ -185,7 +177,7 @@ local function ForceSkadaOptions()
 						["classicons"] = false,
 						["barslocked"] = true,
 						["y"] = 24,
-						["x"] = -5,
+						["x"] = -3,
 						["title"] = {
 							["color"] = {
 								["a"] = 0.3,

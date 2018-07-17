@@ -4,6 +4,7 @@ local B, C, L, DB = unpack(ns)
 DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
+DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 
 -- Colors
 DB.MyClass = select(2, UnitClass("player"))
