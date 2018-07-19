@@ -71,3 +71,13 @@ for i = 1, NUM_CHAT_WINDOWS do
 	orig2[frame] = frame:GetScript("OnHyperlinkLeave")
 	frame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
 end
+
+local function hookCommunitiesFrame(event, addon)
+	if addon == "Blizzard_Communities" then
+		CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkEnter", OnHyperlinkEnter)
+		CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
+
+		B:UnregisterEvent(event, hookCommunitiesFrame)
+	end
+end
+B:RegisterEvent("ADDON_LOADED", hookCommunitiesFrame)
