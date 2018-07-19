@@ -39,32 +39,34 @@ function module:MissingStats()
 				[3] = { stat = "INTELLECT", primary = LE_UNIT_STAT_INTELLECT },
 				[4] = { stat = "STAMINA" },
 				[5] = { stat = "ARMOR" },
-				[6] = { stat = "ATTACK_DAMAGE", primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
-				[7] = { stat = "ATTACK_AP", hideAt = 0, primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
-				[8] = { stat = "ATTACK_ATTACKSPEED", primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
-				[9] = { stat = "ATTACK_DAMAGE", primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
-				[10] = { stat = "ATTACK_AP", hideAt = 0, primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
-				[11] = { stat = "ATTACK_ATTACKSPEED", primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
-				[12] = { stat = "SPELLPOWER", hideAt = 0, primary = LE_UNIT_STAT_INTELLECT },
-				[13] = { stat = "MANAREGEN", hideAt = 0, primary = LE_UNIT_STAT_INTELLECT },
-				[14] = { stat = "ENERGY_REGEN", hideAt = 0, primary = LE_UNIT_STAT_AGILITY },
-				[15] = { stat = "RUNE_REGEN", hideAt = 0, primary = LE_UNIT_STAT_STRENGTH },
-				[16] = { stat = "FOCUS_REGEN", hideAt = 0, primary = LE_UNIT_STAT_AGILITY },
-				[17] = { stat = "MOVESPEED" },
+				[6] = { stat = "STAGGER", hideAt = 0, roles = { "TANK" }},
+				[7] = { stat = "ATTACK_DAMAGE", primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
+				[8] = { stat = "ATTACK_AP", hideAt = 0, primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
+				[9] = { stat = "ATTACK_ATTACKSPEED", primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
+				[10] = { stat = "ATTACK_DAMAGE", primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
+				[11] = { stat = "ATTACK_AP", hideAt = 0, primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
+				[12] = { stat = "ATTACK_ATTACKSPEED", primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
+				[13] = { stat = "SPELLPOWER", hideAt = 0, primary = LE_UNIT_STAT_INTELLECT },
+				[14] = { stat = "MANAREGEN", hideAt = 0, primary = LE_UNIT_STAT_INTELLECT },
+				[15] = { stat = "ENERGY_REGEN", hideAt = 0, primary = LE_UNIT_STAT_AGILITY },
+				[16] = { stat = "RUNE_REGEN", hideAt = 0, primary = LE_UNIT_STAT_STRENGTH },
+				[17] = { stat = "FOCUS_REGEN", hideAt = 0, primary = LE_UNIT_STAT_AGILITY },
+				[18] = { stat = "MOVESPEED" },
 			},
 		},
 		[2] = {
 			categoryFrame = "EnhancementsCategory",
 			stats = {
-				[1] = { stat = "CRITCHANCE", hideAt = 0 },
-				[2] = { stat = "HASTE", hideAt = 0 },
-				[3] = { stat = "MASTERY", hideAt = 0 },
-				[4] = { stat = "VERSATILITY", hideAt = 0 },
-				[5] = { stat = "LIFESTEAL", hideAt = 0 },
-				[6] = { stat = "AVOIDANCE", hideAt = 0 },
-				[7] = { stat = "DODGE", hideAt = 0, roles =  { "TANK" } },
-				[8] = { stat = "PARRY", hideAt = 0, roles =  { "TANK" } },
-				[9] = { stat = "BLOCK", hideAt = 0, roles =  { "TANK" } },
+				{ stat = "CRITCHANCE", hideAt = 0 },
+				{ stat = "HASTE", hideAt = 0 },
+				{ stat = "MASTERY", hideAt = 0 },
+				{ stat = "VERSATILITY", hideAt = 0 },
+				{ stat = "LIFESTEAL", hideAt = 0 },
+				{ stat = "AVOIDANCE", hideAt = 0 },
+				{ stat = "SPEED", hideAt = 0 },
+				{ stat = "DODGE", roles =  { "TANK" } },
+				{ stat = "PARRY", hideAt = 0, roles =  { "TANK" } },
+				{ stat = "BLOCK", hideAt = 0, showFunc = C_PaperDollInfo.OffhandHasShield },
 			},
 		},
 	}
@@ -82,31 +84,5 @@ function module:MissingStats()
 	PAPERDOLL_STATINFO["FOCUS_REGEN"].updateFunc = function(statFrame, unit)
 		statFrame.numericValue = 0
 		PaperDollFrame_SetFocusRegen(statFrame, unit)
-	end
-
-	-- Fix Movespeed
-	PAPERDOLL_STATINFO["MOVESPEED"].updateFunc = function(statFrame, unit)
-		PaperDollFrame_SetMovementSpeed(statFrame, unit)
-	end
-
-	function MovementSpeed_OnEnter(statFrame)
-		GameTooltip:SetOwner(statFrame, "ANCHOR_RIGHT")
-		GameTooltip:SetText(HIGHLIGHT_FONT_COLOR_CODE..format(PAPERDOLLFRAME_TOOLTIP_FORMAT, STAT_MOVEMENT_SPEED).." "..format("%d%%", statFrame.speed + .5)..FONT_COLOR_CODE_CLOSE)
-		GameTooltip:AddLine(format(STAT_MOVEMENT_GROUND_TOOLTIP, statFrame.runSpeed + .5))
-		if statFrame.unit ~= "pet" then
-			GameTooltip:AddLine(format(STAT_MOVEMENT_FLIGHT_TOOLTIP, statFrame.flightSpeed + .5))
-		end
-		GameTooltip:AddLine(format(STAT_MOVEMENT_SWIM_TOOLTIP, statFrame.swimSpeed + .5))
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(format(CR_SPEED_TOOLTIP, BreakUpLargeNumbers(GetCombatRating(CR_SPEED)), GetCombatRatingBonus(CR_SPEED)))
-		GameTooltip:Show()
-	end
-
-	function PaperDollFrame_SetMovementSpeed(statFrame, unit)
-		statFrame.wasSwimming = nil
-		statFrame.unit = unit
-		MovementSpeed_OnUpdate(statFrame)
-		statFrame.onEnterFunc = MovementSpeed_OnEnter
-		statFrame:Show()
 	end
 end
