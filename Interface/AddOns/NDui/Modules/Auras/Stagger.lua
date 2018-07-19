@@ -17,7 +17,7 @@ local function StaggerGo()
 	bar:SetValue(0)
 	bar.Count = B.CreateFS(bar, 16, "", false, "TOPRIGHT", 0, -7)
 
-	local spells = {214326, 115072, 115308, 124275}
+	local spells = {115069, 115072, 115308, 124275}
 	for i = 1, 4 do
 		bu[i] = CreateFrame("Frame", nil, UIParent)
 		bu[i]:SetSize(IconSize, IconSize)
@@ -32,6 +32,8 @@ local function StaggerGo()
 			bu[i]:SetPoint("LEFT", bu[i-1], "RIGHT", 5, 0)
 		end
 	end
+	bu[1].Count:SetAllPoints()
+
 	B.Mover(bar, L["Stagger"], "Stagger", C.Auras.StaggerPos, bar:GetWidth(), 20)
 end
 
@@ -53,20 +55,15 @@ local function lookingForAura(spell, filter)
 end
 
 local function updateSpells()
-	-- Exploding Keg
-	if IsPlayerSpell(214326) then
-		local start, duration = GetSpellCooldown(214326)
-		if start and duration > 1.5 then
-			bu[1]:SetAlpha(.5)
-			bu[1].CD:SetCooldown(start, duration)
-			bu[1].CD:Show()
-		else
-			bu[1]:SetAlpha(1)
-			bu[1].CD:Hide()
-		end
+	-- Stagger percentage
+	local stagger, staggerAgainstTarget = C_PaperDollInfo.GetStaggerPercentage("player")
+	local amount = staggerAgainstTarget or stagger
+	if amount > 0 then
+		bu[1].Count:SetText(floor(amount))
+		bu[1]:SetAlpha(1)
 	else
+		bu[1].Count:SetText("")
 		bu[1]:SetAlpha(.5)
-		bu[1].CD:Hide()
 	end
 
 	-- Expel Harm
