@@ -299,6 +299,8 @@ end)
 
 -- Tooltip skin
 local function style(self)
+	self:SetScale(NDuiDB["Tooltip"]["Scale"])
+
 	if not self.bg then
 		self:SetBackdrop(nil)
 		local bg = B.CreateBG(self, 0)

@@ -210,15 +210,31 @@ function B:StyleActionButton(button, cfg)
 	--no clue why but blizzard created count and duration on background layer, need to fix that
 	local overlay = CreateFrame("Frame", nil, button)
 	overlay:SetAllPoints()
-	if count then count:SetParent(overlay) end
-	if hotkey then hotkey:SetParent(overlay) end
-	if name then name:SetParent(overlay) end
-
-	--hotkey+count+name
-	B.UpdateHotKey(button)
-	SetupFontString(hotkey, cfg.hotkey)
-	SetupFontString(count, cfg.count)
-	SetupFontString(name, cfg.name)
+	if count then
+		if NDuiDB["Actionbar"]["Count"] then
+			count:SetParent(overlay)
+			SetupFontString(count, cfg.count)
+		else
+			count:Hide()
+		end
+	end
+	if hotkey then
+		if NDuiDB["Actionbar"]["Hotkeys"] then
+			hotkey:SetParent(overlay)
+			B.UpdateHotKey(button)
+			SetupFontString(hotkey, cfg.hotkey)
+		else
+			hotkey:Hide()
+		end
+	end
+	if name then
+		if NDuiDB["Actionbar"]["Macro"] then
+			name:SetParent(overlay)
+			SetupFontString(name, cfg.name)
+		else
+			name:Hide()
+		end
+	end
 
 	button.__styled = true
 end
@@ -256,9 +272,17 @@ function B:StyleExtraActionButton(cfg)
 	SetupCooldown(cooldown, cfg.cooldown)
 
 	--hotkey, count
-	B.UpdateHotKey(button)
-	SetupFontString(hotkey, cfg.hotkey)
-	SetupFontString(count, cfg.count)
+	if NDuiDB["Actionbar"]["Hotkeys"] then
+		B.UpdateHotKey(button)
+		SetupFontString(hotkey, cfg.hotkey)
+	else
+		hotkey:Hide()
+	end
+	if NDuiDB["Actionbar"]["Count"] then
+		SetupFontString(count, cfg.count)
+	else
+		count:Hide()
+	end
 
 	button.__styled = true
 end

@@ -75,6 +75,7 @@ local defaultSettings = {
 		ShowTeamIndex = false,
 		ShowPlayerPlate = false,
 		SortRunes = true,
+		AddPower = true,
 	},
 	Chat = {
 		Sticky = false,
@@ -154,6 +155,7 @@ local defaultSettings = {
 		FactionIcon = true,
 		LFDRole = false,
 		TargetBy = true,
+		Scale = 1,
 	},
 	Misc = {
 		Mail = true,
@@ -280,6 +282,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
 		{1, "UFs", "SortRunes", L["Sort Runes"]},
+		{1, "UFs", "AddPower", L["UFs ExtraMana"], true},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
 		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
@@ -417,6 +420,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
 		{1, "Tooltip", "Cursor", L["Follow Cursor"]},
 		{1, "Tooltip", "ClassColor", L["Classcolor Border"], true},
+		{3, "Tooltip", "Scale", L["Tooltip Scale"], false, {.5, 1.5, 1}},
 		{},--blank
 		{1, "Tooltip", "HideTitle", L["Hide Title"]},
 		{1, "Tooltip", "HideRealm", L["Hide Realm"], true},
