@@ -654,15 +654,21 @@ local function OpenGUI()
 	close:SetFrameLevel(3)
 	close:SetScript("OnClick", function() f:Hide() end)
 
+	local scaleOld = NDuiDB["Settings"]["UIScale"]
 	local ok = B.CreateButton(f, 80, 20, OKAY)
 	ok:SetPoint("RIGHT", close, "LEFT", -10, 0)
 	ok:SetFrameLevel(3)
 	ok:SetScript("OnClick", function()
 		local scale = NDuiDB["Settings"]["UIScale"]
-		if scale < .64 then
-			UIParent:SetScale(scale)
-		else
-			SetCVar("uiScale", scale)
+		if scale ~= scaleOld then
+			if scale < .64 then
+				UIParent:SetScale(scale)
+			else
+				SetCVar("uiScale", scale)
+			end
+			if NDuiDB["Chat"]["Lock"] then
+				ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
+			end
 		end
 		f:Hide()
 		StaticPopup_Show("RELOAD_NDUI")
