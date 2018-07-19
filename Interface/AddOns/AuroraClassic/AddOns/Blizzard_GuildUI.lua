@@ -22,6 +22,10 @@ C.themes["Blizzard_GuildUI"] = function()
 	for i = 1, 5 do
 		F.ReskinTab(_G["GuildFrameTab"..i])
 	end
+	if GetLocale() == "zhTW" then
+		GuildFrameTab1:ClearAllPoints()
+		GuildFrameTab1:SetPoint("TOPLEFT", GuildFrame, "BOTTOMLEFT", -7, 2)
+	end
 	GuildFrameTabardBackground:Hide()
 	GuildFrameTabardEmblem:Hide()
 	GuildFrameTabardBorder:Hide()
