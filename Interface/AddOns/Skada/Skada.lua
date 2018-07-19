@@ -1886,15 +1886,10 @@ local function cleuHandler(timestamp, eventtype, hideCaster, srcGUID, srcName, s
 	end
 end
 Skada.cleuHandler = cleuHandler -- For tweaks
-if CombatLogGetCurrentEventInfo then -- XXX bfa
-	cleuFrame:SetScript("OnEvent", function()
-		cleuHandler(CombatLogGetCurrentEventInfo())
-	end)
-else
-	cleuFrame:SetScript("OnEvent", function(self, event, ...)
-		cleuHandler(...)
-	end)
-end
+
+cleuFrame:SetScript("OnEvent", function()
+	cleuHandler(CombatLogGetCurrentEventInfo())
+end)
 
 function Skada:AssignPet(ownerguid, ownername, petguid)
 	pets[petguid] = {id = ownerguid, name = ownername}
@@ -2151,16 +2146,15 @@ end
 function Skada:FormatNumber(number)
 	if number then
 		if self.db.profile.numberformat == 1 then
-            if number > 1000000000 then
-                return ("%02.3fB"):format(number / 1000000000)
-            elseif number > 1000000 then
+			if number > 1000000000 then
+				return ("%02.3fB"):format(number / 1000000000)
+			elseif number > 1000000 then
 				return ("%02.2fM"):format(number / 1000000)
-			else
+			elseif number > 9999 then
 				return ("%02.1fK"):format(number / 1000)
 			end
-		else
-			return math.floor(number)
 		end
+		return math.floor(number)
 	end
 end
 

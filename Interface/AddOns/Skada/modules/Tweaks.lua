@@ -1,5 +1,3 @@
-if CombatLogGetCurrentEventInfo then return end -- XXX bfa
-
 -- Various silly tweaks needed to keep up with Blizzard's shenanigans. Not added to core because they may not be needed/relevant forever.
 Skada:AddLoadableModule("Tweaks", "Various tweaks to get around deficiences and problems in the game's combat logs. Carries a small performance penalty.", function(Skada, L)
     if Skada.db.profile.modulesBlocked.Tweaks then return end
@@ -70,14 +68,8 @@ Skada:AddLoadableModule("Tweaks", "Various tweaks to get around deficiences and 
 
         orig(timestamp, eventtype, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, ...)
     end
-    if CombatLogGetCurrentEventInfo then -- XXX bfa
-        Skada.cleuFrame:SetScript("OnEvent", function()
-            cleuHandler(CombatLogGetCurrentEventInfo())
-        end)
-    else
-        Skada.cleuFrame:SetScript("OnEvent", function(self, event, ...)
-            cleuHandler(...)
-        end)
-    end
 
+    Skada.cleuFrame:SetScript("OnEvent", function()
+        cleuHandler(CombatLogGetCurrentEventInfo())
+    end)
 end)
