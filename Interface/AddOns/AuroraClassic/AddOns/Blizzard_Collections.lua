@@ -724,7 +724,7 @@ do
 					self.reskin = true
 				end
 			end)
-			f:UnregisterEvent("PLAERY_ENTERING_WORLD")
+			f:UnregisterEvent(event)
 		elseif event == "PET_BATTLE_OPENING_START" then
 			C_Timer.After(.01, function()
 				if f.styled then return end
@@ -738,7 +738,7 @@ do
 				end
 				f.styled = true
 			end)
-			f:UnregisterEvent("PET_BATTLE_OPENING_START")
+			f:UnregisterEvent(event)
 		end
 	end)
 end
