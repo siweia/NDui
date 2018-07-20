@@ -88,6 +88,7 @@ local defaultSettings = {
 		EnableFilter = true,
 		Matches = 1,
 		BlockAddonAlert = true,
+		ChatMenu = true,
 	},
 	Map = {
 		Coord = true,
