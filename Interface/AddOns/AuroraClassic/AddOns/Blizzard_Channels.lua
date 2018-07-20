@@ -6,6 +6,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinClose(ChannelFrameCloseButton)
 	F.Reskin(ChannelFrame.NewButton)
 	F.Reskin(ChannelFrame.SettingsButton)
+	F.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
 	F.ReskinScroll(ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
 
 	ChannelFrameInset:Hide()
@@ -82,4 +83,15 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	F.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
 	F.ReskinSlider(UnitPopupVoiceSpeakerVolume.Slider)
+
+	-- VoiceActivityManager
+	hooksecurefunc(VoiceActivityManager, "LinkFrameNotificationAndGuid", function(_, _, notification, guid)
+		local class = select(2, GetPlayerInfoByGUID(guid))
+		if class then
+			local color = C.classcolours[class]
+			if notification.Name then
+				notification.Name:SetTextColor(color.r, color.g, color.b)
+			end
+		end
+	end)
 end)
