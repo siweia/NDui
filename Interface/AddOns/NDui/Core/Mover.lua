@@ -20,7 +20,7 @@ B.Mover = function(Frame, Text, key, Pos, w, h)
 	end
 	Mover:EnableMouse(true)
 	Mover:SetMovable(true)
-	Mover:SetClampedToScreen(true)
+	--Mover:SetClampedToScreen(true)
 	Mover:SetFrameStrata("HIGH")
 	Mover:RegisterForDrag("LeftButton")
 	Mover:SetScript("OnDragStart", function(self) self:StartMoving() end)
