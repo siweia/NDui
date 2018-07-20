@@ -147,14 +147,15 @@ local function autoRepair(event)
 				if guildMoney >= cost and CanGuildBankRepair() or guildMoney == 0 and IsGuildLeader() then
 					RepairAllItems(1)
 					print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(cost)))
+					return
 				end
+			end
+
+			if money > cost then
+				RepairAllItems()
+				print(format(DB.InfoColor.."%s:|r %s", L["Repair cost"], GetMoneyString(cost)))
 			else
-				if money > cost then
-					RepairAllItems()
-					print(format(DB.InfoColor.."%s:|r %s", L["Repair cost"], GetMoneyString(cost)))
-				else
-					print(DB.InfoColor..L["Repair error"])
-				end
+				print(DB.InfoColor..L["Repair error"])
 			end
 		end
 	elseif event == "MERCHANT_CLOSED" then
