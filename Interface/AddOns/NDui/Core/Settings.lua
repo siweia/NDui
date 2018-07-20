@@ -35,7 +35,7 @@ local function ForceDefaultSettings()
 	SetCVar("floatingCombatTextFloatMode", 1)
 	SetCVar("ffxGlow", 0)
 	SetCVar("autoQuestWatch", 1)
-	SetCVar("overrideArchive", 0)
+	--SetCVar("overrideArchive", 0)
 	SetCVar("WorldTextScale", 1.5)
 end
 
