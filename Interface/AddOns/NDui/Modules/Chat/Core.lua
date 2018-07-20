@@ -60,6 +60,7 @@ local function skinChat(self)
 		end
 	end)
 
+	B.StripTextures(self)
 	B.HideObject(self.buttonFrame)
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
