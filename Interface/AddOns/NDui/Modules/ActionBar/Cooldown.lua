@@ -83,6 +83,7 @@ function module:OnLogin()
 
 	local function Timer_Start(self, start, duration)
 		if self:IsForbidden() then return end
+		if self:GetParent():GetParent() == PVPQueueFrame then return end
 		if self.noOCC then return end
 
 		if start > 0 and duration > MIN_DURATION then
@@ -93,7 +94,7 @@ function module:OnLogin()
 			timer.nextUpdate = 0
 
 			if timer.fontScale >= MIN_SCALE then 
-				timer:Show() 
+				timer:Show()
 			end
 		else
 			local timer = self.timer
