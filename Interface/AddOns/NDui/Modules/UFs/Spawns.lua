@@ -395,7 +395,7 @@ function UF:OnLogin()
 			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
 
 			local function UpdateSpecPos(event, ...)
-				local unit, _, _, _, spellID = ...
+				local unit, _, spellID = ...
 				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
 					if not GetSpecialization() then return end
 					local specIndex = GetSpecialization()
