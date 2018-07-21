@@ -119,4 +119,18 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.CreateBG(PetBattleQueueReadyFrame.Art)
 	F.Reskin(PetBattleQueueReadyFrame.AcceptButton)
 	F.Reskin(PetBattleQueueReadyFrame.DeclineButton)
+
+	-- PlayerReportFrame
+	PlayerReportFrame:HookScript("OnShow", function(self)
+		if not self.styled then
+			F.StripTextures(self)
+			F.SetBD(self)
+			F.StripTextures(self.Comment)
+			F.ReskinInput(self.Comment)
+			F.Reskin(self.ReportButton)
+			F.Reskin(self.CancelButton)
+
+			self.styled = true
+		end
+	end)
 end)
