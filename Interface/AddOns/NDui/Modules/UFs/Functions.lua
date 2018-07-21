@@ -626,7 +626,7 @@ function UF:CreateClassPower(self)
 		bars[i]:SetHeight(height)
 		bars[i]:SetWidth((width - 5*margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
-		bars[i]:SetFrameLevel(self:GetFrameLevel() + 1)
+		bars[i]:SetFrameLevel(self:GetFrameLevel() + 2)
 		B.CreateSD(bars[i], 3, 3)
 		if i == 1 then
 			bars[i]:SetPoint(unpack(C.UFs.BarPoint))
