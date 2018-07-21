@@ -15,7 +15,6 @@ local UnitPopupButtonsExtra = {
 }
 
 for k, v in pairs(UnitPopupButtonsExtra) do
-	v.dist = 0
 	UnitPopupButtons[k] = v
 end
 
