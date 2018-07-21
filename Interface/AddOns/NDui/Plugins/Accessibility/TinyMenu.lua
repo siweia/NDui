@@ -118,13 +118,14 @@ hooksecurefunc("UnitPopup_OnClick", function(self)
 	local name = UIDROPDOWNMENU_INIT_MENU.name
 	local server = UIDROPDOWNMENU_INIT_MENU.server
 	local lineID = UIDROPDOWNMENU_INIT_MENU.lineID
+	local localtion = UIDROPDOWNMENU_INIT_MENU.playerLocation
 	local fullname = name
 	local editBox
 	if server and (not unit or UnitRealmRelationship(unit) ~= LE_REALM_RELATION_SAME) then
-		fullname = name .. "-" .. server
+		fullname = name.."-"..server
 	end
 	if self.value == "ARMORY" then
-		local armory = gethost() .. urlencode(server or GetRealmName()) .. "/" .. urlencode(name) .. "/advanced"
+		local armory = gethost()..urlencode(server or GetRealmName()).."/"..urlencode(name).."/advanced"
 		editBox = ChatEdit_ChooseBoxForSend()
 		ChatEdit_ActivateChat(editBox)
 		editBox:SetText(armory)
@@ -147,6 +148,7 @@ hooksecurefunc("UnitPopup_OnClick", function(self)
 	elseif self.value == "GUILD_ADD" then
 		GuildInvite(fullname)
 	elseif self.value == "QUICK_REPORT" then
-		ReportPlayer(PLAYER_REPORT_TYPE_SPAM, lineID)
+		PlayerReportFrame:InitiateReport(PLAYER_REPORT_TYPE_SPAM, fullname, localtion)
+		PlayerReportFrame.ReportButton:Click()
 	end
 end)
