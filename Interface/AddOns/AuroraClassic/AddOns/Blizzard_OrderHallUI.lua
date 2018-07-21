@@ -20,8 +20,7 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	F.CreateSD(OrderHallTalentFrame)
 	ClassHallTalentInset:SetAlpha(0)
 	F.Reskin(OrderHallTalentFrame.BackButton)
-	OrderHallTalentFrame.CurrencyIcon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBDFrame(OrderHallTalentFrame.CurrencyIcon)
+	F.ReskinIcon(OrderHallTalentFrame.Currency.Icon)
 	OrderHallTalentFrame.StyleFrame:SetAlpha(0)
 	F.ReskinClose(OrderHallTalentFrameCloseButton)
 	OrderHallTalentFrameCloseButton:ClearAllPoints()
@@ -35,23 +34,18 @@ C.themes["Blizzard_OrderHallUI"] = function()
 
 		for i = 1, OrderHallTalentFrame:GetNumChildren() do
 			local bu = select(i, OrderHallTalentFrame:GetChildren())
-			if bu.Icon then
-				if not bu.styled then
+			if bu and bu.talent then
+				if not bu.bg then
 					bu.Icon:SetTexCoord(.08, .92, .08, .92)
 					bu.Border:SetAlpha(0)
 					bu.Highlight:SetColorTexture(1, 1, 1, .25)
-					bu.bg = F.CreateBDFrame(bu.Border)
-					bu.bg:SetPoint("TOPLEFT", -1.2, 1.2)
-					bu.bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
-					bu.styled = true
+					bu.bg = F.CreateBDFrame(bu.Icon)
 				end
 
-				if bu and bu.talent then
-					if bu.talent.selected then
-						bu.bg:SetBackdropBorderColor(1, 1, 0)
-					else
-						bu.bg:SetBackdropBorderColor(0, 0, 0)
-					end
+				if bu.talent.selected then
+					bu.bg:SetBackdropBorderColor(1, 1, 0)
+				else
+					bu.bg:SetBackdropBorderColor(0, 0, 0)
 				end
 			end
 		end
