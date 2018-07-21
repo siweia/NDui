@@ -15,64 +15,43 @@ local function TotemsGo()
 	local Totembar = CreateFrame("Frame", nil, UIParent)
 	Totembar:SetSize(C.Auras.IconSize, C.Auras.IconSize)
 	for i = 1, 4 do
-		totem[i] = CreateFrame("Button", nil, Totembar, "SecureActionButtonTemplate")
+		totem[i] = CreateFrame("Button", nil, Totembar)
 		totem[i]:SetSize(C.Auras.IconSize, C.Auras.IconSize)
 		if i == 1 then
 			totem[i]:SetPoint("CENTER", Totembar)
 		else
 			totem[i]:SetPoint("LEFT", totem[i-1], "RIGHT", 5, 0)
 		end
-		B.CreateIF(totem[i], true, true)
+		B.CreateIF(totem[i], false, true)
 		totem[i].Icon:SetTexture(icons[i])
-		totem[i]:SetAlpha(.3)
-		if NDuiDB["Auras"]["DestroyTotems"] then
-			totem[i]:RegisterForClicks("RightButtonUp")
-			totem[i]:SetAttribute("type2", "macro")
-			totem[i]:SetAttribute("macrotext", "/click TotemFrameTotem"..SHAMAN_TOTEM_PRIORITIES[i].." RightButton")
-		end
+		totem[i]:SetAlpha(.2)
 
-		totem[i]:SetScript("OnEnter", function(self)
-			if not self.spellID then return end
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
-			GameTooltip:ClearLines()
-			GameTooltip:SetSpellByID(self.spellID)
-			GameTooltip:Show()
-		end)
-		totem[i]:SetScript("OnLeave", GameTooltip_Hide)
+		local defaultTotem = _G["TotemFrameTotem"..i]
+		defaultTotem:SetParent(totem[i])
+		defaultTotem:SetAllPoints()
+		defaultTotem:SetAlpha(0)
+		defaultTotem:EnableMouse(NDuiDB["Auras"]["DestroyTotems"])
+		totem[i].parent = defaultTotem
 	end
 	B.Mover(Totembar, L["Totembar"], "Totems", C.Auras.TotemsPos, 140, 32)
 end
 
-local function updateGlow(self)
-	local timer = self.start + self.dur - GetTime()
-	if timer > 0 and timer < .8 then
-		ActionButton_ShowOverlayGlow(self)
-	else
-		ActionButton_HideOverlayGlow(self)
-	end
-end
-
 local function updateTotem()
-	for slot = 1, 4 do
-		local haveTotem, name, start, dur, tex = GetTotemInfo(slot)
-		local Totem = totem[slot]
-		local spellID = select(7, GetSpellInfo(name))
-		Totem.start = start
-		Totem.dur = dur
-		Totem.spellID = haveTotem and spellID
+	for i = 1, 4 do
+		local totem = totem[i]
+		local defaultTotem = totem.parent
+		local slot = defaultTotem.slot
 
+		local haveTotem, name, start, dur, icon = GetTotemInfo(slot)
 		if haveTotem and dur > 0 then
-			Totem:SetAlpha(1)
-			Totem.Icon:SetTexture(tex)
-			Totem.CD:SetCooldown(start, dur)
-			Totem.CD:Show()
-			Totem:SetScript("OnUpdate", updateGlow)
+			totem.Icon:SetTexture(icon)
+			totem.CD:SetCooldown(start, dur)
+			totem.CD:Show()
+			totem:SetAlpha(1)
 		else
-			Totem:SetAlpha(.3)
-			Totem.Icon:SetTexture(icons[slot])
-			Totem.CD:Hide()
-			Totem:SetScript("OnUpdate", nil)
-			ActionButton_HideOverlayGlow(Totem)
+			totem:SetAlpha(.2)
+			totem.Icon:SetTexture(icons[i])
+			totem.CD:Hide()
 		end
 	end
 end
