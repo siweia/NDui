@@ -5,13 +5,13 @@ local module = B:GetModule("Chat")
 function module:UrlCopy()
 	local foundurl = false
 
-	local function linkconvert(text, type, value)
-		return "|H"..type..":"..tostring(value).."|h"..DB.InfoColor..text.."|r|h"
+	local function linkconvert(text, value)
+		return "|Hurl:"..tostring(value).."|h"..DB.InfoColor..text.."|r|h"
 	end
 
 	local function highlighturl(_, url)
 		foundurl = true
-		return " "..linkconvert("["..url.."]", "url", url).." "
+		return " "..linkconvert("["..url.."]", url).." "
 	end
 
 	local function searchforurl(frame, text, ...)
