@@ -105,7 +105,7 @@ cast.OnCastSent = function(self)
 	self.Castbar.SafeZone.castSent = true
 end
 
-cast.PostCastStart = function(self, unit, _, _, spellID)
+cast.PostCastStart = function(self, unit)
 	self:SetAlpha(1)
 	self.Spark:Show()
 	self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
@@ -148,15 +148,9 @@ cast.PostCastStart = function(self, unit, _, _, spellID)
 	end
 
 	-- Fix for empty icon
-	local texture = GetSpellTexture(spellID)
-	if not texture then
-		texture = 136243
-		if self.Icon then self.Icon:SetTexture(texture) end
+	if self.Icon and not self.Icon:GetTexture() then
+		self.Icon:SetTexture(136243)
 	end
-end
-
-cast.PostChannelStart = function(self, unit, name, spellID)
-	cast.PostCastStart(self, unit, name, _, spellID)
 end
 
 cast.PostUpdateInterruptible = function(self, unit)

@@ -346,7 +346,7 @@ function UF:CreateCastBar(self)
 
 	cb.OnUpdate = cast.OnCastbarUpdate
 	cb.PostCastStart = cast.PostCastStart
-	cb.PostChannelStart = cast.PostChannelStart
+	cb.PostChannelStart = cast.PostCastStart
 	cb.PostCastStop = cast.PostCastStop
 	cb.PostChannelStop = cast.PostChannelStop
 	cb.PostCastFailed = cast.PostCastFailed
@@ -390,10 +390,6 @@ local function postCreateIcon(element, button)
 	button.icon:SetDrawLayer("ARTWORK")
 	B.CreateSD(button, 2, 2)
 	button.overlay:SetTexture(nil)
-
-	button.stealable:SetTexture(DB.textures.pushed)
-	button.stealable:SetPoint("TOPLEFT", -2, 2)
-	button.stealable:SetPoint("BOTTOMRIGHT", 2, -2)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .3)
