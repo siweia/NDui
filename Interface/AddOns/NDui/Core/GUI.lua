@@ -89,6 +89,7 @@ local defaultSettings = {
 		Matches = 1,
 		BlockAddonAlert = true,
 		ChatMenu = true,
+		WhisperColor = true,
 	},
 	Map = {
 		Coord = true,
@@ -376,13 +377,14 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Freedom", L["Language Filter"]},
 		{1, "Chat", "Sticky", L["Chat Sticky"], true},
 		{1, "Chat", "Oldname", L["Default Channel"]},
+		{1, "Chat", "WhisperColor", L["Differ WhipserColor"], true},
 		{1, "Chat", "Timestamp", L["Timestamp"]},
-		{2, "Chat", "AtList", L["@List"], true, nil, function() B.genChatAtList() end},
 		{},--blank
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
 		{2, "Chat", "FilterList", L["Filter List"], true, nil, function() B.genFilterList() end},
+		{2, "Chat", "AtList", L["@List"], false, nil, function() B.genChatAtList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},

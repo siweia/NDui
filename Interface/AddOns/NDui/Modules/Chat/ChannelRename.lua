@@ -13,7 +13,7 @@ function module:ChannelRename()
 				text = text:gsub(CHAT_FLAG_DND, DB.DNDTex)
 
 				local r, g, b = ...
-				if text:find(L["Tell"].." |H[BN]*player.+%]") then r, g, b = r*.7, g*.7, b*.7 end
+				if NDuiDB["Chat"]["WhisperColor"] and text:find(L["Tell"].." |H[BN]*player.+%]") then r, g, b = r*.7, g*.7, b*.7 end
 				if NDuiDB["Chat"]["Oldname"] then
 					text = text:gsub("|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
 					text = text:gsub("|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")
