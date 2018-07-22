@@ -84,7 +84,7 @@ function Bar:CreateBar4()
 	end
 
 	--create the mouseover functionality
-	if NDuiDB["Actionbar"]["Bar4Fade"] then
+	if NDuiDB["Actionbar"]["Bar4Fade"] and cfg.fader then
 		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
