@@ -50,6 +50,9 @@ local CustomUnits = {
 	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
 	[GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
 	[GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
+	["Spawn of G'huun"] = true,
+	["戈霍恩之嗣"] = true,
+	["古翰幼體"] = true,
 }
 function UF:CreateUnitTable()
 	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
