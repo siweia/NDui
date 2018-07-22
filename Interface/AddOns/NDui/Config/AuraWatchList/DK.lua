@@ -30,8 +30,8 @@ local list = {
 		{AuraID = 191748, UnitID = "target", Caster = "player"},	-- 诸界之灾
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
-		{AuraID = 48265, UnitID = "pet"},		-- 死亡脚步
 		{AuraID = 63560, UnitID = "pet"},		-- 黑暗突变
+		{AuraID = 48265, UnitID = "player"},	-- 死亡脚步
 		{AuraID = 55233, UnitID = "player"},	-- 吸血鬼之血
 		{AuraID = 48707, UnitID = "player"},	-- 反魔法护罩
 		{AuraID = 81256, UnitID = "player"},	-- 符文刃舞
