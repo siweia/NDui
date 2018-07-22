@@ -83,7 +83,7 @@ local function toggle(f)
 end
 
 local function createToggleBox(parent, value, text, disable)
-	local f = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+	local f = CreateFrame("CheckButton", "$parent"..value, parent, "InterfaceOptionsCheckButtonTemplate")
 	f.value = value
 	f.Text:SetText(text)
 	f:SetScript("OnClick", toggle)
