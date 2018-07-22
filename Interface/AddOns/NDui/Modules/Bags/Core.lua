@@ -5,6 +5,11 @@ local cargBags = ns.cargBags
 
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
+	if IsAddOnLoaded("AuroraClassic") then
+		AuroraOptionsbags:Disable()
+		AuroraOptionsbags.Text:SetTextColor(.5, .5, .5)
+		AuroraConfig.bags = false
+	end
 
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
 	Backpack:RegisterBlizzard()

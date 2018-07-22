@@ -4,6 +4,8 @@ local module = B:GetModule("Skins")
 
 function module:FontStyle()
 	if not IsAddOnLoaded("AuroraClassic") then return end
+	AuroraOptionsenableFont:Disable()
+	AuroraOptionsenableFont.Text:SetTextColor(.5, .5, .5)
 	AuroraConfig.enableFont = false
 
 	if not NDuiDB["Skins"]["FontFlag"] then return end

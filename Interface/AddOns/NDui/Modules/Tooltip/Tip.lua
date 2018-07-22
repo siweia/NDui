@@ -358,7 +358,11 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 		EventTraceTooltip:HookScript("OnShow", style)
 
 	elseif addon == "NDui" then
-		if IsAddOnLoaded("AuroraClassic") then AuroraConfig.tooltips = false end
+		if IsAddOnLoaded("AuroraClassic") then
+			AuroraOptionstooltips:Disable()
+			AuroraOptionstooltips.Text:SetTextColor(.5, .5, .5)
+			AuroraConfig.tooltips = false
+		end
 
 		local tooltips = {
 			ChatMenu,
@@ -522,15 +526,7 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 		end
 
 	elseif addon == "Blizzard_Contribution" then
-		local gt = {
-			ContributionTooltip,
-			ContributionBuffTooltip,
-		}
-		for _, f in pairs(gt) do
-			if f then
-				f:HookScript("OnShow", extrastyle)
-			end
-		end
+		ContributionBuffTooltip:HookScript("OnShow", extrastyle)
 		ContributionBuffTooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
 		ContributionBuffTooltip.Border:SetAlpha(0)
 
