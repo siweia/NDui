@@ -4,11 +4,9 @@ local B, C, L, DB = unpack(ns)
 -- QuickQuest, by P3lim
 -- NDui MOD
 --------------------------
-local WorldMapFrame = _G.WorldMapFrame
 local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
-mono:SetPoint("TOPRIGHT", -150, 0)
+mono:SetPoint("TOPRIGHT", -140, 0)
 mono:SetSize(26, 26)
-mono:SetHitRectInsets(0, -10, 0, 0)
 B.CreateCB(mono, .25)
 mono.text = B.CreateFS(mono, 14, L["Auto Quest"], false, "LEFT", 25, 0)
 mono:RegisterEvent("PLAYER_LOGIN")
