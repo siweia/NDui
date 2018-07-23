@@ -2,20 +2,34 @@
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 
+local function ColorPercent(value)
+	local r, g, b
+	if value < 20 then
+		r, g, b = 1, .1, .1
+	elseif value < 35 then
+		r, g, b = 1, .5, 0
+	elseif value < 80 then
+		r, g, b = 1, .9, .3
+	else
+		r, g, b = 1, 1, 1
+	end
+	return B.HexRGB(r, g, b)..value
+end
+
 oUF.Tags.Methods["hp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return oUF.Tags.Methods["DDG"](unit)
 	else
-		local per = oUF.Tags.Methods["nphp"](unit)
+		local per = oUF.Tags.Methods["perhp"](unit) or 0
 		local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 		if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
-			if cur < max then 
-				return B.Numb(cur).." | "..per
+			if per < 100 then
+				return B.Numb(cur).." | "..ColorPercent(per)
 			else
 				return B.Numb(cur)
 			end
 		else
-			return per
+			return ColorPercent(per)
 		end
 	end
 end
@@ -37,9 +51,9 @@ end
 oUF.Tags.Events["power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 oUF.Tags.Methods["color"] = function(unit)
-	local _, class = UnitClass(unit)
+	local class = select(2, UnitClass(unit))
 	local reaction = UnitReaction(unit, "player")
-	
+
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return "|cffA0A0A0"
 	elseif UnitIsTapDenied(unit) then
@@ -54,8 +68,14 @@ oUF.Tags.Methods["color"] = function(unit)
 end
 oUF.Tags.Events["color"] = "UNIT_HEALTH UNIT_CONNECTION"
 
-oUF.Tags.Methods["afkdnd"] = function(unit) 
-	return UnitIsAFK(unit) and "|cffCFCFCF <"..AFK..">|r" or UnitIsDND(unit) and "|cffCFCFCF <"..DND..">|r" or ""
+oUF.Tags.Methods["afkdnd"] = function(unit)
+	if UnitIsAFK(unit) then
+		return "|cffCFCFCF <"..AFK..">|r"
+	elseif UnitIsDND(unit) then
+		return "|cffCFCFCF <"..DND..">|r"
+	else
+		return ""
+	end
 end
 oUF.Tags.Events["afkdnd"] = "PLAYER_FLAGS_CHANGED"
 
@@ -107,8 +127,7 @@ oUF.Tags.Methods["raidhp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return oUF.Tags.Methods["DDG"](unit)
 	else
-		local per = oUF.Tags.Methods["perhp"](unit).."%" or 0
-		return per
+		return oUF.Tags.Methods["perhp"](unit).."%" or 0
 	end
 end
 oUF.Tags.Events["raidhp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION"
@@ -118,25 +137,12 @@ oUF.Tags.Methods["nphp"] = function(unit)
 	local per = oUF.Tags.Methods["perhp"](unit) or 0
 	if per == 100 then return end
 
-	local color
-	if per < 20 then
-		color = B.HexRGB(1, .1, .1)
-	elseif per < 35 then
-		color = B.HexRGB(1, .5, 0)
-	elseif per < 80 then
-		color = B.HexRGB(1, .9, .3)
-	else
-		color = B.HexRGB(1, 1, 1)
-	end
-	per = color..per.."|r"
-
-	return per
+	return ColorPercent(per)
 end
 oUF.Tags.Events["nphp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION"
 
 oUF.Tags.Methods["nppp"] = function(unit)
 	if not C.ShowPowerList[UnitName(unit)] then return end
-
 	local per = oUF.Tags.Methods["perpp"](unit)
 	local color
 	if per > 85 then
@@ -147,13 +153,13 @@ oUF.Tags.Methods["nppp"] = function(unit)
 		color = B.HexRGB(.8, .8, 1)
 	end
 	per = color..per.."|r"
+
 	return per
 end
 oUF.Tags.Events["nppp"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
 oUF.Tags.Methods["nplevel"] = function(unit)
 	local level = UnitLevel(unit)
-
 	if level and level ~= UnitLevel("player") then
 		if level > 0 then
 			level = B.HexRGB(GetCreatureDifficultyColor(level))..level.."|r "
@@ -172,8 +178,8 @@ oUF.Tags.Events["nplevel"] = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHA
 oUF.Tags.Methods["altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
-	if(max > 0 and not UnitIsDeadOrGhost(unit)) then
-		return ("%s%%"):format(math.floor(cur/max*100+.5))
+	if max > 0 and not UnitIsDeadOrGhost(unit) then
+		return ("%s%%"):format(math.floor(cur/max*100 + .5))
 	end
 end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
