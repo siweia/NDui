@@ -102,4 +102,8 @@ function module:OnLogin()
 
 	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
 	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
+
+	-- Elements
+	self:SetupMinimap()
+	--self:MapReveal()
 end

@@ -1,6 +1,6 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:RegisterModule("Minimap")
+local module = B:GetModule("Maps")
 
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
@@ -286,7 +286,7 @@ function module:WhoPingsMyMap()
 	end)
 end
 
-function module:OnLogin()
+function module:SetupMinimap()
 	-- Shape and Position
 	local scale = NDuiDB["Map"]["MinmapScale"]
 	function GetMinimapShape() return "SQUARE" end
