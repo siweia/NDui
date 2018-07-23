@@ -165,7 +165,7 @@ function UF:CreatePowerText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Power)
 
-	local ppval = B.CreateFS(textFrame, retVal(self, 14, 13, 12), "", false, "RIGHT", -3, 2)
+	local ppval = B.CreateFS(textFrame, retVal(self, 13, 12, 12), "", false, "RIGHT", -3, 2)
 	self:Tag(ppval, "[color][power]")
 end
 

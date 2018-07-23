@@ -6,7 +6,7 @@ oUF.Tags.Methods["hp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return oUF.Tags.Methods["DDG"](unit)
 	else
-		local per = oUF.Tags.Methods["perhp"](unit).."%" or 0
+		local per = oUF.Tags.Methods["nphp"](unit)
 		local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 		if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
 			if cur < max then 
@@ -23,7 +23,7 @@ oUF.Tags.Events["hp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION"
 
 oUF.Tags.Methods["power"] = function(unit)
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
-	local per = oUF.Tags.Methods["perpp"](unit).."%" or 0
+	local per = oUF.Tags.Methods["perpp"](unit) or 0
 	if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
 		if cur < max and UnitPowerType(unit) == 0 then
 			return B.Numb(cur).." | "..per
@@ -123,7 +123,7 @@ oUF.Tags.Methods["nphp"] = function(unit)
 		color = B.HexRGB(1, .1, .1)
 	elseif per < 35 then
 		color = B.HexRGB(1, .5, 0)
-	elseif per < 50 then
+	elseif per < 80 then
 		color = B.HexRGB(1, .9, .3)
 	else
 		color = B.HexRGB(1, 1, 1)
