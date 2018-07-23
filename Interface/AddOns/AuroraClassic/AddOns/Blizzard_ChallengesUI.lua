@@ -38,13 +38,13 @@ C.themes["Blizzard_ChallengesUI"] = function()
 		end
 
 		if IsAddOnLoaded("AngryKeystones") and not angryStyle then
-			local scheduel = select(6, self:GetChildren())
+			local scheduel = select(4, self:GetChildren())
 			scheduel:GetRegions():SetAlpha(0)
 			select(3, scheduel:GetRegions()):SetAlpha(0)
 			F.CreateBD(scheduel, .3)
 			if scheduel.Entries then
 				for i = 1, 4 do
-					AffixesSetup(scheduel.Entries[i].Affixes)
+					AffixesSetup(scheduel.Entries[i])
 				end
 			end
 
