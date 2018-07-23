@@ -90,10 +90,16 @@ end
 
 --[[
 	闭上你的嘴！
-	打断/偷取法术时的警报。
+	打断、偷取及驱散法术时的警报
 ]]
 function module:InterruptAlert()
 	if not NDuiDB["Misc"]["Interrupt"] then return end
+
+	local infoType = {
+		["SPELL_INTERRUPT"] = L["Interrupt"],
+		["SPELL_STOLEN"] = L["Steal"],
+		["SPELL_DISPEL"] = L["Dispel"],
+	}
 
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
@@ -101,13 +107,7 @@ function module:InterruptAlert()
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
 			if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") then return end
 
-			local infoText
-			if eventType == "SPELL_INTERRUPT" then
-				infoText = L["Interrupt"]
-			elseif eventType == "SPELL_STOLEN" then
-				infoText = L["Steal"]
-			end
-
+			local infoText = infoType[eventType]
 			if infoText then
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 			end
