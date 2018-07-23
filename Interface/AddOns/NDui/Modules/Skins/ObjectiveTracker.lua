@@ -210,6 +210,7 @@ function module:QuestTracker()
 			select(3, block:GetRegions()):Hide()
 			block.bg = B.CreateBG(block)
 			block.bg:SetPoint("TOPLEFT", 2, 0)
+			block.bg:SetPoint("BOTTOMRIGHT", -2, 0)
 			B.CreateBD(block.bg)
 			B.CreateTex(block.bg)
 		end
