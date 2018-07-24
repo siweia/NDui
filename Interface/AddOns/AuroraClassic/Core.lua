@@ -657,8 +657,7 @@ function F:ReskinGarrisonPortrait()
 	self.PortraitRingQuality:SetTexture("")
 	if self.Highlight then self.Highlight:Hide() end
 
-	self.LevelBorder:Hide()
-	self.LevelBorder.Show = F.dummy
+	self.LevelBorder:SetScale(.0001)
 	self.Level:ClearAllPoints()
 	self.Level:SetPoint("BOTTOM", self, 0, 12)
 
