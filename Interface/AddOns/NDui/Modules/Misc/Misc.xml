@@ -9,4 +9,5 @@
 	<Script file="Focuser.lua"/>
 	<Script file="QuestNotifier.lua"/>
 	<Script file="QuickJoin.lua"/>
+	<Script file="M+GuildBest.lua"/>
 </Ui>
