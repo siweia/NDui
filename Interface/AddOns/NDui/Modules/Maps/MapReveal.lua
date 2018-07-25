@@ -242,12 +242,12 @@ local LeaMapsData = {
 -- Function to refresh overlays (Blizzard_SharedMapDataProviders\MapExplorationDataProvider)
 local overlayTextures, TileExists = {}, {}
 
-local function RefMap(self, fullUpdate)
+local function RefMap(self)
 	wipe(overlayTextures)
 
-	local mapID = self:GetMap():GetMapID(); if not mapID then return end
+	local mapID = WorldMapFrame.mapID; if not mapID then return end
 	local artID = C_Map.GetMapArtID(mapID); if not artID or not LeaMapsData[artID] then return end
-	local LeaPlusMapZone = LeaMapsData[artID]
+	local LeaMapsZone = LeaMapsData[artID]
 
 	local exploredMapTextures = C_MapExplorationInfo.GetExploredMapTextures(mapID)
 	if exploredMapTextures then
@@ -265,7 +265,7 @@ local function RefMap(self, fullUpdate)
 	local TILE_SIZE_HEIGHT = layerInfo.tileHeight
 
 	-- Show textures if they are in database and have not been explored
-	for key, files in pairs(LeaPlusMapZone) do
+	for key, files in pairs(LeaMapsZone) do
 		if not TileExists[mapID..":"..key] then
 			local width, height, offsetX, offsetY = strsplit(":", key)
 			local fileDataIDs = { strsplit(",", files) }
@@ -308,9 +308,6 @@ local function RefMap(self, fullUpdate)
 					texture:SetDrawLayer("ARTWORK", -1)
 					texture:SetShown(NDuiDB["Map"]["MapReveal"])
 					tinsert(overlayTextures, texture)
-					if fullUpdate then
-						self.textureLoadGroup:AddTexture(texture)
-					end
 				end
 			end
 		end
