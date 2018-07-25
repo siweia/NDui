@@ -35,12 +35,6 @@ SlashCmdList.MOUSEOVERBIND = function()
 			end
 		end)
 
-		hooksecurefunc(GameTooltip, "Hide", function(self)
-			for _, tt in pairs(self.shoppingTooltips) do
-				tt:Hide()
-			end
-		end)
-
 		bind:SetScript("OnEvent", function(self) self:Deactivate(false) end)
 		bind:SetScript("OnLeave", function(self) self:HideFrame() end)
 		bind:SetScript("OnKeyUp", function(self, key) self:Listener(key) end)
