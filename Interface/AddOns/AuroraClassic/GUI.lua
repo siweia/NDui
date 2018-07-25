@@ -7,6 +7,7 @@ if locale == "zhCN" then
 	L["Features"] = "模块"
 	L["Bags"] = "背包"
 	L["ChatBubbles"] = "聊天泡泡"
+	L["ChatBubblesColor"] = "聊天泡泡边框染色"
 	L["Loot"] = "拾取框"
 	L["Tooltips"] = "鼠标提示框"
 	L["Shadow Border"] = "阴影边框"
@@ -21,6 +22,7 @@ elseif locale == "zhTW" then
 	L["Features"] = "模塊"
 	L["Bags"] = "背包"
 	L["ChatBubbles"] = "聊天泡泡"
+	L["ChatBubblesColor"] = "聊天泡泡邊框染色"
 	L["Loot"] = "拾取框"
 	L["Tooltips"] = "滑鼠提示框"
 	L["Shadow Border"] = "陰影邊框"
@@ -35,6 +37,7 @@ else
 	L["Features"] = "Features"
 	L["Bags"] = "Bags"
 	L["ChatBubbles"] = "Chat Bubbles"
+	L["ChatBubblesColor"] = "Colored Chat Bubbles"
 	L["Loot"] = "Loot Frame"
 	L["Tooltips"] = "Tooltips"
 	L["Shadow Border"] = "Shadow Border"
@@ -71,7 +74,7 @@ local function addSubCategory(parent, name)
 	header:SetText(name)
 
 	local line = parent:CreateTexture(nil, "ARTWORK")
-	line:SetSize(450, 1)
+	line:SetSize(610, 1)
 	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
 	line:SetColorTexture(1, 1, 1, .2)
 
@@ -150,14 +153,17 @@ bagsBox:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -20)
 local chatBubbleBox = createToggleBox(gui, "chatBubbles", L["ChatBubbles"])
 chatBubbleBox:SetPoint("LEFT", bagsBox, "RIGHT", 110, 0)
 
-local lootBox = createToggleBox(gui, "loot", L["Loot"])
-lootBox:SetPoint("LEFT", chatBubbleBox, "RIGHT", 110, 0)
+local bubbleColorBox = createToggleBox(gui, "bubbleColor", L["ChatBubblesColor"])
+bubbleColorBox:SetPoint("LEFT", chatBubbleBox, "RIGHT", 110, 0)
 
 local tooltipsBox = createToggleBox(gui, "tooltips", L["Tooltips"])
 tooltipsBox:SetPoint("TOPLEFT", bagsBox, "BOTTOMLEFT", 0, -8)
 
 local shadowBox = createToggleBox(gui, "shadow", L["Shadow Border"])
 shadowBox:SetPoint("LEFT", tooltipsBox, "RIGHT", 110, 0)
+
+local lootBox = createToggleBox(gui, "loot", L["Loot"])
+lootBox:SetPoint("LEFT", shadowBox, "RIGHT", 110, 0)
 
 local appearance = addSubCategory(gui, L["Appearance"])
 appearance:SetPoint("TOPLEFT", tooltipsBox, "BOTTOMLEFT", 0, -30)
@@ -183,8 +189,8 @@ alphaSlider:SetValueStep(0.1)
 AuroraOptionsAlphaText:SetText(L["Opacity"])
 
 local line = gui:CreateTexture(nil, "ARTWORK")
-line:SetSize(600, 1)
-line:SetPoint("TOPLEFT", alphaSlider, "BOTTOMLEFT", 0, -30)
+line:SetSize(610, 1)
+line:SetPoint("TOPLEFT", alphaSlider, "BOTTOMLEFT", -20, -30)
 line:SetColorTexture(1, 1, 1, .2)
 
 local reloadText = gui:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
