@@ -12,5 +12,5 @@ C.themes["Blizzard_BattlefieldMap"] = function()
 		select(i, OpacityFrame:GetRegions()):Hide()
 	end
 	F.SetBD(OpacityFrame)
-	F.ReskinSlider(OpacityFrameSlider)
+	F.ReskinSlider(OpacityFrameSlider, true)
 end
