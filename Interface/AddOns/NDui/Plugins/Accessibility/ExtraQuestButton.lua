@@ -8,28 +8,25 @@ local B, C, L, DB = unpack(ns)
 local questAreas = {
 	-- Global
 	[24629] = true,
-
 	-- Icecrown
-	[14108] = 541,
-
+	[14108] = 170,
 	-- Northern Barrens
 	[13998] = 11,
-
 	-- Un'Goro Crater
-	[24735] = 201,
-
+	[24735] = 78,
 	-- Darkmoon Island
-	[29506] = 823,
-	[29510] = 823,
-
+	[29506] = 407,
+	[29510] = 407,
+	[29515] = 407,
+	[29516] = 407,
+	[29517] = 407,
 	-- Mulgore
-	[24440] = 9,
-	[14491] = 9,
-	[24456] = 9,
-	[24524] = 9,
-
+	[24440] = 7,
+	[14491] = 7,
+	[24456] = 7,
+	[24524] = 7,
 	-- Mount Hyjal
-	[25577] = 606,
+	[25577] = 198,
 }
 
 -- Quests items with incorrect or missing quest area blobs
@@ -38,56 +35,44 @@ local itemAreas = {
 	[34862] = true,
 	[34833] = true,
 	[39700] = true,
-
 	-- Deepholm
-	[58167] = 640,
-	[60490] = 640,
-
+	[58167] = 207,
+	[60490] = 207,
 	-- Ashenvale
-	[35237] = 43,
-
+	[35237] = 63,
 	-- Thousand Needles
-	[56011] = 61,
-
+	[56011] = 64,
 	-- Tanaris
-	[52715] = 161,
-
+	[52715] = 71,
 	-- The Jade Forest
-	[84157] = 806,
-	[89769] = 806,
-
+	[84157] = 371,
+	[89769] = 371,
 	-- Hellfire Peninsula
-	[28038] = 465,
-	[28132] = 465,
-
+	[28038] = 100,
+	[28132] = 100,
 	-- Borean Tundra
-	[35352] = 486,
-	[34772] = 486,
-	[34711] = 486,
-	[35288] = 486,
-	[34782] = 486,
-
+	[35352] = 114,
+	[34772] = 114,
+	[34711] = 114,
+	[35288] = 114,
+	[34782] = 114,
 	-- Zul'Drak
-	[41161] = 496,
-	[39157] = 496,
-	[39206] = 496,
-	[39238] = 496,
-	[39664] = 496,
-	[38699] = 496,
-	[41390] = 496,
-
+	[41161] = 121,
+	[39157] = 121,
+	[39206] = 121,
+	[39238] = 121,
+	[39664] = 121,
+	[38699] = 121,
+	[41390] = 121,
 	-- Dalaran (Broken Isles)
-	[129047] = 1014,
-
+	[129047] = 625,
 	-- Stormheim
-	[128287] = 1017,
-	[129161] = 1017,
-
+	[128287] = 634,
+	[129161] = 634,
 	-- Azsuna
-	[118330] = 1015,
-
+	[118330] = 630,
 	-- Suramar
-	[133882] = 1033,
+	[133882] = 680,
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
@@ -390,7 +375,7 @@ local function GetClosestQuestItem()
 			end
 
 			local _, _, _, _, _, isComplete = GetQuestLogTitle(questLogIndex)
-			if(areaID and (type(areaID) == "boolean" or areaID == GetCurrentMapAreaID())) then
+			if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit('player'))) then
 				closestQuestLink = itemLink
 				closestQuestTexture = texture
 			elseif(not isComplete or (isComplete and showCompleted)) then
@@ -417,7 +402,7 @@ local function GetClosestQuestItem()
 						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
 					end
 
-					if(areaID and (type(areaID) == "boolean" or areaID == GetCurrentMapAreaID())) then
+					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit('player'))) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
@@ -446,7 +431,7 @@ local function GetClosestQuestItem()
 						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
 					end
 
-					if(areaID and (type(areaID) == "boolean" or areaID == GetCurrentMapAreaID())) then
+					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit('player'))) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
