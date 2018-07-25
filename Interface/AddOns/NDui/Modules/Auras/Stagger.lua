@@ -47,9 +47,9 @@ end
 
 local function lookingForAura(spell, filter)
 	for index = 1, 32 do
-		local name, _, _, _, dur, exp, _, _, _, spellID = UnitAura("player", index, filter)
+		local name, texture, _, _, dur, exp, _, _, _, spellID = UnitAura("player", index, filter)
 		if name and spellID == spell then
-			return name, dur, exp
+			return name, dur, exp, texture
 		end
 	end
 end
@@ -117,9 +117,9 @@ local function updateSpells()
 		local cur = UnitStagger("player") or 0
 		local max = UnitHealthMax("player")
 		local perc = cur / max
-		local name, dur, exp = lookingForAura(124275, "HARMFUL")
-		if not name then name, dur, exp = lookingForAura(124274, "HARMFUL") end
-		if not name then name, dur, exp = lookingForAura(124273, "HARMFUL") end
+		local name, dur, exp, texture = lookingForAura(124275, "HARMFUL")
+		if not name then name, dur, exp, texture = lookingForAura(124274, "HARMFUL") end
+		if not name then name, dur, exp, texture = lookingForAura(124273, "HARMFUL") end
 
 		if name and cur > 0 and dur > 0 then
 			bar:SetAlpha(1)
@@ -133,14 +133,7 @@ local function updateSpells()
 		end
 		bar:SetValue(perc * 100)
 		bar.Count:SetText(DB.InfoColor..B.Numb(cur).." "..DB.MyColor..B.Numb(perc * 100).."%")
-
-		if perc >= .6 then
-			bu[4].Icon:SetTexture(GetSpellTexture(124273))
-		elseif perc >= .3 then
-			bu[4].Icon:SetTexture(GetSpellTexture(124274))
-		else
-			bu[4].Icon:SetTexture(GetSpellTexture(124275))
-		end
+		bu[4].Icon:SetTexture(texture or 463281)
 
 		if bu[4].Icon:GetTexture() == GetSpellTexture(124273) then
 			ActionButton_ShowOverlayGlow(bu[4])
