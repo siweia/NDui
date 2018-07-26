@@ -136,9 +136,11 @@ function ExtraQuestButton:BAG_UPDATE_DELAYED()
 end
 
 function ExtraQuestButton:PLAYER_REGEN_ENABLED(event)
-	self:SetAttribute("item", self.attribute)
-	self:UnregisterEvent(event)
-	self:BAG_UPDATE_COOLDOWN()
+	if(self.itemID) then
+		self:SetAttribute("item", "item:" .. self.itemID)
+		self:UnregisterEvent(event)
+		self:BAG_UPDATE_COOLDOWN()
+	end
 end
 
 function ExtraQuestButton:UPDATE_BINDINGS()
@@ -318,9 +320,8 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 			return
 		end
 
-		local itemID, itemName = string.match(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
+		local itemID = string.match(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
 		self.itemID = tonumber(itemID)
-		self.itemName = itemName
 		self.itemLink = itemLink
 
 		if(blacklist[itemID]) then
@@ -328,31 +329,32 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 		end
 	end
 
-	local HotKey = self.HotKey
-	local key = GetBindingKey("EXTRAACTIONBUTTON1")
-	if(key) then
-		HotKey:SetText(GetBindingText(key, 1))
-		HotKey:Show()
-	elseif(ItemHasRange(itemLink)) then
-		HotKey:SetText(RANGE_INDICATOR)
-		HotKey:Show()
-	else
-		HotKey:Hide()
-	end
-	if NDuiDB["Actionbar"]["Enable"] then B.UpdateHotKey(self) end
+	if(self.itemID) then
+		local HotKey = self.HotKey
+		local key = GetBindingKey("EXTRAACTIONBUTTON1")
+		if(key) then
+			HotKey:SetText(GetBindingText(key, 1))
+			HotKey:Show()
+		elseif(ItemHasRange(itemLink)) then
+			HotKey:SetText(RANGE_INDICATOR)
+			HotKey:Show()
+		else
+			HotKey:Hide()
+		end
+		if NDuiDB["Actionbar"]["Enable"] then B.UpdateHotKey(self) end
 
-	if(InCombatLockdown()) then
-		self.attribute = self.itemName
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	else
-		self:SetAttribute("item", self.itemName)
-		self:BAG_UPDATE_COOLDOWN()
+		if(InCombatLockdown()) then
+			self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		else
+			self:SetAttribute("item", "item:" .. self.itemID)
+			self:BAG_UPDATE_COOLDOWN()
+		end
 	end
 end
 
 function ExtraQuestButton:RemoveItem()
 	if(InCombatLockdown()) then
-		self.attribute = nil
+		self.itemID = nil
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	else
 		self:SetAttribute("item", nil)
@@ -375,7 +377,7 @@ local function GetClosestQuestItem()
 			end
 
 			local _, _, _, _, _, isComplete = GetQuestLogTitle(questLogIndex)
-			if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit('player'))) then
+			if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
 				closestQuestLink = itemLink
 				closestQuestTexture = texture
 			elseif(not isComplete or (isComplete and showCompleted)) then
@@ -402,7 +404,7 @@ local function GetClosestQuestItem()
 						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
 					end
 
-					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit('player'))) then
+					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
@@ -431,7 +433,7 @@ local function GetClosestQuestItem()
 						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
 					end
 
-					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit('player'))) then
+					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
