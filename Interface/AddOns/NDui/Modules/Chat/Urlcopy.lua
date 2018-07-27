@@ -57,21 +57,31 @@ function module:UrlCopy()
 		end
 	end
 
-	local orig = ChatFrame_OnHyperlinkShow
-	function ChatFrame_OnHyperlinkShow(frame, link, text, button)
+	local orig = ItemRefTooltip.SetHyperlink
+	function ItemRefTooltip:SetHyperlink(link, ...)
+		if link and link:sub(0, 3) == "url" then return end
+
+		return orig(self, link, ...)
+	end
+
+	hooksecurefunc("ChatFrame_OnHyperlinkShow", function(frame, link, _, button)
 		local type, value = link:match("(%a+):(.+)")
-		if IsAltKeyDown() and type == "player" then
+		local hide
+		if button == "LeftButton" and IsAltKeyDown() and type == "player" then
 			InviteToGroup(value:match("([^:]+)"))
-		elseif IsModifierKeyDown() and type == "BNplayer" then
+			hide = true
+		elseif button == "LeftButton" and IsModifierKeyDown() and type == "BNplayer" then
 			local _, bnID = value:match("([^:]*):([^:]*):")
 			if not bnID then return end
 			local _, _, _, _, _, gameID = BNGetFriendInfoByID(bnID)
 			if gameID and CanCooperateWithGameAccount(gameID) then
 				if IsAltKeyDown() then
 					BNInviteFriend(gameID)
+					hide = true
 				elseif IsControlKeyDown() then
 					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
 					GuildInvite(charName.."-"..realmName)
+					hide = true
 				end
 			end
 		elseif type == "url" then
@@ -82,8 +92,8 @@ function module:UrlCopy()
 				eb:SetFocus()
 				eb:HighlightText()
 			end
-		else
-			orig(self, link, text, button)
 		end
-	end
+
+		if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
+	end)
 end
