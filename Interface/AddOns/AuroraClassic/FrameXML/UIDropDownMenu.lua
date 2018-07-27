@@ -99,7 +99,11 @@ tinsert(C.themes["AuroraClassic"], function()
 					arrow:SetNormalTexture(C.media.arrowRight)
 					arrow:SetSize(8, 8)
 				end
-				_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
+
+				local uncheck = _G["DropDownList"..level.."Button"..j.."UnCheck"]
+				if uncheck:GetTexture() == "Interface\\Common\\UI-DropDownRadioChecks" then
+					uncheck:SetTexture("")
+				end
 
 				if not bu.notCheckable then
 					toggleBackdrop(bu, true)
