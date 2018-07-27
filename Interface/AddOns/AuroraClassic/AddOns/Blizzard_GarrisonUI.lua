@@ -368,8 +368,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		for i = 1, 9 do
 			select(i, BuildingLevelTooltip:GetRegions()):Hide()
-			F.CreateBD(BuildingLevelTooltip)
 		end
+		F.CreateBD(BuildingLevelTooltip)
+		F.CreateSD(BuildingLevelTooltip)
 	end
 
 	-- Follower list
@@ -699,9 +700,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	if AuroraConfig.tooltips then
 		GarrisonMissionMechanicTooltip:SetBackdrop(nil)
+		F.CreateBDFrame(GarrisonMissionMechanicTooltip)
+		F.CreateSD(GarrisonMissionMechanicTooltip)
 		GarrisonMissionMechanicFollowerCounterTooltip:SetBackdrop(nil)
-		F.CreateBDFrame(GarrisonMissionMechanicTooltip, .6)
-		F.CreateBDFrame(GarrisonMissionMechanicFollowerCounterTooltip, .6)
+		F.CreateBDFrame(GarrisonMissionMechanicFollowerCounterTooltip)
+		F.CreateSD(GarrisonMissionMechanicFollowerCounterTooltip)
 	end
 
 	-- [[ Recruiter frame ]]
@@ -800,6 +803,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	if AuroraConfig.tooltips then
 		F.CreateBD(GarrisonShipyardMapMissionTooltip)
+		F.CreateSD(GarrisonShipyardMapMissionTooltip)
 	end
 
 	for i = 1, 14 do

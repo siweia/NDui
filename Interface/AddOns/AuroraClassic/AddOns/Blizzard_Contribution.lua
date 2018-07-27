@@ -30,10 +30,9 @@ C.themes["Blizzard_Contribution"] = function()
 
 	-- Tooltips
 	if AuroraConfig.tooltips then
-		ContributionTooltip:SetBackdrop(nil)
 		ContributionBuffTooltip:DisableDrawLayer("BACKGROUND")
-		F.CreateBDFrame(ContributionTooltip)
 		F.CreateBDFrame(ContributionBuffTooltip)
+		F.CreateSD(ContributionBuffTooltip)
 		ContributionBuffTooltip.Icon:SetTexCoord(.08, .92, .08, .92)
 		ContributionBuffTooltip.Border:SetAlpha(0)
 	end

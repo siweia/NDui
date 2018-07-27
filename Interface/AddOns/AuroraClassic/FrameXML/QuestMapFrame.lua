@@ -19,7 +19,9 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	if AuroraConfig.tooltips then
 		F.CreateBD(QuestScrollFrame.StoryTooltip)
+		F.CreateSD(QuestScrollFrame.StoryTooltip)
 		F.CreateBD(QuestScrollFrame.WarCampaignTooltip)
+		F.CreateSD(QuestScrollFrame.WarCampaignTooltip)
 	end
 	F.ReskinScroll(QuestScrollFrame.ScrollBar)
 

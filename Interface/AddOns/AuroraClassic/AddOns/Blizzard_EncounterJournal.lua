@@ -348,6 +348,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	if AuroraConfig.tooltips then
 		local EncounterJournalTooltip = EncounterJournalTooltip
 		F.CreateBD(EncounterJournalTooltip)
+		F.CreateSD(EncounterJournalTooltip)
 		EncounterJournalTooltip.Item1.newBg = F.ReskinIcon(EncounterJournalTooltip.Item1.icon)
 		EncounterJournalTooltip.Item2.newBg = F.ReskinIcon(EncounterJournalTooltip.Item2.icon)
 	end

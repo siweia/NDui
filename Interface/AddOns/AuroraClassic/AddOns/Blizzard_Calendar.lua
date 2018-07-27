@@ -158,6 +158,7 @@ C.themes["Blizzard_Calendar"] = function()
 			bg:SetPoint("BOTTOMRIGHT", -1, 2)
 			bg:SetFrameLevel(tooltip:GetFrameLevel()-1)
 			F.CreateBD(bg)
+			F.CreateSD(bg)
 		end
 	end
 

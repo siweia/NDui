@@ -10,6 +10,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			if not backdrop.reskinned then
 				if AuroraConfig.tooltips then
 					F.CreateBD(menu)
+					F.CreateSD(menu)
 				end
 				F.CreateBD(backdrop)
 				F.CreateSD(backdrop)
