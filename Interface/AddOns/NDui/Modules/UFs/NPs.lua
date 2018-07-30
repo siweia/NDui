@@ -138,8 +138,10 @@ local function UpdateTargetMark(self)
 
 	if UnitIsUnit(self.unit, "target") and not UnitIsUnit(self.unit, "player") then
 		mark:SetAlpha(1)
+		mark.targetMark2:SetAlpha(1)
 	else
 		mark:SetAlpha(0)
+		mark.targetMark2:SetAlpha(0)
 	end
 end
 
@@ -232,6 +234,15 @@ function UF:CreatePlates(unit)
 			arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
 			arrow:SetAlpha(0)
 			self.targetMark = arrow
+
+			local glow3 = CreateFrame("Frame", nil, self)
+			glow3:SetPoint("TOPLEFT", self, -5, 5)
+			glow3:SetPoint("BOTTOMRIGHT", self, 5, -5)
+			glow3:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
+			glow3:SetBackdropBorderColor(1, 1, 1)
+			glow3:SetFrameLevel(0)
+			glow3:SetAlpha(0)
+			arrow.targetMark2 = glow3
 		else
 			local glow = CreateFrame("Frame", nil, self)
 			glow:SetPoint("TOPLEFT", -5, 5)
@@ -241,6 +252,8 @@ function UF:CreatePlates(unit)
 			glow:SetFrameLevel(0)
 			glow:SetAlpha(0)
 			self.targetMark = glow
+			
+			glow.targetMark2 = ""
 		end
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 
