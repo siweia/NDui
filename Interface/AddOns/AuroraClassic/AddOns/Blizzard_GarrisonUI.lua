@@ -155,7 +155,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				button.BG:Hide()
 				button.Selection:SetTexture("")
 				button.AbilitiesBG:SetTexture("")
-
 				F.CreateBD(button, .25)
 
 				local hl = button:GetHighlightTexture()
@@ -189,17 +188,12 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local function onShowFollower(followerList)
 		local self = followerList.followerTab
 		local abilities = self.AbilitiesFrame.Abilities
-
-		if self.numAbilitiesStyled == nil then
-			self.numAbilitiesStyled = 1
-		end
+		if not self.numAbilitiesStyled then self.numAbilitiesStyled = 1 end
 
 		local numAbilitiesStyled = self.numAbilitiesStyled
-
 		local ability = abilities[numAbilitiesStyled]
 		while ability do
 			local icon = ability.IconButton.Icon
-
 			icon:SetTexCoord(.08, .92, .08, .92)
 			icon:SetDrawLayer("BACKGROUND", 1)
 			F.CreateBG(icon)
@@ -207,24 +201,24 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			numAbilitiesStyled = numAbilitiesStyled + 1
 			ability = abilities[numAbilitiesStyled]
 		end
-
 		self.numAbilitiesStyled = numAbilitiesStyled
 
-		local ally = self.AbilitiesFrame.CombatAllySpell[1].iconTexture
-		ally:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(ally)
-
-		for i = 1, 3 do
-			if not self.AbilitiesFrame.Equipment then return end
-			local equip = self.AbilitiesFrame.Equipment[i]
-			if equip then
-				equip.Border:Hide()
-				equip.BG:Hide()
-				equip.Icon:SetTexCoord(.08, .92, .08, .92)
-				if not equip.bg then
+		if self.AbilitiesFrame.Equipment then
+			for i = 1, 3 do
+				local equip = self.AbilitiesFrame.Equipment[i]
+				if equip and not equip.bg then
+					equip.Border:Hide()
+					equip.BG:Hide()
+					equip.Icon:SetTexCoord(.08, .92, .08, .92)
 					equip.bg = F.CreateBDFrame(equip.Icon, .25)
 				end
 			end
+		end
+
+		local iconTexture = self.AbilitiesFrame.CombatAllySpell[1].iconTexture
+		if not iconTexture.styled then
+			F.ReskinIcon(iconTexture)
+			iconTexture.styled = true
 		end
 	end
 
@@ -633,10 +627,34 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, _, numRewards)
-		if self.numRewardsStyled == nil then
-			self.numRewardsStyled = 0
+	hooksecurefunc("GarrisonFollowerButton_SetCounterButton", function(button, _, index)
+		local counter = button.Counters[index]
+		if counter and not counter.styled then
+			F.ReskinIcon(counter.Icon)
+			counter.styled = true
 		end
+	end)
+
+	hooksecurefunc(GarrisonMission, "UpdateMissionParty", function(_, followers)
+		for followerIndex = 1, #followers do
+			local followerFrame = followers[followerIndex]
+			if followerFrame.info then
+				local i = 1
+				local counter = followerFrame.Counters[i]
+				while counter do
+					if not counter.styled then
+						F.ReskinIcon(counter.Icon)
+						counter.styled = true
+					end
+					i = i + 1
+					counter = followerFrame.Counters[i]
+				end
+			end
+		end
+	end)
+
+	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, _, numRewards)
+		if not self.numRewardsStyled then self.numRewardsStyled = 0 end
 
 		while self.numRewardsStyled < numRewards do
 			self.numRewardsStyled = self.numRewardsStyled + 1
@@ -649,12 +667,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc(GarrisonMission, "AssignFollowerToMission", function(_, frame)
-		frame.PortraitFrame.LevelBorder:SetAlpha(0)
-	end)
-
 	hooksecurefunc(GarrisonMission, "RemoveFollowerFromMission", function(_, frame)
-		if frame.PortraitFrame.squareBG then
+		if frame.PortraitFrame and frame.PortraitFrame.squareBG then
 			frame.PortraitFrame.squareBG:Hide()
 		end
 	end)
@@ -864,10 +878,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 		combatAlly.Available.AddFollowerButton.EmptyPortrait:SetAlpha(0)
 		combatAlly.Available.AddFollowerButton.PortraitHighlight:SetAlpha(0)
-	end)
-
-	hooksecurefunc(OrderHallCombatAllyMixin, "SetMission", function(self)
-		self.InProgress.PortraitFrame.LevelBorder:SetAlpha(0)
 	end)
 
 	hooksecurefunc(OrderHallCombatAllyMixin, "UnassignAlly", function(self)
