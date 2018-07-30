@@ -6,7 +6,7 @@ local UF = B:GetModule("UnitFrames")
 -- Units
 local function CreatePlayerStyle(self)
 	self.mystyle = "player"
-	self:SetSize(285, 42)
+	self:SetSize(245, 24)
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -30,7 +30,7 @@ end
 
 local function CreateTargetStyle(self)
 	self.mystyle = "target"
-	self:SetSize(285, 42)
+	self:SetSize(245, 24)
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)

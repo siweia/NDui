@@ -6,14 +6,8 @@ local UF = B:RegisterModule("UnitFrames")
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
-oUF.colors.power.MANA = {.31, .45, .63}
+oUF.colors.power.MANA = {0, .4, 1}
 oUF.colors.power.SOUL_SHARDS = {.58, .51, .79}
-oUF.colors.power.ENERGY = {.9, .86, .12}
-oUF.colors.power.FURY = {.54, .1, .69}
-oUF.colors.power.INSANITY = {.88, .88, .88}
-oUF.colors.power.FOCUS = {.71, .43, .27}
-oUF.colors.power.RUNES = {0, .82, 1}
-oUF.colors.power.RAGE = {.78, .25, .25}
 oUF.colors.power.HOLY_POWER = {.88, .88, .06}
 oUF.colors.power.CHI = {0, 1, .59}
 oUF.colors.power.ARCANE_CHARGES = {.41, .8, .94}
@@ -61,7 +55,7 @@ function UF:CreateHealthBar(self)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
-	B.CreateSD(health, 1, 1)
+	B.CreateSD(health, 3, 3)
 	B.SmoothBar(health)
 
 	local bg = health:CreateTexture(nil, "BACKGROUND")
@@ -105,12 +99,8 @@ function UF:CreateHealthText(self)
 	end
 
 	if self.mystyle == "player" then
-		name:ClearAllPoints()
-		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -2)
 		self:Tag(name, " [color][name]")
 	elseif self.mystyle == "target" then
-		name:ClearAllPoints()
-		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, -2)
 		self:Tag(name, "[fulllevel] [color][name][afkdnd]")
 	elseif self.mystyle == "focus" then
 		self:Tag(name, "[color][name][afkdnd]")
@@ -131,10 +121,6 @@ function UF:CreateHealthText(self)
 	elseif self.mystyle == "nameplate" then
 		hpval:SetPoint("RIGHT", self, "TOPRIGHT", 0, 3)
 		self:Tag(hpval, "[nphp]")
-	elseif self.mystyle == "player" or self.mystyle == "target" then
-		hpval:ClearAllPoints()
-		hpval:SetPoint("LEFT", self, "LEFT", 10, 0)
-		self:Tag(hpval, "[hp]")
 	else
 		self:Tag(hpval, "[hp]")
 	end
@@ -151,9 +137,9 @@ function UF:CreatePowerBar(self)
 		power:SetHeight(retVal(self, 4, 3, 2, 4))
 	end
 	power:SetWidth(self:GetWidth())
-	power:SetPoint("TOP", self, "BOTTOM", 0, -1)
+	power:SetPoint("TOP", self, "BOTTOM", 0, -3)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
-	B.CreateSD(power, 1, 1)
+	B.CreateSD(power, 3, 3)
 	B.SmoothBar(power)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
@@ -164,8 +150,7 @@ function UF:CreatePowerBar(self)
 	if (self.mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (self.mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) or self.mystyle == "PlayerPlate" then
 		power.colorPower = true
 	else
-		power.colorClass = false
-		power.colorPower = true
+		power.colorClass = true
 		power.colorTapping = true
 		power.colorDisconnected = true
 		power.colorReaction = true
@@ -181,10 +166,6 @@ function UF:CreatePowerText(self)
 	textFrame:SetAllPoints(self.Power)
 
 	local ppval = B.CreateFS(textFrame, retVal(self, 13, 12, 12), "", false, "RIGHT", -3, 2)
-	if 	self.mystyle == "player" or self.mystyle == "target" then
-		ppval:ClearAllPoints()
-		ppval:SetPoint("RIGHT", self, "RIGHT", -5, 0)
-	end
 	self:Tag(ppval, "[color][power]")
 end
 
@@ -287,7 +268,7 @@ function UF:CreateCastBar(self)
 	cb:SetStatusBarTexture(DB.normTex)
 	cb:SetFrameLevel(1)
 	B.CreateBD(cb, .5, .1)
-	B.CreateSD(cb, 1, 1)
+	B.CreateSD(cb, 3, 3)
 	B.CreateTex(cb)
 
 	if self.mystyle == "player" then
@@ -307,8 +288,8 @@ function UF:CreateCastBar(self)
 		cb:SetSize(self:GetWidth(), 5)
 	end
 
-	cb.CastingColor = {.33, .33, .33}
-	cb.ChannelingColor = {.33, .33, .33}
+	cb.CastingColor = {.3, .7, 1}
+	cb.ChannelingColor = {.3, .7, 1}
 	cb.notInterruptibleColor = {1, .5, .5}
 	cb.CompleteColor = {.1, .8, 0}
 	cb.FailColor = {1, .1, 0}
