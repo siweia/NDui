@@ -54,6 +54,18 @@ function module:ReskinRegions()
 		self:GetHighlightTexture():SetTexture(DB.garrTex)
 		self:SetSize(30, 30)
 	end)
+	if not IsAddOnLoaded("GarrisonMissionManager") then
+		GarrisonLandingPageMinimapButton:RegisterForClicks("AnyUp")
+		GarrisonLandingPageMinimapButton:HookScript("OnClick", function(_, btn, down)
+			if btn == "MiddleButton" and not down then
+				HideUIPanel(GarrisonLandingPage)
+				ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
+			elseif btn == "RightButton" and not down then
+				HideUIPanel(GarrisonLandingPage)
+				ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
+			end
+		end)
+	end
 
 	-- QueueStatus Button
 	QueueStatusMinimapButton:ClearAllPoints()

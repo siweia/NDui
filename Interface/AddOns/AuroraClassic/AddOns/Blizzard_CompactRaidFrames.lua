@@ -1,7 +1,12 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	if not CompactRaidFrameManagerToggleButton then LoadAddOn("Blizzard_CompactRaidFrames") end		-- just in case
+	if not CompactRaidFrameManagerToggleButton then
+		for _, addon in next, {"Blizzard_CUFProfiles", "Blizzard_CompactRaidFrames"} do
+			EnableAddOn(addon)
+			LoadAddOn(addon)
+		end
+	end
 
 	CompactRaidFrameManagerToggleButton:SetNormalTexture("Interface\\Buttons\\UI-ColorPicker-Buttons")
 	CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(.15, .39, 0, 1)

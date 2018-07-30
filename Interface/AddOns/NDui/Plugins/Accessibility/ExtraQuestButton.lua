@@ -115,7 +115,7 @@ local onAttributeChanged = [[
 ]]
 
 function ExtraQuestButton:BAG_UPDATE_COOLDOWN()
-	if(self:IsShown() and self:IsEnabled()) then
+	if(self:IsShown() and self:IsEnabled() and self.itemID) then
 		local start, duration = GetItemCooldown(self.itemID)
 		if(duration > 0) then
 			self.Cooldown:SetCooldown(start, duration)
@@ -213,6 +213,8 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent("QUEST_POI_UPDATE")
 	self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
 	self:RegisterEvent("QUEST_ACCEPTED")
+	self:RegisterEvent("ZONE_CHANGED")
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 end
 
 local worldQuests = {}
