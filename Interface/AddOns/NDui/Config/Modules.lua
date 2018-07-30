@@ -32,9 +32,9 @@ C.Auras = {
 -- 头像相关
 C.UFs = {
 	Playercb		= {"BOTTOM", UIParent, "BOTTOM", 16, 175},			-- 玩家施法条默认位置
-	PlayercbSize	= {300, 20},										-- 玩家施法条尺寸
+	PlayercbSize	= {510, 18},										-- 玩家施法条尺寸
 	Targetcb		= {"BOTTOM", UIParent, "BOTTOM", 16, 335},			-- 目标施法条默认位置
-	TargetcbSize	= {280, 20},										-- 目标施法条尺寸
+	TargetcbSize	= {200, 15},										-- 目标施法条尺寸
 	Focuscb			= {"CENTER", UIParent, "CENTER", 10, 200},			-- 焦点施法条默认位置
 	FocuscbSize		= {320, 20},										-- 焦点施法条尺寸
 
