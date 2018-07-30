@@ -86,6 +86,7 @@ function module:FontStyle()
 	ReskinFont(Game20Font, 20)
 	ReskinFont(Game24Font, 24)
 	ReskinFont(Game27Font, 27)
+	ReskinFont(Game30Font, 30)
 	ReskinFont(Game32Font, 32)
 	ReskinFont(System_IME, 16)
 	ReskinFont(Fancy24Font, 24)
@@ -122,8 +123,7 @@ function module:FontStyle()
 		end
 	end)
 
-	-- Achievement ShieldPoints, GuildRoster LevelText
-	local styledIndex = 0
+	-- Achievement ShieldPoints
 	local function updateAchievement(event, addon)
 		if addon == "Blizzard_AchievementUI" then
 			hooksecurefunc("AchievementObjectives_DisplayProgressiveAchievement", function()
@@ -142,9 +142,15 @@ function module:FontStyle()
 				end
 			end)
 
-			styledIndex = styledIndex + 1
-		elseif addon == "Blizzard_GuildUI" then
-			hooksecurefunc("GuildRoster_SetView", function(view)
+			B:UnregisterEvent(event, updateAchievement)
+		end
+	end
+	B:RegisterEvent("ADDON_LOADED", updateAchievement)
+
+	-- GuildRoster LevelText
+	local function updateGuildString(event, addon)
+		if addon == "Blizzard_GuildUI" then
+			local function updateLevelString(view)
 				if view == "playerStatus" or view == "reputation" or view == "achievement" then
 					local buttons = GuildRosterContainer.buttons
 					for i = 1, #buttons do
@@ -161,15 +167,21 @@ function module:FontStyle()
 						end
 					end
 				end
-			end)
-			GuildRoster_SetView(GetCVar("guildRosterView"))
+			end
 
-			styledIndex = styledIndex + 1
+			local done
+			GuildRosterContainer:HookScript("OnShow", function()
+				if not done then
+					updateLevelString(GetCVar("guildRosterView"))
+					done = true
+				end
+			end)
+			hooksecurefunc("GuildRoster_SetView", updateLevelString)
 		end
 
-		if styledIndex == 2 then B:UnregisterEvent(event, updateAchievement) end
+		B:UnregisterEvent(event, updateGuildString)
 	end
-	B:RegisterEvent("ADDON_LOADED", updateAchievement)
+	B:RegisterEvent("ADDON_LOADED", updateGuildString)
 
 	-- WhoFrame LevelText
 	hooksecurefunc("WhoList_Update", function()
