@@ -60,16 +60,6 @@ local function UpdateBar(bar)
 	else
 		bar:Hide()
 	end
-
-	-- Available ArtfactPoint
-	if bar.newPoint then
-		bar.newPoint:SetAlpha(0)
-		if HasArtifactEquipped() then
-			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-			local num = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-			if num > 0 then bar.newPoint:SetAlpha(1) end
-		end
-	end
 end
 
 local function UpdateTooltip(bar)
@@ -199,13 +189,6 @@ function module:Expbar()
 	rest:SetStatusBarColor(0, .4, 1, .6)
 	rest:SetFrameLevel(bar:GetFrameLevel() - 1)
 	bar.restBar = rest
-
-	local newPoint = bar:CreateTexture(nil, "OVERLAY")
-	newPoint:SetTexture("Interface\\COMMON\\ReputationStar")
-	newPoint:SetTexCoord(.5, 1, .5, 1)
-	newPoint:SetSize(18, 18)
-	newPoint:SetPoint("CENTER", 0, -2)
-	bar.newPoint = newPoint
 
 	self:SetupScript(bar)
 end
