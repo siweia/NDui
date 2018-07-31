@@ -39,7 +39,7 @@ oUF.Tags.Methods["power"] = function(unit)
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	local per = oUF.Tags.Methods["perpp"](unit) or 0
 	if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
-		if cur < max and UnitPowerType(unit) == 0 then
+		if per < 100 and UnitPowerType(unit) == 0 then
 			return B.Numb(cur).." | "..per
 		else
 			return B.Numb(cur)
