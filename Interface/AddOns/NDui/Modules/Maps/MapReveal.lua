@@ -240,23 +240,21 @@ local LeaMapsData = {
 }
 
 -- Function to refresh overlays (Blizzard_SharedMapDataProviders\MapExplorationDataProvider)
---local overlayTextures, TileExists = {}, {}
-local overlayTextures = {}
+local overlayTextures, TileExists = {}, {}
 
 local function RefMap(self)
 	wipe(overlayTextures)
+	wipe(TileExists)
 
 	local mapID = WorldMapFrame.mapID; if not mapID then return end
 	local artID = C_Map.GetMapArtID(mapID); if not artID or not LeaMapsData[artID] then return end
 	local LeaMapsZone = LeaMapsData[artID]
 
-	local TileExists = {}
 	local exploredMapTextures = C_MapExplorationInfo.GetExploredMapTextures(mapID)
 	if exploredMapTextures then
 		for i, exploredTextureInfo in ipairs(exploredMapTextures) do
 			local key = exploredTextureInfo.textureWidth..":"..exploredTextureInfo.textureHeight..":"..exploredTextureInfo.offsetX..":"..exploredTextureInfo.offsetY
-			--TileExists[mapID..":"..key] = true
-			TileExists[key] = true
+			TileExists[mapID..":"..key] = true
 		end
 	end
 
@@ -269,8 +267,7 @@ local function RefMap(self)
 
 	-- Show textures if they are in database and have not been explored
 	for key, files in pairs(LeaMapsZone) do
-		--if not TileExists[mapID..":"..key] then
-		if not TileExists[key] then
+		if not TileExists[mapID..":"..key] then
 			local width, height, offsetX, offsetY = strsplit(":", key)
 			local fileDataIDs = { strsplit(",", files) }
 			local numTexturesWide = ceil(width/TILE_SIZE_WIDTH)
