@@ -101,7 +101,8 @@ info.onEnter = function(self)
 	local thisRealmList = NDuiADB["totalGold"][myRealm]
 	for k, v in pairs(thisRealmList) do
 		local gold, class = unpack(v)
-		GameTooltip:AddDoubleLine(getClassIcon(class)..k, getGoldString(gold), 1,1,1, 1,1,1)
+		local r, g, b = B.ClassColor(class)
+		GameTooltip:AddDoubleLine(getClassIcon(class)..k, getGoldString(gold), r,g,b, 1,1,1)
 		totalGold = totalGold + gold
 	end
 	GameTooltip:AddLine(" ")
