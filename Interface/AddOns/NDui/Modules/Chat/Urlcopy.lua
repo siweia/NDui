@@ -67,21 +67,29 @@ function module:UrlCopy()
 	hooksecurefunc("ChatFrame_OnHyperlinkShow", function(frame, link, _, button)
 		local type, value = link:match("(%a+):(.+)")
 		local hide
-		if button == "LeftButton" and IsAltKeyDown() and type == "player" then
-			InviteToGroup(value:match("([^:]+)"))
-			hide = true
-		elseif button == "LeftButton" and IsModifierKeyDown() and type == "BNplayer" then
-			local _, bnID = value:match("([^:]*):([^:]*):")
-			if not bnID then return end
-			local _, _, _, _, _, gameID = BNGetFriendInfoByID(bnID)
-			if gameID and CanCooperateWithGameAccount(gameID) then
+		if button == "LeftButton" and IsModifierKeyDown() then
+			if type == "player" then
+				local unit = value:match("([^:]+)")
 				if IsAltKeyDown() then
-					BNInviteFriend(gameID)
+					InviteToGroup(unit)
 					hide = true
 				elseif IsControlKeyDown() then
-					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-					GuildInvite(charName.."-"..realmName)
+					GuildInvite(unit)
 					hide = true
+				end
+			elseif type == "BNplayer" then
+				local _, bnID = value:match("([^:]*):([^:]*):")
+				if not bnID then return end
+				local _, _, _, _, _, gameID = BNGetFriendInfoByID(bnID)
+				if gameID and CanCooperateWithGameAccount(gameID) then
+					if IsAltKeyDown() then
+						BNInviteFriend(gameID)
+						hide = true
+					elseif IsControlKeyDown() then
+						local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+						GuildInvite(charName.."-"..realmName)
+						hide = true
+					end
 				end
 			end
 		elseif type == "url" then
