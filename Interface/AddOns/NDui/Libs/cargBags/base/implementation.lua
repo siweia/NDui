@@ -329,10 +329,9 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.link = clink
 		elseif clink:find("keystone") then
 			local data = strmatch(clink, "|H(.-)|h(.-)|h")
-			local _, _, level = strmatch(data, "(%w+):(%d+):(%d+)")
-			i.id = i.id or 138019
-			i.name, _, _, _, _, i.type, i.subType, i.stackCount, i.equipLoc = GetItemInfo(i.id)
-			i.minLevel = level
+			local level = strmatch(data, "%w+:%d+:%d+:(%d+)")
+			i.name, _, _, _, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc = GetItemInfo(i.id)
+			i.level = level
 			i.link = clink
 		end
 	end
