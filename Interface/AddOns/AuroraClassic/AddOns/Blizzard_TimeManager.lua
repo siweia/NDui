@@ -11,10 +11,6 @@ C.themes["Blizzard_TimeManager"] = function()
 	TimeManagerAlarmAMPMDropDown:SetWidth(90)
 
 	F.ReskinPortraitFrame(TimeManagerFrame, true)
-
-	F.StripTextures(StopwatchFrame)
-	F.StripTextures(StopwatchTabFrame)
-	F.SetBD(StopwatchFrame)
 	F.ReskinDropDown(TimeManagerAlarmHourDropDown)
 	F.ReskinDropDown(TimeManagerAlarmMinuteDropDown)
 	F.ReskinDropDown(TimeManagerAlarmAMPMDropDown)
@@ -22,5 +18,20 @@ C.themes["Blizzard_TimeManager"] = function()
 	F.ReskinCheck(TimeManagerAlarmEnabledButton)
 	F.ReskinCheck(TimeManagerMilitaryTimeCheck)
 	F.ReskinCheck(TimeManagerLocalTimeCheck)
+
+	F.StripTextures(StopwatchFrame)
+	F.StripTextures(StopwatchTabFrame)
+	F.SetBD(StopwatchFrame)
 	F.ReskinClose(StopwatchCloseButton, "TOPRIGHT", StopwatchFrame, "TOPRIGHT", -2, -2)
+
+	local reset = StopwatchResetButton
+	reset:GetNormalTexture():SetTexCoord(.25, .75, .27, .75)
+	reset:SetSize(18, 18)
+	reset:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	reset:SetPoint("BOTTOMRIGHT", -5, 7)
+	local play = StopwatchPlayPauseButton
+	play:GetNormalTexture():SetTexCoord(.25, .75, .27, .75)
+	play:SetSize(18, 18)
+	play:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	play:SetPoint("RIGHT", reset, "LEFT", -2, 0)
 end
