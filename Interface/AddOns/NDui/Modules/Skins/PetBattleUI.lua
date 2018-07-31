@@ -151,7 +151,8 @@ function module:PetBattleUI()
 		end
 		if self.glow then self.glow:Hide() end
 		if self.Icon.Shadow then
-			local color = BAG_ITEM_QUALITY_COLORS[C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex) - 1]
+			local quality = C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex) - 1 or 1
+			local color = BAG_ITEM_QUALITY_COLORS[quality]
 			self.Icon.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end)
