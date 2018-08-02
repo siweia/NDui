@@ -31,7 +31,7 @@ function module:ChatCopy()
 	B.CreateMF(frame)
 	B.CreateBD(frame)
 	frame.close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
-	frame.close:SetPoint("TOPRIGHT", frame, "TOPRIGHT")
+	frame.close:SetPoint("TOPRIGHT", frame)
 
 	local scrollArea = CreateFrame("ScrollFrame", "ChatCopyScrollFrame", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 10, -30)
@@ -48,23 +48,40 @@ function module:ChatCopy()
 	editBox:SetScript("OnEscapePressed", function(f) f:GetParent():GetParent():Hide() f:SetText("") end)
 	scrollArea:SetScrollChild(editBox)
 
+	local function colorReplace(msg, r, g, b)
+		local hexRGB = B.HexRGB(r, g, b)
+		local hexReplace = format("|r%s", hexRGB)
+		msg = gsub(msg, "|r", hexReplace)
+		msg = format("%s%s|r", hexRGB, msg)
+
+		return msg
+	end
+
 	local function copyFunc(_, btn)
 		if btn == "LeftButton" then
 			if not frame:IsShown() then
-				local cf = SELECTED_DOCK_FRAME
-				local _, size = cf:GetFont()
-				FCF_SetChatWindowFontSize(cf, cf, .01)
+				local chatframe = SELECTED_DOCK_FRAME
+				local _, fontSize = chatframe:GetFont()
+				FCF_SetChatWindowFontSize(chatframe, chatframe, .01)
 				frame:Show()
-				local ct = 1
-				for i = 1, cf:GetNumMessages() do
-					local message = cf:GetMessageInfo(i)
-					lines[ct] = tostring(message)
-					ct = ct + 1
+
+				local index = 1
+				for i = 1, chatframe:GetNumMessages() do
+					local message, r, g, b = chatframe:GetMessageInfo(i)
+					r = r or 1
+					g = g or 1
+					b = b or 1
+					message = colorReplace(message, r, g, b)
+
+					lines[index] = tostring(message)
+					index = index + 1
 				end
-				local lineCt = ct - 1
+
+				local lineCt = index - 1
 				local text = table.concat(lines, "\n", 1, lineCt)
-				FCF_SetChatWindowFontSize(cf, cf, size)
+				FCF_SetChatWindowFontSize(chatframe, chatframe, fontSize)
 				editBox:SetText(text)
+
 				wipe(lines)
 			else
 				frame:Hide()
