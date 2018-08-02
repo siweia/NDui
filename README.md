@@ -1,5 +1,7 @@
 #NDui
 
+Use in-game slash command "/ndui" for help.
+
 插件详情：
 http://bbs.ngacn.cc/read.php?tid=5483616
 
