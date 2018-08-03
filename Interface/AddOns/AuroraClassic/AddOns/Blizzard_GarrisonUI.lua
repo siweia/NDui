@@ -708,23 +708,25 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		for i = 1, #mission.followers do
 			local frame = self.MissionComplete.Stage.FollowersFrame.Followers[i]
-			if not frame.bg then
-				frame.PortraitFrame:ClearAllPoints()
-				frame.PortraitFrame:SetPoint("TOPLEFT", 0, -10)
-				F.ReskinGarrisonPortrait(frame.PortraitFrame)
+			if frame.PortraitFrame then
+				if not frame.bg then
+					frame.PortraitFrame:ClearAllPoints()
+					frame.PortraitFrame:SetPoint("TOPLEFT", 0, -10)
+					F.ReskinGarrisonPortrait(frame.PortraitFrame)
 
-				local oldBg = frame:GetRegions()
-				oldBg:Hide()
-				frame.bg = F.CreateBDFrame(oldBg)
-				frame.bg:SetPoint("TOPLEFT", frame.PortraitFrame, -1, 1)
-				frame.bg:SetPoint("BOTTOMRIGHT", -10, 8)
-			end
+					local oldBg = frame:GetRegions()
+					oldBg:Hide()
+					frame.bg = F.CreateBDFrame(oldBg)
+					frame.bg:SetPoint("TOPLEFT", frame.PortraitFrame, -1, 1)
+					frame.bg:SetPoint("BOTTOMRIGHT", -10, 8)
+				end
 
-			local quality = select(4, C_Garrison.GetFollowerMissionCompleteInfo(mission.followers[i]))
-			if quality then
-				local color = BAG_ITEM_QUALITY_COLORS[quality]
-				frame.PortraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
-				frame.PortraitFrame.squareBG:Show()
+				local quality = select(4, C_Garrison.GetFollowerMissionCompleteInfo(mission.followers[i]))
+				if quality then
+					local color = BAG_ITEM_QUALITY_COLORS[quality]
+					frame.PortraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+					frame.PortraitFrame.squareBG:Show()
+				end
 			end
 		end
 	end)
