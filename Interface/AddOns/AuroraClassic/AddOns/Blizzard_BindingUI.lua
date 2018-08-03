@@ -23,34 +23,27 @@ C.themes["Blizzard_BindingUI"] = function()
 	F.ReskinScroll(KeyBindingFrameScrollFrameScrollBar)
 	KeyBindingFrameScrollFrame.scrollFrameScrollBarBackground:Hide()
 
-	local function styleBindingButton(bu)
-		local selected = bu.selectedHighlight
-
-		for i = 1, 9 do
-			select(i, bu:GetRegions()):Hide()
-		end
-
-		selected:SetTexture(C.media.backdrop)
-		selected:SetPoint("TOPLEFT", 1, -1)
-		selected:SetPoint("BOTTOMRIGHT", -1, 1)
-		selected:SetColorTexture(r, g, b, .2)
-
-		F.Reskin(bu)
-	end
-
 	for i = 1, KEY_BINDINGS_DISPLAYED do
 		local button1 = _G["KeyBindingFrameKeyBinding"..i.."Key1Button"]
 		local button2 = _G["KeyBindingFrameKeyBinding"..i.."Key2Button"]
-
 		button2:SetPoint("LEFT", button1, "RIGHT", 1, 0)
-
-		styleBindingButton(button1)
-		styleBindingButton(button2)
 	end
+
+	hooksecurefunc("BindingButtonTemplate_SetupBindingButton", function(_, button)
+		if not button.styled then
+			local selected = button.selectedHighlight
+			selected:SetTexture(C.media.backdrop)
+			selected:SetPoint("TOPLEFT", 1, -1)
+			selected:SetPoint("BOTTOMRIGHT", -1, 1)
+			selected:SetColorTexture(r, g, b, .25)
+			F.Reskin(button)
+
+			button.styled = true
+		end
+	end)
 
 	KeyBindingFrame.header.text:ClearAllPoints()
 	KeyBindingFrame.header.text:SetPoint("TOP", KeyBindingFrame, "TOP", 0, -8)
-
 	KeyBindingFrame.unbindButton:ClearAllPoints()
 	KeyBindingFrame.unbindButton:SetPoint("BOTTOMRIGHT", -207, 16)
 	KeyBindingFrame.okayButton:ClearAllPoints()
