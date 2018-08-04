@@ -111,22 +111,17 @@ C.themes["Blizzard_AuctionUI"] = function()
 		if bu and it then
 			it:SetNormalTexture("")
 			it:SetPushedTexture("")
+			it:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			F.ReskinIcon(ic)
 
-			ic:SetTexCoord(.08, .92, .08, .92)
-
-			F.CreateBG(it)
-
-			it.IconBorder:SetTexture("")
-			it.IconBorder.SetTexture = F.dummy
+			it.IconBorder:SetAlpha(0)
 			_G["BrowseButton"..i.."Left"]:Hide()
 			select(5, _G["BrowseButton"..i]:GetRegions()):Hide()
 			_G["BrowseButton"..i.."Right"]:Hide()
 
-			local bd = CreateFrame("Frame", nil, bu)
-			bd:SetPoint("TOPLEFT")
-			bd:SetPoint("BOTTOMRIGHT", 0, 5)
-			bd:SetFrameLevel(bu:GetFrameLevel()-1)
-			F.CreateBD(bd, .25)
+			local bg = F.CreateBDFrame(bu, .25)
+			bg:SetPoint("TOPLEFT")
+			bg:SetPoint("BOTTOMRIGHT", 0, 5)
 
 			bu:SetHighlightTexture(C.media.backdrop)
 			local hl = bu:GetHighlightTexture()
