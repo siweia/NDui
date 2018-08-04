@@ -620,17 +620,15 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, _, numRewards)
+	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards)
 		if not self.numRewardsStyled then self.numRewardsStyled = 0 end
 
-		while self.numRewardsStyled < numRewards do
+		while self.numRewardsStyled < #rewards do
 			self.numRewardsStyled = self.numRewardsStyled + 1
-
 			local reward = self.Rewards[self.numRewardsStyled]
 			reward:GetRegions():Hide()
-			reward.Icon:SetTexCoord(.08, .92, .08, .92)
 			reward.IconBorder:SetAlpha(0)
-			F.CreateBG(reward.Icon)
+			F.ReskinIcon(reward.Icon)
 		end
 	end)
 
