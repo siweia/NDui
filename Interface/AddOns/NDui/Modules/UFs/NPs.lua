@@ -53,6 +53,8 @@ local CustomUnits = {
 	["Spawn of G'huun"] = true,
 	["戈霍恩之嗣"] = true,
 	["古翰幼體"] = true,
+	["爆炸物"] = true,
+	["炸彈"] = true,
 }
 function UF:CreateUnitTable()
 	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
