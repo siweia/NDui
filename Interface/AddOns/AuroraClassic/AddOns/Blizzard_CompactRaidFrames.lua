@@ -37,13 +37,13 @@ tinsert(C.themes["AuroraClassic"], function()
 		CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
 		CompactRaidFrameManagerDisplayFrameConvertToRaid
 	}
-	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton.SetNormalTexture = function() end
 	for _, button in pairs(buttons) do
 		for i = 1, 9 do
 			select(i, button:GetRegions()):SetAlpha(0)
 		end
 		F.Reskin(button)
 	end
+	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
 
 	for i = 1, 8 do
 		select(i, CompactRaidFrameManager:GetRegions()):SetAlpha(0)
