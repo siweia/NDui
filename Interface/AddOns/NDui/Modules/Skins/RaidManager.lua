@@ -185,12 +185,12 @@ function module:CreateRM()
 	marker:SetPoint("RIGHT", header, "LEFT", 0, 0)
 	marker:SetParent(header)
 	marker:SetSize(30, 30)
-	marker:GetNormalTexture():SetVertexColor(DB.cc.r, DB.cc.g, DB.cc.b)
-	marker.SetNormalTexture = B.Dummy
-	marker.SetPushedTexture = B.Dummy
+	B.StripTextures(marker)
 	B.CreateBD(marker)
 	B.CreateTex(marker)
 	B.CreateBC(marker, .5)
+	marker:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
+	marker:GetNormalTexture():SetVertexColor(DB.cc.r, DB.cc.g, DB.cc.b)
 	marker:HookScript("OnMouseUp", function(_, btn)
 		if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
 			if btn == "RightButton" then ClearRaidMarker() end
