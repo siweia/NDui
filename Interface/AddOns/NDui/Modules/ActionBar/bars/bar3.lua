@@ -16,10 +16,6 @@ function Bar:CreateBar3()
 		frame:SetWidth(num*cfg.size + (num-1)*margin + 2*padding)
 		frame:SetHeight(cfg.size + 2*padding)
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 96}
-	elseif layout == 5 then
-		frame:SetWidth(6*cfg.size + 5*margin + 2*padding)
-		frame:SetHeight(2*cfg.size + margin + 2*padding)
-		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 216, 24}
 	else
 		frame:SetWidth(19*cfg.size + 17*margin + 2*padding)
 		frame:SetHeight(2*cfg.size + margin + 2*padding)
@@ -42,7 +38,7 @@ function Bar:CreateBar3()
 			else
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
 			end
-		elseif (i == 4 and layout < 4) or (i == 7 and layout == 5) then
+		elseif i == 4 and layout < 4 then
 			local previous = _G["MultiBarBottomRightButton1"]
 			button:SetPoint("TOP", previous, "BOTTOM", 0, -margin)
 		elseif i == 7 and layout < 4 then

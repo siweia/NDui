@@ -13,7 +13,7 @@ function Bar:CreateBar5()
 	local frame = CreateFrame("Frame", "NDui_ActionBar5", UIParent, "SecureHandlerStateTemplate")
 	frame:SetWidth(cfg.size + 2*padding)
 	frame:SetHeight(num*cfg.size + (num-1)*margin + 2*padding)
-	if layout == 1 or layout == 4 or layout == 5 then
+	if layout == 1 or layout == 4 then
 		frame.Pos = {"RIGHT", UIParent, "RIGHT", -(frame:GetWidth()-1), 0}
 	else
 		frame.Pos = {"RIGHT", UIParent, "RIGHT", -1, 0}
