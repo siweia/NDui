@@ -291,9 +291,14 @@ function module:OnLogin()
 
 	function MyContainer:OnCreate(name, settings)
 		self.Settings = settings
-		B.CreateBD(self, .5, 1)
-		B.CreateSD(self, 2, 3)
-		B.CreateTex(self)
+		if IsAddOnLoaded("AuroraClassic") then
+			local F = unpack(AuroraClassic)
+			F.SetBD(self)
+		else
+			B.CreateBD(self, .5, 1)
+			B.CreateSD(self, 2, 3)
+			B.CreateTex(self)
+		end
 
 		self:SetParent(settings.Parent or Backpack)
 		self:SetFrameStrata("HIGH")
@@ -380,12 +385,17 @@ function module:OnLogin()
 			bagBar.isGlobal = true
 			bagBar:Hide()
 			self.BagBar = bagBar
-			bagBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 8, -12)
+			bagBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 8, -11)
 			local bg = CreateFrame("Frame", nil, bagBar)
-			bg:SetPoint("TOPLEFT", -10, 10)
-			bg:SetPoint("BOTTOMRIGHT", -115, -10)
-			B.CreateBD(bg)
-			B.CreateTex(bg)
+			bg:SetPoint("TOPLEFT", -8, 8)
+			bg:SetPoint("BOTTOMRIGHT", -118, -8)
+			if IsAddOnLoaded("AuroraClassic") then
+				local F = unpack(AuroraClassic)
+				F.SetBD(bg)
+			else
+				B.CreateBD(bg)
+				B.CreateTex(bg)
+			end
 
 			local bagToggle = B.CreateButton(self, 60, 20, BAGSLOT)
 			bagToggle:SetPoint("LEFT", SortButton, "RIGHT", 6, 0)
