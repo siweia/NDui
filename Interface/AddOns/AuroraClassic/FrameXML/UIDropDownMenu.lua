@@ -27,6 +27,12 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end
 
+	local function isCheckTexture(check)
+		if check:GetTexture() == "Interface\\Common\\UI-DropDownRadioChecks" then
+			return true
+		end
+	end
+
 	hooksecurefunc("ToggleDropDownMenu", function(level, _, dropDownFrame, anchorName)
 		if not level then level = 1 end
 
@@ -102,31 +108,32 @@ tinsert(C.themes["AuroraClassic"], function()
 				end
 
 				local uncheck = _G["DropDownList"..level.."Button"..j.."UnCheck"]
-				if uncheck:GetTexture() == "Interface\\Common\\UI-DropDownRadioChecks" then
-					uncheck:SetTexture("")
-				end
+				if isCheckTexture(uncheck) then uncheck:SetTexture("") end
 
-				if not bu.notCheckable then
-					toggleBackdrop(bu, true)
+				if isCheckTexture(check) then
+					if not bu.notCheckable then
+						toggleBackdrop(bu, true)
 
-					-- only reliable way to see if button is radio or or check...
-					local _, co = check:GetTexCoord()
+						-- only reliable way to see if button is radio or or check...
+						local _, co = check:GetTexCoord()
+						if co == 0 then
+							check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+							check:SetVertexColor(r, g, b, 1)
+							check:SetSize(20, 20)
+							check:SetDesaturated(true)
+						else
+							check:SetTexture(C.media.backdrop)
+							check:SetVertexColor(r, g, b, .6)
+							check:SetSize(10, 10)
+							check:SetDesaturated(false)
+						end
 
-					if co == 0 then
-						check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
-						check:SetVertexColor(r, g, b, 1)
-						check:SetSize(20, 20)
-						check:SetDesaturated(true)
+						check:SetTexCoord(0, 1, 0, 1)
 					else
-						check:SetTexture(C.media.backdrop)
-						check:SetVertexColor(r, g, b, .6)
-						check:SetSize(10, 10)
-						check:SetDesaturated(false)
+						toggleBackdrop(bu, false)
 					end
-
-					check:SetTexCoord(0, 1, 0, 1)
 				else
-					toggleBackdrop(bu, false)
+					check:SetSize(16, 16)
 				end
 			end
 		end
