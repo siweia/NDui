@@ -200,10 +200,10 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	Cooldown:Hide()
 	self.Cooldown = Cooldown
 
-	local Artwork = self:CreateTexture("$parentArtwork", "BACKGROUND")
-	Artwork:SetPoint("CENTER", -2, 0)
-	Artwork:SetSize(240, 120)
-	Artwork:SetTexture([[Interface\ExtraButton\Smash]])
+	local Artwork = self:CreateTexture("$parentArtwork", "ARTWORK")
+	Artwork:SetPoint("BOTTOMLEFT", -1, -3)
+	Artwork:SetSize(20, 20)
+	Artwork:SetTexture(DB.questTex)
 	self.Artwork = Artwork
 
 	self:RegisterEvent("UPDATE_BINDINGS")
@@ -249,6 +249,7 @@ ExtraQuestButton:SetScript("OnUpdate", function(self, elapsed)
 
 	if(self.rangeTimer > TOOLTIP_UPDATE_TIME) then
 		local HotKey = self.HotKey
+		local Icon = self.Icon
 
 		-- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
 		local inRange = IsItemInRange(self.itemLink, "target")
@@ -256,17 +257,21 @@ ExtraQuestButton:SetScript("OnUpdate", function(self, elapsed)
 			if(inRange == false) then
 				HotKey:SetTextColor(1, .1, .1)
 				HotKey:Show()
+				Icon:SetVertexColor(1, .1, .1)
 			elseif(inRange) then
 				HotKey:SetTextColor(.6, .6, .6)
 				HotKey:Show()
+				Icon:SetVertexColor(1, 1, 1)
 			else
 				HotKey:Hide()
 			end
 		else
 			if(inRange == false) then
 				HotKey:SetTextColor(1, .1, .1)
+				Icon:SetVertexColor(1, .1, .1)
 			else
 				HotKey:SetTextColor(.6, .6, .6)
+				Icon:SetVertexColor(1, 1, 1)
 			end
 		end
 
@@ -286,7 +291,6 @@ end)
 ExtraQuestButton:SetScript("OnEnable", function(self)
 	RegisterStateDriver(self, "visible", visibilityState)
 	self:SetAttribute("_onattributechanged", onAttributeChanged)
-	self.Artwork:SetTexture([[Interface\ExtraButton\Smash]])
 	self:Update()
 	self:SetItem()
 end)
@@ -299,7 +303,6 @@ ExtraQuestButton:SetScript("OnDisable", function(self)
 	RegisterStateDriver(self, "visible", "show")
 	self:SetAttribute("_onattributechanged", nil)
 	self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
-	self.Artwork:SetTexture([[Interface\ExtraButton\Ultraxion]])
 	self.HotKey:Hide()
 end)
 
