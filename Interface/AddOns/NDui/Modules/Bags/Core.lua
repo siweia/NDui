@@ -3,6 +3,27 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 
+local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
+local ItemDB = {}
+function module:GetBagItemLevel(link, bag, slot)
+	if ItemDB[link] then return ItemDB[link] end
+
+	local tip = _G["NDuiBagItemTooltip"] or CreateFrame("GameTooltip", "NDuiBagItemTooltip", nil, "GameTooltipTemplate")
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	tip:SetBagItem(bag, slot)
+
+	for i = 2, 5 do
+		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
+		local hasLevel = string.find(text, itemLevelString)
+		if hasLevel then
+			local level = string.match(text, "(%d+)%)?$")
+			ItemDB[link] = tonumber(level)
+			break
+		end
+	end
+	return ItemDB[link]
+end
+
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
 	if IsAddOnLoaded("AuroraClassic") then
@@ -149,27 +170,6 @@ function module:OnLogin()
 		self.ShowNewItems = true
 	end
 
-	local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
-	local ItemDB = {}
-	local function GetBagItemLevel(link, bag, slot)
-		if ItemDB[link] then return ItemDB[link] end
-
-		local tip = _G["NDuiBagItemTooltip"] or CreateFrame("GameTooltip", "NDuiBagItemTooltip", nil, "GameTooltipTemplate")
-		tip:SetOwner(UIParent, "ANCHOR_NONE")
-		tip:SetBagItem(bag, slot)
-
-		for i = 2, 5 do
-			local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-			local hasLevel = string.find(text, itemLevelString)
-			if hasLevel then
-				local level = string.match(text, "(%d+)%)?$")
-				ItemDB[link] = tonumber(level)
-				break
-			end
-		end
-		return ItemDB[link]
-	end
-
 	function MyButton:OnUpdate(item)
 		if MerchantFrame:IsShown() and item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 then
 			self.Junk:SetAlpha(1)
@@ -193,7 +193,7 @@ function module:OnLogin()
 
 		if NDuiDB["Bags"]["BagsiLvl"] then
 			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= "" and item.equipLoc ~= "INVTYPE_TABARD" and item.equipLoc ~= "INVTYPE_BODY" and item.equipLoc ~= "INVTYPE_BAG")) then
-				local level = GetBagItemLevel(item.link, item.bagID, item.slotID) or item.level
+				local level = module:GetBagItemLevel(item.link, item.bagID, item.slotID) or item.level
 				local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 				self.iLvl:SetText(level)
 				self.iLvl:SetTextColor(color.r, color.g, color.b)

@@ -1,6 +1,7 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Misc")
+local bagModule = B:GetModule("Bags")
 
 --[[
 	在角色面板显示装备等级
@@ -90,6 +91,41 @@ function module:ShowItemLevel()
 		local guid = ...
 		if InspectFrame and InspectFrame.unit and UnitGUID(InspectFrame.unit) == guid then
 			SetupItemLevel(InspectFrame.unit, tarString)
+		end
+	end)
+
+	local function SetupFlyoutLevel(button, bag, slot, quality)
+		if not button.iLvl then
+			button.iLvl = B.CreateFS(button, DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
+		end
+		local link, level
+		if bag then
+			link = GetContainerItemLink(bag, slot)
+			level = bagModule:GetBagItemLevel(link, bag, slot)
+		else
+			link = GetInventoryItemLink("player", slot)
+			level = self:GetUnitItemLevel(link, "player", slot, quality)
+		end
+		local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+		button.iLvl:SetText(level)
+		button.iLvl:SetTextColor(color.r, color.g, color.b)
+	end
+
+	hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)
+		local location = button.location
+		if not location or location < 0 then return end
+		if location == EQUIPMENTFLYOUT_PLACEINBAGS_LOCATION then
+			if button.iLvl then button.iLvl:SetText("") end
+			return
+		end
+
+		local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
+		if voidStorage then return end
+		local quality = select(13, EquipmentManager_GetItemInfoByLocation(location))
+		if bags then
+			SetupFlyoutLevel(button, bag, slot, quality)
+		else
+			SetupFlyoutLevel(button, nil, slot, quality)
 		end
 	end)
 end
