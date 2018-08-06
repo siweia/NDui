@@ -35,7 +35,20 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 	end)
 
+	hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)
+		local location = button.location
+		local border = button.IconBorder
+		if not location or location < 0 or not border then return end
+
+		if location == EQUIPMENTFLYOUT_PLACEINBAGS_LOCATION then
+			border:Hide()
+		else
+			border:Show()
+		end
+	end)
+
 	F.CreateBD(EquipmentFlyoutFrame.NavigationFrame)
+	F.CreateSD(EquipmentFlyoutFrame.NavigationFrame)
 	F.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.PrevButton, "left")
 	F.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.NextButton, "right")
 end)
