@@ -87,13 +87,16 @@ local function createRoster(i)
 		local name = guildTable[i][3]
 		if IsAltKeyDown() then
 			if btn == "LeftButton" then
-				local editBox = ChatEdit_ChooseBoxForSend()
-				if editBox:HasFocus() then
-					editBox:Insert(name)
+				if MailFrame:IsShown() then
+					MailFrameTab_OnClick(nil, 2)
+					SendMailNameEditBox:SetText(name)
+					SendMailNameEditBox:HighlightText()
 				else
+					local editBox = ChatEdit_ChooseBoxForSend()
+					local hasText = (editBox:GetText() ~= "")
 					ChatEdit_ActivateChat(editBox)
-					editBox:SetText(name)
-					editBox:HighlightText()
+					editBox:Insert(name)
+					if not hasText then editBox:HighlightText() end
 				end
 			else
 				InviteToGroup(name)
