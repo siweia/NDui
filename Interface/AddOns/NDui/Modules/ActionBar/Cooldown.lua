@@ -9,7 +9,7 @@ function module:OnLogin()
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
 	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 	local ICON_SIZE = 36
-	local GetTime = GetTime
+	local hideNumbers = {}
 
 	-- stops the timer
 	local function Timer_Stop(self)
@@ -82,9 +82,7 @@ function module:OnLogin()
 	end
 
 	local function Timer_Start(self, start, duration)
-		if self:IsForbidden() then return end
-		if self:GetParent():GetParent() == PVPQueueFrame then return end
-		if self.noOCC then return end
+		if self:IsForbidden() or self.noOCC or hideNumbers[self] then return end
 
 		if start > 0 and duration > MIN_DURATION then
 			local timer = self.timer or Timer_Create(self)
@@ -96,13 +94,28 @@ function module:OnLogin()
 			if timer.fontScale >= MIN_SCALE then 
 				timer:Show()
 			end
-		else
-			local timer = self.timer
-			if timer then Timer_Stop(timer) end
+		elseif self.timer then
+			Timer_Stop(self.timer)
 		end
 	end
-	hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, "SetCooldown", Timer_Start)
 
+	local function hideCooldownNumbers(self, hide)
+		if hide then
+			hideNumbers[self] = true
+			if self.timer then Timer_Stop(self.timer) end
+		else
+			hideNumbers[self] = nil
+		end
+	end
+
+	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
+	hooksecurefunc(cooldownIndex, "SetCooldown", Timer_Start)
+	hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", hideCooldownNumbers)
+	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", function(self)
+		hideCooldownNumbers(self, true)
+	end)
+
+	-- action buttons hook
 	local active, hooked = {}, {}
 
 	local function Cooldown_OnShow(self)
