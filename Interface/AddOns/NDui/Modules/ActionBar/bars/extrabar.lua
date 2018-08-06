@@ -40,4 +40,16 @@ function Bar:CreateExtrabar()
 	if cfg.fader then
 		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
+
+	--zone ability
+	ZoneAbilityFrame:ClearAllPoints()
+	ZoneAbilityFrame.ignoreFramePositionManager = true
+	ZoneAbilityFrameNormalTexture:SetAlpha(0)
+	B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", {"BOTTOM", UIParent, "BOTTOM", -250, 100}, 64, 64)
+
+	local spellButton = ZoneAbilityFrame.SpellButton
+	spellButton.Style:SetAlpha(0)
+	spellButton.Icon:SetTexCoord(.08, .92, .08, .92)
+	spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+	B.CreateSD(spellButton.Icon, 3, 3)
 end
