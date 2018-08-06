@@ -252,10 +252,9 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.bg:SetPoint("BOTTOMRIGHT", -8, 13)
 				F.CreateSD(frame.bg)
 
-				F.CreateBG(GuildChallengeAlertFrameEmblemBackground)
+				select(2, frame:GetRegions()):SetTexture("")
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
-				frame.EmblemBorder:SetTexture("")
 			end
 		elseif frame.queue == DungeonCompletionAlertSystem then
 			if not frame.bg then
