@@ -360,8 +360,7 @@ function module:SetupMinimap()
 	}
 
 	for _, v in pairs(frames) do
-		_G[v]:Hide()
-		_G[v].Show = B.Dummy
+		B.HideObject(_G[v])
 	end
 	MinimapCluster:EnableMouse(false)
 	Minimap:SetArchBlobRingScalar(0)
