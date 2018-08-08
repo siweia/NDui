@@ -208,6 +208,20 @@ local function textureOnLeave(self)
 end
 F.clearArrow = textureOnLeave
 
+local function scrollOnEnter(self)
+	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
+	if not bu then return end
+	bu.bg:SetBackdropColor(r, g, b, .3)
+	bu.bg:SetBackdropBorderColor(r, g, b)
+end
+
+local function scrollOnLeave(self)
+	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
+	if not bu then return end
+	bu.bg:SetBackdropColor(0, 0, 0, 0)
+	bu.bg:SetBackdropBorderColor(0, 0, 0)
+end
+
 function F:ReskinScroll()
 	local frame = self:GetName()
 
@@ -268,6 +282,8 @@ function F:ReskinScroll()
 	up:HookScript("OnLeave", textureOnLeave)
 	down:HookScript("OnEnter", textureOnEnter)
 	down:HookScript("OnLeave", textureOnLeave)
+	self:HookScript("OnEnter", scrollOnEnter)
+	self:HookScript("OnLeave", scrollOnLeave)
 end
 
 function F:ReskinDropDown()
