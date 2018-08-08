@@ -182,7 +182,7 @@ local function BuildICON(iconSize)
 	if not NDuiDB["AuraWatch"]["ClickThrough"] then
 		Frame:EnableMouse(true)
 		Frame.HL = Frame:CreateTexture(nil, "HIGHLIGHT")
-		Frame.HL:SetColorTexture(1, 1, 1, .3)
+		Frame.HL:SetColorTexture(1, 1, 1, .25)
 		Frame.HL:SetAllPoints(Frame.Icon)
 
 		Frame:SetScript("OnEnter", function(self)
@@ -232,7 +232,7 @@ local function BuildBAR(barWidth, iconSize)
 	if not NDuiDB["AuraWatch"]["ClickThrough"] then
 		Frame:EnableMouse(true)
 		Frame.HL = Frame:CreateTexture(nil, "HIGHLIGHT")
-		Frame.HL:SetColorTexture(1, 1, 1, .3)
+		Frame.HL:SetColorTexture(1, 1, 1, .25)
 		Frame.HL:SetAllPoints(Frame.Icon)
 
 		Frame:SetScript("OnEnter", function(self)
@@ -318,14 +318,8 @@ local function UpdateCDFrame(index, name, icon, start, duration, _, type, id, ch
 	if Frame.Icon then Frame.Icon:SetTexture(icon) end
 	if Frame.Cooldown then
 		Frame.Cooldown:SetReverse(false)
-		if charges and charges > 0 then
-			StartChargeCooldown(Frame, start, duration)
-			Frame.Cooldown:Hide()
-		else
-			ClearChargeCooldown(Frame)
-			Frame.Cooldown:SetCooldown(start, duration)
-			Frame.Cooldown:Show()
-		end
+		Frame.Cooldown:SetCooldown(start, duration)
+		Frame.Cooldown:Show()
 	end
 	if Frame.Count then Frame.Count:SetText(charges) end
 	if Frame.Spellname then Frame.Spellname:SetText(name) end
