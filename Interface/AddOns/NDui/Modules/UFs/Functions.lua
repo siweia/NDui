@@ -392,7 +392,7 @@ local function postCreateIcon(element, button)
 	button.overlay:SetTexture(nil)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
-	button.HL:SetColorTexture(1, 1, 1, .3)
+	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 end
 

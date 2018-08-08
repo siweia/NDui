@@ -17,7 +17,7 @@ function module:ExtraCDSkin()
 			btn.icon:SetAllPoints()
 			btn.icon:SetTexCoord(unpack(DB.TexCoord))
 			btn.HL = btn:CreateTexture(nil, "HIGHLIGHT")
-			btn.HL:SetColorTexture(1, 1, 1, .3)
+			btn.HL:SetColorTexture(1, 1, 1, .25)
 			btn.HL:SetAllPoints(btn.icon)
 		end
 		btn.icon:SetTexture(icon)

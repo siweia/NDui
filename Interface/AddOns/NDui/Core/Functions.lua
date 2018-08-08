@@ -173,7 +173,7 @@ function B:CreateIF(mouse, cd)
 	if mouse then
 		self:EnableMouse(true)
 		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
-		self.HL:SetColorTexture(1, 1, 1, .3)
+		self.HL:SetColorTexture(1, 1, 1, .25)
 		self.HL:SetAllPoints(self.Icon)
 	end
 	if cd then

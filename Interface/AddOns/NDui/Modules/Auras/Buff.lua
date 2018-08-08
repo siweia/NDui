@@ -69,7 +69,7 @@ local function styleButton(bu, isDebuff)
 
 	bu:SetSize(iconSize, iconSize)
 	bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
-	bu.HL:SetColorTexture(1, 1, 1, .3)
+	bu.HL:SetColorTexture(1, 1, 1, .25)
 	bu.HL:SetAllPoints(icon)
 	B.CreateSD(bu, 3, 3)
 

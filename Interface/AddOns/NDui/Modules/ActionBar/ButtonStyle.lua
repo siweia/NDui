@@ -202,7 +202,7 @@ function B:StyleActionButton(button, cfg)
 	SetupTexture(pushedTexture, cfg.pushedTexture, "SetPushedTexture", button)
 	SetupTexture(highlightTexture, cfg.highlightTexture, "SetHighlightTexture", button)
 	SetupTexture(checkedTexture, cfg.checkedTexture, "SetCheckedTexture", button)
-	highlightTexture:SetColorTexture(1, 1, 1, .3)
+	highlightTexture:SetColorTexture(1, 1, 1, .25)
 
 	--cooldown
 	SetupCooldown(cooldown, cfg.cooldown)
@@ -266,7 +266,7 @@ function B:StyleExtraActionButton(cfg)
 	SetupTexture(pushedTexture, cfg.pushedTexture, "SetPushedTexture", button)
 	SetupTexture(highlightTexture, cfg.highlightTexture, "SetHighlightTexture", button)
 	SetupTexture(checkedTexture, cfg.checkedTexture, "SetCheckedTexture", button)
-	highlightTexture:SetColorTexture(1, 1, 1, .3)
+	highlightTexture:SetColorTexture(1, 1, 1, .25)
 
 	--cooldown
 	SetupCooldown(cooldown, cfg.cooldown)

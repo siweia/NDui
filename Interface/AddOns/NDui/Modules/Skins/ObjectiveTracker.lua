@@ -74,7 +74,7 @@ function module:QuestTracker()
 		if itemButton and not itemButton.styled then
 			itemButton:SetNormalTexture("")
 			itemButton:SetPushedTexture("")
-			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			itemButton.icon:SetTexCoord(unpack(DB.TexCoord))
 			B.CreateSD(itemButton, 3, 3)
 
@@ -85,7 +85,7 @@ function module:QuestTracker()
 		if rightButton and not rightButton.styled then
 			rightButton:SetNormalTexture("")
 			rightButton:SetPushedTexture("")
-			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			local bg = B.CreateBG(rightButton, 3)
 			B.CreateBD(bg)
 			rightButton:SetSize(22, 22)

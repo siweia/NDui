@@ -216,11 +216,11 @@ function module:RecycleBin()
 
 					if child:GetObjectType() == "Button" then
 						child:SetHighlightTexture(DB.bdTex) -- prevent nil function
-						child:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+						child:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 					elseif child:GetObjectType() == "Frame" then
 						child.highlight = child:CreateTexture(nil, "HIGHLIGHT")
 						child.highlight:SetAllPoints()
-						child.highlight:SetColorTexture(1, 1, 1, .3)
+						child.highlight:SetColorTexture(1, 1, 1, .25)
 					end
 					B.CreateSD(child, 3, 3)
 

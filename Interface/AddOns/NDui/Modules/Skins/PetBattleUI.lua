@@ -230,7 +230,7 @@ function module:PetBattleUI()
 			bu.Icon:SetTexCoord(unpack(DB.TexCoord))
 			bu:SetNormalTexture("")
 			bu:GetPushedTexture():SetTexture(DB.textures.pushed)
-			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			B.CreateSD(bu, 3, 3)
 
 			bu.Cooldown:SetFont(DB.Font[1], 26, "OUTLINE")
