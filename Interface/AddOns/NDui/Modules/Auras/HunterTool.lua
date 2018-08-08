@@ -11,6 +11,7 @@ local function CreateElements()
 	bar = CreateFrame("StatusBar", nil, UIParent)
 	bar:SetSize(IconSize*5+20, 6)
 	B.CreateSB(bar, true)
+	B.SmoothBar(bar)
 	bar:SetAlpha(.5)
 	bar.Count = B.CreateFS(bar, 18, "", false, "CENTER", 0, -5)
 
@@ -43,10 +44,14 @@ end
 local function UpdateVisibility()
 	if InCombatLockdown() then return end
 	if not bar then return end
-	for i = 1, 5 do bu[i]:SetAlpha(.1) end
-	if boom:IsShown() then boom:SetAlpha(.1) end
 	bar:SetAlpha(.1)
 	bar.Count:SetText("")
+	for i = 1, 5 do
+		bu[i]:SetAlpha(.1)
+		bu[i].Count:SetTextColor(1, 1, 1)
+		bu[i].Count:SetText("")
+	end
+	if boom:IsShown() then boom:SetAlpha(.1) end
 end
 
 local function UpdatePowerBar()
@@ -58,7 +63,7 @@ local function UpdatePowerBar()
 	if cur > 80 then
 		bar.Count:SetTextColor(1, 0, 0)
 	elseif cur > 30 then
-		bar.Count:SetTextColor(1, 1, 0)
+		bar.Count:SetTextColor(0, 1, 0)
 	else
 		bar.Count:SetTextColor(1, 1, 1)
 	end
@@ -75,21 +80,33 @@ local function GetUnitAura(unit, spell, filter)
 	end
 end
 
-local function UpdateCooldown(button, spellID)
+local function UpdateCooldown(button, spellID, updateTexture)
+	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
 	local start, duration = GetSpellCooldown(spellID)
-	if start and duration > 1.5 then
+	if charges and maxCharges > 1 then button.Count:SetText(charges) end
+	if charges and charges > 0 and charges < maxCharges then
+		button.CD:SetCooldown(chargeStart, chargeDuration)
+		button.CD:Show()
+		button:SetAlpha(1)
+		button.Count:SetTextColor(0, 1, 0)
+	elseif start and duration > 1.5 then
 		button.CD:SetCooldown(start, duration)
 		button.CD:Show()
 		button:SetAlpha(.5)
+		button.Count:SetTextColor(1, 1, 1)
 	else
 		button.CD:Hide()
 		button:SetAlpha(1)
+		if charges == maxCharges then button.Count:SetTextColor(1, 0, 0) end
+	end
+	if updateTexture then
+		button.Icon:SetTexture(GetSpellTexture(spellID))
 	end
 end
 
-local function UpdateBuff(button, spellID, auraID, cooldown)
+local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
-	local name, count, duration, expire = GetUnitAura("player", auraID, "HELPFUL")
+	local name, count, duration, expire = GetUnitAura(isPet and "pet" or "player", auraID, "HELPFUL")
 	if name then
 		if count == 0 then count = "" end
 		button.Count:SetText(count)
@@ -129,75 +146,123 @@ local boomGroups = {
 	[270332] = 259489,
 	[271049] = 259491,
 }
+
 local function UpdateIcons()
-	UpdateDebuff(bu[1], 259491, 259491)
+	if GetSpecialization() == 1 then
+		UpdateCooldown(bu[1], 34026, true)
+		UpdateCooldown(bu[2], 217200, true)
+		UpdateBuff(bu[3], 106785, 272790, false, true)
+		UpdateBuff(bu[4], 19574, 19574, true)
+		UpdateBuff(bu[5], 193530, 193530, true)
 
-	do
-		local button = bu[2]
-		if IsPlayerSpell(260248) then
-			UpdateBuff(button, 260248, 260249)
-		elseif IsPlayerSpell(162488) then
-			UpdateDebuff(button, 162488, 162487, true)
-		else
-			UpdateDebuff(button, 131894, 131894, true)
-		end
-	end
+	elseif GetSpecialization() == 2 then
+		UpdateCooldown(bu[1], 19434, true)
 
-	do
-		local button = bu[4]
-		if IsPlayerSpell(260285) then
-			UpdateBuff(button, 260285, 260286)
-		elseif IsPlayerSpell(269751) then
-			button.Icon:SetTexture(GetSpellTexture(269751))
-			UpdateCooldown(button, 269751)
-		else
-			UpdateBuff(button, 259387, 259388)
-		end
-	end
-
-	do
-		local button = bu[3]
-		if IsPlayerSpell(271014) then
-			boom:Show()
-
-			local name, _, duration, expire, caster, spellID = GetUnitAura("target", 270339, "HARMFUL")
-			if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 270332, "HARMFUL") end
-			if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 271049, "HARMFUL") end
-			if name and caster == "player" then
-				boom.Icon:SetTexture(GetSpellTexture(boomGroups[spellID]))
-				boom.CD:SetCooldown(expire-duration, duration)
-				boom.CD:Show()
-				boom:SetAlpha(1)
+		do
+			local button = bu[2]
+			if IsPlayerSpell(271788) then
+				UpdateDebuff(button, 271788, 271788)
+			elseif IsPlayerSpell(131894) then
+				UpdateDebuff(button, 131894, 131894, true)
 			else
-				local texture = GetSpellTexture(259495)
-				if texture == GetSpellTexture(270323) then
-					boom.Icon:SetTexture(GetSpellTexture(259489))
-					boom:SetAlpha(.5)
-				elseif texture == GetSpellTexture(270335) then
-					boom.Icon:SetTexture(GetSpellTexture(186270))
-					boom:SetAlpha(.5)
-				elseif texture == GetSpellTexture(271045) then
-					boom.Icon:SetTexture(GetSpellTexture(259491))
+				UpdateBuff(button, 260309, 269576)
+			end
+		end
+
+		do
+			local button = bu[3]
+			if IsPlayerSpell(193533) then
+				UpdateBuff(button, 193534, 193534)
+			elseif IsPlayerSpell(257284) then
+				UpdateDebuff(button, 257284, 257284)
+			else
+				UpdateCooldown(button, 257044, true)
+			end
+		end
+
+		do
+			local button = bu[4]
+			if IsPlayerSpell(260402) then
+				UpdateCooldown(button, 260402, true)
+			elseif IsPlayerSpell(120360) then
+				UpdateCooldown(button, 120360, true)
+			else
+				UpdateBuff(button, 260395, 260395)
+			end
+		end
+
+		UpdateBuff(bu[5], 193526, 193526, true)
+
+	elseif GetSpecialization() == 3 then
+		UpdateDebuff(bu[1], 259491, 259491)
+
+		do
+			local button = bu[2]
+			if IsPlayerSpell(260248) then
+				UpdateBuff(button, 260248, 260249)
+			elseif IsPlayerSpell(162488) then
+				UpdateDebuff(button, 162488, 162487, true)
+			else
+				UpdateDebuff(button, 131894, 131894, true)
+			end
+		end
+
+		do
+			local button = bu[4]
+			if IsPlayerSpell(260285) then
+				UpdateBuff(button, 260285, 260286)
+			elseif IsPlayerSpell(269751) then
+				UpdateCooldown(button, 269751, true)
+			else
+				UpdateBuff(button, 259387, 259388)
+			end
+		end
+
+		do
+			local button = bu[3]
+			if IsPlayerSpell(271014) then
+				boom:Show()
+
+				local name, _, duration, expire, caster, spellID = GetUnitAura("target", 270339, "HARMFUL")
+				if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 270332, "HARMFUL") end
+				if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 271049, "HARMFUL") end
+				if name and caster == "player" then
+					boom.Icon:SetTexture(GetSpellTexture(boomGroups[spellID]))
+					boom.CD:SetCooldown(expire-duration, duration)
+					boom.CD:Show()
+					boom:SetAlpha(1)
+				else
+					local texture = GetSpellTexture(259495)
+					if texture == GetSpellTexture(270323) then
+						boom.Icon:SetTexture(GetSpellTexture(259489))
+						boom:SetAlpha(.5)
+					elseif texture == GetSpellTexture(270335) then
+						boom.Icon:SetTexture(GetSpellTexture(186270))
+						boom:SetAlpha(.5)
+					elseif texture == GetSpellTexture(271045) then
+						boom.Icon:SetTexture(GetSpellTexture(259491))
+						boom:SetAlpha(.5)
+					end
 					boom:SetAlpha(.5)
 				end
-				boom:SetAlpha(.5)
+
+				UpdateCooldown(button, 259495, true)
+			else
+				boom:Hide()
+				UpdateDebuff(button, 259495, 269747, true)
 			end
-
-			button.Icon:SetTexture(GetSpellTexture(259495))
-			UpdateCooldown(button, 259495)
-		else
-			boom:Hide()
-			UpdateDebuff(button, 259495, 269747, true)
 		end
-	end
 
-	UpdateBuff(bu[5], 266779, 266779, true)
+		UpdateBuff(bu[5], 266779, 266779, true)
+	end
 
 	UpdateVisibility()
 end
 
 local function CheckSpec(event)
-	if GetSpecializationInfo(GetSpecialization()) == 255 and UnitLevel("player") > 99 then
+	if UnitLevel("player") < 100 then return end
+
+	if GetSpecialization() then
 		CreateElements()
 		for i = 1, 5 do bu[i]:Show() end
 
@@ -205,6 +270,7 @@ local function CheckSpec(event)
 		B:RegisterEvent("UNIT_AURA", UpdateIcons, "player", "target")
 		B:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateIcons)
 		B:RegisterEvent("SPELL_UPDATE_COOLDOWN", UpdateIcons)
+		B:RegisterEvent("SPELL_UPDATE_CHARGES", UpdateIcons)
 	else
 		for i = 1, 5 do
 			if bu[i] then bu[i]:Hide() end
@@ -216,6 +282,7 @@ local function CheckSpec(event)
 		B:UnregisterEvent("UNIT_AURA", UpdateIcons)
 		B:UnregisterEvent("PLAYER_TARGET_CHANGED", UpdateIcons)
 		B:UnregisterEvent("SPELL_UPDATE_COOLDOWN", UpdateIcons)
+		B:UnregisterEvent("SPELL_UPDATE_CHARGES", UpdateIcons)
 	end
 
 	if event == "PLAYER_ENTERING_WORLD" then
