@@ -41,19 +41,6 @@ local function CreateElements()
 	B.Mover(bar, L["HunterTool"], "HunterTool", C.Auras.HunterToolPos, bar:GetWidth(), 30)
 end
 
-local function UpdateVisibility()
-	if InCombatLockdown() then return end
-	if not bar then return end
-	bar:SetAlpha(.1)
-	bar.Count:SetText("")
-	for i = 1, 5 do
-		bu[i]:SetAlpha(.1)
-		bu[i].Count:SetTextColor(1, 1, 1)
-		bu[i].Count:SetText("")
-	end
-	if boom:IsShown() then boom:SetAlpha(.1) end
-end
-
 local function UpdatePowerBar()
 	local cur, max = UnitPower("player"), UnitPowerMax("player")
 	bar:SetMinMaxValues(0, max)
@@ -67,8 +54,6 @@ local function UpdatePowerBar()
 	else
 		bar.Count:SetTextColor(1, 1, 1)
 	end
-
-	UpdateVisibility()
 end
 
 local function GetUnitAura(unit, spell, filter)
@@ -255,6 +240,35 @@ local function UpdateIcons()
 
 		UpdateBuff(bu[5], 266779, 266779, true)
 	end
+end
+
+local function UpdateVisibility()
+	if InCombatLockdown() then return end
+	if not bar then return end
+	bar:SetAlpha(.1)
+	bar.Count:SetText("")
+	for i = 1, 5 do
+		bu[i]:SetAlpha(.1)
+		bu[i].Count:SetTextColor(1, 1, 1)
+		bu[i].Count:SetText("")
+	end
+	if boom:IsShown() then boom:SetAlpha(.1) end
+end
+
+local function TurnOn()
+	B:RegisterEvent("UNIT_POWER_FREQUENT", UpdatePowerBar, "player")
+	B:RegisterEvent("UNIT_AURA", UpdateIcons, "player", "target")
+	B:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateIcons)
+	B:RegisterEvent("SPELL_UPDATE_COOLDOWN", UpdateIcons)
+	B:RegisterEvent("SPELL_UPDATE_CHARGES", UpdateIcons)
+end
+
+local function TurnOff()
+	B:UnregisterEvent("UNIT_POWER_FREQUENT", UpdatePowerBar)
+	B:UnregisterEvent("UNIT_AURA", UpdateIcons)
+	B:UnregisterEvent("PLAYER_TARGET_CHANGED", UpdateIcons)
+	B:UnregisterEvent("SPELL_UPDATE_COOLDOWN", UpdateIcons)
+	B:UnregisterEvent("SPELL_UPDATE_CHARGES", UpdateIcons)
 
 	UpdateVisibility()
 end
@@ -266,11 +280,10 @@ local function CheckSpec(event)
 		CreateElements()
 		for i = 1, 5 do bu[i]:Show() end
 
-		B:RegisterEvent("UNIT_POWER_FREQUENT", UpdatePowerBar, "player")
-		B:RegisterEvent("UNIT_AURA", UpdateIcons, "player", "target")
-		B:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateIcons)
-		B:RegisterEvent("SPELL_UPDATE_COOLDOWN", UpdateIcons)
-		B:RegisterEvent("SPELL_UPDATE_CHARGES", UpdateIcons)
+		UpdateIcons()
+		UpdateVisibility()
+		B:RegisterEvent("PLAYER_REGEN_DISABLED", TurnOn)
+		B:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff)
 	else
 		for i = 1, 5 do
 			if bu[i] then bu[i]:Hide() end
@@ -278,18 +291,13 @@ local function CheckSpec(event)
 		if boom then boom:Hide() end
 		if bar then bar:Hide() end
 
-		B:UnregisterEvent("UNIT_POWER_FREQUENT", UpdatePowerBar)
-		B:UnregisterEvent("UNIT_AURA", UpdateIcons)
-		B:UnregisterEvent("PLAYER_TARGET_CHANGED", UpdateIcons)
-		B:UnregisterEvent("SPELL_UPDATE_COOLDOWN", UpdateIcons)
-		B:UnregisterEvent("SPELL_UPDATE_CHARGES", UpdateIcons)
+		B:UnregisterEvent("PLAYER_REGEN_DISABLED", TurnOn)
+		B:UnregisterEvent("PLAYER_REGEN_ENABLED", TurnOff)
 	end
 
 	if event == "PLAYER_ENTERING_WORLD" then
 		B:UnregisterEvent(event, CheckSpec)
 	end
-
-	UpdateVisibility()
 end
 
 function module:HunterTool()
