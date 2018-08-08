@@ -137,7 +137,6 @@ local defaultSettings = {
 		FontFlag = true,
 		PetBattle = true,
 		TrackerSkin = true,
-		RCLC = true,
 		ExtraCD = true,
 		WeakAuras = true,
 		BarLine = true,
@@ -416,9 +415,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Skada", L["Skada Skin"], true},
 		{1, "Skins", "Bigwigs", L["Bigwigs Skin"]},
 		{1, "Skins", "TMW", L["TMW Skin"], true},
-		{1, "Skins", "RCLC", L["RCLC Skin"]},
-		{1, "Skins", "ExtraCD", L["ExtraCD Skin"], true},
 		{1, "Skins", "WeakAuras", L["WeakAuras Skin"]},
+		{1, "Skins", "ExtraCD", L["ExtraCD Skin"], true},
 	},
 	[11] = {
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
