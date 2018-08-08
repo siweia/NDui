@@ -128,7 +128,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			end
 		end
 
-		tab.Highlight:SetColorTexture(r, g, b, .2)
+		tab.Highlight:SetColorTexture(1, 1, 1, .25)
 		tab.Highlight:SetPoint("TOPLEFT", 3, -4)
 		tab.Highlight:SetPoint("BOTTOMRIGHT", -1, 0)
 		tab.Hider:SetColorTexture(.3, .3, .3, .4)

@@ -26,7 +26,7 @@ C.themes["Blizzard_ScrappingMachineUI"] = function()
 			button.IconBorder:SetAlpha(0)
 			button.bg = F.CreateBDFrame(button, .25)
 			local hl = button:GetHighlightTexture()
-			hl:SetColorTexture(1, 1, 1, .3)
+			hl:SetColorTexture(1, 1, 1, .25)
 			hl:SetAllPoints(button.Icon)
 			hooksecurefunc(button, "RefreshIcon", refreshIcon)
 
