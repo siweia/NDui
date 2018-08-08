@@ -11,6 +11,7 @@ oUF.colors.power.SOUL_SHARDS = {.58, .51, .79}
 oUF.colors.power.HOLY_POWER = {.88, .88, .06}
 oUF.colors.power.CHI = {0, 1, .59}
 oUF.colors.power.ARCANE_CHARGES = {.41, .8, .94}
+oUF.colors.power.COMBO_POINTS = {1, .2, 0}
 
 -- Various values
 local function retVal(self, val1, val2, val3, val4)
@@ -357,23 +358,25 @@ function UF:CreateCastBar(self)
 	self.Castbar = cb
 end
 
-function UF:CreateMirrorBar()
-	for _, bar in pairs({"MirrorTimer1", "MirrorTimer2", "MirrorTimer3"}) do   
-		_G[bar]:GetRegions():Hide()
-		_G[bar.."Border"]:Hide()
-		_G[bar]:SetParent(UIParent)
-		_G[bar]:SetScale(1)
-		_G[bar]:SetHeight(15)
-		_G[bar]:SetWidth(280)
-		_G[bar.."Background"] = _G[bar]:CreateTexture(bar.."Background", "BACKGROUND", _G[bar])
-		_G[bar.."Background"]:SetTexture(DB.normTex)
-		_G[bar.."Background"]:SetAllPoints(bar)
-		_G[bar.."Background"]:SetVertexColor(0, 0, 0, .5)
-		_G[bar.."Text"]:SetFont(unpack(DB.Font))
-		_G[bar.."Text"]:ClearAllPoints()
-		_G[bar.."Text"]:SetPoint("CENTER")
-		_G[bar.."StatusBar"]:SetAllPoints(_G[bar])
-		B.CreateSD(_G[bar], 3, 3)
+function UF:ReskinMirrorBars()
+	local previous
+	for i = 1, 3 do
+		local bar = _G["MirrorTimer"..i]
+		B.StripTextures(bar, true)
+		bar:SetSize(280, 15)
+
+		local bg = B.CreateBG(bar, 3)
+		B.CreateBD(bg)
+		B.CreateTex(bg)
+
+		local statusbar = _G["MirrorTimer"..i.."StatusBar"]
+		statusbar:SetAllPoints()
+		statusbar:SetStatusBarTexture(DB.normTex)
+
+		if previous then
+			bar:SetPoint("TOP", previous, "BOTTOM", 0, -5)
+		end
+		previous = bar
 	end
 end
 
@@ -613,7 +616,7 @@ end
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
 		width, height = self:GetWidth(), self:GetHeight()*2 + 3
-		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
+		C.UFs.BarPoint = {"TOPLEFT", self.Power, "BOTTOMLEFT", 0, -3}
 	end
 
 	local bars = {}

@@ -285,11 +285,19 @@ function B:HideObject()
 	self:Hide()
 end
 
-function B:StripTextures()
+function B:StripTextures(kill)
 	for i = 1, self:GetNumRegions() do
 		local region = select(i, self:GetRegions())
 		if region and region:GetObjectType() == "Texture" then
-			region:SetTexture("")
+			if kill and type(kill) == "boolean" then
+				B.HideObject(region)
+			elseif region:GetDrawLayer() == kill then
+				region:SetTexture(nil)
+			elseif kill and type(kill) == "string" and region:GetTexture() ~= kill then
+				region:SetTexture("")
+			else
+				region:SetTexture("")
+			end
 		end
 	end
 end
