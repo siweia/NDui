@@ -279,6 +279,7 @@ local function CheckSpec(event)
 	if GetSpecialization() then
 		CreateElements()
 		for i = 1, 5 do bu[i]:Show() end
+		if boom then boom:Hide() end
 
 		UpdateIcons()
 		UpdateVisibility()
