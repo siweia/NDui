@@ -118,7 +118,6 @@ function module:OnLogin()
 
 	self:DBMSkin()
 	self:ExtraCDSkin()
-	self:RCLootCoucil()
 	self:SkadaSkin()
 	self:BigWigsSkin()
 end

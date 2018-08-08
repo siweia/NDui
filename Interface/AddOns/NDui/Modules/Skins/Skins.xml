@@ -9,7 +9,6 @@
 	<Script file="AddOns\Bigwigs.lua"/>
 	<Script file="AddOns\DBM.lua"/>
 	<Script file="AddOns\ExtraCD.lua"/>
-	<Script file="AddOns\RCLootCoucil.lua"/>
 	<Script file="AddOns\Skada.lua"/>
 	<Script file="AddOns\TMW.lua"/>
 	<Script file="AddOns\WeakAuras.lua"/>
