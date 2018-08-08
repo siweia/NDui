@@ -160,10 +160,10 @@ function module:DBMSkin()
 		end
 
 		if DBMRangeCheck and not DBMRangeCheck.styled then
-			B.CreateBD(DBMRangeCheck)
-			B.CreateTex(DBMRangeCheck)
-			DBMRangeCheck.SetBackdropColor = B.Dummy
-			DBMRangeCheck.SetBackdropBorderColor = B.Dummy
+			DBMRangeCheck:SetBackdrop(nil)
+			local bg = B.CreateBG(DBMRangeCheck, 0)
+			B.CreateBD(bg)
+			B.CreateTex(bg)
 
 			DBMRangeCheck.styled = true
 		end
@@ -174,11 +174,11 @@ function module:DBMSkin()
 		DBM.InfoFrame:Show(5, "test")
 		DBM.InfoFrame:Hide()
 		DBMInfoFrame:HookScript("OnShow", function(self)
-			if not self.Tex then
-				B.CreateBD(self, .6, 3)
-				B.CreateTex(self)
-				self.SetBackdropColor = B.Dummy
-				self.SetBackdropBorderColor = B.Dummy
+			if not self.bg then
+				self:SetBackdrop(nil)
+				self.bg = B.CreateBG(self, 0)
+				B.CreateBD(self.bg, .6, 3)
+				B.CreateTex(self.bg)
 			end
 		end)
 	end
