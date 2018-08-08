@@ -3,12 +3,12 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Skins")
 
 function module:FontStyle()
+	if not NDuiDB["Skins"]["FontFlag"] then return end
+
 	if not IsAddOnLoaded("AuroraClassic") then return end
 	AuroraOptionsenableFont:Disable()
 	AuroraOptionsenableFont.Text:SetTextColor(.5, .5, .5)
 	AuroraConfig.enableFont = false
-
-	if not NDuiDB["Skins"]["FontFlag"] then return end
 
 	local function ReskinFont(font, size, white)
 		font:SetFont(DB.Font[1], size, white and "" or "OUTLINE")
