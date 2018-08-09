@@ -276,6 +276,9 @@ function UF:PostUpdatePlates(event, unit)
 end
 
 -- Player Nameplate
+local iconSize, margin = C.Auras.IconSize, 5
+local auras = B:GetModule("Auras")
+
 local function PlateVisibility(self, event)
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
 		UIFrameFadeIn(self.Health, .3, self.Health:GetAlpha(), 1)
@@ -292,12 +295,14 @@ end
 
 function UF:CreatePlayerPlate()
 	self.mystyle = "PlayerPlate"
-	self:SetSize(180, 5)
+	self:SetSize(iconSize*5 + margin*4, 5)
 	self:EnableMouse(false)
+	self.iconSize = iconSize
 
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
 	UF:CreateClassPower(self)
+	if auras.CheckLumos and auras.CheckLumos() then auras:CreateLumos(self) end
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility)

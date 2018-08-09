@@ -21,7 +21,7 @@ local function CreatePlayerStyle(self)
 	UF:CreateFCT(self)
 	UF:ReskinMirrorBars()
 
-	if not NDuiDB["Nameplate"]["Enable"] or not NDuiDB["Nameplate"]["ShowPlayerPlate"] then UF:CreateClassPower(self) end
+	if not NDuiDB["Nameplate"]["ShowPlayerPlate"] then UF:CreateClassPower(self) end
 	if not NDuiDB["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 	if NDuiDB["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
 	if NDuiDB["UFs"]["SwingBar"] then UF:CreateSwing(self) end
@@ -170,13 +170,13 @@ function UF:OnLogin()
 		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
 		oUF:SetActiveStyle("Nameplates")
 		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
+	end
 
-		if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
-			oUF:RegisterStyle("PlayerPlate", UF.CreatePlayerPlate)
-			oUF:SetActiveStyle("PlayerPlate")
-			local plate = oUF:Spawn("player", "oUF_PlayerPlate", true)
-			B.Mover(plate, L["PlayerNP"], "PlayerPlate", C.UFs.PlayerPlate, plate:GetWidth(), 20)
-		end
+	if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+		oUF:RegisterStyle("PlayerPlate", UF.CreatePlayerPlate)
+		oUF:SetActiveStyle("PlayerPlate")
+		local plate = oUF:Spawn("player", "oUF_PlayerPlate", true)
+		B.Mover(plate, L["PlayerNP"], "PlayerPlate", C.UFs.PlayerPlate, plate:GetWidth(), 20)
 	end
 
 	-- Default Clicksets for RaidFrame
