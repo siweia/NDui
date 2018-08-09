@@ -4,10 +4,9 @@ local module = B:GetModule("Misc")
 
 --[[
 	QuickJoin 优化系统自带的预创建功能
-	1.鼠标中键点击所追踪的任务进行搜索
+	1.修复简中语系的一个报错
 	2.双击搜索结果，快速申请
-	3.目标为稀有精英或世界BOSS时，右键点击框体可寻找队伍
-	4.自动隐藏部分窗口
+	3.自动隐藏部分窗口
 ]]
 
 function module:QuickJoin()
@@ -19,14 +18,6 @@ function module:QuickJoin()
 			whileDead = 1,
 		}
 	end
-
-	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", function(self, button)
-		if self.module.ShowWorldQuests then
-			if button == "MiddleButton" then
-				LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
-			end
-		end
-	end)
 
 	for i = 1, 10 do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
@@ -41,22 +32,6 @@ function module:QuickJoin()
 			end)
 		end
 	end
-
-	hooksecurefunc("UnitPopup_ShowMenu", function(_, _, unit)
-		if UIDROPDOWNMENU_MENU_LEVEL > 1 then return end
-		if unit and unit == "target" and (UnitLevel(unit) < 0 and UnitClassification(unit) == "elite" or UnitClassification(unit) == "rareelite") then
-			local info = UIDropDownMenu_CreateInfo()
-			info.text = FIND_A_GROUP
-			info.arg1 = {value = "RARE_SEARCH", unit = unit}
-			info.func = function()
-				PVEFrame_ShowFrame("GroupFinderFrame", LFGListPVEStub)
-				LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection, 6, 0)
-				LFGListCategorySelection_StartFindGroup(LFGListFrame.CategorySelection, UnitName(unit))
-			end
-			info.notCheckable = true
-			UIDropDownMenu_AddButton(info)
-		end
-	end)
 
 	hooksecurefunc("LFGListInviteDialog_Accept", function()
 		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
