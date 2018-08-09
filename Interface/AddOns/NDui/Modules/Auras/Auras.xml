@@ -5,6 +5,6 @@
 	<Script file="Stagger.lua"/>
 	<Script file="Totems.lua"/>
 	<Script file="AuraWatch.lua"/>
-	<Script file="HunterTool.lua"/>
 	<Script file="MonkStatue.lua"/>
+	<Include file="Lumos\Lumos.xml"/>
 </Ui>

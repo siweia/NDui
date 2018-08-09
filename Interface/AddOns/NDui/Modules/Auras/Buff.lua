@@ -30,8 +30,6 @@ function module:OnLogin()
 	-- Elements
 	if DB.MyClass == "DEATHKNIGHT" then
 		self:BloodyHell()
-	elseif DB.MyClass == "HUNTER" then
-		self:HunterTool()
 	elseif DB.MyClass == "MONK" then
 		self:Stagger()
 		self:MonkStatue()
