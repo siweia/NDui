@@ -11,7 +11,6 @@ oUF.colors.power.SOUL_SHARDS = {.58, .51, .79}
 oUF.colors.power.HOLY_POWER = {.88, .88, .06}
 oUF.colors.power.CHI = {0, 1, .59}
 oUF.colors.power.ARCANE_CHARGES = {.41, .8, .94}
-oUF.colors.power.COMBO_POINTS = {1, .2, 0}
 
 -- Various values
 local function retVal(self, val1, val2, val3, val4)
@@ -616,7 +615,7 @@ end
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
 		width, height = self:GetWidth(), self:GetHeight()*2 + 3
-		C.UFs.BarPoint = {"TOPLEFT", self.Power, "BOTTOMLEFT", 0, -3}
+		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 
 	local bars = {}
