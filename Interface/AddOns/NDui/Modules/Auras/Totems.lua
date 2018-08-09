@@ -30,7 +30,6 @@ local function TotemsGo()
 		defaultTotem:SetParent(totem[i])
 		defaultTotem:SetAllPoints()
 		defaultTotem:SetAlpha(0)
-		defaultTotem:EnableMouse(NDuiDB["Auras"]["DestroyTotems"])
 		totem[i].parent = defaultTotem
 	end
 	B.Mover(Totembar, L["Totembar"], "Totems", C.Auras.TotemsPos, 140, 32)
@@ -42,7 +41,7 @@ local function updateTotem()
 		local defaultTotem = totem.parent
 		local slot = defaultTotem.slot
 
-		local haveTotem, name, start, dur, icon = GetTotemInfo(slot)
+		local haveTotem, _, start, dur, icon = GetTotemInfo(slot)
 		if haveTotem and dur > 0 then
 			totem.Icon:SetTexture(icon)
 			totem.CD:SetCooldown(start, dur)

@@ -21,7 +21,7 @@ oUF.Tags.Methods["hp"] = function(unit)
 		return oUF.Tags.Methods["DDG"](unit)
 	else
 		local per = oUF.Tags.Methods["perhp"](unit) or 0
-		local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+		local cur = UnitHealth(unit)
 		if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
 			if per < 100 then
 				return B.Numb(cur).." | "..ColorPercent(per)
@@ -36,7 +36,7 @@ end
 oUF.Tags.Events["hp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION"
 
 oUF.Tags.Methods["power"] = function(unit)
-	local cur, max = UnitPower(unit), UnitPowerMax(unit)
+	local cur = UnitPower(unit)
 	local per = oUF.Tags.Methods["perpp"](unit) or 0
 	if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
 		if per < 100 and UnitPowerType(unit) == 0 then
