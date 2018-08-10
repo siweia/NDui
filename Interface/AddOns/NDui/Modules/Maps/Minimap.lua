@@ -301,7 +301,6 @@ end
 function module:SetupMinimap()
 	-- Shape and Position
 	local scale = NDuiDB["Map"]["MinmapScale"]
-	function GetMinimapShape() return "SQUARE" end
 	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
 	MinimapCluster:SetScale(scale)

@@ -32,8 +32,7 @@ hall:RegisterEvent("PLAYER_ENTERING_WORLD")
 hall:RegisterEvent("ADDON_LOADED")
 hall:SetScript("OnEvent", function(self, event, arg1)
 	if event == "ADDON_LOADED" and arg1 == "Blizzard_OrderHallUI" then
-		OrderHallCommandBar:Hide()
-		OrderHallCommandBar.Show = B.Dummy
+		B.HideObject(OrderHallCommandBar)
 		GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
 		self:UnregisterEvent("ADDON_LOADED")
 	elseif event == "UNIT_AURA" or event == "PLAYER_ENTERING_WORLD" then
