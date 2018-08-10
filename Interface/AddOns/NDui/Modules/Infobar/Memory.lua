@@ -31,7 +31,8 @@ local function memoryColor(value, times)
 	end
 end
 
-local memoryTable = {}
+local memoryTable, totalMemory = {}
+
 local function updateMemory()
 	wipe(memoryTable)
 	UpdateAddOnMemoryUsage()
@@ -58,16 +59,8 @@ end
 info.onUpdate = function(self, elapsed)
 	self.timer = (self.timer or 5) + elapsed
 	if self.timer > 5 then
-		UpdateAddOnMemoryUsage()
-
-		local total = 0
-		for i = 1, GetNumAddOns() do
-			if IsAddOnLoaded(i) then
-				local usage = GetAddOnMemoryUsage(i)
-				total = total + usage
-			end
-		end
-		self.text:SetText(ADDONS..": "..B.HexRGB(memoryColor(total, 10))..format("%.1f", total/1024))
+		totalMemory = updateMemory()
+		self.text:SetText(ADDONS..": "..B.HexRGB(memoryColor(totalMemory, 10))..format("%.1f", totalMemory/1024))
 
 		self.timer = 0
 	end
@@ -84,7 +77,6 @@ info.onMouseUp = function(self, btn)
 end
 
 info.onEnter = function(self)
-	local totalMemory = updateMemory()
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
 	GameTooltip:AddDoubleLine(ADDONS, formatMemory(totalMemory), 0,.6,1, .6,.8,1)
