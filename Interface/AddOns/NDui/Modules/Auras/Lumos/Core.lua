@@ -6,9 +6,9 @@ local iconSize = C.Auras.IconSize
 
 function module:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
-		local name, _, count, _, dur, exp, caster, _, _, spellID = UnitAura(unit, index, filter)
+		local name, _, count, _, dur, exp, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
 		if name and spellID == spell then
-			return name, count, dur, exp, caster, spellID
+			return name, count, dur, exp, caster, spellID, value
 		end
 	end
 end
@@ -16,7 +16,11 @@ end
 function module:UpdateCooldown(button, spellID, texture)
 	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
 	local start, duration = GetSpellCooldown(spellID)
-	if charges and maxCharges > 1 then button.Count:SetText(charges) end
+	if charges and maxCharges > 1 then
+		button.Count:SetText(charges)
+	else
+		button.Count:SetText("")
+	end
 	if charges and charges > 0 and charges < maxCharges then
 		button.CD:SetCooldown(chargeStart, chargeDuration)
 		button.CD:Show()
@@ -38,9 +42,9 @@ function module:UpdateCooldown(button, spellID, texture)
 	end
 end
 
-function module:UpdateBuff(button, spellID, auraID, cooldown, isPet)
+function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
-	local name, count, duration, expire = self:GetUnitAura(isPet and "pet" or "player", auraID, "HELPFUL")
+	local name, count, duration, expire = self:GetUnitAura(unit, auraID, filter)
 	if name then
 		if count == 0 then count = "" end
 		button.Count:SetText(count)
@@ -54,23 +58,6 @@ function module:UpdateBuff(button, spellID, auraID, cooldown, isPet)
 			button.Count:SetText("")
 			button.CD:Hide()
 			button:SetAlpha(.5)
-		end
-	end
-end
-
-function module:UpdateDebuff(button, spellID, auraID, cooldown)
-	button.Icon:SetTexture(GetSpellTexture(spellID))
-	local name, _, duration, expire, caster = self:GetUnitAura("target", auraID, "HARMFUL")
-	if name and caster == "player" then
-		button:SetAlpha(1)
-		button.CD:SetCooldown(expire-duration, duration)
-		button.CD:Show()
-	else
-		if cooldown then
-			self:UpdateCooldown(button, spellID)
-		else
-			button:SetAlpha(.5)
-			button.CD:Hide()
 		end
 	end
 end
