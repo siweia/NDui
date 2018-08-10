@@ -612,6 +612,18 @@ local function postUpdateClassPower(element, cur, max, diff, powerType, event)
 	end
 end
 
+local function postUpdateRunes(element, runemap)
+	for index, runeID in next, runemap do
+		local rune = element[index]
+		local runeReady = select(3, GetRuneCooldown(runeID))
+		if rune:IsShown() and not runeReady then
+			rune:SetAlpha(.6)
+		else
+			rune:SetAlpha(1)
+		end
+	end
+end
+
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
 		width, height = self:GetWidth(), self:GetHeight()*2 + 3
@@ -649,6 +661,7 @@ function UF:CreateClassPower(self)
 	if DB.MyClass == "DEATHKNIGHT" then
 		bars.colorSpec = true
 		if NDuiDB["UFs"]["SortRunes"] then bars.sortOrder = "asc" end
+		bars.PostUpdate = postUpdateRunes
 		self.Runes = bars
 	else
 		bars.PostUpdate = postUpdateClassPower
