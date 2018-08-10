@@ -32,11 +32,11 @@ local function UpdateCooldown(button, spellID, texture)
 end
 
 local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
-	return module:UpdateBuff(button, spellID, auraID, cooldown, isPet)
+	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown)
 end
 
 local function UpdateDebuff(button, spellID, auraID, cooldown)
-	return module:UpdateDebuff(button, spellID, auraID, cooldown)
+	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
 end
 
 local boomGroups = {
