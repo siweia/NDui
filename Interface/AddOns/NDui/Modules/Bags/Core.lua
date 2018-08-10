@@ -445,6 +445,8 @@ function module:OnLogin()
 	end
 
 	-- Fix Containter Bug
+	ToggleAllBags()
+	ToggleAllBags()
 	local function getRightFix() return f.bank:GetRight() end
 	BankFrame.GetRight = getRightFix
 
