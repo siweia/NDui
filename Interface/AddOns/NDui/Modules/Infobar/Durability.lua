@@ -130,37 +130,56 @@ end
 info.onLeave = function() GameTooltip:Hide() end
 
 -- Auto repair
-local isShown
-local function autoRepair(event)
-	if event == "MERCHANT_SHOW" and not isShown then
-		isShown = true
-		if NDuiADB["RepairType"] == 0 or not CanMerchantRepair() then return end
+local isShown, isBankEmpty
 
-		local cost = GetRepairAllCost()
-		if cost > 0 then
-			local money = GetMoney()
-			if IsInGuild() and NDuiADB["RepairType"] == 1 then
-				local guildMoney = GetGuildBankWithdrawMoney()
-				if guildMoney > GetGuildBankMoney() then
-					guildMoney = GetGuildBankMoney()
-				end
-				if guildMoney >= cost and CanGuildBankRepair() or guildMoney == 0 and IsGuildLeader() then
-					RepairAllItems(1)
-					print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(cost)))
-					return
-				end
-			end
+local function autoRepair(override)
+	if isShown and not override then return end
+	isShown = true
+	isBankEmpty = false
 
-			if money > cost then
+	local repairAllCost, canRepair = GetRepairAllCost()
+	local myMoney = GetMoney()
+
+	if canRepair and repairAllCost > 0 then
+		if (not override) and NDuiADB["RepairType"] == 1 and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
+			RepairAllItems(true)
+		else
+			if myMoney > repairAllCost then
 				RepairAllItems()
-				print(format(DB.InfoColor.."%s:|r %s", L["Repair cost"], GetMoneyString(cost)))
+				print(format(DB.InfoColor.."%s:|r %s", L["Repair cost"], GetMoneyString(repairAllCost)))
+				return
 			else
 				print(DB.InfoColor..L["Repair error"])
+				return
 			end
 		end
-	elseif event == "MERCHANT_CLOSED" then
-		isShown = false
+
+		C_Timer.After(.5, function()
+			if isBankEmpty then
+				autoRepair(true)
+			else
+				print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(repairAllCost)))
+			end
+		end)
 	end
 end
-B:RegisterEvent("MERCHANT_SHOW", autoRepair)
-B:RegisterEvent("MERCHANT_CLOSED", autoRepair)
+
+local function checkBankFund(_, msgType)
+	if msgType == LE_GAME_ERR_GUILD_NOT_ENOUGH_MONEY then
+		isBankEmpty = true
+	end
+end
+
+local function merchantClose()
+	isShown = false
+	B:UnregisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+	B:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
+end
+
+local function merchantShow()
+	if IsShiftKeyDown() or NDuiADB["RepairType"] == 0 or not CanMerchantRepair() then return end
+	autoRepair()
+	B:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+	B:RegisterEvent("MERCHANT_CLOSED", merchantClose)
+end
+B:RegisterEvent("MERCHANT_SHOW", merchantShow)
