@@ -100,6 +100,7 @@ local defaultSettings = {
 		ShowRecycleBin = true,
 		WhoPings = true,
 		MapReveal = true,
+		AutoQuest = false,
 	},
 	Nameplate = {
 		Enable = true,
@@ -388,6 +389,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
+		{1, "Map", "MapReveal", L["Map Reveal"]},
+		{1, "Misc","AutoQuest", L["Auto Quest"], true},
 		{},--blank
 		{1, "Map", "Invite", L["Calendar Reminder"]},
 		{1, "Map", "Clock", L["Minimap Clock"], true},
