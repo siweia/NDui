@@ -1,4 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Core.lua"/>
+	<Script file="DK.lua"/>
 	<Script file="Hunter.lua"/>
+	<Script file="Priest.lua"/>
+	<Script file="Shaman.lua"/>
 </Ui>
