@@ -65,6 +65,7 @@ local list = {
 		{AuraID = 273947, UnitID = "player"},	-- 鲜血禁闭
 		{AuraID = 253595, UnitID = "player", Combat = true},	-- 酷寒突袭
 		{AuraID = 281209, UnitID = "player", Combat = true},	-- 冷酷之心
+		{AuraID = 47568, UnitID = "player"},	-- 符文武器增效
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 55078, UnitID = "focus", Caster = "player"},	-- 血之疫病
