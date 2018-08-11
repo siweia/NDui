@@ -4,11 +4,6 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "SHAMAN" then return end
 
-function module:CheckLumos()
-	if not NDuiDB["Auras"]["ShamanTool"] then return end
-	return true
-end
-
 local function GetUnitAura(unit, spell, filter)
 	return module:GetUnitAura(unit, spell, filter)
 end

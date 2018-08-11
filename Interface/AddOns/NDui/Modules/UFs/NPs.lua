@@ -302,7 +302,7 @@ function UF:CreatePlayerPlate()
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
 	UF:CreateClassPower(self)
-	if auras.CheckLumos and auras.CheckLumos() then auras:CreateLumos(self) end
+	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility)

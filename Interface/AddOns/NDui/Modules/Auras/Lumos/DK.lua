@@ -4,11 +4,6 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "DEATHKNIGHT" then return end
 
-function module:CheckLumos()
-	if not NDuiDB["Auras"]["DKTool"] then return end
-	return true
-end
-
 function module:PostCreateLumos(self)
 	local shield = B.CreateFS(self.Health, 18, "")
 	shield:ClearAllPoints()
@@ -85,7 +80,7 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[1]
 			if IsPlayerSpell(253593) then
-				UpdateBuff(button, 253593, 55233)
+				UpdateBuff(button, 253593, 253595)
 			elseif IsPlayerSpell(281208) then
 				UpdateBuff(button, 281208, 281209)
 			else

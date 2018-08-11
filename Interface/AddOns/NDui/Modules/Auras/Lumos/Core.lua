@@ -94,6 +94,8 @@ local function TurnOff(self)
 end
 
 function module:CreateLumos(self)
+	if not module.ChantLumos then return end
+
 	self.bu = {}
 	for i = 1, 5 do
 		local bu = CreateFrame("Frame", nil, self.Health)

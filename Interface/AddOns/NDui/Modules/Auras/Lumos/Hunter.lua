@@ -4,11 +4,6 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "HUNTER" then return end
 
-function module:CheckLumos()
-	if not NDuiDB["Auras"]["HunterTool"] then return end
-	return true
-end
-
 function module:PostCreateLumos(self)
 	local iconSize = self.bu[1]:GetWidth()
 	local boom = CreateFrame("Frame", nil, self.Health)
