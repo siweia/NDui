@@ -44,8 +44,8 @@ end
 
 function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
-	local name, count, duration, expire = self:GetUnitAura(unit, auraID, filter)
-	if name then
+	local name, count, duration, expire, caster = self:GetUnitAura(unit, auraID, filter)
+	if name and caster == "player" then
 		if count == 0 then count = "" end
 		button.Count:SetText(count)
 		button.CD:SetCooldown(expire-duration, duration)
@@ -78,7 +78,7 @@ function module:UpdateTotemAura(button, texture, spellID)
 	end
 	if not found then
 		if spellID then
-			UpdateCooldown(button, spellID)
+			self:UpdateCooldown(button, spellID)
 		else
 			button.CD:Hide()
 			button:SetAlpha(.5)
