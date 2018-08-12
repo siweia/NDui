@@ -58,10 +58,10 @@ function module:ChantLumos(self)
 
 		do
 			local button = self.bu[2]
-			if IsPlayerSpell(197992) then
-				UpdateBuff(button, 197992, 202004)
-			elseif IsPlayerSpell(262647) then
-				UpdateBuff(button, 262647, 262652)
+			if IsPlayerSpell(210853) then
+				UpdateBuff(button, 210853, 196834)
+			elseif IsPlayerSpell(210727) then
+				UpdateCooldown(button, 187837, true)
 			else
 				UpdateDebuff(button, 192087, 268429)
 			end
@@ -69,10 +69,10 @@ function module:ChantLumos(self)
 
 		do
 			local button = self.bu[3]
-			if IsPlayerSpell(210853) then
-				UpdateBuff(button, 210853, 196834)
-			elseif IsPlayerSpell(210727) then
-				UpdateCooldown(button, 187837, true)
+			if IsPlayerSpell(197992) then
+				UpdateBuff(button, 197992, 202004)
+			elseif IsPlayerSpell(262647) then
+				UpdateBuff(button, 262647, 262652)
 			else
 				UpdateTotemAura(button, 511726)
 			end
