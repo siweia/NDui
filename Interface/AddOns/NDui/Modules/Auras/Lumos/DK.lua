@@ -33,6 +33,21 @@ local function UpdateDebuff(button, spellID, auraID, cooldown)
 	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
 end
 
+local function UpdateBuffValue(button, spellID)
+	button.Icon:SetTexture(GetSpellTexture(spellID))
+	local name, _, duration, expire, _, _, value = GetUnitAura("player", spellID, "HELPFUL")
+	if name then
+		button.Count:SetText(B.Numb(value))
+		button.CD:SetCooldown(expire-duration, duration)
+		button.CD:Show()
+		button:SetAlpha(1)
+	else
+		button.Count:SetText("")
+		UpdateCooldown(button, spellID)
+	end
+	button.Count:SetTextColor(1, 1, 1)
+end
+
 function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		do
@@ -58,23 +73,7 @@ function module:ChantLumos(self)
 
 		UpdateBuff(self.bu[2], 195181, 195181)
 		UpdateBuff(self.bu[3], 49028, 81256, true)
-
-		do
-			local button = self.bu[4]
-			button.Icon:SetTexture(GetSpellTexture(48707))
-			local name, _, duration, expire, _, _, value = GetUnitAura("player", 48707, "HELPFUL")
-			if name then
-				button.Count:SetText(B.Numb(value))
-				button.CD:SetCooldown(expire-duration, duration)
-				button.CD:Show()
-				button:SetAlpha(1)
-			else
-				button.Count:SetText("")
-				UpdateCooldown(button, 48707)
-			end
-			button.Count:SetTextColor(1, 1, 1)
-		end
-
+		UpdateBuffValue(self.bu[4], 48707)
 		UpdateBuff(self.bu[5], 55233, 55233, true)
 	elseif GetSpecialization() == 2 then
 		do
@@ -100,7 +99,7 @@ function module:ChantLumos(self)
 		end
 
 		UpdateBuff(self.bu[3], 196770, 196770, true)
-		UpdateBuff(self.bu[4], 51271, 51271, true)
+		UpdateBuffValue(self.bu[4], 51271)
 		UpdateBuff(self.bu[5], 47568, 47568, true)
 	elseif GetSpecialization() == 3 then
 		UpdateBuff(self.bu[1], 51460, 51460)

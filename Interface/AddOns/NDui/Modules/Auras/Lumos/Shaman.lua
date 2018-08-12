@@ -4,10 +4,6 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "SHAMAN" then return end
 
-local function GetUnitAura(unit, spell, filter)
-	return module:GetUnitAura(unit, spell, filter)
-end
-
 local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
@@ -18,6 +14,10 @@ end
 
 local function UpdateDebuff(button, spellID, auraID, cooldown)
 	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
+end
+
+local function UpdateTotemAura(button, texture)
+	return module:UpdateTotemAura(button, texture)
 end
 
 function module:ChantLumos(self)
@@ -74,22 +74,7 @@ function module:ChantLumos(self)
 			elseif IsPlayerSpell(210727) then
 				UpdateCooldown(button, 187837, true)
 			else
-				button.Icon:SetTexture(511726)
-				local found
-				for slot = 1, 4 do
-					local haveTotem, _, start, dur, icon = GetTotemInfo(slot)
-					if haveTotem and icon == 511726 then
-						button.CD:SetCooldown(start, dur)
-						button.CD:Show()
-						button:SetAlpha(1)
-						found = true
-						break
-					end
-				end
-				if not found then
-					button.CD:Hide()
-					button:SetAlpha(.5)
-				end
+				UpdateTotemAura(button, 511726)
 			end
 		end
 

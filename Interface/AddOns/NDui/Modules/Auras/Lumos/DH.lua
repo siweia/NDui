@@ -4,10 +4,6 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "DEMONHUNTER" then return end
 
-local function GetUnitAura(unit, spell, filter)
-	return module:GetUnitAura(unit, spell, filter)
-end
-
 local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
@@ -42,6 +38,7 @@ function module:ChantLumos(self)
 			UpdateSpellStatus(button, spellID)
 			button.Count:SetText(GetSpellCount(spellID))
 		end
+
 		UpdateBuff(self.bu[2], 178740, 178740, true)
 		UpdateDebuff(self.bu[3], 204021, 207744, true)
 		UpdateBuff(self.bu[4], 203720, 203819, true)
