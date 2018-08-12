@@ -70,6 +70,7 @@ local list = {
 		{AuraID = 271896, UnitID = "player"},	-- 刀锋冲刺
 		{AuraID = 51690, UnitID = "player"},	-- 影舞步
 		{AuraID = 277925, UnitID = "player"},	-- 袖剑旋风
+		{AuraID = 196980, UnitID = "player"},	-- 暗影大师
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 6770, UnitID = "focus", Caster = "player"},	-- 闷棍

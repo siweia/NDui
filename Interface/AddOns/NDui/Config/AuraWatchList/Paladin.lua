@@ -7,6 +7,9 @@ local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 188370, UnitID = "player"},	-- 奉献
 		{AuraID = 197561, UnitID = "player"},	-- 复仇者的勇气
+		{AuraID = 269571, UnitID = "player"},	-- 狂热
+		{AuraID = 114250, UnitID = "player"},	-- 无私自愈
+		{AuraID = 281178, UnitID = "player"},	-- 愤怒之剑
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 853, UnitID = "target", Caster = "player"},		-- 制裁之锤
@@ -25,6 +28,7 @@ local list = {
 		{AuraID = 209202, UnitID = "target", Caster = "player"},	-- 提尔之眼
 		{AuraID = 204301, UnitID = "target", Caster = "player"},	-- 祝福之盾
 		{AuraID = 204079, UnitID = "target", Caster = "player"},	-- 决一死战
+		{AuraID = 267799, UnitID = "target", Caster = "player"},	-- 处决审判
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 498, UnitID = "player"},		-- 圣佑术
@@ -53,7 +57,6 @@ local list = {
 		{AuraID = 209388, UnitID = "player", Value = true},	-- 秩序堡垒
 		{AuraID = 267611, UnitID = "player"},	-- 正义裁决
 		{AuraID = 271581, UnitID = "player"},	-- 神圣审判
-		{AuraID = 114250, UnitID = "player"},	-- 无私自愈
 		{AuraID = 84963, UnitID = "player"},	-- 异端裁决
 		{AuraID = 280375, UnitID = "player"},	-- 多面防御
 		{AuraID = 216331, UnitID = "player"},	-- 复仇十字军

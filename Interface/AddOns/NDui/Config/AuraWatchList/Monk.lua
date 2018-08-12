@@ -61,6 +61,7 @@ local list = {
 		{AuraID = 261769, UnitID = "player"},	-- 铁布衫
 		{AuraID = 195630, UnitID = "player"},	-- 醉拳大师
 		{AuraID = 115295, UnitID = "player", Value = true},			-- 金钟罩
+		{AuraID = 116847, UnitID = "player"},	-- 碧玉疾风
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 115078, UnitID = "focus", Caster = "player"},		-- 分筋错骨
@@ -70,7 +71,6 @@ local list = {
 		{SlotID = 13, UnitID = "player"},		-- 饰品1
 		{SlotID = 14, UnitID = "player"},		-- 饰品2
 		{SpellID = 115203, UnitID = "player"},	-- 壮胆酒
-		{SpellID = 115310, UnitID = "player"},	-- 还魂术
 	},
 }
 
