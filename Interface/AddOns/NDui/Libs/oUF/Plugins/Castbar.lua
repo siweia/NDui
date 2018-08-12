@@ -17,7 +17,7 @@ local channelingTicks = {
 	-- mage
 	[GetSpellInfo(5143)] = 5, 		-- arcane missiles
 	[GetSpellInfo(12051)] = 3, 		-- evocation
-	[GetSpellInfo(205021)] = 12,
+	[GetSpellInfo(205021)] = 5,
 }
 
 if DB.MyClass == "PRIEST" then
