@@ -23,9 +23,9 @@ end
 function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		UpdateCooldown(self.bu[1], 47540, true)
-		UpdateBuff(self.bu[2], 47536, 47536, true)
-		UpdateBuff(self.bu[3], 33206, 33206, true)
-		UpdateCooldown(self.bu[4], 62618, true)
+		UpdateCooldown(self.bu[2], 194509, true)
+		UpdateBuff(self.bu[3], 47536, 47536, true)
+		UpdateBuff(self.bu[4], 33206, 33206, true)
 		UpdateCooldown(self.bu[5], 32375, true)
 	elseif GetSpecialization() == 2 then
 		UpdateCooldown(self.bu[1], 2050, true)
