@@ -6,9 +6,9 @@ local iconSize = C.Auras.IconSize
 
 function module:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
-		local name, _, count, _, dur, exp, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
+		local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
 		if name and spellID == spell then
-			return name, count, dur, exp, caster, spellID, value
+			return name, count, duration, expire, caster, spellID, value
 		end
 	end
 end
@@ -56,6 +56,30 @@ function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown)
 			self:UpdateCooldown(button, spellID)
 		else
 			button.Count:SetText("")
+			button.CD:Hide()
+			button:SetAlpha(.5)
+		end
+	end
+end
+
+function module:UpdateTotemAura(button, texture, spellID)
+	button.Icon:SetTexture(texture)
+	local found
+	for slot = 1, 4 do
+		local haveTotem, _, start, dur, icon = GetTotemInfo(slot)
+		if haveTotem and icon == texture then
+			button.CD:SetCooldown(start, dur)
+			button.CD:Show()
+			button:SetAlpha(1)
+			button.Count:SetText("")
+			found = true
+			break
+		end
+	end
+	if not found then
+		if spellID then
+			UpdateCooldown(button, spellID)
+		else
 			button.CD:Hide()
 			button:SetAlpha(.5)
 		end
