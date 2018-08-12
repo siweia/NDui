@@ -10,7 +10,7 @@ local list = {
 		{AuraID = 198293, UnitID = "player"},	-- 疾风
 		{AuraID = 197211, UnitID = "player"},	-- 空气之怒
 		{AuraID = 260881, UnitID = "player"},	-- 幽灵狼
-		{AuraID = 192106, UnitID = "player"},	-- 闪电护盾
+		{AuraID = 192106, UnitID = "player", Timeless = true},	-- 闪电护盾
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 61295, UnitID = "target", Caster = "player"},		-- 激流
@@ -68,6 +68,9 @@ local list = {
 		{AuraID = 191634, UnitID = "player"},	-- 风暴守护者
 		{AuraID = 202004, UnitID = "player"},	-- 山崩
 		{AuraID = 262652, UnitID = "player"},	-- 强风
+		{AuraID = 224125, UnitID = "player"},	-- 火
+		{AuraID = 224126, UnitID = "player"},	-- 冰
+		{AuraID = 224127, UnitID = "player"},	-- 电
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 51514, UnitID = "focus", Caster = "player"},	-- 妖术

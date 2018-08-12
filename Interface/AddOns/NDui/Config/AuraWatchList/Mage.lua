@@ -12,6 +12,7 @@ local list = {
 		{AuraID = 235313, UnitID = "player"},	-- 烈焰护体
 		{AuraID = 235450, UnitID = "player"},	-- 棱光屏障
 		{AuraID = 110960, UnitID = "player"},	-- 强化隐形术
+		{AuraID = 157644, UnitID = "player"},	-- 强化烟火之术
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 118, UnitID = "target", Caster = "player"},		-- 变形术
@@ -67,8 +68,8 @@ local list = {
 		{AuraID = 209455, UnitID = "player"},	-- 凯尔萨斯的绝招，抱歉护腕
 		{AuraID = 263725, UnitID = "player"},	-- 节能施法
 		{AuraID = 264774, UnitID = "player"},	-- 三之准则
-		{AuraID = 157644, UnitID = "player"},	-- 强化烟火之术
 		{AuraID = 269651, UnitID = "player"},	-- 火焰冲撞
+		{AuraID = 190446, UnitID = "player"},	-- 冰冷智慧
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 44457, UnitID = "focus", Caster = "player"},	-- 活动炸弹

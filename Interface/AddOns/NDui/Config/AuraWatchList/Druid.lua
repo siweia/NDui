@@ -93,6 +93,7 @@ local list = {
 		{AuraID = 252216, UnitID = "player"}, 	-- 猛虎冲刺
 		{AuraID = 279709, UnitID = "player"}, 	-- 星辰领主
 		{AuraID = 279943, UnitID = "player"}, 	-- 锋利兽爪
+		{AuraID = 197721, UnitID = "player"}, 	-- 繁盛
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 774, UnitID = "focus", Caster = "player"},	-- 回春术
