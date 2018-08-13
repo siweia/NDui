@@ -102,10 +102,32 @@ function module:ChantLumos(self)
 		UpdateBuffValue(self.bu[4], 51271)
 		UpdateBuff(self.bu[5], 47568, 47568, true)
 	elseif GetSpecialization() == 3 then
-		UpdateBuff(self.bu[1], 51460, 51460)
+		do
+			local button = self.bu[1]
+			local name, _, duration, expire = GetUnitAura("player", 51460, "HELPFUL")
+			if name then
+				button.CD:SetCooldown(expire-duration, duration)
+				button.CD:Show()
+				button:SetAlpha(1)
+				button.Count:SetText("")
+				button.Icon:SetTexture(GetSpellTexture(51460))
+			else
+				local count = floor(UnitPower("player")/40)
+				if count == 0 then
+					button:SetAlpha(.5)
+				else
+					button:SetAlpha(1)
+				end
+				button.CD:Hide()
+				button.Count:SetText(count)
+				button.Icon:SetTexture(GetSpellTexture(47541))
+			end
+		end
+
 		UpdateBuff(self.bu[2], 63560, 63560, true, true)
 		UpdateDebuff(self.bu[3], 194310, 194310)
 		UpdateCooldown(self.bu[4], 275699, true)
+
 		do
 			local button = self.bu[5]
 			if IsPlayerSpell(207289) then

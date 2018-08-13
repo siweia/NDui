@@ -58,7 +58,11 @@ function module:ChantLumos(self)
 			elseif IsPlayerSpell(131894) then
 				UpdateDebuff(button, 131894, 131894, true)
 			else
-				UpdateBuff(button, 260242, 260242)
+				if IsPlayerSpell(260367) then
+					UpdateBuff(button, 260242, 260242)
+				else
+					UpdateCooldown(button, 257044, true)
+				end
 			end
 		end
 
