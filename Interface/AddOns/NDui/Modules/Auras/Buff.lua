@@ -29,7 +29,6 @@ function module:OnLogin()
 
 	-- Elements
 	if DB.MyClass == "MONK" then
-		self:Stagger()
 		self:MonkStatue()
 	elseif DB.MyClass == "SHAMAN" then
 		self:Totems()
