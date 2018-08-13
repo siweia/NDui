@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 -- ncHoverBind, by coote
 -- NDui MOD
 ---------------------------
-local bind, localmacros = CreateFrame("Frame", "ncHoverBind", UIParent), 0
+local bind, localmacros, frame = CreateFrame("Frame", "ncHoverBind", UIParent), 0
 -- SLASH COMMAND
 SlashCmdList.MOUSEOVERBIND = function()
 	if InCombatLockdown() then print("|cffffff00"..ERR_NOT_IN_COMBAT.."|r") return end
@@ -218,30 +218,53 @@ SlashCmdList.MOUSEOVERBIND = function()
 			self:RegisterEvent("PLAYER_REGEN_DISABLED")
 		end
 
+		local bindType = 1
 		function bind:Deactivate(save)
 			if save then
-				SaveBindings(2)
+				SaveBindings(bindType)
 				print("|cffffff00"..KEY_BOUND.."|r")
 			else
-				LoadBindings(2)
+				LoadBindings(bindType)
 				print("|cffffff00"..UNCHECK_ALL.."|r")
 			end
 			self.enabled = false
 			self:HideFrame()
 			self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-			StaticPopup_Hide("KEYBIND_MODE")
+			frame:Hide()
 		end
 
-		StaticPopupDialogs["KEYBIND_MODE"] = {
-			text = KEY_BINDING,
-			button1 = APPLY,
-			button2 = CANCEL,
-			OnAccept = function() bind:Deactivate(true) end,
-			OnCancel = function() bind:Deactivate(false) end,
-			timeout = 0,
-			whileDead = 1,
-			hideOnEscape = false
-		}
+		function bind:CallBindFrame()
+			if frame then frame:Show() return end
+
+			frame = CreateFrame("Frame", nil, UIParent)
+			frame:SetSize(320, 100)
+			frame:SetPoint("TOP", 0, -135)
+			B.CreateBD(frame)
+			B.CreateFS(frame, 14, KEY_BINDING, false, "TOP", 0, -15)
+
+			local text = B.CreateFS(frame, 14, CHARACTER_SPECIFIC_KEYBINDINGS, false, "TOP", 0, -40)
+			text:SetTextColor(1, .8, 0)
+
+			local button1 = B.CreateButton(frame, 120, 25, APPLY, 14)
+			button1:SetPoint("BOTTOMLEFT", 25, 10)
+			button1:SetScript("OnClick", function()
+				bind:Deactivate(true)
+			end)
+			local button2 = B.CreateButton(frame, 120, 25, CANCEL, 14)
+			button2:SetPoint("BOTTOMRIGHT", -25, 10)
+			button2:SetScript("OnClick", function()
+				bind:Deactivate(false)
+			end)
+			local box = B.CreateCheckBox(frame)
+			box:SetPoint("RIGHT", text, "LEFT", -5, -0)
+			box:SetScript("OnClick", function(self)
+				if self:GetChecked() == true then
+					bindType = 2
+				else
+					bindType = 1
+				end
+			end)
+		end
 
 		-- REGISTERING
 		local stance = StanceButton1:GetScript("OnClick")
@@ -295,7 +318,7 @@ SlashCmdList.MOUSEOVERBIND = function()
 
 	if not bind.enabled then
 		bind:Activate()
-		StaticPopup_Show("KEYBIND_MODE")
+		bind:CallBindFrame()
 	end
 end
 
