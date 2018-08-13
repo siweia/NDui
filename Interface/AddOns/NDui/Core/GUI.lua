@@ -29,7 +29,6 @@ local defaultSettings = {
 	},
 	Auras = {
 		Reminder = true,
-		Stagger = true,
 		Totems = true,
 		DestroyTotems = true,
 		Statue = true,
@@ -339,10 +338,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "AuraWatch", "Enable", L["Enable AuraWatch"]},
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"]},
 		{},--blank
-		{1, "Auras", "Reminder", L["Enable Reminder"]},
-		{1, "Auras", "Stagger", L["Enable Stagger"], true},
 		{1, "Auras", "Statue", L["Enable Statue"]},
 		{1, "Auras", "Totems", L["Enable Totems"], true},
+		{1, "Auras", "Reminder", L["Enable Reminder"]},
 		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},

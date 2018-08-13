@@ -9,11 +9,7 @@ C.Auras = {
 	Spacing			= 5,												-- BUFF图标间距
 	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, -5},		-- BUFF默认位置
 
-	BHPos			= {"CENTER", UIParent, "CENTER", 0, -200},			-- 血DK助手默认位置
-	StaggerPos		= {"CENTER", UIParent, "CENTER", 0, -220},			-- 坦僧工具默认位置
 	TotemsPos		= {"CENTER", UIParent, "CENTER", 0, -190},			-- 图腾助手默认位置
-	HunterToolPos	= {"CENTER", UIParent, "CENTER", 0, -190},			-- 生存猎助手默认位置
-	FamiliarPos		= {"BOTTOMLEFT", UIParent, 480, 270},				-- 奥法魔宠默认位置
 	StatuePos		= {"TOPRIGHT", UIParent, "BOTTOM", -460, 300},		-- 武僧雕像默认位置
 
 	-- 技能监控各组初始位置
