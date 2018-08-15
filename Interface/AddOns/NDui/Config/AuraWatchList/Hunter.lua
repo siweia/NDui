@@ -7,6 +7,7 @@ local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 136, UnitID = "pet"},			-- 治疗宠物
 		{AuraID = 19577, UnitID = "pet"},		-- 胁迫
+		{AuraID = 160058, UnitID = "pet"},		-- 厚皮
 		{AuraID = 90361, UnitID = "player"},	-- 灵魂治愈
 		{AuraID = 35079, UnitID = "player"},	-- 误导
 		{AuraID = 61648, UnitID = "player"},	-- 变色龙守护
@@ -102,10 +103,7 @@ local list = {
 	["Spell Cooldown"] = {	-- 冷却计时组
 		{SlotID = 13, UnitID = "player"},		-- 饰品1
 		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{SpellID = 201430, UnitID = "player"},	-- 群兽奔腾
 		{SpellID = 186265, UnitID = "player"},	-- 灵龟守护
-		{SpellID = 193530, UnitID = "player"},	-- 野性守护
-		{SpellID = 193526, UnitID = "player"},	-- 百发百中
 		{SpellID = 147362, UnitID = "player"},	-- 反制射击
 	},
 }

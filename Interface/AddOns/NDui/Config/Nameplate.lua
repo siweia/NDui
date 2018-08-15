@@ -16,7 +16,8 @@ C.WhiteList = {
 	[20549] 	= true,		-- 战争践踏
 	[107079] 	= true,		-- 震山掌
 	[272295] 	= true,		-- 悬赏
-	-- Mythic dungeons
+	-- Dungeons
+	[260805]	= true,		-- 聚焦之虹
 	[228318]	= true,		-- 激怒
 	[226510]	= true,		-- 血池
 	[200672]	= true,		-- 水晶迸裂

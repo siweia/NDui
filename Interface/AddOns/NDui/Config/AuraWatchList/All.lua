@@ -60,6 +60,10 @@ local list = {
 		{AuraID = 280780, UnitID = "player"},	-- 战斗荣耀
 		{AuraID = 280787, UnitID = "player"},	-- 反击之怒
 		{AuraID = 279928, UnitID = "player"},	-- 大地链接
+		{AuraID = 280385, UnitID = "player"},	-- 压力渐增
+		{AuraID = 273842, UnitID = "player"},	-- 深渊秘密
+		{AuraID = 273843, UnitID = "player"},	-- 深渊秘密
+		{AuraID = 280412, UnitID = "player"},	-- 激励兽群
 		-- LEG药水附魔
 		{AuraID = 188027, UnitID = "player"},	-- 致命优雅，远程
 		{AuraID = 188028, UnitID = "player"},	-- 上古战神，近战
