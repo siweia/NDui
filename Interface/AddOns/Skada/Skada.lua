@@ -838,9 +838,9 @@ function Skada:Report(channel, chantype, report_mode_name, report_set_name, max,
 
 	if(chantype == "channel") then
 		local list = {GetChannelList()}
-		for i=1,table.getn(list)/2 do
-			if(Skada.db.profile.report.channel == list[i*2]) then
-				channel = list[i*2-1]
+		for i=1,#list,3 do
+			if(Skada.db.profile.report.channel == list[i+1]) then
+				channel = list[i]
 				break
 			end
 		end
@@ -1192,6 +1192,7 @@ function Skada:Reset()
 		end
 	end
 
+	dataobj.text = "n/a"
 	self:UpdateDisplay(true)
 	self:Print(L["All data has been reset."])
 	if not InCombatLockdown() then -- ticket 377: avoid timeout errors in combat because GC can run too long

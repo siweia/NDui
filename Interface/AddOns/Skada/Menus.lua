@@ -10,7 +10,7 @@ local function _modeMenu(window, level)
     for i, module in ipairs(modes) do
         table.insert(categorized, module)
     end
-    
+
     table.sort(categorized, function(a, b)
         local a_score = 0
         local b_score = 0
@@ -24,7 +24,7 @@ local function _modeMenu(window, level)
         b_score = b_score + (string.byte(b.category, 1) * 10) + string.byte(b:GetName(), 1)
         return a_score < b_score
     end)
-    
+
     local lastcat = nil
     for i, module in ipairs(categorized) do
         if not lastcat or lastcat ~= module.category then
@@ -48,7 +48,7 @@ local function _modeMenu(window, level)
         info.func = function() window:DisplayMode(module) end
         info.checked = (window.selectedmode == module)
         UIDropDownMenu_AddButton(info, level)
-    end    
+    end
 end
 
 local function getDropdownPoint()
@@ -80,7 +80,7 @@ function Skada:OpenMenu(window)
     local info = UIDropDownMenu_CreateInfo()
 	skadamenu.initialize = function(self, level)
 	    if not level then return end
-        
+
 	    if level == 1 then
 	        -- Create the title of the menu
             info = UIDropDownMenu_CreateInfo()
@@ -205,7 +205,7 @@ function Skada:OpenMenu(window)
 	            			end
 	            info.checked = (window.selectedset == "total")
 	            UIDropDownMenu_AddButton(info, level)
-                
+
                 info = UIDropDownMenu_CreateInfo()
 	            info.text = L["Current"]
 	            info.func = function()
@@ -300,68 +300,6 @@ function Skada:OpenMenu(window)
 		            info.checked = (Skada.db.profile.report.set == i)
 		            UIDropDownMenu_AddButton(info, level)
 		        end
-		    elseif UIDROPDOWNMENU_MENU_VALUE == "number" then
-		        for i = 1,25 do
-                    info = UIDropDownMenu_CreateInfo()
-		            info.text = i
-		            info.checked = (Skada.db.profile.report.number == i)
-		            info.func = function() Skada.db.profile.report.number = i end
-		            UIDropDownMenu_AddButton(info, level)
-		        end
-		    elseif UIDROPDOWNMENU_MENU_VALUE == "channel" then
-                info = UIDropDownMenu_CreateInfo()
-		        info.text = L["Whisper"]
-		        info.checked = (Skada.db.profile.report.chantype == "whisper")
-		        info.func = function() Skada.db.profile.report.channel = "Whisper"; Skada.db.profile.report.chantype = "whisper" end
-		        UIDropDownMenu_AddButton(info, level)
-
-		        info.text = L["Say"]
-		        info.checked = (Skada.db.profile.report.channel == "Say")
-		        info.func = function() Skada.db.profile.report.channel = "Say"; Skada.db.profile.report.chantype = "preset" end
-		        UIDropDownMenu_AddButton(info, level)
-
-	            info.text = L["Raid"]
-	            info.checked = (Skada.db.profile.report.channel == "Raid")
-	            info.func = function() Skada.db.profile.report.channel = "Raid"; Skada.db.profile.report.chantype = "preset" end
-	            UIDropDownMenu_AddButton(info, level)
-
-	            info.text = L["Party"]
-	            info.checked = (Skada.db.profile.report.channel == "Party")
-	            info.func = function() Skada.db.profile.report.channel = "Party"; Skada.db.profile.report.chantype = "preset" end
-	            UIDropDownMenu_AddButton(info, level)
-
-	            info.text = L["Instance"]
-	            info.checked = (Skada.db.profile.report.channel == "INSTANCE_CHAT")
-	            info.func = function() Skada.db.profile.report.channel = "INSTANCE_CHAT"; Skada.db.profile.report.chantype = "preset" end
-	            UIDropDownMenu_AddButton(info, level)
-
-	            info.text = L["Guild"]
-	            info.checked = (Skada.db.profile.report.channel == "Guild")
-	            info.func = function() Skada.db.profile.report.channel = "Guild"; Skada.db.profile.report.chantype = "preset" end
-	            UIDropDownMenu_AddButton(info, level)
-
-	            info.text = L["Officer"]
-	            info.checked = (Skada.db.profile.report.channel == "Officer")
-	            info.func = function() Skada.db.profile.report.channel = "Officer"; Skada.db.profile.report.chantype = "preset" end
-	            UIDropDownMenu_AddButton(info, level)
-
-	            info.text = L["Self"]
-	            info.checked = (Skada.db.profile.report.chantype == "self")
-	            info.func = function() Skada.db.profile.report.channel = "Self"; Skada.db.profile.report.chantype = "self" end
-	            UIDropDownMenu_AddButton(info, level)
-
-				info.text = BATTLENET_OPTIONS_LABEL
-				info.checked = (Skada.db.profile.report.chantype == "bnet")
-				info.func = function() Skada.db.profile.report.channel = "bnet"; Skada.db.profile.report.chantype = "bnet" end
-				UIDropDownMenu_AddButton(info, level)
-
-				local list = {GetChannelList()}
-				for i=1,table.getn(list)/2 do
-					info.text = list[i*2]
-					info.checked = (Skada.db.profile.report.channel == list[i*2])
-					info.func = function() Skada.db.profile.report.channel = list[i*2]; Skada.db.profile.report.chantype = "channel" end
-					UIDropDownMenu_AddButton(info, level)
-				end
 
 		    end
 
@@ -538,10 +476,10 @@ function Skada:CreateReportWindow(window)
 		bnet	 	= { BATTLENET_OPTIONS_LABEL, "bnet", true},
 	}
 	local list = {GetChannelList()}
-	for i=1,#list/2 do
-		local chan = list[i*2]
+	for i=1,#list,3 do
+		local chan = list[i+1]
 		if chan ~= "Trade" and chan ~= "General" and chan ~= "LookingForGroup" then -- These should be localized.
-			channellist[chan] = {chan, "channel"}
+			channellist[chan] = {("%d: %s"):format(list[i], chan), "channel"}
 		end
 	end
 
@@ -561,7 +499,7 @@ function Skada:CreateReportWindow(window)
 				if channellist[origchan][3] ~= channellist[value][3] then
 					-- redraw in-place to add/remove whisper widget
 					local pos = { frame:GetPoint() }
-					destroywindow() 
+					destroywindow()
 					Skada:CreateReportWindow(window)
 					Skada.ReportWindow:SetPoint(unpack(pos))
 				end
@@ -580,7 +518,7 @@ function Skada:CreateReportWindow(window)
 		local whisperbox = AceGUI:Create("EditBox")
 		whisperbox:SetLabel(L["Whisper Target"])
 		whisperbox:SetText(Skada.db.profile.report.target or "")
-		whisperbox:SetCallback("OnEnterPressed", function(box, event, text) 
+		whisperbox:SetCallback("OnEnterPressed", function(box, event, text)
 			if strlenutf8(text) == #text then -- remove spaces which are always non-meaningful and can sometimes cause problems
 				local ntext = text:gsub("%s","")
 				if ntext ~= text then
@@ -588,8 +526,8 @@ function Skada:CreateReportWindow(window)
 					whisperbox:SetText(text)
 				end
 			end
-			Skada.db.profile.report.target = text; 
-			frame.button.frame:Click() 
+			Skada.db.profile.report.target = text;
+			frame.button.frame:Click()
 		end)
 		whisperbox:SetCallback("OnTextChanged", function(box, event, text) Skada.db.profile.report.target = text end)
 		whisperbox:SetFullWidth(true)
