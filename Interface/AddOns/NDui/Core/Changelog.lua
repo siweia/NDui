@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 if DB.Client ~= "zhCN" then return end
 
 local hx = {
-	"更新oUF库文件，",
+	"更新oUF库文件；",
 	"AuroraClassic部分模块更新；",
 	"更新去除迷雾的地图库；",
 	"更新插件屏蔽列表；",
