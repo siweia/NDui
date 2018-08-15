@@ -18,6 +18,10 @@ local framesToDisable = {
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
 }
 
+local frameToIgnore = {
+	MainMenuBar, PetActionBarFrame
+}
+
 local function DisableAllScripts(frame)
 	for _, script in next, scripts do
 		if frame:HasScript(script) then
@@ -27,6 +31,11 @@ local function DisableAllScripts(frame)
 end
 
 function Bar:HideBlizz()
+	for _, frame in next, frameToIgnore do
+		frame.ignoreFramePositionManager = true
+		frame:SetAttribute("ignoreFramePositionManager", true)
+	end
+
 	for _, frame in next, framesToHide do
 		frame:SetParent(B.HiddenFrame)
 	end
