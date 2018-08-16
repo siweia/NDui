@@ -443,7 +443,7 @@ local function postUpdateGapIcon(_, _, icon)
 	end
 end
 
-local function customFilter(element, unit, button, name, _, _, _, _, _, caster, _, _, spellID, _, _, _, nameplateShowAll)
+local function customFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 	if name and spellID == 209859 then
 		element.bolster = element.bolster + 1
@@ -460,6 +460,8 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 	elseif style == "nameplate" then
 		if UnitIsUnit("player", unit) then
 			return false
+		elseif element.showStealableBuffs and isStealable then
+			return true
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
 		elseif C.BlackList and C.BlackList[spellID] then
