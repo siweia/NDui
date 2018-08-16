@@ -120,7 +120,7 @@ local defaultSettings = {
 		ShowUnitPower = true,
 		ShowPowerList = "",
 		VerticalSpacing = .7,
-		ShowPlayerPlate = false,
+		ShowPlayerPlate = true,
 	},
 	Skins = {
 		DBM = true,
