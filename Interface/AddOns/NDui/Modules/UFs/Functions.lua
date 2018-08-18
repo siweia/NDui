@@ -132,7 +132,7 @@ function UF:CreatePowerBar(self)
 	local power = CreateFrame("StatusBar", nil, self)
 	power:SetStatusBarTexture(DB.normTex)
 	if self.mystyle == "PlayerPlate" then
-		power:SetHeight(self:GetHeight())
+		power:SetHeight(5)
 	else
 		power:SetHeight(retVal(self, 4, 3, 2, 4))
 	end
@@ -460,12 +460,12 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 	elseif style == "nameplate" then
 		if UnitIsUnit("player", unit) then
 			return false
-		elseif element.showStealableBuffs and isStealable then
+		elseif C.BlackList and C.BlackList[spellID] then
+			return false
+		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
 			return true
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
-		elseif C.BlackList and C.BlackList[spellID] then
-			return false
 		else
 			return (NDuiDB["Nameplate"]["AllAuras"] and nameplateShowAll) or (caster == "player" or caster == "pet" or caster == "vehicle")
 		end
@@ -628,7 +628,7 @@ end
 
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
-		width, height = self:GetWidth(), self:GetHeight()*2 + 3
+		width, height = self:GetWidth(), 13
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 
