@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Skins.lua"/>
-	<Script file="FontStyle.lua"/>
 	<Script file="MicroMenu.lua"/>
 	<Script file="ObjectiveTracker.lua"/>
 	<Script file="RaidManager.lua"/>

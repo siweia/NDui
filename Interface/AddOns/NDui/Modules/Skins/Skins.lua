@@ -112,7 +112,6 @@ function module:OnLogin()
 	-- Add Skins
 	self:MicroMenu()
 	self:CreateRM()
-	self:FontStyle()
 	self:QuestTracker()
 	self:PetBattleUI()
 
