@@ -293,4 +293,33 @@ C.themes["Blizzard_GuildUI"] = function()
 			end
 		end
 	end)
+
+	-- Font width fix
+	local function updateLevelString(view)
+		if view == "playerStatus" or view == "reputation" or view == "achievement" then
+			local buttons = GuildRosterContainer.buttons
+			for i = 1, #buttons do
+				local str = _G["GuildRosterContainerButton"..i.."String1"]
+				str:SetWidth(32)
+				str:SetJustifyH("LEFT")
+			end
+
+			if view == "achievement" then
+				for i = 1, #buttons do
+					local str = _G["GuildRosterContainerButton"..i.."BarLabel"]
+					str:SetWidth(60)
+					str:SetJustifyH("LEFT")
+				end
+			end
+		end
+	end
+
+	local done
+	GuildRosterContainer:HookScript("OnShow", function()
+		if not done then
+			updateLevelString(GetCVar("guildRosterView"))
+			done = true
+		end
+	end)
+	hooksecurefunc("GuildRoster_SetView", updateLevelString)
 end
