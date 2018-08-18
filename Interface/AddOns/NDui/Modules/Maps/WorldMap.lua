@@ -34,9 +34,13 @@ function module:OnLogin()
 		if InCombatLockdown() then return end
 		self:SetScale(1)
 	end)
-	-- cursor fix, need reviewed
+
 	if NDuiDB["Map"]["MapScale"] > 1 then
-		RunScript("WorldMapFrame.ScrollContainer.GetCursorPosition=function(f) local x,y=MapCanvasScrollControllerMixin.GetCursorPosition(f);local s=WorldMapFrame:GetScale();return x/s,y/s;end")
+		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+			local s = WorldMapFrame:GetScale()
+			return x/s, y/s
+		end
 	end
 
 	-- Generate Coords
