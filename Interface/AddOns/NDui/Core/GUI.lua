@@ -55,7 +55,7 @@ local defaultSettings = {
 		AutoRes = true,
 		NumGroups = 6,
 		SimpleMode = false,
-		Dispellable = true,
+		Dispellable = false,
 		InstanceAuras = true,
 		DebuffBorder = true,
 		SpecRaidPos = false,
@@ -120,7 +120,8 @@ local defaultSettings = {
 		ShowUnitPower = true,
 		ShowPowerList = "",
 		VerticalSpacing = .7,
-		ShowPlayerPlate = true,
+		ShowPlayerPlate = false,
+		PPHeight = 5,
 	},
 	Skins = {
 		DBM = true,
@@ -132,7 +133,6 @@ local defaultSettings = {
 		DBMCount = "10",
 		EasyMarking = true,
 		TMW = true,
-		FontFlag = true,
 		PetBattle = true,
 		TrackerSkin = true,
 		ExtraCD = true,
@@ -344,6 +344,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
+		{3, "Nameplate", "PPHeight", L["PlayerPlate Height"], false, {5, 15, 0}},
 	},
 	[7] = {
 		{1, "Skins", "RM", L["Raid Manger"]},
@@ -403,9 +404,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "ClassLine", L["ClassColor Line"]},
 		{},--blank
 		{1, "Skins", "MicroMenu", L["Micromenu"]},
-		{1, "Skins", "FontFlag", L["Global FontStyle"], true},
-		{1, "Skins", "PetBattle", L["PetBattle Skin"]},
 		{1, "Skins", "TrackerSkin", L["ObjectiveTracker Skin"], true},
+		{1, "Skins", "PetBattle", L["PetBattle Skin"]},
 		{},--blank
 		{1, "Skins", "DBM", L["DBM Skin"]},
 		{1, "Skins", "Skada", L["Skada Skin"], true},
