@@ -42,6 +42,7 @@
 	<Script file="Blizzard_RaidUI.lua"/>
 	<Script file="Blizzard_ScrappingMachineUI.lua"/>
 	<Script file="Blizzard_TalentUI.lua"/>
+	<Script file="Blizzard_TalkingHeadUI.lua"/>
 	<Script file="Blizzard_TimeManager.lua"/>
 	<Script file="Blizzard_TokenUI.lua"/>
 	<Script file="Blizzard_TradeSkillUI.lua"/>
