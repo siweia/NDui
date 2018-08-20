@@ -152,13 +152,6 @@ local function CreateRaidStyle(self)
 	if not NDuiDB["UFs"]["SimpleMode"] then UF:CreateAuras(self) end
 end
 
-oUF:RegisterStyle("Player", CreatePlayerStyle)
-oUF:RegisterStyle("Target", CreateTargetStyle)
-oUF:RegisterStyle("ToT", CreateToTStyle)
-oUF:RegisterStyle("Focus", CreateFocusStyle)
-oUF:RegisterStyle("FocusTarget", CreateFocusTargetStyle)
-oUF:RegisterStyle("Pet", CreatePetStyle)
-
 -- Spawns
 function UF:OnLogin()
 	if NDuiDB["Nameplate"]["Enable"] then
@@ -183,6 +176,15 @@ function UF:OnLogin()
 	self:DefaultClickSets()
 
 	if NDuiDB["UFs"]["Enable"] then
+		-- Register
+		oUF:RegisterStyle("Player", CreatePlayerStyle)
+		oUF:RegisterStyle("Target", CreateTargetStyle)
+		oUF:RegisterStyle("ToT", CreateToTStyle)
+		oUF:RegisterStyle("Focus", CreateFocusStyle)
+		oUF:RegisterStyle("FocusTarget", CreateFocusTargetStyle)
+		oUF:RegisterStyle("Pet", CreatePetStyle)
+
+		-- Loader
 		oUF:SetActiveStyle("Player")
 		local player = oUF:Spawn("player", "oUF_Player")
 		B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos, 245, 30)
