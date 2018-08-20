@@ -50,6 +50,7 @@ local list = {
 		{AuraID = 271049, UnitID = "target", Caster = "player"},	-- 动荡炸弹
 		{AuraID = 270332, UnitID = "target", Caster = "player"},	-- 信息素炸弹
 		{AuraID = 259277, UnitID = "target", Caster = "pet"},		-- 杀戮命令
+		{AuraID = 277959, UnitID = "target", Caster = "player"},	-- 稳固瞄准
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 19574, UnitID = "player"},	-- 狂野怒火

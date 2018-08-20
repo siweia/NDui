@@ -49,7 +49,9 @@ local list = {
 		{AuraID = 20572, UnitID = "player"},	-- 血性狂怒 兽人
 		{AuraID = 33697, UnitID = "player"},	-- 血性狂怒 兽人
 		-- 饰品附魔
+		{AuraID = 275765, UnitID = "player"},	-- 艾泽里特强化
 		{AuraID = 271194, UnitID = "player"},	-- 火炮
+		{AuraID = 273992, UnitID = "player"},	-- 灵魂之速
 		-- 艾泽里特特质
 		{AuraID = 273685, UnitID = "player"},	-- 缜密计谋
 		{AuraID = 273714, UnitID = "player"},	-- 争分夺秒
@@ -61,7 +63,7 @@ local list = {
 		{AuraID = 268956, UnitID = "player", Text = RAID_BUFF_8},	-- 全能
 		{AuraID = 280780, UnitID = "player"},	-- 战斗荣耀
 		{AuraID = 280787, UnitID = "player"},	-- 反击之怒
-		{AuraID = 279928, UnitID = "player"},	-- 大地链接
+		{AuraID = 279928, UnitID = "player", Combat = true},	-- 大地链接
 		{AuraID = 280385, UnitID = "player"},	-- 压力渐增
 		{AuraID = 273842, UnitID = "player"},	-- 深渊秘密
 		{AuraID = 273843, UnitID = "player"},	-- 深渊秘密
