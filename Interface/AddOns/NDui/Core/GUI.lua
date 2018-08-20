@@ -122,6 +122,7 @@ local defaultSettings = {
 		VerticalSpacing = .7,
 		ShowPlayerPlate = false,
 		PPHeight = 5,
+		PPPHeight = 5,
 	},
 	Skins = {
 		DBM = true,
@@ -242,7 +243,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"]},
 		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"]},
-		{4, "Actionbar", "Style", L["Actionbar Style"], true, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"]}},
+		{4, "Actionbar", "Style", L["Actionbar Style"], true, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
 		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"]},
 		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
@@ -344,7 +345,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
-		{3, "Nameplate", "PPHeight", L["PlayerPlate Height"], false, {5, 15, 0}},
+		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"], false, {5, 13, 0}},
+		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"], true, {5, 13, 0}},
 	},
 	[7] = {
 		{1, "Skins", "RM", L["Raid Manger"]},
