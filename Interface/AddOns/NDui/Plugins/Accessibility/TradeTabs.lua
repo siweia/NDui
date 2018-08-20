@@ -20,6 +20,7 @@ local whitelist = {
 	[197] = true, -- Tailoring
 	[182] = true, -- Herbalism
 	[393] = true, -- Skinning
+	[356] = true, -- Fishing
 }
 
 local onlyPrimary = {
@@ -27,6 +28,7 @@ local onlyPrimary = {
 	[202] = true, -- Engineering
 	[182] = true, -- Herbalism
 	[393] = true, -- Skinning
+	[356] = true, -- Fishing
 }
 
 local RUNEFORGING = 53428 -- Runeforging spellid
@@ -47,8 +49,8 @@ function TradeTabs:OnEvent(event, addon)
 end
 
 local function buildSpellList()
-	local p1, p2, _, _, cooking, firstaid = GetProfessions()
-	local profs = {p1, p2, cooking, firstaid}
+	local p1, p2, _, fishing, cooking = GetProfessions()
+	local profs = {p1, p2, cooking, fishing}
 	local tradeSpells = {}
 	local extras = 0
 
