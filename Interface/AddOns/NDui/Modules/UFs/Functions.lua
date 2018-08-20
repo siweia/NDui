@@ -132,7 +132,7 @@ function UF:CreatePowerBar(self)
 	local power = CreateFrame("StatusBar", nil, self)
 	power:SetStatusBarTexture(DB.normTex)
 	if self.mystyle == "PlayerPlate" then
-		power:SetHeight(5)
+		power:SetHeight(NDuiDB["Nameplate"]["PPPHeight"])
 	else
 		power:SetHeight(retVal(self, 4, 3, 2, 4))
 	end
