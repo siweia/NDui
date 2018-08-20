@@ -106,7 +106,7 @@ local function CreateConsole()
 	end)
 	-- Grids
 	bu[3]:SetScript("OnClick", function()
-		SlashCmdList["TOGGLEGRID"]("32")
+		SlashCmdList["TOGGLEGRID"]("64")
 	end)
 	-- Reset
 	bu[4]:SetScript("OnClick", function()
