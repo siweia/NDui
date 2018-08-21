@@ -6,16 +6,27 @@ tinsert(C.themes["AuroraClassic"], function()
 	if not AuroraConfig.tooltips then return end
 
 	local tooltips = {
-		GameTooltip,
-		ItemRefTooltip,
-		ShoppingTooltip1,
-		ShoppingTooltip2,
-		WorldMapTooltip,
 		ChatMenu,
 		EmoteMenu,
 		LanguageMenu,
 		VoiceMacroMenu,
+		GameTooltip,
+		EmbeddedItemTooltip,
+		ItemRefTooltip,
+		ItemRefShoppingTooltip1,
+		ItemRefShoppingTooltip2,
+		ShoppingTooltip1,
+		ShoppingTooltip2,
+		AutoCompleteBox,
+		FriendsTooltip,
+		WorldMapTooltip,
+		WorldMapCompareTooltip1,
+		WorldMapCompareTooltip2,
+		QuestScrollFrame.StoryTooltip,
+		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
+		QuestScrollFrame.WarCampaignTooltip,
+		NamePlateTooltip,
 	}
 
 	local backdrop = {
