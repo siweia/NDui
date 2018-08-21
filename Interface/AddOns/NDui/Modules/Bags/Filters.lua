@@ -26,7 +26,7 @@ function module:GetFilters()
 	local function isAzeriteArmor(item)
 		if not NDuiDB["Bags"]["ItemFilter"] then return end
 		if not item.link then return end
-		return C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link)
+		return C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) and not (NDuiDB["Bags"]["ItemSetFilter"] and item.isInSet)
 	end
 
 	local function isItemEquipment(item)
@@ -49,11 +49,11 @@ function module:GetFilters()
 		return item.rarity == LE_ITEM_QUALITY_LEGENDARY
 	end
 
-	local onlyBags = function(item) return isItemInBag(item) and not isItemEquipment(item) and not isItemConsumble(item) end
+	local onlyBags = function(item) return isItemInBag(item) and not isItemEquipment(item) and not isItemConsumble(item) and not isAzeriteArmor(item) end
 	local bagAzeriteItem = function(item) return isItemInBag(item) and isAzeriteArmor(item) end
 	local bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 	local bagConsumble = function(item) return isItemInBag(item) and isItemConsumble(item) end
-	local onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemConsumble(item) end
+	local onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemConsumble(item) and not isAzeriteArmor(item) end
 	local bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
 	local bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
