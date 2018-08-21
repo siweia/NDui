@@ -12,7 +12,11 @@ tinsert(C.themes["AuroraClassic"], function()
 	ReskinFont(RaidWarningFrame.slot2, 20)
 	ReskinFont(RaidBossEmoteFrame.slot1, 20)
 	ReskinFont(RaidBossEmoteFrame.slot2, 20)
-	ReskinFont(AchievementFont_Small, 10)
+	if GetLocale() == "zhTW" then
+		ReskinFont(AchievementFont_Small, 14)
+	else
+		ReskinFont(AchievementFont_Small, 12)
+	end
 	ReskinFont(CoreAbilityFont, 32)
 	ReskinFont(DestinyFontHuge, 32)
 	ReskinFont(DestinyFontLarge, 18)
