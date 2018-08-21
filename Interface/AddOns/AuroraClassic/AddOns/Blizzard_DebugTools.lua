@@ -25,7 +25,7 @@ C.themes["Blizzard_DebugTools"] = function()
 	bu.bg:SetPoint("TOPLEFT", bu, 0, 0)
 	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 0)
 	F.CreateBD(bu.bg, 0)
-	F.CreateGradient(bu.bg) 
+	F.CreateGradient(bu.bg)
 
 	EventTraceTooltip:SetParent(UIParent)
 	EventTraceTooltip:SetFrameStrata("TOOLTIP")
