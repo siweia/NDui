@@ -173,6 +173,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local function onShowFollower(followerList)
 		local self = followerList.followerTab
 		local abilities = self.AbilitiesFrame.Abilities
+		if not abilities then return end
 		if not self.numAbilitiesStyled then self.numAbilitiesStyled = 1 end
 
 		local numAbilitiesStyled = self.numAbilitiesStyled

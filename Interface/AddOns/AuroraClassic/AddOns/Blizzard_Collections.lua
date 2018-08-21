@@ -105,20 +105,22 @@ C.themes["Blizzard_Collections"] = function()
 		local buttons = MountJournal.ListScrollFrame.buttons
 		for i = 1, #buttons do
 			local bu = buttons[i]
-			if bu.index ~= nil then
-				bu.bg:Show()
-				bu.icon:Show()
-				bu.icon.bg:Show()
+			if bu.bg then
+				if bu.index ~= nil then
+					bu.bg:Show()
+					bu.icon:Show()
+					bu.icon.bg:Show()
 
-				if bu.selectedTexture:IsShown() then
-					bu.bg:SetBackdropColor(r, g, b, .25)
+					if bu.selectedTexture:IsShown() then
+						bu.bg:SetBackdropColor(r, g, b, .25)
+					else
+						bu.bg:SetBackdropColor(0, 0, 0, .25)
+					end
 				else
-					bu.bg:SetBackdropColor(0, 0, 0, .25)
+					bu.bg:Hide()
+					bu.icon:Hide()
+					bu.icon.bg:Hide()
 				end
-			else
-				bu.bg:Hide()
-				bu.icon:Hide()
-				bu.icon.bg:Hide()
 			end
 		end
 	end
