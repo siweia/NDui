@@ -154,6 +154,19 @@ info.onEnter = function(self)
 		GameTooltip:AddDoubleLine(bonusname, count.." / 3", 1,1,1, r,g,b)
 	end
 
+	local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
+	if iwqID and UnitLevel("player") == 120 then
+		addTitle(QUESTS_LABEL)
+		if IsQuestFlaggedCompleted(iwqID) then
+			GameTooltip:AddDoubleLine(ISLANDS_HEADER, QUEST_COMPLETE, 1,1,1, 1,0,0)
+		else
+			local cur, max = select(4, GetQuestObjectiveInfo(iwqID, 1, false))
+			local stautsText = cur.." / "..max
+			if not cur or not max then stautsText = LFG_LIST_LOADING end
+			GameTooltip:AddDoubleLine(ISLANDS_HEADER, stautsText, 1,1,1, 0,1,0)
+		end
+	end
+
 	for _, index in pairs(questlist) do
 		if index.name and IsQuestFlaggedCompleted(index.id) then
 			addTitle(QUESTS_LABEL)
