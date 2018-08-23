@@ -50,9 +50,9 @@ local CustomUnits = {
 	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
 	[GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
 	[GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
-	["Spawn of G'huun"] = true,
-	["戈霍恩之嗣"] = true,
-	["古翰幼體"] = true,
+	--["Spawn of G'huun"] = true,
+	--["戈霍恩之嗣"] = true,
+	--["古翰幼體"] = true,
 	["爆炸物"] = true,
 	["炸彈"] = true,
 }
@@ -303,6 +303,13 @@ function UF:CreatePlayerPlate()
 	UF:CreatePowerBar(self)
 	UF:CreateClassPower(self)
 	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
+
+	if NDuiDB["Nameplate"]["PPPowerText"] then
+		local textFrame = CreateFrame("Frame", nil, self.Power)
+		textFrame:SetAllPoints()
+		local power = B.CreateFS(textFrame, 14, "")
+		self:Tag(power, "[pppower]")
+	end
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility)
