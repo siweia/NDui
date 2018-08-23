@@ -37,6 +37,7 @@ local defaultSettings = {
 	AuraWatch = {
 		Enable = true,
 		ClickThrough = false,
+		IconScale = 1,
 	},
 	UFs = {
 		Enable = true,
@@ -73,6 +74,7 @@ local defaultSettings = {
 		ShowTeamIndex = false,
 		SortRunes = true,
 		AddPower = true,
+		HeightScale = 1,
 	},
 	Chat = {
 		Sticky = false,
@@ -123,6 +125,7 @@ local defaultSettings = {
 		ShowPlayerPlate = false,
 		PPHeight = 5,
 		PPPHeight = 5,
+		PPPowerText = false,
 	},
 	Skins = {
 		DBM = true,
@@ -239,7 +242,7 @@ local tabList = {
 
 local optionList = {		-- type, key, value, name, horizon, doubleline
 	[1] = {
-		{1, "Actionbar", "Enable", L["Enable Actionbar"]},
+		{1, "Actionbar", "Enable", "|cff00cc4c"..L["Enable Actionbar"]},
 		{},--blank
 		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"]},
 		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"]},
@@ -254,7 +257,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"], true},
 	},
 	[2] = {
-		{1, "Bags", "Enable", L["Enable Bags"]},
+		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
 		{},--blank
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
 		{1, "Bags", "Artifact", L["Bags Artifact"], true},
@@ -268,7 +271,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "Bags", "BankWidth", L["Bank Width"], true, {10, 20, 0}},
 	},
 	[3] = {
-		{1, "UFs", "Enable", L["Enable UFs"]},
+		{1, "UFs", "Enable", "|cff00cc4c"..L["Enable UFs"]},
 		{},--blank
 		{1, "UFs", "Castbars", L["UFs Castbar"]},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"]},
@@ -283,7 +286,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
 		{1, "UFs", "SortRunes", L["Sort Runes"]},
-		{1, "UFs", "AddPower", L["UFs ExtraMana"], true},
+		{1, "UFs", "AddPower", L["UFs ExtraMana"]},
+		{3, "UFs", "HeightScale", L["UFs HeightScale"], true, {.8, 1.5, 1}},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
 		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
@@ -292,7 +296,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PetCombatText", L["CombatText ShowPets"], true},
 	},
 	[4] = {
-		{1, "UFs", "RaidFrame", L["UFs RaidFrame"]},
+		{1, "UFs", "RaidFrame", "|cff00cc4c"..L["UFs RaidFrame"]},
+		{1, "UFs", "SimpleMode", L["Simple RaidFrame"], true},
 		{},--blank
 		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
@@ -301,7 +306,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
-		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"], true},
 		{},--blank
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "DebuffBorder", L["Auras Border"], true},
@@ -312,7 +316,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 	},
 	[5] = {
-		{1, "Nameplate", "Enable", L["Enable Nameplate"]},
+		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"]},
 		{},--blank
 		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
 		{1, "Nameplate", "AllAuras", L["Show All Auras"], true},
@@ -336,20 +340,22 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"], false, {0, 1, 1}},
 	},
 	[6] = {
-		{1, "AuraWatch", "Enable", L["Enable AuraWatch"]},
+		{1, "AuraWatch", "Enable", "|cff00cc4c"..L["Enable AuraWatch"]},
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"]},
+		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], false, {.8, 2, 1}},
 		{},--blank
 		{1, "Auras", "Statue", L["Enable Statue"]},
 		{1, "Auras", "Totems", L["Enable Totems"], true},
 		{1, "Auras", "Reminder", L["Enable Reminder"]},
 		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
-		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
-		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"], false, {5, 13, 0}},
-		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"], true, {5, 13, 0}},
+		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
+		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"], true},
+		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"], false, {5, 15, 0}},
+		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"], true, {5, 15, 0}},
 	},
 	[7] = {
-		{1, "Skins", "RM", L["Raid Manger"]},
+		{1, "Skins", "RM", "|cff00cc4c"..L["Raid Manger"]},
 		{1, "Skins", "RMRune", L["Runes Check"]},
 		{1, "Skins", "EasyMarking", L["Easy Mark"]},
 		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
@@ -755,7 +761,7 @@ local function OpenGUI()
 
 	-- Toggle AuraWatch Console
 	local aura = B.CreateButton(guiPage[6], 150, 30, L["Add AuraWatch"])
-	aura:SetPoint("TOPLEFT", 340, -50)
+	aura:SetPoint("TOPLEFT", 340, -100)
 	aura.text:SetTextColor(1, .8, 0)
 	aura:SetScript("OnClick", function()
 		f:Hide()
