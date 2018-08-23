@@ -105,6 +105,15 @@ function module:OnLogin()
 		elseif self.timer then
 			Timer_Stop(self.timer)
 		end
+
+		-- hide cooldown flash if not visible
+		local parent = self:GetParent()
+		if parent and parent.isAuraWatch then return end
+		if self:GetEffectiveAlpha() > 0 then
+			self:Show()
+		else
+			self:Hide()
+		end
 	end
 
 	local function hideCooldownNumbers(self, hide)
