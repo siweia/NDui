@@ -72,8 +72,6 @@ local defaultSettings = {
 		PetCombatText = true,
 		RaidClickSets = false,
 		ShowTeamIndex = false,
-		SortRunes = true,
-		AddPower = true,
 		HeightScale = 1,
 	},
 	Chat = {
@@ -180,10 +178,7 @@ local defaultSettings = {
 		HideTalking = true,
 		HideBanner = true,
 		PetFilter = true,
-		ReflectingAlert = false,
 		SwapingAlert = false,
-		SistersAlert = false,
-		AntoranBlast = false,
 		QuestNotifier = false,
 		QuestProgress = false,
 	},
@@ -284,9 +279,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ClassColor", L["Classcolor HpBar"]},
 		{1, "UFs", "SmoothColor", L["Smoothcolor HpBar"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
-		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
-		{1, "UFs", "SortRunes", L["Sort Runes"]},
-		{1, "UFs", "AddPower", L["UFs ExtraMana"]},
+		{1, "UFs", "ToTAuras", L["ToT Debuff"]},
 		{3, "UFs", "HeightScale", L["UFs HeightScale"], true, {.8, 1.5, 1}},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
@@ -370,11 +363,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"], true},
-		{1, "Misc", "ReflectingAlert", L["Reflecting Alert"]},
-		{1, "Misc", "SwapingAlert", L["Swaping Alert"], true},
-		{},--blank
-		{1, "Misc", "SistersAlert", L["SistersAlert Alert"]},
-		{1, "Misc", "AntoranBlast", L["AntoranBlast Alert"], true},
+		{1, "Misc", "SwapingAlert", L["Swaping Alert"]},
 	},
 	[8] = {
 		{1, "Chat", "Lock", L["Lock Chat"]},
@@ -579,7 +568,6 @@ local function CreateOption(i)
 			_G[s:GetName().."Text"]:SetPoint("TOP", s, "BOTTOM", 0, 3)
 			_G[s:GetName().."Text"]:SetText(format("%."..step.."f", NDuiDB[key][value]))
 			s:SetBackdrop(nil)
-			s.SetBackdrop = B.Dummy
 			local bd = CreateFrame("Frame", nil, s)
 			bd:SetPoint("TOPLEFT", 14, -2)
 			bd:SetPoint("BOTTOMRIGHT", -15, 3)

@@ -662,7 +662,7 @@ function UF:CreateClassPower(self)
 
 	if DB.MyClass == "DEATHKNIGHT" then
 		bars.colorSpec = true
-		if NDuiDB["UFs"]["SortRunes"] then bars.sortOrder = "asc" end
+		bars.sortOrder = "asc"
 		bars.PostUpdate = postUpdateRunes
 		self.Runes = bars
 	else
