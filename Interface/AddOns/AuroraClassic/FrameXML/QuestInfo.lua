@@ -113,10 +113,13 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	restyleRewardButton(QuestInfoSkillPointFrame)
 	MapQuestInfoRewardsFrame.XPFrame.Name:SetShadowOffset(0, 0)
 	for _, name in next, {"HonorFrame", "MoneyFrame", "SkillPointFrame", "XPFrame", "ArtifactXPFrame", "TitleFrame"} do
 		restyleRewardButton(MapQuestInfoRewardsFrame[name], true)
+	end
+
+	for _, name in next, {"HonorFrame", "SkillPointFrame", "ArtifactXPFrame"} do
+		restyleRewardButton(QuestInfoRewardsFrame[name])
 	end
 
 	-- Spell Rewards
@@ -149,6 +152,37 @@ tinsert(C.themes["AuroraClassic"], function()
 		bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)
 		bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 220, -1)
 	end
+
+	-- Follower Rewards
+	hooksecurefunc("QuestInfo_Display", function()
+        local rewardsFrame = QuestInfoFrame.rewardsFrame
+        local isQuestLog = QuestInfoFrame.questLog ~= nil
+        local isMapQuest = rewardsFrame == MapQuestInfoRewardsFrame
+		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
+
+		if numSpellRewards > 0 then
+			for reward in rewardsFrame.followerRewardPool:EnumerateActive() do
+				local portrait = reward.PortraitFrame
+				if not reward.styled then
+					portrait:ClearAllPoints()
+					portrait:SetPoint("TOPLEFT", 2, -5)
+					F.ReskinGarrisonPortrait(portrait)
+
+					reward.BG:Hide()
+					local bg = F.CreateBDFrame(reward, .25)
+					bg:SetPoint("TOPLEFT", 0, -3)
+					bg:SetPoint("BOTTOMRIGHT", 2, 7)
+
+					reward.styled = true
+				end
+
+				if portrait then
+					local color = BAG_ITEM_QUALITY_COLORS[portrait.quality or 1]
+					portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end)
 
 	-- [[ Change text colours ]]
 
