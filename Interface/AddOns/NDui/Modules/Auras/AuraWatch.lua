@@ -160,6 +160,8 @@ end
 -----> STYLED CODE START
 -- BuildICON
 local function BuildICON(iconSize)
+	iconSize = iconSize * NDuiDB["AuraWatch"]["IconScale"]
+
 	local Frame = CreateFrame("Frame", nil, UIParent)
 	Frame:SetSize(iconSize, iconSize)
 	B.CreateSD(Frame, 3, 3)
@@ -202,6 +204,7 @@ local function BuildICON(iconSize)
 		Frame:SetScript("OnLeave", GameTooltip_Hide)
 	end
 
+	Frame.isAuraWatch = true
 	Frame:Hide()
 	return Frame
 end
@@ -252,6 +255,7 @@ local function BuildBAR(barWidth, iconSize)
 		Frame:SetScript("OnLeave", GameTooltip_Hide)
 	end
 
+	Frame.isAuraWatch = true
 	Frame:Hide()
 	return Frame
 end
