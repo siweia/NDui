@@ -6,7 +6,7 @@ local UF = B:GetModule("UnitFrames")
 -- Units
 local function CreatePlayerStyle(self)
 	self.mystyle = "player"
-	self:SetSize(245, 24)
+	self:SetSize(245, 24*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -30,7 +30,7 @@ end
 
 local function CreateTargetStyle(self)
 	self.mystyle = "target"
-	self:SetSize(245, 24)
+	self:SetSize(245, 24*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -48,7 +48,7 @@ end
 
 local function CreateFocusStyle(self)
 	self.mystyle = "focus"
-	self:SetSize(200, 22)
+	self:SetSize(200, 22*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -65,7 +65,7 @@ end
 
 local function CreateToTStyle(self)
 	self.mystyle = "tot"
-	self:SetSize(120, 18)
+	self:SetSize(120, 18*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -78,7 +78,7 @@ end
 
 local function CreateFocusTargetStyle(self)
 	self.mystyle = "focustarget"
-	self:SetSize(120, 18)
+	self:SetSize(120, 18*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -89,7 +89,7 @@ end
 
 local function CreatePetStyle(self)
 	self.mystyle = "pet"
-	self:SetSize(120, 18)
+	self:SetSize(120, 18*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -101,7 +101,7 @@ end
 
 local function CreateBossStyle(self)
 	self.mystyle = "boss"
-	self:SetSize(150, 22)
+	self:SetSize(150, 22*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -117,7 +117,7 @@ end
 
 local function CreateArenaStyle(self)
 	self.mystyle = "arena"
-	self:SetSize(150, 22)
+	self:SetSize(150, 22*NDuiDB["UFs"]["HeightScale"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
