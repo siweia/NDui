@@ -10,8 +10,8 @@ local groups = {
 	["Focus Aura"] = {"RIGHT", 5, "ICON", 35, C.Auras.FocusPos},
 	["Spell Cooldown"] = {"UP", 5, "BAR", 18, C.Auras.CDPos, 150},
 	["Enchant Aura"] = {"LEFT", 5, "ICON", 36, C.Auras.EnchantPos},
-	["Raid Buff"] = {"LEFT", 5, "ICON", 45, C.Auras.RaidBuffPos},
-	["Raid Debuff"] = {"RIGHT", 5, "ICON", 45, C.Auras.RaidDebuffPos},
+	["Raid Buff"] = {"LEFT", 5, "ICON", 42, C.Auras.RaidBuffPos},
+	["Raid Debuff"] = {"RIGHT", 5, "ICON", 42, C.Auras.RaidDebuffPos},
 	["Warning"] = {"RIGHT", 5, "ICON", 42, C.Auras.WarningPos},
 	["InternalCD"] = {"UP", 5, "BAR", 18, C.Auras.InternalPos, 150},
 }
