@@ -52,6 +52,9 @@ local list = {
 		{AuraID = 275765, UnitID = "player"},	-- 艾泽里特强化
 		{AuraID = 271194, UnitID = "player"},	-- 火炮
 		{AuraID = 273992, UnitID = "player"},	-- 灵魂之速
+		{AuraID = 273955, UnitID = "player"},	-- 望远镜视野
+		{AuraID = 261612, UnitID = "player"},	-- 迅击风暴
+		{AuraID = 264957, UnitID = "player"},	-- 急速瞄准镜
 		-- 艾泽里特特质
 		{AuraID = 273685, UnitID = "player"},	-- 缜密计谋
 		{AuraID = 273714, UnitID = "player"},	-- 争分夺秒
