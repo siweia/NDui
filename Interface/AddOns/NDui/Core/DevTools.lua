@@ -84,6 +84,12 @@ SlashCmdList["NDUI_GETFONT"] = function(msg)
 end
 SLASH_NDUI_GETFONT1 = "/nff"
 
+SlashCmdList["NDUI_CHECK_QUEST"] = function(msg)
+	if not msg then return end
+	print("QuestID "..msg.." complete:", IsQuestFlaggedCompleted(tonumber(msg)))
+end
+SLASH_NDUI_CHECK_QUEST1 = "/ncq"
+
 SlashCmdList["NDUI_DEV"] = function()
 	UIParentLoadAddOn("Blizzard_Console")
 	DeveloperConsole:Toggle()
