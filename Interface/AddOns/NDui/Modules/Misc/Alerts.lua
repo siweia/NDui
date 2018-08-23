@@ -6,12 +6,8 @@ function module:AddAlerts()
 	self:SoloInfo()
 	self:RareAlert()
 	self:InterruptAlert()
-	self:BeamTool()
-	self:ReflectingAlert()
 	self:SwappingAlert()
 	self:VersionCheck()
-	self:SistersAlert()
-	self:AntoranBlast()
 end
 
 --[[
@@ -127,76 +123,6 @@ function module:InterruptAlert()
 end
 
 --[[
-	向左走向右走
-	克洛苏斯给没脑子的助手
-]]
-function module:BeamTool()
-	local f
-	local function KrosusGo()
-		if f then f:Show() return end
-		f = CreateFrame("Frame", "NDui_BeamTool", UIParent)
-		f:SetSize(100, 100)
-		f:SetPoint("BOTTOMRIGHT", -350, 50)
-		B.CreateBD(f)
-		B.CreateTex(f)
-		B.CreateMF(f)
-		B.CreateFS(f, 14, "First Beam:", false, "TOP", 0, -5)
-		f.text = B.CreateFS(f, 20, "", false, "TOP", 0, -25)
-
-		local close = CreateFrame("Button", nil, f)
-		close:SetPoint("BOTTOM")
-		close:SetSize(20, 20)
-		B.CreateFS(close, 14, "X")
-		B.AddTooltip(close, "ANCHOR_TOP", CLOSE, "system")
-		close:SetScript("OnClick", function()
-			f:Hide()
-			f.text:SetText("")
-		end)
-
-		local function CreateBu(anchor, text)
-			local bu = B.CreateButton(f, 40, 40, text, 20)
-			bu:SetPoint(anchor)
-			bu:SetScript("OnClick", function()
-				f.text:SetText(text)
-				if text == "左" then
-					if DBMUpdateKrosusBeam then DBMUpdateKrosusBeam(true) end
-					if BigWigsKrosusFirstBeamWasLeft then BigWigsKrosusFirstBeamWasLeft(true) end
-					print("First beam on LEFT")
-				else
-					if DBMUpdateKrosusBeam then DBMUpdateKrosusBeam(false) end
-					if BigWigsKrosusFirstBeamWasLeft then BigWigsKrosusFirstBeamWasLeft(false) end
-					print("First beam on RIGHT")
-				end
-			end)
-		end
-		CreateBu("BOTTOMLEFT", "左")
-		CreateBu("BOTTOMRIGHT", "右")
-	end
-
-	SlashCmdList["NDUI_BEAMTOOL"] = function() KrosusGo() end
-	SLASH_NDUI_BEAMTOOL1 = "/kro"
-end
-
---[[
-	骂那些用反光棱镜的臭傻逼
-]]
-function module:ReflectingAlert()
-	if not NDuiDB["Misc"]["ReflectingAlert"] then return end
-
-	local name, itemLink = GetItemInfo(112384)
-	local function updateAlert(_, unit, _, spell)
-		if not IsInGroup() then return end
-		if spell ~= 163219 then return end
-		if unit:match("raid") or unit:match("party") and not UnitInRaid(unit) then
-			local unitName = GetUnitName(unit)
-			SendChatMessage(format(L["Reflecting Prism"], unitName, itemLink or name or ""), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
-		end
-	end
-
-	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", updateAlert)
-end
-
---[[
 	工程移形换影装置使用通报
 ]]
 function module:SwappingAlert()
@@ -266,65 +192,4 @@ function module:VersionCheck()
 	B:RegisterEvent("CHAT_MSG_ADDON", UpdateVersionCheck)
 	C_ChatInfo.RegisterAddonMessagePrefix("NDuiVersionCheck")
 	C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
-end
-
---[[
-	通报M月之姐妹的星界易伤情况
-]]
-function module:SistersAlert()
-	if not NDuiDB["Misc"]["SistersAlert"] then return end
-
-	local data = {}
-	local tarSpell = 236330
-	local tarSpellName = GetSpellInfo(tarSpell)
-	local myID = UnitGUID("player")
-
-	local function updateAlert(_, ...)
-		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
-
-		local _, eventType, _, _, sourceName, _, _, destGUID, _, _, _, spellID = ...
-		if eventType == "SPELL_DAMAGE" and spellID == 234998 and destGUID == myID then
-			local name, _, count = UnitDebuff("player", tarSpellName)
-			if not name then return end
-			if not data[sourceName] then data[sourceName] = {} end
-			if count == 0 then count = 1 end
-			tinsert(data[sourceName], count)
-		elseif eventType == "SPELL_AURA_REMOVED" and spellID == tarSpell and destGUID == myID then
-			SendChatMessage("------------", "RAID")
-			for player, value in pairs(data) do
-				SendChatMessage(player..": "..table.concat(value, ", "), "RAID")
-			end
-			wipe(data)
-		end
-	end
-
-	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
-end
-
---[[
-	通报安托兰议会踩雷的CSB
-]]
-function module:AntoranBlast()
-	if not NDuiDB["Misc"]["AntoranBlast"] then return end
-
-	local names, cache = {}, {}
-	local function updateAlert(event, ...)
-		if not UnitIsGroupAssistant("player") and not UnitIsGroupLeader("player") then return end
-
-		local _, eventType, _, sourceGUID, _, _, _, _, destName, _, _, spellID = ...
-		if eventType == "SPELL_DAMAGE" and spellID == 245121 and not GetPlayerInfoByGUID(sourceGUID) and not cache[sourceGUID] then
-			if not names[destName] then names[destName] = 0 end
-			names[destName] = names[destName] + 1
-			SendChatMessage(destName.."  "..L["Spotted"]..names[destName], "RAID")
-			cache[sourceGUID] = true
-		end
-	end
-
-	local function emptyData()
-		wipe(names)
-		wipe(cache)
-	end
-
-	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
-	B:RegisterEvent("ENCOUNTER_END", emptyData)
 end
