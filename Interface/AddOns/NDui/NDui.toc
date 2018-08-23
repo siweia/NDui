@@ -3,7 +3,7 @@
 ## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, Lightspark, Loshine, Neavo, Paopao001, Qulight, Ray, Rubgrsch, Zork.
 ## Author: Siweia
 ## Notes: More than an UI.
-## Version: 3.6.5
+## Version: 3.7.0
 ## X-Support: BfA
 ## X-Website: http://bbs.nga.cn/read.php?tid=5483616
 ## SavedVariables: NDuiADB
