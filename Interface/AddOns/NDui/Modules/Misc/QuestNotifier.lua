@@ -15,15 +15,11 @@ end
 
 local function completeText(link)
 	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, "Master")
-	if NDuiDB["Misc"]["OnlyCompleteRing"] then
-		return
-	else
-		return format("%s %s", link, QUEST_COMPLETE)
-	end
+	return format("%s %s", link, QUEST_COMPLETE)
 end
 
 local function sendQuestMsg(msg)
-	if not msg then return end
+	if NDuiDB["Misc"]["OnlyCompleteRing"] then return end
 
 	if debugMode and DB.isDeveloper then
 		print(msg)
