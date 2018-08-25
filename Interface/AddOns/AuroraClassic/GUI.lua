@@ -150,26 +150,26 @@ title:SetText("|cff0080ffAuroraClassic|r "..GetAddOnMetadata("AuroraClassic", "V
 local features = addSubCategory(gui, L["Features"])
 features:SetPoint("TOPLEFT", 16, -80)
 
-local bagsBox = createToggleBox(gui, "bags", L["Bags"])
-bagsBox:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -20)
+local shadowBox = createToggleBox(gui, "shadow", L["Shadow Border"])
+shadowBox:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -20)
 
 local chatBubbleBox = createToggleBox(gui, "chatBubbles", L["ChatBubbles"])
-chatBubbleBox:SetPoint("LEFT", bagsBox, "RIGHT", 110, 0)
+chatBubbleBox:SetPoint("LEFT", shadowBox, "RIGHT", 110, 0)
 
 local bubbleColorBox = createToggleBox(gui, "bubbleColor", L["ChatBubblesColor"])
 bubbleColorBox:SetPoint("LEFT", chatBubbleBox, "RIGHT", 110, 0)
 
-local tooltipsBox = createToggleBox(gui, "tooltips", L["Tooltips"])
-tooltipsBox:SetPoint("TOPLEFT", bagsBox, "BOTTOMLEFT", 0, -8)
-
-local shadowBox = createToggleBox(gui, "shadow", L["Shadow Border"])
-shadowBox:SetPoint("LEFT", tooltipsBox, "RIGHT", 110, 0)
-
 local lootBox = createToggleBox(gui, "loot", L["Loot"])
-lootBox:SetPoint("LEFT", shadowBox, "RIGHT", 110, 0)
+lootBox:SetPoint("TOPLEFT", shadowBox, "BOTTOMLEFT", 0, -8)
+
+local bagsBox = createToggleBox(gui, "bags", L["Bags"])
+bagsBox:SetPoint("LEFT", lootBox, "RIGHT", 110, 0)
+
+local tooltipsBox = createToggleBox(gui, "tooltips", L["Tooltips"])
+tooltipsBox:SetPoint("LEFT", bagsBox, "RIGHT", 110, 0)
 
 local appearance = addSubCategory(gui, L["Appearance"])
-appearance:SetPoint("TOPLEFT", tooltipsBox, "BOTTOMLEFT", 0, -30)
+appearance:SetPoint("TOPLEFT", lootBox, "BOTTOMLEFT", 0, -30)
 
 local useButtonGradientColourBox = createToggleBox(gui, "useButtonGradientColour", L["Button Gradient"])
 useButtonGradientColourBox:SetPoint("TOPLEFT", appearance, "BOTTOMLEFT", 0, -20)
