@@ -15,10 +15,16 @@ end
 
 local function completeText(link)
 	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, "Master")
-	return format("%s %s", link, QUEST_COMPLETE)
+	if NDuiDB["Misc"]["OnlyCompleteRing"] then
+		return
+	else
+		return format("%s %s", link, QUEST_COMPLETE)
+	end
 end
 
 local function sendQuestMsg(msg)
+	if not msg then return end
+
 	if debugMode and DB.isDeveloper then
 		print(msg)
 	elseif IsPartyLFG() then
@@ -109,7 +115,7 @@ function module:QuestNotifier()
 	B:RegisterEvent("QUEST_ACCEPTED", FindQuestAccept)
 	B:RegisterEvent("QUEST_LOG_UPDATE", FindQuestComplete)
 	B:RegisterEvent("QUEST_TURNED_IN", FindWorldQuestComplete)
-	if NDuiDB["Misc"]["QuestProgress"] then
+	if NDuiDB["Misc"]["QuestProgress"] and not NDuiDB["Misc"]["OnlyCompleteRing"] then
 		B:RegisterEvent("UI_INFO_MESSAGE", FindQuestProgress)
 	end
 end

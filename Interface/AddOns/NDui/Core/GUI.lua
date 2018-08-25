@@ -182,6 +182,7 @@ local defaultSettings = {
 		SwapingAlert = false,
 		QuestNotifier = false,
 		QuestProgress = false,
+		OnlyCompleteRing = false,
 	},
 	Settings = {
 		LockUIScale = false,
@@ -359,8 +360,10 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
 		{2, "Chat", "Keyword", L["Whisper Keyword"]},
 		{},--blank
-		{1, "Misc", "QuestNotifier", L["QuestNotifier"]},
-		{1, "Misc", "QuestProgress", L["QuestProgress"], true},
+		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"]},
+		{1, "Misc", "QuestProgress", L["QuestProgress"]},
+		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"], true},
+		{},--blank
 		{1, "Misc", "RareAlerter", L["Rare Alert"]},
 		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
