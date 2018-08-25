@@ -56,4 +56,5 @@ local function ReskinRewardIcon(self)
 end
 hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", ReskinRewardIcon)
 hooksecurefunc("EmbeddedItemTooltip_SetItemByID", ReskinRewardIcon)
+hooksecurefunc("EmbeddedItemTooltip_SetCurrencyByID", ReskinRewardIcon)
 hooksecurefunc("QuestUtils_AddQuestCurrencyRewardsToTooltip", function(_, _, self) ReskinRewardIcon(self) end)
