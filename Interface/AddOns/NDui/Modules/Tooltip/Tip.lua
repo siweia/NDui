@@ -495,6 +495,11 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 			end
 		end
 
+		-- TomTom
+		if IsAddOnLoaded("TomTom") then
+			TomTomTooltip:HookScript("OnShow", style)
+		end
+
 	elseif addon == "Blizzard_Collections" then
 		local pet = {
 			PetJournalPrimaryAbilityTooltip,
