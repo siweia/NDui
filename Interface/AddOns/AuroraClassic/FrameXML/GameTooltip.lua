@@ -49,6 +49,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+		if not self.auroraTip then return end
 		self:SetBackdrop(nil)
 	end)
 
@@ -64,6 +65,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bg:SetBackdropBorderColor(0, 0, 0)
 		F.CreateSD(bg)
 
+		t.auroraTip = true
 		t.GetBackdrop = getBackdrop
 		t.GetBackdropColor = getBackdropColor
 		t.GetBackdropBorderColor = getBackdropBorderColor
@@ -83,8 +85,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	sep:SetTexture(C.media.backdrop)
 	sep:SetVertexColor(0, 0, 0)
 
-	F.CreateBD(FriendsTooltip)
-	F.CreateSD(FriendsTooltip)
 	IMECandidatesFrame.background:Hide()
 	F.CreateBD(IMECandidatesFrame)
 	F.CreateSD(IMECandidatesFrame)
@@ -115,4 +115,20 @@ tinsert(C.themes["AuroraClassic"], function()
 	FloatingBattlePetTooltip.Delimiter:SetHeight(1)
 	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
+
+	-- Tooltip rewards icon
+	local newString = "0:0:64:64:5:59:5:59"
+	_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |cffffffff%2$s|r %3$s"
+	_G.BONUS_OBJECTIVE_REWARD_FORMAT = "|T%1$s:16:16:"..newString.."|t %2$s"
+
+	local function ReskinRewardIcon(self)
+		if self and self.Icon then
+			self.Icon:SetTexCoord(.08, .92, .08, .92)
+			self.IconBorder:Hide()
+		end
+	end
+	hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", ReskinRewardIcon)
+	hooksecurefunc("EmbeddedItemTooltip_SetItemByID", ReskinRewardIcon)
+	hooksecurefunc("EmbeddedItemTooltip_SetCurrencyByID", ReskinRewardIcon)
+	hooksecurefunc("QuestUtils_AddQuestCurrencyRewardsToTooltip", function(_, _, self) ReskinRewardIcon(self) end)
 end)
