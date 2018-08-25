@@ -55,11 +55,16 @@ local list = {
 		{AuraID = 273955, UnitID = "player"},	-- 望远镜视野
 		{AuraID = 261612, UnitID = "player"},	-- 迅击风暴
 		{AuraID = 264957, UnitID = "player"},	-- 急速瞄准镜
+		{AuraID = 274472, UnitID = "player"},	-- 狂战士之怒
+		{AuraID = 268769, UnitID = "player"},	-- 标记死穴
 		-- 艾泽里特特质
+		{AuraID = 280204, UnitID = "player"},	-- 徘徊的灵魂
 		{AuraID = 273685, UnitID = "player"},	-- 缜密计谋
 		{AuraID = 273714, UnitID = "player"},	-- 争分夺秒
 		{AuraID = 274443, UnitID = "player"},	-- 死亡之舞
 		{AuraID = 280433, UnitID = "player"},	-- 呼啸狂沙
+		{AuraID = 271711, UnitID = "player"},	-- 压倒能量
+		{AuraID = 272733, UnitID = "player"},	-- 弦之韵律
 		{AuraID = 268953, UnitID = "player", Text = RAID_BUFF_6},	-- 元素回旋 爆击
 		{AuraID = 268954, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
 		{AuraID = 268955, UnitID = "player", Text = RAID_BUFF_7},	-- 精通

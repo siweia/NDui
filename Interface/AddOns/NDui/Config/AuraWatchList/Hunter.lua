@@ -23,7 +23,7 @@ local list = {
 		{AuraID = 203924, UnitID = "player"},	-- 守护屏障
 		{AuraID = 197161, UnitID = "player"},	-- 灵龟守护回血
 		{AuraID = 160007, UnitID = "player"},	-- 上升气流（双头龙）
-		{AuraID = 231390, UnitID = "player"},	-- 开拓者
+		{AuraID = 231390, UnitID = "player", Combat = true},	-- 开拓者
 		{AuraID = 164273, UnitID = "player", Combat = true},	-- 独来独往
 	},
 	["Target Aura"] = {		-- 目标光环组
