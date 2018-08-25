@@ -359,8 +359,8 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 
 	elseif addon == "NDui" then
 		if IsAddOnLoaded("AuroraClassic") then
+			AuroraOptionstooltips:SetAlpha(0)
 			AuroraOptionstooltips:Disable()
-			AuroraOptionstooltips.Text:SetTextColor(.5, .5, .5)
 			AuroraConfig.tooltips = false
 		end
 

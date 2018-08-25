@@ -27,8 +27,8 @@ end
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
 	if IsAddOnLoaded("AuroraClassic") then
+		AuroraOptionsbags:SetAlpha(0)
 		AuroraOptionsbags:Disable()
-		AuroraOptionsbags.Text:SetTextColor(.5, .5, .5)
 		AuroraConfig.bags = false
 	end
 
