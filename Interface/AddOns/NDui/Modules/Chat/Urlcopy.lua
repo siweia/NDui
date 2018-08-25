@@ -104,4 +104,30 @@ function module:UrlCopy()
 
 		if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
 	end)
+
+	hooksecurefunc("SetItemRef", function(link)
+		if strsub(link, 1, 6) == "player" then
+			local namelink = strsub(link, 8)
+			if namelink then
+				local name = strsplit(":", namelink)
+				if name and strlen(name) > 0 and IsModifiedClick("CHATLINK") then
+					if not StaticPopup_Visible("ADD_IGNORE") and not StaticPopup_Visible("ADD_FRIEND") and not StaticPopup_Visible("ADD_GUILDMEMBER")
+						and not StaticPopup_Visible("ADD_RAIDMEMBER") and not StaticPopup_Visible("CHANNEL_INVITE") and not ChatEdit_GetActiveWindow() then
+
+						if MailFrame and MailFrame:IsShown() then
+							MailFrameTab_OnClick(nil, 2)
+							SendMailNameEditBox:SetText(name)
+							SendMailNameEditBox:HighlightText()
+						else
+							local editBox = ChatEdit_ChooseBoxForSend()
+							local hasText = (editBox:GetText() ~= "")
+							ChatEdit_ActivateChat(editBox)
+							editBox:Insert(name)
+							if not hasText then editBox:HighlightText() end
+						end
+					end
+				end
+			end
+		end
+	end)
 end
