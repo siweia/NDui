@@ -14,6 +14,7 @@ local defaultSettings = {
 		Style = 1,
 		Bar4Fade = false,
 		Bar5Fade = true,
+		Scale = 1,
 	},
 	Bags = {
 		Enable = true,
@@ -240,8 +241,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Enable", "|cff00cc4c"..L["Enable Actionbar"]},
 		{},--blank
 		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"]},
-		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"]},
-		{4, "Actionbar", "Style", L["Actionbar Style"], true, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
+		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"], true},
+		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
+		{3, "Actionbar", "Scale", L["Actionbar Scale"], true, {.8, 1.5, 1}},
 		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"]},
 		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},

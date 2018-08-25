@@ -18,7 +18,7 @@ function Bar:CreateStancebar()
 	else
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", -42, 135}
 	end
-	frame:SetScale(cfg.scale)
+	frame:SetScale(NDuiDB["Actionbar"]["Scale"])
 
 	--STANCE BAR
 

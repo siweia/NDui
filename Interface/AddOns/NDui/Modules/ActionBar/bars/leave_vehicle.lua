@@ -17,7 +17,7 @@ function Bar:CreateLeaveVehicle()
 	else
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 320, 100}
 	end
-	frame:SetScale(cfg.scale)
+	frame:SetScale(NDuiDB["Actionbar"]["Scale"])
 
 	--the button
 	local button = CreateFrame("CheckButton", "NDui_LeaveVehicleButton", frame, "ActionButtonTemplate, SecureHandlerClickTemplate")

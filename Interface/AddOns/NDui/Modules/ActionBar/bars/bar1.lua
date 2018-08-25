@@ -20,7 +20,7 @@ function module:OnLogin()
 	else
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 24}
 	end
-	frame:SetScale(cfg.scale)
+	frame:SetScale(NDuiDB["Actionbar"]["Scale"])
 
 	for i = 1, num do
 		local button = _G["ActionButton"..i]

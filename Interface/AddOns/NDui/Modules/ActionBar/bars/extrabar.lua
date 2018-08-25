@@ -13,7 +13,7 @@ function Bar:CreateExtrabar()
 	frame:SetWidth(num*cfg.size + (num-1)*margin + 2*padding)
 	frame:SetHeight(cfg.size + 2*padding)
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 250, 100}
-	frame:SetScale(cfg.scale)
+	frame:SetScale(NDuiDB["Actionbar"]["Scale"])
 
 	--move the buttons into position and reparent them
 	ExtraActionBarFrame:SetParent(frame)

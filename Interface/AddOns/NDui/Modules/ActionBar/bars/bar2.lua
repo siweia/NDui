@@ -18,7 +18,7 @@ function Bar:CreateBar2()
 	else
 		frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 0, 60}
 	end
-	frame:SetScale(cfg.scale)
+	frame:SetScale(NDuiDB["Actionbar"]["Scale"])
 
 	--move the buttons into position and reparent them
 	MultiBarBottomLeft:SetParent(frame)

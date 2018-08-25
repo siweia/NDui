@@ -22,55 +22,46 @@ C.bars = {
 
 	-- BAR1 主动作条（下）
 	bar1 = {
-		scale           	= 1,		-- 以1为基准增大/缩放
 		size				= 34,		-- 动作条大小
 		fader				= nil,		-- 鼠标悬停显隐
     },
     -- BAR2 主动作条（上）
     bar2 = {
-		scale          		= 1,		-- 以1为基准增大/缩放
 		size           		= 34,		-- 动作条大小
 		fader				= nil,		-- 鼠标悬停显隐
     },
     -- BAR3 主动作条两侧
     bar3 = {
-		scale           	= 1,		-- 以1为基准增大/缩放
 		size        	    = 32,		-- 动作条大小
 		fader				= nil,		-- 鼠标悬停显隐
     },
     -- BAR4 右边动作条1
     bar4 = {
-		scale           	= 1,		-- 以1为基准增大/缩放
 		size           		= 32,		-- 动作条大小
 		fader				= barFader,	-- 鼠标悬停显隐
     },
     -- BAR5 右边动作条2
     bar5 = {
-		scale          		= 1,		-- 以1为基准增大/缩放
 		size				= 32,		-- 动作条大小
 		fader				= barFader, -- 鼠标悬停显隐
     },
     -- PETBAR 宠物动作条
     petbar = {
-		scale           	= 1,		-- 以1为基准增大/缩放
 		size	            = 26,		-- 动作条大小
 		fader				= nil,		-- 鼠标悬停显隐
     },
     -- STANCE + POSSESSBAR 姿态条
     stancebar = {
-		scale           	= 1,		-- 以1为基准增大/缩放
 		size          		= 30,		-- 动作条大小
 		fader				= nil,		-- 鼠标悬停显隐
     },
     -- EXTRABAR 额外动作条
     extrabar = {
-		scale          		= 1,		-- 以1为基准增大/缩放
 		size    	        = 56,		-- 动作条大小
 		fader				= nil,		-- 鼠标悬停显隐
     },
     -- VEHICLE EXIT 离开载具按钮
     leave_vehicle 			= {
-		scale           	= 1,		-- 以1为基准增大/缩放
 		size          		= 32,		-- 动作条大小
 		fader				= nil,		-- 鼠标悬停显隐
     },
