@@ -74,7 +74,7 @@ function module:OnLogin()
 	local basic = 94
 	if NDuiDB["Actionbar"]["Style"] == 4 then basic = 130 end
 
-	if NDuiDB["Skins"]["BarLine"] then
+	if NDuiDB["Skins"]["BarLine"] and NDuiDB["Actionbar"]["Scale"] == 1 then
 		local MactionbarL = CreateFrame("Frame", nil, UIParent)
 		MactionbarL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 4)
 		B.CreateGF(MactionbarL, 250, basic, "Horizontal", 0, 0, 0, 0, .5)
