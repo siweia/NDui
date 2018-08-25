@@ -301,7 +301,7 @@ end)
 local function style(self)
 	self:SetScale(NDuiDB["Tooltip"]["Scale"])
 
-	if not self.bg then
+	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		local bg = B.CreateBG(self, 0)
 		bg:SetFrameLevel(self:GetFrameLevel())
@@ -313,6 +313,8 @@ local function style(self)
 		self.GetBackdrop = function() return bg:GetBackdrop() end
 		self.GetBackdropColor = function() return 0, 0, 0, .7 end
 		self.GetBackdropBorderColor = function() return 0, 0, 0 end
+
+		self.tipStyled = true
 	end
 
 	self.bg:SetBackdropBorderColor(0, 0, 0)
@@ -349,6 +351,7 @@ local function extrastyle(self)
 end
 
 hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
 end)
 
@@ -493,11 +496,6 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 					f:HookScript("OnShow", style)
 				end
 			end
-		end
-
-		-- TomTom
-		if IsAddOnLoaded("TomTom") then
-			TomTomTooltip:HookScript("OnShow", style)
 		end
 
 	elseif addon == "Blizzard_Collections" then
