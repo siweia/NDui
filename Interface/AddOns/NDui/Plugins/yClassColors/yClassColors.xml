@@ -3,6 +3,5 @@
 	<Script file="battlefield.lua"/>
 	<Script file="friends.lua"/>
 	<Script file="guild.lua"/>
-	<Script file="lfr.lua"/>
 	<Script file="who.lua"/>
 </Ui>

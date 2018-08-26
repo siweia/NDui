@@ -357,8 +357,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
 		{},--blank
 		{1, "Chat", "Invite", L["Whisper Invite"]},
-		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
-		{2, "Chat", "Keyword", L["Whisper Keyword"]},
+		{1, "Chat", "GuildInvite", L["Guild Invite Only"]},
+		{2, "Chat", "Keyword", L["Whisper Keyword"], true},
 		{},--blank
 		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"]},
 		{1, "Misc", "QuestProgress", L["QuestProgress"]},

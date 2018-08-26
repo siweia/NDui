@@ -46,7 +46,7 @@ local function ColorGradient(perc, ...)
 		local r, g, b = ...
 		return r, g, b
 	end
-	
+
 	local num = select("#", ...) / 3
 	local segment, relperc = math.modf(perc*(num-1))
 	local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
