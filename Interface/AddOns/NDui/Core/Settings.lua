@@ -67,24 +67,6 @@ local function ForceUIScale()
 	else
 		SetCVar("uiScale", scale)
 	end
-
-	-- Restore from Auto-scaling
-	local function RestoreUIScale(scale)
-		UIParent:SetScale(scale)
-		if NDuiDB["Chat"]["Lock"] then
-			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
-		end
-	end
-
-	B:RegisterEvent("UI_SCALE_CHANGED", function()
-		if scale < .64 then RestoreUIScale(scale) end
-
-		C_Timer.After(1, function()
-			if scale < .64 and UIParent:GetScale() ~= scale then
-				RestoreUIScale(scale)
-			end
-		end)
-	end)
 end
 
 local function ForceChatSettings()
