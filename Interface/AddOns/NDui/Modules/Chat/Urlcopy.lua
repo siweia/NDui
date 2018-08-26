@@ -105,8 +105,8 @@ function module:UrlCopy()
 		if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
 	end)
 
-	hooksecurefunc("SetItemRef", function(link)
-		if strsub(link, 1, 6) == "player" then
+	hooksecurefunc("SetItemRef", function(link, _, button)
+		if strsub(link, 1, 6) == "player" and button == "LeftButton" then
 			local namelink = strsub(link, 8)
 			if namelink then
 				local name = strsplit(":", namelink)
