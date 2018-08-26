@@ -285,12 +285,9 @@ function UF:OnLogin()
 
 	if NDuiDB["UFs"]["RaidFrame"] then
 		-- Disable Default RaidFrame
-		CompactRaidFrameContainer:UnregisterAllEvents()
-		CompactRaidFrameContainer:Hide()
-		CompactRaidFrameContainer.Show = CompactRaidFrameContainer.Hide
-		CompactRaidFrameManager:UnregisterAllEvents()
-		CompactRaidFrameManager:Hide()
-		CompactRaidFrameManager.Show = CompactRaidFrameManager.Hide
+		B.HideObject(CompactRaidFrameContainer)
+		B.HideObject(CompactRaidFrameManager)
+		RaidOptionsFrame_UpdatePartyFrames = B.Dummy	-- need reviewed
 
 		-- Group Styles
 		oUF:RegisterStyle("Raid", CreateRaidStyle)
