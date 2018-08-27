@@ -58,6 +58,8 @@ local list = {
 		{AuraID = 274472, UnitID = "player"},	-- 狂战士之怒
 		{AuraID = 268769, UnitID = "player"},	-- 标记死穴
 		-- 艾泽里特特质
+		{AuraID = 280409, UnitID = "player"},	-- 血祭之力
+		{AuraID = 279902, UnitID = "player"},	-- 不稳定的烈焰
 		{AuraID = 281843, UnitID = "player"},	-- 汇帆
 		{AuraID = 280204, UnitID = "player"},	-- 徘徊的灵魂
 		{AuraID = 273685, UnitID = "player"},	-- 缜密计谋
