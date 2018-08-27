@@ -70,6 +70,12 @@ local function loadPetFilter()
 		end
 		btn.petType = petType
 
+		btn:SetHighlightTexture(DB.bdTex)
+		local hl = btn:GetHighlightTexture()
+		hl:SetVertexColor(1, 1, 1, .25)
+		hl:SetPoint("TOPLEFT", 2, -2)
+		hl:SetPoint("BOTTOMRIGHT", -2, 2)
+
 		btn:SetScript("OnMouseUp", QuickFilter_Function)
 	end
 
