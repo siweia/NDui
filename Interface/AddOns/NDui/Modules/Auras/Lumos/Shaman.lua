@@ -4,6 +4,10 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "SHAMAN" then return end
 
+local function GetUnitAura(unit, spell, filter)
+	return module:GetUnitAura(unit, spell, filter)
+end
+
 local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
@@ -16,8 +20,8 @@ local function UpdateDebuff(button, spellID, auraID, cooldown)
 	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
 end
 
-local function UpdateTotemAura(button, texture)
-	return module:UpdateTotemAura(button, texture)
+local function UpdateTotemAura(button, texture, spellID)
+	return module:UpdateTotemAura(button, texture, spellID)
 end
 
 function module:ChantLumos(self)
@@ -70,11 +74,20 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[3]
 			if IsPlayerSpell(197992) then
-				UpdateBuff(button, 197992, 202004)
+				local name, _, duration, expire = GetUnitAura("player", 202004, "HELPFUL")
+				if name then
+					button.CD:SetCooldown(expire-duration, duration)
+					button.CD:Show()
+					button:SetAlpha(1)
+					button.Count:SetText("")
+					button.Icon:SetTexture(GetSpellTexture(197992))
+				else
+					UpdateCooldown(button, 193786, true)
+				end
 			elseif IsPlayerSpell(262647) then
 				UpdateBuff(button, 262647, 262652)
 			else
-				UpdateTotemAura(button, 511726)
+				UpdateCooldown(button, 193786, true)
 			end
 		end
 
@@ -103,7 +116,18 @@ function module:ChantLumos(self)
 		UpdateCooldown(self.bu[1], 61295, true)
 		UpdateCooldown(self.bu[2], 5394, true)
 		UpdateCooldown(self.bu[3], 73920, true)
-		UpdateCooldown(self.bu[4], 108280, true)
-		UpdateCooldown(self.bu[5], 98008, true)
+
+		do
+			local button = self.bu[4]
+			if IsPlayerSpell(207399) then
+				UpdateTotemAura(button, 136080, 207399)
+			elseif IsPlayerSpell(198838) then
+				UpdateTotemAura(button, 136098, 198838)
+			else
+				UpdateBuff(button, 79206, 79206, true)
+			end
+		end
+
+		UpdateBuff(self.bu[5], 108271, 108271, true)
 	end
 end
