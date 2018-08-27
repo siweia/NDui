@@ -32,34 +32,22 @@ tinsert(C.themes["AuroraClassic"], function()
 	TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
 	TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
 
-	for i = 1, MAX_TRADE_ITEMS do
-		local bu1 = _G["TradePlayerItem"..i.."ItemButton"]
-		local bu2 = _G["TradeRecipientItem"..i.."ItemButton"]
+	local function reskinButton(bu)
+		bu:SetNormalTexture("")
+		bu:SetPushedTexture("")
+		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.IconBorder:SetAlpha(0)
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		F.CreateBDFrame(bu, .25)
+	end
 
+	for i = 1, MAX_TRADE_ITEMS do
 		_G["TradePlayerItem"..i.."SlotTexture"]:Hide()
 		_G["TradePlayerItem"..i.."NameFrame"]:Hide()
 		_G["TradeRecipientItem"..i.."SlotTexture"]:Hide()
 		_G["TradeRecipientItem"..i.."NameFrame"]:Hide()
 
-		bu1:SetNormalTexture("")
-		bu1:SetPushedTexture("")
-		bu1.icon:SetTexCoord(.08, .92, .08, .92)
-		bu1.IconBorder:SetAlpha(0)
-		bu2:SetNormalTexture("")
-		bu2:SetPushedTexture("")
-		bu2.icon:SetTexCoord(.08, .92, .08, .92)
-		bu2.IconBorder:SetAlpha(0)
-
-		local bg1 = CreateFrame("Frame", nil, bu1)
-		bg1:SetPoint("TOPLEFT", -1, 1)
-		bg1:SetPoint("BOTTOMRIGHT", 1, -1)
-		bg1:SetFrameLevel(bu1:GetFrameLevel()-1)
-		F.CreateBD(bg1, .25)
-
-		local bg2 = CreateFrame("Frame", nil, bu2)
-		bg2:SetPoint("TOPLEFT", -1, 1)
-		bg2:SetPoint("BOTTOMRIGHT", 1, -1)
-		bg2:SetFrameLevel(bu2:GetFrameLevel()-1)
-		F.CreateBD(bg2, .25)
+		reskinButton(_G["TradePlayerItem"..i.."ItemButton"])
+		reskinButton(_G["TradeRecipientItem"..i.."ItemButton"])
 	end
 end)

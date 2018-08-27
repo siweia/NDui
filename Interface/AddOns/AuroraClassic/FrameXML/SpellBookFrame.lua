@@ -27,12 +27,10 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.TextBackground:Hide()
 		bu.TextBackground2:Hide()
 		bu.UnlearnedFrame:SetAlpha(0)
-
 		bu:SetCheckedTexture("")
 		bu:SetPushedTexture("")
 
 		ic:SetTexCoord(.08, .92, .08, .92)
-
 		ic.bg = F.CreateBG(bu)
 	end
 
@@ -83,6 +81,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			if not tab.styled then
 				tab:GetRegions():Hide()
 				tab:SetCheckedTexture(C.media.checked)
+				tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				F.CreateBG(tab)
 
 				tab.styled = true

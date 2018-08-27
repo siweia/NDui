@@ -89,6 +89,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		a:Hide()
 		b:Hide()
 		bu:SetCheckedTexture(C.media.checked)
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		st:Hide()
 		line:Hide()
@@ -102,16 +103,12 @@ tinsert(C.themes["AuroraClassic"], function()
 		local border = bu.IconBorder
 
 		bu:GetRegions():Hide()
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		border:SetPoint("TOPLEFT", -1.2, 1.2)
 		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 		border:SetDrawLayer("BACKGROUND")
-
-		local bg = CreateFrame("Frame", nil, bu)
-		bg:SetPoint("TOPLEFT", -1.2, 1.2)
-		bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
-		bg:SetFrameLevel(0)
-		F.CreateBD(bg, .25)
+		F.CreateBDFrame(bu, .25)
 	end
 
 	-- sigh
@@ -133,6 +130,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		border:SetTexture(C.media.backdrop)
@@ -140,12 +138,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		border:SetPoint("TOPLEFT", -1.2, 1.2)
 		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
 		border:SetDrawLayer("BACKGROUND")
-
-		local bg = CreateFrame("Frame", nil, bu)
-		bg:SetPoint("TOPLEFT", -1.2, 1.2)
-		bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
-		bg:SetFrameLevel(0)
-		F.CreateBD(bg, .25)
+		F.CreateBDFrame(bu, .25)
 	end
 
 	hooksecurefunc("SendMailFrame_Update", function()

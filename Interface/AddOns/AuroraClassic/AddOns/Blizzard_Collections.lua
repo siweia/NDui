@@ -64,7 +64,6 @@ C.themes["Blizzard_Collections"] = function()
 
 	MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
 	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
-
 	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
 
 	local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
@@ -92,11 +91,15 @@ C.themes["Blizzard_Collections"] = function()
 
 			if bu.DragButton then
 				bu.DragButton.ActiveTexture:SetTexture(C.media.checked)
+				bu.DragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+				bu.DragButton:GetHighlightTexture():SetAllPoints(ic)
 			else
 				bu.dragButton.ActiveTexture:SetTexture(C.media.checked)
 				bu.dragButton.levelBG:SetAlpha(0)
 				bu.dragButton.level:SetFontObject(GameFontNormal)
 				bu.dragButton.level:SetTextColor(1, 1, 1)
+				bu.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+				bu.dragButton:GetHighlightTexture():SetAllPoints(ic)
 			end
 		end
 	end
@@ -167,6 +170,7 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournalHealPetButtonBorder:Hide()
 	PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	PetJournal.HealPetButton:SetPushedTexture("")
+	PetJournal.HealPetButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(PetJournal.HealPetButton)
 
 	do
@@ -192,6 +196,7 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournalSummonRandomFavoritePetButtonBorder:Hide()
 	PetJournalSummonRandomFavoritePetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	PetJournalSummonRandomFavoritePetButton:SetPushedTexture("")
+	PetJournalSummonRandomFavoritePetButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(PetJournalSummonRandomFavoritePetButton)
 
 	-- Favourite mount button
@@ -199,6 +204,7 @@ C.themes["Blizzard_Collections"] = function()
 	MountJournalSummonRandomFavoriteButtonBorder:Hide()
 	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	MountJournalSummonRandomFavoriteButton:SetPushedTexture("")
+	MountJournalSummonRandomFavoriteButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(MountJournalSummonRandomFavoriteButton)
 
 	do
@@ -247,9 +253,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	for i = 1, 6 do
 		local bu = card["spell"..i]
-
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(bu.icon)
+		F.ReskinIcon(bu.icon)
 	end
 
 	hooksecurefunc("PetJournal_UpdatePetCard", function(self)
@@ -276,6 +280,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.qualityBorder:SetTexture("")
 		bu.levelBG:SetAlpha(0)
 		bu.helpFrame:GetRegions():Hide()
+		bu.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		bu.level:SetFontObject(GameFontNormal)
 		bu.level:SetTextColor(1, 1, 1)
@@ -307,9 +312,8 @@ C.themes["Blizzard_Collections"] = function()
 			local spell = bu["spell"..j]
 
 			spell:SetPushedTexture("")
-
+			spell:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			spell.selected:SetTexture(C.media.checked)
-
 			spell:GetRegions():Hide()
 
 			spell.FlyoutArrow:SetTexture(C.media.arrowDown)
@@ -340,6 +344,7 @@ C.themes["Blizzard_Collections"] = function()
 
 		bu:SetCheckedTexture(C.media.checked)
 		bu:SetPushedTexture("")
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		bu.icon:SetDrawLayer("ARTWORK")
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
@@ -404,10 +409,9 @@ C.themes["Blizzard_Collections"] = function()
 		local ic = bu.iconTexture
 
 		bu:SetPushedTexture("")
-		bu:SetHighlightTexture("")
-
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		bu:GetHighlightTexture():SetAllPoints(ic)
 		bu.cooldown:SetAllPoints(ic)
-
 		bu.slotFrameCollected:SetTexture("")
 		bu.slotFrameUncollected:SetTexture("")
 
@@ -461,6 +465,9 @@ C.themes["Blizzard_Collections"] = function()
 			button.slotFrameCollected:SetTexture("")
 			button.slotFrameUncollected:SetTexture("")
 			button.levelBackground:SetAlpha(0)
+			button:SetPushedTexture("")
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			button:GetHighlightTexture():SetAllPoints(ic)
 
 			button.iconTextureUncollected:SetTexCoord(.08, .92, .08, .92)
 			button.bg = F.ReskinIcon(ic)
@@ -589,13 +596,11 @@ C.themes["Blizzard_Collections"] = function()
 
 	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(_, itemFrame)
 		local ic = itemFrame.Icon
-		if not itemFrame.styled then
+		if not ic.bg then
 			ic:SetTexCoord(.08, .92, .08, .92)
 			itemFrame.IconBorder:Hide()
 			itemFrame.IconBorder.Show = F.dummy
 			ic.bg = F.CreateBDFrame(ic)
-
-			itemFrame.styled = true
 		end
 
 		if itemFrame.collected then
@@ -691,6 +696,7 @@ C.themes["Blizzard_Collections"] = function()
 			end
 
 			if PetJournalBandageButton then
+				PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				PetJournalBandageButtonBorder:Hide()
 				PetJournalBandageButtonIcon:SetTexCoord(.08, .92, .08, .92)
 				PetJournalBandageButton:SetPoint("TOPRIGHT", PetJournalHealPetButton, "TOPLEFT", -3, 0)

@@ -10,8 +10,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 		select(i, TradeSkillFrame:GetRegions()):Hide()
 	end
 	TradeSkillFrameTitleText:Show()
-	TradeSkillFramePortrait:Hide()
-	TradeSkillFramePortrait.Show = F.dummy
+	TradeSkillFramePortrait:SetAlpha(0)
 
 	local rankFrame = TradeSkillFrame.RankFrame
 	rankFrame:SetStatusBarTexture(C.media.backdrop)
@@ -115,6 +114,9 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	F.Reskin(details.ViewGuildCraftersButton)
 
 	-- Guild Recipe
+
+	TradeSkillFrame.TabardBorder:SetAlpha(0)
+	TradeSkillFrame.TabardBackground:SetAlpha(0)
 
 	local guildFrame = details.GuildFrame
 	F.ReskinClose(guildFrame.CloseButton)
