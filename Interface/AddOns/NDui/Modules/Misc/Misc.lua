@@ -558,6 +558,29 @@ do
 end
 
 -- Instant delete
-hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
-	self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-end)
+do
+	hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
+		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
+	end)
+end
+
+-- TradeFrame hook
+do
+	local infoText = B.CreateFS(TradeFrame, 16, "")
+	infoText:ClearAllPoints()
+	infoText:SetPoint("TOP", TradeFrameRecipientNameText, "BOTTOM", 0, -5)
+
+	hooksecurefunc("TradeFrame_Update", function()
+		local r, g, b = B.UnitColor("NPC")
+		TradeFrameRecipientNameText:SetTextColor(r, g, b)
+
+		local unitName = GetUnitName("NPC", true)
+		local text = "|cffff0000"..L["Stranger"]
+		if B.UnitInGuild(unitName) then
+			text = "|cff00ff00"..GUILD
+		elseif B.FriendsList[unitName] then
+			text = "|cffffff00"..FRIEND
+		end
+		infoText:SetText(text)
+	end)
+end

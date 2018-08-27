@@ -346,12 +346,14 @@ end
 
 -- Guild Check
 function B.UnitInGuild(unitName)
+	if not unitName then return end
 	for i = 1, GetNumGuildMembers() do
 		local name = GetGuildRosterInfo(i)
-		if name and name == unitName then
+		if name and Ambiguate(name, "none") == Ambiguate(unitName, "none") then
 			return true
 		end
 	end
+
 	return false
 end
 
