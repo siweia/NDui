@@ -461,4 +461,8 @@ function module:CreateRM()
 			end
 		end
 	end)
+
+	-- UIWidget reanchor
+	UIWidgetTopCenterContainerFrame:ClearAllPoints()
+	UIWidgetTopCenterContainerFrame:SetPoint("TOP", 0, -35)
 end
