@@ -114,20 +114,35 @@ function module:ChantLumos(self)
 		end
 	elseif GetSpecialization() == 3 then
 		UpdateCooldown(self.bu[1], 61295, true)
-		UpdateCooldown(self.bu[2], 5394, true)
+
+		do
+			local button = self.bu[2]
+			if IsPlayerSpell(157153) then
+				button.Icon:SetTexture(GetSpellTexture(157504))
+				local name, _, _, _, _, _, value = GetUnitAura("player", 157504, "HELPFUL")
+				if name then
+					UpdateTotemAura(button, 971076)
+					button.Count:SetText(B.Numb(value))
+					button.Count:SetTextColor(1, 1, 1)
+				else
+					UpdateCooldown(button, 157153)
+				end
+			else
+				UpdateCooldown(button, 5394, true)
+			end
+		end
+
 		UpdateCooldown(self.bu[3], 73920, true)
 
 		do
 			local button = self.bu[4]
-			if IsPlayerSpell(207399) then
-				UpdateTotemAura(button, 136080, 207399)
-			elseif IsPlayerSpell(198838) then
+			if IsPlayerSpell(198838) then
 				UpdateTotemAura(button, 136098, 198838)
 			else
-				UpdateBuff(button, 79206, 79206, true)
+				UpdateBuff(button, 108271, 108271, true)
 			end
 		end
 
-		UpdateBuff(self.bu[5], 108271, 108271, true)
+		UpdateBuff(self.bu[5], 79206, 79206, true)
 	end
 end
