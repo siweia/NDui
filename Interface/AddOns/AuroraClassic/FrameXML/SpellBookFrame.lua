@@ -21,8 +21,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		local ic = _G["SpellButton"..i.."IconTexture"]
 
 		_G["SpellButton"..i.."SlotFrame"]:SetAlpha(0)
-		_G["SpellButton"..i.."Highlight"]:SetAlpha(0)
-
 		bu.EmptySlot:SetAlpha(0)
 		bu.TextBackground:Hide()
 		bu.TextBackground2:Hide()
@@ -37,12 +35,18 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("SpellButton_UpdateButton", function(self)
 		if SpellBookFrame.bookType == BOOKTYPE_PROFESSION then return end
 
-		local slot, slotType = SpellBook_GetSpellBookSlot(self);
-		local name = self:GetName();
+		local slot, slotType = SpellBook_GetSpellBookSlot(self)
+		local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
+		local name = self:GetName()
+		local highlightTexture = _G[name.."Highlight"]
+		if isPassive then
+			highlightTexture:SetColorTexture(1, 1, 1, 0)
+		else
+			highlightTexture:SetColorTexture(1, 1, 1, .25)
+		end
+
 		local subSpellString = _G[name.."SubSpellName"]
-
 		local isOffSpec = self.offSpecID ~= 0 and SpellBookFrame.bookType == BOOKTYPE_SPELL
-
 		subSpellString:SetTextColor(1, 1, 1)
 
 		if slotType == "FUTURESPELL" then
@@ -56,15 +60,11 @@ tinsert(C.themes["AuroraClassic"], function()
 				subSpellString:SetTextColor(.7, .7, .7)
 			end
 		end
-
 		self.RequiredLevelString:SetTextColor(.7, .7, .7)
 
 		local ic = _G[name.."IconTexture"]
-		if not ic.bg then return end
-		if ic:IsShown() then
-			ic.bg:Show()
-		else
-			ic.bg:Hide()
+		if ic.bg then
+			ic.bg:SetShown(ic:IsShown())
 		end
 	end)
 
@@ -102,25 +102,15 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.missingHeader:SetTextColor(1, 1, 1)
 		bu.missingText:SetTextColor(1, 1, 1)
 
-		bu.statusBar:SetHeight(13)
+		F.StripTextures(bu.statusBar)
+		bu.statusBar:SetHeight(10)
 		bu.statusBar:SetStatusBarTexture(C.media.backdrop)
 		bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
 		bu.statusBar.rankText:SetPoint("CENTER")
 
 		local _, p = bu.statusBar:GetPoint()
 		bu.statusBar:SetPoint("TOPLEFT", p, "BOTTOMLEFT", 1, -3)
-
-		_G[button.."StatusBarLeft"]:Hide()
-		bu.statusBar.capRight:SetAlpha(0)
-		_G[button.."StatusBarBGLeft"]:Hide()
-		_G[button.."StatusBarBGMiddle"]:Hide()
-		_G[button.."StatusBarBGRight"]:Hide()
-
-		local bg = CreateFrame("Frame", nil, bu.statusBar)
-		bg:SetPoint("TOPLEFT", -1, 1)
-		bg:SetPoint("BOTTOMRIGHT", 1, -1)
-		bg:SetFrameLevel(bu:GetFrameLevel()-1)
-		F.CreateBD(bg, .25)
+		F.CreateBDFrame(bu.statusBar, .25)
 	end
 
 	local professionbuttons = {"PrimaryProfession1SpellButtonTop", "PrimaryProfession1SpellButtonBottom", "PrimaryProfession2SpellButtonTop", "PrimaryProfession2SpellButtonBottom", "SecondaryProfession1SpellButtonLeft", "SecondaryProfession1SpellButtonRight", "SecondaryProfession2SpellButtonLeft", "SecondaryProfession2SpellButtonRight", "SecondaryProfession3SpellButtonLeft", "SecondaryProfession3SpellButtonRight"}
@@ -129,10 +119,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		local icon = _G[button.."IconTexture"]
 		local bu = _G[button]
 		_G[button.."NameFrame"]:SetAlpha(0)
-
 		bu:SetPushedTexture("")
 		bu:SetCheckedTexture(C.media.checked)
-		bu:GetHighlightTexture():Hide()
 
 		if icon then
 			icon:SetTexCoord(.08, .92, .08, .92)
@@ -140,6 +128,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			icon:SetPoint("TOPLEFT", 2, -2)
 			icon:SetPoint("BOTTOMRIGHT", -2, 2)
 			F.CreateBG(icon)
+			bu.highlightTexture:SetAllPoints(icon)
 		end
 	end
 
@@ -156,11 +145,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.icon:SetDesaturated(false)
 		F.CreateBG(bu.icon)
 
-		local bg = CreateFrame("Frame", nil, bu)
+		local bg = F.CreateBDFrame(bu, .25)
 		bg:SetPoint("TOPLEFT")
-		bg:SetPoint("BOTTOMRIGHT", 0, -4)
-		bg:SetFrameLevel(0)
-		F.CreateBD(bg, .25)
+		bg:SetPoint("BOTTOMRIGHT", 0, -5)
 	end
 
 	hooksecurefunc("FormatProfession", function(frame, index)
@@ -181,6 +168,13 @@ tinsert(C.themes["AuroraClassic"], function()
 	SpellBookPageText:SetTextColor(.8, .8, .8)
 
 	hooksecurefunc("UpdateProfessionButton", function(self)
+		local spellIndex = self:GetID() + self:GetParent().spellOffset
+		local isPassive = IsPassiveSpell(spellIndex, SpellBookFrame.bookType)
+		if isPassive then
+			self.highlightTexture:SetColorTexture(1, 1, 1, 0)
+		else
+			self.highlightTexture:SetColorTexture(1, 1, 1, .25)
+		end
 		self.spellString:SetTextColor(1, 1, 1);
 		self.subSpellString:SetTextColor(1, 1, 1)
 	end)

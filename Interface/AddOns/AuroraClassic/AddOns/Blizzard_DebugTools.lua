@@ -1,18 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_DebugTools"] = function()
-	FrameStackTooltip:SetScale(UIParent:GetScale())
-	FrameStackTooltip:SetBackdrop(nil)
-
-	local bg = CreateFrame("Frame", nil, FrameStackTooltip)
-	bg:SetPoint("TOPLEFT")
-	bg:SetPoint("BOTTOMRIGHT")
-	bg:SetFrameLevel(FrameStackTooltip:GetFrameLevel()-1)
-	F.CreateBD(bg, .6)
-	F.CreateSD(bg)
-
 	-- EventTraceFrame
-
 	F.CreateBD(EventTraceFrame)
 	F.CreateSD(EventTraceFrame)
 	F.ReskinClose(EventTraceFrameCloseButton)
@@ -27,14 +16,17 @@ C.themes["Blizzard_DebugTools"] = function()
 	F.CreateBD(bu.bg, 0)
 	F.CreateGradient(bu.bg)
 
-	EventTraceTooltip:SetParent(UIParent)
-	EventTraceTooltip:SetFrameStrata("TOOLTIP")
-	EventTraceTooltip:SetBackdrop(nil)
-	local bg = CreateFrame("Frame", nil, EventTraceTooltip)
-	bg:SetPoint("TOPLEFT")
-	bg:SetPoint("BOTTOMRIGHT")
-	bg:SetFrameLevel(EventTraceTooltip:GetFrameLevel()-1)
-	F.CreateBD(bg, .6)
+	if AuroraConfig.tooltips then
+		for _, tip in next, {FrameStackTooltip, EventTraceTooltip} do
+			tip:SetFrameStrata("TOOLTIP")
+			tip:SetBackdrop(nil)
+			tip.auroraTip = true
+			local bg = F.CreateBDFrame(tip, .6)
+			F.CreateSD(bg)
+		end
+		FrameStackTooltip:SetScale(UIParent:GetScale())
+		EventTraceTooltip:SetParent(UIParent)
+	end
 
 	local texs = {
 		"TopLeft",

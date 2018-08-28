@@ -330,8 +330,8 @@ C.themes["Blizzard_Communities"] = function()
 					select(7, button:GetRegions()):SetAlpha(0)
 
 					button.bg = F.CreateBDFrame(button, .25)
-					button.bg:SetPoint("TOPLEFT", button.Icon, 0, 1)
-					button.bg:SetPoint("BOTTOMRIGHT", 0, 3)
+					button.bg:SetPoint("TOPLEFT", button.Icon, -5, 5)
+					button.bg:SetPoint("BOTTOMRIGHT", 0, 10)
 				end
 				button.DisabledBG:Hide()
 			end

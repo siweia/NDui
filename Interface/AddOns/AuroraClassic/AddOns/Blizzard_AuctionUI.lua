@@ -8,18 +8,11 @@ C.themes["Blizzard_AuctionUI"] = function()
 	F.CreateSD(AuctionProgressFrame)
 
 	AuctionProgressBar:SetStatusBarTexture(C.media.backdrop)
-	local ABBD = CreateFrame("Frame", nil, AuctionProgressBar)
-	ABBD:SetPoint("TOPLEFT", -1, 1)
-	ABBD:SetPoint("BOTTOMRIGHT", 1, -1)
-	ABBD:SetFrameLevel(AuctionProgressBar:GetFrameLevel()-1)
-	F.CreateBD(ABBD, .25)
-
-	AuctionProgressBar.Icon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBG(AuctionProgressBar.Icon)
+	F.CreateBDFrame(AuctionProgressBar, .25)
+	F.ReskinIcon(AuctionProgressBar.Icon)
 
 	AuctionProgressBar.Text:ClearAllPoints()
 	AuctionProgressBar.Text:SetPoint("CENTER", 0, 1)
-
 	F.ReskinClose(AuctionProgressFrameCancelButton, "LEFT", AuctionProgressBar, "RIGHT", 4, 0)
 	select(14, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
 
@@ -103,21 +96,18 @@ C.themes["Blizzard_AuctionUI"] = function()
 	BuyoutPriceSilver:SetPoint("LEFT", BuyoutPriceGold, "RIGHT", 1, 0)
 	BuyoutPriceCopper:SetPoint("LEFT", BuyoutPriceSilver, "RIGHT", 1, 0)
 
-	for i = 1, NUM_BROWSE_TO_DISPLAY do
-		local bu = _G["BrowseButton"..i]
-		local it = _G["BrowseButton"..i.."Item"]
-		local ic = _G["BrowseButton"..i.."ItemIconTexture"]
+	local function reskinAuctionButtons(button, i)
+		local bu = _G[button..i]
+		local it = _G[button..i.."Item"]
+		local ic = _G[button..i.."ItemIconTexture"]
 
 		if bu and it then
 			it:SetNormalTexture("")
 			it:SetPushedTexture("")
 			it:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			F.ReskinIcon(ic)
-
 			it.IconBorder:SetAlpha(0)
-			_G["BrowseButton"..i.."Left"]:Hide()
-			select(5, _G["BrowseButton"..i]:GetRegions()):Hide()
-			_G["BrowseButton"..i.."Right"]:Hide()
+			F.StripTextures(bu)
 
 			local bg = F.CreateBDFrame(bu, .25)
 			bg:SetPoint("TOPLEFT")
@@ -132,67 +122,16 @@ C.themes["Blizzard_AuctionUI"] = function()
 		end
 	end
 
+	for i = 1, NUM_BROWSE_TO_DISPLAY do
+		reskinAuctionButtons("BrowseButton", i)
+	end
+
 	for i = 1, NUM_BIDS_TO_DISPLAY do
-		local bu = _G["BidButton"..i]
-		local it = _G["BidButton"..i.."Item"]
-		local ic = _G["BidButton"..i.."ItemIconTexture"]
-
-		it:SetNormalTexture("")
-		it:SetPushedTexture("")
-
-		ic:SetTexCoord(.08, .92, .08, .92)
-
-		F.CreateBG(it)
-
-		it.IconBorder:SetTexture("")
-		_G["BidButton"..i.."Left"]:Hide()
-		select(6, _G["BidButton"..i]:GetRegions()):Hide()
-		_G["BidButton"..i.."Right"]:Hide()
-
-		local bd = CreateFrame("Frame", nil, bu)
-		bd:SetPoint("TOPLEFT")
-		bd:SetPoint("BOTTOMRIGHT", 0, 5)
-		bd:SetFrameLevel(bu:GetFrameLevel()-1)
-		F.CreateBD(bd, .25)
-
-		bu:SetHighlightTexture(C.media.backdrop)
-		local hl = bu:GetHighlightTexture()
-		hl:SetVertexColor(r, g, b, .2)
-		hl:ClearAllPoints()
-		hl:SetPoint("TOPLEFT", 0, -1)
-		hl:SetPoint("BOTTOMRIGHT", -1, 6)
+		reskinAuctionButtons("BidButton", i)
 	end
 
 	for i = 1, NUM_AUCTIONS_TO_DISPLAY do
-		local bu = _G["AuctionsButton"..i]
-		local it = _G["AuctionsButton"..i.."Item"]
-		local ic = _G["AuctionsButton"..i.."ItemIconTexture"]
-
-		it:SetNormalTexture("")
-		it:SetPushedTexture("")
-
-		ic:SetTexCoord(.08, .92, .08, .92)
-
-		F.CreateBG(it)
-
-		it.IconBorder:SetTexture("")
-		it.IconBorder.SetTexture = F.dummy
-		_G["AuctionsButton"..i.."Left"]:Hide()
-		select(4, _G["AuctionsButton"..i]:GetRegions()):Hide()
-		_G["AuctionsButton"..i.."Right"]:Hide()
-
-		local bd = CreateFrame("Frame", nil, bu)
-		bd:SetPoint("TOPLEFT")
-		bd:SetPoint("BOTTOMRIGHT", 0, 5)
-		bd:SetFrameLevel(bu:GetFrameLevel()-1)
-		F.CreateBD(bd, .25)
-
-		bu:SetHighlightTexture(C.media.backdrop)
-		local hl = bu:GetHighlightTexture()
-		hl:SetVertexColor(r, g, b, .2)
-		hl:ClearAllPoints()
-		hl:SetPoint("TOPLEFT", 0, -1)
-		hl:SetPoint("BOTTOMRIGHT", -1, 6)
+		reskinAuctionButtons("AuctionsButton", i)
 	end
 
 	local auctionhandler = CreateFrame("Frame")

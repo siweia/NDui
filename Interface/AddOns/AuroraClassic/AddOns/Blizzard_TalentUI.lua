@@ -254,9 +254,10 @@ C.themes["Blizzard_TalentUI"] = function()
 			F.CreateBDFrame(self.Icon)
 			F.CreateBDFrame(self, .25)
 			self:GetRegions():SetAlpha(0)
-			self:SetHighlightTexture("")
+			self:GetHighlightTexture():SetColorTexture(1, 1, 1, .1)
 			self.SelectedOtherOverlay:SetAlpha(0)
 			self.Selected:SetColorTexture(r, g, b, .25)
+			self.Selected:SetDrawLayer("BACKGROUND")
 			self.styled = true
 		end
 	end
