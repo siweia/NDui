@@ -5,11 +5,8 @@ local module = B:GetModule("Maps")
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
 
-	local MBG = CreateFrame("Frame", nil, Minimap)
-	MBG:SetFrameLevel(Minimap:GetFrameLevel() - 1)
-	MBG:SetPoint("TOPLEFT", -3, 3)
-	MBG:SetPoint("BOTTOMRIGHT", 3, -3)
-	B.CreateBD(MBG)
+	local MBG = B.CreateBG(Minimap, 1)
+	B.CreateSD(MBG)
 	local anim = MBG:CreateAnimationGroup()
 	anim:SetLooping("BOUNCE")
 	anim.fader = anim:CreateAnimation("Alpha")
@@ -20,15 +17,15 @@ function module:CreatePulse()
 
 	local function updateMinimapAnim(event)
 		if event == "PLAYER_REGEN_DISABLED" then
-			MBG:SetBackdropBorderColor(1, 0, 0)
+			MBG.Shadow:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
 		elseif not InCombatLockdown() then
 			if C_Calendar.GetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
-				MBG:SetBackdropBorderColor(1, 1, 0)
+				MBG.Shadow:SetBackdropBorderColor(1, 1, 0)
 				anim:Play()
 			else
 				anim:Stop()
-				MBG:SetBackdropBorderColor(0, 0, 0)
+				MBG.Shadow:SetBackdropBorderColor(0, 0, 0)
 			end
 		end
 	end
@@ -40,7 +37,7 @@ function module:CreatePulse()
 	MiniMapMailFrame:HookScript("OnHide", function()
 		if InCombatLockdown() then return end
 		anim:Stop()
-		MBG:SetBackdropBorderColor(0, 0, 0)
+		MBG.Shadow:SetBackdropBorderColor(0, 0, 0)
 	end)
 end
 
@@ -112,6 +109,7 @@ function module:ReskinRegions()
 	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
 	Invt:SetSize(300, 80)
 	B.CreateBD(Invt)
+	B.CreateSD(Invt)
 	B.CreateTex(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 

@@ -267,9 +267,11 @@ function UF:CreateCastBar(self)
 	cb:SetWidth(self:GetWidth() - 22)
 	cb:SetStatusBarTexture(DB.normTex)
 	cb:SetFrameLevel(1)
-	B.CreateBD(cb, .5, .1)
-	B.CreateSD(cb, 3, 3)
-	B.CreateTex(cb)
+
+	local bg = B.CreateBG(cb)
+	B.CreateBD(bg)
+	B.CreateSD(bg)
+	B.CreateTex(bg)
 
 	if self.mystyle == "player" then
 		cb:SetSize(unpack(C.UFs.PlayercbSize))
@@ -364,8 +366,9 @@ function UF:ReskinMirrorBars()
 		B.StripTextures(bar, true)
 		bar:SetSize(280, 15)
 
-		local bg = B.CreateBG(bar, 3)
+		local bg = B.CreateBG(bar, 1)
 		B.CreateBD(bg)
+		B.CreateSD(bg)
 		B.CreateTex(bg)
 
 		local statusbar = _G["MirrorTimer"..i.."StatusBar"]
@@ -689,8 +692,8 @@ function UF:CreateAltPower(self)
 	bar:SetStatusBarTexture(DB.normTex)
 	bar:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
 	bar:SetSize(self:GetWidth(), 2)
-	B.CreateBD(bar, .5, .1)
-	B.CreateSD(bar, 3, 3)
+	B.CreateBD(bar, .5)
+	B.CreateSD(bar)
 
 	local text = B.CreateFS(bar, 14, "")
 	text:SetJustifyH("CENTER")

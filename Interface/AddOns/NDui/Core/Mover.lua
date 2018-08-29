@@ -9,6 +9,7 @@ B.Mover = function(Frame, Text, key, Pos, w, h)
 	Mover:SetWidth(w or Frame:GetWidth())
 	Mover:SetHeight(h or Frame:GetHeight())
 	B.CreateBD(Mover)
+	B.CreateSD(Mover)
 	B.CreateTex(Mover)
 	B.CreateFS(Mover, DB.Font[2], Text)
 	tinsert(MoverList, Mover)
@@ -84,13 +85,14 @@ local function CreateConsole()
 	f:SetPoint("TOP", 0, -150)
 	f:SetSize(296, 65)
 	B.CreateBD(f)
+	B.CreateSD(f)
 	B.CreateTex(f)
 	B.CreateMF(f)
 	local lable = B.CreateFS(f, 15, L["Mover Console"], false, "TOP", 0, -10)
 	lable:SetTextColor(1, .8, 0)
 	local bu, text = {}, {LOCK, CANCEL, L["Grids"], RESET}
 	for i = 1, 4 do
-		bu[i] = B.CreateButton(f, 70, 30, text[i])
+		bu[i] = B.CreateButton(f, 70, 28, text[i])
 		if i == 1 then
 			bu[i]:SetPoint("BOTTOMLEFT", 5, 5)
 		else
@@ -115,16 +117,17 @@ local function CreateConsole()
 
 	do
 		local frame = CreateFrame("Frame", nil, f)
-		frame:SetPoint("TOP", f, "BOTTOM")
+		frame:SetPoint("TOP", f, "BOTTOM", 0, -2)
 		frame:SetSize(296, 65)
 		B.CreateBD(frame)
+		B.CreateSD(frame)
 		B.CreateTex(frame)
 		local lable = B.CreateFS(frame, 15, L["Toggle AuraWatch"], false, "TOP", 0, -10)
 		lable:SetTextColor(1, .8, 0)
 
 		local bu, text = {}, {UNLOCK, LOCK, RESET}
 		for i = 1, 3 do
-			bu[i] = B.CreateButton(frame, 94, 30, text[i])
+			bu[i] = B.CreateButton(frame, 94, 28, text[i])
 			if i == 1 then
 				bu[i]:SetPoint("BOTTOMLEFT", 5, 5)
 			else

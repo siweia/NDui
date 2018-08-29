@@ -44,6 +44,7 @@ function module:SkadaSkin()
 		skada:SetFrameLevel(5)
 		skada.SetFrameLevel = B.Dummy
 		skada:SetBackdrop(nil)
+		B.StripTextures(skada.borderFrame)
 
 		win.bargroup.button:SetBackdropColor(1, 1, 1, 0)
 
@@ -51,15 +52,18 @@ function module:SkadaSkin()
 			skada.shadow = B.CreateBG(skada)
 			skada.shadow:SetAllPoints()
 			skada.shadow:SetFrameLevel(1)
-			B.CreateBD(skada.shadow, .5, 3)
+			B.CreateBD(skada.shadow)
+			B.CreateSD(skada.shadow)
 			B.CreateTex(skada.shadow)
 
 			local Cskada = B.CreateButton(skada, 20, 80, ">", 18)
-			Cskada:SetPoint("RIGHT", skada, "LEFT", 0, 0)
+			Cskada:SetPoint("RIGHT", skada, "LEFT", -4, 0)
+			B.CreateSD(Cskada)
 			B.CreateTex(Cskada)
 			local Oskada = B.CreateButton(UIParent, 20, 80, "<", 18)
 			Oskada:Hide()
-			Oskada:SetPoint("RIGHT", skada, "RIGHT", 5, 0)
+			Oskada:SetPoint("RIGHT", skada, "RIGHT", 2, 0)
+			B.CreateSD(Oskada)
 			B.CreateTex(Oskada)
 			Cskada:SetScript("OnClick", function()
 				Oskada:Show()
@@ -99,10 +103,10 @@ function module:SkadaSkin()
 	local windows = {}
 	local function EmbedSkada()
 		if #windows == 1 then
-			EmbedWindow(windows[1], 320, 18, 198, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
+			EmbedWindow(windows[1], 320, 18, 198, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 26)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 141)
-			EmbedWindow(windows[2], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -3, 26)
+			EmbedWindow(windows[1], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 145)
+			EmbedWindow(windows[2], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 26)
 		end
 	end
 

@@ -63,6 +63,7 @@ local defaultSettings = {
 		SpecRaidPos = false,
 		RaidClassColor = false,
 		HorizonRaid = false,
+		ReverseRaid = false,
 		RaidScale = 1,
 		HealthPerc = false,
 		AurasClickThrough = false,
@@ -298,10 +299,11 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
 		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
+		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"], true},
+		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"], true},
 		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
-		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{},--blank
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "DebuffBorder", L["Auras Border"], true},
@@ -478,7 +480,7 @@ end
 local function CreateTab(parent, i, name)
 	local tab = CreateFrame("Button", nil, parent)
 	tab:SetPoint("TOPLEFT", 20, -30*i - 20)
-	tab:SetSize(130, 30)
+	tab:SetSize(130, 28)
 	B.CreateBD(tab, .3)
 	local label = B.CreateFS(tab, 15, name, false, "LEFT", 10, 0)
 	label:SetTextColor(1, .8, 0)
@@ -519,7 +521,7 @@ local function CreateOption(i)
 			end)
 		-- Editbox
 		elseif type == 2 then
-			local eb = B.CreateEditBox(parent, 200, 30)
+			local eb = B.CreateEditBox(parent, 200, 28)
 			eb:SetMaxLetters(200)
 			if horizon then
 				eb:SetPoint("TOPLEFT", 345, -offset + 50)
@@ -583,7 +585,7 @@ local function CreateOption(i)
 			thumb:SetBlendMode("ADD")
 		-- Dropdown
 		elseif type == 4 then
-			local dd = B.CreateDropDown(parent, 200, 30, data)
+			local dd = B.CreateDropDown(parent, 200, 28, data)
 			if horizon then
 				dd:SetPoint("TOPLEFT", 345, -offset + 50)
 			else

@@ -152,8 +152,9 @@ function module:DBMSkin()
 
 	local function SkinRange()
 		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
-			local bg = B.CreateBG(DBMRangeCheckRadar, 2)
+			local bg = B.CreateBG(DBMRangeCheckRadar, 1)
 			B.CreateBD(bg, .3)
+			B.CreateSD(bg)
 			B.CreateTex(bg)
 
 			DBMRangeCheckRadar.styled = true
@@ -163,7 +164,9 @@ function module:DBMSkin()
 			DBMRangeCheck:SetBackdrop(nil)
 			local bg = B.CreateBG(DBMRangeCheck, 0)
 			B.CreateBD(bg)
+			B.CreateSD(bg)
 			B.CreateTex(bg)
+			DBMRangeCheck.tipStyled = true
 
 			DBMRangeCheck.styled = true
 		end
@@ -178,7 +181,9 @@ function module:DBMSkin()
 				self:SetBackdrop(nil)
 				self.bg = B.CreateBG(self, 0)
 				B.CreateBD(self.bg, .6, 3)
+				B.CreateSD(self.bg)
 				B.CreateTex(self.bg)
+				DBMInfoFrame.tipStyled = true
 			end
 		end)
 	end

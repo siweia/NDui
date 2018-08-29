@@ -6,9 +6,10 @@ function module:CreateRM()
 	if not NDuiDB["Skins"]["RM"] then return end
 
 	local header = CreateFrame("Button", nil, UIParent)
-	header:SetSize(120, 30)
+	header:SetSize(120, 28)
 	header:SetFrameLevel(2)
 	B.CreateBD(header)
+	B.CreateSD(header)
 	B.CreateTex(header)
 	B.CreateBC(header, .5)
 	B.Mover(header, L["Raid Tool"], "RaidManager", C.Skins.RMPos)
@@ -131,10 +132,11 @@ function module:CreateRM()
 
 	-- Ready check indicator
 	local rcFrame = CreateFrame("Frame", nil, header)
-	rcFrame:SetPoint("TOP", header, "BOTTOM")
+	rcFrame:SetPoint("TOP", header, "BOTTOM", 0, -2)
 	rcFrame:SetSize(120, 50)
 	rcFrame:Hide()
 	B.CreateBD(rcFrame)
+	B.CreateSD(rcFrame)
 	B.CreateTex(rcFrame)
 	B.CreateFS(rcFrame, 14, READY_CHECK, true, "TOP", 0, -8)
 	local rc = B.CreateFS(rcFrame, 14, "", false, "TOP", 0, -28)
@@ -182,11 +184,12 @@ function module:CreateRM()
 	-- World marker
 	local marker = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	marker:ClearAllPoints()
-	marker:SetPoint("RIGHT", header, "LEFT", 0, 0)
+	marker:SetPoint("RIGHT", header, "LEFT", -2, 0)
 	marker:SetParent(header)
-	marker:SetSize(30, 30)
+	marker:SetSize(28, 28)
 	B.StripTextures(marker)
 	B.CreateBD(marker)
+	B.CreateSD(marker)
 	B.CreateTex(marker)
 	B.CreateBC(marker, .5)
 	marker:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
@@ -201,9 +204,10 @@ function module:CreateRM()
 
 	-- Buff checker
 	local checker = CreateFrame("Button", nil, header)
-	checker:SetPoint("LEFT", header, "RIGHT", 0, 0)
-	checker:SetSize(30, 30)
+	checker:SetPoint("LEFT", header, "RIGHT", 2, 0)
+	checker:SetSize(28, 28)
 	B.CreateBD(checker)
+	B.CreateSD(checker)
 	B.CreateTex(checker)
 	B.CreateFS(checker, 16, "!", true)
 	B.CreateBC(checker, .5)
@@ -332,9 +336,10 @@ function module:CreateRM()
 
 	-- Others
 	local menu = CreateFrame("Frame", nil, header)
-	menu:SetPoint("TOP", header, "BOTTOM")
+	menu:SetPoint("TOP", header, "BOTTOM", 0, -2)
 	menu:SetSize(180, 70)
 	B.CreateBD(menu)
+	B.CreateSD(menu)
 	B.CreateTex(menu)
 	menu:Hide()
 	menu:SetScript("OnLeave", function(self)
@@ -406,8 +411,8 @@ function module:CreateRM()
 	}
 	local bu = {}
 	for i, j in pairs(buttons) do
-		bu[i] = B.CreateButton(menu, 85, 30, j[1], 12)
-		bu[i]:SetPoint(mod(i, 2) == 0 and "TOPRIGHT" or "TOPLEFT", mod(i, 2) == 0 and -5 or 5, i > 2 and -35 or -5)
+		bu[i] = B.CreateButton(menu, 83, 28, j[1], 12)
+		bu[i]:SetPoint(mod(i, 2) == 0 and "TOPRIGHT" or "TOPLEFT", mod(i, 2) == 0 and -5 or 5, i > 2 and -37 or -5)
 		bu[i]:SetScript("OnClick", j[2])
 	end
 

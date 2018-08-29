@@ -295,8 +295,8 @@ function module:OnLogin()
 			local F = unpack(AuroraClassic)
 			F.SetBD(self)
 		else
-			B.CreateBD(self, .5, 1)
-			B.CreateSD(self, 2, 3)
+			B.CreateBD(self)
+			B.CreateSD(self)
 			B.CreateTex(self)
 		end
 
@@ -345,7 +345,7 @@ function module:OnLogin()
 		sbg:SetPoint("CENTER", search, "CENTER")
 		sbg:SetSize(230, 22)
 		sbg:SetFrameLevel(search:GetFrameLevel() - 1)
-		B.CreateBD(sbg, .5, 1)
+		B.CreateBD(sbg)
 
 		local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 		tagDisplay:SetFont(unpack(DB.Font))
@@ -394,6 +394,7 @@ function module:OnLogin()
 				F.SetBD(bg)
 			else
 				B.CreateBD(bg)
+				B.CreateSD(bg)
 				B.CreateTex(bg)
 			end
 

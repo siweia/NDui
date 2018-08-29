@@ -224,8 +224,8 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
 	if GameTooltipStatusBar:IsShown() then
 		GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 3, 2)
-		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -3, 2)
+		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 3)
+		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -2, 3)
 	end
 end)
 
@@ -234,8 +234,9 @@ do
 	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
 	GameTooltipStatusBar:SetHeight(5)
 	B.CreateSD(GameTooltipStatusBar, 3, 3)
-	local bg = B.CreateBG(GameTooltipStatusBar, 3)
+	local bg = B.CreateBG(GameTooltipStatusBar, 1)
 	B.CreateBD(bg, .7)
+	B.CreateSD(bg)
 	B.CreateTex(bg)
 end
 
@@ -306,6 +307,7 @@ local function style(self)
 		local bg = B.CreateBG(self, 0)
 		bg:SetFrameLevel(self:GetFrameLevel())
 		B.CreateBD(bg, .7)
+		B.CreateSD(bg)
 		B.CreateTex(bg)
 		self.bg = bg
 

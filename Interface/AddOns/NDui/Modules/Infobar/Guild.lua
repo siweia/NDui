@@ -12,6 +12,7 @@ infoFrame:SetPoint("TOPLEFT", UIParent, 15, -30)
 infoFrame:SetClampedToScreen(true)
 infoFrame:SetFrameStrata("TOOLTIP")
 B.CreateBD(infoFrame, .7)
+B.CreateSD(infoFrame)
 B.CreateTex(infoFrame)
 infoFrame:Hide()
 

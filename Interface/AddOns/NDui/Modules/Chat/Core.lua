@@ -25,9 +25,10 @@ local function skinChat(self)
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
 	eb:ClearAllPoints()
-	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
-	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -15, 54)
+	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 24)
+	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -13, 52)
 	B.CreateBD(eb)
+	B.CreateSD(eb)
 	B.CreateTex(eb)
 	for i = 3, 8 do
 		select(i, eb:GetRegions()):SetAlpha(0)
@@ -35,9 +36,10 @@ local function skinChat(self)
 
 	local lang = _G[name.."EditBoxLanguage"]
 	lang:GetRegions():SetAlpha(0)
-	lang:SetPoint("TOPLEFT", eb, "TOPRIGHT", -2, 0)
-	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 28, 0)
+	lang:SetPoint("TOPLEFT", eb, "TOPRIGHT", 2, 0)
+	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 30, 0)
 	B.CreateBD(lang)
+	B.CreateSD(lang)
 	B.CreateTex(lang)
 
 	local tab = _G[name.."Tab"]

@@ -42,6 +42,7 @@ function module:BigWigsSkin()
 
 		local bd = bar.candyBarBackdrop
 		B.CreateBD(bd)
+		B.CreateSD(bd)
 		B.CreateTex(bd)
 		bd:ClearAllPoints()
 		bd:SetPoint("TOPLEFT", bar, "TOPLEFT", -3, 3)
@@ -64,6 +65,7 @@ function module:BigWigsSkin()
 
 			local iconBd = bar.candyBarIconFrameBackdrop
 			B.CreateBD(iconBd)
+			B.CreateSD(iconBd)
 			iconBd:ClearAllPoints()
 			iconBd:SetPoint("TOPLEFT", icon, "TOPLEFT", -3, 3)
 			iconBd:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 3, -3)
