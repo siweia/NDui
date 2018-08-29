@@ -264,7 +264,7 @@ hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
 			local _, bd, tex = bar:GetRegions()
 			tex:SetTexture(DB.normTex)
 			bd:Hide()
-			local bg = B.CreateBG(bd)
+			local bg = B.CreateBG(bd, 0)
 			B.CreateBD(bg, .25)
 
 			bar.styled = true
@@ -275,11 +275,14 @@ end)
 hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 	if self.progressBarPool then
 		local bar = self.progressBarPool:Acquire()
-		B.StripTextures(bar.Bar)
-		select(7, bar.Bar:GetRegions()):Hide()
-		bar.Bar:SetStatusBarTexture(DB.normTex)
-		B.CreateBD(bar, .25, 2)
-		bar:SetSize(219, 19)
+		if bar and not bar.styled then
+			B.StripTextures(bar.Bar, true)
+			bar.Bar:SetStatusBarTexture(DB.normTex)
+			B.CreateBD(bar, .25)
+			bar:SetSize(216, 18)
+
+			bar.styled = true
+		end
 	end
 end)
 
