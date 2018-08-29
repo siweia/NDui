@@ -421,7 +421,7 @@ function F:ReskinCheck()
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint("TOPLEFT", 5, -5)
 	hl:SetPoint("BOTTOMRIGHT", -5, 5)
-	hl:SetVertexColor(r, g, b, .2)
+	hl:SetVertexColor(r, g, b, .25)
 
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", 4, -4)

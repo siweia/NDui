@@ -696,6 +696,7 @@ C.themes["Blizzard_Collections"] = function()
 			end
 
 			if PetJournalBandageButton then
+				PetJournalBandageButton:SetPushedTexture("")
 				PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				PetJournalBandageButtonBorder:Hide()
 				PetJournalBandageButtonIcon:SetTexCoord(.08, .92, .08, .92)
