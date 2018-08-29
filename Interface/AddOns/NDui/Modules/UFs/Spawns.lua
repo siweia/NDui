@@ -296,6 +296,7 @@ function UF:OnLogin()
 		local numGroups = NDuiDB["UFs"]["NumGroups"]
 		local horizon = NDuiDB["UFs"]["HorizonRaid"]
 		local scale = NDuiDB["UFs"]["RaidScale"]
+		local reverse = NDuiDB["UFs"]["ReverseRaid"]
 		local raidMover
 
 		if NDuiDB["UFs"]["SimpleMode"] then
@@ -369,14 +370,30 @@ function UF:OnLogin()
 				if i == 1 then
 					if horizon then
 						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 84*5*scale, 40*numGroups*scale)
+						if reverse then
+							groups[i]:ClearAllPoints()
+							groups[i]:SetPoint("BOTTOMLEFT", raidMover)
+						end
 					else
 						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 85*numGroups*scale, 42*5*scale)
+						if reverse then
+							groups[i]:ClearAllPoints()
+							groups[i]:SetPoint("TOPRIGHT", raidMover)
+						end
 					end
 				else
 					if horizon then
-						groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, NDuiDB["UFs"]["ShowTeamIndex"] and -25 or -15)
+						if reverse then
+							groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, NDuiDB["UFs"]["ShowTeamIndex"] and 25 or 15)
+						else
+							groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, NDuiDB["UFs"]["ShowTeamIndex"] and -25 or -15)
+						end
 					else
-						groups[i]:SetPoint("TOPLEFT", groups[i-1], "TOPRIGHT", 5, 0)
+						if reverse then
+							groups[i]:SetPoint("TOPRIGHT", groups[i-1], "TOPLEFT", -5, 0)
+						else
+							groups[i]:SetPoint("TOPLEFT", groups[i-1], "TOPRIGHT", 5, 0)
+						end
 					end
 				end
 
