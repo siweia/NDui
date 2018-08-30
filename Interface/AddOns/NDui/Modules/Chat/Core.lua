@@ -62,7 +62,7 @@ local function skinChat(self)
 		end
 	end)
 
-	B.StripTextures(self)
+	if NDuiDB["Chat"]["Lock"] then B.StripTextures(self) end
 	B.HideObject(self.buttonFrame)
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
