@@ -31,7 +31,7 @@ C.defaults = {
 	["alpha"] = 0.5,
 	["bags"] = false,
 	["buttonGradientColour"] = {.3, .3, .3, .3},
-	["buttonSolidColour"] = {.2, .2, .2, 1},
+	["buttonSolidColour"] = {.2, .2, .2, .6},
 	["useButtonGradientColour"] = true,
 	["chatBubbles"] = true,
 	["bubbleColor"] = false,
@@ -779,9 +779,9 @@ Skin:SetScript("OnEvent", function(_, _, addon)
 		useButtonGradientColour = AuroraConfig.useButtonGradientColour
 
 		if useButtonGradientColour then
-			buttonR, buttonG, buttonB, buttonA = unpack(AuroraConfig.buttonGradientColour)
+			buttonR, buttonG, buttonB, buttonA = unpack(C.defaults.buttonGradientColour)
 		else
-			buttonR, buttonG, buttonB, buttonA = unpack(AuroraConfig.buttonSolidColour)
+			buttonR, buttonG, buttonB, buttonA = unpack(C.defaults.buttonSolidColour)
 		end
 
 		if AuroraConfig.useCustomColour then
