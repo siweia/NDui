@@ -1,4 +1,4 @@
-Copyright © 2017-2018 siweia <http://bbs.nga.cn/read.php?tid=5483616>
+Copyright © 2011-2018 siweia <https://github.com/siweia/NDui>
 
 The contents of this addon, excluding third-party resources, are
 copyrighted to its authors with all rights reserved.
@@ -8,7 +8,8 @@ The author of this addon hereby grants you the following rights:
 1. 	You may make modifications to this addon for private use only except
 	if you have been granted explicit permission by the author.
 
-2. 	Do not modify the name of this addon, including the addon folders.
+2. 	Do not modify the name of this addon, including the addon folders and
+	"NDui.toc" file without permission.
 
 3.	Do not embed the contents of this addon within another addon.
 
