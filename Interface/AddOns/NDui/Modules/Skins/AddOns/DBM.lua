@@ -30,7 +30,7 @@ function module:DBMSkin()
 					backdroptex:SetPoint("TOPLEFT", icon1.overlay, "TOPLEFT", 1, -1)
 					backdroptex:SetPoint("BOTTOMRIGHT", icon1.overlay, "BOTTOMRIGHT", -1, 1)
 					backdroptex:SetTexCoord(unpack(DB.TexCoord))
-					B.CreateSD(icon1.overlay, 2, 3)
+					B.CreateSD(icon1.overlay)
 				end
 
 				if not (icon2.overlay) then
@@ -43,7 +43,7 @@ function module:DBMSkin()
 					backdroptex:SetPoint("TOPLEFT", icon2.overlay, "TOPLEFT", 1, -1)
 					backdroptex:SetPoint("BOTTOMRIGHT", icon2.overlay, "BOTTOMRIGHT", -1, 1)
 					backdroptex:SetTexCoord(unpack(DB.TexCoord))		
-					B.CreateSD(icon2.overlay, 2, 3)
+					B.CreateSD(icon2.overlay)
 				end
 
 				if bar.color then

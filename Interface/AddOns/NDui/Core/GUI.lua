@@ -316,21 +316,21 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"]},
 		{},--blank
-		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
-		{1, "Nameplate", "AllAuras", L["Show All Auras"], true},
-		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
-		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
-		{},--blank
 		{1, "Nameplate", "CustomUnitColor", "|cff00cc4c"..L["CustomUnitColor"]},
 		{1, "Nameplate", "ShowUnitPower", "|cff70c0f5"..L["ShowUnitPower"], true},
 		{2, "Nameplate", "UnitList", L["UnitColor List"]},
 		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"], true},
+		{},--blank
+		{1, "Nameplate", "ColorBorder", L["Auras Border"]},
+		{1, "Nameplate", "AllAuras", L["Show All Auras"], true},
+		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
+		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"]},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"], true},
 		{1, "Nameplate", "TankMode", L["Tank Mode"]},
 		{1, "Nameplate", "Arrow", L["Show Arrow"], true},
-		{1, "Nameplate", "InsideView", L["Nameplate InsideView"]},
-		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"], true},
+		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"]},
+		{1, "Nameplate", "InsideView", L["Nameplate InsideView"], true},
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"], false, {.5, 1.5, 1}},
 		{3, "Nameplate", "Distance", L["Nameplate Distance"], true, {20, 100, 0}},
 		{3, "Nameplate", "Width", L["NP Width"], false, {50, 150, 0}},
@@ -649,7 +649,7 @@ local function OpenGUI()
 	f:SetFrameStrata("HIGH")
 	B.CreateMF(f)
 	B.CreateBD(f, .5, 1)
-	B.CreateSD(f, 2, 3)
+	B.CreateSD(f)
 	B.CreateTex(f)
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
 	B.CreateFS(f, 16, DB.Version.." ("..DB.Support..")", false, "TOP", 0, -30)
