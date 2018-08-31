@@ -139,7 +139,6 @@ local defaultSettings = {
 		TMW = true,
 		PetBattle = true,
 		TrackerSkin = true,
-		ExtraCD = true,
 		WeakAuras = true,
 		BarLine = true,
 		InfobarLine = true,
@@ -416,7 +415,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Bigwigs", L["Bigwigs Skin"]},
 		{1, "Skins", "TMW", L["TMW Skin"], true},
 		{1, "Skins", "WeakAuras", L["WeakAuras Skin"]},
-		{1, "Skins", "ExtraCD", L["ExtraCD Skin"], true},
 	},
 	[11] = {
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
