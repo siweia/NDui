@@ -69,7 +69,20 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[3]
 			if IsPlayerSpell(193533) then
-				UpdateBuff(button, 193534, 193534)
+				local name, count, duration, expire, caster, spellID = GetUnitAura("target", 277959, "HARMFUL")
+				if not name then name, count, duration, expire, caster, spellID = GetUnitAura("player", 193534, "HELPFUL") end
+				if name and caster == "player" then
+					button.Count:SetText(count)
+					button.CD:SetCooldown(expire-duration, duration)
+					button.CD:Show()
+					button:SetAlpha(1)
+					button.Icon:SetTexture(GetSpellTexture(spellID))
+				else
+					button.Count:SetText("")
+					button.CD:Hide()
+					button:SetAlpha(.5)
+					button.Icon:SetTexture(GetSpellTexture(193534))
+				end
 			elseif IsPlayerSpell(257284) then
 				UpdateDebuff(button, 257284, 257284)
 			else
