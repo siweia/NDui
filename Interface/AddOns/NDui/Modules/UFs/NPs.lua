@@ -247,7 +247,7 @@ function UF:CreatePlates(unit)
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 
 		local cicon = self:CreateTexture(nil, "OVERLAY")
-		cicon:SetPoint("LEFT", self, "TOPLEFT", 1, 1)
+		cicon:SetPoint("LEFT", self, 1, 5)
 		cicon:SetSize(12, 12)
 		cicon:SetTexture("Interface\\MINIMAP\\ObjectIcons")
 		cicon:SetTexCoord(.391, .487, .644, .74)
