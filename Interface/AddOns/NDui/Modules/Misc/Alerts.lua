@@ -98,8 +98,60 @@ end
 	闭上你的嘴！
 	打断、偷取及驱散法术时的警报
 ]]
+function module:CheckGroupType()
+	local type
+	local count = GetNumGroupMembers()
+	if IsInRaid() then
+		type = "raid"
+	elseif IsInGroup() then
+		type = "party"
+		count = count - 1
+	end
+
+	return type, count
+end
+
 function module:InterruptAlert()
 	if not NDuiDB["Misc"]["Interrupt"] then return end
+
+	local PetData = {}
+	local function collectPets()
+		local myGUID = UnitGUID("player")
+		if myGUID then
+			local mypetGUID = UnitGUID("playerpet")
+			if mypetGUID and not PetData[mypetGUID] then
+				PetData[mypetGUID] = UnitName("player")
+			end
+		end
+
+		if NDuiDB["Misc"]["OwnInterrupt"] then return end
+
+		local type, count = self:CheckGroupType()
+		if type and count > 0 then
+			for i = 1, count do
+				local unit = string.format("%s%d", type, i)
+				local playerGUID = UnitGUID(unit)
+				if playerGUID then
+					local petGUID = UnitGUID(unit.."pet")
+					if petGUID and not PetData[petGUID] then
+						local father = GetUnitName(unit, true)
+						PetData[petGUID] = father
+					end
+				end
+			end
+		end
+	end
+	if not NDuiDB["Misc"]["OwnInterrupt"] then
+		B:RegisterEvent("GROUP_ROSTER_UPDATE", collectPets)
+	end
+	B:RegisterEvent("UNIT_PET", collectPets)
+
+	local function isAllyPet(sourceGUID)
+		local father = PetData[sourceGUID]
+		if father and (UnitInRaid(father) or UnitInParty(father)) then
+			return true
+		end
+	end
 
 	local infoType = {
 		["SPELL_INTERRUPT"] = L["Interrupt"],
@@ -109,10 +161,11 @@ function module:InterruptAlert()
 
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
-		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
-		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
-			if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") then return end
 
+		local _, eventType, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
+		if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") and not isAllyPet(sourceGUID) then return end
+
+		if UnitInRaid(sourceName) or UnitInParty(sourceName) or isAllyPet(sourceGUID) then
 			local infoText = infoType[eventType]
 			if infoText then
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
