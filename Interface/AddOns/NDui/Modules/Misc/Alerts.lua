@@ -6,7 +6,6 @@ function module:AddAlerts()
 	self:SoloInfo()
 	self:RareAlert()
 	self:InterruptAlert()
-	self:SwappingAlert()
 	self:VersionCheck()
 end
 
@@ -161,6 +160,7 @@ function module:InterruptAlert()
 
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
+		if NDuiDB["Misc"]["AlertInInstance"] and not IsInInstance() then return end
 
 		local _, eventType, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
 		if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") and not isAllyPet(sourceGUID) then return end
@@ -170,25 +170,6 @@ function module:InterruptAlert()
 			if infoText then
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 			end
-		end
-	end
-
-	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateAlert)
-end
-
---[[
-	工程移形换影装置使用通报
-]]
-function module:SwappingAlert()
-	if not NDuiDB["Misc"]["SwapingAlert"] then return end
-
-	local name, itemLink = GetItemInfo(111820)
-	local function updateAlert(_, ...)
-		if not IsInGroup() then return end
-		local _, eventType, _, _, sourceName, _, _, _, destName, _, _, spellID, spellName = ...
-		if eventType ~= "SPELL_CAST_SUCCESS" or spellID ~= 161399 then return end
-		if UnitInRaid(sourceName) or UnitInParty(sourceName) then
-			SendChatMessage(format(L["Swapblaster"], sourceName, destName, itemLink or name or spellName), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
 		end
 	end
 
