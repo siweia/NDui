@@ -11,7 +11,8 @@ The author of this addon hereby grants you the following rights:
 2. 	Do not modify the name of this addon, including the addon folders and
 	"NDui.toc" file without permission.
 
-3.	Do not embed the contents of this addon within another addon.
+3.	Do not embed the contents of this addon within another addon without
+	permission or reference.
 
 4. 	This copyright notice shall be included in all copies or substantial
 	portions of the Software.
