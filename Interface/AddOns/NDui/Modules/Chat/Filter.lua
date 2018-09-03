@@ -98,7 +98,7 @@ end
 
 local addonBlockList = {
 	"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【爱不易】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
-	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "属性通报", "%[World Quest Tracker%]", "wowcn%.vip"
+	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "属性通报", "wowcn%.vip"
 }
 
 local function genAddonBlock(_, _, msg, author)
@@ -155,6 +155,38 @@ hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 	end
 end)
 
+--[[
+	过滤WQT的邀请
+	Credit: WorldQuestTrackerBlocker, Jordy141
+]]
+local WQTUsers = {}
+local inviteString = _G.ERR_INVITED_TO_GROUP_SS:gsub(".+|h", "")
+
+local function blockInviteString(_, _, msg)
+	if msg:find(inviteString) then
+		local name = msg:match("%[(.+)%]")
+		if WQTUsers[name] then
+			return true
+		end
+	end
+end
+
+local function blockWhisperString(_, _, msg, author)
+	local name = Ambiguate(author, "none")
+	if msg:find("%[World Quest Tracker%]") or msg:find("一起做世界任务吧：") then
+		if not WQTUsers[name] then
+			WQTUsers[name] = true
+		end
+		return true
+	end
+end
+
+local function hideInvitePopup(_, name)
+	if WQTUsers[name] then
+		StaticPopup_Hide("PARTY_INVITE")
+	end
+end
+
 function module:ChatFilter()
 	genFilterList()
 	genChatAtList()
@@ -176,4 +208,8 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genAddonBlock)
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
+
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", blockInviteString)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", blockWhisperString)
+	B:RegisterEvent("PARTY_INVITE_REQUEST", hideInvitePopup)
 end
