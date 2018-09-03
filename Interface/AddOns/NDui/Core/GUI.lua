@@ -173,13 +173,13 @@ local defaultSettings = {
 		Screenshot = false,
 		TradeTab = true,
 		Interrupt = false,
-		OwnInterrupt = false,
+		OwnInterrupt = true,
+		AlertInInstance = true,
 		FasterLoot = true,
 		AutoQuest = false,
 		HideTalking = true,
 		HideBanner = true,
 		PetFilter = true,
-		SwapingAlert = false,
 		QuestNotifier = false,
 		QuestProgress = false,
 		OnlyCompleteRing = false,
@@ -357,7 +357,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "EasyMarking", L["Easy Mark"]},
 		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
 		{},--blank
-		{1, "Chat", "Invite", L["Whisper Invite"]},
+		{1, "Chat", "Invite", "|cff00cc4c"..L["Whisper Invite"]},
 		{1, "Chat", "GuildInvite", L["Guild Invite Only"]},
 		{2, "Chat", "Keyword", L["Whisper Keyword"], true},
 		{},--blank
@@ -365,11 +365,12 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "QuestProgress", L["QuestProgress"]},
 		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"], true},
 		{},--blank
-		{1, "Misc", "RareAlerter", L["Rare Alert"]},
+		{1, "Misc", "Interrupt", "|cff00cc4c"..L["Interrupt Alert"]},
+		{1, "Misc", "OwnInterrupt", L["Own Interrupt"]},
+		{1, "Misc", "AlertInInstance", L["Alert In Instance"], true},
+		{},--blank
+		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"]},
 		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
-		{1, "Misc", "Interrupt", L["Interrupt Alert"]},
-		{1, "Misc", "OwnInterrupt", L["Own Interrupt"], true},
-		{1, "Misc", "SwapingAlert", L["Swaping Alert"]},
 	},
 	[8] = {
 		{1, "Chat", "Lock", L["Lock Chat"]},
