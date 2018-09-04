@@ -173,7 +173,7 @@ end
 
 local function blockWhisperString(_, _, msg, author)
 	local name = Ambiguate(author, "none")
-	if msg:find("%[World Quest Tracker%]") or msg:find("一起做世界任务吧：") then
+	if msg:find("%[World Quest Tracker%]") or msg:find("一起做世界任务吧：") or msg:find("一起来做世界任务<") then
 		if not WQTUsers[name] then
 			WQTUsers[name] = true
 		end
