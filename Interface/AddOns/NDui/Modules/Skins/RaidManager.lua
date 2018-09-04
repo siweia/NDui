@@ -431,7 +431,7 @@ function module:CreateRM()
 		end
 	end)
 	header:SetScript("OnDoubleClick", function(_, btn)
-		if btn == "RightButton" and not IsInInstance() then
+		if btn == "RightButton" and (IsPartyLFG() and IsLFGComplete() or not IsInInstance()) then
 			LeaveParty()
 		end
 	end)
