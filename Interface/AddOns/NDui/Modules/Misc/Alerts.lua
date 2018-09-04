@@ -160,7 +160,7 @@ function module:InterruptAlert()
 
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
-		if NDuiDB["Misc"]["AlertInInstance"] and not IsInInstance() then return end
+		if NDuiDB["Misc"]["AlertInInstance"] and (not IsInInstance() or IsPartyLFG()) then return end
 
 		local _, eventType, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellID, _, _, extraskillID = ...
 		if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") and not isAllyPet(sourceGUID) then return end
