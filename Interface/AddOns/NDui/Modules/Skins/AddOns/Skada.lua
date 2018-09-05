@@ -46,8 +46,6 @@ function module:SkadaSkin()
 		skada:SetBackdrop(nil)
 		B.StripTextures(skada.borderFrame)
 
-		win.bargroup.button:SetBackdropColor(1, 1, 1, 0)
-
 		if not skada.shadow then
 			skada.shadow = B.CreateBG(skada)
 			skada.shadow:SetAllPoints()
@@ -76,14 +74,15 @@ function module:SkadaSkin()
 		end
 		skada.shadow:ClearAllPoints()
 		if win.db.enabletitle then
-			skada.shadow:SetPoint("TOPLEFT", win.bargroup.button, "TOPLEFT", -3, 3)
+			skada.shadow:SetPoint("TOPLEFT", skada.button, "TOPLEFT", -3, 3)
 		else
-			skada.shadow:SetPoint("TOPLEFT", win.bargroup, "TOPLEFT", -3, 3)
+			skada.shadow:SetPoint("TOPLEFT", skada, "TOPLEFT", -3, 3)
 		end
-		skada.shadow:SetPoint("BOTTOMRIGHT", win.bargroup, "BOTTOMRIGHT", 3, -3)
-		win.bargroup.button:SetFrameStrata("MEDIUM")
-		win.bargroup.button:SetFrameLevel(5)	
-		win.bargroup:SetFrameStrata("MEDIUM")
+		skada.shadow:SetPoint("BOTTOMRIGHT", skada, "BOTTOMRIGHT", 3, -3)
+		skada.button:SetBackdropColor(1, 1, 1, 0)
+		skada.button:SetFrameStrata("MEDIUM")
+		skada.button:SetFrameLevel(5)	
+		skada:SetFrameStrata("MEDIUM")
 	end
 
 	local function EmbedWindow(window, width, barheight, height, point, relativeFrame, relativePoint, ofsx, ofsy)
