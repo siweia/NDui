@@ -54,9 +54,15 @@ local list = {
 		{AuraID = 273992, UnitID = "player"},	-- 灵魂之速
 		{AuraID = 273955, UnitID = "player"},	-- 望远镜视野
 		{AuraID = 261612, UnitID = "player"},	-- 迅击风暴
+		{AuraID = 268887, UnitID = "player"},	-- 迅捷远航
+		{AuraID = 268854, UnitID = "player"},	-- 全能远航
 		{AuraID = 264957, UnitID = "player"},	-- 急速瞄准镜
 		{AuraID = 274472, UnitID = "player"},	-- 狂战士之怒
 		{AuraID = 268769, UnitID = "player"},	-- 标记死穴
+		{AuraID = 267179, UnitID = "player"},	-- 非凡的力量
+		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
+		{AuraID = 267329, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
+		{AuraID = 267331, UnitID = "player", Text = RAID_BUFF_6},	-- 爆击
 		-- 艾泽里特特质
 		{AuraID = 280409, UnitID = "player"},	-- 血祭之力
 		{AuraID = 279902, UnitID = "player"},	-- 不稳定的烈焰
@@ -246,10 +252,10 @@ local list = {
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
 		{AuraID = 240443, UnitID = "player"},	-- 爆裂
-		{AuraID = 193018, UnitID = "player", Value = true},	-- 气体泡泡
 		{AuraID = 230087, UnitID = "player"},	-- 振作
-		-- 卡拉赞
-		{AuraID = 228796, UnitID = "player"},	-- 夜之魇燃魂
+	-- 奥迪尔
+		{AuraID = 265662, UnitID = "player"},	-- 腐化者的契约，泽克沃兹
+		{AuraID = 267409, UnitID = "player"},	-- 黑暗交易，戈霍恩
 	-- 翡翠梦魇
 		-- 尼珊德拉
 		{AuraID = 221028, UnitID = "player"},	-- 不稳定的腐烂，小怪
@@ -531,8 +537,21 @@ local list = {
 	},
 	["Warning"] = {			-- 目标重要光环组
 	-- 5人本
-		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
+	-- 8.0副本
+		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
+		{AuraID = 260512, UnitID = "target"},	-- 灵魂收割，神庙
+	-- 奥迪尔
+		{AuraID = 278218, UnitID = "target"},	-- 虚空召唤，泽克沃兹
+		{AuraID = 278220, UnitID = "target"},	-- 虚空超脱，泽克沃兹
+		{AuraID = 273432, UnitID = "target"},	-- 暗影束缚，祖尔
+		{AuraID = 273288, UnitID = "target"},	-- 婆娑脉动，祖尔
+		{AuraID = 274761, UnitID = "target"},	-- 湮灭帷幕，拆解者米斯拉克斯
+		{AuraID = 276900, UnitID = "target"},	-- 临界炽焰，拆解者米斯拉克斯
+		{AuraID = 279013, UnitID = "target"},	-- 精华碎裂，拆解者米斯拉克斯
+		{AuraID = 263482, UnitID = "target"},	-- 重组冲击，戈霍恩
+		{AuraID = 263372, UnitID = "target"},	-- 能量矩阵，戈霍恩
+		{AuraID = 270447, UnitID = "target"},	-- 腐化滋长，戈霍恩
 	-- 7.0副本
 		{AuraID = 244621, UnitID = "target"},	-- 虚空裂隙，执政团尾王
 		{AuraID = 192132, UnitID = "target"},	-- 英灵殿赫娅
