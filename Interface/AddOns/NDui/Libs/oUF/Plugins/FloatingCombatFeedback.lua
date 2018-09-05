@@ -11,10 +11,7 @@ local _G = getfenv(0)
 local pairs = pairs
 local cos, sin, mmax = cos, sin, math.max
 local tremove, tinsert = table.remove, table.insert
-
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
-local MY_PET_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
-local MY_VEHICLE_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN)
 
 local colors = {
 	ABSORB		= {r = 1.00, g = 1.00, b = 1.00},
@@ -164,8 +161,8 @@ local function Update(self, event)
 		local isPlayer = UnitGUID("player") == sourceGUID
 		local atTarget = UnitGUID("target") == destGUID
 		local atPlayer = UnitGUID("player") == destGUID
-		local isVehicle = element.showPets and sourceFlags == MY_VEHICLE_FLAGS
-		local isPet = element.showPets and sourceFlags == MY_PET_FLAGS
+		local isVehicle = element.showPets and sourceFlags == DB.GuardianFlags
+		local isPet = element.showPets and sourceFlags == DB.MyPetFlags
 
 		if (unit == "target" and (isPlayer or isPet or isVehicle) and atTarget) or (unit == "player" and atPlayer) then
 			local value = eventFilter[eventType]
