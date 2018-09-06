@@ -67,6 +67,8 @@ local ignoreQuestNPC = {
 	[103792] = true,	-- 格里伏塔
 	[101880] = true,	-- 泰克泰克
 	[141584] = true,	-- 祖尔温
+	[142063] = true,	-- 特兹兰
+	[143388] = true,	-- 德鲁扎
 }
 
 local function GetQuestLogQuests(onlyComplete)
@@ -314,12 +316,20 @@ local itemBlacklist = {
 	[31664] = 88604, -- Nat's Fishing Journal
 }
 
+local ignoreProgressNPC = {
+	[119388] = true,
+	[127037] = true,
+	[126954] = true,
+	[124312] = true,
+	[141584] = true,
+}
+
 QuickQuest:Register("QUEST_PROGRESS", function()
 	if(IsQuestCompletable()) then
 		local id, _, worldQuest = GetQuestTagInfo(GetQuestID())
 		if id == 153 or worldQuest then return end
-		-- 阿古斯的随从兑换
-		if GetNPCID() == 119388 or GetNPCID() == 127037 or GetNPCID() == 126954 or GetNPCID() == 124312 then return end
+		local npcID = GetNPCID()
+		if ignoreProgressNPC[npcID] then return end
 
 		local requiredItems = GetNumQuestItems()
 		if(requiredItems > 0) then
