@@ -29,12 +29,11 @@ end
 
 -- Data
 local bonus = {
-	43892, 43893, 43894,	-- Order Resources
-	43895, 43896, 43897,	-- Gold
-	47851, 47864, 47865,	-- Honor Coins
-	43510,					-- Orderhall
+	52834, 52838,	-- Gold
+	52835, 52839,	-- Honor
+	52837, 52840,	-- Resources
 }
-local bonusname = GetCurrencyInfo(1273)
+local bonusname = GetCurrencyInfo(1580)
 
 local keystone = GetItemInfo(138019)
 local questlist = {
@@ -141,7 +140,7 @@ info.onEnter = function(self)
 
 	-- Quests
 	title = false
-	local count = 0
+	local count, maxCoins = 0, 2
 	for _, id in pairs(bonus) do
 		if IsQuestFlaggedCompleted(id) then
 			count = count + 1
@@ -150,8 +149,8 @@ info.onEnter = function(self)
 	if count > 0 then
 		addTitle(QUESTS_LABEL)
 		local r,g,b
-		if count == 3 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-		GameTooltip:AddDoubleLine(bonusname, count.." / 3", 1,1,1, r,g,b)
+		if count == maxCoins then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+		GameTooltip:AddDoubleLine(bonusname, count.." / "..maxCoins, 1,1,1, r,g,b)
 	end
 
 	local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
