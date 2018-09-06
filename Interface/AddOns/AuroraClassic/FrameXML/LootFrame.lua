@@ -49,59 +49,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinArrow(LootFrameUpButton, "up")
 	F.ReskinArrow(LootFrameDownButton, "down")
 
-	-- Master looter frame
-
-	for i = 1, 9 do
-		select(i, MasterLooterFrame:GetRegions()):Hide()
-	end
-
-	MasterLooterFrame.Item.NameBorderLeft:Hide()
-	MasterLooterFrame.Item.NameBorderRight:Hide()
-	MasterLooterFrame.Item.NameBorderMid:Hide()
-	MasterLooterFrame.Item.IconBorder:Hide()
-	MasterLooterFrame.Item.Icon:SetTexCoord(.08, .92, .08, .92)
-	MasterLooterFrame.Item.Icon:SetDrawLayer("ARTWORK")
-	MasterLooterFrame.Item.bg = F.CreateBG(MasterLooterFrame.Item.Icon)
-
-	MasterLooterFrame:HookScript("OnShow", function(self)
-		self.Item.bg:SetVertexColor(self.Item.IconBorder:GetVertexColor())
-		LootFrame:SetAlpha(.4)
-	end)
-
-	MasterLooterFrame:HookScript("OnHide", function()
-		LootFrame:SetAlpha(1)
-	end)
-
-	F.CreateBD(MasterLooterFrame)
-	F.ReskinClose(select(3, MasterLooterFrame:GetChildren()))
-	F.CreateSD(MasterLooterFrame)
-
-	hooksecurefunc("MasterLooterFrame_UpdatePlayers", function()
-		for i = 1, MAX_RAID_MEMBERS do
-			local playerFrame = MasterLooterFrame["player"..i]
-			if playerFrame then
-				if not playerFrame.styled then
-					playerFrame.Bg:SetPoint("TOPLEFT", 1, -1)
-					playerFrame.Bg:SetPoint("BOTTOMRIGHT", -1, 1)
-					playerFrame.Highlight:SetPoint("TOPLEFT", 1, -1)
-					playerFrame.Highlight:SetPoint("BOTTOMRIGHT", -1, 1)
-					playerFrame.Highlight:SetTexture(C.media.backdrop)
-
-					F.CreateBD(playerFrame, 0)
-
-					playerFrame.styled = true
-				end
-				local colour = C.classcolours[select(2, UnitClass(playerFrame.Name:GetText()))]
-				if colour then
-					playerFrame.Name:SetTextColor(colour.r, colour.g, colour.b)
-					playerFrame.Highlight:SetVertexColor(colour.r, colour.g, colour.b, .2)
-				end
-			else
-				break
-			end
-		end
-	end)
-
 	-- Bonus roll
 
 	do
@@ -113,12 +60,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		frame.SpecRing:SetAlpha(0)
 		frame.SpecIcon:SetTexCoord(.08, .92, .08, .92)
 		local bg = F.CreateBDFrame(frame.SpecIcon)
-		frame:HookScript("OnShow", function()
-			bg:SetShown(frame.SpecIcon:IsShown() and frame.SpecIcon:GetTexture() ~= nil)
+		hooksecurefunc("BonusRollFrame_StartBonusRoll", function()
+			bg:SetShown(frame.SpecIcon:IsShown())
 		end)
 
-		frame.PromptFrame.Icon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(frame.PromptFrame.Icon)
+		F.ReskinIcon(frame.PromptFrame.Icon)
 		frame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
 		F.CreateBD(frame)
 		F.CreateSD(frame)
@@ -126,6 +72,10 @@ tinsert(C.themes["AuroraClassic"], function()
 			frame.Shadow:SetFrameLevel(bg:GetFrameLevel() - 1)
 		end
 		F.CreateBDFrame(frame.PromptFrame.Timer, .25)
+
+		local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"
+		BONUS_ROLL_COST = BONUS_ROLL_COST:gsub(from, to)
+		BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 	end
 
 	-- Loot Roll Frame
