@@ -12,7 +12,7 @@ local B, C, L, DB = unpack(ns)
 	/getnpc, get npc name and id
 ]]
 
-local dev = {"寧德", "Hunnie"}
+local dev = {"寧德"}
 local function isDeveloper()
 	for _, name in pairs(dev) do
 		if UnitName("player") == name then
