@@ -29,21 +29,21 @@ end
 do
 	local function CalculateArches()
 		print("|cff0080ff【NDui】".."|c0000FF00"..L["Arch Count"]..":")
-		local ta = 0
-		for x = 1, 15 do
-			local c = GetNumArtifactsByRace(x)
-			local a = 0
-			for y = 1, c do
-				local t = select(9, GetArtifactInfoByRace(x, y))
-				a = a + t
+		local total = 0
+		for i = 1, GetNumArchaeologyRaces() do
+			local numArtifacts = GetNumArtifactsByRace(i)
+			local count = 0
+			for j = 1, numArtifacts do
+				local completionCount = select(10, GetArtifactInfoByRace(i, j))
+				count = count + completionCount
 			end
-			local rn = GetArchaeologyRaceInfo(x)
-			if (c > 1) then
-				print("     - |cfffed100"..rn..": ".."|cff70C0F5"..a)
-				ta = ta + a
+			local name = GetArchaeologyRaceInfo(i)
+			if numArtifacts > 1 then
+				print("     - |cfffed100"..name..": ".."|cff70C0F5"..count)
+				total = total + count
 			end 
 		end
-		print("    -> |c0000ff00"..TOTAL..": ".."|cffff0000"..ta)
+		print("    -> |c0000ff00"..TOTAL..": ".."|cffff0000"..total)
 		print("|cff70C0F5------------------------")
 	end
 
