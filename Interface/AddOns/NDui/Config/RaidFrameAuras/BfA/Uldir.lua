@@ -27,6 +27,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 265237) -- 粉碎
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265264) -- 虚空鞭笞
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265360) -- 翻滚欺诈
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265646, 5) -- 腐化者的意志
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 265662, 5) -- 腐化者的契约
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 270620) -- 灵能冲击波
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 270589) -- 虚空之嚎
 

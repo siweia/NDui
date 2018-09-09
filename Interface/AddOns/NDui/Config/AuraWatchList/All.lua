@@ -255,6 +255,7 @@ local list = {
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
 		{AuraID = 240443, UnitID = "player"},	-- 爆裂
+		{AuraID = 226510, UnitID = "player"},	-- 血池
 		{AuraID = 230087, UnitID = "player"},	-- 振作
 	-- 奥迪尔
 		{AuraID = 265662, UnitID = "player"},	-- 腐化者的契约，泽克沃兹
@@ -546,6 +547,7 @@ local list = {
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
 		{AuraID = 260512, UnitID = "target"},	-- 灵魂收割，神庙
 		{AuraID = 277965, UnitID = "target"},	-- 重型军火，围攻1
+		{AuraID = 256493, UnitID = "target"},	-- 炽燃的艾泽里特，矿区1
 	-- 奥迪尔
 		{AuraID = 278218, UnitID = "target"},	-- 虚空召唤，泽克沃兹
 		{AuraID = 278220, UnitID = "target"},	-- 虚空超脱，泽克沃兹
