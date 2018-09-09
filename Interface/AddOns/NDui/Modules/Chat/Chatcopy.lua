@@ -6,7 +6,7 @@ function module:ChatCopy()
 	-- Custom ChatMenu
 	local menu = CreateFrame("Frame", nil, UIParent)
 	menu:SetSize(25, 100)
-	menu:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 10, 0)
+	menu:SetPoint("TOPRIGHT", ChatFrame1, 15, 0)
 	menu:SetShown(NDuiDB["Chat"]["ChatMenu"])
 
 	ChatFrameMenuButton:ClearAllPoints()
@@ -95,7 +95,7 @@ function module:ChatCopy()
 	end
 
 	local copy = CreateFrame("Button", nil, UIParent)
-	copy:SetPoint("BOTTOMLEFT", 370, 30)
+	copy:SetPoint("BOTTOMRIGHT", ChatFrame1, 15, 0)
 	copy:SetSize(20, 20)
 	copy:SetAlpha(.5)
 	copy.Icon = copy:CreateTexture(nil, "ARTWORK")

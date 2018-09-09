@@ -607,7 +607,7 @@ local function isUnitWeNeed(value, sourceName, destName, sourceFlags)
 			return true
 		end
 	elseif value.UnitID:lower() == "player" then
-		if sourceName and sourceName == UnitName("player") or destName == UnitName("player") or checkPetFlags(sourceFlags) then
+		if sourceName and (sourceName == UnitName("player") or destName == UnitName("player") or checkPetFlags(sourceFlags)) then
 			return true
 		end
 	end
