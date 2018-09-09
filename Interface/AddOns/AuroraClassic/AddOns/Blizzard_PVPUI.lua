@@ -87,8 +87,13 @@ C.themes["Blizzard_PVPUI"] = function()
 		end
 	end
 
-	F.StripTextures(HonorFrame.ConquestBar)
-	F.CreateBDFrame(HonorFrame.ConquestBar, .25)
+	local function reskinConquestBar(bar)
+		F.StripTextures(bar.ConquestBar)
+		F.CreateBDFrame(bar.ConquestBar, .25)
+		bar.ConquestBar:SetStatusBarTexture(C.media.backdrop)
+		bar.ConquestBar:GetStatusBarTexture():SetGradient("VERTICAL", 1, .8, 0, 6, .4, 0)
+	end
+	reskinConquestBar(HonorFrame)
 
 	-- Role buttons
 
@@ -175,8 +180,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	end
 
 	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
-	F.StripTextures(ConquestFrame.ConquestBar)
-	F.CreateBDFrame(ConquestFrame.ConquestBar, .25)
+	reskinConquestBar(ConquestFrame)
 
 	-- Main style
 

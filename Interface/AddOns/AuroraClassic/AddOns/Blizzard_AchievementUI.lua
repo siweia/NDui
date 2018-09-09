@@ -255,14 +255,10 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end
 
 	for i = 1, 20 do
-		local bu = "AchievementFrameStatsContainerButton"..i
-		_G[bu.."BG"]:Hide()
-		_G[bu.."BG"].Show = F.dummy
-		_G[bu.."HeaderLeft"]:SetAlpha(0)
-		_G[bu.."HeaderMiddle"]:SetAlpha(0)
-		_G[bu.."HeaderRight"]:SetAlpha(0)
-		_G[bu]:GetHighlightTexture():SetColorTexture(r, g, b, .25)
-		_G[bu]:GetHighlightTexture():SetBlendMode("BLEND")
+		local bu = _G["AchievementFrameStatsContainerButton"..i]
+		F.StripTextures(bu)
+		bu:GetHighlightTexture():SetColorTexture(r, g, b, .2)
+		bu:GetHighlightTexture():SetBlendMode("BLEND")
 	end
 
 	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 26)
@@ -417,15 +413,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end
 
 	for i = 1, 20 do
-		local bu = "AchievementFrameComparisonStatsContainerButton"..i
-		_G[bu.."BG"]:Hide()
-		_G[bu.."BG"].Show = F.dummy
-		_G[bu.."HeaderLeft"]:SetAlpha(0)
-		_G[bu.."HeaderMiddle"]:SetAlpha(0)
-		_G[bu.."HeaderRight"]:SetAlpha(0)
-		_G[bu.."HeaderLeft2"]:SetAlpha(0)
-		_G[bu.."HeaderMiddle2"]:SetAlpha(0)
-		_G[bu.."HeaderRight2"]:SetAlpha(0)
+		F.StripTextures(_G["AchievementFrameComparisonStatsContainerButton"..i])
 	end
 	F.ReskinScroll(AchievementFrameComparisonStatsContainerScrollBar)
 	AchievementFrameComparisonWatermark:SetAlpha(0)

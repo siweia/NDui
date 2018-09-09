@@ -215,7 +215,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		F.ReskinClose(self.CloseButton)
 		self.GarrCorners:Hide()
 		if self.ClassHallIcon then self.ClassHallIcon:Hide() end
-		if self.Topper then self.Topper:SetAtlas(UnitFactionGroup("player").."Frame-Header") end
 		if self.TitleScroll then
 			F.StripTextures(self.TitleScroll)
 			select(4, self.TitleScroll:GetRegions()):SetTextColor(1, .8, 0)
@@ -956,11 +955,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	f:RegisterEvent("ADDON_LOADED")
 	f:SetScript("OnEvent", function(_, event, addon)
 		if addon == "GarrisonMissionManager" then
-			hooksecurefunc(GarrisonMissionFrame.MissionTab.MissionList, "Update", buttonOnUpdate)
-			GarrisonMissionFrame.MissionTab.MissionPage:HookScript("OnShow", buttonOnShow)
-
-			hooksecurefunc(OrderHallMissionFrame.MissionTab.MissionList, "Update", buttonOnUpdate)
-			OrderHallMissionFrame.MissionTab.MissionPage:HookScript("OnShow", buttonOnShow)
+			for _, frame in next, {GarrisonMissionFrame, OrderHallMissionFrame, BFAMissionFrame} do
+				hooksecurefunc(frame.MissionTab.MissionList, "Update", buttonOnUpdate)
+				frame.MissionTab.MissionPage:HookScript("OnShow", buttonOnShow)
+			end
 
 			f:UnregisterEvent(event)
 		end
