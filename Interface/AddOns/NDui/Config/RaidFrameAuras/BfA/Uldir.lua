@@ -45,6 +45,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 273434) -- 绝望深渊
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 274271) -- 死亡之愿
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 278890) -- 剧烈失血
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 273365) -- 黑暗启示
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 272018) -- 黑暗吸收
 
 BOSS = 2194 -- 拆解者米斯拉克斯
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 274693) -- 精华撕裂
