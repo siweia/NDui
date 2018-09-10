@@ -9,8 +9,6 @@ function module:ChannelRename()
 			local am = f.AddMessage
 			f.AddMessage = function(frame, text, ...)
 				if text:find(INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
-				text = text:gsub(CHAT_FLAG_AFK, DB.AFKTex)
-				text = text:gsub(CHAT_FLAG_DND, DB.DNDTex)
 
 				local r, g, b = ...
 				if NDuiDB["Chat"]["WhisperColor"] and text:find(L["Tell"].." |H[BN]*player.+%]") then r, g, b = r*.7, g*.7, b*.7 end
@@ -57,4 +55,9 @@ function module:ChannelRename()
 	--instance
 	CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE|h[I]|h %s "
 	CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE|h[IL]|h %s "
+
+	--flags
+	CHAT_FLAG_AFK = "[AFK] "
+	CHAT_FLAG_DND = "[DND] "
+	CHAT_FLAG_GM = "[GM] "
 end
