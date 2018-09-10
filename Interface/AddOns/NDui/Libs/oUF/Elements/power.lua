@@ -249,13 +249,13 @@ local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
-local function Enable(self, unit)
+local function Enable(self)
 	local element = self.Power
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		if(element.frequentUpdates and (unit == 'player' or unit == 'pet')) then
+		if(element.frequentUpdates) then
 			self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
 		else
 			self:RegisterEvent('UNIT_POWER_UPDATE', Path)

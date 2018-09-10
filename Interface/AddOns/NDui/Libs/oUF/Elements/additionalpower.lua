@@ -22,10 +22,11 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
 
 The following options are listed by priority. The first check that returns true decides the color of the bar.
 
-.colorClass  - Use `self.colors.class[class]` to color the bar based on the player's class. (boolean)
-.colorSmooth - Use `self.colors.smooth` to color the bar with a smooth gradient based on the player's current additional
+.colorClass   - Use `self.colors.class[class]` to color the bar based on the player's class. (boolean)
+.colorSmooth  - Use `self.colors.smooth` to color the bar with a smooth gradient based on the player's current additional
                power percentage (boolean)
-.colorPower  - Use `self.colors.power[token]` to color the bar based on the player's additional power type. (boolean)
+.colorPower   - Use `self.colors.power[token]` to color the bar based on the player's additional power type. (boolean)
+.displayPairs - Use to override display pairs. (table)
 
 ## Sub-Widget Options
 
@@ -88,7 +89,7 @@ local function UpdateColor(element, cur, max)
 end
 
 local function Update(self, event, unit, powertype)
-	if(unit ~= 'player' or (powertype and powertype ~= ADDITIONAL_POWER_BAR_NAME)) then return end
+	if(not (unit and UnitIsUnit(unit, 'player') and powertype == ADDITIONAL_POWER_BAR_NAME)) then return end
 
 	local element = self.AdditionalPower
 	--[[ Callback: AdditionalPower:PreUpdate(unit)
@@ -157,13 +158,14 @@ local function ElementDisable(self)
 end
 
 local function Visibility(self, event, unit)
+	local element = self.AdditionalPower
 	local shouldEnable
 
 	if(not UnitHasVehicleUI('player')) then
 		if(UnitPowerMax(unit, ADDITIONAL_POWER_BAR_INDEX) ~= 0) then
-			if(ALT_MANA_BAR_PAIR_DISPLAY_INFO[playerClass]) then
+			if(element.displayPairs[playerClass]) then
 				local powerType = UnitPowerType(unit)
-				shouldEnable = ALT_MANA_BAR_PAIR_DISPLAY_INFO[playerClass][powerType]
+				shouldEnable = element.displayPairs[playerClass][powerType]
 			end
 		end
 	end
@@ -192,11 +194,15 @@ end
 
 local function Enable(self, unit)
 	local element = self.AdditionalPower
-	if(element and unit == 'player') then
+	if(element and UnitIsUnit(unit, 'player')) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('UNIT_DISPLAYPOWER', VisibilityPath)
+
+		if(not element.displayPairs) then
+			element.displayPairs = CopyTable(ALT_MANA_BAR_PAIR_DISPLAY_INFO)
+		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
