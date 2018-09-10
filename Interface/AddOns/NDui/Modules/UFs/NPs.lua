@@ -50,6 +50,7 @@ local CustomUnits = {
 	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
 	[GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
 	[GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
+	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
 	--["Spawn of G'huun"] = true,
 	--["戈霍恩之嗣"] = true,
 	--["古翰幼體"] = true,
@@ -68,6 +69,7 @@ end
 C.ShowPowerList = {
 	[GetSectionInfo(13015)] = true,	-- 清扫器
 	[GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
+	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
 }
 function UF:CreatePowerUnitTable()
 	if not NDuiDB["Nameplate"]["ShowUnitPower"] then return end
@@ -270,6 +272,7 @@ function UF:CreatePlates(unit)
 end
 
 function UF:PostUpdatePlates(event, unit)
+	if not self then return end
 	UpdateTargetMark(self)
 	UpdateQuestUnit(self, unit)
 	UpdateUnitClassify(self, unit)
