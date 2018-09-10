@@ -175,6 +175,7 @@ local defaultSettings = {
 		Interrupt = false,
 		OwnInterrupt = true,
 		AlertInInstance = true,
+		BrokenSpell = false,
 		FasterLoot = true,
 		AutoQuest = false,
 		HideTalking = true,
@@ -366,6 +367,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"], true},
 		{},--blank
 		{1, "Misc", "Interrupt", "|cff00cc4c"..L["Interrupt Alert"]},
+		{1, "Misc", "BrokenSpell", L["Broken Spell"], true},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"]},
 		{1, "Misc", "AlertInInstance", L["Alert In Instance"], true},
 		{},--blank

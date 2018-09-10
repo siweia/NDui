@@ -111,6 +111,11 @@ function module:InterruptAlert()
 		["SPELL_STOLEN"] = L["Steal"],
 		["SPELL_DISPEL"] = L["Dispel"],
 	}
+	if NDuiDB["Misc"]["BrokenSpell"] then infoType["SPELL_AURA_BROKEN_SPELL"] = L["BrokenSpell"] end
+
+	local function msgChannel()
+		return IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY"
+	end
 
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
@@ -123,7 +128,11 @@ function module:InterruptAlert()
 		if UnitInRaid(sourceName) or UnitInParty(sourceName) or isAllyPet(sourceFlags) then
 			local infoText = infoType[eventType]
 			if infoText then
-				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
+				if infoText == L["BrokenSpell"] then
+					SendChatMessage(format(infoText, sourceName..GetSpellLink(extraskillID), destName..GetSpellLink(spellID)), msgChannel())
+				else
+					SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), msgChannel())
+				end
 			end
 		end
 	end
