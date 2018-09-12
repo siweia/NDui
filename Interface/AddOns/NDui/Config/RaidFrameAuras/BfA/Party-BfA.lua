@@ -99,3 +99,4 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 264560) -- 窒息海潮
 module:RegisterDebuff(TIER, INSTANCE, 0, 264144) -- 逆流
 module:RegisterDebuff(TIER, INSTANCE, 0, 267899) -- 妨害劈斩
 module:RegisterDebuff(TIER, INSTANCE, 0, 269131) -- 上古摧心者
+module:RegisterDebuff(TIER, INSTANCE, 0, 268214) -- 割肉
