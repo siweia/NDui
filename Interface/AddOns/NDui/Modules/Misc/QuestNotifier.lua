@@ -102,8 +102,8 @@ local function FindWorldQuestComplete(_, questID)
 end
 
 function module:QuestNotifier()
-	if IsAddOnLoaded("QuestNotifier") then return end
 	if not NDuiDB["Misc"]["QuestNotifier"] then return end
+	if IsAddOnLoaded("QuestNotifier") then return end
 
 	FindQuestComplete()
 	initComplete = true

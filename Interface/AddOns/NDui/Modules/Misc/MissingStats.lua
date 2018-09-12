@@ -7,6 +7,7 @@ local module = B:GetModule("Misc")
 ]]
 function module:MissingStats()
 	if not NDuiDB["Misc"]["MissingStats"] then return end
+	if IsAddOnLoaded("DejaCharacterStats") then return end
 
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)
