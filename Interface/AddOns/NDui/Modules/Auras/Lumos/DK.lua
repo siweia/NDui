@@ -5,10 +5,9 @@ local module = B:GetModule("Auras")
 if DB.MyClass ~= "DEATHKNIGHT" then return end
 
 function module:PostCreateLumos(self)
-	local shield = B.CreateFS(self.Health, 18, "")
+	local shield = B.CreateFS(self.Health, 18, "", "system")
 	shield:ClearAllPoints()
 	shield:SetPoint("RIGHT", self.Health, "LEFT", -5, 0)
-	shield:SetTextColor(1, .8, 0)
 
 	self.shield = shield
 end

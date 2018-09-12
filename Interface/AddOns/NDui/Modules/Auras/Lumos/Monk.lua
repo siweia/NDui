@@ -5,10 +5,9 @@ local module = B:GetModule("Auras")
 if DB.MyClass ~= "MONK" then return end
 
 function module:PostCreateLumos(self)
-	local stagger = B.CreateFS(self.Health, 18, "")
+	local stagger = B.CreateFS(self.Health, 18, "", "system")
 	stagger:ClearAllPoints()
 	stagger:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
-	stagger:SetTextColor(1, .8, 0)
 
 	self.stagger = stagger
 end

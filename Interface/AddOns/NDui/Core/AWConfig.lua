@@ -54,8 +54,7 @@ local function CreatePanel()
 
 	-- Elements
 	local function CreateLabel(parent, text, tip)
-		local label = B.CreateFS(parent, 14, text, false, "CENTER", 0, 25)
-		label:SetTextColor(1, .8, 0)
+		local label = B.CreateFS(parent, 14, text, "system", "CENTER", 0, 25)
 		local frame = CreateFrame("Frame", nil, parent)
 		frame:SetAllPoints(label)
 		frame:SetScript("OnEnter", function()
@@ -433,10 +432,8 @@ local function CreatePanel()
 		tabs[i]:SetPoint("TOPLEFT", 20, -40 - i*30)
 		tabs[i]:SetSize(130, 28)
 		B.CreateBD(tabs[i], .3)
-		local label = B.CreateFS(tabs[i], 15, group, true, "LEFT", 10, 0)
-		if i < 11 then
-			label:SetTextColor(1, .8, 0)
-		else
+		local label = B.CreateFS(tabs[i], 15, group, "system", "LEFT", 10, 0)
+		if i > 10 then
 			label:SetTextColor(.6, .8, 1)
 		end
 		tabs[i].Page = CreatePage(group)

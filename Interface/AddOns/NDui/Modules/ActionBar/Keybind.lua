@@ -244,8 +244,7 @@ SlashCmdList.MOUSEOVERBIND = function()
 			B.CreateTex(frame)
 			B.CreateFS(frame, 14, KEY_BINDING, false, "TOP", 0, -15)
 
-			local text = B.CreateFS(frame, 14, CHARACTER_SPECIFIC_KEYBINDINGS, false, "TOP", 0, -40)
-			text:SetTextColor(1, .8, 0)
+			local text = B.CreateFS(frame, 14, CHARACTER_SPECIFIC_KEYBINDINGS, "system", "TOP", 0, -40)
 
 			local button1 = B.CreateButton(frame, 120, 25, APPLY, 14)
 			button1:SetPoint("BOTTOMLEFT", 25, 10)

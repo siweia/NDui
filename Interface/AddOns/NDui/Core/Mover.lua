@@ -88,8 +88,7 @@ local function CreateConsole()
 	B.CreateSD(f)
 	B.CreateTex(f)
 	B.CreateMF(f)
-	local lable = B.CreateFS(f, 15, L["Mover Console"], false, "TOP", 0, -10)
-	lable:SetTextColor(1, .8, 0)
+	B.CreateFS(f, 15, L["Mover Console"], "system", "TOP", 0, -10)
 	local bu, text = {}, {LOCK, CANCEL, L["Grids"], RESET}
 	for i = 1, 4 do
 		bu[i] = B.CreateButton(f, 70, 28, text[i])
@@ -122,8 +121,7 @@ local function CreateConsole()
 		B.CreateBD(frame)
 		B.CreateSD(frame)
 		B.CreateTex(frame)
-		local lable = B.CreateFS(frame, 15, L["Toggle AuraWatch"], false, "TOP", 0, -10)
-		lable:SetTextColor(1, .8, 0)
+		B.CreateFS(frame, 15, L["Toggle AuraWatch"], "system", "TOP", 0, -10)
 
 		local bu, text = {}, {UNLOCK, LOCK, RESET}
 		for i = 1, 3 do

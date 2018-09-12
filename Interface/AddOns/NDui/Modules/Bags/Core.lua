@@ -120,8 +120,7 @@ function module:OnLogin()
 		self.Junk:SetSize(20, 20)
 		self.Junk:SetPoint("TOPRIGHT", 1, 0)
 
-		self.Quest = B.CreateFS(self, 30, "!", false, "LEFT", 3, 0)
-		self.Quest:SetTextColor(1, .8, 0)
+		self.Quest = B.CreateFS(self, 30, "!", "system", "LEFT", 3, 0)
 
 		self.Azerite = self:CreateTexture(nil, "ARTWORK")
 		self.Azerite:SetAtlas("AzeriteIconFrame")

@@ -483,8 +483,7 @@ local function CreateTab(parent, i, name)
 	tab:SetPoint("TOPLEFT", 20, -30*i - 20)
 	tab:SetSize(130, 28)
 	B.CreateBD(tab, .3)
-	local label = B.CreateFS(tab, 15, name, false, "LEFT", 10, 0)
-	label:SetTextColor(1, .8, 0)
+	B.CreateFS(tab, 15, name, "system", "LEFT", 10, 0)
 
 	tab:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
@@ -547,8 +546,7 @@ local function CreateOption(i)
 			end)
 			eb:SetScript("OnLeave", GameTooltip_Hide)
 
-			local label = B.CreateFS(eb, 14, name, false, "CENTER", 0, 25)
-			label:SetTextColor(1, .8, 0)
+			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
 		-- Slider
 		elseif type == 3 then
 			local min, max, step = unpack(data)
@@ -568,8 +566,7 @@ local function CreateOption(i)
 				_G[s:GetName().."Text"]:SetText(current)
 			end)
 
-			local label = B.CreateFS(s, 14, name, false, "CENTER", 0, 25)
-			label:SetTextColor(1, .8, 0)
+			B.CreateFS(s, 14, name, "system", "CENTER", 0, 25)
 			_G[s:GetName().."Low"]:SetText(min)
 			_G[s:GetName().."High"]:SetText(max)
 			_G[s:GetName().."Text"]:ClearAllPoints()
@@ -613,14 +610,11 @@ local function CreateOption(i)
 				end)
 			end
 
-			local label = B.CreateFS(dd, 14, name, false, "CENTER", 0, 25)
-			label:SetTextColor(1, .8, 0)
+			B.CreateFS(dd, 14, name, "system", "CENTER", 0, 25)
 		-- String
 		elseif type == 5 then
-			local fs = parent:CreateFontString(nil, "OVERLAY")
-			fs:SetFont(DB.Font[1], 14, DB.Font[3])
-			fs:SetText(name)
-			fs:SetTextColor(1, .8, 0)
+			local fs = B.CreateFS(parent, 14, name, "system")
+			fs:ClearAllPoints()
 			if horizon then
 				fs:SetPoint("TOPLEFT", 335, -offset + 30)
 			else

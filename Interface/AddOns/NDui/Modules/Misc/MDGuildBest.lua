@@ -22,12 +22,10 @@ function module:GuildBest()
 
 	local function CreateBoard()
 		frame = CreateFrame("Frame", nil, ChallengesFrame)
-		frame:SetPoint("BOTTOMRIGHT", -6, 70)
+		frame:SetPoint("BOTTOMRIGHT", -6, 80)
 		frame:SetSize(170, 110)
 		B.CreateBD(frame, .3)
-		B.CreateSD(frame)
-		local header = B.CreateFS(frame, 14, CHALLENGE_MODE_THIS_WEEK , false, "TOPLEFT", 10, -9)
-		header:SetTextColor(1, .8, 0)
+		B.CreateFS(frame, 14, CHALLENGE_MODE_THIS_WEEK , "system", "TOPLEFT", 10, -9)
 
 		frame.entries = {}
 		for i = 1, 4 do
@@ -36,9 +34,10 @@ function module:GuildBest()
 			entry.CharacterName = B.CreateFS(entry, 14, "", false, "LEFT", 0, 0)
 			entry.CharacterName:SetPoint("RIGHT", -30, 0)
 			entry.CharacterName:SetJustifyH("LEFT")
-			entry.Level = B.CreateFS(entry, 14, "", false, "RIGHT", 0, 0)
-			entry.Level:SetTextColor(1, .8, 0)
-			entry.Level:SetJustifyH("RIGHT")
+			entry.Level = B.CreateFS(entry, 14, "", "system")
+			entry.Level:SetJustifyH("LEFT")
+			entry.Level:ClearAllPoints()
+			entry.Level:SetPoint("LEFT", entry, "RIGHT", -20, 0)
 			entry:SetScript("OnEnter", UpdateTooltip)
 			entry:SetScript("OnLeave", GameTooltip_Hide)
 
