@@ -75,7 +75,11 @@ function B:CreateFS(size, text, classcolor, anchor, x, y)
 	fs:SetFont(DB.Font[1], size, DB.Font[3])
 	fs:SetText(text)
 	fs:SetWordWrap(false)
-	if classcolor then fs:SetTextColor(cr, cg, cb) end
+	if classcolor and type(classcolor) == "boolean" then
+		fs:SetTextColor(cr, cg, cb)
+	elseif classcolor == "system" then
+		fs:SetTextColor(1, .8, 0)
+	end
 	if anchor and x and y then
 		fs:SetPoint(anchor, x, y)
 	else
