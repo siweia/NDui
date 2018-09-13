@@ -113,6 +113,12 @@ function module:InterruptAlert()
 	}
 	if NDuiDB["Misc"]["BrokenSpell"] then infoType["SPELL_AURA_BROKEN_SPELL"] = L["BrokenSpell"] end
 
+	local blackList = {
+		[33395] = true,		-- 冰冻术
+		[228600] = true,	-- 冰川尖刺
+		[197214] = true,	-- 裂地术
+	}
+
 	local function msgChannel()
 		return IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY"
 	end
@@ -128,7 +134,7 @@ function module:InterruptAlert()
 			local infoText = infoType[eventType]
 			if infoText then
 				if infoText == L["BrokenSpell"] then
-					if auraType and auraType == AURA_TYPE_BUFF then return end	-- need reviewed
+					if auraType and auraType == AURA_TYPE_BUFF or blackList[spellID] then return end	-- need reviewed
 					SendChatMessage(format(infoText, sourceName..GetSpellLink(extraskillID), destName..GetSpellLink(spellID)), msgChannel())
 				else
 					if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") and not isAllyPet(sourceFlags) then return end
