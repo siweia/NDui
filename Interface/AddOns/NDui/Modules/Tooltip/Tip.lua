@@ -1,5 +1,12 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local module = B:RegisterModule("Tooltip")
+
+function module:OnLogin()
+	self:ExtraTipInfo()
+	self:TargetedInfo()
+	self:AzeriteArmor()
+end
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -12,7 +19,7 @@ local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERA
 
 local function getUnit(self)
 	local _, unit = self and self:GetUnit()
-	if(not unit) then
+	if not unit then
 		local mFocus = GetMouseFocus()
 		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit"))) or "mouseover"
 	end
@@ -119,18 +126,8 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		end
 
 		if UnitIsPlayer(unit) then
-			local unitName
-			if NDuiDB["Tooltip"]["HideTitle"] and NDuiDB["Tooltip"]["HideRealm"] then
-				unitName = UnitName(unit)
-			elseif NDuiDB["Tooltip"]["HideTitle"] then
-				unitName = GetUnitName(unit, true)
-			elseif NDuiDB["Tooltip"]["HideRealm"] then
-				unitName = UnitPVPName(unit) or UnitName(unit)
-			end
-			if unitName then GameTooltipTextLeft1:SetText(unitName) end
-
 			local relationship = UnitRealmRelationship(unit)
-			if(relationship == LE_REALM_RELATION_VIRTUAL) then
+			if relationship == LE_REALM_RELATION_VIRTUAL then
 				self:AppendText(("|cffcccccc%s|r"):format(INTERACTIVE_SERVER_LABEL))
 			end
 
@@ -360,7 +357,7 @@ hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
 	self:SetBackdrop(nil)
 end)
 
-B:RegisterEvent("ADDON_LOADED", function(_, addon)
+local function addonStyled(_, addon)
 	if addon == "Blizzard_DebugTools" then
 		local tooltips = {
 			FrameStackTooltip,
@@ -374,6 +371,10 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 
 	elseif addon == "NDui" then
 		if IsAddOnLoaded("AuroraClassic") then
+			local F, C = unpack(AuroraClassic)
+			F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
+			F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
+			F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 			AuroraOptionstooltips:SetAlpha(0)
 			AuroraOptionstooltips:Disable()
 			AuroraConfig.tooltips = false
@@ -452,20 +453,19 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
 
 		-- Pet Tooltip
-		PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
-		PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
-		PetBattlePrimaryUnitTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-		PetBattlePrimaryUnitTooltip.Delimiter2:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetColorTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetHeight(1)
+		local petTips = {
+			PetBattlePrimaryUnitTooltip.Delimiter,
+			PetBattlePrimaryUnitTooltip.Delimiter2,
+			PetBattlePrimaryAbilityTooltip.Delimiter1,
+			PetBattlePrimaryAbilityTooltip.Delimiter2,
+			FloatingPetBattleAbilityTooltip.Delimiter1,
+			FloatingPetBattleAbilityTooltip.Delimiter2,
+			FloatingBattlePetTooltip.Delimiter,
+		}
+		for _, element in pairs(petTips) do
+			element:SetColorTexture(0, 0, 0)
+			element:SetHeight(1.2)
+		end
 
 		PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
 			if not self.tipStyled then
@@ -572,12 +572,5 @@ B:RegisterEvent("ADDON_LOADED", function(_, addon)
 		tip:GetParent().IconBorder:SetAlpha(0)
 		tip:GetParent().Icon:SetTexCoord(.08, .92, .08, .92)
 	end
-end)
-
--- Reskin Closebutton
-if IsAddOnLoaded("AuroraClassic") then
-	local F, C = unpack(AuroraClassic)
-	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
-	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 end
+B:RegisterEvent("ADDON_LOADED", addonStyled)
