@@ -6,4 +6,5 @@
 	<Script file="PetInfo.lua"/>
 	<Script file="Hovertips.lua"/>
 	<Script file="Targeted.lua"/>
+	<Script file="AzeriteArmor.lua"/>
 </Ui>
