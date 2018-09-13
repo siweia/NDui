@@ -67,6 +67,7 @@ local list = {
 		{AuraID = 274472, UnitID = "player"},	-- 狂战士之怒
 		{AuraID = 268769, UnitID = "player"},	-- 标记死穴
 		{AuraID = 267179, UnitID = "player"},	-- 非凡的力量
+		{AuraID = 278070, UnitID = "player"},	-- 泰坦过载
 		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
 		{AuraID = 267326, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
 		{AuraID = 267327, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
