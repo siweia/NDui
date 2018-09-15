@@ -7,7 +7,6 @@
 	<Script file="blizzard.lua"/>
 	<Script file="units.lua"/>
 	<Script file="colors.lua"/>
-	<Script file="finalize.lua"/>
 
 	<Script file="elements\power.lua"/>
 	<Script file="elements\auras.lua"/>
@@ -39,6 +38,8 @@
 	<Script file='Plugins\AutoResurrect.lua' />
 	<Script file='Plugins\RaidDebuffs.lua' />
 	<Script file='Plugins\FloatingCombatFeedback.lua' />
+
+	<Script file="finalize.lua"/>
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate">
