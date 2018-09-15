@@ -217,6 +217,13 @@ function module:OnLogin()
 		end
 	end)
 
+	-- Fix chatframe anchor after scaling
+	if NDuiDB["Chat"]["Lock"] then
+		B:RegisterEvent("UI_SCALE_CHANGED", function()
+			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
+		end)
+	end
+
 	-- Add Elements
 	self:ChatFilter()
 	self:ChannelRename()
