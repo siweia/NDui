@@ -110,7 +110,7 @@ function UF:CreateHealthText(self)
 		self:Tag(name, "[color][name]")
 	end
 
-	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 14), "", false, "RIGHT", -3, -1)
+	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, NDuiDB["Nameplate"]["FullHealth"] and 12 or 14), "", false, "RIGHT", -3, -1)
 	if self.mystyle == "raid" then
 		hpval:SetPoint("RIGHT", -3, -7)
 		if NDuiDB["UFs"]["HealthPerc"] then
@@ -470,7 +470,7 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		elseif C.WhiteList and C.WhiteList[spellID] then
 			return true
 		else
-			return (NDuiDB["Nameplate"]["AllAuras"] and nameplateShowAll) or (caster == "player" or caster == "pet" or caster == "vehicle")
+			return nameplateShowAll or (caster == "player" or caster == "pet" or caster == "vehicle")
 		end
 	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
 		return true

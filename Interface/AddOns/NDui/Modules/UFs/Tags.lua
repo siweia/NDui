@@ -137,7 +137,12 @@ oUF.Tags.Methods["nphp"] = function(unit)
 	local per = oUF.Tags.Methods["perhp"](unit) or 0
 	if per == 100 then return end
 
-	return ColorPercent(per)
+	if NDuiDB["Nameplate"]["FullHealth"] then
+		local cur = UnitHealth(unit)
+		return B.Numb(cur).." | "..ColorPercent(per)
+	else
+		return ColorPercent(per)
+	end
 end
 oUF.Tags.Events["nphp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION"
 
