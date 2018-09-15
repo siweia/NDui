@@ -31,22 +31,27 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			if bu and not bu.styled then
 				bu:GetRegions():SetAlpha(0)
 				bu.Icon:SetTexCoord(.08, .92, .08, .92)
-				F.CreateBDFrame(bu.Icon)
+				F.CreateBD(bu, 0)
 
 				bu.styled = true
 			end
 		end
 
 		if IsAddOnLoaded("AngryKeystones") and not angryStyle then
-			local scheduel = select(4, self:GetChildren())
+			local scheduel, party = select(4, self:GetChildren())
+
 			scheduel:GetRegions():SetAlpha(0)
 			select(3, scheduel:GetRegions()):SetAlpha(0)
 			F.CreateBD(scheduel, .3)
 			if scheduel.Entries then
-				for i = 1, 4 do
+				for i = 1, 3 do
 					AffixesSetup(scheduel.Entries[i])
 				end
 			end
+
+			party:GetRegions():SetAlpha(0)
+			select(3, party:GetRegions()):SetAlpha(0)
+			F.CreateBD(party, .3)
 
 			angryStyle = true
 		end

@@ -4,13 +4,8 @@ C.themes["Blizzard_MacroUI"] = function()
 	select(18, MacroFrame:GetRegions()):Hide()
 	MacroHorizontalBarLeft:Hide()
 	select(21, MacroFrame:GetRegions()):Hide()
-
-	for i = 1, 6 do
-		select(i, MacroFrameTab1:GetRegions()):Hide()
-		select(i, MacroFrameTab2:GetRegions()):Hide()
-		select(i, MacroFrameTab1:GetRegions()).Show = F.dummy
-		select(i, MacroFrameTab2:GetRegions()).Show = F.dummy
-	end
+	F.StripTextures(MacroFrameTab1)
+	F.StripTextures(MacroFrameTab2)
 
 	for i = 1, 8 do
 		select(i, MacroPopupFrame.BorderBox:GetRegions()):Hide()
