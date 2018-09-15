@@ -23,26 +23,28 @@ function module:GuildBest()
 	local function CreateBoard()
 		frame = CreateFrame("Frame", nil, ChallengesFrame)
 		frame:SetPoint("BOTTOMRIGHT", -6, 80)
-		frame:SetSize(170, 110)
+		frame:SetSize(170, 105)
 		B.CreateBD(frame, .3)
-		B.CreateFS(frame, 14, CHALLENGE_MODE_THIS_WEEK , "system", "TOPLEFT", 10, -9)
+		B.CreateFS(frame, 16, CHALLENGE_MODE_THIS_WEEK , "system", "TOPLEFT", 16, -6)
 
 		frame.entries = {}
 		for i = 1, 4 do
 			local entry = CreateFrame("Frame", nil, frame)
-			entry:SetSize(150, 18)
-			entry.CharacterName = B.CreateFS(entry, 14, "", false, "LEFT", 0, 0)
+			entry:SetPoint("LEFT", 10, 0)
+			entry:SetPoint("RIGHT", -10, 0)
+			entry:SetHeight(18)
+			entry.CharacterName = B.CreateFS(entry, 14, "", false, "LEFT", 6, 0)
 			entry.CharacterName:SetPoint("RIGHT", -30, 0)
 			entry.CharacterName:SetJustifyH("LEFT")
 			entry.Level = B.CreateFS(entry, 14, "", "system")
 			entry.Level:SetJustifyH("LEFT")
 			entry.Level:ClearAllPoints()
-			entry.Level:SetPoint("LEFT", entry, "RIGHT", -20, 0)
+			entry.Level:SetPoint("LEFT", entry, "RIGHT", -22, 0)
 			entry:SetScript("OnEnter", UpdateTooltip)
 			entry:SetScript("OnLeave", GameTooltip_Hide)
 
 			if i == 1 then
-				entry:SetPoint("TOP", frame, 0, -32)
+				entry:SetPoint("TOP", frame, 0, -26)
 			else
 				entry:SetPoint("TOP", frame.entries[i-1], "BOTTOM")
 			end
@@ -63,6 +65,7 @@ function module:GuildBest()
 		self.Level:SetText(leaderInfo.keystoneLevel)
 	end
 
+	local resize
 	local function UpdateGuildBest(self)
 		if not frame then CreateBoard() end
 		if self.leadersAvailable then
@@ -75,6 +78,22 @@ function module:GuildBest()
 			else
 				frame:Hide()
 			end
+		end
+
+		if not resize and IsAddOnLoaded("AngryKeystones") then
+			local scheduel = select(4, self:GetChildren())
+			frame:SetWidth(246)
+			frame:ClearAllPoints()
+			frame:SetPoint("BOTTOMLEFT", scheduel, "TOPLEFT", 0, 10)
+
+			self.WeeklyInfo.Child.Label:SetPoint("TOP", -135, -25)
+			local affix = self.WeeklyInfo.Child.Affixes[1]
+			if affix then
+				affix:ClearAllPoints()
+				affix:SetPoint("TOPLEFT", 20, -55)
+			end
+
+			resize = true
 		end
 	end
 
