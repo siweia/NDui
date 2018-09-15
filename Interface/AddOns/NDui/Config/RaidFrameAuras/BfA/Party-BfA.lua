@@ -70,6 +70,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 272046) -- 俯冲轰炸
 module:RegisterDebuff(TIER, INSTANCE, 0, 258338) -- 眩晕酒桶
 module:RegisterDebuff(TIER, INSTANCE, 0, 257314) -- 黑火药炸弹
 module:RegisterDebuff(TIER, INSTANCE, 0, 257305) -- 火炮弹幕
+module:RegisterDebuff(TIER, INSTANCE, 0, 281357) -- 水鼠啤酒
 
 INSTANCE = 1041 -- 诸王之眠
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
