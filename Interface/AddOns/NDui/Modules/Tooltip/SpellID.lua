@@ -3,8 +3,6 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Tooltip")
 
 function module:ExtraTipInfo()
-	if not NDuiDB["Tooltip"]["ExtraTipInfo"] then return end
-
 	local types = {
 		spell = SPELLS.."ID:",
 		item = ITEMS.."ID:",
@@ -24,13 +22,16 @@ function module:ExtraTipInfo()
 		if not noadd then self:AddLine(" ") end
 
 		if type == types.item then
-			if GetItemCount(id, true) and GetItemCount(id, true) - GetItemCount(id) > 0 then
-				self:AddDoubleLine(BAGSLOT.."/"..BANK..":", format(DB.InfoColor.."%s|r", GetItemCount(id).."/"..GetItemCount(id, true) - GetItemCount(id)))
-			elseif GetItemCount(id) > 0 then
-				self:AddDoubleLine(BAGSLOT..":", format(DB.InfoColor.."%s|r", GetItemCount(id)))
+			local bagCount = GetItemCount(id)
+			local bankCount = GetItemCount(id, true) - GetItemCount(id)
+			local itemStackCount = select(8, GetItemInfo(id))
+			if bankCount > 0 then
+				self:AddDoubleLine(BAGSLOT.."/"..BANK..":", DB.InfoColor..bagCount.."/"..bankCount)
+			elseif bagCount > 0 then
+				self:AddDoubleLine(BAGSLOT..":", DB.InfoColor..bagCount)
 			end
-			if select(8, GetItemInfo(id)) and select(8, GetItemInfo(id)) > 1 then
-				self:AddDoubleLine(L["Stack Cap"]..":", format(DB.InfoColor.."%s|r", select(8, GetItemInfo(id))))
+			if itemStackCount and itemStackCount > 1 then
+				self:AddDoubleLine(L["Stack Cap"]..":", DB.InfoColor..itemStackCount)
 			end
 		end
 		self:AddDoubleLine(type, format(DB.InfoColor.."%s|r", id))

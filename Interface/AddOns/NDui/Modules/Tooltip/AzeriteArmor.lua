@@ -27,7 +27,7 @@ function module:AzeriteArmor()
 		for i = 8, tooltip:NumLines() do
 			local line = _G[tooltip:GetName().."TextLeft"..i]
 			local text = line:GetText()
-			if text and text:find("- "..powerName) then
+			if text and text:find("%- "..powerName) then
 				return i
 			end
 		end
