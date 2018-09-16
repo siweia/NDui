@@ -64,6 +64,7 @@ local list = {
 		{AuraID = 268887, UnitID = "player"},	-- 迅捷远航
 		{AuraID = 268854, UnitID = "player"},	-- 全能远航
 		{AuraID = 264957, UnitID = "player"},	-- 急速瞄准镜
+		{AuraID = 264878, UnitID = "player"},	-- 爆击瞄准镜
 		{AuraID = 274472, UnitID = "player"},	-- 狂战士之怒
 		{AuraID = 268769, UnitID = "player"},	-- 标记死穴
 		{AuraID = 267179, UnitID = "player"},	-- 非凡的力量
