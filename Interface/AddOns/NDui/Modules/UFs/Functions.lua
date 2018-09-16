@@ -106,6 +106,8 @@ function UF:CreateHealthText(self)
 		self:Tag(name, "[color][name][afkdnd]")
 	elseif self.mystyle == "nameplate" then
 		self:Tag(name, "[nplevel][name]")
+	elseif self.mystyle == "arena" then
+		self:Tag(name, "[color][name][raidcolor][arenaspec]")
 	else
 		self:Tag(name, "[color][name]")
 	end
@@ -124,8 +126,6 @@ function UF:CreateHealthText(self)
 	else
 		self:Tag(hpval, "[hp]")
 	end
-
-	self.nameFrame = textFrame
 end
 
 function UF:CreatePowerBar(self)
@@ -595,8 +595,8 @@ end
 local margin = C.UFs.BarMargin
 local width, height = unpack(C.UFs.BarSize)
 
-local function postUpdateClassPower(element, cur, max, diff, powerType, event)
-	if diff or event == "ClassPowerEnable" then
+local function postUpdateClassPower(element, cur, max, diff, powerType)
+	if diff then
 		for i = 1, 6 do
 			element[i]:SetWidth((width - (max-1)*margin)/max)
 		end
