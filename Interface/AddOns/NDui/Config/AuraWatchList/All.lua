@@ -50,10 +50,15 @@ local list = {
 		{AuraID = 33697, UnitID = "player"},	-- 血性狂怒 兽人
 		-- 饰品附魔
 		{AuraID = 229206, UnitID = "player"},	-- 延时之力
+		{AuraID = 251231, UnitID = "player"},	-- 钢肤药水
 		{AuraID = 279151, UnitID = "player"},	-- 智力药水
 		{AuraID = 279152, UnitID = "player"},	-- 敏捷药水
 		{AuraID = 279153, UnitID = "player"},	-- 力量药水
 		{AuraID = 279154, UnitID = "player"},	-- 耐力药水
+		{AuraID = 251316, UnitID = "player"},	-- 鲜血爆发药水
+		{AuraID = 269853, UnitID = "player"},	-- 死亡崛起药水
+		{AuraID = 188024, UnitID = "player"},	-- 天行药水
+		{AuraID = 250878, UnitID = "player"},	-- 轻足药水
 		{AuraID = 190026, UnitID = "player"},	-- PVP饰品，+敏捷
 		{AuraID = 170397, UnitID = "player"},	-- PVP饰品，+全能
 		{AuraID = 275765, UnitID = "player"},	-- 艾泽里特强化
@@ -478,6 +483,8 @@ local list = {
 		{AuraID = 273251, UnitID = "target"},	-- 重组冲击，戈霍恩
 		{AuraID = 263372, UnitID = "target"},	-- 能量矩阵，戈霍恩
 		{AuraID = 270447, UnitID = "target"},	-- 腐化滋长，戈霍恩
+		{AuraID = 263217, UnitID = "target"},	-- 鲜血护盾，戈霍恩
+		{AuraID = 275129, UnitID = "target"},	-- 臃肿肥胖，戈霍恩
 	-- 7.0副本
 		{AuraID = 244621, UnitID = "target"},	-- 虚空裂隙，执政团尾王
 		{AuraID = 192132, UnitID = "target"},	-- 英灵殿赫娅

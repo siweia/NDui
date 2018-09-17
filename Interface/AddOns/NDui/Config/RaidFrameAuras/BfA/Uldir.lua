@@ -57,4 +57,4 @@ BOSS = 2147 -- 戈霍恩
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 274262) -- 爆炸腐蚀
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 263235) -- 鲜血盛宴
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 267700) -- 戈霍恩的凝视
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 263227) -- 腐败之血
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 263227, 2) -- 腐败之血
