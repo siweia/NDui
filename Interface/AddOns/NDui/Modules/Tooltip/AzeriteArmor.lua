@@ -15,6 +15,7 @@ function module:AzeriteArmor()
 				tinsert(tipList, i)
 			end
 		end
+		return #tipList
 	end
 
 	local iconString = "|T%s:18:22:0:0:64:64:5:59:5:59"
@@ -59,9 +60,9 @@ function module:AzeriteArmor()
 			allTierInfo = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID(link)
 			cache[link] = allTierInfo
 		end
+		if not allTierInfo then return end
 
-		scanTooltip(self)
-
+		local count = scanTooltip(self)
 		local index = 1
 		for i = 1, #allTierInfo do
 			local powerIDs = allTierInfo[i].azeritePowerIDs
@@ -80,9 +81,10 @@ function module:AzeriteArmor()
 				end
 			end
 
-			if #tipList > 0 then
+			if tooltipText ~= "" and count > 0 then
 				local line = _G[self:GetName().."TextLeft"..tipList[index]]
 				line:SetText(line:GetText().."\n "..tooltipText)
+				count = count - 1
 				index = index + 1
 			end
 		end
