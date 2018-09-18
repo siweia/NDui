@@ -78,4 +78,14 @@ function module:OnLogin()
 	C.AuraWatchList = AuraWatchList
 	C.RaidBuffs = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
+
+	-- Filter bloodlust for healers
+	local bloodlustList = {57723, 57724, 80354, 264689}
+	local function filterBloodlust()
+		for _, spellID in pairs(bloodlustList) do
+			C.RaidBuffs["ALL"][spellID] = (DB.Role ~= "Healer")
+		end
+	end
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", filterBloodlust)
+	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", filterBloodlust)
 end
