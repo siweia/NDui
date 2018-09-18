@@ -27,7 +27,15 @@ end
 
 function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		UpdateSpellStatus(self.bu[1], 162794)
+		do
+			local button = self.bu[1]
+			if IsPlayerSpell(258920) then
+				UpdateBuff(button, 258920, 258920, true)
+			else
+				UpdateSpellStatus(button, 162794)
+			end
+		end
+
 		UpdateBuff(self.bu[2], 188499, 188499, true)
 		UpdateCooldown(self.bu[3], 198013, true)
 		UpdateCooldown(self.bu[4], 179057, true)
