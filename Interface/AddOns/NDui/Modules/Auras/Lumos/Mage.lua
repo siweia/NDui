@@ -122,7 +122,7 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[5]
 			if IsPlayerSpell(199786) then
-				UpdateBuff(button, 199786, 199844)
+				UpdateBuff(button, 199786, 205473)
 			elseif IsPlayerSpell(205021) then
 				UpdateCooldown(button, 205021, true)
 			else
