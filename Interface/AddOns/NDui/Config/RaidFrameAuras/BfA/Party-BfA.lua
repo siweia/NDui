@@ -60,6 +60,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 268086) -- 恐怖光环
 module:RegisterDebuff(TIER, INSTANCE, 0, 267907) -- 灵魂荆棘
 module:RegisterDebuff(TIER, INSTANCE, 0, 261440) -- 恶性病原体
+module:RegisterDebuff(TIER, INSTANCE, 0, 260741, 5) -- 锯齿荨麻
 
 INSTANCE = 1001 -- 自由镇
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
