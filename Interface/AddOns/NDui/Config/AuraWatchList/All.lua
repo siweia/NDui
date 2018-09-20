@@ -77,6 +77,8 @@ local list = {
 		{AuraID = 271103, UnitID = "player"},	-- 莱赞的微光之眼
 		{AuraID = 273942, UnitID = "player"},	-- 提振精神
 		{AuraID = 268518, UnitID = "player"},	-- 狂风风铃
+		{AuraID = 265946, UnitID = "player", Value = true},	-- 仪式裹手
+		{AuraID = 278143, UnitID = "player"},	-- 血珠狂怒
 		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
 		{AuraID = 267326, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
 		{AuraID = 267327, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
