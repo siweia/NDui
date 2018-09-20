@@ -39,11 +39,11 @@ function UF:CreateHeader(self)
 	self.Highlight = hl
 
 	self:RegisterForClicks("AnyUp")
-	self:SetScript("OnEnter", function()
+	self:HookScript("OnEnter", function()
 		UnitFrame_OnEnter(self)
 		self.Highlight:Show()
 	end)
-	self:SetScript("OnLeave", function()
+	self:HookScript("OnLeave", function()
 		UnitFrame_OnLeave(self)
 		self.Highlight:Hide()
 	end)

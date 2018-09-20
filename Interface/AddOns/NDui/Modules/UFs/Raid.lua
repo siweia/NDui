@@ -112,6 +112,16 @@ local keyList = {
 	[18] = {KEY_BUTTON5, "ALT", "ALT-%s5"},			-- ALT+鼠标键5
 	[19] = {KEY_BUTTON5, "CTRL", "CTRL-%s5"},		-- CTRL+鼠标键5
 	[20] = {KEY_BUTTON5, "SHIFT", "SHIFT-%s5"},		-- SHIFT+鼠标键5
+
+	[21] = {L["WheelUp"], "", "%s6"},				-- 滚轮上
+	[22] = {L["WheelUp"], "ALT", "%s7"},			-- ALT+滚轮上
+	[23] = {L["WheelUp"], "CTRL", "%s8"},			-- CTRL+滚轮上
+	[24] = {L["WheelUp"], "SHIFT", "%s9"},		-- SHIFT+滚轮上
+
+	[25] = {L["WheelDown"], "", "%s10"},			-- 滚轮下
+	[26] = {L["WheelDown"], "ALT", "%s11"},		-- ALT+滚轮下
+	[27] = {L["WheelDown"], "CTRL", "%s12"},		-- CTRL+滚轮下
+	[28] = {L["WheelDown"], "SHIFT", "%s13"},		-- SHIFT+滚轮下
 }
 
 local defaultSpellList = {
@@ -169,8 +179,39 @@ function UF:DefaultClickSets()
 	end
 end
 
+local function onMouseWheelCast(self)
+	local found
+	for _, data in pairs(NDuiDB["RaidClickSets"]) do
+		local key, modKey, value = unpack(data)
+		if key:match(L["Wheel"]) then
+			found = true
+			break
+		end
+	end
+
+	if found then
+		self:SetAttribute("_onenter", [[
+			self:ClearBindings()
+			self:SetBindingClick(1, "MOUSEWHEELUP", self, "Button6")
+			self:SetBindingClick(1, "ALT-MOUSEWHEELUP", self, "Button7")
+			self:SetBindingClick(1, "CTRL-MOUSEWHEELUP", self, "Button8")
+			self:SetBindingClick(1, "SHIFT-MOUSEWHEELUP", self, "Button9")
+			self:SetBindingClick(1, "MOUSEWHEELDOWN", self, "Button10")
+			self:SetBindingClick(1, "ALT-MOUSEWHEELDOWN", self, "Button11")
+			self:SetBindingClick(1, "CTRL-MOUSEWHEELDOWN", self, "Button12")
+			self:SetBindingClick(1, "SHIFT-MOUSEWHEELDOWN", self, "Button13")
+		]])
+		self:SetAttribute("_onleave", [[
+			self:ClearBindings()
+		]])
+	end
+end
+
 local function setupClickSets(self)
+	if self.mystyle ~= "raid" then return end	-- just in case
 	if InCombatLockdown() then return end
+
+	onMouseWheelCast(self)
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
 		local key, modKey, value = unpack(data)
