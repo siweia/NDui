@@ -184,7 +184,7 @@ function module:ChantLumos(self)
 			end
 		end
 
-		UpdateDebuff(self.bu[4], 80240, 80240)
+		UpdateCooldown(self.bu[4], 80240, true)
 		UpdateTotemAura(self.bu[5], 136219, 1122)
 	end
 end
