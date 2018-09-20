@@ -392,8 +392,9 @@ QuickQuest:Register("QUEST_COMPLETE", function()
 			end
 		end
 
-		if(bestIndex) then
-			QuestInfoItem_OnClick(QuestInfoRewardsFrame.RewardButtons[bestIndex])
+		local button = bestIndex and QuestInfoRewardsFrame.RewardButtons[bestIndex]
+		if button then
+			QuestInfoItem_OnClick(button)
 		end
 	end
 end)

@@ -77,7 +77,7 @@ function module:ExtraTipInfo()
 	local function attachItemTooltip(self)
 		local link = select(2, self:GetItem())
 		if link then
-			local id = link:match("^|%x+|Hitem:(%d+):") or nil
+			local id = link:match("item:(%d+):")
 			if link:find("keystone") then id = 138019 end
 			if id then addLine(self, id, types.item) end
 		end
@@ -92,8 +92,11 @@ function module:ExtraTipInfo()
 		if id then addLine(self, id, types.item) end
 	end)
 	hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, recipeID, reagentIndex)
-		local id = C_TradeSkillUI.GetRecipeReagentItemLink(recipeID, reagentIndex):match("item:(%d+):") or nil
-		if id then addLine(self, id, types.item) end
+		local link = C_TradeSkillUI.GetRecipeReagentItemLink(recipeID, reagentIndex)
+		if link then
+			local id = link:match("item:(%d+):")
+			if id then addLine(self, id, types.item) end
+		end
 	end)
 
 	-- Currencies
