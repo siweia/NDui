@@ -114,9 +114,14 @@ function module:InterruptAlert()
 	if NDuiDB["Misc"]["BrokenSpell"] then infoType["SPELL_AURA_BROKEN_SPELL"] = L["BrokenSpell"] end
 
 	local blackList = {
+		[99] = true,		-- 夺魂咆哮
+		[122] = true,		-- 冰霜新星
+		[8122] = true,		-- 心灵尖啸
 		[33395] = true,		-- 冰冻术
 		[228600] = true,	-- 冰川尖刺
 		[197214] = true,	-- 裂地术
+		[157997] = true,	-- 寒冰新星
+		[102359] = true,	-- 群体缠绕
 	}
 
 	local function msgChannel()
