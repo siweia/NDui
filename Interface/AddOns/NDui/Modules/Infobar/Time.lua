@@ -150,7 +150,7 @@ info.onEnter = function(self)
 		addTitle(QUESTS_LABEL)
 		local r,g,b
 		if count == maxCoins then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-		GameTooltip:AddDoubleLine(bonusname, count.." / "..maxCoins, 1,1,1, r,g,b)
+		GameTooltip:AddDoubleLine(bonusname, count.."/"..maxCoins, 1,1,1, r,g,b)
 	end
 
 	local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
@@ -160,7 +160,7 @@ info.onEnter = function(self)
 			GameTooltip:AddDoubleLine(ISLANDS_HEADER, QUEST_COMPLETE, 1,1,1, 1,0,0)
 		else
 			local cur, max = select(4, GetQuestObjectiveInfo(iwqID, 1, false))
-			local stautsText = cur.." / "..max
+			local stautsText = cur.."/"..max
 			if not cur or not max then stautsText = LFG_LIST_LOADING end
 			GameTooltip:AddDoubleLine(ISLANDS_HEADER, stautsText, 1,1,1, 0,1,0)
 		end

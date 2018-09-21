@@ -84,7 +84,7 @@ function UF:CreateHealthText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints()
 
-	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 11), "", false, "LEFT", 3, -1)
+	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 10), "", false, "LEFT", 3, -1)
 	name:SetJustifyH("LEFT")
 	if self.mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
