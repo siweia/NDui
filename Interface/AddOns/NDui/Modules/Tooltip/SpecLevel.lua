@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local module = B:GetModule("Tooltip")
 ---------------------------------
 -- CloudyUnitInfo, by Cloudyfa
 -- NDui MOD
@@ -49,7 +50,7 @@ end
 
 local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
 local ItemDB = {}
-local function GetItemLevel(link, quality)
+function module:GetItemLevel(link, quality)
 	if ItemDB[link] and quality ~= 6 then return ItemDB[link] end
 
 	local tip = _G["NDuiScanTooltip"] or CreateFrame("GameTooltip", "NDuiScanTooltip", nil, "GameTooltipTemplate")
@@ -93,7 +94,7 @@ local function UnitGear(unit)
 						end
 
 						if unit ~= "player" then
-							level = GetItemLevel(itemLink, quality) or level
+							level = module:GetItemLevel(itemLink, quality) or level
 							if i < 16 then
 								total = total + level
 							elseif i > 15 and quality == 6 then
