@@ -79,6 +79,9 @@ local list = {
 		{AuraID = 268518, UnitID = "player"},	-- 狂风风铃
 		{AuraID = 265946, UnitID = "player", Value = true},	-- 仪式裹手
 		{AuraID = 278143, UnitID = "player"},	-- 血珠狂怒
+		{AuraID = 278381, UnitID = "player"},	-- 海上风暴
+		{AuraID = 274430, UnitID = "player", Text = RAID_BUFF_4},	-- 永不间断的时钟，急速
+		{AuraID = 274431, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
 		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
 		{AuraID = 267326, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
 		{AuraID = 267327, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
@@ -86,6 +89,8 @@ local list = {
 		{AuraID = 267330, UnitID = "player", Text = RAID_BUFF_6},	-- 爆击
 		{AuraID = 267331, UnitID = "player", Text = RAID_BUFF_6},	-- 爆击
 		-- 艾泽里特特质
+		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
+		{AuraID = 266047, UnitID = "player"},	-- 激励咆哮
 		{AuraID = 280409, UnitID = "player"},	-- 血祭之力
 		{AuraID = 279902, UnitID = "player"},	-- 不稳定的烈焰
 		{AuraID = 281843, UnitID = "player"},	-- 汇帆
@@ -141,10 +146,9 @@ local list = {
 		{AuraID = 32182, UnitID = "player"},	-- 英勇
 		{AuraID = 80353, UnitID = "player"},	-- 时间扭曲
 		{AuraID = 264667, UnitID = "player"},	-- 原始狂怒
-		{AuraID = 90355, UnitID = "player"},	-- 熔岩犬：远古狂乱
-		{AuraID = 160452, UnitID = "player"},	-- 虚空鳐：虚空之风
 		{AuraID = 178207, UnitID = "player"},	-- 鼓
 		{AuraID = 230935, UnitID = "player"},	-- 高山战鼓
+		{AuraID = 256740, UnitID = "player"},	-- 漩涡战鼓
 		{AuraID = 102364, UnitID = "player"},	-- 青铜龙的祝福
 		-- 团队增益或减伤
 		{AuraID = 1022, UnitID = "player"},		-- 保护祝福
