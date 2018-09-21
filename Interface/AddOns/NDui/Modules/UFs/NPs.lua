@@ -109,9 +109,15 @@ local function UpdateColor(element, unit)
 			r, g, b = UnitSelectionColor(unit, true)
 			if status and (NDuiDB["Nameplate"]["TankMode"] or DB.Role == "Tank") then
 				if status == 3 then
-					r, g, b = 0, .5, .7
+					if DB.Role == "Tank" then
+						r, g, b = 0, .5, .7
+					else
+						r, g, b = 1, 0, 0
+					end
 				elseif status == 2 or status == 1 then
 					r, g, b = 1, .8, 0
+				elseif status == 0 and DB.Role ~= "TANK" then
+					r, g, b = 0, .5, .7
 				end
 			end
 		end
