@@ -43,9 +43,6 @@ local function GetSectionInfo(id)
 end
 
 local CustomUnits = {
-	["Fel Explosive"] = true,
-	["邪能炸药"] = true,
-	["魔化炸彈"] = true,
 	[GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
 	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
 	[GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
@@ -57,6 +54,7 @@ local CustomUnits = {
 	["Spawn of G'huun"] = true,
 	["戈霍恩之嗣"] = true,
 	["古翰幼體"] = true,
+	["Explosives"] = true,
 	["爆炸物"] = true,
 	["炸彈"] = true,
 }
@@ -116,7 +114,7 @@ local function UpdateColor(element, unit)
 					end
 				elseif status == 2 or status == 1 then
 					r, g, b = 1, .8, 0
-				elseif status == 0 and DB.Role ~= "TANK" then
+				elseif status == 0 and DB.Role ~= "Tank" then
 					r, g, b = 0, .5, .7
 				end
 			end
@@ -212,6 +210,55 @@ local function UpdateUnitClassify(self, unit)
 	end
 end
 
+local function isMouseoverUnit(self)
+	if not self or not self.unit then return end
+
+	if self:IsVisible() and UnitExists("mouseover") and not UnitIsUnit("target", self.unit) then
+		return UnitIsUnit("mouseover", self.unit)
+	end
+	return false
+end
+
+local function updateMouseoverShown(self)
+	if not self or not self.unit then return end
+
+	if self:IsShown() and UnitIsUnit("mouseover", self.unit) and not UnitIsUnit("target", self.unit) then
+		self.glow:Show()
+		self.HighlightIndicator:Show()
+	else
+		self.HighlightIndicator:Hide()
+	end
+end
+
+local function AddMouseoverIndicator(self)
+	local glow = CreateFrame("Frame", nil, self)
+	glow:SetPoint("TOPLEFT", -6, 6)
+	glow:SetPoint("BOTTOMRIGHT", 6, -6)
+	glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
+	glow:SetBackdropBorderColor(1, 1, 1)
+	glow:SetFrameLevel(0)
+
+	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", updateMouseoverShown)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", updateMouseoverShown)
+
+	local f = CreateFrame("Frame", nil, self)
+	f:SetScript("OnUpdate", function(_, elapsed)
+		f.elapsed = (f.elapsed or 0) + elapsed
+		if f.elapsed > .1 then
+			if not isMouseoverUnit(self) then
+				f:Hide()
+			end
+			f.elapsed = 0
+		end
+	end)
+	f:HookScript("OnHide", function()
+		glow:Hide()
+	end)
+
+	self.glow = glow
+	self.HighlightIndicator = f
+end
+
 -- Create Nameplates
 function UF:CreatePlates(unit)
 	self.mystyle = "nameplate"
@@ -245,17 +292,9 @@ function UF:CreatePlates(unit)
 			arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
 			arrow:SetAlpha(0)
 			self.targetMark = arrow
-		else
-			local glow = CreateFrame("Frame", nil, self)
-			glow:SetPoint("TOPLEFT", -5, 5)
-			glow:SetPoint("BOTTOMRIGHT", 5, -5)
-			glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
-			glow:SetBackdropBorderColor(1, 1, 1)
-			glow:SetFrameLevel(0)
-			glow:SetAlpha(0)
-			self.targetMark = glow
+
+			self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 		end
-		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 
 		local cicon = self:CreateTexture(nil, "OVERLAY")
 		cicon:SetPoint("LEFT", self, 1, 5)
@@ -277,6 +316,10 @@ function UF:CreatePlates(unit)
 		local threatIndicator = CreateFrame("Frame", nil, self)
 		self.ThreatIndicator = threatIndicator
 		self.ThreatIndicator.Override = UpdateThreatColor
+
+		if NDuiDB["Nameplate"]["HighlightIndicator"] then
+			AddMouseoverIndicator(self)
+		end
 	end
 end
 
