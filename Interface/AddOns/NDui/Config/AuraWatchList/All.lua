@@ -80,6 +80,7 @@ local list = {
 		{AuraID = 265946, UnitID = "player", Value = true},	-- 仪式裹手
 		{AuraID = 278143, UnitID = "player"},	-- 血珠狂怒
 		{AuraID = 278381, UnitID = "player"},	-- 海上风暴
+		{AuraID = 273974, UnitID = "player"},	-- 洛阿意志
 		{AuraID = 274430, UnitID = "player", Text = RAID_BUFF_4},	-- 永不间断的时钟，急速
 		{AuraID = 274431, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
 		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
