@@ -73,8 +73,6 @@ C.ShowPowerList = {
 	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
 }
 function UF:CreatePowerUnitTable()
-	if not NDuiDB["Nameplate"]["ShowUnitPower"] then return end
-
 	local list = {string.split(" ", NDuiDB["Nameplate"]["ShowPowerList"])}
 	for _, value in pairs(list) do
 		C.ShowPowerList[value] = true
@@ -86,13 +84,18 @@ local function UpdateColor(element, unit)
 	local name = GetUnitName(unit) or UNKNOWN
 	local status = UnitThreatSituation("player", unit) or false		-- just in case
 	local reaction = UnitReaction(unit, "player")
+	local customColor = NDuiDB["Nameplate"]["CustomColor"]
+	local secureColor = NDuiDB["Nameplate"]["SecureColor"]
+	local transColor = NDuiDB["Nameplate"]["TransColor"]
+	local insecureColor = NDuiDB["Nameplate"]["InsecureColor"]
+	local revertThreat = NDuiDB["Nameplate"]["DPSRevertThreat"]
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
 		if CustomUnits and CustomUnits[name] then
-			r, g, b = 0, .8, .3
+			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then
 				r, g, b = B.UnitColor(unit)
@@ -107,15 +110,19 @@ local function UpdateColor(element, unit)
 			r, g, b = UnitSelectionColor(unit, true)
 			if status and (NDuiDB["Nameplate"]["TankMode"] or DB.Role == "Tank") then
 				if status == 3 then
-					if DB.Role == "Tank" then
-						r, g, b = 0, .5, .7
+					if DB.Role ~= "Tank" and revertThreat then
+						r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
 					else
-						r, g, b = 1, 0, 0
+						r, g, b = secureColor.r, secureColor.g, secureColor.b
 					end
 				elseif status == 2 or status == 1 then
-					r, g, b = 1, .8, 0
-				elseif status == 0 and DB.Role ~= "Tank" then
-					r, g, b = 0, .5, .7
+					r, g, b = transColor.r, transColor.g, transColor.b
+				elseif status == 0 then
+					if DB.Role ~= "Tank" and revertThreat then
+						r, g, b = secureColor.r, secureColor.g, secureColor.b
+					else
+						r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
+					end
 				end
 			end
 		end
