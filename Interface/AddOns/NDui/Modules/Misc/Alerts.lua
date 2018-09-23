@@ -116,6 +116,7 @@ function module:InterruptAlert()
 	local blackList = {
 		[99] = true,		-- 夺魂咆哮
 		[122] = true,		-- 冰霜新星
+		[5246] = true,		-- 破胆怒吼
 		[8122] = true,		-- 心灵尖啸
 		[33395] = true,		-- 冰冻术
 		[228600] = true,	-- 冰川尖刺

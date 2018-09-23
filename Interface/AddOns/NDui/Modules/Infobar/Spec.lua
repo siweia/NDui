@@ -54,7 +54,7 @@ info.onEnter = function(self)
 		for c = 1, 3 do
 			local _, name, icon, selected = GetTalentInfo(t, c, 1)
 			if selected then
-				GameTooltip:AddLine(addIcon(icon).." "..DB.MyColor..name)
+				GameTooltip:AddLine(addIcon(icon).." "..name, 1,1,1)
 			end
 		end
 	end
@@ -69,7 +69,7 @@ info.onEnter = function(self)
 			for _, talentID in next, pvpTalents do
 				local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
 				if name and unlocked then
-					GameTooltip:AddLine(addIcon(icon).." "..DB.MyColor..name)
+					GameTooltip:AddLine(addIcon(icon).." "..name, 1,1,1)
 				end
 			end
 		end
