@@ -341,11 +341,10 @@ end
 
 colourButton:SetScript("OnClick", function()
 	local r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
-	ColorPickerFrame:SetColorRGB(r, g, b)
-	ColorPickerFrame.previousValues = {r = r, g = g, b = b}
 	ColorPickerFrame.func = setColour
+	ColorPickerFrame.previousValues = {r = r, g = g, b = b}
 	ColorPickerFrame.cancelFunc = resetColour
-	ColorPickerFrame:Hide()
+	ColorPickerFrame:SetColorRGB(r, g, b)
 	ColorPickerFrame:Show()
 end)
 
