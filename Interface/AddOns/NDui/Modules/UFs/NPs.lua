@@ -151,13 +151,15 @@ local function UpdateThreatColor(self, _, unit)
 end
 
 local function UpdateTargetMark(self)
-	local mark = self.targetMark
-	if not mark then return end
+	local arrow = self.arrowMark
+	local mark = self.tarMark
 
 	if UnitIsUnit(self.unit, "target") and not UnitIsUnit(self.unit, "player") then
-		mark:SetAlpha(1)
+		if arrow then arrow:SetAlpha(1) end
+		if mark then mark:SetAlpha(1) end
 	else
-		mark:SetAlpha(0)
+		if arrow then arrow:SetAlpha(0) end
+		if mark then mark:SetAlpha(0) end
 	end
 end
 
@@ -298,10 +300,18 @@ function UF:CreatePlates(unit)
 			arrow:SetTexture(DB.arrowTex)
 			arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
 			arrow:SetAlpha(0)
-			self.targetMark = arrow
-
-			self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
+			self.arrowMark = arrow
 		end
+		local mark = self.Health:CreateTexture(nil, "BACKGROUND", nil, -1)
+		mark:SetHeight(12)
+		mark:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", -20, -2)
+		mark:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", 20, -2)
+		mark:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
+		mark:SetVertexColor(0, .6, 1)
+		mark:SetBlendMode("ADD")
+		mark:SetAlpha(0)
+		self.tarMark = mark
+		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 
 		local cicon = self:CreateTexture(nil, "OVERLAY")
 		cicon:SetPoint("LEFT", self, 1, 5)
