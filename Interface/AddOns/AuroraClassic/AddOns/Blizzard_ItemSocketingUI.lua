@@ -29,6 +29,7 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		select(2, bu:GetRegions()):Hide()
 
 		bu:SetPushedTexture("")
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 
 		shine:ClearAllPoints()
@@ -52,11 +53,11 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		else
 			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 39)
 		end
+		ItemSocketingDescription:SetBackdrop(nil)
 	end)
 
 	F.ReskinPortraitFrame(ItemSocketingFrame, true)
 	F.CreateBD(ItemSocketingScrollFrame, .25)
 	F.Reskin(ItemSocketingSocketButton)
 	F.ReskinScroll(ItemSocketingScrollFrameScrollBar)
-	F.StripTextures(ItemSocketingDescription)
 end
