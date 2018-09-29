@@ -81,6 +81,8 @@ local list = {
 		{AuraID = 278143, UnitID = "player"},	-- 血珠狂怒
 		{AuraID = 278381, UnitID = "player"},	-- 海上风暴
 		{AuraID = 273974, UnitID = "player"},	-- 洛阿意志
+		{AuraID = 271105, UnitID = "player"},	-- 屠夫之眼
+		{AuraID = 271107, UnitID = "player"},	-- 金色光泽
 		{AuraID = 274430, UnitID = "player", Text = RAID_BUFF_4},	-- 永不间断的时钟，急速
 		{AuraID = 274431, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
 		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
@@ -181,16 +183,39 @@ local list = {
 		{AuraID = 209426, UnitID = "player"},	-- 幻影打击
 	},
 	["Raid Debuff"] = {		-- 团队减益组
-	-- 史诗钥石
+	-- 5人本
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
 		{AuraID = 240443, UnitID = "player"},	-- 爆裂
 		{AuraID = 226512, UnitID = "player"},	-- 血池
+		{AuraID = 240447, UnitID = "player"},	-- 践踏
+		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
+		{AuraID = 265773, UnitID = "player"},	-- 吐金，诸王
+		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
 	-- 奥迪尔
+		{AuraID = 271224, UnitID = "player", Text = L["Get Out"]},	-- 赤红迸发，塔罗克
+		{AuraID = 271225, UnitID = "player", Text = L["Get Out"]},
+		{AuraID = 278888, UnitID = "player", Text = L["Get Out"]},
+		{AuraID = 278889, UnitID = "player", Text = L["Get Out"]},
+		{AuraID = 267787, UnitID = "player"},	-- 消毒打击，纯净圣母
+		{AuraID = 262313, UnitID = "player"},	-- 恶臭沼气，腐臭吞噬者
+		{AuraID = 265237, UnitID = "player"},	-- 粉碎，泽克沃兹
+		{AuraID = 265264, UnitID = "player"},	-- 虚空鞭笞，泽克沃兹
+		{AuraID = 265360, UnitID = "player", Text = L["Get Out"]},	-- 翻滚欺诈，泽克沃兹
 		{AuraID = 265662, UnitID = "player"},	-- 腐化者的契约，泽克沃兹
+		{AuraID = 265129, UnitID = "player"},	-- 终极菌体，维克提斯
+		{AuraID = 267160, UnitID = "player"},
+		{AuraID = 267161, UnitID = "player"},
+		{AuraID = 274990, UnitID = "player"},	-- 破裂损伤，维克提斯
+		{AuraID = 273434, UnitID = "player"},	-- 绝望深渊，祖尔
+		{AuraID = 274271, UnitID = "player"},	-- 死亡之愿，祖尔
+		{AuraID = 273365, UnitID = "player"},	-- 黑暗启示，祖尔
+		{AuraID = 272146, UnitID = "player"},	-- 毁灭，拆解者
 		{AuraID = 272536, UnitID = "player", Text = L["Get Out"]},	-- 毁灭迫近，拆解者
 		{AuraID = 274262, UnitID = "player", Text = L["Get Out"]},	-- 爆炸腐蚀，戈霍恩
 		{AuraID = 267409, UnitID = "player"},	-- 黑暗交易，戈霍恩
+		{AuraID = 263227, UnitID = "player"},	-- 腐败之血，戈霍恩
+		{AuraID = 267700, UnitID = "player"},	-- 戈霍恩的凝视，戈霍恩
 	-- 翡翠梦魇
 		-- 尼珊德拉
 		{AuraID = 221028, UnitID = "player"},	-- 不稳定的腐烂，小怪
@@ -479,8 +504,10 @@ local list = {
 		{AuraID = 277965, UnitID = "target"},	-- 重型军火，围攻1
 		{AuraID = 256493, UnitID = "target"},	-- 炽燃的艾泽里特，矿区1
 	-- 奥迪尔
+		{AuraID = 271965, UnitID = "target"},	-- 能源关闭，塔罗克
 		{AuraID = 278218, UnitID = "target"},	-- 虚空召唤，泽克沃兹
 		{AuraID = 278220, UnitID = "target"},	-- 虚空超脱，泽克沃兹
+		{AuraID = 265264, UnitID = "target"},	-- 虚空鞭笞，泽克沃兹
 		{AuraID = 273432, UnitID = "target"},	-- 暗影束缚，祖尔
 		{AuraID = 273288, UnitID = "target"},	-- 婆娑脉动，祖尔
 		{AuraID = 274230, UnitID = "target"},	-- 湮灭帷幕，拆解者米斯拉克斯

@@ -12,6 +12,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 257459) -- 上钩了
 module:RegisterDebuff(TIER, INSTANCE, 0, 260954) -- 铁之凝视
 module:RegisterDebuff(TIER, INSTANCE, 0, 270624) -- 窒息勒压
+module:RegisterDebuff(TIER, INSTANCE, 0, 257169) -- 恐惧咆哮
 
 INSTANCE = 1022 -- 地渊孢林
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
@@ -72,6 +73,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 258338) -- 眩晕酒桶
 module:RegisterDebuff(TIER, INSTANCE, 0, 257314) -- 黑火药炸弹
 module:RegisterDebuff(TIER, INSTANCE, 0, 257305) -- 火炮弹幕
 module:RegisterDebuff(TIER, INSTANCE, 0, 281357) -- 水鼠啤酒
+module:RegisterDebuff(TIER, INSTANCE, 0, 274389) -- 捕鼠陷阱
 
 INSTANCE = 1041 -- 诸王之眠
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
