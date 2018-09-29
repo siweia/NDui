@@ -48,26 +48,6 @@ local function SetUnitInfo(gear, spec)
 	GameTooltip:Show()
 end
 
-local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
-local ItemDB = {}
-function module:GetItemLevel(link, quality)
-	if ItemDB[link] and quality ~= 6 then return ItemDB[link] end
-
-	local tip = _G["NDuiScanTooltip"] or CreateFrame("GameTooltip", "NDuiScanTooltip", nil, "GameTooltipTemplate")
-	tip:SetOwner(UIParent, "ANCHOR_NONE")
- 	tip:SetHyperlink(link)
-
-	for i = 2, 5 do
-		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-		local level = string.match(text, itemLevelString)
-		if level then
-			ItemDB[link] = tonumber(level)
-			break
-		end
-	end
-	return ItemDB[link]
-end
-
 local function UnitGear(unit)
 	if (not unit) or (UnitGUID(unit) ~= currentGUID) then return end
 	local class = select(2, UnitClass(unit))
@@ -94,7 +74,7 @@ local function UnitGear(unit)
 						end
 
 						if unit ~= "player" then
-							level = module:GetItemLevel(itemLink, quality) or level
+							level = B.GetItemLevel(itemLink) or level
 							if i < 16 then
 								total = total + level
 							elseif i > 15 and quality == 6 then

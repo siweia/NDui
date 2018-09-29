@@ -1,33 +1,10 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Misc")
-local bagModule = B:GetModule("Bags")
-local tipModule = B:GetModule("Tooltip")
 
 --[[
 	在角色面板等显示装备等级
 ]]
-local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
-local ItemDB = {}
-function module:GetUnitItemLevel(link, unit, index, quality)
-	if ItemDB[link] and quality ~= 6 then return ItemDB[link] end
-
-	local tip = _G["NDuiItemLevelTooltip"] or CreateFrame("GameTooltip", "NDuiItemLevelTooltip", nil, "GameTooltipTemplate")
-	tip:SetOwner(UIParent, "ANCHOR_NONE")
- 	tip:SetInventoryItem(unit, index)
-
-	for i = 2, 5 do
-		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-		local hasLevel = string.find(text, itemLevelString)
-		if hasLevel then
-			local level = string.match(text, "(%d+)%)?$")
-			ItemDB[link] = tonumber(level)
-			break
-		end
-	end
-	return ItemDB[link]
-end
-
 function module:ShowItemLevel()
 	if not NDuiDB["Misc"]["ItemLevel"] then return end
 
@@ -67,7 +44,7 @@ function module:ShowItemLevel()
 			local link = GetInventoryItemLink(unit, index)
 			if link and index ~= 4 then
 				local _, _, quality, level = GetItemInfo(link)
-				level = self:GetUnitItemLevel(link, unit, index, quality) or level
+				level = B.GetItemLevel(link, unit, index) or level
 
 				if level and level > 1 and quality then
 					local color = BAG_ITEM_QUALITY_COLORS[quality]
@@ -103,10 +80,10 @@ function module:ShowItemLevel()
 		local link, level
 		if bag then
 			link = GetContainerItemLink(bag, slot)
-			level = bagModule:GetBagItemLevel(link, bag, slot)
+			level = B.GetItemLevel(link, bag, slot)
 		else
 			link = GetInventoryItemLink("player", slot)
-			level = self:GetUnitItemLevel(link, "player", slot, quality)
+			level = B.GetItemLevel(link, "player", slot)
 		end
 		local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 		button.iLvl:SetText(level)
@@ -142,7 +119,7 @@ function module:ShowItemLevel()
 		if self.itemLocation and not self.item:IsItemEmpty() and self.item:GetItemName() then
 			quality = self.item:GetItemQuality()
 		end
-		local level = tipModule:GetItemLevel(self.itemLink, quality)
+		local level = B.GetItemLevel(self.itemLink)
 		local color = BAG_ITEM_QUALITY_COLORS[quality]
 		self.iLvl:SetText(level)
 		self.iLvl:SetTextColor(color.r, color.g, color.b)
