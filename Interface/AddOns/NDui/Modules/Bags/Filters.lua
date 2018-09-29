@@ -6,7 +6,10 @@ function module:GetFilters()
 	-- Custom filter
 	local CustomFilterList = {
 		[37863] = false,	-- 酒吧传送器
+		[141333] = true,	-- 宁神圣典
 		[141446] = true,	-- 宁神书卷
+		[153646] = true,	-- 静心圣典
+		[153647] = true,	-- 静心书卷
 	}
 
 	local function isCustomFilter(item)
