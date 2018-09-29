@@ -193,10 +193,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			for i = 1, 3 do
 				local equip = self.AbilitiesFrame.Equipment[i]
 				if equip and not equip.bg then
-					equip.Border:Hide()
-					equip.BG:Hide()
+					equip.Border:SetAlpha(0)
+					equip.BG:SetAlpha(0)
 					equip.Icon:SetTexCoord(.08, .92, .08, .92)
-					equip.bg = F.CreateBDFrame(equip.Icon, .25)
+					equip.bg = F.CreateBDFrame(equip.Icon)
+					equip.bg:SetBackdropColor(1, 1, 1, .15)
 				end
 			end
 		end
