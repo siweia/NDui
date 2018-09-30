@@ -192,6 +192,7 @@ local list = {
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
 		{AuraID = 265773, UnitID = "player"},	-- 吐金，诸王
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
+		{AuraID = 266923, UnitID = "player"},	-- 充电，神庙
 	-- 奥迪尔
 		{AuraID = 271224, UnitID = "player", Text = L["Get Out"]},	-- 赤红迸发，塔罗克
 		{AuraID = 271225, UnitID = "player", Text = L["Get Out"]},
@@ -649,6 +650,7 @@ local list = {
 	},
 	["InternalCD"] = {		-- 自定义内置冷却组
 		{IntID = 240447, Duration = 20},		-- 践踏
+		{IntID = 114018, Duration = 15, OnSuccess = true, UnitID = "all"},	-- 帷幕
 	},
 }
 
