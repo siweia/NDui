@@ -186,7 +186,7 @@ function module:OnLogin()
 
 		if item.questID or item.isQuestItem then
 			self.BG:SetBackdropBorderColor(.8, .8, 0)
-		elseif item.rarity and item.rarity > 1 then
+		elseif item.rarity and item.rarity > -1 then
 			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 			self.BG:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
