@@ -90,6 +90,8 @@ oUF.Tags.Methods["DDG"] = function(unit)
 end
 oUF.Tags.Events["DDG"] = "UNIT_HEALTH UNIT_CONNECTION"
 
+oUF.Tags.Events["arenaspec"] = "ARENA_PREP_OPPONENT_SPECIALIZATIONS UNIT_NAME_UPDATE"
+
 -- Level tags
 oUF.Tags.Methods["fulllevel"] = function(unit)
 	local level = UnitLevel(unit)
