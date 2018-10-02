@@ -83,6 +83,7 @@ local list = {
 		{AuraID = 273974, UnitID = "player"},	-- 洛阿意志
 		{AuraID = 271105, UnitID = "player"},	-- 屠夫之眼
 		{AuraID = 271107, UnitID = "player"},	-- 金色光泽
+		{AuraID = 277181, UnitID = "player"},	-- 胜利的味道
 		{AuraID = 274430, UnitID = "player", Text = RAID_BUFF_4},	-- 永不间断的时钟，急速
 		{AuraID = 274431, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
 		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
@@ -189,6 +190,7 @@ local list = {
 		{AuraID = 240443, UnitID = "player"},	-- 爆裂
 		{AuraID = 226512, UnitID = "player"},	-- 血池
 		{AuraID = 240447, UnitID = "player"},	-- 践踏
+		{AuraID = 260954, UnitID = "player"},	-- 铁之凝视，围攻
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
 		{AuraID = 265773, UnitID = "player"},	-- 吐金，诸王
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
