@@ -570,7 +570,7 @@ local function addonStyled(_, addon)
 		local tip = IslandsQueueFrameTooltip
 		tip:GetParent():GetParent():HookScript("OnShow", style)
 		tip:GetParent().IconBorder:SetAlpha(0)
-		tip:GetParent().Icon:SetTexCoord(.08, .92, .08, .92)
+		tip:GetParent().Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 end
 B:RegisterEvent("ADDON_LOADED", addonStyled)

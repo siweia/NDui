@@ -148,7 +148,7 @@ function module:PetBattleUI()
 			if petOwner == LE_BATTLE_PET_ALLY then
 				self.Icon:SetTexCoord(.92, .08, .08, .92)
 			else
-				self.Icon:SetTexCoord(.08, .92, .08, .92)
+				self.Icon:SetTexCoord(unpack(DB.TexCoord))
 			end
 		end
 		if self.glow then self.glow:Hide() end
@@ -178,7 +178,7 @@ function module:PetBattleUI()
 				local frame = self.frames[nextFrame]
 				frame.DebuffBorder:Hide()
 				if not frame.styled then
-					frame.Icon:SetTexCoord(.08, .92, .08, .92)
+					frame.Icon:SetTexCoord(unpack(DB.TexCoord))
 					B.CreateSD(frame.Icon, 3, 3)
 					frame.styled = true
 				end
