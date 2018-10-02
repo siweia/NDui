@@ -143,7 +143,6 @@ local defaultSettings = {
 		EasyMarking = true,
 		TMW = true,
 		PetBattle = true,
-		TrackerSkin = true,
 		WeakAuras = true,
 		BarLine = true,
 		InfobarLine = true,
@@ -420,8 +419,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "ClassLine", L["ClassColor Line"]},
 		{},--blank
 		{1, "Skins", "MicroMenu", L["Micromenu"]},
-		{1, "Skins", "TrackerSkin", L["ObjectiveTracker Skin"], true},
-		{1, "Skins", "PetBattle", L["PetBattle Skin"]},
+		{1, "Skins", "PetBattle", L["PetBattle Skin"], true},
 		{},--blank
 		{1, "Skins", "DBM", L["DBM Skin"]},
 		{1, "Skins", "Skada", L["Skada Skin"], true},
