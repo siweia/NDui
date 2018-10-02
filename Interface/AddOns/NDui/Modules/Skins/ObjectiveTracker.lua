@@ -191,11 +191,29 @@ function module:QuestTracker()
 		block.NormalBG:SetTexture("")
 		if not block.bg then
 			block.bg = B.CreateBG(block.GlowTexture)
-			block.bg:SetPoint("TOPLEFT", block.GlowTexture, 2, 0)
-			block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -2, 0)
+			block.bg:SetPoint("TOPLEFT", block.GlowTexture, 4, -2)
+			block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -4, 0)
 			B.CreateBD(block.bg)
 			B.CreateSD(block.bg)
 			B.CreateTex(block.bg)
+		end
+	end)
+
+	hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, "Update", function()
+		local widgetContainer = ScenarioStageBlock.WidgetContainer
+		if not widgetContainer then return end
+		local widgetFrame = widgetContainer:GetChildren()
+		if widgetFrame and widgetFrame.Frame then
+			widgetFrame.Frame:SetAlpha(0)
+			for _, bu in next, {widgetFrame.CurrencyContainer:GetChildren()} do
+				if bu and not bu.styled then
+					bu.Icon:SetTexCoord(unpack(DB.TexCoord))
+					local bg = B.CreateBG(bu.Icon)
+					B.CreateBD(bg)
+
+					bu.styled = true
+				end
+			end
 		end
 	end)
 
