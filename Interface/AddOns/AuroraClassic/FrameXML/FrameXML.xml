@@ -29,9 +29,9 @@
 	<Script file="LFDFrame.lua"/>
 	<Script file="LFGFrame.lua"/>
 	<Script file="LFGList.lua"/>
-	<Script file="LFRFrame.lua"/>
 	<Script file="LootFrame.lua"/>
 	<Script file="LootHistory.lua"/>
+	<Script file="LossOfControlFrame.lua"/>
 	<Script file="MailFrame.lua"/>
 	<Script file="MainMenuBarMicroButtons.lua"/>
 	<Script file="MerchantFrame.lua"/>

@@ -19,6 +19,7 @@ if locale == "zhCN" then
 	L["Opacity"] = "背景透明度*"
 	L["Reload Text"] = "不带星号(*)的设置需要重载插件后生效。"
 	L["FontScale"] = "字体缩放"
+	L["ObjectiveTracker"] = "任务追踪"
 elseif locale == "zhTW" then
 	L["Features"] = "模塊"
 	L["Bags"] = "背包"
@@ -35,6 +36,7 @@ elseif locale == "zhTW" then
 	L["Opacity"] = "背景透明度*"
 	L["Reload Text"] = "不帶星標(*)的設置需要重載插件後生效。"
 	L["FontScale"] = "字體縮放"
+	L["ObjectiveTracker"] = "任務追蹤"
 else
 	L["Features"] = "Features"
 	L["Bags"] = "Bags"
@@ -51,6 +53,7 @@ else
 	L["Opacity"] = "Backdrop Opactiy*"
 	L["Reload Text"] = "Settings not marked with an asterisk (*) require a UI reload."
 	L["FontScale"] = "Font Scale"
+	L["ObjectiveTracker"] = "ObjectiveTracker"
 end
 
 -- [[ Options UI ]]
@@ -88,15 +91,21 @@ local function toggle(f)
 	AuroraConfig[f.value] = f:GetChecked()
 end
 
-local function createToggleBox(parent, value, text, disable)
+local modConver = {
+	[1] = 0,
+	[2] = 1,
+	[0] = 2,
+}
+
+local function createToggleBox(parent, value, text, category, index)
 	local f = CreateFrame("CheckButton", "$parent"..value, parent, "InterfaceOptionsCheckButtonTemplate")
 	f.value = value
 	f.Text:SetText(text)
 	f:SetScript("OnClick", toggle)
-	if disable then
-		f:Disable()
-		f.Text:SetTextColor(.5, .5, .5)
-	end
+
+	local xoffset = modConver[mod(index, 3)]*180
+	local yoffset = -(floor(index/3.1)*32 + 20)
+	f:SetPoint("TOPLEFT", category, "BOTTOMLEFT", xoffset, yoffset)
 
 	tinsert(checkboxes, f)
 	return f
@@ -148,43 +157,33 @@ title:SetPoint("TOPLEFT", 36, -26)
 title:SetText("|cff0080ffAuroraClassic|r "..GetAddOnMetadata("AuroraClassic", "Version").." |cffffffff("..COMMAND.." /ac)")
 
 local features = addSubCategory(gui, L["Features"])
-features:SetPoint("TOPLEFT", 16, -80)
+features:SetPoint("TOPLEFT", 16, -60)
 
-local shadowBox = createToggleBox(gui, "shadow", L["Shadow Border"])
-shadowBox:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -20)
-
-local chatBubbleBox = createToggleBox(gui, "chatBubbles", L["ChatBubbles"])
-chatBubbleBox:SetPoint("LEFT", shadowBox, "RIGHT", 110, 0)
-
-local bubbleColorBox = createToggleBox(gui, "bubbleColor", L["ChatBubblesColor"])
-bubbleColorBox:SetPoint("LEFT", chatBubbleBox, "RIGHT", 110, 0)
-
-local lootBox = createToggleBox(gui, "loot", L["Loot"])
-lootBox:SetPoint("TOPLEFT", shadowBox, "BOTTOMLEFT", 0, -8)
-
-local bagsBox = createToggleBox(gui, "bags", L["Bags"])
-bagsBox:SetPoint("LEFT", lootBox, "RIGHT", 110, 0)
-
-local tooltipsBox = createToggleBox(gui, "tooltips", L["Tooltips"])
-tooltipsBox:SetPoint("LEFT", bagsBox, "RIGHT", 110, 0)
+local featuresList = {
+	[1] = {"shadow", L["Shadow Border"]},
+	[2] = {"loot", L["Loot"]},
+	[3] = {"bags", L["Bags"]},
+	[4] = {"chatBubbles", L["ChatBubbles"]},
+	[5] = {"bubbleColor", L["ChatBubblesColor"]},
+	[6] = {"tooltips", L["Tooltips"]},
+	[7] = {"objectiveTracker", L["ObjectiveTracker"]},
+}
+for index, value in ipairs(featuresList) do
+	createToggleBox(gui, value[1], value[2], features, index)
+end
 
 local appearance = addSubCategory(gui, L["Appearance"])
-appearance:SetPoint("TOPLEFT", lootBox, "BOTTOMLEFT", 0, -30)
+appearance:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -130)
 
-local useButtonGradientColourBox = createToggleBox(gui, "useButtonGradientColour", L["Button Gradient"])
-useButtonGradientColourBox:SetPoint("TOPLEFT", appearance, "BOTTOMLEFT", 0, -20)
+createToggleBox(gui, "useButtonGradientColour", L["Button Gradient"], appearance, 1)
 
-local colourBox = createToggleBox(gui, "useCustomColour", L["Custom Color"])
-colourBox:SetPoint("TOPLEFT", useButtonGradientColourBox, "BOTTOMLEFT", 0, -8)
-
+local colourBox = createToggleBox(gui, "useCustomColour", L["Custom Color"], appearance, 4)
 local colourButton = CreateFrame("Button", nil, gui, "UIPanelButtonTemplate")
 colourButton:SetPoint("LEFT", colourBox.Text, "RIGHT", 20, 0)
 colourButton:SetSize(128, 25)
 colourButton:SetText(L["Change"])
 
-local fontBox = createToggleBox(gui, "reskinFont", L["Replace default game fonts"])
-fontBox:SetPoint("TOPLEFT", colourBox, "BOTTOMLEFT", 0, -8)
-
+local fontBox = createToggleBox(gui, "reskinFont", L["Replace default game fonts"], appearance, 7)
 local fontSlider = CreateFrame("Slider", "AuroraOptionsfontSlider", gui, "OptionsSliderTemplate")
 fontSlider:SetPoint("TOPLEFT", fontBox, "BOTTOMLEFT", 20, -30)
 fontSlider:SetMinMaxValues(.5, 1)
@@ -192,7 +191,6 @@ fontSlider:SetValueStep(0.1)
 AuroraOptionsfontSliderText:SetText(L["FontScale"])
 AuroraOptionsfontSliderLow:SetText(.5)
 AuroraOptionsfontSliderHigh:SetText(1)
-
 local fontValue = fontSlider:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 fontValue:SetPoint("TOP", fontSlider, "BOTTOM", 0, 4)
 

@@ -35,6 +35,7 @@
 	<Script file="Blizzard_ItemUpgradeUI.lua"/>
 	<Script file="Blizzard_LookingForGuildUI.lua"/>
 	<Script file="Blizzard_MacroUI.lua"/>
+	<Script file="Blizzard_ObjectiveTracker.lua"/>
 	<Script file="Blizzard_ObliterumUI.lua"/>
 	<Script file="Blizzard_OrderHallUI.lua"/>
 	<Script file="Blizzard_PVPUI.lua"/>
