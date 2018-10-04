@@ -246,7 +246,7 @@ local function AddMouseoverIndicator(self)
 	glow:SetPoint("BOTTOMRIGHT", 6, -6)
 	glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
 	glow:SetBackdropBorderColor(1, 1, 1)
-	glow:SetFrameLevel(0)
+	glow:Hide()
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", updateMouseoverShown)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", updateMouseoverShown)
