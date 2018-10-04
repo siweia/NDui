@@ -91,8 +91,8 @@ tinsert(C.themes["AuroraClassic"], function()
 			bar.styled = true
 		end
 
-		if icon.bg.Shadow then
-			icon.bg.Shadow:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
+		if icon.bg then
+			icon.bg:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
 		end
 	end
 	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
