@@ -15,11 +15,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			local checkbox = _G[checkBoxName]
 
 			checkbox:SetBackdrop(nil)
-			local bg = CreateFrame("Frame", nil, checkbox)
+			local bg = F.CreateBDFrame(checkbox, .25)
 			bg:SetPoint("TOPLEFT")
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
-			bg:SetFrameLevel(checkbox:GetFrameLevel()-1)
-			F.CreateBD(bg, .25)
 
 			local swatch = _G[checkBoxName.."ColorSwatch"]
 			if swatch then
@@ -57,11 +55,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			local swatch = _G[swatchName]
 
 			swatch:SetBackdrop(nil)
-			local bg = CreateFrame("Frame", nil, swatch)
+			local bg = F.CreateBDFrame(swatch, .25)
 			bg:SetPoint("TOPLEFT")
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
-			bg:SetFrameLevel(swatch:GetFrameLevel()-1)
-			F.CreateBD(bg, .25)
 
 			F.ReskinColourSwatch(_G[swatchName.."ColorSwatch"])
 		end
@@ -128,11 +124,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		F.ReskinCheck(box)
 	end
 
-	local bg = CreateFrame("Frame", nil, ChatConfigCombatSettingsFilters)
+	local bg = F.CreateBDFrame(ChatConfigCombatSettingsFilters, .25)
 	bg:SetPoint("TOPLEFT", 3, 0)
 	bg:SetPoint("BOTTOMRIGHT", 0, 1)
-	bg:SetFrameLevel(ChatConfigCombatSettingsFilters:GetFrameLevel()-1)
-	F.CreateBD(bg, .25)
 
 	F.Reskin(CombatLogDefaultButton)
 	F.Reskin(ChatConfigCombatSettingsFiltersCopyFilterButton)

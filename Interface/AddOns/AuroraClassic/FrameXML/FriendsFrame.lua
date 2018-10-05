@@ -92,11 +92,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	local whoBg = CreateFrame("Frame", nil, WhoFrameEditBoxInset)
+	local whoBg = F.CreateBDFrame(WhoFrameEditBoxInset, .25)
 	whoBg:SetPoint("TOPLEFT")
 	whoBg:SetPoint("BOTTOMRIGHT", -1, 1)
-	whoBg:SetFrameLevel(WhoFrameEditBoxInset:GetFrameLevel()-1)
-	F.CreateBD(whoBg, .25)
 	F.CreateGradient(whoBg)
 
 	F.ReskinPortraitFrame(FriendsFrame, true)

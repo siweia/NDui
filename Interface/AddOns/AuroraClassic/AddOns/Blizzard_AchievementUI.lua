@@ -73,12 +73,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetTextColor(1, 1, 1)
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetPoint("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
 	AchievementFrameSummaryCategoriesStatusBarText:SetPoint("RIGHT", AchievementFrameSummaryCategoriesStatusBar, "RIGHT", -5, 0)
-
-	local bg = CreateFrame("Frame", nil, AchievementFrameSummaryCategoriesStatusBar)
-	bg:SetPoint("TOPLEFT", -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	bg:SetFrameLevel(AchievementFrameSummaryCategoriesStatusBar:GetFrameLevel()-1)
-	F.CreateBD(bg, .25)
+	F.CreateBDFrame(AchievementFrameSummaryCategoriesStatusBar, .25)
 
 	for i = 1, 3 do
 		local tab = _G["AchievementFrameTab"..i]
@@ -263,22 +258,18 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 26)
 
-	local headerbg = CreateFrame("Frame", nil, AchievementFrameComparisonHeader)
+	local headerbg = F.CreateBDFrame(AchievementFrameComparisonHeader)
 	headerbg:SetPoint("TOPLEFT", 20, -20)
 	headerbg:SetPoint("BOTTOMRIGHT", -28, -5)
-	headerbg:SetFrameLevel(AchievementFrameComparisonHeader:GetFrameLevel()-1)
-	F.CreateBD(headerbg)
 	F.CreateSD(headerbg)
 
 	local summaries = {AchievementFrameComparisonSummaryPlayer, AchievementFrameComparisonSummaryFriend}
 
 	for _, frame in pairs(summaries) do
 		frame:SetBackdrop(nil)
-		local bg = CreateFrame("Frame", nil, frame)
+		local bg = F.CreateBDFrame(frame, .25)
 		bg:SetPoint("TOPLEFT", 2, -2)
 		bg:SetPoint("BOTTOMRIGHT", -2, 0)
-		bg:SetFrameLevel(frame:GetFrameLevel()-1)
-		F.CreateBD(bg, .25)
 	end
 
 	local bars = {AchievementFrameComparisonSummaryPlayerStatusBar, AchievementFrameComparisonSummaryFriendStatusBar}
@@ -294,12 +285,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		_G[name.."Title"]:SetTextColor(1, 1, 1)
 		_G[name.."Title"]:SetPoint("LEFT", bar, "LEFT", 6, 0)
 		_G[name.."Text"]:SetPoint("RIGHT", bar, "RIGHT", -5, 0)
-
-		local bg = CreateFrame("Frame", nil, bar)
-		bg:SetPoint("TOPLEFT", -1, 1)
-		bg:SetPoint("BOTTOMRIGHT", 1, -1)
-		bg:SetFrameLevel(bar:GetFrameLevel()-1)
-		F.CreateBD(bg, .25)
+		F.CreateBDFrame(bar, .25)
 	end
 
 	for i = 1, 9 do

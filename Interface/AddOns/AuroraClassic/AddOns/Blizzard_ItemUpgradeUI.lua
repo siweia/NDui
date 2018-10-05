@@ -23,11 +23,10 @@ C.themes["Blizzard_ItemUpgradeUI"] = function()
 	ItemButton.IconTexture:SetPoint("TOPLEFT", 1, -1)
 	ItemButton.IconTexture:SetPoint("BOTTOMRIGHT", -1, 1)
 
-	local bg = CreateFrame("Frame", nil, ItemButton)
+	local bg = F.CreateBDFrame(ItemButton, .25)
+	bg:ClearAllPoints()
 	bg:SetSize(341, 50)
 	bg:SetPoint("LEFT", ItemButton, "RIGHT", -1, 0)
-	bg:SetFrameLevel(ItemButton:GetFrameLevel()-1)
-	F.CreateBD(bg, .25)
 
 	ItemButton:HookScript("OnEnter", function(self)
 		self:SetBackdropBorderColor(1, .56, .85)
@@ -54,11 +53,7 @@ C.themes["Blizzard_ItemUpgradeUI"] = function()
 	currency.icon:SetTexCoord(.08, .92, .08, .92)
 	F.CreateBG(currency.icon)
 
-	local bg = CreateFrame("Frame", nil, ItemUpgradeFrame)
-	bg:SetAllPoints(ItemUpgradeFrame)
-	bg:SetFrameLevel(ItemUpgradeFrame:GetFrameLevel()-1)
-	F.CreateBD(bg)
-
+	F.CreateBDFrame(ItemUpgradeFrame)
 	F.ReskinPortraitFrame(ItemUpgradeFrame)
 	F.Reskin(ItemUpgradeFrameUpgradeButton)
 end

@@ -77,11 +77,9 @@ C.themes["Blizzard_Collections"] = function()
 			bu.iconBorder:SetTexture("")
 			bu.selectedTexture:SetTexture("")
 
-			local bg = CreateFrame("Frame", nil, bu)
+			local bg = F.CreateBDFrame(bu, .25)
 			bg:SetPoint("TOPLEFT", 0, -1)
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
-			bg:SetFrameLevel(bu:GetFrameLevel()-1)
-			F.CreateBD(bg, .25)
 			bu.bg = bg
 
 			ic:SetTexCoord(.08, .92, .08, .92)

@@ -175,11 +175,9 @@ C.themes["Blizzard_TalentUI"] = function()
 			ic:SetTexCoord(.08, .92, .08, .92)
 			F.CreateBG(ic)
 
-			bu.bg = CreateFrame("Frame", nil, bu)
+			bu.bg = F.CreateBDFrame(bu, .25)
 			bu.bg:SetPoint("TOPLEFT", 10, 0)
 			bu.bg:SetPoint("BOTTOMRIGHT")
-			bu.bg:SetFrameLevel(bu:GetFrameLevel()-1)
-			F.CreateBD(bu.bg, .25)
 		end
 	end
 
@@ -202,15 +200,8 @@ C.themes["Blizzard_TalentUI"] = function()
 	for i = 1, 2 do
 		local tab = _G["PlayerSpecTab"..i]
 		_G["PlayerSpecTab"..i.."Background"]:Hide()
-
 		tab:SetCheckedTexture(C.media.checked)
-
-		local bg = CreateFrame("Frame", nil, tab)
-		bg:SetPoint("TOPLEFT", -1, 1)
-		bg:SetPoint("BOTTOMRIGHT", 1, -1)
-		bg:SetFrameLevel(tab:GetFrameLevel()-1)
-		F.CreateBD(bg)
-
+		F.CreateBDFrame(tab)
 		select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 	end
 

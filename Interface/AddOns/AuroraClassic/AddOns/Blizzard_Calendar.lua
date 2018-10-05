@@ -119,12 +119,9 @@ C.themes["Blizzard_Calendar"] = function()
 		ic:SetTexCoord(tcoords[1] + 0.015, tcoords[2] - 0.02, tcoords[3] + 0.018, tcoords[4] - 0.02)
 	end
 
-	local bd = CreateFrame("Frame", nil, CalendarFilterFrame)
+	local bd = F.CreateBDFrame(CalendarFilterFrame, 0)
 	bd:SetPoint("TOPLEFT", 40, 0)
 	bd:SetPoint("BOTTOMRIGHT", -19, 0)
-	bd:SetFrameLevel(CalendarFilterFrame:GetFrameLevel()-1)
-	F.CreateBD(bd, 0)
-
 	F.CreateGradient(bd)
 
 	local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")
@@ -153,11 +150,9 @@ C.themes["Blizzard_Calendar"] = function()
 
 		for _, tooltip in pairs(tooltips) do
 			tooltip:SetBackdrop(nil)
-			local bg = CreateFrame("Frame", nil, tooltip)
+			local bg = F.CreateBDFrame(tooltip)
 			bg:SetPoint("TOPLEFT", 2, -2)
 			bg:SetPoint("BOTTOMRIGHT", -1, 2)
-			bg:SetFrameLevel(tooltip:GetFrameLevel()-1)
-			F.CreateBD(bg)
 			F.CreateSD(bg)
 		end
 	end

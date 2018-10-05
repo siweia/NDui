@@ -1,23 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ChallengesUI"] = function()
-	local function AffixesSetup(self)
-		for _, frame in ipairs(self.Affixes) do
-			frame.Border:SetTexture(nil)
-			frame.Portrait:SetTexture(nil)
-			if not frame.bg then
-				frame.bg = F.ReskinIcon(frame.Portrait)
-			end
-
-			if frame.info then
-				frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
-			elseif frame.affixID then
-				local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
-				frame.Portrait:SetTexture(filedataid)
-			end
-		end
-	end
-
 	ChallengesFrameInset:DisableDrawLayer("BORDER")
 	ChallengesFrameInsetBg:Hide()
 	for i = 1, 2 do
@@ -45,7 +28,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			F.CreateBD(scheduel, .3)
 			if scheduel.Entries then
 				for i = 1, 3 do
-					AffixesSetup(scheduel.Entries[i])
+					F.AffixesSetup(scheduel.Entries[i])
 				end
 			end
 
@@ -61,7 +44,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 	hooksecurefunc(ChallengesFrame.WeeklyInfo, "SetUp", function(self)
 		local affixes = C_MythicPlus.GetCurrentAffixes()
 		if affixes then
-			AffixesSetup(self.Child)
+			F.AffixesSetup(self.Child)
 		end
 	end)
 
@@ -75,5 +58,5 @@ C.themes["Blizzard_ChallengesUI"] = function()
 		self.InstructionBackground:SetAlpha(0)
 	end)
 
-	hooksecurefunc(keystone, "OnKeystoneSlotted", AffixesSetup)
+	hooksecurefunc(keystone, "OnKeystoneSlotted", F.AffixesSetup)
 end

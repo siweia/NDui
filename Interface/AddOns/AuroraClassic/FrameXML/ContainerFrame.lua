@@ -63,11 +63,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			button:HookScript("OnLeave", onLeave)
 		end
 
-		local f = CreateFrame("Frame", nil, con)
+		local f = F.CreateBDFrame(con)
 		f:SetPoint("TOPLEFT", 8, -4)
 		f:SetPoint("BOTTOMRIGHT", -4, 3)
-		f:SetFrameLevel(con:GetFrameLevel()-1)
-		F.CreateBD(f)
 
 		F.ReskinClose(_G["ContainerFrame"..i.."CloseButton"], "TOPRIGHT", con, "TOPRIGHT", -6, -6)
 	end

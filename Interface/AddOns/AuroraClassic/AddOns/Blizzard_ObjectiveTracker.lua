@@ -169,21 +169,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", function(block)
-		for _, frame in ipairs(block.Affixes) do
-			frame.Border:Hide()
-			frame.Portrait:SetTexture(nil)
-			frame.Portrait:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBDFrame(frame.Portrait)
-
-			if frame.info then
-				frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
-			elseif frame.affixID then
-				local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
-				frame.Portrait:SetTexture(filedataid)
-			end
-		end
-	end)
+	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", F.AffixesSetup)
 
 	-- Minimize Button
 	local minimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton

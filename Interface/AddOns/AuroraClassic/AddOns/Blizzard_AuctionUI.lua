@@ -183,12 +183,9 @@ C.themes["Blizzard_AuctionUI"] = function()
 	tex:SetVertexColor(1, 1, 1)
 	BrowseDropDownButton.bgTex = tex
 
-	local bg = CreateFrame("Frame", nil, BrowseDropDown)
+	local bg = F.CreateBDFrame(BrowseDropDown, 0)
 	bg:SetPoint("TOPLEFT", 16, -5)
 	bg:SetPoint("BOTTOMRIGHT", 109, 11)
-	bg:SetFrameLevel(BrowseDropDown:GetFrameLevel()-1)
-	F.CreateBD(bg, 0)
-
 	F.CreateGradient(bg)
 
 	local colourArrow = F.colourArrow

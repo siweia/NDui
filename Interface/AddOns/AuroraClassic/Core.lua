@@ -173,11 +173,9 @@ end
 function F:ReskinTab()
 	self:DisableDrawLayer("BACKGROUND")
 
-	local bg = CreateFrame("Frame", nil, self)
+	local bg = F.CreateBDFrame(self)
 	bg:SetPoint("TOPLEFT", 8, -3)
 	bg:SetPoint("BOTTOMRIGHT", -8, 0)
-	bg:SetFrameLevel(self:GetFrameLevel()-1)
-	F.CreateBD(bg)
 
 	self:SetHighlightTexture(C.media.backdrop)
 	local hl = self:GetHighlightTexture()
@@ -240,10 +238,9 @@ function F:ReskinScroll()
 	bu:SetAlpha(0)
 	bu:SetWidth(17)
 
-	bu.bg = CreateFrame("Frame", nil, self)
+	bu.bg = F.CreateBDFrame(self, 0)
 	bu.bg:SetPoint("TOPLEFT", bu, 0, -2)
 	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 4)
-	F.CreateBD(bu.bg, 0)
 
 	local tex = F.CreateGradient(self)
 	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
@@ -323,11 +320,9 @@ function F:ReskinDropDown()
 	down:HookScript("OnEnter", textureOnEnter)
 	down:HookScript("OnLeave", textureOnLeave)
 
-	local bg = CreateFrame("Frame", nil, self)
+	local bg = F.CreateBDFrame(self, 0)
 	bg:SetPoint("TOPLEFT", 16, -4)
 	bg:SetPoint("BOTTOMRIGHT", -18, 8)
-	bg:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bg, 0)
 
 	local gradient = F.CreateGradient(self)
 	gradient:SetPoint("TOPLEFT", bg, 1, -1)
@@ -382,11 +377,9 @@ function F:ReskinInput(height, width)
 	middle:Hide()
 	right:Hide()
 
-	local bd = CreateFrame("Frame", nil, self)
+	local bd = F.CreateBDFrame(self, 0)
 	bd:SetPoint("TOPLEFT", -2, 0)
 	bd:SetPoint("BOTTOMRIGHT")
-	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
 
 	local gradient = F.CreateGradient(self)
 	gradient:SetPoint("TOPLEFT", bd, 1, -1)
@@ -424,11 +417,9 @@ function F:ReskinCheck()
 	hl:SetPoint("BOTTOMRIGHT", -5, 5)
 	hl:SetVertexColor(r, g, b, .25)
 
-	local bd = CreateFrame("Frame", nil, self)
+	local bd = F.CreateBDFrame(self, 0)
 	bd:SetPoint("TOPLEFT", 4, -4)
 	bd:SetPoint("BOTTOMRIGHT", -4, 4)
-	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
 
 	local tex = F.CreateGradient(self)
 	tex:SetPoint("TOPLEFT", 5, -5)
@@ -457,11 +448,9 @@ function F:ReskinRadio()
 	ch:SetPoint("BOTTOMRIGHT", -4, 4)
 	ch:SetVertexColor(r, g, b, .6)
 
-	local bd = CreateFrame("Frame", nil, self)
+	local bd = F.CreateBDFrame(self, 0)
 	bd:SetPoint("TOPLEFT", 3, -3)
 	bd:SetPoint("BOTTOMRIGHT", -3, 3)
-	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
 	self.bd = bd
 
 	local tex = F.CreateGradient(self)
@@ -476,13 +465,10 @@ function F:ReskinSlider(verticle)
 	self:SetBackdrop(nil)
 	self.SetBackdrop = F.dummy
 
-	local bd = CreateFrame("Frame", nil, self)
+	local bd = F.CreateBDFrame(self, 0)
 	bd:SetPoint("TOPLEFT", 14, -2)
 	bd:SetPoint("BOTTOMRIGHT", -15, 3)
 	bd:SetFrameStrata("BACKGROUND")
-	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
-
 	F.CreateGradient(bd)
 
 	for i = 1, self:GetNumRegions() do
@@ -546,16 +532,11 @@ function F:ReskinExpandOrCollapse()
 end
 
 function F:SetBD(x, y, x2, y2)
-	local bg = CreateFrame("Frame", nil, self)
-	if not x then
-		bg:SetPoint("TOPLEFT")
-		bg:SetPoint("BOTTOMRIGHT")
-	else
+	local bg = F.CreateBDFrame(self)
+	if x then
 		bg:SetPoint("TOPLEFT", x, y)
 		bg:SetPoint("BOTTOMRIGHT", x2, y2)
 	end
-	bg:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bg)
 	F.CreateSD(bg)
 end
 
@@ -739,6 +720,23 @@ function F:ReskinMinMax()
 
 			button:SetScript("OnEnter", textureOnEnter)
 			button:SetScript("OnLeave", textureOnLeave)
+		end
+	end
+end
+
+function F:AffixesSetup()
+	for _, frame in ipairs(self.Affixes) do
+		frame.Border:SetTexture(nil)
+		frame.Portrait:SetTexture(nil)
+		if not frame.bg then
+			frame.bg = F.ReskinIcon(frame.Portrait)
+		end
+
+		if frame.info then
+			frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
+		elseif frame.affixID then
+			local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
+			frame.Portrait:SetTexture(filedataid)
 		end
 	end
 end

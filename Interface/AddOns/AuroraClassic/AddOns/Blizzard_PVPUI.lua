@@ -124,11 +124,9 @@ C.themes["Blizzard_PVPUI"] = function()
 		bu:SetNormalTexture("")
 		bu:SetHighlightTexture("")
 
-		local bg = CreateFrame("Frame", nil, bu)
+		local bg = F.CreateBDFrame(bu, 0)
 		bg:SetPoint("TOPLEFT", 2, 0)
 		bg:SetPoint("BOTTOMRIGHT", -1, 2)
-		F.CreateBD(bg, 0)
-		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 
 		bu.tex = F.CreateGradient(bu)
 		bu.tex:SetDrawLayer("BACKGROUND")

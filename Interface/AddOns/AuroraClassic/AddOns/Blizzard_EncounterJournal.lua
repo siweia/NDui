@@ -255,11 +255,9 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		item.icon:SetDrawLayer("OVERLAY")
 		F.CreateBG(item.icon)
 
-		local bg = CreateFrame("Frame", nil, item)
+		local bg = F.CreateBDFrame(item, .25)
 		bg:SetPoint("TOPLEFT")
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
-		bg:SetFrameLevel(item:GetFrameLevel() - 1)
-		F.CreateBD(bg, .25)
 	end
 
 	-- [[ Search results ]]

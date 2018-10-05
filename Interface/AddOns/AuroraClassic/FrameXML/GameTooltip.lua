@@ -56,13 +56,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	for i = 1, #tooltips do
 		local t = tooltips[i]
 		t:SetBackdrop(nil)
-		local bg = CreateFrame("Frame", nil, t)
-		bg:SetPoint("TOPLEFT")
-		bg:SetPoint("BOTTOMRIGHT")
-		bg:SetFrameLevel(t:GetFrameLevel()-1)
-		bg:SetBackdrop(backdrop)
-		bg:SetBackdropColor(0, 0, 0, .6)
-		bg:SetBackdropBorderColor(0, 0, 0)
+		local bg = F.CreateBDFrame(t, .6)
 		F.CreateSD(bg)
 
 		t.auroraTip = true

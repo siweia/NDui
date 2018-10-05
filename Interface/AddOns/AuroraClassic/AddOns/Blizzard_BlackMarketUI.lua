@@ -26,11 +26,9 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 		header.Middle:Hide()
 		header.Right:Hide()
 
-		local bg = CreateFrame("Frame", nil, header)
+		local bg = F.CreateBDFrame(header, .25)
 		bg:SetPoint("TOPLEFT", 2, 0)
 		bg:SetPoint("BOTTOMRIGHT", -1, 0)
-		bg:SetFrameLevel(header:GetFrameLevel()-1)
-		F.CreateBD(bg, .25)
 	end
 
 	F.SetBD(BlackMarketFrame)
@@ -57,11 +55,9 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 				F.CreateBG(bu.Item)
 				bu.Item.IconBorder:SetAlpha(0)
 
-				local bg = CreateFrame("Frame", nil, bu)
+				local bg = F.CreateBDFrame(bu, 0)
 				bg:SetPoint("TOPLEFT")
 				bg:SetPoint("BOTTOMRIGHT", 0, 5)
-				bg:SetFrameLevel(bu:GetFrameLevel()-1)
-				F.CreateBD(bg, 0)
 
 				local tex = bu:CreateTexture(nil, "BACKGROUND")
 				tex:SetPoint("TOPLEFT")

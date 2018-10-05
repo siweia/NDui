@@ -11,11 +11,9 @@ C.themes["Blizzard_TrainerUI"] = function()
 	ClassTrainerStatusBarSkillRank:ClearAllPoints()
 	ClassTrainerStatusBarSkillRank:SetPoint("CENTER", ClassTrainerStatusBar, "CENTER", 0, 0)
 
-	local bg = CreateFrame("Frame", nil, ClassTrainerFrameSkillStepButton)
+	local bg = F.CreateBDFrame(ClassTrainerFrameSkillStepButton, .25)
 	bg:SetPoint("TOPLEFT", 42, -2)
 	bg:SetPoint("BOTTOMRIGHT", 0, 2)
-	bg:SetFrameLevel(ClassTrainerFrameSkillStepButton:GetFrameLevel()-1)
-	F.CreateBD(bg, .25)
 
 	ClassTrainerFrameSkillStepButton:SetNormalTexture("")
 	ClassTrainerFrameSkillStepButton:SetHighlightTexture("")
@@ -36,11 +34,9 @@ C.themes["Blizzard_TrainerUI"] = function()
 	hooksecurefunc("ClassTrainerFrame_Update", function()
 		for _, bu in next, ClassTrainerFrame.scrollFrame.buttons do
 			if not bu.styled then
-				local bg = CreateFrame("Frame", nil, bu)
+				local bg = F.CreateBDFrame(bu, .25)
 				bg:SetPoint("TOPLEFT", 42, -6)
 				bg:SetPoint("BOTTOMRIGHT", 0, 6)
-				bg:SetFrameLevel(bu:GetFrameLevel()-1)
-				F.CreateBD(bg, .25)
 
 				bu.name:SetParent(bg)
 				bu.name:SetPoint("TOPLEFT", bu.icon, "TOPRIGHT", 6, -2)
@@ -71,14 +67,8 @@ C.themes["Blizzard_TrainerUI"] = function()
 	ClassTrainerStatusBarBackground:Hide()
 	ClassTrainerStatusBar:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
 	ClassTrainerStatusBar:SetStatusBarTexture(C.media.backdrop)
-
 	ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
-
-	local bd = CreateFrame("Frame", nil, ClassTrainerStatusBar)
-	bd:SetPoint("TOPLEFT", -1, 1)
-	bd:SetPoint("BOTTOMRIGHT", 1, -1)
-	bd:SetFrameLevel(ClassTrainerStatusBar:GetFrameLevel()-1)
-	F.CreateBD(bd, .25)
+	F.CreateBDFrame(ClassTrainerStatusBar, .25)
 
 	F.ReskinPortraitFrame(ClassTrainerFrame, true)
 	F.Reskin(ClassTrainerTrainButton)
