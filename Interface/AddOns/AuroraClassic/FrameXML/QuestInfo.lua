@@ -157,7 +157,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("QuestInfo_Display", function()
         local rewardsFrame = QuestInfoFrame.rewardsFrame
         local isQuestLog = QuestInfoFrame.questLog ~= nil
-        local isMapQuest = rewardsFrame == MapQuestInfoRewardsFrame
 		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
 
 		if numSpellRewards > 0 then

@@ -29,8 +29,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		F.Reskin(InterfaceOptionsSocialPanelTwitterLoginButton)
 		F.Reskin(InterfaceOptionsDisplayPanelResetTutorials)
 
-		InterfaceOptionsFrameOkay:SetPoint("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
-
 		InterfaceOptionsFrameHeader:SetTexture("")
 		InterfaceOptionsFrameHeader:ClearAllPoints()
 		InterfaceOptionsFrameHeader:SetPoint("TOP", InterfaceOptionsFrame, 0, 0)

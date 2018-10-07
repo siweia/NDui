@@ -5,7 +5,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("LossOfControlFrame_SetUpDisplay", function(self)
 		if not styled then
 			self.Icon:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBDFrame(self.Icon)
+			local bg = F.CreateBDFrame(self.Icon)
+			F.CreateSD(bg)
 
 			styled = true
 		end
