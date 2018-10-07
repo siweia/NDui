@@ -1,7 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Skins")
-local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
 
 local tracker = ObjectiveTrackerFrame
 local minimize = tracker.HeaderMenu.MinimizeButton

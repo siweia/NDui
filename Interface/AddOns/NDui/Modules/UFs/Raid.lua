@@ -182,7 +182,7 @@ end
 local function onMouseWheelCast(self)
 	local found
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
-		local key, modKey, value = unpack(data)
+		local key = unpack(data)
 		if key:match(L["Wheel"]) then
 			found = true
 			break

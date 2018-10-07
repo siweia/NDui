@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Auras")
 
-local iconSize = C.Auras.IconSize
-
 function module:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
 		local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
