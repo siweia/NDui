@@ -44,11 +44,21 @@ function module:ChatCopy()
 	editBox:SetMaxLetters(99999)
 	editBox:EnableMouse(true)
 	editBox:SetAutoFocus(false)
-	editBox:SetFont(DB.Font[1], 16)
+	editBox:SetFont(DB.Font[1], 12)
 	editBox:SetWidth(scrollArea:GetWidth())
 	editBox:SetHeight(270)
-	editBox:SetScript("OnEscapePressed", function(f) f:GetParent():GetParent():Hide() f:SetText("") end)
+	editBox:SetScript("OnEscapePressed", function() frame:Hide() end)
+	editBox:SetScript("OnTextChanged", function(self, userInput)
+		if userInput then return end
+		local _, max = ChatCopyScrollFrameScrollBar:GetMinMaxValues()
+		for i = 1, max do
+			ScrollFrameTemplate_OnMouseWheel(scrollArea, -1)
+		end
+	end)
 	scrollArea:SetScrollChild(editBox)
+	scrollArea:HookScript("OnVerticalScroll", function(self, offset)
+		editBox:SetHitRectInsets(0, 0, offset, (editBox:GetHeight() - offset - self:GetHeight()))
+	end)
 
 	local function colorReplace(msg, r, g, b)
 		local hexRGB = B.HexRGB(r, g, b)
