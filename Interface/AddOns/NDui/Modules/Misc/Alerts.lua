@@ -125,6 +125,8 @@ function module:InterruptAlert()
 		[157997] = true,	-- 寒冰新星
 		[102359] = true,	-- 群体缠绕
 		[226943] = true,	-- 心灵炸弹
+		[105421] = true,	-- 盲目之光
+		[207167] = true,	-- 致盲冰雨
 	}
 
 	local function msgChannel()
