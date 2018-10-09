@@ -221,6 +221,10 @@ loader:SetScript("OnEvent", function(self, _, addon)
 			if NDuiDB[i] == nil then NDuiDB[i] = j end
 		end
 	end
+
+	-- Others
+	NDuiADB["NameplateFilter"] = NDuiADB["NameplateFilter"] or {[1] = {}, [2] = {}}
+
 	self:UnregisterAllEvents()
 end)
 
@@ -667,6 +671,118 @@ local function CreateOption(i)
 	end
 end
 
+local plateGUI
+local function SetupPlateAura()
+	if plateGUI then ToggleFrame(plateGUI) return end
+
+	plateGUI = CreateFrame("Frame", nil, guiPage[5])
+	plateGUI:SetSize(300, 600)
+	plateGUI:SetPoint("TOPLEFT", f, "TOPRIGHT", 2, 0)
+	B.CreateBD(plateGUI)
+	B.CreateSD(plateGUI)
+	B.CreateTex(plateGUI)
+	guiPage[5]:HookScript("OnHide", function()
+		plateGUI:Hide()
+	end)
+
+	local frameData = {
+		[1] = {text = L["WhiteList"], offset = -25, barList = {}},
+		[2] = {text = L["BlackList"], offset = -315, barList = {}},
+	}
+
+	local function sortBars(index)
+		local num = 1
+		for _, bar in pairs(frameData[index].barList) do
+			if num == 1 then
+				bar:SetPoint("TOPLEFT", 10, -10)
+			else
+				bar:SetPoint("TOPLEFT", 10, -10 - 35*(num-1))
+			end
+			num = num + 1
+		end
+	end
+
+	local function createBar(parent, index, spellID)
+		local name, _, texture = GetSpellInfo(spellID)
+		local bar = CreateFrame("Frame", nil, parent)
+		bar:SetSize(220, 30)
+		B.CreateBD(bar, .3)
+		frameData[index].barList[spellID] = bar
+
+		local icon = CreateFrame("Frame", nil, bar)
+		icon:SetSize(20, 20)
+		icon:SetPoint("LEFT", 5, 0)
+		B.CreateIF(icon, true)
+		icon.Icon:SetTexture(texture)
+		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
+
+		local close = CreateFrame("Button", nil, bar)
+		close:SetSize(20, 20)
+		close:SetPoint("RIGHT", -5, 0)
+		close.Icon = close:CreateTexture(nil, "ARTWORK")
+		close.Icon:SetAllPoints()
+		close.Icon:SetTexture("Interface\\BUTTONS\\UI-GroupLoot-Pass-Up")
+		close:SetHighlightTexture(close.Icon:GetTexture())
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			frameData[index].barList[spellID] = nil
+			NDuiADB["NameplateFilter"][index][spellID] = nil
+			sortBars(index)
+		end)
+
+		local spellName = B.CreateFS(bar, 14, name, false, "LEFT", 30, 0)
+		spellName:SetWidth(180)
+		spellName:SetJustifyH("LEFT")
+		if index == 2 then spellName:SetTextColor(1, 0, 0) end
+
+		sortBars(index)
+	end
+
+	local function addClick(parent, index)
+		local spellID = tonumber(parent.box:GetText())
+		if not spellID then return end
+		if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if NDuiADB["NameplateFilter"][index][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+
+		NDuiADB["NameplateFilter"][index][spellID] = true
+		createBar(parent.child, index, spellID)
+		parent.box:SetText("")
+	end
+
+	for index, value in ipairs(frameData) do
+		B.CreateFS(plateGUI, 14, value.text, "system", "TOPLEFT", 20, value.offset)
+		local frame = CreateFrame("Frame", "frame"..index, plateGUI)
+		frame:SetSize(280, 250)
+		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
+		B.CreateBD(frame, .3)
+
+		local scroll = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
+		scroll:SetSize(240, 200)
+		scroll:SetPoint("BOTTOMLEFT", 10, 10)
+		B.CreateBD(scroll, .3)
+		scroll.child = CreateFrame("Frame", nil, scroll)
+		scroll.child:SetSize(240, 1)
+		scroll:SetScrollChild(scroll.child)
+		if IsAddOnLoaded("AuroraClassic") then
+			local F = unpack(AuroraClassic)
+			F.ReskinScroll(scroll.ScrollBar)
+		end
+
+		scroll.box = B.CreateEditBox(frame, 185, 25)
+		scroll.box:SetPoint("TOPLEFT", 10, -10)
+
+		scroll.add = B.CreateButton(frame, 70, 25, ADD)
+		scroll.add:SetPoint("TOPRIGHT", -8, -10)
+		scroll.add:SetScript("OnClick", function()
+			addClick(scroll, index)
+		end)
+
+		for spellID in pairs(NDuiADB["NameplateFilter"][index]) do
+			createBar(scroll.child, index, spellID)
+		end
+	end
+end
+
 local function OpenGUI()
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	if f then f:Show() return end
@@ -679,7 +795,7 @@ local function OpenGUI()
 	f:SetPoint("CENTER")
 	f:SetFrameStrata("HIGH")
 	B.CreateMF(f)
-	B.CreateBD(f, .5, 1)
+	B.CreateBD(f)
 	B.CreateSD(f)
 	B.CreateTex(f)
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
@@ -776,19 +892,25 @@ local function OpenGUI()
 	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 
 	-- Toggle RaidFrame ClickSets
-	local clickSet = B.CreateButton(guiPage[4], 150, 30, L["Add ClickSets"])
+	local clickSet = B.CreateButton(guiPage[4].child, 150, 30, L["Add ClickSets"])
 	clickSet:SetPoint("TOPLEFT", 40, -440)
-	clickSet.text:SetTextColor(1, .8, 0)
+	clickSet.text:SetTextColor(.6, .8, 1)
 	clickSet:SetScript("OnClick", function()
 		f:Hide()
 		SlashCmdList["NDUI_AWCONFIG"]()
 		NDui_AWConfigTab12:Click()
 	end)
 
+	-- Toggle Nameplate aurafilter
+	local plate = B.CreateButton(guiPage[5].child, 150, 30, L["Nameplate AuraFilter"])
+	plate:SetPoint("TOPLEFT", 340, -20)
+	plate.text:SetTextColor(.6, .8, 1)
+	plate:SetScript("OnClick", SetupPlateAura)
+
 	-- Toggle AuraWatch Console
-	local aura = B.CreateButton(guiPage[6], 150, 30, L["Add AuraWatch"])
+	local aura = B.CreateButton(guiPage[6].child, 150, 30, L["Add AuraWatch"])
 	aura:SetPoint("TOPLEFT", 340, -100)
-	aura.text:SetTextColor(1, .8, 0)
+	aura.text:SetTextColor(.6, .8, 1)
 	aura:SetScript("OnClick", function()
 		f:Hide()
 		SlashCmdList["NDUI_AWCONFIG"]()
