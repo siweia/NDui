@@ -180,7 +180,7 @@ function module:DBMSkin()
 			if not self.bg then
 				self:SetBackdrop(nil)
 				self.bg = B.CreateBG(self, 0)
-				B.CreateBD(self.bg, .6, 3)
+				B.CreateBD(self.bg, .6)
 				B.CreateSD(self.bg)
 				B.CreateTex(self.bg)
 				DBMInfoFrame.tipStyled = true
