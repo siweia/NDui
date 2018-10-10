@@ -44,7 +44,7 @@ function module:GetFilters()
 	local function isItemConsumble(item)
 		if not NDuiDB["Bags"]["ItemFilter"] then return end
 		if isCustomFilter(item) == false then return end
-		return isCustomFilter(item) or (item.type == AUCTION_CATEGORY_CONSUMABLES and item.rarity > LE_ITEM_QUALITY_POOR) or item.type == AUCTION_CATEGORY_ITEM_ENHANCEMENT
+		return isCustomFilter(item) or (item.classID and (item.classID == LE_ITEM_CLASS_CONSUMABLE or item.classID == LE_ITEM_CLASS_ITEM_ENHANCEMENT))
 	end
 
 	local function isItemLegendary(item)
