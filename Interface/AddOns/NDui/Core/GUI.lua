@@ -740,8 +740,7 @@ local function SetupPlateAura()
 
 	local function addClick(parent, index)
 		local spellID = tonumber(parent.box:GetText())
-		if not spellID then return end
-		if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if NDuiADB["NameplateFilter"][index][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		NDuiADB["NameplateFilter"][index][spellID] = true
