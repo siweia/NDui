@@ -104,8 +104,8 @@ function module:SkadaSkin()
 		if #windows == 1 then
 			EmbedWindow(windows[1], 320, 18, 198, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 28)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 147)
-			EmbedWindow(windows[2], 320, 18, 109,  "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 28)
+			EmbedWindow(windows[1], 320, 18, 109, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 147)
+			EmbedWindow(windows[2], 320, 18, 109, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 28)
 		end
 	end
 
