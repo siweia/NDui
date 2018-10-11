@@ -149,6 +149,7 @@ local defaultSettings = {
 		ChatLine = true,
 		MenuLine = true,
 		ClassLine = true,
+		Details = true,
 	},
 	Tooltip = {
 		CombatHide = false,
@@ -430,6 +431,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Bigwigs", L["Bigwigs Skin"]},
 		{1, "Skins", "TMW", L["TMW Skin"], true},
 		{1, "Skins", "WeakAuras", L["WeakAuras Skin"]},
+		{1, "Skins", "Details", L["Details Skin"], true},
 	},
 	[11] = {
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
@@ -913,6 +915,15 @@ local function OpenGUI()
 	aura:SetScript("OnClick", function()
 		f:Hide()
 		SlashCmdList["NDUI_AWCONFIG"]()
+	end)
+
+	-- Reset detail skin
+	local detail = B.CreateButton(guiPage[10].child, 50, 25, RESET)
+	detail:SetPoint("TOPLEFT", 480, -300)
+	detail.text:SetTextColor(.6, .8, 1)
+	detail:SetScript("OnClick", function()
+		NDuiADB["ResetDetails"] = true
+		StaticPopup_Show("RELOAD_NDUI")
 	end)
 
 	SelectTab(1)
