@@ -36,56 +36,45 @@ function module:SkadaSkin()
 	barmod.ApplySettings_ = barmod.ApplySettings
 	barmod.ApplySettings = function(self, win)
 		barmod.ApplySettings_(self, win)
-		local skada = win.bargroup
+		local window = win.bargroup
 		if win.db.enabletitle then
-			skada.button:SetBackdrop(nil)
+			window.button:SetBackdrop(nil)
 		end
-		skada:SetSpacing(barSpacing)
-		skada:SetFrameLevel(5)
-		skada.SetFrameLevel = B.Dummy
-		skada:SetBackdrop(nil)
-		B.StripTextures(skada.borderFrame)
+		window:SetSpacing(barSpacing)
+		window:SetFrameLevel(5)
+		window.SetFrameLevel = B.Dummy
+		window:SetBackdrop(nil)
+		B.StripTextures(window.borderFrame)
 
-		if not skada.shadow then
-			skada.shadow = B.CreateBG(skada)
-			skada.shadow:SetAllPoints()
-			skada.shadow:SetFrameLevel(1)
-			B.CreateBD(skada.shadow)
-			B.CreateSD(skada.shadow)
-			B.CreateTex(skada.shadow)
+		if not window.bg then
+			local bg = B.CreateBG(window)
+			B.CreateBD(bg)
+			B.CreateSD(bg)
+			B.CreateTex(bg)
+			window.bg = bg
 
-			local Cskada = B.CreateButton(skada, 20, 80, ">", 18)
-			Cskada:SetPoint("RIGHT", skada, "LEFT", -4, 0)
-			B.CreateSD(Cskada)
-			B.CreateTex(Cskada)
-			local Oskada = B.CreateButton(UIParent, 20, 80, "<", 18)
-			Oskada:Hide()
-			Oskada:SetPoint("RIGHT", skada, "RIGHT", 2, 0)
-			B.CreateSD(Oskada)
-			B.CreateTex(Oskada)
-			Cskada:SetScript("OnClick", function()
-				Oskada:Show()
-				skada:Hide()
+			local open, close = module:CreateToggle(window)
+			open:HookScript("OnClick", function()
+				window:Show()
 			end)
-			Oskada:SetScript("OnClick", function()
-				Oskada:Hide()
-				skada:Show()
+			close:HookScript("OnClick", function()
+				window:Hide()
 			end)
 		end
-		skada.shadow:ClearAllPoints()
+		window.bg:ClearAllPoints()
 		if win.db.enabletitle then
-			skada.shadow:SetPoint("TOPLEFT", skada.button, "TOPLEFT", -3, 3)
+			window.bg:SetPoint("TOPLEFT", window.button, "TOPLEFT", -3, 3)
 		else
-			skada.shadow:SetPoint("TOPLEFT", skada, "TOPLEFT", -3, 3)
+			window.bg:SetPoint("TOPLEFT", window, "TOPLEFT", -3, 3)
 		end
-		skada.shadow:SetPoint("BOTTOMRIGHT", skada, "BOTTOMRIGHT", 3, -3)
-		skada.button:SetBackdropColor(1, 1, 1, 0)
-		skada.button:SetFrameStrata("MEDIUM")
-		skada.button:SetFrameLevel(5)	
-		skada:SetFrameStrata("MEDIUM")
+		window.bg:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", 3, -3)
+		window.button:SetBackdropColor(1, 1, 1, 0)
+		window.button:SetFrameStrata("MEDIUM")
+		window.button:SetFrameLevel(5)	
+		window:SetFrameStrata("MEDIUM")
 	end
 
-	local function EmbedWindow(window, width, barheight, height, point, relativeFrame, relativePoint, ofsx, ofsy)
+	local function EmbedWindow(window, width, barheight, height, ofsx, ofsy)
 		window.db.barwidth = width
 		window.db.barheight = barheight
 		if window.db.enabletitle then 
@@ -95,17 +84,17 @@ function module:SkadaSkin()
 		window.db.spark = false
 		window.db.barslocked = true
 		window.bargroup:ClearAllPoints()
-		window.bargroup:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
+		window.bargroup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", ofsx, ofsy)
 		barmod.ApplySettings(barmod, window)
 	end
 
 	local windows = {}
 	local function EmbedSkada()
 		if #windows == 1 then
-			EmbedWindow(windows[1], 320, 18, 198, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 28)
+			EmbedWindow(windows[1], 320, 18, 198, -5, 28)
 		elseif #windows == 2 then
-			EmbedWindow(windows[1], 320, 18, 109, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 147)
-			EmbedWindow(windows[2], 320, 18, 109, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -5, 28)
+			EmbedWindow(windows[1], 320, 18, 109, -5, 147)
+			EmbedWindow(windows[2], 320, 18, 109, -5, 28)
 		end
 	end
 
