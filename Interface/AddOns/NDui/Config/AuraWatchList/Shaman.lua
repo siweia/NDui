@@ -71,6 +71,7 @@ local list = {
 		{AuraID = 224125, UnitID = "player"},	-- 火
 		{AuraID = 224126, UnitID = "player"},	-- 冰
 		{AuraID = 224127, UnitID = "player"},	-- 电
+		{AuraID = 187878, UnitID = "player"},	-- 毁灭闪电
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 51514, UnitID = "focus", Caster = "player"},	-- 妖术
