@@ -7,48 +7,36 @@ local function ReskinDetails()
 
 	if NDuiADB["ResetDetails"] == nil then NDuiADB["ResetDetails"] = true end
 
-	local function createToggle(instance)
-		local frame = instance.baseframe
-
-		local close = B.CreateButton(frame, 20, 80, ">", 18)
-		close:SetPoint("RIGHT", frame, "LEFT", -2, 0)
-		B.CreateSD(close)
-		B.CreateTex(close)
-		local open = B.CreateButton(UIParent, 20, 80, "<", 18)
-		open:Hide()
-		open:SetPoint("RIGHT", frame, "RIGHT", 2, 0)
-		B.CreateSD(open)
-		B.CreateTex(open)
-
-		close:SetScript("OnClick", function()
-			open:Show()
-			instance:HideWindow()
-		end)
-		open:SetScript("OnClick", function()
-			open:Hide()
-			instance:ShowWindow()
-		end)
-	end
-
 	local function setupInstance(instance)
 		if instance.styled then return end
+		if not instance.baseframe then return end
 
 		instance:ChangeSkin("Minimalistic")
 		instance:InstanceWallpaper(false)
 		instance:DesaturateMenu(true)
+		instance:HideMainIcon(false)
 		instance:SetBackdropTexture("None")
-		instance:AttributeMenu(true, nil, nil, DB.Font[1], 13, {1, 1, 1}, 1, true)
+		instance:MenuAnchor(16, 3)
+		instance:ToolbarMenuButtonsSize(1)
+		instance:AttributeMenu(true, 0, 3, DB.Font[1], 13, {1, 1, 1}, 1, true)
 		instance:SetBarSettings(18, NDuiADB["ResetDetails"] and "normTex" or nil)
-		instance:SetBarTextSettings(13, DB.Font[1], nil, nil, nil, true, true)
+		instance:SetBarTextSettings(13, DB.Font[1], nil, nil, nil, true, true, nil, nil, nil, nil, nil, nil, false, nil, false, nil)
 
 		local bg = B.CreateBG(instance.baseframe)
 		bg:SetPoint("TOPLEFT", -1, 18)
 		B.CreateBD(bg)
 		B.CreateSD(bg)
 		B.CreateTex(bg)
+		instance.baseframe.bg = bg
 
 		if instance:GetId() <= 2 then
-			createToggle(instance)
+			local open, close = module:CreateToggle(instance.baseframe)
+			open:HookScript("OnClick", function()
+				instance:ShowWindow()
+			end)
+			close:HookScript("OnClick", function()
+				instance:HideWindow()
+			end)
 		end
 
 		instance.styled = true
@@ -85,12 +73,14 @@ local function ReskinDetails()
 
 	local listener = Details:CreateEventListener()
 	listener:RegisterEvent("DETAILS_INSTANCE_OPEN")
-	function listener:OnDetailsEvent(_, instance)
-		setupInstance(instance)
+	function listener:OnDetailsEvent(event, instance)
+		if event == "DETAILS_INSTANCE_OPEN" then
+			setupInstance(instance)
 
-		if instance:GetId() == 2 then
-			instance1:SetSize(320, 95)
-			EmbedWindow(instance, -3, 140, 320, 95)
+			if instance:GetId() == 2 then
+				instance1:SetSize(320, 95)
+				EmbedWindow(instance, -3, 140, 320, 95)
+			end
 		end
 	end
 
