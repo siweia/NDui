@@ -183,24 +183,32 @@ function module:CreateRM()
 
 	-- World marker
 	local marker = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
-	marker:ClearAllPoints()
-	marker:SetPoint("RIGHT", header, "LEFT", -2, 0)
-	marker:SetParent(header)
-	marker:SetSize(28, 28)
-	B.StripTextures(marker)
-	B.CreateBD(marker)
-	B.CreateSD(marker)
-	B.CreateTex(marker)
-	B.CreateBC(marker, .5)
-	marker:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
-	marker:GetNormalTexture():SetVertexColor(DB.cc.r, DB.cc.g, DB.cc.b)
-	marker:HookScript("OnMouseUp", function(_, btn)
-		if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
-			if btn == "RightButton" then ClearRaidMarker() end
-		else
-			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
+	if not marker then
+		for _, addon in next, {"Blizzard_CUFProfiles", "Blizzard_CompactRaidFrames"} do
+			EnableAddOn(addon)
+			LoadAddOn(addon)
 		end
-	end)
+	end
+	if marker then
+		marker:ClearAllPoints()
+		marker:SetPoint("RIGHT", header, "LEFT", -2, 0)
+		marker:SetParent(header)
+		marker:SetSize(28, 28)
+		B.StripTextures(marker)
+		B.CreateBD(marker)
+		B.CreateSD(marker)
+		B.CreateTex(marker)
+		B.CreateBC(marker, .5)
+		marker:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
+		marker:GetNormalTexture():SetVertexColor(DB.cc.r, DB.cc.g, DB.cc.b)
+		marker:HookScript("OnMouseUp", function(_, btn)
+			if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
+				if btn == "RightButton" then ClearRaidMarker() end
+			else
+				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
+			end
+		end)
+	end
 
 	-- Buff checker
 	local checker = CreateFrame("Button", nil, header)
