@@ -95,7 +95,7 @@ StaticPopupDialogs["RELOAD_NDUI"] = {
 	end,
 }
 
--- DBM bars	
+-- DBM bars
 local function ForceDBMOptions()
 	if not IsAddOnLoaded("DBM-Core") then return end
 	if DBT_AllPersistentOptions then table.wipe(DBT_AllPersistentOptions) end
