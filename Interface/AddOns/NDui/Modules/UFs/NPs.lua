@@ -52,6 +52,7 @@ local CustomUnits = {
 	[GetSectionInfo(18232)] = true,	-- 艾什凡炮手
 	[GetSectionInfo(18499)] = true,	-- 凝结之血
 	[GetSectionInfo(18078)] = true,	-- 蛛魔编织者
+	[GetSectionInfo(18007)] = true,	-- 瘟疫聚合体
 	["Spawn of G'huun"] = true,
 	["戈霍恩之嗣"] = true,
 	["古翰幼體"] = true,
