@@ -210,6 +210,7 @@ local list = {
 		{AuraID = 265264, UnitID = "player"},	-- 虚空鞭笞，泽克沃兹
 		{AuraID = 265360, UnitID = "player", Text = L["Get Out"]},	-- 翻滚欺诈，泽克沃兹
 		{AuraID = 265662, UnitID = "player"},	-- 腐化者的契约，泽克沃兹
+		{AuraID = 265127, UnitID = "player"},	-- 持续感染，维克提斯
 		{AuraID = 265129, UnitID = "player"},	-- 终极菌体，维克提斯
 		{AuraID = 267160, UnitID = "player"},
 		{AuraID = 267161, UnitID = "player"},
