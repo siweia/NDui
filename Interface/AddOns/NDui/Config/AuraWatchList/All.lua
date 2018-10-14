@@ -68,6 +68,7 @@ local list = {
 		{AuraID = 267612, UnitID = "player"},	-- 迅击风暴
 		{AuraID = 268887, UnitID = "player"},	-- 迅捷远航
 		{AuraID = 268854, UnitID = "player"},	-- 全能远航
+		{AuraID = 268905, UnitID = "player"},	-- 致命远航
 		{AuraID = 264957, UnitID = "player"},	-- 急速瞄准镜
 		{AuraID = 264878, UnitID = "player"},	-- 爆击瞄准镜
 		{AuraID = 267685, UnitID = "player"},	-- 元素洪流
@@ -511,6 +512,7 @@ local list = {
 		{AuraID = 256493, UnitID = "target"},	-- 炽燃的艾泽里特，矿区1
 	-- 奥迪尔
 		{AuraID = 271965, UnitID = "target"},	-- 能源关闭，塔罗克
+		{AuraID = 277548, UnitID = "target"},	-- 粉碎黑暗，小怪
 		{AuraID = 278218, UnitID = "target"},	-- 虚空召唤，泽克沃兹
 		{AuraID = 278220, UnitID = "target"},	-- 虚空超脱，泽克沃兹
 		{AuraID = 265264, UnitID = "target"},	-- 虚空鞭笞，泽克沃兹
