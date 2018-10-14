@@ -107,7 +107,7 @@ function UF:CreateHealthText(self)
 	elseif self.mystyle == "nameplate" then
 		self:Tag(name, "[nplevel][name]")
 	elseif self.mystyle == "arena" then
-		self:Tag(name, "[color][name][raidcolor][arenaspec]")
+		self:Tag(name, "[arenaspec] [color][name]")
 	else
 		self:Tag(name, "[color][name]")
 	end
