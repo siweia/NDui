@@ -291,7 +291,7 @@ local function CreatePanel()
 			SortBars(index)
 		end)
 
-		local prioString = B.CreateFS(bar, 14, priority, false, "LEFT", 30, 0)
+		local prioString = B.CreateFS(icon, 14, priority)
 		prioString:SetTextColor(0, 1, 0)
 		local spellName = B.CreateFS(bar, 14, name, false, "LEFT", 40, 0)
 		spellName:SetWidth(120)
@@ -591,7 +591,7 @@ local function CreatePanel()
 				if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 				if NDuiADB["RaidDebuffs"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-				priority = (priority and priority < 0 and 0) or (not priority and 2)
+				priority = (priority and priority < 0 and 0) or priority or 2
 				NDuiADB["RaidDebuffs"][spellID] = {instName, spellID, priority}
 				AddRaidDebuffs(tabs[i].List.Child, i, NDuiADB["RaidDebuffs"][spellID])
 				for i = 17, 19 do ClearEdit(Option[i]) end
