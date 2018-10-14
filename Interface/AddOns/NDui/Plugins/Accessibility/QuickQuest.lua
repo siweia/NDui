@@ -11,10 +11,10 @@ B.CreateCB(mono, .25)
 mono.text = B.CreateFS(mono, 14, L["Auto Quest"], false, "LEFT", 25, 0)
 mono:RegisterEvent("PLAYER_LOGIN")
 mono:SetScript("OnEvent", function(self)
-	self:SetChecked(NDuiDB["Misc"].AutoQuest)
+	self:SetChecked(NDuiDB["Misc"]["AutoQuest"])
 end)
 mono:SetScript("OnClick", function(self)
-	NDuiDB["Misc"].AutoQuest = self:GetChecked()
+	NDuiDB["Misc"]["AutoQuest"] = self:GetChecked()
 end)
 
 -- Function
@@ -26,7 +26,7 @@ local quests, choiceQueue = {}
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if NDuiDB["Misc"].AutoQuest then
+		if NDuiDB["Misc"]["AutoQuest"] then
 			if(not IsShiftKeyDown()) then
 				func(...)
 			end

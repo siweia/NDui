@@ -64,7 +64,6 @@ function module:RegisterDebuff(_, instID, _, spellID, level)
 end
 
 function module:OnLogin()
-	if not NDuiADB["RaidDebuffs"] then NDuiADB["RaidDebuffs"] = {} end
 	local newTable = {}
 	for _, value in pairs(NDuiADB["RaidDebuffs"]) do
 		if value then

@@ -5,9 +5,6 @@ local MaxFrame = 12	-- Max Tracked Auras
 
 -- Init
 local function ConvertTable()
-	if not NDuiDB["AuraWatchList"] then NDuiDB["AuraWatchList"] = {} end
-	if not NDuiDB["InternalCD"] then NDuiDB["InternalCD"] = {} end
-
 	local function DataAnalyze(v)
 		newTable = {}
 		if type(v[1]) == "number" then
@@ -137,7 +134,6 @@ local function MakeMoveHandle(Frame, Text, key, Pos)
 	MoveHandle:SetFrameStrata("HIGH")
 	B.CreateBD(MoveHandle)
 	B.CreateFS(MoveHandle, 12, Text)
-	if not NDuiDB["AuraWatchMover"] then NDuiDB["AuraWatchMover"] = {} end
 	if not NDuiDB["AuraWatchMover"][key] then 
 		MoveHandle:SetPoint(unpack(Pos))
 	else

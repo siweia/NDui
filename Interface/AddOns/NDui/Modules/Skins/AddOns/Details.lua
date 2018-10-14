@@ -5,8 +5,6 @@ local module = B:GetModule("Skins")
 local function ReskinDetails()
 	LibStub("LibSharedMedia-3.0"):Register("statusbar", "normTex", DB.normTex)
 
-	if NDuiADB["ResetDetails"] == nil then NDuiADB["ResetDetails"] = true end
-
 	local function setupInstance(instance)
 		if instance.styled then return end
 		if not instance.baseframe then return end

@@ -60,7 +60,6 @@ end
 
 local function compareToShow(event)
 	if HelloWorld then return end
-	if not NDuiADB["Changelog"] then NDuiADB["Changelog"] = {} end
 
 	local old1, old2 = string.split(".", NDuiADB["Changelog"].Version or "")
 	local cur1, cur2 = string.split(".", DB.Version)

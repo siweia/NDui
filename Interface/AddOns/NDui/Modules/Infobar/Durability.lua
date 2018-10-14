@@ -63,8 +63,6 @@ info.eventList = {
 
 info.onEvent = function(self, event)
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	if not NDuiADB["RepairType"] then NDuiADB["RepairType"] = 1 end
-
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent(event)
 		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")

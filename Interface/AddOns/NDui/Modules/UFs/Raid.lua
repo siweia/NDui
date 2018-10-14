@@ -170,8 +170,7 @@ local defaultSpellList = {
 }
 
 function UF:DefaultClickSets()
-	if not NDuiDB["RaidClickSets"] then
-		NDuiDB["RaidClickSets"] = {}
+	if #NDuiDB["RaidClickSets"] == 0 then
 		for k, v in pairs(defaultSpellList[DB.MyClass]) do
 			local clickSet = keyList[k][2]..keyList[k][1]
 			NDuiDB["RaidClickSets"][clickSet] = {keyList[k][1], keyList[k][2], v}

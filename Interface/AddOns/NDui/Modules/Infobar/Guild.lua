@@ -111,8 +111,6 @@ local function createRoster(i)
 end
 
 local function refreshData()
-	if not NDuiADB["GuildSortBy"] then NDuiADB["GuildSortBy"] = 1 end
-
 	wipe(guildTable)
 	GuildRoster()
 	local count = 0
