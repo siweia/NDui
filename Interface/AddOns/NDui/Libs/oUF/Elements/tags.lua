@@ -577,8 +577,10 @@ Used to update all tags on a frame.
 * self - the unit frame from which to update the tags
 --]]
 local function Update(self)
-	for _, fs in next, self.__tags do
-		fs:UpdateTag()
+	if(self.__tags) then
+		for _, fs in next, self.__tags do
+			fs:UpdateTag()
+		end
 	end
 end
 
@@ -819,7 +821,7 @@ Used to unregister a tag from a unit frame.
 * fs   - the font string holding the tag (FontString)
 --]]
 local function Untag(self, fs)
-	if(not fs) then return end
+	if(not fs or not self.__tags) then return end
 
 	unregisterEvents(fs)
 	for _, timers in next, eventlessUnits do
