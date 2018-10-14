@@ -3,6 +3,12 @@ local B, C, L, DB = unpack(ns)
 
 -- Default Settings
 local defaultSettings = {
+	BFA = false,
+	Mover = {},
+	AuraWatchList = {},
+	InternalCD = {},
+	AuraWatchMover = {},
+	RaidClickSets = {},
 	Actionbar = {
 		Enable = true,
 		Hotkeys = true,
@@ -201,6 +207,44 @@ local defaultSettings = {
 	},
 }
 
+local accountSettings = {
+	ChatFilterList = "%*",
+	ChatAtList = "",
+	Timestamp = false,
+	NameplateFilter = {[1]={}, [2]={}},
+	RaidDebuffs = {},
+	Changelog = {},
+	totalGold = {},
+	RepairType = 1,
+	AutoSell = true,
+	GuildSortBy = 1,
+	GuildSortOrder = true,
+	ShowFPS = false,
+	DetectVersion = DB.Version,
+	ResetDetails = true,
+}
+
+local function InitialSettings(source, target)
+	for i, j in pairs(source) do
+		if type(j) == "table" then
+			if target[i] == nil then target[i] = {} end
+			for k, v in pairs(j) do
+				if target[i][k] == nil then
+					target[i][k] = v
+				end
+			end
+		else
+			if target[i] == nil then target[i] = j end
+		end
+	end
+
+	for i in pairs(target) do
+		if source[i] == nil then
+			target[i] = nil
+		end
+	end
+end
+
 local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
@@ -210,21 +254,8 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		NDuiDB["BFA"] = true
 	end
 
-	for i, j in pairs(defaultSettings) do
-		if type(j) == "table" then
-			if NDuiDB[i] == nil then NDuiDB[i] = {} end
-			for k, v in pairs(j) do
-				if NDuiDB[i][k] == nil then
-					NDuiDB[i][k] = v
-				end
-			end
-		else
-			if NDuiDB[i] == nil then NDuiDB[i] = j end
-		end
-	end
-
-	-- Others
-	NDuiADB["NameplateFilter"] = NDuiADB["NameplateFilter"] or {[1] = {}, [2] = {}}
+	InitialSettings(defaultSettings, NDuiDB)
+	InitialSettings(accountSettings, NDuiADB)
 
 	self:UnregisterAllEvents()
 end)
@@ -245,6 +276,10 @@ local tabList = {
 	L["Misc"],
 	L["UI Settings"],
 }
+
+local function tag(value)
+	return "Tag:"..value
+end
 
 local optionList = {		-- type, key, value, name, horizon, doubleline
 	[1] = {
@@ -395,13 +430,13 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Sticky", L["Chat Sticky"], true},
 		{1, "Chat", "Oldname", L["Default Channel"]},
 		{1, "Chat", "WhisperColor", L["Differ WhipserColor"], true},
-		{1, "Chat", "Timestamp", L["Timestamp"]},
+		{1, "Chat", tag("Timestamp"), L["Timestamp"], false, nil, function() B.UpdateTimestamp() end},
 		{},--blank
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
-		{2, "Chat", "FilterList", L["Filter List"], true, nil, function() B.genFilterList() end},
-		{2, "Chat", "AtList", L["@List"], false, nil, function() B.genChatAtList() end},
+		{2, "Chat", tag("ChatFilterList"), L["Filter List"], true, nil, function() B.genFilterList() end},
+		{2, "Chat", tag("ChatAtList"), L["@List"], false, nil, function() B.genChatAtList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
@@ -513,6 +548,23 @@ local function CreateTab(parent, i, name)
 	return tab
 end
 
+local function NDUI_VARIABLE(key, value, result)
+	if value:find("Tag:") then
+		value = select(2, string.split(":", value))
+		if result ~= nil then
+			NDuiADB[value] = result
+		else
+			return NDuiADB[value]
+		end
+	else
+		if result ~= nil then
+			NDuiDB[key][value] = result
+		else
+			return NDuiDB[key][value]
+		end
+	end
+end
+
 local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
@@ -528,9 +580,10 @@ local function CreateOption(i)
 				offset = offset + 35
 			end
 			B.CreateFS(cb, 14, name, false, "LEFT", 30, 0)
-			cb:SetChecked(NDuiDB[key][value])
+			cb:SetChecked(NDUI_VARIABLE(key, value))
 			cb:SetScript("OnClick", function()
-				NDuiDB[key][value] = cb:GetChecked()
+				NDUI_VARIABLE(key, value, cb:GetChecked())
+				if callBack then callBack() else print(2) end
 			end)
 		-- Editbox
 		elseif type == 2 then
@@ -542,12 +595,12 @@ local function CreateOption(i)
 				eb:SetPoint("TOPLEFT", 35, -offset - 20)
 				offset = offset + 70
 			end
-			eb:SetText(NDuiDB[key][value])
+			eb:SetText(NDUI_VARIABLE(key, value))
 			eb:HookScript("OnEscapePressed", function()
-				eb:SetText(NDuiDB[key][value])
+				eb:SetText(NDUI_VARIABLE(key, value))
 			end)
 			eb:HookScript("OnEnterPressed", function()
-				NDuiDB[key][value] = eb:GetText()
+				NDUI_VARIABLE(key, value, eb:GetText())
 				if callBack then callBack() end
 			end)
 			eb:SetScript("OnEnter", function(self)
@@ -572,10 +625,10 @@ local function CreateOption(i)
 			end
 			s:SetWidth(190)
 			s:SetMinMaxValues(min, max)
-			s:SetValue(NDuiDB[key][value])
+			s:SetValue(NDUI_VARIABLE(key, value))
 			s:SetScript("OnValueChanged", function(_, v)
 				local current = tonumber(format("%."..step.."f", v))
-				NDuiDB[key][value] = current
+				NDUI_VARIABLE(key, value, current)
 				_G[s:GetName().."Text"]:SetText(current)
 			end)
 
@@ -584,7 +637,7 @@ local function CreateOption(i)
 			_G[s:GetName().."High"]:SetText(max)
 			_G[s:GetName().."Text"]:ClearAllPoints()
 			_G[s:GetName().."Text"]:SetPoint("TOP", s, "BOTTOM", 0, 3)
-			_G[s:GetName().."Text"]:SetText(format("%."..step.."f", NDuiDB[key][value]))
+			_G[s:GetName().."Text"]:SetText(format("%."..step.."f", NDUI_VARIABLE(key, value)))
 			s:SetBackdrop(nil)
 			local bd = CreateFrame("Frame", nil, s)
 			bd:SetPoint("TOPLEFT", 14, -2)
@@ -603,12 +656,12 @@ local function CreateOption(i)
 				dd:SetPoint("TOPLEFT", 35, -offset - 20)
 				offset = offset + 70
 			end
-			dd.Text:SetText(data[NDuiDB[key][value]])
+			dd.Text:SetText(data[NDUI_VARIABLE(key, value)])
 
 			local opt = dd.options
 			dd.button:HookScript("OnClick", function()
 				for num = 1, #data do
-					if num == NDuiDB[key][value] then
+					if num == NDUI_VARIABLE(key, value) then
 						opt[num]:SetBackdropColor(1, .8, 0, .3)
 						opt[num].selected = true
 					else
@@ -619,7 +672,7 @@ local function CreateOption(i)
 			end)
 			for i in pairs(data) do
 				opt[i]:HookScript("OnClick", function()
-					NDuiDB[key][value] = i
+					NDUI_VARIABLE(key, value, i)
 				end)
 			end
 
@@ -641,22 +694,22 @@ local function CreateOption(i)
 			local tex = f:CreateTexture()
 			tex:SetPoint("TOPLEFT", 2, -2)
 			tex:SetPoint("BOTTOMRIGHT", -2, 2)
-			tex:SetColorTexture(NDuiDB[key][value].r, NDuiDB[key][value].g, NDuiDB[key][value].b)
+			tex:SetColorTexture(NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b)
 
 			local function onUpdate()
 				local r, g, b = ColorPickerFrame:GetColorRGB()
 				tex:SetColorTexture(r, g, b)
-				NDuiDB[key][value].r, NDuiDB[key][value].g, NDuiDB[key][value].b = r, g, b
+				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
 			end
 
 			local function onCancel()
 				local r, g, b = ColorPicker_GetPreviousValues()
 				tex:SetColorTexture(r, g, b)
-				NDuiDB[key][value].r, NDuiDB[key][value].g, NDuiDB[key][value].b = r, g, b
+				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
 			end
 
 			f:SetScript("OnClick", function()
-				local r, g, b = NDuiDB[key][value].r, NDuiDB[key][value].g, NDuiDB[key][value].b
+				local r, g, b = NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b
 				ColorPickerFrame.func = onUpdate
 				ColorPickerFrame.previousValues = {r = r, g = g, b = b}
 				ColorPickerFrame.cancelFunc = onCancel
