@@ -44,6 +44,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 256038) -- 致命狙击
 module:RegisterDebuff(TIER, INSTANCE, 0, 256105) -- 爆炸
 module:RegisterDebuff(TIER, INSTANCE, 0, 258128) -- 衰弱怒吼
 module:RegisterDebuff(TIER, INSTANCE, 0, 256201) -- 爆炎弹
+module:RegisterDebuff(TIER, INSTANCE, 0, 260067) -- 恶毒槌击
 
 INSTANCE = 1012 -- 暴富矿区
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
