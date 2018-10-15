@@ -31,11 +31,19 @@ function UF:SetupCVars()
 end
 
 function UF:BlockAddons()
-	if DBM and DBM.Nameplate then
-		function DBM.Nameplate:SupportedNPMod()
-			return true
+	if not DBM or not DBM.Nameplate then return end
+
+	function DBM.Nameplate:SupportedNPMod()
+		return true
+	end
+
+	local function showAurasForDBM(_, _, _, spellID)
+		if not tonumber(spellID) then return end
+		if not C.WhiteList[spellID] then
+			C.WhiteList[spellID] = true
 		end
 	end
+	hooksecurefunc(DBM.Nameplate, "Show", showAurasForDBM)
 end
 
 local function GetSectionInfo(id)
