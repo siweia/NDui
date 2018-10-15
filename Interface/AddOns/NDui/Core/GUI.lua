@@ -195,13 +195,6 @@ local defaultSettings = {
 		QuestProgress = false,
 		OnlyCompleteRing = false,
 	},
-	Settings = {
-		LockUIScale = false,
-		UIScale = .8,
-		GUIScale = 1,
-		Format = 1,
-		VersionCheck = true,
-	},
 	Tutorial = {
 		Complete = false,
 	},
@@ -222,6 +215,14 @@ local accountSettings = {
 	ShowFPS = false,
 	DetectVersion = DB.Version,
 	ResetDetails = true,
+	LockUIScale = false,
+	UIScale = .8,
+	GUIScale = 1,
+	NumberFormat = 1,
+	VersionCheck = true,
+	DBMRequest = false,
+	SkadaRequest = false,
+	BWRequest = false,
 }
 
 local function InitialSettings(source, target)
@@ -276,10 +277,6 @@ local tabList = {
 	L["Misc"],
 	L["UI Settings"],
 }
-
-local function tag(value)
-	return "Tag:"..value
-end
 
 local optionList = {		-- type, key, value, name, horizon, doubleline
 	[1] = {
@@ -430,13 +427,13 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Sticky", L["Chat Sticky"], true},
 		{1, "Chat", "Oldname", L["Default Channel"]},
 		{1, "Chat", "WhisperColor", L["Differ WhipserColor"], true},
-		{1, "Chat", tag("Timestamp"), L["Timestamp"], false, nil, function() B.UpdateTimestamp() end},
+		{1, "ACCOUNT", "Timestamp", L["Timestamp"], false, nil, function() B.UpdateTimestamp() end},
 		{},--blank
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
-		{2, "Chat", tag("ChatFilterList"), L["Filter List"], true, nil, function() B.genFilterList() end},
-		{2, "Chat", tag("ChatAtList"), L["@List"], false, nil, function() B.genChatAtList() end},
+		{2, "ACCOUNT", "ChatFilterList", L["Filter List"], true, nil, function() B.genFilterList() end},
+		{2, "ACCOUNT", "ChatAtList", L["@List"], false, nil, function() B.genChatAtList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
@@ -499,13 +496,13 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
 	},
 	[13] = {
-		{1, "Settings", "VersionCheck", L["Version Check"]},
+		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{},--blank
-		{3, "Settings", "UIScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
-		{1, "Settings", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
+		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
+		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
-		{3, "Settings", "GUIScale", L["GUI Scale"], false, {.5, 1.5, 1}},
-		{4, "Settings", "Format", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
+		{3, "ACCOUNT", "GUIScale", L["GUI Scale"], false, {.5, 1.5, 1}},
+		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 	},
 }
 
@@ -548,17 +545,16 @@ local function CreateTab(parent, i, name)
 	return tab
 end
 
-local function NDUI_VARIABLE(key, value, result)
-	if value:find("Tag:") then
-		value = select(2, string.split(":", value))
-		if result ~= nil then
-			NDuiADB[value] = result
+local function NDUI_VARIABLE(key, value, newValue)
+	if key == "ACCOUNT" then
+		if newValue ~= nil then
+			NDuiADB[value] = newValue
 		else
 			return NDuiADB[value]
 		end
 	else
-		if result ~= nil then
-			NDuiDB[key][value] = result
+		if newValue ~= nil then
+			NDuiDB[key][value] = newValue
 		else
 			return NDuiDB[key][value]
 		end
@@ -583,7 +579,7 @@ local function CreateOption(i)
 			cb:SetChecked(NDUI_VARIABLE(key, value))
 			cb:SetScript("OnClick", function()
 				NDUI_VARIABLE(key, value, cb:GetChecked())
-				if callBack then callBack() else print(2) end
+				if callBack then callBack() end
 			end)
 		-- Editbox
 		elseif type == 2 then
@@ -844,7 +840,7 @@ local function OpenGUI()
 	-- Main Frame
 	f = CreateFrame("Frame", "NDuiGUI", UIParent)
 	tinsert(UISpecialFrames, "NDuiGUI")
-	f:SetScale(NDuiDB["Settings"]["GUIScale"])
+	f:SetScale(NDuiADB["GUIScale"])
 	f:SetSize(800, 600)
 	f:SetPoint("CENTER")
 	f:SetFrameStrata("HIGH")
@@ -860,12 +856,12 @@ local function OpenGUI()
 	close:SetFrameLevel(3)
 	close:SetScript("OnClick", function() f:Hide() end)
 
-	local scaleOld = NDuiDB["Settings"]["UIScale"]
+	local scaleOld = NDuiADB["UIScale"]
 	local ok = B.CreateButton(f, 80, 20, OKAY)
 	ok:SetPoint("RIGHT", close, "LEFT", -10, 0)
 	ok:SetFrameLevel(3)
 	ok:SetScript("OnClick", function()
-		local scale = NDuiDB["Settings"]["UIScale"]
+		local scale = NDuiADB["UIScale"]
 		if scale ~= scaleOld then
 			if scale < .64 then
 				UIParent:SetScale(scale)
