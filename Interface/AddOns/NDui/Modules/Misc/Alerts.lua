@@ -161,7 +161,7 @@ end
 	NDui版本过期提示
 ]]
 function module:VersionCheck()
-	if not NDuiDB["Settings"]["VersionCheck"] then return end
+	if not NDuiADB["VersionCheck"] then return end
 
 	local f = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
 	f:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 20, 70)

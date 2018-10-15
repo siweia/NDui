@@ -213,7 +213,7 @@ end
 
 -- Numberize
 function B.Numb(n)
-	if NDuiDB["Settings"]["Format"] == 1 then
+	if NDuiADB["NumberFormat"] == 1 then
 		if n >= 1e12 then
 			return ("%.2ft"):format(n / 1e12)
 		elseif n >= 1e9 then
@@ -225,7 +225,7 @@ function B.Numb(n)
 		else
 			return ("%.0f"):format(n)
 		end
-	elseif NDuiDB["Settings"]["Format"] == 2 then
+	elseif NDuiADB["NumberFormat"] == 2 then
 		if n >= 1e12 then
 			return ("%.2f"..L["NumberCap3"]):format(n / 1e12)
 		elseif n >= 1e8 then

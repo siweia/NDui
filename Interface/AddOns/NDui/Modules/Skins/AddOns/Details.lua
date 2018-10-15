@@ -84,7 +84,7 @@ local function ReskinDetails()
 
 	-- Numberize
 	local _detalhes = _G._detalhes
-	local current = NDuiDB["Settings"]["Format"]
+	local current = NDuiADB["NumberFormat"]
 	if current < 3 then
 		_detalhes.numerical_system = current
 		_detalhes:SelectNumericalSystem()
