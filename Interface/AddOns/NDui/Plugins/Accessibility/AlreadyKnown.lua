@@ -5,34 +5,47 @@ local B, C, L, DB = unpack(ns)
 -- NDui MOD
 -----------------------------
 local COLOR = { r = .1, g = 1, b = .1, }
+local tooltip = CreateFrame("GameTooltip", "AlreadyKnownTooltip", nil, "GameTooltipTemplate")
+local knowns = {}
+local knowables = {
+	[LE_ITEM_CLASS_CONSUMABLE] = true,
+	[LE_ITEM_CLASS_RECIPE] = true,
+	[LE_ITEM_CLASS_MISCELLANEOUS] = true,
+}
 
-local tooltip = CreateFrame("GameTooltip")
-tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
-
-local IsAlreadyKnown
-do
-	local knowns = {}
-	local consumable, recipe, misc = LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_RECIPE, LE_ITEM_CLASS_MISCELLANEOUS
-	local knowables = { [consumable] = true, [recipe] = true, [misc] = true }
-
-	local lines = {}
-	for i = 1, 40 do
-		lines[i] = tooltip:CreateFontString()
-		tooltip:AddFontStrings(lines[i], tooltip:CreateFontString())
+local function isPetCollected(speciesID)
+	if not speciesID or speciesID == 0 then return end
+	local numOwned = C_PetJournal.GetNumCollectedInfo(speciesID)
+	if numOwned > 0 then
+		return true
 	end
+end
 
-	function IsAlreadyKnown(itemLink)
-		if not itemLink then return end
-		local itemID = itemLink:match("item:(%d+):")
-		if knowns[itemID] then return true end
-		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(itemLink)
-		if not name or not knowables[itemClassID] then return end
-		tooltip:ClearLines()
-		tooltip:SetHyperlink(itemLink)
-		for i = 1, tooltip:NumLines() do
-			if lines[i]:GetText() == ITEM_SPELL_KNOWN then
-				knowns[itemID] = true
-				return true
+local function IsAlreadyKnown(link, index)
+	if not link then return end
+
+	if link:match("battlepet:") then
+		local speciesID = select(2, strsplit(":", link))
+		return isPetCollected(speciesID)
+	elseif link:match("item:") then
+		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
+		if not name then return end
+
+		if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
+			local speciesID = tooltip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
+			return isPetCollected(speciesID)
+		else
+			if knowns[link] then return true end
+			if not knowables[itemClassID] then return end
+
+			tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+			tooltip:SetHyperlink(link)
+			for i = 1, tooltip:NumLines() do
+				local text = _G[tooltip:GetName().."TextLeft"..i]:GetText() or ""
+				if text:find(COLLECTED) or text == ITEM_SPELL_KNOWN then
+					knowns[link] = true
+					return true
+				end
 			end
 		end
 	end
@@ -89,7 +102,7 @@ local function GuildBankFrame_Update()
 		if button and button:IsShown() then
 			local texture, _, locked = GetGuildBankItemInfo(tab, i)
 			if texture and not locked then	
-				if IsAlreadyKnown(GetGuildBankItemLink(tab, i)) then
+				if IsAlreadyKnown(GetGuildBankItemLink(tab, i), i) then
 					SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
 				else
 					SetItemButtonTextureVertexColor(button, 1, 1, 1)
