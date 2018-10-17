@@ -3,19 +3,51 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 
+function module:ReverseSort()
+	C_Timer.After(.5, function()
+		for bag = 0, 4 do
+			local numSlots = GetContainerNumSlots(bag)
+			for slot = 1, numSlots do
+				local texture, _, locked = GetContainerItemInfo(bag, slot)
+				if texture and not locked then
+					PickupContainerItem(bag, slot)
+					PickupContainerItem(bag, numSlots+1 - slot)
+				end
+			end
+		end
+	end)
+end
+
+function module:UpdateAnchors(parent, bags)
+	local anchor = parent
+	for _, bag in ipairs(bags) do
+		if bag:GetHeight() > 45 then
+			bag:Show()
+		else
+			bag:Hide()
+		end
+		if bag:IsShown() then
+			bag:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, 4)
+			anchor = bag
+		end
+	end
+end
+
+function module:DisableAuroraClassic()
+	if not IsAddOnLoaded("AuroraClassic") then return end
+	AuroraOptionsbags:SetAlpha(0)
+	AuroraOptionsbags:Disable()
+	AuroraConfig.bags = false
+end
+
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
-	if IsAddOnLoaded("AuroraClassic") then
-		AuroraOptionsbags:SetAlpha(0)
-		AuroraOptionsbags:Disable()
-		AuroraConfig.bags = false
-	end
 
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
 	Backpack:RegisterBlizzard()
 
 	local f = {}
-	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent = self:GetFilters()
+	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent = self:GetFilters()
 
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
@@ -24,15 +56,19 @@ function module:OnLogin()
 		f.main:SetFilter(onlyBags, true)
 		f.main:SetPoint("BOTTOMRIGHT", -100, 150)
 
-		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "azeriteitem"})
+		f.junk = MyContainer:New("Junk", {Columns = NDuiDB["Bags"]["BagsWidth"]})
+		f.junk:SetFilter(bagsJunk, true)
+		f.junk:SetParent(f.main)
+
+		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = NDuiDB["Bags"]["BagsWidth"]})
 		f.azeriteItem:SetFilter(bagAzeriteItem, true)
 		f.azeriteItem:SetParent(f.main)
 
-		f.equipment = MyContainer:New("Equipment", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "equipment"})
+		f.equipment = MyContainer:New("Equipment", {Columns = NDuiDB["Bags"]["BagsWidth"]})
 		f.equipment:SetFilter(bagEquipment, true)
 		f.equipment:SetParent(f.main)
 
-		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "consumble"})
+		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"]})
 		f.consumble:SetFilter(bagConsumble, true)
 		f.consumble:SetParent(f.main)
 
@@ -41,23 +77,23 @@ function module:OnLogin()
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -20, 0)
 		f.bank:Hide()
 
-		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankazeriteitem"})
+		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = NDuiDB["Bags"]["BankWidth"]})
 		f.bankAzeriteItem:SetFilter(bankAzeriteItem, true)
 		f.bankAzeriteItem:SetParent(f.bank)
 
-		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "banklegendary"})
+		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"]})
 		f.bankLegendary:SetFilter(bankLegendary, true)
 		f.bankLegendary:SetParent(f.bank)
 
-		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankequipment"})
+		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = NDuiDB["Bags"]["BankWidth"]})
 		f.bankEquipment:SetFilter(bankEquipment, true)
 		f.bankEquipment:SetParent(f.bank)
 
-		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankconsumble"})
+		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"]})
 		f.bankConsumble:SetFilter(bankConsumble, true)
 		f.bankConsumble:SetParent(f.bank)
 
-		f.reagent = MyContainer:New("Reagent", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bankreagent"})
+		f.reagent = MyContainer:New("Reagent", {Columns = NDuiDB["Bags"]["BankWidth"]})
 		f.reagent:SetFilter(onlyReagent, true)
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
@@ -94,10 +130,10 @@ function module:OnLogin()
 		self.BG = B.CreateBG(self)
 		B.CreateBD(self.BG, .3)
 
-		self.Junk = self:CreateTexture(nil, "ARTWORK")
-		self.Junk:SetAtlas("bags-junkcoin")
-		self.Junk:SetSize(20, 20)
-		self.Junk:SetPoint("TOPRIGHT", 1, 0)
+		self.junkIcon = self:CreateTexture(nil, "ARTWORK")
+		self.junkIcon:SetAtlas("bags-junkcoin")
+		self.junkIcon:SetSize(20, 20)
+		self.junkIcon:SetPoint("TOPRIGHT", 1, 0)
 
 		self.Quest = B.CreateFS(self, 30, "!", "system", "LEFT", 3, 0)
 
@@ -146,9 +182,9 @@ function module:OnLogin()
 
 	function MyButton:OnUpdate(item)
 		if MerchantFrame:IsShown() and item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 then
-			self.Junk:SetAlpha(1)
+			self.junkIcon:SetAlpha(1)
 		else
-			self.Junk:SetAlpha(0)
+			self.junkIcon:SetAlpha(0)
 		end
 
 		if item.link and C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) then
@@ -217,46 +253,8 @@ function module:OnLogin()
 		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 10, offset)
 		self:SetSize(width + 20, height + 45)
 
-		local anchor = f.main
-		for _, bag in ipairs({f.azeriteItem, f.equipment, f.consumble}) do
-			if bag:GetHeight() > 45 then
-				bag:Show()
-			else
-				bag:Hide()
-			end
-			if bag:IsShown() then
-				bag:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, 3)
-				anchor = bag
-			end
-		end
-
-		local bankAnchor = f.bank
-		for _, bag in ipairs({f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble}) do
-			if bag:GetHeight() > 45 then
-				bag:Show()
-			else
-				bag:Hide()
-			end
-			if bag:IsShown() then
-				bag:SetPoint("BOTTOMLEFT", bankAnchor, "TOPLEFT", 0, 3)
-				bankAnchor = bag
-			end
-		end
-	end
-
-	local function ReverseSort()
-		C_Timer.After(.5, function()
-			for bag = 0, 4 do
-				local numSlots = GetContainerNumSlots(bag)
-				for slot = 1, numSlots do
-					local texture, _, locked = GetContainerItemInfo(bag, slot)
-					if texture and not locked then
-						PickupContainerItem(bag, slot)
-						PickupContainerItem(bag, numSlots+1 - slot)
-					end
-				end
-			end
-		end)
+		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.junk})
+		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble})
 	end
 
 	local function highlightFunction(button, match)
@@ -300,6 +298,8 @@ function module:OnLogin()
 			label = LOOT_JOURNAL_LEGENDARIES
 		elseif name:match("Consumble$") then
 			label = BAG_FILTER_CONSUMABLES
+		elseif name:match("Junk") then
+			label = BAG_FILTER_JUNK
 		end
 		if label then B.CreateFS(self, 14, label, true, "TOPLEFT", 8, -8) return end
 
@@ -311,15 +311,12 @@ function module:OnLogin()
 		local search = self:SpawnPlugin("SearchBar", infoFrame)
 		search.highlightFunction = highlightFunction
 		search.isGlobal = true
-		search:SetPoint("LEFT", infoFrame, "LEFT", 0, 5)
-		search.Left:SetTexture(nil)
-		search.Right:SetTexture(nil)
-		search.Center:SetTexture(nil)
-		local sbg = CreateFrame("Frame", nil, search)
-		sbg:SetPoint("CENTER", search, "CENTER")
-		sbg:SetSize(230, 22)
-		sbg:SetFrameLevel(search:GetFrameLevel() - 1)
-		B.CreateBD(sbg)
+		search:SetPoint("LEFT", 0, 5)
+		B.StripTextures(search)
+		local sbg = B.CreateBG(search)
+		sbg:SetPoint("TOPLEFT", -5, -5)
+		sbg:SetPoint("BOTTOMRIGHT", 5, 5)
+		B.CreateBD(sbg, .3)
 
 		local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 		tagDisplay:SetFont(unpack(DB.Font))
@@ -339,7 +336,7 @@ function module:OnLogin()
 						UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 					else
 						SortBags()
-						ReverseSort()
+						module:ReverseSort()
 					end
 				else
 					SortBags()
@@ -359,8 +356,8 @@ function module:OnLogin()
 			bagBar.isGlobal = true
 			bagBar:Hide()
 			self.BagBar = bagBar
-			bagBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 8, -11)
-			local bg = CreateFrame("Frame", nil, bagBar)
+			bagBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 8, -12)
+			local bg = B.CreateBG(bagBar)
 			bg:SetPoint("TOPLEFT", -8, 8)
 			bg:SetPoint("BOTTOMRIGHT", -118, -8)
 			if IsAddOnLoaded("AuroraClassic") then
@@ -419,13 +416,12 @@ function module:OnLogin()
 		self:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 	end
 
-	-- Fix Containter Bug
+	-- Fixes
 	ToggleAllBags()
 	ToggleAllBags()
-	local function getRightFix() return f.bank:GetRight() end
-	BankFrame.GetRight = getRightFix
+	BankFrame.GetRight = f.bank.GetRight
 
-	-- Cleanup Bags Order
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 	SetInsertItemsLeftToRight(false)
+	module:DisableAuroraClassic()
 end
