@@ -589,7 +589,7 @@ function F:CreateBDFrame(a)
 	bg:SetPoint("TOPLEFT", self, -1.2, 1.2)
 	bg:SetPoint("BOTTOMRIGHT", self, 1.2, -1.2)
 	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
-	F.CreateBD(bg, a or .5)
+	F.CreateBD(bg, a)
 
 	return bg
 end

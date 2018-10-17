@@ -4,7 +4,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	if not AuroraConfig.reskinFont then return end
 
 	local function ReskinFont(font, size, white)
-		font:SetFont(C.media.font, size*AuroraConfig.fontScale, white and "" or "OUTLINE")
+		local fontSize = floor(size*AuroraConfig.fontScale + .5) -- round number
+		font:SetFont(C.media.font, fontSize, white and "" or "OUTLINE")
 		font:SetShadowColor(0, 0, 0, 0)
 	end
 
