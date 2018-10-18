@@ -83,7 +83,7 @@ function UF:CreateRaidDebuffs(self)
 	bu.EnableTooltip = not NDuiDB["UFs"]["AurasClickThrough"]
 	bu.ShowDebuffBorder = NDuiDB["UFs"]["DebuffBorder"]
 	bu.FilterDispellableDebuff = NDuiDB["UFs"]["Dispellable"]
-	if NDuiDB["UFs"]["InstanceAuras"] then bu.Debuffs = C.RaidDebuffs end
+	if NDuiDB["UFs"]["InstanceAuras"] then bu.Debuffs = NDuiADB["RaidDebuffs"] end
 	self.RaidDebuffs = bu
 end
 
