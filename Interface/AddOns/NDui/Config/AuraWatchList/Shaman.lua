@@ -81,15 +81,15 @@ local list = {
 		{AuraID = 211015, UnitID = "focus", Caster = "player"},	-- 妖术
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{SpellID = 20608, UnitID = "player"},	-- 复生
-		{SpellID = 98008, UnitID = "player"},	-- 灵魂链接
-		{SpellID = 114050, UnitID = "player"},	-- 升腾 元素
-		{SpellID = 114051, UnitID = "player"},	-- 升腾 增强
-		{SpellID = 114052, UnitID = "player"},	-- 升腾 恢复
-		{SpellID = 108280, UnitID = "player"},	-- 治疗之潮
-		{SpellID = 198506, UnitID = "player"},	-- 野性狼魂
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
+		{SpellID = 20608},	-- 复生
+		{SpellID = 98008},	-- 灵魂链接
+		{SpellID = 114050},	-- 升腾 元素
+		{SpellID = 114051},	-- 升腾 增强
+		{SpellID = 114052},	-- 升腾 恢复
+		{SpellID = 108280},	-- 治疗之潮
+		{SpellID = 198506},	-- 野性狼魂
 	},
 }
 

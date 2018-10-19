@@ -78,8 +78,8 @@ local list = {
 		{AuraID = 115767, UnitID = "focus", Caster = "player"},	-- 重伤
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
 	},
 }
 

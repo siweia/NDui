@@ -105,10 +105,10 @@ local list = {
 		{AuraID = 202347, UnitID = "focus", Caster = "player"},	-- 星辰耀斑
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{TotemID = 1, UnitID = "player"},		-- 蘑菇
-		{SpellID = 61336, UnitID = "player"},	-- 生存本能
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
+		{TotemID = 1},		-- 蘑菇
+		{SpellID = 61336},	-- 生存本能
 	},
 }
 

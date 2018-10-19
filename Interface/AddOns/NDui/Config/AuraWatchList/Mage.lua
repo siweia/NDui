@@ -76,12 +76,12 @@ local list = {
 		{AuraID = 114923, UnitID = "focus", Caster = "player"},	-- 虚空风暴
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{TotemID = 1, UnitID = "player"},		-- 能量符文
-		{SpellID = 12472, UnitID = "player"},	-- 冰冷血脉
-		{SpellID = 12042, UnitID = "player"},	-- 奥术强化
-		{SpellID = 190319, UnitID = "player"},	-- 燃烧
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
+		{TotemID = 1},		-- 能量符文
+		{SpellID = 12472},	-- 冰冷血脉
+		{SpellID = 12042},	-- 奥术强化
+		{SpellID = 190319},	-- 燃烧
 	},
 }
 

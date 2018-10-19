@@ -66,10 +66,10 @@ local list = {
 		{AuraID = 156910, UnitID = "focus", Caster = "player"},	-- 信仰道标
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{SpellID = 31884, UnitID = "player"},	-- 复仇之怒
-		{SpellID = 31821, UnitID = "player"},	-- 光环掌握
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
+		{SpellID = 31884},	-- 复仇之怒
+		{SpellID = 31821},	-- 光环掌握
 	},
 }
 

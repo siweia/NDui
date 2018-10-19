@@ -67,10 +67,10 @@ local list = {
 		{AuraID = 139, UnitID = "focus", Caster = "player"},	-- 恢复
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{SpellID = 64843, UnitID = "player"},	-- 神圣赞美诗
-		{SpellID = 33206, UnitID = "player"},	-- 痛苦压制
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
+		{SpellID = 64843},	-- 神圣赞美诗
+		{SpellID = 33206},	-- 痛苦压制
 	},
 }
 

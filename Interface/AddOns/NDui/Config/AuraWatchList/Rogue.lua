@@ -77,11 +77,11 @@ local list = {
 		{AuraID = 2094, UnitID = "focus", Caster = "player"},	-- 致盲
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{SpellID = 13750, UnitID = "player"},	-- 冲动
-		{SpellID = 79140, UnitID = "player"},	-- 宿敌
-		{SpellID = 121471, UnitID = "player"},	-- 暗影之刃
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
+		{SpellID = 13750},	-- 冲动
+		{SpellID = 79140},	-- 宿敌
+		{SpellID = 121471},	-- 暗影之刃
 	},
 }
 

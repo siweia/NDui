@@ -102,10 +102,10 @@ local list = {
 		{AuraID = 199803, UnitID = "focus", Caster = "player"},	-- 精确瞄准
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		{SlotID = 13, UnitID = "player"},		-- 饰品1
-		{SlotID = 14, UnitID = "player"},		-- 饰品2
-		{SpellID = 186265, UnitID = "player"},	-- 灵龟守护
-		{SpellID = 147362, UnitID = "player"},	-- 反制射击
+		{SlotID = 13},		-- 饰品1
+		{SlotID = 14},		-- 饰品2
+		{SpellID = 186265},	-- 灵龟守护
+		{SpellID = 147362},	-- 反制射击
 	},
 }
 
