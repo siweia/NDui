@@ -225,6 +225,7 @@ local function CreatePanel()
 		spellName:SetWidth(180)
 		spellName:SetJustifyH("LEFT")
 		B.CreateFS(bar, 14, text, false, "RIGHT", -30, 0)
+		B.AddTooltip(bar, "ANCHOR_TOP", L["Type*"].." "..typeID, "system")
 
 		SortBars(index)
 	end
