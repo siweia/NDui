@@ -166,6 +166,7 @@ local function BuildICON(iconSize)
 	Frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "BOTTOM", 0, -3)
 	Frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
 	Frame.glowFrame = B.CreateBG(Frame, 4)
+	Frame.glowFrame:SetFrameLevel(Frame:GetFrameLevel())
 
 	if not NDuiDB["AuraWatch"]["ClickThrough"] then
 		Frame:EnableMouse(true)
@@ -459,11 +460,6 @@ local function AuraFilter(spellID, UnitID, index, bool)
 					end
 				end
 				if value.Timeless then duration, expires = 0, 0 end
-				if value.Flash and VALUE.Mode:lower() == "icon" then
-					value.Flash = true
-				else
-					value.Flash = false
-				end
 				return KEY, value.UnitID, name, icon, count, duration, expires, index, filter, value.Flash
 			end
 		end
