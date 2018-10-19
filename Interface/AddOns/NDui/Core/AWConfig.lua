@@ -367,7 +367,7 @@ local function CreatePanel()
 			Option[7] = module:CreateCheckBox(tabs[i].Page, L["Timeless"], 120, -95, L["Timeless Intro"])
 			Option[8] = module:CreateCheckBox(tabs[i].Page, L["Combat"], 200, -95, L["Combat Intro"])
 			Option[9] = module:CreateEditbox(tabs[i].Page, L["Text"], 340, -90, L["Text Intro"])
-			Option[10] = module:CreateCheckBox(tabs[i].Page, "Flash", 280, -95, L["Flash Intro"])
+			Option[10] = module:CreateCheckBox(tabs[i].Page, L["Flash"], 280, -95, L["Flash Intro"])
 			Option[11] = module:CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15]}, L["Slot Intro"])
 			Option[12] = module:CreateDropdown(tabs[i].Page, L["Totem*"], 140, -30, {L["TotemSlot"].."1", L["TotemSlot"].."2", L["TotemSlot"].."3", L["TotemSlot"].."4"}, L["Totem Intro"])
 
