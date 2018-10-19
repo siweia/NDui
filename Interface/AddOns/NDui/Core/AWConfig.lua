@@ -184,14 +184,15 @@ local function CreatePanel()
 		[14] = INVTYPE_TRINKET.."2",
 		[15] = INVTYPE_CLOAK,
 	}
+
 	local function AddAura(parent, index, data)
-		local typeID, spellID, _, _, _, _, _, _, text = unpack(data)
+		local typeID, spellID, unitID, caster, stack, amount, timeless, combat, text = unpack(data)
 		local name, _, texture = GetSpellInfo(spellID)
 		if typeID == "SlotID" then
 			texture = GetInventoryItemTexture("player", spellID)
 			name = slotIndex[spellID]
 		elseif typeID == "TotemID" then
-			texture = "Interface\\ICONS\\INV_Misc_QuestionMark"
+			texture = "Interface\\ICONS\\Spell_Shaman_TotemRecall"
 			name = L["TotemSlot"]..spellID
 		end
 
@@ -226,6 +227,22 @@ local function CreatePanel()
 		spellName:SetJustifyH("LEFT")
 		B.CreateFS(bar, 14, text, false, "RIGHT", -30, 0)
 		B.AddTooltip(bar, "ANCHOR_TOP", L["Type*"].." "..typeID, "system")
+
+		typeID = typeID.." = "..spellID
+		unitID = unitID and ", UnitID = \""..unitID.."\"" or ""
+		caster = caster and ", Caster = \""..caster.."\"" or ""
+		stack = stack and ", Stack = "..stack or ""
+		amount = amount and ", Value = true" or ""
+		timeless = timeless and ", Timeless = true" or ""
+		combat = combat and ", Combat = true" or ""
+		text = text ~= "" and ", Text = \""..text.."\"" or ""
+		local output = "{"..typeID..unitID..caster..stack..amount..timeless..combat..text.."}"
+		bar:SetScript("OnMouseUp", function()
+			local editBox = ChatEdit_ChooseBoxForSend()
+			ChatEdit_ActivateChat(editBox)
+			editBox:SetText(output..",")
+			editBox:HighlightText()
+		end)
 
 		SortBars(index)
 	end
@@ -389,8 +406,7 @@ local function CreatePanel()
 		clear:SetPoint("TOPRIGHT", -120, -90)
 		clear:SetScript("OnClick", function()
 			if i < 10 then
-				for j = 1, 11 do module:ClearEdit(Option[j]) end
-				for j = 2, 11 do Option[j]:Hide() end
+				for j = 2, 11 do module:ClearEdit(Option[j]) end
 			elseif i == 10 then
 				for j = 12, 16 do module:ClearEdit(Option[j]) end
 			end
