@@ -1,12 +1,12 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local AuraList, Aura, UnitIDTable, IntTable, IntCD, newTable = {}, {}, {}, {}, {}, {}
+local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, {}
 local MaxFrame = 12	-- Max Tracked Auras
 
 -- Init
 local function ConvertTable()
 	local function DataAnalyze(v)
-		newTable = {}
+		local newTable = {}
 		if type(v[1]) == "number" then
 			newTable.IntID = v[1]
 			newTable.Duration = v[2]
@@ -14,11 +14,7 @@ local function ConvertTable()
 			newTable.UnitID = v[4]
 			newTable.ItemID = v[5]
 		else
-			if v[1] == "AuraID" then newTable.AuraID = v[2]
-			elseif v[1] == "SpellID" then newTable.SpellID = v[2]
-			elseif v[1] == "SlotID" then newTable.SlotID = v[2]
-			elseif v[1] == "TotemID" then newTable.TotemID = v[2]
-			end
+			newTable[v[1]] = v[2]
 			newTable.UnitID = v[3]
 			newTable.Caster = v[4] ~= nil and v[4] or false
 			newTable.Stack = v[5] ~= nil and v[5] or false
