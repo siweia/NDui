@@ -3,19 +3,20 @@ local B, C, L, DB = unpack(ns)
 
 -- Frame Mover
 local MoverList, BackupTable, f = {}, {}
-B.Mover = function(Frame, Text, key, Pos, w, h)
+
+function B:Mover(text, key, anchor, width, height)
 	if not NDuiDB["Mover"] then NDuiDB["Mover"] = {} end
 	local Mover = CreateFrame("Frame", nil, UIParent)
-	Mover:SetWidth(w or Frame:GetWidth())
-	Mover:SetHeight(h or Frame:GetHeight())
+	Mover:SetWidth(width or self:GetWidth())
+	Mover:SetHeight(height or self:GetHeight())
 	B.CreateBD(Mover)
 	B.CreateSD(Mover)
 	B.CreateTex(Mover)
-	B.CreateFS(Mover, DB.Font[2], Text)
+	B.CreateFS(Mover, DB.Font[2], text)
 	tinsert(MoverList, Mover)
 
 	if not NDuiDB["Mover"][key] then 
-		Mover:SetPoint(unpack(Pos))
+		Mover:SetPoint(unpack(anchor))
 	else
 		Mover:SetPoint(unpack(NDuiDB["Mover"][key]))
 	end
@@ -31,7 +32,7 @@ B.Mover = function(Frame, Text, key, Pos, w, h)
 		NDuiDB["Mover"][key] = {orig, "UIParent", tar, x, y}
 	end)
 	Mover:Hide()
-	Frame:SetPoint("TOPLEFT", Mover)
+	self:SetPoint("TOPLEFT", Mover)
 
 	return Mover
 end
