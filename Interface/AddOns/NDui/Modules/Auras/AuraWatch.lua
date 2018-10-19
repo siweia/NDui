@@ -50,6 +50,11 @@ local function ConvertTable()
 			wipe(target)
 		else
 			for _, v in pairs(myTable[index]) do
+				for _, list in pairs(target) do
+					if list.AuraID and v.AuraID and list.AuraID == v.AuraID then
+						wipe(list)
+					end
+				end
 				tinsert(target, v)
 			end
 		end
