@@ -30,6 +30,7 @@ local module = B:GetModule("AurasTable")
 		Timeless，具体例如萨满的闪电盾，因为持续1个小时，没有必要一直监视时间，启用Timeless则只监视层数；
 		Combat，启用时将仅在战斗中监视该buff，例如猎人的狙击训练，萨满的闪电护盾；
 		Text，启用时将在BUFF图标下用文字提醒，优先级低于Value。比如中了某个BUFF需要出人群时，你就可以使用这个文字提醒；
+		Flash，启用时在图标显示一圈高亮；
 
 	内置CD使用说明：
 		{IntID = 208052, Duration = 30, ItemID = 132452},	-- 塞弗斯的秘密
@@ -202,15 +203,15 @@ local list = {
 		{AuraID = 260067, UnitID = "player"},	-- 恶毒槌击，托尔达戈
 		{AuraID = 273226, UnitID = "player"},	-- 腐烂孢子，孢林
 	-- 奥迪尔
-		{AuraID = 271224, UnitID = "player", Text = L["Get Out"]},	-- 赤红迸发，塔罗克
-		{AuraID = 271225, UnitID = "player", Text = L["Get Out"]},
-		{AuraID = 278888, UnitID = "player", Text = L["Get Out"]},
-		{AuraID = 278889, UnitID = "player", Text = L["Get Out"]},
+		{AuraID = 271224, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 赤红迸发，塔罗克
+		{AuraID = 271225, UnitID = "player", Text = L["Get Out"], Flash = true},
+		{AuraID = 278888, UnitID = "player", Text = L["Get Out"], Flash = true},
+		{AuraID = 278889, UnitID = "player", Text = L["Get Out"], Flash = true},
 		{AuraID = 267787, UnitID = "player"},	-- 消毒打击，纯净圣母
 		{AuraID = 262313, UnitID = "player"},	-- 恶臭沼气，腐臭吞噬者
 		{AuraID = 265237, UnitID = "player"},	-- 粉碎，泽克沃兹
 		{AuraID = 265264, UnitID = "player"},	-- 虚空鞭笞，泽克沃兹
-		{AuraID = 265360, UnitID = "player", Text = L["Get Out"]},	-- 翻滚欺诈，泽克沃兹
+		{AuraID = 265360, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 翻滚欺诈，泽克沃兹
 		{AuraID = 265662, UnitID = "player"},	-- 腐化者的契约，泽克沃兹
 		{AuraID = 265127, UnitID = "player"},	-- 持续感染，维克提斯
 		{AuraID = 265129, UnitID = "player"},	-- 终极菌体，维克提斯
@@ -219,10 +220,10 @@ local list = {
 		{AuraID = 274990, UnitID = "player"},	-- 破裂损伤，维克提斯
 		{AuraID = 273434, UnitID = "player"},	-- 绝望深渊，祖尔
 		{AuraID = 274271, UnitID = "player"},	-- 死亡之愿，祖尔
-		{AuraID = 273365, UnitID = "player"},	-- 黑暗启示，祖尔
+		{AuraID = 273365, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 黑暗启示，祖尔
 		{AuraID = 272146, UnitID = "player"},	-- 毁灭，拆解者
-		{AuraID = 272536, UnitID = "player", Text = L["Get Out"]},	-- 毁灭迫近，拆解者
-		{AuraID = 274262, UnitID = "player", Text = L["Get Out"]},	-- 爆炸腐蚀，戈霍恩
+		{AuraID = 272536, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 毁灭迫近，拆解者
+		{AuraID = 274262, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 爆炸腐蚀，戈霍恩
 		{AuraID = 267409, UnitID = "player"},	-- 黑暗交易，戈霍恩
 		{AuraID = 263227, UnitID = "player"},	-- 腐败之血，戈霍恩
 		{AuraID = 267700, UnitID = "player"},	-- 戈霍恩的凝视，戈霍恩

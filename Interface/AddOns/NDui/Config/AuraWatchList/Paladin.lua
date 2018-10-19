@@ -69,7 +69,6 @@ local list = {
 		{SlotID = 13, UnitID = "player"},		-- 饰品1
 		{SlotID = 14, UnitID = "player"},		-- 饰品2
 		{SpellID = 31884, UnitID = "player"},	-- 复仇之怒
-		{SpellID = 31842, UnitID = "player"},	-- 复仇之怒
 		{SpellID = 31821, UnitID = "player"},	-- 光环掌握
 	},
 }
