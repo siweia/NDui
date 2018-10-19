@@ -16,12 +16,13 @@ local function ConvertTable()
 		else
 			newTable[v[1]] = v[2]
 			newTable.UnitID = v[3]
-			newTable.Caster = v[4] ~= nil and v[4] or false
-			newTable.Stack = v[5] ~= nil and v[5] or false
+			newTable.Caster = v[4]
+			newTable.Stack = v[5]
 			newTable.Value = v[6]
 			newTable.Timeless = v[7]
 			newTable.Combat = v[8]
 			newTable.Text = v[9]
+			newTable.Flash = v[10]
 		end
 
 		return newTable
