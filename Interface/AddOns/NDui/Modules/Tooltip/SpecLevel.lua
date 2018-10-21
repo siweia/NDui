@@ -1,58 +1,114 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
----------------------------------
--- CloudyUnitInfo, by Cloudyfa
--- NDui MOD
----------------------------------
-local GearDB, SpecDB, currentUNIT, currentGUID, weapon = {}, {}
-local gearPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
+local module = B:GetModule("Tooltip")
+
+-- Credit: Cloudy Unit Info, by Cloudyfa
+local cache, weapon, currentUNIT, currentGUID = {}, {}
 local specPrefix = SPECIALIZATION..": "..DB.InfoColor
-local nextUpdate, lastUpdate = 0, 0
+local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
+local resetTime, frequency = 900, .5
+
+local function updateInspect(self, elapsed)
+	self.elapsed = (self.elapsed or frequency) + elapsed
+	if self.elapsed > frequency then
+		self.elapsed = 0
+		self:Hide()
+		ClearInspectPlayer()
+
+		if currentUNIT and UnitGUID(currentUNIT) == currentGUID then
+			B:RegisterEvent("INSPECT_READY", module.GetInspectInfo)
+			NotifyInspect(currentUNIT)
+		end
+	end
+end
 local updater = CreateFrame("Frame")
+updater:SetScript("OnUpdate", updateInspect)
+updater:Hide()
 
-local function SetUnitInfo(gear, spec)
-	if (not gear) and (not spec) then return end
+local function inspectRequest(self)
+	if NDuiDB["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
+
+	local _, unit = self:GetUnit()
+	if not unit or not CanInspect(unit) then return end
+
+	currentUNIT, currentGUID = unit, UnitGUID(unit)
+	module:InspectUnit(unit)
+end
+GameTooltip:HookScript("OnTooltipSetUnit", inspectRequest)
+
+local function resetUnit(_, btn)
+	if not NDuiDB["Tooltip"]["SpecLevelByShift"] then return end
+	if btn == "LSHIFT" and UnitExists("mouseover") then
+		GameTooltip:SetUnit("mouseover")
+	end
+end
+B:RegisterEvent("MODIFIER_STATE_CHANGED", resetUnit)
+
+function module:GetInspectInfo(...)
+	if self == "UNIT_INVENTORY_CHANGED" then
+		local unit = ...
+		if UnitGUID(unit) == currentGUID then
+			module:InspectUnit(unit, true)
+		end
+	elseif self == "INSPECT_READY" then
+		local guid = ...
+		if guid == currentGUID then
+			local spec = module:GetUnitSpec(currentUNIT)
+			local level = module:GetUnitItemLevel(currentUNIT)
+			cache[guid].spec = spec
+			cache[guid].level = level
+			cache[guid].getTime = GetTime()
+
+			if spec and level then
+				module:SetupTooltip(spec, level)
+			else
+				module:InspectUnit(currentUNIT, true)
+			end
+		end
+		B:UnregisterEvent(self, module.GetInspectInfo)
+	end
+end
+B:RegisterEvent("UNIT_INVENTORY_CHANGED", module.GetInspectInfo)
+
+function module:SetupTooltip(spec, level)
 	local _, unit = GameTooltip:GetUnit()
-	if (not unit) or (UnitGUID(unit) ~= currentGUID) then return end
+	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
-	local gearLine, specLine
+	local specLine, levelLine
 	for i = 2, GameTooltip:NumLines() do
-		local line = _G["GameTooltipTextLeft" .. i]
+		local line = _G["GameTooltipTextLeft"..i]
 		local text = line:GetText()
-		if text and strfind(text, gearPrefix) then
-			gearLine = line
-		elseif text and strfind(text, specPrefix) then
+		if text and text:find(specPrefix) then
 			specLine = line
+		elseif text and text:find(levelPrefix) then
+			levelLine = line
 		end
 	end
 
-	if spec then
-		spec = specPrefix..spec
-		if specLine then
-			specLine:SetText(spec)
-		else
-			GameTooltip:AddLine(spec)
-		end
+	spec = specPrefix..(spec or LFG_LIST_LOADING)
+	if specLine then
+		specLine:SetText(spec)
+	else
+		GameTooltip:AddLine(spec)
 	end
 
-	if gear then
-		gear = gearPrefix..gear
-		if gearLine then
-			gearLine:SetText(gear)
-		else
-			GameTooltip:AddLine(gear)
-		end
+	level = levelPrefix..(level or LFG_LIST_LOADING)
+	if levelLine then
+		levelLine:SetText(level)
+	else
+		GameTooltip:AddLine(level)
 	end
-
-	GameTooltip:Show()
 end
 
-local function UnitGear(unit)
-	if (not unit) or (UnitGUID(unit) ~= currentGUID) then return end
+function module:GetUnitItemLevel(unit)
+	if not unit or UnitGUID(unit) ~= currentGUID then return end
+
 	local class = select(2, UnitClass(unit))
 	local ilvl, boa, total, haveWeapon, twohand = 0, 0, 0, 0, 0
 	local delay, mainhand, offhand, hasArtifact
-	weapon = {0, 0}
+	wipe(weapon)
+	tinsert(weapon, 0)
+	tinsert(weapon, 0)
 
 	for i = 1, 17 do
 		if i ~= 4 then
@@ -144,8 +200,8 @@ local function UnitGear(unit)
 	return ilvl
 end
 
-local function UnitSpec(unit)
-	if (not unit) or (UnitGUID(unit) ~= currentGUID) then return end
+function module:GetUnitSpec(unit)
+	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
 	local specName
 	if unit == "player" then
@@ -155,7 +211,7 @@ local function UnitSpec(unit)
 		end
 	else
 		local specID = GetInspectSpecialization(unit)
-		if specID and (specID > 0) then
+		if specID and specID > 0 then
 			specName = select(2, GetSpecializationInfoByID(specID))
 		end
 	end
@@ -163,85 +219,28 @@ local function UnitSpec(unit)
 	return specName
 end
 
-local function ScanUnit(unit, forced)
-	local cachedGear, cachedSpec
+function module:InspectUnit(unit, forced)
+	local spec, level
 
 	if UnitIsUnit(unit, "player") then
-		cachedGear = UnitGear("player")
-		cachedSpec = UnitSpec("player")
-		SetUnitInfo(cachedGear or LFG_LIST_LOADING, cachedSpec or LFG_LIST_LOADING)
+		spec = self:GetUnitSpec("player")
+		level = self:GetUnitItemLevel("player")
+		self:SetupTooltip(spec, level)
 	else
-		if (not unit) or (UnitGUID(unit) ~= currentGUID) or (not UnitIsPlayer(unit)) then return end
-		cachedGear = GearDB[currentGUID]
-		cachedSpec = UnitSpec(unit) or SpecDB[currentGUID]
+		if not unit or UnitGUID(unit) ~= currentGUID then return end
+		if not UnitIsPlayer(unit) then return end
+		if not cache[currentGUID] then cache[currentGUID] = {} end
 
-		if cachedGear or forced then
-			SetUnitInfo(cachedGear or LFG_LIST_LOADING, cachedSpec)
-		end
+		local currentDB = cache[currentGUID]
+		spec = currentDB.spec
+		level = currentDB.level
+		self:SetupTooltip(spec, level)
 
-		if not (IsShiftKeyDown() or forced) then
-			if cachedGear and cachedSpec then return end
-		end
-
-		if not UnitIsVisible(unit) then return end
-		if UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
+		if not NDuiDB["Tooltip"]["SpecLevelByShift"] and IsShiftKeyDown() then forced = true end
+		if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = 0 return end
+		if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
 		if InspectFrame and InspectFrame:IsShown() then return end
 
-		SetUnitInfo(LFG_LIST_LOADING, cachedSpec or LFG_LIST_LOADING)
-
-		local lastRequest = GetTime() - lastUpdate
-		if lastRequest >= 1.5 then
-			nextUpdate = 0
-		else
-			nextUpdate = 1.5 - lastRequest
-		end
 		updater:Show()
 	end
 end
-
-local function getInspectInfo(event, ...)
-	if event == "UNIT_INVENTORY_CHANGED" then
-		local unit = ...
-		if UnitGUID(unit) == currentGUID then
-			ScanUnit(unit, true)
-		end
-	elseif event == "INSPECT_READY" then
-		local guid = ...
-		if guid == currentGUID then
-			local spec = UnitSpec(currentUNIT)
-			SpecDB[guid] = spec
-
-			local gear = UnitGear(currentUNIT)
-			GearDB[guid] = gear
-
-			if gear and spec then
-				SetUnitInfo(gear, spec)
-			else
-				ScanUnit(currentUNIT, true)
-			end
-		end
-		B:UnregisterEvent(event, getInspectInfo)
-	end
-end
-B:RegisterEvent("UNIT_INVENTORY_CHANGED", getInspectInfo)
-
-updater:SetScript("OnUpdate", function(self, elapsed)
-	nextUpdate = nextUpdate - elapsed
-	if nextUpdate > 0 then return end
-	self:Hide()
-	ClearInspectPlayer()
-
-	if currentUNIT and UnitGUID(currentUNIT) == currentGUID then
-		lastUpdate = GetTime()
-		B:RegisterEvent("INSPECT_READY", getInspectInfo)
-		NotifyInspect(currentUNIT)
-	end
-end)
-
-GameTooltip:HookScript("OnTooltipSetUnit", function(self)
-	local _, unit = self:GetUnit()
-	if (not unit) or (not CanInspect(unit)) then return end
-
-	currentUNIT, currentGUID = unit, UnitGUID(unit)
-	ScanUnit(unit)
-end)
