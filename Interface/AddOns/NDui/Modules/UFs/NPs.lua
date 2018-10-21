@@ -173,18 +173,19 @@ local function UpdateTargetMark(self)
 	end
 end
 
+local unitTip = CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
+
 local function UpdateQuestUnit(self, unit)
 	if not NDuiDB["Nameplate"]["QuestIcon"] or unit == "player" then return end
 	local name, instType, instID = GetInstanceInfo()
 	if name and (instType == "raid" or instID == 8) then self.questIcon:SetAlpha(0) return end
 
 	local isObjectiveQuest, isProgressQuest
-	local unitTip = _G["NDuiQuestUnitTip"] or CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
 	unitTip:SetOwner(WorldFrame, "ANCHOR_NONE")
 	unitTip:SetUnit(unit)
 
 	for i = 2, unitTip:NumLines() do
-		local textLine = _G["NDuiQuestUnitTipTextLeft"..i]
+		local textLine = _G[unitTip:GetName().."TextLeft"..i]
 		local text = textLine:GetText()
 		if textLine and text then
 			local r, g, b = textLine:GetTextColor()

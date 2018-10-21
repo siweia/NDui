@@ -4,14 +4,13 @@ local B, C, L, DB = unpack(ns)
 -- AlreadyKnown, by villiv
 -- NDui MOD
 -----------------------------
-local COLOR = { r = .1, g = 1, b = .1, }
-local tooltip = CreateFrame("GameTooltip", "AlreadyKnownTooltip", nil, "GameTooltipTemplate")
-local knowns = {}
-local knowables = {
+local COLOR = {r = .1, g = 1, b = .1}
+local knowables, knowns = {
 	[LE_ITEM_CLASS_CONSUMABLE] = true,
 	[LE_ITEM_CLASS_RECIPE] = true,
 	[LE_ITEM_CLASS_MISCELLANEOUS] = true,
-}
+}, {}
+local tooltip = CreateFrame("GameTooltip", "AlreadyKnownTooltip", nil, "GameTooltipTemplate")
 
 local function isPetCollected(speciesID)
 	if not speciesID or speciesID == 0 then return end
