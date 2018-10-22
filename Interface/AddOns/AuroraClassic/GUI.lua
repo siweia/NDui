@@ -138,7 +138,7 @@ gui:Hide()
 tinsert(UISpecialFrames, "AuroraOptions")
 
 local cancel = CreateFrame("Button", nil, gui, "UIPanelButtonTemplate")
-cancel:SetSize(100, 20)
+cancel:SetSize(100, 22)
 cancel:SetPoint("BOTTOMRIGHT", -10, 10)
 cancel:SetText(CANCEL)
 
