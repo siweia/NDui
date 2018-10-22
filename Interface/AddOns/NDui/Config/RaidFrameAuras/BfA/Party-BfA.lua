@@ -31,6 +31,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 266923) -- 充电
 module:RegisterDebuff(TIER, INSTANCE, 0, 263371) -- 导电
 module:RegisterDebuff(TIER, INSTANCE, 0, 263958) -- 缠绕的蛇群
 module:RegisterDebuff(TIER, INSTANCE, 0, 269686) -- 瘟疫
+module:RegisterDebuff(TIER, INSTANCE, 0, 273563) -- 神经毒素
 
 INSTANCE = 1002 -- 托尔达戈
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
@@ -106,3 +107,4 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 264144) -- 逆流
 module:RegisterDebuff(TIER, INSTANCE, 0, 267899) -- 妨害劈斩
 module:RegisterDebuff(TIER, INSTANCE, 0, 269131) -- 上古摧心者
 module:RegisterDebuff(TIER, INSTANCE, 0, 268214) -- 割肉
+module:RegisterDebuff(TIER, INSTANCE, 0, 276297) -- 虚空种子

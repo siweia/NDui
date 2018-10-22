@@ -198,10 +198,12 @@ local list = {
 		{AuraID = 265773, UnitID = "player"},	-- 吐金，诸王
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
 		{AuraID = 266923, UnitID = "player"},	-- 充电，神庙
+		{AuraID = 273563, UnitID = "player"},	-- 神经毒素，神庙
 		{AuraID = 257407, UnitID = "player"},	-- 追踪，阿塔达萨
 		{AuraID = 258058, UnitID = "player"},	-- 挤压，托尔达戈
 		{AuraID = 260067, UnitID = "player"},	-- 恶毒槌击，托尔达戈
 		{AuraID = 273226, UnitID = "player"},	-- 腐烂孢子，孢林
+		{AuraID = 276297, UnitID = "player"},	-- 虚空种子，风暴神殿
 	-- 奥迪尔
 		{AuraID = 271224, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 赤红迸发，塔罗克
 		{AuraID = 271225, UnitID = "player", Text = L["Get Out"], Flash = true},
