@@ -32,6 +32,8 @@ local function inspectRequest(self)
 	if not unit or not CanInspect(unit) then return end
 
 	currentUNIT, currentGUID = unit, UnitGUID(unit)
+	if not cache[currentGUID] then cache[currentGUID] = {} end
+
 	module:InspectUnit(unit)
 end
 GameTooltip:HookScript("OnTooltipSetUnit", inspectRequest)
@@ -229,7 +231,6 @@ function module:InspectUnit(unit, forced)
 	else
 		if not unit or UnitGUID(unit) ~= currentGUID then return end
 		if not UnitIsPlayer(unit) then return end
-		if not cache[currentGUID] then cache[currentGUID] = {} end
 
 		local currentDB = cache[currentGUID]
 		spec = currentDB.spec
@@ -237,7 +238,7 @@ function module:InspectUnit(unit, forced)
 		self:SetupTooltip(spec, level)
 
 		if not NDuiDB["Tooltip"]["SpecLevelByShift"] and IsShiftKeyDown() then forced = true end
-		if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = 0 return end
+		if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = frequency return end
 		if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
 		if InspectFrame and InspectFrame:IsShown() then return end
 
