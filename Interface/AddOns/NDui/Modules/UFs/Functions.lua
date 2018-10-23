@@ -606,12 +606,12 @@ local function postUpdateClassPower(element, cur, max, diff, powerType)
 		if (powerType == "COMBO_POINTS" or powerType == "HOLY_POWER") and element.__owner.unit ~= "vehicle" and cur == max then
 			for i = 1, 6 do
 				if element[i]:IsShown() then
-					ActionButton_ShowOverlayGlow(element[i].glow)
+					B.ShowOverlayGlow(element[i].glow)
 				end
 			end
 		else
 			for i = 1, 6 do
-				ActionButton_HideOverlayGlow(element[i].glow)
+				B.HideOverlayGlow(element[i].glow)
 			end
 		end
 	end

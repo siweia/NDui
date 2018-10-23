@@ -94,9 +94,9 @@ function module:ChantLumos(self)
 			self.stagger:SetText(DB.InfoColor..B.Numb(cur).." "..DB.MyColor..B.Numb(perc * 100).."%")
 
 			if button.Icon:GetTexture() == GetSpellTexture(124273) then
-				ActionButton_ShowOverlayGlow(button)
+				B.ShowOverlayGlow(button)
 			else
-				ActionButton_HideOverlayGlow(button)
+				B.HideOverlayGlow(button)
 			end
 		end
 	elseif GetSpecialization() == 2 then

@@ -424,9 +424,9 @@ local function UpdateAuraFrame(index, UnitID, name, icon, count, duration, expir
 	end
 	if Frame.glowFrame then
 		if flash then
-			ActionButton_ShowOverlayGlow(Frame.glowFrame)
+			B.ShowOverlayGlow(Frame.glowFrame)
 		else
-			ActionButton_HideOverlayGlow(Frame.glowFrame)
+			B.HideOverlayGlow(Frame.glowFrame)
 		end
 	end
 	Frame.type = 4
