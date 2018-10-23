@@ -85,7 +85,7 @@ info.onEnter = function(self)
 	local maxAddOns = IsShiftKeyDown() and #memoryTable or min(C.Infobar.MaxAddOns, #memoryTable)
 	for i = 1, maxAddOns do
 		local usage = memoryTable[i][2]
-		GameTooltip:AddDoubleLine(memoryTable[i][1], formatMemory(usage), 1,1,1, memoryColor(usage))
+		GameTooltip:AddDoubleLine(memoryTable[i][1], formatMemory(usage), 1,1,1, memoryColor(usage, 5))
 	end
 
 	local hiddenMemory = 0
