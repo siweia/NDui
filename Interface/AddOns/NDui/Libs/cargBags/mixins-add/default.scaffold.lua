@@ -59,14 +59,6 @@ local function ItemButton_Update(self, item)
 	self:UpdateLock(item)
 	self:UpdateQuest(item)
 
-	if self.ShowNewItems then
-		if C_NewItems.IsNewItem(item.bagID, item.slotID) then
-			self.anim:Play()
-		else
-			if self.anim:IsPlaying() then self.anim:Stop() end
-		end
-	end
-
 	if(self.OnUpdate) then self:OnUpdate(item) end
 end
 
@@ -107,9 +99,7 @@ local function ItemButton_UpdateQuest(self, item)
 end
 
 local function ItemButton_OnEnter(self)
-	if self.ShowNewItems then
-		if self.anim:IsPlaying() then self.anim:Stop() end
-	end
+	if(self.OnEnter) then self:OnEnter(item) end
 end
 
 cargBags:RegisterScaffold("Default", function(self)

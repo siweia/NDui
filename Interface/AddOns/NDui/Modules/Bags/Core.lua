@@ -180,6 +180,12 @@ function module:OnLogin()
 		self.ShowNewItems = true
 	end
 
+	function MyButton:OnEnter(item)
+		if self.ShowNewItems then
+			if self.anim:IsPlaying() then self.anim:Stop() end
+		end
+	end
+
 	function MyButton:OnUpdate(item)
 		if MerchantFrame:IsShown() and item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 then
 			self.junkIcon:SetAlpha(1)
@@ -209,6 +215,14 @@ function module:OnLogin()
 				self.iLvl:SetTextColor(color.r, color.g, color.b)
 			else
 				self.iLvl:SetText("")
+			end
+		end
+
+		if self.ShowNewItems then
+			if C_NewItems.IsNewItem(item.bagID, item.slotID) then
+				self.anim:Play()
+			else
+				if self.anim:IsPlaying() then self.anim:Stop() end
 			end
 		end
 	end
