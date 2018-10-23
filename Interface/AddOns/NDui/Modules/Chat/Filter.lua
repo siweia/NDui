@@ -2,27 +2,34 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
---[[
-	修改自NoGoldSeller，强迫症患者只能接受这个低占用的。
-]]
-
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
 
-local FilterList = {}
-local function genFilterList()
-	FilterList = {string.split(" ", NDuiADB["ChatFilterList"] or "")}
-end
-B.genFilterList = genFilterList
+local function splitList(list, variable)
+	wipe(list)
 
-B.FriendsList = {}
+	local index = 1
+	local word = select(index, string.split(" ", variable))
+	while word do
+		list[word] = true
+		index = index + 1
+		word = select(index, string.split(" ", variable))
+	end
+end
+
+local FilterList = {}
+function B:GenFilterList()
+	splitList(FilterList, NDuiADB["ChatFilterList"])
+end
+
+DB.FriendsList = {}
 local function updateFriends()
-	wipe(B.FriendsList)
+	wipe(DB.FriendsList)
 
 	for i = 1, GetNumFriends() do
 		local name = GetFriendInfo(i)
 		if name then
-			B.FriendsList[Ambiguate(name, "none")] = true
+			DB.FriendsList[Ambiguate(name, "none")] = true
 		end
 	end
 
@@ -30,7 +37,7 @@ local function updateFriends()
 		for j = 1, BNGetNumFriendGameAccounts(i) do
 			local _, characterName, client, realmName = BNGetFriendGameAccountInfo(i, j)
 			if client == BNET_CLIENT_WOW then
-				B.FriendsList[Ambiguate(characterName.."-"..realmName, "none")] = true
+				DB.FriendsList[Ambiguate(characterName.."-"..realmName, "none")] = true
 			end
 		end
 	end
@@ -44,7 +51,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	local name = Ambiguate(author, "none")
 	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
-	elseif B.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or B.FriendsList[name] then
+	elseif B.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or DB.FriendsList[name] then
 		return
 	end
 
@@ -53,7 +60,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	end
 
 	local match = 0
-	for _, keyword in pairs(FilterList) do
+	for keyword in pairs(FilterList) do
 		if keyword ~= "" then
 			local _, count = gsub(msg, keyword, "")
 			if count > 0 then
@@ -90,16 +97,16 @@ end
 	公会频道有人@时提示你
 ]]
 local chatAtList, at = {}, {}
-local function genChatAtList()
-	chatAtList = {string.split(" ", NDuiADB["ChatAtList"] or "")}
+function B:GenChatAtList()
+	splitList(chatAtList, NDuiADB["ChatAtList"])
+
 	local name = UnitName("player")
-	tinsert(chatAtList, name)
+	chatAtList[name] = true
 end
-B.genChatAtList = genChatAtList
 
 local function chatAtMe(_, _, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
-	for _, word in pairs(chatAtList) do
+	for word in pairs(chatAtList) do
 		if word ~= "" then
 			if msg:lower():match("@"..word:lower()) then
 				at.checker = true
@@ -176,8 +183,8 @@ local function isPlayerOnIslands()
 end
 
 function module:ChatFilter()
-	genFilterList()
-	genChatAtList()
+	B:GenFilterList()
+	B:GenChatAtList()
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)

@@ -578,7 +578,7 @@ do
 		local text = "|cffff0000"..L["Stranger"]
 		if B.UnitInGuild(unitName) then
 			text = "|cff00ff00"..GUILD
-		elseif B.FriendsList[unitName] then
+		elseif DB.FriendsList[unitName] then
 			text = "|cffffff00"..FRIEND
 		end
 		infoText:SetText(text)

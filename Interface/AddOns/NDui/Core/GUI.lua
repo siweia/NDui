@@ -433,8 +433,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
-		{2, "ACCOUNT", "ChatFilterList", L["Filter List"], true, nil, function() B.genFilterList() end},
-		{2, "ACCOUNT", "ChatAtList", L["@List"], false, nil, function() B.genChatAtList() end},
+		{2, "ACCOUNT", "ChatFilterList", L["Filter List"], true, nil, function() B.GenFilterList() end},
+		{2, "ACCOUNT", "ChatAtList", L["@List"], false, nil, function() B.GenChatAtList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
