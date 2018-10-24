@@ -5,21 +5,9 @@ local module = B:GetModule("Chat")
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
 
-local function splitList(list, variable)
-	wipe(list)
-
-	local index = 1
-	local word = select(index, string.split(" ", variable))
-	while word do
-		list[word] = true
-		index = index + 1
-		word = select(index, string.split(" ", variable))
-	end
-end
-
 local FilterList = {}
 function B:GenFilterList()
-	splitList(FilterList, NDuiADB["ChatFilterList"])
+	B.SplitList(FilterList, NDuiADB["ChatFilterList"], true)
 end
 
 DB.FriendsList = {}
@@ -98,7 +86,7 @@ end
 ]]
 local chatAtList, at = {}, {}
 function B:GenChatAtList()
-	splitList(chatAtList, NDuiADB["ChatAtList"])
+	B.SplitList(chatAtList, NDuiADB["ChatAtList"], true)
 
 	local name = UnitName("player")
 	chatAtList[name] = true

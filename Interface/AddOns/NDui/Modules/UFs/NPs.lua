@@ -71,10 +71,7 @@ local CustomUnits = {
 function UF:CreateUnitTable()
 	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
 
-	local list = {string.split(" ", NDuiDB["Nameplate"]["UnitList"])}
-	for _, value in pairs(list) do
-		CustomUnits[value] = true
-	end
+	B.SplitList(CustomUnits, NDuiDB["Nameplate"]["UnitList"])
 end
 
 C.ShowPowerList = {
@@ -83,10 +80,7 @@ C.ShowPowerList = {
 	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
 }
 function UF:CreatePowerUnitTable()
-	local list = {string.split(" ", NDuiDB["Nameplate"]["ShowPowerList"])}
-	for _, value in pairs(list) do
-		C.ShowPowerList[value] = true
-	end
+	B.SplitList(C.ShowPowerList, NDuiDB["Nameplate"]["ShowPowerList"])
 end
 
 -- Elements
@@ -165,11 +159,11 @@ local function UpdateTargetMark(self)
 	local mark = self.tarMark
 
 	if UnitIsUnit(self.unit, "target") and not UnitIsUnit(self.unit, "player") then
-		if arrow then arrow:SetAlpha(1) end
-		if mark then mark:SetAlpha(1) end
+		if arrow then arrow:Show() end
+		if mark then mark:Show() end
 	else
-		if arrow then arrow:SetAlpha(0) end
-		if mark then mark:SetAlpha(0) end
+		if arrow then arrow:Hide() end
+		if mark then mark:Hide() end
 	end
 end
 
@@ -310,7 +304,7 @@ function UF:CreatePlates(unit)
 			arrow:SetSize(50, 50)
 			arrow:SetTexture(DB.arrowTex)
 			arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
-			arrow:SetAlpha(0)
+			arrow:Hide()
 			self.arrowMark = arrow
 		end
 		local mark = self.Health:CreateTexture(nil, "BACKGROUND", nil, -1)
@@ -320,7 +314,7 @@ function UF:CreatePlates(unit)
 		mark:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
 		mark:SetVertexColor(0, .6, 1)
 		mark:SetBlendMode("ADD")
-		mark:SetAlpha(0)
+		mark:Hide()
 		self.tarMark = mark
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
 

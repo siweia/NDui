@@ -135,14 +135,17 @@ hooksecurefunc("FloatingChatFrame_OnMouseScroll", function(self, dir)
 end)
 
 -- Autoinvite by whisper
+local whisperList = {}
+function B:GenWhisperList()
+	B.SplitList(whisperList, NDuiDB["Chat"]["Keyword"], true)
+end
+
 function module:WhipserInvite()
 	if not NDuiDB["Chat"]["Invite"] then return end
 
-	local whisperList = {string.split(" ", NDuiDB["Chat"]["Keyword"])}
-
 	local function onChatWhisper(event, ...)
 		local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
-		for _, word in pairs(whisperList) do
+		for word in pairs(whisperList) do
 			if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
 				if event == "CHAT_MSG_BN_WHISPER" then
 					local gameID = select(6, BNGetFriendInfoByID(arg3))
@@ -160,6 +163,7 @@ function module:WhipserInvite()
 			end
 		end
 	end
+	B:GenWhisperList()
 	B:RegisterEvent("CHAT_MSG_WHISPER", onChatWhisper)
 	B:RegisterEvent("CHAT_MSG_BN_WHISPER", onChatWhisper)
 end
