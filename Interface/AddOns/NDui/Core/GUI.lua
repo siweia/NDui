@@ -407,7 +407,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Chat", "Invite", "|cff00cc4c"..L["Whisper Invite"]},
 		{1, "Chat", "GuildInvite", L["Guild Invite Only"]},
-		{2, "Chat", "Keyword", L["Whisper Keyword"], true},
+		{2, "Chat", "Keyword", L["Whisper Keyword"], true, nil, function() B.GenWhisperList() end},
 		{},--blank
 		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"]},
 		{1, "Misc", "QuestProgress", L["QuestProgress"]},

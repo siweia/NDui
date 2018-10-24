@@ -182,8 +182,6 @@ local function createOverlayGlow()
 	overlay:SetScript("OnUpdate", ActionButton_OverlayGlowOnUpdate)
 	overlay:SetScript("OnHide", overlayGlow_OnHide)
 
-	overlay.__LBGVersion = MINOR_VERSION
-
 	return overlay
 end
 
