@@ -116,30 +116,12 @@ local function BuildUnitIDTable()
 	end
 end
 
-local function MakeMoveHandle(Frame, Text, key, Pos)
-	local MoveHandle = CreateFrame("Frame", nil, UIParent)
-	MoveHandle:SetWidth(Frame:GetWidth())
-	MoveHandle:SetHeight(Frame:GetHeight())
-	MoveHandle:SetFrameStrata("HIGH")
-	B.CreateBD(MoveHandle)
-	B.CreateFS(MoveHandle, 12, Text)
-	if not NDuiDB["AuraWatchMover"][key] then 
-		MoveHandle:SetPoint(unpack(Pos))
-	else
-		MoveHandle:SetPoint(unpack(NDuiDB["AuraWatchMover"][key]))
-	end
-	MoveHandle:EnableMouse(true)
-	MoveHandle:SetMovable(true)
-	MoveHandle:RegisterForDrag("LeftButton")
-	MoveHandle:SetScript("OnDragStart", function() MoveHandle:StartMoving() end)
-	MoveHandle:SetScript("OnDragStop", function(self)
-		self:StopMovingOrSizing()
-		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
-		NDuiDB["AuraWatchMover"][key] = {AnchorF, "UIParent", AnchorT, X, Y}
-	end)
-	MoveHandle:Hide()
-	Frame:SetPoint("CENTER", MoveHandle)
-	return MoveHandle
+local function MakeMoveHandle(frame, text, value, anchor)
+	local mover = B.Mover(frame, text, value, anchor, nil, nil, true)
+	frame:ClearAllPoints()
+	frame:SetPoint("CENTER", mover)
+
+	return mover
 end
 
 -----> STYLED CODE START
