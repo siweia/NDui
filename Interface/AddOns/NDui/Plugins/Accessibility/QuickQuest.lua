@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 --------------------------
--- QuickQuest, by P3lim
+-- QuickQuest, by p3lim
 -- NDui MOD
 --------------------------
 local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
