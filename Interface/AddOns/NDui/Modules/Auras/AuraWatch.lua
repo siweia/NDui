@@ -143,7 +143,7 @@ local function BuildICON(iconSize)
 
 	local parentFrame = CreateFrame("Frame", nil, Frame)
 	parentFrame:SetAllPoints()
-	parentFrame:SetFrameLevel(Frame:GetFrameLevel() + 3)
+	parentFrame:SetFrameLevel(Frame:GetFrameLevel() + 5)
 
 	Frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "BOTTOM", 0, -3)
 	Frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
