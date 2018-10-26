@@ -6,6 +6,7 @@ local module = B:GetModule("Tooltip")
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
+local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 
 local function updateInspect(self, elapsed)
@@ -39,7 +40,6 @@ end
 GameTooltip:HookScript("OnTooltipSetUnit", inspectRequest)
 
 local function resetUnit(_, btn)
-	if not NDuiDB["Tooltip"]["SpecLevelByShift"] then return end
 	if btn == "LSHIFT" and UnitExists("mouseover") then
 		GameTooltip:SetUnit("mouseover")
 	end
@@ -87,14 +87,14 @@ function module:SetupTooltip(spec, level)
 		end
 	end
 
-	spec = specPrefix..(spec or LFG_LIST_LOADING)
+	spec = specPrefix..(spec or isPending)
 	if specLine then
 		specLine:SetText(spec)
 	else
 		GameTooltip:AddLine(spec)
 	end
 
-	level = levelPrefix..(level or LFG_LIST_LOADING)
+	level = levelPrefix..(level or isPending)
 	if levelLine then
 		levelLine:SetText(level)
 	else
@@ -242,6 +242,7 @@ function module:InspectUnit(unit, forced)
 		if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
 		if InspectFrame and InspectFrame:IsShown() then return end
 
+		self:SetupTooltip()
 		updater:Show()
 	end
 end

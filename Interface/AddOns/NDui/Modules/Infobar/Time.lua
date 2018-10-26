@@ -35,8 +35,8 @@ local bonus = {
 }
 local bonusName = GetCurrencyInfo(1580)
 
-local isWalkingWeek
-local function checkWalkingWeek(event)
+local isTimeWalker
+local function checkTimeWalker(event)
 	C_Calendar.OpenCalendar()
 
 	local today = C_Calendar.GetDate().monthDay
@@ -46,14 +46,14 @@ local function checkWalkingWeek(event)
 	for i = 1, numEvents do
 		local info = C_Calendar.GetDayEvent(0, today, i)
 		if info.title:find(PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= "END" then
-			isWalkingWeek = true
+			isTimeWalker = true
 			break
 		end
 	end
 
-	B:UnregisterEvent(event, checkWalkingWeek)
+	B:UnregisterEvent(event, checkTimeWalker)
 end
-B:RegisterEvent("PLAYER_ENTERING_WORLD", checkWalkingWeek)
+B:RegisterEvent("PLAYER_ENTERING_WORLD", checkTimeWalker)
 
 local questlist = {
 	{name = L["Blingtron"], id = 34774},
@@ -188,7 +188,7 @@ info.onEnter = function(self)
 
 	for _, v in pairs(questlist) do
 		if v.name and IsQuestFlaggedCompleted(v.id) then
-			if v.name == L["Timewarped"] and isWalkingWeek or v.name ~= L["Timewarped"] then
+			if v.name == L["Timewarped"] and isTimeWalker or v.name ~= L["Timewarped"] then
 				addTitle(QUESTS_LABEL)
 				GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
 			end
