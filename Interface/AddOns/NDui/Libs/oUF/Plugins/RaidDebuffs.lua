@@ -67,7 +67,7 @@ do
 	DispellFilter = dispellClasses[class] or {}
 end
 
-local function CheckSpecs()
+local function checkSpecs()
 	if class == "DRUID" then
 		if GetSpecialization() == 4 then
 			DispellFilter.Magic = true
@@ -104,11 +104,11 @@ local function CheckSpecs()
 end
 
 local abs = math.abs
-local function OnUpdate(self, elapsed)
+local function onUpdate(self, elapsed)
 	self.elapsed = (self.elapsed or 0) + elapsed
 	if self.elapsed >= 0.1 then
 		local timeLeft = self.expirationTime - GetTime()
-		if self.reverse then timeLeft = abs((self.expirationTime - GetTime()) - self.duration) end
+		if self.reverse then timeLeft = abs(self.expirationTime - GetTime() - self.duration) end
 		if timeLeft > 0 then
 			local text = B.FormatTime(timeLeft)
 			self.time:SetText(text)
@@ -120,17 +120,16 @@ local function OnUpdate(self, elapsed)
 	end
 end
 
-local UpdateDebuffFrame = function(rd)
+local function UpdateDebuffFrame(rd)
 	if rd.index and rd.type and rd.filter then
 		local _, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(rd.__owner.unit, rd.index, rd.filter)
-
 		if rd.icon then
 			rd.icon:SetTexture(icon)
 			rd.icon:Show()
 		end
 
 		if rd.count then
-			if count and (count > 1) then
+			if count and count > 1 then
 				rd.count:SetText(count)
 				rd.count:Show()
 			else
@@ -146,10 +145,10 @@ local UpdateDebuffFrame = function(rd)
 
 		if rd.time then
 			rd.duration = duration
-			if duration and (duration > 0) then
+			if duration and duration > 0 then
 				rd.expirationTime = expirationTime
 				rd.nextUpdate = 0
-				rd:SetScript("OnUpdate", OnUpdate)
+				rd:SetScript("OnUpdate", onUpdate)
 				rd.time:Show()
 			else
 				rd:SetScript("OnUpdate", nil)
@@ -158,7 +157,7 @@ local UpdateDebuffFrame = function(rd)
 		end
 
 		if rd.cd then
-			if duration and (duration > 0) then
+			if duration and duration > 0 then
 				rd.cd:SetCooldown(expirationTime - duration, duration)
 				rd.cd:Show()
 			else
@@ -171,28 +170,22 @@ local UpdateDebuffFrame = function(rd)
 			rd.Shadow:SetBackdropBorderColor(c[1], c[2], c[3])
 		end
 
-		if not rd:IsShown() then
-			rd:Show()
+		if rd.glowFrame then
+			if rd.priority == 6 then
+				B.ShowOverlayGlow(rd.glowFrame)
+			else
+				B.HideOverlayGlow(rd.glowFrame)
+			end
 		end
-
-		if rd.EnableTooltip then
-			rd:SetScript("OnEnter", function(self)
-				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-				GameTooltip:ClearLines()
-				GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
-				GameTooltip:Show()
-			end)
-			rd:SetScript("OnLeave", GameTooltip_Hide)
-		end
+		rd:Show()
 	else
-		if rd:IsShown() then
-			rd:Hide()
-		end
+		rd:Hide()
 	end
 end
 
-local Update = function(self, _, unit)
+local function Update(self, _, unit)
 	if unit ~= self.unit then return end
+
 	local rd = self.RaidDebuffs
 	rd.priority = invalidPrio
 
@@ -262,15 +255,15 @@ local Update = function(self, _, unit)
 	return UpdateDebuffFrame(rd)
 end
 
-local Path = function(self, ...)
+local function Path(self, ...)
 	return (self.RaidDebuffs.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
-local Enable = function(self)
+local function Enable(self)
 	local rd = self.RaidDebuffs
 	if rd then
 		self:RegisterEvent("UNIT_AURA", Path)
@@ -278,18 +271,20 @@ local Enable = function(self)
 		rd.__owner = self
 		return true
 	end
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpecs)
-	CheckSpecs()
+
+	self:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
+	checkSpecs()
 end
 
-local Disable = function(self)
+local function Disable(self)
 	if self.RaidDebuffs then
 		self:UnregisterEvent("UNIT_AURA", Path)
 		self.RaidDebuffs:Hide()
 		self.RaidDebuffs.__owner = nil
 	end
-	self:UnregisterEvent("PLAYER_TALENT_UPDATE", CheckSpecs)
-	CheckSpecs()
+
+	self:UnregisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
+	checkSpecs()
 end
 
 oUF:AddElement("RaidDebuffs", Update, Enable, Disable)
