@@ -450,7 +450,7 @@ local function addonStyled(_, addon)
 		end)
 
 		-- IME
-		local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
+		local r, g, b = DB.r, DB.g, DB.b
 		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
 
 		-- Pet Tooltip

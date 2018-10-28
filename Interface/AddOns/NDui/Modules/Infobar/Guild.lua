@@ -5,7 +5,7 @@ if not C.Infobar.Guild then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GuildPos)
 
-local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
+local r, g, b = DB.r, DB.g, DB.b
 local infoFrame = CreateFrame("Frame", "NDuiGuildInfobar", info)
 infoFrame:SetSize(335, 495)
 infoFrame:SetPoint("TOPLEFT", UIParent, 15, -30)

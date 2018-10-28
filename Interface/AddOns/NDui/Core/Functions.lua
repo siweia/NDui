@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b
+local cr, cg, cb = DB.r, DB.g, DB.b
 
 -- Gradient Frame
 function B:CreateGF(w, h, o, r, g, b, a1, a2)
@@ -251,7 +251,7 @@ function B.HexRGB(r, g, b)
 end
 
 function B.ClassColor(class)
-	local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+	local color = DB.ClassColors[class]
 	if not color then return 1, 1, 1 end
 	return color.r, color.g, color.b
 end

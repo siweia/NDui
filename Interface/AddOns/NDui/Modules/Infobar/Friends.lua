@@ -132,7 +132,7 @@ info.onEnter = function(self)
 				if connected then
 					local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
 					local levelColor = B.HexRGB(GetQuestDifficultyColor(level))
-					local classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class] or levelColor
+					local classColor = DB.ClassColors[class] or levelColor
 					GameTooltip:AddDoubleLine(levelColor..level.."|r "..name..status, area, classColor.r, classColor.g, classColor.b, zoneColor.r, zoneColor.g, zoneColor.b)
 				end
 			end
@@ -150,7 +150,7 @@ info.onEnter = function(self)
 
 					if client == BNET_CLIENT_WOW then
 						if CanCooperateWithGameAccount(gameID) then
-							local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class] or GetQuestDifficultyColor(1)
+							local color = DB.ClassColors[class] or GetQuestDifficultyColor(1)
 							name = B.HexRGB(color).." "..charName
 						end
 						zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone

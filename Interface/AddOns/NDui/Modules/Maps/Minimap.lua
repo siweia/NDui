@@ -139,7 +139,7 @@ end
 
 function module:RecycleBin()
 	if not NDuiDB["Map"]["ShowRecycleBin"] then return end
-	local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
+	local r, g, b = DB.r, DB.g, DB.b
 
 	local buttons = {}
 	local blackList = {

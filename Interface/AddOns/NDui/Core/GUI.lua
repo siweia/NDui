@@ -508,7 +508,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 }
 
-local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
+local r, g, b = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
 
 local function SelectTab(i)

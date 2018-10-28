@@ -4,7 +4,7 @@ local module = B:RegisterModule("Skins")
 
 function module:OnLogin()
 	local cr, cg, cb = 0, 0, 0
-	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.cc.r, DB.cc.g, DB.cc.b end
+	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
 
 	-- TOPLEFT
 	if NDuiDB["Skins"]["InfobarLine"] then

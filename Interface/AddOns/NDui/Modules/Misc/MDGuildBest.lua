@@ -14,7 +14,7 @@ function module:GuildBest()
 		GameTooltip:SetText(name, 1, 1, 1)
 		GameTooltip:AddLine(CHALLENGE_MODE_POWER_LEVEL:format(leaderInfo.keystoneLevel))
 		for i = 1, #leaderInfo.members do
-			local classColorStr = RAID_CLASS_COLORS[leaderInfo.members[i].classFileName].colorStr
+			local classColorStr = DB.ClassColors[leaderInfo.members[i].classFileName].colorStr
 			GameTooltip:AddLine(CHALLENGE_MODE_GUILD_BEST_LINE:format(classColorStr,leaderInfo.members[i].name));
 		end
 		GameTooltip:Show()
@@ -60,7 +60,7 @@ function module:GuildBest()
 			str = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
 		end
 
-		local classColorStr = RAID_CLASS_COLORS[leaderInfo.classFileName].colorStr
+		local classColorStr = DB.ClassColors[leaderInfo.classFileName].colorStr
 		self.CharacterName:SetText(str:format(classColorStr, leaderInfo.name))
 		self.Level:SetText(leaderInfo.keystoneLevel)
 	end

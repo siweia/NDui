@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("GUI")
 
-local r, g, b = DB.cc.r, DB.cc.g, DB.cc.b
+local r, g, b = DB.r, DB.g, DB.b
 local f
 
 -- Elements
