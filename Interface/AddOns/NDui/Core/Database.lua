@@ -8,8 +8,18 @@ DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 
 -- Colors
 DB.MyClass = select(2, UnitClass("player"))
-DB.cc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[DB.MyClass]
-DB.MyColor = format("|cff%02x%02x%02x", DB.cc.r*255, DB.cc.g*255, DB.cc.b*255)
+
+DB.ClassColors = {}
+local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+for class in pairs(colors) do
+	DB.ClassColors[class] = {}
+	DB.ClassColors[class].r = colors[class].r
+	DB.ClassColors[class].g = colors[class].g
+	DB.ClassColors[class].b = colors[class].b
+	DB.ClassColors[class].colorStr = colors[class].colorStr
+end
+DB.r, DB.g, DB.b = DB.ClassColors[DB.MyClass].r, DB.ClassColors[DB.MyClass].g, DB.ClassColors[DB.MyClass].b
+DB.MyColor = format("|cff%02x%02x%02x", DB.r*255, DB.g*255, DB.b*255)
 DB.InfoColor = "|cff70c0f5"
 DB.GreyColor = "|cff808080"
 BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
