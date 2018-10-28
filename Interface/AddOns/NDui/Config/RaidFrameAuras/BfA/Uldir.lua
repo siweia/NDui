@@ -27,14 +27,15 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 265237) -- 粉碎
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265264) -- 虚空鞭笞
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265360) -- 翻滚欺诈
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265646, 5) -- 腐化者的意志
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 265662, 5) -- 腐化者的契约
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 265662, 6) -- 腐化者的契约
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 270620) -- 灵能冲击波
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 270589) -- 虚空之嚎
 
 BOSS = 2166 -- 维克提斯
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 265129) -- 终极菌体
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 267160)
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 267161)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 265129, 6) -- 终极菌体
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 267160, 6)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 267161, 6)
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 267162, 6)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265178) -- 进化痛苦
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 265212) -- 育种
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 274990, 5) -- 破裂损伤
