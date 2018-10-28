@@ -147,7 +147,7 @@ function module:InterruptAlert()
 					if auraType and auraType == AURA_TYPE_BUFF or blackList[spellID] then return end	-- need reviewed
 					SendChatMessage(format(infoText, sourceName..GetSpellLink(extraskillID), destName..GetSpellLink(spellID)), msgChannel())
 				else
-					if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= UnitName("player") and not isAllyPet(sourceFlags) then return end
+					if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= DB.MyName and not isAllyPet(sourceFlags) then return end
 					SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), msgChannel())
 				end
 			end
@@ -184,7 +184,7 @@ function module:VersionCheck()
 	local function UpdateVersionCheck(_, ...)
 		local prefix, msg, distType, author = ...
 		if prefix ~= "NDuiVersionCheck" then return end
-		if Ambiguate(author, "none") == UnitName("player") then return end
+		if Ambiguate(author, "none") == DB.MyName then return end
 
 		local status = CompareVersion(msg, NDuiADB["DetectVersion"])
 		if status == "IsNew" then

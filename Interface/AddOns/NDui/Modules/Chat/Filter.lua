@@ -88,8 +88,7 @@ local chatAtList, at = {}, {}
 function B:GenChatAtList()
 	B.SplitList(chatAtList, NDuiADB["ChatAtList"], true)
 
-	local name = UnitName("player")
-	chatAtList[name] = true
+	chatAtList[DB.MyName] = true
 end
 
 local function chatAtMe(_, _, ...)

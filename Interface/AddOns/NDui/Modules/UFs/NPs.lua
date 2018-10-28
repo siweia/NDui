@@ -187,7 +187,7 @@ local function UpdateQuestUnit(self, unit)
 				isProgressQuest = true
 			else
 				local unitName, progress = strmatch(text, "^ ([^ ]-) ?%-(.+)$")
-				if unitName and (unitName == "" or unitName == UnitName("player")) and progress then
+				if unitName and (unitName == "" or unitName == DB.MyName) and progress then
 					local current, goal = strmatch(progress, "(%d+)/(%d+)")
 					if current and goal and current ~= goal then
 						isObjectiveQuest = true

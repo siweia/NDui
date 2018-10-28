@@ -15,7 +15,7 @@ local B, C, L, DB = unpack(ns)
 local dev = {"寧德"}
 local function isDeveloper()
 	for _, name in pairs(dev) do
-		if UnitName("player") == name then
+		if DB.MyName == name then
 			return true
 		end
 	end
@@ -126,7 +126,7 @@ do
 	end
 	B:RegisterEvent("CHAT_MSG_ADDON", VerCheckListen)
 
-	SlashCmdList["NDUI_VER_CHECK"] = function()
+	SlashCmdList["NDUI_VER_CHECK"] = function(msg)
 		if not DB.isDeveloper then return end
 		local channel
 		if IsInRaid() then
@@ -134,9 +134,62 @@ do
 		elseif IsInGuild() then
 			channel = "GUILD"
 		end
+		if msg ~= "" then channel = msg end
 		if channel then SendVerCheck(channel) end
 	end
 	SLASH_NDUI_VER_CHECK1 = "/nduiver"
+end
+
+do
+	local debugMode = false
+	local owner = "老陈"
+	local turner = "彭法神"
+	if debugMode then
+		local function inviteMe()
+			local mapID = select(8, GetInstanceInfo())
+			if mapID == 571 and DB.MyName ~= owner and DB.MyName ~= turner and not IsInGroup() then
+				SendChatMessage("raid", "WHISPER", nil, turner)
+			end
+		end
+		local function inviteTurner()
+			C_Timer.After(1, function()
+				if DB.MyName == owner then
+					LeaveParty()
+					InviteUnit(turner)
+				end
+			end)
+		end
+		local function acceptInvite(_, name)
+			if name == owner or name == turner then
+				StaticPopup1Button1:Click()
+			end
+		end
+		local function onEvent(event, ...)
+			if IsInRaid() or not IsInGroup() then return end
+			local mapID = select(8, GetInstanceInfo())
+			if event == "PLAYER_ENTERING_WORLD" then
+				if mapID == 603 then
+					SendChatMessage("IN_ULD", "PARTY")
+				elseif mapID == 571 then
+					SendChatMessage("OUT_ULD", "PARTY")
+				end
+			elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
+				local msg, author = ...
+				local name = Ambiguate(author, "none")
+				if msg == "IN_ULD" and UnitIsGroupLeader("player") then
+					PromoteToLeader(name, 1)
+				elseif msg == "OUT_ULD" and UnitIsUnit(name, "player") then
+					LeaveParty()
+				end
+			end
+		end
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", inviteMe)
+		B:RegisterEvent("PARTY_INVITE_REQUEST", acceptInvite)
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", inviteTurner)
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", onEvent)
+		B:RegisterEvent("CHAT_MSG_PARTY", onEvent)
+		B:RegisterEvent("CHAT_MSG_PARTY_LEADER", onEvent)
+	end
 end
 
 -- Grids

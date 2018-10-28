@@ -564,7 +564,7 @@ local function isUnitWeNeed(value, name, flags)
 			return true
 		end
 	elseif value.UnitID:lower() == "player" then
-		if name and name == UnitName("player") or checkPetFlags(flags) then
+		if name and name == DB.MyName or checkPetFlags(flags) then
 			return true
 		end
 	end

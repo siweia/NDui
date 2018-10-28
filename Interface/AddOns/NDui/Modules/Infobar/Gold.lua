@@ -6,7 +6,7 @@ local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GoldPos)
 
 local profit, spent, oldMoney = 0, 0, 0
-local myName, myRealm = UnitName("player"), GetRealmName()
+local myName, myRealm = DB.MyName, GetRealmName()
 
 local function formatTextMoney(money)
 	return format("%.0f|cffffd700%s|r", money * .0001, GOLD_AMOUNT_SYMBOL)
