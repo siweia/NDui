@@ -78,9 +78,20 @@ function UF:CreateRaidDebuffs(self)
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
 	bu.count = B.CreateFS(bu, 12, "", false, "BOTTOMRIGHT", 6, -3)
 	bu.time = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
+	bu.glowFrame = B.CreateBG(bu.icon, 5)
+
+	if not NDuiDB["UFs"]["AurasClickThrough"] then
+		bu:SetScript("OnEnter", function(self)
+			if not self.index then return end
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+			GameTooltip:ClearLines()
+			GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
+			GameTooltip:Show()
+		end)
+		bu:SetScript("OnLeave", GameTooltip_Hide)
+	end
 
 	bu.ShowDispellableDebuff = true
-	bu.EnableTooltip = not NDuiDB["UFs"]["AurasClickThrough"]
 	bu.ShowDebuffBorder = NDuiDB["UFs"]["DebuffBorder"]
 	bu.FilterDispellableDebuff = NDuiDB["UFs"]["Dispellable"]
 	if NDuiDB["UFs"]["InstanceAuras"] then bu.Debuffs = NDuiADB["RaidDebuffs"] end
