@@ -13,10 +13,10 @@ hooksecurefunc("ChatEdit_InsertLink", function(text) -- shift-clicked
 		local item = GetItemInfo(strmatch(text, "item:(%d+)") or 0)
 		local search = spell or item
 		if not search then return end
-		
+
 		-- search needs to be lowercase for .SetRecipeItemNameFilter
-		TradeSkillFrame.SearchBox:SetText(search:lower())
-		
+		TradeSkillFrame.SearchBox:SetText(search)
+
 		-- jump to the recipe
 		if spell then -- can only select recipes on the learned tab
 			if PanelTemplates_GetSelectedTab(TradeSkillFrame.RecipeList) == 1 then
@@ -38,18 +38,12 @@ end)
 
 -- make it only split stacks with shift-rightclick if the TradeSkillFrame is open
 -- shift-leftclick should be reserved for the search box
-hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(_, button)
+local function hideSplitFrame(_, button)
 	if TradeSkillFrame and TradeSkillFrame:IsShown() then
 		if button == "LeftButton" then
 			StackSplitFrame:Hide()
 		end
 	end
-end)
-
-hooksecurefunc("MerchantItemButton_OnModifiedClick", function(_, button)
-	if TradeSkillFrame and TradeSkillFrame:IsShown() then
-		if button == "LeftButton" then
-			StackSplitFrame:Hide()
-		end
-	end
-end)
+end
+hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", hideSplitFrame)
+hooksecurefunc("MerchantItemButton_OnModifiedClick", hideSplitFrame)
