@@ -7,8 +7,12 @@ DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 
 -- Colors
+DB.MyName = UnitName("player")
 DB.MyClass = select(2, UnitClass("player"))
-
+DB.ClassList = {}
+for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+	DB.ClassList[v] = k
+end
 DB.ClassColors = {}
 local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 for class in pairs(colors) do
