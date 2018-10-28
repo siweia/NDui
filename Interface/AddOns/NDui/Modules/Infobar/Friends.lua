@@ -8,10 +8,6 @@ local info = module:RegisterInfobar(C.Infobar.FriendsPos)
 local friendTable, bnetTable, updateRequest = {}, {}
 local wowString, bnetString = L["WoW"], L["BN"]
 local activeZone, inactiveZone = {r=.3, g=1, b=.3}, {r=.7, g=.7, b=.7}
-local classList = {}
-for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
-	classList[v] = k
-end
 
 local function buildFriendTable(num)
 	wipe(friendTable)
@@ -26,7 +22,7 @@ local function buildFriendTable(num)
 			else
 				status = ""
 			end
-			class = classList[class]
+			class = DB.ClassList[class]
 
 			friendTable[i] = {name, level, class, area, connected, status}
 		end
@@ -49,7 +45,7 @@ local function buildBNetTable(num)
 			local _, _, _, realmName, _, _, _, class, _, zoneName, _, gameText, _, _, _, _, _, isGameAFK, isGameBusy = BNGetGameAccountInfo(gameID)
 
 			charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
-			class = classList[class]
+			class = DB.ClassList[class]
 			accountName = isBattleTagPresence and battleTag or accountName
 
 			local status, infoText = ""
