@@ -587,7 +587,7 @@ local function UpdateInt(_, ...)
 			if value.IntID == spellID and cache[timestamp] ~= spellID and isAuraTracking(value, eventType, sourceName, sourceFlags, destName, destFlags) then
 
 				local guid, name = destGUID, destName
-				if value.OnSuceess then guid, name = sourceGUID, sourceName end
+				if value.OnSuccess then guid, name = sourceGUID, sourceName end
 				UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, guid, name)
 
 				cache[timestamp] = spellID
