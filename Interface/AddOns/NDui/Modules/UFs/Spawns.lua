@@ -19,9 +19,12 @@ local function CreatePlayerStyle(self)
 	UF:CreateIcons(self)
 	UF:CreatePrediction(self)
 	UF:CreateFCT(self)
-	UF:ReskinMirrorBars()
 	UF:CreateAddPower(self)
 
+	if NDuiDB["UFs"]["Castbars"] then
+		UF:ReskinMirrorBars()
+		UF:ReskinTimerTrakcer(self)
+	end
 	if not NDuiDB["Nameplate"]["ShowPlayerPlate"] then UF:CreateClassPower(self) end
 	if not NDuiDB["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 	if NDuiDB["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end

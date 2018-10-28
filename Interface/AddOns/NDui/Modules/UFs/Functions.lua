@@ -359,27 +359,48 @@ function UF:CreateCastBar(self)
 	self.Castbar = cb
 end
 
+local function reskinTimerBar(bar)
+	bar:SetSize(280, 15)
+	B.StripTextures(bar, true)
+
+	local statusbar = _G[bar:GetName().."StatusBar"]
+	if statusbar then
+		statusbar:SetAllPoints()
+		statusbar:SetStatusBarTexture(DB.normTex)
+	else
+		bar:SetStatusBarTexture(DB.normTex)
+	end
+
+	local bg = B.CreateBG(bar)
+	B.CreateBD(bg)
+	B.CreateSD(bg)
+	B.CreateTex(bg)
+end
+
 function UF:ReskinMirrorBars()
 	local previous
 	for i = 1, 3 do
 		local bar = _G["MirrorTimer"..i]
-		B.StripTextures(bar, true)
-		bar:SetSize(280, 15)
-
-		local bg = B.CreateBG(bar, 1)
-		B.CreateBD(bg)
-		B.CreateSD(bg)
-		B.CreateTex(bg)
-
-		local statusbar = _G["MirrorTimer"..i.."StatusBar"]
-		statusbar:SetAllPoints()
-		statusbar:SetStatusBarTexture(DB.normTex)
+		reskinTimerBar(bar)
 
 		if previous then
 			bar:SetPoint("TOP", previous, "BOTTOM", 0, -5)
 		end
 		previous = bar
 	end
+end
+
+function UF:ReskinTimerTrakcer(self)
+	local function updateTimerTracker()
+		for _, timer in pairs(TimerTracker.timerList) do
+			if timer.bar and not timer.bar.styled then
+				reskinTimerBar(timer.bar)
+
+				timer.bar.styled = true
+			end
+		end
+	end
+	self:RegisterEvent("START_TIMER", updateTimerTracker)
 end
 
 -- Auras Relevant
