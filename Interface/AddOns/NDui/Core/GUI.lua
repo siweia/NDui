@@ -792,7 +792,7 @@ local function setupRaidDebuffs()
 
 	local frame = raidDebuffsGUI.bg
 	local options = {}
-	local iType = module:CreateDropdown(frame, L["Type*"], 10, -30, {DUNGEONS, RAID})
+	local iType = module:CreateDropdown(frame, L["Type*"], 10, -30, {DUNGEONS, RAID}, L["Instance Type"])
 	for i = 1, 2 do
 		iType.options[i]:HookScript("OnClick", function()
 			for j = 1, 2 do
@@ -816,9 +816,9 @@ local function setupRaidDebuffs()
 		[1] = EJ_GetInstanceInfo(1031),
 	}
 
-	options[1] = module:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, nil, 130, 30)
+	options[1] = module:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
-	options[2] = module:CreateDropdown(frame, RAID.."*", 120, -30, raids, nil, 130, 30)
+	options[2] = module:CreateDropdown(frame, RAID.."*", 120, -30, raids, L["Raid Intro"], 130, 30)
 	options[2]:Hide()
 	for i = 1, 2 do
 		for j = 1, #options[i].options do
@@ -884,6 +884,7 @@ local function setupRaidDebuffs()
 		if NDuiADB["RaidDebuffs"][instName][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		priority = (priority and priority < 0 and 0) or priority or 2
+		if priority > 6 then priority = 6 end
 		NDuiADB["RaidDebuffs"][instName][spellID] = priority
 		createBar(scroll.child, instName, spellID, priority)
 	end
