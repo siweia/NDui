@@ -549,7 +549,7 @@ function UF:CreateAuras(self)
 	bu:SetWidth(width)
 	bu:SetHeight((bu.size + bu.spacing) * maxLines)
 
-	bu.showStealableBuffs = NDuiDB["UFs"]["StealableBuff"]
+	bu.showStealableBuffs = true
 	bu.CustomFilter = customFilter
 	bu.PostCreateIcon = postCreateIcon
 	bu.PostUpdateIcon = postUpdateIcon
