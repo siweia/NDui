@@ -1,7 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
-	<Script file="core.lua"/>
-	<Script file="battlefield.lua"/>
-	<Script file="friends.lua"/>
-	<Script file="guild.lua"/>
-	<Script file="who.lua"/>
-</Ui>
