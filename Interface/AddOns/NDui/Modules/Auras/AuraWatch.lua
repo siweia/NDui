@@ -145,7 +145,7 @@ local function BuildICON(iconSize)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(Frame:GetFrameLevel() + 5)
 
-	Frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "TOP", 0, 3)
+	Frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "TOP", 0, 5)
 	Frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
 	Frame.glowFrame = B.CreateBG(Frame, 4)
 	Frame.glowFrame:SetSize(iconSize+8, iconSize+8)
