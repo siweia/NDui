@@ -145,10 +145,10 @@ local function BuildICON(iconSize)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(Frame:GetFrameLevel() + 5)
 
-	Frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "BOTTOM", 0, -3)
+	Frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "TOP", 0, 3)
 	Frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
 	Frame.glowFrame = B.CreateBG(Frame, 4)
-	Frame.glowFrame:SetFrameLevel(Frame:GetFrameLevel())
+	Frame.glowFrame:SetSize(iconSize+8, iconSize+8)
 
 	if not NDuiDB["AuraWatch"]["ClickThrough"] then
 		Frame:EnableMouse(true)
@@ -509,7 +509,7 @@ local function UpdateIntFrame(intID, itemID, duration, unitID, guid, sourceName)
 		Frame.spellID = intID
 	end
 	if unitID:lower() == "all" then
-		class = select(2, GetPlayerInfoByGUID(guid)) or "PRIEST"
+		class = select(2, GetPlayerInfoByGUID(guid))
 		name = "*"..sourceName
 	else
 		class = DB.MyClass
@@ -557,16 +557,24 @@ local function checkPetFlags(sourceFlags, all)
 	end
 end
 
-local function isUnitWeNeed(value, sourceName, destName, sourceFlags)
+local function isUnitWeNeed(value, name, flags)
 	if not value.UnitID then value.UnitID = "Player" end
 	if value.UnitID:lower() == "all" then
-		if sourceName and (UnitInRaid(sourceName) or UnitInParty(sourceName) or checkPetFlags(sourceFlags, true)) then
+		if name and (UnitInRaid(name) or UnitInParty(name) or checkPetFlags(flags, true)) then
 			return true
 		end
 	elseif value.UnitID:lower() == "player" then
-		if sourceName and sourceName == UnitName("player") or destName == UnitName("player") or checkPetFlags(sourceFlags) then
+		if name and name == UnitName("player") or checkPetFlags(flags) then
 			return true
 		end
+	end
+end
+
+local function isAuraTracking(value, eventType, sourceName, sourceFlags, destName, destFlags)
+	if value.OnSuccess and eventType == "SPELL_CAST_SUCCESS" and isUnitWeNeed(value, sourceName, sourceFlags) then
+		return true
+	elseif not value.OnSuccess and eventList[eventType] and isUnitWeNeed(value, destName, destFlags) then
+		return true
 	end
 end
 
@@ -575,10 +583,13 @@ local function UpdateInt(_, ...)
 	if not IntCD.List then return end
 	for _, value in pairs(IntCD.List) do
 		if value.IntID then
-			local timestamp, eventType, _, sourceGUID, sourceName, sourceFlags, _, _, destName, _, _, spellID = ...
-			if value.IntID == spellID and isUnitWeNeed(value, sourceName, destName, sourceFlags) and cache[timestamp] ~= spellID and
-				((value.OnSuccess and eventType == "SPELL_CAST_SUCCESS") or (not value.OnSuccess and eventList[eventType])) then
-				UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, sourceGUID, sourceName)
+			local timestamp, eventType, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, spellID = ...
+			if value.IntID == spellID and cache[timestamp] ~= spellID and isAuraTracking(value, eventType, sourceName, sourceFlags, destName, destFlags) then
+
+				local guid, name = destGUID, destName
+				if value.OnSuceess then guid, name = sourceGUID, sourceName end
+				UpdateIntFrame(value.IntID, value.ItemID, value.Duration, value.UnitID, guid, name)
+
 				cache[timestamp] = spellID
 			end
 		end
