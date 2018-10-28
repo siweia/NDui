@@ -71,14 +71,16 @@ function UF:CreateRaidDebuffs(self)
 	bu:SetSize(size, size)
 	bu:SetPoint("TOPRIGHT", -10, -2)
 	bu:SetFrameLevel(self:GetFrameLevel() + 3)
-	B.CreateSD(bu, 2, 2)
+	B.CreateSD(bu, 3, 3)
+	bu:Hide()
 
 	bu.icon = bu:CreateTexture(nil, "ARTWORK")
 	bu.icon:SetAllPoints()
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
 	bu.count = B.CreateFS(bu, 12, "", false, "BOTTOMRIGHT", 6, -3)
 	bu.time = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
-	bu.glowFrame = B.CreateBG(bu.icon, 5)
+	bu.glowFrame = B.CreateBG(bu, 6)
+	bu.glowFrame:SetSize(size+12, size+12)
 
 	if not NDuiDB["UFs"]["AurasClickThrough"] then
 		bu:SetScript("OnEnter", function(self)
