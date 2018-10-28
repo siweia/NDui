@@ -57,7 +57,6 @@ local defaultSettings = {
 		Boss = true,
 		Arena = true,
 		Castbars = true,
-		StealableBuff = true,
 		SwingBar = false,
 		SwingTimer = false,
 		RaidFrame = true,
@@ -82,6 +81,7 @@ local defaultSettings = {
 		RaidClickSets = false,
 		ShowTeamIndex = false,
 		HeightScale = 1,
+		ClassPower = true,
 	},
 	Chat = {
 		Sticky = false,
@@ -242,9 +242,7 @@ local function InitialSettings(source, target)
 	end
 
 	for i in pairs(target) do
-		if source[i] == nil then
-			target[i] = nil
-		end
+		if source[i] == nil then target[i] = nil end
 	end
 end
 
@@ -321,7 +319,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Boss", L["Boss Frame"]},
 		{1, "UFs", "Arena", L["Arena Frame"], true},
 		{1, "UFs", "Portrait", L["UFs Portrait"]},
-		{1, "UFs", "StealableBuff", L["Stealable Buff"], true},
+		{1, "UFs", "ClassPower", L["UFs ClassPower"], true},
 		{1, "UFs", "ClassColor", L["Classcolor HpBar"]},
 		{1, "UFs", "SmoothColor", L["Smoothcolor HpBar"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
