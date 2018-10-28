@@ -35,33 +35,42 @@ local bonus = {
 }
 local bonusName = GetCurrencyInfo(1580)
 
-local isTimeWalker
+local isTimeWalker, walkerTexture
 local function checkTimeWalker(event)
+	local date = C_Calendar.GetDate()
+	C_Calendar.SetAbsMonth(date.month, date.year)
 	C_Calendar.OpenCalendar()
 
-	local today = C_Calendar.GetDate().monthDay
+	local today = date.monthDay
 	local numEvents = C_Calendar.GetNumDayEvents(0, today)
 	if numEvents <= 0 then return end
 
 	for i = 1, numEvents do
 		local info = C_Calendar.GetDayEvent(0, today, i)
-		if info.title:find(PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= "END" then
+		if info and info.title:find(PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= "END" then
 			isTimeWalker = true
+			walkerTexture = info.iconTexture
 			break
 		end
 	end
-
 	B:UnregisterEvent(event, checkTimeWalker)
 end
 B:RegisterEvent("PLAYER_ENTERING_WORLD", checkTimeWalker)
 
+local function checkTexture(texture)
+	if not walkerTexture then return end
+	if walkerTexture == texture or walkerTexture == texture - 1 then
+		return true
+	end
+end
+
 local questlist = {
 	{name = L["Blingtron"], id = 34774},
 	{name = L["Mean One"], id = 6983},
-	{name = L["Timewarped"], id = 40168},	-- TBC
-	{name = L["Timewarped"], id = 40173},	-- WotLK
-	{name = L["Timewarped"], id = 40786},	-- Cata
-	{name = L["Timewarped"], id = 45799},	-- MoP
+	{name = L["Timewarped"], id = 40168, texture = 1129674},	-- TBC
+	{name = L["Timewarped"], id = 40173, texture = 1129686},	-- WotLK
+	{name = L["Timewarped"], id = 40786, texture = 1304688},	-- Cata
+	{name = L["Timewarped"], id = 45799, texture = 1530590},	-- MoP
 }
 
 local invas = {
@@ -188,7 +197,7 @@ info.onEnter = function(self)
 
 	for _, v in pairs(questlist) do
 		if v.name and IsQuestFlaggedCompleted(v.id) then
-			if v.name == L["Timewarped"] and isTimeWalker or v.name ~= L["Timewarped"] then
+			if v.name == L["Timewarped"] and isTimeWalker and checkTexture(v.texture) or v.name ~= L["Timewarped"] then
 				addTitle(QUESTS_LABEL)
 				GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
 			end
