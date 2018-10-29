@@ -67,7 +67,27 @@ local addonBlockList = {
 	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "进度:", "属性通报", "blizzard%.cn%.%w+%.vip"
 }
 
-local function genAddonBlock(_, _, msg, author)
+local function reopenBubble()
+	SetCVar("chatBubbles", 1)
+end
+
+local function toggleBubble()
+	if not GetCVarBool("chatBubbles") then return end
+	SetCVar("chatBubbles", 0)
+	C_Timer.After(0.01, reopenBubble)
+end
+
+local function reopenBubbleParty()
+	SetCVar("chatBubblesParty", 1)
+end
+
+local function toggleBubbleParty()
+	if not GetCVarBool("chatBubblesParty") then return end
+	SetCVar("chatBubblesParty", 0)
+	C_Timer.After(0.01, reopenBubbleParty)
+end
+
+local function genAddonBlock(_, event, msg, author)
 	if not NDuiDB["Chat"]["BlockAddonAlert"] then return end
 
 	local name = Ambiguate(author, "none")
@@ -75,6 +95,11 @@ local function genAddonBlock(_, _, msg, author)
 
 	for _, word in ipairs(addonBlockList) do
 		if msg:find(word) then
+			if event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" then
+				toggleBubble()
+			elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
+				toggleBubbleParty()
+			end
 			return true
 		end
 	end
