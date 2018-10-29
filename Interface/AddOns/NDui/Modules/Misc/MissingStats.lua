@@ -86,4 +86,25 @@ function module:MissingStats()
 		statFrame.numericValue = 0
 		PaperDollFrame_SetFocusRegen(statFrame, unit)
 	end
+
+	if DB.Client == "deDE" then
+		function PaperDollFrame_SetAttackSpeed(statFrame, unit)
+			local meleeHaste = GetMeleeHaste()
+			local speed, offhandSpeed = UnitAttackSpeed(unit)
+			local displaySpeed = format("%.2f", speed)
+			if offhandSpeed then
+				offhandSpeed = format("%.2f", offhandSpeed)
+			end
+			if offhandSpeed then
+				displaySpeed = BreakUpLargeNumbers(displaySpeed).." / "..offhandSpeed
+			else
+				displaySpeed = BreakUpLargeNumbers(displaySpeed)
+			end
+			PaperDollFrame_SetLabelAndText(statFrame, WEAPON_SPEED, displaySpeed, false, speed)
+
+			statFrame.tooltip = HIGHLIGHT_FONT_COLOR_CODE..format(PAPERDOLLFRAME_TOOLTIP_FORMAT, ATTACK_SPEED).." "..displaySpeed..FONT_COLOR_CODE_CLOSE
+			statFrame.tooltip2 = format(STAT_ATTACK_SPEED_BASE_TOOLTIP, BreakUpLargeNumbers(meleeHaste))
+			statFrame:Show()
+		end
+	end
 end
