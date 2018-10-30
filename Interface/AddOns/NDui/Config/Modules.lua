@@ -87,4 +87,5 @@ C.Infobar = {
 	TimePos			= {"BOTTOMRIGHT", UIParent, -15, 6},				-- 时间信息位置
 
 	Fonts			= {STANDARD_TEXT_FONT, 13, "OUTLINE"},				-- 字体
+	AutoAnchor		= true,												-- 自动对齐
 }

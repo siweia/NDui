@@ -5,8 +5,8 @@
 	<Script file="System.lua"/>
 	<Script file="Memory.lua"/>
 	<Script file="Location.lua"/>
-	<Script file="Spec.lua"/>
-	<Script file="Durability.lua"/>
-	<Script file="Gold.lua"/>
 	<Script file="Time.lua"/>
+	<Script file="Gold.lua"/>
+	<Script file="Durability.lua"/>
+	<Script file="Spec.lua"/>
 </Ui>
