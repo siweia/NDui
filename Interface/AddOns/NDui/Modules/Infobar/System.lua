@@ -41,7 +41,7 @@ info.onUpdate = function(self, elapsed)
 	end
 end
 
-local usageTable, startTime = {}
+local usageTable, startTime = {}, 0
 local function retrieveUsage()
 	wipe(usageTable)
 	UpdateAddOnCPUUsage()
