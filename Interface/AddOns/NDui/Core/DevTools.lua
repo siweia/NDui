@@ -67,11 +67,11 @@ end
 SLASH_INSTANCEID1 = "/getid"
 
 SlashCmdList["NDUI_NPCID"] = function()
-	local npcName = UnitName("target")
-	local npcGuid = UnitGUID("target")
-	if npcName and npcGuid then
-		local npcID = select(6, strsplit("-", npcGuid))
-		print(npcName, DB.InfoColor..(npcID or "nil"))
+	local name = UnitName("target")
+	local guid = UnitGUID("target")
+	if name and guid then
+		local npcID = B.GetNPCID(guid)
+		print(name, DB.InfoColor..(npcID or "nil"))
 	end
 end
 SLASH_NDUI_NPCID1 = "/getnpc"

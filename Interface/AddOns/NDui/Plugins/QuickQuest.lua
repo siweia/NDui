@@ -39,7 +39,7 @@ function QuickQuest:Register(event, func)
 end
 
 local function GetNPCID()
-	return tonumber(string.match(UnitGUID("npc") or "", "Creature%-.-%-.-%-.-%-.-%-(.-)%-"))
+	return B.GetNPCID(UnitGUID("npc"))
 end
 
 local function IsTrackingHidden()
