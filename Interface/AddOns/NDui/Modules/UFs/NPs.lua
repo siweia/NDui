@@ -61,15 +61,11 @@ local CustomUnits = {
 	[GetSectionInfo(18499)] = true,	-- 凝结之血
 	[GetSectionInfo(18078)] = true,	-- 蛛魔编织者
 	[GetSectionInfo(18007)] = true,	-- 瘟疫聚合体
-	["Spawn of G'huun"] = true,
-	["戈霍恩之嗣"] = true,
-	["古翰幼體"] = true,
-	["Explosives"] = true,
-	["爆炸物"] = true,
-	["炸彈"] = true,
+	[120651] = true, -- 爆炸物
+	[141851] = true, -- 戈霍恩之嗣
 }
 function UF:CreateUnitTable()
-	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
+	if not NDuiDB["Nameplate"]["CustomUnitColor"] then CustomUnits = nil return end
 
 	B.SplitList(CustomUnits, NDuiDB["Nameplate"]["UnitList"])
 end
@@ -86,6 +82,7 @@ end
 -- Elements
 local function UpdateColor(element, unit)
 	local name = GetUnitName(unit) or UNKNOWN
+	local npcID = B.GetNPCID(UnitGUID(unit))
 	local status = UnitThreatSituation("player", unit) or false		-- just in case
 	local reaction = UnitReaction(unit, "player")
 	local customColor = NDuiDB["Nameplate"]["CustomColor"]
@@ -98,7 +95,7 @@ local function UpdateColor(element, unit)
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if CustomUnits and CustomUnits[name] then
+		if CustomUnits and (CustomUnits[name] or CustomUnits[npcID]) then
 			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then

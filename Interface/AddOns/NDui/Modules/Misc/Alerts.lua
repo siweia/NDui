@@ -217,14 +217,6 @@ end
 function module:ExplosiveAlert()
 	if not NDuiDB["Misc"]["ExplosiveCount"] then return end
 
-	local locales = {
-		["enUS"] = "Explosives",
-		["zhCN"] = "爆炸物",
-		["zhTW"] = "炸彈",
-	}
-	local explosive = locales[DB.Client]
-	if not explosive then return end
-
 	local affixes = C_MythicPlus.GetCurrentAffixes()
 	if affixes[3] ~= 13 then return end
 
@@ -237,9 +229,9 @@ function module:ExplosiveAlert()
 
 	local cache = {}
 	local function updateCount(_, ...)
-		local _, eventType, _, _, sourceName, _, _, _, destName = ...
+		local _, eventType, _, _, sourceName, _, _, destGUID = ...
 		local index = eventList[eventType]
-		if index and destName and destName == explosive then
+		if index and B.GetNPCID(destGUID) == 120651 then
 			local overkill = select(index, ...)
 			if overkill and overkill > 0 then
 				local name = string.split("-", sourceName)
