@@ -435,6 +435,11 @@ function B.GetItemLevel(link, arg1, arg2)
 	return iLvlDB[link]
 end
 
+function B.GetNPCID(guid)
+	local id = tonumber((guid or ""):match("%-(%d-)%-%x-$"))
+	return id
+end
+
 -- GUI APIs
 function B:CreateButton(width, height, text, fontSize)
 	local bu = CreateFrame("Button", nil, self)
