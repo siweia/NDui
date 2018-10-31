@@ -7,6 +7,7 @@ function module:AddAlerts()
 	self:RareAlert()
 	self:InterruptAlert()
 	self:VersionCheck()
+	self:ExplosiveAlert()
 end
 
 --[[
@@ -208,4 +209,60 @@ function module:VersionCheck()
 	if IsInGuild() then
 		C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 	end
+end
+
+--[[
+	大米完成时，通报打球统计
+]]
+function module:ExplosiveAlert()
+	if not NDuiDB["Misc"]["ExplosiveCount"] then return end
+
+	local locales = {
+		["enUS"] = "Explosives",
+		["zhCN"] = "爆炸物",
+		["zhTW"] = "炸彈",
+	}
+	local explosive = locales[DB.Client]
+	if not explosive then return end
+
+	local affixes = C_MythicPlus.GetCurrentAffixes()
+	if affixes[3] ~= 13 then return end
+
+	local eventList = {
+		["SWING_DAMAGE"] = 13,
+		["RANGE_DAMAGE"] = 16,
+		["SPELL_DAMAGE"] = 16,
+		["SPELL_PERIODIC_DAMAGE"] = 16,
+	}
+
+	local cache = {}
+	local function updateCount(_, ...)
+		local _, eventType, _, _, sourceName, _, _, _, destName = ...
+		local index = eventList[eventType]
+		if index and destName and destName == explosive then
+			local overkill = select(index, ...)
+			if overkill and overkill > 0 then
+				local name = string.split("-", sourceName)
+				if not cache[name] then cache[name] = 0 end
+				cache[name] = cache[name] + 1
+			end
+		end
+	end
+
+	local function startCount()
+		wipe(cache)
+		B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateCount)
+	end
+
+	local function endCount()
+		local text
+		for name, count in pairs(cache) do
+			text = (text or L["ExplosiveCount"])..name.."("..count..") "
+		end
+		if text then SendChatMessage(text, "PARTY") end
+		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateCount)
+	end
+
+	B:RegisterEvent("CHALLENGE_MODE_START", startCount)
+	B:RegisterEvent("CHALLENGE_MODE_COMPLETED", endCount)
 end
