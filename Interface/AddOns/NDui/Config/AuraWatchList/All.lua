@@ -191,9 +191,9 @@ local list = {
 	-- 5人本
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
-		{AuraID = 240443, UnitID = "player"},	-- 爆裂
+		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		{AuraID = 226512, UnitID = "player"},	-- 血池
-		{AuraID = 240447, UnitID = "player"},	-- 践踏
+		{AuraID = 240447, UnitID = "player", Flash = true},	-- 践踏
 		{AuraID = 260954, UnitID = "player"},	-- 铁之凝视，围攻
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
 		{AuraID = 265773, UnitID = "player"},	-- 吐金，诸王

@@ -218,7 +218,7 @@ function module:ExplosiveAlert()
 	if not NDuiDB["Misc"]["ExplosiveCount"] then return end
 
 	local affixes = C_MythicPlus.GetCurrentAffixes()
-	if affixes and affixes[3] ~= 13 then return end
+	if not affixes or affixes[3] ~= 13 then return end
 
 	local eventList = {
 		["SWING_DAMAGE"] = 13,
