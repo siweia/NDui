@@ -1,15 +1,19 @@
-local _, ns = ...
-local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF or oUF
-
 --[[
-	QuakeTimer for Mythic+, Siweia
-	Example:
+	## Element: QuakeTimer, by Siweia
+
+	Show a timer bar for Quake in Mythic+.
+
+	## Optional:
+
+	element.failColor		- insecure color
+	element.passColor		- secure color
+	element.timerFormat 	- timer format, eg "%.2f | %.2f", "%.1f"
+
+	## Example:
 
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetPoint("CENTER")
 	bar:SetSize(100, 20)
-	bar:SetStatusBarTexture(texture_file_name)
 
 	local icon = bar:CreateTexture(nil, "ARTWORK")
 	icon:SetSize(20, 20)
@@ -18,6 +22,9 @@ local oUF = ns.oUF or oUF
 
 	self.QuakeTimer = bar
 ]]
+local _, ns = ...
+local oUF = ns.oUF
+
 local _G = getfenv(0)
 local DEBUFF_MAX_DISPLAY = _G.DEBUFF_MAX_DISPLAY
 
@@ -44,7 +51,6 @@ end
 local function onEvent(self, event, unit)
 	if not unit or unit ~= "player" then return end
 	local element = self.QuakeTimer
-	if not element then return end
 
 	if event == "UNIT_AURA" then
 		local found
@@ -98,27 +104,31 @@ end
 local function Path(self, ...)
 	local element = self.QuakeTimer
 	if not element then return end
-	return (element.Override or Update)(self, ...)
+	return (element.Override or Update) (self, ...)
 end
 
 local function ForceUpdate(element)
 	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
-local function Enable(self, unit)
+local function Enable(self)
 	local element = self.QuakeTimer
 
 	if element then
 		local affixes = C_MythicPlus.GetCurrentAffixes()
 		if not affixes or affixes[3] ~= 14 then return end
 
-		element.failColor = element.failColor or {1, 0, 0}
-		element.passColor = element.passColor or {0, 1, 0}
-		element.timerFormat = element.timerFormat or "%.2f | %.2f"
-
+		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 		element:SetScript("OnUpdate", updateTimer)
 		element:Hide()
+
+		element.failColor = element.failColor or {1, 0, 0}
+		element.passColor = element.passColor or {0, 1, 0}
+		element.timerFormat = element.timerFormat or "%.2f | %.2f"
+		if not element:GetStatusBarTexture() then
+			element:SetStatusBarTexture([[Interface\ChatFrame\ChatFrameBackground]])
+		end
 
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", Path)
 	end
