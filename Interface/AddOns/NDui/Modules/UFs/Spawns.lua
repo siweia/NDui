@@ -29,6 +29,7 @@ local function CreatePlayerStyle(self)
 	if not NDuiDB["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 	if NDuiDB["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
 	if NDuiDB["UFs"]["SwingBar"] then UF:CreateSwing(self) end
+	if NDuiDB["UFs"]["QuakeTimer"] then UF:CreateQuakeTimer(self) end
 end
 
 local function CreateTargetStyle(self)
