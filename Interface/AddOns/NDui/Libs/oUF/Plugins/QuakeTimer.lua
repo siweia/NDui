@@ -8,6 +8,7 @@
 	element.failColor		- insecure color
 	element.passColor		- secure color
 	element.timerFormat 	- timer format, eg "%.2f | %.2f", "%.1f"
+	element.PostUpdate		- post update when event fired
 
 	## Example:
 
@@ -101,36 +102,32 @@ local function Update(self)
 	end
 end
 
-local function Path(self, ...)
-	local element = self.QuakeTimer
-	if not element then return end
-	return (element.Override or Update) (self, ...)
-end
+local function CheckAffixes(self, event)
+	local affixes = C_MythicPlus.GetCurrentAffixes()
+	if not affixes then return end
 
-local function ForceUpdate(element)
-	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
+	if affixes[3] == 14 then
+		Update(self)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", Update)
+		self:RegisterEvent("CHALLENGE_MODE_START", Update)
+	end
+	self:UnregisterEvent(event, CheckAffixes)
 end
 
 local function Enable(self)
 	local element = self.QuakeTimer
 
 	if element then
-		local affixes = C_MythicPlus.GetCurrentAffixes()
-		if not affixes or affixes[3] ~= 14 then return end
-
-		element.__owner = self
-		element.ForceUpdate = ForceUpdate
-		element:SetScript("OnUpdate", updateTimer)
-		element:Hide()
-
 		element.failColor = element.failColor or {1, 0, 0}
 		element.passColor = element.passColor or {0, 1, 0}
 		element.timerFormat = element.timerFormat or "%.2f | %.2f"
 		if not element:GetStatusBarTexture() then
 			element:SetStatusBarTexture([[Interface\ChatFrame\ChatFrameBackground]])
 		end
+		element:SetScript("OnUpdate", updateTimer)
+		element:Hide()
 
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", Path)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", CheckAffixes)
 	end
 
 	return true
@@ -141,8 +138,15 @@ local function Disable(self)
 
 	if element then
 		element:Hide()
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD", Path)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD", CheckAffixes)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD", Update)
+		self:UnregisterEvent("CHALLENGE_MODE_START", Update)
+		self:UnregisterEvent("UNIT_AURA", onEvent)
+		self:UnregisterEvent("UNIT_SPELLCAST_START", onEvent)
+		self:UnregisterEvent("UNIT_SPELLCAST_STOP", onEvent)
+		self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START", onEvent)
+		self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", onEvent)
 	end
 end
 
-oUF:AddElement("QuakeTimer", Path, Enable, Disable)
+oUF:AddElement("QuakeTimer", nil, Enable, Disable)
