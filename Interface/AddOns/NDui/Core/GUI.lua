@@ -314,7 +314,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	[3] = {
 		{1, "UFs", "Enable", "|cff00cc4c"..L["Enable UFs"]},
 		{},--blank
-		{1, "UFs", "Castbars", L["UFs Castbar"]},
+		{1, "UFs", "Castbars", "|cff00cc4c"..L["UFs Castbar"]},
 		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"]},
 		{1, "UFs", "SwingTimer", L["UFs SwingTimer"], true},
