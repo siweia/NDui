@@ -217,9 +217,6 @@ end
 function module:ExplosiveAlert()
 	if not NDuiDB["Misc"]["ExplosiveCount"] then return end
 
-	local affixes = C_MythicPlus.GetCurrentAffixes()
-	if not affixes or affixes[3] ~= 13 then return end
-
 	local eventList = {
 		["SWING_DAMAGE"] = 13,
 		["RANGE_DAMAGE"] = 16,
@@ -256,6 +253,24 @@ function module:ExplosiveAlert()
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateCount)
 	end
 
-	B:RegisterEvent("CHALLENGE_MODE_START", startCount)
-	B:RegisterEvent("CHALLENGE_MODE_COMPLETED", endCount)
+	local function pauseCount()
+		local name, _, instID = GetInstanceInfo()
+		if name and instID == 8 then
+			B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateCount)
+		else
+			B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", updateCount)
+		end
+	end
+
+	local function checkAffixes(event)
+		local affixes = C_MythicPlus.GetCurrentAffixes()
+		if not affixes then return end
+		if affixes[3] == 13 then
+			B:RegisterEvent("CHALLENGE_MODE_START", startCount)
+			B:RegisterEvent("CHALLENGE_MODE_COMPLETED", endCount)
+			B:RegisterEvent("PLAYER_ENTERING_WORLD", pauseCount)
+		end
+		B:UnregisterEvent(event, checkAffixes)
+	end
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
 end
