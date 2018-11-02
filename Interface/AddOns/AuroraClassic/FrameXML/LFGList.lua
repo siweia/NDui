@@ -159,6 +159,15 @@ tinsert(C.themes["AuroraClassic"], function()
 	ApplicationViewer.RefreshButton:SetSize(24, 24)
 	ApplicationViewer.RefreshButton.Icon:SetPoint("CENTER")
 
+	hooksecurefunc("LFGListApplicationViewer_UpdateApplicant", function(button)
+		if not button.styled then
+			F.Reskin(button.DeclineButton)
+			F.Reskin(button.InviteButton)
+
+			button.styled = true
+		end
+	end)
+
 	-- [[ Entry creation ]]
 
 	local EntryCreation = LFGListFrame.EntryCreation

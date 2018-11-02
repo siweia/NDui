@@ -2,17 +2,11 @@ local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
 	for i = 1, 3 do
-		select(i, FriendsFrameFriendsScrollFrame:GetRegions()):Hide()
-	end
-	IgnoreListFrameTop:Hide()
-	IgnoreListFrameMiddle:Hide()
-	IgnoreListFrameBottom:Hide()
-
-	for i = 1, 3 do
 		F.ReskinTab(_G["FriendsFrameTab"..i])
 	end
-
 	FriendsFrameIcon:Hide()
+	F.StripTextures(FriendsFrameFriendsScrollFrame)
+	F.StripTextures(IgnoreListFrame)
 
 	for i = 1, FRIENDS_TO_DISPLAY do
 		local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
@@ -31,6 +25,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.bg = CreateFrame("Frame", nil, bu)
 		bu.bg:SetAllPoints(ic)
 		F.CreateBD(bu.bg, 0)
+		if i == 1 then
+			bu.bg:SetPoint("BOTTOMRIGHT", ic, 0, -1)
+		end
 	end
 
 	local function UpdateScroll()
@@ -46,11 +43,34 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end
 
-	local bu1 = FriendsFrameFriendsScrollFrameButton1
-	bu1.bg:SetPoint("BOTTOMRIGHT", bu1.gameIcon, 0, -1)
-
 	hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
 	hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
+
+	local header = FriendsFrameFriendsScrollFrame.PendingInvitesHeaderButton
+	for i = 1, 11 do
+		select(i, header:GetRegions()):Hide()
+	end
+	local headerBg = F.CreateBDFrame(header, .25)
+	headerBg:SetPoint("TOPLEFT", 2, -2)
+	headerBg:SetPoint("BOTTOMRIGHT", -2, 2)
+
+	local function reskinInvites(self)
+		for invite in self:EnumerateActive() do
+			if not invite.styled then
+				F.Reskin(invite.AcceptButton)
+				F.Reskin(invite.DeclineButton)
+
+				invite.styled = true
+			end
+		end
+	end
+
+	hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
+		if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
+			reskinInvites(FriendsFrameFriendsScrollFrame.invitePool)
+		end
+	end)
+	hooksecurefunc(FriendsFrameFriendsScrollFrame.invitePool, "Acquire", reskinInvites)
 
 	FriendsFrameStatusDropDown:ClearAllPoints()
 	FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
@@ -73,7 +93,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("FriendsFrame_CheckBattlenetStatus", function()
 		if BNFeaturesEnabled() then
 			local frame = FriendsFrameBattlenetFrame
-
 			frame.BroadcastButton:Hide()
 
 			if BNConnected() then
@@ -111,6 +130,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinDropDown(FriendsFriendsFrameDropDown)
 	F.Reskin(FriendsListFrameContinueButton)
 	F.CreateBD(FriendsFriendsList, .25)
+	F.StripTextures(AddFriendNoteFrame)
 	F.CreateBD(AddFriendNoteFrame, .25)
 	F.ReskinInput(AddFriendNameEditBox)
 	F.ReskinInput(FriendsFrameBroadcastInput)
@@ -127,34 +147,20 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(FriendsFriendsCloseButton)
 	F.Reskin(AddFriendInfoFrameContinueButton)
 
-	for i = 1, 9 do
-		select(i, AddFriendNoteFrame:GetRegions()):Hide()
-	end
 	WhoListScrollFrame:GetRegions():Hide()
 	select(2, WhoListScrollFrame:GetRegions()):Hide()
 	WhoFrameListInsetBg:Hide()
 	WhoFrameEditBoxInsetBg:Hide()
 
-	local bglayers = {"WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4"}
-	for i = 1, #bglayers do
-		_G[bglayers[i]]:DisableDrawLayer("BACKGROUND")
+	for i = 1, 4 do
+		F.StripTextures(_G["WhoFrameColumnHeader"..i])
 	end
 
-	local borderlayers = {"WhoFrameListInset", "WhoFrameEditBoxInset"}
-	for i = 1, #borderlayers do
-		local bd = _G[borderlayers[i]]
-		if not bd then
-			print(borderlayers[i], "not found")
-		else
-			bd:DisableDrawLayer("BORDER")
-		end
-	end
+	WhoFrameListInset:DisableDrawLayer("BORDER")
+	WhoFrameEditBoxInset:DisableDrawLayer("BORDER")
 
-	for i = 1, 6 do
-		for j = 1, 3 do
-			select(i, _G["FriendsTabHeaderTab"..j]:GetRegions()):Hide()
-			select(i, _G["FriendsTabHeaderTab"..j]:GetRegions()).Show = F.dummy
-		end
+	for i = 1, 3 do
+		F.StripTextures(_G["FriendsTabHeaderTab"..i])
 	end
 
 	WhoFrameWhoButton:SetPoint("RIGHT", WhoFrameAddFriendButton, "LEFT", -1, 0)
