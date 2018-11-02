@@ -574,11 +574,12 @@ do
 		local r, g, b = B.UnitColor("NPC")
 		TradeFrameRecipientNameText:SetTextColor(r, g, b)
 
-		local unitName = GetUnitName("NPC", true)
+		local guid = UnitGUID("NPC")
+		if not guid then return end
 		local text = "|cffff0000"..L["Stranger"]
-		if B.UnitInGuild(unitName) then
+		if BNGetGameAccountInfoByGUID(guid) or IsCharacterFriend(guid) then
 			text = "|cff00ff00"..GUILD
-		elseif DB.FriendsList[unitName] then
+		elseif IsGuildMember(guid) then
 			text = "|cffffff00"..FRIEND
 		end
 		infoText:SetText(text)

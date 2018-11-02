@@ -10,36 +10,13 @@ function B:GenFilterList()
 	B.SplitList(FilterList, NDuiADB["ChatFilterList"], true)
 end
 
-DB.FriendsList = {}
-local function updateFriends()
-	wipe(DB.FriendsList)
-
-	for i = 1, GetNumFriends() do
-		local name = GetFriendInfo(i)
-		if name then
-			DB.FriendsList[Ambiguate(name, "none")] = true
-		end
-	end
-
-	for i = 1, select(2, BNGetNumFriends()) do
-		for j = 1, BNGetNumFriendGameAccounts(i) do
-			local _, characterName, client, realmName = BNGetFriendGameAccountInfo(i, j)
-			if client == BNET_CLIENT_WOW then
-				DB.FriendsList[Ambiguate(characterName.."-"..realmName, "none")] = true
-			end
-		end
-	end
-end
-B:RegisterEvent("FRIENDLIST_UPDATE", updateFriends)
-B:RegisterEvent("BN_FRIEND_INFO_CHANGED", updateFriends)
-
-local function genChatFilter(_, event, msg, author, _, _, _, flag)
+local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _, guid)
 	if not NDuiDB["Chat"]["EnableFilter"] then return end
 
 	local name = Ambiguate(author, "none")
 	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
-	elseif B.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or DB.FriendsList[name] then
+	elseif IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or IsCharacterFriend(guid) or IsGUIDInGroup(guid) then
 		return
 	end
 
