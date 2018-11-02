@@ -126,6 +126,30 @@ end
 
 -----> STYLED CODE START
 -- BuildICON
+local function updateTooltip(self)
+	GameTooltip:ClearLines()
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 3)
+	if self.type == 1 then
+		GameTooltip:SetSpellByID(self.spellID)
+	elseif self.type == 2 then
+		GameTooltip:SetHyperlink(select(2, GetItemInfo(self.spellID)))
+	elseif self.type == 3 then
+		GameTooltip:SetInventoryItem("player", self.spellID)
+	elseif self.type == 4 then
+		GameTooltip:SetUnitAura(self.unitID, self.id, self.filter)
+	end
+	GameTooltip:Show()
+end
+
+local function enableTooltip(self)
+	self:EnableMouse(true)
+	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
+	self.HL:SetColorTexture(1, 1, 1, .25)
+	self.HL:SetAllPoints(self.Icon)
+	self:SetScript("OnEnter", updateTooltip)
+	self:SetScript("OnLeave", GameTooltip_Hide)
+end
+
 local function BuildICON(iconSize)
 	iconSize = iconSize * NDuiDB["AuraWatch"]["IconScale"]
 
@@ -149,29 +173,7 @@ local function BuildICON(iconSize)
 	Frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
 	Frame.glowFrame = B.CreateBG(Frame, 4)
 	Frame.glowFrame:SetSize(iconSize+8, iconSize+8)
-
-	if not NDuiDB["AuraWatch"]["ClickThrough"] then
-		Frame:EnableMouse(true)
-		Frame.HL = Frame:CreateTexture(nil, "HIGHLIGHT")
-		Frame.HL:SetColorTexture(1, 1, 1, .25)
-		Frame.HL:SetAllPoints(Frame.Icon)
-
-		Frame:SetScript("OnEnter", function(self)
-			GameTooltip:ClearLines()
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 3)
-			if self.type == 1 then
-				GameTooltip:SetSpellByID(self.spellID)
-			elseif self.type == 2 then
-				GameTooltip:SetHyperlink(select(2, GetItemInfo(self.spellID)))
-			elseif self.type == 3 then
-				GameTooltip:SetInventoryItem("player", self.spellID)
-			elseif self.type == 4 then
-				GameTooltip:SetUnitAura(self.unitID, self.id, self.filter)
-			end
-			GameTooltip:Show()
-		end)
-		Frame:SetScript("OnLeave", GameTooltip_Hide)
-	end
+	if not NDuiDB["AuraWatch"]["ClickThrough"] then enableTooltip(Frame) end
 
 	Frame.isAuraWatch = true
 	Frame:Hide()
@@ -200,29 +202,7 @@ local function BuildBAR(barWidth, iconSize)
 	Frame.Spellname = B.CreateFS(Frame.Statusbar, 14, "", false, "LEFT", 2, 8)
 	Frame.Spellname:SetWidth(Frame.Statusbar:GetWidth()*.6)
 	Frame.Spellname:SetJustifyH("LEFT")
-
-	if not NDuiDB["AuraWatch"]["ClickThrough"] then
-		Frame:EnableMouse(true)
-		Frame.HL = Frame:CreateTexture(nil, "HIGHLIGHT")
-		Frame.HL:SetColorTexture(1, 1, 1, .25)
-		Frame.HL:SetAllPoints(Frame.Icon)
-
-		Frame:SetScript("OnEnter", function(self)
-			GameTooltip:ClearLines()
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 3)
-			if self.type == 1 then
-				GameTooltip:SetSpellByID(self.spellID)
-			elseif self.type == 2 then
-				GameTooltip:SetHyperlink(select(2, GetItemInfo(self.spellID)))
-			elseif self.type == 3 then
-				GameTooltip:SetInventoryItem("player", self.spellID)
-			elseif self.type == 4 then
-				GameTooltip:SetUnitAura(self.unitID, self.id, self.filter)
-			end
-			GameTooltip:Show()
-		end)
-		Frame:SetScript("OnLeave", GameTooltip_Hide)
-	end
+	if not NDuiDB["AuraWatch"]["ClickThrough"] then enableTooltip(Frame) end
 
 	Frame.isAuraWatch = true
 	Frame:Hide()
@@ -283,6 +263,31 @@ local function Init()
 	Pos()
 end
 
+local function updateBarTimer(self)
+	if self.expires then
+		self.Timer = self.expires - GetTime()
+	else
+		self.Timer = self.start + self.duration - GetTime()
+	end
+
+	if self.Timer < 0 then
+		if self.Time then self.Time:SetText("N/A") end
+		self.Statusbar:SetMinMaxValues(0, 1)
+		self.Statusbar:SetValue(0)
+		self.Statusbar.Spark:Hide()
+	elseif self.Timer < 60 then
+		if self.Time then self.Time:SetFormattedText("%.1f", self.Timer) end
+		self.Statusbar:SetMinMaxValues(0, self.duration)
+		self.Statusbar:SetValue(self.Timer)
+		self.Statusbar.Spark:Show()
+	else
+		if self.Time then self.Time:SetFormattedText("%d:%.2d", self.Timer/60, self.Timer%60) end
+		self.Statusbar:SetMinMaxValues(0, self.duration)
+		self.Statusbar:SetValue(self.Timer)
+		self.Statusbar.Spark:Show()
+	end
+end
+
 -- UpdateCD
 local function UpdateCDFrame(index, name, icon, start, duration, _, type, id, charges)
 	local Frame = Aura[index][Aura[index].Index]
@@ -299,25 +304,7 @@ local function UpdateCDFrame(index, name, icon, start, duration, _, type, id, ch
 		Frame.duration = duration
 		Frame.start = start
 		Frame.Timer = 0
-		Frame:SetScript("OnUpdate", function(self)
-			self.Timer = self.start + self.duration - GetTime()
-			if self.Timer < 0 then
-				if self.Time then self.Time:SetText("N/A") end
-				self.Statusbar:SetMinMaxValues(0, 1)
-				self.Statusbar:SetValue(0)
-				self.Statusbar.Spark:Hide()
-			elseif self.Timer < 60 then
-				if self.Time then self.Time:SetFormattedText("%.1f", self.Timer) end
-				self.Statusbar:SetMinMaxValues(0, self.duration)
-				self.Statusbar:SetValue(self.Timer)
-				self.Statusbar.Spark:Show()
-			else
-				if self.Time then self.Time:SetFormattedText("%d:%.2d", self.Timer/60, self.Timer%60) end
-				self.Statusbar:SetMinMaxValues(0, self.duration)
-				self.Statusbar:SetValue(self.Timer)
-				self.Statusbar.Spark:Show()
-			end
-		end)
+		Frame:SetScript("OnUpdate", updateBarTimer)
 	end
 	Frame.type = type
 	Frame.spellID = id
@@ -384,25 +371,7 @@ local function UpdateAuraFrame(index, UnitID, name, icon, count, duration, expir
 		Frame.duration = duration
 		Frame.expires = expires
 		Frame.Timer = 0
-		Frame:SetScript("OnUpdate", function(self)
-			self.Timer = self.expires-GetTime()
-			if self.Timer < 0 then
-				if self.Time then self.Time:SetText("N/A") end
-				self.Statusbar:SetMinMaxValues(0, 1)
-				self.Statusbar:SetValue(0)
-				self.Statusbar.Spark:Hide()
-			elseif self.Timer < 60 then
-				if self.Time then self.Time:SetFormattedText("%.1f", self.Timer) end
-				self.Statusbar:SetMinMaxValues(0, self.duration)
-				self.Statusbar:SetValue(self.Timer)
-				self.Statusbar.Spark:Show()
-			else
-				if self.Time then self.Time:SetFormattedText("%d:%.2d", self.Timer/60, self.Timer%60) end
-				self.Statusbar:SetMinMaxValues(0, self.duration)
-				self.Statusbar:SetValue(self.Timer)
-				self.Statusbar.Spark:Show()
-			end
-		end)
+		Frame:SetScript("OnUpdate", updateBarTimer)
 	end
 	if Frame.glowFrame then
 		if flash then
@@ -489,6 +458,25 @@ local function SortBars()
 	end
 end
 
+local function updateIntTimer(self, elapsed)
+	self.Timer = self.Timer + elapsed
+	local timer = self.duration - self.Timer
+	if timer < 0 then
+		self:SetScript("OnUpdate", nil)
+		self:Hide()
+		tremove(IntTable, self.ID)
+		SortBars()
+	elseif timer < 60 then
+		if self.Time then self.Time:SetFormattedText("%.1f", timer) end
+		self.Statusbar:SetValue(timer)
+		self.Statusbar.Spark:Show()
+	else
+		if self.Time then self.Time:SetFormattedText("%d:%.2d", timer/60, timer%60) end
+		self.Statusbar:SetValue(timer)
+		self.Statusbar.Spark:Show()
+	end
+end
+
 local function UpdateIntFrame(intID, itemID, duration, unitID, guid, sourceName)
 	if not UIParent:IsShown() then return end
 
@@ -525,24 +513,8 @@ local function UpdateIntFrame(intID, itemID, duration, unitID, guid, sourceName)
 		Frame.Statusbar:SetStatusBarColor(B.ClassColor(class))
 		Frame.Statusbar:SetMinMaxValues(0, duration)
 		Frame.Timer = 0
-		Frame:SetScript("OnUpdate", function(self, elapsed)
-			self.Timer = self.Timer + elapsed
-			local timer = duration - self.Timer
-			if timer < 0 then
-				self:SetScript("OnUpdate", nil)
-				self:Hide()
-				tremove(IntTable, self.ID)
-				SortBars()
-			elseif timer < 60 then
-				if self.Time then self.Time:SetFormattedText("%.1f", timer) end
-				self.Statusbar:SetValue(timer)
-				self.Statusbar.Spark:Show()
-			else
-				if self.Time then self.Time:SetFormattedText("%d:%.2d", timer/60, timer%60) end
-				self.Statusbar:SetValue(timer)
-				self.Statusbar.Spark:Show()
-			end
-		end)
+		Frame.duration = duration
+		Frame:SetScript("OnUpdate", updateIntTimer)
 	end
 end
 

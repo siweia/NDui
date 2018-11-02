@@ -18,23 +18,6 @@ SlashCmdList.MOUSEOVERBIND = function()
 		bind.texture:SetColorTexture(0, 0, 0, .25)
 		bind:Hide()
 
-		GameTooltip:HookScript("OnUpdate", function(self, elapsed)
-			self.elapsed = (self.elapsed or 0) + elapsed
-			if self.elapsed > .2 then
-				if not self.comparing and IsModifiedClick("COMPAREITEMS") then
-					GameTooltip_ShowCompareItem(self)
-					self.comparing = true
-				elseif self.comparing and not IsModifiedClick("COMPAREITEMS") then
-					for _, frame in pairs(self.shoppingTooltips) do
-						frame:Hide()
-					end
-					self.comparing = false
-				end
-
-				self.elapsed = 0
-			end
-		end)
-
 		bind:SetScript("OnEvent", function(self) self:Deactivate(false) end)
 		bind:SetScript("OnLeave", function(self) self:HideFrame() end)
 		bind:SetScript("OnKeyUp", function(self, key) self:Listener(key) end)
