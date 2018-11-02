@@ -144,20 +144,20 @@ function module:WhipserInvite()
 	if not NDuiDB["Chat"]["Invite"] then return end
 
 	local function onChatWhisper(event, ...)
-		local arg1, arg2, _, _, _, _, _, _, _, _, _, _, arg3 = ...
+		local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
 		for word in pairs(whisperList) do
-			if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(arg1) == strlower(word) then
+			if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
 				if event == "CHAT_MSG_BN_WHISPER" then
-					local gameID = select(6, BNGetFriendInfoByID(arg3))
+					local gameID = select(6, BNGetFriendInfoByID(presenceID))
 					if gameID then
-						local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(charName.."-"..realmName)) then
+						local _, charName, _, realmName, _, _, _, _, guild = BNGetGameAccountInfo(gameID)
+						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or guild == GetGuildInfo("player")) then
 							BNInviteFriend(gameID)
 						end
 					end
 				else
-					if not NDuiDB["Chat"]["GuildInvite"] or B.UnitInGuild(arg2) then
-						InviteToGroup(arg2)
+					if not NDuiDB["Chat"]["GuildInvite"] or IsGuildMember(guid) then
+						InviteToGroup(author)
 					end
 				end
 			end
