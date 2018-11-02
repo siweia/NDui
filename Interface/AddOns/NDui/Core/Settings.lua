@@ -183,7 +183,7 @@ local function ForceSkadaOptions()
 							["g"] = 0,
 							["r"] = 0,
 						},
-						["barfontsize"] = 15,
+						["barfontsize"] = 14,
 						["background"] = {
 							["height"] = 180,
 							["texture"] = "None",

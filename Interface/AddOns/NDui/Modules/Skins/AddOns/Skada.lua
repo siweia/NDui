@@ -132,7 +132,7 @@ function module:SkadaSkin()
 	Skada.windowdefaults.title.fontsize = 14
 	Skada.windowdefaults.title.color = {r=0,g=0,b=0,a=.3}
 	Skada.windowdefaults.barfontflags = "OUTLINE"
-	Skada.windowdefaults.barfontsize = 15
+	Skada.windowdefaults.barfontsize = 14
 	Skada.windowdefaults.barbgcolor = {r=0,g=0,b=0,a=0}
 
 	-- Change Skada NumberFormat
