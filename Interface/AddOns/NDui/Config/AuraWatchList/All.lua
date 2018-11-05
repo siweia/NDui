@@ -201,6 +201,7 @@ local list = {
 		{AuraID = 266923, UnitID = "player"},	-- 充电，神庙
 		{AuraID = 273563, UnitID = "player"},	-- 神经毒素，神庙
 		{AuraID = 257407, UnitID = "player"},	-- 追踪，阿塔达萨
+		{AuraID = 250585, UnitID = "player", Flash = true},	-- 剧毒之池，阿塔达萨
 		{AuraID = 258058, UnitID = "player"},	-- 挤压，托尔达戈
 		{AuraID = 260067, UnitID = "player"},	-- 恶毒槌击，托尔达戈
 		{AuraID = 273226, UnitID = "player"},	-- 腐烂孢子，孢林
@@ -220,7 +221,7 @@ local list = {
 		{AuraID = 265129, UnitID = "player"},	-- 终极菌体，维克提斯
 		{AuraID = 267160, UnitID = "player"},
 		{AuraID = 267161, UnitID = "player"},
-		{AuraID = 274990, UnitID = "player"},	-- 破裂损伤，维克提斯
+		{AuraID = 274990, UnitID = "player", Flash = true},	-- 破裂损伤，维克提斯
 		{AuraID = 273434, UnitID = "player"},	-- 绝望深渊，祖尔
 		{AuraID = 274271, UnitID = "player"},	-- 死亡之愿，祖尔
 		{AuraID = 273365, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 黑暗启示，祖尔
