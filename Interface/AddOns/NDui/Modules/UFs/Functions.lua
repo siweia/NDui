@@ -855,6 +855,8 @@ function UF:CreateSwing(self)
 end
 
 function UF:CreateQuakeTimer(self)
+	if not NDuiDB["UFs"]["Castbars"] then return end
+
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetPoint("TOPLEFT", self.Castbar, "TOPLEFT", 0, 25)
 	bar:SetPoint("BOTTOMRIGHT", self.Castbar, "TOPRIGHT", 0, 5)
