@@ -639,6 +639,7 @@ SlashCmdList.AuraWatch = function(msg)
 				if value[i].Time then value[i].Time:SetText("59") end
 				if value[i].Statusbar then value[i].Statusbar:SetValue(1) end
 				if value[i].Spellname then value[i].Spellname:SetText("") end
+				if value[i].glowFrame then B.HideOverlayGlow(value[i].glowFrame) end
 			end
 			value[1].MoveHandle:Show()
 		end
