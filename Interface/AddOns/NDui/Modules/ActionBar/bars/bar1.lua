@@ -82,6 +82,18 @@ function module:OnLogin()
 	]])
 	RegisterStateDriver(frame, "page", actionPage)
 
+	--attempt to fix vehicle status
+	local function vehicleFix()
+		if InCombatLockdown() then return end
+		if HasVehicleActionBar() or HasOverrideActionBar() then
+			for _, button in next, buttonList do
+				ActionButton_Update(button)
+			end
+		end
+	end
+	B:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR", vehicleFix)
+	B:RegisterEvent("UPDATE_OVERRIDE_ACTIONBAR", vehicleFix)
+
 	--add elements
 	self:CreateBar2()
 	self:CreateBar3()
