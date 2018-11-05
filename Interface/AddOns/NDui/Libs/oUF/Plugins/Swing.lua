@@ -207,7 +207,6 @@ end
 
 local Ranged = function(self, _, unit, _, spellID)
 	if unit ~= "player" then return end
-	--if spellName ~= rangeText1 and spellName ~= rangeText2 then return end
 	if spellID ~= 75 and spellID ~= 5019 then return end
 
 	local bar = self.Swing

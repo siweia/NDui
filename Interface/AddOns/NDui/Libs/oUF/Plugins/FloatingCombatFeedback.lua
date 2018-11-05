@@ -11,7 +11,18 @@ local _G = getfenv(0)
 local pairs = pairs
 local cos, sin, mmax = cos, sin, math.max
 local tremove, tinsert = table.remove, table.insert
+
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
+local ENTERING_COMBAT = _G.ENTERING_COMBAT
+local LEAVING_COMBAT = _G.LEAVING_COMBAT
+local SCHOOL_MASK_NONE = _G.SCHOOL_MASK_NONE or 0x00
+local SCHOOL_MASK_PHYSICAL = _G.SCHOOL_MASK_PHYSICAL or 0x01
+local SCHOOL_MASK_HOLY = _G.SCHOOL_MASK_HOLY or 0x02
+local SCHOOL_MASK_FIRE = _G.SCHOOL_MASK_FIRE or 0x04
+local SCHOOL_MASK_NATURE = _G.SCHOOL_MASK_NATURE or 0x08
+local SCHOOL_MASK_FROST = _G.SCHOOL_MASK_FROST or 0x10
+local SCHOOL_MASK_SHADOW = _G.SCHOOL_MASK_SHADOW or 0x20
+local SCHOOL_MASK_ARCANE = _G.SCHOOL_MASK_ARCANE or 0x40
 
 local colors = {
 	ABSORB		= {r = 1.00, g = 1.00, b = 1.00},
@@ -212,12 +223,12 @@ local function onEvent(self, event, ...)
 		end
 	elseif event == "PLAYER_REGEN_DISABLED" then
 		texture = ""
-		text = _G.ENTERING_COMBAT
+		text = ENTERING_COMBAT
 		color = colors.WOUND
 		multiplier = 1.3
 	elseif event == "PLAYER_REGEN_ENABLED" then
 		texture = ""
-		text = _G.LEAVING_COMBAT
+		text = LEAVING_COMBAT
 		color = colors.HEAL
 		multiplier = 1.3
 	end
