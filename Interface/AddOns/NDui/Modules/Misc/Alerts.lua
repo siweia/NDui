@@ -129,6 +129,10 @@ function module:InterruptAlert()
 		[226943] = true,	-- 心灵炸弹
 		[105421] = true,	-- 盲目之光
 		[207167] = true,	-- 致盲冰雨
+		[31661] = true,		-- 龙息术
+		[82691] = true,		-- 冰霜之环
+		[207685] = true,	-- 悲苦咒符
+		[64695] = true,		-- 陷地
 	}
 
 	local function msgChannel()
