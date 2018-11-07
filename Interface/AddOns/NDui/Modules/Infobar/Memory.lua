@@ -69,7 +69,7 @@ end
 info.onMouseUp = function(self, btn)
 	if btn == "LeftButton" then
 		local before = gcinfo()
-		collectgarbage()
+		collectgarbage("collect")
 		print(format("|cff66C6FF%s:|r %s", L["Collect Memory"], formatMemory(before - gcinfo())))
 		updateMemory()
 		self:GetScript("OnEnter")(self)
@@ -124,14 +124,3 @@ info.onEvent = function(self, event, arg1)
 		self:GetScript("OnEnter")(self)
 	end
 end
-
-local f = CreateFrame("Frame")
-f:RegisterAllEvents()
-f:SetScript("OnEvent", function(_, event)
-	if InCombatLockdown() then return end
-	f.events = (f.events or 0) + 1
-	if f.events > 6000 or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_REGEN_ENABLED" then
-		collectgarbage()
-		f.events = 0
-	end
-end)
