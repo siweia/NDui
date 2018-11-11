@@ -308,7 +308,7 @@ function module:CreateRM()
 		if btn == "RightButton" then
 			scanBuff()
 		elseif btn == "LeftButton" then
-			if InCombatLockdown() then return end
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 			if IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid())) then
 				DoReadyCheck()
 			else
@@ -369,7 +369,7 @@ function module:CreateRM()
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			if InCombatLockdown() then return end
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 			if IsInRaid() then
 				SendChatMessage(L["Disband Process"], "RAID")
 				for i = 1, GetNumGroupMembers() do

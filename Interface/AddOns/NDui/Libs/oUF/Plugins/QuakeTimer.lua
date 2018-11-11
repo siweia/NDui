@@ -125,19 +125,16 @@ local function Enable(self)
 			element:SetStatusBarTexture([[Interface\ChatFrame\ChatFrameBackground]])
 		end
 		element:SetScript("OnUpdate", updateTimer)
-		element:Hide()
 
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", CheckAffixes)
+		return true
 	end
-
-	return true
 end
 
 local function Disable(self)
 	local element = self.QuakeTimer
 
 	if element then
-		element:Hide()
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD", CheckAffixes)
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD", Update)
 		self:UnregisterEvent("CHALLENGE_MODE_START", Update)
