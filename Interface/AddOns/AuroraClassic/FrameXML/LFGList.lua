@@ -35,6 +35,14 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
+	hooksecurefunc("LFGListSearchEntry_Update", function(self)
+		local cancelButton = self.CancelButton
+		if not cancelButton.styled then
+			F.Reskin(cancelButton)
+			cancelButton.styled = true
+		end
+	end)
+
 	-- [[ Nothing available ]]
 
 	local NothingAvailable = LFGListFrame.NothingAvailable
