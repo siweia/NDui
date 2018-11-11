@@ -45,7 +45,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 256038) -- 致命狙击
 module:RegisterDebuff(TIER, INSTANCE, 0, 256105) -- 爆炸
 module:RegisterDebuff(TIER, INSTANCE, 0, 258128) -- 衰弱怒吼
 module:RegisterDebuff(TIER, INSTANCE, 0, 256201) -- 爆炎弹
-module:RegisterDebuff(TIER, INSTANCE, 0, 260067) -- 恶毒槌击
+module:RegisterDebuff(TIER, INSTANCE, 0, 260067, 6) -- 恶毒槌击
 
 INSTANCE = 1012 -- 暴富矿区
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
@@ -64,7 +64,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 268086) -- 恐怖光环
 module:RegisterDebuff(TIER, INSTANCE, 0, 267907) -- 灵魂荆棘
 module:RegisterDebuff(TIER, INSTANCE, 0, 261440) -- 恶性病原体
-module:RegisterDebuff(TIER, INSTANCE, 0, 260741, 5) -- 锯齿荨麻
+module:RegisterDebuff(TIER, INSTANCE, 0, 260741, 6) -- 锯齿荨麻
 
 INSTANCE = 1001 -- 自由镇
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
