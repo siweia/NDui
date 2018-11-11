@@ -5,6 +5,6 @@
 ## Notes: Improved error reporting
 ## Author: Baudzilla, wolftankk, Affli@RU-Howling Fjord
 ## Version: NDui Mod
+## SavedVariables: BaudErrorFrameConfig
 
 BaudErrorFrame.xml
-Reskin.lua

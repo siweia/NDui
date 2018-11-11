@@ -2,15 +2,15 @@ local SelectedError = 1
 local ErrorList = {}
 local SoundTime = 0
 local QueueError = {}
-local EnableSound = false
+BaudErrorFrameConfig = BaudErrorFrameConfig or {}
 
 function BaudErrorFrame_OnLoad(self)
 	self:RegisterEvent("VARIABLES_LOADED")
 	self:RegisterEvent("ADDON_ACTION_BLOCKED")
 	self:RegisterEvent("MACRO_ACTION_BLOCKED")
 	self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
-	UIParent:UnregisterEvent("ADDON_ACTION_FORBIDDEN")
 	self:RegisterEvent("MACRO_ACTION_FORBIDDEN")
+	UIParent:UnregisterEvent("ADDON_ACTION_FORBIDDEN")
 	UIParent:UnregisterEvent("MACRO_ACTION_FORBIDDEN")
 
 	tinsert(UISpecialFrames, self:GetName())
@@ -23,6 +23,35 @@ function BaudErrorFrame_OnLoad(self)
 	end
 	SLASH_BaudErrorFrame1 = "/bauderror"
 	seterrorhandler(BaudErrorFrameHandler)
+
+	local soundButton = CreateFrame("Frame", nil, BaudErrorFrame)
+	soundButton:SetSize(25, 25)
+	soundButton:SetPoint("TOPRIGHT", -10, -10)
+	local icon = soundButton:CreateTexture(nil, "ARTWORK")
+	icon:SetAllPoints()
+	icon:SetTexture([[Interface\COMMON\VOICECHAT-SPEAKER]])
+
+	local function updateColor()
+		if BaudErrorFrameConfig.enableSound then
+			icon:SetVertexColor(1, 1, 0)
+		else
+			icon:SetVertexColor(1, 0, 0)
+		end
+	end
+
+	soundButton:SetScript("OnMouseUp", function(self)
+		BaudErrorFrameConfig.enableSound = not BaudErrorFrameConfig.enableSound
+		updateColor()
+		PlaySoundFile("Sound\\Creature\\Crone\\OzCroneAttack02.ogg", "Master")
+		self:GetScript("OnEnter")(self)
+	end)
+	soundButton:SetScript("OnShow", updateColor)
+	soundButton:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:AddLine(SOUND..": "..(BaudErrorFrameConfig.enableSound and "|cff00ff00"..ENABLE or "|cffff0000"..DISABLE))
+		GameTooltip:Show()
+	end)
+	soundButton:SetScript("OnLeave", BaudErrorFrameMinimapButton_OnLeave)
 end
 
 function BaudErrorFrame_OnEvent(self, event, ...)
@@ -31,7 +60,7 @@ function BaudErrorFrame_OnEvent(self, event, ...)
 		if type(BaudErrorFrameConfig) ~= "table" then
 			BaudErrorFrameConfig = {}
 		end
-		for Key, Value in ipairs(QueueError) do
+		for _, Value in ipairs(QueueError) do
 			BaudErrorFrameShowError(Value)
 		end
 		QueueError = nil
@@ -71,14 +100,18 @@ function BaudErrorFrameHandler(Error)
 end
 
 function BaudErrorFrameShowError(Error)
-	if (GetTime() > SoundTime) and EnableSound then
-		PlaySoundFile("Sound\\Creature\\Crone\\OzCroneAttack02.ogg")
+	if not BaudErrorFrameConfig.enableSound then return end
+
+	if GetTime() > SoundTime then
+		PlaySoundFile("Sound\\Creature\\Crone\\OzCroneAttack02.ogg", "Master")
 		SoundTime = GetTime() + 1
 	end
 end
 
 function BaudErrorFrameAdd(Error, Retrace)
-	for Key, Value in pairs(ErrorList) do
+	if Error:match("script ran too long") then return end
+
+	for _, Value in pairs(ErrorList) do
 		if Value.Error == Error then
 			if Value.Count < 99 then
 				Value.Count = Value.Count + 1
@@ -87,10 +120,10 @@ function BaudErrorFrameAdd(Error, Retrace)
 			return
 		end
 	end
+
 	if BaudErrorFrameConfig then
 		BaudErrorFrameShowError(Error)
 	else
-		if Error:match("script ran too long") then return end
 		tinsert(QueueError, Error)
 	end
 	tinsert(ErrorList, {Error = Error, Count = 1, Stack = debugstack(Retrace)})
@@ -116,7 +149,7 @@ function BaudErrorFrameEntry_OnClick(self)
 end
 
 function BaudErrorFrameClearButton_OnClick(self)
-	ErrorList = {}
+	wipe(ErrorList)
 	BaudErrorFrameMinimapButton:Hide()
 	self:GetParent():Hide()
 end
@@ -129,7 +162,7 @@ function BaudErrorFrameScrollValue()
 end
 
 function BaudErrorFrameScrollBar_Update()
-	if not BaudErrorFrame:IsShown()then return end
+	if not BaudErrorFrame:IsShown() then return end
 
 	local Index, Button, ButtonText, Text
 	local Frame = BaudErrorFrameListScrollBox
@@ -178,3 +211,30 @@ function BaudErrorFrameEditBox_OnTextChanged(self)
 end
 
 function BaudErrorFrameEditBox_OnTextSet() end
+
+-- Reskin
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:SetScript("OnEvent", function()
+	f:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
+		F.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
+		F.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
+	end
+	if IsAddOnLoaded("NDui") then
+		local B = unpack(NDui)
+		B.CreateBD(BaudErrorFrame)
+		B.CreateSD(BaudErrorFrame)
+		B.CreateTex(BaudErrorFrame)
+		B.StripTextures(BaudErrorFrameDetailScrollBox)
+		local BG2 = CreateFrame("Frame", nil, BaudErrorFrame)
+		BG2:SetPoint("CENTER", BaudErrorFrame, "CENTER", 0, -81)
+		BG2:SetSize(BaudErrorFrameEditBox:GetWidth() + 56, BaudErrorFrameEditBox:GetHeight() + 10)
+		B.CreateBD(BG2)
+		for _, button in next, {BaudErrorFrameClearButton, BaudErrorFrameCloseButton, BaudErrorFrameReloadUIButton} do
+			B.CreateBD(button)
+			B.CreateBC(button)
+		end
+	end
+end)
