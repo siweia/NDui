@@ -27,7 +27,7 @@ function module:UpdateAnchors(parent, bags)
 			bag:Hide()
 		end
 		if bag:IsShown() then
-			bag:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, 4)
+			bag:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, 5)
 			anchor = bag
 		end
 	end
@@ -40,11 +40,172 @@ function module:DisableAuroraClassic()
 	AuroraConfig.bags = false
 end
 
+function module:SetBackground()
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
+		F.SetBD(self)
+	else
+		B.CreateBD(self)
+		B.CreateSD(self)
+		B.CreateTex(self)
+	end
+end
+
+local function highlightFunction(button, match)
+	button:SetAlpha(match and 1 or .3)
+end
+
+function module:CreateInfoFrame()
+	local infoFrame = CreateFrame("Button", nil, self)
+	infoFrame:SetPoint("TOPLEFT", 10, 0)
+	infoFrame:SetSize(220, 32)
+	B.CreateFS(infoFrame, 14, SEARCH, true, "LEFT", -5, 0)
+
+	local search = self:SpawnPlugin("SearchBar", infoFrame)
+	search.highlightFunction = highlightFunction
+	search.isGlobal = true
+	search:SetPoint("LEFT", 0, 5)
+	B.StripTextures(search)
+	local bg = B.CreateBG(search)
+	bg:SetPoint("TOPLEFT", -5, -5)
+	bg:SetPoint("BOTTOMRIGHT", 5, 5)
+	B.CreateBD(bg, .3)
+
+	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
+	tag:SetFont(unpack(DB.Font))
+	tag:SetPoint("RIGHT", -5, 0)
+end
+
+function module:CreateBagBar(settings, columns)
+	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
+	local width, height = bagBar:LayoutButtons("grid", columns, 5, 5, -5)
+	bagBar:SetSize(width + 10, height + 10)
+	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
+	module.SetBackground(bagBar)
+	bagBar.highlightFunction = highlightFunction
+	bagBar.isGlobal = true
+	bagBar:Hide()
+
+	self.BagBar = bagBar
+end
+
+function module:CreateCloseButton()
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Buttons\\UI-StopButton")
+	bu:SetPoint("TOPRIGHT", -5, -5)
+	bu:SetScript("OnClick", CloseAllBags)
+	B.AddTooltip(bu, "ANCHOR_TOP", CLOSE)
+
+	return bu
+end
+
+function module:CreateRestoreButton(f)
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Buttons\\UI-RefreshButton")
+	bu:SetScript("OnClick", function()
+		NDuiDB["TempAnchor"][f.main:GetName()] = nil
+		NDuiDB["TempAnchor"][f.bank:GetName()] = nil
+		NDuiDB["TempAnchor"][f.reagent:GetName()] = nil
+		f.main:ClearAllPoints()
+		f.main:SetPoint("BOTTOMRIGHT", -100, 100)
+		f.bank:ClearAllPoints()
+		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
+		f.reagent:ClearAllPoints()
+		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
+	end)
+	B.AddTooltip(bu, "ANCHOR_TOP", RESET)
+
+	return bu
+end
+
+function module:CreateReagentButton(f)
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS")
+	bu:RegisterForClicks("AnyUp")
+	bu:SetScript("OnClick", function(_, btn)
+		if not IsReagentBankUnlocked() then
+			StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
+		else
+			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+			ReagentBankFrame:Show()
+			BankFrame.selectedTab = 2
+			f.reagent:Show()
+			f.bank:Hide()
+			if btn == "RightButton" then DepositReagentBank() end
+		end
+	end)
+	B.AddTooltip(bu, "ANCHOR_TOP", REAGENT_BANK)
+
+	return bu
+end
+
+function module:CreateBankButton(f)
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Misc_EngGizmos_17")
+	bu:SetScript("OnClick", function()
+		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+		ReagentBankFrame:Hide()
+		BankFrame.selectedTab = 1
+		f.reagent:Hide()
+		f.bank:Show()
+	end)
+	B.AddTooltip(bu, "ANCHOR_TOP", BANK)
+
+	return bu
+end
+
+function module:CreateDepositButton()
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\Spell_ChargePositive")
+	bu:SetScript("OnClick", DepositReagentBank)
+	B.AddTooltip(bu, "ANCHOR_TOP", REAGENTBANK_DEPOSIT)
+
+	return bu
+end
+
+function module:CreateBagToggle()
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Misc_Bag_08")
+	bu:SetScript("OnClick", function()
+		ToggleFrame(self.BagBar)
+		if self.BagBar:IsShown() then
+			bu.Shadow:SetBackdropBorderColor(1, 1, 1)
+		else
+			bu.Shadow:SetBackdropBorderColor(0, 0, 0)
+		end
+	end)
+	B.AddTooltip(bu, "ANCHOR_TOP", BACKPACK_TOOLTIP)
+
+	return bu
+end
+
+function module:CreateSortButton(name)
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Pet_Broom")
+	bu:SetScript("OnClick", function()
+		if name == "Bank" then
+			SortBankBags()
+		elseif name == "Reagent" then
+			SortReagentBankBags()
+		else
+			if NDuiDB["Bags"]["ReverseSort"] then
+				if InCombatLockdown() then
+					UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
+				else
+					SortBags()
+					module:ReverseSort()
+				end
+			else
+				SortBags()
+			end
+		end
+	end)
+	B.AddTooltip(bu, "ANCHOR_TOP", L["Sort"])
+
+	return bu
+end
+
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
 
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
 	Backpack:RegisterBlizzard()
+	Backpack:SetScale(NDuiDB["Bags"]["BagsScale"])
+	Backpack:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
+	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
 	local f = {}
 	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent = self:GetFilters()
@@ -54,44 +215,36 @@ function module:OnLogin()
 
 		f.main = MyContainer:New("Main", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "bags"})
 		f.main:SetFilter(onlyBags, true)
-		f.main:SetPoint("BOTTOMRIGHT", -100, 150)
+		f.main:SetPoint("BOTTOMRIGHT", -100, 100)
 
-		f.junk = MyContainer:New("Junk", {Columns = NDuiDB["Bags"]["BagsWidth"]})
+		f.junk = MyContainer:New("Junk", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
 		f.junk:SetFilter(bagsJunk, true)
-		f.junk:SetParent(f.main)
 
-		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = NDuiDB["Bags"]["BagsWidth"]})
+		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
 		f.azeriteItem:SetFilter(bagAzeriteItem, true)
-		f.azeriteItem:SetParent(f.main)
 
-		f.equipment = MyContainer:New("Equipment", {Columns = NDuiDB["Bags"]["BagsWidth"]})
+		f.equipment = MyContainer:New("Equipment", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
 		f.equipment:SetFilter(bagEquipment, true)
-		f.equipment:SetParent(f.main)
 
-		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"]})
+		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
 		f.consumble:SetFilter(bagConsumble, true)
-		f.consumble:SetParent(f.main)
 
 		f.bank = MyContainer:New("Bank", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bank"})
 		f.bank:SetFilter(onlyBank, true)
-		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -20, 0)
+		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
 		f.bank:Hide()
 
-		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = NDuiDB["Bags"]["BankWidth"]})
+		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
 		f.bankAzeriteItem:SetFilter(bankAzeriteItem, true)
-		f.bankAzeriteItem:SetParent(f.bank)
 
-		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"]})
+		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
 		f.bankLegendary:SetFilter(bankLegendary, true)
-		f.bankLegendary:SetParent(f.bank)
 
-		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = NDuiDB["Bags"]["BankWidth"]})
+		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
 		f.bankEquipment:SetFilter(bankEquipment, true)
-		f.bankEquipment:SetParent(f.bank)
 
-		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"]})
+		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
 		f.bankConsumble:SetFilter(bankConsumble, true)
-		f.bankConsumble:SetParent(f.bank)
 
 		f.reagent = MyContainer:New("Reagent", {Columns = NDuiDB["Bags"]["BankWidth"]})
 		f.reagent:SetFilter(onlyReagent, true)
@@ -244,60 +397,27 @@ function module:OnLogin()
 		end
 	end
 
-	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
-	function BagButton:OnCreate()
-		self:SetNormalTexture(nil)
-		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		self:SetPushedTexture(nil)
-		self:SetCheckedTexture(DB.textures.pushed)
-		self:GetCheckedTexture():SetVertexColor(.3, .9, .9, .5)
-
-		self.Icon:SetPoint("TOPLEFT", 2, -2)
-		self.Icon:SetPoint("BOTTOMRIGHT", -2, 2)
-		self.Icon:SetTexCoord(unpack(DB.TexCoord))
-	end
-
 	local MyContainer = Backpack:GetContainerClass()
 	function MyContainer:OnContentsChanged()
 		self:SortButtons("bagSlot")
 
-		local offset = -32
-		if self.name == "Main" or self.name == "Bank" or self.name == "Reagent" then offset = -10 end
+		local offset = 30
+		if self.name == "Main" or self.name == "Bank" or self.name == "Reagent" then offset = 40 end
 
-		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 10, offset)
-		self:SetSize(width + 20, height + 45)
+		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 5, -offset + 5)
+		self:SetSize(width + 10, height + offset)
 
 		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.junk})
 		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble})
 	end
 
-	local function highlightFunction(button, match)
-		button:SetAlpha(match and 1 or .3)
-	end
-
 	function MyContainer:OnCreate(name, settings)
 		self.Settings = settings
-		if IsAddOnLoaded("AuroraClassic") then
-			local F = unpack(AuroraClassic)
-			F.SetBD(self)
-		else
-			B.CreateBD(self)
-			B.CreateSD(self)
-			B.CreateTex(self)
-		end
-
 		self:SetParent(settings.Parent or Backpack)
 		self:SetFrameStrata("HIGH")
 		self:SetClampedToScreen(true)
-
-		if name == "Main" or name == "Bank" or name == "Reagent" then
-			self:SetScale(NDuiDB["Bags"]["BagsScale"])
-			B.CreateMF(self)
-		elseif name:match("^Bank%a+") then
-			B.CreateMF(self, f.bank)
-		else
-			B.CreateMF(self, f.main)
-		end
+		module.SetBackground(self)
+		B.CreateMF(self, settings.Parent, true)
 
 		local label
 		if name:match("AzeriteItem$") then
@@ -315,119 +435,61 @@ function module:OnLogin()
 		elseif name:match("Junk") then
 			label = BAG_FILTER_JUNK
 		end
-		if label then B.CreateFS(self, 14, label, true, "TOPLEFT", 8, -8) return end
+		if label then B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -5) return end
 
-		local infoFrame = CreateFrame("Button", nil, self)
-		infoFrame:SetPoint("BOTTOMRIGHT", -50, 0)
-		infoFrame:SetWidth(220)
-		infoFrame:SetHeight(32)
+		module.CreateInfoFrame(self)
 
-		local search = self:SpawnPlugin("SearchBar", infoFrame)
-		search.highlightFunction = highlightFunction
-		search.isGlobal = true
-		search:SetPoint("LEFT", 0, 5)
-		B.StripTextures(search)
-		local sbg = B.CreateBG(search)
-		sbg:SetPoint("TOPLEFT", -5, -5)
-		sbg:SetPoint("BOTTOMRIGHT", 5, 5)
-		B.CreateBD(sbg, .3)
-
-		local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
-		tagDisplay:SetFont(unpack(DB.Font))
-		tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT",0,0)
-		B.CreateFS(infoFrame, 14, SEARCH, true, "LEFT", 0, 1)
-
-		local SortButton = B.CreateButton(self, 60, 20, L["Sort"])
-		SortButton:SetPoint("BOTTOMLEFT", 5, 7)
-		SortButton:SetScript("OnClick", function()
-			if name == "Bank" then
-				SortBankBags()
-			elseif name == "Reagent" then
-				SortReagentBankBags()
-			else
-				if NDuiDB["Bags"]["ReverseSort"] then
-					if InCombatLockdown() then
-						UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
-					else
-						SortBags()
-						module:ReverseSort()
-					end
-				else
-					SortBags()
-				end
-			end
-		end)
-
-		local closebutton = B.CreateButton(self, 20, 20, "X")
-		closebutton:SetPoint("BOTTOMRIGHT", -5, 7)
-		closebutton:SetScript("OnClick", CloseAllBags)
-
-		if name == "Main" or name == "Bank" then
-			local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
-			bagBar:SetSize(bagBar:LayoutButtons("grid", 7))
-			bagBar:SetScale(.8)
-			bagBar.highlightFunction = highlightFunction
-			bagBar.isGlobal = true
-			bagBar:Hide()
-			self.BagBar = bagBar
-			bagBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 8, -12)
-			local bg = B.CreateBG(bagBar)
-			bg:SetPoint("TOPLEFT", -8, 8)
-			bg:SetPoint("BOTTOMRIGHT", -118, -8)
-			if IsAddOnLoaded("AuroraClassic") then
-				local F = unpack(AuroraClassic)
-				F.SetBD(bg)
-			else
-				B.CreateBD(bg)
-				B.CreateSD(bg)
-				B.CreateTex(bg)
-			end
-
-			local bagToggle = B.CreateButton(self, 60, 20, BAGSLOT)
-			bagToggle:SetPoint("LEFT", SortButton, "RIGHT", 6, 0)
-			bagToggle:SetScript("OnClick", function()
-				ToggleFrame(self.BagBar)
-			end)
-
-			if name == "Bank" then
-				bg:SetPoint("TOPLEFT", -10, 10)
-				bg:SetPoint("BOTTOMRIGHT", 10, -10)
-
-				local switch = B.CreateButton(self, 70, 20, REAGENT_BANK)
-				switch:SetPoint("LEFT", bagToggle, "RIGHT", 6, 0)
-				switch:RegisterForClicks("AnyUp")
-				switch:SetScript("OnClick", function(_, btn)
-					if not IsReagentBankUnlocked() then
-						StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
-					else
-						PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-						ReagentBankFrame:Show()
-						BankFrame.selectedTab = 2
-						f.reagent:Show()
-						f.bank:Hide()
-						if btn == "RightButton" then DepositReagentBank() end
-					end
-				end)
-			end
+		local buttons = {}
+		buttons[1] = module.CreateCloseButton(self)
+		if name == "Main" then
+			module.CreateBagBar(self, settings, 4)
+			buttons[2] = module.CreateRestoreButton(self, f)
+			buttons[3] = module.CreateBagToggle(self)
+		elseif name == "Bank" then
+			module.CreateBagBar(self, settings, 7)
+			buttons[2] = module.CreateReagentButton(self, f)
+			buttons[3] = module.CreateBagToggle(self)
 		elseif name == "Reagent" then
-			local deposit = B.CreateButton(self, 100, 20, REAGENTBANK_DEPOSIT)
-			deposit:SetPoint("LEFT", SortButton, "RIGHT", 6, 0)
-			deposit:SetScript("OnClick", DepositReagentBank)
+			buttons[2] = module.CreateBankButton(self, f)
+			buttons[3] = module.CreateDepositButton(self)
+		end
+		buttons[4] = module.CreateSortButton(self, name)
 
-			local switch = B.CreateButton(self, 70, 20, BANK)
-			switch:SetPoint("LEFT", deposit, "RIGHT", 6, 0)
-			switch:SetScript("OnClick", function()
-				PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-				ReagentBankFrame:Hide()
-				BankFrame.selectedTab = 1
-				f.reagent:Hide()
-				f.bank:Show()
-			end)
+		for i = 1, 4 do
+			local bu = buttons[i]
+			if i == 1 then
+				bu:SetPoint("TOPRIGHT", -5, -5)
+			else
+				bu:SetPoint("RIGHT", buttons[i-1], "LEFT", -5, 0)
+			end
 		end
 
-		-- Add Sound
-		self:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
-		self:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
+		self:HookScript("OnShow", B.RestoreMF)
+	end
+
+	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
+	function BagButton:OnCreate()
+		self:SetNormalTexture(nil)
+		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		self:SetPushedTexture(nil)
+		self:SetCheckedTexture(nil)
+
+		self:SetSize(iconSize, iconSize)
+		self.BG = B.CreateBG(self)
+		B.CreateBD(self.BG, 0)
+		self.Icon:SetAllPoints()
+		self.Icon:SetTexCoord(unpack(DB.TexCoord))
+	end
+
+	function BagButton:OnUpdate()
+		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
+		local quality = id and select(3, GetItemInfo(id)) or 1
+		local color = BAG_ITEM_QUALITY_COLORS[quality]
+		if self:GetChecked() then
+			self.BG:SetBackdropBorderColor(color.r, color.g, color.b)
+		else
+			self.BG:SetBackdropBorderColor(0, 0, 0)
+		end
 	end
 
 	-- Fixes
