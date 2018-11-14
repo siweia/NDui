@@ -10,6 +10,7 @@ local defaultSettings = {
 	InternalCD = {},
 	AuraWatchMover = {},
 	RaidClickSets = {},
+	TempAnchor = {},
 	Actionbar = {
 		Enable = true,
 		Hotkeys = true,
