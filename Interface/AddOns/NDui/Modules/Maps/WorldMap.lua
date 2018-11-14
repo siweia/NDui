@@ -25,15 +25,13 @@ end
 
 function module:OnLogin()
 	-- Scaling
-	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(NDuiDB["Map"]["MapScale"]) end
-	hooksecurefunc(WorldMapFrame, "Minimize", function(self)
-		if InCombatLockdown() then return end
-		self:SetScale(NDuiDB["Map"]["MapScale"])
-	end)
-	hooksecurefunc(WorldMapFrame, "Maximize", function(self)
-		if InCombatLockdown() then return end
-		self:SetScale(1)
-	end)
+	local function setupScale(self)
+		if self.isMaximized and self:GetScale() ~= 1 then
+			self:SetScale(1)
+		elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then
+			self:SetScale(NDuiDB["Map"]["MapScale"])
+		end
+	end
 
 	if NDuiDB["Map"]["MapScale"] > 1 then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
@@ -42,6 +40,13 @@ function module:OnLogin()
 			return x/s, y/s
 		end
 	end
+
+	local function updateMapAnchor(self)
+		setupScale(self)
+		if not self.isMaximized then B.RestoreMF(self) end
+	end
+	B.CreateMF(WorldMapFrame, nil, true)
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", updateMapAnchor)
 
 	-- Generate Coords
 	if not NDuiDB["Map"]["Coord"] then return end

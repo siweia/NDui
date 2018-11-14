@@ -50,7 +50,6 @@ local frames = {
 	["TutorialFrame"] = false,
 	["VideoOptionsFrame"] = false,
 	["WorldStateScoreFrame"] = false,
-	["WorldMapFrame"] = false,
 
 	-- Other AddOns
 	["BaudErrorFrame"] = false,
