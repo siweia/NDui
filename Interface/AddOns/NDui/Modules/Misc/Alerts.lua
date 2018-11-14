@@ -133,6 +133,7 @@ function module:InterruptAlert()
 		[82691] = true,		-- 冰霜之环
 		[207685] = true,	-- 悲苦咒符
 		[64695] = true,		-- 陷地
+		[198121] = true,	-- 冰霜撕咬
 	}
 
 	local function msgChannel()
