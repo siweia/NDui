@@ -312,9 +312,7 @@ function UF:CreateCastBar(self)
 		cb:SetFrameLevel(10)
 		cb.SafeZone = safe
 
-		local lag = B.CreateFS(cb, 10, "")
-		lag:SetPoint("LEFT", cb, "RIGHT", 3, 0)
-		lag:SetJustifyH("LEFT")
+		local lag = B.CreateFS(cb, 10, "", false, "CENTER", -6, 17)
 		cb.Lag = lag
 		self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", cast.OnCastSent)
 	elseif self.mystyle == "nameplate" then
