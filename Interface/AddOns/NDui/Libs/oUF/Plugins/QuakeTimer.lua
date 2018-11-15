@@ -40,7 +40,7 @@ local function updateTimer(self, elapsed)
 			self.Text:SetText(format(self.timerFormat, timer, self.duration))
 		end
 
-		if self.endTime and self.endTime - GetTime() >= duration then
+		if self.endTime and self.endTime - GetTime() >= duration and not element.notInterruptible then
 			self:SetStatusBarColor(unpack(self.failColor))
 		else
 			self:SetStatusBarColor(unpack(self.passColor))
@@ -70,16 +70,18 @@ local function onEvent(self, event, unit)
 		end
 		element:SetShown(found)
 	elseif event:find("START") then
-		local name, _, _, _, endTime = UnitCastingInfo(unit)
+		local name, _, _, _, endTime, _, _, notInterruptible = UnitCastingInfo(unit)
 		if not name then
-			name, _, _, _, endTime = UnitChannelInfo(unit)
+			name, _, _, _, endTime, _, _, notInterruptible = UnitChannelInfo(unit)
 		end
 		if not name then return end
 
 		endTime = endTime / 1e3
 		element.endTime = endTime
+		element.notInterruptible = notInterruptible
 	elseif event:find("STOP") then
 		element.endTime = nil
+		element.notInterruptible = false
 	end
 
 	if self.PostUpdate then self:PostUpdate(event, unit) end
