@@ -63,7 +63,7 @@ local list = {
 		{AuraID = 118455, UnitID = "pet"},		-- 野兽瞬劈斩
 		{AuraID = 207094, UnitID = "pet"},		-- 泰坦之雷
 		{AuraID = 217200, UnitID = "pet"},		-- 凶猛狂暴
-		{AuraID = 272790, UnitID = "pet"},		-- 狂暴
+		{AuraID = 272790, UnitID = "pet", Flash = true},	-- 狂暴
 		{AuraID = 193526, UnitID = "player"},	-- 百发百中
 		{AuraID = 193530, UnitID = "player"},	-- 野性守护
 		{AuraID = 185791, UnitID = "player"},	-- 荒野呼唤

@@ -97,6 +97,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 250258) -- 剧毒跳碾
 module:RegisterDebuff(TIER, INSTANCE, 0, 255371) -- 恐惧之面
 module:RegisterDebuff(TIER, INSTANCE, 0, 257407) -- 追踪
 module:RegisterDebuff(TIER, INSTANCE, 0, 250050) -- 沙德拉的回响
+module:RegisterDebuff(TIER, INSTANCE, 0, 255558) -- 污血
 
 INSTANCE = 1036 -- 风暴神殿
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽

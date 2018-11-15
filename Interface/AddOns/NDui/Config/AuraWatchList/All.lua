@@ -518,6 +518,7 @@ local list = {
 		{AuraID = 260512, UnitID = "target"},	-- 灵魂收割，神庙
 		{AuraID = 277965, UnitID = "target"},	-- 重型军火，围攻1
 		{AuraID = 256493, UnitID = "target"},	-- 炽燃的艾泽里特，矿区1
+		{AuraID = 271867, UnitID = "target"},	-- 氪金致胜，矿区1
 	-- 奥迪尔
 		{AuraID = 271965, UnitID = "target"},	-- 能源关闭，塔罗克
 		{AuraID = 277548, UnitID = "target"},	-- 粉碎黑暗，小怪
