@@ -143,6 +143,18 @@ end
 function module:WhipserInvite()
 	if not NDuiDB["Chat"]["Invite"] then return end
 
+	local function isUnitInGuild(unitName)
+		if not unitName then return end
+		for i = 1, GetNumGuildMembers() do
+			local name = GetGuildRosterInfo(i)
+			if name and Ambiguate(name, "none") == Ambiguate(unitName, "none") then
+				return true
+			end
+		end
+
+		return false
+	end
+
 	local function onChatWhisper(event, ...)
 		local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
 		for word in pairs(whisperList) do
@@ -151,7 +163,7 @@ function module:WhipserInvite()
 					local gameID = select(6, BNGetFriendInfoByID(presenceID))
 					if gameID then
 						local _, charName, _, realmName, _, _, _, _, guild = BNGetGameAccountInfo(gameID)
-						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or guild == GetGuildInfo("player")) then
+						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or isUnitInGuild(charName.."-"..realmName)) then
 							BNInviteFriend(gameID)
 						end
 					end
