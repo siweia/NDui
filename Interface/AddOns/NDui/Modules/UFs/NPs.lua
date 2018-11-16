@@ -243,9 +243,9 @@ local function updateMouseoverShown(self)
 end
 
 local function AddMouseoverIndicator(self)
-	local glow = CreateFrame("Frame", nil, self)
-	glow:SetPoint("TOPLEFT", -6, 6)
-	glow:SetPoint("BOTTOMRIGHT", 6, -6)
+	local glow = CreateFrame("Frame", nil, UIParent)
+	glow:SetPoint("TOPLEFT", self, -6, 6)
+	glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
 	glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
 	glow:SetBackdropBorderColor(1, 1, 1)
 	glow:Hide()
