@@ -484,7 +484,8 @@ function module:OnLogin()
 
 	function BagButton:OnUpdate()
 		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
-		local quality = id and select(3, GetItemInfo(id)) or 1
+		local quality = id and select(3, GetItemInfo(id)) or 0
+		if quality == 1 then quality = 0 end
 		local color = BAG_ITEM_QUALITY_COLORS[quality]
 		if self:GetChecked() then
 			self.BG:SetBackdropBorderColor(color.r, color.g, color.b)
