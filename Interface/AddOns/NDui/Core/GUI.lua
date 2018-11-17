@@ -135,11 +135,11 @@ local defaultSettings = {
 		PPPHeight = 5,
 		PPPowerText = false,
 		FullHealth = false,
-		HighlightIndicator = true,
 		SecureColor = {r=1, g=0, b=1},
 		TransColor = {r=1, g=.8, b=0},
 		InsecureColor = {r=1, g=0, b=0},
 		DPSRevertThreat = false,
+		ExplosivesScale = false,
 	},
 	Skins = {
 		DBM = true,
@@ -372,19 +372,19 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"]},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"], true},
-		{1, "Nameplate", "Arrow", L["Show Arrow"]},
-		{1, "Nameplate", "HighlightIndicator", L["Show HighlightIndicator"], true},
 		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"]},
 		{1, "Nameplate", "ColorBorder", L["Auras Border"], true},
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"]},
 		{1, "Nameplate", "FullHealth", L["Show FullHealth"], true},
+		{1, "Nameplate", "Arrow", L["Show Arrow"]},
+		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"]},
+		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"], true, {0, 1, 1}},
 		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
 		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"], false, {.5, 1.5, 1}},
 		{3, "Nameplate", "Distance", L["Nameplate Distance"], true, {20, 100, 0}},
 		{3, "Nameplate", "Width", L["NP Width"], false, {50, 150, 0}},
 		{3, "Nameplate", "Height", L["NP Height"], true, {5, 15, 0}},
-		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"], false, {0, 1, 1}},
 	},
 	[6] = {
 		{1, "AuraWatch", "Enable", "|cff00cc4c"..L["Enable AuraWatch"]},
@@ -407,10 +407,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "EasyMarking", L["Easy Mark"]},
 		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
 		{},--blank
-		{1, "Chat", "Invite", "|cff00cc4c"..L["Whisper Invite"]},
-		{1, "Chat", "GuildInvite", L["Guild Invite Only"]},
-		{2, "Chat", "Keyword", L["Whisper Keyword"], true, nil, function() B.GenWhisperList() end},
-		{},--blank
 		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"]},
 		{1, "Misc", "QuestProgress", L["QuestProgress"]},
 		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"], true},
@@ -425,7 +421,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
 	},
 	[8] = {
-		{1, "Chat", "Lock", L["Lock Chat"]},
+		{1, "Chat", "Lock", "|cff00cc4c"..L["Lock Chat"]},
 		{},--blank
 		{1, "Chat", "Freedom", L["Language Filter"]},
 		{1, "Chat", "Sticky", L["Chat Sticky"], true},
@@ -433,11 +429,15 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "WhisperColor", L["Differ WhipserColor"], true},
 		{1, "ACCOUNT", "Timestamp", L["Timestamp"], false, nil, function() B.UpdateTimestamp() end},
 		{},--blank
-		{1, "Chat", "EnableFilter", L["Enable Chatfilter"]},
+		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
 		{2, "ACCOUNT", "ChatFilterList", L["Filter List"], true, nil, function() B.GenFilterList() end},
-		{2, "ACCOUNT", "ChatAtList", L["@List"], false, nil, function() B.GenChatAtList() end},
+		{},--blank
+		{1, "Chat", "Invite", "|cff00cc4c"..L["Whisper Invite"]},
+		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
+		{2, "Chat", "Keyword", L["Whisper Keyword"], false, nil, function() B.GenWhisperList() end},
+		{2, "ACCOUNT", "ChatAtList", L["@List"], true, nil, function() B.GenChatAtList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
