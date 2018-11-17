@@ -274,7 +274,7 @@ function module:ExplosiveAlert()
 		if affixes[3] == 13 then
 			B:RegisterEvent("CHALLENGE_MODE_START", startCount)
 			B:RegisterEvent("CHALLENGE_MODE_COMPLETED", endCount)
-			B:RegisterEvent("PLAYER_ENTERING_WORLD", pauseCount)
+			B:RegisterEvent(event, pauseCount)
 		end
 		B:UnregisterEvent(event, checkAffixes)
 	end

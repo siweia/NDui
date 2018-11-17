@@ -104,16 +104,15 @@ local function Update(self)
 	end
 end
 
-local function CheckAffixes(self, event)
+local function checkAffixes(self, event)
 	local affixes = C_MythicPlus.GetCurrentAffixes()
 	if not affixes then return end
-
 	if affixes[3] == 14 then
 		Update(self)
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", Update)
+		self:RegisterEvent(event, Update)
 		self:RegisterEvent("CHALLENGE_MODE_START", Update)
 	end
-	self:UnregisterEvent(event, CheckAffixes)
+	self:UnregisterEvent(event, checkAffixes)
 end
 
 local function Enable(self)
@@ -128,7 +127,7 @@ local function Enable(self)
 		end
 		element:SetScript("OnUpdate", updateTimer)
 
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", CheckAffixes)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
 		return true
 	end
 end
