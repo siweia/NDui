@@ -222,6 +222,57 @@ local function UpdateUnitClassify(self, unit)
 	end
 end
 
+local explosiveCount, hasExplosives = 0
+local function scalePlates()
+	for _, nameplate in next, C_NamePlate.GetNamePlates() do
+		local unitFrame = nameplate.unitFrame
+		local npcID = B.GetNPCID(UnitGUID(unitFrame.unit))
+		if explosiveCount > 0 and npcID == 120651 or explosiveCount == 0 then
+			unitFrame:SetScale(1)
+		else
+			unitFrame:SetScale(.5)
+		end
+	end
+end
+
+local function UpdateExplosives(self, event, unit)
+	if not hasExplosives or unit ~= self.unit then return end
+
+	local npcID = B.GetNPCID(UnitGUID(unit))
+	if event == "NAME_PLATE_UNIT_ADDED" and npcID == 120651 then
+		explosiveCount = explosiveCount + 1
+	elseif event == "NAME_PLATE_UNIT_REMOVED" and npcID == 120651 then
+		explosiveCount = explosiveCount - 1
+	end
+	scalePlates()
+end
+
+local function checkInstance()
+	local name, _, instID = GetInstanceInfo()
+	if name and instID == 8 then
+		hasExplosives = true
+	else
+		hasExplosives = false
+		explosiveCount = 0
+	end
+end
+
+function UF:CheckExplosives()
+	if not NDuiDB["Nameplate"]["ExplosivesScale"] then return end
+
+	local function checkAffixes(event)
+		local affixes = C_MythicPlus.GetCurrentAffixes()
+		if not affixes then return end
+		if affixes[3] == 13 then
+			checkInstance()
+			B:RegisterEvent(event, checkInstance)
+			B:RegisterEvent("CHALLENGE_MODE_START", checkInstance)
+		end
+		B:UnregisterEvent(event, checkAffixes)
+	end
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
+end
+
 local function isMouseoverUnit(self)
 	if not self or not self.unit then return end
 
@@ -337,9 +388,7 @@ function UF:CreatePlates(unit)
 		self.ThreatIndicator = threatIndicator
 		self.ThreatIndicator.Override = UpdateThreatColor
 
-		if NDuiDB["Nameplate"]["HighlightIndicator"] then
-			AddMouseoverIndicator(self)
-		end
+		AddMouseoverIndicator(self)
 	end
 end
 
@@ -348,6 +397,7 @@ function UF:PostUpdatePlates(event, unit)
 	UpdateTargetMark(self)
 	UpdateQuestUnit(self, unit)
 	UpdateUnitClassify(self, unit)
+	UpdateExplosives(self, event, unit)
 end
 
 -- Player Nameplate

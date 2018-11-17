@@ -163,6 +163,7 @@ function UF:OnLogin()
 		self:BlockAddons()
 		self:CreateUnitTable()
 		self:CreatePowerUnitTable()
+		self:CheckExplosives()
 
 		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
 		oUF:SetActiveStyle("Nameplates")
