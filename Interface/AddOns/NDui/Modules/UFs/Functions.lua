@@ -286,8 +286,9 @@ function UF:CreateCastBar(self)
 		cb:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -8)
 		cb:SetSize(self:GetWidth(), 10)
 	elseif self.mystyle == "nameplate" then
+		cb:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -5)
 		cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
-		cb:SetSize(self:GetWidth(), self:GetHeight())
+		cb:SetHeight(self:GetHeight())
 	end
 
 	cb.CastingColor = {.3, .7, 1}
@@ -331,7 +332,7 @@ function UF:CreateCastBar(self)
 		shield:SetPoint("CENTER", 0, -5)
 		cb.Shield = shield
 
-		local iconSize = self.Health:GetHeight() + cb:GetHeight() + 5
+		local iconSize = self:GetHeight()*2 + 5
 		cb.Icon:SetSize(iconSize, iconSize)
 	end
 
