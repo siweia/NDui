@@ -199,6 +199,7 @@ local defaultSettings = {
 		QuestProgress = false,
 		OnlyCompleteRing = false,
 		ExplosiveCount = false,
+		ExplosiveCache = {},
 	},
 	Tutorial = {
 		Complete = false,

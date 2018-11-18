@@ -231,7 +231,7 @@ function module:ExplosiveAlert()
 		["SPELL_BUILDING_DAMAGE"] = 16,
 	}
 
-	local cache = {}
+	local cache = NDuiDB["Misc"]["ExplosiveCache"]
 	local function updateCount(_, ...)
 		local _, eventType, _, _, sourceName, _, _, destGUID = ...
 		local index = eventList[eventType]
