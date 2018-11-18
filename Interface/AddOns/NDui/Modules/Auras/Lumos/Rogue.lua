@@ -27,10 +27,11 @@ end
 
 function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		UpdateDebuff(self.bu[1], 1943, 1943)
+		UpdateDebuff(self.bu[1], 703, 703, true)
+		UpdateDebuff(self.bu[2], 1943, 1943)
 
 		do
-			local button = self.bu[2]
+			local button = self.bu[3]
 			if IsPlayerSpell(111240) then
 				UpdateSpellStatus(button, 111240)
 			elseif IsPlayerSpell(193640) then
@@ -41,7 +42,7 @@ function module:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[3]
+			local button = self.bu[4]
 			if IsPlayerSpell(200806) then
 				UpdateCooldown(button, 200806, true)
 			elseif IsPlayerSpell(245388) then
@@ -51,8 +52,7 @@ function module:ChantLumos(self)
 			end
 		end
 
-		UpdateDebuff(self.bu[4], 79140, 79140, true)
-		UpdateBuff(self.bu[5], 31224, 31224, true)
+		UpdateDebuff(self.bu[5], 79140, 79140, true)
 	elseif GetSpecialization() == 2 then
 		UpdateBuff(self.bu[1], 195627, 195627)
 
