@@ -223,14 +223,16 @@ local function UpdateUnitClassify(self, unit)
 end
 
 local explosiveCount, hasExplosives = 0
+--local id = 126023 --test
+local id = 120651
 local function scalePlates()
 	for _, nameplate in next, C_NamePlate.GetNamePlates() do
 		local unitFrame = nameplate.unitFrame
 		local npcID = B.GetNPCID(UnitGUID(unitFrame.unit))
-		if explosiveCount > 0 and npcID == 120651 or explosiveCount == 0 then
-			unitFrame:SetScale(1)
+		if explosiveCount > 0 and npcID == id or explosiveCount == 0 then
+			unitFrame:SetWidth(NDuiDB["Nameplate"]["Width"] * 1.4)
 		else
-			unitFrame:SetScale(.5)
+			unitFrame:SetWidth(NDuiDB["Nameplate"]["Width"] * .9)
 		end
 	end
 end
@@ -239,9 +241,9 @@ local function UpdateExplosives(self, event, unit)
 	if not hasExplosives or unit ~= self.unit then return end
 
 	local npcID = B.GetNPCID(UnitGUID(unit))
-	if event == "NAME_PLATE_UNIT_ADDED" and npcID == 120651 then
+	if event == "NAME_PLATE_UNIT_ADDED" and npcID == id then
 		explosiveCount = explosiveCount + 1
-	elseif event == "NAME_PLATE_UNIT_REMOVED" and npcID == 120651 then
+	elseif event == "NAME_PLATE_UNIT_REMOVED" and npcID == id then
 		explosiveCount = explosiveCount - 1
 	end
 	scalePlates()
