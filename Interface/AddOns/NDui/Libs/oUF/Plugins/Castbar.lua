@@ -55,9 +55,6 @@ local function setBarTicks(castBar, ticknum)
 end
 
 cast.OnCastbarUpdate = function(self, elapsed)
-	if not self.Lag then self.Lag = 0 end
-	if GetNetStats() == 0 then return end
-
 	if self.casting or self.channeling then
 		local mystyle = self.__owner.mystyle
 		local decimal = "%.2f"
@@ -75,7 +72,9 @@ cast.OnCastbarUpdate = function(self, elapsed)
 				self.Time:SetFormattedText(decimal.." | |cffff0000"..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
 			else
 				self.Time:SetFormattedText(decimal.." | "..decimal, duration, self.max)
-				if self.SafeZone and self.SafeZone.timeDiff ~= 0 then self.Lag:SetFormattedText("%d ms", self.SafeZone.timeDiff * 1000) end
+				if self.Lag and self.SafeZone and self.SafeZone.timeDiff ~= 0 then
+					self.Lag:SetFormattedText("%d ms", self.SafeZone.timeDiff * 1000)
+				end
 			end
 		else
 			if duration > 1e4 then
@@ -112,9 +111,8 @@ cast.PostCastStart = function(self, unit)
 
 	if unit == "vehicle" then 
 		self.SafeZone:Hide()
-		self.Lag:Hide()
+		if self.Lag then self.Lag:Hide() end
 	elseif unit == "player" then
-		if GetNetStats() == 0 then return end
 		local sf = self.SafeZone
 		if not sf then return end
 
@@ -127,13 +125,12 @@ cast.PostCastStart = function(self, unit)
 			sf.castSent = false
 		end
 
-		self.Lag:SetText("")
 		if not UnitInVehicle("player") then
 			sf:Show()
-			self.Lag:Show()
+			if self.Lag then self.Lag:Show() end
 		else
 			sf:Hide()
-			self.Lag:Hide()
+			if self.Lag then self.Lag:Hide() end
 		end
 
 		if self.casting then
