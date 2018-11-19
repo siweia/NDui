@@ -28,8 +28,9 @@ local oUF = ns.oUF
 
 local _G = getfenv(0)
 local DEBUFF_MAX_DISPLAY = _G.DEBUFF_MAX_DISPLAY
+local format, strfind = string.format, string.find
 
-local function updateTimer(self, elapsed)
+local function updateTimer(self)
 	local duration = self.expires - GetTime()
 	if duration < 0 then
 		self:Hide()
@@ -40,7 +41,7 @@ local function updateTimer(self, elapsed)
 			self.Text:SetText(format(self.timerFormat, timer, self.duration))
 		end
 
-		if self.endTime and self.endTime - GetTime() >= duration and not element.notInterruptible then
+		if self.endTime and self.endTime - GetTime() >= duration and not self.notInterruptible then
 			self:SetStatusBarColor(unpack(self.failColor))
 		else
 			self:SetStatusBarColor(unpack(self.passColor))
@@ -69,7 +70,7 @@ local function onEvent(self, event, unit)
 			end
 		end
 		element:SetShown(found)
-	elseif event:find("START") then
+	elseif strfind(event, "START") then
 		local name, _, _, _, endTime, _, _, notInterruptible = UnitCastingInfo(unit)
 		if not name then
 			name, _, _, _, endTime, _, _, notInterruptible = UnitChannelInfo(unit)
@@ -79,7 +80,7 @@ local function onEvent(self, event, unit)
 		endTime = endTime / 1e3
 		element.endTime = endTime
 		element.notInterruptible = notInterruptible
-	elseif event:find("STOP") then
+	elseif strfind(event, "STOP") then
 		element.endTime = nil
 		element.notInterruptible = false
 	end
@@ -136,7 +137,7 @@ local function Disable(self)
 	local element = self.QuakeTimer
 
 	if element then
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD", CheckAffixes)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD", Update)
 		self:UnregisterEvent("CHALLENGE_MODE_START", Update)
 		self:UnregisterEvent("UNIT_AURA", onEvent)
