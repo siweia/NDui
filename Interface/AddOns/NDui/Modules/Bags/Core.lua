@@ -1,7 +1,9 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
+
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
+local ipairs, strmatch = ipairs, string.match
 
 function module:ReverseSort()
 	C_Timer.After(.5, function()
@@ -336,7 +338,7 @@ function module:OnLogin()
 		self.ShowNewItems = true
 	end
 
-	function MyButton:OnEnter(item)
+	function MyButton:OnEnter()
 		if self.ShowNewItems then
 			if self.anim:IsPlaying() then self.anim:Stop() end
 		end
@@ -421,9 +423,9 @@ function module:OnLogin()
 		B.CreateMF(self, settings.Parent, true)
 
 		local label
-		if name:match("AzeriteItem$") then
+		if strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]
-		elseif name:match("Equipment$") then
+		elseif strmatch(name, "Equipment$") then
 			if NDuiDB["Bags"]["ItemSetFilter"] then
 				label = L["Equipement Set"]
 			else
@@ -431,9 +433,9 @@ function module:OnLogin()
 			end
 		elseif name == "BankLegendary" then
 			label = LOOT_JOURNAL_LEGENDARIES
-		elseif name:match("Consumble$") then
+		elseif strmatch(name, "Consumble$") then
 			label = BAG_FILTER_CONSUMABLES
-		elseif name:match("Junk") then
+		elseif strmatch(name, "Junk") then
 			label = BAG_FILTER_JUNK
 		end
 		if label then B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8) return end
