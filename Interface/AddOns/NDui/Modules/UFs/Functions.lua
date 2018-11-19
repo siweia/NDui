@@ -1,8 +1,11 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+
 local oUF = ns.oUF or oUF
 local cast = ns.cast
 local UF = B:RegisterModule("UnitFrames")
+local format, floor = string.format, math.floor
+local pairs, next = pairs, next
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
@@ -319,9 +322,11 @@ function UF:CreateCastBar(self)
 		cb:SetFrameLevel(10)
 		cb.SafeZone = safe
 
-		local lag = B.CreateFS(cb, 10, "", false, "CENTER", -6, 17)
-		cb.Lag = lag
-		self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", cast.OnCastSent)
+		if NDuiDB["UFs"]["LagString"] then
+			local lag = B.CreateFS(cb, 10, "", false, "CENTER", -6, 17)
+			cb.Lag = lag
+			self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", cast.OnCastSent)
+		end
 	elseif self.mystyle == "nameplate" then
 		name:SetPoint("LEFT", cb, 0, -5)
 		timer:SetPoint("RIGHT", cb, 0, -5)
@@ -689,7 +694,7 @@ end
 
 local function postUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
-		local perc = math.floor((cur/max)*100)
+		local perc = floor((cur/max)*100)
 		if perc < 35 then
 			element:SetStatusBarColor(0, 1, 0)
 		elseif perc < 70 then

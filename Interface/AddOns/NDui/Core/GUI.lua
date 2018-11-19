@@ -2,6 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("GUI")
 
+local format, tonumber, type = string.format, tonumber, type
+local pairs, ipairs, next = pairs, ipairs, next
+
 -- Default Settings
 local defaultSettings = {
 	BFA = false,
@@ -84,6 +87,7 @@ local defaultSettings = {
 		HeightScale = 1,
 		ClassPower = true,
 		QuakeTimer = false,
+		LagString = true,
 	},
 	Chat = {
 		Sticky = false,
@@ -317,9 +321,10 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Enable", "|cff00cc4c"..L["Enable UFs"]},
 		{},--blank
 		{1, "UFs", "Castbars", "|cff00cc4c"..L["UFs Castbar"]},
-		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"]},
 		{1, "UFs", "SwingTimer", L["UFs SwingTimer"], true},
+		{1, "UFs", "LagString", L["Castbar LagString"]},
+		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true},
 		{},--blank
 		{1, "UFs", "Boss", L["Boss Frame"]},
 		{1, "UFs", "Arena", L["Arena Frame"], true},
@@ -944,11 +949,11 @@ local function setupClickCast()
 	local function createBar(parent, data)
 		local key, modKey, value = unpack(data)
 		local clickSet = modKey..key
-		local name, texture, _
+		local texture
 		if tonumber(value) then
-			name, _, texture = GetSpellInfo(value)
+			texture = GetSpellTexture(value)
 		else
-			name = textIndex[value] or MACRO
+			value = textIndex[value] or value
 			texture = 136243
 		end
 
