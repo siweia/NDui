@@ -2,6 +2,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Misc")
 
+local tostring, tonumber, pairs = tostring, tonumber, pairs
+local tremove, tinsert = table.remove, table.insert
+local strsplit, random = string.split, math.random
+
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
 ]]
@@ -238,38 +242,24 @@ do
 	end
 end
 
--- Auto screenshot when achieved
+-- Auto screenshot when Achievement earned
 do
-	local waitTable = {}
-	local function TakeScreen(delay, func, ...)
-		wipe(waitTable)
-		local waitFrame = _G["TakeScreenWaitFrame"] or CreateFrame("Frame", "TakeScreenWaitFrame", UIParent)
-		waitFrame:SetScript("OnUpdate", function(_, elapse)
-			local count = #waitTable
-			local i = 1
-			while (i <= count) do
-				local waitRecord = tremove(waitTable, i)
-				local d = tremove(waitRecord, 1)
-				local f = tremove(waitRecord, 1)
-				local p = tremove(waitRecord, 1)
-				if (d > elapse) then
-					tinsert(waitTable, i, {d-elapse, f, p})
-					i = i + 1
-				else
-					count = count - 1
-					f(unpack(p))
-				end
-			end
-		end)
-
-		tinsert(waitTable, {delay, func, {...}})
-	end
+	local f = CreateFrame("Frame")
+	f:Hide()
+	f:SetScript("OnUpdate", function(_, elapsed)
+		f.delay = f.delay - elapsed
+		if f.delay < 0 then
+			Screenshot()
+			f:Hide()
+		end
+	end)
 
 	local function setupMisc(event)
 		if not NDuiDB["Misc"]["Screenshot"] then
 			B:UnregisterEvent(event, setupMisc)
 		else
-			TakeScreen(1, Screenshot)
+			f.delay = 1
+			f:Show()
 		end
 	end
 
@@ -469,7 +459,7 @@ if DB.Client == "zhCN" then
 	end
 
 	local function randomRoll(gold)
-		local cur = math.random(1, gold - (maxPacks-index))
+		local cur = random(1, gold - (maxPacks-index))
 		gold = gold - cur
 		return cur, gold
 	end
@@ -513,7 +503,7 @@ if DB.Client == "zhCN" then
 
 	SlashCmdList["ROLLGOLD"] = function(arg)
 		if not arg then return end
-		local max, num = string.split(" ", tostring(arg))
+		local max, num = strsplit(" ", tostring(arg))
 		maxGold = tonumber(max)
 		maxPacks = tonumber(num) or 1
 		if maxPacks > 10 then maxPacks = 10 end
