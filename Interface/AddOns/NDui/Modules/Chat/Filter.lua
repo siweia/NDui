@@ -2,6 +2,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
+local strmatch, strfind = string.match, string.find
+local format, gsub = string.format, string.gsub
+local pairs, ipairs = pairs, ipairs
+
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
 
@@ -41,7 +45,7 @@ end
 
 local addonBlockList = {
 	"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【爱不易】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
-	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "进度:", "属性通报", "blizzard%.cn.+%.vip", "助我轻松提高DPS"
+	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "进度:", "属性通报", "blizzard.+验证码", "助我轻松提高DPS"
 }
 
 local function restoreCVar(cvar)
@@ -64,7 +68,7 @@ local function genAddonBlock(_, event, msg, author)
 	if UnitIsUnit(name, "player") then return end
 
 	for _, word in ipairs(addonBlockList) do
-		if msg:find(word) then
+		if strfind(msg, word) then
 			if event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" then
 				toggleBubble()
 			elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
@@ -89,7 +93,7 @@ local function chatAtMe(_, _, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
 	for word in pairs(chatAtList) do
 		if word ~= "" then
-			if msg:lower():match("@"..word:lower()) then
+			if strmatch(msg:lower(), "@"..word:lower()) then
 				at.checker = true
 				at.author = author
 				at.class = select(2, GetPlayerInfoByGUID(guid))
@@ -122,8 +126,8 @@ local WQTUsers = {}
 local inviteString = _G.ERR_INVITED_TO_GROUP_SS:gsub(".+|h", "")
 
 local function blockInviteString(_, _, msg)
-	if msg:find(inviteString) then
-		local name = msg:match("%[(.+)%]")
+	if strfind(msg, inviteString) then
+		local name = strmatch(msg, "%[(.+)%]")
 		if WQTUsers[name] then
 			return true
 		end
@@ -132,7 +136,7 @@ end
 
 local function blockWhisperString(_, _, msg, author)
 	local name = Ambiguate(author, "none")
-	if msg:find("%[World Quest Tracker%]") or msg:find("一起做世界任务吧：") or msg:find("一起来做世界任务<") then
+	if strfind(msg, "%[World Quest Tracker%]") or strfind(msg, "一起做世界任务吧：") or strfind(msg, "一起来做世界任务<") then
 		if not WQTUsers[name] then
 			WQTUsers[name] = true
 		end
@@ -149,7 +153,7 @@ end
 -- 过滤海岛探险中艾泽里特的获取信息
 local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub("%%d/%%d ", "")
 local function filterAzeriteGain(_, _, msg)
-	if msg:find(azerite) then
+	if strfind(msg, azerite) then
 		return true
 	end
 end
