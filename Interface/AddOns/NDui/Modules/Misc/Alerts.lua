@@ -241,7 +241,7 @@ function module:ExplosiveAlert()
 		if index and B.GetNPCID(destGUID) == 120651 then
 			local overkill = select(index, ...)
 			if overkill and overkill > 0 then
-				local name = strsplit("-", sourceName)
+				local name = strsplit("-", sourceName or UNKNOWN)
 				if not cache[name] then cache[name] = 0 end
 				cache[name] = cache[name] + 1
 			end
