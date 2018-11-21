@@ -2,6 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Misc")
 
+local format, gsub, strsplit = string.format, string.gsub, string.split
+local pairs, tonumber = pairs, tonumber
+
 function module:AddAlerts()
 	self:SoloInfo()
 	self:RareAlert()
@@ -80,7 +83,7 @@ function module:RareAlert()
 
 			local atlasWidth = width/(txRight-txLeft)
 			local atlasHeight = height/(txBottom-txTop)
-			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
+			local tex = format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 			if NDuiDB["Misc"]["AlertinChat"] then
 				print("  -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
@@ -176,9 +179,9 @@ function module:VersionCheck()
 	f:Hide()
 
 	local function CompareVersion(new, old)
-		local new1, new2 = string.split(".", new)
+		local new1, new2 = strsplit(".", new)
 		new1, new2 = tonumber(new1), tonumber(new2)
-		local old1, old2 = string.split(".", old)
+		local old1, old2 = strsplit(".", old)
 		old1, old2 = tonumber(old1), tonumber(old2)
 		if new1 > old1 or new2 > old2 then
 			return "IsNew"
@@ -202,7 +205,7 @@ function module:VersionCheck()
 
 		if not checked then
 			if CompareVersion(NDuiADB["DetectVersion"], DB.Version) == "IsNew" then
-				local release = NDuiADB["DetectVersion"]:gsub("(%d)$", "0")
+				local release = gsub(NDuiADB["DetectVersion"], "(%d)$", "0")
 				f.Text:SetText(format(L["Outdated NDui"], release))
 				f:Show()
 			end
@@ -238,7 +241,7 @@ function module:ExplosiveAlert()
 		if index and B.GetNPCID(destGUID) == 120651 then
 			local overkill = select(index, ...)
 			if overkill and overkill > 0 then
-				local name = string.split("-", sourceName)
+				local name = strsplit("-", sourceName)
 				if not cache[name] then cache[name] = 0 end
 				cache[name] = cache[name] + 1
 			end
