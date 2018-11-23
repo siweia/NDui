@@ -88,14 +88,15 @@ local list = {
 		{AuraID = 271105, UnitID = "player"},	-- 屠夫之眼
 		{AuraID = 271107, UnitID = "player"},	-- 金色光泽
 		{AuraID = 277181, UnitID = "player"},	-- 胜利的味道
-		{AuraID = 274430, UnitID = "player", Text = RAID_BUFF_4},	-- 永不间断的时钟，急速
-		{AuraID = 274431, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
-		{AuraID = 267325, UnitID = "player", Text = RAID_BUFF_7},	-- 注铅骰子，精通
-		{AuraID = 267326, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
-		{AuraID = 267327, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
-		{AuraID = 267329, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
-		{AuraID = 267330, UnitID = "player", Text = RAID_BUFF_6},	-- 爆击
-		{AuraID = 267331, UnitID = "player", Text = RAID_BUFF_6},	-- 爆击
+		{AuraID = 274430, UnitID = "player", Text = L["Haste"]},	-- 永不间断的时钟，急速
+		{AuraID = 274431, UnitID = "player", Text = L["Mastery"]},	-- 精通
+		{AuraID = 267325, UnitID = "player", Text = L["Mastery"]},	-- 注铅骰子，精通
+		{AuraID = 267326, UnitID = "player", Text = L["Mastery"]},	-- 精通
+		{AuraID = 267327, UnitID = "player", Text = L["Haste"]},	-- 急速
+		{AuraID = 267329, UnitID = "player", Text = L["Haste"]},	-- 急速
+		{AuraID = 267330, UnitID = "player", Text = L["Crit"]},	-- 爆击
+		{AuraID = 267331, UnitID = "player", Text = L["Crit"]},	-- 爆击
+		{AuraID = 280573, UnitID = "player", Combat = true},	-- 重组阵列
 		-- 艾泽里特特质
 		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
 		{AuraID = 266047, UnitID = "player"},	-- 激励咆哮
@@ -109,10 +110,10 @@ local list = {
 		{AuraID = 280433, UnitID = "player"},	-- 呼啸狂沙
 		{AuraID = 271711, UnitID = "player"},	-- 压倒能量
 		{AuraID = 272733, UnitID = "player"},	-- 弦之韵律
-		{AuraID = 268953, UnitID = "player", Text = RAID_BUFF_6},	-- 元素回旋 爆击
-		{AuraID = 268954, UnitID = "player", Text = RAID_BUFF_4},	-- 急速
-		{AuraID = 268955, UnitID = "player", Text = RAID_BUFF_7},	-- 精通
-		{AuraID = 268956, UnitID = "player", Text = RAID_BUFF_8},	-- 全能
+		{AuraID = 268953, UnitID = "player", Text = L["Crit"]},	-- 元素回旋 爆击
+		{AuraID = 268954, UnitID = "player", Text = L["Haste"]},	-- 急速
+		{AuraID = 268955, UnitID = "player", Text = L["Mastery"]},	-- 精通
+		{AuraID = 268956, UnitID = "player", Text = L["Versa"]},	-- 全能
 		{AuraID = 280780, UnitID = "player"},	-- 战斗荣耀
 		{AuraID = 280787, UnitID = "player"},	-- 反击之怒
 		{AuraID = 279928, UnitID = "player", Combat = true},	-- 大地链接
@@ -120,6 +121,7 @@ local list = {
 		{AuraID = 273842, UnitID = "player"},	-- 深渊秘密
 		{AuraID = 273843, UnitID = "player"},	-- 深渊秘密
 		{AuraID = 280412, UnitID = "player"},	-- 激励兽群
+		{AuraID = 274596, UnitID = "player"},	-- 冲击大师
 		-- 泰坦之路系列饰品
 		{AuraID = 256816, UnitID = "player"},	-- 阿格拉玛的信念
 		{AuraID = 256831, UnitID = "player"},	-- 阿格拉玛的信念
