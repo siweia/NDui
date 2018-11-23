@@ -1,7 +1,13 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, {}
+
+local AuraList, Aura, UnitIDTable, IntTable, IntCD, statTable = {}, {}, {}, {}, {}, {}
 local MaxFrame = 12	-- Max Tracked Auras
+local pairs, tinsert, tremove = pairs, table.insert, table.remove
+local max, wipe, sort = math.max, table.wipe, table.sort
+local GetCombatRating = GetCombatRating
+local CR_HASTE_MELEE, CR_MASTERY, CR_VERSATILITY_DAMAGE_DONE = CR_HASTE_MELEE, CR_MASTERY, CR_VERSATILITY_DAMAGE_DONE
+local CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE = CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE
 
 -- Init
 local function ConvertTable()
@@ -388,6 +394,21 @@ local function UpdateAuraFrame(index, UnitID, name, icon, count, duration, expir
 	Aura[index].Index = (Aura[index].Index + 1 > MaxFrame) and MaxFrame or Aura[index].Index + 1
 end
 
+local function sortStat(a, b)
+	return a.num > b.num
+end
+
+local function getMaxStat()
+	wipe(statTable)
+	tinsert(statTable, {num = max(GetCombatRating(CR_CRIT_SPELL), GetCombatRating(CR_CRIT_RANGED), GetCombatRating(CR_CRIT_MELEE)), text = L["Crit"]})
+	tinsert(statTable, {num = GetCombatRating(CR_HASTE_MELEE), text = L["Haste"]})
+	tinsert(statTable, {num = GetCombatRating(CR_MASTERY), text = L["Mastery"]})
+	tinsert(statTable, {num = GetCombatRating(CR_VERSATILITY_DAMAGE_DONE), text = L["Versa"]})
+	sort(statTable, sortStat)
+
+	return statTable[1].text
+end
+
 local function AuraFilter(spellID, UnitID, index, bool)
 	for KEY, VALUE in pairs(AuraList) do
 		for _, value in pairs(VALUE.List) do
@@ -411,6 +432,7 @@ local function AuraFilter(spellID, UnitID, index, bool)
 					end
 				end
 				if value.Timeless then duration, expires = 0, 0 end
+				if spellID == 280573 then name = getMaxStat() end
 				return KEY, value.UnitID, name, icon, count, duration, expires, index, filter, value.Flash
 			end
 		end
