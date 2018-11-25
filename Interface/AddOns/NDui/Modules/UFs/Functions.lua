@@ -490,6 +490,8 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		else
 			return nameplateShowAll or (caster == "player" or caster == "pet" or caster == "vehicle")
 		end
+	elseif style == "boss" or style == "arena" then
+		return nameplateShowAll or button.isPlayer
 	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
 		return true
 	end
@@ -517,8 +519,7 @@ function UF:CreateAuras(self)
 		bu.iconsPerRow = 5
 	elseif self.mystyle == "focus" then
 		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -10)
-		bu.numBuffs = 0
-		bu.numDebuffs = 14
+		bu.numTotal = 20
 		bu.iconsPerRow = 7
 	elseif self.mystyle == "raid" then
 		bu:SetPoint("BOTTOMLEFT", self, 2, 0)
@@ -587,15 +588,14 @@ function UF:CreateDebuffs(self)
 	bu["growth-y"] = "DOWN"
 	if self.mystyle == "player" then
 		bu:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -10)
-		bu.onlyShowPlayer = false
 		bu.num = 14
 		bu.iconsPerRow = 7
 		bu.showDebuffType = true
 	elseif self.mystyle == "boss" or self.mystyle == "arena" then
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
-		bu.onlyShowPlayer = true
 		bu.num = 10
 		bu.iconsPerRow = 5
+		bu.CustomFilter = customFilter
 	end
 
 	local width = self:GetWidth()
@@ -635,14 +635,35 @@ local function postUpdateClassPower(element, cur, max, diff, powerType)
 	end
 end
 
+local function onUpdateRunes(self, elapsed)
+	local duration = self.duration + elapsed
+	self.duration = duration
+	self:SetValue(duration)
+
+	if self.timer then
+		local remain = self.runeDuration - duration
+		if remain > 0 then
+			self.timer:SetText(B.FormatTime(remain))
+		else
+			self.timer:SetText(nil)
+		end
+	end
+end
+
 local function postUpdateRunes(element, runemap)
 	for index, runeID in next, runemap do
 		local rune = element[index]
-		local runeReady = select(3, GetRuneCooldown(runeID))
-		if rune:IsShown() and not runeReady then
-			rune:SetAlpha(.6)
-		else
-			rune:SetAlpha(1)
+		local start, duration, runeReady = GetRuneCooldown(runeID)
+		if rune:IsShown() then
+			if runeReady then
+				rune:SetAlpha(1)
+				rune:SetScript("OnUpdate", nil)
+				if rune.timer then rune.timer:SetText(nil) end
+			elseif start then
+				rune:SetAlpha(.6)
+				rune.runeDuration = duration
+				rune:SetScript("OnUpdate", onUpdateRunes)
+			end
 		end
 	end
 end
@@ -659,7 +680,7 @@ function UF:CreateClassPower(self)
 		bars[i]:SetHeight(height)
 		bars[i]:SetWidth((width - 5*margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
-		bars[i]:SetFrameLevel(self:GetFrameLevel() + 2)
+		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 		B.CreateSD(bars[i], 3, 3)
 		if i == 1 then
 			bars[i]:SetPoint(unpack(C.UFs.BarPoint))
@@ -672,6 +693,8 @@ function UF:CreateClassPower(self)
 			bars[i].bg:SetAllPoints()
 			bars[i].bg:SetTexture(DB.normTex)
 			bars[i].bg.multiplier = .2
+
+			bars[i].timer = B.CreateFS(bars[i], 13, "")
 		end
 
 		if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
