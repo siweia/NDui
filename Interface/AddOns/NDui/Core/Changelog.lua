@@ -2,23 +2,28 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 if DB.Client ~= "zhCN" then return end
 
+local strsplit, pairs = string.split, pairs
+
 local hx = {
-	"AuroraClassic更新至1.10.9；",
-	"修复德语客户端下，开启全属性显示时的报错；",
-	"信息条各模块现在自动对齐；",
-	"信息条内存模块一个潜在错误修正；",
-	"本地文本更新；",
+	"移除自动整理内存；",
 	"更新部分法术监控；",
-	"添加大米易爆击杀统计的功能，默认关闭；",
-	"姓名板目标过滤优化",
-	"添加震荡计时条，默认关闭；",
-	"优化目标关系的获取；",
-	"密语邀请调整；",
-	"背包一个错误修正；",
-	"聊天过滤内容时自动隐藏泡泡；",
-	"优化技能监控的性能；",
-	"互换技能冷却分组和内置冷却分组的位置；",
-	"动作条调整。",
+	"更新打破通报的黑名单过滤；",
+	"更新姓名板自定义目标过滤列表；",
+	"添加重组阵列的监控；",
+	"错误信息框调整，添加声音提示按钮；",
+	"团队工具调整；",
+	"震荡计时条调整；",
+	"背包调整；",
+	"背包和世界地图可以在移动后保存位置了；",
+	"姓名板高亮调整；",
+	"添加选项以缩放非易爆球的姓名板，默认关闭；",
+	"易爆球击杀统计调整；",
+	"添加选项以隐藏施法条延迟计时；",
+	"获得成就自动截图的功能优化；",
+	"DK的符文冷却添加计时；",
+	"头像部分框体的法术过滤调整；",
+	"控制台及本地文本更新；",
+	"部分反馈的问题调整。",
 }
 
 local f
@@ -58,8 +63,8 @@ end
 local function compareToShow(event)
 	if HelloWorld then return end
 
-	local old1, old2 = string.split(".", NDuiADB["Changelog"].Version or "")
-	local cur1, cur2 = string.split(".", DB.Version)
+	local old1, old2 = strsplit(".", NDuiADB["Changelog"].Version or "")
+	local cur1, cur2 = strsplit(".", DB.Version)
 	if old1 ~= cur1 or old2 ~= cur2 then
 		changelog()
 		NDuiADB["Changelog"].Version = DB.Version
