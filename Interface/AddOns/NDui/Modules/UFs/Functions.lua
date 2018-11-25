@@ -478,7 +478,7 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		elseif C.RaidBuffs["ALL"][spellID] then
 			return true
 		end
-	elseif style == "nameplate" then
+	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if UnitIsUnit("player", unit) then
 			return false
 		elseif NDuiADB["NameplateFilter"][2][spellID] or C.BlackList[spellID] then
@@ -490,8 +490,6 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		else
 			return nameplateShowAll or (caster == "player" or caster == "pet" or caster == "vehicle")
 		end
-	elseif style == "boss" or style == "arena" then
-		return nameplateShowAll or button.isPlayer
 	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
 		return true
 	end
