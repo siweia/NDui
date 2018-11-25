@@ -4,6 +4,8 @@ local B, C, L, DB = unpack(ns)
 -- AlreadyKnown, by villiv
 -- NDui MOD
 -----------------------------
+local strmatch, strfind, strsplit, mod = string.match, string.find, string.split, mod
+
 local COLOR = {r = .1, g = 1, b = .1}
 local knowables, knowns = {
 	[LE_ITEM_CLASS_CONSUMABLE] = true,
@@ -23,10 +25,10 @@ end
 local function IsAlreadyKnown(link, index)
 	if not link then return end
 
-	if link:match("battlepet:") then
+	if strmatch(link, "battlepet:") then
 		local speciesID = select(2, strsplit(":", link))
 		return isPetCollected(speciesID)
-	elseif link:match("item:") then
+	elseif strmatch(link, "item:") then
 		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
 		if not name then return end
 
@@ -41,7 +43,7 @@ local function IsAlreadyKnown(link, index)
 			tooltip:SetHyperlink(link)
 			for i = 1, tooltip:NumLines() do
 				local text = _G[tooltip:GetName().."TextLeft"..i]:GetText() or ""
-				if text:find(COLLECTED) or text == ITEM_SPELL_KNOWN then
+				if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
 					knowns[link] = true
 					return true
 				end

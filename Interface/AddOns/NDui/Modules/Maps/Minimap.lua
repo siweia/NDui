@@ -2,6 +2,9 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Maps")
 
+local strmatch, strfind, strupper = string.match, string.find, string.upper
+local pairs, ipairs = pairs, ipairs
+
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
 
@@ -190,15 +193,15 @@ function module:RecycleBin()
 	local function CollectRubbish()
 		for _, child in ipairs({Minimap:GetChildren()}) do
 			local name = child:GetName()
-			if name and not blackList[name] and not strupper(name):match("HANDYNOTES") then
-				if child:GetObjectType() == "Button" or strupper(name):match("BUTTON") then
+			if name and not blackList[name] and not strmatch(strupper(name), "HANDYNOTES") then
+				if child:GetObjectType() == "Button" or strmatch(strupper(name), "BUTTON") then
 					child:SetParent(bin)
 					child:SetSize(34, 34)
 					for j = 1, child:GetNumRegions() do
 						local region = select(j, child:GetRegions())
 						if region:GetObjectType() == "Texture" then
 							local texture = region:GetTexture()
-							if (string.find(texture, "Interface\\CharacterFrame") or string.find(texture, "Interface\\Minimap")) then
+							if strfind(texture, "Interface\\CharacterFrame") or strfind(texture, "Interface\\Minimap") then
 								region:SetTexture(nil)
 							elseif texture == 136430 or texture == 136467 then
 								region:SetTexture(nil)

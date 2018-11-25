@@ -5,6 +5,7 @@ if not C.Infobar.Location then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.LocationPos)
 local mapModule = B:GetModule("Maps")
+local format = string.format
 
 local zoneInfo = {
 	sanctuary = {SANCTUARY_TERRITORY, {.41, .8, .94}},

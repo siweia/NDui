@@ -4,6 +4,7 @@ local B, C, L, DB = unpack(ns)
 -- TradeTabs, by tardmrr
 -- NDui MOD
 ---------------------------
+local pairs, ipairs, tinsert = pairs, ipairs, table.insert
 local TradeTabs = CreateFrame("Frame", "TradeTabs")
 
 local whitelist = {

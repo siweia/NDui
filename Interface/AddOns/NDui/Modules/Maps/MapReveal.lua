@@ -244,6 +244,8 @@ local LeaMapsData = {
 
 -- Function to refresh overlays (Blizzard_SharedMapDataProviders\MapExplorationDataProvider)
 local overlayTextures, TileExists = {}, {}
+local strsplit, ceil, mod = string.split, math.ceil, mod
+local pairs, tonumber, tinsert = pairs, tonumber, table.insert
 
 local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 	wipe(overlayTextures)

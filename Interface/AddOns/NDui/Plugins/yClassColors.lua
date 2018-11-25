@@ -5,6 +5,8 @@ local oUF = ns.oUF
 -- yClassColors, by yleaf
 -- NDui MOD
 ----------------------------
+local format, strsplit, ipairs, tinsert = string.format, string.split, ipairs, table.insert
+
 -- Colors
 local function classColor(class, showRGB)
 	local color = DB.ClassColors[DB.ClassList[class] or class]

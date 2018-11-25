@@ -5,6 +5,7 @@ local B, C, L, DB = unpack(ns)
 ---------------------------
 local Bar = B:GetModule("Actionbar")
 local _G = getfenv(0)
+local pairs, gsub = pairs, string.gsub
 
 local function CallButtonFunctionByName(button, func, ...)
 	if button and func and button[func] then

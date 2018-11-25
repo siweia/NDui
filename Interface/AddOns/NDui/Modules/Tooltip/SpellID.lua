@@ -3,6 +3,9 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Tooltip")
 
 function module:ExtraTipInfo()
+	local strmatch, strfind, format = string.match, string.find, string.format
+	local tonumber = tonumber
+
 	local types = {
 		spell = SPELLS.."ID:",
 		item = ITEMS.."ID:",
@@ -40,7 +43,7 @@ function module:ExtraTipInfo()
 
 	-- All types, primarily for linked tooltips
 	local function onSetHyperlink(self, link)
-		local type, id = string.match(link, "^(%a+):(%d+)")
+		local type, id = strmatch(link, "^(%a+):(%d+)")
 		if not type or not id then return end
 		if type == "spell" or type == "enchant" or type == "trade" then
 			addLine(self, id, types.spell)
@@ -69,7 +72,7 @@ function module:ExtraTipInfo()
 		if id then addLine(self, id, types.spell) end
 	end)
 	hooksecurefunc("SetItemRef", function(link)
-		local id = tonumber(link:match("spell:(%d+)"))
+		local id = tonumber(strmatch(link, "spell:(%d+)"))
 		if id then addLine(ItemRefTooltip, id, types.spell) end
 	end)
 
@@ -77,8 +80,8 @@ function module:ExtraTipInfo()
 	local function attachItemTooltip(self)
 		local link = select(2, self:GetItem())
 		if link then
-			local id = link:match("item:(%d+):")
-			if link:find("keystone") then id = 138019 end
+			local id = strmatch(link, "item:(%d+):")
+			if strfind(link, "keystone") then id = 138019 end
 			if id then addLine(self, id, types.item) end
 		end
 	end
@@ -94,14 +97,14 @@ function module:ExtraTipInfo()
 	hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, recipeID, reagentIndex)
 		local link = C_TradeSkillUI.GetRecipeReagentItemLink(recipeID, reagentIndex)
 		if link then
-			local id = link:match("item:(%d+):")
+			local id = strmatch(link, "item:(%d+):")
 			if id then addLine(self, id, types.item) end
 		end
 	end)
 
 	-- Currencies
 	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
-		local id = tonumber(string.match(GetCurrencyListLink(index), "currency:(%d+)"))
+		local id = tonumber(strmatch(GetCurrencyListLink(index), "currency:(%d+)"))
 		if id then addLine(self, id, types.currency) end
 	end)
 	hooksecurefunc(GameTooltip, "SetCurrencyByID", function(self, id)

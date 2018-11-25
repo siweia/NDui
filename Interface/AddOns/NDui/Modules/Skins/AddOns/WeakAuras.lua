@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Skins")
+local pairs = pairs
 
 local function ReskinWA()
 	local function Skin_WeakAuras(f, fType)

@@ -4,6 +4,8 @@ local B, C, L, DB = unpack(ns)
 -- Pet Quick Filter, by Windrunner
 -- NDui MOD
 -------------------------------------
+local ipairs = ipairs
+
 local function loadPetFilter()
 	PetJournalListScrollFrame:SetPoint("TOPLEFT", PetJournalLeftInset, 3, -60)
 	if PetJournalEnhancedListScrollFrame then

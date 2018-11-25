@@ -6,6 +6,7 @@ function module:DBMSkin()
 	if not IsAddOnLoaded("DBM-Core") then return end
 	if not NDuiDB["Skins"]["DBM"] then return end
 
+	local strfind, strmatch, gsub = string.find, string.match, string.gsub
 	local buttonsize = 24
 	local function SkinBars(self)
 		for bar in self:GetBarIterator() do
@@ -190,15 +191,15 @@ function module:DBMSkin()
 
 	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
 	RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
-		if textString:find("|T") then
-            if textString:match(":(%d+):(%d+)") then
-                local size1, size2 = textString:match(":(%d+):(%d+)")
+		if strfind(textString, "|T") then
+            if strmatch(textString, ":(%d+):(%d+)") then
+                local size1, size2 = strmatch(textString, ":(%d+):(%d+)")
                 size1, size2 = size1 + 3, size2 + 3
-                textString = string.gsub(textString,":(%d+):(%d+)",":"..size1..":"..size2..":0:0:64:64:5:59:5:59")
-            elseif textString:match(":(%d+)|t") then
-                local size = textString:match(":(%d+)|t")
+                textString = gsub(textString,":(%d+):(%d+)",":"..size1..":"..size2..":0:0:64:64:5:59:5:59")
+            elseif strmatch(textString, ":(%d+)|t") then
+                local size = strmatch(textString, ":(%d+)|t")
                 size = size + 3
-                textString = string.gsub(textString,":(%d+)|t",":"..size..":"..size..":0:0:64:64:5:59:5:59|t")
+                textString = gsub(textString,":(%d+)|t",":"..size..":"..size..":0:0:64:64:5:59:5:59|t")
             end
 		end
 		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)

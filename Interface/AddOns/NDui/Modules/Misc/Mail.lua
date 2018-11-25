@@ -8,6 +8,7 @@ local module = B:GetModule("Misc")
 function module:Mailbox()
 	if not NDuiDB["Misc"]["Mail"] then return end
 
+	local strsplit, pairs, tonumber = string.split, pairs, tonumber
 	local deletedelay, t, mailIndex, mailItemIndex, inboxItems = .5, 0, 1, 0, {}
 	local button1, button2, button3, button4, lastopened, imOrig_InboxFrame_OnClick, hasNewMail, takingOnlyCash, onlyCurrentMail, needsToWait, skipMail, OpenMail, StopOpening
 

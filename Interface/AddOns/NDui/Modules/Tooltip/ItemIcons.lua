@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local pairs = pairs
 local newString = "0:0:64:64:5:59:5:59"
 
 local function setTooltipIcon(self, icon)

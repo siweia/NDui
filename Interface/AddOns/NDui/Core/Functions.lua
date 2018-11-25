@@ -2,6 +2,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
 
+local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
+local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
+local min, max, abs, floor = math.min, math.max, math.abs, math.floor
+
 -- Gradient Frame
 function B:CreateGF(w, h, o, r, g, b, a1, a2)
 	self:SetSize(w, h)
@@ -228,28 +232,28 @@ end
 function B.Numb(n)
 	if NDuiADB["NumberFormat"] == 1 then
 		if n >= 1e12 then
-			return ("%.2ft"):format(n / 1e12)
+			return format("%.2ft", n / 1e12)
 		elseif n >= 1e9 then
-			return ("%.2fb"):format(n / 1e9)
+			return format("%.2fb", n / 1e9)
 		elseif n >= 1e6 then
-			return ("%.2fm"):format(n / 1e6)
+			return format("%.2fm", n / 1e6)
 		elseif n >= 1e3 then
-			return ("%.1fk"):format(n / 1e3)
+			return format("%.1fk", n / 1e3)
 		else
-			return ("%.0f"):format(n)
+			return format("%.0f", n)
 		end
 	elseif NDuiADB["NumberFormat"] == 2 then
 		if n >= 1e12 then
-			return ("%.2f"..L["NumberCap3"]):format(n / 1e12)
+			return format("%.2f"..L["NumberCap3"], n / 1e12)
 		elseif n >= 1e8 then
-			return ("%.2f"..L["NumberCap2"]):format(n / 1e8)
+			return format("%.2f"..L["NumberCap2"], n / 1e8)
 		elseif n >= 1e4 then
-			return ("%.1f"..L["NumberCap1"]):format(n / 1e4)
+			return format("%.1f"..L["NumberCap1"], n / 1e4)
 		else
-			return ("%.0f"):format(n)
+			return format("%.0f", n)
 		end
 	else
-		return ("%.0f"):format(n)
+		return format("%.0f", n)
 	end
 end
 
@@ -259,7 +263,7 @@ function B.HexRGB(r, g, b)
 		if type(r) == "table" then
 			if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
 		end
-		return ("|cff%02x%02x%02x"):format(r*255, g*255, b*255)
+		return format("|cff%02x%02x%02x", r*255, g*255, b*255)
 	end
 end
 
@@ -335,12 +339,12 @@ f:SetScript("OnUpdate", function()
 	local limit = 30/GetFramerate()
 	for bar, value in pairs(smoothing) do
 		local cur = bar:GetValue()
-		local new = cur + math.min((value-cur)/8, math.max(value-cur, limit))
+		local new = cur + min((value-cur)/8, max(value-cur, limit))
 		if new ~= new then
 			new = value
 		end
 		bar:SetValue_(new)
-		if cur == value or math.abs(new - value) < 1 then
+		if cur == value or abs(new - value) < 1 then
 			smoothing[bar] = nil
 			bar:SetValue_(value)
 		end
@@ -401,7 +405,7 @@ end
 function B.SplitList(list, variable, cleanup)
 	if cleanup then wipe(list) end
 
-	for word in variable:gmatch("%S+") do
+	for word in gmatch(variable, "%S+") do
 		list[word] = true
 	end
 end
@@ -425,9 +429,9 @@ function B.GetItemLevel(link, arg1, arg2)
 
 	for i = 2, 5 do
 		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-		local found = text:find(itemLevelString)
+		local found = strfind(text, itemLevelString)
 		if found then
-			local level = text:match("(%d+)%)?$")
+			local level = strmatch(text, "(%d+)%)?$")
 			iLvlDB[link] = tonumber(level)
 			break
 		end
@@ -436,7 +440,7 @@ function B.GetItemLevel(link, arg1, arg2)
 end
 
 function B.GetNPCID(guid)
-	local id = tonumber((guid or ""):match("%-(%d-)%-%x-$"))
+	local id = tonumber(strmatch((guid or ""), "%-(%d-)%-%x-$"))
 	return id
 end
 

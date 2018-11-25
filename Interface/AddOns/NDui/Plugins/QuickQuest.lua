@@ -18,6 +18,9 @@ mono:SetScript("OnClick", function(self)
 end)
 
 -- Function
+local strmatch = string.match
+local tonumber, next = tonumber, next
+
 local QuickQuest = CreateFrame("Frame")
 QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 
@@ -336,7 +339,7 @@ QuickQuest:Register("QUEST_PROGRESS", function()
 			for index = 1, requiredItems do
 				local link = GetQuestItemLink("required", index)
 				if(link) then
-					local id = tonumber(string.match(link, "item:(%d+)"))
+					local id = tonumber(strmatch(link, "item:(%d+)"))
 					for _, itemID in next, itemBlacklist do
 						if(itemID == id) then
 							return
@@ -381,7 +384,7 @@ QuickQuest:Register("QUEST_COMPLETE", function()
 			local link = GetQuestItemLink("choice", index)
 			if(link) then
 				local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
-				value = cashRewards[tonumber(string.match(link, "item:(%d+):"))] or value
+				value = cashRewards[tonumber(strmatch(link, "item:(%d+):"))] or value
 
 				if(value > bestValue) then
 					bestValue, bestIndex = value, index

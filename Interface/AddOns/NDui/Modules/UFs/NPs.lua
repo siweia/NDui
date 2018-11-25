@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
+local strmatch, tonumber = string.match, tonumber
 
 -- Init
 function UF:SetupCVars()
@@ -327,7 +328,7 @@ end
 -- Create Nameplates
 function UF:CreatePlates(unit)
 	self.mystyle = "nameplate"
-	if unit:match("nameplate") then
+	if strmatch(unit, "nameplate") then
 		self:SetSize(NDuiDB["Nameplate"]["Width"] * 1.4, NDuiDB["Nameplate"]["Height"])
 		self:SetPoint("CENTER", 0, -3)
 

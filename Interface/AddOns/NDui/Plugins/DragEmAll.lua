@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 -- DragEmAll, by emelio
 -- NDui MOD
 --------------------------
-local _G = getfenv(0)
+local _G, pairs, type = getfenv(0), pairs, type
 
 local frames = {
 	-- ["FrameName"] = true (the parent frame should be moved) or false (the frame itself should be moved)

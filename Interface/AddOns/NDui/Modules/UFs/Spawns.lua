@@ -1,7 +1,9 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+
 local oUF = ns.oUF or oUF
 local UF = B:GetModule("UnitFrames")
+local format, tostring = string.format, tostring
 
 -- Units
 local function CreatePlayerStyle(self)

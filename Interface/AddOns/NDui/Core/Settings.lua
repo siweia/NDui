@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
+local pairs, tonumber, wipe = pairs, tonumber, table.wipe
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")
@@ -98,7 +99,7 @@ StaticPopupDialogs["RELOAD_NDUI"] = {
 -- DBM bars
 local function ForceDBMOptions()
 	if not IsAddOnLoaded("DBM-Core") then return end
-	if DBT_AllPersistentOptions then table.wipe(DBT_AllPersistentOptions) end
+	if DBT_AllPersistentOptions then wipe(DBT_AllPersistentOptions) end
 	DBT_AllPersistentOptions = {
 		["Default"] = {
 			["DBM"] = {
@@ -148,7 +149,7 @@ end
 -- Skada
 local function ForceSkadaOptions()
 	if not IsAddOnLoaded("Skada") then return end
-	if SkadaDB then table.wipe(SkadaDB) end
+	if SkadaDB then wipe(SkadaDB) end
 	SkadaDB = {
 		["hasUpgraded"] = true,
 		["profiles"] = {
@@ -210,7 +211,7 @@ end
 -- BigWigs
 local function ForceBigwigs()
 	if not IsAddOnLoaded("BigWigs") then return end
-	if BigWigs3DB then table.wipe(BigWigs3DB) end
+	if BigWigs3DB then wipe(BigWigs3DB) end
 	BigWigs3DB = {
 		["namespaces"] = {
 			["BigWigs_Plugins_Bars"] = {

@@ -2,6 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
+local strmatch, format = string.match, string.format
+local pairs, ipairs, next, tonumber = pairs, ipairs, next, tonumber
+
 -- RaidFrame Elements
 function UF:CreateRaidIcons(self)
 	local parent = CreateFrame("Frame", nil, self)
@@ -195,7 +198,7 @@ local function onMouseWheelCast(self)
 	local found
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
 		local key = unpack(data)
-		if key:match(L["Wheel"]) then
+		if strmatch(key, L["Wheel"]) then
 			found = true
 			break
 		end
@@ -242,7 +245,7 @@ local function setupClickSets(self)
 				elseif value == "follow" then
 					self:SetAttribute(format(v[3], "type"), "macro")
 					self:SetAttribute(format(v[3], "macrotext"), "/follow mouseover")
-				elseif value:match("/") then
+				elseif strmatch(value, "/") then
 					self:SetAttribute(format(v[3], "type"), "macro")
 					self:SetAttribute(format(v[3], "macrotext"), value)
 				end

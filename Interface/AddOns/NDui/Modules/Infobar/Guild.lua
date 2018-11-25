@@ -4,6 +4,7 @@ if not C.Infobar.Guild then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GuildPos)
+local wipe, sort, format = table.wipe, table.sort, format
 
 local r, g, b = DB.r, DB.g, DB.b
 local infoFrame = CreateFrame("Frame", "NDuiGuildInfobar", info)

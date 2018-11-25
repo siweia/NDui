@@ -6,6 +6,7 @@ function module:SkadaSkin()
 	if not NDuiDB["Skins"]["Skada"] then return end
 	if not IsAddOnLoaded("Skada") then return end
 
+	local pairs, ipairs, tinsert = pairs, ipairs, table.insert
 	local Skada = Skada
 	local barSpacing = 0
 	local barmod = Skada.displays["bar"]

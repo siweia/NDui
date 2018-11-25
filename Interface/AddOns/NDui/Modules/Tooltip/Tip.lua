@@ -14,8 +14,10 @@ local classification = {
 	rareelite = " |cffff99cc"..L["Rare"].."|r ".."|cffcc8800"..ELITE.."|r",
 	worldboss = " |cffff0000"..BOSS.."|r",
 }
-local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
-local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
+
+local strfind, format, strupper, strsplit, pairs = string.find, string.format, string.upper, string.split, pairs
+local COALESCED_REALM_TOOLTIP1 = strsplit(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
+local INTERACTIVE_REALM_TOOLTIP1 = strsplit(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
 
 local function getUnit(self)
 	local _, unit = self and self:GetUnit()
@@ -34,7 +36,7 @@ local function hideLines(self)
 			if NDuiDB["Tooltip"]["HidePVP"] and linetext == PVP_ENABLED then
 				tiptext:SetText(nil)
 				tiptext:Hide()
-			elseif linetext:find(COALESCED_REALM_TOOLTIP1) or linetext:find(INTERACTIVE_REALM_TOOLTIP1) then
+			elseif strfind(linetext, COALESCED_REALM_TOOLTIP1) or strfind(linetext, INTERACTIVE_REALM_TOOLTIP1) then
 				tiptext:SetText(nil)
 				tiptext:Hide()
 				local pretiptext = _G["GameTooltipTextLeft"..i-1]
@@ -62,7 +64,7 @@ end
 
 local function getTarget(unit)
 	if UnitIsUnit(unit, "player") then
-		return ("|cffff0000%s|r"):format(">"..string.upper(YOU).."<")
+		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
 		return B.HexRGB(B.UnitColor(unit))..UnitName(unit).."|r"
 	end
@@ -128,12 +130,12 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		if UnitIsPlayer(unit) then
 			local relationship = UnitRealmRelationship(unit)
 			if relationship == LE_REALM_RELATION_VIRTUAL then
-				self:AppendText(("|cffcccccc%s|r"):format(INTERACTIVE_SERVER_LABEL))
+				self:AppendText(format("|cffcccccc%s|r", INTERACTIVE_SERVER_LABEL))
 			end
 
 			local status = (UnitIsAFK(unit) and AFK) or (UnitIsDND(unit) and DND) or (not UnitIsConnected(unit) and PLAYER_OFFLINE)
 			if status then
-				self:AppendText((" |cff00cc00<%s>|r"):format(status))
+				self:AppendText(format(" |cff00cc00<%s>|r", status))
 			end
 
 			if NDuiDB["Tooltip"]["FactionIcon"] then
@@ -186,18 +188,18 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
 			local diff = GetCreatureDifficultyColor(level)
 			local classify = UnitClassification(unit)
-			local textLevel = ("%s%s%s|r"):format(B.HexRGB(diff), boss or ("%d"):format(level), classification[classify] or "")
+			local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
 			local tiptextLevel
 			for i = 2, self:NumLines() do
 				local tiptext = _G["GameTooltipTextLeft"..i]
 				local linetext = tiptext:GetText()
-				if linetext and linetext:find(LEVEL) then
+				if linetext and strfind(linetext, LEVEL) then
 					tiptextLevel = tiptext
 				end
 			end
 
 			local creature = not UnitIsPlayer(unit) and UnitCreatureType(unit) or ""
-			local unitClass = UnitIsPlayer(unit) and ("%s %s"):format(UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or ""
+			local unitClass = UnitIsPlayer(unit) and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or ""
 			if tiptextLevel then
 				tiptextLevel:SetFormattedText(("%s %s%s %s"), textLevel, creature, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 			end
@@ -206,7 +208,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		if UnitExists(unit.."target") then
 			local tarRicon = GetRaidTargetIndex(unit.."target")
 			if tarRicon and tarRicon > 8 then tarRicon = nil end
-			local tar = ("%s%s"):format((tarRicon and ICON_LIST[tarRicon].."10|t") or "", getTarget(unit.."target"))
+			local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", getTarget(unit.."target"))
 			self:AddLine(TARGET..": "..tar)
 		end
 

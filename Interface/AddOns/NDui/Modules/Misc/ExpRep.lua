@@ -5,6 +5,9 @@ local module = B:GetModule("Misc")
 --[[
 	一个工具条用来替代系统的经验条、声望条、神器经验等等
 ]]
+local format, pairs = string.format, pairs
+local math_min, mod, floor = math.min, mod, math.floor
+
 local function UpdateBar(bar)
 	local rest = bar.restBar
 	if rest then rest:Hide() end
@@ -17,7 +20,7 @@ local function UpdateBar(bar)
 		bar:Show()
 		if rxp then
 			rest:SetMinMaxValues(0, mxp)
-			rest:SetValue(math.min(xp + rxp, mxp))
+			rest:SetValue(math_min(xp + rxp, mxp))
 			rest:Show()
 		end
 		if IsXPUserDisabled() then bar:SetStatusBarColor(.7, 0, 0) end

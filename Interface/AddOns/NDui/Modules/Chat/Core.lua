@@ -1,10 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
-
 -- Reskin Chat
 local maxLines = 1024
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
+local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 
 local function skinChat(self)
 	if not self or (self and self.styled) then return end
@@ -162,7 +162,7 @@ function module:WhipserInvite()
 				if event == "CHAT_MSG_BN_WHISPER" then
 					local gameID = select(6, BNGetFriendInfoByID(presenceID))
 					if gameID then
-						local _, charName, _, realmName, _, _, _, _, guild = BNGetGameAccountInfo(gameID)
+						local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
 						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or isUnitInGuild(charName.."-"..realmName)) then
 							BNInviteFriend(gameID)
 						end

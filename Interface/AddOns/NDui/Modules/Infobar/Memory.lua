@@ -4,6 +4,8 @@ if not C.Infobar.Memory then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.MemoryPos)
+local format, min = string.format, math.min
+local sort, wipe = table.sort, table.wipe
 
 local function formatMemory(value)
 	if value > 1024 then

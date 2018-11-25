@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Infobar")
+local tinsert, pairs = table.insert, pairs
 
 function module:RegisterInfobar(point)
 	if not self.modules then self.modules = {} end

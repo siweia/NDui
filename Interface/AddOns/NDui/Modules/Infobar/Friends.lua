@@ -5,6 +5,8 @@ if not C.Infobar.Friends then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.FriendsPos)
 
+local strfind, format = string.find, string.format
+local sort, wipe = table.sort, table.wipe
 local friendTable, bnetTable, updateRequest = {}, {}
 local wowString, bnetString = L["WoW"], L["BN"]
 local activeZone, inactiveZone = {r=.3, g=1, b=.3}, {r=.7, g=.7, b=.7}
@@ -88,7 +90,7 @@ info.eventList = {
 
 info.onEvent = function(self, event, arg1)
 	if event == "CHAT_MSG_SYSTEM" then
-		if not string.find(arg1, ERR_FRIEND_ONLINE_SS) and not string.find(arg1, ERR_FRIEND_OFFLINE_S) then return end
+		if not strfind(arg1, ERR_FRIEND_ONLINE_SS) and not strfind(arg1, ERR_FRIEND_OFFLINE_S) then return end
 	elseif event == "MODIFIER_STATE_CHANGED" and arg1 == "LSHIFT" then
 		self:GetScript("OnEnter")(self)
 	end

@@ -4,6 +4,9 @@ local B, C, L, DB = unpack(ns)
 -- ExtraQuestButton, by p3lim
 -- NDui MOD
 --------------------------------
+local strmatch = string.match
+local tonumber, next, type = tonumber, next, type
+
 -- Quests with incorrect or missing quest area blobs
 local questAreas = {
 	-- Global
@@ -325,7 +328,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 			return
 		end
 
-		local itemID = string.match(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
+		local itemID = strmatch(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
 		self.itemID = tonumber(itemID)
 		self.itemLink = itemLink
 
@@ -378,7 +381,7 @@ local function GetClosestQuestItem()
 		if(itemLink) then
 			local areaID = questAreas[questID]
 			if(not areaID) then
-				areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
+				areaID = itemAreas[tonumber(strmatch(itemLink, "item:(%d+)"))]
 			end
 
 			local _, _, _, _, _, isComplete = GetQuestLogTitle(questLogIndex)
@@ -406,7 +409,7 @@ local function GetClosestQuestItem()
 				if(itemLink) then
 					local areaID = questAreas[questID]
 					if(not areaID) then
-						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
+						areaID = itemAreas[tonumber(strmatch(itemLink, "item:(%d+)"))]
 					end
 
 					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
@@ -435,7 +438,7 @@ local function GetClosestQuestItem()
 				if(itemLink) then
 					local areaID = questAreas[questID]
 					if(not areaID) then
-						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
+						areaID = itemAreas[tonumber(strmatch(itemLink, "item:(%d+)"))]
 					end
 
 					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then

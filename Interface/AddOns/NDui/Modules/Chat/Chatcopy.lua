@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
 function module:ChatCopy()
+	local gsub, format, tconcat = string.gsub, string.format, table.concat
+
 	-- Custom ChatMenu
 	local menu = CreateFrame("Frame", nil, UIParent)
 	menu:SetSize(25, 100)
@@ -48,7 +50,7 @@ function module:ChatCopy()
 	editBox:SetWidth(scrollArea:GetWidth())
 	editBox:SetHeight(270)
 	editBox:SetScript("OnEscapePressed", function() frame:Hide() end)
-	editBox:SetScript("OnTextChanged", function(self, userInput)
+	editBox:SetScript("OnTextChanged", function(_, userInput)
 		if userInput then return end
 		local _, max = ChatCopyScrollFrameScrollBar:GetMinMaxValues()
 		for i = 1, max do
@@ -90,7 +92,7 @@ function module:ChatCopy()
 				end
 
 				local lineCt = index - 1
-				local text = table.concat(lines, "\n", 1, lineCt)
+				local text = tconcat(lines, "\n", 1, lineCt)
 				FCF_SetChatWindowFontSize(chatframe, chatframe, fontSize)
 				editBox:SetText(text)
 

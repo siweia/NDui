@@ -9,6 +9,7 @@ function module:Focuser()
 	local modifier = "shift" -- shift, alt or ctrl
 	local mouseButton = "1" -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb buttons if there are any
 	local pending = {}
+	local pairs = pairs
 
 	local function SetFocusHotkey(frame)
 		if not frame or frame.focuser then return end

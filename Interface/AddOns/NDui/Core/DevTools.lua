@@ -12,6 +12,10 @@ local B, C, L, DB = unpack(ns)
 	/getnpc, get npc name and id
 ]]
 
+local strfind, format, strsplit = string.find, string.format, string.split
+local pairs, tonumber, tostring = pairs, tonumber, tostring
+local floor, ceil = math.floor, math.ceil
+
 local dev = {"寧德"}
 local function isDeveloper()
 	for _, name in pairs(dev) do
@@ -41,7 +45,7 @@ SlashCmdList["NDUI_ENUMFRAME"] = function()
 	local frame = EnumerateFrames()
 	while frame do
 		if (frame:IsVisible() and MouseIsOver(frame)) then
-			print(frame:GetName() or string.format(UNKNOWN..": [%s]", tostring(frame)))
+			print(frame:GetName() or format(UNKNOWN..": [%s]", tostring(frame)))
 		end
 		frame = EnumerateFrames(frame)
 	end
@@ -118,8 +122,8 @@ do
 		if prefix == "NDuiFVC" then
 			if msg == "VersionCheck" then
 				C_ChatInfo.SendAddonMessage("NDuiFVC", "MyVer-"..DB.Version, distType)
-			elseif msg:find("MyVer") then
-				local _, version = string.split("-", msg)
+			elseif strfind(msg, "MyVer") then
+				local _, version = strsplit("-", msg)
 				versionList[sender] = version.." - "..distType
 			end
 		end
@@ -175,7 +179,7 @@ local function Grid_Create()
 		tx:SetPoint('BOTTOMRIGHT', grid, 'TOPRIGHT', 0, -(height/2 + size/2))
 	end
 
-	for i = 1, math.floor((height/2)/hStep) do
+	for i = 1, floor((height/2)/hStep) do
 		local tx = grid:CreateTexture(nil, 'BACKGROUND') 
 		tx:SetColorTexture(0, 0, 0, .5)
 
@@ -207,7 +211,7 @@ SlashCmdList["TOGGLEGRID"] = function(arg)
 		if grid then grid:Hide() end
 		isAligning = false
 	else
-		boxSize = (math.ceil((tonumber(arg) or boxSize) / 32) * 32)
+		boxSize = (ceil((tonumber(arg) or boxSize) / 32) * 32)
 		if boxSize > 256 then boxSize = 256 end    
 		Grid_Show()
 		isAligning = true

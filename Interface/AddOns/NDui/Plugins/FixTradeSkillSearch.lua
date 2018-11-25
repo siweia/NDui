@@ -5,6 +5,8 @@ local B, C, L, DB = unpack(ns)
 -- License: Public Domain
 -- NDui MOD
 ------------------------------------
+local pairs, tonumber, strmatch = pairs, tonumber, string.match
+
 hooksecurefunc("ChatEdit_InsertLink", function(text) -- shift-clicked
 	-- change from SearchBox:HasFocus to :IsShown again
 	if text and TradeSkillFrame and TradeSkillFrame:IsShown() then

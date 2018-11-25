@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local orig1, orig2, GameTooltip = {}, {}, GameTooltip
+local orig1, orig2 = {}, {}
 local linktypes = {
 	item = true,
 	enchant = true,
@@ -15,10 +15,11 @@ local linktypes = {
 	currency = true,
 	keystone = true,
 }
+local strmatch, strsplit, tonumber = string.match, string.split, tonumber
 
 local sectionInfo
 local function OnHyperlinkEnter(frame, link, ...)
-	local linktype = link:match("^([^:]+)")
+	local linktype = strmatch(link, "^([^:]+)")
 	if linktype and linktype == "battlepet" then
 		GameTooltip:SetOwner(frame, "ANCHOR_TOPRIGHT", -3, 5)
 		GameTooltip:Show()

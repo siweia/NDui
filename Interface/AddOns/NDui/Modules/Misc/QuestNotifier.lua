@@ -4,6 +4,8 @@ local module = B:GetModule("Misc")
 
 local debugMode = false
 local completedQuest, initComplete = {}
+local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
+local mod, tonumber, pairs = mod, tonumber, pairs
 
 local function acceptText(link, daily)
 	if daily then
@@ -33,9 +35,9 @@ local function sendQuestMsg(msg)
 end
 
 local function getPattern(pattern)
-	pattern = string.gsub(pattern, "%(", "%%%1")
-	pattern = string.gsub(pattern, "%)", "%%%1")
-	pattern = string.gsub(pattern, "%%%d?$?.", "(.+)")
+	pattern = gsub(pattern, "%(", "%%%1")
+	pattern = gsub(pattern, "%)", "%%%1")
+	pattern = gsub(pattern, "%%%d?$?.", "(.+)")
 	return format("^%s$", pattern)
 end
 
@@ -51,8 +53,8 @@ local questMatches = {
 
 local function FindQuestProgress(_, _, msg)
 	for _, pattern in pairs(questMatches) do
-		if msg:match(pattern) then
-			local _, _, _, cur, max = string.find(msg, "(.*)[:：]%s*([-%d]+)%s*/%s*([-%d]+)%s*$")
+		if strmatch(msg, pattern) then
+			local _, _, _, cur, max = strfind(msg, "(.*)[:：]%s*([-%d]+)%s*/%s*([-%d]+)%s*$")
 			cur, max = tonumber(cur), tonumber(max)
 			if cur and max and max >= 10 then
 				if mod(cur, floor(max/5)) == 0 then

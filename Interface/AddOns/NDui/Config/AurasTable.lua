@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("AurasTable")
+local pairs, next, tonumber, format = pairs, next, tonumber, string.format
 
 local groups = {
 	-- groups name = direction, interval, mode, iconsize, position, barwidth

@@ -5,6 +5,9 @@ local module = B:GetModule("Skins")
 function module:CreateRM()
 	if not NDuiDB["Skins"]["RM"] then return end
 
+	local tinsert, strsplit = table.insert, string.split
+	local next, pairs, mod = next, pairs, mod
+
 	local header = CreateFrame("Button", nil, UIParent)
 	header:SetSize(120, 28)
 	header:SetFrameLevel(2)
@@ -275,7 +278,7 @@ function module:CreateRM()
 					end
 					if not HasBuff then
 						name = strsplit("-", name)	-- remove realm name
-						table.insert(NoBuff[j], name)
+						tinsert(NoBuff[j], name)
 					end
 				end
 			end

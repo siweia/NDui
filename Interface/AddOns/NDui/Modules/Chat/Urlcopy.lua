@@ -2,6 +2,9 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
+local strfind, strmatch, strsub, gsub = string.find, string.match, string.sub, string.gsub
+local strsplit, strlen = string.split, string.len
+
 function module:UrlCopy()
 	local foundurl = false
 
@@ -17,33 +20,33 @@ function module:UrlCopy()
 	local function searchforurl(frame, text, ...)
 		foundurl = false
 
-		if string.find(text, "%pTInterface%p+") or string.find(text, "%pTINTERFACE%p+") then
+		if strfind(text, "%pTInterface%p+") or strfind(text, "%pTINTERFACE%p+") then
 			foundurl = true
 		end
 
 		if not foundurl then
 			--192.168.1.1:1234
-			text = string.gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?:%d%d?%d?%d?%d?)(%s?)", highlighturl)
+			text = gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?:%d%d?%d?%d?%d?)(%s?)", highlighturl)
 		end
 		if not foundurl then
 			--192.168.1.1
-			text = string.gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)(%s?)", highlighturl)
+			text = gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)(%s?)", highlighturl)
 		end
 		if not foundurl then
 			--www.teamspeak.com:3333
-			text = string.gsub(text, "(%s?)([%w_-]+%.?[%w_-]+%.[%w_-]+:%d%d%d?%d?%d?)(%s?)", highlighturl)
+			text = gsub(text, "(%s?)([%w_-]+%.?[%w_-]+%.[%w_-]+:%d%d%d?%d?%d?)(%s?)", highlighturl)
 		end
 		if not foundurl then
 			--http://www.google.com
-			text = string.gsub(text, "(%s?)(%a+://[%w_/%.%?%%=~&-'%-]+)(%s?)", highlighturl)
+			text = gsub(text, "(%s?)(%a+://[%w_/%.%?%%=~&-'%-]+)(%s?)", highlighturl)
 		end
 		if not foundurl then
 			--www.google.com
-			text = string.gsub(text, "(%s?)(www%.[%w_/%.%?%%=~&-'%-]+)(%s?)", highlighturl)
+			text = gsub(text, "(%s?)(www%.[%w_/%.%?%%=~&-'%-]+)(%s?)", highlighturl)
 		end
 		if not foundurl then
 			--lol@lol.com
-			text = string.gsub(text, "(%s?)([_%w-%.~-]+@[_%w-]+%.[_%w-%.]+)(%s?)", highlighturl)
+			text = gsub(text, "(%s?)([_%w-%.~-]+@[_%w-]+%.[_%w-%.]+)(%s?)", highlighturl)
 		end
 
 		frame.am(frame, text, ...)
@@ -59,17 +62,17 @@ function module:UrlCopy()
 
 	local orig = ItemRefTooltip.SetHyperlink
 	function ItemRefTooltip:SetHyperlink(link, ...)
-		if link and link:sub(0, 3) == "url" then return end
+		if link and strsub(link, 0, 3) == "url" then return end
 
 		return orig(self, link, ...)
 	end
 
 	hooksecurefunc("ChatFrame_OnHyperlinkShow", function(frame, link, _, button)
-		local type, value = link:match("(%a+):(.+)")
+		local type, value = strmatch(link, "(%a+):(.+)")
 		local hide
 		if button == "LeftButton" and IsModifierKeyDown() then
 			if type == "player" then
-				local unit = value:match("([^:]+)")
+				local unit = strmatch(value, "([^:]+)")
 				if IsAltKeyDown() then
 					InviteToGroup(unit)
 					hide = true
@@ -78,7 +81,7 @@ function module:UrlCopy()
 					hide = true
 				end
 			elseif type == "BNplayer" then
-				local _, bnID = value:match("([^:]*):([^:]*):")
+				local _, bnID = strmatch(value, "([^:]*):([^:]*):")
 				if not bnID then return end
 				local _, _, _, _, _, gameID = BNGetFriendInfoByID(bnID)
 				if gameID and CanCooperateWithGameAccount(gameID) then

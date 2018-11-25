@@ -4,6 +4,8 @@ if not C.Infobar.Gold then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GoldPos)
+local format = string.format
+local pairs, wipe = pairs, table.wipe
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, GetRealmName()

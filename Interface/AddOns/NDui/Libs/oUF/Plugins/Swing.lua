@@ -5,12 +5,11 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
-local meleeing
-local rangeing
-local lasthit
+local meleeing, rangeing, lasthit
 local MainhandID = GetInventoryItemID("player", 16)
 local OffhandID = GetInventoryItemID("player", 17)
 local RangedID = GetInventoryItemID("player", 18)
+local strfind = string.find
 
 local SwingStopped = function(element)
 	local bar = element.__owner
@@ -234,7 +233,7 @@ end
 local Melee = function(self)
 	local _, subevent, _, GUID = CombatLogGetCurrentEventInfo()
 	if GUID ~= UnitGUID("player") then return end
-	if not string.find(subevent, "SWING") then return end
+	if not strfind(subevent, "SWING") then return end
 
 	local bar = self.Swing
 	local swing = bar.Twohand
@@ -291,7 +290,7 @@ local ParryHaste = function(self)
 
 	if tarGUID ~= UnitGUID("player") then return end
 	if not meleeing then return end
-	if not string.find(subevent, "MISSED") then return end
+	if not strfind(subevent, "MISSED") then return end
 	if missType ~= "PARRY" then return end
 
 	local bar = self.Swing

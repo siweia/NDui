@@ -4,7 +4,7 @@ local module = B:GetModule("Skins")
 
 function module:PetBattleUI()
 	if not NDuiDB["Skins"]["PetBattle"] then return end
-	local r, g, b = DB.r, DB.g, DB.b
+	local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
 
 	-- Head Frame
 	local frame = PetBattleFrame

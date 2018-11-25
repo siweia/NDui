@@ -6,7 +6,8 @@ ns[4] = {}			-- DB, Database
 NDuiADB = NDuiADB or {}
 NDuiDB = NDuiDB or {}
 
-local B, C, L, D = unpack(ns)
+local B, C, L, DB = unpack(ns)
+local pairs, next, tinsert = pairs, next, table.insert
 
 -- Events
 local events = {}

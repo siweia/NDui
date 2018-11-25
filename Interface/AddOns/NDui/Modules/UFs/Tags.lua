@@ -1,6 +1,8 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
+
 local oUF = ns.oUF or oUF
+local format, floor = string.format, math.floor
 
 local function ColorPercent(value)
 	local r, g, b
@@ -195,7 +197,7 @@ oUF.Tags.Methods["altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
 	if max > 0 and not UnitIsDeadOrGhost(unit) then
-		return ("%s%%"):format(math.floor(cur/max*100 + .5))
+		return format("%s%%", floor(cur/max*100 + .5))
 	end
 end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"

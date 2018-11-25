@@ -4,6 +4,7 @@ if not C.Infobar.Spec then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.SpecPos)
+local format, wipe = string.format, table.wipe
 
 local function addIcon(texture)
 	texture = texture and "|T"..texture..":12:16:0:0:50:50:4:46:4:46|t" or ""

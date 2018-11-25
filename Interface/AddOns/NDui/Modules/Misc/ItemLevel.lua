@@ -8,6 +8,7 @@ local module = B:GetModule("Misc")
 function module:ShowItemLevel()
 	if not NDuiDB["Misc"]["ItemLevel"] then return end
 
+	local pairs = pairs
 	local SLOTIDS = {}
 	for _, slot in pairs({"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand", "SecondaryHand"}) do
 		SLOTIDS[slot] = GetInventorySlotInfo(slot.."Slot")

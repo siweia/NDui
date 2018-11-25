@@ -8,6 +8,8 @@ local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
+local tinsert, max = table.insert, math.max
+local strfind, format, strsplit = string.find, string.format, string.split
 
 local function updateInspect(self, elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
@@ -80,9 +82,9 @@ function module:SetupTooltip(spec, level)
 	for i = 2, GameTooltip:NumLines() do
 		local line = _G["GameTooltipTextLeft"..i]
 		local text = line:GetText()
-		if text and text:find(specPrefix) then
+		if text and strfind(text, specPrefix) then
 			specLine = line
-		elseif text and text:find(levelPrefix) then
+		elseif text and strfind(text, levelPrefix) then
 			levelLine = line
 		end
 	end
@@ -175,7 +177,7 @@ function module:GetUnitItemLevel(unit)
 			ilvl = select(2, GetAverageItemLevel())
 		else
 			if hasArtifact or twohand == 2 then
-				local higher = math.max(weapon[1], weapon[2])
+				local higher = max(weapon[1], weapon[2])
 				total = total + higher*2
 			elseif twohand == 1 and haveWeapon == 1 then
 				total = total + weapon[1]*2 + weapon[2]*2
@@ -193,7 +195,7 @@ function module:GetUnitItemLevel(unit)
 			ilvl = total / 16
 		end
 
-		if ilvl > 0 then ilvl = string.format("%d", ilvl) end
+		if ilvl > 0 then ilvl = format("%d", ilvl) end
 		if boa > 0 then ilvl = ilvl.." |cff00ccff("..boa..HEIRLOOMS..")" end
 	else
 		ilvl = nil

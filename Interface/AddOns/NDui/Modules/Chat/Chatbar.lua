@@ -6,6 +6,7 @@ function module:Chatbar()
 	local chatFrame = SELECTED_DOCK_FRAME
 	local editBox = chatFrame.editBox
 	local width, height, padding, buttonList = 40, 6, 5, {}
+	local tinsert, pairs = table.insert, pairs
 
 	local Chatbar = CreateFrame("Frame", nil, UIParent)
 	Chatbar:SetSize(width, height)

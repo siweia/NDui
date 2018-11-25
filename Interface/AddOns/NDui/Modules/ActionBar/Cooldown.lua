@@ -10,6 +10,7 @@ function module:OnLogin()
 	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 	local ICON_SIZE = 36
 	local hideNumbers = {}
+	local pairs, floor = pairs, math.floor
 
 	-- stops the timer
 	local function Timer_Stop(self)
@@ -48,8 +49,8 @@ function module:OnLogin()
 		else
 			local remain = self.duration - (GetTime() - self.start)
 			if remain > 0 then
-				local time, nextUpdate = B.FormatTime(remain)
-				self.text:SetText(time)
+				local getTime, nextUpdate = B.FormatTime(remain)
+				self.text:SetText(getTime)
 				self.nextUpdate = nextUpdate
 			else
 				Timer_Stop(self)

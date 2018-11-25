@@ -4,6 +4,8 @@ local module = B:GetModule("Skins")
 
 local buttonList = {}
 local r, g, b = DB.r, DB.g, DB.b
+local tinsert, pairs, format = table.insert, pairs, string.format
+
 local function CreateMicroButton(parent, data)
 	local texture, texcoord, tip, func = unpack(data)
 	if not NDuiDB["Skins"]["ClassLine"] then r, g, b = 0, 0, 0 end

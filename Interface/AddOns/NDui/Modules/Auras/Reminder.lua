@@ -5,6 +5,7 @@ local module = B:GetModule("Auras")
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = C.Auras.IconSize + 4
 local frames, parentFrame = {}
+local pairs, tinsert = pairs, table.insert
 
 local function UpdateReminder(cfg)
 	local frame = cfg.frame
