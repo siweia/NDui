@@ -4,6 +4,13 @@ local module = B:RegisterModule("GUI")
 
 local format, tonumber, type = string.format, tonumber, type
 local pairs, ipairs, next = pairs, ipairs, next
+local r, g, b = DB.r, DB.g, DB.b
+local guiTab, guiPage, f = {}, {}
+
+local function setupGUIScale()
+	if not f then return end
+	f:SetScale(NDuiADB["GUIScale"])
+end
 
 -- Default Settings
 local defaultSettings = {
@@ -300,8 +307,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Count", L["Actionbar Item Counts"]},
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
 		{},--blank
-		{1, "Actionbar", "Cooldown", L["Show Cooldown"]},
-		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"], true},
+		{1, "Actionbar", "Cooldown", "|cff00cc4c"..L["Show Cooldown"]},
+		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*", true},
 	},
 	[2] = {
 		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
@@ -370,25 +377,25 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{2, "Nameplate", "UnitList", L["UnitColor List"]},
 		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"], true},
 		{},--blank
-		{1, "Nameplate", "TankMode", "|cff00cc4c"..L["Tank Mode"]},
-		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"], true},
-		{5, "Nameplate", "SecureColor", L["Secure Color"]},
-		{5, "Nameplate", "TransColor", L["Trans Color"], 1},
-		{5, "Nameplate", "InsecureColor", L["Insecure Color"], 2},
+		{1, "Nameplate", "TankMode", "|cff00cc4c"..L["Tank Mode"].."*"},
+		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true},
+		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
+		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
+		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
 		{},--blank
-		{1, "Nameplate", "FriendlyCC", L["Friendly CC"]},
-		{1, "Nameplate", "HostileCC", L["Hostile CC"], true},
+		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
+		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*", true},
 		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"]},
 		{1, "Nameplate", "ColorBorder", L["Auras Border"], true},
-		{1, "Nameplate", "InsideView", L["Nameplate InsideView"]},
+		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", false, nil, function() B.PlateInsideView() end},
 		{1, "Nameplate", "FullHealth", L["Show FullHealth"], true},
 		{1, "Nameplate", "Arrow", L["Show Arrow"]},
 		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"]},
-		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"], true, {0, 1, 1}},
+		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {0, 1, 1}, function() B.UpdatePlateAlpha() end},
 		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
 		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
-		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"], false, {.5, 1.5, 1}},
-		{3, "Nameplate", "Distance", L["Nameplate Distance"], true, {20, 100, 0}},
+		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", false, {.5, 1.5, 1}, function() B.UpdatePlateSpacing() end},
+		{3, "Nameplate", "Distance", L["Nameplate Distance"].."*", true, {20, 100, 0}, function() B.UpdatePlateRange() end},
 		{3, "Nameplate", "Width", L["NP Width"], false, {50, 150, 0}},
 		{3, "Nameplate", "Height", L["NP Height"], true, {5, 15, 0}},
 	},
@@ -409,9 +416,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[7] = {
 		{1, "Skins", "RM", "|cff00cc4c"..L["Raid Manger"]},
-		{1, "Skins", "RMRune", L["Runes Check"]},
-		{1, "Skins", "EasyMarking", L["Easy Mark"]},
-		{2, "Skins", "DBMCount", L["Countdown Sec"], true},
+		{1, "Skins", "RMRune", L["Runes Check"].."*"},
+		{1, "Skins", "EasyMarking", L["Easy Mark"].."*"},
+		{2, "Skins", "DBMCount", L["Countdown Sec"].."*", true},
 		{},--blank
 		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"]},
 		{1, "Misc", "QuestProgress", L["QuestProgress"]},
@@ -419,31 +426,31 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Misc", "Interrupt", "|cff00cc4c"..L["Interrupt Alert"]},
 		{1, "Misc", "BrokenSpell", L["Broken Spell"], true},
-		{1, "Misc", "OwnInterrupt", L["Own Interrupt"]},
-		{1, "Misc", "AlertInInstance", L["Alert In Instance"], true},
+		{1, "Misc", "OwnInterrupt", L["Own Interrupt"].."*"},
+		{1, "Misc", "AlertInInstance", L["Alert In Instance"].."*", true},
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"]},
 		{},--blank
 		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"]},
-		{1, "Misc", "AlertinChat", L["Alert In Chat"], true},
+		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*", true},
 	},
 	[8] = {
 		{1, "Chat", "Lock", "|cff00cc4c"..L["Lock Chat"]},
 		{},--blank
 		{1, "Chat", "Freedom", L["Language Filter"]},
-		{1, "Chat", "Sticky", L["Chat Sticky"], true},
+		{1, "Chat", "Sticky", L["Chat Sticky"].."*", true, nil, function() B.ChatWhisperSticky() end},
 		{1, "Chat", "Oldname", L["Default Channel"]},
-		{1, "Chat", "WhisperColor", L["Differ WhipserColor"], true},
+		{1, "Chat", "WhisperColor", L["Differ WhipserColor"].."*", true},
 		{1, "ACCOUNT", "Timestamp", L["Timestamp"], false, nil, function() B.UpdateTimestamp() end},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
-		{3, "Chat", "Matches", L["Keyword Match"], false, {1, 3, 0}},
-		{2, "ACCOUNT", "ChatFilterList", L["Filter List"], true, nil, function() B.GenFilterList() end},
+		{3, "Chat", "Matches", L["Keyword Match"].."*", false, {1, 3, 0}},
+		{2, "ACCOUNT", "ChatFilterList", L["Filter List"].."*", true, nil, function() B.GenFilterList() end},
 		{},--blank
 		{1, "Chat", "Invite", "|cff00cc4c"..L["Whisper Invite"]},
-		{1, "Chat", "GuildInvite", L["Guild Invite Only"], true},
-		{2, "Chat", "Keyword", L["Whisper Keyword"], false, nil, function() B.GenWhisperList() end},
-		{2, "ACCOUNT", "ChatAtList", L["@List"], true, nil, function() B.GenChatAtList() end},
+		{1, "Chat", "GuildInvite", L["Guild Invite Only"].."*", true},
+		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", false, nil, function() B.GenWhisperList() end},
+		{2, "ACCOUNT", "ChatAtList", L["@List"].."*", true, nil, function() B.GenChatAtList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
@@ -455,7 +462,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Map", "WhoPings", L["Show WhoPings"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{},--blank
-		{3, "Map", "MapScale", L["Map Scale"], false, {1, 2, 1}},
+		{3, "Map", "MapScale", L["Map Scale"].."*", false, {1, 2, 1}},
 		{3, "Map", "MinmapScale", L["Minimap Scale"], true, {1, 2, 1}},
 	},
 	[10] = {
@@ -476,19 +483,19 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Details", L["Details Skin"], true},
 	},
 	[11] = {
-		{1, "Tooltip", "CombatHide", L["Hide Tooltip"]},
-		{1, "Tooltip", "Cursor", L["Follow Cursor"]},
-		{1, "Tooltip", "ClassColor", L["Classcolor Border"]},
-		{3, "Tooltip", "Scale", L["Tooltip Scale"], true, {.5, 1.5, 1}},
+		{1, "Tooltip", "CombatHide", L["Hide Tooltip"].."*"},
+		{1, "Tooltip", "Cursor", L["Follow Cursor"].."*"},
+		{1, "Tooltip", "ClassColor", L["Classcolor Border"].."*"},
+		{3, "Tooltip", "Scale", L["Tooltip Scale"].."*", true, {.5, 1.5, 1}},
 		{},--blank
-		{1, "Tooltip", "HideRank", L["Hide Rank"]},
-		{1, "Tooltip", "HidePVP", L["Hide PVP"], true},
-		{1, "Tooltip", "HideFaction", L["Hide Faction"]},
-		{1, "Tooltip", "FactionIcon", L["FactionIcon"], true},
-		{1, "Tooltip", "LFDRole", L["Group Roles"]},
-		{1, "Tooltip", "TargetBy", L["Show TargetedBy"], true},
+		{1, "Tooltip", "HideRank", L["Hide Rank"].."*"},
+		{1, "Tooltip", "HidePVP", L["Hide PVP"].."*", true},
+		{1, "Tooltip", "HideFaction", L["Hide Faction"].."*"},
+		{1, "Tooltip", "FactionIcon", L["FactionIcon"].."*", true},
+		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
+		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},
 		{1, "Tooltip", "AzeriteArmor", L["Show AzeriteArmor"]},
-		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"], true},
+		{1, "Tooltip", "TargetBy", L["Show TargetedBy"], true},
 	},
 	[12] = {
 		{1, "Misc", "Mail", L["Mail Tool"]},
@@ -512,13 +519,10 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
-		{3, "ACCOUNT", "GUIScale", L["GUI Scale"], false, {.5, 1.5, 1}},
+		{3, "ACCOUNT", "GUIScale", L["GUI Scale"].."*", false, {.5, 1.5, 2}, setupGUIScale},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 	},
 }
-
-local r, g, b = DB.r, DB.g, DB.b
-local guiTab, guiPage, f = {}, {}
 
 local function SelectTab(i)
 	for num = 1, #tabList do
@@ -576,7 +580,7 @@ local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
 	for _, option in pairs(optionList[i]) do
-		local type, key, value, name, horizon, data, callBack = unpack(option)
+		local type, key, value, name, horizon, data, callback = unpack(option)
 		-- Checkboxes
 		if type == 1 then
 			local cb = B.CreateCheckBox(parent)
@@ -590,7 +594,7 @@ local function CreateOption(i)
 			cb:SetChecked(NDUI_VARIABLE(key, value))
 			cb:SetScript("OnClick", function()
 				NDUI_VARIABLE(key, value, cb:GetChecked())
-				if callBack then callBack() end
+				if callback then callback() end
 			end)
 		-- Editbox
 		elseif type == 2 then
@@ -608,7 +612,7 @@ local function CreateOption(i)
 			end)
 			eb:HookScript("OnEnterPressed", function()
 				NDUI_VARIABLE(key, value, eb:GetText())
-				if callBack then callBack() end
+				if callback then callback() end
 			end)
 			eb:SetScript("OnEnter", function(self)
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
@@ -637,6 +641,7 @@ local function CreateOption(i)
 				local current = tonumber(format("%."..step.."f", v))
 				NDUI_VARIABLE(key, value, current)
 				_G[s:GetName().."Text"]:SetText(current)
+				if callback then callback() end
 			end)
 
 			B.CreateFS(s, 14, name, "system", "CENTER", 0, 25)
@@ -680,6 +685,7 @@ local function CreateOption(i)
 			for i in pairs(data) do
 				opt[i]:HookScript("OnClick", function()
 					NDUI_VARIABLE(key, value, i)
+					if callback then callback() end
 				end)
 			end
 
@@ -707,6 +713,7 @@ local function CreateOption(i)
 				local r, g, b = ColorPickerFrame:GetColorRGB()
 				tex:SetColorTexture(r, g, b)
 				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
+				if callback then callback() end
 			end
 
 			local function onCancel()
@@ -1117,7 +1124,7 @@ local function OpenGUI()
 	-- Main Frame
 	f = CreateFrame("Frame", "NDuiGUI", UIParent)
 	tinsert(UISpecialFrames, "NDuiGUI")
-	f:SetScale(NDuiADB["GUIScale"])
+	setupGUIScale()
 	f:SetSize(800, 600)
 	f:SetPoint("CENTER")
 	f:SetFrameStrata("HIGH")
@@ -1189,6 +1196,9 @@ local function OpenGUI()
 		StaticPopup_Show("RESET_NDUI")
 	end)
 
+	local optTip = B.CreateFS(f, 14, L["Option* Tips"], "system", "LEFT", 0, 0)
+	optTip:SetPoint("LEFT", reset, "RIGHT", 15, 0)
+
 	local credit = CreateFrame("Button", nil, f)
 	credit:SetPoint("TOPRIGHT", -20, -15)
 	credit:SetSize(35, 35)
@@ -1219,7 +1229,7 @@ local function OpenGUI()
 	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 
 	-- Toggle RaidFrame Debuffs
-	local raidDebuffs = B.CreateButton(guiPage[4].child, 150, 30, L["RaidFrame Debuffs"])
+	local raidDebuffs = B.CreateButton(guiPage[4].child, 150, 30, L["RaidFrame Debuffs"].."*")
 	raidDebuffs:SetPoint("TOPLEFT", 340, -403)
 	raidDebuffs.text:SetTextColor(.6, .8, 1)
 	raidDebuffs:SetScript("OnClick", function()
@@ -1234,7 +1244,7 @@ local function OpenGUI()
 	clickSet:SetScript("OnClick", setupClickCast)
 
 	-- Toggle Nameplate aurafilter
-	local plate = B.CreateButton(guiPage[5].child, 150, 30, L["Nameplate AuraFilter"])
+	local plate = B.CreateButton(guiPage[5].child, 150, 30, L["Nameplate AuraFilter"].."*")
 	plate:SetPoint("TOPLEFT", 340, -20)
 	plate.text:SetTextColor(.6, .8, 1)
 	plate:SetScript("OnClick", setupPlateAura)
