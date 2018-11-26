@@ -90,7 +90,7 @@ local roleTex = {
 local function InsertRoleFrame(self, role)
 	if not self.roleFrame then
 		local f = self:CreateTexture(nil, "OVERLAY")
-		f:SetPoint("TOPRIGHT", self, "TOPLEFT", -1, -4)
+		f:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, -2)
 		f:SetSize(20, 20)
 		f:SetTexture("Interface\\LFGFrame\\UI-LFG-ICONS-ROLEBACKGROUNDS")
 		B.CreateSD(f, 3, 3)
@@ -321,14 +321,14 @@ local function style(self)
 		self.tipStyled = true
 	end
 
-	self.bg:SetBackdropBorderColor(0, 0, 0)
+	self.bg.Shadow:SetBackdropBorderColor(0, 0, 0)
 	if NDuiDB["Tooltip"]["ClassColor"] and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+				self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
 		end
 	end
