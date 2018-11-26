@@ -4,7 +4,7 @@ local UF = B:GetModule("UnitFrames")
 local strmatch, tonumber = string.match, tonumber
 
 -- Init
-function UF:SetupCVars()
+function B.PlateInsideView()
 	if NDuiDB["Nameplate"]["InsideView"] then
 		SetCVar("nameplateOtherTopInset", .05)
 		SetCVar("nameplateOtherBottomInset", .08)
@@ -12,12 +12,27 @@ function UF:SetupCVars()
 		SetCVar("nameplateOtherTopInset", -1)
 		SetCVar("nameplateOtherBottomInset", -1)
 	end
-	SetCVar("nameplateOverlapH", .5)
-	SetCVar("nameplateOverlapV", NDuiDB["Nameplate"]["VerticalSpacing"])
-	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
+end
 
+function B.UpdatePlateAlpha()
 	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateMaxAlpha", NDuiDB["Nameplate"]["MinAlpha"])
+end
+
+function B.UpdatePlateRange()
+	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
+end
+
+function B.UpdatePlateSpacing()
+	SetCVar("nameplateOverlapV", NDuiDB["Nameplate"]["VerticalSpacing"])
+end
+
+function UF:SetupCVars()
+	B.PlateInsideView()
+	SetCVar("nameplateOverlapH", .5)
+	B.UpdatePlateSpacing()
+	B.UpdatePlateRange()
+	B.UpdatePlateAlpha()
 	SetCVar("nameplateSelectedAlpha", 1)
 
 	SetCVar("namePlateMinScale", .8)

@@ -180,8 +180,8 @@ function module:WhipserInvite()
 	B:RegisterEvent("CHAT_MSG_BN_WHISPER", onChatWhisper)
 end
 
-local function updateTimestamp()
-	-- Timestamp
+-- Timestamp
+function B.UpdateTimestamp()
 	local greyStamp = DB.GreyColor.."[%H:%M:%S]|r "
 	if NDuiADB["Timestamp"] then
 		SetCVar("showTimestamps", greyStamp)
@@ -189,7 +189,17 @@ local function updateTimestamp()
 		SetCVar("showTimestamps", "none")
 	end
 end
-B.UpdateTimestamp = updateTimestamp
+
+-- Sticky whisper
+function B.ChatWhisperSticky()
+	if NDuiDB["Chat"]["Sticky"] then
+		ChatTypeInfo["WHISPER"].sticky = 1
+		ChatTypeInfo["BN_WHISPER"].sticky = 1
+	else
+		ChatTypeInfo["WHISPER"].sticky = 0
+		ChatTypeInfo["BN_WHISPER"].sticky = 0
+	end
+end
 
 function module:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
@@ -223,12 +233,6 @@ function module:OnLogin()
 	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
-	-- Sticky
-	if not NDuiDB["Chat"]["Sticky"] then
-		ChatTypeInfo["WHISPER"].sticky = 0
-		ChatTypeInfo["BN_WHISPER"].sticky = 0
-	end
-
 	-- Easy Resizing
 	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
@@ -252,13 +256,14 @@ function module:OnLogin()
 	end
 
 	-- Add Elements
+	B.UpdateTimestamp()
+	B.ChatWhisperSticky()
 	self:ChatFilter()
 	self:ChannelRename()
 	self:Chatbar()
 	self:ChatCopy()
 	self:UrlCopy()
 	self:WhipserInvite()
-	updateTimestamp()
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
