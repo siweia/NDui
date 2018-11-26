@@ -11,6 +11,7 @@ function module:AddAlerts()
 	self:InterruptAlert()
 	self:VersionCheck()
 	self:ExplosiveAlert()
+	self:PlacedItemAlert()
 end
 
 --[[
@@ -101,6 +102,10 @@ end
 	闭上你的嘴！
 	打断、偷取及驱散法术时的警报
 ]]
+local function msgChannel()
+	return IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY"
+end
+
 function module:InterruptAlert()
 	if not NDuiDB["Misc"]["Interrupt"] then return end
 
@@ -138,10 +143,6 @@ function module:InterruptAlert()
 		[64695] = true,		-- 陷地
 		[198121] = true,	-- 冰霜撕咬
 	}
-
-	local function msgChannel()
-		return IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY"
-	end
 
 	local function updateAlert(_, ...)
 		if not IsInGroup() then return end
@@ -282,4 +283,30 @@ function module:ExplosiveAlert()
 		B:UnregisterEvent(event, checkAffixes)
 	end
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
+end
+
+--[[
+	放大餐时叫一叫
+]]
+function module:PlacedItemAlert()
+	local itemList = {
+		[226241] = true,	-- 宁神圣典
+		[256230] = true,	-- 静心圣典
+		[185709] = true,	-- 焦糖鱼宴
+		[259409] = true,	-- 海帆盛宴
+		[259410] = true,	-- 船长盛宴
+	}
+
+	local function checkSpell(_, unit, _, spellID)
+		if not NDuiDB["Misc"]["PlacedItemAlert"] then return end
+		if UnitInRaid(unit) or UnitInParty(unit) then
+			if spellID and itemList[spellID] then
+				local who = UnitName(unit)
+				local link = GetSpellLink(spellID)
+				local name = GetSpellInfo(spellID)
+				SendChatMessage(format(L["Place item"], who, link or name), msgChannel())
+			end
+		end
+	end
+	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", checkSpell)
 end

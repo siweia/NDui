@@ -211,6 +211,7 @@ local defaultSettings = {
 		OnlyCompleteRing = false,
 		ExplosiveCount = false,
 		ExplosiveCache = {},
+		PlacedItemAlert = false,
 	},
 	Tutorial = {
 		Complete = false,
@@ -429,6 +430,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"].."*"},
 		{1, "Misc", "AlertInInstance", L["Alert In Instance"].."*", true},
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"]},
+		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
 		{},--blank
 		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"]},
 		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*", true},
