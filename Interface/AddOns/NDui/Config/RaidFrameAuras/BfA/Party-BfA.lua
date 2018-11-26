@@ -21,6 +21,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 260292) -- 冲锋
 module:RegisterDebuff(TIER, INSTANCE, 0, 259718) -- 颠覆
 module:RegisterDebuff(TIER, INSTANCE, 0, 269310) -- 净化之光
+module:RegisterDebuff(TIER, INSTANCE, 0, 278961, 6) -- 衰弱意志
 
 INSTANCE = 1030 -- 塞塔里斯神庙
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
