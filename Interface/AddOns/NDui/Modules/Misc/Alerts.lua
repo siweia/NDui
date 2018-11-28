@@ -295,6 +295,7 @@ function module:PlacedItemAlert()
 		[185709] = true,	-- 焦糖鱼宴
 		[259409] = true,	-- 海帆盛宴
 		[259410] = true,	-- 船长盛宴
+		[276972] = true,	-- 秘法药锅
 	}
 
 	local function checkSpell(_, unit, _, spellID)
