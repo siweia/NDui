@@ -76,6 +76,8 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 			print("Module <"..module.name.."> does not loaded.")
 		end
 	end
+
+	C_Timer.After(3, collectgarbage)
 end)
 
 _G[addonName] = ns
