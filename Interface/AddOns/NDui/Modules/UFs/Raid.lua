@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
-local strmatch, format = string.match, string.format
+local strmatch, format, wipe = string.match, string.format, table.wipe
 local pairs, ipairs, next, tonumber = pairs, ipairs, next, tonumber
 
 -- RaidFrame Elements
@@ -67,6 +67,26 @@ function UF:CreateThreatBorder(self)
 	self.ThreatIndicator.Override = UpdateThreatBorder
 end
 
+local debuffList = {}
+function B:UpdateRaidDebuffs()
+	wipe(debuffList)
+	for instName, value in pairs(C.RaidDebuffs) do
+		for spell, priority in pairs(value) do
+			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell]) then
+				if not debuffList[instName] then debuffList[instName] = {} end
+				debuffList[instName][spell] = priority
+			end
+		end
+	end
+	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
+		for spell, priority in pairs(value) do
+			if priority > 0 then
+				debuffList[instName][spell] = priority
+			end
+		end
+	end
+end
+
 function UF:CreateRaidDebuffs(self)
 	local size = 18*NDuiDB["UFs"]["RaidScale"]
 
@@ -99,7 +119,10 @@ function UF:CreateRaidDebuffs(self)
 	bu.ShowDispellableDebuff = true
 	bu.ShowDebuffBorder = NDuiDB["UFs"]["DebuffBorder"]
 	bu.FilterDispellableDebuff = NDuiDB["UFs"]["Dispellable"]
-	if NDuiDB["UFs"]["InstanceAuras"] then bu.Debuffs = NDuiADB["RaidDebuffs"] end
+	if NDuiDB["UFs"]["InstanceAuras"] then
+		if not next(debuffList) then B.UpdateRaidDebuffs() end
+		bu.Debuffs = debuffList
+	end
 	self.RaidDebuffs = bu
 end
 

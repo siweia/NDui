@@ -87,12 +87,22 @@ function module:OnLogin()
 			break
 		end
 	end
-	if not next(NDuiADB["RaidDebuffs"]) then
-		B.CopyTable(RaidDebuffs, NDuiADB["RaidDebuffs"])
+	for instName, value in pairs(RaidDebuffs) do
+		for spell, priority in pairs(value) do
+			if NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell] and NDuiADB["RaidDebuffs"][instName][spell] == priority then
+				NDuiADB["RaidDebuffs"][instName][spell] = nil
+			end
+		end
+	end
+	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
+		if not next(value) then
+			NDuiADB["RaidDebuffs"][instName] = nil
+		end
 	end
 
 	C.AuraWatchList = AuraWatchList
 	C.RaidBuffs = RaidBuffs
+	C.RaidDebuffs = RaidDebuffs
 
 	-- Filter bloodlust for healers
 	local bloodlustList = {57723, 57724, 80354, 264689}

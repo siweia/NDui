@@ -4,6 +4,7 @@ local module = B:RegisterModule("GUI")
 
 local format, tonumber, type = string.format, tonumber, type
 local pairs, ipairs, next = pairs, ipairs, next
+local min, max = math.min, math.max
 local r, g, b = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
 
@@ -762,7 +763,7 @@ local function createExtraGUI(parent, title, bgFrame)
 	B.CreateSD(frame)
 	B.CreateTex(frame)
 	parent:HookScript("OnHide", function()
-		frame:Hide()
+		if frame:IsShown() then frame:Hide() end
 	end)
 
 	if title then
@@ -792,6 +793,7 @@ local function setupRaidDebuffs()
 	if raidDebuffsGUI then ToggleFrame(raidDebuffsGUI) return end
 
 	raidDebuffsGUI = createExtraGUI(guiPage[4], L["RaidFrame Debuffs"], true)
+	raidDebuffsGUI:SetScript("OnHide", B.UpdateRaidDebuffs)
 
 	local barTable = {}
 	local function updateBars(instName)
@@ -876,7 +878,12 @@ local function setupRaidDebuffs()
 		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			NDuiADB["RaidDebuffs"][instName][spellID] = nil
+			if C.RaidDebuffs[instName][spellID] then
+				if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
+				NDuiADB["RaidDebuffs"][instName][spellID] = 0
+			else
+				NDuiADB["RaidDebuffs"][instName][spellID] = nil
+			end
 			barTable[instName][spellID] = nil
 			sortBars(barTable[instName])
 		end)
@@ -894,15 +901,31 @@ local function setupRaidDebuffs()
 		sortBars(barTable[instName])
 	end
 
+	local function isAuraExisted(instName, spellID)
+		local localPrio = C.RaidDebuffs[instName][spellID]
+		local savedPrio = NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]
+		if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
+			return false
+		end
+		return true
+	end
+
+	local function analyzePrio(priority)
+		priority = priority or 2
+		priority = min(priority, 6)
+		priority = max(priority, 1)
+		return priority
+	end
+
 	local function addClick(scroll, options)
 		local dungeonName, raidName, spellID, priority = options[1].Text:GetText(), options[2].Text:GetText(), tonumber(options[3]:GetText()), tonumber(options[4]:GetText())
 		local instName = dungeonName or raidName
 		if not instName or not spellID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 		if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		if NDuiADB["RaidDebuffs"][instName][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+		if isAuraExisted(instName, spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-		priority = (priority and priority < 0 and 0) or priority or 2
-		if priority > 6 then priority = 6 end
+		priority = analyzePrio(priority)
+		if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
 		NDuiADB["RaidDebuffs"][instName][spellID] = priority
 		createBar(scroll.child, instName, spellID, priority)
 	end
@@ -935,9 +958,18 @@ local function setupRaidDebuffs()
 		updateBars("")
 	end)
 
+	for instName, value in pairs(C.RaidDebuffs) do
+		for spell, priority in pairs(value) do
+			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell]) then
+				createBar(scroll.child, instName, spell, priority)
+			end
+		end
+	end
 	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
 		for spell, priority in pairs(value) do
-			createBar(scroll.child, instName, spell, priority)
+			if priority > 0 then
+				createBar(scroll.child, instName, spell, priority)
+			end
 		end
 	end
 	updateBars("")
