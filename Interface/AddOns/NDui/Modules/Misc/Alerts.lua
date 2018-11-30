@@ -300,13 +300,11 @@ function module:PlacedItemAlert()
 
 	local function checkSpell(_, unit, _, spellID)
 		if not NDuiDB["Misc"]["PlacedItemAlert"] then return end
-		if UnitInRaid(unit) or UnitInParty(unit) then
-			if spellID and itemList[spellID] then
-				local who = UnitName(unit)
-				local link = GetSpellLink(spellID)
-				local name = GetSpellInfo(spellID)
-				SendChatMessage(format(L["Place item"], who, link or name), msgChannel())
-			end
+		if (UnitInRaid(unit) or UnitInParty(unit)) and spellID and itemList[spellID] then
+			local who = UnitName(unit)
+			local link = GetSpellLink(spellID)
+			local name = GetSpellInfo(spellID)
+			SendChatMessage(format(L["Place item"], who, link or name), msgChannel())
 		end
 	end
 	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", checkSpell)

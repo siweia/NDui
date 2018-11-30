@@ -93,7 +93,6 @@ end
 
 function module:CreateCloseButton()
 	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\UI-StopButton")
-	bu:SetPoint("TOPRIGHT", -5, -5)
 	bu:SetScript("OnClick", CloseAllBags)
 	B.AddTooltip(bu, "ANCHOR_TOP", CLOSE)
 
