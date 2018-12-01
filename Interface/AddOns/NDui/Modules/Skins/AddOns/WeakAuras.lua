@@ -10,6 +10,10 @@ local function ReskinWA()
 				f.icon:SetTexCoord(unpack(DB.TexCoord))
 				f.icon.SetTexCoord = B.Dummy
 				B.CreateSD(f, 3, 3)
+				f.Shadow:HookScript("OnUpdate", function(self)
+					self:SetAlpha(self:GetParent().icon:GetAlpha())
+				end)
+
 				f.styled = true
 			end
 		elseif fType == "aurabar" then
@@ -19,6 +23,7 @@ local function ReskinWA()
 				f.icon.SetTexCoord = B.Dummy
 				f.iconFrame:SetAllPoints(f.icon)
 				B.CreateSD(f.iconFrame, 3, 3)
+
 				f.styled = true
 			end
 		end
@@ -50,7 +55,7 @@ local function ReskinWA()
 		Skin_WeakAuras(region, "aurabar")
 	end
 
-	for weakAura, _ in pairs(WeakAuras.regions) do
+	for weakAura in pairs(WeakAuras.regions) do
 		local regions = WeakAuras.regions[weakAura]
 		if regions.regionType == "icon" or regions.regionType == "aurabar" then
 			Skin_WeakAuras(regions.region, regions.regionType)
