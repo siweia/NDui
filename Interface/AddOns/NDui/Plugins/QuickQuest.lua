@@ -29,14 +29,8 @@ local quests, choiceQueue = {}
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if NDuiDB["Misc"]["AutoQuest"] then
-			if(not IsShiftKeyDown()) then
-				func(...)
-			end
-		else
-			if(IsShiftKeyDown()) then
-				func(...)
-			end
+		if NDuiDB["Misc"]["AutoQuest"] and not IsShiftKeyDown() then
+			func(...)
 		end
 	end
 end
