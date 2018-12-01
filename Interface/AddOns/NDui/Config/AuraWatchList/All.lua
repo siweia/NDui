@@ -200,6 +200,7 @@ local list = {
 		{AuraID = 260954, UnitID = "player"},	-- 铁之凝视，围攻
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
 		{AuraID = 265773, UnitID = "player"},	-- 吐金，诸王
+		{AuraID = 271640, UnitID = "player"},	-- 黑暗启示，诸王
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
 		{AuraID = 266923, UnitID = "player"},	-- 充电，神庙
 		{AuraID = 273563, UnitID = "player"},	-- 神经毒素，神庙
