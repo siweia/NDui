@@ -92,6 +92,7 @@ C.ShowPowerList = {
 	[GetSectionInfo(13015)] = true,	-- 清扫器
 	[GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
 	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
+	[GetSectionInfo(18539)] = true,	-- 碾压者
 }
 function UF:CreatePowerUnitTable()
 	B.SplitList(C.ShowPowerList, NDuiDB["Nameplate"]["ShowPowerList"])
