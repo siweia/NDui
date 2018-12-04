@@ -75,9 +75,7 @@ local defaultSettings = {
 		AutoRes = true,
 		NumGroups = 6,
 		SimpleMode = false,
-		Dispellable = false,
 		InstanceAuras = true,
-		DebuffBorder = true,
 		SpecRaidPos = false,
 		RaidClassColor = false,
 		HorizonRaid = false,
@@ -365,9 +363,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
 		{},--blank
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
-		{1, "UFs", "DebuffBorder", L["Auras Border"], true},
-		{1, "UFs", "AutoRes", L["UFs AutoRes"]},
-		{1, "UFs", "Dispellable", L["Dispellable Only"], true},
+		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{1, "UFs", "RaidClickSets", L["Enable ClickSets"]},
 		{1, "UFs", "InstanceAuras", L["Instance Auras"], true},
 	},
@@ -865,6 +861,21 @@ local function setupRaidDebuffs()
 		end
 	end
 
+	local function analyzePrio(priority)
+		priority = priority or 2
+		priority = min(priority, 6)
+		priority = max(priority, 1)
+		return priority
+	end
+
+	local function setupBoxTip(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(L["Tips"])
+		GameTooltip:AddLine(L["Prio Editbox"], .6,.8,1)
+		GameTooltip:Show()
+	end
+
 	local function createBar(parent, instName, spellID, priority)
 		local name, _, texture = GetSpellInfo(spellID)
 
@@ -888,15 +899,27 @@ local function setupRaidDebuffs()
 			sortBars(barTable[instName])
 		end)
 
-		local prioString = B.CreateFS(icon, 14, priority)
-		prioString:SetTextColor(0, 1, 0)
 		local spellName = B.CreateFS(bar, 14, name, false, "LEFT", 30, 0)
-		spellName:SetWidth(85)
+		spellName:SetWidth(120)
 		spellName:SetJustifyH("LEFT")
-		local instance = B.CreateFS(bar, 14, instName, false, "RIGHT", -35, 0)
-		instance:SetTextColor(.6, .8, 1)
-		instance:SetWidth(80)
-		instance:SetJustifyH("RIGHT")
+		local prioBox = B.CreateEditBox(bar, 30, 24)
+		prioBox:SetPoint("RIGHT", close, "LEFT", -15, 0)
+		prioBox:SetTextInsets(10, 0, 0, 0)
+		prioBox:SetMaxLetters(1)
+		prioBox:SetTextColor(0, 1, 0)
+		prioBox:SetBackdropColor(1, 1, 1, .2)
+		prioBox:SetText(priority)
+		prioBox:HookScript("OnEscapePressed", function(self)
+			self:SetText(priority)
+		end)
+		prioBox:HookScript("OnEnterPressed", function(self)
+			local prio = analyzePrio(tonumber(self:GetText()))
+			if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
+			NDuiADB["RaidDebuffs"][instName][spellID] = prio
+			self:SetText(prio)
+		end)
+		prioBox:SetScript("OnEnter", setupBoxTip)
+		prioBox:SetScript("OnLeave", GameTooltip_Hide)
 
 		sortBars(barTable[instName])
 	end
@@ -910,13 +933,6 @@ local function setupRaidDebuffs()
 		return true
 	end
 
-	local function analyzePrio(priority)
-		priority = priority or 2
-		priority = min(priority, 6)
-		priority = max(priority, 1)
-		return priority
-	end
-
 	local function addClick(scroll, options)
 		local dungeonName, raidName, spellID, priority = options[1].Text:GetText(), options[2].Text:GetText(), tonumber(options[3]:GetText()), tonumber(options[4]:GetText())
 		local instName = dungeonName or raidName
@@ -928,6 +944,8 @@ local function setupRaidDebuffs()
 		if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
 		NDuiADB["RaidDebuffs"][instName][spellID] = priority
 		createBar(scroll.child, instName, spellID, priority)
+		module:ClearEdit(options[3])
+		module:ClearEdit(options[4])
 	end
 
 	local scroll = module:CreateScroll(frame, 240, 350)
@@ -1264,7 +1282,7 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame Debuffs
 	local raidDebuffs = B.CreateButton(guiPage[4].child, 150, 30, L["RaidFrame Debuffs"].."*")
-	raidDebuffs:SetPoint("TOPLEFT", 340, -403)
+	raidDebuffs:SetPoint("TOPLEFT", 340, -370)
 	raidDebuffs.text:SetTextColor(.6, .8, 1)
 	raidDebuffs:SetScript("OnClick", function()
 		setupRaidDebuffs()
@@ -1273,7 +1291,7 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4].child, 150, 30, L["Add ClickSets"])
-	clickSet:SetPoint("TOPLEFT", 40, -403)
+	clickSet:SetPoint("TOPLEFT", 40, -370)
 	clickSet.text:SetTextColor(.6, .8, 1)
 	clickSet:SetScript("OnClick", setupClickCast)
 

@@ -117,8 +117,8 @@ function UF:CreateRaidDebuffs(self)
 	end
 
 	bu.ShowDispellableDebuff = true
-	bu.ShowDebuffBorder = NDuiDB["UFs"]["DebuffBorder"]
-	bu.FilterDispellableDebuff = NDuiDB["UFs"]["Dispellable"]
+	bu.ShowDebuffBorder = true
+	bu.FilterDispellableDebuff = true
 	if NDuiDB["UFs"]["InstanceAuras"] then
 		if not next(debuffList) then B.UpdateRaidDebuffs() end
 		bu.Debuffs = debuffList

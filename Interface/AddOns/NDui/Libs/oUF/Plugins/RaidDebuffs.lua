@@ -6,12 +6,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 
-local class = DB.MyClass
-local bossDebuffPrio = 9999999
-local invalidPrio = -1
-
-local RaidDebuffsReverse = {}
-local RaidDebuffsIgnore = {}
+local debugMode = false
+local abs, next = math.abs, next
+local class, invalidPrio = DB.MyClass, -1
+local RaidDebuffsReverse, RaidDebuffsIgnore = {}, {}
 
 local auraFilters = {
 	["HARMFUL"] = true,
@@ -23,7 +21,7 @@ local DispellColor = {
 	["Curse"]	= {.6, 0, 1},
 	["Disease"]	= {.6, .4, 0},
 	["Poison"]	= {0, .6, 0},
-	["none"]	= {1, 0, 0},
+	["none"]	= {0, 0, 0},
 }
 
 local DispellPriority = {
@@ -103,7 +101,6 @@ local function checkSpecs()
 	end
 end
 
-local abs = math.abs
 local function onUpdate(self, elapsed)
 	self.elapsed = (self.elapsed or 0) + elapsed
 	if self.elapsed >= 0.1 then
@@ -120,9 +117,9 @@ local function onUpdate(self, elapsed)
 	end
 end
 
-local function UpdateDebuffFrame(rd)
-	if rd.index and rd.type and rd.filter then
-		local _, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(rd.__owner.unit, rd.index, rd.filter)
+local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, expirationTime, spellId)
+	local rd = self.RaidDebuffs
+	if name then
 		if rd.icon then
 			rd.icon:SetTexture(icon)
 			rd.icon:Show()
@@ -177,82 +174,74 @@ local function UpdateDebuffFrame(rd)
 				B.HideOverlayGlow(rd.glowFrame)
 			end
 		end
+
 		rd:Show()
 	else
 		rd:Hide()
 	end
 end
 
+local instName
+local function checkInstance()
+	if IsInInstance() then
+		instName = GetInstanceInfo()
+	else
+		instName = nil
+	end
+end
+
 local function Update(self, _, unit)
-	if unit ~= self.unit then return end
+	if unit ~= self.unit or not instName then return end
 
 	local rd = self.RaidDebuffs
 	rd.priority = invalidPrio
+	local _name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId
+	local debuffs = rd.Debuffs or {}
 
 	for filter in next, (rd.Filters or auraFilters) do
 		local i = 0
 		while(true) do
 			i = i + 1
-			local name, _, _, debuffType, _, _, _, _, _, spellId, _, isBossDebuff = UnitAura(unit, i, filter)
+			local name, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(unit, i, filter)
 			if not name then break end
-
-			if rd.ShowBossDebuff and isBossDebuff then
-				local prio = rd.BossDebuffPriority or bossDebuffPrio
-				if prio and prio > rd.priority then
-					rd.priority = prio
-					rd.index = i
-					rd.type = "Boss"
-					rd.filter = filter
-				end
-			end
 
 			if rd.ShowDispellableDebuff and debuffType and filter == "HARMFUL" then
 				local disPrio = rd.DispellPriority or DispellPriority
 				local disFilter = rd.DispellFilter or DispellFilter
 				local prio
-
 				if rd.FilterDispellableDebuff and disFilter then
-					prio = disFilter[debuffType] and disPrio[debuffType]
+					prio = disFilter[debuffType] and (disPrio[debuffType] + 10)
 				else
 					prio = disPrio[debuffType]
 				end
 
-				if prio and (prio > rd.priority) then
+				if prio and prio > rd.priority then
 					rd.priority = prio
-					rd.index = i
-					rd.type = "Dispel"
-					rd.filter = filter
 				end
 			end
 
 			local prio
-			local debuffs = rd.Debuffs or {}
-			if IsInInstance() then
-				local instName = GetInstanceInfo()
-				if debuffs[instName] then
-					prio = debuffs[instName][spellId]
-				end
+			if debuffs[instName] then
+				prio = debuffs[instName][spellId]
 			end
-			-- Test
-			--local debuffs = {[264689]=1}
-			--local prio = debuffs[spellId]
 
-			if not RaidDebuffsIgnore[spellId] and prio and (prio > rd.priority) then
+			if not RaidDebuffsIgnore[spellId] and prio and prio > rd.priority then
 				rd.priority = prio
-				rd.index = i
-				rd.type = "Custom"
-				rd.filter = filter
+				_name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId = name, icon, count, debuffType, duration, expirationTime, spellId
 			end
 		end
 	end
 
-	if rd.priority == invalidPrio then
-		rd.index = nil
-		rd.filter = nil
-		rd.type = nil
+	if debugMode then
+		rd.priority = 6
+		_spellId = 47540
+		_name, _, _icon = GetSpellInfo(_spellId)
+		_count, _debuffType, _duration, _expirationTime = 2, "Magic", 10, GetTime()+10, 0
 	end
 
-	return UpdateDebuffFrame(rd)
+	if rd.priority == invalidPrio then _name = nil end
+
+	UpdateDebuffFrame(self, _name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId)
 end
 
 local function Path(self, ...)
@@ -272,8 +261,10 @@ local function Enable(self)
 		return true
 	end
 
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
 	checkSpecs()
+	self:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
+	checkInstance()
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", checkInstance)
 end
 
 local function Disable(self)
@@ -284,7 +275,7 @@ local function Disable(self)
 	end
 
 	self:UnregisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
-	checkSpecs()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD", checkInstance)
 end
 
 oUF:AddElement("RaidDebuffs", Update, Enable, Disable)
