@@ -144,7 +144,6 @@ local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, 
 			rd.duration = duration
 			if duration and duration > 0 then
 				rd.expirationTime = expirationTime
-				rd.nextUpdate = 0
 				rd:SetScript("OnUpdate", onUpdate)
 				rd.time:Show()
 			else
@@ -217,6 +216,7 @@ local function Update(self, _, unit)
 
 				if prio and prio > rd.priority then
 					rd.priority = prio
+					_name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId = name, icon, count, debuffType, duration, expirationTime, spellId
 				end
 			end
 
