@@ -143,6 +143,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 257908) -- 浸油之刃
 module:RegisterDebuff(TIER, INSTANCE, 0, 257436) -- 毒性打击
 module:RegisterDebuff(TIER, INSTANCE, 0, 274555) -- 污染之咬
 module:RegisterDebuff(TIER, INSTANCE, 0, 256363) -- 裂伤拳
+module:RegisterDebuff(TIER, INSTANCE, 0, 281357, 1) -- 水鼠啤酒
 
 INSTANCE = 1041 -- 诸王之眠
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
@@ -205,3 +206,4 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 268309) -- 无尽黑暗
 module:RegisterDebuff(TIER, INSTANCE, 0, 268317) -- 撕裂大脑
 module:RegisterDebuff(TIER, INSTANCE, 0, 268391) -- 心智突袭
 module:RegisterDebuff(TIER, INSTANCE, 0, 274720) -- 深渊打击
+module:RegisterDebuff(TIER, INSTANCE, 0, 267037) -- 力量的低语
