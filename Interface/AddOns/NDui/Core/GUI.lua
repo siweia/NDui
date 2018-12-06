@@ -317,7 +317,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Bags", "Artifact", L["Bags Artifact"], true},
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"]},
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"]},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", false, nil, function() SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"]) end},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -1170,7 +1170,7 @@ local function setupPlateAura()
 end
 
 local function OpenGUI()
-	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+	if not f and InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	if f then f:Show() return end
 
 	-- Main Frame
@@ -1266,19 +1266,6 @@ local function OpenGUI()
 		GameTooltip:Show()
 	end)
 	credit:SetScript("OnLeave", GameTooltip_Hide)
-
-	local function showLater(event)
-		if event == "PLAYER_REGEN_DISABLED" then
-			if f:IsShown() then
-				f:Hide()
-				B:RegisterEvent("PLAYER_REGEN_ENABLED", showLater)
-			end
-		else
-			f:Show()
-			B:UnregisterEvent(event, showLater)
-		end
-	end
-	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 
 	-- Toggle RaidFrame Debuffs
 	local raidDebuffs = B.CreateButton(guiPage[4].child, 150, 30, L["RaidFrame Debuffs"].."*")
