@@ -190,7 +190,7 @@ local function checkInstance()
 end
 
 local function Update(self, _, unit)
-	if unit ~= self.unit or not instName then return end
+	if unit ~= self.unit then return end
 
 	local rd = self.RaidDebuffs
 	rd.priority = invalidPrio
@@ -221,7 +221,7 @@ local function Update(self, _, unit)
 			end
 
 			local prio
-			if debuffs[instName] then
+			if instName and debuffs[instName] then
 				prio = debuffs[instName][spellId]
 			end
 
