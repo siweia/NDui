@@ -289,6 +289,7 @@ end
 	放大餐时叫一叫
 ]]
 function module:PlacedItemAlert()
+	local GetTime = GetTime
 	local itemList = {
 		[226241] = true,	-- 宁神圣典
 		[256230] = true,	-- 静心圣典
@@ -298,13 +299,15 @@ function module:PlacedItemAlert()
 		[276972] = true,	-- 秘法药锅
 	}
 
+	local lastTime = 0
 	local function checkSpell(_, unit, _, spellID)
 		if not NDuiDB["Misc"]["PlacedItemAlert"] then return end
-		if (UnitInRaid(unit) or UnitInParty(unit)) and spellID and itemList[spellID] then
+		if (UnitInRaid(unit) or UnitInParty(unit)) and spellID and itemList[spellID] and lastTime ~= GetTime() then
 			local who = UnitName(unit)
 			local link = GetSpellLink(spellID)
 			local name = GetSpellInfo(spellID)
 			SendChatMessage(format(L["Place item"], who, link or name), msgChannel())
+			lastTime = GetTime()
 		end
 	end
 	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", checkSpell)
