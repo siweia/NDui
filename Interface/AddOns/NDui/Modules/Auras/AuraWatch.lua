@@ -5,7 +5,7 @@ local AuraList, Aura, UnitIDTable, IntTable, IntCD, statTable = {}, {}, {}, {}, 
 local MaxFrame = 12	-- Max Tracked Auras
 local pairs, tinsert, tremove = pairs, table.insert, table.remove
 local max, wipe, sort = math.max, table.wipe, table.sort
-local GetCombatRating = GetCombatRating
+local GetCombatRating, GetTime = GetCombatRating, GetTime
 local CR_HASTE_MELEE, CR_MASTERY, CR_VERSATILITY_DAMAGE_DONE = CR_HASTE_MELEE, CR_MASTERY, CR_VERSATILITY_DAMAGE_DONE
 local CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE = CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE
 
