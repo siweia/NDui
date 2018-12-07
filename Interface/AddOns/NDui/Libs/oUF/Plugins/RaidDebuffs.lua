@@ -8,8 +8,8 @@ local oUF = ns.oUF or oUF
 
 local debugMode = false
 local abs, next = math.abs, next
-local class, invalidPrio = DB.MyClass, -1
-local RaidDebuffsReverse, RaidDebuffsIgnore = {}, {}
+local class = DB.MyClass
+local RaidDebuffsReverse, RaidDebuffsIgnore, invalidPrio = {}, {}, -1
 
 local auraFilters = {
 	["HARMFUL"] = true,
@@ -196,22 +196,23 @@ local function Update(self, _, unit)
 	rd.priority = invalidPrio
 	local _name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId
 	local debuffs = rd.Debuffs or {}
+	local isCharmed = UnitIsCharmed(unit)
+	local canAttack = UnitCanAttack("player", unit)
+	local prio
 
-	for filter in next, (rd.Filters or auraFilters) do
+	for filter in next, auraFilters do
 		local i = 0
 		while(true) do
 			i = i + 1
 			local name, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(unit, i, filter)
 			if not name then break end
 
-			if rd.ShowDispellableDebuff and debuffType and filter == "HARMFUL" then
-				local disPrio = rd.DispellPriority or DispellPriority
-				local disFilter = rd.DispellFilter or DispellFilter
-				local prio
-				if rd.FilterDispellableDebuff and disFilter then
-					prio = disFilter[debuffType] and (disPrio[debuffType] + 10)
+			if rd.ShowDispellableDebuff and debuffType and filter == "HARMFUL" and (not isCharmed) and (not canAttack) then
+				if rd.FilterDispellableDebuff then
+					prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or 2
+					if prio == 2 then debuffType = nil end
 				else
-					prio = disPrio[debuffType]
+					prio = DispellPriority[debuffType]
 				end
 
 				if prio and prio > rd.priority then
@@ -220,13 +221,13 @@ local function Update(self, _, unit)
 				end
 			end
 
-			local prio
+			local instPrio
 			if instName and debuffs[instName] then
-				prio = debuffs[instName][spellId]
+				instPrio = debuffs[instName][spellId]
 			end
 
-			if not RaidDebuffsIgnore[spellId] and prio and prio > rd.priority then
-				rd.priority = prio
+			if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
+				rd.priority = instPrio
 				_name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId = name, icon, count, debuffType, duration, expirationTime, spellId
 			end
 		end
