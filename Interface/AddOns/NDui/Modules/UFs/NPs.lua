@@ -79,6 +79,7 @@ local CustomUnits = {
 	[GetSectionInfo(18007)] = true,	-- 瘟疫聚合体
 	[GetSectionInfo(18053)] = true,	-- 灵魂荆棘
 	[GetSectionInfo(18312)] = true,	-- 血面兽
+	[GetSectionInfo(18890)] = true,	-- 夏尔扎克斯
 	[120651] = true, -- 爆炸物
 	[141851] = true, -- 戈霍恩之嗣
 }
