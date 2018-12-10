@@ -572,6 +572,7 @@ function UF:CreateBuffs(self)
 	bu:SetWidth(self:GetWidth())
 	bu:SetHeight((bu.size + bu.spacing) * floor(bu.num/bu.iconsPerRow + .5))
 
+	bu.showStealableBuffs = true
 	bu.PostCreateIcon = postCreateIcon
 	bu.PostUpdateIcon = postUpdateIcon
 
