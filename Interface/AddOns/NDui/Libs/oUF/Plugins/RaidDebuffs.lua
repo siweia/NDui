@@ -216,7 +216,7 @@ local function Update(self, _, unit)
 				end
 
 				if prio and prio > rd.priority then
-					rd.priority = prio
+					rd.priority, rd.index, rd.filter = prio, i, filter
 					_name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId = name, icon, count, debuffType, duration, expirationTime, spellId
 				end
 			end
@@ -227,7 +227,7 @@ local function Update(self, _, unit)
 			end
 
 			if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
-				rd.priority = instPrio
+				rd.priority, rd.index, rd.filter = instPrio, i, filter
 				_name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId = name, icon, count, debuffType, duration, expirationTime, spellId
 			end
 		end
@@ -240,7 +240,9 @@ local function Update(self, _, unit)
 		_count, _debuffType, _duration, _expirationTime = 2, "Magic", 10, GetTime()+10, 0
 	end
 
-	if rd.priority == invalidPrio then _name = nil end
+	if rd.priority == invalidPrio then
+		rd.index, _name = nil, nil
+	end
 
 	UpdateDebuffFrame(self, _name, _icon, _count, _debuffType, _duration, _expirationTime, _spellId)
 end
