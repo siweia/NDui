@@ -147,11 +147,11 @@ local function friendsFrame()
 		local button = buttons[i]
 		if button:IsShown() then
 			if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
-				local name, level, class, area, connected = GetFriendInfo(button.id)
-				if connected then
-					nameText = classColor(class)..name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, diffColor(level)..level.."|r", class)
-					if area == playerArea then
-						infoText = format("|cff00ff00%s|r", area)
+				local info = C_FriendList.GetFriendInfoByIndex(button.id)
+				if info and info.connected then
+					nameText = classColor(info.className)..info.name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, diffColor(info.level)..info.level.."|r", info.className)
+					if info.area == playerArea then
+						infoText = format("|cff00ff00%s|r", info.area)
 					end
 				end
 			elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
@@ -188,9 +188,9 @@ local function updateWhoList()
 		local nameText = _G["WhoFrameButton"..i.."Name"]
 		local levelText = _G["WhoFrameButton"..i.."Level"]
 		local variableText = _G["WhoFrameButton"..i.."Variable"]
-
-		local name, guild, level, race, _, zone, class = GetWhoInfo(index)
-		if name then
+		local info = C_FriendList.GetWhoInfo(index)
+		if info then
+			local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
 			if zone == playerZone then zone = "|cff00ff00"..zone end
 			if guild == playerGuild then guild = "|cff00ff00"..guild end
 			if race == playerRace then race = "|cff00ff00"..race end
