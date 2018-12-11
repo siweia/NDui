@@ -50,26 +50,6 @@ function module:OnLogin()
 		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
-	--fix stupid blizzard
-	local updateAfterCombat
-	local function ToggleButtonGrid()
-		if InCombatLockdown() then
-			updateAfterCombat = true
-			B:RegisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-		else
-			local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
-			for _, button in next, buttonList do
-				button:SetAttribute("showgrid", showgrid)
-				ActionButton_ShowGrid(button)
-			end
-			if updateAfterCombat then
-				B:UnregisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-				updateAfterCombat = false
-			end
-		end
-	end
-	hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
-
 	--_onstate-page state driver
 	local actionPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
 	local buttonName = "ActionButton"
