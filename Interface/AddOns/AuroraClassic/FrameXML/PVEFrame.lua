@@ -3,13 +3,9 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["AuroraClassic"], function()
 	local r, g, b = C.r, C.g, C.b
 
-	PVEFrame:DisableDrawLayer("ARTWORK")
-	PVEFrameLeftInset:DisableDrawLayer("BORDER")
+	PVEFrameLeftInset:Hide()
 	PVEFrameBlueBg:SetAlpha(0)
-	PVEFrameLeftInsetBg:Hide()
 	PVEFrame.shadows:SetAlpha(0)
-	select(24, PVEFrame:GetRegions()):SetAlpha(0)
-	select(25, PVEFrame:GetRegions()):SetAlpha(0)
 
 	PVEFrameTab2:SetPoint("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
 	PVEFrameTab3:SetPoint("LEFT", PVEFrameTab2, "RIGHT", -15, 0)
@@ -48,6 +44,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	end)
 
 	F.ReskinPortraitFrame(PVEFrame)
+	F.SetBD(PVEFrame)
 	F.ReskinTab(PVEFrameTab1)
 	F.ReskinTab(PVEFrameTab2)
 	F.ReskinTab(PVEFrameTab3)

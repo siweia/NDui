@@ -1,24 +1,20 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	MerchantMoneyInset:DisableDrawLayer("BORDER")
-	MerchantExtraCurrencyInset:DisableDrawLayer("BORDER")
-	BuybackBG:SetAlpha(0)
-	MerchantMoneyBg:Hide()
-	MerchantMoneyInsetBg:Hide()
-	MerchantFrameBottomLeftBorder:SetAlpha(0)
-	MerchantFrameBottomRightBorder:SetAlpha(0)
-	MerchantExtraCurrencyBg:SetAlpha(0)
-	MerchantExtraCurrencyInsetBg:Hide()
-	MerchantPrevPageButton:GetRegions():Hide()
-	MerchantNextPageButton:GetRegions():Hide()
-	select(2, MerchantPrevPageButton:GetRegions()):Hide()
-	select(2, MerchantNextPageButton:GetRegions()):Hide()
-
-	F.ReskinPortraitFrame(MerchantFrame, true)
+	F.ReskinPortraitFrame(MerchantFrame)
+	F.SetBD(MerchantFrame)
 	F.ReskinDropDown(MerchantFrameLootFilter)
+	F.StripTextures(MerchantPrevPageButton)
 	F.ReskinArrow(MerchantPrevPageButton, "left")
+	F.StripTextures(MerchantNextPageButton)
 	F.ReskinArrow(MerchantNextPageButton, "right")
+	MerchantFrameInset:Hide()
+	MerchantMoneyInset:Hide()
+	MerchantMoneyBg:Hide()
+	MerchantNameText:SetDrawLayer("ARTWORK")
+	MerchantExtraCurrencyBg:SetAlpha(0)
+	MerchantExtraCurrencyInset:Hide()
+	BuybackBG:SetAlpha(0)
 
 	MerchantFrameTab1:ClearAllPoints()
 	MerchantFrameTab1:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 50, -14)
@@ -27,8 +23,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	for i = 1, 2 do
 		F.ReskinTab(_G["MerchantFrameTab"..i])
 	end
-
-	MerchantNameText:SetDrawLayer("ARTWORK")
 
 	for i = 1, BUYBACK_ITEMS_PER_PAGE do
 		local button = _G["MerchantItem"..i]

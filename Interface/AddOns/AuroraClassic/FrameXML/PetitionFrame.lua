@@ -1,15 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	select(18, PetitionFrame:GetRegions()):Hide()
-	select(19, PetitionFrame:GetRegions()):Hide()
-	select(23, PetitionFrame:GetRegions()):Hide()
-	select(24, PetitionFrame:GetRegions()):Hide()
-	PetitionFrameTop:Hide()
-	PetitionFrameBottom:Hide()
-	PetitionFrameMiddle:Hide()
-
-	F.ReskinPortraitFrame(PetitionFrame, true)
+	F.ReskinPortraitFrame(PetitionFrame)
+	F.SetBD(PetitionFrame)
 	F.Reskin(PetitionFrameSignButton)
 	F.Reskin(PetitionFrameRequestButton)
 	F.Reskin(PetitionFrameRenameButton)

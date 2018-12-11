@@ -1,7 +1,9 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(QuestFrame, true)
+	F.ReskinPortraitFrame(QuestFrame)
+	F.SetBD(QuestFrame)
+	QuestFrameInset:Hide()
 
 	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")
@@ -10,25 +12,10 @@ tinsert(C.themes["AuroraClassic"], function()
 	QuestFrameDetailPanel:DisableDrawLayer("BORDER")
 	QuestFrameRewardPanel:DisableDrawLayer("BORDER")
 	QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
-
-	QuestDetailScrollFrameTop:Hide()
-	QuestDetailScrollFrameBottom:Hide()
-	QuestDetailScrollFrameMiddle:Hide()
-	QuestProgressScrollFrameTop:Hide()
-	QuestProgressScrollFrameBottom:Hide()
-	QuestProgressScrollFrameMiddle:Hide()
-	QuestRewardScrollFrameTop:Hide()
-	QuestRewardScrollFrameBottom:Hide()
-	QuestRewardScrollFrameMiddle:Hide()
-	QuestGreetingScrollFrameTop:Hide()
-	QuestGreetingScrollFrameBottom:Hide()
-	QuestGreetingScrollFrameMiddle:Hide()
-
 	QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
 	QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
 	QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
 	QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
-
 	hooksecurefunc("QuestFrame_SetMaterial", function(frame)
 		_G[frame:GetName().."MaterialTopLeft"]:Hide()
 		_G[frame:GetName().."MaterialTopRight"]:Hide()
@@ -37,12 +24,10 @@ tinsert(C.themes["AuroraClassic"], function()
 	end)
 
 	local line = QuestFrameGreetingPanel:CreateTexture()
-	line:SetColorTexture(1, 1, 1, .2)
-	line:SetSize(256, 1)
+	line:SetColorTexture(1, 1, 1, .25)
+	line:SetSize(256, 1.2)
 	line:SetPoint("CENTER", QuestGreetingFrameHorizontalBreak)
-
 	QuestGreetingFrameHorizontalBreak:SetTexture("")
-
 	QuestFrameGreetingPanel:HookScript("OnShow", function()
 		line:SetShown(QuestGreetingFrameHorizontalBreak:IsShown())
 	end)
@@ -52,13 +37,10 @@ tinsert(C.themes["AuroraClassic"], function()
 		local ic = _G["QuestProgressItem"..i.."IconTexture"]
 		local na = _G["QuestProgressItem"..i.."NameFrame"]
 		local co = _G["QuestProgressItem"..i.."Count"]
-
 		ic:SetSize(40, 40)
 		ic:SetTexCoord(.08, .92, .08, .92)
 		ic:SetDrawLayer("OVERLAY")
-
 		F.CreateBD(bu, .25)
-
 		na:Hide()
 		co:SetDrawLayer("OVERLAY")
 

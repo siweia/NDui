@@ -1,11 +1,11 @@
-## Interface: 80000
+## Interface: 80100
 ## Title: |cff0080ffAuroraClassic|r
 ## Title-zhCN: |cff0080ffAuroraClassic|r 材质美化
 ## Title-zhTW: |cff0080ffAuroraClassic|r 材質美化
 ## Notes: Classical Aurora Style for WoW UIs.
 ## Author: Haleth, Lightsword, Siweia
 ## X-Credits: Gethe
-## Version: 1.10.10
+## Version: 2.0.0
 ## X-Website: https://github.com/siweia/AuroraClassic
 ## SavedVariables: AuroraConfig
 

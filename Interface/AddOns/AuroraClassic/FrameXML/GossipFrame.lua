@@ -1,10 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	GossipGreetingScrollFrameTop:Hide()
-	GossipGreetingScrollFrameBottom:Hide()
-	GossipGreetingScrollFrameMiddle:Hide()
-	select(19, GossipFrame:GetRegions()):Hide()
+	local gsub = string.gsub
 
 	GossipGreetingText:SetTextColor(1, 1, 1)
 	NPCFriendshipStatusBar:GetRegions():Hide()
@@ -17,13 +14,14 @@ tinsert(C.themes["AuroraClassic"], function()
 	NPCFriendshipStatusBarNotch4:SetColorTexture(0, 0, 0)
 	NPCFriendshipStatusBarNotch4:SetSize(1, 16)
 	select(7, NPCFriendshipStatusBar:GetRegions()):Hide()
-
 	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
 	F.CreateBDFrame(NPCFriendshipStatusBar, .25)
 
-	F.ReskinPortraitFrame(GossipFrame, true)
+	GossipFrameInset:Hide()
+	F.ReskinPortraitFrame(GossipFrame)
 	F.Reskin(GossipFrameGreetingGoodbyeButton)
 	F.ReskinScroll(GossipGreetingScrollFrameScrollBar)
+	F.SetBD(GossipFrame)
 
 	GossipFrame:HookScript("OnShow", function()
 		C_Timer.After(.01, function()

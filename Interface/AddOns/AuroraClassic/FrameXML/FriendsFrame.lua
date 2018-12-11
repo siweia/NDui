@@ -111,12 +111,14 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	local whoBg = F.CreateBDFrame(WhoFrameEditBoxInset, .25)
-	whoBg:SetPoint("TOPLEFT")
-	whoBg:SetPoint("BOTTOMRIGHT", -1, 1)
+	local whoBg = F.CreateBDFrame(WhoFrameEditBox, .25)
+	whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
+	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
 	F.CreateGradient(whoBg)
 
-	F.ReskinPortraitFrame(FriendsFrame, true)
+	F.ReskinPortraitFrame(FriendsFrame)
+	F.SetBD(FriendsFrame)
+	FriendsFrameInset:Hide()
 	F.Reskin(FriendsFrameAddFriendButton)
 	F.Reskin(FriendsFrameSendMessageButton)
 	F.Reskin(FriendsFrameIgnorePlayerButton)
@@ -147,17 +149,12 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(FriendsFriendsCloseButton)
 	F.Reskin(AddFriendInfoFrameContinueButton)
 
-	WhoListScrollFrame:GetRegions():Hide()
-	select(2, WhoListScrollFrame:GetRegions()):Hide()
-	WhoFrameListInsetBg:Hide()
-	WhoFrameEditBoxInsetBg:Hide()
-
 	for i = 1, 4 do
 		F.StripTextures(_G["WhoFrameColumnHeader"..i])
 	end
 
-	WhoFrameListInset:DisableDrawLayer("BORDER")
-	WhoFrameEditBoxInset:DisableDrawLayer("BORDER")
+	WhoFrameListInset:Hide()
+	WhoFrameEditBoxInset:Hide()
 
 	for i = 1, 3 do
 		F.StripTextures(_G["FriendsTabHeaderTab"..i])

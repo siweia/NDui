@@ -5,23 +5,21 @@ tinsert(C.themes["AuroraClassic"], function()
 	local BorderFrame = WorldMapFrame.BorderFrame
 
 	F.StripTextures(WorldMapFrame)
-	F.StripTextures(BorderFrame)
-	WorldMapFramePortrait:SetAlpha(0)
-	WorldMapFramePortraitFrame:SetAlpha(0)
 	F.SetBD(WorldMapFrame, 1, 0, -3, 2)
-	WorldMapFrameTopLeftCorner:SetAlpha(0)
+	F.ReskinPortraitFrame(BorderFrame)
 	BorderFrame.Tutorial.Ring:Hide()
 	F.ReskinMinMax(BorderFrame.MaximizeMinimizeFrame)
-	F.ReskinClose(WorldMapFrameCloseButton)
 
-	F.ReskinDropDown(WorldMapFrame.overlayFrames[1])
-	WorldMapFrame.overlayFrames[2].Border:Hide()
-	WorldMapFrame.overlayFrames[2].Background:Hide()
-	WorldMapFrame.overlayFrames[2]:GetRegions():Hide()
+	local overlayFrames = WorldMapFrame.overlayFrames
+	F.ReskinDropDown(overlayFrames[1])
+	overlayFrames[2]:DisableDrawLayer("BACKGROUND")
+	overlayFrames[2]:DisableDrawLayer("OVERLAY")
 
-	WorldMapFrame.SidePanelToggle.OpenButton:GetRegions():Hide()
-	F.ReskinArrow(WorldMapFrame.SidePanelToggle.OpenButton, "right")
-	WorldMapFrame.SidePanelToggle.CloseButton:GetRegions():Hide()
-	F.ReskinArrow(WorldMapFrame.SidePanelToggle.CloseButton, "left")
-	F.ReskinNavBar(WorldMapFrame.NavBar)
+	local sideToggle = WorldMapFrame.SidePanelToggle
+	sideToggle.OpenButton:GetRegions():Hide()
+	F.ReskinArrow(sideToggle.OpenButton, "right")
+	sideToggle.CloseButton:GetRegions():Hide()
+	F.ReskinArrow(sideToggle.CloseButton, "left")
+
+	--F.ReskinNavBar(WorldMapFrame.NavBar)
 end)

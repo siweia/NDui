@@ -421,7 +421,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	GarrisonCapacitiveDisplayFrame.Count:SetWidth(38)
 	GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)
 
-	F.ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame, true)
+	F.ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame)
+	F.SetBD(GarrisonCapacitiveDisplayFrame)
 	F.Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
 	F.Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
 	F.ReskinArrow(GarrisonCapacitiveDisplayFrame.DecrementButton, "left")
@@ -738,7 +739,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		select(i, GarrisonRecruiterFrame:GetRegions()):Hide()
 	end
 
-	F.ReskinPortraitFrame(GarrisonRecruiterFrame, true)
+	F.ReskinPortraitFrame(GarrisonRecruiterFrame)
+	F.SetBD(GarrisonRecruiterFrame)
 
 	-- Pick
 

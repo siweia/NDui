@@ -5,8 +5,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	LootFramePortraitOverlay:Hide()
 
-	select(19, LootFrame:GetRegions()):SetPoint("TOP", LootFrame, "TOP", 0, -7)
-
 	hooksecurefunc("LootFrame_UpdateButton", function(index)
 		local ic = _G["LootButton"..index.."IconTexture"]
 
@@ -43,7 +41,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	LootFrameNext:ClearAllPoints()
 	LootFrameNext:SetPoint("RIGHT", LootFrameDownButton, "LEFT", -4, 0)
 
-	F.ReskinPortraitFrame(LootFrame, true)
+	F.ReskinPortraitFrame(LootFrame)
+	F.SetBD(LootFrame)
+	LootFrameInset:Hide()
 	F.ReskinArrow(LootFrameUpButton, "up")
 	F.ReskinArrow(LootFrameDownButton, "down")
 

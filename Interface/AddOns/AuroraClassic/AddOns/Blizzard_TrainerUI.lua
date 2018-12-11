@@ -3,10 +3,10 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_TrainerUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
-	ClassTrainerFrameBottomInset:DisableDrawLayer("BORDER")
-	ClassTrainerFrame.BG:Hide()
-	ClassTrainerFrameBottomInsetBg:Hide()
-	ClassTrainerFrameMoneyBg:SetAlpha(0)
+	F.ReskinPortraitFrame(ClassTrainerFrame)
+	F.SetBD(ClassTrainerFrame)
+	ClassTrainerFrameInset:Hide()
+	ClassTrainerFrameBottomInset:SetAlpha(0)
 
 	ClassTrainerStatusBarSkillRank:ClearAllPoints()
 	ClassTrainerStatusBarSkillRank:SetPoint("CENTER", ClassTrainerStatusBar, "CENTER", 0, 0)
@@ -70,7 +70,6 @@ C.themes["Blizzard_TrainerUI"] = function()
 	ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	F.CreateBDFrame(ClassTrainerStatusBar, .25)
 
-	F.ReskinPortraitFrame(ClassTrainerFrame, true)
 	F.Reskin(ClassTrainerTrainButton)
 	F.ReskinScroll(ClassTrainerScrollFrameScrollBar)
 	F.ReskinDropDown(ClassTrainerFrameFilterDropDown)

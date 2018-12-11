@@ -1,9 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_MacroUI"] = function()
-	select(18, MacroFrame:GetRegions()):Hide()
 	MacroHorizontalBarLeft:Hide()
-	select(21, MacroFrame:GetRegions()):Hide()
 	F.StripTextures(MacroFrameTab1)
 	F.StripTextures(MacroFrameTab2)
 
@@ -67,7 +65,9 @@ C.themes["Blizzard_MacroUI"] = function()
 		end
 	end)
 
-	F.ReskinPortraitFrame(MacroFrame, true)
+	F.ReskinPortraitFrame(MacroFrame)
+	F.SetBD(MacroFrame)
+	MacroFrameInset:Hide()
 	F.CreateBD(MacroFrameScrollFrame, .25)
 	F.CreateBD(MacroPopupFrame)
 	F.CreateSD(MacroPopupFrame)

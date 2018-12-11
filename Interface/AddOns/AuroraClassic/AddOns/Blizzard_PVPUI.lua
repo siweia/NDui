@@ -59,15 +59,12 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	PVPQueueFrame.CategoryButton1.Background:Show()
 	F.StripTextures(PVPQueueFrame.HonorInset)
+	F.RemoveSlice(PVPQueueFrame.HonorInset)
 
 	-- Honor frame
 
-	local Inset = HonorFrame.Inset
 	local BonusFrame = HonorFrame.BonusFrame
-
-	for i = 1, 9 do
-		select(i, Inset:GetRegions()):Hide()
-	end
+	HonorFrame.Inset:Hide()
 	BonusFrame.WorldBattlesTexture:Hide()
 	BonusFrame.ShadowOverlay:Hide()
 
@@ -145,9 +142,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Conquest Frame
 
-	for i = 1, 9 do
-		select(i, ConquestFrame.Inset:GetRegions()):Hide()
-	end
+	ConquestFrame.Inset:Hide()
 	ConquestFrame.RatedBGTexture:Hide()
 	ConquestFrame.ShadowOverlay:Hide()
 

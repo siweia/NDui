@@ -7,7 +7,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	-- [[ Bank ]]
 
-	select(16, BankFrame:GetRegions()):Hide()
 	BankSlotsFrame:DisableDrawLayer("BORDER")
 	BankPortraitTexture:Hide()
 	BankFrameMoneyFrameInset:Hide()
@@ -18,6 +17,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	select(10, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
 
 	F.ReskinPortraitFrame(BankFrame)
+	F.SetBD(BankFrame)
 	F.Reskin(BankFramePurchaseButton)
 	F.ReskinTab(BankFrameTab1)
 	F.ReskinTab(BankFrameTab2)
@@ -74,7 +74,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bag:SetPushedTexture("")
 		bag:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		highlightFrame:GetRegions():SetTexture(C.media.checked)
+		--highlightFrame:GetRegions():SetTexture(C.media.checked)
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.dummy
@@ -96,6 +96,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	BankItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
 	BankItemAutoSortButton:GetPushedTexture():SetTexCoord(.17, .83, .17, .83)
 	F.CreateBG(BankItemAutoSortButton)
+	local highlight = BankItemAutoSortButton:GetHighlightTexture()
+	highlight:SetColorTexture(1, 1, 1, .25)
+	highlight:SetAllPoints(BankItemAutoSortButton)
 
 	hooksecurefunc("BankFrameItemButton_Update", function(button)
 		if not button.isBag and button.IconQuestTexture:IsShown() then
@@ -113,6 +116,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(ReagentBankFrameUnlockInfoPurchaseButton)
 
 	-- make button more visible
+	F.StripTextures(ReagentBankFrameUnlockInfo)
 	ReagentBankFrameUnlockInfoBlackBG:SetColorTexture(.1, .1, .1)
 
 	local reagentButtonsStyled = false

@@ -2,10 +2,8 @@ local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
 	SpellBookFrame:DisableDrawLayer("BACKGROUND")
-	SpellBookFrame:DisableDrawLayer("BORDER")
-	SpellBookFrame:DisableDrawLayer("OVERLAY")
-	SpellBookFrameInset:DisableDrawLayer("BORDER")
-
+	SpellBookFrameInset:Hide()
+	F.ReskinPortraitFrame(SpellBookFrame)
 	F.SetBD(SpellBookFrame)
 	F.ReskinClose(SpellBookFrameCloseButton)
 

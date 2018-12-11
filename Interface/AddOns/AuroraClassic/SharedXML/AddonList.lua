@@ -1,7 +1,9 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(AddonList, true)
+	F.ReskinPortraitFrame(AddonList)
+	F.SetBD(AddonList)
+	AddonListInset:Hide()
 	F.Reskin(AddonListEnableAllButton)
 	F.Reskin(AddonListDisableAllButton)
 	F.Reskin(AddonListCancelButton)

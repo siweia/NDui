@@ -126,6 +126,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- Refont RaidFrame Health
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
 		if frame:IsForbidden() then return end
+		if not frame.statusText then return end
 
 		local options = DefaultCompactUnitFrameSetupOptions
 		frame.statusText:ClearAllPoints()

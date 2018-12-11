@@ -9,7 +9,9 @@ tinsert(C.themes["AuroraClassic"], function()
     F.ReskinClose(HelpFrameCloseButton)
 
 	F.StripTextures(HelpFrameMainInset)
+	F.RemoveSlice(HelpFrameMainInset)
 	F.StripTextures(HelpFrameLeftInset)
+	F.RemoveSlice(HelpFrameLeftInset)
 	F.StripTextures(HelpBrowser.BrowserInset)
 
 	F.CreateBD(HelpFrameGM_ResponseScrollFrame1, .25)
@@ -113,11 +115,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	LoadingIcon:ClearAllPoints()
 	LoadingIcon:SetPoint("LEFT", HelpBrowserNavStop, "RIGHT")
 
-	for i = 1, 9 do
-		select(i, BrowserSettingsTooltip:GetRegions()):Hide()
-	end
-
+	F.StripTextures(BrowserSettingsTooltip)
 	F.CreateBD(BrowserSettingsTooltip)
+	F.CreateSD(BrowserSettingsTooltip)
 	F.Reskin(BrowserSettingsTooltip.CacheButton)
 	F.Reskin(BrowserSettingsTooltip.CookiesButton)
 	F.Reskin(ReportCheatingDialogReportButton)
