@@ -236,6 +236,7 @@ local list = {
 		{AuraID = 267409, UnitID = "player"},	-- 黑暗交易，戈霍恩
 		{AuraID = 263227, UnitID = "player"},	-- 腐败之血，戈霍恩
 		{AuraID = 267700, UnitID = "player"},	-- 戈霍恩的凝视，戈霍恩
+		{AuraID = 273405, UnitID = "player"},	-- 黑暗交易，戈霍恩
 	-- 翡翠梦魇
 		-- 尼珊德拉
 		{AuraID = 221028, UnitID = "player"},	-- 不稳定的腐烂，小怪
