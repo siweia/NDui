@@ -4,10 +4,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	local class = select(2, UnitClass("player"))
 	if class ~= "HUNTER" then return end
 
-	PetStableBottomInset:DisableDrawLayer("BACKGROUND")
-	PetStableBottomInset:DisableDrawLayer("BORDER")
-	PetStableLeftInset:DisableDrawLayer("BACKGROUND")
-	PetStableLeftInset:DisableDrawLayer("BORDER")
+	PetStableBottomInset:Hide()
+	PetStableLeftInset:Hide()
 	PetStableModelShadow:Hide()
 	PetStableModelRotateLeftButton:Hide()
 	PetStableModelRotateRightButton:Hide()
@@ -17,6 +15,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	F.ReskinPortraitFrame(PetStableFrame)
 	F.SetBD(PetStableFrame)
+	PetStableFrameInset:Hide()
 	F.ReskinArrow(PetStablePrevPageButton, "left")
 	F.ReskinArrow(PetStableNextPageButton, "right")
 
@@ -28,20 +27,22 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.Background:Hide()
 		bu.Border:Hide()
 		bu:SetNormalTexture("")
+		bu:SetPushedTexture("")
 		bu.Checked:SetTexture(C.media.checked)
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBD(bu, .25)
+		F.CreateBDFrame(bu, .25)
 	end
 
 	for i = 1, NUM_PET_STABLE_SLOTS do
 		local bu = _G["PetStableStabledPet"..i]
-		local bd = CreateFrame("Frame", nil, bu)
-		bd:SetPoint("TOPLEFT", -1, 1)
-		bd:SetPoint("BOTTOMRIGHT", 1, -1)
-		F.CreateBD(bd, .25)
 		bu:SetNormalTexture("")
+		bu:SetPushedTexture("")
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
+
 		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBDFrame(bu, .25)
 	end
 end)

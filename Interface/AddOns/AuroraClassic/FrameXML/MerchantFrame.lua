@@ -13,7 +13,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	MerchantMoneyBg:Hide()
 	MerchantNameText:SetDrawLayer("ARTWORK")
 	MerchantExtraCurrencyBg:SetAlpha(0)
-	MerchantExtraCurrencyInset:Hide()
+	MerchantExtraCurrencyInset:SetAlpha(0)
 	BuybackBG:SetAlpha(0)
 
 	MerchantFrameTab1:ClearAllPoints()

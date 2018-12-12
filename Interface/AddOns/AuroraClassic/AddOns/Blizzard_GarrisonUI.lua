@@ -414,15 +414,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
 
-	GarrisonCapacitiveDisplayFrameLeft:Hide()
-	GarrisonCapacitiveDisplayFrameMiddle:Hide()
-	GarrisonCapacitiveDisplayFrameRight:Hide()
 	F.CreateBD(GarrisonCapacitiveDisplayFrame.Count, .25)
 	GarrisonCapacitiveDisplayFrame.Count:SetWidth(38)
 	GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)
 
 	F.ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame)
 	F.SetBD(GarrisonCapacitiveDisplayFrame)
+	GarrisonCapacitiveDisplayFrameInset:Hide()
 	F.Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
 	F.Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
 	F.ReskinArrow(GarrisonCapacitiveDisplayFrame.DecrementButton, "left")
@@ -431,7 +429,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Capacitive display
 
 	local CapacitiveDisplay = GarrisonCapacitiveDisplayFrame.CapacitiveDisplay
-
 	CapacitiveDisplay.IconBG:SetAlpha(0)
 
 	do
@@ -466,10 +463,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local GarrisonLandingPage = GarrisonLandingPage
 
-	for i = 1, 10 do
-		select(i, GarrisonLandingPage:GetRegions()):Hide()
-	end
-
+	F.StripTextures(GarrisonLandingPage)
 	F.CreateBD(GarrisonLandingPage)
 	F.CreateSD(GarrisonLandingPage)
 	F.ReskinClose(GarrisonLandingPage.CloseButton)
@@ -734,13 +728,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- [[ Recruiter frame ]]
 
 	local GarrisonRecruiterFrame = GarrisonRecruiterFrame
-
-	for i = 18, 22 do
-		select(i, GarrisonRecruiterFrame:GetRegions()):Hide()
-	end
-
 	F.ReskinPortraitFrame(GarrisonRecruiterFrame)
 	F.SetBD(GarrisonRecruiterFrame)
+	GarrisonRecruiterFrameInset:Hide()
 
 	-- Pick
 

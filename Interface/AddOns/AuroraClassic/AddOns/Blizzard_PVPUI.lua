@@ -61,6 +61,18 @@ C.themes["Blizzard_PVPUI"] = function()
 	F.StripTextures(PVPQueueFrame.HonorInset)
 	F.RemoveSlice(PVPQueueFrame.HonorInset)
 
+	local popup = PVPQueueFrame.NewSeasonPopup
+	F.Reskin(popup.Leave)
+	popup.NewSeason:SetTextColor(1, .8, 0)
+	popup.SeasonDescription:SetTextColor(1, 1, 1)
+	popup.SeasonDescription2:SetTextColor(1, 1, 1)
+
+	local SeasonRewardFrame = SeasonRewardFrame
+	SeasonRewardFrame.CircleMask:Hide()
+	SeasonRewardFrame.Ring:Hide()
+	F.ReskinIcon(SeasonRewardFrame.Icon)
+	select(3, SeasonRewardFrame:GetRegions()):SetTextColor(1, .8, 0)
+
 	-- Honor frame
 
 	local BonusFrame = HonorFrame.BonusFrame
@@ -70,14 +82,12 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	for _, bonusButton in pairs({"RandomBGButton", "RandomEpicBGButton", "Arena1Button", "BrawlButton"}) do
 		local bu = BonusFrame[bonusButton]
-		local reward = bu.Reward
-
 		F.Reskin(bu, true)
-
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
 		bu.SelectedTexture:SetAllPoints()
 
+		local reward = bu.Reward
 		if reward then
 			reward.Border:Hide()
 			F.ReskinIcon(reward.Icon)

@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["AuroraClassic"], function()
 	local r, g, b = C.r, C.g, C.b
 
-	PVEFrameLeftInset:Hide()
+	PVEFrameLeftInset:SetAlpha(0)
 	PVEFrameBlueBg:SetAlpha(0)
 	PVEFrame.shadows:SetAlpha(0)
 
