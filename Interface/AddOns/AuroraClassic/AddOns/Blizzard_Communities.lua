@@ -4,10 +4,9 @@ C.themes["Blizzard_Communities"] = function()
 	local r, g, b = C.r, C.g, C.b
 	local CommunitiesFrame = CommunitiesFrame
 
-	F.StripTextures(CommunitiesFrame)
+	F.ReskinPortraitFrame(CommunitiesFrame)
 	F.SetBD(CommunitiesFrame)
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
-	CommunitiesFrame.MaximizeMinimizeFrame:GetRegions():Hide()
 	F.ReskinDropDown(CommunitiesFrame.StreamDropDownMenu)
 	F.ReskinClose(CommunitiesFrameCloseButton)
 	F.ReskinMinMax(CommunitiesFrame.MaximizeMinimizeFrame)
@@ -67,7 +66,7 @@ C.themes["Blizzard_Communities"] = function()
 
 	-- ChatTab
 	F.Reskin(CommunitiesFrame.InviteButton)
-	F.StripTextures(CommunitiesFrame.Chat.InsetFrame)
+	F.RemoveSlice(CommunitiesFrame.Chat.InsetFrame)
 	F.ReskinScroll(CommunitiesFrame.Chat.MessageFrame.ScrollBar)
 	F.StripTextures(CommunitiesFrame.ChatEditBox)
 	local bg1 = F.CreateBDFrame(CommunitiesFrame.Chat.InsetFrame, .25)

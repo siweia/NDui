@@ -3,18 +3,13 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["AuroraClassic"], function()
 	-- Dressup Frame
 
-	DressUpFramePortrait:Hide()
-	for i = 1, 17 do
-		select(i, DressUpFrame:GetRegions()):Hide()
-	end
-	select(8, DressUpFrame:GetRegions()):Show()
-	DressUpFrameInset:Hide()
-	MaximizeMinimizeFrame:GetRegions():Hide()
-
+	F.ReskinPortraitFrame(DressUpFrame)
 	F.SetBD(DressUpFrame, 5, 5, -5, 0)
+	DressUpFrameInset:Hide()
 	F.Reskin(DressUpFrameOutfitDropDown.SaveButton)
 	F.Reskin(DressUpFrameCancelButton)
 	F.Reskin(DressUpFrameResetButton)
+	F.StripTextures(DressUpFrameOutfitDropDown)
 	F.ReskinDropDown(DressUpFrameOutfitDropDown)
 	F.ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -10, 0)
 

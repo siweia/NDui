@@ -2,10 +2,7 @@ local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
 	LFDParentFrame:DisableDrawLayer("BACKGROUND")
-	LFDParentFrameInset:DisableDrawLayer("BACKGROUND")
-	LFDParentFrame:DisableDrawLayer("BORDER")
-	LFDParentFrameInset:DisableDrawLayer("BORDER")
-	LFDParentFrame:DisableDrawLayer("OVERLAY")
+	LFDParentFrameInset:Hide()
 
 	LFDQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
 	LFDQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()

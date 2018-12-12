@@ -7,7 +7,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	Display.YesMountsTex:Hide()
 	Display.ShadowOverlay:Hide()
 
-	F.ReskinPortraitFrame(ModelPreviewFrame, true)
+	F.ReskinPortraitFrame(ModelPreviewFrame)
+	F.SetBD(ModelPreviewFrame)
 	F.Reskin(ModelPreviewFrame.CloseButton)
 
 	F.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")

@@ -15,8 +15,6 @@ C.themes["Blizzard_InspectUI"] = function()
 
 	-- Character
 
-	select(11, InspectMainHandSlot:GetRegions()):Hide()
-
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
@@ -27,8 +25,7 @@ C.themes["Blizzard_InspectUI"] = function()
 		local slot = _G["Inspect"..slots[i].."Slot"]
 		local border = slot.IconBorder
 
-		_G["Inspect"..slots[i].."SlotFrame"]:Hide()
-
+		F.StripTextures(slot)
 		slot:SetNormalTexture("")
 		slot:SetPushedTexture("")
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -109,5 +106,7 @@ C.themes["Blizzard_InspectUI"] = function()
 		end
 	end
 
-	F.ReskinPortraitFrame(InspectFrame, true)
+	F.ReskinPortraitFrame(InspectFrame)
+	F.SetBD(InspectFrame)
+	InspectFrameInset:Hide()
 end

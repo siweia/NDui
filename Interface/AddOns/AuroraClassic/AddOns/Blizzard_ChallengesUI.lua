@@ -1,8 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ChallengesUI"] = function()
-	ChallengesFrameInset:DisableDrawLayer("BORDER")
-	ChallengesFrameInsetBg:Hide()
+	ChallengesFrameInset:Hide()
 	for i = 1, 2 do
 		select(i, ChallengesFrame:GetRegions()):Hide()
 	end

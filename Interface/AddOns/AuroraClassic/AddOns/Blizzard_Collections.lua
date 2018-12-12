@@ -5,14 +5,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- [[ General ]]
 
-	for i = 1, 14 do
-		if i ~= 8 then
-			select(i, CollectionsJournal:GetRegions()):Hide()
-		end
-	end
-
-	F.CreateBD(CollectionsJournal)
-	F.CreateSD(CollectionsJournal)
+	F.ReskinPortraitFrame(CollectionsJournal)
+	F.SetBD(CollectionsJournal)
 	F.ReskinTab(CollectionsJournalTab1)
 	F.ReskinTab(CollectionsJournalTab2)
 	F.ReskinTab(CollectionsJournalTab3)
@@ -352,14 +346,10 @@ C.themes["Blizzard_Collections"] = function()
 	-- [[ Toy box ]]
 
 	local ToyBox = ToyBox
+	local iconsFrame = ToyBox.iconsFrame
 
-	local icons = ToyBox.iconsFrame
-	icons.Bg:Hide()
-	icons.BackgroundTile:Hide()
-	icons:DisableDrawLayer("BORDER")
-	icons:DisableDrawLayer("ARTWORK")
-	icons:DisableDrawLayer("OVERLAY")
-
+	F.StripTextures(iconsFrame)
+	F.RemoveSlice(iconsFrame)
 	F.ReskinInput(ToyBox.searchBox)
 	F.ReskinFilterButton(ToyBoxFilterButton)
 	F.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
@@ -424,14 +414,10 @@ C.themes["Blizzard_Collections"] = function()
 	-- [[ Heirlooms ]]
 
 	local HeirloomsJournal = HeirloomsJournal
-
 	local icons = HeirloomsJournal.iconsFrame
-	icons.Bg:Hide()
-	icons.BackgroundTile:Hide()
-	icons:DisableDrawLayer("BORDER")
-	icons:DisableDrawLayer("ARTWORK")
-	icons:DisableDrawLayer("OVERLAY")
 
+	F.StripTextures(icons)
+	F.RemoveSlice(icons)
 	F.ReskinInput(HeirloomsJournalSearchBox)
 	F.ReskinDropDown(HeirloomsJournalClassDropDown)
 	F.ReskinFilterButton(HeirloomsJournalFilterButton)
@@ -510,12 +496,12 @@ C.themes["Blizzard_Collections"] = function()
 
 			if button.iconTexture:IsShown() then
 				button.name:SetTextColor(1, 1, 1)
-				button.bg:SetVertexColor(0, .8, 1)
-				button.newLevelBg:Show()
+				if button.bg then button.bg:SetVertexColor(0, .8, 1) end
+				if button.newLevelBg then button.newLevelBg:Show() end
 			else
 				button.name:SetTextColor(.5, .5, .5)
-				button.bg:SetVertexColor(0, 0, 0)
-				button.newLevelBg:Hide()
+				if button.bg then button.bg:SetVertexColor(0, 0, 0) end
+				if button.newLevelBg then button.newLevelBg:Hide() end
 			end
 		end
 	end)
@@ -526,6 +512,7 @@ C.themes["Blizzard_Collections"] = function()
 	local ItemsCollectionFrame = WardrobeCollectionFrame.ItemsCollectionFrame
 
 	F.StripTextures(ItemsCollectionFrame)
+	F.RemoveSlice(ItemsCollectionFrame)
 	F.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	F.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	F.ReskinInput(WardrobeCollectionFrameSearchBox)
@@ -611,9 +598,7 @@ C.themes["Blizzard_Collections"] = function()
 	end)
 
 	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
-	for i = 1, 34 do
-		select(i, SetsTransmogFrame:GetRegions()):Hide()
-	end
+	F.StripTextures(SetsTransmogFrame)
 	F.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
 	F.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
 

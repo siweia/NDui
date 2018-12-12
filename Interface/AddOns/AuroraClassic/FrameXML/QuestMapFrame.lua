@@ -129,12 +129,8 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local QuestLogPopupDetailFrame = QuestLogPopupDetailFrame
 
-	select(18, QuestLogPopupDetailFrame:GetRegions()):SetAlpha(0)
-	QuestLogPopupDetailFrameScrollFrameTop:SetAlpha(0)
-	QuestLogPopupDetailFrameScrollFrameBottom:SetAlpha(0)
-	QuestLogPopupDetailFrameScrollFrameMiddle:SetAlpha(0)
-
-	F.ReskinPortraitFrame(QuestLogPopupDetailFrame, true)
+	F.ReskinPortraitFrame(QuestLogPopupDetailFrame)
+	F.SetBD(QuestLogPopupDetailFrame)
 	F.ReskinScroll(QuestLogPopupDetailFrameScrollFrameScrollBar)
 	F.Reskin(QuestLogPopupDetailFrame.AbandonButton)
 	F.Reskin(QuestLogPopupDetailFrame.TrackButton)

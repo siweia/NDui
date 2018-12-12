@@ -16,7 +16,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		F.ReskinTab(_G["WorldStateScoreFrameTab"..i])
 	end
 
-	F.ReskinPortraitFrame(WorldStateScoreFrame, true)
+	F.ReskinPortraitFrame(WorldStateScoreFrame)
+	F.SetBD(WorldStateScoreFrame)
 	F.Reskin(WorldStateScoreFrameQueueButton)
 	F.Reskin(WorldStateScoreFrameLeaveButton)
 	F.ReskinScroll(WorldStateScoreScrollFrameScrollBar)

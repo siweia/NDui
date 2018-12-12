@@ -70,24 +70,4 @@ function Bar:CreateBar3()
 	if cfg.fader then
 		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
-
-	--fix stupid blizzard
-	local updateAfterCombat
-	local function ToggleButtonGrid()
-		if InCombatLockdown() then
-			updateAfterCombat = true
-			B:RegisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-		else
-			local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
-			for _, button in next, buttonList do
-				button:SetAttribute("showgrid", showgrid)
-				ActionButton_ShowGrid(button)
-			end
-			if updateAfterCombat then
-				B:UnregisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-				updateAfterCombat = false
-			end
-		end
-	end
-	hooksecurefunc("MultiActionBar_UpdateGrid", ToggleButtonGrid)
 end

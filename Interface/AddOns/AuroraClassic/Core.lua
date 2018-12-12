@@ -224,6 +224,7 @@ end
 
 function F:ReskinScroll()
 	local frame = self:GetName()
+	F.StripTextures(self:GetParent())
 
 	local track = (self.trackBG or self.Background or self.Track) or (_G[frame.."Track"] or _G[frame.."BG"])
 	if track then track:Hide() end
@@ -549,35 +550,19 @@ function F:StripTextures()
 	end
 end
 
-function F:ReskinPortraitFrame(isButtonFrame)
-	local name = self:GetName()
-
-	_G[name.."Bg"]:Hide()
-	_G[name.."TitleBg"]:Hide()
-	_G[name.."Portrait"]:Hide()
-	_G[name.."PortraitFrame"]:Hide()
-	_G[name.."TopRightCorner"]:Hide()
-	_G[name.."TopLeftCorner"]:Hide()
-	_G[name.."TopBorder"]:Hide()
-	_G[name.."TopTileStreaks"]:SetTexture("")
-	_G[name.."BotLeftCorner"]:Hide()
-	_G[name.."BotRightCorner"]:Hide()
-	_G[name.."BottomBorder"]:Hide()
-	_G[name.."LeftBorder"]:Hide()
-	_G[name.."RightBorder"]:Hide()
-
-	if isButtonFrame then
-		_G[name.."BtnCornerLeft"]:SetTexture("")
-		_G[name.."BtnCornerRight"]:SetTexture("")
-		_G[name.."ButtonBottomBorder"]:SetTexture("")
-
-		self.Inset.Bg:Hide()
-		self.Inset:DisableDrawLayer("BORDER")
+function F:RemoveSlice()
+	for _, tex in next, self.NineSlice do
+		if type(tex) == "table" then
+			tex:Hide()
+		end
 	end
+end
 
-	F.CreateBD(self)
-	F.CreateSD(self)
-	F.ReskinClose(_G[name.."CloseButton"])
+function F:ReskinPortraitFrame()
+	F.StripTextures(self)
+	F.RemoveSlice(self)
+	self.portrait:SetAlpha(0)
+	F.ReskinClose(self.CloseButton)
 end
 
 function F:CreateBDFrame(a)

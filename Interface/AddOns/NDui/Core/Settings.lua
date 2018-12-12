@@ -155,11 +155,10 @@ local function ForceSkadaOptions()
 		["profiles"] = {
 			["Default"] = {
 				["windows"] = {
-					{
-						["barheight"] = 18,
+					{	["barheight"] = 18,
 						["classicons"] = false,
 						["barslocked"] = true,
-						["y"] = 24,
+						["y"] = 28,
 						["x"] = -3,
 						["title"] = {
 							["color"] = {

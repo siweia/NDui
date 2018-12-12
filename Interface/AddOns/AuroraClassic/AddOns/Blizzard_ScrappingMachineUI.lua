@@ -1,10 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ScrappingMachineUI"] = function()
-	F.StripTextures(ScrappingMachineFrame)
+	F.ReskinPortraitFrame(ScrappingMachineFrame)
 	F.SetBD(ScrappingMachineFrame)
-	F.ReskinClose(ScrappingMachineFrameCloseButton)
-	ScrappingMachineFramePortrait:Hide()
 	ScrappingMachineFrameInset:Hide()
 	F.Reskin(ScrappingMachineFrame.ScrapButton)
 

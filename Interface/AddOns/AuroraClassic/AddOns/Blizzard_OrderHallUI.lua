@@ -12,25 +12,23 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	end
 
 	-- Talent Frame
-	for i = 1, 15 do
-		if i ~= 8 then
-			select(i, OrderHallTalentFrame:GetRegions()):SetAlpha(0)
-		end
-	end
-	OrderHallTalentFrameBg:Hide()
-	F.CreateBD(OrderHallTalentFrame)
-	F.CreateSD(OrderHallTalentFrame)
-	ClassHallTalentInset:SetAlpha(0)
+	local OrderHallTalentFrame = OrderHallTalentFrame
+
+	F.ReskinPortraitFrame(OrderHallTalentFrame)
+	F.SetBD(OrderHallTalentFrame)
+	OrderHallTalentFrame.Inset:SetAlpha(0)
+	OrderHallTalentFrame.Background:SetAlpha(0)
 	F.Reskin(OrderHallTalentFrame.BackButton)
 	F.ReskinIcon(OrderHallTalentFrame.Currency.Icon)
-	OrderHallTalentFrame.StyleFrame:SetAlpha(0)
-	F.ReskinClose(OrderHallTalentFrameCloseButton)
-	OrderHallTalentFrameCloseButton:ClearAllPoints()
-	OrderHallTalentFrameCloseButton:SetPoint("TOPRIGHT", OrderHallTalentFrame)
-	OrderHallTalentFrameCloseButton.SetPoint = F.dummy
+	OrderHallTalentFrame.OverlayElements:Hide()
 
 	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function()
-		for i = 34, OrderHallTalentFrame:GetNumRegions() do
+		OrderHallTalentFrameCloseButton:ClearAllPoints()
+		OrderHallTalentFrameCloseButton:SetPoint("TOPRIGHT", OrderHallTalentFrame)
+		OrderHallTalentFrameCloseButton.Border:SetAlpha(0)
+		OrderHallTalentFrame.CurrencyBG:SetAlpha(0)
+
+		for i = 15, OrderHallTalentFrame:GetNumRegions() do
 			select(i, OrderHallTalentFrame:GetRegions()):SetAlpha(0)
 		end
 

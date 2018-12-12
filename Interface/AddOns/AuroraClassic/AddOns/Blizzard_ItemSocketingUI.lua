@@ -1,21 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ItemSocketingUI"] = function()
-	ItemSocketingFrame:DisableDrawLayer("ARTWORK")
-	ItemSocketingScrollFrameTop:SetAlpha(0)
-	ItemSocketingScrollFrameMiddle:SetAlpha(0)
-	ItemSocketingScrollFrameBottom:SetAlpha(0)
-	ItemSocketingSocket1Left:SetAlpha(0)
-	ItemSocketingSocket1Right:SetAlpha(0)
-	ItemSocketingSocket2Left:SetAlpha(0)
-	ItemSocketingSocket2Right:SetAlpha(0)
-	ItemSocketingSocket3Left:SetAlpha(0)
-	ItemSocketingSocket3Right:SetAlpha(0)
-
-	for i = 36, 51 do
-		select(i, ItemSocketingFrame:GetRegions()):Hide()
-	end
-
 	local title = select(18, ItemSocketingFrame:GetRegions())
 	title:ClearAllPoints()
 	title:SetPoint("TOP", 0, -5)
@@ -26,7 +11,7 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 
 		_G["ItemSocketingSocket"..i.."BracketFrame"]:Hide()
 		_G["ItemSocketingSocket"..i.."Background"]:SetAlpha(0)
-		select(2, bu:GetRegions()):Hide()
+		F.StripTextures(bu)
 
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -56,7 +41,10 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		ItemSocketingDescription:SetBackdrop(nil)
 	end)
 
-	F.ReskinPortraitFrame(ItemSocketingFrame, true)
+	F.ReskinPortraitFrame(ItemSocketingFrame)
+	F.SetBD(ItemSocketingFrame)
+	ItemSocketingFrameInset:Hide()
+	ItemSocketingFrame.BackgroundColor:SetAlpha(0)
 	F.CreateBD(ItemSocketingScrollFrame, .25)
 	F.Reskin(ItemSocketingSocketButton)
 	F.ReskinScroll(ItemSocketingScrollFrameScrollBar)

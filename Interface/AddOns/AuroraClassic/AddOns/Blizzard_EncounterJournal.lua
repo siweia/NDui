@@ -4,19 +4,13 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	local r, g, b = C.r, C.g, C.b
 
 	EncounterJournalEncounterFrameInfo:DisableDrawLayer("BACKGROUND")
-	EncounterJournal:DisableDrawLayer("BORDER")
-	EncounterJournalInset:DisableDrawLayer("BORDER")
-	EncounterJournal:DisableDrawLayer("OVERLAY")
-
-	EncounterJournalPortrait:Hide()
 	EncounterJournalInstanceSelectBG:Hide()
-	EncounterJournalBg:Hide()
-	EncounterJournalTitleBg:Hide()
-	EncounterJournalInsetBg:Hide()
 	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
 	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 
+	F.ReskinPortraitFrame(EncounterJournal)
 	F.SetBD(EncounterJournal)
+	EncounterJournalInset:Hide()
 
 	-- [[ Dungeon / raid tabs ]]
 

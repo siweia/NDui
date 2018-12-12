@@ -1,16 +1,9 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	RaidFinderFrameBottomInset:DisableDrawLayer("BORDER")
-	RaidFinderFrameBottomInsetBg:Hide()
-	RaidFinderFrameBtnCornerRight:Hide()
-	RaidFinderFrameButtonBottomBorder:Hide()
-	RaidFinderQueueFrameScrollFrameScrollBackground:Hide()
-	RaidFinderQueueFrameScrollFrameScrollBackgroundTopLeft:Hide()
-	RaidFinderQueueFrameScrollFrameScrollBackgroundBottomRight:Hide()
-	RaidFinderFrameRoleInsetBg:Hide()
+	RaidFinderFrameBottomInset:Hide()
 	RaidFinderFrameRoleBackground:Hide()
-	RaidFinderFrameRoleInset:DisableDrawLayer("BORDER")
+	RaidFinderFrameRoleInset:Hide()
 	RaidFinderQueueFrameBackground:Hide()
 
 	-- this fixes right border of second reward being cut off

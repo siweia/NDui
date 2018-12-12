@@ -11,7 +11,7 @@ C.themes["Blizzard_BindingUI"] = function()
 	KeyBindingFrame.scrollFrame.scrollBorderBottom:SetTexture("")
 	KeyBindingFrame.scrollFrame.scrollBorderMiddle:SetTexture("")
 	KeyBindingFrame.scrollFrame.scrollFrameScrollBarBackground:SetTexture("")
-	KeyBindingFrame.categoryList:DisableDrawLayer("BACKGROUND")
+	F.StripTextures(KeyBindingFrame.categoryList)
 	KeyBindingFrame.bindingsContainer:SetBackdrop(nil)
 
 	F.CreateBD(KeyBindingFrame)

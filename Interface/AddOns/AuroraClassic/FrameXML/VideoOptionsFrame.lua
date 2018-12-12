@@ -1,8 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	VideoOptionsFrameCategoryFrame:DisableDrawLayer("BACKGROUND")
-	VideoOptionsFramePanelContainer:DisableDrawLayer("BORDER")
+	F.StripTextures(VideoOptionsFrameCategoryFrame)
+	F.StripTextures(VideoOptionsFramePanelContainer)
 
 	VideoOptionsFrameHeader:SetTexture("")
 	VideoOptionsFrameHeader:ClearAllPoints()
@@ -22,9 +22,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		if styledOptions then return end
 
 		local line = VideoOptionsFrame:CreateTexture(nil, "ARTWORK")
-		line:SetSize(1, 512)
+		line:SetSize(1.2, 512)
 		line:SetPoint("LEFT", 205, 30)
-		line:SetColorTexture(1, 1, 1, .2)
+		line:SetColorTexture(1, 1, 1, .25)
 
 		Display_:SetBackdrop(nil)
 		Graphics_:SetBackdrop(nil)
