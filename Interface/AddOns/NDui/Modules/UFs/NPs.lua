@@ -42,6 +42,7 @@ function UF:SetupCVars()
 	SetCVar("nameplateSelfScale", 1)
 
 	SetCVar("nameplateShowSelf", 0)
+	SetCVar("nameplateResourceOnTarget", 0)
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
 end
