@@ -81,6 +81,7 @@ local CustomUnits = {
 	[GetSectionInfo(18053)] = true,	-- 灵魂荆棘
 	[GetSectionInfo(18312)] = true,	-- 血面兽
 	[GetSectionInfo(18890)] = true,	-- 夏尔扎克斯
+	[GetSectionInfo(18321)] = true,	-- 缠绕的蛇群
 	[120651] = true, -- 爆炸物
 	[141851] = true, -- 戈霍恩之嗣
 }
@@ -285,7 +286,7 @@ function UF:CheckExplosives()
 	local function checkAffixes(event)
 		local affixes = C_MythicPlus.GetCurrentAffixes()
 		if not affixes then return end
-		if affixes[3] == 13 then
+		if affixes[3] and affixes[3].id == 13 then
 			checkInstance()
 			B:RegisterEvent(event, checkInstance)
 			B:RegisterEvent("CHALLENGE_MODE_START", checkInstance)

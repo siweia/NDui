@@ -108,7 +108,7 @@ end
 local function checkAffixes(self, event)
 	local affixes = C_MythicPlus.GetCurrentAffixes()
 	if not affixes then return end
-	if affixes[3] == 14 then
+	if affixes[3] and affixes[3].id == 14 then
 		Update(self)
 		self:RegisterEvent(event, Update)
 		self:RegisterEvent("CHALLENGE_MODE_START", Update)

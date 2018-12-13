@@ -275,7 +275,7 @@ function module:ExplosiveAlert()
 	local function checkAffixes(event)
 		local affixes = C_MythicPlus.GetCurrentAffixes()
 		if not affixes then return end
-		if affixes[3] == 13 then
+		if affixes[3] and affixes[3].id == 13 then
 			B:RegisterEvent("CHALLENGE_MODE_START", startCount)
 			B:RegisterEvent("CHALLENGE_MODE_COMPLETED", endCount)
 			B:RegisterEvent(event, pauseCount)
