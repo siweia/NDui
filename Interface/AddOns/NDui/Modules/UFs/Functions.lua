@@ -419,6 +419,13 @@ local function postCreateIcon(element, button)
 	button.HL:SetAllPoints()
 end
 
+local filteredStyle = {
+	["target"] = true,
+	["nameplate"] = true,
+	["boss"] = true,
+	["arena"] = true,
+}
+
 local function postUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 	if duration then button.Shadow:Show() end
 
@@ -429,7 +436,7 @@ local function postUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 		button:SetSize(element.size, element.size)
 	end
 
-	if button.isDebuff and (style == "target" or style == "nameplate") and not button.isPlayer then
+	if button.isDebuff and filteredStyle[style] and not button.isPlayer then
 		button.icon:SetDesaturated(true)
 	else
 		button.icon:SetDesaturated(false)
