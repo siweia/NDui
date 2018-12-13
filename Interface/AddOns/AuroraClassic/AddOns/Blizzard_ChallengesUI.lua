@@ -20,7 +20,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 		end
 
 		if IsAddOnLoaded("AngryKeystones") and not angryStyle then
-			local scheduel, party = select(4, self:GetChildren())
+			local scheduel, party = select(5, self:GetChildren())
 
 			scheduel:GetRegions():SetAlpha(0)
 			select(3, scheduel:GetRegions()):SetAlpha(0)

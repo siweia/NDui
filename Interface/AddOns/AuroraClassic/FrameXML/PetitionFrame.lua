@@ -1,8 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(PetitionFrame)
-	F.SetBD(PetitionFrame)
+	F.ReskinPortraitFrame(PetitionFrame, true)
 	F.Reskin(PetitionFrameSignButton)
 	F.Reskin(PetitionFrameRequestButton)
 	F.Reskin(PetitionFrameRenameButton)

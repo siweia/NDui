@@ -558,11 +558,20 @@ function F:RemoveSlice()
 	end
 end
 
-function F:ReskinPortraitFrame()
+function F:CleanInset()
+	self.Bg:Hide()
+	F.RemoveSlice(self)
+end
+
+function F:ReskinPortraitFrame(setBG)
+	local name = self:GetName()
+	local insetFrame = name and _G[name.."Inset"] or self.Inset
+	if insetFrame then F.CleanInset(insetFrame) end
 	F.StripTextures(self)
 	F.RemoveSlice(self)
 	self.portrait:SetAlpha(0)
 	F.ReskinClose(self.CloseButton)
+	if setBG then F.SetBD(self) end
 end
 
 function F:CreateBDFrame(a)

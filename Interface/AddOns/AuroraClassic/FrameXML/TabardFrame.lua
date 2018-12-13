@@ -1,9 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(TabardFrame)
-	TabardFrameInset:Hide()
-	F.SetBD(TabardFrame)
+	F.ReskinPortraitFrame(TabardFrame, true)
 	TabardFrameMoneyInset:Hide()
 	TabardFrameMoneyBg:Hide()
 	F.CreateBD(TabardFrameCostFrame, .25)

@@ -1,12 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
+	F.ReskinPortraitFrame(SpellBookFrame, true)
 	SpellBookFrame:DisableDrawLayer("BACKGROUND")
-	SpellBookFrameInset:Hide()
-	F.ReskinPortraitFrame(SpellBookFrame)
-	F.SetBD(SpellBookFrame)
-	F.ReskinClose(SpellBookFrameCloseButton)
-
 	SpellBookFrameTabButton1:ClearAllPoints()
 	SpellBookFrameTabButton1:SetPoint("TOPLEFT", SpellBookFrame, "BOTTOMLEFT", 0, 2)
 
@@ -105,9 +101,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.statusBar:SetStatusBarTexture(C.media.backdrop)
 		bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
 		bu.statusBar.rankText:SetPoint("CENTER")
-
-		local _, p = bu.statusBar:GetPoint()
-		bu.statusBar:SetPoint("TOPLEFT", p, "BOTTOMLEFT", 1, -3)
 		F.CreateBDFrame(bu.statusBar, .25)
 	end
 

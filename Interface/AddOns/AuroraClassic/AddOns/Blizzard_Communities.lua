@@ -4,13 +4,10 @@ C.themes["Blizzard_Communities"] = function()
 	local r, g, b = C.r, C.g, C.b
 	local CommunitiesFrame = CommunitiesFrame
 
-	F.ReskinPortraitFrame(CommunitiesFrame)
-	F.SetBD(CommunitiesFrame)
+	F.ReskinPortraitFrame(CommunitiesFrame, true)
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
 	F.ReskinDropDown(CommunitiesFrame.StreamDropDownMenu)
-	F.ReskinClose(CommunitiesFrameCloseButton)
 	F.ReskinMinMax(CommunitiesFrame.MaximizeMinimizeFrame)
-	CommunitiesFrameInset:Hide()
 	F.ReskinArrow(CommunitiesFrame.AddToChatButton, "down")
 	F.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
 

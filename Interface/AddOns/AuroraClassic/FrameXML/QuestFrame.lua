@@ -1,9 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(QuestFrame)
-	F.SetBD(QuestFrame)
-	QuestFrameInset:Hide()
+	F.ReskinPortraitFrame(QuestFrame, true)
 
 	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")

@@ -8,10 +8,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
 	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 
-	F.ReskinPortraitFrame(EncounterJournal)
-	F.SetBD(EncounterJournal)
-	EncounterJournalInset:Hide()
-
 	-- [[ Dungeon / raid tabs ]]
 
 	local function onEnable(self)
@@ -321,8 +317,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- [[ Various controls ]]
 
+	F.ReskinPortraitFrame(EncounterJournal, true)
 	F.Reskin(EncounterJournalEncounterFrameInfoResetButton)
-	F.ReskinClose(EncounterJournalCloseButton)
 	F.ReskinInput(EncounterJournalSearchBox)
 	F.ReskinScroll(EncounterJournalInstanceSelectScrollFrameScrollBar)
 	F.ReskinScroll(EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
