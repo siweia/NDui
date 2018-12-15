@@ -414,6 +414,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
 
+	GarrisonCapacitiveDisplayFrameLeft:Hide()
+	GarrisonCapacitiveDisplayFrameMiddle:Hide()
+	GarrisonCapacitiveDisplayFrameRight:Hide()
 	F.CreateBD(GarrisonCapacitiveDisplayFrame.Count, .25)
 	GarrisonCapacitiveDisplayFrame.Count:SetWidth(38)
 	GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)

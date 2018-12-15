@@ -208,14 +208,11 @@ C.themes["Blizzard_AuctionUI"] = function()
 	local BrowseWowTokenResults = BrowseWowTokenResults
 
 	F.Reskin(BrowseWowTokenResults.Buyout)
-
-	-- Tutorial
-
-	local WowTokenGameTimeTutorial = WowTokenGameTimeTutorial
-
 	F.ReskinPortraitFrame(WowTokenGameTimeTutorial, true)
 	F.Reskin(StoreButton)
+	WowTokenGameTimeTutorial.LeftDisplay.Label:SetTextColor(1, 1, 1)
 	WowTokenGameTimeTutorial.LeftDisplay.Tutorial1:SetTextColor(1, .8, 0)
+	WowTokenGameTimeTutorial.RightDisplay.Label:SetTextColor(1, 1, 1)
 	WowTokenGameTimeTutorial.RightDisplay.Tutorial1:SetTextColor(1, .8, 0)
 
 	-- Token
@@ -228,8 +225,8 @@ C.themes["Blizzard_AuctionUI"] = function()
 		Token.ItemBorder:Hide()
 		iconBorder:SetTexture(C.media.backdrop)
 		iconBorder:SetDrawLayer("BACKGROUND")
-		iconBorder:SetPoint("TOPLEFT", icon, -1, 1)
-		iconBorder:SetPoint("BOTTOMRIGHT", icon, 1, -1)
+		iconBorder:SetPoint("TOPLEFT", icon, -1.2, 1.2)
+		iconBorder:SetPoint("BOTTOMRIGHT", icon, 1.2, -1.2)
 		icon:SetTexCoord(.08, .92, .08, .92)
 	end
 end
