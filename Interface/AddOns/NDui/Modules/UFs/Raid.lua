@@ -2,8 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
-local strmatch, format, wipe = string.match, string.format, table.wipe
+local strmatch, format, wipe, tinsert = string.match, string.format, table.wipe, table.insert
 local pairs, ipairs, next, tonumber = pairs, ipairs, next, tonumber
+local floor, ceil = math.floor, math.ceil
 
 -- RaidFrame Elements
 function UF:CreateRaidIcons(self)
@@ -92,7 +93,7 @@ function UF:CreateRaidDebuffs(self)
 
 	local bu = CreateFrame("Frame", nil, self)
 	bu:SetSize(size, size)
-	bu:SetPoint("TOPRIGHT", -10, -2)
+	bu:SetPoint("RIGHT", -15, 0)
 	bu:SetFrameLevel(self:GetFrameLevel() + 3)
 	B.CreateSD(bu, 3, 3)
 	bu:Hide()
@@ -102,8 +103,8 @@ function UF:CreateRaidDebuffs(self)
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
 	bu.count = B.CreateFS(bu, 12, "", false, "BOTTOMRIGHT", 6, -3)
 	bu.time = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
-	bu.glowFrame = B.CreateBG(bu, 6)
-	bu.glowFrame:SetSize(size+12, size+12)
+	bu.glowFrame = B.CreateBG(bu, 4)
+	bu.glowFrame:SetSize(size+8, size+8)
 
 	if not NDuiDB["UFs"]["AurasClickThrough"] then
 		bu:SetScript("OnEnter", function(self)
@@ -200,12 +201,9 @@ local defaultSpellList = {
 	["MAGE"] = {
 		[6] = 130,			-- 缓落
 	},
-	["DEMONHUNTER"] = {
-	},
-	["WARLOCK"] = {
-	},
-	["DEATHKNIGHT"] = {
-	},
+	["DEMONHUNTER"] = {},
+	["WARLOCK"] = {},
+	["DEATHKNIGHT"] = {},
 }
 
 function UF:DefaultClickSets()
@@ -288,4 +286,128 @@ function UF:CreateClickSets(self)
 	else
 		setupClickSets(self)
 	end
+end
+
+local counterOffsets = {
+	["TOPLEFT"] = {{6, 1}, {"LEFT", "RIGHT", -2, 0}},
+	["TOPRIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}},
+	["BOTTOMLEFT"] = {{6, 1},{"LEFT", "RIGHT", -2, 0}},
+	["BOTTOMRIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}},
+	["LEFT"] = {{6, 1}, {"LEFT", "RIGHT", -2, 0}},
+	["RIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}},
+	["TOP"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}},
+	["BOTTOM"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}},
+}
+
+local function onUpdate(self, elapsed)
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed >= .1 then
+		local timeLeft = self.expiration - GetTime()
+		if timeLeft > 0 then
+			local text = B.FormatTimeRaw(timeLeft)
+			self.timer:SetText(text)
+		else
+			self:SetScript("OnUpdate", nil)
+			self.timer:SetText(nil)
+		end
+		self.elapsed = 0
+	end
+end
+
+local found = {}
+local function updateBuffIndicator(self, event, unit)
+	if self.unit ~= unit then return end
+	local spellList = C.CornerBuffs[DB.MyClass]
+	local icons = self.BuffIndicator
+
+	wipe(found)
+	for i = 1, 40 do
+		local name, _, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, "HELPFUL")
+		if not name then break end
+		local value = spellList[spellID]
+		if value and (value[3] or caster == "player") then
+			for _, icon in pairs(icons) do
+				if icon.anchor == value[1] then
+					if icon.timer then
+						if duration and duration > 0 then
+							icon.expiration = expiration
+							icon:SetScript("OnUpdate", onUpdate)
+						else
+							icon:SetScript("OnUpdate", nil)
+						end
+						icon.timer:SetTextColor(unpack(value[2]))
+					else
+						if duration and duration > 0 then
+							icon.cd:SetCooldown(expiration - duration, duration)
+							icon.cd:Show()
+						else
+							icon.cd:Hide()
+						end
+						icon.icon:SetVertexColor(unpack(value[2]))
+					end
+					if count > 1 then icon.count:SetText(count) end
+					icon:Show()
+					found[icon.anchor] = true
+					break
+				end
+			end
+		end
+	end
+
+	for _, icon in pairs(icons) do
+		if not found[icon.anchor] then
+			icon:Hide()
+		end
+	end
+end
+
+function UF:CreateBuffIndicator(self)
+	if not NDuiDB["UFs"]["RaidBuffIndicator"] then return end
+
+	local spellList = C.CornerBuffs[DB.MyClass]
+	if not next(spellList) then return end
+
+	local cache, icons = {}, {}
+	for spell, value in pairs(spellList) do
+		local anchor, color = unpack(value)
+		if not cache[anchor] then
+			local icon = CreateFrame("Frame", nil, self)
+			icon:SetFrameLevel(self:GetFrameLevel()+10)
+			icon:SetSize(10, 10)
+			icon:SetPoint(anchor)
+			icon:Hide()
+
+			icon.count = B.CreateFS(icon, 12, "")
+			icon.count:ClearAllPoints()
+			if NDuiDB["UFs"]["BuffTimerIndicator"] then
+				icon.timer = B.CreateFS(icon, 12, "")
+				local point, anchorPoint, x, y = unpack(counterOffsets[anchor][2])
+				icon.count:SetPoint(point, icon.timer, anchorPoint, x, y)
+			else
+				icon.bg = icon:CreateTexture(nil, "BACKGROUND")
+				icon.bg:SetPoint("TOPLEFT", -1.2, 1.2)
+				icon.bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+				icon.bg:SetTexture(DB.bdTex)
+				icon.bg:SetVertexColor(0, 0, 0)
+
+				icon.icon = icon:CreateTexture(nil, "BORDER")
+				icon.icon:SetAllPoints()
+				icon.icon:SetTexture(DB.bdTex)
+
+				icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
+				icon.cd:SetAllPoints()
+				icon.cd:SetReverse(true)
+				icon.cd:SetHideCountdownNumbers(true)
+
+				icon.count:SetPoint("CENTER", unpack(counterOffsets[anchor][1]))
+			end
+
+			icon.anchor = anchor
+			tinsert(icons, icon)
+			cache[anchor] = true
+		end
+	end
+
+	self.BuffIndicator = icons
+	self:RegisterEvent("UNIT_AURA", updateBuffIndicator)
 end
