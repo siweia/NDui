@@ -476,3 +476,5 @@ L["Prio Editbox"] = "\nPriority limit in 1-6.\n\nPress KEY ENTER when you finish
 L["Player Count"] = "%s players"
 L["BfA Invasion"] = "Faction Invasion"
 L["UFs RuneTimer"] = "Show DK Runes Timer"
+L["RaidBuffIndicator"] = "Show Buff Indicator"
+L["BuffTimerIndicator"] = "Replace by Timer Indicator"

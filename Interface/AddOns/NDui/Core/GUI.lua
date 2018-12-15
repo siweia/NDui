@@ -94,6 +94,8 @@ local defaultSettings = {
 		QuakeTimer = false,
 		LagString = true,
 		RuneTimer = true,
+		RaidBuffIndicator = true,
+		BuffTimerIndicator = false,
 	},
 	Chat = {
 		Sticky = false,
@@ -362,6 +364,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
 		{},--blank
+		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"]},
+		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"], true},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{1, "UFs", "RaidClickSets", L["Enable ClickSets"]},
@@ -1283,7 +1287,7 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame Debuffs
 	local raidDebuffs = B.CreateButton(guiPage[4].child, 150, 30, L["RaidFrame Debuffs"].."*")
-	raidDebuffs:SetPoint("TOPLEFT", 340, -370)
+	raidDebuffs:SetPoint("TOPLEFT", 340, -410)
 	raidDebuffs.text:SetTextColor(.6, .8, 1)
 	raidDebuffs:SetScript("OnClick", function()
 		setupRaidDebuffs()
@@ -1292,7 +1296,7 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4].child, 150, 30, L["Add ClickSets"])
-	clickSet:SetPoint("TOPLEFT", 40, -370)
+	clickSet:SetPoint("TOPLEFT", 40, -410)
 	clickSet.text:SetTextColor(.6, .8, 1)
 	clickSet:SetScript("OnClick", setupClickCast)
 

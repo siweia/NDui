@@ -476,3 +476,5 @@ L["Prio Editbox"] = "\n优先级仅限1-6。\n\n输入完毕后，按Enter键生
 L["Player Count"] = "%s名玩家"
 L["BfA Invasion"] = "阵营突袭"
 L["UFs RuneTimer"] = "显示DK符文条的计时"
+L["RaidBuffIndicator"] = "增益Buff指示器"
+L["BuffTimerIndicator"] = "替换为数字计时器"
