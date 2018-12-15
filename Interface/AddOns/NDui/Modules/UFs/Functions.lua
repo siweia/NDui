@@ -442,7 +442,9 @@ local function postUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 		button.icon:SetDesaturated(false)
 	end
 
-	if element.showDebuffType and button.isDebuff then
+	if style == "raid" and NDuiDB["UFs"]["RaidBuffIndicator"] then
+		button.Shadow:SetBackdropBorderColor(1, 0, 0)
+	elseif element.showDebuffType and button.isDebuff then
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		button.Shadow:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
@@ -480,10 +482,10 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 			return true
 		end
 	elseif style == "raid" then
-		if C.RaidBuffs[DB.MyClass] and C.RaidBuffs[DB.MyClass][spellID] and button.isPlayer then
-			return true
-		elseif C.RaidBuffs["ALL"][spellID] then
-			return true
+		if NDuiDB["UFs"]["RaidBuffIndicator"] then
+			return C.RaidBuffs["ALL"][spellID] and not button.isDebuff
+		else
+			return C.RaidBuffs[DB.MyClass][spellID] and button.isPlayer or C.RaidBuffs["ALL"][spellID]
 		end
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if UnitIsUnit("player", unit) then
@@ -508,6 +510,7 @@ end
 
 function UF:CreateAuras(self)
 	local bu = CreateFrame("Frame", nil, self)
+	bu:SetFrameLevel(self:GetFrameLevel() + 2)
 	bu.gap = true
 	bu.initialAnchor = "TOPLEFT"
 	bu["growth-y"] = "DOWN"
@@ -527,10 +530,17 @@ function UF:CreateAuras(self)
 		bu.numTotal = 20
 		bu.iconsPerRow = 7
 	elseif self.mystyle == "raid" then
-		bu:SetPoint("BOTTOMLEFT", self, 2, 0)
-		bu.numTotal = 6
-		bu.spacing = 2
-		bu.iconsPerRow = 6
+		if NDuiDB["UFs"]["RaidBuffIndicator"] then
+			bu.initialAnchor = "LEFT"
+			bu:SetPoint("LEFT", self, 15, 0)
+			bu.size = 18*NDuiDB["UFs"]["RaidScale"]
+			bu.numTotal = 1
+		else
+			bu:SetPoint("BOTTOMLEFT", self, 2, 0)
+			bu.numTotal = 6
+			bu.iconsPerRow = 6
+			bu.spacing = 2
+		end
 		bu.gap = false
 		bu.disableMouse = NDuiDB["UFs"]["AurasClickThrough"]
 	elseif self.mystyle == "nameplate" then
