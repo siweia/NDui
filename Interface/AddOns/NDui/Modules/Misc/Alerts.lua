@@ -297,6 +297,7 @@ function module:PlacedItemAlert()
 		[259409] = true,	-- 海帆盛宴
 		[259410] = true,	-- 船长盛宴
 		[276972] = true,	-- 秘法药锅
+		[286050] = true,	-- 鲜血大餐
 	}
 
 	local lastTime = 0
