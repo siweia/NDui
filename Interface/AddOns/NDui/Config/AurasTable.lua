@@ -105,12 +105,14 @@ function module:OnLogin()
 	C.RaidDebuffs = RaidDebuffs
 
 	-- Filter bloodlust for healers
+	if NDuiDB["UFs"]["RaidBuffIndicator"] then return end
+
 	local bloodlustList = {57723, 57724, 80354, 264689}
 	local function filterBloodlust()
 		for _, spellID in pairs(bloodlustList) do
 			C.RaidBuffs["ALL"][spellID] = (DB.Role ~= "Healer")
 		end
 	end
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", filterBloodlust)
+	filterBloodlust()
 	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", filterBloodlust)
 end
