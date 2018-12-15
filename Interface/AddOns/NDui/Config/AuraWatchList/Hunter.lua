@@ -64,7 +64,6 @@ local list = {
 		{AuraID = 207094, UnitID = "pet"},		-- 泰坦之雷
 		{AuraID = 217200, UnitID = "pet"},		-- 凶猛狂暴
 		{AuraID = 272790, UnitID = "pet", Flash = true},	-- 狂暴
-		{AuraID = 193526, UnitID = "player"},	-- 百发百中
 		{AuraID = 193530, UnitID = "player"},	-- 野性守护
 		{AuraID = 185791, UnitID = "player"},	-- 荒野呼唤
 		{AuraID = 259388, UnitID = "player"},	-- 猫鼬之怒
@@ -92,6 +91,8 @@ local list = {
 		{AuraID = 268552, UnitID = "player"},	-- 蝰蛇毒液
 		{AuraID = 260249, UnitID = "player"},	-- 掠食者
 		{AuraID = 257622, UnitID = "player", Text = "A"},	-- 技巧射击
+		{AuraID = 288613, UnitID = "player"},	-- 百发百中
+		{AuraID = 274447, UnitID = "player"},	-- 千里之目
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱

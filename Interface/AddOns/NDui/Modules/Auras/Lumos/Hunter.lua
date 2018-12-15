@@ -101,7 +101,7 @@ function module:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[5], 193526, 193526, true)
+		UpdateBuff(self.bu[5], 288613, 288613, true)
 
 	elseif GetSpecialization() == 3 then
 		UpdateDebuff(self.bu[1], 259491, 259491)
