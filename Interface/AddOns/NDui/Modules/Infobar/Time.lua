@@ -4,8 +4,9 @@ if not C.Infobar.Time then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.TimePos)
+local time, date = time, date
 local strfind, format, floor = string.find, string.format, math.floor
-local mod, tonumber, pairs = mod, tonumber, pairs
+local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
 local TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM = TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM
 
 local function updateTimerFormat(color, hour, minute)
@@ -96,26 +97,56 @@ local tanaan = {
 }
 
 -- Check Invasion Status
-local zonePOIIds = {5175, 5210, 5177, 5178}
-local zoneNames = {630, 641, 650, 634}
-local timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}
-local baseTime = 1517274000 -- 1/30 9:00 [1]
+local invIndex = {
+	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = 1517274000}, -- 1/30 9:00 [1]
+	[2] = {title = L["BfA Invasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6}, baseTime = 1544691600}, -- 12/13 17:00 [1]
+}
 
-local function onInvasion()
-	for i = 1, #zonePOIIds do
-		local timeLeftMinutes = C_AreaPoiInfo.GetAreaPOITimeLeft(zonePOIIds[i])
-		if timeLeftMinutes and timeLeftMinutes > 0 and timeLeftMinutes < 361 then
-			local mapInfo = C_Map.GetMapInfo(zoneNames[i])
-			return timeLeftMinutes, mapInfo.name
+local function GetInvasionTimeLeft(areaPoiID, mapID)
+	local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
+	if seconds then
+		local mapInfo = C_Map.GetMapInfo(mapID)
+		return seconds, mapInfo.name
+	end
+end
+
+local function GetInvasionInfo(mapID)
+	local banners = C_Map.GetMapBannersForMap(mapID)
+	for _, info in pairs(banners) do
+		if info then
+			if info.uiTextureKit == "LegionInvasion" then
+				return 1, GetInvasionTimeLeft(info.areaPoiID, mapID)
+			elseif info.atlasName and strfind(info.atlasName, "Emblem") then
+				return 2, GetInvasionTimeLeft(info.areaPoiID, mapID)
+			end
 		end
 	end
 end
 
-local function whereToGo(nextTime)
-	local elapsed = nextTime - baseTime
-	local round = mod(floor(elapsed / 66600) + 1, 12)
-	if round == 0 then round = 12 end
-	return C_Map.GetMapInfo(zoneNames[timeTable[round]]).name
+local function CheckInvasion(zones, index)
+	for _, mapID in pairs(zones) do
+		local invType, timeLeft, name = GetInvasionInfo(mapID)
+		if invType and invType == index then
+			return timeLeft, name
+		end
+	end
+end
+
+local function GetNextTime(baseTime, index)
+	local currentTime = time()
+	local duration = invIndex[index].duration
+	local elapsed = mod(currentTime - baseTime, duration)
+	return duration - elapsed + currentTime
+end
+
+local function GetNextLocation(nextTime, index)
+	if index == 2 then return UNKNOWN end	-- data collecting
+	local inv = invIndex[index]
+	local count = #inv.timeTable
+	local elapsed = nextTime - inv.baseTime
+	local round = mod(floor(elapsed / inv.duration) + 1, count)
+	if round == 0 then round = count end
+	return C_Map.GetMapInfo(inv.maps[inv.timeTable[round]]).name
 end
 
 local title
@@ -130,6 +161,7 @@ end
 info.onEnter = function(self)
 	RequestRaidInfo()
 
+	local r,g,b
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint("BOTTOMRIGHT", UIParent, -15, 30)
 	GameTooltip:ClearLines()
@@ -157,7 +189,6 @@ info.onEnter = function(self)
 		local name, _, reset, diff, locked, extended = GetSavedInstanceInfo(i)
 		if diff == 23 and (locked or extended) then
 			addTitle(DUNGEON_DIFFICULTY3..DUNGEONS)
-			local r,g,b
 			if extended then r,g,b = .3,1,.3 else r,g,b = 1,1,1 end
 			GameTooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
 		end
@@ -169,7 +200,6 @@ info.onEnter = function(self)
 		local name, _, reset, _, locked, extended, _, isRaid, _, diffName = GetSavedInstanceInfo(i)
 		if isRaid and (locked or extended) then
 			addTitle(RAID_INFO)
-			local r,g,b
 			if extended then r,g,b = .3,1,.3 else r,g,b = 1,1,1 end
 			GameTooltip:AddDoubleLine(name.." - "..diffName, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
 		end
@@ -185,7 +215,6 @@ info.onEnter = function(self)
 	end
 	if count > 0 then
 		addTitle(QUESTS_LABEL)
-		local r,g,b
 		if count == maxCoins then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 		GameTooltip:AddDoubleLine(bonusName, count.."/"..maxCoins, 1,1,1, r,g,b)
 	end
@@ -229,19 +258,19 @@ info.onEnter = function(self)
 		end
 	end
 
-	-- Legion Invasion
-	title = false
-	addTitle(L["Legion Invasion"])
-
-	local elapsed = mod(time() - baseTime, 66600)
-	local nextTime = 66600 - elapsed + time()
-	if onInvasion() then
-		local timeLeft, zoneName = onInvasion()
-		local r,g,b
-		if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-		GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+	-- Invasions
+	for index, value in ipairs(invIndex) do
+		title = false
+		addTitle(value.title)
+		local timeLeft, zoneName = CheckInvasion(value.maps, index)
+		local nextTime = GetNextTime(value.baseTime, index)
+		if timeLeft then
+			timeLeft = timeLeft/60
+			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+			GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+		end
+		GameTooltip:AddDoubleLine(L["Next Invasion"]..GetNextLocation(nextTime, index), date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
 	end
-	GameTooltip:AddDoubleLine(L["Next Invasion"]..whereToGo(nextTime), date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
 
 	-- Help Info
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
