@@ -55,10 +55,9 @@ local function ForceUIScale()
 
 	local scale = NDuiADB["UIScale"]
 	if NDuiADB["LockUIScale"] then
-		scale = 768/DB.ScreenHeight * .8
 		local minScale = .64
-		if DB.ScreenHeight > 1080 then minScale = .5 end
-		if scale < minScale then scale = minScale end
+		if DB.ScreenHeight > 1080 then minScale = .4 end
+		scale = max(minScale, 768/DB.ScreenHeight)
 		NDuiADB["UIScale"] = scale
 	end
 
@@ -68,6 +67,8 @@ local function ForceUIScale()
 	else
 		SetCVar("uiScale", scale)
 	end
+
+	C.mult = 768/DB.ScreenHeight/scale
 end
 
 local function ForceChatSettings()

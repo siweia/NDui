@@ -519,7 +519,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{},--blank
-		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.5, 1.1, 2}},
+		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.1, 2}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
 		{3, "ACCOUNT", "GUIScale", L["GUI Scale"].."*", false, {.5, 1.5, 2}, setupGUIScale},
