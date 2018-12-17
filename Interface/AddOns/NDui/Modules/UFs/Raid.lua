@@ -82,6 +82,7 @@ function B:UpdateRaidDebuffs()
 	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
 		for spell, priority in pairs(value) do
 			if priority > 0 then
+				if not debuffList[instName] then debuffList[instName] = {} end
 				debuffList[instName][spell] = priority
 			end
 		end
