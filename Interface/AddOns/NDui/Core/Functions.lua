@@ -577,3 +577,15 @@ function B:CreateDropDown(width, height, data)
 	dd.Type = "DropDown"
 	return dd
 end
+
+function B:CreateColorSwatch()
+	local swatch = CreateFrame("Button", nil, self)
+	swatch:SetSize(18, 18)
+	B.CreateBD(swatch, 1)
+	local tex = swatch:CreateTexture()
+	tex:SetPoint("TOPLEFT", 2, -2)
+	tex:SetPoint("BOTTOMRIGHT", -2, 2)
+	swatch.tex = tex
+
+	return swatch
+end

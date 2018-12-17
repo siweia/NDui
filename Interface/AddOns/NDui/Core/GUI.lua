@@ -695,7 +695,7 @@ local function CreateOption(i)
 			B.CreateFS(dd, 14, name, "system", "CENTER", 0, 25)
 		-- Colorswatch
 		elseif type == 5 then
-			local f = CreateFrame("Button", nil, parent)
+			local f = B.CreateColorSwatch(parent)
 			local width = 25 + (horizon or 0)*155
 			if horizon then
 				f:SetPoint("TOPLEFT", width, -offset + 30)
@@ -703,25 +703,19 @@ local function CreateOption(i)
 				f:SetPoint("TOPLEFT", width, -offset - 5)
 				offset = offset + 35
 			end
-			f:SetSize(18, 18)
-			B.CreateBD(f, 1)
 			B.CreateFS(f, 14, name, false, "LEFT", 26, 0)
-
-			local tex = f:CreateTexture()
-			tex:SetPoint("TOPLEFT", 2, -2)
-			tex:SetPoint("BOTTOMRIGHT", -2, 2)
-			tex:SetColorTexture(NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b)
+			f.tex:SetColorTexture(NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b)
 
 			local function onUpdate()
 				local r, g, b = ColorPickerFrame:GetColorRGB()
-				tex:SetColorTexture(r, g, b)
+				f.tex:SetColorTexture(r, g, b)
 				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
 				if callback then callback() end
 			end
 
 			local function onCancel()
 				local r, g, b = ColorPicker_GetPreviousValues()
-				tex:SetColorTexture(r, g, b)
+				f.tex:SetColorTexture(r, g, b)
 				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
 			end
 
