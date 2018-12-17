@@ -506,7 +506,8 @@ end
 function B:CreateDropDown(width, height, data)
 	local dd = CreateFrame("Frame", nil, self)
 	dd:SetSize(width, height)
-	B.CreateBD(dd, .3)
+	B.CreateBD(dd)
+	dd:SetBackdropBorderColor(1, 1, 1, .2)
 	dd.Text = B.CreateFS(dd, 14, "", false, "LEFT", 5, 0)
 	dd.Text:SetPoint("RIGHT", -5, 0)
 	dd.options = {}
