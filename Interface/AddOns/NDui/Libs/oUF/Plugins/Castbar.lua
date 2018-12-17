@@ -40,7 +40,7 @@ local function setBarTicks(castBar, ticknum)
 				ticks[k] = castBar:CreateTexture(nil, "OVERLAY")
 				ticks[k]:SetTexture(DB.normTex)
 				ticks[k]:SetVertexColor(0, 0, 0, .7)
-				ticks[k]:SetWidth(1.2)
+				ticks[k]:SetWidth(C.mult)
 				ticks[k]:SetHeight(castBar:GetHeight())
 			end
 			ticks[k]:ClearAllPoints()

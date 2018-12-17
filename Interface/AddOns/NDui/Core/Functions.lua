@@ -19,7 +19,7 @@ end
 -- Create Backdrop
 function B:CreateBD(a)
 	self:SetBackdrop({
-		bgFile = DB.bdTex, edgeFile = DB.bdTex, edgeSize = 1.2,
+		bgFile = DB.bdTex, edgeFile = DB.bdTex, edgeSize = C.mult,
 	})
 	self:SetBackdropColor(0, 0, 0, a or .5)
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -48,7 +48,7 @@ end
 function B:CreateBG(offset)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
-	offset = offset or 1.2
+	offset = offset or C.mult
 	local lvl = frame:GetFrameLevel()
 
 	local bg = CreateFrame("Frame", nil, frame)
