@@ -18,12 +18,13 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	OrderHallTalentFrame.Background:SetAlpha(0)
 	F.Reskin(OrderHallTalentFrame.BackButton)
 	F.ReskinIcon(OrderHallTalentFrame.Currency.Icon)
-	OrderHallTalentFrame.OverlayElements:Hide()
+	OrderHallTalentFrame.OverlayElements:SetAlpha(0)
 
 	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function()
-		OrderHallTalentFrameCloseButton:ClearAllPoints()
-		OrderHallTalentFrameCloseButton:SetPoint("TOPRIGHT", OrderHallTalentFrame)
-		OrderHallTalentFrameCloseButton.Border:SetAlpha(0)
+		local closeButton = OrderHallTalentFrameCloseButton
+		closeButton:ClearAllPoints()
+		closeButton:SetPoint("TOPRIGHT", OrderHallTalentFrame)
+		if closeButton.Border then closeButton.Border:SetAlpha(0) end
 		OrderHallTalentFrame.CurrencyBG:SetAlpha(0)
 
 		for i = 15, OrderHallTalentFrame:GetNumRegions() do

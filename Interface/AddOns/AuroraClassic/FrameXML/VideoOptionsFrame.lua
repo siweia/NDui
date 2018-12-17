@@ -22,7 +22,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		if styledOptions then return end
 
 		local line = VideoOptionsFrame:CreateTexture(nil, "ARTWORK")
-		line:SetSize(1.2, 512)
+		line:SetSize(C.mult, 512)
 		line:SetPoint("LEFT", 205, 30)
 		line:SetColorTexture(1, 1, 1, .25)
 

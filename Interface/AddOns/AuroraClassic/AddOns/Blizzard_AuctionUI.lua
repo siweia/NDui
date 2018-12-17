@@ -225,8 +225,8 @@ C.themes["Blizzard_AuctionUI"] = function()
 		Token.ItemBorder:Hide()
 		iconBorder:SetTexture(C.media.backdrop)
 		iconBorder:SetDrawLayer("BACKGROUND")
-		iconBorder:SetPoint("TOPLEFT", icon, -1.2, 1.2)
-		iconBorder:SetPoint("BOTTOMRIGHT", icon, 1.2, -1.2)
+		iconBorder:SetPoint("TOPLEFT", icon, -C.mult, C.mult)
+		iconBorder:SetPoint("BOTTOMRIGHT", icon, C.mult, -C.mult)
 		icon:SetTexCoord(.08, .92, .08, .92)
 	end
 end

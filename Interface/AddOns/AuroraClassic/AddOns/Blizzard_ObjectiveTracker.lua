@@ -76,8 +76,8 @@ tinsert(C.themes["AuroraClassic"], function()
 			bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.8, g*.8, b*.8, r*.5, g*.5, b*.5)
 
 			local bg = F.CreateBDFrame(progressBar)
-			bg:SetPoint("TOPLEFT", bar, -1.2, 1.2)
-			bg:SetPoint("BOTTOMRIGHT", bar, 1.2, -1.2)
+			bg:SetPoint("TOPLEFT", bar, -C.mult, C.mult)
+			bg:SetPoint("BOTTOMRIGHT", bar, C.mult, -C.mult)
 			F.CreateSD(bg)
 
 			icon:SetMask(nil)

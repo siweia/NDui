@@ -215,6 +215,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		F.StripTextures(self.CloseButton)
 		F.ReskinClose(self.CloseButton)
 		self.GarrCorners:Hide()
+		if self.OverlayElements then self.OverlayElements:SetAlpha(0) end
 		if self.ClassHallIcon then self.ClassHallIcon:Hide() end
 		if self.TitleScroll then
 			F.StripTextures(self.TitleScroll)

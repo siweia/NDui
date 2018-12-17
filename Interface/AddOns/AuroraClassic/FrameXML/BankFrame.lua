@@ -40,12 +40,12 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.dummy
-		border:SetPoint("TOPLEFT", -1.2, 1.2)
-		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+		border:SetPoint("TOPLEFT", -C.mult, C.mult)
+		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 		border:SetDrawLayer("BACKGROUND", 1)
 
-		searchOverlay:SetPoint("TOPLEFT", -1.2, 1.2)
-		searchOverlay:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+		searchOverlay:SetPoint("TOPLEFT", -C.mult, C.mult)
+		searchOverlay:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
@@ -77,12 +77,12 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.dummy
-		border:SetPoint("TOPLEFT", -1.2, 1.2)
-		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+		border:SetPoint("TOPLEFT", -C.mult, C.mult)
+		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 		border:SetDrawLayer("BACKGROUND", 1)
 
-		searchOverlay:SetPoint("TOPLEFT", -1.2, 1.2)
-		searchOverlay:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+		searchOverlay:SetPoint("TOPLEFT", -C.mult, C.mult)
+		searchOverlay:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 
 		bag.icon:SetTexCoord(.08, .92, .08, .92)
 

@@ -25,8 +25,8 @@ tinsert(C.themes["AuroraClassic"], function()
 			bu.Icon:SetTexCoord(.01, .99, .01, .99)
 
 			local bg = F.CreateBG(bu)
-			bg:SetPoint("TOPLEFT", bu.Icon, -1.2, 1.2)
-			bg:SetPoint("BOTTOMRIGHT", bu.Icon, 1.2, -1.2)
+			bg:SetPoint("TOPLEFT", bu.Icon, -C.mult, C.mult)
+			bg:SetPoint("BOTTOMRIGHT", bu.Icon, C.mult, -C.mult)
 
 			bu.styled = true
 		end

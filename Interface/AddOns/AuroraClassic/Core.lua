@@ -54,6 +54,12 @@ local _, class = UnitClass("player")
 C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 
+local function SetupPixelFix()
+	local screenHeight = select(2, GetPhysicalScreenSize())
+	local scale = UIParent:GetScale()
+	C.mult = 768/screenHeight/scale
+end
+
 function F:dummy()
 end
 
@@ -83,7 +89,7 @@ function F:CreateBD(a)
 	self:SetBackdrop({
 		bgFile = C.media.backdrop,
 		edgeFile = C.media.backdrop,
-		edgeSize = 1.2,
+		edgeSize = C.mult,
 	})
 	self:SetBackdropColor(0, 0, 0, a or AuroraConfig.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -95,8 +101,8 @@ function F:CreateBG()
 	if self:GetObjectType() == "Texture" then f = self:GetParent() end
 
 	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", self, -1.2, 1.2)
-	bg:SetPoint("BOTTOMRIGHT", self, 1.2, -1.2)
+	bg:SetPoint("TOPLEFT", self, -C.mult, C.mult)
+	bg:SetPoint("BOTTOMRIGHT", self, C.mult, -C.mult)
 	bg:SetTexture(C.media.backdrop)
 	bg:SetVertexColor(0, 0, 0)
 
@@ -564,7 +570,6 @@ function F:CleanInset()
 end
 
 function F:ReskinPortraitFrame(setBG)
-	local name = self:GetName()
 	local insetFrame = self.inset or self.Inset
 	if insetFrame then F.CleanInset(insetFrame) end
 	F.StripTextures(self)
@@ -580,8 +585,8 @@ function F:CreateBDFrame(a)
 	local lvl = frame:GetFrameLevel()
 
 	local bg = CreateFrame("Frame", nil, frame)
-	bg:SetPoint("TOPLEFT", self, -1.2, 1.2)
-	bg:SetPoint("BOTTOMRIGHT", self, 1.2, -1.2)
+	bg:SetPoint("TOPLEFT", self, -C.mult, C.mult)
+	bg:SetPoint("BOTTOMRIGHT", self, C.mult, -C.mult)
 	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
 	F.CreateBD(bg, a)
 
@@ -746,6 +751,8 @@ local Skin = CreateFrame("Frame")
 Skin:RegisterEvent("ADDON_LOADED")
 Skin:SetScript("OnEvent", function(_, _, addon)
 	if addon == "AuroraClassic" then
+		SetupPixelFix()
+
 		-- [[ Load Variables ]]
 
 		-- remove deprecated or corrupt variables
