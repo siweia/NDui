@@ -76,7 +76,8 @@ function module:CreateScroll(parent, width, height, text)
 	local scroll = CreateFrame("ScrollFrame", nil, parent, "UIPanelScrollFrameTemplate")
 	scroll:SetSize(width, height)
 	scroll:SetPoint("BOTTOMLEFT", 10, 10)
-	B.CreateBD(scroll, .2)
+	local bg = B.CreateBG(scroll)
+	B.CreateBD(bg, .2)
 	if text then
 		B.CreateFS(scroll, 15, text, false, "TOPLEFT", 5, 20)
 	end
