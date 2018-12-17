@@ -72,11 +72,8 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	bar:SetTexture(C.media.backdrop)
 	bar:SetGradient("VERTICAL", .65, .25, 0, .75, .35, .1)
 
-	local bg = CreateFrame("Frame", nil, ArchaeologyFrameArtifactPageSolveFrameStatusBar)
-	bg:SetPoint("TOPLEFT", -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", 1, -1)
+	local bg = F.CreateBDFrame(ArchaeologyFrameArtifactPageSolveFrameStatusBar, .25)
 	bg:SetFrameLevel(0)
-	F.CreateBD(bg, .25)
 
 	ArchaeologyFrameArtifactPageIcon:SetTexCoord(.08, .92, .08, .92)
 	F.CreateBG(ArchaeologyFrameArtifactPageIcon)

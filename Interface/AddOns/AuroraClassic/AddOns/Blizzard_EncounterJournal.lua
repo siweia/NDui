@@ -240,7 +240,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		item.IconBorder:SetAlpha(0)
 
 		item.icon:SetPoint("TOPLEFT", 1, -1)
-
 		item.icon:SetTexCoord(.08, .92, .08, .92)
 		item.icon:SetDrawLayer("OVERLAY")
 		F.CreateBG(item.icon)

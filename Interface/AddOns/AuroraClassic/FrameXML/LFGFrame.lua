@@ -90,13 +90,11 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
 		if not button.styled then
 			local border = _G[button:GetName().."Border"]
-
 			button.texture:SetTexCoord(.08, .92, .08, .92)
-
 			border:SetColorTexture(0, 0, 0)
 			border:SetDrawLayer("BACKGROUND")
-			border:SetPoint("TOPLEFT", button.texture, -1, 1)
-			border:SetPoint("BOTTOMRIGHT", button.texture, 1, -1)
+			border:SetPoint("TOPLEFT", button.texture, -C.mult, C.mult)
+			border:SetPoint("BOTTOMRIGHT", button.texture, C.mult, -C.mult)
 
 			button.styled = true
 		end
@@ -199,13 +197,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		local shortageBorder = roleButton.shortageBorder
 		if shortageBorder then
 			local icon = roleButton.incentiveIcon
-
 			shortageBorder:SetTexture("")
-
 			icon.border:SetColorTexture(0, 0, 0)
 			icon.border:SetDrawLayer("BACKGROUND")
-			icon.border:SetPoint("TOPLEFT", icon.texture, -1, 1)
-			icon.border:SetPoint("BOTTOMRIGHT", icon.texture, 1, -1)
+			icon.border:SetPoint("TOPLEFT", icon.texture, -C.mult, C.mult)
+			icon.border:SetPoint("BOTTOMRIGHT", icon.texture, C.mult, -C.mult)
 
 			icon:SetPoint("BOTTOMRIGHT", 3, -3)
 			icon:SetSize(14, 14)

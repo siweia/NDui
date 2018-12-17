@@ -145,8 +145,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				local hl = button:GetHighlightTexture()
 				hl:SetColorTexture(r, g, b, .1)
 				hl:ClearAllPoints()
-				hl:SetPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
-				hl:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
+				hl:SetPoint("TOPLEFT", button, C.mult, -C.mult)
+				hl:SetPoint("BOTTOMRIGHT", button, -C.mult, C.mult)
 
 				if portrait then
 					F.ReskinGarrisonPortrait(portrait)
@@ -297,8 +297,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local hl = tab:GetHighlightTexture()
 		hl:SetColorTexture(r, g, b, .1)
 		hl:ClearAllPoints()
-		hl:SetPoint("TOPLEFT", bg, 1, -1)
-		hl:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+		hl:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+		hl:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
 	end
 
 	hooksecurefunc("GarrisonBuildingList_SelectTab", function(tab)
@@ -324,14 +324,12 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 				button.SelectedBG:SetColorTexture(r, g, b, .2)
 				button.SelectedBG:ClearAllPoints()
-				button.SelectedBG:SetPoint("TOPLEFT", bg, 1, -1)
-				button.SelectedBG:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+				button.SelectedBG:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+				button.SelectedBG:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
 
 				local hl = button:GetHighlightTexture()
 				hl:SetColorTexture(r, g, b, .1)
-				hl:ClearAllPoints()
-				hl:SetPoint("TOPLEFT", bg, 1, -1)
-				hl:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+				hl:SetAllPoints(button.SelectedBG)
 
 				button.styled = true
 			end

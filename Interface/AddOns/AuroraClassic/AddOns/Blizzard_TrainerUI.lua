@@ -21,11 +21,7 @@ C.themes["Blizzard_TrainerUI"] = function()
 	ClassTrainerFrameSkillStepButton.selectedTex:SetPoint("BOTTOMRIGHT", -1, 3)
 	ClassTrainerFrameSkillStepButton.selectedTex:SetTexture(C.media.backdrop)
 	ClassTrainerFrameSkillStepButton.selectedTex:SetVertexColor(r, g, b, .2)
-
-	local icbg = CreateFrame("Frame", nil, ClassTrainerFrameSkillStepButton)
-	icbg:SetPoint("TOPLEFT", ClassTrainerFrameSkillStepButtonIcon, -1, 1)
-	icbg:SetPoint("BOTTOMRIGHT", ClassTrainerFrameSkillStepButtonIcon, 1, -1)
-	F.CreateBD(icbg, 0)
+	F.CreateBDFrame(ClassTrainerFrameSkillStepButton, 0)
 
 	ClassTrainerFrameSkillStepButtonIcon:SetTexCoord(.08, .92, .08, .92)
 

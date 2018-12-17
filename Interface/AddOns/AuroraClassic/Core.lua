@@ -115,8 +115,8 @@ local buttonR, buttonG, buttonB, buttonA
 
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
-	tex:SetPoint("TOPLEFT", 1, -1)
-	tex:SetPoint("BOTTOMRIGHT", -1, 1)
+	tex:SetPoint("TOPLEFT", C.mult, -C.mult)
+	tex:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 	tex:SetTexture(useButtonGradientColour and C.media.gradient or C.media.backdrop)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
@@ -250,8 +250,8 @@ function F:ReskinScroll()
 	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 4)
 
 	local tex = F.CreateGradient(self)
-	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
-	tex:SetPoint("BOTTOMRIGHT", bu.bg, -1, 1)
+	tex:SetPoint("TOPLEFT", bu.bg, C.mult, -C.mult)
+	tex:SetPoint("BOTTOMRIGHT", bu.bg, -C.mult, C.mult)
 
 	local up, down = self:GetChildren()
 	up:SetWidth(17)
@@ -332,8 +332,8 @@ function F:ReskinDropDown()
 	bg:SetPoint("BOTTOMRIGHT", -18, 8)
 
 	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bg, 1, -1)
-	gradient:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+	gradient:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+	gradient:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
 end
 
 function F:ReskinClose(a1, p, a2, x, y)
@@ -389,8 +389,8 @@ function F:ReskinInput(height, width)
 	bd:SetPoint("BOTTOMRIGHT")
 
 	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bd, 1, -1)
-	gradient:SetPoint("BOTTOMRIGHT", bd, -1, 1)
+	gradient:SetPoint("TOPLEFT", bd, C.mult, -C.mult)
+	gradient:SetPoint("BOTTOMRIGHT", bd, -C.mult, C.mult)
 
 	if height then self:SetHeight(height) end
 	if width then self:SetWidth(width) end

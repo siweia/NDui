@@ -84,8 +84,8 @@ C.themes["Blizzard_GuildControlUI"] = function()
 					tex:SetPoint("BOTTOMRIGHT", -5, 5)
 
 					local bg = F.CreateBDFrame(ch, 1)
-					bg:SetPoint("TOPLEFT", tex, -1, 1)
-					bg:SetPoint("BOTTOMRIGHT", tex, 1, -1)
+					bg:SetPoint("TOPLEFT", tex, -C.mult, C.mult)
+					bg:SetPoint("BOTTOMRIGHT", tex, C.mult, -C.mult)
 				end
 
 				bu.styled = true

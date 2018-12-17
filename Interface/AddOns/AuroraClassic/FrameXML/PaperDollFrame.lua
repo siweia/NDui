@@ -179,8 +179,8 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		bu:SetCheckedTexture(C.media.checked)
 		select(2, bu:GetRegions()):Hide()
-		ic:SetPoint("TOPLEFT", 1, -1)
-		ic:SetPoint("BOTTOMRIGHT", -1, 1)
+		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
+		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		F.CreateBD(bu, .25)
