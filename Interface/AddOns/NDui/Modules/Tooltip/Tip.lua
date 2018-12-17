@@ -225,19 +225,18 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		GameTooltipStatusBar:ClearAllPoints()
 		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 3)
 		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -2, 3)
+		if not GameTooltipStatusBar.bg then
+			GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
+			GameTooltipStatusBar:SetHeight(5)
+			B.CreateSD(GameTooltipStatusBar, 3, 3)
+			local bg = B.CreateBG(GameTooltipStatusBar, 1)
+			B.CreateBD(bg, .7)
+			B.CreateSD(bg)
+			B.CreateTex(bg)
+			GameTooltipStatusBar.bg = bg
+		end
 	end
 end)
-
--- Tooltip statusbars
-do
-	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
-	GameTooltipStatusBar:SetHeight(5)
-	B.CreateSD(GameTooltipStatusBar, 3, 3)
-	local bg = B.CreateBG(GameTooltipStatusBar, 1)
-	B.CreateBD(bg, .7)
-	B.CreateSD(bg)
-	B.CreateTex(bg)
-end
 
 GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
 	if not value then return end
@@ -456,20 +455,6 @@ local function addonStyled(_, addon)
 		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
 
 		-- Pet Tooltip
-		local petTips = {
-			PetBattlePrimaryUnitTooltip.Delimiter,
-			PetBattlePrimaryUnitTooltip.Delimiter2,
-			PetBattlePrimaryAbilityTooltip.Delimiter1,
-			PetBattlePrimaryAbilityTooltip.Delimiter2,
-			FloatingPetBattleAbilityTooltip.Delimiter1,
-			FloatingPetBattleAbilityTooltip.Delimiter2,
-			FloatingBattlePetTooltip.Delimiter,
-		}
-		for _, element in pairs(petTips) do
-			element:SetColorTexture(0, 0, 0)
-			element:SetHeight(1.2)
-		end
-
 		PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
 			self.Border:SetAlpha(0)
 			if not self.tipStyled then

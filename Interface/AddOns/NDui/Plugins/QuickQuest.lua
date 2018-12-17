@@ -4,27 +4,30 @@ local B, C, L, DB = unpack(ns)
 -- QuickQuest, by p3lim
 -- NDui MOD
 --------------------------
-local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
-mono:SetPoint("TOPRIGHT", -140, 0)
-mono:SetSize(26, 26)
-B.CreateCB(mono, .25)
-mono.text = B.CreateFS(mono, 14, L["Auto Quest"], false, "LEFT", 25, 0)
-mono:RegisterEvent("PLAYER_LOGIN")
-mono:SetScript("OnEvent", function(self)
-	self:SetChecked(NDuiDB["Misc"]["AutoQuest"])
-end)
-mono:SetScript("OnClick", function(self)
-	NDuiDB["Misc"]["AutoQuest"] = self:GetChecked()
-end)
+local created
+local function setupCheckButton()
+	if created then return end
+	local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
+	mono:SetPoint("TOPRIGHT", -140, 0)
+	mono:SetSize(26, 26)
+	B.CreateCB(mono, .25)
+	mono.text = B.CreateFS(mono, 14, L["Auto Quest"], false, "LEFT", 25, 0)
+	mono:SetChecked(NDuiDB["Misc"]["AutoQuest"])
+	mono:SetScript("OnClick", function(self)
+		NDuiDB["Misc"]["AutoQuest"] = self:GetChecked()
+	end)
+
+	created = true
+end
+WorldMapFrame:HookScript("OnShow", setupCheckButton)
 
 -- Function
 local strmatch = string.match
 local tonumber, next = tonumber, next
 
+local quests, choiceQueue = {}
 local QuickQuest = CreateFrame("Frame")
 QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
-
-local quests, choiceQueue = {}
 
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
