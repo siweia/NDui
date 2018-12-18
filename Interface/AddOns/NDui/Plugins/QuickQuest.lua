@@ -70,6 +70,7 @@ local ignoreQuestNPC = {
 	[142063] = true,	-- 特兹兰
 	[143388] = true,	-- 德鲁扎
 	[98489] = true,		-- 海难俘虏
+	[135690] = true,	-- 亡灵舰长
 }
 
 local function GetQuestLogQuests(onlyComplete)
