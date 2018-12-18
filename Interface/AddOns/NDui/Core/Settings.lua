@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
 local pairs, tonumber, wipe = pairs, tonumber, table.wipe
-local max = math.max
+local min, max, format = math.min, math.max, string.format
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")
@@ -50,17 +50,15 @@ local function ForceRaidFrame()
 	CompactUnitFrameProfiles_UpdateCurrentPanel()
 end
 
-local function ForceUIScale()
-	B.HideOption(Advanced_UseUIScale)
-	B.HideOption(Advanced_UIScaleSlider)
-
+local function SetupUIScale()
 	local scale = NDuiADB["UIScale"]
+	local minScale = .64
+	local fixedHeight = 768/DB.ScreenHeight
 	if NDuiADB["LockUIScale"] then
-		local minScale = .64
-		if DB.ScreenHeight > 1080 then minScale = .4 end
-		scale = max(minScale, 768/DB.ScreenHeight)
-		NDuiADB["UIScale"] = scale
+		scale = max(minScale, min(1.1, fixedHeight))
 	end
+	scale = tonumber(format("%.2f", scale))
+	C.mult = fixedHeight/scale
 
 	SetCVar("useUiScale", 1)
 	if scale < .64 then
@@ -68,8 +66,6 @@ local function ForceUIScale()
 	else
 		SetCVar("uiScale", scale)
 	end
-
-	C.mult = 768/DB.ScreenHeight/scale
 end
 
 local function ForceChatSettings()
@@ -357,7 +353,7 @@ local function YesTutor()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Default Settings Check"])
 		elseif currentPage == 2 then
 			NDuiADB["LockUIScale"] = true
-			ForceUIScale()
+			SetupUIScale()
 			NDuiADB["LockUIScale"] = false
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
 		elseif currentPage == 3 then
@@ -435,12 +431,15 @@ SlashCmdList["NDUI"] = function() HelloWorld() end
 SLASH_NDUI1 = "/ndui"
 
 function module:OnLogin()
+	B.HideOption(Advanced_UseUIScale)
+	B.HideOption(Advanced_UIScaleSlider)
+	SetupUIScale()
+
 	if not NDuiDB["Tutorial"]["Complete"] then
 		HelloWorld()
 		NDuiDB["Tutorial"]["Complete"] = true
 	end
 
-	ForceUIScale()
 	ForceAddonSkins()
 	if NDuiDB["Chat"]["Lock"] then ForceChatSettings() end
 
