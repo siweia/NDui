@@ -57,8 +57,8 @@ local function SetupUIScale()
 	if NDuiADB["LockUIScale"] then
 		scale = max(minScale, min(1.1, fixedHeight))
 	end
-	scale = tonumber(format("%.2f", scale))
 	C.mult = fixedHeight/scale
+	scale = tonumber(format("%.2f", scale))
 
 	SetCVar("useUiScale", 1)
 	if scale < .64 then
