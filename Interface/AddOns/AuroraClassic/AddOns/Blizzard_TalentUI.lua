@@ -74,6 +74,7 @@ C.themes["Blizzard_TalentUI"] = function()
 		local shownSpec = spec or playerTalentSpec or 1
 		local sex = self.isPet and UnitSex("pet") or UnitSex("player")
 		local id, _, _, icon = GetSpecializationInfo(shownSpec, nil, self.isPet, nil, sex)
+		if not id then return end
 		local scrollChild = self.spellsScroll.child
 		scrollChild.specIcon:SetTexture(icon)
 

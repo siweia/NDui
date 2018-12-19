@@ -1,15 +1,11 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ArchaeologyUI"] = function()
-	F.SetBD(ArchaeologyFrame)
+	F.ReskinPortraitFrame(ArchaeologyFrame, true)
+	ArchaeologyFrame:DisableDrawLayer("BACKGROUND")
 	F.Reskin(ArchaeologyFrameArtifactPageSolveFrameSolveButton)
 	F.Reskin(ArchaeologyFrameArtifactPageBackButton)
-	ArchaeologyFramePortrait:Hide()
-	ArchaeologyFrame:DisableDrawLayer("BACKGROUND")
-	ArchaeologyFrame:DisableDrawLayer("BORDER")
-	ArchaeologyFrame:DisableDrawLayer("OVERLAY")
-	ArchaeologyFrameInset:DisableDrawLayer("BACKGROUND")
-	ArchaeologyFrameInset:DisableDrawLayer("BORDER")
+
 	ArchaeologyFrameSummaryPageTitle:SetTextColor(1, 1, 1)
 	ArchaeologyFrameArtifactPageHistoryTitle:SetTextColor(1, 1, 1)
 	ArchaeologyFrameArtifactPageHistoryScrollChildText:SetTextColor(1, 1, 1)
@@ -22,7 +18,6 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	ArchaeologyFrameCompletedPageTitleMid:SetTextColor(1, 1, 1)
 	ArchaeologyFrameCompletedPagePageText:SetTextColor(1, 1, 1)
 	ArchaeologyFrameSummaryPagePageText:SetTextColor(1, 1, 1)
-
 	for i = 1, ARCHAEOLOGY_MAX_RACES do
 		_G["ArchaeologyFrameSummaryPageRace"..i]:GetRegions():SetTextColor(1, 1, 1)
 	end
@@ -49,7 +44,6 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	ArchaeologyFrameCompletedButton:SetFrameLevel(ArchaeologyFrame:GetFrameLevel() - 1)
 
 	F.ReskinDropDown(ArchaeologyFrameRaceFilter)
-	F.ReskinClose(ArchaeologyFrameCloseButton)
 	F.ReskinScroll(ArchaeologyFrameArtifactPageHistoryScrollScrollBar)
 	F.ReskinArrow(ArchaeologyFrameCompletedPagePrevPageButton, "left")
 	F.ReskinArrow(ArchaeologyFrameCompletedPageNextPageButton, "right")
@@ -71,9 +65,7 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	local bar = select(3, ArchaeologyFrameArtifactPageSolveFrameStatusBar:GetRegions())
 	bar:SetTexture(C.media.backdrop)
 	bar:SetGradient("VERTICAL", .65, .25, 0, .75, .35, .1)
-
-	local bg = F.CreateBDFrame(ArchaeologyFrameArtifactPageSolveFrameStatusBar, .25)
-	bg:SetFrameLevel(0)
+	F.CreateBDFrame(ArchaeologyFrameArtifactPageSolveFrameStatusBar, .25)
 
 	ArchaeologyFrameArtifactPageIcon:SetTexCoord(.08, .92, .08, .92)
 	F.CreateBG(ArchaeologyFrameArtifactPageIcon)
