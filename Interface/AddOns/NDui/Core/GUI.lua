@@ -449,12 +449,12 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[8] = {
 		{1, "Chat", "Lock", "|cff00cc4c"..L["Lock Chat"]},
-		{},--blank
-		{1, "Chat", "Freedom", L["Language Filter"]},
 		{1, "Chat", "Sticky", L["Chat Sticky"].."*", true, nil, function() B.ChatWhisperSticky() end},
 		{1, "Chat", "Oldname", L["Default Channel"]},
 		{1, "Chat", "WhisperColor", L["Differ WhipserColor"].."*", true},
+		{1, "Chat", "Freedom", L["Language Filter"]},
 		{1, "ACCOUNT", "Timestamp", L["Timestamp"], false, nil, function() B.UpdateTimestamp() end},
+		{2, "ACCOUNT", "ChatAtList", L["@List"].."*", true, nil, function() B.GenChatAtList() end},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
@@ -464,7 +464,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Invite", "|cff00cc4c"..L["Whisper Invite"]},
 		{1, "Chat", "GuildInvite", L["Guild Invite Only"].."*", true},
 		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", false, nil, function() B.GenWhisperList() end},
-		{2, "ACCOUNT", "ChatAtList", L["@List"].."*", true, nil, function() B.GenChatAtList() end},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
@@ -621,9 +620,9 @@ local function CreateOption(i)
 			local eb = B.CreateEditBox(parent, 200, 28)
 			eb:SetMaxLetters(200)
 			if horizon then
-				eb:SetPoint("TOPLEFT", 345, -offset + 50)
+				eb:SetPoint("TOPLEFT", 345, -offset + 45)
 			else
-				eb:SetPoint("TOPLEFT", 35, -offset - 20)
+				eb:SetPoint("TOPLEFT", 35, -offset - 25)
 				offset = offset + 70
 			end
 			eb:SetText(NDUI_VARIABLE(key, value))
