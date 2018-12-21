@@ -93,7 +93,7 @@ local function chatAtMe(_, _, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
 	for word in pairs(chatAtList) do
 		if word ~= "" then
-			if strmatch(msg:lower(), "@"..word:lower()) then
+			if strmatch(msg:lower(), word:lower()) then
 				at.checker = true
 				at.author = author
 				at.class = select(2, GetPlayerInfoByGUID(guid))
@@ -113,7 +113,7 @@ hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 		self.DoubleLine:Show()
 
 		local hexColor = B.HexRGB(B.ClassColor(at.class))
-		self.DoubleLine:SetText(format("%s "..DB.InfoColor.."@"..YOU.."! ("..GUILD..")", hexColor..Ambiguate(at.author, "short")))
+		self.DoubleLine:SetText(format(L["Mention You"], hexColor..Ambiguate(at.author, "short")..DB.InfoColor))
 		at.checker = false
 	end
 end)
