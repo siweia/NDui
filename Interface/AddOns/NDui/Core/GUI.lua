@@ -4,8 +4,8 @@ local module = B:RegisterModule("GUI")
 
 local format, tonumber, type = string.format, tonumber, type
 local pairs, ipairs, next = pairs, ipairs, next
-local min, max = math.min, math.max
-local r, g, b = DB.r, DB.g, DB.b
+local min, max, tinsert = math.min, math.max, table.insert
+local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
 
 local function setupGUIScale()
@@ -242,6 +242,8 @@ local accountSettings = {
 	DBMRequest = false,
 	SkadaRequest = false,
 	BWRequest = false,
+	RaidAuraWatch = {},
+	CornerBuffs = {},
 }
 
 local function InitialSettings(source, target)
@@ -365,7 +367,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"]},
-		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"], true},
+		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"]},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{1, "UFs", "RaidClickSets", L["Enable ClickSets"]},
@@ -530,7 +532,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 local function SelectTab(i)
 	for num = 1, #tabList do
 		if num == i then
-			guiTab[num]:SetBackdropColor(r, g, b, .3)
+			guiTab[num]:SetBackdropColor(cr, cg, cb, .3)
 			guiTab[num].checked = true
 			guiPage[num]:Show()
 		else
@@ -554,7 +556,7 @@ local function CreateTab(parent, i, name)
 	end)
 	tab:SetScript("OnEnter", function(self)
 		if self.checked then return end
-		self:SetBackdropColor(r, g, b, .3)
+		self:SetBackdropColor(cr, cg, cb, .3)
 	end)
 	tab:SetScript("OnLeave", function(self)
 		if self.checked then return end
@@ -704,18 +706,18 @@ local function CreateOption(i)
 				offset = offset + 35
 			end
 			B.CreateFS(f, 14, name, false, "LEFT", 26, 0)
-			f.tex:SetColorTexture(NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b)
+			f.tex:SetVertexColor(NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b)
 
 			local function onUpdate()
 				local r, g, b = ColorPickerFrame:GetColorRGB()
-				f.tex:SetColorTexture(r, g, b)
+				f.tex:SetVertexColor(r, g, b)
 				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
 				if callback then callback() end
 			end
 
 			local function onCancel()
 				local r, g, b = ColorPicker_GetPreviousValues()
-				f.tex:SetColorTexture(r, g, b)
+				f.tex:SetVertexColor(r, g, b)
 				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
 			end
 
@@ -780,10 +782,11 @@ local function clearEdit(options)
 	end
 end
 
-local raidDebuffsGUI, clickCastGUI, autoSelectInstance
+local raidDebuffsGUI, clickCastGUI, autoSelectInstance, buffIndicatorGUI
 
 local function setupRaidDebuffs()
 	if clickCastGUI and clickCastGUI:IsShown() then clickCastGUI:Hide() end
+	if buffIndicatorGUI and buffIndicatorGUI:IsShown() then buffIndicatorGUI:Hide() end
 	if raidDebuffsGUI then ToggleFrame(raidDebuffsGUI) return end
 
 	raidDebuffsGUI = createExtraGUI(guiPage[4], L["RaidFrame Debuffs"], true)
@@ -993,6 +996,7 @@ end
 
 local function setupClickCast()
 	if raidDebuffsGUI and raidDebuffsGUI:IsShown() then raidDebuffsGUI:Hide() end
+	if buffIndicatorGUI and buffIndicatorGUI:IsShown() then buffIndicatorGUI:Hide() end
 	if clickCastGUI then ToggleFrame(clickCastGUI) return end
 
 	clickCastGUI = createExtraGUI(guiPage[4], L["Add ClickSets"], true)
@@ -1167,6 +1171,165 @@ local function setupPlateAura()
 	end
 end
 
+local function setupBuffIndicator()
+	if raidDebuffsGUI and raidDebuffsGUI:IsShown() then raidDebuffsGUI:Hide() end
+	if clickCastGUI and clickCastGUI:IsShown() then clickCastGUI:Hide() end
+	if buffIndicatorGUI then ToggleFrame(buffIndicatorGUI) return end
+
+	buffIndicatorGUI = createExtraGUI(f)
+
+	local frameData = {
+		[1] = {text = L["RaidBuffWatch"], offset = -25, width = 160, barList = {}},
+		[2] = {text = L["BuffIndicator"], offset = -315, width = 70, barList = {}},
+	}
+	local decodeAnchor = {
+		["TL"] = "TOPLEFT",
+		["T"] = "TOP",
+		["TR"] = "TOPRIGHT",
+		["L"] = "LEFT",
+		["R"] = "RIGHT",
+		["BL"] = "BOTTOMLEFT",
+		["B"] = "BOTTOM",
+		["BR"] = "BOTTOMRIGHT",
+	}
+	local anchors = {"TL", "T", "TR", "L", "R", "BL", "B", "BR"}
+
+	local function createBar(parent, index, spellID, anchor, r, g, b)
+		local name, _, texture = GetSpellInfo(spellID)
+		local bar = CreateFrame("Frame", nil, parent)
+		bar:SetSize(220, 30)
+		B.CreateBD(bar, .3)
+		frameData[index].barList[spellID] = bar
+
+		local icon, close = module:CreateBarWidgets(bar, texture)
+		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			if index == 1 then
+				NDuiADB["RaidAuraWatch"][spellID] = nil
+			else
+				NDuiADB["CornerBuffs"][DB.MyClass][spellID] = nil
+			end
+			frameData[index].barList[spellID] = nil
+			sortBars(frameData[index].barList)
+		end)
+
+		name = L[anchor] or name
+		local text = B.CreateFS(bar, 14, name, false, "LEFT", 30, 0)
+		text:SetWidth(180)
+		text:SetJustifyH("LEFT")
+		if anchor then text:SetTextColor(r, g, b) end
+
+		sortBars(frameData[index].barList)
+	end
+
+	local function addClick(parent, index)
+		local spellID = tonumber(parent.box:GetText())
+		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		local anchor, r, g, b
+		if index == 1 then
+			if NDuiADB["RaidAuraWatch"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+			NDuiADB["RaidAuraWatch"][spellID] = true
+		else
+			anchor, r, g, b = parent.dd.Text:GetText(), parent.swatch.tex:GetVertexColor()
+			if NDuiADB["CornerBuffs"][DB.MyClass][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+			anchor = decodeAnchor[anchor]
+			NDuiADB["CornerBuffs"][DB.MyClass][spellID] = {anchor, {r, g, b}}
+		end
+		createBar(parent.child, index, spellID, anchor, r, g, b)
+		parent.box:SetText("")
+	end
+
+	local currentIndex
+	StaticPopupDialogs["RESET_NDUI_RaidAuraWatch"] = {
+		text = L["Reset your raiddebuffs list?"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			if currentIndex == 1 then
+				NDuiADB["RaidAuraWatch"] = nil
+			else
+				NDuiADB["CornerBuffs"][DB.MyClass] = nil
+			end
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
+	for index, value in ipairs(frameData) do
+		B.CreateFS(buffIndicatorGUI, 14, value.text, "system", "TOPLEFT", 20, value.offset)
+
+		local frame = CreateFrame("Frame", nil, buffIndicatorGUI)
+		frame:SetSize(280, 250)
+		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
+		B.CreateBD(frame, .3)
+
+		local scroll = module:CreateScroll(frame, 240, 200)
+		scroll.box = B.CreateEditBox(frame, value.width, 25)
+		scroll.box:SetPoint("TOPLEFT", 10, -10)
+		scroll.box:SetMaxLetters(6)
+		scroll.add = B.CreateButton(frame, 45, 25, ADD)
+		scroll.add:SetPoint("TOPRIGHT", -8, -10)
+		scroll.add:SetScript("OnClick", function()
+			addClick(scroll, index)
+		end)
+		scroll.reset = B.CreateButton(frame, 45, 25, RESET)
+		scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
+		scroll.reset:SetScript("OnClick", function()
+			currentIndex = index
+			StaticPopup_Show("RESET_NDUI_RaidAuraWatch")
+		end)
+		if index == 1 then
+			for spellID in pairs(NDuiADB["RaidAuraWatch"]) do
+				createBar(scroll.child, index, spellID)
+			end
+		else
+			scroll.dd = B.CreateDropDown(frame, 45, 25, anchors)
+			scroll.dd:SetPoint("TOPLEFT", 10, -10)
+			scroll.dd.options[1]:Click()
+
+			local function optionOnEnter(self)
+				GameTooltip:SetOwner(self, "ANCHOR_TOP")
+				GameTooltip:ClearLines()
+				GameTooltip:AddLine(L[decodeAnchor[self.text]], 1, 1, 1)
+				GameTooltip:Show()
+			end
+			for i = 1, 8 do
+				scroll.dd.options[i]:HookScript("OnEnter", optionOnEnter)
+				scroll.dd.options[i]:HookScript("OnLeave", GameTooltip_Hide)
+			end
+			scroll.box:SetPoint("TOPLEFT", scroll.dd, "TOPRIGHT", 25, 0)
+
+			local r, g, b = 1, 1, 1
+			local swatch = B.CreateColorSwatch(frame)
+			swatch:SetPoint("LEFT", scroll.box, "RIGHT", 5, 0)
+			swatch.tex:SetVertexColor(r, g, b)
+			scroll.swatch = swatch
+
+			local function onUpdate()
+				local nr, ng, nb = ColorPickerFrame:GetColorRGB()
+				swatch.tex:SetVertexColor(nr, ng, nb)
+				r, g, b = nr, ng, nb
+			end
+			local function onCancel()
+				local pr, pg, pb = ColorPicker_GetPreviousValues()
+				swatch.tex:SetVertexColor(pr, pg, pb)
+				r, g, b = pr, pg, pb
+			end
+			swatch:SetScript("OnClick", function()
+				ColorPickerFrame.func = onUpdate
+				ColorPickerFrame.previousValues = {r = r, g = g, b = b}
+				ColorPickerFrame.cancelFunc = onCancel
+				ColorPickerFrame:SetColorRGB(r, g, b)
+				ColorPickerFrame:Show()
+			end)
+
+			for spellID, value in pairs(NDuiADB["CornerBuffs"][DB.MyClass]) do
+				createBar(scroll.child, index, spellID, value[1], unpack(value[2]))
+			end
+		end
+	end
+end
+
 local function OpenGUI()
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	if f then f:Show() return end
@@ -1281,7 +1444,7 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame Debuffs
 	local raidDebuffs = B.CreateButton(guiPage[4].child, 150, 30, L["RaidFrame Debuffs"].."*")
-	raidDebuffs:SetPoint("TOPLEFT", 340, -410)
+	raidDebuffs:SetPoint("TOPLEFT", 340, -440)
 	raidDebuffs.text:SetTextColor(.6, .8, 1)
 	raidDebuffs:SetScript("OnClick", function()
 		setupRaidDebuffs()
@@ -1290,9 +1453,15 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4].child, 150, 30, L["Add ClickSets"])
-	clickSet:SetPoint("TOPLEFT", 40, -410)
+	clickSet:SetPoint("TOPLEFT", 40, -440)
 	clickSet.text:SetTextColor(.6, .8, 1)
 	clickSet:SetScript("OnClick", setupClickCast)
+
+	-- Toggle BuffIndicator
+	local buffIndicator = B.CreateButton(guiPage[4].child, 150, 30, "BuffIndicator".."*")
+	buffIndicator:SetPoint("TOPLEFT", 340, -310)
+	buffIndicator.text:SetTextColor(.6, .8, 1)
+	buffIndicator:SetScript("OnClick", setupBuffIndicator)
 
 	-- Toggle Nameplate aurafilter
 	local plate = B.CreateButton(guiPage[5].child, 150, 30, L["Nameplate AuraFilter"].."*")
