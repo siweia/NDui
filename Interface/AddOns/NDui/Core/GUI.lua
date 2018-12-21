@@ -1458,7 +1458,7 @@ local function OpenGUI()
 	clickSet:SetScript("OnClick", setupClickCast)
 
 	-- Toggle BuffIndicator
-	local buffIndicator = B.CreateButton(guiPage[4].child, 150, 30, "BuffIndicator".."*")
+	local buffIndicator = B.CreateButton(guiPage[4].child, 150, 30, L["BuffIndicator Setup"].."*")
 	buffIndicator:SetPoint("TOPLEFT", 340, -310)
 	buffIndicator.text:SetTextColor(.6, .8, 1)
 	buffIndicator:SetScript("OnClick", setupBuffIndicator)
