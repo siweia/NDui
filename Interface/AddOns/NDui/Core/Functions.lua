@@ -4,7 +4,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 
 local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
 local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
-local min, max, abs, floor, ceil = math.min, math.max, math.abs, math.floor, math.ceil
+local min, max, abs, floor = math.min, math.max, math.abs, math.floor
 
 -- Gradient Frame
 function B:CreateGF(w, h, o, r, g, b, a1, a2)
@@ -369,11 +369,11 @@ end
 local day, hour, minute = 86400, 3600, 60
 function B.FormatTime(s)
 	if s >= day then
-		return format("%d"..DB.MyColor.."d", ceil(s/day)), s%day
+		return format("%d"..DB.MyColor.."d", s/day), s%day
 	elseif s >= hour then
-		return format("%d"..DB.MyColor.."h", ceil(s/hour)), s%hour
+		return format("%d"..DB.MyColor.."h", s/hour), s%hour
 	elseif s >= minute then
-		return format("%d"..DB.MyColor.."m", ceil(s/minute)), s%minute
+		return format("%d"..DB.MyColor.."m", s/minute), s%minute
 	elseif s > 10 then
 		return format("|cffcccc33%d|r", s), s - floor(s)
 	elseif s > 3 then
@@ -389,11 +389,11 @@ end
 
 function B.FormatTimeRaw(s)
 	if s >= day then
-		return format("%dd", ceil(s/day))
+		return format("%dd", s/day)
 	elseif s >= hour then
-		return format("%dh", ceil(s/hour))
+		return format("%dh", s/hour)
 	elseif s >= minute then
-		return format("%dm", ceil(s/minute))
+		return format("%dm", s/minute)
 	elseif s >= 3 then
 		return floor(s)
 	else
@@ -402,6 +402,22 @@ function B.FormatTimeRaw(s)
 		else
 			return format("%d", s + .5)
 		end
+	end
+end
+
+function B:CooldownOnUpdate(elapsed, raw)
+	local formatTime = raw and B.FormatTimeRaw or B.FormatTime
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed >= .1 then
+		local timeLeft = self.expiration - GetTime()
+		if timeLeft > 0 then
+			local text = formatTime(timeLeft)
+			self.timer:SetText(text)
+		else
+			self:SetScript("OnUpdate", nil)
+			self.timer:SetText(nil)
+		end
+		self.elapsed = 0
 	end
 end
 
@@ -489,7 +505,7 @@ function B:CreateEditBox(width, height)
 	local eb = CreateFrame("EditBox", nil, self)
 	eb:SetSize(width, height)
 	eb:SetAutoFocus(false)
-	eb:SetTextInsets(10, 10, 0, 0)
+	eb:SetTextInsets(5, 5, 0, 0)
 	eb:SetFontObject(GameFontHighlight)
 	B.CreateBD(eb, .3)
 	eb:SetScript("OnEscapePressed", function()
@@ -585,6 +601,7 @@ function B:CreateColorSwatch()
 	local tex = swatch:CreateTexture()
 	tex:SetPoint("TOPLEFT", 2, -2)
 	tex:SetPoint("BOTTOMRIGHT", -2, 2)
+	tex:SetTexture(DB.bdTex)
 	swatch.tex = tex
 
 	return swatch
