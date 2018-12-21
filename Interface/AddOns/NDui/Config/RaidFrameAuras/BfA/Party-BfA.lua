@@ -76,10 +76,9 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 258079) -- 巨口噬咬
 module:RegisterDebuff(TIER, INSTANCE, 0, 258058) -- 挤压
 module:RegisterDebuff(TIER, INSTANCE, 0, 260016) -- 瘙痒叮咬
 module:RegisterDebuff(TIER, INSTANCE, 0, 257119) -- 流沙陷阱
-module:RegisterDebuff(TIER, INSTANCE, 0, 260067) -- 恶毒槌击
 module:RegisterDebuff(TIER, INSTANCE, 0, 258313) -- 手铐
 module:RegisterDebuff(TIER, INSTANCE, 0, 259711) -- 全面紧闭
-module:RegisterDebuff(TIER, INSTANCE, 0, 256198) -- 爆炎弹
+module:RegisterDebuff(TIER, INSTANCE, 0, 256201) -- 爆炎弹
 module:RegisterDebuff(TIER, INSTANCE, 0, 256101) -- 爆炸
 module:RegisterDebuff(TIER, INSTANCE, 0, 256044) -- 致命狙击
 module:RegisterDebuff(TIER, INSTANCE, 0, 256474) -- 竭心毒剂

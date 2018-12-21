@@ -21,7 +21,6 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 233901)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 248713)
 
 BOSS = 1856 -- 哈亚坦
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 248713)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 234016)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 241573, 5)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 231998)
