@@ -10,7 +10,7 @@ function module:OnLogin()
 	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 	local ICON_SIZE = 36
 	local hideNumbers = {}
-	local pairs, floor = pairs, math.floor
+	local pairs, floor, strfind = pairs, math.floor, string.find
 
 	-- stops the timer
 	local function Timer_Stop(self)
@@ -110,6 +110,9 @@ function module:OnLogin()
 		-- hide cooldown flash if not visible
 		local parent = self:GetParent()
 		if parent and parent.isAuraWatch then return end
+		local name = parent:GetName()
+		if name and strfind(name, "Hekili") then return end
+
 		if self:GetEffectiveAlpha() > 0 then
 			self:Show()
 		else
