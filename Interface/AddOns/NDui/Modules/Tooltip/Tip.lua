@@ -371,7 +371,7 @@ local function addonStyled(_, addon)
 
 	elseif addon == "NDui" then
 		if IsAddOnLoaded("AuroraClassic") then
-			local F, C = unpack(AuroraClassic)
+			local F = unpack(AuroraClassic)
 			F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 			F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 			F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)

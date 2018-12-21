@@ -357,16 +357,9 @@ end
 
 -- Repoint Vehicle
 do
-	local mover = CreateFrame("Button", "NDuiVehicleSeatMover", VehicleSeatIndicator)
+	local mover = B.CreateGear(VehicleSeatIndicator, "NDuiVehicleSeatMover")
 	mover:SetPoint("BOTTOMRIGHT", UIParent, -360, 30)
-	mover:SetSize(22, 22)
 	mover:SetFrameStrata("HIGH")
-	mover.Icon = mover:CreateTexture(nil, "ARTWORK")
-	mover.Icon:SetAllPoints()
-	mover.Icon:SetTexture(DB.gearTex)
-	mover.Icon:SetTexCoord(0, .5, 0, .5)
-	mover:SetHighlightTexture(DB.gearTex)
-	mover:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
 	B.AddTooltip(mover, "ANCHOR_TOP", L["Toggle"], "system")
 	B.CreateMF(mover)
 
