@@ -225,7 +225,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		GameTooltipStatusBar:ClearAllPoints()
 		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 3)
 		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -2, 3)
-		if not GameTooltipStatusBar.bg then
+		if C.mult and not GameTooltipStatusBar.bg then
 			GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
 			GameTooltipStatusBar:SetHeight(5)
 			local bg = B.CreateBG(GameTooltipStatusBar)
