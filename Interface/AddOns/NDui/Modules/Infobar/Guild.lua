@@ -266,6 +266,7 @@ info.onEnter = function()
 end
 
 info.onLeave = function()
+	if not infoFrame then return end
 	C_Timer.After(.1, function()
 		if MouseIsOver(infoFrame) then return end
 		infoFrame:Hide()
