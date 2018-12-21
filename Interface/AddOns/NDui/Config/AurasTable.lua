@@ -104,6 +104,11 @@ function module:OnLogin()
 	C.RaidBuffs = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
 
+	if not NDuiADB["CornerBuffs"][DB.MyClass] then NDuiADB["CornerBuffs"][DB.MyClass] = {} end
+	if not next(NDuiADB["CornerBuffs"][DB.MyClass]) then
+		B.CopyTable(C.CornerBuffs[DB.MyClass], NDuiADB["CornerBuffs"][DB.MyClass])
+	end
+
 	-- Filter bloodlust for healers
 	if NDuiDB["UFs"]["RaidBuffIndicator"] then return end
 

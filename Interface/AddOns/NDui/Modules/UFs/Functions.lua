@@ -417,6 +417,8 @@ local function postCreateIcon(element, button)
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
+
+	if element.disableCooldown then button.timer = B.CreateFS(button, 12, "") end
 end
 
 local filteredStyle = {
@@ -426,7 +428,7 @@ local filteredStyle = {
 	["arena"] = true,
 }
 
-local function postUpdateIcon(element, _, button, _, _, duration, _, debuffType)
+local function postUpdateIcon(element, _, button, _, _, duration, expiration, debuffType)
 	if duration then button.Shadow:Show() end
 
 	local style = element.__owner.mystyle
@@ -449,6 +451,17 @@ local function postUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 		button.Shadow:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
 		button.Shadow:SetBackdropBorderColor(0, 0, 0)
+	end
+
+	if element.disableCooldown then
+		if duration and duration > 0 then
+			button.expiration = expiration
+			button:SetScript("OnUpdate", B.CooldownOnUpdate)
+			button.timer:Show()
+		else
+			button:SetScript("OnUpdate", nil)
+			button.timer:Hide()
+		end
 	end
 end
 
@@ -483,7 +496,7 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		end
 	elseif style == "raid" then
 		if NDuiDB["UFs"]["RaidBuffIndicator"] then
-			return C.RaidBuffs["ALL"][spellID] and not button.isDebuff
+			return not button.isDebuff and (C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID])
 		else
 			return C.RaidBuffs[DB.MyClass][spellID] and button.isPlayer or C.RaidBuffs["ALL"][spellID]
 		end
@@ -535,6 +548,7 @@ function UF:CreateAuras(self)
 			bu:SetPoint("LEFT", self, 15, 0)
 			bu.size = 18*NDuiDB["UFs"]["RaidScale"]
 			bu.numTotal = 1
+			bu.disableCooldown = true
 		else
 			bu:SetPoint("BOTTOMLEFT", self, 2, 0)
 			bu.numTotal = 6
