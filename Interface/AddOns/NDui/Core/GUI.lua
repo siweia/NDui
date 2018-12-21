@@ -368,6 +368,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"]},
 		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"]},
+		{},--blank
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{1, "UFs", "RaidClickSets", L["Enable ClickSets"]},
@@ -1444,7 +1445,7 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame Debuffs
 	local raidDebuffs = B.CreateButton(guiPage[4].child, 150, 30, L["RaidFrame Debuffs"].."*")
-	raidDebuffs:SetPoint("TOPLEFT", 340, -440)
+	raidDebuffs:SetPoint("TOPLEFT", 340, -470)
 	raidDebuffs.text:SetTextColor(.6, .8, 1)
 	raidDebuffs:SetScript("OnClick", function()
 		setupRaidDebuffs()
@@ -1453,13 +1454,13 @@ local function OpenGUI()
 
 	-- Toggle RaidFrame ClickSets
 	local clickSet = B.CreateButton(guiPage[4].child, 150, 30, L["Add ClickSets"])
-	clickSet:SetPoint("TOPLEFT", 40, -440)
+	clickSet:SetPoint("TOPLEFT", 40, -470)
 	clickSet.text:SetTextColor(.6, .8, 1)
 	clickSet:SetScript("OnClick", setupClickCast)
 
 	-- Toggle BuffIndicator
 	local buffIndicator = B.CreateButton(guiPage[4].child, 150, 30, L["BuffIndicator Setup"].."*")
-	buffIndicator:SetPoint("TOPLEFT", 340, -310)
+	buffIndicator:SetPoint("TOPLEFT", 340, -320)
 	buffIndicator.text:SetTextColor(.6, .8, 1)
 	buffIndicator:SetScript("OnClick", setupBuffIndicator)
 
