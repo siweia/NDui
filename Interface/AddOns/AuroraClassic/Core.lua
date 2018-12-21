@@ -57,6 +57,7 @@ local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours
 local function SetupPixelFix()
 	local screenHeight = select(2, GetPhysicalScreenSize())
 	local scale = UIParent:GetScale()
+	scale = tonumber(floor(scale*100 + .5)/100)
 	C.mult = 768/screenHeight/scale
 end
 
