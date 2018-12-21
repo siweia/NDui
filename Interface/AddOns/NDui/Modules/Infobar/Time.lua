@@ -82,20 +82,6 @@ local questlist = {
 	{name = L["Timewarped"], id = 45799, texture = 1530590},	-- MoP
 }
 
-local invas = {
-	{quest = 38482, name = L["Platinum Invasion"]},
-	{quest = 37640, name = L["Gold Invasion"]},
-	{quest = 37639, name = L["Silver Invasion"]},
-	{quest = 37638, name = L["Bronze Invasion"]},
-}
-
-local tanaan = {
-	{name = L["Deathtalon"], id = 39287},
-	{name = L["Terrorfist"], id = 39288},
-	{name = L["Doomroller"], id = 39289},
-	{name = L["Vengeance"], id = 39290},
-}
-
 -- Check Invasion Status
 local invIndex = {
 	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = 1517274000}, -- 1/30 9:00 [1]
@@ -237,23 +223,6 @@ info.onEnter = function(self)
 				addTitle(QUESTS_LABEL)
 				GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
 			end
-		end
-	end
-
-	for _, v in pairs(invas) do
-		if v.quest and IsQuestFlaggedCompleted(v.quest) then
-			addTitle(QUESTS_LABEL)
-			GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
-			break
-		end
-	end
-
-	-- Tanaan rares
-	title = false
-	for _, boss in pairs(tanaan) do
-		if boss.name and IsQuestFlaggedCompleted(boss.id) then
-			addTitle(L["Tanaan"])
-			GameTooltip:AddDoubleLine(boss.name, BOSS_DEAD, 1,1,1, 1,0,0)
 		end
 	end
 
