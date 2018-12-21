@@ -103,7 +103,7 @@ function UF:CreateRaidDebuffs(self)
 	bu.icon:SetAllPoints()
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
 	bu.count = B.CreateFS(bu, 12, "", false, "BOTTOMRIGHT", 6, -3)
-	bu.time = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
+	bu.timer = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
 	bu.glowFrame = B.CreateBG(bu, 4)
 	bu.glowFrame:SetSize(size+8, size+8)
 
@@ -301,24 +301,13 @@ local counterOffsets = {
 }
 
 local function onUpdate(self, elapsed)
-	self.elapsed = (self.elapsed or 0) + elapsed
-	if self.elapsed >= .1 then
-		local timeLeft = self.expiration - GetTime()
-		if timeLeft > 0 then
-			local text = B.FormatTimeRaw(timeLeft)
-			self.timer:SetText(text)
-		else
-			self:SetScript("OnUpdate", nil)
-			self.timer:SetText(nil)
-		end
-		self.elapsed = 0
-	end
+	B.CooldownOnUpdate(self, elapsed, true)
 end
 
 local found = {}
 local function updateBuffIndicator(self, event, unit)
 	if self.unit ~= unit then return end
-	local spellList = C.CornerBuffs[DB.MyClass]
+	local spellList = NDuiADB["CornerBuffs"][DB.MyClass]
 	local icons = self.BuffIndicator
 
 	wipe(found)
@@ -365,48 +354,42 @@ end
 function UF:CreateBuffIndicator(self)
 	if not NDuiDB["UFs"]["RaidBuffIndicator"] then return end
 
-	local spellList = C.CornerBuffs[DB.MyClass]
-	if not next(spellList) then return end
+	local anchors = {"TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT"}
+	local icons = {}
+	for _, anchor in pairs(anchors) do
+		local icon = CreateFrame("Frame", nil, self)
+		icon:SetFrameLevel(self:GetFrameLevel()+10)
+		icon:SetSize(10, 10)
+		icon:SetPoint(anchor)
+		icon:Hide()
 
-	local cache, icons = {}, {}
-	for spell, value in pairs(spellList) do
-		local anchor, color = unpack(value)
-		if not cache[anchor] then
-			local icon = CreateFrame("Frame", nil, self)
-			icon:SetFrameLevel(self:GetFrameLevel()+10)
-			icon:SetSize(10, 10)
-			icon:SetPoint(anchor)
-			icon:Hide()
+		icon.count = B.CreateFS(icon, 12, "")
+		icon.count:ClearAllPoints()
+		if NDuiDB["UFs"]["BuffTimerIndicator"] then
+			icon.timer = B.CreateFS(icon, 12, "")
+			local point, anchorPoint, x, y = unpack(counterOffsets[anchor][2])
+			icon.count:SetPoint(point, icon.timer, anchorPoint, x, y)
+		else
+			icon.bg = icon:CreateTexture(nil, "BACKGROUND")
+			icon.bg:SetPoint("TOPLEFT", -C.mult, C.mult)
+			icon.bg:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+			icon.bg:SetTexture(DB.bdTex)
+			icon.bg:SetVertexColor(0, 0, 0)
 
-			icon.count = B.CreateFS(icon, 12, "")
-			icon.count:ClearAllPoints()
-			if NDuiDB["UFs"]["BuffTimerIndicator"] then
-				icon.timer = B.CreateFS(icon, 12, "")
-				local point, anchorPoint, x, y = unpack(counterOffsets[anchor][2])
-				icon.count:SetPoint(point, icon.timer, anchorPoint, x, y)
-			else
-				icon.bg = icon:CreateTexture(nil, "BACKGROUND")
-				icon.bg:SetPoint("TOPLEFT", -C.mult, C.mult)
-				icon.bg:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-				icon.bg:SetTexture(DB.bdTex)
-				icon.bg:SetVertexColor(0, 0, 0)
+			icon.icon = icon:CreateTexture(nil, "BORDER")
+			icon.icon:SetAllPoints()
+			icon.icon:SetTexture(DB.bdTex)
 
-				icon.icon = icon:CreateTexture(nil, "BORDER")
-				icon.icon:SetAllPoints()
-				icon.icon:SetTexture(DB.bdTex)
+			icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
+			icon.cd:SetAllPoints()
+			icon.cd:SetReverse(true)
+			icon.cd:SetHideCountdownNumbers(true)
 
-				icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
-				icon.cd:SetAllPoints()
-				icon.cd:SetReverse(true)
-				icon.cd:SetHideCountdownNumbers(true)
-
-				icon.count:SetPoint("CENTER", unpack(counterOffsets[anchor][1]))
-			end
-
-			icon.anchor = anchor
-			tinsert(icons, icon)
-			cache[anchor] = true
+			icon.count:SetPoint("CENTER", unpack(counterOffsets[anchor][1]))
 		end
+
+		icon.anchor = anchor
+		tinsert(icons, icon)
 	end
 
 	self.BuffIndicator = icons
