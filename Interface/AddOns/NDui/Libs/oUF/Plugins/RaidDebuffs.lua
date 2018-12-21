@@ -11,11 +11,6 @@ local next = next
 local class = DB.MyClass
 local RaidDebuffsIgnore, invalidPrio = {}, -1
 
-local auraFilters = {
-	["HARMFUL"] = true,
-	["HELPFUL"] = true,
-}
-
 local DispellColor = {
 	["Magic"]	= {.2, .6, 1},
 	["Curse"]	= {.6, 0, 1},
@@ -178,36 +173,32 @@ local function Update(self, _, unit)
 	local canAttack = UnitCanAttack("player", unit)
 	local prio
 
-	for filter in next, auraFilters do
-		local i = 0
-		while(true) do
-			i = i + 1
-			local name, icon, count, debuffType, duration, expiration, _, _, _, spellId = UnitAura(unit, i, filter)
-			if not name then break end
+	for i = 1, 40 do
+		local name, icon, count, debuffType, duration, expiration, _, _, _, spellId = UnitAura(unit, i, "HARMFUL")
+		if not name then break end
 
-			if rd.ShowDispellableDebuff and debuffType and filter == "HARMFUL" and (not isCharmed) and (not canAttack) then
-				if rd.FilterDispellableDebuff then
-					prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or 2
-					if prio == 2 then debuffType = nil end
-				else
-					prio = DispellPriority[debuffType]
-				end
-
-				if prio and prio > rd.priority then
-					rd.priority, rd.index, rd.filter = prio, i, filter
-					_name, _icon, _count, _debuffType, _duration, _expiration, _spellId = name, icon, count, debuffType, duration, expiration, spellId
-				end
+		if rd.ShowDispellableDebuff and debuffType and filter == "HARMFUL" and (not isCharmed) and (not canAttack) then
+			if rd.FilterDispellableDebuff then
+				prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or 2
+				if prio == 2 then debuffType = nil end
+			else
+				prio = DispellPriority[debuffType]
 			end
 
-			local instPrio
-			if instName and debuffs[instName] then
-				instPrio = debuffs[instName][spellId]
-			end
-
-			if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
-				rd.priority, rd.index, rd.filter = instPrio, i, filter
+			if prio and prio > rd.priority then
+				rd.priority, rd.index, rd.filter = prio, i, filter
 				_name, _icon, _count, _debuffType, _duration, _expiration, _spellId = name, icon, count, debuffType, duration, expiration, spellId
 			end
+		end
+
+		local instPrio
+		if instName and debuffs[instName] then
+			instPrio = debuffs[instName][spellId]
+		end
+
+		if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
+			rd.priority, rd.index, rd.filter = instPrio, i, filter
+			_name, _icon, _count, _debuffType, _duration, _expiration, _spellId = name, icon, count, debuffType, duration, expiration, spellId
 		end
 	end
 
