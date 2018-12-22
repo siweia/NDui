@@ -221,6 +221,7 @@ local defaultSettings = {
 		ExplosiveCount = false,
 		ExplosiveCache = {},
 		PlacedItemAlert = false,
+		RareAlertInWild = false,
 	},
 	Tutorial = {
 		Complete = false,
@@ -445,7 +446,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
 		{},--blank
 		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"]},
-		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*", true},
+		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*"},
+		{1, "Misc", "RareAlertInWild", L["RareAlertInWild"].."*", true},
 	},
 	[8] = {
 		{1, "Chat", "Lock", "|cff00cc4c"..L["Lock Chat"]},
