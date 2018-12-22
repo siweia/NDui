@@ -88,31 +88,30 @@ local invIndex = {
 	[2] = {title = L["BfA Invasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1544691600}, -- 12/13 17:00 [1]
 }
 
-local function GetInvasionTimeLeft(areaPoiID, mapID)
-	local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
-	if seconds then
-		local mapInfo = C_Map.GetMapInfo(mapID)
-		return seconds, mapInfo.name
-	end
-end
+local mapAreaPoiIDs = {
+	[630] = 5175,
+	[641] = 5210,
+	[650] = 5177,
+	[634] = 5178,
+	[862] = 5973,
+	[863] = 5969,
+	[864] = 5970,
+	[896] = 5964,
+	[942] = 5966,
+	[895] = 5896,
+}
 
 local function GetInvasionInfo(mapID)
-	local banners = C_Map.GetMapBannersForMap(mapID)
-	for _, info in pairs(banners) do
-		if info then
-			if info.uiTextureKit == "LegionInvasion" then
-				return 1, GetInvasionTimeLeft(info.areaPoiID, mapID)
-			elseif info.atlasName and strfind(info.atlasName, "Emblem") then
-				return 2, GetInvasionTimeLeft(info.areaPoiID, mapID)
-			end
-		end
-	end
+	local areaPoiID = mapAreaPoiIDs[mapID]
+	local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
+	local mapInfo = C_Map.GetMapInfo(mapID)
+	return seconds, mapInfo.name
 end
 
-local function CheckInvasion(zones, index)
-	for _, mapID in pairs(zones) do
-		local invType, timeLeft, name = GetInvasionInfo(mapID)
-		if invType and invType == index then
+local function CheckInvasion(index)
+	for _, mapID in pairs(invIndex[index].maps) do
+		local timeLeft, name = GetInvasionInfo(mapID)
+		if timeLeft and timeLeft > 0 then
 			return timeLeft, name
 		end
 	end
@@ -230,7 +229,7 @@ info.onEnter = function(self)
 	for index, value in ipairs(invIndex) do
 		title = false
 		addTitle(value.title)
-		local timeLeft, zoneName = CheckInvasion(value.maps, index)
+		local timeLeft, zoneName = CheckInvasion(index)
 		local nextTime = GetNextTime(value.baseTime, index)
 		if timeLeft then
 			timeLeft = timeLeft/60
