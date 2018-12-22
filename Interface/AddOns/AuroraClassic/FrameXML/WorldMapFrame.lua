@@ -21,5 +21,5 @@ tinsert(C.themes["AuroraClassic"], function()
 	sideToggle.CloseButton:GetRegions():Hide()
 	F.ReskinArrow(sideToggle.CloseButton, "left")
 
-	--F.ReskinNavBar(WorldMapFrame.NavBar)
+	F.ReskinNavBar(WorldMapFrame.NavBar)
 end)
