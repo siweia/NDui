@@ -65,7 +65,6 @@ C.CornerBuffs = {
 -- 团队框体职业相关Buffs
 local list = {
 	["ALL"] = {			-- 全职业
-		-- Buffs
 		[642] = true,		-- 圣盾术
 		[1022] = true,		-- 保护祝福
 		[204018] = true,	-- 破咒祝福
@@ -86,7 +85,8 @@ local list = {
 		[115203] = true,	-- 壮胆酒
 		[104773] = true,	-- 不灭决心
 		[108271] = true,	-- 星界转移
-		-- Debuffs
+	},
+	["WARNING"] = {
 		[87023] = true,		-- 灸灼
 		[95809] = true,		-- 疯狂
 		[123981] = true,	-- 永劫不复

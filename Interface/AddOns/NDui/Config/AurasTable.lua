@@ -57,7 +57,7 @@ end
 local RaidBuffs = {}
 function module:AddClassSpells(list)
 	for class, value in pairs(list) do
-		if class == "ALL" or class == DB.MyClass then
+		if class == "ALL" or class == "WARNING" or class == DB.MyClass then
 			RaidBuffs[class] = value
 		end
 	end
@@ -115,7 +115,7 @@ function module:OnLogin()
 	local bloodlustList = {57723, 57724, 80354, 264689}
 	local function filterBloodlust()
 		for _, spellID in pairs(bloodlustList) do
-			C.RaidBuffs["ALL"][spellID] = (DB.Role ~= "Healer")
+			C.RaidBuffs["WARNING"][spellID] = (DB.Role ~= "Healer")
 		end
 	end
 	filterBloodlust()
