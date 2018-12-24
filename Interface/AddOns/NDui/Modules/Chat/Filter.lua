@@ -91,6 +91,9 @@ end
 
 local function chatAtMe(_, _, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
+	author = Ambiguate(author, "short")
+	if author == DB.MyName then return end
+
 	for word in pairs(chatAtList) do
 		if word ~= "" then
 			if strmatch(msg:lower(), word:lower()) then
@@ -113,7 +116,7 @@ hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 		self.DoubleLine:Show()
 
 		local hexColor = B.HexRGB(B.ClassColor(at.class))
-		self.DoubleLine:SetText(format(L["Mention You"], hexColor..Ambiguate(at.author, "short")..DB.InfoColor))
+		self.DoubleLine:SetText(format(L["Mention You"], hexColor..at.author..DB.InfoColor))
 		at.checker = false
 	end
 end)
