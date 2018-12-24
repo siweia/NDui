@@ -421,11 +421,7 @@ function B.FormatTimeRaw(s)
 	elseif s >= 3 then
 		return floor(s)
 	else
-		if NDuiDB["Actionbar"]["DecimalCD"] then
-			return format("%.1f", s)
-		else
-			return format("%d", s + .5)
-		end
+		return format("%d", s)
 	end
 end
 
