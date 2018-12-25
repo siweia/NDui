@@ -597,6 +597,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
 	F.StripTextures(SetsTransmogFrame)
+	F.RemoveSlice(WardrobeCollectionFrame.SetsTransmogFrame)
 	F.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
 	F.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
 
