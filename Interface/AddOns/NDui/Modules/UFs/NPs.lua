@@ -34,6 +34,7 @@ function UF:SetupCVars()
 	B.UpdatePlateRange()
 	B.UpdatePlateAlpha()
 	SetCVar("nameplateSelectedAlpha", 1)
+	SetCVar("showQuestTrackingTooltips", 1)
 
 	SetCVar("namePlateMinScale", .8)
 	SetCVar("namePlateMaxScale", .8)
