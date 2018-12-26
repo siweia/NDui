@@ -6,7 +6,12 @@ local module = B:GetModule("Misc")
 	一个工具条用来替代系统的经验条、声望条、神器经验等等
 ]]
 local format, pairs = string.format, pairs
-local math_min, mod, floor = math.min, mod, math.floor
+local min, mod, floor = math.min, mod, math.floor
+local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
+local MAX_REPUTATION_REACTION = MAX_REPUTATION_REACTION
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS
+local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
+local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
 
 local function UpdateBar(bar)
 	local rest = bar.restBar
@@ -20,35 +25,35 @@ local function UpdateBar(bar)
 		bar:Show()
 		if rxp then
 			rest:SetMinMaxValues(0, mxp)
-			rest:SetValue(math_min(xp + rxp, mxp))
+			rest:SetValue(min(xp + rxp, mxp))
 			rest:Show()
 		end
 		if IsXPUserDisabled() then bar:SetStatusBarColor(.7, 0, 0) end
 	elseif GetWatchedFactionInfo() then
-		local _, standing, min, max, value, factionID = GetWatchedFactionInfo()
+		local _, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 		if friendID then
 			if nextFriendThreshold then
-				min, max, value = friendThreshold, nextFriendThreshold, friendRep
+				barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
 			else
-				min, max, value = 0, 1, 1
+				barMin, barMax, value = 0, 1, 1
 			end
 			standing = 5
 		elseif C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 			currentValue = mod(currentValue, threshold)
-			min, max, value = 0, threshold, currentValue
+			barMin, barMax, value = 0, threshold, currentValue
 		else
-			if standing == MAX_REPUTATION_REACTION then min, max, value = 0, 1, 1 end
+			if standing == MAX_REPUTATION_REACTION then barMin, barMax, value = 0, 1, 1 end
 		end
 		bar:SetStatusBarColor(FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b, .85)
-		bar:SetMinMaxValues(min, max)
+		bar:SetMinMaxValues(barMin, barMax)
 		bar:SetValue(value)
 		bar:Show()
 	elseif IsWatchingHonorAsXP() then
-		local current, max = UnitHonor("player"), UnitHonorMax("player")
+		local current, barMax = UnitHonor("player"), UnitHonorMax("player")
 		bar:SetStatusBarColor(1, .24, 0)
-		bar:SetMinMaxValues(0, max)
+		bar:SetMinMaxValues(0, barMax)
 		bar:SetValue(current)
 		bar:Show()
 	elseif C_AzeriteItem.HasActiveAzeriteItem() then
@@ -92,7 +97,7 @@ local function UpdateTooltip(bar)
 	end
 
 	if GetWatchedFactionInfo() then
-		local name, standing, min, max, value, factionID = GetWatchedFactionInfo()
+		local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local friendID, _, _, _, _, _, friendTextLevel, _, nextFriendThreshold = GetFriendshipReputation(factionID)
 		local currentRank, maxRank = GetFriendshipReputationRanks(friendID)
 		local standingtext
@@ -101,19 +106,19 @@ local function UpdateTooltip(bar)
 				name = name.." ("..currentRank.." / "..maxRank..")"
 			end
 			if not nextFriendThreshold then
-				value = max - 1
+				value = barMax - 1
 			end
 			standingtext = friendTextLevel
 		else
 			if standing == MAX_REPUTATION_REACTION then
-				max = min + 1e3
-				value = max - 1
+				barMax = barMin + 1e3
+				value = barMax - 1
 			end
 			standingtext = GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))
 		end
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(name, 0,.6,1)
-		GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(standingtext, value - barMin.."/"..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", .6,.8,1, 1,1,1)
 
 		if C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
@@ -124,10 +129,10 @@ local function UpdateTooltip(bar)
 	end
 
 	if IsWatchingHonorAsXP() then
-		local current, max, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
+		local current, barMax, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(HONOR, .0,.6,1)
-		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..max, .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..barMax, .6,.8,1, 1,1,1)
 	end
 
 	if C_AzeriteItem.HasActiveAzeriteItem() then
@@ -211,4 +216,32 @@ function module:Expbar()
 	bar.restBar = rest
 
 	self:SetupScript(bar)
+
+	hooksecurefunc("ReputationFrame_Update", module.HookParagonRep)
+end
+
+function module:HookParagonRep()
+	local numFactions = GetNumFactions()
+	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
+	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
+		local factionIndex = factionOffset + i
+		local factionRow = _G["ReputationBar"..i]
+		local factionBar = _G["ReputationBar"..i.."ReputationBar"]
+		local factionStanding = _G["ReputationBar"..i.."ReputationBarFactionStanding"]
+
+		if factionIndex <= numFactions then
+			local factionID = select(14, GetFactionInfo(factionIndex))
+			if factionID and C_Reputation.IsFactionParagon(factionID) then
+				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+				local barValue = mod(currentValue, threshold)
+				local factionStandingtext = DB.InfoColor..L["Paragon"]..floor(currentValue/threshold)
+
+				factionBar:SetMinMaxValues(0, threshold)
+				factionBar:SetValue(barValue)
+				factionStanding:SetText(factionStandingtext)
+				factionRow.standingText = factionStandingtext
+				factionRow.rolloverText = DB.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+			end
+		end
+	end
 end
