@@ -3,73 +3,60 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_VoidStorageUI"] = function()
 	F.SetBD(VoidStorageFrame, 20, 0, 0, 20)
 	F.CreateBD(VoidStoragePurchaseFrame)
-
-	VoidStorageBorderFrame:DisableDrawLayer("BORDER")
-	VoidStorageBorderFrame:DisableDrawLayer("BACKGROUND")
-	VoidStorageBorderFrame:DisableDrawLayer("OVERLAY")
-	VoidStorageDepositFrame:DisableDrawLayer("BACKGROUND")
-	VoidStorageDepositFrame:DisableDrawLayer("BORDER")
-	VoidStorageWithdrawFrame:DisableDrawLayer("BACKGROUND")
-	VoidStorageWithdrawFrame:DisableDrawLayer("BORDER")
-	VoidStorageCostFrame:DisableDrawLayer("BACKGROUND")
-	VoidStorageCostFrame:DisableDrawLayer("BORDER")
-	VoidStorageStorageFrame:DisableDrawLayer("BACKGROUND")
-	VoidStorageStorageFrame:DisableDrawLayer("BORDER")
+	F.StripTextures(VoidStorageBorderFrame)
+	F.StripTextures(VoidStorageDepositFrame)
+	F.StripTextures(VoidStorageWithdrawFrame)
+	F.StripTextures(VoidStorageCostFrame)
+	F.StripTextures(VoidStorageStorageFrame)
 	VoidStorageFrameMarbleBg:Hide()
-	select(2, VoidStorageFrame:GetRegions()):Hide()
 	VoidStorageFrameLines:Hide()
-	VoidStorageStorageFrameLine1:Hide()
-	VoidStorageStorageFrameLine2:Hide()
-	VoidStorageStorageFrameLine3:Hide()
-	VoidStorageStorageFrameLine4:Hide()
-	select(12, VoidStorageDepositFrame:GetRegions()):Hide()
-	select(12, VoidStorageWithdrawFrame:GetRegions()):Hide()
-	for i = 1, 10 do
-		select(i, VoidStoragePurchaseFrame:GetRegions()):Hide()
-	end
+	select(2, VoidStorageFrame:GetRegions()):Hide()
+	F.RemoveSlice(VoidStorageDepositFrame)
+	F.RemoveSlice(VoidStorageWithdrawFrame)
+	F.RemoveSlice(VoidStorageCostFrame)
+	F.RemoveSlice(VoidStorageStorageFrame)
 
-	for _, voidButton in pairs({"VoidStorageDepositButton", "VoidStorageWithdrawButton"}) do
-		for i = 1, 9 do
-			local bu = _G[voidButton..i]
-			local border = bu.IconBorder
-
+	local function reskinIcons(bu, quality)
+		if not bu.bg then
 			bu:SetPushedTexture("")
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			_G[voidButton..i.."Bg"]:Hide()
+			bu.IconBorder:SetAlpha(0)
+			bu.bg = F.CreateBDFrame(bu, .25)
+			local bg, icon, _, search = bu:GetRegions()
+			bg:Hide()
+			icon:SetTexCoord(.08, .92, .08, .92)
+			search:SetAllPoints(bu.bg)
+		end
 
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
+		local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+		bu.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+	end
 
-			border:SetTexture(C.media.backdrop)
-			border.SetTexture = F.dummy
-			border:SetPoint("TOPLEFT", -C.mult, C.mult)
-			border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-			border:SetDrawLayer("BACKGROUND")
+	local function hookItemsUpdate(doDeposit, doContents)
+		local self = VoidStorageFrame
+		if doDeposit then
+			for i = 1, 9 do
+				local quality = select(3, GetVoidTransferDepositInfo(i))
+				local bu = _G["VoidStorageDepositButton"..i]
+				reskinIcons(bu, quality)
+			end
+		end
 
-			F.CreateBDFrame(bu, .25)
+		if doContents then
+			for i = 1, 9 do
+				local quality = select(3, GetVoidTransferWithdrawalInfo(i))
+				local bu = _G["VoidStorageWithdrawButton"..i]
+				reskinIcons(bu, quality)
+			end
+
+			for i = 1, 80 do
+				local quality = select(6, GetVoidItemInfo(self.page, i))
+				local bu = _G["VoidStorageStorageButton"..i]
+				reskinIcons(bu, quality)
+			end
 		end
 	end
-
-	for i = 1, 80 do
-		local bu = _G["VoidStorageStorageButton"..i]
-		local border = bu.IconBorder
-		local searchOverlay = bu.searchOverlay
-
-		bu:SetPushedTexture("")
-		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		F.CreateBDFrame(bu, .25)
-
-		border:SetTexture(C.media.backdrop)
-		border.SetTexture = F.dummy
-		border:SetPoint("TOPLEFT", -C.mult, C.mult)
-		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-		border:SetDrawLayer("BACKGROUND")
-
-		searchOverlay:SetPoint("TOPLEFT", -C.mult, C.mult)
-		searchOverlay:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-
-		_G["VoidStorageStorageButton"..i.."Bg"]:Hide()
-		_G["VoidStorageStorageButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-	end
+	hooksecurefunc("VoidStorage_ItemsUpdate", hookItemsUpdate)
 
 	for i = 1, 2 do
 		local tab = VoidStorageFrame["Page"..i]
@@ -86,6 +73,6 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 	F.Reskin(VoidStoragePurchaseButton)
 	F.Reskin(VoidStorageHelpBoxButton)
 	F.Reskin(VoidStorageTransferButton)
-	F.ReskinClose(VoidStorageBorderFrame:GetChildren(), nil)
+	F.ReskinClose(VoidStorageBorderFrame.CloseButton)
 	F.ReskinInput(VoidItemSearchBox)
 end
