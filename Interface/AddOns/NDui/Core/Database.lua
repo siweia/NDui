@@ -24,7 +24,7 @@ for class in pairs(colors) do
 end
 DB.r, DB.g, DB.b = DB.ClassColors[DB.MyClass].r, DB.ClassColors[DB.MyClass].g, DB.ClassColors[DB.MyClass].b
 DB.MyColor = format("|cff%02x%02x%02x", DB.r*255, DB.g*255, DB.b*255)
-DB.InfoColor = "|cff70c0f5"
+DB.InfoColor = "|cff99ccff" --.6,.8,1
 DB.GreyColor = "|cff808080"
 BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
 BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
