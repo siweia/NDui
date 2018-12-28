@@ -9,4 +9,6 @@
 	<Script file="Legion\AntorusBurningThrone.lua"/>
 	<Script file="BfA\Party-BfA.lua"/>
 	<Script file="BfA\Uldir.lua"/>
+	<Script file="BfA\ZuldazarRaid.lua"/>
+	<Script file="BfA\CrucibleofStorms.lua"/>
 </Ui>
