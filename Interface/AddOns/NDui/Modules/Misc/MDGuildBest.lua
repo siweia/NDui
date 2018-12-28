@@ -45,7 +45,7 @@ function module:GuildBest()
 			entry.Level:ClearAllPoints()
 			entry.Level:SetPoint("LEFT", entry, "RIGHT", -22, 0)
 			entry:SetScript("OnEnter", UpdateTooltip)
-			entry:SetScript("OnLeave", GameTooltip_Hide)
+			entry:SetScript("OnLeave", B.HideTooltip)
 
 			if i == 1 then
 				entry:SetPoint("TOP", frame, 0, -26)

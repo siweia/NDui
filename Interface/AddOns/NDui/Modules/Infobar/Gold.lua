@@ -131,7 +131,7 @@ info.onEnter = function(self)
 	GameTooltip:Show()
 end
 
-info.onLeave = function() GameTooltip:Hide() end
+info.onLeave = B.HideTooltip
 
 -- Auto selljunk
 local sellCount, stop, cache = 0, true, {}

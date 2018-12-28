@@ -38,7 +38,7 @@ function Bar:CreateLeaveVehicle()
 	end
 	button:SetScript("OnClick", onClick)
 	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
-	button:SetScript("OnLeave", GameTooltip_Hide)
+	button:SetScript("OnLeave", B.HideTooltip)
 
 	--frame visibility
 	frame.frameVisibility = "[canexitvehicle]c;[mounted]m;n"

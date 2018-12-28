@@ -313,7 +313,7 @@ function module:CreateRM()
 		end
 		GameTooltip:Show()
 	end)
-	checker:HookScript("OnLeave", GameTooltip_Hide)
+	checker:HookScript("OnLeave", B.HideTooltip)
 
 	local reset = true
 	checker:HookScript("OnMouseDown", function(_, btn)

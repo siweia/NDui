@@ -132,7 +132,7 @@ end
 
 -----> STYLED CODE START
 -- BuildICON
-local function updateTooltip(self)
+local function tooltipOnEnter(self)
 	GameTooltip:ClearLines()
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 3)
 	if self.type == 1 then
@@ -152,8 +152,8 @@ local function enableTooltip(self)
 	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 	self.HL:SetColorTexture(1, 1, 1, .25)
 	self.HL:SetAllPoints(self.Icon)
-	self:SetScript("OnEnter", updateTooltip)
-	self:SetScript("OnLeave", GameTooltip_Hide)
+	self:SetScript("OnEnter", tooltipOnEnter)
+	self:SetScript("OnLeave", B.HideTooltip)
 end
 
 local function BuildICON(iconSize)

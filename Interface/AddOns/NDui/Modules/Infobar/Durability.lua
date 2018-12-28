@@ -127,7 +127,7 @@ info.onEnter = function(self)
 	GameTooltip:Show()
 end
 
-info.onLeave = function() GameTooltip:Hide() end
+info.onLeave = B.HideTooltip
 
 -- Auto repair
 local isShown, isBankEmpty

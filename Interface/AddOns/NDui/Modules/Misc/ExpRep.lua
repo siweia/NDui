@@ -185,7 +185,7 @@ function module:SetupScript(bar)
 	end
 	bar:SetScript("OnEvent", UpdateBar)
 	bar:SetScript("OnEnter", UpdateTooltip)
-	bar:SetScript("OnLeave", GameTooltip_Hide)
+	bar:SetScript("OnLeave", B.HideTooltip)
 	bar:SetScript("OnMouseUp", function(_, btn)
 		if not HasArtifactEquipped() or btn ~= "LeftButton" then return end
 		if not ArtifactFrame or not ArtifactFrame:IsShown() then

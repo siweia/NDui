@@ -19,7 +19,7 @@ do
 		GameTooltip:AddLine(L["Toggle"], 1, .8, 0)
 		GameTooltip:Show()
 	end)
-	minimize:HookScript("OnLeave", GameTooltip_Hide)
+	minimize:HookScript("OnLeave", B.HideTooltip)
 
 	hooksecurefunc(tracker, "SetPoint", function(_, _, parent)
 		if parent ~= mover then

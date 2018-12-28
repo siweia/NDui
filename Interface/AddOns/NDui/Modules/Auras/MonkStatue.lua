@@ -22,7 +22,7 @@ local function StatueGo()
 		GameTooltip:SetTotem(1)
 		GameTooltip:Show()
 	end)
-	bu:SetScript("OnLeave", GameTooltip_Hide)
+	bu:SetScript("OnLeave", B.HideTooltip)
 
 	B.Mover(bu, L["Statue"], "Statue", C.Auras.StatuePos, IconSize, IconSize)
 end

@@ -164,7 +164,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 
 	self:SetSize(ExtraActionButton1:GetSize())
 	self:SetScale(ExtraActionButton1:GetScale())
-	self:SetScript("OnLeave", GameTooltip_Hide)
+	self:SetScript("OnLeave", B.HideTooltip)
 	self:SetClampedToScreen(true)
 	self:SetToplevel(true)
 
