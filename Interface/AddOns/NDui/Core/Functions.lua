@@ -105,24 +105,33 @@ function B:CreateFS(size, text, classcolor, anchor, x, y)
 end
 
 -- GameTooltip
-function B:AddTooltip(anchor, text, color)
-	self:SetScript("OnEnter", function()
-		GameTooltip:SetOwner(self, anchor)
-		GameTooltip:ClearLines()
-		if tonumber(text) then
-			GameTooltip:SetSpellByID(text)
-		else
-			local r, g, b = 1, 1, 1
-			if color == "class" then
-				r, g, b = cr, cg, cb
-			elseif color == "system" then
-				r, g, b = 1, .8, 0
-			end
-			GameTooltip:AddLine(text, r, g, b)
+function B:HideTooltip()
+	GameTooltip:Hide()
+end
+
+local function tooltipOnEnter(self)
+	GameTooltip:SetOwner(self, self.anchor)
+	GameTooltip:ClearLines()
+	if tonumber(self.text) then
+		GameTooltip:SetSpellByID(self.text)
+	else
+		local r, g, b = 1, 1, 1
+		if self.color == "class" then
+			r, g, b = cr, cg, cb
+		elseif self.color == "system" then
+			r, g, b = 1, .8, 0
 		end
-		GameTooltip:Show()
-	end)
-	self:SetScript("OnLeave", GameTooltip_Hide)
+		GameTooltip:AddLine(self.text, r, g, b)
+	end
+	GameTooltip:Show()
+end
+
+function B:AddTooltip(anchor, text, color)
+	self.anchor = anchor
+	self.text = text
+	self.color = color
+	self:SetScript("OnEnter", tooltipOnEnter)
+	self:SetScript("OnLeave", B.HideTooltip)
 end
 
 -- Button Color
