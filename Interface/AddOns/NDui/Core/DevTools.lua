@@ -10,6 +10,7 @@ local B, C, L, DB = unpack(ns)
 	/ng, show grid on WorldFrame
 	/getid, get instance id
 	/getnpc, get npc name and id
+	/getenc, get selected encounters info
 ]]
 
 local strfind, format, strsplit = string.find, string.format, string.split
@@ -144,6 +145,28 @@ do
 	SLASH_NDUI_VER_CHECK1 = "/nduiver"
 end
 
+SlashCmdList["NDUI_GET_ENCOUNTERS"] = function()
+	if not EncounterJournal then return end
+	local tierID = EJ_GetCurrentTier()
+	local instID = EncounterJournal.instanceID
+	EJ_SelectInstance(instID)
+	local instName = EJ_GetInstanceInfo()
+	print("local _, ns = ...")
+	print("local B, C, L, DB = unpack(ns)")
+	print("local module = B:GetModule(\"AurasTable\")")
+	print("local TIER = "..tierID)
+	print("local INSTANCE = "..instID.." -- "..instName)
+	print("local BOSS")
+	local i = 0
+	while true do
+		i = i + 1
+		local name, _, boss = EJ_GetEncounterInfoByIndex(i)
+		if not name then return end
+		print("BOSS = "..boss.." -- "..name)
+	end
+end
+SLASH_NDUI_GET_ENCOUNTERS1 = "/getenc"
+
 -- Grids
 local grid
 local boxSize = 32
@@ -218,3 +241,17 @@ SlashCmdList["TOGGLEGRID"] = function(arg)
 	end
 end
 SLASH_TOGGLEGRID1 = "/ng"
+--[[
+local function onAccept(event, ...)
+	C_PetBattles.AcceptQueuedPVPMatch()
+	StaticPopupSpecial_Hide(PetBattleQueueReadyFrame)
+end
+B:RegisterEvent("PET_BATTLE_QUEUE_PROPOSE_MATCH", onAccept)
+
+local function onStart(event, msg)
+	if msg == "PET_QUEUE" then
+		C_PetBattles.StartPVPMatchmaking()
+	end
+end
+B:RegisterEvent("CHAT_MSG_PARTY", onStart)
+B:RegisterEvent("CHAT_MSG_PARTY_LEADER", onStart)]]
