@@ -534,7 +534,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.1, 2}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
-		{3, "ACCOUNT", "GUIScale", L["GUI Scale"].."*", false, {.5, 1.5, 2}, setupGUIScale},
+		{3, "ACCOUNT", "GUIScale", L["GUI Scale"].."*", false, {.5, 1.5, 1}, setupGUIScale},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 	},
 }
@@ -553,25 +553,31 @@ local function SelectTab(i)
 	end
 end
 
+local function tabOnClick(self)
+	PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+	SelectTab(self.index)
+end
+local function tabOnEnter(self)
+	if self.checked then return end
+	self:SetBackdropColor(cr, cg, cb, .3)
+end
+local function tabOnLeave(self)
+	if self.checked then return end
+	self:SetBackdropColor(0, 0, 0, .3)
+end
+
 local function CreateTab(parent, i, name)
 	local tab = CreateFrame("Button", nil, parent)
 	tab:SetPoint("TOPLEFT", 20, -30*i - 20)
 	tab:SetSize(130, 28)
 	B.CreateBD(tab, .3)
 	B.CreateFS(tab, 15, name, "system", "LEFT", 10, 0)
+	tab.index = i
 
-	tab:SetScript("OnClick", function()
-		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
-		SelectTab(i)
-	end)
-	tab:SetScript("OnEnter", function(self)
-		if self.checked then return end
-		self:SetBackdropColor(cr, cg, cb, .3)
-	end)
-	tab:SetScript("OnLeave", function(self)
-		if self.checked then return end
-		self:SetBackdropColor(0, 0, 0, .3)
-	end)
+	tab:SetScript("OnClick", tabOnClick)
+	tab:SetScript("OnEnter", tabOnEnter)
+	tab:SetScript("OnLeave", tabOnLeave)
+
 	return tab
 end
 
@@ -589,6 +595,14 @@ local function NDUI_VARIABLE(key, value, newValue)
 			return NDuiDB[key][value]
 		end
 	end
+end
+
+local function editBoxOnEnter(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:ClearLines()
+	GameTooltip:AddLine(L["Tips"])
+	GameTooltip:AddLine(L["EdieBox Tip"], .6,.8,1)
+	GameTooltip:Show()
 end
 
 local function CreateOption(i)
@@ -635,14 +649,8 @@ local function CreateOption(i)
 				NDUI_VARIABLE(key, value, eb:GetText())
 				if callback then callback() end
 			end)
-			eb:SetScript("OnEnter", function(self)
-				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-				GameTooltip:ClearLines()
-				GameTooltip:AddLine(L["Tips"])
-				GameTooltip:AddLine(L["EdieBox Tip"], .6,.8,1)
-				GameTooltip:Show()
-			end)
-			eb:SetScript("OnLeave", GameTooltip_Hide)
+			eb:SetScript("OnEnter", editBoxOnEnter)
+			eb:SetScript("OnLeave", B.HideTooltip)
 
 			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
 		-- Slider
@@ -808,34 +816,24 @@ function setupRaidDebuffs()
 	raidDebuffsGUI = createExtraGUI(guiPage[4], L["RaidFrame Debuffs"].."*", true)
 	raidDebuffsGUI:SetScript("OnHide", B.UpdateRaidDebuffs)
 
-	local barTable = {}
-	local function updateBars(instName)
-		for name, value in pairs(barTable) do
-			if name == instName then
-				for _, bar in pairs(value) do
-					bar:Show()
-				end
-			else
-				for _, bar in pairs(value) do
-					bar:Hide()
-				end
-			end
-		end
-	end
-
+	local setupBars
 	local frame = raidDebuffsGUI.bg
-	local options = {}
+	local bars, options = {}, {}
+
 	local iType = module:CreateDropdown(frame, L["Type*"], 10, -30, {DUNGEONS, RAID}, L["Instance Type"])
 	for i = 1, 2 do
 		iType.options[i]:HookScript("OnClick", function()
 			for j = 1, 2 do
 				module:ClearEdit(options[j])
-				updateBars("")
 				if i == j then
 					options[j]:Show()
 				else
 					options[j]:Hide()
 				end
+			end
+
+			for k = 1, #bars do
+				bars[k]:Hide()
 			end
 		end)
 	end
@@ -847,19 +845,14 @@ function setupRaidDebuffs()
 	end
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1031),
+		[2] = EJ_GetInstanceInfo(1176),
+		[3] = EJ_GetInstanceInfo(1177),
 	}
 
 	options[1] = module:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
 	options[2] = module:CreateDropdown(frame, RAID.."*", 120, -30, raids, L["Raid Intro"], 130, 30)
 	options[2]:Hide()
-	for i = 1, 2 do
-		for j = 1, #options[i].options do
-			options[i].options[j]:HookScript("OnClick", function(self)
-				updateBars(self.text)
-			end)
-		end
-	end
 
 	options[3] = module:CreateEditbox(frame, "ID*", 10, -90, L["ID Intro"])
 	options[4] = module:CreateEditbox(frame, L["Priority"], 120, -90, L["Priority Intro"])
@@ -877,54 +870,6 @@ function setupRaidDebuffs()
 		GameTooltip:AddLine(L["Tips"])
 		GameTooltip:AddLine(L["Prio Editbox"], .6,.8,1)
 		GameTooltip:Show()
-	end
-
-	local function createBar(parent, instName, spellID, priority)
-		local name, _, texture = GetSpellInfo(spellID)
-
-		local bar = CreateFrame("Frame", nil, parent)
-		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
-		if not barTable[instName] then barTable[instName] = {} end
-		barTable[instName][spellID] = bar
-
-		local icon, close = module:CreateBarWidgets(bar, texture)
-		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
-		close:SetScript("OnClick", function()
-			bar:Hide()
-			if C.RaidDebuffs[instName][spellID] then
-				if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
-				NDuiADB["RaidDebuffs"][instName][spellID] = 0
-			else
-				NDuiADB["RaidDebuffs"][instName][spellID] = nil
-			end
-			barTable[instName][spellID] = nil
-			sortBars(barTable[instName])
-		end)
-
-		local spellName = B.CreateFS(bar, 14, name, false, "LEFT", 30, 0)
-		spellName:SetWidth(120)
-		spellName:SetJustifyH("LEFT")
-		local prioBox = B.CreateEditBox(bar, 30, 24)
-		prioBox:SetPoint("RIGHT", close, "LEFT", -15, 0)
-		prioBox:SetTextInsets(10, 0, 0, 0)
-		prioBox:SetMaxLetters(1)
-		prioBox:SetTextColor(0, 1, 0)
-		prioBox:SetBackdropColor(1, 1, 1, .2)
-		prioBox:SetText(priority)
-		prioBox:HookScript("OnEscapePressed", function(self)
-			self:SetText(priority)
-		end)
-		prioBox:HookScript("OnEnterPressed", function(self)
-			local prio = analyzePrio(tonumber(self:GetText()))
-			if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
-			NDuiADB["RaidDebuffs"][instName][spellID] = prio
-			self:SetText(prio)
-		end)
-		prioBox:SetScript("OnEnter", setupBoxTip)
-		prioBox:SetScript("OnLeave", GameTooltip_Hide)
-
-		sortBars(barTable[instName])
 	end
 
 	local function isAuraExisted(instName, spellID)
@@ -946,7 +891,7 @@ function setupRaidDebuffs()
 		priority = analyzePrio(priority)
 		if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
 		NDuiADB["RaidDebuffs"][instName][spellID] = priority
-		createBar(scroll.child, instName, spellID, priority)
+		setupBars(instName)
 		module:ClearEdit(options[3])
 		module:ClearEdit(options[4])
 	end
@@ -976,24 +921,124 @@ function setupRaidDebuffs()
 	scroll.clear:SetPoint("RIGHT", scroll.add, "LEFT", -10, 0)
 	scroll.clear:SetScript("OnClick", function()
 		clearEdit(options)
-		updateBars("")
 	end)
 
-	for instName, value in pairs(C.RaidDebuffs) do
-		for spell, priority in pairs(value) do
-			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell]) then
-				createBar(scroll.child, instName, spell, priority)
+	local function iconOnEnter(self)
+		local spellID = self:GetParent().spellID
+		if not spellID then return end
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:SetSpellByID(spellID)
+		GameTooltip:Show()
+	end
+
+	local function createBar(index)
+		local bar = CreateFrame("Frame", nil, scroll.child)
+		bar:SetSize(220, 30)
+		B.CreateBD(bar, .3)
+		bar.index = index
+
+		local instName = bar.instName
+		local spellID = bar.spellID
+		local priority = bar.priority
+
+		local icon, close = module:CreateBarWidgets(bar, texture)
+		icon:SetScript("OnEnter", iconOnEnter)
+		icon:SetScript("OnLeave", B.HideTooltip)
+		bar.icon = icon
+
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			if C.RaidDebuffs[instName][spellID] then
+				if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
+				NDuiADB["RaidDebuffs"][instName][spellID] = 0
+			else
+				NDuiADB["RaidDebuffs"][instName][spellID] = nil
+			end
+			setupBars(instName)
+		end)
+
+		local spellName = B.CreateFS(bar, 14, "", false, "LEFT", 30, 0)
+		spellName:SetWidth(120)
+		spellName:SetJustifyH("LEFT")
+		bar.spellName = spellName
+
+		local prioBox = B.CreateEditBox(bar, 30, 24)
+		prioBox:SetPoint("RIGHT", close, "LEFT", -15, 0)
+		prioBox:SetTextInsets(10, 0, 0, 0)
+		prioBox:SetMaxLetters(1)
+		prioBox:SetTextColor(0, 1, 0)
+		prioBox:SetBackdropColor(1, 1, 1, .2)
+		prioBox:HookScript("OnEscapePressed", function(self)
+			self:SetText(priority)
+		end)
+		prioBox:HookScript("OnEnterPressed", function(self)
+			local prio = analyzePrio(tonumber(self:GetText()))
+			if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
+			NDuiADB["RaidDebuffs"][instName][spellID] = prio
+			self:SetText(prio)
+		end)
+		prioBox:SetScript("OnEnter", setupBoxTip)
+		prioBox:SetScript("OnLeave", B.HideTooltip)
+		bar.prioBox = prioBox
+
+		return bar
+	end
+
+	local function applyData(index, instName, spellID, priority)
+		if not bars[index] then
+			bars[index] = createBar(index)
+		end
+		local name, _, texture = GetSpellInfo(spellID)
+		bars[index].instName = instName
+		bars[index].spellID = spellID
+		bars[index].priority = priority
+		bars[index].spellName:SetText(name)
+		bars[index].prioBox:SetText(priority)
+		bars[index].icon.Icon:SetTexture(texture)
+		bars[index]:Show()
+	end
+
+	function setupBars(self)
+		local instName = self.text or self
+		local index = 0
+
+		for spellID, priority in pairs(C.RaidDebuffs[instName]) do
+			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]) then
+				index = index + 1
+				applyData(index, instName, spellID, priority)
+			end
+		end
+
+		if NDuiADB["RaidDebuffs"][instName] then
+			for spellID, priority in pairs(NDuiADB["RaidDebuffs"][instName]) do
+				if priority > 0 then
+					index = index + 1
+					applyData(index, instName, spellID, priority)
+				end
+			end
+		end
+
+		for i = 1, #bars do
+			if i > index then
+				bars[i]:Hide()
+			end
+		end
+
+		for i = 1, index do
+			if i == 1 then
+				bars[i]:SetPoint("TOPLEFT", 10, -10)
+			else
+				bars[i]:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -5)
 			end
 		end
 	end
-	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
-		for spell, priority in pairs(value) do
-			if priority > 0 then
-				createBar(scroll.child, instName, spell, priority)
-			end
+
+	for i = 1, 2 do
+		for j = 1, #options[i].options do
+			options[i].options[j]:HookScript("OnClick", setupBars)
 		end
 	end
-	updateBars("")
 
 	local function autoSelectInstance()
 		local instName, instType = GetInstanceInfo()
@@ -1313,7 +1358,7 @@ function setupBuffIndicator()
 			end
 			for i = 1, 8 do
 				scroll.dd.options[i]:HookScript("OnEnter", optionOnEnter)
-				scroll.dd.options[i]:HookScript("OnLeave", GameTooltip_Hide)
+				scroll.dd.options[i]:HookScript("OnLeave", B.HideTooltip)
 			end
 			scroll.box:SetPoint("TOPLEFT", scroll.dd, "TOPRIGHT", 25, 0)
 
@@ -1359,6 +1404,7 @@ local function OpenGUI()
 	f:SetSize(800, 600)
 	f:SetPoint("CENTER")
 	f:SetFrameStrata("HIGH")
+	f:SetFrameLevel(5)
 	B.CreateMF(f)
 	B.SetBackground(f)
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
@@ -1366,13 +1412,11 @@ local function OpenGUI()
 
 	local close = B.CreateButton(f, 80, 20, CLOSE)
 	close:SetPoint("BOTTOMRIGHT", -20, 15)
-	close:SetFrameLevel(3)
 	close:SetScript("OnClick", function() f:Hide() end)
 
 	local scaleOld = NDuiADB["UIScale"]
 	local ok = B.CreateButton(f, 80, 20, OKAY)
 	ok:SetPoint("RIGHT", close, "LEFT", -10, 0)
-	ok:SetFrameLevel(3)
 	ok:SetScript("OnClick", function()
 		local scale = NDuiADB["UIScale"]
 		if scale ~= scaleOld then
@@ -1443,7 +1487,7 @@ local function OpenGUI()
 		GameTooltip:AddLine(GetAddOnMetadata("NDui", "X-Credits"), .6,.8,1, 1)
 		GameTooltip:Show()
 	end)
-	credit:SetScript("OnLeave", GameTooltip_Hide)
+	credit:SetScript("OnLeave", B.HideTooltip)
 
 	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
