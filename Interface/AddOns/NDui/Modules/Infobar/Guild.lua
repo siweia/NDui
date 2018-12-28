@@ -93,12 +93,37 @@ local function setupInfoFrame()
 end
 
 local guildTable, frames, previous = {}, {}, 0
+
+local function buttonOnClick(self, btn)
+	local name = guildTable[self.index][3]
+	if btn == "LeftButton" then
+		if IsAltKeyDown() then
+			InviteToGroup(name)
+		elseif IsShiftKeyDown() then
+			if MailFrame:IsShown() then
+				MailFrameTab_OnClick(nil, 2)
+				SendMailNameEditBox:SetText(name)
+				SendMailNameEditBox:HighlightText()
+			else
+				local editBox = ChatEdit_ChooseBoxForSend()
+				local hasText = (editBox:GetText() ~= "")
+				ChatEdit_ActivateChat(editBox)
+				editBox:Insert(name)
+				if not hasText then editBox:HighlightText() end
+			end
+		end
+	else
+		ChatFrame_OpenChat("/w "..name.." ", SELECTED_DOCK_FRAME)
+	end
+end
+
 local function createRoster(parent, i)
 	local button = CreateFrame("Button", nil, parent)
 	button:SetSize(312, 20)
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetAllPoints()
 	button.HL:SetColorTexture(r, g, b, .2)
+	button.index = i
 
 	button.level = B.CreateFS(button, 13, "Level", false)
 	button.level:SetPoint("TOP", button, "TOPLEFT", 16, -4)
@@ -114,28 +139,7 @@ local function createRoster(parent, i)
 	button.zone:SetJustifyH("RIGHT")
 
 	button:RegisterForClicks("AnyUp")
-	button:SetScript("OnClick", function(_, btn)
-		local name = guildTable[i][3]
-		if btn == "LeftButton" then
-			if IsAltKeyDown() then
-				InviteToGroup(name)
-			elseif IsShiftKeyDown() then
-				if MailFrame:IsShown() then
-					MailFrameTab_OnClick(nil, 2)
-					SendMailNameEditBox:SetText(name)
-					SendMailNameEditBox:HighlightText()
-				else
-					local editBox = ChatEdit_ChooseBoxForSend()
-					local hasText = (editBox:GetText() ~= "")
-					ChatEdit_ActivateChat(editBox)
-					editBox:Insert(name)
-					if not hasText then editBox:HighlightText() end
-				end
-			end
-		else
-			ChatFrame_OpenChat("/w "..name.." ", SELECTED_DOCK_FRAME)
-		end
-	end)
+	button:SetScript("OnClick", buttonOnClick)
 
 	return button
 end
