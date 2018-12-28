@@ -48,17 +48,13 @@ local addonBlockList = {
 	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "进度:", "属性通报", "blizzard.+验证码", "汐寒"
 }
 
-local function restoreCVar(cvar)
-	C_Timer.After(.01, function()
-		SetCVar(cvar, 1)
-	end)
-end
-
 local function toggleBubble(party)
 	local cvar = "chatBubbles"..(party and "Party" or "")
 	if not GetCVarBool(cvar) then return end
 	SetCVar(cvar, 0)
-	restoreCVar(cvar)
+	C_Timer.After(.01, function()
+		SetCVar(cvar, 1)
+	end)
 end
 
 local function genAddonBlock(_, event, msg, author)
@@ -80,7 +76,7 @@ local function genAddonBlock(_, event, msg, author)
 end
 
 --[[
-	公会频道有人@时提示你
+	公会频道有人提到你时通知你
 ]]
 local chatAtList, at = {}, {}
 function B:GenChatAtList()
@@ -121,38 +117,6 @@ hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 	end
 end)
 
---[[
-	过滤WQT的邀请
-	Credit: WorldQuestTrackerBlocker, Jordy141
-]]
-local WQTUsers = {}
-local inviteString = _G.ERR_INVITED_TO_GROUP_SS:gsub(".+|h", "")
-
-local function blockInviteString(_, _, msg)
-	if strfind(msg, inviteString) then
-		local name = strmatch(msg, "%[(.+)%]")
-		if WQTUsers[name] then
-			return true
-		end
-	end
-end
-
-local function blockWhisperString(_, _, msg, author)
-	local name = Ambiguate(author, "none")
-	if strfind(msg, "%[World Quest Tracker%]") or strfind(msg, "一起做世界任务吧：") or strfind(msg, "一起来做世界任务<") then
-		if not WQTUsers[name] then
-			WQTUsers[name] = true
-		end
-		return true
-	end
-end
-
-local function hideInvitePopup(_, name)
-	if WQTUsers[name] then
-		StaticPopup_Hide("PARTY_INVITE")
-	end
-end
-
 -- 过滤海岛探险中艾泽里特的获取信息
 local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub("%%d/%%d ", "")
 local function filterAzeriteGain(_, _, msg)
@@ -192,10 +156,6 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genAddonBlock)
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
-
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", blockInviteString)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", blockWhisperString)
-	B:RegisterEvent("PARTY_INVITE_REQUEST", hideInvitePopup)
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", isPlayerOnIslands)
 end
