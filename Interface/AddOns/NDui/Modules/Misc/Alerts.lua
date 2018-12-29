@@ -121,8 +121,8 @@ function module:InterruptAlert()
 		["SPELL_INTERRUPT"] = L["Interrupt"],
 		["SPELL_STOLEN"] = L["Steal"],
 		["SPELL_DISPEL"] = L["Dispel"],
+		["SPELL_AURA_BROKEN_SPELL"] = L["BrokenSpell"],
 	}
-	if NDuiDB["Misc"]["BrokenSpell"] then infoType["SPELL_AURA_BROKEN_SPELL"] = L["BrokenSpell"] end
 
 	local blackList = {
 		[99] = true,		-- 夺魂咆哮
@@ -157,6 +157,7 @@ function module:InterruptAlert()
 			local infoText = infoType[eventType]
 			if infoText then
 				if infoText == L["BrokenSpell"] then
+					if not NDuiDB["Misc"]["BrokenSpell"] then return end
 					if auraType and auraType == AURA_TYPE_BUFF or blackList[spellID] then return end	-- need reviewed
 					SendChatMessage(format(infoText, sourceName..GetSpellLink(extraskillID), destName..GetSpellLink(spellID)), msgChannel())
 				else
