@@ -88,6 +88,7 @@ local list = {
 		{AuraID = 271105, UnitID = "player"},	-- 屠夫之眼
 		{AuraID = 271107, UnitID = "player"},	-- 金色光泽
 		{AuraID = 277181, UnitID = "player"},	-- 胜利的味道
+		{AuraID = 278231, UnitID = "player"},	-- 森林之王的愤怒
 		{AuraID = 274430, UnitID = "player", Text = L["Haste"]},	-- 永不间断的时钟，急速
 		{AuraID = 274431, UnitID = "player", Text = L["Mastery"]},	-- 精通
 		{AuraID = 267325, UnitID = "player", Text = L["Mastery"]},	-- 注铅骰子，精通
