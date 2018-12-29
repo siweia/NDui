@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "DEATHKNIGHT" then return end
+local floor = math.floor
 
 function module:PostCreateLumos(self)
 	local shield = B.CreateFS(self.Health, 18, "", "system")
@@ -51,7 +52,10 @@ function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		do
 			local button = self.bu[1]
-			local boneCount = floor(UnitPower("player")/45)
+			local price = 45
+			local hasBuff = GetUnitAura("player", 219788, "HELPFUL")
+			if hasBuff then price = 40 end
+			local boneCount = floor(UnitPower("player")/price)
 			button.Icon:SetTexture(GetSpellTexture(49998))
 			button.Count:SetText(boneCount)
 			local name, _, dur, exp, _, _, value = GetUnitAura("player", 77535, "HELPFUL")
