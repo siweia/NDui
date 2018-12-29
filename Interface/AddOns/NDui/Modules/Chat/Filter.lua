@@ -4,7 +4,7 @@ local module = B:GetModule("Chat")
 
 local strmatch, strfind = string.match, string.find
 local format, gsub = string.format, string.gsub
-local pairs, ipairs = pairs, ipairs
+local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
@@ -48,13 +48,17 @@ local addonBlockList = {
 	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "进度:", "属性通报", "blizzard.+验证码", "汐寒"
 }
 
+local cvar
+local function toggleCVar(value)
+	value = tonumber(value) or 1
+	SetCVar(cvar, value)
+end
+
 local function toggleBubble(party)
-	local cvar = "chatBubbles"..(party and "Party" or "")
+	cvar = "chatBubbles"..(party and "Party" or "")
 	if not GetCVarBool(cvar) then return end
-	SetCVar(cvar, 0)
-	C_Timer.After(.01, function()
-		SetCVar(cvar, 1)
-	end)
+	toggleCVar(0)
+	C_Timer.After(.01, toggleCVar)
 end
 
 local function genAddonBlock(_, event, msg, author)
