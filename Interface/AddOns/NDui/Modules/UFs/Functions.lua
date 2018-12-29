@@ -540,7 +540,8 @@ function UF:CreateAuras(self)
 		bu.iconsPerRow = 5
 	elseif self.mystyle == "focus" then
 		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -10)
-		bu.numTotal = 20
+		bu.numBuffs = 0
+		bu.numDebuffs = 14
 		bu.iconsPerRow = 7
 	elseif self.mystyle == "raid" then
 		if NDuiDB["UFs"]["RaidBuffIndicator"] then
