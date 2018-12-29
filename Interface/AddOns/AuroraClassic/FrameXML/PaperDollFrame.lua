@@ -56,7 +56,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local slot = _G["Character"..slots[i].."Slot"]
 		local border = slot.IconBorder
 
-		F.StripTextures(slot)
+		_G[slot:GetName().."Frame"]:Hide()
 		slot:SetNormalTexture("")
 		slot:SetPushedTexture("")
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -90,6 +90,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		hooksecurefunc(slot, "DisplayAsAzeriteItem", UpdateAzeriteItem)
 		hooksecurefunc(slot, "DisplayAsAzeriteEmpoweredItem", UpdateAzeriteEmpoweredItem)
 	end
+
+	select(14, CharacterMainHandSlot:GetRegions()):Hide()
+	select(14, CharacterSecondaryHandSlot:GetRegions()):Hide()
 
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)
 		-- also fires for bag slots, we don't want that
