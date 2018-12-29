@@ -26,6 +26,11 @@ function UF:CreateRaidIcons(self)
 	role:SetSize(12, 12)
 	role:SetPoint("TOPLEFT", 12, 8)
 	self.RaidRoleIndicator = role
+
+    local summon = parent:CreateTexture(nil, "OVERLAY")
+    summon:SetSize(32, 32)
+    summon:SetPoint("CENTER", 0, -8)
+    self.SummonIndicator = summon
 end
 
 local function UpdateTargetBorder(self)
