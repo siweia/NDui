@@ -222,6 +222,7 @@ local defaultSettings = {
 		ExplosiveCache = {},
 		PlacedItemAlert = false,
 		RareAlertInWild = false,
+		ParagonRep = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -439,9 +440,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"], true},
 		{},--blank
 		{1, "Misc", "Interrupt", "|cff00cc4c"..L["Interrupt Alert"]},
-		{1, "Misc", "BrokenSpell", L["Broken Spell"], true},
-		{1, "Misc", "OwnInterrupt", L["Own Interrupt"].."*"},
 		{1, "Misc", "AlertInInstance", L["Alert In Instance"].."*", true},
+		{1, "Misc", "OwnInterrupt", L["Own Interrupt"].."*"},
+		{1, "Misc", "BrokenSpell", L["Broken Spell"].."*", true},
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"]},
 		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
 		{},--blank
@@ -527,6 +528,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
 		{1, "Misc", "HideErrors", L["Hide Error"]},
 		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
+		{},--blank
+		{1, "Misc", "ParagonRep", L["ParagonRep"]},
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

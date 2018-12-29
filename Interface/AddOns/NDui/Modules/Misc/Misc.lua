@@ -19,6 +19,9 @@ function module:OnLogin()
 	self:QuickJoin()
 	self:QuestNotifier()
 	self:GuildBest()
+	if NDuiDB["Misc"]["ParagonRep"] then
+		hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
+	end
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then

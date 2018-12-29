@@ -216,8 +216,6 @@ function module:Expbar()
 	bar.restBar = rest
 
 	self:SetupScript(bar)
-
-	hooksecurefunc("ReputationFrame_Update", module.HookParagonRep)
 end
 
 function module:HookParagonRep()
