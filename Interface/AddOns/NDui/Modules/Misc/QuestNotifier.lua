@@ -52,6 +52,9 @@ local questMatches = {
 }
 
 local function FindQuestProgress(_, _, msg)
+	if not NDuiDB["Misc"]["QuestProgress"] then return end
+	if NDuiDB["Misc"]["OnlyCompleteRing"] then return end
+
 	for _, pattern in pairs(questMatches) do
 		if strmatch(msg, pattern) then
 			local _, _, _, cur, max = strfind(msg, "(.*)[:：]%s*([-%d]+)%s*/%s*([-%d]+)%s*$")
@@ -113,7 +116,5 @@ function module:QuestNotifier()
 	B:RegisterEvent("QUEST_ACCEPTED", FindQuestAccept)
 	B:RegisterEvent("QUEST_LOG_UPDATE", FindQuestComplete)
 	B:RegisterEvent("QUEST_TURNED_IN", FindWorldQuestComplete)
-	if NDuiDB["Misc"]["QuestProgress"] and not NDuiDB["Misc"]["OnlyCompleteRing"] then
-		B:RegisterEvent("UI_INFO_MESSAGE", FindQuestProgress)
-	end
+	B:RegisterEvent("UI_INFO_MESSAGE", FindQuestProgress)
 end

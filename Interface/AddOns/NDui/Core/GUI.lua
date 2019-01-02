@@ -436,8 +436,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{2, "Skins", "DBMCount", L["Countdown Sec"].."*", true},
 		{},--blank
 		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"]},
-		{1, "Misc", "QuestProgress", L["QuestProgress"]},
-		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"], true},
+		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
+		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"].."*", true},
 		{},--blank
 		{1, "Misc", "Interrupt", "|cff00cc4c"..L["Interrupt Alert"]},
 		{1, "Misc", "AlertInInstance", L["Alert In Instance"].."*", true},
@@ -782,9 +782,7 @@ local function createExtraGUI(parent, title, bgFrame)
 	local frame = CreateFrame("Frame", nil, parent)
 	frame:SetSize(300, 600)
 	frame:SetPoint("TOPLEFT", f, "TOPRIGHT", 2, 0)
-	B.CreateBD(frame)
-	B.CreateSD(frame)
-	B.CreateTex(frame)
+	B.SetBackground(frame)
 	parent:HookScript("OnHide", function()
 		if frame:IsShown() then frame:Hide() end
 	end)
