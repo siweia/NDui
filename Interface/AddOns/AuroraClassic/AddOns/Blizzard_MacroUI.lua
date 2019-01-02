@@ -38,12 +38,11 @@ C.themes["Blizzard_MacroUI"] = function()
 
 		bu:SetCheckedTexture(C.media.checked)
 		select(2, bu:GetRegions()):Hide()
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
-		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 		ic:SetTexCoord(.08, .92, .08, .92)
-
-		F.CreateBD(bu, .25)
+		ic:SetAllPoints()
+		F.CreateBDFrame(bu, .25)
 	end
 
 	MacroPopupFrame:HookScript("OnShow", function()
