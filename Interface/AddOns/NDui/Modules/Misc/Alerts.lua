@@ -90,7 +90,8 @@ function module:RareAlert()
 				print("  -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 			end
 			if not NDuiDB["Misc"]["RareAlertInWild"] or instType == "none" then
-				PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+				--PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+				PlaySound(23404, "master")
 			end
 			cache[id] = true
 		end
