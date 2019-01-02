@@ -497,6 +497,16 @@ local function addonStyled(_, addon)
 			end
 		end
 
+		if IsAddOnLoaded("BattlePetBreedID") then
+			hooksecurefunc("BPBID_SetBreedTooltip", function(parent)
+				if parent == FloatingBattlePetTooltip then
+					extrastyle(BPBID_BreedTooltip2)
+				else
+					extrastyle(BPBID_BreedTooltip)
+				end
+			end)
+		end
+
 	elseif addon == "Blizzard_Collections" then
 		local pet = {
 			PetJournalPrimaryAbilityTooltip,
