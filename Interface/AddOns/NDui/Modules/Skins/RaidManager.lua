@@ -459,6 +459,10 @@ function module:CreateRM()
 			LeaveParty()
 		end
 	end)
+	header:HookScript("OnShow", function(self)
+		self:GetScript("OnLeave")(self)
+		self:GetScript("OnMouseUp")(self)
+	end)
 
 	-- Easymarking
 	local menuFrame = CreateFrame("Frame", "NDui_EastMarking", UIParent, "UIDropDownMenuTemplate")
