@@ -111,7 +111,7 @@ function module:OnLogin()
 		local parent = self:GetParent()
 		if parent and parent.isAuraWatch then return end
 		local name = parent:GetName()
-		if name and strfind(name, "Hekili") then return end
+		if name and (strfind(name, "Hekili") or strfind(name, "Zygor")) then return end
 
 		if self:GetEffectiveAlpha() > 0 then
 			self:Show()
