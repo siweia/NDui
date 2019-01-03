@@ -58,6 +58,7 @@ end
 
 local function Update(self, event)
 	local element = self.ReadyCheckIndicator
+	local unit = self.unit
 
 	--[[ Callback: ReadyCheckIndicator:PreUpdate()
 	Called before the element has been updated.
@@ -68,7 +69,6 @@ local function Update(self, event)
 		element:PreUpdate()
 	end
 
-	local unit = self.unit
 	local status = GetReadyCheckStatus(unit)
 	if(UnitExists(unit) and status) then
 		if(status == 'ready') then
