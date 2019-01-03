@@ -325,8 +325,8 @@ local function AddMouseoverIndicator(self)
 	glow:SetBackdropBorderColor(1, 1, 1)
 	glow:Hide()
 
-	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", updateMouseoverShown)
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", updateMouseoverShown)
+	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", updateMouseoverShown, true)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", updateMouseoverShown, true)
 
 	local f = CreateFrame("Frame", nil, self)
 	f:SetScript("OnUpdate", function(_, elapsed)
@@ -389,7 +389,7 @@ function UF:CreatePlates(unit)
 		mark:SetBlendMode("ADD")
 		mark:Hide()
 		self.tarMark = mark
-		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark)
+		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark, true)
 
 		local cicon = self:CreateTexture(nil, "OVERLAY")
 		cicon:SetPoint("LEFT", self, 1, 5)
@@ -460,9 +460,9 @@ function UF:CreatePlayerPlate()
 		self:Tag(power, "[pppower]")
 	end
 
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility)
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility)
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", PlateVisibility)
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility, true)
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility, true)
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", PlateVisibility, true)
 	self:RegisterEvent("UNIT_ENTERED_VEHICLE", PlateVisibility)
 	self:RegisterEvent("UNIT_EXITED_VEHICLE", PlateVisibility)
 end

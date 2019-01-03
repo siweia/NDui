@@ -78,7 +78,7 @@ local Enable = function(self)
 	if not NDuiDB["UFs"]["AutoRes"] then return end
 
 	if InCombatLockdown() then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupAttribute)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupAttribute, true)
 	else
 		setupAttribute(self)
 	end

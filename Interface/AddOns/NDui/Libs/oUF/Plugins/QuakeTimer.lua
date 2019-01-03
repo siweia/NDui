@@ -110,8 +110,8 @@ local function checkAffixes(self, event)
 	if not affixes then return end
 	if affixes[3] and affixes[3].id == 14 then
 		Update(self)
-		self:RegisterEvent(event, Update)
-		self:RegisterEvent("CHALLENGE_MODE_START", Update)
+		self:RegisterEvent(event, Update, true)
+		self:RegisterEvent("CHALLENGE_MODE_START", Update, true)
 	end
 	self:UnregisterEvent(event, checkAffixes)
 end
@@ -128,7 +128,7 @@ local function Enable(self)
 		end
 		element:SetScript("OnUpdate", updateTimer)
 
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes, true)
 		return true
 	end
 end

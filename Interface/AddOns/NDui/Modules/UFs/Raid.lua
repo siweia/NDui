@@ -29,7 +29,7 @@ function UF:CreateRaidIcons(self)
 
 	local summon = parent:CreateTexture(nil, "OVERLAY")
 	summon:SetSize(32, 32)
-	summon:SetPoint("BOTTOM", 0, 1)
+	summon:SetPoint("CENTER")
 	self.SummonIndicator = summon
 end
 
@@ -49,8 +49,8 @@ function UF:CreateTargetBorder(self)
 	border:Hide()
 
 	self.TargetBorder = border
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetBorder)
-	self:RegisterEvent("GROUP_ROSTER_UPDATE", UpdateTargetBorder)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetBorder, true)
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", UpdateTargetBorder, true)
 end
 
 local function UpdateThreatBorder(self, _, unit)
@@ -290,7 +290,7 @@ end
 function UF:CreateClickSets(self)
 	if not NDuiDB["UFs"]["RaidClickSets"] then return end
 	if InCombatLockdown() then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupClickSets)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupClickSets, true)
 	else
 		setupClickSets(self)
 	end

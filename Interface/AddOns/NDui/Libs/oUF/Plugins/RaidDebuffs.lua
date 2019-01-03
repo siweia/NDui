@@ -236,9 +236,9 @@ local function Enable(self)
 	end
 
 	checkSpecs()
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
+	self:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs, true)
 	checkInstance()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", checkInstance)
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", checkInstance, true)
 end
 
 local function Disable(self)

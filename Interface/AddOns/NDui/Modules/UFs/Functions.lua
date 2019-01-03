@@ -325,7 +325,7 @@ function UF:CreateCastBar(self)
 		if NDuiDB["UFs"]["LagString"] then
 			local lag = B.CreateFS(cb, 10, "", false, "CENTER", -6, 17)
 			cb.Lag = lag
-			self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", cast.OnCastSent)
+			self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", cast.OnCastSent, true)
 		end
 	elseif self.mystyle == "nameplate" then
 		name:SetPoint("LEFT", cb, 0, -5)
@@ -397,7 +397,7 @@ function UF:ReskinTimerTrakcer(self)
 			end
 		end
 	end
-	self:RegisterEvent("START_TIMER", updateTimerTracker)
+	self:RegisterEvent("START_TIMER", updateTimerTracker, true)
 end
 
 -- Auras Relevant
@@ -992,6 +992,6 @@ function UF:CreateFactionIcon(self)
 
 	self.factionIndicator = bu
 	self:RegisterEvent("UNIT_AURA", postUpdateFaction)	-- need reviewed
-	self:RegisterEvent("ARENA_OPPONENT_UPDATE", postUpdateFaction)
+	self:RegisterEvent("ARENA_OPPONENT_UPDATE", postUpdateFaction, true)
 	self:RegisterEvent("UNIT_NAME_UPDATE", postUpdateFaction)
 end

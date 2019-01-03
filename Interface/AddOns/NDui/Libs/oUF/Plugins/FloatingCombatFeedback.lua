@@ -311,10 +311,10 @@ local function Enable(self, unit)
 
 	element:HookScript("OnShow", onShow)
 
-	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path)
+	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path, true)
 	if unit == "player" then
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", Path)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path, true)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", Path, true)
 	end
 
 	return true
