@@ -57,7 +57,6 @@ local function SetupUIScale()
 	if NDuiADB["LockUIScale"] then
 		scale = max(minScale, min(1.1, fixedHeight))
 	end
-	C.mult = fixedHeight/scale
 
 	SetCVar("useUiScale", 1)
 	scale = tonumber(floor(scale*100 + .5)/100)
@@ -66,6 +65,7 @@ local function SetupUIScale()
 	else
 		SetCVar("uiScale", scale)
 	end
+	C.mult = fixedHeight/scale
 
 	NDuiADB["UIScale"] = scale
 end
