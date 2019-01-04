@@ -29,7 +29,8 @@ function UF:CreateRaidIcons(self)
 
 	local summon = parent:CreateTexture(nil, "OVERLAY")
 	summon:SetSize(32, 32)
-	summon:SetPoint("CENTER")
+	summon:SetPoint("CENTER", parent)
+	summon:SetParent(UIParent)
 	self.SummonIndicator = summon
 end
 
