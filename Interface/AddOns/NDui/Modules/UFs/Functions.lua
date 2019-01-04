@@ -92,7 +92,12 @@ function UF:CreateHealthText(self)
 	if self.mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
 		name:ClearAllPoints()
-		name:SetPoint("TOPLEFT", 2, -2)
+		if NDuiDB["UFs"]["RaidBuffIndicator"] then
+			name:SetPoint("CENTER")
+			name:SetJustifyH("CENTER")
+		else
+			name:SetPoint("TOPLEFT", 2, -2)
+		end
 	elseif self.mystyle == "nameplate" then
 		name:SetWidth(self:GetWidth()*.85)
 		name:ClearAllPoints()
@@ -821,6 +826,7 @@ function UF:CreatePrediction(self)
 	oag:SetWidth(15)
 	oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
 	oag:SetBlendMode("ADD")
+	oag:SetAlpha(.7)
 	oag:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -5, 2)
 	oag:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -5, -2)
 
