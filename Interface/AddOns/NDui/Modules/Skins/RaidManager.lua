@@ -460,8 +460,8 @@ function module:CreateRM()
 		end
 	end)
 	header:HookScript("OnShow", function(self)
-		self:GetScript("OnLeave")(self)
-		self:GetScript("OnMouseUp")(self)
+		self:SetBackdropColor(0, 0, 0, .5)
+		self:SetBackdropBorderColor(0, 0, 0, 1)
 	end)
 
 	-- Easymarking
