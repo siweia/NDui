@@ -82,6 +82,22 @@ function module:OnLogin()
 		return timer
 	end
 
+	local ignoreList = {
+		["Hekili"] = true,
+		["Zygor"] = true,
+		["Rematch"] = true,
+	}
+
+	local function isAddOnIgnored(self)
+		local name = self:GetParent():GetName()
+		if not name then return end
+		for addon in pairs(ignoreList) do
+			if strfind(name, addon) then
+				return true
+			end
+		end
+	end
+
 	local function Timer_Start(self, start, duration)
 		if self:IsForbidden() or self.noOCC or hideNumbers[self] then return end
 
@@ -110,8 +126,7 @@ function module:OnLogin()
 		-- hide cooldown flash if not visible
 		local parent = self:GetParent()
 		if parent and parent.isAuraWatch then return end
-		local name = parent:GetName()
-		if name and (strfind(name, "Hekili") or strfind(name, "Zygor")) then return end
+		if isAddOnIgnored(self) then return end
 
 		if self:GetEffectiveAlpha() > 0 then
 			self:Show()
@@ -131,7 +146,6 @@ function module:OnLogin()
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", Timer_Start)
-	--hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", hideCooldownNumbers)
 	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", function(self)
 		hideCooldownNumbers(self, true)
 	end)
