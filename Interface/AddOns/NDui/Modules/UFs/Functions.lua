@@ -92,7 +92,7 @@ function UF:CreateHealthText(self)
 	if self.mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
 		name:ClearAllPoints()
-		if NDuiDB["UFs"]["RaidBuffIndicator"] then
+		if NDuiDB["UFs"]["RaidBuffIndicator"] and not NDuiDB["UFs"]["SimpleMode"] then
 			name:SetPoint("CENTER")
 			name:SetJustifyH("CENTER")
 		else
