@@ -1,8 +1,8 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local AuraList, Aura, UnitIDTable, IntTable, IntCD, statTable = {}, {}, {}, {}, {}, {}
-local MaxFrame = 12	-- Max Tracked Auras
+local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, {}
+local maxFrames = 12	-- Max Tracked Auras
 local pairs, tinsert, tremove = pairs, table.insert, table.remove
 local max, wipe, sort = math.max, table.wipe, table.sort
 local GetCombatRating, GetTime = GetCombatRating, GetTime
@@ -113,11 +113,11 @@ end
 local function BuildUnitIDTable()
 	for _, VALUE in pairs(AuraList) do
 		for _, value in pairs(VALUE.List) do
-			local Flag = true
+			local flag = true
 			for _, v in pairs(UnitIDTable) do
-				if value.UnitID == v then Flag = false end
+				if value.UnitID == v then flag = false end
 			end
-			if Flag then tinsert(UnitIDTable, value.UnitID) end
+			if flag then tinsert(UnitIDTable, value.UnitID) end
 		end
 	end
 end
@@ -159,104 +159,102 @@ end
 local function BuildICON(iconSize)
 	iconSize = iconSize * NDuiDB["AuraWatch"]["IconScale"]
 
-	local Frame = CreateFrame("Frame", nil, UIParent)
-	Frame:SetSize(iconSize, iconSize)
-	B.CreateSD(Frame, 3, 3)
+	local frame = CreateFrame("Frame", nil, UIParent)
+	frame:SetSize(iconSize, iconSize)
+	B.CreateSD(frame, 3, 3)
 
-	Frame.Icon = Frame:CreateTexture(nil, "ARTWORK")
-	Frame.Icon:SetAllPoints()
-	Frame.Icon:SetTexCoord(unpack(DB.TexCoord))
+	frame.Icon = frame:CreateTexture(nil, "ARTWORK")
+	frame.Icon:SetAllPoints()
+	frame.Icon:SetTexCoord(unpack(DB.TexCoord))
 
-	Frame.Cooldown = CreateFrame("Cooldown", nil, Frame, "CooldownFrameTemplate")
-	Frame.Cooldown:SetAllPoints()
-	Frame.Cooldown:SetReverse(true)
+	frame.Cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
+	frame.Cooldown:SetAllPoints()
+	frame.Cooldown:SetReverse(true)
 
-	local parentFrame = CreateFrame("Frame", nil, Frame)
+	local parentFrame = CreateFrame("Frame", nil, frame)
 	parentFrame:SetAllPoints()
-	parentFrame:SetFrameLevel(Frame:GetFrameLevel() + 5)
+	parentFrame:SetFrameLevel(frame:GetFrameLevel() + 5)
 
-	Frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "TOP", 0, 5)
-	Frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
-	Frame.glowFrame = B.CreateBG(Frame, 4)
-	Frame.glowFrame:SetSize(iconSize+8, iconSize+8)
-	if not NDuiDB["AuraWatch"]["ClickThrough"] then enableTooltip(Frame) end
+	frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "TOP", 0, 5)
+	frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
+	frame.glowFrame = B.CreateBG(frame, 4)
+	frame.glowFrame:SetSize(iconSize+8, iconSize+8)
+	if not NDuiDB["AuraWatch"]["ClickThrough"] then enableTooltip(frame) end
 
-	Frame.isAuraWatch = true
-	Frame:Hide()
-	return Frame
+	frame:Hide()
+	return frame
 end
 
 -- BuildBAR
 local function BuildBAR(barWidth, iconSize)
-	local Frame = CreateFrame("Frame", nil, UIParent)
-	Frame:SetSize(iconSize, iconSize)
-	B.CreateSD(Frame, 2, 2)
+	local frame = CreateFrame("Frame", nil, UIParent)
+	frame:SetSize(iconSize, iconSize)
+	B.CreateSD(frame, 2, 2)
 
-	Frame.Icon = Frame:CreateTexture(nil, "ARTWORK")
-	Frame.Icon:SetAllPoints()
-	Frame.Icon:SetTexCoord(unpack(DB.TexCoord))
+	frame.Icon = frame:CreateTexture(nil, "ARTWORK")
+	frame.Icon:SetAllPoints()
+	frame.Icon:SetTexCoord(unpack(DB.TexCoord))
 
-	Frame.Statusbar = CreateFrame("StatusBar", nil, Frame)
-	Frame.Statusbar:SetSize(barWidth, iconSize/2.5)
-	Frame.Statusbar:SetPoint("BOTTOMLEFT", Frame, "BOTTOMRIGHT", 5, 0)
-	Frame.Statusbar:SetMinMaxValues(0, 1)
-	Frame.Statusbar:SetValue(0)
-	B.CreateSB(Frame.Statusbar, true)
+	frame.Statusbar = CreateFrame("StatusBar", nil, frame)
+	frame.Statusbar:SetSize(barWidth, iconSize/2.5)
+	frame.Statusbar:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 5, 0)
+	frame.Statusbar:SetMinMaxValues(0, 1)
+	frame.Statusbar:SetValue(0)
+	B.CreateSB(frame.Statusbar, true)
 
-	Frame.Count = B.CreateFS(Frame, 14, "", false, "BOTTOMRIGHT", 3, -1)
-	Frame.Time = B.CreateFS(Frame.Statusbar, 14, "", false, "RIGHT", 0, 8)
-	Frame.Spellname = B.CreateFS(Frame.Statusbar, 14, "", false, "LEFT", 2, 8)
-	Frame.Spellname:SetWidth(Frame.Statusbar:GetWidth()*.6)
-	Frame.Spellname:SetJustifyH("LEFT")
-	if not NDuiDB["AuraWatch"]["ClickThrough"] then enableTooltip(Frame) end
+	frame.Count = B.CreateFS(frame, 14, "", false, "BOTTOMRIGHT", 3, -1)
+	frame.Time = B.CreateFS(frame.Statusbar, 14, "", false, "RIGHT", 0, 8)
+	frame.Spellname = B.CreateFS(frame.Statusbar, 14, "", false, "LEFT", 2, 8)
+	frame.Spellname:SetWidth(frame.Statusbar:GetWidth()*.6)
+	frame.Spellname:SetJustifyH("LEFT")
+	if not NDuiDB["AuraWatch"]["ClickThrough"] then enableTooltip(frame) end
 
-	Frame.isAuraWatch = true
-	Frame:Hide()
-	return Frame
+	frame:Hide()
+	return frame
 end
 -----> STYLED CODE END
 
 local function BuildAura()
 	for key, value in pairs(AuraList) do
-		local FrameTable = {}
-		for i = 1, MaxFrame do
+		local frameTable = {}
+		for i = 1, maxFrames do
 			if value.Mode:lower() == "icon" then
-				local Frame = BuildICON(value.IconSize)
-				if i == 1 then Frame.MoveHandle = MakeMoveHandle(Frame, L[value.Name], key, value.Pos) end
-				tinsert(FrameTable, Frame)
+				local frame = BuildICON(value.IconSize)
+				if i == 1 then frame.MoveHandle = MakeMoveHandle(frame, L[value.Name], key, value.Pos) end
+				tinsert(frameTable, frame)
 			elseif value.Mode:lower() == "bar" then
-				local Frame = BuildBAR(value.BarWidth, value.IconSize)
-				if i == 1 then Frame.MoveHandle = MakeMoveHandle(Frame, L[value.Name], key, value.Pos) end
-				tinsert(FrameTable, Frame)
+				local frame = BuildBAR(value.BarWidth, value.IconSize)
+				if i == 1 then frame.MoveHandle = MakeMoveHandle(frame, L[value.Name], key, value.Pos) end
+				tinsert(frameTable, frame)
 			end
 		end
-		FrameTable.Index = 1
-		tinsert(Aura, FrameTable)
+		frameTable.Index = 1
+		tinsert(Aura, frameTable)
 	end
 end
 
 local function Pos()
 	for key, VALUE in pairs(Aura) do
 		local value = AuraList[key]
-		local Pre = nil
+		local previous
 		for i = 1, #VALUE do
-			local Frame = VALUE[i]
+			local frame = VALUE[i]
 			if i == 1 then
-				Frame:SetPoint("CENTER", Frame.MoveHandle)
+				frame:SetPoint("CENTER", frame.MoveHandle)
 			elseif value.Name == "Target Aura" and i == 7 then
-				Frame:SetPoint("BOTTOM", VALUE[1], "TOP", 0, value.Interval)
+				frame:SetPoint("BOTTOM", VALUE[1], "TOP", 0, value.Interval)
 			else
 				if value.Direction:lower() == "right" then
-					Frame:SetPoint("LEFT", Pre, "RIGHT", value.Interval, 0)
+					frame:SetPoint("LEFT", previous, "RIGHT", value.Interval, 0)
 				elseif value.Direction:lower() == "left" then
-					Frame:SetPoint("RIGHT", Pre, "LEFT", -value.Interval, 0)
+					frame:SetPoint("RIGHT", previous, "LEFT", -value.Interval, 0)
 				elseif value.Direction:lower() == "up" then
-					Frame:SetPoint("BOTTOM", Pre, "TOP", 0, value.Interval)
+					frame:SetPoint("BOTTOM", previous, "TOP", 0, value.Interval)
 				elseif value.Direction:lower() == "down" then
-					Frame:SetPoint("TOP", Pre, "BOTTOM", 0, -value.Interval)
+					frame:SetPoint("TOP", previous, "BOTTOM", 0, -value.Interval)
 				end
 			end
-			Pre = Frame
+			previous = frame
 		end
 	end
 end
@@ -296,26 +294,26 @@ end
 
 -- UpdateCD
 local function UpdateCDFrame(index, name, icon, start, duration, _, type, id, charges)
-	local Frame = Aura[index][Aura[index].Index]
-	if Frame then Frame:Show() end
-	if Frame.Icon then Frame.Icon:SetTexture(icon) end
-	if Frame.Cooldown then
-		Frame.Cooldown:SetReverse(false)
-		Frame.Cooldown:SetCooldown(start, duration)
-		Frame.Cooldown:Show()
+	local frame = Aura[index][Aura[index].Index]
+	if frame then frame:Show() end
+	if frame.Icon then frame.Icon:SetTexture(icon) end
+	if frame.Cooldown then
+		frame.Cooldown:SetReverse(false)
+		frame.Cooldown:SetCooldown(start, duration)
+		frame.Cooldown:Show()
 	end
-	if Frame.Count then Frame.Count:SetText(charges) end
-	if Frame.Spellname then Frame.Spellname:SetText(name) end
-	if Frame.Statusbar then
-		Frame.duration = duration
-		Frame.start = start
-		Frame.Timer = 0
-		Frame:SetScript("OnUpdate", updateBarTimer)
+	if frame.Count then frame.Count:SetText(charges) end
+	if frame.Spellname then frame.Spellname:SetText(name) end
+	if frame.Statusbar then
+		frame.duration = duration
+		frame.start = start
+		frame.Timer = 0
+		frame:SetScript("OnUpdate", updateBarTimer)
 	end
-	Frame.type = type
-	Frame.spellID = id
+	frame.type = type
+	frame.spellID = id
 
-	Aura[index].Index = (Aura[index].Index + 1 > MaxFrame) and MaxFrame or Aura[index].Index + 1
+	Aura[index].Index = (Aura[index].Index + 1 > maxFrames) and maxFrames or Aura[index].Index + 1
 end
 
 local function UpdateCD()
@@ -364,41 +362,42 @@ end
 local function UpdateAuraFrame(index, UnitID, name, icon, count, duration, expires, id, filter, flash)
 	if not index then return end
 
-	local Frame = Aura[index][Aura[index].Index]
-	if Frame then Frame:Show() end
-	if Frame.Icon then Frame.Icon:SetTexture(icon) end
-	if Frame.Count then Frame.Count:SetText(count > 1 and count or nil) end
-	if Frame.Cooldown then
-		Frame.Cooldown:SetReverse(true)
-		Frame.Cooldown:SetCooldown(expires-duration, duration)
+	local frame = Aura[index][Aura[index].Index]
+	if frame then frame:Show() end
+	if frame.Icon then frame.Icon:SetTexture(icon) end
+	if frame.Count then frame.Count:SetText(count > 1 and count or nil) end
+	if frame.Cooldown then
+		frame.Cooldown:SetReverse(true)
+		frame.Cooldown:SetCooldown(expires-duration, duration)
 	end
-	if Frame.Spellname then Frame.Spellname:SetText(name) end
-	if Frame.Statusbar then
-		Frame.duration = duration
-		Frame.expires = expires
-		Frame.Timer = 0
-		Frame:SetScript("OnUpdate", updateBarTimer)
+	if frame.Spellname then frame.Spellname:SetText(name) end
+	if frame.Statusbar then
+		frame.duration = duration
+		frame.expires = expires
+		frame.Timer = 0
+		frame:SetScript("OnUpdate", updateBarTimer)
 	end
-	if Frame.glowFrame then
+	if frame.glowFrame then
 		if flash then
-			B.ShowOverlayGlow(Frame.glowFrame)
+			B.ShowOverlayGlow(frame.glowFrame)
 		else
-			B.HideOverlayGlow(Frame.glowFrame)
+			B.HideOverlayGlow(frame.glowFrame)
 		end
 	end
-	Frame.type = 4
-	Frame.unitID = UnitID
-	Frame.id = id
-	Frame.filter = filter
+	frame.type = 4
+	frame.unitID = UnitID
+	frame.id = id
+	frame.filter = filter
 
-	Aura[index].Index = (Aura[index].Index + 1 > MaxFrame) and MaxFrame or Aura[index].Index + 1
+	Aura[index].Index = (Aura[index].Index + 1 > maxFrames) and maxFrames or Aura[index].Index + 1
 end
 
 local function sortStat(a, b)
 	return a.num > b.num
 end
 
-local function getMaxStat()
+local statTable = {}
+local function GetCurrentMaxStat()
 	wipe(statTable)
 	tinsert(statTable, {num = max(GetCombatRating(CR_CRIT_SPELL), GetCombatRating(CR_CRIT_RANGED), GetCombatRating(CR_CRIT_MELEE)), text = L["Crit"]})
 	tinsert(statTable, {num = GetCombatRating(CR_HASTE_MELEE), text = L["Haste"]})
@@ -432,7 +431,7 @@ local function AuraFilter(spellID, UnitID, index, bool)
 					end
 				end
 				if value.Timeless then duration, expires = 0, 0 end
-				if spellID == 280573 then name = getMaxStat() end
+				if spellID == 280573 then name = GetCurrentMaxStat() end
 				return KEY, value.UnitID, name, icon, count, duration, expires, index, filter, value.Flash
 			end
 		end
@@ -502,21 +501,21 @@ end
 local function UpdateIntFrame(intID, itemID, duration, unitID, guid, sourceName)
 	if not UIParent:IsShown() then return end
 
-	local Frame = BuildBAR(IntCD.BarWidth, IntCD.IconSize)
-	if Frame then
-		Frame:Show()
-		tinsert(IntTable, Frame)
+	local frame = BuildBAR(IntCD.BarWidth, IntCD.IconSize)
+	if frame then
+		frame:Show()
+		tinsert(IntTable, frame)
 		SortBars()
 	end
 	local name, icon, _, class
 	if itemID then
 		name, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemID)
-		Frame.type = 2
-		Frame.spellID = itemID
+		frame.type = 2
+		frame.spellID = itemID
 	else
 		name, _, icon = GetSpellInfo(intID)
-		Frame.type = 1
-		Frame.spellID = intID
+		frame.type = 1
+		frame.spellID = intID
 	end
 	if unitID:lower() == "all" then
 		class = select(2, GetPlayerInfoByGUID(guid))
@@ -524,19 +523,19 @@ local function UpdateIntFrame(intID, itemID, duration, unitID, guid, sourceName)
 	else
 		class = DB.MyClass
 	end
-	if Frame.Icon then Frame.Icon:SetTexture(icon) end
-	if Frame.Count then Frame.Count:SetText(nil) end
-	if Frame.Cooldown then
-		Frame.Cooldown:SetReverse(true)
-		Frame.Cooldown:SetCooldown(GetTime(), duration)
+	if frame.Icon then frame.Icon:SetTexture(icon) end
+	if frame.Count then frame.Count:SetText(nil) end
+	if frame.Cooldown then
+		frame.Cooldown:SetReverse(true)
+		frame.Cooldown:SetCooldown(GetTime(), duration)
 	end
-	if Frame.Spellname then Frame.Spellname:SetText(name) end
-	if Frame.Statusbar then
-		Frame.Statusbar:SetStatusBarColor(B.ClassColor(class))
-		Frame.Statusbar:SetMinMaxValues(0, duration)
-		Frame.Timer = 0
-		Frame.duration = duration
-		Frame:SetScript("OnUpdate", updateIntTimer)
+	if frame.Spellname then frame.Spellname:SetText(name) end
+	if frame.Statusbar then
+		frame.Statusbar:SetStatusBarColor(B.ClassColor(class))
+		frame.Statusbar:SetMinMaxValues(0, duration)
+		frame.Timer = 0
+		frame.duration = duration
+		frame:SetScript("OnUpdate", updateIntTimer)
 	end
 end
 
@@ -594,7 +593,7 @@ end
 -- CleanUp
 local function CleanUp()
 	for _, value in pairs(Aura) do
-		for i = 1, MaxFrame do
+		for i = 1, maxFrames do
 			if value[i] then
 				value[i]:Hide()
 				value[i]:SetScript("OnUpdate", nil)
