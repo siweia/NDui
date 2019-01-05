@@ -16,8 +16,7 @@ end
 
 function Bar:RangeUpdate()
 	if NDuiDB["Actionbar"]["Enable"] then
-		local bar = self:GetParent():GetParent()
-		if bar and bar:GetAlpha() < 1 then return end
+		if self.__faderParent and self:GetEffectiveAlpha() < 1 then return end
 	end
 
 	local icon = self.icon
