@@ -155,8 +155,7 @@ local function CreateRaidStyle(self)
 	UF:CreateRaidDebuffs(self)
 	UF:CreateThreatBorder(self)
 	UF:CreateAuras(self)
-
-	if not NDuiDB["UFs"]["SimpleMode"] then UF:CreateBuffIndicator(self) end
+	UF:CreateBuffIndicator(self)
 end
 
 -- Spawns

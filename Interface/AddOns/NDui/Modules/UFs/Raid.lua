@@ -360,6 +360,7 @@ local function updateBuffIndicator(self, event, unit)
 end
 
 function UF:CreateBuffIndicator(self)
+	if NDuiDB["UFs"]["SimpleMode"] then return end
 	if not NDuiDB["UFs"]["RaidBuffIndicator"] then return end
 
 	local anchors = {"TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT"}
