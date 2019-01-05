@@ -82,22 +82,6 @@ function module:OnLogin()
 		return timer
 	end
 
-	local ignoreList = {
-		["Hekili"] = true,
-		["Zygor"] = true,
-		["Rematch"] = true,
-	}
-
-	local function isAddOnIgnored(self)
-		local name = self:GetParent():GetName()
-		if not name then return end
-		for addon in pairs(ignoreList) do
-			if strfind(name, addon) then
-				return true
-			end
-		end
-	end
-
 	local function Timer_Start(self, start, duration)
 		if self:IsForbidden() or self.noOCC or hideNumbers[self] then return end
 
@@ -123,15 +107,13 @@ function module:OnLogin()
 			Timer_Stop(self.timer)
 		end
 
-		-- hide cooldown flash if not visible
-		local parent = self:GetParent()
-		if parent and parent.isAuraWatch then return end
-		if isAddOnIgnored(self) then return end
-
-		if self:GetEffectiveAlpha() > 0 then
-			self:Show()
-		else
-			self:Hide()
+		-- hide cooldown flash if barFader enabled
+		if self:GetParent().__faderParent then
+			if self:GetEffectiveAlpha() < 1 then
+				self:Hide()
+			else
+				self:Show()
+			end
 		end
 	end
 
