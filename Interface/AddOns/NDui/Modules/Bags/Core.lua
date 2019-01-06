@@ -488,6 +488,7 @@ function module:OnLogin()
 	ToggleAllBags()
 	ToggleAllBags()
 	BankFrame.GetRight = function() return f.bank:GetRight() end
+	BankFrameItemButton_Update = B.Dummy
 
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 	SetInsertItemsLeftToRight(false)
