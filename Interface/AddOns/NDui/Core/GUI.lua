@@ -42,6 +42,7 @@ local defaultSettings = {
 		Bar4Fade = false,
 		Bar5Fade = true,
 		Scale = 1,
+		BindType = 1,
 	},
 	Bags = {
 		Enable = true,

@@ -201,13 +201,12 @@ SlashCmdList.MOUSEOVERBIND = function()
 			self:RegisterEvent("PLAYER_REGEN_DISABLED")
 		end
 
-		local bindType = 1
 		function bind:Deactivate(save)
 			if save then
-				SaveBindings(bindType)
+				SaveBindings(NDuiDB["Actionbar"]["BindType"])
 				print("|cffffff00"..KEY_BOUND.."|r")
 			else
-				LoadBindings(bindType)
+				LoadBindings(NDuiDB["Actionbar"]["BindType"])
 				print("|cffffff00"..UNCHECK_ALL.."|r")
 			end
 			self.enabled = false
@@ -240,12 +239,13 @@ SlashCmdList.MOUSEOVERBIND = function()
 				bind:Deactivate(false)
 			end)
 			local box = B.CreateCheckBox(frame)
+			box:SetChecked(NDuiDB["Actionbar"]["BindType"] == 2)
 			box:SetPoint("RIGHT", text, "LEFT", -5, -0)
 			box:SetScript("OnClick", function(self)
 				if self:GetChecked() == true then
-					bindType = 2
+					NDuiDB["Actionbar"]["BindType"] = 2
 				else
-					bindType = 1
+					NDuiDB["Actionbar"]["BindType"] = 1
 				end
 			end)
 		end
