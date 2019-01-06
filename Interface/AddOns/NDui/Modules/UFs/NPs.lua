@@ -64,40 +64,11 @@ function UF:BlockAddons()
 	hooksecurefunc(DBM.Nameplate, "Show", showAurasForDBM)
 end
 
-local function GetSectionInfo(id)
-	return C_EncounterJournal.GetSectionInfo(id).title
-end
-
-local CustomUnits = {
-	[GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
-	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
-	[GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
-	[GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
-	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
-	[GetSectionInfo(18104)] = true,	-- 散疫触须
-	[GetSectionInfo(18232)] = true,	-- 艾什凡炮手
-	[GetSectionInfo(18499)] = true,	-- 凝结之血
-	[GetSectionInfo(18078)] = true,	-- 蛛魔编织者
-	[GetSectionInfo(18007)] = true,	-- 瘟疫聚合体
-	[GetSectionInfo(18053)] = true,	-- 灵魂荆棘
-	[GetSectionInfo(18312)] = true,	-- 血面兽
-	[GetSectionInfo(18890)] = true,	-- 夏尔扎克斯
-	[GetSectionInfo(18321)] = true,	-- 缠绕的蛇群
-	[120651] = true, -- 爆炸物
-	[141851] = true, -- 戈霍恩之嗣
-}
 function UF:CreateUnitTable()
-	if not NDuiDB["Nameplate"]["CustomUnitColor"] then CustomUnits = nil return end
-
-	B.SplitList(CustomUnits, NDuiDB["Nameplate"]["UnitList"])
+	if not NDuiDB["Nameplate"]["CustomUnitColor"] then C.CustomUnits = nil return end
+	B.SplitList(C.CustomUnits, NDuiDB["Nameplate"]["UnitList"])
 end
 
-C.ShowPowerList = {
-	[GetSectionInfo(13015)] = true,	-- 清扫器
-	[GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
-	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
-	[GetSectionInfo(18539)] = true,	-- 碾压者
-}
 function UF:CreatePowerUnitTable()
 	B.SplitList(C.ShowPowerList, NDuiDB["Nameplate"]["ShowPowerList"])
 end
@@ -118,7 +89,7 @@ local function UpdateColor(element, unit)
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if CustomUnits and (CustomUnits[name] or CustomUnits[npcID]) then
+		if C.CustomUnits and (C.CustomUnits[name] or C.CustomUnits[npcID]) then
 			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then
