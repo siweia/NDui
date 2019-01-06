@@ -109,10 +109,10 @@ function module:OnLogin()
 
 		-- hide cooldown flash if barFader enabled
 		if self:GetParent().__faderParent then
-			if self:GetEffectiveAlpha() < 1 then
-				self:Hide()
-			else
+			if self:GetEffectiveAlpha() > 0 then
 				self:Show()
+			else
+				self:Hide()
 			end
 		end
 	end
