@@ -7,8 +7,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 
 		if AuroraConfig.tooltips then
-			F.CreateBD(frame)
-			F.CreateSD(frame)
+			F.ReskinTooltip(frame)
 		end
 	end
 
@@ -16,17 +15,15 @@ tinsert(C.themes["AuroraClassic"], function()
 		for i = 1, 9 do
 			select(i, frame:GetRegions()):Hide()
 		end
-
-		local icon = frame.Icon
-
-		icon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(icon)
+		F.ReskinIcon(frame.Icon)
 
 		if AuroraConfig.tooltips then
-			F.CreateBD(frame)
-			F.CreateSD(frame)
+			F.ReskinTooltip(frame)
 		end
 	end
+
+	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonMissionTooltip)
+	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 
 	restyleGarrisonFollowerTooltipTemplate(GarrisonFollowerTooltip)
 	restyleGarrisonFollowerAbilityTooltipTemplate(GarrisonFollowerAbilityTooltip)
@@ -37,20 +34,18 @@ tinsert(C.themes["AuroraClassic"], function()
 	restyleGarrisonFollowerAbilityTooltipTemplate(FloatingGarrisonFollowerAbilityTooltip)
 	F.ReskinClose(FloatingGarrisonFollowerAbilityTooltip.CloseButton)
 
+	restyleGarrisonFollowerTooltipTemplate(GarrisonShipyardFollowerTooltip)
 	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonShipyardFollowerTooltip)
 	F.ReskinClose(FloatingGarrisonShipyardFollowerTooltip.CloseButton)
 
 	hooksecurefunc("GarrisonFollowerTooltipTemplate_SetGarrisonFollower", function(tooltipFrame)
 		-- Abilities
-
 		if tooltipFrame.numAbilitiesStyled == nil then
 			tooltipFrame.numAbilitiesStyled = 1
 		end
 
 		local numAbilitiesStyled = tooltipFrame.numAbilitiesStyled
-
 		local abilities = tooltipFrame.Abilities
-
 		local ability = abilities[numAbilitiesStyled]
 		while ability do
 			local icon = ability.Icon
@@ -65,15 +60,12 @@ tinsert(C.themes["AuroraClassic"], function()
 		tooltipFrame.numAbilitiesStyled = numAbilitiesStyled
 
 		-- Traits
-
 		if tooltipFrame.numTraitsStyled == nil then
 			tooltipFrame.numTraitsStyled = 1
 		end
 
 		local numTraitsStyled = tooltipFrame.numTraitsStyled
-
 		local traits = tooltipFrame.Traits
-
 		local trait = traits[numTraitsStyled]
 		while trait do
 			local icon = trait.Icon
@@ -87,9 +79,4 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		tooltipFrame.numTraitsStyled = numTraitsStyled
 	end)
-	
-	-- Mission tooltip
-	
-	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonMissionTooltip)
-	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 end)

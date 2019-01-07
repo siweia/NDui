@@ -1,14 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	if AuroraConfig.tooltips then
-		for i = 1, 9 do
-			select(i, QueueStatusFrame:GetRegions()):Hide()
-		end
-		F.CreateBD(QueueStatusFrame)
-		F.CreateSD(QueueStatusFrame)
-	end
-
 	local function SkinEntry(entry)
 		for _, roleButton in next, {entry.HealersFound, entry.TanksFound, entry.DamagersFound} do
 			roleButton.Texture:SetTexture(C.media.roleIcons)

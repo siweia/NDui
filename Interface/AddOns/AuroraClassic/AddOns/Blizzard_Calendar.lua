@@ -146,15 +146,8 @@ C.themes["Blizzard_Calendar"] = function()
 	end
 
 	if AuroraConfig.tooltips then
-		local tooltips = {CalendarContextMenu, CalendarInviteStatusContextMenu}
-
-		for _, tooltip in pairs(tooltips) do
-			tooltip:SetBackdrop(nil)
-			local bg = F.CreateBDFrame(tooltip)
-			bg:SetPoint("TOPLEFT", 2, -2)
-			bg:SetPoint("BOTTOMRIGHT", -1, 2)
-			F.CreateSD(bg)
-		end
+		F.ReskinTooltip(CalendarContextMenu)
+		F.ReskinTooltip(CalendarInviteStatusContextMenu)
 	end
 
 	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)

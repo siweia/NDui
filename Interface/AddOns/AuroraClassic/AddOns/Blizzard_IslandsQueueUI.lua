@@ -12,4 +12,11 @@ C.themes["Blizzard_IslandsQueueUI"] = function()
 	local closeButton = tutorial:GetChildren()
 	F.Reskin(closeButton)
 	tutorial.TutorialText:SetTextColor(1, 1, 1)
+
+	if AuroraConfig.tooltips then
+		local tooltip = IslandsQueueFrameTooltip:GetParent()
+		tooltip.IconBorder:SetAlpha(0)
+		tooltip.Icon:SetTexCoord(.08, .92, .08, .92)
+		F.ReskinTooltip(tooltip:GetParent())
+	end
 end

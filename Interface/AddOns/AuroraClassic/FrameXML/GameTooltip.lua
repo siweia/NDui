@@ -5,6 +5,30 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	if not AuroraConfig.tooltips then return end
 
+	local function getBackdrop(self) return self.bg:GetBackdrop() end
+	local function getBackdropColor() return 0, 0, 0, .7 end
+	local function getBackdropBorderColor() return 0, 0, 0 end
+
+	function F:ReskinTooltip()
+		if not self.auroraTip then
+			self:SetBackdrop(nil)
+			self:DisableDrawLayer("BACKGROUND")
+			local bg = F.CreateBDFrame(self, .7)
+			F.CreateSD(bg)
+			self.bg = bg
+
+			self.GetBackdrop = getBackdrop
+			self.GetBackdropColor = getBackdropColor
+			self.GetBackdropBorderColor = getBackdropBorderColor
+			self.auroraTip = true
+		end
+	end
+
+	hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+		if not self.auroraTip then return end
+		self:SetBackdrop(nil)
+	end)
+
 	local tooltips = {
 		ChatMenu,
 		EmoteMenu,
@@ -22,48 +46,26 @@ tinsert(C.themes["AuroraClassic"], function()
 		WorldMapTooltip,
 		WorldMapCompareTooltip1,
 		WorldMapCompareTooltip2,
-		QuestScrollFrame.StoryTooltip,
 		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
-		QuestScrollFrame.WarCampaignTooltip,
 		NamePlateTooltip,
+		QueueStatusFrame,
+		BattlePetTooltip,
+		PetBattlePrimaryAbilityTooltip,
+		PetBattlePrimaryUnitTooltip,
+		FloatingBattlePetTooltip,
+		FloatingPetBattleAbilityTooltip,
+		IMECandidatesFrame,
 	}
-
-	local backdrop = {
-		bgFile = C.media.backdrop,
-		edgeFile = C.media.backdrop,
-		edgeSize = 1,
-	}
-
-	-- so other stuff which tries to look like GameTooltip doesn't mess up
-	local getBackdrop = function()
-		return backdrop
+	for _, tooltip in pairs(tooltips) do
+		F.ReskinTooltip(tooltip)
 	end
 
-	local getBackdropColor = function()
-		return 0, 0, 0, .6
-	end
-
-	local getBackdropBorderColor = function()
-		return 0, 0, 0
-	end
-
-	hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
-		if not self.auroraTip then return end
-		self:SetBackdrop(nil)
+	C_Timer.After(5, function()
+		if LibDBIconTooltip then
+			F.ReskinTooltip(LibDBIconTooltip)
+		end
 	end)
-
-	for i = 1, #tooltips do
-		local t = tooltips[i]
-		t:SetBackdrop(nil)
-		local bg = F.CreateBDFrame(t, .6)
-		F.CreateSD(bg)
-
-		t.auroraTip = true
-		t.GetBackdrop = getBackdrop
-		t.GetBackdropColor = getBackdropColor
-		t.GetBackdropBorderColor = getBackdropBorderColor
-	end
 
 	local sb = _G["GameTooltipStatusBar"]
 	sb:SetHeight(3)
@@ -73,27 +75,11 @@ tinsert(C.themes["AuroraClassic"], function()
 	sb:SetStatusBarTexture(C.media.backdrop)
 
 	local sep = GameTooltipStatusBar:CreateTexture(nil, "ARTWORK")
-	sep:SetHeight(1)
+	sep:SetHeight(C.mult)
 	sep:SetPoint("BOTTOMLEFT", 0, 3)
 	sep:SetPoint("BOTTOMRIGHT", 0, 3)
 	sep:SetTexture(C.media.backdrop)
 	sep:SetVertexColor(0, 0, 0)
-
-	IMECandidatesFrame.background:Hide()
-	F.CreateBD(IMECandidatesFrame)
-	F.CreateSD(IMECandidatesFrame)
-
-	-- [[ Pet battle tooltips ]]
-
-	local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
-	for _, f in pairs(tooltips) do
-		f:DisableDrawLayer("BACKGROUND")
-		local bg = CreateFrame("Frame", nil, f)
-		bg:SetAllPoints()
-		bg:SetFrameLevel(0)
-		F.CreateBD(bg)
-		F.CreateSD(bg)
-	end
 
 	PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
 	PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
@@ -125,4 +111,28 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("EmbeddedItemTooltip_SetItemByID", ReskinRewardIcon)
 	hooksecurefunc("EmbeddedItemTooltip_SetCurrencyByID", ReskinRewardIcon)
 	hooksecurefunc("QuestUtils_AddQuestCurrencyRewardsToTooltip", function(_, _, self) ReskinRewardIcon(self) end)
+
+	-- Other addons
+	local listener = CreateFrame("Frame")
+	listener:RegisterEvent("ADDON_LOADED")
+	listener:SetScript("OnEvent", function(_, _, addon)
+		if addon == "MethodDungeonTools" then
+			local styledMDT
+			hooksecurefunc(MethodDungeonTools, "ShowInterface", function()
+				if not styledMDT then
+					F.ReskinTooltip(MethodDungeonTools.tooltip)
+					F.ReskinTooltip(MethodDungeonTools.pullTooltip)
+					styledMDT = true
+				end
+			end)
+		elseif addon == "BattlePetBreedID" then
+			hooksecurefunc("BPBID_SetBreedTooltip", function(parent)
+				if parent == FloatingBattlePetTooltip then
+					F.ReskinTooltip(BPBID_BreedTooltip2)
+				else
+					F.ReskinTooltip(BPBID_BreedTooltip)
+				end
+			end)
+		end
+	end)
 end)
