@@ -556,7 +556,7 @@ do
 	infoText:ClearAllPoints()
 	infoText:SetPoint("TOP", TradeFrameRecipientNameText, "BOTTOM", 0, -5)
 
-	hooksecurefunc("TradeFrame_Update", function()
+	local function updateColor()
 		local r, g, b = B.UnitColor("NPC")
 		TradeFrameRecipientNameText:SetTextColor(r, g, b)
 
@@ -564,10 +564,11 @@ do
 		if not guid then return end
 		local text = "|cffff0000"..L["Stranger"]
 		if BNGetGameAccountInfoByGUID(guid) or IsCharacterFriend(guid) then
-			text = "|cff00ff00"..GUILD
-		elseif IsGuildMember(guid) then
 			text = "|cffffff00"..FRIEND
+		elseif IsGuildMember(guid) then
+			text = "|cff00ff00"..GUILD
 		end
 		infoText:SetText(text)
-	end)
+	end
+	hooksecurefunc("TradeFrame_Update", updateColor)
 end
