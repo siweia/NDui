@@ -304,6 +304,10 @@ local function getBackdropColor() return 0, 0, 0, .7 end
 local function getBackdropBorderColor() return 0, 0, 0 end
 
 function B:ReskinTooltip()
+	if not self then
+		if DB.isDeveloper then print("Unknown tooltip spotted.") end
+		return
+	end
 	self:SetScale(NDuiDB["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
@@ -466,7 +470,6 @@ local function addonStyled(_, addon)
 		-- MeetingShit
 		if IsAddOnLoaded("MeetingStone") then
 			B.ReskinTooltip(NetEaseGUI20_Tooltip51)
-			B.ReskinTooltip(NetEaseGUI20_Tooltip52)
 		end
 
 		if IsAddOnLoaded("BattlePetBreedID") then
