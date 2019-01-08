@@ -48,6 +48,7 @@
 	<Script file="Blizzard_TokenUI.lua"/>
 	<Script file="Blizzard_TradeSkillUI.lua"/>
 	<Script file="Blizzard_TrainerUI.lua"/>
+	<Script file="Blizzard_Tutorial.lua"/>
 	<Script file="Blizzard_VoidStorageUI.lua"/>
 	<Script file="Blizzard_WarboardUI.lua"/>
 	<Script file="Blizzard_WarfrontsPartyPoseUI.lua"/>
