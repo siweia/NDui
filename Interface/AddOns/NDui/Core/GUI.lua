@@ -514,7 +514,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},
 		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"], true},
-		{1, "Tooltip", "AzeriteArmor", L["Show AzeriteArmor"], true},
+		{1, "Tooltip", "AzeriteArmor", L["Show AzeriteArmor"]},
 	},
 	[12] = {
 		{1, "Misc", "Mail", L["Mail Tool"]},
