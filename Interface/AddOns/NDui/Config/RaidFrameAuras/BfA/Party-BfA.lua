@@ -168,6 +168,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 266231) -- 斩首之斧
 module:RegisterDebuff(TIER, INSTANCE, 0, 266191) -- 回旋飞斧
 module:RegisterDebuff(TIER, INSTANCE, 0, 272388) -- 暗影弹幕
 module:RegisterDebuff(TIER, INSTANCE, 0, 268796) -- 穿刺长矛
+module:RegisterDebuff(TIER, INSTANCE, 0, 270289) -- 净化光线
 
 INSTANCE = 968 -- 阿塔达萨
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
