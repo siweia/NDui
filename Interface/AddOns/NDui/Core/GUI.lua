@@ -194,6 +194,7 @@ local defaultSettings = {
 		SpecLevelByShift = false,
 		HideRealm = false,
 		HideTitle = false,
+		HideJunkGuild = true,
 	},
 	Misc = {
 		Mail = true,
@@ -508,10 +509,11 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "HideTitle", L["Hide Title"].."*"},
 		{1, "Tooltip", "FactionIcon", L["FactionIcon"].."*", true},
 		{1, "Tooltip", "HideRank", L["Hide Rank"].."*"},
-		{1, "Tooltip", "HideRealm", L["Hide Realm"].."*", true},
-		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
+		{1, "Tooltip", "HideJunkGuild", L["HideJunkGuild"].."*", true},
+		{1, "Tooltip", "HideRealm", L["Hide Realm"].."*"},
 		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},
-		{1, "Tooltip", "TargetBy", L["Show TargetedBy"]},
+		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
+		{1, "Tooltip", "TargetBy", L["Show TargetedBy"], true},
 		{1, "Tooltip", "AzeriteArmor", L["Show AzeriteArmor"], true},
 	},
 	[12] = {

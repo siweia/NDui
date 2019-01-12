@@ -15,7 +15,8 @@ local classification = {
 	worldboss = " |cffff0000"..BOSS.."|r",
 }
 
-local strfind, format, strupper, strsplit, pairs = string.find, string.format, string.upper, string.split, pairs
+local strfind, format, strupper, strsplit = string.find, string.format, string.upper, string.split
+local gsub, strlen, pairs = string.gsub,  string.len, pairs
 
 local function getUnit(self)
 	local _, unit = self and self:GetUnit()
@@ -164,6 +165,12 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 				if NDuiDB["Tooltip"]["HideRank"] then rank = "" end
 				if guildRealm and isShiftKeyDown then
 					guildName = guildName.."-"..guildRealm
+				end
+				if NDuiDB["Tooltip"]["HideJunkGuild"] and not isShiftKeyDown then
+					local cleanName = gsub(guildName, "%w", "")
+					if cleanName ~= "" and strlen(cleanName) > 30 then
+						guildName = L["ExceedName"]
+					end
 				end
 				GameTooltipTextLeft2:SetText("<"..guildName.."> "..rank.."("..rankIndex..")")
 
