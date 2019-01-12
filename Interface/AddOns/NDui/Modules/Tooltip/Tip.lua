@@ -357,186 +357,206 @@ hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
 	self:SetBackdrop(nil)
 end)
 
+local tipTable = {}
+function module:RegisterTooltips(addon, func)
+	tipTable[addon] = func
+end
 local function addonStyled(_, addon)
-	if addon == "Blizzard_DebugTools" then
-		B.ReskinTooltip(FrameStackTooltip)
-		B.ReskinTooltip(EventTraceTooltip)
-		FrameStackTooltip:SetScale(UIParent:GetScale())
-		EventTraceTooltip:SetParent(UIParent)
-		EventTraceTooltip:SetFrameStrata("TOOLTIP")
-
-	elseif addon == "NDui" then
-		if IsAddOnLoaded("AuroraClassic") then
-			local F = unpack(AuroraClassic)
-			F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-			F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
-			F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
-			AuroraOptionstooltips:SetAlpha(0)
-			AuroraOptionstooltips:Disable()
-			AuroraConfig.tooltips = false
-		end
-
-		local tooltips = {
-			ChatMenu,
-			EmoteMenu,
-			LanguageMenu,
-			VoiceMacroMenu,
-			GameTooltip,
-			EmbeddedItemTooltip,
-			ItemRefTooltip,
-			ItemRefShoppingTooltip1,
-			ItemRefShoppingTooltip2,
-			ShoppingTooltip1,
-			ShoppingTooltip2,
-			AutoCompleteBox,
-			FriendsTooltip,
-			WorldMapTooltip,
-			WorldMapCompareTooltip1,
-			WorldMapCompareTooltip2,
-			QuestScrollFrame.StoryTooltip,
-			GeneralDockManagerOverflowButtonList,
-			ReputationParagonTooltip,
-			QuestScrollFrame.WarCampaignTooltip,
-			NamePlateTooltip,
-			LibDBIconTooltip,
-			QueueStatusFrame,
-			FloatingGarrisonFollowerTooltip,
-			FloatingGarrisonFollowerAbilityTooltip,
-			FloatingGarrisonMissionTooltip,
-			GarrisonFollowerAbilityTooltip,
-			GarrisonFollowerTooltip,
-			FloatingGarrisonShipyardFollowerTooltip,
-			GarrisonShipyardFollowerTooltip,
-			BattlePetTooltip,
-			PetBattlePrimaryAbilityTooltip,
-			PetBattlePrimaryUnitTooltip,
-			FloatingBattlePetTooltip,
-			FloatingPetBattleAbilityTooltip,
-			IMECandidatesFrame
-		}
-		for _, f in pairs(tooltips) do
-			f:HookScript("OnShow", B.ReskinTooltip)
-		end
-
-		-- DropdownMenu
-		local function reskinDropdown()
-			for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do
-				for i = 1, UIDROPDOWNMENU_MAXLEVELS do
-					local menu = _G[name..i.."MenuBackdrop"]
-					if menu and not menu.styled then
-						menu:HookScript("OnShow", B.ReskinTooltip)
-						menu.styled = true
-					end
-				end
-			end
-		end
-		hooksecurefunc("UIDropDownMenu_CreateFrames", reskinDropdown)
-
-		-- IME
-		local r, g, b = DB.r, DB.g, DB.b
-		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
-
-		-- Pet Tooltip
-		PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
-			self.Border:SetAlpha(0)
-			if not self.tipStyled then
-				if self.glow then self.glow:Hide() end
-				self.Icon:SetTexCoord(unpack(DB.TexCoord))
-				self.tipStyled = true
-			end
-		end)
-
-		hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self)
-			local nextBuff, nextDebuff = 1, 1
-			for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
-				local _, _, _, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
-				if isBuff and self.Buffs then
-					local frame = self.Buffs.frames[nextBuff]
-					if frame and frame.Icon then
-						frame.Icon:SetTexCoord(unpack(DB.TexCoord))
-					end
-					nextBuff = nextBuff + 1
-				elseif (not isBuff) and self.Debuffs then
-					local frame = self.Debuffs.frames[nextDebuff]
-					if frame and frame.Icon then
-						frame.DebuffBorder:Hide()
-						frame.Icon:SetTexCoord(unpack(DB.TexCoord))
-					end
-					nextDebuff = nextDebuff + 1
-				end
-			end
-		end)
-
-		-- MeetingShit
-		if IsAddOnLoaded("MeetingStone") then
-			B.ReskinTooltip(NetEaseGUI20_Tooltip51)
-		end
-
-		if IsAddOnLoaded("BattlePetBreedID") then
-			hooksecurefunc("BPBID_SetBreedTooltip", function(parent)
-				if parent == FloatingBattlePetTooltip then
-					B.ReskinTooltip(BPBID_BreedTooltip2)
-				else
-					B.ReskinTooltip(BPBID_BreedTooltip)
-				end
-			end)
-		end
-
-		if IsAddOnLoaded("MethodDungeonTools") then
-			local styledMDT
-			hooksecurefunc(MethodDungeonTools, "ShowInterface", function()
-				if not styledMDT then
-					B.ReskinTooltip(MethodDungeonTools.tooltip)
-					B.ReskinTooltip(MethodDungeonTools.pullTooltip)
-					styledMDT = true
-				end
-			end)
-		end
-
-	elseif addon == "Blizzard_Collections" then
-		PetJournalPrimaryAbilityTooltip:HookScript("OnShow", B.ReskinTooltip)
-		PetJournalSecondaryAbilityTooltip:HookScript("OnShow", B.ReskinTooltip)
-		PetJournalPrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-		PetJournalPrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
-		PetJournalPrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-		PetJournalPrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-
-	elseif addon == "Blizzard_GarrisonUI" then
-		local gt = {
-			GarrisonMissionMechanicTooltip,
-			GarrisonMissionMechanicFollowerCounterTooltip,
-			GarrisonShipyardMapMissionTooltip,
-			GarrisonBonusAreaTooltip,
-			GarrisonBuildingFrame.BuildingLevelTooltip,
-			GarrisonFollowerAbilityWithoutCountersTooltip,
-			GarrisonFollowerMissionAbilityWithoutCountersTooltip
-		}
-		for _, f in pairs(gt) do
-			f:HookScript("OnShow", B.ReskinTooltip)
-		end
-
-	elseif addon == "Blizzard_PVPUI" then
-		ConquestTooltip:HookScript("OnShow", B.ReskinTooltip)
-
-	elseif addon == "Blizzard_Contribution" then
-		ContributionBuffTooltip:HookScript("OnShow", B.ReskinTooltip)
-		ContributionBuffTooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
-		ContributionBuffTooltip.Border:SetAlpha(0)
-
-	elseif addon == "Blizzard_EncounterJournal" then
-		EncounterJournalTooltip:HookScript("OnShow", B.ReskinTooltip)
-		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
-		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(DB.TexCoord))
-
-	elseif addon == "Blizzard_Calendar" then
-		CalendarContextMenu:HookScript("OnShow", B.ReskinTooltip)
-		CalendarInviteStatusContextMenu:HookScript("OnShow", B.ReskinTooltip)
-
-	elseif addon == "Blizzard_IslandsQueueUI" then
-		local tooltip = IslandsQueueFrameTooltip:GetParent()
-		tooltip.IconBorder:SetAlpha(0)
-		tooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
-		tooltip:GetParent():HookScript("OnShow", B.ReskinTooltip)
+	if tipTable[addon] then
+		tipTable[addon]()
+		tipTable[addon] = nil
 	end
 end
 B:RegisterEvent("ADDON_LOADED", addonStyled)
+
+module:RegisterTooltips("NDui", function()
+	if IsAddOnLoaded("AuroraClassic") then
+		local F = unpack(AuroraClassic)
+		F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
+		F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
+		F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
+		AuroraOptionstooltips:SetAlpha(0)
+		AuroraOptionstooltips:Disable()
+		AuroraConfig.tooltips = false
+	end
+
+	local tooltips = {
+		ChatMenu,
+		EmoteMenu,
+		LanguageMenu,
+		VoiceMacroMenu,
+		GameTooltip,
+		EmbeddedItemTooltip,
+		ItemRefTooltip,
+		ItemRefShoppingTooltip1,
+		ItemRefShoppingTooltip2,
+		ShoppingTooltip1,
+		ShoppingTooltip2,
+		AutoCompleteBox,
+		FriendsTooltip,
+		WorldMapTooltip,
+		WorldMapCompareTooltip1,
+		WorldMapCompareTooltip2,
+		QuestScrollFrame.StoryTooltip,
+		GeneralDockManagerOverflowButtonList,
+		ReputationParagonTooltip,
+		QuestScrollFrame.WarCampaignTooltip,
+		NamePlateTooltip,
+		QueueStatusFrame,
+		FloatingGarrisonFollowerTooltip,
+		FloatingGarrisonFollowerAbilityTooltip,
+		FloatingGarrisonMissionTooltip,
+		GarrisonFollowerAbilityTooltip,
+		GarrisonFollowerTooltip,
+		FloatingGarrisonShipyardFollowerTooltip,
+		GarrisonShipyardFollowerTooltip,
+		BattlePetTooltip,
+		PetBattlePrimaryAbilityTooltip,
+		PetBattlePrimaryUnitTooltip,
+		FloatingBattlePetTooltip,
+		FloatingPetBattleAbilityTooltip,
+		IMECandidatesFrame
+	}
+	for _, f in pairs(tooltips) do
+		f:HookScript("OnShow", B.ReskinTooltip)
+	end
+
+	-- DropdownMenu
+	local function reskinDropdown()
+		for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do
+			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
+				local menu = _G[name..i.."MenuBackdrop"]
+				if menu and not menu.styled then
+					menu:HookScript("OnShow", B.ReskinTooltip)
+					menu.styled = true
+				end
+			end
+		end
+	end
+	hooksecurefunc("UIDropDownMenu_CreateFrames", reskinDropdown)
+
+	-- IME
+	local r, g, b = DB.r, DB.g, DB.b
+	IMECandidatesFrame.selection:SetVertexColor(r, g, b)
+
+	-- Pet Tooltip
+	PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
+		self.Border:SetAlpha(0)
+		if not self.iconStyled then
+			if self.glow then self.glow:Hide() end
+			self.Icon:SetTexCoord(unpack(DB.TexCoord))
+			self.iconStyled = true
+		end
+	end)
+
+	hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self)
+		local nextBuff, nextDebuff = 1, 1
+		for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
+			local _, _, _, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
+			if isBuff and self.Buffs then
+				local frame = self.Buffs.frames[nextBuff]
+				if frame and frame.Icon then
+					frame.Icon:SetTexCoord(unpack(DB.TexCoord))
+				end
+				nextBuff = nextBuff + 1
+			elseif (not isBuff) and self.Debuffs then
+				local frame = self.Debuffs.frames[nextDebuff]
+				if frame and frame.Icon then
+					frame.DebuffBorder:Hide()
+					frame.Icon:SetTexCoord(unpack(DB.TexCoord))
+				end
+				nextDebuff = nextDebuff + 1
+			end
+		end
+	end)
+
+	-- Others
+	C_Timer.After(5, function()
+		if LibDBIconTooltip then
+			B.ReskinTooltip(LibDBIconTooltip)
+		end
+	end)
+
+	if IsAddOnLoaded("BattlePetBreedID") then
+		hooksecurefunc("BPBID_SetBreedTooltip", function(parent)
+			if parent == FloatingBattlePetTooltip then
+				B.ReskinTooltip(BPBID_BreedTooltip2)
+			else
+				B.ReskinTooltip(BPBID_BreedTooltip)
+			end
+		end)
+	end
+
+	if IsAddOnLoaded("MethodDungeonTools") then
+		local styledMDT
+		hooksecurefunc(MethodDungeonTools, "ShowInterface", function()
+			if not styledMDT then
+				B.ReskinTooltip(MethodDungeonTools.tooltip)
+				B.ReskinTooltip(MethodDungeonTools.pullTooltip)
+				styledMDT = true
+			end
+		end)
+	end
+
+	if IsAddOnLoaded("MeetingStone") then B.ReskinTooltip(NetEaseGUI20_Tooltip51) end
+end)
+
+module:RegisterTooltips("Blizzard_DebugTools", function()
+	B.ReskinTooltip(FrameStackTooltip)
+	B.ReskinTooltip(EventTraceTooltip)
+	FrameStackTooltip:SetScale(UIParent:GetScale())
+	EventTraceTooltip:SetParent(UIParent)
+	EventTraceTooltip:SetFrameStrata("TOOLTIP")
+end)
+
+module:RegisterTooltips("Blizzard_Collections", function()
+	PetJournalPrimaryAbilityTooltip:HookScript("OnShow", B.ReskinTooltip)
+	PetJournalSecondaryAbilityTooltip:HookScript("OnShow", B.ReskinTooltip)
+	PetJournalPrimaryAbilityTooltip.Delimiter1:SetHeight(1)
+	PetJournalPrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
+	PetJournalPrimaryAbilityTooltip.Delimiter2:SetHeight(1)
+	PetJournalPrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
+end)
+
+module:RegisterTooltips("Blizzard_GarrisonUI", function()
+	local gt = {
+		GarrisonMissionMechanicTooltip,
+		GarrisonMissionMechanicFollowerCounterTooltip,
+		GarrisonShipyardMapMissionTooltip,
+		GarrisonBonusAreaTooltip,
+		GarrisonBuildingFrame.BuildingLevelTooltip,
+		GarrisonFollowerAbilityWithoutCountersTooltip,
+		GarrisonFollowerMissionAbilityWithoutCountersTooltip
+	}
+	for _, f in pairs(gt) do
+		f:HookScript("OnShow", B.ReskinTooltip)
+	end
+end)
+
+module:RegisterTooltips("Blizzard_PVPUI", function()
+	ConquestTooltip:HookScript("OnShow", B.ReskinTooltip)
+end)
+
+module:RegisterTooltips("Blizzard_Contribution", function()
+	ContributionBuffTooltip:HookScript("OnShow", B.ReskinTooltip)
+	ContributionBuffTooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
+	ContributionBuffTooltip.Border:SetAlpha(0)
+end)
+
+module:RegisterTooltips("Blizzard_EncounterJournal", function()
+	EncounterJournalTooltip:HookScript("OnShow", B.ReskinTooltip)
+	EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
+	EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(DB.TexCoord))
+end)
+
+module:RegisterTooltips("Blizzard_Calendar", function()
+	CalendarContextMenu:HookScript("OnShow", B.ReskinTooltip)
+	CalendarInviteStatusContextMenu:HookScript("OnShow", B.ReskinTooltip)
+end)
+
+module:RegisterTooltips("Blizzard_IslandsQueueUI", function()
+	local tooltip = IslandsQueueFrameTooltip:GetParent()
+	tooltip.IconBorder:SetAlpha(0)
+	tooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
+	tooltip:GetParent():HookScript("OnShow", B.ReskinTooltip)
+end)
