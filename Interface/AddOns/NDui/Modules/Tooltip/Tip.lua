@@ -16,8 +16,6 @@ local classification = {
 }
 
 local strfind, format, strupper, strsplit, pairs = string.find, string.format, string.upper, string.split, pairs
-local COALESCED_REALM_TOOLTIP1 = strsplit(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
-local INTERACTIVE_REALM_TOOLTIP1 = strsplit(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
 
 local function getUnit(self)
 	local _, unit = self and self:GetUnit()
@@ -33,25 +31,18 @@ local function hideLines(self)
         local tiptext = _G["GameTooltipTextLeft"..i]
 		local linetext = tiptext:GetText()
 		if linetext then
-			if NDuiDB["Tooltip"]["HidePVP"] and linetext == PVP_ENABLED then
+			if linetext == PVP then
 				tiptext:SetText(nil)
 				tiptext:Hide()
-			elseif strfind(linetext, COALESCED_REALM_TOOLTIP1) or strfind(linetext, INTERACTIVE_REALM_TOOLTIP1) then
-				tiptext:SetText(nil)
-				tiptext:Hide()
-				local pretiptext = _G["GameTooltipTextLeft"..i-1]
-				pretiptext:SetText(nil)
-				pretiptext:Hide()
-				self:Show()
 			elseif linetext == FACTION_HORDE then
-				if NDuiDB["Tooltip"]["HideFaction"] then
+				if NDuiDB["Tooltip"]["FactionIcon"] then
 					tiptext:SetText(nil)
 					tiptext:Hide()
 				else
 					tiptext:SetText("|cffff5040"..linetext.."|r")
 				end
 			elseif linetext == FACTION_ALLIANCE then
-				if NDuiDB["Tooltip"]["HideFaction"] then
+				if NDuiDB["Tooltip"]["FactionIcon"] then
 					tiptext:SetText(nil)
 					tiptext:Hide()
 				else
@@ -118,6 +109,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	hideLines(self)
 
 	local unit = getUnit(self)
+	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
 		local hexColor = B.HexRGB(B.UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
@@ -127,16 +119,29 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			GameTooltipTextLeft1:SetFormattedText(("%s %s"), ICON_LIST[ricon].."18|t", text)
 		end
 
-		if UnitIsPlayer(unit) then
+		local isPlayer = UnitIsPlayer(unit)
+		if isPlayer then
+			local name, realm = UnitName(unit)
+			local pvpName = UnitPVPName(unit)
 			local relationship = UnitRealmRelationship(unit)
-			if relationship == LE_REALM_RELATION_VIRTUAL then
-				self:AppendText(format("|cffcccccc%s|r", INTERACTIVE_SERVER_LABEL))
+			if not NDuiDB["Tooltip"]["HideTitle"] and pvpName then
+				name = pvpName
+			end
+			if realm and realm ~= "" then
+				if isShiftKeyDown or not NDuiDB["Tooltip"]["HideRealm"] then
+					name = name.."-"..realm
+				elseif relationship == LE_REALM_RELATION_COALESCED then
+					name = name..FOREIGN_SERVER_LABEL
+				elseif relationship == LE_REALM_RELATION_VIRTUAL then
+					name = name..INTERACTIVE_SERVER_LABEL
+				end
 			end
 
 			local status = (UnitIsAFK(unit) and AFK) or (UnitIsDND(unit) and DND) or (not UnitIsConnected(unit) and PLAYER_OFFLINE)
 			if status then
-				self:AppendText(format(" |cff00cc00<%s>|r", status))
+				status = format(" |cffffcc00[%s]|r", status)
 			end
+			GameTooltipTextLeft1:SetFormattedText("%s", hexColor..name..(status or ""))
 
 			if NDuiDB["Tooltip"]["FactionIcon"] then
 				local faction = UnitFactionGroup(unit)
@@ -153,14 +158,14 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			end
 
 			local guildName, rank, rankIndex, guildRealm = GetGuildInfo(unit)
-			local text = GameTooltipTextLeft2:GetText()
-			if rank and text then
+			local hasText = GameTooltipTextLeft2:GetText()
+			if guildName and hasText then
 				rankIndex = rankIndex + 1
-				if NDuiDB["Tooltip"]["HideRank"] then
-					GameTooltipTextLeft2:SetText("<"..text..">")
-				else
-					GameTooltipTextLeft2:SetText("<"..text..">  "..rank.."("..rankIndex..")")
+				if NDuiDB["Tooltip"]["HideRank"] then rank = "" end
+				if guildRealm and isShiftKeyDown then
+					guildName = guildName.."-"..guildRealm
 				end
+				GameTooltipTextLeft2:SetText("<"..guildName.."> "..rank.."("..rankIndex..")")
 
 				local myGuild, _, _, myGuildRealm = GetGuildInfo("player")
 				if IsInGuild() and guildName == myGuild and guildRealm == myGuildRealm then
@@ -170,9 +175,6 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 				end
 			end
 		end
-
-		local line1 = GameTooltipTextLeft1:GetText()
-		GameTooltipTextLeft1:SetFormattedText("%s", hexColor..line1)
 
 		local alive = not UnitIsDeadOrGhost(unit)
 		local level
@@ -198,10 +200,10 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 				end
 			end
 
-			local creature = not UnitIsPlayer(unit) and UnitCreatureType(unit) or ""
-			local unitClass = UnitIsPlayer(unit) and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or ""
+			local pvpFlag = UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
+			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
 			if tiptextLevel then
-				tiptextLevel:SetFormattedText(("%s %s%s %s"), textLevel, creature, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
+				tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 			end
 		end
 
