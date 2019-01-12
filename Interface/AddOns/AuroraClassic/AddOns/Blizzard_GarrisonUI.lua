@@ -54,7 +54,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		local env = self.Stage.MissionEnvIcon
 		env.Texture:SetDrawLayer("BORDER", 1)
-		F.ReskinIcon(env.Texture)
+		env.bg = F.ReskinIcon(env.Texture)
 
 		local item = self.RewardsFrame.OvermaxItem
 		item.Icon:SetDrawLayer("BORDER", 1)
@@ -710,6 +710,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					frame.PortraitFrame.squareBG:Show()
 				end
 			end
+		end
+	end)
+
+	hooksecurefunc(GarrisonMission, "ShowMission", function(self)
+		local envIcon = self:GetMissionPage().Stage.MissionEnvIcon
+		if envIcon.bg then
+			envIcon.bg:SetShown(envIcon.Texture:GetTexture())
 		end
 	end)
 
