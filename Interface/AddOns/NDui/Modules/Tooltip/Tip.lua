@@ -16,9 +16,9 @@ local classification = {
 }
 
 local strfind, format, strupper, strsplit = string.find, string.format, string.upper, string.split
-local gsub, strlen, pairs = string.gsub,  string.len, pairs
+local strlen, pairs = string.len, pairs
 
-local function getUnit(self)
+function module:GetUnit(self)
 	local _, unit = self and self:GetUnit()
 	if not unit then
 		local mFocus = GetMouseFocus()
@@ -27,7 +27,7 @@ local function getUnit(self)
 	return unit
 end
 
-local function hideLines(self)
+function module:HideLines(self)
     for i = 3, self:NumLines() do
         local tiptext = _G["GameTooltipTextLeft"..i]
 		local linetext = tiptext:GetText()
@@ -54,7 +54,17 @@ local function hideLines(self)
     end
 end
 
-local function getTarget(unit)
+function module:GetLevelLine(self)
+	for i = 2, self:NumLines() do
+		local tiptext = _G["GameTooltipTextLeft"..i]
+		local linetext = tiptext:GetText()
+		if linetext and strfind(linetext, LEVEL) then
+			return tiptext
+		end
+	end
+end
+
+function module:GetTarget(unit)
 	if UnitIsUnit(unit, "player") then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
@@ -62,7 +72,7 @@ local function getTarget(unit)
 	end
 end
 
-local function InsertFactionFrame(self, faction)
+function module:InsertFactionFrame(self, faction)
 	if not self.factionFrame then
 		local f = self:CreateTexture(nil, "OVERLAY")
 		f:SetPoint("TOPRIGHT", 0, -5)
@@ -79,7 +89,7 @@ local roleTex = {
 	["DAMAGER"] = {.66, .813, .133, .445},
 }
 
-local function InsertRoleFrame(self, role)
+function module:InsertRoleFrame(self, role)
 	if not self.roleFrame then
 		local f = self:CreateTexture(nil, "OVERLAY")
 		f:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, -2)
@@ -107,9 +117,9 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	if NDuiDB["Tooltip"]["CombatHide"] and InCombatLockdown() then
 		return self:Hide()
 	end
-	hideLines(self)
+	module:HideLines(self)
 
-	local unit = getUnit(self)
+	local unit = module:GetUnit(self)
 	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
 		local hexColor = B.HexRGB(B.UnitColor(unit))
@@ -142,46 +152,46 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			if status then
 				status = format(" |cffffcc00[%s]|r", status)
 			end
-			GameTooltipTextLeft1:SetFormattedText("%s", hexColor..name..(status or ""))
+			GameTooltipTextLeft1:SetFormattedText("%s", name..(status or ""))
 
 			if NDuiDB["Tooltip"]["FactionIcon"] then
 				local faction = UnitFactionGroup(unit)
 				if faction and faction ~= "Neutral" then
-					InsertFactionFrame(self, faction)
+					module:InsertFactionFrame(self, faction)
 				end
 			end
 
 			if NDuiDB["Tooltip"]["LFDRole"] then
 				local role = UnitGroupRolesAssigned(unit)
 				if role ~= "NONE" then
-					InsertRoleFrame(self, role)
+					module:InsertRoleFrame(self, role)
 				end
 			end
 
 			local guildName, rank, rankIndex, guildRealm = GetGuildInfo(unit)
 			local hasText = GameTooltipTextLeft2:GetText()
 			if guildName and hasText then
-				rankIndex = rankIndex + 1
-				if NDuiDB["Tooltip"]["HideRank"] then rank = "" end
-				if guildRealm and isShiftKeyDown then
-					guildName = guildName.."-"..guildRealm
-				end
-				if NDuiDB["Tooltip"]["HideJunkGuild"] and not isShiftKeyDown then
-					local cleanName = gsub(guildName, "%w", "")
-					if cleanName ~= "" and strlen(cleanName) > 30 then
-						guildName = L["ExceedName"]
-					end
-				end
-				GameTooltipTextLeft2:SetText("<"..guildName.."> "..rank.."("..rankIndex..")")
-
 				local myGuild, _, _, myGuildRealm = GetGuildInfo("player")
 				if IsInGuild() and guildName == myGuild and guildRealm == myGuildRealm then
 					GameTooltipTextLeft2:SetTextColor(.25, 1, .25)
 				else
 					GameTooltipTextLeft2:SetTextColor(.6, .8, 1)
 				end
+
+				rankIndex = rankIndex + 1
+				if NDuiDB["Tooltip"]["HideRank"] then rank = "" end
+				if guildRealm and isShiftKeyDown then
+					guildName = guildName.."-"..guildRealm
+				end
+				if NDuiDB["Tooltip"]["HideJunkGuild"] and not isShiftKeyDown then
+					if strlen(guildName) > 31 then guildName = "..." end
+				end
+				GameTooltipTextLeft2:SetText("<"..guildName.."> "..rank.."("..rankIndex..")")
 			end
 		end
+
+		local line1 = GameTooltipTextLeft1:GetText()
+		GameTooltipTextLeft1:SetFormattedText("%s", hexColor..line1)
 
 		local alive = not UnitIsDeadOrGhost(unit)
 		local level
@@ -198,18 +208,10 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			local diff = GetCreatureDifficultyColor(level)
 			local classify = UnitClassification(unit)
 			local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
-			local tiptextLevel
-			for i = 2, self:NumLines() do
-				local tiptext = _G["GameTooltipTextLeft"..i]
-				local linetext = tiptext:GetText()
-				if linetext and strfind(linetext, LEVEL) then
-					tiptextLevel = tiptext
-				end
-			end
-
-			local pvpFlag = UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
-			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
+			local tiptextLevel = module:GetLevelLine(self)
 			if tiptextLevel then
+				local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
+				local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
 				tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 			end
 		end
@@ -217,7 +219,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		if UnitExists(unit.."target") then
 			local tarRicon = GetRaidTargetIndex(unit.."target")
 			if tarRicon and tarRicon > 8 then tarRicon = nil end
-			local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", getTarget(unit.."target"))
+			local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", module:GetTarget(unit.."target"))
 			self:AddLine(TARGET..": "..tar)
 		end
 
@@ -230,19 +232,17 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
 	end
 
-	if GameTooltipStatusBar:IsShown() then
+	if GameTooltipStatusBar:IsShown() and C.mult and not GameTooltipStatusBar.bg then
 		GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 3)
-		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -2, 3)
-		if C.mult and not GameTooltipStatusBar.bg then
-			GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
-			GameTooltipStatusBar:SetHeight(5)
-			local bg = B.CreateBG(GameTooltipStatusBar)
-			B.CreateBD(bg, .7)
-			B.CreateSD(bg)
-			B.CreateTex(bg)
-			GameTooltipStatusBar.bg = bg
-		end
+		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", C.mult, 3)
+		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -C.mult, 3)
+		GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
+		GameTooltipStatusBar:SetHeight(5)
+		local bg = B.CreateBG(GameTooltipStatusBar)
+		B.CreateBD(bg, .7)
+		B.CreateSD(bg)
+		B.CreateTex(bg)
+		GameTooltipStatusBar.bg = bg
 	end
 end)
 
@@ -251,7 +251,7 @@ GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
 	local min, max = self:GetMinMaxValues()
 	if (value < min) or (value > max) then return end
 
-	local unit = getUnit(GameTooltip)
+	local unit = module:GetUnit(GameTooltip)
 	if UnitExists(unit) then
 		min, max = UnitHealth(unit), UnitHealthMax(unit)
 		if not self.text then
