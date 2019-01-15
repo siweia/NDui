@@ -58,7 +58,9 @@ C.themes["Blizzard_Communities"] = function()
 		tab:GetRegions():Hide()
 		F.ReskinIcon(tab.Icon)
 		tab:SetCheckedTexture(C.media.checked)
-		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		local hl = tab:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetAllPoints(tab.Icon)
 	end
 
 	-- ChatTab
