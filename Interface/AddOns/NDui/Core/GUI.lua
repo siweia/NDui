@@ -507,8 +507,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "Tooltip", "Scale", L["Tooltip Scale"].."*", true, {.5, 1.5, 1}},
 		{},--blank
 		{1, "Tooltip", "HideTitle", L["Hide Title"].."*"},
-		{1, "Tooltip", "FactionIcon", L["FactionIcon"].."*", true},
-		{1, "Tooltip", "HideRank", L["Hide Rank"].."*"},
+		{1, "Tooltip", "HideRank", L["Hide Rank"].."*", true},
+		{1, "Tooltip", "FactionIcon", L["FactionIcon"].."*"},
 		{1, "Tooltip", "HideJunkGuild", L["HideJunkGuild"].."*", true},
 		{1, "Tooltip", "HideRealm", L["Hide Realm"].."*"},
 		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},

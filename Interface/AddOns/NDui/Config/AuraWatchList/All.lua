@@ -91,6 +91,7 @@ local list = {
 		{AuraID = 278231, UnitID = "player"},	-- 森林之王的愤怒
 		{AuraID = 268311, UnitID = "player"},	-- 唤风者之赐
 		{AuraID = 285489, UnitID = "player"},	-- 黑喉之力
+		{AuraID = 278317, UnitID = "player"},	-- 末日余波
 		{AuraID = 274430, UnitID = "player", Text = L["Haste"]},	-- 永不间断的时钟，急速
 		{AuraID = 274431, UnitID = "player", Text = L["Mastery"]},	-- 精通
 		{AuraID = 267325, UnitID = "player", Text = L["Mastery"]},	-- 注铅骰子，精通
