@@ -241,7 +241,7 @@ local function Pos()
 			local frame = VALUE[i]
 			if i == 1 then
 				frame:SetPoint("CENTER", frame.MoveHandle)
-			elseif value.Name == "Target Aura" and i == 7 then
+			elseif (value.Name == "Target Aura" or value.Name == "Enchant Aura") and i == 7 then
 				frame:SetPoint("BOTTOM", VALUE[1], "TOP", 0, value.Interval)
 			else
 				if value.Direction:lower() == "right" then
