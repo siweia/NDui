@@ -161,6 +161,7 @@ local defaultSettings = {
 		InsecureColor = {r=1, g=0, b=0},
 		DPSRevertThreat = false,
 		ExplosivesScale = false,
+		PPIconSize = 32,
 	},
 	Skins = {
 		DBM = true,
@@ -430,6 +431,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"], true},
 		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"], false, {5, 15, 0}},
 		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"], true, {5, 15, 0}},
+		{3, "Nameplate", "PPIconSize", L["PlayerPlate IconSize"], false, {30, 40, 0}},
 	},
 	[7] = {
 		{1, "Skins", "RM", "|cff00cc4c"..L["Raid Manger"]},

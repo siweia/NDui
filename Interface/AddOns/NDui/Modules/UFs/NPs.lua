@@ -396,7 +396,6 @@ function UF:PostUpdatePlates(event, unit)
 end
 
 -- Player Nameplate
-local iconSize, margin = C.Auras.IconSize, 2
 local auras = B:GetModule("Auras")
 
 local function PlateVisibility(self, event)
@@ -415,6 +414,7 @@ end
 
 function UF:CreatePlayerPlate()
 	self.mystyle = "PlayerPlate"
+	local iconSize, margin = NDuiDB["Nameplate"]["PPIconSize"], 2
 	self:SetSize(iconSize*5 + margin*4, NDuiDB["Nameplate"]["PPHeight"])
 	self:EnableMouse(false)
 	self.iconSize = iconSize
