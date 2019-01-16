@@ -1,13 +1,11 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(ChannelFrame, true)
+	F.ReskinPortraitFrame(ChannelFrame)
 	F.Reskin(ChannelFrame.NewButton)
 	F.Reskin(ChannelFrame.SettingsButton)
 	F.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
 	F.ReskinScroll(ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
-	F.CleanInset(ChannelFrame.LeftInset)
-	F.CleanInset(ChannelFrame.RightInset)
 
 	hooksecurefunc(ChannelFrame.ChannelList, "Update", function(self)
 		for i = 1, self.Child:GetNumChildren() do

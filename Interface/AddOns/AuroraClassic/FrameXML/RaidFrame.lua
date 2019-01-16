@@ -19,7 +19,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinScroll(RaidInfoScrollFrameScrollBar)
 	F.ReskinClose(RaidParentFrameCloseButton)
 
-	F.ReskinPortraitFrame(RaidParentFrame, true)
+	F.ReskinPortraitFrame(RaidParentFrame)
 	RaidInfoInstanceLabel:DisableDrawLayer("BACKGROUND")
 	RaidInfoIDLabel:DisableDrawLayer("BACKGROUND")
 end)

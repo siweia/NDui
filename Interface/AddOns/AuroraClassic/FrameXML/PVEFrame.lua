@@ -43,7 +43,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	F.ReskinPortraitFrame(PVEFrame, true)
+	F.ReskinPortraitFrame(PVEFrame)
 	F.ReskinTab(PVEFrameTab1)
 	F.ReskinTab(PVEFrameTab2)
 	F.ReskinTab(PVEFrameTab3)

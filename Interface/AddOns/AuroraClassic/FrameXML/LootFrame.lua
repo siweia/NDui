@@ -41,7 +41,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	LootFrameNext:ClearAllPoints()
 	LootFrameNext:SetPoint("RIGHT", LootFrameDownButton, "LEFT", -4, 0)
 
-	F.ReskinPortraitFrame(LootFrame, true)
+	F.ReskinPortraitFrame(LootFrame)
 	F.ReskinArrow(LootFrameUpButton, "up")
 	F.ReskinArrow(LootFrameDownButton, "down")
 

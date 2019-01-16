@@ -5,7 +5,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	AvailableServicesText:SetTextColor(1, 1, 1)
 	AvailableServicesText:SetShadowColor(0, 0, 0)
 
-	F.ReskinPortraitFrame(GuildRegistrarFrame, true)
+	F.ReskinPortraitFrame(GuildRegistrarFrame)
 	F.CreateBD(GuildRegistrarFrameEditBox, .25)
 	F.Reskin(GuildRegistrarFrameGoodbyeButton)
 	F.Reskin(GuildRegistrarFramePurchaseButton)

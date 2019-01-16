@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(MerchantFrame, true)
+	F.ReskinPortraitFrame(MerchantFrame)
 	F.ReskinDropDown(MerchantFrameLootFilter)
 	F.StripTextures(MerchantPrevPageButton)
 	F.ReskinArrow(MerchantPrevPageButton, "left")

@@ -116,7 +116,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
 	F.CreateGradient(whoBg)
 
-	F.ReskinPortraitFrame(FriendsFrame, true)
+	F.ReskinPortraitFrame(FriendsFrame)
 	F.Reskin(FriendsFrameAddFriendButton)
 	F.Reskin(FriendsFrameSendMessageButton)
 	F.Reskin(FriendsFrameIgnorePlayerButton)

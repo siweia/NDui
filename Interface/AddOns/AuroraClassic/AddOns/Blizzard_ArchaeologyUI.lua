@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ArchaeologyUI"] = function()
-	F.ReskinPortraitFrame(ArchaeologyFrame, true)
+	F.ReskinPortraitFrame(ArchaeologyFrame)
 	ArchaeologyFrame:DisableDrawLayer("BACKGROUND")
 	F.Reskin(ArchaeologyFrameArtifactPageSolveFrameSolveButton)
 	F.Reskin(ArchaeologyFrameArtifactPageBackButton)

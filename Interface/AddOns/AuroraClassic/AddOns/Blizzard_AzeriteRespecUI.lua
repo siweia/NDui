@@ -5,7 +5,7 @@ C.themes["Blizzard_AzeriteRespecUI"] = function()
 		select(i, AzeriteRespecFrame:GetRegions()):Hide()
 	end
 	F.CreateBDFrame(AzeriteRespecFrame.Background)
-	F.RemoveSlice(AzeriteRespecFrame)
+	AzeriteRespecFrame.NineSlice:Hide()
 	F.SetBD(AzeriteRespecFrame)
 	F.ReskinClose(AzeriteRespecFrameCloseButton)
 	AzeriteRespecFrame.ItemSlot.Icon:SetTexCoord(.08, .92, .08, .92)

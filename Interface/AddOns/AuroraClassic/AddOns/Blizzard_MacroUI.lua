@@ -64,7 +64,7 @@ C.themes["Blizzard_MacroUI"] = function()
 		end
 	end)
 
-	F.ReskinPortraitFrame(MacroFrame, true)
+	F.ReskinPortraitFrame(MacroFrame)
 	F.CreateBD(MacroFrameScrollFrame, .25)
 	F.CreateBD(MacroPopupFrame)
 	F.CreateSD(MacroPopupFrame)

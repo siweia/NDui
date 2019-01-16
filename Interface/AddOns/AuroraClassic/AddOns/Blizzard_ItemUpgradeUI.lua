@@ -54,6 +54,6 @@ C.themes["Blizzard_ItemUpgradeUI"] = function()
 	F.CreateBG(currency.icon)
 
 	F.CreateBDFrame(ItemUpgradeFrame)
-	F.ReskinPortraitFrame(ItemUpgradeFrame, true)
+	F.ReskinPortraitFrame(ItemUpgradeFrame)
 	F.Reskin(ItemUpgradeFrameUpgradeButton)
 end

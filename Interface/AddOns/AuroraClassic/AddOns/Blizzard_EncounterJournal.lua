@@ -316,7 +316,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- [[ Various controls ]]
 
-	F.ReskinPortraitFrame(EncounterJournal, true)
+	F.ReskinPortraitFrame(EncounterJournal)
 	F.Reskin(EncounterJournalEncounterFrameInfoResetButton)
 	F.ReskinInput(EncounterJournalSearchBox)
 	F.ReskinScroll(EncounterJournalInstanceSelectScrollFrameScrollBar)

@@ -11,10 +11,6 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 	VoidStorageFrameMarbleBg:Hide()
 	VoidStorageFrameLines:Hide()
 	select(2, VoidStorageFrame:GetRegions()):Hide()
-	F.RemoveSlice(VoidStorageDepositFrame)
-	F.RemoveSlice(VoidStorageWithdrawFrame)
-	F.RemoveSlice(VoidStorageCostFrame)
-	F.RemoveSlice(VoidStorageStorageFrame)
 
 	local function reskinIcons(bu, quality)
 		if not bu.bg then

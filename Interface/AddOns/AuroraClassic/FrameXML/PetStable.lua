@@ -13,7 +13,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	PetStablePrevPageButtonIcon:SetTexture("")
 	PetStableNextPageButtonIcon:SetTexture("")
 
-	F.ReskinPortraitFrame(PetStableFrame, true)
+	F.ReskinPortraitFrame(PetStableFrame)
 	F.ReskinArrow(PetStablePrevPageButton, "left")
 	F.ReskinArrow(PetStableNextPageButton, "right")
 

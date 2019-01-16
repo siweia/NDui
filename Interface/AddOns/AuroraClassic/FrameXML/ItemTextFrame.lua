@@ -9,7 +9,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	ItemTextMaterialBotLeft:SetAlpha(0)
 	ItemTextMaterialBotRight:SetAlpha(0)
 
-	F.ReskinPortraitFrame(ItemTextFrame, true)
+	F.ReskinPortraitFrame(ItemTextFrame)
 	F.ReskinScroll(ItemTextScrollFrameScrollBar)
 	F.ReskinArrow(ItemTextPrevPageButton, "left")
 	F.ReskinArrow(ItemTextNextPageButton, "right")

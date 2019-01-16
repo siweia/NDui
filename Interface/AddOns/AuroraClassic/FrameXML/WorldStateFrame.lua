@@ -17,7 +17,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	F.ReskinPortraitFrame(WorldStateScoreFrame)
-	F.SetBD(WorldStateScoreFrame)
 	F.Reskin(WorldStateScoreFrameQueueButton)
 	F.Reskin(WorldStateScoreFrameLeaveButton)
 	F.ReskinScroll(WorldStateScoreScrollFrameScrollBar)
@@ -66,21 +65,4 @@ tinsert(C.themes["AuroraClassic"], function()
 			end
 		end
 	end)
---[[
-	hooksecurefunc(ExtendedUI["CAPTUREPOINT"], "update", function(id)
-		local bar = _G["WorldStateCaptureBar"..id]
-		if not (bar.newLeftFaction and bar.newRightFaction) then return end
-
-		if bar.style == "LFD_BATTLEFIELD" then
-			bar.newLeftFaction:SetTexture("Interface\\WorldStateFrame\\ColumnIcon-FlagCapture2")
-			bar.newRightFaction:SetTexture("Interface\\WorldStateFrame\\ColumnIcon-FlagCapture2")
-			bar.newRightFaction:SetDesaturated(true)
-			bar.newRightFaction:SetVertexColor(.75, .5, 1)
-		else
-			bar.newLeftFaction:SetTexture("Interface\\WorldStateFrame\\AllianceFlag")
-			bar.newRightFaction:SetTexture("Interface\\WorldStateFrame\\HordeFlag")
-			bar.newRightFaction:SetDesaturated(false)
-			bar.newRightFaction:SetVertexColor(1, 1, 1)
-		end
-	end)]]
 end)

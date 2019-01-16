@@ -5,7 +5,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- [[ General ]]
 
-	F.ReskinPortraitFrame(CollectionsJournal, true)
+	F.ReskinPortraitFrame(CollectionsJournal)
 	F.ReskinTab(CollectionsJournalTab1)
 	F.ReskinTab(CollectionsJournalTab2)
 	F.ReskinTab(CollectionsJournalTab3)
@@ -341,7 +341,6 @@ C.themes["Blizzard_Collections"] = function()
 	local iconsFrame = ToyBox.iconsFrame
 
 	F.StripTextures(iconsFrame)
-	F.RemoveSlice(iconsFrame)
 	F.ReskinInput(ToyBox.searchBox)
 	F.ReskinFilterButton(ToyBoxFilterButton)
 	F.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
@@ -409,7 +408,6 @@ C.themes["Blizzard_Collections"] = function()
 	local icons = HeirloomsJournal.iconsFrame
 
 	F.StripTextures(icons)
-	F.RemoveSlice(icons)
 	F.ReskinInput(HeirloomsJournalSearchBox)
 	F.ReskinDropDown(HeirloomsJournalClassDropDown)
 	F.ReskinFilterButton(HeirloomsJournalFilterButton)
@@ -504,7 +502,6 @@ C.themes["Blizzard_Collections"] = function()
 	local ItemsCollectionFrame = WardrobeCollectionFrame.ItemsCollectionFrame
 
 	F.StripTextures(ItemsCollectionFrame)
-	F.RemoveSlice(ItemsCollectionFrame)
 	F.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	F.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	F.ReskinInput(WardrobeCollectionFrameSearchBox)
@@ -591,7 +588,6 @@ C.themes["Blizzard_Collections"] = function()
 
 	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
 	F.StripTextures(SetsTransmogFrame)
-	F.RemoveSlice(WardrobeCollectionFrame.SetsTransmogFrame)
 	F.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
 	F.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
 
@@ -600,8 +596,7 @@ C.themes["Blizzard_Collections"] = function()
 	local WardrobeFrame = WardrobeFrame
 	local WardrobeTransmogFrame = WardrobeTransmogFrame
 
-	WardrobeTransmogFrameBg:Hide()
-	F.CleanInset(WardrobeTransmogFrame.Inset)
+	F.StripTextures(WardrobeTransmogFrame)
 	WardrobeTransmogFrame.MoneyLeft:Hide()
 	WardrobeTransmogFrame.MoneyMiddle:Hide()
 	WardrobeTransmogFrame.MoneyRight:Hide()
@@ -611,7 +606,7 @@ C.themes["Blizzard_Collections"] = function()
 		select(i, WardrobeTransmogFrame.SpecButton:GetRegions()):Hide()
 	end
 
-	F.ReskinPortraitFrame(WardrobeFrame, true)
+	F.ReskinPortraitFrame(WardrobeFrame)
 	F.Reskin(WardrobeTransmogFrame.ApplyButton)
 	F.Reskin(WardrobeOutfitDropDown.SaveButton)
 	F.ReskinArrow(WardrobeTransmogFrame.SpecButton, "down")

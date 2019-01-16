@@ -10,7 +10,7 @@ C.themes["Blizzard_TimeManager"] = function()
 	TimeManagerAlarmMinuteDropDown:SetWidth(80)
 	TimeManagerAlarmAMPMDropDown:SetWidth(90)
 
-	F.ReskinPortraitFrame(TimeManagerFrame, true)
+	F.ReskinPortraitFrame(TimeManagerFrame)
 	F.ReskinDropDown(TimeManagerAlarmHourDropDown)
 	F.ReskinDropDown(TimeManagerAlarmMinuteDropDown)
 	F.ReskinDropDown(TimeManagerAlarmAMPMDropDown)

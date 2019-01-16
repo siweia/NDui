@@ -7,7 +7,7 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 	hooksecurefunc("LookingForGuildFrame_CreateUIElements", function()
 		if styled then return end
 
-		F.ReskinPortraitFrame(LookingForGuildFrame, true)
+		F.ReskinPortraitFrame(LookingForGuildFrame)
 		F.CreateBD(LookingForGuildInterestFrame, .25)
 		LookingForGuildInterestFrameBg:Hide()
 		F.CreateBD(LookingForGuildAvailabilityFrame, .25)

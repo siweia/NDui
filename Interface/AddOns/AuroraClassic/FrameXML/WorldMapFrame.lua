@@ -4,9 +4,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	local WorldMapFrame = WorldMapFrame
 	local BorderFrame = WorldMapFrame.BorderFrame
 
-	F.StripTextures(WorldMapFrame)
-	F.SetBD(WorldMapFrame, 1, 0, -3, 2)
-	F.ReskinPortraitFrame(BorderFrame)
+	F.ReskinPortraitFrame(WorldMapFrame)
+	BorderFrame.NineSlice:Hide()
 	BorderFrame.Tutorial.Ring:Hide()
 	F.ReskinMinMax(BorderFrame.MaximizeMinimizeFrame)
 

@@ -9,9 +9,7 @@ tinsert(C.themes["AuroraClassic"], function()
     F.ReskinClose(HelpFrameCloseButton)
 
 	F.StripTextures(HelpFrameMainInset)
-	F.RemoveSlice(HelpFrameMainInset)
 	F.StripTextures(HelpFrameLeftInset)
-	F.RemoveSlice(HelpFrameLeftInset)
 	F.StripTextures(HelpBrowser.BrowserInset)
 
 	F.CreateBD(HelpFrameGM_ResponseScrollFrame1, .25)

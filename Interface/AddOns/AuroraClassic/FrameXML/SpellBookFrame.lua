@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinPortraitFrame(SpellBookFrame, true)
+	F.ReskinPortraitFrame(SpellBookFrame)
 	SpellBookFrame:DisableDrawLayer("BACKGROUND")
 	SpellBookFrameTabButton1:ClearAllPoints()
 	SpellBookFrameTabButton1:SetPoint("TOPLEFT", SpellBookFrame, "BOTTOMLEFT", 0, 2)

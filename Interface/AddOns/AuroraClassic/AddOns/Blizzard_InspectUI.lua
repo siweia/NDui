@@ -106,5 +106,5 @@ C.themes["Blizzard_InspectUI"] = function()
 		end
 	end
 
-	F.ReskinPortraitFrame(InspectFrame, true)
+	F.ReskinPortraitFrame(InspectFrame)
 end

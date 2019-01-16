@@ -1,17 +1,16 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ArtifactUI"] = function()
+	F.StripTextures(ArtifactFrame)
 	F.SetBD(ArtifactFrame)
 	F.ReskinTab(ArtifactFrameTab1)
 	F.ReskinTab(ArtifactFrameTab2)
 	ArtifactFrameTab1:ClearAllPoints()
 	ArtifactFrameTab1:SetPoint("TOPLEFT", ArtifactFrame, "BOTTOMLEFT", 10, 0)
 	F.ReskinClose(ArtifactFrame.CloseButton)
-	for i = 1, 7 do
-		select(i, ArtifactFrame.BorderFrame:GetRegions()):Hide()
-	end
 	ArtifactFrame.Background:Hide()
 	ArtifactFrame.PerksTab.BackgroundBack:Hide()
+	ArtifactFrame.PerksTab.Model.BackgroundBackShadow:Hide()
 	ArtifactFrame.PerksTab.HeaderBackground:Hide()
 	ArtifactFrame.PerksTab.TitleContainer.Background:SetAlpha(0)
 	ArtifactFrame.PerksTab.Model:SetAlpha(.5)

@@ -16,7 +16,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	select(9, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
 	select(10, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
 
-	F.ReskinPortraitFrame(BankFrame, true)
+	F.ReskinPortraitFrame(BankFrame)
 	F.Reskin(BankFramePurchaseButton)
 	F.ReskinTab(BankFrameTab1)
 	F.ReskinTab(BankFrameTab2)

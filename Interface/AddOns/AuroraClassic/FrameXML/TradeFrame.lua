@@ -14,7 +14,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	select(4, TradePlayerItem7:GetRegions()):Hide()
 	select(4, TradeRecipientItem7:GetRegions()):Hide()
 
-	F.ReskinPortraitFrame(TradeFrame, true)
+	F.ReskinPortraitFrame(TradeFrame)
 	TradeFrame.RecipientOverlay:Hide()
 	F.Reskin(TradeFrameTradeButton)
 	F.Reskin(TradeFrameCancelButton)

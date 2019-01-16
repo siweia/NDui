@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["AuroraClassic"], function()
 	-- Dressup Frame
 
-	F.ReskinPortraitFrame(DressUpFrame, true)
+	F.ReskinPortraitFrame(DressUpFrame)
 	F.Reskin(DressUpFrameOutfitDropDown.SaveButton)
 	F.Reskin(DressUpFrameCancelButton)
 	F.Reskin(DressUpFrameResetButton)

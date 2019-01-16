@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_TradeSkillUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
-	F.ReskinPortraitFrame(TradeSkillFrame, true)
+	F.ReskinPortraitFrame(TradeSkillFrame)
 	TradeSkillFrameTitleText:Show()
 	TradeSkillFramePortrait:SetAlpha(0)
 
