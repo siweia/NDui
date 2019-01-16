@@ -154,10 +154,10 @@ function module:CreateBagToggle()
 	bu:SetScript("OnClick", function()
 		ToggleFrame(self.BagBar)
 		if self.BagBar:IsShown() then
-			bu.Shadow:SetBackdropBorderColor(1, 1, 1)
+			bu:SetBackdropBorderColor(1, 1, 1)
 			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 		else
-			bu.Shadow:SetBackdropBorderColor(0, 0, 0)
+			bu:SetBackdropBorderColor(0, 0, 0)
 			PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 		end
 	end)
@@ -451,7 +451,7 @@ function module:OnLogin()
 			if i == 1 then
 				bu:SetPoint("TOPRIGHT", -5, -5)
 			else
-				bu:SetPoint("RIGHT", buttons[i-1], "LEFT", -5, 0)
+				bu:SetPoint("RIGHT", buttons[i-1], "LEFT", -3, 0)
 			end
 		end
 

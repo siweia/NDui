@@ -396,7 +396,7 @@ function UF:PostUpdatePlates(event, unit)
 end
 
 -- Player Nameplate
-local iconSize, margin = C.Auras.IconSize, 5
+local iconSize, margin = C.Auras.IconSize, 2
 local auras = B:GetModule("Auras")
 
 local function PlateVisibility(self, event)

@@ -98,10 +98,9 @@ end
 
 function module:CreateBarWidgets(parent, texture)
 	local icon = CreateFrame("Frame", nil, parent)
-	icon:SetSize(20, 20)
+	icon:SetSize(22, 22)
 	icon:SetPoint("LEFT", 5, 0)
-	B.CreateIF(icon, true)
-	icon.Icon:SetTexture(texture)
+	B.PixelIcon(icon, texture, true)
 
 	local close = CreateFrame("Button", nil, parent)
 	close:SetSize(20, 20)

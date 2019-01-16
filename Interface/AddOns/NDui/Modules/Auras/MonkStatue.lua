@@ -10,7 +10,7 @@ local function StatueGo()
 
 	bu = CreateFrame("Button", nil, UIParent, "SecureActionButtonTemplate")
 	bu:SetSize(IconSize, IconSize)
-	B.CreateIF(bu, true, true)
+	B.AuraIcon(bu, true)
 	bu:RegisterForClicks("AnyUp")
 	bu:SetAttribute("type1", "macro")
 	bu:SetAttribute("type2", "macro")

@@ -22,7 +22,7 @@ local function TotemsGo()
 		else
 			totem[i]:SetPoint("LEFT", totem[i-1], "RIGHT", 5, 0)
 		end
-		B.CreateIF(totem[i], false, true)
+		B.AuraIcon(totem[i])
 		totem[i].Icon:SetTexture(icons[i])
 		totem[i]:SetAlpha(.2)
 

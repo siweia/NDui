@@ -40,7 +40,8 @@ end
 local function AddReminder(cfg)
 	local frame = CreateFrame("Frame", nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
-	B.CreateIF(frame)
+	B.PixelIcon(frame)
+	B.CreateSD(frame)
 	for spell in pairs(cfg.spells) do
 		frame.Icon:SetTexture(GetSpellTexture(spell))
 		break

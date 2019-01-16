@@ -5,7 +5,7 @@ local module = B:GetModule("Chat")
 function module:Chatbar()
 	local chatFrame = SELECTED_DOCK_FRAME
 	local editBox = chatFrame.editBox
-	local width, height, padding, buttonList = 40, 6, 5, {}
+	local width, height, padding, buttonList = 40, 8, 5, {}
 	local tinsert, pairs = table.insert, pairs
 
 	local Chatbar = CreateFrame("Frame", nil, UIParent)
@@ -15,8 +15,8 @@ function module:Chatbar()
 	local function AddButton(r, g, b, text, func)
 		local bu = CreateFrame("Button", nil, Chatbar, "SecureActionButtonTemplate")
 		bu:SetSize(width, height)
-		B.CreateIF(bu, true)
-		bu.Icon:SetTexture(DB.normTex)
+		B.PixelIcon(bu, DB.normTex, true)
+		B.CreateSD(bu)
 		bu.Icon:SetVertexColor(r, g, b)
 		bu:SetHitRectInsets(0, 0, -8, -8)
 		bu:RegisterForClicks("AnyUp")

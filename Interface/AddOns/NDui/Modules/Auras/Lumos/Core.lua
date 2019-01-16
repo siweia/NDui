@@ -123,7 +123,7 @@ function module:CreateLumos(self)
 	for i = 1, 5 do
 		local bu = CreateFrame("Frame", nil, self.Health)
 		bu:SetSize(self.iconSize, self.iconSize)
-		B.CreateIF(bu, false, true)
+		B.AuraIcon(bu)
 
 		local fontParent = CreateFrame("Frame", nil, bu)
 		fontParent:SetAllPoints()
@@ -131,7 +131,7 @@ function module:CreateLumos(self)
 		if i == 1 then
 			bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -5)
 		else
-			bu:SetPoint("LEFT", self.bu[i-1], "RIGHT", 5, 0)
+			bu:SetPoint("LEFT", self.bu[i-1], "RIGHT", 2, 0)
 		end
 
 		self.bu[i] = bu

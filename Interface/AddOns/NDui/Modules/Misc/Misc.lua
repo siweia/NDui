@@ -22,6 +22,8 @@ function module:OnLogin()
 	if NDuiDB["Misc"]["ParagonRep"] then
 		hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
 	end
+	self:NakedIcon()
+	self:ExtendInstance()
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
@@ -55,13 +57,12 @@ do
 	end
 
 	local function AddCalculateIcon()
-		local ar = CreateFrame("Button", nil, ArchaeologyFrameCompletedPage)
-		ar:SetPoint("TOPRIGHT", -45, -45)
-		ar:SetSize(35, 35)
-		B.CreateIF(ar, true)
-		ar.Icon:SetTexture("Interface\\ICONS\\Ability_Iyyokuk_Calculate")
-		B.AddTooltip(ar, "ANCHOR_RIGHT", L["Arch Count"], "system")
-		ar:SetScript("OnMouseUp", CalculateArches)
+		local bu = CreateFrame("Button", nil, ArchaeologyFrameCompletedPage)
+		bu:SetPoint("TOPRIGHT", -45, -45)
+		bu:SetSize(35, 35)
+		B.PixelIcon(bu, "Interface\\ICONS\\Ability_Iyyokuk_Calculate", true)
+		B.AddTooltip(bu, "ANCHOR_RIGHT", L["Arch Count"], "system")
+		bu:SetScript("OnMouseUp", CalculateArches)
 	end
 
 	local function setupMisc(event, addon)
@@ -186,12 +187,11 @@ do
 end
 
 -- Get Naked
-do
+function module:NakedIcon()
 	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
-	bu:SetSize(29, 30)
+	bu:SetSize(31, 33)
 	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
-	B.CreateIF(bu, true)
-	bu.Icon:SetTexture("Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH")
+	B.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
 	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
 
 	local function UnequipItemInSlot(i)
@@ -330,12 +330,11 @@ do
 end
 
 -- Extend Instance
-do
+function module:ExtendInstance()
 	local bu = CreateFrame("Button", nil, RaidInfoFrame)
 	bu:SetPoint("TOPRIGHT", -35, -5)
 	bu:SetSize(25, 25)
-	B.CreateIF(bu, true)
-	bu.Icon:SetTexture(GetSpellTexture(80353))
+	B.PixelIcon(bu, GetSpellTexture(80353), true)
 	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Extend Instance"], "system")
 
 	bu:SetScript("OnMouseUp", function(_, btn)
