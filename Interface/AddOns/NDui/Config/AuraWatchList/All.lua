@@ -60,8 +60,11 @@ local list = {
 		{AuraID = 269853, UnitID = "player"},	-- 死亡崛起药水
 		{AuraID = 188024, UnitID = "player"},	-- 天行药水
 		{AuraID = 250878, UnitID = "player"},	-- 轻足药水
-		{AuraID = 190026, UnitID = "player"},	-- PVP饰品，+敏捷
-		{AuraID = 170397, UnitID = "player"},	-- PVP饰品，+全能
+		{AuraID = 277179, UnitID = "player"},	-- 角斗士勋章
+		{AuraID = 277181, UnitID = "player"},	-- 角斗士徽记
+		{AuraID = 277187, UnitID = "player"},	-- 角斗士纹章
+		{AuraID = 277185, UnitID = "player"},	-- 角斗士徽章
+		{AuraID = 286342, UnitID = "player", Value = true},	-- 角斗士的护徽
 		{AuraID = 275765, UnitID = "player"},	-- 艾泽里特强化
 		{AuraID = 271194, UnitID = "player"},	-- 火炮
 		{AuraID = 273992, UnitID = "player"},	-- 灵魂之速
@@ -76,7 +79,7 @@ local list = {
 		{AuraID = 267685, UnitID = "player"},	-- 元素洪流
 		{AuraID = 274472, UnitID = "player"},	-- 狂战士之怒
 		{AuraID = 268769, UnitID = "player"},	-- 标记死穴
-		{AuraID = 267179, UnitID = "player"},	-- 非凡的力量
+		{AuraID = 267179, UnitID = "player"},	-- 瓶中的电荷
 		{AuraID = 278070, UnitID = "player"},	-- 泰坦过载
 		{AuraID = 271103, UnitID = "player"},	-- 莱赞的微光之眼
 		{AuraID = 273942, UnitID = "player"},	-- 提振精神
@@ -87,11 +90,17 @@ local list = {
 		{AuraID = 273974, UnitID = "player"},	-- 洛阿意志
 		{AuraID = 271105, UnitID = "player"},	-- 屠夫之眼
 		{AuraID = 271107, UnitID = "player"},	-- 金色光泽
-		{AuraID = 277181, UnitID = "player"},	-- 胜利的味道
 		{AuraID = 278231, UnitID = "player"},	-- 森林之王的愤怒
-		{AuraID = 268311, UnitID = "player"},	-- 唤风者之赐
+		{AuraID = 268311, UnitID = "player", Flash = true},	-- 唤风者之赐
 		{AuraID = 285489, UnitID = "player"},	-- 黑喉之力
 		{AuraID = 278317, UnitID = "player"},	-- 末日余波
+		{AuraID = 278249, UnitID = "player"},	-- 刀叶风暴
+		{AuraID = 287916, UnitID = "player", Stack = 6, Flash = true, Combat = true},	-- 反应堆
+		{AuraID = 287917, UnitID = "player"},	-- 振荡过载
+		{AuraID = 265954, UnitID = "player"},	-- 黄金之触
+		{AuraID = 268439, UnitID = "player"},	-- 共鸣之心
+		{AuraID = 278225, UnitID = "player"},	-- 缚魂巫毒瘤节
+		{AuraID = 278388, UnitID = "player"},	-- 永冻护壳之心
 		{AuraID = 274430, UnitID = "player", Text = L["Haste"]},	-- 永不间断的时钟，急速
 		{AuraID = 274431, UnitID = "player", Text = L["Mastery"]},	-- 精通
 		{AuraID = 267325, UnitID = "player", Text = L["Mastery"]},	-- 注铅骰子，精通
@@ -127,6 +136,7 @@ local list = {
 		{AuraID = 280412, UnitID = "player"},	-- 激励兽群
 		{AuraID = 274596, UnitID = "player"},	-- 冲击大师
 		{AuraID = 277969, UnitID = "player"},	-- 迅疾爪击
+		{AuraID = 273264, UnitID = "player"},	-- 怒火升腾
 		-- 泰坦之路系列饰品
 		{AuraID = 256816, UnitID = "player"},	-- 阿格拉玛的信念
 		{AuraID = 256831, UnitID = "player"},	-- 阿格拉玛的信念
