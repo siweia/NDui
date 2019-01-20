@@ -172,6 +172,11 @@ local rogueClassHallInsignia = {
 	[93188] = true, -- Mongar
 }
 
+local followerAssignees = {
+	[138708] = true, -- 半兽人迦罗娜
+	[135614] = true, -- 马迪亚斯·肖尔大师
+}
+
 QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
 	if(ignoreQuestNPC[npcID]) then
@@ -213,18 +218,22 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 		return SelectGossipOption(1)
 	end
 
-	if(available == 0 and active == 0 and GetNumGossipOptions() == 1) then
-		if(npcID == 57850) then
-			return SelectGossipOption(1)
-		end
-
-		local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-		if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
-			local _, type = GetGossipOptions()
-			if(type == "gossip") then
-				SelectGossipOption(1)
-				return
+	if(available == 0 and active == 0) then
+		if GetNumGossipOptions() == 1 then
+			if(npcID == 57850) then
+				return SelectGossipOption(1)
 			end
+
+			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+			if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
+				local _, type = GetGossipOptions()
+				if(type == "gossip") then
+					SelectGossipOption(1)
+					return
+				end
+			end
+		elseif followerAssignees[npcID] and GetNumGossipOptions() > 1 then
+			return SelectGossipOption(1)
 		end
 	end
 end)
