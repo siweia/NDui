@@ -98,7 +98,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		-- also fires for bag slots, we don't want that
 		if button.popoutButton then
 			button.IconBorder:SetTexture(C.media.backdrop)
-			button.icon:SetShown(button.hasItem)
+			if C.isNewPatch then
+				button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
+			else
+				button.icon:SetShown(button.hasItem)
+			end
 			colourPopout(button.popoutButton)
 		end
 	end)

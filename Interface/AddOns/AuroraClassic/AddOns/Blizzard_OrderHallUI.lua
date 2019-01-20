@@ -5,24 +5,17 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	local OrderHallTalentFrame = OrderHallTalentFrame
 
 	F.ReskinPortraitFrame(OrderHallTalentFrame)
-	OrderHallTalentFrame.Background:SetAlpha(0)
 	F.Reskin(OrderHallTalentFrame.BackButton)
 	F.ReskinIcon(OrderHallTalentFrame.Currency.Icon)
 	OrderHallTalentFrame.OverlayElements:SetAlpha(0)
 
-	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function()
-		local closeButton = OrderHallTalentFrameCloseButton
-		closeButton:ClearAllPoints()
-		closeButton:SetPoint("TOPRIGHT", OrderHallTalentFrame)
-		if closeButton.Border then closeButton.Border:SetAlpha(0) end
-		OrderHallTalentFrame.CurrencyBG:SetAlpha(0)
+	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function(self)
+		if self.Border then self.Border:SetAlpha(0) end
+		if self.CurrencyBG then self.CurrencyBG:SetAlpha(0) end
+		F.StripTextures(self)
 
-		for i = 15, OrderHallTalentFrame:GetNumRegions() do
-			select(i, OrderHallTalentFrame:GetRegions()):SetAlpha(0)
-		end
-
-		for i = 1, OrderHallTalentFrame:GetNumChildren() do
-			local bu = select(i, OrderHallTalentFrame:GetChildren())
+		for i = 1, self:GetNumChildren() do
+			local bu = select(i, self:GetChildren())
 			if bu and bu.talent then
 				bu.Border:SetAlpha(0)
 				if not bu.bg then
