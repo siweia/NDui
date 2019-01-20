@@ -403,9 +403,6 @@ module:RegisterTooltips("NDui", function()
 		ShoppingTooltip2,
 		AutoCompleteBox,
 		FriendsTooltip,
-		WorldMapTooltip,
-		WorldMapCompareTooltip1,
-		WorldMapCompareTooltip2,
 		QuestScrollFrame.StoryTooltip,
 		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
@@ -426,6 +423,11 @@ module:RegisterTooltips("NDui", function()
 		FloatingPetBattleAbilityTooltip,
 		IMECandidatesFrame
 	}
+	if not DB.isNewPatch then
+		tinsert(tooltips, WorldMapTooltip)
+		tinsert(tooltips, WorldMapCompareTooltip1)
+		tinsert(tooltips, WorldMapCompareTooltip2)
+	end
 	for _, f in pairs(tooltips) do
 		f:HookScript("OnShow", B.ReskinTooltip)
 	end

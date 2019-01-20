@@ -98,5 +98,7 @@ function module:AzeriteArmor()
 	GameTooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 	ShoppingTooltip1:HookScript("OnTooltipSetItem", updateAzeriteArmor)
-	WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
+	if not DB.isNewPatch then
+		WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
+	end
 end
