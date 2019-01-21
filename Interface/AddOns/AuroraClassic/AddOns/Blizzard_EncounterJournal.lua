@@ -180,7 +180,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				header.styled = true
 			end
 
-			if header.button.abilityIcon:GetTexture() then
+			if header.button.abilityIcon:IsShown() then
 				header.button.bg:Show()
 			else
 				header.button.bg:Hide()
@@ -251,44 +251,16 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- [[ Search results ]]
 
-	for i = 1, 6 do
-		select(i, EncounterJournalSearchBox.searchPreviewContainer:GetRegions()):Hide()
-	end
-
-	local function styleSearchButton(result)
-		select(1, result:GetRegions()):SetAlpha(0)
-		if result.icon then
-			select(2, result:GetRegions()):SetAlpha(0)
-			select(3, result:GetRegions()):SetTexCoord(.08, .92, .08, .92)
-			F.ReskinIcon(select(3, result:GetRegions()))
-			select(5, result:GetRegions()):SetAlpha(0)
-			select(6, result:GetRegions()):SetAlpha(0)
-		else
-			select(3, result:GetRegions()):SetAlpha(0)
-			select(4, result:GetRegions()):SetAlpha(0)
-		end
-		F.CreateBD(result)
-		F.CreateSD(result)
-
-		result:SetHighlightTexture(C.media.backdrop)
-		local hl = result:GetHighlightTexture()
-		hl:SetVertexColor(r, g, b, .2)
-		hl:SetPoint("TOPLEFT", 1, -2)
-		hl:SetPoint("BOTTOMRIGHT", -1, 1)
-	end
-
 	for i = 1, 5 do
-		styleSearchButton(EncounterJournalSearchBox["sbutton"..i])
+		F.StyleSearchButton(EncounterJournalSearchBox["sbutton"..i])
 	end
-	styleSearchButton(EncounterJournalSearchBox.showAllResults)
+	F.StyleSearchButton(EncounterJournalSearchBox.showAllResults)
+	F.StripTextures(EncounterJournalSearchBox.searchPreviewContainer)
 
 	do
 		local result = EncounterJournalSearchResults
-		result:SetPoint("BOTTOMLEFT", EncounterJournal, "BOTTOMRIGHT", 30, 0)
-
-		for i = 3, 11 do
-			select(i, EncounterJournalSearchResults:GetRegions()):Hide()
-		end
+		result:SetPoint("BOTTOMLEFT", EncounterJournal, "BOTTOMRIGHT", 15, -1)
+		F.StripTextures(result)
 		local bg = F.CreateBDFrame(result)
 		bg:SetPoint("TOPLEFT", -10, 0)
 		bg:SetPoint("BOTTOMRIGHT")
@@ -296,21 +268,18 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 		for i = 1, 9 do
 			local bu = _G["EncounterJournalSearchResultsScrollFrameButton"..i]
-			F.CreateBD(bu, .25)
-			bu:SetNormalTexture("")
-			bu:GetRegions():Hide()
+			F.StripTextures(bu)
 			F.ReskinIcon(bu.icon)
 			bu.icon.SetTexCoord = F.dummy
-
+			F.CreateBD(bu, .25)
 			bu:SetHighlightTexture(C.media.backdrop)
 			local hl = bu:GetHighlightTexture()
-			hl:SetVertexColor(r, g, b, .2)
-			hl:SetPoint("TOPLEFT", 1, -2)
-			hl:SetPoint("BOTTOMRIGHT", -1, 1)
+			hl:SetVertexColor(r, g, b, .25)
+			hl:SetPoint("TOPLEFT", C.mult, -C.mult)
+			hl:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 		end
 	end
 
-	EncounterJournalSearchResultsBg:Hide()
 	F.ReskinClose(EncounterJournalSearchResultsCloseButton)
 	F.ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
 

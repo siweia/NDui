@@ -1,5 +1,19 @@
 local F, C = unpack(select(2, ...))
 
+function F:StyleSearchButton()
+	F.StripTextures(self)
+	if self.icon then
+		F.ReskinIcon(self.icon)
+	end
+	F.CreateBD(self, .25)
+
+	self:SetHighlightTexture(C.media.backdrop)
+	local hl = self:GetHighlightTexture()
+	hl:SetVertexColor(C.r, C.g, C.b, .25)
+	hl:SetPoint("TOPLEFT", C.mult, -C.mult)
+	hl:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+end
+
 C.themes["Blizzard_AchievementUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
@@ -323,32 +337,15 @@ C.themes["Blizzard_AchievementUI"] = function()
 	bg:SetPoint("BOTTOMRIGHT", AchievementFrame.showAllSearchResults, 2, -2)
 	F.CreateSD(bg)
 
-	local function styleSearchButton(result)
-		F.StripTextures(result)
-		if result.icon then
-			F.ReskinIcon(result.icon)
-		end
-		F.CreateBD(result, .25)
-
-		result:SetHighlightTexture(C.media.backdrop)
-		local hl = result:GetHighlightTexture()
-		hl:SetVertexColor(r, g, b, .25)
-		hl:SetPoint("TOPLEFT", 1, -2)
-		hl:SetPoint("BOTTOMRIGHT", -1, 1)
-	end
-
 	for i = 1, 5 do
-		styleSearchButton(AchievementFrame.searchPreview[i])
+		F.StyleSearchButton(AchievementFrame.searchPreview[i])
 	end
-	styleSearchButton(AchievementFrame.showAllSearchResults)
+	F.StyleSearchButton(AchievementFrame.showAllSearchResults)
 
 	do
 		local result = AchievementFrame.searchResults
-		result:SetPoint("BOTTOMLEFT", AchievementFrame, "BOTTOMRIGHT", 10, 0)
-		for i = 1, 14 do
-			select(i, result:GetRegions()):Hide()
-		end
-		result.titleText:Show()
+		result:SetPoint("BOTTOMLEFT", AchievementFrame, "BOTTOMRIGHT", 15, -1)
+		F.StripTextures(result)
 		local bg = F.CreateBDFrame(result)
 		bg:SetPoint("TOPLEFT", -10, 0)
 		bg:SetPoint("BOTTOMRIGHT")
