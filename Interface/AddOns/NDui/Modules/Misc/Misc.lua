@@ -24,6 +24,7 @@ function module:OnLogin()
 	end
 	self:NakedIcon()
 	self:ExtendInstance()
+	self:PetFilterTab()
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
