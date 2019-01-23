@@ -17,6 +17,9 @@ local classification = {
 
 local strfind, format, strupper, strsplit = string.find, string.format, string.upper, string.split
 local strlen, pairs = string.len, pairs
+local PVP, FACTION_HORDE, FACTION_ALLIANCE, LEVEL, YOU, TARGET = PVP, FACTION_HORDE, FACTION_ALLIANCE, LEVEL, YOU, TARGET
+local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
+local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
 
 function module:GetUnit(self)
 	local _, unit = self and self:GetUnit()
@@ -77,9 +80,10 @@ function module:InsertFactionFrame(self, faction)
 		local f = self:CreateTexture(nil, "OVERLAY")
 		f:SetPoint("TOPRIGHT", 0, -5)
 		f:SetBlendMode("ADD")
+		f:SetScale(.3)
 		self.factionFrame = f
 	end
-	self.factionFrame:SetTexture("Interface\\FriendsFrame\\PlusManz-"..faction)
+	self.factionFrame:SetTexture("Interface\\Timer\\"..faction.."-Logo")
 	self.factionFrame:SetAlpha(.5)
 end
 
