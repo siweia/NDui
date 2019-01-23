@@ -33,8 +33,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		bg:SetPoint("BOTTOMRIGHT", -4, 5)
 		if header == campaignHeader then
 			local newTex = bg:CreateTexture(nil, "OVERLAY")
-			newTex:SetPoint("TOPRIGHT", -25, -3)
-			newTex:SetSize(40, 40)
+			newTex:SetPoint("TOPRIGHT", -25, 3)
+			newTex:SetSize(50, 50)
 			newTex:SetBlendMode("ADD")
 			newTex:SetAlpha(0)
 			header.newTex = newTex
@@ -49,8 +49,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	local idToTexture = {
-		[261] = "Interface\\FriendsFrame\\PlusManz-Alliance",
-		[262] = "Interface\\FriendsFrame\\PlusManz-Horde",
+		[261] = "Interface\\Timer\\Alliance-Logo",
+		[262] = "Interface\\Timer\\Horde-Logo",
 	}
 	local function UpdateCampaignHeader()
 		campaignHeader.newTex:SetAlpha(0)
