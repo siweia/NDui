@@ -14,7 +14,7 @@ function UF:CreateRaidIcons(self)
 
 	local check = parent:CreateTexture(nil, "OVERLAY")
 	check:SetSize(16, 16)
-	check:SetPoint("CENTER")
+	check:SetPoint("BOTTOM", 0, 1)
 	self.ReadyCheckIndicator = check
 
 	local resurrect = parent:CreateTexture(nil, "OVERLAY")

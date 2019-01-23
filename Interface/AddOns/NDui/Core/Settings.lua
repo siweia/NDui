@@ -76,7 +76,7 @@ local function ForceChatSettings()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
 	ChatFrame1:SetWidth(380)
 	ChatFrame1:SetHeight(190)
-    ChatFrame1:SetUserPlaced(true)
+	ChatFrame1:SetUserPlaced(true)
 	for i = 1, NUM_CHAT_WINDOWS do
 		local cf = _G["ChatFrame"..i]
 		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
