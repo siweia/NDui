@@ -32,6 +32,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 284089) -- 成功防御
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286369) -- 赤精之歌
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284453) -- 赤精之歌
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286503) -- 射线
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 287747) -- 超力之球
 
 BOSS = 2342 -- 丰灵
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287424) -- 窃贼的报应
@@ -54,6 +55,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 287513) -- 惩罚烈焰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285479) -- 烈焰喷射
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 283947) -- 烈焰喷射
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285014, 6) -- 金币雨
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284470) -- 昏睡妖术
 
 BOSS = 2330 -- 神选者教团
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282135, 6) -- 恶意妖术

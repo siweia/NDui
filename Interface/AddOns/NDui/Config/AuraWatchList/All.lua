@@ -605,6 +605,7 @@ local list = {
 		{AuraID = 284943, UnitID = "player"},	-- 贪婪
 		{AuraID = 285945, UnitID = "player", Flash = true},	-- 急速之风，神选者教团
 		{AuraID = 285893, UnitID = "player"},	-- 野性重殴
+		{AuraID = 282079, UnitID = "player"},	-- 神灵的契约
 		{AuraID = 284377, UnitID = "player"},	-- 无息，拉斯塔哈大王
 		{AuraID = 284446, UnitID = "player"},	-- 邦桑迪的恩泽
 		{AuraID = 289169, UnitID = "player"},	-- 邦桑迪的恩泽
