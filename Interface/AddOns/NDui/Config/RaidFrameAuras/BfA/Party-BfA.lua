@@ -204,6 +204,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 255814) -- 撕裂重殴
 module:RegisterDebuff(TIER, INSTANCE, 0, 255421) -- 吞噬
 module:RegisterDebuff(TIER, INSTANCE, 0, 255434) -- 锯齿
 module:RegisterDebuff(TIER, INSTANCE, 0, 256577) -- 灵魂盛宴
+module:RegisterDebuff(TIER, INSTANCE, 0, 255558) -- 污血
 
 INSTANCE = 1036 -- 风暴神殿
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽

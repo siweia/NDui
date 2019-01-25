@@ -52,6 +52,7 @@ C.WhiteList = {
 	[287469]	= true,		-- 殒落祷告
 	[287439]	= true,		-- 神圣之锤
 	[286436]	= true,		-- 翡翠风暴，玉火大师
+	[286425]	= true,		-- 火焰护盾
 	[287652]	= true,		-- 过载，丰灵
 	[282098]	= true,		-- 风之恩赐，神选者教团
 	[287650]	= true,		-- 沸腾之怒
@@ -137,6 +138,8 @@ C.CustomUnits = {
 	[120651] = true, -- 爆炸物
 	[141851] = true, -- 戈霍恩之嗣
 	[GetSectionInfo(19656)] = true,	-- 僵尸尘图腾
+	[GetSectionInfo(19393)] = true,	-- 雪怒之魂
+	[GetSectionInfo(19279)] = true,	-- 谄媚海妖
 }
 
 -- 显示能量值的单位

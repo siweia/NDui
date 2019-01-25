@@ -17,8 +17,10 @@ BOSS = 2325 -- 丛林之王格洛恩
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285671) -- 碾碎
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285998) -- 凶狠咆哮
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285875) -- 撕裂噬咬
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 285659) -- 猿猴折磨者核心
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 285659, 6) -- 猿猴折磨者核心
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 286373, 6) -- 死亡战栗
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 283069) -- 原子烈焰
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 286434) -- 死疽之核
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 289406) -- 蛮兽压掷
 
 BOSS = 2341 -- 玉火大师
@@ -100,6 +102,8 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 284369) -- 海洋暴风
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284121) -- 雷霆轰鸣
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285350) -- 风暴哀嚎
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285000) -- 海藻缠裹
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 285350, 6) -- 风暴哀嚎
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 285426, 6) -- 风暴哀嚎
 
 BOSS = 2343 -- 吉安娜·普罗德摩尔
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287490) -- 冻结
