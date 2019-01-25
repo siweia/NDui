@@ -89,6 +89,8 @@ local function FindQuestComplete()
 		if title and isComplete and not completedQuest[questID] and not worldQuest then
 			if initComplete then
 				sendQuestMsg(completeText(link))
+			else
+				initComplete = true
 			end
 			completedQuest[questID] = true
 		end
@@ -111,8 +113,6 @@ function module:QuestNotifier()
 	if IsAddOnLoaded("QuestNotifier") then return end
 
 	FindQuestComplete()
-	initComplete = true
-
 	B:RegisterEvent("QUEST_ACCEPTED", FindQuestAccept)
 	B:RegisterEvent("QUEST_LOG_UPDATE", FindQuestComplete)
 	B:RegisterEvent("QUEST_TURNED_IN", FindWorldQuestComplete)
