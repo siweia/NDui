@@ -252,11 +252,14 @@ local list = {
 		{AuraID = 284881, UnitID = "player"},	-- 怒意释放
 		{AuraID = 283507, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 爆裂充能
 		{AuraID = 287648, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 爆裂充能
+		{AuraID = 287072, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 液态黄金
 		{AuraID = 284424, UnitID = "player", Flash = true},	-- 灼烧之地
 		{AuraID = 285014, UnitID = "player", Flash = true},	-- 金币雨
+		{AuraID = 284470, UnitID = "player"},	-- 昏睡妖术
 		{AuraID = 282444, UnitID = "player"},	-- 裂爪猛击，神选者教团
 		{AuraID = 286838, UnitID = "player"},	-- 静电之球
 		{AuraID = 285879, UnitID = "player"},	-- 记忆清除
+		{AuraID = 282135, UnitID = "player"},	-- 恶意妖术
 		{AuraID = 284831, UnitID = "player", Text = L["Get Out"]},	-- 炽焰引爆，拉斯塔哈大王
 		{AuraID = 284662, UnitID = "player", Flash = true},	-- 净化之印
 		{AuraID = 289858, UnitID = "player"},	-- 碾压
@@ -264,12 +267,16 @@ local list = {
 		{AuraID = 284781, UnitID = "player"},	-- 重斧掷击
 		{AuraID = 285195, UnitID = "player"},	-- 寂灭凋零
 		{AuraID = 288449, UnitID = "player"},	-- 死亡之门
+		{AuraID = 284376, UnitID = "player"},	-- 死亡的存在
+		{AuraID = 285349, UnitID = "player"},	-- 赤焰瘟疫
 		{AuraID = 287147, UnitID = "player", Flash = true},	-- 恐惧收割
 		{AuraID = 284168, UnitID = "player"},	-- 缩小，大工匠梅卡托克
 		{AuraID = 282182, UnitID = "player"},	-- 毁灭加农炮
 		{AuraID = 286516, UnitID = "player"},	-- 反干涉震击
 		{AuraID = 286480, UnitID = "player"},	-- 反干涉震击
 		{AuraID = 287167, UnitID = "player"},	-- 基因解组
+		{AuraID = 286105, UnitID = "player"},	-- 干涉
+		{AuraID = 286646, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 千兆伏特充能
 		{AuraID = 285075, UnitID = "player", Flash = true},	-- 冰封潮汐池，风暴之墙阻击战
 		{AuraID = 284121, UnitID = "player", Flash = true},	-- 雷霆轰鸣
 		{AuraID = 285000, UnitID = "player"},	-- 海藻缠裹

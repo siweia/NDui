@@ -11,6 +11,7 @@ local list = {
 		{AuraID = 59052, UnitID = "player"},	-- 白霜
 		{AuraID = 219788, UnitID = "player"},	-- 埋骨之所
 		{AuraID = 215377, UnitID = "player"},	-- 巨口饿了
+		{AuraID = 111673, UnitID = "pet"},		-- 控制亡灵
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 55078, UnitID = "target", Caster = "player"},		-- 血之疫病

@@ -58,6 +58,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 285479) -- 烈焰喷射
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 283947) -- 烈焰喷射
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285014, 6) -- 金币雨
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284470) -- 昏睡妖术
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 287072) -- 液态黄金
 
 BOSS = 2330 -- 神选者教团
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282135, 6) -- 恶意妖术
@@ -65,6 +66,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 282209) -- 掠食印记
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282592) -- 血流不止
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286838) -- 静电之球
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282444) -- 裂爪猛击
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 282135) -- 恶意妖术
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285879, 6) -- 记忆清除
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284663, 6) -- 邦桑迪的愤怒
 
@@ -76,17 +78,17 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 285178) -- 蛇焰吐息
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 289858) -- 碾压
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284740, 6) -- 重斧掷击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284781, 6) -- 重斧掷击
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 285349) -- 赤焰分散
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 285349) -- 赤焰瘟疫
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284995) -- 僵尸尘
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285195) -- 寂灭凋零
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 288449) -- 死亡之门
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 288449, 6) -- 死亡之门
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286742) -- 死疽碎击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286779) -- 死亡聚焦
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 288415) -- 死亡之抚
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285213) -- 死亡之抚
 
 BOSS = 2334 -- 大工匠梅卡托克
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 286646) -- 千兆伏特充能
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 286646, 6) -- 千兆伏特充能
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 288806) -- 千兆伏特轰炸
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284168) -- 缩小
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282182) -- 毁灭加农炮
@@ -95,6 +97,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 286516) -- 反干涉震击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286480) -- 反干涉震击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284214) -- 践踏
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287167) -- 基因解组
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 286105) -- 干涉
 
 BOSS = 2337 -- 风暴之墙阻击战
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284405) -- 诱惑之歌
