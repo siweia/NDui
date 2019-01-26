@@ -27,30 +27,31 @@ function module:SoloInfo()
 		[575] = 2,		-- 乌特加德之巅，蓝龙
 		[585] = 2,		-- 魔导师平台，白鸡
 		[631] = 6,		-- 冰冠堡垒，无敌
+		[1651] = 23,	-- 新午夜，卡拉赞
 	}
 
-	local f = CreateFrame("Frame", nil, UIParent)
-	f:SetPoint("CENTER", UIParent, "CENTER", 0, 120)
-	f:SetSize(150, 70)
-	f:Hide()
-	B.CreateBD(f)
-	B.CreateSD(f)
-	B.CreateTex(f)
-	f.Text = B.CreateFS(f, 12, "")
-	f.Text:SetWordWrap(true)
-	f:SetScript("OnMouseUp", function() f:Hide() end)
+	local f
+	local function setupAlertFrame()
+		if f then f:Show() return end
+
+		f = CreateFrame("Frame", nil, UIParent)
+		f:SetPoint("CENTER", UIParent, "CENTER", 0, 120)
+		f:SetSize(150, 70)
+		B.CreateBD(f)
+		B.CreateSD(f)
+		B.CreateTex(f)
+		f.Text = B.CreateFS(f, 14, "")
+		f.Text:SetWordWrap(true)
+		f:SetScript("OnMouseUp", function() f:Hide() end)
+	end
 
 	local function updateAlert()
-		local name, _, instType, diffname, _, _, _, id = GetInstanceInfo()
-		if IsInInstance() and instType ~= 24 then
-			if instList[id] and instList[id] ~= instType then
-				f:Show()
-				f.Text:SetText(DB.InfoColor..name..DB.MyColor.."\n( "..diffname.." )\n\n"..DB.InfoColor..L["Wrong Difficulty"])
-			else
-				f:Hide()
-			end
+		local name, instType, diffID, diffName, _, _, _, instID = GetInstanceInfo()
+		if instType ~= "none" and diffID ~= 24 and instList[instID] and instList[instID] ~= diffID then
+			setupAlertFrame()
+			f.Text:SetText(DB.InfoColor..name..DB.MyColor.."\n( "..diffName.." )\n\n"..DB.InfoColor..L["Wrong Difficulty"])
 		else
-			f:Hide()
+			if f then f:Hide() end
 		end
 	end
 
@@ -128,6 +129,7 @@ function module:InterruptAlert()
 	local blackList = {
 		[99] = true,		-- 夺魂咆哮
 		[122] = true,		-- 冰霜新星
+		[1776] = true,		-- 凿击
 		[1784] = true,		-- 潜行
 		[115191] = true,
 		[5246] = true,		-- 破胆怒吼
