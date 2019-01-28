@@ -57,6 +57,8 @@ C.WhiteList = {
 	[282098]	= true,		-- 风之恩赐，神选者教团
 	[287650]	= true,		-- 沸腾之怒
 	[282736]	= true,		-- 神灵的愤怒
+	[285945]	= true,		-- 急速之风
+	[286007]	= true,		-- 龙群猎手
 	[289162]	= true,		-- 无情不朽，拉斯卡哈大王
 	[288117]	= true,		-- 灌魔之灵
 	[287297]	= true,		-- 上满发条，大工匠
@@ -140,6 +142,7 @@ C.CustomUnits = {
 	[GetSectionInfo(19656)] = true,	-- 僵尸尘图腾
 	[GetSectionInfo(19393)] = true,	-- 雪怒之魂
 	[GetSectionInfo(19279)] = true,	-- 谄媚海妖
+	[GetSectionInfo(19019)] = true,	-- 贪婪的追猎者
 }
 
 -- 显示能量值的单位

@@ -60,6 +60,7 @@ local list = {
 		{AuraID = 269853, UnitID = "player"},	-- 死亡崛起药水
 		{AuraID = 188024, UnitID = "player"},	-- 天行药水
 		{AuraID = 250878, UnitID = "player"},	-- 轻足药水
+		{AuraID = 290365, UnitID = "player"},	-- 辉煌蓝宝石
 		{AuraID = 277179, UnitID = "player"},	-- 角斗士勋章
 		{AuraID = 277181, UnitID = "player"},	-- 角斗士徽记
 		{AuraID = 277187, UnitID = "player"},	-- 角斗士纹章
@@ -255,11 +256,15 @@ local list = {
 		{AuraID = 287072, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 液态黄金
 		{AuraID = 284424, UnitID = "player", Flash = true},	-- 灼烧之地
 		{AuraID = 285014, UnitID = "player", Flash = true},	-- 金币雨
+		{AuraID = 285479, UnitID = "player", Flash = true},	-- 烈焰喷射
+		{AuraID = 283947, UnitID = "player", Flash = true},	-- 烈焰喷射
 		{AuraID = 284470, UnitID = "player"},	-- 昏睡妖术
 		{AuraID = 282444, UnitID = "player"},	-- 裂爪猛击，神选者教团
 		{AuraID = 286838, UnitID = "player"},	-- 静电之球
 		{AuraID = 285879, UnitID = "player"},	-- 记忆清除
 		{AuraID = 282135, UnitID = "player"},	-- 恶意妖术
+		{AuraID = 282209, UnitID = "player", Flash = true},	-- 掠食印记
+		{AuraID = 286821, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 阿昆达的愤怒
 		{AuraID = 284831, UnitID = "player", Text = L["Get Out"]},	-- 炽焰引爆，拉斯塔哈大王
 		{AuraID = 284662, UnitID = "player", Flash = true},	-- 净化之印
 		{AuraID = 289858, UnitID = "player"},	-- 碾压

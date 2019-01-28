@@ -50,14 +50,14 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 284814) -- 地之根系绿宝石
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284881) -- 怒意释放猫眼石
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 283610) -- 碾压
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 283609) -- 碾压
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 283507, 6) -- 爆裂充能
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 287648, 6) -- 爆裂充能
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 283507) -- 爆裂充能
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 287648) -- 爆裂充能
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 283063) -- 惩罚烈焰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287513) -- 惩罚烈焰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285479) -- 烈焰喷射
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 283947) -- 烈焰喷射
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285014, 6) -- 金币雨
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284470) -- 昏睡妖术
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284470, 6) -- 昏睡妖术
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287072) -- 液态黄金
 
 BOSS = 2330 -- 神选者教团
@@ -66,7 +66,6 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 282209) -- 掠食印记
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282592) -- 血流不止
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286838) -- 静电之球
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282444) -- 裂爪猛击
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 282135) -- 恶意妖术
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285879, 6) -- 记忆清除
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284663, 6) -- 邦桑迪的愤怒
 
