@@ -298,38 +298,12 @@ function module:OnLogin()
 			self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 1)
 		end
 
-		local flash = self:CreateTexture(nil, "ARTWORK")
-		flash:SetTexture(DB.newItemFlash)
-		flash:SetPoint("TOPLEFT", -20, 20)
-		flash:SetPoint("BOTTOMRIGHT", 20, -20)
-		flash:SetBlendMode("ADD")
-		flash:SetAlpha(0)
-		local anim = flash:CreateAnimationGroup()
-		anim:SetLooping("REPEAT")
-		anim.rota = anim:CreateAnimation("Rotation")
-		anim.rota:SetDuration(1)
-		anim.rota:SetDegrees(-90)
-		anim.fader = anim:CreateAnimation("Alpha")
-		anim.fader:SetFromAlpha(0)
-		anim.fader:SetToAlpha(.5)
-		anim.fader:SetDuration(.5)
-		anim.fader:SetSmoothing("OUT")
-		anim.fader2 = anim:CreateAnimation("Alpha")
-		anim.fader2:SetStartDelay(.5)
-		anim.fader2:SetFromAlpha(.5)
-		anim.fader2:SetToAlpha(0)
-		anim.fader2:SetDuration(1.2)
-		anim.fader2:SetSmoothing("OUT")
-		self:HookScript("OnHide", function() if anim:IsPlaying() then anim:Stop() end end)
-		self.anim = anim
-
-		self.ShowNewItems = true
+		self.glowFrame = B.CreateBG(self, 4)
+		self.glowFrame:SetSize(iconSize+8, iconSize+8)
 	end
 
-	function MyButton:OnEnter()
-		if self.ShowNewItems then
-			if self.anim:IsPlaying() then self.anim:Stop() end
-		end
+	function MyButton:OnEnter(item)
+		if self.glowFrame then B.HideOverlayGlow(self.glowFrame) end
 	end
 
 	function MyButton:OnUpdate(item)
@@ -364,11 +338,11 @@ function module:OnLogin()
 			end
 		end
 
-		if self.ShowNewItems then
+		if self.glowFrame then
 			if C_NewItems.IsNewItem(item.bagID, item.slotID) then
-				self.anim:Play()
+				B.ShowOverlayGlow(self.glowFrame)
 			else
-				if self.anim:IsPlaying() then self.anim:Stop() end
+				B.HideOverlayGlow(self.glowFrame)
 			end
 		end
 	end
