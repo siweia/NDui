@@ -130,7 +130,7 @@ local list = {
 		{AuraID = 268956, UnitID = "player", Text = L["Versa"]},	-- 全能
 		{AuraID = 280780, UnitID = "player"},	-- 战斗荣耀
 		{AuraID = 280787, UnitID = "player"},	-- 反击之怒
-		{AuraID = 279928, UnitID = "player", Combat = true},	-- 大地链接
+		--{AuraID = 279928, UnitID = "player", Combat = true},	-- 大地链接
 		{AuraID = 280385, UnitID = "player"},	-- 压力渐增
 		{AuraID = 273842, UnitID = "player"},	-- 深渊秘密
 		{AuraID = 273843, UnitID = "player"},	-- 深渊秘密
@@ -265,8 +265,9 @@ local list = {
 		{AuraID = 282135, UnitID = "player"},	-- 恶意妖术
 		{AuraID = 282209, UnitID = "player", Flash = true},	-- 掠食印记
 		{AuraID = 286821, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 阿昆达的愤怒
-		{AuraID = 284831, UnitID = "player", Text = L["Get Out"]},	-- 炽焰引爆，拉斯塔哈大王
-		{AuraID = 284662, UnitID = "player", Flash = true},	-- 净化之印
+		{AuraID = 284831, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 炽焰引爆，拉斯塔哈大王
+		{AuraID = 284662, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 净化之印
+		{AuraID = 290450, UnitID = "player", Text = L["Get Out"], Flash = true},	-- 净化之印
 		{AuraID = 289858, UnitID = "player"},	-- 碾压
 		{AuraID = 284740, UnitID = "player"},	-- 重斧掷击
 		{AuraID = 284781, UnitID = "player"},	-- 重斧掷击

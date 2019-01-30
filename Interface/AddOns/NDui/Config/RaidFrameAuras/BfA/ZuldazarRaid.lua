@@ -70,9 +70,11 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 285879, 6) -- 记忆清除
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284663, 6) -- 邦桑迪的愤怒
 
 BOSS = 2335 -- 拉斯塔哈大王
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 289917, 6) -- 邦桑迪的契约，小怪
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284831) -- 炽焰引爆
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285010) -- 蟾蜍粘液毒素
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284676) -- 净化之印
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 290450) -- 净化之印
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285178) -- 蛇焰吐息
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 289858) -- 碾压
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284740, 6) -- 重斧掷击
