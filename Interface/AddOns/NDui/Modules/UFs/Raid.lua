@@ -30,7 +30,6 @@ function UF:CreateRaidIcons(self)
 	local summon = parent:CreateTexture(nil, "OVERLAY")
 	summon:SetSize(32, 32)
 	summon:SetPoint("CENTER", parent)
-	summon:SetParent(UIParent)
 	self.SummonIndicator = summon
 end
 
@@ -165,10 +164,10 @@ local keyList = {
 	[21] = {L["WheelUp"], "", "%s6"},				-- 滚轮上
 	[22] = {L["WheelUp"], "ALT", "%s7"},			-- ALT+滚轮上
 	[23] = {L["WheelUp"], "CTRL", "%s8"},			-- CTRL+滚轮上
-	[24] = {L["WheelUp"], "SHIFT", "%s9"},		-- SHIFT+滚轮上
+	[24] = {L["WheelUp"], "SHIFT", "%s9"},			-- SHIFT+滚轮上
 
 	[25] = {L["WheelDown"], "", "%s10"},			-- 滚轮下
-	[26] = {L["WheelDown"], "ALT", "%s11"},		-- ALT+滚轮下
+	[26] = {L["WheelDown"], "ALT", "%s11"},			-- ALT+滚轮下
 	[27] = {L["WheelDown"], "CTRL", "%s12"},		-- CTRL+滚轮下
 	[28] = {L["WheelDown"], "SHIFT", "%s13"},		-- SHIFT+滚轮下
 }
@@ -186,7 +185,7 @@ local defaultSpellList = {
 		[6] = 57934,		-- 嫁祸
 	},
 	["WARRIOR"] = {
-		[6] = 3411,			-- 援护
+		[6] = 198304,		-- 拦截
 	},
 	["SHAMAN"] = {
 		[2] = 77130,		-- 驱散

@@ -132,7 +132,7 @@ do
 	B:RegisterEvent("CHAT_MSG_ADDON", VerCheckListen)
 
 	SlashCmdList["NDUI_VER_CHECK"] = function(msg)
-		if not DB.isDeveloper then return end
+		--if not DB.isDeveloper then return end
 		local channel
 		if IsInRaid() then
 			channel = "RAID"
