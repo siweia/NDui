@@ -490,6 +490,9 @@ module:RegisterTooltips("NDui", function()
 		if LibDBIconTooltip then
 			B.ReskinTooltip(LibDBIconTooltip)
 		end
+		if TomTomTooltip then
+			B.ReskinTooltip(TomTomTooltip)
+		end
 	end)
 
 	if IsAddOnLoaded("BattlePetBreedID") then
