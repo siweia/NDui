@@ -111,6 +111,7 @@ local list = {
 		{AuraID = 267330, UnitID = "player", Text = L["Crit"]},	-- 爆击
 		{AuraID = 267331, UnitID = "player", Text = L["Crit"]},	-- 爆击
 		{AuraID = 280573, UnitID = "player", Combat = true},	-- 重组阵列
+		{AuraID = 289523, UnitID = "player", Combat = true},	-- 耀辉之光
 		-- 艾泽里特特质
 		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
 		{AuraID = 266047, UnitID = "player"},	-- 激励咆哮
@@ -218,13 +219,14 @@ local list = {
 		{AuraID = 271640, UnitID = "player"},	-- 黑暗启示，诸王
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
 		{AuraID = 266923, UnitID = "player"},	-- 充电，神庙
-		{AuraID = 273563, UnitID = "player"},	-- 神经毒素，神庙
+		{AuraID = 273563, UnitID = "player", Text = L["No move"]},	-- 神经毒素，神庙
 		{AuraID = 257407, UnitID = "player"},	-- 追踪，阿塔达萨
 		{AuraID = 250585, UnitID = "player", Flash = true},	-- 剧毒之池，阿塔达萨
 		{AuraID = 258723, UnitID = "player", Flash = true},	-- 怪诞之池，阿塔达萨
 		{AuraID = 258058, UnitID = "player"},	-- 挤压，托尔达戈
 		{AuraID = 260067, UnitID = "player"},	-- 恶毒槌击，托尔达戈
 		{AuraID = 273226, UnitID = "player"},	-- 腐烂孢子，孢林
+		{AuraID = 269838, UnitID = "player", Flash = true},	-- 邪恶污染，孢林
 		{AuraID = 276297, UnitID = "player"},	-- 虚空种子，风暴神殿
 		{AuraID = 268086, UnitID = "player"},	-- 恐怖光环，庄园
 	-- 达萨罗之战
@@ -258,7 +260,7 @@ local list = {
 		{AuraID = 285014, UnitID = "player", Flash = true},	-- 金币雨
 		{AuraID = 285479, UnitID = "player", Flash = true},	-- 烈焰喷射
 		{AuraID = 283947, UnitID = "player", Flash = true},	-- 烈焰喷射
-		{AuraID = 284470, UnitID = "player"},	-- 昏睡妖术
+		{AuraID = 284470, UnitID = "player", Text = L["No move"], Flash = true},	-- 昏睡妖术
 		{AuraID = 282444, UnitID = "player"},	-- 裂爪猛击，神选者教团
 		{AuraID = 286838, UnitID = "player"},	-- 静电之球
 		{AuraID = 285879, UnitID = "player"},	-- 记忆清除
@@ -610,8 +612,6 @@ local list = {
 		{AuraID = 271867, UnitID = "target"},	-- 氪金致胜，矿区1
 	-- 达萨罗之战
 		{AuraID = 284459, UnitID = "target"},	-- 狂热，圣光勇士
-		{AuraID = 283572, UnitID = "target"},	-- 圣洁之刃
-		{AuraID = 284469, UnitID = "target"},	-- 惩戒圣印
 		{AuraID = 284436, UnitID = "target"},	-- 清算圣印
 		{AuraID = 282113, UnitID = "target"},	-- 复仇之怒
 		{AuraID = 281936, UnitID = "target"},	-- 发怒，丛林之王格洛恩
