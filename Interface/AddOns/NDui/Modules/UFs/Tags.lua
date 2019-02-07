@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 local oUF = ns.oUF or oUF
 local format, floor = string.format, math.floor
+local AFK, DND, DEAD, PLAYER_OFFLINE = AFK, DND, DEAD, PLAYER_OFFLINE
+local ALTERNATE_POWER_INDEX = ALTERNATE_POWER_INDEX or 10
 
 local function ColorPercent(value)
 	local r, g, b
@@ -18,6 +20,14 @@ local function ColorPercent(value)
 	return B.HexRGB(r, g, b)..value
 end
 
+local function ValueAndPercent(cur, per)
+	if per < 100 then
+		return B.Numb(cur).." | "..ColorPercent(per)
+	else
+		return B.Numb(cur)
+	end
+end
+
 oUF.Tags.Methods["hp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return oUF.Tags.Methods["DDG"](unit)
@@ -25,11 +35,7 @@ oUF.Tags.Methods["hp"] = function(unit)
 		local per = oUF.Tags.Methods["perhp"](unit) or 0
 		local cur = UnitHealth(unit)
 		if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
-			if per < 100 then
-				return B.Numb(cur).." | "..ColorPercent(per)
-			else
-				return B.Numb(cur)
-			end
+			return ValueAndPercent(cur, per)
 		else
 			return ColorPercent(per)
 		end
@@ -137,12 +143,10 @@ oUF.Tags.Events["raidhp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION
 -- Nameplate tags
 oUF.Tags.Methods["nphp"] = function(unit)
 	local per = oUF.Tags.Methods["perhp"](unit) or 0
-	if per == 100 then return end
-
 	if NDuiDB["Nameplate"]["FullHealth"] then
 		local cur = UnitHealth(unit)
-		return B.Numb(cur).." | "..ColorPercent(per)
-	else
+		return ValueAndPercent(cur, per)
+	elseif per < 100 then
 		return ColorPercent(per)
 	end
 end
