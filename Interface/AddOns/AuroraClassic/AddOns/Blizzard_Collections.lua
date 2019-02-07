@@ -7,15 +7,11 @@ C.themes["Blizzard_Collections"] = function()
 
 	F.ReskinPortraitFrame(CollectionsJournal)
 	F.ReskinTab(CollectionsJournalTab1)
-	F.ReskinTab(CollectionsJournalTab2)
-	F.ReskinTab(CollectionsJournalTab3)
-	F.ReskinTab(CollectionsJournalTab4)
-	F.ReskinTab(CollectionsJournalTab5)
-
-	CollectionsJournalTab2:SetPoint("LEFT", CollectionsJournalTab1, "RIGHT", -15, 0)
-	CollectionsJournalTab3:SetPoint("LEFT", CollectionsJournalTab2, "RIGHT", -15, 0)
-	CollectionsJournalTab4:SetPoint("LEFT", CollectionsJournalTab3, "RIGHT", -15, 0)
-	CollectionsJournalTab5:SetPoint("LEFT", CollectionsJournalTab4, "RIGHT", -15, 0)
+	for i = 2, 5 do
+		local tab = _G["CollectionsJournalTab"..i]
+		F.ReskinTab(tab)
+		tab:SetPoint("LEFT", _G["CollectionsJournalTab"..(i-1)], "RIGHT", -15, 0)
+	end
 
 	-- [[ Mounts and pets ]]
 
@@ -597,34 +593,16 @@ C.themes["Blizzard_Collections"] = function()
 	local WardrobeTransmogFrame = WardrobeTransmogFrame
 
 	F.StripTextures(WardrobeTransmogFrame)
-	WardrobeTransmogFrame.MoneyLeft:Hide()
-	WardrobeTransmogFrame.MoneyMiddle:Hide()
-	WardrobeTransmogFrame.MoneyRight:Hide()
-	WardrobeTransmogFrame.SpecButton.Icon:Hide()
-
-	for i = 1, 9 do
-		select(i, WardrobeTransmogFrame.SpecButton:GetRegions()):Hide()
-	end
-
 	F.ReskinPortraitFrame(WardrobeFrame)
 	F.Reskin(WardrobeTransmogFrame.ApplyButton)
-	F.Reskin(WardrobeOutfitDropDown.SaveButton)
+	F.StripTextures(WardrobeTransmogFrame.SpecButton)
 	F.ReskinArrow(WardrobeTransmogFrame.SpecButton, "down")
-	F.ReskinDropDown(WardrobeOutfitDropDown)
-	WardrobeOutfitDropDown:SetHeight(32)
-	WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
-	for i = 1, 9 do
-		select(i, WardrobeOutfitFrame:GetRegions()):Hide()
-	end
-	F.CreateBDFrame(WardrobeOutfitFrame, .25)
-	F.CreateSD(WardrobeOutfitFrame, .25)
+	WardrobeTransmogFrame.SpecButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
 	for i = 1, 10 do
 		select(i, WardrobeTransmogFrame.Model.ClearAllPendingButton:GetRegions()):Hide()
 	end
-	WardrobeTransmogFrame.SpecButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
 
 	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand"}
-
 	for i = 1, #slots do
 		local slot = WardrobeTransmogFrame.Model[slots[i].."Button"]
 		if slot then
@@ -639,17 +617,36 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end
 
-	-- Edit Frame
-	for i = 1, 11 do
-		select(i, WardrobeOutfitEditFrame:GetRegions()):Hide()
-	end
-	WardrobeOutfitEditFrame.Title:Show()
-	for i = 2, 5 do
-		select(i, WardrobeOutfitEditFrame.EditBox:GetRegions()):Hide()
-	end
+	-- Outfit Frame
+	F.Reskin(WardrobeOutfitDropDown.SaveButton)
+	F.ReskinDropDown(WardrobeOutfitDropDown)
+	WardrobeOutfitDropDown:SetHeight(32)
+	WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
+	F.StripTextures(WardrobeOutfitFrame)
+	F.CreateBDFrame(WardrobeOutfitFrame, .7)
+	F.CreateSD(WardrobeOutfitFrame, .25)
+
+	hooksecurefunc(WardrobeOutfitFrame, "Update", function(self)
+		for i = 1, C_TransmogCollection.GetNumMaxOutfits() do
+			local button = self.Buttons[i]
+			if button and button:IsShown() and not button.styled then
+				F.ReskinIcon(button.Icon)
+				button.Selection:SetColorTexture(1, 1, 1, .25)
+				button.Highlight:SetColorTexture(r, g, b, .25)
+
+				button.styled = true
+			end
+		end
+	end)
+
+	F.StripTextures(WardrobeOutfitEditFrame)
+	F.StripTextures(WardrobeOutfitEditFrame.EditBox)
 	F.CreateBD(WardrobeOutfitEditFrame)
 	F.CreateSD(WardrobeOutfitEditFrame)
-	F.CreateBDFrame(WardrobeOutfitEditFrame.EditBox,.25)
+	local bg = F.CreateBDFrame(WardrobeOutfitEditFrame.EditBox, .25)
+	bg:SetPoint("TOPLEFT", -5, -3)
+	bg:SetPoint("BOTTOMRIGHT", 5, 3)
+	F.CreateGradient(bg)
 	F.Reskin(WardrobeOutfitEditFrame.AcceptButton)
 	F.Reskin(WardrobeOutfitEditFrame.CancelButton)
 	F.Reskin(WardrobeOutfitEditFrame.DeleteButton)
