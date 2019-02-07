@@ -36,7 +36,7 @@ function module:ChantLumos(self)
 			elseif IsPlayerSpell(117014) then
 				UpdateCooldown(button, 117014, true)
 			else
-				if IsUsableSpell(228260) then
+				if IsUsableSpell(8042) then
 					button:SetAlpha(1)
 				else
 					button:SetAlpha(.5)
