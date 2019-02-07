@@ -53,6 +53,7 @@ local function ReskinDetails()
 	local instance2 = Details:GetInstance(2)
 
 	local function EmbedWindow(instance, x, y, width, height)
+		if not instance.baseframe then return end
 		instance.baseframe:ClearAllPoints()
 		instance.baseframe:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", x, y)
 		instance:SetSize(width, height)
@@ -62,10 +63,13 @@ local function ReskinDetails()
 	end
 
 	if NDuiADB["ResetDetails"] then
-		EmbedWindow(instance1, -3, 25, 320, 190)
-		if instance2 then
-			instance1:SetSize(320, 95)
-			EmbedWindow(instance2, -3, 140, 320, 95)
+		local height = 190
+		if instance1 then
+			if instance2 then
+				height = 95
+				EmbedWindow(instance2, -3, 140, 320, height)
+			end
+			EmbedWindow(instance1, -3, 25, 320, height)
 		end
 	end
 
