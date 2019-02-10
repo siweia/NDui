@@ -118,6 +118,7 @@ GameTooltip:HookScript("OnTooltipCleared", function(self)
 end)
 
 GameTooltip:HookScript("OnTooltipSetUnit", function(self)
+	if self:IsForbidden() then return end
 	if NDuiDB["Tooltip"]["CombatHide"] and InCombatLockdown() then
 		return self:Hide()
 	end
@@ -321,6 +322,7 @@ function B:ReskinTooltip()
 		if DB.isDeveloper then print("Unknown tooltip spotted.") end
 		return
 	end
+	if self:IsForbidden() then return end
 	self:SetScale(NDuiDB["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
