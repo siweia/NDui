@@ -176,9 +176,7 @@ end
 cast.PostCastFailed = function(self)
 	self:SetStatusBarColor(unpack(self.FailColor))
 	self:SetValue(self.max)
-	if not self.fadeOut then
-		self.fadeOut = true
-	end
+	self.fadeOut = true
 	self:Show()
 end
 
