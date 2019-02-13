@@ -157,6 +157,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 257436) -- 毒性打击
 module:RegisterDebuff(TIER, INSTANCE, 0, 274555) -- 污染之咬
 module:RegisterDebuff(TIER, INSTANCE, 0, 256363) -- 裂伤拳
 module:RegisterDebuff(TIER, INSTANCE, 0, 281357, 1) -- 水鼠啤酒
+module:RegisterDebuff(TIER, INSTANCE, 0, 278467) -- 腐蚀酒
 
 INSTANCE = 1041 -- 诸王之眠
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
