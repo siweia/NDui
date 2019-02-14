@@ -81,7 +81,7 @@ function module:CreateBagBar(settings, columns)
 end
 
 function module:CreateCloseButton()
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\UI-StopButton")
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
 	bu:SetScript("OnClick", CloseAllBags)
 	B.AddTooltip(bu, "ANCHOR_TOP", CLOSE)
 
@@ -89,7 +89,7 @@ function module:CreateCloseButton()
 end
 
 function module:CreateRestoreButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\UI-RefreshButton")
+	local bu = B.CreateButton(self, 24, 24, true, "Atlas:transmog-icon-revert")
 	bu:SetScript("OnClick", function()
 		NDuiDB["TempAnchor"][f.main:GetName()] = nil
 		NDuiDB["TempAnchor"][f.bank:GetName()] = nil
@@ -108,7 +108,7 @@ function module:CreateRestoreButton(f)
 end
 
 function module:CreateReagentButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS")
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS")
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
 		if not IsReagentBankUnlocked() then
@@ -128,7 +128,7 @@ function module:CreateReagentButton(f)
 end
 
 function module:CreateBankButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\INV_Misc_EngGizmos_17")
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Misc_EngGizmos_17")
 	bu:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 		ReagentBankFrame:Hide()
@@ -142,7 +142,7 @@ function module:CreateBankButton(f)
 end
 
 function module:CreateDepositButton()
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Spell_ChargePositive")
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\Spell_ChargePositive")
 	bu:SetScript("OnClick", DepositReagentBank)
 	B.AddTooltip(bu, "ANCHOR_TOP", REAGENTBANK_DEPOSIT)
 
@@ -150,11 +150,11 @@ function module:CreateDepositButton()
 end
 
 function module:CreateBagToggle()
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\INV_Misc_Bag_08")
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Buttons\\Button-Backpack-Up")
 	bu:SetScript("OnClick", function()
 		ToggleFrame(self.BagBar)
 		if self.BagBar:IsShown() then
-			bu:SetBackdropBorderColor(1, 1, 1)
+			bu:SetBackdropBorderColor(1, .8, 0)
 			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 		else
 			bu:SetBackdropBorderColor(0, 0, 0)
@@ -167,7 +167,7 @@ function module:CreateBagToggle()
 end
 
 function module:CreateSortButton(name)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\INV_Pet_Broom")
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Pet_Broom")
 	bu:SetScript("OnClick", function()
 		if name == "Bank" then
 			SortBankBags()
@@ -423,7 +423,7 @@ function module:OnLogin()
 		for i = 1, 4 do
 			local bu = buttons[i]
 			if i == 1 then
-				bu:SetPoint("TOPRIGHT", -5, -5)
+				bu:SetPoint("TOPRIGHT", -5, -3)
 			else
 				bu:SetPoint("RIGHT", buttons[i-1], "LEFT", -3, 0)
 			end
