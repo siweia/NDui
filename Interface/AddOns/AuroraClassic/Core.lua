@@ -773,6 +773,20 @@ function F:AffixesSetup()
 	end
 end
 
+function F:StyleSearchButton()
+	F.StripTextures(self)
+	if self.icon then
+		F.ReskinIcon(self.icon)
+	end
+	F.CreateBD(self, .25)
+
+	self:SetHighlightTexture(C.media.backdrop)
+	local hl = self:GetHighlightTexture()
+	hl:SetVertexColor(r, g, b, .25)
+	hl:SetPoint("TOPLEFT", C.mult, -C.mult)
+	hl:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+end
+
 -- [[ Variable and module handling ]]
 
 C.themes = {}

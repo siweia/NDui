@@ -2,18 +2,19 @@ local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_DebugTools"] = function()
 	-- EventTraceFrame
-	F.CreateBD(EventTraceFrame)
-	F.CreateSD(EventTraceFrame)
+	F.StripTextures(EventTraceFrame)
+	F.SetBD(EventTraceFrame)
 	F.ReskinClose(EventTraceFrameCloseButton)
 
-	select(1, EventTraceFrameScroll:GetRegions()):Hide()
-	local bu = select(2, EventTraceFrameScroll:GetRegions())
+	local bg, bu = EventTraceFrameScroll:GetRegions()
+	bg:Hide()
 	bu:SetAlpha(0)
 	bu:SetWidth(17)
 	bu.bg = CreateFrame("Frame", nil, EventTraceFrame)
 	bu.bg:SetPoint("TOPLEFT", bu, 0, 0)
 	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 0)
-	F.CreateBD(bu.bg, 0)
+	bu.bg = F.CreateBDFrame(EventTraceFrame, 0)
+	bu.bg:SetAllPoints(bu)
 	F.CreateGradient(bu.bg)
 
 	if AuroraConfig.tooltips then
@@ -24,28 +25,11 @@ C.themes["Blizzard_DebugTools"] = function()
 		EventTraceTooltip:SetFrameStrata("TOOLTIP")
 	end
 
-	local texs = {
-		"TopLeft",
-		"TopRight",
-		"Top",
-		"BottomLeft",
-		"BottomRight",
-		"Bottom",
-		"Left",
-		"Right",
-		"TitleBG",
-		"DialogBG",
-	}
-
-	for i = 1, #texs do
-		_G["EventTraceFrame"..texs[i]]:SetTexture(nil)
-	end
-
 	-- Table Attribute Display
 
 	local function reskinTableAttribute(frame)
-		F.CreateBD(frame)
-		F.CreateSD(frame)
+		F.StripTextures(frame)
+		F.SetBD(frame)
 		F.ReskinClose(frame.CloseButton)
 		F.ReskinCheck(frame.VisibilityButton)
 		F.ReskinCheck(frame.HighlightButton)
@@ -64,20 +48,11 @@ C.themes["Blizzard_DebugTools"] = function()
 		frame.DuplicateButton:ClearAllPoints()
 		frame.DuplicateButton:SetPoint("LEFT", frame.NavigateForwardButton, "RIGHT")
 
-		for i = 1, 10 do
-			select(i, frame:GetRegions()):Hide()
-		end
-
-		for i = 1, 8 do
-			select(i, frame.ScrollFrameArt:GetRegions()):Hide()
-		end
-		F.CreateBD(frame.ScrollFrameArt, .3)
+		F.StripTextures(frame.ScrollFrameArt)
+		F.CreateBDFrame(frame.ScrollFrameArt, .25)
 		F.ReskinScroll(frame.LinesScrollFrame.ScrollBar)
 	end
 
 	reskinTableAttribute(TableAttributeDisplay)
-
-	hooksecurefunc(TableInspectorMixin, "InspectTable", function(self)
-		reskinTableAttribute(self)
-	end)
+	hooksecurefunc(TableInspectorMixin, "InspectTable", reskinTableAttribute)
 end

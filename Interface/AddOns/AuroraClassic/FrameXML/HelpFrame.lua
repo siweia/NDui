@@ -12,14 +12,12 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.StripTextures(HelpFrameLeftInset)
 	F.StripTextures(HelpBrowser.BrowserInset)
 
-	F.CreateBD(HelpFrameGM_ResponseScrollFrame1, .25)
-	F.CreateBD(HelpFrameGM_ResponseScrollFrame2, .25)
-	F.CreateBD(HelpFrameReportBugScrollFrame, .25)
-	F.CreateBD(HelpFrameSubmitSuggestionScrollFrame, .25)
-	F.CreateBD(ReportCheatingDialogCommentFrame, .25)
-	for i = 1, 9 do
-		select(i, ReportCheatingDialogCommentFrame:GetRegions()):Hide()
-	end
+	F.CreateBDFrame(HelpFrameGM_ResponseScrollFrame1, .25)
+	F.CreateBDFrame(HelpFrameGM_ResponseScrollFrame2, .25)
+	F.CreateBDFrame(HelpFrameReportBugScrollFrame, .25)
+	F.CreateBDFrame(HelpFrameSubmitSuggestionScrollFrame, .25)
+	F.StripTextures(ReportCheatingDialogCommentFrame)
+	F.CreateBDFrame(ReportCheatingDialogCommentFrame, .25)
 
 	local scrolls = {
 		"HelpFrameKnowledgebaseScrollFrameScrollBar",
@@ -63,7 +61,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		local bu = _G["HelpFrameKnowledgebaseScrollFrameButton"..i]
 		bu:DisableDrawLayer("ARTWORK")
 		F.CreateBD(bu, 0)
-
 		F.CreateGradient(bu)
 	end
 
