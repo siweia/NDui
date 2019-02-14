@@ -159,6 +159,15 @@ local function createClickStopper(button)
 	f:Hide()
 end
 
+local function reskinTabs(button)
+	if not IsAddOnLoaded("AuroraClassic") then return end
+	local F, C = unpack(AuroraClassic)
+	button:SetCheckedTexture(C.media.checked)
+	button:GetRegions():Hide()
+	F.CreateBG(button)
+	button:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+end
+
 function TradeTabs:CreateTab(i, parent, spellID, isToy)
 	local name, texture, _
 	if isToy then
@@ -178,13 +187,7 @@ function TradeTabs:CreateTab(i, parent, spellID, isToy)
 
 	button:SetNormalTexture(texture)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	if IsAddOnLoaded("AuroraClassic") then
-		local F, C = unpack(AuroraClassic)
-		button:SetCheckedTexture(C.media.checked)
-		button:GetRegions():Hide()
-		F.CreateBG(button)
-		button:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
-	end
+	reskinTabs(button)
 	button.CD = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 	button.CD:SetAllPoints()
 
