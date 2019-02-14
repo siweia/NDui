@@ -5,6 +5,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
 local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
 local min, max, abs, floor = math.min, math.max, math.abs, math.floor
+local ACF = IsAddOnLoaded("AuroraClassic") and unpack(AuroraClassic)
 
 -- Gradient Frame
 function B:CreateGF(w, h, o, r, g, b, a1, a2)
@@ -74,9 +75,8 @@ function B:CreateTex()
 end
 
 function B:SetBackground()
-	if IsAddOnLoaded("AuroraClassic") then
-		local F = unpack(AuroraClassic)
-		F.SetBD(self)
+	if ACF then
+		ACF.SetBD(self)
 	else
 		B.CreateBD(self)
 		B.CreateSD(self)
@@ -213,7 +213,12 @@ function B:PixelIcon(texture, highlight)
 	self.Icon:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 	self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	if texture then
-		self.Icon:SetTexture(texture)
+		local atlas = strmatch(texture, "Atlas:(.+)$")
+		if atlas then
+			self.Icon:SetAtlas(atlas)
+		else
+			self.Icon:SetTexture(texture)
+		end
 	end
 	if highlight and type(highlight) == "boolean" then
 		self:EnableMouse(true)
