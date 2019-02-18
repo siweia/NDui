@@ -3,8 +3,10 @@ ns[1] = {}			-- B, Basement
 ns[2] = {}			-- C, Config
 ns[3] = {}			-- L, Locales
 ns[4] = {}			-- DB, Database
-NDuiADB = NDuiADB or {}
-NDuiDB = NDuiDB or {}
+if IsAddOnLoaded("AuroraClassic") then
+	ns[5], ns[6] = unpack(AuroraClassic)
+end
+NDuiDB, NDuiADB = {}, {}
 
 local B, C, L, DB = unpack(ns)
 local pairs, next, tinsert = pairs, next, table.insert
