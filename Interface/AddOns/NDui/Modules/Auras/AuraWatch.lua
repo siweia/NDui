@@ -10,6 +10,17 @@ local CR_HASTE_MELEE, CR_MASTERY, CR_VERSATILITY_DAMAGE_DONE = CR_HASTE_MELEE, C
 local CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE = CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE
 
 -- Init
+function B.RemoveAuraData(spellID)
+	for _, v in pairs(C.AuraWatchList[DB.MyClass]) do
+		for _, list in pairs(v.List) do
+			if list.AuraID and list.AuraID == spellID then
+				wipe(list)
+				break
+			end
+		end
+	end
+end
+
 local function ConvertTable()
 	local function DataAnalyze(v)
 		local newTable = {}
@@ -60,6 +71,7 @@ local function ConvertTable()
 				for _, list in pairs(target) do
 					if list.AuraID and v.AuraID and list.AuraID == v.AuraID then
 						wipe(list)
+						break
 					end
 				end
 				tinsert(target, v)
