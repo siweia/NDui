@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L, DB, F = unpack(ns)
 local module = B:GetModule("Misc")
 
 --[[
@@ -239,8 +239,7 @@ function module:Mailbox()
 	end
 
 	-- Aurora Reskin
-	if IsAddOnLoaded("AuroraClassic") then
-		local F = unpack(AuroraClassic)
+	if F then
 		F.Reskin(button1)
 		F.Reskin(button2)
 		F.Reskin(button3)

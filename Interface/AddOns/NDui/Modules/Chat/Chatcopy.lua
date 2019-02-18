@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L, DB, F = unpack(ns)
 local module = B:GetModule("Chat")
 
 function module:ChatCopy()
@@ -120,8 +120,7 @@ function module:ChatCopy()
 	copy:HookScript("OnLeave", function() copy:SetAlpha(.5) end)
 
 	-- Aurora Reskin
-	if IsAddOnLoaded("AuroraClassic") then
-		local F = unpack(AuroraClassic)
+	if F then
 		F.ReskinClose(frame.close)
 		F.ReskinScroll(ChatCopyScrollFrameScrollBar)
 	end

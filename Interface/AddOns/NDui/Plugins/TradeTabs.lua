@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L, DB, F, M = unpack(ns)
 ---------------------------
 -- TradeTabs, by tardmrr
 -- NDui MOD
@@ -160,12 +160,12 @@ local function createClickStopper(button)
 end
 
 local function reskinTabs(button)
-	if not IsAddOnLoaded("AuroraClassic") then return end
-	local F, C = unpack(AuroraClassic)
-	button:SetCheckedTexture(C.media.checked)
-	button:GetRegions():Hide()
-	F.CreateBG(button)
-	button:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+	if F then
+		button:SetCheckedTexture(M.media.checked)
+		button:GetRegions():Hide()
+		F.CreateBG(button)
+		button:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+	end
 end
 
 function TradeTabs:CreateTab(i, parent, spellID, isToy)

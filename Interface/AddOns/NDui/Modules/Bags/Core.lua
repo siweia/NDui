@@ -1,5 +1,5 @@
 ﻿local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L, DB, F = unpack(ns)
 
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
@@ -36,10 +36,11 @@ function module:UpdateAnchors(parent, bags)
 end
 
 function module:DisableAuroraClassic()
-	if not IsAddOnLoaded("AuroraClassic") then return end
-	AuroraOptionsbags:SetAlpha(0)
-	AuroraOptionsbags:Disable()
-	AuroraConfig.bags = false
+	if F then
+		AuroraOptionsbags:SetAlpha(0)
+		AuroraOptionsbags:Disable()
+		AuroraConfig.bags = false
+	end
 end
 
 local function highlightFunction(button, match)

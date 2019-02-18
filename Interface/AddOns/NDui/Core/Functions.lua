@@ -1,11 +1,10 @@
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L, DB, F = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
 local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
 local min, max, abs, floor = math.min, math.max, math.abs, math.floor
-local ACF = IsAddOnLoaded("AuroraClassic") and unpack(AuroraClassic)
 
 -- Gradient Frame
 function B:CreateGF(w, h, o, r, g, b, a1, a2)
@@ -75,8 +74,8 @@ function B:CreateTex()
 end
 
 function B:SetBackground()
-	if ACF then
-		ACF.SetBD(self)
+	if F then
+		F.SetBD(self)
 	else
 		B.CreateBD(self)
 		B.CreateSD(self)
