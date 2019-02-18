@@ -44,8 +44,10 @@ function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
 	local name, count, duration, expire, caster = self:GetUnitAura(unit, auraID, filter)
 	if name and caster == "player" then
-		if count == 0 then count = "" end
-		button.Count:SetText(count)
+		if button.Count then
+			if count == 0 then count = "" end
+			button.Count:SetText(count)
+		end
 		button.CD:SetCooldown(expire-duration, duration)
 		button.CD:Show()
 		button:SetAlpha(1)
@@ -53,7 +55,7 @@ function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown)
 		if cooldown then
 			self:UpdateCooldown(button, spellID)
 		else
-			button.Count:SetText("")
+			if button.Count then button.Count:SetText("") end
 			button.CD:Hide()
 			button:SetAlpha(.5)
 		end
@@ -138,6 +140,7 @@ function module:CreateLumos(self)
 	end
 
 	if module.PostCreateLumos then module:PostCreateLumos(self) end
+	if module.RemoveAuraWatch then module:RemoveAuraWatch() end
 
 	UpdateIcons(self)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)

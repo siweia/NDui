@@ -4,6 +4,49 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "ROGUE" then return end
 
+local diceSpells = {
+	[1] = {id = 193356, text = L["Combo"]},
+	[2] = {id = 193357, text = L["Crit"]},
+	[3] = {id = 193358, text = L["AttackSpeed"]},
+	[4] = {id = 193359, text = L["CD"]},
+	[5] = {id = 199603, text = L["Strike"]},
+	[6] = {id = 199600, text = L["Power"]},
+}
+
+function module:PostCreateLumos(self)
+	local iconSize = (self:GetWidth() - 10)/6
+	local buttons = {}
+	for i = 1, 6 do
+		local bu = CreateFrame("Frame", nil, self.Health)
+		bu:SetSize(iconSize, iconSize)
+		bu.Text = B.CreateFS(bu, 12, diceSpells[i].text, false, "TOP", 1, 12)
+		B.AuraIcon(bu)
+		if i == 1 then
+			bu:SetPoint("BOTTOMLEFT", self.ClassPower[1], "TOPLEFT", 0, 5)
+		else
+			bu:SetPoint("LEFT", buttons[i-1], "RIGHT", 2, 0)
+		end
+		buttons[i] = bu
+	end
+
+	self.dices = buttons
+end
+
+function module:PostUpdateVisibility(self)
+	for i = 1, 6 do
+		local dice = self.dices[i]
+		if dice:IsShown() then
+			self.dices[i]:SetAlpha(.3)
+		end
+	end
+end
+
+function module:RemoveAuraWatch()
+	for i = 1, 6 do
+		B.RemoveAuraData(diceSpells[i].id)
+	end
+end
+
 local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
@@ -27,6 +70,8 @@ end
 
 function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
+		for i = 1, 6 do self.dices[i]:Hide() end
+
 		UpdateDebuff(self.bu[1], 703, 703, true)
 		UpdateDebuff(self.bu[2], 1943, 1943)
 
@@ -67,6 +112,7 @@ function module:ChantLumos(self)
 			end
 		end
 
+		local hasBlade
 		do
 			local button = self.bu[3]
 			if IsPlayerSpell(51690) then
@@ -75,11 +121,24 @@ function module:ChantLumos(self)
 				UpdateCooldown(button, 271877, true)
 			else
 				UpdateBuff(button, 13877, 13877, true)
+				hasBlade = true
 			end
 		end
 		UpdateBuff(self.bu[4], 13750, 13750, true)
-		UpdateBuff(self.bu[5], 31224, 31224, true)
+
+		local spellID = hasBlade and 31224 or 13877
+		UpdateBuff(self.bu[5], spellID, spellID, true)
+
+		-- Dices
+		for i = 1, 6 do
+			local bu = self.dices[i]
+			local diceSpell = diceSpells[i].id
+			bu:Show()
+			UpdateBuff(bu, diceSpell, diceSpell)
+		end
 	elseif GetSpecialization() == 3 then
+		for i = 1, 6 do self.dices[i]:Hide() end
+
 		UpdateDebuff(self.bu[1], 195452, 195452)
 
 		do
