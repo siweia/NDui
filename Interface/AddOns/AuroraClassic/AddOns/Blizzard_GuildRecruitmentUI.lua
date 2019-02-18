@@ -23,13 +23,9 @@ C.themes["Blizzard_GuildRecruitmentUI"] = function()
 	end
 
 	local rolesFrame = CommunitiesGuildRecruitmentFrameRecruitment.RolesFrame
-	for _, button in next, {rolesFrame.TankButton, rolesFrame.HealerButton, rolesFrame.DamagerButton} do
-		button:SetNormalTexture(C.media.roleIcons)
-		F.ReskinCheck(button.checkButton)
-		local bg = F.CreateBDFrame(button, 1)
-		bg:SetPoint("TOPLEFT", 4, -3)
-		bg:SetPoint("BOTTOMRIGHT", -4, 5)
-	end
+	F.ReskinRole(rolesFrame.TankButton, "TANK")
+	F.ReskinRole(rolesFrame.HealerButton, "HEALER")
+	F.ReskinRole(rolesFrame.DamagerButton, "DPS")
 
 	F.ReskinCheck(CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekdaysButton)
 	F.ReskinCheck(CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekendsButton)

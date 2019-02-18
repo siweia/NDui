@@ -1,19 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	LFDParentFrame:DisableDrawLayer("BACKGROUND")
-	LFDParentFrameInset:Hide()
-
-	LFDQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
-	LFDQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
-	LFDQueueFrameBackground:Hide()
-	LFDQueueFrameRandomScrollFrameScrollBackground:Hide()
-	LFDQueueFrameSpecificListScrollFrameScrollBackgroundTopLeft:Hide()
-	LFDQueueFrameSpecificListScrollFrameScrollBackgroundBottomRight:Hide()
-
-	-- this fixes right border of second reward being cut off
-	LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
-
 	hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button)
 		if not button.expandOrCollapseButton.styled then
 			F.ReskinCheck(button.enableButton)
@@ -25,6 +12,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		button.enableButton:GetCheckedTexture():SetDesaturated(true)
 	end)
 
+	F.StripTextures(LFDParentFrame)
+	LFDQueueFrameBackground:Hide()
 	F.CreateBD(LFDRoleCheckPopup)
 	F.CreateSD(LFDRoleCheckPopup)
 	F.Reskin(LFDRoleCheckPopupAcceptButton)
@@ -38,6 +27,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(LFDQueueFramePartyBackfillNoBackfillButton)
 	F.Reskin(LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
 
+	LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
 	LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
 	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
 end)

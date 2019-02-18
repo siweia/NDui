@@ -103,20 +103,12 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Role buttons
 
-	local function styleRole(f)
-		f:DisableDrawLayer("BACKGROUND")
-		f:DisableDrawLayer("BORDER")
-
-		for _, roleButton in pairs({f.HealerIcon, f.TankIcon, f.DPSIcon}) do
-			roleButton.cover:SetTexture(C.media.roleIcons)
-			roleButton:SetNormalTexture(C.media.roleIcons)
-			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
-			local bg = F.CreateBDFrame(roleButton, 1)
-			bg:SetPoint("TOPLEFT", roleButton, 3, -2)
-			bg:SetPoint("BOTTOMRIGHT", roleButton, -3, 4)
-
-			F.ReskinCheck(roleButton.checkButton)
-		end
+	local function styleRole(self)
+		self:DisableDrawLayer("BACKGROUND")
+		self:DisableDrawLayer("BORDER")
+		F.ReskinRole(self.TankIcon, "TANK")
+		F.ReskinRole(self.HealerIcon, "HEALER")
+		F.ReskinRole(self.DPSIcon, "DPS")
 	end
 	styleRole(HonorFrame)
 	styleRole(ConquestFrame)

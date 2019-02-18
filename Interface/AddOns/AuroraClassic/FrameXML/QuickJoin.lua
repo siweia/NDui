@@ -14,13 +14,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinClose(QuickJoinRoleSelectionFrame.CloseButton)
 	F.StripTextures(QuickJoinRoleSelectionFrame)
 
-	for _, bu in pairs({QuickJoinRoleSelectionFrame.RoleButtonTank, QuickJoinRoleSelectionFrame.RoleButtonHealer, QuickJoinRoleSelectionFrame.RoleButtonDPS}) do
-		bu.Cover:SetTexture(C.media.roleIcons)
-		bu:SetNormalTexture(C.media.roleIcons)
-		bu.CheckButton:SetFrameLevel(bu:GetFrameLevel() + 2)
-		F.ReskinCheck(bu.CheckButton)
-		local bg = F.CreateBDFrame(QuickJoinRoleSelectionFrame, 1)
-		bg:SetPoint("TOPLEFT", bu, 9, -7)
-		bg:SetPoint("BOTTOMRIGHT", bu, -9, 11)
-	end
+	F.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonTank, "TANK")
+	F.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonHealer, "HEALER")
+	F.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonDPS, "DPS")
 end)

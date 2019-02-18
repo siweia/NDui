@@ -1,20 +1,15 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_InspectUI"] = function()
-	InspectModelFrame:DisableDrawLayer("OVERLAY")
-
-	InspectTalentFrame:GetRegions():Hide()
-	select(2, InspectTalentFrame:GetRegions()):Hide()
+	F.StripTextures(InspectTalentFrame)
+	F.StripTextures(InspectModelFrame, true)
 	InspectGuildFrameBG:Hide()
-	for i = 1, 5 do
-		select(i, InspectModelFrame:GetRegions()):Hide()
-	end
 	F.Reskin(InspectPaperDollFrame.ViewButton)
 	InspectPaperDollFrame.ViewButton:ClearAllPoints()
 	InspectPaperDollFrame.ViewButton:SetPoint("TOP", InspectFrame, 0, -45)
+	InspectPVPFrame.BG:Hide()
 
 	-- Character
-
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
@@ -42,33 +37,24 @@ C.themes["Blizzard_InspectUI"] = function()
 		button.icon:SetShown(button.hasItem)
 	end)
 
-	-- PVP
-
-	InspectPVPFrame.BG:Hide()
-
 	-- Talents
-
 	local inspectSpec = InspectTalentFrame.InspectSpec
 
 	inspectSpec.ring:Hide()
+	F.ReskinIcon(inspectSpec.specIcon)
+	inspectSpec.roleIcon:SetTexture(C.media.roleIcons)
+	F.CreateBDFrame(inspectSpec.roleIcon)
 
 	for i = 1, 7 do
 		local row = InspectTalentFrame.InspectTalents["tier"..i]
 		for j = 1, 3 do
 			local bu = row["talent"..j]
-
 			bu.Slot:Hide()
 			bu.border:SetTexture("")
-
 			bu.icon:SetDrawLayer("ARTWORK")
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
-
-			F.CreateBG(bu.icon)
+			F.ReskinIcon(bu.icon)
 		end
 	end
-
-	inspectSpec.specIcon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBG(inspectSpec.specIcon)
 
 	local function updateIcon(self)
 		local spec = nil
@@ -80,6 +66,7 @@ C.themes["Blizzard_InspectUI"] = function()
 			if role1 ~= nil then
 				local _, _, _, icon = GetSpecializationInfoByID(spec)
 				self.specIcon:SetTexture(icon)
+				self.roleIcon:SetTexCoord(F.GetRoleTexCoord(role1))
 			end
 		end
 	end
@@ -91,12 +78,6 @@ C.themes["Blizzard_InspectUI"] = function()
 			updateIcon(self.InspectSpec)
 		end
 	end)
-
-	local roleIcon = inspectSpec.roleIcon
-	roleIcon:SetTexture(C.media.roleIcons)
-	local bg = F.CreateBDFrame(roleIcon, 1)
-	bg:SetPoint("TOPLEFT", roleIcon, 2, -1)
-	bg:SetPoint("BOTTOMRIGHT", roleIcon, -1, 2)
 
 	for i = 1, 4 do
 		local tab = _G["InspectFrameTab"..i]

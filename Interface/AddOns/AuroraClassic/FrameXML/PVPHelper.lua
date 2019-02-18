@@ -3,18 +3,17 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["AuroraClassic"], function()
 	local PVPReadyDialog = PVPReadyDialog
 
+	F.StripTextures(PVPReadyDialog)
 	PVPReadyDialogBackground:Hide()
-	PVPReadyDialogBottomArt:Hide()
-	PVPReadyDialogFiligree:Hide()
+	F.SetBD(PVPReadyDialog)
 	PVPReadyDialogRoleIconTexture:SetTexture(C.media.roleIcons)
+	F.CreateBDFrame(PVPReadyDialogRoleIcon)
 
-	local bg = F.CreateBDFrame(PVPReadyDialogRoleIcon, 1)
-	bg:SetPoint("TOPLEFT", 9, -7)
-	bg:SetPoint("BOTTOMRIGHT", -8, 10)
-
-	F.CreateBD(PVPReadyDialog)
-	F.CreateSD(PVPReadyDialog)
-	PVPReadyDialog.SetBackdrop = F.dummy
+	hooksecurefunc("PVPReadyDialog_Display", function(self, _, _, _, _, _, role)
+		if self.roleIcon:IsShown() then
+			self.roleIcon.texture:SetTexCoord(F.GetRoleTexCoord(role))
+		end
+	end)
 
 	F.Reskin(PVPReadyDialog.enterButton)
 	F.Reskin(PVPReadyDialog.leaveButton)

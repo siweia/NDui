@@ -4,29 +4,23 @@ tinsert(C.themes["AuroraClassic"], function()
 	local r, g, b = C.r, C.g, C.b
 
 	local LFGListFrame = LFGListFrame
+	LFGListFrame.NothingAvailable.Inset:Hide()
 
 	-- [[ Category selection ]]
 
 	local CategorySelection = LFGListFrame.CategorySelection
-	CategorySelection.Inset:Hide()
 
 	F.Reskin(CategorySelection.FindGroupButton)
 	F.Reskin(CategorySelection.StartGroupButton)
-
+	CategorySelection.Inset:Hide()
 	CategorySelection.CategoryButtons[1]:SetNormalFontObject(GameFontNormal)
 
 	hooksecurefunc("LFGListCategorySelection_AddButton", function(self, btnIndex)
 		local bu = self.CategoryButtons[btnIndex]
-
 		if bu and not bu.styled then
 			bu.Cover:Hide()
-
-			bu.Icon:SetDrawLayer("BACKGROUND", 1)
 			bu.Icon:SetTexCoord(.01, .99, .01, .99)
-
-			local bg = F.CreateBG(bu)
-			bg:SetPoint("TOPLEFT", bu.Icon, -C.mult, C.mult)
-			bg:SetPoint("BOTTOMRIGHT", bu.Icon, C.mult, -C.mult)
+			F.CreateBDFrame(bu.Icon)
 
 			bu.styled = true
 		end
@@ -40,15 +34,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	-- [[ Nothing available ]]
-
-	local NothingAvailable = LFGListFrame.NothingAvailable
-	NothingAvailable.Inset:DisableDrawLayer("BORDER")
-
 	-- [[ Search panel ]]
 
 	local SearchPanel = LFGListFrame.SearchPanel
-	SearchPanel.ResultsInset:Hide()
 
 	F.Reskin(SearchPanel.RefreshButton)
 	F.Reskin(SearchPanel.BackButton)
@@ -59,14 +47,8 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	SearchPanel.RefreshButton:SetSize(24, 24)
 	SearchPanel.RefreshButton.Icon:SetPoint("CENTER")
-
-	-- Auto complete frame
-
-	SearchPanel.AutoCompleteFrame.BottomLeftBorder:Hide()
-	SearchPanel.AutoCompleteFrame.BottomRightBorder:Hide()
-	SearchPanel.AutoCompleteFrame.BottomBorder:Hide()
-	SearchPanel.AutoCompleteFrame.LeftBorder:Hide()
-	SearchPanel.AutoCompleteFrame.RightBorder:Hide()
+	SearchPanel.ResultsInset:Hide()
+	F.StripTextures(SearchPanel.AutoCompleteFrame)
 
 	local function resultOnEnter(self)
 		self.hl:Show()
@@ -98,7 +80,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			local hl = result:CreateTexture(nil, "BACKGROUND")
 			hl:SetAllPoints()
 			hl:SetTexture(C.media.backdrop)
-			hl:SetVertexColor(r, g, b, .2)
+			hl:SetVertexColor(r, g, b, .25)
 			hl:Hide()
 			result.hl = hl
 
@@ -127,9 +109,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader"}) do
 		local header = ApplicationViewer[headerName]
-		header.Left:Hide()
-		header.Middle:Hide()
-		header.Right:Hide()
+		F.StripTextures(header)
 		header.Label:SetFont(C.media.font, 14, "OUTLINE")
 		header.Label:SetShadowColor(0, 0, 0, 0)
 		header:SetHighlightTexture("")
@@ -137,7 +117,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local hl = header:CreateTexture(nil, "BACKGROUND")
 		hl:SetAllPoints()
 		hl:SetTexture(C.media.backdrop)
-		hl:SetVertexColor(r, g, b, .2)
+		hl:SetVertexColor(r, g, b, .25)
 		hl:Hide()
 		header.hl = hl
 
@@ -171,11 +151,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local EntryCreation = LFGListFrame.EntryCreation
 	EntryCreation.Inset:Hide()
-
-	for i = 1, 9 do
-		select(i, EntryCreation.Description:GetRegions()):Hide()
-	end
-
+	F.StripTextures(EntryCreation.Description)
 	F.Reskin(EntryCreation.ListGroupButton)
 	F.Reskin(EntryCreation.CancelButton)
 	F.CreateBD(EntryCreation.Description, 0)
@@ -195,24 +171,9 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	hooksecurefunc("LFGListGroupDataDisplayRoleCount_Update", function(self)
 		if not self.styled then
-			for _, roleButton in pairs({self.TankIcon, self.HealerIcon, self.DamagerIcon}) do
-				roleButton:SetTexture(C.media.roleIcons)
-
-				local bg = F.CreateBDFrame(self, 1)
-				if roleButton == self.TankIcon then
-					roleButton:SetTexCoord(0, .24, .25, .5)
-					bg:SetPoint("TOPLEFT", roleButton, 2, -3)
-					bg:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
-				elseif roleButton == self.HealerIcon then
-					roleButton:SetTexCoord(.249, .5, 0.003, .243)
-					bg:SetPoint("TOPLEFT", roleButton, 2, -1)
-					bg:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
-				else
-					roleButton:SetTexCoord(.25, .5, .25, .5)
-					bg:SetPoint("TOPLEFT", roleButton, 2, -3)
-					bg:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
-				end
-			end
+			F.ReskinRole(self.TankIcon, "TANK")
+			F.ReskinRole(self.HealerIcon, "HEALER")
+			F.ReskinRole(self.DamagerIcon, "DPS")
 
 			self.styled = true
 		end
@@ -221,15 +182,12 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- Activity finder
 
 	local ActivityFinder = EntryCreation.ActivityFinder
+
 	ActivityFinder.Background:SetTexture("")
 	ActivityFinder.Dialog.Bg:Hide()
-	for i = 1, 9 do
-		select(i, ActivityFinder.Dialog.BorderFrame:GetRegions()):Hide()
-	end
-
+	F.StripTextures(ActivityFinder.Dialog.BorderFrame)
 	F.CreateBD(ActivityFinder.Dialog)
 	ActivityFinder.Dialog:SetBackdropColor(.2, .2, .2, .9)
-
 	F.Reskin(ActivityFinder.Dialog.SelectButton)
 	F.Reskin(ActivityFinder.Dialog.CancelButton)
 	F.ReskinInput(ActivityFinder.Dialog.EntryBox)
@@ -239,13 +197,10 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local LFGListApplicationDialog = LFGListApplicationDialog
 
-	for i = 1, 9 do
-		select(i, LFGListApplicationDialog.Description:GetRegions()):Hide()
-	end
-
 	F.CreateBD(LFGListApplicationDialog)
 	F.CreateSD(LFGListApplicationDialog)
-	F.CreateBD(LFGListApplicationDialog.Description, .25)
+	F.StripTextures(LFGListApplicationDialog.Description)
+	F.CreateBDFrame(LFGListApplicationDialog.Description, .25)
 	F.Reskin(LFGListApplicationDialog.SignUpButton)
 	F.Reskin(LFGListApplicationDialog.CancelButton)
 
@@ -259,10 +214,12 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(LFGListInviteDialog.DeclineButton)
 	F.Reskin(LFGListInviteDialog.AcknowledgeButton)
 
-	local RoleIcon = LFGListInviteDialog.RoleIcon
-	RoleIcon:SetTexture(C.media.roleIcons)
+	local roleIcon = LFGListInviteDialog.RoleIcon
+	roleIcon:SetTexture(C.media.roleIcons)
+	F.CreateBDFrame(roleIcon)
 
-	local bg = F.CreateBDFrame(LFGListInviteDialog, 1)
-	bg:SetPoint("TOPLEFT", RoleIcon, 8, -6)
-	bg:SetPoint("BOTTOMRIGHT", RoleIcon, -8, 10)
+	hooksecurefunc("LFGListInviteDialog_Show", function(self, resultID)
+		local role = select(5, C_LFGList.GetApplicationInfo(resultID))
+		self.RoleIcon:SetTexCoord(F.GetRoleTexCoord(role))
+	end)
 end)

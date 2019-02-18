@@ -1,32 +1,29 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	local function SkinEntry(entry)
-		for _, roleButton in next, {entry.HealersFound, entry.TanksFound, entry.DamagersFound} do
-			roleButton.Texture:SetTexture(C.media.roleIcons)
-			roleButton.Cover:SetTexture(C.media.roleIcons)
-			local bg = F.CreateBDFrame(roleButton, 1)
-			bg:SetPoint("TOPLEFT", 4, -3)
-			bg:SetPoint("BOTTOMRIGHT", -5, 6)
-		end
+	local LFD_NUM_ROLES = LFD_NUM_ROLES
+
+	local function SkinEntry(self)
+		if self.styled then return end
+
+		F.ReskinRole(self.TanksFound, "TANK")
+		F.ReskinRole(self.HealersFound, "HEALER")
+		F.ReskinRole(self.DamagersFound, "DPS")
 
 		for i = 1, LFD_NUM_ROLES do
-			local roleIcon = entry["RoleIcon"..i]
+			local roleIcon = self["RoleIcon"..i]
 			roleIcon:SetTexture(C.media.roleIcons)
-
-			local bg = F.CreateBDFrame(entry, 1)
-			bg:SetPoint("TOPLEFT", roleIcon, 2, -2)
-			bg:SetPoint("BOTTOMRIGHT", roleIcon, -2, 3)
-			roleIcon.bg = bg
+			roleIcon.bg = F.CreateBDFrame(roleIcon)
+			if i > 1 then
+				roleIcon:SetPoint("RIGHT", self["RoleIcon"..(i-1)], "LEFT", -4, 0)
+			end
 		end
 
-		entry._auroraSkinned = true
+		self.styled = true
 	end
 
 	hooksecurefunc("QueueStatusEntry_SetMinimalDisplay", function(entry)
-		if not entry._auroraSkinned then
-			SkinEntry(entry)
-		end
+		SkinEntry(entry)
 
 		for i = 1, LFD_NUM_ROLES do
 			local roleIcon = entry["RoleIcon"..i]
@@ -34,15 +31,33 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	hooksecurefunc("QueueStatusEntry_SetFullDisplay", function(entry)
-		if not entry._auroraSkinned then
-			SkinEntry(entry)
+	local function updateTexCoord(entry, index, role)
+		local roleIcon = entry["RoleIcon"..index]
+		roleIcon:SetTexCoord(F.GetRoleTexCoord(role))
+		roleIcon:Show()
+		roleIcon.bg:Show()
+	end
+
+	hooksecurefunc("QueueStatusEntry_SetFullDisplay", function(entry, _, _, _, isTank, isHealer, isDPS)
+		SkinEntry(entry)
+
+		local nextRoleIcon = 1
+		if isDPS then
+			updateTexCoord(entry, nextRoleIcon, "DPS")
+			nextRoleIcon = nextRoleIcon + 1
+		end
+		if isHealer then
+			updateTexCoord(entry, nextRoleIcon, "HEALER")
+			nextRoleIcon = nextRoleIcon + 1
+		end
+		if isTank then
+			updateTexCoord(entry, nextRoleIcon, "TANK")
+			nextRoleIcon = nextRoleIcon + 1
 		end
 
-		for i = 1, LFD_NUM_ROLES do
-			local roleIcon = entry["RoleIcon"..i]
-			local shown = entry["RoleIcon"..i]:IsShown()
-			roleIcon.bg:SetShown(shown)
+		for i = nextRoleIcon, LFD_NUM_ROLES do
+			entry["RoleIcon"..i]:Hide()
+			entry["RoleIcon"..i].bg:Hide()
 		end
 	end)
 end)

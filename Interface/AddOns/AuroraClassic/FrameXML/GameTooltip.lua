@@ -2,6 +2,8 @@ local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinClose(ItemRefCloseButton)
+	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
+	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
 	if not AuroraConfig.tooltips then return end
 
@@ -95,8 +97,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	FloatingPetBattleAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
 	FloatingBattlePetTooltip.Delimiter:SetColorTexture(0, 0, 0)
 	FloatingBattlePetTooltip.Delimiter:SetHeight(1)
-	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
 	-- Tooltip rewards icon
 	local newString = "0:0:64:64:5:59:5:59"

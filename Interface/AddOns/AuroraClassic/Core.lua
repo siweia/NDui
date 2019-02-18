@@ -787,6 +787,54 @@ function F:StyleSearchButton()
 	hl:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 end
 
+function F:GetRoleTexCoord()
+	if self == "TANK" then
+		return .32/9.03, 2.04/9.03, 2.65/9.03, 4.3/9.03
+	elseif self == "DPS" or self == "DAMAGER" then
+		return 2.68/9.03, 4.4/9.03, 2.65/9.03, 4.34/9.03
+	elseif self == "HEALER" then
+		return 2.68/9.03, 4.4/9.03, .28/9.03, 1.98/9.03
+	elseif self == "LEADER" then
+		return .32/9.03, 2.04/9.03, .28/9.03, 1.98/9.03
+	elseif self == "READY" then
+		return 5.1/9.03, 6.76/9.03, .28/9.03, 1.98/9.03
+	elseif self == "PENDING" then
+		return 5.1/9.03, 6.76/9.03, 2.65/9.03, 4.34/9.03
+	elseif self == "REFUSE" then
+		return 2.68/9.03, 4.4/9.03, 5.02/9.03, 6.7/9.03
+	end
+end
+
+function F:ReskinRole(role)
+	if self.background then self.background:SetTexture("") end
+	local cover = self.cover or self.Cover
+	if cover then cover:SetTexture("") end
+	local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self)
+	if texture then
+		texture:SetTexture(C.media.roleIcons)
+		texture:SetTexCoord(F.GetRoleTexCoord(role))
+	end
+	self.bg = F.CreateBDFrame(self)
+
+	local checkButton = self.checkButton or self.CheckButton
+	if checkButton then
+		checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
+		checkButton:SetPoint("BOTTOMLEFT", -2, -2)
+		F.ReskinCheck(checkButton)
+	end
+
+	local shortageBorder = self.shortageBorder
+	if shortageBorder then
+		shortageBorder:SetTexture("")
+		local icon = self.incentiveIcon
+		icon:SetPoint("BOTTOMRIGHT")
+		icon:SetSize(14, 14)
+		icon.texture:SetSize(14, 14)
+		F.ReskinIcon(icon.texture)
+		icon.border:SetTexture("")
+	end
+end
+
 -- [[ Variable and module handling ]]
 
 C.themes = {}

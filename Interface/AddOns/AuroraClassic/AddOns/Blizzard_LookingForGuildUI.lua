@@ -70,17 +70,9 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 		end
 
 		-- [[ Role buttons ]]
-
-		for _, roleButton in pairs({LookingForGuildTankButton, LookingForGuildHealerButton, LookingForGuildDamagerButton}) do
-			roleButton.cover:SetTexture(C.media.roleIcons)
-			roleButton:SetNormalTexture(C.media.roleIcons)
-			local bg = F.CreateBDFrame(roleButton, 1)
-			bg:SetPoint("TOPLEFT", roleButton, 5, -3)
-			bg:SetPoint("BOTTOMRIGHT", roleButton, -5, 6)
-
-			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
-			F.ReskinCheck(roleButton.checkButton)
-		end
+		F.ReskinRole(LookingForGuildTankButton, "TANK")
+		F.ReskinRole(LookingForGuildHealerButton, "HEALER")
+		F.ReskinRole(LookingForGuildDamagerButton, "DPS")
 
 		styled = true
 	end)
