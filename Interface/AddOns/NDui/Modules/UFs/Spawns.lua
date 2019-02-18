@@ -139,7 +139,7 @@ end
 local function CreateRaidStyle(self)
 	self.mystyle = "raid"
 	self.Range = {
-		insideAlpha = 1, outsideAlpha = .35,
+		insideAlpha = 1, outsideAlpha = .4,
 	}
 
 	UF:CreateHeader(self)
