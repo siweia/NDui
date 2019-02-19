@@ -144,6 +144,12 @@ function module:CreateRM()
 	local rc = B.CreateFS(rcFrame, 14, "", false, "TOP", 0, -28)
 
 	local count, total
+	local function hideRCFrame()
+		rcFrame:Hide()
+		rc:SetText("")
+		count, total = 0, 0
+	end
+
 	rcFrame:RegisterEvent("READY_CHECK")
 	rcFrame:RegisterEvent("READY_CHECK_CONFIRM")
 	rcFrame:RegisterEvent("READY_CHECK_FINISHED")
@@ -154,11 +160,7 @@ function module:CreateRM()
 			else
 				rc:SetTextColor(1, 0, 0)
 			end
-			C_Timer.After(5, function()
-				self:Hide()
-				rc:SetText("")
-				count, total = 0, 0
-			end)
+			C_Timer.After(5, hideRCFrame)
 		else
 			count, total = 0, 0
 			self:Show()

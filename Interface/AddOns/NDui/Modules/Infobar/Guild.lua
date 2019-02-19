@@ -269,12 +269,14 @@ info.onEnter = function()
 	applyData()
 end
 
+local function delayLeave()
+	if MouseIsOver(infoFrame) then return end
+	infoFrame:Hide()
+end
+
 info.onLeave = function()
 	if not infoFrame then return end
-	C_Timer.After(.1, function()
-		if MouseIsOver(infoFrame) then return end
-		infoFrame:Hide()
-	end)
+	C_Timer.After(.1, delayLeave)
 end
 
 info.onMouseUp = function()

@@ -6,18 +6,16 @@ local cargBags = ns.cargBags
 local ipairs, strmatch = ipairs, string.match
 
 function module:ReverseSort()
-	C_Timer.After(.5, function()
-		for bag = 0, 4 do
-			local numSlots = GetContainerNumSlots(bag)
-			for slot = 1, numSlots do
-				local texture, _, locked = GetContainerItemInfo(bag, slot)
-				if texture and not locked then
-					PickupContainerItem(bag, slot)
-					PickupContainerItem(bag, numSlots+1 - slot)
-				end
+	for bag = 0, 4 do
+		local numSlots = GetContainerNumSlots(bag)
+		for slot = 1, numSlots do
+			local texture, _, locked = GetContainerItemInfo(bag, slot)
+			if texture and not locked then
+				PickupContainerItem(bag, slot)
+				PickupContainerItem(bag, numSlots+1 - slot)
 			end
 		end
-	end)
+	end
 end
 
 function module:UpdateAnchors(parent, bags)
@@ -180,7 +178,7 @@ function module:CreateSortButton(name)
 					UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 				else
 					SortBags()
-					module:ReverseSort()
+					C_Timer.After(.5, module.ReverseSort)
 				end
 			else
 				SortBags()

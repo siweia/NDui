@@ -105,16 +105,17 @@ do
 	local versionList = {}
 	C_ChatInfo.RegisterAddonMessagePrefix("NDuiFVC")
 
+	local function PrintVerCheck()
+		print("----------")
+		for name, version in pairs(versionList) do
+			print(name.." "..version)
+		end
+	end
+
 	local function SendVerCheck(channel)
 		wipe(versionList)
 		C_ChatInfo.SendAddonMessage("NDuiFVC", "VersionCheck", channel)
-
-		C_Timer.After(3, function()
-			print("----------")
-			for name, version in pairs(versionList) do
-				print(name.." "..version)
-			end
-		end)
+		C_Timer.After(3, PrintVerCheck)
 	end
 
 	local function VerCheckListen(_, ...)

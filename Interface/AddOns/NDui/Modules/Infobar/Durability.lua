@@ -130,9 +130,17 @@ end
 info.onLeave = B.HideTooltip
 
 -- Auto repair
-local isShown, isBankEmpty
+local isShown, isBankEmpty, autoRepair
 
-local function autoRepair(override)
+local function delayFunc()
+	if isBankEmpty then
+		autoRepair(true)
+	else
+		print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(repairAllCost)))
+	end
+end
+
+function autoRepair(override)
 	if isShown and not override then return end
 	isShown = true
 	isBankEmpty = false
@@ -154,13 +162,7 @@ local function autoRepair(override)
 			end
 		end
 
-		C_Timer.After(.5, function()
-			if isBankEmpty then
-				autoRepair(true)
-			else
-				print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(repairAllCost)))
-			end
-		end)
+		C_Timer.After(.5, delayFunc)
 	end
 end
 
