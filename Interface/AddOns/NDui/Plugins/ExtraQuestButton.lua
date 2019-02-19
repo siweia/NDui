@@ -7,6 +7,13 @@ local B, C, L, DB = unpack(ns)
 local strmatch = string.match
 local tonumber, next, type = tonumber, next, type
 
+-- Warlords of Draenor intro quest items which inspired this addon
+local blacklist = {
+	[113191] = true,
+	[110799] = true,
+	[109164] = true,
+}
+
 -- Quests with incorrect or missing quest area blobs
 local questAreas = {
 	-- Global
@@ -38,6 +45,10 @@ local itemAreas = {
 	[34862] = true,
 	[34833] = true,
 	[39700] = true,
+	[155915] = true,
+	[156474] = true,
+	[156477] = true,
+	[155918] = true,
 	-- Deepholm
 	[58167] = 207,
 	[60490] = 207,
@@ -59,6 +70,11 @@ local itemAreas = {
 	[34711] = 114,
 	[35288] = 114,
 	[34782] = 114,
+	-- Dragonblight
+	[37881] = 115,
+	[37923] = 115,
+	[44450] = 115,
+	[37887] = 115,
 	-- Zul'Drak
 	[41161] = 121,
 	[39157] = 121,
@@ -67,6 +83,14 @@ local itemAreas = {
 	[39664] = 121,
 	[38699] = 121,
 	[41390] = 121,
+	-- Grizzly Hills
+	[38083] = 116,
+	[35797] = 116,
+	[37716] = 116,
+	[35739] = 116,
+	[36851] = 116,
+	-- Icecrown
+	[41265] = 170,
 	-- Dalaran (Broken Isles)
 	[129047] = 625,
 	-- Stormheim
@@ -76,6 +100,8 @@ local itemAreas = {
 	[118330] = 630,
 	-- Suramar
 	[133882] = 680,
+	-- Tiragarde Sound
+	[154878] = 895
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
@@ -220,10 +246,10 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 end
 
-local worldQuests = {}
+local activeWorldQuests = {}
 function ExtraQuestButton:QUEST_REMOVED(_, questID)
-	if(worldQuests[questID]) then
-		worldQuests[questID] = nil
+	if(activeWorldQuests[questID]) then
+		activeWorldQuests[questID] = nil
 
 		self:Update()
 	end
@@ -232,8 +258,8 @@ end
 function ExtraQuestButton:QUEST_ACCEPTED(_, questLogIndex, questID)
 	if(questID and not IsQuestBounty(questID) and IsQuestTask(questID)) then
 		local _, _, worldQuestType = GetQuestTagInfo(questID)
-		if(worldQuestType and not worldQuests[questID]) then
-			worldQuests[questID] = questLogIndex
+		if(worldQuestType and not activeWorldQuests[questID]) then
+			activeWorldQuests[questID] = questLogIndex
 
 			self:Update()
 		end
@@ -309,13 +335,6 @@ ExtraQuestButton:SetScript("OnDisable", function(self)
 	self.HotKey:Hide()
 end)
 
--- Sometimes blizzard does actually do what I want
-local blacklist = {
-	[113191] = true,
-	[110799] = true,
-	[109164] = true,
-}
-
 function ExtraQuestButton:SetItem(itemLink, texture)
 	if(HasExtraActionBar()) then
 		return
@@ -376,7 +395,7 @@ local function GetClosestQuestItem()
 	local numItems = 0
 
 	-- XXX: temporary solution for the above
-	for questID, questLogIndex in next, worldQuests do
+	for questID, questLogIndex in next, activeWorldQuests do
 		local itemLink, texture, _, showCompleted = GetQuestLogSpecialItemInfo(questLogIndex)
 		if(itemLink) then
 			local areaID = questAreas[questID]
