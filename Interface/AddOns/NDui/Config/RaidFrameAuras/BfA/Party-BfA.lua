@@ -148,7 +148,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
-module:RegisterDebuff(TIER, INSTANCE, 0, 258875) -- 眩晕酒桶
+module:RegisterDebuff(TIER, INSTANCE, 0, 258875, 6) -- 眩晕酒桶
 module:RegisterDebuff(TIER, INSTANCE, 0, 274389) -- 捕鼠陷阱
 module:RegisterDebuff(TIER, INSTANCE, 0, 258323) -- 感染之伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 257775) -- 瘟疫步
@@ -157,7 +157,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 257436) -- 毒性打击
 module:RegisterDebuff(TIER, INSTANCE, 0, 274555) -- 污染之咬
 module:RegisterDebuff(TIER, INSTANCE, 0, 256363) -- 裂伤拳
 module:RegisterDebuff(TIER, INSTANCE, 0, 281357, 1) -- 水鼠啤酒
-module:RegisterDebuff(TIER, INSTANCE, 0, 278467) -- 腐蚀酒
+module:RegisterDebuff(TIER, INSTANCE, 0, 278467, 3) -- 腐蚀酒
 
 INSTANCE = 1041 -- 诸王之眠
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
