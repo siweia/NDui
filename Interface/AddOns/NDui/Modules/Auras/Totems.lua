@@ -59,5 +59,6 @@ function module:Totems()
 	if not NDuiDB["Auras"]["Totems"] then return end
 
 	TotemsGo()
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateTotem)
 	B:RegisterEvent("PLAYER_TOTEM_UPDATE", updateTotem)
 end
