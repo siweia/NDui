@@ -9,11 +9,11 @@ function module:Focuser()
 	local modifier = "shift" -- shift, alt or ctrl
 	local mouseButton = "1" -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb buttons if there are any
 	local pending = {}
-	local pairs = pairs
+	local pairs, strmatch = pairs, string.match
 
 	local function SetFocusHotkey(frame)
 		if not frame or frame.focuser then return end
-		if frame:GetName() and string.match(frame:GetName(), "oUF_NPs") then return end
+		if frame:GetName() and strmatch(frame:GetName(), "oUF_NPs") then return end
 
 		if not InCombatLockdown() then
 			frame:SetAttribute(modifier.."-type"..mouseButton, "focus")

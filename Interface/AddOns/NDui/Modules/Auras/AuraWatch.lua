@@ -286,25 +286,26 @@ end
 
 local function updateBarTimer(self)
 	if self.expires then
-		self.Timer = self.expires - GetTime()
+		self.elapsed = self.expires - GetTime()
 	else
-		self.Timer = self.start + self.duration - GetTime()
+		self.elapsed = self.start + self.duration - GetTime()
 	end
 
-	if self.Timer < 0 then
+	local timer = self.elapsed
+	if timer < 0 then
 		if self.Time then self.Time:SetText("N/A") end
 		self.Statusbar:SetMinMaxValues(0, 1)
 		self.Statusbar:SetValue(0)
 		self.Statusbar.Spark:Hide()
-	elseif self.Timer < 60 then
-		if self.Time then self.Time:SetFormattedText("%.1f", self.Timer) end
+	elseif timer < 60 then
+		if self.Time then self.Time:SetFormattedText("%.1f", timer) end
 		self.Statusbar:SetMinMaxValues(0, self.duration)
-		self.Statusbar:SetValue(self.Timer)
+		self.Statusbar:SetValue(timer)
 		self.Statusbar.Spark:Show()
 	else
-		if self.Time then self.Time:SetFormattedText("%d:%.2d", self.Timer/60, self.Timer%60) end
+		if self.Time then self.Time:SetFormattedText("%d:%.2d", timer/60, timer%60) end
 		self.Statusbar:SetMinMaxValues(0, self.duration)
-		self.Statusbar:SetValue(self.Timer)
+		self.Statusbar:SetValue(timer)
 		self.Statusbar.Spark:Show()
 	end
 end
@@ -324,7 +325,7 @@ local function UpdateCDFrame(index, name, icon, start, duration, _, type, id, ch
 	if frame.Statusbar then
 		frame.duration = duration
 		frame.start = start
-		frame.Timer = 0
+		frame.elapsed = 0
 		frame:SetScript("OnUpdate", updateBarTimer)
 	end
 	frame.type = type
@@ -391,7 +392,7 @@ local function UpdateAuraFrame(index, UnitID, name, icon, count, duration, expir
 	if frame.Statusbar then
 		frame.duration = duration
 		frame.expires = expires
-		frame.Timer = 0
+		frame.elapsed = 0
 		frame:SetScript("OnUpdate", updateBarTimer)
 	end
 	if frame.glowFrame then
@@ -497,8 +498,8 @@ local function SortBars()
 end
 
 local function updateIntTimer(self, elapsed)
-	self.Timer = self.Timer + elapsed
-	local timer = self.duration - self.Timer
+	self.elapsed = self.elapsed + elapsed
+	local timer = self.duration - self.elapsed
 	if timer < 0 then
 		self:SetScript("OnUpdate", nil)
 		self:Hide()
@@ -550,7 +551,7 @@ local function UpdateIntFrame(intID, itemID, duration, unitID, guid, sourceName)
 	if frame.Statusbar then
 		frame.Statusbar:SetStatusBarColor(B.ClassColor(class))
 		frame.Statusbar:SetMinMaxValues(0, duration)
-		frame.Timer = 0
+		frame.elapsed = 0
 		frame.duration = duration
 		frame:SetScript("OnUpdate", updateIntTimer)
 	end
@@ -638,9 +639,9 @@ B:RegisterEvent("PLAYER_ENTERING_WORLD", onEvent)
 B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", onEvent)
 
 local function onUpdate(self, elapsed)
-	self.Timer = (self.Timer or 0) + elapsed
-	if self.Timer > .1 then
-		self.Timer = 0
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed > .1 then
+		self.elapsed = 0
 		CleanUp()
 		UpdateCD()
 		for _, value in pairs(UnitIDTable) do
