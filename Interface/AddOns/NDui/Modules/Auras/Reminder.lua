@@ -28,6 +28,7 @@ local function UpdateReminder(cfg)
 	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle("player") then
 		for i = 1, 32 do
 			local name, _, _, _, _, _, _, _, _, spellID = UnitBuff("player", i)
+			if not name then break end
 			if name and cfg.spells[spellID] then
 				frame:Hide()
 				return

@@ -69,14 +69,16 @@ function module:CreateRM()
 		role[i].text:SetPoint("CENTER", role[i], "RIGHT", 12, 0)
 	end
 
-	local raidCounts
+	local raidCounts = {totalTANK = 0, totalHEALER = 0, totalDAMAGER = 0}
 	roleFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
 	roleFrame:RegisterEvent("UPDATE_ACTIVE_BATTLEFIELD")
 	roleFrame:RegisterEvent("UNIT_FLAGS")
 	roleFrame:RegisterEvent("PLAYER_FLAGS_CHANGED")
 	roleFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	roleFrame:SetScript("OnEvent", function()
-		raidCounts = {totalTANK = 0, totalHEALER = 0, totalDAMAGER = 0}
+		for k in pairs(raidCounts) do
+			raidCounts[k] = 0
+		end
 
 		local maxgroup = getRaidMaxGroup()
 		for i = 1, GetNumGroupMembers() do

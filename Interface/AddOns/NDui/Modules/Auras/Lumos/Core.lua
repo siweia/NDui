@@ -5,6 +5,7 @@ local module = B:GetModule("Auras")
 function module:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
 		local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
+		if not name then break end
 		if name and spellID == spell then
 			return name, count, duration, expire, caster, spellID, value
 		end
