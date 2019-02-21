@@ -141,7 +141,7 @@ function module:CreateLumos(self)
 	end
 
 	if module.PostCreateLumos then module:PostCreateLumos(self) end
-	if module.RemoveAuraWatch then module:RemoveAuraWatch() end
+	--if module.RemoveAuraWatch then module:RemoveAuraWatch() end
 
 	UpdateIcons(self)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)
