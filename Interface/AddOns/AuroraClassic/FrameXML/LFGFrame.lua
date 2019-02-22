@@ -142,13 +142,19 @@ tinsert(C.themes["AuroraClassic"], function()
 	}
 	reskinRoleButton(dps, "DPS")
 
-	local leaders = {
-		LFDQueueFrameRoleButtonLeader,
-		RaidFinderQueueFrameRoleButtonLeader
-	}
-	reskinRoleButton(leaders, "LEADER")
-
+	F.ReskinRole(LFDQueueFrameRoleButtonLeader, "LEADER")
+	F.ReskinRole(RaidFinderQueueFrameRoleButtonLeader, "LEADER")
 	F.ReskinRole(LFGDungeonReadyStatusRolelessReady, "READY")
+
+	hooksecurefunc("SetCheckButtonIsRadio", function(button)
+		button:SetNormalTexture("")
+		button:SetHighlightTexture(C.media.backdrop)
+		button:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
+		button:GetCheckedTexture():SetTexCoord(0, 1, 0, 1)
+		button:SetPushedTexture("")
+		button:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+		button:GetDisabledCheckedTexture():SetTexCoord(0, 1, 0, 1)
+	end)
 
 	local function updateRoleBonus(roleButton)
 		if not roleButton.bg then return end
