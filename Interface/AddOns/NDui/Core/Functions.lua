@@ -320,7 +320,7 @@ end
 function B.UnitColor(unit)
 	local r, g, b = 1, 1, 1
 	if UnitIsPlayer(unit) then
-		local _, class = UnitClass(unit)
+		local class = select(2, UnitClass(unit))
 		if class then
 			r, g, b = B.ClassColor(class)
 		end
@@ -555,6 +555,32 @@ function B:CreateEditBox(width, height)
 
 	eb.Type = "EditBox"
 	return eb
+end 
+
+local function optOnClick(self)
+	PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+	local opt = self.__owner.options
+	for i = 1, #opt do
+		if self == opt[i] then
+			opt[i]:SetBackdropColor(1, .8, 0, .3)
+			opt[i].selected = true
+		else
+			opt[i]:SetBackdropColor(0, 0, 0, .3)
+			opt[i].selected = false
+		end
+	end
+	self.__owner.Text:SetText(self.text)
+	self:GetParent():Hide()
+end
+
+local function optOnEnter(self)
+	if self.selected then return end
+	self:SetBackdropColor(1, 1, 1, .25)
+end
+
+local function optOnLeave(self)
+	if self.selected then return end
+	self:SetBackdropColor(0, 0, 0)
 end
 
 function B:CreateDropDown(width, height, data)
@@ -569,8 +595,9 @@ function B:CreateDropDown(width, height, data)
 	local bu = B.CreateGear(dd)
 	bu:SetPoint("LEFT", dd, "RIGHT", -2, 0)
 	local list = CreateFrame("Frame", nil, dd)
-	list:SetPoint("TOP", dd, "BOTTOM")
+	list:SetPoint("TOP", dd, "BOTTOM", 0, -2)
 	B.CreateBD(list, 1)
+	list:SetBackdropBorderColor(1, 1, 1, .2)
 	list:Hide()
 	bu:SetScript("OnShow", function() list:Hide() end)
 	bu:SetScript("OnClick", function()
@@ -580,38 +607,15 @@ function B:CreateDropDown(width, height, data)
 	dd.button = bu
 
 	local opt, index = {}, 0
-	local function optOnClick(self)
-		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
-		for i = 1, #opt do
-			if self == opt[i] then
-				opt[i]:SetBackdropColor(1, .8, 0, .3)
-				opt[i].selected = true
-			else
-				opt[i]:SetBackdropColor(0, 0, 0, .3)
-				opt[i].selected = false
-			end
-		end
-		dd.Text:SetText(self.text)
-		list:Hide()
-	end
-	local function optOnEnter(self)
-		if self.selected then return end
-		self:SetBackdropColor(1, 1, 1, .25)
-	end
-	local function optOnLeave(self)
-		if self.selected then return end
-		self:SetBackdropColor(0, 0, 0, .3)
-	end
-
 	for i, j in pairs(data) do
 		opt[i] = CreateFrame("Button", nil, list)
 		opt[i]:SetPoint("TOPLEFT", 4, -4 - (i-1)*(height+2))
 		opt[i]:SetSize(width - 8, height)
-		B.CreateBD(opt[i], .3)
-		opt[i]:SetBackdropBorderColor(1, 1, 1, .2)
+		B.CreateBD(opt[i])
 		local text = B.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
 		text:SetPoint("RIGHT", -5, 0)
 		opt[i].text = j
+		opt[i].__owner = dd
 		opt[i]:SetScript("OnClick", optOnClick)
 		opt[i]:SetScript("OnEnter", optOnEnter)
 		opt[i]:SetScript("OnLeave", optOnLeave)
