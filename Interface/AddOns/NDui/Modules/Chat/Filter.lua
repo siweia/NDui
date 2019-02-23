@@ -2,9 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
-local strmatch, strfind = string.match, string.find
-local format, gsub = string.format, string.gsub
+local strmatch, strfind, format, gsub = string.match, string.find, string.format, string.gsub
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
+local min, max, tremove = math.min, math.max, table.remove
 
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
@@ -14,24 +14,47 @@ function B:GenFilterList()
 	B.SplitList(FilterList, NDuiADB["ChatFilterList"], true)
 end
 
-local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _, guid)
-	if not NDuiDB["Chat"]["EnableFilter"] then return end
+-- ECF strings compare
+local last, this = {}, {}
+local function strDiff(sA, sB) -- arrays of bytes
+	local len_a, len_b = #sA, #sB
+	local last, this = last, this
+	for j = 0, len_b do
+		last[j+1] = j
+	end
+	for i = 1, len_a do
+		this[1] = i
+		for j = 1, len_b do
+			this[j+1] = (sA[i] == sB[j]) and last[j] or (min(last[j+1], this[j], last[j]) + 1)
+		end
+		for j = 0, len_b do
+			last[j+1] = this[j+1]
+		end
+	end
+	return this[len_b+1] / max(len_a,len_b)
+end
 
+local chatLines = {}
+local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _, guid)
 	local name = Ambiguate(author, "none")
+
 	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
 	elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or IsCharacterFriend(guid) or IsGUIDInGroup(guid)) then
 		return
 	end
 
+	local filterMsg = msg:gsub("|H.-|h(.-)|h", "%1"):gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+
+	-- Trash Filter
 	for _, symbol in ipairs(msgSymbols) do
-		msg = gsub(msg, symbol, "")
+		filterMsg = gsub(filterMsg, symbol, "")
 	end
 
 	local match = 0
 	for keyword in pairs(FilterList) do
 		if keyword ~= "" then
-			local _, count = gsub(msg, keyword, "")
+			local _, count = gsub(filterMsg, keyword, "")
 			if count > 0 then
 				match = match + 1
 			end
@@ -41,6 +64,22 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _
 	if match >= NDuiDB["Chat"]["Matches"] then
 		return true
 	end
+
+	-- ECF Repeat Filter
+	local msgTable = {name, {}, GetTime()}
+	for i = 1, #filterMsg do
+		msgTable[2][i] = filterMsg:byte(i)
+	end
+	local chatLinesSize = #chatLines
+	chatLines[chatLinesSize+1] = msgTable
+	for i = 1, chatLinesSize do
+		local line = chatLines[i]
+		if line[1] == msgTable[1] and ((msgTable[3] - line[3] < .6) or strDiff(line[2], msgTable[2]) <= .1) then
+			tremove(chatLines, i)
+			return true
+		end
+	end
+	if chatLinesSize >= 30 then tremove(chatLines, 1) end
 end
 
 local addonBlockList = {
@@ -62,8 +101,6 @@ local function toggleBubble(party)
 end
 
 local function genAddonBlock(_, event, msg, author)
-	if not NDuiDB["Chat"]["BlockAddonAlert"] then return end
-
 	local name = Ambiguate(author, "none")
 	if UnitIsUnit(name, "player") then return end
 
@@ -139,28 +176,31 @@ local function isPlayerOnIslands()
 end
 
 function module:ChatFilter()
-	B:GenFilterList()
+	if NDuiDB["Chat"]["EnableFilter"] then
+		B:GenFilterList()
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
+	end
+
+	if NDuiDB["Chat"]["BlockAddonAlert"] then
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genAddonBlock)
+	end
+
 	B:GenChatAtList()
-
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genChatFilter)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genChatFilter)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
-
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genAddonBlock)
-
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", isPlayerOnIslands)
