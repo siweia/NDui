@@ -5,12 +5,8 @@ C.themes["Blizzard_MacroUI"] = function()
 	F.StripTextures(MacroFrameTab1)
 	F.StripTextures(MacroFrameTab2)
 
-	for i = 1, 8 do
-		select(i, MacroPopupFrame.BorderBox:GetRegions()):Hide()
-	end
-	for i = 1, 3 do
-		select(i, MacroPopupScrollFrame:GetRegions()):Hide()
-	end
+	F.StripTextures(MacroPopupFrame.BorderBox)
+	F.StripTextures(MacroPopupScrollFrame)
 	MacroPopupFrame:GetRegions():Hide()
 	MacroPopupNameLeft:Hide()
 	MacroPopupNameMiddle:Hide()
@@ -38,7 +34,8 @@ C.themes["Blizzard_MacroUI"] = function()
 
 		bu:SetCheckedTexture(C.media.checked)
 		select(2, bu:GetRegions()):Hide()
-		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		local hl = bu:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		ic:SetAllPoints()
@@ -53,12 +50,15 @@ C.themes["Blizzard_MacroUI"] = function()
 			if not bu.styled then
 				bu:SetCheckedTexture(C.media.checked)
 				select(2, bu:GetRegions()):Hide()
+				local hl = bu:GetHighlightTexture()
+				hl:SetColorTexture(1, 1, 1, .25)
+				hl:SetAllPoints(ic)
 
 				ic:SetPoint("TOPLEFT", C.mult, -C.mult)
 				ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 				ic:SetTexCoord(.08, .92, .08, .92)
-
 				F.CreateBD(bu, .25)
+
 				bu.styled = true
 			end
 		end

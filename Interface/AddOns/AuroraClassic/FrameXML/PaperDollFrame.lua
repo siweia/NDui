@@ -146,11 +146,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			select(2, tab:GetRegions()):SetPoint("BOTTOMRIGHT", -1, -1)
 		end
 
-		tab.bg = CreateFrame("Frame", nil, tab)
+		tab.bg = F.CreateBDFrame(tab)
 		tab.bg:SetPoint("TOPLEFT", 2, -3)
 		tab.bg:SetPoint("BOTTOMRIGHT", 0, -2)
-		tab.bg:SetFrameLevel(0)
-		F.CreateBD(tab.bg)
 
 		tab.Hider:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
 		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
@@ -158,25 +156,22 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	-- [[ Equipment manager ]]
 
-	for i = 1, 8 do
-		select(i, GearManagerDialogPopup.BorderBox:GetRegions()):Hide()
-	end
+	F.StripTextures(GearManagerDialogPopup.BorderBox)
 	GearManagerDialogPopup.BG:Hide()
 	F.CreateBD(GearManagerDialogPopup)
 	F.CreateSD(GearManagerDialogPopup)
 	GearManagerDialogPopup:SetHeight(525)
-	for i = 1, 3 do
-		select(i, GearManagerDialogPopupScrollFrame:GetRegions()):Hide()
-	end
+	F.StripTextures(GearManagerDialogPopupScrollFrame)
 	F.ReskinScroll(GearManagerDialogPopupScrollFrameScrollBar)
 	F.Reskin(GearManagerDialogPopupOkay)
 	F.Reskin(GearManagerDialogPopupCancel)
 	F.ReskinInput(GearManagerDialogPopupEditBox)
 	F.ReskinScroll(PaperDollTitlesPaneScrollBar)
 	F.ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
-	PaperDollSidebarTabs:GetRegions():Hide()
-	select(2, PaperDollSidebarTabs:GetRegions()):Hide()
-	select(6, PaperDollEquipmentManagerPaneEquipSet:GetRegions()):Hide()
+	F.StripTextures(PaperDollSidebarTabs)
+	if not C.isNewPatch then
+		PaperDollEquipmentManagerPaneEquipSet.ButtonBackground:Hide()
+	end
 	F.Reskin(PaperDollEquipmentManagerPaneEquipSet)
 	F.Reskin(PaperDollEquipmentManagerPaneSaveSet)
 
@@ -186,10 +181,13 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		bu:SetCheckedTexture(C.media.checked)
 		select(2, bu:GetRegions()):Hide()
+		local hl = bu:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetAllPoints(ic)
+
 		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
 		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 		ic:SetTexCoord(.08, .92, .08, .92)
-
 		F.CreateBD(bu, .25)
 	end
 
