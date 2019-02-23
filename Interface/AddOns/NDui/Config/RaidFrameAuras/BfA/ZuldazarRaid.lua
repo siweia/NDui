@@ -77,8 +77,8 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 284676) -- 净化之印
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 290450) -- 净化之印
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285178) -- 蛇焰吐息
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 289858) -- 碾压
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284740, 6) -- 重斧掷击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284781, 6) -- 重斧掷击
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 290955, 6) -- 重斧掷击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285349) -- 赤焰瘟疫
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284995) -- 僵尸尘
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285195) -- 寂灭凋零
