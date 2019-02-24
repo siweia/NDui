@@ -130,7 +130,7 @@ end
 info.onLeave = B.HideTooltip
 
 -- Auto repair
-local isShown, isBankEmpty, autoRepair
+local isShown, isBankEmpty, autoRepair, repairAllCost, canRepair
 
 local function delayFunc()
 	if isBankEmpty then
@@ -145,8 +145,8 @@ function autoRepair(override)
 	isShown = true
 	isBankEmpty = false
 
-	local repairAllCost, canRepair = GetRepairAllCost()
 	local myMoney = GetMoney()
+	repairAllCost, canRepair = GetRepairAllCost()
 
 	if canRepair and repairAllCost > 0 then
 		if (not override) and NDuiADB["RepairType"] == 1 and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
