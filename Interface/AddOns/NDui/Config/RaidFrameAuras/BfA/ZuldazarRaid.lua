@@ -31,8 +31,6 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 286379) -- 炎爆术
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285632) -- 追踪
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 288151) -- 考验后遗症
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284089) -- 成功防御
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 286369) -- 赤精之歌
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284453) -- 赤精之歌
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 286503) -- 射线
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287747) -- 超力之球
 
