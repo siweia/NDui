@@ -120,6 +120,12 @@ end
 
 -- 特殊单位的染色列表
 C.CustomUnits = {
+	[120651] = true, -- 爆炸物
+	[141851] = true, -- 戈霍恩之嗣
+	[148716] = {.8, .8, .8}, -- 复生之魂
+	[148893] = {.8, .8, .8}, -- 被折磨的灵魂
+	[148894] = {.8, .8, .8}, -- 失落的灵魂
+
 	[GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
 	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
 	[GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
@@ -137,8 +143,6 @@ C.CustomUnits = {
 	[GetSectionInfo(18321)] = true,	-- 缠绕的蛇群
 	[GetSectionInfo(18271)] = true,	-- 爆裂图腾
 	[GetSectionInfo(17026)] = true,	-- 眩晕酒桶
-	[120651] = true, -- 爆炸物
-	[141851] = true, -- 戈霍恩之嗣
 	[GetSectionInfo(19656)] = true,	-- 僵尸尘图腾
 	[GetSectionInfo(19393)] = true,	-- 雪怒之魂
 	[GetSectionInfo(19279)] = true,	-- 谄媚海妖

@@ -77,6 +77,7 @@ end
 local function UpdateColor(element, unit)
 	local name = GetUnitName(unit) or UNKNOWN
 	local npcID = B.GetNPCID(UnitGUID(unit))
+	local customUnit = C.CustomUnits and (C.CustomUnits[name] or C.CustomUnits[npcID])
 	local status = UnitThreatSituation("player", unit) or false		-- just in case
 	local reaction = UnitReaction(unit, "player")
 	local customColor = NDuiDB["Nameplate"]["CustomColor"]
@@ -89,8 +90,12 @@ local function UpdateColor(element, unit)
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if C.CustomUnits and (C.CustomUnits[name] or C.CustomUnits[npcID]) then
-			r, g, b = customColor.r, customColor.g, customColor.b
+		if customUnit then
+			if type(customUnit) == "table" then
+				r, g, b = unpack(customUnit)
+			else
+				r, g, b = customColor.r, customColor.g, customColor.b
+			end
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then
 				r, g, b = B.UnitColor(unit)
