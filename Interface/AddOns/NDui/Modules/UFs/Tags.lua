@@ -135,7 +135,8 @@ oUF.Tags.Methods["raidhp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return oUF.Tags.Methods["DDG"](unit)
 	else
-		return oUF.Tags.Methods["perhp"](unit).."%" or 0
+		local per = oUF.Tags.Methods["perhp"](unit) or 0
+		return ColorPercent(per)
 	end
 end
 oUF.Tags.Events["raidhp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION"
