@@ -92,7 +92,9 @@ function UF:CreateHealthText(self)
 	if self.mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
 		name:ClearAllPoints()
-		if NDuiDB["UFs"]["RaidBuffIndicator"] and not NDuiDB["UFs"]["SimpleMode"] and not NDuiDB["UFs"]["HealthPerc"] then
+		if NDuiDB["UFs"]["SimpleMode"] then
+			name:SetPoint("LEFT", 4, 0)
+		elseif NDuiDB["UFs"]["RaidBuffIndicator"] and not NDuiDB["UFs"]["HealthPerc"] then
 			name:SetPoint("CENTER")
 			name:SetJustifyH("CENTER")
 		else
@@ -122,7 +124,11 @@ function UF:CreateHealthText(self)
 
 	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, NDuiDB["Nameplate"]["FullHealth"] and 12 or 14), "", false, "RIGHT", -3, -1)
 	if self.mystyle == "raid" then
-		hpval:SetPoint("RIGHT", -3, -7)
+		if NDuiDB["UFs"]["SimpleMode"] then
+			hpval:SetPoint("RIGHT", -4, 0)
+		else
+			hpval:SetPoint("RIGHT", -3, -7)
+		end
 		if NDuiDB["UFs"]["HealthPerc"] then
 			self:Tag(hpval, "[raidhp]")
 		else
@@ -1000,4 +1006,32 @@ function UF:CreateFactionIcon(self)
 	self:RegisterEvent("UNIT_AURA", postUpdateFaction)	-- need reviewed
 	self:RegisterEvent("ARENA_OPPONENT_UPDATE", postUpdateFaction, true)
 	self:RegisterEvent("UNIT_NAME_UPDATE", postUpdateFaction)
+end
+
+function UF:InterruptIndicator(self)
+	local iconSize = self:GetHeight() + self.Power:GetHeight() + 3
+	local buttons = {}
+	buttons.__max = 3
+	local rel1, rel2, offset, margin = "TOPRIGHT", "TOPLEFT", -5, -2
+	if NDuiDB["UFs"]["PWOnRight"] then
+		rel1, rel2, offset, margin = "TOPLEFT", "TOPRIGHT", 5, 2
+	end
+
+	for i = 1, buttons.__max do
+		local bu = CreateFrame("Frame", nil, self)
+		bu:SetSize(iconSize, iconSize)
+		B.AuraIcon(bu)
+		bu.CD:SetReverse(false)
+		if i == 1 then
+			bu:SetPoint(rel1, self, rel2, offset, 0)
+		else
+			bu:SetPoint(rel1, buttons[i-1], rel2, margin, 0)
+		end
+		bu:Hide()
+
+		buttons[i] = bu
+	end
+
+	buttons.PartySpells = C.PartySpells
+	self.PartyWatcher = buttons
 end
