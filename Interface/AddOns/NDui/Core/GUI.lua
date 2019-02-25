@@ -89,12 +89,15 @@ local defaultSettings = {
 		AutoRes = true,
 		NumGroups = 6,
 		SimpleMode = false,
+		SimpleModeSortByRole = true,
 		InstanceAuras = true,
 		SpecRaidPos = false,
 		RaidClassColor = false,
 		HorizonRaid = false,
 		ReverseRaid = false,
 		RaidScale = 1,
+		RaidWidth = 80,
+		RaidHeight = 32,
 		HealthPerc = false,
 		AurasClickThrough = false,
 		CombatText = true,
@@ -111,6 +114,9 @@ local defaultSettings = {
 		RuneTimer = true,
 		RaidBuffIndicator = true,
 		BuffTimerIndicator = false,
+		PartyFrame = true,
+		PartyWatcher = true,
+		PWOnRight = false,
 	},
 	Chat = {
 		Sticky = false,
@@ -377,24 +383,30 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", "|cff00cc4c"..L["UFs RaidFrame"]},
-		{1, "UFs", "SimpleMode", L["Simple RaidFrame"], true},
+		{1, "UFs", "PartyFrame", "|cff00cc4c"..L["UFs PartyFrame"], true},
+		{1, "UFs", "PartyWatcher", L["UFs PartyWatcher"]},
+		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
+		{},--blank
+		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, function() setupBuffIndicator() end},
+		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"], true},
+		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
+		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
+		{1, "UFs", "RaidClickSets", L["Enable ClickSets"], nil, function() setupClickCast() end},
+		{1, "UFs", "InstanceAuras", L["Instance Auras"], true, function() setupRaidDebuffs() end},
 		{},--blank
 		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
 		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
 		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"], true},
+		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"]},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
-		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"], true},
-		{3, "UFs", "NumGroups", L["Num Groups"], false, {4, 8, 0}},
-		{3, "UFs", "RaidScale", L["RaidFrame Scale"], true, {.8, 1.5, 2}},
+		{3, "UFs", "NumGroups", L["Num Groups"], true, {4, 8, 0}},
+		{3, "UFs", "RaidWidth", L["RaidFrame Width"], false, {60, 120, 0}},
+		{3, "UFs", "RaidHeight", L["RaidFrame Height"], true, {25, 40, 0}},
 		{},--blank
-		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, function() setupBuffIndicator() end},
-		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"], true},
-		{},--blank
-		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
-		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
-		{1, "UFs", "RaidClickSets", L["Enable ClickSets"], nil, function() setupClickCast() end},
-		{1, "UFs", "InstanceAuras", L["Instance Auras"], true, function() setupRaidDebuffs() end},
+		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
+		{1, "UFs", "SimpleModeSortByRole", L["SimpleMode SortByRole"]},
+		{3, "UFs", "RaidScale", L["SimpleMode Scale"], true, {.8, 1.5, 2}},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"], nil, function() setupPlateAura() end},
@@ -588,7 +600,7 @@ end
 
 local function CreateTab(parent, i, name)
 	local tab = CreateFrame("Button", nil, parent)
-	tab:SetPoint("TOPLEFT", 20, -30*i - 20)
+	tab:SetPoint("TOPLEFT", 20, -30*i - 20 + C.mult)
 	tab:SetSize(130, 28)
 	B.CreateBD(tab, .3)
 	B.CreateFS(tab, 15, name, "system", "LEFT", 10, 0)
