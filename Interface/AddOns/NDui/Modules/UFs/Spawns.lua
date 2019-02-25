@@ -156,6 +156,12 @@ local function CreateRaidStyle(self)
 	UF:CreateThreatBorder(self)
 	UF:CreateAuras(self)
 	UF:CreateBuffIndicator(self)
+	UF:InterruptIndicator(self)
+end
+
+local function CreatePartyStyle(self)
+	CreateRaidStyle(self)
+	UF:InterruptIndicator(self)
 end
 
 -- Spawns
@@ -238,6 +244,33 @@ function UF:OnLogin()
 				arena[i]:SetPoint("TOPLEFT", boss[i].mover)
 			end
 		end
+
+		if NDuiDB["UFs"]["PartyFrame"] then
+			oUF:RegisterStyle("Party", CreatePartyStyle)
+			oUF:SetActiveStyle("Party")
+
+			local party = oUF:SpawnHeader("oUF_Party", nil, "party",
+			"showPlayer", true,
+			"showSolo", false,
+			"showParty", true,
+			"showRaid", false,
+			"xoffset", 0,
+			"yOffset", 10,
+			"groupFilter", "1",
+			"groupingOrder", "HEALER,NONE,DAMAGER,TANK",
+			"groupBy", "ASSIGNEDROLE",
+			"sortMethod", "NAME",
+			"point", "BOTTOM",
+			"columnAnchorPoint", "LEFT",
+			"oUF-initialConfigFunction", ([[
+			self:SetWidth(%d)
+			self:SetHeight(%d)
+			]]):format(100, 32))
+
+			local partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0}, 100, 32*5+10*4)
+			party:ClearAllPoints()
+			party:SetPoint("BOTTOMLEFT", partyMover)
+		end
 	end
 
 	if NDuiDB["UFs"]["RaidFrame"] then
@@ -263,22 +296,29 @@ function UF:OnLogin()
 		local numGroups = NDuiDB["UFs"]["NumGroups"]
 		local horizon = NDuiDB["UFs"]["HorizonRaid"]
 		local scale = NDuiDB["UFs"]["RaidScale"]
+		local width = NDuiDB["UFs"]["RaidWidth"]
+		local height = NDuiDB["UFs"]["RaidHeight"]
 		local reverse = NDuiDB["UFs"]["ReverseRaid"]
 		local raidMover
 
 		if NDuiDB["UFs"]["SimpleMode"] then
+			local groupingOrder, groupBy, sortMethod = "1,2,3,4,5,6,7,8", "GROUP", "INDEX"
+			if NDuiDB["UFs"]["SimpleModeSortByRole"] then
+				groupingOrder, groupBy, sortMethod = "TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"
+			end
+
 			local function CreateGroup(name, i)
 				local group = oUF:SpawnHeader(name, nil, "solo,party,raid",
 				"showPlayer", true,
 				"showSolo", false,
-				"showParty", true,
+				"showParty", not NDuiDB["UFs"]["PartyFrame"],
 				"showRaid", true,
 				"xoffset", 5,
 				"yOffset", -10,
 				"groupFilter", tostring(i),
-				"groupingOrder", "1,2,3,4,5,6,7,8",
-				"groupBy", "GROUP",
-				"sortMethod", "INDEX",
+				"groupingOrder", groupingOrder,
+				"groupBy", groupBy,
+				"sortMethod", sortMethod,
 				"maxColumns", 2,
 				"unitsPerColumn", 20,
 				"columnSpacing", 5,
@@ -311,7 +351,7 @@ function UF:OnLogin()
 				local group = oUF:SpawnHeader(name, nil, "solo,party,raid",
 				"showPlayer", true,
 				"showSolo", false,
-				"showParty", true,
+				"showParty", not NDuiDB["UFs"]["PartyFrame"],
 				"showRaid", true,
 				"xoffset", 5,
 				"yOffset", -10,
@@ -327,7 +367,7 @@ function UF:OnLogin()
 				"oUF-initialConfigFunction", ([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
-				]]):format(80*scale, 32*scale))
+				]]):format(width, height))
 				return group
 			end
 
@@ -336,13 +376,13 @@ function UF:OnLogin()
 				groups[i] = CreateGroup("oUF_Raid"..i, i)
 				if i == 1 then
 					if horizon then
-						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 84*5*scale, 40*numGroups*scale)
+						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (width+5)*5, (height+(NDuiDB["UFs"]["ShowTeamIndex"] and 25 or 15))*numGroups)
 						if reverse then
 							groups[i]:ClearAllPoints()
 							groups[i]:SetPoint("BOTTOMLEFT", raidMover)
 						end
 					else
-						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, 85*numGroups*scale, 42*5*scale)
+						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (width+5)*numGroups, (height+10)*5)
 						if reverse then
 							groups[i]:ClearAllPoints()
 							groups[i]:SetPoint("TOPRIGHT", raidMover)
