@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 local cast = ns.cast
 local UF = B:RegisterModule("UnitFrames")
-local format, floor = string.format, math.floor
+local format, floor, abs = string.format, math.floor, math.abs
 local pairs, next = pairs, next
 
 -- Custom colors
@@ -92,7 +92,7 @@ function UF:CreateHealthText(self)
 	if self.mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
 		name:ClearAllPoints()
-		if NDuiDB["UFs"]["SimpleMode"] then
+		if NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			name:SetPoint("LEFT", 4, 0)
 		elseif NDuiDB["UFs"]["RaidBuffIndicator"] and not NDuiDB["UFs"]["HealthPerc"] then
 			name:SetPoint("CENTER")
@@ -124,7 +124,7 @@ function UF:CreateHealthText(self)
 
 	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, NDuiDB["Nameplate"]["FullHealth"] and 12 or 14), "", false, "RIGHT", -3, -1)
 	if self.mystyle == "raid" then
-		if NDuiDB["UFs"]["SimpleMode"] then
+		if NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
 		else
 			hpval:SetPoint("RIGHT", -3, -7)
@@ -1009,21 +1009,35 @@ function UF:CreateFactionIcon(self)
 end
 
 function UF:InterruptIndicator(self)
-	local iconSize = self:GetHeight() + self.Power:GetHeight() + 3
-	local buttons = {}
-	buttons.__max = 3
-	local rel1, rel2, offset, margin = "TOPRIGHT", "TOPLEFT", -5, -2
-	if NDuiDB["UFs"]["PWOnRight"] then
-		rel1, rel2, offset, margin = "TOPLEFT", "TOPRIGHT", 5, 2
-	end
+	if not NDuiDB["UFs"]["PartyWatcher"] then return end
 
-	for i = 1, buttons.__max do
+	local horizon = NDuiDB["UFs"]["HorizonRaid"]
+	local otherSide = NDuiDB["UFs"]["PWOnRight"]
+	local relF = horizon and "BOTTOMLEFT" or "TOPRIGHT"
+	local relT = "TOPLEFT"
+	local xOffset = horizon and 0 or -5
+	local yOffset = horizon and 5 or 0
+	local margin = horizon and 2 or -2
+	if otherSide then
+		relF = "TOPLEFT"
+		relT = horizon and "BOTTOMLEFT" or "TOPRIGHT"
+		xOffset = horizon and 0 or 5
+		yOffset = horizon and -(self.Power:GetHeight()+8) or 0
+		margin = 2
+	end
+	local rel1 = not horizon and not otherSide and "RIGHT" or "LEFT"
+	local rel2 = not horizon and not otherSide and "LEFT" or "RIGHT"
+	local buttons = {}
+	local maxIcons = 3
+	local iconSize = horizon and (self:GetWidth()-(maxIcons-1)*abs(margin))/maxIcons or (self:GetHeight()+self.Power:GetHeight()+3)
+
+	for i = 1, maxIcons do
 		local bu = CreateFrame("Frame", nil, self)
 		bu:SetSize(iconSize, iconSize)
 		B.AuraIcon(bu)
 		bu.CD:SetReverse(false)
 		if i == 1 then
-			bu:SetPoint(rel1, self, rel2, offset, 0)
+			bu:SetPoint(relF, self, relT, xOffset, yOffset)
 		else
 			bu:SetPoint(rel1, buttons[i-1], rel2, margin, 0)
 		end
@@ -1032,6 +1046,7 @@ function UF:InterruptIndicator(self)
 		buttons[i] = bu
 	end
 
+	buttons.__max = maxIcons
 	buttons.PartySpells = C.PartySpells
 	self.PartyWatcher = buttons
 end
