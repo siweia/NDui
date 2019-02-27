@@ -23,32 +23,7 @@ function module:GetPlayerMapPos(mapID)
 	return tempVec2D.y/mapRect[2].y, tempVec2D.x/mapRect[2].x
 end
 
-function module:OnLogin()
-	-- Scaling
-	local function setupScale(self)
-		if self.isMaximized and self:GetScale() ~= 1 then
-			self:SetScale(1)
-		elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then
-			self:SetScale(NDuiDB["Map"]["MapScale"])
-		end
-	end
-
-	if NDuiDB["Map"]["MapScale"] > 1 then
-		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-			local s = WorldMapFrame:GetScale()
-			return x/s, y/s
-		end
-	end
-
-	local function updateMapAnchor(self)
-		setupScale(self)
-		if not self.isMaximized then B.RestoreMF(self) end
-	end
-	B.CreateMF(WorldMapFrame, nil, true)
-	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", updateMapAnchor)
-
-	-- Generate Coords
+function module:UpdateCoords()
 	if not NDuiDB["Map"]["Coord"] then return end
 
 	local player = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
@@ -111,8 +86,36 @@ function module:OnLogin()
 
 	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
 	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
+end
 
-	-- Elements
+function module:WorldMapScale()
+	local function setupScale(self)
+		if self.isMaximized and self:GetScale() ~= 1 then
+			self:SetScale(1)
+		elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then
+			self:SetScale(NDuiDB["Map"]["MapScale"])
+		end
+	end
+
+	if NDuiDB["Map"]["MapScale"] > 1 then
+		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+			local s = WorldMapFrame:GetScale()
+			return x/s, y/s
+		end
+	end
+
+	local function updateMapAnchor(self)
+		setupScale(self)
+		if not self.isMaximized then B.RestoreMF(self) end
+	end
+	B.CreateMF(WorldMapFrame, nil, true)
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", updateMapAnchor)
+end
+
+function module:OnLogin()
+	self:WorldMapScale()
+	self:UpdateCoords()
 	self:SetupMinimap()
 	self:MapReveal()
 end
