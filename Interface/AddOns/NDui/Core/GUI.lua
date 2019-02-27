@@ -174,6 +174,7 @@ local defaultSettings = {
 		DPSRevertThreat = false,
 		ExplosivesScale = false,
 		PPIconSize = 32,
+		AKSProgress = false,
 	},
 	Skins = {
 		DBM = true,
@@ -415,7 +416,6 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "CustomColor", L["Custom Color"], 2},
 		{2, "Nameplate", "UnitList", L["UnitColor List"]},
 		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"], true},
-		{},--blank
 		{1, "Nameplate", "TankMode", "|cff00cc4c"..L["Tank Mode"].."*"},
 		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true},
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
@@ -429,14 +429,15 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", false, nil, function() B.PlateInsideView() end},
 		{1, "Nameplate", "FullHealth", L["Show FullHealth"], true},
 		{1, "Nameplate", "Arrow", L["Show Arrow"]},
-		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"]},
-		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {0, 1, 1}, function() B.UpdatePlateAlpha() end},
+		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
+		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"]},
 		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
 		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", false, {.5, 1.5, 1}, function() B.UpdatePlateSpacing() end},
 		{3, "Nameplate", "Distance", L["Nameplate Distance"].."*", true, {20, 100, 0}, function() B.UpdatePlateRange() end},
 		{3, "Nameplate", "Width", L["NP Width"], false, {50, 150, 0}},
 		{3, "Nameplate", "Height", L["NP Height"], true, {5, 15, 0}},
+		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", false, {0, 1, 1}, function() B.UpdatePlateAlpha() end},
 	},
 	[6] = {
 		{1, "AuraWatch", "Enable", "|cff00cc4c"..L["Enable AuraWatch"], nil, setupAuraWatch},
