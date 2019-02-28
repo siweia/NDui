@@ -90,7 +90,7 @@ inform.CloseButton:HookScript("OnClick", function()
 end)
 
 info.onMouseUp = function(self, btn)
-	if btn == "RightButton" then
+	if btn == "MiddleButton" then
 		NDuiADB["RepairType"] = NDuiADB["RepairType"] + 1
 		if NDuiADB["RepairType"] == 3 then NDuiADB["RepairType"] = 0 end
 		self:GetScript("OnEnter")(self)
@@ -123,7 +123,7 @@ info.onEnter = function(self)
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Player Panel"].." ", 1,1,1, .6,.8,1)
-	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Auto Repair"]..": "..repairlist[NDuiADB["RepairType"]].." ", 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["Auto Repair"]..": "..repairlist[NDuiADB["RepairType"]].." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 end
 

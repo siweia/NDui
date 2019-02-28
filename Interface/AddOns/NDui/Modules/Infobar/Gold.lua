@@ -66,7 +66,7 @@ StaticPopupDialogs["RESETGOLD"] = {
 info.onMouseUp = function(self, btn)
 	if IsControlKeyDown() and btn == "RightButton" then
 		StaticPopup_Show("RESETGOLD")
-	elseif btn == "RightButton" then
+	elseif btn == "MiddleButton" then
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
 		self:GetScript("OnEnter")(self)
 	else
@@ -126,7 +126,7 @@ info.onEnter = function(self)
 	end
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Currency Panel"].." ", 1,1,1, .6,.8,1)
-	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", "CTRL +"..DB.RightButton..L["Reset Gold"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 end
