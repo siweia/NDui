@@ -6,6 +6,7 @@
 	## Optional:
 
 	element.PartySpells		- spell list
+	element.TalentCDFix		- spell list for talent cd
 	element.__max			- max icons for tracking
 	element.PostUpdate		- post update when event fired
 
@@ -32,6 +33,7 @@
 ]]
 local _, ns = ...
 local oUF = ns.oUF
+local GetTime, GetSpellTexture = GetTime, GetSpellTexture
 
 local function Update(self, event, unit, _, spellID)
 	if unit ~= self.unit then return end
@@ -40,12 +42,18 @@ local function Update(self, event, unit, _, spellID)
 	local maxButtons = #element
 	local index = element.index
 	local duration = element.PartySpells[spellID]
+	local talentCDFix = element.TalentCDFix[spellID]
 
 	if duration and index <= maxButtons then
+		local thisTime = GetTime()
 		for i = 1, maxButtons do
 			local button = element[i]
 			if button.spellID and button.spellID == spellID then
-				button.CD:SetCooldown(GetTime(), duration)
+				if talentCDFix and (thisTime-button.lastTime+1) <= duration then -- 1s latency
+					duration = talentCDFix
+				end
+				button.lastTime = thisTime
+				button.CD:SetCooldown(thisTime, duration)
 				return
 			end
 		end
@@ -55,7 +63,8 @@ local function Update(self, event, unit, _, spellID)
 		element.index = index
 
 		local button = element[index]
-		button.CD:SetCooldown(GetTime(), duration)
+		button.lastTime = thisTime
+		button.CD:SetCooldown(thisTime, duration)
 		button.Icon:SetTexture(GetSpellTexture(spellID))
 		button.spellID = spellID
 		button:Show()

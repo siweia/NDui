@@ -1048,5 +1048,6 @@ function UF:InterruptIndicator(self)
 
 	buttons.__max = maxIcons
 	buttons.PartySpells = C.PartySpells
+	buttons.TalentCDFix = C.TalentCDFix
 	self.PartyWatcher = buttons
 end
