@@ -18,7 +18,6 @@ end
 local last, this = {}, {}
 local function strDiff(sA, sB) -- arrays of bytes
 	local len_a, len_b = #sA, #sB
-	local last, this = last, this
 	for j = 0, len_b do
 		last[j+1] = j
 	end
@@ -31,7 +30,7 @@ local function strDiff(sA, sB) -- arrays of bytes
 			last[j+1] = this[j+1]
 		end
 	end
-	return this[len_b+1] / max(len_a,len_b)
+	return (this[len_b+1] or 100) / max(len_a, len_b)
 end
 
 local chatLines = {}
