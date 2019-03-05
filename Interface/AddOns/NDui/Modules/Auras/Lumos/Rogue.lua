@@ -41,12 +41,6 @@ function module:PostUpdateVisibility(self)
 	end
 end
 
-function module:RemoveAuraWatch()
-	for i = 1, 6 do
-		B.RemoveAuraData(diceSpells[i].id)
-	end
-end
-
 local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
