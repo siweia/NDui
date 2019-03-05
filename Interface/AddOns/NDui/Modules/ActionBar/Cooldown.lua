@@ -84,6 +84,10 @@ function module:OnLogin()
 
 	local function Timer_Start(self, start, duration)
 		if self:IsForbidden() or self.noOCC or hideNumbers[self] then return end
+		if NDuiDB["Actionbar"]["OverrideWA"] and self:GetName() and strfind(self:GetName(), "WeakAuras") then
+			self.noOCC = true
+			return
+		end
 
 		if start > 0 and duration > MIN_DURATION then
 			local timer = self.timer or Timer_Create(self)
