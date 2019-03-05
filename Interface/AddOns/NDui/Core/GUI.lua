@@ -49,6 +49,7 @@ local defaultSettings = {
 		Bar5Fade = true,
 		Scale = 1,
 		BindType = 1,
+		OverrideWA = false,
 	},
 	Bags = {
 		Enable = true,
@@ -117,6 +118,8 @@ local defaultSettings = {
 		PartyFrame = true,
 		PartyWatcher = true,
 		PWOnRight = false,
+		PartyWidth = 100,
+		PartyHeight = 32,
 	},
 	Chat = {
 		Sticky = false,
@@ -175,6 +178,7 @@ local defaultSettings = {
 		ExplosivesScale = false,
 		PPIconSize = 32,
 		AKSProgress = false,
+		PPHideOOC = true,
 	},
 	Skins = {
 		DBM = true,
@@ -341,7 +345,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
 		{},--blank
 		{1, "Actionbar", "Cooldown", "|cff00cc4c"..L["Show Cooldown"]},
-		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*", true},
+		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*"},
+		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"], true},
 	},
 	[2] = {
 		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
@@ -384,9 +389,12 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", "|cff00cc4c"..L["UFs RaidFrame"]},
-		{1, "UFs", "PartyFrame", "|cff00cc4c"..L["UFs PartyFrame"], true},
+		{},--blank
+		{1, "UFs", "PartyFrame", "|cff00cc4c"..L["UFs PartyFrame"]},
 		{1, "UFs", "PartyWatcher", L["UFs PartyWatcher"]},
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
+		{3, "UFs", "PartyWidth", L["PartyFrame Width"], false, {60, 150, 0}},
+		{3, "UFs", "PartyHeight", L["PartyFrame Height"], true, {25, 40, 0}},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, function() setupBuffIndicator() end},
 		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"], true},
@@ -449,11 +457,12 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Auras", "Reminder", L["Enable Reminder"]},
 		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
-		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
-		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"], true},
+		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
+		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
+		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
+		{3, "Nameplate", "PPIconSize", L["PlayerPlate IconSize"], true, {30, 40, 0}},
 		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"], false, {5, 15, 0}},
 		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"], true, {5, 15, 0}},
-		{3, "Nameplate", "PPIconSize", L["PlayerPlate IconSize"], false, {30, 40, 0}},
 	},
 	[7] = {
 		{1, "Skins", "RM", "|cff00cc4c"..L["Raid Manger"]},
@@ -667,7 +676,7 @@ local function CreateOption(i)
 		-- Editbox
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)
-			eb:SetMaxLetters(200)
+			eb:SetMaxLetters(999)
 			if horizon then
 				eb:SetPoint("TOPLEFT", 345, -offset + 45)
 			else
