@@ -5,6 +5,8 @@ local module = B:GetModule("Chat")
 local strmatch, strfind, format, gsub = string.match, string.find, string.format, string.gsub
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
+local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup
+local Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime = Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime
 
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
@@ -30,42 +32,48 @@ local function strDiff(sA, sB) -- arrays of bytes
 			last[j+1] = this[j+1]
 		end
 	end
-	return (this[len_b+1] or 100) / max(len_a, len_b)
+	return this[len_b+1] / max(len_a, len_b)
 end
 
-local chatLines = {}
-local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _, guid)
-	local name = Ambiguate(author, "none")
+local chatLines, badBoys, prevLineID = {}, {}, 0
+local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, lineID, guid)
+	if lineID ~= 0 and lineID == prevLineID then return end
+	prevLineID = lineID
 
+	local name = Ambiguate(author, "none")
+	if badBoys[name] and badBoys[name] > 5 then return true end
 	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
-	elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or IsCharacterFriend(guid) or IsGUIDInGroup(guid)) then
+	elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGUIDInGroup(guid)) then
 		return
 	end
 
-	local filterMsg = msg:gsub("|H.-|h(.-)|h", "%1"):gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+	local filterMsg = gsub(msg, "|H.-|h(.-)|h", "%1")
+	filterMsg = gsub(filterMsg, "|c%x%x%x%x%x%x%x%x", "")
+	filterMsg = gsub(filterMsg, "|r", "")
 
 	-- Trash Filter
 	for _, symbol in ipairs(msgSymbols) do
 		filterMsg = gsub(filterMsg, symbol, "")
 	end
 
-	local match = 0
+	local matches = 0
 	for keyword in pairs(FilterList) do
 		if keyword ~= "" then
 			local _, count = gsub(filterMsg, keyword, "")
 			if count > 0 then
-				match = match + 1
+				matches = matches + 1
 			end
 		end
 	end
 
-	if match >= NDuiDB["Chat"]["Matches"] then
+	if matches >= NDuiDB["Chat"]["Matches"] then
 		return true
 	end
 
 	-- ECF Repeat Filter
 	local msgTable = {name, {}, GetTime()}
+	if filterMsg == "" then filterMsg = msg end
 	for i = 1, #filterMsg do
 		msgTable[2][i] = filterMsg:byte(i)
 	end
@@ -75,6 +83,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _
 		local line = chatLines[i]
 		if line[1] == msgTable[1] and ((msgTable[3] - line[3] < .6) or strDiff(line[2], msgTable[2]) <= .1) then
 			tremove(chatLines, i)
+			badBoys[name] = (badBoys[name] or 0) + 1
 			return true
 		end
 	end
@@ -189,7 +198,6 @@ function module:ChatFilter()
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genAddonBlock)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genAddonBlock)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genAddonBlock)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", genAddonBlock)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", genAddonBlock)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", genAddonBlock)
