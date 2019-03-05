@@ -9,7 +9,9 @@ function module:MissingStats()
 	if not NDuiDB["Misc"]["MissingStats"] then return end
 	if IsAddOnLoaded("DejaCharacterStats") then return end
 
-	local format = string.format
+	local format, max, floor = string.format, math.max, math.floor
+	local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
+	local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
 
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)
@@ -107,4 +109,18 @@ function module:MissingStats()
 		statFrame.tooltip2 = format(STAT_ATTACK_SPEED_BASE_TOOLTIP, BreakUpLargeNumbers(meleeHaste))
 		statFrame:Show()
 	end
+
+	hooksecurefunc("PaperDollFrame_SetItemLevel", function(statFrame, unit)
+		if unit ~= "player" then return end
+
+		local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()
+		local minItemLevel = C_PaperDollInfo_GetMinItemLevel()
+		local displayItemLevel = max(minItemLevel or 0, avgItemLevelEquipped)
+		displayItemLevel = floor(displayItemLevel)
+		avgItemLevel = floor(avgItemLevel)
+
+		if displayItemLevel ~= avgItemLevel then
+			PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel.." / "..avgItemLevel, false, displayItemLevel)
+		end
+	end)
 end
