@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 local cast = ns.cast
 local UF = B:RegisterModule("UnitFrames")
-local format, floor, abs = string.format, math.floor, math.abs
+local format, floor, abs, min = string.format, math.floor, math.abs, math.min
 local pairs, next = pairs, next
 
 -- Custom colors
@@ -94,9 +94,13 @@ function UF:CreateHealthText(self)
 		name:ClearAllPoints()
 		if NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			name:SetPoint("LEFT", 4, 0)
-		elseif NDuiDB["UFs"]["RaidBuffIndicator"] and not NDuiDB["UFs"]["HealthPerc"] then
-			name:SetPoint("CENTER")
+		elseif NDuiDB["UFs"]["RaidBuffIndicator"] then
 			name:SetJustifyH("CENTER")
+			if NDuiDB["UFs"]["HealthPerc"] then
+				name:SetPoint("TOP", 0, -3)
+			else
+				name:SetPoint("CENTER")
+			end
 		else
 			name:SetPoint("TOPLEFT", 2, -2)
 		end
@@ -126,6 +130,10 @@ function UF:CreateHealthText(self)
 	if self.mystyle == "raid" then
 		if NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
+		elseif NDuiDB["UFs"]["RaidBuffIndicator"] then
+			hpval:ClearAllPoints()
+			hpval:SetPoint("BOTTOM", 0, 1)
+			hpval:SetJustifyH("CENTER")
 		else
 			hpval:SetPoint("RIGHT", -3, -7)
 		end
@@ -562,8 +570,8 @@ function UF:CreateAuras(self)
 			bu.numTotal = 1
 			bu.disableCooldown = true
 		else
-			bu:SetPoint("BOTTOMLEFT", self, 2, 0)
-			bu.numTotal = 6
+			bu:SetPoint("BOTTOMLEFT", self, 2, -1)
+			bu.numTotal = NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 6
 			bu.iconsPerRow = 6
 			bu.spacing = 2
 		end
@@ -1029,7 +1037,7 @@ function UF:InterruptIndicator(self)
 	local rel2 = not horizon and not otherSide and "LEFT" or "RIGHT"
 	local buttons = {}
 	local maxIcons = 3
-	local iconSize = horizon and (self:GetWidth()-(maxIcons-1)*abs(margin))/maxIcons or (self:GetHeight()+self.Power:GetHeight()+3)
+	local iconSize = horizon and min((self:GetWidth()-(maxIcons-1)*abs(margin))/maxIcons, 32) or (self:GetHeight()+self.Power:GetHeight()+3)
 
 	for i = 1, maxIcons do
 		local bu = CreateFrame("Frame", nil, self)

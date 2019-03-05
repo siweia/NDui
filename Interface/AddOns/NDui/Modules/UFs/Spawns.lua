@@ -169,10 +169,10 @@ function UF:OnLogin()
 	local horizon = NDuiDB["UFs"]["HorizonRaid"]
 	local numGroups = NDuiDB["UFs"]["NumGroups"]
 	local scale = NDuiDB["UFs"]["RaidScale"]
-	local raidWidth = NDuiDB["UFs"]["RaidWidth"]
-	local raidHeight = NDuiDB["UFs"]["RaidHeight"]
+	local raidWidth, raidHeight = NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"]
 	local reverse = NDuiDB["UFs"]["ReverseRaid"]
 	local showPartyFrame = NDuiDB["UFs"]["PartyFrame"]
+	local partyWidth, partyHeight = NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"]
 
 	if NDuiDB["Nameplate"]["Enable"] then
 		self:SetupCVars()
@@ -252,38 +252,6 @@ function UF:OnLogin()
 				arena[i]:SetPoint("TOPLEFT", boss[i].mover)
 			end
 		end
-
-		if showPartyFrame then
-			oUF:RegisterStyle("Party", CreatePartyStyle)
-			oUF:SetActiveStyle("Party")
-
-			local partyWidth, partyHeight, xOffset, yOffset = 100, 32, 5, 10
-			local moverWidth = horizon and (partyWidth*5+xOffset*4) or partyWidth
-			local moverHeight = horizon and partyHeight or (partyHeight*5+yOffset*4)
-			local groupingOrder = horizon and "TANK,DAMAGER,NONE,HEALER" or "HEALER,NONE,DAMAGER,TANK"
-
-			local party = oUF:SpawnHeader("oUF_Party", nil, "solo,party",
-			"showPlayer", true,
-			"showSolo", false,
-			"showParty", true,
-			"showRaid", false,
-			"xoffset", xOffset,
-			"yOffset", yOffset,
-			"groupFilter", "1",
-			"groupingOrder", "HEALER,NONE,DAMAGER,TANK",
-			"groupBy", "ASSIGNEDROLE",
-			"sortMethod", "NAME",
-			"point", horizon and "LEFT" or "BOTTOM",
-			"columnAnchorPoint", "LEFT",
-			"oUF-initialConfigFunction", ([[
-			self:SetWidth(%d)
-			self:SetHeight(%d)
-			]]):format(partyWidth, partyHeight))
-
-			local partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0}, moverWidth, moverHeight)
-			party:ClearAllPoints()
-			party:SetPoint("BOTTOMLEFT", partyMover)
-		end
 	end
 
 	if NDuiDB["UFs"]["RaidFrame"] then
@@ -303,6 +271,38 @@ function UF:OnLogin()
 		CompactRaidFrameContainer:UnregisterAllEvents()
 
 		-- Group Styles
+		if showPartyFrame then
+			oUF:RegisterStyle("Party", CreatePartyStyle)
+			oUF:SetActiveStyle("Party")
+
+			local xOffset, yOffset = 5, 10
+			local moverWidth = horizon and (partyWidth*5+xOffset*4) or partyWidth
+			local moverHeight = horizon and partyHeight or (partyHeight*5+yOffset*4)
+			local groupingOrder = horizon and "TANK,HEALER,DAMAGER,NONE" or "NONE,DAMAGER,HEALER,TANK"
+
+			local party = oUF:SpawnHeader("oUF_Party", nil, "solo,party",
+			"showPlayer", true,
+			"showSolo", false,
+			"showParty", true,
+			"showRaid", false,
+			"xoffset", xOffset,
+			"yOffset", yOffset,
+			"groupFilter", "1",
+			"groupingOrder", groupingOrder,
+			"groupBy", "ASSIGNEDROLE",
+			"sortMethod", "NAME",
+			"point", horizon and "LEFT" or "BOTTOM",
+			"columnAnchorPoint", "LEFT",
+			"oUF-initialConfigFunction", ([[
+			self:SetWidth(%d)
+			self:SetHeight(%d)
+			]]):format(partyWidth, partyHeight))
+
+			local partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0}, moverWidth, moverHeight)
+			party:ClearAllPoints()
+			party:SetPoint("BOTTOMLEFT", partyMover)
+		end
+
 		oUF:RegisterStyle("Raid", CreateRaidStyle)
 		oUF:SetActiveStyle("Raid")
 
