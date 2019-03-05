@@ -480,9 +480,11 @@ function UF:CreatePlayerPlate()
 		self:Tag(power, "[pppower]")
 	end
 
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility, true)
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility, true)
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", PlateVisibility, true)
-	self:RegisterEvent("UNIT_ENTERED_VEHICLE", PlateVisibility)
-	self:RegisterEvent("UNIT_EXITED_VEHICLE", PlateVisibility)
+	if NDuiDB["Nameplate"]["PPHideOOC"] then
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility, true)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility, true)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", PlateVisibility, true)
+		self:RegisterEvent("UNIT_ENTERED_VEHICLE", PlateVisibility)
+		self:RegisterEvent("UNIT_EXITED_VEHICLE", PlateVisibility)
+	end
 end
