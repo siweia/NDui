@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
-local strmatch, tonumber = string.match, tonumber
+local strmatch, tonumber, pairs = string.match, tonumber, pairs
 
 -- Init
 function B.PlateInsideView()
@@ -170,7 +170,7 @@ local function UpdateQuestUnit(self, unit)
 	local name, instType, instID = GetInstanceInfo()
 	if name and (instType == "raid" or instID == 8) then self.questIcon:SetAlpha(0) return end
 
-	local isObjectiveQuest, isProgressQuest
+	local isMemberQuest, isObjectiveQuest, isProgressQuest
 	unitTip:SetOwner(WorldFrame, "ANCHOR_NONE")
 	unitTip:SetUnit(unit)
 
@@ -178,15 +178,19 @@ local function UpdateQuestUnit(self, unit)
 		local textLine = _G[unitTip:GetName().."TextLeft"..i]
 		local text = textLine:GetText()
 		if textLine and text then
-			local r, g, b = textLine:GetTextColor()
-			if r > .99 and g > .82 and b == 0 then
-				isProgressQuest = true
-			else
-				local unitName, progress = strmatch(text, "^ ([^ ]-) ?%-(.+)$")
-				if unitName and (unitName == "" or unitName == DB.MyName) and progress then
-					local current, goal = strmatch(progress, "(%d+)/(%d+)")
+			local unitName, progressText = strmatch(text, "^ ([^ ]-) ?%- (.+)$")
+			if unitName and progressText then
+				if unitName ~= "" and unitName ~= DB.MyName then
+					isMemberQuest = true
+				else
+					local current, goal = strmatch(progressText, "(%d+)/(%d+)")
 					if current and goal and current ~= goal then
 						isObjectiveQuest = true
+					else
+						local progress = tonumber(strmatch(progressText, "([%d%.]+)%%"))
+						if progress and progress < 100 then
+							isProgressQuest = true
+						end
 					end
 				end
 			end
@@ -194,9 +198,13 @@ local function UpdateQuestUnit(self, unit)
 	end
 
 	if isObjectiveQuest or isProgressQuest then
-		self.questIcon:SetAlpha(1)
+		self.questIcon:SetDesaturated(false)
+		self.questIcon:Show()
+	elseif isMemberQuest then
+		self.questIcon:SetDesaturated(true)
+		self.questIcon:Show()
 	else
-		self.questIcon:SetAlpha(0)
+		self.questIcon:Hide()
 	end
 end
 
@@ -418,7 +426,7 @@ function UF:CreatePlates(unit)
 			qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
 			qicon:SetSize(20, 20)
 			qicon:SetTexture(DB.questTex)
-			qicon:SetAlpha(0)
+			qicon:Hide()
 			self.questIcon = qicon
 		end
 
