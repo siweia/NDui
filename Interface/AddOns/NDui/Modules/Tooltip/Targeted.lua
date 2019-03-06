@@ -3,8 +3,6 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Tooltip")
 
 function module:TargetedInfo()
-	if not NDuiDB["Tooltip"]["TargetBy"] then return end
-
 	local targetTable = {}
 	local function ScanTargets(unit)
 		if not IsInGroup() then return end
@@ -25,6 +23,7 @@ function module:TargetedInfo()
 	end
 
 	GameTooltip:HookScript("OnTooltipSetUnit", function()
+		if not NDuiDB["Tooltip"]["TargetBy"] then return end
 		local _, unit = GameTooltip:GetUnit()
 		if UnitExists(unit) then ScanTargets(unit) end
 	end)
