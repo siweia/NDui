@@ -17,6 +17,10 @@ C.themes["Blizzard_ChallengesUI"] = function()
 
 				bu.styled = true
 			end
+			if i == 1 then
+				self.WeeklyInfo.Child.SeasonBest:ClearAllPoints()
+				self.WeeklyInfo.Child.SeasonBest:SetPoint("TOPLEFT", self.DungeonIcons[i], "TOPLEFT", 5, 20)
+			end
 		end
 
 		if IsAddOnLoaded("AngryKeystones") and not angryStyle then
