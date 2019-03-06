@@ -101,7 +101,6 @@ local function CreatePetStyle(self)
 	UF:CreateHealthBar(self)
 	UF:CreateHealthText(self)
 	UF:CreatePowerBar(self)
-	UF:CreateCastBar(self)
 	UF:CreateRaidMark(self)
 end
 
