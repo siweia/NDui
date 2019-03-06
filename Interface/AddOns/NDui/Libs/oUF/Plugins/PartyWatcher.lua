@@ -90,6 +90,7 @@ local function Enable(self)
 		element.index = 0
 		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", Update)
 		self:RegisterEvent("GROUP_ROSTER_UPDATE", ResetButtons, true)
+		self:RegisterEvent("GROUP_LEFT", ResetButtons, true)
 		self:RegisterEvent("CHALLENGE_MODE_START", ResetButtons, true)
 		return true
 	end
@@ -101,6 +102,7 @@ local function Disable(self)
 	if element then
 		self:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", Update)
 		self:UnregisterEvent("GROUP_ROSTER_UPDATE", ResetButtons)
+		self:UnregisterEvent("GROUP_LEFT", ResetButtons)
 		self:UnregisterEvent("CHALLENGE_MODE_START", ResetButtons)
 	end
 end
