@@ -3,8 +3,11 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Tooltip")
 
 function module:ExtraTipInfo()
-	local strmatch, strfind, format = string.match, string.find, string.format
-	local tonumber = tonumber
+	local strmatch, strfind, format, strsplit, tonumber = string.match, string.find, string.format, string.split, tonumber
+	local UnitAura, GetItemCount, GetItemInfo, GetUnitName, Ambiguate = UnitAura, GetItemCount, GetItemInfo, GetUnitName, Ambiguate
+	local GetCurrencyListLink, GetUnitName, GetContainerItemInfo = GetCurrencyListLink, GetUnitName, GetContainerItemInfo
+	local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+	local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
 
 	local types = {
 		spell = SPELLS.."ID:",
@@ -15,7 +18,7 @@ function module:ExtraTipInfo()
 		currency = CURRENCY.."ID:",
 	}
 
-	local function addLine(self, id, type, noadd)
+	local function addLine(self, id, type, noadd, isKeystone)
 		for i = 1, self:NumLines() do
 			local line = _G[self:GetName().."TextLeft"..i]
 			if not line then break end
@@ -24,7 +27,17 @@ function module:ExtraTipInfo()
 		end
 		if not noadd then self:AddLine(" ") end
 
-		if type == types.item then
+		if isKeystone and NDuiADB["ShowKeystoneInfo"] then
+			for name, info in pairs(NDuiADB["KeystoneInfo"]) do
+				local name = Ambiguate(name, "none")
+				if name ~= DB.MyName then
+					local mapID, level, class = strsplit(":", info)
+					local color = B.HexRGB(B.ClassColor(class))
+					local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
+					self:AddDoubleLine(format(color.."%s:|r", name), format(DB.InfoColor.."%s(%s)|r", dungeon, level))
+				end
+			end
+		elseif type == types.item then
 			local bagCount = GetItemCount(id)
 			local bankCount = GetItemCount(id, true) - GetItemCount(id)
 			local itemStackCount = select(8, GetItemInfo(id))
@@ -37,6 +50,7 @@ function module:ExtraTipInfo()
 				self:AddDoubleLine(L["Stack Cap"]..":", DB.InfoColor..itemStackCount)
 			end
 		end
+
 		self:AddDoubleLine(type, format(DB.InfoColor.."%s|r", id))
 		self:Show()
 	end
@@ -81,8 +95,9 @@ function module:ExtraTipInfo()
 		local link = select(2, self:GetItem())
 		if link then
 			local id = strmatch(link, "item:(%d+):")
-			if strfind(link, "keystone") then id = 138019 end
-			if id then addLine(self, id, types.item) end
+			local keystone = strmatch(link, "|Hkeystone:([0-9]+):")
+			if keystone then id = tonumber(keystone) end
+			if id then addLine(self, id, types.item, nil, keystone) end
 		end
 	end
 	GameTooltip:HookScript("OnTooltipSetItem", attachItemTooltip)
@@ -95,7 +110,7 @@ function module:ExtraTipInfo()
 		if id then addLine(self, id, types.item) end
 	end)
 	hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, recipeID, reagentIndex)
-		local link = C_TradeSkillUI.GetRecipeReagentItemLink(recipeID, reagentIndex)
+		local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
 		if link then
 			local id = strmatch(link, "item:(%d+):")
 			if id then addLine(self, id, types.item) end
@@ -125,4 +140,31 @@ function module:ExtraTipInfo()
 		end
 	end
 	hooksecurefunc(GameTooltip, "SetUnitAura", SetCaster)
+
+	-- Keystone Info
+	local myFullName = DB.MyName.."-"..DB.MyRealm
+	local function GetKeyInfo()
+		for bag = 0, 4 do
+			local numSlots = GetContainerNumSlots(bag)
+			for slot = 1, numSlots do
+				local slotLink = select(7, GetContainerItemInfo(bag, slot))
+				local itemString = slotLink and strmatch(slotLink, "|Hkeystone:([0-9:]+)|h(%b[])|h")
+				if itemString then
+					return slotLink, itemString
+				end
+			end
+		end
+	end
+
+	local function UpdateBagInfo()
+		local link, itemString = GetKeyInfo()
+		if link then
+			local _, mapID, level = strsplit(":", itemString)
+			NDuiADB["KeystoneInfo"][myFullName] = mapID..":"..level..":"..DB.MyClass
+		else
+			NDuiADB["KeystoneInfo"][myFullName] = nil
+		end
+	end
+	UpdateBagInfo()
+	B:RegisterEvent("BAG_UPDATE", UpdateBagInfo)
 end
