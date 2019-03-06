@@ -9,6 +9,7 @@ DB.isNewPatch = GetBuildInfo() == "8.1.5"
 
 -- Colors
 DB.MyName = UnitName("player")
+DB.MyRealm = GetRealmName()
 DB.MyClass = select(2, UnitClass("player"))
 DB.ClassList = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do

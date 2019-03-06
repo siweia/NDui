@@ -150,7 +150,7 @@ info.onEnter = function(self)
 							name = B.HexRGB(color).." "..charName
 						end
 						zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
-						realmColor = GetRealmName() == realmName and activeZone or inactiveZone
+						realmColor = DB.MyRealm == realmName and activeZone or inactiveZone
 					end
 
 					local cicon = BNet_GetClientEmbeddedTexture(client, 14, 14, 0, -1)
