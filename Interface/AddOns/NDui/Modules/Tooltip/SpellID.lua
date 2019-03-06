@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Tooltip")
 
 function module:ExtraTipInfo()
-	local strmatch, strfind, format, strsplit, tonumber = string.match, string.find, string.format, string.split, tonumber
+	local strmatch, format, tonumber = string.match, string.format, tonumber
 	local UnitAura, GetItemCount, GetItemInfo, GetUnitName, GetCurrencyListLink = UnitAura, GetItemCount, GetItemInfo, GetUnitName, GetCurrencyListLink
 	local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
 
