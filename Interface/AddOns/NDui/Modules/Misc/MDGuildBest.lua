@@ -6,7 +6,9 @@ function module:GuildBest()
 	local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
 	local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 	local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
-	local format = string.format
+	local Ambiguate, GetContainerNumSlots, GetContainerItemInfo = Ambiguate, GetContainerNumSlots, GetContainerItemInfo
+	local C_ChallengeMode_GetMapUIInfo, C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetMapUIInfo, C_ChallengeMode.GetGuildLeaders
+	local format, strsplit, strmatch, tonumber, pairs = string.format, string.split, string.match, tonumber, pairs
 	local frame
 
 	local function UpdateTooltip(self)
@@ -14,7 +16,7 @@ function module:GuildBest()
 		if not leaderInfo then return end
 
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		local name = C_ChallengeMode.GetMapUIInfo(leaderInfo.mapChallengeModeID)
+		local name = C_ChallengeMode_GetMapUIInfo(leaderInfo.mapChallengeModeID)
 		GameTooltip:SetText(name, 1, 1, 1)
 		GameTooltip:AddLine(format(CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
 		for i = 1, #leaderInfo.members do
@@ -46,7 +48,6 @@ function module:GuildBest()
 			entry.Level:SetPoint("LEFT", entry, "RIGHT", -22, 0)
 			entry:SetScript("OnEnter", UpdateTooltip)
 			entry:SetScript("OnLeave", B.HideTooltip)
-
 			if i == 1 then
 				entry:SetPoint("TOP", frame, 0, -26)
 			else
@@ -73,7 +74,7 @@ function module:GuildBest()
 	local function UpdateGuildBest(self)
 		if not frame then CreateBoard() end
 		if self.leadersAvailable then
-			local leaders = C_ChallengeMode.GetGuildLeaders()
+			local leaders = C_ChallengeMode_GetGuildLeaders()
 			if leaders and #leaders > 0 then
 				for i = 1, #leaders do
 					SetUpRecord(frame.entries[i], leaders[i])
@@ -101,12 +102,62 @@ function module:GuildBest()
 		end
 	end
 
+	local function AddKeystoneIcon()
+		local texture = select(10, GetItemInfo(158923))
+		local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo)
+		button:SetPoint("LEFT", 10, -20)
+		button:SetSize(35, 35)
+		B.PixelIcon(button, texture, true)
+		button:SetScript("OnEnter", function(self)
+			GameTooltip:ClearLines()
+			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+			GameTooltip:AddLine(L["Account Keystones"])
+			for name, info in pairs(NDuiADB["KeystoneInfo"]) do
+				local name = Ambiguate(name, "none")
+				local mapID, level, class = strsplit(":", info)
+				local color = B.HexRGB(B.ClassColor(class))
+				local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
+				GameTooltip:AddDoubleLine(format(color.."%s:|r", name), format(DB.InfoColor.."%s(%s)|r", dungeon, level))
+			end
+			GameTooltip:Show()
+		end)
+		button:SetScript("OnLeave", B.HideTooltip)
+	end
+
 	local function ChallengesOnLoad(event, addon)
 		if addon == "Blizzard_ChallengesUI" then
 			hooksecurefunc("ChallengesFrame_Update", UpdateGuildBest)
+			AddKeystoneIcon()
 
 			B:UnregisterEvent(event)
 		end
 	end
 	B:RegisterEvent("ADDON_LOADED", ChallengesOnLoad)
+
+	-- Keystone Info
+	local myFullName = DB.MyName.."-"..DB.MyRealm
+	local function GetKeyInfo()
+		for bag = 0, 4 do
+			local numSlots = GetContainerNumSlots(bag)
+			for slot = 1, numSlots do
+				local slotLink = select(7, GetContainerItemInfo(bag, slot))
+				local itemString = slotLink and strmatch(slotLink, "|Hkeystone:([0-9:]+)|h(%b[])|h")
+				if itemString then
+					return slotLink, itemString
+				end
+			end
+		end
+	end
+
+	local function UpdateBagInfo()
+		local link, itemString = GetKeyInfo()
+		if link then
+			local _, mapID, level = strsplit(":", itemString)
+			NDuiADB["KeystoneInfo"][myFullName] = mapID..":"..level..":"..DB.MyClass
+		else
+			NDuiADB["KeystoneInfo"][myFullName] = nil
+		end
+	end
+	UpdateBagInfo()
+	B:RegisterEvent("BAG_UPDATE", UpdateBagInfo)
 end
