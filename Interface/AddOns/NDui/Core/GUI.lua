@@ -209,7 +209,6 @@ local defaultSettings = {
 		LFDRole = false,
 		TargetBy = true,
 		Scale = 1,
-		AzeriteArmor = true,
 		SpecLevelByShift = false,
 		HideRealm = false,
 		HideTitle = false,
@@ -276,6 +275,9 @@ local accountSettings = {
 	RaidAuraWatch = {},
 	CornerBuffs = {},
 	TexStyle = 2,
+	KeystoneInfo = {},
+	ShowKeystoneInfo = true,
+	AzeriteArmor = true,
 }
 
 local function InitialSettings(source, target)
@@ -547,8 +549,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "HideRealm", L["Hide Realm"].."*"},
 		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},
 		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
-		{1, "Tooltip", "TargetBy", L["Show TargetedBy"], true},
-		{1, "Tooltip", "AzeriteArmor", L["Show AzeriteArmor"]},
+		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
+		{1, "ACCOUNT", "ShowKeystoneInfo", L["Show Account Keystone"].."*"},
+		{1, "ACCOUNT", "AzeriteArmor", L["Show AzeriteArmor"], true},
 	},
 	[12] = {
 		{1, "Misc", "Mail", L["Mail Tool"]},
