@@ -184,7 +184,7 @@ local function UpdateQuestUnit(self, unit)
 					isMemberQuest = true
 				else
 					local current, goal = strmatch(progressText, "(%d+)/(%d+)")
-					if current and goal and current ~= goal then
+					if current and goal and tonumber(current) < tonumber(goal) then
 						isObjectiveQuest = true
 					else
 						local progress = tonumber(strmatch(progressText, "([%d%.]+)%%"))
