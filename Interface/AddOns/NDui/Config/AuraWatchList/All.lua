@@ -131,7 +131,6 @@ local list = {
 		{AuraID = 268956, UnitID = "player", Text = L["Versa"]},	-- 全能
 		{AuraID = 280780, UnitID = "player"},	-- 战斗荣耀
 		{AuraID = 280787, UnitID = "player"},	-- 反击之怒
-		--{AuraID = 279928, UnitID = "player", Combat = true},	-- 大地链接
 		{AuraID = 280385, UnitID = "player"},	-- 压力渐增
 		{AuraID = 273842, UnitID = "player"},	-- 深渊秘密
 		{AuraID = 273843, UnitID = "player"},	-- 深渊秘密
@@ -261,6 +260,8 @@ local list = {
 		{AuraID = 285014, UnitID = "player", Flash = true},	-- 金币雨
 		{AuraID = 285479, UnitID = "player", Flash = true},	-- 烈焰喷射
 		{AuraID = 283947, UnitID = "player", Flash = true},	-- 烈焰喷射
+		{AuraID = 289383, UnitID = "player", Flash = true},	-- 混沌位移
+		{AuraID = 291146, UnitID = "player", Flash = true},	-- 混沌位移
 		{AuraID = 284470, UnitID = "player", Text = L["No move"], Flash = true},	-- 昏睡妖术
 		{AuraID = 282444, UnitID = "player"},	-- 裂爪猛击，神选者教团
 		{AuraID = 286838, UnitID = "player"},	-- 静电之球

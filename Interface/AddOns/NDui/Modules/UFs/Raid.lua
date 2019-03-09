@@ -378,11 +378,8 @@ function UF:CreateBuffIndicator(self)
 			icon.timer = B.CreateFS(icon, 12, "", false, "CENTER", -x, 0)
 			icon.count:SetPoint(point, icon.timer, anchorPoint, x, y)
 		else
-			icon.bg = icon:CreateTexture(nil, "BACKGROUND")
-			icon.bg:SetPoint("TOPLEFT", -C.mult, C.mult)
-			icon.bg:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-			icon.bg:SetTexture(DB.bdTex)
-			icon.bg:SetVertexColor(0, 0, 0)
+			icon.bg = B.CreateBG(icon)
+			B.CreateBD(icon.bg)
 
 			icon.icon = icon:CreateTexture(nil, "BORDER")
 			icon.icon:SetAllPoints()
