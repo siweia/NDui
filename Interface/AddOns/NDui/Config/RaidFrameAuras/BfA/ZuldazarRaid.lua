@@ -36,13 +36,14 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 287747) -- 超力之球
 
 BOSS = 2342 -- 丰灵
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287424) -- 窃贼的报应
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284527) -- 坚毅守护者的钻石
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284527, 1) -- 坚毅守护者的钻石
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284546) -- 枯竭的钻石
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284567) -- 顺风蓝宝石
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284558) -- 暗影之王紫水晶
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284567, 1) -- 顺风蓝宝石
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284558, 1) -- 暗影之王紫水晶
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284556) -- 暗影触痕
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284611) -- 聚焦敌意红宝石
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 284645) -- 璀璨日光黄晶
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284611, 1) -- 聚焦敌意红宝石
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284645, 1) -- 璀璨日光黄晶
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 284664) -- 炽热
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284798, 6) -- 极度炽热
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284814) -- 地之根系绿宝石
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284881) -- 怒意释放猫眼石
@@ -57,6 +58,8 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 283947) -- 烈焰喷射
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 285014, 6) -- 金币雨
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 284470, 6) -- 昏睡妖术
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 287072) -- 液态黄金
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 289383) -- 混沌位移
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 291146, 6) -- 混沌位移
 
 BOSS = 2330 -- 神选者教团
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 282135, 6) -- 恶意妖术

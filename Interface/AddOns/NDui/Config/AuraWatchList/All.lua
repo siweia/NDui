@@ -261,7 +261,7 @@ local list = {
 		{AuraID = 285479, UnitID = "player", Flash = true},	-- 烈焰喷射
 		{AuraID = 283947, UnitID = "player", Flash = true},	-- 烈焰喷射
 		{AuraID = 289383, UnitID = "player", Flash = true},	-- 混沌位移
-		{AuraID = 291146, UnitID = "player", Flash = true},	-- 混沌位移
+		{AuraID = 291146, UnitID = "player", Text = L["No move"], Flash = true},	-- 混沌位移
 		{AuraID = 284470, UnitID = "player", Text = L["No move"], Flash = true},	-- 昏睡妖术
 		{AuraID = 282444, UnitID = "player"},	-- 裂爪猛击，神选者教团
 		{AuraID = 286838, UnitID = "player"},	-- 静电之球
