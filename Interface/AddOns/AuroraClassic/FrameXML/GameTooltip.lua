@@ -56,11 +56,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		FloatingPetBattleAbilityTooltip,
 		IMECandidatesFrame,
 	}
-	if not C.isNewPatch then
-		tinsert(tooltips, WorldMapTooltip)
-		tinsert(tooltips, WorldMapCompareTooltip1)
-		tinsert(tooltips, WorldMapCompareTooltip2)
-	end
 	for _, tooltip in pairs(tooltips) do
 		F.ReskinTooltip(tooltip)
 	end

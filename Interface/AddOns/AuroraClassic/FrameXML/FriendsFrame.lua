@@ -13,21 +13,27 @@ tinsert(C.themes["AuroraClassic"], function()
 		local ic = bu.gameIcon
 
 		bu.background:Hide()
-		bu.travelPassButton:SetAlpha(0)
-		bu.travelPassButton:EnableMouse(false)
-
 		bu:SetHighlightTexture(C.media.backdrop)
 		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
-
 		ic:SetSize(22, 22)
-		ic:SetTexCoord(.15, .85, .15, .85)
+		ic:SetTexCoord(.17, .83, .17, .83)
 
 		bu.bg = CreateFrame("Frame", nil, bu)
 		bu.bg:SetAllPoints(ic)
-		F.CreateBD(bu.bg, 0)
-		if i == 1 then
-			bu.bg:SetPoint("BOTTOMRIGHT", ic, 0, -1)
-		end
+		F.CreateBDFrame(bu.bg, 0)
+
+		local travelPass = bu.travelPassButton
+		travelPass:SetSize(22, 22)
+		travelPass:SetPushedTexture(nil)
+		travelPass:SetDisabledTexture(nil)
+		travelPass:SetPoint("TOPRIGHT", -3, -6)
+		F.CreateBDFrame(travelPass, 1)
+		local nt = travelPass:GetNormalTexture()
+		nt:SetTexture("Interface\\FriendsFrame\\UI-Toast-FriendRequestIcon")
+		nt:SetTexCoord(.15, .85, .15, .85)
+		local hl = travelPass:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetAllPoints()
 	end
 
 	local function UpdateScroll()
@@ -36,13 +42,12 @@ tinsert(C.themes["AuroraClassic"], function()
 
 			if bu.gameIcon:IsShown() then
 				bu.bg:Show()
-				bu.gameIcon:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
+				bu.gameIcon:SetPoint("TOPRIGHT", bu.travelPassButton, "TOPLEFT", -4, 0)
 			else
 				bu.bg:Hide()
 			end
 		end
 	end
-
 	hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
 	hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
 
@@ -65,12 +70,18 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end
 
+	hooksecurefunc(FriendsFrameFriendsScrollFrame.invitePool, "Acquire", reskinInvites)
 	hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
 		if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
 			reskinInvites(FriendsFrameFriendsScrollFrame.invitePool)
+		elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+			if FriendsFrame_GetInviteRestriction(button.id) == 6 then
+				button.travelPassButton:GetNormalTexture():SetVertexColor(1, 1, 1)
+			else
+				button.travelPassButton:GetNormalTexture():SetVertexColor(.3, .3, .3)
+			end
 		end
 	end)
-	hooksecurefunc(FriendsFrameFriendsScrollFrame.invitePool, "Acquire", reskinInvites)
 
 	FriendsFrameStatusDropDown:ClearAllPoints()
 	FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)

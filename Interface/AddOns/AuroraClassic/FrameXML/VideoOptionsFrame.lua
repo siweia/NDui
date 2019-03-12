@@ -75,7 +75,6 @@ tinsert(C.themes["AuroraClassic"], function()
 			"RaidGraphics_LightingQualityDropDown",
 			"RaidGraphics_OutlineModeDropDown",
 			"Advanced_BufferingDropDown",
-			"Advanced_LagDropDown",
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",
