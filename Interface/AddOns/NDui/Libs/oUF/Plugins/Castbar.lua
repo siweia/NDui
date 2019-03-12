@@ -14,21 +14,18 @@ local function GetSpellName(spellID)
 end
 
 local channelingTicks = {
-	-- warlock
-	[GetSpellName(755)] = 3,		-- health funnel
-	[GetSpellName(198590)] = 5,		-- drain soul
-	[GetSpellName(234153)] = 5,		-- drain life
-	-- druid
-	[GetSpellName(740)] = 4,		-- Tranquility
-	-- priest
-	[GetSpellName(15407)] = 4,		-- mind flay
-	[GetSpellName(47540)] = 3,		-- penance
-	[GetSpellName(64843)] = 4,		-- divine hymn
-	[GetSpellName(205065)] = 6,
-	-- mage
-	[GetSpellName(5143)] = 5, 		-- arcane missiles
-	[GetSpellName(12051)] = 3, 		-- evocation
-	[GetSpellName(205021)] = 5,
+	[GetSpellName(740)] = 4,		-- 宁静
+	[GetSpellName(755)] = 3,		-- 生命通道
+	[GetSpellName(5143)] = 5, 		-- 奥术飞弹
+	[GetSpellName(12051)] = 3, 		-- 唤醒
+	[GetSpellName(15407)] = 4,		-- 精神鞭笞
+	[GetSpellName(47540)] = 3,		-- 苦修
+	[GetSpellName(64843)] = 4,		-- 神圣赞美诗
+	[GetSpellName(198590)] = 5,		-- 吸取灵魂
+	[GetSpellName(205021)] = 5,		-- 冰霜射线
+	[GetSpellName(205065)] = 6,		-- 虚空洪流
+	[GetSpellName(234153)] = 5,		-- 吸取生命
+	[GetSpellName(291944)] = 6,		-- 再生
 }
 
 if DB.MyClass == "PRIEST" then
