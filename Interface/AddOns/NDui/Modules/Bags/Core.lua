@@ -107,7 +107,8 @@ function module:CreateRestoreButton(f)
 end
 
 function module:CreateReagentButton(f)
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS")
+	local bu = B.CreateButton(self, 24, 24, true, "Atlas:Reagents")
+	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -C.mult)
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
 		if not IsReagentBankUnlocked() then
@@ -127,7 +128,7 @@ function module:CreateReagentButton(f)
 end
 
 function module:CreateBankButton(f)
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Misc_EngGizmos_17")
+	local bu = B.CreateButton(self, 24, 24, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 		ReagentBankFrame:Hide()
@@ -141,7 +142,9 @@ function module:CreateBankButton(f)
 end
 
 function module:CreateDepositButton()
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\Spell_ChargePositive")
+	local bu = B.CreateButton(self, 24, 24, true, "Atlas:GreenCross")
+	bu.Icon:SetPoint("TOPLEFT", -C.mult, C.mult)
+	bu.Icon:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 	bu:SetScript("OnClick", DepositReagentBank)
 	B.AddTooltip(bu, "ANCHOR_TOP", REAGENTBANK_DEPOSIT)
 
