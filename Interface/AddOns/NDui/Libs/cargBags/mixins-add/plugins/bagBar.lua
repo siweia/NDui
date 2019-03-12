@@ -40,37 +40,38 @@ function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
 end
 
-local BagButton = cargBags:NewClass("BagButton", nil, "CheckButton")
+local BagButton = cargBags:NewClass("BagButton", nil, "Button")
 
 -- Default attributes
-BagButton.checkedTex = [[Interface\Buttons\CheckButtonHilight]]
 BagButton.bgTex = [[Interface\Paperdoll\UI-PaperDoll-Slot-Bag]]
 BagButton.itemFadeAlpha = 0.1
+
+local function hackBagID(button)
+	return button.bagID
+end
 
 local buttonNum = 0
 function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
 	local isBankBag = (bagID>=5 and bagID<=11)
-	local button = setmetatable(CreateFrame("CheckButton", name, nil, (isBankBag and "BankItemButtonBagTemplate") or "ItemButtonTemplate"), self.__index)
+	local button = setmetatable(CreateFrame("ItemButton", name), self.__index)
 
-	local invID = (isBankBag and (bagID-4)) or ContainerIDToInventoryID(bagID)
+	local invID = (isBankBag and bagID-4) or ContainerIDToInventoryID(bagID)
 	button.invID = invID
 	button:SetID(invID)
 	button.bagID = bagID
+	button.GetBagID = hackBagID
 	button.isBankBag = isBankBag
+	if isBankBag then
+		button.isBag = 1
+		button.GetInventorySlot = ButtonInventorySlot
+	end
 
 	button:RegisterForDrag("LeftButton", "RightButton")
 	button:RegisterForClicks("anyUp")
-	button:SetCheckedTexture(self.checkedTex, "ADD")
-
 	button:SetSize(37, 37)
-
-	button.Icon = 		_G[name.."IconTexture"]
-	button.Count = 		_G[name.."Count"]
-	button.Cooldown = 	_G[name.."Cooldown"]
-	button.Quest = 		_G[name.."IconQuestTexture"]
-	button.Border =		_G[name.."NormalTexture"]
+	button.Icon = _G[name.."IconTexture"]
 
 	cargBags.SetScriptHandlers(button, "OnClick", "OnReceiveDrag", "OnEnter", "OnLeave", "OnDragStart")
 
@@ -80,7 +81,7 @@ function BagButton:Create(bagID)
 end
 
 function BagButton:Update()
-	local icon = GetInventoryItemTexture("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
+	local icon = GetInventoryItemTexture("player", self.GetInventorySlot and self:GetInventorySlot() or self.invID)
 	self.Icon:SetTexture(icon or self.bgTex)
 	self.Icon:SetDesaturated(IsInventoryItemLocked(self.invID))
 
@@ -93,8 +94,6 @@ function BagButton:Update()
 			self.Icon:SetVertexColor(1, 0, 0)
 		end
 	end
-
-	self:SetChecked(not self.hidden and not self.notBought)
 
 	if(self.OnUpdate) then self:OnUpdate() end
 end
@@ -143,7 +142,6 @@ end
 
 function BagButton:OnClick()
 	if(self.notBought) then
-		self:SetChecked(nil)
 		BankFrame.nextSlotCost = GetBankSlotCost(GetNumBankSlots())
 		return StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
 	end

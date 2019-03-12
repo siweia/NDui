@@ -267,7 +267,8 @@ function module:OnLogin()
 	function MyButton:OnCreate()
 		self:SetNormalTexture(nil)
 		self:SetPushedTexture(nil)
-		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		self:SetHighlightTexture(DB.bdTex)
+		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		self:SetSize(iconSize, iconSize)
 
 		self.Icon:SetAllPoints()
@@ -437,9 +438,9 @@ function module:OnLogin()
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
 	function BagButton:OnCreate()
 		self:SetNormalTexture(nil)
-		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		self:SetPushedTexture(nil)
-		self:SetCheckedTexture(nil)
+		self:SetHighlightTexture(DB.bdTex)
+		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 
 		self:SetSize(iconSize, iconSize)
 		self.BG = B.CreateBG(self)
@@ -453,7 +454,7 @@ function module:OnLogin()
 		local quality = id and select(3, GetItemInfo(id)) or 0
 		if quality == 1 then quality = 0 end
 		local color = BAG_ITEM_QUALITY_COLORS[quality]
-		if self:GetChecked() then
+		if not self.hidden and not self.notBought then
 			self.BG:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
 			self.BG:SetBackdropBorderColor(0, 0, 0)

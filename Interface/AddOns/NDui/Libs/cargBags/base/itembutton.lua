@@ -35,8 +35,8 @@ local ItemButton = cargBags:NewClass("ItemButton", nil, "Button")
 ]]
 function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagID
-	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "ItemButtonTemplate",
-      (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or "ItemButtonTemplate";
+	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "",
+      (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or "";
 end
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
@@ -73,7 +73,7 @@ function ItemButton:Create(tpl, parent)
 	impl.numSlots = (impl.numSlots or 0) + 1
 	local name = ("%sSlot%d"):format(impl.name, impl.numSlots)
 
-	local button = setmetatable(CreateFrame("Button", name, parent, tpl), self.__index)
+	local button = setmetatable(CreateFrame("ItemButton", name, parent, tpl), self.__index)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
 	if(button.OnCreate) then button:OnCreate(tpl) end
