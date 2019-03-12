@@ -351,11 +351,11 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 	},
 	[2] = {
 		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
+		{1, "Bags", "ItemFilter", L["Bags ItemFilter"]},
+		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
 		{},--blank
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
 		{1, "Bags", "Artifact", L["Bags Artifact"], true},
-		{1, "Bags", "ItemFilter", L["Bags ItemFilter"]},
-		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
 		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", false, nil, function() SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"]) end},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
