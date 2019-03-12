@@ -1,7 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
-local strmatch, tonumber, pairs = string.match, tonumber, pairs
+
+local strmatch, tonumber, pairs, type, unpack, next = string.match, tonumber, pairs, type, unpack, next
+local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
+local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
+local GetInstanceInfo, UnitClassification, UnitGUID, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitGUID, UnitExists, InCombatLockdown
+local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_NamePlate_GetNamePlates, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_NamePlate.GetNamePlates, C_MythicPlus.GetCurrentAffixes
+local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
 
 -- Init
 function B.PlateInsideView()
@@ -165,13 +171,17 @@ end
 
 local unitTip = CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
 
-local function UpdateQuestUnit(self, unit)
-	if not NDuiDB["Nameplate"]["QuestIcon"] or unit == "player" then return end
-	local name, instType, instID = GetInstanceInfo()
-	if name and (instType == "raid" or instID == 8) then self.questIcon:SetAlpha(0) return end
+local function UpdateQuestUnit(self, _, unit)
+	if not NDuiDB["Nameplate"]["QuestIcon"] then return end
+	if IsInInstance() then
+		self.questIcon:Hide()
+		self.questCount:SetText("")
+		return
+	end
+	unit = unit or self.unit
 
-	local isMemberQuest, isObjectiveQuest, isProgressQuest
-	unitTip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	local isLootQuest, questProgress
+	unitTip:SetOwner(UIParent, "ANCHOR_NONE")
 	unitTip:SetUnit(unit)
 
 	for i = 2, unitTip:NumLines() do
@@ -179,32 +189,40 @@ local function UpdateQuestUnit(self, unit)
 		local text = textLine:GetText()
 		if textLine and text then
 			local unitName, progressText = strmatch(text, "^ ([^ ]-) ?%- (.+)$")
-			if unitName and progressText then
-				if unitName ~= "" and unitName ~= DB.MyName then
-					isMemberQuest = true
-				else
-					local current, goal = strmatch(progressText, "(%d+)/(%d+)")
-					if current and goal and tonumber(current) < tonumber(goal) then
-						isObjectiveQuest = true
-					else
-						local progress = tonumber(strmatch(progressText, "([%d%.]+)%%"))
-						if progress and progress < 100 then
-							isProgressQuest = true
-						end
+			if unitName and progressText and (unitName == "" or unitName == DB.MyName) then
+				local current, goal = strmatch(progressText, "(%d+)/(%d+)")
+				local progress = strmatch(progressText, "([%d%.]+)%%")
+				if current and goal then
+					if tonumber(current) < tonumber(goal) then
+						questProgress = goal - current
+						break
 					end
+				elseif progress then
+					progress = tonumber(progress)
+					if progress and progress < 100 then
+						questProgress = progress.."%"
+						break
+					end
+				else
+					isLootQuest = true
+					break
 				end
 			end
 		end
 	end
 
-	if isObjectiveQuest or isProgressQuest then
-		self.questIcon:SetDesaturated(false)
-		self.questIcon:Show()
-	elseif isMemberQuest then
-		self.questIcon:SetDesaturated(true)
+	if questProgress then
+		self.questCount:SetText(questProgress)
+		self.questIcon:SetAtlas(DB.objectTex)
 		self.questIcon:Show()
 	else
-		self.questIcon:Hide()
+		self.questCount:SetText("")
+		if isLootQuest then
+			self.questIcon:SetAtlas(DB.questTex)
+			self.questIcon:Show()
+		else
+			self.questIcon:Hide()
+		end
 	end
 end
 
@@ -214,12 +232,12 @@ local function UpdateDungeonProgress(self, unit)
 	if not self.progressText or not AngryKeystones_Data then return end
 	self.progressText:SetText("")
 
-	local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario.GetInfo()
+	local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario_GetInfo()
 	if scenarioType == LE_SCENARIO_TYPE_CHALLENGE_MODE then
 		local npcID = B.GetNPCID(UnitGUID(unit))
 		local info = AngryKeystones_Data.progress[npcID]
 		if info then
-			local numCriteria = select(3, C_Scenario.GetStepInfo())
+			local numCriteria = select(3, C_Scenario_GetStepInfo())
 			local total = cache[name]
 			if not total then
 				for criteriaIndex = 1, numCriteria do
@@ -270,7 +288,7 @@ end
 local explosiveCount, hasExplosives = 0
 local id = 120651
 local function scalePlates()
-	for _, nameplate in next, C_NamePlate.GetNamePlates() do
+	for _, nameplate in next, C_NamePlate_GetNamePlates() do
 		local unitFrame = nameplate.unitFrame
 		local npcID = B.GetNPCID(UnitGUID(unitFrame.unit))
 		if explosiveCount > 0 and npcID == id or explosiveCount == 0 then
@@ -307,7 +325,7 @@ function UF:CheckExplosives()
 	if not NDuiDB["Nameplate"]["ExplosivesScale"] then return end
 
 	local function checkAffixes(event)
-		local affixes = C_MythicPlus.GetCurrentAffixes()
+		local affixes = C_MythicPlus_GetCurrentAffixes()
 		if not affixes then return end
 		if affixes[3] and affixes[3].id == 13 then
 			checkInstance()
@@ -425,9 +443,14 @@ function UF:CreatePlates(unit)
 			local qicon = self:CreateTexture(nil, "OVERLAY")
 			qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
 			qicon:SetSize(20, 20)
-			qicon:SetTexture(DB.questTex)
+			qicon:SetAtlas(DB.questTex)
 			qicon:Hide()
+			local count = B.CreateFS(self, 12, "", "system", "LEFT", 0, 0)
+			count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
+
 			self.questIcon = qicon
+			self.questCount = count
+			self:RegisterEvent("QUEST_LOG_UPDATE", UpdateQuestUnit, true)
 		end
 
 		if NDuiDB["Nameplate"]["AKSProgress"] then
@@ -446,7 +469,7 @@ end
 function UF:PostUpdatePlates(event, unit)
 	if not self then return end
 	UpdateTargetMark(self)
-	UpdateQuestUnit(self, unit)
+	UpdateQuestUnit(self, event, unit)
 	UpdateUnitClassify(self, unit)
 	UpdateExplosives(self, event, unit)
 	UpdateDungeonProgress(self, unit)
