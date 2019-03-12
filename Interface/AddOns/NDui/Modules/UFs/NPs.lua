@@ -407,6 +407,7 @@ function UF:CreatePlates(unit)
 		UF:CreateRaidMark(self)
 		UF:CreatePrediction(self)
 		UF:CreateAuras(self)
+		UF:CreatePVPClassify(self)
 
 		self.powerText = B.CreateFS(self, 15, "", false, "LEFT", 0, 0)
 		self.powerText:SetPoint("LEFT", self, "RIGHT", 2, 0)

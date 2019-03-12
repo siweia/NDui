@@ -1006,28 +1006,12 @@ function UF:CreateFCT(self)
 	B.HideOption(InterfaceOptionsCombatPanelEnableFloatingCombatText)
 end
 
-local function postUpdateFaction(self)
-	local _, instanceType = IsInInstance()
-	local faction = UnitFactionGroup(self.unit)
-	if faction and faction ~= "Neutral" and instanceType ~= "arena" then
-		self.factionIndicator.Icon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..faction)
-		self.factionIndicator:Show()
-	else
-		self.factionIndicator:Hide()
-	end
-end
-
-function UF:CreateFactionIcon(self)
-	local bu = CreateFrame("Frame", nil, self)
-	bu:SetSize(30, 30)
+function UF:CreatePVPClassify(self)
+    local bu = self:CreateTexture(nil, "ARTWORK")
+    bu:SetSize(30, 30)
 	bu:SetPoint("LEFT", self, "RIGHT", 5, -2)
-	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
-	bu.Icon:SetAllPoints()
 
-	self.factionIndicator = bu
-	self:RegisterEvent("UNIT_AURA", postUpdateFaction)	-- need reviewed
-	self:RegisterEvent("ARENA_OPPONENT_UPDATE", postUpdateFaction, true)
-	self:RegisterEvent("UNIT_NAME_UPDATE", postUpdateFaction)
+	self.PvPClassificationIndicator = bu
 end
 
 function UF:InterruptIndicator(self)
