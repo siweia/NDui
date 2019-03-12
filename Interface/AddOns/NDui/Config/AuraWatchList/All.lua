@@ -49,6 +49,7 @@ local list = {
 		{AuraID = 26297, UnitID = "player"},	-- 狂暴 巨魔
 		{AuraID = 20572, UnitID = "player"},	-- 血性狂怒 兽人
 		{AuraID = 33697, UnitID = "player"},	-- 血性狂怒 兽人
+		{AuraID = 292463, UnitID = "player"},	-- 帕库之拥 赞达拉
 		-- 饰品附魔
 		{AuraID = 229206, UnitID = "player"},	-- 延时之力
 		{AuraID = 251231, UnitID = "player"},	-- 钢肤药水
