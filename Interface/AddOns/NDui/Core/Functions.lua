@@ -223,7 +223,8 @@ function B:PixelIcon(texture, highlight)
 		self:EnableMouse(true)
 		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 		self.HL:SetColorTexture(1, 1, 1, .25)
-		self.HL:SetAllPoints(self.Icon)
+		self.HL:SetPoint("TOPLEFT", C.mult, -C.mult)
+		self.HL:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 	end
 end
 
