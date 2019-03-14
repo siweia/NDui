@@ -234,7 +234,7 @@ local function onMouseWheelCast(self)
 	end
 
 	if found then
-		self:SetAttribute("_onenter", [[
+		self:SetAttribute("clickcast_onenter", [[
 			self:ClearBindings()
 			self:SetBindingClick(1, "MOUSEWHEELUP", self, "Button6")
 			self:SetBindingClick(1, "ALT-MOUSEWHEELUP", self, "Button7")
@@ -245,7 +245,7 @@ local function onMouseWheelCast(self)
 			self:SetBindingClick(1, "CTRL-MOUSEWHEELDOWN", self, "Button12")
 			self:SetBindingClick(1, "SHIFT-MOUSEWHEELDOWN", self, "Button13")
 		]])
-		self:SetAttribute("_onleave", [[
+		self:SetAttribute("clickcast_onleave", [[
 			self:ClearBindings()
 		]])
 	end
