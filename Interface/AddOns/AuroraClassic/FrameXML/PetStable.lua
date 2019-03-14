@@ -37,6 +37,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local bu = _G["PetStableStabledPet"..i]
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
+		bu.Checked:SetTexture(C.media.checked)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
 

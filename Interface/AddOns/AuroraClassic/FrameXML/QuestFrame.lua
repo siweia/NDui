@@ -85,13 +85,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	CurrentQuestsText:SetShadowColor(0, 0, 0)
 
 	-- [[ Quest NPC model ]]
-
-	QuestNPCModelShadowOverlay:Hide()
-	QuestNPCModelBg:Hide()
-	QuestNPCModel:DisableDrawLayer("OVERLAY")
-	QuestNPCModelNameText:SetDrawLayer("ARTWORK")
-	QuestNPCModelTextFrameBg:Hide()
-	QuestNPCModelTextFrame:DisableDrawLayer("OVERLAY")
+	F.StripTextures(QuestNPCModel)
+	F.StripTextures(QuestNPCModelTextFrame)
 
 	local npcbd = CreateFrame("Frame", nil, QuestNPCModel)
 	npcbd:SetPoint("TOPLEFT", -1, 1)
@@ -104,13 +99,15 @@ tinsert(C.themes["AuroraClassic"], function()
 	local npcLine = CreateFrame("Frame", nil, QuestNPCModel)
 	npcLine:SetPoint("BOTTOMLEFT", 0, -1)
 	npcLine:SetPoint("BOTTOMRIGHT", 1, -1)
-	npcLine:SetHeight(1)
+	npcLine:SetHeight(C.mult)
 	npcLine:SetFrameLevel(0)
 	F.CreateBD(npcLine, 0)
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
 		if parentFrame == QuestLogPopupDetailFrame or parentFrame == QuestFrame then
 			x = x + 3
+		else
+			x = x + 5
 		end
 
 		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)

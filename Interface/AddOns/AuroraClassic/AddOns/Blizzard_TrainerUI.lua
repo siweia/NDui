@@ -4,33 +4,27 @@ C.themes["Blizzard_TrainerUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
 	F.ReskinPortraitFrame(ClassTrainerFrame)
-	ClassTrainerFrameBottomInset:SetAlpha(0)
-
 	ClassTrainerStatusBarSkillRank:ClearAllPoints()
 	ClassTrainerStatusBarSkillRank:SetPoint("CENTER", ClassTrainerStatusBar, "CENTER", 0, 0)
 
+	local icbg = F.ReskinIcon(ClassTrainerFrameSkillStepButtonIcon)
 	local bg = F.CreateBDFrame(ClassTrainerFrameSkillStepButton, .25)
-	bg:SetPoint("TOPLEFT", 42, -2)
-	bg:SetPoint("BOTTOMRIGHT", 0, 2)
+	bg:SetPoint("TOPLEFT", icbg, "TOPRIGHT", 1, 0)
+	bg:SetPoint("BOTTOMRIGHT", icbg, "BOTTOMRIGHT", 270, 0)
 
 	ClassTrainerFrameSkillStepButton:SetNormalTexture("")
 	ClassTrainerFrameSkillStepButton:SetHighlightTexture("")
 	ClassTrainerFrameSkillStepButton.disabledBG:SetTexture("")
-
-	ClassTrainerFrameSkillStepButton.selectedTex:SetPoint("TOPLEFT", 43, -3)
-	ClassTrainerFrameSkillStepButton.selectedTex:SetPoint("BOTTOMRIGHT", -1, 3)
-	ClassTrainerFrameSkillStepButton.selectedTex:SetTexture(C.media.backdrop)
-	ClassTrainerFrameSkillStepButton.selectedTex:SetVertexColor(r, g, b, .2)
-	F.CreateBDFrame(ClassTrainerFrameSkillStepButton, 0)
-
-	ClassTrainerFrameSkillStepButtonIcon:SetTexCoord(.08, .92, .08, .92)
+	ClassTrainerFrameSkillStepButton.selectedTex:SetAllPoints(bg)
+	ClassTrainerFrameSkillStepButton.selectedTex:SetColorTexture(r, g, b, .25)
 
 	hooksecurefunc("ClassTrainerFrame_Update", function()
 		for _, bu in next, ClassTrainerFrame.scrollFrame.buttons do
 			if not bu.styled then
+				local icbg = F.ReskinIcon(bu.icon)
 				local bg = F.CreateBDFrame(bu, .25)
-				bg:SetPoint("TOPLEFT", 42, -6)
-				bg:SetPoint("BOTTOMRIGHT", 0, 6)
+				bg:SetPoint("TOPLEFT", icbg, "TOPRIGHT", 1, 0)
+				bg:SetPoint("BOTTOMRIGHT", icbg, "BOTTOMRIGHT", 253, 0)
 
 				bu.name:SetParent(bg)
 				bu.name:SetPoint("TOPLEFT", bu.icon, "TOPRIGHT", 6, -2)
@@ -41,24 +35,15 @@ C.themes["Blizzard_TrainerUI"] = function()
 				bu:SetHighlightTexture("")
 				bu.disabledBG:Hide()
 				bu.disabledBG.Show = F.dummy
-
-				bu.selectedTex:SetPoint("TOPLEFT", 43, -6)
-				bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 7)
-				bu.selectedTex:SetTexture(C.media.backdrop)
-				bu.selectedTex:SetVertexColor(r, g, b, .2)
-
-				bu.icon:SetTexCoord(.08, .92, .08, .92)
-				F.CreateBG(bu.icon)
+				bu.selectedTex:SetAllPoints(bg)
+				bu.selectedTex:SetColorTexture(r, g, b, .25)
 
 				bu.styled = true
 			end
 		end
 	end)
 
-	ClassTrainerStatusBarLeft:Hide()
-	ClassTrainerStatusBarMiddle:Hide()
-	ClassTrainerStatusBarRight:Hide()
-	ClassTrainerStatusBarBackground:Hide()
+	F.StripTextures(ClassTrainerStatusBar)
 	ClassTrainerStatusBar:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
 	ClassTrainerStatusBar:SetStatusBarTexture(C.media.backdrop)
 	ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
