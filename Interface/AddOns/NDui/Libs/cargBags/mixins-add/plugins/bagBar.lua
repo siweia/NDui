@@ -40,7 +40,7 @@ function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
 end
 
-local BagButton = cargBags:NewClass("BagButton", nil, "Button")
+local BagButton = cargBags:NewClass("BagButton", nil, "ItemButton")
 
 -- Default attributes
 BagButton.bgTex = [[Interface\Paperdoll\UI-PaperDoll-Slot-Bag]]
