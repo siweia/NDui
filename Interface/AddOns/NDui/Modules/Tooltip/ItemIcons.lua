@@ -1,13 +1,22 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local pairs = pairs
+local pairs, strfind, gsub = pairs, string.find, gsub
 local newString = "0:0:64:64:5:59:5:59"
 
 local function setTooltipIcon(self, icon)
 	local title = icon and _G[self:GetName().."TextLeft1"]
 	if title then
 		title:SetFormattedText("|T%s:20:20:"..newString..":%d|t %s", icon, 20, title:GetText())
+	end
+
+	for i = 2, self:NumLines() do
+		local line = _G[self:GetName().."TextLeft"..i]
+		if not line then break end
+		local text = line:GetText() or ""
+		if strfind(text, "|T.+|t") then
+			line:SetText(gsub(text, ":(%d+)|t", ":20:20:"..newString.."|t"))
+		end
 	end
 end
 
@@ -18,7 +27,7 @@ local function newTooltipHooker(method, func)
 			modified = false
 		end)
 		tooltip:HookScript(method, function(self, ...)
-			if not modified  then
+			if not modified then
 				modified = true
 				func(self, ...)
 			end
@@ -34,7 +43,7 @@ local hookItem = newTooltipHooker("OnTooltipSetItem", function(self)
 end)
 
 local hookSpell = newTooltipHooker("OnTooltipSetSpell", function(self)
-	local _, _, id = self:GetSpell()
+	local _, id = self:GetSpell()
 	if id then
 		setTooltipIcon(self, GetSpellTexture(id))
 	end
