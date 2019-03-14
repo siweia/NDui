@@ -203,7 +203,7 @@ function module:RecycleBin()
 					for j = 1, child:GetNumRegions() do
 						local region = select(j, child:GetRegions())
 						if region:GetObjectType() == "Texture" then
-							local texture = region:GetTexture()
+							local texture = region:GetTexture() or ""
 							if strfind(texture, "Interface\\CharacterFrame") or strfind(texture, "Interface\\Minimap") then
 								region:SetTexture(nil)
 							elseif texture == 136430 or texture == 136467 then
