@@ -30,9 +30,6 @@ function module:OnLogin()
 	if NDuiDB["Misc"]["HideBanner"] then
 		BossBanner:UnregisterAllEvents()
 	end
-
-	-- Fix patch 27326
-	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame", nil, B.HiddenFrame)
 end
 
 -- Archaeology counts
