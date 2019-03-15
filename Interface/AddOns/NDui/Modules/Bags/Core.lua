@@ -3,7 +3,11 @@ local B, C, L, DB, F = unpack(ns)
 
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
-local ipairs, strmatch = ipairs, string.match
+local ipairs, strmatch, unpack = ipairs, string.match, unpack
+local BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
+local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
+local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
+local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
 
 function module:ReverseSort()
 	for bag = 0, 4 do
@@ -181,7 +185,7 @@ function module:CreateSortButton(name)
 					UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 				else
 					SortBags()
-					C_Timer.After(.5, module.ReverseSort)
+					C_Timer_After(.5, module.ReverseSort)
 				end
 			else
 				SortBags()
@@ -316,7 +320,7 @@ function module:OnLogin()
 			self.junkIcon:SetAlpha(0)
 		end
 
-		if item.link and C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) then
+		if item.link and C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			self.Azerite:SetAlpha(1)
 		else
 			self.Azerite:SetAlpha(0)
@@ -342,7 +346,7 @@ function module:OnLogin()
 		end
 
 		if self.glowFrame then
-			if C_NewItems.IsNewItem(item.bagID, item.slotID) then
+			if C_NewItems_IsNewItem(item.bagID, item.slotID) then
 				B.ShowOverlayGlow(self.glowFrame)
 			else
 				B.HideOverlayGlow(self.glowFrame)

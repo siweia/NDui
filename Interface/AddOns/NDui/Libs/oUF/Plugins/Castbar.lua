@@ -122,7 +122,7 @@ function B:PostCastStart(unit)
 	elseif unit == "player" then
 		local safeZone = self.SafeZone
 		if not safeZone then return end
- 
+
 		safeZone.timeDiff = 0
 		if safeZone.castSent then
 			safeZone.timeDiff = GetTime() - safeZone.sendTime
@@ -157,7 +157,7 @@ function B:PostUpdateInterruptible(unit)
 end
 
 function B:PostCastStop()
-	if not self.fadeOut then 
+	if not self.fadeOut then
 		self:SetStatusBarColor(unpack(self.CompleteColor))
 		self.fadeOut = true
 	end
