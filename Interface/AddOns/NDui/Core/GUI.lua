@@ -277,7 +277,6 @@ local accountSettings = {
 	TexStyle = 2,
 	KeystoneInfo = {},
 	AzeriteArmor = true,
-	NameplateMotion = 1,
 }
 
 local function InitialSettings(source, target)

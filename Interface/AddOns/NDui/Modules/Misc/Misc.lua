@@ -551,18 +551,3 @@ do
 	end
 	hooksecurefunc("TradeFrame_Update", updateColor)
 end
-
--- Temporary fix for nameplate motion
-do
-	hooksecurefunc("InterfaceOptionsNameplateMotionDropDown_OnClick", function(self)
-		NDuiADB["NameplateMotion"] = self.value
-	end)
-	B:RegisterEvent("PLAYER_LOGIN", function()
-		local current = GetCVar("nameplateMotion")
-		if current == "0" and NDuiADB["NameplateMotion"] == 1 then
-			SetCVar("nameplateMotion", 1)
-		elseif current == "1" and DB.isDeveloper then
-			print("Blizz fix nameplate motion.")
-		end
-	end)
-end
