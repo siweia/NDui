@@ -96,6 +96,7 @@ local list = {
 		{AuraID = 268311, UnitID = "player", Flash = true},	-- 唤风者之赐
 		{AuraID = 285489, UnitID = "player"},	-- 黑喉之力
 		{AuraID = 278317, UnitID = "player"},	-- 末日余波
+		{AuraID = 278806, UnitID = "player"},	-- 雄狮谋略
 		{AuraID = 278249, UnitID = "player"},	-- 刀叶风暴
 		{AuraID = 287916, UnitID = "player", Stack = 6, Flash = true, Combat = true},	-- 反应堆
 		{AuraID = 287917, UnitID = "player"},	-- 振荡过载
