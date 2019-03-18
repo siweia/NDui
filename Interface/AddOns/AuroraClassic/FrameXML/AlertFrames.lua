@@ -186,7 +186,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.shine:SetTexture("")
 			end
 			frame.FollowerBG:SetTexture("")
-		elseif frame.queue == GarrisonMissionAlertSystem then
+		elseif frame.queue == GarrisonMissionAlertSystem or frame.queue == GarrisonShipMissionAlertSystem or frame.queue == GarrisonShipFollowerAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 8, -8)
@@ -194,29 +194,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				F.CreateSD(frame.bg)
 
 				frame.Background:Hide()
-				frame.IconBG:Hide()
-				frame.glow:SetTexture("")
-				frame.shine:SetTexture("")
-			end
-		elseif frame.queue == GarrisonShipMissionAlertSystem then
-			if not frame.bg then
-				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", 8, -8)
-				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
-				F.CreateSD(frame.bg)
-
-				frame.Background:Hide()
-				frame.glow:SetTexture("")
-				frame.shine:SetTexture("")
-			end
-		elseif frame.queue == GarrisonShipFollowerAlertSystem then
-			if not frame.bg then
-				frame.bg = F.CreateBDFrame(frame)
-				frame.bg:SetPoint("TOPLEFT", 8, -8)
-				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
-				F.CreateSD(frame.bg)
-
-				frame.Background:Hide()
+				if frame.IconBG then frame.IconBG:Hide() end
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
@@ -301,7 +279,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.Background3:SetTexture("")
 				frame.glow:SetTexture("")
 			end
-		elseif frame.queue == NewPetAlertSystem or frame.queue == NewMountAlertSystem then
+		elseif frame.queue == NewPetAlertSystem or frame.queue == NewMountAlertSystem or frame.queue == NewToyAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 12, -13)

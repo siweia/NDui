@@ -104,12 +104,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.CreateBD(npcLine, 0)
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
-		if parentFrame == QuestLogPopupDetailFrame or parentFrame == QuestFrame then
-			x = x + 3
-		else
-			x = x + 5
-		end
-
+		x = x + 5
 		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
 	end)
 

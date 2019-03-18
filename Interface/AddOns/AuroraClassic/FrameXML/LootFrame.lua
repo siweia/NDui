@@ -7,6 +7,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	hooksecurefunc("LootFrame_UpdateButton", function(index)
 		local ic = _G["LootButton"..index.."IconTexture"]
+		if not ic then return end
 
 		if not ic.bg then
 			local bu = _G["LootButton"..index]
