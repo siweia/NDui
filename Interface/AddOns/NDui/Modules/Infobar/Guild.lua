@@ -180,7 +180,7 @@ local function refreshData()
 			if not zone then zone = UNKNOWN end
 
 			count = count + 1
-			guildTable[count] = {level, class, name, zone, status}
+			guildTable[count] = {level, class, Ambiguate(name, "none"), zone, status}
 		end
 	end
 
@@ -230,10 +230,14 @@ function applyData()
 		frames[i].class:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
 
 		local namecolor = B.HexRGB(B.ClassColor(class))
-		frames[i].name:SetText(namecolor..Ambiguate(name, "guild")..status)
+		frames[i].name:SetText(namecolor..name..status)
 
 		local zonecolor = "|cffa6a6a6"
-		if GetRealZoneText() == zone then zonecolor = "|cff4cff4c" end
+		if UnitInRaid(name) or UnitInParty(name) then
+			zonecolor = "|cff4c4cff"
+		elseif GetRealZoneText() == zone then
+			zonecolor = "|cff4cff4c"
+		end
 		frames[i].zone:SetText(zonecolor..zone)
 	end
 end
