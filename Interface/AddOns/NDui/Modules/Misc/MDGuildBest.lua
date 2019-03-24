@@ -102,13 +102,14 @@ function module:GuildBest()
 		end
 	end
 
+	local iconColor = BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_EPIC or 4]
 	local function AddKeystoneIcon()
 		local texture = select(10, GetItemInfo(158923)) or 525134
 		local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo)
 		button:SetPoint("BOTTOMLEFT", 10, 67)
 		button:SetSize(35, 35)
 		B.PixelIcon(button, texture, true)
-		button:SetBackdropBorderColor(.78, .27, .98)
+		button:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
 		button:SetScript("OnEnter", function(self)
 			GameTooltip:ClearLines()
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")

@@ -397,12 +397,12 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{3, "UFs", "PartyWidth", L["PartyFrame Width"], false, {60, 150, 0}},
 		{3, "UFs", "PartyHeight", L["PartyFrame Height"], true, {25, 40, 0}},
 		{},--blank
+		{1, "UFs", "RaidClickSets", "|cff00cc4c"..L["Enable ClickSets"], nil, function() setupClickCast() end},
+		{1, "UFs", "InstanceAuras", "|cff00cc4c"..L["Instance Auras"], true, function() setupRaidDebuffs() end},
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, function() setupBuffIndicator() end},
 		{1, "UFs", "BuffTimerIndicator", L["BuffTimerIndicator"], true},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
-		{1, "UFs", "RaidClickSets", L["Enable ClickSets"], nil, function() setupClickCast() end},
-		{1, "UFs", "InstanceAuras", L["Instance Auras"], true, function() setupRaidDebuffs() end},
 		{},--blank
 		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
 		{1, "UFs", "HealthPerc", L["Show HealthPerc"], true},
