@@ -1,13 +1,12 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, {}
 local maxFrames = 12	-- Max Tracked Auras
-local pairs, tinsert, tremove = pairs, table.insert, table.remove
-local max, wipe, sort = math.max, table.wipe, table.sort
-local GetCombatRating, GetTime = GetCombatRating, GetTime
-local CR_HASTE_MELEE, CR_MASTERY, CR_VERSATILITY_DAMAGE_DONE = CR_HASTE_MELEE, CR_MASTERY, CR_VERSATILITY_DAMAGE_DONE
-local CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE = CR_CRIT_SPELL, CR_CRIT_RANGED, CR_CRIT_MELEE
+local AuraList, Aura, UnitIDTable, IntTable, IntCD = {}, {}, {}, {}, {}
+local pairs, tinsert, tremove, wipe, sort = pairs, table.insert, table.remove, table.wipe, table.sort
+local UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
+local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo = GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo
+local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
 -- Init
 function B.RemoveAuraData(spellID)
@@ -348,9 +347,9 @@ local function UpdateCD()
 					UpdateCDFrame(KEY, name, icon, start, duration, true, 1, value.SpellID)
 				end
 			elseif value.ItemID then
-				if select(2, GetItemCooldown(value.ItemID)) > 1.5 then
+				local start, duration = GetItemCooldown(value.ItemID)
+				if start and duration > 1.5 then
 					local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(value.ItemID)
-					local start, duration = GetItemCooldown(value.ItemID)
 					if VALUE.Mode:lower() == "icon" then name = nil end
 					UpdateCDFrame(KEY, name, icon, start, duration, false, 2, value.ItemID)
 				end
@@ -410,22 +409,6 @@ local function UpdateAuraFrame(index, UnitID, name, icon, count, duration, expir
 	Aura[index].Index = (Aura[index].Index + 1 > maxFrames) and maxFrames or Aura[index].Index + 1
 end
 
-local function sortStat(a, b)
-	return a.num > b.num
-end
-
-local statTable = {}
-local function GetCurrentMaxStat()
-	wipe(statTable)
-	tinsert(statTable, {num = max(GetCombatRating(CR_CRIT_SPELL), GetCombatRating(CR_CRIT_RANGED), GetCombatRating(CR_CRIT_MELEE)), text = L["Crit"]})
-	tinsert(statTable, {num = GetCombatRating(CR_HASTE_MELEE), text = L["Haste"]})
-	tinsert(statTable, {num = GetCombatRating(CR_MASTERY), text = L["Mastery"]})
-	tinsert(statTable, {num = GetCombatRating(CR_VERSATILITY_DAMAGE_DONE), text = L["Versa"]})
-	sort(statTable, sortStat)
-
-	return statTable[1].text
-end
-
 local function AuraFilter(spellID, UnitID, index, bool)
 	for KEY, VALUE in pairs(AuraList) do
 		for _, value in pairs(VALUE.List) do
@@ -449,7 +432,6 @@ local function AuraFilter(spellID, UnitID, index, bool)
 					end
 				end
 				if value.Timeless then duration, expires = 0, 0 end
-				if spellID == 280573 then name = GetCurrentMaxStat() end
 				return KEY, value.UnitID, name, icon, count, duration, expires, index, filter, value.Flash
 			end
 		end
