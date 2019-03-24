@@ -578,8 +578,6 @@ local function Enable(self, unit)
 			safeZone:SetColorTexture(1, 0, 0)
 		end
 
-		element:Hide()
-
 		return true
 	end
 end
