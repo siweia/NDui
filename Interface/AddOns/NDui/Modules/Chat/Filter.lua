@@ -5,8 +5,8 @@ local module = B:GetModule("Chat")
 local strmatch, strfind, format, gsub = string.match, string.find, string.format, string.gsub
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
-local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup
-local Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime = Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime
+local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
+local Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar = Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar
 
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
@@ -35,18 +35,10 @@ local function strDiff(sA, sB) -- arrays of bytes
 	return this[len_b+1] / max(len_a, len_b)
 end
 
-local chatLines, badBoys, prevLineID = {}, {}, 0
-local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, lineID, guid)
-	if lineID ~= 0 and lineID == prevLineID then return end
-	prevLineID = lineID
-
-	local name = Ambiguate(author, "none")
-	if badBoys[name] and badBoys[name] > 5 then return true end
-	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
-		return
-	elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGUIDInGroup(guid)) then
-		return
-	end
+C.BadBoys = {} -- debug
+local chatLines, prevLineID, filterResult = {}, 0, false
+local function getFilterResult(msg, name)
+	if C.BadBoys[name] and C.BadBoys[name] >= 5 then return true end
 
 	local filterMsg = gsub(msg, "|H.-|h(.-)|h", "%1")
 	filterMsg = gsub(filterMsg, "|c%x%x%x%x%x%x%x%x", "")
@@ -83,11 +75,27 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, l
 		local line = chatLines[i]
 		if line[1] == msgTable[1] and ((msgTable[3] - line[3] < .6) or strDiff(line[2], msgTable[2]) <= .1) then
 			tremove(chatLines, i)
-			badBoys[name] = (badBoys[name] or 0) + 1
+			C.BadBoys[name] = (C.BadBoys[name] or 0) + 1
 			return true
 		end
 	end
 	if chatLinesSize >= 30 then tremove(chatLines, 1) end
+end
+
+local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, lineID, guid)
+	if lineID == 0 or lineID ~= prevLineID then
+		prevLineID = lineID
+
+		local name = Ambiguate(author, "none")
+		if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
+			return
+		elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGUIDInGroup(guid)) then
+			return
+		end
+		filterResult = getFilterResult(msg, name)
+	end
+
+	return filterResult
 end
 
 local addonBlockList = {
@@ -105,7 +113,7 @@ local function toggleBubble(party)
 	cvar = "chatBubbles"..(party and "Party" or "")
 	if not GetCVarBool(cvar) then return end
 	toggleCVar(0)
-	C_Timer.After(.01, toggleCVar)
+	C_Timer_After(.01, toggleCVar)
 end
 
 local function genAddonBlock(_, event, msg, author)
