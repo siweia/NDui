@@ -188,8 +188,12 @@ local function UpdateQuestUnit(self, _, unit)
 		local textLine = _G[unitTip:GetName().."TextLeft"..i]
 		local text = textLine:GetText()
 		if textLine and text then
+			local r, g, b = textLine:GetTextColor()
 			local unitName, progressText = strmatch(text, "^ ([^ ]-) ?%- (.+)$")
-			if unitName and progressText and (unitName == "" or unitName == DB.MyName) then
+			if r > .99 and g > .82 and b == 0 then
+				isLootQuest = true
+			elseif unitName and progressText and (unitName == "" or unitName == DB.MyName) then
+				isLootQuest = false
 				local current, goal = strmatch(progressText, "(%d+)/(%d+)")
 				local progress = strmatch(progressText, "([%d%.]+)%%")
 				if current and goal then
@@ -446,8 +450,9 @@ function UF:CreatePlates(unit)
 			qicon:SetSize(20, 20)
 			qicon:SetAtlas(DB.questTex)
 			qicon:Hide()
-			local count = B.CreateFS(self, 12, "", "system", "LEFT", 0, 0)
-			count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
+			local count = B.CreateFS(self, 12, "", nil, "LEFT", 0, 0)
+			count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)	
+			count:SetTextColor(.6, .8, 1)
 
 			self.questIcon = qicon
 			self.questCount = count
