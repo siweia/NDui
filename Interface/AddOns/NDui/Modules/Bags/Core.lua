@@ -9,14 +9,18 @@ local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBan
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
 
+local sortCache = {}
 function module:ReverseSort()
 	for bag = 0, 4 do
 		local numSlots = GetContainerNumSlots(bag)
 		for slot = 1, numSlots do
 			local texture, _, locked = GetContainerItemInfo(bag, slot)
-			if texture and not locked then
+			if (slot <= numSlots/2) and texture and not locked and not sortCache["b"..bag.."s"..slot] then
 				PickupContainerItem(bag, slot)
 				PickupContainerItem(bag, numSlots+1 - slot)
+				sortCache["b"..bag.."s"..slot] = true
+				C_Timer_After(.1, module.ReverseSort)
+				return
 			end
 		end
 	end
@@ -185,6 +189,7 @@ function module:CreateSortButton(name)
 					UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 				else
 					SortBags()
+					wipe(sortCache)
 					C_Timer_After(.5, module.ReverseSort)
 				end
 			else
