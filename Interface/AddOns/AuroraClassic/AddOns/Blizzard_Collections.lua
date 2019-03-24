@@ -18,11 +18,6 @@ C.themes["Blizzard_Collections"] = function()
 	local PetJournal = PetJournal
 	local MountJournal = MountJournal
 
-	for i = 1, 9 do
-		select(i, MountJournal.MountCount:GetRegions()):Hide()
-		select(i, PetJournal.PetCount:GetRegions()):Hide()
-	end
-
 	MountJournal.LeftInset:Hide()
 	MountJournal.RightInset:Hide()
 	PetJournal.LeftInset:Hide()
@@ -34,7 +29,9 @@ C.themes["Blizzard_Collections"] = function()
 	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournalTutorialButton.Ring:Hide()
 
+	F.StripTextures(MountJournal.MountCount)
 	F.CreateBD(MountJournal.MountCount, .25)
+	F.StripTextures(PetJournal.PetCount)
 	F.CreateBD(PetJournal.PetCount, .25)
 	F.CreateBD(MountJournal.MountDisplay.ModelScene, .25)
 
@@ -187,15 +184,13 @@ C.themes["Blizzard_Collections"] = function()
 	MountJournalSummonRandomFavoriteButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(MountJournalSummonRandomFavoriteButton)
 
-	do
-		local movedButton
-		MountJournal:HookScript("OnShow", function()
-			if not InCombatLockdown() and not movedButton then
-				MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -7, -32)
-				movedButton = true
-			end
-		end)
-	end
+	local movedButton
+	MountJournal:HookScript("OnShow", function()
+		if not InCombatLockdown() and not movedButton then
+			MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -10, -26)
+			movedButton = true
+		end
+	end)
 
 	-- Pet card
 

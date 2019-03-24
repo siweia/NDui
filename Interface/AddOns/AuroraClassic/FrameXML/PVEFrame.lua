@@ -14,6 +14,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 
+	local iconSize = 60-2*C.mult
 	for i = 1, 4 do
 		local bu = GroupFinderFrame["groupButton"..i]
 
@@ -21,12 +22,12 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.bg:SetTexture(C.media.backdrop)
 		bu.bg:SetVertexColor(r, g, b, .2)
 		bu.bg:SetAllPoints()
-
 		F.Reskin(bu, true)
 
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 		bu.icon:SetPoint("LEFT", bu, "LEFT")
 		bu.icon:SetDrawLayer("OVERLAY")
+		bu.icon:SetSize(iconSize, iconSize)
 		bu.icon.bg = F.CreateBG(bu.icon)
 		bu.icon.bg:SetDrawLayer("ARTWORK")
 	end

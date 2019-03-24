@@ -68,13 +68,14 @@ C.themes["Blizzard_Communities"] = function()
 	F.Reskin(CommunitiesFrame.InviteButton)
 	F.StripTextures(CommunitiesFrame.Chat)
 	F.ReskinScroll(CommunitiesFrame.Chat.MessageFrame.ScrollBar)
-	F.StripTextures(CommunitiesFrame.ChatEditBox)
+	CommunitiesFrame.ChatEditBox:DisableDrawLayer("BACKGROUND")
 	local bg1 = F.CreateBDFrame(CommunitiesFrame.Chat.InsetFrame, .25)
-	bg1:SetPoint("BOTTOMRIGHT", -1, 22)
+	bg1:SetPoint("TOPLEFT", 1, -3)
+	bg1:SetPoint("BOTTOMRIGHT", -3, 22)
 	local bg2 = F.CreateBDFrame(CommunitiesFrame.ChatEditBox, 0)
 	F.CreateGradient(bg2)
-	bg2:SetPoint("TOPLEFT", -2, -5)
-	bg2:SetPoint("BOTTOMRIGHT", 2, 5)
+	bg2:SetPoint("TOPLEFT", -5, -5)
+	bg2:SetPoint("BOTTOMRIGHT", 4, 5)
 
 	do
 		local dialog = CommunitiesFrame.NotificationSettingsDialog
