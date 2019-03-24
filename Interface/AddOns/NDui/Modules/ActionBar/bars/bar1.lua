@@ -65,7 +65,7 @@ function module:OnLogin()
 	]]):format(num, buttonName))
 
 	frame:SetAttribute("_onstate-page", [[
-		for i, button in next, buttons do
+		for _, button in next, buttons do
 			button:SetAttribute("actionpage", newstate)
 		end
 	]])
@@ -82,4 +82,22 @@ function module:OnLogin()
 	self:CreateStancebar()
 	self:HideBlizz()
 	self:ReskinBars()
+
+	--vehicle fix
+	local function getActionTexture(button)
+		return GetActionTexture(button.action)
+	end
+
+	B:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR", function()
+		for _, button in next, buttonList do
+			local icon = button.icon
+			local texture = getActionTexture(button)
+			if texture then
+				icon:SetTexture(texture)
+				icon:Show()
+			else
+				icon:Hide()
+			end
+		end
+	end)
 end
