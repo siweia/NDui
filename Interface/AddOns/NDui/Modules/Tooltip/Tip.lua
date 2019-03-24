@@ -287,7 +287,7 @@ hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 	if self.progressBarPool then
 		local bar = self.progressBarPool:Acquire()
 		if bar and not bar.styled then
-			B.StripTextures(bar.Bar, true)
+			B.StripTextures(bar.Bar)
 			bar.Bar:SetStatusBarTexture(DB.normTex)
 			B.CreateBD(bar, .25)
 			bar:SetSize(216, 18)
