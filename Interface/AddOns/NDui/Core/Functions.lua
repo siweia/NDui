@@ -635,8 +635,8 @@ function B:CreateColorSwatch()
 	swatch:SetSize(18, 18)
 	B.CreateBD(swatch, 1)
 	local tex = swatch:CreateTexture()
-	tex:SetPoint("TOPLEFT", 2, -2)
-	tex:SetPoint("BOTTOMRIGHT", -2, 2)
+	tex:SetPoint("TOPLEFT", C.mult, -C.mult)
+	tex:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 	tex:SetTexture(DB.bdTex)
 	swatch.tex = tex
 
