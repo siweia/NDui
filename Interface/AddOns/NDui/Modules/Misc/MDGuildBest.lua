@@ -8,7 +8,7 @@ function module:GuildBest()
 	local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
 	local Ambiguate, GetContainerNumSlots, GetContainerItemInfo = Ambiguate, GetContainerNumSlots, GetContainerItemInfo
 	local C_ChallengeMode_GetMapUIInfo, C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetMapUIInfo, C_ChallengeMode.GetGuildLeaders
-	local format, strsplit, strmatch, tonumber, pairs = string.format, string.split, string.match, tonumber, pairs
+	local format, strsplit, strmatch, tonumber, pairs, wipe = string.format, string.split, string.match, tonumber, pairs, table.wipe
 	local frame
 
 	local function UpdateTooltip(self)
@@ -121,9 +121,16 @@ function module:GuildBest()
 				local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
 				GameTooltip:AddDoubleLine(format(color.."%s:|r", name), format(DB.InfoColor.."%s(%s)|r", dungeon, level))
 			end
+			GameTooltip:AddDoubleLine(" ", DB.LineString)
+			GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["Reset Gold"].." ", 1,1,1, .6,.8,1)
 			GameTooltip:Show()
 		end)
 		button:SetScript("OnLeave", B.HideTooltip)
+		button:SetScript("OnMouseUp", function(_, btn)
+			if btn == "MiddleButton" then
+				wipe(NDuiADB["KeystoneInfo"])
+			end
+		end)
 	end
 
 	local function ChallengesOnLoad(event, addon)
