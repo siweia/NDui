@@ -404,6 +404,8 @@ end
 	@callback Container:OnBagUpdate(bagID, slotID)
 ]]
 function Implementation:BAG_UPDATE(_, bagID, slotID)
+	if self.isSorting then return end
+
 	if(bagID and slotID) then
 		self:UpdateSlot(bagID, slotID)
 	elseif(bagID) then
@@ -453,6 +455,7 @@ end
 	@param slotID <number> [optional]
 ]]
 function Implementation:ITEM_LOCK_CHANGED(_, bagID, slotID)
+	if self.isSorting then return end
 	if(not slotID) then return end
 
 	local button = self:GetButton(bagID, slotID)

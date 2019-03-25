@@ -24,6 +24,9 @@ function module:ReverseSort()
 			end
 		end
 	end
+
+	NDui_Backpack.isSorting = false
+	NDui_Backpack:BAG_UPDATE()
 end
 
 function module:UpdateAnchors(parent, bags)
@@ -63,7 +66,7 @@ function module:CreateInfoFrame()
 	search.highlightFunction = highlightFunction
 	search.isGlobal = true
 	search:SetPoint("LEFT", 0, 5)
-	B.StripTextures(search)
+	search:DisableDrawLayer("BACKGROUND")
 	local bg = B.CreateBG(search)
 	bg:SetPoint("TOPLEFT", -5, -5)
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
@@ -190,6 +193,7 @@ function module:CreateSortButton(name)
 				else
 					SortBags()
 					wipe(sortCache)
+					NDui_Backpack.isSorting = true
 					C_Timer_After(.5, module.ReverseSort)
 				end
 			else
