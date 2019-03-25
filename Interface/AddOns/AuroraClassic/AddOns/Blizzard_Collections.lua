@@ -635,7 +635,7 @@ C.themes["Blizzard_Collections"] = function()
 	end)
 
 	F.StripTextures(WardrobeOutfitEditFrame)
-	F.StripTextures(WardrobeOutfitEditFrame.EditBox)
+	WardrobeOutfitEditFrame.EditBox:DisableDrawLayer("BACKGROUND")
 	F.CreateBD(WardrobeOutfitEditFrame)
 	F.CreateSD(WardrobeOutfitEditFrame)
 	local bg = F.CreateBDFrame(WardrobeOutfitEditFrame.EditBox, .25)

@@ -29,8 +29,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		travelPass:SetPoint("TOPRIGHT", -3, -6)
 		F.CreateBDFrame(travelPass, 1)
 		local nt = travelPass:GetNormalTexture()
-		nt:SetTexture("Interface\\FriendsFrame\\UI-Toast-FriendRequestIcon")
-		nt:SetTexCoord(.15, .85, .15, .85)
+		nt:SetTexture("Interface\\FriendsFrame\\PlusManz-PlusManz")
+		nt:SetTexCoord(.1, .9, .1, .9)
 		local hl = travelPass:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)
 		hl:SetAllPoints()
@@ -75,10 +75,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
 			reskinInvites(FriendsFrameFriendsScrollFrame.invitePool)
 		elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+			local nt = button.travelPassButton:GetNormalTexture()
 			if FriendsFrame_GetInviteRestriction(button.id) == 6 then
-				button.travelPassButton:GetNormalTexture():SetVertexColor(1, 1, 1)
+				nt:SetVertexColor(1, 1, 1)
 			else
-				button.travelPassButton:GetNormalTexture():SetVertexColor(.3, .3, .3)
+				nt:SetVertexColor(.3, .3, .3)
 			end
 		end
 	end)

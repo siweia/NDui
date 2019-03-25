@@ -109,7 +109,7 @@ C.themes["Blizzard_Communities"] = function()
 		local dialog = CommunitiesFrame.EditStreamDialog
 		F.StripTextures(dialog)
 		F.SetBD(dialog)
-		F.StripTextures(dialog.NameEdit)
+		dialog.NameEdit:DisableDrawLayer("BACKGROUND")
 		local bg = F.CreateBDFrame(dialog.NameEdit, .25)
 		bg:SetPoint("TOPLEFT", -3, -3)
 		bg:SetPoint("BOTTOMRIGHT", -4, 3)

@@ -202,4 +202,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		local role = select(2, GetLFGProposalMember(button:GetID()))
 		button.texture:SetTexCoord(F.GetRoleTexCoord(role))
 	end)
+
+	hooksecurefunc("LFGDungeonReadyStatusGrouped_UpdateIcon", function(button, role)
+		button.texture:SetTexCoord(F.GetRoleTexCoord(role))
+	end)
 end)
