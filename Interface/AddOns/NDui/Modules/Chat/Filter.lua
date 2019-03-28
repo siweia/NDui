@@ -38,6 +38,12 @@ end
 C.BadBoys = {} -- debug
 local chatLines, prevLineID, filterResult = {}, 0, false
 local function getFilterResult(msg, name)
+	if name == DB.MyName or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
+		return
+	elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or (IsInInstance() and IsGUIDInGroup(guid))) then
+		return
+	end
+
 	if C.BadBoys[name] and C.BadBoys[name] >= 5 then return true end
 
 	local filterMsg = gsub(msg, "|H.-|h(.-)|h", "%1")
@@ -86,13 +92,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, l
 		prevLineID = lineID
 
 		local name = Ambiguate(author, "none")
-		if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
-			return
-		elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or (IsInInstance() and IsGUIDInGroup(guid))) then
-			return
-		end
 		filterResult = getFilterResult(msg, name)
-
 		if filterResult then C.BadBoys[name] = (C.BadBoys[name] or 0) + 1 end
 	end
 
