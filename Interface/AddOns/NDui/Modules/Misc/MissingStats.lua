@@ -116,8 +116,8 @@ function module:MissingStats()
 		local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()
 		local minItemLevel = C_PaperDollInfo_GetMinItemLevel()
 		local displayItemLevel = max(minItemLevel or 0, avgItemLevelEquipped)
-		displayItemLevel = floor(displayItemLevel)
-		avgItemLevel = floor(avgItemLevel)
+		displayItemLevel = format("%.1f", displayItemLevel)
+		avgItemLevel = format("%.1f", avgItemLevel)
 
 		if displayItemLevel ~= avgItemLevel then
 			PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel.." / "..avgItemLevel, false, displayItemLevel)

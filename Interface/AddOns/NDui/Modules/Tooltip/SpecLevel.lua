@@ -195,7 +195,7 @@ function module:GetUnitItemLevel(unit)
 			ilvl = total / 16
 		end
 
-		if ilvl > 0 then ilvl = format("%d", ilvl) end
+		if ilvl > 0 then ilvl = format("%.1f", ilvl) end
 		if boa > 0 then ilvl = ilvl.." |cff00ccff("..boa..HEIRLOOMS..")" end
 	else
 		ilvl = nil
