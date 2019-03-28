@@ -31,7 +31,7 @@ function module:GuildBest()
 		frame:SetPoint("BOTTOMRIGHT", -6, 80)
 		frame:SetSize(170, 105)
 		B.CreateBD(frame, .3)
-		B.CreateFS(frame, 16, CHALLENGE_MODE_THIS_WEEK , "system", "TOPLEFT", 16, -6)
+		B.CreateFS(frame, 16, GUILD, "system", "TOPLEFT", 16, -6)
 
 		frame.entries = {}
 		for i = 1, 4 do
@@ -116,10 +116,11 @@ function module:GuildBest()
 			GameTooltip:AddLine(L["Account Keystones"])
 			for name, info in pairs(NDuiADB["KeystoneInfo"]) do
 				local name = Ambiguate(name, "none")
-				local mapID, level, class = strsplit(":", info)
+				local mapID, level, class, faction = strsplit(":", info)
 				local color = B.HexRGB(B.ClassColor(class))
+				local infoColor = faction == "Horde" and "|cffee1919" or "|cff00adf0"
 				local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
-				GameTooltip:AddDoubleLine(format(color.."%s:|r", name), format(DB.InfoColor.."%s(%s)|r", dungeon, level))
+				GameTooltip:AddDoubleLine(format(color.."%s:|r", name), format(infoColor.."%s(%s)|r", dungeon, level))
 			end
 			GameTooltip:AddDoubleLine(" ", DB.LineString)
 			GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["Reset Gold"].." ", 1,1,1, .6,.8,1)
@@ -144,6 +145,7 @@ function module:GuildBest()
 	B:RegisterEvent("ADDON_LOADED", ChallengesOnLoad)
 
 	-- Keystone Info
+	local myFaction = UnitFactionGroup("player")
 	local myFullName = DB.MyName.."-"..DB.MyRealm
 	local function GetKeyInfo()
 		for bag = 0, 4 do
@@ -162,7 +164,7 @@ function module:GuildBest()
 		local link, itemString = GetKeyInfo()
 		if link then
 			local _, mapID, level = strsplit(":", itemString)
-			NDuiADB["KeystoneInfo"][myFullName] = mapID..":"..level..":"..DB.MyClass
+			NDuiADB["KeystoneInfo"][myFullName] = mapID..":"..level..":"..DB.MyClass..":"..myFaction
 		else
 			NDuiADB["KeystoneInfo"][myFullName] = nil
 		end
