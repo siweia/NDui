@@ -93,8 +93,7 @@ function module:ShowItemLevel()
 
 	hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)
 		local location = button.location
-		if not location or location < 0 then return end
-		if location == EQUIPMENTFLYOUT_PLACEINBAGS_LOCATION then
+		if not location or location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
 			if button.iLvl then button.iLvl:SetText("") end
 			return
 		end
