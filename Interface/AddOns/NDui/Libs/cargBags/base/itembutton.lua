@@ -70,7 +70,9 @@ end
 ]]
 
 local function updateContextMatch(button)
-	button:SetAlpha(button.ItemContextOverlay:IsShown() and .3 or 1)
+	local item = button:GetItemInfo()
+	local isItemSet = ScrappingMachineFrame and ScrappingMachineFrame:IsShown() and item and item.isInSet
+	button:SetAlpha((button.ItemContextOverlay:IsShown() or isItemSet) and .3 or 1)
 end
 
 function ItemButton:Create(tpl, parent)
