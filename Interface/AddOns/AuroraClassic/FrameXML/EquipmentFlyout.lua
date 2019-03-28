@@ -38,9 +38,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)
 		local location = button.location
 		local border = button.IconBorder
-		if not location or location < 0 or not border then return end
+		if not location or not border then return end
 
-		if location == EQUIPMENTFLYOUT_PLACEINBAGS_LOCATION then
+		if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
 			border:Hide()
 		else
 			border:Show()
