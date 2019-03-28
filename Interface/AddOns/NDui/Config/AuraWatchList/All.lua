@@ -140,6 +140,8 @@ local list = {
 		{AuraID = 274596, UnitID = "player"},	-- 冲击大师
 		{AuraID = 277969, UnitID = "player"},	-- 迅疾爪击
 		{AuraID = 273264, UnitID = "player"},	-- 怒火升腾
+		{AuraID = 280653, UnitID = "player"},	-- 工程特质，变小
+		{AuraID = 280654, UnitID = "player"},	-- 工程特质，变大
 		-- 泰坦之路系列饰品
 		{AuraID = 256816, UnitID = "player"},	-- 阿格拉玛的信念
 		{AuraID = 256831, UnitID = "player"},	-- 阿格拉玛的信念
