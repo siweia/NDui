@@ -113,7 +113,7 @@ function module:UrlCopy()
 			if not StaticPopup_Visible("ADD_IGNORE") and not StaticPopup_Visible("ADD_FRIEND") and not StaticPopup_Visible("ADD_GUILDMEMBER")
 				and not StaticPopup_Visible("ADD_RAIDMEMBER") and not StaticPopup_Visible("CHANNEL_INVITE") and not ChatEdit_GetActiveWindow() then
 
-				local namelink, name
+				local namelink, fullname
 				if strsub(link, 7, 8) == "GM" then
 					namelink = strsub(link, 10)
 				elseif strsub(link, 7, 15) == "Community" then
@@ -121,9 +121,12 @@ function module:UrlCopy()
 				else
 					namelink = strsub(link, 8)
 				end
-				if namelink then name = strsplit(":", namelink) end
+				if namelink then fullname = strsplit(":", namelink) end
 
-				if name and strlen(name) > 0 then
+				if fullname and strlen(fullname) > 0 then
+					local name, server = strsplit("-", fullname)
+					if server and server ~= DB.MyRealm then name = fullname end
+
 					if MailFrame and MailFrame:IsShown() then
 						MailFrameTab_OnClick(nil, 2)
 						SendMailNameEditBox:SetText(name)
