@@ -83,9 +83,21 @@ local questlist = {
 }
 
 -- Check Invasion Status
+local region = GetCVar("portal")
+local legionZoneTime = {
+	["CN"] = 1546844400, -- CN time 1/7/2019 15:00 [1]
+	["EU"] = 1546786800, -- CN-16
+	["US"] = 1546815600, -- CN-8
+}
+local bfaZoneTime = {
+	["CN"] = 1546743600, -- CN time 1/6/2019 11:00 [1]
+	["EU"] = 1546768800, -- CN+7
+	["US"] = 1546769340, -- CN+16
+}
+
 local invIndex = {
-	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = 1546844400}, -- 1/7/2019 15:00 [1]
-	[2] = {title = L["BfA Invasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1546743600}, -- 1/6/2019 11:00 [1]
+	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = legionZoneTime[region] or 1546844400}, -- 1/7/2019 15:00 [1]
+	[2] = {title = L["BfA Invasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or 1546743600},
 }
 
 local mapAreaPoiIDs = {
