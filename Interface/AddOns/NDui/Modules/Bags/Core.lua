@@ -324,6 +324,14 @@ function module:OnLogin()
 	end
 
 	function MyButton:OnUpdate(item)
+		if MerchantFrame:IsShown() then
+			if item.isInSet then
+				self:SetAlpha(.5)
+			else
+				self:SetAlpha(1)
+			end
+		end
+
 		if MerchantFrame:IsShown() and item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 then
 			self.junkIcon:SetAlpha(1)
 		else
