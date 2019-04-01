@@ -20,7 +20,6 @@ L["Lack"] = "Lack of"
 L["Flask"] = "Flask"
 L["Food"] = "Food"
 --L["World Channel"] = nil
---L["World Channel Name"] = nil
 L["Damage Poison"] = "Damage Poisons"
 L["Effect Poison"] = "Effect Poisons"
 L["Raid Tool"] = "Raid Tool"
