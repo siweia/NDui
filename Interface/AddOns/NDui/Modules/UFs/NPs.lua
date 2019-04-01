@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
-local strmatch, tonumber, pairs, type, unpack, next = string.match, tonumber, pairs, type, unpack, next
+local strmatch, tonumber, pairs, type, unpack, next, rad = string.match, tonumber, pairs, type, unpack, next, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
 local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
 local GetInstanceInfo, UnitClassification, UnitGUID, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitGUID, UnitExists, InCombatLockdown
@@ -417,11 +417,16 @@ function UF:CreatePlates(unit)
 		self.powerText:SetPoint("LEFT", self, "RIGHT", 2, 0)
 		self:Tag(self.powerText, "[nppp]")
 
-		if NDuiDB["Nameplate"]["Arrow"] then
-			local arrow = self:CreateTexture(nil, "OVERLAY")
-			arrow:SetSize(50, 50)
+		if NDuiDB["Nameplate"]["TarArrow"] < 3 then
+			local arrow = self:CreateTexture(nil, "OVERLAY", nil, 1)
+			arrow:SetSize(40, 40)
 			arrow:SetTexture(DB.arrowTex)
-			arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
+			if NDuiDB["Nameplate"]["TarArrow"] == 2 then
+				arrow:SetPoint("LEFT", self, "RIGHT", 3, 0)
+				arrow:SetRotation(rad(-90))
+			else
+				arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
+			end
 			arrow:Hide()
 			self.arrowMark = arrow
 		end
@@ -431,7 +436,6 @@ function UF:CreatePlates(unit)
 		mark:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", 20, -2)
 		mark:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
 		mark:SetVertexColor(0, .6, 1)
-		mark:SetBlendMode("ADD")
 		mark:Hide()
 		self.tarMark = mark
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark, true)
@@ -445,7 +449,7 @@ function UF:CreatePlates(unit)
 		self.creatureIcon = cicon
 
 		if NDuiDB["Nameplate"]["QuestIcon"] then
-			local qicon = self:CreateTexture(nil, "OVERLAY")
+			local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
 			qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
 			qicon:SetSize(20, 20)
 			qicon:SetAtlas(DB.questTex)
