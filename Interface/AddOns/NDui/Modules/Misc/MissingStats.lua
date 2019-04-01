@@ -12,6 +12,7 @@ function module:MissingStats()
 	local format, max, floor = string.format, math.max, math.floor
 	local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
 	local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
+	local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)
@@ -120,7 +121,8 @@ function module:MissingStats()
 		avgItemLevel = format("%.1f", avgItemLevel)
 
 		if displayItemLevel ~= avgItemLevel then
-			PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel.." / "..avgItemLevel, false, displayItemLevel)
+			displayItemLevel = displayItemLevel.." / "..avgItemLevel
 		end
+		PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
 	end)
 end
