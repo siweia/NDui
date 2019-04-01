@@ -47,7 +47,11 @@ local function ForceRaidFrame()
 	CompactUnitFrameProfiles_UpdateCurrentPanel()
 end
 
+local isScaling = false
 local function SetupUIScale()
+	if isScaling then return end
+	isScaling = true
+
 	local scale = NDuiADB["UIScale"]
 	local minScale = .64
 	local fixedHeight = 768/DB.ScreenHeight
@@ -65,6 +69,8 @@ local function SetupUIScale()
 	C.mult = fixedHeight/scale
 
 	NDuiADB["UIScale"] = scale
+
+	isScaling = false
 end
 
 local function ForceChatSettings()
@@ -441,6 +447,7 @@ function module:OnLogin()
 	B.HideOption(Advanced_UseUIScale)
 	B.HideOption(Advanced_UIScaleSlider)
 	SetupUIScale()
+	B:RegisterEvent("UI_SCALE_CHANGED", SetupUIScale)
 	if not NDuiDB["Tutorial"]["Complete"] then HelloWorld() end
 	ForceAddonSkins()
 	if NDuiDB["Chat"]["Lock"] then ForceChatSettings() end
