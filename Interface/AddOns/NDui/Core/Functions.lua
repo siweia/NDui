@@ -547,6 +547,7 @@ function B:CreateEditBox(width, height)
 	eb:SetTextInsets(5, 5, 0, 0)
 	eb:SetFontObject(GameFontHighlight)
 	B.CreateBD(eb, .3)
+	if F then F.CreateGradient(eb) end
 	eb:SetScript("OnEscapePressed", function()
 		eb:ClearFocus()
 	end)

@@ -70,7 +70,8 @@ function module:CreateInfoFrame()
 	local bg = B.CreateBG(search)
 	bg:SetPoint("TOPLEFT", -5, -5)
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
-	B.CreateBD(bg)
+	B.CreateBD(bg, .3)
+	if F then F.CreateGradient(bg) end
 
 	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tag:SetFont(unpack(DB.Font))
