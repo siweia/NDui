@@ -89,7 +89,7 @@ local function UpdateTooltip(bar)
 
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
-		GameTooltip:AddDoubleLine(XP..":", xp.."/"..mxp.." ("..floor(xp/mxp*100).."%)", .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(XP..":", xp.." / "..mxp.." ("..floor(xp/mxp*100).."%)", .6,.8,1, 1,1,1)
 		if rxp then
 			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26..":", "+"..rxp.." ("..floor(rxp/mxp*100).."%)", .6,.8,1, 1,1,1)
 		end
@@ -118,13 +118,13 @@ local function UpdateTooltip(bar)
 		end
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(name, 0,.6,1)
-		GameTooltip:AddDoubleLine(standingtext, value - barMin.."/"..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(standingtext, value - barMin.." / "..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", .6,.8,1, 1,1,1)
 
 		if C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 			local paraCount = floor(currentValue/threshold)
 			currentValue = mod(currentValue, threshold)
-			GameTooltip:AddDoubleLine(L["ParagonRep"]..paraCount, currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
 		end
 	end
 
@@ -132,18 +132,21 @@ local function UpdateTooltip(bar)
 		local current, barMax, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(HONOR, .0,.6,1)
-		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..barMax, .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.." / "..barMax, .6,.8,1, 1,1,1)
 	end
 
 	if C_AzeriteItem.HasActiveAzeriteItem() then
 		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
-		local azeriteItemName = azeriteItem:GetItemName()
-		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(C_AzeriteItem.FindActiveAzeriteItem())
+		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
 		local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 0,.6,1)
-		GameTooltip:AddDoubleLine(ARTIFACT_POWER, B.Numb(xp).."/"..B.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", .6,.8,1, 1,1,1)
+
+		azeriteItem:ContinueWithCancelOnItemLoad(function()
+			local azeriteItemName = azeriteItem:GetItemName()
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 0,.6,1)
+			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(xp).." / "..BreakUpLargeNumbers(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", .6,.8,1, 1,1,1)
+		end)
 	end
 
 	if HasArtifactEquipped() then
@@ -156,10 +159,10 @@ local function UpdateTooltip(bar)
 		else
 			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
 			local numText = num > 0 and " ("..num..")" or ""
-			GameTooltip:AddDoubleLine(ARTIFACT_POWER, B.Numb(totalXP)..numText, .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(totalXP)..numText, .6,.8,1, 1,1,1)
 			if xpForNextPoint ~= 0 then
 				local perc = " ("..floor(xp/xpForNextPoint*100).."%)"
-				GameTooltip:AddDoubleLine(L["Next Trait"], B.Numb(xp).."/"..B.Numb(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
+				GameTooltip:AddDoubleLine(L["Next Trait"], BreakUpLargeNumbers(xp).." / "..BreakUpLargeNumbers(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
 			end
 		end
 	end
