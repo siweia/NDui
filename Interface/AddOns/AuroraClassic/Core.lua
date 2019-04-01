@@ -43,6 +43,7 @@ C.defaults = {
 	["shadow"] = true,
 	["fontScale"] = 1,
 	["objectiveTracker"] = true,
+	["uiScale"] = 0,
 }
 
 C.frames = {}
@@ -57,6 +58,8 @@ local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours
 local function SetupPixelFix()
 	local screenHeight = select(2, GetPhysicalScreenSize())
 	local scale = UIParent:GetScale()
+	local uiScale = AuroraConfig.uiScale
+	if uiScale and uiScale > 0 and uiScale < .64 then scale = uiScale end
 	scale = tonumber(floor(scale*100 + .5)/100)
 	C.mult = 768/screenHeight/scale
 end
@@ -693,11 +696,8 @@ function F:ReskinGarrisonPortrait()
 	self.Level:ClearAllPoints()
 	self.Level:SetPoint("BOTTOM", self, 0, 12)
 
-	self.squareBG = F.CreateBDFrame(self, 1)
-	self.squareBG:SetFrameLevel(self:GetFrameLevel())
-	self.squareBG:SetPoint("TOPLEFT", 3, -3)
-	self.squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
-	
+	self.squareBG = F.CreateBDFrame(self.Portrait, 1)
+
 	if self.PortraitRingCover then
 		self.PortraitRingCover:SetColorTexture(0, 0, 0)
 		self.PortraitRingCover:SetAllPoints(self.squareBG)
@@ -843,60 +843,65 @@ C.themes["AuroraClassic"] = {}
 
 local Skin = CreateFrame("Frame")
 Skin:RegisterEvent("ADDON_LOADED")
-Skin:SetScript("OnEvent", function(_, _, addon)
-	if addon == "AuroraClassic" then
-		SetupPixelFix()
+Skin:RegisterEvent("PLAYER_LOGOUT")
+Skin:SetScript("OnEvent", function(_, event, addon)
+	if event == "ADDON_LOADED" then
+		if addon == "AuroraClassic" then
+			SetupPixelFix()
 
-		-- [[ Load Variables ]]
+			-- [[ Load Variables ]]
 
-		-- remove deprecated or corrupt variables
-		for key in pairs(AuroraConfig) do
-			if C.defaults[key] == nil then
-				AuroraConfig[key] = nil
+			-- remove deprecated or corrupt variables
+			for key in pairs(AuroraConfig) do
+				if C.defaults[key] == nil then
+					AuroraConfig[key] = nil
+				end
 			end
+
+			-- load or init variables
+			for key, value in pairs(C.defaults) do
+				if AuroraConfig[key] == nil then
+					if type(value) == "table" then
+						AuroraConfig[key] = {}
+						for k in pairs(value) do
+							AuroraConfig[key][k] = value[k]
+						end
+					else
+						AuroraConfig[key] = value
+					end
+				end
+			end
+
+			useButtonGradientColour = AuroraConfig.useButtonGradientColour
+
+			if useButtonGradientColour then
+				buttonR, buttonG, buttonB, buttonA = unpack(C.defaults.buttonGradientColour)
+			else
+				buttonR, buttonG, buttonB, buttonA = unpack(C.defaults.buttonSolidColour)
+			end
+
+			if AuroraConfig.useCustomColour then
+				r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
+			end
+
+			-- for modules
+			C.r, C.g, C.b = r, g, b
 		end
 
-		-- load or init variables
-		for key, value in pairs(C.defaults) do
-			if AuroraConfig[key] == nil then
-				if type(value) == "table" then
-					AuroraConfig[key] = {}
-					for k in pairs(value) do
-						AuroraConfig[key][k] = value[k]
-					end
-				else
-					AuroraConfig[key] = value
+		-- [[ Load modules ]]
+
+		-- check if the addon loaded is supported by Aurora, and if it is, execute its module
+		local addonModule = C.themes[addon]
+		if addonModule then
+			if type(addonModule) == "function" then
+				addonModule()
+			else
+				for _, moduleFunc in pairs(addonModule) do
+					moduleFunc()
 				end
 			end
 		end
-
-		useButtonGradientColour = AuroraConfig.useButtonGradientColour
-
-		if useButtonGradientColour then
-			buttonR, buttonG, buttonB, buttonA = unpack(C.defaults.buttonGradientColour)
-		else
-			buttonR, buttonG, buttonB, buttonA = unpack(C.defaults.buttonSolidColour)
-		end
-
-		if AuroraConfig.useCustomColour then
-			r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
-		end
-
-		-- for modules
-		C.r, C.g, C.b = r, g, b
-	end
-
-	-- [[ Load modules ]]
-
-	-- check if the addon loaded is supported by Aurora, and if it is, execute its module
-	local addonModule = C.themes[addon]
-	if addonModule then
-		if type(addonModule) == "function" then
-			addonModule()
-		else
-			for _, moduleFunc in pairs(addonModule) do
-				moduleFunc()
-			end
-		end
+	else
+		AuroraConfig.uiScale = UIParent:GetScale()
 	end
 end)
