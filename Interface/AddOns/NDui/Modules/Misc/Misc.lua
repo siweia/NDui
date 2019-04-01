@@ -39,6 +39,20 @@ function module:OnLogin()
 			PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 		end)
 	end
+
+	-- Auto chatBubbles
+	if NDuiDB["Misc"]["AutoBubbles"] then
+		local function updateBubble()
+			local name, instType = GetInstanceInfo()
+			if name and instType == "raid" then
+				SetCVar("chatBubbles", 1)
+			else
+				SetCVar("chatBubbles", 0)
+			end
+		end
+		updateBubble()
+		B:RegisterEvent("ZONE_CHANGED_NEW_AREA", updateBubble)
+	end
 end
 
 -- Archaeology counts

@@ -243,6 +243,7 @@ local defaultSettings = {
 		PlacedItemAlert = false,
 		RareAlertInWild = false,
 		ParagonRep = true,
+		AutoBubbles = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -568,6 +569,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
 		{},--blank
 		{1, "Misc", "ParagonRep", L["ParagonRep"]},
+		{1, "Misc", "AutoBubbles", L["AutoBubbles"], true},
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
