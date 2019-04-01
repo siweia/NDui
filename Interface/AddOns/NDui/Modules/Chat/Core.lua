@@ -78,10 +78,10 @@ local cycles = {
     { chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
     { chatType = "GUILD", use = function() return IsInGuild() end },
 	{ chatType = "CHANNEL", use = function(_, editbox)
-		if DB.Client ~= "zhCN" then return false end
+		if GetCVar("portal") ~= "CN" then return false end
 		local channels, inWorldChannel, number = {GetChannelList()}
 		for i = 1, #channels do
-			if channels[i] == L["World Channel Name"] then
+			if channels[i] == "大脚世界频道" then
 				inWorldChannel = true
 				number = channels[i-1]
 				break
