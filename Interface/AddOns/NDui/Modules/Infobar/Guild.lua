@@ -7,7 +7,7 @@ local info = module:RegisterInfobar(C.Infobar.GuildPos)
 
 local wipe, sort, format = table.wipe, table.sort, format
 local r, g, b = DB.r, DB.g, DB.b
-local infoFrame, gName, gOnline, gApps, gRank, applyData
+local infoFrame, gName, gOnline, gApps, gRank, applyData, prevTime
 
 local function setupInfoFrame()
 	if infoFrame then infoFrame:Show() return end
@@ -149,6 +149,11 @@ C_Timer.After(5, function()
 end)
 
 local function refreshData()
+	if not prevTime or (GetTime()-prevTime > 5) then
+		GuildRoster()
+		prevTime = GetTime()
+	end
+
 	wipe(guildTable)
 	local count = 0
 	local total, _, online = GetNumGuildMembers()
