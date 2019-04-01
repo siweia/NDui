@@ -4,8 +4,7 @@ if not C.Infobar.Gold then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GoldPos)
-local format = string.format
-local pairs, wipe = pairs, table.wipe
+local format, pairs, wipe = string.format, pairs, table.wipe
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
@@ -56,8 +55,7 @@ StaticPopupDialogs["RESETGOLD"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		NDuiADB["totalGold"] = {}
-		NDuiADB["totalGold"][myRealm] = {}
+		wipe(NDuiADB["totalGold"][myRealm])
 		NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
 	end,
 	whileDead = 1,
