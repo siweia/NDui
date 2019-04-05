@@ -23,6 +23,7 @@
 	<Script file="Blizzard_EncounterJournal.lua"/>
 	<Script file="Blizzard_FlightMap.lua"/>
 	<Script file="Blizzard_GarrisonUI.lua"/>
+	<Script file="Blizzard_GMChatUI.lua"/>
 	<Script file="Blizzard_GMSurveyUI.lua"/>
 	<Script file="Blizzard_GuildBankUI.lua"/>
 	<Script file="Blizzard_GuildControlUI.lua"/>

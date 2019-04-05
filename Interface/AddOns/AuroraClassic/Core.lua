@@ -549,6 +549,8 @@ function F:SetBD(x, y, x2, y2)
 		bg:SetPoint("BOTTOMRIGHT", x2, y2)
 	end
 	F.CreateSD(bg)
+
+	return bg
 end
 
 local hiddenFrame = CreateFrame("Frame")
