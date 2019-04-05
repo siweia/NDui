@@ -6,6 +6,14 @@ local maxLines = 1024
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 
+local function tabSetAlpha(self, alpha)
+	if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
+		self:SetAlpha(1)
+	elseif alpha < .6 then
+		self:SetAlpha(.6)
+	end
+end
+
 local function skinChat(self)
 	if not self or (self and self.styled) then return end
 
@@ -53,14 +61,7 @@ local function skinChat(self)
 			select(i, tab:GetRegions()):SetTexture(nil)
 		end
 	end
-
-	hooksecurefunc(tab, "SetAlpha", function(self, alpha)
-		if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
-			self:SetAlpha(1)
-		elseif alpha < .6 then
-			self:SetAlpha(.6)
-		end
-	end)
+	hooksecurefunc(tab, "SetAlpha", tabSetAlpha)
 
 	if NDuiDB["Chat"]["Lock"] then B.StripTextures(self) end
 	B.HideObject(self.buttonFrame)
@@ -250,8 +251,12 @@ function module:OnLogin()
 
 	-- Fix chatframe anchor after scaling
 	if NDuiDB["Chat"]["Lock"] then
+		local isScaling = false
 		B:RegisterEvent("UI_SCALE_CHANGED", function()
+			if isScaling then return end
+			isScaling = true
 			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
+			isScaling = false
 		end)
 	end
 
