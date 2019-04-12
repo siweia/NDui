@@ -70,4 +70,12 @@ function Bar:HideBlizz()
 		end
 	end
 	hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
+
+	-- Update token panel
+	local function updateToken()
+		TokenFrame_LoadUI()
+		TokenFrame_Update()
+		BackpackTokenFrame_Update()
+	end
+	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateToken)
 end
