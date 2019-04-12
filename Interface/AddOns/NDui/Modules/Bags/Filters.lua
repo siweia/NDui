@@ -13,6 +13,7 @@ local CustomFilterList = {
 	[141446] = true,	-- 宁神书卷
 	[153646] = true,	-- 静心圣典
 	[153647] = true,	-- 静心书卷
+	[161053] = true,	-- 水手咸饼干
 }
 
 local function isCustomFilter(item)
