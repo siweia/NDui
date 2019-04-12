@@ -243,7 +243,7 @@ local defaultSettings = {
 		PlacedItemAlert = false,
 		RareAlertInWild = false,
 		ParagonRep = true,
-		AutoBubbles = true,
+		AutoBubbles = false,
 	},
 	Tutorial = {
 		Complete = false,
@@ -396,7 +396,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyWatcher", L["UFs PartyWatcher"]},
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
 		{3, "UFs", "PartyWidth", L["PartyFrame Width"], false, {60, 150, 0}},
-		{3, "UFs", "PartyHeight", L["PartyFrame Height"], true, {25, 40, 0}},
+		{3, "UFs", "PartyHeight", L["PartyFrame Height"], true, {25, 60, 0}},
 		{},--blank
 		{1, "UFs", "RaidClickSets", "|cff00cc4c"..L["Enable ClickSets"], nil, function() setupClickCast() end},
 		{1, "UFs", "InstanceAuras", "|cff00cc4c"..L["Instance Auras"], true, function() setupRaidDebuffs() end},
@@ -412,8 +412,8 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"]},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{3, "UFs", "NumGroups", L["Num Groups"], true, {4, 8, 0}},
-		{3, "UFs", "RaidWidth", L["RaidFrame Width"], false, {60, 120, 0}},
-		{3, "UFs", "RaidHeight", L["RaidFrame Height"], true, {25, 40, 0}},
+		{3, "UFs", "RaidWidth", L["RaidFrame Width"], false, {60, 150, 0}},
+		{3, "UFs", "RaidHeight", L["RaidFrame Height"], true, {25, 60, 0}},
 		{},--blank
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
 		{1, "UFs", "SimpleModeSortByRole", L["SimpleMode SortByRole"]},
