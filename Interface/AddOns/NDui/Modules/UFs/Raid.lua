@@ -340,7 +340,11 @@ local function updateBuffIndicator(self, event, unit)
 						else
 							icon.cd:Hide()
 						end
-						icon.icon:SetVertexColor(unpack(value[2]))
+						if icon.block then
+							icon.icon:SetVertexColor(unpack(value[2]))
+						else
+							icon.icon:SetTexture(GetSpellTexture(spellID))
+						end
 					end
 					if count > 1 then icon.count:SetText(count) end
 					icon:Show()
@@ -373,7 +377,7 @@ function UF:CreateBuffIndicator(self)
 
 		icon.count = B.CreateFS(icon, 12, "")
 		icon.count:ClearAllPoints()
-		if NDuiDB["UFs"]["BuffTimerIndicator"] then
+		if NDuiDB["UFs"]["BuffIndicatorType"] == 3 then
 			local point, anchorPoint, x, y = unpack(counterOffsets[anchor][2])
 			icon.timer = B.CreateFS(icon, 12, "", false, "CENTER", -x, 0)
 			icon.count:SetPoint(point, icon.timer, anchorPoint, x, y)
@@ -383,7 +387,10 @@ function UF:CreateBuffIndicator(self)
 
 			icon.icon = icon:CreateTexture(nil, "BORDER")
 			icon.icon:SetAllPoints()
-			icon.icon:SetTexture(DB.bdTex)
+			if NDuiDB["UFs"]["BuffIndicatorType"] == 1 then
+				icon.icon:SetTexture(DB.bdTex)
+				icon.block = true
+			end
 
 			icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
 			icon.cd:SetAllPoints()
