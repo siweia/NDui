@@ -98,4 +98,5 @@ function module:AzeriteArmor()
 	GameTooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 	ShoppingTooltip1:HookScript("OnTooltipSetItem", updateAzeriteArmor)
+	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 end
