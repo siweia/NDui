@@ -192,24 +192,26 @@ local function UpdateQuestUnit(self, _, unit)
 			local unitName, progressText = strmatch(text, "^ ([^ ]-) ?%- (.+)$")
 			if r > .99 and g > .82 and b == 0 then
 				isLootQuest = true
-			elseif unitName and progressText and (unitName == "" or unitName == DB.MyName) then
+			elseif unitName and progressText then
 				isLootQuest = false
-				local current, goal = strmatch(progressText, "(%d+)/(%d+)")
-				local progress = strmatch(progressText, "([%d%.]+)%%")
-				if current and goal then
-					if tonumber(current) < tonumber(goal) then
-						questProgress = goal - current
+				if unitName == "" or unitName == DB.MyName then
+					local current, goal = strmatch(progressText, "(%d+)/(%d+)")
+					local progress = strmatch(progressText, "([%d%.]+)%%")
+					if current and goal then
+						if tonumber(current) < tonumber(goal) then
+							questProgress = goal - current
+							break
+						end
+					elseif progress then
+						progress = tonumber(progress)
+						if progress and progress < 100 then
+							questProgress = progress.."%"
+							break
+						end
+					else
+						isLootQuest = true
 						break
 					end
-				elseif progress then
-					progress = tonumber(progress)
-					if progress and progress < 100 then
-						questProgress = progress.."%"
-						break
-					end
-				else
-					isLootQuest = true
-					break
 				end
 			end
 		end
