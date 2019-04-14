@@ -366,20 +366,22 @@ function UF:CreateBuffIndicator(self)
 	if not NDuiDB["UFs"]["RaidBuffIndicator"] then return end
 	if NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then return end
 
+	local iconSize = NDuiDB["UFs"]["BI_IconSize"]
+	local fontScale = iconSize/10
 	local anchors = {"TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT"}
 	local icons = {}
 	for _, anchor in pairs(anchors) do
 		local icon = CreateFrame("Frame", nil, self)
 		icon:SetFrameLevel(self:GetFrameLevel()+10)
-		icon:SetSize(10, 10)
+		icon:SetSize(iconSize, iconSize)
 		icon:SetPoint(anchor)
 		icon:Hide()
 
-		icon.count = B.CreateFS(icon, 12, "")
+		icon.count = B.CreateFS(icon, 12*fontScale, "")
 		icon.count:ClearAllPoints()
 		if NDuiDB["UFs"]["BuffIndicatorType"] == 3 then
 			local point, anchorPoint, x, y = unpack(counterOffsets[anchor][2])
-			icon.timer = B.CreateFS(icon, 12, "", false, "CENTER", -x, 0)
+			icon.timer = B.CreateFS(icon, 12*fontScale, "", false, "CENTER", -x, 0)
 			icon.count:SetPoint(point, icon.timer, anchorPoint, x, y)
 		else
 			icon.bg = B.CreateBG(icon)
