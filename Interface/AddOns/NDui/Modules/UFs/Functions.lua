@@ -70,12 +70,12 @@ function UF:CreateHealthBar(self)
 
 	if mystyle == "PlayerPlate" then
 		health.colorHealth = true
-	elseif (mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) then
+	elseif (mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (mystyle ~= "raid" and NDuiDB["UFs"]["HealthColor"] == 2) then
 		health.colorClass = true
 		health.colorTapping = true
 		health.colorReaction = true
 		health.colorDisconnected = true
-	elseif mystyle ~= "raid" and NDuiDB["UFs"]["SmoothColor"] then
+	elseif mystyle ~= "raid" and NDuiDB["UFs"]["HealthColor"] == 3 then
 		health.colorSmooth = true
 	end
 	health.frequentUpdates = true
@@ -172,7 +172,7 @@ function UF:CreatePowerBar(self)
 	bg:SetTexture(DB.normTex)
 	bg.multiplier = .25
 
-	if (mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (mystyle ~= "raid" and NDuiDB["UFs"]["ClassColor"]) or mystyle == "PlayerPlate" then
+	if (mystyle == "raid" and NDuiDB["UFs"]["RaidClassColor"]) or (mystyle ~= "raid" and NDuiDB["UFs"]["HealthColor"] == 2) or mystyle == "PlayerPlate" then
 		power.colorPower = true
 	else
 		power.colorClass = true

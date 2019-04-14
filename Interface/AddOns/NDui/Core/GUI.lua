@@ -78,8 +78,6 @@ local defaultSettings = {
 	UFs = {
 		Enable = true,
 		Portrait = true,
-		ClassColor = false,
-		SmoothColor = false,
 		PlayerDebuff = false,
 		ToTAuras = false,
 		Arena = true,
@@ -120,6 +118,7 @@ local defaultSettings = {
 		PWOnRight = false,
 		PartyWidth = 100,
 		PartyHeight = 32,
+		HealthColor = 1,
 	},
 	Chat = {
 		Sticky = false,
@@ -377,10 +376,9 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Portrait", L["UFs Portrait"], true},
 		{1, "UFs", "ClassPower", L["UFs ClassPower"]},
 		{1, "UFs", "RuneTimer", L["UFs RuneTimer"], true},
-		{1, "UFs", "ClassColor", L["Classcolor HpBar"]},
-		{1, "UFs", "SmoothColor", L["Smoothcolor HpBar"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
-		{1, "UFs", "ToTAuras", L["ToT Debuff"]},
+		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
+		{4, "UFs", "HealthColor", L["HealthColor"], false, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}},
 		{3, "UFs", "HeightScale", L["UFs HeightScale"], true, {.8, 1.5, 1}},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
