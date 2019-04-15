@@ -319,7 +319,7 @@ function module:OnLogin()
 		self.glowFrame:SetSize(iconSize+8, iconSize+8)
 	end
 
-	function MyButton:OnEnter(item)
+	function MyButton:ItemOnEnter(item)
 		if self.glowFrame then B.HideOverlayGlow(self.glowFrame) end
 	end
 

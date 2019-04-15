@@ -99,7 +99,11 @@ local function ItemButton_UpdateQuest(self, item)
 end
 
 local function ItemButton_OnEnter(self)
-	if(self.OnEnter) then self:OnEnter() end
+	if(self.ItemOnEnter) then self:ItemOnEnter() end
+end
+
+local function ItemButton_OnLeave(self)
+	if(self.ItemOnLeave) then self:ItemOnLeave() end
 end
 
 cargBags:RegisterScaffold("Default", function(self)
