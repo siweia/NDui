@@ -234,8 +234,8 @@ end
 
 local cache = {}
 local function UpdateDungeonProgress(self, unit)
-	if unit ~= self.unit then return end
 	if not self.progressText or not AngryKeystones_Data then return end
+	if unit ~= self.unit then return end
 	self.progressText:SetText("")
 
 	local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario_GetInfo()
