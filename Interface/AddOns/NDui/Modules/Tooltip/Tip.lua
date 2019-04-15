@@ -2,12 +2,6 @@ local _, ns = ...
 local B, C, L, DB, F = unpack(ns)
 local module = B:RegisterModule("Tooltip")
 
-function module:OnLogin()
-	self:ExtraTipInfo()
-	self:TargetedInfo()
-	self:AzeriteArmor()
-end
-
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
 	rare = " |cffff99cc"..L["Rare"].."|r",
@@ -15,8 +9,7 @@ local classification = {
 	worldboss = " |cffff0000"..BOSS.."|r",
 }
 
-local strfind, format, strupper, strsplit = string.find, string.format, string.upper, string.split
-local strlen, pairs = string.len, pairs
+local strfind, format, strupper, strsplit, strlen, pairs = string.find, string.format, string.upper, string.split, string.len, pairs
 local PVP, FACTION_HORDE, FACTION_ALLIANCE, LEVEL, YOU, TARGET = PVP, FACTION_HORDE, FACTION_ALLIANCE, LEVEL, YOU, TARGET
 local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
 local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
@@ -107,7 +100,7 @@ function module:InsertRoleFrame(self, role)
 	self.roleFrame.Shadow:SetAlpha(1)
 end
 
-GameTooltip:HookScript("OnTooltipCleared", function(self)
+function module:OnTooltipCleared()
 	if self.factionFrame and self.factionFrame:GetAlpha() ~= 0 then
 		self.factionFrame:SetAlpha(0)
 	end
@@ -115,9 +108,9 @@ GameTooltip:HookScript("OnTooltipCleared", function(self)
 		self.roleFrame:SetAlpha(0)
 		self.roleFrame.Shadow:SetAlpha(0)
 	end
-end)
+end
 
-GameTooltip:HookScript("OnTooltipSetUnit", function(self)
+function module:OnTooltipSetUnit()
 	if self:IsForbidden() then return end
 	if NDuiDB["Tooltip"]["CombatHide"] and InCombatLockdown() then
 		return self:Hide()
@@ -236,39 +229,37 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	else
 		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
 	end
+end
 
-	if GameTooltipStatusBar:IsShown() and C.mult and not GameTooltipStatusBar.bg then
-		GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", C.mult, 3)
-		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -C.mult, 3)
-		GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
-		GameTooltipStatusBar:SetHeight(5)
-		local bg = B.CreateBG(GameTooltipStatusBar)
-		B.CreateBD(bg, .7)
-		B.CreateSD(bg)
-		B.CreateTex(bg)
-		GameTooltipStatusBar.bg = bg
-	end
-end)
-
-GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
-	if not value then return end
+function module:StatusBar_OnValueChanged(value)
+	if self:IsForbidden() or not value then return end
 	local min, max = self:GetMinMaxValues()
 	if (value < min) or (value > max) then return end
 
-	local unit = module:GetUnit(GameTooltip)
-	if UnitExists(unit) then
-		min, max = UnitHealth(unit), UnitHealthMax(unit)
-		if not self.text then
-			self.text = B.CreateFS(self, 12, "")
-		end
-		self.text:Show()
-		local hp = B.Numb(min).." / "..B.Numb(max)
-		self.text:SetText(hp)
+	if not self.text then
+		self.text = B.CreateFS(self, 12, "")
 	end
-end)
+	local unit = module:GetUnit(self:GetParent())
+	if value > 0 and max == 1 then
+		self.text:SetFormattedText("%d%%", value*100)
+	else
+		self.text:SetText(B.Numb(value).." | "..B.Numb(max))
+	end
+end
 
-hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
+function module:ReskinStatusBar()
+	GameTooltipStatusBar:ClearAllPoints()
+	GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", C.mult, 3)
+	GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -C.mult, 3)
+	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
+	GameTooltipStatusBar:SetHeight(5)
+	local bg = B.CreateBG(GameTooltipStatusBar)
+	B.CreateBD(bg, .7)
+	B.CreateSD(bg)
+	B.CreateTex(bg)
+end
+
+function module:GameTooltip_ShowStatusBar()
 	if self.statusBarPool then
 		local bar = self.statusBarPool:Acquire()
 		if bar and not bar.styled then
@@ -281,9 +272,9 @@ hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
 			bar.styled = true
 		end
 	end
-end)
+end
 
-hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
+function module:GameTooltip_ShowProgressBar()
 	if self.progressBarPool then
 		local bar = self.progressBarPool:Acquire()
 		if bar and not bar.styled then
@@ -295,22 +286,22 @@ hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 			bar.styled = true
 		end
 	end
-end)
+end
 
 -- Anchor and mover
 local mover
-hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
+function module:GameTooltip_SetDefaultAnchor(parent)
 	if NDuiDB["Tooltip"]["Cursor"] then
-		tooltip:SetOwner(parent, "ANCHOR_CURSOR_RIGHT")
+		self:SetOwner(parent, "ANCHOR_CURSOR_RIGHT")
 	else
 		if not mover then
-			mover = B.Mover(tooltip, L["Tooltip"], "GameTooltip", C.Tooltips.TipPos, 240, 120)
+			mover = B.Mover(self, L["Tooltip"], "GameTooltip", C.Tooltips.TipPos, 240, 120)
 		end
-		tooltip:SetOwner(parent, "ANCHOR_NONE")
-		tooltip:ClearAllPoints()
-		tooltip:SetPoint("BOTTOMRIGHT", mover)
+		self:SetOwner(parent, "ANCHOR_NONE")
+		self:ClearAllPoints()
+		self:SetPoint("BOTTOMRIGHT", mover)
 	end
-end)
+end
 
 -- Tooltip skin
 local function getBackdrop(self) return self.bg:GetBackdrop() end
@@ -367,11 +358,27 @@ function B:ReskinTooltip()
 	end
 end
 
-hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+function module:GameTooltip_SetBackdropStyle()
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
-end)
+end
 
+function module:OnLogin()
+	self:ExtraTipInfo()
+	self:TargetedInfo()
+	self:AzeriteArmor()
+
+	self:ReskinStatusBar()
+	GameTooltip:HookScript("OnTooltipCleared", self.OnTooltipCleared)
+	GameTooltip:HookScript("OnTooltipSetUnit", self.OnTooltipSetUnit)
+	GameTooltipStatusBar:SetScript("OnValueChanged", self.StatusBar_OnValueChanged)
+	hooksecurefunc("GameTooltip_ShowStatusBar", self.GameTooltip_ShowStatusBar)
+	hooksecurefunc("GameTooltip_ShowProgressBar", self.GameTooltip_ShowProgressBar)
+	hooksecurefunc("GameTooltip_SetDefaultAnchor", self.GameTooltip_SetDefaultAnchor)
+	hooksecurefunc("GameTooltip_SetBackdropStyle", self.GameTooltip_SetBackdropStyle)
+end
+
+-- Tooltip Skin Registration
 local tipTable = {}
 function module:RegisterTooltips(addon, func)
 	tipTable[addon] = func
