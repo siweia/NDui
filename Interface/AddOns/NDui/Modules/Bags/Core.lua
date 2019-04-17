@@ -107,7 +107,7 @@ function module:CreateRestoreButton(f)
 		NDuiDB["TempAnchor"][f.bank:GetName()] = nil
 		NDuiDB["TempAnchor"][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
-		f.main:SetPoint("BOTTOMRIGHT", -100, 100)
+		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 		f.bank:ClearAllPoints()
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
 		f.reagent:ClearAllPoints()
@@ -225,7 +225,7 @@ function module:OnLogin()
 
 		f.main = MyContainer:New("Main", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "bags"})
 		f.main:SetFilter(onlyBags, true)
-		f.main:SetPoint("BOTTOMRIGHT", -100, 100)
+		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 
 		f.junk = MyContainer:New("Junk", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
 		f.junk:SetFilter(bagsJunk, true)
