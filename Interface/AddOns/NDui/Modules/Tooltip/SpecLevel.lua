@@ -28,19 +28,6 @@ local updater = CreateFrame("Frame")
 updater:SetScript("OnUpdate", updateInspect)
 updater:Hide()
 
-local function inspectRequest(self)
-	if NDuiDB["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
-
-	local _, unit = self:GetUnit()
-	if not unit or not CanInspect(unit) then return end
-
-	currentUNIT, currentGUID = unit, UnitGUID(unit)
-	if not cache[currentGUID] then cache[currentGUID] = {} end
-
-	module:InspectUnit(unit)
-end
-GameTooltip:HookScript("OnTooltipSetUnit", inspectRequest)
-
 local function resetUnit(_, btn)
 	if btn == "LSHIFT" and UnitExists("mouseover") then
 		GameTooltip:SetUnit("mouseover")
@@ -247,4 +234,16 @@ function module:InspectUnit(unit, forced)
 		self:SetupTooltip()
 		updater:Show()
 	end
+end
+
+function module:InspectUnitSpecAndLevel()
+	if NDuiDB["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
+
+	local _, unit = self:GetUnit()
+	if not unit or not CanInspect(unit) then return end
+
+	currentUNIT, currentGUID = unit, UnitGUID(unit)
+	if not cache[currentGUID] then cache[currentGUID] = {} end
+
+	module:InspectUnit(unit)
 end
