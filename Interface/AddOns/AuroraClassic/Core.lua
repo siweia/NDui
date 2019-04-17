@@ -47,6 +47,7 @@ C.defaults = {
 }
 
 C.frames = {}
+C.isNewPatch = GetBuildInfo() == "8.2.0"
 
 -- [[ Functions ]]
 
@@ -810,14 +811,14 @@ function F:ReskinRole(role)
 	if self.background then self.background:SetTexture("") end
 	local cover = self.cover or self.Cover
 	if cover then cover:SetTexture("") end
-	local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self)
+	local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or (C.isNewPatch and self.Icon)
 	if texture then
 		texture:SetTexture(C.media.roleIcons)
 		texture:SetTexCoord(F.GetRoleTexCoord(role))
 	end
 	self.bg = F.CreateBDFrame(self)
 
-	local checkButton = self.checkButton or self.CheckButton
+	local checkButton = self.checkButton or self.CheckButton or (C.isNewPatch and self.CheckBox)
 	if checkButton then
 		checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
 		checkButton:SetPoint("BOTTOMLEFT", -2, -2)

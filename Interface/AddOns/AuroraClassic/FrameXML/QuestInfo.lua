@@ -82,33 +82,27 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local function restyleRewardButton(bu, isMapQuestInfo)
 		bu.NameFrame:Hide()
+		if bu.IconBorder then bu.IconBorder:SetAlpha(0) end
 
 		bu.Icon:SetTexCoord(.08, .92, .08, .92)
 		bu.Icon:SetDrawLayer("BACKGROUND", 1)
-		F.CreateBG(bu.Icon, 1)
-		if bu.IconBorder then
-			bu.IconBorder:SetAlpha(0)
+		local iconBG = F.CreateBG(bu.Icon)
+		if isMapQuestInfo then
+			bu.Icon:SetSize(29, 29)
+		else
+			bu.Icon:SetSize(35, 35)
 		end
 
 		local bg = F.CreateBDFrame(bu, .25)
-		bg:SetPoint("TOPLEFT", bu, 1, 1)
-
-		if isMapQuestInfo then
-			bg:SetPoint("BOTTOMRIGHT", bu, -3, 0)
-			bu.Icon:SetSize(29, 29)
-		else
-			bg:SetPoint("BOTTOMRIGHT", bu, -3, 1)
-		end
-
+		bg:SetPoint("TOPLEFT", iconBG, "TOPRIGHT")
+		bg:SetPoint("BOTTOMRIGHT", iconBG, 100, 0)
 		bu.bg = bg
 	end
 
 	hooksecurefunc("QuestInfo_GetRewardButton", function(rewardsFrame, index)
 		local bu = rewardsFrame.RewardButtons[index]
-
 		if not bu.restyled then
 			restyleRewardButton(bu, rewardsFrame == MapQuestInfoRewardsFrame)
-
 			bu.restyled = true
 		end
 	end)

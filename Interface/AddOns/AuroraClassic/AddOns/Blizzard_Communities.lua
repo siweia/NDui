@@ -25,6 +25,24 @@ C.themes["Blizzard_Communities"] = function()
 		if frame.FindAGuildButton then F.Reskin(frame.FindAGuildButton) end
 		if frame.AcceptButton then F.Reskin(frame.AcceptButton) end
 		if frame.DeclineButton then F.Reskin(frame.DeclineButton) end
+
+		if C.isNewPatch then
+			local optionsList = frame.OptionsList
+			if optionsList then
+				F.ReskinDropDown(optionsList.ClubFocusDropdown)
+				optionsList.ClubFocusDropdown.GuildFocusDropdownLabel:SetWidth(150)
+				F.ReskinDropDown(optionsList.ClubSizeDropdown)
+				F.ReskinRole(optionsList.TankRoleFrame, "TANK")
+				F.ReskinRole(optionsList.HealerRoleFrame, "HEALER")
+				F.ReskinRole(optionsList.DpsRoleFrame, "DPS")
+				F.ReskinInput(optionsList.SearchBox)
+				optionsList.SearchBox:SetSize(118, 22)
+				F.Reskin(optionsList.Search)
+				optionsList.Search:ClearAllPoints()
+				optionsList.Search:SetPoint("TOPRIGHT", optionsList.SearchBox, "BOTTOMRIGHT", 0, -2)
+				F.Reskin(frame.PendingClubs)
+			end
+		end
 	end
 
 	F.StripTextures(CommunitiesFrameCommunitiesList)
