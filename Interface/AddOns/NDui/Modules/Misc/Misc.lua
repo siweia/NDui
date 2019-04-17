@@ -41,7 +41,7 @@ function module:OnLogin()
 	end
 
 	-- Auto chatBubbles
-	if NDuiDB["Misc"]["AutoBubbles"] then
+	if NDuiADB["AutoBubbles"] then
 		local function updateBubble()
 			local name, instType = GetInstanceInfo()
 			if name and instType == "raid" then

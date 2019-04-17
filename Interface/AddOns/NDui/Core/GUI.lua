@@ -243,7 +243,6 @@ local defaultSettings = {
 		PlacedItemAlert = false,
 		RareAlertInWild = false,
 		ParagonRep = true,
-		AutoBubbles = false,
 	},
 	Tutorial = {
 		Complete = false,
@@ -278,6 +277,7 @@ local accountSettings = {
 	TexStyle = 2,
 	KeystoneInfo = {},
 	AzeriteArmor = true,
+	AutoBubbles = false,
 }
 
 local function InitialSettings(source, target)
@@ -569,7 +569,7 @@ local optionList = {		-- type, key, value, name, horizon, doubleline
 		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
 		{},--blank
 		{1, "Misc", "ParagonRep", L["ParagonRep"]},
-		{1, "Misc", "AutoBubbles", L["AutoBubbles"], true},
+		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
