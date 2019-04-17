@@ -33,7 +33,7 @@ The following options are listed by priority. The first check that returns true 
 .colorClassPet     - Use `self.colors.class[class]` to color the bar if the unit is player controlled, but not a player
                      (boolean)
 .colorSelection    - Use `self.colors.selection[selection]` to color the bar based on the unit's selection color.
-                     `selection` is defined by the return value of Private.UnitSelectionType, a wrapper function
+                     `selection` is defined by the return value of Private.unitSelectionType, a wrapper function
                      for [UnitSelectionType](https://wow.gamepedia.com/API_UnitSelectionType) (boolean)
 .colorReaction     - Use `self.colors.reaction[reaction]` to color the bar based on the player's reaction towards the
                      unit. `reaction` is defined by the return value of
@@ -85,7 +85,7 @@ local _, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
-local UnitSelectionType = Private.UnitSelectionType
+local unitSelectionType = Private.unitSelectionType
 
 local function UpdateColor(element, unit, cur, max)
 	local parent = element.__owner
@@ -100,8 +100,8 @@ local function UpdateColor(element, unit, cur, max)
 		(element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
 		t = parent.colors.class[class]
-	elseif(element.colorSelection and UnitSelectionType(unit, element.considerSelectionInCombatHostile)) then
-		t = parent.colors.selection[UnitSelectionType(unit, element.considerSelectionInCombatHostile)]
+	elseif(element.colorSelection and unitSelectionType(unit, element.considerSelectionInCombatHostile)) then
+		t = parent.colors.selection[unitSelectionType(unit, element.considerSelectionInCombatHostile)]
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then
 		t = parent.colors.reaction[UnitReaction(unit, 'player')]
 	elseif(element.colorSmooth) then
