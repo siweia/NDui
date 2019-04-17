@@ -234,6 +234,23 @@ local list = {
 		{AuraID = 269838, UnitID = "player", Flash = true},	-- 邪恶污染，孢林
 		{AuraID = 276297, UnitID = "player"},	-- 虚空种子，风暴神殿
 		{AuraID = 268086, UnitID = "player"},	-- 恐怖光环，庄园
+	-- 风暴熔炉
+		{AuraID = 282384, UnitID = "player"},	-- 精神割裂，无眠秘党
+		{AuraID = 282566, UnitID = "player"},	-- 力量应许
+		{AuraID = 282561, UnitID = "player"},	-- 黑暗通报者
+		{AuraID = 282432, UnitID = "player", Text = L["Get Out"]},	-- 粉碎之疑
+		{AuraID = 282621, UnitID = "player"},	-- 终焉见证
+		{AuraID = 282743, UnitID = "player"},	-- 风暴湮灭
+		{AuraID = 282738, UnitID = "player"},	-- 虚空之拥
+		{AuraID = 282589, UnitID = "player"},	-- 脑髓侵袭
+		{AuraID = 287876, UnitID = "player"},	-- 黑暗吞噬
+		{AuraID = 282540, UnitID = "player"},	-- 死亡化身
+		{AuraID = 284851, UnitID = "player"},	-- 末日之触，乌纳特
+		{AuraID = 285652, UnitID = "player"},	-- 贪食折磨
+		{AuraID = 285685, UnitID = "player"},	-- 恩佐斯之赐：疯狂
+		{AuraID = 284804, UnitID = "player"},	-- 深渊护持
+		{AuraID = 285477, UnitID = "player"},	-- 渊黯
+		{AuraID = 285367, UnitID = "player"},	-- 恩佐斯的穿刺凝视
 	-- 达萨罗之战
 		{AuraID = 283573, UnitID = "player"},	-- 圣洁之刃，圣光勇士
 		{AuraID = 285671, UnitID = "player"},	-- 碾碎，丛林之王格洛恩
@@ -618,6 +635,13 @@ local list = {
 		{AuraID = 273721, UnitID = "target"},
 		{AuraID = 256493, UnitID = "target"},	-- 炽燃的艾泽里特，矿区1
 		{AuraID = 271867, UnitID = "target"},	-- 氪金致胜，矿区1
+	-- 风暴熔炉
+		{AuraID = 282741, UnitID = "target", Value = true},	-- 暗影之壳，无眠秘党
+		{AuraID = 284722, UnitID = "target", Value = true},	-- 暗影之壳，乌纳特
+		{AuraID = 287692, UnitID = "target"},	-- 隐性联结
+		{AuraID = 286310, UnitID = "target"},	-- 虚空之盾
+		{AuraID = 285333, UnitID = "target"},	-- 非自然再生
+		{AuraID = 285642, UnitID = "target"},	-- 恩佐斯之赐：癔乱
 	-- 达萨罗之战
 		{AuraID = 284459, UnitID = "target"},	-- 狂热，圣光勇士
 		{AuraID = 284436, UnitID = "target"},	-- 清算圣印
