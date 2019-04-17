@@ -2,12 +2,13 @@ local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
 	local r, g, b = C.r, C.g, C.b
+	local tooltipsEnabled = AuroraConfig.tooltips
 
 	local function reskinDropdown()
 		for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do
 			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
 				local menu = _G[name..i.."MenuBackdrop"]
-				if AuroraConfig.tooltips then
+				if tooltipsEnabled then
 					if menu and not menu.styled then
 						F.ReskinTooltip(menu)
 						menu.styled = true
