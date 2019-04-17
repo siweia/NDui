@@ -4,7 +4,8 @@ local B, C, L, DB, F = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 local ipairs, strmatch, unpack = ipairs, string.match, unpack
-local BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
+local BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT = BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT
+local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
@@ -217,7 +218,7 @@ function module:OnLogin()
 	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
 	local f = {}
-	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent = self:GetFilters()
+	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet = self:GetFilters()
 
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
@@ -238,6 +239,9 @@ function module:OnLogin()
 		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
 		f.consumble:SetFilter(bagConsumble, true)
 
+		f.bagCompanion = MyContainer:New("BagCompanion", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
+		f.bagCompanion:SetFilter(bagMountPet, true)
+
 		f.bank = MyContainer:New("Bank", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bank"})
 		f.bank:SetFilter(onlyBank, true)
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
@@ -254,6 +258,9 @@ function module:OnLogin()
 
 		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
 		f.bankConsumble:SetFilter(bankConsumble, true)
+
+		f.bankCompanion = MyContainer:New("BankCompanion", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
+		f.bankCompanion:SetFilter(bankMountPet, true)
 
 		f.reagent = MyContainer:New("Reagent", {Columns = NDuiDB["Bags"]["BankWidth"]})
 		f.reagent:SetFilter(onlyReagent, true)
@@ -319,7 +326,7 @@ function module:OnLogin()
 		self.glowFrame:SetSize(iconSize+8, iconSize+8)
 	end
 
-	function MyButton:ItemOnEnter(item)
+	function MyButton:ItemOnEnter()
 		if self.glowFrame then B.HideOverlayGlow(self.glowFrame) end
 	end
 
@@ -353,7 +360,7 @@ function module:OnLogin()
 		end
 
 		if NDuiDB["Bags"]["BagsiLvl"] then
-			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= "" and item.equipLoc ~= "INVTYPE_TABARD" and item.equipLoc ~= "INVTYPE_BODY" and item.equipLoc ~= "INVTYPE_BAG")) then
+			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR) then
 				local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
 				local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 				self.iLvl:SetText(level)
@@ -397,8 +404,8 @@ function module:OnLogin()
 		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 5, -offset + 5)
 		self:SetSize(width + 10, height + offset)
 
-		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.junk})
-		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble})
+		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.bagCompanion, f.consumble, f.junk})
+		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankConsumble})
 	end
 
 	function MyContainer:OnCreate(name, settings)
@@ -422,8 +429,10 @@ function module:OnLogin()
 			label = LOOT_JOURNAL_LEGENDARIES
 		elseif strmatch(name, "Consumble$") then
 			label = BAG_FILTER_CONSUMABLES
-		elseif strmatch(name, "Junk") then
+		elseif name == "Junk" then
 			label = BAG_FILTER_JUNK
+		elseif strmatch(name, "Companion") then
+			label = MOUNTS_AND_PETS
 		end
 		if label then B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8) return end
 

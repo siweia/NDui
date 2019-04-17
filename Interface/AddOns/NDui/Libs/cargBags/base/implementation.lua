@@ -30,7 +30,8 @@ Implementation.instances = {}
 Implementation.itemKeys = {}
 
 local toBagSlot = cargBags.ToBagSlot
-local L
+local LE_ITEM_CLASS_MISCELLANEOUS = LE_ITEM_CLASS_MISCELLANEOUS or 15
+local LE_ITEM_MISCELLANEOUS_COMPANION_PET = LE_ITEM_MISCELLANEOUS_COMPANION_PET or 2
 
 --[[!
 	Creates a new instance of the class
@@ -311,21 +312,19 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 		i.id = GetContainerItemID(bagID, slotID)
 
 		local texture
-		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice, i.classID = GetItemInfo(clink)
+		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice, i.classID, i.subClassID = GetItemInfo(clink)
 		i.texture = i.texture or texture
 		i.rarity = i.rarity or i.quality
 
 		if clink:find("battlepet") then
-			if not(L) then
-				L = cargBags:GetLocalizedTypes()
-			end
 			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
 			local _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
-			i.type = L["Battle Pets"]
+			i.classID = LE_ITEM_CLASS_MISCELLANEOUS
+			i.subClassID = LE_ITEM_MISCELLANEOUS_COMPANION_PET
 			i.rarity = tonumber(rarity) or 0
 			i.id = tonumber(id) or 0
 			i.name = name
-			i.minLevel = level
+			i.level = level
 			i.link = clink
 		elseif clink:find("keystone") then
 			local data = strmatch(clink, "|H(.-)|h(.-)|h")
