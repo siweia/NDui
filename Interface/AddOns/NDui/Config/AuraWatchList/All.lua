@@ -251,6 +251,7 @@ local list = {
 		{AuraID = 284804, UnitID = "player"},	-- 深渊护持
 		{AuraID = 285477, UnitID = "player"},	-- 渊黯
 		{AuraID = 285367, UnitID = "player"},	-- 恩佐斯的穿刺凝视
+		{AuraID = 284733, UnitID = "player", Flash = true},	-- 虚空之拥
 	-- 达萨罗之战
 		{AuraID = 283573, UnitID = "player"},	-- 圣洁之刃，圣光勇士
 		{AuraID = 285671, UnitID = "player"},	-- 碾碎，丛林之王格洛恩
