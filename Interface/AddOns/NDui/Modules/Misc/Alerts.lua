@@ -12,6 +12,7 @@ function module:AddAlerts()
 	self:VersionCheck()
 	self:ExplosiveAlert()
 	self:PlacedItemAlert()
+	self:UunatAlert()
 end
 
 --[[
@@ -319,4 +320,31 @@ function module:PlacedItemAlert()
 		end
 	end
 	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", checkSpell)
+end
+
+-- 乌纳特踩圈通报，测试
+function module:UunatAlert()
+	local data = {}
+	local function isBuffBlock()
+		for i = 1, 40 do
+			local name, _, _, _, _, _, _, _, _, spellID = UnitDebuff("player", i)
+			if not name then break end
+			if name and spellID == 284733 then
+				return true
+			end
+		end
+	end
+
+	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", function(_, ...)
+		if not NDuiDB["Misc"]["UunatAlert"] then return end
+		local _, eventType, _, _, _, _, _, _, destName, _, _, spellID = ...
+		if eventType == "SPELL_DAMAGE" and spellID == 285214 and not isBuffBlock() then
+			data[destName] = (data[destName] or 0) + 1
+			SendChatMessage(format(L["UunatAlertString"], destName, data[destName]), msgChannel())
+		end
+	end)
+
+	B:RegisterEvent("ENCOUNTER_END", function()
+		wipe(data)
+	end)
 end
