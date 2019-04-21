@@ -26,8 +26,8 @@ C.themes["Blizzard_AdventureMap"] = function()
 				bu.ItemNameBG:Hide()
 			end
 		end
-		dialog.Details.Child.TitleHeader:SetTextColor(1, 1, 1)
-		dialog.Details.Child.ObjectivesHeader:SetTextColor(1, 1, 1)
+		dialog.Details.Child.TitleHeader:SetTextColor(1, .8, 0)
+		dialog.Details.Child.ObjectivesHeader:SetTextColor(1, .8, 0)
 
 		self.styled = true
 	end)

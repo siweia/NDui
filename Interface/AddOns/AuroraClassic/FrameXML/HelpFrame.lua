@@ -69,7 +69,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	local function clearTab(f)
-		f.text:SetTextColor(1, .82, 0)
+		f.text:SetTextColor(1, .8, 0)
 	end
 
 	local function styleTab(bu)

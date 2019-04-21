@@ -33,7 +33,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 					local child2 = select(j, child:GetChildren())
 					if child2 then
 						if child2.Text and reskinFont then
-							child2.Text:SetTextColor(1, .8, 0)
+							child2.Text:SetTextColor(1, 1, 1)
 						end
 
 						if child2.LeadingText and reskinFont then

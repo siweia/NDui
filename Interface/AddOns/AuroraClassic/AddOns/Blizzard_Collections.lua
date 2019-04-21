@@ -20,13 +20,13 @@ C.themes["Blizzard_Collections"] = function()
 
 	MountJournal.LeftInset:Hide()
 	MountJournal.RightInset:Hide()
+	MountJournal.MountDisplay.YesMountsTex:SetAlpha(0)
+	MountJournal.MountDisplay.NoMountsTex:SetAlpha(0)
+	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournal.LeftInset:Hide()
 	PetJournal.RightInset:Hide()
 	PetJournal.PetCardInset:Hide()
 	PetJournal.loadoutBorder:Hide()
-	MountJournal.MountDisplay.YesMountsTex:SetAlpha(0)
-	MountJournal.MountDisplay.NoMountsTex:SetAlpha(0)
-	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournalTutorialButton.Ring:Hide()
 
 	F.StripTextures(MountJournal.MountCount)
@@ -34,6 +34,7 @@ C.themes["Blizzard_Collections"] = function()
 	F.StripTextures(PetJournal.PetCount)
 	F.CreateBD(PetJournal.PetCount, .25)
 	F.CreateBD(MountJournal.MountDisplay.ModelScene, .25)
+	F.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
 
 	F.Reskin(MountJournalMountButton)
 	F.Reskin(PetJournalSummonButton)
@@ -46,6 +47,13 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, "right")
 	F.ReskinFilterButton(PetJournalFilterButton)
 	F.ReskinFilterButton(MountJournalFilterButton)
+
+	if C.isNewPatch then
+		F.StripTextures(MountJournal.BottomLeftInset)
+		local bg = F.CreateBDFrame(MountJournal.BottomLeftInset, .25)
+		bg:SetPoint("TOPLEFT", 3, 0)
+		bg:SetPoint("BOTTOMRIGHT", -24, 2)
+	end
 
 	MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
 	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
@@ -155,12 +163,6 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournal.HealPetButton:SetPushedTexture("")
 	PetJournal.HealPetButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(PetJournal.HealPetButton)
-
-	do
-		local ic = MountJournal.MountDisplay.InfoButton.Icon
-		ic:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(ic)
-	end
 
 	if AuroraConfig.tooltips then
 		F.ReskinTooltip(PetJournalPrimaryAbilityTooltip)

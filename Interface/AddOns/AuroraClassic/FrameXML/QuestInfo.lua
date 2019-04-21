@@ -187,19 +187,19 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	QuestInfoTitleHeader:SetTextColor(1, 1, 1)
+	QuestInfoTitleHeader:SetTextColor(1, .8, 0)
 	QuestInfoTitleHeader.SetTextColor = F.dummy
 	QuestInfoTitleHeader:SetShadowColor(0, 0, 0)
 
-	QuestInfoDescriptionHeader:SetTextColor(1, 1, 1)
+	QuestInfoDescriptionHeader:SetTextColor(1, .8, 0)
 	QuestInfoDescriptionHeader.SetTextColor = F.dummy
 	QuestInfoDescriptionHeader:SetShadowColor(0, 0, 0)
 
-	QuestInfoObjectivesHeader:SetTextColor(1, 1, 1)
+	QuestInfoObjectivesHeader:SetTextColor(1, .8, 0)
 	QuestInfoObjectivesHeader.SetTextColor = F.dummy
 	QuestInfoObjectivesHeader:SetShadowColor(0, 0, 0)
 
-	QuestInfoRewardsFrame.Header:SetTextColor(1, 1, 1)
+	QuestInfoRewardsFrame.Header:SetTextColor(1, .8, 0)
 	QuestInfoRewardsFrame.Header.SetTextColor = F.dummy
 	QuestInfoRewardsFrame.Header:SetShadowColor(0, 0, 0)
 
