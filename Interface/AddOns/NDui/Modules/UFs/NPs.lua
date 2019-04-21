@@ -517,6 +517,7 @@ function UF:CreatePlayerPlate()
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
 	UF:CreateClassPower(self)
+	UF:StaggerBar(self)
 	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
 
 	if NDuiDB["Nameplate"]["PPPowerText"] then

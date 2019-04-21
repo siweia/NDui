@@ -675,12 +675,12 @@ end
 
 -- Class Powers
 local margin = C.UFs.BarMargin
-local width, height = unpack(C.UFs.BarSize)
+local barWidth, barHeight = unpack(C.UFs.BarSize)
 
 local function postUpdateClassPower(element, cur, max, diff, powerType)
 	if diff then
 		for i = 1, 6 do
-			element[i]:SetWidth((width - (max-1)*margin)/max)
+			element[i]:SetWidth((barWidth - (max-1)*margin)/max)
 		end
 	end
 
@@ -734,15 +734,15 @@ end
 
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
-		width, height = self:GetWidth(), (self:GetHeight()+self.Power:GetHeight())
+		barWidth, barHeight = self:GetWidth(), (self:GetHeight()+self.Power:GetHeight())
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 
 	local bars = {}
 	for i = 1, 6 do
 		bars[i] = CreateFrame("StatusBar", nil, self.Health)
-		bars[i]:SetHeight(height)
-		bars[i]:SetWidth((width - 5*margin) / 6)
+		bars[i]:SetHeight(barHeight)
+		bars[i]:SetWidth((barWidth - 5*margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 		B.CreateSD(bars[i], 3, 3)
@@ -756,7 +756,7 @@ function UF:CreateClassPower(self)
 			bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
 			bars[i].bg:SetAllPoints()
 			bars[i].bg:SetTexture(DB.normTex)
-			bars[i].bg.multiplier = .2
+			bars[i].bg.multiplier = .25
 
 			if NDuiDB["UFs"]["RuneTimer"] then
 				bars[i].timer = B.CreateFS(bars[i], 13, "")
@@ -779,6 +779,24 @@ function UF:CreateClassPower(self)
 		bars.PostUpdate = postUpdateClassPower
 		self.ClassPower = bars
 	end
+end
+
+function UF:StaggerBar(self)
+	local stagger = CreateFrame("StatusBar", nil, self.Health)
+	stagger:SetSize(barWidth, barHeight)
+	stagger:SetPoint(unpack(C.UFs.BarPoint))
+	stagger:SetStatusBarTexture(DB.normTex)
+	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
+	B.CreateSD(stagger, 3, 3)
+	stagger:Hide()
+
+	local bg = stagger:CreateTexture(nil, "BACKGROUND")
+	bg:SetAllPoints()
+	bg:SetTexture(DB.normTex)
+	bg.multiplier = .25
+
+	self.Stagger = stagger
+	self.Stagger.bg = bg
 end
 
 local function postUpdateAltPower(element, _, cur, _, max)
@@ -908,15 +926,15 @@ function UF:CreateAddPower(self)
 	B.CreateSD(bar, 3, 3)
 	bar.colorPower = true
 
-	local b = bar:CreateTexture(nil, "BACKGROUND")
-	b:SetAllPoints()
-	b:SetTexture(DB.normTex)
-	b.multiplier = .3
-	local t = B.CreateFS(bar, 12, "", false, "CENTER", 1, -3)
+	local bg = bar:CreateTexture(nil, "BACKGROUND")
+	bg:SetAllPoints()
+	bg:SetTexture(DB.normTex)
+	bg.multiplier = .25
+	local text = B.CreateFS(bar, 12, "", false, "CENTER", 1, -3)
 
 	self.AdditionalPower = bar
-	self.AdditionalPower.bg = b
-	self.AdditionalPower.Text = t
+	self.AdditionalPower.bg = bg
+	self.AdditionalPower.Text = text
 	self.AdditionalPower.PostUpdate = postUpdateAddPower
 end
 
