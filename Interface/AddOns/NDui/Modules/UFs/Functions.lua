@@ -782,13 +782,14 @@ function UF:CreateClassPower(self)
 end
 
 function UF:StaggerBar(self)
+	if DB.MyClass ~= "MONK" then return end
+
 	local stagger = CreateFrame("StatusBar", nil, self.Health)
 	stagger:SetSize(barWidth, barHeight)
 	stagger:SetPoint(unpack(C.UFs.BarPoint))
 	stagger:SetStatusBarTexture(DB.normTex)
 	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
 	B.CreateSD(stagger, 3, 3)
-	stagger:Hide()
 
 	local bg = stagger:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
