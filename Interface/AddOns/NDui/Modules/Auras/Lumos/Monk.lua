@@ -4,18 +4,6 @@ local module = B:GetModule("Auras")
 
 if DB.MyClass ~= "MONK" then return end
 
-function module:PostCreateLumos(self)
-	local stagger = B.CreateFS(self.Health, 18, "", "system")
-	stagger:ClearAllPoints()
-	stagger:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
-
-	self.stagger = stagger
-end
-
-function module:PostUpdateVisibility(self)
-	if self.stagger then self.stagger:SetText("") end
-end
-
 local function GetUnitAura(unit, spell, filter)
 	return module:GetUnitAura(unit, spell, filter)
 end
@@ -74,15 +62,12 @@ function module:ChantLumos(self)
 
 		do
 			local button = self.bu[5]
-			local cur = UnitStagger("player") or 0
-			local max = UnitHealthMax("player")
-			local perc = cur / max
 			local name, _, duration, expire, _, spellID = GetUnitAura("player", 124275, "HARMFUL")
 			if not name then name, _, duration, expire, _, spellID = GetUnitAura("player", 124274, "HARMFUL") end
 			if not name then name, _, duration, expire, _, spellID = GetUnitAura("player", 124273, "HARMFUL") end
 
-			if name and cur > 0 and duration > 0 then
-				button.CD:SetCooldown(expire-duration, duration)
+			if name and duration > 0 then
+				button.CD:SetCooldown(expire-10, 10)
 				button.CD:Show()
 				button:SetAlpha(1)
 			else
@@ -91,7 +76,6 @@ function module:ChantLumos(self)
 			end
 			local texture = spellID and GetSpellTexture(spellID) or 463281
 			button.Icon:SetTexture(texture)
-			self.stagger:SetText(DB.InfoColor..B.Numb(cur).." "..DB.MyColor..B.Numb(perc * 100).."%")
 
 			if button.Icon:GetTexture() == GetSpellTexture(124273) then
 				B.ShowOverlayGlow(button)

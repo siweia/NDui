@@ -206,3 +206,13 @@ oUF.Tags.Methods["altpower"] = function(unit)
 	end
 end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
+
+-- Monk stagger
+oUF.Tags.Methods["monkstagger"] = function(unit)
+	if unit ~= "player" then return end
+	local cur = UnitStagger(unit) or 0
+	local perc = cur / UnitHealthMax(unit)
+	if cur == 0 then return end
+	return B.Numb(cur).." | "..DB.MyColor..floor(perc*100 + .5).."%"
+end
+oUF.Tags.Events["monkstagger"] = "UNIT_MAXHEALTH UNIT_AURA"
