@@ -32,33 +32,24 @@ function module:PostCreateLumos(self)
 	self.dices = buttons
 end
 
-function module:PostUpdateVisibility(self)
-	for i = 1, 6 do
-		local dice = self.dices[i]
-		if dice:IsShown() then
-			self.dices[i]:SetAlpha(.3)
-		end
-	end
-end
-
 local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
 
-local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
-	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown)
+local function UpdateBuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
-local function UpdateDebuff(button, spellID, auraID, cooldown)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
+local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local function UpdateSpellStatus(button, spellID)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
 	if IsUsableSpell(spellID) then
-		button:SetAlpha(1)
+		button.Icon:SetDesaturated(false)
 	else
-		button:SetAlpha(.5)
+		button.Icon:SetDesaturated(true)
 	end
 end
 
@@ -66,15 +57,15 @@ function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		for i = 1, 6 do self.dices[i]:Hide() end
 
-		UpdateDebuff(self.bu[1], 703, 703, true)
-		UpdateDebuff(self.bu[2], 1943, 1943)
+		UpdateDebuff(self.bu[1], 703, 703, true, "END")
+		UpdateDebuff(self.bu[2], 1943, 1943, false, "END")
 
 		do
 			local button = self.bu[3]
 			if IsPlayerSpell(111240) then
 				UpdateSpellStatus(button, 111240)
 			elseif IsPlayerSpell(193640) then
-				UpdateBuff(button, 193640, 193641)
+				UpdateBuff(button, 193640, 193641, false, true)
 			else
 				UpdateSpellStatus(button, 1329)
 			end
@@ -85,13 +76,13 @@ function module:ChantLumos(self)
 			if IsPlayerSpell(200806) then
 				UpdateCooldown(button, 200806, true)
 			elseif IsPlayerSpell(245388) then
-				UpdateDebuff(button, 245388, 245389, true)
+				UpdateDebuff(button, 245388, 245389, true, true)
 			else
 				UpdateDebuff(button, 2818, 2818)
 			end
 		end
 
-		UpdateDebuff(self.bu[5], 79140, 79140, true)
+		UpdateDebuff(self.bu[5], 79140, 79140, true, true)
 	elseif GetSpecialization() == 2 then
 		UpdateBuff(self.bu[1], 195627, 195627)
 
@@ -114,14 +105,14 @@ function module:ChantLumos(self)
 			elseif IsPlayerSpell(271877) then
 				UpdateCooldown(button, 271877, true)
 			else
-				UpdateBuff(button, 13877, 13877, true)
+				UpdateBuff(button, 13877, 13877, true, true)
 				hasBlade = true
 			end
 		end
-		UpdateBuff(self.bu[4], 13750, 13750, true)
+		UpdateBuff(self.bu[4], 13750, 13750, true, true)
 
 		local spellID = hasBlade and 31224 or 13877
-		UpdateBuff(self.bu[5], spellID, spellID, true)
+		UpdateBuff(self.bu[5], spellID, spellID, true, true)
 
 		-- Dices
 		for i = 1, 6 do
@@ -133,7 +124,7 @@ function module:ChantLumos(self)
 	elseif GetSpecialization() == 3 then
 		for i = 1, 6 do self.dices[i]:Hide() end
 
-		UpdateDebuff(self.bu[1], 195452, 195452)
+		UpdateDebuff(self.bu[1], 195452, 195452, true, "END")
 
 		do
 			local button = self.bu[2]
@@ -146,8 +137,8 @@ function module:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[3], 185313, 185422, true)
+		UpdateBuff(self.bu[3], 185313, 185422, true, true)
 		UpdateBuff(self.bu[4], 212283, 212283, true)
-		UpdateBuff(self.bu[5], 121471, 121471, true)
+		UpdateBuff(self.bu[5], 121471, 121471, true, true)
 	end
 end

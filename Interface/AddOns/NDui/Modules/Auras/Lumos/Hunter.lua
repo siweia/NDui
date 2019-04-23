@@ -26,12 +26,12 @@ local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
 
-local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
-	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown)
+local function UpdateBuff(button, spellID, auraID, cooldown, isPet, glow)
+	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
-local function UpdateDebuff(button, spellID, auraID, cooldown)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
+local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local boomGroups = {
@@ -44,9 +44,9 @@ function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		UpdateCooldown(self.bu[1], 34026, true)
 		UpdateCooldown(self.bu[2], 217200, true)
-		UpdateBuff(self.bu[3], 106785, 272790, false, true)
-		UpdateBuff(self.bu[4], 19574, 19574, true)
-		UpdateBuff(self.bu[5], 193530, 193530, true)
+		UpdateBuff(self.bu[3], 106785, 272790, false, true, "END")
+		UpdateBuff(self.bu[4], 19574, 19574, true, false, true)
+		UpdateBuff(self.bu[5], 193530, 193530, true, false, true)
 
 	elseif GetSpecialization() == 2 then
 		UpdateCooldown(self.bu[1], 19434, true)
@@ -75,12 +75,12 @@ function module:ChantLumos(self)
 					button.Count:SetText(count)
 					button.CD:SetCooldown(expire-duration, duration)
 					button.CD:Show()
-					button:SetAlpha(1)
+					button.Icon:SetDesaturated(false)
 					button.Icon:SetTexture(GetSpellTexture(spellID))
 				else
 					button.Count:SetText("")
 					button.CD:Hide()
-					button:SetAlpha(.5)
+					button.Icon:SetDesaturated(true)
 					button.Icon:SetTexture(GetSpellTexture(193534))
 				end
 			elseif IsPlayerSpell(257284) then
@@ -93,7 +93,7 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[4]
 			if IsPlayerSpell(260402) then
-				UpdateCooldown(button, 260402, true)
+				UpdateBuff(button, 260402, 260402, true, false, true)
 			elseif IsPlayerSpell(120360) then
 				UpdateCooldown(button, 120360, true)
 			else
@@ -101,10 +101,10 @@ function module:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[5], 288613, 288613, true)
+		UpdateBuff(self.bu[5], 288613, 288613, true, false, true)
 
 	elseif GetSpecialization() == 3 then
-		UpdateDebuff(self.bu[1], 259491, 259491)
+		UpdateDebuff(self.bu[1], 259491, 259491, false, "END")
 
 		do
 			local button = self.bu[2]
@@ -130,7 +130,7 @@ function module:ChantLumos(self)
 					boom.Icon:SetTexture(GetSpellTexture(boomGroups[spellID]))
 					boom.CD:SetCooldown(expire-duration, duration)
 					boom.CD:Show()
-					boom:SetAlpha(1)
+					boom.Icon:SetDesaturated(false)
 				else
 					local texture = GetSpellTexture(259495)
 					if texture == GetSpellTexture(270323) then
@@ -140,7 +140,7 @@ function module:ChantLumos(self)
 					else
 						boom.Icon:SetTexture(GetSpellTexture(186270))	-- 270335
 					end
-					boom:SetAlpha(.5)
+					boom.Icon:SetDesaturated(true)
 				end
 
 				UpdateCooldown(button, 259495, true)
@@ -157,10 +157,10 @@ function module:ChantLumos(self)
 			elseif IsPlayerSpell(269751) then
 				UpdateCooldown(button, 269751, true)
 			else
-				UpdateBuff(button, 259387, 259388)
+				UpdateBuff(button, 259387, 259388, false, false, "END")
 			end
 		end
 
-		UpdateBuff(self.bu[5], 266779, 266779, true)
+		UpdateBuff(self.bu[5], 266779, 266779, true, false, true)
 	end
 end

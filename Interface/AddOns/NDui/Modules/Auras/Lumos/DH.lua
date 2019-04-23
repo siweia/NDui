@@ -8,20 +8,20 @@ local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
 
-local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
-	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown)
+local function UpdateBuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
-local function UpdateDebuff(button, spellID, auraID, cooldown)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
+local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local function UpdateSpellStatus(button, spellID)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
 	if IsUsableSpell(spellID) then
-		button:SetAlpha(1)
+		button.Icon:SetDesaturated(false)
 	else
-		button:SetAlpha(.5)
+		button.Icon:SetDesaturated(true)
 	end
 end
 
@@ -36,10 +36,10 @@ function module:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[2], 188499, 188499, true)
+		UpdateBuff(self.bu[2], 188499, 188499, true, true)
 		UpdateCooldown(self.bu[3], 198013, true)
 		UpdateCooldown(self.bu[4], 179057, true)
-		UpdateBuff(self.bu[5], 191427, 162264, true)
+		UpdateBuff(self.bu[5], 191427, 162264, true, true)
 	elseif GetSpecialization() == 2 then
 		do
 			local button, spellID = self.bu[1], 228477
@@ -48,8 +48,8 @@ function module:ChantLumos(self)
 		end
 
 		UpdateBuff(self.bu[2], 178740, 178740, true)
-		UpdateDebuff(self.bu[3], 204021, 207744, true)
-		UpdateBuff(self.bu[4], 203720, 203819, true)
-		UpdateBuff(self.bu[5], 187827, 187827, true)
+		UpdateDebuff(self.bu[3], 204021, 207744, true, true)
+		UpdateBuff(self.bu[4], 203720, 203819, true, "END")
+		UpdateBuff(self.bu[5], 187827, 187827, true, true)
 	end
 end

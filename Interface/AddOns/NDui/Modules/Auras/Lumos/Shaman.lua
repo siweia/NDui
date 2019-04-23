@@ -12,12 +12,12 @@ local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
 
-local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
-	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown)
+local function UpdateBuff(button, spellID, auraID, cooldown)
+	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown)
 end
 
-local function UpdateDebuff(button, spellID, auraID, cooldown)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
+local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local function UpdateTotemAura(button, texture, spellID)
@@ -26,7 +26,7 @@ end
 
 function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		UpdateDebuff(self.bu[1], 188389, 188389, true)
+		UpdateDebuff(self.bu[1], 188389, 188389, true, "END")
 		UpdateBuff(self.bu[2], 51505, 77762, true)
 
 		do
@@ -37,9 +37,11 @@ function module:ChantLumos(self)
 				UpdateCooldown(button, 117014, true)
 			else
 				if IsUsableSpell(8042) then
-					button:SetAlpha(1)
+					button.Icon:SetDesaturated(false)
+					B.ShowOverlayGlow(button.glowFrame)
 				else
-					button:SetAlpha(.5)
+					button.Icon:SetDesaturated(true)
+					B.HideOverlayGlow(button.glowFrame)
 				end
 				button.Icon:SetTexture(GetSpellTexture(8042))
 			end
@@ -50,15 +52,15 @@ function module:ChantLumos(self)
 			if IsPlayerSpell(260895) then
 				UpdateBuff(button, 260895, 272737)
 			elseif IsPlayerSpell(191634) then
-				UpdateBuff(button, 191634, 191634, true)
+				UpdateBuff(button, 191634, 191634, true, true)
 			else
-				UpdateBuff(button, 114050, 114050, true)
+				UpdateBuff(button, 114050, 114050, true, true)
 			end
 		end
 
 		UpdateCooldown(self.bu[5], 198067, true)
 	elseif GetSpecialization() == 2 then
-		UpdateBuff(self.bu[1], 194084, 194084)
+		UpdateBuff(self.bu[1], 194084, 194084, false, "END")
 
 		do
 			local button = self.bu[2]
@@ -78,7 +80,7 @@ function module:ChantLumos(self)
 				if name then
 					button.CD:SetCooldown(expire-duration, duration)
 					button.CD:Show()
-					button:SetAlpha(1)
+					button.Icon:SetDesaturated(false)
 					button.Count:SetText("")
 					button.Icon:SetTexture(GetSpellTexture(197992))
 				else
@@ -107,7 +109,7 @@ function module:ChantLumos(self)
 			if IsPlayerSpell(188089) then
 				UpdateDebuff(button, 188089, 188089, true)
 			elseif IsPlayerSpell(114051) then
-				UpdateBuff(button, 114051, 114051, true)
+				UpdateBuff(button, 114051, 114051, true, true)
 			else
 				UpdateCooldown(button, 51533, true)
 			end
@@ -139,7 +141,7 @@ function module:ChantLumos(self)
 			if IsPlayerSpell(198838) then
 				UpdateTotemAura(button, 136098, 198838)
 			else
-				UpdateBuff(button, 108271, 108271, true)
+				UpdateBuff(button, 108271, 108271, true, true)
 			end
 		end
 

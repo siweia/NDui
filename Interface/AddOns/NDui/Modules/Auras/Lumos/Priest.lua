@@ -8,26 +8,26 @@ local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
 
-local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
-	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown)
+local function UpdateBuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
-local function UpdateDebuff(button, spellID, auraID, cooldown)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
+local function UpdateDebuff(button, spellID, auraID)
+	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, false, "END")
 end
 
 function module:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		UpdateCooldown(self.bu[1], 47540, true)
 		UpdateCooldown(self.bu[2], 194509, true)
-		UpdateBuff(self.bu[3], 47536, 47536, true)
-		UpdateBuff(self.bu[4], 33206, 33206, true)
+		UpdateBuff(self.bu[3], 47536, 47536, true, true)
+		UpdateBuff(self.bu[4], 33206, 33206, true, true)
 		UpdateCooldown(self.bu[5], 32375, true)
 	elseif GetSpecialization() == 2 then
 		UpdateCooldown(self.bu[1], 2050, true)
 		UpdateCooldown(self.bu[2], 47788, true)
-		UpdateBuff(self.bu[3], 64843, 64843, true)
-		UpdateBuff(self.bu[4], 64901, 64901, true)
+		UpdateBuff(self.bu[3], 64843, 64843, true, true)
+		UpdateBuff(self.bu[4], 64901, 64901, true, true)
 		UpdateCooldown(self.bu[5], 32375, true)
 	elseif GetSpecialization() == 3 then
 		UpdateDebuff(self.bu[1], 589, 589)
@@ -46,12 +46,14 @@ function module:ChantLumos(self)
 			local button = self.bu[4]
 			UpdateCooldown(button, 228260, true)
 			if IsUsableSpell(228260) then
-				button:SetAlpha(1)
+				button.Icon:SetDesaturated(false)
+				B.ShowOverlayGlow(button.glowFrame)
 			else
-				button:SetAlpha(.5)
+				button.Icon:SetDesaturated(true)
+				B.HideOverlayGlow(button.glowFrame)
 			end
 		end
 
-		UpdateBuff(self.bu[5], 47585, 47585, true)
+		UpdateBuff(self.bu[5], 47585, 47585, true, true)
 	end
 end

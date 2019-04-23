@@ -12,20 +12,20 @@ local function UpdateCooldown(button, spellID, texture)
 	return module:UpdateCooldown(button, spellID, texture)
 end
 
-local function UpdateBuff(button, spellID, auraID, cooldown, isPet)
-	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown)
+local function UpdateBuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
-local function UpdateDebuff(button, spellID, auraID, cooldown)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown)
+local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
+	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local function UpdateSpellStatus(button, spellID)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
 	if IsUsableSpell(spellID) then
-		button:SetAlpha(1)
+		button.Icon:SetDesaturated(false)
 	else
-		button:SetAlpha(.5)
+		button.Icon:SetDesaturated(true)
 	end
 end
 
@@ -39,7 +39,7 @@ function module:ChantLumos(self)
 			if IsPlayerSpell(114165) then
 				UpdateCooldown(button, 114165, true)
 			elseif IsPlayerSpell(105809) then
-				UpdateBuff(button, 105809, 105809, true)
+				UpdateBuff(button, 105809, 105809, true, true)
 			else
 				UpdateCooldown(button, 275773, true)
 			end
@@ -48,13 +48,13 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[4]
 			if IsPlayerSpell(216331) then
-				UpdateBuff(button, 216331, 216331, true)
+				UpdateBuff(button, 216331, 216331, true, true)
 			else
-				UpdateBuff(button, 31884, 31884, true)
+				UpdateBuff(button, 31884, 31884, true, true)
 			end
 		end
 
-		UpdateBuff(self.bu[5], 31821, 31821, true)
+		UpdateBuff(self.bu[5], 31821, 31821, true, true)
 	elseif GetSpecialization() == 2 then
 		do
 			local button = self.bu[1]
@@ -65,17 +65,17 @@ function module:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[2], 53600, 132403, true)
-		UpdateBuff(self.bu[3], 31884, 31884, true)
-		UpdateBuff(self.bu[4], 31850, 31850, true)
-		UpdateBuff(self.bu[5], 86659, 86659, true)
+		UpdateBuff(self.bu[2], 53600, 132403, true, "END")
+		UpdateBuff(self.bu[3], 31884, 31884, true, true)
+		UpdateBuff(self.bu[4], 31850, 31850, true, true)
+		UpdateBuff(self.bu[5], 86659, 86659, true, true)
 	elseif GetSpecialization() == 3 then
 		do
 			local button = self.bu[1]
 			if IsPlayerSpell(267610) then
-				UpdateBuff(button, 267610, 267611)
+				UpdateBuff(button, 267610, 267611, false, "END")
 			elseif IsPlayerSpell(267798) then
-				UpdateDebuff(button, 267798, 267799, true)
+				UpdateDebuff(button, 267798, 267799, true, true)
 			else
 				UpdateBuff(button, 20271, 269571, true)
 			end
@@ -87,7 +87,7 @@ function module:ChantLumos(self)
 				UpdateCooldown(button, 24275)
 				UpdateSpellStatus(button, 24275)
 			elseif IsPlayerSpell(231832) then
-				UpdateBuff(button, 231832, 281178, true)
+				UpdateBuff(button, 184575, 231832, true)
 			else
 				UpdateBuff(button, 35395, 209785, true)
 			end
@@ -107,9 +107,9 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[4]
 			if IsPlayerSpell(223817) then
-				UpdateBuff(button, 223817, 223819)
+				UpdateBuff(button, 223817, 223819, false, true)
 			elseif IsPlayerSpell(84963) then
-				UpdateBuff(button, 84963, 84963)
+				UpdateBuff(button, 84963, 84963, false, "END")
 			else
 				button.Icon:SetTexture(GetSpellTexture(184662))
 				local name, _, duration, expire, _, _, value = GetUnitAura("player", 184662, "HELPFUL")
@@ -117,7 +117,7 @@ function module:ChantLumos(self)
 					button.Count:SetText(B.Numb(value))
 					button.CD:SetCooldown(expire-duration, duration)
 					button.CD:Show()
-					button:SetAlpha(1)
+					button.Icon:SetDesaturated(false)
 				else
 					button.Count:SetText("")
 					UpdateCooldown(button, 184662)
@@ -129,10 +129,10 @@ function module:ChantLumos(self)
 		do
 			local button = self.bu[5]
 			if IsPlayerSpell(231895) then
-				UpdateBuff(button, 231895, 231895, true)
+				UpdateBuff(button, 231895, 231895, true, true)
 				button.Count:SetTextColor(1, 1, 1)
 			else
-				UpdateBuff(button, 31884, 31884, true)
+				UpdateBuff(button, 31884, 31884, true, true)
 			end
 		end
 	end
