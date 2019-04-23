@@ -796,6 +796,10 @@ function UF:StaggerBar(self)
 	bg:SetTexture(DB.normTex)
 	bg.multiplier = .25
 
+	local text = B.CreateFS(stagger, 13)
+	text:SetPoint("CENTER", stagger, "TOP")
+	self:Tag(text, "[monkstagger]")
+
 	self.Stagger = stagger
 	self.Stagger.bg = bg
 end
