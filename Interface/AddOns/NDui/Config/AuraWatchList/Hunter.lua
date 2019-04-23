@@ -51,6 +51,7 @@ local list = {
 		{AuraID = 270332, UnitID = "target", Caster = "player"},	-- 信息素炸弹
 		{AuraID = 259277, UnitID = "target", Caster = "pet"},		-- 杀戮命令
 		{AuraID = 277959, UnitID = "target", Caster = "player"},	-- 稳固瞄准
+		{AuraID = 217200, UnitID = "target", Caster = "player"},	-- 倒刺射击
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 19574, UnitID = "player"},	-- 狂野怒火
@@ -63,7 +64,7 @@ local list = {
 		{AuraID = 118455, UnitID = "pet"},		-- 野兽瞬劈斩
 		{AuraID = 207094, UnitID = "pet"},		-- 泰坦之雷
 		{AuraID = 217200, UnitID = "pet"},		-- 凶猛狂暴
-		{AuraID = 272790, UnitID = "pet", Flash = true},	-- 狂暴
+		{AuraID = 272790, UnitID = "pet"},		-- 狂暴
 		{AuraID = 193530, UnitID = "player"},	-- 野性守护
 		{AuraID = 185791, UnitID = "player"},	-- 荒野呼唤
 		{AuraID = 259388, UnitID = "player"},	-- 猫鼬之怒
