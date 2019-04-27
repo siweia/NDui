@@ -49,7 +49,6 @@ local frames = {
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
 	["VideoOptionsFrame"] = false,
-	["WorldStateScoreFrame"] = false,
 
 	-- Other AddOns
 	["BaudErrorFrame"] = false,

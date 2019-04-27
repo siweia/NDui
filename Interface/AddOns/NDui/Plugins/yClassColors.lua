@@ -131,7 +131,9 @@ local function updateScoreFrame()
 		end
 	end
 end
-hooksecurefunc("WorldStateScoreFrame_Update", updateScoreFrame)
+if not DB.isNewPatch then
+	hooksecurefunc("WorldStateScoreFrame_Update", updateScoreFrame)
+end
 
 -- Friends
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
