@@ -223,7 +223,24 @@ function UF:DefaultClickSets()
 	end
 end
 
-local function onMouseWheelCast(self)
+local wheelBindingIndex = {
+	["MOUSEWHEELUP"] = 6,
+	["ALT-MOUSEWHEELUP"] = 7,
+	["CTRL-MOUSEWHEELUP"] = 8,
+	["SHIFT-MOUSEWHEELUP"] = 9,
+	["MOUSEWHEELDOWN"] = 10,
+	["ALT-MOUSEWHEELDOWN"] = 11,
+	["CTRL-MOUSEWHEELDOWN"] = 12,
+	["SHIFT-MOUSEWHEELDOWN"] = 13,
+}
+
+local onEnterString = "self:ClearBindings();"
+local onLeaveString = onEnterString
+for keyString, keyIndex in pairs(wheelBindingIndex) do
+	onEnterString = format("%sself:SetBindingClick(0, \"%s\", self:GetName(), \"Button%d\");", onEnterString, keyString, keyIndex)
+end
+
+local function setupMouseWheelCast(self)
 	local found
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
 		local key = unpack(data)
@@ -234,28 +251,13 @@ local function onMouseWheelCast(self)
 	end
 
 	if found then
-		self:SetAttribute("clickcast_onenter", [[
-			self:ClearBindings()
-			self:SetBindingClick(1, "MOUSEWHEELUP", self, "Button6")
-			self:SetBindingClick(1, "ALT-MOUSEWHEELUP", self, "Button7")
-			self:SetBindingClick(1, "CTRL-MOUSEWHEELUP", self, "Button8")
-			self:SetBindingClick(1, "SHIFT-MOUSEWHEELUP", self, "Button9")
-			self:SetBindingClick(1, "MOUSEWHEELDOWN", self, "Button10")
-			self:SetBindingClick(1, "ALT-MOUSEWHEELDOWN", self, "Button11")
-			self:SetBindingClick(1, "CTRL-MOUSEWHEELDOWN", self, "Button12")
-			self:SetBindingClick(1, "SHIFT-MOUSEWHEELDOWN", self, "Button13")
-		]])
-		self:SetAttribute("clickcast_onleave", [[
-			self:ClearBindings()
-		]])
+		self:SetAttribute("clickcast_onenter", onEnterString)
+		self:SetAttribute("clickcast_onleave", onLeaveString)
 	end
 end
 
 local function setupClickSets(self)
-	if self.mystyle ~= "raid" then return end	-- just in case
-	if InCombatLockdown() then return end
-
-	onMouseWheelCast(self)
+	setupMouseWheelCast(self)
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
 		local key, modKey, value = unpack(data)
