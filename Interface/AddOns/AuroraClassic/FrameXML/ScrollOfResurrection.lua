@@ -11,7 +11,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	for i = 1, 6 do
 		select(i, ScrollOfResurrectionFrameNoteFrame:GetRegions()):Hide()
 	end
-	ScrollOfResurrectionSelectionFrameBackground:Hide()
+	if not C.isNewPatch then
+		ScrollOfResurrectionSelectionFrameBackground:Hide()
+	end
 	F.Reskin(ScrollOfResurrectionSelectionFrameAcceptButton)
 	F.Reskin(ScrollOfResurrectionSelectionFrameCancelButton)
 	F.Reskin(ScrollOfResurrectionFrameAcceptButton)

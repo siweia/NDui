@@ -16,6 +16,7 @@ C.themes["Blizzard_BindingUI"] = function()
 
 	F.CreateBD(KeyBindingFrame)
 	F.CreateSD(KeyBindingFrame)
+	if C.isNewPatch then KeyBindingFrame.BG:Hide() end
 	F.Reskin(KeyBindingFrame.defaultsButton)
 	F.Reskin(KeyBindingFrame.unbindButton)
 	F.Reskin(KeyBindingFrame.okayButton)

@@ -14,6 +14,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 		F.CreateBD(InterfaceOptionsFrame)
 		F.CreateSD(InterfaceOptionsFrame)
+		if C.isNewPatch then InterfaceOptionsFrame.Border:Hide() end
 
 		InterfaceOptionsFrameHeader:SetTexture("")
 		InterfaceOptionsFrameHeader:ClearAllPoints()

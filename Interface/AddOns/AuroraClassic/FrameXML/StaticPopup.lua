@@ -30,18 +30,17 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu:SetPushedTexture("")
 		F.CreateBG(bu)
 		bu.IconBorder:SetAlpha(0)
+		if C.isNewPatch then frame["Border"]:Hide() end
 
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
 		F.CreateBD(frame)
 		F.CreateSD(frame)
-
 		for j = 1, 4 do
 			F.Reskin(frame["button"..j])
 		end
 		F.Reskin(frame["extraButton"])
-
 		F.ReskinClose(close)
 
 		close.minimize = close:CreateTexture(nil, "OVERLAY")

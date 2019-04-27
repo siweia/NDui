@@ -202,7 +202,7 @@ C.themes["Blizzard_Communities"] = function()
 	local detailFrame = CommunitiesFrame.GuildMemberDetailFrame
 	F.StripTextures(detailFrame)
 	F.SetBD(detailFrame)
-	detailFrame.BackBackground:Hide()
+	if not C.isNewPatch then detailFrame.BackBackground:Hide() end
 	F.ReskinClose(detailFrame.CloseButton)
 	F.Reskin(detailFrame.RemoveButton)
 	F.Reskin(detailFrame.GroupInviteButton)

@@ -10,6 +10,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	F.CreateBD(VideoOptionsFrame)
 	F.CreateSD(VideoOptionsFrame)
+	if C.isNewPatch then VideoOptionsFrame.Border:Hide() end
 	F.Reskin(VideoOptionsFrameOkay)
 	F.Reskin(VideoOptionsFrameCancel)
 	F.Reskin(VideoOptionsFrameDefaults)

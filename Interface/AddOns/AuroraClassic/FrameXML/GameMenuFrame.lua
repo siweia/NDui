@@ -6,6 +6,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	GameMenuFrameHeader:SetPoint("TOP", GameMenuFrame, 0, 7)
 	F.CreateBD(GameMenuFrame)
 	F.CreateSD(GameMenuFrame)
+	if C.isNewPatch then GameMenuFrame.Border:Hide() end
 
 	local buttons = {
 		GameMenuButtonHelp,
