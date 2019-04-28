@@ -1015,8 +1015,8 @@ function UF:CreateFCT(self)
 		fcf[i] = parentFrame:CreateFontString("$parentText", "OVERLAY")
 	end
 
-	fcf.xOffset = 60
-	fcf.fontHeight = 18
+	fcf.font = DB.Font[1]
+	fcf.fontFlags = DB.Font[3]
 	fcf.showPets = NDuiDB["UFs"]["PetCombatText"]
 	fcf.showHots = NDuiDB["UFs"]["HotsDots"]
 	fcf.showAutoAttack = NDuiDB["UFs"]["AutoAttack"]

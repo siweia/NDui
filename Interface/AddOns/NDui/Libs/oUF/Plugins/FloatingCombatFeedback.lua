@@ -8,10 +8,12 @@ local oUF = ns.oUF or oUF
 assert(oUF, "oUF FloatingCombatFeedback was unable to locate oUF install")
 
 local _G = getfenv(0)
-local pairs = pairs
-local cos, sin, mmax = cos, sin, math.max
-local tremove, tinsert = table.remove, table.insert
+local pairs, select = _G.pairs, _G.select
+local tremove, tinsert, wipe = _G.table.remove, _G.table.insert, _G.table.wipe
+local m_cos, m_sin, m_pi, m_random = _G.math.cos, _G.math.sin, _G.math.pi, _G.math.random
 
+local UnitGUID = _G.UnitGUID
+local GetSpellTexture = _G.GetSpellTexture
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
 local ENTERING_COMBAT = _G.ENTERING_COMBAT
 local LEAVING_COMBAT = _G.LEAVING_COMBAT
@@ -23,6 +25,17 @@ local SCHOOL_MASK_NATURE = _G.SCHOOL_MASK_NATURE or 0x08
 local SCHOOL_MASK_FROST = _G.SCHOOL_MASK_FROST or 0x10
 local SCHOOL_MASK_SHADOW = _G.SCHOOL_MASK_SHADOW or 0x20
 local SCHOOL_MASK_ARCANE = _G.SCHOOL_MASK_ARCANE or 0x40
+local PET_ATTACK_TEXTURE = _G.PET_ATTACK_TEXTURE
+
+local function clamp(v)
+	if v > 1 then
+		return 1
+	elseif v < 0 then
+		return 0
+	end
+
+	return v
+end
 
 local colors = {
 	ABSORB		= {r = 1.00, g = 1.00, b = 1.00},
@@ -62,7 +75,7 @@ local function removeString(self, i, string)
 end
 
 local function getAvailableString(self)
-	for i = 1, self.__max do
+	for i = 1, #self do
 		if not self[i]:IsShown() then
 			return self[i]
 		end
@@ -71,27 +84,61 @@ local function getAvailableString(self)
 	return removeString(self, 1, self.FeedbackToAnimate[1])
 end
 
-local function fountainScroll(self)
-	return self.x + self.xDirection * self.scrollHeight * (1 - cos(90 * self.elapsed / self.scrollTime)),
-		self.y + self.yDirection * self.scrollHeight * sin(90 * self.elapsed / self.scrollTime)
-end
+local animations = {
+	["fountain"] = function(self)
+		return self.x + self.xDirection * self.radius * (1 - m_cos(m_pi / 2 * self.progress)),
+			self.y + self.yDirection * self.radius * m_sin(m_pi / 2 * self.progress)
+	end,
+	["vertical"] = function(self)
+		return self.x, self.y + self.yDirection * self.radius * self.progress
+	end,
+	["horizontal"] = function(self)
+		return self.x + self.xDirection * self.radius * self.progress, self.y
+	end,
+	["diagonal"] = function(self)
+		return self.x + self.xDirection * self.radius * self.progress,
+			self.y + self.yDirection * self.radius * self.progress
+	end,
+	["static"] = function(self)
+		return self.x, self.y
+	end,
+	["random"] = function(self)
+		if self.elapsed == 0 then
+			self.x, self.y = m_random(-self.radius * 0.66, self.radius * 0.66), m_random(-self.radius * 0.66, self.radius * 0.66)
+		end
 
-local function standardScroll(self)
-	return self.x, self.y + self.yDirection * self.scrollHeight * self.elapsed / self.scrollTime
-end
+		return self.x, self.y
+	end,
+}
+
+local xOffsetsByAnimation = {
+	["diagonal"  ] = 24,
+	["fountain"  ] = 24,
+	["horizontal"] = 8,
+	["random"    ] = 0,
+	["static"    ] = 0,
+	["vertical"  ] = 50,
+}
+
+local yOffsetsByAnimation = {
+	["diagonal"  ] = 8,
+	["fountain"  ] = 8,
+	["horizontal"] = 8,
+	["random"    ] = 0,
+	["static"    ] = 0,
+	["vertical"  ] = 8,
+}
 
 local function onUpdate(self, elapsed)
-	for index, string in pairs(self.FeedbackToAnimate) do
-		if string.elapsed >= string.scrollTime then
+	for index, string in next, self.FeedbackToAnimate do
+		if string.elapsed >= self.scrollTime then
 			removeString(self, index, string)
 		else
+			string.progress = string.elapsed / self.scrollTime
+			string:SetPoint("CENTER", self, "CENTER", string:GetXY())
+
 			string.elapsed = string.elapsed + elapsed
-
-			string:SetPoint("CENTER", self, "CENTER", self.Scroll(string))
-
-			if (string.elapsed >= self.fadeout) then
-				string:SetAlpha(mmax(1 - (string.elapsed - self.fadeout) / (self.scrollTime - self.fadeout), 0))
-			end
+			string:SetAlpha(clamp(1 - (string.elapsed - self.fadeTime) / (self.scrollTime - self.fadeTime)))
 		end
 	end
 
@@ -100,9 +147,13 @@ local function onUpdate(self, elapsed)
 	end
 end
 
-local function onShow(self)
-	for index, string in pairs(self.FeedbackToAnimate) do
-		removeString(self, index, string)
+local function flush(self)
+	wipe(self.FeedbackToAnimate)
+
+	for i = 1, #self do
+		self[i]:SetText(nil)
+		self[i]:SetAlpha(0)
+		self[i]:Hide()
 	end
 end
 
@@ -115,10 +166,12 @@ local eventFilter = {
 
 	["SPELL_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell"},
 	["SPELL_PERIODIC_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell", isPeriod = true},
+	["SPELL_BUILDING_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell"},
 
 	["SWING_MISSED"] = {suffix = "MISS", index = 12, iconType = "swing", autoAttack = true},
 	["RANGE_MISSED"] = {suffix = "MISS", index = 15, iconType = "range", autoAttack = true},
 	["SPELL_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell"},
+	["SPELL_PERIODIC_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell", isPeriod = true},
 
 	["ENVIRONMENTAL_DAMAGE"] = {suffix = "ENVIRONMENT", index = 12, iconType = "env"},
 }
@@ -132,18 +185,27 @@ local envTexture = {
 	["Slime"] = "inv_misc_slime_02",
 }
 
+local iconCache = {}
+local function getTexture(spellID)
+	if not iconCache[spellID] then
+		local texture = GetSpellTexture(spellID)
+		iconCache[spellID] = texture
+	end
+	return iconCache[spellID]
+end
+
 local function getFloatingIconTexture(iconType, spellID, isPet)
 	local texture
 	if iconType == "spell" then
-		texture = GetSpellTexture(spellID)
+		texture = getTexture(spellID)
 	elseif iconType == "swing" then
 		if isPet then
 			texture = PET_ATTACK_TEXTURE
 		else
-			texture = GetSpellTexture(6603)
+			texture = 130730
 		end
 	elseif iconType == "range" then
-		texture = GetSpellTexture(75)
+		texture = getTexture(75)
 	elseif iconType == "env" then
 		texture = envTexture[spellID] or "ability_creature_cursed_05"
 		texture = "Interface\\Icons\\"..texture
@@ -164,9 +226,15 @@ end
 
 local function onEvent(self, event, ...)
 	local element = self.FloatingCombatFeedback
+	local unit = self.unit
+
+	local unitGUID = UnitGUID(unit)
+	if unitGUID ~= element.unitGUID then
+		flush(element)
+		element.unitGUID = unitGUID
+	end
 	local multiplier = 1
 	local text, color, texture, critMark
-	local unit = self.unit
 
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
 		local _, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = ...
@@ -234,20 +302,22 @@ local function onEvent(self, event, ...)
 	end
 
 	if text and texture then
+		local animation = critMark and element.critMode or element.defaultMode
 		local string = getAvailableString(element)
 
-		string:SetFont(DB.Font[1], element.fontHeight * multiplier, DB.Font[3])
-		string:SetFormattedText("|T%s:18:18:-2:0:64:64:5:59:5:59|t%s", texture, (critMark and "*" or "")..text)
+		string:SetFont(element.font, element.fontHeight * multiplier, element.fontFlags)
+		string:SetFormattedText(element.format, texture, (critMark and "*" or "")..text)
 		string:SetTextColor(color.r, color.g, color.b)
 		string.elapsed = 0
-		string.scrollHeight = element.scrollHeight
+		string.GetXY = animations[animation]
+		string.radius = element.radius
 		string.scrollTime = element.scrollTime
 		string.xDirection = element.xDirection
 		string.yDirection = element.yDirection
-		string.x = element.xOffset * string.xDirection
-		string.y = element.yOffset * string.yDirection
+		string.x = element.xDirection * xOffsetsByAnimation[animation]
+		string.y = element.yDirection * yOffsetsByAnimation[animation]
 		string:SetPoint("CENTER", element, "CENTER", string.x, string.y)
-		string:SetAlpha(1)
+		string:SetAlpha(0)
 		string:Show()
 
 		tinsert(element.FeedbackToAnimate, string)
@@ -255,8 +325,6 @@ local function onEvent(self, event, ...)
 		element.xDirection = element.xDirection * -1
 
 		if not element:GetScript("OnUpdate") then
-			element.Scroll = element.mode == "Fountain" and fountainScroll or standardScroll
-
 			element:SetScript("OnUpdate", onUpdate)
 		end
 	end
@@ -275,41 +343,34 @@ local function Path(self, ...)
 end
 
 local function ForceUpdate(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
 local function Enable(self, unit)
 	local element = self.FloatingCombatFeedback
-
 	if not element then return end
 
 	element.__owner = self
-	element.__max = #element
+	element.ForceUpdate = ForceUpdate
+	element.defaultMode = "vertical"
+	element.critMode = "random"
+	element.format = "|T%s:18:18:-2:0:64:64:5:59:5:59|t%s"
 	element.xDirection = 1
-	element.scrollHeight = 160
-	element.scrollTime = element.scrollTime or 2
-	element.fadeout = element.scrollTime / 3
 	element.yDirection = element.yDirection or 1
+	element.scrollTime = element.scrollTime or 1.2
+	element.radius = element.radius or 65
+	element.fadeTime = element.scrollTime / 3
 	element.fontHeight = element.fontHeight or 18
 	element.abbreviateNumbers = element.abbreviateNumbers
-	element.ForceUpdate = ForceUpdate
 	element.FeedbackToAnimate = {}
 
-	if element.mode == "Fountain" then
-		element.Scroll = fountainScroll
-		element.xOffset = element.xOffset or 6
-		element.yOffset = element.yOffset or 8
-	else
-		element.Scroll = standardScroll
-		element.xOffset = element.xOffset or 30
-		element.yOffset = element.yOffset or 8
-	end
-
-	for i = 1, element.__max do
+	for i = 1, #element do
+		element[i]:SetFont(element.font, element.fontHeight, element.fontFlags)
 		element[i]:Hide()
 	end
 
-	element:HookScript("OnShow", onShow)
+	element:SetScript("OnHide", flush)
+	element:SetScript("OnShow", flush)
 
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path, true)
 	if unit == "player" then
@@ -324,6 +385,11 @@ local function Disable(self)
 	local element = self.FloatingCombatFeedback
 
 	if element then
+		flush(element)
+		element:SetScript("OnHide", nil)
+		element:SetScript("OnShow", nil)
+		element:SetScript("OnUpdate", nil)
+
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_DISABLED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Path)
