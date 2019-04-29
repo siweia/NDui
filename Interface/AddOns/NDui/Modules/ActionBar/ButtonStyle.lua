@@ -274,13 +274,17 @@ function B:StyleExtraActionButton(cfg)
 	SetupCooldown(cooldown, cfg.cooldown)
 
 	--hotkey, count
+	local overlay = CreateFrame("Frame", nil, button)
+	overlay:SetAllPoints()
 	if NDuiDB["Actionbar"]["Hotkeys"] then
+		hotkey:SetParent(overlay)
 		B.UpdateHotKey(button)
 		SetupFontString(hotkey, cfg.hotkey)
 	else
 		hotkey:Hide()
 	end
 	if NDuiDB["Actionbar"]["Count"] then
+		count:SetParent(overlay)
 		SetupFontString(count, cfg.count)
 	else
 		count:Hide()
