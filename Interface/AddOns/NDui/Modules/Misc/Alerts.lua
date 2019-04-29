@@ -72,6 +72,8 @@ function module:RareAlert()
 		[1153] = true,		-- 部落要塞
 		[1159] = true,		-- 联盟要塞
 		[1803] = true,		-- 涌泉海滩
+		[1876] = true,		-- 部落激流堡
+		[2111] = true,		-- 黑海岸前线
 	}
 
 	local cache = {}
