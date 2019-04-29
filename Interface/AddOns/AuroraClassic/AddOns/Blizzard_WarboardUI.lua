@@ -4,11 +4,24 @@ C.themes["Blizzard_WarboardUI"] = function()
 	local reskinFont = AuroraConfig.reskinFont
 
 	hooksecurefunc(WarboardQuestChoiceFrame, "Update", function(self)
+		if not self.bg then
+			self.Background:Hide()
+			self.NineSlice:Hide()
+			self.Title:DisableDrawLayer("BACKGROUND")
+			self.Title.Text:SetTextColor(1, .8, 0)
+			self.Title.Text:SetFontObject(SystemFont_Huge2)
+			self.BorderFrame.Header:SetAlpha(0)
+			F.CreateBDFrame(self.Title, .25)
+			F.ReskinClose(self.CloseButton)
+			self.CloseButton.Border:SetAlpha(0)
+			self.bg = F.SetBD(self)
+		end
+
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
 			if reskinFont then
-				option.OptionText:SetTextColor(1, .8, 0)
-				option.Header.Text:SetTextColor(1, 1, 1)
+				option.Header.Text:SetTextColor(1, .8, 0)
+				option.OptionText:SetTextColor(1, 1, 1)
 			end
 
 			for i = 1, option.WidgetContainer:GetNumChildren() do
@@ -37,7 +50,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 						end
 
 						if child2.LeadingText and reskinFont then
-							child2.LeadingText:SetTextColor(1, .8, 0)
+							child2.LeadingText:SetTextColor(1, 1, 1)
 						end
 
 						if child2.Icon and not child2.Icon.bg then
@@ -47,13 +60,15 @@ C.themes["Blizzard_WarboardUI"] = function()
 				end
 			end
 
-			if not option.styled then
+			if not option.bg then
 				F.Reskin(option.OptionButtonsContainer.OptionButton1)
 				F.Reskin(option.OptionButtonsContainer.OptionButton2)
-
-				option.styled = true
+				option.Background:SetAlpha(0)
+				local bg = F.CreateBDFrame(option, .25)
+				bg:SetPoint("TOPLEFT", -4, 0)
+				bg:SetPoint("BOTTOMRIGHT", 4, 0)
+				option.bg = bg
 			end
 		end
 	end)
-	F.ReskinClose(WarboardQuestChoiceFrame.CloseButton)
 end

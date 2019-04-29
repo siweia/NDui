@@ -5,7 +5,7 @@
 ## Notes: Classical Aurora Style for WoW UIs.
 ## Author: Haleth/Lightsword, Siweia
 ## X-Credits: Gethe
-## Version: 2.7.10
+## Version: 2.7.12
 ## X-Website: https://github.com/siweia/AuroraClassic
 ## SavedVariables: AuroraConfig
 
