@@ -37,6 +37,7 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 		NDuiDB[key][value] = {orig, "UIParent", tar, x, y}
 	end)
 	mover:Hide()
+	self:ClearAllPoints()
 	self:SetPoint("TOPLEFT", mover)
 
 	return mover
