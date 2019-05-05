@@ -232,7 +232,7 @@ local function ForceBigwigs()
 						},
 						["font"] = DB.Font[1],
 						["onlyInterceptOnKeypress"] = true,
-						["emphasizeScale"] = 1,
+						["emphasizeMultiplier"] = 1,
 						["BigWigsEmphasizeAnchor_x"] = 810,
 						["BigWigsEmphasizeAnchor_y"] = 350,
 						["BigWigsEmphasizeAnchor_width"] = 220,
