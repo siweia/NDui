@@ -223,12 +223,21 @@ function module:VersionCheck()
 			checked = true
 		end
 	end
-
 	B:RegisterEvent("CHAT_MSG_ADDON", UpdateVersionCheck)
+
 	C_ChatInfo.RegisterAddonMessagePrefix("NDuiVersionCheck")
 	if IsInGuild() then
 		C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
 	end
+
+	local prevTime = 0
+	local function SendGroupCheck()
+		if not IsInGroup() or (GetTime()-prevTime < 30) then return end
+		prevTime = GetTime()
+		C_ChatInfo.SendAddonMessage("NDuiVersionCheck", DB.Version, msgChannel())
+	end
+	SendGroupCheck()
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", SendGroupCheck)
 end
 
 --[[
