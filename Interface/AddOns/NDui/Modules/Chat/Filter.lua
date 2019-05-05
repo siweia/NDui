@@ -135,11 +135,15 @@ local function genAddonBlock(_, event, msg, author)
 end
 
 -- Block trash clubs
+local trashClubs = {"站桩", "致敬我们"}
 local function blockTrashClub(self)
 	if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
 		local text = self.DoubleLine:GetText() or ""
-		if strfind(text, "站桩") then
-			self:Hide()
+		for _, name in pairs(trashClubs) do
+			if strfind(text, name) then
+				self:Hide()
+				return
+			end
 		end
 	end
 end
