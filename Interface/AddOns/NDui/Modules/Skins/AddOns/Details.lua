@@ -3,8 +3,6 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Skins")
 
 local function ReskinDetails()
-	LibStub("LibSharedMedia-3.0"):Register("statusbar", "normTex", DB.normTex)
-
 	local function setupInstance(instance)
 		if instance.styled then return end
 		if not instance.baseframe then return end

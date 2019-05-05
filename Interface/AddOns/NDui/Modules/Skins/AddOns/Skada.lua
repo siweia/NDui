@@ -126,7 +126,6 @@ function module:SkadaSkin()
 	EmbedSkada()
 
 	-- Change Skada Default Settings
-	LibStub("LibSharedMedia-3.0"):Register("statusbar", "normTex", DB.normTex)
 	Skada.windowdefaults.bartexture = "normTex"
 	Skada.windowdefaults.classicons = false
 	Skada.windowdefaults.title.fontflags = "OUTLINE"

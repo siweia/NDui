@@ -119,6 +119,9 @@ function module:OnLogin()
 	self:SkadaSkin()
 	self:BigWigsSkin()
 	self:PGFSkin()
+
+	-- Register skin
+	LibStub("LibSharedMedia-3.0"):Register("statusbar", "normTex", DB.normTex)
 end
 
 function module:CreateToggle(frame)
