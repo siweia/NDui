@@ -216,7 +216,7 @@ C.themes["Blizzard_Communities"] = function()
 
 	do
 		local dialog = CommunitiesSettingsDialog
-		F.StripTextures(dialog)
+		if not C.isNewPatch then F.StripTextures(dialog) end
 		F.SetBD(dialog)
 		F.Reskin(dialog.ChangeAvatarButton)
 		F.Reskin(dialog.Accept)
@@ -228,6 +228,17 @@ C.themes["Blizzard_Communities"] = function()
 		F.CreateBDFrame(dialog.Description, .25)
 		F.StripTextures(dialog.MessageOfTheDay)
 		F.CreateBDFrame(dialog.MessageOfTheDay, .25)
+
+		if C.isNewPatch then
+			dialog.BG:Hide()
+			F.ReskinCheck(dialog.ShouldListClub.Button)
+			F.ReskinCheck(dialog.AutoAcceptApplications.Button)
+			F.ReskinCheck(dialog.MaxLevelOnly.Button)
+			F.ReskinCheck(dialog.MinIlvlOnly.Button)
+			F.ReskinInput(dialog.MinIlvlOnly.EditBox)
+			F.ReskinDropDown(dialog.ClubFocusDropdown)
+			F.ReskinDropDown(dialog.LookingForDropdown)
+		end
 	end
 
 	do
@@ -382,11 +393,19 @@ C.themes["Blizzard_Communities"] = function()
 	F.ReskinScroll(CommunitiesFrameGuildDetailsFrameNewsContainer.ScrollBar)
 	F.StripTextures(CommunitiesFrameGuildDetailsFrame)
 
-	hooksecurefunc("CommunitiesGuildNewsButton_SetNews", function(button)
-		if button.header:IsShown() then
-			button.header:SetAlpha(0)
-		end
-	end)
+	if C.isNewPatch then
+		hooksecurefunc("GuildNewsButton_SetNews", function(button)
+			if button.header:IsShown() then
+				button.header:SetAlpha(0)
+			end
+		end)
+	else
+		hooksecurefunc("CommunitiesGuildNewsButton_SetNews", function(button)
+			if button.header:IsShown() then
+				button.header:SetAlpha(0)
+			end
+		end)
+	end
 
 	F.StripTextures(CommunitiesGuildNewsFiltersFrame)
 	CommunitiesGuildNewsFiltersFrameBg:Hide()
