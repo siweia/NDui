@@ -229,3 +229,4 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 268317) -- 撕裂大脑
 module:RegisterDebuff(TIER, INSTANCE, 0, 268391) -- 心智突袭
 module:RegisterDebuff(TIER, INSTANCE, 0, 274720) -- 深渊打击
 module:RegisterDebuff(TIER, INSTANCE, 0, 267037) -- 力量的低语
+module:RegisterDebuff(TIER, INSTANCE, 0, 276286) -- 切割旋风
