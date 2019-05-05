@@ -26,7 +26,7 @@ function module:AzeriteArmor()
 		if known then
 			return format(iconString..":255:255:255|t", icon)
 		else
-			return format(iconString..":130:130:130|t", icon)
+			return format(iconString..":120:120:120|t", icon)
 		end
 	end
 

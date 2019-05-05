@@ -14,6 +14,7 @@ function module:ExtraTipInfo()
 		talent = TALENT.."ID:",
 		achievement = ACHIEVEMENTS.."ID:",
 		currency = CURRENCY.."ID:",
+		azerite = L["Trait"].."ID:",
 	}
 
 	local function addLine(self, id, type, noadd)
@@ -128,4 +129,10 @@ function module:ExtraTipInfo()
 		end
 	end
 	hooksecurefunc(GameTooltip, "SetUnitAura", SetCaster)
+
+	-- Azerite traits
+	hooksecurefunc(GameTooltip, "SetAzeritePower", function(self, ...)
+		local id = select(3, ...)
+		if id then addLine(self, id, types.azerite, true) end
+	end)
 end
