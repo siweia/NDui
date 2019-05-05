@@ -7,7 +7,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	select(2, ReadyCheckListenerFrame:GetRegions()):Hide()
 
 	ReadyCheckFrame:HookScript("OnShow", function(self)
-		if UnitIsUnit("player", self.initiator) then
+		if self.initiator and UnitIsUnit("player", self.initiator) then
 			self:Hide()
 		end
 	end)

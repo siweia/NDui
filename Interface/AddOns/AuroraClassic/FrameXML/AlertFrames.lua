@@ -2,19 +2,19 @@ local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
 	-- Fix Alertframe bg
-	local function fixBg(f)
-		if f:GetObjectType() == "AnimationGroup" then
-			f = f:GetParent()
+	local function fixBg(frame)
+		if frame:GetObjectType() == "AnimationGroup" then
+			frame = frame:GetParent()
 		end
-		if f.bg then
-			f.bg:SetBackdropColor(0, 0, 0, AuroraConfig.alpha)
+		if frame.bg then
+			frame.bg:SetBackdropColor(0, 0, 0, AuroraConfig.alpha)
 		end
 	end
 
-	local function fixParentbg(f)
-		f = f:GetParent():GetParent()
-		if f.bg then
-			f.bg:SetBackdropColor(0, 0, 0, AuroraConfig.alpha)
+	local function fixParentbg(frame)
+		frame = frame:GetParent():GetParent()
+		if frame.bg then
+			frame.bg:SetBackdropColor(0, 0, 0, AuroraConfig.alpha)
 		end
 	end
 
@@ -82,9 +82,9 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(frame.Icon)
 				frame.SpecRing:SetTexture("")
-				frame.SpecIcon:SetTexCoord(.08, .92, .08, .92)
-				frame.SpecIcon.bg = F.CreateBG(frame.SpecIcon)
-				frame.SpecIcon.bg:SetDrawLayer("BORDER", 2)
+				frame.SpecIcon:SetPoint("TOPLEFT", frame.Icon, -5, 5)
+				frame.SpecIcon.bg = F.ReskinIcon(frame.SpecIcon)
+				frame.SpecIcon.bg:SetDrawLayer("ARTWORK", 1)
 			end
 			frame.glow:SetTexture("")
 			frame.shine:SetTexture("")
@@ -101,7 +101,6 @@ tinsert(C.themes["AuroraClassic"], function()
 				F.CreateSD(frame.bg)
 
 				F.ReskinIcon(frame.Icon)
-				frame.Icon:SetDrawLayer("BORDER", 5)
 				frame.Icon:ClearAllPoints()
 				frame.Icon:SetPoint("CENTER", frame.BaseQualityBorder)
 
@@ -150,9 +149,8 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.QuestTexture:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(frame.QuestTexture)
 				frame.shine:SetTexture("")
-				for i = 2, 5 do
-					select(i, frame:GetRegions()):Hide()
-				end
+				frame:DisableDrawLayer("BORDER")
+				select(6, frame:GetRegions()):SetFontObject(NumberFont_GameNormal)
 			end
 		elseif frame.queue == GarrisonTalentAlertSystem then
 			if not frame.bg then
@@ -206,8 +204,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				F.CreateSD(frame.bg)
 
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
-				frame.Icon:SetDrawLayer("ARTWORK")
-				F.CreateBG(frame.Icon)
+				F.CreateBDFrame(frame.Icon)
 				frame:GetRegions():Hide()
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
@@ -257,7 +254,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 				frame.dungeonTexture:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(frame.dungeonTexture)
-				select(1, frame:GetRegions()):Hide()
+				frame:GetRegions():Hide()
 				select(3, frame:GetRegions()):Hide()
 				frame.glowFrame.glow:SetTexture("")
 				frame.shine:SetTexture("")
@@ -299,8 +296,8 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.bg:SetPoint("BOTTOMRIGHT", -6, 6)
 				F.CreateSD(frame.bg)
 
-				select(1, frame:GetRegions()):Hide()
-				local icon = select(2, frame:GetRegions())
+				local bg, icon = frame:GetRegions()
+				bg:Hide()
 				icon:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBDFrame(icon)
 			end
@@ -327,47 +324,45 @@ tinsert(C.themes["AuroraClassic"], function()
 	end)
 
 	-- BonusRollLootWonFrame
-	hooksecurefunc("LootWonAlertFrame_SetUp", function(f)
-		if not f.bg then
-			f.bg = F.CreateBDFrame(f)
-			f.bg:SetPoint("TOPLEFT", 10, -10)
-			f.bg:SetPoint("BOTTOMRIGHT", -10, 10)
-			F.CreateSD(f.bg)
-			fixAnim(f)
+	hooksecurefunc("LootWonAlertFrame_SetUp", function(frame)
+		if not frame.bg then
+			frame.bg = F.CreateBDFrame(frame)
+			frame.bg:SetPoint("TOPLEFT", 10, -10)
+			frame.bg:SetPoint("BOTTOMRIGHT", -10, 10)
+			F.CreateSD(frame.bg)
+			fixAnim(frame)
 
-			f.shine:SetTexture("")
-			f.Icon:SetDrawLayer("BORDER")
-			f.Icon:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBG(f.Icon)
+			frame.shine:SetTexture("")
+			frame.Icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBDFrame(frame.Icon)
 
-			f.SpecRing:SetTexture("")
-			f.SpecIcon:SetTexCoord(.08, .92, .08, .92)
-			f.SpecIcon.bg = F.CreateBG(f.SpecIcon)
-			f.SpecIcon.bg:SetDrawLayer("BORDER", 2)
-			f.SpecIcon.bg:SetShown(f.SpecIcon:IsShown() and f.SpecIcon:GetTexture() ~= nil)
+			frame.SpecRing:SetTexture("")
+			frame.SpecIcon:SetPoint("TOPLEFT", frame.Icon, -5, 5)
+			frame.SpecIcon.bg = F.ReskinIcon(frame.SpecIcon)
+			frame.SpecIcon.bg:SetDrawLayer("ARTWORK", 1)
+			frame.SpecIcon.bg:SetShown(frame.SpecIcon:IsShown() and frame.SpecIcon:GetTexture() ~= nil)
 		end
 
-		f.glow:SetTexture("")
-		f.Background:SetTexture("")
-		f.PvPBackground:SetTexture("")
-		f.BGAtlas:SetTexture("")			
-		f.IconBorder:SetTexture("")
+		frame.glow:SetTexture("")
+		frame.Background:SetTexture("")
+		frame.PvPBackground:SetTexture("")
+		frame.BGAtlas:SetTexture("")			
+		frame.IconBorder:SetTexture("")
 	end)
 
 	-- BonusRollMoneyWonFrame
-	hooksecurefunc("MoneyWonAlertFrame_SetUp", function(f)
-		if not f.bg then
-			f.bg = F.CreateBDFrame(f) 
-			f.bg:SetPoint("TOPLEFT", 5, -5)
-			f.bg:SetPoint("BOTTOMRIGHT", -5, 5)
-			F.CreateSD(f.bg)
-			fixAnim(f)
+	hooksecurefunc("MoneyWonAlertFrame_SetUp", function(frame)
+		if not frame.bg then
+			frame.bg = F.CreateBDFrame(frame) 
+			frame.bg:SetPoint("TOPLEFT", 5, -5)
+			frame.bg:SetPoint("BOTTOMRIGHT", -5, 5)
+			F.CreateSD(frame.bg)
+			fixAnim(frame)
 
-			f.Background:SetTexture("")
-			f.Icon:SetTexCoord(.08, .92, .08, .92)
-			f.Icon:SetDrawLayer("ARTWORK")
-			F.CreateBG(f.Icon)
-			f.IconBorder:SetTexture("")
+			frame.Background:SetTexture("")
+			frame.Icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBDFrame(frame.Icon)
+			frame.IconBorder:SetTexture("")
 		end
 	end)
 end)

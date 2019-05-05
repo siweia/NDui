@@ -55,8 +55,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		frame.IconBorder:Hide()
 		frame.BlackBackgroundHoist.Background:Hide()
 		frame.SpecRing:SetAlpha(0)
-		frame.SpecIcon:SetTexCoord(.08, .92, .08, .92)
-		local bg = F.CreateBDFrame(frame.SpecIcon)
+		frame.SpecIcon:SetPoint("TOPLEFT", 5, -5)
+		local bg = F.ReskinIcon(frame.SpecIcon)
+		bg:SetDrawLayer("OVERLAY", 1)
 		hooksecurefunc("BonusRollFrame_StartBonusRoll", function()
 			bg:SetShown(frame.SpecIcon:IsShown())
 		end)
@@ -65,9 +66,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		frame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
 		F.CreateBD(frame)
 		F.CreateSD(frame)
-		if frame.Shadow then
-			frame.Shadow:SetFrameLevel(bg:GetFrameLevel() - 1)
-		end
 		F.CreateBDFrame(frame.PromptFrame.Timer, .25)
 
 		local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"
