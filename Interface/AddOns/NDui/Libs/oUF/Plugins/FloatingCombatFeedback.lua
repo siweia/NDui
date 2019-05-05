@@ -15,8 +15,10 @@ local m_cos, m_sin, m_pi, m_random = _G.math.cos, _G.math.sin, _G.math.pi, _G.ma
 local UnitGUID = _G.UnitGUID
 local GetSpellTexture = _G.GetSpellTexture
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
+local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
 local ENTERING_COMBAT = _G.ENTERING_COMBAT
 local LEAVING_COMBAT = _G.LEAVING_COMBAT
+local PET_ATTACK_TEXTURE = _G.PET_ATTACK_TEXTURE
 local SCHOOL_MASK_NONE = _G.SCHOOL_MASK_NONE or 0x00
 local SCHOOL_MASK_PHYSICAL = _G.SCHOOL_MASK_PHYSICAL or 0x01
 local SCHOOL_MASK_HOLY = _G.SCHOOL_MASK_HOLY or 0x02
@@ -25,7 +27,6 @@ local SCHOOL_MASK_NATURE = _G.SCHOOL_MASK_NATURE or 0x08
 local SCHOOL_MASK_FROST = _G.SCHOOL_MASK_FROST or 0x10
 local SCHOOL_MASK_SHADOW = _G.SCHOOL_MASK_SHADOW or 0x20
 local SCHOOL_MASK_ARCANE = _G.SCHOOL_MASK_ARCANE or 0x40
-local PET_ATTACK_TEXTURE = _G.PET_ATTACK_TEXTURE
 
 local function clamp(v)
 	if v > 1 then
@@ -214,6 +215,14 @@ local function getFloatingIconTexture(iconType, spellID, isPet)
 	return texture
 end
 
+local missCache = {}
+local function getMissText(missType)
+	if not missCache[missType] then
+		missCache[missType] = _G["COMBAT_TEXT_"..missType]
+	end
+	return missCache[missType]
+end
+
 local function formatNumber(self, amount)
 	local element = self.FloatingCombatFeedback
 
@@ -280,7 +289,7 @@ local function onEvent(self, event, ...)
 			elseif value.suffix == "MISS" then
 				local missType = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
-				text = _G["COMBAT_TEXT_"..missType]
+				text = getMissText(missType)
 			elseif value.suffix == "ENVIRONMENT" then
 				local envType, amount = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, envType)
