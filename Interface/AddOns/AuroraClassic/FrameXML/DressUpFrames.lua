@@ -19,17 +19,15 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	-- SideDressUp
 
-	for i = 1, 4 do
-		select(i, SideDressUpFrame:GetRegions()):Hide()
-	end
+	F.StripTextures(SideDressUpFrame, 0)
 	select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
 
 	SideDressUpModel:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
-		self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", 1, 0)
+		self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", C.mult, 0)
 	end)
 
 	F.Reskin(SideDressUpModelResetButton)
 	F.ReskinClose(SideDressUpModelCloseButton)
-	F.CreateBDFrame(SideDressUpModel)
+	F.SetBD(SideDressUpModel)
 end)
