@@ -121,7 +121,10 @@ function module:OnLogin()
 	self:PGFSkin()
 
 	-- Register skin
-	LibStub("LibSharedMedia-3.0"):Register("statusbar", "normTex", DB.normTex)
+	local media = LibStub and LibStub("LibSharedMedia-3.0")
+	if media then
+		media:Register("statusbar", "normTex", DB.normTex)
+	end
 end
 
 function module:CreateToggle(frame)
