@@ -518,3 +518,4 @@ L["DeleteMode Enabled"] = "背包物品摧毁模式已启用！你可以按住CT
 L["DeleteMode Disabled"] = "背包物品摧毁模式已禁用。"
 L["ItemDeleteMode"] = "摧毁模式"
 L["Trait"] = "特质"
+L["Drag AltBar Tip"] = "你可以直接拖动特殊能量条。"

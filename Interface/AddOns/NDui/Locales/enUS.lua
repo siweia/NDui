@@ -518,3 +518,4 @@ L["DeleteMode Enabled"] = "ItemDeleteMode enabled! You can destroy container ite
 L["DeleteMode Disabled"] = "ItemDeleteMode disabled."
 L["ItemDeleteMode"] = "ItemDeleteMode"
 L["Trait"] = "Trait"
+L["Drag AltBar Tip"] = "You can simply drag the alternative power bar."

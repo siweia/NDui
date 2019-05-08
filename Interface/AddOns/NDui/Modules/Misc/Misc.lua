@@ -211,6 +211,13 @@ do
 			statusFrame.Hide = statusFrame.Show
 		end
 	end)
+
+	local informed
+	B:RegisterEvent("UNIT_POWER_BAR_SHOW", function()
+		if informed then return end
+		UIErrorsFrame:AddMessage(DB.InfoColor..L["Drag AltBar Tip"])
+		informed = true
+	end)
 end
 
 -- Get Naked
