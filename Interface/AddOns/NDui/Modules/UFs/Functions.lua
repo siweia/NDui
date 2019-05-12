@@ -529,7 +529,7 @@ local function customFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		if NDuiDB["UFs"]["RaidBuffIndicator"] then
 			return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
 		else
-			return button.isPlayer and C.RaidBuffs[DB.MyClass][spellID] or C.RaidBuffs["ALL"][spellID] or C.RaidBuffs["WARNING"][spellID]
+			return (button.isPlayer or caster == "pet") and C.RaidBuffs[DB.MyClass][spellID] or C.RaidBuffs["ALL"][spellID] or C.RaidBuffs["WARNING"][spellID]
 		end
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if UnitIsUnit("player", unit) then
