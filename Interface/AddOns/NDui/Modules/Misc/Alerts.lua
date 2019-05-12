@@ -135,22 +135,22 @@ function module:InterruptAlert()
 		[122] = true,		-- 冰霜新星
 		[1776] = true,		-- 凿击
 		[1784] = true,		-- 潜行
-		[115191] = true,
 		[5246] = true,		-- 破胆怒吼
 		[8122] = true,		-- 心灵尖啸
-		[33395] = true,		-- 冰冻术
-		[228600] = true,	-- 冰川尖刺
-		[197214] = true,	-- 裂地术
-		[157997] = true,	-- 寒冰新星
-		[102359] = true,	-- 群体缠绕
-		[226943] = true,	-- 心灵炸弹
-		[105421] = true,	-- 盲目之光
-		[207167] = true,	-- 致盲冰雨
 		[31661] = true,		-- 龙息术
-		[82691] = true,		-- 冰霜之环
-		[207685] = true,	-- 悲苦咒符
+		[33395] = true,		-- 冰冻术
 		[64695] = true,		-- 陷地
+		[82691] = true,		-- 冰霜之环
+		[102359] = true,	-- 群体缠绕
+		[105421] = true,	-- 盲目之光
+		[115191] = true,	-- 潜行
+		[157997] = true,	-- 寒冰新星
+		[197214] = true,	-- 裂地术
 		[198121] = true,	-- 冰霜撕咬
+		[207167] = true,	-- 致盲冰雨
+		[207685] = true,	-- 悲苦咒符
+		[226943] = true,	-- 心灵炸弹
+		[228600] = true,	-- 冰川尖刺
 	}
 
 	local function updateAlert(_, ...)
@@ -182,8 +182,6 @@ end
 	NDui版本过期提示
 ]]
 function module:VersionCheck()
-	if not NDuiADB["VersionCheck"] then return end
-
 	local f = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
 	f:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 20, 70)
 	f.Text:SetText("")
@@ -201,7 +199,7 @@ function module:VersionCheck()
 		end
 	end
 
-	local checked
+	local checked = not NDuiADB["VersionCheck"]
 	local function UpdateVersionCheck(_, ...)
 		local prefix, msg, distType, author = ...
 		if prefix ~= "NDuiVersionCheck" then return end
