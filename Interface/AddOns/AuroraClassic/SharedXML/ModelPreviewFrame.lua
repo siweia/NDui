@@ -7,9 +7,12 @@ tinsert(C.themes["AuroraClassic"], function()
 	Display.YesMountsTex:Hide()
 	Display.ShadowOverlay:Hide()
 
-	F.ReskinPortraitFrame(ModelPreviewFrame)
+	F.StripTextures(ModelPreviewFrame)
+	F.SetBD(ModelPreviewFrame)
 	F.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")
 	F.ReskinArrow(Display.ModelScene.RotateRightButton, "right")
+	F.ReskinClose(ModelPreviewFrameCloseButton)
+	F.Reskin(ModelPreviewFrame.CloseButton)
 
 	local bg = F.CreateBDFrame(Display.ModelScene, .25)
 	bg:SetPoint("TOPLEFT", -1, 0)
