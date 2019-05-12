@@ -314,44 +314,47 @@ local function onUpdate(self, elapsed)
 end
 
 local found = {}
+local auraFilter = {"HELPFUL", "HARMFUL"}
 local function updateBuffIndicator(self, event, unit)
 	if self.unit ~= unit then return end
 	local spellList = NDuiADB["CornerBuffs"][DB.MyClass]
 	local icons = self.BuffIndicator
 
 	wipe(found)
-	for i = 1, 40 do
-		local name, _, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, "HELPFUL")
-		if not name then break end
-		local value = spellList[spellID]
-		if value and (value[3] or caster == "player" or caster == "pet") then
-			for _, icon in pairs(icons) do
-				if icon.anchor == value[1] then
-					if icon.timer then
-						if duration and duration > 0 then
-							icon.expiration = expiration
-							icon:SetScript("OnUpdate", onUpdate)
+	for _, filter in next, auraFilter do
+		for i = 1, 40 do
+			local name, _, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
+			if not name then break end
+			local value = spellList[spellID]
+			if value and (value[3] or caster == "player" or caster == "pet") then
+				for _, icon in pairs(icons) do
+					if icon.anchor == value[1] then
+						if icon.timer then
+							if duration and duration > 0 then
+								icon.expiration = expiration
+								icon:SetScript("OnUpdate", onUpdate)
+							else
+								icon:SetScript("OnUpdate", nil)
+							end
+							icon.timer:SetTextColor(unpack(value[2]))
 						else
-							icon:SetScript("OnUpdate", nil)
+							if duration and duration > 0 then
+								icon.cd:SetCooldown(expiration - duration, duration)
+								icon.cd:Show()
+							else
+								icon.cd:Hide()
+							end
+							if icon.block then
+								icon.icon:SetVertexColor(unpack(value[2]))
+							else
+								icon.icon:SetTexture(GetSpellTexture(spellID))
+							end
 						end
-						icon.timer:SetTextColor(unpack(value[2]))
-					else
-						if duration and duration > 0 then
-							icon.cd:SetCooldown(expiration - duration, duration)
-							icon.cd:Show()
-						else
-							icon.cd:Hide()
-						end
-						if icon.block then
-							icon.icon:SetVertexColor(unpack(value[2]))
-						else
-							icon.icon:SetTexture(GetSpellTexture(spellID))
-						end
+						if count > 1 then icon.count:SetText(count) end
+						icon:Show()
+						found[icon.anchor] = true
+						break
 					end
-					if count > 1 then icon.count:SetText(count) end
-					icon:Show()
-					found[icon.anchor] = true
-					break
 				end
 			end
 		end
