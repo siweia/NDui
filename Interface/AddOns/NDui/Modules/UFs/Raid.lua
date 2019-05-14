@@ -257,6 +257,7 @@ local function setupMouseWheelCast(self)
 end
 
 local function setupClickSets(self)
+	if self.clickCastRegistered then return end
 	setupMouseWheelCast(self)
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
@@ -287,6 +288,7 @@ local function setupClickSets(self)
 
 	self:RegisterForClicks("AnyDown")
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED", setupClickSets)
+	self.clickCastRegistered = true
 end
 
 function UF:CreateClickSets(self)
