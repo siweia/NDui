@@ -113,7 +113,7 @@ function module:OnLogin()
 	local bloodlustList = {57723, 57724, 80354, 264689}
 	local function filterBloodlust()
 		for _, spellID in pairs(bloodlustList) do
-			NDuiADB["CornerBuffs"][DB.MyClass][spellID] = DB.Role ~= "Healer" and {"BOTTOM", {1, .8, 0}, true} or nil
+			NDuiADB["CornerBuffs"][DB.MyClass][spellID] = DB.Role ~= "Healer" and {"BOTTOMLEFT", {1, .8, 0}, true} or nil
 			C.RaidBuffs["WARNING"][spellID] = (DB.Role ~= "Healer")
 		end
 	end
