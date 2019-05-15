@@ -518,8 +518,6 @@ module:RegisterTooltips("NDui", function()
 			end
 		end)
 	end
-
-	if IsAddOnLoaded("MeetingStone") then B.ReskinTooltip(NetEaseGUI20_Tooltip51) end
 end)
 
 module:RegisterTooltips("Blizzard_DebugTools", function()
