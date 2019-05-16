@@ -2,11 +2,10 @@ local _, ns = ...
 local B, C, L, DB, F = unpack(ns)
 local module = B:RegisterModule("GUI")
 
-local format, tonumber, type = string.format, tonumber, type
-local pairs, ipairs, next = pairs, ipairs, next
-local min, max, tinsert = math.min, math.max, table.insert
+local tonumber, tostring, pairs, ipairs, next, select, type = tonumber, tostring, pairs, ipairs, next, select, type
+local min, max, tinsert, format, strsplit = math.min, math.max, table.insert, string.format, string.split
 local cr, cg, cb = DB.r, DB.g, DB.b
-local guiTab, guiPage, f = {}, {}
+local guiTab, guiPage, f, dataFrame = {}, {}
 
 -- Extra setup
 local setupRaidDebuffs, setupClickCast, setupBuffIndicator, setupPlateAura
@@ -282,7 +281,7 @@ local accountSettings = {
 	AutoBubbles = false,
 }
 
-local function InitialSettings(source, target)
+local function InitialSettings(source, target, fullClean)
 	for i, j in pairs(source) do
 		if type(j) == "table" then
 			if target[i] == nil then target[i] = {} end
@@ -296,8 +295,15 @@ local function InitialSettings(source, target)
 		end
 	end
 
-	for i in pairs(target) do
+	for i, j in pairs(target) do
 		if source[i] == nil then target[i] = nil end
+		if type(j) == "table" and fullClean then
+			for k, v in pairs(j) do
+				if type(v) ~= "table" and source[i][k] == nil then
+					target[i][k] = nil
+				end
+			end
+		end
 	end
 end
 
@@ -310,7 +316,7 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		NDuiDB["BFA"] = true
 	end
 
-	InitialSettings(defaultSettings, NDuiDB)
+	InitialSettings(defaultSettings, NDuiDB, true)
 	InitialSettings(accountSettings, NDuiADB)
 	DB.normTex = textureList[NDuiADB["TexStyle"]]
 
@@ -1437,6 +1443,174 @@ function setupBuffIndicator()
 	end
 end
 
+local function exportData()
+	local text = "NDuiSettings:"..DB.Version..":"..DB.MyName..":"..DB.MyClass
+	for KEY, VALUE in pairs(NDuiDB) do
+		if type(VALUE) == "table" then
+			for key, value in pairs(VALUE) do
+				if type(value) == "table" then
+					if value.r then
+						for k, v in pairs(value) do
+							text = text..";"..KEY..":"..key..":"..k..":"..v
+						end
+					elseif key == "ExplosiveCache" then
+						text = text..";"..KEY..":"..key..":EMPTYTABLE"
+					elseif KEY == "AuraWatchList" then
+						for spellID, k in pairs(value) do
+							text = text..";"..KEY..":"..key..":"..spellID
+							if k[5] == nil then k[5] = "nil" end
+							for _, v in ipairs(k) do
+								text = text..":"..tostring(v)
+							end
+						end
+					elseif KEY == "Mover" or KEY == "RaidClickSets" then
+						text = text..";"..KEY..":"..key
+						for _, v in ipairs(value) do
+							text = text..":"..tostring(v)
+						end
+					end
+				else
+					if NDuiDB[KEY][key] ~= defaultSettings[KEY][key] then
+						text = text..";"..KEY..":"..key..":"..tostring(value)
+					end
+				end
+			end
+		end
+	end
+	dataFrame.editBox:SetText(text)
+	dataFrame.editBox:HighlightText()
+end
+
+local function toBoolean(value)
+	if value == "true" then
+		return true
+	elseif value == "false" then
+		return false
+	end
+end
+
+local function importData()
+	local options = {strsplit(";", dataFrame.editBox:GetText())}
+	local title, _, _, class = strsplit(":", options[1])
+	if title ~= "NDuiSettings" then
+		UIErrorsFrame:AddMessage(DB.InfoColor..L["Import data error"])
+		return
+	end
+
+	for i = 2, #options do
+		local option = options[i]
+		local key, value, arg1 = strsplit(":", option)
+		if arg1 == "true" or arg1 == "false" then
+			NDuiDB[key][value] = toBoolean(arg1)
+		elseif arg1 == "EMPTYTABLE" then
+			NDuiDB[key][value] = {}
+		elseif arg1 == "r" or arg1 == "g" or arg1 == "b" then
+			local color = select(4, strsplit(":", option))
+			NDuiDB[key][value][arg1] = tonumber(color)
+		elseif key == "AuraWatchList" then
+			local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
+			value = tonumber(value)
+			arg1 = tonumber(arg1)
+			spellID = tonumber(spellID)
+			stack = tonumber(stack)
+			amount = toBoolean(amount)
+			timeless = toBoolean(timeless)
+			combat = toBoolean(combat)
+			flash = toBoolean(flash)
+			if not NDuiDB[key][value] then NDuiDB[key][value] = {} end
+			NDuiDB[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
+		elseif key == "Mover" then
+			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
+			x = tonumber(x)
+			y = tonumber(y)
+			NDuiDB[key][value] = {relFrom, parent, relTo, x, y}
+		elseif key == "RaidClickSets" then
+			if DB.MyClass == class then
+				NDuiDB[key][value] = {select(3, strsplit(":", option))}
+			end
+		elseif tonumber(arg1) then
+			if value == "DBMCount" then
+				NDuiDB[key][value] = arg1
+			else
+				NDuiDB[key][value] = tonumber(arg1)
+			end
+		end
+	end
+end
+
+local function updateTooltip()
+	local option = strsplit(";", dataFrame.editBox:GetText())
+	local title, version, name, class = strsplit(":", option)
+	if title == "NDuiSettings" then
+		dataFrame.version = version
+		dataFrame.name = name
+		dataFrame.class = class
+	else
+		dataFrame.version = nil
+	end
+end
+
+local function createDataFrame()
+	if dataFrame then dataFrame:Show() return end
+
+	dataFrame = CreateFrame("Frame", nil, UIParent)
+	dataFrame:SetPoint("CENTER")
+	dataFrame:SetSize(500, 500)
+	dataFrame:SetFrameStrata("DIALOG")
+	B.CreateMF(dataFrame)
+	B.SetBackground(dataFrame)
+	dataFrame.Header = B.CreateFS(dataFrame, 16, L["Export Header"], true, "TOP", 0, -5)
+
+	local scrollArea = CreateFrame("ScrollFrame", nil, dataFrame, "UIPanelScrollFrameTemplate")
+	scrollArea:SetPoint("TOPLEFT", 10, -30)
+	scrollArea:SetPoint("BOTTOMRIGHT", -28, 40)
+	B.CreateBD(B.CreateBG(scrollArea), .25)
+	if F then F.ReskinScroll(scrollArea.ScrollBar) end
+
+	local editBox = CreateFrame("EditBox", nil, dataFrame)
+	editBox:SetMultiLine(true)
+	editBox:SetMaxLetters(99999)
+	editBox:EnableMouse(true)
+	editBox:SetAutoFocus(true)
+	editBox:SetFont(DB.Font[1], 14)
+	editBox:SetWidth(scrollArea:GetWidth())
+	editBox:SetHeight(scrollArea:GetHeight())
+	editBox:SetScript("OnEscapePressed", function() dataFrame:Hide() end)
+	scrollArea:SetScrollChild(editBox)
+	dataFrame.editBox = editBox
+
+	StaticPopupDialogs["NDUI_IMPORT_DATA"] = {
+		text = L["Import data warning"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			importData()
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
+	local accept = B.CreateButton(dataFrame, 100, 20, OKAY)
+	accept:SetPoint("BOTTOM", 0, 10)
+	accept:SetScript("OnClick", function(self)
+		if self.text:GetText() ~= OKAY and dataFrame.editBox:GetText() ~= "" then
+			StaticPopup_Show("NDUI_IMPORT_DATA")
+		end
+		dataFrame:Hide()
+	end)
+	accept:HookScript("OnEnter", function(self)
+		updateTooltip()
+		if not dataFrame.version then return end
+		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 10)
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(L["Data Info"])
+		GameTooltip:AddDoubleLine(L["Version"], dataFrame.version, .6,.8,1, 1,1,1)
+		GameTooltip:AddDoubleLine(L["Character"], dataFrame.name, .6,.8,1, B.ClassColor(dataFrame.class))
+		GameTooltip:Show()
+	end)
+	accept:HookScript("OnLeave", B.HideTooltip)
+	dataFrame.text = accept.text
+end
+
 local function OpenGUI()
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	if f then f:Show() return end
@@ -1510,6 +1684,26 @@ local function OpenGUI()
 	}
 	reset:SetScript("OnClick", function()
 		StaticPopup_Show("RESET_NDUI")
+	end)
+
+	local import = B.CreateButton(f, 59, 20, L["Import"])
+	import:SetPoint("BOTTOMLEFT", reset, "TOPLEFT", 0, 2)
+	import:SetScript("OnClick", function()
+		f:Hide()
+		createDataFrame()
+		dataFrame.Header:SetText(L["Import Header"])
+		dataFrame.text:SetText(L["Import"])
+		dataFrame.editBox:SetText("")
+	end)
+
+	local export = B.CreateButton(f, 59, 20, L["Export"])
+	export:SetPoint("BOTTOMRIGHT", reset, "TOPRIGHT", 0, 2)
+	export:SetScript("OnClick", function()
+		f:Hide()
+		createDataFrame()
+		dataFrame.Header:SetText(L["Export Header"])
+		dataFrame.text:SetText(OKAY)
+		exportData()
 	end)
 
 	local optTip = B.CreateFS(f, 14, L["Option* Tips"], "system", "LEFT", 0, 0)
