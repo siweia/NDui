@@ -116,7 +116,6 @@ local list = {
 		{AuraID = 280573, UnitID = "player", Combat = true},	-- 重组阵列
 		{AuraID = 289523, UnitID = "player", Combat = true},	-- 耀辉之光
 		{AuraID = 295408, UnitID = "player"},	-- 险恶赐福
-		{AuraID = 295413, UnitID = "player", Stack = 20, Flash = true},	-- 苦楚
 		{AuraID = 273988, UnitID = "player"},	-- 原始本能
 		-- 艾泽里特特质
 		{AuraID = 277960, UnitID = "player"},	-- 神经电激
@@ -217,6 +216,7 @@ local list = {
 		{AuraID = 209426, UnitID = "player"},	-- 幻影打击
 	},
 	["Raid Debuff"] = {		-- 团队减益组
+		{AuraID = 295413, UnitID = "player", Stack = 20, Flash = true},	-- 苦楚
 	-- 5人本
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
