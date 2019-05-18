@@ -33,6 +33,7 @@ local function ConvertTable()
 			newTable[v[1]] = v[2]
 			newTable.UnitID = v[3]
 			newTable.Caster = v[4]
+			if v[5] == "nil" then v[5] = nil end -- need reviewed
 			newTable.Stack = v[5]
 			newTable.Value = v[6]
 			newTable.Timeless = v[7]
