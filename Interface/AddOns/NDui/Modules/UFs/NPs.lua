@@ -46,7 +46,6 @@ function UF:SetupCVars()
 	SetCVar("namePlateMaxScale", .8)
 	SetCVar("nameplateSelectedScale", 1)
 	SetCVar("nameplateLargerScale", 1)
-	SetCVar("nameplateSelfScale", 1)
 
 	SetCVar("nameplateShowSelf", 0)
 	SetCVar("nameplateResourceOnTarget", 0)
