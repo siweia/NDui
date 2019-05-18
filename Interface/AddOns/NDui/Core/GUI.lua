@@ -1443,6 +1443,13 @@ function setupBuffIndicator()
 	end
 end
 
+local bloodlustFilter = {
+	[57723] = true,
+	[57724] = true,
+	[80354] = true,
+	[264689] = true
+}
+
 local function exportData()
 	local text = "NDuiSettings:"..DB.Version..":"..DB.MyName..":"..DB.MyClass
 	for KEY, VALUE in pairs(NDuiDB) do
@@ -1477,6 +1484,38 @@ local function exportData()
 			end
 		end
 	end
+
+	for KEY, VALUE in pairs(NDuiADB) do
+		if KEY == "RaidAuraWatch" then
+			text = text..";ACCOUNT:"..KEY
+			for spellID in pairs(VALUE) do
+				text = text..":"..spellID
+			end
+		elseif KEY == "RaidDebuffs" then
+			for instName, value in pairs(VALUE) do
+				for spellID, prio in pairs(value) do
+					text = text..";ACCOUNT:"..KEY..":"..instName..":"..spellID..":"..prio
+				end
+			end
+		elseif KEY == "NameplateFilter" then
+			for index, value in pairs(VALUE) do
+				text = text..";ACCOUNT:"..KEY..":"..index
+				for spellID in pairs(value) do
+					text = text..":"..spellID
+				end
+			end
+		elseif KEY == "CornerBuffs" then
+			for class, value in pairs(VALUE) do
+				for spellID, data in pairs(value) do
+					if not bloodlustFilter[spellID] and class == DB.MyClass then
+						local anchor, color, filter = unpack(data)
+						text = text..";ACCOUNT:"..KEY..":"..class..":"..spellID..":"..anchor..":"..color[1]..":"..color[2]..":"..color[3]..":"..tostring(filter or false)
+					end
+				end
+			end
+		end
+	end
+
 	dataFrame.editBox:SetText(text)
 	dataFrame.editBox:HighlightText()
 end
@@ -1528,6 +1567,30 @@ local function importData()
 			if DB.MyClass == class then
 				NDuiDB[key][value] = {select(3, strsplit(":", option))}
 			end
+		elseif key == "ACCOUNT" then
+			if value == "RaidAuraWatch" then
+				local spells = {select(3, strsplit(":", option))}
+				for _, spellID in next, spells do
+					NDuiADB[value][tonumber(spellID)] = true
+				end
+			elseif value == "RaidDebuffs" then
+				local instName, spellID, priority = select(3, strsplit(":", option))
+				if not NDuiADB[value][instName] then NDuiADB[value][instName] = {} end
+				NDuiADB[value][instName][tonumber(spellID)] = tonumber(priority)
+			elseif value == "NameplateFilter" then
+				local spells = {select(4, strsplit(":", option))}
+				for _, spellID in next, spells do
+					NDuiADB[value][tonumber(arg1)][tonumber(spellID)] = true
+				end
+			elseif value == "CornerBuffs" then
+				local class, spellID, anchor, r, g, b, filter = select(3, strsplit(":", option))
+				spellID = tonumber(spellID)
+				r = tonumber(r)
+				g = tonumber(g)
+				b = tonumber(b)
+				filter = toBoolean(filter)
+				NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
+			end
 		elseif tonumber(arg1) then
 			if value == "DBMCount" then
 				NDuiDB[key][value] = arg1
@@ -1536,6 +1599,8 @@ local function importData()
 			end
 		end
 	end
+
+	ReloadUI()
 end
 
 local function updateTooltip()
@@ -1585,7 +1650,6 @@ local function createDataFrame()
 		button2 = NO,
 		OnAccept = function()
 			importData()
-			ReloadUI()
 		end,
 		whileDead = 1,
 	}
