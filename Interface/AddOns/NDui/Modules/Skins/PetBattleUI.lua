@@ -270,10 +270,10 @@ function module:PetBattleUI()
 
 	local turnTimer = bottomFrame.TurnTimer
 	turnTimer:SetParent(bar)
-	turnTimer:SetSize(xpbar:GetWidth()+2, xpbar:GetHeight()+10)
+	turnTimer:SetSize(xpbar:GetWidth()+4, xpbar:GetHeight()+10)
 	turnTimer:ClearAllPoints()
 	turnTimer:SetPoint("BOTTOM", bar, "TOP", 0, 7)
-	turnTimer.bg = B.CreateBG(turnTimer, 0)
+	turnTimer.bg = B.CreateBG(turnTimer, -1)
 	B.CreateBD(turnTimer.bg)
 	B.CreateSD(turnTimer.bg)
 	B.CreateTex(turnTimer.bg)

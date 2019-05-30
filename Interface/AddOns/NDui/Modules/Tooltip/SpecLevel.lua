@@ -8,6 +8,7 @@ local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
+local LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
 local tinsert, max = table.insert, math.max
 local strfind, format, strsplit = string.find, string.format, string.split
 
@@ -115,7 +116,7 @@ function module:GetUnitItemLevel(unit)
 					if (not quality) or (not level) then
 						delay = true
 					else
-						if quality == 7 then
+						if quality == LE_ITEM_QUALITY_HEIRLOOM then
 							boa = boa + 1
 						end
 
@@ -123,7 +124,7 @@ function module:GetUnitItemLevel(unit)
 							level = B.GetItemLevel(itemLink) or level
 							if i < 16 then
 								total = total + level
-							elseif i > 15 and quality == 6 then
+							elseif i > 15 and quality == LE_ITEM_QUALITY_ARTIFACT then
 								local relics = {select(4, strsplit(":", itemLink))}
 								for i = 1, 3 do
 									local relicID = relics[i] ~= "" and relics[i]
@@ -136,7 +137,7 @@ function module:GetUnitItemLevel(unit)
 							end
 
 							if i == 16 then
-								if quality == 6 then hasArtifact = true end
+								if quality == LE_ITEM_QUALITY_ARTIFACT then hasArtifact = true end
 
 								weapon[1] = level
 								haveWeapon = haveWeapon + 1

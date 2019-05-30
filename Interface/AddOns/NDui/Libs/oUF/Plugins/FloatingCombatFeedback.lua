@@ -188,7 +188,7 @@ local envTexture = {
 
 local iconCache = {}
 local function getTexture(spellID)
-	if not iconCache[spellID] then
+	if spellID and not iconCache[spellID] then
 		local texture = GetSpellTexture(spellID)
 		iconCache[spellID] = texture
 	end
@@ -217,7 +217,7 @@ end
 
 local missCache = {}
 local function getMissText(missType)
-	if not missCache[missType] then
+	if missType and not missCache[missType] then
 		missCache[missType] = _G["COMBAT_TEXT_"..missType]
 	end
 	return missCache[missType]
