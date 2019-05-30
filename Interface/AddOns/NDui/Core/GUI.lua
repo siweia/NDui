@@ -1666,13 +1666,18 @@ local function createDataFrame()
 		dataFrame:Hide()
 	end)
 	accept:HookScript("OnEnter", function(self)
+		if dataFrame.editBox:GetText() == "" then return end
 		updateTooltip()
-		if not dataFrame.version then return end
+
 		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 10)
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L["Data Info"])
-		GameTooltip:AddDoubleLine(L["Version"], dataFrame.version, .6,.8,1, 1,1,1)
-		GameTooltip:AddDoubleLine(L["Character"], dataFrame.name, .6,.8,1, B.ClassColor(dataFrame.class))
+		if dataFrame.version then
+			GameTooltip:AddLine(L["Data Info"])
+			GameTooltip:AddDoubleLine(L["Version"], dataFrame.version, .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(L["Character"], dataFrame.name, .6,.8,1, B.ClassColor(dataFrame.class))
+		else
+			GameTooltip:AddLine(L["Data Exception"], 1,0,0)
+		end
 		GameTooltip:Show()
 	end)
 	accept:HookScript("OnLeave", B.HideTooltip)
