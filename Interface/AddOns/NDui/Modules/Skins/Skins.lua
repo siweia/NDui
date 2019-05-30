@@ -121,7 +121,7 @@ function module:OnLogin()
 	self:PGFSkin()
 
 	-- Register skin
-	local media = LibStub and LibStub("LibSharedMedia-3.0")
+	local media = LibStub and LibStub("LibSharedMedia-3.0", true)
 	if media then
 		media:Register("statusbar", "normTex", DB.normTex)
 	end
