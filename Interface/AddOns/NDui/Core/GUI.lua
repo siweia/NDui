@@ -299,7 +299,7 @@ local function InitialSettings(source, target, fullClean)
 		if source[i] == nil then target[i] = nil end
 		if type(j) == "table" and fullClean then
 			for k, v in pairs(j) do
-				if type(v) ~= "table" and source[i][k] == nil then
+				if type(v) ~= "table" and source[i] and source[i][k] == nil then
 					target[i][k] = nil
 				end
 			end
@@ -1516,7 +1516,7 @@ local function exportData()
 		end
 	end
 
-	dataFrame.editBox:SetText(text)
+	dataFrame.editBox:SetText(B:Encode(text))
 	dataFrame.editBox:HighlightText()
 end
 
@@ -1529,7 +1529,9 @@ local function toBoolean(value)
 end
 
 local function importData()
-	local options = {strsplit(";", dataFrame.editBox:GetText())}
+	local profile = dataFrame.editBox:GetText()
+	if B:IsBase64(profile) then profile = B:Decode(profile) end
+	local options = {strsplit(";", profile)}
 	local title, _, _, class = strsplit(":", options[1])
 	if title ~= "NDuiSettings" then
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Import data error"])
@@ -1604,7 +1606,9 @@ local function importData()
 end
 
 local function updateTooltip()
-	local option = strsplit(";", dataFrame.editBox:GetText())
+	local profile = dataFrame.editBox:GetText()
+	if B:IsBase64(profile) then profile = B:Decode(profile) end
+	local option = strsplit(";", profile)
 	local title, version, name, class = strsplit(":", option)
 	if title == "NDuiSettings" then
 		dataFrame.version = version
