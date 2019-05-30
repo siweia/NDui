@@ -4,7 +4,8 @@ local B, C, L, DB, F = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 local ipairs, strmatch, unpack = ipairs, string.match, unpack
-local BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT = BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT
+local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
+local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
@@ -232,7 +233,7 @@ end
 local function deleteButtonOnClick(self)
 	if not deleteEnable then return end
 	local texture, _, _, quality = GetContainerItemInfo(self.bagID, self.slotID)
-	if IsControlKeyDown() and IsAltKeyDown() and texture and quality < 3 then
+	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
 		PickupContainerItem(self.bagID, self.slotID)
 		DeleteCursorItem()
 	end
