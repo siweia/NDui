@@ -242,15 +242,3 @@ SlashCmdList["TOGGLEGRID"] = function(arg)
 	end
 end
 SLASH_TOGGLEGRID1 = "/ng"
-
---[[
-local function onStart(event, msg)
-	if msg == "PET_QUEUE" then
-		C_PetBattles.StartPVPMatchmaking()
-	elseif msg == "PET_IN" then
-		C_PetBattles.AcceptQueuedPVPMatch()
-		StaticPopupSpecial_Hide(PetBattleQueueReadyFrame)
-	end
-end
-B:RegisterEvent("CHAT_MSG_PARTY", onStart)
-B:RegisterEvent("CHAT_MSG_PARTY_LEADER", onStart)]]
