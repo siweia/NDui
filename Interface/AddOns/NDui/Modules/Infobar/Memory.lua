@@ -4,8 +4,11 @@ if not C.Infobar.Memory then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.MemoryPos)
-local format, min = string.format, math.min
-local sort, wipe = table.sort, table.wipe
+local select, gcinfo, collectgarbage = select, gcinfo, collectgarbage
+local format, min, sort, wipe = string.format, math.min, table.sort, table.wipe
+local ADDONS, GetNumAddOns, GetAddOnInfo = ADDONS, GetNumAddOns, GetAddOnInfo
+local IsShiftKeyDown, IsAddOnLoaded = IsShiftKeyDown, IsAddOnLoaded
+local UpdateAddOnMemoryUsage, GetAddOnMemoryUsage = UpdateAddOnMemoryUsage, GetAddOnMemoryUsage
 
 local function formatMemory(value)
 	if value > 1024 then
@@ -33,27 +36,34 @@ local function memoryColor(value, times)
 	end
 end
 
-local memoryTable, totalMemory = {}
+local memoryTable, totalMemory, entered = {}, 0
+
+local function updateMemoryTable()
+	local numAddons = GetNumAddOns()
+	if numAddons == #memoryTable then return end
+
+	wipe(memoryTable)
+	for i = 1, numAddons do
+		memoryTable[i] = {i, select(2, GetAddOnInfo(i)), 0}
+	end
+end
+
+local function sortMemory(a, b)
+	if a and b then
+		return a[3] > b[3]
+	end
+end
 
 local function updateMemory()
-	wipe(memoryTable)
 	UpdateAddOnMemoryUsage()
 
-	local total, count = 0, 0
-	for i = 1, GetNumAddOns() do
-		if IsAddOnLoaded(i) then
-			count = count + 1
-			local usage = GetAddOnMemoryUsage(i)
-			memoryTable[count] = {select(2, GetAddOnInfo(i)), usage}
-			total = total + usage
-		end
+	local total = 0
+	for i = 1, #memoryTable do
+		local value = memoryTable[i]
+		value[3] = GetAddOnMemoryUsage(value[1])
+		total = total + value[3]
 	end
-
-	sort(memoryTable, function(a, b)
-		if a and b then
-			return a[2] > b[2]
-		end
-	end)
+	sort(memoryTable, sortMemory)
 
 	return total
 end
@@ -61,8 +71,10 @@ end
 info.onUpdate = function(self, elapsed)
 	self.timer = (self.timer or 5) + elapsed
 	if self.timer > 5 then
+		updateMemoryTable()
 		totalMemory = updateMemory()
 		self.text:SetText(ADDONS..": "..B.HexRGB(memoryColor(totalMemory, 10))..format("%.1f", totalMemory/1024))
+		if entered then self:onEnter() end
 
 		self.timer = 0
 	end
@@ -74,31 +86,37 @@ info.onMouseUp = function(self, btn)
 		collectgarbage("collect")
 		print(format("|cff66C6FF%s:|r %s", L["Collect Memory"], formatMemory(before - gcinfo())))
 		updateMemory()
-		self:GetScript("OnEnter")(self)
+		self:onEnter()
 	end
 end
 
 info.onEnter = function(self)
+	entered = true
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
 	GameTooltip:AddDoubleLine(ADDONS, formatMemory(totalMemory), 0,.6,1, .6,.8,1)
 	GameTooltip:AddLine(" ")
 
-	local maxAddOns = IsShiftKeyDown() and #memoryTable or min(C.Infobar.MaxAddOns, #memoryTable)
-	for i = 1, maxAddOns do
-		local usage = memoryTable[i][2]
-		GameTooltip:AddDoubleLine(memoryTable[i][1], formatMemory(usage), 1,1,1, memoryColor(usage, 5))
+	local maxAddOns = C.Infobar.MaxAddOns
+	local isShiftKeyDown = IsShiftKeyDown()
+	local maxShown = isShiftKeyDown and #memoryTable or min(maxAddOns, #memoryTable)
+	local numEnabled = 0
+	for i = 1, #memoryTable do
+		local value = memoryTable[i]
+		if value and IsAddOnLoaded(value[1]) then
+			numEnabled = numEnabled + 1
+			if numEnabled <= maxShown then
+				GameTooltip:AddDoubleLine(value[2], formatMemory(value[3]), 1,1,1, memoryColor(value[3], 5))
+			end
+		end
 	end
 
-	local hiddenMemory = 0
-	if not IsShiftKeyDown() then
-		for i = (C.Infobar.MaxAddOns + 1), #memoryTable do
-			hiddenMemory = hiddenMemory + memoryTable[i][2]
+	if not isShiftKeyDown and (numEnabled > maxAddOns) then
+		local hiddenMemory = 0
+		for i = (maxAddOns + 1), numEnabled do
+			hiddenMemory = hiddenMemory + memoryTable[i][3]
 		end
-		if #memoryTable > C.Infobar.MaxAddOns then
-			local numHidden = #memoryTable - C.Infobar.MaxAddOns
-			GameTooltip:AddDoubleLine(format("%d %s (%s)", numHidden, L["Hidden"], L["Hold Shift"]), formatMemory(hiddenMemory), .6,.8,1, .6,.8,1)
-		end
+		GameTooltip:AddDoubleLine(format("%d %s (%s)", numEnabled - maxAddOns, L["Hidden"], L["Hold Shift"]), formatMemory(hiddenMemory), .6,.8,1, .6,.8,1)
 	end
 
 	GameTooltip:AddLine(" ")
@@ -112,6 +130,7 @@ info.onEnter = function(self)
 end
 
 info.onLeave = function(self)
+	entered = false
 	GameTooltip:Hide()
 	self:UnregisterEvent("MODIFIER_STATE_CHANGED")
 end
@@ -123,6 +142,6 @@ info.eventList = {
 info.onEvent = function(self, event, arg1)
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	if event == "MODIFIER_STATE_CHANGED" and arg1 == "LSHIFT" then
-		self:GetScript("OnEnter")(self)
+		self:onEnter()
 	end
 end
