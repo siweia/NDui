@@ -30,11 +30,13 @@ local textureList = {
 local defaultSettings = {
 	BFA = false,
 	Mover = {},
-	AuraWatchList = {},
 	InternalCD = {},
 	AuraWatchMover = {},
 	RaidClickSets = {},
 	TempAnchor = {},
+	AuraWatchList = {
+		Switcher = {},
+	},
 	Actionbar = {
 		Enable = true,
 		Hotkeys = true,
@@ -1463,11 +1465,17 @@ local function exportData()
 					elseif key == "ExplosiveCache" then
 						text = text..";"..KEY..":"..key..":EMPTYTABLE"
 					elseif KEY == "AuraWatchList" then
-						for spellID, k in pairs(value) do
-							text = text..";"..KEY..":"..key..":"..spellID
-							if k[5] == nil then k[5] = "nil" end
-							for _, v in ipairs(k) do
-								text = text..":"..tostring(v)
+						if key == "Switcher" then
+							for k, v in pairs(value) do
+								text = text..";"..KEY..":"..key..":"..k..":"..tostring(v)
+							end
+						else
+							for spellID, k in pairs(value) do
+								text = text..";"..KEY..":"..key..":"..spellID
+								if k[5] == nil then k[5] = "nil" end
+								for _, v in ipairs(k) do
+									text = text..":"..tostring(v)
+								end
 							end
 						end
 					elseif KEY == "Mover" or KEY == "RaidClickSets" then
@@ -1549,17 +1557,22 @@ local function importData()
 			local color = select(4, strsplit(":", option))
 			NDuiDB[key][value][arg1] = tonumber(color)
 		elseif key == "AuraWatchList" then
-			local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
-			value = tonumber(value)
-			arg1 = tonumber(arg1)
-			spellID = tonumber(spellID)
-			stack = tonumber(stack)
-			amount = toBoolean(amount)
-			timeless = toBoolean(timeless)
-			combat = toBoolean(combat)
-			flash = toBoolean(flash)
-			if not NDuiDB[key][value] then NDuiDB[key][value] = {} end
-			NDuiDB[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
+			if value == "Switcher" then
+				local index, state = select(3, strsplit(":", option))
+				NDuiDB[key][value][tonumber(index)] = toBoolean(state)
+			else
+				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
+				value = tonumber(value)
+				arg1 = tonumber(arg1)
+				spellID = tonumber(spellID)
+				stack = tonumber(stack)
+				amount = toBoolean(amount)
+				timeless = toBoolean(timeless)
+				combat = toBoolean(combat)
+				flash = toBoolean(flash)
+				if not NDuiDB[key][value] then NDuiDB[key][value] = {} end
+				NDuiDB[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
+			end
 		elseif key == "Mover" then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
 			x = tonumber(x)

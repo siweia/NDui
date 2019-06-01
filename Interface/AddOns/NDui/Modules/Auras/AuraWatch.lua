@@ -64,7 +64,7 @@ local function ConvertTable()
 	end
 
 	local function InsertData(index, target)
-		if NDuiDB["AuraWatchList"]["Switcher"..index] then
+		if NDuiDB["AuraWatchList"]["Switcher"][index] then
 			wipe(target)
 		else
 			for _, v in pairs(myTable[index]) do
