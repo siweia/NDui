@@ -120,6 +120,22 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
+	local function reskinTimerBar(_, _, line)
+		local timerBar = line.TimerBar
+		local bar = timerBar.Bar
+
+		if not bar.bg then
+			F.StripTextures(bar)
+			bar:SetStatusBarTexture(C.media.backdrop)
+			bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.8, g*.8, b*.8, r*.5, g*.5, b*.5)
+			bar.bg = F.CreateBDFrame(bar)
+			F.CreateSD(bar.bg)
+		end
+	end
+	hooksecurefunc(QUEST_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
+	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
+	hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
+
 	-- Reskin Blocks
 	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
 		block.NormalBG:SetTexture("")
