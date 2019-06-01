@@ -4,7 +4,8 @@ local module = B:GetModule("Tooltip")
 
 -- Credit: AzeriteTooltip, by jokair9
 function module:AzeriteArmor()
-	if not NDuiADB["AzeriteArmor"] then return end
+	if not NDuiDB["Tooltip"]["AzeriteArmor"] then return end
+	if IsAddOnLoaded("AzeriteTooltip") then return end
 
 	local strfind, format = string.find, string.format
 	local tinsert, ipairs = table.insert, ipairs
