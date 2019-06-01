@@ -155,6 +155,7 @@ function module:InterruptAlert()
 	}
 
 	local function updateAlert(_, ...)
+		if not NDuiDB["Misc"]["Interrupt"] then return end
 		if not IsInGroup() then return end
 		if NDuiDB["Misc"]["AlertInInstance"] and (not IsInInstance() or IsPartyLFG()) then return end
 
