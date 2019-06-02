@@ -5,7 +5,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- [[ General ]]
 
-	F.ReskinPortraitFrame(CollectionsJournal)
+	CollectionsJournal.bg = F.ReskinPortraitFrame(CollectionsJournal)
 	F.ReskinTab(CollectionsJournalTab1)
 	for i = 2, 5 do
 		local tab = _G["CollectionsJournalTab"..i]

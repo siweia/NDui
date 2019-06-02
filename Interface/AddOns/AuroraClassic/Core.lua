@@ -190,8 +190,7 @@ function F:ReskinTab()
 
 	self:SetHighlightTexture(C.media.backdrop)
 	local hl = self:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 9, -4)
-	hl:SetPoint("BOTTOMRIGHT", -9, 1)
+	hl:SetAllPoints(bg)
 	hl:SetVertexColor(r, g, b, .25)
 end
 
@@ -236,17 +235,9 @@ end
 function F:ReskinScroll()
 	local frame = self:GetName()
 	F.StripTextures(self:GetParent())
+	F.StripTextures(self)
 
-	local track = (self.trackBG or self.Background or self.Track) or (_G[frame.."Track"] or _G[frame.."BG"])
-	if track then track:Hide() end
-	local top = (self.ScrollBarTop or self.Top or self.ScrollUpBorder) or _G[frame.."Top"]
-	if top then top:Hide() end
-	local middle = (self.ScrollBarMiddle or self.Middle or self.Border) or _G[frame.."Middle"]
-	if middle then middle:Hide() end
-	local bottom = (self.ScrollBarBottom or self.Bottom or self.ScrollDownBorder) or _G[frame.."Bottom"]
-	if bottom then bottom:Hide() end
-
-	local bu = (self.ThumbTexture or self.thumbTexture) or _G[frame.."ThumbTexture"]
+	local bu = (self.ThumbTexture or self.thumbTexture) or frame and _G[frame.."ThumbTexture"]
 	bu:SetAlpha(0)
 	bu:SetWidth(17)
 
@@ -610,12 +601,13 @@ end
 
 function F:ReskinPortraitFrame()
 	F.StripTextures(self)
-	F.SetBD(self)
+	local bg = F.SetBD(self)
 	local frameName = self.GetName and self:GetName()
 	local portrait = self.portrait or _G[frameName.."Portrait"]
 	portrait:SetAlpha(0)
 	local closeButton = self.CloseButton or _G[frameName.."CloseButton"]
 	F.ReskinClose(closeButton)
+	return bg
 end
 
 function F:CreateBDFrame(a)

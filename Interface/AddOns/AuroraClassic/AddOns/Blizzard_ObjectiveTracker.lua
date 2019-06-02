@@ -57,28 +57,23 @@ tinsert(C.themes["AuroraClassic"], function()
 	for _, header in pairs(headers) do reskinHeader(header) end
 
 	-- Reskin Progressbars
+	local function reskinBarTemplate(bar)
+		F.StripTextures(bar)
+		bar:SetStatusBarTexture(C.media.backdrop)
+		bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
+		bar.bg = F.CreateBDFrame(bar)
+		F.CreateSD(bar.bg)
+	end
+
 	local function reskinProgressbar(_, _, line)
 		local progressBar = line.ProgressBar
 		local bar = progressBar.Bar
 		local icon = bar.Icon
 
-		if not bar.styled then
-			bar.BarFrame:Hide()
-			bar.BarFrame2:Hide()
-			bar.BarFrame3:Hide()
-			bar.BarBG:Hide()
-			bar.BarGlow:Hide()
-			bar.IconBG:SetTexture("")
-			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.dummy
-
+		if not bar.bg then
 			bar:SetPoint("LEFT", 22, 0)
-			bar:SetStatusBarTexture(C.media.backdrop)
-			bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.8, g*.8, b*.8, r*.5, g*.5, b*.5)
-
-			local bg = F.CreateBDFrame(progressBar)
-			bg:SetPoint("TOPLEFT", bar, -C.mult, C.mult)
-			bg:SetPoint("BOTTOMRIGHT", bar, C.mult, -C.mult)
-			F.CreateSD(bg)
+			reskinBarTemplate(bar)
+			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.dummy
 
 			icon:SetMask(nil)
 			icon:SetTexCoord(.08, .92, .08, .92)
@@ -87,8 +82,6 @@ tinsert(C.themes["AuroraClassic"], function()
 			icon:ClearAllPoints()
 			icon:SetPoint("TOPLEFT", bar, "TOPRIGHT", 5, 0)
 			icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 25, 0)
-
-			bar.styled = true
 		end
 
 		if icon.bg then
@@ -103,20 +96,10 @@ tinsert(C.themes["AuroraClassic"], function()
 		local progressBar = line.ProgressBar
 		local bar = progressBar.Bar
 
-		if not bar.styled then
+		if not bar.bg then
 			bar:ClearAllPoints()
 			bar:SetPoint("LEFT")
-			for i = 1, 6 do
-				select(i, bar:GetRegions()):Hide()
-			end
-			bar:SetStatusBarTexture(C.media.backdrop)
-			bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.8, g*.8, b*.8, r*.5, g*.5, b*.5)
-			bar.Label:Show()
-			local oldBg = select(5, bar:GetRegions())
-			local bg = F.CreateBDFrame(oldBg)
-			F.CreateSD(bg)
-
-			bar.styled = true
+			reskinBarTemplate(bar)
 		end
 	end)
 
@@ -125,11 +108,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local bar = timerBar.Bar
 
 		if not bar.bg then
-			F.StripTextures(bar)
-			bar:SetStatusBarTexture(C.media.backdrop)
-			bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.8, g*.8, b*.8, r*.5, g*.5, b*.5)
-			bar.bg = F.CreateBDFrame(bar)
-			F.CreateSD(bar.bg)
+			reskinBarTemplate(bar)
 		end
 	end
 	hooksecurefunc(QUEST_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
@@ -174,7 +153,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
 
 			block.StatusBar:SetStatusBarTexture(C.media.backdrop)
-			block.StatusBar:GetStatusBarTexture():SetGradient("VERTICAL", r*.8, g*.8, b*.8, r*.5, g*.5, b*.5)
+			block.StatusBar:GetStatusBarTexture():SetGradient("VERTICAL", r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
 			block.StatusBar:SetHeight(10)
 
 			select(3, block:GetRegions()):Hide()
