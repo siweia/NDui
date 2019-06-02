@@ -119,6 +119,7 @@ function module:OnLogin()
 	self:SkadaSkin()
 	self:BigWigsSkin()
 	self:PGFSkin()
+	self:ReskinRematch()
 
 	-- Register skin
 	local media = LibStub and LibStub("LibSharedMedia-3.0", true)
