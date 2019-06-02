@@ -235,7 +235,7 @@ function module:PetBattleUI()
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			B.CreateSD(bu, 3, 3)
 
-			bu.Cooldown:SetFont(DB.Font[1], 26, "OUTLINE")
+			bu.Cooldown:SetFont(DB.Font[1], 26, DB.Font[3])
 			bu.SelectedHighlight:ClearAllPoints()
 			bu.SelectedHighlight:SetPoint("TOPLEFT", bu, -12, 12)
 			bu.SelectedHighlight:SetPoint("BOTTOMRIGHT", bu, 12, -12)

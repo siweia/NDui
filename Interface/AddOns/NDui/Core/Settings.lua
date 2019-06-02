@@ -138,10 +138,10 @@ local function ForceDBMOptions()
 	if not DBM_AllSavedOptions["Default"] then DBM_AllSavedOptions["Default"] = {} end
 	DBM_AllSavedOptions["Default"]["WarningY"] = -170
 	DBM_AllSavedOptions["Default"]["WarningX"] = 0
-	DBM_AllSavedOptions["Default"]["WarningFontStyle"] = "OUTLINE"
+	DBM_AllSavedOptions["Default"]["WarningFontStyle"] = DB.Font[3]
 	DBM_AllSavedOptions["Default"]["SpecialWarningX"] = 0
 	DBM_AllSavedOptions["Default"]["SpecialWarningY"] = -260
-	DBM_AllSavedOptions["Default"]["SpecialWarningFontStyle"] = "OUTLINE"
+	DBM_AllSavedOptions["Default"]["SpecialWarningFontStyle"] = DB.Font[3]
 	DBM_AllSavedOptions["Default"]["HideObjectivesFrame"] = false
 	DBM_AllSavedOptions["Default"]["WarningFontSize"] = 18
 	DBM_AllSavedOptions["Default"]["SpecialWarningFontSize2"] = 24
@@ -172,11 +172,11 @@ local function ForceSkadaOptions()
 							},
 							["font"] = "",
 							["borderthickness"] = 0,
-							["fontflags"] = "OUTLINE",
+							["fontflags"] = DB.Font[3],
 							["fontsize"] = 14,
 							["texture"] = "normTex",
 						},
-						["barfontflags"] = "OUTLINE",
+						["barfontflags"] = DB.Font[3],
 						["point"] = "BOTTOMRIGHT",
 						["mode"] = "",
 						["barwidth"] = 300,
@@ -219,7 +219,7 @@ local function ForceBigwigs()
 			["BigWigs_Plugins_Bars"] = {
 				["profiles"] = {
 					["Default"] = {
-						["outline"] = "OUTLINE",
+						["outline"] = DB.Font[3],
 						["fontSize"] = 12,
 						["BigWigsAnchor_y"] = 336,
 						["BigWigsAnchor_x"] = 16,
@@ -278,7 +278,7 @@ local function ForceBigwigs()
 						["posx"] = 1002,
 						["fontSize"] = 14,
 						["font"] = DB.Font[1],
-						["fontOutline"] = "OUTLINE",
+						["fontOutline"] = DB.Font[3],
 						["posy"] = 490,
 					},
 				},

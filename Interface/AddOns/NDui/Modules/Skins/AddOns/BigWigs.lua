@@ -69,12 +69,12 @@ function module:BigWigsSkin()
 		bar.candyBarLabel:ClearAllPoints()
 		bar.candyBarLabel:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
 		bar.candyBarLabel:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
-		bar.candyBarLabel:SetFont(DB.Font[1], 13, "OUTLINE")
+		bar.candyBarLabel:SetFont(DB.Font[1], 13, DB.Font[3])
 		bar.candyBarLabel.SetFont = B.Dummy
 		bar.candyBarDuration:ClearAllPoints()
 		bar.candyBarDuration:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
 		bar.candyBarDuration:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
-		bar.candyBarDuration:SetFont(DB.Font[1], 13, "OUTLINE")
+		bar.candyBarDuration:SetFont(DB.Font[1], 13, DB.Font[3])
 		bar.candyBarDuration.SetFont = B.Dummy
 	end
 
