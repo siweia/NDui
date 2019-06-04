@@ -605,8 +605,7 @@ C.themes["Blizzard_Collections"] = function()
 			slot:SetHighlightTexture(C.media.backdrop)
 			local hl = slot:GetHighlightTexture()
 			hl:SetVertexColor(1, 1, 1, .25)
-			hl:SetPoint("TOPLEFT", 2, -2)
-			hl:SetPoint("BOTTOMRIGHT", -2, 2)
+			hl:SetAllPoints(slot.Icon)
 		end
 	end
 

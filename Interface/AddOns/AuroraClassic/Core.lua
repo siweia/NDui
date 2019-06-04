@@ -502,9 +502,9 @@ local function SetupTexture(self, texture)
 
 	if texture and texture ~= "" then
 		if texture:find("Plus") then
-			self.expTex:SetTexCoord(0, 0.4375, 0, 0.4375)
+			self.expTex:SetTexCoord(0, .4375, 0, .4375)
 		elseif texture:find("Minus") then
-			self.expTex:SetTexCoord(0.5625, 1, 0, 0.4375)
+			self.expTex:SetTexCoord(.5625, 1, 0, .4375)
 		end
 		self.bg:Show()
 	else
