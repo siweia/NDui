@@ -10,14 +10,16 @@ function module:ReskinRematch()
 	if not RematchJournal then return end
 
 	local cr, cg, cb = DB.r, DB.g, DB.b
-	RematchSettings.ColorPetNames = true
-	RematchSettings.FixedPetCard = true
+	local select, pairs, ipairs, next, unpack = select, pairs, ipairs, next, unpack
+
+	local settings = RematchSettings
+	settings.ColorPetNames = true
+	settings.FixedPetCard = true
 	RematchLoreFont:SetTextColor(1, 1, 1)
 
 	local function reskinRematchClose(self)
-		F.StripTextures(self.CloseButton, 0)
+		F.StripTextures(self.CloseButton)
 		F.ReskinClose(self.CloseButton)
-		if self.CloseButton.Icon then self.CloseButton.Icon:Hide() end
 	end
 
 	local function reskinRematchFilter(self)
@@ -34,13 +36,17 @@ function module:ReskinRematch()
 		if self.IconBorder then self.IconBorder:Hide() end
 		if self.Background then self.Background:Hide() end
 		if self.Icon then
-			self.Icon:SetTexCoord(.08, .92, .08, .92)
+			self.Icon:SetTexCoord(unpack(DB.TexCoord))
 			self.Icon.bg = F.CreateBDFrame(self.Icon)
 			local hl = self.GetHighlightTexture and self:GetHighlightTexture() or select(3, self:GetRegions())
 			if hl then
 				hl:SetColorTexture(1, 1, 1, .25)
 				hl:SetAllPoints(self.Icon)
 			end
+		end
+		if self.Level then
+			if self.Level.BG then self.Level.BG:Hide() end
+			if self.Level.Text then self.Level.Text:SetTextColor(1, 1, 1) end
 		end
 
 		self.styled = true
@@ -65,7 +71,7 @@ function module:ReskinRematch()
 	local function reskinRematchDropdown(self)
 		self:SetBackdrop(nil)
 		F.StripTextures(self, 0)
-		F.CreateBDFrame(self, .25)
+		F.CreateGradient(F.CreateBDFrame(self, 0))
 		if self.Icon then
 			self.Icon:SetAlpha(1)
 			F.CreateBDFrame(self.Icon)
@@ -83,6 +89,14 @@ function module:ReskinRematch()
 		F.CreateBDFrame(face.Bottom, .25)
 	end
 
+	local function reskinMenu(self)
+		F.StripTextures(self.Title)
+		local bg = F.CreateBDFrame(self.Title)
+		bg:SetBackdropColor(1, .8, .0, .25)
+		F.StripTextures(self)
+		F.CreateSD(F.CreateBDFrame(self, .7))
+	end
+
 	local function resizeBackground()
 		local parent = RematchJournal:IsShown() and RematchJournal or CollectionsJournal
 		CollectionsJournal.bg:SetPoint("BOTTOMRIGHT", parent, C.mult, -C.mult)
@@ -97,11 +111,17 @@ function module:ReskinRematch()
 		hooksecurefunc("CollectionsJournal_UpdateSelectedTab", resizeBackground)
 		B.ReskinTooltip(RematchTooltip)
 		B.ReskinTooltip(RematchTableTooltip)
+		for i = 1, 3 do
+			local menu = Rematch:GetMenuFrame(i, UIParent)
+			reskinMenu(menu)
+		end
 
 		F.StripTextures(RematchJournal)
 		reskinRematchClose(RematchJournal)
-		F.StripTextures(RematchToolbar.PetCount)
-		F.CreateBDFrame(RematchToolbar.PetCount, .25)
+		for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
+			F.ReskinTab(tab)
+		end
+
 		local buttons = {
 			RematchHealButton,
 			RematchBandageButton,
@@ -113,9 +133,9 @@ function module:ReskinRematch()
 		for _, button in pairs(buttons) do
 			reskinRematchIcon(button)
 		end
-		for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
-			F.ReskinTab(tab)
-		end
+		F.StripTextures(RematchToolbar.PetCount)
+		local bg = F.CreateBDFrame(RematchToolbar.PetCount, .25)
+		bg:SetPoint("TOPLEFT", -10, -5)
 
 		F.StripTextures(RematchPetPanel.Top)
 		F.Reskin(RematchPetPanel.Top.Toggle)
@@ -160,7 +180,12 @@ function module:ReskinRematch()
 		F.StripTextures(RematchQueuePanel.Top)
 		reskinRematchFilter(RematchQueuePanel.Top.QueueButton)
 		reskinRematchScroll(RematchQueuePanel.List)
+
 		reskinRematchScroll(RematchOptionPanel.List)
+		for i = 1, 4 do
+			local bu = RematchOptionPanel.Growth.Corners[i]
+			reskinRematchIcon(bu)
+		end
 
 		F.Reskin(RematchBottomPanel.SummonButton)
 		F.ReskinCheck(UseRematchButton)
@@ -223,6 +248,7 @@ function module:ReskinRematch()
 		reskinRematchInput(dialog.SaveAs.Name)
 		reskinRematchDropdown(dialog.SaveAs.Target)
 		reskinRematchDropdown(dialog.TabPicker)
+		reskinRematchIcon(dialog.Pet.Pet)
 
 		local preferences = dialog.Preferences
 		reskinRematchInput(preferences.MinHP)
@@ -242,32 +268,39 @@ function module:ReskinRematch()
 		bg:SetPoint("TOPLEFT", -5, 5)
 		bg:SetPoint("BOTTOMRIGHT", 5, -5)
 
+		local report = dialog.CollectionReport
+		reskinRematchDropdown(report.ChartTypeComboBox)
+		F.StripTextures(report.Chart)
+		F.CreateBDFrame(report.Chart, .25)
+
 		local note = RematchNotes
-		F.StripTextures(RematchNotes)
-		reskinRematchClose(RematchNotes)
+		F.StripTextures(note)
+		reskinRematchClose(note)
 		for i = 1, 6 do
 			if i ~= 2 then
-				local region = select(i, RematchNotes.LockButton:GetRegions())
+				local region = select(i, note.LockButton:GetRegions())
 				region:SetTexture(nil)
 			end
 		end
-		RematchNotes.LockButton:SetPoint("TOPLEFT")
-		local bg = F.CreateBDFrame(RematchNotes.LockButton, .25)
+		note.LockButton:SetPoint("TOPLEFT")
+		local bg = F.CreateBDFrame(note.LockButton, .25)
 		bg:SetPoint("TOPLEFT", 7, -7)
 		bg:SetPoint("BOTTOMRIGHT", -7, 7)
-		F.StripTextures(RematchNotes.Content)
-		F.ReskinScroll(RematchNotes.Content.ScrollFrame.ScrollBar)
-		local bg = F.CreateBDFrame(RematchNotes.Content.ScrollFrame, .25)
+
+		F.StripTextures(note.Content)
+		F.ReskinScroll(note.Content.ScrollFrame.ScrollBar)
+		local bg = F.CreateBDFrame(note.Content.ScrollFrame, .25)
 		bg:SetPoint("TOPLEFT", 0, 5)
 		bg:SetPoint("BOTTOMRIGHT", 0, -2)
-		local bg = F.CreateBDFrame(RematchNotes.Content.ScrollFrame)
-		bg:SetAllPoints(RematchNotes)
+		local bg = F.CreateBDFrame(note.Content.ScrollFrame)
+		bg:SetAllPoints(note)
 		F.CreateSD(bg)
 		for _, icon in pairs({"Left", "Right"}) do
-			local bu = RematchNotes.Content[icon.."Icon"]
+			local bu = note.Content[icon.."Icon"]
 			bu:SetMask(nil)
 			F.ReskinIcon(bu)
 		end
+
 		F.Reskin(note.Controls.DeleteButton)
 		F.Reskin(note.Controls.UndoButton)
 		F.Reskin(note.Controls.SaveButton)
@@ -310,8 +343,6 @@ function module:ReskinRematch()
 				F.StripTextures(loadout)
 				F.CreateBDFrame(loadout, .25)
 				reskinRematchIcon(loadout.Pet.Pet)
-				loadout.Pet.Pet.Level.BG:Hide()
-				loadout.Pet.Pet.Level.Text:SetTextColor(1, 1, 1)
 				loadout.HP:SetStatusBarTexture(DB.bdTex)
 				for j = 1, 3 do
 					reskinRematchIcon(loadout.Abilities[j])
@@ -382,13 +413,15 @@ function module:ReskinRematch()
 					parent = button.Pets[3]
 				end
 
-				button.Back:SetTexture(nil)
-				local bg = F.CreateBDFrame(button.Back, .25)
-				bg:SetPoint("TOPLEFT", parent, "TOPRIGHT", 3, C.mult)
-				bg:SetPoint("BOTTOMRIGHT", 0, C.mult)
-				button.bg = bg
-				button:HookScript("OnEnter", buttonOnEnter)
-				button:HookScript("OnLeave", buttonOnLeave)
+				if button.Back then
+					button.Back:SetTexture(nil)
+					local bg = F.CreateBDFrame(button.Back, .25)
+					bg:SetPoint("TOPLEFT", parent, "TOPRIGHT", 3, C.mult)
+					bg:SetPoint("BOTTOMRIGHT", 0, C.mult)
+					button.bg = bg
+					button:HookScript("OnEnter", buttonOnEnter)
+					button:HookScript("OnLeave", buttonOnLeave)
+				end
 
 				button.styled = true
 			end
@@ -404,8 +437,6 @@ function module:ReskinRematch()
 			local button = frame.Pets[i]
 			if not button.styled then
 				reskinRematchIcon(button)
-				button.Level.BG:Hide()
-				button.Level.Text:SetTextColor(1, 1, 1)
 			end
 			button.Icon.bg:SetBackdropBorderColor(button.IconBorder:GetVertexColor())
 
@@ -438,33 +469,6 @@ function module:ReskinRematch()
 		end
 	end)
 
-	local function reskinMenu(self)
-		F.StripTextures(self.Title)
-		local bg = F.CreateBDFrame(self.Title)
-		bg:SetBackdropColor(1, .8, .0, .25)
-		F.StripTextures(self)
-		F.CreateSD(F.CreateBDFrame(self, .7))
-
-		self.styled = true
-	end
-
-	hooksecurefunc(Rematch, "ShowMenu", function()
-		local menu = RematchMenu
-		if not menu.styled then
-			reskinMenu(menu)
-		end
-
-		for i = 1, menu:GetNumChildren() do
-			local option = select(i, menu:GetChildren())
-			if option.entry and option.entry.subMenu then
-				local subMenu = select(1, option:GetChildren())
-				if subMenu and subMenu.Buttons and not subMenu.styled then
-					reskinMenu(subMenu)
-				end
-			end
-		end
-	end)
-
 	hooksecurefunc(Rematch, "MenuButtonSetChecked", function(_, button, isChecked, isRadio)
 		if isChecked then
 			local x = .5
@@ -476,10 +480,74 @@ function module:ReskinRematch()
 
 		if not button.styled then
 			button.Check:SetVertexColor(cr, cg, cb)
-			local bg = F.CreateBDFrame(button.Check, .25)
+			local bg = F.CreateBDFrame(button.Check, 0)
 			bg:SetPoint("TOPLEFT", button.Check, 4, -4)
 			bg:SetPoint("BOTTOMRIGHT", button.Check, -4, 4)
+			F.CreateGradient(bg)
+
 			button.styled = true
+		end
+	end)
+
+	local panel = RematchOptionPanel
+	hooksecurefunc(panel, "FillOptionListButton", function(self, index)
+		local opt = panel.opts[index]
+		if opt then
+			self.optType = opt[1]
+			local checkButton = self.CheckButton
+			if not checkButton.bg then
+				local bg = F.CreateBDFrame(checkButton, 0)
+				checkButton.bgTex = F.CreateGradient(bg)
+				checkButton.bg = bg
+				self.HeaderBack:SetTexture(nil)
+			end
+			checkButton.bg:SetBackdropColor(0, 0, 0, 0)
+			checkButton.bg:Show()
+			checkButton.bgTex:Show()
+
+			if self.optType == "header" then
+				self.headerIndex = opt[3]
+				checkButton:SetSize(8, 8)
+				checkButton:SetPoint("LEFT", 5, 0)
+				checkButton:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+				checkButton.bg:SetBackdropColor(0, 0, 0, .25)
+				checkButton.bg:SetPoint("TOPLEFT", 0, -2)
+				checkButton.bg:SetPoint("BOTTOMRIGHT", 0, 2)
+				checkButton.bgTex:Hide()
+
+				local isCollapsed = settings.CollapsedOptHeaders[opt[3]]
+				if isCollapsed then
+					checkButton:SetTexCoord(0, .4375, 0, .4375)
+				else
+					checkButton:SetTexCoord(.5625, 1, 0, .4375)
+				end
+				if self.headerIndex == 0 and panel.allCollapsed then
+					checkButton:SetTexCoord(0, .4375, 0, .4375)
+				end
+			elseif self.optType == "check" then
+				checkButton:SetSize(22, 22)
+				checkButton.bg:SetPoint("TOPLEFT", checkButton, 2, -2)
+				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, -2, 2)
+				if self.isChecked and self.isDisabled then
+					checkButton:SetTexCoord(.25, .5, .75, 1)
+				elseif self.isChecked then
+					checkButton:SetTexCoord(.5, .75, 0, .25)
+				else
+					checkButton:SetTexCoord(0, 0, 0, 0)
+				end
+			elseif self.optType == "radio" then
+				local isChecked = settings[opt[2]] == opt[5]
+				checkButton:SetSize(22, 22)
+				checkButton.bg:SetPoint("TOPLEFT", checkButton, 2, -2)
+				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, -2, 2)
+				if isChecked then
+					checkButton:SetTexCoord(.5, .75, .25, .5)
+				else
+					checkButton:SetTexCoord(0, 0, 0, 0)
+				end
+			else
+				checkButton.bg:Hide()
+			end
 		end
 	end)
 end
