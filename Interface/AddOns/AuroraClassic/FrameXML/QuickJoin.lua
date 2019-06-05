@@ -1,9 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	for i = 1, 3 do
-		select(i, QuickJoinScrollFrame:GetRegions()):Hide()
-	end
 	F.ReskinScroll(QuickJoinScrollFrameScrollBar)
 	F.Reskin(QuickJoinFrame.JoinQueueButton)
 
