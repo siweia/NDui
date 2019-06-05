@@ -56,11 +56,7 @@ local function skinChat(self)
 	tabFs:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
 	tabFs:SetShadowColor(0, 0, 0, 0)
 	tabFs:SetTextColor(1, .8, 0)
-	for i = 1, 10 do
-		if i ~= 7 then
-			select(i, tab:GetRegions()):SetTexture(nil)
-		end
-	end
+	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", tabSetAlpha)
 
 	if NDuiDB["Chat"]["Lock"] then B.StripTextures(self) end
