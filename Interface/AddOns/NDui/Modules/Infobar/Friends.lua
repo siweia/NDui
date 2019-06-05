@@ -5,17 +5,28 @@ if not C.Infobar.Friends then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.FriendsPos)
 
-local strfind, format = string.find, string.format
-local sort, wipe = table.sort, table.wipe
+local strfind, format, sort, wipe, unpack = string.find, string.format, table.sort, table.wipe, unpack
+local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
+local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
+local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
+local BNGetNumFriends, BNGetFriendInfo, BNGetGameAccountInfo, BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName = BNGetNumFriends, BNGetFriendInfo, BNGetGameAccountInfo, BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName
+local CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor, IsShiftKeyDown = CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor, IsShiftKeyDown
+local BNET_CLIENT_WOW, UNKNOWN, FRIENDS_LIST, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, FRIENDS_LIST, GUILD_ONLINE_LABEL
 local friendTable, bnetTable, updateRequest = {}, {}
 local wowString, bnetString = L["WoW"], L["BN"]
 local activeZone, inactiveZone = {r=.3, g=1, b=.3}, {r=.7, g=.7, b=.7}
+
+local function sortFriends(a, b)
+	if a[1] and b[1] then
+		return a[1] < b[1]
+	end
+end
 
 local function buildFriendTable(num)
 	wipe(friendTable)
 
 	for i = 1, num do
-		local info = C_FriendList.GetFriendInfoByIndex(i)
+		local info = C_FriendList_GetFriendInfoByIndex(i)
 		if info and info.connected then
 			local status = ""
 			if info.afk then
@@ -28,11 +39,13 @@ local function buildFriendTable(num)
 		end
 	end
 
-	sort(friendTable, function(a, b)
-		if a[1] and b[1] then
-			return a[1] < b[1]
-		end
-	end)
+	sort(friendTable, sortFriends)
+end
+
+local function sortBNFriends(a, b)
+	if a[5] and b[5] then
+		return a[5] > b[5]
+	end
 end
 
 local function buildBNetTable(num)
@@ -70,11 +83,7 @@ local function buildBNetTable(num)
 		end
 	end
 
-	sort(bnetTable, function(a, b)
-		if a[5] and b[5] then
-			return a[5] > b[5]
-		end
-	end)
+	sort(bnetTable, sortBNFriends)
 end
 
 info.eventList = {
@@ -93,14 +102,14 @@ info.onEvent = function(self, event, arg1)
 		self:GetScript("OnEnter")(self)
 	end
 
-	local onlineFriends = C_FriendList.GetNumOnlineFriends()
+	local onlineFriends = C_FriendList_GetNumOnlineFriends()
 	local _, onlineBNet = BNGetNumFriends()
 	self.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, onlineFriends + onlineBNet))
 	updateRequest = false
 end
 
 info.onEnter = function(self)
-	local numFriends, onlineFriends = C_FriendList.GetNumFriends(), C_FriendList.GetNumOnlineFriends()
+	local numFriends, onlineFriends = C_FriendList_GetNumFriends(), C_FriendList_GetNumOnlineFriends()
 	local numBNet, onlineBNet = BNGetNumFriends()
 	local totalOnline = onlineFriends + onlineBNet
 	local totalFriends = numFriends + numBNet

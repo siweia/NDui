@@ -6,8 +6,22 @@ local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.TimePos)
 local time, date = time, date
 local strfind, format, floor = string.find, string.format, math.floor
-local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
-local TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM = TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM
+local mod, tonumber, pairs, ipairs, select = mod, tonumber, pairs, ipairs, select
+local C_Map_GetMapInfo = C_Map.GetMapInfo
+local C_Calendar_GetDate = C_Calendar.GetDate
+local C_Calendar_SetAbsMonth = C_Calendar.SetAbsMonth
+local C_Calendar_OpenCalendar = C_Calendar.OpenCalendar
+local C_Calendar_GetNumDayEvents = C_Calendar.GetNumDayEvents
+local C_Calendar_GetNumPendingInvites = C_Calendar.GetNumPendingInvites
+local C_AreaPoiInfo_GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
+local C_IslandsQueue_GetIslandsWeeklyQuestID = C_IslandsQueue.GetIslandsWeeklyQuestID
+local TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR = TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR
+local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES
+local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
+local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING
+local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo
+local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
+local GetNumSavedInstances, GetSavedInstanceInfo, IsQuestFlaggedCompleted, GetQuestObjectiveInfo = GetNumSavedInstances, GetSavedInstanceInfo, IsQuestFlaggedCompleted, GetQuestObjectiveInfo
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool("timeMgrUseMilitaryTime") then
@@ -22,7 +36,7 @@ end
 info.onUpdate = function(self, elapsed)
 	self.timer = (self.timer or 0) + elapsed
 	if self.timer > 1 then
-		local color = C_Calendar.GetNumPendingInvites() > 0 and "|cffFF0000" or ""
+		local color = C_Calendar_GetNumPendingInvites() > 0 and "|cffFF0000" or ""
 
 		local hour, minute
 		if GetCVarBool("timeMgrUseLocalTime") then
@@ -46,12 +60,12 @@ local bonusName = GetCurrencyInfo(1580)
 
 local isTimeWalker, walkerTexture
 local function checkTimeWalker(event)
-	local date = C_Calendar.GetDate()
-	C_Calendar.SetAbsMonth(date.month, date.year)
-	C_Calendar.OpenCalendar()
+	local date = C_Calendar_GetDate()
+	C_Calendar_SetAbsMonth(date.month, date.year)
+	C_Calendar_OpenCalendar()
 
 	local today = date.monthDay
-	local numEvents = C_Calendar.GetNumDayEvents(0, today)
+	local numEvents = C_Calendar_GetNumDayEvents(0, today)
 	if numEvents <= 0 then return end
 
 	for i = 1, numEvents do
@@ -114,16 +128,16 @@ local mapAreaPoiIDs = {
 	[895] = 5896,
 }
 
-local function GetInvasionInfo(mapID)
+local function getInvasionInfo(mapID)
 	local areaPoiID = mapAreaPoiIDs[mapID]
-	local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
-	local mapInfo = C_Map.GetMapInfo(mapID)
+	local seconds = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
+	local mapInfo = C_Map_GetMapInfo(mapID)
 	return seconds, mapInfo.name
 end
 
 local function CheckInvasion(index)
 	for _, mapID in pairs(invIndex[index].maps) do
-		local timeLeft, name = GetInvasionInfo(mapID)
+		local timeLeft, name = getInvasionInfo(mapID)
 		if timeLeft and timeLeft > 0 then
 			return timeLeft, name
 		end
@@ -143,7 +157,7 @@ local function GetNextLocation(nextTime, index)
 	local elapsed = nextTime - inv.baseTime
 	local round = mod(floor(elapsed / inv.duration) + 1, count)
 	if round == 0 then round = count end
-	return C_Map.GetMapInfo(inv.maps[inv.timeTable[round]]).name
+	return C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name
 end
 
 local title
@@ -162,7 +176,7 @@ info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint("BOTTOMRIGHT", UIParent, -15, 30)
 	GameTooltip:ClearLines()
-	local today = C_Calendar.GetDate()
+	local today = C_Calendar_GetDate()
 	local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
 	GameTooltip:AddLine(format(FULLDATE, CALENDAR_WEEKDAY_NAMES[w], CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), 0,.6,1)
 	GameTooltip:AddLine(" ")
@@ -216,7 +230,7 @@ info.onEnter = function(self)
 		GameTooltip:AddDoubleLine(bonusName, count.."/"..maxCoins, 1,1,1, r,g,b)
 	end
 
-	local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
+	local iwqID = C_IslandsQueue_GetIslandsWeeklyQuestID()
 	if iwqID and UnitLevel("player") == 120 then
 		addTitle(QUESTS_LABEL)
 		if IsQuestFlaggedCompleted(iwqID) then

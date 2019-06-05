@@ -4,8 +4,11 @@ if not C.Infobar.Durability then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.DurabilityPos)
-local format, gsub, sort = string.format, string.gsub, table.sort
-local floor, modf = math.floor, math.modf
+local format, gsub, sort, floor, modf, select = string.format, string.gsub, table.sort, math.floor, math.modf, select
+local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture = GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture
+local GetMoneyString, GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoneyString, GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
+local GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney
+local C_Timer_After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair = C_Timer.After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair
 
 local localSlots = {
 	[1] = {1, INVTYPE_HEAD, 1000},
@@ -25,6 +28,12 @@ inform:SetPoint("BOTTOM", info, "TOP", 0, 23)
 inform.Text:SetText(L["Low Durability"])
 inform:Hide()
 
+local function sortSlots(a, b)
+	if a and b then
+		return a[3] < b[3]
+	end
+end
+
 local function getItemDurability()
 	local numSlots = 0
 	for i = 1, 10 do
@@ -38,7 +47,7 @@ local function getItemDurability()
 			localSlots[i][3] = 1000
 		end
 	end
-	sort(localSlots, function(a, b) return a[3] < b[3] end)
+	sort(localSlots, sortSlots)
 
 	return numSlots
 end
@@ -162,7 +171,7 @@ function autoRepair(override)
 			end
 		end
 
-		C_Timer.After(.5, delayFunc)
+		C_Timer_After(.5, delayFunc)
 	end
 end
 

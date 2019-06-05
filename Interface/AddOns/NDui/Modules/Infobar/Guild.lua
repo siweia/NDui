@@ -5,7 +5,15 @@ if not C.Infobar.Guild then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.GuildPos)
 
-local wipe, sort, format = table.wipe, table.sort, format
+local wipe, sort, format, select = table.wipe, table.sort, format, select
+local CLASS_ICON_TCOORDS, SELECTED_DOCK_FRAME = CLASS_ICON_TCOORDS, SELECTED_DOCK_FRAME
+local LEVEL_ABBR, CLASS_ABBR, NAME, ZONE, RANK, GUILDINFOTAB_APPLICANTS, REMOTE_CHAT = LEVEL_ABBR, CLASS_ABBR, NAME, ZONE, RANK, GUILDINFOTAB_APPLICANTS, REMOTE_CHAT
+local IsAltKeyDown, IsShiftKeyDown, InviteToGroup, C_Timer_After, GetTime, Ambiguate, MouseIsOver = IsAltKeyDown, IsShiftKeyDown, InviteToGroup, C_Timer.After, GetTime, Ambiguate, MouseIsOver
+local MailFrameTab_OnClick, MailFrame, SendMailNameEditBox = MailFrameTab_OnClick, MailFrame, SendMailNameEditBox
+local ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture = ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture
+local GuildRoster, GetNumGuildMembers, GetGuildInfo, GetNumGuildApplicants, GetGuildRosterInfo, IsInGuild = GuildRoster, GetNumGuildMembers, GetGuildInfo, GetNumGuildApplicants, GetGuildRosterInfo, IsInGuild
+local GetQuestDifficultyColor, GetRealZoneText, UnitInRaid, UnitInParty = GetQuestDifficultyColor, GetRealZoneText, UnitInRaid, UnitInParty
+
 local r, g, b = DB.r, DB.g, DB.b
 local infoFrame, gName, gOnline, gApps, gRank, applyData, prevTime
 
@@ -144,7 +152,7 @@ local function createRoster(parent, i)
 	return button
 end
 
-C_Timer.After(5, function()
+C_Timer_After(5, function()
 	if IsInGuild() then GuildRoster() end
 end)
 
@@ -217,16 +225,18 @@ local function setPosition()
 	end
 end
 
-function applyData()
-	sort(guildTable, function(a, b)
-		if a and b then
-			if NDuiADB["GuildSortOrder"] then
-				return a[NDuiADB["GuildSortBy"]] < b[NDuiADB["GuildSortBy"]]
-			else
-				return a[NDuiADB["GuildSortBy"]] > b[NDuiADB["GuildSortBy"]]
-			end
+local function sortGuild(a, b)
+	if a and b then
+		if NDuiADB["GuildSortOrder"] then
+			return a[NDuiADB["GuildSortBy"]] < b[NDuiADB["GuildSortBy"]]
+		else
+			return a[NDuiADB["GuildSortBy"]] > b[NDuiADB["GuildSortBy"]]
 		end
-	end)
+	end
+end
+
+function applyData()
+	sort(guildTable, sortGuild)
 
 	for i = 1, previous do
 		local level, class, name, zone, status = unpack(guildTable[i])
@@ -294,7 +304,7 @@ end
 
 info.onLeave = function()
 	if not infoFrame then return end
-	C_Timer.After(.1, delayLeave)
+	C_Timer_After(.1, delayLeave)
 end
 
 info.onMouseUp = function()

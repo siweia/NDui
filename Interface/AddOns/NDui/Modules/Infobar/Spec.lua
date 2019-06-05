@@ -4,7 +4,12 @@ if not C.Infobar.Spec then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.SpecPos)
-local format, wipe = string.format, table.wipe
+local format, wipe, select, next = string.format, table.wipe, select, next
+local SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS = SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS
+local SHOW_PVP_TALENT_LEVEL, PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = SHOW_PVP_TALENT_LEVEL, PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
+local GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID
+local GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
+local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
 
 local function addIcon(texture)
 	texture = texture and "|T"..texture..":12:16:0:0:50:50:4:46:4:46|t" or ""
@@ -25,8 +30,9 @@ info.eventList = {
 }
 
 info.onEvent = function(self)
-	if GetSpecialization() then
-		local _, name, _, icon = GetSpecializationInfo(GetSpecialization())
+	local specIndex = GetSpecialization()
+	if specIndex then
+		local _, name, _, icon = GetSpecializationInfo(specIndex)
 		if not name then return end
 		local specID = GetLootSpecialization()
 		if specID == 0 then
@@ -42,13 +48,15 @@ end
 
 local pvpTalents
 info.onEnter = function(self)
-	if not GetSpecialization() then return end
+	local specIndex = GetSpecialization()
+	if not specIndex then return end
+
 	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 15)
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(TALENTS_BUTTON, 0,.6,1)
 	GameTooltip:AddLine(" ")
 
-	local _, specName, _, specIcon = GetSpecializationInfo(GetSpecialization())
+	local _, specName, _, specIcon = GetSpecializationInfo(specIndex)
 	GameTooltip:AddLine(addIcon(specIcon).." "..specName, .6,.8,1)
 
 	for t = 1, MAX_TALENT_TIERS do
@@ -61,7 +69,7 @@ info.onEnter = function(self)
 	end
 
 	if UnitLevel("player") >= SHOW_PVP_TALENT_LEVEL then
-		pvpTalents = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
+		pvpTalents = C_SpecializationInfo_GetAllSelectedPvpTalentIDs()
 
 		if #pvpTalents > 0 then
 			local texture = select(3, GetCurrencyInfo(104))
@@ -97,14 +105,16 @@ local function clickFunc(i, isLoot)
 end
 
 info.onMouseUp = function(self, btn)
-	if not GetSpecialization() then return end
+	local specIndex = GetSpecialization()
+	if not specIndex then return end
+
 	if btn == "LeftButton" then
 		ToggleTalentFrame(2)
 	else
 		menuList[2].menuList = {{}, {}, {}, {}}
 		menuList[3].menuList = {{}, {}, {}, {}, {}}
 		local specList, lootList = menuList[2].menuList, menuList[3].menuList
-		local spec, specName = GetSpecializationInfo(GetSpecialization())
+		local spec, specName = GetSpecializationInfo(specIndex)
 		local lootSpec = GetLootSpecialization()
 		lootList[1] = {text = format(LOOT_SPECIALIZATION_DEFAULT, specName), func = function() clickFunc(0, true) end, checked = lootSpec == 0 and true or false}
 

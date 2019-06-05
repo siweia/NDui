@@ -5,7 +5,7 @@ if not C.Infobar.System then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar(C.Infobar.SystemPos)
 local min, max, floor, format, sort, select = math.min, math.max, math.floor, string.format, table.sort, select
-local GetFramerate, GetNetStats, GetTime, GetCVarBool = GetFramerate, GetNetStats, GetTime, GetCVarBool
+local GetFramerate, GetNetStats, GetTime, GetCVarBool, SetCVar = GetFramerate, GetNetStats, GetTime, GetCVarBool, SetCVar
 local GetNumAddOns, GetAddOnInfo, FRAMERATE_LABEL = GetNumAddOns, GetAddOnInfo, FRAMERATE_LABEL
 local IsShiftKeyDown, IsAddOnLoaded = IsShiftKeyDown, IsAddOnLoaded
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
