@@ -117,6 +117,7 @@ local list = {
 		{AuraID = 289523, UnitID = "player", Combat = true},	-- 耀辉之光
 		{AuraID = 295408, UnitID = "player"},	-- 险恶赐福
 		{AuraID = 273988, UnitID = "player"},	-- 原始本能
+		{AuraID = 285475, UnitID = "player"},	-- 卡亚矿涌流
 		-- 艾泽里特特质
 		{AuraID = 277960, UnitID = "player"},	-- 神经电激
 		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
