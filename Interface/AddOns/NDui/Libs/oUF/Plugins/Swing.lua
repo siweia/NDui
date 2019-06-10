@@ -369,7 +369,7 @@ local Enable = function(self, unit)
 		end
 
 		if bar.colorBG then
-			r2, g2, b2, a2 = unpack(bar.colorBG) 
+			r2, g2, b2, a2 = unpack(bar.colorBG)
 		else
 			r2, g2, b2, a2 = 0, 0, 0, 1
 		end

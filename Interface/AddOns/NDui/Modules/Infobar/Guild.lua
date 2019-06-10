@@ -37,7 +37,7 @@ local function setupInfoFrame()
 				self:SetScript("OnUpdate", nil)
 			end
 
-			self.timer = 0 
+			self.timer = 0
 		end
 	end
 	infoFrame:SetScript("OnLeave", function(self)

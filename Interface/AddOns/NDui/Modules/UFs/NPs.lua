@@ -459,7 +459,7 @@ function UF:CreatePlates(unit)
 			qicon:SetAtlas(DB.questTex)
 			qicon:Hide()
 			local count = B.CreateFS(self, 12, "", nil, "LEFT", 0, 0)
-			count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)	
+			count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
 			count:SetTextColor(.6, .8, 1)
 
 			self.questIcon = qicon

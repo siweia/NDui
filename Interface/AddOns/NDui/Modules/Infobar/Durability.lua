@@ -39,7 +39,7 @@ local function getItemDurability()
 	for i = 1, 10 do
 		if GetInventoryItemLink("player", localSlots[i][1]) then
 			local current, max = GetInventoryItemDurability(localSlots[i][1])
-			if current then 
+			if current then
 				localSlots[i][3] = current/max
 				numSlots = numSlots + 1
 			end

@@ -32,7 +32,7 @@ function module:MissingStats()
 			statPanel:Hide()
 		else
 			statPanel:Show()
-		end	
+		end
 	end)
 
 	-- Change default data

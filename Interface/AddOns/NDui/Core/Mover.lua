@@ -20,7 +20,7 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 		tinsert(MoverList, mover)
 	end
 
-	if not NDuiDB[key][value] then 
+	if not NDuiDB[key][value] then
 		mover:SetPoint(unpack(anchor))
 	else
 		mover:SetPoint(unpack(NDuiDB[key][value]))

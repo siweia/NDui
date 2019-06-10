@@ -67,7 +67,7 @@ info.onEnter = function(self)
 
 	if pvp[1] and not IsInInstance() then
 		local r, g, b = unpack(zoneInfo[pvp[1]][2])
-		if subzone and subzone ~= zone then 
+		if subzone and subzone ~= zone then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(subzone, r, g, b)
 		end

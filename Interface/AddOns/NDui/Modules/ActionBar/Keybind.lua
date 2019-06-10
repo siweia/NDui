@@ -274,13 +274,13 @@ SlashCmdList.MOUSEOVERBIND = function()
 			val = EnumerateFrames(val)
 		end
 
-		for i = 1,12 do
+		for i = 1, 12 do
 			local b = _G["SpellButton"..i]
 			b:HookScript("OnEnter", function(self) bind:Update(self, "SPELL") end)
 		end
 
 		local function registermacro()
-			for i = 1,36 do
+			for i = 1, 36 do
 				local b = _G["MacroButton"..i]
 				b:HookScript("OnEnter", function(self) bind:Update(self, "MACRO") end)
 			end

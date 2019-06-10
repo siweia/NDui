@@ -37,12 +37,12 @@ function module:Chatbar()
 			end
 		end},
 		{1, .5, 1, WHISPER, function(_, btn)
-			if btn == "RightButton" then   
+			if btn == "RightButton" then
 				ChatFrame_ReplyTell(chatFrame)
 				if not editBox:IsVisible() or editBox:GetAttribute("chatType") ~= "WHISPER" then
 					ChatFrame_OpenChat("/w ", chatFrame)
 				end
-			else   
+			else
 				if UnitExists("target") and UnitName("target") and UnitIsPlayer("target") and GetDefaultLanguage("player") == GetDefaultLanguage("target") then
 					local name = GetUnitName("target", true)
 					ChatFrame_OpenChat("/w "..name.." ", chatFrame)

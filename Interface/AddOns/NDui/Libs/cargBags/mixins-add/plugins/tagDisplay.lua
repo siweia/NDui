@@ -49,7 +49,7 @@ local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](obj
 local function updater(self, event)
 	object = self
 	self:SetText(self.tagString:gsub("%[([^%]:]+):?(.-)%]", tagger))
-	
+
 	if(self.OnTagUpdate) then self:OnTagUpdate(event) end
 end
 

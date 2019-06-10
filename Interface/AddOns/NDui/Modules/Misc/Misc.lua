@@ -71,7 +71,7 @@ do
 			if numArtifacts > 1 then
 				print("     - |cfffed100"..name..": ".."|cff70C0F5"..count)
 				total = total + count
-			end 
+			end
 		end
 		print("    -> |c0000ff00"..TOTAL..": ".."|cffff0000"..total)
 		print("|cff70C0F5------------------------")
@@ -237,7 +237,7 @@ function module:NakedIcon()
 		for i = 1, 17 do
 			local texture = GetInventoryItemTexture("player", i)
 			if texture then
-				UnequipItemInSlot(i) 
+				UnequipItemInSlot(i)
 			end
 		end
 	end)

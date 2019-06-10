@@ -46,7 +46,7 @@ function module:ChantLumos(self)
 			else
 				UpdateSpellStatus(button, 191034)
 				button.Count:SetText(floor(UnitPower("player", 8)/50))
-			end				
+			end
 		end
 
 		do

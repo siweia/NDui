@@ -42,7 +42,7 @@ function module:DBMSkin()
 					icon1.overlay:SetSize(buttonsize+2, buttonsize+2)
 					icon1.overlay:SetFrameStrata("BACKGROUND")
 					icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -buttonsize/6, -3)
-			
+
 					local backdroptex = icon1.overlay:CreateTexture(nil, "BORDER")
 					backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
 					backdroptex:SetPoint("TOPLEFT", icon1.overlay, "TOPLEFT", 1, -1)
@@ -55,12 +55,12 @@ function module:DBMSkin()
 					icon2.overlay = CreateFrame("Frame", "$parentIcon2Overlay", tbar)
 					icon2.overlay:SetSize(buttonsize+2, buttonsize+2)
 					icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", buttonsize/6, -3)
-			
+
 					local backdroptex = icon2.overlay:CreateTexture(nil, "BORDER")
 					backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
 					backdroptex:SetPoint("TOPLEFT", icon2.overlay, "TOPLEFT", 1, -1)
 					backdroptex:SetPoint("BOTTOMRIGHT", icon2.overlay, "BOTTOMRIGHT", -1, 1)
-					backdroptex:SetTexCoord(unpack(DB.TexCoord))		
+					backdroptex:SetTexCoord(unpack(DB.TexCoord))
 					B.CreateSD(icon2.overlay)
 				end
 
@@ -101,7 +101,7 @@ function module:DBMSkin()
 					icon1.SetSize = B.Dummy
 					icon1.styled = true
 				end
-		
+
 				if not icon2.styled then
 					icon2:SetTexCoord(unpack(DB.TexCoord))
 					icon2:ClearAllPoints()
@@ -143,8 +143,8 @@ function module:DBMSkin()
 					name:SetShadowColor(0, 0, 0, 0)
 					name.styled = true
 				end
-		
-				if not timer.styled then	
+
+				if not timer.styled then
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", frame, "RIGHT", -2, 8)
 					timer.SetPoint = B.Dummy

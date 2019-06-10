@@ -102,7 +102,7 @@ local function GuildBankFrame_Update()
 		local button = _G["GuildBankColumn"..math.ceil((i - .5) / NUM_SLOTS_PER_GUILDBANK_GROUP).."Button"..index]
 		if button and button:IsShown() then
 			local texture, _, locked = GetGuildBankItemInfo(tab, i)
-			if texture and not locked then	
+			if texture and not locked then
 				if IsAlreadyKnown(GetGuildBankItemLink(tab, i), i) then
 					SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
 				else

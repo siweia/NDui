@@ -45,7 +45,7 @@ info.onUpdate = function(self, elapsed)
 			hour, minute = GetGameTime()
 		end
 		self.text:SetText(updateTimerFormat(color, hour, minute))
-	
+
 		self.timer = 0
 	end
 end
@@ -276,7 +276,7 @@ end
 info.onLeave = B.HideTooltip
 
 info.onMouseUp = function(_, btn)
-	if btn == "RightButton" then				
+	if btn == "RightButton" then
 		ToggleTimeManager()
 	else
 		ToggleCalendar()

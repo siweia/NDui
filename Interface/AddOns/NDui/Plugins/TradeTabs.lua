@@ -126,7 +126,7 @@ end
 local function onLeave(self)
 	GameTooltip:Hide()
 	self:GetParent():UnlockHighlight()
-end   
+end
 
 local function updateSelection(self)
 	if IsCurrentSpell(self.spellID) then

@@ -48,7 +48,7 @@ local defaultFilters = {
 	@param filters <FilterSet> table to store resulting filters in [optional]
 	@param textFilters <table> table of text filters to parse from [optional]
 
-	@note Basically works like this: text ----textFilters----> filters,filterInfo	
+	@note Basically works like this: text ----textFilters----> filters,filterInfo
 ]]
 function Implementation:ParseTextFilter(text, filters, textFilters)
 	filters = filters or cargBags.classes.FilterSet:New()

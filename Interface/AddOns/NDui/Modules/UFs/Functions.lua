@@ -829,7 +829,7 @@ function UF:CreateAltPower(self)
 	text:SetJustifyH("CENTER")
 	self:Tag(text, "[altpower]")
 
-	self.AlternativePower = bar		
+	self.AlternativePower = bar
 	self.AlternativePower.PostUpdate = postUpdateAltPower
 end
 

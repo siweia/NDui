@@ -9,17 +9,6 @@ local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo = G
 local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
 -- Init
-function B.RemoveAuraData(spellID)
-	for _, v in pairs(C.AuraWatchList[DB.MyClass]) do
-		for _, list in pairs(v.List) do
-			if list.AuraID and list.AuraID == spellID then
-				wipe(list)
-				break
-			end
-		end
-	end
-end
-
 local function ConvertTable()
 	local function DataAnalyze(v)
 		local newTable = {}

@@ -224,7 +224,7 @@ local function ForceBigwigs()
 						["BigWigsAnchor_y"] = 336,
 						["BigWigsAnchor_x"] = 16,
 						["BigWigsAnchor_width"] = 175,
-						["growup"] = true, 
+						["growup"] = true,
 						["interceptMouse"] = false,
 						["barStyle"] = "NDui",
 						["LeftButton"] = {

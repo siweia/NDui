@@ -71,14 +71,14 @@ function module:SkadaSkin()
 		window.bg:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", 3, -3)
 		window.button:SetBackdropColor(1, 1, 1, 0)
 		window.button:SetFrameStrata("MEDIUM")
-		window.button:SetFrameLevel(5)	
+		window.button:SetFrameLevel(5)
 		window:SetFrameStrata("MEDIUM")
 	end
 
 	local function EmbedWindow(window, width, barheight, height, ofsx, ofsy)
 		window.db.barwidth = width
 		window.db.barheight = barheight
-		if window.db.enabletitle then 
+		if window.db.enabletitle then
 			height = height - barheight
 		end
 		window.db.background.height = height

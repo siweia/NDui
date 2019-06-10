@@ -29,9 +29,9 @@ local tooltip
 
 local function generateTooltip()
 	tooltip = CreateFrame("GameTooltip", tipName)
-	tooltip:SetOwner(WorldFrame, "ANCHOR_NONE") 
-	tooltip:AddFontStrings( 
-		tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"), 
+	tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	tooltip:AddFontStrings(
+		tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
 		tooltip:CreateFontString("$parentTextRight1", nil, "GameTooltipText")
 	)
 end

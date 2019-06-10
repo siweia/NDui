@@ -561,7 +561,7 @@ function B:CreateEditBox(width, height)
 
 	eb.Type = "EditBox"
 	return eb
-end 
+end
 
 local function optOnClick(self)
 	PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)

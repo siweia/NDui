@@ -58,7 +58,7 @@ function Implementation:New(name)
 	impl.events = {} -- @property events <table> Holds all event callbacks
 	impl.notInited = true -- @property notInited <bool>
 
-	tinsert(UISpecialFrames, name) 
+	tinsert(UISpecialFrames, name)
 
 	self.instances[name] = impl
 
@@ -197,7 +197,7 @@ local _isEventRegistered = UIParent.IsEventRegistered
 ]]
 function Implementation:RegisterEvent(event, key, func)
 	local events = self.events
-	
+
 	if(not events[event]) then
 		events[event] = {}
 	end
