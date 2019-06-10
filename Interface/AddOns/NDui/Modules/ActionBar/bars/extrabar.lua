@@ -25,7 +25,8 @@ function Bar:CreateExtrabar()
 	--the extra button
 	local button = ExtraActionButton1
 	table.insert(buttonList, button) --add the button object to the list
-	button:SetSize(cfg.size,cfg.size)
+	table.insert(self.activeButtons, button)
+	button:SetSize(cfg.size, cfg.size)
 
 	--show/hide the frame on a given state driver
 	frame.frameVisibility = "[extrabar] show; hide"

@@ -36,6 +36,7 @@ function Bar:CreateBar4()
 	for i = 1, num do
 		local button = _G["MultiBarRightButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
+		table.insert(self.activeButtons, button)
 		button:SetSize(cfg.size, cfg.size)
 		button:ClearAllPoints()
 		if layout == 2 then
