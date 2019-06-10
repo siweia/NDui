@@ -266,7 +266,6 @@ local accountSettings = {
 	AutoSell = true,
 	GuildSortBy = 1,
 	GuildSortOrder = true,
-	ShowFPS = false,
 	DetectVersion = DB.Version,
 	ResetDetails = true,
 	LockUIScale = false,
@@ -282,6 +281,7 @@ local accountSettings = {
 	TexStyle = 2,
 	KeystoneInfo = {},
 	AutoBubbles = false,
+	SystemInfoType = 1,
 }
 
 local function InitialSettings(source, target, fullClean)

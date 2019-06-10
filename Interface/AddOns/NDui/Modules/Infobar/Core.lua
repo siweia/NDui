@@ -48,6 +48,8 @@ function module:OnLogin()
 		self:LoadInfobar(info)
 	end
 
+	self.loginTime = GetTime()
+
 	if not C.Infobar.AutoAnchor then return end
 	for index, info in pairs(self.modules) do
 		if index == 1 or index == 6 then
