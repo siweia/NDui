@@ -149,6 +149,7 @@ local list = {
 		{AuraID = 280654, UnitID = "player"},	-- 工程特质，变大
 		{AuraID = 273525, UnitID = "player"},	-- 大难临头
 		{AuraID = 274373, UnitID = "player"},	-- 溃烂之力
+		{AuraID = 280170, UnitID = "player", Value = true},	-- 假死盾
 		-- 泰坦之路系列饰品
 		{AuraID = 256816, UnitID = "player"},	-- 阿格拉玛的信念
 		{AuraID = 256831, UnitID = "player"},	-- 阿格拉玛的信念
