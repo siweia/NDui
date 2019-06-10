@@ -265,11 +265,10 @@ function module:GameTooltip_ShowStatusBar()
 	if self.statusBarPool then
 		local bar = self.statusBarPool:Acquire()
 		if bar and not bar.styled then
-			local _, bd, tex = bar:GetRegions()
+			B.StripTextures(bar)
+			local tex = select(3, bar:GetRegions())
 			tex:SetTexture(DB.normTex)
-			bd:Hide()
-			local bg = B.CreateBG(bd, 0)
-			B.CreateBD(bg, .25)
+			B.CreateBD(B.CreateBG(bar), .25)
 
 			bar.styled = true
 		end
@@ -282,8 +281,7 @@ function module:GameTooltip_ShowProgressBar()
 		if bar and not bar.styled then
 			B.StripTextures(bar.Bar)
 			bar.Bar:SetStatusBarTexture(DB.normTex)
-			B.CreateBD(bar, .25)
-			bar:SetSize(216, 18)
+			B.CreateBD(B.CreateBG(bar.Bar), .25)
 
 			bar.styled = true
 		end
