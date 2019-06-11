@@ -36,6 +36,9 @@ function module:RematchIcon()
 		if self.Level.BG then self.Level.BG:Hide() end
 		if self.Level.Text then self.Level.Text:SetTextColor(1, 1, 1) end
 	end
+	if self.GetCheckedTexture then
+		self:SetCheckedTexture(T.media.checked)
+	end
 
 	self.styled = true
 end
@@ -49,14 +52,26 @@ function module:RematchInput()
 	F.CreateGradient(bg)
 end
 
+local function scrollEndOnLeave(self)
+	self.bgTex:SetVertexColor(1, .8, 0)
+end
+
+local function reskinScrollEnd(self, direction)
+	F.ReskinArrow(self, direction)
+	self:SetSize(17, 12)
+	self.bgTex:SetVertexColor(1, .8, 0)
+	self:HookScript("OnLeave", scrollEndOnLeave)
+end
+
 function module:RematchScroll()
 	self.Background:Hide()
 	local scrollBar = self.ScrollFrame.ScrollBar
 	F.StripTextures(scrollBar)
 	scrollBar.thumbTexture = scrollBar.ScrollThumb
 	F.ReskinScroll(scrollBar)
-	F.StripTextures(scrollBar.TopButton)
-	scrollBar.TopButton:GetNormalTexture():SetColorTexture(1, 1, 1, .25)
+	scrollBar.thumbTexture:SetPoint("TOPRIGHT")
+	reskinScrollEnd(scrollBar.TopButton, "up")
+	reskinScrollEnd(scrollBar.BottomButton, "down")
 end
 
 function module:RematchDropdown()
@@ -144,6 +159,12 @@ function module:RematchPetList()
 	end
 end
 
+function module:RematchSelectedOverlay()
+	F.StripTextures(self.SelectedOverlay)
+	local bg = F.CreateBDFrame(self.SelectedOverlay)
+	bg:SetBackdropColor(1, .8, 0, .5)
+end
+
 function module:ResizeJournal()
 	local parent = RematchJournal:IsShown() and RematchJournal or CollectionsJournal
 	CollectionsJournal.bg:SetPoint("BOTTOMRIGHT", parent, C.mult, -C.mult)
@@ -214,11 +235,10 @@ function module:ReskinRematch()
 		F.Reskin(RematchPetPanel.Top.Toggle)
 		RematchPetPanel.Top.TypeBar:SetBackdrop(nil)
 		for i = 1, 10 do
-			local button = RematchPetPanel.Top.TypeBar.Buttons[i]
-			module.RematchIcon(button)
-			button:SetCheckedTexture(T.media.checked)
+			module.RematchIcon(RematchPetPanel.Top.TypeBar.Buttons[i])
 		end
 
+		module.RematchSelectedOverlay(RematchPetPanel)
 		module.RematchInset(RematchPetPanel.Results)
 		module.RematchInput(RematchPetPanel.Top.SearchBox)
 		module.RematchFilter(RematchPetPanel.Top.Filter)
@@ -257,6 +277,7 @@ function module:ReskinRematch()
 		module.RematchInput(RematchTeamPanel.Top.SearchBox)
 		module.RematchFilter(RematchTeamPanel.Top.Teams)
 		module.RematchScroll(RematchTeamPanel.List)
+		module.RematchSelectedOverlay(RematchTeamPanel)
 
 		F.StripTextures(RematchQueuePanel.Top)
 		module.RematchFilter(RematchQueuePanel.Top.QueueButton)
@@ -266,8 +287,7 @@ function module:ReskinRematch()
 		-- RematchOptionPanel
 		module.RematchScroll(RematchOptionPanel.List)
 		for i = 1, 4 do
-			local bu = RematchOptionPanel.Growth.Corners[i]
-			module.RematchIcon(bu)
+			module.RematchIcon(RematchOptionPanel.Growth.Corners[i])
 		end
 
 		-- RematchPetCard
@@ -284,8 +304,9 @@ function module:ReskinRematch()
 		module.RematchCard(petCard.Front)
 		module.RematchCard(petCard.Back)
 		for i = 1, 6 do
-			local button = petCard.Front.Bottom.Abilities[i]
+			local button = RematchPetCard.Front.Bottom.Abilities[i]
 			button.IconBorder:Hide()
+			select(8, button:GetRegions()):SetTexture(nil)
 			F.ReskinIcon(button.Icon)
 		end
 
@@ -429,11 +450,8 @@ function module:ReskinRematch()
 	hooksecurefunc(Rematch, "FillCommonPetListButton", function(self, petID)
 		local petInfo = Rematch.petInfo:Fetch(petID)
 		local parentPanel = self:GetParent():GetParent():GetParent():GetParent()
-		if petInfo.isSummoned then
-			local overlay = parentPanel.SelectedOverlay
-			if parentPanel == Rematch.PetPanel and overlay:IsShown() then
-				overlay:SetAllPoints(self.bg)
-			end
+		if petInfo.isSummoned and parentPanel == Rematch.PetPanel then
+			parentPanel.SelectedOverlay:SetAllPoints(self.bg)
 		end
 	end)
 
@@ -448,8 +466,7 @@ function module:ReskinRematch()
 			button.Icon.bg:SetBackdropBorderColor(button.IconBorder:GetVertexColor())
 
 			for j = 1, 3 do
-				local bu = button.Abilities[j]
-				module.RematchIcon(bu)
+				module.RematchIcon(button.Abilities[j])
 			end
 		end
 	end)
