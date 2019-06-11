@@ -432,7 +432,7 @@ function UF:ReskinTimerTrakcer(self)
 end
 
 -- Auras Relevant
-local function postCreateIcon(element, button)
+function UF.PostCreateIcon(element, button)
 	local fontSize = element.fontSize or element.size*.6
 	local parentFrame = CreateFrame("Frame", nil, button)
 	parentFrame:SetAllPoints()
@@ -459,7 +459,7 @@ local filteredStyle = {
 	["arena"] = true,
 }
 
-local function postUpdateIcon(element, _, button, _, _, duration, expiration, debuffType)
+function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuffType)
 	if duration then button.Shadow:Show() end
 
 	local style = element.__owner.mystyle
@@ -511,13 +511,13 @@ local function bolsterPostUpdate(element)
 	end
 end
 
-local function postUpdateGapIcon(_, _, icon)
+function UF.PostUpdateGapIcon(_, _, icon)
 	if icon.Shadow and icon.Shadow:IsShown() then
 		icon.Shadow:Hide()
 	end
 end
 
-local function customFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
+function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 	if name and spellID == 209859 then
 		element.bolster = element.bolster + 1
@@ -610,10 +610,10 @@ function UF:CreateAuras(self)
 	bu:SetHeight((bu.size + bu.spacing) * maxLines)
 
 	bu.showStealableBuffs = true
-	bu.CustomFilter = customFilter
-	bu.PostCreateIcon = postCreateIcon
-	bu.PostUpdateIcon = postUpdateIcon
-	bu.PostUpdateGapIcon = postUpdateGapIcon
+	bu.CustomFilter = UF.CustomFilter
+	bu.PostCreateIcon = UF.PostCreateIcon
+	bu.PostUpdateIcon = UF.PostUpdateIcon
+	bu.PostUpdateGapIcon = UF.PostUpdateGapIcon
 	bu.PreUpdate = bolsterPreUpdate
 	bu.PostUpdate = bolsterPostUpdate
 
@@ -637,8 +637,8 @@ function UF:CreateBuffs(self)
 	bu:SetHeight((bu.size + bu.spacing) * floor(bu.num/bu.iconsPerRow + .5))
 
 	bu.showStealableBuffs = true
-	bu.PostCreateIcon = postCreateIcon
-	bu.PostUpdateIcon = postUpdateIcon
+	bu.PostCreateIcon = UF.PostCreateIcon
+	bu.PostUpdateIcon = UF.PostUpdateIcon
 
 	self.Buffs = bu
 end
@@ -659,7 +659,7 @@ function UF:CreateDebuffs(self)
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 		bu.num = 10
 		bu.iconsPerRow = 5
-		bu.CustomFilter = customFilter
+		bu.CustomFilter = UF.CustomFilter
 	end
 
 	local width = self:GetWidth()
@@ -667,8 +667,8 @@ function UF:CreateDebuffs(self)
 	bu:SetWidth(self:GetWidth())
 	bu:SetHeight((bu.size + bu.spacing) * floor(bu.num/bu.iconsPerRow + .5))
 
-	bu.PostCreateIcon = postCreateIcon
-	bu.PostUpdateIcon = postUpdateIcon
+	bu.PostCreateIcon = UF.PostCreateIcon
+	bu.PostUpdateIcon = UF.PostUpdateIcon
 
 	self.Debuffs = bu
 end
@@ -677,7 +677,7 @@ end
 local margin = C.UFs.BarMargin
 local barWidth, barHeight = unpack(C.UFs.BarSize)
 
-local function postUpdateClassPower(element, cur, max, diff, powerType)
+function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 	if diff then
 		for i = 1, 6 do
 			element[i]:SetWidth((barWidth - (max-1)*margin)/max)
@@ -699,7 +699,7 @@ local function postUpdateClassPower(element, cur, max, diff, powerType)
 	end
 end
 
-local function onUpdateRunes(self, elapsed)
+function UF:OnUpdateRunes(elapsed)
 	local duration = self.duration + elapsed
 	self.duration = duration
 	self:SetValue(duration)
@@ -714,7 +714,7 @@ local function onUpdateRunes(self, elapsed)
 	end
 end
 
-local function postUpdateRunes(element, runemap)
+function UF.PostUpdateRunes(element, runemap)
 	for index, runeID in next, runemap do
 		local rune = element[index]
 		local start, duration, runeReady = GetRuneCooldown(runeID)
@@ -726,7 +726,7 @@ local function postUpdateRunes(element, runemap)
 			elseif start then
 				rune:SetAlpha(.6)
 				rune.runeDuration = duration
-				rune:SetScript("OnUpdate", onUpdateRunes)
+				rune:SetScript("OnUpdate", UF.OnUpdateRunes)
 			end
 		end
 	end
@@ -773,10 +773,10 @@ function UF:CreateClassPower(self)
 	if DB.MyClass == "DEATHKNIGHT" then
 		bars.colorSpec = true
 		bars.sortOrder = "asc"
-		bars.PostUpdate = postUpdateRunes
+		bars.PostUpdate = UF.PostUpdateRunes
 		self.Runes = bars
 	else
-		bars.PostUpdate = postUpdateClassPower
+		bars.PostUpdate = UF.PostUpdateClassPower
 		self.ClassPower = bars
 	end
 end
@@ -804,7 +804,7 @@ function UF:StaggerBar(self)
 	self.Stagger.bg = bg
 end
 
-local function postUpdateAltPower(element, _, cur, _, max)
+function UF.PostUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local perc = floor((cur/max)*100)
 		if perc < 35 then
@@ -830,7 +830,7 @@ function UF:CreateAltPower(self)
 	self:Tag(text, "[altpower]")
 
 	self.AlternativePower = bar
-	self.AlternativePower.PostUpdate = postUpdateAltPower
+	self.AlternativePower.PostUpdate = UF.PostUpdateAltPower
 end
 
 function UF:CreateExpRepBar(self)
@@ -909,7 +909,7 @@ function UF:CreatePrediction(self)
 	}
 end
 
-local function postUpdateAddPower(element, _, cur, max)
+function UF.PostUpdateAddPower(element, _, cur, max)
 	if element.Text and max > 0 then
 		local perc = cur/max * 100
 		if perc == 100 then
@@ -940,7 +940,7 @@ function UF:CreateAddPower(self)
 	self.AdditionalPower = bar
 	self.AdditionalPower.bg = bg
 	self.AdditionalPower.Text = text
-	self.AdditionalPower.PostUpdate = postUpdateAddPower
+	self.AdditionalPower.PostUpdate = UF.PostUpdateAddPower
 end
 
 function UF:CreateSwing(self)

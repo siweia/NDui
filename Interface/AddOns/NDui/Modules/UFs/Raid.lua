@@ -33,7 +33,7 @@ function UF:CreateRaidIcons(self)
 	self.SummonIndicator = summon
 end
 
-local function UpdateTargetBorder(self)
+function UF:UpdateTargetBorder()
 	if UnitIsUnit("target", self.unit) then
 		self.TargetBorder:Show()
 	else
@@ -49,11 +49,11 @@ function UF:CreateTargetBorder(self)
 	border:Hide()
 
 	self.TargetBorder = border
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetBorder, true)
-	self:RegisterEvent("GROUP_ROSTER_UPDATE", UpdateTargetBorder, true)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetBorder, true)
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetBorder, true)
 end
 
-local function UpdateThreatBorder(self, _, unit)
+function UF:UpdateThreatBorder(_, unit)
 	if unit ~= self.unit then return end
 
 	local element = self.Health.Shadow
@@ -70,7 +70,7 @@ end
 function UF:CreateThreatBorder(self)
 	local threatIndicator = CreateFrame("Frame", nil, self)
 	self.ThreatIndicator = threatIndicator
-	self.ThreatIndicator.Override = UpdateThreatBorder
+	self.ThreatIndicator.Override = UF.UpdateThreatBorder
 end
 
 local debuffList = {}
@@ -312,13 +312,14 @@ local counterOffsets = {
 	["BOTTOM"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}},
 }
 
-local function onUpdate(self, elapsed)
+function UF:BuffIndicatorOnUpdate(elapsed)
 	B.CooldownOnUpdate(self, elapsed, true)
 end
 
 local found = {}
 local auraFilter = {"HELPFUL", "HARMFUL"}
-local function updateBuffIndicator(self, event, unit)
+
+function UF:UpdateBuffIndicator(event, unit)
 	if self.unit ~= unit then return end
 	local spellList = NDuiADB["CornerBuffs"][DB.MyClass]
 	local icons = self.BuffIndicator
@@ -335,7 +336,7 @@ local function updateBuffIndicator(self, event, unit)
 						if icon.timer then
 							if duration and duration > 0 then
 								icon.expiration = expiration
-								icon:SetScript("OnUpdate", onUpdate)
+								icon:SetScript("OnUpdate", UF.BuffIndicatorOnUpdate)
 							else
 								icon:SetScript("OnUpdate", nil)
 							end
@@ -415,5 +416,5 @@ function UF:CreateBuffIndicator(self)
 	end
 
 	self.BuffIndicator = icons
-	self:RegisterEvent("UNIT_AURA", updateBuffIndicator)
+	self:RegisterEvent("UNIT_AURA", UF.UpdateBuffIndicator)
 end

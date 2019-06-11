@@ -5,8 +5,12 @@ local module = B:RegisterModule("Chat")
 local maxLines = 1024
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
+local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
+local ChatEdit_UpdateHeader, GetChatWindowInfo, GetChannelList, GetCVar, SetCVar, Ambiguate = ChatEdit_UpdateHeader, GetChatWindowInfo, GetChannelList, GetCVar, SetCVar, Ambiguate
+local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup
+local BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
 
-local function tabSetAlpha(self, alpha)
+function module:TabSetAlpha(alpha)
 	if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
 		self:SetAlpha(1)
 	elseif alpha < .6 then
@@ -14,7 +18,7 @@ local function tabSetAlpha(self, alpha)
 	end
 end
 
-local function skinChat(self)
+function module:SkinChat()
 	if not self or (self and self.styled) then return end
 
 	local name = self:GetName()
@@ -57,7 +61,7 @@ local function skinChat(self)
 	tabFs:SetShadowColor(0, 0, 0, 0)
 	tabFs:SetTextColor(1, .8, 0)
 	B.StripTextures(tab, 7)
-	hooksecurefunc(tab, "SetAlpha", tabSetAlpha)
+	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
 	if NDuiDB["Chat"]["Lock"] then B.StripTextures(self) end
 	B.HideObject(self.buttonFrame)
@@ -94,7 +98,7 @@ local cycles = {
     { chatType = "SAY", use = function() return 1 end },
 }
 
-hooksecurefunc("ChatEdit_CustomTabPressed", function(self)
+function module:UpdateTabChannelSwitch()
 	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
     local currChatType = self:GetAttribute("chatType")
     for i, curr in ipairs(cycles) do
@@ -110,10 +114,11 @@ hooksecurefunc("ChatEdit_CustomTabPressed", function(self)
             end
         end
     end
-end)
+end
+hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
 
 -- Quick Scroll
-hooksecurefunc("FloatingChatFrame_OnMouseScroll", function(self, dir)
+function module:QuickMouseScroll(dir)
 	if dir > 0 then
 		if IsShiftKeyDown() then
 			self:ScrollToTop()
@@ -129,7 +134,8 @@ hooksecurefunc("FloatingChatFrame_OnMouseScroll", function(self, dir)
 			self:ScrollDown()
 		end
 	end
-end)
+end
+hooksecurefunc("FloatingChatFrame_OnMouseScroll", module.QuickMouseScroll)
 
 -- Autoinvite by whisper
 local whisperList = {}
@@ -137,44 +143,44 @@ function B:GenWhisperList()
 	B.SplitList(whisperList, NDuiDB["Chat"]["Keyword"], true)
 end
 
-function module:WhipserInvite()
-	if not NDuiDB["Chat"]["Invite"] then return end
-
-	local function isUnitInGuild(unitName)
-		if not unitName then return end
-		for i = 1, GetNumGuildMembers() do
-			local name = GetGuildRosterInfo(i)
-			if name and Ambiguate(name, "none") == Ambiguate(unitName, "none") then
-				return true
-			end
+function module:IsUnitInGuild(unitName)
+	if not unitName then return end
+	for i = 1, GetNumGuildMembers() do
+		local name = GetGuildRosterInfo(i)
+		if name and Ambiguate(name, "none") == Ambiguate(unitName, "none") then
+			return true
 		end
-
-		return false
 	end
 
-	local function onChatWhisper(event, ...)
-		local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
-		for word in pairs(whisperList) do
-			if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
-				if event == "CHAT_MSG_BN_WHISPER" then
-					local gameID = select(6, BNGetFriendInfoByID(presenceID))
-					if gameID then
-						local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-						if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or isUnitInGuild(charName.."-"..realmName)) then
-							BNInviteFriend(gameID)
-						end
+	return false
+end
+
+function module.OnChatWhisper(event, ...)
+	local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
+	for word in pairs(whisperList) do
+		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
+			if event == "CHAT_MSG_BN_WHISPER" then
+				local gameID = select(6, BNGetFriendInfoByID(presenceID))
+				if gameID then
+					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+					if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or isUnitInGuild(charName.."-"..realmName)) then
+						BNInviteFriend(gameID)
 					end
-				else
-					if not NDuiDB["Chat"]["GuildInvite"] or IsGuildMember(guid) then
-						InviteToGroup(author)
-					end
+				end
+			else
+				if not NDuiDB["Chat"]["GuildInvite"] or IsGuildMember(guid) then
+					InviteToGroup(author)
 				end
 			end
 		end
 	end
+end
+
+function module:WhipserInvite()
+	if not NDuiDB["Chat"]["Invite"] then return end
 	B:GenWhisperList()
-	B:RegisterEvent("CHAT_MSG_WHISPER", onChatWhisper)
-	B:RegisterEvent("CHAT_MSG_BN_WHISPER", onChatWhisper)
+	B:RegisterEvent("CHAT_MSG_WHISPER", module.OnChatWhisper)
+	B:RegisterEvent("CHAT_MSG_BN_WHISPER", module.OnChatWhisper)
 end
 
 -- Timestamp
@@ -200,14 +206,14 @@ end
 
 function module:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
-		skinChat(_G["ChatFrame"..i])
+		module.SkinChat(_G["ChatFrame"..i])
 	end
 
 	hooksecurefunc("FCF_OpenTemporaryWindow", function()
 		for _, chatFrameName in next, CHAT_FRAMES do
 			local frame = _G[chatFrameName]
 			if frame.isTemporary then
-				skinChat(frame)
+				module.SkinChat(frame)
 			end
 		end
 	end)

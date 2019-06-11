@@ -41,7 +41,7 @@ function module:UpdateCooldown(button, spellID, texture)
 	end
 end
 
-local function flashOnEnd(self)
+function module:GlowOnEnd()
 	local elapsed = self.expire - GetTime()
 	if elapsed < 3 then
 		B.ShowOverlayGlow(self.glowFrame)
@@ -64,7 +64,7 @@ function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown, glow
 		if glow then
 			if glow == "END" then
 				button.expire = expire
-				button:SetScript("OnUpdate", flashOnEnd)
+				button:SetScript("OnUpdate", module.GlowOnEnd)
 			else
 				B.ShowOverlayGlow(button.glowFrame)
 			end
@@ -97,7 +97,7 @@ function module:UpdateTotemAura(button, texture, spellID, glow)
 			if glow then
 				if glow == "END" then
 					button.expire = expire
-					button:SetScript("OnUpdate", flashOnEnd)
+					button:SetScript("OnUpdate", module.GlowOnEnd)
 				else
 					B.ShowOverlayGlow(button.glowFrame)
 				end

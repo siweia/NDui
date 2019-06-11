@@ -79,7 +79,7 @@ function UF:CreatePowerUnitTable()
 end
 
 -- Elements
-local function UpdateColor(element, unit)
+function UF.UpdateColor(element, unit)
 	local name = GetUnitName(unit) or UNKNOWN
 	local npcID = B.GetNPCID(UnitGUID(unit))
 	local customUnit = C.CustomUnits and (C.CustomUnits[name] or C.CustomUnits[npcID])
@@ -150,12 +150,12 @@ local function UpdateColor(element, unit)
 	end
 end
 
-local function UpdateThreatColor(self, _, unit)
+function UF:UpdateThreatColor(_, unit)
 	if unit ~= self.unit then return end
-	UpdateColor(self.Health, unit)
+	UF.UpdateColor(self.Health, unit)
 end
 
-local function UpdateTargetMark(self)
+function UF:UpdateTargetMark()
 	local arrow = self.arrowMark
 	local mark = self.tarMark
 
@@ -170,7 +170,7 @@ end
 
 local unitTip = CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
 
-local function UpdateQuestUnit(self, _, unit)
+function UF:UpdateQuestUnit(_, unit)
 	if not NDuiDB["Nameplate"]["QuestIcon"] then return end
 	if IsInInstance() then
 		self.questIcon:Hide()
@@ -232,7 +232,7 @@ local function UpdateQuestUnit(self, _, unit)
 end
 
 local cache = {}
-local function UpdateDungeonProgress(self, unit)
+function UF:UpdateDungeonProgress(unit)
 	if not self.progressText or not AngryKeystones_Data then return end
 	if unit ~= self.unit then return end
 	self.progressText:SetText("")
@@ -277,7 +277,7 @@ local classify = {
 	worldboss = {0, 1, 0},
 }
 
-local function UpdateUnitClassify(self, unit)
+function UF:UpdateUnitClassify(unit)
 	local class = UnitClassification(unit)
 	if self.creatureIcon then
 		if class and classify[class] then
@@ -293,7 +293,7 @@ end
 
 local explosiveCount, hasExplosives = 0
 local id = 120651
-local function scalePlates()
+function UF:ScalePlates()
 	for _, nameplate in next, C_NamePlate_GetNamePlates() do
 		local unitFrame = nameplate.unitFrame
 		local npcID = B.GetNPCID(UnitGUID(unitFrame.unit))
@@ -305,7 +305,7 @@ local function scalePlates()
 	end
 end
 
-local function UpdateExplosives(self, event, unit)
+function UF:UpdateExplosives(event, unit)
 	if not hasExplosives or unit ~= self.unit then return end
 
 	local npcID = B.GetNPCID(UnitGUID(unit))
@@ -314,7 +314,7 @@ local function UpdateExplosives(self, event, unit)
 	elseif event == "NAME_PLATE_UNIT_REMOVED" and npcID == id then
 		explosiveCount = explosiveCount - 1
 	end
-	scalePlates()
+	UF:ScalePlates()
 end
 
 local function checkInstance()
@@ -343,7 +343,7 @@ function UF:CheckExplosives()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
 end
 
-local function isMouseoverUnit(self)
+function UF:IsMouseoverUnit()
 	if not self or not self.unit then return end
 
 	if self:IsVisible() and UnitExists("mouseover") and not UnitIsUnit("target", self.unit) then
@@ -352,7 +352,7 @@ local function isMouseoverUnit(self)
 	return false
 end
 
-local function updateMouseoverShown(self)
+function UF:UpdateMouseoverShown()
 	if not self or not self.unit then return end
 
 	if self:IsShown() and UnitIsUnit("mouseover", self.unit) and not UnitIsUnit("target", self.unit) then
@@ -371,14 +371,14 @@ local function AddMouseoverIndicator(self)
 	glow:SetBackdropBorderColor(1, 1, 1)
 	glow:Hide()
 
-	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", updateMouseoverShown, true)
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", updateMouseoverShown, true)
+	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateMouseoverShown, true)
 
 	local f = CreateFrame("Frame", nil, self)
 	f:SetScript("OnUpdate", function(_, elapsed)
 		f.elapsed = (f.elapsed or 0) + elapsed
 		if f.elapsed > .1 then
-			if not isMouseoverUnit(self) then
+			if not UF.IsMouseoverUnit(self) then
 				f:Hide()
 			end
 			f.elapsed = 0
@@ -406,7 +406,7 @@ function UF:CreatePlates(unit)
 		B.SmoothBar(health)
 		self.Health = health
 		self.Health.frequentUpdates = true
-		self.Health.UpdateColor = UpdateColor
+		self.Health.UpdateColor = UF.UpdateColor
 
 		UF:CreateHealthText(self)
 		UF:CreateCastBar(self)
@@ -440,7 +440,7 @@ function UF:CreatePlates(unit)
 		mark:SetVertexColor(0, .6, 1)
 		mark:Hide()
 		self.tarMark = mark
-		self:RegisterEvent("PLAYER_TARGET_CHANGED", UpdateTargetMark, true)
+		self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetMark, true)
 
 		local iconFrame = CreateFrame("Frame", nil, self)
 		iconFrame:SetAllPoints()
@@ -464,7 +464,7 @@ function UF:CreatePlates(unit)
 
 			self.questIcon = qicon
 			self.questCount = count
-			self:RegisterEvent("QUEST_LOG_UPDATE", UpdateQuestUnit, true)
+			self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
 		end
 
 		if NDuiDB["Nameplate"]["AKSProgress"] then
@@ -474,7 +474,7 @@ function UF:CreatePlates(unit)
 
 		local threatIndicator = CreateFrame("Frame", nil, self)
 		self.ThreatIndicator = threatIndicator
-		self.ThreatIndicator.Override = UpdateThreatColor
+		self.ThreatIndicator.Override = UF.UpdateThreatColor
 
 		AddMouseoverIndicator(self)
 	end
@@ -482,17 +482,17 @@ end
 
 function UF:PostUpdatePlates(event, unit)
 	if not self then return end
-	UpdateTargetMark(self)
-	UpdateQuestUnit(self, event, unit)
-	UpdateUnitClassify(self, unit)
-	UpdateExplosives(self, event, unit)
-	UpdateDungeonProgress(self, unit)
+	UF.UpdateTargetMark(self)
+	UF.UpdateQuestUnit(self, event, unit)
+	UF.UpdateUnitClassify(self, unit)
+	UF.UpdateExplosives(self, event, unit)
+	UF.UpdateDungeonProgress(self, unit)
 end
 
 -- Player Nameplate
 local auras = B:GetModule("Auras")
 
-local function PlateVisibility(self, event)
+function UF:PlateVisibility(event)
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
 		UIFrameFadeIn(self.Health, .3, self.Health:GetAlpha(), 1)
 		UIFrameFadeIn(self.Health.bg, .3, self.Health.bg:GetAlpha(), 1)
@@ -527,10 +527,10 @@ function UF:CreatePlayerPlate()
 	end
 
 	if NDuiDB["Nameplate"]["PPHideOOC"] then
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", PlateVisibility, true)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", PlateVisibility, true)
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", PlateVisibility, true)
-		self:RegisterEvent("UNIT_ENTERED_VEHICLE", PlateVisibility)
-		self:RegisterEvent("UNIT_EXITED_VEHICLE", PlateVisibility)
+		self:RegisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
+		self:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility, true)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility, true)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility, true)
 	end
 end

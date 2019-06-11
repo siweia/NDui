@@ -33,7 +33,7 @@ local serpentStatueTex = GetSpellTexture(115313)
 local oxStatue = GetSpellInfo(115315)
 local oxStatueTex = GetSpellTexture(115315)
 
-local function updateStatue()
+function module:UpdateStatue()
 	local haveTotem, _, start, dur = GetTotemInfo(1)
 	if haveTotem then
 		bu.CD:SetCooldown(start, dur)
@@ -59,10 +59,10 @@ local function checkSpec(event)
 			statue = oxStatue
 		end
 		bu:SetAttribute("macrotext1", "/tar "..statue)
-		B:RegisterEvent("PLAYER_TOTEM_UPDATE", updateStatue)
+		B:RegisterEvent("PLAYER_TOTEM_UPDATE", module.UpdateStatue)
 	else
 		if bu then bu:Hide() end
-		B:UnregisterEvent("PLAYER_TOTEM_UPDATE", updateStatue)
+		B:UnregisterEvent("PLAYER_TOTEM_UPDATE", module.UpdateStatue)
 	end
 
 	if event == "PLAYER_ENTERING_WORLD" then

@@ -2,11 +2,12 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Auras")
 
-local BuffFrame = BuffFrame
+local BuffFrame, PlayerFrame, DebuffTypeColor, UnitAura = BuffFrame, PlayerFrame, DebuffTypeColor, UnitAura
+local NUM_TEMP_ENCHANT_FRAMES = NUM_TEMP_ENCHANT_FRAMES or 3
 local buffsPerRow, buffSize, margin, offset = C.Auras.IconsPerRow, C.Auras.IconSize - 2, C.Auras.Spacing, 12
 local debuffsPerRow, debuffSize = C.Auras.IconsPerRow - 4, C.Auras.IconSize + 3
 local parentFrame, buffAnchor, debuffAnchor
-local format, mod = string.format, mod
+local format, mod, unpack = string.format, mod, unpack
 
 function module:OnLogin()
 	parentFrame = CreateFrame("Frame", nil, UIParent)
@@ -37,7 +38,7 @@ function module:OnLogin()
 	self:InitReminder()
 end
 
-local function styleButton(bu, isDebuff)
+function module:StyleAuraButton(bu, isDebuff)
 	if not bu or bu.styled then return end
 	local name = bu:GetName()
 
@@ -72,14 +73,14 @@ local function styleButton(bu, isDebuff)
 	bu.styled = true
 end
 
-local function reskinBuffs()
+function module:ReskinBuffs()
 	local buff, previousBuff, aboveBuff, index
 	local numBuffs = 0
 	local slack = BuffFrame.numEnchants
 
 	for i = 1, BUFF_ACTUAL_DISPLAY do
 		buff = _G["BuffButton"..i]
-		styleButton(buff)
+		module:StyleAuraButton(buff)
 
 		numBuffs = numBuffs + 1
 		index = numBuffs + slack
@@ -101,19 +102,19 @@ local function reskinBuffs()
 		previousBuff = buff
 	end
 end
-hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", reskinBuffs)
+hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", module.ReskinBuffs)
 
-local function reskinTempEnchant()
+function module:ReskinTempEnchant()
 	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 		local bu = _G["TempEnchant"..i]
-		styleButton(bu)
+		module:StyleAuraButton(bu)
 	end
 end
-hooksecurefunc("TemporaryEnchantFrame_Update", reskinTempEnchant)
+hooksecurefunc("TemporaryEnchantFrame_Update", module.ReskinTempEnchant)
 
-local function reskinDebuffs(buttonName, i)
+function module.ReskinDebuffs(buttonName, i)
 	local debuff = _G[buttonName..i]
-	styleButton(debuff, true)
+	module:StyleAuraButton(debuff, true)
 
 	debuff:ClearAllPoints()
 	if i > 1 and mod(i, debuffsPerRow) == 1 then
@@ -124,9 +125,9 @@ local function reskinDebuffs(buttonName, i)
 		debuff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -margin, 0)
 	end
 end
-hooksecurefunc("DebuffButton_UpdateAnchors", reskinDebuffs)
+hooksecurefunc("DebuffButton_UpdateAnchors", module.ReskinDebuffs)
 
-local function updateDebuffBorder(buttonName, index, filter)
+function module.UpdateDebuffBorder(buttonName, index, filter)
 	local unit = PlayerFrame.unit
 	local name, _, _, debuffType = UnitAura(unit, index, filter)
 	if not name then return end
@@ -138,18 +139,18 @@ local function updateDebuffBorder(buttonName, index, filter)
 		bu.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 end
-hooksecurefunc("AuraButton_Update", updateDebuffBorder)
+hooksecurefunc("AuraButton_Update", module.UpdateDebuffBorder)
 
-local function flashOnEnd(self)
+function module:FlashOnEnd()
 	if self.timeLeft < 10 then
 		self:SetAlpha(BuffFrame.BuffAlphaValue)
 	else
 		self:SetAlpha(1)
 	end
 end
-hooksecurefunc("AuraButton_OnUpdate", flashOnEnd)
+hooksecurefunc("AuraButton_OnUpdate", module.FlashOnEnd)
 
-local function formatAuraTime(seconds)
+function module.FormatAuraTime(seconds)
 	local d, h, m, str = 0, 0, 0
 	if seconds >= 86400 then
 		d = seconds/86400
@@ -184,13 +185,14 @@ local function formatAuraTime(seconds)
 	return str
 end
 
-hooksecurefunc("AuraButton_UpdateDuration", function(button, timeLeft)
+function module.UpdateDurationColor(button, timeLeft)
 	local duration = button.duration
 	if SHOW_BUFF_DURATIONS == "1" and timeLeft then
-		duration:SetText(formatAuraTime(timeLeft))
+		duration:SetText(module.FormatAuraTime(timeLeft))
 		duration:SetVertexColor(1, 1, 1)
 		duration:Show()
 	else
 		duration:Hide()
 	end
-end)
+end
+hooksecurefunc("AuraButton_UpdateDuration", module.UpdateDurationColor)
