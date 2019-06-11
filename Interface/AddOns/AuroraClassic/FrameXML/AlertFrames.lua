@@ -346,14 +346,14 @@ tinsert(C.themes["AuroraClassic"], function()
 		frame.glow:SetTexture("")
 		frame.Background:SetTexture("")
 		frame.PvPBackground:SetTexture("")
-		frame.BGAtlas:SetTexture("")			
+		frame.BGAtlas:SetTexture("")
 		frame.IconBorder:SetTexture("")
 	end)
 
 	-- BonusRollMoneyWonFrame
 	hooksecurefunc("MoneyWonAlertFrame_SetUp", function(frame)
 		if not frame.bg then
-			frame.bg = F.CreateBDFrame(frame) 
+			frame.bg = F.CreateBDFrame(frame)
 			frame.bg:SetPoint("TOPLEFT", 5, -5)
 			frame.bg:SetPoint("BOTTOMRIGHT", -5, 5)
 			F.CreateSD(frame.bg)

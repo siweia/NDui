@@ -18,11 +18,11 @@ C.themes["Blizzard_BarbershopUI"] = function()
 	F.Reskin(BarberShopFrameCancelButton)
 	F.Reskin(BarberShopFrameResetButton)
 
-	for i = 1, #BarberShopFrame.Selector do 
-		local prevBtn, nextBtn = BarberShopFrame.Selector[i]:GetChildren() 
-		F.ReskinArrow(prevBtn, "left") 
-		F.ReskinArrow(nextBtn, "right") 
-	end 
+	for i = 1, #BarberShopFrame.Selector do
+		local prevBtn, nextBtn = BarberShopFrame.Selector[i]:GetChildren()
+		F.ReskinArrow(prevBtn, "left")
+		F.ReskinArrow(nextBtn, "right")
+	end
 
 	-- [[ Banner frame ]]
 
