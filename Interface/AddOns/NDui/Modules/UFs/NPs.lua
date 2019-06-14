@@ -10,7 +10,7 @@ local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_NamePlate_GetNamePlates, C_M
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
 
 -- Init
-function B.PlateInsideView()
+function UF:PlateInsideView()
 	if NDuiDB["Nameplate"]["InsideView"] then
 		SetCVar("nameplateOtherTopInset", .05)
 		SetCVar("nameplateOtherBottomInset", .08)
@@ -20,25 +20,25 @@ function B.PlateInsideView()
 	end
 end
 
-function B.UpdatePlateAlpha()
+function UF:UpdatePlateAlpha()
 	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateMaxAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 end
 
-function B.UpdatePlateRange()
+function UF:UpdatePlateRange()
 	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
 end
 
-function B.UpdatePlateSpacing()
+function UF:UpdatePlateSpacing()
 	SetCVar("nameplateOverlapV", NDuiDB["Nameplate"]["VerticalSpacing"])
 end
 
 function UF:SetupCVars()
-	B.PlateInsideView()
+	UF:PlateInsideView()
 	SetCVar("nameplateOverlapH", .5)
-	B.UpdatePlateSpacing()
-	B.UpdatePlateRange()
-	B.UpdatePlateAlpha()
+	UF:UpdatePlateSpacing()
+	UF:UpdatePlateRange()
+	UF:UpdatePlateAlpha()
 	SetCVar("nameplateSelectedAlpha", 1)
 	SetCVar("showQuestTrackingTooltips", 1)
 
@@ -246,7 +246,7 @@ function UF:UpdateDungeonProgress(unit)
 			local total = cache[name]
 			if not total then
 				for criteriaIndex = 1, numCriteria do
-					local criteriaString, _, _, _, totalQuantity, _, _, _, _, _, _, _, isWeightedProgress = C_Scenario.GetCriteriaInfo(criteriaIndex)
+					local _, _, _, _, totalQuantity, _, _, _, _, _, _, _, isWeightedProgress = C_Scenario.GetCriteriaInfo(criteriaIndex)
 					if isWeightedProgress then
 						cache[name] = totalQuantity
 						total = cache[name]

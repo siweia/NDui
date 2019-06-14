@@ -13,7 +13,7 @@ local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
 
 local FilterList = {}
-function B:GenFilterList()
+function module:UpdateFilterList()
 	B.SplitList(FilterList, NDuiADB["ChatFilterList"], true)
 end
 
@@ -152,7 +152,7 @@ end
 	公会频道有人提到你时通知你
 ]]
 local chatAtList, at = {}, {}
-function B:GenChatAtList()
+function module:UpdateChatAtList()
 	B.SplitList(chatAtList, NDuiADB["ChatAtList"], true)
 
 	chatAtList[DB.MyName] = true
@@ -211,7 +211,7 @@ end
 
 function module:ChatFilter()
 	if NDuiDB["Chat"]["EnableFilter"] then
-		B:GenFilterList()
+		module:UpdateFilterList()
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
@@ -235,7 +235,7 @@ function module:ChatFilter()
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genAddonBlock)
 	end
 
-	B:GenChatAtList()
+	self:UpdateChatAtList()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", isPlayerOnIslands)

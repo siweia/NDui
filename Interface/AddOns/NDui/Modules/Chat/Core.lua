@@ -139,7 +139,7 @@ hooksecurefunc("FloatingChatFrame_OnMouseScroll", module.QuickMouseScroll)
 
 -- Autoinvite by whisper
 local whisperList = {}
-function B:GenWhisperList()
+function module:UpdateWhisperList()
 	B.SplitList(whisperList, NDuiDB["Chat"]["Keyword"], true)
 end
 
@@ -163,7 +163,7 @@ function module.OnChatWhisper(event, ...)
 				local gameID = select(6, BNGetFriendInfoByID(presenceID))
 				if gameID then
 					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-					if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or isUnitInGuild(charName.."-"..realmName)) then
+					if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or module:IsUnitInGuild(charName.."-"..realmName)) then
 						BNInviteFriend(gameID)
 					end
 				end
@@ -178,13 +178,13 @@ end
 
 function module:WhipserInvite()
 	if not NDuiDB["Chat"]["Invite"] then return end
-	B:GenWhisperList()
+	self:UpdateWhisperList()
 	B:RegisterEvent("CHAT_MSG_WHISPER", module.OnChatWhisper)
 	B:RegisterEvent("CHAT_MSG_BN_WHISPER", module.OnChatWhisper)
 end
 
 -- Timestamp
-function B.UpdateTimestamp()
+function module:UpdateTimestamp()
 	local greyStamp = DB.GreyColor.."[%H:%M:%S]|r "
 	if NDuiADB["Timestamp"] then
 		SetCVar("showTimestamps", greyStamp)
@@ -194,7 +194,7 @@ function B.UpdateTimestamp()
 end
 
 -- Sticky whisper
-function B.ChatWhisperSticky()
+function module:ChatWhisperSticky()
 	if NDuiDB["Chat"]["Sticky"] then
 		ChatTypeInfo["WHISPER"].sticky = 1
 		ChatTypeInfo["BN_WHISPER"].sticky = 1
@@ -204,39 +204,28 @@ function B.ChatWhisperSticky()
 	end
 end
 
-function module:OnLogin()
-	for i = 1, NUM_CHAT_WINDOWS do
-		module.SkinChat(_G["ChatFrame"..i])
+local isScaling = false
+function module:FixChatFrameAnchor()
+	if isScaling then return end
+	isScaling = true
+
+	local x, y = select(4, ChatFrame1:GetPoint())
+	if x ~= 0 or y ~= 28 then
+		ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
 	end
+	isScaling = false
+end
 
-	hooksecurefunc("FCF_OpenTemporaryWindow", function()
-		for _, chatFrameName in next, CHAT_FRAMES do
-			local frame = _G[chatFrameName]
-			if frame.isTemporary then
-				module.SkinChat(frame)
-			end
-		end
-	end)
-
-	hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
-		if selected then
-			self:GetFontString():SetTextColor(1, .8, 0)
-		else
-			self:GetFontString():SetTextColor(.5, .5, .5)
-		end
-	end)
-
-	-- Font size
-	for i = 1, 15 do
-		CHAT_FONT_HEIGHTS[i] = i + 9
+function module:UpdateTabColors(selected)
+	if selected then
+		self:GetFontString():SetTextColor(1, .8, 0)
+	else
+		self:GetFontString():SetTextColor(.5, .5, .5)
 	end
+end
 
-	-- Default
-	SetCVar("chatStyle", "classic")
-	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
-	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
-
-	-- Easy Resizing
+-- Easy Resizing chatframe by dragging tab1
+function module:ResizeChatFrame()
 	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
 			if select(8, GetChatWindowInfo(1)) then
@@ -250,27 +239,49 @@ function module:OnLogin()
 			FCF_SavePositionAndDimensions(ChatFrame1)
 		end
 	end)
+end
+
+function module:OnLogin()
+	for i = 1, NUM_CHAT_WINDOWS do
+		self.SkinChat(_G["ChatFrame"..i])
+	end
+
+	hooksecurefunc("FCF_OpenTemporaryWindow", function()
+		for _, chatFrameName in next, CHAT_FRAMES do
+			local frame = _G[chatFrameName]
+			if frame.isTemporary then
+				self.SkinChat(frame)
+			end
+		end
+	end)
+
+	hooksecurefunc("FCFTab_UpdateColors", self.UpdateTabColors)
+
+	-- Font size
+	for i = 1, 15 do
+		CHAT_FONT_HEIGHTS[i] = i + 9
+	end
+
+	-- Default
+	SetCVar("chatStyle", "classic")
+	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
+	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Fix chatframe anchor after scaling
 	if NDuiDB["Chat"]["Lock"] then
-		local isScaling = false
-		B:RegisterEvent("UI_SCALE_CHANGED", function()
-			if isScaling then return end
-			isScaling = true
-			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
-			isScaling = false
-		end)
+		B:RegisterEvent("UI_SCALE_CHANGED", self.FixChatFrameAnchor)
 	end
 
 	-- Add Elements
-	B.UpdateTimestamp()
-	B.ChatWhisperSticky()
+	self:UpdateTimestamp()
+	self:ChatWhisperSticky()
 	self:ChatFilter()
 	self:ChannelRename()
 	self:Chatbar()
 	self:ChatCopy()
 	self:UrlCopy()
 	self:WhipserInvite()
+	self:ResizeChatFrame()
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
