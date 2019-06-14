@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="All.lua"/>
+	<Script file="Deprecated.lua"/>
 	<Script file="DH.lua"/>
 	<Script file="DK.lua"/>
 	<Script file="Druid.lua"/>
