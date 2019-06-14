@@ -95,12 +95,6 @@ SlashCmdList["NDUI_CHECK_QUEST"] = function(msg)
 end
 SLASH_NDUI_CHECK_QUEST1 = "/ncq"
 
-SlashCmdList["NDUI_DEV"] = function()
-	UIParentLoadAddOn("Blizzard_Console")
-	DeveloperConsole:Toggle()
-end
-SLASH_NDUI_DEV1 = "/ndev"
-
 do
 	local versionList = {}
 	C_ChatInfo.RegisterAddonMessagePrefix("NDuiFVC")
@@ -133,7 +127,6 @@ do
 	B:RegisterEvent("CHAT_MSG_ADDON", VerCheckListen)
 
 	SlashCmdList["NDUI_VER_CHECK"] = function(msg)
-		--if not DB.isDeveloper then return end
 		local channel
 		if IsInRaid() then
 			channel = "RAID"
