@@ -167,7 +167,7 @@ function module:InterruptAlert()
 			if infoText then
 				if infoText == L["BrokenSpell"] then
 					if not NDuiDB["Misc"]["BrokenSpell"] then return end
-					if auraType and auraType == AURA_TYPE_BUFF or blackList[spellID] then return end	-- need reviewed
+					if auraType and auraType == AURA_TYPE_BUFF or blackList[spellID] then return end
 					SendChatMessage(format(infoText, sourceName..GetSpellLink(extraskillID), destName..GetSpellLink(spellID)), msgChannel())
 				else
 					if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= DB.MyName and not isAllyPet(sourceFlags) then return end

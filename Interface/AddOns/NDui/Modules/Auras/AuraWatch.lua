@@ -595,7 +595,7 @@ function module:UpdateInt(_, ...)
 end
 
 -- CleanUp
-function module:CleanUp()
+function module:CleanUp()	-- FIXME: there should be a better way to do this
 	for _, value in pairs(FrameList) do
 		for i = 1, maxFrames do
 			local frame = value[i]
