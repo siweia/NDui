@@ -2,68 +2,100 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 
-local _G = getfenv(0)
-local next = _G.next
-local HasAction = _G.HasAction
-local IsUsableAction = _G.IsUsableAction
-local IsActionInRange = _G.IsActionInRange
-local TOOLTIP_UPDATE_TIME = TOOLTIP_UPDATE_TIME or .2
+local next, pairs, unpack = next, pairs, unpack
+local HasAction, IsUsableAction, IsActionInRange = HasAction, IsUsableAction, IsActionInRange
 
-local rangeTimer = -1
+local UPDATE_DELAY = .2
+local buttonColors, buttonsToUpdate = {}, {}
 local updater = CreateFrame("Frame")
 
-function Bar:RangeUpdate()
-	if self.__faderParent and self:GetEffectiveAlpha() < 1 then return end
-
-	local icon = self.icon
-	local action = self.action
-	if not action then return end
-
-	local isUsable, notEnoughMana = IsUsableAction(action)
-	local inRange = IsActionInRange(action)
-
-	if isUsable then -- Usable
-		if inRange == false then -- Out of range
-			icon:SetVertexColor(.8, .1, .1)
-		else -- In range
-			icon:SetVertexColor(1, 1, 1)
-		end
-	elseif notEnoughMana then -- Not enough power
-		icon:SetVertexColor(.5, .5, 1)
-	else -- Not usable
-		icon:SetVertexColor(.3, .3, .3)
-	end
-end
-
-function Bar:HookOnEnter()
-	for _, button in next, Bar.activeButtons do
-		button:HookScript("OnEnter", Bar.RangeUpdate)
-	end
-end
+local colors = {
+	["normal"] = {1, 1, 1},
+	["oor"] = {1, .3, .1},
+	["oom"] = {.1, .3, 1},
+	["unusable"] = {.4, .4, .4}
+}
 
 function Bar:OnUpdateRange(elapsed)
-	if NDuiDB["Actionbar"]["Enable"] then
-		rangeTimer = rangeTimer - elapsed
-		if rangeTimer <= 0 then
-			for _, button in next, Bar.activeButtons do
-				local action = button.action
-				if action and button:IsVisible() and HasAction(action) then
-					Bar.RangeUpdate(button)
-				end
-			end
-			rangeTimer = TOOLTIP_UPDATE_TIME
+	self.elapsed = (self.elapsed or UPDATE_DELAY) - elapsed
+	if self.elapsed <= 0 then
+		self.elapsed = UPDATE_DELAY
+
+		if not Bar:UpdateButtons() then
+			self:Hide()
 		end
-	else
-		self:SetScript("OnUpdate", nil)
 	end
 end
 updater:SetScript("OnUpdate", Bar.OnUpdateRange)
 
-function Bar:ResetRangeTimer()
-	if NDuiDB["Actionbar"]["Enable"] then
-		rangeTimer = -1
+function Bar:UpdateButtons()
+	if next(buttonsToUpdate) then
+		for button in pairs(buttonsToUpdate) do
+			self.UpdateButtonUsable(button)
+		end
+		return true
+	end
+
+	return false
+end
+
+function Bar:UpdateButtonStatus()
+	local action = self.action
+
+	if action and self:IsVisible() and HasAction(action) then
+		buttonsToUpdate[self] = true
 	else
-		B:UnregisterEvent("PLAYER_TARGET_CHANGED", Bar.ResetRangeTimer)
+		buttonsToUpdate[self] = nil
+	end
+
+	if next(buttonsToUpdate) then
+		updater:Show()
 	end
 end
-B:RegisterEvent("PLAYER_TARGET_CHANGED", Bar.ResetRangeTimer)
+
+function Bar:UpdateButtonUsable(force)
+	if force then
+		buttonColors[self] = nil
+	end
+
+	local action = self.action
+	local isUsable, notEnoughMana = IsUsableAction(action)
+
+	if isUsable then
+		local inRange = IsActionInRange(action)
+		if inRange == false then
+			Bar.SetButtonColor(self, "oor")
+		else
+			Bar.SetButtonColor(self, "normal")
+		end
+	elseif notEnoughMana then
+		Bar.SetButtonColor(self, "oom")
+	else
+		Bar.SetButtonColor(self, "unusable")
+	end
+end
+
+function Bar:SetButtonColor(colorIndex)
+	if buttonColors[self] == colorIndex then return end
+	buttonColors[self] = colorIndex
+
+	local r, g, b = unpack(colors[colorIndex])
+	self.icon:SetVertexColor(r, g, b)
+end
+
+function Bar:Register()
+	self:HookScript("OnShow", Bar.UpdateButtonStatus)
+	self:HookScript("OnHide", Bar.UpdateButtonStatus)
+	self:SetScript("OnUpdate", nil)
+	Bar.UpdateButtonStatus(self)
+end
+
+local function button_UpdateUsable(button)
+	Bar.UpdateButtonUsable(button, true)
+end
+
+function Bar:HookActionEvents()
+	hooksecurefunc("ActionButton_OnUpdate", self.Register)
+	hooksecurefunc("ActionButton_Update", self.UpdateButtonStatus)
+	hooksecurefunc("ActionButton_UpdateUsable", button_UpdateUsable)
+end
