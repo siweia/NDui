@@ -58,7 +58,7 @@ local function changelog()
 end
 
 local function compareToShow(event)
-	if HelloWorld then return end
+	if NDui_Tutorial then return end
 
 	local old1, old2 = strsplit(".", NDuiADB["Changelog"].Version or "")
 	local cur1, cur2 = strsplit(".", DB.Version)

@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
 local pairs, tonumber, wipe = pairs, tonumber, table.wipe
-local min, max, format = math.min, math.max, string.format
+local min, max, floor = math.min, math.max, floor
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")
@@ -47,28 +47,33 @@ local function ForceRaidFrame()
 	CompactUnitFrameProfiles_UpdateCurrentPanel()
 end
 
-local isScaling = false
-local function SetupUIScale()
-	if isScaling then return end
-	isScaling = true
-
+local function GetPerfectScale()
 	local scale = NDuiADB["UIScale"]
 	local minScale = .64
 	local fixedHeight = 768/DB.ScreenHeight
 	if NDuiADB["LockUIScale"] then
 		scale = max(minScale, min(1.1, fixedHeight))
-	end
-
-	SetCVar("useUiScale", 1)
-	scale = tonumber(floor(scale*100 + .5)/100)
-	if scale < .64 then
-		UIParent:SetScale(scale)
-	else
-		SetCVar("uiScale", scale)
+		scale = tonumber(floor(scale*100 + .5)/100)
 	end
 	C.mult = fixedHeight/scale
 
 	NDuiADB["UIScale"] = scale
+end
+
+local isScaling = false
+local function SetupUIScale()
+	if isScaling then return end
+	isScaling = true
+
+	local cvar = tonumber(GetCVar("uiScale"))
+	local val = NDuiADB["UIScale"]
+	local scale = UIParent:GetScale()
+	if val >= .64 and cvar ~= val then
+		SetCVar("useUiScale", 1)
+		SetCVar("uiScale", val)
+	elseif val < .64 and val ~= scale then
+		UIParent:SetScale(val)
+	end
 
 	isScaling = false
 end
@@ -335,7 +340,7 @@ local function YesTutor()
 	local apply = B.CreateButton(tutor, 50, 20, APPLY)
 	apply:SetPoint("BOTTOMRIGHT", -10, 10)
 
-	local titles = {L["Default Settings"], UI_SCALE, L["ChatFrame"], L["Skins"], L["Tips"]}
+	local titles = {L["Default Settings"], L["ChatFrame"], UI_SCALE, L["Skins"], L["Tips"]}
 	local function RefreshText(page)
 		title:SetText(titles[page])
 		body:SetText(L["Tutorial Page"..page])
@@ -357,13 +362,13 @@ local function YesTutor()
 			ForceRaidFrame()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Default Settings Check"])
 		elseif currentPage == 2 then
+			ForceChatSettings()
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Chat Settings Check"])
+		elseif currentPage == 3 then
 			NDuiADB["LockUIScale"] = true
 			SetupUIScale()
 			NDuiADB["LockUIScale"] = false
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
-		elseif currentPage == 3 then
-			ForceChatSettings()
-			UIErrorsFrame:AddMessage(DB.InfoColor..L["Chat Settings Check"])
 		elseif currentPage == 4 then
 			NDuiADB["DBMRequest"] = true
 			NDuiADB["SkadaRequest"] = true
@@ -388,7 +393,7 @@ local welcome
 local function HelloWorld()
 	if welcome then welcome:Show() return end
 
-	welcome = CreateFrame("Frame", "HelloWorld", UIParent)
+	welcome = CreateFrame("Frame", "NDui_Tutorial", UIParent)
 	welcome:SetPoint("CENTER")
 	welcome:SetSize(350, 400)
 	welcome:SetScale(1.2)
@@ -444,15 +449,17 @@ SlashCmdList["NDUI"] = HelloWorld
 SLASH_NDUI1 = "/ndui"
 
 function module:OnLogin()
+	-- Hide options
 	B.HideOption(Advanced_UseUIScale)
 	B.HideOption(Advanced_UIScaleSlider)
+
+	-- Update UIScale
+	GetPerfectScale()
 	SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", SetupUIScale)
-	if not NDuiDB["Tutorial"]["Complete"] then HelloWorld() end
-	ForceAddonSkins()
-	if NDuiDB["Chat"]["Lock"] then ForceChatSettings() end
 
-	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
-		SetCVar("cameraDistanceMaxZoomFactor", 2.6)
-	end
+	-- Tutorial and settings
+	ForceAddonSkins()
+	if not NDuiDB["Tutorial"]["Complete"] then HelloWorld() end
+	if NDuiDB["Chat"]["Lock"] then ForceChatSettings() end
 end
