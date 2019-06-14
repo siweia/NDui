@@ -2,189 +2,183 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Cooldown")
 
+local FONT_SIZE = 19
+local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
+local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
+local ICON_SIZE = 36
+local hideNumbers, active, hooked = {}, {}, {}
+local pairs, floor, strfind = pairs, math.floor, string.find
+local GetTime, GetActionCooldown = GetTime, GetActionCooldown
+
+function module:StopTimer()
+	self.enabled = nil
+	self:Hide()
+end
+
+function module:ForceUpdate()
+	self.nextUpdate = 0
+	self:Show()
+end
+
+function module:OnSizeChanged(width)
+	local fontScale = floor(width + 0.5) / ICON_SIZE
+	if fontScale == self.fontScale then return end
+	self.fontScale = fontScale
+
+	if fontScale < MIN_SCALE then
+		self:Hide()
+	else
+		self.text:SetFont(DB.Font[1], fontScale * FONT_SIZE, DB.Font[3])
+		self.text:SetShadowColor(0, 0, 0, 0)
+
+		if self.enabled then
+			module.ForceUpdate(self)
+		end
+	end
+end
+
+function module:TimerOnUpdate(elapsed)
+	if self.nextUpdate > 0 then
+		self.nextUpdate = self.nextUpdate - elapsed
+	else
+		local remain = self.duration - (GetTime() - self.start)
+		if remain > 0 then
+			local getTime, nextUpdate = B.FormatTime(remain)
+			self.text:SetText(getTime)
+			self.nextUpdate = nextUpdate
+		else
+			module.StopTimer(self)
+		end
+	end
+end
+
+function module:OnCreate()
+	local scaler = CreateFrame("Frame", nil, self)
+	scaler:SetAllPoints(self)
+
+	local timer = CreateFrame("Frame", nil, scaler)
+	timer:Hide()
+	timer:SetAllPoints(scaler)
+	timer:SetScript("OnUpdate", module.TimerOnUpdate)
+
+	local text = timer:CreateFontString(nil, "BACKGROUND")
+	text:SetPoint("CENTER", 2, 0)
+	text:SetJustifyH("CENTER")
+	timer.text = text
+
+	module.OnSizeChanged(timer, scaler:GetSize())
+	scaler:SetScript("OnSizeChanged", function(_, ...)
+		module.OnSizeChanged(timer, ...)
+	end)
+
+	self.timer = timer
+	return timer
+end
+
+function module:StartTimer(start, duration)
+	if self:IsForbidden() then return end
+	if self.noOCC or hideNumbers[self] then return end
+
+	local frameName = self.GetName and self:GetName() or ""
+	if NDuiDB["Actionbar"]["OverrideWA"] and strfind(frameName, "WeakAuras") then
+		self.noOCC = true
+		return
+	end
+
+	if start > 0 and duration > MIN_DURATION then
+		local timer = self.timer or module.OnCreate(self)
+		timer.start = start
+		timer.duration = duration
+		timer.enabled = true
+		timer.nextUpdate = 0
+
+		-- wait for blizz to fix itself
+		local parent = self:GetParent()
+		local charge = parent and parent.chargeCooldown
+		local chargeTimer = charge and charge.timer
+		if chargeTimer and chargeTimer ~= timer then
+			module.StopTimer(chargeTimer)
+		end
+
+		if timer.fontScale >= MIN_SCALE then
+			timer:Show()
+		end
+	elseif self.timer then
+		module.StopTimer(self.timer)
+	end
+
+	-- hide cooldown flash if barFader enabled
+	if self:GetParent().__faderParent then
+		if self:GetEffectiveAlpha() > 0 then
+			self:Show()
+		else
+			self:Hide()
+		end
+	end
+end
+
+function module:HideCooldownNumbers()
+	hideNumbers[self] = true
+	if self.timer then module.StopTimer(self.timer) end
+end
+
+function module:CooldownOnShow()
+	active[self] = true
+end
+
+function module:CooldownOnHide()
+	active[self] = nil
+end
+
+local function shouldUpdateTimer(self, start)
+	local timer = self.timer
+	if not timer then
+		return true
+	end
+	return timer.start ~= start
+end
+
+function module:CooldownUpdate()
+	local button = self:GetParent()
+	local start, duration = GetActionCooldown(button.action)
+
+	if shouldUpdateTimer(self, start) then
+		module.StartTimer(self, start, duration)
+	end
+end
+
+function module:ActionbarUpateCooldown()
+	for cooldown in pairs(active) do
+		module.CooldownUpdate(cooldown)
+	end
+end
+
+function module:RegisterActionButton()
+	local cooldown = self.cooldown
+	if not hooked[cooldown] then
+		cooldown:HookScript("OnShow", module.CooldownOnShow)
+		cooldown:HookScript("OnHide", module.CooldownOnHide)
+
+		hooked[cooldown] = true
+	end
+end
+
 function module:OnLogin()
 	if not NDuiDB["Actionbar"]["Cooldown"] then return end
 
-	local FONT_SIZE = 19
-	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
-	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
-	local ICON_SIZE = 36
-	local hideNumbers = {}
-	local pairs, floor, strfind = pairs, math.floor, string.find
-
-	-- stops the timer
-	local function Timer_Stop(self)
-		self.enabled = nil
-		self:Hide()
-	end
-
-	-- forces the given timer to update on the next frame
-	local function Timer_ForceUpdate(self)
-		self.nextUpdate = 0
-		self:Show()
-	end
-
-	-- adjust font size whenever the timer's parent size changes, hide if it gets too tiny
-	local function Timer_OnSizeChanged(self, width)
-		local fontScale = floor(width + 0.5) / ICON_SIZE
-		if fontScale == self.fontScale then return end
-		self.fontScale = fontScale
-
-		if fontScale < MIN_SCALE then
-			self:Hide()
-		else
-			self.text:SetFont(DB.Font[1], fontScale * FONT_SIZE, DB.Font[3])
-			self.text:SetShadowColor(0, 0, 0, 0)
-
-			if self.enabled then
-				Timer_ForceUpdate(self)
-			end
-		end
-	end
-
-	-- update timer text, if it needs to be, hide the timer if done
-	local function Timer_OnUpdate(self, elapsed)
-		if self.nextUpdate > 0 then
-			self.nextUpdate = self.nextUpdate - elapsed
-		else
-			local remain = self.duration - (GetTime() - self.start)
-			if remain > 0 then
-				local getTime, nextUpdate = B.FormatTime(remain)
-				self.text:SetText(getTime)
-				self.nextUpdate = nextUpdate
-			else
-				Timer_Stop(self)
-			end
-		end
-	end
-
-	-- returns a new timer object
-	local function Timer_Create(self)
-		local scaler = CreateFrame("Frame", nil, self)
-		scaler:SetAllPoints(self)
-
-		local timer = CreateFrame("Frame", nil, scaler)
-		timer:Hide()
-		timer:SetAllPoints(scaler)
-		timer:SetScript("OnUpdate", Timer_OnUpdate)
-
-		local text = timer:CreateFontString(nil, "BACKGROUND")
-		text:SetPoint("CENTER", 2, 0)
-		text:SetJustifyH("CENTER")
-		timer.text = text
-
-		Timer_OnSizeChanged(timer, scaler:GetSize())
-		scaler:SetScript("OnSizeChanged", function(_, ...)
-			Timer_OnSizeChanged(timer, ...)
-		end)
-
-		self.timer = timer
-		return timer
-	end
-
-	local function Timer_Start(self, start, duration)
-		if self:IsForbidden() or self.noOCC or hideNumbers[self] then return end
-		if NDuiDB["Actionbar"]["OverrideWA"] and self:GetName() and strfind(self:GetName(), "WeakAuras") then
-			self.noOCC = true
-			return
-		end
-
-		if start > 0 and duration > MIN_DURATION then
-			local timer = self.timer or Timer_Create(self)
-			timer.start = start
-			timer.duration = duration
-			timer.enabled = true
-			timer.nextUpdate = 0
-
-			-- wait for blizz to fix itself
-			local parent = self:GetParent()
-			local charge = parent and parent.chargeCooldown
-			local chargeTimer = charge and charge.timer
-			if chargeTimer and chargeTimer ~= timer then
-				Timer_Stop(chargeTimer)
-			end
-
-			if timer.fontScale >= MIN_SCALE then
-				timer:Show()
-			end
-		elseif self.timer then
-			Timer_Stop(self.timer)
-		end
-
-		-- hide cooldown flash if barFader enabled
-		if self:GetParent().__faderParent then
-			if self:GetEffectiveAlpha() > 0 then
-				self:Show()
-			else
-				self:Hide()
-			end
-		end
-	end
-
-	local function hideCooldownNumbers(self, hide)
-		if hide then
-			hideNumbers[self] = true
-			if self.timer then Timer_Stop(self.timer) end
-		else
-			hideNumbers[self] = nil
-		end
-	end
-
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
-	hooksecurefunc(cooldownIndex, "SetCooldown", Timer_Start)
-	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", function(self)
-		hideCooldownNumbers(self, true)
-	end)
+	hooksecurefunc(cooldownIndex, "SetCooldown", module.StartTimer)
 
-	-- action buttons hook
-	local active, hooked = {}, {}
+	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", module.HideCooldownNumbers)
 
-	local function Cooldown_OnShow(self)
-		active[self] = true
-	end
-
-	local function Cooldown_OnHide(self)
-		active[self] = nil
-	end
-
-	local function Cooldown_ShouldUpdateTimer(self, start)
-		local timer = self.timer
-		if not timer then
-			return true
-		end
-		return timer.start ~= start
-	end
-
-	local function Cooldown_Update(self)
-		local button = self:GetParent()
-		local start, duration = GetActionCooldown(button.action)
-
-		if Cooldown_ShouldUpdateTimer(self, start) then
-			Timer_Start(self, start, duration)
-		end
-	end
-
-	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", function()
-		for cooldown in pairs(active) do
-			Cooldown_Update(cooldown)
-		end
-	end)
-
-	local function ActionButton_Register(frame)
-		local cooldown = frame.cooldown
-		if not hooked[cooldown] then
-			cooldown:HookScript("OnShow", Cooldown_OnShow)
-			cooldown:HookScript("OnHide", Cooldown_OnHide)
-			hooked[cooldown] = true
-		end
-	end
+	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", module.ActionbarUpateCooldown)
 
 	if _G["ActionBarButtonEventsFrame"].frames then
 		for _, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
-			ActionButton_Register(frame)
+			module.RegisterActionButton(frame)
 		end
 	end
-	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", ActionButton_Register)
+	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", module.RegisterActionButton)
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)
