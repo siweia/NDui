@@ -96,7 +96,7 @@ function module:UpdateTotemAura(button, texture, spellID, glow)
 			button.Count:SetText("")
 			if glow then
 				if glow == "END" then
-					button.expire = expire
+					button.expire = start + dur
 					button:SetScript("OnUpdate", module.GlowOnEnd)
 				else
 					B.ShowOverlayGlow(button.glowFrame)
