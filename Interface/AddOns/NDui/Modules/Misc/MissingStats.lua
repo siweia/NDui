@@ -2,17 +2,14 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Misc")
 
---[[
-	给角色属性面板添加额外的数据，同时使其支持滚动，防止数据溢出。
-]]
+local format, max = string.format, math.max
+local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
+local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
+local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
+
 function module:MissingStats()
 	if not NDuiDB["Misc"]["MissingStats"] then return end
 	if IsAddOnLoaded("DejaCharacterStats") then return end
-
-	local format, max, floor = string.format, math.max, math.floor
-	local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
-	local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
-	local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)

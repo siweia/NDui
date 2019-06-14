@@ -10,7 +10,7 @@ local GetNumAddOns, GetAddOnInfo, IsShiftKeyDown, IsAddOnLoaded = GetNumAddOns, 
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage, ResetCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage, ResetCPUUsage
 local VIDEO_OPTIONS_ENABLED, VIDEO_OPTIONS_DISABLED, FRAMERATE_LABEL = VIDEO_OPTIONS_ENABLED, VIDEO_OPTIONS_DISABLED, FRAMERATE_LABEL
 
-local usageTable, startTime, showMode, entered = {}, 0, 0
+local usageTable, showMode, entered = {}, 0
 local usageString = "%.3f ms"
 
 local function colorLatency(latency)
@@ -154,7 +154,7 @@ info.onEnter = function(self)
 	GameTooltip:Show()
 end
 
-info.onLeave = function(self)
+info.onLeave = function()
 	entered = false
 	GameTooltip:Hide()
 end

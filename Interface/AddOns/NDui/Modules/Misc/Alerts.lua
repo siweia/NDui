@@ -338,7 +338,7 @@ end
 function module:UunatAlert()
 	local data = {}
 	local function isBuffBlock()
-		for i = 1, 40 do
+		for i = 1, 16 do
 			local name, _, _, _, _, _, _, _, _, spellID = UnitDebuff("player", i)
 			if not name then break end
 			if name and spellID == 284733 then

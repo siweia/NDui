@@ -84,21 +84,18 @@ function TradeTabs:Initialize()
 
 	local parent = TradeSkillFrame
 	local tradeSpells = buildSpellList()
-	local i = 1
 	local prev, foundCooking
 
 	-- if player is a DK, insert runeforging at the top
 	if select(2, UnitClass("player")) == "DEATHKNIGHT" then
-		prev = self:CreateTab(i, parent, RUNEFORGING)
+		prev = self:CreateTab(parent, RUNEFORGING)
 		prev:SetPoint("TOPLEFT", parent, "TOPRIGHT", 2, -44)
-		i = i + 1
 	end
 
-	for i, slot in ipairs(tradeSpells) do
+	for _, slot in ipairs(tradeSpells) do
 		local _, spellID = GetSpellBookItemInfo(slot, BOOKTYPE_PROFESSION)
-		local tab = self:CreateTab(i, parent, spellID)
+		local tab = self:CreateTab(parent, spellID)
 		if spellID == 818 then foundCooking = true end
-		i = i + 1
 
 		local point, relPoint, x, y = "TOPLEFT", "BOTTOMLEFT", 0, -10
 		if not prev then
@@ -110,7 +107,7 @@ function TradeTabs:Initialize()
 	end
 
 	if foundCooking and PlayerHasToy(CHEF_HAT) and C_ToyBox.IsToyUsable(CHEF_HAT) then
-		local tab = self:CreateTab(i, parent, CHEF_HAT, true)
+		local tab = self:CreateTab(parent, CHEF_HAT, true)
 		tab:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -10)
 	end
 
@@ -168,7 +165,7 @@ local function reskinTabs(button)
 	end
 end
 
-function TradeTabs:CreateTab(i, parent, spellID, isToy)
+function TradeTabs:CreateTab(parent, spellID, isToy)
 	local name, texture, _
 	if isToy then
 		_, name, texture = C_ToyBox.GetToyInfo(spellID)

@@ -7,7 +7,6 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 
 local debugMode = false
-local next = next
 local class = DB.MyClass
 local RaidDebuffsIgnore, invalidPrio = {}, -1
 
@@ -96,7 +95,7 @@ local function checkSpecs()
 	end
 end
 
-local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, expiration, spellId)
+local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, expiration)
 	local rd = self.RaidDebuffs
 	if name then
 		if rd.icon then
@@ -169,13 +168,13 @@ local function Update(self, _, unit)
 	rd.priority = invalidPrio
 	rd.filter = "HARMFUL"
 
-	local _name, _icon, _count, _debuffType, _duration, _expiration, _spellId
+	local _name, _icon, _count, _debuffType, _duration, _expiration
 	local debuffs = rd.Debuffs or {}
 	local isCharmed = UnitIsCharmed(unit)
 	local canAttack = UnitCanAttack("player", unit)
 	local prio
 
-	for i = 1, 40 do
+	for i = 1, 32 do
 		local name, icon, count, debuffType, duration, expiration, _, _, _, spellId = UnitAura(unit, i, rd.filter)
 		if not name then break end
 
@@ -189,7 +188,7 @@ local function Update(self, _, unit)
 
 			if prio and prio > rd.priority then
 				rd.priority, rd.index = prio, i
-				_name, _icon, _count, _debuffType, _duration, _expiration, _spellId = name, icon, count, debuffType, duration, expiration, spellId
+				_name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
 			end
 		end
 
@@ -200,14 +199,13 @@ local function Update(self, _, unit)
 
 		if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
 			rd.priority, rd.index = instPrio, i
-			_name, _icon, _count, _debuffType, _duration, _expiration, _spellId = name, icon, count, debuffType, duration, expiration, spellId
+			_name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
 		end
 	end
 
 	if debugMode then
 		rd.priority = 6
-		_spellId = 47540
-		_name, _, _icon = GetSpellInfo(_spellId)
+		_name, _, _icon = GetSpellInfo(47540)
 		_count, _debuffType, _duration, _expiration = 2, "Magic", 10, GetTime()+10, 0
 	end
 
@@ -215,7 +213,7 @@ local function Update(self, _, unit)
 		rd.index, _name = nil, nil
 	end
 
-	UpdateDebuffFrame(self, _name, _icon, _count, _debuffType, _duration, _expiration, _spellId)
+	UpdateDebuffFrame(self, _name, _icon, _count, _debuffType, _duration, _expiration)
 end
 
 local function Path(self, ...)

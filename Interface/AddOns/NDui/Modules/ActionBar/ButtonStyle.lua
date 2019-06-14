@@ -341,8 +341,8 @@ function Bar:ReskinBars()
 		icon = {
 			texCoord = DB.TexCoord,
 			points = {
-				{"TOPLEFT", 1, -1},
-				{"BOTTOMRIGHT", -1, 1},
+				{"TOPLEFT", C.mult, -C.mult},
+				{"BOTTOMRIGHT", -C.mult, C.mult},
 			},
 		},
 		flyoutBorder = {file = ""},
@@ -363,8 +363,8 @@ function Bar:ReskinBars()
 		highlightTexture = {
 			file = "",
 			points = {
-				{"TOPLEFT", 1, -1},
-				{"BOTTOMRIGHT", -1, 1},
+				{"TOPLEFT", C.mult, -C.mult},
+				{"BOTTOMRIGHT", -C.mult, C.mult},
 			},
 		},
 		cooldown = {

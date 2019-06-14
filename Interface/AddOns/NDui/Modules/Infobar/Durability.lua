@@ -101,7 +101,7 @@ end)
 info.onMouseUp = function(self, btn)
 	if btn == "MiddleButton" then
 		NDuiADB["RepairType"] = mod(NDuiADB["RepairType"] + 1, 3)
-		self:GetScript("OnEnter")(self)
+		self:onEnter()
 	else
 		ToggleCharacter("PaperDollFrame")
 	end

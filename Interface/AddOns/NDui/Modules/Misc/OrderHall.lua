@@ -28,23 +28,7 @@ local function RetrieveData(self)
 	end
 end
 
-hall:RegisterUnitEvent("UNIT_AURA", "player")
-hall:RegisterEvent("PLAYER_ENTERING_WORLD")
-hall:RegisterEvent("ADDON_LOADED")
-hall:SetScript("OnEvent", function(self, event, arg1)
-	if event == "ADDON_LOADED" and arg1 == "Blizzard_OrderHallUI" then
-		B.HideObject(OrderHallCommandBar)
-		GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
-		self:UnregisterEvent("ADDON_LOADED")
-	elseif event == "UNIT_AURA" or event == "PLAYER_ENTERING_WORLD" then
-		local inOrderHall = C_Garrison.IsPlayerInGarrison(LE_GARRISON_TYPE_7_0)
-		self:SetShown(inOrderHall)
-	elseif event == "MODIFIER_STATE_CHANGED" and arg1 == "LSHIFT" then
-		self:GetScript("OnEnter")(self)
-	end
-end)
-
-hall:SetScript("OnEnter", function(self)
+local function hallIconOnEnter(self)
 	C_Garrison.RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	RetrieveData(self)
 
@@ -71,9 +55,29 @@ hall:SetScript("OnEnter", function(self)
 	GameTooltip:Show()
 
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
-end)
+end
 
-hall:SetScript("OnLeave", function(self)
+local function hallIconOnLeave(self)
 	GameTooltip:Hide()
 	self:UnregisterEvent("MODIFIER_STATE_CHANGED")
-end)
+end
+
+local function hallIconOnEvent(self, event, arg1)
+	if event == "ADDON_LOADED" and arg1 == "Blizzard_OrderHallUI" then
+		B.HideObject(OrderHallCommandBar)
+		GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
+		self:UnregisterEvent("ADDON_LOADED")
+	elseif event == "UNIT_AURA" or event == "PLAYER_ENTERING_WORLD" then
+		local inOrderHall = C_Garrison.IsPlayerInGarrison(LE_GARRISON_TYPE_7_0)
+		self:SetShown(inOrderHall)
+	elseif event == "MODIFIER_STATE_CHANGED" and arg1 == "LSHIFT" then
+		hallIconOnEnter(self)
+	end
+end
+
+hall:RegisterUnitEvent("UNIT_AURA", "player")
+hall:RegisterEvent("PLAYER_ENTERING_WORLD")
+hall:RegisterEvent("ADDON_LOADED")
+hall:SetScript("OnEvent", hallIconOnEvent)
+hall:SetScript("OnEnter", hallIconOnEnter)
+hall:SetScript("OnLeave", hallIconOnLeave)

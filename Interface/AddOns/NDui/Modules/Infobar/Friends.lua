@@ -99,7 +99,7 @@ info.onEvent = function(self, event, arg1)
 	if event == "CHAT_MSG_SYSTEM" then
 		if not strfind(arg1, ERR_FRIEND_ONLINE_SS) and not strfind(arg1, ERR_FRIEND_OFFLINE_S) then return end
 	elseif event == "MODIFIER_STATE_CHANGED" and arg1 == "LSHIFT" then
-		self:GetScript("OnEnter")(self)
+		self:onEnter()
 	end
 
 	local onlineFriends = C_FriendList_GetNumOnlineFriends()

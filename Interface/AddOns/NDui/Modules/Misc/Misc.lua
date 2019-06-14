@@ -3,7 +3,6 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Misc")
 
 local tostring, tonumber, pairs = tostring, tonumber, pairs
-local tremove, tinsert = table.remove, table.insert
 local strsplit, random = string.split, math.random
 
 --[[
@@ -25,6 +24,11 @@ function module:OnLogin()
 	self:NakedIcon()
 	self:ExtendInstance()
 	self:PetFilterTab()
+
+	-- Max camera distancee
+	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
+		SetCVar("cameraDistanceMaxZoomFactor", 2.6)
+	end
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then

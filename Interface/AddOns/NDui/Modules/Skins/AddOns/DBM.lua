@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Skins")
 
+local strfind, strmatch, gsub = string.find, string.match, string.gsub
+
 function module:DBMSkin()
 	-- Default notice message
 	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
@@ -23,7 +25,6 @@ function module:DBMSkin()
 	if not IsAddOnLoaded("DBM-Core") then return end
 	if not NDuiDB["Skins"]["DBM"] then return end
 
-	local strfind, strmatch, gsub = string.find, string.match, string.gsub
 	local buttonsize = 24
 	local function SkinBars(self)
 		for bar in self:GetBarIterator() do

@@ -52,7 +52,7 @@ local function UpdateCoords(self, elapsed)
 			coordX, coordY = 0, 0
 			self:SetScript("OnUpdate", nil)
 		end
-		self:GetScript("OnEnter")(self)
+		self:onEnter()
 
 		self.elapsed = 0
 	end

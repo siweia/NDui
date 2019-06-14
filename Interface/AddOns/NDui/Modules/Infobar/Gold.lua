@@ -70,7 +70,7 @@ info.onMouseUp = function(self, btn)
 		StaticPopup_Show("RESETGOLD")
 	elseif btn == "MiddleButton" then
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
-		self:GetScript("OnEnter")(self)
+		self:onEnter()
 	else
 		ToggleCharacter("TokenFrame")
 	end

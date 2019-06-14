@@ -71,7 +71,7 @@ end
 
 -- Init
 B:RegisterEvent("PLAYER_LOGIN", function()
-	for _, module in pairs(initQueue) do
+	for _, module in next, initQueue do
 		if module.OnLogin then
 			module:OnLogin()
 		else

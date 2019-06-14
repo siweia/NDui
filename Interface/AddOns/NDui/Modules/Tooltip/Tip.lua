@@ -9,7 +9,7 @@ local classification = {
 	worldboss = " |cffff0000"..BOSS.."|r",
 }
 
-local strfind, format, strupper, strsplit, strlen, pairs = string.find, string.format, string.upper, string.split, string.len, pairs
+local strfind, format, strupper, strlen, pairs = string.find, string.format, string.upper, string.len, pairs
 local PVP, FACTION_HORDE, FACTION_ALLIANCE, LEVEL, YOU, TARGET = PVP, FACTION_HORDE, FACTION_ALLIANCE, LEVEL, YOU, TARGET
 local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
 local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
@@ -241,7 +241,7 @@ function module:StatusBar_OnValueChanged(value)
 	if not self.text then
 		self.text = B.CreateFS(self, 12, "")
 	end
-	local unit = module:GetUnit(self:GetParent())
+
 	if value > 0 and max == 1 then
 		self.text:SetFormattedText("%d%%", value*100)
 	else

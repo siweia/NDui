@@ -459,7 +459,7 @@ function module:ReskinRematch()
 		button.LevelText:SetTextColor(1, 1, 1)
 	end)
 
-	hooksecurefunc(RematchDialog, "FillTeam", function(self, frame)
+	hooksecurefunc(RematchDialog, "FillTeam", function(_, frame)
 		for i = 1, 3 do
 			local button = frame.Pets[i]
 			module.RematchIcon(button)
