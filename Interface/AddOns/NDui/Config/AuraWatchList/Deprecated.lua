@@ -1,6 +1,5 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("AurasTable")
 
 -- 旧资料片数据 Auras for old expansions
 C.DeprecatedAuras = {

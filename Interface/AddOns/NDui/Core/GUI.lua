@@ -3,7 +3,7 @@ local B, C, L, DB, F = unpack(ns)
 local module = B:RegisterModule("GUI")
 
 local tonumber, tostring, pairs, ipairs, next, select, type = tonumber, tostring, pairs, ipairs, next, select, type
-local min, max, tinsert, format, strsplit = math.min, math.max, table.insert, string.format, string.split
+local tinsert, format, strsplit = table.insert, string.format, string.split
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f, dataFrame = {}, {}
 

@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("AurasTable")
-local pairs, next, tonumber, format, wipe = pairs, next, tonumber, string.format, wipe
+local pairs, next, format, wipe = pairs, next, string.format, wipe
 
 -- AuraWatch
 local AuraWatchList = {}
