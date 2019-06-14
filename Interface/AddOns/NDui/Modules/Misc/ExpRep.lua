@@ -234,14 +234,16 @@ function module:HookParagonRep()
 			local factionID = select(14, GetFactionInfo(factionIndex))
 			if factionID and C_Reputation.IsFactionParagon(factionID) then
 				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
-				local barValue = mod(currentValue, threshold)
-				local factionStandingtext = DB.InfoColor..L["Paragon"]..floor(currentValue/threshold)
+				if currentValue then
+					local barValue = mod(currentValue, threshold)
+					local factionStandingtext = DB.InfoColor..L["Paragon"]..floor(currentValue/threshold)
 
-				factionBar:SetMinMaxValues(0, threshold)
-				factionBar:SetValue(barValue)
-				factionStanding:SetText(factionStandingtext)
-				factionRow.standingText = factionStandingtext
-				factionRow.rolloverText = DB.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+					factionBar:SetMinMaxValues(0, threshold)
+					factionBar:SetValue(barValue)
+					factionStanding:SetText(factionStandingtext)
+					factionRow.standingText = factionStandingtext
+					factionRow.rolloverText = DB.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+				end
 			end
 		end
 	end
