@@ -125,7 +125,7 @@ end
 local function BuildCooldownTable()
 	for KEY, VALUE in pairs(AuraList) do
 		for spellID, value in pairs(VALUE.List) do
-			if value.SpellID then
+			if value.SpellID or value.ItemID or value.SlotID or value.TotemID then
 				if not cooldownTable[KEY] then cooldownTable[KEY] = {} end
 				cooldownTable[KEY][spellID] = true
 			end
