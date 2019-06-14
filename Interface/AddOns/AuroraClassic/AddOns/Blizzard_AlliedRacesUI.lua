@@ -11,7 +11,7 @@ C.themes["Blizzard_AlliedRacesUI"] = function()
 	scrollFrame.Child.RaceDescriptionText:SetTextColor(1, 1, 1)
 	scrollFrame.Child.RacialTraitsLabel:SetTextColor(1, .8, 0)
 
-	AlliedRacesFrame:HookScript("OnShow", function(self)
+	AlliedRacesFrame:HookScript("OnShow", function()
 		local parent = scrollFrame.Child
 		for i = 1, parent:GetNumChildren() do
 			local bu = select(i, parent:GetChildren())

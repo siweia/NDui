@@ -65,15 +65,13 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	for i = 1, 7 do
 		local bag = BankSlotsFrame["Bag"..i]
-		local _, highlightFrame = bag:GetChildren()
 		local border = bag.IconBorder
 		local searchOverlay = bag.searchOverlay
 
 		bag:SetNormalTexture("")
 		bag:SetPushedTexture("")
 		bag:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
-		--highlightFrame:GetRegions():SetTexture(C.media.checked)
+		bag.SlotHighlightTexture:SetTexture(C.media.checked)
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.dummy

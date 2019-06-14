@@ -28,7 +28,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			local titleButton = _G["GossipTitleButton"..index]
 			while titleButton do
 				if titleButton:GetText() ~= nil then
-					titleButton:SetText(string.gsub(titleButton:GetText(), ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59"))
+					titleButton:SetText(gsub(titleButton:GetText(), ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59"))
 				end
 				index = index + 1
 				titleButton = _G["GossipTitleButton"..index]
