@@ -84,6 +84,7 @@ function Bar:OnLogin()
 	self:CreateStancebar()
 	self:HideBlizz()
 	self:ReskinBars()
+	self:HookOnEnter()
 
 	--vehicle fix
 	local function getActionTexture(button)
