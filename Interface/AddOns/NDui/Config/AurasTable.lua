@@ -1,8 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("AurasTable")
-local pairs, next, tonumber, format = pairs, next, tonumber, string.format
+local pairs, next, tonumber, format, wipe = pairs, next, tonumber, string.format, wipe
 
+-- AuraWatch
+local AuraWatchList = {}
 local groups = {
 	-- groups name = direction, interval, mode, iconsize, position, barwidth
 	["Player Aura"] = {"LEFT", 5, "ICON", 22, C.Auras.PlayerAuraPos},
@@ -17,8 +19,17 @@ local groups = {
 	["InternalCD"] = {"UP", 5, "BAR", 18, C.Auras.InternalPos, 150},
 }
 
--- AuraWatch
-local AuraWatchList = {}
+local function newAuraFormat(value)
+	local newTable = {}
+	for _, v in pairs(value) do
+		local id = v.AuraID or v.SpellID or v.ItemID or v.SlotID or v.TotemID or v.IntID
+		if id then
+			newTable[id] = v
+		end
+	end
+	return newTable
+end
+
 function module:AddNewAuraWatch(class, list)
 	for _, k in pairs(list) do
 		for _, v in pairs(k) do
@@ -48,9 +59,25 @@ function module:AddNewAuraWatch(class, list)
 			IconSize = size,
 			Pos = pos,
 			BarWidth = width,
-			List = v
+			List = newAuraFormat(v)
 		})
 	end
+end
+
+function module:AddDeprecatedGroup()
+	if not NDuiDB["AuraWatch"]["DeprecatedAuras"] then return end
+
+	for name, value in pairs(C.DeprecatedAuras) do
+		for _, list in pairs(AuraWatchList["ALL"]) do
+			if list.Name == name then
+				local newTable = newAuraFormat(value)
+				for spellID, v in pairs(newTable) do
+					list.List[spellID] = v
+				end
+			end
+		end
+	end
+	wipe(C.DeprecatedAuras)
 end
 
 -- RaidFrame spells
@@ -80,13 +107,6 @@ function module:RegisterDebuff(_, instID, _, spellID, level)
 end
 
 function module:OnLogin()
-	-- Wipe old stuff
-	for spellID in pairs(NDuiADB["RaidDebuffs"]) do
-		if spellID and tonumber(spellID) then
-			NDuiADB["RaidDebuffs"] = {}
-			break
-		end
-	end
 	for instName, value in pairs(RaidDebuffs) do
 		for spell, priority in pairs(value) do
 			if NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell] and NDuiADB["RaidDebuffs"][instName][spell] == priority then
@@ -100,6 +120,7 @@ function module:OnLogin()
 		end
 	end
 
+	self:AddDeprecatedGroup()
 	C.AuraWatchList = AuraWatchList
 	C.RaidBuffs = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
