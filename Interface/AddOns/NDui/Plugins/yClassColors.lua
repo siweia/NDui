@@ -10,6 +10,8 @@ local format, strsplit, ipairs, tinsert = string.format, string.split, ipairs, t
 -- Colors
 local function classColor(class, showRGB)
 	local color = DB.ClassColors[DB.ClassList[class] or class]
+	if not color then color = DB.ClassColors["PRIEST"] end
+
 	if showRGB then
 		return color.r, color.g, color.b
 	else
