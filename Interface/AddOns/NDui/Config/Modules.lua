@@ -4,11 +4,9 @@ local _, C = unpack(ns)
 
 -- BUFF/DEBUFF相关
 C.Auras = {
-	IconSize		= 32,												-- BUFF及相关职业助手图标大小
-	IconsPerRow		= 14,												-- BUFF每行个数
-	Spacing			= 5,												-- BUFF图标间距
 	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, 0},			-- BUFF默认位置
 
+	IconSize		= 32,												-- 相关职业助手图标大小
 	TotemsPos		= {"CENTER", UIParent, "CENTER", 0, -190},			-- 图腾助手默认位置
 	StatuePos		= {"TOPRIGHT", UIParent, "BOTTOM", -460, 300},		-- 武僧雕像默认位置
 
