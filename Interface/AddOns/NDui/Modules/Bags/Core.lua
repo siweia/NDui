@@ -212,20 +212,22 @@ end
 
 local deleteEnable
 function module:CreateDeleteButton()
-	if not NDuiDB["Bags"]["DeleteButton"] then return end
+	local disabledText = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t"..L["ItemDeleteMode"]
+	local enabledText = disabledText.."\n\n"..DB.InfoColor..L["DeleteMode Enabled"]
 
 	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Buttons\\UI-GroupLoot-Pass-Up")
-	bu:SetScript("OnClick", function()
+	bu:SetScript("OnClick", function(self)
 		deleteEnable = not deleteEnable
 		if deleteEnable then
-			bu:SetBackdropBorderColor(1, .8, 0)
-			print("|cff33ff33"..L["DeleteMode Enabled"])
+			self:SetBackdropBorderColor(1, .8, 0)
+			self.text = enabledText
 		else
-			bu:SetBackdropBorderColor(0, 0, 0)
-			print("|cffff5040"..L["DeleteMode Disabled"])
+			self:SetBackdropBorderColor(0, 0, 0)
+			self.text = disabledText
 		end
+		self:GetScript("OnEnter")(self)
 	end)
-	B.AddTooltip(bu, "ANCHOR_TOP", "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t"..L["ItemDeleteMode"])
+	B.AddTooltip(bu, "ANCHOR_TOP", disabledText)
 
 	return bu
 end
@@ -242,9 +244,20 @@ end
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
 
+	-- Settings
+	local bagsScale = NDuiDB["Bags"]["BagsScale"]
+	local bagsWidth = NDuiDB["Bags"]["BagsWidth"]
+	local bankWidth = NDuiDB["Bags"]["BankWidth"]
+	local iconSize = NDuiDB["Bags"]["IconSize"]
+	local artifaceMark = NDuiDB["Bags"]["Artifact"]
+	local showItemLevel = NDuiDB["Bags"]["BagsiLvl"]
+	local deleteButton = NDuiDB["Bags"]["DeleteButton"]
+	local itemSetFilter = NDuiDB["Bags"]["ItemSetFilter"]
+
+	-- Init
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
 	Backpack:RegisterBlizzard()
-	Backpack:SetScale(NDuiDB["Bags"]["BagsScale"])
+	Backpack:SetScale(bagsScale)
 	Backpack:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
 	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
@@ -254,46 +267,46 @@ function module:OnLogin()
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
 
-		f.main = MyContainer:New("Main", {Columns = NDuiDB["Bags"]["BagsWidth"], Bags = "bags"})
+		f.main = MyContainer:New("Main", {Columns = bagsWidth, Bags = "bags"})
 		f.main:SetFilter(onlyBags, true)
 		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 
-		f.junk = MyContainer:New("Junk", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
+		f.junk = MyContainer:New("Junk", {Columns = bagsWidth, Parent = f.main})
 		f.junk:SetFilter(bagsJunk, true)
 
-		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
+		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = bagsWidth, Parent = f.main})
 		f.azeriteItem:SetFilter(bagAzeriteItem, true)
 
-		f.equipment = MyContainer:New("Equipment", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
+		f.equipment = MyContainer:New("Equipment", {Columns = bagsWidth, Parent = f.main})
 		f.equipment:SetFilter(bagEquipment, true)
 
-		f.consumble = MyContainer:New("Consumble", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
+		f.consumble = MyContainer:New("Consumble", {Columns = bagsWidth, Parent = f.main})
 		f.consumble:SetFilter(bagConsumble, true)
 
-		f.bagCompanion = MyContainer:New("BagCompanion", {Columns = NDuiDB["Bags"]["BagsWidth"], Parent = f.main})
+		f.bagCompanion = MyContainer:New("BagCompanion", {Columns = bagsWidth, Parent = f.main})
 		f.bagCompanion:SetFilter(bagMountPet, true)
 
-		f.bank = MyContainer:New("Bank", {Columns = NDuiDB["Bags"]["BankWidth"], Bags = "bank"})
+		f.bank = MyContainer:New("Bank", {Columns = bankWidth, Bags = "bank"})
 		f.bank:SetFilter(onlyBank, true)
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
 		f.bank:Hide()
 
-		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
+		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = bankWidth, Parent = f.bank})
 		f.bankAzeriteItem:SetFilter(bankAzeriteItem, true)
 
-		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
+		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = bankWidth, Parent = f.bank})
 		f.bankLegendary:SetFilter(bankLegendary, true)
 
-		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
+		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = bankWidth, Parent = f.bank})
 		f.bankEquipment:SetFilter(bankEquipment, true)
 
-		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
+		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = bankWidth, Parent = f.bank})
 		f.bankConsumble:SetFilter(bankConsumble, true)
 
-		f.bankCompanion = MyContainer:New("BankCompanion", {Columns = NDuiDB["Bags"]["BankWidth"], Parent = f.bank})
+		f.bankCompanion = MyContainer:New("BankCompanion", {Columns = bankWidth, Parent = f.bank})
 		f.bankCompanion:SetFilter(bankMountPet, true)
 
-		f.reagent = MyContainer:New("Reagent", {Columns = NDuiDB["Bags"]["BankWidth"]})
+		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth})
 		f.reagent:SetFilter(onlyReagent, true)
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
@@ -315,7 +328,6 @@ function module:OnLogin()
 	local MyButton = Backpack:GetItemButtonClass()
 	MyButton:Scaffold("Default")
 
-	local iconSize = NDuiDB["Bags"]["IconSize"]
 	function MyButton:OnCreate()
 		self:SetNormalTexture(nil)
 		self:SetPushedTexture(nil)
@@ -342,21 +354,21 @@ function module:OnLogin()
 		self.Azerite:SetAtlas("AzeriteIconFrame")
 		self.Azerite:SetAllPoints()
 
-		if NDuiDB["Bags"]["Artifact"] then
+		if artifaceMark then
 			self.Artifact = self:CreateTexture(nil, "ARTWORK")
 			self.Artifact:SetAtlas("collections-icon-favorites")
 			self.Artifact:SetSize(35, 35)
 			self.Artifact:SetPoint("TOPLEFT", -12, 10)
 		end
 
-		if NDuiDB["Bags"]["BagsiLvl"] then
+		if showItemLevel then
 			self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 1)
 		end
 
 		self.glowFrame = B.CreateBG(self, 4)
 		self.glowFrame:SetSize(iconSize+8, iconSize+8)
 
-		if NDuiDB["Bags"]["DeleteButton"] then
+		if deleteButton then
 			self:HookScript("OnClick", deleteButtonOnClick)
 		end
 	end
@@ -386,7 +398,7 @@ function module:OnLogin()
 			self.Azerite:SetAlpha(0)
 		end
 
-		if NDuiDB["Bags"]["Artifact"] then
+		if artifaceMark then
 			if item.rarity == LE_ITEM_QUALITY_ARTIFACT or item.id == 138019 then
 				self.Artifact:SetAlpha(1)
 			else
@@ -394,7 +406,7 @@ function module:OnLogin()
 			end
 		end
 
-		if NDuiDB["Bags"]["BagsiLvl"] then
+		if showItemLevel then
 			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR) then
 				local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
 				local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
@@ -455,7 +467,7 @@ function module:OnLogin()
 		if strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]
 		elseif strmatch(name, "Equipment$") then
-			if NDuiDB["Bags"]["ItemSetFilter"] then
+			if itemSetFilter then
 				label = L["Equipement Set"]
 			else
 				label = BAG_FILTER_EQUIPMENT
@@ -479,7 +491,7 @@ function module:OnLogin()
 			module.CreateBagBar(self, settings, 4)
 			buttons[2] = module.CreateRestoreButton(self, f)
 			buttons[3] = module.CreateBagToggle(self)
-			buttons[5] = module.CreateDeleteButton(self)
+			if deleteButton then buttons[5] = module.CreateDeleteButton(self) end
 		elseif name == "Bank" then
 			module.CreateBagBar(self, settings, 7)
 			buttons[2] = module.CreateReagentButton(self, f)

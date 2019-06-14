@@ -120,7 +120,7 @@ local function tooltipOnEnter(self)
 		elseif self.color == "system" then
 			r, g, b = 1, .8, 0
 		end
-		GameTooltip:AddLine(self.text, r, g, b)
+		GameTooltip:AddLine(self.text, r, g, b, 1)
 	end
 	GameTooltip:Show()
 end
