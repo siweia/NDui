@@ -1,7 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local TT = B:GetModule("Tooltip")
 
-local function insertPetIcon(self, petType)
+function TT:InsertPetIcon(petType)
 	if not self.petIcon then
 		local f = self:CreateTexture(nil, "OVERLAY")
 		f:SetPoint("TOPRIGHT", -5, -5)
@@ -20,16 +21,15 @@ GameTooltip:HookScript("OnTooltipCleared", function(self)
 	end
 end)
 
-local function addPetInfo(self)
+GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	local _, unit = self:GetUnit()
 	if not unit then return end
 	if not UnitIsBattlePet(unit) then return end
 
 	-- Pet Species icon
-	insertPetIcon(self, UnitBattlePetType(unit))
+	TT.InsertPetIcon(self, UnitBattlePetType(unit))
 
 	-- Pet ID
 	local speciesID = UnitBattlePetSpeciesID(unit)
 	self:AddDoubleLine(PET..ID..":", ((DB.InfoColor..speciesID.."|r") or (DB.GreyColor..UNKNOWN.."|r")))
-end
-GameTooltip:HookScript("OnTooltipSetUnit", addPetInfo)
+end)

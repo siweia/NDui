@@ -1,8 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Tooltip")
+local TT = B:GetModule("Tooltip")
 
-function module:ExtraTipInfo()
+function TT:ExtraTipInfo()
 	local strmatch, format, tonumber = string.match, string.format, tonumber
 	local UnitAura, GetItemCount, GetItemInfo, GetUnitName, GetCurrencyListLink = UnitAura, GetItemCount, GetItemInfo, GetUnitName, GetCurrencyListLink
 	local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink

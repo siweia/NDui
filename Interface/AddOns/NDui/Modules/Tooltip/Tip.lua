@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB, F = unpack(ns)
-local module = B:RegisterModule("Tooltip")
+local TT = B:RegisterModule("Tooltip")
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -14,7 +14,7 @@ local PVP, FACTION_HORDE, FACTION_ALLIANCE, LEVEL, YOU, TARGET = PVP, FACTION_HO
 local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
 local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
 
-function module:GetUnit(self)
+function TT:GetUnit(self)
 	local _, unit = self and self:GetUnit()
 	if not unit then
 		local mFocus = GetMouseFocus()
@@ -23,7 +23,7 @@ function module:GetUnit(self)
 	return unit
 end
 
-function module:HideLines(self)
+function TT:HideLines(self)
     for i = 3, self:NumLines() do
         local tiptext = _G["GameTooltipTextLeft"..i]
 		local linetext = tiptext:GetText()
@@ -50,7 +50,7 @@ function module:HideLines(self)
     end
 end
 
-function module:GetLevelLine(self)
+function TT:GetLevelLine(self)
 	for i = 2, self:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i]
 		local linetext = tiptext:GetText()
@@ -60,7 +60,7 @@ function module:GetLevelLine(self)
 	end
 end
 
-function module:GetTarget(unit)
+function TT:GetTarget(unit)
 	if UnitIsUnit(unit, "player") then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
@@ -68,7 +68,7 @@ function module:GetTarget(unit)
 	end
 end
 
-function module:InsertFactionFrame(self, faction)
+function TT:InsertFactionFrame(self, faction)
 	if not self.factionFrame then
 		local f = self:CreateTexture(nil, "OVERLAY")
 		f:SetPoint("TOPRIGHT", 0, -5)
@@ -86,7 +86,7 @@ local roleTex = {
 	["DAMAGER"] = {.66, .813, .133, .445},
 }
 
-function module:InsertRoleFrame(self, role)
+function TT:InsertRoleFrame(self, role)
 	if not self.roleFrame then
 		local f = self:CreateTexture(nil, "OVERLAY")
 		f:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, -2)
@@ -100,7 +100,7 @@ function module:InsertRoleFrame(self, role)
 	self.roleFrame.Shadow:SetAlpha(1)
 end
 
-function module:OnTooltipCleared()
+function TT:OnTooltipCleared()
 	if self.factionFrame and self.factionFrame:GetAlpha() ~= 0 then
 		self.factionFrame:SetAlpha(0)
 	end
@@ -110,14 +110,14 @@ function module:OnTooltipCleared()
 	end
 end
 
-function module:OnTooltipSetUnit()
+function TT:OnTooltipSetUnit()
 	if self:IsForbidden() then return end
 	if NDuiDB["Tooltip"]["CombatHide"] and InCombatLockdown() then
 		return self:Hide()
 	end
-	module:HideLines(self)
+	TT:HideLines(self)
 
-	local unit = module:GetUnit(self)
+	local unit = TT:GetUnit(self)
 	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
 		local hexColor = B.HexRGB(B.UnitColor(unit))
@@ -155,14 +155,14 @@ function module:OnTooltipSetUnit()
 			if NDuiDB["Tooltip"]["FactionIcon"] then
 				local faction = UnitFactionGroup(unit)
 				if faction and faction ~= "Neutral" then
-					module:InsertFactionFrame(self, faction)
+					TT:InsertFactionFrame(self, faction)
 				end
 			end
 
 			if NDuiDB["Tooltip"]["LFDRole"] then
 				local role = UnitGroupRolesAssigned(unit)
 				if role ~= "NONE" then
-					module:InsertRoleFrame(self, role)
+					TT:InsertRoleFrame(self, role)
 				end
 			end
 
@@ -206,7 +206,7 @@ function module:OnTooltipSetUnit()
 			local diff = GetCreatureDifficultyColor(level)
 			local classify = UnitClassification(unit)
 			local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
-			local tiptextLevel = module:GetLevelLine(self)
+			local tiptextLevel = TT:GetLevelLine(self)
 			if tiptextLevel then
 				local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
 				local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
@@ -217,7 +217,7 @@ function module:OnTooltipSetUnit()
 		if UnitExists(unit.."target") then
 			local tarRicon = GetRaidTargetIndex(unit.."target")
 			if tarRicon and tarRicon > 8 then tarRicon = nil end
-			local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", module:GetTarget(unit.."target"))
+			local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", TT:GetTarget(unit.."target"))
 			self:AddLine(TARGET..": "..tar)
 		end
 
@@ -230,10 +230,10 @@ function module:OnTooltipSetUnit()
 		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
 	end
 
-	module.InspectUnitSpecAndLevel(self)
+	TT.InspectUnitSpecAndLevel(self)
 end
 
-function module:StatusBar_OnValueChanged(value)
+function TT:StatusBar_OnValueChanged(value)
 	if self:IsForbidden() or not value then return end
 	local min, max = self:GetMinMaxValues()
 	if (value < min) or (value > max) then return end
@@ -249,7 +249,7 @@ function module:StatusBar_OnValueChanged(value)
 	end
 end
 
-function module:ReskinStatusBar()
+function TT:ReskinStatusBar()
 	GameTooltipStatusBar:ClearAllPoints()
 	GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", C.mult, 3)
 	GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -C.mult, 3)
@@ -261,7 +261,7 @@ function module:ReskinStatusBar()
 	B.CreateTex(bg)
 end
 
-function module:GameTooltip_ShowStatusBar()
+function TT:GameTooltip_ShowStatusBar()
 	if self.statusBarPool then
 		local bar = self.statusBarPool:Acquire()
 		if bar and not bar.styled then
@@ -275,7 +275,7 @@ function module:GameTooltip_ShowStatusBar()
 	end
 end
 
-function module:GameTooltip_ShowProgressBar()
+function TT:GameTooltip_ShowProgressBar()
 	if self.progressBarPool then
 		local bar = self.progressBarPool:Acquire()
 		if bar and not bar.styled then
@@ -290,7 +290,7 @@ end
 
 -- Anchor and mover
 local mover
-function module:GameTooltip_SetDefaultAnchor(parent)
+function TT:GameTooltip_SetDefaultAnchor(parent)
 	if NDuiDB["Tooltip"]["Cursor"] then
 		self:SetOwner(parent, "ANCHOR_CURSOR_RIGHT")
 	else
@@ -358,12 +358,12 @@ function B:ReskinTooltip()
 	end
 end
 
-function module:GameTooltip_SetBackdropStyle()
+function TT:GameTooltip_SetBackdropStyle()
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
 end
 
-function module:OnLogin()
+function TT:OnLogin()
 	self:ReskinStatusBar()
 	GameTooltip:HookScript("OnTooltipCleared", self.OnTooltipCleared)
 	GameTooltip:HookScript("OnTooltipSetUnit", self.OnTooltipSetUnit)
@@ -377,11 +377,12 @@ function module:OnLogin()
 	self:ExtraTipInfo()
 	self:TargetedInfo()
 	self:AzeriteArmor()
+	self:ReskinIconsInTooltip()
 end
 
 -- Tooltip Skin Registration
 local tipTable = {}
-function module:RegisterTooltips(addon, func)
+function TT:RegisterTooltips(addon, func)
 	tipTable[addon] = func
 end
 local function addonStyled(_, addon)
@@ -392,7 +393,7 @@ local function addonStyled(_, addon)
 end
 B:RegisterEvent("ADDON_LOADED", addonStyled)
 
-module:RegisterTooltips("NDui", function()
+TT:RegisterTooltips("NDui", function()
 	if F then
 		AuroraOptionstooltips:SetAlpha(0)
 		AuroraOptionstooltips:Disable()
@@ -518,7 +519,7 @@ module:RegisterTooltips("NDui", function()
 	end
 end)
 
-module:RegisterTooltips("Blizzard_DebugTools", function()
+TT:RegisterTooltips("Blizzard_DebugTools", function()
 	B.ReskinTooltip(FrameStackTooltip)
 	B.ReskinTooltip(EventTraceTooltip)
 	FrameStackTooltip:SetScale(UIParent:GetScale())
@@ -526,7 +527,7 @@ module:RegisterTooltips("Blizzard_DebugTools", function()
 	EventTraceTooltip:SetFrameStrata("TOOLTIP")
 end)
 
-module:RegisterTooltips("Blizzard_Collections", function()
+TT:RegisterTooltips("Blizzard_Collections", function()
 	PetJournalPrimaryAbilityTooltip:HookScript("OnShow", B.ReskinTooltip)
 	PetJournalSecondaryAbilityTooltip:HookScript("OnShow", B.ReskinTooltip)
 	PetJournalPrimaryAbilityTooltip.Delimiter1:SetHeight(1)
@@ -535,7 +536,7 @@ module:RegisterTooltips("Blizzard_Collections", function()
 	PetJournalPrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
 end)
 
-module:RegisterTooltips("Blizzard_GarrisonUI", function()
+TT:RegisterTooltips("Blizzard_GarrisonUI", function()
 	local gt = {
 		GarrisonMissionMechanicTooltip,
 		GarrisonMissionMechanicFollowerCounterTooltip,
@@ -550,17 +551,17 @@ module:RegisterTooltips("Blizzard_GarrisonUI", function()
 	end
 end)
 
-module:RegisterTooltips("Blizzard_PVPUI", function()
+TT:RegisterTooltips("Blizzard_PVPUI", function()
 	ConquestTooltip:HookScript("OnShow", B.ReskinTooltip)
 end)
 
-module:RegisterTooltips("Blizzard_Contribution", function()
+TT:RegisterTooltips("Blizzard_Contribution", function()
 	ContributionBuffTooltip:HookScript("OnShow", B.ReskinTooltip)
 	ContributionBuffTooltip.Icon:SetTexCoord(unpack(DB.TexCoord))
 	ContributionBuffTooltip.Border:SetAlpha(0)
 end)
 
-module:RegisterTooltips("Blizzard_EncounterJournal", function()
+TT:RegisterTooltips("Blizzard_EncounterJournal", function()
 	EncounterJournalTooltip:HookScript("OnShow", B.ReskinTooltip)
 	EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(DB.TexCoord))
 	EncounterJournalTooltip.Item1.IconBorder:SetAlpha(0)
@@ -568,12 +569,12 @@ module:RegisterTooltips("Blizzard_EncounterJournal", function()
 	EncounterJournalTooltip.Item2.IconBorder:SetAlpha(0)
 end)
 
-module:RegisterTooltips("Blizzard_Calendar", function()
+TT:RegisterTooltips("Blizzard_Calendar", function()
 	CalendarContextMenu:HookScript("OnShow", B.ReskinTooltip)
 	CalendarInviteStatusContextMenu:HookScript("OnShow", B.ReskinTooltip)
 end)
 
-module:RegisterTooltips("Blizzard_IslandsQueueUI", function()
+TT:RegisterTooltips("Blizzard_IslandsQueueUI", function()
 	local tooltip = IslandsQueueFrameTooltip:GetParent()
 	tooltip.IconBorder:SetAlpha(0)
 	tooltip.Icon:SetTexCoord(unpack(DB.TexCoord))

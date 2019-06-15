@@ -1,9 +1,9 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Tooltip")
+local TT = B:GetModule("Tooltip")
 
 -- Credit: AzeriteTooltip, by jokair9
-function module:AzeriteArmor()
+function TT:AzeriteArmor()
 	if not NDuiDB["Tooltip"]["AzeriteArmor"] then return end
 	if IsAddOnLoaded("AzeriteTooltip") then return end
 

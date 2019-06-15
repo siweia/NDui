@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Tooltip")
+local TT = B:GetModule("Tooltip")
 
 -- Credit: Cloudy Unit Info, by Cloudyfa
 local cache, weapon, currentUNIT, currentGUID = {}, {}
@@ -20,7 +20,7 @@ local function updateInspect(self, elapsed)
 		ClearInspectPlayer()
 
 		if currentUNIT and UnitGUID(currentUNIT) == currentGUID then
-			B:RegisterEvent("INSPECT_READY", module.GetInspectInfo)
+			B:RegisterEvent("INSPECT_READY", TT.GetInspectInfo)
 			NotifyInspect(currentUNIT)
 		end
 	end
@@ -36,33 +36,33 @@ local function resetUnit(_, btn)
 end
 B:RegisterEvent("MODIFIER_STATE_CHANGED", resetUnit)
 
-function module:GetInspectInfo(...)
+function TT:GetInspectInfo(...)
 	if self == "UNIT_INVENTORY_CHANGED" then
 		local unit = ...
 		if UnitGUID(unit) == currentGUID then
-			module:InspectUnit(unit, true)
+			TT:InspectUnit(unit, true)
 		end
 	elseif self == "INSPECT_READY" then
 		local guid = ...
 		if guid == currentGUID then
-			local spec = module:GetUnitSpec(currentUNIT)
-			local level = module:GetUnitItemLevel(currentUNIT)
+			local spec = TT:GetUnitSpec(currentUNIT)
+			local level = TT:GetUnitItemLevel(currentUNIT)
 			cache[guid].spec = spec
 			cache[guid].level = level
 			cache[guid].getTime = GetTime()
 
 			if spec and level then
-				module:SetupTooltip(spec, level)
+				TT:SetupTooltip(spec, level)
 			else
-				module:InspectUnit(currentUNIT, true)
+				TT:InspectUnit(currentUNIT, true)
 			end
 		end
-		B:UnregisterEvent(self, module.GetInspectInfo)
+		B:UnregisterEvent(self, TT.GetInspectInfo)
 	end
 end
-B:RegisterEvent("UNIT_INVENTORY_CHANGED", module.GetInspectInfo)
+B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
-function module:SetupTooltip(spec, level)
+function TT:SetupTooltip(spec, level)
 	local _, unit = GameTooltip:GetUnit()
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
@@ -92,7 +92,7 @@ function module:SetupTooltip(spec, level)
 	end
 end
 
-function module:GetUnitItemLevel(unit)
+function TT:GetUnitItemLevel(unit)
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
 	local class = select(2, UnitClass(unit))
@@ -192,7 +192,7 @@ function module:GetUnitItemLevel(unit)
 	return ilvl
 end
 
-function module:GetUnitSpec(unit)
+function TT:GetUnitSpec(unit)
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
 	local specName
@@ -211,7 +211,7 @@ function module:GetUnitSpec(unit)
 	return specName
 end
 
-function module:InspectUnit(unit, forced)
+function TT:InspectUnit(unit, forced)
 	local spec, level
 
 	if UnitIsUnit(unit, "player") then
@@ -237,7 +237,7 @@ function module:InspectUnit(unit, forced)
 	end
 end
 
-function module:InspectUnitSpecAndLevel()
+function TT:InspectUnitSpecAndLevel()
 	if NDuiDB["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
 
 	local _, unit = self:GetUnit()
@@ -246,5 +246,5 @@ function module:InspectUnitSpecAndLevel()
 	currentUNIT, currentGUID = unit, UnitGUID(unit)
 	if not cache[currentGUID] then cache[currentGUID] = {} end
 
-	module:InspectUnit(unit)
+	TT:InspectUnit(unit)
 end

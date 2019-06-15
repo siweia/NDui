@@ -1,7 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local TT = B:GetModule("Tooltip")
 
-local orig1, orig2 = {}, {}
+local strmatch, strsplit, tonumber = string.match, string.split, tonumber
+local orig1, orig2, sectionInfo = {}, {}
+
 local linktypes = {
 	item = true,
 	enchant = true,
@@ -15,10 +18,8 @@ local linktypes = {
 	currency = true,
 	keystone = true,
 }
-local strmatch, strsplit, tonumber = string.match, string.split, tonumber
 
-local sectionInfo
-local function OnHyperlinkEnter(frame, link, ...)
+function TT.OnHyperlinkEnter(frame, link, ...)
 	local linktype = strmatch(link, "^([^:]+)")
 	if linktype and linktype == "battlepet" then
 		GameTooltip:SetOwner(frame, "ANCHOR_TOPRIGHT", -3, 5)
@@ -57,7 +58,7 @@ local function OnHyperlinkEnter(frame, link, ...)
 	if orig1[frame] then return orig1[frame](frame, link, ...) end
 end
 
-local function OnHyperlinkLeave(frame, _, ...)
+function TT.OnHyperlinkLeave(frame, _, ...)
 	BattlePetTooltip:Hide()
 	GameTooltip:Hide()
 
@@ -67,16 +68,16 @@ end
 for i = 1, NUM_CHAT_WINDOWS do
 	local frame = _G["ChatFrame"..i]
 	orig1[frame] = frame:GetScript("OnHyperlinkEnter")
-	frame:SetScript("OnHyperlinkEnter", OnHyperlinkEnter)
+	frame:SetScript("OnHyperlinkEnter", TT.OnHyperlinkEnter)
 
 	orig2[frame] = frame:GetScript("OnHyperlinkLeave")
-	frame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
+	frame:SetScript("OnHyperlinkLeave", TT.OnHyperlinkLeave)
 end
 
 local function hookCommunitiesFrame(event, addon)
 	if addon == "Blizzard_Communities" then
-		CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkEnter", OnHyperlinkEnter)
-		CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
+		CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkEnter", TT.OnHyperlinkEnter)
+		CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkLeave", TT.OnHyperlinkLeave)
 
 		B:UnregisterEvent(event, hookCommunitiesFrame)
 	end
