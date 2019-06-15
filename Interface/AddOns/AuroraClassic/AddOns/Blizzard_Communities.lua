@@ -228,17 +228,6 @@ C.themes["Blizzard_Communities"] = function()
 		F.CreateBDFrame(dialog.Description, .25)
 		F.StripTextures(dialog.MessageOfTheDay)
 		F.CreateBDFrame(dialog.MessageOfTheDay, .25)
-
-		if C.isNewPatch then
-			dialog.BG:Hide()
-			F.ReskinCheck(dialog.ShouldListClub.Button)
-			F.ReskinCheck(dialog.AutoAcceptApplications.Button)
-			F.ReskinCheck(dialog.MaxLevelOnly.Button)
-			F.ReskinCheck(dialog.MinIlvlOnly.Button)
-			F.ReskinInput(dialog.MinIlvlOnly.EditBox)
-			F.ReskinDropDown(dialog.ClubFocusDropdown)
-			F.ReskinDropDown(dialog.LookingForDropdown)
-		end
 	end
 
 	do
