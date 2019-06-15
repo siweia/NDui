@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("GUI")
+local G = B:GetModule("GUI")
 
 local function sortBars(barTable)
 	local num = 1
@@ -51,7 +51,7 @@ end
 
 local function clearEdit(options)
 	for i = 1, #options do
-		module:ClearEdit(options[i])
+		G:ClearEdit(options[i])
 	end
 end
 
@@ -61,7 +61,7 @@ local function updateRaidDebuffs()
 	B:GetModule("UnitFrames"):UpdateRaidDebuffs()
 end
 
-function module:SetupRaidDebuffs(parent)
+function G:SetupRaidDebuffs(parent)
 	toggleExtraGUI("NDuiGUI_RaidDebuffs")
 	if raidDebuffsGUI then return end
 
@@ -72,11 +72,11 @@ function module:SetupRaidDebuffs(parent)
 	local frame = raidDebuffsGUI.bg
 	local bars, options = {}, {}
 
-	local iType = module:CreateDropdown(frame, L["Type*"], 10, -30, {DUNGEONS, RAID}, L["Instance Type"])
+	local iType = G:CreateDropdown(frame, L["Type*"], 10, -30, {DUNGEONS, RAID}, L["Instance Type"])
 	for i = 1, 2 do
 		iType.options[i]:HookScript("OnClick", function()
 			for j = 1, 2 do
-				module:ClearEdit(options[j])
+				G:ClearEdit(options[j])
 				if i == j then
 					options[j]:Show()
 				else
@@ -101,13 +101,13 @@ function module:SetupRaidDebuffs(parent)
 		[3] = EJ_GetInstanceInfo(1177),
 	}
 
-	options[1] = module:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
+	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
-	options[2] = module:CreateDropdown(frame, RAID.."*", 120, -30, raids, L["Raid Intro"], 130, 30)
+	options[2] = G:CreateDropdown(frame, RAID.."*", 120, -30, raids, L["Raid Intro"], 130, 30)
 	options[2]:Hide()
 
-	options[3] = module:CreateEditbox(frame, "ID*", 10, -90, L["ID Intro"])
-	options[4] = module:CreateEditbox(frame, L["Priority"], 120, -90, L["Priority Intro"])
+	options[3] = G:CreateEditbox(frame, "ID*", 10, -90, L["ID Intro"])
+	options[4] = G:CreateEditbox(frame, L["Priority"], 120, -90, L["Priority Intro"])
 
 	local function analyzePrio(priority)
 		priority = priority or 2
@@ -144,11 +144,11 @@ function module:SetupRaidDebuffs(parent)
 		if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
 		NDuiADB["RaidDebuffs"][instName][spellID] = priority
 		setupBars(instName)
-		module:ClearEdit(options[3])
-		module:ClearEdit(options[4])
+		G:ClearEdit(options[3])
+		G:ClearEdit(options[4])
 	end
 
-	local scroll = module:CreateScroll(frame, 240, 350)
+	local scroll = G:CreateScroll(frame, 240, 350)
 	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
 	scroll.reset:SetPoint("TOPLEFT", 10, -140)
 	StaticPopupDialogs["RESET_NDUI_RAIDDEBUFFS"] = {
@@ -190,7 +190,7 @@ function module:SetupRaidDebuffs(parent)
 		B.CreateBD(bar, .3)
 		bar.index = index
 
-		local icon, close = module:CreateBarWidgets(bar, texture)
+		local icon, close = G:CreateBarWidgets(bar, texture)
 		icon:SetScript("OnEnter", iconOnEnter)
 		icon:SetScript("OnLeave", B.HideTooltip)
 		bar.icon = icon
@@ -306,7 +306,7 @@ function module:SetupRaidDebuffs(parent)
 	raidDebuffsGUI:HookScript("OnShow", autoSelectInstance)
 end
 
-function module:SetupClickCast(parent)
+function G:SetupClickCast(parent)
 	toggleExtraGUI("NDuiGUI_ClickCast")
 	if clickCastGUI then return end
 
@@ -334,7 +334,7 @@ function module:SetupClickCast(parent)
 		B.CreateBD(bar, .3)
 		barTable[clickSet] = bar
 
-		local icon, close = module:CreateBarWidgets(bar, texture)
+		local icon, close = G:CreateBarWidgets(bar, texture)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", value, "system")
 		close:SetScript("OnClick", function()
 			bar:Hide()
@@ -363,11 +363,11 @@ function module:SetupClickCast(parent)
 		L["WheelDown"],
 	}, {}
 
-	options[1] = module:CreateEditbox(frame, L["Action*"], 10, -30, L["Action Intro"], 260, 30)
-	options[2] = module:CreateDropdown(frame, L["Key*"], 10, -90, keyList, L["Key Intro"], 120, 30)
-	options[3] = module:CreateDropdown(frame, L["Modified Key"], 170, -90, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 85, 30)
+	options[1] = G:CreateEditbox(frame, L["Action*"], 10, -30, L["Action Intro"], 260, 30)
+	options[2] = G:CreateDropdown(frame, L["Key*"], 10, -90, keyList, L["Key Intro"], 120, 30)
+	options[3] = G:CreateDropdown(frame, L["Modified Key"], 170, -90, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 85, 30)
 
-	local scroll = module:CreateScroll(frame, 240, 350)
+	local scroll = G:CreateScroll(frame, 240, 350)
 	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
 	scroll.reset:SetPoint("TOPLEFT", 10, -140)
 	StaticPopupDialogs["RESET_NDUI_CLICKSETS"] = {
@@ -415,7 +415,7 @@ function module:SetupClickCast(parent)
 	end
 end
 
-function module:SetupNameplateFilter(parent)
+function G:SetupNameplateFilter(parent)
 	toggleExtraGUI("NDuiGUI_NameplateFilter")
 	if plateGUI then return end
 
@@ -433,7 +433,7 @@ function module:SetupNameplateFilter(parent)
 		B.CreateBD(bar, .3)
 		frameData[index].barList[spellID] = bar
 
-		local icon, close = module:CreateBarWidgets(bar, texture)
+		local icon, close = G:CreateBarWidgets(bar, texture)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
 		close:SetScript("OnClick", function()
 			bar:Hide()
@@ -467,7 +467,7 @@ function module:SetupNameplateFilter(parent)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
 		B.CreateBD(frame, .3)
 
-		local scroll = module:CreateScroll(frame, 240, 200)
+		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, 185, 25)
 		scroll.box:SetPoint("TOPLEFT", 10, -10)
 		scroll.add = B.CreateButton(frame, 70, 25, ADD)
@@ -482,7 +482,7 @@ function module:SetupNameplateFilter(parent)
 	end
 end
 
-function module:SetupBuffIndicator(parent)
+function G:SetupBuffIndicator(parent)
 	toggleExtraGUI("NDuiGUI_BuffIndicator")
 	if buffIndicatorGUI then return end
 
@@ -511,7 +511,7 @@ function module:SetupBuffIndicator(parent)
 		B.CreateBD(bar, .3)
 		frameData[index].barList[spellID] = bar
 
-		local icon, close = module:CreateBarWidgets(bar, texture)
+		local icon, close = G:CreateBarWidgets(bar, texture)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
 		close:SetScript("OnClick", function()
 			bar:Hide()
@@ -573,7 +573,7 @@ function module:SetupBuffIndicator(parent)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
 		B.CreateBD(frame, .3)
 
-		local scroll = module:CreateScroll(frame, 240, 200)
+		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, value.width, 25)
 		scroll.box:SetPoint("TOPLEFT", 10, -10)
 		scroll.box:SetMaxLetters(6)

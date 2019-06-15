@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB, F = unpack(ns)
-local module = B:RegisterModule("GUI")
+local G = B:RegisterModule("GUI")
 
 local tonumber, tostring, pairs, ipairs, next, select, type = tonumber, tostring, pairs, ipairs, next, select, type
 local tinsert, format, strsplit = table.insert, string.format, string.split
@@ -322,19 +322,19 @@ end)
 
 -- Callbacks
 local function setupRaidDebuffs()
-	module:SetupRaidDebuffs(guiPage[4])
+	G:SetupRaidDebuffs(guiPage[4])
 end
 
 local function setupClickCast()
-	module:SetupClickCast(guiPage[4])
+	G:SetupClickCast(guiPage[4])
 end
 
 local function setupBuffIndicator()
-	module:SetupBuffIndicator(guiPage[4])
+	G:SetupBuffIndicator(guiPage[4])
 end
 
 local function setupNameplateFilter()
-	module:SetupNameplateFilter(guiPage[5])
+	G:SetupNameplateFilter(guiPage[5])
 end
 
 local function setupAuraWatch()
@@ -380,6 +380,30 @@ end
 
 local function updatePlateRange()
 	B:GetModule("UnitFrames"):UpdatePlateRange()
+end
+
+local function updateInterruptAlert()
+	B:GetModule("Misc"):InterruptAlert()
+end
+
+local function updateUunatAlert()
+	B:GetModule("Misc"):UunatAlert()
+end
+
+local function updateExplosiveAlert()
+	B:GetModule("Misc"):ExplosiveAlert()
+end
+
+local function updateRareAlert()
+	B:GetModule("Misc"):RareAlert()
+end
+
+local function updateSoloInfo()
+	B:GetModule("Misc"):SoloInfo()
+end
+
+local function updateQuestNotifier()
+	B:GetModule("Misc"):QuestNotifier()
 end
 
 -- Config
@@ -548,20 +572,21 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "EasyMarking", L["Easy Mark"].."*"},
 		{2, "Skins", "DBMCount", L["Countdown Sec"].."*", true},
 		{},--blank
-		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"]},
+		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"].."*", nil, nil, updateQuestNotifier},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
 		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"].."*", true},
 		{},--blank
-		{1, "Misc", "Interrupt", "|cff00cc4c"..L["Interrupt Alert"]},
+		{1, "Misc", "Interrupt", "|cff00cc4c"..L["Interrupt Alert"].."*", nil, nil, updateInterruptAlert},
 		{1, "Misc", "AlertInInstance", L["Alert In Instance"].."*", true},
 		{1, "Misc", "OwnInterrupt", L["Own Interrupt"].."*"},
 		{1, "Misc", "BrokenSpell", L["Broken Spell"].."*", true},
 		{},--blank
-		{1, "Misc", "ExplosiveCount", L["Explosive Alert"]},
+		{1, "Misc", "ExplosiveCount", L["Explosive Alert"].."*", nil, nil, updateExplosiveAlert},
 		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
-		{1, "Misc", "UunatAlert", L["Uunat Alert"].."*"},
+		{1, "Misc", "UunatAlert", L["Uunat Alert"].."*", nil, nil, updateUunatAlert},
+		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", true, nil, updateSoloInfo},
 		{},--blank
-		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"]},
+		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*"},
 		{1, "Misc", "RareAlertInWild", L["RareAlertInWild"].."*", true},
 	},
@@ -645,7 +670,6 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
 		{1, "Misc", "HideErrors", L["Hide Error"]},
-		{1, "Misc", "SoloInfo", L["SoloInfo"], true},
 		{},--blank
 		{1, "Misc", "ParagonRep", L["ParagonRep"]},
 		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
@@ -1272,7 +1296,7 @@ local function OpenGUI()
 	SelectTab(1)
 end
 
-function module:OnLogin()
+function G:OnLogin()
 	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate")
 	gui:SetText(L["NDui Console"])
 	gui:SetPoint("TOP", GameMenuButtonAddons, "BOTTOM", 0, -21)
