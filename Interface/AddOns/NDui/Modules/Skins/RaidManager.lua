@@ -1,8 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Skins")
+local S = B:GetModule("Skins")
 
-function module:CreateRM()
+function S:CreateRM()
 	if not NDuiDB["Skins"]["RM"] then return end
 
 	local tinsert, strsplit, format = table.insert, string.split, string.format

@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Skins")
+local S = B:GetModule("Skins")
 
 local pairs = pairs
 local tracker = ObjectiveTrackerFrame
@@ -30,7 +30,7 @@ do
 	end)
 end
 
-function module:QuestTracker()
+function S:QuestTracker()
 	-- Questblock click enhant
 	local function QuestHook(id)
 		local questLogIndex = GetQuestLogIndexByID(id)

@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Skins")
+local S = B:GetModule("Skins")
 
 local buttonList = {}
 local r, g, b = DB.r, DB.g, DB.b
@@ -78,7 +78,7 @@ local function ReanchorAlert()
 	end
 end
 
-function module:MicroMenu()
+function S:MicroMenu()
 	-- Taint Fix
 	ToggleFrame(SpellBookFrame)
 	ToggleFrame(SpellBookFrame)

@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Skins")
+local S = B:GetModule("Skins")
 local pairs = pairs
 
 local function ReskinWA()
@@ -63,4 +63,4 @@ local function ReskinWA()
 	end
 end
 
-module:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)
+S:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)

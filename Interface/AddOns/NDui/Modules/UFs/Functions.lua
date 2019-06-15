@@ -848,8 +848,7 @@ function UF:CreateExpRepBar(self)
 	rest:SetOrientation("VERTICAL")
 	bar.restBar = rest
 
-	local module = B:GetModule("Misc")
-	module:SetupScript(bar)
+	B:GetModule("Misc"):SetupScript(bar)
 end
 
 function UF:CreatePrediction(self)

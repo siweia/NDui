@@ -1,8 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Skins")
+local S = B:GetModule("Skins")
 
-function module:BigWigsSkin()
+function S:BigWigsSkin()
 	if not NDuiDB["Skins"]["Bigwigs"] or not IsAddOnLoaded("BigWigs") then return end
 	if not BigWigs3DB then return end
 
