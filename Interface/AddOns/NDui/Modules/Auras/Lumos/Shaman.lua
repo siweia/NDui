@@ -1,30 +1,30 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "SHAMAN" then return end
 
 local function GetUnitAura(unit, spell, filter)
-	return module:GetUnitAura(unit, spell, filter)
+	return A:GetUnitAura(unit, spell, filter)
 end
 
 local function UpdateCooldown(button, spellID, texture)
-	return module:UpdateCooldown(button, spellID, texture)
+	return A:UpdateCooldown(button, spellID, texture)
 end
 
 local function UpdateBuff(button, spellID, auraID, cooldown)
-	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown)
+	return A:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown)
 end
 
 local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
+	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local function UpdateTotemAura(button, texture, spellID)
-	return module:UpdateTotemAura(button, texture, spellID)
+	return A:UpdateTotemAura(button, texture, spellID)
 end
 
-function module:ChantLumos(self)
+function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		UpdateDebuff(self.bu[1], 188389, 188389, true, "END")
 		UpdateBuff(self.bu[2], 51505, 77762, true)

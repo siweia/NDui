@@ -1,8 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
-function module:GetUnitAura(unit, spell, filter)
+function A:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
 		local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
 		if not name then break end
@@ -12,7 +12,7 @@ function module:GetUnitAura(unit, spell, filter)
 	end
 end
 
-function module:UpdateCooldown(button, spellID, texture)
+function A:UpdateCooldown(button, spellID, texture)
 	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
 	local start, duration = GetSpellCooldown(spellID)
 	if charges and maxCharges > 1 then
@@ -41,7 +41,7 @@ function module:UpdateCooldown(button, spellID, texture)
 	end
 end
 
-function module:GlowOnEnd()
+function A:GlowOnEnd()
 	local elapsed = self.expire - GetTime()
 	if elapsed < 3 then
 		B.ShowOverlayGlow(self.glowFrame)
@@ -50,7 +50,7 @@ function module:GlowOnEnd()
 	end
 end
 
-function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown, glow)
+function A:UpdateAura(button, unit, auraID, filter, spellID, cooldown, glow)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
 	local name, count, duration, expire, caster = self:GetUnitAura(unit, auraID, filter)
 	if name and caster == "player" then
@@ -64,7 +64,7 @@ function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown, glow
 		if glow then
 			if glow == "END" then
 				button.expire = expire
-				button:SetScript("OnUpdate", module.GlowOnEnd)
+				button:SetScript("OnUpdate", A.GlowOnEnd)
 			else
 				B.ShowOverlayGlow(button.glowFrame)
 			end
@@ -84,7 +84,7 @@ function module:UpdateAura(button, unit, auraID, filter, spellID, cooldown, glow
 	end
 end
 
-function module:UpdateTotemAura(button, texture, spellID, glow)
+function A:UpdateTotemAura(button, texture, spellID, glow)
 	button.Icon:SetTexture(texture)
 	local found
 	for slot = 1, 4 do
@@ -97,7 +97,7 @@ function module:UpdateTotemAura(button, texture, spellID, glow)
 			if glow then
 				if glow == "END" then
 					button.expire = start + dur
-					button:SetScript("OnUpdate", module.GlowOnEnd)
+					button:SetScript("OnUpdate", A.GlowOnEnd)
 				else
 					B.ShowOverlayGlow(button.glowFrame)
 				end
@@ -129,12 +129,12 @@ local function UpdateVisibility(self)
 		self.bu[i]:SetScript("OnUpdate", nil)
 		B.HideOverlayGlow(self.bu[i].glowFrame)
 	end
-	if module.PostUpdateVisibility then module:PostUpdateVisibility(self) end
+	if A.PostUpdateVisibility then A:PostUpdateVisibility(self) end
 end
 
 local function UpdateIcons(self, event, unit)
 	if event == "UNIT_AURA" and unit ~= "player" and unit ~= "target" then return end
-	module:ChantLumos(self)
+	A:ChantLumos(self)
 	UpdateVisibility(self)
 end
 
@@ -153,8 +153,8 @@ local function TurnOff(self)
 	UpdateVisibility(self)
 end
 
-function module:CreateLumos(self)
-	if not module.ChantLumos then return end
+function A:CreateLumos(self)
+	if not A.ChantLumos then return end
 
 	self.bu = {}
 	local iconSize = self.iconSize
@@ -178,7 +178,7 @@ function module:CreateLumos(self)
 		self.bu[i] = bu
 	end
 
-	if module.PostCreateLumos then module:PostCreateLumos(self) end
+	if A.PostCreateLumos then A:PostCreateLumos(self) end
 
 	UpdateIcons(self)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)

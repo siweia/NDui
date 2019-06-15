@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
 -- Style
 local totem = {}
@@ -35,7 +35,7 @@ local function TotemsGo()
 	B.Mover(Totembar, L["Totembar"], "Totems", C.Auras.TotemsPos, 140, 32)
 end
 
-local function updateTotem()
+function A:UpdateTotems()
 	for i = 1, 4 do
 		local totem = totem[i]
 		local defaultTotem = totem.parent
@@ -55,10 +55,10 @@ local function updateTotem()
 	end
 end
 
-function module:Totems()
+function A:Totems()
 	if not NDuiDB["Auras"]["Totems"] then return end
 
 	TotemsGo()
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateTotem)
-	B:RegisterEvent("PLAYER_TOTEM_UPDATE", updateTotem)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", self.UpdateTotems)
+	B:RegisterEvent("PLAYER_TOTEM_UPDATE", self.UpdateTotems)
 end

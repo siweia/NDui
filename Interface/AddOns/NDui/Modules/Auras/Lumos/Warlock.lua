@@ -1,10 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "WARLOCK" then return end
 
-function module:PostCreateLumos(self)
+function A:PostCreateLumos(self)
 	local frame = CreateFrame("Frame")
 	frame:SetScript("OnUpdate", function()
 		if not self.dotExp then return end
@@ -20,31 +20,31 @@ function module:PostCreateLumos(self)
 	self.dotUpdater = frame
 end
 
-function module:PostUpdateVisibility(self)
+function A:PostUpdateVisibility(self)
 	if self.dotUpdater then self.dotUpdater:Hide() end
 end
 
 local function GetUnitAura(unit, spell, filter)
-	return module:GetUnitAura(unit, spell, filter)
+	return A:GetUnitAura(unit, spell, filter)
 end
 
 local function UpdateCooldown(button, spellID, texture)
-	return module:UpdateCooldown(button, spellID, texture)
+	return A:UpdateCooldown(button, spellID, texture)
 end
 
 local function UpdateBuff(button, spellID, auraID, cooldown, glow)
-	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
+	return A:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
 local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
+	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local function UpdateTotemAura(button, texture, spellID)
-	return module:UpdateTotemAura(button, texture, spellID, true)
+	return A:UpdateTotemAura(button, texture, spellID, true)
 end
 
-function module:ChantLumos(self)
+function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		UpdateDebuff(self.bu[1], 172, 146739, false, "END")
 		UpdateDebuff(self.bu[2], 980, 980, false, "END")

@@ -1,19 +1,19 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "DRUID" then return end
 
 local function UpdateCooldown(button, spellID, texture)
-	return module:UpdateCooldown(button, spellID, texture)
+	return A:UpdateCooldown(button, spellID, texture)
 end
 
 local function UpdateBuff(button, spellID, auraID, cooldown, glow)
-	return module:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
+	return A:UpdateAura(button, "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
 local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
+	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local function UpdateSpellStatus(button, spellID)
@@ -25,7 +25,7 @@ local function UpdateSpellStatus(button, spellID)
 	end
 end
 
-function module:ChantLumos(self)
+function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		UpdateBuff(self.bu[1], 164545, 164545)
 		UpdateBuff(self.bu[2], 164547, 164547)
@@ -123,7 +123,7 @@ function module:ChantLumos(self)
 		end
 
 		UpdateCooldown(self.bu[2], 48438, true)
-		module:UpdateAura(self.bu[3], "target", 102342, "HELPFUL", 102342, true)
+		A:UpdateAura(self.bu[3], "target", 102342, "HELPFUL", 102342, true)
 
 		do
 			local button = self.bu[4]

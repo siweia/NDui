@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
 -- Monk Statue
 local IconSize = C.Auras.IconSize - 2
@@ -33,7 +33,7 @@ local serpentStatueTex = GetSpellTexture(115313)
 local oxStatue = GetSpellInfo(115315)
 local oxStatueTex = GetSpellTexture(115315)
 
-function module:UpdateStatue()
+function A:UpdateStatue()
 	local haveTotem, _, start, dur = GetTotemInfo(1)
 	if haveTotem then
 		bu.CD:SetCooldown(start, dur)
@@ -59,10 +59,10 @@ local function checkSpec(event)
 			statue = oxStatue
 		end
 		bu:SetAttribute("macrotext1", "/tar "..statue)
-		B:RegisterEvent("PLAYER_TOTEM_UPDATE", module.UpdateStatue)
+		B:RegisterEvent("PLAYER_TOTEM_UPDATE", A.UpdateStatue)
 	else
 		if bu then bu:Hide() end
-		B:UnregisterEvent("PLAYER_TOTEM_UPDATE", module.UpdateStatue)
+		B:UnregisterEvent("PLAYER_TOTEM_UPDATE", A.UpdateStatue)
 	end
 
 	if event == "PLAYER_ENTERING_WORLD" then
@@ -70,7 +70,7 @@ local function checkSpec(event)
 	end
 end
 
-function module:MonkStatue()
+function A:MonkStatue()
 	if not NDuiDB["Auras"]["Statue"] then return end
 
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkSpec)

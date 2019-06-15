@@ -1,10 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "HUNTER" then return end
 
-function module:PostCreateLumos(self)
+function A:PostCreateLumos(self)
 	local iconSize = self.bu[1]:GetWidth()
 	local boom = CreateFrame("Frame", nil, self.Health)
 	boom:SetSize(iconSize, iconSize)
@@ -14,24 +14,24 @@ function module:PostCreateLumos(self)
 	self.boom = boom
 end
 
-function module:PostUpdateVisibility(self)
+function A:PostUpdateVisibility(self)
 	if self.boom then self.boom:Hide() end
 end
 
 local function GetUnitAura(unit, spell, filter)
-	return module:GetUnitAura(unit, spell, filter)
+	return A:GetUnitAura(unit, spell, filter)
 end
 
 local function UpdateCooldown(button, spellID, texture)
-	return module:UpdateCooldown(button, spellID, texture)
+	return A:UpdateCooldown(button, spellID, texture)
 end
 
 local function UpdateBuff(button, spellID, auraID, cooldown, isPet, glow)
-	return module:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown, glow)
+	return A:UpdateAura(button, isPet and "pet" or "player", auraID, "HELPFUL", spellID, cooldown, glow)
 end
 
 local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
-	return module:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
+	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
 local boomGroups = {
@@ -40,7 +40,7 @@ local boomGroups = {
 	[271049] = 259491,
 }
 
-function module:ChantLumos(self)
+function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		UpdateCooldown(self.bu[1], 34026, true)
 		UpdateCooldown(self.bu[2], 217200, true)

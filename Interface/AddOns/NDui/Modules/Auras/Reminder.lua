@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Auras")
+local A = B:GetModule("Auras")
 
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = C.Auras.IconSize + 4
@@ -9,7 +9,7 @@ local GetSpecialization, InCombatLockdown, GetZonePVPInfo, UnitInVehicle = GetSp
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 local pairs, tinsert, next = pairs, table.insert, next
 
-function module:UpdateReminder(cfg)
+function A:Reminder_Update(cfg)
 	local frame = cfg.frame
 	local depend = cfg.depend
 	local spec = cfg.spec
@@ -40,7 +40,7 @@ function module:UpdateReminder(cfg)
 	end
 end
 
-function module:AddReminder(cfg)
+function A:Reminder_Create(cfg)
 	local frame = CreateFrame("Frame", nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
 	B.PixelIcon(frame)
@@ -56,7 +56,7 @@ function module:AddReminder(cfg)
 	tinsert(frames, frame)
 end
 
-function module:UpdateAnchor()
+function A:Reminder_UpdateAnchor()
 	local index = 0
 	local offset = iconSize + 5
 	for _, frame in next, frames do
@@ -68,15 +68,15 @@ function module:UpdateAnchor()
 	parentFrame:SetWidth(offset * index)
 end
 
-function module:EventUpdate()
+function A:Reminder_OnEvent()
 	for _, cfg in pairs(groups) do
-		if not cfg.frame then module:AddReminder(cfg) end
-		module:UpdateReminder(cfg)
+		if not cfg.frame then A:Reminder_Create(cfg) end
+		A:Reminder_Update(cfg)
 	end
-	module:UpdateAnchor()
+	A:Reminder_UpdateAnchor()
 end
 
-function module:InitReminder()
+function A:InitReminder()
 	if not groups then return end
 	if not NDuiDB["Auras"]["Reminder"] then return end
 
@@ -84,11 +84,11 @@ function module:InitReminder()
 	parentFrame:SetPoint("CENTER", -220, 130)
 	parentFrame:SetSize(iconSize, iconSize)
 
-	B:RegisterEvent("UNIT_AURA", module.EventUpdate, "player")
-	B:RegisterEvent("UNIT_EXITED_VEHICLE", module.EventUpdate)
-	B:RegisterEvent("UNIT_ENTERED_VEHICLE", module.EventUpdate)
-	B:RegisterEvent("PLAYER_REGEN_ENABLED", module.EventUpdate)
-	B:RegisterEvent("PLAYER_REGEN_DISABLED", module.EventUpdate)
-	B:RegisterEvent("ZONE_CHANGED_NEW_AREA", module.EventUpdate)
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", module.EventUpdate)
+	B:RegisterEvent("UNIT_AURA", A.Reminder_OnEvent, "player")
+	B:RegisterEvent("UNIT_EXITED_VEHICLE", A.Reminder_OnEvent)
+	B:RegisterEvent("UNIT_ENTERED_VEHICLE", A.Reminder_OnEvent)
+	B:RegisterEvent("PLAYER_REGEN_ENABLED", A.Reminder_OnEvent)
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
+	B:RegisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
 end

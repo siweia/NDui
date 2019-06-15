@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:RegisterModule("Auras")
+local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
 local format, floor, strmatch, select, unpack = format, floor, strmatch, select, unpack
@@ -9,7 +9,7 @@ local UnitAura, GetTime = UnitAura, GetTime
 local GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo
 local margin, offset, settings = 6, 12
 
-function module:OnLogin()
+function A:OnLogin()
 	-- Config
 	settings = {
 		Buffs = {
@@ -51,7 +51,7 @@ function module:OnLogin()
 end
 
 local day, hour, minute = 86400, 3600, 60
-function module:FormatAuraTime(s)
+function A:FormatAuraTime(s)
 	if s >= day then
 		return format("%d"..DB.MyColor.."d", s/day), s%day
 	elseif s >= hour then
@@ -69,7 +69,7 @@ function module:FormatAuraTime(s)
 	end
 end
 
-function module:UpdateTimer(elapsed)
+function A:UpdateTimer(elapsed)
 	if self.offset then
 		local expiration = select(self.offset, GetWeaponEnchantInfo())
 		if expiration then
@@ -86,12 +86,12 @@ function module:UpdateTimer(elapsed)
 		return
 	end
 
-	local timer, nextUpdate = module:FormatAuraTime(self.timeLeft)
+	local timer, nextUpdate = A:FormatAuraTime(self.timeLeft)
 	self.nextUpdate = nextUpdate
 	self.timer:SetText(timer)
 end
 
-function module:UpdateAuras(button, index)
+function A:UpdateAuras(button, index)
 	local filter = button:GetParent():GetAttribute("filter")
 	local unit = button:GetParent():GetAttribute("unit")
 	local name, texture, count, debuffType, duration, expirationTime = UnitAura(unit, index, filter)
@@ -101,13 +101,13 @@ function module:UpdateAuras(button, index)
 			local timeLeft = expirationTime - GetTime()
 			if not button.timeLeft then
 				button.timeLeft = timeLeft
-				button:SetScript("OnUpdate", module.UpdateTimer)
+				button:SetScript("OnUpdate", A.UpdateTimer)
 			else
 				button.timeLeft = timeLeft
 			end
 
 			button.nextUpdate = -1
-			module.UpdateTimer(button, 0)
+			A.UpdateTimer(button, 0)
 		else
 			button.timeLeft = nil
 			button.timer:SetText("")
@@ -132,7 +132,7 @@ function module:UpdateAuras(button, index)
 	end
 end
 
-function module:UpdateTempEnchant(button, index)
+function A:UpdateTempEnchant(button, index)
 	local quality = GetInventoryItemQuality("player", index)
 	button.icon:SetTexture(GetInventoryItemTexture("player", index))
 
@@ -149,9 +149,9 @@ function module:UpdateTempEnchant(button, index)
 	local expirationTime = select(offset, GetWeaponEnchantInfo())
 	if expirationTime then
 		button.offset = offset
-		button:SetScript("OnUpdate", module.UpdateTimer)
+		button:SetScript("OnUpdate", A.UpdateTimer)
 		button.nextUpdate = -1
-		module.UpdateTimer(button, 0)
+		A.UpdateTimer(button, 0)
 	else
 		button.offset = nil
 		button.timeLeft = nil
@@ -160,15 +160,15 @@ function module:UpdateTempEnchant(button, index)
 	end
 end
 
-function module:OnAttributeChanged(attribute, value)
+function A:OnAttributeChanged(attribute, value)
 	if attribute == "index" then
-		module:UpdateAuras(self, value)
+		A:UpdateAuras(self, value)
 	elseif attribute == "target-slot" then
-		module:UpdateTempEnchant(self, value)
+		A:UpdateTempEnchant(self, value)
 	end
 end
 
-function module:UpdateHeader(header)
+function A:UpdateHeader(header)
 	local cfg = settings.Debuffs
 	if header:GetAttribute("filter") == "HELPFUL" then
 		cfg = settings.Buffs
@@ -207,7 +207,7 @@ function module:UpdateHeader(header)
 	end
 end
 
-function module:CreateAuraHeader(filter)
+function A:CreateAuraHeader(filter)
 	local name = "NDuiPlayerDebuffs"
 	if filter == "HELPFUL" then name = "NDuiPlayerBuffs" end
 
@@ -223,13 +223,13 @@ function module:CreateAuraHeader(filter)
 		header:SetAttribute("includeWeapons", 1)
 	end
 
-	module:UpdateHeader(header)
+	A:UpdateHeader(header)
 	header:Show()
 
 	return header
 end
 
-function module:CreateAuraIcon(button)
+function A:CreateAuraIcon(button)
 	local header = button:GetParent()
 	local cfg = settings.Debuffs
 	if header:GetAttribute("filter") == "HELPFUL" then
@@ -256,5 +256,5 @@ function module:CreateAuraIcon(button)
 	local bg = B.CreateBG(button)
 	button.Shadow = B.CreateSD(bg)
 
-	button:SetScript("OnAttributeChanged", module.OnAttributeChanged)
+	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
 end
