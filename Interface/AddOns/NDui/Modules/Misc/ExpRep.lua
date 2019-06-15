@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Misc")
+local M = B:GetModule("Misc")
 
 --[[
 	一个工具条用来替代系统的经验条、声望条、神器经验等等
@@ -13,22 +13,22 @@ local FACTION_BAR_COLORS = FACTION_BAR_COLORS
 local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
 local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
 
-local function UpdateBar(bar)
-	local rest = bar.restBar
+function M:ExpBar_Update()
+	local rest = self.restBar
 	if rest then rest:Hide() end
 
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
-		bar:SetStatusBarColor(0, .7, 1)
-		bar:SetMinMaxValues(0, mxp)
-		bar:SetValue(xp)
-		bar:Show()
+		self:SetStatusBarColor(0, .7, 1)
+		self:SetMinMaxValues(0, mxp)
+		self:SetValue(xp)
+		self:Show()
 		if rxp then
 			rest:SetMinMaxValues(0, mxp)
 			rest:SetValue(min(xp + rxp, mxp))
 			rest:Show()
 		end
-		if IsXPUserDisabled() then bar:SetStatusBarColor(.7, 0, 0) end
+		if IsXPUserDisabled() then self:SetStatusBarColor(.7, 0, 0) end
 	elseif GetWatchedFactionInfo() then
 		local _, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
@@ -46,44 +46,44 @@ local function UpdateBar(bar)
 		else
 			if standing == MAX_REPUTATION_REACTION then barMin, barMax, value = 0, 1, 1 end
 		end
-		bar:SetStatusBarColor(FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b, .85)
-		bar:SetMinMaxValues(barMin, barMax)
-		bar:SetValue(value)
-		bar:Show()
+		self:SetStatusBarColor(FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b, .85)
+		self:SetMinMaxValues(barMin, barMax)
+		self:SetValue(value)
+		self:Show()
 	elseif IsWatchingHonorAsXP() then
 		local current, barMax = UnitHonor("player"), UnitHonorMax("player")
-		bar:SetStatusBarColor(1, .24, 0)
-		bar:SetMinMaxValues(0, barMax)
-		bar:SetValue(current)
-		bar:Show()
+		self:SetStatusBarColor(1, .24, 0)
+		self:SetMinMaxValues(0, barMax)
+		self:SetValue(current)
+		self:Show()
 	elseif C_AzeriteItem.HasActiveAzeriteItem() then
 		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
-		bar:SetStatusBarColor(.9, .8, .6)
-		bar:SetMinMaxValues(0, totalLevelXP)
-		bar:SetValue(xp)
-		bar:Show()
+		self:SetStatusBarColor(.9, .8, .6)
+		self:SetMinMaxValues(0, totalLevelXP)
+		self:SetValue(xp)
+		self:Show()
 	elseif HasArtifactEquipped() then
 		if C_ArtifactUI.IsEquippedArtifactDisabled() then
-			bar:SetStatusBarColor(.6, .6, .6)
-			bar:SetMinMaxValues(0, 1)
-			bar:SetValue(1)
+			self:SetStatusBarColor(.6, .6, .6)
+			self:SetMinMaxValues(0, 1)
+			self:SetValue(1)
 		else
 			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 			local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 			xp = xpForNextPoint == 0 and 0 or xp
-			bar:SetStatusBarColor(.9, .8, .6)
-			bar:SetMinMaxValues(0, xpForNextPoint)
-			bar:SetValue(xp)
+			self:SetStatusBarColor(.9, .8, .6)
+			self:SetMinMaxValues(0, xpForNextPoint)
+			self:SetValue(xp)
 		end
-		bar:Show()
+		self:Show()
 	else
-		bar:Hide()
+		self:Hide()
 	end
 end
 
-local function UpdateTooltip(bar)
-	GameTooltip:SetOwner(bar, "ANCHOR_LEFT")
+function M:ExpBar_UpdateTooltip()
+	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), 0,.6,1)
 
@@ -169,7 +169,7 @@ local function UpdateTooltip(bar)
 	GameTooltip:Show()
 end
 
-function module:SetupScript(bar)
+function M:SetupScript(bar)
 	bar.eventList = {
 		"PLAYER_XP_UPDATE",
 		"PLAYER_LEVEL_UP",
@@ -186,8 +186,8 @@ function module:SetupScript(bar)
 	for _, event in pairs(bar.eventList) do
 		bar:RegisterEvent(event)
 	end
-	bar:SetScript("OnEvent", UpdateBar)
-	bar:SetScript("OnEnter", UpdateTooltip)
+	bar:SetScript("OnEvent", M.ExpBar_Update)
+	bar:SetScript("OnEnter", M.ExpBar_UpdateTooltip)
 	bar:SetScript("OnLeave", B.HideTooltip)
 	bar:SetScript("OnMouseUp", function(_, btn)
 		if not HasArtifactEquipped() or btn ~= "LeftButton" then return end
@@ -198,11 +198,11 @@ function module:SetupScript(bar)
 		end
 	end)
 	hooksecurefunc(StatusTrackingBarManager, "UpdateBarsShown", function()
-		UpdateBar(bar)
+		M.ExpBar_Update(bar)
 	end)
 end
 
-function module:Expbar()
+function M:Expbar()
 	if not NDuiDB["Misc"]["ExpRep"] then return end
 
 	local bar = CreateFrame("StatusBar", nil, Minimap)
@@ -221,7 +221,7 @@ function module:Expbar()
 	self:SetupScript(bar)
 end
 
-function module:HookParagonRep()
+function M:HookParagonRep()
 	local numFactions = GetNumFactions()
 	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
 	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do

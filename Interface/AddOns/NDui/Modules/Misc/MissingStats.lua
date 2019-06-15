@@ -1,13 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Misc")
+local M = B:GetModule("Misc")
 
 local format, max = string.format, math.max
 local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
 local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
 local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
-function module:MissingStats()
+function M:MissingStats()
 	if not NDuiDB["Misc"]["MissingStats"] then return end
 	if IsAddOnLoaded("DejaCharacterStats") then return end
 

@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Misc")
+local M = B:GetModule("Misc")
 
 local debugMode = false
 local completedQuest, initComplete = {}
@@ -54,7 +54,7 @@ local questMatches = {
 	["QuestFailed"] = getPattern(ERR_QUEST_FAILED_S),
 }
 
-local function FindQuestProgress(_, _, msg)
+function M:FindQuestProgress(_, msg)
 	if not NDuiDB["Misc"]["QuestProgress"] then return end
 	if NDuiDB["Misc"]["OnlyCompleteRing"] then return end
 
@@ -74,7 +74,7 @@ local function FindQuestProgress(_, _, msg)
 	end
 end
 
-local function FindQuestAccept(_, questLogIndex, questID)
+function M:FindQuestAccept(questLogIndex, questID)
 	local link = GetQuestLink(questID)
 	local frequency = select(7, GetQuestLogTitle(questLogIndex))
 	if link then
@@ -84,7 +84,7 @@ local function FindQuestAccept(_, questLogIndex, questID)
 	end
 end
 
-local function FindQuestComplete()
+function M:FindQuestComplete()
 	for i = 1, GetNumQuestLogEntries() do
 		local _, _, _, _, _, isComplete, _, questID = GetQuestLogTitle(i)
 		local link = GetQuestLink(questID)
@@ -100,7 +100,7 @@ local function FindQuestComplete()
 	end
 end
 
-local function FindWorldQuestComplete(_, questID)
+function M:FindWorldQuestComplete(questID)
 	if QuestUtils_IsQuestWorldQuest(questID) then
 		local link = GetQuestLink(questID)
 		if link and not completedQuest[questID] then
@@ -110,13 +110,18 @@ local function FindWorldQuestComplete(_, questID)
 	end
 end
 
-function module:QuestNotifier()
-	if not NDuiDB["Misc"]["QuestNotifier"] then return end
-	if IsAddOnLoaded("QuestNotifier") then return end
-
-	FindQuestComplete()
-	B:RegisterEvent("QUEST_ACCEPTED", FindQuestAccept)
-	B:RegisterEvent("QUEST_LOG_UPDATE", FindQuestComplete)
-	B:RegisterEvent("QUEST_TURNED_IN", FindWorldQuestComplete)
-	B:RegisterEvent("UI_INFO_MESSAGE", FindQuestProgress)
+function M:QuestNotifier()
+	if NDuiDB["Misc"]["QuestNotifier"] then
+		self:FindQuestComplete()
+		B:RegisterEvent("QUEST_ACCEPTED", self.FindQuestAccept)
+		B:RegisterEvent("QUEST_LOG_UPDATE", self.FindQuestComplete)
+		B:RegisterEvent("QUEST_TURNED_IN", self.FindWorldQuestComplete)
+		B:RegisterEvent("UI_INFO_MESSAGE", self.FindQuestProgress)
+	else
+		wipe(completedQuest)
+		B:UnregisterEvent("QUEST_ACCEPTED", self.FindQuestAccept)
+		B:UnregisterEvent("QUEST_LOG_UPDATE", self.FindQuestComplete)
+		B:UnregisterEvent("QUEST_TURNED_IN", self.FindWorldQuestComplete)
+		B:UnregisterEvent("UI_INFO_MESSAGE", self.FindQuestProgress)
+	end
 end

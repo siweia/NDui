@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Misc")
+local M = B:GetModule("Misc")
+if not M then return end
 -------------------------------------
 -- Pet Quick Filter, by Windrunner
 -- NDui MOD
@@ -80,7 +81,7 @@ local function loadPetFilter()
 	end
 end
 
-function module:PetFilterTab()
+function M:PetFilterTab()
 	if not NDuiDB["Misc"]["PetFilter"] then return end
 
 	local function onLoad(event, addon)

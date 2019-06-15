@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:RegisterModule("Misc")
+local M = B:RegisterModule("Misc")
 
 local tostring, tonumber, pairs = tostring, tonumber, pairs
 local strsplit, random = string.split, math.random
@@ -8,11 +8,11 @@ local strsplit, random = string.split, math.random
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
 ]]
-function module:OnLogin()
+function M:OnLogin()
 	self:AddAlerts()
 	self:Expbar()
 	self:Focuser()
-	self:Mailbox()
+	self:MailBox()
 	self:MissingStats()
 	self:ShowItemLevel()
 	self:QuickJoin()
@@ -225,7 +225,7 @@ do
 end
 
 -- Get Naked
-function module:NakedIcon()
+function M:NakedIcon()
 	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
 	bu:SetSize(31, 33)
 	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
@@ -368,7 +368,7 @@ do
 end
 
 -- Extend Instance
-function module:ExtendInstance()
+function M:ExtendInstance()
 	local bu = CreateFrame("Button", nil, RaidInfoFrame)
 	bu:SetPoint("TOPRIGHT", -35, -5)
 	bu:SetSize(25, 25)

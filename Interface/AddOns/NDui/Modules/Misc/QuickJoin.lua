@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:GetModule("Misc")
+local M = B:GetModule("Misc")
 
 --[[
 	QuickJoin 优化系统自带的预创建功能
@@ -10,7 +10,40 @@ local module = B:GetModule("Misc")
 	4.自动隐藏部分窗口
 ]]
 
-function module:QuickJoin()
+function M:HookTrackerOnBlockClick(button)
+	if self.M.ShowWorldQuests then
+		if button == "MiddleButton" then
+			LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
+		end
+	end
+end
+
+function M:HookApplicationClick()
+	if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
+		LFGListFrame.SearchPanel.SignUpButton:Click()
+	end
+	if LFGListApplicationDialog:IsShown() and LFGListApplicationDialog.SignUpButton:IsEnabled() then
+		LFGListApplicationDialog.SignUpButton:Click()
+	end
+end
+
+local pendingFrame
+function M:HookDialogOnShow()
+	pendingFrame = self
+	C_Timer.After(1, M.DialogHideInSecond)
+end
+
+function M:DialogHideInSecond()
+	if not pendingFrame then return end
+
+	if pendingFrame.informational then
+		StaticPopupSpecial_Hide(pendingFrame)
+	elseif pendingFrame == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
+		StaticPopup_Hide(pendingFrame)
+	end
+end
+
+function M:QuickJoin()
 	if DB.Client == "zhCN" then
 		StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
 			text = "针对此项活动，你的队伍人数已满，将被移出列表。",
@@ -20,25 +53,12 @@ function module:QuickJoin()
 		}
 	end
 
-	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", function(self, button)
-		if self.module.ShowWorldQuests then
-			if button == "MiddleButton" then
-				LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
-			end
-		end
-	end)
+	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", self.HookTrackerOnBlockClick)
 
 	for i = 1, 10 do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
 		if bu then
-			bu:HookScript("OnDoubleClick", function()
-				if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
-					LFGListFrame.SearchPanel.SignUpButton:Click()
-				end
-				if LFGListApplicationDialog:IsShown() and LFGListApplicationDialog.SignUpButton:IsEnabled() then
-					LFGListApplicationDialog.SignUpButton:Click()
-				end
-			end)
+			bu:HookScript("OnDoubleClick", M.HookApplicationClick)
 		end
 	end
 
@@ -46,15 +66,6 @@ function module:QuickJoin()
 		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
 	end)
 
-	local function hideInSecond(frame)
-		C_Timer.After(1, function()
-			if frame.informational then
-				StaticPopupSpecial_Hide(frame)
-			elseif frame == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
-				StaticPopup_Hide(frame)
-			end
-		end)
-	end
-	hooksecurefunc("StaticPopup_Show", hideInSecond)
-	hooksecurefunc("LFGListInviteDialog_Show", hideInSecond)
+	hooksecurefunc("StaticPopup_Show", self.HookDialogOnShow)
+	hooksecurefunc("LFGListInviteDialog_Show", self.HookDialogOnShow)
 end
