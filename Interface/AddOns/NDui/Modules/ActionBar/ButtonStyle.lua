@@ -143,7 +143,7 @@ local replaces = {
 	{CAPSLOCK_KEY_TEXT, "CL"},
 }
 
-function B:UpdateHotKey()
+function Bar:UpdateHotKey()
 	local hotkey = _G[self:GetName().."HotKey"]
 	if hotkey and hotkey:IsShown() and not NDuiDB["Actionbar"]["Hotkeys"] then
 		hotkey:Hide()
@@ -164,7 +164,7 @@ function B:UpdateHotKey()
 	end
 end
 
-function B:StyleActionButton(button, cfg)
+function Bar:StyleActionButton(button, cfg)
 	if not button then return end
 	if button.__styled then return end
 
@@ -223,7 +223,7 @@ function B:StyleActionButton(button, cfg)
 	if hotkey then
 		if NDuiDB["Actionbar"]["Hotkeys"] then
 			hotkey:SetParent(overlay)
-			B.UpdateHotKey(button)
+			Bar.UpdateHotKey(button)
 			SetupFontString(hotkey, cfg.hotkey)
 		else
 			hotkey:Hide()
@@ -241,7 +241,7 @@ function B:StyleActionButton(button, cfg)
 	button.__styled = true
 end
 
-function B:StyleExtraActionButton(cfg)
+function Bar:StyleExtraActionButton(cfg)
 	local button = ExtraActionButton1
 	if button.__styled then return end
 
@@ -278,7 +278,7 @@ function B:StyleExtraActionButton(cfg)
 	overlay:SetAllPoints()
 	if NDuiDB["Actionbar"]["Hotkeys"] then
 		hotkey:SetParent(overlay)
-		B.UpdateHotKey(button)
+		Bar.UpdateHotKey(button)
 		cfg.hotkey.font = {DB.Font[1], 13, DB.Font[3]}
 		SetupFontString(hotkey, cfg.hotkey)
 	else
@@ -295,31 +295,31 @@ function B:StyleExtraActionButton(cfg)
 	button.__styled = true
 end
 
-function B:StyleAllActionButtons(cfg)
+function Bar:StyleAllActionButtons(cfg)
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
-		B:StyleActionButton(_G["ActionButton"..i], cfg)
-		B:StyleActionButton(_G["MultiBarBottomLeftButton"..i], cfg)
-		B:StyleActionButton(_G["MultiBarBottomRightButton"..i], cfg)
-		B:StyleActionButton(_G["MultiBarRightButton"..i], cfg)
-		B:StyleActionButton(_G["MultiBarLeftButton"..i], cfg)
+		Bar:StyleActionButton(_G["ActionButton"..i], cfg)
+		Bar:StyleActionButton(_G["MultiBarBottomLeftButton"..i], cfg)
+		Bar:StyleActionButton(_G["MultiBarBottomRightButton"..i], cfg)
+		Bar:StyleActionButton(_G["MultiBarRightButton"..i], cfg)
+		Bar:StyleActionButton(_G["MultiBarLeftButton"..i], cfg)
 	end
 	for i = 1, 6 do
-		B:StyleActionButton(_G["OverrideActionBarButton"..i], cfg)
+		Bar:StyleActionButton(_G["OverrideActionBarButton"..i], cfg)
 	end
 	--petbar buttons
 	for i = 1, NUM_PET_ACTION_SLOTS do
-		B:StyleActionButton(_G["PetActionButton"..i], cfg)
+		Bar:StyleActionButton(_G["PetActionButton"..i], cfg)
 	end
 	--stancebar buttons
 	for i = 1, NUM_STANCE_SLOTS do
-		B:StyleActionButton(_G["StanceButton"..i], cfg)
+		Bar:StyleActionButton(_G["StanceButton"..i], cfg)
 	end
 	--possess buttons
 	for i = 1, NUM_POSSESS_SLOTS do
-		B:StyleActionButton(_G["PossessButton"..i], cfg)
+		Bar:StyleActionButton(_G["PossessButton"..i], cfg)
 	end
 	--extra action button
-	B:StyleExtraActionButton(cfg)
+	Bar:StyleExtraActionButton(cfg)
 	--spell flyout
 	SpellFlyoutBackgroundEnd:SetTexture(nil)
 	SpellFlyoutHorizontalBackground:SetTexture(nil)
@@ -328,7 +328,7 @@ function B:StyleAllActionButtons(cfg)
 		local i = 1
 		local button = _G["SpellFlyoutButton"..i]
 		while button and button:IsShown() do
-			B:StyleActionButton(button, cfg)
+			Bar:StyleActionButton(button, cfg)
 			i = i + 1
 			button = _G["SpellFlyoutButton"..i]
 		end
@@ -395,6 +395,6 @@ function Bar:ReskinBars()
 		},
 		buttonstyle = {file = ""},
 	}
-	B:StyleAllActionButtons(cfg)
-	hooksecurefunc("ActionButton_UpdateHotkeys", B.UpdateHotKey)
+	Bar:StyleAllActionButtons(cfg)
+	hooksecurefunc("ActionButton_UpdateHotkeys", Bar.UpdateHotKey)
 end

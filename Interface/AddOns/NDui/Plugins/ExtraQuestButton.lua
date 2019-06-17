@@ -368,7 +368,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 		else
 			HotKey:Hide()
 		end
-		if NDuiDB["Actionbar"]["Enable"] then B.UpdateHotKey(self) end
+		if NDuiDB["Actionbar"]["Enable"] then B:GetModule("Actionbar").UpdateHotKey(self) end
 
 		if(InCombatLockdown()) then
 			self:RegisterEvent("PLAYER_REGEN_ENABLED")
