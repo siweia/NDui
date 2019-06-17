@@ -19,7 +19,7 @@ end
 
 -- ECF strings compare
 local last, this = {}, {}
-local function strDiff(sA, sB) -- arrays of bytes
+function module:CompareStrDiff(sA, sB) -- arrays of bytes
 	local len_a, len_b = #sA, #sB
 	for j = 0, len_b do
 		last[j+1] = j
@@ -38,7 +38,7 @@ end
 
 C.BadBoys = {} -- debug
 local chatLines, prevLineID, filterResult = {}, 0, false
-local function getFilterResult(event, msg, name, flag, guid)
+function module:GetFilterResult(event, msg, name, flag, guid)
 	if name == DB.MyName or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
 	elseif guid and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or (IsInInstance() and IsGUIDInGroup(guid))) then
@@ -80,7 +80,7 @@ local function getFilterResult(event, msg, name, flag, guid)
 	chatLines[chatLinesSize+1] = msgTable
 	for i = 1, chatLinesSize do
 		local line = chatLines[i]
-		if line[1] == msgTable[1] and ((msgTable[3] - line[3] < .6) or strDiff(line[2], msgTable[2]) <= .1) then
+		if line[1] == msgTable[1] and ((msgTable[3] - line[3] < .6) or module:CompareStrDiff(line[2], msgTable[2]) <= .1) then
 			tremove(chatLines, i)
 			return true
 		end
@@ -88,18 +88,19 @@ local function getFilterResult(event, msg, name, flag, guid)
 	if chatLinesSize >= 30 then tremove(chatLines, 1) end
 end
 
-local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, lineID, guid)
+function module:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, lineID, guid)
 	if lineID == 0 or lineID ~= prevLineID then
 		prevLineID = lineID
 
 		local name = Ambiguate(author, "none")
-		filterResult = getFilterResult(event, msg, name, flag, guid)
+		filterResult = module:GetFilterResult(event, msg, name, flag, guid)
 		if filterResult then C.BadBoys[name] = (C.BadBoys[name] or 0) + 1 end
 	end
 
 	return filterResult
 end
 
+-- Block addon msg
 local addonBlockList = {
 	"任务进度提示", "%[接受任务%]", "%(任务完成%)", "<大脚", "【爱不易】", "EUI[:_]", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*", "<iLvl>", ("%-"):rep(20),
 	"<小队物品等级:.+>", "<LFG>", "进度:", "属性通报", "汐寒", "wow.+兑换码", "wow.+验证码", "【有爱插件】", "：.+>"
@@ -111,23 +112,23 @@ local function toggleCVar(value)
 	SetCVar(cvar, value)
 end
 
-local function toggleBubble(party)
+function module:ToggleChatBubble(party)
 	cvar = "chatBubbles"..(party and "Party" or "")
 	if not GetCVarBool(cvar) then return end
 	toggleCVar(0)
 	C_Timer_After(.01, toggleCVar)
 end
 
-local function genAddonBlock(_, event, msg, author)
+function module:UpdateAddOnBlocker(event, msg, author)
 	local name = Ambiguate(author, "none")
 	if UnitIsUnit(name, "player") then return end
 
 	for _, word in ipairs(addonBlockList) do
 		if strfind(msg, word) then
 			if event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" then
-				toggleBubble()
+				module:ToggleChatBubble()
 			elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
-				toggleBubble(true)
+				module:ToggleChatBubble(true)
 			end
 			return true
 		end
@@ -136,7 +137,7 @@ end
 
 -- Block trash clubs
 local trashClubs = {"站桩", "致敬我们"}
-local function blockTrashClub(self)
+function module:BlockTrashClub()
 	if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
 		local text = self.DoubleLine:GetText() or ""
 		for _, name in pairs(trashClubs) do
@@ -158,7 +159,7 @@ function module:UpdateChatAtList()
 	chatAtList[DB.MyName] = true
 end
 
-local function chatAtMe(_, _, ...)
+function module:UpdateChatAtMe(_, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
 	author = Ambiguate(author, "short")
 	if author == DB.MyName then return end
@@ -189,54 +190,54 @@ hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 		at.checker = false
 	end
 
-	blockTrashClub(self)
+	module.BlockTrashClub(self)
 end)
 
--- 过滤海岛探险中艾泽里特的获取信息
+-- Filter azerite msg on islands
 local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub("%%d/%%d ", "")
-local function filterAzeriteGain(_, _, msg)
+function module:FilterAzeriteGain(_, msg)
 	if strfind(msg, azerite) then
 		return true
 	end
 end
 
-local function isPlayerOnIslands()
+function module:IsPlayerOnIslands()
 	local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
 	if instanceType == "scenario" and maxPlayers == 3 then
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", filterAzeriteGain)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", module.FilterAzeriteGain)
 	else
-		ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", filterAzeriteGain)
+		ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", module.FilterAzeriteGain)
 	end
 end
 
 function module:ChatFilter()
 	if NDuiDB["Chat"]["EnableFilter"] then
-		module:UpdateFilterList()
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", genChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", genChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", genChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", genChatFilter)
+		self:UpdateFilterList()
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", self.UpdateChatFilter)
 	end
 
 	if NDuiDB["Chat"]["BlockAddonAlert"] then
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genAddonBlock)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateAddOnBlocker)
 	end
 
 	self:UpdateChatAtList()
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", chatAtMe)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", self.UpdateChatAtMe)
 
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", isPlayerOnIslands)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", self.IsPlayerOnIslands)
 end

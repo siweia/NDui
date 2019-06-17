@@ -3,25 +3,31 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
 local gsub, strfind = string.gsub, string.find
+local INTERFACE_ACTION_BLOCKED = INTERFACE_ACTION_BLOCKED
+
+function module:UpdateChannelNames(text, ...)
+	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
+
+	local r, g, b = ...
+	if NDuiDB["Chat"]["WhisperColor"] and strfind(text, L["Tell"].." |H[BN]*player.+%]") then
+		r, g, b = r*.7, g*.7, b*.7
+	end
+
+	if NDuiDB["Chat"]["Oldname"] then
+		text = gsub(text, "|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
+		text = gsub(text, "|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")
+		return self.oldAddMsg(self, text, r, g, b)
+	else
+		return self.oldAddMsg(self, gsub(text, "|h%[(%d+)%..-%]|h", "|h[%1]|h"), r, g, b)
+	end
+end
 
 function module:ChannelRename()
 	for i = 1, NUM_CHAT_WINDOWS do
 		if i ~= 2 then
-			local f = _G["ChatFrame"..i]
-			local am = f.AddMessage
-			f.AddMessage = function(frame, text, ...)
-				if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
-
-				local r, g, b = ...
-				if NDuiDB["Chat"]["WhisperColor"] and strfind(text, L["Tell"].." |H[BN]*player.+%]") then r, g, b = r*.7, g*.7, b*.7 end
-				if NDuiDB["Chat"]["Oldname"] then
-					text = gsub(text, "|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
-					text = gsub(text, "|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")
-					return am(frame, text, r, g, b)
-				else
-					return am(frame, gsub(text, "|h%[(%d+)%..-%]|h", "|h[%1]|h"), r, g, b)
-				end
-			end
+			local chatFrame = _G["ChatFrame"..i]
+			chatFrame.oldAddMsg = chatFrame.AddMessage
+			chatFrame.AddMessage = module.UpdateChannelNames
 		end
 	end
 
