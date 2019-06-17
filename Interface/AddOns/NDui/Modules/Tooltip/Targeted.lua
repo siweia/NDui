@@ -2,9 +2,19 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
+local wipe, tinsert, tconcat = table.wipe, table.insert, table.concat
+local IsInGroup, IsInRaid, GetNumGroupMembers = IsInGroup, IsInRaid, GetNumGroupMembers
+local UnitExists, UnitIsUnit, UnitIsDeadOrGhost, UnitName = UnitExists, UnitIsUnit, UnitIsDeadOrGhost, UnitName
+
 local targetTable = {}
 
-function TT:ScanTargets(unit)
+function TT:ScanTargets()
+	if not NDuiDB["Tooltip"]["TargetBy"] then return end
+	if not IsInGroup() then return end
+
+	local _, unit = self:GetUnit()
+	if not UnitExists(unit) then return end
+
 	wipe(targetTable)
 
 	for i = 1, GetNumGroupMembers() do
@@ -17,18 +27,10 @@ function TT:ScanTargets(unit)
 	end
 
 	if #targetTable > 0 then
-		GameTooltip:AddLine(L["Targeted By"]..DB.InfoColor.."("..#targetTable..")|r "..table.concat(targetTable, ", "), nil, nil, nil, 1)
+		GameTooltip:AddLine(L["Targeted By"]..DB.InfoColor.."("..#targetTable..")|r "..tconcat(targetTable, ", "), nil, nil, nil, 1)
 	end
 end
 
 function TT:TargetedInfo()
-	GameTooltip:HookScript("OnTooltipSetUnit", function(self)
-		if not NDuiDB["Tooltip"]["TargetBy"] then return end
-		if not IsInGroup() then return end
-	
-		local _, unit = self:GetUnit()
-		if UnitExists(unit) then
-			TT:ScanTargets(unit)
-		end
-	end)
+	GameTooltip:HookScript("OnTooltipSetUnit", TT.ScanTargets)
 end

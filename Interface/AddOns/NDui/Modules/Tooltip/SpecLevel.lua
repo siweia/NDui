@@ -3,16 +3,24 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 -- Credit: Cloudy Unit Info, by Cloudyfa
-local cache, weapon, currentUNIT, currentGUID = {}, {}
+local select, max, strfind, format, strsplit = select, math.max, string.find, string.format, string.split
+local GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown = GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown
+local UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi
+local GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel
+local GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID
+local HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
+
 local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
-local LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
-local tinsert, max = table.insert, math.max
-local strfind, format, strsplit = string.find, string.format, string.split
+local cache, weapon, currentUNIT, currentGUID = {}, {}
 
-local function updateInspect(self, elapsed)
+local updater = CreateFrame("Frame")
+updater:Hide()
+updater:SetScript("OnUpdate", TT.InspectOnUpdate)
+
+function TT:InspectOnUpdate(elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
 	if self.elapsed > frequency then
 		self.elapsed = 0
@@ -25,16 +33,13 @@ local function updateInspect(self, elapsed)
 		end
 	end
 end
-local updater = CreateFrame("Frame")
-updater:SetScript("OnUpdate", updateInspect)
-updater:Hide()
 
-local function resetUnit(_, btn)
+function TT:ResetUnit(btn)
 	if btn == "LSHIFT" and UnitExists("mouseover") then
 		GameTooltip:SetUnit("mouseover")
 	end
 end
-B:RegisterEvent("MODIFIER_STATE_CHANGED", resetUnit)
+B:RegisterEvent("MODIFIER_STATE_CHANGED", TT.ResetUnit)
 
 function TT:GetInspectInfo(...)
 	if self == "UNIT_INVENTORY_CHANGED" then
@@ -52,7 +57,7 @@ function TT:GetInspectInfo(...)
 			cache[guid].getTime = GetTime()
 
 			if spec and level then
-				TT:SetupTooltip(spec, level)
+				TT:SetupSpecLevel(spec, level)
 			else
 				TT:InspectUnit(currentUNIT, true)
 			end
@@ -62,7 +67,7 @@ function TT:GetInspectInfo(...)
 end
 B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
-function TT:SetupTooltip(spec, level)
+function TT:SetupSpecLevel(spec, level)
 	local _, unit = GameTooltip:GetUnit()
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
@@ -98,9 +103,7 @@ function TT:GetUnitItemLevel(unit)
 	local class = select(2, UnitClass(unit))
 	local ilvl, boa, total, haveWeapon, twohand = 0, 0, 0, 0, 0
 	local delay, mainhand, offhand, hasArtifact
-	wipe(weapon)
-	tinsert(weapon, 0)
-	tinsert(weapon, 0)
+	weapon[1], weapon[2] = 0, 0
 
 	for i = 1, 17 do
 		if i ~= 4 then
@@ -217,7 +220,7 @@ function TT:InspectUnit(unit, forced)
 	if UnitIsUnit(unit, "player") then
 		spec = self:GetUnitSpec("player")
 		level = self:GetUnitItemLevel("player")
-		self:SetupTooltip(spec, level)
+		self:SetupSpecLevel(spec, level)
 	else
 		if not unit or UnitGUID(unit) ~= currentGUID then return end
 		if not UnitIsPlayer(unit) then return end
@@ -225,14 +228,14 @@ function TT:InspectUnit(unit, forced)
 		local currentDB = cache[currentGUID]
 		spec = currentDB.spec
 		level = currentDB.level
-		self:SetupTooltip(spec, level)
+		self:SetupSpecLevel(spec, level)
 
 		if not NDuiDB["Tooltip"]["SpecLevelByShift"] and IsShiftKeyDown() then forced = true end
 		if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = frequency return end
 		if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
 		if InspectFrame and InspectFrame:IsShown() then return end
 
-		self:SetupTooltip()
+		self:SetupSpecLevel()
 		updater:Show()
 	end
 end

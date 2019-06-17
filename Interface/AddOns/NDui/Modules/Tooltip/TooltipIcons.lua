@@ -54,7 +54,7 @@ function TT:HookTooltipMethod()
 	self:HookScript("OnTooltipCleared", TT.HookTooltipCleared)
 end
 
-function TT:ReskinIconsInTooltip()
+function TT:ReskinTooltipIcons()
 	TT.HookTooltipMethod(GameTooltip)
 	TT.HookTooltipMethod(ItemRefTooltip)
 end
