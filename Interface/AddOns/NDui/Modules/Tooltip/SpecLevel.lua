@@ -16,10 +16,6 @@ local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
-local updater = CreateFrame("Frame")
-updater:Hide()
-updater:SetScript("OnUpdate", TT.InspectOnUpdate)
-
 function TT:InspectOnUpdate(elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
 	if self.elapsed > frequency then
@@ -33,6 +29,10 @@ function TT:InspectOnUpdate(elapsed)
 		end
 	end
 end
+
+local updater = CreateFrame("Frame")
+updater:SetScript("OnUpdate", TT.InspectOnUpdate)
+updater:Hide()
 
 function TT:ResetUnit(btn)
 	if btn == "LSHIFT" and UnitExists("mouseover") then
