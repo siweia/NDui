@@ -8,7 +8,7 @@ local ToggleFrame = ToggleFrame
 local FCF_SetChatWindowFontSize = FCF_SetChatWindowFontSize
 local ScrollFrameTemplate_OnMouseWheel = ScrollFrameTemplate_OnMouseWheel
 
-local lines, frame, menu = {}
+local lines, menu, frame, editBox = {}
 
 local function canChangeMessage(arg1, id)
 	if id and arg1 == "" then return id end
@@ -97,7 +97,7 @@ function module:ChatCopy_Create()
 	scrollArea:SetPoint("TOPLEFT", 10, -30)
 	scrollArea:SetPoint("BOTTOMRIGHT", -28, 10)
 
-	local editBox = CreateFrame("EditBox", nil, frame)
+	editBox = CreateFrame("EditBox", nil, frame)
 	editBox:SetMultiLine(true)
 	editBox:SetMaxLetters(99999)
 	editBox:EnableMouse(true)

@@ -10,7 +10,7 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
-local mapID
+local mapID, player, cursor
 local mapBody = WorldMapFrame:GetCanvasContainer()
 local scale, width, height = mapBody:GetEffectiveScale(), mapBody:GetWidth(), mapBody:GetHeight()
 
@@ -74,8 +74,8 @@ end
 function module:SetupCoords()
 	if not NDuiDB["Map"]["Coord"] then return end
 
-	local player = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
-	local cursor = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
+	player = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
+	cursor = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 
 	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function()
