@@ -11,9 +11,9 @@ local updater = CreateFrame("Frame")
 
 local colors = {
 	["normal"] = {1, 1, 1},
-	["oor"] = {1, .3, .1},
-	["oom"] = {.1, .3, 1},
-	["unusable"] = {.4, .4, .4}
+	["oor"] = {.8, .1, .1},
+	["oom"] = {.5, .5, 1},
+	["unusable"] = {.3, .3, .3}
 }
 
 function module:OnUpdateRange(elapsed)
