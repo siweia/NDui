@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
+local TT = B:GetModule("Tooltip")
 
 local strfind, strmatch, gsub = string.find, string.match, string.gsub
 
@@ -171,12 +172,12 @@ function S:DBMSkin()
 
 	local function SkinRange()
 		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
-			B.ReskinTooltip(DBMRangeCheckRadar)
+			TT.ReskinTooltip(DBMRangeCheckRadar)
 			DBMRangeCheckRadar.styled = true
 		end
 
 		if DBMRangeCheck and not DBMRangeCheck.styled then
-			B.ReskinTooltip(DBMRangeCheck)
+			TT.ReskinTooltip(DBMRangeCheck)
 			DBMRangeCheck.styled = true
 		end
 	end
@@ -185,7 +186,7 @@ function S:DBMSkin()
 	if DBM.InfoFrame then
 		DBM.InfoFrame:Show(5, "test")
 		DBM.InfoFrame:Hide()
-		DBMInfoFrame:HookScript("OnShow", B.ReskinTooltip)
+		DBMInfoFrame:HookScript("OnShow", TT.ReskinTooltip)
 	end
 
 	-- Force Settings

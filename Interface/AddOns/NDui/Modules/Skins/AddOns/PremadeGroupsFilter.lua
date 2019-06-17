@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB, F = unpack(ns)
 local S = B:GetModule("Skins")
+local TT = B:GetModule("Tooltip")
 
 function S:PGFSkin()
 	if not NDuiDB["Skins"]["PGFSkin"] then return end
@@ -12,7 +13,7 @@ function S:PGFSkin()
 		for i = 1, 15 do
 			local child = select(i, PremadeGroupsFilterDialog:GetChildren())
 			if child and child.Shadow then
-				B.ReskinTooltip(child)
+				TT.ReskinTooltip(child)
 				tipStyled = true
 				break
 			end

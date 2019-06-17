@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB, F, T = unpack(ns)
 local S = B:GetModule("Skins")
+local TT = B:GetModule("Tooltip")
 
 local cr, cg, cb = DB.r, DB.g, DB.b
 local select, pairs, ipairs, next, unpack = select, pairs, ipairs, next, unpack
@@ -190,8 +191,8 @@ function S:ReskinRematch()
 
 		-- Main Elements
 		hooksecurefunc("CollectionsJournal_UpdateSelectedTab", S.ResizeJournal)
-		B.ReskinTooltip(RematchTooltip)
-		B.ReskinTooltip(RematchTableTooltip)
+		TT.ReskinTooltip(RematchTooltip)
+		TT.ReskinTooltip(RematchTableTooltip)
 		for i = 1, 3 do
 			local menu = Rematch:GetMenuFrame(i, UIParent)
 			F.StripTextures(menu.Title)
