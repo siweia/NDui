@@ -38,7 +38,7 @@ function Bar:CreateExtrabar()
 
 	--create the mouseover functionality
 	if cfg.fader then
-		B.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
 	--zone ability

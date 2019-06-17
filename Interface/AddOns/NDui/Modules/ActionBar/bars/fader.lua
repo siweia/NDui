@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local Bar = B:GetModule("Actionbar")
 ----------------------------
 -- rLib: framefader, zork
 ----------------------------
@@ -109,7 +110,7 @@ local function CreateFrameFader(frame, faderConfig)
 	FrameHandler(frame)
 end
 
-function B:CreateButtonFrameFader(buttonList, faderConfig)
+function Bar:CreateButtonFrameFader(buttonList, faderConfig)
 	CreateFrameFader(self, faderConfig)
 	for _, button in next, buttonList do
 		if not button.__faderParent then
