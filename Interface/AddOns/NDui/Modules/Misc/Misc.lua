@@ -54,8 +54,7 @@ function M:OnLogin()
 				SetCVar("chatBubbles", 0)
 			end
 		end
-		updateBubble()
-		B:RegisterEvent("ZONE_CHANGED_NEW_AREA", updateBubble)
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", updateBubble)
 	end
 end
 
