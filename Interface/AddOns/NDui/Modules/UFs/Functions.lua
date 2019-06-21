@@ -443,11 +443,13 @@ function UF.PostCreateIcon(element, button)
 	button.icon:SetTexCoord(unpack(DB.TexCoord))
 	button.icon:SetDrawLayer("ARTWORK")
 	B.CreateSD(button, 2, 2)
-	button.overlay:SetTexture(nil)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
+
+	button.overlay:SetTexture(nil)
+	button.stealable:SetAtlas("bags-newitem")
 
 	if element.disableCooldown then button.timer = B.CreateFS(button, 12, "") end
 end
