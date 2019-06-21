@@ -86,9 +86,11 @@ function A:UpdateTimer(elapsed)
 		return
 	end
 
-	local timer, nextUpdate = A:FormatAuraTime(self.timeLeft)
-	self.nextUpdate = nextUpdate
-	self.timer:SetText(timer)
+	if self.timeLeft >= 0 then
+		local timer, nextUpdate = A:FormatAuraTime(self.timeLeft)
+		self.nextUpdate = nextUpdate
+		self.timer:SetText(timer)
+	end
 end
 
 function A:UpdateAuras(button, index)
