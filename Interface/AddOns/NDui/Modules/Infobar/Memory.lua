@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 if not C.Infobar.Memory then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar(C.Infobar.MemoryPos)
+local info = module:RegisterInfobar("Memory", C.Infobar.MemoryPos)
 local select, gcinfo, collectgarbage = select, gcinfo, collectgarbage
 local format, min, sort, wipe = string.format, math.min, table.sort, table.wipe
 local ADDONS, GetNumAddOns, GetAddOnInfo = ADDONS, GetNumAddOns, GetAddOnInfo
@@ -69,7 +69,7 @@ local function updateMemory()
 end
 
 info.onUpdate = function(self, elapsed)
-	self.timer = (self.timer or 5) + elapsed
+	self.timer = (self.timer or 3) + elapsed
 	if self.timer > 5 then
 		updateMemoryTable()
 		totalMemory = updateMemory()

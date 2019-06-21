@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Infobar")
 local tinsert, pairs, unpack = table.insert, pairs, unpack
 
-function module:RegisterInfobar(point)
+function module:RegisterInfobar(name, point)
 	if not self.modules then self.modules = {} end
 
 	local info = CreateFrame("Frame", nil, UIParent)
@@ -16,6 +16,7 @@ function module:RegisterInfobar(point)
 		info.text:SetPoint(unpack(point))
 	end
 	info:SetAllPoints(info.text)
+	info.name = name
 	tinsert(self.modules, info)
 
 	return info

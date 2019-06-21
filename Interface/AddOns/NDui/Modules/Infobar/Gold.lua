@@ -3,7 +3,8 @@ local B, C, L, DB = unpack(ns)
 if not C.Infobar.Gold then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar(C.Infobar.GoldPos)
+local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
+
 local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
 local GOLD_AMOUNT_SYMBOL, CLASS_ICON_TCOORDS = GOLD_AMOUNT_SYMBOL, CLASS_ICON_TCOORDS
 local GetMoney, GetMoneyString, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo = GetMoney, GetMoneyString, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo

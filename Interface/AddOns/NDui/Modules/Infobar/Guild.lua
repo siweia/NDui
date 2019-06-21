@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 if not C.Infobar.Guild then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar(C.Infobar.GuildPos)
+local info = module:RegisterInfobar("Guild", C.Infobar.GuildPos)
 
 local wipe, sort, format, select = table.wipe, table.sort, format, select
 local CLASS_ICON_TCOORDS, SELECTED_DOCK_FRAME = CLASS_ICON_TCOORDS, SELECTED_DOCK_FRAME
