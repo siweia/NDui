@@ -936,13 +936,13 @@ local function exportData()
 						else
 							for spellID, k in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..spellID
-								if k[5] == nil then k[5] = "nil" end
+								if k[5] == nil then k[5] = false end
 								for _, v in ipairs(k) do
 									text = text..":"..tostring(v)
 								end
 							end
 						end
-					elseif KEY == "Mover" or KEY == "RaidClickSets" then
+					elseif KEY == "Mover" or KEY == "RaidClickSets" or KEY == "InternalCD" then
 						text = text..";"..KEY..":"..key
 						for _, v in ipairs(value) do
 							text = text..":"..tostring(v)
@@ -1046,6 +1046,12 @@ local function importData()
 			if DB.MyClass == class then
 				NDuiDB[key][value] = {select(3, strsplit(":", option))}
 			end
+		elseif key == "InternalCD" then
+			local spellID, duration, indicator, unit, itemID = select(3, strsplit(":", option))
+			spellID = tonumber(spellID)
+			duration = tonumber(duration)
+			itemID = tonumber(itemID)
+			NDuiDB[key][spellID] = {spellID, duration, indicator, unit, itemID}
 		elseif key == "ACCOUNT" then
 			if value == "RaidAuraWatch" then
 				local spells = {select(3, strsplit(":", option))}
