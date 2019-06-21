@@ -308,7 +308,7 @@ function module:SetupMinimap()
 	local scale = NDuiDB["Map"]["MinmapScale"]
 	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
-	MinimapCluster:SetScale(scale)
+	Minimap:SetScale(scale)
 	DropDownList1:SetClampedToScreen(true)
 
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos, Minimap:GetWidth()*scale, Minimap:GetHeight()*scale)
