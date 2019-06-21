@@ -133,7 +133,7 @@ end
 
 function M:MailItem_AddDelete(i)
 	local bu = CreateFrame("Button", nil, self)
-	bu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", -5, -1)
+	bu:SetPoint("BOTTOMRIGHT", self:GetParent(), "BOTTOMRIGHT", -10, 5)
 	bu:SetSize(16, 16)
 	B.PixelIcon(bu, 136813, true)
 	bu.id = i
@@ -163,7 +163,7 @@ function M:InboxFrame_Hook()
 	end
 end
 
-function M:InboxItem_Hook()
+function M:InboxItem_OnEnter()
 	wipe(inboxItems)
 
 	local itemAttached = select(8, GetInboxHeaderInfo(self.index))
@@ -196,34 +196,32 @@ function M:MailBox()
 
 	for i = 1, 7 do
 		local itemButton = _G["MailItem"..i.."Button"]
-		itemButton:SetScript("OnClick", self.MailItem_OnClick)
-
-		local expireTime = _G["MailItem"..i.."ExpireTime"]
-		self.MailItem_AddDelete(expireTime, i)
+		itemButton:SetScript("OnClick", M.MailItem_OnClick)
+		M.MailItem_AddDelete(itemButton, i)
 	end
 
 	button1 = M:CreatButton(InboxFrame, L["Collect All"], 100, 22, "TOPLEFT", "InboxFrame", "TOPLEFT", 50, -35)
 	button1:RegisterEvent("MAIL_CLOSED")
-	button1:SetScript("OnClick", self.MailBox_OpenAll)
-	button1:SetScript("OnEvent", self.MailBox_OnEvent)
+	button1:SetScript("OnClick", M.MailBox_OpenAll)
+	button1:SetScript("OnEvent", M.MailBox_OnEvent)
 
 	button2 = M:CreatButton(InboxFrame, L["Collect Gold"], 100, 22, "LEFT", button1, "RIGHT", 30, 0)
 	button2:SetScript("OnClick", function()
 		takingOnlyCash = true
-		self:MailBox_OpenAll()
+		M:MailBox_OpenAll()
 	end)
-	button2:SetScript("OnEnter", self.TotalCash_OnEnter)
+	button2:SetScript("OnEnter", M.TotalCash_OnEnter)
 	button2:SetScript("OnLeave", B.HideTooltip)
 
 	button3 = M:CreatButton(OpenMailFrame, L["Collect Letters"], 82, 22, "RIGHT", "OpenMailReplyButton", "LEFT", 0, 0)
 	button3:SetScript("OnClick", function()
 		onlyCurrentMail = true
-		self:MailBox_OpenAll()
+		M:MailBox_OpenAll()
 	end)
-	button3:SetScript("OnEvent", self.MailBox_OnEvent)
+	button3:SetScript("OnEvent", M.MailBox_OnEvent)
 
-	hooksecurefunc("InboxFrame_Update", self.InboxFrame_Hook)
-	hooksecurefunc("InboxFrameItem_OnEnter", self.InboxItem_Hook)
+	hooksecurefunc("InboxFrame_Update", M.InboxFrame_Hook)
+	hooksecurefunc("InboxFrameItem_OnEnter", M.InboxItem_OnEnter)
 
 	-- Replace the alert frame
 	if InboxTooMuchMail then
