@@ -24,6 +24,12 @@ function M:Focuser_Setup()
 	end
 end
 
+function M:Focuser_CreateFrameHook(name, _, template)
+	if name and template == "SecureUnitButtonTemplate" then
+		M.Focuser_Setup(_G[name])
+	end
+end
+
 function M.Focuser_OnEvent(event)
 	if event == "PLAYER_REGEN_ENABLED" then
 		if next(pending) then
@@ -49,6 +55,7 @@ function M:Focuser()
 	f:SetAttribute("macrotext", "/focus mouseover")
 	SetOverrideBindingClick(FocuserButton, true, modifier.."-BUTTON"..mouseButton, "FocuserButton")
 
+	hooksecurefunc("CreateFrame", M.Focuser_CreateFrameHook)
 	self:Focuser_OnEvent()
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", self.Focuser_OnEvent)
 	B:RegisterEvent("GROUP_ROSTER_UPDATE", self.Focuser_OnEvent)
