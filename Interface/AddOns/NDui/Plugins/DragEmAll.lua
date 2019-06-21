@@ -50,9 +50,6 @@ local frames = {
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
 	["VideoOptionsFrame"] = false,
-
-	-- Other AddOns
-	["BaudErrorFrame"] = false,
 }
 
 -- Frame Existing Check
