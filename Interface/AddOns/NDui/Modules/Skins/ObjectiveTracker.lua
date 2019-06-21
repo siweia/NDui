@@ -3,34 +3,22 @@ local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 local pairs = pairs
-local tracker = ObjectiveTrackerFrame
-local minimize = tracker.HeaderMenu.MinimizeButton
-
-do
-	-- Move Tracker Frame
-	local mover = CreateFrame("Frame", "NDuiQuestMover", tracker)
-	mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -60, -25)
-	mover:SetSize(50, 50)
-	B.CreateMF(minimize, mover)
-	minimize:SetFrameStrata("HIGH")
-	minimize:HookScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L["Toggle"], 1, .8, 0)
-		GameTooltip:Show()
-	end)
-	minimize:HookScript("OnLeave", B.HideTooltip)
-
-	hooksecurefunc(tracker, "SetPoint", function(_, _, parent)
-		if parent ~= mover then
-			tracker:ClearAllPoints()
-			tracker:SetPoint("TOPRIGHT", mover, "CENTER", 15, 15)
-			tracker:SetHeight(GetScreenHeight() - 400)
-		end
-	end)
-end
+local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
 
 function S:QuestTracker()
+	-- Mover for quest tracker
+	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
+	frame:SetSize(240, 50)
+	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -60, -25})
+
+	local tracker = ObjectiveTrackerFrame
+	tracker:ClearAllPoints()
+	tracker:SetPoint("TOPRIGHT", frame)
+	tracker:SetHeight(GetScreenHeight()*.7)
+	tracker:SetClampedToScreen(false)
+	tracker:SetMovable(true)
+	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
+
 	-- Questblock click enhant
 	local function QuestHook(id)
 		local questLogIndex = GetQuestLogIndexByID(id)
