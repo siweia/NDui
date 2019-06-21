@@ -1,7 +1,6 @@
 local SelectedError = 1
 local ErrorList = {}
 local SoundTime = 0
-local QueueError = {}
 BaudErrorFrameConfig = BaudErrorFrameConfig or {}
 
 function BaudErrorFrame_OnLoad(self)
@@ -43,7 +42,7 @@ function BaudErrorFrame_OnLoad(self)
 	soundButton:SetScript("OnMouseUp", function(self)
 		BaudErrorFrameConfig.enableSound = not BaudErrorFrameConfig.enableSound
 		updateColor()
-		PlaySoundFile("Sound\\Creature\\Crone\\OzCroneAttack02.ogg", "Master")
+		PlaySound(48942, "Master")
 		self:GetScript("OnEnter")(self)
 	end)
 	soundButton:SetScript("OnShow", updateColor)
@@ -61,10 +60,6 @@ function BaudErrorFrame_OnEvent(self, event, ...)
 		if type(BaudErrorFrameConfig) ~= "table" then
 			BaudErrorFrameConfig = {}
 		end
-		for _, Value in ipairs(QueueError) do
-			BaudErrorFrameShowError(Value)
-		end
-		QueueError = nil
 	elseif event == "ADDON_ACTION_BLOCKED" then
 		BaudErrorFrameAdd(arg1.." blocked from using "..arg2, 4)
 	elseif event == "MACRO_ACTION_BLOCKED" then
@@ -104,7 +99,7 @@ function BaudErrorFrameShowError(Error)
 	if not BaudErrorFrameConfig.enableSound then return end
 
 	if GetTime() > SoundTime then
-		PlaySoundFile("Sound\\Creature\\Crone\\OzCroneAttack02.ogg", "Master")
+		PlaySound(48942, "Master")
 		SoundTime = GetTime() + 1
 	end
 end
@@ -122,11 +117,7 @@ function BaudErrorFrameAdd(Error, Retrace)
 		end
 	end
 
-	if BaudErrorFrameConfig then
-		BaudErrorFrameShowError(Error)
-	else
-		tinsert(QueueError, Error)
-	end
+	BaudErrorFrameShowError(Error)
 	tinsert(ErrorList, {Error = Error, Count = 1, Stack = debugstack(Retrace)})
 	BaudErrorFrameMinimapCount:SetText(getn(ErrorList))
 	BaudErrorFrameMinimapButton:Show()
@@ -228,11 +219,12 @@ f:SetScript("OnEvent", function()
 		B.CreateBD(BaudErrorFrame)
 		B.CreateSD(BaudErrorFrame)
 		B.CreateTex(BaudErrorFrame)
+		BaudErrorFrameListScrollBox:SetBackdrop(nil)
 		B.StripTextures(BaudErrorFrameDetailScrollBox)
 		local BG2 = CreateFrame("Frame", nil, BaudErrorFrame)
 		BG2:SetPoint("CENTER", BaudErrorFrame, "CENTER", 0, -81)
 		BG2:SetSize(BaudErrorFrameEditBox:GetWidth() + 56, BaudErrorFrameEditBox:GetHeight() + 10)
-		B.CreateBD(BG2)
+		B.CreateBD(BG2, .25)
 		for _, button in next, {BaudErrorFrameClearButton, BaudErrorFrameCloseButton, BaudErrorFrameReloadUIButton} do
 			B.CreateBD(button)
 			B.CreateBC(button)

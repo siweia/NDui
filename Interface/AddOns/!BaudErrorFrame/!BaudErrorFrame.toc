@@ -3,7 +3,7 @@
 ## Title-zhCN: |cff0080ffBaudErrorFrame|r 报错收集
 ## Title-zhTW: |cff0080ffBaudErrorFrame|r 報錯收集
 ## Notes: Improved error reporting
-## Author: Baudzilla, wolftankk, Affli@RU-Howling Fjord
+## Author: Baudzilla, wolftankk, Siweia
 ## Version: NDui Mod
 ## SavedVariables: BaudErrorFrameConfig
 
