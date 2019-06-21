@@ -2,8 +2,33 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
-local tostring, tonumber, pairs = tostring, tonumber, pairs
-local strsplit, random = string.split, math.random
+local tostring, tonumber, pairs, select, random = tostring, tonumber, pairs, select, math.random
+local strsplit, strfind, strmatch, strupper, gsub = string.split, string.find, string.match, string.upper, gsub
+local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
+local GetNumArchaeologyRaces = GetNumArchaeologyRaces
+local GetNumArtifactsByRace = GetNumArtifactsByRace
+local GetArtifactInfoByRace = GetArtifactInfoByRace
+local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
+local GetNumAuctionItems, GetAuctionItemInfo = GetNumAuctionItems, GetAuctionItemInfo
+local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
+local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
+local EquipmentManager_RunAction = EquipmentManager_RunAction
+local GetInventoryItemTexture = GetInventoryItemTexture
+local GetItemInfo = GetItemInfo
+local BuyMerchantItem = BuyMerchantItem
+local GetMerchantItemLink = GetMerchantItemLink
+local GetMerchantItemMaxStack = GetMerchantItemMaxStack
+local GetItemQualityColor = GetItemQualityColor
+local Screenshot = Screenshot
+local GetTime, GetCVarBool, SetCVar = GetTime, GetCVarBool, SetCVar
+local GetNumLootItems, LootSlot = GetNumLootItems, LootSlot
+local GetNumSavedInstances = GetNumSavedInstances
+local GetInstanceInfo = GetInstanceInfo
+local GetSavedInstanceInfo = GetSavedInstanceInfo
+local SetSavedInstanceExtend = SetSavedInstanceExtend
+local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
+local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
+local EnumerateFrames = EnumerateFrames
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -23,6 +48,7 @@ function M:OnLogin()
 	end
 	self:NakedIcon()
 	self:ExtendInstance()
+	self:VehicleSeatMover()
 	self:PetFilterTab()
 
 	-- Max camera distancee
@@ -152,8 +178,6 @@ end
 
 -- Show BID and highlight price
 do
-	local GetNumAuctionItems, GetAuctionItemInfo, SetMoneyFrameColor = GetNumAuctionItems, GetAuctionItemInfo, SetMoneyFrameColor
-
 	local function setupMisc(event, addon)
 		if addon == "Blizzard_AuctionUI" then
 			hooksecurefunc("AuctionFrameBrowse_Update", function()
@@ -248,28 +272,32 @@ end
 
 -- ALT+RightClick to buy a stack
 do
-	local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
 	local cache = {}
+	local itemLink, id
+
+	StaticPopupDialogs["BUY_STACK"] = {
+		text = L["Stack Buying Check"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			if not itemLink then return end
+			BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+			cache[itemLink] = true
+			itemLink = nil
+		end,
+		hideOnEscape = 1,
+		hasItemFrame = 1,
+	}
+
+	local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
 	function MerchantItemButton_OnModifiedClick(self, ...)
 		if IsAltKeyDown() then
-			local id = self:GetID()
-			local itemLink = GetMerchantItemLink(id)
+			id = self:GetID()
+			itemLink = GetMerchantItemLink(id)
 			if not itemLink then return end
 			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
 			if maxStack and maxStack > 1 then
 				if not cache[itemLink] then
-					StaticPopupDialogs["BUY_STACK"] = {
-						text = L["Stack Buying Check"],
-						button1 = YES,
-						button2 = NO,
-						OnAccept = function()
-							BuyMerchantItem(id, GetMerchantItemMaxStack(id))
-							cache[itemLink] = true
-						end,
-						hideOnEscape = 1,
-						hasItemFrame = 1,
-					}
-
 					local r, g, b = GetItemQualityColor(quality or 1)
 					StaticPopup_Show("BUY_STACK", " ", " ", {["texture"] = texture, ["name"] = name, ["color"] = {r, g, b, 1}, ["link"] = itemLink, ["index"] = id, ["count"] = maxStack})
 				else
@@ -395,18 +423,15 @@ function M:ExtendInstance()
 end
 
 -- Repoint Vehicle
-do
-	local mover = B.CreateGear(VehicleSeatIndicator, "NDuiVehicleSeatMover")
-	mover:SetPoint("BOTTOMRIGHT", UIParent, -360, 30)
-	mover:SetFrameStrata("HIGH")
-	B.AddTooltip(mover, "ANCHOR_TOP", L["Toggle"], "system")
-	B.CreateMF(mover)
+function M:VehicleSeatMover()
+	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
+	frame:SetSize(125, 125)
+	local mover = B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
 
-	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(_, _, parent)
-		if parent ~= mover then
-			VehicleSeatIndicator:ClearAllPoints()
-			VehicleSeatIndicator:SetClampedToScreen(true)
-			VehicleSeatIndicator:SetPoint("BOTTOMRIGHT", mover, "BOTTOMLEFT", -5, 0)
+	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(self, _, parent)
+		if parent == "MinimapCluster" or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint("TOPLEFT", frame)
 		end
 	end)
 end
@@ -591,8 +616,6 @@ end
 
 -- TradeFrame hook
 do
-	local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
-
 	local infoText = B.CreateFS(TradeFrame, 16, "")
 	infoText:ClearAllPoints()
 	infoText:SetPoint("TOP", TradeFrameRecipientNameText, "BOTTOM", 0, -5)
@@ -612,4 +635,52 @@ do
 		infoText:SetText(text)
 	end
 	hooksecurefunc("TradeFrame_Update", updateColor)
+end
+
+-- Framestack fix
+if DB.isNewPatch then
+	local frames = {}
+	local function FindFrame(hash)
+		if frames[hash] then
+			return frames[hash]
+		else
+			local frame = EnumerateFrames()
+			while frame do
+				if frame:IsVisible() and frame:IsMouseOver() then
+					if strfind(tostring(frame), hash) then
+						frames[hash] = frame
+						return frame
+					end
+				end
+				frame = EnumerateFrames(frame)
+			end
+		end
+	end
+
+	local function SetFrameStack_Hook(self)
+		for i = 1, self:GetNumRegions() do
+			local region = select(i, self:GetRegions())
+			if region:GetObjectType() == "FontString" then
+				local text = region:GetText()
+				if text and strfind(text, "<%d+>") then
+					local hash = strmatch(text, "UIParent%.(%x*)%.?")
+					if hash then
+						local frame = FindFrame(strupper(hash))
+						if frame then
+							local name = frame:GetName() or frame:GetDebugName()
+							region:SetText(gsub(text, "(UIParent%.%x*)", name))
+						end
+					end
+				end
+			end
+		end
+	end
+
+	local function setupMisc(event, addon)
+		if addon == "Blizzard_DebugTools" then
+			hooksecurefunc(FrameStackTooltip, "SetFrameStack", SetFrameStack_Hook)
+			B:UnregisterEvent(event, fixOnLoad)
+		end
+	end
+	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
