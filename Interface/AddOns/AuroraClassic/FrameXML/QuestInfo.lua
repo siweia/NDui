@@ -51,11 +51,29 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	restyleSpellButton(QuestInfoSpellObjectiveFrame)
 
+	local function QuestInfo_GetQuestID()
+		if QuestInfoFrame.questLog then
+			return select(8, GetQuestLogTitle(GetQuestLogSelection()))
+		else
+			return GetQuestID()
+		end
+	end
+
 	local function colourObjectivesText()
 		if not QuestInfoFrame.questLog then return end
 
+		local questID = QuestInfo_GetQuestID()
 		local objectivesTable = QuestInfoObjectivesFrame.Objectives
 		local numVisibleObjectives = 0
+
+		if C.isNewPatch then
+			local waypointText = C_QuestLog.GetNextWaypointText(questID);
+			if waypointText then
+				numVisibleObjectives = numVisibleObjectives + 1;
+				objective = objectivesTable[numVisibleObjectives]
+				objective:SetTextColor(1, 1, 1)
+			end
+		end
 
 		for i = 1, GetNumQuestLeaderBoards() do
 			local _, type, finished = GetQuestLogLeaderBoard(i)

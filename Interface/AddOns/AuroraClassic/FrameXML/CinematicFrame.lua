@@ -5,6 +5,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		self:SetScale(UIParent:GetScale())
 	end)
 
+	F.StripTextures(CinematicFrameCloseDialog)
 	F.CreateBD(CinematicFrameCloseDialog)
 	F.CreateSD(CinematicFrameCloseDialog)
 	F.Reskin(CinematicFrameCloseDialogConfirmButton)

@@ -92,8 +92,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	F.StripTextures(LFGDungeonReadyDialog, true)
+	F.StripTextures(LFGDungeonReadyDialog, 0)
 	F.SetBD(LFGDungeonReadyDialog)
+	F.StripTextures(LFGInvitePopup)
 	F.CreateBD(LFGInvitePopup)
 	F.CreateSD(LFGInvitePopup)
 	F.CreateBD(LFGDungeonReadyStatus)
