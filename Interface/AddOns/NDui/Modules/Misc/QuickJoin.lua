@@ -11,7 +11,7 @@ local M = B:GetModule("Misc")
 ]]
 
 function M:HookTrackerOnBlockClick(button)
-	if self.M.ShowWorldQuests then
+	if self.module.ShowWorldQuests then
 		if button == "MiddleButton" then
 			LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
 		end
@@ -28,11 +28,6 @@ function M:HookApplicationClick()
 end
 
 local pendingFrame
-function M:HookDialogOnShow()
-	pendingFrame = self
-	C_Timer.After(1, M.DialogHideInSecond)
-end
-
 function M:DialogHideInSecond()
 	if not pendingFrame then return end
 
@@ -41,6 +36,12 @@ function M:DialogHideInSecond()
 	elseif pendingFrame == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
 		StaticPopup_Hide(pendingFrame)
 	end
+	pendingFrame = nil
+end
+
+function M:HookDialogOnShow()
+	pendingFrame = self
+	C_Timer.After(1, M.DialogHideInSecond)
 end
 
 function M:QuickJoin()
