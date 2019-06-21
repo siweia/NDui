@@ -21,6 +21,7 @@ local linkTypes = {
 	instancelock = true,
 	currency = true,
 	keystone = true,
+	azessence = true,
 }
 
 function TT:HyperLink_SetPet(link)
@@ -71,12 +72,12 @@ function TT:HyperLink_SetTypes(link)
 end
 
 function TT:HyperLink_OnEnter(link, ...)
-	local linktype = strmatch(link, "^([^:]+)")
-	if linktype and linktype == "battlepet" then
+	local linkType = strmatch(link, "^([^:]+)")
+	if linkType and linkType == "battlepet" then
 		TT.HyperLink_SetPet(self, link)
-	elseif linktype and linktype == "journal" then
+	elseif linkType and linkType == "journal" then
 		TT.HyperLink_SetJournal(self, link)
-	elseif linktype and linkTypes[linktype] then
+	elseif linkType and linkTypes[linkType] then
 		TT.HyperLink_SetTypes(self, link)
 	end
 
