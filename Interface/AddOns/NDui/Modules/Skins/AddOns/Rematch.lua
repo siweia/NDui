@@ -178,9 +178,10 @@ function S:ReskinRematch()
 	local RematchJournal = RematchJournal
 	if not RematchJournal then return end
 
-	local settings = RematchSettings
-	settings.ColorPetNames = true
-	settings.FixedPetCard = true
+	if RematchSettings then
+		RematchSettings.ColorPetNames = true
+		RematchSettings.FixedPetCard = true
+	end
 	RematchLoreFont:SetTextColor(1, 1, 1)
 
 	local styled
@@ -574,7 +575,7 @@ function S:ReskinRematch()
 		if not teamInfo then return end
 
 		local panel = RematchTeamPanel
-		if teamInfo.key == settings.loadedTeam then
+		if teamInfo.key == RematchSettings.loadedTeam then
 			panel.SelectedOverlay:SetAllPoints(self.bg)
 		end
 	end)
@@ -605,7 +606,7 @@ function S:ReskinRematch()
 				checkButton.bg:SetPoint("BOTTOMRIGHT", 0, 2)
 				checkButton.bgTex:Hide()
 
-				local isCollapsed = settings.CollapsedOptHeaders[opt[3]]
+				local isCollapsed = RematchSettings.CollapsedOptHeaders[opt[3]]
 				if isCollapsed then
 					checkButton:SetTexCoord(0, .4375, 0, .4375)
 				else
@@ -626,7 +627,7 @@ function S:ReskinRematch()
 					checkButton:SetTexCoord(0, 0, 0, 0)
 				end
 			elseif self.optType == "radio" then
-				local isChecked = settings[opt[2]] == opt[5]
+				local isChecked = RematchSettings[opt[2]] == opt[5]
 				checkButton:SetSize(22, 22)
 				checkButton.bg:SetPoint("TOPLEFT", checkButton, 2, -2)
 				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, -2, 2)
