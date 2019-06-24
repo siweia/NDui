@@ -1,4 +1,4 @@
-## Interface: 80100
+## Interface: 80200
 ## Title: |cff0080ffSkada|r
 ## Title-zhCN: |cff0080ffSkada|r 战斗统计
 ## Title-zhTW: |cff0080ffSkada|r 戰鬥統計
