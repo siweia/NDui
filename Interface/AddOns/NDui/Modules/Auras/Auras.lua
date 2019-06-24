@@ -108,6 +108,9 @@ function A:UpdateAuras(button, index)
 			else
 				button.timeLeft = timeLeft
 			end
+			-- need reviewed
+			button.nextUpdate = -1
+			A.UpdateTimer(button, 0)
 		else
 			button.timeLeft = nil
 			button.timer:SetText("")
@@ -177,8 +180,8 @@ function A:UpdateHeader(header)
 	end
 
 	header:SetAttribute("separateOwn", 1)
-	header:SetAttribute("sortMethod", "TIME")
-	header:SetAttribute("sortDirection", "-")
+	header:SetAttribute("sortMethod", "INDEX")
+	header:SetAttribute("sortDirection", "+")
 	header:SetAttribute("wrapAfter", cfg.wrapAfter)
 	header:SetAttribute("maxWraps", cfg.maxWraps)
 	header:SetAttribute("point", cfg.reverseGrow and "TOPLEFT" or "TOPRIGHT")
