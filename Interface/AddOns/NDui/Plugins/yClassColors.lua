@@ -95,48 +95,6 @@ local function updateGuildUI(event, addon)
 end
 B:RegisterEvent("ADDON_LOADED", updateGuildUI)
 
--- Battlefield
-local function updateScoreFrame()
-	local inArena = IsActiveBattlefieldArena()
-	local offset = FauxScrollFrame_GetOffset(WorldStateScoreScrollFrame)
-
-	for i = 1, 20 do
-		local index = offset + i
-		local fullName, _, _, _, _, faction, _, _, class = GetBattlefieldScore(index)
-		-- faction: Battlegrounds: Horde = 0, Alliance = 1 / Arenas: Green Team = 0, Yellow Team = 1
-		if fullName then
-			local name, realm = strsplit("-", fullName)
-			name = classColor(class)..name.."|r"
-			if fullName == DB.MyName then name = "> "..name.." <" end
-
-			if realm then
-				local color
-				if inArena then
-					if faction == 1 then
-						color = "|cffffd100"
-					else
-						color = "|cff19ff19"
-					end
-				else
-					if faction == 1 then
-						color = "|cff00adf0"
-					else
-						color = "|cffff1919"
-					end
-				end
-				realm = color..realm.."|r"
-				name = name.."|cffffffff - |r"..realm
-			end
-
-			local button = _G["WorldStateScoreButton"..i]
-			button.name.text:SetText(name)
-		end
-	end
-end
-if not DB.isNewPatch then
-	hooksecurefunc("WorldStateScoreFrame_Update", updateScoreFrame)
-end
-
 -- Friends
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%$d", "%$s")
