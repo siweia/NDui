@@ -102,14 +102,12 @@ function A:UpdateAuras(button, index)
 		if duration > 0 and expirationTime then
 			local timeLeft = expirationTime - GetTime()
 			if not button.timeLeft then
+				button.nextUpdate = -1
 				button.timeLeft = timeLeft
 				button:SetScript("OnUpdate", A.UpdateTimer)
 			else
 				button.timeLeft = timeLeft
 			end
-
-			button.nextUpdate = -1
-			A.UpdateTimer(button, 0)
 		else
 			button.timeLeft = nil
 			button.timer:SetText("")
@@ -175,12 +173,12 @@ function A:UpdateHeader(header)
 	if header:GetAttribute("filter") == "HELPFUL" then
 		cfg = settings.Buffs
 		header:SetAttribute("consolidateTo", 0)
-		header:SetAttribute("weaponTemplate", ("NDuiAuraTemplate%d"):format(cfg.size))
+		header:SetAttribute("weaponTemplate", format("NDuiAuraTemplate%d", cfg.size))
 	end
 
 	header:SetAttribute("separateOwn", 1)
 	header:SetAttribute("sortMethod", "TIME")
-	header:SetAttribute("sortDirection", "DESCENDING")
+	header:SetAttribute("sortDirection", "-")
 	header:SetAttribute("wrapAfter", cfg.wrapAfter)
 	header:SetAttribute("maxWraps", cfg.maxWraps)
 	header:SetAttribute("point", cfg.reverseGrow and "TOPLEFT" or "TOPRIGHT")
@@ -190,7 +188,7 @@ function A:UpdateHeader(header)
 	header:SetAttribute("yOffset", 0)
 	header:SetAttribute("wrapXOffset", 0)
 	header:SetAttribute("wrapYOffset", -(cfg.size + offset))
-	header:SetAttribute("template", ("NDuiAuraTemplate%d"):format(cfg.size))
+	header:SetAttribute("template", format("NDuiAuraTemplate%d", cfg.size))
 
 	local index = 1
 	local child = select(index, header:GetChildren())
