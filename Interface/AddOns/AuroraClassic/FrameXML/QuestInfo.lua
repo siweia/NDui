@@ -66,13 +66,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		local objectivesTable = QuestInfoObjectivesFrame.Objectives
 		local numVisibleObjectives = 0
 
-		if C.isNewPatch then
-			local waypointText = C_QuestLog.GetNextWaypointText(questID);
-			if waypointText then
-				numVisibleObjectives = numVisibleObjectives + 1;
-				objective = objectivesTable[numVisibleObjectives]
-				objective:SetTextColor(1, 1, 1)
-			end
+		local waypointText = C_QuestLog.GetNextWaypointText(questID);
+		if waypointText then
+			numVisibleObjectives = numVisibleObjectives + 1;
+			objective = objectivesTable[numVisibleObjectives]
+			objective:SetTextColor(1, 1, 1)
 		end
 
 		for i = 1, GetNumQuestLeaderBoards() do

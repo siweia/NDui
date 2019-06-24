@@ -90,7 +90,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local professions = {"PrimaryProfession1", "PrimaryProfession2", "SecondaryProfession1", "SecondaryProfession2", "SecondaryProfession3"}
 
-	for _, button in pairs(professions) do
+	for i, button in pairs(professions) do
 		local bu = _G[button]
 		bu.professionName:SetTextColor(1, 1, 1)
 		bu.missingHeader:SetTextColor(1, 1, 1)
@@ -102,6 +102,10 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
 		bu.statusBar.rankText:SetPoint("CENTER")
 		F.CreateBDFrame(bu.statusBar, .25)
+		if i > 2 then
+			bu.statusBar:ClearAllPoints()
+			bu.statusBar:SetPoint("BOTTOMLEFT", 16, 3)
+		end
 	end
 
 	local professionbuttons = {"PrimaryProfession1SpellButtonTop", "PrimaryProfession1SpellButtonBottom", "PrimaryProfession2SpellButtonTop", "PrimaryProfession2SpellButtonBottom", "SecondaryProfession1SpellButtonLeft", "SecondaryProfession1SpellButtonRight", "SecondaryProfession2SpellButtonLeft", "SecondaryProfession2SpellButtonRight", "SecondaryProfession3SpellButtonLeft", "SecondaryProfession3SpellButtonRight"}

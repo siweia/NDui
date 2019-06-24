@@ -73,7 +73,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.shine:SetTexture("")
 			end
 		elseif frame.queue == LootAlertSystem then
-			local lootItem = frame.lootItem or frame
+			local lootItem = frame.lootItem
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", frame, 13, -15)
@@ -326,7 +326,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	-- BonusRollLootWonFrame
 	hooksecurefunc("LootWonAlertFrame_SetUp", function(frame)
-		local lootItem = frame.lootItem or frame
+		local lootItem = frame.lootItem
 		if not frame.bg then
 			frame.bg = F.CreateBDFrame(frame)
 			frame.bg:SetPoint("TOPLEFT", 10, -10)

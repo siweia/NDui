@@ -1,8 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ItemUpgradeUI"] = function()
-	if not C.isNewPatch then return end
-
 	local ItemUpgradeFrame = ItemUpgradeFrame
 	F.ReskinPortraitFrame(ItemUpgradeFrame)
 

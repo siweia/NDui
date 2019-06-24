@@ -30,7 +30,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu:SetPushedTexture("")
 		F.CreateBG(bu)
 		bu.IconBorder:SetAlpha(0)
-		if C.isNewPatch then frame["Border"]:Hide() end
+		frame["Border"]:Hide()
 
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)

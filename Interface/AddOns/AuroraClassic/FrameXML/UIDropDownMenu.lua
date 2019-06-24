@@ -16,7 +16,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				end
 				local backdrop = _G[name..i.."Backdrop"]
 				if backdrop and not backdrop.styled then
-					if C.isNewPatch then F.StripTextures(backdrop) end
+					F.StripTextures(backdrop)
 					F.CreateBD(backdrop, .7)
 					F.CreateSD(backdrop)
 					backdrop.styled = true

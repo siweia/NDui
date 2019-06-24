@@ -67,5 +67,4 @@
 	<Script file="UIDropDownMenu.lua"/>
 	<Script file="VideoOptionsFrame.lua"/>
 	<Script file="WorldMapFrame.lua"/>
-	<Script file="WorldStateFrame.lua"/>
 </Ui>

@@ -48,12 +48,10 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinFilterButton(PetJournalFilterButton)
 	F.ReskinFilterButton(MountJournalFilterButton)
 
-	if C.isNewPatch then
-		F.StripTextures(MountJournal.BottomLeftInset)
-		local bg = F.CreateBDFrame(MountJournal.BottomLeftInset, .25)
-		bg:SetPoint("TOPLEFT", 3, 0)
-		bg:SetPoint("BOTTOMRIGHT", -24, 2)
-	end
+	F.StripTextures(MountJournal.BottomLeftInset)
+	local bg = F.CreateBDFrame(MountJournal.BottomLeftInset, .25)
+	bg:SetPoint("TOPLEFT", 3, 0)
+	bg:SetPoint("BOTTOMRIGHT", -24, 2)
 
 	MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
 	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
