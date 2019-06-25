@@ -1,9 +1,18 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ItemSocketingUI"] = function()
-	local title = select(18, ItemSocketingFrame:GetRegions())
-	title:ClearAllPoints()
-	title:SetPoint("TOP", 0, -5)
+	local GemTypeInfo = {
+		Yellow = {r=0.97, g=0.82, b=0.29},
+		Red = {r=1, g=0.47, b=0.47},
+		Blue = {r=0.47, g=0.67, b=1},
+		Hydraulic = {r=1, g=1, b=1},
+		Cogwheel = {r=1, g=1, b=1},
+		Meta = {r=1, g=1, b=1},
+		Prismatic = {r=1, g=1, b=1},
+		PunchcardRed = {r=1, g=0.47, b=0.47},
+		PunchcardYellow = {r=0.97, g=0.82, b=0.29},
+		PunchcardBlue = {r=0.47, g=0.67, b=1},
+	}
 
 	for i = 1, MAX_NUM_SOCKETS do
 		local bu = _G["ItemSocketingSocket"..i]
@@ -26,18 +35,10 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 
 	hooksecurefunc("ItemSocketingFrame_Update", function()
 		for i = 1, MAX_NUM_SOCKETS do
-			local color = GEM_TYPE_INFO[GetSocketTypes(i)]
+			local color = GemTypeInfo[GetSocketTypes(i)]
 			_G["ItemSocketingSocket"..i].bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 
-		local num = GetNumSockets()
-		if num == 3 then
-			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -75, 39)
-		elseif num == 2 then
-			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -35, 39)
-		else
-			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 39)
-		end
 		ItemSocketingDescription:SetBackdrop(nil)
 	end)
 

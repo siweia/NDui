@@ -101,7 +101,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local function ReskinRewardIcon(self)
 		if self and self.Icon then
 			self.Icon:SetTexCoord(.08, .92, .08, .92)
-			self.IconBorder:Hide()
+			self.IconBorder:SetAlpha(0)
 		end
 	end
 	hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", ReskinRewardIcon)
