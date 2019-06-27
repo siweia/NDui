@@ -52,13 +52,24 @@ local list = {
 		{AuraID = 292463, UnitID = "player"},	-- 帕库之拥 赞达拉
 		-- 饰品附魔
 		{AuraID = 229206, UnitID = "player"},	-- 延时之力
+
 		{AuraID = 251231, UnitID = "player"},	-- 钢肤药水
 		{AuraID = 279151, UnitID = "player"},	-- 智力药水
 		{AuraID = 279152, UnitID = "player"},	-- 敏捷药水
 		{AuraID = 279153, UnitID = "player"},	-- 力量药水
 		{AuraID = 279154, UnitID = "player"},	-- 耐力药水
-		{AuraID = 251316, UnitID = "player"},	-- 鲜血爆发药水
-		{AuraID = 269853, UnitID = "player"},	-- 死亡崛起药水
+
+		{AuraID = 298155, UnitID = "player"},	-- 超强钢肤药水
+		{AuraID = 298152, UnitID = "player"},	-- 超强智力药水
+		{AuraID = 298146, UnitID = "player"},	-- 超强敏捷药水
+		{AuraID = 298154, UnitID = "player"},	-- 超强力量药水
+		{AuraID = 298153, UnitID = "player"},	-- 超强耐力药水
+
+		{AuraID = 298225, UnitID = "player"},	-- 邻位强化药水
+		{AuraID = 298317, UnitID = "player"},	-- 专注决心药水
+		{AuraID = 300714, UnitID = "player"},	-- 无拘之怒药水
+		{AuraID = 300741, UnitID = "player"},	-- 狂野愈合药水
+
 		{AuraID = 188024, UnitID = "player"},	-- 天行药水
 		{AuraID = 250878, UnitID = "player"},	-- 轻足药水
 		{AuraID = 290365, UnitID = "player"},	-- 辉煌蓝宝石
