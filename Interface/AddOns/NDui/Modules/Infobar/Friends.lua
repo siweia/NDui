@@ -5,7 +5,7 @@ if not C.Infobar.Friends then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Friends", C.Infobar.FriendsPos)
 
-local strfind, format, sort, wipe, unpack = string.find, string.format, table.sort, table.wipe, unpack
+local strfind, format, sort, wipe, unpack, tinsert = string.find, string.format, table.sort, table.wipe, unpack, table.insert
 local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
 local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
@@ -35,7 +35,7 @@ local function buildFriendTable(num)
 				status = DB.DNDTex
 			end
 			local class = DB.ClassList[info.className]
-			friendTable[i] = {info.name, info.level, class, info.area, info.connected, status}
+			tinsert(friendTable, {info.name, info.level, class, info.area, info.connected, status})
 		end
 	end
 
@@ -79,7 +79,7 @@ local function buildBNetTable(num)
 				infoText = gameText
 			end
 
-			bnetTable[i] = {bnetID, accountName, charName, gameID, client, isOnline, status, realmName, class, infoText}
+			tinsert(bnetTable, {bnetID, accountName, charName, gameID, client, isOnline, status, realmName, class, infoText})
 		end
 	end
 
