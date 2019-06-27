@@ -172,17 +172,20 @@ tinsert(C.themes["AuroraClassic"], function()
 		if numSpellRewards > 0 then
 			for reward in rewardsFrame.followerRewardPool:EnumerateActive() do
 				local portrait = reward.PortraitFrame
-				if not reward.styled then
-					portrait:ClearAllPoints()
-					portrait:SetPoint("TOPLEFT", 2, -5)
+				if not reward.bg then
 					F.ReskinGarrisonPortrait(portrait)
-
 					reward.BG:Hide()
-					local bg = F.CreateBDFrame(reward, .25)
-					bg:SetPoint("TOPLEFT", 0, -3)
-					bg:SetPoint("BOTTOMRIGHT", 2, 7)
+					reward.bg = F.CreateBDFrame(reward, .25)
+				end
 
-					reward.styled = true
+				if isQuestLog then
+					portrait:SetPoint("TOPLEFT", 2, 0)
+					reward.bg:SetPoint("TOPLEFT", 0, 1)
+					reward.bg:SetPoint("BOTTOMRIGHT", 2, -3)
+				else
+					portrait:SetPoint("TOPLEFT", 2, -5)
+					reward.bg:SetPoint("TOPLEFT", 0, -3)
+					reward.bg:SetPoint("BOTTOMRIGHT", 2, 7)
 				end
 
 				if portrait then

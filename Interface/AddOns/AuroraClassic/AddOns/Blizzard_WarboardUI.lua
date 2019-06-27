@@ -41,7 +41,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 
 				if child.Spell then
 					if not child.Spell.bg then
-						child.Spell.Border:Hide()
+						child.Spell.Border:SetTexture("")
 						child.Spell.IconMask:Hide()
 						child.Spell.bg = F.ReskinIcon(child.Spell.Icon)
 					end
