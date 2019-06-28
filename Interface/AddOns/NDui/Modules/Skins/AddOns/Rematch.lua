@@ -164,6 +164,7 @@ function S:RematchSelectedOverlay()
 	F.StripTextures(self.SelectedOverlay)
 	local bg = F.CreateBDFrame(self.SelectedOverlay)
 	bg:SetBackdropColor(1, .8, 0, .5)
+	self.SelectedOverlay.bg = bg
 end
 
 function S:ResizeJournal()
@@ -453,7 +454,11 @@ function S:ReskinRematch()
 		local petInfo = Rematch.petInfo:Fetch(petID)
 		local parentPanel = self:GetParent():GetParent():GetParent():GetParent()
 		if petInfo.isSummoned and parentPanel == Rematch.PetPanel then
-			parentPanel.SelectedOverlay:SetAllPoints(self.bg)
+			local bg = parentPanel.SelectedOverlay.bg
+			if bg then
+				bg:ClearAllPoints()
+				bg:SetAllPoints(self.bg)
+			end
 		end
 	end)
 
@@ -576,7 +581,11 @@ function S:ReskinRematch()
 
 		local panel = RematchTeamPanel
 		if teamInfo.key == RematchSettings.loadedTeam then
-			panel.SelectedOverlay:SetAllPoints(self.bg)
+			local bg = panel.SelectedOverlay.bg
+			if bg then
+				bg:ClearAllPoints()
+				bg:SetAllPoints(self.bg)
+			end
 		end
 	end)
 
