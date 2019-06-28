@@ -40,6 +40,7 @@
 	<Script file="Blizzard_ObjectiveTracker.lua"/>
 	<Script file="Blizzard_ObliterumUI.lua"/>
 	<Script file="Blizzard_OrderHallUI.lua"/>
+	<Script file="Blizzard_PVPMatch.lua"/>
 	<Script file="Blizzard_PVPUI.lua"/>
 	<Script file="Blizzard_QuestChoice.lua"/>
 	<Script file="Blizzard_RaidUI.lua"/>

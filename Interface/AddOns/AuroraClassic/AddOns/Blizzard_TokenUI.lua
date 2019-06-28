@@ -5,6 +5,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	TokenFramePopupCorner:Hide()
 	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
+	F.StripTextures(TokenFramePopup)
 	F.CreateBD(TokenFramePopup)
 	F.CreateSD(TokenFramePopup)
 	F.ReskinClose(TokenFramePopupCloseButton)

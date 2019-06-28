@@ -53,6 +53,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		ObjectiveTrackerBlocksFrame.ScenarioHeader,
 		BONUS_OBJECTIVE_TRACKER_MODULE.Header,
 		WORLD_QUEST_TRACKER_MODULE.Header,
+		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader
 	}
 	for _, header in pairs(headers) do reskinHeader(header) end
 

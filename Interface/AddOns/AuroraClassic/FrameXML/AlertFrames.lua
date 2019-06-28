@@ -19,6 +19,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	local function fixAnim(frame)
+		if frame.hooked then return end
+
 		frame:HookScript("OnEnter", fixBg)
 		frame:HookScript("OnShow", fixBg)
 		frame.animIn:HookScript("OnFinished", fixBg)
@@ -26,6 +28,12 @@ tinsert(C.themes["AuroraClassic"], function()
 			frame.animArrows:HookScript("OnPlay", fixBg)
 			frame.animArrows:HookScript("OnFinished", fixBg)
 		end
+		if frame.Arrows and frame.Arrows.ArrowsAnim then
+			frame.Arrows.ArrowsAnim:HookScript("OnPlay", fixParentbg)
+			frame.Arrows.ArrowsAnim:HookScript("OnFinished", fixParentbg)
+		end
+
+		frame.hookded = true
 	end
 
 	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
@@ -172,8 +180,6 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.bg:SetPoint("TOPLEFT", 16, -3)
 				frame.bg:SetPoint("BOTTOMRIGHT", -16, 16)
 				F.CreateSD(frame.bg)
-				frame.Arrows.ArrowsAnim:HookScript("OnPlay", fixParentbg)
-				frame.Arrows.ArrowsAnim:HookScript("OnFinished", fixParentbg)
 
 				frame:GetRegions():Hide()
 				select(5, frame:GetRegions()):Hide()
@@ -185,15 +191,16 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.shine:SetTexture("")
 			end
 			frame.FollowerBG:SetTexture("")
-		elseif frame.queue == GarrisonMissionAlertSystem or frame.queue == GarrisonShipMissionAlertSystem or frame.queue == GarrisonShipFollowerAlertSystem then
+		elseif frame.queue == GarrisonMissionAlertSystem or frame.queue == GarrisonRandomMissionAlertSystem or frame.queue == GarrisonShipMissionAlertSystem or frame.queue == GarrisonShipFollowerAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", 8, -8)
 				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
 				F.CreateSD(frame.bg)
 
-				frame.Background:Hide()
+				if frame.Blank then frame.Blank:Hide() end
 				if frame.IconBG then frame.IconBG:Hide() end
+				frame.Background:Hide()
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end

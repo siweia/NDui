@@ -213,6 +213,7 @@ C.themes["Blizzard_Communities"] = function()
 
 	do
 		local dialog = CommunitiesSettingsDialog
+		F.StripTextures(dialog)
 		F.SetBD(dialog)
 		F.Reskin(dialog.ChangeAvatarButton)
 		F.Reskin(dialog.Accept)
