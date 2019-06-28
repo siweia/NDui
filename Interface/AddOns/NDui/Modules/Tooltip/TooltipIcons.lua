@@ -69,6 +69,13 @@ function TT:ReskinTooltipIcons()
 	TT.HookTooltipMethod(GameTooltip)
 	TT.HookTooltipMethod(ItemRefTooltip)
 
+    hooksecurefunc(GameTooltip, "SetAzeriteEssence", function(self)
+		TT.SetupTooltipIcon(self)
+	end)
+    hooksecurefunc(GameTooltip, "SetAzeriteEssenceSlot", function(self)
+		TT.SetupTooltipIcon(self)
+	end)
+
 	-- Tooltip rewards icon
 	_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |cffffffff%2$s|r %3$s"
 	_G.BONUS_OBJECTIVE_REWARD_FORMAT = "|T%1$s:16:16:"..newString.."|t %2$s"
