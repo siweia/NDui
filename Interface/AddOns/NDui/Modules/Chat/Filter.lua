@@ -193,23 +193,6 @@ hooksecurefunc(BNToastFrame, "ShowToast", function(self)
 	module.BlockTrashClub(self)
 end)
 
--- Filter azerite msg on islands
-local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub("%%d/%%d ", "")
-function module:FilterAzeriteGain(_, msg)
-	if strfind(msg, azerite) then
-		return true
-	end
-end
-
-function module:IsPlayerOnIslands()
-	local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
-	if instanceType == "scenario" and maxPlayers == 3 then
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", module.FilterAzeriteGain)
-	else
-		ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", module.FilterAzeriteGain)
-	end
-end
-
 function module:ChatFilter()
 	if NDuiDB["Chat"]["EnableFilter"] then
 		self:UpdateFilterList()
@@ -238,6 +221,4 @@ function module:ChatFilter()
 
 	self:UpdateChatAtList()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", self.UpdateChatAtMe)
-
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", self.IsPlayerOnIslands)
 end
