@@ -103,7 +103,8 @@ function M:RareAlert_Update(id)
 
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		if NDuiDB["Misc"]["AlertinChat"] then
-			print("  -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
+			local currrentTime = DB.GreyColor.."["..date("%H:%M:%S").."]|r"
+			print(currrentTime.." -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		end
 		if not NDuiDB["Misc"]["RareAlertInWild"] or instType == "none" then
 			PlaySound(23404, "master")
@@ -116,8 +117,8 @@ function M:RareAlert_Update(id)
 end
 
 function M:RareAlert_CheckInstance()
-	local instID = select(8, GetInstanceInfo())
-	if instID and isIgnored[instID] then
+	local _, instanceType, _, _, maxPlayers, _, _, instID = GetInstanceInfo()
+	if (instID and isIgnored[instID]) or (instanceType == "scenario" and maxPlayers == 3) then
 		B:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
 	else
 		B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
