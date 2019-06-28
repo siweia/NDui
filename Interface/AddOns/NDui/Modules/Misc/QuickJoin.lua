@@ -5,18 +5,9 @@ local M = B:GetModule("Misc")
 --[[
 	QuickJoin 优化系统自带的预创建功能
 	1.修复简中语系的一个报错
-	2.中键点击世界任务搜索可用任务
-	3.双击搜索结果，快速申请
-	4.自动隐藏部分窗口
+	2.双击搜索结果，快速申请
+	3.自动隐藏部分窗口
 ]]
-
-function M:HookTrackerOnBlockClick(button)
-	if self.module.ShowWorldQuests then
-		if button == "MiddleButton" then
-			LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
-		end
-	end
-end
 
 function M:HookApplicationClick()
 	if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
@@ -53,8 +44,6 @@ function M:QuickJoin()
 			whileDead = 1,
 		}
 	end
-
-	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", self.HookTrackerOnBlockClick)
 
 	for i = 1, 10 do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
