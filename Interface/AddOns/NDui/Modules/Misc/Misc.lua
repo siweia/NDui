@@ -2,8 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
-local tostring, tonumber, pairs, select, random = tostring, tonumber, pairs, select, math.random
-local strsplit, strfind, strmatch, strupper, gsub = string.split, string.find, string.match, string.upper, gsub
+local tostring, tonumber, pairs, select, random, strsplit = tostring, tonumber, pairs, select, math.random, string.split
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
@@ -28,7 +27,6 @@ local GetSavedInstanceInfo = GetSavedInstanceInfo
 local SetSavedInstanceExtend = SetSavedInstanceExtend
 local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
 local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
-local EnumerateFrames = EnumerateFrames
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -479,29 +477,6 @@ do
 				repeat
 					i, t[prefix .. i] = i+1
 				until f("UIDROPDOWNMENU_OPEN_MENU")
-			end
-		end)
-	end
-
-	-- https://www.townlong-yak.com/bugs/YhgQma-SetValueRefreshTaint
-	if (COMMUNITY_UIDD_REFRESH_PATCH_VERSION or 0) < 1 then
-		COMMUNITY_UIDD_REFRESH_PATCH_VERSION = 1
-		local function CleanDropdowns()
-			if COMMUNITY_UIDD_REFRESH_PATCH_VERSION ~= 1 then return end
-			local f, f2 = FriendsFrame, FriendsTabHeader
-			local s = f:IsShown()
-			f:Hide()
-			f:Show()
-			if not f2:IsShown() then
-				f2:Show()
-				f2:Hide()
-			end
-			if not s then f:Hide() end
-		end
-		hooksecurefunc("Communities_LoadUI", CleanDropdowns)
-		hooksecurefunc("SetCVar", function(n)
-			if n == "lastSelectedClubId" then
-				CleanDropdowns()
 			end
 		end)
 	end
