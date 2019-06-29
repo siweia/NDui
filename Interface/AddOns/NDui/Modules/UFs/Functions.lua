@@ -78,7 +78,8 @@ function UF:CreateHealthBar(self)
 	elseif mystyle ~= "raid" and NDuiDB["UFs"]["HealthColor"] == 3 then
 		health.colorSmooth = true
 	end
-	health.frequentUpdates = true
+	--health.frequentUpdates = true
+	health.frequentUpdates = mystyle ~= "raid"
 
 	self.Health = health
 	self.Health.bg = bg
@@ -180,7 +181,8 @@ function UF:CreatePowerBar(self)
 		power.colorDisconnected = true
 		power.colorReaction = true
 	end
-	power.frequentUpdates = true
+	--power.frequentUpdates = true
+	power.frequentUpdates = mystyle == "player" or mystyle == "target" or mystyle == "PlayerPlate"
 
 	self.Power = power
 	self.Power.bg = bg
