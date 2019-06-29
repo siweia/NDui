@@ -165,6 +165,7 @@ local list = {
 		{AuraID = 298357, UnitID = "player"},	-- 清醒梦境之忆
 		{AuraID = 302731, UnitID = "player", Flash = true},	-- 空间涟漪
 		{AuraID = 302952, UnitID = "player"},	-- 现实流转
+		{AuraID = 295137, UnitID = "player", Flash = true},	-- 源血
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
