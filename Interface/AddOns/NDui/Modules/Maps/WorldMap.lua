@@ -10,9 +10,8 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
-local mapID, player, cursor
-local mapBody = WorldMapFrame:GetCanvasContainer()
-local scale, width, height = mapBody:GetEffectiveScale(), mapBody:GetWidth(), mapBody:GetHeight()
+local mapScale, mapWidth, mapHeight, mapCenterX, mapCenterY
+local currentMapID, playerCoords, cursorCoords
 
 function module:GetPlayerMapPos(mapID)
 	tempVec2D.x, tempVec2D.y = UnitPosition("player")
@@ -33,12 +32,11 @@ function module:GetPlayerMapPos(mapID)
 end
 
 function module:GetCursorCoords()
-	local left, top = mapBody:GetLeft() or 0, mapBody:GetTop() or 0
 	local x, y = GetCursorPosition()
-	local cx = (x/scale - left) / width
-	local cy = (top - y/scale) / height
-	if cx < 0 or cx > 1 or cy < 0 or cy > 1 then return end
-	return cx, cy
+	local cursorX = x and ((x / mapScale - (mapCenterX - (mapWidth/2))) / mapWidth)
+	local cursorY = y and ((mapCenterY + (mapHeight/2) - y / mapScale) / mapHeight)
+	if cursorX < 0 or cursorX > 1 or cursorY < 0 or cursorY > 1 then return end
+	return cursorX, cursorY
 end
 
 local function CoordsFormat(owner, none)
@@ -49,21 +47,21 @@ end
 function module:UpdateCoords(elapsed)
 	self.elapsed = (self.elapsed or 0) + elapsed
 	if self.elapsed > .1 then
-		local cx, cy = module:GetCursorCoords()
-		if cx and cy then
-			cursor:SetFormattedText(CoordsFormat(L["Mouse"]), 100 * cx, 100 * cy)
+		local cursorX, cursorY = module:GetCursorCoords()
+		if cursorX and cursorY then
+			cursorCoords:SetFormattedText(CoordsFormat(L["Mouse"]), 100 * cursorX, 100 * cursorY)
 		else
-			cursor:SetText(CoordsFormat(L["Mouse"], true))
+			cursorCoords:SetText(CoordsFormat(L["Mouse"], true))
 		end
 
-		if not mapID then
-			player:SetText(CoordsFormat(PLAYER, true))
+		if not currentMapID then
+			playerCoords:SetText(CoordsFormat(PLAYER, true))
 		else
-			local x, y = module:GetPlayerMapPos(mapID)
+			local x, y = module:GetPlayerMapPos(currentMapID)
 			if not x or (x == 0 and y == 0) then
-				player:SetText(CoordsFormat(PLAYER, true))
+				playerCoords:SetText(CoordsFormat(PLAYER, true))
 			else
-				player:SetFormattedText(CoordsFormat(PLAYER), 100 * x, 100 * y)
+				playerCoords:SetFormattedText(CoordsFormat(PLAYER), 100 * x, 100 * y)
 			end
 		end
 
@@ -74,19 +72,23 @@ end
 function module:SetupCoords()
 	if not NDuiDB["Map"]["Coord"] then return end
 
-	player = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
-	cursor = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
+	playerCoords = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
+	cursorCoords = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 
-	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function()
-		width, height = mapBody:GetWidth(), mapBody:GetHeight()
+	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function(self)
+		local mapBody = self:GetCanvasContainer()
+		mapWidth = mapBody:GetWidth()
+		mapHeight = mapBody:GetHeight()
+		mapCenterX, mapCenterY = mapBody:GetCenter()
+		mapScale = mapBody:GetEffectiveScale()
 	end)
 
 	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
 		if self:GetMapID() == C_Map_GetBestMapForUnit("player") then
-			mapID = self:GetMapID()
+			currentMapID = self:GetMapID()
 		else
-			mapID = nil
+			currentMapID = nil
 		end
 	end)
 
@@ -108,12 +110,10 @@ function module:UpdateMapAnchor()
 end
 
 function module:WorldMapScale()
-	if NDuiDB["Map"]["MapScale"] > 1 then
-		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-			local s = WorldMapFrame:GetScale()
-			return x/s, y/s
-		end
+	WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+		local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+		local scale = WorldMapFrame:GetScale()
+		return x / scale, y / scale
 	end
 
 	B.CreateMF(WorldMapFrame, nil, true)
