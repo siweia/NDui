@@ -497,11 +497,20 @@ TT:RegisterTooltips("NDui", function()
 
 	-- Others
 	C_Timer.After(5, function()
+		-- Lib minimap icon
 		if LibDBIconTooltip then
 			TT.ReskinTooltip(LibDBIconTooltip)
 		end
+		-- TomTom
 		if TomTomTooltip then
 			TT.ReskinTooltip(TomTomTooltip)
+		end
+		-- RareScanner
+		if RSMapItemToolTip then
+			TT.ReskinTooltip(RSMapItemToolTip)
+		end
+		if LootBarToolTip then
+			TT.ReskinTooltip(LootBarToolTip)
 		end
 	end)
 
