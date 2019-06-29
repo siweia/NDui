@@ -6,11 +6,6 @@ local TT = B:GetModule("Tooltip")
 local cr, cg, cb = DB.r, DB.g, DB.b
 local select, pairs, ipairs, next, unpack = select, pairs, ipairs, next, unpack
 
-function S:RematchClose()
-	F.StripTextures(self.CloseButton)
-	F.ReskinClose(self.CloseButton)
-end
-
 function S:RematchFilter()
 	F.StripTextures(self)
 	F.Reskin(self)
@@ -205,7 +200,7 @@ function S:ReskinRematch()
 		end
 
 		F.StripTextures(RematchJournal)
-		S.RematchClose(RematchJournal)
+		F.ReskinClose(RematchJournal.CloseButton)
 		for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
 			F.ReskinTab(tab)
 		end
@@ -296,7 +291,7 @@ function S:ReskinRematch()
 		-- RematchPetCard
 		local petCard = RematchPetCard
 		F.StripTextures(petCard)
-		S.RematchClose(petCard)
+		F.ReskinClose(petCard.CloseButton)
 		F.StripTextures(petCard.Title)
 		F.StripTextures(petCard.PinButton)
 		F.ReskinArrow(petCard.PinButton, "up")
@@ -322,7 +317,7 @@ function S:ReskinRematch()
 		-- RematchWinRecordCard
 		local card = RematchWinRecordCard
 		F.StripTextures(card)
-		S.RematchClose(card)
+		F.ReskinClose(card.CloseButton)
 		F.StripTextures(card.Content)
 		local bg = F.CreateBDFrame(card.Content, .25)
 		bg:SetPoint("TOPLEFT", 2, -2)
@@ -341,7 +336,7 @@ function S:ReskinRematch()
 		local dialog = RematchDialog
 		F.StripTextures(dialog)
 		F.SetBD(dialog)
-		S.RematchClose(dialog)
+		F.ReskinClose(dialog.CloseButton)
 
 		S.RematchIcon(dialog.Slot)
 		S.RematchInput(dialog.EditBox)
@@ -394,7 +389,7 @@ function S:ReskinRematch()
 		-- RematchNotes
 		local note = RematchNotes
 		F.StripTextures(note)
-		S.RematchClose(note)
+		F.ReskinClose(note.CloseButton)
 		F.StripTextures(note.LockButton, 2)
 		note.LockButton:SetPoint("TOPLEFT")
 		local bg = F.CreateBDFrame(note.LockButton, .25)
