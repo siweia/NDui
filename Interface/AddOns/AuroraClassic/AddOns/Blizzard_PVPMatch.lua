@@ -1,28 +1,49 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.StripTextures(PVPMatchScoreboard)
+	local function stripBorders(self)
+		F.StripTextures(self)
+	end
+
+	-- match score
 	F.SetBD(PVPMatchScoreboard)
+	PVPMatchScoreboard:HookScript("OnShow", stripBorders)
 	F.ReskinClose(PVPMatchScoreboard.CloseButton)
 
-	F.StripTextures(PVPMatchScoreboard.Content)
-	F.ReskinScroll(PVPMatchScoreboard.Content.ScrollFrame.ScrollBar)
-	F.StripTextures(PVPMatchScoreboard.Content.TabContainer)
+	local content = PVPMatchScoreboard.Content
+	local tabContainer = content.TabContainer
+
+	F.StripTextures(content)
+	local bg = F.CreateBDFrame(content, .25)
+	bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
+	F.ReskinScroll(content.ScrollFrame.ScrollBar)
+
+	F.StripTextures(tabContainer)
 	for i = 1, 3 do
-		F.ReskinTab(PVPMatchScoreboard.Content.TabContainer.TabGroup["Tab"..i])
+		F.ReskinTab(tabContainer.TabGroup["Tab"..i])
 	end
 
-	F.StripTextures(PVPMatchResults)
+	-- match results
 	F.SetBD(PVPMatchResults)
+	PVPMatchResults:HookScript("OnShow", stripBorders)
 	F.ReskinClose(PVPMatchResults.CloseButton)
+	F.StripTextures(PVPMatchResults.overlay)
 
-	F.StripTextures(PVPMatchResults.content)
-	F.StripTextures(PVPMatchResults.content.earningsArt)
-	F.ReskinScroll(PVPMatchResults.content.scrollFrame.scrollBar)
-	F.StripTextures(PVPMatchResults.content.tabContainer)
+	local content = PVPMatchResults.content
+	local tabContainer = content.tabContainer
+
+	F.StripTextures(content)
+	local bg = F.CreateBDFrame(content, .25)
+	bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
+	F.StripTextures(content.earningsArt)
+	F.ReskinScroll(content.scrollFrame.scrollBar)
+
+	F.StripTextures(tabContainer)
 	for i = 1, 3 do
-		F.ReskinTab(PVPMatchResults.content.tabContainer.tabGroup["tab"..i])
+		F.ReskinTab(tabContainer.tabGroup["tab"..i])
 	end
-	F.Reskin(PVPMatchResults.buttonContainer.leaveButton)
-	F.Reskin(PVPMatchResults.buttonContainer.requeueButton)
+
+	local buttonContainer = PVPMatchResults.buttonContainer
+	F.Reskin(buttonContainer.leaveButton)
+	F.Reskin(buttonContainer.requeueButton)
 end)

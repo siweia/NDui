@@ -341,10 +341,7 @@ function F:ReskinClose(a1, p, a2, x, y)
 		self:SetPoint(a1, p, a2, x, y)
 	end
 
-	self:SetNormalTexture("")
-	self:SetHighlightTexture("")
-	self:SetPushedTexture("")
-	self:SetDisabledTexture("")
+	F.StripTextures(self)
 	F.CreateBD(self, 0)
 	F.CreateGradient(self)
 
