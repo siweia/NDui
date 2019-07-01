@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L, DB, F = unpack(ns)
 if not C.Infobar.Durability then return end
 
 local module = B:GetModule("Infobar")
@@ -74,7 +74,11 @@ info.eventList = {
 }
 
 info.onEvent = function(self, event)
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	if event == "PLAYER_ENTERING_WORLD" then
+		if F then F.ReskinClose(inform.CloseButton) end
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	end
+
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent(event)
 		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
@@ -104,6 +108,7 @@ info.onMouseUp = function(self, btn)
 		NDuiADB["RepairType"] = mod(NDuiADB["RepairType"] + 1, 3)
 		self:onEnter()
 	else
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		ToggleCharacter("PaperDollFrame")
 	end
 end
