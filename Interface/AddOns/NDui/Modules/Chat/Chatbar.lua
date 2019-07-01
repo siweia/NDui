@@ -60,7 +60,7 @@ function module:Chatbar()
 			end
 		end},
 		{.25, 1, .25, GUILD.."/"..OFFICER, function(_, btn)
-			if btn == "RightButton" and CanEditOfficerNote() then
+			if btn == "RightButton" and C_GuildInfo.CanEditOfficerNote() then
 				ChatFrame_OpenChat("/o ", chatFrame)
 			else
 				ChatFrame_OpenChat("/g ", chatFrame)
