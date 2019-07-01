@@ -9,7 +9,7 @@ function S:QuestTracker()
 	-- Mover for quest tracker
 	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
 	frame:SetSize(240, 50)
-	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -60, -25})
+	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
 
 	local tracker = ObjectiveTrackerFrame
 	tracker:ClearAllPoints()
