@@ -29,7 +29,7 @@
 	</Button>
 	<Button name="BaudErrorFrameMinimapButton" frameStrata="DIALOG" parent="UIParent" movable="true" hidden="true" inherits="MiniMapButtonTemplate">
 		<Size>
-			<AbsDimension x="25" y="25"/>
+			<AbsDimension x="22" y="22"/>
 		</Size>
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -47,7 +47,7 @@
 				</Texture>
 			</Layer>
 			<Layer level="BORDER">
-				<FontString name="BaudErrorFrameMinimapCount" font="fonts\ARKai_T.TTF" outline="false" monochrome="false" text="">
+				<FontString name="BaudErrorFrameMinimapCount" inherits="ChatFontNormal">
 					<Color r="0.39" g="0.58" b="0.92" a="0.8"/>
 					<FontHeight>
 						<AbsValue val="18"/>
@@ -369,9 +369,7 @@
 				BaudErrorFrame_OnLoad(self);
 				self:SetBackdropBorderColor(0.37, 0.3, 0.3);
 			</OnLoad>
-			<OnEvent>
-				BaudErrorFrame_OnEvent();
-			</OnEvent>
+			<OnEvent function="BaudErrorFrame_OnEvent"/>
 			<OnShow>
 				BaudErrorFrame_OnShow();
 			</OnShow>

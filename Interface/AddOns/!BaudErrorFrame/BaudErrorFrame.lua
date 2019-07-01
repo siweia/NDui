@@ -1,16 +1,22 @@
 local SelectedError = 1
 local ErrorList = {}
 local SoundTime = 0
+local enableTaint = false
 BaudErrorFrameConfig = BaudErrorFrameConfig or {}
 
 function BaudErrorFrame_OnLoad(self)
 	self:RegisterEvent("VARIABLES_LOADED")
-	self:RegisterEvent("ADDON_ACTION_BLOCKED")
-	self:RegisterEvent("MACRO_ACTION_BLOCKED")
-	self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
-	self:RegisterEvent("MACRO_ACTION_FORBIDDEN")
-	UIParent:UnregisterEvent("ADDON_ACTION_FORBIDDEN")
-	UIParent:UnregisterEvent("MACRO_ACTION_FORBIDDEN")
+	if enableTaint then
+		self:RegisterEvent("ADDON_ACTION_BLOCKED")
+		self:RegisterEvent("MACRO_ACTION_BLOCKED")
+		self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
+		self:RegisterEvent("MACRO_ACTION_FORBIDDEN")
+	end
+
+    UIParent:UnregisterEvent("MACRO_ACTION_BLOCKED")
+    UIParent:UnregisterEvent("ADDON_ACTION_BLOCKED")
+    UIParent:UnregisterEvent("MACRO_ACTION_FORBIDDEN")
+    UIParent:UnregisterEvent("ADDON_ACTION_FORBIDDEN")
 
 	tinsert(UISpecialFrames, self:GetName())
 	SlashCmdList["BaudErrorFrame"] = function()
@@ -85,7 +91,7 @@ end
 function BaudErrorFrameMinimapButton_OnUpdate(self)
 	self:ClearAllPoints()
 	if IsAddOnLoaded("NDui") then
-		self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", 0, -2)
+		self:SetPoint("BOTTOMRIGHT", UIParent)
 	else
 		self:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 0, 0)
 	end
@@ -209,11 +215,13 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function()
 	f:UnregisterEvent("PLAYER_ENTERING_WORLD")
+
 	if IsAddOnLoaded("AuroraClassic") then
 		local F = unpack(AuroraClassic)
 		F.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
 		F.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
 	end
+
 	if IsAddOnLoaded("NDui") then
 		local B = unpack(NDui)
 		B.CreateBD(BaudErrorFrame)
