@@ -180,4 +180,5 @@ C.themes["Blizzard_PVPUI"] = function()
 	F.Reskin(ConquestFrame.JoinButton)
 	F.ReskinDropDown(HonorFrameTypeDropDown)
 	F.ReskinScroll(HonorFrameSpecificFrameScrollBar)
+	F.ReskinClose(PremadeGroupsPvPTutorialAlert.CloseButton)
 end

@@ -1,13 +1,17 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	local microButtons = {TalentMicroButtonAlert, CollectionsMicroButtonAlert, EJMicroButtonAlert}
-		for _, button in pairs(microButtons) do
-		button:DisableDrawLayer("BACKGROUND")
-		button:DisableDrawLayer("BORDER")
-		button.Arrow:Hide()
+	local microButtons = {
+		CharacterMicroButtonAlert,
+		TalentMicroButtonAlert,
+		CollectionsMicroButtonAlert,
+		LFDMicroButtonAlert,
+		EJMicroButtonAlert,
+		StoreMicroButtonAlert,
+		ZoneAbilityButtonAlert,
+	}
 
-		F.SetBD(button)
-		F.ReskinClose(button.CloseButton)
+	for _, alert in pairs(microButtons) do
+		F.ReskinClose(alert.CloseButton)
 	end
 end)
