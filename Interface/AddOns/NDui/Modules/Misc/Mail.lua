@@ -193,6 +193,7 @@ end
 
 function M:MailBox()
 	if not NDuiDB["Misc"]["Mail"] then return end
+	if IsAddOnLoaded("Postal") then return end
 
 	for i = 1, 7 do
 		local itemButton = _G["MailItem"..i.."Button"]

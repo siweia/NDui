@@ -120,6 +120,7 @@ function S:OnLogin()
 	self:BigWigsSkin()
 	self:PGFSkin()
 	self:ReskinRematch()
+	self:PostalSkin()
 
 	-- Register skin
 	local media = LibStub and LibStub("LibSharedMedia-3.0", true)
