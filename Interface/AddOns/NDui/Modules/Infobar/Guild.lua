@@ -11,8 +11,9 @@ local LEVEL_ABBR, CLASS_ABBR, NAME, ZONE, RANK, GUILDINFOTAB_APPLICANTS, REMOTE_
 local IsAltKeyDown, IsShiftKeyDown, InviteToGroup, C_Timer_After, GetTime, Ambiguate, MouseIsOver = IsAltKeyDown, IsShiftKeyDown, InviteToGroup, C_Timer.After, GetTime, Ambiguate, MouseIsOver
 local MailFrameTab_OnClick, MailFrame, SendMailNameEditBox = MailFrameTab_OnClick, MailFrame, SendMailNameEditBox
 local ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture = ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture
-local GuildRoster, GetNumGuildMembers, GetGuildInfo, GetNumGuildApplicants, GetGuildRosterInfo, IsInGuild = GuildRoster, GetNumGuildMembers, GetGuildInfo, GetNumGuildApplicants, GetGuildRosterInfo, IsInGuild
+local GetNumGuildMembers, GetGuildInfo, GetNumGuildApplicants, GetGuildRosterInfo, IsInGuild = GetNumGuildMembers, GetGuildInfo, GetNumGuildApplicants, GetGuildRosterInfo, IsInGuild
 local GetQuestDifficultyColor, GetRealZoneText, UnitInRaid, UnitInParty = GetQuestDifficultyColor, GetRealZoneText, UnitInRaid, UnitInParty
+local C_GuildInfo_GuildRoster = C_GuildInfo.GuildRoster
 
 local r, g, b = DB.r, DB.g, DB.b
 local infoFrame, gName, gOnline, gApps, gRank, applyData, prevTime
@@ -153,12 +154,12 @@ local function createRoster(parent, i)
 end
 
 C_Timer_After(5, function()
-	if IsInGuild() then GuildRoster() end
+	if IsInGuild() then C_GuildInfo_GuildRoster() end
 end)
 
 local function refreshData()
 	if not prevTime or (GetTime()-prevTime > 5) then
-		GuildRoster()
+		C_GuildInfo_GuildRoster()
 		prevTime = GetTime()
 	end
 
@@ -275,7 +276,7 @@ info.onEvent = function(self, event, ...)
 	if event == "GUILD_ROSTER_UPDATE" then
 		local canRequestRosterUpdate = ...
 		if canRequestRosterUpdate then
-			GuildRoster()
+			C_GuildInfo_GuildRoster()
 		end
 	end
 
@@ -308,6 +309,8 @@ info.onLeave = function()
 end
 
 info.onMouseUp = function()
+	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+
 	if not IsInGuild() then return end
 	infoFrame:Hide()
 	if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end

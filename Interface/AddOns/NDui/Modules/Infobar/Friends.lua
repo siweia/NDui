@@ -185,6 +185,8 @@ info.onLeave = function(self)
 end
 
 info.onMouseUp = function(_, btn)
+	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+
 	if btn ~= "LeftButton" then return end
 	GameTooltip:Hide()
 	ToggleFriendsFrame()

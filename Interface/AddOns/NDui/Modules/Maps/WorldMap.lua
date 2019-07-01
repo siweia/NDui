@@ -97,6 +97,8 @@ function module:SetupCoords()
 end
 
 function module:UpdateMapScale()
+	if InCombatLockdown() then return end
+
 	if self.isMaximized and self:GetScale() ~= 1 then
 		self:SetScale(1)
 	elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then

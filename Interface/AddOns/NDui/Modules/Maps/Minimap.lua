@@ -129,7 +129,9 @@ function module:ReskinRegions()
 
 	Invt:SetScript("OnClick", function(_, btn)
 		Invt:Hide()
-		if btn == "LeftButton" then ToggleCalendar() end
+		if btn == "LeftButton" and not InCombatLockdown() then
+			ToggleCalendar()
+		end
 		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
 	end)
@@ -341,6 +343,7 @@ function module:SetupMinimap()
 	-- Click Func
 	Minimap:SetScript("OnMouseUp", function(self, btn)
 		if btn == "MiddleButton" then
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 			ToggleCalendar()
 		elseif btn == "RightButton" then
 			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, -(self:GetWidth()*.7), (self:GetWidth()*.3))

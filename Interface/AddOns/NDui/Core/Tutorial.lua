@@ -79,18 +79,15 @@ local function SetupUIScale()
 end
 
 local function ForceChatSettings()
-	FCF_SetLocked(ChatFrame1, nil)
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
 	ChatFrame1:SetWidth(380)
 	ChatFrame1:SetHeight(190)
-	ChatFrame1:SetUserPlaced(true)
 	for i = 1, NUM_CHAT_WINDOWS do
 		local cf = _G["ChatFrame"..i]
 		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
-	FCF_SetLocked(ChatFrame1, true)
 
 	NDuiDB["Chat"]["Lock"] = true
 end

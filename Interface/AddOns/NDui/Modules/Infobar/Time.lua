@@ -279,6 +279,7 @@ info.onMouseUp = function(_, btn)
 	if btn == "RightButton" then
 		ToggleTimeManager()
 	else
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		ToggleCalendar()
 	end
 end
