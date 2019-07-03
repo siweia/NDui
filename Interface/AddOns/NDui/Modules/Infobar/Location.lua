@@ -91,6 +91,9 @@ info.onMouseUp = function(_, btn)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		ToggleFrame(WorldMapFrame)
 	elseif btn == "RightButton" then
-		ChatFrame_OpenChat(format("%s: %s (%s)", L["My Position"], zone, formatCoords()), SELECTED_DOCK_FRAME)
+		local hasUnit = UnitExists("target") and not UnitIsPlayer("target")
+		local unitName = nil
+		if hasUnit then unitName = UnitName("target") end
+		ChatFrame_OpenChat(format("%s: %s (%s) %s", L["My Position"], zone, formatCoords(), unitName or ""), SELECTED_DOCK_FRAME)
 	end
 end
