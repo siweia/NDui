@@ -310,9 +310,9 @@ function S:CreateRM()
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(DB.LeftButton..DB.InfoColor..READY_CHECK)
 		GameTooltip:AddDoubleLine(DB.ScrollButton..DB.InfoColor..L["Count Down"])
-		GameTooltip:AddDoubleLine(DB.RightButton..DB.InfoColor..L["Check Status"])
+		GameTooltip:AddDoubleLine(DB.RightButton.."(Ctrl) "..DB.InfoColor..L["Check Status"])
 		if potionCheck then
-			GameTooltip:AddDoubleLine(DB.RightButton.."(ALT) "..DB.InfoColor..L["ExRT Potioncheck"])
+			GameTooltip:AddDoubleLine(DB.RightButton.."(Alt) "..DB.InfoColor..L["ExRT Potioncheck"])
 		end
 		GameTooltip:Show()
 	end)
@@ -323,7 +323,7 @@ function S:CreateRM()
 		if btn == "RightButton" then
 			if IsAltKeyDown() and potionCheck then
 				SlashCmdList["exrtSlash"]("potionchat")
-			else
+			elseif IsControlKeyDown() then
 				scanBuff()
 			end
 		elseif btn == "LeftButton" then
