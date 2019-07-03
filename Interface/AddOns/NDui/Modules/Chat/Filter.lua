@@ -149,50 +149,6 @@ function module:BlockTrashClub()
 	end
 end
 
---[[
-	公会频道有人提到你时通知你
-]]
-local chatAtList, at = {}, {}
-function module:UpdateChatAtList()
-	B.SplitList(chatAtList, NDuiADB["ChatAtList"], true)
-
-	chatAtList[DB.MyName] = true
-end
-
-function module:UpdateChatAtMe(_, ...)
-	local msg, author, _, _, _, _, _, _, _, _, _, guid = ...
-	author = Ambiguate(author, "short")
-	if author == DB.MyName then return end
-
-	for word in pairs(chatAtList) do
-		if word ~= "" then
-			if strmatch(msg:lower(), word:lower()) then
-				at.checker = true
-				at.author = author
-				at.class = select(2, GetPlayerInfoByGUID(guid))
-				BNToastFrame:AddToast(BN_TOAST_TYPE_NEW_INVITE)
-			end
-		end
-	end
-end
-
-hooksecurefunc(BNToastFrame, "ShowToast", function(self)
-	if at.checker == true then
-		self:SetHeight(50)
-		self.IconTexture:SetTexCoord(.75, 1, 0, .5)
-		self.TopLine:Hide()
-		self.MiddleLine:Hide()
-		self.BottomLine:Hide()
-		self.DoubleLine:Show()
-
-		local hexColor = B.HexRGB(B.ClassColor(at.class))
-		self.DoubleLine:SetText(format(L["Mention You"], hexColor..at.author..DB.InfoColor))
-		at.checker = false
-	end
-
-	module.BlockTrashClub(self)
-end)
-
 function module:ChatFilter()
 	if NDuiDB["Chat"]["EnableFilter"] then
 		self:UpdateFilterList()
@@ -219,6 +175,5 @@ function module:ChatFilter()
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateAddOnBlocker)
 	end
 
-	self:UpdateChatAtList()
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", self.UpdateChatAtMe)
+	hooksecurefunc(BNToastFrame, "ShowToast", self.BlockTrashClub)
 end

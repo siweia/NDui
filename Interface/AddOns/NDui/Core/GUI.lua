@@ -244,7 +244,6 @@ local defaultSettings = {
 
 local accountSettings = {
 	ChatFilterList = "%*",
-	ChatAtList = "",
 	Timestamp = true,
 	NameplateFilter = {[1]={}, [2]={}},
 	RaidDebuffs = {},
@@ -356,10 +355,6 @@ end
 
 local function updateWhisperList()
 	B:GetModule("Chat"):UpdateWhisperList()
-end
-
-local function updateChatAtList()
-	B:GetModule("Chat"):UpdateChatAtList()
 end
 
 local function updateFilterList()
@@ -596,8 +591,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Oldname", L["Default Channel"]},
 		{1, "Chat", "WhisperColor", L["Differ WhipserColor"].."*", true},
 		{1, "Chat", "Freedom", L["Language Filter"]},
-		{1, "ACCOUNT", "Timestamp", L["Timestamp"], false, nil, updateTimestamp},
-		{2, "ACCOUNT", "ChatAtList", L["@List"].."*", true, nil, updateChatAtList},
+		{1, "ACCOUNT", "Timestamp", L["Timestamp"], true, nil, updateTimestamp},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
@@ -605,8 +599,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{2, "ACCOUNT", "ChatFilterList", L["Filter List"].."*", true, nil, updateFilterList},
 		{},--blank
 		{1, "Chat", "Invite", "|cff00cc4c"..L["Whisper Invite"]},
-		{1, "Chat", "GuildInvite", L["Guild Invite Only"].."*", true},
-		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", false, nil, updateWhisperList},
+		{1, "Chat", "GuildInvite", L["Guild Invite Only"].."*"},
+		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", true, nil, updateWhisperList},
 	},
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
