@@ -78,7 +78,6 @@ local lodFrames = {
 	Blizzard_Communities		= { ["CommunitiesFrame"] = false, ["CommunitiesSettingsDialog"] = false, ["CommunitiesGuildLogFrame"] = false, ["CommunitiesTicketManagerDialog"] = false, ["CommunitiesAvatarPickerDialog"] = false, ["CommunitiesFrame.NotificationSettingsDialog"] = false},
 	Blizzard_EncounterJournal	= { ["EncounterJournal"] = false },
 	Blizzard_FlightMap			= { ["FlightMapFrame"] = false },
-	Blizzard_GarrisonUI			= { ["GarrisonLandingPage"] = false, ["GarrisonMissionFrame"] = false, ["GarrisonBuildingFrame"] = false, ["GarrisonRecruiterFrame"] = false, ["GarrisonRecruitSelectFrame"] = false, ["GarrisonCapacitiveDisplayFrame"] = false, ["GarrisonShipyardFrame"] = false, ["OrderHallMissionFrame"] = false, ["BFAMissionFrame"] = false,},
 	Blizzard_GMSurveyUI			= { ["GMSurveyFrame"] = false },
 	Blizzard_GuildBankUI		= { ["GuildBankFrame"] = false, ["GuildBankEmblemFrame"] = true },
 	Blizzard_GuildControlUI		= { ["GuildControlUI"] = false },
