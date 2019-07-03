@@ -396,7 +396,7 @@ function UF:AddFollowerXP(self)
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetSize(NDuiDB["Nameplate"]["Width"], NDuiDB["Nameplate"]["Height"])
 	bar:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
-	B.CreateSB(bar, false, .3, .7, 1)
+	B.CreateSB(bar, false, 0, .7, 1)
 	bar.progressText = B.CreateFS(bar, 9)
 
 	self.NazjatarFollowerXP = bar
