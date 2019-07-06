@@ -99,7 +99,7 @@ function UF:CreateHealthText(self)
 			name:SetPoint("LEFT", 4, 0)
 		elseif NDuiDB["UFs"]["RaidBuffIndicator"] then
 			name:SetJustifyH("CENTER")
-			if NDuiDB["UFs"]["HealthPerc"] then
+			if NDuiDB["UFs"]["RaidHPMode"] ~= 1 then
 				name:SetPoint("TOP", 0, -3)
 			else
 				name:SetPoint("CENTER")
@@ -140,11 +140,7 @@ function UF:CreateHealthText(self)
 		else
 			hpval:SetPoint("RIGHT", -3, -7)
 		end
-		if NDuiDB["UFs"]["HealthPerc"] then
-			self:Tag(hpval, "[raidhp]")
-		else
-			self:Tag(hpval, "[DDG]")
-		end
+		self:Tag(hpval, "[raidhp]")
 	elseif mystyle == "nameplate" then
 		hpval:SetPoint("RIGHT", self, 0, 5)
 		self:Tag(hpval, "[nphp]")

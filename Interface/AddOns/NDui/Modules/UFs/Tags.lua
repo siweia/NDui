@@ -134,9 +134,12 @@ oUF.Tags.Events["fulllevel"] = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_C
 oUF.Tags.Methods["raidhp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return oUF.Tags.Methods["DDG"](unit)
-	else
+	elseif NDuiDB["UFs"]["RaidHPMode"] == 2 then
 		local per = oUF.Tags.Methods["perhp"](unit) or 0
 		return ColorPercent(per)
+	elseif NDuiDB["UFs"]["RaidHPMode"] == 3 then
+		local cur = UnitHealth(unit)
+		return B.Numb(cur)
 	end
 end
 oUF.Tags.Events["raidhp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
