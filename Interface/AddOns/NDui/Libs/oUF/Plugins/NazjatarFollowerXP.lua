@@ -5,6 +5,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 
+local strmatch = string.match
+local UnitIsOwnerOrControllerOfUnit = UnitIsOwnerOrControllerOfUnit
+local C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo
+
 local NPCIDToWidgetIDMap = {
 	[154304] = 1940, -- Farseer Ori
 	[150202] = 1613, -- Hunter Akana
@@ -24,8 +28,10 @@ local CampfireNPCIDToWidgetIDMap = {
 }
 
 local function GetBodyguardXP(widgetID)
-	local widget = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(widgetID)
-	local rank = string.match(widget.overrideBarText, "%d+")
+	local widget = widgetID and C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo(widgetID)
+	if not widget then return end
+
+	local rank = strmatch(widget.overrideBarText, "%d+")
 	local cur = widget.barValue - widget.barMin
 	local next = widget.barMax - widget.barMin
 	local total = widget.barValue
@@ -34,6 +40,8 @@ end
 
 local function Update(self, ...)
 	local element = self.NazjatarFollowerXP
+	if not element then return end
+
 	local npcID = B.GetNPCID(UnitGUID(self.unit))
 	local shouldDisplay = npcID and (NPCIDToWidgetIDMap[npcID] and self.unit and UnitIsOwnerOrControllerOfUnit("player", self.unit)) or CampfireNPCIDToWidgetIDMap[npcID]
 	if (not shouldDisplay) then
