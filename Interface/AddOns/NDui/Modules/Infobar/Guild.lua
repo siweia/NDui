@@ -18,6 +18,21 @@ local C_GuildInfo_GuildRoster = C_GuildInfo.GuildRoster
 local r, g, b = DB.r, DB.g, DB.b
 local infoFrame, gName, gOnline, gApps, gRank, applyData, prevTime
 
+local function scrollBarHook(self, delta)
+	local scrollBar = self.ScrollBar
+	scrollBar:SetValue(scrollBar:GetValue() - delta*50)
+end
+
+function module:ReskinScrollBar()
+	local scrollBar = self.ScrollBar
+	B.HideObject(scrollBar.ScrollUpButton)
+	B.HideObject(scrollBar.ScrollDownButton)
+	scrollBar.ThumbTexture:SetColorTexture(.3, .3, .3)
+	scrollBar.ThumbTexture:SetSize(3, 10)
+	scrollBar.ThumbTexture:SetPoint("LEFT", -5, 0)
+	self:SetScript("OnMouseWheel", scrollBarHook)
+end
+
 local function setupInfoFrame()
 	if infoFrame then infoFrame:Show() return end
 
@@ -45,7 +60,7 @@ local function setupInfoFrame()
 		self:SetScript("OnUpdate", onUpdate)
 	end)
 
-	gName = B.CreateFS(infoFrame, 18, "Guild", true, "TOPLEFT", 15, -10)
+	gName = B.CreateFS(infoFrame, 16, "Guild", true, "TOPLEFT", 15, -10)
 	gOnline = B.CreateFS(infoFrame, 13, "Online", false, "TOPLEFT", 15, -35)
 	gApps = B.CreateFS(infoFrame, 13, "Applications", false, "TOPRIGHT", -15, -35)
 	gRank = B.CreateFS(infoFrame, 13, "Rank", false, "TOPLEFT", 15, -51)
@@ -87,16 +102,12 @@ local function setupInfoFrame()
 	B.CreateFS(infoFrame, 13, copyInfo, false, "BOTTOMRIGHT", -15, 10)
 
 	local scrollFrame = CreateFrame("ScrollFrame", nil, infoFrame, "UIPanelScrollFrameTemplate")
-	scrollFrame:SetSize(312, 320)
+	scrollFrame:SetSize(315, 320)
 	scrollFrame:SetPoint("TOPLEFT", 10, -100)
-	scrollFrame.ScrollBar:Hide()
-	scrollFrame.ScrollBar.Show = B.Dummy
-	scrollFrame:SetScript("OnMouseWheel", function(_, delta)
-		local scrollBar = scrollFrame.ScrollBar
-		scrollBar:SetValue(scrollBar:GetValue() - delta*50)
-	end)
+	module.ReskinScrollBar(scrollFrame)
+
 	local roster = CreateFrame("Frame", nil, scrollFrame)
-	roster:SetSize(312, 1)
+	roster:SetSize(315, 1)
 	scrollFrame:SetScrollChild(roster)
 	infoFrame.roster = roster
 end
@@ -157,6 +168,17 @@ C_Timer_After(5, function()
 	if IsInGuild() then C_GuildInfo_GuildRoster() end
 end)
 
+local function setPosition()
+	for i = 1, previous do
+		if i == 1 then
+			frames[i]:SetPoint("TOPLEFT")
+		else
+			frames[i]:SetPoint("TOP", frames[i-1], "BOTTOM")
+		end
+		frames[i]:Show()
+	end
+end
+
 local function refreshData()
 	if not prevTime or (GetTime()-prevTime > 5) then
 		C_GuildInfo_GuildRoster()
@@ -201,28 +223,21 @@ local function refreshData()
 		end
 	end
 
-	if count > previous then
-		for i = previous+1, count do
-			if not frames[i] then
-				frames[i] = createRoster(infoFrame.roster, i)
+	if count ~= previous then
+		if count > previous then
+			for i = previous+1, count do
+				if not frames[i] then
+					frames[i] = createRoster(infoFrame.roster, i)
+				end
+			end
+		elseif count < previous then
+			for i = count+1, previous do
+				frames[i]:Hide()
 			end
 		end
-	elseif count < previous then
-		for i = count+1, previous do
-			frames[i]:Hide()
-		end
-	end
-	previous = count
-end
+		previous = count
 
-local function setPosition()
-	for i = 1, previous do
-		if i == 1 then
-			frames[i]:SetPoint("TOPLEFT")
-		else
-			frames[i]:SetPoint("TOP", frames[i-1], "BOTTOM")
-		end
-		frames[i]:Show()
+		setPosition()
 	end
 end
 
@@ -251,7 +266,7 @@ function applyData()
 		local namecolor = B.HexRGB(B.ClassColor(class))
 		frames[i].name:SetText(namecolor..name..status)
 
-		local zonecolor = "|cffa6a6a6"
+		local zonecolor = DB.GreyColor
 		if UnitInRaid(name) or UnitInParty(name) then
 			zonecolor = "|cff4c4cff"
 		elseif GetRealZoneText() == zone then
@@ -285,16 +300,15 @@ info.onEvent = function(self, event, ...)
 
 	if infoFrame and infoFrame:IsShown() then
 		refreshData()
-		setPosition()
 		applyData()
 	end
 end
 
 info.onEnter = function()
 	if not IsInGuild() then return end
+	if NDuiFriendsFrame and NDuiFriendsFrame:IsShown() then NDuiFriendsFrame:Hide() end
 	setupInfoFrame()
 	refreshData()
-	setPosition()
 	applyData()
 end
 
