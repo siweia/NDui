@@ -14,7 +14,7 @@ function S:QuestTracker()
 	local tracker = ObjectiveTrackerFrame
 	tracker:ClearAllPoints()
 	tracker:SetPoint("TOPRIGHT", frame)
-	tracker:SetHeight(GetScreenHeight()*.7)
+	tracker:SetHeight(GetScreenHeight()*.65)
 	tracker:SetClampedToScreen(false)
 	tracker:SetMovable(true)
 	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
