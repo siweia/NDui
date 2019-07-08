@@ -240,7 +240,7 @@ local list = {
 		{AuraID = 271640, UnitID = "player"},	-- 黑暗启示，诸王
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
 		{AuraID = 266923, UnitID = "player"},	-- 充电，神庙
-		{AuraID = 273563, UnitID = "player", Text = L["No move"]},	-- 神经毒素，神庙
+		{AuraID = 273563, UnitID = "player", Text = L["Freeze"]},	-- 神经毒素，神庙
 		{AuraID = 269686, UnitID = "player"},	-- 瘟疫，神庙
 		{AuraID = 257407, UnitID = "player"},	-- 追踪，阿塔达萨
 		{AuraID = 250585, UnitID = "player", Flash = true},	-- 剧毒之池，阿塔达萨
@@ -253,7 +253,86 @@ local list = {
 		{AuraID = 274438, UnitID = "player", Flash = true},	-- 风暴
 		{AuraID = 276286, UnitID = "player"},	-- 切割旋风
 		{AuraID = 267818, UnitID = "player"},	-- 切割冲击
-		{AuraID = 268086, UnitID = "player"},	-- 恐怖光环，庄园
+		{AuraID = 268086, UnitID = "player", Text = L["Move"]},	-- 恐怖光环，庄园
+	-- 永恒王宫
+		-- 深渊指挥官西瓦拉
+		{AuraID = 295795, UnitID = "player", Flash = true, Text = L["Move"]},	-- 冻结之血
+		{AuraID = 295796, UnitID = "player", Flash = true, Text = L["Freeze"]},	-- 漫毒之血
+		{AuraID = 295807, UnitID = "player"},	-- 冻结之血
+		{AuraID = 295850, UnitID = "player"},	-- 癫狂
+		{AuraID = 294847, UnitID = "player"},	-- 不稳定混合物
+		{AuraID = 300883, UnitID = "player"},	-- 倒置之疾
+		{AuraID = 300701, UnitID = "player"},	-- 白霜
+		{AuraID = 300705, UnitID = "player"},	-- 脓毒污染
+		{AuraID = 295348, UnitID = "player"},	-- 溢流寒霜
+		{AuraID = 295421, UnitID = "player"},	-- 溢流毒液
+		{AuraID = 300961, UnitID = "player", Flash = true},	-- 冰霜之地
+		{AuraID = 300962, UnitID = "player", Flash = true},	-- 败血之地
+		-- 黑水巨鳗
+		{AuraID = 298428, UnitID = "player"},	-- 暴食
+		{AuraID = 292127, UnitID = "player", Flash = true},	-- 墨黑深渊
+		{AuraID = 292138, UnitID = "player"},	-- 辐光生物质
+		{AuraID = 292133, UnitID = "player"},	-- 生物体荧光
+		{AuraID = 292167, UnitID = "player"},	-- 剧毒脊刺
+		{AuraID = 301180, UnitID = "player"},	-- 冲流
+		{AuraID = 298595, UnitID = "player"},	-- 发光的钉刺
+		{AuraID = 292307, UnitID = "player", Flash = true},	-- 深渊凝视
+		-- 艾萨拉之辉
+		{AuraID = 296566, UnitID = "player"},	-- 海潮之拳
+		{AuraID = 296737, UnitID = "player", Flash = true},	-- 奥术炸弹
+		{AuraID = 296746, UnitID = "player"},	-- 奥术炸弹
+		{AuraID = 299152, UnitID = "player"},	-- 翻滚之水
+		-- 艾什凡女勋爵
+		{AuraID = 296725, UnitID = "player"},	-- 壶蔓猛击
+		{AuraID = 296693, UnitID = "player"},	-- 浸水
+		{AuraID = 296752, UnitID = "player"},	-- 锋利的珊瑚
+		{AuraID = 296938, UnitID = "player"},	-- 艾泽里特弧光
+		{AuraID = 296941, UnitID = "player"},
+		{AuraID = 296942, UnitID = "player"},
+		{AuraID = 296939, UnitID = "player"},
+		{AuraID = 296940, UnitID = "player"},
+		{AuraID = 296943, UnitID = "player"},
+		-- 奥戈佐亚
+		{AuraID = 298156, UnitID = "player"},	-- 麻痹钉刺
+		{AuraID = 298459, UnitID = "player"},	-- 羊水喷发
+		{AuraID = 295779, UnitID = "player", Flash = true},	-- 水舞长枪
+		{AuraID = 300244, UnitID = "player", Flash = true},	-- 狂怒急流
+		-- 女王法庭
+		{AuraID = 301830, UnitID = "player"}, -- 帕什玛之触
+		{AuraID = 301832, UnitID = "player"}, -- 疯狂热诚
+		{AuraID = 296851, UnitID = "player", Flash = true, Text = L["Get Out"]}, -- 狂热裁决
+		{AuraID = 299914, UnitID = "player"}, -- 狂热冲锋
+		{AuraID = 300545, UnitID = "player"}, -- 力量决裂
+		{AuraID = 304409, UnitID = "player", Flash = true}, -- 重复行动
+		{AuraID = 304410, UnitID = "player", Flash = true}, -- 重复行动
+		{AuraID = 304128, UnitID = "player"}, -- 缓刑
+		{AuraID = 297586, UnitID = "player", Flash = true}, -- 承受折磨
+		-- 扎库尔，尼奥罗萨先驱
+		{AuraID = 298192, UnitID = "player", Flash = true}, -- 黑暗虚空
+		{AuraID = 295480, UnitID = "player"}, -- 心智锁链
+		{AuraID = 295495, UnitID = "player"},
+		{AuraID = 300133, UnitID = "player", Flash = true}, -- 折断
+		{AuraID = 292963, UnitID = "player"}, -- 惊惧
+		{AuraID = 293509, UnitID = "player", Flash = true}, -- 惊惧
+		{AuraID = 295327, UnitID = "player", Flash = true}, -- 碎裂心智
+		{AuraID = 296018, UnitID = "player", Flash = true}, -- 癫狂惊惧
+		{AuraID = 296015, UnitID = "player"}, -- 腐蚀谵妄
+		-- 艾萨拉女王
+		{AuraID = 297907, UnitID = "player", Flash = true}, -- 诅咒之心
+		{AuraID = 299251, UnitID = "player"}, -- 服从！
+		{AuraID = 299249, UnitID = "player"}, -- 受苦！
+		{AuraID = 299255, UnitID = "player"}, -- 出列！
+		{AuraID = 299254, UnitID = "player"}, -- 集合！
+		{AuraID = 299252, UnitID = "player"}, -- 前进！
+		{AuraID = 299253, UnitID = "player"}, -- 停留！
+		{AuraID = 298569, UnitID = "player"}, -- 干涸灵魂
+		{AuraID = 298014, UnitID = "player"}, -- 冰爆
+		{AuraID = 298018, UnitID = "player", Flash = true}, -- 冻结
+		{AuraID = 298756, UnitID = "player"}, -- 锯齿之锋
+		{AuraID = 298781, UnitID = "player"}, -- 奥术宝珠
+		{AuraID = 303825, UnitID = "player", Flash = true}, -- 溺水
+		{AuraID = 302999, UnitID = "player"}, -- 奥术易伤
+		{AuraID = 303657, UnitID = "player", Flash = true}, -- 奥术震爆
 	-- 风暴熔炉
 		{AuraID = 282384, UnitID = "player"},	-- 精神割裂，无眠秘党
 		{AuraID = 282566, UnitID = "player"},	-- 力量应许
@@ -304,8 +383,8 @@ local list = {
 		{AuraID = 285479, UnitID = "player", Flash = true},	-- 烈焰喷射
 		{AuraID = 283947, UnitID = "player", Flash = true},	-- 烈焰喷射
 		{AuraID = 289383, UnitID = "player", Flash = true},	-- 混沌位移
-		{AuraID = 291146, UnitID = "player", Text = L["No move"], Flash = true},	-- 混沌位移
-		{AuraID = 284470, UnitID = "player", Text = L["No move"], Flash = true},	-- 昏睡妖术
+		{AuraID = 291146, UnitID = "player", Text = L["Freeze"], Flash = true},	-- 混沌位移
+		{AuraID = 284470, UnitID = "player", Text = L["Freeze"], Flash = true},	-- 昏睡妖术
 		{AuraID = 282444, UnitID = "player"},	-- 裂爪猛击，神选者教团
 		{AuraID = 286838, UnitID = "player"},	-- 静电之球
 		{AuraID = 285879, UnitID = "player"},	-- 记忆清除
@@ -378,6 +457,12 @@ local list = {
 		{AuraID = 273721, UnitID = "target"},
 		{AuraID = 256493, UnitID = "target"},	-- 炽燃的艾泽里特，矿区1
 		{AuraID = 271867, UnitID = "target"},	-- 氪金致胜，矿区1
+	-- 永恒王宫
+		{AuraID = 296389, UnitID = "target"},	-- 上旋气流，艾萨拉之辉
+		{AuraID = 304951, UnitID = "target"},	-- 聚焦能量
+		{AuraID = 296650, UnitID = "target", Value = true},	-- 硬化甲壳，艾什凡女勋爵
+		{AuraID = 299575, UnitID = "target", Flash = true},	-- 指挥官之怒，女王法庭
+		{AuraID = 295099, UnitID = "target"},	-- 穿透黑暗，扎库尔
 	-- 风暴熔炉
 		{AuraID = 282741, UnitID = "target", Value = true},	-- 暗影之壳，无眠秘党
 		{AuraID = 284722, UnitID = "target", Value = true},	-- 暗影之壳，乌纳特
