@@ -55,8 +55,8 @@ SLASH_NDUI_ENUMFRAME1 = "/nf"
 
 SlashCmdList["NDUI_DUMPSPELL"] = function(arg)
 	local name = GetSpellInfo(arg)
-	local des = GetSpellDescription(arg)
 	if not name then return end
+	local des = GetSpellDescription(arg)
 	print("|cff70C0F5------------------------")
 	print(" \124T"..GetSpellTexture(arg)..":16:16:::64:64:5:59:5:59\124t", DB.InfoColor..arg)
 	print(NAME, DB.InfoColor..(name or "nil"))
