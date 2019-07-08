@@ -7,6 +7,7 @@ local _G = getfenv(0)
 function S:PostalSkin()
 	if not F then return end
 	if not IsAddOnLoaded("Postal") then return end
+	if not PostalOpenAllButton then return end -- update your postal
 
 	F.Reskin(PostalSelectOpenButton)
 	F.Reskin(PostalSelectReturnButton)
