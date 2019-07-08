@@ -11,4 +11,5 @@
 	<Script file="BfA\Uldir.lua"/>
 	<Script file="BfA\ZuldazarRaid.lua"/>
 	<Script file="BfA\CrucibleofStorms.lua"/>
+	<Script file="BfA\EternalPalace.lua"/>
 </Ui>
