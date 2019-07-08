@@ -63,7 +63,6 @@ end
 function S:MicroMenu()
 	if not NDuiDB["Skins"]["MicroMenu"] then return end
 
-	local faction = UnitFactionGroup("player")
 	local menubar = CreateFrame("Frame", nil, UIParent)
 	menubar:SetSize(323, 22)
 	B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)

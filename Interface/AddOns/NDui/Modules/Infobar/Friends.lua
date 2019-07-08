@@ -289,8 +289,8 @@ end
 
 local previous = 0
 local function updateFriendsFrame()
-	local numFriends, onlineFriends = C_FriendList_GetNumFriends(), C_FriendList_GetNumOnlineFriends()
-	local numBNet, onlineBNet = BNGetNumFriends()
+	local onlineFriends = C_FriendList_GetNumOnlineFriends()
+	local _, onlineBNet = BNGetNumFriends()
 	local totalOnline = onlineFriends + onlineBNet
 	if totalOnline ~= previous then
 		if totalOnline > previous then

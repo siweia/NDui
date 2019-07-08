@@ -424,7 +424,7 @@ end
 function M:VehicleSeatMover()
 	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
 	frame:SetSize(125, 125)
-	local mover = B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
+	B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
 
 	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(self, _, parent)
 		if parent == "MinimapCluster" or parent == MinimapCluster then

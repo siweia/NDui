@@ -5,7 +5,7 @@ local oUF = ns.oUF
 -- yClassColors, by yleaf
 -- NDui MOD
 ----------------------------
-local format, strsplit, ipairs, tinsert = string.format, string.split, ipairs, table.insert
+local format, ipairs, tinsert = string.format, ipairs, table.insert
 
 -- Colors
 local function classColor(class, showRGB)
