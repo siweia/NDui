@@ -196,7 +196,7 @@ local function buttonOnClick(self, btn)
 		end
 	else
 		if self.isBNet then
-			ChatFrame_SendBNetTell(self.data[3])
+			ChatFrame_SendBNetTell(self.data[2])
 		else
 			ChatFrame_SendTell(self.data[1], SELECTED_DOCK_FRAME)
 		end
