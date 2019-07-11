@@ -592,23 +592,22 @@ function S:ReskinRematch()
 			local checkButton = self.CheckButton
 			if not checkButton.bg then
 				local bg = F.CreateBDFrame(checkButton, 0)
-				checkButton.bgTex = F.CreateGradient(bg)
+				F.CreateGradient(bg)
 				checkButton.bg = bg
 				self.HeaderBack:SetTexture(nil)
 			end
 			checkButton.bg:SetBackdropColor(0, 0, 0, 0)
 			checkButton.bg:Show()
-			checkButton.bgTex:Show()
 
 			if self.optType == "header" then
 				self.headerIndex = opt[3]
+				self.Text:SetPoint("LEFT", checkButton, "RIGHT", 5, 0)
 				checkButton:SetSize(8, 8)
 				checkButton:SetPoint("LEFT", 5, 0)
 				checkButton:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
 				checkButton.bg:SetBackdropColor(0, 0, 0, .25)
-				checkButton.bg:SetPoint("TOPLEFT", 0, -2)
-				checkButton.bg:SetPoint("BOTTOMRIGHT", 0, 2)
-				checkButton.bgTex:Hide()
+				checkButton.bg:SetPoint("TOPLEFT", checkButton, -3, 3)
+				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, 3, -3)
 
 				local isCollapsed = RematchSettings.CollapsedOptHeaders[opt[3]]
 				if isCollapsed then
@@ -621,8 +620,8 @@ function S:ReskinRematch()
 				end
 			elseif self.optType == "check" then
 				checkButton:SetSize(22, 22)
-				checkButton.bg:SetPoint("TOPLEFT", checkButton, 2, -2)
-				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, -2, 2)
+				checkButton.bg:SetPoint("TOPLEFT", checkButton, 3, -3)
+				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, -3, 3)
 				if self.isChecked and self.isDisabled then
 					checkButton:SetTexCoord(.25, .5, .75, 1)
 				elseif self.isChecked then
@@ -633,8 +632,8 @@ function S:ReskinRematch()
 			elseif self.optType == "radio" then
 				local isChecked = RematchSettings[opt[2]] == opt[5]
 				checkButton:SetSize(22, 22)
-				checkButton.bg:SetPoint("TOPLEFT", checkButton, 2, -2)
-				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, -2, 2)
+				checkButton.bg:SetPoint("TOPLEFT", checkButton, 3, -3)
+				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, -3, 3)
 				if isChecked then
 					checkButton:SetTexCoord(.5, .75, .25, .5)
 				else
