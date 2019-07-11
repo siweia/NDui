@@ -230,3 +230,9 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 268391) -- 心智突袭
 module:RegisterDebuff(TIER, INSTANCE, 0, 274720) -- 深渊打击
 module:RegisterDebuff(TIER, INSTANCE, 0, 267037) -- 力量的低语
 module:RegisterDebuff(TIER, INSTANCE, 0, 276286) -- 切割旋风
+
+INSTANCE = 1178 -- 麦卡贡
+module:RegisterDebuff(TIER, INSTANCE, 0, 298259, 6) -- 束缚粘液
+module:RegisterDebuff(TIER, INSTANCE, 0, 297257) -- 电荷充能
+module:RegisterDebuff(TIER, INSTANCE, 0, 303885) -- 爆裂喷发
+module:RegisterDebuff(TIER, INSTANCE, 0, 292267) -- 超荷电磁炮
