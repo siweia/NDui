@@ -54,15 +54,23 @@ function TT:HookTooltipMethod()
 	self:HookScript("OnTooltipCleared", TT.HookTooltipCleared)
 end
 
-function TT:ReskinRewardIcon()
-	if self and self.Icon then
-		self.Icon:SetTexCoord(unpack(DB.TexCoord))
-		self.IconBorder:SetAlpha(0)
-	end
+local function updateBackdropColor(self, r, g, b)
+	self:GetParent().bg:SetBackdropBorderColor(r, g, b)
 end
 
-local function reskinQuestCurrencyRewardIcon(_, _, self)
-	TT.ReskinRewardIcon(self)
+local function resetBackdropColor(self)
+	self:GetParent().bg:SetBackdropBorderColor(0, 0, 0)
+end
+
+function TT:ReskinRewardIcon()
+	self.Icon:SetTexCoord(unpack(DB.TexCoord))
+	self.bg = B.CreateBG(self.Icon)
+	B.CreateBD(self.bg)
+
+	local iconBorder = self.IconBorder
+	iconBorder:SetAlpha(0)
+	hooksecurefunc(iconBorder, "SetVertexColor", updateBackdropColor)
+	hooksecurefunc(iconBorder, "Hide", resetBackdropColor)
 end
 
 function TT:ReskinTooltipIcons()
@@ -77,11 +85,6 @@ function TT:ReskinTooltipIcons()
 	end)
 
 	-- Tooltip rewards icon
-	_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |cffffffff%2$s|r %3$s"
-	_G.BONUS_OBJECTIVE_REWARD_FORMAT = "|T%1$s:16:16:"..newString.."|t %2$s"
-
-	hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", TT.ReskinRewardIcon)
-	hooksecurefunc("EmbeddedItemTooltip_SetItemByID", TT.ReskinRewardIcon)
-	hooksecurefunc("EmbeddedItemTooltip_SetCurrencyByID", TT.ReskinRewardIcon)
-	hooksecurefunc("QuestUtils_AddQuestCurrencyRewardsToTooltip", reskinQuestCurrencyRewardIcon)
+	TT.ReskinRewardIcon(GameTooltip.ItemTooltip)
+	TT.ReskinRewardIcon(EmbeddedItemTooltip.ItemTooltip)
 end
