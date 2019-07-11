@@ -6,11 +6,12 @@ C.themes["Blizzard_Collections"] = function()
 	-- [[ General ]]
 
 	CollectionsJournal.bg = F.ReskinPortraitFrame(CollectionsJournal)
-	F.ReskinTab(CollectionsJournalTab1)
-	for i = 2, 5 do
+	for i = 1, 5 do
 		local tab = _G["CollectionsJournalTab"..i]
 		F.ReskinTab(tab)
-		tab:SetPoint("LEFT", _G["CollectionsJournalTab"..(i-1)], "RIGHT", -15, 0)
+		if i > 1 then
+			tab:SetPoint("LEFT", _G["CollectionsJournalTab"..(i-1)], "RIGHT", -15, 0)
+		end
 	end
 
 	-- [[ Mounts and pets ]]

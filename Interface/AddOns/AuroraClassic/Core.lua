@@ -57,11 +57,12 @@ local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours
 
 local function SetupPixelFix()
 	local screenHeight = select(2, GetPhysicalScreenSize())
+	local bestScale = max(.4, min(1.15, 768 / screenHeight))
+	local pixelScale = 768 / screenHeight
 	local scale = UIParent:GetScale()
 	local uiScale = AuroraConfig.uiScale
-	if uiScale and uiScale > 0 and uiScale < .64 then scale = uiScale end
-	scale = tonumber(floor(scale*100 + .5)/100)
-	C.mult = 768/screenHeight/scale
+	if uiScale and uiScale > 0 then scale = uiScale end
+	C.mult = (bestScale / scale) - ((bestScale - pixelScale) / scale)
 end
 
 function F:dummy()

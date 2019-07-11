@@ -147,10 +147,10 @@ tinsert(C.themes["AuroraClassic"], function()
 		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
 
 		if numSpellRewards > 0 then
-            -- Spell Headers
-            for spellHeader in rewardsFrame.spellHeaderPool:EnumerateActive() do
+			-- Spell Headers
+			for spellHeader in rewardsFrame.spellHeaderPool:EnumerateActive() do
 				spellHeader:SetVertexColor(1, 1, 1)
-            end
+			end
 			-- Follower Rewards
 			for reward in rewardsFrame.followerRewardPool:EnumerateActive() do
 				local portrait = reward.PortraitFrame
@@ -175,8 +175,8 @@ tinsert(C.themes["AuroraClassic"], function()
 					portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 				end
 			end
-            -- Spell Rewards
-            for spellReward in rewardsFrame.spellRewardPool:EnumerateActive() do
+			-- Spell Rewards
+			for spellReward in rewardsFrame.spellRewardPool:EnumerateActive() do
 				if not spellReward.styled then
 					local icon = spellReward.Icon
 					local nameFrame = spellReward.NameFrame
