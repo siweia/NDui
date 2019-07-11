@@ -140,6 +140,8 @@ local strsplit, ceil, mod = string.split, math.ceil, mod
 local pairs, tonumber, tinsert = pairs, tonumber, table.insert
 
 local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
+	if InCombatLockdown() then return end -- need reviewed
+
 	wipe(overlayTextures)
 	wipe(TileExists)
 

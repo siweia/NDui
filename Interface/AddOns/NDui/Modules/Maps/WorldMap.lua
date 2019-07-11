@@ -110,10 +110,12 @@ function module:UpdateMapAnchor()
 end
 
 function module:WorldMapScale()
-	WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-		local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-		local scale = WorldMapFrame:GetScale()
-		return x / scale, y / scale
+	if NDuiDB["Map"]["MapScale"] > 1 then
+		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+			local scale = WorldMapFrame:GetScale()
+			return x / scale, y / scale
+		end
 	end
 
 	B.CreateMF(WorldMapFrame, nil, true)
