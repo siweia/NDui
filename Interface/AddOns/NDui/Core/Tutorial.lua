@@ -41,17 +41,18 @@ local function ForceRaidFrame()
 	CompactUnitFrameProfiles_UpdateCurrentPanel()
 end
 
+local function clipScale(scale)
+	return tonumber(format("%.5f", scale))
+end
+
 local function GetPerfectScale()
 	local scale = NDuiADB["UIScale"]
-	local minScale = .64
-	local fixedHeight = 768/DB.ScreenHeight
-	if NDuiADB["LockUIScale"] then
-		scale = max(minScale, min(1.1, fixedHeight))
-		scale = tonumber(floor(scale*100 + .5)/100)
-	end
-	C.mult = fixedHeight/scale
+	local bestScale = max(.4, min(1.15, 768 / DB.ScreenHeight))
+	local pixelScale = 768 / DB.ScreenHeight
+	if NDuiADB["LockUIScale"] then scale = clipScale(bestScale) end
+	C.mult = (bestScale / scale) - ((bestScale - pixelScale) / scale)
 
-	NDuiADB["UIScale"] = scale
+	return scale
 end
 
 local isScaling = false
@@ -59,15 +60,13 @@ local function SetupUIScale()
 	if isScaling then return end
 	isScaling = true
 
-	local cvar = tonumber(GetCVar("uiScale"))
-	local val = NDuiADB["UIScale"]
-	local scale = UIParent:GetScale()
-	if val >= .64 and cvar ~= val then
-		SetCVar("useUiScale", 1)
-		SetCVar("uiScale", val)
-	elseif val < .64 and val ~= scale then
-		UIParent:SetScale(val)
+	local scale = GetPerfectScale()
+	local parentScale = UIParent:GetScale()
+	if scale ~= parentScale then
+		UIParent:SetScale(scale)
 	end
+
+	NDuiADB["UIScale"] = clipScale(scale)
 
 	isScaling = false
 end
@@ -357,7 +356,6 @@ local function YesTutor()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Chat Settings Check"])
 		elseif currentPage == 3 then
 			NDuiADB["LockUIScale"] = true
-			GetPerfectScale()
 			SetupUIScale()
 			NDuiADB["LockUIScale"] = false
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
@@ -446,7 +444,6 @@ function module:OnLogin()
 	B.HideOption(Advanced_UIScaleSlider)
 
 	-- Update UIScale
-	GetPerfectScale()
 	SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", SetupUIScale)
 

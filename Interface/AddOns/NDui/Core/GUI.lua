@@ -671,7 +671,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{},--blank
-		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.1, 2}},
+		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, 2}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {L["Highlight"], L["Gradient"], L["Flat"]}},
@@ -897,7 +897,7 @@ local function CreateOption(i)
 		else
 			local l = CreateFrame("Frame", nil, parent)
 			l:SetPoint("TOPLEFT", 25, -offset - 12)
-			B.CreateGF(l, 550, 2, "Horizontal", .7, .7, .7, .7, 0)
+			B.CreateGF(l, 550, C.mult, "Horizontal", 1, 1, 1, .25, .25)
 			offset = offset + 35
 		end
 	end
@@ -1187,11 +1187,7 @@ local function OpenGUI()
 	ok:SetScript("OnClick", function()
 		local scale = NDuiADB["UIScale"]
 		if scale ~= scaleOld then
-			if scale < .64 then
-				UIParent:SetScale(scale)
-			else
-				SetCVar("uiScale", scale)
-			end
+			UIParent:SetScale(scale)
 		end
 		f:Hide()
 		StaticPopup_Show("RELOAD_NDUI")
