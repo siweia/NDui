@@ -276,8 +276,9 @@ local function createRoster(parent, i)
 	return button
 end
 
+local previous = 0
 local function updateAnchor()
-	for i = 1, #buttons do
+	for i = 1, previous do
 		if i == 1 then
 			buttons[i]:SetPoint("TOPLEFT")
 		else
@@ -287,7 +288,6 @@ local function updateAnchor()
 	end
 end
 
-local previous = 0
 local function updateFriendsFrame()
 	local onlineFriends = C_FriendList_GetNumOnlineFriends()
 	local _, onlineBNet = BNGetNumFriends()
