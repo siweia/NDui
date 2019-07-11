@@ -99,7 +99,7 @@ function TradeTabs:Initialize()
 
 		local point, relPoint, x, y = "TOPLEFT", "BOTTOMLEFT", 0, -10
 		if not prev then
-			prev, relPoint, x, y = parent, "TOPRIGHT", 2, -40
+			prev, relPoint, x, y = parent, "TOPRIGHT", 3, -40
 		end
 		tab:SetPoint(point, prev, relPoint, x, y)
 
