@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
+local _G = getfenv(0)
 local tostring, tonumber, pairs, select, random, strsplit = tostring, tonumber, pairs, select, math.random, string.split
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
@@ -41,13 +42,12 @@ function M:OnLogin()
 	self:QuickJoin()
 	self:QuestNotifier()
 	self:GuildBest()
-	if NDuiDB["Misc"]["ParagonRep"] then
-		hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
-	end
+	self:ParagonReputationSetup()
 	self:NakedIcon()
 	self:ExtendInstance()
 	self:VehicleSeatMover()
 	self:PetFilterTab()
+	self:AlertFrame_Setup()
 
 	-- Max camera distancee
 	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
@@ -359,37 +359,6 @@ do
 	end
 
 	B:RegisterEvent("LOOT_READY", setupMisc)
-end
-
--- Hide TalkingFrame
-do
-	local function NoTalkingHeads()
-		hooksecurefunc(TalkingHeadFrame, "Show", function(self)
-			self:Hide()
-		end)
-		TalkingHeadFrame.ignoreFramePositionManager = true
-	end
-
-	local function setupMisc(event, addon)
-		if not NDuiDB["Misc"]["HideTalking"] then
-			B:UnregisterEvent(event, setupMisc)
-			return
-		end
-
-		if event == "PLAYER_ENTERING_WORLD" then
-			B:UnregisterEvent(event, setupMisc)
-			if IsAddOnLoaded("Blizzard_TalkingHeadUI") then
-				NoTalkingHeads()
-				B:UnregisterEvent("ADDON_LOADED", setupMisc)
-			end
-		elseif event == "ADDON_LOADED" and addon == "Blizzard_TalkingHeadUI" then
-			NoTalkingHeads()
-			B:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", setupMisc)
-	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
 -- Extend Instance

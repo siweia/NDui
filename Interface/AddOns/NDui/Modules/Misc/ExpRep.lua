@@ -248,3 +248,8 @@ function M:HookParagonRep()
 		end
 	end
 end
+
+function M:ParagonReputationSetup()
+	if not NDuiDB["Misc"]["ParagonRep"] then return end
+	hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
+end
