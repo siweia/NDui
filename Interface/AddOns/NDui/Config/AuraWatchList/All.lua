@@ -310,7 +310,7 @@ local list = {
 		{AuraID = 300545, UnitID = "player"}, -- 力量决裂
 		{AuraID = 304409, UnitID = "player", Flash = true}, -- 重复行动
 		{AuraID = 304410, UnitID = "player", Flash = true}, -- 重复行动
-		{AuraID = 304128, UnitID = "player"}, -- 缓刑
+		{AuraID = 304128, UnitID = "player", Text = L["Move"]}, -- 缓刑
 		{AuraID = 297586, UnitID = "player", Flash = true}, -- 承受折磨
 		-- 扎库尔，尼奥罗萨先驱
 		{AuraID = 298192, UnitID = "player", Flash = true}, -- 黑暗虚空
