@@ -94,7 +94,7 @@ function module:ReskinRegions()
 		local flag = _G[v]
 		flag:ClearAllPoints()
 		flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
-		flag:SetScale(.75)
+		flag:SetScale(.9)
 	end
 
 	-- Mail icon
