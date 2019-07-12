@@ -232,6 +232,8 @@ local function formatNumber(self, amount)
 	end
 end
 
+local playerGUID = UnitGUID("player")
+
 local function onEvent(self, event, ...)
 	local element = self.FloatingCombatFeedback
 	local unit = self.unit
@@ -246,9 +248,9 @@ local function onEvent(self, event, ...)
 
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
 		local _, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = ...
-		local isPlayer = UnitGUID("player") == sourceGUID
+		local isPlayer = playerGUID == sourceGUID
 		local atTarget = UnitGUID("target") == destGUID
-		local atPlayer = UnitGUID("player") == destGUID
+		local atPlayer = playerGUID == destGUID
 		local isVehicle = element.showPets and sourceFlags == DB.GuardianFlags
 		local isPet = element.showPets and sourceFlags == DB.MyPetFlags
 
