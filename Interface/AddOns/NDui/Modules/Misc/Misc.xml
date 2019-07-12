@@ -10,4 +10,5 @@
 	<Script file="QuestNotifier.lua"/>
 	<Script file="QuickJoin.lua"/>
 	<Script file="MDGuildBest.lua"/>
+	<Script file="AlertFrames.lua"/>
 </Ui>
