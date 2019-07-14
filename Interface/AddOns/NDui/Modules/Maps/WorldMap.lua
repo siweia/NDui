@@ -3,15 +3,15 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Maps")
 
 local select = select
+local WorldMapFrame = WorldMapFrame
 local CreateVector2D = CreateVector2D
-local UnitPosition, GetCursorPosition = UnitPosition, GetCursorPosition
+local UnitPosition = UnitPosition
 local C_Map_GetWorldPosFromMapPos = C_Map.GetWorldPosFromMapPos
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
-local mapScale, mapWidth, mapHeight, mapCenterX, mapCenterY
-local currentMapID, playerCoords, cursorCoords
+local currentMapID, playerCoords, cursorCoords, mapScale
 
 function module:GetPlayerMapPos(mapID)
 	tempVec2D.x, tempVec2D.y = UnitPosition("player")
@@ -32,9 +32,9 @@ function module:GetPlayerMapPos(mapID)
 end
 
 function module:GetCursorCoords()
-	local x, y = GetCursorPosition()
-	local cursorX = x and ((x / mapScale - (mapCenterX - (mapWidth/2))) / mapWidth)
-	local cursorY = y and ((mapCenterY + (mapHeight/2) - y / mapScale) / mapHeight)
+	if not WorldMapFrame.ScrollContainer:IsMouseOver() then return end
+
+	local cursorX, cursorY = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
 	if cursorX < 0 or cursorX > 1 or cursorY < 0 or cursorY > 1 then return end
 	return cursorX, cursorY
 end
@@ -69,6 +69,14 @@ function module:UpdateCoords(elapsed)
 	end
 end
 
+function module:UpdateMapID()
+	if self:GetMapID() == C_Map_GetBestMapForUnit("player") then
+		currentMapID = self:GetMapID()
+	else
+		currentMapID = nil
+	end
+end
+
 function module:SetupCoords()
 	if not NDuiDB["Map"]["Coord"] then return end
 
@@ -76,21 +84,8 @@ function module:SetupCoords()
 	cursorCoords = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 
-	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function(self)
-		local mapBody = self:GetCanvasContainer()
-		mapWidth = mapBody:GetWidth()
-		mapHeight = mapBody:GetHeight()
-		mapCenterX, mapCenterY = mapBody:GetCenter()
-		mapScale = mapBody:GetEffectiveScale()
-	end)
-
-	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
-		if self:GetMapID() == C_Map_GetBestMapForUnit("player") then
-			currentMapID = self:GetMapID()
-		else
-			currentMapID = nil
-		end
-	end)
+	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", module.UpdateMapID)
+	hooksecurefunc(WorldMapFrame, "OnMapChanged", module.UpdateMapID)
 
 	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
 	CoordsUpdater:SetScript("OnUpdate", module.UpdateCoords)
@@ -99,8 +94,8 @@ end
 function module:UpdateMapScale()
 	if self.isMaximized and self:GetScale() ~= 1 then
 		self:SetScale(1)
-	elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then
-		self:SetScale(NDuiDB["Map"]["MapScale"])
+	elseif not self.isMaximized and self:GetScale() ~= mapScale then
+		self:SetScale(mapScale)
 	end
 end
 
@@ -110,7 +105,9 @@ function module:UpdateMapAnchor()
 end
 
 function module:WorldMapScale()
-	if NDuiDB["Map"]["MapScale"] > 1 then
+	mapScale = NDuiDB["Map"]["MapScale"]
+
+	if mapScale > 1 then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
 			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
 			local scale = WorldMapFrame:GetScale()
