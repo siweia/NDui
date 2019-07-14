@@ -74,5 +74,5 @@ C.themes["Blizzard_ChallengesUI"] = function()
 	local affix = ChallengesFrame.SeasonChangeNoticeFrame.Affix
 	F.StripTextures(affix)
 	F.ReskinIcon(affix.Portrait)
-	affix.Portrait:SetTexture(2446016)
+	--affix.Portrait:SetTexture(2446016) -- for testing
 end
