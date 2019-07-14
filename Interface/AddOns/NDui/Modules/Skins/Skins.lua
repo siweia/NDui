@@ -54,7 +54,7 @@ function S:OnLogin()
 	end
 
 	-- MICROMENU
-	if NDuiDB["Skins"]["MenuLine"] then
+	if NDuiDB["Skins"]["MenuLine"] and NDuiDB["Skins"]["MicroMenu"] then
 		local mmbottomL = CreateFrame("Frame", nil, UIParent)
 		mmbottomL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 3)
 		B.CreateGF(mmbottomL, 210, C.mult, "Horizontal", cr, cg, cb, 0, .7)
