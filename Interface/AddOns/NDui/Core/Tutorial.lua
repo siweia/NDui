@@ -357,7 +357,6 @@ local function YesTutor()
 		elseif currentPage == 3 then
 			NDuiADB["LockUIScale"] = true
 			SetupUIScale()
-			NDuiADB["LockUIScale"] = false
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
 		elseif currentPage == 4 then
 			NDuiADB["DBMRequest"] = true
