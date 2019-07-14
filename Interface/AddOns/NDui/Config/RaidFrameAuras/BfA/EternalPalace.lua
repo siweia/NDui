@@ -55,6 +55,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 298459) -- 羊水喷发
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 295779, 6) -- 水舞长枪
 
 BOSS = 2359 -- 女王法庭
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 303630) -- 爆裂之黯
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 301830) -- 帕什玛之触
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 301832) -- 疯狂热诚
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 296851, 6) -- 狂热裁决
@@ -69,7 +70,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 298192) -- 黑暗虚空
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 295480) -- 心智锁链
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 295495)
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 300133, 6) -- 折断
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 292963) -- 惊惧
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 292963, 6) -- 惊惧
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 293509, 6) -- 惊惧
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 295327, 6) -- 碎裂心智
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 296018, 6) -- 癫狂惊惧

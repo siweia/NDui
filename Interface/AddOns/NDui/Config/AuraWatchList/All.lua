@@ -278,6 +278,7 @@ local list = {
 		{AuraID = 292127, UnitID = "player", Flash = true},	-- 墨黑深渊
 		{AuraID = 292138, UnitID = "player"},	-- 辐光生物质
 		{AuraID = 292133, UnitID = "player"},	-- 生物体荧光
+		{AuraID = 301968, UnitID = "player"},	-- 生物体荧光，小怪
 		{AuraID = 292167, UnitID = "player"},	-- 剧毒脊刺
 		{AuraID = 301180, UnitID = "player"},	-- 冲流
 		{AuraID = 298595, UnitID = "player"},	-- 发光的钉刺
@@ -288,6 +289,7 @@ local list = {
 		{AuraID = 296746, UnitID = "player"},	-- 奥术炸弹
 		{AuraID = 299152, UnitID = "player"},	-- 翻滚之水
 		-- 艾什凡女勋爵
+		{AuraID = 303630, UnitID = "player"},	-- 爆裂之黯，小怪
 		{AuraID = 296725, UnitID = "player"},	-- 壶蔓猛击
 		{AuraID = 296693, UnitID = "player"},	-- 浸水
 		{AuraID = 296752, UnitID = "player"},	-- 锋利的珊瑚
@@ -303,6 +305,7 @@ local list = {
 		{AuraID = 295779, UnitID = "player", Flash = true},	-- 水舞长枪
 		{AuraID = 300244, UnitID = "player", Flash = true},	-- 狂怒急流
 		-- 女王法庭
+		{AuraID = 297585, UnitID = "player"}, -- 服从或受苦
 		{AuraID = 301830, UnitID = "player"}, -- 帕什玛之触
 		{AuraID = 301832, UnitID = "player"}, -- 疯狂热诚
 		{AuraID = 296851, UnitID = "player", Flash = true, Text = L["Get Out"]}, -- 狂热裁决
@@ -465,8 +468,10 @@ local list = {
 	-- 永恒王宫
 		{AuraID = 296389, UnitID = "target"},	-- 上旋气流，艾萨拉之辉
 		{AuraID = 304951, UnitID = "target"},	-- 聚焦能量
+		{AuraID = 295916, UnitID = "target"},	-- 远古风暴
 		{AuraID = 296650, UnitID = "target", Value = true},	-- 硬化甲壳，艾什凡女勋爵
-		{AuraID = 299575, UnitID = "target", Flash = true},	-- 指挥官之怒，女王法庭
+		{AuraID = 299575, UnitID = "target"},	-- 指挥官之怒，女王法庭
+		{AuraID = 296704, UnitID = "target", Flash = true},	-- 权力制衡，女王法庭
 		{AuraID = 295099, UnitID = "target"},	-- 穿透黑暗，扎库尔
 	-- 风暴熔炉
 		{AuraID = 282741, UnitID = "target", Value = true},	-- 暗影之壳，无眠秘党
