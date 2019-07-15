@@ -21,7 +21,7 @@ local zoneInfo = {
 	neutral = {format(FACTION_CONTROLLED_TERRITORY, FACTION_STANDING_LABEL4), {1, .93, .76}}
 }
 
-local subzone, zone, pvp
+local subzone, zone, pvpType, faction
 local coordX, coordY = 0, 0
 
 local function formatCoords()
@@ -36,9 +36,12 @@ info.eventList = {
 }
 
 info.onEvent = function(self)
-	subzone, zone, pvp = GetSubZoneText(), GetZoneText(), {GetZonePVPInfo()}
-	if not pvp[1] then pvp[1] = "neutral" end
-	local r, g, b = unpack(zoneInfo[pvp[1]][2])
+	subzone = GetSubZoneText()
+	zone = GetZoneText()
+	pvpType, _, faction = GetZonePVPInfo()
+	pvpType = pvpType or "neutral"
+
+	local r, g, b = unpack(zoneInfo[pvpType][2])
 	self.text:SetText((subzone ~= "") and subzone or zone)
 	self.text:SetTextColor(r, g, b)
 end
@@ -66,13 +69,13 @@ info.onEnter = function(self)
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(format("%s |cffffffff(%s)", zone, formatCoords()), 0,.6,1)
 
-	if pvp[1] and not IsInInstance() then
-		local r, g, b = unpack(zoneInfo[pvp[1]][2])
+	if pvpType and not IsInInstance() then
+		local r, g, b = unpack(zoneInfo[pvpType][2])
 		if subzone and subzone ~= zone then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(subzone, r, g, b)
 		end
-		GameTooltip:AddLine(format(zoneInfo[pvp[1]][1], pvp[3] or ""), r, g, b)
+		GameTooltip:AddLine(format(zoneInfo[pvpType][1], faction or ""), r, g, b)
 	end
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)

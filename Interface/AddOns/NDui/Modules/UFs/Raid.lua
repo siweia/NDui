@@ -243,8 +243,7 @@ end
 local function setupMouseWheelCast(self)
 	local found
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
-		local key = unpack(data)
-		if strmatch(key, L["Wheel"]) then
+		if strmatch(data[1], L["Wheel"]) then
 			found = true
 			break
 		end
