@@ -5,14 +5,14 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- tooltips
 	if AuroraConfig.tooltips then
-		F.ReskinTooltip(GarrisonFollowerAbilityWithoutCountersTooltip)
-		F.ReskinTooltip(GarrisonFollowerMissionAbilityWithoutCountersTooltip)
 		F.ReskinTooltip(GarrisonMissionMechanicTooltip)
 		F.ReskinTooltip(GarrisonMissionMechanicFollowerCounterTooltip)
 		F.ReskinTooltip(GarrisonShipyardMapMissionTooltip)
 		F.ReskinTooltip(GarrisonBonusAreaTooltip)
 		F.ReskinTooltip(GarrisonBuildingFrame.BuildingLevelTooltip)
 	end
+	F.ReskinGarrisonTooltip(GarrisonFollowerAbilityWithoutCountersTooltip)
+	F.ReskinGarrisonTooltip(GarrisonFollowerMissionAbilityWithoutCountersTooltip)
 
 	-- [[ Shared codes ]]
 
