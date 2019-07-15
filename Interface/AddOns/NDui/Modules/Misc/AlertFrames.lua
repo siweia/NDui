@@ -97,7 +97,7 @@ local function MoveTalkingHead()
 
 	TalkingHeadFrame.ignoreFramePositionManager = true
 	TalkingHeadFrame:ClearAllPoints()
-	TalkingHeadFrame:SetPoint("BOTTOM", 0, 120)
+	TalkingHeadFrame:SetPoint("BOTTOM", 0, 220)
 
 	for index, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
 		if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == TalkingHeadFrame then
@@ -125,7 +125,7 @@ end
 function M:AlertFrame_Setup()
 	parentFrame = CreateFrame("Frame", nil, UIParent)
 	parentFrame:SetSize(200, 30)
-	B.Mover(parentFrame, L["AlertFrames"], "AlertFrames", {"TOP", UIParent, 0, -120})
+	B.Mover(parentFrame, L["AlertFrames"], "AlertFrames", {"TOP", UIParent, 0, -40})
 
 	GroupLootContainer:EnableMouse(false)
 	GroupLootContainer.ignoreFramePositionManager = true
