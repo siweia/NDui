@@ -100,9 +100,10 @@ local questlist = {
 -- Check Invasion Status
 local region = GetCVar("portal")
 local legionZoneTime = {
-	["CN"] = 1546844400, -- CN time 1/7/2019 15:00 [1]
+	--["CN"] = 1546844400, -- CN time 1/7/2019 15:00 [1]
 	["EU"] = 1546786800, -- CN-16
 	["US"] = 1546815600, -- CN-8
+	["CN"] = 1562895000, -- CN time 7/12/2019 09:30 [1]
 }
 local bfaZoneTime = {
 	["CN"] = 1546743600, -- CN time 1/6/2019 11:00 [1]
