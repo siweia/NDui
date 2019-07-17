@@ -20,6 +20,7 @@ local r, g, b = DB.r, DB.g, DB.b
 local friendsFrame, menuFrame, updateRequest
 local menuList, buttons, friendTable, bnetTable = {}, {}, {}, {}
 local activeZone, inactiveZone = "|cff4cff4c", DB.GreyColor
+local noteString = LABEL_NOTE..": %s"
 
 local function sortFriends(a, b)
 	if a[1] and b[1] then
@@ -57,7 +58,7 @@ local function buildBNetTable(num)
 	wipe(bnetTable)
 
 	for i = 1, num do
-		local _, accountName, battleTag, _, charName, gameID, _, isOnline, _, isAFK, isDND = BNGetFriendInfo(i)
+		local _, accountName, battleTag, _, charName, gameID, _, isOnline, _, isAFK, isDND, _, note = BNGetFriendInfo(i)
 		if isOnline then
 			local _, _, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy = BNGetGameAccountInfo(gameID)
 
@@ -82,7 +83,7 @@ local function buildBNetTable(num)
 				infoText = gameText
 			end
 
-			tinsert(bnetTable, {i, accountName, charName, gameID, client, realmName, status, class, level, infoText})
+			tinsert(bnetTable, {i, accountName, charName, gameID, client, realmName, status, class, level, infoText, note})
 		end
 	end
 
@@ -210,7 +211,8 @@ local function buttonOnEnter(self)
 	if self.isBNet then
 		GameTooltip:AddLine(L["BN"], 0,.6,1)
 		GameTooltip:AddLine(" ")
-		local index, accountName = unpack(self.data)
+
+		local index, accountName, _, _, _, _, _, _, _, _, note = unpack(self.data)
 		local numGameAccounts = BNGetNumFriendGameAccounts(index)
 		for i = 1, numGameAccounts do
 			local _, charName, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, bnetIDGameAccount = BNGetFriendGameAccountInfo(index, i)
@@ -229,6 +231,11 @@ local function buttonOnEnter(self)
 				GameTooltip:AddLine(format("|cffffffff%s%s", clientString, accountName))
 				GameTooltip:AddLine(format("%s%s", inactiveZone, gameText))
 			end
+		end
+
+		if note and note ~= "" then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(format(noteString, note), 1,.8,0)
 		end
 	else
 		GameTooltip:AddLine(L["WoW"], 1,.8,0)
