@@ -74,6 +74,7 @@ local ignoreQuestNPC = {
 	[105387] = true,	-- 安杜斯
 	[93538] = true,		-- 达瑞妮斯
 	[154534] = true,	-- 大杂院阿畅
+	[150987] = true,	-- 肖恩·维克斯
 }
 
 local function GetQuestLogQuests(onlyComplete)
