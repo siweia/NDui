@@ -386,7 +386,11 @@ function S:ReskinRematch()
 		bg:SetPoint("TOPLEFT", border, 6, -5)
 		bg:SetPoint("BOTTOMRIGHT", border, -6, 5)
 
-		-- RematchNotes
+		styled = true
+	end)
+
+	-- RematchNotes
+	do
 		local note = RematchNotes
 		F.StripTextures(note)
 		F.ReskinClose(note.CloseButton)
@@ -414,9 +418,7 @@ function S:ReskinRematch()
 		F.Reskin(note.Controls.DeleteButton)
 		F.Reskin(note.Controls.UndoButton)
 		F.Reskin(note.Controls.SaveButton)
-
-		styled = true
-	end)
+	end
 
 	hooksecurefunc(Rematch, "FillPetTypeIcon", function(_, texture, _, prefix)
 		if prefix then
