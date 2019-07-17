@@ -3,7 +3,10 @@ local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
 local strmatch, format, wipe, tinsert = string.match, string.format, table.wipe, table.insert
-local pairs, ipairs, next, tonumber = pairs, ipairs, next, tonumber
+local pairs, ipairs, next, tonumber, unpack = pairs, ipairs, next, tonumber, unpack
+local UnitAura = UnitAura
+local GetSpellInfo, GetSpellTexture = GetSpellInfo, GetSpellTexture
+local InCombatLockdown = InCombatLockdown
 
 -- RaidFrame Elements
 function UF:CreateRaidIcons(self)
@@ -257,7 +260,6 @@ end
 
 local function setupClickSets(self)
 	if self.clickCastRegistered then return end
-	setupMouseWheelCast(self)
 
 	for _, data in pairs(NDuiDB["RaidClickSets"]) do
 		local key, modKey, value = unpack(data)
@@ -285,18 +287,36 @@ local function setupClickSets(self)
 		end
 	end
 
+	setupMouseWheelCast(self)
 	self:RegisterForClicks("AnyDown")
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED", setupClickSets)
+
 	self.clickCastRegistered = true
 end
 
+local pendingFrames = {}
 function UF:CreateClickSets(self)
 	if not NDuiDB["UFs"]["RaidClickSets"] then return end
+
 	if InCombatLockdown() then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupClickSets, true)
+		pendingFrames[self] = true
 	else
 		setupClickSets(self)
+		pendingFrames[self] = nil
 	end
+end
+
+function UF:DelayClickSets()
+	if not next(pendingFrames) then return end
+
+	for frame in next, pendingFrames do
+		UF:CreateClickSets(frame)
+	end
+end
+
+function UF:AddClickSetsListener()
+	if not NDuiDB["UFs"]["RaidClickSets"] then return end
+
+	B:RegisterEvent("PLAYER_REGEN_ENABLED", UF.DelayClickSets)
 end
 
 local counterOffsets = {
