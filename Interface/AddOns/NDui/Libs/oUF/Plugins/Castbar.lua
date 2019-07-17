@@ -92,6 +92,8 @@ function B:OnCastbarUpdate(elapsed)
 		self.duration = duration
 		self:SetValue(duration)
 		self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
+	elseif self.holdTime > 0 then
+		self.holdTime = self.holdTime - elapsed
 	else
 		self.Spark:Hide()
 		local alpha = self:GetAlpha() - .02

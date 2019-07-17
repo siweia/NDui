@@ -5,9 +5,11 @@ local UF = B:GetModule("UnitFrames")
 local strmatch, tonumber, pairs, type, unpack, next, rad = string.match, tonumber, pairs, type, unpack, next, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
 local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
-local GetInstanceInfo, UnitClassification, UnitGUID, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitGUID, UnitExists, InCombatLockdown
+local GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown
 local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_NamePlate_GetNamePlates, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_NamePlate.GetNamePlates, C_MythicPlus.GetCurrentAffixes
+local UnitGUID, GetPlayerInfoByGUID = UnitGUID, GetPlayerInfoByGUID
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
+local UNKNOWN, INTERRUPTED = UNKNOWN, INTERRUPTED
 
 -- Init
 function UF:PlateInsideView()
@@ -81,7 +83,7 @@ end
 -- Elements
 function UF.UpdateColor(element, unit)
 	local name = GetUnitName(unit) or UNKNOWN
-	local npcID = B.GetNPCID(UnitGUID(unit))
+	local npcID = element.__owner.npcID
 	local customUnit = C.CustomUnits and (C.CustomUnits[name] or C.CustomUnits[npcID])
 	local status = UnitThreatSituation("player", unit) or false		-- just in case
 	local reaction = UnitReaction(unit, "player")
@@ -239,7 +241,7 @@ function UF:UpdateDungeonProgress(unit)
 
 	local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario_GetInfo()
 	if scenarioType == LE_SCENARIO_TYPE_CHALLENGE_MODE then
-		local npcID = B.GetNPCID(UnitGUID(unit))
+		local npcID = self.npcID
 		local info = AngryKeystones_Data.progress[npcID]
 		if info then
 			local numCriteria = select(3, C_Scenario_GetStepInfo())
@@ -296,7 +298,7 @@ local id = 120651
 function UF:ScalePlates()
 	for _, nameplate in next, C_NamePlate_GetNamePlates() do
 		local unitFrame = nameplate.unitFrame
-		local npcID = B.GetNPCID(UnitGUID(unitFrame.unit))
+		local npcID = unitFrame.npcID
 		if explosiveCount > 0 and npcID == id or explosiveCount == 0 then
 			unitFrame:SetWidth(NDuiDB["Nameplate"]["Width"] * 1.4)
 		else
@@ -308,7 +310,7 @@ end
 function UF:UpdateExplosives(event, unit)
 	if not hasExplosives or unit ~= self.unit then return end
 
-	local npcID = B.GetNPCID(UnitGUID(unit))
+	local npcID = self.npcID
 	if event == "NAME_PLATE_UNIT_ADDED" and npcID == id then
 		explosiveCount = explosiveCount + 1
 	elseif event == "NAME_PLATE_UNIT_REMOVED" and npcID == id then
@@ -327,19 +329,20 @@ local function checkInstance()
 	end
 end
 
+local function checkAffixes(event)
+	local affixes = C_MythicPlus_GetCurrentAffixes()
+	if not affixes then return end
+	if affixes[3] and affixes[3].id == 13 then
+		checkInstance()
+		B:RegisterEvent(event, checkInstance)
+		B:RegisterEvent("CHALLENGE_MODE_START", checkInstance)
+	end
+	B:UnregisterEvent(event, checkAffixes)
+end
+
 function UF:CheckExplosives()
 	if not NDuiDB["Nameplate"]["ExplosivesScale"] then return end
 
-	local function checkAffixes(event)
-		local affixes = C_MythicPlus_GetCurrentAffixes()
-		if not affixes then return end
-		if affixes[3] and affixes[3].id == 13 then
-			checkInstance()
-			B:RegisterEvent(event, checkInstance)
-			B:RegisterEvent("CHALLENGE_MODE_START", checkInstance)
-		end
-		B:UnregisterEvent(event, checkAffixes)
-	end
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
 end
 
@@ -363,7 +366,7 @@ function UF:UpdateMouseoverShown()
 	end
 end
 
-local function AddMouseoverIndicator(self)
+function UF:MouseoverIndicator(self)
 	local glow = CreateFrame("Frame", nil, UIParent)
 	glow:SetPoint("TOPLEFT", self, -6, 6)
 	glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
@@ -400,6 +403,24 @@ function UF:AddFollowerXP(self)
 	bar.progressText = B.CreateFS(bar, 9)
 
 	self.NazjatarFollowerXP = bar
+end
+
+local guidToPlate = {}
+function UF:UpdateCastbarInterrupt(...)
+	local _, eventType, _, sourceGUID, sourceName, _, _, destGUID = ...
+	if eventType == "SPELL_INTERRUPT" and destGUID and sourceName and sourceName ~= "" then
+		local nameplate = guidToPlate[destGUID]
+		if nameplate and nameplate.Castbar then
+			local _, class = GetPlayerInfoByGUID(sourceGUID)
+			local r, g, b = B.ClassColor(class)
+			local color = B.HexRGB(r, g, b)
+			nameplate.Castbar.Text:SetText(INTERRUPTED.." > "..color..sourceName)
+		end
+	end
+end
+
+function UF:AddInterruptInfo()
+	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", self.UpdateCastbarInterrupt)
 end
 
 -- Create Nameplates
@@ -487,12 +508,25 @@ function UF:CreatePlates(unit)
 		self.ThreatIndicator = threatIndicator
 		self.ThreatIndicator.Override = UF.UpdateThreatColor
 
-		AddMouseoverIndicator(self)
+		UF:MouseoverIndicator(self)
 	end
 end
 
 function UF:PostUpdatePlates(event, unit)
 	if not self then return end
+
+	if event == "NAME_PLATE_UNIT_ADDED" then
+		self.unitGUID = UnitGUID(unit)
+		if self.unitGUID then
+			guidToPlate[self.unitGUID] = self
+		end
+		self.npcID = B.GetNPCID(self.unitGUID)
+	elseif event == "NAME_PLATE_UNIT_REMOVED" then
+		if self.unitGUID then
+			guidToPlate[self.unitGUID] = nil
+		end
+	end
+
 	UF.UpdateTargetMark(self)
 	UF.UpdateQuestUnit(self, event, unit)
 	UF.UpdateUnitClassify(self, unit)

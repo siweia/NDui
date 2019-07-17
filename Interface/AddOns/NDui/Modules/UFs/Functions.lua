@@ -78,8 +78,7 @@ function UF:CreateHealthBar(self)
 	elseif mystyle ~= "raid" and NDuiDB["UFs"]["HealthColor"] == 3 then
 		health.colorSmooth = true
 	end
-	--health.frequentUpdates = true
-	health.frequentUpdates = mystyle ~= "raid"
+	health.frequentUpdates = true
 
 	self.Health = health
 	self.Health.bg = bg
@@ -362,6 +361,7 @@ function UF:CreateCastBar(self)
 
 		local iconSize = self:GetHeight()*2 + 5
 		cb.Icon:SetSize(iconSize, iconSize)
+		cb.timeToHold = .5
 	end
 
 	if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then
