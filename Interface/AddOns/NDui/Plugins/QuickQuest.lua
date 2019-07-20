@@ -168,6 +168,7 @@ local ignoreGossipNPC = {
 	[84684] = true, -- Lieutenant Thorn (Alliance)
 	[117871] = true, -- War Councilor Victoria (Class Challenges @ Broken Shore)
 	[155101] = true, -- 元素精华融合器
+	[155261] = true, -- 肖恩·维克斯
 }
 
 local rogueClassHallInsignia = {
