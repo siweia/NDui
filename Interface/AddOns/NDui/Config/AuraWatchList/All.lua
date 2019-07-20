@@ -130,6 +130,7 @@ local list = {
 		{AuraID = 273988, UnitID = "player"},	-- 原始本能
 		{AuraID = 285475, UnitID = "player"},	-- 卡亚矿涌流
 		{AuraID = 306242, UnitID = "player"},	-- 红卡重置
+		{AuraID = 285482, UnitID = "player"},	-- 海巨人的凶猛
 		-- 艾泽里特特质
 		{AuraID = 277960, UnitID = "player"},	-- 神经电激
 		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
@@ -260,6 +261,7 @@ local list = {
 		{AuraID = 297257, UnitID = "player"},	-- 电荷充能
 		{AuraID = 303885, UnitID = "player"},	-- 爆裂喷发
 		{AuraID = 292267, UnitID = "player"},	-- 超荷电磁炮
+		{AuraID = 305699, UnitID = "player"},	-- 锁定
 	-- 永恒王宫
 		-- 深渊指挥官西瓦拉
 		{AuraID = 295795, UnitID = "player", Flash = true, Text = L["Move"]},	-- 冻结之血
@@ -460,6 +462,7 @@ local list = {
 	-- 5人本
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
 	-- 8.0副本
+		{AuraID = 300011, UnitID = "target"},	-- 力场护盾，麦卡贡
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
 		{AuraID = 260512, UnitID = "target"},	-- 灵魂收割，神庙
 		{AuraID = 277965, UnitID = "target"},	-- 重型军火，围攻1
