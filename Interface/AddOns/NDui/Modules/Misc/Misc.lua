@@ -580,3 +580,33 @@ do
 	end
 	hooksecurefunc("TradeFrame_Update", updateColor)
 end
+
+-- Fix blizz guild news hyperlink
+do
+	local function fixGuildNews(event, addon)
+		if addon ~= "Blizzard_GuildUI" then return end
+
+		local _GuildNewsButton_OnEnter = GuildNewsButton_OnEnter
+		function GuildNewsButton_OnEnter(self)
+			if not (self.newsInfo and self.newsInfo.whatText) then return end
+			_GuildNewsButton_OnEnter(self)
+		end
+
+		B:UnregisterEvent(event, fixGuildNews)
+	end
+
+	local function fixCommunitiesNews(event, addon)
+		if addon ~= "Blizzard_Communities" then return end
+
+		local _CommunitiesGuildNewsButton_OnEnter = CommunitiesGuildNewsButton_OnEnter
+		function CommunitiesGuildNewsButton_OnEnter(self)
+			if not (self.newsInfo and self.newsInfo.whatText) then return end
+			_CommunitiesGuildNewsButton_OnEnter(self)
+		end
+
+		B:UnregisterEvent(event, fixCommunitiesNews)
+	end
+
+	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
+	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
+end
