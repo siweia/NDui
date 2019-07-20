@@ -2,6 +2,6 @@
 	<Script file="Tags.lua"/>
 	<Script file="Functions.lua"/>
 	<Script file="Raid.lua"/>
-	<Script file="NPs.lua"/>
+	<Script file="Nameplates.lua"/>
 	<Script file="Spawns.lua"/>
 </Ui>
