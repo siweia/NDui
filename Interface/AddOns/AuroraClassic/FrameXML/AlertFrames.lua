@@ -204,6 +204,23 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
+
+			-- Anchor fix in 8.2
+			if frame.Level then
+				if frame.ItemLevel:IsShown() and frame.Rare:IsShown() then
+					frame.Level:SetPoint("TOP", frame, "TOP", -115, -14)
+					frame.ItemLevel:SetPoint("TOP", frame, "TOP", -115, -37)
+					frame.Rare:SetPoint("TOP", frame, "TOP", -115, -48)
+				elseif frame.Rare:IsShown() then
+					frame.Level:SetPoint("TOP", frame, "TOP", -115, -19)
+					frame.Rare:SetPoint("TOP", frame, "TOP", -115, -45)
+				elseif frame.ItemLevel:IsShown() then
+					frame.Level:SetPoint("TOP", frame, "TOP", -115, -19)
+					frame.ItemLevel:SetPoint("TOP", frame, "TOP", -115, -45)
+				else
+					frame.Level:SetPoint("TOP", frame, "TOP", -115, -28)
+				end
+			end
 		elseif frame.queue == GarrisonBuildingAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
