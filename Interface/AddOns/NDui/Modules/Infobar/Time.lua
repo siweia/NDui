@@ -264,7 +264,9 @@ info.onEnter = function(self)
 			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 			GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 		end
-		GameTooltip:AddDoubleLine(L["Next Invasion"]..GetNextLocation(nextTime, index), date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
+		local nextLocation = UNKNOWN
+		if index == 2 then nextLocation = GetNextLocation(nextTime, index) end
+		GameTooltip:AddDoubleLine(L["Next Invasion"]..nextLocation, date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
 	end
 
 	-- Help Info
