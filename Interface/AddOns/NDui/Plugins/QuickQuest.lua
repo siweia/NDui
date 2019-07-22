@@ -74,7 +74,8 @@ local ignoreQuestNPC = {
 	[105387] = true,	-- 安杜斯
 	[93538] = true,		-- 达瑞妮斯
 	[154534] = true,	-- 大杂院阿畅
-	[150987] = true,	-- 肖恩·维克斯
+	[150987] = true,	-- 肖恩·维克斯，斯坦索姆
+	[150563] = true,	-- 斯卡基特，麦卡贡订单日常
 }
 
 local function GetQuestLogQuests(onlyComplete)
@@ -168,7 +169,7 @@ local ignoreGossipNPC = {
 	[84684] = true, -- Lieutenant Thorn (Alliance)
 	[117871] = true, -- War Councilor Victoria (Class Challenges @ Broken Shore)
 	[155101] = true, -- 元素精华融合器
-	[155261] = true, -- 肖恩·维克斯
+	[155261] = true, -- 肖恩·维克斯，斯坦索姆
 }
 
 local rogueClassHallInsignia = {
