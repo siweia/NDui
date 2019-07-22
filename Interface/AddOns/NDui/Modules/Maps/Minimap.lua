@@ -352,14 +352,6 @@ function module:SetupMinimap()
 		end
 	end)
 
-	-- Reanchor PVP progress
-	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, "SetPoint", function(self, _, parent)
-		if parent == MinimapCluster then
-			self:ClearAllPoints()
-			self:SetPoint("TOP", Minimap, "BOTTOM", 0, -20)
-		end
-	end)
-
 	-- Hide Blizz
 	local frames = {
 		"GameTimeFrame",
