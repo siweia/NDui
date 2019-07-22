@@ -164,6 +164,7 @@ local list = {
 		{AuraID = 274373, UnitID = "player"},	-- 溃烂之力
 		{AuraID = 280170, UnitID = "player", Value = true},	-- 假死盾
 		-- 艾泽里特精华
+		{AuraID = 295248, UnitID = "player"},	-- 专注能量
 		{AuraID = 298357, UnitID = "player"},	-- 清醒梦境之忆
 		{AuraID = 302731, UnitID = "player", Flash = true},	-- 空间涟漪
 		{AuraID = 302952, UnitID = "player"},	-- 现实流转
@@ -475,7 +476,7 @@ local list = {
 		{AuraID = 295916, UnitID = "target"},	-- 远古风暴
 		{AuraID = 296650, UnitID = "target", Value = true},	-- 硬化甲壳，艾什凡女勋爵
 		{AuraID = 299575, UnitID = "target"},	-- 指挥官之怒，女王法庭
-		{AuraID = 296704, UnitID = "target", Flash = true},	-- 权力制衡，女王法庭
+		{AuraID = 296716, UnitID = "target", Flash = true},	-- 权力制衡，女王法庭
 		{AuraID = 295099, UnitID = "target"},	-- 穿透黑暗，扎库尔
 	-- 风暴熔炉
 		{AuraID = 282741, UnitID = "target", Value = true},	-- 暗影之壳，无眠秘党
