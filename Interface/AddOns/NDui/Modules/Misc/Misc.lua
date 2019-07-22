@@ -46,8 +46,13 @@ function M:OnLogin()
 	self:NakedIcon()
 	self:ExtendInstance()
 	self:VehicleSeatMover()
+	self:UIWidgetFrameMover()
 	self:PetFilterTab()
 	self:AlertFrame_Setup()
+	self:UpdateScreenShot()
+	self:UpdateFasterLoot()
+	self:UpdateErrorBlocker()
+	self:TradeTargetInfo()
 
 	-- Max camera distancee
 	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
@@ -80,6 +85,221 @@ function M:OnLogin()
 		end
 		B:RegisterEvent("PLAYER_ENTERING_WORLD", updateBubble)
 	end
+
+	-- Readycheck sound on master channel
+	B:RegisterEvent("READY_CHECK", function()
+		PlaySound(SOUNDKIT.READY_CHECK, "master")
+	end)
+
+	-- Instant delete
+	hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
+		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
+	end)
+end
+
+-- Get Naked
+function M:NakedIcon()
+	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
+	bu:SetSize(31, 33)
+	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
+	B.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
+	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
+
+	local function UnequipItemInSlot(i)
+		local action = EquipmentManager_UnequipItemInSlot(i)
+		EquipmentManager_RunAction(action)
+	end
+
+	bu:SetScript("OnDoubleClick", function()
+		for i = 1, 17 do
+			local texture = GetInventoryItemTexture("player", i)
+			if texture then
+				UnequipItemInSlot(i)
+			end
+		end
+	end)
+end
+
+-- Extend Instance
+function M:ExtendInstance()
+	local bu = CreateFrame("Button", nil, RaidInfoFrame)
+	bu:SetPoint("TOPRIGHT", -35, -5)
+	bu:SetSize(25, 25)
+	B.PixelIcon(bu, GetSpellTexture(80353), true)
+	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Extend Instance"], "system")
+
+	bu:SetScript("OnMouseUp", function(_, btn)
+		for i = 1, GetNumSavedInstances() do
+			local _, _, _, _, _, extended, _, isRaid = GetSavedInstanceInfo(i)
+			if isRaid then
+				if btn == "LeftButton" then
+					if not extended then
+						SetSavedInstanceExtend(i, true)		-- extend
+					end
+				else
+					if extended then
+						SetSavedInstanceExtend(i, false)	-- cancel
+					end
+				end
+			end
+		end
+		RequestRaidInfo()
+		RaidInfoFrame_Update()
+	end)
+end
+
+-- Repoint Vehicle
+function M:VehicleSeatMover()
+	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
+	frame:SetSize(125, 125)
+	B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
+
+	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(self, _, parent)
+		if parent == "MinimapCluster" or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint("TOPLEFT", frame)
+		end
+	end)
+end
+
+-- Reanchor UIWidgetBelowMinimapContainerFrame
+function M:UIWidgetFrameMover()
+	local frame = CreateFrame("Frame", "NDuiUIWidgetMover", UIParent)
+	frame:SetSize(200, 50)
+	B.Mover(frame, L["UIWidgetFrame"], "UIWidgetFrame", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -20})
+
+	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, "SetPoint", function(self, _, parent)
+		if parent == "MinimapCluster" or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint("TOP", frame)
+		end
+	end)
+end
+
+-- Achievement screenshot
+function M:ScreenShotOnEvent()
+	M.ScreenShotFrame.delay = 1
+	M.ScreenShotFrame:Show()
+end
+
+function M:UpdateScreenShot()
+	if not M.ScreenShotFrame then
+		M.ScreenShotFrame = CreateFrame("Frame")
+		M.ScreenShotFrame:Hide()
+		M.ScreenShotFrame:SetScript("OnUpdate", function(self, elapsed)
+			self.delay = self.delay - elapsed
+			if self.delay < 0 then
+				Screenshot()
+				self:Hide()
+			end
+		end)
+	end
+
+	if NDuiDB["Misc"]["Screenshot"] then
+		B:RegisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
+	else
+		M.ScreenShotFrame:Hide()
+		B:UnregisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
+	end
+end
+
+-- Faster Looting
+local lootDelay = 0
+function M:DoFasterLoot()
+	if GetTime() - lootDelay >= .3 then
+		lootDelay = GetTime()
+		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
+			for i = GetNumLootItems(), 1, -1 do
+				LootSlot(i)
+			end
+			lootDelay = GetTime()
+		end
+	end
+end
+
+function M:UpdateFasterLoot()
+	if NDuiDB["Misc"]["FasterLoot"] then
+		B:RegisterEvent("LOOT_READY", M.DoFasterLoot)
+	else
+		B:UnregisterEvent("LOOT_READY", M.DoFasterLoot)
+	end
+end
+
+-- Hide errors in combat
+local erList = {
+	[ERR_ABILITY_COOLDOWN] = true,
+	[ERR_ATTACK_MOUNTED] = true,
+	[ERR_OUT_OF_ENERGY] = true,
+	[ERR_OUT_OF_FOCUS] = true,
+	[ERR_OUT_OF_HEALTH] = true,
+	[ERR_OUT_OF_MANA] = true,
+	[ERR_OUT_OF_RAGE] = true,
+	[ERR_OUT_OF_RANGE] = true,
+	[ERR_OUT_OF_RUNES] = true,
+	[ERR_OUT_OF_HOLY_POWER] = true,
+	[ERR_OUT_OF_RUNIC_POWER] = true,
+	[ERR_OUT_OF_SOUL_SHARDS] = true,
+	[ERR_OUT_OF_ARCANE_CHARGES] = true,
+	[ERR_OUT_OF_COMBO_POINTS] = true,
+	[ERR_OUT_OF_CHI] = true,
+	[ERR_OUT_OF_POWER_DISPLAY] = true,
+	[ERR_SPELL_COOLDOWN] = true,
+	[ERR_ITEM_COOLDOWN] = true,
+	[SPELL_FAILED_BAD_IMPLICIT_TARGETS] = true,
+	[SPELL_FAILED_BAD_TARGETS] = true,
+	[SPELL_FAILED_CASTER_AURASTATE] = true,
+	[SPELL_FAILED_NO_COMBO_POINTS] = true,
+	[SPELL_FAILED_SPELL_IN_PROGRESS] = true,
+	[SPELL_FAILED_TARGET_AURASTATE] = true,
+	[ERR_NO_ATTACK_TARGET] = true,
+}
+
+local isRegistered = true
+function M:ErrorBlockerOnEvent(_, text)
+	if InCombatLockdown() and erList[text] then
+		if isRegistered then
+			UIErrorsFrame:UnregisterEvent(self)
+			isRegistered = false
+		end
+	else
+		if not isRegistered then
+			UIErrorsFrame:RegisterEvent(self)
+			isRegistered = true
+		end
+	end
+end
+
+function M:UpdateErrorBlocker()
+	if NDuiDB["Misc"]["HideErrors"] then
+		B:RegisterEvent("UI_ERROR_MESSAGE", M.ErrorBlockerOnEvent)
+	else
+		isRegistered = true
+		UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE")
+		B:UnregisterEvent("UI_ERROR_MESSAGE", M.ErrorBlockerOnEvent)
+	end
+end
+
+-- TradeFrame hook
+function M:TradeTargetInfo()
+	local infoText = B.CreateFS(TradeFrame, 16, "")
+	infoText:ClearAllPoints()
+	infoText:SetPoint("TOP", TradeFrameRecipientNameText, "BOTTOM", 0, -5)
+
+	local function updateColor()
+		local r, g, b = B.UnitColor("NPC")
+		TradeFrameRecipientNameText:SetTextColor(r, g, b)
+
+		local guid = UnitGUID("NPC")
+		if not guid then return end
+		local text = "|cffff0000"..L["Stranger"]
+		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
+			text = "|cffffff00"..FRIEND
+		elseif IsGuildMember(guid) then
+			text = "|cff00ff00"..GUILD
+		end
+		infoText:SetText(text)
+	end
+	hooksecurefunc("TradeFrame_Update", updateColor)
 end
 
 -- Archaeology counts
@@ -126,52 +346,6 @@ do
 	end
 
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
-end
-
--- Hide errors in combat
-do
-	local erList = {
-		[ERR_ABILITY_COOLDOWN] = true,
-		[ERR_ATTACK_MOUNTED] = true,
-		[ERR_OUT_OF_ENERGY] = true,
-		[ERR_OUT_OF_FOCUS] = true,
-		[ERR_OUT_OF_HEALTH] = true,
-		[ERR_OUT_OF_MANA] = true,
-		[ERR_OUT_OF_RAGE] = true,
-		[ERR_OUT_OF_RANGE] = true,
-		[ERR_OUT_OF_RUNES] = true,
-		[ERR_OUT_OF_HOLY_POWER] = true,
-		[ERR_OUT_OF_RUNIC_POWER] = true,
-		[ERR_OUT_OF_SOUL_SHARDS] = true,
-		[ERR_OUT_OF_ARCANE_CHARGES] = true,
-		[ERR_OUT_OF_COMBO_POINTS] = true,
-		[ERR_OUT_OF_CHI] = true,
-		[ERR_OUT_OF_POWER_DISPLAY] = true,
-		[ERR_SPELL_COOLDOWN] = true,
-		[ERR_ITEM_COOLDOWN] = true,
-		[SPELL_FAILED_BAD_IMPLICIT_TARGETS] = true,
-		[SPELL_FAILED_BAD_TARGETS] = true,
-		[SPELL_FAILED_CASTER_AURASTATE] = true,
-		[SPELL_FAILED_NO_COMBO_POINTS] = true,
-		[SPELL_FAILED_SPELL_IN_PROGRESS] = true,
-		[SPELL_FAILED_TARGET_AURASTATE] = true,
-		[ERR_NO_ATTACK_TARGET] = true,
-	}
-
-	local function setupMisc(event, ...)
-		if NDuiDB["Misc"]["HideErrors"] then
-			local text = select(2, ...)
-			if InCombatLockdown() and erList[text] then
-				UIErrorsFrame:UnregisterEvent(event)
-			else
-				UIErrorsFrame:RegisterEvent(event)
-			end
-		else
-			B:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	B:RegisterEvent("UI_ERROR_MESSAGE", setupMisc)
 end
 
 -- Show BID and highlight price
@@ -245,29 +419,6 @@ do
 	end)
 end
 
--- Get Naked
-function M:NakedIcon()
-	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
-	bu:SetSize(31, 33)
-	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
-	B.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
-	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
-
-	local function UnequipItemInSlot(i)
-		local action = EquipmentManager_UnequipItemInSlot(i)
-		EquipmentManager_RunAction(action)
-	end
-
-	bu:SetScript("OnDoubleClick", function()
-		for i = 1, 17 do
-			local texture = GetInventoryItemTexture("player", i)
-			if texture then
-				UnequipItemInSlot(i)
-			end
-		end
-	end)
-end
-
 -- ALT+RightClick to buy a stack
 do
 	local cache = {}
@@ -287,7 +438,7 @@ do
 		hasItemFrame = 1,
 	}
 
-	local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
+	local _MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
 	function MerchantItemButton_OnModifiedClick(self, ...)
 		if IsAltKeyDown() then
 			id = self:GetID()
@@ -304,103 +455,8 @@ do
 			end
 		end
 
-		old_MerchantItemButton_OnModifiedClick(self, ...)
+		_MerchantItemButton_OnModifiedClick(self, ...)
 	end
-end
-
--- Auto screenshot when Achievement earned
-do
-	local f = CreateFrame("Frame")
-	f:Hide()
-	f:SetScript("OnUpdate", function(_, elapsed)
-		f.delay = f.delay - elapsed
-		if f.delay < 0 then
-			Screenshot()
-			f:Hide()
-		end
-	end)
-
-	local function setupMisc(event)
-		if not NDuiDB["Misc"]["Screenshot"] then
-			B:UnregisterEvent(event, setupMisc)
-		else
-			f.delay = 1
-			f:Show()
-		end
-	end
-
-	B:RegisterEvent("ACHIEVEMENT_EARNED", setupMisc)
-end
-
--- RC in MasterSound
-do
-	B:RegisterEvent("READY_CHECK", function()
-		PlaySound(SOUNDKIT.READY_CHECK, "master")
-	end)
-end
-
--- Faster Looting
-do
-	local delay = 0
-	local function setupMisc(event)
-		if NDuiDB["Misc"]["FasterLoot"] then
-			if GetTime() - delay >= .3 then
-				delay = GetTime()
-				if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
-					for i = GetNumLootItems(), 1, -1 do
-						LootSlot(i)
-					end
-					delay = GetTime()
-				end
-			end
-		else
-			B:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	B:RegisterEvent("LOOT_READY", setupMisc)
-end
-
--- Extend Instance
-function M:ExtendInstance()
-	local bu = CreateFrame("Button", nil, RaidInfoFrame)
-	bu:SetPoint("TOPRIGHT", -35, -5)
-	bu:SetSize(25, 25)
-	B.PixelIcon(bu, GetSpellTexture(80353), true)
-	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Extend Instance"], "system")
-
-	bu:SetScript("OnMouseUp", function(_, btn)
-		for i = 1, GetNumSavedInstances() do
-			local _, _, _, _, _, extended, _, isRaid = GetSavedInstanceInfo(i)
-			if isRaid then
-				if btn == "LeftButton" then
-					if not extended then
-						SetSavedInstanceExtend(i, true)		-- extend
-					end
-				else
-					if extended then
-						SetSavedInstanceExtend(i, false)	-- cancel
-					end
-				end
-			end
-		end
-		RequestRaidInfo()
-		RaidInfoFrame_Update()
-	end)
-end
-
--- Repoint Vehicle
-function M:VehicleSeatMover()
-	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
-	frame:SetSize(125, 125)
-	B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
-
-	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == MinimapCluster then
-			self:ClearAllPoints()
-			self:SetPoint("TOPLEFT", frame)
-		end
-	end)
 end
 
 -- Fix Drag Collections taint
@@ -451,73 +507,6 @@ do
 	end
 end
 
--- Roll Gold
-if DB.Client == "zhCN" then
-	local maxGold, maxPacks, curGold, remainGold
-	local keyword, goldList, index, finish = "#1", {}, 1, true
-	local f = CreateFrame("Frame")
-
-	local function sendMsg(msg)
-		SendChatMessage(msg, "GUILD")
-		--print(msg)
-	end
-
-	local function randomRoll(gold)
-		local cur = random(1, gold - (maxPacks-index))
-		gold = gold - cur
-		return cur, gold
-	end
-
-	local function finishRoll()
-		finish = true
-		remainGold = nil
-		index = 1
-		wipe(goldList)
-		f:UnregisterAllEvents()
-	end
-
-	f:SetScript("OnEvent", function(_, _, ...)
-		if finish then return end
-		local msg, author = ...
-		if msg == keyword and not goldList[author] then
-			if maxPacks == 1 then
-				sendMsg(maxGold.."金都被"..author.."抢走了")
-				finishRoll()
-			elseif index == maxPacks then
-				goldList[author] = remainGold
-				sendMsg("所有的金币都已经被抢完，分别是：")
-				local text = ""
-				for k, v in pairs(goldList) do
-					text = text..k..": "..v.."金 "
-					if #text > 212 then	-- 255-13*3-4=212
-						sendMsg(text)
-						text = ""
-					end
-				end
-				sendMsg(text)
-				finishRoll()
-			else
-				curGold, remainGold = randomRoll(remainGold or maxGold)
-				goldList[author] = curGold
-				index = index + 1
-				sendMsg(author.."抢到了"..curGold.."金。")
-			end
-		end
-	end)
-
-	SlashCmdList["ROLLGOLD"] = function(arg)
-		if not arg then return end
-		local max, num = strsplit(" ", tostring(arg))
-		maxGold = tonumber(max)
-		maxPacks = tonumber(num) or 1
-		if maxPacks > 10 then maxPacks = 10 end
-		finish = false
-		f:RegisterEvent("CHAT_MSG_GUILD")
-		sendMsg("我拿出了"..max.."金，装成"..maxPacks.."份，快输入 "..keyword.." 来抢吧。")
-	end
-	SLASH_ROLLGOLD1 = "/groll"
-end
-
 -- Select target when click on raid units
 do
 	local function fixRaidGroupButton()
@@ -551,37 +540,7 @@ do
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
--- Instant delete
-do
-	hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
-		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-	end)
-end
-
--- TradeFrame hook
-do
-	local infoText = B.CreateFS(TradeFrame, 16, "")
-	infoText:ClearAllPoints()
-	infoText:SetPoint("TOP", TradeFrameRecipientNameText, "BOTTOM", 0, -5)
-
-	local function updateColor()
-		local r, g, b = B.UnitColor("NPC")
-		TradeFrameRecipientNameText:SetTextColor(r, g, b)
-
-		local guid = UnitGUID("NPC")
-		if not guid then return end
-		local text = "|cffff0000"..L["Stranger"]
-		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
-			text = "|cffffff00"..FRIEND
-		elseif IsGuildMember(guid) then
-			text = "|cff00ff00"..GUILD
-		end
-		infoText:SetText(text)
-	end
-	hooksecurefunc("TradeFrame_Update", updateColor)
-end
-
--- Fix blizz guild news hyperlink
+-- Fix blizz guild news hyperlink error
 do
 	local function fixGuildNews(event, addon)
 		if addon ~= "Blizzard_GuildUI" then return end

@@ -15,7 +15,7 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	B.CreateBD(mover)
 	B.CreateSD(mover)
 	B.CreateTex(mover)
-	B.CreateFS(mover, DB.Font[2], text)
+	B.CreateFS(mover, DB.Font[2], text):SetWordWrap(true)
 	if not isAuraWatch then
 		tinsert(MoverList, mover)
 	end

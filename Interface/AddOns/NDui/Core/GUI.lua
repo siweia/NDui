@@ -401,6 +401,18 @@ local function updateQuestNotifier()
 	B:GetModule("Misc"):QuestNotifier()
 end
 
+local function updateScreenShot()
+	B:GetModule("Misc"):UpdateScreenShot()
+end
+
+local function updateFasterLoot()
+	B:GetModule("Misc"):UpdateFasterLoot()
+end
+
+local function updateErrorBlocker()
+	B:GetModule("Misc"):UpdateErrorBlocker()
+end
+
 -- Config
 local tabList = {
 	L["Actionbar"],
@@ -658,12 +670,12 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Misc", "ItemLevel", L["Show ItemLevel"]},
 		{1, "Misc", "MissingStats", L["Show MissingStats"], true},
-		{1, "Misc", "Screenshot", L["Auto ScreenShot"]},
-		{1, "Misc", "FasterLoot", L["Faster Loot"], true},
-		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
-		{1, "Misc", "HideErrors", L["Hide Error"]},
+		{},--blank
+		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", nil, nil, updateScreenShot},
+		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
+		{1, "Misc", "HideErrors", L["Hide Error"].."*", nil, nil, updateErrorBlocker},
 		{},--blank
 		{1, "Misc", "ParagonRep", L["ParagonRep"]},
 		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
