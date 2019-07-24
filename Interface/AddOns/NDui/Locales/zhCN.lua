@@ -545,3 +545,4 @@ L["UIWidgetFrame"] = "小地图下方特殊框体\n\n如PVP占点/艾萨拉结�
 L["Horizon PartyFrame"] = "小队横向排列"
 L["Nameplate ClassPower"] = "在目标姓名板上显示资源条"
 L["MaxPowerGlow"] = "资源条充满时高亮"
+L["OffTank Color"] = "副坦仇恨"
