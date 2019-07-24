@@ -10,6 +10,8 @@ local GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown = GetIns
 local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_NamePlate_GetNamePlates, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_NamePlate.GetNamePlates, C_MythicPlus.GetCurrentAffixes
 local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
+local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
+local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local UNKNOWN, INTERRUPTED = UNKNOWN, INTERRUPTED
 
 -- Init
@@ -82,28 +84,68 @@ function UF:CreatePowerUnitTable()
 end
 
 -- Elements
+local groupRoles, isInGroup = {}
+
+local function refreshGroupRoles()
+	local isInRaid = IsInRaid()
+	isInGroup = isInRaid or IsInGroup()
+	wipe(groupRoles)
+
+	if isInGroup then
+		local numPlayers = (isInRaid and GetNumGroupMembers()) or GetNumSubgroupMembers()
+		local unit = (isInRaid and "raid") or "party"
+		for i = 1, numPlayers do
+			local index = unit..i
+			if UnitExists(index) then
+				groupRoles[UnitName(index)] = UnitGroupRolesAssigned(index)
+			end
+		end
+	end
+end
+
+local function resetGroupRoles()
+	isInGroup = IsInRaid() or IsInGroup()
+	wipe(groupRoles)
+end
+
+function UF:UpdateGroupRoles()
+	refreshGroupRoles()
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", refreshGroupRoles)
+	B:RegisterEvent("GROUP_LEFT", resetGroupRoles)
+end
+
+function UF:CheckTankStatus(unit)
+	local index = unit.."target"
+	local unitRole = isInGroup and UnitExists(index) and not UnitIsUnit(index, "player") and groupRoles[UnitName(index)] or "NONE"
+	if unitRole == "TANK" and DB.Role == "Tank" then
+		self.feedbackUnit = index
+		self.isOffTank = true
+	else
+		self.feedbackUnit = "player"
+		self.isOffTank = false
+	end
+end
+
 function UF.UpdateColor(element, unit)
+	local self = element.__owner
 	local name = GetUnitName(unit) or UNKNOWN
-	local npcID = element.__owner.npcID
+	local npcID = self.npcID
 	local customUnit = C.CustomUnits and (C.CustomUnits[name] or C.CustomUnits[npcID])
-	local status = UnitThreatSituation("player", unit) or false		-- just in case
+	local status = UnitThreatSituation(self.feedbackUnit, unit) or false -- just in case
 	local reaction = UnitReaction(unit, "player")
 	local customColor = NDuiDB["Nameplate"]["CustomColor"]
 	local secureColor = NDuiDB["Nameplate"]["SecureColor"]
 	local transColor = NDuiDB["Nameplate"]["TransColor"]
 	local insecureColor = NDuiDB["Nameplate"]["InsecureColor"]
 	local revertThreat = NDuiDB["Nameplate"]["DPSRevertThreat"]
+	local offTankColor = NDuiDB["Nameplate"]["OffTankColor"]
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
 		if customUnit then
-			if type(customUnit) == "table" then
-				r, g, b = unpack(customUnit)
-			else
-				r, g, b = customColor.r, customColor.g, customColor.b
-			end
+			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then
 				r, g, b = B.UnitColor(unit)
@@ -121,7 +163,11 @@ function UF.UpdateColor(element, unit)
 					if DB.Role ~= "Tank" and revertThreat then
 						r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
 					else
-						r, g, b = secureColor.r, secureColor.g, secureColor.b
+						if self.isOffTank then
+							r, g, b = offTankColor.r, offTankColor.g, offTankColor.b
+						else
+							r, g, b = secureColor.r, secureColor.g, secureColor.b
+						end
 					end
 				elseif status == 2 or status == 1 then
 					r, g, b = transColor.r, transColor.g, transColor.b
@@ -155,6 +201,8 @@ end
 
 function UF:UpdateThreatColor(_, unit)
 	if unit ~= self.unit then return end
+
+	UF.CheckTankStatus(self, unit)
 	UF.UpdateColor(self.Health, unit)
 end
 
@@ -462,7 +510,11 @@ function UF:CreatePlates(unit)
 				arrow:SetPoint("LEFT", self, "RIGHT", 3, 0)
 				arrow:SetRotation(rad(-90))
 			else
-				arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
+				if NDuiDB["Nameplate"]["ShowPlayerPlate"] and NDuiDB["Nameplate"]["NameplateClassPower"] then
+					arrow:SetPoint("BOTTOM", self, "TOP", 0, 14 + _G.oUF_ClassPowerBar:GetHeight())
+				else
+					arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
+				end
 			end
 			arrow:Hide()
 			self.arrowMark = arrow
@@ -525,7 +577,7 @@ function UF:UpdateClassPowerAnchor()
 		bar:SetParent(nameplate.unitFrame)
 		bar:SetScale(.7)
 		bar:ClearAllPoints()
-		bar:SetPoint("TOP", nameplate.unitFrame.Castbar, "BOTTOM", 0, -10)
+		bar:SetPoint("BOTTOM", nameplate.unitFrame, "TOP", 0, 25)
 		bar:Show()
 	else
 		bar:Hide()
