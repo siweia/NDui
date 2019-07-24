@@ -83,6 +83,7 @@ local defaultSettings = {
 		SpecRaidPos = false,
 		RaidClassColor = false,
 		HorizonRaid = false,
+		HorizonParty = false,
 		ReverseRaid = false,
 		RaidScale = 1,
 		RaidWidth = 80,
@@ -169,6 +170,8 @@ local defaultSettings = {
 		PPIconSize = 32,
 		AKSProgress = false,
 		PPHideOOC = true,
+		NameplateClassPower = false,
+		MaxPowerGlow = true,
 	},
 	Skins = {
 		DBM = true,
@@ -377,6 +380,10 @@ local function updatePlateRange()
 	B:GetModule("UnitFrames"):UpdatePlateRange()
 end
 
+local function updateTargetClassPower()
+	B:GetModule("UnitFrames"):UpdateTargetClassPower()
+end
+
 local function updateInterruptAlert()
 	B:GetModule("Misc"):InterruptAlert()
 end
@@ -491,6 +498,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidFrame", "|cff00cc4c"..L["UFs RaidFrame"]},
 		{},--blank
 		{1, "UFs", "PartyFrame", "|cff00cc4c"..L["UFs PartyFrame"]},
+		{1, "UFs", "HorizonParty", L["Horizon PartyFrame"], true},
 		{1, "UFs", "PartyWatcher", L["UFs PartyWatcher"]},
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
 		{3, "UFs", "PartyWidth", L["PartyFrame Width"], false, {60, 150, 0}},
@@ -554,14 +562,12 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"]},
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], true, {.8, 2, 1}},
 		{},--blank
-		{1, "Auras", "Statue", L["Enable Statue"]},
-		{1, "Auras", "Totems", L["Enable Totems"], true},
-		{1, "Auras", "Reminder", L["Enable Reminder"]},
-		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
-		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
+		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
+		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"].."*", true, nil, updateTargetClassPower},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
+		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
 		{3, "Nameplate", "PPIconSize", L["PlayerPlate IconSize"], true, {30, 40, 0}},
 		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"], false, {5, 15, 0}},
 		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"], true, {5, 15, 0}},
@@ -572,6 +578,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Auras", "DebuffSize", L["DebuffSize"], true, {24, 40, 0}},
 		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"], nil, {10, 20, 0}},
 		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"], true, {10, 16, 0}},
+		{},--blank
+		{1, "Auras", "Statue", L["Enable Statue"]},
+		{1, "Auras", "Totems", L["Enable Totems"], true},
+		{1, "Auras", "Reminder", L["Enable Reminder"]},
 	},
 	[7] = {
 		{1, "Skins", "RM", "|cff00cc4c"..L["Raid Manger"]},
