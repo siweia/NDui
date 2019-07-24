@@ -168,7 +168,8 @@ end
 
 -- Spawns
 function UF:OnLogin()
-	local horizon = NDuiDB["UFs"]["HorizonRaid"]
+	local horizonRaid = NDuiDB["UFs"]["HorizonRaid"]
+	local horizonParty = NDuiDB["UFs"]["HorizonParty"]
 	local numGroups = NDuiDB["UFs"]["NumGroups"]
 	local scale = NDuiDB["UFs"]["RaidScale"]
 	local raidWidth, raidHeight = NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"]
@@ -281,9 +282,9 @@ function UF:OnLogin()
 			oUF:SetActiveStyle("Party")
 
 			local xOffset, yOffset = 5, 10
-			local moverWidth = horizon and (partyWidth*5+xOffset*4) or partyWidth
-			local moverHeight = horizon and partyHeight or (partyHeight*5+yOffset*4)
-			local groupingOrder = horizon and "TANK,HEALER,DAMAGER,NONE" or "NONE,DAMAGER,HEALER,TANK"
+			local moverWidth = horizonParty and (partyWidth*5+xOffset*4) or partyWidth
+			local moverHeight = horizonParty and partyHeight or (partyHeight*5+yOffset*4)
+			local groupingOrder = horizonParty and "TANK,HEALER,DAMAGER,NONE" or "NONE,DAMAGER,HEALER,TANK"
 
 			local party = oUF:SpawnHeader("oUF_Party", nil, "solo,party",
 			"showPlayer", true,
@@ -296,7 +297,7 @@ function UF:OnLogin()
 			"groupingOrder", groupingOrder,
 			"groupBy", "ASSIGNEDROLE",
 			"sortMethod", "NAME",
-			"point", horizon and "LEFT" or "BOTTOM",
+			"point", horizonParty and "LEFT" or "BOTTOM",
 			"columnAnchorPoint", "LEFT",
 			"oUF-initialConfigFunction", ([[
 			self:SetWidth(%d)
@@ -375,7 +376,7 @@ function UF:OnLogin()
 				"maxColumns", 1,
 				"unitsPerColumn", 5,
 				"columnSpacing", 5,
-				"point", horizon and "LEFT" or "TOP",
+				"point", horizonRaid and "LEFT" or "TOP",
 				"columnAnchorPoint", "LEFT",
 				"oUF-initialConfigFunction", ([[
 				self:SetWidth(%d)
@@ -388,7 +389,7 @@ function UF:OnLogin()
 			for i = 1, numGroups do
 				groups[i] = CreateGroup("oUF_Raid"..i, i)
 				if i == 1 then
-					if horizon then
+					if horizonRaid then
 						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (raidWidth+5)*5, (raidHeight+(NDuiDB["UFs"]["ShowTeamIndex"] and 25 or 15))*numGroups)
 						if reverse then
 							groups[i]:ClearAllPoints()
@@ -402,7 +403,7 @@ function UF:OnLogin()
 						end
 					end
 				else
-					if horizon then
+					if horizonRaid then
 						if reverse then
 							groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, NDuiDB["UFs"]["ShowTeamIndex"] and 25 or 15)
 						else
