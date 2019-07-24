@@ -591,7 +591,11 @@ function UF:CreateAuras(self)
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-y"] = "UP"
-		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 20)
+		if NDuiDB["Nameplate"]["ShowPlayerPlate"] and NDuiDB["Nameplate"]["NameplateClassPower"] then
+			bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 20 + _G.oUF_ClassPowerBar:GetHeight())
+		else
+			bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 20)
+		end
 		bu.numTotal = NDuiDB["Nameplate"]["maxAuras"]
 		bu.spacing = 3
 		bu.size = NDuiDB["Nameplate"]["AuraSize"]
@@ -676,18 +680,21 @@ local margin = C.UFs.BarMargin
 local barWidth, barHeight = unpack(C.UFs.BarSize)
 
 function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
-	if not element.isEnabled then
+	if not cur or cur == 0 then
 		for i = 1, 6 do
 			element[i].bg:Hide()
 			element[i].bg.Shadow:Hide()
+		end
+	else
+		for i = 1, max do
+			element[i].bg:Show()
+			element[i].bg.Shadow:Show()
 		end
 	end
 
 	if diff then
 		for i = 1, max do
 			element[i]:SetWidth((barWidth - (max-1)*margin)/max)
-			element[i].bg:Show()
-			element[i].bg.Shadow:Show()
 		end
 		for i = max + 1, 6 do
 			element[i].bg:Hide()
