@@ -145,7 +145,7 @@ local defaultSettings = {
 		FriendlyCC = false,
 		HostileCC = true,
 		TankMode = false,
-		TarArrow = 1,
+		TarArrow = 2,
 		InsideView = true,
 		QuestIcon = true,
 		MinAlpha = .7,
@@ -165,6 +165,7 @@ local defaultSettings = {
 		SecureColor = {r=1, g=0, b=1},
 		TransColor = {r=1, g=.8, b=0},
 		InsecureColor = {r=1, g=0, b=0},
+		OffTankColor = {r=.2, g=.7, b=.5},
 		DPSRevertThreat = false,
 		ExplosivesScale = false,
 		PPIconSize = 32,
@@ -380,10 +381,6 @@ local function updatePlateRange()
 	B:GetModule("UnitFrames"):UpdatePlateRange()
 end
 
-local function updateTargetClassPower()
-	B:GetModule("UnitFrames"):UpdateTargetClassPower()
-end
-
 local function updateInterruptAlert()
 	B:GetModule("Misc"):InterruptAlert()
 end
@@ -538,6 +535,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
 		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
+		{5, "Nameplate", "OffTankColor", "OffTank Color".."*", 3},
 		{},--blank
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*", true},
@@ -565,7 +563,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
 		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
-		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"].."*", true, nil, updateTargetClassPower},
+		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
 		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
 		{3, "Nameplate", "PPIconSize", L["PlayerPlate IconSize"], true, {30, 40, 0}},

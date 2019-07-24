@@ -184,6 +184,7 @@ function UF:OnLogin()
 		self:CreatePowerUnitTable()
 		self:CheckExplosives()
 		self:AddInterruptInfo()
+		self:UpdateGroupRoles()
 
 		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
 		oUF:SetActiveStyle("Nameplates")
