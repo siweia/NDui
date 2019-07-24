@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
+local _G = getfenv(0)
 local strmatch, tonumber, pairs, type, unpack, next, rad = string.match, tonumber, pairs, type, unpack, next, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
 local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
@@ -514,6 +515,41 @@ function UF:CreatePlates(unit)
 	end
 end
 
+local isTargetClassPower
+function UF:UpdateClassPowerAnchor()
+	if not isTargetClassPower then return end
+
+	local bar = _G.oUF_ClassPowerBar
+	local nameplate = C_NamePlate.GetNamePlateForUnit("target")
+	if nameplate then
+		bar:SetParent(nameplate.unitFrame)
+		bar:SetScale(.7)
+		bar:ClearAllPoints()
+		bar:SetPoint("TOP", nameplate.unitFrame.Castbar, "BOTTOM", 0, -10)
+		bar:Show()
+	else
+		bar:Hide()
+	end
+end
+
+function UF:UpdateTargetClassPower()
+	local bar = _G.oUF_ClassPowerBar
+	local playerPlate = _G.oUF_PlayerPlate
+	if not bar or not playerPlate then return end
+
+	if NDuiDB["Nameplate"]["NameplateClassPower"] then
+		isTargetClassPower = true
+		UF:UpdateClassPowerAnchor()
+	else
+		isTargetClassPower = false
+		bar:SetParent(playerPlate.Health)
+		bar:SetScale(1)
+		bar:ClearAllPoints()
+		bar:SetPoint("BOTTOMLEFT", playerPlate.Health, "TOPLEFT", 0, 3)
+		bar:Show()
+	end
+end
+
 function UF:PostUpdatePlates(event, unit)
 	if not self then return end
 
@@ -534,6 +570,7 @@ function UF:PostUpdatePlates(event, unit)
 	UF.UpdateUnitClassify(self, unit)
 	UF.UpdateExplosives(self, event, unit)
 	UF.UpdateDungeonProgress(self, unit)
+	UF:UpdateClassPowerAnchor()
 end
 
 -- Player Nameplate
@@ -572,6 +609,8 @@ function UF:CreatePlayerPlate()
 		local power = B.CreateFS(textFrame, 14, "")
 		self:Tag(power, "[pppower]")
 	end
+
+	UF:UpdateTargetClassPower()
 
 	if NDuiDB["Nameplate"]["PPHideOOC"] then
 		self:RegisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)

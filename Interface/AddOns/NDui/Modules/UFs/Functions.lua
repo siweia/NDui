@@ -676,13 +676,26 @@ local margin = C.UFs.BarMargin
 local barWidth, barHeight = unpack(C.UFs.BarSize)
 
 function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
-	if diff then
+	if not element.isEnabled then
 		for i = 1, 6 do
-			element[i]:SetWidth((barWidth - (max-1)*margin)/max)
+			element[i].bg:Hide()
+			element[i].bg.Shadow:Hide()
 		end
 	end
 
-	if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+	if diff then
+		for i = 1, max do
+			element[i]:SetWidth((barWidth - (max-1)*margin)/max)
+			element[i].bg:Show()
+			element[i].bg.Shadow:Show()
+		end
+		for i = max + 1, 6 do
+			element[i].bg:Hide()
+			element[i].bg.Shadow:Hide()
+		end
+	end
+
+	if NDuiDB["Nameplate"]["ShowPlayerPlate"] and NDuiDB["Nameplate"]["MaxPowerGlow"] then
 		if (powerType == "COMBO_POINTS" or powerType == "HOLY_POWER") and element.__owner.unit ~= "vehicle" and cur == max then
 			for i = 1, 6 do
 				if element[i]:IsShown() then
@@ -736,29 +749,31 @@ function UF:CreateClassPower(self)
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 
+	local bar = CreateFrame("Frame", "oUF_ClassPowerBar", self.Health)
+	bar:SetSize(barWidth, barHeight)
+	bar:SetPoint(unpack(C.UFs.BarPoint))
+
 	local bars = {}
 	for i = 1, 6 do
-		bars[i] = CreateFrame("StatusBar", nil, self.Health)
+		bars[i] = CreateFrame("StatusBar", nil, bar)
 		bars[i]:SetHeight(barHeight)
 		bars[i]:SetWidth((barWidth - 5*margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
-		B.CreateSD(bars[i], 3, 3)
 		if i == 1 then
-			bars[i]:SetPoint(unpack(C.UFs.BarPoint))
+			bars[i]:SetPoint("LEFT")
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", margin, 0)
 		end
 
-		if DB.MyClass == "DEATHKNIGHT" then
-			bars[i].bg = bars[i]:CreateTexture(nil, "BACKGROUND")
-			bars[i].bg:SetAllPoints()
-			bars[i].bg:SetTexture(DB.normTex)
-			bars[i].bg.multiplier = .25
+		bars[i].bg = bar:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(DB.normTex)
+		bars[i].bg.multiplier = .25
+		B.CreateSD(bars[i].bg, 3, 3)
 
-			if NDuiDB["UFs"]["RuneTimer"] then
-				bars[i].timer = B.CreateFS(bars[i], 13, "")
-			end
+		if DB.MyClass == "DEATHKNIGHT" and NDuiDB["UFs"]["RuneTimer"] then
+			bars[i].timer = B.CreateFS(bars[i], 13, "")
 		end
 
 		if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
@@ -1037,7 +1052,7 @@ end
 function UF:InterruptIndicator(self)
 	if not NDuiDB["UFs"]["PartyWatcher"] then return end
 
-	local horizon = NDuiDB["UFs"]["HorizonRaid"]
+	local horizon = NDuiDB["UFs"]["HorizonParty"]
 	local otherSide = NDuiDB["UFs"]["PWOnRight"]
 	local relF = horizon and "BOTTOMLEFT" or "TOPRIGHT"
 	local relT = "TOPLEFT"
