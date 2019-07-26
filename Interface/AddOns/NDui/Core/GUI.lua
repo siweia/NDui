@@ -209,6 +209,7 @@ local defaultSettings = {
 		HideTitle = false,
 		HideJunkGuild = true,
 		AzeriteArmor = true,
+		OnlyArmorIcons = false,
 	},
 	Misc = {
 		Mail = true,
@@ -668,7 +669,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},
 		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
-		{1, "Tooltip", "AzeriteArmor", L["Show AzeriteArmor"]},
+		{},--blank
+		{1, "Tooltip", "AzeriteArmor", "|cff00cc4c"..L["Show AzeriteArmor"]},
+		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
 	},
 	[12] = {
 		{1, "Misc", "Mail", L["Mail Tool"]},
