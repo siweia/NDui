@@ -411,12 +411,12 @@ do
 		end
 	end)
 
-	local informed
-	B:RegisterEvent("UNIT_POWER_BAR_SHOW", function()
-		if informed then return end
+	local function dragAlert(event, unit)
+		if unit ~= "player" then return end
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Drag AltBar Tip"])
-		informed = true
-	end)
+		B:UnregisterEvent(event, dragAlert)
+	end
+	B:RegisterEvent("UNIT_POWER_BAR_SHOW", dragAlert)
 end
 
 -- ALT+RightClick to buy a stack
