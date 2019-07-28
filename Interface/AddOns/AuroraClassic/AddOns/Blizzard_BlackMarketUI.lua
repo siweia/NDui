@@ -3,29 +3,16 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_BlackMarketUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
-	BlackMarketFrame:DisableDrawLayer("BACKGROUND")
-	BlackMarketFrame:DisableDrawLayer("BORDER")
-	BlackMarketFrame:DisableDrawLayer("OVERLAY")
-	BlackMarketFrame.Inset:DisableDrawLayer("BORDER")
-	select(9, BlackMarketFrame.Inset:GetRegions()):Hide()
-	BlackMarketFrame.MoneyFrameBorder:Hide()
-	BlackMarketFrame.HotDeal.Left:Hide()
-	BlackMarketFrame.HotDeal.Right:Hide()
-	select(4, BlackMarketFrame.HotDeal:GetRegions()):Hide()
-	BlackMarketFrameLeft:Hide()
-	BlackMarketFrameMiddle:Hide()
-	BlackMarketFrameRight:Hide()
-
+	F.StripTextures(BlackMarketFrame)
+	BlackMarketFrame.MoneyFrameBorder:SetAlpha(0)
+	F.StripTextures(BlackMarketFrame.HotDeal)
 	F.CreateBG(BlackMarketFrame.HotDeal.Item)
 	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
 
 	local headers = {"ColumnName", "ColumnLevel", "ColumnType", "ColumnDuration", "ColumnHighBidder", "ColumnCurrentBid"}
 	for _, header in pairs(headers) do
 		local header = BlackMarketFrame[header]
-		header.Left:Hide()
-		header.Middle:Hide()
-		header.Right:Hide()
-
+		F.StripTextures(header)
 		local bg = F.CreateBDFrame(header, .25)
 		bg:SetPoint("TOPLEFT", 2, 0)
 		bg:SetPoint("BOTTOMRIGHT", -1, 0)
@@ -45,9 +32,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 
 			bu.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
 			if not bu.reskinned then
-				bu.Left:Hide()
-				bu.Right:Hide()
-				select(3, bu:GetRegions()):Hide()
+				F.StripTextures(bu)
 
 				bu.Item:SetNormalTexture("")
 				bu.Item:SetPushedTexture("")
@@ -55,26 +40,19 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 				F.CreateBG(bu.Item)
 				bu.Item.IconBorder:SetAlpha(0)
 
-				local bg = F.CreateBDFrame(bu, 0)
-				bg:SetPoint("TOPLEFT")
-				bg:SetPoint("BOTTOMRIGHT", 0, 5)
-
-				local tex = bu:CreateTexture(nil, "BACKGROUND")
-				tex:SetPoint("TOPLEFT")
-				tex:SetPoint("BOTTOMRIGHT", 0, 5)
-				tex:SetColorTexture(0, 0, 0, .25)
+				local bg = F.CreateBDFrame(bu, .25)
+				bg:SetPoint("TOPLEFT", bu.Item, "TOPRIGHT", 3, C.mult)
+				bg:SetPoint("BOTTOMRIGHT", 0, 4)
 
 				bu:SetHighlightTexture(C.media.backdrop)
 				local hl = bu:GetHighlightTexture()
 				hl:SetVertexColor(r, g, b, .2)
 				hl.SetAlpha = F.dummy
 				hl:ClearAllPoints()
-				hl:SetPoint("TOPLEFT", 0, -1)
-				hl:SetPoint("BOTTOMRIGHT", -1, 6)
+				hl:SetAllPoints(bg)
 
 				bu.Selection:ClearAllPoints()
-				bu.Selection:SetPoint("TOPLEFT", 0, -1)
-				bu.Selection:SetPoint("BOTTOMRIGHT", -1, 6)
+				bu.Selection:SetAllPoints(bg)
 				bu.Selection:SetTexture(C.media.backdrop)
 				bu.Selection:SetVertexColor(r, g, b, .1)
 
