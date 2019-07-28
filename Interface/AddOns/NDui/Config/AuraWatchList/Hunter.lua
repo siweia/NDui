@@ -25,6 +25,7 @@ local list = {
 		{AuraID = 160007, UnitID = "player"},	-- 上升气流（双头龙）
 		{AuraID = 231390, UnitID = "player", Combat = true},	-- 开拓者
 		{AuraID = 164273, UnitID = "player", Combat = true},	-- 独来独往
+		{AuraID = 209997, UnitID = "pet", Flash = true},		-- 装死
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 3355, UnitID = "target", Caster = "player"},		-- 冰冻陷阱
