@@ -341,6 +341,7 @@ local ignoreProgressNPC = {
 	[124312] = true,
 	[141584] = true,
 	[326027] = true, -- 运输站回收生成器DX-82
+	[150563] = true, -- 斯卡基特，麦卡贡订单日常
 }
 
 QuickQuest:Register("QUEST_PROGRESS", function()
