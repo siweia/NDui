@@ -7,7 +7,11 @@ local oUF = ns.oUF or oUF
 
 local strmatch = string.match
 local UnitIsOwnerOrControllerOfUnit = UnitIsOwnerOrControllerOfUnit
+local IsQuestFlaggedCompleted = IsQuestFlaggedCompleted
 local C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo
+
+local MaxNazjatarBodyguardRank = 30
+local myFaction = UnitFactionGroup("player")
 
 local NPCIDToWidgetIDMap = {
 	[154304] = 1940, -- Farseer Ori
@@ -27,15 +31,24 @@ local CampfireNPCIDToWidgetIDMap = {
 	[149906] = 1920 -- Vim Brineheart
 }
 
+local NeededQuestIDs = {
+	["Horde"] = 55500,
+	["Alliance"] = 56156
+}
+
 local function GetBodyguardXP(widgetID)
 	local widget = widgetID and C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo(widgetID)
 	if not widget then return end
 
-	local rank = strmatch(widget.overrideBarText, "%d+")
+	local rank = tonumber(strmatch(widget.overrideBarText, "%d+"))
+	if not rank then return end
+
 	local cur = widget.barValue - widget.barMin
-	local next = widget.barMax - widget.barMin
+	local toNext = widget.barMax - widget.barMin
 	local total = widget.barValue
-	return rank, cur, next, total
+	local isMax = rank == MaxNazjatarBodyguardRank
+
+	return rank, cur, toNext, total, isMax
 end
 
 local function Update(self, ...)
@@ -43,8 +56,10 @@ local function Update(self, ...)
 	if not element then return end
 
 	local npcID = B.GetNPCID(UnitGUID(self.unit))
-	local shouldDisplay = npcID and (NPCIDToWidgetIDMap[npcID] and self.unit and UnitIsOwnerOrControllerOfUnit("player", self.unit)) or CampfireNPCIDToWidgetIDMap[npcID]
-	if (not shouldDisplay) then
+	local questID = NeededQuestIDs[myFaction]
+	local hasQuestCompleted = questID and IsQuestFlaggedCompleted(questID)
+	local isProperNPC = npcID and (NPCIDToWidgetIDMap[npcID] and self.unit and UnitIsOwnerOrControllerOfUnit("player", self.unit)) or CampfireNPCIDToWidgetIDMap[npcID]
+	if (not hasQuestCompleted or not isProperNPC) then
 		element:Hide()
 		if element.progressText then
 			element.progressText:Hide()
@@ -66,19 +81,21 @@ local function Update(self, ...)
 		return
 	end
 
-	local rank, cur, next, total = GetBodyguardXP(widgetID)
-	element:SetMinMaxValues(0, next)
-	element:SetValue(cur)
+	local rank, cur, toNext, total, isMax = GetBodyguardXP(widgetID)
+	if not rank then return end
+
+	element:SetMinMaxValues(0, (isMax and 1) or toNext)
+	element:SetValue(isMax and 1 or cur)
 
 	if element.progressText then
-		element.progressText:SetText(format("Lv%d %d / %d", rank, cur, next))
+		element.progressText:SetText((isMax and "Lv30") or format("Lv%d %d / %d", rank, cur, toNext))
 		element.progressText:Show()
 	end
 
 	element:Show()
 
 	if (element.PostUpdate) then
-		element:PostUpdate(rank, cur, next, total)
+		element:PostUpdate(rank, cur, toNext, total)
 	end
 end
 
