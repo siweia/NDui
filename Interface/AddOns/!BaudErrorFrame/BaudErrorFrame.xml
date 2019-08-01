@@ -201,12 +201,12 @@
 						</Anchors>
 						<Layers>
 							<Layer level="BACKGROUND">
-								<Texture name="$parentTexture" file="Interface\Buttons\UI-Listbox-Highlight2"/>
+								<Texture name="$parentTexture" file="Interface\ChatFrame\ChatFrameBackground"/>
 							</Layer>
 						</Layers>
 						<Scripts>
 							<OnLoad>
-								getglobal(self:GetName().."Texture"):SetVertexColor(0.5,0.5,0);
+								getglobal(self:GetName().."Texture"):SetVertexColor(1,.8,0,.25);
 							</OnLoad>
 						</Scripts>
 					</Frame>
@@ -251,7 +251,7 @@
 							<Anchors>
 								<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
 									<Offset>
-										<AbsDimension x="0" y="1"/>
+										<AbsDimension x="0" y="3"/>
 									</Offset>
 								</Anchor>
 							</Anchors>
@@ -319,7 +319,7 @@
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="50" y="16"/>
+							<AbsDimension x="39" y="12"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -336,7 +336,7 @@
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
 						<Offset>
-							<AbsDimension x="-50" y="16"/>
+							<AbsDimension x="-39" y="12"/>
 						</Offset>
 					</Anchor>
 				</Anchors>

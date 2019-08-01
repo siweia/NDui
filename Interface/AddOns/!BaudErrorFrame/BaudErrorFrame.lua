@@ -159,6 +159,19 @@ function BaudErrorFrameScrollValue()
 	end
 end
 
+local function colorStack(ret)
+	ret = tostring(ret) or "" -- Yes, it gets called with nonstring from somewhere /mikk
+	ret = ret:gsub("[%.I][%.n][%.t][%.e][%.r]face\\", "")
+	ret = ret:gsub("%.?%.?%.?\\?AddOns\\", "")
+	ret = ret:gsub("|([^chHr])", "||%1"):gsub("|$", "||") -- Pipes
+	ret = ret:gsub("<(.-)>", "|cffffd200<%1>|r") -- Things wrapped in <>
+	ret = ret:gsub("%[(.-)%]", "|cffffd200[%1]|r") -- Things wrapped in []
+	ret = ret:gsub("([\"`'])(.-)([\"`'])", "|cff82c5ff%1%2%3|r") -- Quotes
+	ret = ret:gsub(":(%d+)([%S\n])", ":|cff7fff7f%1|r%2") -- Line numbers
+	ret = ret:gsub("([^\\]+%.lua)", "|cffffffff%1|r") -- Lua files
+	return ret
+end
+
 function BaudErrorFrameScrollBar_Update()
 	if not BaudErrorFrame:IsShown() then return end
 
@@ -177,7 +190,7 @@ function BaudErrorFrameScrollBar_Update()
 		ButtonText = _G[FrameName.."Entry"..Line.."Text"]
 		if Index <= Total then
 			Button:SetID(Index)
-			ButtonText:SetText(ErrorList[Index].Error)
+			ButtonText:SetText(colorStack(ErrorList[Index].Error))
 			Button:Show()
 			if Index == SelectedError then
 				Highlight:SetPoint("TOP", Button)
@@ -192,7 +205,7 @@ end
 
 function BaudErrorFrameEditBoxUpdate()
 	if ErrorList[SelectedError] then
-		BaudErrorFrameEditBox.TextShown = ErrorList[SelectedError].Error.."\nCount: "..ErrorList[SelectedError].Count.."\n\nCall Stack:\n"..ErrorList[SelectedError].Stack
+		BaudErrorFrameEditBox.TextShown = colorStack(ErrorList[SelectedError].Error.."\nCount: "..ErrorList[SelectedError].Count.."\n\nCall Stack:\n"..ErrorList[SelectedError].Stack)
 	else
 		BaudErrorFrameEditBox.TextShown = ""
 	end
@@ -217,26 +230,22 @@ f:SetScript("OnEvent", function()
 	f:UnregisterEvent("PLAYER_ENTERING_WORLD")
 
 	if IsAddOnLoaded("AuroraClassic") then
-		local F = unpack(AuroraClassic)
+		local F, C = unpack(AuroraClassic)
+		F.CreateBD(BaudErrorFrame)
+		F.CreateSD(BaudErrorFrame)
+		BaudErrorFrameListScrollBox:SetBackdrop(nil)
+		BaudErrorFrameListScrollBoxHighlightTexture:SetVertexColor(C.r, C.g, C.b, .25)
+		F.StripTextures(BaudErrorFrameDetailScrollBox)
+		F.CreateBDFrame(BaudErrorFrameDetailScrollBox, .25)
 		F.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
 		F.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
+		F.Reskin(BaudErrorFrameClearButton)
+		F.Reskin(BaudErrorFrameCloseButton)
+		F.Reskin(BaudErrorFrameReloadUIButton)
 	end
 
 	if IsAddOnLoaded("NDui") then
 		local B = unpack(NDui)
-		B.CreateBD(BaudErrorFrame)
-		B.CreateSD(BaudErrorFrame)
-		B.CreateTex(BaudErrorFrame)
 		B.CreateMF(BaudErrorFrame)
-		BaudErrorFrameListScrollBox:SetBackdrop(nil)
-		B.StripTextures(BaudErrorFrameDetailScrollBox)
-		local BG2 = CreateFrame("Frame", nil, BaudErrorFrame)
-		BG2:SetPoint("CENTER", BaudErrorFrame, "CENTER", 0, -81)
-		BG2:SetSize(BaudErrorFrameEditBox:GetWidth() + 56, BaudErrorFrameEditBox:GetHeight() + 10)
-		B.CreateBD(BG2, .25)
-		for _, button in next, {BaudErrorFrameClearButton, BaudErrorFrameCloseButton, BaudErrorFrameReloadUIButton} do
-			B.CreateBD(button)
-			B.CreateBC(button)
-		end
 	end
 end)
