@@ -577,7 +577,7 @@ function UF:UpdateClassPowerAnchor()
 		bar:SetParent(nameplate.unitFrame)
 		bar:SetScale(.7)
 		bar:ClearAllPoints()
-		bar:SetPoint("BOTTOM", nameplate.unitFrame, "TOP", 0, 25)
+		bar:SetPoint("BOTTOM", nameplate.unitFrame, "TOP", 0, 26)
 		bar:Show()
 	else
 		bar:Hide()
