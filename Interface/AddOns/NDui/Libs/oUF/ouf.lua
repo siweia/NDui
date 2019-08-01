@@ -631,7 +631,7 @@ do
 		local name = overrideName or generateName(nil, ...)
 		local header = CreateFrame('Frame', name, PetBattleFrameHider, template)
 
-		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate')
+		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, SecureHandlerShowHideTemplate')
 		for i = 1, select('#', ...), 2 do
 			local att, val = select(i, ...)
 			if(not att) then break end
