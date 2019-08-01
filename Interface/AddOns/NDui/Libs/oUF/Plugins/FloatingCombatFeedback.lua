@@ -312,7 +312,7 @@ local function onEvent(self, event, ...)
 	end
 
 	if text and texture then
-		local animation = critMark and element.critMode or element.defaultMode
+		local animation = element.defaultMode
 		local string = getAvailableString(element)
 
 		string:SetFont(element.font, element.fontHeight * multiplier, element.fontFlags)
@@ -324,15 +324,13 @@ local function onEvent(self, event, ...)
 		string.scrollTime = element.scrollTime
 		string.xDirection = element.xDirection
 		string.yDirection = element.yDirection
-		string.x = element.xDirection * xOffsetsByAnimation[animation]
+		string.x = element.xDirection * xOffsetsByAnimation[animation] * (critMark and -1 or 1)
 		string.y = element.yDirection * yOffsetsByAnimation[animation]
 		string:SetPoint("CENTER", element, "CENTER", string.x, string.y)
 		string:SetAlpha(0)
 		string:Show()
 
 		tinsert(element.FeedbackToAnimate, string)
-
-		element.xDirection = element.xDirection * -1
 
 		if not element:GetScript("OnUpdate") then
 			element:SetScript("OnUpdate", onUpdate)
@@ -363,12 +361,11 @@ local function Enable(self, unit)
 	element.__owner = self
 	element.ForceUpdate = ForceUpdate
 	element.defaultMode = "vertical"
-	element.critMode = "random"
 	element.format = "|T%s:18:18:-2:0:64:64:5:59:5:59|t%s"
 	element.xDirection = 1
 	element.yDirection = element.yDirection or 1
-	element.scrollTime = element.scrollTime or 1.2
-	element.radius = element.radius or 65
+	element.scrollTime = element.scrollTime or 2
+	element.radius = element.radius or 100
 	element.fadeTime = element.scrollTime / 3
 	element.fontHeight = element.fontHeight or 18
 	element.abbreviateNumbers = element.abbreviateNumbers
@@ -384,6 +381,7 @@ local function Enable(self, unit)
 
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path, true)
 	if unit == "player" then
+		element.xDirection = -1
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path, true)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", Path, true)
 	end
