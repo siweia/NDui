@@ -18,9 +18,9 @@ C.themes["Blizzard_ScrappingMachineUI"] = function()
 
 	for button in pairs(ItemSlots.scrapButtons.activeObjects) do
 		if not button.styled then
-			button.Icon:SetTexCoord(.08, .92, .08, .92)
 			button.IconBorder:SetAlpha(0)
-			button.bg = F.CreateBDFrame(button, .25)
+			button.Icon:SetTexCoord(.08, .92, .08, .92)
+			button.bg = F.CreateBDFrame(button.Icon, .25)
 			local hl = button:GetHighlightTexture()
 			hl:SetColorTexture(1, 1, 1, .25)
 			hl:SetAllPoints(button.Icon)

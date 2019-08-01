@@ -18,6 +18,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	else
 		ReskinFont(AchievementFont_Small, 12)
 	end
+	ReskinFont(AchievementCriteriaFont, 12)
+	ReskinFont(AchievementDescriptionFont, 12)
 	ReskinFont(CoreAbilityFont, 32)
 	ReskinFont(DestinyFontMed, 14)
 	ReskinFont(DestinyFontHuge, 32)

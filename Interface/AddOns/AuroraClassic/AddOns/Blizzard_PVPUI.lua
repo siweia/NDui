@@ -152,6 +152,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	end
 
 	local function ConquestFrameButton_OnEnter(self)
+		ConquestTooltip:ClearAllPoints()
 		ConquestTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT", 1, 0)
 	end
 	ConquestFrame.Arena2v2:HookScript("OnEnter", ConquestFrameButton_OnEnter)

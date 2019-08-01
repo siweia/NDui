@@ -569,6 +569,7 @@ local BlizzTextures = {
 	"bgRight",
 	"FilligreeOverlay",
 	"Border",
+	"BG",
 }
 
 function F:StripTextures(kill)

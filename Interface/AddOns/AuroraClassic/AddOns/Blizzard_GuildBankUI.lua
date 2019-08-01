@@ -50,9 +50,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		end
 	end
 
-	for i = 1, 8 do
-		select(i, GuildBankPopupFrame.BorderBox:GetRegions()):Hide()
-	end
+	F.StripTextures(GuildBankPopupFrame.BorderBox)
 	GuildBankPopupFrame.BG:Hide()
 	F.CreateBD(GuildBankPopupFrame)
 	F.CreateSD(GuildBankPopupFrame)
