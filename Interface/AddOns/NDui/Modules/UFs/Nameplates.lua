@@ -74,18 +74,34 @@ function UF:BlockAddons()
 	hooksecurefunc(DBM.Nameplate, "Show", showAurasForDBM)
 end
 
-function UF:CreateUnitTable()
-	if not NDuiDB["Nameplate"]["CustomUnitColor"] then C.CustomUnits = nil return end
-	B.SplitList(C.CustomUnits, NDuiDB["Nameplate"]["UnitList"])
-end
-
-function UF:CreatePowerUnitTable()
-	B.SplitList(C.ShowPowerList, NDuiDB["Nameplate"]["ShowPowerList"])
-end
-
 -- Elements
-local groupRoles, isInGroup = {}
+local customUnits = {}
+function UF:CreateUnitTable()
+	wipe(customUnits)
+	if not NDuiDB["Nameplate"]["CustomUnitColor"] then return end
+	B.CopyTable(C.CustomUnits, customUnits)
+	B.SplitList(customUnits, NDuiDB["Nameplate"]["UnitList"])
+end
 
+local showPowerList = {}
+function UF:CreatePowerUnitTable()
+	wipe(showPowerList)
+	B.CopyTable(C.ShowPowerList, showPowerList)
+	B.SplitList(showPowerList, NDuiDB["Nameplate"]["ShowPowerList"])
+end
+
+function UF:UpdateUnitPower()
+	local unitName = self.unitName
+	local npcID = self.npcID
+	local shouldShowPower = showPowerList[unitName] or showPowerList[npcID]
+	if shouldShowPower then
+		self.powerText:Show()
+	else
+		self.powerText:Hide()
+	end
+end
+
+local groupRoles, isInGroup = {}
 local function refreshGroupRoles()
 	local isInRaid = IsInRaid()
 	isInGroup = isInRaid or IsInGroup()
@@ -128,9 +144,9 @@ end
 
 function UF.UpdateColor(element, unit)
 	local self = element.__owner
-	local name = GetUnitName(unit) or UNKNOWN
+	local name = self.unitName
 	local npcID = self.npcID
-	local customUnit = C.CustomUnits and (C.CustomUnits[name] or C.CustomUnits[npcID])
+	local isCustomUnit = customUnits[name] or customUnits[npcID]
 	local status = UnitThreatSituation(self.feedbackUnit, unit) or false -- just in case
 	local reaction = UnitReaction(unit, "player")
 	local customColor = NDuiDB["Nameplate"]["CustomColor"]
@@ -144,7 +160,7 @@ function UF.UpdateColor(element, unit)
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if customUnit then
+		if isCustomUnit then
 			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif UnitIsPlayer(unit) and (reaction and reaction >= 5) then
 			if NDuiDB["Nameplate"]["FriendlyCC"] then
@@ -498,8 +514,9 @@ function UF:CreatePlates(unit)
 		UF:CreatePVPClassify(self)
 		UF:AddFollowerXP(self)
 
-		self.powerText = B.CreateFS(self, 15, "", false, "LEFT", 0, 0)
-		self.powerText:SetPoint("LEFT", self, "RIGHT", 2, 0)
+		self.powerText = B.CreateFS(self, 15)
+		self.powerText:ClearAllPoints()
+		self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -2)
 		self:Tag(self.powerText, "[nppp]")
 
 		if NDuiDB["Nameplate"]["TarArrow"] < 3 then
@@ -606,6 +623,7 @@ function UF:PostUpdatePlates(event, unit)
 	if not self then return end
 
 	if event == "NAME_PLATE_UNIT_ADDED" then
+		self.unitName = UnitName(unit)
 		self.unitGUID = UnitGUID(unit)
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = self
@@ -617,6 +635,7 @@ function UF:PostUpdatePlates(event, unit)
 		end
 	end
 
+	UF.UpdateUnitPower(self)
 	UF.UpdateTargetMark(self)
 	UF.UpdateQuestUnit(self, event, unit)
 	UF.UpdateUnitClassify(self, unit)

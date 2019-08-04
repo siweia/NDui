@@ -382,6 +382,14 @@ local function updatePlateRange()
 	B:GetModule("UnitFrames"):UpdatePlateRange()
 end
 
+local function updateCustomUnitList()
+	B:GetModule("UnitFrames"):CreateUnitTable()
+end
+
+local function updatePowerUnitList()
+	B:GetModule("UnitFrames"):CreatePowerUnitTable()
+end
+
 local function updateInterruptAlert()
 	B:GetModule("Misc"):InterruptAlert()
 end
@@ -527,10 +535,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"], nil, setupNameplateFilter},
 		{},--blank
-		{1, "Nameplate", "CustomUnitColor", "|cff00cc4c"..L["CustomUnitColor"]},
-		{5, "Nameplate", "CustomColor", L["Custom Color"], 2},
-		{2, "Nameplate", "UnitList", L["UnitColor List"]},
-		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"], true},
+		{1, "Nameplate", "CustomUnitColor", "|cff00cc4c"..L["CustomUnitColor"].."*", nil, nil, updateCustomUnitList},
+		{5, "Nameplate", "CustomColor", L["Custom Color"].."*", 2},
+		{2, "Nameplate", "UnitList", L["UnitColor List"].."*", nil, nil, updateCustomUnitList},
+		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"].."*", true, nil, updatePowerUnitList},
 		{1, "Nameplate", "TankMode", "|cff00cc4c"..L["Tank Mode"].."*"},
 		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true},
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},

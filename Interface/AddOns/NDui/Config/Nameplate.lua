@@ -148,6 +148,9 @@ C.CustomUnits = {
 	[120651] = true, -- 爆炸物
 	[141851] = true, -- 戈霍恩之嗣
 	[153377] = true, -- 粘液，麦卡贡
+	[155432] = true, -- 魔力使者
+	[155433] = true, -- 虚触使者
+	[155434] = true, -- 潮汐使者
 
 	[GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
 	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
@@ -174,6 +177,8 @@ C.CustomUnits = {
 
 -- 显示能量值的单位
 C.ShowPowerList = {
+	[155432] = true, -- 魔力使者
+	[152703] = true, -- 步行震击者X1型，困难麦卡贡
 	[GetSectionInfo(13015)] = true,	-- 清扫器
 	[GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
 	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
