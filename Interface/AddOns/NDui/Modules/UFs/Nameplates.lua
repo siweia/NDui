@@ -424,20 +424,20 @@ function UF:UpdateMouseoverShown()
 	if not self or not self.unit then return end
 
 	if self:IsShown() and UnitIsUnit("mouseover", self.unit) and not UnitIsUnit("target", self.unit) then
-		self.glow:Show()
 		self.HighlightIndicator:Show()
+		self.HighlightUpdater:Show()
 	else
-		self.HighlightIndicator:Hide()
+		self.HighlightUpdater:Hide()
 	end
 end
 
 function UF:MouseoverIndicator(self)
-	local glow = CreateFrame("Frame", nil, UIParent)
-	glow:SetPoint("TOPLEFT", self, -6, 6)
-	glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
-	glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
-	glow:SetBackdropBorderColor(1, 1, 1)
-	glow:Hide()
+	local highlight = CreateFrame("Frame", nil, self.Health)
+	highlight:SetAllPoints(self)
+	highlight:Hide()
+	local texture = highlight:CreateTexture(nil, "ARTWORK")
+	texture:SetAllPoints()
+	texture:SetColorTexture(1, 1, 1, .25)
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateMouseoverShown, true)
@@ -453,11 +453,11 @@ function UF:MouseoverIndicator(self)
 		end
 	end)
 	f:HookScript("OnHide", function()
-		glow:Hide()
+		highlight:Hide()
 	end)
 
-	self.glow = glow
-	self.HighlightIndicator = f
+	self.HighlightIndicator = highlight
+	self.HighlightUpdater = f
 end
 
 function UF:AddFollowerXP(self)
@@ -513,10 +513,11 @@ function UF:CreatePlates(unit)
 		UF:CreateAuras(self)
 		UF:CreatePVPClassify(self)
 		UF:AddFollowerXP(self)
+		UF:MouseoverIndicator(self)
 
 		self.powerText = B.CreateFS(self, 15)
 		self.powerText:ClearAllPoints()
-		self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -2)
+		self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
 		self:Tag(self.powerText, "[nppp]")
 
 		if NDuiDB["Nameplate"]["TarArrow"] < 3 then
@@ -536,14 +537,14 @@ function UF:CreatePlates(unit)
 			arrow:Hide()
 			self.arrowMark = arrow
 		end
-		local mark = self.Health:CreateTexture(nil, "BACKGROUND", nil, -1)
-		mark:SetHeight(12)
-		mark:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", -20, -2)
-		mark:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", 20, -2)
-		mark:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
-		mark:SetVertexColor(0, .6, 1)
-		mark:Hide()
-		self.tarMark = mark
+
+		local glow = CreateFrame("Frame", nil, self)
+		glow:SetPoint("TOPLEFT", self, -6, 6)
+		glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
+		glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
+		glow:SetBackdropBorderColor(1, 1, 1, .7)
+		glow:Hide()
+		self.tarMark = glow
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetMark, true)
 
 		local iconFrame = CreateFrame("Frame", nil, self)
@@ -579,8 +580,6 @@ function UF:CreatePlates(unit)
 		local threatIndicator = CreateFrame("Frame", nil, self)
 		self.ThreatIndicator = threatIndicator
 		self.ThreatIndicator.Override = UF.UpdateThreatColor
-
-		UF:MouseoverIndicator(self)
 	end
 end
 
