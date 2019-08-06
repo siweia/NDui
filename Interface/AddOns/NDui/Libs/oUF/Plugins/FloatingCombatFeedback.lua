@@ -303,12 +303,14 @@ local function onEvent(self, event, ...)
 		texture = ""
 		text = ENTERING_COMBAT
 		color = colors.WOUND
-		multiplier = 1.3
+		multiplier = 1.25
+		critMark = true
 	elseif event == "PLAYER_REGEN_ENABLED" then
 		texture = ""
 		text = LEAVING_COMBAT
 		color = colors.HEAL
-		multiplier = 1.3
+		multiplier = 1.25
+		critMark = true
 	end
 
 	if text and texture then
