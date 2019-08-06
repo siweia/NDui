@@ -4,19 +4,23 @@ local SoundTime = 0
 local enableTaint = false
 BaudErrorFrameConfig = BaudErrorFrameConfig or {}
 
+local function RegisterTaintEvents(self)
+	self:RegisterEvent("ADDON_ACTION_BLOCKED")
+	self:RegisterEvent("MACRO_ACTION_BLOCKED")
+	self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
+	self:RegisterEvent("MACRO_ACTION_FORBIDDEN")
+end
+
 function BaudErrorFrame_OnLoad(self)
 	self:RegisterEvent("VARIABLES_LOADED")
 	if enableTaint then
-		self:RegisterEvent("ADDON_ACTION_BLOCKED")
-		self:RegisterEvent("MACRO_ACTION_BLOCKED")
-		self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
-		self:RegisterEvent("MACRO_ACTION_FORBIDDEN")
+		RegisterTaintEvents(self)
 	end
 
-    UIParent:UnregisterEvent("MACRO_ACTION_BLOCKED")
-    UIParent:UnregisterEvent("ADDON_ACTION_BLOCKED")
-    UIParent:UnregisterEvent("MACRO_ACTION_FORBIDDEN")
-    UIParent:UnregisterEvent("ADDON_ACTION_FORBIDDEN")
+	UIParent:UnregisterEvent("MACRO_ACTION_BLOCKED")
+	UIParent:UnregisterEvent("ADDON_ACTION_BLOCKED")
+	UIParent:UnregisterEvent("MACRO_ACTION_FORBIDDEN")
+	UIParent:UnregisterEvent("ADDON_ACTION_FORBIDDEN")
 
 	tinsert(UISpecialFrames, self:GetName())
 	SlashCmdList["BaudErrorFrame"] = function()
@@ -245,7 +249,10 @@ f:SetScript("OnEvent", function()
 	end
 
 	if IsAddOnLoaded("NDui") then
-		local B = unpack(NDui)
+		local B, _, _, DB = unpack(NDui)
 		B.CreateMF(BaudErrorFrame)
+		if DB.isDeveloper then
+			RegisterTaintEvents(BaudErrorFrame)
+		end
 	end
 end)
