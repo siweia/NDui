@@ -125,6 +125,7 @@ local defaultSettings = {
 		BlockAddonAlert = true,
 		ChatMenu = true,
 		WhisperColor = true,
+		ChatItemLevel = true,
 	},
 	Map = {
 		Coord = true,
@@ -229,7 +230,7 @@ local defaultSettings = {
 		BrokenSpell = false,
 		FasterLoot = true,
 		AutoQuest = false,
-		HideTalking = false,
+		HideTalking = true,
 		HideBanner = true,
 		PetFilter = true,
 		QuestNotifier = false,
@@ -616,11 +617,13 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[8] = {
 		{1, "Chat", "Lock", "|cff00cc4c"..L["Lock Chat"]},
-		{1, "Chat", "Sticky", L["Chat Sticky"].."*", true, nil, updateChatSticky},
+		{},--blank
 		{1, "Chat", "Oldname", L["Default Channel"]},
+		{1, "ACCOUNT", "Timestamp", L["Timestamp"], true, nil, updateTimestamp},
+		{1, "Chat", "Sticky", L["Chat Sticky"].."*", nil, nil, updateChatSticky},
 		{1, "Chat", "WhisperColor", L["Differ WhipserColor"].."*", true},
 		{1, "Chat", "Freedom", L["Language Filter"]},
-		{1, "ACCOUNT", "Timestamp", L["Timestamp"], true, nil, updateTimestamp},
+		{1, "Chat", "ChatItemLevel", "|cff00cc4c"..L["ShowChatItemLevel"], true},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},

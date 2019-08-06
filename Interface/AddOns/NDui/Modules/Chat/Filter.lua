@@ -2,11 +2,13 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
-local strfind, gsub = string.find, string.gsub
+local strfind, strmatch, gsub = string.find, string.match, string.gsub
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
 local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
 local Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar = Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar
+local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
+local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
 local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
 
 -- Filter Chat symbols
@@ -149,6 +151,36 @@ function module:BlockTrashClub()
 	end
 end
 
+-- Show itemlevel on chat hyperlinks
+local function isItemHasLevel(link)
+	local name, _, rarity, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
+	if name and level and rarity > 1 and (classID == LE_ITEM_CLASS_WEAPON or classID == LE_ITEM_CLASS_ARMOR) then
+		local itemLevel = B.GetItemLevel(link)
+		return name, itemLevel
+	end
+end
+
+local function isItemHasGem(link)
+	local stats = GetItemStats(link)
+	for index in pairs(stats) do
+		if strfind(index, "EMPTY_SOCKET_") then
+			return "|TInterface\\ItemSocketingFrame\\UI-EmptySocket-Prismatic:0|t"
+		end
+	end
+	return ""
+end
+
+function module:UpdateChatItemLevel(_, msg, ...)
+	local link = strmatch(msg, "|Hitem:.-|h")
+	if link then
+		local name, itemLevel = isItemHasLevel(link)
+		if name then
+			msg = gsub(msg, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..isItemHasGem(link)..")]|h")
+		end
+	end
+	return false, msg, ...
+end
+
 function module:ChatFilter()
 	if NDuiDB["Chat"]["EnableFilter"] then
 		self:UpdateFilterList()
@@ -176,4 +208,22 @@ function module:ChatFilter()
 	end
 
 	hooksecurefunc(BNToastFrame, "ShowToast", self.BlockTrashClub)
+
+	if NDuiDB["Chat"]["ChatItemLevel"] then
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_LOOT", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_BATTLEGROUND", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", self.UpdateChatItemLevel)
+	end
 end
