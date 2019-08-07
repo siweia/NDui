@@ -101,6 +101,7 @@ function UF:UpdateUnitPower()
 	end
 end
 
+-- Off-tank threat color
 local groupRoles, isInGroup = {}
 local function refreshGroupRoles()
 	local isInRaid = IsInRaid()
@@ -142,6 +143,7 @@ function UF:CheckTankStatus(unit)
 	end
 end
 
+-- Update unit color
 function UF.UpdateColor(element, unit)
 	local self = element.__owner
 	local name = self.unitName
@@ -222,6 +224,7 @@ function UF:UpdateThreatColor(_, unit)
 	UF.UpdateColor(self.Health, unit)
 end
 
+-- Target indicator
 function UF:UpdateTargetMark()
 	local arrow = self.arrowMark
 	local mark = self.tarMark
@@ -235,8 +238,8 @@ function UF:UpdateTargetMark()
 	end
 end
 
+-- Quest progress
 local unitTip = CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
-
 function UF:UpdateQuestUnit(_, unit)
 	if not NDuiDB["Nameplate"]["QuestIcon"] then return end
 	if IsInInstance() then
@@ -298,6 +301,7 @@ function UF:UpdateQuestUnit(_, unit)
 	end
 end
 
+-- Dungeon progress, AngryKeystones required
 local cache = {}
 function UF:UpdateDungeonProgress(unit)
 	if not self.progressText or not AngryKeystones_Data then return end
@@ -337,6 +341,7 @@ function UF:UpdateDungeonProgress(unit)
 	end
 end
 
+-- Unit classification
 local classify = {
 	rare = {1, 1, 1, true},
 	elite = {1, 1, 1},
@@ -358,6 +363,7 @@ function UF:UpdateUnitClassify(unit)
 	end
 end
 
+-- Scale plates for explosives
 local explosiveCount, hasExplosives = 0
 local id = 120651
 function UF:ScalePlates()
@@ -411,10 +417,11 @@ function UF:CheckExplosives()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
 end
 
+-- Mouseover indicator
 function UF:IsMouseoverUnit()
 	if not self or not self.unit then return end
 
-	if self:IsVisible() and UnitExists("mouseover") and not UnitIsUnit("target", self.unit) then
+	if self:IsVisible() and UnitExists("mouseover") then
 		return UnitIsUnit("mouseover", self.unit)
 	end
 	return false
@@ -423,7 +430,7 @@ end
 function UF:UpdateMouseoverShown()
 	if not self or not self.unit then return end
 
-	if self:IsShown() and UnitIsUnit("mouseover", self.unit) and not UnitIsUnit("target", self.unit) then
+	if self:IsShown() and UnitIsUnit("mouseover", self.unit) then
 		self.HighlightIndicator:Show()
 		self.HighlightUpdater:Show()
 	else
@@ -440,7 +447,6 @@ function UF:MouseoverIndicator(self)
 	texture:SetColorTexture(1, 1, 1, .25)
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateMouseoverShown, true)
 
 	local f = CreateFrame("Frame", nil, self)
 	f:SetScript("OnUpdate", function(_, elapsed)
@@ -460,6 +466,7 @@ function UF:MouseoverIndicator(self)
 	self.HighlightUpdater = f
 end
 
+-- NazjatarFollowerXP
 function UF:AddFollowerXP(self)
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetSize(NDuiDB["Nameplate"]["Width"], NDuiDB["Nameplate"]["Height"])
@@ -470,6 +477,7 @@ function UF:AddFollowerXP(self)
 	self.NazjatarFollowerXP = bar
 end
 
+-- Interrupt info on castbars
 local guidToPlate = {}
 function UF:UpdateCastbarInterrupt(...)
 	local _, eventType, _, sourceGUID, sourceName, _, _, destGUID = ...
@@ -583,6 +591,7 @@ function UF:CreatePlates(unit)
 	end
 end
 
+-- Classpower on target nameplate
 local isTargetClassPower
 function UF:UpdateClassPowerAnchor()
 	if not isTargetClassPower then return end
