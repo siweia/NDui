@@ -184,8 +184,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local ActivityFinder = EntryCreation.ActivityFinder
 
 	ActivityFinder.Background:SetTexture("")
-	ActivityFinder.Dialog.Bg:Hide()
-	F.StripTextures(ActivityFinder.Dialog.BorderFrame)
+	F.StripTextures(ActivityFinder.Dialog)
 	F.CreateBD(ActivityFinder.Dialog)
 	ActivityFinder.Dialog:SetBackdropColor(.2, .2, .2, .9)
 	F.Reskin(ActivityFinder.Dialog.SelectButton)
