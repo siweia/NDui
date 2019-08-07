@@ -170,14 +170,23 @@ local function isItemHasGem(link)
 	return ""
 end
 
-function module:UpdateChatItemLevel(_, msg, ...)
-	local link = strmatch(msg, "|Hitem:.-|h")
-	if link then
-		local name, itemLevel = isItemHasLevel(link)
+local itemCache = {}
+local function convertItemLevel(link)
+	if itemCache[link] then return itemCache[link] end
+
+	local itemLink = strmatch(link, "|Hitem:.-|h")
+	if itemLink then
+		local name, itemLevel = isItemHasLevel(itemLink)
 		if name then
-			msg = gsub(msg, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..isItemHasGem(link)..")]|h")
+			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..isItemHasGem(itemLink)..")]|h")
+			itemCache[link] = link
 		end
 	end
+	return link
+end
+
+function module:UpdateChatItemLevel(_, msg, ...)
+	msg = gsub(msg, "(|Hitem:%d+:.-|h.-|h)", convertItemLevel)
 	return false, msg, ...
 end
 
