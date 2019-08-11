@@ -15,12 +15,14 @@ local CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor = Ca
 local BNGetNumFriends, BNGetFriendInfo, BNGetGameAccountInfo, BNGetNumFriendGameAccounts, BNGetFriendGameAccountInfo = BNGetNumFriends, BNGetFriendInfo, BNGetGameAccountInfo, BNGetNumFriendGameAccounts, BNGetFriendGameAccountInfo
 local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL
 local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
+local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
 
 local r, g, b = DB.r, DB.g, DB.b
 local friendsFrame, menuFrame, updateRequest
 local menuList, buttons, friendTable, bnetTable = {}, {}, {}, {}
 local activeZone, inactiveZone = "|cff4cff4c", DB.GreyColor
-local noteString = LABEL_NOTE..": %s"
+local noteString = "|T"..DB.copyTex..":12|t %s"
+local broadcastString = "|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)"
 
 local function sortFriends(a, b)
 	if a[1] and b[1] then
@@ -58,9 +60,9 @@ local function buildBNetTable(num)
 	wipe(bnetTable)
 
 	for i = 1, num do
-		local _, accountName, battleTag, _, charName, gameID, _, isOnline, _, isAFK, isDND, _, note = BNGetFriendInfo(i)
+		local _, accountName, battleTag, _, charName, gameID, _, isOnline, _, isAFK, isDND, broadcastText, note, _, broadcastTime = BNGetFriendInfo(i)
 		if isOnline then
-			local _, _, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy = BNGetGameAccountInfo(gameID)
+			local _, _, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, _, wowProjectID = BNGetGameAccountInfo(gameID)
 
 			charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
 			class = DB.ClassList[class]
@@ -73,7 +75,7 @@ local function buildBNetTable(num)
 			else
 				status = FRIENDS_TEXTURE_ONLINE
 			end
-			if client == BNET_CLIENT_WOW then
+			if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
 				if not zoneName or zoneName == "" then
 					infoText = UNKNOWN
 				else
@@ -83,7 +85,7 @@ local function buildBNetTable(num)
 				infoText = gameText
 			end
 
-			tinsert(bnetTable, {i, accountName, charName, gameID, client, realmName, status, class, level, infoText, note})
+			tinsert(bnetTable, {i, accountName, charName, gameID, client, realmName, status, class, level, infoText, note, broadcastText, broadcastTime})
 		end
 	end
 
@@ -212,10 +214,10 @@ local function buttonOnEnter(self)
 		GameTooltip:AddLine(L["BN"], 0,.6,1)
 		GameTooltip:AddLine(" ")
 
-		local index, accountName, _, _, _, _, _, _, _, _, note = unpack(self.data)
+		local index, accountName, _, _, _, _, _, _, _, _, note, broadcastText, broadcastTime = unpack(self.data)
 		local numGameAccounts = BNGetNumFriendGameAccounts(index)
 		for i = 1, numGameAccounts do
-			local _, charName, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, bnetIDGameAccount = BNGetFriendGameAccountInfo(index, i)
+			local _, charName, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, bnetIDGameAccount, _, _, _, _, wowProjectID = BNGetFriendGameAccountInfo(index, i)
 			local clientString = BNet_GetClientEmbeddedTexture(client, 16)
 			if client == BNET_CLIENT_WOW then
 				realmName = DB.MyRealm == realmName and "" or "-"..realmName
@@ -226,16 +228,24 @@ local function buttonOnEnter(self)
 				else
 					GameTooltip:AddLine(format("%s%s%s* %s%s%s", clientString, inactiveZone, level, classColor, charName, realmName))
 				end
+				if wowProjectID ~= WOW_PROJECT_ID then zoneName = gameText end
 				GameTooltip:AddLine(format("%s%s", inactiveZone, zoneName))
 			else
 				GameTooltip:AddLine(format("|cffffffff%s%s", clientString, accountName))
-				GameTooltip:AddLine(format("%s%s", inactiveZone, gameText))
+				if gameText ~= "" then
+					GameTooltip:AddLine(format("%s%s", inactiveZone, gameText))
+				end
 			end
 		end
 
 		if note and note ~= "" then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(format(noteString, note), 1,.8,0)
+		end
+
+		if broadcastText and broadcastText ~= "" then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(format(broadcastString, broadcastText, FriendsFrame_GetLastOnline(broadcastTime)), .3,.6,.8, 1)
 		end
 	else
 		GameTooltip:AddLine(L["WoW"], 1,.8,0)
