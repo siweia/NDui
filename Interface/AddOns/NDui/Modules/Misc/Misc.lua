@@ -47,6 +47,7 @@ function M:OnLogin()
 	self:ExtendInstance()
 	self:VehicleSeatMover()
 	self:UIWidgetFrameMover()
+	self:MoveDurabilityFrame()
 	self:PetFilterTab()
 	self:AlertFrame_Setup()
 	self:UpdateScreenShot()
@@ -148,7 +149,7 @@ function M:ExtendInstance()
 	end)
 end
 
--- Repoint Vehicle
+-- Reanchor Vehicle
 function M:VehicleSeatMover()
 	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
 	frame:SetSize(125, 125)
@@ -174,6 +175,17 @@ function M:UIWidgetFrameMover()
 			self:SetPoint("TOP", frame)
 		end
 	end)
+end
+
+-- Reanchor DurabilityFrame
+function M:MoveDurabilityFrame()
+	hooksecurefunc(DurabilityFrame, "SetPoint", function(self, _, parent)
+		if parent == "MinimapCluster" or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -30)
+		end
+	end)
+	DurabilityFrame:SetFrameStrata("HIGH")
 end
 
 -- Achievement screenshot
@@ -502,6 +514,33 @@ do
 				repeat
 					i, t[prefix .. i] = i+1
 				until f("UIDROPDOWNMENU_OPEN_MENU")
+			end
+		end)
+	end
+
+	-- https://www.townlong-yak.com/bugs/YhgQma-SetValueRefreshTaint
+	if (COMMUNITY_UIDD_REFRESH_PATCH_VERSION or 0) < 1 then
+		COMMUNITY_UIDD_REFRESH_PATCH_VERSION = 1
+		local function CleanDropdowns()
+			if COMMUNITY_UIDD_REFRESH_PATCH_VERSION ~= 1 then
+				return
+			end
+			local f, f2 = FriendsFrame, FriendsTabHeader
+			local s = f:IsShown()
+			f:Hide()
+			f:Show()
+			if not f2:IsShown() then
+				f2:Show()
+				f2:Hide()
+			end
+			if not s then
+				f:Hide()
+			end
+		end
+		hooksecurefunc("Communities_LoadUI", CleanDropdowns)
+		hooksecurefunc("SetCVar", function(n)
+			if n == "lastSelectedClubId" then
+				CleanDropdowns()
 			end
 		end)
 	end
