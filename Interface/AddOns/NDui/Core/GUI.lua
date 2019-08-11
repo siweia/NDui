@@ -145,11 +145,10 @@ local defaultSettings = {
 		FriendlyCC = false,
 		HostileCC = true,
 		TankMode = false,
-		TarArrow = 2,
+		TargetIndicator = 6,
 		InsideView = true,
-		QuestIcon = true,
 		Distance = 42,
-		PlateWidth = 140,
+		PlateWidth = 125,
 		PlateHeight = 5,
 		CustomUnitColor = true,
 		CustomColor = {r=0, g=.8, b=.3},
@@ -174,7 +173,6 @@ local defaultSettings = {
 		MaxPowerGlow = true,
 		NameTextSize = 10,
 		HealthTextSize = 12,
-		HighlightBorder = true,
 		MinScale = 1,
 	},
 	Skins = {
@@ -389,7 +387,7 @@ local function updatePowerUnitList()
 	B:GetModule("UnitFrames"):CreatePowerUnitTable()
 end
 
-local function refreshNameplate()
+local function refreshNameplates()
 	B:GetModule("UnitFrames"):RefreshAllPlates()
 end
 
@@ -514,7 +512,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HorizonParty", L["Horizon PartyFrame"], true},
 		{1, "UFs", "PartyWatcher", L["UFs PartyWatcher"]},
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
-		{3, "UFs", "PartyWidth", L["PartyFrame Width"], false, {60, 150, 0}},
+		{3, "UFs", "PartyWidth", L["PartyFrame Width"], false, {60, 200, 0}},
 		{3, "UFs", "PartyHeight", L["PartyFrame Height"], true, {25, 60, 0}},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, setupBuffIndicator},
@@ -532,7 +530,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
 		{4, "UFs", "RaidHPMode", L["RaidHPMode"], nil, {L["DisableRaidHP"], L["RaidHPPercent"], L["RaidHPCurrent"]}},
 		{3, "UFs", "NumGroups", L["Num Groups"], true, {4, 8, 0}},
-		{3, "UFs", "RaidWidth", L["RaidFrame Width"], false, {60, 150, 0}},
+		{3, "UFs", "RaidWidth", L["RaidFrame Width"], false, {60, 200, 0}},
 		{3, "UFs", "RaidHeight", L["RaidFrame Height"], true, {25, 60, 0}},
 		{},--blank
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
@@ -554,21 +552,19 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
 		{},--blank
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
-		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"], true},
-		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*"},
 		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
-		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*"},
+		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*"},
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", true, nil, updatePlateInsideView},
-		{1, "Nameplate", "HighlightBorder", L["NameplateHighlight"]},
+		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*"},
 		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
-		{4, "Nameplate", "TarArrow", L["Show Arrow"], false, {L["TOP"], L["RIGHT"], DISABLE}},
-		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", true, {.5, 1, 1}, updateNameplateScale},
-		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", false, {.5, 1.5, 1}, updatePlateSpacing},
+		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"], false, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "Distance", L["Nameplate Distance"].."*", true, {20, 100, 0}, updatePlateRange},
-		{3, "Nameplate", "PlateWidth", L["NP Width"].."*", false, {50, 200, 0}, refreshNameplate},
-		{3, "Nameplate", "PlateHeight", L["NP Height"].."*", true, {5, 20, 0}, refreshNameplate},
-		{3, "Nameplate", "NameTextSize", L["NameTextSize"].."*", false, {8, 16, 0}, refreshNameplate},
-		{3, "Nameplate", "HealthTextSize", L["HealthTextSize"].."*", true, {8, 16, 0}, refreshNameplate},
+		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", false, {.5, 1.5, 1}, updatePlateSpacing},
+		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", true, {.5, 1, 1}, updateNameplateScale},
+		{3, "Nameplate", "PlateWidth", L["NP Width"].."*", false, {50, 200, 0}, refreshNameplates},
+		{3, "Nameplate", "PlateHeight", L["NP Height"].."*", true, {5, 20, 0}, refreshNameplates},
+		{3, "Nameplate", "NameTextSize", L["NameTextSize"].."*", false, {8, 16, 0}, refreshNameplates},
+		{3, "Nameplate", "HealthTextSize", L["HealthTextSize"].."*", true, {8, 16, 0}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
 		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
 	},
