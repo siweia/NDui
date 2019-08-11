@@ -89,7 +89,7 @@ function UF:CreateHealthText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints()
 
-	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 10), "", false, "LEFT", 3, -1)
+	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, NDuiDB["Nameplate"]["NameTextSize"]), "", false, "LEFT", 3, -1)
 	name:SetJustifyH("LEFT")
 	if mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
@@ -128,7 +128,7 @@ function UF:CreateHealthText(self)
 		self:Tag(name, "[color][name]")
 	end
 
-	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, NDuiDB["Nameplate"]["FullHealth"] and 12 or 14), "", false, "RIGHT", -3, -1)
+	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, NDuiDB["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, -1)
 	if mystyle == "raid" then
 		if NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
@@ -146,6 +146,9 @@ function UF:CreateHealthText(self)
 	else
 		self:Tag(hpval, "[hp]")
 	end
+
+	self.nameText = name
+	self.healthValue = hpval
 end
 
 function UF:CreatePowerBar(self)
@@ -599,7 +602,7 @@ function UF:CreateAuras(self)
 		bu.numTotal = NDuiDB["Nameplate"]["maxAuras"]
 		bu.spacing = 3
 		bu.size = NDuiDB["Nameplate"]["AuraSize"]
-		bu.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
+		bu.showDebuffType = true
 		bu.gap = false
 		bu.disableMouse = true
 	end

@@ -25,9 +25,9 @@ function UF:PlateInsideView()
 	end
 end
 
-function UF:UpdatePlateAlpha()
-	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
-	SetCVar("nameplateMaxAlpha", NDuiDB["Nameplate"]["MinAlpha"])
+function UF:UpdatePlateScale()
+	SetCVar("namePlateMinScale", NDuiDB["Nameplate"]["MinScale"])
+	SetCVar("namePlateMaxScale", NDuiDB["Nameplate"]["MinScale"])
 end
 
 function UF:UpdatePlateRange()
@@ -38,17 +38,23 @@ function UF:UpdatePlateSpacing()
 	SetCVar("nameplateOverlapV", NDuiDB["Nameplate"]["VerticalSpacing"])
 end
 
+function UF:UpdateClickableSize()
+	C_NamePlate.SetNamePlateEnemySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+20)
+	C_NamePlate.SetNamePlateFriendlySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+20)
+end
+
 function UF:SetupCVars()
+	UF:UpdateClickableSize()
 	UF:PlateInsideView()
 	SetCVar("nameplateOverlapH", .5)
 	UF:UpdatePlateSpacing()
 	UF:UpdatePlateRange()
-	UF:UpdatePlateAlpha()
+	SetCVar("nameplateMinAlpha", 1)
+	SetCVar("nameplateMaxAlpha", 1)
 	SetCVar("nameplateSelectedAlpha", 1)
 	SetCVar("showQuestTrackingTooltips", 1)
 
-	SetCVar("namePlateMinScale", .8)
-	SetCVar("namePlateMaxScale", .8)
+	UF:UpdatePlateScale()
 	SetCVar("nameplateSelectedScale", 1)
 	SetCVar("nameplateLargerScale", 1)
 
@@ -56,6 +62,8 @@ function UF:SetupCVars()
 	SetCVar("nameplateResourceOnTarget", 0)
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
+
+	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateOptions", UF.UpdateClickableSize)
 end
 
 function UF:BlockAddons()
@@ -371,9 +379,9 @@ function UF:ScalePlates()
 		local unitFrame = nameplate.unitFrame
 		local npcID = unitFrame.npcID
 		if explosiveCount > 0 and npcID == id or explosiveCount == 0 then
-			unitFrame:SetWidth(NDuiDB["Nameplate"]["Width"] * 1.4)
+			unitFrame:SetWidth(NDuiDB["Nameplate"]["PlateWidth"])
 		else
-			unitFrame:SetWidth(NDuiDB["Nameplate"]["Width"] * .9)
+			unitFrame:SetWidth(NDuiDB["Nameplate"]["PlateWidth"] * .7)
 		end
 	end
 end
@@ -469,7 +477,7 @@ end
 -- NazjatarFollowerXP
 function UF:AddFollowerXP(self)
 	local bar = CreateFrame("StatusBar", nil, self)
-	bar:SetSize(NDuiDB["Nameplate"]["Width"], NDuiDB["Nameplate"]["Height"])
+	bar:SetSize(NDuiDB["Nameplate"]["PlateWidth"]*.75, NDuiDB["Nameplate"]["PlateHeight"])
 	bar:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
 	B.CreateSB(bar, false, 0, .7, 1)
 	bar.progressText = B.CreateFS(bar, 9)
@@ -499,96 +507,97 @@ function UF:AddInterruptInfo()
 end
 
 -- Create Nameplates
-function UF:CreatePlates(unit)
+local platesList = {}
+function UF:CreatePlates()
 	self.mystyle = "nameplate"
-	if strmatch(unit, "nameplate") then
-		self:SetSize(NDuiDB["Nameplate"]["Width"] * 1.4, NDuiDB["Nameplate"]["Height"])
-		self:SetPoint("CENTER", 0, -3)
+	self:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
+	self:SetPoint("CENTER")
 
-		local health = CreateFrame("StatusBar", nil, self)
-		health:SetAllPoints()
-		health:SetFrameLevel(self:GetFrameLevel() - 2)
-		B.CreateSB(health)
-		B.SmoothBar(health)
-		self.Health = health
-		self.Health.frequentUpdates = true
-		self.Health.UpdateColor = UF.UpdateColor
+	local health = CreateFrame("StatusBar", nil, self)
+	health:SetAllPoints()
+	health:SetFrameLevel(self:GetFrameLevel() - 2)
+	B.CreateSB(health)
+	B.SmoothBar(health)
+	self.Health = health
+	self.Health.frequentUpdates = true
+	self.Health.UpdateColor = UF.UpdateColor
 
-		UF:CreateHealthText(self)
-		UF:CreateCastBar(self)
-		UF:CreateRaidMark(self)
-		UF:CreatePrediction(self)
-		UF:CreateAuras(self)
-		UF:CreatePVPClassify(self)
-		UF:AddFollowerXP(self)
-		UF:MouseoverIndicator(self)
+	UF:CreateHealthText(self)
+	UF:CreateCastBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreatePrediction(self)
+	UF:CreateAuras(self)
+	UF:CreatePVPClassify(self)
+	UF:AddFollowerXP(self)
+	UF:MouseoverIndicator(self)
 
-		self.powerText = B.CreateFS(self, 15)
-		self.powerText:ClearAllPoints()
-		self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
-		self:Tag(self.powerText, "[nppp]")
+	self.powerText = B.CreateFS(self, 15)
+	self.powerText:ClearAllPoints()
+	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
+	self:Tag(self.powerText, "[nppp]")
 
-		if NDuiDB["Nameplate"]["TarArrow"] < 3 then
-			local arrow = self:CreateTexture(nil, "OVERLAY", nil, 1)
-			arrow:SetSize(40, 40)
-			arrow:SetTexture(DB.arrowTex)
-			if NDuiDB["Nameplate"]["TarArrow"] == 2 then
-				arrow:SetPoint("LEFT", self, "RIGHT", 3, 0)
-				arrow:SetRotation(rad(-90))
+	if NDuiDB["Nameplate"]["TarArrow"] < 3 then
+		local arrow = self:CreateTexture(nil, "OVERLAY", nil, 1)
+		arrow:SetSize(40, 40)
+		arrow:SetTexture(DB.arrowTex)
+		if NDuiDB["Nameplate"]["TarArrow"] == 2 then
+			arrow:SetPoint("LEFT", self, "RIGHT", 3, 0)
+			arrow:SetRotation(rad(-90))
+		else
+			if NDuiDB["Nameplate"]["ShowPlayerPlate"] and NDuiDB["Nameplate"]["NameplateClassPower"] then
+				arrow:SetPoint("BOTTOM", self, "TOP", 0, 14 + _G.oUF_ClassPowerBar:GetHeight())
 			else
-				if NDuiDB["Nameplate"]["ShowPlayerPlate"] and NDuiDB["Nameplate"]["NameplateClassPower"] then
-					arrow:SetPoint("BOTTOM", self, "TOP", 0, 14 + _G.oUF_ClassPowerBar:GetHeight())
-				else
-					arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
-				end
+				arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
 			end
-			arrow:Hide()
-			self.arrowMark = arrow
 		end
-
-		local glow = CreateFrame("Frame", nil, self)
-		glow:SetPoint("TOPLEFT", self, -6, 6)
-		glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
-		glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
-		glow:SetBackdropBorderColor(1, 1, 1, .7)
-		glow:Hide()
-		self.tarMark = glow
-		self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetMark, true)
-
-		local iconFrame = CreateFrame("Frame", nil, self)
-		iconFrame:SetAllPoints()
-		iconFrame:SetFrameLevel(self:GetFrameLevel() + 2)
-		local cicon = iconFrame:CreateTexture(nil, "ARTWORK")
-		cicon:SetAtlas("VignetteKill")
-		cicon:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -4)
-		cicon:SetSize(18, 18)
-		cicon:SetAlpha(0)
-		self.creatureIcon = cicon
-
-		if NDuiDB["Nameplate"]["QuestIcon"] then
-			local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
-			qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
-			qicon:SetSize(20, 20)
-			qicon:SetAtlas(DB.questTex)
-			qicon:Hide()
-			local count = B.CreateFS(self, 12, "", nil, "LEFT", 0, 0)
-			count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
-			count:SetTextColor(.6, .8, 1)
-
-			self.questIcon = qicon
-			self.questCount = count
-			self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
-		end
-
-		if NDuiDB["Nameplate"]["AKSProgress"] then
-			self.progressText = B.CreateFS(self, 12, "", false, "LEFT", 0, 0)
-			self.progressText:SetPoint("LEFT", self, "RIGHT", 5, 0)
-		end
-
-		local threatIndicator = CreateFrame("Frame", nil, self)
-		self.ThreatIndicator = threatIndicator
-		self.ThreatIndicator.Override = UF.UpdateThreatColor
+		arrow:Hide()
+		self.arrowMark = arrow
 	end
+
+	local glow = CreateFrame("Frame", nil, self)
+	glow:SetPoint("TOPLEFT", self, -6, 6)
+	glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
+	glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
+	glow:SetBackdropBorderColor(1, 1, 1, .7)
+	glow:Hide()
+	self.tarMark = glow
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetMark, true)
+
+	local iconFrame = CreateFrame("Frame", nil, self)
+	iconFrame:SetAllPoints()
+	iconFrame:SetFrameLevel(self:GetFrameLevel() + 2)
+	local cicon = iconFrame:CreateTexture(nil, "ARTWORK")
+	cicon:SetAtlas("VignetteKill")
+	cicon:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -4)
+	cicon:SetSize(18, 18)
+	cicon:SetAlpha(0)
+	self.creatureIcon = cicon
+
+	if NDuiDB["Nameplate"]["QuestIcon"] then
+		local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
+		qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
+		qicon:SetSize(20, 20)
+		qicon:SetAtlas(DB.questTex)
+		qicon:Hide()
+		local count = B.CreateFS(self, 12, "", nil, "LEFT", 0, 0)
+		count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
+		count:SetTextColor(.6, .8, 1)
+
+		self.questIcon = qicon
+		self.questCount = count
+		self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
+	end
+
+	if NDuiDB["Nameplate"]["AKSProgress"] then
+		self.progressText = B.CreateFS(self, 12, "", false, "LEFT", 0, 0)
+		self.progressText:SetPoint("LEFT", self, "RIGHT", 5, 0)
+	end
+
+	local threatIndicator = CreateFrame("Frame", nil, self)
+	self.ThreatIndicator = threatIndicator
+	self.ThreatIndicator.Override = UF.UpdateThreatColor
+
+	platesList[self] = self:GetName()
 end
 
 -- Classpower on target nameplate
@@ -624,6 +633,15 @@ function UF:UpdateTargetClassPower()
 		bar:ClearAllPoints()
 		bar:SetPoint("BOTTOMLEFT", playerPlate.Health, "TOPLEFT", 0, 3)
 		bar:Show()
+	end
+end
+
+function UF:RefreshAllPlates()
+	for nameplate in pairs(platesList) do
+		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
+		UF:UpdateClickableSize()
+		nameplate.nameText:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
+		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
 	end
 end
 
