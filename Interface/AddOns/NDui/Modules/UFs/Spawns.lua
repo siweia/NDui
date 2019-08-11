@@ -185,6 +185,7 @@ function UF:OnLogin()
 		self:CheckExplosives()
 		self:AddInterruptInfo()
 		self:UpdateGroupRoles()
+		self:QuestIconCheck()
 
 		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
 		oUF:SetActiveStyle("Nameplates")

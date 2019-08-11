@@ -602,7 +602,7 @@ function UF:CreateAuras(self)
 		bu.numTotal = NDuiDB["Nameplate"]["maxAuras"]
 		bu.spacing = 3
 		bu.size = NDuiDB["Nameplate"]["AuraSize"]
-		bu.showDebuffType = true
+		bu.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 		bu.gap = false
 		bu.disableMouse = true
 	end

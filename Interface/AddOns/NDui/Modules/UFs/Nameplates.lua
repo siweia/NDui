@@ -311,13 +311,20 @@ end
 
 -- Quest progress
 local isInInstance
-function UF:QuestIconCheck()
+local function CheckInstanceStatus()
 	isInInstance = IsInInstance()
 end
-B:RegisterEvent("PLAYER_ENTERING_WORLD", UF.QuestIconCheck)
+
+function UF:QuestIconCheck()
+	if not NDuiDB["Nameplate"]["QuestIndicator"] then return end
+
+	CheckInstanceStatus()
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", CheckInstanceStatus)
+end
 
 local unitTip = CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
 function UF:UpdateQuestUnit(_, unit)
+	if not NDuiDB["Nameplate"]["QuestIndicator"] then return end
 	if isInInstance then
 		self.questIcon:Hide()
 		self.questCount:SetText("")
@@ -379,6 +386,8 @@ function UF:UpdateQuestUnit(_, unit)
 end
 
 function UF:AddQuestIcon(self)
+	if not NDuiDB["Nameplate"]["QuestIndicator"] then return end
+
 	local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
 	qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
 	qicon:SetSize(20, 20)
@@ -677,6 +686,7 @@ function UF:RefreshAllPlates()
 		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
 		nameplate.nameText:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
+		nameplate.Auras.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 		UF:UpdateClickableSize()
 		UF:UpdateTargetIndicator(nameplate)
 	end
