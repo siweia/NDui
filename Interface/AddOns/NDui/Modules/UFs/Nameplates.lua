@@ -39,12 +39,11 @@ function UF:UpdatePlateSpacing()
 end
 
 function UF:UpdateClickableSize()
-	C_NamePlate.SetNamePlateEnemySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+20)
-	C_NamePlate.SetNamePlateFriendlySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+20)
+	C_NamePlate.SetNamePlateEnemySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+40)
+	C_NamePlate.SetNamePlateFriendlySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+40)
 end
 
 function UF:SetupCVars()
-	UF:UpdateClickableSize()
 	UF:PlateInsideView()
 	SetCVar("nameplateOverlapH", .5)
 	UF:UpdatePlateSpacing()
@@ -63,6 +62,7 @@ function UF:SetupCVars()
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
 
+	UF:UpdateClickableSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateOptions", UF.UpdateClickableSize)
 end
 
@@ -232,29 +232,98 @@ function UF:UpdateThreatColor(_, unit)
 	UF.UpdateColor(self.Health, unit)
 end
 
+function UF:CreateThreatColor(self)
+	local frame = CreateFrame("Frame", nil, self)
+	self.ThreatIndicator = frame
+	self.ThreatIndicator.Override = UF.UpdateThreatColor
+end
+
 -- Target indicator
-function UF:UpdateTargetMark()
-	local arrow = self.arrowMark
-	local mark = self.tarMark
+function UF:UpdateTargetChange()
+	local element = self.TargetIndicator
+	if NDuiDB["Nameplate"]["TargetIndicator"] == 1 then return end
 
 	if UnitIsUnit(self.unit, "target") and not UnitIsUnit(self.unit, "player") then
-		if arrow then arrow:Show() end
-		if mark then mark:Show() end
+		element:SetAlpha(1)
 	else
-		if arrow then arrow:Hide() end
-		if mark then mark:Hide() end
+		element:SetAlpha(0)
 	end
 end
 
+function UF:UpdateTargetIndicator(self)
+	local style = NDuiDB["Nameplate"]["TargetIndicator"]
+	local element = self.TargetIndicator
+	if style == 1 then
+		element:Hide()
+	else
+		if style == 2 then
+			element.TopArrow:Show()
+			element.RightArrow:Hide()
+			element.Glow:Hide()
+		elseif style == 3 then
+			element.TopArrow:Hide()
+			element.RightArrow:Show()
+			element.Glow:Hide()
+		elseif style == 4 then
+			element.TopArrow:Hide()
+			element.RightArrow:Hide()
+			element.Glow:Show()
+		elseif style == 5 then
+			element.TopArrow:Show()
+			element.RightArrow:Hide()
+			element.Glow:Show()
+		elseif style == 6 then
+			element.TopArrow:Hide()
+			element.RightArrow:Show()
+			element.Glow:Show()
+		end
+		element:Show()
+	end
+end
+
+function UF:AddTargetIndicator(self)
+	local frame = CreateFrame("Frame", nil, self)
+	frame:SetAllPoints()
+	frame:SetFrameLevel(0)
+	frame:SetAlpha(0)
+
+	frame.TopArrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
+	frame.TopArrow:SetSize(40, 40)
+	frame.TopArrow:SetTexture(DB.arrowTex)
+	frame.TopArrow:SetPoint("BOTTOM", frame, "TOP", 0, 10)
+
+	frame.RightArrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
+	frame.RightArrow:SetSize(40, 40)
+	frame.RightArrow:SetTexture(DB.arrowTex)
+	frame.RightArrow:SetPoint("LEFT", frame, "RIGHT", 3, 0)
+	frame.RightArrow:SetRotation(rad(-90))
+
+	frame.Glow = CreateFrame("Frame", nil, frame)
+	frame.Glow:SetPoint("TOPLEFT", frame, -6, 6)
+	frame.Glow:SetPoint("BOTTOMRIGHT", frame, 6, -6)
+	frame.Glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
+	frame.Glow:SetBackdropBorderColor(1, 1, 1, .7)
+
+	self.TargetIndicator = frame
+	UF:UpdateTargetIndicator(self)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
+end
+
 -- Quest progress
+local isInInstance
+function UF:QuestIconCheck()
+	isInInstance = IsInInstance()
+end
+B:RegisterEvent("PLAYER_ENTERING_WORLD", UF.QuestIconCheck)
+
 local unitTip = CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
 function UF:UpdateQuestUnit(_, unit)
-	if not NDuiDB["Nameplate"]["QuestIcon"] then return end
-	if IsInInstance() then
+	if isInInstance then
 		self.questIcon:Hide()
 		self.questCount:SetText("")
 		return
 	end
+
 	unit = unit or self.unit
 
 	local isLootQuest, questProgress
@@ -309,7 +378,29 @@ function UF:UpdateQuestUnit(_, unit)
 	end
 end
 
+function UF:AddQuestIcon(self)
+	local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
+	qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
+	qicon:SetSize(20, 20)
+	qicon:SetAtlas(DB.questTex)
+	qicon:Hide()
+	local count = B.CreateFS(self, 12, "", nil, "LEFT", 0, 0)
+	count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
+	count:SetTextColor(.6, .8, 1)
+
+	self.questIcon = qicon
+	self.questCount = count
+	self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
+end
+
 -- Dungeon progress, AngryKeystones required
+function UF:AddDungeonProgress(self)
+	if not NDuiDB["Nameplate"]["AKSProgress"] then return end
+
+	self.progressText = B.CreateFS(self, 12, "", false, "LEFT", 0, 0)
+	self.progressText:SetPoint("LEFT", self, "RIGHT", 5, 0)
+end
+
 local cache = {}
 function UF:UpdateDungeonProgress(unit)
 	if not self.progressText or not AngryKeystones_Data then return end
@@ -357,6 +448,20 @@ local classify = {
 	worldboss = {0, 1, 0},
 }
 
+function UF:AddCreatureIcon(self)
+	local iconFrame = CreateFrame("Frame", nil, self)
+	iconFrame:SetAllPoints()
+	iconFrame:SetFrameLevel(self:GetFrameLevel() + 2)
+
+	local icon = iconFrame:CreateTexture(nil, "ARTWORK")
+	icon:SetAtlas("VignetteKill")
+	icon:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -4)
+	icon:SetSize(18, 18)
+	icon:Hide()
+
+	self.creatureIcon = icon
+end
+
 function UF:UpdateUnitClassify(unit)
 	local class = UnitClassification(unit)
 	if self.creatureIcon then
@@ -364,38 +469,25 @@ function UF:UpdateUnitClassify(unit)
 			local r, g, b, desature = unpack(classify[class])
 			self.creatureIcon:SetVertexColor(r, g, b)
 			self.creatureIcon:SetDesaturated(desature)
-			self.creatureIcon:SetAlpha(1)
+			self.creatureIcon:Show()
 		else
-			self.creatureIcon:SetAlpha(0)
+			self.creatureIcon:Hide()
 		end
 	end
 end
 
 -- Scale plates for explosives
-local explosiveCount, hasExplosives = 0
+local hasExplosives
 local id = 120651
-function UF:ScalePlates()
-	for _, nameplate in next, C_NamePlate_GetNamePlates() do
-		local unitFrame = nameplate.unitFrame
-		local npcID = unitFrame.npcID
-		if explosiveCount > 0 and npcID == id or explosiveCount == 0 then
-			unitFrame:SetWidth(NDuiDB["Nameplate"]["PlateWidth"])
-		else
-			unitFrame:SetWidth(NDuiDB["Nameplate"]["PlateWidth"] * .7)
-		end
-	end
-end
-
 function UF:UpdateExplosives(event, unit)
 	if not hasExplosives or unit ~= self.unit then return end
 
 	local npcID = self.npcID
 	if event == "NAME_PLATE_UNIT_ADDED" and npcID == id then
-		explosiveCount = explosiveCount + 1
-	elseif event == "NAME_PLATE_UNIT_REMOVED" and npcID == id then
-		explosiveCount = explosiveCount - 1
+		self:SetScale(1.25)
+	elseif event == "NAME_PLATE_UNIT_REMOVED" then
+		self:SetScale(1)
 	end
-	UF:ScalePlates()
 end
 
 local function checkInstance()
@@ -404,7 +496,6 @@ local function checkInstance()
 		hasExplosives = true
 	else
 		hasExplosives = false
-		explosiveCount = 0
 	end
 end
 
@@ -528,74 +619,19 @@ function UF:CreatePlates()
 	UF:CreatePrediction(self)
 	UF:CreateAuras(self)
 	UF:CreatePVPClassify(self)
-	UF:AddFollowerXP(self)
-	UF:MouseoverIndicator(self)
+	UF:CreateThreatColor(self)
 
 	self.powerText = B.CreateFS(self, 15)
 	self.powerText:ClearAllPoints()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
 	self:Tag(self.powerText, "[nppp]")
 
-	if NDuiDB["Nameplate"]["TarArrow"] < 3 then
-		local arrow = self:CreateTexture(nil, "OVERLAY", nil, 1)
-		arrow:SetSize(40, 40)
-		arrow:SetTexture(DB.arrowTex)
-		if NDuiDB["Nameplate"]["TarArrow"] == 2 then
-			arrow:SetPoint("LEFT", self, "RIGHT", 3, 0)
-			arrow:SetRotation(rad(-90))
-		else
-			if NDuiDB["Nameplate"]["ShowPlayerPlate"] and NDuiDB["Nameplate"]["NameplateClassPower"] then
-				arrow:SetPoint("BOTTOM", self, "TOP", 0, 14 + _G.oUF_ClassPowerBar:GetHeight())
-			else
-				arrow:SetPoint("BOTTOM", self, "TOP", 0, 14)
-			end
-		end
-		arrow:Hide()
-		self.arrowMark = arrow
-	end
-
-	local glow = CreateFrame("Frame", nil, self)
-	glow:SetPoint("TOPLEFT", self, -6, 6)
-	glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
-	glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
-	glow:SetBackdropBorderColor(1, 1, 1, .7)
-	glow:Hide()
-	self.tarMark = glow
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetMark, true)
-
-	local iconFrame = CreateFrame("Frame", nil, self)
-	iconFrame:SetAllPoints()
-	iconFrame:SetFrameLevel(self:GetFrameLevel() + 2)
-	local cicon = iconFrame:CreateTexture(nil, "ARTWORK")
-	cicon:SetAtlas("VignetteKill")
-	cicon:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -4)
-	cicon:SetSize(18, 18)
-	cicon:SetAlpha(0)
-	self.creatureIcon = cicon
-
-	if NDuiDB["Nameplate"]["QuestIcon"] then
-		local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
-		qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
-		qicon:SetSize(20, 20)
-		qicon:SetAtlas(DB.questTex)
-		qicon:Hide()
-		local count = B.CreateFS(self, 12, "", nil, "LEFT", 0, 0)
-		count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
-		count:SetTextColor(.6, .8, 1)
-
-		self.questIcon = qicon
-		self.questCount = count
-		self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
-	end
-
-	if NDuiDB["Nameplate"]["AKSProgress"] then
-		self.progressText = B.CreateFS(self, 12, "", false, "LEFT", 0, 0)
-		self.progressText:SetPoint("LEFT", self, "RIGHT", 5, 0)
-	end
-
-	local threatIndicator = CreateFrame("Frame", nil, self)
-	self.ThreatIndicator = threatIndicator
-	self.ThreatIndicator.Override = UF.UpdateThreatColor
+	UF:AddFollowerXP(self)
+	UF:MouseoverIndicator(self)
+	UF:AddTargetIndicator(self)
+	UF:AddCreatureIcon(self)
+	UF:AddQuestIcon(self)
+	UF:AddDungeonProgress(self)
 
 	platesList[self] = self:GetName()
 end
@@ -639,9 +675,10 @@ end
 function UF:RefreshAllPlates()
 	for nameplate in pairs(platesList) do
 		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
-		UF:UpdateClickableSize()
 		nameplate.nameText:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
+		UF:UpdateClickableSize()
+		UF:UpdateTargetIndicator(nameplate)
 	end
 end
 
@@ -662,7 +699,7 @@ function UF:PostUpdatePlates(event, unit)
 	end
 
 	UF.UpdateUnitPower(self)
-	UF.UpdateTargetMark(self)
+	UF.UpdateTargetChange(self)
 	UF.UpdateQuestUnit(self, event, unit)
 	UF.UpdateUnitClassify(self, unit)
 	UF.UpdateExplosives(self, event, unit)
