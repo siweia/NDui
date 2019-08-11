@@ -140,7 +140,6 @@ local defaultSettings = {
 	},
 	Nameplate = {
 		Enable = true,
-		ColorBorder = false,
 		maxAuras = 5,
 		AuraSize = 22,
 		FriendlyCC = false,
@@ -149,10 +148,9 @@ local defaultSettings = {
 		TarArrow = 2,
 		InsideView = true,
 		QuestIcon = true,
-		MinAlpha = .7,
 		Distance = 42,
-		Width = 100,
-		Height = 5,
+		PlateWidth = 140,
+		PlateHeight = 5,
 		CustomUnitColor = true,
 		CustomColor = {r=0, g=.8, b=.3},
 		UnitList = "",
@@ -174,6 +172,10 @@ local defaultSettings = {
 		PPHideOOC = true,
 		NameplateClassPower = false,
 		MaxPowerGlow = true,
+		NameTextSize = 10,
+		HealthTextSize = 12,
+		HighlightBorder = true,
+		MinScale = 1,
 	},
 	Skins = {
 		DBM = true,
@@ -371,10 +373,6 @@ local function updatePlateInsideView()
 	B:GetModule("UnitFrames"):PlateInsideView()
 end
 
-local function updatePlateAlpha()
-	B:GetModule("UnitFrames"):UpdatePlateAlpha()
-end
-
 local function updatePlateSpacing()
 	B:GetModule("UnitFrames"):UpdatePlateSpacing()
 end
@@ -389,6 +387,14 @@ end
 
 local function updatePowerUnitList()
 	B:GetModule("UnitFrames"):CreatePowerUnitTable()
+end
+
+local function refreshNameplate()
+	B:GetModule("UnitFrames"):RefreshAllPlates()
+end
+
+local function updateNameplateScale()
+	B:GetModule("UnitFrames"):UpdatePlateScale()
 end
 
 local function updateInterruptAlert()
@@ -548,21 +554,23 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
 		{},--blank
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
-		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*", true},
-		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"]},
-		{1, "Nameplate", "ColorBorder", L["Auras Border"], true},
-		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", false, nil, updatePlateInsideView},
-		{1, "Nameplate", "FullHealth", L["Show FullHealth"], true},
-		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"]},
+		{1, "Nameplate", "QuestIcon", L["Nameplate QuestIcon"], true},
+		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*"},
+		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
+		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*"},
+		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", true, nil, updatePlateInsideView},
+		{1, "Nameplate", "HighlightBorder", L["NameplateHighlight"]},
 		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
 		{4, "Nameplate", "TarArrow", L["Show Arrow"], false, {L["TOP"], L["RIGHT"], DISABLE}},
-		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {0, 1, 1}, updatePlateAlpha},
-		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
-		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
+		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", true, {.5, 1, 1}, updateNameplateScale},
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", false, {.5, 1.5, 1}, updatePlateSpacing},
 		{3, "Nameplate", "Distance", L["Nameplate Distance"].."*", true, {20, 100, 0}, updatePlateRange},
-		{3, "Nameplate", "Width", L["NP Width"], false, {50, 150, 0}},
-		{3, "Nameplate", "Height", L["NP Height"], true, {5, 15, 0}},
+		{3, "Nameplate", "PlateWidth", L["NP Width"].."*", false, {50, 200, 0}, refreshNameplate},
+		{3, "Nameplate", "PlateHeight", L["NP Height"].."*", true, {5, 20, 0}, refreshNameplate},
+		{3, "Nameplate", "NameTextSize", L["NameTextSize"].."*", false, {8, 16, 0}, refreshNameplate},
+		{3, "Nameplate", "HealthTextSize", L["HealthTextSize"].."*", true, {8, 16, 0}, refreshNameplate},
+		{3, "Nameplate", "maxAuras", L["Max Auras"], false, {0, 10, 0}},
+		{3, "Nameplate", "AuraSize", L["Auras Size"], true, {18, 40, 0}},
 	},
 	[6] = {
 		{1, "AuraWatch", "Enable", "|cff00cc4c"..L["Enable AuraWatch"], nil, setupAuraWatch},
