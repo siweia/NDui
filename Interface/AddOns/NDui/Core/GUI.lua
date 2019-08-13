@@ -129,7 +129,6 @@ local defaultSettings = {
 	},
 	Map = {
 		Coord = true,
-		Invite = true,
 		Clock = false,
 		CombatPulse = true,
 		MapScale = 1,
@@ -137,6 +136,7 @@ local defaultSettings = {
 		ShowRecycleBin = true,
 		WhoPings = true,
 		MapReveal = true,
+		Calendar = false,
 	},
 	Nameplate = {
 		Enable = true,
@@ -173,7 +173,7 @@ local defaultSettings = {
 		MaxPowerGlow = true,
 		NameTextSize = 10,
 		HealthTextSize = 12,
-		MinScale = 1,
+		MinScale = .8,
 		ColorBorder = false,
 		QuestIndicator = true,
 	},
@@ -395,6 +395,18 @@ end
 
 local function updateNameplateScale()
 	B:GetModule("UnitFrames"):UpdatePlateScale()
+end
+
+local function updateMinimapScale()
+	B:GetModule("Maps"):UpdateMinimapScale()
+end
+
+local function showMinimapClock()
+	B:GetModule("Maps"):ShowMinimapClock()
+end
+
+local function showCalendar()
+	B:GetModule("Maps"):ShowCalendar()
 end
 
 local function updateInterruptAlert()
@@ -645,15 +657,15 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[9] = {
 		{1, "Map", "Coord", L["Map Coords"]},
 		{},--blank
-		{1, "Map", "Invite", L["Calendar Reminder"]},
-		{1, "Map", "Clock", L["Minimap Clock"], true},
+		{1, "Map", "Calendar", L["Minimap Calendar"].."*", nil, nil, showCalendar},
+		{1, "Map", "Clock", L["Minimap Clock"].."*", true, nil, showMinimapClock},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
-		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"], true},
-		{1, "Map", "WhoPings", L["Show WhoPings"]},
+		{1, "Map", "WhoPings", L["Show WhoPings"], true},
+		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{},--blank
 		{3, "Map", "MapScale", L["Map Scale"], false, {1, 2, 1}},
-		{3, "Map", "MinmapScale", L["Minimap Scale"], true, {1, 2, 1}},
+		{3, "Map", "MinmapScale", L["Minimap Scale"].."*", true, {1, 2, 1}, updateMinimapScale},
 	},
 	[10] = {
 		{1, "Skins", "BarLine", L["Bar Line"]},
