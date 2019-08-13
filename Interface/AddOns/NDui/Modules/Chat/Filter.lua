@@ -177,7 +177,7 @@ local function convertItemLevel(link)
 	local itemLink = strmatch(link, "|Hitem:.-|h")
 	if itemLink then
 		local name, itemLevel = isItemHasLevel(itemLink)
-		if name then
+		if name and itemLevel then
 			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..isItemHasGem(itemLink)..")]|h")
 			itemCache[link] = link
 		end
