@@ -411,7 +411,12 @@ function S:ReskinRematch()
 		F.CreateSD(bg)
 		for _, icon in pairs({"Left", "Right"}) do
 			local bu = content[icon.."Icon"]
-			bu:SetMask(nil)
+			local mask = content[icon.."CircleMask"]
+			if mask then
+				mask:Hide()
+			else
+				bu:SetMask(nil)
+			end
 			F.ReskinIcon(bu)
 		end
 
