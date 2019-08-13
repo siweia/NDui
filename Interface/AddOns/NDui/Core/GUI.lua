@@ -148,7 +148,7 @@ local defaultSettings = {
 		TargetIndicator = 6,
 		InsideView = true,
 		Distance = 42,
-		PlateWidth = 125,
+		PlateWidth = 135,
 		PlateHeight = 5,
 		CustomUnitColor = true,
 		CustomColor = {r=0, g=.8, b=.3},
@@ -173,7 +173,8 @@ local defaultSettings = {
 		MaxPowerGlow = true,
 		NameTextSize = 10,
 		HealthTextSize = 12,
-		MinScale = .8,
+		MinScale = 1,
+		MinAlpha = 1,
 		ColorBorder = false,
 		QuestIndicator = true,
 	},
@@ -393,8 +394,12 @@ local function refreshNameplates()
 	B:GetModule("UnitFrames"):RefreshAllPlates()
 end
 
-local function updateNameplateScale()
+local function updatePlateScale()
 	B:GetModule("UnitFrames"):UpdatePlateScale()
+end
+
+local function updatePlateAlpha()
+	B:GetModule("UnitFrames"):UpdatePlateAlpha()
 end
 
 local function updateMinimapScale()
@@ -514,10 +519,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "HeightScale", L["UFs HeightScale"], true, {.8, 1.5, 1}},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
-		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
-		{1, "UFs", "FCTOverHealing", L["CombatText OverHealing"], true},
 		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"]},
 		{1, "UFs", "PetCombatText", L["CombatText ShowPets"], true},
+		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
+		{1, "UFs", "FCTOverHealing", L["CombatText OverHealing"], true},
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", "|cff00cc4c"..L["UFs RaidFrame"]},
@@ -572,11 +577,13 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, updatePlateInsideView},
 		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
-		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
-		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"], false, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
-		{3, "Nameplate", "Distance", L["Nameplate Distance"].."*", true, {20, 100, 0}, updatePlateRange},
+		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"]},
+		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"], true, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
+		{},--blank
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", false, {.5, 1.5, 1}, updatePlateSpacing},
-		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", true, {.5, 1, 1}, updateNameplateScale},
+		{3, "Nameplate", "Distance", L["Nameplate Distance"].."*", true, {20, 100, 0}, updatePlateRange},
+		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", false, {.5, 1, 1}, updatePlateScale},
+		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.5, 1, 1}, updatePlateAlpha},
 		{3, "Nameplate", "PlateWidth", L["NP Width"].."*", false, {50, 200, 0}, refreshNameplates},
 		{3, "Nameplate", "PlateHeight", L["NP Height"].."*", true, {5, 20, 0}, refreshNameplates},
 		{3, "Nameplate", "NameTextSize", L["NameTextSize"].."*", false, {8, 16, 0}, refreshNameplates},
