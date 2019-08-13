@@ -30,6 +30,11 @@ function UF:UpdatePlateScale()
 	SetCVar("namePlateMaxScale", NDuiDB["Nameplate"]["MinScale"])
 end
 
+function UF:UpdatePlateAlpha()
+	SetCVar("nameplateMinAlpha", NDuiDB["Nameplate"]["MinAlpha"])
+	SetCVar("nameplateMaxAlpha", NDuiDB["Nameplate"]["MinAlpha"])
+end
+
 function UF:UpdatePlateRange()
 	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
 end
@@ -48,8 +53,7 @@ function UF:SetupCVars()
 	SetCVar("nameplateOverlapH", .5)
 	UF:UpdatePlateSpacing()
 	UF:UpdatePlateRange()
-	SetCVar("nameplateMinAlpha", 1)
-	SetCVar("nameplateMaxAlpha", 1)
+	UF:UpdatePlateAlpha()
 	SetCVar("nameplateSelectedAlpha", 1)
 	SetCVar("showQuestTrackingTooltips", 1)
 
@@ -301,8 +305,8 @@ function UF:AddTargetIndicator(self)
 	frame.Glow = CreateFrame("Frame", nil, frame)
 	frame.Glow:SetPoint("TOPLEFT", frame, -6, 6)
 	frame.Glow:SetPoint("BOTTOMRIGHT", frame, 6, -6)
-	frame.Glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 4})
-	frame.Glow:SetBackdropBorderColor(1, 1, 1, .7)
+	frame.Glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 5})
+	frame.Glow:SetBackdropBorderColor(1, 1, 1)
 
 	self.TargetIndicator = frame
 	UF:UpdateTargetIndicator(self)
@@ -615,7 +619,6 @@ function UF:CreatePlates()
 
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
-	health:SetFrameLevel(self:GetFrameLevel() - 2)
 	B.CreateSB(health)
 	B.SmoothBar(health)
 	self.Health = health
