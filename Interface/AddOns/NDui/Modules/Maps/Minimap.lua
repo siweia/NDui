@@ -3,7 +3,8 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Maps")
 
 local strmatch, strfind, strupper = string.match, string.find, string.upper
-local pairs, ipairs = pairs, ipairs
+local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
+local cr, cg, cb = DB.r, DB.g, DB.b
 
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
@@ -108,21 +109,16 @@ function module:ReskinRegions()
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
 	GameTimeCalendarInvitesTexture:SetParent("Minimap")
 	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
+
 	local Invt = CreateFrame("Button", nil, UIParent)
 	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
 	Invt:SetSize(300, 80)
 	Invt:Hide()
-	B.CreateBD(Invt)
-	B.CreateSD(Invt)
-	B.CreateTex(Invt)
+	B.SetBackground(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
 	local function updateInviteVisibility()
-		if NDuiDB["Map"]["Invite"] and C_Calendar.GetNumPendingInvites() > 0 then
-			Invt:Show()
-		else
-			Invt:Hide()
-		end
+		Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
 	end
 	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
@@ -135,20 +131,14 @@ function module:ReskinRegions()
 		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
 	end)
-
-	if TicketStatusFrame then
-		TicketStatusFrame:ClearAllPoints()
-		TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", -400, -20)
-		TicketStatusFrame.SetPoint = B.Dummy
-	end
 end
 
 function module:RecycleBin()
 	if not NDuiDB["Map"]["ShowRecycleBin"] then return end
-	local r, g, b = DB.r, DB.g, DB.b
 
 	local buttons = {}
 	local blackList = {
+		["GameTimeFrame"] = true,
 		["MiniMapLFGFrame"] = true,
 		["BattlefieldMinimap"] = true,
 		["MinimapBackdrop"] = true,
@@ -178,13 +168,13 @@ function module:RecycleBin()
 	B.CreateGF(bin, 220, 40, "Horizontal", 0, 0, 0, 0, .7)
 	local topLine = CreateFrame("Frame", nil, bin)
 	topLine:SetPoint("BOTTOMRIGHT", bin, "TOPRIGHT", 1, 0)
-	B.CreateGF(topLine, 220, 1, "Horizontal", r, g, b, 0, .7)
+	B.CreateGF(topLine, 220, 1, "Horizontal", cr, cg, cb, 0, .7)
 	local bottomLine = CreateFrame("Frame", nil, bin)
 	bottomLine:SetPoint("TOPRIGHT", bin, "BOTTOMRIGHT", 1, 0)
-	B.CreateGF(bottomLine, 220, 1, "Horizontal", r, g, b, 0, .7)
+	B.CreateGF(bottomLine, 220, 1, "Horizontal", cr, cg, cb, 0, .7)
 	local rightLine = CreateFrame("Frame", nil, bin)
 	rightLine:SetPoint("LEFT", bin, "RIGHT", 0, 0)
-	B.CreateGF(rightLine, 1, 40, "Vertical", r, g, b, .7, .7)
+	B.CreateGF(rightLine, 1, 40, "Vertical", cr, cg, cb, .7, .7)
 	bin:SetFrameStrata("LOW")
 
 	local function hideBinButton()
@@ -305,30 +295,73 @@ function module:WhoPingsMyMap()
 	end)
 end
 
+function module:UpdateMinimapScale()
+	local scale = NDuiDB["Map"]["MinmapScale"]
+	Minimap:SetScale(scale)
+	Minimap.mover:SetSize(Minimap:GetWidth()*scale, Minimap:GetHeight()*scale)
+end
+
+function module:ShowMinimapClock()
+	if NDuiDB["Map"]["Clock"] then
+		if not TimeManagerClockButton then LoadAddOn("Blizzard_TimeManager") end
+		if not TimeManagerClockButton.styled then
+			TimeManagerClockButton:DisableDrawLayer("BORDER")
+			TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -8)
+			TimeManagerClockTicker:SetFont(unpack(DB.Font))
+			TimeManagerClockTicker:SetTextColor(1, 1, 1)
+
+			TimeManagerClockButton.styled = true
+		end
+		TimeManagerClockButton:Show()
+	else
+		if TimeManagerClockButton then TimeManagerClockButton:Hide() end
+	end
+end
+
+function module:ShowCalendar()
+	if NDuiDB["Map"]["Calendar"] then
+		if not GameTimeFrame.styled then
+			GameTimeFrame:SetNormalTexture(nil)
+			GameTimeFrame:SetPushedTexture(nil)
+			GameTimeFrame:SetHighlightTexture(nil)
+			GameTimeFrame:SetSize(18, 18)
+			GameTimeFrame:SetParent(Minimap)
+			GameTimeFrame:ClearAllPoints()
+			GameTimeFrame:SetPoint("BOTTOMRIGHT", Minimap, 1, 18)
+			GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
+
+			for i = 1, GameTimeFrame:GetNumRegions() do
+				local region = select(i, GameTimeFrame:GetRegions())
+				if region.SetTextColor then
+					region:SetTextColor(cr, cg, cb)
+					region:SetFont(unpack(DB.Font))
+					break
+				end
+			end
+
+			GameTimeFrame.styled = true
+		end
+		GameTimeFrame:Show()
+	else
+		GameTimeFrame:Hide()
+	end
+end
+
 function module:SetupMinimap()
 	-- Shape and Position
 	local scale = NDuiDB["Map"]["MinmapScale"]
 	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
-	Minimap:SetScale(scale)
 	DropDownList1:SetClampedToScreen(true)
 
-	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos, Minimap:GetWidth()*scale, Minimap:GetHeight()*scale)
+	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
+	Minimap.mover = mover
 
-	-- ClockFrame
-	if NDuiDB["Map"]["Clock"] then
-		if not TimeManagerClockButton then LoadAddOn("Blizzard_TimeManager") end
-		local clockFrame, clockTime = TimeManagerClockButton:GetRegions()
-		clockFrame:Hide()
-		clockTime:SetFont(unpack(DB.Font))
-		clockTime:SetTextColor(1, 1, 1)
-		TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -6)
-	else
-		if TimeManagerClockButton then TimeManagerClockButton:Hide() end
-		GameTimeFrame:Hide()
-	end
+	self:UpdateMinimapScale()
+	self:ShowMinimapClock()
+	self:ShowCalendar()
 
 	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
@@ -354,7 +387,6 @@ function module:SetupMinimap()
 
 	-- Hide Blizz
 	local frames = {
-		"GameTimeFrame",
 		"MinimapBorderTop",
 		"MinimapNorthTag",
 		"MinimapBorder",
