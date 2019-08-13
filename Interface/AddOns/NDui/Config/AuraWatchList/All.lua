@@ -167,6 +167,7 @@ local list = {
 		{AuraID = 274373, UnitID = "player"},	-- 溃烂之力
 		{AuraID = 280170, UnitID = "player", Value = true},	-- 假死盾
 		-- 艾泽里特精华
+		{AuraID = 295855, UnitID = "player"},	-- 艾泽拉斯守护者
 		{AuraID = 295248, UnitID = "player"},	-- 专注能量
 		{AuraID = 298357, UnitID = "player"},	-- 清醒梦境之忆
 		{AuraID = 302731, UnitID = "player", Flash = true},	-- 空间涟漪
@@ -570,7 +571,8 @@ local list = {
 		{AuraID = 228323, UnitID = "target", Value = true},	-- 克罗塔的护盾
 	},
 	["InternalCD"] = {		-- 自定义内置冷却组
-		{IntID = 240447, Duration = 20},		-- 践踏
+		{IntID = 240447, Duration = 20},	-- 践踏
+		{IntID = 295840, Duration = 30, OnSuccess = true},	-- 艾泽拉斯守护者
 		{IntID = 114018, Duration = 15, OnSuccess = true, UnitID = "all"},	-- 帷幕
 	},
 }
