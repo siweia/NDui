@@ -48,6 +48,7 @@ function M:OnLogin()
 	self:VehicleSeatMover()
 	self:UIWidgetFrameMover()
 	self:MoveDurabilityFrame()
+	self:MoveTicketStatusFrame()
 	self:PetFilterTab()
 	self:AlertFrame_Setup()
 	self:UpdateScreenShot()
@@ -185,7 +186,16 @@ function M:MoveDurabilityFrame()
 			self:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -30)
 		end
 	end)
-	DurabilityFrame:SetFrameStrata("HIGH")
+end
+
+-- Reanchor TicketStatusFrame
+function M:MoveTicketStatusFrame()
+	hooksecurefunc(TicketStatusFrame, "SetPoint", function(self, relF)
+		if relF == "TOPRIGHT" then
+			self:ClearAllPoints()
+			self:SetPoint("TOP", UIParent, "TOP", -400, -20)
+		end
+	end)
 end
 
 -- Achievement screenshot
