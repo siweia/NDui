@@ -101,4 +101,7 @@ function S:MicroMenu()
 	B.HideObject(GuildMicroButtonTabard)
 	B.HideObject(MainMenuBarDownload)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
+
+	CharacterMicroButtonAlert:EnableMouse(false)
+	B.HideOption(CharacterMicroButtonAlert)
 end
