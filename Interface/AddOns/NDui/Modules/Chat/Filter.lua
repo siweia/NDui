@@ -200,7 +200,7 @@ end
 
 local function isPlayerOnIslands()
 	local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
-	if instanceType == "scenario" and maxPlayers == 3 then
+	if instanceType == "scenario" and (maxPlayers == 3 or maxPlayers == 6) then
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", filterAzeriteGain)
 	else
 		ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", filterAzeriteGain)

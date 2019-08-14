@@ -118,7 +118,7 @@ end
 
 function M:RareAlert_CheckInstance()
 	local _, instanceType, _, _, maxPlayers, _, _, instID = GetInstanceInfo()
-	if (instID and isIgnored[instID]) or (instanceType == "scenario" and maxPlayers == 3) then
+	if (instID and isIgnored[instID]) or (instanceType == "scenario" and (maxPlayers == 3 or maxPlayers == 6)) then
 		B:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
 	else
 		B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
