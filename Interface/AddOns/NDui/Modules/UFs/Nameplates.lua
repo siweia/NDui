@@ -307,6 +307,7 @@ function UF:AddTargetIndicator(self)
 	frame.Glow:SetPoint("BOTTOMRIGHT", frame, 6, -6)
 	frame.Glow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = 5})
 	frame.Glow:SetBackdropBorderColor(1, 1, 1)
+	frame.Glow:SetFrameLevel(0)
 
 	self.TargetIndicator = frame
 	UF:UpdateTargetIndicator(self)
