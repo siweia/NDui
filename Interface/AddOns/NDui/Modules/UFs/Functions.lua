@@ -358,7 +358,7 @@ function UF:CreateCastBar(self)
 
 		local shield = cb:CreateTexture(nil, "OVERLAY")
 		shield:SetAtlas("nameplates-InterruptShield")
-		shield:SetSize(15, 15)
+		shield:SetSize(14, 14)
 		shield:SetPoint("CENTER", 0, -5)
 		cb.Shield = shield
 
