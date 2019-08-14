@@ -190,6 +190,23 @@ function module:UpdateChatItemLevel(_, msg, ...)
 	return false, msg, ...
 end
 
+-- Filter azerite message on island expeditions
+local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub("%%d/%%d ", "")
+local function filterAzeriteGain(_, _, msg)
+	if strfind(msg, azerite) then
+		return true
+	end
+end
+
+local function isPlayerOnIslands()
+	local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+	if instanceType == "scenario" and maxPlayers == 3 then
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", filterAzeriteGain)
+	else
+		ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", filterAzeriteGain)
+	end
+end
+
 function module:ChatFilter()
 	if NDuiDB["Chat"]["EnableFilter"] then
 		self:UpdateFilterList()
@@ -235,4 +252,6 @@ function module:ChatFilter()
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", self.UpdateChatItemLevel)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", self.UpdateChatItemLevel)
 	end
+
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", isPlayerOnIslands)
 end
