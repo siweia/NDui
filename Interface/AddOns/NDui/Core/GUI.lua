@@ -559,6 +559,16 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"], nil, setupNameplateFilter},
 		{},--blank
+		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
+		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*"},
+		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"], true, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
+		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*"},
+		{1, "Nameplate", "ColorBorder", L["ColorBorder"].."*", true, nil, refreshNameplates},
+		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, updatePlateInsideView},
+		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
+		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
+		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
+		{},--blank
 		{1, "Nameplate", "CustomUnitColor", "|cff00cc4c"..L["CustomUnitColor"].."*", nil, nil, updateCustomUnitList},
 		{5, "Nameplate", "CustomColor", L["Custom Color"].."*", 2},
 		{2, "Nameplate", "UnitList", L["UnitColor List"].."*", nil, nil, updateCustomUnitList},
@@ -569,16 +579,6 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
 		{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
-		{},--blank
-		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
-		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*", true},
-		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*"},
-		{1, "Nameplate", "ColorBorder", L["ColorBorder"].."*", true, nil, refreshNameplates},
-		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, updatePlateInsideView},
-		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
-		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
-		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"]},
-		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"], true, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{},--blank
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", false, {.5, 1.5, 1}, updatePlateSpacing},
 		{3, "Nameplate", "Distance", L["Nameplate Distance"].."*", true, {20, 100, 0}, updatePlateRange},
