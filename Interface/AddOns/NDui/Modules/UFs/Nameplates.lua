@@ -50,7 +50,7 @@ end
 
 function UF:SetupCVars()
 	UF:PlateInsideView()
-	SetCVar("nameplateOverlapH", .5)
+	SetCVar("nameplateOverlapH", .8)
 	UF:UpdatePlateSpacing()
 	UF:UpdatePlateRange()
 	UF:UpdatePlateAlpha()
