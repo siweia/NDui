@@ -62,5 +62,7 @@ function S:PGFSkin()
 
 		styled = true
 	end)
+
 	F.ReskinCheck(UsePFGButton)
+	UsePFGButton.text:SetWidth(35)
 end
