@@ -218,6 +218,7 @@ local defaultSettings = {
 	Misc = {
 		Mail = true,
 		ItemLevel = true,
+		GemNEnchant = true,
 		MissingStats = true,
 		HideErrors = true,
 		SoloInfo = true,
@@ -561,7 +562,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*"},
-		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"], true, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
+		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", true, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*"},
 		{1, "Nameplate", "ColorBorder", L["ColorBorder"].."*", true, nil, refreshNameplates},
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, updatePlateInsideView},
@@ -712,22 +713,22 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
 	},
 	[12] = {
-		{1, "Misc", "Mail", L["Mail Tool"]},
-		{1, "Misc", "Focuser", L["Easy Focus"], true},
-		{1, "Misc", "TradeTab", L["TradeTabs"]},
-		{1, "Misc", "PetFilter", L["Show PetFilter"], true},
+		{1, "Misc", "ItemLevel", "|cff00cc4c"..L["Show ItemLevel"]},
+		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*", true},
 		{},--blank
-		{1, "Misc", "ItemLevel", L["Show ItemLevel"]},
-		{1, "Misc", "MissingStats", L["Show MissingStats"], true},
+		{1, "Misc", "MissingStats", L["Show MissingStats"]},
+		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
-		{},--blank
-		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", nil, nil, updateScreenShot},
-		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
-		{1, "Misc", "HideErrors", L["Hide Error"].."*", nil, nil, updateErrorBlocker},
-		{},--blank
-		{1, "Misc", "ParagonRep", L["ParagonRep"]},
+		{1, "Misc", "Focuser", L["Easy Focus"]},
 		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
+		{},--blank
+		{1, "Misc", "Mail", L["Mail Tool"]},
+		{1, "Misc", "TradeTab", L["TradeTabs"], true},
+		{1, "Misc", "PetFilter", L["Show PetFilter"]},
+		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", true, nil, updateScreenShot},
+		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", nil, nil, updateFasterLoot},
+		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
