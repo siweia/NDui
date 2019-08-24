@@ -502,19 +502,19 @@ function B:InspectItemTextures(clean, grabTextures)
 	for i = 1, 5 do
 		local tex = _G[tip:GetName().."Texture"..i]
 		local texture = tex and tex:GetTexture()
-		if texture then
-			if grabTextures then
-				if texture == essenceTextureID then
-					local selected = (texturesDB[i-1] ~= essenceTextureID and texturesDB[i-1]) or nil
-					essencesDB[i] = {selected, tex:GetAtlas(), texture}
-					if selected then texturesDB[i-1] = nil end
-				else
-					texturesDB[i] = texture
-				end
-			end
+		if not texture then break end
 
-			if clean then tex:SetTexture() end
+		if grabTextures then
+			if texture == essenceTextureID then
+				local selected = (texturesDB[i-1] ~= essenceTextureID and texturesDB[i-1]) or nil
+				essencesDB[i] = {selected, tex:GetAtlas(), texture}
+				if selected then texturesDB[i-1] = nil end
+			else
+				texturesDB[i] = texture
+			end
 		end
+
+		if clean then tex:SetTexture() end
 	end
 
 	return texturesDB, essencesDB
