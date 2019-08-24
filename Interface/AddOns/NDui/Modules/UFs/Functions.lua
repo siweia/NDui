@@ -151,6 +151,27 @@ function UF:CreateHealthText(self)
 	self.healthValue = hpval
 end
 
+function UF:UpdateRaidNameText()
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == "raid" then
+			local name = frame.nameText
+			name:ClearAllPoints()
+			if NDuiDB["UFs"]["SimpleMode"] and not frame.isPartyFrame then
+				name:SetPoint("LEFT", 4, 0)
+			elseif NDuiDB["UFs"]["RaidBuffIndicator"] then
+				name:SetJustifyH("CENTER")
+				if NDuiDB["UFs"]["RaidHPMode"] ~= 1 then
+					name:SetPoint("TOP", 0, -3)
+				else
+					name:SetPoint("CENTER")
+				end
+			else
+				name:SetPoint("TOPLEFT", 2, -2)
+			end
+		end
+	end
+end
+
 function UF:CreatePowerBar(self)
 	local mystyle = self.mystyle
 	local power = CreateFrame("StatusBar", nil, self)
