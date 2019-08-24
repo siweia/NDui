@@ -134,6 +134,7 @@ local list = {
 		{AuraID = 303570, UnitID = "player"},	-- 锋锐珊瑚
 		{AuraID = 303568, UnitID = "target", Caster = "player"},	-- 锋锐珊瑚
 		{AuraID = 301624, UnitID = "target", Caster = "player"},	-- 颤栗毒素
+		{AuraID = 302565, UnitID = "target", Caster = "player"},	-- 导电墨汁
 		-- 艾泽里特特质
 		{AuraID = 277960, UnitID = "player"},	-- 神经电激
 		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
@@ -167,6 +168,7 @@ local list = {
 		{AuraID = 274373, UnitID = "player"},	-- 溃烂之力
 		{AuraID = 280170, UnitID = "player", Value = true},	-- 假死盾
 		-- 艾泽里特精华
+		{AuraID = 298343, UnitID = "player"},	-- 清醒梦境
 		{AuraID = 295855, UnitID = "player"},	-- 艾泽拉斯守护者
 		{AuraID = 295248, UnitID = "player"},	-- 专注能量
 		{AuraID = 298357, UnitID = "player"},	-- 清醒梦境之忆
@@ -256,6 +258,7 @@ local list = {
 		{AuraID = 260067, UnitID = "player"},	-- 恶毒槌击，托尔达戈
 		{AuraID = 273226, UnitID = "player"},	-- 腐烂孢子，孢林
 		{AuraID = 269838, UnitID = "player", Flash = true},	-- 邪恶污染，孢林
+		{AuraID = 259718, UnitID = "player"},	-- 颠覆
 		{AuraID = 276297, UnitID = "player"},	-- 虚空种子，风暴神殿
 		{AuraID = 274438, UnitID = "player", Flash = true},	-- 风暴
 		{AuraID = 276286, UnitID = "player"},	-- 切割旋风
