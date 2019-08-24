@@ -146,6 +146,10 @@ oUF.Tags.Methods["raidhp"] = function(unit)
 	elseif NDuiDB["UFs"]["RaidHPMode"] == 3 then
 		local cur = UnitHealth(unit)
 		return B.Numb(cur)
+	elseif NDuiDB["UFs"]["RaidHPMode"] == 4 then
+		local loss = UnitHealthMax(unit) - UnitHealth(unit)
+		if loss == 0 then return end
+		return B.Numb(loss)
 	end
 end
 oUF.Tags.Events["raidhp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
