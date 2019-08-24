@@ -92,20 +92,7 @@ function A:ChantLumos(self)
 		UpdateBuff(self.bu[4], 184362, 184362, true, true)
 		UpdateBuff(self.bu[5], 1719, 1719, true, true)
 	elseif GetSpecialization() == 3 then
-		do
-			local button = self.bu[1]
-			local name, _, duration, expire, _, _, value = GetUnitAura("player", 190456, "HELPFUL")
-			if name then
-				button.Count:SetText(B.Numb(value))
-				button.CD:SetCooldown(expire-duration, duration)
-				button.CD:Show()
-				button.Icon:SetDesaturated(false)
-			else
-				button.Count:SetText("")
-				button.CD:Hide()
-				UpdateSpellStatus(button, 190456)
-			end
-		end
+		UpdateDebuff(self.bu[1], 1160, 1160, true)
 
 		do
 			local button = self.bu[2]
