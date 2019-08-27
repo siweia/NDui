@@ -16,6 +16,7 @@ local BNGetNumFriends, BNGetFriendInfo, BNGetGameAccountInfo, BNGetNumFriendGame
 local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL
 local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
+local CLIENT_WOW_CLASSIC = "WoV"
 
 local r, g, b = DB.r, DB.g, DB.b
 local friendsFrame, menuFrame, updateRequest
@@ -84,6 +85,7 @@ local function buildBNetTable(num)
 			else
 				infoText = gameText
 			end
+			if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_CLASSIC end
 
 			tinsert(bnetTable, {i, accountName, charName, gameID, client, realmName, status, class, level, infoText, note, broadcastText, broadcastTime})
 		end
@@ -217,17 +219,19 @@ local function buttonOnEnter(self)
 		local index, accountName, _, _, _, _, _, _, _, _, note, broadcastText, broadcastTime = unpack(self.data)
 		local numGameAccounts = BNGetNumFriendGameAccounts(index)
 		for i = 1, numGameAccounts do
-			local _, charName, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, bnetIDGameAccount, _, _, _, _, wowProjectID = BNGetFriendGameAccountInfo(index, i)
+			local _, charName, client, realmName, _, faction, _, class, _, zoneName, level, gameText, _, _, _, _, _, _, _, _, wowProjectID = BNGetFriendGameAccountInfo(index, i)
 			local clientString = BNet_GetClientEmbeddedTexture(client, 16)
 			if client == BNET_CLIENT_WOW then
-				realmName = DB.MyRealm == realmName and "" or "-"..realmName
+				realmName = (DB.MyRealm == realmName or realmName == "") and "" or "-"..realmName
 				class = DB.ClassList[class]
 				local classColor = B.HexRGB(B.ClassColor(class))
-				if CanCooperateWithGameAccount(bnetIDGameAccount) then
-					GameTooltip:AddLine(format("%s%s %s%s%s", clientString, level, classColor, charName, realmName))
-				else
-					GameTooltip:AddLine(format("%s%s%s* %s%s%s", clientString, inactiveZone, level, classColor, charName, realmName))
+				if faction == "Horde" then
+					clientString = "|TInterface\\FriendsFrame\\PlusManz-Horde:16:|t"
+				elseif faction == "Alliance" then
+					clientString = "|TInterface\\FriendsFrame\\PlusManz-Alliance:16:|t"
 				end
+				GameTooltip:AddLine(format("%s%s %s%s%s", clientString, level, classColor, charName, realmName))
+
 				if wowProjectID ~= WOW_PROJECT_ID then zoneName = gameText end
 				GameTooltip:AddLine(format("%s%s", inactiveZone, zoneName))
 			else
@@ -357,7 +361,13 @@ local function updateFriendsFrame()
 		end
 		button.name:SetText(format("%s%s|r (%s|r)", DB.InfoColor, accountName, name))
 		button.zone:SetText(format("%s%s", zoneColor, infoText))
-		button.gameIcon:SetTexture(BNet_GetClientTexture(client))
+		if client == CLIENT_WOW_CLASSIC then
+			button.gameIcon:SetTexture(BNet_GetClientTexture(BNET_CLIENT_WOW))
+			button.gameIcon:SetVertexColor(.3, .3, .3)
+		else
+			button.gameIcon:SetTexture(BNet_GetClientTexture(client))
+			button.gameIcon:SetVertexColor(1, 1, 1)
+		end
 
 		button.isBNet = true
 		button.data = bnetTable[i]
@@ -381,7 +391,9 @@ info.onEvent = function(self, event, arg1)
 	local onlineFriends = C_FriendList_GetNumOnlineFriends()
 	local _, onlineBNet = BNGetNumFriends()
 	self.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, onlineFriends + onlineBNet))
+
 	updateRequest = false
+	if friendsFrame and friendsFrame:IsShown() then info:onEnter() end
 end
 
 info.onEnter = function(self)
