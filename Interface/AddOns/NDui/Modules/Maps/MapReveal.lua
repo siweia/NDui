@@ -214,11 +214,20 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 					else
 						texture:Hide()
 					end
+					texture:SetVertexColor(.6, .6, .6)
+
 					tinsert(overlayTextures, texture)
 				end
 			end
 		end
 	end
+end
+
+-- Reset texture color and alpha
+local function TexturePool_ResetVertexColor(pool, texture)
+	texture:SetVertexColor(1, 1, 1)
+	texture:SetAlpha(1)
+	return TexturePool_HideAndClearAnchors(pool, texture)
 end
 
 function module:MapReveal()
@@ -231,6 +240,7 @@ function module:MapReveal()
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate("MapExplorationPinTemplate") do
 		hooksecurefunc(pin, "RefreshOverlays", MapExplorationPin_RefreshOverlays)
+		pin.overlayTexturePool.resetterFunc = TexturePool_ResetVertexColor
 	end
 
 	bu:SetScript("OnClick", function(self)
