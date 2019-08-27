@@ -131,7 +131,7 @@ local list = {
 		{AuraID = 285475, UnitID = "player"},	-- 卡亚矿涌流
 		{AuraID = 306242, UnitID = "player"},	-- 红卡重置
 		{AuraID = 285482, UnitID = "player"},	-- 海巨人的凶猛
-		{AuraID = 303570, UnitID = "player"},	-- 锋锐珊瑚
+		{AuraID = 303570, UnitID = "player", Flash = true},	-- 锋锐珊瑚
 		{AuraID = 303568, UnitID = "target", Caster = "player"},	-- 锋锐珊瑚
 		{AuraID = 301624, UnitID = "target", Caster = "player"},	-- 颤栗毒素
 		{AuraID = 302565, UnitID = "target", Caster = "player"},	-- 导电墨汁
@@ -202,6 +202,7 @@ local list = {
 		{AuraID = 230935, UnitID = "player"},	-- 高山战鼓
 		{AuraID = 256740, UnitID = "player"},	-- 漩涡战鼓
 		{AuraID = 102364, UnitID = "player"},	-- 青铜龙的祝福
+		{AuraID = 292686, UnitID = "player"},	-- 制皮鼓
 		-- 团队增益或减伤
 		{AuraID = 1022, UnitID = "player"},		-- 保护祝福
 		{AuraID = 6940, UnitID = "player"},		-- 牺牲祝福
