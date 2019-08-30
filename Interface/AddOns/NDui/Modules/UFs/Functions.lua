@@ -168,6 +168,7 @@ function UF:UpdateRaidNameText()
 			else
 				name:SetPoint("TOPLEFT", 2, -2)
 			end
+			frame.healthValue:UpdateTag()
 		end
 	end
 end
