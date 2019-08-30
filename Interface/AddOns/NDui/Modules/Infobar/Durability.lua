@@ -7,7 +7,7 @@ local info = module:RegisterInfobar("Durability", C.Infobar.DurabilityPos)
 
 local format, gsub, sort, floor, modf, select = string.format, string.gsub, table.sort, math.floor, math.modf, select
 local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture = GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture
-local GetMoneyString, GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoneyString, GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
+local GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
 local GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney
 local C_Timer_After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair = C_Timer.After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair
 
@@ -150,7 +150,7 @@ local function delayFunc()
 	if isBankEmpty then
 		autoRepair(true)
 	else
-		print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(repairAllCost)))
+		print(format(DB.InfoColor.."%s|r%s", L["Guild repair"], module:GetMoneyString(repairAllCost)))
 	end
 end
 
@@ -168,7 +168,7 @@ function autoRepair(override)
 		else
 			if myMoney > repairAllCost then
 				RepairAllItems()
-				print(format(DB.InfoColor.."%s:|r %s", L["Repair cost"], GetMoneyString(repairAllCost)))
+				print(format(DB.InfoColor.."%s|r%s", L["Repair cost"], module:GetMoneyString(repairAllCost)))
 				return
 			else
 				print(DB.InfoColor..L["Repair error"])
