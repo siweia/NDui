@@ -539,9 +539,12 @@ function B.GetItemLevel(link, arg1, arg2, fullScan)
 		gems, essences = B:InspectItemTextures(nil, true)
 
 		for i = 1, tip:NumLines() do
-			local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-			iLvl, enchantText = B:InspectItemInfo(text, iLvl, enchantText)
-			if enchantText then break end
+			local line = _G[tip:GetName().."TextLeft"..i]
+			if line then
+				local text = line:GetText() or ""
+				iLvl, enchantText = B:InspectItemInfo(text, iLvl, enchantText)
+				if enchantText then break end
+			end
 		end
 
 		return iLvl, enchantText, gems, essences
@@ -558,12 +561,15 @@ function B.GetItemLevel(link, arg1, arg2, fullScan)
 		end
 
 		for i = 2, 5 do
-			local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-			local found = strfind(text, itemLevelString)
-			if found then
-				local level = strmatch(text, "(%d+)%)?$")
-				iLvlDB[link] = tonumber(level)
-				break
+			local line = _G[tip:GetName().."TextLeft"..i]
+			if line then
+				local text = line:GetText() or ""
+				local found = strfind(text, itemLevelString)
+				if found then
+					local level = strmatch(text, "(%d+)%)?$")
+					iLvlDB[link] = tonumber(level)
+					break
+				end
 			end
 		end
 
