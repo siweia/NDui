@@ -48,7 +48,7 @@
 			</Layer>
 			<Layer level="BORDER">
 				<FontString name="BaudErrorFrameMinimapCount" inherits="ChatFontNormal">
-					<Color r="0.39" g="0.58" b="0.92" a="0.8"/>
+					<Color r="1" g="0" b="0" a="0.8"/>
 					<FontHeight>
 						<AbsValue val="18"/>
 					</FontHeight>
