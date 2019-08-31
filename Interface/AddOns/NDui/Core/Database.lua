@@ -16,12 +16,12 @@ for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 end
 DB.ClassColors = {}
 local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-for class in pairs(colors) do
+for class, value in pairs(colors) do
 	DB.ClassColors[class] = {}
-	DB.ClassColors[class].r = colors[class].r
-	DB.ClassColors[class].g = colors[class].g
-	DB.ClassColors[class].b = colors[class].b
-	DB.ClassColors[class].colorStr = colors[class].colorStr
+	DB.ClassColors[class].r = value.r
+	DB.ClassColors[class].g = value.g
+	DB.ClassColors[class].b = value.b
+	DB.ClassColors[class].colorStr = value.colorStr
 end
 DB.r, DB.g, DB.b = DB.ClassColors[DB.MyClass].r, DB.ClassColors[DB.MyClass].g, DB.ClassColors[DB.MyClass].b
 DB.MyColor = format("|cff%02x%02x%02x", DB.r*255, DB.g*255, DB.b*255)
