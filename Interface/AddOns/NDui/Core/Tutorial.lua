@@ -367,6 +367,7 @@ local function YesTutor()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Tutorial Complete"])
 			pass:Hide()
 		elseif currentPage == 5 then
+			NDuiDB["Tutorial"]["Complete"] = true
 			tutor:Hide()
 			StaticPopup_Show("RELOAD_NDUI")
 			currentPage = 0
@@ -419,19 +420,19 @@ local function HelloWorld()
 	B.CreateFS(welcome, 12, L["Help Info10"], false, "TOPLEFT", 20, -310)
 	B.CreateFS(welcome, 12, L["Help Info11"], false, "TOPLEFT", 20, -330)
 
-	local close = B.CreateButton(welcome, 16, 16, "X")
-	close:SetPoint("TOPRIGHT", -10, -10)
-	close:SetScript("OnClick", function()
-		welcome:Hide()
-		NDuiDB["Tutorial"]["Complete"] = true
-	end)
+	if NDuiDB["Tutorial"]["Complete"] then
+		local close = B.CreateButton(welcome, 16, 16, "X")
+		close:SetPoint("TOPRIGHT", -10, -10)
+		close:SetScript("OnClick", function()
+			welcome:Hide()
+		end)
+	end
 
 	local goTutor = B.CreateButton(welcome, 100, 20, L["Tutorial"])
 	goTutor:SetPoint("BOTTOM", 0, 10)
 	goTutor:SetScript("OnClick", function()
 		welcome:Hide()
 		YesTutor()
-		NDuiDB["Tutorial"]["Complete"] = true
 	end)
 end
 SlashCmdList["NDUI"] = HelloWorld
