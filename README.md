@@ -6,8 +6,9 @@
 - It contains build-in auras watcher and toolbar for all specs and talents.
 - Locales include 简体中文, 繁體中文 and enUS.
 - Published Pages:
-  - NGA (CN): http://bbs.ngacn.cc/read.php?tid=5483616
-  - WoWInterface (EN): https://www.wowinterface.com/downloads/info24846-NDui.html
+  - NGA: https://bbs.nga.cn/read.php?tid=5483616
+  - Curse: https://www.curseforge.com/wow/addons/ndui
+  - WoWInterface: https://www.wowinterface.com/downloads/info24846-NDui.html
 
 # Main Features
 - Reskin default UI skins.
@@ -17,7 +18,7 @@
   - PartyFrame: simple spells cooldown watcher a nd buff indicator for group members.
   - RaidFrame: two mode for differ needs, configurable click cast and raid debuffs.
   - Nameplate: highlight special units, target and mouseover highlight, dispellable auras highlight, tank treat color, auras filter.
-- Chat spam filter, whisper invite, special alert when someone mentions you in guild.
+- Chat spam filter, whisper invite.
 - One-container system with filters by cargBags.
 - Classbar with spells for all classes, disabled as default (Console - Auras - Enable Personal Resource).
 - Raid Toolbar with ready check, count down, combat resurrect timer.
