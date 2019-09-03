@@ -31,21 +31,21 @@ inform:Hide()
 
 local function sortSlots(a, b)
 	if a and b then
-		return a[3] < b[3]
+		return (a[3] == b[3] and a[1] < b[1]) or (a[3] < b[3])
 	end
 end
 
 local function getItemDurability()
 	local numSlots = 0
 	for i = 1, 10 do
-		if GetInventoryItemLink("player", localSlots[i][1]) then
-			local current, max = GetInventoryItemDurability(localSlots[i][1])
+		localSlots[i][3] = 1000
+		local index = localSlots[i][1]
+		if GetInventoryItemLink("player", index) then
+			local current, max = GetInventoryItemDurability(index)
 			if current then
 				localSlots[i][3] = current/max
 				numSlots = numSlots + 1
 			end
-		else
-			localSlots[i][3] = 1000
 		end
 	end
 	sort(localSlots, sortSlots)
