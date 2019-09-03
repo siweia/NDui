@@ -85,3 +85,7 @@ You can also contact me via [GitHub](https://github.com/siweia/NDui).
 
 # Credits
 - Elv, Freebaser, Haleth, Haste, Leatrix, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
+
+# Donate
+[Patreon](https://www.patreon.com/siweia).
+[爱发电](https://afdian.net/@siweia).
