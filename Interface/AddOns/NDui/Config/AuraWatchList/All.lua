@@ -168,6 +168,7 @@ local list = {
 		{AuraID = 274373, UnitID = "player"},	-- 溃烂之力
 		{AuraID = 280170, UnitID = "player", Value = true},	-- 假死盾
 		-- 艾泽里特精华
+		{AuraID = 304056, UnitID = "player"},	-- 斗争
 		{AuraID = 298343, UnitID = "player"},	-- 清醒梦境
 		{AuraID = 295855, UnitID = "player"},	-- 艾泽拉斯守护者
 		{AuraID = 295248, UnitID = "player"},	-- 专注能量
