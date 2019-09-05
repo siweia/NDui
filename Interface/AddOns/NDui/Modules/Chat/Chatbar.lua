@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
 function module:Chatbar()
+	if not NDuiDB["Chat"]["Chatbar"] then return end
+
 	local chatFrame = SELECTED_DOCK_FRAME
 	local editBox = chatFrame.editBox
 	local width, height, padding, buttonList = 40, 8, 5, {}
