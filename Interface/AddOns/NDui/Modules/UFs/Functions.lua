@@ -15,17 +15,19 @@ oUF.colors.power.CHI = {0, 1, .59}
 oUF.colors.power.ARCANE_CHARGES = {.41, .8, .94}
 
 -- Various values
-local function retVal(self, val1, val2, val3, val4)
+local function retVal(self, val1, val2, val3, val4, val5)
 	local mystyle = self.mystyle
 	if mystyle == "player" or mystyle == "target" then
 		return val1
 	elseif mystyle == "focus" then
 		return val2
+	elseif mystyle == "boss" or mystyle == "arena" then
+		return val3
 	else
-		if mystyle == "nameplate" and val4 then
-			return val4
+		if mystyle == "nameplate" and val5 then
+			return val5
 		else
-			return val3
+			return val4
 		end
 	end
 end
@@ -89,7 +91,7 @@ function UF:CreateHealthText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints()
 
-	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, NDuiDB["Nameplate"]["NameTextSize"]), "", false, "LEFT", 3, -1)
+	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12, NDuiDB["Nameplate"]["NameTextSize"]), "", false, "LEFT", 3, -1)
 	name:SetJustifyH("LEFT")
 	if mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
@@ -128,7 +130,7 @@ function UF:CreateHealthText(self)
 		self:Tag(name, "[color][name]")
 	end
 
-	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, NDuiDB["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, -1)
+	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 13, NDuiDB["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, -1)
 	if mystyle == "raid" then
 		if NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
@@ -180,10 +182,11 @@ function UF:CreatePowerBar(self)
 	if mystyle == "PlayerPlate" then
 		power:SetHeight(NDuiDB["Nameplate"]["PPPHeight"])
 	else
-		power:SetHeight(retVal(self, 4, 3, 2, 4))
+		power:SetHeight(retVal(self, NDuiDB["UFs"]["PlayerPowerHeight"], NDuiDB["UFs"]["FocusPowerHeight"], NDuiDB["UFs"]["BossPowerHeight"], NDuiDB["UFs"]["PetPowerHeight"]))
 	end
 	power:SetWidth(self:GetWidth())
-	power:SetPoint("TOP", self, "BOTTOM", 0, -3)
+	power:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
+	power:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
 	B.CreateSD(power, 3, 3)
 	B.SmoothBar(power)
@@ -201,7 +204,6 @@ function UF:CreatePowerBar(self)
 		power.colorDisconnected = true
 		power.colorReaction = true
 	end
-	--power.frequentUpdates = true
 	power.frequentUpdates = mystyle == "player" or mystyle == "target" or mystyle == "PlayerPlate"
 
 	self.Power = power
@@ -212,7 +214,7 @@ function UF:CreatePowerText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Power)
 
-	local ppval = B.CreateFS(textFrame, retVal(self, 13, 12, 12), "", false, "RIGHT", -3, 2)
+	local ppval = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12), "", false, "RIGHT", -3, 2)
 	self:Tag(ppval, "[color][power]")
 end
 
@@ -303,7 +305,7 @@ function UF:CreateRaidMark(self)
 	else
 		ri:SetPoint("TOPRIGHT", self, "TOPRIGHT", -30, 10)
 	end
-	local size = retVal(self, 14, 13, 12, 20)
+	local size = retVal(self, 14, 13, 12, 12, 20)
 	ri:SetSize(size, size)
 	self.RaidTargetIndicator = ri
 end
@@ -347,8 +349,8 @@ function UF:CreateCastBar(self)
 	cb.CompleteColor = {.1, .8, 0}
 	cb.FailColor = {1, .1, 0}
 
-	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)
-	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 10), "", false, "LEFT", 2, 0)
+	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)
+	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, 10), "", false, "LEFT", 2, 0)
 	name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
 	name:SetJustifyH("LEFT")
 
@@ -793,7 +795,7 @@ function UF:CreateClassPower(self)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 		if i == 1 then
-			bars[i]:SetPoint("LEFT")
+			bars[i]:SetPoint("BOTTOMLEFT")
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", margin, 0)
 		end
@@ -865,8 +867,9 @@ end
 function UF:CreateAltPower(self)
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetStatusBarTexture(DB.normTex)
-	bar:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
-	bar:SetSize(self:GetWidth(), 2)
+	bar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -3)
+	bar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
+	bar:SetHeight(2)
 	B.CreateBD(bar, .5)
 	B.CreateSD(bar)
 
