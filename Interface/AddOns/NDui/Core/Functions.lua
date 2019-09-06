@@ -611,7 +611,7 @@ function B:CreateEditBox(width, height)
 	eb:SetSize(width, height)
 	eb:SetAutoFocus(false)
 	eb:SetTextInsets(5, 5, 0, 0)
-	eb:SetFontObject(GameFontHighlight)
+	eb:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
 	B.CreateBD(eb, .3)
 	if F then F.CreateGradient(eb) end
 	eb:SetScript("OnEscapePressed", function()
@@ -708,4 +708,47 @@ function B:CreateColorSwatch()
 	swatch.tex = tex
 
 	return swatch
+end
+
+local function updateSliderEditBox(self)
+	local slider = self.__owner
+	local minValue, maxValue = slider:GetMinMaxValues()
+	local text = tonumber(self:GetText())
+	if not text then return end
+	text = min(maxValue, text)
+	text = max(minValue, text)
+	slider:SetValue(text)
+	self:SetText(text)
+	self:ClearFocus()
+end
+
+function B:CreateSlider(name, minValue, maxValue, x, y, width)
+	local slider = CreateFrame("Slider", nil, self, "OptionsSliderTemplate")
+	slider:SetPoint("TOPLEFT", x, y)
+	slider:SetWidth(width or 200)
+	slider:SetMinMaxValues(minValue, maxValue)
+	slider:SetHitRectInsets(0, 0, 0, 0)
+
+	slider.Low:SetText(minValue)
+	slider.Low:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", 10, -2)
+	slider.High:SetText(maxValue)
+	slider.High:SetPoint("TOPRIGHT", slider, "BOTTOMRIGHT", -10, -2)
+	slider.Text:ClearAllPoints()
+	slider.Text:SetPoint("CENTER", 0, 25)
+	slider.Text:SetText(name)
+	slider.Text:SetTextColor(1, .8, 0)
+	slider:SetBackdrop(nil)
+	slider.Thumb:SetTexture(DB.sparkTex)
+	slider.Thumb:SetBlendMode("ADD")
+	local bg = B.CreateBG(slider)
+	bg:SetPoint("TOPLEFT", 14, -2)
+	bg:SetPoint("BOTTOMRIGHT", -15, 3)
+	B.CreateBD(bg, .3)
+	slider.value = B.CreateEditBox(slider, 50, 20)
+	slider.value:SetPoint("TOP", slider, "BOTTOM")
+	slider.value:SetJustifyH("CENTER")
+	slider.value.__owner = slider
+	slider.value:SetScript("OnEnterPressed", updateSliderEditBox)
+
+	return slider
 end
