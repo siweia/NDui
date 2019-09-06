@@ -645,7 +645,7 @@ function G:SetupUnitFrame(parent)
 	toggleExtraGUI("NDuiGUI_UnitFrameSetup")
 	if unitframeGUI then return end
 
-	unitframeGUI = createExtraGUI(parent, "NDuiGUI_UnitFrameSetup", L["UnitFrame Size"])
+	unitframeGUI = createExtraGUI(parent, "NDuiGUI_UnitFrameSetup", L["UnitFrame Size"].."*")
 
 	local scroll = G:CreateScroll(unitframeGUI, 260, 540)
 
