@@ -738,6 +738,19 @@ function UF:PlateVisibility(event)
 	end
 end
 
+function UF:ResizePlayerPlate()
+	local plate = _G.oUF_PlayerPlate
+	if plate then
+		plate:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
+		plate.Power:SetHeight(NDuiDB["Nameplate"]["PPPHeight"])
+		if plate.ClassPower then
+			for i = 1, 6 do
+				plate.ClassPower[i]:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
+			end
+		end
+	end
+end
+
 function UF:CreatePlayerPlate()
 	self.mystyle = "PlayerPlate"
 	local iconSize, margin = NDuiDB["Nameplate"]["PPIconSize"], 2
