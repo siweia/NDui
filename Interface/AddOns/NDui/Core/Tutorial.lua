@@ -72,10 +72,8 @@ local function SetupUIScale()
 end
 
 local function ForceChatSettings()
-	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
-	ChatFrame1:SetWidth(380)
-	ChatFrame1:SetHeight(190)
+	B:GetModule("Chat"):UpdateChatSize()
+
 	for i = 1, NUM_CHAT_WINDOWS do
 		local cf = _G["ChatFrame"..i]
 		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
@@ -450,5 +448,4 @@ function module:OnLogin()
 	-- Tutorial and settings
 	ForceAddonSkins()
 	if not NDuiDB["Tutorial"]["Complete"] then HelloWorld() end
-	if NDuiDB["Chat"]["Lock"] then ForceChatSettings() end
 end

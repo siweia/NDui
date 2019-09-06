@@ -20,7 +20,7 @@ function S:OnLogin()
 	end
 
 	-- BOTTOMLEFT
-	if NDuiDB["Skins"]["ChatLine"] then
+	if NDuiDB["Skins"]["ChatLine"] and NDuiDB["Chat"]["Lock"] then
 		local Linfobar = CreateFrame("Frame", nil, UIParent)
 		Linfobar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 3)
 		B.CreateGF(Linfobar, 450, ChatFrame1:GetHeight() + 30, "Horizontal", 0, 0, 0, .5, 0)
@@ -33,11 +33,7 @@ function S:OnLogin()
 		local Linfobar3 = CreateFrame("Frame", nil, Linfobar)
 		Linfobar3:SetPoint("TOP", Linfobar, "BOTTOM")
 		B.CreateGF(Linfobar3, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
-		ChatFrame1Tab:HookScript("OnMouseUp", function(_, btn)
-			if btn == "LeftButton" then
-				Linfobar:SetHeight(ChatFrame1:GetHeight() + 30)
-			end
-		end)
+		ChatFrame1.gradientBG = Linfobar
 	end
 
 	-- BOTTOMRIGHT

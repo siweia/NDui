@@ -18,6 +18,17 @@ function module:TabSetAlpha(alpha)
 	end
 end
 
+function module:UpdateChatSize()
+	ChatFrame1:ClearAllPoints()
+	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
+	ChatFrame1:SetWidth(NDuiDB["Chat"]["ChatWidth"])
+	ChatFrame1:SetHeight(NDuiDB["Chat"]["ChatHeight"])
+	local bg = ChatFrame1.gradientBG
+	if bg then
+		bg:SetHeight(NDuiDB["Chat"]["ChatHeight"] + 30)
+	end
+end
+
 function module:SkinChat()
 	if not self or (self and self.styled) then return end
 
@@ -224,23 +235,6 @@ function module:UpdateTabColors(selected)
 	end
 end
 
--- Easy Resizing chatframe by dragging tab1
-function module:ResizeChatFrame()
-	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
-		if btn == "LeftButton" then
-			if select(8, GetChatWindowInfo(1)) then
-				ChatFrame1:StartSizing("TOP")
-			end
-		end
-	end)
-	ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
-		if btn == "LeftButton" then
-			ChatFrame1:StopMovingOrSizing()
-			FCF_SavePositionAndDimensions(ChatFrame1)
-		end
-	end)
-end
-
 function module:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
 		self.SkinChat(_G["ChatFrame"..i])
@@ -281,7 +275,12 @@ function module:OnLogin()
 	self:ChatCopy()
 	self:UrlCopy()
 	self:WhipserInvite()
-	self:ResizeChatFrame()
+
+	-- Lock chatframe
+	if NDuiDB["Chat"]["Lock"] then
+		self:UpdateChatSize()
+		hooksecurefunc("FCF_SavePositionAndDimensions", self.UpdateChatSize)
+	end
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
