@@ -1100,7 +1100,9 @@ local function importData()
 			NDuiDB[key][value] = {}
 		elseif arg1 == "r" or arg1 == "g" or arg1 == "b" then
 			local color = select(4, strsplit(":", option))
-			NDuiDB[key][value][arg1] = tonumber(color)
+			if NDuiDB[key][value] then
+				NDuiDB[key][value][arg1] = tonumber(color)
+			end
 		elseif key == "AuraWatchList" then
 			if value == "Switcher" then
 				local index, state = select(3, strsplit(":", option))
