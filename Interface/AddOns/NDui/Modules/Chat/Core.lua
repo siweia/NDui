@@ -279,8 +279,10 @@ function module:OnLogin()
 	self:WhipserInvite()
 
 	-- Lock chatframe
-	self:UpdateChatSize()
-	hooksecurefunc("FCF_SavePositionAndDimensions", self.UpdateChatSize)
+	if NDuiDB["Chat"]["Lock"] then
+		self:UpdateChatSize()
+		hooksecurefunc("FCF_SavePositionAndDimensions", self.UpdateChatSize)
+	end
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
