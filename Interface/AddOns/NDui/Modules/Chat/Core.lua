@@ -19,6 +19,8 @@ function module:TabSetAlpha(alpha)
 end
 
 function module:UpdateChatSize()
+	if not NDuiDB["Chat"]["Lock"] then return end
+
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
 	ChatFrame1:SetWidth(NDuiDB["Chat"]["ChatWidth"])
@@ -277,10 +279,8 @@ function module:OnLogin()
 	self:WhipserInvite()
 
 	-- Lock chatframe
-	if NDuiDB["Chat"]["Lock"] then
-		self:UpdateChatSize()
-		hooksecurefunc("FCF_SavePositionAndDimensions", self.UpdateChatSize)
-	end
+	self:UpdateChatSize()
+	hooksecurefunc("FCF_SavePositionAndDimensions", self.UpdateChatSize)
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
