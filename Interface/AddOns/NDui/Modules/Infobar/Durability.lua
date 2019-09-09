@@ -10,6 +10,7 @@ local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture 
 local GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
 local GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney
 local C_Timer_After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair = C_Timer.After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair
+local repairCostString = gsub(REPAIR_COST, HEADER_COLON, ":")
 
 local localSlots = {
 	[1] = {1, INVTYPE_HEAD, 1000},
@@ -69,6 +70,9 @@ local function gradientColor(perc)
 	return format("|cff%02x%02x%02x", r*255, g*255, b*255), r, g, b
 end
 
+local tip = CreateFrame("GameTooltip", "NDuiDurabilityTooltip")
+tip:SetOwner(UIParent, "ANCHOR_NONE")
+
 info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD",
 }
@@ -126,13 +130,22 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(DURABILITY, format("%s: %d/%d", STAT_AVERAGE_ITEM_LEVEL, equipped, total), 0,.6,1, 0,.6,1)
 	GameTooltip:AddLine(" ")
 
+	local totalCost = 0
 	for i = 1, 10 do
 		if localSlots[i][3] ~= 1000 then
+			local slot = localSlots[i][1]
 			local green = localSlots[i][3]*2
 			local red = 1 - green
-			local slotIcon = "|T"..GetInventoryItemTexture("player", localSlots[i][1])..":13:15:0:0:50:50:4:46:4:46|t " or ""
+			local slotIcon = "|T"..GetInventoryItemTexture("player", slot)..":13:15:0:0:50:50:4:46:4:46|t " or ""
 			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], floor(localSlots[i][3]*100).."%", 1,1,1, red+1,green,0)
+
+			totalCost = totalCost + select(3, tip:SetInventoryItem("player", slot))
 		end
+	end
+
+	if totalCost > 0 then
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine(repairCostString, module:GetMoneyString(totalCost), .6,.8,1, 1,1,1)
 	end
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
