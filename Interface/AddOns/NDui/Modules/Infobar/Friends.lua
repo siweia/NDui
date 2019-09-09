@@ -24,6 +24,8 @@ local menuList, buttons, friendTable, bnetTable = {}, {}, {}, {}
 local activeZone, inactiveZone = "|cff4cff4c", DB.GreyColor
 local noteString = "|T"..DB.copyTex..":12|t %s"
 local broadcastString = "|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)"
+local onlineString = gsub(ERR_FRIEND_ONLINE_SS, ".+h", "")
+local offlineString = gsub(ERR_FRIEND_OFFLINE_S, "%%s", "")
 
 local function sortFriends(a, b)
 	if a[1] and b[1] then
@@ -385,7 +387,7 @@ info.eventList = {
 
 info.onEvent = function(self, event, arg1)
 	if event == "CHAT_MSG_SYSTEM" then
-		if not strfind(arg1, ERR_FRIEND_ONLINE_SS) and not strfind(arg1, ERR_FRIEND_OFFLINE_S) then return end
+		if not strfind(arg1, onlineString) and not strfind(arg1, offlineString) then return end
 	end
 
 	local onlineFriends = C_FriendList_GetNumOnlineFriends()
