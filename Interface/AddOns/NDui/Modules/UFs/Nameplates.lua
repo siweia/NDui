@@ -690,6 +690,7 @@ function UF:RefreshAllPlates()
 		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
 		nameplate.nameText:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
+		nameplate.healthValue:UpdateTag()
 		nameplate.Auras.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 		UF:UpdateClickableSize()
 		UF:UpdateTargetIndicator(nameplate)

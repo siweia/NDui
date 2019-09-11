@@ -601,7 +601,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
 		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*"},
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", true, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
-		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*"},
+		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*", nil, nil, refreshNameplates},
 		{1, "Nameplate", "ColorBorder", L["ColorBorder"].."*", true, nil, refreshNameplates},
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, updatePlateInsideView},
 		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
