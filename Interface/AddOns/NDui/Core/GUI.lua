@@ -365,14 +365,6 @@ local function setupUnitFrame()
 	G:SetupUnitFrame(guiPage[3])
 end
 
-local function updatePartySize()
-	B:GetModule("UnitFrames"):ResizePartyFrame()
-end
-
-local function updateRaidSize()
-	B:GetModule("UnitFrames"):ResizeRaidFrame()
-end
-
 local function setupAuraWatch()
 	f:Hide()
 	SlashCmdList["NDUI_AWCONFIG"]()
@@ -380,6 +372,10 @@ end
 
 local function updateBagSortOrder()
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
+end
+
+local function updateReminder()
+	B:GetModule("Auras"):InitReminder()
 end
 
 local function updateChatSticky()
@@ -436,6 +432,14 @@ end
 
 local function updateRaidNameText()
 	B:GetModule("UnitFrames"):UpdateRaidNameText()
+end
+
+local function updatePartySize()
+	B:GetModule("UnitFrames"):ResizePartyFrame()
+end
+
+local function updateRaidSize()
+	B:GetModule("UnitFrames"):ResizeRaidFrame()
 end
 
 local function updatePlayerPlate()
@@ -655,7 +659,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Auras", "Statue", L["Enable Statue"]},
 		{1, "Auras", "Totems", L["Enable Totems"], true},
-		{1, "Auras", "Reminder", L["Enable Reminder"]},
+		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder},
 	},
 	[7] = {
 		{1, "Skins", "RM", "|cff00cc4c"..L["Raid Manger"]},
@@ -840,11 +844,11 @@ local function NDUI_VARIABLE(key, value, newValue)
 	end
 end
 
-local function editBoxOnEnter(self)
+local function optionOnEnter(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(L["Tips"])
-	GameTooltip:AddLine(L["EdieBox Tip"], .6,.8,1)
+	GameTooltip:AddLine(self.tips, .6,.8,1, 1)
 	GameTooltip:Show()
 end
 
@@ -852,7 +856,7 @@ local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
 	for _, option in pairs(optionList[i]) do
-		local optType, key, value, name, horizon, data, callback = unpack(option)
+		local optType, key, value, name, horizon, data, callback, tooltip = unpack(option)
 		-- Checkboxes
 		if optType == 1 then
 			local cb = B.CreateCheckBox(parent)
@@ -874,6 +878,11 @@ local function CreateOption(i)
 				bu:SetPoint("LEFT", cb.name, "RIGHT", -2, 1)
 				bu:SetScript("OnClick", data)
 			end
+			if tooltip then
+				cb.tips = tooltip
+				cb:HookScript("OnEnter", optionOnEnter)
+				cb:HookScript("OnLeave", B.HideTooltip)
+			end
 		-- Editbox
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)
@@ -892,7 +901,8 @@ local function CreateOption(i)
 				NDUI_VARIABLE(key, value, eb:GetText())
 				if callback then callback() end
 			end)
-			eb:SetScript("OnEnter", editBoxOnEnter)
+			eb.tips = L["EdieBox Tip"]
+			eb:SetScript("OnEnter", optionOnEnter)
 			eb:SetScript("OnLeave", B.HideTooltip)
 
 			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
