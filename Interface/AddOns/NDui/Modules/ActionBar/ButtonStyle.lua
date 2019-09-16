@@ -129,10 +129,12 @@ local function SetupBackdrop(button)
 	end
 end
 
+local keyButton = gsub(KEY_BUTTON4, "%d", "")
+local keyNumpad = gsub(KEY_NUMPAD1, "%d", "")
+
 local replaces = {
-	{"(Mouse Button )", "M"},
-	{"(鼠标按键)", "M"},
-	{"(滑鼠按鍵)", "M"},
+	{"("..keyButton..")", "M"},
+	{"("..keyNumpad..")", "N"},
 	{"(a%-)", "a"},
 	{"(c%-)", "c"},
 	{"(s%-)", "s"},

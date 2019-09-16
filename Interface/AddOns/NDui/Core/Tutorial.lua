@@ -29,7 +29,7 @@ local function ForceDefaultSettings()
 	SetCVar("ffxGlow", 0)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
-	SetCVar("WorldTextScale", 1.5)
+	SetCVar("WorldTextScale", 1)
 end
 
 local function ForceRaidFrame()
@@ -72,10 +72,8 @@ local function SetupUIScale()
 end
 
 local function ForceChatSettings()
-	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
-	ChatFrame1:SetWidth(380)
-	ChatFrame1:SetHeight(190)
+	B:GetModule("Chat"):UpdateChatSize()
+
 	for i = 1, NUM_CHAT_WINDOWS do
 		local cf = _G["ChatFrame"..i]
 		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
@@ -367,6 +365,7 @@ local function YesTutor()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Tutorial Complete"])
 			pass:Hide()
 		elseif currentPage == 5 then
+			NDuiDB["Tutorial"]["Complete"] = true
 			tutor:Hide()
 			StaticPopup_Show("RELOAD_NDUI")
 			currentPage = 0
@@ -419,19 +418,19 @@ local function HelloWorld()
 	B.CreateFS(welcome, 12, L["Help Info10"], false, "TOPLEFT", 20, -310)
 	B.CreateFS(welcome, 12, L["Help Info11"], false, "TOPLEFT", 20, -330)
 
-	local close = B.CreateButton(welcome, 16, 16, "X")
-	close:SetPoint("TOPRIGHT", -10, -10)
-	close:SetScript("OnClick", function()
-		welcome:Hide()
-		NDuiDB["Tutorial"]["Complete"] = true
-	end)
+	if NDuiDB["Tutorial"]["Complete"] then
+		local close = B.CreateButton(welcome, 16, 16, "X")
+		close:SetPoint("TOPRIGHT", -10, -10)
+		close:SetScript("OnClick", function()
+			welcome:Hide()
+		end)
+	end
 
 	local goTutor = B.CreateButton(welcome, 100, 20, L["Tutorial"])
 	goTutor:SetPoint("BOTTOM", 0, 10)
 	goTutor:SetScript("OnClick", function()
 		welcome:Hide()
 		YesTutor()
-		NDuiDB["Tutorial"]["Complete"] = true
 	end)
 end
 SlashCmdList["NDUI"] = HelloWorld
@@ -449,5 +448,4 @@ function module:OnLogin()
 	-- Tutorial and settings
 	ForceAddonSkins()
 	if not NDuiDB["Tutorial"]["Complete"] then HelloWorld() end
-	if NDuiDB["Chat"]["Lock"] then ForceChatSettings() end
 end

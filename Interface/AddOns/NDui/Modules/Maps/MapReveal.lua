@@ -140,8 +140,6 @@ local strsplit, ceil, mod = string.split, math.ceil, mod
 local pairs, tonumber, tinsert = pairs, tonumber, table.insert
 
 local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
-	if InCombatLockdown() then return end -- need reviewed
-
 	wipe(overlayTextures)
 	wipe(TileExists)
 
@@ -214,6 +212,8 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 					else
 						texture:Hide()
 					end
+					texture:SetVertexColor(.6, .6, .6)
+
 					tinsert(overlayTextures, texture)
 				end
 			end
@@ -221,7 +221,16 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 	end
 end
 
+-- Reset texture color and alpha
+local function TexturePool_ResetVertexColor(pool, texture)
+	texture:SetVertexColor(1, 1, 1)
+	texture:SetAlpha(1)
+	return TexturePool_HideAndClearAnchors(pool, texture)
+end
+
 function module:MapReveal()
+	if IsAddOnLoaded("Leatrix_Maps") then return end
+
 	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
 	bu:SetPoint("TOPRIGHT", -270, 0)
 	bu:SetSize(26, 26)
@@ -231,6 +240,7 @@ function module:MapReveal()
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate("MapExplorationPinTemplate") do
 		hooksecurefunc(pin, "RefreshOverlays", MapExplorationPin_RefreshOverlays)
+		pin.overlayTexturePool.resetterFunc = TexturePool_ResetVertexColor
 	end
 
 	bu:SetScript("OnClick", function(self)

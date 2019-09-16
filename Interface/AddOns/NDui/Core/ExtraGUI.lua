@@ -18,7 +18,7 @@ local extraGUIs = {}
 local function createExtraGUI(parent, name, title, bgFrame)
 	local frame = CreateFrame("Frame", name, parent)
 	frame:SetSize(300, 600)
-	frame:SetPoint("TOPLEFT", parent:GetParent(), "TOPRIGHT", 2, 0)
+	frame:SetPoint("TOPLEFT", parent:GetParent(), "TOPRIGHT", 3, 0)
 	B.SetBackground(frame)
 	parent:HookScript("OnHide", function()
 		if frame:IsShown() then frame:Hide() end
@@ -55,7 +55,7 @@ local function clearEdit(options)
 	end
 end
 
-local raidDebuffsGUI, clickCastGUI, buffIndicatorGUI, plateGUI
+local raidDebuffsGUI, clickCastGUI, buffIndicatorGUI, plateGUI, unitframeGUI
 
 local function updateRaidDebuffs()
 	B:GetModule("UnitFrames"):UpdateRaidDebuffs()
@@ -639,4 +639,90 @@ function G:SetupBuffIndicator(parent)
 			end
 		end
 	end
+end
+
+function G:SetupUnitFrame(parent)
+	toggleExtraGUI("NDuiGUI_UnitFrameSetup")
+	if unitframeGUI then return end
+
+	unitframeGUI = createExtraGUI(parent, "NDuiGUI_UnitFrameSetup", L["UnitFrame Size"].."*")
+
+	local scroll = G:CreateScroll(unitframeGUI, 260, 540)
+
+	local function sliderValueChanged(self, v)
+		local current = tonumber(format("%.0f", v))
+		self.value:SetText(current)
+		NDuiDB["UFs"][self.__value] = current
+		self.__update()
+	end
+
+	local function createSlider(parent, title, minV, maxV, x, y, value, func)
+		local slider = B.CreateSlider(parent, title, minV, maxV, x, y)
+		slider:SetValue(NDuiDB["UFs"][value])
+		slider.value:SetText(NDuiDB["UFs"][value])
+		slider.__value = value
+		slider.__update = func
+		slider:SetScript("OnValueChanged", sliderValueChanged)
+	end
+
+	local sliderRange = {
+		["Player"] = {200, 300},
+		["Focus"] = {150, 250},
+		["Pet"] = {100, 200},
+		["Boss"] = {100, 250},
+	}
+
+	local defaultValue = {
+		["Player"] = {245, 24, 4},
+		["Focus"] = {200, 22, 3},
+		["Pet"] = {120, 18, 2},
+		["Boss"] = {150, 22, 2},
+	}
+
+	local function createOptionGroup(parent, title, offset, value, func, default)
+		B.CreateFS(parent, 14, title, nil, "TOP", 0, offset)
+		local l = CreateFrame("Frame", nil, parent)
+		l:SetPoint("TOPLEFT", 30, offset-20)
+		B.CreateGF(l, 200, C.mult, "Horizontal", 1, 1, 1, .25, .25)
+		createSlider(parent, L["Health Width"].."("..defaultValue[value][1]..")", sliderRange[value][1], sliderRange[value][2], 30, offset-60, value.."Width", func)
+		createSlider(parent, L["Health Height"].."("..defaultValue[value][2]..")", 15, 50, 30, offset-130, value.."Height", func)
+		createSlider(parent, L["Power Height"].."("..defaultValue[value][3]..")", 2, 30, 30, offset-200, value.."PowerHeight", func)
+	end
+
+	local function updatePlayerSize()
+		local frames = {_G.oUF_Player, _G.oUF_Target}
+		for _, frame in pairs(frames) do
+			frame:SetSize(NDuiDB["UFs"]["PlayerWidth"], NDuiDB["UFs"]["PlayerHeight"])
+			frame.Power:SetHeight(NDuiDB["UFs"]["PlayerPowerHeight"])
+		end
+	end
+	createOptionGroup(scroll.child, L["Player&Target"], -10, "Player", updatePlayerSize)
+
+	local function updateFocusSize()
+		local frame = _G.oUF_Focus
+		if frame then
+			frame:SetSize(NDuiDB["UFs"]["FocusWidth"], NDuiDB["UFs"]["FocusHeight"])
+			frame.Power:SetHeight(NDuiDB["UFs"]["FocusPowerHeight"])
+		end
+	end
+	createOptionGroup(scroll.child, L["FocusUF"], -270, "Focus", updateFocusSize)
+
+	local function updatePetSize()
+		local frames = {_G.oUF_Pet, _G.oUF_ToT, _G.oUF_FocusTarget}
+		for _, frame in pairs(frames) do
+			frame:SetSize(NDuiDB["UFs"]["PetWidth"], NDuiDB["UFs"]["PetHeight"])
+			frame.Power:SetHeight(NDuiDB["UFs"]["PetPowerHeight"])
+		end
+	end
+	createOptionGroup(scroll.child, L["Pet&*Target"], -530, "Pet", updatePetSize)
+
+	local function updateBossSize()
+		for _, frame in next, oUF.objects do
+			if frame.mystyle == "boss" or frame.mystyle == "arena" then
+				frame:SetSize(NDuiDB["UFs"]["BossWidth"], NDuiDB["UFs"]["BossHeight"])
+				frame.Power:SetHeight(NDuiDB["UFs"]["BossPowerHeight"])
+			end
+		end
+	end
+	createOptionGroup(scroll.child, L["Boss&Arena"], -790, "Boss", updateBossSize)
 end

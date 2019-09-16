@@ -114,7 +114,7 @@ local function NoTalkingHeads()
 	end)
 end
 
-local function TalkingHeadOnLoad(_, addon)
+local function TalkingHeadOnLoad(event, addon)
 	if addon == "Blizzard_TalkingHeadUI" then
 		MoveTalkingHead()
 		NoTalkingHeads()

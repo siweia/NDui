@@ -78,17 +78,33 @@ end
 
 function A:InitReminder()
 	if not groups then return end
-	if not NDuiDB["Auras"]["Reminder"] then return end
 
-	parentFrame = CreateFrame("Frame", nil, UIParent)
-	parentFrame:SetPoint("CENTER", -220, 130)
-	parentFrame:SetSize(iconSize, iconSize)
+	if NDuiDB["Auras"]["Reminder"] then
+		if not parentFrame then
+			parentFrame = CreateFrame("Frame", nil, UIParent)
+			parentFrame:SetPoint("CENTER", -220, 130)
+			parentFrame:SetSize(iconSize, iconSize)
+		end
+		parentFrame:Show()
 
-	B:RegisterEvent("UNIT_AURA", A.Reminder_OnEvent, "player")
-	B:RegisterEvent("UNIT_EXITED_VEHICLE", A.Reminder_OnEvent)
-	B:RegisterEvent("UNIT_ENTERED_VEHICLE", A.Reminder_OnEvent)
-	B:RegisterEvent("PLAYER_REGEN_ENABLED", A.Reminder_OnEvent)
-	B:RegisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
-	B:RegisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
+		A:Reminder_OnEvent()
+		B:RegisterEvent("UNIT_AURA", A.Reminder_OnEvent, "player")
+		B:RegisterEvent("UNIT_EXITED_VEHICLE", A.Reminder_OnEvent)
+		B:RegisterEvent("UNIT_ENTERED_VEHICLE", A.Reminder_OnEvent)
+		B:RegisterEvent("PLAYER_REGEN_ENABLED", A.Reminder_OnEvent)
+		B:RegisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
+		B:RegisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
+	else
+		if parentFrame then
+			parentFrame:Hide()
+			B:UnregisterEvent("UNIT_AURA", A.Reminder_OnEvent)
+			B:UnregisterEvent("UNIT_EXITED_VEHICLE", A.Reminder_OnEvent)
+			B:UnregisterEvent("UNIT_ENTERED_VEHICLE", A.Reminder_OnEvent)
+			B:UnregisterEvent("PLAYER_REGEN_ENABLED", A.Reminder_OnEvent)
+			B:UnregisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
+			B:UnregisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
+			B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
+		end
+	end
 end

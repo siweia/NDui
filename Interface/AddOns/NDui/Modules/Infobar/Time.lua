@@ -18,7 +18,7 @@ local C_IslandsQueue_GetIslandsWeeklyQuestID = C_IslandsQueue.GetIslandsWeeklyQu
 local TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR = TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR
 local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES
 local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
-local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING
+local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE
 local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
 local GetNumSavedInstances, GetSavedInstanceInfo, IsQuestFlaggedCompleted, GetQuestObjectiveInfo = GetNumSavedInstances, GetSavedInstanceInfo, IsQuestFlaggedCompleted, GetQuestObjectiveInfo
@@ -93,17 +93,16 @@ local questlist = {
 	{name = L["Timewarped"], id = 40168, texture = 1129674},	-- TBC
 	{name = L["Timewarped"], id = 40173, texture = 1129686},	-- WotLK
 	{name = L["Timewarped"], id = 40786, texture = 1304688},	-- Cata
-	{name = L["Timewarped"], id = 45799, texture = 1530590},	-- MoP
+	{name = L["Timewarped"], id = 45563, texture = 1530590},	-- MoP
 	{name = L["Timewarped"], id = 55499, texture = 1129683},	-- WoD
 }
 
 -- Check Invasion Status
 local region = GetCVar("portal")
 local legionZoneTime = {
-	--["CN"] = 1546844400, -- CN time 1/7/2019 15:00 [1]
-	["EU"] = 1546786800, -- CN-16
-	["US"] = 1546815600, -- CN-8
-	["CN"] = 1562895000, -- CN time 7/12/2019 09:30 [1]
+	["EU"] = 1565168400, -- CN-16
+	["US"] = 1565197200, -- CN-8
+	["CN"] = 1565226000, -- CN time 8/8/2019 09:00 [1]
 }
 local bfaZoneTime = {
 	["CN"] = 1546743600, -- CN time 1/6/2019 11:00 [1]
@@ -111,9 +110,24 @@ local bfaZoneTime = {
 	["US"] = 1546769340, -- CN+16
 }
 
+local legionTime = { -- took me 12 rounds
+	4,2,3,1,
+	2,4,1,3,
+	4,3,1,2,
+	1,2,4,3,
+	4,3,1,2,
+	3,2,1,4,
+	1,4,3,2,
+	3,4,2,1,
+	4,1,3,2,
+	2,3,4,1,
+	4,3,1,2,
+	1,2,4,3,
+}
+
 local invIndex = {
-	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = legionZoneTime[region] or 1546844400}, -- 1/7/2019 15:00 [1]
-	[2] = {title = L["BfA Invasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or 1546743600},
+	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {}, baseTime = legionZoneTime[region] or legionZoneTime["CN"]}, -- need reviewed
+	[2] = {title = L["BfA Invasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or bfaZoneTime["CN"]},
 }
 
 local mapAreaPoiIDs = {
@@ -155,6 +169,8 @@ end
 local function GetNextLocation(nextTime, index)
 	local inv = invIndex[index]
 	local count = #inv.timeTable
+	if count == 0 then return QUEUE_TIME_UNAVAILABLE end
+
 	local elapsed = nextTime - inv.baseTime
 	local round = mod(floor(elapsed / inv.duration) + 1, count)
 	if round == 0 then round = count end
@@ -264,8 +280,7 @@ info.onEnter = function(self)
 			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 			GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 		end
-		local nextLocation = UNKNOWN
-		if index == 2 then nextLocation = GetNextLocation(nextTime, index) end
+		local nextLocation = GetNextLocation(nextTime, index)
 		GameTooltip:AddDoubleLine(L["Next Invasion"]..nextLocation, date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
 	end
 

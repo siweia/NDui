@@ -7,9 +7,10 @@ local info = module:RegisterInfobar("Durability", C.Infobar.DurabilityPos)
 
 local format, gsub, sort, floor, modf, select = string.format, string.gsub, table.sort, math.floor, math.modf, select
 local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture = GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture
-local GetMoneyString, GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoneyString, GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
+local GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
 local GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney
 local C_Timer_After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair = C_Timer.After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair
+local repairCostString = gsub(REPAIR_COST, HEADER_COLON, ":")
 
 local localSlots = {
 	[1] = {1, INVTYPE_HEAD, 1000},
@@ -31,21 +32,21 @@ inform:Hide()
 
 local function sortSlots(a, b)
 	if a and b then
-		return a[3] < b[3]
+		return (a[3] == b[3] and a[1] < b[1]) or (a[3] < b[3])
 	end
 end
 
 local function getItemDurability()
 	local numSlots = 0
 	for i = 1, 10 do
-		if GetInventoryItemLink("player", localSlots[i][1]) then
-			local current, max = GetInventoryItemDurability(localSlots[i][1])
+		localSlots[i][3] = 1000
+		local index = localSlots[i][1]
+		if GetInventoryItemLink("player", index) then
+			local current, max = GetInventoryItemDurability(index)
 			if current then
 				localSlots[i][3] = current/max
 				numSlots = numSlots + 1
 			end
-		else
-			localSlots[i][3] = 1000
 		end
 	end
 	sort(localSlots, sortSlots)
@@ -68,6 +69,9 @@ local function gradientColor(perc)
 	local r, g, b = r1+(r2-r1)*relperc, g1+(g2-g1)*relperc, b1+(b2-b1)*relperc
 	return format("|cff%02x%02x%02x", r*255, g*255, b*255), r, g, b
 end
+
+local tip = CreateFrame("GameTooltip", "NDuiDurabilityTooltip")
+tip:SetOwner(UIParent, "ANCHOR_NONE")
 
 info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD",
@@ -126,13 +130,22 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(DURABILITY, format("%s: %d/%d", STAT_AVERAGE_ITEM_LEVEL, equipped, total), 0,.6,1, 0,.6,1)
 	GameTooltip:AddLine(" ")
 
+	local totalCost = 0
 	for i = 1, 10 do
 		if localSlots[i][3] ~= 1000 then
+			local slot = localSlots[i][1]
 			local green = localSlots[i][3]*2
 			local red = 1 - green
-			local slotIcon = "|T"..GetInventoryItemTexture("player", localSlots[i][1])..":13:15:0:0:50:50:4:46:4:46|t " or ""
+			local slotIcon = "|T"..GetInventoryItemTexture("player", slot)..":13:15:0:0:50:50:4:46:4:46|t " or ""
 			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], floor(localSlots[i][3]*100).."%", 1,1,1, red+1,green,0)
+
+			totalCost = totalCost + select(3, tip:SetInventoryItem("player", slot))
 		end
+	end
+
+	if totalCost > 0 then
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine(repairCostString, module:GetMoneyString(totalCost), .6,.8,1, 1,1,1)
 	end
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
@@ -150,7 +163,7 @@ local function delayFunc()
 	if isBankEmpty then
 		autoRepair(true)
 	else
-		print(format(DB.InfoColor.."%s:|r %s", L["Guild repair"], GetMoneyString(repairAllCost)))
+		print(format(DB.InfoColor.."%s|r%s", L["Guild repair"], module:GetMoneyString(repairAllCost)))
 	end
 end
 
@@ -168,7 +181,7 @@ function autoRepair(override)
 		else
 			if myMoney > repairAllCost then
 				RepairAllItems()
-				print(format(DB.InfoColor.."%s:|r %s", L["Repair cost"], GetMoneyString(repairAllCost)))
+				print(format(DB.InfoColor.."%s|r%s", L["Repair cost"], module:GetMoneyString(repairAllCost)))
 				return
 			else
 				print(DB.InfoColor..L["Repair error"])

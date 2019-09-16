@@ -50,7 +50,7 @@ end
 
 function UF:SetupCVars()
 	UF:PlateInsideView()
-	SetCVar("nameplateOverlapH", .5)
+	SetCVar("nameplateOverlapH", .8)
 	UF:UpdatePlateSpacing()
 	UF:UpdatePlateRange()
 	UF:UpdatePlateAlpha()
@@ -690,6 +690,7 @@ function UF:RefreshAllPlates()
 		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
 		nameplate.nameText:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
+		nameplate.healthValue:UpdateTag()
 		nameplate.Auras.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 		UF:UpdateClickableSize()
 		UF:UpdateTargetIndicator(nameplate)
@@ -735,6 +736,23 @@ function UF:PlateVisibility(event)
 		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), .1)
 		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), .1)
 		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), .1)
+	end
+end
+
+function UF:ResizePlayerPlate()
+	local plate = _G.oUF_PlayerPlate
+	if plate then
+		plate:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
+		plate.Power:SetHeight(NDuiDB["Nameplate"]["PPPHeight"])
+		local bars = plate.ClassPower or plate.Runes
+		if bars then
+			for i = 1, 6 do
+				bars[i]:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
+			end
+		end
+		if plate.Stagger then
+			plate.Stagger:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
+		end
 	end
 end
 

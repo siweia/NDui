@@ -3,7 +3,7 @@ local B, C, L, DB, F = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
-local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
+local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, abs, floor = math.min, math.max, math.abs, math.floor
 
 -- Gradient Frame
@@ -489,33 +489,95 @@ end
 
 -- Itemlevel
 local iLvlDB = {}
-local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
+local itemLevelString = gsub(ITEM_LEVEL, "%%d", "")
+local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
+local essenceTextureID = 2975691
 local tip = CreateFrame("GameTooltip", "NDui_iLvlTooltip", nil, "GameTooltipTemplate")
 
-function B.GetItemLevel(link, arg1, arg2)
-	if iLvlDB[link] then return iLvlDB[link] end
+local texturesDB, essencesDB = {}, {}
+function B:InspectItemTextures(clean, grabTextures)
+	wipe(texturesDB)
+	wipe(essencesDB)
 
-	tip:SetOwner(UIParent, "ANCHOR_NONE")
-	if arg1 and type(arg1) == "string" then
-		tip:SetInventoryItem(arg1, arg2)
-	elseif arg1 and type(arg1) == "number" then
-		tip:SetBagItem(arg1, arg2)
-	else
-		tip:SetHyperlink(link)
-	end
+	for i = 1, 5 do
+		local tex = _G[tip:GetName().."Texture"..i]
+		local texture = tex and tex:GetTexture()
+		if not texture then break end
 
-	for i = 2, 5 do
-		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-		local found = strfind(text, itemLevelString)
-		if found then
-			local level = strmatch(text, "(%d+)%)?$")
-			iLvlDB[link] = tonumber(level)
-			break
+		if grabTextures then
+			if texture == essenceTextureID then
+				local selected = (texturesDB[i-1] ~= essenceTextureID and texturesDB[i-1]) or nil
+				essencesDB[i] = {selected, tex:GetAtlas(), texture}
+				if selected then texturesDB[i-1] = nil end
+			else
+				texturesDB[i] = texture
+			end
 		end
+
+		if clean then tex:SetTexture() end
 	end
-	return iLvlDB[link]
+
+	return texturesDB, essencesDB
 end
 
+function B:InspectItemInfo(text, iLvl, enchantText)
+	local itemLevel = strfind(text, itemLevelString) and strmatch(text, "(%d+)%)?$")
+	if itemLevel then iLvl = tonumber(itemLevel) end
+	local enchant = strmatch(text, enchantString)
+	if enchant then enchantText = enchant end
+
+	return iLvl, enchantText
+end
+
+function B.GetItemLevel(link, arg1, arg2, fullScan)
+	if fullScan then
+		B:InspectItemTextures(true)
+		tip:SetOwner(UIParent, "ANCHOR_NONE")
+		tip:SetInventoryItem(arg1, arg2)
+
+		local iLvl, enchantText, gems, essences
+		gems, essences = B:InspectItemTextures(nil, true)
+
+		for i = 1, tip:NumLines() do
+			local line = _G[tip:GetName().."TextLeft"..i]
+			if line then
+				local text = line:GetText() or ""
+				iLvl, enchantText = B:InspectItemInfo(text, iLvl, enchantText)
+				if enchantText then break end
+			end
+		end
+
+		return iLvl, enchantText, gems, essences
+	else
+		if iLvlDB[link] then return iLvlDB[link] end
+
+		tip:SetOwner(UIParent, "ANCHOR_NONE")
+		if arg1 and type(arg1) == "string" then
+			tip:SetInventoryItem(arg1, arg2)
+		elseif arg1 and type(arg1) == "number" then
+			tip:SetBagItem(arg1, arg2)
+		else
+			tip:SetHyperlink(link)
+		end
+
+		for i = 2, 5 do
+			local line = _G[tip:GetName().."TextLeft"..i]
+			if line then
+				local text = line:GetText() or ""
+				local found = strfind(text, itemLevelString)
+				if found then
+					local level = strmatch(text, "(%d+)%)?$")
+					iLvlDB[link] = tonumber(level)
+					break
+				end
+			end
+		end
+
+		return iLvlDB[link]
+	end
+end
+
+-- GUID to npcID
 function B.GetNPCID(guid)
 	local id = tonumber(strmatch((guid or ""), "%-(%d-)%-%x-$"))
 	return id
@@ -549,7 +611,7 @@ function B:CreateEditBox(width, height)
 	eb:SetSize(width, height)
 	eb:SetAutoFocus(false)
 	eb:SetTextInsets(5, 5, 0, 0)
-	eb:SetFontObject(GameFontHighlight)
+	eb:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
 	B.CreateBD(eb, .3)
 	if F then F.CreateGradient(eb) end
 	eb:SetScript("OnEscapePressed", function()
@@ -646,4 +708,47 @@ function B:CreateColorSwatch()
 	swatch.tex = tex
 
 	return swatch
+end
+
+local function updateSliderEditBox(self)
+	local slider = self.__owner
+	local minValue, maxValue = slider:GetMinMaxValues()
+	local text = tonumber(self:GetText())
+	if not text then return end
+	text = min(maxValue, text)
+	text = max(minValue, text)
+	slider:SetValue(text)
+	self:SetText(text)
+	self:ClearFocus()
+end
+
+function B:CreateSlider(name, minValue, maxValue, x, y, width)
+	local slider = CreateFrame("Slider", nil, self, "OptionsSliderTemplate")
+	slider:SetPoint("TOPLEFT", x, y)
+	slider:SetWidth(width or 200)
+	slider:SetMinMaxValues(minValue, maxValue)
+	slider:SetHitRectInsets(0, 0, 0, 0)
+
+	slider.Low:SetText(minValue)
+	slider.Low:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", 10, -2)
+	slider.High:SetText(maxValue)
+	slider.High:SetPoint("TOPRIGHT", slider, "BOTTOMRIGHT", -10, -2)
+	slider.Text:ClearAllPoints()
+	slider.Text:SetPoint("CENTER", 0, 25)
+	slider.Text:SetText(name)
+	slider.Text:SetTextColor(1, .8, 0)
+	slider:SetBackdrop(nil)
+	slider.Thumb:SetTexture(DB.sparkTex)
+	slider.Thumb:SetBlendMode("ADD")
+	local bg = B.CreateBG(slider)
+	bg:SetPoint("TOPLEFT", 14, -2)
+	bg:SetPoint("BOTTOMRIGHT", -15, 3)
+	B.CreateBD(bg, .3)
+	slider.value = B.CreateEditBox(slider, 50, 20)
+	slider.value:SetPoint("TOP", slider, "BOTTOM")
+	slider.value:SetJustifyH("CENTER")
+	slider.value.__owner = slider
+	slider.value:SetScript("OnEnterPressed", updateSliderEditBox)
+
+	return slider
 end

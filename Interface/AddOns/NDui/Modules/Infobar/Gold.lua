@@ -5,18 +5,14 @@ if not C.Infobar.Gold then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
 
-local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
-local GOLD_AMOUNT_SYMBOL, CLASS_ICON_TCOORDS = GOLD_AMOUNT_SYMBOL, CLASS_ICON_TCOORDS
-local GetMoney, GetMoneyString, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo = GetMoney, GetMoneyString, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo
+local format, pairs, wipe, unpack, mod, floor = string.format, pairs, table.wipe, unpack, mod, floor
+local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
+local GetMoney, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo = GetMoney, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo
 local GetContainerNumSlots, GetContainerItemLink, GetItemInfo, GetContainerItemInfo, UseContainerItem = GetContainerNumSlots, GetContainerItemLink, GetItemInfo, GetContainerItemInfo, UseContainerItem
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
-
-local function formatTextMoney(money)
-	return format("%.0f|cffffd700%s|r", money * .0001, GOLD_AMOUNT_SYMBOL)
-end
 
 local function getClassIcon(class)
 	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
@@ -47,7 +43,7 @@ info.onEvent = function(self, event)
 	else								-- Gained Moeny
 		profit = profit + change
 	end
-	self.text:SetText(formatTextMoney(newMoney))
+	self.text:SetText(module:GetMoneyString(newMoney))
 
 	if not NDuiADB["totalGold"][myRealm] then NDuiADB["totalGold"][myRealm] = {} end
 	NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
@@ -78,11 +74,6 @@ info.onMouseUp = function(self, btn)
 	end
 end
 
-local function getGoldString(number)
-	local money = format("%.0f", number/1e4)
-	return GetMoneyString(money*1e4)
-end
-
 info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint("BOTTOMRIGHT", UIParent, -15, 30)
@@ -91,12 +82,12 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 
 	GameTooltip:AddLine(L["Session"], .6,.8,1)
-	GameTooltip:AddDoubleLine(L["Earned"], GetMoneyString(profit), 1,1,1, 1,1,1)
-	GameTooltip:AddDoubleLine(L["Spent"], GetMoneyString(spent), 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(L["Earned"], module:GetMoneyString(profit, true), 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(L["Spent"], module:GetMoneyString(spent, true), 1,1,1, 1,1,1)
 	if profit < spent then
-		GameTooltip:AddDoubleLine(L["Deficit"], GetMoneyString(spent-profit), 1,0,0, 1,1,1)
+		GameTooltip:AddDoubleLine(L["Deficit"], module:GetMoneyString(spent-profit, true), 1,0,0, 1,1,1)
 	elseif profit > spent then
-		GameTooltip:AddDoubleLine(L["Profit"], GetMoneyString(profit-spent), 0,1,0, 1,1,1)
+		GameTooltip:AddDoubleLine(L["Profit"], module:GetMoneyString(profit-spent, true), 0,1,0, 1,1,1)
 	end
 	GameTooltip:AddLine(" ")
 
@@ -106,11 +97,11 @@ info.onEnter = function(self)
 	for k, v in pairs(thisRealmList) do
 		local gold, class = unpack(v)
 		local r, g, b = B.ClassColor(class)
-		GameTooltip:AddDoubleLine(getClassIcon(class)..k, getGoldString(gold), r,g,b, 1,1,1)
+		GameTooltip:AddDoubleLine(getClassIcon(class)..k, module:GetMoneyString(gold), r,g,b, 1,1,1)
 		totalGold = totalGold + gold
 	end
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddDoubleLine(TOTAL..":", getGoldString(totalGold), .6,.8,1, 1,1,1)
+	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
 	for i = 1, GetNumWatchedTokens() do
 		local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
@@ -144,7 +135,7 @@ local errorText = _G.ERR_VENDOR_DOESNT_BUY
 local function stopSelling(tell)
 	stop = true
 	if sellCount > 0 and tell then
-		print(format("|cff99CCFF%s|r %s", L["Selljunk Calculate"], GetMoneyString(sellCount)))
+		print(format("|cff99CCFF%s|r%s", L["Selljunk Calculate"], module:GetMoneyString(sellCount, true)))
 	end
 	sellCount = 0
 end

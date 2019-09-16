@@ -8,7 +8,7 @@ local format, tostring = string.format, tostring
 -- Units
 local function CreatePlayerStyle(self)
 	self.mystyle = "player"
-	self:SetSize(245, 24*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["PlayerWidth"], NDuiDB["UFs"]["PlayerHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -39,7 +39,7 @@ end
 
 local function CreateTargetStyle(self)
 	self.mystyle = "target"
-	self:SetSize(245, 24*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["PlayerWidth"], NDuiDB["UFs"]["PlayerHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -57,7 +57,7 @@ end
 
 local function CreateFocusStyle(self)
 	self.mystyle = "focus"
-	self:SetSize(200, 22*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["FocusWidth"], NDuiDB["UFs"]["FocusHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -74,7 +74,7 @@ end
 
 local function CreateToTStyle(self)
 	self.mystyle = "tot"
-	self:SetSize(120, 18*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["PetWidth"], NDuiDB["UFs"]["PetHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -87,7 +87,7 @@ end
 
 local function CreateFocusTargetStyle(self)
 	self.mystyle = "focustarget"
-	self:SetSize(120, 18*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["PetWidth"], NDuiDB["UFs"]["PetHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -98,7 +98,7 @@ end
 
 local function CreatePetStyle(self)
 	self.mystyle = "pet"
-	self:SetSize(120, 18*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["PetWidth"], NDuiDB["UFs"]["PetHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -109,7 +109,7 @@ end
 
 local function CreateBossStyle(self)
 	self.mystyle = "boss"
-	self:SetSize(150, 22*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["BossWidth"], NDuiDB["UFs"]["BossHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -125,7 +125,7 @@ end
 
 local function CreateArenaStyle(self)
 	self.mystyle = "arena"
-	self:SetSize(150, 22*NDuiDB["UFs"]["HeightScale"])
+	self:SetSize(NDuiDB["UFs"]["BossWidth"], NDuiDB["UFs"]["BossHeight"])
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -136,6 +136,18 @@ local function CreateArenaStyle(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
 	UF:CreatePVPClassify(self)
+end
+
+function UF:ResizeRaidFrame()
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == "raid" and not frame.isPartyFrame then
+			if NDuiDB["UFs"]["SimpleMode"] then
+				frame:SetSize(100*NDuiDB["UFs"]["RaidScale"], 20*NDuiDB["UFs"]["RaidScale"])
+			else
+				frame:SetSize(NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"])
+			end
+		end
+	end
 end
 
 local function CreateRaidStyle(self)
@@ -158,6 +170,14 @@ local function CreateRaidStyle(self)
 	UF:CreateThreatBorder(self)
 	UF:CreateAuras(self)
 	UF:CreateBuffIndicator(self)
+end
+
+function UF:ResizePartyFrame()
+	for _, frame in pairs(oUF.objects) do
+		if frame.isPartyFrame then
+			frame:SetSize(NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"])
+		end
+	end
 end
 
 local function CreatePartyStyle(self)
@@ -214,27 +234,27 @@ function UF:OnLogin()
 		-- Loader
 		oUF:SetActiveStyle("Player")
 		local player = oUF:Spawn("player", "oUF_Player")
-		B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos, 245, 30)
+		B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos)
 
 		oUF:SetActiveStyle("Target")
 		local target = oUF:Spawn("target", "oUF_Target")
-		B.Mover(target, L["TargetUF"], "TargetUF", C.UFs.TargetPos, 245, 30)
+		B.Mover(target, L["TargetUF"], "TargetUF", C.UFs.TargetPos)
 
 		oUF:SetActiveStyle("ToT")
 		local targettarget = oUF:Spawn("targettarget", "oUF_ToT")
-		B.Mover(targettarget, L["TotUF"], "TotUF", C.UFs.ToTPos, 120, 30)
+		B.Mover(targettarget, L["TotUF"], "TotUF", C.UFs.ToTPos)
 
 		oUF:SetActiveStyle("Pet")
 		local pet = oUF:Spawn("pet", "oUF_Pet")
-		B.Mover(pet, L["PetUF"], "PetUF", C.UFs.PetPos, 120, 30)
+		B.Mover(pet, L["PetUF"], "PetUF", C.UFs.PetPos)
 
 		oUF:SetActiveStyle("Focus")
 		local focus = oUF:Spawn("focus", "oUF_Focus")
-		B.Mover(focus, L["FocusUF"], "FocusUF", C.UFs.FocusPos, 200, 30)
+		B.Mover(focus, L["FocusUF"], "FocusUF", C.UFs.FocusPos)
 
 		oUF:SetActiveStyle("FocusTarget")
 		local focustarget = oUF:Spawn("focustarget", "oUF_FocusTarget")
-		B.Mover(focustarget, L["FotUF"], "FotUF", C.UFs.FoTPos, 120, 30)
+		B.Mover(focustarget, L["FotUF"], "FotUF", {"TOPLEFT", oUF_Focus, "TOPRIGHT", 5, 0})
 
 		oUF:RegisterStyle("Boss", CreateBossStyle)
 		oUF:SetActiveStyle("Boss")

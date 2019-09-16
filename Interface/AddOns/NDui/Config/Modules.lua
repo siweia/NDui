@@ -37,7 +37,6 @@ C.UFs = {
 	ToTPos			= {"BOTTOM", UIParent, "BOTTOM", 136, 241},			-- 目标的目标框体默认位置
 	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 241},		-- 宠物框体默认位置
 	FocusPos		= {"LEFT", UIParent, "LEFT", 5, -150},				-- 焦点框体默认位置
-	FoTPos			= {"LEFT", UIParent, "LEFT", 210, -150},			-- 焦点目标框体默认位置
 	PlayerPlate		= {"BOTTOM", UIParent, "BOTTOM", 0, 400},			-- 玩家姓名板默认位置
 
 	BarPoint		= {"TOPLEFT", 12, 4},								-- 资源条位置（以自身头像为基准）

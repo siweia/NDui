@@ -37,7 +37,7 @@ function S:MicroButton_Create(parent, data)
 		button:SetParent(bu)
 		button:ClearAllPoints(bu)
 		button:SetAllPoints(bu)
-		if not NDuiDB["Actionbar"]["Enable"] then button.SetPoint = B.Dummy end
+		button.SetPoint = B.Dummy
 		button:UnregisterAllEvents()
 		button:SetNormalTexture(nil)
 		button:SetPushedTexture(nil)
