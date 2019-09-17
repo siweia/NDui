@@ -111,14 +111,19 @@ end
 local function tooltipOnEnter(self)
 	GameTooltip:SetOwner(self, self.anchor)
 	GameTooltip:ClearLines()
+	if self.title then
+		GameTooltip:AddLine(self.title)
+	end
 	if tonumber(self.text) then
 		GameTooltip:SetSpellByID(self.text)
-	else
+	elseif self.text then
 		local r, g, b = 1, 1, 1
 		if self.color == "class" then
 			r, g, b = cr, cg, cb
 		elseif self.color == "system" then
 			r, g, b = 1, .8, 0
+		elseif self.color == "info" then
+			r, g, b = .6, .8, 1
 		end
 		GameTooltip:AddLine(self.text, r, g, b, 1)
 	end
