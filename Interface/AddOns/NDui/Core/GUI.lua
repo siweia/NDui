@@ -40,11 +40,11 @@ local defaultSettings = {
 		BagsWidth = 12,
 		BankWidth = 14,
 		BagsiLvl = true,
-		Artifact = true,
 		ReverseSort = false,
 		ItemFilter = true,
 		ItemSetFilter = false,
 		DeleteButton = true,
+		FavouriteItems = {},
 	},
 	Auras = {
 		Reminder = true,
@@ -293,6 +293,7 @@ local accountSettings = {
 	KeystoneInfo = {},
 	AutoBubbles = false,
 	SystemInfoType = 1,
+	DisableInfobars = false,
 }
 
 -- Initial settings
@@ -535,9 +536,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
 		{},--blank
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
-		{1, "Bags", "Artifact", L["Bags Artifact"], true},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", false, nil, updateBagSortOrder},
 		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", nil, nil, updateBagSortOrder},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -777,6 +777,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
+		{1, "ACCOUNT", "DisableInfobars", L["DisableInfobars"], true},
 		{},--blank
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, 2}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
@@ -844,14 +845,6 @@ local function NDUI_VARIABLE(key, value, newValue)
 	end
 end
 
-local function optionOnEnter(self)
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:ClearLines()
-	GameTooltip:AddLine(L["Tips"])
-	GameTooltip:AddLine(self.tips, .6,.8,1, 1)
-	GameTooltip:Show()
-end
-
 local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
@@ -879,9 +872,8 @@ local function CreateOption(i)
 				bu:SetScript("OnClick", data)
 			end
 			if tooltip then
-				cb.tips = tooltip
-				cb:HookScript("OnEnter", optionOnEnter)
-				cb:HookScript("OnLeave", B.HideTooltip)
+				cb.title = L["Tips"]
+				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info")
 			end
 		-- Editbox
 		elseif optType == 2 then
@@ -901,9 +893,8 @@ local function CreateOption(i)
 				NDUI_VARIABLE(key, value, eb:GetText())
 				if callback then callback() end
 			end)
-			eb.tips = L["EdieBox Tip"]
-			eb:SetScript("OnEnter", optionOnEnter)
-			eb:SetScript("OnLeave", B.HideTooltip)
+			eb.title = L["Tips"]
+			B.AddTooltip(eb, "ANCHOR_RIGHT", L["EdieBox Tip"], "info")
 
 			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
 		-- Slider
@@ -1038,6 +1029,11 @@ local function exportData()
 						for _, v in ipairs(value) do
 							text = text..":"..tostring(v)
 						end
+					elseif key == "FavouriteItems" then
+						text = text..";"..KEY..":"..key
+						for itemID in pairs(value) do
+							text = text..":"..tostring(itemID)
+						end
 					end
 				else
 					if NDuiDB[KEY][key] ~= defaultSettings[KEY][key] then
@@ -1129,6 +1125,11 @@ local function importData()
 				flash = toBoolean(flash)
 				if not NDuiDB[key][value] then NDuiDB[key][value] = {} end
 				NDuiDB[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
+			end
+		elseif value == "FavouriteItems" then
+			local items = {select(3, strsplit(":", option))}
+			for _, itemID in next, items do
+				NDuiDB[key][value][tonumber(itemID)] = true
 			end
 		elseif key == "Mover" then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
