@@ -248,10 +248,8 @@ function UF:CreateIcons(self)
 	if mystyle == "player" then
 		local combat = self:CreateTexture(nil, "OVERLAY")
 		combat:SetPoint("CENTER", self, "BOTTOMLEFT")
-		combat:SetSize(20, 20)
-		combat:SetTexture("Interface\\WORLDSTATEFRAME\\CombatSwords")
-		combat:SetTexCoord(0, .5, 0, .5)
-		combat:SetVertexColor(.8, 0, 0)
+		combat:SetSize(28, 28)
+		combat:SetAtlas(DB.objectTex)
 		self.CombatIndicator = combat
 
 		local rest = self:CreateTexture(nil, "OVERLAY")
