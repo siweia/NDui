@@ -34,8 +34,8 @@ C.UFs = {
 
 	PlayerPos		= {"TOPRIGHT", UIParent, "BOTTOM", -200, 300},		-- 玩家框体默认位置
 	TargetPos		= {"TOPLEFT", UIParent, "BOTTOM", 200, 300},		-- 目标框体默认位置
-	ToTPos			= {"BOTTOM", UIParent, "BOTTOM", 136, 241},			-- 目标的目标框体默认位置
-	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 241},		-- 宠物框体默认位置
+	ToTPos			= {"BOTTOM", UIParent, "BOTTOM", 136, 250},			-- 目标的目标框体默认位置
+	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 250},		-- 宠物框体默认位置
 	FocusPos		= {"LEFT", UIParent, "LEFT", 5, -150},				-- 焦点框体默认位置
 	PlayerPlate		= {"BOTTOM", UIParent, "BOTTOM", 0, 400},			-- 玩家姓名板默认位置
 
