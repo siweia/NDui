@@ -3,12 +3,13 @@ local B, C, L, DB, F = unpack(ns)
 
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
-local ipairs, strmatch, unpack = ipairs, string.match, unpack
+local ipairs, strmatch, unpack, pairs = ipairs, string.match, unpack, pairs
+local ceil = math.ceil
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
-local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
+local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem, GetContainerItemID = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem, GetContainerItemID
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 
@@ -47,14 +48,6 @@ function module:UpdateAnchors(parent, bags)
 	end
 end
 
-function module:DisableAuroraClassic()
-	if F then
-		AuroraOptionsbags:SetAlpha(0)
-		AuroraOptionsbags:Disable()
-		AuroraConfig.bags = false
-	end
-end
-
 local function highlightFunction(button, match)
 	button:SetAlpha(match and 1 or .3)
 end
@@ -63,7 +56,11 @@ function module:CreateInfoFrame()
 	local infoFrame = CreateFrame("Button", nil, self)
 	infoFrame:SetPoint("TOPLEFT", 10, 0)
 	infoFrame:SetSize(200, 32)
-	B.CreateFS(infoFrame, 14, SEARCH, true, "LEFT", -5, 0)
+	local icon = infoFrame:CreateTexture()
+	icon:SetSize(24, 24)
+	icon:SetPoint("LEFT")
+	icon:SetTexture("Interface\\Minimap\\Tracking\\None")
+	icon:SetTexCoord(1, 0, 0, 1)
 
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
@@ -290,10 +287,84 @@ local function favouriteOnClick(self)
 	end
 end
 
-local function buttonOnClick(self, btn)
+function module:ButtonOnClick(btn)
 	if btn ~= "LeftButton" then return end
 	deleteButtonOnClick(self)
 	favouriteOnClick(self)
+end
+
+function module:GetContainerEmptySlot(bagID)
+	for slotID = 1, GetContainerNumSlots(bagID) do
+		if not GetContainerItemID(bagID, slotID) then
+			return slotID
+		end
+	end
+end
+
+function module:GetEmptySlot(name)
+	if name == "Main" then
+		for bagID = 0, 4 do
+			local slotID = module:GetContainerEmptySlot(bagID)
+			if slotID then
+				return bagID, slotID
+			end
+		end
+	elseif name == "Bank" then
+		local slotID = module:GetContainerEmptySlot(-1)
+		if slotID then
+			return -1, slotID
+		end
+		for bagID = 5, 11 do
+			local slotID = module:GetContainerEmptySlot(bagID)
+			if slotID then
+				return bagID, slotID
+			end
+		end
+	elseif name == "Reagent" then
+		local slotID = module:GetContainerEmptySlot(-3)
+		if slotID then
+			return -3, slotID
+		end
+	end
+end
+
+function module:FreeSlotOnDrop()
+	local bagID, slotID = module:GetEmptySlot(self.__name)
+	if slotID then
+		PickupContainerItem(bagID, slotID)
+	end
+end
+
+local freeSlotContainer = {
+	["Main"] = true,
+	["Bank"] = true,
+	["Reagent"] = true,
+}
+
+function module:CreateFreeSlots()
+	if not NDuiDB["Bags"]["GatherEmpty"] then return end
+
+	local name = self.name
+	if not freeSlotContainer[name] then return end
+
+	local slot = CreateFrame("Button", name.."FreeSlot", self)
+	slot:SetSize(self.iconSize, self.iconSize)
+	slot:SetHighlightTexture(DB.bdTex)
+	slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
+	local bg = B.CreateBG(slot)
+	B.CreateBD(bg, .3)
+	slot:SetScript("OnMouseUp", module.FreeSlotOnDrop)
+	slot:SetScript("OnReceiveDrag", module.FreeSlotOnDrop)
+	B.AddTooltip(slot, "ANCHOR_RIGHT", L["FreeSlots"])
+	slot.__name = name
+
+	local tag = self:SpawnPlugin("TagDisplay", "[space]", slot)
+	tag:SetFont(unpack(DB.Font))
+	tag:SetTextColor(.6, .8, 1)
+	tag:SetPoint("CENTER", 1, 0)
+	tag.__name = name
+
+	self.freeSlot = slot
 end
 
 function module:OnLogin()
@@ -426,7 +497,7 @@ function module:OnLogin()
 		self.glowFrame = B.CreateBG(self, 4)
 		self.glowFrame:SetSize(iconSize+8, iconSize+8)
 
-		self:HookScript("OnClick", buttonOnClick)
+		self:HookScript("OnClick", module.ButtonOnClick)
 	end
 
 	function MyButton:ItemOnEnter()
@@ -501,9 +572,30 @@ function module:OnLogin()
 	function MyContainer:OnContentsChanged()
 		self:SortButtons("bagSlot")
 
+		local columns = self.Settings.Columns
 		local offset = 38
-		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 5, -offset + 5)
-		self:SetSize(width + 10, height + offset)
+		local spacing = 5
+		local xOffset = 5
+		local yOffset = -offset + spacing
+		local width, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
+		if self.freeSlot then
+			local numSlots = #self.buttons + 1
+			local row = ceil(numSlots / columns)
+			local col = numSlots % columns
+			if col == 0 then col = columns end
+			local xPos = (col-1) * (iconSize + spacing)
+			local yPos = -1 * (row-1) * (iconSize + spacing)
+
+			self.freeSlot:ClearAllPoints()
+			self.freeSlot:SetPoint("TOPLEFT", self, "TOPLEFT", xPos+xOffset, yPos+yOffset)
+
+			if height < 0 then
+				width, height = columns * (iconSize+spacing)-spacing, iconSize
+			elseif col == 1 then
+				height = height + iconSize + spacing
+			end
+		end
+		self:SetSize(width + xOffset*2, height + offset)
 
 		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.bagCompanion, f.consumble, f.bagFavourite, f.junk})
 		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankConsumble, f.bankFavourite})
@@ -570,6 +662,9 @@ function module:OnLogin()
 		end
 
 		self:HookScript("OnShow", B.RestoreMF)
+
+		self.iconSize = iconSize
+		module.CreateFreeSlots(self)
 	end
 
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
@@ -606,5 +701,11 @@ function module:OnLogin()
 
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 	SetInsertItemsLeftToRight(false)
-	module:DisableAuroraClassic()
+
+	-- Override AuroraClassic
+	if F then
+		AuroraOptionsbags:SetAlpha(0)
+		AuroraOptionsbags:Disable()
+		AuroraConfig.bags = false
+	end
 end
