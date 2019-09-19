@@ -91,17 +91,23 @@ end
 
 
 -- Tags
-
-tagPool["space"] = function(self, str)
-	local free,max = 0, 0
-	if(self.bags) then
-		for _,id in pairs(self.bags) do
-			free = free + GetContainerNumFreeSlots(id)
-			max = max + GetContainerNumSlots(id)
+local function GetNumFreeSlots(name)
+	if name == "Main" then
+		return CalculateTotalNumberOfFreeBagSlots()
+	elseif name == "Bank" then
+		local numFreeSlots = GetContainerNumFreeSlots(-1)
+		for bagID = 5, 11 do
+			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
 		end
+		return numFreeSlots
+	elseif name == "Reagent" then
+		return GetContainerNumFreeSlots(-3)
 	end
-	str = str or "free/max"
-	return str:gsub("free", free):gsub("max", max):gsub("used", max-free)
+end
+
+tagPool["space"] = function(self)
+	local str = GetNumFreeSlots(self.__name)
+	return str
 end
 
 tagPool["item"] = function(self, item)
