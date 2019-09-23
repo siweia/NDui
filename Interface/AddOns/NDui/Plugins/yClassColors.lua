@@ -100,7 +100,7 @@ local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%$d", "%$s")
 
 local function friendsFrame()
-	local scrollFrame = FriendsFrameFriendsScrollFrame
+	local scrollFrame = DB.isNewPatch and FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame
 	local buttons = scrollFrame.buttons
 	local playerArea = GetRealZoneText()
 
@@ -134,7 +134,11 @@ local function friendsFrame()
 		if infoText then button.info:SetText(infoText) end
 	end
 end
-hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", friendsFrame)
+if DB.isNewPatch then
+	hooksecurefunc(FriendsListFrameScrollFrame, "update", friendsFrame)
+else
+	hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", friendsFrame)
+end
 hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame)
 
 -- Whoframe
@@ -147,9 +151,17 @@ local function updateWhoList()
 
 	for i = 1, WHOS_TO_DISPLAY, 1 do
 		local index = whoOffset + i
-		local nameText = _G["WhoFrameButton"..i.."Name"]
-		local levelText = _G["WhoFrameButton"..i.."Level"]
-		local variableText = _G["WhoFrameButton"..i.."Variable"]
+		local nameText, levelText, variableText
+		if DB.isNewPatch then
+			local bu = _G["WhoListScrollFrameButton"..i]
+			nameText = bu.Name
+			levelText = bu.Level
+			variableText = bu.Variable
+		else
+			nameText = _G["WhoFrameButton"..i.."Name"]
+			levelText = _G["WhoFrameButton"..i.."Level"]
+			variableText = _G["WhoFrameButton"..i.."Variable"]
+		end
 		local info = C_FriendList.GetWhoInfo(index)
 		if info then
 			local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
