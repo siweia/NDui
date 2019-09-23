@@ -159,6 +159,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("WhoList_Update", function()
 		for i = 1, WHOS_TO_DISPLAY, 1 do
 			local level = _G["WhoFrameButton"..i.."Level"]
+			if C.isNewPatch then level = _G["WhoListScrollFrameButton"..i]["Level"] end
 			if level and not level.fontStyled then
 				level:SetWidth(32)
 				level:SetJustifyH("LEFT")

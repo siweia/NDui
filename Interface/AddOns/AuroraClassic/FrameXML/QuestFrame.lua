@@ -85,6 +85,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	CurrentQuestsText:SetShadowColor(0, 0, 0)
 
 	-- [[ Quest NPC model ]]
+	if C.isNewPatch then return end
+
 	F.StripTextures(QuestNPCModel)
 	F.StripTextures(QuestNPCModelTextFrame)
 

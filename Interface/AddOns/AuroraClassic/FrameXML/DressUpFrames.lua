@@ -20,6 +20,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- SideDressUp
 
 	F.StripTextures(SideDressUpFrame, 0)
+
+	if C.isNewPatch then return end
+
 	select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
 
 	SideDressUpModel:HookScript("OnShow", function(self)

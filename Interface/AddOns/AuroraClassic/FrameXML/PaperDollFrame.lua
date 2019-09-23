@@ -91,8 +91,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		hooksecurefunc(slot, "DisplayAsAzeriteEmpoweredItem", UpdateAzeriteEmpoweredItem)
 	end
 
-	select(14, CharacterMainHandSlot:GetRegions()):Hide()
-	select(14, CharacterSecondaryHandSlot:GetRegions()):Hide()
+	local index = C.isNewPatch and 15 or 14
+	select(index, CharacterMainHandSlot:GetRegions()):Hide()
+	select(index, CharacterSecondaryHandSlot:GetRegions()):Hide()
 
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)
 		-- also fires for bag slots, we don't want that
@@ -246,6 +247,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
 
 	-- Item alert
+	if C.isNewPatch then return end
+
 	local closeButton = PaperDollItemsFrame.HelpTipBox.CloseButton
 	F.ReskinClose(closeButton)
 	hooksecurefunc(closeButton, "SetPoint", function(self, _, _, _, x)

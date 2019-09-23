@@ -1,7 +1,11 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	F.ReskinScroll(QuickJoinScrollFrameScrollBar)
+	if C.isNewPatch then
+		F.ReskinScroll(QuickJoinScrollFrame.scrollBar)
+	else
+		F.ReskinScroll(QuickJoinScrollFrameScrollBar)
+	end
 	F.Reskin(QuickJoinFrame.JoinQueueButton)
 
 	F.CreateBD(QuickJoinRoleSelectionFrame)

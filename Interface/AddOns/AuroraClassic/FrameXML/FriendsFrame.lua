@@ -1,15 +1,20 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	for i = 1, 3 do
+	local maxTabs = C.isNewPatch and 4 or 3
+	for i = 1, maxTabs do
 		F.ReskinTab(_G["FriendsFrameTab"..i])
 	end
 	FriendsFrameIcon:Hide()
-	F.StripTextures(FriendsFrameFriendsScrollFrame)
 	F.StripTextures(IgnoreListFrame)
 
 	for i = 1, FRIENDS_TO_DISPLAY do
-		local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
+		local bu
+		if C.isNewPatch then
+			bu = _G["FriendsListFrameScrollFrameButton"..i]
+		else
+			bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
+		end
 		local ic = bu.gameIcon
 
 		bu.background:Hide()
@@ -38,7 +43,12 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local function UpdateScroll()
 		for i = 1, FRIENDS_TO_DISPLAY do
-			local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
+			local bu
+			if C.isNewPatch then
+				bu = _G["FriendsListFrameScrollFrameButton"..i]
+			else
+				bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
+			end
 
 			if bu.gameIcon:IsShown() then
 				bu.bg:Show()
@@ -49,9 +59,10 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end
 	hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
-	hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
+	local FriendsListFrameScrollFrame = C.isNewPatch and FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame
+	hooksecurefunc(FriendsListFrameScrollFrame, "update", UpdateScroll)
 
-	local header = FriendsFrameFriendsScrollFrame.PendingInvitesHeaderButton
+	local header = FriendsListFrameScrollFrame.PendingInvitesHeaderButton
 	for i = 1, 11 do
 		select(i, header:GetRegions()):Hide()
 	end
@@ -70,10 +81,10 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end
 
-	hooksecurefunc(FriendsFrameFriendsScrollFrame.invitePool, "Acquire", reskinInvites)
+	hooksecurefunc(FriendsListFrameScrollFrame.invitePool, "Acquire", reskinInvites)
 	hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
 		if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
-			reskinInvites(FriendsFrameFriendsScrollFrame.invitePool)
+			reskinInvites(FriendsListFrameScrollFrame.invitePool)
 		elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
 			local nt = button.travelPassButton:GetNormalTexture()
 			if FriendsFrame_GetInviteRestriction(button.id) == 6 then
@@ -109,8 +120,10 @@ tinsert(C.themes["AuroraClassic"], function()
 
 			if BNConnected() then
 				frame:Hide()
-				FriendsFrameBroadcastInput:Show()
-				FriendsFrameBroadcastInput_UpdateDisplay()
+				if not C.isNewPatch then
+					FriendsFrameBroadcastInput:Show()
+					FriendsFrameBroadcastInput_UpdateDisplay()
+				end
 			end
 		end
 	end)
@@ -133,19 +146,27 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(FriendsFrameSendMessageButton)
 	F.Reskin(FriendsFrameIgnorePlayerButton)
 	F.Reskin(FriendsFrameUnsquelchButton)
-	F.ReskinScroll(FriendsFrameFriendsScrollFrameScrollBar)
-	F.ReskinScroll(FriendsFrameIgnoreScrollFrameScrollBar)
-	F.ReskinScroll(FriendsFriendsScrollFrameScrollBar)
-	F.ReskinScroll(WhoListScrollFrameScrollBar)
+	if C.isNewPatch then
+		F.ReskinScroll(FriendsListFrameScrollFrame.scrollBar)
+		F.ReskinScroll(IgnoreListFrameScrollFrame.scrollBar)
+		F.ReskinScroll(WhoListScrollFrame.scrollBar)
+	else
+		F.ReskinScroll(FriendsFrameFriendsScrollFrameScrollBar)
+		F.ReskinScroll(FriendsFrameIgnoreScrollFrameScrollBar)
+		F.ReskinScroll(FriendsFriendsScrollFrameScrollBar)
+		F.ReskinScroll(WhoListScrollFrameScrollBar)
+		F.CreateBD(FriendsFriendsList, .25)
+		F.StripTextures(AddFriendNoteFrame)
+		F.CreateBD(AddFriendNoteFrame, .25)
+		F.ReskinInput(FriendsFrameBroadcastInput)
+		F.Reskin(FriendsFriendsSendRequestButton)
+		F.Reskin(FriendsFriendsCloseButton)
+	end
 	F.ReskinDropDown(FriendsFrameStatusDropDown)
 	F.ReskinDropDown(WhoFrameDropDown)
 	F.ReskinDropDown(FriendsFriendsFrameDropDown)
 	F.Reskin(FriendsListFrameContinueButton)
-	F.CreateBD(FriendsFriendsList, .25)
-	F.StripTextures(AddFriendNoteFrame)
-	F.CreateBD(AddFriendNoteFrame, .25)
 	F.ReskinInput(AddFriendNameEditBox)
-	F.ReskinInput(FriendsFrameBroadcastInput)
 	F.StripTextures(AddFriendFrame)
 	F.CreateBD(AddFriendFrame)
 	F.CreateSD(AddFriendFrame)
@@ -156,8 +177,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(WhoFrameGroupInviteButton)
 	F.Reskin(AddFriendEntryFrameAcceptButton)
 	F.Reskin(AddFriendEntryFrameCancelButton)
-	F.Reskin(FriendsFriendsSendRequestButton)
-	F.Reskin(FriendsFriendsCloseButton)
 	F.Reskin(AddFriendInfoFrameContinueButton)
 
 	for i = 1, 4 do

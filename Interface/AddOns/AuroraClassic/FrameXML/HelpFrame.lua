@@ -113,7 +113,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.StripTextures(BrowserSettingsTooltip)
 	F.CreateBD(BrowserSettingsTooltip)
 	F.CreateSD(BrowserSettingsTooltip)
-	F.Reskin(BrowserSettingsTooltip.CacheButton)
+	if not C.isNewPatch then
+		F.Reskin(BrowserSettingsTooltip.CacheButton)
+	end
 	F.Reskin(BrowserSettingsTooltip.CookiesButton)
 	F.Reskin(ReportCheatingDialogReportButton)
 	F.Reskin(ReportCheatingDialogCancelButton)
