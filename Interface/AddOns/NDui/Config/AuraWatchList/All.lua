@@ -545,6 +545,7 @@ local list = {
 		{AuraID = 31884, UnitID = "target"},	-- 复仇之怒
 		{AuraID = 33206, UnitID = "target"},	-- 痛苦压制
 		{AuraID = 45438, UnitID = "target"},	-- 寒冰屏障
+		{AuraID = 47585, UnitID = "target"},	-- 消散
 		{AuraID = 47788, UnitID = "target"},	-- 守护之魂
 		{AuraID = 48792, UnitID = "target"},	-- 冰封之韧
 		{AuraID = 48707, UnitID = "target"},	-- 反魔法护罩
