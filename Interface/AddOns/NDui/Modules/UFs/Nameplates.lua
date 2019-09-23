@@ -216,7 +216,7 @@ function UF.UpdateColor(element, unit)
 		element:SetStatusBarColor(r, g, b)
 	end
 
-	if not NDuiDB["Nameplate"]["TankMode"] and DB.Role ~= "Tank" then
+	if isCustomUnit or (not NDuiDB["Nameplate"]["TankMode"] and DB.Role ~= "Tank") then
 		if status and status == 3 then
 			element.Shadow:SetBackdropBorderColor(1, 0, 0)
 		elseif status and (status == 2 or status == 1) then
