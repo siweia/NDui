@@ -242,6 +242,7 @@ function M:VersionCheck_Create(text)
 	local frame = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
 	frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 20, 70)
 	frame.Text:SetText(text)
+	frame:Show()
 end
 
 local hasChecked
