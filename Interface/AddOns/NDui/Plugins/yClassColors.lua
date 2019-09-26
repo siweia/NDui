@@ -6,6 +6,10 @@ local oUF = ns.oUF
 -- NDui MOD
 ----------------------------
 local format, ipairs, tinsert = string.format, ipairs, table.insert
+local C_FriendList_GetWhoInfo = C_FriendList.GetWhoInfo
+local C_FriendList_GetNumWhoResults = C_FriendList.GetNumWhoResults
+local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
+local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 
 -- Colors
 local function classColor(class, showRGB)
@@ -109,7 +113,7 @@ local function friendsFrame()
 		local button = buttons[i]
 		if button:IsShown() then
 			if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
-				local info = C_FriendList.GetFriendInfoByIndex(button.id)
+				local info = C_FriendList_GetFriendInfoByIndex(button.id)
 				if info and info.connected then
 					nameText = classColor(info.className)..info.name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, diffColor(info.level)..info.level.."|r", info.className)
 					if info.area == playerArea then
@@ -117,7 +121,7 @@ local function friendsFrame()
 					end
 				end
 			elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
-				local accountInfo = C_BattleNet.GetFriendAccountInfo(button.id)
+				local accountInfo = C_BattleNet_GetFriendAccountInfo(button.id)
 				if accountInfo then
 					local accountName = accountInfo.accountName
 					local gameAccountInfo = accountInfo.gameAccountInfo
@@ -151,7 +155,7 @@ local function updateWhoList()
 	local offset = HybridScrollFrame_GetOffset(scrollFrame)
 	local buttons = scrollFrame.buttons
 	local numButtons = #buttons
-	local numWhos, totalCount = C_FriendList.GetNumWhoResults()
+	local numWhos = C_FriendList_GetNumWhoResults()
 
 	local playerZone = GetRealZoneText()
 	local playerGuild = GetGuildInfo("player")
@@ -165,7 +169,7 @@ local function updateWhoList()
 			local levelText = button.Level
 			local variableText = button.Variable
 
-			local info = C_FriendList.GetWhoInfo(index)
+			local info = C_FriendList_GetWhoInfo(index)
 			local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
 			if zone == playerZone then zone = "|cff00ff00"..zone end
 			if guild == playerGuild then guild = "|cff00ff00"..guild end

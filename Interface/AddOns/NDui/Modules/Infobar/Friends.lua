@@ -13,7 +13,11 @@ local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture = BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture
 local CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor = CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor
 local BNGetNumFriends = BNGetNumFriends
-local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL
+local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+local C_BattleNet_GetFriendNumGameAccounts = C_BattleNet.GetFriendNumGameAccounts
+local C_BattleNet_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
+
+local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL, UNKNOWN = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL, UNKNOWN
 local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
 local CLIENT_WOW_CLASSIC = "WoV" -- for sorting
@@ -85,7 +89,7 @@ local function buildBNetTable(num)
 	wipe(bnetTable)
 
 	for i = 1, num do
-		local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+		local accountInfo = C_BattleNet_GetFriendAccountInfo(i)
 		if accountInfo then
 			local accountName = accountInfo.accountName
 			local battleTag = accountInfo.battleTag
@@ -213,11 +217,11 @@ local function buttonOnClick(self, btn)
 					for i = 2, #menuList do menuList[i] = nil end
 				end
 
-				local numGameAccounts = C_BattleNet.GetFriendNumGameAccounts(self.data[1])
+				local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(self.data[1])
 				local lastGameAccountID, lastGameAccountGUID
 				if numGameAccounts > 1 then
 					for i = 1, numGameAccounts do
-						local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(self.data[1], i)
+						local gameAccountInfo = C_BattleNet_GetFriendGameAccountInfo(self.data[1], i)
 						local charName = gameAccountInfo.characterName
 						local client = gameAccountInfo.clientProgram
 						local class = gameAccountInfo.className or UNKNOWN
@@ -266,9 +270,9 @@ local function buttonOnEnter(self)
 		GameTooltip:AddLine(" ")
 
 		local index, accountName, _, _, _, _, _, _, _, note, broadcastText, broadcastTime = unpack(self.data)
-		local numGameAccounts = C_BattleNet.GetFriendNumGameAccounts(index)
+		local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(index)
 		for i = 1, numGameAccounts do
-			local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(index, i)
+			local gameAccountInfo = C_BattleNet_GetFriendGameAccountInfo(index, i)
 			local charName = gameAccountInfo.characterName
 			local client = gameAccountInfo.clientProgram
 			local realmName = gameAccountInfo.realmName or ""
