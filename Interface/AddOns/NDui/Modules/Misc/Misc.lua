@@ -27,7 +27,7 @@ local GetInstanceInfo = GetInstanceInfo
 local GetSavedInstanceInfo = GetSavedInstanceInfo
 local SetSavedInstanceExtend = SetSavedInstanceExtend
 local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
-local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
+local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -314,7 +314,7 @@ function M:TradeTargetInfo()
 		local guid = UnitGUID("NPC")
 		if not guid then return end
 		local text = "|cffff0000"..L["Stranger"]
-		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
+		if C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
 			text = "|cffffff00"..FRIEND
 		elseif IsGuildMember(guid) then
 			text = "|cff00ff00"..GUILD

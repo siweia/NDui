@@ -5,6 +5,11 @@ local module = B:GetModule("Chat")
 local strfind, strmatch, strsub, gsub = string.find, string.match, string.sub, string.gsub
 local strsplit, strlen = string.split, string.len
 
+local IsModifierKeyDown, IsAltKeyDown, IsControlKeyDown, IsModifiedClick = IsModifierKeyDown, IsAltKeyDown, IsControlKeyDown, IsModifiedClick
+local InviteToGroup, GuildInvite, BNInviteFriend = InviteToGroup, GuildInvite, BNInviteFriend
+local CanCooperateWithGameAccount = CanCooperateWithGameAccount
+local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
+
 local foundurl = false
 
 local function convertLink(text, value)
@@ -67,13 +72,17 @@ function module:HyperlinkShowHook(link, _, button)
 		elseif type == "BNplayer" then
 			local _, bnID = strmatch(value, "([^:]*):([^:]*):")
 			if not bnID then return end
-			local _, _, _, _, _, gameID = BNGetFriendInfoByID(bnID)
-			if gameID and CanCooperateWithGameAccount(gameID) then
+			local accountInfo = C_BattleNet_GetAccountInfoByID(bnID)
+			if not accountInfo then return end
+			local gameAccountInfo = accountInfo.gameAccountInfo
+			local gameID = gameAccountInfo.gameAccountID
+			if gameID and CanCooperateWithGameAccount(accountInfo) then
 				if IsAltKeyDown() then
 					BNInviteFriend(gameID)
 					hide = true
 				elseif IsControlKeyDown() then
-					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+					local charName = gameAccountInfo.characterName
+					local realmName = gameAccountInfo.realmName
 					GuildInvite(charName.."-"..realmName)
 					hide = true
 				end
