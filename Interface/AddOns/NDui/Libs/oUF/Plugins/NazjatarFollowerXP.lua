@@ -11,7 +11,7 @@ local IsQuestFlaggedCompleted = IsQuestFlaggedCompleted
 local C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo
 
 local MaxNazjatarBodyguardRank = 30
-local myFaction = UnitFactionGroup("player")
+local myFaction = DB.MyFaction
 
 local NPCIDToWidgetIDMap = {
 	[154304] = 1940, -- Farseer Ori
