@@ -112,14 +112,14 @@ function M.GuildBest_OnLoad(event, addon)
 end
 
 -- Keystone Info
-local myFaction = UnitFactionGroup("player")
+local myFaction = DB.MyFaction
 local myFullName = DB.MyName.."-"..DB.MyRealm
 local iconColor = BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_EPIC or 4]
 
 function M:KeystoneInfo_Create()
 	local texture = select(10, GetItemInfo(158923)) or 525134
 	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo)
-	button:SetPoint("BOTTOMLEFT", 10, 67)
+	button:SetPoint("BOTTOMLEFT", 2, 67)
 	button:SetSize(35, 35)
 	B.PixelIcon(button, texture, true)
 	button:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
