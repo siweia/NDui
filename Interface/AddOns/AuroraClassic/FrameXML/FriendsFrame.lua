@@ -1,20 +1,14 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	local maxTabs = C.isNewPatch and 4 or 3
-	for i = 1, maxTabs do
+	for i = 1, 4 do
 		F.ReskinTab(_G["FriendsFrameTab"..i])
 	end
 	FriendsFrameIcon:Hide()
 	F.StripTextures(IgnoreListFrame)
 
 	for i = 1, FRIENDS_TO_DISPLAY do
-		local bu
-		if C.isNewPatch then
-			bu = _G["FriendsListFrameScrollFrameButton"..i]
-		else
-			bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
-		end
+		local bu = _G["FriendsListFrameScrollFrameButton"..i]
 		local ic = bu.gameIcon
 
 		bu.background:Hide()
@@ -43,13 +37,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local function UpdateScroll()
 		for i = 1, FRIENDS_TO_DISPLAY do
-			local bu
-			if C.isNewPatch then
-				bu = _G["FriendsListFrameScrollFrameButton"..i]
-			else
-				bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
-			end
-
+			local bu = _G["FriendsListFrameScrollFrameButton"..i]
 			if bu.gameIcon:IsShown() then
 				bu.bg:Show()
 				bu.gameIcon:SetPoint("TOPRIGHT", bu.travelPassButton, "TOPLEFT", -4, 0)
@@ -59,7 +47,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end
 	hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
-	local FriendsListFrameScrollFrame = C.isNewPatch and FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame
 	hooksecurefunc(FriendsListFrameScrollFrame, "update", UpdateScroll)
 
 	local header = FriendsListFrameScrollFrame.PendingInvitesHeaderButton
@@ -82,12 +69,14 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	hooksecurefunc(FriendsListFrameScrollFrame.invitePool, "Acquire", reskinInvites)
+
+	local INVITE_RESTRICTION_NONE = 9
 	hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
 		if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
 			reskinInvites(FriendsListFrameScrollFrame.invitePool)
 		elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
 			local nt = button.travelPassButton:GetNormalTexture()
-			if FriendsFrame_GetInviteRestriction(button.id) == 6 then
+			if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
 				nt:SetVertexColor(1, 1, 1)
 			else
 				nt:SetVertexColor(.3, .3, .3)
@@ -120,10 +109,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 			if BNConnected() then
 				frame:Hide()
-				if not C.isNewPatch then
-					FriendsFrameBroadcastInput:Show()
-					FriendsFrameBroadcastInput_UpdateDisplay()
-				end
 			end
 		end
 	end)
@@ -146,22 +131,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(FriendsFrameSendMessageButton)
 	F.Reskin(FriendsFrameIgnorePlayerButton)
 	F.Reskin(FriendsFrameUnsquelchButton)
-	if C.isNewPatch then
-		F.ReskinScroll(FriendsListFrameScrollFrame.scrollBar)
-		F.ReskinScroll(IgnoreListFrameScrollFrame.scrollBar)
-		F.ReskinScroll(WhoListScrollFrame.scrollBar)
-	else
-		F.ReskinScroll(FriendsFrameFriendsScrollFrameScrollBar)
-		F.ReskinScroll(FriendsFrameIgnoreScrollFrameScrollBar)
-		F.ReskinScroll(FriendsFriendsScrollFrameScrollBar)
-		F.ReskinScroll(WhoListScrollFrameScrollBar)
-		F.CreateBD(FriendsFriendsList, .25)
-		F.StripTextures(AddFriendNoteFrame)
-		F.CreateBD(AddFriendNoteFrame, .25)
-		F.ReskinInput(FriendsFrameBroadcastInput)
-		F.Reskin(FriendsFriendsSendRequestButton)
-		F.Reskin(FriendsFriendsCloseButton)
-	end
+	F.ReskinScroll(FriendsListFrameScrollFrame.scrollBar)
+	F.ReskinScroll(IgnoreListFrameScrollFrame.scrollBar)
+	F.ReskinScroll(WhoListScrollFrame.scrollBar)
 	F.ReskinDropDown(FriendsFrameStatusDropDown)
 	F.ReskinDropDown(WhoFrameDropDown)
 	F.ReskinDropDown(FriendsFriendsFrameDropDown)

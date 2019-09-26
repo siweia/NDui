@@ -48,11 +48,10 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, "right")
 	F.ReskinFilterButton(PetJournalFilterButton)
 	F.ReskinFilterButton(MountJournalFilterButton)
-	if C.isNewPatch then
-		local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
-		F.ReskinCheck(togglePlayer)
-		togglePlayer:SetSize(28, 28)
-	end
+
+	local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
+	F.ReskinCheck(togglePlayer)
+	togglePlayer:SetSize(28, 28)
 
 	F.StripTextures(MountJournal.BottomLeftInset)
 	local bg = F.CreateBDFrame(MountJournal.BottomLeftInset, .25)

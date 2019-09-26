@@ -39,9 +39,6 @@ C.themes["Blizzard_Communities"] = function()
 			local optionsList = frame.OptionsList
 			if optionsList then
 				F.ReskinDropDown(optionsList.ClubFocusDropdown)
-				if not C.isNewPatch then
-					optionsList.ClubFocusDropdown.GuildFocusDropdownLabel:SetWidth(150)
-				end
 				F.ReskinDropDown(optionsList.ClubSizeDropdown)
 				F.ReskinDropDown(optionsList.SortByDropdown)
 				F.ReskinRole(optionsList.TankRoleFrame, "TANK")
@@ -52,17 +49,12 @@ C.themes["Blizzard_Communities"] = function()
 				F.Reskin(optionsList.Search)
 				optionsList.Search:ClearAllPoints()
 				optionsList.Search:SetPoint("TOPRIGHT", optionsList.SearchBox, "BOTTOMRIGHT", 0, -2)
-				if not C.isNewPatch then
-					F.Reskin(frame.PendingClubs)
-				end
 			end
 			if frame.ClubFinderSearchTab then reskinCommunityTab(frame.ClubFinderSearchTab) end
 			if frame.ClubFinderPendingTab then reskinCommunityTab(frame.ClubFinderPendingTab) end
 		end
 	end
-	if C.isNewPatch then
-		F.ReskinScroll(ClubFinderCommunityAndGuildFinderFrame.CommunityCards.ListScrollFrame.scrollBar)
-	end
+	F.ReskinScroll(ClubFinderCommunityAndGuildFinderFrame.CommunityCards.ListScrollFrame.scrollBar)
 
 	F.StripTextures(CommunitiesFrameCommunitiesList)
 	CommunitiesFrameCommunitiesList.InsetFrame:Hide()
