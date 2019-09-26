@@ -246,6 +246,17 @@ function M:VersionCheck_Create(text)
 end
 
 local hasChecked
+function M:VersionCheck_Initial()
+	if not hasChecked then
+		if M:VersionCheck_Compare(NDuiADB["DetectVersion"], DB.Version) == "IsNew" then
+			local release = gsub(NDuiADB["DetectVersion"], "(%d)$", "0")
+			M:VersionCheck_Create(format(L["Outdated NDui"], release))
+		end
+
+		hasChecked = true
+	end
+end
+
 function M:VersionCheck_Update(...)
 	local prefix, msg, distType, author = ...
 	if prefix ~= "NDuiVersionCheck" then return end
@@ -258,14 +269,7 @@ function M:VersionCheck_Update(...)
 		C_ChatInfo_SendAddonMessage("NDuiVersionCheck", NDuiADB["DetectVersion"], distType)
 	end
 
-	if not hasChecked then
-		if M:VersionCheck_Compare(NDuiADB["DetectVersion"], DB.Version) == "IsNew" then
-			local release = gsub(NDuiADB["DetectVersion"], "(%d)$", "0")
-			M:VersionCheck_Create(format(L["Outdated NDui"], release))
-		end
-
-		hasChecked = true
-	end
+	M:VersionCheck_Initial()
 end
 
 local prevTime = 0
@@ -280,6 +284,7 @@ function M:VersionCheck()
 
 	B:RegisterEvent("CHAT_MSG_ADDON", self.VersionCheck_Update)
 
+	M:VersionCheck_Initial()
 	C_ChatInfo_RegisterAddonMessagePrefix("NDuiVersionCheck")
 	if IsInGuild() then
 		C_ChatInfo_SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
