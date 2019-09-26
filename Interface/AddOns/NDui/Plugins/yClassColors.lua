@@ -100,7 +100,7 @@ local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%$d", "%$s")
 
 local function friendsFrame()
-	local scrollFrame = DB.isNewPatch and FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame
+	local scrollFrame = FriendsListFrameScrollFrame
 	local buttons = scrollFrame.buttons
 	local playerArea = GetRealZoneText()
 
@@ -117,13 +117,20 @@ local function friendsFrame()
 					end
 				end
 			elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
-				local _, presenceName, _, _, _, gameID, client, isOnline = BNGetFriendInfo(button.id)
-				if isOnline and client == BNET_CLIENT_WOW then
-					local _, charName, _, _, _, faction, _, class, _, zoneName = BNGetGameAccountInfo(gameID)
-					if presenceName and charName and class and faction == UnitFactionGroup("player") then
-						nameText = presenceName.." "..FRIENDS_WOW_NAME_COLOR_CODE.."("..classColor(class)..charName..FRIENDS_WOW_NAME_COLOR_CODE..")"
-						if zoneName == playerArea then
-							infoText = format("|cff00ff00%s|r", zoneName)
+				local accountInfo = C_BattleNet.GetFriendAccountInfo(button.id)
+				if accountInfo then
+					local accountName = accountInfo.accountName
+					local gameAccountInfo = accountInfo.gameAccountInfo
+					if gameAccountInfo.isOnline and gameAccountInfo.clientProgram == BNET_CLIENT_WOW then
+						local charName = gameAccountInfo.characterName
+						local faction = gameAccountInfo.factionName
+						local class = gameAccountInfo.className or UNKNOWN
+						local zoneName = gameAccountInfo.areaName or UNKNOWN
+						if accountName and charName and class and faction == DB.MyFaction then
+							nameText = accountName.." "..FRIENDS_WOW_NAME_COLOR_CODE.."("..classColor(class)..charName..FRIENDS_WOW_NAME_COLOR_CODE..")"
+							if zoneName == playerArea then
+								infoText = format("|cff00ff00%s|r", zoneName)
+							end
 						end
 					end
 				end
@@ -134,36 +141,31 @@ local function friendsFrame()
 		if infoText then button.info:SetText(infoText) end
 	end
 end
-if DB.isNewPatch then
-	hooksecurefunc(FriendsListFrameScrollFrame, "update", friendsFrame)
-else
-	hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", friendsFrame)
-end
+hooksecurefunc(FriendsListFrameScrollFrame, "update", friendsFrame)
 hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame)
 
 -- Whoframe
 local columnTable = {}
 local function updateWhoList()
-	local whoOffset = FauxScrollFrame_GetOffset(WhoListScrollFrame)
+	local scrollFrame = WhoListScrollFrame
+	local offset = HybridScrollFrame_GetOffset(scrollFrame)
+	local buttons = scrollFrame.buttons
+	local numButtons = #buttons
+	local numWhos, totalCount = C_FriendList.GetNumWhoResults()
+
 	local playerZone = GetRealZoneText()
 	local playerGuild = GetGuildInfo("player")
 	local playerRace = UnitRace("player")
 
-	for i = 1, WHOS_TO_DISPLAY, 1 do
-		local index = whoOffset + i
-		local nameText, levelText, variableText
-		if DB.isNewPatch then
-			local bu = _G["WhoListScrollFrameButton"..i]
-			nameText = bu.Name
-			levelText = bu.Level
-			variableText = bu.Variable
-		else
-			nameText = _G["WhoFrameButton"..i.."Name"]
-			levelText = _G["WhoFrameButton"..i.."Level"]
-			variableText = _G["WhoFrameButton"..i.."Variable"]
-		end
-		local info = C_FriendList.GetWhoInfo(index)
-		if info then
+	for i = 1, numButtons do
+		local button = buttons[i]
+		local index = offset + i
+		if index <= numWhos then
+			local nameText = button.Name
+			local levelText = button.Level
+			local variableText = button.Variable
+
+			local info = C_FriendList.GetWhoInfo(index)
 			local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
 			if zone == playerZone then zone = "|cff00ff00"..zone end
 			if guild == playerGuild then guild = "|cff00ff00"..guild end
@@ -181,3 +183,4 @@ local function updateWhoList()
 	end
 end
 hooksecurefunc("WhoList_Update", updateWhoList)
+hooksecurefunc(WhoListScrollFrame, "update", updateWhoList)
