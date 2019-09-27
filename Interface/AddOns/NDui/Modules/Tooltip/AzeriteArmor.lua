@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 local _G = getfenv(0)
-local strfind, format, tinsert, ipairs, select = string.find, string.format, table.insert, ipairs, select
+local format, tinsert, ipairs, select = string.format, table.insert, ipairs, select
 local GetSpellInfo = GetSpellInfo
 local C_AzeriteEmpoweredItem_GetPowerInfo = C_AzeriteEmpoweredItem.GetPowerInfo
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID

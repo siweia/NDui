@@ -3,7 +3,7 @@ local B, C, L, DB, F = unpack(ns)
 
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
-local ipairs, strmatch, unpack, pairs, ceil = ipairs, string.match, unpack, pairs, math.ceil
+local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
