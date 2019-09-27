@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local G = B:GetModule("GUI")
+local oUF = ns.oUF or oUF
 
 local function sortBars(barTable)
 	local num = 1
