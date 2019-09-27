@@ -3,16 +3,16 @@ local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
 local _G = getfenv(0)
-local strmatch, tonumber, pairs, type, unpack, next, rad = string.match, tonumber, pairs, type, unpack, next, math.rad
+local strmatch, tonumber, pairs, unpack, rad = string.match, tonumber, pairs, unpack, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
 local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
 local GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown
-local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_NamePlate_GetNamePlates, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_NamePlate.GetNamePlates, C_MythicPlus.GetCurrentAffixes
+local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
 local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
 local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
-local UNKNOWN, INTERRUPTED = UNKNOWN, INTERRUPTED
+local INTERRUPTED = INTERRUPTED
 
 -- Init
 function UF:PlateInsideView()
@@ -358,13 +358,19 @@ function UF:UpdateQuestUnit(_, unit)
 						local current, goal = strmatch(questText, "(%d+)/(%d+)")
 						local progress = strmatch(questText, "([%d%.]+)%%")
 						if current and goal then
-							if tonumber(current) < tonumber(goal) then
+							current = tonumber(current)
+							goal = tonumber(goal)
+							if current == goal then
+								isLootQuest = nil
+							elseif current < goal then
 								questProgress = goal - current
 								break
 							end
 						elseif progress then
 							progress = tonumber(progress)
-							if progress and progress < 100 then
+							if progress == 100 then
+								isLootQuest = nil
+							elseif progress < 100 then
 								questProgress = progress.."%"
 								break
 							end
