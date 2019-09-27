@@ -69,7 +69,8 @@ function Bar:CreateStancebar()
 
 	--create drag frame and drag functionality
 	if C.bars.userplaced then
-		B.Mover(frame, L["StanceBar"], "StanceBar", frame.Pos)
+		local mover = B.Mover(frame, L["StanceBar"], "StanceBar", frame.Pos)
+		mover:SetScale(NDuiDB["Actionbar"]["Scale"])
 	end
 
 	--create the mouseover functionality

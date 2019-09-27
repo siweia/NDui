@@ -49,7 +49,8 @@ function Bar:CreateLeaveVehicle()
 
 	--create drag frame and drag functionality
 	if C.bars.userplaced then
-		B.Mover(frame, L["LeaveVehicle"], "LeaveVehicle", frame.Pos)
+		local mover = B.Mover(frame, L["LeaveVehicle"], "LeaveVehicle", frame.Pos)
+		mover:SetScale(NDuiDB["Actionbar"]["Scale"])
 	end
 
 	--create the mouseover functionality
