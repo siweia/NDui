@@ -41,15 +41,11 @@ local function ForceRaidFrame()
 	CompactUnitFrameProfiles_UpdateCurrentPanel()
 end
 
-local function clipScale(scale)
-	return tonumber(format("%.5f", scale))
-end
-
 local function GetPerfectScale()
 	local scale = NDuiADB["UIScale"]
 	local bestScale = max(.4, min(1.15, 768 / DB.ScreenHeight))
 	local pixelScale = 768 / DB.ScreenHeight
-	if NDuiADB["LockUIScale"] then scale = clipScale(bestScale) end
+	if NDuiADB["LockUIScale"] then scale = bestScale end
 	C.mult = (bestScale / scale) - ((bestScale - pixelScale) / scale)
 
 	return scale
@@ -66,7 +62,7 @@ local function SetupUIScale()
 		UIParent:SetScale(scale)
 	end
 
-	NDuiADB["UIScale"] = clipScale(scale)
+	NDuiADB["UIScale"] = scale
 
 	isScaling = false
 end
