@@ -20,14 +20,12 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- SideDressUp
 
 	F.StripTextures(SideDressUpFrame, 0)
-	select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
+	F.SetBD(SideDressUpFrame)
+	F.Reskin(SideDressUpFrame.ResetButton)
+	F.ReskinClose(SideDressUpFrameCloseButton)
 
-	SideDressUpModel:HookScript("OnShow", function(self)
-		self:ClearAllPoints()
-		self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", C.mult, 0)
+	SideDressUpFrame:HookScript("OnShow", function(self)
+		SideDressUpFrame:ClearAllPoints()
+		SideDressUpFrame:SetPoint("LEFT", self:GetParent(), "RIGHT", 3, 0)
 	end)
-
-	F.Reskin(SideDressUpModelResetButton)
-	F.ReskinClose(SideDressUpModelCloseButton)
-	F.SetBD(SideDressUpModel)
 end)

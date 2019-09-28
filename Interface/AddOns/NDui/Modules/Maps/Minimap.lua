@@ -349,7 +349,6 @@ end
 
 function module:SetupMinimap()
 	-- Shape and Position
-	local scale = NDuiDB["Map"]["MinmapScale"]
 	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
 	DropDownList1:SetClampedToScreen(true)

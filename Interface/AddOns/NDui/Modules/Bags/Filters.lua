@@ -68,20 +68,32 @@ local function isMountAndPet(item)
 	return item.classID == LE_ITEM_CLASS_MISCELLANEOUS and (item.subClassID == LE_ITEM_MISCELLANEOUS_MOUNT or item.subClassID == LE_ITEM_MISCELLANEOUS_COMPANION_PET)
 end
 
+local function isItemFavourite(item)
+	if not NDuiDB["Bags"]["ItemFilter"] then return end
+	return item.id and NDuiDB["Bags"]["FavouriteItems"][item.id]
+end
+
+local function isEmptySlot(item)
+	if not NDuiDB["Bags"]["GatherEmpty"] then return end
+	return not item.texture and not module.SpecialBags[item.bagID]
+end
+
 function module:GetFilters()
-	local onlyBags = function(item) return isItemInBag(item) and not isItemEquipment(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isItemJunk(item) and not isMountAndPet(item) end
+	local onlyBags = function(item) return isItemInBag(item) and not isItemEquipment(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isItemJunk(item) and not isMountAndPet(item) and not isItemFavourite(item) and not isEmptySlot(item) end
 	local bagAzeriteItem = function(item) return isItemInBag(item) and isAzeriteArmor(item) end
 	local bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 	local bagConsumble = function(item) return isItemInBag(item) and isItemConsumble(item) end
 	local bagsJunk = function(item) return isItemInBag(item) and isItemJunk(item) end
-	local onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isMountAndPet(item) end
+	local onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemLegendary(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isMountAndPet(item) and not isItemFavourite(item) and not isEmptySlot(item) end
 	local bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
 	local bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	local bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
 	local bankConsumble = function(item) return isItemInBank(item) and isItemConsumble(item) end
-	local onlyReagent = function(item) return item.bagID == -3 end
+	local onlyReagent = function(item) return item.bagID == -3 and not isEmptySlot(item) end
 	local bagMountPet = function(item) return isItemInBag(item) and isMountAndPet(item) end
 	local bankMountPet = function(item) return isItemInBank(item) and isMountAndPet(item) end
+	local bagFavourite = function(item) return isItemInBag(item) and isItemFavourite(item) end
+	local bankFavourite = function(item) return isItemInBank(item) and isItemFavourite(item) end
 
-	return onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet
+	return onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet, bagFavourite, bankFavourite
 end

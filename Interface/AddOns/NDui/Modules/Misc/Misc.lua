@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
 local _G = getfenv(0)
-local tostring, tonumber, pairs, select, random, strsplit = tostring, tonumber, pairs, select, math.random, string.split
+local tonumber, select = tonumber, select
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
@@ -27,7 +27,7 @@ local GetInstanceInfo = GetInstanceInfo
 local GetSavedInstanceInfo = GetSavedInstanceInfo
 local SetSavedInstanceExtend = SetSavedInstanceExtend
 local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
-local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
+local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -314,7 +314,7 @@ function M:TradeTargetInfo()
 		local guid = UnitGUID("NPC")
 		if not guid then return end
 		local text = "|cffff0000"..L["Stranger"]
-		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
+		if C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
 			text = "|cffffff00"..FRIEND
 		elseif IsGuildMember(guid) then
 			text = "|cff00ff00"..GUILD
@@ -617,4 +617,32 @@ do
 
 	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
 	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
+end
+
+-- Check SHIFT key status
+do
+	local function onUpdate(self, elapsed)
+		if IsShiftKeyDown() then
+			self.elapsed = self.elapsed + elapsed
+			if self.elapsed > 3 then
+				UIErrorsFrame:AddMessage(DB.InfoColor..L["StupidShiftKey"])
+				self:Hide()
+			end
+		end
+	end
+	local shiftUpdater = CreateFrame("Frame")
+	shiftUpdater:SetScript("OnUpdate", onUpdate)
+	shiftUpdater:Hide()
+
+	local function ShiftKeyOnEvent(_, key, down)
+		if key == "LSHIFT" then
+			if down == 1 then
+				shiftUpdater.elapsed = 0
+				shiftUpdater:Show()
+			else
+				shiftUpdater:Hide()
+			end
+		end
+	end
+	B:RegisterEvent("MODIFIER_STATE_CHANGED", ShiftKeyOnEvent)
 end

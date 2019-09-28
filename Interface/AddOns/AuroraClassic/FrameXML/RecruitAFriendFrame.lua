@@ -4,16 +4,16 @@ tinsert(C.themes["AuroraClassic"], function()
 	local RecruitAFriendFrame = RecruitAFriendFrame
 	local RecruitAFriendSentFrame = RecruitAFriendSentFrame
 
-	RecruitAFriendFrame.NoteFrame:DisableDrawLayer("BACKGROUND")
+	--RecruitAFriendFrame.NoteFrame:DisableDrawLayer("BACKGROUND")
 
 	F.CreateBD(RecruitAFriendFrame)
-	F.ReskinClose(RecruitAFriendFrameCloseButton)
-	F.Reskin(RecruitAFriendFrame.SendButton)
-	F.ReskinInput(RecruitAFriendNameEditBox)
+	--F.ReskinClose(RecruitAFriendFrameCloseButton)
+	--F.Reskin(RecruitAFriendFrame.SendButton)
+	--F.ReskinInput(RecruitAFriendNameEditBox)
 
-	F.CreateBDFrame(RecruitAFriendFrame.NoteFrame, .25)
+	--F.CreateBDFrame(RecruitAFriendFrame.NoteFrame, .25)
 
-	F.CreateBD(RecruitAFriendSentFrame)
-	F.Reskin(RecruitAFriendSentFrame.OKButton)
-	F.ReskinClose(RecruitAFriendSentFrameCloseButton)
+	--F.CreateBD(RecruitAFriendSentFrame)
+	--F.Reskin(RecruitAFriendSentFrame.OKButton)
+	--F.ReskinClose(RecruitAFriendSentFrameCloseButton)
 end)

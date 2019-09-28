@@ -255,7 +255,7 @@ local function CreatePanel()
 		timeless = timeless and ", Timeless = true" or ""
 		combat = combat and ", Combat = true" or ""
 		flash = flash and ", Flash = true" or ""
-		text = text ~= "" and ", Text = \""..text.."\"" or ""
+		text = text and text ~= "" and ", Text = \""..text.."\"" or ""
 		local output = "{"..typeID..unitID..caster..stack..amount..timeless..combat..flash..text.."}"
 		bar:SetScript("OnMouseUp", function()
 			local editBox = ChatEdit_ChooseBoxForSend()

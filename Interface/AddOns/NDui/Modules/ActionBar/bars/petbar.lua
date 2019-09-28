@@ -47,7 +47,8 @@ function Bar:CreatePetbar()
 
 	--create drag frame and drag functionality
 	if C.bars.userplaced then
-		B.Mover(frame, L["Pet Actionbar"], "PetBar", frame.Pos)
+		local mover = B.Mover(frame, L["Pet Actionbar"], "PetBar", frame.Pos)
+		mover:SetScale(NDuiDB["Actionbar"]["Scale"])
 	end
 
 	--create the mouseover functionality

@@ -2,10 +2,11 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
-local pairs = pairs
-local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
-
 function S:QuestTracker()
+	local pairs = pairs
+	local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
+	local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
+
 	-- Mover for quest tracker
 	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
 	frame:SetSize(240, 50)
@@ -19,18 +20,6 @@ function S:QuestTracker()
 	tracker:SetMovable(true)
 	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
 
-	-- Questblock click enhant
-	local function QuestHook(id)
-		local questLogIndex = GetQuestLogIndexByID(id)
-		if IsControlKeyDown() and CanAbandonQuest(id) then
-			QuestMapQuestOptions_AbandonQuest(id)
-		elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then
-			QuestMapQuestOptions_ShareQuest(id)
-		end
-	end
-	hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(_, block) QuestHook(block.id) end)
-	hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
-
 	-- Show quest color and level
 	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
 		if ENABLE_COLORBLIND_MODE == "1" then return end
@@ -40,6 +29,8 @@ function S:QuestTracker()
 				local title = "["..level.."] "..title
 				if isComplete then
 					title = "|cffff78ff"..title
+				elseif C_QuestLog_IsQuestReplayable(questID) then
+					title = "|cff00ff00"..title
 				elseif frequency == LE_QUEST_FREQUENCY_DAILY then
 					title = "|cff3399ff"..title
 				end

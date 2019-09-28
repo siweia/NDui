@@ -42,7 +42,8 @@ function Bar:OnLogin()
 
 	--create drag frame and drag functionality
 	if C.bars.userplaced then
-		B.Mover(frame, L["Main Actionbar"], "Bar1", frame.Pos)
+		local mover = B.Mover(frame, L["Main Actionbar"], "Bar1", frame.Pos)
+		mover:SetScale(NDuiDB["Actionbar"]["Scale"])
 	end
 
 	--create the mouseover functionality

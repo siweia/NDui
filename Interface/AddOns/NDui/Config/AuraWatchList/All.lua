@@ -135,6 +135,7 @@ local list = {
 		{AuraID = 303568, UnitID = "target", Caster = "player"},	-- 锋锐珊瑚
 		{AuraID = 301624, UnitID = "target", Caster = "player"},	-- 颤栗毒素
 		{AuraID = 302565, UnitID = "target", Caster = "player"},	-- 导电墨汁
+		{AuraID = 296962, UnitID = "player"},	-- 艾萨拉饰品
 		-- 艾泽里特特质
 		{AuraID = 277960, UnitID = "player"},	-- 神经电激
 		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
@@ -545,6 +546,7 @@ local list = {
 		{AuraID = 31884, UnitID = "target"},	-- 复仇之怒
 		{AuraID = 33206, UnitID = "target"},	-- 痛苦压制
 		{AuraID = 45438, UnitID = "target"},	-- 寒冰屏障
+		{AuraID = 47585, UnitID = "target"},	-- 消散
 		{AuraID = 47788, UnitID = "target"},	-- 守护之魂
 		{AuraID = 48792, UnitID = "target"},	-- 冰封之韧
 		{AuraID = 48707, UnitID = "target"},	-- 反魔法护罩

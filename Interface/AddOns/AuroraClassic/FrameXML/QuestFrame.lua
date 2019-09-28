@@ -84,29 +84,16 @@ tinsert(C.themes["AuroraClassic"], function()
 	CurrentQuestsText.SetTextColor = F.dummy
 	CurrentQuestsText:SetShadowColor(0, 0, 0)
 
-	-- [[ Quest NPC model ]]
-	F.StripTextures(QuestNPCModel)
+	-- Quest NPC model
+
+	F.StripTextures(QuestModelScene)
 	F.StripTextures(QuestNPCModelTextFrame)
-
-	local npcbd = CreateFrame("Frame", nil, QuestNPCModel)
-	npcbd:SetPoint("TOPLEFT", -1, 1)
-	npcbd:SetPoint("RIGHT", 2, 0)
-	npcbd:SetPoint("BOTTOM", QuestNPCModelTextScrollFrame)
-	npcbd:SetFrameLevel(0)
-	F.CreateBD(npcbd)
-	F.CreateSD(npcbd)
-
-	local npcLine = CreateFrame("Frame", nil, QuestNPCModel)
-	npcLine:SetPoint("BOTTOMLEFT", 0, -1)
-	npcLine:SetPoint("BOTTOMRIGHT", 1, -1)
-	npcLine:SetHeight(C.mult)
-	npcLine:SetFrameLevel(0)
-	F.CreateBD(npcLine, 0)
+	local bg = F.SetBD(QuestNPCModelTextFrame)
+	bg:SetPoint("TOPLEFT", QuestModelScene)
+	bg:SetFrameLevel(0)
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
-		x = x + 5
-		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
+		x = x + 6
+		QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
 	end)
-
-	F.ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
 end)

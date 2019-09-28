@@ -11,12 +11,15 @@ local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
 local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture = BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture
-local CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor = CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor
-local BNGetNumFriends, BNGetFriendInfo, BNGetGameAccountInfo, BNGetNumFriendGameAccounts, BNGetFriendGameAccountInfo = BNGetNumFriends, BNGetFriendInfo, BNGetGameAccountInfo, BNGetNumFriendGameAccounts, BNGetFriendGameAccountInfo
-local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL
+local BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor = BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor
+local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+local C_BattleNet_GetFriendNumGameAccounts = C_BattleNet.GetFriendNumGameAccounts
+local C_BattleNet_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
+
+local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL, UNKNOWN = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL, UNKNOWN
 local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
-local CLIENT_WOW_CLASSIC = "WoV"
+local CLIENT_WOW_CLASSIC = "WoV" -- for sorting
 
 local r, g, b = DB.r, DB.g, DB.b
 local friendsFrame, menuFrame, updateRequest
@@ -59,37 +62,79 @@ local function sortBNFriends(a, b)
 	end
 end
 
+local function CanCooperateWithUnit(gameAccountInfo)
+	return gameAccountInfo.playerGuid and (gameAccountInfo.factionName == DB.MyFaction) and (gameAccountInfo.realmID ~= 0)
+end
+
+local function GetOnlineInfoText(client, isMobile, rafLinkType, locationText)
+	if not locationText or locationText == "" then
+		return UNKNOWN
+	end
+	if isMobile then
+		return LOCATION_MOBILE_APP
+	end
+	if (client == BNET_CLIENT_WOW) and (rafLinkType ~= Enum.RafLinkType.None) and not isMobile then
+		if rafLinkType == Enum.RafLinkType.Recruit then
+			return RAF_RECRUIT_FRIEND:format(locationText)
+		else
+			return RAF_RECRUITER_FRIEND:format(locationText)
+		end
+	end
+
+	return locationText
+end
+
 local function buildBNetTable(num)
 	wipe(bnetTable)
 
 	for i = 1, num do
-		local _, accountName, battleTag, _, charName, gameID, _, isOnline, _, isAFK, isDND, broadcastText, note, _, broadcastTime = BNGetFriendInfo(i)
-		if isOnline then
-			local _, _, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, _, wowProjectID = BNGetGameAccountInfo(gameID)
+		local accountInfo = C_BattleNet_GetFriendAccountInfo(i)
+		if accountInfo then
+			local accountName = accountInfo.accountName
+			local battleTag = accountInfo.battleTag
+			local isAFK = accountInfo.isAFK
+			local isDND = accountInfo.isDND
+			local note = accountInfo.note
+			local broadcastText = accountInfo.customMessage
+			local broadcastTime = accountInfo.customMessageTime
+			local rafLinkType = accountInfo.rafLinkType
 
-			charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
-			class = DB.ClassList[class]
+			local gameAccountInfo = accountInfo.gameAccountInfo
+			local isOnline = gameAccountInfo.isOnline
+			local gameID = gameAccountInfo.gameAccountID
 
-			local status, infoText
-			if isAFK or isGameAFK then
-				status = FRIENDS_TEXTURE_AFK
-			elseif isDND or isGameBusy then
-				status = FRIENDS_TEXTURE_DND
-			else
-				status = FRIENDS_TEXTURE_ONLINE
-			end
-			if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
-				if not zoneName or zoneName == "" then
-					infoText = UNKNOWN
-				else
-					infoText = zoneName
+			if isOnline and gameID then
+				local charName = gameAccountInfo.characterName
+				local client = gameAccountInfo.clientProgram
+				local class = gameAccountInfo.className or UNKNOWN
+				local zoneName = gameAccountInfo.areaName or UNKNOWN
+				local level = gameAccountInfo.characterLevel
+				local gameText = gameAccountInfo.richPresence or ""
+				local isGameAFK = gameAccountInfo.isGameAFK
+				local isGameBusy = gameAccountInfo.isGameBusy
+				local wowProjectID = gameAccountInfo.wowProjectID
+				local isMobile = gameAccountInfo.isWowMobile
+				local canCooperate = CanCooperateWithUnit(gameAccountInfo)
+
+				charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
+				class = DB.ClassList[class]
+
+				local status = FRIENDS_TEXTURE_ONLINE
+				if isAFK or isGameAFK then
+					status = FRIENDS_TEXTURE_AFK
+				elseif isDND or isGameBusy then
+					status = FRIENDS_TEXTURE_DND
 				end
-			else
-				infoText = gameText
-			end
-			if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_CLASSIC end
 
-			tinsert(bnetTable, {i, accountName, charName, gameID, client, realmName, status, class, level, infoText, note, broadcastText, broadcastTime})
+				local infoText = GetOnlineInfoText(client, isMobile, rafLinkType, gameText)
+				if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
+					infoText = GetOnlineInfoText(client, isMobile, rafLinkType, zoneName)
+				end
+
+				if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_CLASSIC end
+
+				tinsert(bnetTable, {i, accountName, charName, canCooperate, client, status, class, level, infoText, note, broadcastText, broadcastTime})
+			end
 		end
 	end
 
@@ -171,12 +216,17 @@ local function buttonOnClick(self, btn)
 					for i = 2, #menuList do menuList[i] = nil end
 				end
 
-				local numGameAccounts = BNGetNumFriendGameAccounts(self.data[1])
+				local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(self.data[1])
 				local lastGameAccountID, lastGameAccountGUID
 				if numGameAccounts > 1 then
 					for i = 1, numGameAccounts do
-						local _, charName, client, _, _, _, _, class, _, _, _, _, _, _, _, bnetIDGameAccount, _, _, _, guid = BNGetFriendGameAccountInfo(self.data[1], i)
-						if client == BNET_CLIENT_WOW and CanCooperateWithGameAccount(bnetIDGameAccount) then
+						local gameAccountInfo = C_BattleNet_GetFriendGameAccountInfo(self.data[1], i)
+						local charName = gameAccountInfo.characterName
+						local client = gameAccountInfo.clientProgram
+						local class = gameAccountInfo.className or UNKNOWN
+						local bnetIDGameAccount = gameAccountInfo.gameAccountID
+						local guid = gameAccountInfo.playerGuid
+						if client == BNET_CLIENT_WOW and CanCooperateWithUnit(gameAccountInfo) then
 							if not menuList[index] then menuList[index] = {} end
 							menuList[index].text = B.HexRGB(B.ClassColor(DB.ClassList[class]))..charName
 							menuList[index].notCheckable = true
@@ -218,24 +268,35 @@ local function buttonOnEnter(self)
 		GameTooltip:AddLine(L["BN"], 0,.6,1)
 		GameTooltip:AddLine(" ")
 
-		local index, accountName, _, _, _, _, _, _, _, _, note, broadcastText, broadcastTime = unpack(self.data)
-		local numGameAccounts = BNGetNumFriendGameAccounts(index)
+		local index, accountName, _, _, _, _, _, _, _, note, broadcastText, broadcastTime = unpack(self.data)
+		local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(index)
 		for i = 1, numGameAccounts do
-			local _, charName, client, realmName, _, faction, _, class, _, zoneName, level, gameText, _, _, _, _, _, _, _, _, wowProjectID = BNGetFriendGameAccountInfo(index, i)
+			local gameAccountInfo = C_BattleNet_GetFriendGameAccountInfo(index, i)
+			local charName = gameAccountInfo.characterName
+			local client = gameAccountInfo.clientProgram
+			local realmName = gameAccountInfo.realmName or ""
+			local faction = gameAccountInfo.factionName
+			local class = gameAccountInfo.className or UNKNOWN
+			local zoneName = gameAccountInfo.areaName
+			local level = gameAccountInfo.characterLevel
+			local gameText = gameAccountInfo.richPresence or ""
+			local wowProjectID = gameAccountInfo.wowProjectID
 			local clientString = BNet_GetClientEmbeddedTexture(client, 16)
 			if client == BNET_CLIENT_WOW then
-				realmName = (DB.MyRealm == realmName or realmName == "") and "" or "-"..realmName
-				class = DB.ClassList[class]
-				local classColor = B.HexRGB(B.ClassColor(class))
-				if faction == "Horde" then
-					clientString = "|TInterface\\FriendsFrame\\PlusManz-Horde:16:|t"
-				elseif faction == "Alliance" then
-					clientString = "|TInterface\\FriendsFrame\\PlusManz-Alliance:16:|t"
-				end
-				GameTooltip:AddLine(format("%s%s %s%s%s", clientString, level, classColor, charName, realmName))
+				if charName ~= "" then -- fix for weird account
+					realmName = (DB.MyRealm == realmName or realmName == "") and "" or "-"..realmName
+					class = DB.ClassList[class]
+					local classColor = B.HexRGB(B.ClassColor(class))
+					if faction == "Horde" then
+						clientString = "|TInterface\\FriendsFrame\\PlusManz-Horde:16:|t"
+					elseif faction == "Alliance" then
+						clientString = "|TInterface\\FriendsFrame\\PlusManz-Alliance:16:|t"
+					end
+					GameTooltip:AddLine(format("%s%s %s%s%s", clientString, level, classColor, charName, realmName))
 
-				if wowProjectID ~= WOW_PROJECT_ID then zoneName = gameText end
-				GameTooltip:AddLine(format("%s%s", inactiveZone, zoneName))
+					if wowProjectID ~= WOW_PROJECT_ID then zoneName = gameText end
+					GameTooltip:AddLine(format("%s%s", inactiveZone, zoneName))
+				end
 			else
 				GameTooltip:AddLine(format("|cffffffff%s%s", clientString, accountName))
 				if gameText ~= "" then
@@ -349,13 +410,13 @@ local function updateFriendsFrame()
 
 	for i = 1, #bnetTable do
 		local button = buttons[i+onlineFriends]
-		local _, accountName, charName, gameID, client, _, status, class, _, infoText = unpack(bnetTable[i])
+		local _, accountName, charName, canCooperate, client, status, class, _, infoText = unpack(bnetTable[i])
 
 		button.status:SetTexture(status)
 		local zoneColor = inactiveZone
 		local name = inactiveZone..charName
 		if client == BNET_CLIENT_WOW then
-			if CanCooperateWithGameAccount(gameID) then
+			if canCooperate then
 				local color = DB.ClassColors[class] or GetQuestDifficultyColor(1)
 				name = B.HexRGB(color)..charName
 			end

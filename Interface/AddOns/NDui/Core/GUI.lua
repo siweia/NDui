@@ -40,11 +40,12 @@ local defaultSettings = {
 		BagsWidth = 12,
 		BankWidth = 14,
 		BagsiLvl = true,
-		Artifact = true,
 		ReverseSort = false,
 		ItemFilter = true,
 		ItemSetFilter = false,
 		DeleteButton = true,
+		FavouriteItems = {},
+		GatherEmpty = false,
 	},
 	Auras = {
 		Reminder = true,
@@ -123,6 +124,15 @@ local defaultSettings = {
 		BossWidth = 150,
 		BossHeight = 22,
 		BossPowerHeight = 2,
+
+		CastingColor = {r=.3, g=.7, b=1},
+		NotInterruptColor = {r=1, g=.5, b=.5},
+		PlayerCBWidth = 300,
+		PlayerCBHeight = 20,
+		TargetCBWidth = 280,
+		TargetCBHeight = 20,
+		FocusCBWidth = 320,
+		FocusCBHeight = 20,
 	},
 	Chat = {
 		Sticky = false,
@@ -293,6 +303,7 @@ local accountSettings = {
 	KeystoneInfo = {},
 	AutoBubbles = false,
 	SystemInfoType = 1,
+	DisableInfobars = false,
 }
 
 -- Initial settings
@@ -363,6 +374,10 @@ end
 
 local function setupUnitFrame()
 	G:SetupUnitFrame(guiPage[3])
+end
+
+local function setupCastbar()
+	G:SetupCastbar(guiPage[3])
 end
 
 local function setupAuraWatch()
@@ -535,9 +550,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"], true},
 		{},--blank
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
-		{1, "Bags", "Artifact", L["Bags Artifact"], true},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", false, nil, updateBagSortOrder},
 		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", nil, nil, updateBagSortOrder},
+		{1, "Bags", "GatherEmpty", "|cff00cc4c"..L["Bags GatherEmpty"], true},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -547,7 +562,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[3] = {
 		{1, "UFs", "Enable", "|cff00cc4c"..L["Enable UFs"], nil, setupUnitFrame},
 		{},--blank
-		{1, "UFs", "Castbars", "|cff00cc4c"..L["UFs Castbar"]},
+		{1, "UFs", "Castbars", "|cff00cc4c"..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"]},
 		{1, "UFs", "SwingTimer", L["UFs SwingTimer"], true},
 		{1, "UFs", "LagString", L["Castbar LagString"]},
@@ -777,8 +792,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
+		{1, "ACCOUNT", "DisableInfobars", L["DisableInfobars"], true},
 		{},--blank
-		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, 2}},
+		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, 15}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {L["Highlight"], L["Gradient"], L["Flat"]}},
@@ -844,14 +860,6 @@ local function NDUI_VARIABLE(key, value, newValue)
 	end
 end
 
-local function optionOnEnter(self)
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:ClearLines()
-	GameTooltip:AddLine(L["Tips"])
-	GameTooltip:AddLine(self.tips, .6,.8,1, 1)
-	GameTooltip:Show()
-end
-
 local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
@@ -879,9 +887,8 @@ local function CreateOption(i)
 				bu:SetScript("OnClick", data)
 			end
 			if tooltip then
-				cb.tips = tooltip
-				cb:HookScript("OnEnter", optionOnEnter)
-				cb:HookScript("OnLeave", B.HideTooltip)
+				cb.title = L["Tips"]
+				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info")
 			end
 		-- Editbox
 		elseif optType == 2 then
@@ -901,14 +908,14 @@ local function CreateOption(i)
 				NDUI_VARIABLE(key, value, eb:GetText())
 				if callback then callback() end
 			end)
-			eb.tips = L["EdieBox Tip"]
-			eb:SetScript("OnEnter", optionOnEnter)
-			eb:SetScript("OnLeave", B.HideTooltip)
+			eb.title = L["Tips"]
+			B.AddTooltip(eb, "ANCHOR_RIGHT", L["EdieBox Tip"], "info")
 
 			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
 		-- Slider
 		elseif optType == 3 then
 			local min, max, step = unpack(data)
+			local decimal = step > 2 and 2 or step
 			local x, y
 			if horizon then
 				x, y = 350, -offset + 40
@@ -916,12 +923,12 @@ local function CreateOption(i)
 				x, y = 40, -offset - 30
 				offset = offset + 70
 			end
-			local s = B.CreateSlider(parent, name, min, max, x, y, width)
+			local s = B.CreateSlider(parent, name, min, max, x, y)
 			s:SetValue(NDUI_VARIABLE(key, value))
 			s:SetScript("OnValueChanged", function(_, v)
 				local current = tonumber(format("%."..step.."f", v))
 				NDUI_VARIABLE(key, value, current)
-				s.value:SetText(current)
+				s.value:SetText(format("%."..decimal.."f", current))
 				if callback then callback() end
 			end)
 			s.value:SetText(format("%."..step.."f", NDUI_VARIABLE(key, value)))
@@ -958,7 +965,7 @@ local function CreateOption(i)
 			B.CreateFS(dd, 14, name, "system", "CENTER", 0, 25)
 		-- Colorswatch
 		elseif optType == 5 then
-			local f = B.CreateColorSwatch(parent)
+			local f = B.CreateColorSwatch(parent, name, NDUI_VARIABLE(key, value))
 			local width = 25 + (horizon or 0)*155
 			if horizon then
 				f:SetPoint("TOPLEFT", width, -offset + 30)
@@ -966,30 +973,6 @@ local function CreateOption(i)
 				f:SetPoint("TOPLEFT", width, -offset - 5)
 				offset = offset + 35
 			end
-			B.CreateFS(f, 14, name, false, "LEFT", 26, 0)
-			f.tex:SetVertexColor(NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b)
-
-			local function onUpdate()
-				local r, g, b = ColorPickerFrame:GetColorRGB()
-				f.tex:SetVertexColor(r, g, b)
-				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
-				if callback then callback() end
-			end
-
-			local function onCancel()
-				local r, g, b = ColorPicker_GetPreviousValues()
-				f.tex:SetVertexColor(r, g, b)
-				NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b = r, g, b
-			end
-
-			f:SetScript("OnClick", function()
-				local r, g, b = NDUI_VARIABLE(key, value).r, NDUI_VARIABLE(key, value).g, NDUI_VARIABLE(key, value).b
-				ColorPickerFrame.func = onUpdate
-				ColorPickerFrame.previousValues = {r = r, g = g, b = b}
-				ColorPickerFrame.cancelFunc = onCancel
-				ColorPickerFrame:SetColorRGB(r, g, b)
-				ColorPickerFrame:Show()
-			end)
 		-- Blank, no optType
 		else
 			local l = CreateFrame("Frame", nil, parent)
@@ -1037,6 +1020,11 @@ local function exportData()
 						text = text..";"..KEY..":"..key
 						for _, v in ipairs(value) do
 							text = text..":"..tostring(v)
+						end
+					elseif key == "FavouriteItems" then
+						text = text..";"..KEY..":"..key
+						for itemID in pairs(value) do
+							text = text..":"..tostring(itemID)
 						end
 					end
 				else
@@ -1129,6 +1117,11 @@ local function importData()
 				flash = toBoolean(flash)
 				if not NDuiDB[key][value] then NDuiDB[key][value] = {} end
 				NDuiDB[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
+			end
+		elseif value == "FavouriteItems" then
+			local items = {select(3, strsplit(":", option))}
+			for _, itemID in next, items do
+				NDuiDB[key][value][tonumber(itemID)] = true
 			end
 		elseif key == "Mover" then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
@@ -1286,7 +1279,7 @@ local function OpenGUI()
 	ok:SetPoint("RIGHT", close, "LEFT", -10, 0)
 	ok:SetScript("OnClick", function()
 		local scale = NDuiADB["UIScale"]
-		if scale ~= scaleOld then
+		if not NDuiADB["LockUIScale"] and scale ~= scaleOld then
 			UIParent:SetScale(scale)
 		end
 		f:Hide()

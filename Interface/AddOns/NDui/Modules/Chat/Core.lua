@@ -6,9 +6,10 @@ local maxLines = 1024
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
-local ChatEdit_UpdateHeader, GetChatWindowInfo, GetChannelList, GetCVar, SetCVar, Ambiguate = ChatEdit_UpdateHeader, GetChatWindowInfo, GetChannelList, GetCVar, SetCVar, Ambiguate
+local ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate = ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate
 local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup
-local BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
+local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
+local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 
 function module:TabSetAlpha(alpha)
 	if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
@@ -173,11 +174,16 @@ function module.OnChatWhisper(event, ...)
 	for word in pairs(whisperList) do
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
-				local gameID = select(6, BNGetFriendInfoByID(presenceID))
-				if gameID then
-					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-					if CanCooperateWithGameAccount(gameID) and (not NDuiDB["Chat"]["GuildInvite"] or module:IsUnitInGuild(charName.."-"..realmName)) then
-						BNInviteFriend(gameID)
+				local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
+				if accountInfo then
+					local gameAccountInfo = accountInfo.gameAccountInfo
+					local gameID = gameAccountInfo.gameAccountID
+					if gameID then
+						local charName = gameAccountInfo.characterName
+						local realmName = gameAccountInfo.realmName
+						if CanCooperateWithGameAccount(accountInfo) and (not NDuiDB["Chat"]["GuildInvite"] or module:IsUnitInGuild(charName.."-"..realmName)) then
+							BNInviteFriend(gameID)
+						end
 					end
 				end
 			else

@@ -248,10 +248,8 @@ function UF:CreateIcons(self)
 	if mystyle == "player" then
 		local combat = self:CreateTexture(nil, "OVERLAY")
 		combat:SetPoint("CENTER", self, "BOTTOMLEFT")
-		combat:SetSize(20, 20)
-		combat:SetTexture("Interface\\WORLDSTATEFRAME\\CombatSwords")
-		combat:SetTexCoord(0, .5, 0, .5)
-		combat:SetVertexColor(.8, 0, 0)
+		combat:SetSize(28, 28)
+		combat:SetAtlas(DB.objectTex)
 		self.CombatIndicator = combat
 
 		local rest = self:CreateTexture(nil, "OVERLAY")
@@ -314,6 +312,7 @@ local function createBarMover(bar, text, value, anchor)
 	local mover = B.Mover(bar, text, value, anchor, bar:GetHeight()+bar:GetWidth()+5, bar:GetHeight()+5)
 	bar:ClearAllPoints()
 	bar:SetPoint("RIGHT", mover)
+	bar.mover = mover
 end
 
 function UF:CreateCastBar(self)
@@ -326,13 +325,13 @@ function UF:CreateCastBar(self)
 	B.CreateSB(cb, true, .3, .7, 1)
 
 	if mystyle == "player" then
-		cb:SetSize(unpack(C.UFs.PlayercbSize))
+		cb:SetSize(NDuiDB["UFs"]["PlayerCBWidth"], NDuiDB["UFs"]["PlayerCBHeight"])
 		createBarMover(cb, L["Player Castbar"], "PlayerCB", C.UFs.Playercb)
 	elseif mystyle == "target" then
-		cb:SetSize(unpack(C.UFs.TargetcbSize))
+		cb:SetSize(NDuiDB["UFs"]["TargetCBWidth"], NDuiDB["UFs"]["TargetCBHeight"])
 		createBarMover(cb, L["Target Castbar"], "TargetCB", C.UFs.Targetcb)
 	elseif mystyle == "focus" then
-		cb:SetSize(unpack(C.UFs.FocuscbSize))
+		cb:SetSize(NDuiDB["UFs"]["FocusCBWidth"], NDuiDB["UFs"]["FocusCBHeight"])
 		createBarMover(cb, L["Focus Castbar"], "FocusCB", C.UFs.Focuscb)
 	elseif mystyle == "boss" or mystyle == "arena" then
 		cb:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -8)
@@ -342,12 +341,6 @@ function UF:CreateCastBar(self)
 		cb:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 		cb:SetHeight(self:GetHeight())
 	end
-
-	cb.CastingColor = {.3, .7, 1}
-	cb.ChannelingColor = {.3, .7, 1}
-	cb.notInterruptibleColor = {1, .5, .5}
-	cb.CompleteColor = {.1, .8, 0}
-	cb.FailColor = {1, .1, 0}
 
 	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, 10), "", false, "RIGHT", -2, 0)
 	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, 10), "", false, "LEFT", 2, 0)
@@ -1028,7 +1021,7 @@ function UF:CreateQuakeTimer(self)
 	if not NDuiDB["UFs"]["Castbars"] then return end
 
 	local bar = CreateFrame("StatusBar", nil, self)
-	bar:SetSize(unpack(C.UFs.PlayercbSize))
+	bar:SetSize(NDuiDB["UFs"]["PlayerCBWidth"], NDuiDB["UFs"]["PlayerCBHeight"])
 	B.CreateSB(bar, true, 0, 1, 0)
 	bar:Hide()
 

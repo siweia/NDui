@@ -161,7 +161,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 				ic:SetTexCoord(.08, .92, .08, .92)
 				ic:SetDrawLayer("OVERLAY")
-				ic:SetPoint("LEFT", co, "RIGHT", 2, 0)
 				co:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)
 
 				F.CreateBG(ic)

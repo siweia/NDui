@@ -112,7 +112,7 @@ ExtraQuestButton:RegisterEvent("PLAYER_LOGIN")
 ExtraQuestButton:SetScript("OnEvent", function(self, event, ...)
 	if(self[event]) then
 		self[event](self, event, ...)
-	elseif(self:IsEnabled()) then
+	else
 		self:Update()
 	end
 end)
@@ -146,7 +146,7 @@ local onAttributeChanged = [[
 ]]
 
 function ExtraQuestButton:BAG_UPDATE_COOLDOWN()
-	if(self:IsShown() and self:IsEnabled() and self.itemID) then
+	if(self:IsShown() and self.itemID) then
 		local start, duration = GetItemCooldown(self.itemID)
 		if(duration > 0) then
 			self.Cooldown:SetCooldown(start, duration)
@@ -160,7 +160,7 @@ end
 function ExtraQuestButton:BAG_UPDATE_DELAYED()
 	self:Update()
 
-	if(self:IsShown() and self:IsEnabled()) then
+	if(self:IsShown()) then
 		local count = GetItemCount(self.itemLink)
 		self.Count:SetText(count and count > 1 and count or "")
 	end
@@ -175,7 +175,7 @@ function ExtraQuestButton:PLAYER_REGEN_ENABLED(event)
 end
 
 function ExtraQuestButton:UPDATE_BINDINGS()
-	if(self:IsShown() and self:IsEnabled()) then
+	if(self:IsShown()) then
 		self:SetItem()
 		self:SetAttribute("binding", GetTime())
 	end
@@ -274,48 +274,46 @@ ExtraQuestButton:SetScript("OnEnter", function(self)
 end)
 
 ExtraQuestButton:SetScript("OnUpdate", function(self, elapsed)
-	if(not self:IsEnabled()) then
-		return
-	end
+	if self.updateRange then
+		if((self.rangeTimer or 0) > TOOLTIP_UPDATE_TIME) then
+			local HotKey = self.HotKey
+			local Icon = self.Icon
 
-	if(self.rangeTimer > TOOLTIP_UPDATE_TIME) then
-		local HotKey = self.HotKey
-		local Icon = self.Icon
-
-		-- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
-		local inRange = IsItemInRange(self.itemLink, "target")
-		if(HotKey:GetText() == RANGE_INDICATOR) then
-			if(inRange == false) then
-				HotKey:SetTextColor(1, .1, .1)
-				HotKey:Show()
-				Icon:SetVertexColor(1, .1, .1)
-			elseif(inRange) then
-				HotKey:SetTextColor(.6, .6, .6)
-				HotKey:Show()
-				Icon:SetVertexColor(1, 1, 1)
+			-- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
+			local inRange = IsItemInRange(self.itemLink, "target")
+			if(HotKey:GetText() == RANGE_INDICATOR) then
+				if(inRange == false) then
+					HotKey:SetTextColor(1, .1, .1)
+					HotKey:Show()
+					Icon:SetVertexColor(1, .1, .1)
+				elseif(inRange) then
+					HotKey:SetTextColor(.6, .6, .6)
+					HotKey:Show()
+					Icon:SetVertexColor(1, 1, 1)
+				else
+					HotKey:Hide()
+				end
 			else
-				HotKey:Hide()
+				if(inRange == false) then
+					HotKey:SetTextColor(1, .1, .1)
+					Icon:SetVertexColor(1, .1, .1)
+				else
+					HotKey:SetTextColor(.6, .6, .6)
+					Icon:SetVertexColor(1, 1, 1)
+				end
 			end
+
+			self.rangeTimer = 0
 		else
-			if(inRange == false) then
-				HotKey:SetTextColor(1, .1, .1)
-				Icon:SetVertexColor(1, .1, .1)
-			else
-				HotKey:SetTextColor(.6, .6, .6)
-				Icon:SetVertexColor(1, 1, 1)
-			end
+			self.rangeTimer = (self.rangeTimer or 0) + elapsed
 		end
-
-		self.rangeTimer = 0
-	else
-		self.rangeTimer = self.rangeTimer + elapsed
 	end
 
-	if(self.updateTimer > 5) then
+	if((self.updateTimer or 0) > 5) then
 		self:Update()
 		self.updateTimer = 0
 	else
-		self.updateTimer = self.updateTimer + elapsed
+		self.updateTimer = (self.updateTimer or 0) + elapsed
 	end
 end)
 
@@ -361,10 +359,11 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 	if(self.itemID) then
 		local HotKey = self.HotKey
 		local key = GetBindingKey("EXTRAACTIONBUTTON1")
+		local hasRange = ItemHasRange(itemLink)
 		if(key) then
 			HotKey:SetText(GetBindingText(key, 1))
 			HotKey:Show()
-		elseif(ItemHasRange(itemLink)) then
+		elseif(hasRange) then
 			HotKey:SetText(RANGE_INDICATOR)
 			HotKey:Show()
 		else
@@ -378,6 +377,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 			self:SetAttribute("item", "item:" .. self.itemID)
 			self:BAG_UPDATE_COOLDOWN()
 		end
+		self.updateRange = hasRange
 	end
 end
 
@@ -485,7 +485,7 @@ end
 
 local ticker
 function ExtraQuestButton:Update()
-	if(not self:IsEnabled() or self.locked) then
+	if(HasExtraActionBar() or self.locked) then
 		return
 	end
 

@@ -10,6 +10,7 @@ DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.MyName = UnitName("player")
 DB.MyRealm = GetRealmName()
 DB.MyClass = select(2, UnitClass("player"))
+DB.MyFaction = UnitFactionGroup("player")
 DB.ClassList = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 	DB.ClassList[v] = k

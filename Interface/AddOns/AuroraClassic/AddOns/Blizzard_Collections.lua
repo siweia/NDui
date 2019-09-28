@@ -49,6 +49,10 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinFilterButton(PetJournalFilterButton)
 	F.ReskinFilterButton(MountJournalFilterButton)
 
+	local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
+	F.ReskinCheck(togglePlayer)
+	togglePlayer:SetSize(28, 28)
+
 	F.StripTextures(MountJournal.BottomLeftInset)
 	local bg = F.CreateBDFrame(MountJournal.BottomLeftInset, .25)
 	bg:SetPoint("TOPLEFT", 3, 0)
