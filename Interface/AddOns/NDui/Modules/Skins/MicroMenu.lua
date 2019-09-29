@@ -61,12 +61,36 @@ function S:MicroButton_Create(parent, data)
 	end
 end
 
+function S:MicroMenu_Lines()
+	if not NDuiDB["Skins"]["MenuLine"] then return end
+
+	local cr, cg, cb = 0, 0, 0
+	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
+
+	-- MICROMENU
+	local mmbottomL = CreateFrame("Frame", nil, UIParent)
+	mmbottomL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 3)
+	B.CreateGF(mmbottomL, 210, C.mult, "Horizontal", cr, cg, cb, 0, .7)
+	local mmbottomR = CreateFrame("Frame", nil, UIParent)
+	mmbottomR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 3)
+	B.CreateGF(mmbottomR, 210, C.mult, "Horizontal", cr, cg, cb, .7, 0)
+
+	local mmtopL = CreateFrame("Frame", nil, UIParent)
+	mmtopL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 24)
+	B.CreateGF(mmtopL, 230, C.mult, "Horizontal", cr, cg, cb, 0, .7)
+	local mmtopR = CreateFrame("Frame", nil, UIParent)
+	mmtopR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 24)
+	B.CreateGF(mmtopR, 230, C.mult, "Horizontal", cr, cg, cb, .7, 0)
+end
+
 function S:MicroMenu()
 	if not NDuiDB["Skins"]["MicroMenu"] then return end
+	if not NDuiDB["Actionbar"]["Enable"] then return end
 
 	local menubar = CreateFrame("Frame", nil, UIParent)
 	menubar:SetSize(323, 22)
 	B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
+	S:MicroMenu_Lines()
 
 	-- Generate Buttons
 	local buttonInfo = {

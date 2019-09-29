@@ -4,6 +4,8 @@ local S = B:GetModule("Skins")
 
 function S:PetBattleUI()
 	if not NDuiDB["Skins"]["PetBattle"] then return end
+	if not NDuiDB["Actionbar"]["Enable"] then return end
+
 	local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
 
 	-- Head Frame
