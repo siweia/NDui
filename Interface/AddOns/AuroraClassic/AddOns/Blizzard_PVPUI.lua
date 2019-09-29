@@ -72,6 +72,12 @@ C.themes["Blizzard_PVPUI"] = function()
 	F.ReskinIcon(SeasonRewardFrame.Icon)
 	select(3, SeasonRewardFrame:GetRegions()):SetTextColor(1, .8, 0)
 
+	local seasonReward = PVPQueueFrame.HonorInset.RatedPanel.SeasonRewardFrame
+	seasonReward.Ring:Hide()
+	seasonReward.CircleMask:Hide()
+	seasonReward.Icon:SetTexCoord(.08, .92, .08, .92)
+	F.CreateBDFrame(seasonReward.Icon)
+
 	-- Honor frame
 
 	local BonusFrame = HonorFrame.BonusFrame
@@ -89,6 +95,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		local reward = bu.Reward
 		if reward then
 			reward.Border:Hide()
+			reward.CircleMask:Hide()
 			F.ReskinIcon(reward.Icon)
 		end
 	end
@@ -164,6 +171,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		local reward = bu.Reward
 		if reward then
 			reward.Border:Hide()
+			reward.CircleMask:Hide()
 			F.ReskinIcon(reward.Icon)
 		end
 
