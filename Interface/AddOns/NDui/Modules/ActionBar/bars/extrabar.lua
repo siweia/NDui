@@ -9,11 +9,10 @@ function Bar:CreateExtrabar()
 	local buttonList = {}
 
 	--create the frame to hold the buttons
-	local frame = CreateFrame("Frame", "NDui_ExtraActionBar", UIParent, "SecureHandlerStateTemplate")
+	local frame = CreateFrame("Frame", "NDui_ActionBarExtra", UIParent, "SecureHandlerStateTemplate")
 	frame:SetWidth(num*cfg.size + (num-1)*margin + 2*padding)
 	frame:SetHeight(cfg.size + 2*padding)
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 250, 100}
-	frame:SetScale(NDuiDB["Actionbar"]["Scale"])
 
 	--move the buttons into position and reparent them
 	ExtraActionBarFrame:SetParent(frame)
@@ -33,8 +32,7 @@ function Bar:CreateExtrabar()
 
 	--create drag frame and drag functionality
 	if C.bars.userplaced then
-		local mover = B.Mover(frame, L["Extrabar"], "Extrabar", frame.Pos)
-		mover:SetScale(NDuiDB["Actionbar"]["Scale"])
+		frame.mover = B.Mover(frame, L["Extrabar"], "Extrabar", frame.Pos)
 	end
 
 	--create the mouseover functionality
@@ -43,10 +41,17 @@ function Bar:CreateExtrabar()
 	end
 
 	--zone ability
+	local zoneFrame = CreateFrame("Frame", "NDui_ActionBarZone", UIParent)
+	zoneFrame:SetWidth(cfg.size + 2*padding)
+	zoneFrame:SetHeight(cfg.size + 2*padding)
+	zoneFrame.Pos = {"BOTTOM", UIParent, "BOTTOM", -250, 100}
+
+	ZoneAbilityFrame:SetParent(zoneFrame)
 	ZoneAbilityFrame:ClearAllPoints()
+	ZoneAbilityFrame:SetPoint("CENTER", 0, 0)
 	ZoneAbilityFrame.ignoreFramePositionManager = true
 	ZoneAbilityFrameNormalTexture:SetAlpha(0)
-	B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", {"BOTTOM", UIParent, "BOTTOM", -250, 100}, 64, 64)
+	zoneFrame.mover = B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
 
 	local spellButton = ZoneAbilityFrame.SpellButton
 	spellButton.Style:SetAlpha(0)

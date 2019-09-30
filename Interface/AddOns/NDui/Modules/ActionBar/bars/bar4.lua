@@ -24,7 +24,6 @@ function Bar:CreateBar4()
 		frame:SetHeight(num*cfg.size + (num-1)*margin + 2*padding)
 		frame.Pos = {"RIGHT", UIParent, "RIGHT", -1, 0}
 	end
-	frame:SetScale(NDuiDB["Actionbar"]["Scale"])
 
 	--move the buttons into position and reparent them
 	MultiBarRight:SetParent(frame)
@@ -77,8 +76,7 @@ function Bar:CreateBar4()
 
 	--create drag frame and drag functionality
 	if C.bars.userplaced then
-		local mover = B.Mover(frame, SHOW_MULTIBAR3_TEXT, "Bar4", frame.Pos)
-		mover:SetScale(NDuiDB["Actionbar"]["Scale"])
+		frame.mover = B.Mover(frame, SHOW_MULTIBAR3_TEXT, "Bar4", frame.Pos)
 	end
 
 	--create the mouseover functionality

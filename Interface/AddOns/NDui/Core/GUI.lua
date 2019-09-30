@@ -389,6 +389,10 @@ local function updateBagSortOrder()
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 end
 
+local function updateActionbarScale()
+	B:GetModule("Actionbar"):UpdateAllScale()
+end
+
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -535,7 +539,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"]},
 		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"], true},
 		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
-		{3, "Actionbar", "Scale", L["Actionbar Scale"], true, {.8, 1.5, 1}},
+		{3, "Actionbar", "Scale", L["Actionbar Scale"].."*", true, {.8, 1.5, 1}, updateActionbarScale},
 		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"]},
 		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
