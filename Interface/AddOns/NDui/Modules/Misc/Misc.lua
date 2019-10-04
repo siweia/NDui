@@ -624,7 +624,7 @@ do
 	local function onUpdate(self, elapsed)
 		if IsShiftKeyDown() then
 			self.elapsed = self.elapsed + elapsed
-			if self.elapsed > 3 then
+			if self.elapsed > 5 then
 				UIErrorsFrame:AddMessage(DB.InfoColor..L["StupidShiftKey"])
 				self:Hide()
 			end
