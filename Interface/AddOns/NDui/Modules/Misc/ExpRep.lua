@@ -112,6 +112,7 @@ function M:ExpBar_UpdateTooltip()
 	GameTooltip:AddLine(LEVEL.." "..myLevel, 0,.6,1)
 
 	if myLevel < MAX_PLAYER_LEVEL then
+		GameTooltip:AddLine(" ")
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
 		GameTooltip:AddDoubleLine(XP..":", xp.." / "..mxp.." ("..floor(xp/mxp*100).."%)", .6,.8,1, 1,1,1)
 		if rxp then
