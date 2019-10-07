@@ -148,11 +148,6 @@ function B:PostCastStart(unit)
 		color = NDuiDB["UFs"]["NotInterruptColor"]
 		self:SetStatusBarColor(color.r, color.g, color.b)
 	end
-
-	-- Fix for empty icon
-	if self.Icon and not self.Icon:GetTexture() then
-		self.Icon:SetTexture(136243)
-	end
 end
 
 function B:PostUpdateInterruptible(unit)
