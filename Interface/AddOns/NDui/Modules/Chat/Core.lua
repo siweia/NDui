@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
 
 local maxLines = 1024
+local fontOutline
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
@@ -40,7 +41,7 @@ function module:SkinChat()
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetMaxResize(maxWidth, maxHeight)
 	self:SetMinResize(100, 50)
-	self:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	self:SetFont(DB.Font[1], fontSize, fontOutline)
 	self:SetShadowColor(0, 0, 0, 0)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
@@ -71,7 +72,7 @@ function module:SkinChat()
 	local tab = _G[name.."Tab"]
 	tab:SetAlpha(1)
 	local tabFs = tab:GetFontString()
-	tabFs:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
+	tabFs:SetFont(DB.Font[1], DB.Font[2]+2, fontOutline)
 	tabFs:SetShadowColor(0, 0, 0, 0)
 	tabFs:SetTextColor(1, .8, 0)
 	B.StripTextures(tab, 7)
@@ -266,6 +267,12 @@ function module:ChatFrameBackground()
 end
 
 function module:OnLogin()
+	if AuroraConfig and not AuroraConfig.reskinFont then
+		fontOutline = ""
+	else
+		fontOutline = "OUTLINE"
+	end
+
 	for i = 1, NUM_CHAT_WINDOWS do
 		self.SkinChat(_G["ChatFrame"..i])
 	end
