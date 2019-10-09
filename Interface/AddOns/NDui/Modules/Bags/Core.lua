@@ -342,8 +342,6 @@ local freeSlotContainer = {
 }
 
 function module:CreateFreeSlots()
-	if not NDuiDB["Bags"]["GatherEmpty"] then return end
-
 	local name = self.name
 	if not freeSlotContainer[name] then return end
 
@@ -583,20 +581,25 @@ function module:OnLogin()
 		local yOffset = -offset + spacing
 		local width, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
 		if self.freeSlot then
-			local numSlots = #self.buttons + 1
-			local row = ceil(numSlots / columns)
-			local col = numSlots % columns
-			if col == 0 then col = columns end
-			local xPos = (col-1) * (iconSize + spacing)
-			local yPos = -1 * (row-1) * (iconSize + spacing)
+			if NDuiDB["Bags"]["GatherEmpty"] then
+				local numSlots = #self.buttons + 1
+				local row = ceil(numSlots / columns)
+				local col = numSlots % columns
+				if col == 0 then col = columns end
+				local xPos = (col-1) * (iconSize + spacing)
+				local yPos = -1 * (row-1) * (iconSize + spacing)
 
-			self.freeSlot:ClearAllPoints()
-			self.freeSlot:SetPoint("TOPLEFT", self, "TOPLEFT", xPos+xOffset, yPos+yOffset)
+				self.freeSlot:ClearAllPoints()
+				self.freeSlot:SetPoint("TOPLEFT", self, "TOPLEFT", xPos+xOffset, yPos+yOffset)
+				self.freeSlot:Show()
 
-			if height < 0 then
-				width, height = columns * (iconSize+spacing)-spacing, iconSize
-			elseif col == 1 then
-				height = height + iconSize + spacing
+				if height < 0 then
+					width, height = columns * (iconSize+spacing)-spacing, iconSize
+				elseif col == 1 then
+					height = height + iconSize + spacing
+				end
+			else
+				self.freeSlot:Hide()
 			end
 		end
 		self:SetSize(width + xOffset*2, height + offset)
