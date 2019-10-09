@@ -80,7 +80,6 @@ function UF:CreateHealthBar(self)
 	elseif mystyle ~= "raid" and NDuiDB["UFs"]["HealthColor"] == 3 then
 		health.colorSmooth = true
 	end
-	health.frequentUpdates = true
 
 	self.Health = health
 	self.Health.bg = bg

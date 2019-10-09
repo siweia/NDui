@@ -17,8 +17,6 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
 
 ## Options
 
-.frequentUpdates                  - Indicates whether to use UNIT_HEALTH_FREQUENT instead of UNIT_HEALTH to update the
-                                    bar (boolean)
 .smoothGradient                   - 9 color values to be used with the .colorSmooth option (table)
 .considerSelectionInCombatHostile - Indicates whether selection should be considered hostile while the unit is in
                                     combat with the player (boolean)
@@ -66,7 +64,6 @@ The following options are listed by priority. The first check that returns true 
     Background:SetTexture(1, 1, 1, .5)
 
     -- Options
-    Health.frequentUpdates = true
     Health.colorTapping = true
     Health.colorDisconnected = true
     Health.colorClass = true
@@ -189,38 +186,13 @@ local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
---[[ Health:SetFrequentUpdates(state)
-Used to toggle frequent updates.
-
-* self  - the Health element
-* state - the desired state of frequent updates (boolean)
---]]
-local function SetFrequentUpdates(element, state)
-	if(element.frequentUpdates ~= state) then
-		element.frequentUpdates = state
-		if(element.frequentUpdates) then
-			element.__owner:UnregisterEvent('UNIT_HEALTH', Path)
-			element.__owner:RegisterEvent('UNIT_HEALTH_FREQUENT', Path)
-		else
-			element.__owner:UnregisterEvent('UNIT_HEALTH_FREQUENT', Path)
-			element.__owner:RegisterEvent('UNIT_HEALTH', Path)
-		end
-	end
-end
-
 local function Enable(self, unit)
 	local element = self.Health
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
-		element.SetFrequentUpdates = SetFrequentUpdates
 
-		if(element.frequentUpdates) then
-			self:RegisterEvent('UNIT_HEALTH_FREQUENT', Path)
-		else
-			self:RegisterEvent('UNIT_HEALTH', Path)
-		end
-
+		self:RegisterEvent('UNIT_HEALTH_FREQUENT', Path)
 		self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		self:RegisterEvent('UNIT_CONNECTION', Path)
 		self:RegisterEvent('UNIT_FACTION', Path) -- For tapping
@@ -246,7 +218,6 @@ local function Disable(self)
 		element:Hide()
 
 		self:UnregisterEvent('UNIT_HEALTH_FREQUENT', Path)
-		self:UnregisterEvent('UNIT_HEALTH', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		self:UnregisterEvent('UNIT_CONNECTION', Path)
 		self:UnregisterEvent('UNIT_FACTION', Path)
