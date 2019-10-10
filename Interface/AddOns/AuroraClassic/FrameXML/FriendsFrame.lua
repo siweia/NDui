@@ -93,38 +93,45 @@ tinsert(C.themes["AuroraClassic"], function()
 		F.CreateBDFrame(button)
 	end
 
-	F.CreateBD(FriendsFrameBattlenetFrame.UnavailableInfoFrame)
-	FriendsFrameBattlenetFrame.UnavailableInfoFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 1, -18)
+	-- FriendsFrameBattlenetFrame
 
 	FriendsFrameBattlenetFrame:GetRegions():Hide()
-	F.CreateBD(FriendsFrameBattlenetFrame, .25)
+	local bg = F.CreateBDFrame(FriendsFrameBattlenetFrame, .25)
+	bg:SetPoint("TOPLEFT", 0, -2)
+	bg:SetPoint("BOTTOMRIGHT", -2, 2)
+	bg:SetBackdropColor(0, .6, 1, .25)
 
-	FriendsFrameBattlenetFrame.Tag:SetParent(FriendsListFrame)
-	FriendsFrameBattlenetFrame.Tag:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
+	local broadcastButton = FriendsFrameBattlenetFrame.BroadcastButton
+	broadcastButton:SetSize(20, 20)
+	F.Reskin(broadcastButton)
+	local newIcon = broadcastButton:CreateTexture(nil, "ARTWORK")
+	newIcon:SetAllPoints()
+	newIcon:SetTexture("Interface\\FriendsFrame\\BroadcastIcon")
 
-	hooksecurefunc("FriendsFrame_CheckBattlenetStatus", function()
-		if BNFeaturesEnabled() then
-			local frame = FriendsFrameBattlenetFrame
-			frame.BroadcastButton:Hide()
+	local broadcastFrame = FriendsFrameBattlenetFrame.BroadcastFrame
+	F.StripTextures(broadcastFrame)
+	F.SetBD(broadcastFrame, 10, -10, -10, 10)
+	broadcastFrame.EditBox:DisableDrawLayer("BACKGROUND")
+	local bg = F.CreateBDFrame(broadcastFrame.EditBox, 0)
+	bg:SetPoint("TOPLEFT", -2, -2)
+	bg:SetPoint("BOTTOMRIGHT", 2, 2)
+	F.CreateGradient(bg)
+	F.Reskin(broadcastFrame.UpdateButton)
+	F.Reskin(broadcastFrame.CancelButton)
+	broadcastFrame:ClearAllPoints()
+	broadcastFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 3, 0)
 
-			if BNConnected() then
-				frame:Hide()
-			end
-		end
-	end)
+	local function BroadcastButton_SetTexture(self)
+		self.BroadcastButton:SetNormalTexture("")
+		self.BroadcastButton:SetPushedTexture("")
+	end
+	hooksecurefunc(broadcastFrame, "ShowFrame", BroadcastButton_SetTexture)
+	hooksecurefunc(broadcastFrame, "HideFrame", BroadcastButton_SetTexture)
 
-	hooksecurefunc("FriendsFrame_Update", function()
-		if FriendsFrame.selectedTab == 1 and FriendsTabHeader.selectedTab == 1 and FriendsFrameBattlenetFrame.Tag:IsShown() then
-			FriendsFrameTitleText:Hide()
-		else
-			FriendsFrameTitleText:Show()
-		end
-	end)
-
-	local whoBg = F.CreateBDFrame(WhoFrameEditBox, .25)
-	whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
-	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
-	F.CreateGradient(whoBg)
+	local unavailableFrame = FriendsFrameBattlenetFrame.UnavailableInfoFrame
+	F.StripTextures(unavailableFrame)
+	F.SetBD(unavailableFrame)
+	unavailableFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 3, -18)
 
 	F.ReskinPortraitFrame(FriendsFrame)
 	F.Reskin(FriendsFrameAddFriendButton)
@@ -157,6 +164,10 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	WhoFrameListInset:Hide()
 	WhoFrameEditBoxInset:Hide()
+	local whoBg = F.CreateBDFrame(WhoFrameEditBox, 0)
+	whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
+	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
+	F.CreateGradient(whoBg)
 
 	for i = 1, 3 do
 		F.StripTextures(_G["FriendsTabHeaderTab"..i])
