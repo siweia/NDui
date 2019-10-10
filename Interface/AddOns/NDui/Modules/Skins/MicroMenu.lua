@@ -45,7 +45,7 @@ function S:MicroButton_Create(parent, data)
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
-		S:MicroButton_SetupTexture(button:GetHighlightTexture(), texcoord, texture)
+		S:MicroButton_SetupTexture(hl, texcoord, texture)
 		if not NDuiDB["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
 		local flash = button.Flash
