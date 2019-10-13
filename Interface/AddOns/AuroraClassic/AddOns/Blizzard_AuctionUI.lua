@@ -1,6 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_AuctionUI"] = function()
+	if C.isNewPatch then return end
+
 	local r, g, b = C.r, C.g, C.b
 
 	F.SetBD(AuctionFrame, 2, -10, 0, 10)

@@ -47,7 +47,7 @@ C.defaults = {
 }
 
 C.frames = {}
-C.isNewPatch = GetBuildInfo() == "8.2.5"
+C.isNewPatch = GetBuildInfo() == "8.3.0"
 
 -- [[ Functions ]]
 
