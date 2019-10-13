@@ -174,6 +174,12 @@ function UF:UpdateRaidNameText()
 	end
 end
 
+local frequentUpdateCheck = {
+	["player"] = true,
+	["target"] = true,
+	["focus"] = true,
+	["PlayerPlate"] = true,
+}
 function UF:CreatePowerBar(self)
 	local mystyle = self.mystyle
 	local power = CreateFrame("StatusBar", nil, self)
@@ -203,7 +209,7 @@ function UF:CreatePowerBar(self)
 		power.colorDisconnected = true
 		power.colorReaction = true
 	end
-	power.frequentUpdates = mystyle == "player" or mystyle == "target" or mystyle == "PlayerPlate"
+	power.frequentUpdates = frequentUpdateCheck[mystyle]
 
 	self.Power = power
 	self.Power.bg = bg
