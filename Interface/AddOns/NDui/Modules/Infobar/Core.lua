@@ -4,7 +4,7 @@ local module = B:RegisterModule("Infobar")
 local tinsert, pairs, unpack = table.insert, pairs, unpack
 
 local GOLD_AMOUNT_SYMBOL = format("|cffffd700%s|r", GOLD_AMOUNT_SYMBOL)
-local SILVER_AMOUNT_SYMBOL = format("|cffb0b0b0%s|r", SILVER_AMOUNT_SYMBOL)
+local SILVER_AMOUNT_SYMBOL = format("|cffd0d0d0%s|r", SILVER_AMOUNT_SYMBOL)
 local COPPER_AMOUNT_SYMBOL = format("|cffc77050%s|r", COPPER_AMOUNT_SYMBOL)
 
 function module:GetMoneyString(money, full)
