@@ -29,7 +29,6 @@ local function ForceDefaultSettings()
 	SetCVar("ffxGlow", 0)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
-	SetCVar("WorldTextScale", 1)
 end
 
 local function ForceRaidFrame()
