@@ -242,6 +242,7 @@ local onLeaveString = onEnterString
 for keyString, keyIndex in pairs(wheelBindingIndex) do
 	onEnterString = format("%sself:SetBindingClick(0, \"%s\", self:GetName(), \"Button%d\");", onEnterString, keyString, keyIndex)
 end
+local onMouseString = "if not self:IsUnderMouse(false) then self:ClearBindings(); end"
 
 local function setupMouseWheelCast(self)
 	local found
@@ -257,6 +258,7 @@ local function setupMouseWheelCast(self)
 		self:SetAttribute("clickcast_onleave", onLeaveString)
 		self:SetAttribute("_onshow", onLeaveString)
 		self:SetAttribute("_onhide", onLeaveString)
+		self:SetAttribute("_onmousedown", onMouseString)
 	end
 end
 
