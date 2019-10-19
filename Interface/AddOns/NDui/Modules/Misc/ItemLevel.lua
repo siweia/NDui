@@ -43,11 +43,12 @@ function M:GetSlotAnchor(index)
 end
 
 function M:CreateItemTexture(slot, relF, x, y)
-	local icon = slot:CreateTexture(nil, "ARTWORK")
+	local icon = slot:CreateTexture()
 	icon:SetPoint(relF, x, y)
 	icon:SetSize(14, 14)
 	icon:SetTexCoord(unpack(DB.TexCoord))
 	icon.bg = B.CreateBG(icon)
+	icon.bg:SetFrameLevel(3)
 	B.CreateBD(icon.bg)
 	icon.bg:Hide()
 
@@ -68,7 +69,7 @@ function M:CreateItemString(frame, strType)
 			slotFrame.enchantText:ClearAllPoints()
 			slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
 			slotFrame.enchantText:SetTextColor(0, 1, 0)
-			for i = 1, 5 do
+			for i = 1, 10 do
 				local offset = (i-1)*18 + 5
 				local iconX = x > 0 and x+offset or x-offset
 				local iconY = index > 15 and 20 or 2
@@ -90,7 +91,7 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 			local slotFrame = _G[strType..slot.."Slot"]
 			slotFrame.iLvlText:SetText("")
 			slotFrame.enchantText:SetText("")
-			for i = 1, 5 do
+			for i = 1, 10 do
 				local texture = slotFrame["textureIcon"..i]
 				texture:SetTexture(nil)
 				texture.bg:Hide()
@@ -99,7 +100,13 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 			local link = GetInventoryItemLink(unit, index)
 			if link then
 				local quality = select(3, GetItemInfo(link))
-				local level, enchant, gems, essences = B.GetItemLevel(link, unit, index, NDuiDB["Misc"]["GemNEnchant"])
+				local info = B.GetItemLevel(link, unit, index, NDuiDB["Misc"]["GemNEnchant"])
+				local infoType = type(info)
+				if infoType == "table" then
+					level = info.iLvl
+				else
+					level = info
+				end
 
 				if level and level > 1 and quality then
 					local color = BAG_ITEM_QUALITY_COLORS[quality]
@@ -107,25 +114,39 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 					slotFrame.iLvlText:SetTextColor(color.r, color.g, color.b)
 				end
 
-				if enchant then
-					slotFrame.enchantText:SetText(enchant)
-				end
+				if infoType == "table" then
+					if info.enchantText then
+						slotFrame.enchantText:SetText(enchant)
+					end
 
-				for i = 1, 5 do
-					local texture = slotFrame["textureIcon"..i]
-					if gems and next(gems) then
-						local index, gem = next(gems)
-						texture:SetTexture(gem)
-						texture.bg:Show()
+					local gemStep, essenceStep = 1, 1
+					for i = 1, 10 do
+						local texture = slotFrame["textureIcon"..i]
+						local bg = texture.bg
+						local gem = info.gems and info.gems[gemStep]
+						local essence = not gem and (info.essences and info.essences[essenceStep])
+						if gem then
+							texture:SetTexture(gem)
+							bg:SetBackdropBorderColor(0, 0, 0)
+							bg:Show()
 
-						gems[index] = nil
-					elseif essences and next(essences) then
-						local index, essence = next(essences)
-						local selected = essence[1]
-						texture:SetTexture(selected)
-						texture.bg:Show()
+							gemStep = gemStep + 1
+						elseif essence and next(essence) then
+							local r = essence[4]
+							local g = essence[5]
+							local b = essence[6]
+							if r and g and b then
+								bg:SetBackdropBorderColor(r, g, b)
+							else
+								bg:SetBackdropBorderColor(0, 0, 0)
+							end
 
-						essences[index] = nil
+							local selected = essence[1]
+							texture:SetTexture(selected)
+							bg:Show()
+
+							essenceStep = essenceStep + 1
+						end
 					end
 				end
 			end
