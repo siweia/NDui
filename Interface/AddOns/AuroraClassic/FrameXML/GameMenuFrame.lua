@@ -4,8 +4,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	GameMenuFrameHeader:SetAlpha(0)
 	GameMenuFrameHeader:ClearAllPoints()
 	GameMenuFrameHeader:SetPoint("TOP", GameMenuFrame, 0, 7)
-	F.CreateBD(GameMenuFrame)
-	F.CreateSD(GameMenuFrame)
+	F.SetBD(GameMenuFrame)
 	GameMenuFrame.Border:Hide()
 
 	local buttons = {
