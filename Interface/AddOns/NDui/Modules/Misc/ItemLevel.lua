@@ -115,7 +115,8 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 				end
 
 				if infoType == "table" then
-					if info.enchantText then
+					local enchant = info.enchantText
+					if enchant then
 						slotFrame.enchantText:SetText(enchant)
 					end
 
