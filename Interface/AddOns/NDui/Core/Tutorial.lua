@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
-local pairs, tonumber, wipe = pairs, tonumber, table.wipe
+local pairs, wipe = pairs, table.wipe
 local min, max = math.min, math.max
 
 -- Addon Info

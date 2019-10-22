@@ -512,17 +512,52 @@ do
 		InterfaceOptionsFrameOkay:Click()
 	end)
 
-	--taint workarounds by townlong-yak.com
-	--HonorFrameLoadTaint	- https://www.townlong-yak.com/bugs/afKy4k-HonorFrameLoadTaint
-	if _G.UIDROPDOWNMENU_VALUE_PATCH_VERSION or 0 < 2 then _G.UIDROPDOWNMENU_VALUE_PATCH_VERSION = 2 end
-	--CommunitiesUI			- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeTaint
-	if _G.UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0 < 1 then _G.UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1 end
-	--CommunitiesUI #2		- https://www.townlong-yak.com/bugs/YhgQma-SetValueRefreshTaint
-	if _G.COMMUNITY_UIDD_REFRESH_PATCH_VERSION or 0 < 1 then _G.COMMUNITY_UIDD_REFRESH_PATCH_VERSION = 1 end
-	--RefreshOverread		- https://www.townlong-yak.com/bugs/Mx7CWN-RefreshOverread
-	if _G.UIDD_REFRESH_OVERREAD_PATCH_VERSION or 0 < 1 then _G.UIDD_REFRESH_OVERREAD_PATCH_VERSION = 1 end
+	-- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeCommunitiesTaint
+	if (UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0) < 1 then
+		UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1
+		hooksecurefunc("UIDropDownMenu_InitializeHelper", function(frame)
+			if UIDROPDOWNMENU_OPEN_PATCH_VERSION ~= 1 then return end
 
-	if _G.UIDROPDOWNMENU_VALUE_PATCH_VERSION == 2 or _G.UIDROPDOWNMENU_OPEN_PATCH_VERSION == 1 or _G.UIDD_REFRESH_OVERREAD_PATCH_VERSION == 1 then
+			if UIDROPDOWNMENU_OPEN_MENU and UIDROPDOWNMENU_OPEN_MENU ~= frame and not issecurevariable(UIDROPDOWNMENU_OPEN_MENU, "displayMode") then
+				UIDROPDOWNMENU_OPEN_MENU = nil
+				local t, f, prefix, i = _G, issecurevariable, " \0", 1
+				repeat
+					i, t[prefix .. i] = i+1
+				until f("UIDROPDOWNMENU_OPEN_MENU")
+			end
+		end)
+	end
+
+	-- https://www.townlong-yak.com/bugs/YhgQma-SetValueRefreshTaint
+	if (COMMUNITY_UIDD_REFRESH_PATCH_VERSION or 0) < 1 then
+		COMMUNITY_UIDD_REFRESH_PATCH_VERSION = 1
+		local function CleanDropdowns()
+			if COMMUNITY_UIDD_REFRESH_PATCH_VERSION ~= 1 then
+				return
+			end
+			local f, f2 = FriendsFrame, FriendsTabHeader
+			local s = f:IsShown()
+			f:Hide()
+			f:Show()
+			if not f2:IsShown() then
+				f2:Show()
+				f2:Hide()
+			end
+			if not s then
+				f:Hide()
+			end
+		end
+		hooksecurefunc("Communities_LoadUI", CleanDropdowns)
+		hooksecurefunc("SetCVar", function(n)
+			if n == "lastSelectedClubId" then
+				CleanDropdowns()
+			end
+		end)
+	end
+
+	-- https://www.townlong-yak.com/bugs/Mx7CWN-RefreshOverread
+	if (UIDD_REFRESH_OVERREAD_PATCH_VERSION or 0) < 1 then
+		UIDD_REFRESH_OVERREAD_PATCH_VERSION = 1
 		local function drop(t, k)
 			local c = 42
 			t[k] = nil
@@ -533,57 +568,16 @@ do
 				c = c + 1
 			end
 		end
-
-		hooksecurefunc('UIDropDownMenu_InitializeHelper', function(frame)
-			if _G.UIDROPDOWNMENU_VALUE_PATCH_VERSION == 2 or _G.UIDD_REFRESH_OVERREAD_PATCH_VERSION == 1 then
-				for i=1, _G.UIDROPDOWNMENU_MAXLEVELS do
-					for j=1, _G.UIDROPDOWNMENU_MAXBUTTONS do
-						local b, _ = _G['DropDownList' .. i .. 'Button' .. j]
-						if _G.UIDROPDOWNMENU_VALUE_PATCH_VERSION == 2 and not (issecurevariable(b, 'value') or b:IsShown()) then
-							b.value = nil
-							repeat j, b["fx" .. j] = j+1, nil
-							until issecurevariable(b, 'value')
-						end
-						if _G.UIDD_REFRESH_OVERREAD_PATCH_VERSION == 1 then
-							_ = issecurevariable(b, "checked")      or drop(b, "checked")
-							_ = issecurevariable(b, "notCheckable") or drop(b, "notCheckable")
-						end
-					end
-				end
+		hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
+			if UIDD_REFRESH_OVERREAD_PATCH_VERSION ~= 1 then
+				return
 			end
-
-			if _G.UIDROPDOWNMENU_OPEN_PATCH_VERSION == 1 then
-				if _G.UIDROPDOWNMENU_OPEN_MENU and _G.UIDROPDOWNMENU_OPEN_MENU ~= frame and not issecurevariable(_G.UIDROPDOWNMENU_OPEN_MENU, 'displayMode') then
-					_G.UIDROPDOWNMENU_OPEN_MENU = nil
-					local t, f, prefix, i = _G, issecurevariable, ' \0', 1
-					repeat i, t[prefix .. i] = i + 1, nil
-					until f('UIDROPDOWNMENU_OPEN_MENU')
+			for i = 1,UIDROPDOWNMENU_MAXLEVELS do
+				for j = 1,UIDROPDOWNMENU_MAXBUTTONS do
+					local b, _ = _G["DropDownList"..i.."Button"..j]
+					_ = issecurevariable(b, "checked") or drop(b, "checked")
+					_ = issecurevariable(b, "notCheckable") or drop(b, "notCheckable")
 				end
-			end
-		end)
-	end
-
-	if _G.COMMUNITY_UIDD_REFRESH_PATCH_VERSION == 1 then
-		local function CleanDropdowns()
-			if _G.COMMUNITY_UIDD_REFRESH_PATCH_VERSION == 1 then
-				local f, f2 = _G.FriendsFrame, _G.FriendsTabHeader
-				local s = f:IsShown()
-				f:Hide()
-				f:Show()
-				if not f2:IsShown() then
-					f2:Show()
-					f2:Hide()
-				end
-				if not s then
-					f:Hide()
-				end
-			end
-		end
-
-		hooksecurefunc('Communities_LoadUI', CleanDropdowns)
-		hooksecurefunc('SetCVar', function(n)
-			if n == 'lastSelectedClubId' then
-				CleanDropdowns()
 			end
 		end)
 	end

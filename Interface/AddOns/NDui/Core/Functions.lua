@@ -501,7 +501,6 @@ local essenceDescription = GetSpellDescription(277253)
 local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
 local tip = CreateFrame("GameTooltip", "NDui_iLvlTooltip", nil, "GameTooltipTemplate")
 
-local texturesDB, essencesDB = {}, {}
 function B:InspectItemTextures()
 	if not tip.gems then
 		tip.gems = {}
