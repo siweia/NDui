@@ -115,7 +115,7 @@ function module:Chatbar()
 					LeaveChannelByName(channelName)
 					print("|cffFF7F50"..QUIT.."|r "..DB.InfoColor..L["World Channel"])
 					wc.inChannel = false
-				else
+				elseif channelID then
 					ChatFrame_OpenChat("/"..channelID, chatFrame)
 				end
 			else
