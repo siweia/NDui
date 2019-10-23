@@ -216,8 +216,11 @@ function S:ReskinRematch()
 		for _, button in pairs(buttons) do
 			S.RematchIcon(button)
 		end
-		F.StripTextures(RematchToolbar.PetCount)
-		local bg = F.CreateBDFrame(RematchToolbar.PetCount, .25)
+
+		local petCount = RematchToolbar.PetCount
+		petCount:SetWidth(130)
+		F.StripTextures(petCount)
+		local bg = F.CreateBDFrame(petCount, .25)
 		bg:SetPoint("TOPLEFT", -6, -8)
 		bg:SetPoint("BOTTOMRIGHT", -4, 3)
 
