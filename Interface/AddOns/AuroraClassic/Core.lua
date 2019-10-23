@@ -427,6 +427,8 @@ function F:ReskinCheck()
 	tex:SetPoint("BOTTOMRIGHT", -5, 5)
 
 	local ch = self:GetCheckedTexture()
+	ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+	ch:SetTexCoord(0, 1, 0, 1)
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(r, g, b)
 end
