@@ -278,7 +278,7 @@ local function buttonOnEnter(self)
 			local realmName = gameAccountInfo.realmName or ""
 			local faction = gameAccountInfo.factionName
 			local class = gameAccountInfo.className or UNKNOWN
-			local zoneName = gameAccountInfo.areaName
+			local zoneName = gameAccountInfo.areaName or UNKNOWN
 			local level = gameAccountInfo.characterLevel
 			local gameText = gameAccountInfo.richPresence or ""
 			local wowProjectID = gameAccountInfo.wowProjectID
