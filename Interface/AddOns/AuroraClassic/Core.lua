@@ -83,22 +83,102 @@ function F:CreateSD()
 	if not AuroraConfig.shadow then return end
 	if self.Shadow then return end
 	self.Shadow = CreateFrame("Frame", nil, self)
-	self.Shadow:SetPoint("TOPLEFT", -2, 2)
-	self.Shadow:SetPoint("BOTTOMRIGHT", 2, -2)
-	self.Shadow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 3})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0)
+	self.Shadow:SetPoint("TOPLEFT", -3, 3)
+	self.Shadow:SetPoint("BOTTOMRIGHT", 3, -3)
+	self.Shadow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, .6)
 	CreateTex(self)
 	return self.Shadow
 end
 
+-- ls, Azil, and Simpy made this to replace Blizzard's SetBackdrop API while the textures can't snap
+local PIXEL_BORDERS = {"TOPLEFT", "TOPRIGHT", "BOTTOMLEFT", "BOTTOMRIGHT", "TOP", "BOTTOM", "LEFT", "RIGHT"}
+
+function F:SetBackdropColor(r, g, b, a)
+	if self.pixelBorders then
+		self.pixelBorders.CENTER:SetVertexColor(r, g, b, a)
+	end
+end
+
+function F:SetBackdropBorderColor(r, g, b, a)
+	if self.pixelBorders then
+		for _, v in pairs(PIXEL_BORDERS) do
+			self.pixelBorders[v]:SetVertexColor(r or 0, g or 0, b or 0, a or 1)
+		end
+	end
+end
+
+function F:SetBackdropColor_Hook(r, g, b, a)
+	F.SetBackdropColor(self, r, g, b, a)
+end
+
+function F:SetBackdropBorderColor_Hook(r, g, b, a)
+	F.SetBackdropBorderColor(self, r, g, b, a)
+end
+
+function F:PixelBorders(frame)
+	if frame and not frame.pixelBorders then
+		local borders = {}
+		for _, v in pairs(PIXEL_BORDERS) do
+			borders[v] = frame:CreateTexture(nil, "BORDER", nil, 1)
+			borders[v]:SetTexture(C.media.backdrop)
+		end
+
+		borders.CENTER = frame:CreateTexture(nil, "BACKGROUND", nil, -1)
+		borders.CENTER:SetTexture(C.media.backdrop)
+
+		borders.TOPLEFT:SetPoint("BOTTOMRIGHT", borders.CENTER, "TOPLEFT", 1, -1)
+		borders.TOPRIGHT:SetPoint("BOTTOMLEFT", borders.CENTER, "TOPRIGHT", -1, -1)
+		borders.BOTTOMLEFT:SetPoint("TOPRIGHT", borders.CENTER, "BOTTOMLEFT", 1, 1)
+		borders.BOTTOMRIGHT:SetPoint("TOPLEFT", borders.CENTER, "BOTTOMRIGHT", -1, 1)
+
+		borders.TOP:SetPoint("TOPLEFT", borders.TOPLEFT, "TOPRIGHT", 0, 0)
+		borders.TOP:SetPoint("TOPRIGHT", borders.TOPRIGHT, "TOPLEFT", 0, 0)
+
+		borders.BOTTOM:SetPoint("BOTTOMLEFT", borders.BOTTOMLEFT, "BOTTOMRIGHT", 0, 0)
+		borders.BOTTOM:SetPoint("BOTTOMRIGHT", borders.BOTTOMRIGHT, "BOTTOMLEFT", 0, 0)
+
+		borders.LEFT:SetPoint("TOPLEFT", borders.TOPLEFT, "BOTTOMLEFT", 0, 0)
+		borders.LEFT:SetPoint("BOTTOMLEFT", borders.BOTTOMLEFT, "TOPLEFT", 0, 0)
+
+		borders.RIGHT:SetPoint("TOPRIGHT", borders.TOPRIGHT, "BOTTOMRIGHT", 0, 0)
+		borders.RIGHT:SetPoint("BOTTOMRIGHT", borders.BOTTOMRIGHT, "TOPRIGHT", 0, 0)
+
+		hooksecurefunc(frame, "SetBackdropColor", F.SetBackdropColor_Hook)
+		hooksecurefunc(frame, "SetBackdropBorderColor", F.SetBackdropBorderColor_Hook)
+
+		frame.pixelBorders = borders
+	end
+end
+
+function F:SetBackdrop(frame, a)
+	local borders = frame.pixelBorders
+	if not borders then return end
+
+	local size = C.mult
+
+	borders.CENTER:SetPoint("TOPLEFT", frame)
+	borders.CENTER:SetPoint("BOTTOMRIGHT", frame)
+
+	borders.TOPLEFT:SetSize(size, size)
+	borders.TOPRIGHT:SetSize(size, size)
+	borders.BOTTOMLEFT:SetSize(size, size)
+	borders.BOTTOMRIGHT:SetSize(size, size)
+
+	borders.TOP:SetHeight(size)
+	borders.BOTTOM:SetHeight(size)
+	borders.LEFT:SetWidth(size)
+	borders.RIGHT:SetWidth(size)
+
+	F.SetBackdropColor(frame, 0, 0, 0, a)
+	F.SetBackdropBorderColor(frame, 0, 0, 0)
+end
+-- Custom SetBackdrop END
+
 function F:CreateBD(a)
-	self:SetBackdrop({
-		bgFile = C.media.backdrop,
-		edgeFile = C.media.backdrop,
-		edgeSize = C.mult,
-	})
-	self:SetBackdropColor(0, 0, 0, a or AuroraConfig.alpha)
-	self:SetBackdropBorderColor(0, 0, 0)
+	self:SetBackdrop(nil)
+	F:PixelBorders(self)
+	F:SetBackdrop(self, a or AuroraConfig.alpha)
 	if not a then tinsert(C.frames, self) end
 end
 
@@ -121,8 +201,7 @@ local buttonR, buttonG, buttonB, buttonA
 
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
-	tex:SetPoint("TOPLEFT", C.mult, -C.mult)
-	tex:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	tex:SetAllPoints()
 	tex:SetTexture(useButtonGradientColour and C.media.gradient or C.media.backdrop)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
@@ -245,10 +324,7 @@ function F:ReskinScroll()
 	bu.bg = F.CreateBDFrame(self, 0)
 	bu.bg:SetPoint("TOPLEFT", bu, 0, -2)
 	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 4)
-
-	local tex = F.CreateGradient(self)
-	tex:SetPoint("TOPLEFT", bu.bg, C.mult, -C.mult)
-	tex:SetPoint("BOTTOMRIGHT", bu.bg, -C.mult, C.mult)
+	F.CreateGradient(bu.bg)
 
 	local up, down = self:GetChildren()
 	up:SetWidth(17)
@@ -327,10 +403,7 @@ function F:ReskinDropDown()
 	local bg = F.CreateBDFrame(self, 0)
 	bg:SetPoint("TOPLEFT", 16, -4)
 	bg:SetPoint("BOTTOMRIGHT", -18, 8)
-
-	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
-	gradient:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
+	F.CreateGradient(bg)
 end
 
 function F:ReskinClose(a1, p, a2, x, y)
@@ -381,10 +454,7 @@ function F:ReskinInput(height, width)
 	local bd = F.CreateBDFrame(self, 0)
 	bd:SetPoint("TOPLEFT", -2, 0)
 	bd:SetPoint("BOTTOMRIGHT")
-
-	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bd, C.mult, -C.mult)
-	gradient:SetPoint("BOTTOMRIGHT", bd, -C.mult, C.mult)
+	F.CreateGradient(bd)
 
 	if height then self:SetHeight(height) end
 	if width then self:SetWidth(width) end
@@ -421,10 +491,7 @@ function F:ReskinCheck()
 	local bd = F.CreateBDFrame(self, 0)
 	bd:SetPoint("TOPLEFT", 4, -4)
 	bd:SetPoint("BOTTOMRIGHT", -4, 4)
-
-	local tex = F.CreateGradient(self)
-	tex:SetPoint("TOPLEFT", 5, -5)
-	tex:SetPoint("BOTTOMRIGHT", -5, 5)
+	F.CreateGradient(bd)
 
 	local ch = self:GetCheckedTexture()
 	ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
@@ -454,11 +521,8 @@ function F:ReskinRadio()
 	local bd = F.CreateBDFrame(self, 0)
 	bd:SetPoint("TOPLEFT", 3, -3)
 	bd:SetPoint("BOTTOMRIGHT", -3, 3)
+	F.CreateGradient(bd)
 	self.bd = bd
-
-	local tex = F.CreateGradient(self)
-	tex:SetPoint("TOPLEFT", 4, -4)
-	tex:SetPoint("BOTTOMRIGHT", -4, 4)
 
 	self:HookScript("OnEnter", colourRadio)
 	self:HookScript("OnLeave", clearRadio)
@@ -618,12 +682,11 @@ end
 function F:CreateBDFrame(a)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
-	local lvl = frame:GetFrameLevel()
 
 	local bg = CreateFrame("Frame", nil, frame)
+	bg:SetFrameLevel(max(frame:GetFrameLevel()-1, 0))
 	bg:SetPoint("TOPLEFT", self, -C.mult, C.mult)
 	bg:SetPoint("BOTTOMRIGHT", self, C.mult, -C.mult)
-	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
 	F.CreateBD(bg, a)
 
 	return bg
@@ -738,6 +801,7 @@ function F:ReskinMinMax()
 			hline:SetColorTexture(1, 1, 1)
 			hline:SetSize(7, 2)
 			tinsert(button.pixels, hline)
+
 			local vline = button:CreateTexture()
 			vline:SetColorTexture(1, 1, 1)
 			vline:SetSize(2, 7)
@@ -907,3 +971,57 @@ Skin:SetScript("OnEvent", function(_, event, addon)
 		AuroraConfig.uiScale = UIParent:GetScale()
 	end
 end)
+
+-- Add APIs
+local function WatchPixelSnap(frame, snap)
+	if (frame and not frame:IsForbidden()) and frame.PixelSnapDisabled and snap then
+		frame.PixelSnapDisabled = nil
+	end
+end
+
+local function DisablePixelSnap(frame)
+	if (frame and not frame:IsForbidden()) and not frame.PixelSnapDisabled then
+		if frame.SetSnapToPixelGrid then
+			frame:SetSnapToPixelGrid(false)
+			frame:SetTexelSnappingBias(0)
+		elseif frame.GetStatusBarTexture then
+			local texture = frame:GetStatusBarTexture()
+			if texture and texture.SetSnapToPixelGrid then
+				texture:SetSnapToPixelGrid(false)
+				texture:SetTexelSnappingBias(0)
+			end
+		end
+
+		frame.PixelSnapDisabled = true
+	end
+end
+
+local function addapi(object)
+	local mt = getmetatable(object).__index
+	if not object.DisabledPixelSnap then
+		if mt.SetSnapToPixelGrid then hooksecurefunc(mt, "SetSnapToPixelGrid", WatchPixelSnap) end
+		if mt.SetStatusBarTexture then hooksecurefunc(mt, "SetStatusBarTexture", DisablePixelSnap) end
+		if mt.SetColorTexture then hooksecurefunc(mt, "SetColorTexture", DisablePixelSnap) end
+		if mt.SetVertexColor then hooksecurefunc(mt, "SetVertexColor", DisablePixelSnap) end
+		if mt.CreateTexture then hooksecurefunc(mt, "CreateTexture", DisablePixelSnap) end
+		if mt.SetTexCoord then hooksecurefunc(mt, "SetTexCoord", DisablePixelSnap) end
+		if mt.SetTexture then hooksecurefunc(mt, "SetTexture", DisablePixelSnap) end
+		mt.DisabledPixelSnap = true
+	end
+end
+
+local handled = {["Frame"] = true}
+local object = CreateFrame("Frame")
+addapi(object)
+addapi(object:CreateTexture())
+addapi(object:CreateMaskTexture())
+
+object = EnumerateFrames()
+while object do
+	if not object:IsForbidden() and not handled[object:GetObjectType()] then
+		addapi(object)
+		handled[object:GetObjectType()] = true
+	end
+
+	object = EnumerateFrames(object)
+end

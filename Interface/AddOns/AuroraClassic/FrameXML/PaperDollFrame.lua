@@ -42,7 +42,8 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local function UpdateAzeriteEmpoweredItem(self)
 		self.AzeriteTexture:SetAtlas("AzeriteIconFrame")
-		self.AzeriteTexture:SetAllPoints()
+		self.AzeriteTexture:SetPoint("TOPLEFT", C.mult, -C.mult)
+		self.AzeriteTexture:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 		self.AzeriteTexture:SetDrawLayer("BORDER", 1)
 	end
 
@@ -56,17 +57,16 @@ tinsert(C.themes["AuroraClassic"], function()
 		local slot = _G["Character"..slots[i].."Slot"]
 		local border = slot.IconBorder
 
-		_G[slot:GetName().."Frame"]:Hide()
-		slot:SetNormalTexture("")
-		slot:SetPushedTexture("")
+		F.StripTextures(slot)
+		slot.icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBD(slot, .25)
+
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		slot.SetHighlightTexture = F.dummy
-		slot.icon:SetTexCoord(.08, .92, .08, .92)
 
-		border:SetPoint("TOPLEFT", -C.mult, C.mult)
-		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-		border:SetDrawLayer("BACKGROUND")
-		F.CreateBDFrame(slot, .25)
+		border:SetAlpha(0)
+		hooksecurefunc(border, "SetVertexColor", function(_, r, g, b) slot:SetBackdropBorderColor(r, g, b) end)
+		hooksecurefunc(border, "Hide", function() slot:SetBackdropBorderColor(0, 0, 0) end)
 
 		local popout = slot.popoutButton
 		popout:SetNormalTexture("")
@@ -91,13 +91,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		hooksecurefunc(slot, "DisplayAsAzeriteEmpoweredItem", UpdateAzeriteEmpoweredItem)
 	end
 
-	select(15, CharacterMainHandSlot:GetRegions()):Hide()
-	select(15, CharacterSecondaryHandSlot:GetRegions()):Hide()
-
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)
 		-- also fires for bag slots, we don't want that
 		if button.popoutButton then
-			button.IconBorder:SetTexture(C.media.backdrop)
 			button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
 			colourPopout(button.popoutButton)
 		end

@@ -269,7 +269,7 @@ end)
 
 local function updateFrames()
 	for i = 1, #C.frames do
-		F.CreateBD(C.frames[i], AuroraConfig.alpha)
+		F.SetBackdropColor(C.frames[i], 0, 0, 0, AuroraConfig.alpha)
 	end
 end
 

@@ -21,19 +21,16 @@ C.themes["Blizzard_InspectUI"] = function()
 		local border = slot.IconBorder
 
 		F.StripTextures(slot)
-		slot:SetNormalTexture("")
-		slot:SetPushedTexture("")
+		slot.icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBD(slot, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		border:SetPoint("TOPLEFT", -C.mult, C.mult)
-		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-		border:SetDrawLayer("BACKGROUND")
-		F.CreateBDFrame(slot, .25)
-		slot.icon:SetTexCoord(.08, .92, .08, .92)
+		border:SetAlpha(0)
+		hooksecurefunc(border, "SetVertexColor", function(_, r, g, b) slot:SetBackdropBorderColor(r, g, b) end)
+		hooksecurefunc(border, "Hide", function() slot:SetBackdropBorderColor(0, 0, 0) end)
 	end
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
-		button.IconBorder:SetTexture(C.media.backdrop)
 		button.icon:SetShown(button.hasItem)
 	end)
 
