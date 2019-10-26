@@ -950,7 +950,7 @@ local function CreateOption(i)
 				s.value:SetText(format("%."..decimal.."f", current))
 				if callback then callback() end
 			end)
-			s.value:SetText(format("%."..step.."f", NDUI_VARIABLE(key, value)))
+			s.value:SetText(format("%."..decimal.."f", NDUI_VARIABLE(key, value)))
 		-- Dropdown
 		elseif optType == 4 then
 			local dd = B.CreateDropDown(parent, 200, 28, data)
