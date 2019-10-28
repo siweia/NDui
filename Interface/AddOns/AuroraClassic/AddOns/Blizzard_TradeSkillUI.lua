@@ -75,13 +75,10 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	F.Reskin(details.CreateAllButton)
 	F.Reskin(details.CreateButton)
 	F.Reskin(details.ExitButton)
+	details.CreateMultipleInputBox:DisableDrawLayer("BACKGROUND")
 	F.ReskinInput(details.CreateMultipleInputBox)
 	F.ReskinArrow(details.CreateMultipleInputBox.DecrementButton, "left")
 	F.ReskinArrow(details.CreateMultipleInputBox.IncrementButton, "right")
-	for i = 1, 9 do
-		select(i, details.CreateMultipleInputBox:GetRegions()):Hide()
-	end
-	select(1, details.CreateMultipleInputBox:GetRegions()):Show()
 
 	local contents = details.Contents
 	hooksecurefunc(contents.ResultIcon, "SetNormalTexture", function(self)
