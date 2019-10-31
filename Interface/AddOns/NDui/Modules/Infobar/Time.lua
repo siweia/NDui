@@ -21,7 +21,8 @@ local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = 
 local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE
 local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
-local GetNumSavedInstances, GetSavedInstanceInfo, IsQuestFlaggedCompleted, GetQuestObjectiveInfo = GetNumSavedInstances, GetSavedInstanceInfo, IsQuestFlaggedCompleted, GetQuestObjectiveInfo
+local GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo = GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo
+local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool("timeMgrUseMilitaryTime") then

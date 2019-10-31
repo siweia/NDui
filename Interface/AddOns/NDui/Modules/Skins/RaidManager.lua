@@ -7,6 +7,9 @@ function S:CreateRM()
 
 	local tinsert, strsplit, format = table.insert, string.split, string.format
 	local next, pairs, mod = next, pairs, mod
+	local LeaveParty = C_PartyInfo.LeaveParty
+	local ConvertToRaid = C_PartyInfo.ConvertToRaid
+	local ConvertToParty = C_PartyInfo.ConvertToParty
 
 	local header = CreateFrame("Button", nil, UIParent)
 	header:SetSize(120, 28)

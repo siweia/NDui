@@ -7,7 +7,7 @@ local oUF = ns.oUF or oUF
 
 local strmatch = string.match
 local UnitIsOwnerOrControllerOfUnit = UnitIsOwnerOrControllerOfUnit
-local IsQuestFlaggedCompleted = IsQuestFlaggedCompleted
+local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo
 
 local MaxNazjatarBodyguardRank = 30
