@@ -5,6 +5,13 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
+local GetTime = GetTime
+local GetInventoryItemID = GetInventoryItemID
+local UnitAttackSpeed = UnitAttackSpeed
+local UnitRangedDamage = UnitRangedDamage
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local UnitGUID = UnitGUID
+
 local meleeing, rangeing, lasthit
 local MainhandID = GetInventoryItemID("player", 16)
 local OffhandID = GetInventoryItemID("player", 17)
@@ -113,14 +120,14 @@ local MeleeChange = function(self, _, unit)
 			swing:Hide()
 			swing:SetScript("OnUpdate", nil)
 
-			swingMH.min = GetTime()
+			swingMH.min = now
 			swingMH.max = swingMH.min + mhspeed
 			swingMH.speed = mhspeed
 			swingMH:Show()
 			swingMH:SetMinMaxValues(swingMH.min, swingMH.max)
 			swingMH:SetScript("OnUpdate", OnDurationUpdate)
 
-			swingOH.min = GetTime()
+			swingOH.min = now
 			swingOH.max = swingOH.min + ohspeed
 			swingOH.speed = ohspeed
 			if mhspeed ~= ohspeed then
@@ -132,7 +139,7 @@ local MeleeChange = function(self, _, unit)
 				swingOH:SetScript("OnUpdate", nil)
 			end
 		else
-			swing.min = GetTime()
+			swing.min = now
 			swing.max = swing.min + mhspeed
 			swing.speed = mhspeed
 			swing:Show()
@@ -189,14 +196,14 @@ local RangedChange = function(self, _, unit)
 
 	if RangedID ~= NewRangedID then
 		swing.speed = UnitRangedDamage(unit)
-		swing.min = GetTime()
+		swing.min = now
 		swing.max = swing.min + swing.speed
 		swing:Show()
 		swing:SetMinMaxValues(swing.min, swing.max)
 		swing:SetScript("OnUpdate", OnDurationUpdate)
 	else
 		if swing.speed ~= speed then
-			local percentage = (swing.max - GetTime()) / (swing.speed)
+			local percentage = (swing.max - now) / (swing.speed)
 			swing.min = now - speed * (1 - percentage)
 			swing.max = now + speed * percentage
 			swing.speed = speed
@@ -242,6 +249,8 @@ local Melee = function(self)
 
 	-- calculation of new hits is in OnDurationUpdate
 	-- workaround, cant differ between mainhand and offhand hits
+	local now = GetTime()
+
 	if not meleeing then
 		bar:Show()
 		swing:Hide()
@@ -254,14 +263,14 @@ local Melee = function(self)
 
 		local mhspeed, ohspeed = UnitAttackSpeed("player")
 		if ohspeed then
-			swingMH.min = GetTime()
+			swingMH.min = now
 			swingMH.max = swingMH.min + mhspeed
 			swingMH.speed = mhspeed
 			swingMH:Show()
 			swingMH:SetMinMaxValues(swingMH.min, swingMH.max)
 			swingMH:SetScript("OnUpdate", OnDurationUpdate)
 
-			swingOH.min = GetTime()
+			swingOH.min = now
 			swingOH.max = swingOH.min + ohspeed
 			swingOH.speed = ohspeed
 			if mhspeed ~= ohspeed then
@@ -270,7 +279,7 @@ local Melee = function(self)
 				swingOH:SetScript("OnUpdate", OnDurationUpdate)
 			end
 		else
-			swing.min = GetTime()
+			swing.min = now
 			swing.max = swing.min + mhspeed
 			swing.speed = mhspeed
 			swing:Show()
@@ -282,7 +291,7 @@ local Melee = function(self)
 		rangeing = false
 	end
 
-	lasthit = GetTime()
+	lasthit = now
 end
 
 local ParryHaste = function(self)
