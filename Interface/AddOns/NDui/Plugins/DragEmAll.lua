@@ -64,6 +64,7 @@ local lodFrames = {
 	Blizzard_AlliedRacesUI		= { ["AlliedRacesFrame"] = false },
 	Blizzard_ArchaeologyUI		= { ["ArchaeologyFrame"] = false },
 	Blizzard_ArtifactUI			= { ["ArtifactFrame"] = false, ["ArtifactRelicForgeFrame"] = false },
+	Blizzard_AuctionHouseUI		= { ["AuctionHouseFrame"] = false },
 	Blizzard_AuctionUI			= { ["AuctionFrame"] = false },
 	Blizzard_AzeriteEssenceUI	= { ["AzeriteEssenceUI"] = false },
 	Blizzard_AzeriteRespecUI	= { ["AzeriteRespecFrame"] = false },
