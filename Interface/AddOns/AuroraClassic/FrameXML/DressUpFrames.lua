@@ -9,13 +9,16 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.Reskin(DressUpFrameResetButton)
 	F.StripTextures(DressUpFrameOutfitDropDown)
 	F.ReskinDropDown(DressUpFrameOutfitDropDown)
-	F.ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -10, 0)
 
 	DressUpFrameOutfitDropDown:SetHeight(32)
 	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)
 	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
 
-	F.ReskinMinMax(MaximizeMinimizeFrame)
+	if C.isNewPatch then
+		F.ReskinMinMax(DressUpFrame.MaximizeMinimizeFrame)
+	else
+		F.ReskinMinMax(MaximizeMinimizeFrame)
+	end
 
 	-- SideDressUp
 

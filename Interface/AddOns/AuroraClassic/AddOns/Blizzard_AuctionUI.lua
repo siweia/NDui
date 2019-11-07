@@ -1,8 +1,202 @@
 local F, C = unpack(select(2, ...))
 
-C.themes["Blizzard_AuctionUI"] = function()
-	if C.isNewPatch then return end
+C.themes["Blizzard_AuctionHouseUI"] = function()
+	local function reskinAuctionButton(button)
+		F.Reskin(button)
+		button:SetSize(22,22)
+	end
 
+	local function reskinSellPanel(frame)
+		F.StripTextures(frame)
+
+		local itemDisplay = frame.ItemDisplay
+		F.StripTextures(itemDisplay)
+		F.CreateBDFrame(itemDisplay, .25)
+
+		local itemButton = itemDisplay.ItemButton
+		if itemButton.IconMask then itemButton.IconMask:Hide() end
+		if itemButton.IconBorder then itemButton.IconBorder:SetAlpha(0) end
+		itemButton.EmptyBackground:Hide()
+		itemButton:SetPushedTexture("")
+		itemButton.Highlight:SetColorTexture(1, 1, 1, .25)
+		itemButton.Highlight:SetAllPoints(itemButton.Icon)
+		itemButton.Icon:SetTexCoord(.08, .92, .08, .92)
+		local bg = F.CreateBDFrame(itemButton.Icon)
+		hooksecurefunc(itemButton.IconBorder, "SetVertexColor", function(_, r, g, b) bg:SetBackdropBorderColor(r, g, b) end)
+		hooksecurefunc(itemButton.IconBorder, "Hide", function() bg:SetBackdropBorderColor(0, 0, 0) end)
+
+		F.ReskinInput(frame.QuantityInput.InputBox)
+		F.Reskin(frame.QuantityInput.MaxButton)
+		F.ReskinInput(frame.PriceInput.MoneyInputFrame.GoldBox)
+		F.ReskinInput(frame.PriceInput.MoneyInputFrame.SilverBox)
+		if frame.SecondaryPriceInput then
+			F.ReskinInput(frame.SecondaryPriceInput.MoneyInputFrame.GoldBox)
+			F.ReskinInput(frame.SecondaryPriceInput.MoneyInputFrame.SilverBox)
+		end
+		F.ReskinDropDown(frame.DurationDropDown.DropDown)
+		F.Reskin(frame.PostButton)
+		if frame.BuyoutModeCheckButton then F.ReskinCheck(frame.BuyoutModeCheckButton) end
+	end
+
+	local function reskinListIcon(frame)
+		if not frame.tableBuilder then return end
+
+		for i = 1, 22 do
+			local row = frame.tableBuilder.rows[i]
+			if row then
+				for j = 1, 4 do
+					local cell = row.cells and row.cells[j]
+					if cell and cell.Icon and not cell.styled then
+						F.ReskinIcon(cell.Icon)
+						cell.IconBorder:Hide()
+
+						cell.styled = true
+					end
+				end
+			end
+		end
+	end
+
+	local function reskinSummaryIcon(frame)
+		for i = 1, 23 do
+			local child = select(i, frame.ScrollFrame.scrollChild:GetChildren())
+			if child and child.Icon and not child.styled then
+				F.ReskinIcon(child.Icon)
+
+				child.styled = true
+			end
+		end
+	end
+
+	local function reskinListHeader(frame)
+		local maxHeaders = frame.HeaderContainer:GetNumChildren()
+		for i = 1, maxHeaders do
+			local header = select(i, frame.HeaderContainer:GetChildren())
+			if header and not header.styled then
+				header:DisableDrawLayer("BACKGROUND")
+				header.bg = F.CreateBDFrame(header)
+				local hl = header:GetHighlightTexture()
+				hl:SetColorTexture(1, 1, 1, .1)
+				hl:SetAllPoints(bg)
+
+				header.styled = true
+			end
+
+			if header.bg then
+				header.bg:SetPoint("BOTTOMRIGHT", i < maxHeaders and -5 or 0, -2)
+			end
+		end
+
+		reskinListIcon(frame)
+	end
+
+	local function reskinSellList(frame, hasHeader)
+		F.StripTextures(frame)
+		if frame.RefreshFrame then
+			reskinAuctionButton(frame.RefreshFrame.RefreshButton)
+		end
+		F.ReskinScroll(frame.ScrollFrame.scrollBar)
+		if hasHeader then
+			F.CreateBDFrame(frame.ScrollFrame, .25)
+			hooksecurefunc(frame, "RefreshScrollFrame", reskinListHeader)
+		else
+			hooksecurefunc(frame, "RefreshScrollFrame", reskinSummaryIcon)
+		end
+	end
+
+	F.ReskinPortraitFrame(AuctionHouseFrame)
+	F.StripTextures(AuctionHouseFrame.MoneyFrameBorder)
+	F.CreateBDFrame(AuctionHouseFrame.MoneyFrameBorder, .25)
+	F.StripTextures(AuctionHouseFrame.MoneyFrameInset)
+	F.ReskinTab(AuctionHouseFrameBuyTab)
+	F.ReskinTab(AuctionHouseFrameSellTab)
+	F.ReskinTab(AuctionHouseFrameAuctionsTab)
+
+	local searchBar = AuctionHouseFrame.SearchBar
+	reskinAuctionButton(searchBar.FavoritesSearchButton)
+	F.ReskinInput(searchBar.SearchBox)
+	F.ReskinFilterButton(searchBar.FilterButton)
+	F.Reskin(searchBar.SearchButton)
+
+	F.StripTextures(AuctionHouseFrame.CategoriesList)
+	F.ReskinScroll(AuctionHouseFrame.CategoriesList.ScrollFrame.ScrollBar)
+
+	hooksecurefunc("FilterButton_SetUp", function(button)
+		button.NormalTexture:SetAlpha(0)
+		button.SelectedTexture:SetColorTexture(0, .6, 1, .3)
+		button.HighlightTexture:SetColorTexture(1, 1, 1, .1)
+	end)
+	
+	local itemList = AuctionHouseFrame.BrowseResultsFrame.ItemList
+	F.StripTextures(itemList, 3)
+	F.CreateBDFrame(itemList.ScrollFrame, .25)
+	F.ReskinScroll(itemList.ScrollFrame.scrollBar)
+	hooksecurefunc(itemList, "RefreshScrollFrame", reskinListHeader)
+
+	local itemBuyFrame = AuctionHouseFrame.ItemBuyFrame
+	F.Reskin(itemBuyFrame.BackButton)
+	F.Reskin(itemBuyFrame.BidFrame.BidButton)
+	F.Reskin(itemBuyFrame.BuyoutFrame.BuyoutButton)
+	F.ReskinInput(AuctionHouseFrameGold)
+	F.ReskinInput(AuctionHouseFrameSilver)
+	local itemDisplay = itemBuyFrame.ItemDisplay
+	F.StripTextures(itemDisplay)
+	F.CreateBDFrame(itemDisplay, .25)
+	local itemButton = itemDisplay.ItemButton
+	itemButton.CircleMask:Hide()
+	itemButton.IconBorder:SetAlpha(0)
+	F.ReskinIcon(itemButton.Icon)
+	local itemList = itemBuyFrame.ItemList
+	F.StripTextures(itemList)
+	reskinAuctionButton(itemList.RefreshFrame.RefreshButton)
+	F.CreateBDFrame(itemList.ScrollFrame, .25)
+	F.ReskinScroll(itemList.ScrollFrame.scrollBar)
+	hooksecurefunc(itemList, "RefreshScrollFrame", reskinListHeader)
+
+	local commBuyFrame = AuctionHouseFrame.CommoditiesBuyFrame
+	F.Reskin(commBuyFrame.BackButton)
+	local buyDisplay = commBuyFrame.BuyDisplay
+	F.StripTextures(buyDisplay)
+	F.ReskinInput(buyDisplay.QuantityInput.InputBox)
+	local itemDisplay = buyDisplay.ItemDisplay
+	F.StripTextures(itemDisplay)
+	F.CreateBDFrame(itemDisplay, .25)
+	local itemButton = itemDisplay.ItemButton
+	itemButton.CircleMask:Hide()
+	itemButton.IconBorder:SetAlpha(0)
+	F.ReskinIcon(itemButton.Icon)
+	local itemList = commBuyFrame.ItemList
+	F.StripTextures(itemList)
+	F.CreateBDFrame(itemList, .25)
+	reskinAuctionButton(itemList.RefreshFrame.RefreshButton)
+	F.ReskinScroll(itemList.ScrollFrame.scrollBar)
+	F.Reskin(BuyButton)
+
+	local wowTokenResults = AuctionHouseFrame.WoWTokenResults
+	F.StripTextures(wowTokenResults)
+	F.StripTextures(wowTokenResults.TokenDisplay)
+	F.CreateBDFrame(wowTokenResults.TokenDisplay, .25)
+	F.Reskin(wowTokenResults.Buyout)
+	F.ReskinScroll(wowTokenResults.DummyScrollBar)
+
+	reskinSellPanel(AuctionHouseFrame.ItemSellFrame)
+	reskinSellPanel(AuctionHouseFrame.CommoditiesSellFrame)
+	reskinSellList(AuctionHouseFrame.CommoditiesSellList, true)
+	reskinSellList(AuctionHouseFrame.ItemSellList, true)
+	reskinSellList(AuctionHouseFrameAuctionsFrame.SummaryList)
+	reskinSellList(AuctionHouseFrameAuctionsFrame.AllAuctionsList, true)
+	reskinSellList(AuctionHouseFrameAuctionsFrame.BidsList, true)
+
+	F.ReskinTab(AuctionHouseFrameAuctionsFrameAuctionsTab)
+	F.ReskinTab(AuctionHouseFrameAuctionsFrameBidsTab)
+	F.ReskinInput(AuctionHouseFrameAuctionsFrameGold)
+	F.ReskinInput(AuctionHouseFrameAuctionsFrameSilver)
+	F.Reskin(AuctionHouseFrameAuctionsFrame.CancelAuctionButton)
+	F.Reskin(AuctionHouseFrameAuctionsFrame.BidFrame.BidButton)
+	F.Reskin(AuctionHouseFrameAuctionsFrame.BuyoutFrame.BuyoutButton)
+end
+
+C.themes["Blizzard_AuctionUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
 	F.SetBD(AuctionFrame, 2, -10, 0, 10)

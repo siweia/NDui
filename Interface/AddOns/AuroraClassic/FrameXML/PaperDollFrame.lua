@@ -55,11 +55,14 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
+		local cooldown = _G["Character"..slots[i].."SlotCooldown"]
 		local border = slot.IconBorder
 
 		F.StripTextures(slot)
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBD(slot, .25)
+		cooldown:SetPoint("TOPLEFT", C.mult, -C.mult)
+		cooldown:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		slot.SetHighlightTexture = F.dummy
