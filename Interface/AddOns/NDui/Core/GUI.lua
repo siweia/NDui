@@ -614,7 +614,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HorizonParty", L["Horizon PartyFrame"], true},
 		{1, "UFs", "PartyWatcher", L["UFs PartyWatcher"], nil, setupPartyWatcher},
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
-		{3, "UFs", "PartyWidth", L["PartyFrame Width"].."*(100)", false, {60, 200, 0}, updatePartySize},
+		{3, "UFs", "PartyWidth", L["PartyFrame Width"].."*(100)", false, {80, 200, 0}, updatePartySize},
 		{3, "UFs", "PartyHeight", L["PartyFrame Height"].."*(32)", true, {25, 60, 0}, updatePartySize},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, setupBuffIndicator},
