@@ -1124,7 +1124,7 @@ function UF:InterruptIndicator(self)
 	end
 
 	buttons.__max = maxIcons
-	buttons.PartySpells = C.PartySpells
+	buttons.PartySpells = NDuiADB["PartyWatcherSpells"]
 	buttons.TalentCDFix = C.TalentCDFix
 	self.PartyWatcher = buttons
 end

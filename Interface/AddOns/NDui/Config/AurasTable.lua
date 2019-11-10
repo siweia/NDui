@@ -106,6 +106,18 @@ function module:RegisterDebuff(_, instID, _, spellID, level)
 	RaidDebuffs[instName][spellID] = level
 end
 
+-- Party watcher spells
+function module:UpdatePartyWatcherSpells()
+	if not next(NDuiADB["PartyWatcherSpells"]) then
+		for spellID, duration in pairs(C.PartySpells) do
+			local name = GetSpellInfo(spellID)
+			if name then
+				NDuiADB["PartyWatcherSpells"][spellID] = duration
+			end
+		end
+	end
+end
+
 function module:OnLogin()
 	for instName, value in pairs(RaidDebuffs) do
 		for spell, priority in pairs(value) do
@@ -129,6 +141,8 @@ function module:OnLogin()
 	if not next(NDuiADB["CornerBuffs"][DB.MyClass]) then
 		B.CopyTable(C.CornerBuffs[DB.MyClass], NDuiADB["CornerBuffs"][DB.MyClass])
 	end
+
+	self:UpdatePartyWatcherSpells()
 
 	-- Filter bloodlust for healers
 	local bloodlustList = {57723, 57724, 80354, 264689}
