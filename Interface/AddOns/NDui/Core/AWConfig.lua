@@ -11,7 +11,7 @@ local function labelOnEnter(self)
 	GameTooltip:ClearLines()
 	GameTooltip:SetOwner(self:GetParent(), "ANCHOR_RIGHT", 0, 3)
 	GameTooltip:AddLine(self.text)
-	GameTooltip:AddLine(self.tip, .6,.8,1)
+	GameTooltip:AddLine(self.tip, .6,.8,1, 1)
 	GameTooltip:Show()
 end
 

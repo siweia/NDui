@@ -415,8 +415,11 @@ function G:SetupPartyWatcher(parent)
 	partyWatcherGUI = createExtraGUI(parent, "NDuiGUI_PartyWatcher", L["AddPartyWatcher"].."*", true)
 
 	local barTable = {}
+	local ARCANE_TORRENT = GetSpellInfo(25046)
 
 	local function createBar(parent, spellID, duration)
+		local spellName = GetSpellInfo(spellID)
+		if spellName == ARCANE_TORRENT then return end
 		local texture = GetSpellTexture(spellID)
 
 		local bar = CreateFrame("Frame", nil, parent)
@@ -433,7 +436,6 @@ function G:SetupPartyWatcher(parent)
 			sortBars(barTable)
 		end)
 
-		local spellName = GetSpellInfo(spellID)
 		local name = B.CreateFS(bar, 14, spellName, false, "LEFT", 30, 0)
 		name:SetWidth(120)
 		name:SetJustifyH("LEFT")
@@ -450,7 +452,7 @@ function G:SetupPartyWatcher(parent)
 	local options = {}
 
 	options[1] = G:CreateEditbox(frame, "ID*", 10, -30, L["ID Intro"])
-	options[2] = G:CreateEditbox(frame, L["Duration*"], 120, -30, L["Duration Intro"])
+	options[2] = G:CreateEditbox(frame, L["Cooldown*"], 120, -30, L["Cooldown Intro"])
 
 	local scroll = G:CreateScroll(frame, 240, 410)
 	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
