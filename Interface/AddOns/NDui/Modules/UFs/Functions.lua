@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local oUF = ns.oUF or oUF
 local UF = B:RegisterModule("UnitFrames")
-local format, floor, abs, min = string.format, math.floor, math.abs, math.min
+local format, floor, abs = string.format, math.floor, math.abs
 local pairs, next = pairs, next
 
 -- Custom colors
@@ -1105,8 +1105,9 @@ function UF:InterruptIndicator(self)
 	local rel1 = not horizon and not otherSide and "RIGHT" or "LEFT"
 	local rel2 = not horizon and not otherSide and "LEFT" or "RIGHT"
 	local buttons = {}
-	local maxIcons = 3
-	local iconSize = horizon and min((self:GetWidth()-(maxIcons-1)*abs(margin))/maxIcons, 32) or (self:GetHeight()+self.Power:GetHeight()+3)
+	local maxIcons = 4
+	local iconSize = horizon and (self:GetWidth()-(maxIcons-1)*abs(margin))/maxIcons or (self:GetHeight()+self.Power:GetHeight()+3)
+	if iconSize > 32 then iconSize = 32 end
 
 	for i = 1, maxIcons do
 		local bu = CreateFrame("Frame", nil, self)
