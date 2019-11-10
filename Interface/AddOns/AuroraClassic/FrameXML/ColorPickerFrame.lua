@@ -1,10 +1,16 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	ColorPickerFrameHeader:SetAlpha(0)
-	ColorPickerFrameHeader:ClearAllPoints()
-	ColorPickerFrameHeader:SetPoint("TOP", ColorPickerFrame, 0, 0)
+	ColorPickerFrame.Header = ColorPickerFrame.Header or ColorPickerFrameHeader -- deprecated in 8.3
+	if C.isNewPatch then
+		F.StripTextures(ColorPickerFrame.Header)
+	else
+		ColorPickerFrame.Header:SetAlpha(0)
+	end
+	ColorPickerFrame.Header:ClearAllPoints()
+	ColorPickerFrame.Header:SetPoint("TOP", ColorPickerFrame, 0, 0)
 	ColorPickerFrame.Border:Hide()
+
 	F.CreateBD(ColorPickerFrame)
 	F.CreateSD(ColorPickerFrame)
 	F.Reskin(ColorPickerOkayButton)

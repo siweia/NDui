@@ -41,6 +41,13 @@ tinsert(C.themes["AuroraClassic"], function()
 	ReskinFont(NumberFont_Outline_Large)
 	ReskinFont(NumberFont_Shadow_Med)
 	ReskinFont(NumberFont_Shadow_Small)
+	if C.isNewPatch then
+		ReskinFont(Number13FontYellow)
+		ReskinFont(Number13FontWhite)
+		ReskinFont(Number13FontGray)
+		ReskinFont(Number14FontWhite)
+		ReskinFont(Number18FontWhite)
+	end
 	ReskinFont(QuestFont_Shadow_Small)
 	ReskinFont(QuestFont_Large)
 	ReskinFont(QuestFont_Shadow_Huge)

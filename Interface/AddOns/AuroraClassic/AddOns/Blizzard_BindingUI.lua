@@ -5,8 +5,8 @@ C.themes["Blizzard_BindingUI"] = function()
 
 	local KeyBindingFrame = KeyBindingFrame
 
-	KeyBindingFrame.header:DisableDrawLayer("BACKGROUND")
-	KeyBindingFrame.header:DisableDrawLayer("BORDER")
+	KeyBindingFrame.Header = KeyBindingFrame.Header or KeyBindingFrame.header -- deprecated in 8.3
+	F.StripTextures(KeyBindingFrame.Header)
 	KeyBindingFrame.scrollFrame.scrollBorderTop:SetTexture("")
 	KeyBindingFrame.scrollFrame.scrollBorderBottom:SetTexture("")
 	KeyBindingFrame.scrollFrame.scrollBorderMiddle:SetTexture("")
@@ -44,8 +44,9 @@ C.themes["Blizzard_BindingUI"] = function()
 		end
 	end)
 
-	KeyBindingFrame.header.text:ClearAllPoints()
-	KeyBindingFrame.header.text:SetPoint("TOP", KeyBindingFrame, "TOP", 0, -8)
+	KeyBindingFrame.Header.Text = KeyBindingFrame.Header.Text or KeyBindingFrame.Header.text -- deprecated in 8.3
+	KeyBindingFrame.Header.Text:ClearAllPoints()
+	KeyBindingFrame.Header.Text:SetPoint("TOP", KeyBindingFrame, "TOP", 0, -8)
 	KeyBindingFrame.unbindButton:ClearAllPoints()
 	KeyBindingFrame.unbindButton:SetPoint("BOTTOMRIGHT", -207, 16)
 	KeyBindingFrame.okayButton:ClearAllPoints()

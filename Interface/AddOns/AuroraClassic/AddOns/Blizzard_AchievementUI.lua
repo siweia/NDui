@@ -266,18 +266,24 @@ C.themes["Blizzard_AchievementUI"] = function()
 	AchievementFrame.searchBox:SetPoint("TOPRIGHT", AchievementFrame, "TOPRIGHT", -25, -5)
 	AchievementFrame.searchBox:SetPoint("BOTTOMLEFT", AchievementFrame, "TOPRIGHT", -130, -25)
 
+	local showAllSearchResults = C.isNewPatch and AchievementFrame.searchPreviewContainer.showAllSearchResults or AchievementFrame.showAllSearchResults
+
 	F.StripTextures(AchievementFrame.searchPreviewContainer)
 	AchievementFrame.searchPreviewContainer:ClearAllPoints()
 	AchievementFrame.searchPreviewContainer:SetPoint("TOPLEFT", AchievementFrame, "TOPRIGHT", 7, -1)
 	local bg = F.CreateBDFrame(AchievementFrame.searchPreviewContainer)
 	bg:SetPoint("TOPLEFT", -2, 2)
-	bg:SetPoint("BOTTOMRIGHT", AchievementFrame.showAllSearchResults, 2, -2)
+	bg:SetPoint("BOTTOMRIGHT", showAllSearchResults, 2, -2)
 	F.CreateSD(bg)
 
 	for i = 1, 5 do
-		F.StyleSearchButton(AchievementFrame.searchPreview[i])
+		if C.isNewPatch then
+			F.StyleSearchButton(AchievementFrame.searchPreviewContainer["searchPreview"..i])
+		else
+			F.StyleSearchButton(AchievementFrame.searchPreview[i])
+		end
 	end
-	F.StyleSearchButton(AchievementFrame.showAllSearchResults)
+	F.StyleSearchButton(showAllSearchResults)
 
 	do
 		local result = AchievementFrame.searchResults
