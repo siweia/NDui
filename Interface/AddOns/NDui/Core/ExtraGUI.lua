@@ -747,6 +747,9 @@ function G:SetupCastbar(parent)
 				_G.oUF_Player.QuakeTimer.mover:Show()
 				_G.oUF_Player.QuakeTimer.mover:SetSize(width+height+5, height+5)
 			end
+			if _G.oUF_Player.Swing then
+				_G.oUF_Player.Swing:SetWidth(width-height-5)
+			end
 		end
 	end
 	createOptionGroup(scroll.child, L["Player Castbar"], -110, "Player", updatePlayerCastbar)
