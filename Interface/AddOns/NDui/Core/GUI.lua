@@ -1088,6 +1088,14 @@ local function exportData()
 					end
 				end
 			end
+		elseif KEY == "PartyWatcherSpells" then
+			text = text..";ACCOUNT:"..KEY
+			for spellID, duration in pairs(VALUE) do
+				local name = GetSpellInfo(spellID)
+				if name then
+					text = text..":"..spellID..":"..duration
+				end
+			end
 		end
 	end
 
@@ -1187,6 +1195,16 @@ local function importData()
 				filter = toBoolean(filter)
 				if not NDuiADB[value][class] then NDuiADB[value][class] = {} end
 				NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
+			elseif value == "PartyWatcherSpells" then
+				local options = {strsplit(":", option)}
+				local index = 3
+				local spellID = options[index]
+				while spellID do
+					local duration = options[index+1]
+					NDuiADB[value][tonumber(spellID)] = tonumber(duration) or 0
+					index = index + 2
+					spellID = options[index]
+				end
 			end
 		elseif tonumber(arg1) then
 			if value == "DBMCount" then
