@@ -185,10 +185,28 @@ function module:RecycleBin()
 		C_Timer.After(.5, hideBinButton)
 	end
 
+	local secureAddons = {
+		["HANDYNOTES"] = true,
+	}
+
+	local function isButtonSecure(name)
+		name = strupper(name)
+		for addonName in pairs(secureAddons) do
+			if strmatch(name, addonName) then
+				return true
+			end
+		end
+	end
+
+	local isCollecting
+
 	local function CollectRubbish()
+		if isCollecting then return end
+		isCollecting = true
+
 		for _, child in ipairs({Minimap:GetChildren()}) do
 			local name = child:GetName()
-			if name and not blackList[name] and not strmatch(strupper(name), "HANDYNOTES") then
+			if name and not blackList[name] and not isButtonSecure(name) then
 				if child:GetObjectType() == "Button" or strmatch(strupper(name), "BUTTON") then
 					child:SetParent(bin)
 					child:SetSize(34, 34)
@@ -233,6 +251,8 @@ function module:RecycleBin()
 				end
 			end
 		end
+
+		isCollecting = nil
 	end
 
 	local function SortRubbish()
