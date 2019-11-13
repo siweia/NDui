@@ -34,6 +34,7 @@ C.themes["Blizzard_Collections"] = function()
 	F.CreateBD(MountJournal.MountCount, .25)
 	F.StripTextures(PetJournal.PetCount)
 	F.CreateBD(PetJournal.PetCount, .25)
+	PetJournal.PetCount:SetWidth(140)
 	F.CreateBD(MountJournal.MountDisplay.ModelScene, .25)
 	F.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
 

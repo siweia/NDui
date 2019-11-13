@@ -81,7 +81,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 				header.bg = F.CreateBDFrame(header)
 				local hl = header:GetHighlightTexture()
 				hl:SetColorTexture(1, 1, 1, .1)
-				hl:SetAllPoints(bg)
+				hl:SetAllPoints(header.bg)
 
 				header.styled = true
 			end

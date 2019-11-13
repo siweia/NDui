@@ -4,13 +4,24 @@ C.themes["Blizzard_Calendar"] = function()
 	local r, g, b = C.r, C.g, C.b
 
 	for i = 1, 42 do
-		_G["CalendarDayButton"..i.."DarkFrame"]:SetAlpha(.5)
-		local bu = _G["CalendarDayButton"..i]
+		local dayButtonName = "CalendarDayButton"..i
+		local bu = _G[dayButtonName]
 		bu:DisableDrawLayer("BACKGROUND")
 		bu:SetHighlightTexture(C.media.backdrop)
 		local hl = bu:GetHighlightTexture()
 		hl:SetVertexColor(r, g, b, .25)
 		hl.SetAlpha = F.dummy
+
+		_G[dayButtonName.."DarkFrame"]:SetAlpha(.5)
+
+		local eventButtonIndex = 1
+		local eventButton = _G[dayButtonName.."EventButton"..eventButtonIndex]
+		while eventButton do
+			eventButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			eventButton.black:SetTexture(nil)
+			eventButtonIndex = eventButtonIndex + 1
+			eventButton = _G[dayButtonName.."EventButton"..eventButtonIndex]
+		end
 	end
 
 	for i = 1, 7 do
@@ -21,19 +32,17 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarCreateEventDivider:Hide()
 	CalendarViewEventInviteList:GetRegions():Hide()
 	CalendarViewEventDescriptionContainer:GetRegions():Hide()
-	select(5, CalendarCreateEventCloseButton:GetRegions()):Hide()
-	select(5, CalendarViewEventCloseButton:GetRegions()):Hide()
-	select(5, CalendarViewHolidayCloseButton:GetRegions()):Hide()
-	select(5, CalendarViewRaidCloseButton:GetRegions()):Hide()
-	select(5, CalendarMassInviteCloseButton:GetRegions()):Hide()
 	CalendarCreateEventFrameButtonBackground:Hide()
 	CalendarCreateEventMassInviteButtonBorder:Hide()
 	CalendarCreateEventCreateButtonBorder:Hide()
 	CalendarCreateEventIcon:SetTexCoord(.08, .92, .08, .92)
 	CalendarCreateEventIcon.SetTexCoord = F.dummy
 	F.CreateBDFrame(CalendarCreateEventIcon)
-	F.StripTextures(CalendarEventPickerTitleFrame)
-	CalendarEventPickerFrameButtonBackground:Hide()
+	if not C.isNewPatch then
+		F.StripTextures(CalendarEventPickerFrame)
+		F.SetBD(CalendarEventPickerFrame)
+		F.StripTextures(CalendarEventPickerTitleFrame)
+	end
 	CalendarEventPickerCloseButtonBorder:Hide()
 	CalendarCreateEventRaidInviteButtonBorder:Hide()
 	CalendarMonthBackground:SetAlpha(0)
@@ -51,7 +60,17 @@ C.themes["Blizzard_Calendar"] = function()
 	F.CreateBD(CalendarViewEventDescriptionContainer, .25)
 	F.CreateBD(CalendarCreateEventInviteList, .25)
 	F.CreateBD(CalendarCreateEventDescriptionContainer, .25)
-	F.CreateBD(CalendarEventPickerFrame, .25)
+	if C.isNewPatch then
+		local function reskinCalendarPage(frame)
+			F.StripTextures(frame)
+			F.SetBD(frame)
+			F.StripTextures(frame.Header)
+		end
+		reskinCalendarPage(CalendarViewHolidayFrame)
+		reskinCalendarPage(CalendarCreateEventFrame)
+		reskinCalendarPage(CalendarTexturePickerFrame)
+		reskinCalendarPage(CalendarEventPickerFrame)
+	end
 
 	local frames = {
 		CalendarViewEventTitleFrame, CalendarViewHolidayTitleFrame, CalendarViewRaidTitleFrame, CalendarCreateEventTitleFrame, CalendarTexturePickerTitleFrame, CalendarMassInviteTitleFrame
@@ -118,10 +137,10 @@ C.themes["Blizzard_Calendar"] = function()
 		F.ReskinTooltip(CalendarInviteStatusContextMenu)
 	end
 
-	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-	CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-	CalendarViewRaidFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-	CalendarCreateEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
+	CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
+	CalendarViewRaidFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
+	CalendarCreateEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
 	CalendarCreateEventInviteButton:SetPoint("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
 	CalendarClassButton1:SetPoint("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
 
