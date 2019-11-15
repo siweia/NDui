@@ -589,7 +589,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "Castbars", "|cff00cc4c"..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"]},
-		{1, "UFs", "SwingTimer", L["UFs SwingTimer"], true},
+		{1, "UFs", "SwingTimer", L["UFs SwingTimer"], true, nil, nil, L["SwingTimer Tip"]},
 		{1, "UFs", "LagString", L["Castbar LagString"]},
 		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true},
 		{},--blank
