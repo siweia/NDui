@@ -580,6 +580,7 @@ function A:IsAuraTracking(value, eventType, sourceName, sourceFlags, destName, d
 end
 
 local cache = {}
+local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
 function A:AuraWatch_UpdateInt(_, ...)
 	if not IntCD.List then return end
 
@@ -590,6 +591,8 @@ function A:AuraWatch_UpdateInt(_, ...)
 		if value.OnSuccess then guid, name = sourceGUID, sourceName end
 
 		A:AuraWatch_SetupInt(value.IntID, value.ItemID, value.Duration, value.UnitID, guid, name)
+		if NDuiDB["AuraWatch"]["QuakeRing"] and spellID == 240447 then PlaySound(soundKitID, "Master") end -- 'Ding' on quake
+
 		cache[timestamp] = spellID
 	end
 
