@@ -65,7 +65,7 @@ local defaultSettings = {
 		ClickThrough = false,
 		IconScale = 1,
 		DeprecatedAuras = false,
-		QuakeRing = true,
+		QuakeRing = false,
 	},
 	UFs = {
 		Enable = true,
