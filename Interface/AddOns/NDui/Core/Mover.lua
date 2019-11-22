@@ -6,45 +6,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 
 -- Frame Mover
 local MoverList, f = {}
-
-function M:Mover_OnClick(btn)
-	if IsShiftKeyDown() and btn == "RightButton" then
-		if self.isAuraWatch then
-			UIErrorsFrame:AddMessage(DB.InfoColor..L["AuraWatchToggleError"])
-		else
-			self:Hide()
-		end
-	elseif IsControlKeyDown() and btn == "RightButton" then
-		self:ClearAllPoints()
-		self:SetPoint(unpack(self.__anchor))
-		NDuiDB[self.__key][self.__value] = nil
-	end
-end
-
-function M:Mover_OnEnter()
-	self:SetBackdropBorderColor(cr, cg, cb)
-	self.text:SetTextColor(1, .8, 0)
-end
-
-function M:Mover_OnLeave()
-	self:SetBackdropBorderColor(0, 0, 0)
-	self.text:SetTextColor(1, 1, 1)
-end
-
-function M:Mover_OnDragStart()
-	self:StartMoving()
-end
-
-function M:Mover_OnDragStop()
-	self:StopMovingOrSizing()
-	local orig, _, tar, x, y = self:GetPoint()
-	x = B:Round(x)
-	y = B:Round(y)
-
-	self:ClearAllPoints()
-	self:SetPoint(orig, "UIParent", tar, x, y)
-	NDuiDB[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
-end
+local updater
 
 function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	local key = "Mover"
@@ -87,6 +49,112 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	self:SetPoint("TOPLEFT", mover)
 
 	return mover
+end
+
+function M:CalculateMoverPoints(mover, trimX, trimY)
+	local screenWidth = B:Round(UIParent:GetRight())
+	local screenHeight = B:Round(UIParent:GetTop())
+	local screenCenter = B:Round(UIParent:GetCenter())
+	local x, y = mover:GetCenter()
+
+	local LEFT = screenWidth / 3
+	local RIGHT = screenWidth * 2 / 3
+	local TOP = screenHeight / 2
+	local point
+
+	if y >= TOP then
+		point = "TOP"
+		y = -(screenHeight - mover:GetTop())
+	else
+		point = "BOTTOM"
+		y = mover:GetBottom()
+	end
+
+	if x >= RIGHT then
+		point = point.."RIGHT"
+		x = mover:GetRight() - screenWidth
+	elseif x <= LEFT then
+		point = point.."LEFT"
+		x = mover:GetLeft()
+	else
+		x = x - screenCenter
+	end
+
+	x = x + (trimX or 0)
+	y = y + (trimY or 0)
+
+	return x, y, point
+end
+
+function M:UpdateTrimFrame()
+	local x, y = M:CalculateMoverPoints(self)
+	x, y = B:Round(x), B:Round(y)
+	f.__x:SetText(x)
+	f.__y:SetText(y)
+	f.__x.__current = x
+	f.__y.__current = y
+	f.__trimText:SetText(self.text:GetText())
+end
+
+function M:DoTrim(trimX, trimY)
+	local mover = updater.__owner
+	if mover then
+		local x, y, point = M:CalculateMoverPoints(mover, trimX, trimY)
+		x, y = B:Round(x), B:Round(y)
+		f.__x:SetText(x)
+		f.__y:SetText(y)
+		f.__x.__current = x
+		f.__y.__current = y
+		mover:ClearAllPoints()
+		mover:SetPoint(point, UIParent, point, x, y)
+		NDuiDB[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
+	end
+end
+
+function M:Mover_OnClick(btn)
+	if IsShiftKeyDown() and btn == "RightButton" then
+		if self.isAuraWatch then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["AuraWatchToggleError"])
+		else
+			self:Hide()
+		end
+	elseif IsControlKeyDown() and btn == "RightButton" then
+		self:ClearAllPoints()
+		self:SetPoint(unpack(self.__anchor))
+		NDuiDB[self.__key][self.__value] = nil
+	end
+	updater.__owner = self
+	M.UpdateTrimFrame(self)
+end
+
+function M:Mover_OnEnter()
+	self:SetBackdropBorderColor(cr, cg, cb)
+	self.text:SetTextColor(1, .8, 0)
+end
+
+function M:Mover_OnLeave()
+	self:SetBackdropBorderColor(0, 0, 0)
+	self.text:SetTextColor(1, 1, 1)
+end
+
+function M:Mover_OnDragStart()
+	self:StartMoving()
+	M.UpdateTrimFrame(self)
+	updater.__owner = self
+	updater:Show()
+end
+
+function M:Mover_OnDragStop()
+	self:StopMovingOrSizing()
+	local orig, _, tar, x, y = self:GetPoint()
+	x = B:Round(x)
+	y = B:Round(y)
+
+	self:ClearAllPoints()
+	self:SetPoint(orig, "UIParent", tar, x, y)
+	NDuiDB[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
+	M.UpdateTrimFrame(self)
+	updater:Hide()
 end
 
 function M:UnlockElements()
@@ -175,6 +243,80 @@ local function CreateConsole()
 	tex:SetPoint("TOPRIGHT", 2, 5)
 	tex:SetTexture("Interface\\Common\\Help-i")
 
+	local frame = CreateFrame("Frame", nil, f)
+	frame:SetSize(212, 70)
+	frame:SetPoint("TOP", f, "BOTTOM", 0, -2)
+	B.CreateBD(frame)
+	B.CreateSD(frame)
+	B.CreateTex(frame)
+	f.__trimText = B.CreateFS(frame, 12, NONE, "system", "BOTTOM", 0, 5)
+
+	local xBox = B.CreateEditBox(frame, 60, 22)
+	xBox:SetPoint("TOPRIGHT", frame, "TOP", -1, -2)
+	B.CreateFS(xBox, 14, "X", "system", "LEFT", -20, 0)
+	xBox:SetJustifyH("CENTER")
+	xBox.__current = 0
+	xBox:HookScript("OnEnterPressed", function(self)
+		local text = self:GetText()
+		text = tonumber(text)
+		if text then
+			local diff = text - self.__current
+			self.__current = text
+			M:DoTrim(diff)
+		end
+	end)
+	f.__x = xBox
+
+	local yBox = B.CreateEditBox(frame, 60, 22)
+	yBox:SetPoint("TOPLEFT", frame, "TOP", 1, -2)
+	B.CreateFS(yBox, 14, "Y", "system", "RIGHT", 20, 0)
+	yBox:SetJustifyH("CENTER")
+	yBox.__current = 0
+	yBox:HookScript("OnEnterPressed", function(self)
+		local text = self:GetText()
+		text = tonumber(text)
+		if text then
+			local diff = text - self.__current
+			self.__current = text
+			M:DoTrim(nil, diff)
+		end
+	end)
+	f.__y = yBox
+
+	local arrows = {}
+	local arrowIndex = {
+		[1] = {degree = 180, offset = -1},
+		[2] = {degree = 0, offset = 1},
+		[3] = {degree = 90, offset = 1},
+		[4] = {degree = -90, offset = -1},
+	}
+	local function arrowOnClick(self)
+		local modKey = IsModifierKeyDown()
+		if self.__index < 3 then
+			M:DoTrim(self.__offset * (modKey and 10 or 1))
+		else
+			M:DoTrim(nil, self.__offset * (modKey and 10 or 1))
+		end
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+	end
+
+	for i = 1, 4 do
+		arrows[i] = CreateFrame("Button", nil, frame)
+		arrows[i]:SetSize(20, 20)
+		B.PixelIcon(arrows[i], "Interface\\OPTIONSFRAME\\VoiceChat-Play", true)
+		arrows[i].__index = i
+		arrows[i].__offset = arrowIndex[i].offset
+		arrows[i]:SetScript("OnClick", arrowOnClick)
+		if i == 1 then
+			arrows[i]:SetPoint("TOPLEFT", 48, -28)
+		else
+			arrows[i]:SetPoint("LEFT", arrows[i-1], "RIGHT", 12, 0)
+		end
+		arrows[i].Icon:SetPoint("TOPLEFT", 3, -3)
+		arrows[i].Icon:SetPoint("BOTTOMRIGHT", -3, 3)
+		arrows[i].Icon:SetRotation(math.rad(arrowIndex[i].degree))
+	end
+
 	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
@@ -189,14 +331,20 @@ local function CreateConsole()
 	B:RegisterEvent("PLAYER_REGEN_DISABLED", showLater)
 end
 
-function M:OnLogin()
-	SlashCmdList["NDUI_MOVER"] = function()
-		if InCombatLockdown() then
-			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
-			return
-		end
-		CreateConsole()
-		M:UnlockElements()
+SlashCmdList["NDUI_MOVER"] = function()
+	if InCombatLockdown() then
+		UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
+		return
 	end
-	SLASH_NDUI_MOVER1 = "/mm"
+	CreateConsole()
+	M:UnlockElements()
+end
+SLASH_NDUI_MOVER1 = "/mm"
+
+function M:OnLogin()
+	updater = CreateFrame("Frame")
+	updater:Hide()
+	updater:SetScript("OnUpdate", function()
+		M.UpdateTrimFrame(updater.__owner)
+	end)
 end
