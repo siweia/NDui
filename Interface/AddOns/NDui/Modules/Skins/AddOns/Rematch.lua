@@ -217,6 +217,15 @@ function S:ReskinRematch()
 			S.RematchIcon(button)
 		end
 
+		if ALPTRematchOptionButton then
+			ALPTRematchOptionButton:SetPushedTexture(nil)
+			ALPTRematchOptionButton:SetHighlightTexture(DB.bdTex)
+			ALPTRematchOptionButton:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
+			local tex = ALPTRematchOptionButton:GetNormalTexture()
+			tex:SetTexCoord(unpack(DB.TexCoord))
+			F.CreateBDFrame(tex)
+		end
+
 		local petCount = RematchToolbar.PetCount
 		petCount:SetWidth(130)
 		F.StripTextures(petCount)
