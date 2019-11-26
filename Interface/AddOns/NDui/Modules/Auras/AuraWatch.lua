@@ -37,14 +37,14 @@ end
 local function InsertData(index, target)
 	if NDuiDB["AuraWatchList"]["Switcher"][index] then
 		wipe(target)
-	else
-		for spellID, v in pairs(myTable[index]) do
-			local value = target[spellID]
-			if value and value.AuraID == v.AuraID then
-				value = nil
-			end
-			target[spellID] = v
+	end
+
+	for spellID, v in pairs(myTable[index]) do
+		local value = target[spellID]
+		if value and value.AuraID == v.AuraID then
+			value = nil
 		end
+		target[spellID] = v
 	end
 end
 

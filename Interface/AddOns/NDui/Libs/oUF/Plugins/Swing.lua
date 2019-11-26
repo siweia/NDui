@@ -12,7 +12,6 @@ local UnitAttackSpeed = UnitAttackSpeed
 local UnitRangedDamage = UnitRangedDamage
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local UnitGUID = UnitGUID
-local GetUnitSpeed = GetUnitSpeed
 
 local meleeing, rangeing, lasthit
 local MainhandID = GetInventoryItemID("player", 16)

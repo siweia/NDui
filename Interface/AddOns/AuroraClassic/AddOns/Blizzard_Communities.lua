@@ -56,6 +56,27 @@ C.themes["Blizzard_Communities"] = function()
 	end
 	F.ReskinScroll(ClubFinderCommunityAndGuildFinderFrame.CommunityCards.ListScrollFrame.scrollBar)
 
+	for _, frame in ipairs({ClubFinderGuildFinderFrame.RequestToJoinFrame, ClubFinderCommunityAndGuildFinderFrame.RequestToJoinFrame}) do
+		F.StripTextures(frame)
+		F.SetBD(frame)
+
+		hooksecurefunc(frame, "Initialize", function(self)
+			for button in self.SpecsPool:EnumerateActive() do
+				if button.CheckBox then
+					F.ReskinCheck(button.CheckBox)
+					button.CheckBox:SetSize(26, 26)
+				end
+			end
+		end)
+
+		F.StripTextures(frame.MessageFrame)
+		F.StripTextures(frame.MessageFrame.MessageScroll)
+		F.CreateBDFrame(frame.MessageFrame.MessageScroll, .25)
+		F.ReskinScroll(ClubFinderGuildFinderFrameScrollBar)
+		F.Reskin(frame.Apply)
+		F.Reskin(frame.Cancel)
+	end
+
 	F.StripTextures(CommunitiesFrameCommunitiesList)
 	CommunitiesFrameCommunitiesList.InsetFrame:Hide()
 	CommunitiesFrameCommunitiesList.FilligreeOverlay:Hide()
@@ -413,4 +434,22 @@ C.themes["Blizzard_Communities"] = function()
 	F.CreateBDFrame(CommunitiesGuildLogFrame.Container, .25)
 	local closeButton = select(3, CommunitiesGuildLogFrame:GetChildren())
 	F.Reskin(closeButton)
+
+	-- Recruitment dialog
+	do
+		local dialog = CommunitiesFrame.RecruitmentDialog
+		F.StripTextures(dialog)
+		F.SetBD(dialog)
+		F.ReskinCheck(dialog.ShouldListClub.Button)
+		F.ReskinCheck(dialog.MaxLevelOnly.Button)
+		F.ReskinCheck(dialog.MinIlvlOnly.Button)
+		F.ReskinDropDown(dialog.ClubFocusDropdown)
+		F.ReskinDropDown(dialog.LookingForDropdown)
+		F.StripTextures(dialog.RecruitmentMessageFrame)
+		F.StripTextures(dialog.RecruitmentMessageFrame.RecruitmentMessageInput)
+		F.ReskinInput(dialog.RecruitmentMessageFrame)
+		F.ReskinInput(dialog.MinIlvlOnly.EditBox)
+		F.Reskin(dialog.Accept)
+		F.Reskin(dialog.Cancel)
+	end
 end
