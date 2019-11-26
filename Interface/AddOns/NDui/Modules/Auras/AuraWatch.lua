@@ -652,16 +652,6 @@ end
 updater:SetScript("OnUpdate", A.AuraWatch_OnUpdate)
 
 -- Mover
-StaticPopupDialogs["RESET_AURAWATCH_MOVER"] = {
-	text = L["Reset AuraWatch Mover Confirm"],
-	button1 = OKAY,
-	button2 = CANCEL,
-	OnAccept = function()
-		wipe(NDuiDB["AuraWatchMover"])
-		ReloadUI()
-	end,
-}
-
 SlashCmdList.AuraWatch = function(msg)
 	if msg:lower() == "move" then
 		updater:SetScript("OnUpdate", nil)

@@ -1,13 +1,16 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local M = B:RegisterModule("Mover")
+
+local cr, cg, cb = DB.r, DB.g, DB.b
 
 -- Frame Mover
-local MoverList, BackupTable, f = {}, {}
+local MoverList, f = {}
+local updater
 
 function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	local key = "Mover"
 	if isAuraWatch then key = "AuraWatchMover" end
-	if not NDuiDB[key] then NDuiDB[key] = {} end
 
 	local mover = CreateFrame("Frame", nil, UIParent)
 	mover:SetWidth(width or self:GetWidth())
@@ -15,10 +18,9 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	B.CreateBD(mover)
 	B.CreateSD(mover)
 	B.CreateTex(mover)
-	B.CreateFS(mover, DB.Font[2], text):SetWordWrap(true)
-	if not isAuraWatch then
-		tinsert(MoverList, mover)
-	end
+	mover:Hide()
+	mover.text = B.CreateFS(mover, DB.Font[2], text)
+	mover.text:SetWordWrap(true)
 
 	if not NDuiDB[key][value] then
 		mover:SetPoint(unpack(anchor))
@@ -30,31 +32,142 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	mover:SetClampedToScreen(true)
 	mover:SetFrameStrata("HIGH")
 	mover:RegisterForDrag("LeftButton")
-	mover:SetScript("OnDragStart", function() mover:StartMoving() end)
-	mover:SetScript("OnDragStop", function()
-		mover:StopMovingOrSizing()
-		local orig, _, tar, x, y = mover:GetPoint()
-		NDuiDB[key][value] = {orig, "UIParent", tar, x, y}
-	end)
-	mover:Hide()
+	mover.__key = key
+	mover.__value = value
+	mover.__anchor = anchor
+	mover.isAuraWatch = isAuraWatch
+	mover:SetScript("OnEnter", M.Mover_OnEnter)
+	mover:SetScript("OnLeave", M.Mover_OnLeave)
+	mover:SetScript("OnDragStart", M.Mover_OnDragStart)
+	mover:SetScript("OnDragStop", M.Mover_OnDragStop)
+	mover:SetScript("OnMouseUp", M.Mover_OnClick)
+	if not isAuraWatch then
+		tinsert(MoverList, mover)
+	end
+
 	self:ClearAllPoints()
 	self:SetPoint("TOPLEFT", mover)
 
 	return mover
 end
 
-local function UnlockElements()
+function M:CalculateMoverPoints(mover, trimX, trimY)
+	local screenWidth = B:Round(UIParent:GetRight())
+	local screenHeight = B:Round(UIParent:GetTop())
+	local screenCenter = B:Round(UIParent:GetCenter())
+	local x, y = mover:GetCenter()
+
+	local LEFT = screenWidth / 3
+	local RIGHT = screenWidth * 2 / 3
+	local TOP = screenHeight / 2
+	local point
+
+	if y >= TOP then
+		point = "TOP"
+		y = -(screenHeight - mover:GetTop())
+	else
+		point = "BOTTOM"
+		y = mover:GetBottom()
+	end
+
+	if x >= RIGHT then
+		point = point.."RIGHT"
+		x = mover:GetRight() - screenWidth
+	elseif x <= LEFT then
+		point = point.."LEFT"
+		x = mover:GetLeft()
+	else
+		x = x - screenCenter
+	end
+
+	x = x + (trimX or 0)
+	y = y + (trimY or 0)
+
+	return x, y, point
+end
+
+function M:UpdateTrimFrame()
+	local x, y = M:CalculateMoverPoints(self)
+	x, y = B:Round(x), B:Round(y)
+	f.__x:SetText(x)
+	f.__y:SetText(y)
+	f.__x.__current = x
+	f.__y.__current = y
+	f.__trimText:SetText(self.text:GetText())
+end
+
+function M:DoTrim(trimX, trimY)
+	local mover = updater.__owner
+	if mover then
+		local x, y, point = M:CalculateMoverPoints(mover, trimX, trimY)
+		x, y = B:Round(x), B:Round(y)
+		f.__x:SetText(x)
+		f.__y:SetText(y)
+		f.__x.__current = x
+		f.__y.__current = y
+		mover:ClearAllPoints()
+		mover:SetPoint(point, UIParent, point, x, y)
+		NDuiDB[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
+	end
+end
+
+function M:Mover_OnClick(btn)
+	if IsShiftKeyDown() and btn == "RightButton" then
+		if self.isAuraWatch then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["AuraWatchToggleError"])
+		else
+			self:Hide()
+		end
+	elseif IsControlKeyDown() and btn == "RightButton" then
+		self:ClearAllPoints()
+		self:SetPoint(unpack(self.__anchor))
+		NDuiDB[self.__key][self.__value] = nil
+	end
+	updater.__owner = self
+	M.UpdateTrimFrame(self)
+end
+
+function M:Mover_OnEnter()
+	self:SetBackdropBorderColor(cr, cg, cb)
+	self.text:SetTextColor(1, .8, 0)
+end
+
+function M:Mover_OnLeave()
+	self:SetBackdropBorderColor(0, 0, 0)
+	self.text:SetTextColor(1, 1, 1)
+end
+
+function M:Mover_OnDragStart()
+	self:StartMoving()
+	M.UpdateTrimFrame(self)
+	updater.__owner = self
+	updater:Show()
+end
+
+function M:Mover_OnDragStop()
+	self:StopMovingOrSizing()
+	local orig, _, tar, x, y = self:GetPoint()
+	x = B:Round(x)
+	y = B:Round(y)
+
+	self:ClearAllPoints()
+	self:SetPoint(orig, "UIParent", tar, x, y)
+	NDuiDB[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
+	M.UpdateTrimFrame(self)
+	updater:Hide()
+end
+
+function M:UnlockElements()
 	for i = 1, #MoverList do
 		local mover = MoverList[i]
 		if not mover:IsShown() then
 			mover:Show()
 		end
 	end
-	B.CopyTable(NDuiDB["Mover"], BackupTable)
 	f:Show()
 end
 
-local function LockElements()
+function M:LockElements()
 	for i = 1, #MoverList do
 		local mover = MoverList[i]
 		mover:Hide()
@@ -70,16 +183,7 @@ StaticPopupDialogs["RESET_MOVER"] = {
 	button2 = CANCEL,
 	OnAccept = function()
 		wipe(NDuiDB["Mover"])
-		ReloadUI()
-	end,
-}
-
-StaticPopupDialogs["CANCEL_MOVER"] = {
-	text = L["Cancel Mover Confirm"],
-	button1 = OKAY,
-	button2 = CANCEL,
-	OnAccept = function()
-		B.CopyTable(BackupTable, NDuiDB["Mover"])
+		wipe(NDuiDB["AuraWatchMover"])
 		ReloadUI()
 	end,
 }
@@ -90,75 +194,137 @@ local function CreateConsole()
 
 	f = CreateFrame("Frame", nil, UIParent)
 	f:SetPoint("TOP", 0, -150)
-	f:SetSize(296, 65)
+	f:SetSize(212, 80)
 	B.CreateBD(f)
 	B.CreateSD(f)
 	B.CreateTex(f)
-	B.CreateMF(f)
-	B.CreateFS(f, 15, L["Mover Console"], "system", "TOP", 0, -10)
-	local bu, text = {}, {LOCK, CANCEL, L["Grids"], RESET}
+	B.CreateFS(f, 15, L["Mover Console"], "system", "TOP", 0, -8)
+	local bu, text = {}, {LOCK, L["Grids"], L["AuraWatch"], RESET}
 	for i = 1, 4 do
-		bu[i] = B.CreateButton(f, 70, 28, text[i])
+		bu[i] = B.CreateButton(f, 100, 22, text[i])
 		if i == 1 then
-			bu[i]:SetPoint("BOTTOMLEFT", 5, 5)
+			bu[i]:SetPoint("BOTTOMLEFT", 5, 29)
+		elseif i == 3 then
+			bu[i]:SetPoint("TOP", bu[1], "BOTTOM", 0, -2)
 		else
 			bu[i]:SetPoint("LEFT", bu[i-1], "RIGHT", 2, 0)
 		end
 	end
 
 	-- Lock
-	bu[1]:SetScript("OnClick", LockElements)
-	-- Cancel
-	bu[2]:SetScript("OnClick", function()
-		StaticPopup_Show("CANCEL_MOVER")
-	end)
+	bu[1]:SetScript("OnClick", M.LockElements)
 	-- Grids
-	bu[3]:SetScript("OnClick", function()
+	bu[2]:SetScript("OnClick", function()
 		SlashCmdList["TOGGLEGRID"]("64")
+	end)
+	-- Cancel
+	bu[3]:SetScript("OnClick", function(self)
+		self.state = not self.state
+		if self.state then
+			SlashCmdList.AuraWatch("move")
+		else
+			SlashCmdList.AuraWatch("lock")
+		end
 	end)
 	-- Reset
 	bu[4]:SetScript("OnClick", function()
 		StaticPopup_Show("RESET_MOVER")
 	end)
 
-	do
-		local frame = CreateFrame("Frame", nil, f)
-		frame:SetPoint("TOP", f, "BOTTOM", 0, -2)
-		frame:SetSize(296, 65)
-		B.CreateBD(frame)
-		B.CreateSD(frame)
-		B.CreateTex(frame)
-		B.CreateFS(frame, 15, L["Toggle AuraWatch"], "system", "TOP", 0, -10)
+	local header = CreateFrame("Frame", nil, f)
+	header:SetSize(212, 30)
+	header:SetPoint("TOP")
+	B.CreateMF(header, f)
+	local tips = DB.InfoColor.."|nCTRL +"..DB.RightButton..L["Reset anchor"].."|nSHIFT +"..DB.RightButton..L["Hide panel"]
+	header.title = L["Tips"]
+	B.AddTooltip(header, "ANCHOR_TOP", tips)
+	local tex = header:CreateTexture()
+	tex:SetSize(40, 40)
+	tex:SetPoint("TOPRIGHT", 2, 5)
+	tex:SetTexture("Interface\\Common\\Help-i")
 
-		local bu, text = {}, {UNLOCK, LOCK, RESET}
-		for i = 1, 3 do
-			bu[i] = B.CreateButton(frame, 94, 28, text[i])
-			if i == 1 then
-				bu[i]:SetPoint("BOTTOMLEFT", 5, 5)
-			else
-				bu[i]:SetPoint("LEFT", bu[i-1], "RIGHT", 2, 0)
-			end
+	local frame = CreateFrame("Frame", nil, f)
+	frame:SetSize(212, 70)
+	frame:SetPoint("TOP", f, "BOTTOM", 0, -2)
+	B.CreateBD(frame)
+	B.CreateSD(frame)
+	B.CreateTex(frame)
+	f.__trimText = B.CreateFS(frame, 12, NONE, "system", "BOTTOM", 0, 5)
+
+	local xBox = B.CreateEditBox(frame, 60, 22)
+	xBox:SetPoint("TOPRIGHT", frame, "TOP", -1, -2)
+	B.CreateFS(xBox, 14, "X", "system", "LEFT", -20, 0)
+	xBox:SetJustifyH("CENTER")
+	xBox.__current = 0
+	xBox:HookScript("OnEnterPressed", function(self)
+		local text = self:GetText()
+		text = tonumber(text)
+		if text then
+			local diff = text - self.__current
+			self.__current = text
+			M:DoTrim(diff)
 		end
-		-- UNLOCK
-		bu[1]:SetScript("OnClick", function()
-			SlashCmdList.AuraWatch("move")
-		end)
-		-- Lock
-		bu[2]:SetScript("OnClick", LockElements)
-		-- RESET
-		bu[3]:SetScript("OnClick", function()
-			StaticPopup_Show("RESET_AURAWATCH_MOVER")
-		end)
+	end)
+	f.__x = xBox
+
+	local yBox = B.CreateEditBox(frame, 60, 22)
+	yBox:SetPoint("TOPLEFT", frame, "TOP", 1, -2)
+	B.CreateFS(yBox, 14, "Y", "system", "RIGHT", 20, 0)
+	yBox:SetJustifyH("CENTER")
+	yBox.__current = 0
+	yBox:HookScript("OnEnterPressed", function(self)
+		local text = self:GetText()
+		text = tonumber(text)
+		if text then
+			local diff = text - self.__current
+			self.__current = text
+			M:DoTrim(nil, diff)
+		end
+	end)
+	f.__y = yBox
+
+	local arrows = {}
+	local arrowIndex = {
+		[1] = {degree = 180, offset = -1},
+		[2] = {degree = 0, offset = 1},
+		[3] = {degree = 90, offset = 1},
+		[4] = {degree = -90, offset = -1},
+	}
+	local function arrowOnClick(self)
+		local modKey = IsModifierKeyDown()
+		if self.__index < 3 then
+			M:DoTrim(self.__offset * (modKey and 10 or 1))
+		else
+			M:DoTrim(nil, self.__offset * (modKey and 10 or 1))
+		end
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+	end
+
+	for i = 1, 4 do
+		arrows[i] = CreateFrame("Button", nil, frame)
+		arrows[i]:SetSize(20, 20)
+		B.PixelIcon(arrows[i], "Interface\\OPTIONSFRAME\\VoiceChat-Play", true)
+		arrows[i].__index = i
+		arrows[i].__offset = arrowIndex[i].offset
+		arrows[i]:SetScript("OnClick", arrowOnClick)
+		if i == 1 then
+			arrows[i]:SetPoint("TOPLEFT", 48, -28)
+		else
+			arrows[i]:SetPoint("LEFT", arrows[i-1], "RIGHT", 12, 0)
+		end
+		arrows[i].Icon:SetPoint("TOPLEFT", 3, -3)
+		arrows[i].Icon:SetPoint("BOTTOMRIGHT", -3, 3)
+		arrows[i].Icon:SetRotation(math.rad(arrowIndex[i].degree))
 	end
 
 	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			if f:IsShown() then
-				LockElements()
+				M:LockElements()
 				B:RegisterEvent("PLAYER_REGEN_ENABLED", showLater)
 			end
 		else
-			UnlockElements()
+			M:UnlockElements()
 			B:UnregisterEvent(event, showLater)
 		end
 	end
@@ -171,6 +337,14 @@ SlashCmdList["NDUI_MOVER"] = function()
 		return
 	end
 	CreateConsole()
-	UnlockElements()
+	M:UnlockElements()
 end
 SLASH_NDUI_MOVER1 = "/mm"
+
+function M:OnLogin()
+	updater = CreateFrame("Frame")
+	updater:Hide()
+	updater:SetScript("OnUpdate", function()
+		M.UpdateTrimFrame(updater.__owner)
+	end)
+end
