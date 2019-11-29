@@ -57,7 +57,7 @@ local function SetupUIScale()
 
 	local scale = GetPerfectScale()
 	local parentScale = UIParent:GetScale()
-	if scale ~= parentScale then
+	if scale ~= parentScale and not InCombatLockdown() then
 		UIParent:SetScale(scale)
 	end
 
