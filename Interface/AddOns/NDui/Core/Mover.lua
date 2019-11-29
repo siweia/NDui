@@ -244,7 +244,7 @@ local function CreateConsole()
 	tex:SetTexture("Interface\\Common\\Help-i")
 
 	local frame = CreateFrame("Frame", nil, f)
-	frame:SetSize(212, 70)
+	frame:SetSize(212, 73)
 	frame:SetPoint("TOP", f, "BOTTOM", 0, -2)
 	B.CreateBD(frame)
 	B.CreateSD(frame)
@@ -252,7 +252,7 @@ local function CreateConsole()
 	f.__trimText = B.CreateFS(frame, 12, NONE, "system", "BOTTOM", 0, 5)
 
 	local xBox = B.CreateEditBox(frame, 60, 22)
-	xBox:SetPoint("TOPRIGHT", frame, "TOP", -1, -2)
+	xBox:SetPoint("TOPRIGHT", frame, "TOP", -12, -5)
 	B.CreateFS(xBox, 14, "X", "system", "LEFT", -20, 0)
 	xBox:SetJustifyH("CENTER")
 	xBox.__current = 0
@@ -268,8 +268,8 @@ local function CreateConsole()
 	f.__x = xBox
 
 	local yBox = B.CreateEditBox(frame, 60, 22)
-	yBox:SetPoint("TOPLEFT", frame, "TOP", 1, -2)
-	B.CreateFS(yBox, 14, "Y", "system", "RIGHT", 20, 0)
+	yBox:SetPoint("TOPRIGHT", frame, "TOP", -12, -29)
+	B.CreateFS(yBox, 14, "Y", "system", "LEFT", -20, 0)
 	yBox:SetJustifyH("CENTER")
 	yBox.__current = 0
 	yBox:HookScript("OnEnterPressed", function(self)
@@ -285,10 +285,10 @@ local function CreateConsole()
 
 	local arrows = {}
 	local arrowIndex = {
-		[1] = {degree = 180, offset = -1},
-		[2] = {degree = 0, offset = 1},
-		[3] = {degree = 90, offset = 1},
-		[4] = {degree = -90, offset = -1},
+		[1] = {degree = 180, offset = -1, x = 28, y = 9},
+		[2] = {degree = 0, offset = 1, x = 72, y = 9},
+		[3] = {degree = 90, offset = 1, x = 50, y = 20},
+		[4] = {degree = -90, offset = -1, x = 50, y = -2},
 	}
 	local function arrowOnClick(self)
 		local modKey = IsModifierKeyDown()
@@ -304,17 +304,14 @@ local function CreateConsole()
 		arrows[i] = CreateFrame("Button", nil, frame)
 		arrows[i]:SetSize(20, 20)
 		B.PixelIcon(arrows[i], "Interface\\OPTIONSFRAME\\VoiceChat-Play", true)
+		local arrowData = arrowIndex[i]
 		arrows[i].__index = i
-		arrows[i].__offset = arrowIndex[i].offset
+		arrows[i].__offset = arrowData.offset
 		arrows[i]:SetScript("OnClick", arrowOnClick)
-		if i == 1 then
-			arrows[i]:SetPoint("TOPLEFT", 48, -28)
-		else
-			arrows[i]:SetPoint("LEFT", arrows[i-1], "RIGHT", 12, 0)
-		end
+		arrows[i]:SetPoint("CENTER", arrowData.x, arrowData.y)
 		arrows[i].Icon:SetPoint("TOPLEFT", 3, -3)
 		arrows[i].Icon:SetPoint("BOTTOMRIGHT", -3, 3)
-		arrows[i].Icon:SetRotation(math.rad(arrowIndex[i].degree))
+		arrows[i].Icon:SetRotation(math.rad(arrowData.degree))
 	end
 
 	local function showLater(event)
