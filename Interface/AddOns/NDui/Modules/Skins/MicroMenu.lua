@@ -124,6 +124,7 @@ function S:MicroMenu()
 	B.HideObject(MicroButtonPortrait)
 	B.HideObject(GuildMicroButtonTabard)
 	B.HideObject(MainMenuBarDownload)
+	B.HideObject(HelpOpenWebTicketButton)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
 
 	CharacterMicroButtonAlert:EnableMouse(false)
