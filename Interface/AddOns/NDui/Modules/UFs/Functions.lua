@@ -221,6 +221,29 @@ function UF:CreatePowerText(self)
 
 	local ppval = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12), "", false, "RIGHT", -3, 2)
 	self:Tag(ppval, "[color][power]")
+	self.powerText = ppval
+end
+
+local textScaleFrames = {
+	["player"] = true,
+	["target"] = true,
+	["focus"] = true,
+	["pet"] = true,
+	["tot"] = true,
+	["focustarget"] = true,
+	["boss"] = true,
+	["arena"] = true,
+}
+function UF:UpdateTextScale()
+	local scale = NDuiDB["UFs"]["UFTextScale"]
+	for _, frame in pairs(oUF.objects) do
+		local style = frame.mystyle
+		if style and textScaleFrames[style] then
+			frame.nameText:SetScale(scale)
+			frame.healthValue:SetScale(scale)
+			if frame.powerText then frame.powerText:SetScale(scale) end
+		end
+	end
 end
 
 function UF:CreatePortrait(self)

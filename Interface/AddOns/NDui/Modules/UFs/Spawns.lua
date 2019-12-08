@@ -278,6 +278,8 @@ function UF:OnLogin()
 				arena[i]:SetPoint("TOPLEFT", boss[i].mover)
 			end
 		end
+
+		UF:UpdateTextScale()
 	end
 
 	if NDuiDB["UFs"]["RaidFrame"] then
