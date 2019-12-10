@@ -32,7 +32,7 @@ local function ForceDefaultSettings()
 end
 
 local function ForceRaidFrame()
-	if not CompactUnitFrameProfiles.selectedProfile then return end
+	if not CompactUnitFrameProfiles then return end
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "useClassColors", true)
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "displayPowerBar", true)
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "displayBorder", false)
