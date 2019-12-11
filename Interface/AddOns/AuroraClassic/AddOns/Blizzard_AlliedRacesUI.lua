@@ -7,6 +7,8 @@ C.themes["Blizzard_AlliedRacesUI"] = function()
 
 	local scrollFrame = AlliedRacesFrame.RaceInfoFrame.ScrollFrame
 	F.ReskinScroll(scrollFrame.ScrollBar)
+	scrollFrame.ScrollBar.ScrollUpBorder:Hide()
+	scrollFrame.ScrollBar.ScrollDownBorder:Hide()
 	AlliedRacesFrame.RaceInfoFrame.AlliedRacesRaceName:SetTextColor(1, .8, 0)
 	scrollFrame.Child.RaceDescriptionText:SetTextColor(1, 1, 1)
 	scrollFrame.Child.RacialTraitsLabel:SetTextColor(1, .8, 0)
