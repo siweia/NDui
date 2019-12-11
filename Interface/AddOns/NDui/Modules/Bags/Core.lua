@@ -712,9 +712,12 @@ function module:OnLogin()
 	-- Fixes
 	ToggleAllBags()
 	ToggleAllBags()
+	module.initComplete = true
+
 	BankFrame.GetRight = function() return f.bank:GetRight() end
 	BankFrameItemButton_Update = B.Dummy
 
+	-- Sort order
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 	SetInsertItemsLeftToRight(false)
 
