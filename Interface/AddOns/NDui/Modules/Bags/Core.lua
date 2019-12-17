@@ -55,7 +55,7 @@ end
 function module:CreateInfoFrame()
 	local infoFrame = CreateFrame("Button", nil, self)
 	infoFrame:SetPoint("TOPLEFT", 10, 0)
-	infoFrame:SetSize(200, 32)
+	infoFrame:SetSize(160, 32)
 	local icon = infoFrame:CreateTexture()
 	icon:SetSize(24, 24)
 	icon:SetPoint("LEFT")
@@ -75,7 +75,7 @@ function module:CreateInfoFrame()
 
 	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tag:SetFont(unpack(DB.Font))
-	tag:SetPoint("RIGHT", -5, 0)
+	tag:SetPoint("LEFT", icon, "RIGHT", 5, 0)
 end
 
 function module:CreateBagBar(settings, columns)
