@@ -1,6 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
+	if C.isNewPatch then return end
+
 	local ProductChoiceFrame = ProductChoiceFrame
 
 	F.ReskinPortraitFrame(ProductChoiceFrame)

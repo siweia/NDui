@@ -271,7 +271,9 @@ function F:ReskinTab()
 
 	self:SetHighlightTexture(C.media.backdrop)
 	local hl = self:GetHighlightTexture()
-	hl:SetAllPoints(bg)
+	hl:ClearAllPoints()
+	hl:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+	hl:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
 	hl:SetVertexColor(r, g, b, .25)
 end
 
