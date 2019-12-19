@@ -502,6 +502,8 @@ function S:CreateRM()
 	end)
 
 	-- UIWidget reanchor
-	UIWidgetTopCenterContainerFrame:ClearAllPoints()
-	UIWidgetTopCenterContainerFrame:SetPoint("TOP", 0, -35)
+	if not UIWidgetTopCenterContainerFrame:IsMovable() then -- can be movable for some addons, eg BattleInfo
+		UIWidgetTopCenterContainerFrame:ClearAllPoints()
+		UIWidgetTopCenterContainerFrame:SetPoint("TOP", 0, -35)
+	end
 end
