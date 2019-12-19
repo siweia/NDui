@@ -187,6 +187,7 @@ function module:RecycleBin()
 
 	local secureAddons = {
 		["HANDYNOTESPIN"] = true,
+		["GATHERMATEPIN"] = true,
 	}
 
 	local function isButtonSecure(name)
