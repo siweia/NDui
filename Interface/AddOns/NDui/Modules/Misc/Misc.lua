@@ -327,8 +327,11 @@ end
 
 -- Archaeology counts
 do
-	local function CalculateArches()
-		print("|cff0080ff【NDui】".."|c0000FF00"..L["Arch Count"]..":")
+	local function CalculateArches(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine("|c0000FF00"..L["Arch Count"]..":")
+		GameTooltip:AddLine(" ")
 		local total = 0
 		for i = 1, GetNumArchaeologyRaces() do
 			local numArtifacts = GetNumArtifactsByRace(i)
@@ -339,12 +342,13 @@ do
 			end
 			local name = GetArchaeologyRaceInfo(i)
 			if numArtifacts > 1 then
-				print("     - |cfffed100"..name..": ".."|cff70C0F5"..count)
+				GameTooltip:AddDoubleLine(name..":", DB.InfoColor..count)
 				total = total + count
 			end
 		end
-		print("    -> |c0000ff00"..TOTAL..": ".."|cffff0000"..total)
-		print("|cff70C0F5------------------------")
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine("|c0000ff00"..TOTAL..":", "|cffff0000"..total)
+		GameTooltip:Show()
 	end
 
 	local function AddCalculateIcon()
@@ -352,8 +356,8 @@ do
 		bu:SetPoint("TOPRIGHT", -45, -45)
 		bu:SetSize(35, 35)
 		B.PixelIcon(bu, "Interface\\ICONS\\Ability_Iyyokuk_Calculate", true)
-		B.AddTooltip(bu, "ANCHOR_RIGHT", L["Arch Count"], "system")
-		bu:SetScript("OnMouseUp", CalculateArches)
+		bu:SetScript("OnEnter", CalculateArches)
+		bu:SetScript("OnLeave", B.HideTooltip)
 	end
 
 	local function setupMisc(event, addon)
