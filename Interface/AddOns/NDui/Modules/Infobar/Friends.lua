@@ -220,7 +220,7 @@ local function buttonOnClick(self, btn)
 
 				local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(self.data[1])
 				local lastGameAccountID, lastGameAccountGUID
-				if numGameAccounts > 1 then
+				if numGameAccounts > 0 then
 					for i = 1, numGameAccounts do
 						local gameAccountInfo = C_BattleNet_GetFriendGameAccountInfo(self.data[1], i)
 						local charName = gameAccountInfo.characterName
