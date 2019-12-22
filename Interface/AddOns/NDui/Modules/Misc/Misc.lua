@@ -373,6 +373,16 @@ do
 	end
 
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
+
+	local newTitleString = ARCHAEOLOGY_DIGSITE_PROGRESS_BAR_TITLE.." %s/%s"
+	local function updateArcTitle(_, ...)
+		local numFindsCompleted, totalFinds = ...
+		if ArcheologyDigsiteProgressBar then
+			ArcheologyDigsiteProgressBar.BarTitle:SetFormattedText(newTitleString, numFindsCompleted, totalFinds)
+		end
+	end
+	B:RegisterEvent("ARCHAEOLOGY_SURVEY_CAST", updateArcTitle)
+	B:RegisterEvent("ARCHAEOLOGY_FIND_COMPLETE", updateArcTitle)
 end
 
 -- Show BID and highlight price
