@@ -274,6 +274,7 @@ local defaultSettings = {
 		RareAlertInWild = false,
 		ParagonRep = true,
 		UunatAlert = false,
+		InstantDelete = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -821,6 +822,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", true, nil, updateScreenShot},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", nil, nil, updateFasterLoot},
 		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
+		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
