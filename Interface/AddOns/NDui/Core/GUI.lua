@@ -110,6 +110,9 @@ local defaultSettings = {
 		PWOnRight = false,
 		PartyWidth = 100,
 		PartyHeight = 32,
+		PartyPetFrame = false,
+		PartyPetWidth = 100,
+		PartyPetHeight = 22,
 		HealthColor = 1,
 		BuffIndicatorType = 1,
 		BI_IconSize = 10,
@@ -466,6 +469,10 @@ local function updatePartySize()
 	B:GetModule("UnitFrames"):ResizePartyFrame()
 end
 
+local function updatePartyPetSize()
+	B:GetModule("UnitFrames"):ResizePartyPetFrame()
+end
+
 local function updateRaidSize()
 	B:GetModule("UnitFrames"):ResizeRaidFrame()
 end
@@ -626,6 +633,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
 		{3, "UFs", "PartyWidth", L["PartyFrame Width"].."*(100)", false, {80, 200, 0}, updatePartySize},
 		{3, "UFs", "PartyHeight", L["PartyFrame Height"].."*(32)", true, {25, 60, 0}, updatePartySize},
+		{1, "UFs", "PartyPetFrame", "|cff00cc4c"..L["UFs PartyPetFrame"]},
+		{3, "UFs", "PartyPetWidth", L["PartyPetFrame Width"].."*(100)", false, {80, 200, 0}, updatePartyPetSize},
+		{3, "UFs", "PartyPetHeight", L["PartyPetFrame Height"].."*(22)", true, {20, 60, 0}, updatePartyPetSize},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, setupBuffIndicator},
 		{3, "UFs", "BI_IconSize", L["BI_IconSize"], nil, {10, 18, 0}},

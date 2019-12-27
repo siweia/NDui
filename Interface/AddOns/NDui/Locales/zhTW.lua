@@ -593,3 +593,7 @@ L["HideUFWarning"] = "|n關閉后，也將關閉施法條和簡易戰鬥訊息�
 L["Bags ShowNewItem"] = "背包新物品高亮"
 L["UFTextScale"] = "文本字號縮放"
 L["InstantDelete"] = "摧毀時自動填寫DELETE"
+L["PartyPetFrame"] = "小隊寵物框架"
+L["UFs PartyPetFrame"] = "啓用小隊寵物框架"
+L["PartyPetFrame Width"] = "小隊寵物寬度"
+L["PartyPetFrame Height"] = "小隊寵物高度"

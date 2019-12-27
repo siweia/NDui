@@ -186,6 +186,31 @@ local function CreatePartyStyle(self)
 	UF:InterruptIndicator(self)
 end
 
+local function CreatePartyPetStyle(self)
+	self.mystyle = "partypet"
+	self.Range = {
+		insideAlpha = 1, outsideAlpha = .4,
+	}
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateTargetBorder(self)
+	UF:CreatePrediction(self)
+	UF:CreateClickSets(self)
+	UF:CreateThreatBorder(self)
+end
+
+function UF:ResizePartyPetFrame()
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == "partypet" then
+			frame:SetSize(NDuiDB["UFs"]["PartyPetWidth"], NDuiDB["UFs"]["PartyPetHeight"])
+		end
+	end
+end
+
 -- Spawns
 function UF:OnLogin()
 	local horizonRaid = NDuiDB["UFs"]["HorizonRaid"]
@@ -196,6 +221,8 @@ function UF:OnLogin()
 	local reverse = NDuiDB["UFs"]["ReverseRaid"]
 	local showPartyFrame = NDuiDB["UFs"]["PartyFrame"]
 	local partyWidth, partyHeight = NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"]
+	local showPartyPetFrame = NDuiDB["UFs"]["PartyPetFrame"]
+	local petWidth, petHeight = NDuiDB["UFs"]["PartyPetWidth"], NDuiDB["UFs"]["PartyPetHeight"]
 
 	if NDuiDB["Nameplate"]["Enable"] then
 		self:SetupCVars()
@@ -332,6 +359,34 @@ function UF:OnLogin()
 			local partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0}, moverWidth, moverHeight)
 			party:ClearAllPoints()
 			party:SetPoint("BOTTOMLEFT", partyMover)
+
+			oUF:RegisterStyle("PartyPet", CreatePartyPetStyle)
+			oUF:SetActiveStyle("PartyPet")
+
+			if showPartyPetFrame then
+				local petMoverWidth = horizonParty and (petWidth*5+xOffset*4) or petWidth
+				local petMoverHeight = horizonParty and petHeight or (petHeight*5+yOffset*4)
+
+				local partyPet = oUF:SpawnHeader("oUF_PartyPet", nil, "solo,party",
+				"showPlayer", true,
+				"showSolo", false,
+				"showParty", true,
+				"showRaid", false,
+				"xoffset", xOffset,
+				"yOffset", yOffset,
+				"point", horizonParty and "LEFT" or "BOTTOM",
+				"columnAnchorPoint", "LEFT",
+				"oUF-initialConfigFunction", ([[
+				self:SetWidth(%d)
+				self:SetHeight(%d)
+				self:SetAttribute("unitsuffix", "pet")
+				]]):format(petWidth, petHeight))
+
+				local moverAnchor = horizonParty and {"TOPLEFT", partyMover, "BOTTOMLEFT", 0, -20} or {"BOTTOMRIGHT", partyMover, "BOTTOMLEFT", -10, 0}
+				local petMover = B.Mover(partyPet, L["PartyPetFrame"], "PartyPetFrame", moverAnchor, petMoverWidth, petMoverHeight)
+				partyPet:ClearAllPoints()
+				partyPet:SetPoint("BOTTOMLEFT", petMover)
+			end
 		end
 
 		oUF:RegisterStyle("Raid", CreateRaidStyle)
