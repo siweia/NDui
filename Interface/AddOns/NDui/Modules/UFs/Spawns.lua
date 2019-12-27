@@ -345,7 +345,6 @@ function UF:OnLogin()
 			"showRaid", false,
 			"xoffset", xOffset,
 			"yOffset", yOffset,
-			"groupFilter", "1",
 			"groupingOrder", groupingOrder,
 			"groupBy", "ASSIGNEDROLE",
 			"sortMethod", "NAME",
@@ -360,10 +359,10 @@ function UF:OnLogin()
 			party:ClearAllPoints()
 			party:SetPoint("BOTTOMLEFT", partyMover)
 
-			oUF:RegisterStyle("PartyPet", CreatePartyPetStyle)
-			oUF:SetActiveStyle("PartyPet")
-
 			if showPartyPetFrame then
+				oUF:RegisterStyle("PartyPet", CreatePartyPetStyle)
+				oUF:SetActiveStyle("PartyPet")
+
 				local petMoverWidth = horizonParty and (petWidth*5+xOffset*4) or petWidth
 				local petMoverHeight = horizonParty and petHeight or (petHeight*5+yOffset*4)
 
