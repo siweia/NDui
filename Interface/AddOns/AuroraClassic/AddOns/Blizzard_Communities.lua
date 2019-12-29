@@ -52,7 +52,7 @@ C.themes["Blizzard_Communities"] = function()
 		end
 	end
 
-	for _, name in next, {"GuildFinderFrame", "InvitationFrame", "TicketFrame", "CommunityFinderFrame"} do
+	for _, name in next, {"GuildFinderFrame", "InvitationFrame", "TicketFrame", "CommunityFinderFrame", "ClubFinderInvitationFrame"} do
 		local frame = CommunitiesFrame[name]
 		if frame then
 			F.StripTextures(frame)
@@ -281,6 +281,13 @@ C.themes["Blizzard_Communities"] = function()
 		F.CreateBDFrame(dialog.Description, .25)
 		F.StripTextures(dialog.MessageOfTheDay)
 		F.CreateBDFrame(dialog.MessageOfTheDay, .25)
+		F.ReskinCheck(dialog.ShouldListClub.Button)
+		F.ReskinCheck(dialog.AutoAcceptApplications.Button)
+		F.ReskinCheck(dialog.MaxLevelOnly.Button)
+		F.ReskinCheck(dialog.MinIlvlOnly.Button)
+		F.ReskinInput(dialog.MinIlvlOnly.EditBox)
+		F.ReskinDropDown(ClubFinderFocusDropdown)
+		F.ReskinDropDown(ClubFinderLookingForDropdown)
 	end
 
 	do
