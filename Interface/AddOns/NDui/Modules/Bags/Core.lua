@@ -471,8 +471,12 @@ function module:OnLogin()
 		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
 		self.Count:SetFont(unpack(DB.Font))
 
-		self.BG = B.CreateBG(self)
-		B.CreateBD(self.BG, .3)
+		if F then
+			self.BG = F.CreateBDFrame(self, .3)
+		else
+			self.BG = B.CreateBG(self)
+			B.CreateBD(self.BG, .3)
+		end
 
 		self.junkIcon = self:CreateTexture(nil, "ARTWORK")
 		self.junkIcon:SetAtlas("bags-junkcoin")
