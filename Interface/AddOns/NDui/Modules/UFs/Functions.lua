@@ -1038,7 +1038,7 @@ function UF:CreateSwing(self)
 	if NDuiDB["UFs"]["SwingTimer"] then
 		bar.Text = B.CreateFS(bar, 12, "")
 		bar.TextMH = B.CreateFS(main, 12, "")
-		bar.TextOH = B.CreateFS(off, 12, "", false, "CENTER", 1, -3)
+		bar.TextOH = B.CreateFS(off, 12, "", false, "CENTER", 1, -5)
 	end
 
 	self.Swing = bar
