@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local unpack, GetTime, IsPlayerSpell = unpack, GetTime, IsPlayerSpell
-local UnitChannelInfo, UnitInVehicle, UnitIsUnit = UnitChannelInfo, UnitInVehicle, UnitIsUnit
+local UnitInVehicle, UnitIsUnit = UnitInVehicle, UnitIsUnit
 
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
@@ -140,8 +140,7 @@ function B:PostCastStart(unit)
 
 		local numTicks = 0
 		if self.channeling then
-			local spellID = UnitChannelInfo(unit)
-			numTicks = channelingTicks[spellID] or 0
+			numTicks = channelingTicks[self.spellID] or 0
 		end
 		updateCastBarTicks(self, numTicks)
 	elseif not UnitIsUnit(unit, "player") and self.notInterruptible then
