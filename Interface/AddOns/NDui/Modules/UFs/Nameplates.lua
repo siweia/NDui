@@ -356,7 +356,7 @@ function UF:UpdateQuestUnit(_, unit)
 					local questText = questLine:GetText()
 					if questLine and questText then
 						local current, goal = strmatch(questText, "(%d+)/(%d+)")
-						local progress = strmatch(questText, "([%d%.]+)%%")
+						local progress = strmatch(questText, "(%d+)%%")
 						if current and goal then
 							current = tonumber(current)
 							goal = tonumber(goal)
