@@ -88,6 +88,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	restyleSpellButton(QuestInfoSpellObjectiveFrame)
 
 	local function restyleRewardButton(bu, isMapQuestInfo)
+		if not bu then return end -- C.isNewPatch
+
 		bu.NameFrame:Hide()
 		if bu.IconBorder then bu.IconBorder:SetAlpha(0) end
 
@@ -127,7 +129,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		restyleRewardButton(MapQuestInfoRewardsFrame[name], true)
 	end
 
-	for _, name in next, {"HonorFrame", "SkillPointFrame", "ArtifactXPFrame"} do
+	for _, name in next, {"HonorFrame", "SkillPointFrame", "ArtifactXPFrame", "WarModeBonusFrame"} do
 		restyleRewardButton(QuestInfoRewardsFrame[name])
 	end
 
