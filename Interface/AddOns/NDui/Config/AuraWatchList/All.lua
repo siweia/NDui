@@ -84,8 +84,12 @@ local list = {
 		{AuraID = 273955, UnitID = "player"},	-- 望远镜视野
 		{AuraID = 267612, UnitID = "player"},	-- 迅击风暴
 		{AuraID = 268887, UnitID = "player"},	-- 迅捷远航
+		{AuraID = 268893, UnitID = "player"},	-- 迅捷远航
 		{AuraID = 268854, UnitID = "player"},	-- 全能远航
+		{AuraID = 268856, UnitID = "player"},	-- 全能远航
+		{AuraID = 268904, UnitID = "player"},	-- 致命远航
 		{AuraID = 268905, UnitID = "player"},	-- 致命远航
+		{AuraID = 268898, UnitID = "player"},	-- 精湛远航
 		{AuraID = 268899, UnitID = "player"},	-- 精湛远航
 		{AuraID = 264957, UnitID = "player"},	-- 急速瞄准镜
 		{AuraID = 264878, UnitID = "player"},	-- 爆击瞄准镜
