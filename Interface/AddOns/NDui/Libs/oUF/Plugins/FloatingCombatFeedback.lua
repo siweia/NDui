@@ -252,7 +252,7 @@ local function onEvent(self, event, ...)
 		local atTarget = UnitGUID("target") == destGUID
 		local atPlayer = playerGUID == destGUID
 		local isVehicle = element.showPets and sourceFlags == DB.GuardianFlags
-		local isPet = element.showPets and sourceFlags == DB.MyPetFlags
+		local isPet = element.showPets and DB.IsMyPet(sourceFlags)
 
 		if (unit == "target" and (isPlayer or isPet or isVehicle) and atTarget) or (unit == "player" and atPlayer) then
 			local value = eventFilter[eventType]
