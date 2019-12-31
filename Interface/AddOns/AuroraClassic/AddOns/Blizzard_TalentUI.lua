@@ -9,6 +9,8 @@ C.themes["Blizzard_TalentUI"] = function()
 	PlayerTalentFrameTitleGlowLeft:SetTexture("")
 	PlayerTalentFrameTitleGlowRight:SetTexture("")
 	PlayerTalentFrameTitleGlowCenter:SetTexture("")
+	PlayerTalentFrameLockInfoPortraitFrame:Hide()
+	PlayerTalentFrameLockInfoPortrait:Hide()
 
 	for i = 1, 6 do
 		select(i, PlayerTalentFrameSpecialization:GetRegions()):Hide()
