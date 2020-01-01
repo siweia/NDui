@@ -553,7 +553,7 @@ local eventList = {
 }
 
 local function checkPetFlags(sourceFlags, all)
-	if DB.IsMyPet(sourceFlags) or (all and (sourceFlags == DB.PartyPetFlags or sourceFlags == DB.RaidPetFlags)) then
+	if DB:IsMyPet(sourceFlags) or (all and (sourceFlags == DB.PartyPetFlags or sourceFlags == DB.RaidPetFlags)) then
 		return true
 	end
 end

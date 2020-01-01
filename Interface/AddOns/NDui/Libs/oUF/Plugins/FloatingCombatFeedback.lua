@@ -251,10 +251,9 @@ local function onEvent(self, event, ...)
 		local isPlayer = playerGUID == sourceGUID
 		local atTarget = UnitGUID("target") == destGUID
 		local atPlayer = playerGUID == destGUID
-		local isVehicle = element.showPets and sourceFlags == DB.GuardianFlags
-		local isPet = element.showPets and DB.IsMyPet(sourceFlags)
+		local isPet = element.showPets and DB:IsMyPet(sourceFlags)
 
-		if (unit == "target" and (isPlayer or isPet or isVehicle) and atTarget) or (unit == "player" and atPlayer) then
+		if (unit == "target" and (isPlayer or isPet) and atTarget) or (unit == "player" and atPlayer) then
 			local value = eventFilter[eventType]
 			if not value then return end
 
