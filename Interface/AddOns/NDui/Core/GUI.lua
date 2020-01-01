@@ -251,6 +251,7 @@ local defaultSettings = {
 		Mail = true,
 		ItemLevel = true,
 		GemNEnchant = true,
+		AzeriteTraits = true,
 		MissingStats = true,
 		HideErrors = true,
 		SoloInfo = true,
@@ -824,7 +825,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[12] = {
 		{1, "Misc", "ItemLevel", "|cff00cc4c"..L["Show ItemLevel"]},
-		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*", true},
+		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
+		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
