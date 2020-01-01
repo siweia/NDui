@@ -229,6 +229,7 @@ local defaultSettings = {
 		Details = true,
 		PGFSkin = true,
 		Rematch = true,
+		ToggleDirection = 1,
 	},
 	Tooltip = {
 		CombatHide = false,
@@ -427,6 +428,10 @@ end
 
 local function updateChatSize()
 	B:GetModule("Chat"):UpdateChatSize()
+end
+
+local function updateToggleDirection()
+	B:GetModule("Skins"):RefreshToggleDirection()
 end
 
 local function updatePlateInsideView()
@@ -788,12 +793,14 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "MenuLine", L["Menu Line"], true},
 		{1, "Skins", "ClassLine", L["ClassColor Line"]},
 		{},--blank
+		{1, "Skins", "Skada", L["Skada Skin"]},
+		{1, "Skins", "Details", L["Details Skin"], nil, resetDetails},
+		{4, "Skins", "ToggleDirection", L["ToggleDirection"].."*", true, {L["LEFT"], L["RIGHT"], L["TOP"], L["BOTTOM"]}, updateToggleDirection},
+		{},--blank
 		{1, "Skins", "DBM", L["DBM Skin"]},
-		{1, "Skins", "Skada", L["Skada Skin"], true},
-		{1, "Skins", "Bigwigs", L["Bigwigs Skin"]},
-		{1, "Skins", "TMW", L["TMW Skin"], true},
-		{1, "Skins", "WeakAuras", L["WeakAuras Skin"]},
-		{1, "Skins", "Details", L["Details Skin"], true, resetDetails},
+		{1, "Skins", "Bigwigs", L["Bigwigs Skin"], true},
+		{1, "Skins", "TMW", L["TMW Skin"]},
+		{1, "Skins", "WeakAuras", L["WeakAuras Skin"], true},
 		{1, "Skins", "PGFSkin", L["PGF Skin"]},
 		{1, "Skins", "Rematch", L["Rematch Skin"], true},
 	},
