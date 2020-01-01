@@ -314,6 +314,7 @@ local accountSettings = {
 	SystemInfoType = 1,
 	DisableInfobars = false,
 	PartyWatcherSpells = {},
+	ContactList = {}
 }
 
 -- Initial settings
