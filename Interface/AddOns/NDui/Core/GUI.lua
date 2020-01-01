@@ -1128,6 +1128,10 @@ local function exportData()
 					text = text..":"..spellID..":"..duration
 				end
 			end
+		elseif KEY == "ContactList" then
+			for name, color in pairs(VALUE) do
+				text = text..";ACCOUNT:"..KEY..":"..name..":"..color
+			end
 		end
 	end
 
@@ -1237,6 +1241,9 @@ local function importData()
 					index = index + 2
 					spellID = options[index]
 				end
+			elseif value == "ContactList" then
+				local name, r, g, b = select(3, strsplit(":", option))
+				NDuiADB["ContactList"][name] = r..":"..g..":"..b
 			end
 		elseif tonumber(arg1) then
 			if value == "DBMCount" then
