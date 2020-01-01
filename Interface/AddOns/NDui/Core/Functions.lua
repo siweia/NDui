@@ -777,6 +777,8 @@ local function openColorPicker(self)
 end
 
 function B:CreateColorSwatch(name, color)
+	color = color or {r=1, g=1, b=1}
+
 	local swatch = CreateFrame("Button", nil, self)
 	swatch:SetSize(18, 18)
 	B.CreateBD(swatch, 1)

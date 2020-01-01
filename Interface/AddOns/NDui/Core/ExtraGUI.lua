@@ -693,8 +693,7 @@ function G:SetupBuffIndicator(parent)
 			end
 			scroll.box:SetPoint("TOPLEFT", scroll.dd, "TOPRIGHT", 25, 0)
 
-			local color = {r=1, g=1, b=1}
-			local swatch = B.CreateColorSwatch(frame, "", color)
+			local swatch = B.CreateColorSwatch(frame, "")
 			swatch:SetPoint("LEFT", scroll.box, "RIGHT", 5, 0)
 			scroll.swatch = swatch
 
