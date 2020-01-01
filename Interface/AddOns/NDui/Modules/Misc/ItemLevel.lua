@@ -197,7 +197,9 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 					end
 				end
 
-				M:ItemLevel_UpdateTraits(slotFrame, index, link)
+				if strType == "Character" then
+					M:ItemLevel_UpdateTraits(slotFrame, index, link)
+				end
 			end
 		end
 	end
