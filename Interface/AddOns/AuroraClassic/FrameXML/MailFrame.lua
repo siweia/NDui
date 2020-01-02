@@ -37,6 +37,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	F.ReskinArrow(InboxPrevPageButton, "left")
 	F.ReskinArrow(InboxNextPageButton, "right")
 
+	local bg = F.CreateBDFrame(SendMailScrollFrame, .25)
+	bg:SetPoint("TOPLEFT", 6, 0)
+
 	SendMailMailButton:SetPoint("RIGHT", SendMailCancelButton, "LEFT", -1, 0)
 	OpenMailDeleteButton:SetPoint("RIGHT", OpenMailCancelButton, "LEFT", -1, 0)
 	OpenMailReplyButton:SetPoint("RIGHT", OpenMailDeleteButton, "LEFT", -1, 0)
