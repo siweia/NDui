@@ -531,8 +531,8 @@ function module:OnLogin()
 		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
 		self.Count:SetFont(unpack(DB.Font))
 
-		self.BG = B.CreateBG(self)
-		B.CreateBD(self.BG, .3)
+		self.bg = B.CreateBG(self)
+		B.CreateBD(self.bg, .3)
 
 		local parentFrame = CreateFrame("Frame", nil, self)
 		parentFrame:SetAllPoints()
@@ -628,12 +628,12 @@ function module:OnLogin()
 		end
 
 		if item.questID or item.isQuestItem then
-			self.BG:SetBackdropBorderColor(.8, .8, 0)
+			self.bg:SetBackdropBorderColor(.8, .8, 0)
 		elseif item.rarity and item.rarity > -1 then
 			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
-			self.BG:SetBackdropBorderColor(color.r, color.g, color.b)
+			self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
-			self.BG:SetBackdropBorderColor(0, 0, 0)
+			self.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
 
@@ -751,8 +751,8 @@ function module:OnLogin()
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 
 		self:SetSize(iconSize, iconSize)
-		self.BG = B.CreateBG(self)
-		B.CreateBD(self.BG, 0)
+		self.bg = B.CreateBG(self)
+		B.CreateBD(self.bg, 0)
 		self.Icon:SetAllPoints()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
@@ -763,9 +763,9 @@ function module:OnLogin()
 		if quality == 1 then quality = 0 end
 		local color = BAG_ITEM_QUALITY_COLORS[quality]
 		if not self.hidden and not self.notBought then
-			self.BG:SetBackdropBorderColor(color.r, color.g, color.b)
+			self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
-			self.BG:SetBackdropBorderColor(0, 0, 0)
+			self.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 
 		local bagFamily = select(2, GetContainerNumFreeSlots(self.bagID))
