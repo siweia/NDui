@@ -23,8 +23,6 @@ function module:ReverseSort()
 				PickupContainerItem(bag, slot)
 				PickupContainerItem(bag, numSlots+1 - slot)
 				sortCache["b"..bag.."s"..slot] = true
-				C_Timer_After(.1, module.ReverseSort)
-				return
 			end
 		end
 	end
