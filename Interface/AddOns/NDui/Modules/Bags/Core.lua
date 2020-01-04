@@ -471,12 +471,8 @@ function module:OnLogin()
 		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
 		self.Count:SetFont(unpack(DB.Font))
 
-		if F then
-			self.BG = F.CreateBDFrame(self, .3)
-		else
-			self.BG = B.CreateBG(self)
-			B.CreateBD(self.BG, .3)
-		end
+		self.BG = B.CreateBG(self)
+		B.CreateBD(self.BG, .3)
 
 		local parentFrame = CreateFrame("Frame", nil, self)
 		parentFrame:SetAllPoints()
