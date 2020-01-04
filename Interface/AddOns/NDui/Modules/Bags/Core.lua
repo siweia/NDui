@@ -29,8 +29,8 @@ function module:ReverseSort()
 		end
 	end
 
-	NDui_Backpack.isSorting = false
-	NDui_Backpack:BAG_UPDATE()
+	module.Bags.isSorting = false
+	module:UpdateAllBags()
 end
 
 function module:UpdateAnchors(parent, bags)
@@ -200,7 +200,7 @@ function module:CreateSortButton(name)
 				else
 					SortBags()
 					wipe(sortCache)
-					NDui_Backpack.isSorting = true
+					module.Bags.isSorting = true
 					C_Timer_After(.5, module.ReverseSort)
 				end
 			else
@@ -283,7 +283,7 @@ local function favouriteOnClick(self)
 			NDuiDB["Bags"]["FavouriteItems"][itemID] = true
 		end
 		ClearCursor()
-		NDui_Backpack:BAG_UPDATE()
+		module:UpdateAllBags()
 	end
 end
 
@@ -425,6 +425,12 @@ function module:ButtonOnClick(btn)
 	splitOnClick(self)
 end
 
+function module:UpdateAllBags()
+	if self.Bags and self.Bags:IsShown() then
+		self.Bags:BAG_UPDATE()
+	end
+end
+
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
 
@@ -444,6 +450,7 @@ function module:OnLogin()
 	Backpack:SetScale(bagsScale)
 	Backpack:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
 	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
+	module.Bags = Backpack
 
 	local f = {}
 	module.SpecialBags = {}

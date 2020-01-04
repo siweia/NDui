@@ -405,6 +405,10 @@ local function updateBagSortOrder()
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 end
 
+local function updateBagStatus()
+	B:GetModule("Bags"):UpdateAllBags()
+end
+
 local function updateActionbarScale()
 	B:GetModule("Actionbar"):UpdateAllScale()
 end
@@ -595,9 +599,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[2] = {
 		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
 		{},--blank
-		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*"},
-		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"].."*", true},
-		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*"},
+		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, nil, updateBagStatus},
+		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"].."*", true, nil, updateBagStatus},
+		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", true, nil, updateBagSortOrder},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"]},
 		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
