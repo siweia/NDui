@@ -11,7 +11,7 @@ local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBan
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
-local GetContainerItemID, GetContainerNumFreeSlots = GetContainerItemID, GetContainerNumFreeSlots
+local GetContainerItemID, GetContainerNumFreeSlots, SplitContainerItem = GetContainerItemID, GetContainerNumFreeSlots, SplitContainerItem
 
 local sortCache = {}
 function module:ReverseSort()
@@ -287,12 +287,6 @@ local function favouriteOnClick(self)
 	end
 end
 
-function module:ButtonOnClick(btn)
-	if btn ~= "LeftButton" then return end
-	deleteButtonOnClick(self)
-	favouriteOnClick(self)
-end
-
 function module:GetContainerEmptySlot(bagID)
 	for slotID = 1, GetContainerNumSlots(bagID) do
 		if not GetContainerItemID(bagID, slotID) then
@@ -363,6 +357,72 @@ function module:CreateFreeSlots()
 	tag.__name = name
 
 	self.freeSlot = slot
+end
+
+local splitEnable
+local function saveSplitCount(self)
+	local count = self:GetText() or ""
+	NDuiDB["Bags"]["SplitCount"] = tonumber(count) or 1
+end
+
+function module:CreateSplitButton()
+	local enabledText = DB.InfoColor..L["SplitMode Enabled"]
+
+	local splitFrame = CreateFrame("Frame", nil, self)
+	splitFrame:SetSize(100, 50)
+	splitFrame:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
+	B.CreateFS(splitFrame, 14, L["SplitCount"], "system", "TOP", 1, -5)
+	B.SetBackground(splitFrame)
+	splitFrame:Hide()
+	local editbox = B.CreateEditBox(splitFrame, 90, 20)
+	editbox:SetPoint("BOTTOMLEFT", 5, 5)
+	editbox:SetJustifyH("CENTER")
+	editbox:SetScript("OnTextChanged", saveSplitCount)
+
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\HELPFRAME\\ReportLagIcon-AuctionHouse")
+	bu.Icon:SetPoint("TOPLEFT", -1, 3)
+	bu.Icon:SetPoint("BOTTOMRIGHT", 1, -3)
+	bu:SetScript("OnClick", function(self, btn)
+		splitEnable = not splitEnable
+		if splitEnable then
+			self:SetBackdropBorderColor(1, .8, 0)
+			self.text = enabledText
+			splitFrame:Show()
+			editbox:SetText(NDuiDB["Bags"]["SplitCount"])
+		else
+			self:SetBackdropBorderColor(0, 0, 0)
+			self.text = nil
+			splitFrame:Hide()
+		end
+		self:GetScript("OnEnter")(self)
+	end)
+	bu.title = L["QuickSplit"]
+	B.AddTooltip(bu, "ANCHOR_TOP")
+
+	return bu
+end
+
+local function splitOnClick(self)
+	if not splitEnable then return end
+
+	PickupContainerItem(self.bagID, self.slotID)
+
+	local texture, itemCount, locked = GetContainerItemInfo(self.bagID, self.slotID)
+	if texture and not locked and itemCount and itemCount > NDuiDB["Bags"]["SplitCount"] then
+		SplitContainerItem(self.bagID, self.slotID, NDuiDB["Bags"]["SplitCount"])
+
+		local bagID, slotID = module:GetEmptySlot("Main")
+		if slotID then
+			PickupContainerItem(bagID, slotID)
+		end
+	end
+end
+
+function module:ButtonOnClick(btn)
+	if btn ~= "LeftButton" then return end
+	deleteButtonOnClick(self)
+	favouriteOnClick(self)
+	splitOnClick(self)
 end
 
 function module:OnLogin()
@@ -654,8 +714,9 @@ function module:OnLogin()
 			module.CreateBagBar(self, settings, 4)
 			buttons[2] = module.CreateRestoreButton(self, f)
 			buttons[3] = module.CreateBagToggle(self)
-			buttons[5] = module.CreateFavouriteButton(self)
-			if deleteButton then buttons[6] = module.CreateDeleteButton(self) end
+			buttons[5] = module.CreateSplitButton(self)
+			buttons[6] = module.CreateFavouriteButton(self)
+			if deleteButton then buttons[7] = module.CreateDeleteButton(self) end
 		elseif name == "Bank" then
 			module.CreateBagBar(self, settings, 7)
 			buttons[2] = module.CreateReagentButton(self, f)
@@ -666,7 +727,7 @@ function module:OnLogin()
 		end
 		buttons[4] = module.CreateSortButton(self, name)
 
-		for i = 1, 6 do
+		for i = 1, #buttons do
 			local bu = buttons[i]
 			if not bu then break end
 			if i == 1 then

@@ -47,6 +47,7 @@ local defaultSettings = {
 		FavouriteItems = {},
 		GatherEmpty = false,
 		ShowNewItem = true,
+		SplitCount = 1,
 	},
 	Auras = {
 		Reminder = true,
