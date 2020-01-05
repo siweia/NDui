@@ -4,14 +4,14 @@ local B, C, L, DB, F = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
-local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
+local BAG_ITEM_QUALITY_COLORS, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = BAG_ITEM_QUALITY_COLORS, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM
-local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
+local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
-local GetContainerItemID, SplitContainerItem = GetContainerItemID, SplitContainerItem
+local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 
 local sortCache = {}
 function module:ReverseSort()
@@ -451,8 +451,9 @@ function module:OnLogin()
 
 	module.Bags = Backpack
 	module.BagsType = {}
-	module.BagsType[0] = 0
-	module.BagsType[-1] = 0
+	module.BagsType[0] = 0	-- backpack
+	module.BagsType[-1] = 0	-- bank
+	module.BagsType[-3] = 0	-- reagent
 
 	local f = {}
 	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet, bagFavourite, bankFavourite = self:GetFilters()
@@ -588,11 +589,17 @@ function module:OnLogin()
 	end
 
 	local bagTypeColor = {
-		[-1] = {.67, .83, .45, .25},
-		[0] = {0, 0, 0, .25},
-		[1] = {.53, .53, .93, .25},
-		[2] = {0, .5, 0, .25},
-		[3] = {0, .5, .8, .25},
+		[0] = {0, 0, 0, .25},		-- 容器
+		[1] = false,				-- 弹药袋
+		[2] = {0, .5, 0, .25},		-- 草药袋
+		[3] = {.8, 0, .8, .25},		-- 附魔袋
+		[4] = {1, .8, 0, .25},		-- 工程袋
+		[5] = {0, .8, .8, .25},		-- 宝石袋
+		[6] = {.5, .4, 0, .25},		-- 矿石袋
+		[7] = {.8, .5, .5, .25},	-- 制皮包
+		[8] = {.8, .8, .8, .25},	-- 铭文包
+		[9] = {.4, .6, 1, .25},		-- 工具箱
+		[10] = {.8, 0, 0, .25},		-- 烹饪包
 	}
 
 	function MyButton:OnUpdate(item)
@@ -644,9 +651,9 @@ function module:OnLogin()
 		if NDuiDB["Bags"]["SpecialBagsColor"] then
 			local bagType = module.BagsType[item.bagID]
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
-			self.BG:SetBackdropColor(unpack(color))
+			self.bg:SetBackdropColor(unpack(color))
 		else
-			self.BG:SetBackdropColor(0, 0, 0, .25)
+			self.bg:SetBackdropColor(0, 0, 0, .25)
 		end
 	end
 
@@ -801,8 +808,6 @@ function module:OnLogin()
 
 		if classID == LE_ITEM_CLASS_CONTAINER then
 			module.BagsType[self.bagID] = subClassID or 0
-		elseif classID == LE_ITEM_CLASS_QUIVER then
-			module.BagsType[self.bagID] = -1
 		else
 			module.BagsType[self.bagID] = 0
 		end
