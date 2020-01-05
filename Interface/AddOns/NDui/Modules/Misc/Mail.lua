@@ -204,7 +204,6 @@ function M:MailBox_ContactList()
 	list:SetFrameStrata("Tooltip")
 	B.SetBackground(list)
 	B.CreateFS(list, 14, L["ContactList"], "system", "TOP", 0, -5)
-	list:Hide()
 
 	local editbox = B.CreateEditBox(list, 120, 25)
 	editbox:SetPoint("TOPLEFT", 5, -22)
