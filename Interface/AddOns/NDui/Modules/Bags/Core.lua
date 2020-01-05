@@ -11,7 +11,7 @@ local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBan
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
-local GetContainerItemID, GetContainerNumFreeSlots, SplitContainerItem = GetContainerItemID, GetContainerNumFreeSlots, SplitContainerItem
+local GetContainerItemID, SplitContainerItem = GetContainerItemID, SplitContainerItem
 
 local sortCache = {}
 function module:ReverseSort()
@@ -448,10 +448,13 @@ function module:OnLogin()
 	Backpack:SetScale(bagsScale)
 	Backpack:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
 	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
+
 	module.Bags = Backpack
+	module.BagsType = {}
+	module.BagsType[0] = 0
+	module.BagsType[-1] = 0
 
 	local f = {}
-	module.SpecialBags = {}
 	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet, bagFavourite, bankFavourite = self:GetFilters()
 
 	function Backpack:OnInit()
@@ -508,9 +511,15 @@ function module:OnLogin()
 		f.reagent:Hide()
 	end
 
+	local initBagType
 	function Backpack:OnBankOpened()
 		BankFrame:Show()
 		self:GetContainer("Bank"):Show()
+
+		if not initBagType then
+			module:UpdateAllBags() -- Initialize bagType
+			initBagType = true
+		end
 	end
 
 	function Backpack:OnBankClosed()
@@ -578,6 +587,14 @@ function module:OnLogin()
 		end
 	end
 
+	local bagTypeColor = {
+		[-1] = {.67, .83, .45, .25},
+		[0] = {0, 0, 0, .25},
+		[1] = {.53, .53, .93, .25},
+		[2] = {0, .5, 0, .25},
+		[3] = {0, .5, .8, .25},
+	}
+
 	function MyButton:OnUpdate(item)
 		if MerchantFrame:IsShown() then
 			if item.isInSet then
@@ -622,6 +639,14 @@ function module:OnLogin()
 			else
 				B.HideOverlayGlow(self.glowFrame)
 			end
+		end
+
+		if NDuiDB["Bags"]["SpecialBagsColor"] then
+			local bagType = module.BagsType[item.bagID]
+			local color = bagTypeColor[bagType] or bagTypeColor[0]
+			self.BG:SetBackdropColor(unpack(color))
+		else
+			self.BG:SetBackdropColor(0, 0, 0, .25)
 		end
 	end
 
@@ -764,8 +789,9 @@ function module:OnLogin()
 
 	function BagButton:OnUpdate()
 		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
-		local quality = id and select(3, GetItemInfo(id)) or 0
-		if quality == 1 then quality = 0 end
+		if not id then return end
+		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = GetItemInfo(id)
+		if not quality or quality == 1 then quality = 0 end
 		local color = BAG_ITEM_QUALITY_COLORS[quality]
 		if not self.hidden and not self.notBought then
 			self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
@@ -773,9 +799,12 @@ function module:OnLogin()
 			self.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 
-		local bagFamily = select(2, GetContainerNumFreeSlots(self.bagID))
-		if bagFamily then
-			module.SpecialBags[self.bagID] = bagFamily ~= 0
+		if classID == LE_ITEM_CLASS_CONTAINER then
+			module.BagsType[self.bagID] = subClassID or 0
+		elseif classID == LE_ITEM_CLASS_QUIVER then
+			module.BagsType[self.bagID] = -1
+		else
+			module.BagsType[self.bagID] = 0
 		end
 	end
 
