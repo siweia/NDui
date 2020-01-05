@@ -54,6 +54,11 @@ function module:ReskinRegions()
 		self:GetPushedTexture():SetTexture(DB.garrTex)
 		self:GetHighlightTexture():SetTexture(DB.garrTex)
 		self:SetSize(30, 30)
+
+		if RecycleBinToggleButton and not RecycleBinToggleButton.settled then
+			RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
+			RecycleBinToggleButton.settled = true
+		end
 	end)
 	if not IsAddOnLoaded("GarrisonMissionManager") then
 		GarrisonLandingPageMinimapButton:RegisterForClicks("AnyUp")
@@ -155,7 +160,7 @@ function module:RecycleBin()
 
 	local bu = CreateFrame("Button", "RecycleBinToggleButton", Minimap)
 	bu:SetSize(30, 30)
-	bu:SetPoint("BOTTOMRIGHT", -15, -6)
+	bu:SetPoint("BOTTOMRIGHT", 4, -6)
 	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
 	bu.Icon:SetAllPoints()
 	bu.Icon:SetTexture(DB.binTex)
