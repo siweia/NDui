@@ -49,6 +49,7 @@ local defaultSettings = {
 		ShowNewItem = true,
 		SplitCount = 1,
 		SpecialBagsColor = false,
+		iLvlToShow = 1,
 	},
 	Auras = {
 		Reminder = true,
@@ -603,11 +604,12 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"].."*", true, nil, updateBagStatus},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
-		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", true, nil, updateBagStatus, L["SpecialBagsColorTip"]},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", nil, nil, updateBagSortOrder},
+		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", true, nil, updateBagSortOrder},
+		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", true, nil, updateBagStatus},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"]},
-		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
+		{1, "Bags", "DeleteButton", L["Bags DeleteButton"]},
+		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", true, {1, 500, 0}, updateBagStatus, L["iLvlToShowTip"]},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
@@ -995,6 +997,10 @@ local function CreateOption(i)
 				if callback then callback() end
 			end)
 			s.value:SetText(format("%."..decimal.."f", NDUI_VARIABLE(key, value)))
+			if tooltip then
+				s.title = L["Tips"]
+				B.AddTooltip(s, "ANCHOR_RIGHT", tooltip, "info")
+			end
 		-- Dropdown
 		elseif optType == 4 then
 			local dd = B.CreateDropDown(parent, 200, 28, data)

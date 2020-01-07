@@ -631,6 +631,7 @@ function module:OnLogin()
 
 		if NDuiDB["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
 			local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
+			if level < NDuiDB["Bags"]["iLvlToShow"] then level = "" end
 			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
