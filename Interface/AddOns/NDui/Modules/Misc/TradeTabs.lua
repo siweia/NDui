@@ -141,6 +141,48 @@ function M:TradeTabs_Create(slotID, spellID, toyID, itemID)
 	index = index + 1
 end
 
+function M:TradeTabs_FilterIcons()
+	local buttonList = {
+		[1] = {"Atlas:bags-greenarrow", TRADESKILL_FILTER_HAS_SKILL_UP, C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes},
+		[2] = {"Interface\\RAIDFRAME\\ReadyCheck-Ready", CRAFT_IS_MAKEABLE, C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes},
+	}
+
+	local function filterClick(self)
+		local value = self.__value
+		if value[3]() then
+			value[4](false)
+			self:SetBackdropBorderColor(0, 0, 0)
+		else
+			value[4](true)
+			self:SetBackdropBorderColor(1, .8, 0)
+		end
+	end
+
+	local buttons = {}
+	for index, value in pairs(buttonList) do
+		local bu = CreateFrame("Button", nil, TradeSkillFrame)
+		bu:SetSize(22, 22)
+		bu:SetPoint("RIGHT", TradeSkillFrame.FilterButton, "LEFT", -5 - (index-1)*27, 0)
+		B.PixelIcon(bu, value[1], true)
+		B.AddTooltip(bu, "ANCHOR_TOP", value[2])
+		bu.__value = value
+		bu:SetScript("OnClick", filterClick)
+
+		buttons[index] = bu
+	end
+
+	local function updateFilterStatus()
+		for index, value in pairs(buttonList) do
+			if value[3]() then
+				buttons[index]:SetBackdropBorderColor(1, .8, 0)
+			else
+				buttons[index]:SetBackdropBorderColor(0, 0, 0)
+			end
+		end
+	end
+	B:RegisterEvent("TRADE_SKILL_LIST_UPDATE", updateFilterStatus)
+end
+
 function M:TradeTabs_OnLoad()
 	M:UpdateProfessions()
 
@@ -149,6 +191,8 @@ function M:TradeTabs_OnLoad()
 	B:RegisterEvent("TRADE_SKILL_SHOW", M.TradeTabs_Update)
 	B:RegisterEvent("TRADE_SKILL_CLOSE", M.TradeTabs_Update)
 	B:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", M.TradeTabs_Update)
+
+	M:TradeTabs_FilterIcons()
 end
 
 function M.TradeTabs_OnEvent(event, addon)
