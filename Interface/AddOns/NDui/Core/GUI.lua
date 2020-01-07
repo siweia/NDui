@@ -122,7 +122,7 @@ local defaultSettings = {
 		PartyPetPowerHeight = 2,
 		HealthColor = 1,
 		BuffIndicatorType = 1,
-		BI_IconSize = 10,
+		BuffIndicatorScale = 1,
 		UFTextScale = 1,
 
 		PlayerWidth = 245,
@@ -495,8 +495,8 @@ local function updateUFTextScale()
 	B:GetModule("UnitFrames"):UpdateTextScale()
 end
 
-local function resizeRaidDebuffs()
-	B:GetModule("UnitFrames"):ResizeRaidDebuffs()
+local function refreshRaidFrameIcons()
+	B:GetModule("UnitFrames"):RefreshRaidFrameIcons()
 end
 
 local function updateMinimapScale()
@@ -650,11 +650,11 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyPetFrame", "|cff00cc4c"..L["UFs PartyPetFrame"]},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, setupBuffIndicator},
-		{3, "UFs", "BI_IconSize", L["BI_IconSize"], nil, {10, 18, 0}},
-		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"], true, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}},
+		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"], nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}},
+		{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"].."*", true, {1, 2, 1}, refreshRaidFrameIcons},
 		{1, "UFs", "RaidClickSets", "|cff00cc4c"..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "InstanceAuras", "|cff00cc4c"..L["Instance Auras"], nil, setupRaidDebuffs},
-		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {1, 2, 1}, resizeRaidDebuffs},
+		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {1, 2, 1}, refreshRaidFrameIcons},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{},--blank
