@@ -313,19 +313,11 @@ function UF:OnLogin()
 		UF:AddClickSetsListener()
 
 		-- Hide Default RaidFrame
-		if CompactRaidFrameManager_UpdateShown then
-			local function HideRaid()
-				if InCombatLockdown() then return end
-				B.HideObject(CompactRaidFrameManager)
-				local compact_raid = CompactRaidFrameManager_GetSetting("IsShown")
-				if compact_raid and compact_raid ~= "0" then
-					CompactRaidFrameManager_SetSetting("IsShown", "0")
-				end
-			end
-			CompactRaidFrameManager:HookScript("OnShow", HideRaid)
-			hooksecurefunc("CompactRaidFrameManager_UpdateShown", HideRaid)
-			CompactRaidFrameContainer:UnregisterAllEvents()
-			HideRaid()
+		if CompactRaidFrameManager_SetSetting then
+			CompactRaidFrameManager_SetSetting("IsShown", "0")
+			UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
+			CompactRaidFrameManager:UnregisterAllEvents()
+			CompactRaidFrameManager:SetParent(B.HiddenFrame)
 		end
 
 		-- Group Styles
