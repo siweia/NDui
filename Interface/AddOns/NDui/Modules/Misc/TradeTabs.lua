@@ -3,14 +3,16 @@ local B, C, L, DB, F = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
-local GetSpellCooldown, GetSpellInfo, GetItemCooldown = GetSpellCooldown, GetSpellInfo, GetItemCooldown
-local IsPassiveSpell, IsCurrentSpell, CastSpell = IsPassiveSpell, IsCurrentSpell, CastSpell
+local GetSpellCooldown, GetSpellInfo, GetItemCooldown, GetItemCount, GetItemInfo = GetSpellCooldown, GetSpellInfo, GetItemCooldown, GetItemCount, GetItemInfo
+local IsPassiveSpell, IsCurrentSpell, CastSpell, IsPlayerSpell = IsPassiveSpell, IsCurrentSpell, CastSpell, IsPlayerSpell
 local GetProfessions, GetProfessionInfo, GetSpellBookItemInfo = GetProfessions, GetProfessionInfo, GetSpellBookItemInfo
 local PlayerHasToy, C_ToyBox_IsToyUsable, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.IsToyUsable, C_ToyBox.GetToyInfo
 
 local BOOKTYPE_PROFESSION = BOOKTYPE_PROFESSION
 local RUNEFORGING_ID = 53428
+local PICK_LOCK = 1804
 local CHEF_HAT = 134020
+local THERMAL_ANVIL = 87216
 local tabList = {}
 
 local onlyPrimary = {
@@ -27,6 +29,8 @@ function M:UpdateProfessions()
 
 	if DB.MyClass == "DEATHKNIGHT" then
 		M:TradeTabs_Create(nil, RUNEFORGING_ID)
+	elseif DB.MyClass == "ROGUE" and IsPlayerSpell(PICK_LOCK) then
+		M:TradeTabs_Create(nil, PICK_LOCK)
 	end
 
 	local isCook
@@ -52,6 +56,9 @@ function M:UpdateProfessions()
 
 	if isCook and PlayerHasToy(CHEF_HAT) and C_ToyBox_IsToyUsable(CHEF_HAT) then
 		M:TradeTabs_Create(nil, nil, CHEF_HAT)
+	end
+	if GetItemCount(THERMAL_ANVIL) > 0 then
+		M:TradeTabs_Create(nil, nil, nil, THERMAL_ANVIL)
 	end
 end
 
@@ -96,10 +103,12 @@ function M:TradeTabs_OnClick()
 end
 
 local index = 1
-function M:TradeTabs_Create(slotID, spellID, itemID)
+function M:TradeTabs_Create(slotID, spellID, toyID, itemID)
 	local name, _, texture
-	if itemID then
-		_, name, texture = C_ToyBox_GetToyInfo(itemID)
+	if toyID then
+		_, name, texture = C_ToyBox_GetToyInfo(toyID)
+	elseif itemID then
+		name, _, _, _, _, _, _, _, _, texture = GetItemInfo(itemID)
 	else
 		name, _, texture = GetSpellInfo(spellID)
 	end
@@ -108,8 +117,8 @@ function M:TradeTabs_Create(slotID, spellID, itemID)
 	tab.tooltip = name
 	tab.slotID = slotID
 	tab.spellID = spellID
-	tab.itemID = itemID
-	tab.type = itemID and "toy" or "spell"
+	tab.itemID = toyID or itemID
+	tab.type = (toyID and "toy") or (itemID and "item") or "spell"
 	if slotID then
 		tab:SetScript("OnClick", M.TradeTabs_OnClick)
 	else
