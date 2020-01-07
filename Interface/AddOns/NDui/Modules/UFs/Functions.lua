@@ -1138,9 +1138,9 @@ function UF:InterruptIndicator(self)
 	local rel1 = not horizon and not otherSide and "RIGHT" or "LEFT"
 	local rel2 = not horizon and not otherSide and "LEFT" or "RIGHT"
 	local buttons = {}
-	local maxIcons = 4
-	local iconSize = horizon and (self:GetWidth()-(maxIcons-1)*abs(margin))/maxIcons or (self:GetHeight()+self.Power:GetHeight()+3)
-	if iconSize > 32 then iconSize = 32 end
+	local maxIcons = 6
+	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()+self.Power:GetHeight()+3)
+	if iconSize > 34 then iconSize = 34 end
 
 	for i = 1, maxIcons do
 		local bu = CreateFrame("Frame", nil, self)
@@ -1149,6 +1149,8 @@ function UF:InterruptIndicator(self)
 		bu.CD:SetReverse(false)
 		if i == 1 then
 			bu:SetPoint(relF, self, relT, xOffset, yOffset)
+		elseif i == 4 and horizon then
+			bu:SetPoint(relF, buttons[i-3], relT, 0, margin)
 		else
 			bu:SetPoint(rel1, buttons[i-1], rel2, margin, 0)
 		end
