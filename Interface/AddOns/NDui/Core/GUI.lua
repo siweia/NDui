@@ -1038,6 +1038,10 @@ local function CreateOption(i)
 			offset = offset + 35
 		end
 	end
+
+	local footer = CreateFrame("Frame", nil, parent)
+	footer:SetSize(20, 20)
+	footer:SetPoint("TOPLEFT", 25, -offset)
 end
 
 local bloodlustFilter = {
