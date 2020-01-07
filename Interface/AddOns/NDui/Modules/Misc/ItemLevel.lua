@@ -91,6 +91,8 @@ local azeriteSlots = {
 
 local locationCache = {}
 local function GetSlotItemLocation(id)
+	if not azeriteSlots[id] then return end
+
 	local itemLocation = locationCache[id]
 	if not itemLocation then
 		itemLocation = ItemLocation:CreateFromEquipmentSlot(id)
@@ -101,7 +103,9 @@ end
 
 function M:ItemLevel_UpdateTraits(button, id, link)
 	if not NDuiDB["Misc"]["AzeriteTraits"] then return end
-	if not azeriteSlots[id] then return end
+
+	local empoweredItemLocation = GetSlotItemLocation(id)
+	if not empoweredItemLocation then return end
 
 	local allTierInfo = TT:Azerite_UpdateTier(link)
 	if not allTierInfo then return end
@@ -111,7 +115,6 @@ function M:ItemLevel_UpdateTraits(button, id, link)
 		if powerIDs[1] == 13 then break end
 
 		for _, powerID in pairs(powerIDs) do
-			local empoweredItemLocation = GetSlotItemLocation(id)
 			local selected = C_AzeriteEmpoweredItem_IsPowerSelected(empoweredItemLocation, powerID)
 			if selected then
 				local spellID = TT:Azerite_PowerToSpell(powerID)
