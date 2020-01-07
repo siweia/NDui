@@ -55,7 +55,7 @@ local function clearEdit(options)
 	end
 end
 
-local raidDebuffsGUI, clickCastGUI, buffIndicatorGUI, plateGUI, unitframeGUI, castbarGUI, partyWatcherGUI
+local raidDebuffsGUI, clickCastGUI, buffIndicatorGUI, plateGUI, unitframeGUI, castbarGUI, raidframeGUI, partyWatcherGUI
 
 local function updateRaidDebuffs()
 	B:GetModule("UnitFrames"):UpdateRaidDebuffs()
@@ -792,6 +792,69 @@ function G:SetupUnitFrame(parent)
 		end
 	end
 	createOptionGroup(scroll.child, L["Boss&Arena"], -790, "Boss", updateBossSize)
+end
+
+function G:SetupRaidFrame(parent)
+	toggleExtraGUI("NDuiGUI_RaidFrameSetup")
+	if raidframeGUI then return end
+
+	raidframeGUI = createExtraGUI(parent, "NDuiGUI_RaidFrameSetup", L["RaidFrame Size"])
+
+	local scroll = G:CreateScroll(raidframeGUI, 260, 540)
+
+	local minRange = {
+		["Party"] = {80, 25},
+		["PartyPet"] = {80, 20},
+		["Raid"] = {60, 25},
+	}
+
+	local defaultValue = {
+		["Party"] = {100, 32, 2},
+		["PartyPet"] = {100, 22, 2},
+		["Raid"] = {80, 32, 2},
+	}
+
+	local function createOptionGroup(parent, title, offset, value, func)
+		createOptionTitle(parent, title, offset)
+		createOptionSlider(parent, L["Health Width"].."("..defaultValue[value][1]..")", minRange[value][1], 200, 30, offset-60, value.."Width", func)
+		createOptionSlider(parent, L["Health Height"].."("..defaultValue[value][2]..")", minRange[value][2], 60, 30, offset-130, value.."Height", func)
+		createOptionSlider(parent, L["Power Height"].."("..defaultValue[value][3]..")", 2, 30, 30, offset-200, value.."PowerHeight", func)
+	end
+
+	local function resizeRaidFrame()
+		for _, frame in pairs(ns.oUF.objects) do
+			if frame.mystyle == "raid" and not frame.isPartyFrame then
+				if NDuiDB["UFs"]["SimpleMode"] then
+					frame:SetSize(100*NDuiDB["UFs"]["SimpleRaidScale"]/10, 20*NDuiDB["UFs"]["SimpleRaidScale"]/10)
+				else
+					frame:SetSize(NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"])
+					frame.Power:SetHeight(NDuiDB["UFs"]["RaidPowerHeight"])
+				end
+			end
+		end
+	end
+	createOptionGroup(scroll.child, L["RaidFrame"], -10, "Raid", resizeRaidFrame)
+	createOptionSlider(scroll.child, "|cff00cc4c"..L["SimpleMode Scale"], 8, 15, 30, -280, "SimpleRaidScale", resizeRaidFrame)
+
+	local function resizePartyFrame()
+		for _, frame in pairs(ns.oUF.objects) do
+			if frame.isPartyFrame then
+				frame:SetSize(NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"])
+				frame.Power:SetHeight(NDuiDB["UFs"]["PartyPowerHeight"])
+			end
+		end
+	end
+	createOptionGroup(scroll.child, L["PartyFrame"], -340, "Party", resizePartyFrame)
+
+	local function resizePartyPetFrame()
+		for _, frame in pairs(ns.oUF.objects) do
+			if frame.mystyle == "partypet" then
+				frame:SetSize(NDuiDB["UFs"]["PartyPetWidth"], NDuiDB["UFs"]["PartyPetHeight"])
+				frame.Power:SetHeight(NDuiDB["UFs"]["PartyPetPowerHeight"])
+			end
+		end
+	end
+	createOptionGroup(scroll.child, L["PartyPetFrame"], -600, "PartyPet", resizePartyPetFrame)
 end
 
 local function createOptionSwatch(parent, name, value, x, y)

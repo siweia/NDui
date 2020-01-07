@@ -184,11 +184,21 @@ function UF:CreatePowerBar(self)
 	local mystyle = self.mystyle
 	local power = CreateFrame("StatusBar", nil, self)
 	power:SetStatusBarTexture(DB.normTex)
+	local powerHeight
 	if mystyle == "PlayerPlate" then
-		power:SetHeight(NDuiDB["Nameplate"]["PPPHeight"])
+		powerHeight = NDuiDB["Nameplate"]["PPPHeight"]
+	elseif mystyle == "raid" then
+		if self.isPartyFrame then
+			powerHeight = NDuiDB["UFs"]["PartyPowerHeight"]
+		else
+			powerHeight = NDuiDB["UFs"]["SimpleMode"] and 2 or NDuiDB["UFs"]["RaidPowerHeight"]
+		end
+	elseif mystyle == "partypet" then
+		powerHeight = NDuiDB["UFs"]["PartyPetPowerHeight"]
 	else
-		power:SetHeight(retVal(self, NDuiDB["UFs"]["PlayerPowerHeight"], NDuiDB["UFs"]["FocusPowerHeight"], NDuiDB["UFs"]["BossPowerHeight"], NDuiDB["UFs"]["PetPowerHeight"]))
+		powerHeight = retVal(self, NDuiDB["UFs"]["PlayerPowerHeight"], NDuiDB["UFs"]["FocusPowerHeight"], NDuiDB["UFs"]["BossPowerHeight"], NDuiDB["UFs"]["PetPowerHeight"])
 	end
+	power:SetHeight(powerHeight)
 	power:SetWidth(self:GetWidth())
 	power:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
 	power:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
@@ -625,7 +635,7 @@ function UF:CreateAuras(self)
 		if NDuiDB["UFs"]["RaidBuffIndicator"] then
 			bu.initialAnchor = "LEFT"
 			bu:SetPoint("LEFT", self, 15, 0)
-			bu.size = 18*NDuiDB["UFs"]["RaidScale"]
+			bu.size = 18*NDuiDB["UFs"]["SimpleRaidScale"]/10
 			bu.numTotal = 1
 			bu.disableCooldown = true
 		else

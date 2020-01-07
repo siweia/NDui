@@ -138,18 +138,6 @@ local function CreateArenaStyle(self)
 	UF:CreatePVPClassify(self)
 end
 
-function UF:ResizeRaidFrame()
-	for _, frame in pairs(oUF.objects) do
-		if frame.mystyle == "raid" and not frame.isPartyFrame then
-			if NDuiDB["UFs"]["SimpleMode"] then
-				frame:SetSize(100*NDuiDB["UFs"]["RaidScale"], 20*NDuiDB["UFs"]["RaidScale"])
-			else
-				frame:SetSize(NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"])
-			end
-		end
-	end
-end
-
 local function CreateRaidStyle(self)
 	self.mystyle = "raid"
 	self.Range = {
@@ -170,14 +158,6 @@ local function CreateRaidStyle(self)
 	UF:CreateThreatBorder(self)
 	UF:CreateAuras(self)
 	UF:CreateBuffIndicator(self)
-end
-
-function UF:ResizePartyFrame()
-	for _, frame in pairs(oUF.objects) do
-		if frame.isPartyFrame then
-			frame:SetSize(NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"])
-		end
-	end
 end
 
 local function CreatePartyStyle(self)
@@ -203,20 +183,12 @@ local function CreatePartyPetStyle(self)
 	UF:CreateThreatBorder(self)
 end
 
-function UF:ResizePartyPetFrame()
-	for _, frame in pairs(oUF.objects) do
-		if frame.mystyle == "partypet" then
-			frame:SetSize(NDuiDB["UFs"]["PartyPetWidth"], NDuiDB["UFs"]["PartyPetHeight"])
-		end
-	end
-end
-
 -- Spawns
 function UF:OnLogin()
 	local horizonRaid = NDuiDB["UFs"]["HorizonRaid"]
 	local horizonParty = NDuiDB["UFs"]["HorizonParty"]
 	local numGroups = NDuiDB["UFs"]["NumGroups"]
-	local scale = NDuiDB["UFs"]["RaidScale"]
+	local scale = NDuiDB["UFs"]["SimpleRaidScale"]/10
 	local raidWidth, raidHeight = NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"]
 	local reverse = NDuiDB["UFs"]["ReverseRaid"]
 	local showPartyFrame = NDuiDB["UFs"]["PartyFrame"]

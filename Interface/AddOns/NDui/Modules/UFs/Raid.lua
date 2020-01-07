@@ -105,7 +105,7 @@ local function buttonOnEnter(self)
 end
 
 function UF:CreateRaidDebuffs(self)
-	local size = 18*NDuiDB["UFs"]["RaidScale"]
+	local size = 18
 
 	local bu = CreateFrame("Frame", nil, self)
 	bu:SetSize(size, size)
