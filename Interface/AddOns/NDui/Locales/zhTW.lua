@@ -602,3 +602,4 @@ L["SpecialBagsColorTip"] = "|n為草藥袋、礦石袋、附魔材料袋等特�
 L["iLvlToShow"] = "物品等級閾值"
 L["iLvlToShowTip"] = "|n只在大於所設閾值時顯示裝備等級。"
 L["RaidFrame Size"] = "團隊各框架尺寸調整"
+L["RaidDebuffScale"] = "副本減益圖標縮放"

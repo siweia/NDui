@@ -602,3 +602,4 @@ L["SpecialBagsColorTip"] = "|nShow color for special bags:|n- Herb bag|n- Mining
 L["iLvlToShow"] = "iLvl Threshold"
 L["iLvlToShowTip"] = "|nOnly show iLvl info if higher than threshold."
 L["RaidFrame Size"] = "Raidframes resize"
+L["RaidDebuffScale"] = "RaidDebuffs Scale"

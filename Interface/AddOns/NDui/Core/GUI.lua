@@ -86,6 +86,7 @@ local defaultSettings = {
 		SimpleMode = false,
 		SimpleModeSortByRole = true,
 		InstanceAuras = true,
+		RaidDebuffScale = 1,
 		SpecRaidPos = false,
 		RaidClassColor = false,
 		HorizonRaid = false,
@@ -494,6 +495,10 @@ local function updateUFTextScale()
 	B:GetModule("UnitFrames"):UpdateTextScale()
 end
 
+local function resizeRaidDebuffs()
+	B:GetModule("UnitFrames"):ResizeRaidDebuffs()
+end
+
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -647,8 +652,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, setupBuffIndicator},
 		{3, "UFs", "BI_IconSize", L["BI_IconSize"], nil, {10, 18, 0}},
 		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"], true, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}},
+		{1, "UFs", "RaidClickSets", "|cff00cc4c"..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "InstanceAuras", "|cff00cc4c"..L["Instance Auras"], nil, setupRaidDebuffs},
-		{1, "UFs", "RaidClickSets", "|cff00cc4c"..L["Enable ClickSets"], true, setupClickCast},
+		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {1, 2, 1}, resizeRaidDebuffs},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{},--blank

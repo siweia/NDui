@@ -104,7 +104,9 @@ local function buttonOnEnter(self)
 	GameTooltip:Show()
 end
 
+local iconTable = {}
 function UF:CreateRaidDebuffs(self)
+	local scale = NDuiDB["UFs"]["RaidDebuffScale"]
 	local size = 18
 
 	local bu = CreateFrame("Frame", nil, self)
@@ -112,6 +114,7 @@ function UF:CreateRaidDebuffs(self)
 	bu:SetPoint("RIGHT", -15, 0)
 	bu:SetFrameLevel(self:GetFrameLevel() + 3)
 	B.CreateSD(bu, 3, 3)
+	bu:SetScale(scale)
 	bu:Hide()
 
 	bu.icon = bu:CreateTexture(nil, "ARTWORK")
@@ -135,6 +138,14 @@ function UF:CreateRaidDebuffs(self)
 		bu.Debuffs = debuffList
 	end
 	self.RaidDebuffs = bu
+
+	tinsert(iconTable, bu)
+end
+
+function UF:ResizeRaidDebuffs()
+	for _, bu in pairs(iconTable) do
+		bu:SetScale(NDuiDB["UFs"]["RaidDebuffScale"])
+	end
 end
 
 local keyList = {
