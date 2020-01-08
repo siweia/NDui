@@ -51,9 +51,13 @@ local function GetPerfectScale()
 end
 
 local isScaling = false
-local function SetupUIScale()
+local function SetupUIScale(event)
 	if isScaling then return end
 	isScaling = true
+
+	if event == "UI_SCALE_CHANGED" then
+		DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
+	end
 
 	local scale = GetPerfectScale()
 	local parentScale = UIParent:GetScale()
