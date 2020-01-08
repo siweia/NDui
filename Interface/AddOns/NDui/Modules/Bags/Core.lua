@@ -547,6 +547,7 @@ function module:OnLogin()
 
 		self.bg = B.CreateBG(self)
 		B.CreateBD(self.bg, .3)
+		self.bg:SetBackdropColor(.3, .3, .3, .25)
 
 		local parentFrame = CreateFrame("Frame", nil, self)
 		parentFrame:SetAllPoints()
@@ -652,7 +653,7 @@ function module:OnLogin()
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self.bg:SetBackdropColor(unpack(color))
 		else
-			self.bg:SetBackdropColor(0, 0, 0, .25)
+			self.bg:SetBackdropColor(.3, .3, .3, .25)
 		end
 	end
 
