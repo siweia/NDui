@@ -12,4 +12,5 @@
 	<Script file="BfA\ZuldazarRaid.lua"/>
 	<Script file="BfA\CrucibleofStorms.lua"/>
 	<Script file="BfA\EternalPalace.lua"/>
+	<Script file="BfA\Nyalotha.lua"/>
 </Ui>

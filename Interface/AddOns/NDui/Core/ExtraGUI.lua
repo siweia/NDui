@@ -100,6 +100,7 @@ function G:SetupRaidDebuffs(parent)
 		[2] = EJ_GetInstanceInfo(1176),
 		[3] = EJ_GetInstanceInfo(1177),
 		[4] = EJ_GetInstanceInfo(1179),
+		[5] = EJ_GetInstanceInfo(1180),
 	}
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
