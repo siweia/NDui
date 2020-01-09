@@ -59,7 +59,7 @@ end
 function UF:UpdateThreatBorder(_, unit)
 	if unit ~= self.unit then return end
 
-	local element = self.Health.Shadow
+	local element = self.Health.backdrop
 	local status = UnitThreatSituation(unit)
 
 	if status and status > 1 then
@@ -113,7 +113,7 @@ function UF:CreateRaidDebuffs(self)
 	bu:SetSize(size, size)
 	bu:SetPoint("RIGHT", -15, 0)
 	bu:SetFrameLevel(self:GetFrameLevel() + 3)
-	B.CreateSD(bu, 3, 3)
+	B.CreateSD(bu, 3, true)
 	bu:SetScale(scale)
 	bu:Hide()
 
@@ -417,8 +417,7 @@ function UF:CreateBuffIndicator(self)
 			icon.timer = B.CreateFS(icon, 12, "", false, "CENTER", -x, 0)
 			icon.count:SetPoint(point, icon.timer, anchorPoint, x, y)
 		else
-			icon.bg = B.CreateBG(icon)
-			B.CreateBD(icon.bg)
+			B.CreateBDFrame(icon)
 
 			icon.icon = icon:CreateTexture(nil, "BORDER")
 			icon.icon:SetAllPoints()

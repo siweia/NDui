@@ -49,9 +49,8 @@ function M:CreateItemTexture(slot, relF, x, y)
 	icon:SetPoint(relF, x, y)
 	icon:SetSize(14, 14)
 	icon:SetTexCoord(unpack(DB.TexCoord))
-	icon.bg = B.CreateBG(icon)
+	icon.bg = B.ReskinIcon(icon)
 	icon.bg:SetFrameLevel(3)
-	B.CreateBD(icon.bg)
 	icon.bg:Hide()
 
 	return icon

@@ -37,20 +37,20 @@ function B:CreateTex()
 end
 
 -- Create Shadow
-function B:CreateSD(m, s)
-	if not NDuiDB["Skins"]["Shadow"] then return end
+function B:CreateSD(size, override)
+	if not override and not NDuiDB["Skins"]["Shadow"] then return end
 
 	if self.Shadow then return end
 
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
-	if not m then m, s = 2, 3 end
+	if not size then size = 3 end
 
 	self.Shadow = CreateFrame("Frame", nil, frame)
-	self.Shadow:SetPoint("TOPLEFT", self, -m, m)
-	self.Shadow:SetPoint("BOTTOMRIGHT", self, m, -m)
-	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(s)})
+	self.Shadow:SetPoint("TOPLEFT", self, -size, size)
+	self.Shadow:SetPoint("BOTTOMRIGHT", self, size, -size)
+	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size)})
 	self.Shadow:SetBackdropBorderColor(0, 0, 0, 1)
 	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
@@ -1583,6 +1583,7 @@ function B:CreateSlider(name, minValue, maxValue, x, y, width)
 	slider:SetWidth(width or 200)
 	slider:SetMinMaxValues(minValue, maxValue)
 	slider:SetHitRectInsets(0, 0, 0, 0)
+	B.ReskinSlider(slider)
 
 	slider.Low:SetText(minValue)
 	slider.Low:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", 10, -2)
@@ -1592,13 +1593,6 @@ function B:CreateSlider(name, minValue, maxValue, x, y, width)
 	slider.Text:SetPoint("CENTER", 0, 25)
 	slider.Text:SetText(name)
 	slider.Text:SetTextColor(1, .8, 0)
-	slider:SetBackdrop(nil)
-	slider.Thumb:SetTexture(DB.sparkTex)
-	slider.Thumb:SetBlendMode("ADD")
-	local bg = B.CreateBG(slider)
-	bg:SetPoint("TOPLEFT", 14, -2)
-	bg:SetPoint("BOTTOMRIGHT", -15, 3)
-	B.CreateBD(bg, .3)
 	slider.value = B.CreateEditBox(slider, 50, 20)
 	slider.value:SetPoint("TOP", slider, "BOTTOM")
 	slider.value:SetJustifyH("CENTER")

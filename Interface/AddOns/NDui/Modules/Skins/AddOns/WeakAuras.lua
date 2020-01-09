@@ -9,20 +9,24 @@ local function ReskinWA()
 			if not f.styled then
 				f.icon:SetTexCoord(unpack(DB.TexCoord))
 				f.icon.SetTexCoord = B.Dummy
-				B.CreateSD(f, 3, 3)
-				f.Shadow:HookScript("OnUpdate", function(self)
-					self:SetAlpha(self:GetParent().icon:GetAlpha())
+				f.bg = B.SetBD(f)
+				f.bg.__icon = f.icon
+				f.bg:HookScript("OnUpdate", function(self)
+					self:SetAlpha(self.__icon:GetAlpha())
+					if self.Shadow then
+						self.Shadow:SetAlpha(self.__icon:GetAlpha())
+					end
 				end)
 
 				f.styled = true
 			end
 		elseif fType == "aurabar" then
 			if not f.styled then
-				B.CreateSD(f.bar, 3, 3)
+				B.SetBD(f.bar)
 				f.icon:SetTexCoord(unpack(DB.TexCoord))
 				f.icon.SetTexCoord = B.Dummy
 				f.iconFrame:SetAllPoints(f.icon)
-				B.CreateSD(f.iconFrame, 3, 3)
+				B.SetBD(f.iconFrame)
 
 				f.styled = true
 			end

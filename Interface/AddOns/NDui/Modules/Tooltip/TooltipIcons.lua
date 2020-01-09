@@ -63,10 +63,7 @@ local function resetBackdropColor(self)
 end
 
 function TT:ReskinRewardIcon()
-	self.Icon:SetTexCoord(unpack(DB.TexCoord))
-	self.bg = B.CreateBG(self.Icon)
-	B.CreateBD(self.bg)
-
+	self.bg = B.ReskinIcon(self.Icon)
 	local iconBorder = self.IconBorder
 	iconBorder:SetAlpha(0)
 	hooksecurefunc(iconBorder, "SetVertexColor", updateBackdropColor)

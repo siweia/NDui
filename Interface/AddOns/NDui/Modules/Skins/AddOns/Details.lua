@@ -18,11 +18,8 @@ local function ReskinDetails()
 		instance:SetBarSettings(18, NDuiADB["ResetDetails"] and "normTex" or nil)
 		instance:SetBarTextSettings(NDuiADB["ResetDetails"] and 14 or nil, DB.Font[1], nil, nil, nil, true, true, nil, nil, nil, nil, nil, nil, false, nil, false, nil)
 
-		local bg = B.CreateBG(instance.baseframe)
+		local bg = B.SetBD(instance.baseframe)
 		bg:SetPoint("TOPLEFT", -1, 18)
-		B.CreateBD(bg)
-		B.CreateSD(bg)
-		B.CreateTex(bg)
 		instance.baseframe.bg = bg
 
 		if instance:GetId() <= 2 then

@@ -102,12 +102,12 @@ function TT:InsertRoleFrame(role)
 		f:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, -2)
 		f:SetSize(20, 20)
 		f:SetTexture("Interface\\LFGFrame\\UI-LFG-ICONS-ROLEBACKGROUNDS")
-		B.CreateSD(f, 3, 3)
+		f.bg = B.CreateBDFrame(f)
 		self.roleFrame = f
 	end
 	self.roleFrame:SetTexCoord(unpack(roleTex[role]))
 	self.roleFrame:SetAlpha(1)
-	self.roleFrame.Shadow:SetAlpha(1)
+	self.roleFrame.bg:SetAlpha(1)
 end
 
 function TT:OnTooltipCleared()
@@ -116,7 +116,7 @@ function TT:OnTooltipCleared()
 	end
 	if self.roleFrame and self.roleFrame:GetAlpha() ~= 0 then
 		self.roleFrame:SetAlpha(0)
-		self.roleFrame.Shadow:SetAlpha(0)
+		self.roleFrame.bg:SetAlpha(0)
 	end
 end
 
@@ -259,14 +259,11 @@ end
 
 function TT:ReskinStatusBar()
 	GameTooltipStatusBar:ClearAllPoints()
-	GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", C.mult, 3)
-	GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -C.mult, 3)
+	GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", 0, 3)
+	GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", 0, 3)
 	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
 	GameTooltipStatusBar:SetHeight(5)
-	local bg = B.CreateBG(GameTooltipStatusBar)
-	B.CreateBD(bg, .7)
-	B.CreateSD(bg)
-	B.CreateTex(bg)
+	B.CreateBDFrame(GameTooltipStatusBar)
 end
 
 function TT:GameTooltip_ShowStatusBar()
@@ -276,7 +273,7 @@ function TT:GameTooltip_ShowStatusBar()
 			B.StripTextures(bar)
 			local tex = select(3, bar:GetRegions())
 			tex:SetTexture(DB.normTex)
-			B.CreateBD(B.CreateBG(bar), .25)
+			B.CreateBDFrame(bar, .25)
 
 			bar.styled = true
 		end
@@ -289,7 +286,7 @@ function TT:GameTooltip_ShowProgressBar()
 		if bar and not bar.styled then
 			B.StripTextures(bar.Bar)
 			bar.Bar:SetStatusBarTexture(DB.normTex)
-			B.CreateBD(B.CreateBG(bar.Bar), .25)
+			B.CreateBDFrame(bar.Bar, .25)
 
 			bar.styled = true
 		end
@@ -312,7 +309,10 @@ function TT:GameTooltip_SetDefaultAnchor(parent)
 end
 
 -- Tooltip skin
-local function getBackdrop(self) return self.bg:GetBackdrop() end
+local fakeBg = CreateFrame("Frame", nil, UIParent)
+fakeBg:SetBackdrop({ bgFile = DB.bdTex, edgeFile = DB.bdTex, edgeSize = 1 })
+
+local function getBackdrop() return fakeBg:GetBackdrop() end
 local function getBackdropColor() return 0, 0, 0, .7 end
 local function getBackdropBorderColor() return 0, 0, 0 end
 
@@ -327,12 +327,9 @@ function TT:ReskinTooltip()
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer("BACKGROUND")
-		local bg = B.CreateBG(self, 0)
-		bg:SetFrameLevel(self:GetFrameLevel())
-		B.CreateBD(bg, .7)
-		B.CreateSD(bg)
-		B.CreateTex(bg)
-		self.bg = bg
+		self.bg = B.CreateBDFrame(self, .7)
+		B.CreateTex(self.bg)
+		--self.bg:SetFrameLevel(self:GetFrameLevel()) -- need reviewed
 
 		-- other gametooltip-like support
 		self.GetBackdrop = getBackdrop
@@ -342,14 +339,14 @@ function TT:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	self.bg.Shadow:SetBackdropBorderColor(0, 0, 0)
+	self.bg:SetBackdropBorderColor(0, 0, 0)
 	if NDuiDB["Tooltip"]["ClassColor"] and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
 		end
 	end

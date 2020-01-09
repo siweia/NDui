@@ -48,11 +48,7 @@ function S:SkadaSkin()
 		B.StripTextures(window.borderFrame)
 
 		if not window.bg then
-			local bg = B.CreateBG(window)
-			B.CreateBD(bg)
-			B.CreateSD(bg)
-			B.CreateTex(bg)
-			window.bg = bg
+			window.bg = B.SetBD(window)
 
 			local open, close = S:CreateToggle(window)
 			open:HookScript("OnClick", function()

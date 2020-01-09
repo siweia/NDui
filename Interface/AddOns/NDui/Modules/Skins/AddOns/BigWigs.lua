@@ -32,16 +32,13 @@ function S:BigWigsSkin()
 		local height = bar:GetHeight()
 		bar:Set("bigwigs:restoreheight", height)
 		bar:SetHeight(height/2)
+		bar.candyBarBackdrop:Hide()
+		if not bar.styled then
+			B.StripTextures(bar.candyBarBar, true)
+			B.SetBD(bar.candyBarBar)
+			bar.styled = true
+		end
 		bar:SetTexture(DB.normTex)
-
-		local bd = bar.candyBarBackdrop
-		B.CreateBD(bd)
-		B.CreateSD(bd)
-		B.CreateTex(bd)
-		bd:ClearAllPoints()
-		bd:SetPoint("TOPLEFT", bar, "TOPLEFT", -C.mult, C.mult)
-		bd:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", C.mult, -C.mult)
-		bd:Show()
 
 		local tex = bar:GetIcon()
 		if tex then
@@ -56,14 +53,12 @@ function S:BigWigsSkin()
 			end
 			icon:SetSize(height, height)
 			bar:Set("bigwigs:restoreicon", tex)
+			bar.candyBarIconFrameBackdrop:Hide()
 
-			local iconBd = bar.candyBarIconFrameBackdrop
-			B.CreateBD(iconBd)
-			B.CreateSD(iconBd)
-			iconBd:ClearAllPoints()
-			iconBd:SetPoint("TOPLEFT", icon, "TOPLEFT", -C.mult, C.mult)
-			iconBd:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", C.mult, -C.mult)
-			iconBd:Show()
+			if not icon.styled then
+				B.SetBD(icon)
+				icon.styled = true
+			end
 		end
 
 		bar.candyBarLabel:ClearAllPoints()

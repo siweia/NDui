@@ -61,7 +61,7 @@ function UF:CreateHealthBar(self)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
-	B.CreateSD(health, 3, 3)
+	health.backdrop = B.CreateBDFrame(health, 0) -- don't mess up with libs
 	B.SmoothBar(health)
 
 	local bg = health:CreateTexture(nil, "BACKGROUND")
@@ -203,7 +203,7 @@ function UF:CreatePowerBar(self)
 	power:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
 	power:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
-	B.CreateSD(power, 3, 3)
+	B.CreateBDFrame(power, 0)
 	B.SmoothBar(power)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
@@ -455,10 +455,7 @@ local function reskinTimerBar(bar)
 		bar:SetStatusBarTexture(DB.normTex)
 	end
 
-	local bg = B.CreateBG(bar)
-	B.CreateBD(bg)
-	B.CreateSD(bg)
-	B.CreateTex(bg)
+	B.SetBD(bar)
 end
 
 function UF:ReskinMirrorBars()
@@ -495,10 +492,7 @@ function UF.PostCreateIcon(element, button)
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
 	button.count = B.CreateFS(parentFrame, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
 	button.cd:SetReverse(true)
-
-	button.icon:SetTexCoord(unpack(DB.TexCoord))
-	button.icon:SetDrawLayer("ARTWORK")
-	B.CreateSD(button, 2, 2)
+	button.iconbg = B.ReskinIcon(button.icon)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
@@ -518,7 +512,7 @@ local filteredStyle = {
 }
 
 function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuffType)
-	if duration then button.Shadow:Show() end
+	if duration then button.iconbg:Show() end
 
 	local style = element.__owner.mystyle
 	if style == "nameplate" then
@@ -534,12 +528,12 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 	end
 
 	if style == "raid" and NDuiDB["UFs"]["RaidBuffIndicator"] then
-		button.Shadow:SetBackdropBorderColor(1, 0, 0)
+		button.iconbg:SetBackdropBorderColor(1, 0, 0)
 	elseif element.showDebuffType and button.isDebuff then
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
-		button.Shadow:SetBackdropBorderColor(color[1], color[2], color[3])
+		button.iconbg:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
-		button.Shadow:SetBackdropBorderColor(0, 0, 0)
+		button.iconbg:SetBackdropBorderColor(0, 0, 0)
 	end
 
 	if element.disableCooldown then
@@ -570,8 +564,8 @@ local function bolsterPostUpdate(element)
 end
 
 function UF.PostUpdateGapIcon(_, _, icon)
-	if icon.Shadow and icon.Shadow:IsShown() then
-		icon.Shadow:Hide()
+	if icon.iconbg and icon.iconbg:IsShown() then
+		icon.iconbg:Hide()
 	end
 end
 
@@ -741,12 +735,12 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 	if not cur or cur == 0 then
 		for i = 1, 6 do
 			element[i].bg:Hide()
-			element[i].bg.Shadow:Hide()
+			if element[i].bg.Shadow then element[i].bg.Shadow:Hide() end
 		end
 	else
 		for i = 1, max do
 			element[i].bg:Show()
-			element[i].bg.Shadow:Show()
+			if element[i].bg.Shadow then element[i].bg.Shadow:Show() end
 		end
 	end
 
@@ -756,7 +750,7 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 		end
 		for i = max + 1, 6 do
 			element[i].bg:Hide()
-			element[i].bg.Shadow:Hide()
+			if element[i].bg.Shadow then element[i].bg.Shadow:Hide() end
 		end
 	end
 
@@ -835,7 +829,7 @@ function UF:CreateClassPower(self)
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg.multiplier = .25
-		B.CreateSD(bars[i].bg, 3, 3)
+		B.CreateBDFrame(bars[i].bg, 0)
 
 		if DB.MyClass == "DEATHKNIGHT" and NDuiDB["UFs"]["RuneTimer"] then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
@@ -867,7 +861,7 @@ function UF:StaggerBar(self)
 	stagger:SetPoint(unpack(C.UFs.BarPoint))
 	stagger:SetStatusBarTexture(DB.normTex)
 	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
-	B.CreateSD(stagger, 3, 3)
+	B.CreateBDFrame(stagger, 0)
 
 	local bg = stagger:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -901,8 +895,7 @@ function UF:CreateAltPower(self)
 	bar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -3)
 	bar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 	bar:SetHeight(2)
-	B.CreateBD(bar, .5)
-	B.CreateSD(bar)
+	B.CreateBDFrame(bar, 0)
 
 	local text = B.CreateFS(bar, 14, "")
 	text:SetJustifyH("CENTER")
@@ -1006,7 +999,7 @@ function UF:CreateAddPower(self)
 	bar:SetSize(150, 4)
 	bar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 	bar:SetStatusBarTexture(DB.normTex)
-	B.CreateSD(bar, 3, 3)
+	B.CreateBDFrame(bar, 0)
 	bar.colorPower = true
 
 	local bg = bar:CreateTexture(nil, "BACKGROUND")
@@ -1073,8 +1066,7 @@ function UF:CreateQuakeTimer(self)
 	local icon = bar:CreateTexture(nil, "ARTWORK")
 	icon:SetSize(bar:GetHeight(), bar:GetHeight())
 	icon:SetPoint("RIGHT", bar, "LEFT", -5, 0)
-	icon:SetTexCoord(unpack(DB.TexCoord))
-	B.CreateSD(icon, 3, 3)
+	B.ReskinIcon(icon)
 	bar.Icon = icon
 
 	self.QuakeTimer = bar

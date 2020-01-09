@@ -219,14 +219,14 @@ function UF.UpdateColor(element, unit)
 
 	if isCustomUnit or (not NDuiDB["Nameplate"]["TankMode"] and DB.Role ~= "Tank") then
 		if status and status == 3 then
-			element.Shadow:SetBackdropBorderColor(1, 0, 0)
+			element.backdrop:SetBackdropBorderColor(1, 0, 0)
 		elseif status and (status == 2 or status == 1) then
-			element.Shadow:SetBackdropBorderColor(1, 1, 0)
+			element.backdrop:SetBackdropBorderColor(1, 1, 0)
 		else
-			element.Shadow:SetBackdropBorderColor(0, 0, 0)
+			element.backdrop:SetBackdropBorderColor(0, 0, 0)
 		end
 	else
-		element.Shadow:SetBackdropBorderColor(0, 0, 0)
+		element.backdrop:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
@@ -626,7 +626,8 @@ function UF:CreatePlates()
 
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
-	B.CreateSB(health)
+	health:SetStatusBarTexture(DB.normTex)
+	health.backdrop = B.CreateBDFrame(health) -- don't mess up with libs
 	B.SmoothBar(health)
 	self.Health = health
 	self.Health.frequentUpdates = true

@@ -42,9 +42,8 @@ local function setupInfoFrame()
 	infoFrame:SetPoint("TOPLEFT", UIParent, 15, -30)
 	infoFrame:SetClampedToScreen(true)
 	infoFrame:SetFrameStrata("TOOLTIP")
-	B.CreateBD(infoFrame, .7)
-	B.CreateSD(infoFrame)
-	B.CreateTex(infoFrame)
+	local bg = B.SetBD(infoFrame)
+	bg:SetBackdropColor(0, 0, 0, .7)
 
 	local function onUpdate(self, elapsed)
 		self.timer = (self.timer or 0) + elapsed

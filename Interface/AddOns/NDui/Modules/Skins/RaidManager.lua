@@ -5,19 +5,39 @@ local S = B:GetModule("Skins")
 function S:CreateRM()
 	if not NDuiDB["Skins"]["RM"] then return end
 
+	local cr, cg, cb = DB.r, DB.g, DB.b
+
 	local tinsert, strsplit, format = table.insert, string.split, string.format
 	local next, pairs, mod = next, pairs, mod
 	local LeaveParty = C_PartyInfo.LeaveParty
 	local ConvertToRaid = C_PartyInfo.ConvertToRaid
 	local ConvertToParty = C_PartyInfo.ConvertToParty
 
+	local function onEnter(self)
+		self.bg:SetBackdropBorderColor(cr, cg, cb, 1)
+	end
+	local function onLeave(self)
+		self.bg:SetBackdropBorderColor(0, 0, 0, 1)
+	end
+	local function onMouseDown(self)
+		self.bg:SetBackdropColor(cr, cg, cb, .5)
+	end
+	local function onMouseUp(self)
+		self.bg:SetBackdropColor(0, 0, 0, .5)
+	end
+	local function reskinMenuButton(button)
+		B.StripTextures(button)
+		button.bg = B.SetBD(button)
+		button:SetScript("OnEnter", onEnter)
+		button:SetScript("OnLeave", onLeave)
+		button:SetScript("OnMouseUp", onMouseUp)
+		button:SetScript("OnMouseDown", onMouseDown)
+	end
+
 	local header = CreateFrame("Button", nil, UIParent)
 	header:SetSize(120, 28)
 	header:SetFrameLevel(2)
-	B.CreateBD(header)
-	B.CreateSD(header)
-	B.CreateTex(header)
-	B.CreateBC(header, .5)
+	reskinMenuButton(header)
 	B.Mover(header, L["Raid Tool"], "RaidManager", C.Skins.RMPos)
 	header:RegisterEvent("GROUP_ROSTER_UPDATE")
 	header:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -142,9 +162,7 @@ function S:CreateRM()
 	rcFrame:SetPoint("TOP", header, "BOTTOM", 0, -2)
 	rcFrame:SetSize(120, 50)
 	rcFrame:Hide()
-	B.CreateBD(rcFrame)
-	B.CreateSD(rcFrame)
-	B.CreateTex(rcFrame)
+	B.SetBD(rcFrame)
 	B.CreateFS(rcFrame, 14, READY_CHECK, true, "TOP", 0, -8)
 	local rc = B.CreateFS(rcFrame, 14, "", false, "TOP", 0, -28)
 
@@ -200,14 +218,10 @@ function S:CreateRM()
 	end
 	if marker then
 		marker:ClearAllPoints()
-		marker:SetPoint("RIGHT", header, "LEFT", -2, 0)
+		marker:SetPoint("RIGHT", header, "LEFT", -3, 0)
 		marker:SetParent(header)
 		marker:SetSize(28, 28)
-		B.StripTextures(marker)
-		B.CreateBD(marker)
-		B.CreateSD(marker)
-		B.CreateTex(marker)
-		B.CreateBC(marker, .5)
+		reskinMenuButton(marker)
 		marker:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
 		marker:GetNormalTexture():SetVertexColor(DB.r, DB.g, DB.b)
 		marker:HookScript("OnMouseUp", function(_, btn)
@@ -221,13 +235,10 @@ function S:CreateRM()
 
 	-- Buff checker
 	local checker = CreateFrame("Button", nil, header)
-	checker:SetPoint("LEFT", header, "RIGHT", 2, 0)
+	checker:SetPoint("LEFT", header, "RIGHT", 3, 0)
 	checker:SetSize(28, 28)
-	B.CreateBD(checker)
-	B.CreateSD(checker)
-	B.CreateTex(checker)
 	B.CreateFS(checker, 16, "!", true)
-	B.CreateBC(checker, .5)
+	reskinMenuButton(checker)
 
 	local BuffName, numPlayer = {L["Flask"], L["Food"], SPELL_STAT4_NAME, RAID_BUFF_2, RAID_BUFF_3, RUNES}
 	local NoBuff, numGroups = {}, 6
@@ -367,10 +378,8 @@ function S:CreateRM()
 	-- Others
 	local menu = CreateFrame("Frame", nil, header)
 	menu:SetPoint("TOP", header, "BOTTOM", 0, -2)
-	menu:SetSize(180, 70)
-	B.CreateBD(menu)
-	B.CreateSD(menu)
-	B.CreateTex(menu)
+	menu:SetSize(184, 70)
+	B.SetBD(menu)
 	menu:Hide()
 	menu:SetScript("OnLeave", function(self)
 		self:SetScript("OnUpdate", function(self, elapsed)
@@ -441,7 +450,7 @@ function S:CreateRM()
 	}
 	local bu = {}
 	for i, j in pairs(buttons) do
-		bu[i] = B.CreateButton(menu, 83, 28, j[1], 12)
+		bu[i] = B.CreateButton(menu, 84, 28, j[1], 12)
 		bu[i]:SetPoint(mod(i, 2) == 0 and "TOPRIGHT" or "TOPLEFT", mod(i, 2) == 0 and -5 or 5, i > 2 and -37 or -5)
 		bu[i]:SetScript("OnClick", j[2])
 	end

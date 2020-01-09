@@ -238,7 +238,7 @@ local defaultSettings = {
 		Rematch = true,
 		ToggleDirection = 1,
 
-		SkinAlpha = .6,
+		SkinAlpha = .5,
 		DefaultBags = false,
 		FlatMode = false,
 		ChatBubbles = true,
