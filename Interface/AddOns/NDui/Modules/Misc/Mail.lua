@@ -341,12 +341,9 @@ function M:MailBox()
 		InboxTooMuchMail:SetPoint("BOTTOM", MailFrame, "TOP", 0, 5)
 	end
 
-	-- AuroraClassic
-	if F then
-		F.Reskin(button1)
-		F.Reskin(button2)
-		F.Reskin(button3)
-	end
+	B.Reskin(button1)
+	B.Reskin(button2)
+	B.Reskin(button3)
 
 	-- Hide Blizz
 	B.HideObject(OpenAllMail)

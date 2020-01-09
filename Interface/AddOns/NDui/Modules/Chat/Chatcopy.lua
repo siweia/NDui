@@ -132,11 +132,8 @@ function module:ChatCopy_Create()
 	copy:HookScript("OnEnter", function() copy:SetAlpha(1) end)
 	copy:HookScript("OnLeave", function() copy:SetAlpha(.5) end)
 
-	-- AuroraClassic
-	if F then
-		F.ReskinClose(frame.close)
-		F.ReskinScroll(ChatCopyScrollFrameScrollBar)
-	end
+	B.ReskinClose(frame.close)
+	B.ReskinScroll(ChatCopyScrollFrameScrollBar)
 end
 
 function module:ChatCopy()

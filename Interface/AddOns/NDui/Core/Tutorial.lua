@@ -45,7 +45,7 @@ local function GetBestScale()
 	return max(.4, min(1.15, scale))
 end
 
-local function SetupUIScale(init)
+function B:SetupUIScale(init)
 	if NDuiADB["LockUIScale"] then NDuiADB["UIScale"] = GetBestScale() end
 	local scale = NDuiADB["UIScale"]
 	if init then
@@ -65,8 +65,8 @@ local function UpdatePixelScale(event)
 	if event == "UI_SCALE_CHANGED" then
 		DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 	end
-	SetupUIScale(true)
-	SetupUIScale()
+	B:SetupUIScale(true)
+	B:SetupUIScale()
 
 	isScaling = false
 end
@@ -442,7 +442,7 @@ function module:OnLogin()
 	B.HideOption(Advanced_UIScaleSlider)
 
 	-- Update UIScale
-	UpdatePixelScale()
+	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
 
 	-- Tutorial and settings

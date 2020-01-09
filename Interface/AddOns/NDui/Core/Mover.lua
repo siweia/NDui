@@ -4,6 +4,32 @@ local M = B:RegisterModule("Mover")
 
 local cr, cg, cb = DB.r, DB.g, DB.b
 
+-- Movable Frame
+function B:CreateMF(parent, saved)
+	local frame = parent or self
+	frame:SetMovable(true)
+	frame:SetUserPlaced(true)
+	frame:SetClampedToScreen(true)
+
+	self:EnableMouse(true)
+	self:RegisterForDrag("LeftButton")
+	self:SetScript("OnDragStart", function() frame:StartMoving() end)
+	self:SetScript("OnDragStop", function()
+		frame:StopMovingOrSizing()
+		if not saved then return end
+		local orig, _, tar, x, y = frame:GetPoint()
+		NDuiDB["TempAnchor"][frame:GetName()] = {orig, "UIParent", tar, x, y}
+	end)
+end
+
+function B:RestoreMF()
+	local name = self:GetName()
+	if name and NDuiDB["TempAnchor"][name] then
+		self:ClearAllPoints()
+		self:SetPoint(unpack(NDuiDB["TempAnchor"][name]))
+	end
+end
+
 -- Frame Mover
 local MoverList, f = {}
 local updater

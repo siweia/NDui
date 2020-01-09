@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB, F = unpack(ns)
+local B, C, L, DB = unpack(ns)
 local G = B:RegisterModule("GUI")
 
 local tonumber, tostring, pairs, ipairs, next, select, type = tonumber, tostring, pairs, ipairs, next, select, type
@@ -237,6 +237,15 @@ local defaultSettings = {
 		PGFSkin = true,
 		Rematch = true,
 		ToggleDirection = 1,
+
+		SkinAlpha = .6,
+		DefaultBags = false,
+		FlatMode = false,
+		ChatBubbles = true,
+		FontOutline = true,
+		Loot = true,
+		Shadow = true,
+		ObjectiveTracker = true,
 	},
 	Tooltip = {
 		CombatHide = false,
@@ -366,6 +375,7 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		NDuiDB["BFA"] = true
 	end
 
+	B:SetupUIScale(true)
 	InitialSettings(defaultSettings, NDuiDB, true)
 	InitialSettings(accountSettings, NDuiADB)
 	DB.normTex = textureList[NDuiADB["TexStyle"]]
@@ -545,6 +555,12 @@ end
 
 local function updateErrorBlocker()
 	B:GetModule("Misc"):UpdateErrorBlocker()
+end
+
+local function updateSkinAlpha()
+	for _, frame in pairs(C.frames) do
+		B:SetBackdropColor(frame, 0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+	end
 end
 
 StaticPopupDialogs["RESET_DETAILS"] = {
@@ -792,6 +808,16 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Map", "MinmapScale", L["Minimap Scale"].."*", true, {1, 2, 1}, updateMinimapScale},
 	},
 	[10] = {
+		{1, "Skins", "FlatMode", "FlatMode"},
+		{1, "Skins", "Shadow", "Shadow"},
+		{3, "Skins", "SkinAlpha", "SkinAlpha".."*", true, {0, 1, 1}, updateSkinAlpha},
+		{1, "Skins", "FontOutline", "FontOutline"},
+		{1, "Skins", "ChatBubbles", "ChatBubbles", true},
+		{1, "Skins", "DefaultBags", "DefaultBags"},
+		{1, "Skins", "Loot", "Loot", true},
+		{1, "Skins", "ObjectiveTracker", "ObjectiveTracker"},
+		{},--blank
+
 		{1, "Skins", "BarLine", L["Bar Line"]},
 		{1, "Skins", "InfobarLine", L["Infobar Line"], true},
 		{1, "Skins", "ChatLine", L["Chat Line"]},
@@ -1296,8 +1322,8 @@ local function createDataFrame()
 	local scrollArea = CreateFrame("ScrollFrame", nil, dataFrame, "UIPanelScrollFrameTemplate")
 	scrollArea:SetPoint("TOPLEFT", 10, -30)
 	scrollArea:SetPoint("BOTTOMRIGHT", -28, 40)
-	B.CreateBD(B.CreateBG(scrollArea), .25)
-	if F then F.ReskinScroll(scrollArea.ScrollBar) end
+	B.CreateBDFrame(scrollArea, .25)
+	B.ReskinScroll(scrollArea.ScrollBar)
 
 	local editBox = CreateFrame("EditBox", nil, dataFrame)
 	editBox:SetMultiLine(true)
@@ -1385,14 +1411,12 @@ local function OpenGUI()
 		guiPage[i] = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
 		guiPage[i]:SetPoint("TOPLEFT", 160, -50)
 		guiPage[i]:SetSize(610, 500)
-		local bg = B.CreateBG(guiPage[i])
-		B.CreateBD(bg, .3)
+		B.CreateBDFrame(guiPage[i], .3)
 		guiPage[i]:Hide()
 		guiPage[i].child = CreateFrame("Frame", nil, guiPage[i])
 		guiPage[i].child:SetSize(610, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
-		-- AuroraClassic
-		if F then F.ReskinScroll(guiPage[i].ScrollBar) end
+		B.ReskinScroll(guiPage[i].ScrollBar)
 
 		CreateOption(i)
 	end
@@ -1485,5 +1509,5 @@ function G:OnLogin()
 	end)
 
 	-- AuroraClassic
-	if F then F.Reskin(gui) end
+	B.Reskin(gui)
 end

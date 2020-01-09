@@ -1,8 +1,22 @@
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L, DB, F = unpack(ns)
 local S = B:RegisterModule("Skins")
 
+C.themes = {}
+C.themes["AuroraClassic"] = {}
+
 function S:OnLogin()
+	if not F then
+		-- Reskin Blizzard UIs
+		for _, func in pairs(C.themes["AuroraClassic"]) do
+			func()
+		end
+		B:RegisterEvent("ADDON_LOADED", function(_, addon)
+			local func = C.themes[addon]
+			if func then func() end
+		end)
+	end
+
 	-- Add Skins
 	self:MicroMenu()
 	self:CreateRM()

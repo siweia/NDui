@@ -353,7 +353,7 @@ local function createRoster(parent, i)
 	button.gameIcon:SetPoint("RIGHT", button, -8, 0)
 	button.gameIcon:SetSize(16, 16)
 	button.gameIcon:SetTexCoord(.17, .83, .17, .83)
-	B.CreateBD(B.CreateBG(button.gameIcon))
+	B.CreateBDFrame(button.gameIcon)
 
 	button:RegisterForClicks("AnyUp")
 	button:SetScript("OnClick", buttonOnClick)

@@ -390,7 +390,7 @@ function UF:CreateCastBar(self)
 		cb.Icon:SetSize(cb:GetHeight(), cb:GetHeight())
 		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
 		cb.Icon:SetTexCoord(unpack(DB.TexCoord))
-		B.CreateSD(cb.Icon, 3, 3)
+		B.SetBD(cb.Icon)
 	end
 
 	if mystyle == "player" then
