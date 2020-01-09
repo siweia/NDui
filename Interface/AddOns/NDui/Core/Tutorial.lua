@@ -40,32 +40,33 @@ local function ForceRaidFrame()
 	CompactUnitFrameProfiles_UpdateCurrentPanel()
 end
 
-local function GetPerfectScale()
-	local scale = NDuiADB["UIScale"]
-	local bestScale = max(.4, min(1.15, 768 / DB.ScreenHeight))
-	local pixelScale = 768 / DB.ScreenHeight
-	if NDuiADB["LockUIScale"] then scale = bestScale end
-	C.mult = (bestScale / scale) - ((bestScale - pixelScale) / scale)
+local function GetBestScale()
+	local scale = B:Round(768 / DB.ScreenHeight, 5)
+	return max(.4, min(1.15, scale))
+end
 
-	return scale
+local function SetupUIScale(init)
+	if NDuiADB["LockUIScale"] then NDuiADB["UIScale"] = GetBestScale() end
+	local scale = NDuiADB["UIScale"]
+	if init then
+		local pixel = 1
+		local ratio = 768 / DB.ScreenHeight
+		C.mult = (pixel / scale) - ((pixel - ratio) / scale)
+	elseif not InCombatLockdown() then
+		UIParent:SetScale(scale)
+	end
 end
 
 local isScaling = false
-local function SetupUIScale(event)
+local function UpdatePixelScale(event)
 	if isScaling then return end
 	isScaling = true
 
 	if event == "UI_SCALE_CHANGED" then
 		DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 	end
-
-	local scale = GetPerfectScale()
-	local parentScale = UIParent:GetScale()
-	if scale ~= parentScale and not InCombatLockdown() then
-		UIParent:SetScale(scale)
-	end
-
-	NDuiADB["UIScale"] = scale
+	SetupUIScale(true)
+	SetupUIScale()
 
 	isScaling = false
 end
@@ -353,7 +354,7 @@ local function YesTutor()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Chat Settings Check"])
 		elseif currentPage == 3 then
 			NDuiADB["LockUIScale"] = true
-			SetupUIScale()
+			UpdatePixelScale()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
 		elseif currentPage == 4 then
 			NDuiADB["DBMRequest"] = true
@@ -441,8 +442,8 @@ function module:OnLogin()
 	B.HideOption(Advanced_UIScaleSlider)
 
 	-- Update UIScale
-	SetupUIScale()
-	B:RegisterEvent("UI_SCALE_CHANGED", SetupUIScale)
+	UpdatePixelScale()
+	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
 
 	-- Tutorial and settings
 	ForceAddonSkins()
