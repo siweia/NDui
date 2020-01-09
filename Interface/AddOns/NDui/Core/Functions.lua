@@ -45,13 +45,13 @@ function B:CreateSD(size, override)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
-	if not size then size = 5 end
+	local offset = size or 5
 
 	self.Shadow = CreateFrame("Frame", nil, frame)
-	self.Shadow:SetPoint("TOPLEFT", self, -size, size)
-	self.Shadow:SetPoint("BOTTOMRIGHT", self, size, -size)
-	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size+1)})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
+	self.Shadow:SetPoint("TOPLEFT", self, -offset, offset)
+	self.Shadow:SetPoint("BOTTOMRIGHT", self, offset, -offset)
+	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 6)})
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
 	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
 	return self.Shadow
@@ -151,8 +151,7 @@ end
 
 function B:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
-	tex:SetPoint("TOPLEFT", self, C.mult, -C.mult)
-	tex:SetPoint("BOTTOMRIGHT", self, -C.mult, C.mult)
+	tex:SetInside(self)
 	tex:SetTexture(DB.bdTex)
 	if NDuiDB["Skins"]["FlatMode"] then
 		tex:SetVertexColor(.3, .3, .3, .25)
@@ -265,8 +264,7 @@ end
 function B:PixelIcon(texture, highlight)
 	B.CreateBD(self)
 	self.Icon = self:CreateTexture(nil, "ARTWORK")
-	self.Icon:SetPoint("TOPLEFT", C.mult, -C.mult)
-	self.Icon:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	self.Icon:SetInside()
 	self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	if texture then
 		local atlas = strmatch(texture, "Atlas:(.+)$")
@@ -280,8 +278,7 @@ function B:PixelIcon(texture, highlight)
 		self:EnableMouse(true)
 		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 		self.HL:SetColorTexture(1, 1, 1, .25)
-		self.HL:SetPoint("TOPLEFT", C.mult, -C.mult)
-		self.HL:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		self.HL:SetInside()
 	end
 end
 
@@ -421,8 +418,7 @@ function B:ReskinTab()
 	self:SetHighlightTexture(DB.bdTex)
 	local hl = self:GetHighlightTexture()
 	hl:ClearAllPoints()
-	hl:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
-	hl:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
+	hl:SetInside(bg)
 	hl:SetVertexColor(cr, cg, cb, .25)
 end
 
@@ -866,8 +862,7 @@ function B:StyleSearchButton()
 	self:SetHighlightTexture(DB.bdTex)
 	local hl = self:GetHighlightTexture()
 	hl:SetVertexColor(cr, cg, cb, .25)
-	hl:SetPoint("TOPLEFT", C.mult, -C.mult)
-	hl:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	hl:SetInside()
 end
 
 function B:AffixesSetup()
@@ -1554,8 +1549,7 @@ function B:CreateColorSwatch(name, color)
 	B.CreateBD(swatch, 1)
 	swatch.text = B.CreateFS(swatch, 14, name, false, "LEFT", 26, 0)
 	local tex = swatch:CreateTexture()
-	tex:SetPoint("TOPLEFT", C.mult, -C.mult)
-	tex:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	tex:SetInside()
 	tex:SetTexture(DB.bdTex)
 	tex:SetVertexColor(color.r, color.g, color.b)
 

@@ -45,12 +45,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			newItemTexture:SetDrawLayer("BACKGROUND")
 			newItemTexture:SetSize(1, 1)
 
-			border:SetPoint("TOPLEFT", -C.mult, C.mult)
-			border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+			border:SetOutside()
 			border:SetDrawLayer("BACKGROUND", 1)
-
-			searchOverlay:SetPoint("TOPLEFT", -C.mult, C.mult)
-			searchOverlay:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+			searchOverlay:SetOutside()
 		end
 
 		local f = B.CreateBDFrame(con)

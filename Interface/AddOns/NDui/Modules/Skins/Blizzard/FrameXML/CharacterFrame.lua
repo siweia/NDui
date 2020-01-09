@@ -52,8 +52,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local function UpdateAzeriteEmpoweredItem(self)
 		self.AzeriteTexture:SetAtlas("AzeriteIconFrame")
-		self.AzeriteTexture:SetPoint("TOPLEFT", C.mult, -C.mult)
-		self.AzeriteTexture:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		self.AzeriteTexture:SetInside()
 		self.AzeriteTexture:SetDrawLayer("BORDER", 1)
 	end
 
@@ -70,11 +69,9 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
-		slot.icon:SetPoint("TOPLEFT", C.mult, -C.mult)
-		slot.icon:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		slot.icon:SetInside()
 		B.CreateBD(slot, .25)
-		cooldown:SetPoint("TOPLEFT", C.mult, -C.mult)
-		cooldown:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		cooldown:SetInside()
 
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		slot.SetHighlightTexture = B.Dummy
@@ -160,9 +157,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		tab.bg = B.CreateBDFrame(tab)
 		tab.bg:SetPoint("TOPLEFT", 2, -3)
 		tab.bg:SetPoint("BOTTOMRIGHT", 0, -2)
-
-		tab.Hider:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
-		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
+		tab.Hider:SetInside(tab.bg)
 	end
 
 	-- [[ Equipment manager ]]
@@ -193,8 +188,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		hl:SetColorTexture(1, 1, 1, .25)
 		hl:SetAllPoints(ic)
 
-		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
-		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		ic:SetInside()
 		ic:SetTexCoord(.08, .92, .08, .92)
 		B.CreateBD(bu, .25)
 	end

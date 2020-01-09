@@ -71,16 +71,12 @@ C.themes["Blizzard_GuildBankUI"] = function()
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
 			bu.icon:SetTexCoord(.08, .92, .08, .92)
-
-			border:SetPoint("TOPLEFT", -C.mult, C.mult)
-			border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
-			border:SetDrawLayer("BACKGROUND")
-
-			searchOverlay:SetPoint("TOPLEFT", -C.mult, C.mult)
-			searchOverlay:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 			B.CreateBDFrame(bu, .25)
+
+			border:SetOutside()
+			border:SetDrawLayer("BACKGROUND")
+			searchOverlay:SetOutside()
 		end
 	end
 

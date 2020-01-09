@@ -20,8 +20,7 @@ C.themes["Blizzard_MacroUI"] = function()
 	MacroButtonScrollFrameMiddle:Hide()
 
 	MacroFrameSelectedMacroButton:SetPoint("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)
-	MacroFrameSelectedMacroButtonIcon:SetPoint("TOPLEFT", C.mult, -C.mult)
-	MacroFrameSelectedMacroButtonIcon:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	MacroFrameSelectedMacroButtonIcon:SetInside()
 	MacroFrameSelectedMacroButtonIcon:SetTexCoord(.08, .92, .08, .92)
 
 	MacroPopupFrame:SetPoint("TOPLEFT", MacroFrame, "TOPRIGHT", 1, 0)
@@ -55,8 +54,7 @@ C.themes["Blizzard_MacroUI"] = function()
 				hl:SetColorTexture(1, 1, 1, .25)
 				hl:SetAllPoints(ic)
 
-				ic:SetPoint("TOPLEFT", C.mult, -C.mult)
-				ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+				ic:SetInside()
 				ic:SetTexCoord(.08, .92, .08, .92)
 				B.CreateBD(bu, .25)
 

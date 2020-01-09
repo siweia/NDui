@@ -39,8 +39,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		button:SetHighlightTexture(DB.bdTex)
 		local hl = button:GetHighlightTexture()
 		hl:SetVertexColor(r, g, b, .25)
-		hl:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
-		hl:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
+		hl:SetInside(bg)
 	end
 
 	hooksecurefunc("AchievementFrameCategories_DisplayButton", function(bu)

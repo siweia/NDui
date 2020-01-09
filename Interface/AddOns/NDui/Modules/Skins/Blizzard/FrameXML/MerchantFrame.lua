@@ -57,9 +57,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		B.CreateBD(button.bd, .25)
 
 		ic:SetTexCoord(.08, .92, .08, .92)
-		ic:ClearAllPoints()
-		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
-		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		ic:SetInside()
 
 		for j = 1, 3 do
 			B.ReskinIcon(_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"])
@@ -129,9 +127,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	B.CreateBD(MerchantBuyBackItem, .25)
 
 	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
-	MerchantBuyBackItemItemButtonIconTexture:ClearAllPoints()
-	MerchantBuyBackItemItemButtonIconTexture:SetPoint("TOPLEFT", C.mult, -C.mult)
-	MerchantBuyBackItemItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	MerchantBuyBackItemItemButtonIconTexture:SetInside()
 
 	MerchantBuyBackItemName:SetHeight(25)
 	MerchantBuyBackItemName:ClearAllPoints()

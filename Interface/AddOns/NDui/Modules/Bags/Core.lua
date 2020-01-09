@@ -156,8 +156,7 @@ end
 
 function module:CreateDepositButton()
 	local bu = B.CreateButton(self, 24, 24, true, "Atlas:GreenCross")
-	bu.Icon:SetPoint("TOPLEFT", -C.mult, C.mult)
-	bu.Icon:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+	bu.Icon:SetOutside()
 	bu:SetScript("OnClick", DepositReagentBank)
 	bu.title = REAGENTBANK_DEPOSIT
 	B.AddTooltip(bu, "ANCHOR_TOP")

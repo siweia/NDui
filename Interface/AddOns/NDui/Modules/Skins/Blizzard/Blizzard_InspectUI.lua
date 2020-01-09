@@ -23,8 +23,7 @@ C.themes["Blizzard_InspectUI"] = function()
 
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
-		slot.icon:SetPoint("TOPLEFT", C.mult, -C.mult)
-		slot.icon:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		slot.icon:SetInside()
 		B.CreateBD(slot, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 

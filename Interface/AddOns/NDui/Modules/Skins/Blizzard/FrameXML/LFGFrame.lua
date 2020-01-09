@@ -70,8 +70,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		button.texture:SetTexCoord(.08, .92, .08, .92)
 		border:SetColorTexture(0, 0, 0)
 		border:SetDrawLayer("BACKGROUND")
-		border:SetPoint("TOPLEFT", button.texture, -C.mult, C.mult)
-		border:SetPoint("BOTTOMRIGHT", button.texture, C.mult, -C.mult)
+		border:SetOutside(button.texture)
 		button.styled = true
 	end
 
