@@ -262,12 +262,12 @@ function B:CreateSB(spark, r, g, b)
 	else
 		self:SetStatusBarColor(cr, cg, cb)
 	end
-	B.CreateSD(self, 3, 3)
-	self.BG = self:CreateTexture(nil, "BACKGROUND")
-	self.BG:SetAllPoints()
-	self.BG:SetTexture(DB.normTex)
-	self.BG:SetVertexColor(0, 0, 0, .5)
-	B.CreateTex(self.BG)
+
+	local bg = B.CreateBG(self)
+	B.CreateBD(bg)
+	B.CreateSD(bg)
+	B.CreateTex(bg)
+
 	if spark then
 		self.Spark = self:CreateTexture(nil, "OVERLAY")
 		self.Spark:SetTexture(DB.sparkTex)
@@ -307,8 +307,10 @@ function B.Numb(n)
 	end
 end
 
-function B:Round(number)
-	return floor(number + .5)
+function B:Round(number, idp)
+	idp = idp or 0
+	local mult = 10 ^ idp
+	return floor(number * mult + .5) / mult
 end
 
 -- Color code
