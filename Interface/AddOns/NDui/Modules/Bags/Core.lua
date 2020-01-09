@@ -821,11 +821,4 @@ function module:OnLogin()
 	-- Sort order
 	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
 	SetInsertItemsLeftToRight(false)
-
-	-- Override AuroraClassic
-	if F and AuroraClassicDB then
-		AuroraOptionsBags:SetAlpha(0)
-		AuroraOptionsBags:Disable()
-		AuroraClassicDB.Bags = false
-	end
 end

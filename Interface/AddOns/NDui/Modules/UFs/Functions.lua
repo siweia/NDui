@@ -61,7 +61,7 @@ function UF:CreateHealthBar(self)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
-	health.backdrop = B.CreateBDFrame(health, 0) -- don't mess up with libs
+	health.backdrop = B.CreateBDFrame(health, 0, true) -- don't mess up with libs
 	B.SmoothBar(health)
 
 	local bg = health:CreateTexture(nil, "BACKGROUND")
@@ -203,7 +203,7 @@ function UF:CreatePowerBar(self)
 	power:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
 	power:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
-	B.CreateBDFrame(power, 0)
+	B.CreateBDFrame(power, 0, true)
 	B.SmoothBar(power)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
@@ -492,7 +492,7 @@ function UF.PostCreateIcon(element, button)
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
 	button.count = B.CreateFS(parentFrame, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
 	button.cd:SetReverse(true)
-	button.iconbg = B.ReskinIcon(button.icon)
+	button.iconbg = B.ReskinIcon(button.icon, true)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)

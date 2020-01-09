@@ -341,9 +341,11 @@ function M:MailBox()
 		InboxTooMuchMail:SetPoint("BOTTOM", MailFrame, "TOP", 0, 5)
 	end
 
-	B.Reskin(button1)
-	B.Reskin(button2)
-	B.Reskin(button3)
+	if NDuiDB["Skins"]["BlizzardSkins"] then
+		B.Reskin(button1)
+		B.Reskin(button2)
+		B.Reskin(button3)
+	end
 
 	-- Hide Blizz
 	B.HideObject(OpenAllMail)

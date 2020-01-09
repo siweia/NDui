@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	TaxiFrame:DisableDrawLayer("BORDER")
 	TaxiFrame:DisableDrawLayer("OVERLAY")
 	TaxiFrame.Bg:Hide()

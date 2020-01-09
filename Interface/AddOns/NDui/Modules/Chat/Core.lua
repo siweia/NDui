@@ -57,8 +57,8 @@ function module:SkinChat()
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
 	eb:ClearAllPoints()
-	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 24)
-	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -13, 52)
+	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 4, 26)
+	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -17, 50)
 	B.SetBD(eb)
 	for i = 3, 8 do
 		select(i, eb:GetRegions()):SetAlpha(0)
@@ -66,8 +66,8 @@ function module:SkinChat()
 
 	local lang = _G[name.."EditBoxLanguage"]
 	lang:GetRegions():SetAlpha(0)
-	lang:SetPoint("TOPLEFT", eb, "TOPRIGHT", 2, 0)
-	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 30, 0)
+	lang:SetPoint("TOPLEFT", eb, "TOPRIGHT", 5, 0)
+	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 29, 0)
 	B.SetBD(lang)
 
 	local tab = _G[name.."Tab"]
@@ -258,11 +258,7 @@ function module:ChatFrameBackground()
 end
 
 function module:OnLogin()
-	if AuroraClassicDB and not AuroraClassicDB.FontOutline then
-		fontOutline = ""
-	else
-		fontOutline = "OUTLINE"
-	end
+	fontOutline = NDuiDB["Skins"]["FontOutline"] and "OUTLINE" or ""
 
 	for i = 1, NUM_CHAT_WINDOWS do
 		self.SkinChat(_G["ChatFrame"..i])

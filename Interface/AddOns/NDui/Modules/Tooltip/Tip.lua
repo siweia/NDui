@@ -263,7 +263,7 @@ function TT:ReskinStatusBar()
 	GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", 0, 3)
 	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
 	GameTooltipStatusBar:SetHeight(5)
-	B.CreateBDFrame(GameTooltipStatusBar)
+	B.CreateBDFrame(GameTooltipStatusBar, nil, true)
 end
 
 function TT:GameTooltip_ShowStatusBar()
@@ -327,9 +327,8 @@ function TT:ReskinTooltip()
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer("BACKGROUND")
-		self.bg = B.CreateBDFrame(self, .7)
-		B.CreateTex(self.bg)
-		--self.bg:SetFrameLevel(self:GetFrameLevel()) -- need reviewed
+		self.bg = B.SetBD(self)
+		self.bg:SetBackdropColor(0, 0, 0, .7)
 
 		-- other gametooltip-like support
 		self.GetBackdrop = getBackdrop
@@ -399,12 +398,6 @@ end
 B:RegisterEvent("ADDON_LOADED", addonStyled)
 
 TT:RegisterTooltips("NDui", function()
-	if F and AuroraClassicDB then
-		AuroraOptionsTooltips:SetAlpha(0)
-		AuroraOptionsTooltips:Disable()
-		AuroraClassicDB.Tooltips = false
-	end
-
 	local tooltips = {
 		ChatMenu,
 		EmoteMenu,

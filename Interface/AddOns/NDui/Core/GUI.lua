@@ -238,6 +238,7 @@ local defaultSettings = {
 		Rematch = true,
 		ToggleDirection = 1,
 
+		BlizzardSkins = true,
 		SkinAlpha = .5,
 		DefaultBags = false,
 		FlatMode = false,
@@ -246,6 +247,7 @@ local defaultSettings = {
 		Loot = true,
 		Shadow = true,
 		ObjectiveTracker = true,
+		AlertFrames = true,
 	},
 	Tooltip = {
 		CombatHide = false,
@@ -812,10 +814,12 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Shadow", "Shadow"},
 		{3, "Skins", "SkinAlpha", "SkinAlpha".."*", true, {0, 1, 1}, updateSkinAlpha},
 		{1, "Skins", "FontOutline", "FontOutline"},
-		{1, "Skins", "ChatBubbles", "ChatBubbles", true},
-		{1, "Skins", "DefaultBags", "DefaultBags"},
-		{1, "Skins", "Loot", "Loot", true},
-		{1, "Skins", "ObjectiveTracker", "ObjectiveTracker"},
+		{1, "Skins", "BlizzardSkins", "BlizzardSkins", true},
+		{1, "Skins", "ChatBubbles", "ChatBubbles"},
+		{1, "Skins", "DefaultBags", "DefaultBags", true},
+		{1, "Skins", "Loot", "Loot"},
+		{1, "Skins", "ObjectiveTracker", "ObjectiveTracker", true},
+		{1, "Skins", "AlertFrames", "AlertFrames"},
 		{},--blank
 
 		{1, "Skins", "BarLine", L["Bar Line"]},
@@ -1509,5 +1513,7 @@ function G:OnLogin()
 	end)
 
 	-- AuroraClassic
-	B.Reskin(gui)
+	if NDuiDB["Skins"]["BlizzardSkins"] then
+		B.Reskin(gui)
+	end
 end

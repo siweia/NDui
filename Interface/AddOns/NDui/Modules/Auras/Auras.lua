@@ -256,8 +256,7 @@ function A:CreateAuraIcon(button)
 	button.highlight:SetColorTexture(1, 1, 1, .25)
 	button.highlight:SetAllPoints(button.icon)
 
-	button.bg = B.CreateBDFrame(button)
-	-- shadow space
+	button.bg = B.CreateBDFrame(button, nil, true)
 
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
 end

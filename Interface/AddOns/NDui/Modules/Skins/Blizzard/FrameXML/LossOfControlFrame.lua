@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	local styled
 	hooksecurefunc("LossOfControlFrame_SetUpDisplay", function(self)
 		if not styled then

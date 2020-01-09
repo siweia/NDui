@@ -11,10 +11,12 @@ function S:OnLogin()
 		for _, func in pairs(C.themes["AuroraClassic"]) do
 			func()
 		end
-		B:RegisterEvent("ADDON_LOADED", function(_, addon)
-			local func = C.themes[addon]
-			if func then func() end
-		end)
+		if NDuiDB["Skins"]["BlizzardSkins"] then
+			B:RegisterEvent("ADDON_LOADED", function(_, addon)
+				local func = C.themes[addon]
+				if func then func() end
+			end)
+		end
 	end
 
 	-- Add Skins

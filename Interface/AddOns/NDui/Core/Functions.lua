@@ -45,13 +45,13 @@ function B:CreateSD(size, override)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
-	if not size then size = 3 end
+	if not size then size = 5 end
 
 	self.Shadow = CreateFrame("Frame", nil, frame)
 	self.Shadow:SetPoint("TOPLEFT", self, -size, size)
 	self.Shadow:SetPoint("BOTTOMRIGHT", self, size, -size)
-	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size)})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0, 1)
+	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size+1)})
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
 	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
 	return self.Shadow
@@ -175,7 +175,7 @@ function B:CreateBG(offset)
 	return bg
 end
 
-function B:CreateBDFrame(a)
+function B:CreateBDFrame(a, shadow)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
@@ -184,6 +184,7 @@ function B:CreateBDFrame(a)
 	bg:SetOutside(self)
 	bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 	B.CreateBD(bg, a)
+	if shadow then B.CreateSD(bg) end
 	return bg
 end
 
@@ -256,9 +257,9 @@ function B:AddTooltip(anchor, text, color)
 end
 
 -- Icon Style
-function B:ReskinIcon()
+function B:ReskinIcon(shadow)
 	self:SetTexCoord(unpack(DB.TexCoord))
-	return B.CreateBDFrame(self)
+	return B.CreateBDFrame(self, nil, shadow)
 end
 
 function B:PixelIcon(texture, highlight)

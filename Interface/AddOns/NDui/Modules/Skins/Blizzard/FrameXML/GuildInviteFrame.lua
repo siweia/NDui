@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	B.CreateBD(GuildInviteFrame)
 	B.CreateSD(GuildInviteFrame)
 	for i = 1, 10 do

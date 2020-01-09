@@ -9,8 +9,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
 
-	local bg = B.CreateBDFrame(Minimap)
-	-- shadow space
+	local bg = B.CreateBDFrame(Minimap, nil, true)
 	local anim = bg:CreateAnimationGroup()
 	anim:SetLooping("BOUNCE")
 	anim.fader = anim:CreateAnimation("Alpha")

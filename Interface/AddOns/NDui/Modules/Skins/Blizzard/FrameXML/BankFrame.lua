@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
+	if NDuiDB["Bags"]["Enable"] then return end
 	if not NDuiDB["Skins"]["DefaultBags"] then return end
 
 	local r, g, b = DB.r, DB.g, DB.b

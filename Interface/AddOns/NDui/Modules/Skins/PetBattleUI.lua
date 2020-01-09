@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
-function S:PetBattleUI() -- shadow space
+function S:PetBattleUI()
 	if not NDuiDB["Skins"]["PetBattle"] then return end
 
 	local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
@@ -20,7 +20,7 @@ function S:PetBattleUI() -- shadow space
 	weather.Name:Hide()
 	weather.Icon:ClearAllPoints()
 	weather.Icon:SetPoint("TOP", frame.TopVersusText, "BOTTOM", 0, -15)
-	B.ReskinIcon(weather.Icon)
+	B.ReskinIcon(weather.Icon, true)
 	weather.BackgroundArt:SetPoint("TOP", UIParent)
 	weather.Duration:ClearAllPoints()
 	weather.Duration:SetPoint("CENTER", weather.Icon, 1, 0)
@@ -32,7 +32,7 @@ function S:PetBattleUI() -- shadow space
 		unit.HealthBarFrame:Hide()
 		unit.healthBarWidth = 250
 		unit.ActualHealthBar:SetTexture(DB.normTex)
-		unit.healthBg = B.CreateBDFrame(unit.ActualHealthBar)
+		unit.healthBg = B.CreateBDFrame(unit.ActualHealthBar, nil, true)
 		unit.healthBg:ClearAllPoints()
 		unit.healthBg:SetWidth(252)
 		unit.HealthText:ClearAllPoints()
@@ -40,7 +40,7 @@ function S:PetBattleUI() -- shadow space
 
 		unit.petIcon = unit:CreateTexture(nil, "ARTWORK")
 		unit.petIcon:SetSize(25, 25)
-		B.ReskinIcon(unit.petIcon)
+		B.ReskinIcon(unit.petIcon, true)
 		unit.PetType:SetAlpha(0)
 		unit.PetType:ClearAllPoints()
 		unit.PetType:SetAllPoints(unit.petIcon)
@@ -49,7 +49,7 @@ function S:PetBattleUI() -- shadow space
 		unit.Border:SetAlpha(0)
 		unit.Border2:SetAlpha(0)
 		unit.BorderFlash:SetAlpha(0)
-		unit.Iconbg = B.CreateBDFrame(unit.Icon)
+		unit.Iconbg = B.CreateBDFrame(unit.Icon, nil, true)
 
 		unit.LevelUnderlay:SetAlpha(0)
 		unit.Level:SetFontObject(SystemFont_Shadow_Huge1)
@@ -95,7 +95,7 @@ function S:PetBattleUI() -- shadow space
 		unit.HealthDivider:SetAlpha(0)
 		unit.BorderAlive:SetAlpha(0)
 		unit.BorderDead:SetAlpha(0)
-		unit.Iconbg = B.ReskinIcon(unit.Icon)
+		unit.Iconbg = B.ReskinIcon(unit.Icon, true)
 
 		unit.deadIcon = unit:CreateTexture(nil, "ARTWORK")
 		unit.deadIcon:SetAllPoints(unit.Icon)
@@ -106,7 +106,7 @@ function S:PetBattleUI() -- shadow space
 		unit.ActualHealthBar:ClearAllPoints()
 		unit.ActualHealthBar:SetPoint("TOPLEFT", unit.Icon, "BOTTOMLEFT", 1, -4)
 		unit.ActualHealthBar:SetTexture(DB.normTex)
-		unit.healthBg = B.CreateBDFrame(unit.ActualHealthBar)
+		unit.healthBg = B.CreateBDFrame(unit.ActualHealthBar, nil, true)
 		unit.healthBg:SetPoint("TOPLEFT", unit.ActualHealthBar, -1, 1)
 		unit.healthBg:SetPoint("BOTTOMRIGHT", unit.ActualHealthBar, "TOPLEFT", 37, -8)
 		unit.healthBg:SetFrameLevel(unit:GetFrameLevel())
@@ -168,7 +168,7 @@ function S:PetBattleUI() -- shadow space
 				local frame = self.frames[nextFrame]
 				frame.DebuffBorder:Hide()
 				if not frame.styled then
-					B.ReskinIcon(frame.Icon)
+					B.ReskinIcon(frame.Icon, true)
 					frame.styled = true
 				end
 
@@ -216,7 +216,7 @@ function S:PetBattleUI() -- shadow space
 			bu:SetNormalTexture("")
 			bu:GetPushedTexture():SetTexture(DB.textures.pushed)
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			B.ReskinIcon(bu.Icon)
+			B.ReskinIcon(bu.Icon, true)
 
 			bu.Cooldown:SetFont(DB.Font[1], 26, DB.Font[3])
 			bu.SelectedHighlight:ClearAllPoints()
@@ -231,7 +231,9 @@ function S:PetBattleUI() -- shadow space
 	skipButton:SetSize(40, 40)
 	B.StripTextures(skipButton)
 	B.PixelIcon(skipButton, "Interface\\Icons\\Ability_Foundryraid_Dormant", true)
-	skipButton.Icon:SetAllPoints()
+	skipButton.Icon:SetOutside()
+	B.CreateBDFrame(skipButton.Icon, nil, true)
+	skipButton.HL:SetAllPoints(skipButton)
 	skipButton:SetPushedTexture(DB.textures.pushed)
 
 	local xpbar = PetBattleFrameXPBar
@@ -239,14 +241,14 @@ function S:PetBattleUI() -- shadow space
 	xpbar:SetParent(bar)
 	xpbar:SetWidth(bar:GetWidth())
 	xpbar:SetStatusBarTexture(DB.normTex)
-	B.CreateBDFrame(xpbar)
+	B.CreateBDFrame(xpbar, nil, true)
 
 	local turnTimer = bottomFrame.TurnTimer
 	turnTimer:SetParent(bar)
 	turnTimer:SetSize(xpbar:GetWidth()+4, xpbar:GetHeight()+10)
 	turnTimer:ClearAllPoints()
 	turnTimer:SetPoint("BOTTOM", bar, "TOP", 0, 7)
-	turnTimer.bg = B.CreateBDFrame(turnTimer)
+	turnTimer.bg = B.CreateBDFrame(turnTimer, nil, true)
 	turnTimer.Bar:ClearAllPoints()
 	turnTimer.Bar:SetPoint("LEFT", 2, 0)
 	turnTimer.TimerText:ClearAllPoints()
@@ -272,7 +274,7 @@ function S:PetBattleUI() -- shadow space
 		local unit = bottomFrame.PetSelectionFrame["Pet"..i]
 		local icon = unit.Icon
 
-		unit.Iconbg = B.ReskinIcon(icon)
+		unit.Iconbg = B.ReskinIcon(icon, true)
 		unit.HealthBarBG:Hide()
 		unit.Framing:Hide()
 		unit.HealthDivider:Hide()
@@ -280,7 +282,7 @@ function S:PetBattleUI() -- shadow space
 
 		unit.ActualHealthBar:SetPoint("BOTTOMLEFT", icon, "BOTTOMRIGHT", 5, 0)
 		unit.ActualHealthBar:SetTexture(DB.normTex)
-		local bg = B.CreateBDFrame(unit.ActualHealthBar)
+		local bg = B.CreateBDFrame(unit.ActualHealthBar, nil, true)
 		bg:SetPoint("TOPLEFT", unit.ActualHealthBar, -1, 1)
 		bg:SetPoint("BOTTOMRIGHT", unit.ActualHealthBar, "BOTTOMLEFT", 129, -1)
 	end

@@ -209,7 +209,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	local Icon = self:CreateTexture("$parentIcon", "ARTWORK")
 	Icon:SetAllPoints()
 	Icon:SetTexCoord(unpack(DB.TexCoord))
-	-- shadow space
+	B.CreateSD(Icon)
 	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 	self.HL:SetColorTexture(1, 1, 1, .25)
 	self.HL:SetAllPoints(Icon)

@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	GameMenuFrame.Header = GameMenuFrame.Header or GameMenuFrameHeader -- deprecated in 8.3
 	if DB.isNewPatch then
 		B.StripTextures(GameMenuFrame.Header)
