@@ -18,7 +18,6 @@ local frames = {
 	["ChatConfigFrame"] = false,
 	["DressUpFrame"] = false,
 	["FriendsFrame"] = false,
-	["GameMenuFrame"] = false,
 	["GossipFrame"] = false,
 	["GuildInviteFrame"] = false,
 	["GuildRegistrarFrame"] = false,
