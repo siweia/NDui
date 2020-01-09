@@ -826,9 +826,9 @@ function module:OnLogin()
 	SetInsertItemsLeftToRight(false)
 
 	-- Override AuroraClassic
-	if F then
-		AuroraOptionsbags:SetAlpha(0)
-		AuroraOptionsbags:Disable()
-		AuroraConfig.bags = false
+	if F and AuroraClassicDB then
+		AuroraOptionsBags:SetAlpha(0)
+		AuroraOptionsBags:Disable()
+		AuroraClassicDB.Bags = false
 	end
 end

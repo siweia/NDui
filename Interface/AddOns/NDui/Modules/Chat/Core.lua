@@ -262,7 +262,7 @@ function module:ChatFrameBackground()
 end
 
 function module:OnLogin()
-	if AuroraConfig and not AuroraConfig.reskinFont then
+	if AuroraClassicDB and not AuroraClassicDB.FontOutline then
 		fontOutline = ""
 	else
 		fontOutline = "OUTLINE"

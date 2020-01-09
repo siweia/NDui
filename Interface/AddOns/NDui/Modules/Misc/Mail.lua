@@ -341,7 +341,7 @@ function M:MailBox()
 		InboxTooMuchMail:SetPoint("BOTTOM", MailFrame, "TOP", 0, 5)
 	end
 
-	-- Aurora Reskin
+	-- AuroraClassic
 	if F then
 		F.Reskin(button1)
 		F.Reskin(button2)

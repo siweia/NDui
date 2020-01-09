@@ -402,10 +402,10 @@ end
 B:RegisterEvent("ADDON_LOADED", addonStyled)
 
 TT:RegisterTooltips("NDui", function()
-	if F then
-		AuroraOptionstooltips:SetAlpha(0)
-		AuroraOptionstooltips:Disable()
-		AuroraConfig.tooltips = false
+	if F and AuroraClassicDB then
+		AuroraOptionsTooltips:SetAlpha(0)
+		AuroraOptionsTooltips:Disable()
+		AuroraClassicDB.Tooltips = false
 	end
 
 	local tooltips = {
