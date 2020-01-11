@@ -166,7 +166,6 @@ end
 local function colorStack(ret)
 	ret = tostring(ret) or "" -- Yes, it gets called with nonstring from somewhere /mikk
 	ret = ret:gsub("[%.I][%.n][%.t][%.e][%.r]face\\", "")
-	ret = ret:gsub("%.?%.?%.?\\?AddOns\\", "")
 	ret = ret:gsub("|([^chHr])", "||%1"):gsub("|$", "||") -- Pipes
 	ret = ret:gsub("<(.-)>", "|cffffd200<%1>|r") -- Things wrapped in <>
 	ret = ret:gsub("%[(.-)%]", "|cffffd200[%1]|r") -- Things wrapped in []
@@ -233,26 +232,22 @@ f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function()
 	f:UnregisterEvent("PLAYER_ENTERING_WORLD")
 
-	if IsAddOnLoaded("AuroraClassic") then
-		local F, C = unpack(AuroraClassic)
-		F.CreateBD(BaudErrorFrame)
-		F.CreateSD(BaudErrorFrame)
-		BaudErrorFrameListScrollBox:SetBackdrop(nil)
-		BaudErrorFrameListScrollBoxHighlightTexture:SetVertexColor(C.r, C.g, C.b, .25)
-		F.StripTextures(BaudErrorFrameDetailScrollBox)
-		F.CreateBDFrame(BaudErrorFrameDetailScrollBox, .25)
-		F.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
-		F.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
-		F.Reskin(BaudErrorFrameClearButton)
-		F.Reskin(BaudErrorFrameCloseButton)
-		F.Reskin(BaudErrorFrameReloadUIButton)
-	end
-
 	if IsAddOnLoaded("NDui") then
 		local B, _, _, DB = unpack(NDui)
 		B.CreateMF(BaudErrorFrame)
 		if DB.isDeveloper then
 			RegisterTaintEvents(BaudErrorFrame)
 		end
+		BaudErrorFrame:SetBackdrop(nil)
+		B.SetBD(BaudErrorFrame)
+		BaudErrorFrameListScrollBox:SetBackdrop(nil)
+		BaudErrorFrameListScrollBoxHighlightTexture:SetVertexColor(DB.r, DB.g, DB.b, .25)
+		B.StripTextures(BaudErrorFrameDetailScrollBox)
+		B.CreateBDFrame(BaudErrorFrameDetailScrollBox, .25)
+		B.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
+		B.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
+		B.Reskin(BaudErrorFrameClearButton)
+		B.Reskin(BaudErrorFrameCloseButton)
+		B.Reskin(BaudErrorFrameReloadUIButton)
 	end
 end)
