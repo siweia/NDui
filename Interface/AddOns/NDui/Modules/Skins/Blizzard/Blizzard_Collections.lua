@@ -84,11 +84,11 @@ C.themes["Blizzard_Collections"] = function()
 			bu.name:SetParent(bg)
 
 			if bu.DragButton then
-				bu.DragButton.ActiveTexture:SetTexture(DB.textures.checked)
+				bu.DragButton.ActiveTexture:SetTexture(DB.textures.pushed)
 				bu.DragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				bu.DragButton:GetHighlightTexture():SetAllPoints(ic)
 			else
-				bu.dragButton.ActiveTexture:SetTexture(DB.textures.checked)
+				bu.dragButton.ActiveTexture:SetTexture(DB.textures.pushed)
 				bu.dragButton.levelBG:SetAlpha(0)
 				bu.dragButton.level:SetFontObject(GameFontNormal)
 				bu.dragButton.level:SetTextColor(1, 1, 1)
@@ -282,7 +282,7 @@ C.themes["Blizzard_Collections"] = function()
 
 			spell:SetPushedTexture("")
 			spell:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			spell.selected:SetTexture(DB.textures.checked)
+			spell.selected:SetTexture(DB.textures.pushed)
 			spell:GetRegions():Hide()
 
 			spell.FlyoutArrow:SetTexture(DB.arrowDown)
@@ -310,7 +310,7 @@ C.themes["Blizzard_Collections"] = function()
 	for i = 1, 2 do
 		local bu = PetJournal.SpellSelect["Spell"..i]
 
-		bu:SetCheckedTexture(DB.textures.checked)
+		bu:SetCheckedTexture(DB.textures.pushed)
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 

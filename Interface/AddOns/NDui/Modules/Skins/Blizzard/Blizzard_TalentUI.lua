@@ -200,7 +200,7 @@ C.themes["Blizzard_TalentUI"] = function()
 	for i = 1, 2 do
 		local tab = _G["PlayerSpecTab"..i]
 		_G["PlayerSpecTab"..i.."Background"]:Hide()
-		tab:SetCheckedTexture(DB.textures.checked)
+		tab:SetCheckedTexture(DB.textures.pushed)
 		B.CreateBDFrame(tab)
 		select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 	end

@@ -58,7 +58,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bag:SetNormalTexture("")
 		bag:SetPushedTexture("")
 		bag:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		bag.SlotHighlightTexture:SetTexture(DB.textures.checked)
+		bag.SlotHighlightTexture:SetTexture(DB.textures.pushed)
 
 		border:SetTexture(DB.bdTex)
 		border.SetTexture = B.Dummy

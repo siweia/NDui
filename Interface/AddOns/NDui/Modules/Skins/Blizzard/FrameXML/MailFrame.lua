@@ -77,7 +77,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local a, b = it:GetRegions()
 		a:Hide()
 		b:Hide()
-		bu:SetCheckedTexture(DB.textures.checked)
+		bu:SetCheckedTexture(DB.textures.pushed)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		st:Hide()

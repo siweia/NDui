@@ -182,7 +182,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local bu = _G["GearManagerDialogPopupButton"..i]
 		local ic = _G["GearManagerDialogPopupButton"..i.."Icon"]
 
-		bu:SetCheckedTexture(DB.textures.checked)
+		bu:SetCheckedTexture(DB.textures.pushed)
 		select(2, bu:GetRegions()):Hide()
 		local hl = bu:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)

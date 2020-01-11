@@ -76,7 +76,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 			if not tab.styled then
 				tab:GetRegions():Hide()
-				tab:SetCheckedTexture(DB.textures.checked)
+				tab:SetCheckedTexture(DB.textures.pushed)
 				tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				B.CreateBDFrame(tab)
 
@@ -136,7 +136,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		bu.highlightTexture:SetAllPoints(icon)
 		local check = bu:GetCheckedTexture()
-		check:SetTexture(DB.textures.checked)
+		check:SetTexture(DB.textures.pushed)
 		check:SetAllPoints(icon)
 	end
 

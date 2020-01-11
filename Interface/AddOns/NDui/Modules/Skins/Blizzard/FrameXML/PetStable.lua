@@ -27,7 +27,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.Border:Hide()
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
-		bu.Checked:SetTexture(DB.textures.checked)
+		bu.Checked:SetTexture(DB.textures.pushed)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
@@ -38,7 +38,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local bu = _G["PetStableStabledPet"..i]
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
-		bu.Checked:SetTexture(DB.textures.checked)
+		bu.Checked:SetTexture(DB.textures.pushed)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
 
