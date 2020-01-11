@@ -49,7 +49,7 @@ function B:CreateSD(size, override)
 	self.Shadow = CreateFrame("Frame", nil, frame)
 	self.Shadow:SetOutside(self, size or 4, size or 4)
 	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .5)
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
 	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
 	return self.Shadow
@@ -114,22 +114,22 @@ function B:PixelBorders(frame)
 		borders.CENTER = frame:CreateTexture(nil, "BACKGROUND", nil, -1)
 		borders.CENTER:SetTexture(DB.bdTex)
 
-		borders.TOPLEFT:SetPoint("BOTTOMRIGHT", borders.CENTER, "TOPLEFT", 1, -1)
-		borders.TOPRIGHT:SetPoint("BOTTOMLEFT", borders.CENTER, "TOPRIGHT", -1, -1)
-		borders.BOTTOMLEFT:SetPoint("TOPRIGHT", borders.CENTER, "BOTTOMLEFT", 1, 1)
-		borders.BOTTOMRIGHT:SetPoint("TOPLEFT", borders.CENTER, "BOTTOMRIGHT", -1, 1)
+		borders.TOPLEFT:Point("BOTTOMRIGHT", borders.CENTER, "TOPLEFT", 1, -1)
+		borders.TOPRIGHT:Point("BOTTOMLEFT", borders.CENTER, "TOPRIGHT", -1, -1)
+		borders.BOTTOMLEFT:Point("TOPRIGHT", borders.CENTER, "BOTTOMLEFT", 1, 1)
+		borders.BOTTOMRIGHT:Point("TOPLEFT", borders.CENTER, "BOTTOMRIGHT", -1, 1)
 
-		borders.TOP:SetPoint("TOPLEFT", borders.TOPLEFT, "TOPRIGHT", 0, 0)
-		borders.TOP:SetPoint("TOPRIGHT", borders.TOPRIGHT, "TOPLEFT", 0, 0)
+		borders.TOP:Point("TOPLEFT", borders.TOPLEFT, "TOPRIGHT", 0, 0)
+		borders.TOP:Point("TOPRIGHT", borders.TOPRIGHT, "TOPLEFT", 0, 0)
 
-		borders.BOTTOM:SetPoint("BOTTOMLEFT", borders.BOTTOMLEFT, "BOTTOMRIGHT", 0, 0)
-		borders.BOTTOM:SetPoint("BOTTOMRIGHT", borders.BOTTOMRIGHT, "BOTTOMLEFT", 0, 0)
+		borders.BOTTOM:Point("BOTTOMLEFT", borders.BOTTOMLEFT, "BOTTOMRIGHT", 0, 0)
+		borders.BOTTOM:Point("BOTTOMRIGHT", borders.BOTTOMRIGHT, "BOTTOMLEFT", 0, 0)
 
-		borders.LEFT:SetPoint("TOPLEFT", borders.TOPLEFT, "BOTTOMLEFT", 0, 0)
-		borders.LEFT:SetPoint("BOTTOMLEFT", borders.BOTTOMLEFT, "TOPLEFT", 0, 0)
+		borders.LEFT:Point("TOPLEFT", borders.TOPLEFT, "BOTTOMLEFT", 0, 0)
+		borders.LEFT:Point("BOTTOMLEFT", borders.BOTTOMLEFT, "TOPLEFT", 0, 0)
 
-		borders.RIGHT:SetPoint("TOPRIGHT", borders.TOPRIGHT, "BOTTOMRIGHT", 0, 0)
-		borders.RIGHT:SetPoint("BOTTOMRIGHT", borders.BOTTOMRIGHT, "TOPRIGHT", 0, 0)
+		borders.RIGHT:Point("TOPRIGHT", borders.TOPRIGHT, "BOTTOMRIGHT", 0, 0)
+		borders.RIGHT:Point("BOTTOMRIGHT", borders.BOTTOMRIGHT, "TOPRIGHT", 0, 0)
 
 		hooksecurefunc(frame, "SetBackdropColor", B.SetBackdropColor_Hook)
 		hooksecurefunc(frame, "SetBackdropBorderColor", B.SetBackdropBorderColor_Hook)
@@ -1347,6 +1347,17 @@ local function DisablePixelSnap(frame)
 	end
 end
 
+local function Point(frame, arg1, arg2, arg3, arg4, arg5, ...)
+	if arg2 == nil then arg2 = frame:GetParent() end
+
+	if type(arg2) == "number" then arg2 = B:Scale(arg2) end
+	if type(arg3) == "number" then arg3 = B:Scale(arg3) end
+	if type(arg4) == "number" then arg4 = B:Scale(arg4) end
+	if type(arg5) == "number" then arg5 = B:Scale(arg5) end
+
+	frame:SetPoint(arg1, arg2, arg3, arg4, arg5, ...)
+end
+
 local function SetInside(frame, anchor, xOffset, yOffset, anchor2)
 	xOffset = xOffset or C.mult
 	yOffset = yOffset or C.mult
@@ -1354,8 +1365,8 @@ local function SetInside(frame, anchor, xOffset, yOffset, anchor2)
 
 	DisablePixelSnap(frame)
 	frame:ClearAllPoints()
-	frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
-	frame:SetPoint("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", -xOffset, yOffset)
+	frame:Point("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
+	frame:Point("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", -xOffset, yOffset)
 end
 
 local function SetOutside(frame, anchor, xOffset, yOffset, anchor2)
@@ -1365,12 +1376,13 @@ local function SetOutside(frame, anchor, xOffset, yOffset, anchor2)
 
 	DisablePixelSnap(frame)
 	frame:ClearAllPoints()
-	frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
-	frame:SetPoint("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", xOffset, -yOffset)
+	frame:Point("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
+	frame:Point("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", xOffset, -yOffset)
 end
 
 local function addapi(object)
 	local mt = getmetatable(object).__index
+	if not object.Point then mt.Point = Point end
 	if not object.SetInside then mt.SetInside = SetInside end
 	if not object.SetOutside then mt.SetOutside = SetOutside end
 	if not object.DisabledPixelSnap then
