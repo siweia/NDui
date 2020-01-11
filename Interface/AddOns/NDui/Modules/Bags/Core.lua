@@ -544,6 +544,7 @@ function module:OnLogin()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
 		self.Count:SetFont(unpack(DB.Font))
+		self.Cooldown:SetInside()
 
 		B.CreateBD(self, .3)
 		self:SetBackdropColor(.3, .3, .3, .3)
