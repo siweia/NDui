@@ -118,12 +118,13 @@ local function SetupCooldown(cooldown, cfg)
 end
 
 local function SetupBackdrop(button)
-	local bg = B.SetBD(button)
-	bg:SetAllPoints()
+	B.CreateBD(button)
+	B.CreateTex(button)
+	B.CreateSD(button)
 	if NDuiDB["Actionbar"]["Classcolor"] then
-		bg:SetBackdropColor(DB.r, DB.g, DB.b, .25)
+		button:SetBackdropColor(DB.r, DB.g, DB.b, .25)
 	else
-		bg:SetBackdropColor(.2, .2, .2, .25)
+		button:SetBackdropColor(.2, .2, .2, .25)
 	end
 end
 

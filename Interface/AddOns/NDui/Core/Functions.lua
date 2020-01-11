@@ -175,17 +175,15 @@ function B:CreateBDFrame(a, shadow)
 end
 
 function B:SetBD(x, y, x2, y2)
-	local bg = B.CreateBDFrame(self)
+	local bg = B.CreateBDFrame(self, nil, true)
 	if x then
 		bg:SetPoint("TOPLEFT", x, y)
 		bg:SetPoint("BOTTOMRIGHT", x2, y2)
 	end
-	B.CreateSD(bg)
 	B.CreateTex(bg)
 
 	return bg
 end
-B.SetBackground = B.SetBD
 
 -- Frame Text
 function B:CreateFS(size, text, classcolor, anchor, x, y)

@@ -246,7 +246,6 @@ local defaultSettings = {
 		FontOutline = true,
 		Loot = true,
 		Shadow = true,
-		ObjectiveTracker = true,
 		AlertFrames = true,
 	},
 	Tooltip = {
@@ -814,12 +813,11 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Shadow", "Shadow"},
 		{3, "Skins", "SkinAlpha", "SkinAlpha".."*", true, {0, 1, 1}, updateSkinAlpha},
 		{1, "Skins", "FontOutline", "FontOutline"},
-		{1, "Skins", "BlizzardSkins", "BlizzardSkins", true},
+		{1, "Skins", "AlertFrames", "AlertFrames", true},
 		{1, "Skins", "ChatBubbles", "ChatBubbles"},
 		{1, "Skins", "DefaultBags", "DefaultBags", true},
 		{1, "Skins", "Loot", "Loot"},
-		{1, "Skins", "ObjectiveTracker", "ObjectiveTracker", true},
-		{1, "Skins", "AlertFrames", "AlertFrames"},
+		{1, "Skins", "BlizzardSkins", "BlizzardSkins", true},
 		{},--blank
 
 		{1, "Skins", "BarLine", L["Bar Line"]},
@@ -881,7 +879,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{1, "ACCOUNT", "DisableInfobars", L["DisableInfobars"], true},
 		{},--blank
-		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, 15}},
+		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, 2}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {L["Highlight"], L["Gradient"], L["Flat"]}},
@@ -1320,7 +1318,7 @@ local function createDataFrame()
 	dataFrame:SetSize(500, 500)
 	dataFrame:SetFrameStrata("DIALOG")
 	B.CreateMF(dataFrame)
-	B.SetBackground(dataFrame)
+	B.SetBD(dataFrame)
 	dataFrame.Header = B.CreateFS(dataFrame, 16, L["Export Header"], true, "TOP", 0, -5)
 
 	local scrollArea = CreateFrame("ScrollFrame", nil, dataFrame, "UIPanelScrollFrameTemplate")
@@ -1389,7 +1387,7 @@ local function OpenGUI()
 	f:SetFrameStrata("HIGH")
 	f:SetFrameLevel(10)
 	B.CreateMF(f)
-	B.SetBackground(f)
+	B.SetBD(f)
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
 	B.CreateFS(f, 16, DB.Version.." ("..DB.Support..")", false, "TOP", 0, -30)
 

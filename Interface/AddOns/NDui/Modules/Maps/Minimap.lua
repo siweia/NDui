@@ -118,7 +118,7 @@ function module:ReskinRegions()
 	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
 	Invt:SetSize(300, 80)
 	Invt:Hide()
-	B.SetBackground(Invt)
+	B.SetBD(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
 	local function updateInviteVisibility()

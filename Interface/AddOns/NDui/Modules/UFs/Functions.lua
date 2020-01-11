@@ -819,6 +819,7 @@ function UF:CreateClassPower(self)
 		bars[i]:SetWidth((barWidth - 5*margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
+		B.CreateBD(bars[i])
 		if i == 1 then
 			bars[i]:SetPoint("BOTTOMLEFT")
 		else
@@ -829,7 +830,7 @@ function UF:CreateClassPower(self)
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg.multiplier = .25
-		B.CreateBDFrame(bars[i].bg, 0)
+	--	B.CreateBDFrame(bars[i].bg, 0)
 
 		if DB.MyClass == "DEATHKNIGHT" and NDuiDB["UFs"]["RuneTimer"] then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
