@@ -221,10 +221,9 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local result = EncounterJournalSearchResults
 		result:SetPoint("BOTTOMLEFT", EncounterJournal, "BOTTOMRIGHT", 15, -1)
 		B.StripTextures(result)
-		local bg = B.CreateBDFrame(result)
+		local bg = B.CreateBDFrame(result, nil, true)
 		bg:SetPoint("TOPLEFT", -10, 0)
 		bg:SetPoint("BOTTOMRIGHT")
-		B.CreateSD(bg)
 
 		for i = 1, 9 do
 			local bu = _G["EncounterJournalSearchResultsScrollFrameButton"..i]

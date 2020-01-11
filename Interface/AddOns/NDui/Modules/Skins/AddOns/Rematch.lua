@@ -417,9 +417,8 @@ function S:ReskinRematch()
 		local bg = B.CreateBDFrame(content.ScrollFrame, .25)
 		bg:SetPoint("TOPLEFT", 0, 5)
 		bg:SetPoint("BOTTOMRIGHT", 0, -2)
-		local bg = B.CreateBDFrame(content.ScrollFrame)
+		local bg = B.CreateBDFrame(content.ScrollFrame, nil, true)
 		bg:SetAllPoints(note)
-		B.CreateSD(bg)
 		for _, icon in pairs({"Left", "Right"}) do
 			local bu = content[icon.."Icon"]
 			local mask = content[icon.."CircleMask"]

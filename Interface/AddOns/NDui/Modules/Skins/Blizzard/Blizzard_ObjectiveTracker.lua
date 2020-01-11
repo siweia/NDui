@@ -10,9 +10,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			itemButton:SetNormalTexture("")
 			itemButton:SetPushedTexture("")
 			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			itemButton.icon:SetTexCoord(.08, .92, .08, .92)
-			local bg = B.CreateBDFrame(itemButton.icon)
-			B.CreateSD(bg)
+			B.ReskinIcon(itemButton.icon, true)
 
 			itemButton.styled = true
 		end
@@ -22,8 +20,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			rightButton:SetNormalTexture("")
 			rightButton:SetPushedTexture("")
 			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			local bg = B.CreateBDFrame(rightButton)
-			B.CreateSD(bg)
+			B.CreateBDFrame(rightButton, nil, true)
 			rightButton:SetSize(22, 22)
 			rightButton.Icon:SetParent(bg)
 			rightButton.Icon:SetSize(18, 18)
@@ -61,8 +58,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		B.StripTextures(bar)
 		bar:SetStatusBarTexture(DB.bdTex)
 		bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
-		bar.bg = B.CreateBDFrame(bar)
-		B.CreateSD(bar.bg)
+		bar.bg = B.CreateBDFrame(bar, nil, true)
 	end
 
 	local function reskinProgressbar(_, _, line)
@@ -76,9 +72,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			BonusObjectiveTrackerProgressBar_PlayFlareAnim = B.Dummy
 
 			icon:SetMask(nil)
-			icon:SetTexCoord(.08, .92, .08, .92)
-			icon.bg = B.CreateBDFrame(icon)
-			B.CreateSD(icon.bg)
+			icon.bg = B.ReskinIcon(icon, true)
 			icon:ClearAllPoints()
 			icon:SetPoint("TOPLEFT", bar, "TOPRIGHT", 5, 0)
 			icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 25, 0)
@@ -119,10 +113,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
 		block.NormalBG:SetTexture("")
 		if not block.bg then
-			block.bg = B.CreateBDFrame(block.GlowTexture)
+			block.bg = B.CreateBDFrame(block.GlowTexture, nil, true)
 			block.bg:SetPoint("TOPLEFT", block.GlowTexture, 4, -2)
 			block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -4, 0)
-			B.CreateSD(block.bg)
 		end
 	end)
 
@@ -157,10 +150,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			block.StatusBar:SetHeight(10)
 
 			select(3, block:GetRegions()):Hide()
-			block.bg = B.CreateBDFrame(block)
+			block.bg = B.CreateBDFrame(block, nil, true)
 			block.bg:SetPoint("TOPLEFT", 4, -2)
 			block.bg:SetPoint("BOTTOMRIGHT", -4, 0)
-			B.CreateSD(block.bg)
 		end
 	end)
 

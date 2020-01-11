@@ -9,10 +9,9 @@ C.themes["Blizzard_IslandsPartyPoseUI"] = function()
 	B.CreateBDFrame(IslandsPartyPoseFrame.ModelScene, .25)
 
 	local rewardFrame = IslandsPartyPoseFrame.RewardAnimations.RewardFrame
-	local bg = B.CreateBDFrame(rewardFrame)
+	local bg = B.CreateBDFrame(rewardFrame, nil, true)
 	bg:SetPoint("TOPLEFT", -5, 5)
 	bg:SetPoint("BOTTOMRIGHT", rewardFrame.NameFrame, 0, -5)
-	B.CreateSD(bg)
 	rewardFrame.NameFrame:SetAlpha(0)
 	rewardFrame.IconBorder:SetAlpha(0)
 	rewardFrame.Icon:SetTexCoord(.08, .92, .08, .92)

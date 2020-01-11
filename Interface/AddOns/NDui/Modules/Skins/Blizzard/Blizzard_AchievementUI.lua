@@ -211,10 +211,9 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end
 
 	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 26)
-	local headerbg = B.CreateBDFrame(AchievementFrameComparisonHeader)
+	local headerbg = B.CreateBDFrame(AchievementFrameComparisonHeader, nil, true)
 	headerbg:SetPoint("TOPLEFT", 20, -20)
 	headerbg:SetPoint("BOTTOMRIGHT", -28, -5)
-	B.CreateSD(headerbg)
 
 	local summaries = {AchievementFrameComparisonSummaryPlayer, AchievementFrameComparisonSummaryFriend}
 	for _, frame in pairs(summaries) do
@@ -271,10 +270,9 @@ C.themes["Blizzard_AchievementUI"] = function()
 	B.StripTextures(AchievementFrame.searchPreviewContainer)
 	AchievementFrame.searchPreviewContainer:ClearAllPoints()
 	AchievementFrame.searchPreviewContainer:SetPoint("TOPLEFT", AchievementFrame, "TOPRIGHT", 7, -1)
-	local bg = B.CreateBDFrame(AchievementFrame.searchPreviewContainer)
+	local bg = B.CreateBDFrame(AchievementFrame.searchPreviewContainer, nil, true)
 	bg:SetPoint("TOPLEFT", -2, 2)
 	bg:SetPoint("BOTTOMRIGHT", showAllSearchResults, 2, -2)
-	B.CreateSD(bg)
 
 	for i = 1, 5 do
 		if DB.isNewPatch then
@@ -289,10 +287,10 @@ C.themes["Blizzard_AchievementUI"] = function()
 		local result = AchievementFrame.searchResults
 		result:SetPoint("BOTTOMLEFT", AchievementFrame, "BOTTOMRIGHT", 15, -1)
 		B.StripTextures(result)
-		local bg = B.CreateBDFrame(result)
+		local bg = B.CreateBDFrame(result, nil, bg)
 		bg:SetPoint("TOPLEFT", -10, 0)
 		bg:SetPoint("BOTTOMRIGHT")
-		B.CreateSD(bg)
+
 		B.ReskinClose(result.closeButton)
 		B.ReskinScroll(AchievementFrameScrollFrameScrollBar)
 		for i = 1, 8 do

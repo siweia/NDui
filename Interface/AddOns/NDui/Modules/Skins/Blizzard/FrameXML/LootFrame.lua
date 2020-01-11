@@ -80,8 +80,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			if not frame.styled then
 				frame.Border:SetAlpha(0)
 				frame.Background:SetAlpha(0)
-				frame.bg = B.CreateBDFrame(frame)
-				B.CreateSD(frame)
+				frame.bg = B.CreateBDFrame(frame, nil, true)
 
 				frame.Timer.Bar:SetTexture(DB.bdTex)
 				frame.Timer.Bar:SetVertexColor(1, .8, 0)

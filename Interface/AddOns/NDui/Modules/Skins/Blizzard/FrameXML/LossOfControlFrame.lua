@@ -7,9 +7,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local styled
 	hooksecurefunc("LossOfControlFrame_SetUpDisplay", function(self)
 		if not styled then
-			self.Icon:SetTexCoord(.08, .92, .08, .92)
-			local bg = B.CreateBDFrame(self.Icon)
-			B.CreateSD(bg)
+			B.ReskinIcon(self.Icon, true)
 
 			styled = true
 		end

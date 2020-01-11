@@ -395,7 +395,7 @@ do
 	B:RegisterEvent("ARCHAEOLOGY_FIND_COMPLETE", updateArcTitle)
 end
 
--- Show BID and highlight price
+-- Show BID and highlight price, tag isNewPatch, removal
 do
 	local function setupMisc(event, addon)
 		if addon == "Blizzard_AuctionUI" then
