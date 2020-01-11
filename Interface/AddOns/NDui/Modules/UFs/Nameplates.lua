@@ -406,10 +406,10 @@ function UF:AddQuestIcon(self)
 
 	local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
 	qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
-	qicon:SetSize(20, 20)
+	qicon:SetSize(28, 28)
 	qicon:SetAtlas(DB.questTex)
 	qicon:Hide()
-	local count = B.CreateFS(self, 12, "", nil, "LEFT", 0, 0)
+	local count = B.CreateFS(self, 16, "", nil, "LEFT", 0, 0)
 	count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
 	count:SetTextColor(.6, .8, 1)
 
@@ -422,7 +422,7 @@ end
 function UF:AddDungeonProgress(self)
 	if not NDuiDB["Nameplate"]["AKSProgress"] then return end
 
-	self.progressText = B.CreateFS(self, 12, "", false, "LEFT", 0, 0)
+	self.progressText = B.CreateFS(self, 16, "", false, "LEFT", 0, 0)
 	self.progressText:SetPoint("LEFT", self, "RIGHT", 5, 0)
 end
 
@@ -480,8 +480,8 @@ function UF:AddCreatureIcon(self)
 
 	local icon = iconFrame:CreateTexture(nil, "ARTWORK")
 	icon:SetAtlas("VignetteKill")
-	icon:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -4)
-	icon:SetSize(18, 18)
+	icon:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -6)
+	icon:SetSize(24, 24)
 	icon:Hide()
 
 	self.creatureIcon = icon
@@ -596,7 +596,7 @@ function UF:AddFollowerXP(self)
 	bar:SetSize(NDuiDB["Nameplate"]["PlateWidth"]*.75, NDuiDB["Nameplate"]["PlateHeight"])
 	bar:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
 	B.CreateSB(bar, false, 0, .7, 1)
-	bar.progressText = B.CreateFS(bar, 9)
+	bar.progressText = B.CreateFS(bar, 12)
 
 	self.NazjatarFollowerXP = bar
 end
@@ -648,7 +648,7 @@ function UF:CreatePlates()
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
 
-	self.powerText = B.CreateFS(self, 15)
+	self.powerText = B.CreateFS(self, 22)
 	self.powerText:ClearAllPoints()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
 	self:Tag(self.powerText, "[nppp]")
@@ -703,6 +703,8 @@ function UF:RefreshAllPlates()
 	for nameplate in pairs(platesList) do
 		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
 		nameplate.nameText:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
+		nameplate.Castbar.Time:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
+		nameplate.Castbar.Text:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
 		nameplate.healthValue:UpdateTag()
 		nameplate.Auras.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]

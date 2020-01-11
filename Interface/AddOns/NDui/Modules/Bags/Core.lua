@@ -340,8 +340,8 @@ function module:CreateFreeSlots()
 	slot:SetHighlightTexture(DB.bdTex)
 	slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 	slot:GetHighlightTexture():SetInside()
-	B.CreateBD(slot, .25)
-	slot:SetBackdropColor(.3, .3, .3, .25)
+	B.CreateBD(slot, .3)
+	slot:SetBackdropColor(.3, .3, .3, .3)
 	slot:SetScript("OnMouseUp", module.FreeSlotOnDrop)
 	slot:SetScript("OnReceiveDrag", module.FreeSlotOnDrop)
 	B.AddTooltip(slot, "ANCHOR_RIGHT", L["FreeSlots"])
@@ -545,8 +545,8 @@ function module:OnLogin()
 		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
 		self.Count:SetFont(unpack(DB.Font))
 
-		B.CreateBD(self, .25)
-		self:SetBackdropColor(.3, .3, .3, .25)
+		B.CreateBD(self, .3)
+		self:SetBackdropColor(.3, .3, .3, .3)
 
 		local parentFrame = CreateFrame("Frame", nil, self)
 		parentFrame:SetAllPoints()
@@ -584,7 +584,7 @@ function module:OnLogin()
 	end
 
 	local bagTypeColor = {
-		[0] = {.3, .3, .3, .25},	-- 容器
+		[0] = {.3, .3, .3, .3},	-- 容器
 		[1] = false,				-- 弹药袋
 		[2] = {0, .5, 0, .25},		-- 草药袋
 		[3] = {.8, 0, .8, .25},		-- 附魔袋
@@ -651,7 +651,7 @@ function module:OnLogin()
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self:SetBackdropColor(unpack(color))
 		else
-			self:SetBackdropColor(.3, .3, .3, .25)
+			self:SetBackdropColor(.3, .3, .3, .3)
 		end
 	end
 

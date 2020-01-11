@@ -20,10 +20,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			rightButton:SetNormalTexture("")
 			rightButton:SetPushedTexture("")
 			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			B.CreateBDFrame(rightButton, nil, true)
 			rightButton:SetSize(22, 22)
-			rightButton.Icon:SetParent(bg)
 			rightButton.Icon:SetSize(18, 18)
+			B.CreateBDFrame(rightButton, nil, true)
 
 			rightButton.styled = true
 		end
