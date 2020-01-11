@@ -193,8 +193,9 @@ local function BuildICON(iconSize)
 
 	frame.Spellname = B.CreateFS(parentFrame, 13, "", false, "TOP", 0, 5)
 	frame.Count = B.CreateFS(parentFrame, iconSize*.55, "", false, "BOTTOMRIGHT", 6, -3)
-	frame.glowFrame = B.CreateBG(frame, 4)
-	frame.glowFrame:SetSize(iconSize+8, iconSize+8)
+
+	frame.glowFrame = B.CreateGlowFrame(frame, iconSize)
+
 	if not NDuiDB["AuraWatch"]["ClickThrough"] then enableTooltip(frame) end
 
 	frame:Hide()

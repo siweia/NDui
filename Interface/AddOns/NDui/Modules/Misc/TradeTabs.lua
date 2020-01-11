@@ -90,12 +90,10 @@ function M:TradeTabs_Update()
 end
 
 function M:TradeTabs_Reskin()
-	if not F then return end
-
 	for _, tab in pairs(tabList) do
 		tab:SetCheckedTexture(DB.textures.pushed)
 		tab:GetRegions():Hide()
-		F.CreateBG(tab)
+		B.CreateBDFrame(tab)
 		tab:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
 	end
 end

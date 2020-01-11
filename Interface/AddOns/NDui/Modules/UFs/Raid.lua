@@ -45,11 +45,11 @@ function UF:UpdateTargetBorder()
 end
 
 function UF:CreateTargetBorder(self)
-	local border = B.CreateBG(self, 2)
-	B.CreateBD(border, 0)
+	local border = B.CreateSD(self, 3, true)
+	border:SetOutside(self.Health.backdrop, 3, 3, self.Power.backdrop)
 	border:SetBackdropBorderColor(.7, .7, .7)
-	border:SetPoint("BOTTOMRIGHT", self.Power, 2, -2)
 	border:Hide()
+	self.Shadow = nil
 
 	self.TargetBorder = border
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetBorder, true)
@@ -59,19 +59,25 @@ end
 function UF:UpdateThreatBorder(_, unit)
 	if unit ~= self.unit then return end
 
-	local element = self.Health.backdrop
+	local element = self.ThreatIndicator
 	local status = UnitThreatSituation(unit)
 
 	if status and status > 1 then
 		local r, g, b = GetThreatStatusColor(status)
 		element:SetBackdropBorderColor(r, g, b)
+		element:Show()
 	else
-		element:SetBackdropBorderColor(0, 0, 0)
+		element:Hide()
 	end
 end
 
 function UF:CreateThreatBorder(self)
-	local threatIndicator = CreateFrame("Frame", nil, self)
+	local threatIndicator = B.CreateSD(self, 3, true)
+	threatIndicator:SetOutside(self.Health.backdrop, 3, 3, self.Power.backdrop)
+	threatIndicator:SetBackdropBorderColor(.7, .7, .7)
+	threatIndicator:SetFrameLevel(0)
+	self.Shadow = nil
+
 	self.ThreatIndicator = threatIndicator
 	self.ThreatIndicator.Override = UF.UpdateThreatBorder
 end
@@ -122,8 +128,7 @@ function UF:CreateRaidDebuffs(self)
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
 	bu.count = B.CreateFS(bu, 12, "", false, "BOTTOMRIGHT", 6, -3)
 	bu.timer = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
-	bu.glowFrame = B.CreateBG(bu, 4)
-	bu.glowFrame:SetSize(size+8, size+8)
+	bu.glowFrame = B.CreateGlowFrame(bu, size)
 
 	if not NDuiDB["UFs"]["AurasClickThrough"] then
 		bu:SetScript("OnEnter", buttonOnEnter)

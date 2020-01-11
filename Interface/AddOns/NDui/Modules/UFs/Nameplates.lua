@@ -219,14 +219,16 @@ function UF.UpdateColor(element, unit)
 
 	if isCustomUnit or (not NDuiDB["Nameplate"]["TankMode"] and DB.Role ~= "Tank") then
 		if status and status == 3 then
-			element.backdrop:SetBackdropBorderColor(1, 0, 0)
+			self.ThreatIndicator:SetBackdropBorderColor(1, 0, 0)
+			self.ThreatIndicator:Show()
 		elseif status and (status == 2 or status == 1) then
-			element.backdrop:SetBackdropBorderColor(1, 1, 0)
+			self.ThreatIndicator:SetBackdropBorderColor(1, 1, 0)
+			self.ThreatIndicator:Show()
 		else
-			element.backdrop:SetBackdropBorderColor(0, 0, 0)
+			self.ThreatIndicator:Hide()
 		end
 	else
-		element.backdrop:SetBackdropBorderColor(0, 0, 0)
+		self.ThreatIndicator:Hide()
 	end
 end
 
@@ -238,8 +240,11 @@ function UF:UpdateThreatColor(_, unit)
 end
 
 function UF:CreateThreatColor(self)
-	local frame = CreateFrame("Frame", nil, self)
-	self.ThreatIndicator = frame
+	local threatIndicator = B.CreateSD(self, 3, true)
+	threatIndicator:SetOutside(self.Health.backdrop, 3, 3)
+	threatIndicator:Hide()
+
+	self.ThreatIndicator = threatIndicator
 	self.ThreatIndicator.Override = UF.UpdateThreatColor
 end
 
@@ -623,12 +628,14 @@ function UF:CreatePlates()
 	self.mystyle = "nameplate"
 	self:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
 	self:SetPoint("CENTER")
+	self:SetScale(NDuiADB["UIScale"])
 
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
-	health.backdrop = B.CreateBDFrame(health) -- don't mess up with libs
+	health.backdrop = B.CreateBDFrame(health, nil, true) -- don't mess up with libs
 	B.SmoothBar(health)
+
 	self.Health = health
 	self.Health.frequentUpdates = true
 	self.Health.UpdateColor = UF.UpdateColor

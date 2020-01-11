@@ -203,7 +203,7 @@ function UF:CreatePowerBar(self)
 	power:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -3)
 	power:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
-	B.CreateBDFrame(power, 0, true)
+	power.backdrop = B.CreateBDFrame(power, 0, true)
 	B.SmoothBar(power)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")

@@ -45,12 +45,10 @@ function B:CreateSD(size, override)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
-	local offset = size or 5
 
 	self.Shadow = CreateFrame("Frame", nil, frame)
-	self.Shadow:SetPoint("TOPLEFT", self, -offset, offset)
-	self.Shadow:SetPoint("BOTTOMRIGHT", self, offset, -offset)
-	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 6)})
+	self.Shadow:SetOutside(self, size or 4, size or 4)
+	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
 	self.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
 	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
@@ -163,17 +161,6 @@ function B:CreateGradient()
 end
 
 -- Create Background
-function B:CreateBG(offset)
-	local frame = self
-	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
-	local lvl = frame:GetFrameLevel()
-
-	local bg = CreateFrame("Frame", nil, frame)
-	bg:SetOutside(self, offset, offset)
-	bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
-	return bg
-end
-
 function B:CreateBDFrame(a, shadow)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
@@ -880,6 +867,14 @@ function B:AffixesSetup()
 			frame.Portrait:SetTexture(filedataid)
 		end
 	end
+end
+
+function B:CreateGlowFrame(size)
+	local frame = CreateFrame("Frame", nil, self)
+	frame:SetPoint("CENTER")
+	frame:SetSize(size+8, size+8)
+
+	return frame
 end
 
 -- Role Icons

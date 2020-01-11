@@ -568,8 +568,7 @@ function module:OnLogin()
 		self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 1)
 
 		if showNewItem then
-			self.glowFrame = B.CreateBG(self, 4)
-			self.glowFrame:SetSize(iconSize+8, iconSize+8)
+			self.glowFrame = B.CreateGlowFrame(self, iconSize)
 		end
 
 		self:HookScript("OnClick", module.ButtonOnClick)
