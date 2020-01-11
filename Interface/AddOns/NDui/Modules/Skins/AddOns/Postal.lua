@@ -1,23 +1,22 @@
 local _, ns = ...
-local B, C, L, DB, F = unpack(ns)
+local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 local _G = getfenv(0)
 
 function S:PostalSkin()
-	if not F then return end
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 	if not IsAddOnLoaded("Postal") then return end
 	if not PostalOpenAllButton then return end -- update your postal
 
-	F.Reskin(PostalSelectOpenButton)
-	F.Reskin(PostalSelectReturnButton)
-	F.Reskin(PostalOpenAllButton)
-	F.ReskinArrow(Postal_ModuleMenuButton, "down")
-	F.ReskinArrow(Postal_OpenAllMenuButton, "down")
-	F.ReskinArrow(Postal_BlackBookButton, "down")
+	B.Reskin(PostalSelectOpenButton)
+	B.Reskin(PostalSelectReturnButton)
+	B.Reskin(PostalOpenAllButton)
+	B.ReskinArrow(Postal_ModuleMenuButton, "down")
+	B.ReskinArrow(Postal_OpenAllMenuButton, "down")
+	B.ReskinArrow(Postal_BlackBookButton, "down")
 	for i = 1, 7 do
-		local checkbox = _G["PostalInboxCB"..i]
-		F.ReskinCheck(checkbox)
+		B.ReskinCheck(_G["PostalInboxCB"..i])
 	end
 
 	Postal_ModuleMenuButton:ClearAllPoints()

@@ -1,5 +1,5 @@
 ﻿local _, ns = ...
-local B, C, L, DB, F = unpack(ns)
+local B, C, L, DB = unpack(ns)
 
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags

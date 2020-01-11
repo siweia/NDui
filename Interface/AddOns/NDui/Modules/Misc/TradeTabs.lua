@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB, F = unpack(ns)
+local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
@@ -90,6 +90,8 @@ function M:TradeTabs_Update()
 end
 
 function M:TradeTabs_Reskin()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	for _, tab in pairs(tabList) do
 		tab:SetCheckedTexture(DB.textures.pushed)
 		tab:GetRegions():Hide()

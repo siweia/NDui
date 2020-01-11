@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	local r, g, b = DB.r, DB.g, DB.b
 
 	TokenFramePopupCorner:Hide()

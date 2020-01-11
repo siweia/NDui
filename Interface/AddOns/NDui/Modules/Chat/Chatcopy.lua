@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB, F = unpack(ns)
+local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
 local _G = getfenv(0)

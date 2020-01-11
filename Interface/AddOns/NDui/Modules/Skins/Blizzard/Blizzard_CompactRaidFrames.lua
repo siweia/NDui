@@ -2,8 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
-	if not IsAddOnLoaded("Blizzard_CUFProfiles") then return end
-	if not IsAddOnLoaded("Blizzard_CompactRaidFrames") then return end
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	if not CompactRaidFrameManagerToggleButton then return end
 
 	CompactRaidFrameManagerToggleButton:SetNormalTexture("Interface\\Buttons\\UI-ColorPicker-Buttons")

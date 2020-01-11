@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB, F = unpack(ns)
+local B, C, L, DB = unpack(ns)
 local G = B:GetModule("GUI")
 
 local r, g, b = DB.r, DB.g, DB.b

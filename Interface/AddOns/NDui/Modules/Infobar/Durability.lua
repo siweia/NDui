@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB, F = unpack(ns)
+local B, C, L, DB = unpack(ns)
 if not C.Infobar.Durability then return end
 
 local module = B:GetModule("Infobar")

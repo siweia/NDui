@@ -392,7 +392,27 @@ function B:Reskin(noHighlight)
  		self:HookScript("OnLeave", buttonOnLeave)
 	end
 end
-B.CreateBC = function() end
+
+local function menuOnEnter(self)
+	self.bg:SetBackdropBorderColor(cr, cg, cb)
+end
+local function menuOnLeave(self)
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+end
+local function onMouseDown(self)
+	self.bg:SetBackdropColor(cr, cg, cb, .25)
+end
+local function onMouseUp(self)
+	self.bg:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+end
+function B:ReskinMenuButton()
+	B.StripTextures(self)
+	self.bg = B.SetBD(self)
+	self:SetScript("OnEnter", menuOnEnter)
+	self:SetScript("OnLeave", menuOnLeave)
+	self:SetScript("OnMouseUp", onMouseUp)
+	self:SetScript("OnMouseDown", onMouseDown)
+end
 
 -- Tabs
 function B:ReskinTab()
@@ -652,14 +672,6 @@ hooksecurefunc("TriStateCheckbox_SetState", function(_, checkButton)
 	end
 end)
 
-local function radioOnEnter(self)
-	self.bg:SetBackdropBorderColor(cr, cg, cb)
-end
-
-local function radioOnLeave(self)
-	self.bg:SetBackdropBorderColor(0, 0, 0)
-end
-
 function B:ReskinRadio()
 	self:SetNormalTexture("")
 	self:SetHighlightTexture("")
@@ -676,8 +688,8 @@ function B:ReskinRadio()
 	B.CreateGradient(bg)
 	self.bg = bg
 
-	self:HookScript("OnEnter", radioOnEnter)
-	self:HookScript("OnLeave", radioOnLeave)
+	self:HookScript("OnEnter", menuOnEnter)
+	self:HookScript("OnLeave", menuOnLeave)
 end
 
 -- Swatch

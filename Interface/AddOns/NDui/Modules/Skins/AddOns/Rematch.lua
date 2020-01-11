@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB, F, T = unpack(ns)
+local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 local TT = B:GetModule("Tooltip")
 
@@ -7,9 +7,9 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 local select, pairs, ipairs, next, unpack = select, pairs, ipairs, next, unpack
 
 function S:RematchFilter()
-	F.StripTextures(self)
-	F.Reskin(self)
-	self.Arrow:SetTexture(T.media.arrowRight)
+	B.StripTextures(self)
+	B.Reskin(self)
+	self.Arrow:SetTexture(DB.arrowRight)
 	self.Arrow:SetPoint("RIGHT", self, "RIGHT", -5, 0)
 	self.Arrow:SetSize(8, 8)
 end
@@ -21,7 +21,7 @@ function S:RematchIcon()
 	if self.Background then self.Background:Hide() end
 	if self.Icon then
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
-		self.Icon.bg = F.CreateBDFrame(self.Icon)
+		self.Icon.bg = B.CreateBDFrame(self.Icon)
 		local hl = self.GetHighlightTexture and self:GetHighlightTexture() or select(3, self:GetRegions())
 		if hl then
 			hl:SetColorTexture(1, 1, 1, .25)
@@ -33,7 +33,7 @@ function S:RematchIcon()
 		if self.Level.Text then self.Level.Text:SetTextColor(1, 1, 1) end
 	end
 	if self.GetCheckedTexture then
-		self:SetCheckedTexture(T.media.checked)
+		self:SetCheckedTexture(DB.textures.checked)
 	end
 
 	self.styled = true
@@ -42,10 +42,10 @@ end
 function S:RematchInput()
 	self:DisableDrawLayer("BACKGROUND")
 	self:SetBackdrop(nil)
-	local bg = F.CreateBDFrame(self, 0)
+	local bg = B.CreateBDFrame(self, 0)
 	bg:SetPoint("TOPLEFT", 2, 0)
 	bg:SetPoint("BOTTOMRIGHT", -2, 0)
-	F.CreateGradient(bg)
+	B.CreateGradient(bg)
 end
 
 local function scrollEndOnLeave(self)
@@ -53,7 +53,7 @@ local function scrollEndOnLeave(self)
 end
 
 local function reskinScrollEnd(self, direction)
-	F.ReskinArrow(self, direction)
+	B.ReskinArrow(self, direction)
 	self:SetSize(17, 12)
 	self.bgTex:SetVertexColor(1, .8, 0)
 	self:HookScript("OnLeave", scrollEndOnLeave)
@@ -62,9 +62,9 @@ end
 function S:RematchScroll()
 	self.Background:Hide()
 	local scrollBar = self.ScrollFrame.ScrollBar
-	F.StripTextures(scrollBar)
+	B.StripTextures(scrollBar)
 	scrollBar.thumbTexture = scrollBar.ScrollThumb
-	F.ReskinScroll(scrollBar)
+	B.ReskinScroll(scrollBar)
 	scrollBar.thumbTexture:SetPoint("TOPRIGHT")
 	reskinScrollEnd(scrollBar.TopButton, "up")
 	reskinScrollEnd(scrollBar.BottomButton, "down")
@@ -72,36 +72,36 @@ end
 
 function S:RematchDropdown()
 	self:SetBackdrop(nil)
-	F.StripTextures(self, 0)
-	F.CreateGradient(F.CreateBDFrame(self, 0))
+	B.StripTextures(self, 0)
+	B.CreateGradient(B.CreateBDFrame(self, 0))
 	if self.Icon then
 		self.Icon:SetAlpha(1)
-		F.CreateBDFrame(self.Icon)
+		B.CreateBDFrame(self.Icon)
 	end
 	local arrow = self:GetChildren()
-	F.ReskinArrow(arrow, "down")
+	B.ReskinArrow(arrow, "down")
 end
 
 function S:RematchXP()
-	F.StripTextures(self)
+	B.StripTextures(self)
 	self:SetStatusBarTexture(DB.bdTex)
-	F.CreateBDFrame(self, .25)
+	B.CreateBDFrame(self, .25)
 end
 
 function S:RematchCard()
 	self:SetBackdrop(nil)
-	if self.Source then F.StripTextures(self.Source) end
-	F.StripTextures(self.Middle)
-	F.CreateBDFrame(self.Middle, .25)
+	if self.Source then B.StripTextures(self.Source) end
+	B.StripTextures(self.Middle)
+	B.CreateBDFrame(self.Middle, .25)
 	if self.Middle.XP then S.RematchXP(self.Middle.XP) end
-	F.StripTextures(self.Bottom)
-	local bg = F.CreateBDFrame(self.Bottom, .25)
+	B.StripTextures(self.Bottom)
+	local bg = B.CreateBDFrame(self.Bottom, .25)
 	bg:SetPoint("TOPLEFT", -C.mult, -3)
 end
 
 function S:RematchInset()
-	F.StripTextures(self)
-	local bg = F.CreateBDFrame(self, .25)
+	B.StripTextures(self)
+	local bg = B.CreateBDFrame(self, .25)
 	bg:SetPoint("TOPLEFT", 3, 0)
 	bg:SetPoint("BOTTOMRIGHT", -3, 0)
 end
@@ -123,7 +123,7 @@ function S:RematchPetList()
 		if not button.styled then
 			local parent
 			if button.Pet then
-				F.CreateBDFrame(button.Pet)
+				B.CreateBDFrame(button.Pet)
 				if button.Rarity then button.Rarity:SetTexture(nil) end
 				if button.LevelBack then button.LevelBack:SetTexture(nil) end
 				button.LevelText:SetTextColor(1, 1, 1)
@@ -134,7 +134,7 @@ function S:RematchPetList()
 				for j = 1, 3 do
 					local bu = button.Pets[j]
 					bu:SetWidth(25)
-					F.CreateBDFrame(bu)
+					B.CreateBDFrame(bu)
 				end
 				if button.Border then button.Border:SetTexture(nil) end
 				parent = button.Pets[3]
@@ -142,7 +142,7 @@ function S:RematchPetList()
 
 			if button.Back then
 				button.Back:SetTexture(nil)
-				local bg = F.CreateBDFrame(button.Back, .25)
+				local bg = B.CreateBDFrame(button.Back, .25)
 				bg:SetPoint("TOPLEFT", parent, "TOPRIGHT", 3, C.mult)
 				bg:SetPoint("BOTTOMRIGHT", 0, C.mult)
 				button.bg = bg
@@ -156,8 +156,8 @@ function S:RematchPetList()
 end
 
 function S:RematchSelectedOverlay()
-	F.StripTextures(self.SelectedOverlay)
-	local bg = F.CreateBDFrame(self.SelectedOverlay)
+	B.StripTextures(self.SelectedOverlay)
+	local bg = B.CreateBDFrame(self.SelectedOverlay)
 	bg:SetBackdropColor(1, .8, 0, .5)
 	self.SelectedOverlay.bg = bg
 end
@@ -168,8 +168,8 @@ function S:ResizeJournal()
 end
 
 function S:ReskinRematch()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 	if not NDuiDB["Skins"]["Rematch"] then return end
-	if not F then return end
 
 	local RematchJournal = RematchJournal
 	if not RematchJournal then return end
@@ -192,17 +192,17 @@ function S:ReskinRematch()
 		TT.ReskinTooltip(RematchTableTooltip)
 		for i = 1, 3 do
 			local menu = Rematch:GetMenuFrame(i, UIParent)
-			F.StripTextures(menu.Title)
-			local bg = F.CreateBDFrame(menu.Title)
+			B.StripTextures(menu.Title)
+			local bg = B.CreateBDFrame(menu.Title)
 			bg:SetBackdropColor(1, .8, .0, .25)
-			F.StripTextures(menu)
-			F.CreateSD(F.CreateBDFrame(menu, .7))
+			B.StripTextures(menu)
+			B.CreateSD(B.CreateBDFrame(menu, .7))
 		end
 
-		F.StripTextures(RematchJournal)
-		F.ReskinClose(RematchJournal.CloseButton)
+		B.StripTextures(RematchJournal)
+		B.ReskinClose(RematchJournal.CloseButton)
 		for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
-			F.ReskinTab(tab)
+			B.ReskinTab(tab)
 		end
 
 		local buttons = {
@@ -223,26 +223,26 @@ function S:ReskinRematch()
 			ALPTRematchOptionButton:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 			local tex = ALPTRematchOptionButton:GetNormalTexture()
 			tex:SetTexCoord(unpack(DB.TexCoord))
-			F.CreateBDFrame(tex)
+			B.CreateBDFrame(tex)
 		end
 
 		local petCount = RematchToolbar.PetCount
 		petCount:SetWidth(130)
-		F.StripTextures(petCount)
-		local bg = F.CreateBDFrame(petCount, .25)
+		B.StripTextures(petCount)
+		local bg = B.CreateBDFrame(petCount, .25)
 		bg:SetPoint("TOPLEFT", -6, -8)
 		bg:SetPoint("BOTTOMRIGHT", -4, 3)
 
-		F.Reskin(RematchBottomPanel.SummonButton)
-		F.ReskinCheck(UseRematchButton)
-		F.ReskinCheck(RematchBottomPanel.UseDefault)
-		F.Reskin(RematchBottomPanel.SaveButton)
-		F.Reskin(RematchBottomPanel.SaveAsButton)
-		F.Reskin(RematchBottomPanel.FindBattleButton)
+		B.Reskin(RematchBottomPanel.SummonButton)
+		B.ReskinCheck(UseRematchButton)
+		B.ReskinCheck(RematchBottomPanel.UseDefault)
+		B.Reskin(RematchBottomPanel.SaveButton)
+		B.Reskin(RematchBottomPanel.SaveAsButton)
+		B.Reskin(RematchBottomPanel.FindBattleButton)
 
 		-- RematchPetPanel
-		F.StripTextures(RematchPetPanel.Top)
-		F.Reskin(RematchPetPanel.Top.Toggle)
+		B.StripTextures(RematchPetPanel.Top)
+		B.Reskin(RematchPetPanel.Top.Toggle)
 		RematchPetPanel.Top.TypeBar:SetBackdrop(nil)
 		for i = 1, 10 do
 			S.RematchIcon(RematchPetPanel.Top.TypeBar.Buttons[i])
@@ -255,23 +255,23 @@ function S:ReskinRematch()
 		S.RematchScroll(RematchPetPanel.List)
 
 		-- RematchLoadedTeamPanel
-		F.StripTextures(RematchLoadedTeamPanel)
-		local bg = F.CreateBDFrame(RematchLoadedTeamPanel)
+		B.StripTextures(RematchLoadedTeamPanel)
+		local bg = B.CreateBDFrame(RematchLoadedTeamPanel)
 		bg:SetBackdropColor(1, .8, 0, .1)
 		bg:SetPoint("TOPLEFT", -C.mult, -C.mult)
 		bg:SetPoint("BOTTOMRIGHT", C.mult, C.mult)
-		F.StripTextures(RematchLoadedTeamPanel.Footnotes)
+		B.StripTextures(RematchLoadedTeamPanel.Footnotes)
 
 		-- RematchLoadoutPanel
 		local target = RematchLoadoutPanel.Target
-		F.StripTextures(target)
-		F.CreateBDFrame(target, .25)
+		B.StripTextures(target)
+		B.CreateBDFrame(target, .25)
 		S.RematchFilter(target.TargetButton)
 		target.ModelBorder:SetBackdrop(nil)
 		target.ModelBorder:DisableDrawLayer("BACKGROUND")
-		F.CreateBDFrame(target.ModelBorder, .25)
-		F.StripTextures(target.LoadSaveButton)
-		F.Reskin(target.LoadSaveButton)
+		B.CreateBDFrame(target.ModelBorder, .25)
+		B.StripTextures(target.LoadSaveButton)
+		B.Reskin(target.LoadSaveButton)
 		for i = 1, 3 do
 			S.RematchIcon(target["Pet"..i])
 		end
@@ -283,13 +283,13 @@ function S:ReskinRematch()
 		end
 
 		-- RematchTeamPanel
-		F.StripTextures(RematchTeamPanel.Top)
+		B.StripTextures(RematchTeamPanel.Top)
 		S.RematchInput(RematchTeamPanel.Top.SearchBox)
 		S.RematchFilter(RematchTeamPanel.Top.Teams)
 		S.RematchScroll(RematchTeamPanel.List)
 		S.RematchSelectedOverlay(RematchTeamPanel)
 
-		F.StripTextures(RematchQueuePanel.Top)
+		B.StripTextures(RematchQueuePanel.Top)
 		S.RematchFilter(RematchQueuePanel.Top.QueueButton)
 		S.RematchScroll(RematchQueuePanel.List)
 		S.RematchInset(RematchQueuePanel.Status)
@@ -302,61 +302,61 @@ function S:ReskinRematch()
 
 		-- RematchPetCard
 		local petCard = RematchPetCard
-		F.StripTextures(petCard)
-		F.ReskinClose(petCard.CloseButton)
-		F.StripTextures(petCard.Title)
-		F.StripTextures(petCard.PinButton)
-		F.ReskinArrow(petCard.PinButton, "up")
+		B.StripTextures(petCard)
+		B.ReskinClose(petCard.CloseButton)
+		B.StripTextures(petCard.Title)
+		B.StripTextures(petCard.PinButton)
+		B.ReskinArrow(petCard.PinButton, "up")
 		petCard.PinButton:SetPoint("TOPLEFT", 5, -5)
-		local bg = F.CreateBDFrame(petCard.Title, .7)
+		local bg = B.CreateBDFrame(petCard.Title, .7)
 		bg:SetAllPoints(petCard)
-		F.CreateSD(bg)
+		B.CreateSD(bg)
 		S.RematchCard(petCard.Front)
 		S.RematchCard(petCard.Back)
 		for i = 1, 6 do
 			local button = RematchPetCard.Front.Bottom.Abilities[i]
 			button.IconBorder:Hide()
 			select(8, button:GetRegions()):SetTexture(nil)
-			F.ReskinIcon(button.Icon)
+			B.ReskinIcon(button.Icon)
 		end
 
 		-- RematchAbilityCard
 		local abilityCard = RematchAbilityCard
-		F.StripTextures(abilityCard, 15)
-		F.CreateSD(F.CreateBDFrame(abilityCard, .7))
+		B.StripTextures(abilityCard, 15)
+		B.CreateSD(B.CreateBDFrame(abilityCard, .7))
 		abilityCard.Hints.HintsBG:Hide()
 
 		-- RematchWinRecordCard
 		local card = RematchWinRecordCard
-		F.StripTextures(card)
-		F.ReskinClose(card.CloseButton)
-		F.StripTextures(card.Content)
-		local bg = F.CreateBDFrame(card.Content, .25)
+		B.StripTextures(card)
+		B.ReskinClose(card.CloseButton)
+		B.StripTextures(card.Content)
+		local bg = B.CreateBDFrame(card.Content, .25)
 		bg:SetPoint("TOPLEFT", 2, -2)
 		bg:SetPoint("BOTTOMRIGHT", -2, 2)
-		local bg = F.SetBD(card.Content)
+		local bg = B.SetBD(card.Content)
 		bg:SetAllPoints(card)
 		for _, result in pairs({"Wins", "Losses", "Draws"}) do
 			S.RematchInput(card.Content[result].EditBox)
 			card.Content[result].Add.IconBorder:Hide()
 		end
-		F.Reskin(card.Controls.ResetButton)
-		F.Reskin(card.Controls.SaveButton)
-		F.Reskin(card.Controls.CancelButton)
+		B.Reskin(card.Controls.ResetButton)
+		B.Reskin(card.Controls.SaveButton)
+		B.Reskin(card.Controls.CancelButton)
 
 		-- RematchDialog
 		local dialog = RematchDialog
-		F.StripTextures(dialog)
-		F.SetBD(dialog)
-		F.ReskinClose(dialog.CloseButton)
+		B.StripTextures(dialog)
+		B.SetBD(dialog)
+		B.ReskinClose(dialog.CloseButton)
 
 		S.RematchIcon(dialog.Slot)
 		S.RematchInput(dialog.EditBox)
-		F.StripTextures(dialog.Prompt)
-		F.Reskin(dialog.Accept)
-		F.Reskin(dialog.Cancel)
-		F.Reskin(dialog.Other)
-		F.ReskinCheck(dialog.CheckButton)
+		B.StripTextures(dialog.Prompt)
+		B.Reskin(dialog.Accept)
+		B.Reskin(dialog.Cancel)
+		B.Reskin(dialog.Other)
+		B.ReskinCheck(dialog.CheckButton)
 		S.RematchInput(dialog.SaveAs.Name)
 		S.RematchInput(dialog.Send.EditBox)
 		S.RematchDropdown(dialog.SaveAs.Target)
@@ -365,36 +365,36 @@ function S:ReskinRematch()
 
 		local preferences = dialog.Preferences
 		S.RematchInput(preferences.MinHP)
-		F.ReskinCheck(preferences.AllowMM)
+		B.ReskinCheck(preferences.AllowMM)
 		S.RematchInput(preferences.MaxHP)
 		S.RematchInput(preferences.MinXP)
 		S.RematchInput(preferences.MaxXP)
 
 		local iconPicker = dialog.TeamTabIconPicker
-		F.ReskinScroll(iconPicker.ScrollFrame.ScrollBar)
-		F.StripTextures(iconPicker)
-		F.CreateBDFrame(iconPicker, .25)
+		B.ReskinScroll(iconPicker.ScrollFrame.ScrollBar)
+		B.StripTextures(iconPicker)
+		B.CreateBDFrame(iconPicker, .25)
 
-		F.ReskinScroll(dialog.MultiLine.ScrollBar)
+		B.ReskinScroll(dialog.MultiLine.ScrollBar)
 		select(2, dialog.MultiLine:GetChildren()):SetBackdrop(nil)
-		local bg = F.CreateBDFrame(dialog.MultiLine, .25)
+		local bg = B.CreateBDFrame(dialog.MultiLine, .25)
 		bg:SetPoint("TOPLEFT", -5, 5)
 		bg:SetPoint("BOTTOMRIGHT", 5, -5)
-		F.ReskinCheck(dialog.ShareIncludes.IncludePreferences)
-		F.ReskinCheck(dialog.ShareIncludes.IncludeNotes)
+		B.ReskinCheck(dialog.ShareIncludes.IncludePreferences)
+		B.ReskinCheck(dialog.ShareIncludes.IncludeNotes)
 
 		local report = dialog.CollectionReport
 		S.RematchDropdown(report.ChartTypeComboBox)
-		F.StripTextures(report.Chart)
-		local bg = F.CreateBDFrame(report.Chart, .25)
+		B.StripTextures(report.Chart)
+		local bg = B.CreateBDFrame(report.Chart, .25)
 		bg:SetPoint("TOPLEFT", -C.mult, -3)
 		bg:SetPoint("BOTTOMRIGHT", C.mult, 2)
-		F.ReskinRadio(report.ChartTypesRadioButton)
-		F.ReskinRadio(report.ChartSourcesRadioButton)
+		B.ReskinRadio(report.ChartTypesRadioButton)
+		B.ReskinRadio(report.ChartSourcesRadioButton)
 
 		local border = report.RarityBarBorder
 		border:Hide()
-		local bg = F.CreateBDFrame(border, .25)
+		local bg = B.CreateBDFrame(border, .25)
 		bg:SetPoint("TOPLEFT", border, 6, -5)
 		bg:SetPoint("BOTTOMRIGHT", border, -6, 5)
 
@@ -404,23 +404,23 @@ function S:ReskinRematch()
 	-- RematchNotes
 	do
 		local note = RematchNotes
-		F.StripTextures(note)
-		F.ReskinClose(note.CloseButton)
-		F.StripTextures(note.LockButton, 2)
+		B.StripTextures(note)
+		B.ReskinClose(note.CloseButton)
+		B.StripTextures(note.LockButton, 2)
 		note.LockButton:SetPoint("TOPLEFT")
-		local bg = F.CreateBDFrame(note.LockButton, .25)
+		local bg = B.CreateBDFrame(note.LockButton, .25)
 		bg:SetPoint("TOPLEFT", 7, -7)
 		bg:SetPoint("BOTTOMRIGHT", -7, 7)
 
 		local content = note.Content
-		F.StripTextures(content)
-		F.ReskinScroll(content.ScrollFrame.ScrollBar)
-		local bg = F.CreateBDFrame(content.ScrollFrame, .25)
+		B.StripTextures(content)
+		B.ReskinScroll(content.ScrollFrame.ScrollBar)
+		local bg = B.CreateBDFrame(content.ScrollFrame, .25)
 		bg:SetPoint("TOPLEFT", 0, 5)
 		bg:SetPoint("BOTTOMRIGHT", 0, -2)
-		local bg = F.CreateBDFrame(content.ScrollFrame)
+		local bg = B.CreateBDFrame(content.ScrollFrame)
 		bg:SetAllPoints(note)
-		F.CreateSD(bg)
+		B.CreateSD(bg)
 		for _, icon in pairs({"Left", "Right"}) do
 			local bu = content[icon.."Icon"]
 			local mask = content[icon.."CircleMask"]
@@ -429,12 +429,12 @@ function S:ReskinRematch()
 			else
 				bu:SetMask(nil)
 			end
-			F.ReskinIcon(bu)
+			B.ReskinIcon(bu)
 		end
 
-		F.Reskin(note.Controls.DeleteButton)
-		F.Reskin(note.Controls.UndoButton)
-		F.Reskin(note.Controls.SaveButton)
+		B.Reskin(note.Controls.DeleteButton)
+		B.Reskin(note.Controls.UndoButton)
+		B.Reskin(note.Controls.SaveButton)
 	end
 
 	hooksecurefunc(Rematch, "FillPetTypeIcon", function(_, texture, _, prefix)
@@ -455,10 +455,10 @@ function S:ReskinRematch()
 
 		if not button.styled then
 			button.Check:SetVertexColor(cr, cg, cb)
-			local bg = F.CreateBDFrame(button.Check, 0)
+			local bg = B.CreateBDFrame(button.Check, 0)
 			bg:SetPoint("TOPLEFT", button.Check, 4, -4)
 			bg:SetPoint("BOTTOMRIGHT", button.Check, -4, 4)
-			F.CreateGradient(bg)
+			B.CreateGradient(bg)
 
 			button.styled = true
 		end
@@ -539,8 +539,8 @@ function S:ReskinRematch()
 		for i = 1, 3 do
 			local loadout = self.Loadouts[i]
 			if not loadout.styled then
-				F.StripTextures(loadout)
-				local bg = F.CreateBDFrame(loadout, .25)
+				B.StripTextures(loadout)
+				local bg = B.CreateBDFrame(loadout, .25)
 				bg:SetPoint("BOTTOMRIGHT", C.mult, C.mult)
 				S.RematchIcon(loadout.Pet.Pet)
 				S.RematchXP(loadout.HP)
@@ -572,11 +572,11 @@ function S:ReskinRematch()
 			for i = 1, 3 do
 				local tab = typeBar.Tabs[i]
 				if not tab.styled then
-					F.StripTextures(tab)
-					tab.bg = F.CreateBDFrame(tab)
+					B.StripTextures(tab)
+					tab.bg = B.CreateBDFrame(tab)
 					local r, g, b = tab.Selected.MidSelected:GetVertexColor()
 					tab.bg:SetBackdropColor(r, g, b, .5)
-					F.StripTextures(tab.Selected)
+					B.StripTextures(tab.Selected)
 
 					tab.styled = true
 				end
@@ -610,8 +610,8 @@ function S:ReskinRematch()
 			self.optType = opt[1]
 			local checkButton = self.CheckButton
 			if not checkButton.bg then
-				local bg = F.CreateBDFrame(checkButton, 0)
-				F.CreateGradient(bg)
+				local bg = B.CreateBDFrame(checkButton, 0)
+				B.CreateGradient(bg)
 				checkButton.bg = bg
 				self.HeaderBack:SetTexture(nil)
 			end
