@@ -49,7 +49,7 @@ function B:CreateSD(size, override)
 	self.Shadow = CreateFrame("Frame", nil, frame)
 	self.Shadow:SetOutside(self, size or 4, size or 4)
 	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .5)
 	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
 	return self.Shadow
@@ -90,7 +90,7 @@ end
 function B:SetBackdropBorderColor(frame, r, g, b, a)
 	if frame.pixelBorders then
 		for _, v in pairs(PIXEL_BORDERS) do
-			frame.pixelBorders[v]:SetVertexColor(r or 0, g or 0, b or 0, a or 1)
+			frame.pixelBorders[v]:SetVertexColor(r or 0, g or 0, b or 0, a)
 		end
 	end
 end

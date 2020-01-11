@@ -339,8 +339,9 @@ function module:CreateFreeSlots()
 	slot:SetSize(self.iconSize, self.iconSize)
 	slot:SetHighlightTexture(DB.bdTex)
 	slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
-	slot.bg = B.CreateBDFrame(slot, .3)
-	slot.bg:SetBackdropColor(.3, .3, .3, .25)
+	slot:GetHighlightTexture():SetInside()
+	B.CreateBD(slot, .25)
+	slot:SetBackdropColor(.3, .3, .3, .25)
 	slot:SetScript("OnMouseUp", module.FreeSlotOnDrop)
 	slot:SetScript("OnReceiveDrag", module.FreeSlotOnDrop)
 	B.AddTooltip(slot, "ANCHOR_RIGHT", L["FreeSlots"])
@@ -544,7 +545,7 @@ function module:OnLogin()
 		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
 		self.Count:SetFont(unpack(DB.Font))
 
-		B.CreateBD(self)
+		B.CreateBD(self, .25)
 		self:SetBackdropColor(.3, .3, .3, .25)
 
 		local parentFrame = CreateFrame("Frame", nil, self)
@@ -566,7 +567,7 @@ function module:OnLogin()
 		self.Favourite:SetPoint("TOPLEFT", -12, 9)
 
 		self.Quest = B.CreateFS(self, 30, "!", "system", "LEFT", 3, 0)
-		self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 1)
+		self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 2)
 
 		if showNewItem then
 			self.glowFrame = B.CreateGlowFrame(self, iconSize)
@@ -583,7 +584,7 @@ function module:OnLogin()
 	end
 
 	local bagTypeColor = {
-		[0] = {0, 0, 0, .25},		-- 容器
+		[0] = {.3, .3, .3, .25},	-- 容器
 		[1] = false,				-- 弹药袋
 		[2] = {0, .5, 0, .25},		-- 草药袋
 		[3] = {.8, 0, .8, .25},		-- 附魔袋
@@ -677,9 +678,9 @@ function module:OnLogin()
 
 		local columns = self.Settings.Columns
 		local offset = 38
-		local spacing = 5
+		local spacing = 3
 		local xOffset = 5
-		local yOffset = -offset + spacing
+		local yOffset = -offset + xOffset
 		local _, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
 		local width = columns * (iconSize+spacing)-spacing
 		if self.freeSlot then
@@ -786,7 +787,7 @@ function module:OnLogin()
 		self:GetHighlightTexture():SetInside()
 
 		self:SetSize(iconSize, iconSize)
-		B.CreateBD(self)
+		B.CreateBD(self, .25)
 		self.Icon:SetAllPoints()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end

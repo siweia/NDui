@@ -118,7 +118,7 @@ local function SetupCooldown(cooldown, cfg)
 end
 
 local function SetupBackdrop(button)
-	B.CreateBD(button)
+	B.CreateBD(button, .25)
 	B.CreateTex(button)
 	B.CreateSD(button)
 	if NDuiDB["Actionbar"]["Classcolor"] then

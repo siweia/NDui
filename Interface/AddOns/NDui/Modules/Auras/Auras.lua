@@ -7,7 +7,7 @@ local format, floor, strmatch, select, unpack = format, floor, strmatch, select,
 local DebuffTypeColor = _G.DebuffTypeColor
 local UnitAura, GetTime = UnitAura, GetTime
 local GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo
-local margin, offset, settings = 6, 12
+local margin, offset, settings = 3, 12
 
 function A:OnLogin()
 	-- Config
@@ -256,9 +256,8 @@ function A:CreateAuraIcon(button)
 	button.highlight:SetColorTexture(1, 1, 1, .25)
 	button.highlight:SetInside()
 
-	B.CreateBD(button)
+	B.CreateBD(button, .25)
 	B.CreateSD(button)
-	--button.bg = B.CreateBDFrame(button, nil, true)
 
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
 end
