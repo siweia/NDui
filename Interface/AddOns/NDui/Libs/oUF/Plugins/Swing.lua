@@ -96,7 +96,6 @@ do
 						slamtime = 0
 					end
 				else
-					delayTime = 0
 					self:Hide()
 					self:SetScript("OnUpdate", nil)
 					meleeing = false

@@ -3,13 +3,13 @@ ns[1] = {}			-- B, Basement
 ns[2] = {}			-- C, Config
 ns[3] = {}			-- L, Locales
 ns[4] = {}			-- DB, Database
-if IsAddOnLoaded("AuroraClassic") then
-	ns[5], ns[6] = unpack(AuroraClassic)
-end
+
 NDuiDB, NDuiADB = {}, {}
 
 local B, C, L, DB = unpack(ns)
 local pairs, next, tinsert = pairs, next, table.insert
+local min, max = math.min, math.max
+local CombatLogGetCurrentEventInfo, GetPhysicalScreenSize = CombatLogGetCurrentEventInfo, GetPhysicalScreenSize
 
 -- Events
 local events = {}

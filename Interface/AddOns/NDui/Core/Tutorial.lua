@@ -2,7 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
 local pairs, wipe = pairs, table.wipe
-local min, max = math.min, math.max
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")

@@ -379,7 +379,7 @@ function module:CreateSplitButton()
 	local bu = B.CreateButton(self, 24, 24, true, "Interface\\HELPFRAME\\ReportLagIcon-AuctionHouse")
 	bu.Icon:SetPoint("TOPLEFT", -1, 3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", 1, -3)
-	bu:SetScript("OnClick", function(self, btn)
+	bu:SetScript("OnClick", function(self)
 		splitEnable = not splitEnable
 		if splitEnable then
 			self:SetBackdropBorderColor(1, .8, 0)
