@@ -29,7 +29,6 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	hooksecurefunc("EquipmentFlyout_CreateButton", function()
 		local bu = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
-		local border = bu.IconBorder
 
 		bu.IconBorder:SetAlpha(0)
 		bu.icon:SetTexCoord(.08, .92, .08, .92)

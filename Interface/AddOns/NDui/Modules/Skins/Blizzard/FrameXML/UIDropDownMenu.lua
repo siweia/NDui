@@ -9,7 +9,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	local function reskinDropdown()
 		for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do
 			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
-				local menu = _G[name..i.."MenuBackdrop"]
 				local backdrop = _G[name..i.."Backdrop"]
 				if backdrop and not backdrop.styled then
 					B.StripTextures(backdrop)

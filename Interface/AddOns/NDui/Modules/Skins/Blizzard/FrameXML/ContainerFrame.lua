@@ -5,8 +5,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	if NDuiDB["Bags"]["Enable"] then return end
 	if not NDuiDB["Skins"]["DefaultBags"] then return end
 
-	local r, g, b = DB.r, DB.g, DB.b
-
 	BackpackTokenFrame:GetRegions():Hide()
 
 	for i = 1, 12 do
