@@ -1,10 +1,14 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local gsub = string.gsub
+
+NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, "000000", "ffffff")
+TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, "000000", "ffffff")
+IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, "000000", "ffffff")
+
 tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
-
-	local gsub = string.gsub
 
 	GossipGreetingText:SetTextColor(1, 1, 1)
 	NPCFriendshipStatusBar:GetRegions():Hide()

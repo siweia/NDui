@@ -784,7 +784,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "WhisperColor", L["Differ WhipserColor"].."*", true},
 		{1, "Chat", "Freedom", L["Language Filter"]},
 		{1, "Chat", "Chatbar", L["ShowChatbar"], true},
-		{1, "Chat", "ChatItemLevel", "|cff00cc4c"..L["ShowChatItemLevel"]},
+		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
@@ -817,7 +817,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "ChatBubbles", L["ChatBubbles"]},
 		{1, "Skins", "DefaultBags", L["DefaultBags"], true, nil, nil, L["DefaultBagsTips"]},
 		{1, "Skins", "Loot", L["Loot"]},
-		{1, "Skins", "BlizzardSkins", L["BlizzardSkins"], true, nil, nil, L["BlizzardSkinsTips"]},
+		{1, "Skins", "BlizzardSkins", "|cff00cc4c"..L["BlizzardSkins"], true, nil, nil, L["BlizzardSkinsTips"]},
 		{},--blank
 
 		{1, "Skins", "BarLine", L["Bar Line"]},
@@ -1505,8 +1505,5 @@ function G:OnLogin()
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 	end)
 
-	-- AuroraClassic
-	if NDuiDB["Skins"]["BlizzardSkins"] then
-		B.Reskin(gui)
-	end
+	if NDuiDB["Skins"]["BlizzardSkins"] then B.Reskin(gui) end
 end
