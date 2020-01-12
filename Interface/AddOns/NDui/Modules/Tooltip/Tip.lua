@@ -230,12 +230,12 @@ function TT:OnTooltipSetUnit()
 		end
 
 		if alive then
-			GameTooltipStatusBar:SetStatusBarColor(B.UnitColor(unit))
+			self.StatusBar:SetStatusBarColor(B.UnitColor(unit))
 		else
-			GameTooltipStatusBar:Hide()
+			self.StatusBar:Hide()
 		end
 	else
-		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
+		self.StatusBar:SetStatusBarColor(0, .9, 0)
 	end
 
 	TT.InspectUnitSpecAndLevel(self)
@@ -258,12 +258,12 @@ function TT:StatusBar_OnValueChanged(value)
 end
 
 function TT:ReskinStatusBar()
-	GameTooltipStatusBar:ClearAllPoints()
-	GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", 0, 3)
-	GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", 0, 3)
-	GameTooltipStatusBar:SetStatusBarTexture(DB.normTex)
-	GameTooltipStatusBar:SetHeight(5)
-	B.CreateBDFrame(GameTooltipStatusBar, nil, true)
+	self.StatusBar:ClearAllPoints()
+	self.StatusBar:SetPoint("BOTTOMLEFT", self.bg, "TOPLEFT", C.mult, 3)
+	self.StatusBar:SetPoint("BOTTOMRIGHT", self.bg, "TOPRIGHT", -C.mult, 3)
+	self.StatusBar:SetStatusBarTexture(DB.normTex)
+	self.StatusBar:SetHeight(5)
+	B.CreateBDFrame(self.StatusBar, nil, true)
 end
 
 function TT:GameTooltip_ShowStatusBar()
@@ -327,13 +327,18 @@ function TT:ReskinTooltip()
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer("BACKGROUND")
-		self.bg = B.SetBD(self)
-		self.bg:SetBackdropColor(0, 0, 0, .7)
+		self.bg = B.CreateBDFrame(self, .7, true)
+		self.bg:SetInside()
+		B.CreateTex(self.bg)
 
 		-- other gametooltip-like support
 		self.GetBackdrop = getBackdrop
 		self.GetBackdropColor = getBackdropColor
 		self.GetBackdropBorderColor = getBackdropBorderColor
+
+		if self.StatusBar then
+			TT.ReskinStatusBar(self)
+		end
 
 		self.tipStyled = true
 	end
@@ -368,10 +373,10 @@ function TT:GameTooltip_SetBackdropStyle()
 end
 
 function TT:OnLogin()
-	self:ReskinStatusBar()
+	GameTooltip.StatusBar = GameTooltipStatusBar
 	GameTooltip:HookScript("OnTooltipCleared", self.OnTooltipCleared)
 	GameTooltip:HookScript("OnTooltipSetUnit", self.OnTooltipSetUnit)
-	GameTooltipStatusBar:SetScript("OnValueChanged", self.StatusBar_OnValueChanged)
+	GameTooltip.StatusBar:SetScript("OnValueChanged", self.StatusBar_OnValueChanged)
 	hooksecurefunc("GameTooltip_ShowStatusBar", self.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", self.GameTooltip_ShowProgressBar)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", self.GameTooltip_SetDefaultAnchor)
