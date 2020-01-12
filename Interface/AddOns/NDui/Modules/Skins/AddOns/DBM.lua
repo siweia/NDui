@@ -27,9 +27,27 @@ function S:DBMSkin()
 	if not NDuiDB["Skins"]["DBM"] then return end
 
 	local buttonsize = 24
+
+	local function reskinBarIcon(icon, bar)
+		if icon.styled then return end
+
+		icon:SetSize(buttonsize, buttonsize)
+		icon.SetSize = B.Dummy
+		icon:ClearAllPoints()
+		icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
+		local bg = B.ReskinIcon(icon)
+		B.CreateSD(bg)
+		bg.icon = bg:CreateTexture(nil, "BACKGROUND")
+		bg.icon:SetInside()
+		bg.icon:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
+		bg.icon:SetTexCoord(unpack(DB.TexCoord))
+
+		icon.styled = true
+	end
+
 	local function SkinBars(self)
 		for bar in self:GetBarIterator() do
-			if not bar.injected then
+			if not bar.styeld then
 				local frame		= bar.frame
 				local tbar		= _G[frame:GetName().."Bar"]
 				local spark		= _G[frame:GetName().."BarSpark"]
@@ -67,44 +85,21 @@ function S:DBMSkin()
 					spark.killed = true
 				end
 
-				if not icon1.styled then
-					icon1:SetSize(buttonsize, buttonsize)
-					icon1.SetSize = B.Dummy
-					B.ReskinIcon(icon1)
-					icon1:ClearAllPoints()
-					icon1:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -5, 0)
-					icon1.styled = true
-				end
+				reskinBarIcon(icon1, tbar)
+				reskinBarIcon(icon2, tbar)
 
-				if not icon2.styled then
-					icon2:SetSize(buttonsize, buttonsize)
-					icon2.SetSize = B.Dummy
-					B.ReskinIcon(icon2)
-					icon2:ClearAllPoints()
-					icon2:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -5, 0)
-					icon2.styled = true
+				if not tbar.styled then
+					B.StripTextures(tbar)
+					B.CreateSB(tbar, true)
+					tbar:SetInside(frame, 2, 2)
+					tbar.SetPoint = B.Dummy
+					tbar.styled = true
 				end
 
 				if not texture.styled then
 					texture:SetTexture(DB.normTex)
+					texture.SetTexture = B.Dummy
 					texture.styled = true
-				end
-
-				tbar:SetStatusBarTexture(DB.normTex)
-				if not tbar.styled then
-					B.StripTextures(tbar)
-					B.SetBD(tbar)
-					tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 2, -2)
-					tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 2)
-					tbar.SetPoint = B.Dummy
-					tbar.styled = true
-
-					tbar.Spark = tbar:CreateTexture(nil, "OVERLAY")
-					tbar.Spark:SetTexture(DB.sparkTex)
-					tbar.Spark:SetBlendMode("ADD")
-					tbar.Spark:SetAlpha(.8)
-					tbar.Spark:SetPoint("TOPLEFT", tbar:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
-					tbar.Spark:SetPoint("BOTTOMRIGHT", tbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -10)
 				end
 
 				if not name.styled then
@@ -131,14 +126,12 @@ function S:DBMSkin()
 					timer.styled = true
 				end
 
-				if bar.owner.options.IconLeft then icon1:Show() else icon1:Hide() end
-				if bar.owner.options.IconRight then icon2:Show() else icon2:Hide() end
 				tbar:SetAlpha(1)
 				frame:SetAlpha(1)
-				texture:SetAlpha(1)
 				frame:Show()
 				bar:Update(0)
-				bar.injected = true
+
+				bar.styeld = true
 			end
 		end
 	end
