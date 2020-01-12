@@ -57,7 +57,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		B.StripTextures(bar)
 		bar:SetStatusBarTexture(DB.bdTex)
 		bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
-		bar.bg = B.CreateBDFrame(bar, nil, true)
+		bar.bg = B.SetBD(bar)
 	end
 
 	local function reskinProgressbar(_, _, line)
@@ -112,9 +112,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
 		block.NormalBG:SetTexture("")
 		if not block.bg then
-			block.bg = B.CreateBDFrame(block.GlowTexture, nil, true)
-			block.bg:SetPoint("TOPLEFT", block.GlowTexture, 4, -2)
-			block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -4, 0)
+			block.bg = B.SetBD(block.GlowTexture, 4, -2, -4, 0)
 		end
 	end)
 
@@ -126,8 +124,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			widgetFrame.Frame:SetAlpha(0)
 			for _, bu in next, {widgetFrame.CurrencyContainer:GetChildren()} do
 				if bu and not bu.styled then
-					bu.Icon:SetTexCoord(.08, .92, .08, .92)
-					B.CreateBDFrame(bu.Icon)
+					B.ReskinIcon(bu.Icon)
 
 					bu.styled = true
 				end
@@ -149,9 +146,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			block.StatusBar:SetHeight(10)
 
 			select(3, block:GetRegions()):Hide()
-			block.bg = B.CreateBDFrame(block, nil, true)
-			block.bg:SetPoint("TOPLEFT", 4, -2)
-			block.bg:SetPoint("BOTTOMRIGHT", -4, 0)
+			block.bg = B.SetBD(block, 4, -2, -4, 0)
 		end
 	end)
 
