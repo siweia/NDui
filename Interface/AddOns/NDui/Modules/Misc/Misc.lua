@@ -139,7 +139,9 @@ function M:ExtendInstance()
 	bu:SetPoint("TOPRIGHT", -35, -5)
 	bu:SetSize(25, 25)
 	B.PixelIcon(bu, GetSpellTexture(80353), true)
-	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Extend Instance"], "system")
+	bu.title = L["Extend Instance"]
+	local tipStr = format(L["Extend Instance Tip"], DB.LeftButton, DB.RightButton)
+	B.AddTooltip(bu, "ANCHOR_RIGHT", tipStr, "system")
 
 	bu:SetScript("OnMouseUp", function(_, btn)
 		for i = 1, GetNumSavedInstances() do
