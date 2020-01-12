@@ -27,6 +27,12 @@ function S:CreateRM()
 		end
 	end)
 
+	local function IsManagerOnTop()
+		local y = select(2, header:GetCenter())
+		local screenHeight = UIParent:GetTop()
+		return y > screenHeight/2
+	end
+
 	-- Role counts
 	local function getRaidMaxGroup()
 		local _, instType, difficulty = GetInstanceInfo()
@@ -163,7 +169,15 @@ function S:CreateRM()
 			C_Timer.After(5, hideRCFrame)
 		else
 			count, total = 0, 0
+
+			self:ClearAllPoints()
+			if IsManagerOnTop() then
+				self:SetPoint("TOP", header, "BOTTOM", 0, -3)
+			else
+				self:SetPoint("BOTTOM", header, "TOP", 0, 3)
+			end
 			self:Show()
+
 			local maxgroup = getRaidMaxGroup()
 			for i = 1, GetNumGroupMembers() do
 				local name, _, subgroup, _, _, _, _, online = GetRaidRosterInfo(i)
@@ -443,6 +457,16 @@ function S:CreateRM()
 	header:SetScript("OnClick", function(_, btn)
 		if btn == "LeftButton" then
 			ToggleFrame(menu)
+
+			if menu:IsShown() then
+				menu:ClearAllPoints()
+				if IsManagerOnTop() then
+					menu:SetPoint("TOP", header, "BOTTOM", 0, -3)
+				else
+					menu:SetPoint("BOTTOM", header, "TOP", 0, 3)
+				end
+			end
+
 			updateText(bu[2].text)
 		end
 	end)
