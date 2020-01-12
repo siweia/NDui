@@ -2,20 +2,31 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:RegisterModule("Skins")
 
--- Add quality colour for Poor items
-BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
--- Change Common from grey to black
-BAG_ITEM_QUALITY_COLORS[-1] = {r = 0, g = 0, b = 0}
-BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
-
-NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, "000000", "ffffff")
-TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, "000000", "ffffff")
-IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, "000000", "ffffff")
-
 C.themes = {}
 C.themes["AuroraClassic"] = {}
 
+StaticPopupDialogs["AURORA_CLASSIC_WARNING"] = {
+	text = L["AuroraClassic warning"],
+	button1 = DISABLE,
+	hideOnEscape = false,
+	whileDead = 1,
+	OnAccept = function()
+		DisableAddOn("Aurora")
+		DisableAddOn("AuroraClassic")
+		ReloadUI()
+	end,
+}
+function S:DetectAurora()
+	if DB.isDevelper then return end
+
+	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then
+		StaticPopup_Show("AURORA_CLASSIC_WARNING")
+	end
+end
+
 function S:OnLogin()
+	self:DetectAurora()
+
 	if not IsAddOnLoaded("AuroraClassic") and not IsAddOnLoaded("Aurora") then
 		-- Reskin Blizzard UIs
 		for _, func in pairs(C.themes["AuroraClassic"]) do
