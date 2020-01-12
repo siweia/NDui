@@ -9,6 +9,7 @@ DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
+DB.isNewPatch = GetBuildInfo() == "8.3.0"
 
 -- Colors
 DB.MyName = UnitName("player")
