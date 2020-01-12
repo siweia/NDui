@@ -58,6 +58,7 @@ function module:ChatCopy_OnClick(btn)
 			frame:Hide()
 		end
 	elseif btn == "RightButton" then
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		ToggleFrame(menu)
 		NDuiDB["Chat"]["ChatMenu"] = menu:IsShown()
 	end
@@ -128,7 +129,8 @@ function module:ChatCopy_Create()
 	copy.Icon:SetTexture(DB.copyTex)
 	copy:RegisterForClicks("AnyUp")
 	copy:SetScript("OnClick", self.ChatCopy_OnClick)
-	B.AddTooltip(copy, "ANCHOR_RIGHT", L["Chat Copy"])
+	local copyStr = format(L["Chat Copy"], DB.LeftButton, DB.RightButton)
+	B.AddTooltip(copy, "ANCHOR_RIGHT", copyStr)
 	copy:HookScript("OnEnter", function() copy:SetAlpha(1) end)
 	copy:HookScript("OnLeave", function() copy:SetAlpha(.5) end)
 
