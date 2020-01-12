@@ -21,8 +21,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 		itemButton:SetPushedTexture("")
 		itemButton.Highlight:SetColorTexture(1, 1, 1, .25)
 		itemButton.Highlight:SetAllPoints(itemButton.Icon)
-		itemButton.Icon:SetTexCoord(.08, .92, .08, .92)
-		local bg = B.CreateBDFrame(itemButton.Icon)
+		local bg = B.ReskinIcon(itemButton.Icon)
 		hooksecurefunc(itemButton.IconBorder, "SetVertexColor", function(_, r, g, b) bg:SetBackdropBorderColor(r, g, b) end)
 		hooksecurefunc(itemButton.IconBorder, "Hide", function() bg:SetBackdropBorderColor(0, 0, 0) end)
 
@@ -351,7 +350,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 	auctionhandler:SetScript("OnEvent", function()
 		local AuctionsItemButtonIconTexture = AuctionsItemButton:GetNormalTexture()
 		if AuctionsItemButtonIconTexture then
-			AuctionsItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+			AuctionsItemButtonIconTexture:SetTexCoord(unpack(DB.TexCoord))
 			AuctionsItemButtonIconTexture:SetInside()
 		end
 		AuctionsItemButton.IconBorder:SetTexture("")
@@ -433,6 +432,6 @@ C.themes["Blizzard_AuctionUI"] = function()
 		iconBorder:SetTexture(DB.bdTex)
 		iconBorder:SetDrawLayer("BACKGROUND")
 		iconBorder:SetOutside(icon)
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 end

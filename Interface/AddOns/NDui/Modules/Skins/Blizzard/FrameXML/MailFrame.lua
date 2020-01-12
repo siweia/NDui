@@ -52,7 +52,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	OpenMailLetterButton:SetNormalTexture("")
 	OpenMailLetterButton:SetPushedTexture("")
-	OpenMailLetterButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	OpenMailLetterButtonIconTexture:SetTexCoord(unpack(DB.TexCoord))
 	B.CreateBDFrame(OpenMailLetterButton)
 
 	for i = 1, 2 do
@@ -61,7 +61,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	OpenMailMoneyButton:SetNormalTexture("")
 	OpenMailMoneyButton:SetPushedTexture("")
-	OpenMailMoneyButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	OpenMailMoneyButtonIconTexture:SetTexCoord(unpack(DB.TexCoord))
 	B.CreateBDFrame(OpenMailMoneyButton)
 
 	SendMailSubjectEditBox:SetPoint("TOPLEFT", SendMailNameEditBox, "BOTTOMLEFT", 0, -1)
@@ -82,7 +82,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		st:Hide()
 		line:Hide()
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(DB.TexCoord))
 		bd:SetAlpha(0)
 		B.CreateBDFrame(bu)
 	end
@@ -119,7 +119,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(DB.TexCoord))
 
 		border:SetTexture(DB.bdTex)
 		border.SetTexture = B.Dummy
@@ -133,7 +133,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			local button = _G["SendMailAttachment"..i]
 			button.IconBorder:SetTexture(DB.bdTex)
 			if button:GetNormalTexture() then
-				button:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+				button:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
 			end
 		end
 	end)

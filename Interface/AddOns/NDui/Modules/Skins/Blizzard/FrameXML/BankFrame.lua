@@ -40,7 +40,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(bu, .25)
 	end
 
@@ -64,7 +64,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		border:SetDrawLayer("BACKGROUND", 1)
 		searchOverlay:SetOutside()
 
-		bag.icon:SetTexCoord(.08, .92, .08, .92)
+		bag.icon:SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(bag, .25)
 	end
 

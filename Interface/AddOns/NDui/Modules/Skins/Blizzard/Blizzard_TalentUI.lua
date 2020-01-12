@@ -202,7 +202,7 @@ C.themes["Blizzard_TalentUI"] = function()
 		_G["PlayerSpecTab"..i.."Background"]:Hide()
 		tab:SetCheckedTexture(DB.textures.pushed)
 		B.CreateBDFrame(tab)
-		select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+		select(2, tab:GetRegions()):SetTexCoord(unpack(DB.TexCoord))
 	end
 
 	hooksecurefunc("PlayerTalentFrame_UpdateSpecs", function()
@@ -240,8 +240,7 @@ C.themes["Blizzard_TalentUI"] = function()
 
 	local function updatePVPTalent(self)
 		if not self.styled then
-			self.Icon:SetTexCoord(.08, .92, .08, .92)
-			B.CreateBDFrame(self.Icon)
+			B.ReskinIcon(self.Icon)
 			B.CreateBDFrame(self, .25)
 			self:GetRegions():SetAlpha(0)
 			self:GetHighlightTexture():SetColorTexture(1, 1, 1, .1)

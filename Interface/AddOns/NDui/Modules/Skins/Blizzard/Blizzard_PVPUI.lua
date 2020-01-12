@@ -69,8 +69,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	local seasonReward = PVPQueueFrame.HonorInset.RatedPanel.SeasonRewardFrame
 	seasonReward.Ring:Hide()
 	seasonReward.CircleMask:Hide()
-	seasonReward.Icon:SetTexCoord(.08, .92, .08, .92)
-	B.CreateBDFrame(seasonReward.Icon)
+	B.ReskinIcon(seasonReward.Icon)
 
 	-- Honor frame
 

@@ -14,6 +14,5 @@ C.themes["Blizzard_WarfrontsPartyPoseUI"] = function()
 	bg:SetPoint("BOTTOMRIGHT", rewardFrame.NameFrame, 0, -5)
 	rewardFrame.NameFrame:SetAlpha(0)
 	rewardFrame.IconBorder:SetAlpha(0)
-	rewardFrame.Icon:SetTexCoord(.08, .92, .08, .92)
-	B.CreateBDFrame(rewardFrame.Icon)
+	B.ReskinIcon(rewardFrame.Icon)
 end

@@ -22,7 +22,7 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 			bu.bg:SetBackdropColor(.3, .3, .3, .3)
 			local bg, icon, _, search = bu:GetRegions()
 			bg:Hide()
-			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetTexCoord(unpack(DB.TexCoord))
 			search:SetAllPoints(bu.bg)
 		end
 
@@ -61,7 +61,7 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 		tab:GetRegions():Hide()
 		tab:SetCheckedTexture(DB.textures.pushed)
 		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+		tab:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(tab)
 	end
 

@@ -92,7 +92,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
 		button:SetPushedTexture("")
-		button:GetRegions():SetTexCoord(.08, .92, .08, .92)
+		button:GetRegions():SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(button)
 	end
 

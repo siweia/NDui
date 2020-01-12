@@ -135,8 +135,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local frame = QuestInfoPlayerTitleFrame
 		local icon = frame.Icon
 
-		icon:SetTexCoord(.08, .92, .08, .92)
-		B.CreateBDFrame(icon)
+		B.ReskinIcon(icon)
 		for i = 2, 4 do
 			select(i, frame:GetRegions()):Hide()
 		end
@@ -187,8 +186,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				if not spellReward.styled then
 					local icon = spellReward.Icon
 					local nameFrame = spellReward.NameFrame
-					icon:SetTexCoord(.08, .92, .08, .92)
-					B.CreateBDFrame(icon)
+					B.ReskinIcon(icon)
 					nameFrame:Hide()
 					local bg = B.CreateBDFrame(nameFrame, .25)
 					bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)

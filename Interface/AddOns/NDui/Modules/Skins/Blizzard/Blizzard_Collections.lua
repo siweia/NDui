@@ -421,7 +421,7 @@ C.themes["Blizzard_Collections"] = function()
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			button:GetHighlightTexture():SetAllPoints(ic)
 
-			button.iconTextureUncollected:SetTexCoord(.08, .92, .08, .92)
+			button.iconTextureUncollected:SetTexCoord(unpack(DB.TexCoord))
 			button.bg = B.ReskinIcon(ic)
 
 			button.level:ClearAllPoints()
@@ -549,10 +549,9 @@ C.themes["Blizzard_Collections"] = function()
 	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(_, itemFrame)
 		local ic = itemFrame.Icon
 		if not ic.bg then
-			ic:SetTexCoord(.08, .92, .08, .92)
 			itemFrame.IconBorder:Hide()
 			itemFrame.IconBorder.Show = B.Dummy
-			ic.bg = B.CreateBDFrame(ic)
+			ic.bg = B.ReskinIcon(ic)
 		end
 
 		if itemFrame.collected then
@@ -645,10 +644,9 @@ C.themes["Blizzard_Collections"] = function()
 				PetJournalBandageButton:SetPushedTexture("")
 				PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				PetJournalBandageButtonBorder:Hide()
-				PetJournalBandageButtonIcon:SetTexCoord(.08, .92, .08, .92)
 				PetJournalBandageButton:SetPoint("TOPRIGHT", PetJournalHealPetButton, "TOPLEFT", -3, 0)
 				PetJournalBandageButton:SetPoint("BOTTOMLEFT", PetJournalHealPetButton, "BOTTOMLEFT", -35, 0)
-				B.CreateBDFrame(PetJournalBandageButtonIcon)
+				B.ReskinIcon(PetJournalBandageButtonIcon)
 			end
 			reskinHPet = true
 		end

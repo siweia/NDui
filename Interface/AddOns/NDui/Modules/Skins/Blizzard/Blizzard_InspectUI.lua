@@ -22,7 +22,7 @@ C.themes["Blizzard_InspectUI"] = function()
 		local border = slot.IconBorder
 
 		B.StripTextures(slot)
-		slot.icon:SetTexCoord(.08, .92, .08, .92)
+		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
 		B.CreateBD(slot, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)

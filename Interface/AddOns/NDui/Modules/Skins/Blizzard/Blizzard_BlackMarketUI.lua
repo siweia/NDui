@@ -8,7 +8,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 	BlackMarketFrame.MoneyFrameBorder:SetAlpha(0)
 	B.StripTextures(BlackMarketFrame.HotDeal)
 	B.CreateBDFrame(BlackMarketFrame.HotDeal.Item)
-	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
+	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(unpack(DB.TexCoord))
 
 	local headers = {"ColumnName", "ColumnLevel", "ColumnType", "ColumnDuration", "ColumnHighBidder", "ColumnCurrentBid"}
 	for _, header in pairs(headers) do
@@ -31,7 +31,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 		for i = 1, #buttons do
 			local bu = buttons[i]
 
-			bu.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
+			bu.Item.IconTexture:SetTexCoord(unpack(DB.TexCoord))
 			if not bu.reskinned then
 				B.StripTextures(bu)
 

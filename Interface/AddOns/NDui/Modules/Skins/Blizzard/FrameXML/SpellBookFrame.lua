@@ -71,7 +71,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			local tab = _G["SpellBookSkillLineTab"..i]
 			local nt = tab:GetNormalTexture()
 			if nt then
-				nt:SetTexCoord(.08, .92, .08, .92)
+				nt:SetTexCoord(unpack(DB.TexCoord))
 			end
 
 			if not tab.styled then

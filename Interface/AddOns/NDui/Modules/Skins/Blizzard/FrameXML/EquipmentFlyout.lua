@@ -31,7 +31,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local bu = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
 
 		bu.IconBorder:SetAlpha(0)
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(DB.TexCoord))
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)

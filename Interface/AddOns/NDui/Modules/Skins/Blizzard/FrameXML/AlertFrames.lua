@@ -144,7 +144,7 @@ tinsert(C.themes["AuroraClassic"], function()
 				frame.shine:SetTexture("")
 			end
 			frame.Icon:SetMask(nil)
-			frame.Icon:SetTexCoord(.08, .92, .08, .92)
+			frame.Icon:SetTexCoord(unpack(DB.TexCoord))
 		elseif frame.queue == WorldQuestCompleteAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)

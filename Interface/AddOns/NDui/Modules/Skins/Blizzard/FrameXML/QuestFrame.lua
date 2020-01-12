@@ -39,7 +39,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local na = _G["QuestProgressItem"..i.."NameFrame"]
 		local co = _G["QuestProgressItem"..i.."Count"]
 		ic:SetSize(40, 40)
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(DB.TexCoord))
 		ic:SetDrawLayer("OVERLAY")
 		B.CreateBD(bu, .25)
 		na:Hide()

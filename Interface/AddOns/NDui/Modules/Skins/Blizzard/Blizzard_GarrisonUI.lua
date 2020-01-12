@@ -53,7 +53,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		B.ReskinIcon(item.Icon)
 
 		if self.CostFrame then
-			self.CostFrame.CostIcon:SetTexCoord(.08, .92, .08, .92)
+			self.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
 		end
 	end
 
@@ -79,7 +79,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end
 
 	function B:ReskinGarrMaterial()
-		self.MaterialFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+		self.MaterialFrame.Icon:SetTexCoord(unpack(DB.TexCoord))
 		self.MaterialFrame:GetRegions():Hide()
 		local bg = B.CreateBDFrame(self.MaterialFrame, .25)
 		bg:SetPoint("TOPLEFT", 5, -5)
@@ -200,8 +200,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				if equip and not equip.bg then
 					equip.Border:SetAlpha(0)
 					equip.BG:SetAlpha(0)
-					equip.Icon:SetTexCoord(.08, .92, .08, .92)
-					equip.bg = B.CreateBDFrame(equip.Icon)
+					equip.bg = B.ReskinIcon(equip.Icon)
 					equip.bg:SetBackdropColor(1, 1, 1, .15)
 				end
 			end
@@ -612,8 +611,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	hooksecurefunc("GarrisonMissionPage_SetReward", function(frame)
 		if not frame.bg then
-			frame.Icon:SetTexCoord(.08, .92, .08, .92)
-			B.CreateBDFrame(frame.Icon)
+			B.ReskinIcon(frame.Icon)
 			frame.BG:SetAlpha(0)
 			frame.bg = B.CreateBDFrame(frame.BG, .25)
 			frame.IconBorder:SetScale(.0001)

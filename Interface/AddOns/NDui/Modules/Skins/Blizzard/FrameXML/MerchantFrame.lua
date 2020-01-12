@@ -56,7 +56,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		button.bd:SetFrameLevel(0)
 		B.CreateBD(button.bd, .25)
 
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(DB.TexCoord))
 		ic:SetInside()
 
 		for j = 1, 3 do
@@ -126,7 +126,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	B.CreateBD(MerchantBuyBackItemItemButton, 0)
 	B.CreateBD(MerchantBuyBackItem, .25)
 
-	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(unpack(DB.TexCoord))
 	MerchantBuyBackItemItemButtonIconTexture:SetInside()
 
 	MerchantBuyBackItemName:SetHeight(25)
@@ -148,7 +148,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	reskinMerchantInteract(MerchantRepairItemButton)
 	local ic = MerchantRepairItemButton:GetRegions()
 	ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
-	ic:SetTexCoord(.08, .92, .08, .92)
+	ic:SetTexCoord(unpack(DB.TexCoord))
 
 	hooksecurefunc("MerchantFrame_UpdateCurrencies", function()
 		for i = 1, MAX_MERCHANT_CURRENCIES do

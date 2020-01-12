@@ -6,8 +6,7 @@ local function reskinReforgeUI(frame, index)
 	B.CreateBDFrame(frame.Background)
 	B.SetBD(frame)
 	B.ReskinClose(frame.CloseButton)
-	frame.ItemSlot.Icon:SetTexCoord(.08, .92, .08, .92)
-	B.CreateBDFrame(frame.ItemSlot.Icon)
+	B.ReskinIcon(frame.ItemSlot.Icon)
 
 	local buttonFrame = frame.ButtonFrame
 	B.StripTextures(buttonFrame)

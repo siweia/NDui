@@ -30,7 +30,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu.Checked:SetTexture(DB.textures.pushed)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(bu, .25)
 	end
 
@@ -42,7 +42,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
 
-		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(bu, .25)
 	end
 end)

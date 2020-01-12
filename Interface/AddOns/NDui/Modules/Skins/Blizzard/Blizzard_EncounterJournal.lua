@@ -317,7 +317,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 			if data.iconPath then
 				suggestion.icon:SetMask(nil)
-				suggestion.icon:SetTexCoord(.08, .92, .08, .92)
+				suggestion.icon:SetTexCoord(unpack(DB.TexCoord))
 			end
 		end
 
@@ -331,7 +331,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 				if data.iconPath then
 					suggestion.icon:SetMask(nil)
-					suggestion.icon:SetTexCoord(.08, .92, .08, .92)
+					suggestion.icon:SetTexCoord(unpack(DB.TexCoord))
 				end
 			end
 		end
@@ -341,7 +341,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local rewardData = suggestion.reward.data
 		if rewardData then
 			suggestion.reward.icon:SetMask("")
-			suggestion.reward.icon:SetTexCoord(.08, .92, .08, .92)
+			suggestion.reward.icon:SetTexCoord(unpack(DB.TexCoord))
 		end
 	end)
 
@@ -380,8 +380,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(_, button)
 		if not button.bg then
 			button.Border:SetAlpha(0)
-			button.Icon:SetTexCoord(.08, .92, .08, .92)
-			button.bg = B.CreateBDFrame(button.Icon)
+			button.bg = B.ReskinIcon(button.Icon)
 		end
 
 		local quality = select(3, GetItemInfo(button.itemID))

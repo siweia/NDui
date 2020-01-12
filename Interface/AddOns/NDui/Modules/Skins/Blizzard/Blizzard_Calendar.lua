@@ -36,9 +36,8 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarCreateEventFrameButtonBackground:Hide()
 	CalendarCreateEventMassInviteButtonBorder:Hide()
 	CalendarCreateEventCreateButtonBorder:Hide()
-	CalendarCreateEventIcon:SetTexCoord(.08, .92, .08, .92)
+	B.ReskinIcon(CalendarCreateEventIcon)
 	CalendarCreateEventIcon.SetTexCoord = B.Dummy
-	B.CreateBDFrame(CalendarCreateEventIcon)
 	if not DB.isNewPatch then
 		B.StripTextures(CalendarEventPickerFrame)
 		B.SetBD(CalendarEventPickerFrame)

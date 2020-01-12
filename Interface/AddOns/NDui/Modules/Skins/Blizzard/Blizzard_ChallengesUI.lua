@@ -13,7 +13,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			local bu = self.DungeonIcons[i]
 			if bu and not bu.styled then
 				bu:GetRegions():SetAlpha(0)
-				bu.Icon:SetTexCoord(.08, .92, .08, .92)
+				bu.Icon:SetTexCoord(unpack(DB.TexCoord))
 				B.CreateBD(bu, 0)
 
 				bu.styled = true

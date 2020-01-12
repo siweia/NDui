@@ -36,7 +36,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			button:SetPushedTexture("")
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-			button.icon:SetTexCoord(.08, .92, .08, .92)
+			button.icon:SetTexCoord(unpack(DB.TexCoord))
 			B.CreateBDFrame(button, .25)
 
 			-- easiest way to 'hide' it without breaking stuff

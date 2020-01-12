@@ -67,7 +67,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		if button.styled then return end
 
 		local border = _G[button:GetName().."Border"]
-		button.texture:SetTexCoord(.08, .92, .08, .92)
+		button.texture:SetTexCoord(unpack(DB.TexCoord))
 		border:SetColorTexture(0, 0, 0)
 		border:SetDrawLayer("BACKGROUND")
 		border:SetOutside(button.texture)

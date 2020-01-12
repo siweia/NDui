@@ -68,7 +68,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		local border = slot.IconBorder
 
 		B.StripTextures(slot)
-		slot.icon:SetTexCoord(.08, .92, .08, .92)
+		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
 		B.CreateBD(slot, .25)
 		cooldown:SetInside()
@@ -189,7 +189,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		hl:SetAllPoints(ic)
 
 		ic:SetInside()
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBD(bu, .25)
 	end
 

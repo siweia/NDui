@@ -71,7 +71,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			bu.icon:SetTexCoord(unpack(DB.TexCoord))
 			local bg = B.CreateBDFrame(bu, .3)
 			bg:SetBackdropColor(.3, .3, .3, .3)
 
@@ -107,7 +107,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		local a1, p, a2, x, y = bu:GetPoint()
 		bu:SetPoint(a1, p, a2, x + 1, y)
 
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(DB.TexCoord))
 	end
 
 	GuildBankPopupFrame:HookScript("OnShow", function()
