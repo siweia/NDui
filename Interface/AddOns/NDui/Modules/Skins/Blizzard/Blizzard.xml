@@ -14,7 +14,6 @@
 	<Script file="Blizzard_BlackMarketUI.lua"/>
 	<Script file="Blizzard_Calendar.lua"/>
 	<Script file="Blizzard_ChallengesUI.lua"/>
-	<Script file="Blizzard_Channels.lua"/>
 	<Script file="Blizzard_Collections.lua"/>
 	<Script file="Blizzard_Communities.lua"/>
 	<Script file="Blizzard_CompactRaidFrames.lua"/>
@@ -37,10 +36,8 @@
 	<Script file="Blizzard_ItemUpgradeUI.lua"/>
 	<Script file="Blizzard_LookingForGuildUI.lua"/>
 	<Script file="Blizzard_MacroUI.lua"/>
-	<Script file="Blizzard_ObjectiveTracker.lua"/>
 	<Script file="Blizzard_ObliterumUI.lua"/>
 	<Script file="Blizzard_OrderHallUI.lua"/>
-	<Script file="Blizzard_PVPMatch.lua"/>
 	<Script file="Blizzard_PVPUI.lua"/>
 	<Script file="Blizzard_QuestChoice.lua"/>
 	<Script file="Blizzard_RaidUI.lua"/>
@@ -48,11 +45,9 @@
 	<Script file="Blizzard_TalentUI.lua"/>
 	<Script file="Blizzard_TalkingHeadUI.lua"/>
 	<Script file="Blizzard_TimeManager.lua"/>
-	<Script file="Blizzard_TokenUI.lua"/>
 	<Script file="Blizzard_TradeSkillUI.lua"/>
 	<Script file="Blizzard_TrainerUI.lua"/>
 	<Script file="Blizzard_Tutorial.lua"/>
 	<Script file="Blizzard_VoidStorageUI.lua"/>
 	<Script file="Blizzard_WarboardUI.lua"/>
-	<Script file="Blizzard_WarfrontsPartyPoseUI.lua"/>
 </Ui>

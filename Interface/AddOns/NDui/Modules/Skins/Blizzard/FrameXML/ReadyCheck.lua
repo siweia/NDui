@@ -4,6 +4,7 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
+	-- Ready check
 	B.CreateBD(ReadyCheckFrame)
 	B.CreateSD(ReadyCheckFrame)
 	ReadyCheckPortrait:SetAlpha(0)
@@ -17,4 +18,14 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	B.Reskin(ReadyCheckFrameYesButton)
 	B.Reskin(ReadyCheckFrameNoButton)
+
+	-- Role poll
+	B.StripTextures(RolePollPopup)
+	B.SetBD(RolePollPopup)
+	B.Reskin(RolePollPopupAcceptButton)
+	B.ReskinClose(RolePollPopupCloseButton)
+
+	B.ReskinRole(RolePollPopupRoleButtonTank, "TANK")
+	B.ReskinRole(RolePollPopupRoleButtonHealer, "HEALER")
+	B.ReskinRole(RolePollPopupRoleButtonDPS, "DPS")
 end)
