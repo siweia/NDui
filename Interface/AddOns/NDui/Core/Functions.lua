@@ -210,7 +210,7 @@ function B:HideTooltip()
 	GameTooltip:Hide()
 end
 
-local function tooltipOnEnter(self)
+local function Tooltip_OnEnter(self)
 	GameTooltip:SetOwner(self, self.anchor)
 	GameTooltip:ClearLines()
 	if self.title then
@@ -236,7 +236,7 @@ function B:AddTooltip(anchor, text, color)
 	self.anchor = anchor
 	self.text = text
 	self.color = color
-	self:SetScript("OnEnter", tooltipOnEnter)
+	self:SetScript("OnEnter", Tooltip_OnEnter)
 	self:SetScript("OnLeave", B.HideTooltip)
 end
 
@@ -312,7 +312,7 @@ end
 
 
 -- Reskin ui widgets
-local function buttonOnEnter(self)
+local function Button_OnEnter(self)
 	if not self:IsEnabled() then return end
 
 	if NDuiDB["Skins"]["FlatMode"] then
@@ -323,7 +323,7 @@ local function buttonOnEnter(self)
 	self:SetBackdropBorderColor(cr, cg, cb)
 end
 
-local function buttonOnLeave(self)
+local function Button_OnLeave(self)
 	if NDuiDB["Skins"]["FlatMode"] then
 		self.bgTex:SetVertexColor(.3, .3, .3, .25)
 	else
@@ -386,30 +386,30 @@ function B:Reskin(noHighlight)
 	self.bgTex = B.CreateGradient(self)
 
 	if not noHighlight then
-		self:HookScript("OnEnter", buttonOnEnter)
- 		self:HookScript("OnLeave", buttonOnLeave)
+		self:HookScript("OnEnter", Button_OnEnter)
+ 		self:HookScript("OnLeave", Button_OnLeave)
 	end
 end
 
-local function menuOnEnter(self)
+local function Menu_OnEnter(self)
 	self.bg:SetBackdropBorderColor(cr, cg, cb)
 end
-local function menuOnLeave(self)
+local function Menu_OnLeave(self)
 	self.bg:SetBackdropBorderColor(0, 0, 0)
 end
-local function onMouseDown(self)
-	self.bg:SetBackdropColor(cr, cg, cb, .25)
-end
-local function onMouseUp(self)
+local function Menu_OnMouseUp(self)
 	self.bg:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+end
+local function Menu_OnMouseDown(self)
+	self.bg:SetBackdropColor(cr, cg, cb, .25)
 end
 function B:ReskinMenuButton()
 	B.StripTextures(self)
 	self.bg = B.SetBD(self)
-	self:SetScript("OnEnter", menuOnEnter)
-	self:SetScript("OnLeave", menuOnLeave)
-	self:SetScript("OnMouseUp", onMouseUp)
-	self:SetScript("OnMouseDown", onMouseDown)
+	self:SetScript("OnEnter", Menu_OnEnter)
+	self:SetScript("OnLeave", Menu_OnLeave)
+	self:SetScript("OnMouseUp", Menu_OnMouseUp)
+	self:SetScript("OnMouseDown", Menu_OnMouseDown)
 end
 
 -- Tabs
@@ -437,14 +437,14 @@ hooksecurefunc("PanelTemplates_DeselectTab", resetTabAnchor)
 hooksecurefunc("PanelTemplates_SelectTab", resetTabAnchor)
 
 -- Scrollframe
-local function scrollOnEnter(self)
+local function Scroll_OnEnter(self)
 	local thumb = self.thumb
 	if not thumb then return end
 	thumb.bg:SetBackdropColor(cr, cg, cb, .25)
 	thumb.bg:SetBackdropBorderColor(cr, cg, cb)
 end
 
-local function scrollOnLeave(self)
+local function Scroll_OnLeave(self)
 	local thumb = self.thumb
 	if not thumb then return end
 	thumb.bg:SetBackdropColor(0, 0, 0, 0)
@@ -473,8 +473,8 @@ function B:ReskinScroll()
 	B.ReskinArrow(up, "up")
 	B.ReskinArrow(down, "down")
 
-	self:HookScript("OnEnter", scrollOnEnter)
-	self:HookScript("OnLeave", scrollOnLeave)
+	self:HookScript("OnEnter", Scroll_OnEnter)
+	self:HookScript("OnLeave", Scroll_OnLeave)
 end
 
 -- Dropdown
@@ -495,23 +495,27 @@ function B:ReskinDropDown()
 	B.CreateGradient(bg)
 end
 
-local function textureOnEnter(self)
+function B:Texture_OnEnter()
 	if self:IsEnabled() then
 		if self.pixels then
 			for _, pixel in pairs(self.pixels) do
 				pixel:SetVertexColor(cr, cg, cb)
 			end
+		elseif self.bg then
+			self.bg:SetBackdropColor(cr, cg, cb, .25)
 		else
 			self.bgTex:SetVertexColor(cr, cg, cb)
 		end
 	end
 end
 
-local function textureOnLeave(self)
+function B:Texture_OnLeave()
 	if self.pixels then
 		for _, pixel in pairs(self.pixels) do
 			pixel:SetVertexColor(1, 1, 1)
 		end
+	elseif self.bg then
+		self.bg:SetBackdropColor(0, 0, 0, .25)
 	else
 		self.bgTex:SetVertexColor(1, 1, 1)
 	end
@@ -548,8 +552,8 @@ function B:ReskinClose(a1, p, a2, x, y)
 		tinsert(self.pixels, tex)
 	end
 
-	self:HookScript("OnEnter", textureOnEnter)
- 	self:HookScript("OnLeave", textureOnLeave)
+	self:HookScript("OnEnter", B.Texture_OnEnter)
+ 	self:HookScript("OnLeave", B.Texture_OnLeave)
 end
 
 -- Editbox
@@ -570,7 +574,7 @@ function B:ReskinEditBox(height, width)
 	if height then self:SetHeight(height) end
 	if width then self:SetWidth(width) end
 end
-B.ReskinInput = B.ReskinEditBox
+B.ReskinInput = B.ReskinEditBox -- Deprecated
 
 -- Arrows
 local direcIndex = {
@@ -595,8 +599,8 @@ function B:ReskinArrow(direction)
 	tex:SetPoint("CENTER")
 	self.bgTex = tex
 
-	self:HookScript("OnEnter", textureOnEnter)
-	self:HookScript("OnLeave", textureOnLeave)
+	self:HookScript("OnEnter", B.Texture_OnEnter)
+	self:HookScript("OnLeave", B.Texture_OnLeave)
 end
 
 function B:ReskinFilterButton()
@@ -627,8 +631,8 @@ function B:ReskinNavBar()
 	tex:SetPoint("CENTER")
 	overflowButton.bgTex = tex
 
-	overflowButton:HookScript("OnEnter", textureOnEnter)
-	overflowButton:HookScript("OnLeave", textureOnLeave)
+	overflowButton:HookScript("OnEnter", B.Texture_OnEnter)
+	overflowButton:HookScript("OnLeave", B.Texture_OnLeave)
 
 	self.navBarStyled = true
 end
@@ -656,7 +660,6 @@ function B:ReskinCheck(forceSaturation)
 
 	self.forceSaturation = forceSaturation
 end
-B.CreateCB = B.ReskinCheck
 
 hooksecurefunc("TriStateCheckbox_SetState", function(_, checkButton)
 	if checkButton.forceSaturation then
@@ -686,8 +689,8 @@ function B:ReskinRadio()
 	B.CreateGradient(bg)
 	self.bg = bg
 
-	self:HookScript("OnEnter", menuOnEnter)
-	self:HookScript("OnLeave", menuOnLeave)
+	self:HookScript("OnEnter", Menu_OnEnter)
+	self:HookScript("OnLeave", Menu_OnLeave)
 end
 
 -- Swatch
@@ -704,7 +707,6 @@ function B:ReskinColorSwatch()
 	bg:SetPoint("TOPLEFT", 2, -2)
 	bg:SetPoint("BOTTOMRIGHT", -2, 2)
 end
-B.ReskinColourSwatch = B.ReskinColorSwatch
 
 -- Slider
 function B:ReskinSlider(verticle)
@@ -723,16 +725,6 @@ function B:ReskinSlider(verticle)
 end
 
 -- Multi elements
-local function expandOnEnter(self)
-	if self:IsEnabled() then
-		self.bg:SetBackdropColor(cr, cg, cb, .25)
-	end
-end
-
-local function expandOnLeave(self)
-	self.bg:SetBackdropColor(0, 0, 0, .25)
-end
-
 local function UpdateExpandOrCollapse(self, texture)
 	if self.settingTexture then return end
 	self.settingTexture = true
@@ -767,8 +759,8 @@ function B:ReskinExpandOrCollapse()
 	self.expTex:SetPoint("CENTER")
 	self.expTex:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
 
-	self:HookScript("OnEnter", expandOnEnter)
-	self:HookScript("OnLeave", expandOnLeave)
+	self:HookScript("OnEnter", B.Texture_OnEnter)
+	self:HookScript("OnLeave", B.Texture_OnLeave)
 	hooksecurefunc(self, "SetNormalTexture", UpdateExpandOrCollapse)
 end
 
@@ -808,8 +800,8 @@ function B:ReskinMinMax()
 				vline:SetPoint("BOTTOMLEFT", 4, 4)
 			end
 
-			button:SetScript("OnEnter", textureOnEnter)
-			button:SetScript("OnLeave", textureOnLeave)
+			button:SetScript("OnEnter", B.Texture_OnEnter)
+			button:SetScript("OnLeave", B.Texture_OnLeave)
 		end
 	end
 end
@@ -1430,7 +1422,7 @@ end
 
 function B:CreateCheckBox()
 	local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
-	B.CreateCB(cb)
+	B.ReskinCheck(cb)
 
 	cb.Type = "CheckBox"
 	return cb

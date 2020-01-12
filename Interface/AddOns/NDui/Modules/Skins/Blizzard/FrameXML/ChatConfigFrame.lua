@@ -31,7 +31,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 			local swatch = _G[checkBoxName.."ColorSwatch"]
 			if swatch then
-				B.ReskinColourSwatch(_G[checkBoxName.."ColorSwatch"])
+				B.ReskinColorSwatch(_G[checkBoxName.."ColorSwatch"])
 			end
 			B.ReskinCheck(_G[checkBoxName.."Check"])
 		end
@@ -69,7 +69,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			bg:SetPoint("TOPLEFT")
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 
-			B.ReskinColourSwatch(_G[swatchName.."ColorSwatch"])
+			B.ReskinColorSwatch(_G[swatchName.."ColorSwatch"])
 		end
 
 		frame.styled = true
@@ -151,8 +151,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	B.ReskinInput(CombatConfigSettingsNameEditBox)
 	B.ReskinRadio(CombatConfigColorsColorizeEntireLineBySource)
 	B.ReskinRadio(CombatConfigColorsColorizeEntireLineByTarget)
-	B.ReskinColourSwatch(CombatConfigColorsColorizeSpellNamesColorSwatch)
-	B.ReskinColourSwatch(CombatConfigColorsColorizeDamageNumberColorSwatch)
+	B.ReskinColorSwatch(CombatConfigColorsColorizeSpellNamesColorSwatch)
+	B.ReskinColorSwatch(CombatConfigColorsColorizeDamageNumberColorSwatch)
 	B.ReskinScroll(ChatConfigCombatSettingsFiltersScrollFrameScrollBar)
 	ChatConfigCombatSettingsFiltersScrollFrameScrollBarBorder:Hide()
 

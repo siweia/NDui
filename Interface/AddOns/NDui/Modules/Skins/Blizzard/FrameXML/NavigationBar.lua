@@ -75,9 +75,8 @@ tinsert(C.themes["AuroraClassic"], function()
 			tex:SetPoint("CENTER")
 			arrowButton.bgTex = tex
 
-			local colourArrow, clearArrow = B.colourArrow, B.clearArrow
-			arrowButton:SetScript("OnEnter", colourArrow)
-			arrowButton:SetScript("OnLeave", clearArrow)
+			arrowButton:SetScript("OnEnter", B.Texture_OnEnter)
+			arrowButton:SetScript("OnLeave", B.Texture_OnLeave)
 
 			navButton.restyled = true
 		end

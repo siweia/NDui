@@ -402,11 +402,8 @@ C.themes["Blizzard_AuctionUI"] = function()
 	bg:SetPoint("BOTTOMRIGHT", 109, 11)
 	B.CreateGradient(bg)
 
-	local colourArrow = B.colourArrow
-	local clearArrow = B.clearArrow
-
-	BrowseDropDownButton:HookScript("OnEnter", colourArrow)
-	BrowseDropDownButton:HookScript("OnLeave", clearArrow)
+	BrowseDropDownButton:HookScript("OnEnter", B.Texture_OnEnter)
+	BrowseDropDownButton:HookScript("OnLeave", B.Texture_OnLeave)
 
 	local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "BrowseBidPriceGold", "BrowseBidPriceSilver", "BrowseBidPriceCopper", "BidBidPriceGold", "BidBidPriceSilver", "BidBidPriceCopper", "StartPriceGold", "StartPriceSilver", "StartPriceCopper", "BuyoutPriceGold", "BuyoutPriceSilver", "BuyoutPriceCopper", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
 	for i = 1, #inputs do
