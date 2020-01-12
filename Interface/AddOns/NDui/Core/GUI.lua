@@ -740,8 +740,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"]},
 		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"], true},
-		{3, "Auras", "BuffSize", L["BuffSize"], nil, {24, 40, 0}},
-		{3, "Auras", "DebuffSize", L["DebuffSize"], true, {24, 40, 0}},
+		{3, "Auras", "BuffSize", L["BuffSize"], nil, {24, 50, 0}},
+		{3, "Auras", "DebuffSize", L["DebuffSize"], true, {24, 50, 0}},
 		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"], nil, {10, 20, 0}},
 		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"], true, {10, 16, 0}},
 		{},--blank
@@ -829,7 +829,6 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Skada", L["Skada Skin"]},
 		{1, "Skins", "Details", L["Details Skin"], nil, resetDetails},
 		{4, "Skins", "ToggleDirection", L["ToggleDirection"].."*", true, {L["LEFT"], L["RIGHT"], L["TOP"], L["BOTTOM"]}, updateToggleDirection},
-		{},--blank
 		{1, "Skins", "DBM", L["DBM Skin"]},
 		{1, "Skins", "Bigwigs", L["Bigwigs Skin"], true},
 		{1, "Skins", "TMW", L["TMW Skin"]},
