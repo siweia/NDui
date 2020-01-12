@@ -70,7 +70,42 @@ function B:GetModule(name)
 end
 
 -- Init
+local function GetBestScale()
+	local scale = B:Round(768 / DB.ScreenHeight, 5)
+	return max(.4, min(1.15, scale))
+end
+
+function B:SetupUIScale(init)
+	if NDuiADB["LockUIScale"] then NDuiADB["UIScale"] = GetBestScale() end
+	local scale = NDuiADB["UIScale"]
+	if init then
+		local pixel = 1
+		local ratio = 768 / DB.ScreenHeight
+		C.mult = (pixel / scale) - ((pixel - ratio) / scale)
+	elseif not InCombatLockdown() then
+		UIParent:SetScale(scale)
+	end
+end
+
+local isScaling = false
+local function UpdatePixelScale(event)
+	if isScaling then return end
+	isScaling = true
+
+	if event == "UI_SCALE_CHANGED" then
+		DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
+	end
+	B:SetupUIScale(true)
+	B:SetupUIScale()
+
+	isScaling = false
+end
+
 B:RegisterEvent("PLAYER_LOGIN", function()
+	-- Update UIScale
+	B:SetupUIScale()
+	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
+
 	for _, module in next, initQueue do
 		if module.OnLogin then
 			module:OnLogin()
