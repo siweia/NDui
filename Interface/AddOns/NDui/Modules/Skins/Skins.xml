@@ -4,10 +4,6 @@
 	<Include file="Blizzard\Blizzard.xml"/>
 	<Include file="Blizzard\FrameXML\FrameXML.xml"/>
 
-	<Script file="MicroMenu.lua"/>
-	<Script file="RaidManager.lua"/>
-	<Script file="PetBattleUI.lua"/>
-
 	<Script file="AddOns\Bigwigs.lua"/>
 	<Script file="AddOns\DBM.lua"/>
 	<Script file="AddOns\Skada.lua"/>

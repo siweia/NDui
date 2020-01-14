@@ -1,9 +1,9 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local S = B:GetModule("Skins")
+local M = B:GetModule("Misc")
 
-function S:CreateRM()
-	if not NDuiDB["Skins"]["RM"] then return end
+function M:CreateRM()
+	if not NDuiDB["Misc"]["RaidTool"] then return end
 
 	local tinsert, strsplit, format = table.insert, string.split, string.format
 	local next, pairs, mod = next, pairs, mod
@@ -294,14 +294,14 @@ function S:CreateRM()
 				end
 			end
 		end
-		if not NDuiDB["Skins"]["RMRune"] then NoBuff[numGroups] = {} end
+		if not NDuiDB["Misc"]["RMRune"] then NoBuff[numGroups] = {} end
 
 		if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and #NoBuff[6] == 0 then
 			sendMsg(L["Buffs Ready"])
 		else
 			sendMsg(L["Raid Buff Check"])
 			for i = 1, 5 do sendResult(i) end
-			if NDuiDB["Skins"]["RMRune"] then sendResult(numGroups) end
+			if NDuiDB["Misc"]["RMRune"] then sendResult(numGroups) end
 		end
 	end
 
@@ -342,7 +342,7 @@ function S:CreateRM()
 			if IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid())) then
 				if IsAddOnLoaded("DBM-Core") then
 					if reset then
-						SlashCmdList["DEADLYBOSSMODS"]("pull "..NDuiDB["Skins"]["DBMCount"])
+						SlashCmdList["DEADLYBOSSMODS"]("pull "..NDuiDB["Misc"]["DBMCount"])
 					else
 						SlashCmdList["DEADLYBOSSMODS"]("pull 0")
 					end
@@ -350,7 +350,7 @@ function S:CreateRM()
 				elseif IsAddOnLoaded("BigWigs") then
 					if not SlashCmdList["BIGWIGSPULL"] then LoadAddOn("BigWigs_Plugins") end
 					if reset then
-						SlashCmdList["BIGWIGSPULL"](NDuiDB["Skins"]["DBMCount"])
+						SlashCmdList["BIGWIGSPULL"](NDuiDB["Misc"]["DBMCount"])
 					else
 						SlashCmdList["BIGWIGSPULL"]("0")
 					end
@@ -495,7 +495,8 @@ function S:CreateRM()
 	}
 
 	WorldFrame:HookScript("OnMouseDown", function(_, btn)
-		if not NDuiDB["Skins"]["EasyMarking"] then return end
+		if not NDuiDB["Misc"]["EasyMarking"] then return end
+
 		if btn == "LeftButton" and IsControlKeyDown() and UnitExists("mouseover") then
 			if not IsInGroup() or (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
 				local ricon = GetRaidTargetIndex("mouseover")

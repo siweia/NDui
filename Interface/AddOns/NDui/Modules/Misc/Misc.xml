@@ -12,4 +12,5 @@
 	<Script file="MDGuildBest.lua"/>
 	<Script file="AlertFrames.lua"/>
 	<Script file="TradeTabs.lua"/>
+	<Script file="RaidManager.lua"/>
 </Ui>

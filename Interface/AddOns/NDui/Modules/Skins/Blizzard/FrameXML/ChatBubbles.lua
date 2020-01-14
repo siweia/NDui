@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
-	if not NDuiDB["Skins"]["ChatBubbles"] then return end
-
 	local function styleBubble(frame)
 		for i = 1, frame:GetNumRegions() do
 			local region = select(i, frame:GetRegions())

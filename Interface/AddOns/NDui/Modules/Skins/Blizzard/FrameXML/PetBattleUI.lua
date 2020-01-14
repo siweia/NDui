@@ -1,8 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local S = B:GetModule("Skins")
 
-function S:PetBattleUI()
+tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["PetBattle"] then return end
 
 	local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
@@ -303,4 +302,4 @@ function S:PetBattleUI()
 	lineRight:SetPoint("BOTTOMLEFT", bgRight, "TOPLEFT")
 	B.CreateGF(lineRight, 180, C.mult, "Horizontal", r, g, b, .7, 0)
 	RegisterStateDriver(bgRight, "visibility", visibleState)
-end
+end)

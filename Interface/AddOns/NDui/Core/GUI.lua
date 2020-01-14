@@ -32,6 +32,7 @@ local defaultSettings = {
 		Scale = 1,
 		BindType = 1,
 		OverrideWA = false,
+		MicroMenu = true,
 	},
 	Bags = {
 		Enable = true,
@@ -218,13 +219,8 @@ local defaultSettings = {
 	},
 	Skins = {
 		DBM = true,
-		MicroMenu = true,
 		Skada = true,
 		Bigwigs = true,
-		RM = true,
-		RMRune = false,
-		DBMCount = "10",
-		EasyMarking = true,
 		TMW = true,
 		PetBattle = true,
 		WeakAuras = true,
@@ -237,16 +233,14 @@ local defaultSettings = {
 		PGFSkin = true,
 		Rematch = true,
 		ToggleDirection = 1,
-
 		BlizzardSkins = true,
 		SkinAlpha = .5,
 		DefaultBags = false,
 		FlatMode = false,
-		ChatBubbles = true,
+		AlertFrames = true,
 		FontOutline = true,
 		Loot = true,
 		Shadow = true,
-		AlertFrames = true,
 	},
 	Tooltip = {
 		CombatHide = false,
@@ -297,6 +291,10 @@ local defaultSettings = {
 		ParagonRep = true,
 		UunatAlert = false,
 		InstantDelete = true,
+		RaidTool = true,
+		RMRune = false,
+		DBMCount = "10",
+		EasyMarking = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -598,8 +596,7 @@ local tabList = {
 local optionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
 		{1, "Actionbar", "Enable", "|cff00cc4c"..L["Enable Actionbar"]},
-		{1, "Skins", "MicroMenu", L["Micromenu"]},
-		{1, "Skins", "PetBattle", L["PetBattle Skin"], true},
+		{1, "Actionbar", "MicroMenu", L["Micromenu"], true},
 		{},--blank
 		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"]},
 		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"], true},
@@ -750,10 +747,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder},
 	},
 	[7] = {
-		{1, "Skins", "RM", "|cff00cc4c"..L["Raid Manger"]},
-		{1, "Skins", "RMRune", L["Runes Check"].."*"},
-		{1, "Skins", "EasyMarking", L["Easy Mark"].."*"},
-		{2, "Skins", "DBMCount", L["Countdown Sec"].."*", true},
+		{1, "Misc", "RaidTool", "|cff00cc4c"..L["Raid Manger"]},
+		{1, "Misc", "RMRune", L["Runes Check"].."*"},
+		{1, "Misc", "EasyMarking", L["Easy Mark"].."*"},
+		{2, "Misc", "DBMCount", L["Countdown Sec"].."*", true},
 		{},--blank
 		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"].."*", nil, nil, updateQuestNotifier},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
@@ -813,8 +810,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Shadow", L["Shadow"]},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", true, {0, 1, 1}, updateSkinAlpha},
 		{1, "Skins", "FontOutline", L["FontOutline"]},
-		{1, "Skins", "AlertFrames", L["AlertFrames"], true},
-		{1, "Skins", "ChatBubbles", L["ChatBubbles"]},
+		{1, "Skins", "PetBattle", L["PetBattle Skin"], true},
+		{1, "Skins", "AlertFrames", L["ReskinAlertFrames"]},
 		{1, "Skins", "DefaultBags", L["DefaultBags"], true, nil, nil, L["DefaultBagsTips"]},
 		{1, "Skins", "Loot", L["Loot"]},
 		{1, "Skins", "BlizzardSkins", "|cff00cc4c"..L["BlizzardSkins"], true, nil, nil, L["BlizzardSkinsTips"]},

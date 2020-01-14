@@ -37,6 +37,7 @@
 	<Script file="MovieFrame.lua"/>
 	<Script file="NavigationBar.lua"/>
 	<Script file="ObjectiveTracker.lua"/>
+	<Script file="PetBattleUI.lua"/>
 	<Script file="PetitionFrame.lua"/>
 	<Script file="PetStable.lua"/>
 	<Script file="PVEFrame.lua"/>

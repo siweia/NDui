@@ -105,6 +105,7 @@ function Bar:OnLogin()
 	self:ReskinBars()
 	self:UpdateAllScale()
 	self:CreateBackground()
+	self:MicroMenu()
 
 	--vehicle fix
 	local function getActionTexture(button)

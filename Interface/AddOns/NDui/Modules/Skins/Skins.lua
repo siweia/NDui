@@ -41,10 +41,6 @@ function S:OnLogin()
 	end
 
 	-- Add Skins
-	self:MicroMenu()
-	self:CreateRM()
-	self:PetBattleUI()
-
 	self:DBMSkin()
 	self:SkadaSkin()
 	self:BigWigsSkin()
