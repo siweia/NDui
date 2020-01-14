@@ -2,10 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 C.themes["Blizzard_WarboardUI"] = function()
-	local reskinFont = NDuiDB["Skins"]["FontOutline"]
-
 	local function forceProgressText(self)
-		if not reskinFont then return end
 		if self.styled then return end
 
 		self:SetTextColor(1, 1, 1)
@@ -31,14 +28,12 @@ C.themes["Blizzard_WarboardUI"] = function()
 
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
-			if reskinFont then
-				option.Header.Text:SetTextColor(1, .8, 0)
-				option.OptionText:SetTextColor(1, 1, 1)
-			end
+			option.Header.Text:SetTextColor(1, .8, 0)
+			option.OptionText:SetTextColor(1, 1, 1)
 
 			for i = 1, option.WidgetContainer:GetNumChildren() do
 				local child = select(i, option.WidgetContainer:GetChildren())
-				if child.Text and reskinFont then
+				if child.Text then
 					child.Text:SetTextColor(1, 1, 1)
 				end
 
@@ -49,9 +44,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 						child.Spell.bg = B.ReskinIcon(child.Spell.Icon)
 					end
 
-					if reskinFont then
-						child.Spell.Text:SetTextColor(1, 1, 1)
-					end
+					child.Spell.Text:SetTextColor(1, 1, 1)
 				end
 
 				for j = 1, child:GetNumChildren() do
