@@ -267,29 +267,30 @@ function TT:ReskinStatusBar()
 end
 
 function TT:GameTooltip_ShowStatusBar()
-	if self.statusBarPool then
-		local bar = self.statusBarPool:Acquire()
-		if bar and not bar.styled then
-			B.StripTextures(bar)
-			local tex = select(3, bar:GetRegions())
-			tex:SetTexture(DB.normTex)
-			B.CreateBDFrame(bar, .25)
+	if not self or self:IsForbidden() then return end
+	if not self.statusBarPool then return end
 
-			bar.styled = true
-		end
+	local bar = self.statusBarPool:GetNextActive()
+	if bar and not bar.styled then
+		B.StripTextures(bar)
+		B.CreateBDFrame(bar, .25)
+		bar:SetStatusBarTexture(DB.normTex)
+
+		bar.styled = true
 	end
 end
 
 function TT:GameTooltip_ShowProgressBar()
-	if self.progressBarPool then
-		local bar = self.progressBarPool:Acquire()
-		if bar and not bar.styled then
-			B.StripTextures(bar.Bar)
-			bar.Bar:SetStatusBarTexture(DB.normTex)
-			B.CreateBDFrame(bar.Bar, .25)
+	if not self or self:IsForbidden() then return end
+	if not self.progressBarPool then return end
 
-			bar.styled = true
-		end
+	local bar = self.progressBarPool:GetNextActive()
+	if bar and not bar.styled then
+		B.StripTextures(bar.Bar)
+		B.CreateBDFrame(bar.Bar, .25)
+		bar.Bar:SetStatusBarTexture(DB.normTex)
+
+		bar.styled = true
 	end
 end
 
@@ -328,7 +329,7 @@ function TT:ReskinTooltip()
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer("BACKGROUND")
 		self.bg = B.CreateBDFrame(self, .7, true)
-		self.bg:SetInside()
+		self.bg:SetInside(self)
 		B.CreateTex(self.bg)
 
 		-- other gametooltip-like support
