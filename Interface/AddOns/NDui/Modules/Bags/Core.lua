@@ -542,7 +542,7 @@ function module:OnLogin()
 
 		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
-		self.Count:SetPoint("BOTTOMRIGHT", 1, 1)
+		self.Count:SetPoint("BOTTOMRIGHT", -1, 2)
 		self.Count:SetFont(unpack(DB.Font))
 		self.Cooldown:SetInside()
 
