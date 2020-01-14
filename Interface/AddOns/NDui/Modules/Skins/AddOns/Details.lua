@@ -3,6 +3,9 @@ local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 local function ReskinDetails()
+	-- instance table can be nil sometimes
+	Details.tabela_instancias = Details.tabela_instancias or {}
+
 	local function setupInstance(instance)
 		if instance.styled then return end
 		if not instance.baseframe then return end
@@ -81,13 +84,12 @@ local function ReskinDetails()
 	end
 
 	-- Numberize
-	local _detalhes = _G._detalhes
 	local current = NDuiADB["NumberFormat"]
 	if current < 3 then
-		_detalhes.numerical_system = current
-		_detalhes:SelectNumericalSystem()
+		Details.numerical_system = current
+		Details:SelectNumericalSystem()
 	end
-	_detalhes.OpenWelcomeWindow = function()
+	Details.OpenWelcomeWindow = function()
 		if instance1 then
 			EmbedWindow(instance1, -3, 25, 320, 190)
 			instance1:SetBarSettings(18, "normTex")
