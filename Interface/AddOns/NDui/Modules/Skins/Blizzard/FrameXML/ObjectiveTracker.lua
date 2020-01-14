@@ -58,6 +58,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local function reskinBarTemplate(bar)
 		B.StripTextures(bar)
 		bar:SetStatusBarTexture(DB.normTex)
+		bar:SetStatusBarColor(r, g, b)
 		bar.bg = B.SetBD(bar)
 	end
 
@@ -143,6 +144,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
 
 			block.StatusBar:SetStatusBarTexture(DB.normTex)
+			block.StatusBar:SetStatusBarColor(r, g, b)
 			block.StatusBar:SetHeight(10)
 
 			select(3, block:GetRegions()):Hide()
