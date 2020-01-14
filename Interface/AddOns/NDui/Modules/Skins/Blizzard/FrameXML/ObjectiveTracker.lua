@@ -57,8 +57,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	-- Reskin Progressbars
 	local function reskinBarTemplate(bar)
 		B.StripTextures(bar)
-		bar:SetStatusBarTexture(DB.bdTex)
-		bar:GetStatusBarTexture():SetGradient("VERTICAL", r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
+		bar:SetStatusBarTexture(DB.normTex)
 		bar.bg = B.SetBD(bar)
 	end
 
@@ -143,8 +142,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 6, -2)
 			block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
 
-			block.StatusBar:SetStatusBarTexture(DB.bdTex)
-			block.StatusBar:GetStatusBarTexture():SetGradient("VERTICAL", r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
+			block.StatusBar:SetStatusBarTexture(DB.normTex)
 			block.StatusBar:SetHeight(10)
 
 			select(3, block:GetRegions()):Hide()
