@@ -50,6 +50,8 @@ function module:GetFilterResult(event, msg, name, flag, guid)
 		return
 	end
 
+	if NDuiDB["Chat"]["BlockStranger"] and event == "CHAT_MSG_WHISPER" then return true end -- Block strangers
+
 	if C.BadBoys[name] and C.BadBoys[name] >= 5 then return true end
 
 	local filterMsg = gsub(msg, "|H.-|h(.-)|h", "%1")

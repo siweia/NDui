@@ -165,6 +165,7 @@ local defaultSettings = {
 		Chatbar = true,
 		ChatWidth = 380,
 		ChatHeight = 190,
+		BlockStranger = false,
 	},
 	Map = {
 		Coord = true,
@@ -784,6 +785,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
+		{1, "Chat", "BlockStranger", "|cffff0000"..L["BlockStranger"].."*", nil, nil, nil, L["BlockStrangerTip"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{3, "Chat", "Matches", L["Keyword Match"].."*", false, {1, 3, 0}},
 		{2, "ACCOUNT", "ChatFilterList", L["Filter List"].."*", true, nil, updateFilterList, L["FilterListTip"]},
