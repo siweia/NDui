@@ -82,9 +82,7 @@ end
 local RaidBuffs = {}
 function module:AddClassSpells(list)
 	for class, value in pairs(list) do
-		if class == "ALL" or class == "WARNING" or class == DB.MyClass then
-			RaidBuffs[class] = value
-		end
+		RaidBuffs[class] = value
 	end
 end
 
