@@ -5,7 +5,6 @@
 	<Include file="Blizzard\FrameXML\FrameXML.xml"/>
 
 	<Script file="MicroMenu.lua"/>
-	<Script file="ObjectiveTracker.lua"/>
 	<Script file="RaidManager.lua"/>
 	<Script file="PetBattleUI.lua"/>
 

@@ -43,7 +43,6 @@ function S:OnLogin()
 	-- Add Skins
 	self:MicroMenu()
 	self:CreateRM()
-	self:QuestTracker()
 	self:PetBattleUI()
 
 	self:DBMSkin()

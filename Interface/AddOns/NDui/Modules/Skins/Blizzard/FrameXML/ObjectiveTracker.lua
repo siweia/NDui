@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
 	local r, g, b = DB.r, DB.g, DB.b
+	local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
+	local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
 
 	local function reskinQuestIcon(_, block)
 		local itemButton = block.itemButton
@@ -159,4 +161,28 @@ tinsert(C.themes["AuroraClassic"], function()
 	minimize.expTex:SetTexCoord(0.5625, 1, 0, 0.4375)
 	hooksecurefunc("ObjectiveTracker_Collapse", function() minimize.expTex:SetTexCoord(0, .4375, 0, .4375) end)
 	hooksecurefunc("ObjectiveTracker_Expand", function() minimize.expTex:SetTexCoord(.5625, 1, 0, .4375) end)
+
+	-- Show quest color and level
+	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
+		if ENABLE_COLORBLIND_MODE == "1" then return end
+
+		for button in pairs(QuestScrollFrame.titleFramePool.activeObjects) do
+			if title and not isHeader and button.questID == questID then
+				local title = "["..level.."] "..title
+				if isComplete then
+					title = "|cffff78ff"..title
+				elseif C_QuestLog_IsQuestReplayable(questID) then
+					title = "|cff00ff00"..title
+				elseif frequency == LE_QUEST_FREQUENCY_DAILY then
+					title = "|cff3399ff"..title
+				end
+				button.Text:SetText(title)
+				button.Text:SetPoint("TOPLEFT", 24, -5)
+				button.Text:SetWidth(205)
+				button.Text:SetWordWrap(false)
+				button.Check:SetPoint("LEFT", button.Text, button.Text:GetWrappedWidth(), 0)
+			end
+		end
+	end
+	hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
 end)

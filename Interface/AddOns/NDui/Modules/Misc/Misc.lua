@@ -56,6 +56,7 @@ function M:OnLogin()
 	self:UpdateErrorBlocker()
 	self:TradeTargetInfo()
 	self:TradeTabs()
+	self:MoverQuestTracker()
 
 	-- Max camera distancee
 	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
@@ -209,6 +210,21 @@ function M:MoveTicketStatusFrame()
 			self:SetPoint("TOP", UIParent, "TOP", -400, -20)
 		end
 	end)
+end
+
+-- Reanchor ObjectiveTracker
+function M:MoverQuestTracker()
+	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
+	frame:SetSize(240, 50)
+	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
+
+	local tracker = ObjectiveTrackerFrame
+	tracker:ClearAllPoints()
+	tracker:SetPoint("TOPRIGHT", frame)
+	tracker:SetHeight(GetScreenHeight()*.65)
+	tracker:SetClampedToScreen(false)
+	tracker:SetMovable(true)
+	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
 end
 
 -- Achievement screenshot
