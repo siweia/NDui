@@ -204,18 +204,21 @@ tinsert(C.themes["AuroraClassic"], function()
 		for i = 1, 6 do
 			local bu = buttonList[i]
 			bu:SetParent(bar)
-			bu:SetSize(40, 40)
+			bu:SetSize(42, 42)
 			bu:ClearAllPoints()
 			if i == 1 then
 				bu:SetPoint("LEFT", bar)
 			else
-				bu:SetPoint("LEFT", buttonList[i-1], "RIGHT", 5, 0)
+				bu:SetPoint("LEFT", buttonList[i-1], "RIGHT", 3, 0)
 			end
 
 			bu:SetNormalTexture("")
 			bu:GetPushedTexture():SetTexture(DB.textures.pushed)
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			B.ReskinIcon(bu.Icon, true)
+			if not bu.bg then
+				bu.bg = B.ReskinIcon(bu.Icon, true)
+				bu.Icon:SetInside()
+			end
 
 			bu.Cooldown:SetFont(DB.Font[1], 26, DB.Font[3])
 			bu.SelectedHighlight:ClearAllPoints()
@@ -227,11 +230,10 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local skipButton = bottomFrame.TurnTimer.SkipButton
 	skipButton:SetParent(bar)
-	skipButton:SetSize(40, 40)
+	skipButton:SetSize(42, 42)
 	B.StripTextures(skipButton)
 	B.PixelIcon(skipButton, "Interface\\Icons\\Ability_Foundryraid_Dormant", true)
-	skipButton.Icon:SetOutside()
-	B.CreateBDFrame(skipButton.Icon, nil, true)
+	B.CreateSD(skipButton)
 	skipButton.HL:SetAllPoints(skipButton)
 	skipButton:SetPushedTexture(DB.textures.pushed)
 
@@ -255,7 +257,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	hooksecurefunc("PetBattleFrame_UpdatePassButtonAndTimer", function()
 		skipButton:ClearAllPoints()
-		skipButton:SetPoint("LEFT", bottomFrame.ForfeitButton, "RIGHT", 5, 0)
+		skipButton:SetPoint("LEFT", bottomFrame.ForfeitButton, "RIGHT", 3, 0)
 
 		local pveBattle = C_PetBattles.IsPlayerNPC(LE_BATTLE_PET_ENEMY)
 		turnTimer.bg:SetShown(not pveBattle)

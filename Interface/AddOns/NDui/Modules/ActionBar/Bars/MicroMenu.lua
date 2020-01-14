@@ -85,7 +85,6 @@ end
 
 function Bar:MicroMenu()
 	if not NDuiDB["Actionbar"]["MicroMenu"] then return end
-	if not NDuiDB["Actionbar"]["Enable"] then return end
 
 	local menubar = CreateFrame("Frame", nil, UIParent)
 	menubar:SetSize(323, 22)
