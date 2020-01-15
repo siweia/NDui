@@ -665,7 +665,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyPetFrame", "|cff00cc4c"..L["UFs PartyPetFrame"]},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", "|cff00cc4c"..L["RaidBuffIndicator"], nil, setupBuffIndicator},
-		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"], nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}},
+		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"].."*", nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}, refreshRaidFrameIcons},
 		{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"].."*", true, {1, 2, 1}, refreshRaidFrameIcons},
 		{1, "UFs", "RaidClickSets", "|cff00cc4c"..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "InstanceAuras", "|cff00cc4c"..L["Instance Auras"], nil, setupRaidDebuffs},
