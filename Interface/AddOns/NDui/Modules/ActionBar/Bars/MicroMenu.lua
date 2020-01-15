@@ -2,34 +2,29 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 
+-- Texture credit: 胡里胡涂
 local _G = getfenv(0)
 local tinsert, pairs, type = table.insert, pairs, type
 local buttonList = {}
 
-function Bar:MicroButton_SetupTexture(icon, texcoord, texture)
+function Bar:MicroButton_SetupTexture(icon, texture)
 	local r, g, b = DB.r, DB.g, DB.b
 	if not NDuiDB["Skins"]["ClassLine"] then r, g, b = 0, 0, 0 end
 
-	if texture == "encounter" then
-		icon:SetPoint("TOPLEFT", 2, -2)
-		icon:SetPoint("BOTTOMRIGHT", -2, 3)
-	else
-		icon:SetAllPoints()
-	end
+	icon:SetOutside(nil, 3, 3)
 	icon:SetTexture(DB.MicroTex..texture)
-	icon:SetTexCoord(unpack(texcoord))
 	icon:SetVertexColor(r, g, b)
 end
 
 function Bar:MicroButton_Create(parent, data)
-	local texture, texcoord, method, tooltip = unpack(data)
+	local texture, method, tooltip = unpack(data)
 
 	local bu = CreateFrame("Frame", nil, parent)
 	tinsert(buttonList, bu)
 	bu:SetSize(22, 22)
 
 	local icon = bu:CreateTexture(nil, "ARTWORK")
-	Bar:MicroButton_SetupTexture(icon, texcoord, texture)
+	Bar:MicroButton_SetupTexture(icon, texture)
 
 	if type(method) == "string" then
 		local button = _G[method]
@@ -45,18 +40,19 @@ function Bar:MicroButton_Create(parent, data)
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
-		Bar:MicroButton_SetupTexture(hl, texcoord, texture)
+		Bar:MicroButton_SetupTexture(hl, texture)
 		if not NDuiDB["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
 		local flash = button.Flash
-		Bar:MicroButton_SetupTexture(flash, texcoord, texture)
+		Bar:MicroButton_SetupTexture(flash, texture)
 		if not NDuiDB["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
 	else
 		bu:SetScript("OnMouseUp", method)
 		B.AddTooltip(bu, "ANCHOR_RIGHT", tooltip)
 
 		local hl = bu:CreateTexture(nil, "HIGHLIGHT")
-		Bar:MicroButton_SetupTexture(hl, texcoord, texture)
+		hl:SetBlendMode("ADD")
+		Bar:MicroButton_SetupTexture(hl, texture)
 		if not NDuiDB["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 	end
 end
@@ -93,18 +89,18 @@ function Bar:MicroMenu()
 
 	-- Generate Buttons
 	local buttonInfo = {
-		{"player", {51/256, 141/256, 86/256, 173/256}, "CharacterMicroButton"},
-		{"spellbook", {83/256, 173/256, 86/256, 173/256}, "SpellbookMicroButton"},
-		{"talents", {83/256, 173/256, 86/256, 173/256}, "TalentMicroButton"},
-		{"achievements", {83/256, 173/256, 83/256, 173/256}, "AchievementMicroButton"},
-		{"quests", {83/256, 173/256, 80/256, 167/256}, "QuestLogMicroButton"},
-		{"guild", {83/256, 173/256, 80/256, 167/256}, "GuildMicroButton"},
-		{"LFD", {83/256, 173/256, 83/256, 173/256}, "LFDMicroButton"},
-		{"encounter", {83/256, 173/256, 83/256, 173/256}, "EJMicroButton"},
-		{"pets", {83/256, 173/256, 83/256, 173/256}, "CollectionsMicroButton"},
-		{"store", {83/256, 173/256, 83/256, 173/256}, "StoreMicroButton"},
-		{"help", {83/256, 173/256, 80/256, 170/256}, "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
-		{"bags", {47/256, 137/256, 83/256, 173/256}, ToggleAllBags, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
+		{"player", "CharacterMicroButton"},
+		{"spellbook", "SpellbookMicroButton"},
+		{"talents", "TalentMicroButton"},
+		{"achievements", "AchievementMicroButton"},
+		{"quests", "QuestLogMicroButton"},
+		{"guild", "GuildMicroButton"},
+		{"LFG", "LFDMicroButton"},
+		{"encounter", "EJMicroButton"},
+		{"collections", "CollectionsMicroButton"},
+		{"store", "StoreMicroButton"},
+		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
+		{"bags", ToggleAllBags, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
 	}
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)
