@@ -17,7 +17,7 @@ StaticPopupDialogs["AURORA_CLASSIC_WARNING"] = {
 	end,
 }
 function S:DetectAurora()
-	if DB.isDevelper then return end
+	if DB.isDeveloper then return end
 
 	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then
 		StaticPopup_Show("AURORA_CLASSIC_WARNING")
