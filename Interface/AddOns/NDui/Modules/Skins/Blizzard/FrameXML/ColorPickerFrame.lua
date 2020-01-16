@@ -4,12 +4,7 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	ColorPickerFrame.Header = ColorPickerFrame.Header or ColorPickerFrameHeader -- deprecated in 8.3
-	if DB.isNewPatch then
-		B.StripTextures(ColorPickerFrame.Header)
-	else
-		ColorPickerFrame.Header:SetAlpha(0)
-	end
+	B.StripTextures(ColorPickerFrame.Header)
 	ColorPickerFrame.Header:ClearAllPoints()
 	ColorPickerFrame.Header:SetPoint("TOP", ColorPickerFrame, 0, 0)
 	ColorPickerFrame.Border:Hide()

@@ -88,8 +88,6 @@ tinsert(C.themes["AuroraClassic"], function()
 	restyleSpellButton(QuestInfoSpellObjectiveFrame)
 
 	local function restyleRewardButton(bu, isMapQuestInfo)
-		if not bu then return end -- DB.isNewPatch
-
 		bu.NameFrame:Hide()
 		if bu.IconBorder then bu.IconBorder:SetAlpha(0) end
 

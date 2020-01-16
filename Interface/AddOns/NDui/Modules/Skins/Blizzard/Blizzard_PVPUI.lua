@@ -60,7 +60,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	popup.SeasonDescription:SetTextColor(1, 1, 1)
 	popup.SeasonDescription2:SetTextColor(1, 1, 1)
 
-	local SeasonRewardFrame = DB.isNewPatch and popup.SeasonRewardFrame or SeasonRewardFrame
+	local SeasonRewardFrame = popup.SeasonRewardFrame
 	SeasonRewardFrame.CircleMask:Hide()
 	SeasonRewardFrame.Ring:Hide()
 	B.ReskinIcon(SeasonRewardFrame.Icon)

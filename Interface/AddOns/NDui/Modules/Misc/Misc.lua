@@ -414,47 +414,6 @@ do
 	B:RegisterEvent("ARCHAEOLOGY_FIND_COMPLETE", updateArcTitle)
 end
 
--- Show BID and highlight price, tag isNewPatch, removal
-do
-	local function setupMisc(event, addon)
-		if addon == "Blizzard_AuctionUI" then
-			hooksecurefunc("AuctionFrameBrowse_Update", function()
-				local numBatchAuctions = GetNumAuctionItems("list")
-				local offset = FauxScrollFrame_GetOffset(BrowseScrollFrame)
-				local name, buyoutPrice, bidAmount, hasAllInfo
-				for i = 1, NUM_BROWSE_TO_DISPLAY do
-					local index = offset + i + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page)
-					local shouldHide = index > (numBatchAuctions + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page))
-					if not shouldHide then
-						name, _, _, _, _, _, _, _, _, buyoutPrice, bidAmount, _, _, _, _, _, _, hasAllInfo = GetAuctionItemInfo("list", offset + i)
-						if not hasAllInfo then shouldHide = true end
-					end
-					if not shouldHide then
-						local alpha = .5
-						local color = "yellow"
-						local buttonName = "BrowseButton"..i
-						local itemName = _G[buttonName.."Name"]
-						local moneyFrame = _G[buttonName.."MoneyFrame"]
-						local buyoutMoney = _G[buttonName.."BuyoutFrameMoney"]
-						if buyoutPrice >= 5*1e7 then color = "red" end
-						if bidAmount > 0 then
-							name = name.." |cffffff00"..BID.."|r"
-							alpha = 1.0
-						end
-						itemName:SetText(name)
-						moneyFrame:SetAlpha(alpha)
-						SetMoneyFrameColor(buyoutMoney:GetName(), color)
-					end
-				end
-			end)
-
-			B:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	B:RegisterEvent("ADDON_LOADED", setupMisc)
-end
-
 -- Drag AltPowerbar
 do
 	local mover = CreateFrame("Frame", "NDuiAltBarMover", PlayerPowerBarAlt)

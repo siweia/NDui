@@ -250,9 +250,7 @@ C.themes["Blizzard_Communities"] = function()
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.CommunitiesSettingsButton)
-	if DB.isNewPatch then
-		B.ReskinDropDown(CommunitiesFrame.CommunityMemberListDropDownMenu)
-	end
+	B.ReskinDropDown(CommunitiesFrame.CommunityMemberListDropDownMenu)
 
 	local detailFrame = CommunitiesFrame.GuildMemberDetailFrame
 	B.StripTextures(detailFrame)

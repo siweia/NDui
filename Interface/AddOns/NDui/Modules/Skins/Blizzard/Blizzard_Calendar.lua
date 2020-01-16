@@ -38,11 +38,6 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarCreateEventCreateButtonBorder:Hide()
 	B.ReskinIcon(CalendarCreateEventIcon)
 	CalendarCreateEventIcon.SetTexCoord = B.Dummy
-	if not DB.isNewPatch then
-		B.StripTextures(CalendarEventPickerFrame)
-		B.SetBD(CalendarEventPickerFrame)
-		B.StripTextures(CalendarEventPickerTitleFrame)
-	end
 	CalendarEventPickerCloseButtonBorder:Hide()
 	CalendarCreateEventRaidInviteButtonBorder:Hide()
 	CalendarMonthBackground:SetAlpha(0)
@@ -60,17 +55,16 @@ C.themes["Blizzard_Calendar"] = function()
 	B.CreateBD(CalendarViewEventDescriptionContainer, .25)
 	B.CreateBD(CalendarCreateEventInviteList, .25)
 	B.CreateBD(CalendarCreateEventDescriptionContainer, .25)
-	if DB.isNewPatch then
-		local function reskinCalendarPage(frame)
-			B.StripTextures(frame)
-			B.SetBD(frame)
-			B.StripTextures(frame.Header)
-		end
-		reskinCalendarPage(CalendarViewHolidayFrame)
-		reskinCalendarPage(CalendarCreateEventFrame)
-		reskinCalendarPage(CalendarTexturePickerFrame)
-		reskinCalendarPage(CalendarEventPickerFrame)
+
+	local function reskinCalendarPage(frame)
+		B.StripTextures(frame)
+		B.SetBD(frame)
+		B.StripTextures(frame.Header)
 	end
+	reskinCalendarPage(CalendarViewHolidayFrame)
+	reskinCalendarPage(CalendarCreateEventFrame)
+	reskinCalendarPage(CalendarTexturePickerFrame)
+	reskinCalendarPage(CalendarEventPickerFrame)
 
 	local frames = {
 		CalendarViewEventTitleFrame, CalendarViewHolidayTitleFrame, CalendarViewRaidTitleFrame, CalendarCreateEventTitleFrame, CalendarTexturePickerTitleFrame, CalendarMassInviteTitleFrame

@@ -12,16 +12,11 @@ tinsert(C.themes["AuroraClassic"], function()
 	B.Reskin(DressUpFrameResetButton)
 	B.StripTextures(DressUpFrameOutfitDropDown)
 	B.ReskinDropDown(DressUpFrameOutfitDropDown)
+	B.ReskinMinMax(DressUpFrame.MaximizeMinimizeFrame)
 
 	DressUpFrameOutfitDropDown:SetHeight(32)
 	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)
 	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
-
-	if DB.isNewPatch then
-		B.ReskinMinMax(DressUpFrame.MaximizeMinimizeFrame)
-	else
-		B.ReskinMinMax(MaximizeMinimizeFrame)
-	end
 
 	-- SideDressUp
 

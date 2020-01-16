@@ -1239,12 +1239,11 @@ function B:InspectItemInfo(text, slotInfo)
 	end
 end
 
-local essIndex = DB.isNewPatch and 5 or 4
 function B:CollectEssenceInfo(index, lineText, slotInfo)
 	local step = 1
 	local essence = slotInfo.essences[step]
 	if essence and next(essence) and (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
-		for i = essIndex, 2, -1 do
+		for i = 5, 2, -1 do
 			local line = _G[tip:GetName().."TextLeft"..index-i]
 			local text = line and line:GetText()
 

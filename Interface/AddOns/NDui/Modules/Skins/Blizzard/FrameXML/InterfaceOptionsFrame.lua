@@ -18,13 +18,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		B.CreateBD(InterfaceOptionsFrame)
 		B.CreateSD(InterfaceOptionsFrame)
 		InterfaceOptionsFrame.Border:Hide()
-
-		InterfaceOptionsFrame.Header = InterfaceOptionsFrame.Header or InterfaceOptionsFrameHeader -- deprecated in 8.3
-		if DB.isNewPatch then
-			B.StripTextures(InterfaceOptionsFrame.Header)
-		else
-			InterfaceOptionsFrame.Header:SetTexture("")
-		end
+		B.StripTextures(InterfaceOptionsFrame.Header)
 		InterfaceOptionsFrame.Header:ClearAllPoints()
 		InterfaceOptionsFrame.Header:SetPoint("TOP", InterfaceOptionsFrame, 0, 0)
 

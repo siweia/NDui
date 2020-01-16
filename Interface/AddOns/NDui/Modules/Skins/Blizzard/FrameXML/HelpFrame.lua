@@ -8,12 +8,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	B.StripTextures(HelpFrame)
 	B.SetBD(HelpFrame)
-	HelpFrame.Header = HelpFrame.Header or HelpFrameHeader -- deprecated in 8.3
-	if DB.isNewPatch then
-		B.StripTextures(HelpFrame.Header)
-	else
-		HelpFrame.Header:Hide()
-	end
+	B.StripTextures(HelpFrame.Header)
     B.ReskinClose(HelpFrameCloseButton)
 
 	B.StripTextures(HelpFrameMainInset)
