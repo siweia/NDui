@@ -1,7 +1,9 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-C.themes["Blizzard_TimeManager"] = function()
+tinsert(C.themes["AuroraClassic"], function()
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
 	TimeManagerGlobe:Hide()
 	TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
 	TimeManagerStopwatchCheck:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -36,4 +38,4 @@ C.themes["Blizzard_TimeManager"] = function()
 	play:SetSize(18, 18)
 	play:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	play:SetPoint("RIGHT", reset, "LEFT", -2, 0)
-end
+end)
