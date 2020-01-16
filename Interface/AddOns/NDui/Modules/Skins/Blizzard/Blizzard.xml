@@ -4,7 +4,7 @@
 	<Script file="Blizzard_AlliedRacesUI.lua"/>
 	<Script file="Blizzard_ArchaeologyUI.lua"/>
 	<Script file="Blizzard_ArtifactUI.lua"/>
-	<Script file="Blizzard_AuctionUI.lua"/>
+	<Script file="Blizzard_AuctionHouseUI.lua"/>
 	<Script file="Blizzard_AzeriteEssenceUI.lua"/>
 	<Script file="Blizzard_AzeriteRespecUI.lua"/>
 	<Script file="Blizzard_AzeriteUI.lua"/>
