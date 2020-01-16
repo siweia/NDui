@@ -114,7 +114,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
 		block.NormalBG:SetTexture("")
 		if not block.bg then
-			block.bg = B.SetBD(block.GlowTexture, 4, -2, -4, 0)
+			block.bg = B.SetBD(block.GlowTexture, 4, -2, -4, 2)
 		end
 	end)
 

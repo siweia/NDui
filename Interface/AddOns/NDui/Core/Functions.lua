@@ -177,8 +177,8 @@ end
 function B:SetBD(x, y, x2, y2)
 	local bg = B.CreateBDFrame(self, nil, true)
 	if x then
-		bg:SetPoint("TOPLEFT", x, y)
-		bg:SetPoint("BOTTOMRIGHT", x2, y2)
+		bg:SetPoint("TOPLEFT", self, x, y)
+		bg:SetPoint("BOTTOMRIGHT", self, x2, y2)
 	end
 	B.CreateTex(bg)
 
