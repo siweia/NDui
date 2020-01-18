@@ -408,8 +408,8 @@ function B:ReskinMenuButton()
 	self.bg = B.SetBD(self)
 	self:SetScript("OnEnter", Menu_OnEnter)
 	self:SetScript("OnLeave", Menu_OnLeave)
-	self:SetScript("OnMouseUp", Menu_OnMouseUp)
-	self:SetScript("OnMouseDown", Menu_OnMouseDown)
+	self:HookScript("OnMouseUp", Menu_OnMouseUp)
+	self:HookScript("OnMouseDown", Menu_OnMouseDown)
 end
 
 -- Tabs

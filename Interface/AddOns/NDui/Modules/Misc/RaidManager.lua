@@ -216,11 +216,8 @@ function M:CreateRM()
 		marker:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
 		marker:GetNormalTexture():SetVertexColor(DB.r, DB.g, DB.b)
 		marker:HookScript("OnMouseUp", function(_, btn)
-			if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
-				if btn == "RightButton" then ClearRaidMarker() end
-			else
-				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
-			end
+			if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then return end
+			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
 		end)
 	end
 
