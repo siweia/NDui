@@ -300,7 +300,7 @@ function UF:AddTargetIndicator(self)
 	frame.TopArrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
 	frame.TopArrow:SetSize(50, 50)
 	frame.TopArrow:SetTexture(DB.arrowTex)
-	frame.TopArrow:SetPoint("BOTTOM", frame, "TOP", 0, 18)
+	frame.TopArrow:SetPoint("BOTTOM", frame, "TOP", 0, 20)
 
 	frame.RightArrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
 	frame.RightArrow:SetSize(50, 50)
