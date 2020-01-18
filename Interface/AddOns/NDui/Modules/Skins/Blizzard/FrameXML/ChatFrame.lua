@@ -128,7 +128,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	hooksecurefunc(VoiceActivityManager, "LinkFrameNotificationAndGuid", function(_, _, notification, guid)
 		local class = select(2, GetPlayerInfoByGUID(guid))
 		if class then
-			local color = C.ClassColors[class]
+			local color = DB.ClassColors[class]
 			if notification.Name then
 				notification.Name:SetTextColor(color.r, color.g, color.b)
 			end
