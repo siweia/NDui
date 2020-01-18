@@ -24,21 +24,24 @@ function S:DetectAurora()
 	end
 end
 
+function S:LoadDefaultSkins()
+	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then return end
+
+	-- Reskin Blizzard UIs
+	for _, func in pairs(C.themes["AuroraClassic"]) do
+		func()
+	end
+	if NDuiDB["Skins"]["BlizzardSkins"] then
+		B:RegisterEvent("ADDON_LOADED", function(_, addon)
+			local func = C.themes[addon]
+			if func then func() end
+		end)
+	end
+end
+
 function S:OnLogin()
 	self:DetectAurora()
-
-	if not IsAddOnLoaded("AuroraClassic") and not IsAddOnLoaded("Aurora") then
-		-- Reskin Blizzard UIs
-		for _, func in pairs(C.themes["AuroraClassic"]) do
-			func()
-		end
-		if NDuiDB["Skins"]["BlizzardSkins"] then
-			B:RegisterEvent("ADDON_LOADED", function(_, addon)
-				local func = C.themes[addon]
-				if func then func() end
-			end)
-		end
-	end
+	self:LoadDefaultSkins()
 
 	-- Add Skins
 	self:DBMSkin()
