@@ -73,8 +73,7 @@ C.themes["Blizzard_Calendar"] = function()
 		B.StripTextures(titleFrame)
 		local parent = titleFrame:GetParent()
 		B.StripTextures(parent)
-		B.CreateBD(parent)
-		B.CreateSD(parent)
+		B.SetBD(parent)
 	end
 
 	CalendarWeekdaySelectedTexture:SetDesaturated(true)

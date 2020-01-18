@@ -53,8 +53,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
-	B.CreateBD(EquipmentFlyoutFrame.NavigationFrame)
-	B.CreateSD(EquipmentFlyoutFrame.NavigationFrame)
+	B.SetBD(EquipmentFlyoutFrame.NavigationFrame)
 	B.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.PrevButton, "left")
 	B.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.NextButton, "right")
 end)

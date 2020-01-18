@@ -7,18 +7,17 @@ tinsert(C.themes["AuroraClassic"], function()
 	local r, g, b = DB.r, DB.g, DB.b
 
 	-- Battlenet toast frame
-	B.CreateBD(BNToastFrame)
-	B.CreateSD(BNToastFrame)
-	B.CreateBD(BNToastFrame.TooltipFrame)
-	B.CreateSD(BNToastFrame.TooltipFrame)
+	BNToastFrame:SetBackdrop(nil)
+	B.SetBD(BNToastFrame)
+	BNToastFrame.TooltipFrame:SetBackdrop(nil)
+	B.SetBD(BNToastFrame.TooltipFrame)
 
 	-- Battletag invite frame
-	B.CreateBD(BattleTagInviteFrame)
-	B.CreateSD(BattleTagInviteFrame)
 	local border, send, cancel = BattleTagInviteFrame:GetChildren()
 	border:Hide()
 	B.Reskin(send)
 	B.Reskin(cancel)
+	B.SetBD(BattleTagInviteFrame)
 
 	local friendTex = "Interface\\HELPFRAME\\ReportLagIcon-Chat"
 	local queueTex = "Interface\\HELPFRAME\\HelpIcon-ItemRestoration"
@@ -43,10 +42,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		self.FriendsButton:SetTexture(friendTex)
 	end)
 	QuickJoinToastButton.Toast.Background:SetTexture("")
-	local bg = B.CreateBDFrame(QuickJoinToastButton.Toast)
+	local bg = B.CreateBDFrame(QuickJoinToastButton.Toast, nil, true)
 	bg:SetPoint("TOPLEFT", 10, -1)
 	bg:SetPoint("BOTTOMRIGHT", 0, 3)
-	B.CreateSD(bg)
 	bg:Hide()
 	hooksecurefunc(QuickJoinToastButton, "ShowToast", function() bg:Show() end)
 	hooksecurefunc(QuickJoinToastButton, "HideToast", function() bg:Hide() end)
@@ -119,11 +117,9 @@ tinsert(C.themes["AuroraClassic"], function()
 	B.ReskinInput(CreateChannelPopup.Name)
 	B.ReskinInput(CreateChannelPopup.Password)
 
-	B.CreateBD(VoiceChatPromptActivateChannel)
-	B.CreateSD(VoiceChatPromptActivateChannel)
+	B.SetBD(VoiceChatPromptActivateChannel)
 	B.Reskin(VoiceChatPromptActivateChannel.AcceptButton)
-	B.CreateBD(VoiceChatChannelActivatedNotification)
-	B.CreateSD(VoiceChatChannelActivatedNotification)
+	B.SetBD(VoiceChatChannelActivatedNotification)
 
 	B.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
 	B.ReskinSlider(UnitPopupVoiceSpeakerVolume.Slider)

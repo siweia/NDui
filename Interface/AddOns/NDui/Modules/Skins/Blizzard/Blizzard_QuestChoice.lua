@@ -46,7 +46,6 @@ C.themes["Blizzard_QuestChoice"] = function()
 		end
 	end)
 
-	B.CreateBD(QuestChoiceFrame)
-	B.CreateSD(QuestChoiceFrame)
+	B.SetBD(QuestChoiceFrame)
 	B.ReskinClose(QuestChoiceFrame.CloseButton)
 end

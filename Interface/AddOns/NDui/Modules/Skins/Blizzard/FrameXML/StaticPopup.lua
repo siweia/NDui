@@ -38,8 +38,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
-		B.CreateBD(frame)
-		B.CreateSD(frame)
+		B.SetBD(frame)
 		for j = 1, 4 do
 			B.Reskin(frame["button"..j])
 		end
@@ -116,8 +115,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	-- Pet battle queue popup
 
-	B.CreateBD(PetBattleQueueReadyFrame)
-	B.CreateSD(PetBattleQueueReadyFrame)
+	B.SetBD(PetBattleQueueReadyFrame)
 	B.CreateBDFrame(PetBattleQueueReadyFrame.Art)
 	PetBattleQueueReadyFrame.Border:Hide()
 	B.Reskin(PetBattleQueueReadyFrame.AcceptButton)

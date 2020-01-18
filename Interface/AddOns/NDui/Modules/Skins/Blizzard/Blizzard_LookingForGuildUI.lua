@@ -18,8 +18,7 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 		B.CreateBD(LookingForGuildCommentFrame, .25)
 		LookingForGuildCommentFrameBg:Hide()
 		B.CreateBD(LookingForGuildCommentInputFrame, .12)
-		B.CreateBD(GuildFinderRequestMembershipFrame)
-		B.CreateSD(GuildFinderRequestMembershipFrame)
+		B.SetBD(GuildFinderRequestMembershipFrame)
 		for i = 1, 9 do
 			select(i, LookingForGuildCommentInputFrame:GetRegions()):Hide()
 		end

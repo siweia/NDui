@@ -5,8 +5,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
 	B.StripTextures(RaidInfoFrame)
-	B.CreateBD(RaidInfoFrame)
-	B.CreateSD(RaidInfoFrame)
+	B.SetBD(RaidInfoFrame)
 	B.ReskinCheck(RaidFrameAllAssistCheckButton)
 	B.StripTextures(RaidInfoFrame.Header)
 

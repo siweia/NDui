@@ -11,9 +11,8 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 	B.ReskinIcon(GhostFrameContentsFrameIcon)
 
-	B.CreateBD(GhostFrame, .25)
-	B.CreateSD(GhostFrame)
-	B.CreateGradient(GhostFrame)
+	local bg = B.SetBD(GhostFrame)
+	B.CreateGradient(bg)
 	GhostFrame:SetHighlightTexture(DB.bdTex)
 	GhostFrame:GetHighlightTexture():SetVertexColor(r, g, b, .25)
 end)

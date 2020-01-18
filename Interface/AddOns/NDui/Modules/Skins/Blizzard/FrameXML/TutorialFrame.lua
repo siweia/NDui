@@ -4,8 +4,7 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	B.CreateBD(TutorialFrame)
-	B.CreateSD(TutorialFrame)
+	B.SetBD(TutorialFrame)
 
 	TutorialFrameBackground:Hide()
 	TutorialFrameBackground.Show = B.Dummy

@@ -5,8 +5,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
 	-- Ready check
-	B.CreateBD(ReadyCheckFrame)
-	B.CreateSD(ReadyCheckFrame)
+	B.SetBD(ReadyCheckFrame)
 	ReadyCheckPortrait:SetAlpha(0)
 	select(2, ReadyCheckListenerFrame:GetRegions()):Hide()
 

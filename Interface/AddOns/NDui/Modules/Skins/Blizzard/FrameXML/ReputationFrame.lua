@@ -43,8 +43,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	end
 
 	B.StripTextures(ReputationDetailFrame)
-	B.CreateBD(ReputationDetailFrame)
-	B.CreateSD(ReputationDetailFrame)
+	B.SetBD(ReputationDetailFrame)
 	B.ReskinClose(ReputationDetailCloseButton)
 	B.ReskinCheck(ReputationDetailAtWarCheckBox)
 	B.ReskinCheck(ReputationDetailInactiveCheckBox)

@@ -446,8 +446,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local GarrisonLandingPage = GarrisonLandingPage
 
 	B.StripTextures(GarrisonLandingPage)
-	B.CreateBD(GarrisonLandingPage)
-	B.CreateSD(GarrisonLandingPage)
+	B.SetBD(GarrisonLandingPage)
 	B.ReskinClose(GarrisonLandingPage.CloseButton)
 	B.ReskinTab(GarrisonLandingPageTab1)
 	B.ReskinTab(GarrisonLandingPageTab2)

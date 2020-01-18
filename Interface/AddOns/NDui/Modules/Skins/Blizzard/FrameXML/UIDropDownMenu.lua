@@ -12,8 +12,9 @@ tinsert(C.themes["AuroraClassic"], function()
 				local backdrop = _G[name..i.."Backdrop"]
 				if backdrop and not backdrop.styled then
 					B.StripTextures(backdrop)
-					B.CreateBD(backdrop, .7)
-					B.CreateSD(backdrop)
+					local bg = B.CreateBDFrame(backdrop, .7, true)
+					B.CreateTex(bg)
+
 					backdrop.styled = true
 				end
 			end

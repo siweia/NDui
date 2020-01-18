@@ -4,8 +4,7 @@ local B, C, L, DB = unpack(ns)
 C.themes["Blizzard_GuildControlUI"] = function()
 	local r, g, b = DB.r, DB.g, DB.b
 
-	B.CreateBD(GuildControlUI)
-	B.CreateSD(GuildControlUI)
+	B.SetBD(GuildControlUI)
 
 	for i = 1, 9 do
 		select(i, GuildControlUI:GetRegions()):Hide()

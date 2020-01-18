@@ -5,8 +5,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
 	B.StripTextures(ChatConfigFrame)
-	B.CreateBD(ChatConfigFrame)
-	B.CreateSD(ChatConfigFrame)
+	B.SetBD(ChatConfigFrame)
 	B.StripTextures(ChatConfigFrame.Header)
 	ChatConfigFrame.Header:SetPoint("TOP", ChatConfigFrame, 0, 0)
 

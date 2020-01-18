@@ -63,8 +63,7 @@ tinsert(C.themes["AuroraClassic"], function()
 
 		B.ReskinIcon(frame.PromptFrame.Icon)
 		frame.PromptFrame.Timer.Bar:SetTexture(DB.bdTex)
-		B.CreateBD(frame)
-		B.CreateSD(frame)
+		B.SetBD(frame)
 		B.CreateBDFrame(frame.PromptFrame.Timer, .25)
 
 		local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"

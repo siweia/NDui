@@ -200,8 +200,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local LFGListApplicationDialog = LFGListApplicationDialog
 
 	B.StripTextures(LFGListApplicationDialog)
-	B.CreateBD(LFGListApplicationDialog)
-	B.CreateSD(LFGListApplicationDialog)
+	B.SetBD(LFGListApplicationDialog)
 	B.StripTextures(LFGListApplicationDialog.Description)
 	B.CreateBDFrame(LFGListApplicationDialog.Description, .25)
 	B.Reskin(LFGListApplicationDialog.SignUpButton)
@@ -212,8 +211,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local LFGListInviteDialog = LFGListInviteDialog
 
 	B.StripTextures(LFGListInviteDialog)
-	B.CreateBD(LFGListInviteDialog)
-	B.CreateSD(LFGListInviteDialog)
+	B.SetBD(LFGListInviteDialog)
 	B.Reskin(LFGListInviteDialog.AcceptButton)
 	B.Reskin(LFGListInviteDialog.DeclineButton)
 	B.Reskin(LFGListInviteDialog.AcknowledgeButton)

@@ -18,9 +18,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	LootHistoryFrame.Label:ClearAllPoints()
 	LootHistoryFrame.Label:SetPoint("TOP", LootHistoryFrame, "TOP", 0, -8)
 
-	B.CreateBD(LootHistoryFrame)
-	B.CreateSD(LootHistoryFrame)
-
+	B.SetBD(LootHistoryFrame)
 	B.ReskinClose(LootHistoryFrame.CloseButton)
 	B.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
 

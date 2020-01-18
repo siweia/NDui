@@ -111,13 +111,12 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 		select(i, guildFrame:GetRegions()):Hide()
 	end
 	guildFrame.Title:Show()
-	B.CreateBD(guildFrame)
-	B.CreateSD(guildFrame)
+	B.SetBD(guildFrame)
 	guildFrame:ClearAllPoints()
-	guildFrame:SetPoint("BOTTOMLEFT", TradeSkillFrame, "BOTTOMRIGHT", 2, 0)
+	guildFrame:SetPoint("BOTTOMLEFT", TradeSkillFrame, "BOTTOMRIGHT", 3, 0)
 	B.ReskinScroll(guildFrame.Container.ScrollFrame.scrollBar)
 	for i = 1, 9 do
 		select(i, guildFrame.Container:GetRegions()):Hide()
 	end
-	B.CreateBD(guildFrame.Container)
+	B.CreateBD(guildFrame.Container, .25)
 end

@@ -233,6 +233,7 @@ C.themes["Blizzard_TalentUI"] = function()
 	B.StripTextures(talentList)
 	B.CreateBD(talentList)
 	B.CreateSD(talentList)
+	B.CreateTex(talentList)
 	talentList.Inset:Hide()
 
 	B.StripTextures(PlayerTalentFrameTalentsPvpTalentFrame)
