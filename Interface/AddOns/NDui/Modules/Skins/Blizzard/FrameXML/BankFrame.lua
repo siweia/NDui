@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 tinsert(C.themes["AuroraClassic"], function()
 	if NDuiDB["Bags"]["Enable"] then return end
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 	if not NDuiDB["Skins"]["DefaultBags"] then return end
 
 	-- [[ Bank ]]
