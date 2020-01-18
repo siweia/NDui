@@ -63,7 +63,7 @@ tinsert(C.themes["AuroraClassic"], function()
 		end)
 
 		B.ReskinIcon(frame.PromptFrame.Icon)
-		frame.PromptFrame.Timer.Bar:SetTexture(DB.bdTex)
+		frame.PromptFrame.Timer.Bar:SetTexture(DB.normTex)
 		B.SetBD(frame)
 		B.CreateBDFrame(frame.PromptFrame.Timer, .25)
 
