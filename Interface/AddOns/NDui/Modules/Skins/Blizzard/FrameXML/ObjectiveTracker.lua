@@ -12,7 +12,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			itemButton:SetNormalTexture("")
 			itemButton:SetPushedTexture("")
 			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			B.ReskinIcon(itemButton.icon, true)
+			itemButton.icon:SetTexCoord(unpack(DB.TexCoord))
+			B.CreateBD(itemButton)
+			B.CreateSD(itemButton)
 
 			itemButton.styled = true
 		end
@@ -24,7 +26,8 @@ tinsert(C.themes["AuroraClassic"], function()
 			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			rightButton:SetSize(22, 22)
 			rightButton.Icon:SetSize(18, 18)
-			B.CreateBDFrame(rightButton, nil, true)
+			B.CreateBD(rightButton)
+			B.CreateSD(rightButton)
 
 			rightButton.styled = true
 		end
