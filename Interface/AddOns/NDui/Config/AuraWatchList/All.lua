@@ -184,6 +184,7 @@ local list = {
 		{AuraID = 302731, UnitID = "player", Flash = true},	-- 空间涟漪
 		{AuraID = 302952, UnitID = "player"},	-- 现实流转
 		{AuraID = 295137, UnitID = "player", Flash = true},	-- 源血
+		{AuraID = 311203, UnitID = "player"},	-- 光荣时刻
 		-- 腐蚀
 		{AuraID = 316823, UnitID = "player"},	-- 虚空仪式
 		{AuraID = 318211, UnitID = "player"},	-- 活力涌动
