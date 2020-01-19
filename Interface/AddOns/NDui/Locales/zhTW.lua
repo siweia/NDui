@@ -620,3 +620,4 @@ L["AuroraClassic warning"] = "檢測到你啓用了Aurora或者AuroraClassic，�
 L["ReskinAlertFrames"] = "美化通知窗口"
 L["BlockStranger"] = "屏蔽陌生人密語"
 L["BlockStrangerTip"] = "|n啓用后，只接受來自隊友、好友以及公會成員的密語。"
+L["LesserVision"] = "恩佐斯的小幻象"

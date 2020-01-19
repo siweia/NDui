@@ -620,3 +620,4 @@ L["AuroraClassic warning"] = "Before we start, you need to disable addon Aurora 
 L["ReskinAlertFrames"] = "Reskin AlertFrames"
 L["BlockStranger"] = "Block stranger whipser"
 L["BlockStrangerTip"] = "|nIf checked, only accept whispers from party or raid members, friends and guild members."
+L["LesserVision"] = "Lesser Vision of N'Zoth"
