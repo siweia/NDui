@@ -481,6 +481,8 @@ local list = {
 		{AuraID = 273405, UnitID = "player"},	-- 黑暗交易，戈霍恩
 	},
 	["Warning"] = {			-- 目标重要光环组
+	-- 幻象
+		{AuraID = 319643, UnitID = "target", Value = true},	-- 虚空哀嚎，吸收盾
 	-- 5人本
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
 	-- 8.0副本
