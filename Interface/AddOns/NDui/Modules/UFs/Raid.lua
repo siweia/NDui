@@ -523,6 +523,8 @@ function UF:InterruptIndicator(self)
 end
 
 function UF:CreatePartyAltPower(self)
+	if not NDuiDB["UFs"]["PartyAltPower"] then return end
+
 	local horizon = NDuiDB["UFs"]["HorizonParty"]
 	local relF = horizon and "TOP" or "LEFT"
 	local relT = horizon and "BOTTOM" or "RIGHT"
