@@ -189,6 +189,14 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.Reskin(wowTokenResults.Buyout)
 	B.ReskinScroll(wowTokenResults.DummyScrollBar)
 
+	local gameTimeTutorial = wowTokenResults.GameTimeTutorial
+	B.ReskinPortraitFrame(gameTimeTutorial)
+	B.Reskin(gameTimeTutorial.RightDisplay.StoreButton)
+	gameTimeTutorial.LeftDisplay.Label:SetTextColor(1, 1, 1)
+	gameTimeTutorial.LeftDisplay.Tutorial1:SetTextColor(1, .8, 0)
+	gameTimeTutorial.RightDisplay.Label:SetTextColor(1, 1, 1)
+	gameTimeTutorial.RightDisplay.Tutorial1:SetTextColor(1, .8, 0)
+
 	reskinSellPanel(AuctionHouseFrame.ItemSellFrame)
 	reskinSellPanel(AuctionHouseFrame.CommoditiesSellFrame)
 	reskinSellList(AuctionHouseFrame.CommoditiesSellList, true)
