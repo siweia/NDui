@@ -519,7 +519,11 @@ function UF.PostCreateIcon(element, button)
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
 	button.count = B.CreateFS(parentFrame, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
 	button.cd:SetReverse(true)
-	button.iconbg = B.ReskinIcon(button.icon, true)
+	local needShadow = true
+	if element.__owner.mystyle == "raid" and not NDuiDB["UFs"]["RaidBuffIndicator"] then
+		needShadow = false
+	end
+	button.iconbg = B.ReskinIcon(button.icon, needShadow)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
@@ -660,7 +664,7 @@ function UF:CreateAuras(self)
 			bu.numTotal = 1
 			bu.disableCooldown = true
 		else
-			bu:SetPoint("BOTTOMLEFT", self, 2, -1)
+			bu:SetPoint("BOTTOMLEFT", self.Health)
 			bu.numTotal = NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 6
 			bu.iconsPerRow = 6
 			bu.spacing = 2
