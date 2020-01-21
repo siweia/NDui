@@ -836,9 +836,10 @@ function G:SetupRaidFrame(parent)
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.mystyle == "raid" and not frame.isPartyFrame then
 				if NDuiDB["UFs"]["SimpleMode"] then
-					local frameWidth = 100*NDuiDB["UFs"]["SimpleRaidScale"]/10
-					local frameHeight = 20*NDuiDB["UFs"]["SimpleRaidScale"]/10
-					local powerHeight = 2*NDuiDB["UFs"]["SimpleRaidScale"]/10
+					local scale = NDuiDB["UFs"]["SimpleRaidScale"]/10
+					local frameWidth = 100*scale
+					local frameHeight = 20*scale
+					local powerHeight = 2*scale
 					local healthHeight = frameHeight - powerHeight
 					frame:SetSize(frameWidth, frameHeight)
 					frame.Health:SetHeight(healthHeight)
