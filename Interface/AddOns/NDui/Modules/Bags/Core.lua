@@ -12,6 +12,7 @@ local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetConta
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
+local IsCorruptedItem = IsCorruptedItem
 
 local sortCache = {}
 function module:ReverseSort()
@@ -549,6 +550,14 @@ function module:OnLogin()
 		B.CreateBD(self, .3)
 		self:SetBackdropColor(.3, .3, .3, .3)
 
+		self.Azerite = self:CreateTexture(nil, "ARTWORK")
+		self.Azerite:SetAtlas("AzeriteIconFrame")
+		self.Azerite:SetInside()
+
+		self.Corrupt = self:CreateTexture(nil, "ARTWORK")
+		self.Corrupt:SetAtlas("Nzoth-inventory-icon")
+		self.Corrupt:SetInside()
+
 		local parentFrame = CreateFrame("Frame", nil, self)
 		parentFrame:SetAllPoints()
 		parentFrame:SetFrameLevel(5)
@@ -557,10 +566,6 @@ function module:OnLogin()
 		self.junkIcon:SetAtlas("bags-junkcoin")
 		self.junkIcon:SetSize(20, 20)
 		self.junkIcon:SetPoint("TOPRIGHT", 1, 0)
-
-		self.Azerite = self:CreateTexture(nil, "ARTWORK")
-		self.Azerite:SetAtlas("AzeriteIconFrame")
-		self.Azerite:SetInside()
 
 		self.Favourite = parentFrame:CreateTexture(nil, "ARTWORK")
 		self.Favourite:SetAtlas("collections-icon-favorites")
@@ -621,6 +626,12 @@ function module:OnLogin()
 			self.Azerite:SetAlpha(1)
 		else
 			self.Azerite:SetAlpha(0)
+		end
+
+		if item.link and IsCorruptedItem(item.link) then
+			self.Corrupt:SetAlpha(1)
+		else
+			self.Corrupt:SetAlpha(0)
 		end
 
 		if NDuiDB["Bags"]["FavouriteItems"][item.id] then
