@@ -474,3 +474,73 @@ function UF:RefreshRaidFrameIcons()
 		end
 	end
 end
+
+function UF:InterruptIndicator(self)
+	if not NDuiDB["UFs"]["PartyWatcher"] then return end
+
+	local horizon = NDuiDB["UFs"]["HorizonParty"]
+	local otherSide = NDuiDB["UFs"]["PWOnRight"]
+	local relF = horizon and "BOTTOMLEFT" or "TOPRIGHT"
+	local relT = "TOPLEFT"
+	local xOffset = horizon and 0 or -5
+	local yOffset = horizon and 5 or 0
+	local margin = horizon and 2 or -2
+	if otherSide then
+		relF = "TOPLEFT"
+		relT = horizon and "BOTTOMLEFT" or "TOPRIGHT"
+		xOffset = horizon and 0 or 5
+		yOffset = horizon and -(self.Power:GetHeight()+8) or 0
+		margin = 2
+	end
+	local rel1 = not horizon and not otherSide and "RIGHT" or "LEFT"
+	local rel2 = not horizon and not otherSide and "LEFT" or "RIGHT"
+	local buttons = {}
+	local maxIcons = 6
+	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()+self.Power:GetHeight()+3)
+	if iconSize > 34 then iconSize = 34 end
+
+	for i = 1, maxIcons do
+		local bu = CreateFrame("Frame", nil, self)
+		bu:SetSize(iconSize, iconSize)
+		B.AuraIcon(bu)
+		bu.CD:SetReverse(false)
+		if i == 1 then
+			bu:SetPoint(relF, self, relT, xOffset, yOffset)
+		elseif i == 4 and horizon then
+			bu:SetPoint(relF, buttons[i-3], relT, 0, margin)
+		else
+			bu:SetPoint(rel1, buttons[i-1], rel2, margin, 0)
+		end
+		bu:Hide()
+
+		buttons[i] = bu
+	end
+
+	buttons.__max = maxIcons
+	buttons.PartySpells = NDuiADB["PartyWatcherSpells"]
+	buttons.TalentCDFix = C.TalentCDFix
+	self.PartyWatcher = buttons
+end
+
+function UF:CreatePartyAltPower(self)
+	local horizon = NDuiDB["UFs"]["HorizonParty"]
+	local relF = horizon and "TOP" or "LEFT"
+	local relT = horizon and "BOTTOM" or "RIGHT"
+	local xOffset = horizon and 0 or 5
+	local yOffset = horizon and -5 or 0
+	local otherSide = NDuiDB["UFs"]["PWOnRight"]
+	if otherSide then
+		xOffset = horizon and 0 or -5
+		yOffset = horizon and 5 or 0
+	end
+
+	local altPower = B.CreateFS(self, 16, "99%")
+	altPower:ClearAllPoints()
+	if otherSide then
+		altPower:SetPoint(relT, self, relF, xOffset, yOffset)
+	else
+		local parent = horizon and self.Power or self
+		altPower:SetPoint(relF, parent, relT, xOffset, yOffset)
+	end
+	self:Tag(altPower, "[altpower]")
+end

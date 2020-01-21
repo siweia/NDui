@@ -164,6 +164,7 @@ local function CreatePartyStyle(self)
 	self.isPartyFrame = true
 	CreateRaidStyle(self)
 	UF:InterruptIndicator(self)
+	UF:CreatePartyAltPower(self)
 end
 
 local function CreatePartyPetStyle(self)
