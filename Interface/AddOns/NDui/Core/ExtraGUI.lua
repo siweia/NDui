@@ -820,9 +820,9 @@ function G:SetupRaidFrame(parent)
 	}
 
 	local defaultValue = {
-		["Party"] = {100, 30, 2},
-		["PartyPet"] = {100, 20, 2},
-		["Raid"] = {80, 30, 2},
+		["Party"] = {100, 32, 2},
+		["PartyPet"] = {100, 22, 2},
+		["Raid"] = {80, 32, 2},
 	}
 
 	local function createOptionGroup(parent, title, offset, value, func)
