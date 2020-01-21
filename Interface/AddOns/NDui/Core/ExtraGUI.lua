@@ -734,6 +734,14 @@ local function createOptionSlider(parent, title, minV, maxV, x, y, value, func)
 	slider:SetScript("OnValueChanged", sliderValueChanged)
 end
 
+local function SetUnitFrameSize(self, unit)
+	local width = NDuiDB["UFs"][unit.."Width"]
+	local height = NDuiDB["UFs"][unit.."Height"] + NDuiDB["UFs"][unit.."PowerHeight"] + C.mult
+	self:SetSize(width, height)
+	self.Health:SetHeight(NDuiDB["UFs"][unit.."Height"])
+	self.Power:SetHeight(NDuiDB["UFs"][unit.."PowerHeight"])
+end
+
 function G:SetupUnitFrame(parent)
 	toggleExtraGUI("NDuiGUI_UnitFrameSetup")
 	if unitframeGUI then return end
@@ -766,8 +774,7 @@ function G:SetupUnitFrame(parent)
 	local mainFrames = {_G.oUF_Player, _G.oUF_Target}
 	local function updatePlayerSize()
 		for _, frame in pairs(mainFrames) do
-			frame:SetSize(NDuiDB["UFs"]["PlayerWidth"], NDuiDB["UFs"]["PlayerHeight"])
-			frame.Power:SetHeight(NDuiDB["UFs"]["PlayerPowerHeight"])
+			SetUnitFrameSize(frame, "Player")
 		end
 	end
 	createOptionGroup(scroll.child, L["Player&Target"], -10, "Player", updatePlayerSize)
@@ -775,8 +782,7 @@ function G:SetupUnitFrame(parent)
 	local function updateFocusSize()
 		local frame = _G.oUF_Focus
 		if frame then
-			frame:SetSize(NDuiDB["UFs"]["FocusWidth"], NDuiDB["UFs"]["FocusHeight"])
-			frame.Power:SetHeight(NDuiDB["UFs"]["FocusPowerHeight"])
+			SetUnitFrameSize(frame, "Focus")
 		end
 	end
 	createOptionGroup(scroll.child, L["FocusUF"], -270, "Focus", updateFocusSize)
@@ -784,8 +790,7 @@ function G:SetupUnitFrame(parent)
 	local subFrames = {_G.oUF_Pet, _G.oUF_ToT, _G.oUF_FocusTarget}
 	local function updatePetSize()
 		for _, frame in pairs(subFrames) do
-			frame:SetSize(NDuiDB["UFs"]["PetWidth"], NDuiDB["UFs"]["PetHeight"])
-			frame.Power:SetHeight(NDuiDB["UFs"]["PetPowerHeight"])
+			SetUnitFrameSize(frame, "Pet")
 		end
 	end
 	createOptionGroup(scroll.child, L["Pet&*Target"], -530, "Pet", updatePetSize)
@@ -793,8 +798,7 @@ function G:SetupUnitFrame(parent)
 	local function updateBossSize()
 		for _, frame in next, ns.oUF.objects do
 			if frame.mystyle == "boss" or frame.mystyle == "arena" then
-				frame:SetSize(NDuiDB["UFs"]["BossWidth"], NDuiDB["UFs"]["BossHeight"])
-				frame.Power:SetHeight(NDuiDB["UFs"]["BossPowerHeight"])
+				SetUnitFrameSize(frame, "Boss")
 			end
 		end
 	end
@@ -816,9 +820,9 @@ function G:SetupRaidFrame(parent)
 	}
 
 	local defaultValue = {
-		["Party"] = {100, 32, 2},
-		["PartyPet"] = {100, 22, 2},
-		["Raid"] = {80, 32, 2},
+		["Party"] = {100, 30, 2},
+		["PartyPet"] = {100, 20, 2},
+		["Raid"] = {80, 30, 2},
 	}
 
 	local function createOptionGroup(parent, title, offset, value, func)
@@ -832,10 +836,15 @@ function G:SetupRaidFrame(parent)
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.mystyle == "raid" and not frame.isPartyFrame then
 				if NDuiDB["UFs"]["SimpleMode"] then
-					frame:SetSize(100*NDuiDB["UFs"]["SimpleRaidScale"]/10, 20*NDuiDB["UFs"]["SimpleRaidScale"]/10)
+					local frameWidth = 100*NDuiDB["UFs"]["SimpleRaidScale"]/10
+					local frameHeight = 20*NDuiDB["UFs"]["SimpleRaidScale"]/10
+					local powerHeight = 2*NDuiDB["UFs"]["SimpleRaidScale"]/10
+					local healthHeight = frameHeight - powerHeight
+					frame:SetSize(frameWidth, frameHeight)
+					frame.Health:SetHeight(healthHeight)
+					frame.Power:SetHeight(powerHeight)
 				else
-					frame:SetSize(NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"])
-					frame.Power:SetHeight(NDuiDB["UFs"]["RaidPowerHeight"])
+					SetUnitFrameSize(frame, "Raid")
 				end
 			end
 		end
@@ -846,8 +855,7 @@ function G:SetupRaidFrame(parent)
 	local function resizePartyFrame()
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.isPartyFrame then
-				frame:SetSize(NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"])
-				frame.Power:SetHeight(NDuiDB["UFs"]["PartyPowerHeight"])
+				SetUnitFrameSize(frame, "Party")
 			end
 		end
 	end
@@ -856,8 +864,7 @@ function G:SetupRaidFrame(parent)
 	local function resizePartyPetFrame()
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.mystyle == "partypet" then
-				frame:SetSize(NDuiDB["UFs"]["PartyPetWidth"], NDuiDB["UFs"]["PartyPetHeight"])
-				frame.Power:SetHeight(NDuiDB["UFs"]["PartyPetPowerHeight"])
+				SetUnitFrameSize(frame, "PartyPet")
 			end
 		end
 	end

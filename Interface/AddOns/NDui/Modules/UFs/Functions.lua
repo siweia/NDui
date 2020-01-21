@@ -57,7 +57,26 @@ end
 function UF:CreateHealthBar(self)
 	local mystyle = self.mystyle
 	local health = CreateFrame("StatusBar", nil, self)
-	health:SetAllPoints()
+	health:SetPoint("TOPLEFT", self)
+	health:SetPoint("TOPRIGHT", self)
+	local healthHeight
+	if mystyle == "PlayerPlate" then
+		healthHeight = NDuiDB["Nameplate"]["PPHeight"]
+	elseif mystyle == "raid" then
+		if self.isPartyFrame then
+			healthHeight = NDuiDB["UFs"]["PartyHeight"]
+		elseif NDuiDB["UFs"]["SimpleMode"] then
+			local scale = NDuiDB["UFs"]["SimpleRaidScale"]/10
+			healthHeight = 20*scale - 2*scale - C.mult
+		else
+			healthHeight = NDuiDB["UFs"]["RaidHeight"]
+		end
+	elseif mystyle == "partypet" then
+		healthHeight = NDuiDB["UFs"]["PartyPetHeight"]
+	else
+		healthHeight = retVal(self, NDuiDB["UFs"]["PlayerHeight"], NDuiDB["UFs"]["FocusHeight"], NDuiDB["UFs"]["BossHeight"], NDuiDB["UFs"]["PetHeight"])
+	end
+	health:SetHeight(healthHeight)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
@@ -89,7 +108,7 @@ end
 function UF:CreateHealthText(self)
 	local mystyle = self.mystyle
 	local textFrame = CreateFrame("Frame", nil, self)
-	textFrame:SetAllPoints()
+	textFrame:SetAllPoints(self.Health)
 
 	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12, NDuiDB["Nameplate"]["NameTextSize"]), "", false, "LEFT", 3, -1)
 	name:SetJustifyH("LEFT")
@@ -186,14 +205,18 @@ function UF:CreatePowerBar(self)
 	local mystyle = self.mystyle
 	local power = CreateFrame("StatusBar", nil, self)
 	power:SetStatusBarTexture(DB.normTex)
+	power:SetPoint("BOTTOMLEFT", self)
+	power:SetPoint("BOTTOMRIGHT", self)
 	local powerHeight
 	if mystyle == "PlayerPlate" then
 		powerHeight = NDuiDB["Nameplate"]["PPPHeight"]
 	elseif mystyle == "raid" then
 		if self.isPartyFrame then
 			powerHeight = NDuiDB["UFs"]["PartyPowerHeight"]
+		elseif NDuiDB["UFs"]["SimpleMode"] then
+			powerHeight = 2*NDuiDB["UFs"]["SimpleRaidScale"]/10
 		else
-			powerHeight = NDuiDB["UFs"]["SimpleMode"] and 2 or NDuiDB["UFs"]["RaidPowerHeight"]
+			powerHeight = NDuiDB["UFs"]["RaidPowerHeight"]
 		end
 	elseif mystyle == "partypet" then
 		powerHeight = NDuiDB["UFs"]["PartyPetPowerHeight"]
@@ -201,9 +224,6 @@ function UF:CreatePowerBar(self)
 		powerHeight = retVal(self, NDuiDB["UFs"]["PlayerPowerHeight"], NDuiDB["UFs"]["FocusPowerHeight"], NDuiDB["UFs"]["BossPowerHeight"], NDuiDB["UFs"]["PetPowerHeight"])
 	end
 	power:SetHeight(powerHeight)
-	power:SetWidth(self:GetWidth())
-	power:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -C.mult)
-	power:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -C.mult)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
 	power.backdrop = B.CreateBDFrame(power, 0)
 	B.SmoothBar(power)

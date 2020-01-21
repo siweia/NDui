@@ -433,7 +433,7 @@ function UF:CreateBuffIndicator(self)
 	local anchors = {"TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT"}
 	local buttons = {}
 	for _, anchor in pairs(anchors) do
-		local bu = CreateFrame("Frame", nil, self)
+		local bu = CreateFrame("Frame", nil, self.Health)
 		bu:SetFrameLevel(self:GetFrameLevel()+10)
 		bu:SetSize(10, 10)
 		bu:SetPoint(anchor)

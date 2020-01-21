@@ -635,7 +635,6 @@ function UF:CreatePlates()
 	B.SmoothBar(health)
 
 	self.Health = health
-	self.Health.frequentUpdates = true
 	self.Health.UpdateColor = UF.UpdateColor
 
 	UF:CreateHealthText(self)
@@ -756,26 +755,31 @@ end
 function UF:ResizePlayerPlate()
 	local plate = _G.oUF_PlayerPlate
 	if plate then
-		plate:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
-		plate.Power:SetHeight(NDuiDB["Nameplate"]["PPPHeight"])
+		local iconSize, margin = NDuiDB["Nameplate"]["PPIconSize"], 2
+		local pHeight, ppHeight = NDuiDB["Nameplate"]["PPHeight"], NDuiDB["Nameplate"]["PPPHeight"]
+		plate:SetSize(iconSize*5 + margin*4, pHeight + ppHeight + C.mult)
+		plate.Health:SetHeight(pHeight)
+		plate.Power:SetHeight(ppHeight)
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
 			for i = 1, 6 do
-				bars[i]:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
+				bars[i]:SetHeight(pHeight)
 			end
 		end
 		if plate.Stagger then
-			plate.Stagger:SetHeight(NDuiDB["Nameplate"]["PPHeight"])
+			plate.Stagger:SetHeight(pHeight)
+		end
+		if plate.bu then
+			for i = 1, 5 do
+				plate.bu[i]:SetSize(NDuiDB["Nameplate"]["PPIconSize"], NDuiDB["Nameplate"]["PPIconSize"])
+			end
 		end
 	end
 end
 
 function UF:CreatePlayerPlate()
 	self.mystyle = "PlayerPlate"
-	local iconSize, margin = NDuiDB["Nameplate"]["PPIconSize"], 2
-	self:SetSize(iconSize*5 + margin*4, NDuiDB["Nameplate"]["PPHeight"])
 	self:EnableMouse(false)
-	self.iconSize = iconSize
 
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
@@ -799,4 +803,6 @@ function UF:CreatePlayerPlate()
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility, true)
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility, true)
 	end
+
+	UF:ResizePlayerPlate()
 end
