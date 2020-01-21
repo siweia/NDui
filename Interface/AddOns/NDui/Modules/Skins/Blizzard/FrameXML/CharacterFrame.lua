@@ -56,6 +56,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		self.AzeriteTexture:SetDrawLayer("BORDER", 1)
 	end
 
+	local function UpdateCorruption(self)
+		local itemLink = GetInventoryItemLink("player", self:GetID())
+		self.IconOverlay:SetShown(itemLink and IsCorruptedItem(itemLink))
+	end	
+
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
@@ -76,6 +81,12 @@ tinsert(C.themes["AuroraClassic"], function()
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		slot.SetHighlightTexture = B.Dummy
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
+		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
+
+		slot.IconOverlay:SetAtlas("Nzoth-inventory-icon")
+		slot.IconOverlay:SetInside()
+		slot:HookScript("OnShow", UpdateCorruption)
+		slot:HookScript("OnEvent", UpdateCorruption)
 
 		border:SetAlpha(0)
 		hooksecurefunc(border, "SetVertexColor", function(_, r, g, b) slot:SetBackdropBorderColor(r, g, b) end)
@@ -116,6 +127,8 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	local pane = CharacterStatsPane
 	pane.ClassBackground:Hide()
+	pane.ItemLevelFrame.Corruption:SetPoint("RIGHT", 22, -8)
+
 	local categories = {pane.ItemLevelCategory, pane.AttributesCategory, pane.EnhancementsCategory}
 	for _, category in pairs(categories) do
 		category.Background:Hide()
