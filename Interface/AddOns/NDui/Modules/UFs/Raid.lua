@@ -536,7 +536,7 @@ function UF:CreatePartyAltPower(self)
 		yOffset = horizon and 5 or 0
 	end
 
-	local altPower = B.CreateFS(self, 16, "99%")
+	local altPower = B.CreateFS(self, 16, "")
 	altPower:ClearAllPoints()
 	if otherSide then
 		altPower:SetPoint(relT, self, relF, xOffset, yOffset)
