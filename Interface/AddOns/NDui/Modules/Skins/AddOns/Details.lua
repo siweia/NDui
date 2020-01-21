@@ -3,8 +3,11 @@ local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 local function ReskinDetails()
+	local Details = _G.Details
 	-- instance table can be nil sometimes
 	Details.tabela_instancias = Details.tabela_instancias or {}
+	-- toggle windows on init
+	Details:ReabrirTodasInstancias()
 
 	local function setupInstance(instance)
 		if instance.styled then return end
