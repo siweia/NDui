@@ -127,8 +127,8 @@ function M:KeystoneInfo_Create()
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:AddLine(L["Account Keystones"])
-		for name, info in pairs(NDuiADB["KeystoneInfo"]) do
-			local name = Ambiguate(name, "none")
+		for fullName, info in pairs(NDuiADB["KeystoneInfo"]) do
+			local name = Ambiguate(fullName, "none")
 			local mapID, level, class, faction = strsplit(":", info)
 			local color = B.HexRGB(B.ClassColor(class))
 			local factionColor = faction == "Horde" and "|cffff5040" or "|cff00adf0"
