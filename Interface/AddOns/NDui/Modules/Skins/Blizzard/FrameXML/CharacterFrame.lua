@@ -59,7 +59,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	local function UpdateCorruption(self)
 		local itemLink = GetInventoryItemLink("player", self:GetID())
 		self.IconOverlay:SetShown(itemLink and IsCorruptedItem(itemLink))
-	end	
+	end
 
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",

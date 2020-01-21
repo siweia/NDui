@@ -330,7 +330,7 @@ local accountSettings = {
 	SystemInfoType = 1,
 	DisableInfobars = false,
 	PartyWatcherSpells = {},
-	ContactList = {}
+	ContactList = {},
 }
 
 -- Initial settings
