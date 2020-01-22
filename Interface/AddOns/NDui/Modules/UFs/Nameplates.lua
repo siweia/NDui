@@ -780,6 +780,9 @@ end
 function UF:CreatePlayerPlate()
 	self.mystyle = "PlayerPlate"
 	self:EnableMouse(false)
+	local iconSize, margin = NDuiDB["Nameplate"]["PPIconSize"], 2
+	local pHeight, ppHeight = NDuiDB["Nameplate"]["PPHeight"], NDuiDB["Nameplate"]["PPPHeight"]
+	self:SetSize(iconSize*5 + margin*4, pHeight + ppHeight + C.mult)
 
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
@@ -803,6 +806,4 @@ function UF:CreatePlayerPlate()
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility, true)
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility, true)
 	end
-
-	UF:ResizePlayerPlate()
 end

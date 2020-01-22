@@ -831,7 +831,7 @@ end
 
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
-		barWidth, barHeight = self:GetWidth(), self:GetHeight()
+		barWidth, barHeight = self:GetWidth(), self.Health:GetHeight()
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 
