@@ -350,9 +350,11 @@ local found = {}
 local auraFilter = {"HELPFUL", "HARMFUL"}
 
 function UF:UpdateBuffIndicator(event, unit)
-	if self.unit ~= unit then return end
+	if event == "UNIT_AURA" and self.unit ~= unit then return end
+
 	local spellList = NDuiADB["CornerBuffs"][DB.MyClass]
 	local buttons = self.BuffIndicator
+	unit = self.unit
 
 	wipe(found)
 	for _, filter in next, auraFilter do
@@ -457,6 +459,7 @@ function UF:CreateBuffIndicator(self)
 
 	self.BuffIndicator = buttons
 	self:RegisterEvent("UNIT_AURA", UF.UpdateBuffIndicator)
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateBuffIndicator, true)
 end
 
 function UF:RefreshRaidFrameIcons()
