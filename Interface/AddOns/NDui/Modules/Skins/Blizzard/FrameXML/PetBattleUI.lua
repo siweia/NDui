@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-tinsert(C.themes["AuroraClassic"], function()
+tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["PetBattle"] then return end
 
 	local r, g, b, pairs = DB.r, DB.g, DB.b, pairs

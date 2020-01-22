@@ -2,8 +2,11 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:RegisterModule("Skins")
 
+local pairs, wipe = pairs, wipe
+local IsAddOnLoaded = IsAddOnLoaded
+
+C.defaultThemes = {}
 C.themes = {}
-C.themes["AuroraClassic"] = {}
 
 StaticPopupDialogs["AURORA_CLASSIC_WARNING"] = {
 	text = L["AuroraClassic warning"],
@@ -28,15 +31,28 @@ function S:LoadDefaultSkins()
 	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then return end
 
 	-- Reskin Blizzard UIs
-	for _, func in pairs(C.themes["AuroraClassic"]) do
+	for _, func in pairs(C.defaultThemes) do
 		func()
 	end
-	if NDuiDB["Skins"]["BlizzardSkins"] then
-		B:RegisterEvent("ADDON_LOADED", function(_, addon)
-			local func = C.themes[addon]
-			if func then func() end
-		end)
+	wipe(C.defaultThemes)
+
+	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+
+	for addonName, func in pairs(C.themes) do
+		local isLoaded, isFinished = IsAddOnLoaded(addonName)
+		if isLoaded and isFinished then
+			func()
+			C.themes[addonName] = nil
+		end
 	end
+
+	B:RegisterEvent("ADDON_LOADED", function(_, addonName)
+		local func = C.themes[addonName]
+		if func then
+			func()
+			C.themes[addonName] = nil
+		end
+	end)
 end
 
 function S:OnLogin()

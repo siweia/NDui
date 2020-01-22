@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-tinsert(C.themes["AuroraClassic"], function()
+tinsert(C.defaultThemes, function()
 	local r, g, b = DB.r, DB.g, DB.b
 	local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
 	local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
