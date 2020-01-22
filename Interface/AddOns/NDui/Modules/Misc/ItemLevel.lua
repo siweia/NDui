@@ -111,7 +111,7 @@ function M:ItemLevel_UpdateTraits(button, id, link)
 
 	for i = 1, 2 do
 		local powerIDs = allTierInfo[i].azeritePowerIDs
-		if powerIDs[1] == 13 or not powerIDs[4] then break end
+		if powerIDs[1] == 13 then break end
 
 		for _, powerID in pairs(powerIDs) do
 			local selected = C_AzeriteEmpoweredItem_IsPowerSelected(empoweredItemLocation, powerID)
