@@ -774,6 +774,9 @@ function UF:ResizePlayerPlate()
 				plate.bu[i]:SetSize(NDuiDB["Nameplate"]["PPIconSize"], NDuiDB["Nameplate"]["PPIconSize"])
 			end
 		end
+		if plate.dices then
+			plate.dices[1]:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, 8 + plate.Health:GetHeight())
+		end
 	end
 end
 
