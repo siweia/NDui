@@ -188,6 +188,8 @@ local list = {
 		-- 腐蚀
 		{AuraID = 316823, UnitID = "player"},	-- 虚空仪式
 		{AuraID = 318211, UnitID = "player"},	-- 活力涌动
+		{AuraID = 318219, UnitID = "player"},	-- 致命之势
+		{AuraID = 318378, UnitID = "player", Flash = true},	-- 坚定决心，橙披
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
@@ -285,6 +287,92 @@ local list = {
 		{AuraID = 292267, UnitID = "player"},	-- 超荷电磁炮
 		{AuraID = 305699, UnitID = "player"},	-- 锁定
 		{AuraID = 259533, UnitID = "player", Flash = true},	-- 艾泽里特催化剂，暴富
+	-- 尼奥罗萨
+		-- 黑龙帝王拉希奥
+		{AuraID = 306015, UnitID = "player"},	-- 灼烧护甲
+		{AuraID = 306163, UnitID = "player"},	-- 万物尽焚
+		{AuraID = 313959, UnitID = "player", Flash = true},	-- 灼热气泡
+		{AuraID = 307053, UnitID = "player", Flash = true},	-- 岩浆池
+		{AuraID = 314347, UnitID = "player"},	-- 毒扼
+		-- 玛乌特
+		{AuraID = 307399, UnitID = "player"},	-- 暗影之伤
+		{AuraID = 307806, UnitID = "player"},	-- 吞噬魔法
+		{AuraID = 307586, UnitID = "player"},	-- 噬魔深渊
+		{AuraID = 306301, UnitID = "player"},	-- 禁忌法力
+		{AuraID = 315025, UnitID = "player"},	-- 远古诅咒
+		{AuraID = 314993, UnitID = "player", Flash = true},	-- 吸取精华
+		-- 先知斯基特拉
+		{AuraID = 308059, UnitID = "player"},	-- 暗影震击
+		{AuraID = 307950, UnitID = "player", Flash = true},	-- 心智剥离
+		-- 黑暗审判官夏奈什
+		{AuraID = 311551, UnitID = "player"},	-- 深渊打击
+		{AuraID = 312406, UnitID = "player"},	-- 虚空觉醒
+		{AuraID = 314298, UnitID = "player", Flash = true},	-- 末日迫近
+		{AuraID = 316211, UnitID = "player"},	-- 恐惧浪潮
+		-- 主脑
+		{AuraID = 313461, UnitID = "player"},	-- 腐蚀
+		{AuraID = 315311, UnitID = "player"},	-- 毁灭
+		{AuraID = 313672, UnitID = "player", Flash = true},	-- 酸液池
+		{AuraID = 314593, UnitID = "player"},	-- 麻痹毒液
+		-- 无厌者夏德哈
+		{AuraID = 307471, UnitID = "player"},	-- 碾压
+		{AuraID = 307472, UnitID = "player"},	-- 融解
+		{AuraID = 306928, UnitID = "player"},	-- 幽影吐息
+		{AuraID = 306930, UnitID = "player"},	-- 熵能暗息
+		{AuraID = 314736, UnitID = "player", Flash = true},	-- 气泡流溢
+		-- 德雷阿佳丝
+		{AuraID = 310277, UnitID = "player"},	-- 动荡之种
+		{AuraID = 310309, UnitID = "player"},	-- 动荡易伤
+		{AuraID = 310361, UnitID = "player"},	-- 不羁狂乱
+		{AuraID = 308377, UnitID = "player"},	-- 虚化脓液
+		{AuraID = 317001, UnitID = "player"},	-- 暗影排异
+		{AuraID = 310563, UnitID = "player"},	-- 背叛低语
+		{AuraID = 310567, UnitID = "player"},	-- 背叛者
+		-- 伊格诺斯，重生之蚀
+		{AuraID = 309961, UnitID = "player"},	-- 恩佐斯之眼
+		{AuraID = 311367, UnitID = "player"},	-- 腐蚀者之触
+		{AuraID = 310322, UnitID = "player", Flash = true},	-- 梦魇腐蚀
+		{AuraID = 313759, UnitID = "player"},	-- 诅咒之血
+		-- 维克修娜
+		{AuraID = 307359, UnitID = "player"},	-- 绝望
+		{AuraID = 307020, UnitID = "player"},	-- 暮光之息
+		{AuraID = 307019, UnitID = "player"},	-- 虚空腐蚀
+		{AuraID = 306981, UnitID = "player"},	-- 虚空之赐
+		{AuraID = 310224, UnitID = "player"},	-- 毁灭
+		{AuraID = 307314, UnitID = "player"},	-- 渗透暗影
+		{AuraID = 307343, UnitID = "player"},	-- 暗影残渣
+		{AuraID = 307645, UnitID = "player"},	-- 黑暗之心
+		{AuraID = 315932, UnitID = "player"},	-- 蛮力重击
+		-- 虚无者莱登
+		{AuraID = 306819, UnitID = "player"},	-- 虚化重击
+		{AuraID = 306279, UnitID = "player"},	-- 动荡暴露
+		{AuraID = 306637, UnitID = "player"},	-- 不稳定的虚空爆发
+		{AuraID = 309777, UnitID = "player"},	-- 虚空污秽
+		{AuraID = 313227, UnitID = "player"},	-- 腐坏伤口
+		{AuraID = 310019, UnitID = "player"},	-- 充能锁链
+		{AuraID = 310022, UnitID = "player"},	-- 充能锁链
+		{AuraID = 315252, UnitID = "player"},	-- 恐怖炼狱
+		-- 恩佐斯的外壳
+		{AuraID = 307832, UnitID = "player"},	-- 恩佐斯的仆从
+		{AuraID = 313334, UnitID = "player"},	-- 恩佐斯之赐
+		{AuraID = 315954, UnitID = "player"},	-- 漆黑伤疤
+		{AuraID = 307044, UnitID = "player"},	-- 梦魇抗原
+		{AuraID = 307011, UnitID = "player"},	-- 疯狂繁衍
+		{AuraID = 307061, UnitID = "player"},	-- 菌丝生长
+		-- 腐蚀者恩佐斯
+		{AuraID = 308996, UnitID = "player"},	-- 恩佐斯的仆从
+		{AuraID = 313609, UnitID = "player"},	-- 恩佐斯之赐
+		{AuraID = 309991, UnitID = "player"},	-- 痛楚
+		{AuraID = 316711, UnitID = "player"},	-- 意志摧毁
+		{AuraID = 313400, UnitID = "player"},	-- 堕落心灵
+		{AuraID = 316542, UnitID = "player"},	-- 妄念
+		{AuraID = 316541, UnitID = "player"},	-- 妄念
+		{AuraID = 310042, UnitID = "player"},	-- 混乱爆发
+		{AuraID = 313793, UnitID = "player"},	-- 狂乱之火
+		{AuraID = 313610, UnitID = "player"},	-- 精神腐烂
+		{AuraID = 311392, UnitID = "player"},	-- 心灵之握
+		{AuraID = 310073, UnitID = "player"},	-- 心灵之握
+		{AuraID = 316522, UnitID = "player"},	-- 生命充能
 	-- 永恒王宫
 		-- 深渊指挥官西瓦拉
 		{AuraID = 295795, UnitID = "player", Flash = true, Text = L["Move"]},	-- 冻结之血
@@ -494,6 +582,14 @@ local list = {
 		{AuraID = 273721, UnitID = "target"},
 		{AuraID = 256493, UnitID = "target"},	-- 炽燃的艾泽里特，矿区1
 		{AuraID = 271867, UnitID = "target"},	-- 氪金致胜，矿区1
+	-- 尼奥罗萨
+		{AuraID = 313175, UnitID = "target"},	-- 硬化核心，拉希奥
+		{AuraID = 306005, UnitID = "target"},	-- 黑曜石之肤，玛乌特
+		{AuraID = 313208, UnitID = "target"},	-- 无形幻象，先知斯基特拉
+		{AuraID = 312329, UnitID = "target"},	-- 狼吞虎咽，无厌者夏德哈
+		{AuraID = 312595, UnitID = "target"},	-- 易爆腐蚀，德雷阿佳丝
+		{AuraID = 312750, UnitID = "target"},	-- 召唤梦魇，虚无者莱登
+		{AuraID = 306990, UnitID = "target", Value = true},	-- 适化外膜，恩佐斯外壳
 	-- 永恒王宫
 		{AuraID = 296389, UnitID = "target"},	-- 上旋气流，艾萨拉之辉
 		{AuraID = 304951, UnitID = "target"},	-- 聚焦能量

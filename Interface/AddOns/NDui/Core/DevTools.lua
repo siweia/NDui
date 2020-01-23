@@ -162,6 +162,16 @@ SlashCmdList["NDUI_GET_ENCOUNTERS"] = function()
 end
 SLASH_NDUI_GET_ENCOUNTERS1 = "/getenc"
 
+SlashCmdList["NDUI_DUMPSPELLS"] = function(arg)
+	for spell in gmatch(arg, "%d+") do
+		local name = GetSpellInfo(spell)
+		if name then
+			print("module:RegisterDebuff(TIER, INSTANCE, BOSS, "..spell..") -- "..name)
+		end
+	end
+end
+SLASH_NDUI_DUMPSPELLS1 = "/getss"
+
 -- Grids
 local grid
 local boxSize = 32
