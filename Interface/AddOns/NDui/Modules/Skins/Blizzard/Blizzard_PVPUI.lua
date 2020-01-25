@@ -63,7 +63,8 @@ C.themes["Blizzard_PVPUI"] = function()
 	local SeasonRewardFrame = popup.SeasonRewardFrame
 	SeasonRewardFrame.CircleMask:Hide()
 	SeasonRewardFrame.Ring:Hide()
-	B.ReskinIcon(SeasonRewardFrame.Icon)
+	local bg = B.ReskinIcon(SeasonRewardFrame.Icon)
+	bg:SetFrameLevel(4)
 	select(3, SeasonRewardFrame:GetRegions()):SetTextColor(1, .8, 0)
 
 	local seasonReward = PVPQueueFrame.HonorInset.RatedPanel.SeasonRewardFrame
