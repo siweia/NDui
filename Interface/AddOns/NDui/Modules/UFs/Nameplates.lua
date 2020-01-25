@@ -407,7 +407,7 @@ function UF:AddQuestIcon(self)
 	qicon:SetSize(28, 28)
 	qicon:SetAtlas(DB.questTex)
 	qicon:Hide()
-	local count = B.CreateFS(self, 16, "", nil, "LEFT", 0, 0)
+	local count = B.CreateFS(self, 18, "", nil, "LEFT", 0, 0)
 	count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
 	count:SetTextColor(.6, .8, 1)
 
