@@ -119,6 +119,7 @@ tinsert(C.defaultThemes, function()
 
 	B.SetBD(VoiceChatPromptActivateChannel)
 	B.Reskin(VoiceChatPromptActivateChannel.AcceptButton)
+	VoiceChatChannelActivatedNotification:SetBackdrop(nil)
 	B.SetBD(VoiceChatChannelActivatedNotification)
 
 	B.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
