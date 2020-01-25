@@ -297,6 +297,9 @@ end
 -- Anchor and mover
 local mover
 function TT:GameTooltip_SetDefaultAnchor(parent)
+	if self:IsForbidden() then return end
+	if not parent then return end
+
 	if NDuiDB["Tooltip"]["Cursor"] then
 		self:SetOwner(parent, "ANCHOR_CURSOR_RIGHT")
 	else
