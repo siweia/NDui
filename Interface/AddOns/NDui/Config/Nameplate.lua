@@ -189,6 +189,7 @@ C.CustomUnits = {
 	[GetSectionInfo(19393)] = true,	-- 雪怒之魂
 	[GetSectionInfo(19279)] = true,	-- 谄媚海妖
 	[GetSectionInfo(19019)] = true,	-- 贪婪的追猎者
+	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
 }
 
 -- 显示能量值的单位
