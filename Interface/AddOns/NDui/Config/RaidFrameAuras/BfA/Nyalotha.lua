@@ -28,7 +28,6 @@ BOSS = 2369 -- 先知斯基特拉
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307785) -- 扭曲心智
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307784) -- 困惑心智
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 308059) -- 暗影震击
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 309657) -- 黑暗仪式
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 309652) -- 虚幻之蚀
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307950) -- 心智剥离
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 313215) -- 颤涌镜像
@@ -53,15 +52,12 @@ BOSS = 2367 -- 无厌者夏德哈
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307471) -- 碾压
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307472) -- 融解
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307358) -- 衰弱唾液
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 306448) -- 幽影遮罩
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 306928) -- 幽影吐息
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 306934) -- 熵能遮罩
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 308177) -- 熵能聚合
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 306930) -- 熵能暗息
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 306932) -- 剧毒遮罩
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 314736) -- 毒泡流溢
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 306929) -- 翻滚毒息
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 307260) -- 锁定
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 318078, 6) -- 锁定
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 309704) -- 腐蚀涂层
 
 BOSS = 2373 -- 德雷阿佳丝

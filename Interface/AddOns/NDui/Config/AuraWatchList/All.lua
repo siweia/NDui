@@ -252,6 +252,8 @@ local list = {
 	["Raid Debuff"] = {		-- 团队减益组
 		{AuraID = 295413, UnitID = "player", Stack = 20, Flash = true},	-- 苦楚
 	-- 5人本
+		{AuraID = 314478, UnitID = "player"},	-- 倾泻恐惧
+		{AuraID = 314483, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
 		{AuraID = 302420, UnitID = "player"},	-- 女王法令：隐藏
@@ -320,6 +322,7 @@ local list = {
 		{AuraID = 306928, UnitID = "player"},	-- 幽影吐息
 		{AuraID = 306930, UnitID = "player"},	-- 熵能暗息
 		{AuraID = 314736, UnitID = "player", Flash = true},	-- 气泡流溢
+		{AuraID = 318078, UnitID = "player", Flash = true, Text = L["Get Out"]},	-- 锁定
 		-- 德雷阿佳丝
 		{AuraID = 310277, UnitID = "player"},	-- 动荡之种
 		{AuraID = 310309, UnitID = "player"},	-- 动荡易伤
@@ -372,7 +375,6 @@ local list = {
 		{AuraID = 313610, UnitID = "player"},	-- 精神腐烂
 		{AuraID = 311392, UnitID = "player"},	-- 心灵之握
 		{AuraID = 310073, UnitID = "player"},	-- 心灵之握
-		{AuraID = 316522, UnitID = "player"},	-- 生命充能
 	-- 永恒王宫
 		-- 深渊指挥官西瓦拉
 		{AuraID = 295795, UnitID = "player", Flash = true, Text = L["Move"]},	-- 冻结之血
