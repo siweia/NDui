@@ -254,6 +254,7 @@ local list = {
 	-- 5人本
 		{AuraID = 314478, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314483, UnitID = "player"},	-- 倾泻恐惧
+		{AuraID = 314565, UnitID = "player", Flash = true},	-- 亵渎大地
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
 		{AuraID = 302420, UnitID = "player"},	-- 女王法令：隐藏
