@@ -5,6 +5,7 @@ local oUF = ns.oUF or oUF
 local format, floor = string.format, math.floor
 local AFK, DND, DEAD, PLAYER_OFFLINE = AFK, DND, DEAD, PLAYER_OFFLINE
 local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate or 10
+local UnitAlternatePowerTextureInfo = UnitAlternatePowerTextureInfo
 local UnitIsDeadOrGhost, UnitIsConnected, UnitHasVehicleUI, UnitIsTapDenied, UnitIsPlayer = UnitIsDeadOrGhost, UnitIsConnected, UnitHasVehicleUI, UnitIsTapDenied, UnitIsPlayer
 local UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger = UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger
 local UnitClass, UnitReaction, UnitLevel, UnitClassification = UnitClass, UnitReaction, UnitLevel, UnitClassification
@@ -212,10 +213,10 @@ oUF.Tags.Events["pppower"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWE
 -- AltPower value tag
 oUF.Tags.Methods["altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
-	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
-	if cur > 0 and max > 0 then
-		local perc = floor(cur/max*100 + .5)
-		return format("%s%%", ColorPercent(perc))
+	if cur > 0 then
+		local _, r, g, b = UnitAlternatePowerTextureInfo(unit, 2)
+		if not r then r, g, b = 1, 1, 1 end
+		return B.HexRGB(r, g, b)..cur
 	end
 end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE UNIT_MAXPOWER"
