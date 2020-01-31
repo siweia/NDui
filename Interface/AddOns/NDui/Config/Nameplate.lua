@@ -60,7 +60,6 @@ C.WhiteList = {
 	[313208]	= true,		-- 无形幻象，先知斯基特拉
 	[307637]	= true,		-- 突变进化，主脑
 	[307213]	= true,		-- 虚空灌注
-	[307227]	= true,		-- 重生
 	[307583]	= true,		-- 不稳定的喷发
 	[312595]	= true,		-- 易爆腐蚀，德雷阿佳丝
 	[307729]	= true,		-- 狂热晋升，维克修娜
@@ -189,6 +188,7 @@ C.CustomUnits = {
 	[GetSectionInfo(19393)] = true,	-- 雪怒之魂
 	[GetSectionInfo(19279)] = true,	-- 谄媚海妖
 	[GetSectionInfo(19019)] = true,	-- 贪婪的追猎者
+	["爆裂工虫"] = true,
 	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
 }
 
