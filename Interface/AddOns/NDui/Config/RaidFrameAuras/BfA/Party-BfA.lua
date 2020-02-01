@@ -12,6 +12,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 257169) -- 恐惧咆哮
 module:RegisterDebuff(TIER, INSTANCE, 0, 257168) -- 诅咒挥砍
 module:RegisterDebuff(TIER, INSTANCE, 0, 272588) -- 腐烂伤口
@@ -34,6 +35,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 278961, 6) -- 衰弱意志
 module:RegisterDebuff(TIER, INSTANCE, 0, 265468) -- 枯萎诅咒
 module:RegisterDebuff(TIER, INSTANCE, 0, 259714) -- 腐烂孢子
@@ -55,6 +57,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 269686) -- 瘟疫
 module:RegisterDebuff(TIER, INSTANCE, 0, 268013) -- 烈焰震击
 module:RegisterDebuff(TIER, INSTANCE, 0, 268008) -- 毒蛇诱惑
@@ -76,6 +79,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 260067, 6) -- 恶毒槌击
 module:RegisterDebuff(TIER, INSTANCE, 0, 258128) -- 衰弱怒吼
 module:RegisterDebuff(TIER, INSTANCE, 0, 265889) -- 火把攻击
@@ -102,6 +106,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 263074) -- 溃烂撕咬
 module:RegisterDebuff(TIER, INSTANCE, 0, 280605) -- 脑部冻结
 module:RegisterDebuff(TIER, INSTANCE, 0, 257337) -- 电击之爪
@@ -126,6 +131,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 260741, 6) -- 锯齿荨麻
 module:RegisterDebuff(TIER, INSTANCE, 0, 260703) -- 不稳定的符文印记
 module:RegisterDebuff(TIER, INSTANCE, 0, 263905) -- 符文劈斩
@@ -155,6 +161,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 258875, 6) -- 眩晕酒桶
 module:RegisterDebuff(TIER, INSTANCE, 0, 274389) -- 捕鼠陷阱
 module:RegisterDebuff(TIER, INSTANCE, 0, 258323) -- 感染之伤
@@ -173,6 +180,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 265773) -- 吐金
 module:RegisterDebuff(TIER, INSTANCE, 0, 271640) -- 黑暗启示
 module:RegisterDebuff(TIER, INSTANCE, 0, 270492) -- 妖术
@@ -202,6 +210,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 252781) -- 不稳定的妖术
 module:RegisterDebuff(TIER, INSTANCE, 0, 250096) -- 毁灭痛苦
 module:RegisterDebuff(TIER, INSTANCE, 0, 253562) -- 野火
@@ -223,6 +232,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
 module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 264560) -- 窒息海潮
 module:RegisterDebuff(TIER, INSTANCE, 0, 268233) -- 电化震击
 module:RegisterDebuff(TIER, INSTANCE, 0, 268322) -- 溺毙者之触
@@ -242,6 +252,13 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 267037) -- 力量的低语
 module:RegisterDebuff(TIER, INSTANCE, 0, 276286) -- 切割旋风
 
 INSTANCE = 1178 -- 麦卡贡
+module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
+module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
+module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
+module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
+module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
+module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 298259, 6) -- 束缚粘液
 module:RegisterDebuff(TIER, INSTANCE, 0, 297257) -- 电荷充能
 module:RegisterDebuff(TIER, INSTANCE, 0, 303885) -- 爆裂喷发
