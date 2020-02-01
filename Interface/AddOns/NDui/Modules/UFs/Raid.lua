@@ -125,7 +125,11 @@ function UF:CreateRaidDebuffs(self)
 	bu.icon = bu:CreateTexture(nil, "ARTWORK")
 	bu.icon:SetAllPoints()
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
-	bu.count = B.CreateFS(bu, 12, "", false, "BOTTOMRIGHT", 6, -3)
+
+	local parentFrame = CreateFrame("Frame", nil, bu)
+	parentFrame:SetAllPoints()
+	parentFrame:SetFrameLevel(bu:GetFrameLevel() + 6)
+	bu.count = B.CreateFS(parentFrame, 12, "", false, "BOTTOMRIGHT", 6, -3)
 	bu.timer = B.CreateFS(bu, 12, "", false, "CENTER", 1, 0)
 	bu.glowFrame = B.CreateGlowFrame(bu, size)
 
