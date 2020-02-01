@@ -62,6 +62,7 @@ C.WhiteList = {
 	[307213]	= true,		-- 虚空灌注
 	[307583]	= true,		-- 不稳定的喷发
 	[312595]	= true,		-- 易爆腐蚀，德雷阿佳丝
+	[317672]	= true,		-- 血性狂乱，伊格诺斯
 	[307729]	= true,		-- 狂热晋升，维克修娜
 	[312750]	= true,		-- 召唤梦魇，虚无者莱登
 	[306990]	= true,		-- 适化外膜，恩佐斯外壳
@@ -190,6 +191,8 @@ C.CustomUnits = {
 	[GetSectionInfo(19019)] = true,	-- 贪婪的追猎者
 	["爆裂工虫"] = true,
 	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
+	[GetSectionInfo(20561)] = true,	-- 惊魂淤血
+	[GetSectionInfo(21329)] = true,	-- 聚合增生
 }
 
 -- 显示能量值的单位

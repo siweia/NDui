@@ -122,12 +122,12 @@ local list = {
 		{AuraID = 278388, UnitID = "player"},	-- 永冻护壳之心
 		{AuraID = 274430, UnitID = "player", Text = L["Haste"]},	-- 永不间断的时钟，急速
 		{AuraID = 274431, UnitID = "player", Text = L["Mastery"]},	-- 精通
-		{AuraID = 267325, UnitID = "player", Text = L["Mastery"]},	-- 注铅骰子，精通
-		{AuraID = 267326, UnitID = "player", Text = L["Mastery"]},	-- 精通
-		{AuraID = 267327, UnitID = "player", Text = L["Haste"]},	-- 急速
-		{AuraID = 267329, UnitID = "player", Text = L["Haste"]},	-- 急速
-		{AuraID = 267330, UnitID = "player", Text = L["Crit"]},	-- 爆击
-		{AuraID = 267331, UnitID = "player", Text = L["Crit"]},	-- 爆击
+		--{AuraID = 267325, UnitID = "player", Text = L["Mastery"]},	-- 注铅骰子，精通
+		--{AuraID = 267326, UnitID = "player", Text = L["Mastery"]},	-- 精通
+		--{AuraID = 267327, UnitID = "player", Text = L["Haste"]},	-- 急速
+		--{AuraID = 267329, UnitID = "player", Text = L["Haste"]},	-- 急速
+		--{AuraID = 267330, UnitID = "player", Text = L["Crit"]},	-- 爆击
+		--{AuraID = 267331, UnitID = "player", Text = L["Crit"]},	-- 爆击
 		{AuraID = 280573, UnitID = "player", Combat = true},	-- 重组阵列
 		{AuraID = 289523, UnitID = "player", Combat = true},	-- 耀辉之光
 		{AuraID = 295408, UnitID = "player"},	-- 险恶赐福
@@ -368,6 +368,8 @@ local list = {
 		{AuraID = 307044, UnitID = "player"},	-- 梦魇抗原
 		{AuraID = 307011, UnitID = "player"},	-- 疯狂繁衍
 		{AuraID = 307061, UnitID = "player"},	-- 菌丝生长
+		{AuraID = 306973, UnitID = "player"},	-- 疯狂炸弹
+		{AuraID = 306984, UnitID = "player"},	-- 狂乱炸弹
 		-- 腐蚀者恩佐斯
 		{AuraID = 308996, UnitID = "player"},	-- 恩佐斯的仆从
 		{AuraID = 313609, UnitID = "player"},	-- 恩佐斯之赐

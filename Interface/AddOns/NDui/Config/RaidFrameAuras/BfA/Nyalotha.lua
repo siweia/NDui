@@ -112,11 +112,11 @@ BOSS = 2366 -- 恩佐斯的外壳
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307832) -- 恩佐斯的仆从
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 313334) -- 恩佐斯之赐
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 306973) -- 疯狂炸弹
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 306984) -- 狂乱炸弹
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 313364) -- 精神腐烂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 315954) -- 漆黑伤疤
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307044) -- 梦魇抗原
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307011) -- 疯狂繁衍
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 307061) -- 菌丝生长
 
 BOSS = 2375 -- 腐蚀者恩佐斯
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 314889) -- 探视心智
