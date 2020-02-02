@@ -455,58 +455,58 @@ function module:OnLogin()
 	module.BagsType[-3] = 0	-- reagent
 
 	local f = {}
-	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet, bagFavourite, bankFavourite = self:GetFilters()
+	local filters = self:GetFilters()
 
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
 
 		f.main = MyContainer:New("Main", {Columns = bagsWidth, Bags = "bags"})
-		f.main:SetFilter(onlyBags, true)
+		f.main:SetFilter(filters.onlyBags, true)
 		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 
 		f.junk = MyContainer:New("Junk", {Columns = bagsWidth, Parent = f.main})
-		f.junk:SetFilter(bagsJunk, true)
+		f.junk:SetFilter(filters.bagsJunk, true)
 
 		f.bagFavourite = MyContainer:New("BagFavourite", {Columns = bagsWidth, Parent = f.main})
-		f.bagFavourite:SetFilter(bagFavourite, true)
+		f.bagFavourite:SetFilter(filters.bagFavourite, true)
 
 		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = bagsWidth, Parent = f.main})
-		f.azeriteItem:SetFilter(bagAzeriteItem, true)
+		f.azeriteItem:SetFilter(filters.bagAzeriteItem, true)
 
 		f.equipment = MyContainer:New("Equipment", {Columns = bagsWidth, Parent = f.main})
-		f.equipment:SetFilter(bagEquipment, true)
+		f.equipment:SetFilter(filters.bagEquipment, true)
 
 		f.consumble = MyContainer:New("Consumble", {Columns = bagsWidth, Parent = f.main})
-		f.consumble:SetFilter(bagConsumble, true)
+		f.consumble:SetFilter(filters.bagConsumble, true)
 
 		f.bagCompanion = MyContainer:New("BagCompanion", {Columns = bagsWidth, Parent = f.main})
-		f.bagCompanion:SetFilter(bagMountPet, true)
+		f.bagCompanion:SetFilter(filters.bagMountPet, true)
 
 		f.bank = MyContainer:New("Bank", {Columns = bankWidth, Bags = "bank"})
-		f.bank:SetFilter(onlyBank, true)
+		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
 		f.bank:Hide()
 
 		f.bankFavourite = MyContainer:New("BankFavourite", {Columns = bankWidth, Parent = f.bank})
-		f.bankFavourite:SetFilter(bankFavourite, true)
+		f.bankFavourite:SetFilter(filters.bankFavourite, true)
 
 		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = bankWidth, Parent = f.bank})
-		f.bankAzeriteItem:SetFilter(bankAzeriteItem, true)
+		f.bankAzeriteItem:SetFilter(filters.bankAzeriteItem, true)
 
 		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = bankWidth, Parent = f.bank})
-		f.bankLegendary:SetFilter(bankLegendary, true)
+		f.bankLegendary:SetFilter(filters.bankLegendary, true)
 
 		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = bankWidth, Parent = f.bank})
-		f.bankEquipment:SetFilter(bankEquipment, true)
+		f.bankEquipment:SetFilter(filters.bankEquipment, true)
 
 		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = bankWidth, Parent = f.bank})
-		f.bankConsumble:SetFilter(bankConsumble, true)
+		f.bankConsumble:SetFilter(filters.bankConsumble, true)
 
 		f.bankCompanion = MyContainer:New("BankCompanion", {Columns = bankWidth, Parent = f.bank})
-		f.bankCompanion:SetFilter(bankMountPet, true)
+		f.bankCompanion:SetFilter(filters.bankMountPet, true)
 
 		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth})
-		f.reagent:SetFilter(onlyReagent, true)
+		f.reagent:SetFilter(filters.onlyReagent, true)
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
 	end
@@ -751,7 +751,10 @@ function module:OnLogin()
 		elseif strmatch(name, "Favourite") then
 			label = PREFERENCES
 		end
-		if label then B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8) return end
+		if label then
+			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
+			return
+		end
 
 		module.CreateInfoFrame(self)
 

@@ -55,7 +55,7 @@ local function clearEdit(options)
 	end
 end
 
-local raidDebuffsGUI, clickCastGUI, buffIndicatorGUI, plateGUI, unitframeGUI, castbarGUI, raidframeGUI, partyWatcherGUI
+local raidDebuffsGUI, clickCastGUI, buffIndicatorGUI, plateGUI, unitframeGUI, castbarGUI, raidframeGUI, partyWatcherGUI, bagFilterGUI
 
 local function updateRaidDebuffs()
 	B:GetModule("UnitFrames"):UpdateRaidDebuffs()
@@ -952,4 +952,48 @@ function G:SetupCastbar(parent)
 		if _G.oUF_Target then _G.oUF_Target.Castbar.mover:Hide() end
 		if _G.oUF_Focus then _G.oUF_Focus.Castbar.mover:Hide() end
 	end)
+end
+
+local function createOptionCheck(parent, offset, text)
+	local box = B.CreateCheckBox(parent)
+	box:SetPoint("TOPLEFT", 10, -offset)
+	B.CreateFS(box, 14, text, false, "LEFT", 30, 0)
+	return box
+end
+
+function G:SetupBagFilter(parent)
+	toggleExtraGUI("NDuiGUI_BagFilterSetup")
+	if bagFilterGUI then return end
+
+	bagFilterGUI = createExtraGUI(parent, "NDuiGUI_BagFilterSetup", L["BagFilterSetup"].."*")
+
+	local scroll = G:CreateScroll(bagFilterGUI, 260, 540)
+
+	local filterOptions = {
+		[1] = "FilterJunk",
+		[2] = "FilterConsumble",
+		[3] = "FilterAzerite",
+		[4] = "FilterEquipment",
+		[5] = "FilterLegendary",
+		[6] = "FilterMount",
+		[7] = "FilterFavourite",
+	}
+
+	local Bags = B:GetModule("Bags")
+	local function filterOnClick(self)
+		local value = self.__value
+		NDuiDB["Bags"][value] = not NDuiDB["Bags"][value]
+		self:SetChecked(NDuiDB["Bags"][value])
+		Bags:UpdateAllBags()
+	end
+
+	local offset = 10
+	for _, value in ipairs(filterOptions) do
+		local box = createOptionCheck(scroll, offset, L[value])
+		box:SetChecked(NDuiDB["Bags"][value])
+		box.__value = value
+		box:SetScript("OnClick", filterOnClick)
+
+		offset = offset + 35
+	end
 end
