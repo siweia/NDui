@@ -229,7 +229,7 @@ function module:CreateDeleteButton()
 		end
 		self:GetScript("OnEnter")(self)
 	end)
-	bu.title = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t"..L["ItemDeleteMode"]
+	bu.title = L["ItemDeleteMode"]
 	B.AddTooltip(bu, "ANCHOR_TOP")
 
 	return bu
