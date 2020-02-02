@@ -58,6 +58,7 @@ function M:OnLogin()
 	self:TradeTabs()
 	self:MoverQuestTracker()
 	self:CreateRM()
+	self:BlockWQTInvite()
 
 	-- Max camera distancee
 	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
@@ -678,4 +679,46 @@ do
 		end
 	end
 	B:RegisterEvent("MODIFIER_STATE_CHANGED", ShiftKeyOnEvent)
+end
+
+function M:BlockWQTInvite()
+	if not NDuiDB["Misc"]["BlockWQT"] then return end
+
+	local frame = CreateFrame("Frame", nil, StaticPopup1)
+	frame:SetPoint("TOP", StaticPopup1, "BOTTOM", 0, -3)
+	frame:SetSize(200, 34)
+	B.CreateBD(frame)
+	B.CreateTex(frame)
+	B.CreateSD(frame)
+	frame:Hide()
+
+	local WQTUsers = {}
+	local currentName
+
+	local bu = CreateFrame("Button", nil, frame)
+	bu:SetInside(frame, 5, 5)
+	B.CreateFS(bu, 15, L["DecineNBlock"], "system")
+	bu.title = L["Tips"]
+	B.AddTooltip(bu, "ANCHOR_TOP", L["DeclineNBlockTips"], "info")
+	B.Reskin(bu)
+	bu:SetScript("OnClick", function()
+		if currentName then
+			WQTUsers[currentName] = true
+		end
+		StaticPopup_Hide("PARTY_INVITE")
+	end)
+
+	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, name)
+		if WQTUsers[name] then
+			StaticPopup_Hide("PARTY_INVITE")
+			return
+		end
+		frame:Show()
+		currentName = name
+	end)
+
+	hooksecurefunc(StaticPopupDialogs["PARTY_INVITE"], "OnHide", function()
+		frame:Hide()
+		currentName = nil
+	end)
 end
