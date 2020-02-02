@@ -717,7 +717,7 @@ function M:BlockWQTInvite()
 		currentName = name
 	end)
 
-	hooksecurefunc(StaticPopupDialogs["PARTY_INVITE"], "OnHide", function()
+	hooksecurefunc(StaticPopup1, "Hide", function()
 		frame:Hide()
 		currentName = nil
 	end)
