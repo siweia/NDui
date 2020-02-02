@@ -697,7 +697,7 @@ function M:BlockWQTInvite()
 
 	local bu = CreateFrame("Button", nil, frame)
 	bu:SetInside(frame, 5, 5)
-	B.CreateFS(bu, 15, L["DecineNBlock"], "system")
+	B.CreateFS(bu, 15, L["DeclineNBlock"], "system")
 	bu.title = L["Tips"]
 	B.AddTooltip(bu, "ANCHOR_TOP", L["DeclineNBlockTips"], "info")
 	B.Reskin(bu)
