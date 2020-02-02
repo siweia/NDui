@@ -51,6 +51,14 @@ local defaultSettings = {
 		SplitCount = 1,
 		SpecialBagsColor = false,
 		iLvlToShow = 1,
+
+		FilterJunk = true,
+		FilterConsumble = true,
+		FilterAzerite = true,
+		FilterEquipment = true,
+		FilterLegendary = true,
+		FilterMount = true,
+		FilterFavourite = true,
 	},
 	Auras = {
 		Reminder = true,
@@ -297,6 +305,7 @@ local defaultSettings = {
 		RMRune = false,
 		DBMCount = "10",
 		EasyMarking = true,
+		BlockWQT = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -385,6 +394,10 @@ loader:SetScript("OnEvent", function(self, _, addon)
 end)
 
 -- Callbacks
+local function setupBagFilter()
+	G:SetupBagFilter(guiPage[2])
+end
+
 local function setupUnitFrame()
 	G:SetupUnitFrame(guiPage[3])
 end
@@ -428,6 +441,13 @@ end
 
 local function updateBagStatus()
 	B:GetModule("Bags"):UpdateAllBags()
+
+	local label = BAG_FILTER_EQUIPMENT
+	if NDuiDB["Bags"]["ItemSetFilter"] then
+		label = L["Equipement Set"]
+	end
+	_G.NDui_BackpackEquipment.label:SetText(label)
+	_G.NDui_BackpackBankEquipment.label:SetText(label)
 end
 
 local function updateActionbarScale()
@@ -617,8 +637,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[2] = {
 		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
 		{},--blank
-		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, nil, updateBagStatus},
-		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"].."*", true, nil, updateBagStatus},
+		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
+		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"].."*", true, nil, updateBagStatus, L["ItemSetFilterTips"]},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", true, nil, updateBagSortOrder},
 		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
@@ -629,8 +649,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},
-		{3, "Bags", "BagsWidth", L["Bags Width"], false, {10, 20, 0}},
-		{3, "Bags", "BankWidth", L["Bank Width"], true, {10, 20, 0}},
+		{3, "Bags", "BagsWidth", L["Bags Width"], false, {12, 24, 0}},
+		{3, "Bags", "BankWidth", L["Bank Width"], true, {12, 24, 0}},
 	},
 	[3] = {
 		{1, "UFs", "Enable", "|cff00cc4c"..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
@@ -874,6 +894,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", nil, nil, updateFasterLoot},
 		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
+		{1, "Misc", "BlockWQT", L["BlockWQT"], true},
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
