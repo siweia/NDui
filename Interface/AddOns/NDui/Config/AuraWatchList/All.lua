@@ -383,6 +383,7 @@ local list = {
 		{AuraID = 313610, UnitID = "player"},	-- 精神腐烂
 		{AuraID = 311392, UnitID = "player"},	-- 心灵之握
 		{AuraID = 310073, UnitID = "player"},	-- 心灵之握
+		{AuraID = 317112, UnitID = "player"},	-- 激荡痛楚
 	-- 永恒王宫
 		-- 深渊指挥官西瓦拉
 		{AuraID = 295795, UnitID = "player", Flash = true, Text = L["Move"]},	-- 冻结之血
@@ -600,6 +601,9 @@ local list = {
 		{AuraID = 312595, UnitID = "target"},	-- 易爆腐蚀，德雷阿佳丝
 		{AuraID = 312750, UnitID = "target"},	-- 召唤梦魇，虚无者莱登
 		{AuraID = 306990, UnitID = "target", Value = true},	-- 适化外膜，恩佐斯外壳
+		{AuraID = 310126, UnitID = "target"},	-- 心灵护壳，恩佐斯
+		{AuraID = 312155, UnitID = "target"},	-- 碎裂自我
+		{AuraID = 313184, UnitID = "target"},	-- 突触震击
 	-- 永恒王宫
 		{AuraID = 296389, UnitID = "target"},	-- 上旋气流，艾萨拉之辉
 		{AuraID = 304951, UnitID = "target"},	-- 聚焦能量
