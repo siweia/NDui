@@ -595,9 +595,9 @@ function UF:AddFollowerXP(self)
 	bar:SetSize(NDuiDB["Nameplate"]["PlateWidth"]*.75, NDuiDB["Nameplate"]["PlateHeight"])
 	bar:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
 	B.CreateSB(bar, false, 0, .7, 1)
-	bar.progressText = B.CreateFS(bar, 12)
+	bar.ProgressText = B.CreateFS(bar, 12)
 
-	self.NazjatarFollowerXP = bar
+	self.WidgetXPBar = bar
 end
 
 -- Interrupt info on castbars

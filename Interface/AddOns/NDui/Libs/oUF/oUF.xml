@@ -39,7 +39,7 @@
 	<Script file='Plugins\AutoResurrect.lua' />
 	<Script file='Plugins\Castbar.lua' />
 	<Script file='Plugins\FloatingCombatFeedback.lua' />
-	<Script file='Plugins\NazjatarFollowerXP.lua' />
+	<Script file='Plugins\WidgetXPBar.lua' />
 	<Script file='Plugins\QuakeTimer.lua' />
 	<Script file='Plugins\RaidDebuffs.lua' />
 	<Script file='Plugins\Swing.lua' />
