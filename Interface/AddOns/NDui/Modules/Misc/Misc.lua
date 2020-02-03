@@ -653,34 +653,6 @@ do
 	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
 end
 
--- Check SHIFT key status
-do
-	local function onUpdate(self, elapsed)
-		if IsShiftKeyDown() then
-			self.elapsed = self.elapsed + elapsed
-			if self.elapsed > 5 then
-				UIErrorsFrame:AddMessage(DB.InfoColor..L["StupidShiftKey"])
-				self:Hide()
-			end
-		end
-	end
-	local shiftUpdater = CreateFrame("Frame")
-	shiftUpdater:SetScript("OnUpdate", onUpdate)
-	shiftUpdater:Hide()
-
-	local function ShiftKeyOnEvent(_, key, down)
-		if key == "LSHIFT" then
-			if down == 1 then
-				shiftUpdater.elapsed = 0
-				shiftUpdater:Show()
-			else
-				shiftUpdater:Hide()
-			end
-		end
-	end
-	B:RegisterEvent("MODIFIER_STATE_CHANGED", ShiftKeyOnEvent)
-end
-
 function M:BlockWQTInvite()
 	if not NDuiDB["Misc"]["BlockWQT"] then return end
 
