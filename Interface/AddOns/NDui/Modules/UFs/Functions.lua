@@ -135,19 +135,18 @@ function UF:CreateHealthText(self)
 		name:SetWidth(self:GetWidth()*.55)
 	end
 
-	local colorStr = self.Health.colorClass and "" or "[color]"
 	if mystyle == "player" then
-		self:Tag(name, " "..colorStr.."[name]")
+		self:Tag(name, " [color][name]")
 	elseif mystyle == "target" then
-		self:Tag(name, "[fulllevel] "..colorStr.."[name][afkdnd]")
+		self:Tag(name, "[fulllevel] [color][name][afkdnd]")
 	elseif mystyle == "focus" then
-		self:Tag(name, colorStr.."[name][afkdnd]")
+		self:Tag(name, "[color][name][afkdnd]")
 	elseif mystyle == "nameplate" then
 		self:Tag(name, "[nplevel][name]")
 	elseif mystyle == "arena" then
-		self:Tag(name, "[arenaspec] "..colorStr.."[name]")
+		self:Tag(name, "[arenaspec] [color][name]")
 	else
-		self:Tag(name, colorStr.."[name]")
+		self:Tag(name, "[color][name]")
 	end
 
 	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 13, NDuiDB["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, -1)
