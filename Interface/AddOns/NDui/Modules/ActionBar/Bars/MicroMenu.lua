@@ -100,7 +100,7 @@ function Bar:MicroMenu()
 		{"collections", "CollectionsMicroButton"},
 		{"store", "StoreMicroButton"},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
-		{"bags", ToggleAllBags, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
+		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
 	}
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)
