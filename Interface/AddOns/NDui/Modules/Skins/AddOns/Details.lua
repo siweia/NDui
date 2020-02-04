@@ -6,6 +6,7 @@ local function ReskinDetails()
 	local Details = _G.Details
 	-- instance table can be nil sometimes
 	Details.tabela_instancias = Details.tabela_instancias or {}
+	Details.instances_amount = Details.instances_amount or 5
 	-- toggle windows on init
 	Details:ReabrirTodasInstancias()
 
