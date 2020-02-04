@@ -50,7 +50,7 @@ function B:CreateSD(size, override)
 	self.Shadow:SetOutside(self, size or 4, size or 4)
 	self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
 	self.Shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
-	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
+	self.Shadow:SetFrameLevel(1)
 
 	return self.Shadow
 end
@@ -1070,40 +1070,6 @@ end
 function B:HideOption()
 	self:SetAlpha(0)
 	self:SetScale(.0001)
-end
-
--- Smoothy
-local smoothing = {}
-local f = CreateFrame("Frame")
-f:SetScript("OnUpdate", function()
-	local limit = 30/GetFramerate()
-	for bar, value in pairs(smoothing) do
-		local cur = bar:GetValue()
-		local new = cur + min((value-cur)/8, max(value-cur, limit))
-		if new ~= new then
-			new = value
-		end
-		bar:SetValue_(new)
-		if cur == value or abs(new - value) < 1 then
-			smoothing[bar] = nil
-			bar:SetValue_(value)
-		end
-	end
-end)
-
-local function SetSmoothValue(self, value)
-	if value ~= self:GetValue() or value == 0 then
-		smoothing[self] = value
-	else
-		smoothing[self] = nil
-	end
-end
-
-function B:SmoothBar()
-	if not self.SetValue_ then
-		self.SetValue_ = self.SetValue
-		self.SetValue = SetSmoothValue
-	end
 end
 
 -- Timer Format
