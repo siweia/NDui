@@ -82,7 +82,7 @@ function UF:CreateHealthBar(self)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
 	health.backdrop = B.CreateBDFrame(health, 0, true) -- don't mess up with libs
 	health.shadow = health.backdrop.Shadow
-	B.SmoothBar(health)
+	B:SmoothBar(health)
 
 	local bg = health:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -225,7 +225,7 @@ function UF:CreatePowerBar(self)
 	power:SetHeight(powerHeight)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
 	power.backdrop = B.CreateBDFrame(power, 0)
-	B.SmoothBar(power)
+	B:SmoothBar(power)
 
 	if self.Health.shadow then
 		self.Health.shadow:SetPoint("BOTTOMRIGHT", power.backdrop, C.mult+3, -C.mult-3)

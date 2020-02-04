@@ -633,7 +633,7 @@ function UF:CreatePlates()
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
 	health.backdrop = B.CreateBDFrame(health, nil, true) -- don't mess up with libs
-	B.SmoothBar(health)
+	B:SmoothBar(health)
 
 	self.Health = health
 	self.Health.UpdateColor = UF.UpdateColor
