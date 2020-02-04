@@ -18,11 +18,13 @@ local C_IslandsQueue_GetIslandsWeeklyQuestID = C_IslandsQueue.GetIslandsWeeklyQu
 local TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR = TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR
 local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES
 local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
-local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE
+local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE
+local PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE = PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE
 local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
 local GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo = GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo
 local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
+local PVPGetConquestLevelInfo, IsPlayerAtEffectiveMaxLevel = PVPGetConquestLevelInfo, IsPlayerAtEffectiveMaxLevel
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool("timeMgrUseMilitaryTime") then
@@ -114,7 +116,7 @@ local bfaZoneTime = {
 }
 
 local invIndex = {
-	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {}, baseTime = legionZoneTime[region] or legionZoneTime["CN"]}, -- need reviewed
+	[1] = {title = L["Legion Invasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {}, baseTime = legionZoneTime[region] or legionZoneTime["CN"]},
 	[2] = {title = L["BfA Invasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or bfaZoneTime["CN"]},
 }
 
@@ -233,6 +235,20 @@ info.onEnter = function(self)
 		addTitle(QUESTS_LABEL)
 		if count == maxCoins then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 		GameTooltip:AddDoubleLine(bonusName, count.."/"..maxCoins, 1,1,1, r,g,b)
+	end
+
+	do
+		local currentValue, maxValue, questID = PVPGetConquestLevelInfo()
+		local questDone = questID and questID == 0
+		if IsPlayerAtEffectiveMaxLevel() then
+			if questDone then
+				addTitle(QUESTS_LABEL)
+				GameTooltip:AddDoubleLine(PVP_CONQUEST, QUEST_COMPLETE, 1,1,1, 1,0,0)
+			elseif currentValue > 0 then
+				addTitle(QUESTS_LABEL)
+				GameTooltip:AddDoubleLine(PVP_CONQUEST, currentValue.."/"..maxValue, 1,1,1, 0,1,0)
+			end
+		end
 	end
 
 	local iwqID = C_IslandsQueue_GetIslandsWeeklyQuestID()
