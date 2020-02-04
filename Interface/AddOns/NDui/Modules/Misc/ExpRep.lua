@@ -14,13 +14,12 @@ local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
 local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
 local HONOR, LEVEL, TUTORIAL_TITLE26, SPELLBOOK_AVAILABLE_AT = HONOR, LEVEL, TUTORIAL_TITLE26, SPELLBOOK_AVAILABLE_AT
 local ARTIFACT_POWER, ARTIFACT_RETIRED = ARTIFACT_POWER, ARTIFACT_RETIRED
-local PVP_CONQUEST, CONQUEST_BAR_REWARD_DONE, ARENA_THIS_WEEK = PVP_CONQUEST, CONQUEST_BAR_REWARD_DONE, ARENA_THIS_WEEK
 
 local UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled = UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled
 local GetText, UnitSex, BreakUpLargeNumbers, GetNumFactions, GetFactionInfo = GetText, UnitSex, BreakUpLargeNumbers, GetNumFactions, GetFactionInfo
 local GetWatchedFactionInfo, GetFriendshipReputation, GetFriendshipReputationRanks = GetWatchedFactionInfo, GetFriendshipReputation, GetFriendshipReputationRanks
 local HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP = HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP
-local IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel, IsPlayerAtEffectiveMaxLevel = IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel, IsPlayerAtEffectiveMaxLevel
+local IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel = IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel
 local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
 local C_AzeriteItem_HasActiveAzeriteItem = C_AzeriteItem.HasActiveAzeriteItem
@@ -158,19 +157,6 @@ function M:ExpBar_UpdateTooltip()
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(HONOR, 0,.6,1)
 		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.." / "..barMax, .6,.8,1, 1,1,1)
-
-		local locked = not IsPlayerAtEffectiveMaxLevel()
-		local currentValue, maxValue, questID = PVPGetConquestLevelInfo()
-		local questDone = questID and questID == 0
-		if not locked then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(PVP_CONQUEST, 0,.6,1)
-			if questDone then
-				GameTooltip:AddLine(CONQUEST_BAR_REWARD_DONE, .6,.8,1, 1)
-			else
-				GameTooltip:AddDoubleLine(ARENA_THIS_WEEK, currentValue.." / "..maxValue, .6,.8,1, 1,1,1)
-			end
-		end
 	end
 
 	if C_AzeriteItem_HasActiveAzeriteItem() then
