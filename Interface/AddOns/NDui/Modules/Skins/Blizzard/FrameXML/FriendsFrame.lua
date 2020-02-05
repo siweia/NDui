@@ -163,7 +163,7 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(_G["WhoFrameColumnHeader"..i])
 	end
 
-	WhoFrameListInset:Hide()
+	B.StripTextures(WhoFrameListInset)
 	WhoFrameEditBoxInset:Hide()
 	local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0)
 	whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
