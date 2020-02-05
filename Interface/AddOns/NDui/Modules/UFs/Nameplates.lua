@@ -45,8 +45,8 @@ end
 
 function UF:UpdateClickableSize()
 	if InCombatLockdown() then return end
-	C_NamePlate.SetNamePlateEnemySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+40)
-	C_NamePlate.SetNamePlateFriendlySize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"]+40)
+	C_NamePlate.SetNamePlateEnemySize(NDuiDB["Nameplate"]["PlateWidth"]*NDuiADB["UIScale"], NDuiDB["Nameplate"]["PlateHeight"]*NDuiADB["UIScale"]+40)
+	C_NamePlate.SetNamePlateFriendlySize(NDuiDB["Nameplate"]["PlateWidth"]*NDuiADB["UIScale"], NDuiDB["Nameplate"]["PlateHeight"]*NDuiADB["UIScale"]+40)
 end
 
 function UF:SetupCVars()
