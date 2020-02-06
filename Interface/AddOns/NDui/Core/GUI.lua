@@ -59,6 +59,7 @@ local defaultSettings = {
 		FilterLegendary = true,
 		FilterMount = true,
 		FilterFavourite = true,
+		FilterGoods = false,
 	},
 	Auras = {
 		Reminder = true,
