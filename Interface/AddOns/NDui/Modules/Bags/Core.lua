@@ -482,6 +482,9 @@ function module:OnLogin()
 		f.bagCompanion = MyContainer:New("BagCompanion", {Columns = bagsWidth, Parent = f.main})
 		f.bagCompanion:SetFilter(filters.bagMountPet, true)
 
+		f.bagGoods = MyContainer:New("BagGoods", {Columns = bagsWidth, Parent = f.main})
+		f.bagGoods:SetFilter(filters.bagGoods, true)
+
 		f.bank = MyContainer:New("Bank", {Columns = bankWidth, Bags = "bank"})
 		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
@@ -505,10 +508,16 @@ function module:OnLogin()
 		f.bankCompanion = MyContainer:New("BankCompanion", {Columns = bankWidth, Parent = f.bank})
 		f.bankCompanion:SetFilter(filters.bankMountPet, true)
 
+		f.bankGoods = MyContainer:New("BankGoods", {Columns = bagsWidth, Parent = f.main})
+		f.bankGoods:SetFilter(filters.bankGoods, true)
+
 		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth})
 		f.reagent:SetFilter(filters.onlyReagent, true)
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
+
+		module.BagGroup = {f.azeriteItem, f.equipment, f.bagCompanion, f.bagGoods, f.consumble, f.bagFavourite, f.junk}
+		module.BankGroup = {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankGoods, f.bankConsumble, f.bankFavourite}
 	end
 
 	local initBagType
@@ -685,6 +694,7 @@ function module:OnLogin()
 	end
 
 	local MyContainer = Backpack:GetContainerClass()
+
 	function MyContainer:OnContentsChanged()
 		self:SortButtons("bagSlot")
 
@@ -719,8 +729,8 @@ function module:OnLogin()
 		end
 		self:SetSize(width + xOffset*2, height + offset)
 
-		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.bagCompanion, f.consumble, f.bagFavourite, f.junk})
-		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankConsumble, f.bankFavourite})
+		module:UpdateAnchors(f.main, module.BagGroup)
+		module:UpdateAnchors(f.bank, module.BankGroup)
 	end
 
 	function MyContainer:OnCreate(name, settings)
@@ -750,6 +760,8 @@ function module:OnLogin()
 			label = MOUNTS_AND_PETS
 		elseif strmatch(name, "Favourite") then
 			label = PREFERENCES
+		elseif strmatch(name, "Goods") then
+			label = AUCTION_CATEGORY_TRADE_GOODS
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

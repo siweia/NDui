@@ -5,7 +5,7 @@ local module = B:GetModule("Bags")
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY
 local LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local LE_ITEM_CLASS_MISCELLANEOUS, LE_ITEM_MISCELLANEOUS_MOUNT, LE_ITEM_MISCELLANEOUS_COMPANION_PET = LE_ITEM_CLASS_MISCELLANEOUS, LE_ITEM_MISCELLANEOUS_MOUNT, LE_ITEM_MISCELLANEOUS_COMPANION_PET
-local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
+local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 
 -- Custom filter
@@ -88,15 +88,21 @@ local function isEmptySlot(item)
 	return module.initComplete and not item.texture and module.BagsType[item.bagID] == 0
 end
 
+local function isTradeGoods(item)
+	if not NDuiDB["Bags"]["ItemFilter"] then return end
+	if not NDuiDB["Bags"]["FilterGoods"] then return end
+	return item.classID == LE_ITEM_CLASS_TRADEGOODS
+end
+
 function module:GetFilters()
 	local filters = {}
 
-	filters.onlyBags = function(item) return isItemInBag(item) and not isItemEquipment(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isItemJunk(item) and not isMountAndPet(item) and not isItemFavourite(item) and not isEmptySlot(item) end
+	filters.onlyBags = function(item) return isItemInBag(item) and not isItemEquipment(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isItemJunk(item) and not isMountAndPet(item) and not isItemFavourite(item) and not isEmptySlot(item) and not isTradeGoods(item) end
 	filters.bagAzeriteItem = function(item) return isItemInBag(item) and isAzeriteArmor(item) end
 	filters.bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 	filters.bagConsumble = function(item) return isItemInBag(item) and isItemConsumble(item) end
 	filters.bagsJunk = function(item) return isItemInBag(item) and isItemJunk(item) end
-	filters.onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemLegendary(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isMountAndPet(item) and not isItemFavourite(item) and not isEmptySlot(item) end
+	filters.onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemLegendary(item) and not isItemConsumble(item) and not isAzeriteArmor(item) and not isMountAndPet(item) and not isItemFavourite(item) and not isEmptySlot(item) and not isTradeGoods(item) end
 	filters.bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
 	filters.bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	filters.bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
@@ -106,6 +112,8 @@ function module:GetFilters()
 	filters.bankMountPet = function(item) return isItemInBank(item) and isMountAndPet(item) end
 	filters.bagFavourite = function(item) return isItemInBag(item) and isItemFavourite(item) end
 	filters.bankFavourite = function(item) return isItemInBank(item) and isItemFavourite(item) end
+	filters.bagGoods = function(item) return isItemInBag(item) and isTradeGoods(item) end
+	filters.bankGoods = function(item) return isItemInBank(item) and isTradeGoods(item) end
 
 	return filters
 end
