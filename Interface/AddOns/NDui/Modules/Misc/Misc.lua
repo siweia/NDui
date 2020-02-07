@@ -9,7 +9,6 @@ local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
 local GetArtifactInfoByRace = GetArtifactInfoByRace
 local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
-local GetNumAuctionItems, GetAuctionItemInfo = GetNumAuctionItems, GetAuctionItemInfo
 local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
 local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
 local EquipmentManager_RunAction = EquipmentManager_RunAction
@@ -437,12 +436,13 @@ do
 		end
 	end)
 
-	local function dragAlert(event, unit)
-		if unit ~= "player" then return end
-		UIErrorsFrame:AddMessage(DB.InfoColor..L["Drag AltBar Tip"])
-		B:UnregisterEvent(event, dragAlert)
-	end
-	B:RegisterEvent("UNIT_POWER_BAR_SHOW", dragAlert)
+	local count = 0
+	PlayerPowerBarAlt:HookScript("OnEnter", function()
+		if count < 5 then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Drag AltBar Tip"])
+			count = count + 1
+		end
+	end)
 end
 
 -- ALT+RightClick to buy a stack
