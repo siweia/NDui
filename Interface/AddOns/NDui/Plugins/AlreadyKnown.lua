@@ -100,7 +100,6 @@ local function Hook_UpdateAuctionHouse(self)
 	local buttons = HybridScrollFrame_GetButtons(self.ScrollFrame)
 	local buttonCount = #buttons
 	local offset = self:GetScrollOffset()
-	local populateCount = min(buttonCount, numResults)
 	for i = 1, buttonCount do
 		local visible = i + offset <= numResults
 		local button = buttons[i]

@@ -215,7 +215,7 @@ function M:CreateRM()
 		B.ReskinMenuButton(marker)
 		marker:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
 		marker:GetNormalTexture():SetVertexColor(DB.r, DB.g, DB.b)
-		marker:HookScript("OnMouseUp", function(_, btn)
+		marker:HookScript("OnMouseUp", function()
 			if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then return end
 			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
 		end)

@@ -4,7 +4,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 
 local type, pairs, tonumber, wipe, next = type, pairs, tonumber, table.wipe, next
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
-local min, max, abs, floor = math.min, math.max, math.abs, math.floor
+local min, max, floor = math.min, math.max, math.floor
 
 function B:Scale(x)
 	local mult = C.mult
@@ -44,7 +44,6 @@ function B:CreateSD(size, override)
 
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
-	local lvl = frame:GetFrameLevel()
 
 	self.Shadow = CreateFrame("Frame", nil, frame)
 	self.Shadow:SetOutside(self, size or 4, size or 4)

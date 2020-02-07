@@ -1,8 +1,7 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
-
 local oUF = ns.oUF or oUF
-local format, floor = string.format, math.floor
+
 local AFK, DND, DEAD, PLAYER_OFFLINE = AFK, DND, DEAD, PLAYER_OFFLINE
 local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate or 10
 local UnitAlternatePowerTextureInfo = UnitAlternatePowerTextureInfo
@@ -227,6 +226,6 @@ oUF.Tags.Methods["monkstagger"] = function(unit)
 	local cur = UnitStagger(unit) or 0
 	local perc = cur / UnitHealthMax(unit)
 	if cur == 0 then return end
-	return B.Numb(cur).." | "..DB.MyColor..floor(perc*100 + .5).."%"
+	return B.Numb(cur).." | "..DB.MyColor..B:Round(perc*100).."%"
 end
 oUF.Tags.Events["monkstagger"] = "UNIT_MAXHEALTH UNIT_AURA"

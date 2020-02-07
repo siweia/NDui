@@ -9,7 +9,6 @@ local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
 local GetArtifactInfoByRace = GetArtifactInfoByRace
 local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
-local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
 local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
 local EquipmentManager_RunAction = EquipmentManager_RunAction
 local GetInventoryItemTexture = GetInventoryItemTexture

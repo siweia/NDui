@@ -77,7 +77,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 	local bg = B.ReskinIcon(affix.Portrait)
 	bg:SetFrameLevel(3)
 
-	hooksecurefunc(affix, "SetUp", function(self, affixID)
+	hooksecurefunc(affix, "SetUp", function(_, affixID)
 		local _, _, texture = C_ChallengeMode.GetAffixInfo(affixID)
 		if texture then
 			affix.Portrait:SetTexture(texture)
