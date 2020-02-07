@@ -508,7 +508,7 @@ function module:OnLogin()
 		f.bankCompanion = MyContainer:New("BankCompanion", {Columns = bankWidth, Parent = f.bank})
 		f.bankCompanion:SetFilter(filters.bankMountPet, true)
 
-		f.bankGoods = MyContainer:New("BankGoods", {Columns = bagsWidth, Parent = f.main})
+		f.bankGoods = MyContainer:New("BankGoods", {Columns = bankWidth, Parent = f.bank})
 		f.bankGoods:SetFilter(filters.bankGoods, true)
 
 		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth})
