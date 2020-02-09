@@ -198,7 +198,8 @@ C.CustomUnits = {
 -- 显示能量值的单位
 C.ShowPowerList = {
 	[155432] = true, -- 魔力使者
-	[152703] = true, -- 步行震击者X1型，困难麦卡贡
+	[152703] = true, -- 步行震击者X1型，麦卡贡
+	[163746] = true, -- 步行震击者X1型
 	[GetSectionInfo(13015)] = true,	-- 清扫器
 	[GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
 	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师

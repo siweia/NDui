@@ -253,6 +253,7 @@ local list = {
 	},
 	["Raid Debuff"] = {		-- 团队减益组
 		{AuraID = 295413, UnitID = "player", Stack = 20, Flash = true},	-- 苦楚
+		{AuraID = 315176, UnitID = "player"},	-- 贪婪触须
 		{AuraID = 315161, UnitID = "player"},	-- 腐化之眼
 	-- 5人本
 		{AuraID = 311390, UnitID = "player"},	-- 疯狂：昆虫恐惧症，幻象
