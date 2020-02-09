@@ -5,127 +5,97 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 
-local tonumber, format = tonumber, format
+local tonumber, next, strmatch = tonumber, next, string.match
+local UnitPlayerControlled = UnitPlayerControlled
 local UnitIsOwnerOrControllerOfUnit = UnitIsOwnerOrControllerOfUnit
-local C_QuestLog_IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo
 
-local NPCIDToWidgetIDMap = {
-	[154304] = 1940, -- Farseer Ori
-	[150202] = 1613, -- Hunter Akana
-	[154297] = 1966, -- Bladesman Inowari
-	[151300] = 1621, -- Neri Sharpfin
-	[151310] = 1622, -- Poen Gillbrack
-	[151309] = 1920 -- Vim Brineheart
-}
-
-local CampfireNPCIDToWidgetIDMap = {
+local widgetMap = {
 	[149805] = 1940, -- Farseer Ori
 	[149804] = 1613, -- Hunter Akana
 	[149803] = 1966, -- Bladesman Inowari
 	[149904] = 1621, -- Neri Sharpfin
 	[149902] = 1622, -- Poen Gillbrack
-	[149906] = 1920 -- Vim Brineheart,
-}
+	[149906] = 1920, -- Vim Brineheart
 
-local NeededQuestIDs = {
-	["Horde"] = 55500,
-	["Alliance"] = 56156
-}
+	[154304] = 1940, -- Farseer Ori
+	[150202] = 1613, -- Hunter Akana
+	[154297] = 1966, -- Bladesman Inowari
+	[151300] = 1621, -- Neri Sharpfin
+	[151310] = 1622, -- Poen Gillbrack
+	[151309] = 1920, -- Vim Brineheart
 
-local VoidtouchedEggQuestID = 58802
-
-local VoidtouchedEggNPCIDToWidgetIDMap = {
 	[163541] = 2342, -- Voidtouched Egg
 	[163592] = 2342, -- Yu'gaz
 	[163593] = 2342, -- Bitey McStabface
 	[163595] = 2342, -- Reginald
 	[163596] = 2342, -- Picco
+	[163648] = 2342, -- Bitey McStabface
+	[163651] = 2342, -- Yu'gaz
 }
 
-local function GetWidgetInfoBase(widgetID, overrideProc)
+local function GetWidgetInfoID(guid)
+	return widgetMap[guid]
+end
+
+local function SetWidgetInfoID(guid, widgetID)
+	if widgetID then
+		widgetMap[guid] = widgetID
+	end
+end
+
+local MaxNazjatarBodyguardRank = 30
+local function GetWidgetInfoBase(widgetID)
 	local widget = widgetID and C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo(widgetID)
 	if not widget then return end
-
-	local extra
-	if ( overrideProc ) then
-		extra =	overrideProc(widget.overrideBarText)
-	end
 
 	local cur = widget.barValue - widget.barMin
 	local toNext = widget.barMax - widget.barMin
 	local total = widget.barValue
 
-	return cur, toNext, total, extra
+	local rank, maxRank
+	if widget.overrideBarText then
+		rank = tonumber(strmatch(widget.overrideBarText, "%d+"))
+		maxRank = rank == MaxNazjatarBodyguardRank
+	end
+
+	return cur, toNext, total, rank, maxRank
 end
 
-local MaxNazjatarBodyguardRank = 30
-local function parseRank(text)
-	return tonumber(strmatch(text, "%d+"))
-end
-
-local function GetNazjatarBodyguardXP(widgetID)
-	local cur, toNext, total, rank = GetWidgetInfoBase(widgetID, parseRank)
-	if not rank then return end
-
-	local isMax = rank == MaxNazjatarBodyguardRank
-
-	return rank, cur, toNext, total, isMax
+local function Hide(element)
+	if element.Rank then element.Rank:Hide() end
+	if element.ProgressText then element.ProgressText:Hide() end
+	element:Hide()
 end
 
 local function Update(self)
 	local element = self.WidgetXPBar
-	if not element then
-		return
-	end
+	if not element then return end
 
-	local npcID, questID = tonumber(self.npcID), NeededQuestIDs[DB.MyFaction]
-	if VoidtouchedEggNPCIDToWidgetIDMap[npcID] then
-		questID = VoidtouchedEggQuestID
-	end
-	local hasQuestCompleted = questID and C_QuestLog_IsQuestFlaggedCompleted(questID)
-	local isProperNPC =
-		npcID and (NPCIDToWidgetIDMap[npcID] and self.unit and UnitIsOwnerOrControllerOfUnit("player", self.unit)) or
-		CampfireNPCIDToWidgetIDMap[npcID] or
-		VoidtouchedEggNPCIDToWidgetIDMap[npcID]
-	if (not hasQuestCompleted or not isProperNPC) then
-		element:Hide()
-		if element.Rank then
-			element.Rank:Hide()
-		end
-		if element.ProgressText then
-			element.ProgressText:Hide()
-		end
+	local widget = self.widget
+	if not widget then Hide(element) return end
 
-		return
-	end
+	local unit = self.unit
+	if unit and UnitPlayerControlled(unit) and not UnitIsOwnerOrControllerOfUnit('player', unit) then Hide(element) return end
 
 	if element.PreUpdate then
 		element:PreUpdate()
 	end
 
-	local widgetID =
-		NPCIDToWidgetIDMap[npcID] or CampfireNPCIDToWidgetIDMap[npcID] or VoidtouchedEggNPCIDToWidgetIDMap[npcID]
-	if not widgetID then
-		element:Hide()
-		if element.Rank then
-			element.Rank:Hide()
-		end
-		if element.ProgressText then
-			element.ProgressText:Hide()
-		end
-		return
+	local npcID = self.npcID and tonumber(self.npcID)
+	local widgetID = GetWidgetInfoID(npcID)
+	local realID = widget.widgetFrames and next(widget.widgetFrames)
+	if realID and realID ~= widgetID then -- auto save new npc ids to their widget id
+		SetWidgetInfoID(npcID, realID)
+		widgetID = realID
 	end
 
-	local rank, cur, toNext, total, isMax
-	if VoidtouchedEggNPCIDToWidgetIDMap[npcID] then
-		cur, toNext, total = GetWidgetInfoBase(widgetID)
-	else
-		rank, cur, toNext, total, isMax = GetNazjatarBodyguardXP(widgetID)
-	end
+	local cur, toNext, total, rank, maxRank = GetWidgetInfoBase(widgetID)
+	if not cur then Hide(element) return end
 
-	element:SetMinMaxValues(0, (isMax and 1) or toNext)
-	element:SetValue(isMax and 1 or cur)
+	element:SetMinMaxValues(0, maxRank and 1 or toNext)
+	element:SetValue(maxRank and 1 or cur)
+	element:Show()
 
 	if rank and element.Rank then
 		element.Rank:SetText(rank)
@@ -133,14 +103,12 @@ local function Update(self)
 	end
 
 	if element.ProgressText then
-		element.ProgressText:SetText((isMax and L["Max Rank"]) or format("Lv%d %d / %d", rank, cur, toNext))
+		element.ProgressText:SetFormattedText(maxRank and L["Max Rank"] or "Lv%d %d / %d", rank, cur, toNext)
 		element.ProgressText:Show()
 	end
 
-	element:Show()
-
 	if element.PostUpdate then
-		element:PostUpdate(rank, cur, toNext, total)
+		element:PostUpdate(cur, toNext, total, rank, maxRank)
 	end
 end
 
@@ -166,14 +134,8 @@ end
 
 local function Disable(self)
 	local element = self.WidgetXPBar
-	if (element) then
-		element:Hide()
-		if element.Rank then
-			element.Rank:Hide()
-		end
-		if element.ProgressText then
-			element.ProgressText:Hide()
-		end
+	if element then
+		Hide(element)
 
 		self:UnregisterEvent("UPDATE_UI_WIDGET", Path)
 		self:UnregisterEvent("QUEST_LOG_UPDATE", Path)
