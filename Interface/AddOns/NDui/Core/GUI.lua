@@ -71,7 +71,7 @@ local defaultSettings = {
 		BuffSize = 30,
 		BuffsPerRow = 16,
 		ReverseDebuffs = false,
-		DebuffSize = 34,
+		DebuffSize = 30,
 		DebuffsPerRow = 16,
 	},
 	AuraWatch = {
@@ -209,7 +209,7 @@ local defaultSettings = {
 		PPHeight = 5,
 		PPPHeight = 5,
 		PPPowerText = false,
-		FullHealth = false,
+		FullHealth = true,
 		SecureColor = {r=1, g=0, b=1},
 		TransColor = {r=1, g=.8, b=0},
 		InsecureColor = {r=1, g=0, b=0},
