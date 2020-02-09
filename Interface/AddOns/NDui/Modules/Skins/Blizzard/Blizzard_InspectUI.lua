@@ -30,7 +30,6 @@ C.themes["Blizzard_InspectUI"] = function()
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
-		slot.icon:SetDrawLayer("BACKGROUND", -2)
 		B.CreateBD(slot, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
