@@ -30,7 +30,7 @@ function M:GuildBest_Create()
 	frame = CreateFrame("Frame", nil, ChallengesFrame)
 	frame:SetPoint("BOTTOMRIGHT", -6, 80)
 	frame:SetSize(170, 105)
-	B.CreateBD(frame, .3)
+	B.CreateBD(frame, .25)
 	B.CreateFS(frame, 16, GUILD, "system", "TOPLEFT", 16, -6)
 
 	frame.entries = {}
@@ -86,10 +86,10 @@ function M:GuildBest_Update()
 	end
 
 	if not resize and IsAddOnLoaded("AngryKeystones") then
-		local scheduel = select(5, self:GetChildren())
+		local schedule = AngryKeystones.Modules.Schedule.AffixFrame
 		frame:SetWidth(246)
 		frame:ClearAllPoints()
-		frame:SetPoint("BOTTOMLEFT", scheduel, "TOPLEFT", 0, 10)
+		frame:SetPoint("BOTTOMLEFT", schedule, "TOPLEFT", 0, 10)
 
 		self.WeeklyInfo.Child.Label:SetPoint("TOP", -135, -25)
 		local affix = self.WeeklyInfo.Child.Affixes[1]
