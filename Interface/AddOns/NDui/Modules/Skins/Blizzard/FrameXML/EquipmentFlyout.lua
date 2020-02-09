@@ -28,18 +28,40 @@ tinsert(C.defaultThemes, function()
 	end
 
 	hooksecurefunc("EquipmentFlyout_CreateButton", function()
-		local bu = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
+		local button = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
 
-		bu.IconBorder:SetAlpha(0)
-		bu.icon:SetTexCoord(unpack(DB.TexCoord))
-		bu:SetNormalTexture("")
-		bu:SetPushedTexture("")
-		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		bu.bg = B.CreateBDFrame(bu)
+		button.IconBorder:SetAlpha(0)
+		button.icon:SetTexCoord(unpack(DB.TexCoord))
+		button:SetNormalTexture("")
+		button:SetPushedTexture("")
+		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		button.bg = B.CreateBDFrame(button)
 
-		hooksecurefunc(bu.IconBorder, "SetVertexColor", hook_SetVertexColor)
-		hooksecurefunc(bu.IconBorder, "Hide", hook_Hide)
+		if not button.Eye then
+			button.Eye = button:CreateTexture()
+			button.Eye:SetAtlas("Nzoth-inventory-icon")
+			button.Eye:SetInside()
+		end
+
+		hooksecurefunc(button.IconBorder, "SetVertexColor", hook_SetVertexColor)
+		hooksecurefunc(button.IconBorder, "Hide", hook_Hide)
 	end)
+
+	local function UpdateCorruption(button, location)
+		local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
+		if voidStorage then
+			button.Eye:Hide()
+			return
+		end
+
+		local itemLink
+		if bags then
+			itemLink = GetContainerItemLink(bag, slot)
+		else
+			itemLink = GetInventoryItemLink("player", slot)
+		end
+		button.Eye:SetShown(itemLink and IsCorruptedItem(itemLink))
+	end
 
 	hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)
 		local location = button.location
@@ -51,6 +73,8 @@ tinsert(C.defaultThemes, function()
 		else
 			border:Show()
 		end
+
+		UpdateCorruption(button, location)
 	end)
 
 	B.SetBD(EquipmentFlyoutFrame.NavigationFrame)
