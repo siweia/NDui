@@ -57,6 +57,7 @@ function M:OnLogin()
 	self:MoverQuestTracker()
 	self:CreateRM()
 	self:BlockWQTInvite()
+	self:OverrideAWQ()
 
 	-- Max camera distancee
 	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
@@ -652,6 +653,7 @@ do
 	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
 end
 
+-- Button to block auto invite addons
 function M:BlockWQTInvite()
 	if not NDuiDB["Misc"]["BlockWQT"] then return end
 
@@ -692,4 +694,26 @@ function M:BlockWQTInvite()
 		frame:Hide()
 		currentName = nil
 	end)
+end
+
+-- Override default settings for AngryWorldQuests
+function M:OverrideAWQ()
+	if not IsAddOnLoaded("AngryWorldQuests") then return end
+
+	AngryWorldQuests_Config = AngryWorldQuests_Config or {}
+	AngryWorldQuests_CharacterConfig = AngryWorldQuests_CharacterConfig or {}
+
+	local settings = {
+		hideFilteredPOI = true,
+		showContinentPOI = true,
+		sortMethod = 2,
+	}
+	local function overrideOptions(_, key)
+		local value = settings[key]
+		if value then
+			AngryWorldQuests_Config[key] = value
+			AngryWorldQuests_CharacterConfig[key] = value
+		end
+	end
+	hooksecurefunc(AngryWorldQuests.Modules.Config, "Set", overrideOptions)
 end
