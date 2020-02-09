@@ -10,6 +10,12 @@ C.themes["Blizzard_InspectUI"] = function()
 	InspectPaperDollFrame.ViewButton:SetPoint("TOP", InspectFrame, 0, -45)
 	InspectPVPFrame.BG:Hide()
 
+	local function UpdateCorruption(self)
+		local unit = InspectFrame.unit
+		local itemLink = unit and GetInventoryItemLink(unit, self:GetID())
+		self.Eye:SetShown(itemLink and IsCorruptedItem(itemLink))
+	end
+
 	-- Character
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
@@ -24,8 +30,17 @@ C.themes["Blizzard_InspectUI"] = function()
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
+		slot.icon:SetDrawLayer("BACKGROUND", -2)
 		B.CreateBD(slot, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+
+		if not slot.Eye then
+			slot.Eye = slot:CreateTexture()
+			slot.Eye:SetAtlas("Nzoth-inventory-icon")
+			slot.Eye:SetInside()
+			slot:HookScript("OnShow", UpdateCorruption)
+			slot:HookScript("OnEvent", UpdateCorruption)
+		end
 
 		border:SetAlpha(0)
 		hooksecurefunc(border, "SetVertexColor", function(_, r, g, b) slot:SetBackdropBorderColor(r, g, b) end)
