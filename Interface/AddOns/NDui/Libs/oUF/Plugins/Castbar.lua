@@ -7,39 +7,30 @@ local UnitInVehicle, UnitIsUnit = UnitInVehicle, UnitIsUnit
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
 
-local function GetSpellName(spellID)
-	local name = GetSpellInfo(spellID)
-	if not name then
-		print("oUF-Plugins-Castbar: ".. spellID.." not found.")
-		return 0
-	end
-	return name
-end
-
 local channelingTicks = {
-	[GetSpellName(740)] = 4,		-- 宁静
-	[GetSpellName(755)] = 3,		-- 生命通道
-	[GetSpellName(5143)] = 5, 		-- 奥术飞弹
-	[GetSpellName(12051)] = 3, 		-- 唤醒
-	[GetSpellName(15407)] = 4,		-- 精神鞭笞
-	[GetSpellName(47540)] = 3,		-- 苦修
-	[GetSpellName(64843)] = 4,		-- 神圣赞美诗
-	[GetSpellName(198590)] = 5,		-- 吸取灵魂
-	[GetSpellName(205021)] = 5,		-- 冰霜射线
-	[GetSpellName(205065)] = 6,		-- 虚空洪流
-	[GetSpellName(234153)] = 5,		-- 吸取生命
-	[GetSpellName(291944)] = 6,		-- 再生
+	[740] = 4,		-- 宁静
+	[755] = 3,		-- 生命通道
+	[5143] = 5, 	-- 奥术飞弹
+	[12051] = 3, 	-- 唤醒
+	[15407] = 4,	-- 精神鞭笞
+	[47758] = 3,	-- 苦修
+	[64843] = 4,	-- 神圣赞美诗
+	[198590] = 5,	-- 吸取灵魂
+	[205021] = 5,	-- 冰霜射线
+	[205065] = 6,	-- 虚空洪流
+	[234153] = 5,	-- 吸取生命
+	[291944] = 6,	-- 再生
 }
 
 if DB.MyClass == "PRIEST" then
-	local penance = GetSpellName(47540)
+	local penanceID = 47758
 	local function updateTicks()
 		local numTicks = 3
-		if IsPlayerSpell(193134) then numTicks = 4 end	-- Enhanced Mind Flay
-		channelingTicks[penance] = numTicks
+		if IsPlayerSpell(193134) then numTicks = 4 end
+		channelingTicks[penanceID] = numTicks
 	end
 	B:RegisterEvent("PLAYER_LOGIN", updateTicks)
-	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", updateTicks)
+	B:RegisterEvent("PLAYER_TALENT_UPDATE", updateTicks)
 end
 
 local ticks = {}
