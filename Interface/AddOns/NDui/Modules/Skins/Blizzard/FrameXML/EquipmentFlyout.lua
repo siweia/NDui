@@ -77,7 +77,19 @@ tinsert(C.defaultThemes, function()
 		UpdateCorruption(button, location)
 	end)
 
-	B.SetBD(EquipmentFlyoutFrame.NavigationFrame)
-	B.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.PrevButton, "left")
-	B.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.NextButton, "right")
+	local function reskinButtonFrame()
+		local frame = EquipmentFlyoutFrame.buttonFrame
+		if not frame.bg then
+			frame.bg = B.SetBD(EquipmentFlyoutFrame.buttonFrame)
+		end
+		frame:SetWidth(frame:GetWidth()+3)
+	end
+	hooksecurefunc("EquipmentFlyout_UpdateItems", reskinButtonFrame)
+
+	local navigationFrame = EquipmentFlyoutFrame.NavigationFrame
+	B.SetBD(navigationFrame)
+	navigationFrame:SetPoint("TOPLEFT", EquipmentFlyoutFrameButtons, "BOTTOMLEFT", 0, -3)
+	navigationFrame:SetPoint("TOPRIGHT", EquipmentFlyoutFrameButtons, "BOTTOMRIGHT", 0, -3)
+	B.ReskinArrow(navigationFrame.PrevButton, "left")
+	B.ReskinArrow(navigationFrame.NextButton, "right")
 end)
