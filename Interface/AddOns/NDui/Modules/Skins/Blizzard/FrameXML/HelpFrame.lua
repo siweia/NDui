@@ -118,6 +118,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(ReportCheatingDialogReportButton)
 	B.Reskin(ReportCheatingDialogCancelButton)
 
+	B.StripTextures(TicketStatusFrameButton)
 	B.SetBD(TicketStatusFrameButton)
 	B.SetBD(ReportCheatingDialog)
 	ReportCheatingDialog.Border:Hide()
