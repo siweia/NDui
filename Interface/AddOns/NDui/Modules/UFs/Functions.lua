@@ -362,11 +362,12 @@ function UF:CreateRaidMark(self)
 	if mystyle == "raid" then
 		ri:SetPoint("TOP", self, 0, 10)
 	elseif mystyle == "nameplate" then
-		ri:SetPoint("RIGHT", self, "LEFT", -3, 3)
+		ri:SetPoint("RIGHT", self, "LEFT", -3, 0)
+		ri:SetParent(self.Health)
 	else
 		ri:SetPoint("TOPRIGHT", self, "TOPRIGHT", -30, 10)
 	end
-	local size = retVal(self, 14, 13, 12, 12, 28)
+	local size = retVal(self, 14, 13, 12, 12, 32)
 	ri:SetSize(size, size)
 	self.RaidTargetIndicator = ri
 end
