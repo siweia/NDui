@@ -721,6 +721,9 @@ function UF:PostUpdatePlates(event, unit)
 			guidToPlate[self.unitGUID] = self
 		end
 		self.npcID = B.GetNPCID(self.unitGUID)
+
+		local blizzPlate = self:GetParent().UnitFrame
+		self.widget = blizzPlate.WidgetContainer
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
