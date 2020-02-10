@@ -5,7 +5,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 
-local tonumber, next, strmatch = tonumber, next, string.match
+local tonumber, next, strmatch, format = tonumber, next, string.match, string.format
 local UnitPlayerControlled = UnitPlayerControlled
 local UnitIsOwnerOrControllerOfUnit = UnitIsOwnerOrControllerOfUnit
 local C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo
@@ -103,7 +103,15 @@ local function Update(self)
 	end
 
 	if element.ProgressText then
-		element.ProgressText:SetFormattedText(maxRank and L["Max Rank"] or "Lv%d %d / %d", rank, cur, toNext)
+		local text
+		if maxRank then
+			text = L["Max Rank"]
+		elseif rank then
+			text = format("Lv%d %d / %d", rank, cur, toNext)
+		else
+			text = format("%d / %d", cur, toNext)
+		end
+		element.ProgressText:SetText(text)
 		element.ProgressText:Show()
 	end
 
@@ -122,7 +130,7 @@ end
 
 local function Enable(self)
 	local element = self.WidgetXPBar
-	if (element) then
+	if element then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
