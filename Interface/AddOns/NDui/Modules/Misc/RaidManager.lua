@@ -453,7 +453,11 @@ function M:CreateRM()
 	header:RegisterForClicks("AnyUp")
 	header:SetScript("OnClick", function(_, btn)
 		if btn == "LeftButton" then
-			ToggleFrame(menu)
+			if menu:IsShown() then
+				menu:Hide()
+			else
+				menu:Show()
+			end
 
 			if menu:IsShown() then
 				menu:ClearAllPoints()
@@ -462,9 +466,9 @@ function M:CreateRM()
 				else
 					menu:SetPoint("BOTTOM", header, "TOP", 0, 3)
 				end
-			end
 
-			updateText(bu[2].text)
+				updateText(bu[2].text)
+			end
 		end
 	end)
 	header:SetScript("OnDoubleClick", function(_, btn)
