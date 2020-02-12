@@ -167,6 +167,7 @@ C.CustomUnits = {
 	[155432] = true, -- 魔力使者
 	[155433] = true, -- 虚触使者
 	[155434] = true, -- 潮汐使者
+	[161895] = true, -- 彼岸之物
 
 	[GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
 	[GetSectionInfo(14595)] = true,	-- 深渊追猎者

@@ -255,11 +255,15 @@ local list = {
 		{AuraID = 295413, UnitID = "player", Stack = 20, Flash = true},	-- 苦楚
 		{AuraID = 315176, UnitID = "player"},	-- 贪婪触须
 		{AuraID = 315161, UnitID = "player"},	-- 腐化之眼
+		{AuraID = 319695, UnitID = "player", Flash = true},	-- 壮美幻象
 	-- 5人本
 		{AuraID = 311390, UnitID = "player"},	-- 疯狂：昆虫恐惧症，幻象
 		{AuraID = 314478, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314483, UnitID = "player"},	-- 倾泻恐惧
+		{AuraID = 314411, UnitID = "player"},	-- 疑云密布
+		{AuraID = 314406, UnitID = "player"},	-- 致残疾病
 		{AuraID = 314565, UnitID = "player", Flash = true},	-- 亵渎大地
+		{AuraID = 314392, UnitID = "player", Flash = true},	-- 邪恶腐化物
 		{AuraID = 314308, UnitID = "player", Flash = true},	-- 灵魂毁灭
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
