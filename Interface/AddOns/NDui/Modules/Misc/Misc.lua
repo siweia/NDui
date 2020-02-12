@@ -659,7 +659,7 @@ function M:BlockWQTInvite()
 
 	local frame = CreateFrame("Frame", nil, StaticPopup1)
 	frame:SetPoint("TOP", StaticPopup1, "BOTTOM", 0, -3)
-	frame:SetSize(200, 34)
+	frame:SetSize(200, 31)
 	B.CreateBD(frame)
 	B.CreateTex(frame)
 	B.CreateSD(frame)
