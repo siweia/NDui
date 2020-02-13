@@ -453,11 +453,7 @@ function M:CreateRM()
 	header:RegisterForClicks("AnyUp")
 	header:SetScript("OnClick", function(_, btn)
 		if btn == "LeftButton" then
-			if menu:IsShown() then
-				menu:Hide()
-			else
-				menu:Show()
-			end
+			B:TogglePanel(menu)
 
 			if menu:IsShown() then
 				menu:ClearAllPoints()

@@ -4,7 +4,6 @@ local module = B:GetModule("Chat")
 
 local _G = getfenv(0)
 local gsub, format, tconcat, tostring = string.gsub, string.format, table.concat, tostring
-local ToggleFrame = ToggleFrame
 local FCF_SetChatWindowFontSize = FCF_SetChatWindowFontSize
 local ScrollFrameTemplate_OnMouseWheel = ScrollFrameTemplate_OnMouseWheel
 
@@ -58,8 +57,7 @@ function module:ChatCopy_OnClick(btn)
 			frame:Hide()
 		end
 	elseif btn == "RightButton" then
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-		ToggleFrame(menu)
+		B:TogglePanel(menu)
 		NDuiDB["Chat"]["ChatMenu"] = menu:IsShown()
 	end
 end

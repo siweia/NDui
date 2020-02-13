@@ -168,7 +168,7 @@ end
 function module:CreateBagToggle()
 	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Buttons\\Button-Backpack-Up")
 	bu:SetScript("OnClick", function()
-		ToggleFrame(self.BagBar)
+		B:TogglePanel(self.BagBar)
 		if self.BagBar:IsShown() then
 			bu:SetBackdropBorderColor(1, .8, 0)
 			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)

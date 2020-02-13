@@ -222,7 +222,7 @@ function M:SetupScript(bar)
 		if not ArtifactFrame or not ArtifactFrame:IsShown() then
 			SocketInventoryItem(16)
 		else
-			ToggleFrame(ArtifactFrame)
+			B:TogglePanel(ArtifactFrame)
 		end
 	end)
 	hooksecurefunc(StatusTrackingBarManager, "UpdateBarsShown", function()

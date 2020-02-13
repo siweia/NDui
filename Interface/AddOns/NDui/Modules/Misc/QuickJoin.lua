@@ -48,7 +48,7 @@ function M:QuickJoin()
 	end
 
 	hooksecurefunc("LFGListInviteDialog_Accept", function()
-		if PVEFrame:IsShown() then ToggleFrame(PVEFrame) end
+		if PVEFrame:IsShown() then PVEFrame:Hide() end
 	end)
 
 	hooksecurefunc("StaticPopup_Show", self.HookDialogOnShow)

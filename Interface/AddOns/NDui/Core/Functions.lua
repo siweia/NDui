@@ -1444,7 +1444,7 @@ end
 
 local function buttonOnClick(self)
 	PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
-	ToggleFrame(self.__list)
+	B:TogglePanel(self.__list)
 end
 
 function B:CreateDropDown(width, height, data)
@@ -1569,4 +1569,12 @@ function B:CreateSlider(name, minValue, maxValue, x, y, width)
 	slider.value:SetScript("OnEnterPressed", updateSliderEditBox)
 
 	return slider
+end
+
+function B:TogglePanel(frame)
+	if frame:IsShown() then
+		frame:Hide()
+	else
+		frame:Show()
+	end
 end
