@@ -258,6 +258,7 @@ local list = {
 		{AuraID = 319695, UnitID = "player", Flash = true},	-- 壮美幻象
 	-- 5人本
 		{AuraID = 311390, UnitID = "player"},	-- 疯狂：昆虫恐惧症，幻象
+		{AuraID = 313698, UnitID = "player", Flash = true},	-- 泰坦之赐
 		{AuraID = 314478, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314483, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314411, UnitID = "player"},	-- 疑云密布
