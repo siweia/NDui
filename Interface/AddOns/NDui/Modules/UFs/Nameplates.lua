@@ -309,7 +309,7 @@ function UF:AddTargetIndicator(self)
 	frame.RightArrow:SetPoint("LEFT", frame, "RIGHT", 3, 0)
 	frame.RightArrow:SetRotation(rad(-90))
 
-	frame.Glow = B.CreateSD(frame, 4, true)
+	frame.Glow = B.CreateSD(frame, 5, true)
 	frame.Glow:SetOutside(self.Health.backdrop, 5, 5)
 	frame.Glow:SetBackdropBorderColor(1, 1, 1)
 	frame.Glow:SetFrameLevel(0)
