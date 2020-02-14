@@ -46,7 +46,7 @@ end
 function UF:CreateTargetBorder(self)
 	local border = B.CreateSD(self, 3, true)
 	border:SetOutside(self.Health.backdrop, C.mult+3, C.mult+3, self.Power.backdrop)
-	border:SetBackdropBorderColor(.7, .7, .7)
+	border:SetBackdropBorderColor(.8, .8, .8)
 	border:Hide()
 	self.Shadow = nil
 
