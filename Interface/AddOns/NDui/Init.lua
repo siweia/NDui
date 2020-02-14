@@ -102,9 +102,10 @@ local function UpdatePixelScale(event)
 end
 
 B:RegisterEvent("PLAYER_LOGIN", function()
-	-- Update UIScale
+	-- Initial
 	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
+	B:SetSmoothingAmount(NDuiDB["UFs"]["SmoothAmount"])
 
 	for _, module in next, initQueue do
 		if module.OnLogin then

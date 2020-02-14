@@ -636,3 +636,5 @@ L["FilterMount"] = "Фильтр транспорта и питомцев"
 L["FilterFavourite"] = "Фильтр предпочтительного"
 L["FilterGoods"] = "Хозяйственные товары"
 L["Max Rank"] = "Макс.ранг"
+L["SmoothAmount"] = "Smooth Frequency" -- need translation
+L["SmoothAmountTip"] = "|nSetup healthbar smooth frequency for unitframes and nameplates.|nThe lower the smoother." -- need translation
