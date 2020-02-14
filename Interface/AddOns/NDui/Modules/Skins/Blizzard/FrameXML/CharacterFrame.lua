@@ -152,25 +152,16 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 
-		tab.Highlight:SetColorTexture(1, 1, 1, .25)
-		tab.Highlight:SetPoint("TOPLEFT", 3, -4)
-		tab.Highlight:SetPoint("BOTTOMRIGHT", -1, 0)
-		tab.Hider:SetColorTexture(.3, .3, .3, .4)
-		tab.TabBg:SetAlpha(0)
-
-		select(2, tab:GetRegions()):ClearAllPoints()
-		if i == 1 then
-			select(2, tab:GetRegions()):SetPoint("TOPLEFT", 3, -4)
-			select(2, tab:GetRegions()):SetPoint("BOTTOMRIGHT", -1, 0)
-		else
-			select(2, tab:GetRegions()):SetPoint("TOPLEFT", 2, -4)
-			select(2, tab:GetRegions()):SetPoint("BOTTOMRIGHT", -1, -1)
-		end
-
 		tab.bg = B.CreateBDFrame(tab)
 		tab.bg:SetPoint("TOPLEFT", 2, -3)
 		tab.bg:SetPoint("BOTTOMRIGHT", 0, -2)
+
+		tab.Icon:SetInside(tab.bg)
 		tab.Hider:SetInside(tab.bg)
+		tab.Highlight:SetInside(tab.bg)
+		tab.Highlight:SetColorTexture(1, 1, 1, .25)
+		tab.Hider:SetColorTexture(.3, .3, .3, .4)
+		tab.TabBg:SetAlpha(0)
 	end
 
 	-- [[ Equipment manager ]]
