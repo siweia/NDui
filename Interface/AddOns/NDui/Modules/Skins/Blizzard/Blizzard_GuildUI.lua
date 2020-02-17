@@ -5,6 +5,7 @@ C.themes["Blizzard_GuildUI"] = function()
 	local r, g, b = DB.r, DB.g, DB.b
 
 	B.ReskinPortraitFrame(GuildFrame)
+	B.StripTextures(GuildMemberDetailFrame)
 	B.SetBD(GuildMemberDetailFrame)
 	B.CreateBD(GuildMemberNoteBackground, .25)
 	B.CreateBD(GuildMemberOfficerNoteBackground, .25)
@@ -28,7 +29,6 @@ C.themes["Blizzard_GuildUI"] = function()
 	GuildFrameTabardEmblem:Hide()
 	GuildFrameTabardBorder:Hide()
 	select(5, GuildInfoFrameInfo:GetRegions()):Hide()
-	select(11, GuildMemberDetailFrame:GetRegions()):Hide()
 	GuildMemberDetailCorner:Hide()
 	for i = 1, 9 do
 		select(i, GuildLogFrame:GetRegions()):Hide()
