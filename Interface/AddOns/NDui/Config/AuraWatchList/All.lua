@@ -142,6 +142,7 @@ local list = {
 		{AuraID = 296962, UnitID = "player"},	-- 艾萨拉饰品
 		{AuraID = 315787, UnitID = "player", Caster = "player"},	-- 生命充能
 		-- 艾泽里特特质
+		{AuraID = 274598, UnitID = "player"},	-- 冲击大师
 		{AuraID = 277960, UnitID = "player"},	-- 神经电激
 		{AuraID = 280852, UnitID = "player"},	-- 解放者之力
 		{AuraID = 266047, UnitID = "player"},	-- 激励咆哮
