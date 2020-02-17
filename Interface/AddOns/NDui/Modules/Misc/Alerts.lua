@@ -276,7 +276,7 @@ end
 
 local prevTime = 0
 function M:VersionCheck_UpdateGroup()
-	if not IsInGroup() or (GetTime()-prevTime < 30) then return end
+	if not IsInGroup() or (GetTime()-prevTime < 10) then return end
 	prevTime = GetTime()
 	C_ChatInfo_SendAddonMessage("NDuiVersionCheck", DB.Version, msgChannel())
 end
