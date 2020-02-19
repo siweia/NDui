@@ -17,7 +17,7 @@ function TT:SetupTooltipIcon(icon)
 		if not line then break end
 		local text = line:GetText() or ""
 		if strmatch(text, "|T.-:[%d+:]+|t") then
-			line:SetText(gsub(text, "|T(.-):[%d+:]+|t", "|T%1:20:20:"..newString.."|t"))
+			line:SetText(gsub(text, "|T(.-):[%d+:]+|t", "|T%1:14:14:"..newString.."|t"))
 		end
 	end
 end
