@@ -638,3 +638,4 @@ L["FilterGoods"] = "Хозяйственные товары"
 L["Max Rank"] = "Макс.ранг"
 L["SmoothAmount"] = "Smooth Frequency" -- need translation
 L["SmoothAmountTip"] = "|nSetup healthbar smooth frequency for unitframes and nameplates.|nThe lower the smoother." -- need translation
+L["ShowCorruptionRank"] = "Show corruption rank" -- need translation
