@@ -7,4 +7,5 @@
 	<Script file="Hovertips.lua"/>
 	<Script file="Targeted.lua"/>
 	<Script file="AzeriteArmor.lua"/>
+	<Script file="CorruptionRank.lua"/>
 </Ui>
