@@ -93,7 +93,8 @@ function TT:Corruption_Convert(name, icon, level)
 		local line = _G[self:GetName().."TextLeft"..i]
 		local text = line:GetText()
 		if text and strmatch(text, ITEM_MOD_CORRUPTION) then
-			line:SetText(text.." - "..getIconString(icon)..name..level)
+			line:SetText(text.." - "..getIconString(icon)..name.." "..level)
+			return
 		end
 	end
 end
@@ -119,5 +120,6 @@ function TT:CorruptionRank()
 	GameTooltip:HookScript("OnTooltipSetItem", TT.Corruption_Update)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Corruption_Update)
 	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Corruption_Update)
+	ShoppingTooltip2:HookScript("OnTooltipSetItem", TT.Corruption_Update)
 	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Corruption_Update)
 end
