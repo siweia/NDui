@@ -66,6 +66,7 @@ C.themes["Blizzard_Communities"] = function()
 			if frame.FindAGuildButton then B.Reskin(frame.FindAGuildButton) end
 			if frame.AcceptButton then B.Reskin(frame.AcceptButton) end
 			if frame.DeclineButton then B.Reskin(frame.DeclineButton) end
+			if frame.ApplyButton then B.Reskin(frame.ApplyButton) end
 
 			local optionsList = frame.OptionsList
 			if optionsList then
@@ -465,6 +466,15 @@ C.themes["Blizzard_Communities"] = function()
 	B.CreateBDFrame(CommunitiesGuildLogFrame.Container, .25)
 	local closeButton = select(3, CommunitiesGuildLogFrame:GetChildren())
 	B.Reskin(closeButton)
+
+	local bossModel = CommunitiesFrameGuildDetailsFrameNews.BossModel
+	B.StripTextures(bossModel)
+	bossModel:ClearAllPoints()
+	bossModel:SetPoint("LEFT", CommunitiesFrame, "RIGHT", 40, 0)
+	local textFrame = bossModel.TextFrame
+	B.StripTextures(textFrame)
+	local bg = B.SetBD(bossModel)
+	bg:SetOutside(bossModel, nil, nil, textFrame)
 
 	-- Recruitment dialog
 	do
