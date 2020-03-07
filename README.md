@@ -33,9 +33,7 @@
 
 # Default AddOns
 - !BaudErrorFrame: Error collecter
-- AuroraClassic: Reskin blizzard ui and NDui.
 - NDui: Core for NDui.
-- Skada: Damage metre.
 
 # Skins Support
 - BigWigs, DBM, Details, PremadeGroupsFilter, Rematch, Skada, TMW, WeakAuras.
