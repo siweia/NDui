@@ -119,7 +119,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 		bg:SetPoint("TOPLEFT", 3, -3)
 		bg:SetPoint("BOTTOMRIGHT", -3, 0)
 		local itemButton = itemDisplay.ItemButton
-		itemButton.CircleMask:Hide()
+		if itemButton.CircleMask then itemButton.CircleMask:Hide() end
 		itemButton.IconBorder:SetAlpha(0)
 		B.ReskinIcon(itemButton.Icon)
 	end
@@ -203,7 +203,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.CreateBDFrame(woWTokenSellFrame.DummyItemList, .25)
 	B.ReskinScroll(woWTokenSellFrame.DummyItemList.DummyScrollBar)
 	reskinAuctionButton(woWTokenSellFrame.DummyRefreshButton)
-	reskinItemDisplay(woWTokenSellFrame.ItemDisplay)
+	reskinItemDisplay(woWTokenSellFrame)
 
 	reskinSellPanel(AuctionHouseFrame.ItemSellFrame)
 	reskinSellPanel(AuctionHouseFrame.CommoditiesSellFrame)
