@@ -119,6 +119,7 @@ function UF:CreateRaidDebuffs(self)
 	bu:SetPoint("RIGHT", -15, 0)
 	bu:SetFrameLevel(self:GetFrameLevel() + 3)
 	B.CreateSD(bu, 3, true)
+	bu.Shadow:SetFrameLevel(self:GetFrameLevel() + 2)
 	bu:SetScale(scale)
 	bu:Hide()
 
