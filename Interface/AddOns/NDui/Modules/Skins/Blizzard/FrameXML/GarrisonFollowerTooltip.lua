@@ -2,6 +2,11 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
+	-- Tooltip close buttons
+	B.ReskinClose(ItemRefCloseButton)
+	B.ReskinClose(FloatingBattlePetTooltip.CloseButton)
+	B.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
+
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
 	-- Tooltips
@@ -20,10 +25,6 @@ tinsert(C.defaultThemes, function()
 	B.ReskinGarrisonTooltip(FloatingGarrisonFollowerAbilityTooltip)
 	B.ReskinGarrisonTooltip(GarrisonShipyardFollowerTooltip)
 	B.ReskinGarrisonTooltip(FloatingGarrisonShipyardFollowerTooltip)
-
-	B.ReskinClose(ItemRefCloseButton)
-	B.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-	B.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
 	hooksecurefunc("GarrisonFollowerTooltipTemplate_SetGarrisonFollower", function(tooltipFrame)
 		-- Abilities
