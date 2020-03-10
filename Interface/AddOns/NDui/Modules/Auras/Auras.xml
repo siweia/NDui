@@ -38,6 +38,16 @@
 	<Button name="NDuiAuraTemplate38" inherits="NDuiAuraTemplate" virtual="true"><Size x="38" y="38"/></Button>
 	<Button name="NDuiAuraTemplate39" inherits="NDuiAuraTemplate" virtual="true"><Size x="39" y="39"/></Button>
 	<Button name="NDuiAuraTemplate40" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate41" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate42" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate43" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate44" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate45" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate46" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate47" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate48" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate49" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
+	<Button name="NDuiAuraTemplate50" inherits="NDuiAuraTemplate" virtual="true"><Size x="40" y="40"/></Button>
 
 	<Script file="Auras.lua"/>
 	<Script file="Reminder.lua"/>
