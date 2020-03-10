@@ -37,8 +37,6 @@ C.themes["Blizzard_InspectUI"] = function()
 			slot.Eye = slot:CreateTexture()
 			slot.Eye:SetAtlas("Nzoth-inventory-icon")
 			slot.Eye:SetInside()
-			slot:HookScript("OnShow", UpdateCorruption)
-			slot:HookScript("OnEvent", UpdateCorruption)
 		end
 
 		border:SetAlpha(0)
@@ -48,6 +46,7 @@ C.themes["Blizzard_InspectUI"] = function()
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
 		button.icon:SetShown(button.hasItem)
+		UpdateCorruption(buton)
 	end)
 
 	-- Talents

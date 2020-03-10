@@ -82,11 +82,8 @@ tinsert(C.defaultThemes, function()
 		slot.SetHighlightTexture = B.Dummy
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
 		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
-
 		slot.IconOverlay:SetAtlas("Nzoth-inventory-icon")
 		slot.IconOverlay:SetInside()
-		slot:HookScript("OnShow", UpdateCorruption)
-		slot:HookScript("OnEvent", UpdateCorruption)
 
 		border:SetAlpha(0)
 		hooksecurefunc(border, "SetVertexColor", function(_, r, g, b) slot:SetBackdropBorderColor(r, g, b) end)
@@ -121,6 +118,7 @@ tinsert(C.defaultThemes, function()
 			button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
 			colourPopout(button.popoutButton)
 		end
+		UpdateCorruption(button)
 	end)
 
 	-- [[ Stats pane ]]
