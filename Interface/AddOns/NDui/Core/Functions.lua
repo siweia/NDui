@@ -1152,6 +1152,7 @@ local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
 local essenceTextureID = 2975691
 local essenceDescription = GetSpellDescription(277253)
 local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
+local RETRIEVING_ITEM_INFO = RETRIEVING_ITEM_INFO
 local tip = CreateFrame("GameTooltip", "NDui_iLvlTooltip", nil, "GameTooltipTemplate")
 
 function B:InspectItemTextures()
@@ -1239,8 +1240,12 @@ function B.GetItemLevel(link, arg1, arg2, fullScan)
 			local line = _G[tip:GetName().."TextLeft"..i]
 			if line then
 				local text = line:GetText() or ""
-				B:InspectItemInfo(text, slotInfo)
-				B:CollectEssenceInfo(i, text, slotInfo)
+				if i == 1 and text == RETRIEVING_ITEM_INFO then
+					return "tooSoon"
+				else
+					B:InspectItemInfo(text, slotInfo)
+					B:CollectEssenceInfo(i, text, slotInfo)
+				end
 			end
 		end
 
@@ -1255,6 +1260,11 @@ function B.GetItemLevel(link, arg1, arg2, fullScan)
 			tip:SetBagItem(arg1, arg2)
 		else
 			tip:SetHyperlink(link)
+		end
+
+		local firstLine = _G.NDui_iLvlTooltipTextLeft1:GetText()
+		if firstLine == RETRIEVING_ITEM_INFO then
+			return "tooSoon"
 		end
 
 		for i = 2, 5 do
