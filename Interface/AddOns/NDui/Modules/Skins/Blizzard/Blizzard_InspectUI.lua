@@ -46,7 +46,7 @@ C.themes["Blizzard_InspectUI"] = function()
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
 		button.icon:SetShown(button.hasItem)
-		UpdateCorruption(buton)
+		UpdateCorruption(button)
 	end)
 
 	-- Talents
