@@ -34,7 +34,7 @@ DB.MyColor = format("|cff%02x%02x%02x", DB.r*255, DB.g*255, DB.b*255)
 DB.InfoColor = "|cff99ccff" --.6,.8,1
 DB.GreyColor = "|cff7b8489"
 DB.QualityColors = {}
-local qualityColors = C.QualityColors
+local qualityColors = BAG_ITEM_QUALITY_COLORS
 for index, value in pairs(qualityColors) do
 	DB.QualityColors[index] = {r = value.r, g = value.g, b = value.b}
 end
