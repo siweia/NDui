@@ -384,7 +384,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 
 		local quality = select(3, GetItemInfo(button.itemID))
-		local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+		local color = DB.QualityColors[quality or 1]
 		button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end)
 end

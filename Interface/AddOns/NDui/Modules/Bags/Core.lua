@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
-local BAG_ITEM_QUALITY_COLORS, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = BAG_ITEM_QUALITY_COLORS, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
+local EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
@@ -652,7 +652,7 @@ function module:OnLogin()
 		if NDuiDB["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
 			local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
 			if level < NDuiDB["Bags"]["iLvlToShow"] then level = "" end
-			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
+			local color = DB.QualityColors[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
 		else
@@ -686,7 +686,7 @@ function module:OnLogin()
 		if item.questID or item.isQuestItem then
 			self:SetBackdropBorderColor(.8, .8, 0)
 		elseif item.rarity and item.rarity > -1 then
-			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
+			local color = DB.QualityColors[item.rarity]
 			self:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
 			self:SetBackdropBorderColor(0, 0, 0)
@@ -824,7 +824,7 @@ function module:OnLogin()
 		if not id then return end
 		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = GetItemInfo(id)
 		if not quality or quality == 1 then quality = 0 end
-		local color = BAG_ITEM_QUALITY_COLORS[quality]
+		local color = DB.QualityColors[quality]
 		if not self.hidden and not self.notBought then
 			self:SetBackdropBorderColor(color.r, color.g, color.b)
 		else

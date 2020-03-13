@@ -114,7 +114,7 @@ end
 -- Keystone Info
 local myFaction = DB.MyFaction
 local myFullName = DB.MyName.."-"..DB.MyRealm
-local iconColor = BAG_ITEM_QUALITY_COLORS[LE_ITEM_QUALITY_EPIC or 4]
+local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 
 function M:KeystoneInfo_Create()
 	local texture = select(10, GetItemInfo(158923)) or 525134

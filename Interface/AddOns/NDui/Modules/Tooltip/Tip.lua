@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local TT = B:RegisterModule("Tooltip")
 
 local strfind, format, strupper, strlen, pairs, unpack = string.find, string.format, string.upper, string.len, pairs, unpack
-local ICON_LIST, BAG_ITEM_QUALITY_COLORS = ICON_LIST, BAG_ITEM_QUALITY_COLORS
+local ICON_LIST = ICON_LIST
 local PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE = PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE
 local YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE = YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE
 local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
@@ -378,7 +378,7 @@ function TT:ReskinTooltip()
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
-			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+			local color = DB.QualityColors[quality or 1]
 			if color then
 				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end

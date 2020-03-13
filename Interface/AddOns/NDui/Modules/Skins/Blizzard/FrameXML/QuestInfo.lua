@@ -175,7 +175,7 @@ tinsert(C.defaultThemes, function()
 				end
 
 				if portrait then
-					local color = BAG_ITEM_QUALITY_COLORS[portrait.quality or 1]
+					local color = DB.QualityColors[portrait.quality or 1]
 					portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 				end
 			end
