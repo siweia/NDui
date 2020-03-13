@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 C.themes["Blizzard_AuctionHouseUI"] = function()
 	local function reskinAuctionButton(button)
 		B.Reskin(button)
-		button:SetSize(22,22)
+		button:SetSize(22, 22)
 	end
 
 	local function reskinSellPanel(frame)
