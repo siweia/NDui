@@ -712,7 +712,6 @@ local list = {
 	},
 	["InternalCD"] = {		-- 自定义内置冷却组
 		{IntID = 240447, Duration = 20},	-- 践踏
-		{IntID = 313698, Duration = 80},	-- 泰坦之赐
 		{IntID = 295840, Duration = 30, OnSuccess = true},	-- 艾泽拉斯守护者
 		{IntID = 114018, Duration = 15, OnSuccess = true, UnitID = "all"},	-- 帷幕
 	},
