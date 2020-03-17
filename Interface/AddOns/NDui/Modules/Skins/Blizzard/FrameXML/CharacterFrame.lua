@@ -46,8 +46,6 @@ tinsert(C.defaultThemes, function()
 
 			self.styled = true
 		end
-		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		self:GetHighlightTexture():SetAllPoints()
 	end
 
 	local function UpdateAzeriteEmpoweredItem(self)
@@ -59,6 +57,12 @@ tinsert(C.defaultThemes, function()
 	local function UpdateCorruption(self)
 		local itemLink = GetInventoryItemLink("player", self:GetID())
 		self.IconOverlay:SetShown(itemLink and IsCorruptedItem(itemLink))
+	end
+
+	local function UpdateHighlight(self)
+		local highlight = self:GetHighlightTexture()
+		highlight:SetColorTexture(1, 1, 1, .25)
+		highlight:SetInside()
 	end
 
 	local slots = {
@@ -78,8 +82,6 @@ tinsert(C.defaultThemes, function()
 		B.CreateBD(slot, .25)
 		cooldown:SetInside()
 
-		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		slot.SetHighlightTexture = B.Dummy
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
 		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
 		slot.IconOverlay:SetAtlas("Nzoth-inventory-icon")
@@ -119,6 +121,7 @@ tinsert(C.defaultThemes, function()
 			colourPopout(button.popoutButton)
 		end
 		UpdateCorruption(button)
+		UpdateHighlight(button)
 	end)
 
 	-- [[ Stats pane ]]
