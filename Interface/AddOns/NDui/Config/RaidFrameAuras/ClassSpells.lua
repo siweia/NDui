@@ -59,7 +59,7 @@ C.CornerBuffs = {
 		[90361]  = {"TOPLEFT", {.4, .8, .2}},			-- 灵魂治愈
 	},
 	["WARLOCK"] = {
-		[20707]  = {"BOTTOMRIGHT", {.8, .4, .8}},		-- 灵魂石
+		[20707]  = {"BOTTOMRIGHT", {.8, .4, .8}, true},	-- 灵魂石
 	},
 	["DEMONHUNTER"] = {},
 	["MAGE"] = {},
