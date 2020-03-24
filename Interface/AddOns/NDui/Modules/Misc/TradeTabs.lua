@@ -96,7 +96,8 @@ function M:TradeTabs_Reskin()
 		tab:SetCheckedTexture(DB.textures.pushed)
 		tab:GetRegions():Hide()
 		B.CreateBDFrame(tab)
-		tab:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+		local texture = tab:GetNormalTexture()
+		if texture then texture:SetTexCoord(unpack(DB.TexCoord)) end
 	end
 end
 
