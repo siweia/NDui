@@ -639,3 +639,4 @@ L["Max Rank"] = "Макс.ранг"
 L["SmoothAmount"] = "Smooth Frequency" -- need translation
 L["SmoothAmountTip"] = "|nSetup healthbar smooth frequency for unitframes and nameplates.|nThe lower the smoother." -- need translation
 L["ShowCorruptionRank"] = "Show corruption rank" -- need translation
+L["ShowAllTip"] = "|nIf unchecked, you can only see the aura you cast.|n|nIf checked, the aura would be tracked from all casters." -- need translation
