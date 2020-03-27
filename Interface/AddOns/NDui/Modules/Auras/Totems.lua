@@ -12,7 +12,7 @@ local icons = {
 }
 
 local function TotemsGo()
-	local Totembar = CreateFrame("Frame", nil, UIParent)
+	local Totembar = CreateFrame("Frame", nil, A.PetBattleFrameHider)
 	Totembar:SetSize(C.Auras.IconSize, C.Auras.IconSize)
 	for i = 1, 4 do
 		totem[i] = CreateFrame("Button", nil, Totembar)
