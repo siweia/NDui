@@ -193,6 +193,7 @@ local list = {
 		{AuraID = 318219, UnitID = "player"},	-- 致命之势
 		{AuraID = 317020, UnitID = "player", Flash = true, Combat = true},	-- 虚空回响
 		{AuraID = 318378, UnitID = "player", Flash = true},	-- 坚定决心，橙披
+		{AuraID = 317859, UnitID = "player"},	-- 龙族强化，橙披
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
@@ -259,6 +260,7 @@ local list = {
 		{AuraID = 319695, UnitID = "player", Flash = true},	-- 壮美幻象
 	-- 5人本
 		{AuraID = 311390, UnitID = "player"},	-- 疯狂：昆虫恐惧症，幻象
+		{AuraID = 306583, UnitID = "player"},	-- 灌铅脚步
 		{AuraID = 313698, UnitID = "player", Flash = true},	-- 泰坦之赐
 		{AuraID = 314478, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314483, UnitID = "player"},	-- 倾泻恐惧
