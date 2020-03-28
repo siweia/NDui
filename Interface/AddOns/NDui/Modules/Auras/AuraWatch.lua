@@ -178,14 +178,14 @@ local function BuildICON(iconSize)
 
 	local frame = CreateFrame("Frame", nil, PetBattleFrameHider)
 	frame:SetSize(iconSize, iconSize)
-	B.SetBD(frame)
+	frame.bg = B.SetBD(frame)
 
 	frame.Icon = frame:CreateTexture(nil, "ARTWORK")
-	frame.Icon:SetAllPoints()
+	frame.Icon:SetInside(frame.bg)
 	frame.Icon:SetTexCoord(unpack(DB.TexCoord))
 
 	frame.Cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
-	frame.Cooldown:SetAllPoints()
+	frame.Cooldown:SetInside(frame.bg)
 	frame.Cooldown:SetReverse(true)
 
 	local parentFrame = CreateFrame("Frame", nil, frame)
@@ -717,6 +717,8 @@ end
 -- Gift of the Titans
 local hasTitan
 function A:AuraWatch_OnUnitAura()
+	if not IntCD.MoveHandle then return end
+
 	for i = 1, 40 do
 		local name, _, _, _, _, expires, _, _, _, spellID = UnitBuff("player", i)
 		if not name then break end
@@ -730,4 +732,13 @@ function A:AuraWatch_OnUnitAura()
 	end
 	hasTitan = false
 end
-B:RegisterEvent("UNIT_AURA", A.AuraWatch_OnUnitAura, "player")
+
+function A:AuraWatch_CheckInstance()
+	local diffID = select(3, GetInstanceInfo())
+	if diffID == 152 then
+		B:RegisterEvent("UNIT_AURA", A.AuraWatch_OnUnitAura, "player")
+	else
+		B:UnregisterEvent("UNIT_AURA", A.AuraWatch_OnUnitAura)
+	end
+end
+B:RegisterEvent("UPDATE_INSTANCE_INFO", A.AuraWatch_CheckInstance)
