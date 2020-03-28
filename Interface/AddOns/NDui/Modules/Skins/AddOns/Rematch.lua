@@ -248,6 +248,18 @@ function S:ReskinRematch()
 			S.RematchIcon(RematchPetPanel.Top.TypeBar.Buttons[i])
 		end
 
+		-- quality bar in the new version
+		local qualityBar = RematchPetPanel.Top.TypeBar.QualityBar
+		if qualityBar then
+			local buttons = {"HealthButton", "PowerButton", "SpeedButton", "Level25Button", "RareButton"}
+			for _, name in pairs(buttons) do
+				local button = qualityBar[name]
+				if button then
+					S.RematchIcon(button)
+				end
+			end
+		end
+
 		S.RematchSelectedOverlay(RematchPetPanel)
 		S.RematchInset(RematchPetPanel.Results)
 		S.RematchInput(RematchPetPanel.Top.SearchBox)
@@ -567,8 +579,9 @@ function S:ReskinRematch()
 	hooksecurefunc(RematchPetPanel, "UpdateTypeBar", function(self)
 		local typeBar = self.Top.TypeBar
 		if typeBar:IsShown() then
-			for i = 1, 3 do
+			for i = 1, 4 do
 				local tab = typeBar.Tabs[i]
+				if not tab then break end
 				if not tab.styled then
 					B.StripTextures(tab)
 					tab.bg = B.CreateBDFrame(tab)
