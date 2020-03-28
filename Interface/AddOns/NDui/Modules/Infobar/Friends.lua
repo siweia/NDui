@@ -296,7 +296,7 @@ local function buttonOnEnter(self)
 					end
 					GameTooltip:AddLine(format("%s%s %s%s%s", clientString, level, classColor, charName, realmName))
 
-					if wowProjectID ~= WOW_PROJECT_ID then zoneName = gameText end
+					if wowProjectID ~= WOW_PROJECT_ID then zoneName = "*"..zoneName end
 					GameTooltip:AddLine(format("%s%s", inactiveZone, zoneName))
 				end
 			else
