@@ -155,8 +155,10 @@ function UF:CreateHealthText(self)
 
 	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 13, NDuiDB["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, -1)
 	if mystyle == "raid" then
+		self:Tag(hpval, "[raidhp]")
 		if self.isPartyPet then
 			hpval:SetPoint("RIGHT", -3, -1)
+			self:Tag(hpval, "[hp]")
 		elseif NDuiDB["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
 		elseif NDuiDB["UFs"]["RaidBuffIndicator"] then
@@ -167,7 +169,6 @@ function UF:CreateHealthText(self)
 			hpval:SetPoint("RIGHT", -3, -7)
 		end
 		hpval:SetScale(NDuiDB["UFs"]["RaidTextScale"])
-		self:Tag(hpval, "[raidhp]")
 	elseif mystyle == "nameplate" then
 		hpval:SetPoint("RIGHT", self, 0, 5)
 		self:Tag(hpval, "[nphp]")
@@ -181,7 +182,7 @@ end
 
 function UF:UpdateRaidNameText()
 	for _, frame in pairs(oUF.objects) do
-		if frame.mystyle == "raid" then
+		if frame.mystyle == "raid" and not frame.isPartyPet then
 			local name = frame.nameText
 			name:ClearAllPoints()
 			if NDuiDB["UFs"]["SimpleMode"] and not frame.isPartyFrame then

@@ -849,7 +849,7 @@ function G:SetupRaidFrame(parent)
 
 	local function resizeRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.mystyle == "raid" and not frame.isPartyFrame then
+			if frame.mystyle == "raid" and not frame.isPartyFrame and not frame.isPartyPet then
 				if NDuiDB["UFs"]["SimpleMode"] then
 					local scale = NDuiDB["UFs"]["SimpleRaidScale"]/10
 					local frameWidth = 100*scale
