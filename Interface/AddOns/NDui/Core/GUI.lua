@@ -98,7 +98,7 @@ local defaultSettings = {
 		InstanceAuras = true,
 		RaidDebuffScale = 1,
 		SpecRaidPos = false,
-		RaidClassColor = false,
+		RaidHealthColor = 1,
 		HorizonRaid = false,
 		HorizonParty = false,
 		ReverseRaid = false,
@@ -136,6 +136,7 @@ local defaultSettings = {
 		UFTextScale = 1,
 		PartyAltPower = true,
 		SmoothAmount = .3,
+		RaidTextScale = 1,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -177,6 +178,7 @@ local defaultSettings = {
 		ChatWidth = 380,
 		ChatHeight = 190,
 		BlockStranger = false,
+		AllowFriends = true,
 	},
 	Map = {
 		Coord = true,
@@ -529,6 +531,10 @@ local function updateUFTextScale()
 	B:GetModule("UnitFrames"):UpdateTextScale()
 end
 
+local function updateRaidTextScale()
+	B:GetModule("UnitFrames"):UpdateRaidTextScale()
+end
+
 local function refreshRaidFrameIcons()
 	B:GetModule("UnitFrames"):RefreshRaidFrameIcons()
 end
@@ -675,7 +681,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"]},
 		{4, "UFs", "HealthColor", L["HealthColor"], true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}},
-		{3, "UFs", "UFTextScale", L["UFTextScale"], nil, {.8, 2, 2}, updateUFTextScale},
+		{3, "UFs", "UFTextScale", L["UFTextScale"], nil, {.8, 1.5, 2}, updateUFTextScale},
 		{3, "UFs", "SmoothAmount", "|cff00cc4c"..L["SmoothAmount"], true, {.15, .6, 2}, updateSmoothingAmount, L["SmoothAmountTip"]},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
@@ -704,12 +710,13 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{},--blank
 		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
-		{1, "UFs", "RaidClassColor", L["ClassColor RaidFrame"], true},
-		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
-		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"], true},
+		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"], true},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"]},
-		{4, "UFs", "RaidHPMode", L["RaidHPMode"].."*", nil, {L["DisableRaidHP"], L["RaidHPPercent"], L["RaidHPCurrent"], L["RaidHPLost"]}, updateRaidNameText},
-		{3, "UFs", "NumGroups", L["Num Groups"], true, {4, 8, 0}},
+		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"], true},
+		{4, "UFs", "RaidHealthColor", L["HealthColor"], nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}},
+		{4, "UFs", "RaidHPMode", L["RaidHPMode"].."*", true, {L["DisableRaidHP"], L["RaidHPPercent"], L["RaidHPCurrent"], L["RaidHPLost"]}, updateRaidNameText},
+		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 0}},
+		{3, "UFs", "RaidTextScale", L["UFTextScale"], true, {.8, 1.5, 2}, updateRaidTextScale},
 		{},--blank
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
 		{1, "UFs", "SimpleModeSortByRole", L["SimpleMode SortByRole"], true},
@@ -815,8 +822,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
-		{1, "Chat", "BlockStranger", "|cffff0000"..L["BlockStranger"].."*", nil, nil, nil, L["BlockStrangerTip"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
+		{1, "Chat", "AllowFriends", L["AllowFriendsSpam"].."*", nil, nil, nil, L["AllowFriendsSpamTip"]},
+		{1, "Chat", "BlockStranger", "|cffff0000"..L["BlockStranger"].."*", true, nil, nil, L["BlockStrangerTip"]},
 		{3, "Chat", "Matches", L["Keyword Match"].."*", false, {1, 3, 0}},
 		{2, "ACCOUNT", "ChatFilterList", L["Filter List"].."*", true, nil, updateFilterList, L["FilterListTip"]},
 		{},--blank
