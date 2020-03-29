@@ -174,7 +174,8 @@ local function CreatePartyStyle(self)
 end
 
 local function CreatePartyPetStyle(self)
-	self.mystyle = "partypet"
+	self.mystyle = "raid"
+	self.isPartyPet = true
 	self.Range = {
 		insideAlpha = 1, outsideAlpha = .4,
 	}
@@ -202,6 +203,7 @@ function UF:OnLogin()
 	local partyWidth, partyHeight = NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"]
 	local showPartyPetFrame = NDuiDB["UFs"]["PartyPetFrame"]
 	local petWidth, petHeight = NDuiDB["UFs"]["PartyPetWidth"], NDuiDB["UFs"]["PartyPetHeight"]
+	local showTeamIndex = NDuiDB["UFs"]["ShowTeamIndex"]
 
 	if NDuiDB["Nameplate"]["Enable"] then
 		self:SetupCVars()
@@ -444,13 +446,13 @@ function UF:OnLogin()
 				groups[i] = CreateGroup("oUF_Raid"..i, i)
 				if i == 1 then
 					if horizonRaid then
-						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (raidWidth+5)*5, (raidFrameHeight+(NDuiDB["UFs"]["ShowTeamIndex"] and 25 or 15))*numGroups)
+						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (raidWidth+5)*5-5, (raidFrameHeight+(showTeamIndex and 20 or 5))*numGroups - (showTeamIndex and 20 or 5))
 						if reverse then
 							groups[i]:ClearAllPoints()
 							groups[i]:SetPoint("BOTTOMLEFT", raidMover)
 						end
 					else
-						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (raidWidth+5)*numGroups, (raidFrameHeight+10)*5)
+						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (raidWidth+5)*numGroups-5, (raidFrameHeight+5)*5-5)
 						if reverse then
 							groups[i]:ClearAllPoints()
 							groups[i]:SetPoint("TOPRIGHT", raidMover)
@@ -459,9 +461,9 @@ function UF:OnLogin()
 				else
 					if horizonRaid then
 						if reverse then
-							groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, NDuiDB["UFs"]["ShowTeamIndex"] and 25 or 15)
+							groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, showTeamIndex and 20 or 5)
 						else
-							groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, NDuiDB["UFs"]["ShowTeamIndex"] and -25 or -15)
+							groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, showTeamIndex and -20 or -5)
 						end
 					else
 						if reverse then
@@ -472,7 +474,7 @@ function UF:OnLogin()
 					end
 				end
 
-				if NDuiDB["UFs"]["ShowTeamIndex"] then
+				if showTeamIndex then
 					local parent = _G["oUF_Raid"..i.."UnitButton1"]
 					local teamIndex = B.CreateFS(parent, 12, format(GROUP_NUMBER, i))
 					teamIndex:ClearAllPoints()

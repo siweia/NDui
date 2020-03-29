@@ -879,7 +879,7 @@ function G:SetupRaidFrame(parent)
 
 	local function resizePartyPetFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.mystyle == "partypet" then
+			if frame.isPartyPet then
 				SetUnitFrameSize(frame, "PartyPet")
 			end
 		end
