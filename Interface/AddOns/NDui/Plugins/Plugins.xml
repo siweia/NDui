@@ -1,0 +1,9 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="AlreadyKnown.lua"/>
+	<Script file="DragEmAll.lua"/>
+	<Script file="ExtraQuestButton.lua"/>
+	<Script file="FixTradeSkillSearch.lua"/>
+	<Script file="PetFilterTab.lua"/>
+	<Script file="QuickQuest.lua"/>
+	<Script file="yClassColors.lua"/>
+</Ui>

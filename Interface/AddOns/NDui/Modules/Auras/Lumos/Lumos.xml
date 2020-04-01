@@ -1,0 +1,15 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Core.lua"/>
+	<Script file="DK.lua"/>
+	<Script file="Hunter.lua"/>
+	<Script file="Priest.lua"/>
+	<Script file="Shaman.lua"/>
+	<Script file="Warrior.lua"/>
+	<Script file="DH.lua"/>
+	<Script file="Druid.lua"/>
+	<Script file="Mage.lua"/>
+	<Script file="Rogue.lua"/>
+	<Script file="Paladin.lua"/>
+	<Script file="Warlock.lua"/>
+	<Script file="Monk.lua"/>
+</Ui>

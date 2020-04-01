@@ -1,0 +1,16 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="ClassSpells.lua"/>
+	<Script file="Legion\PartyDungeons.lua"/>
+	<Script file="Legion\BrokenIsles.lua"/>
+	<Script file="Legion\TheEmeraldNightmare.lua"/>
+	<Script file="Legion\TrialofValor.lua"/>
+	<Script file="Legion\TheNighthold.lua"/>
+	<Script file="Legion\TombofSargeras.lua"/>
+	<Script file="Legion\AntorusBurningThrone.lua"/>
+	<Script file="BfA\Party-BfA.lua"/>
+	<Script file="BfA\Uldir.lua"/>
+	<Script file="BfA\ZuldazarRaid.lua"/>
+	<Script file="BfA\CrucibleofStorms.lua"/>
+	<Script file="BfA\EternalPalace.lua"/>
+	<Script file="BfA\Nyalotha.lua"/>
+</Ui>
