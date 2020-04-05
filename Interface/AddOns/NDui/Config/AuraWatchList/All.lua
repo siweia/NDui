@@ -188,6 +188,7 @@ local list = {
 		{AuraID = 295137, UnitID = "player", Flash = true},	-- 源血
 		{AuraID = 311203, UnitID = "player"},	-- 光荣时刻
 		{AuraID = 311202, UnitID = "player"},	-- 收割火焰
+		{AuraID = 312915, UnitID = "player"},	-- 共生姿态
 		-- 腐蚀
 		{AuraID = 316823, UnitID = "player"},	-- 虚空仪式
 		{AuraID = 318211, UnitID = "player"},	-- 活力涌动
