@@ -303,6 +303,7 @@ function module:OnLogin()
 		B:RegisterEvent("UI_SCALE_CHANGED", self.UpdateChatSize)
 	end
 
+--[=[
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
 	if not NDuiDB["Chat"]["Freedom"] then
@@ -310,4 +311,5 @@ function module:OnLogin()
 	else
 		SetCVar("profanityFilter", 0)
 	end
+	]=]
 end
