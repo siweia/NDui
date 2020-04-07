@@ -5,7 +5,7 @@ local TT = B:GetModule("Tooltip")
 local select, strmatch, gmatch, format, next, wipe = select, strmatch, gmatch, format, next, wipe
 local ITEM_MOD_CORRUPTION = ITEM_MOD_CORRUPTION
 local IsCorruptedItem, GetSpellInfo = IsCorruptedItem, GetSpellInfo
-local GetInventoryItemLink = GetInventoryItemLink
+local GetInventoryItemLink, UnitGUID = GetInventoryItemLink, UnitGUID
 
 local corruptionData = {
 	-- Credit: CorruptionNameTooltips
@@ -147,6 +147,49 @@ function TT:Corruption_PlayerSummary()
 	TT:Corruption_Summary("player")
 end
 
+function TT:Corruption_InspectSummary()
+	if not self.guid then return end
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+	GameTooltip:ClearLines()
+	GameTooltip:AddLine(L["CorruptionSummary"], 1,1,1)
+	TT:Corruption_Summary(InspectFrame.unit)
+end
+
+function TT:Corruption_CreateEye()
+	if not InspectFrame.__eye then
+		local eye = CreateFrame("Button", nil, InspectFrame)
+		eye:SetPoint("BOTTOM", InspectHandsSlot, "TOP", 0, 10)
+		eye:SetSize(50, 50)
+		eye:SetScript("OnEnter", TT.Corruption_InspectSummary)
+		eye:SetScript("OnLeave", B.HideTooltip)
+
+		local tex = eye:CreateTexture()
+		tex:SetPoint("TOPRIGHT", 18, 5)
+		tex:SetSize(60, 60)
+		tex:SetAtlas("bfa-threats-cornereye")
+
+		local hl = eye:CreateTexture(nil, "HIGHLIGHT")
+		hl:SetAllPoints(tex)
+		hl:SetAtlas("bfa-threats-cornereye")
+		hl:SetBlendMode("ADD")
+
+		InspectFrame.__eye = eye
+	end
+end
+
+function TT:Corruption_UpdateInspect(...)
+	if not InspectFrame then return end
+	TT:Corruption_CreateEye()
+
+	local guid = ...
+	local eye = InspectFrame.__eye
+	if InspectFrame.unit and UnitGUID(InspectFrame.unit) == guid then
+		eye.guid = guid
+	else
+		eye.guid = nil
+	end
+end
+
 function TT:CorruptionRank()
 	if not NDuiDB["Tooltip"]["CorruptionRank"] then return end
 	if IsAddOnLoaded("CorruptionTooltips") then return end
@@ -160,4 +203,5 @@ function TT:CorruptionRank()
 
 	hooksecurefunc("CharacterFrameCorruption_OnEnter", TT.Corruption_PlayerSummary)
 	CharacterStatsPane.ItemLevelFrame.Corruption:HookScript("OnEnter", TT.Corruption_PlayerSummary)
+	B:RegisterEvent("INSPECT_READY", TT.Corruption_UpdateInspect)
 end
