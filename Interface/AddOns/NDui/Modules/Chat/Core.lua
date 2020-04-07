@@ -303,13 +303,14 @@ function module:OnLogin()
 		B:RegisterEvent("UI_SCALE_CHANGED", self.UpdateChatSize)
 	end
 
---[=[
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
-	if not NDuiDB["Chat"]["Freedom"] then
-		SetCVar("profanityFilter", 1)
-	else
+	if NDuiDB["Chat"]["Freedom"] then
+		if GetCVar("portal") == "CN" then
+			ConsoleExec("portal TW")
+		end
 		SetCVar("profanityFilter", 0)
+	else
+		SetCVar("profanityFilter", 1)
 	end
-	]=]
 end
