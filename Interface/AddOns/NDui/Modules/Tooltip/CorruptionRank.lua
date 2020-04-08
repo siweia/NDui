@@ -2,83 +2,108 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
-local select, strmatch, gmatch, format, next, wipe = select, strmatch, gmatch, format, next, wipe
-local ITEM_MOD_CORRUPTION = ITEM_MOD_CORRUPTION
+local select, strmatch, gmatch, format, next, wipe, max = select, strmatch, gmatch, format, next, wipe, max
 local IsCorruptedItem, GetSpellInfo = IsCorruptedItem, GetSpellInfo
 local GetInventoryItemLink, UnitGUID = GetInventoryItemLink, UnitGUID
+local ITEM_MOD_CORRUPTION = ITEM_MOD_CORRUPTION
+local CORRUPTION_TOOLTIP_TITLE = CORRUPTION_TOOLTIP_TITLE
+local CORRUPTION_DESCRIPTION = CORRUPTION_DESCRIPTION
+local CORRUPTION_TOOLTIP_LINE = CORRUPTION_TOOLTIP_LINE
+local CORRUPTION_RESISTANCE_TOOLTIP_LINE = CORRUPTION_RESISTANCE_TOOLTIP_LINE
+local TOTAL_CORRUPTION_TOOLTIP_LINE = TOTAL_CORRUPTION_TOOLTIP_LINE
 
 local corruptionData = {
-	-- Credit: CorruptionNameTooltips
-	["6483"] = {spellID = 315607, level = "I (|cffffffff10|r/15/20)"},
-	["6484"] = {spellID = 315608, level = "II (10/|cffffffff15|r/20)"},
-	["6485"] = {spellID = 315609, level = "III (10/15/|cffffffff20|r)"},
-	["6474"] = {spellID = 315544, level = "I (|cffffffff10|r/15/20)"},
-	["6475"] = {spellID = 315545, level = "II (10/|cffffffff15|r/20)"},
-	["6476"] = {spellID = 315546, level = "III (10/15/|cffffffff20|r)"},
-	["6471"] = {spellID = 315529, level = "I (|cffffffff10|r/15/20)"},
-	["6472"] = {spellID = 315530, level = "II (10/|cffffffff15|r/20)"},
-	["6473"] = {spellID = 315531, level = "III (10/15/|cffffffff20|r)"},
-	["6480"] = {spellID = 315554, level = "I (|cffffffff10|r/15/20)"},
-	["6481"] = {spellID = 315557, level = "II (10/|cffffffff15|r/20)"},
-	["6482"] = {spellID = 315558, level = "III (10/15/|cffffffff20|r)"},
-	["6477"] = {spellID = 315549, level = "I (|cffffffff10|r/15/20)"},
-	["6478"] = {spellID = 315552, level = "II (10/|cffffffff15|r/20)"},
-	["6479"] = {spellID = 315553, level = "III (10/15/|cffffffff20|r)"},
-	["6493"] = {spellID = 315590, level = "I (|cffffffff10|r/15/20)"},
-	["6494"] = {spellID = 315591, level = "II (10/|cffffffff15|r/20)"},
-	["6495"] = {spellID = 315592, level = "III (10/15/|cffffffff20|r)"},
-	["6437"] = {spellID = 315277, level = "I (|cffffffff10|r/15/20)"},
-	["6438"] = {spellID = 315281, level = "II (10/|cffffffff15|r/20)"},
-	["6439"] = {spellID = 315282, level = "III (10/15/|cffffffff20|r)"},
-	["6555"] = {spellID = 318266, level = "I (|cffffffff15|r/20/35)"},
-	["6559"] = {spellID = 318492, level = "II (15/|cffffffff20|r/35)"},
-	["6560"] = {spellID = 318496, level = "III (15/20/|cffffffff35|r)"},
-	["6556"] = {spellID = 318268, level = "I (|cffffffff15|r/20/35)"},
-	["6561"] = {spellID = 318493, level = "II (15/|cffffffff20|r/35)"},
-	["6562"] = {spellID = 318497, level = "III (15/20/|cffffffff35|r)"},
-	["6558"] = {spellID = 318270, level = "I (|cffffffff15|r/20/35)"},
-	["6565"] = {spellID = 318495, level = "II (15/|cffffffff20|r/35)"},
-	["6566"] = {spellID = 318499, level = "III (15/20/|cffffffff35|r)"},
-	["6557"] = {spellID = 318269, level = "I (|cffffffff15|r/20/35)"},
-	["6563"] = {spellID = 318494, level = "II (15/|cffffffff20|r/35)"},
-	["6564"] = {spellID = 318498, level = "III (15/20/|cffffffff35|r)"},
-	["6549"] = {spellID = 318280, level = "I (|cffffffff25|r/35/60)"},
-	["6550"] = {spellID = 318485, level = "II (25/|cffffffff35|r/60)"},
-	["6551"] = {spellID = 318486, level = "III (25/35/|cffffffff60|r)"},
-	["6552"] = {spellID = 318274, level = "I (|cffffffff25|r/50/75)"},
-	["6553"] = {spellID = 318487, level = "II (25/|cffffffff50|r/75)"},
-	["6554"] = {spellID = 318488, level = "III (25/50/|cffffffff75|r)"},
-	["6547"] = {spellID = 318303, level = "I (|cffffffff12|r/30)"},
-	["6548"] = {spellID = 318484, level = "II (12/|cffffffff30|r)"},
-	["6537"] = {spellID = 318276, level = "I (|cffffffff25|r/50/75)"},
-	["6538"] = {spellID = 318477, level = "II (25/|cffffffff50|r/75)"},
-	["6539"] = {spellID = 318478, level = "III (25/50/|cffffffff75|r)"},
-	["6543"] = {spellID = 318481, level = "I (|cffffffff10|r/35/66)"},
-	["6544"] = {spellID = 318482, level = "II (10/|cffffffff35|r/66)"},
-	["6545"] = {spellID = 318483, level = "III (10/35/|cffffffff66|r)"},
-	["6540"] = {spellID = 318286, level = "I (|cffffffff15|r/35/66)"},
-	["6541"] = {spellID = 318479, level = "II (15/|cffffffff35|r/66)"},
-	["6542"] = {spellID = 318480, level = "III (15/35/|cffffffff66|r)"},
-	["6573"] = {spellID = 318272, level = "(|cffffffff15|r)"},
-	["6546"] = {spellID = 318239, level = "(|cffffffff15|r)"},
-	["6571"] = {spellID = 318293, level = "(|cffffffff30|r)"},
-	["6572"] = {spellID = 316651, level = "(|cffffffff50|r)"},
-	["6567"] = {spellID = 318294, level = "(|cffffffff35|r)"},
-	["6568"] = {spellID = 316780, level = "(|cffffffff25|r)"},
-	["6570"] = {spellID = 318299, level = "(|cffffffff20|r)"},
-	["6569"] = {spellID = 317290, level = "(|cffffffff25|r)"},
+	["6483"] = {spellID = 315607, level = "I (|cffffffff10|r/15/20)", value = 10},
+	["6484"] = {spellID = 315608, level = "II (10/|cffffffff15|r/20)", value = 15},
+	["6485"] = {spellID = 315609, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6474"] = {spellID = 315544, level = "I (|cffffffff10|r/15/20)", value = 10},
+	["6475"] = {spellID = 315545, level = "II (10/|cffffffff15|r/20)", value = 15},
+	["6476"] = {spellID = 315546, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6471"] = {spellID = 315529, level = "I (|cffffffff10|r/15/20)", value = 10},
+	["6472"] = {spellID = 315530, level = "II (10/|cffffffff15|r/20)", value = 15},
+	["6473"] = {spellID = 315531, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6480"] = {spellID = 315554, level = "I (|cffffffff10|r/15/20)", value = 10},
+	["6481"] = {spellID = 315557, level = "II (10/|cffffffff15|r/20)", value = 15},
+	["6482"] = {spellID = 315558, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6477"] = {spellID = 315549, level = "I (|cffffffff10|r/15/20)", value = 10},
+	["6478"] = {spellID = 315552, level = "II (10/|cffffffff15|r/20)", value = 15},
+	["6479"] = {spellID = 315553, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6493"] = {spellID = 315590, level = "I (|cffffffff10|r/15/20)", value = 10},
+	["6494"] = {spellID = 315591, level = "II (10/|cffffffff15|r/20)", value = 15},
+	["6495"] = {spellID = 315592, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6437"] = {spellID = 315277, level = "I (|cffffffff10|r/15/20)", value = 10},
+	["6438"] = {spellID = 315281, level = "II (10/|cffffffff15|r/20)", value = 15},
+	["6439"] = {spellID = 315282, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6555"] = {spellID = 318266, level = "I (|cffffffff15|r/20/35)", value = 15},
+	["6559"] = {spellID = 318492, level = "II (15/|cffffffff20|r/35)", value = 20},
+	["6560"] = {spellID = 318496, level = "III (15/20/|cffffffff35|r)", value = 35},
+	["6556"] = {spellID = 318268, level = "I (|cffffffff15|r/20/35)", value = 15},
+	["6561"] = {spellID = 318493, level = "II (15/|cffffffff20|r/35)", value = 20},
+	["6562"] = {spellID = 318497, level = "III (15/20/|cffffffff35|r)", value = 35},
+	["6558"] = {spellID = 318270, level = "I (|cffffffff15|r/20/35)", value = 15},
+	["6565"] = {spellID = 318495, level = "II (15/|cffffffff20|r/35)", value = 20},
+	["6566"] = {spellID = 318499, level = "III (15/20/|cffffffff35|r)", value = 35},
+	["6557"] = {spellID = 318269, level = "I (|cffffffff15|r/20/35)", value = 15},
+	["6563"] = {spellID = 318494, level = "II (15/|cffffffff20|r/35)", value = 20},
+	["6564"] = {spellID = 318498, level = "III (15/20/|cffffffff35|r)", value = 35},
+	["6549"] = {spellID = 318280, level = "I (|cffffffff25|r/35/60)", value = 25},
+	["6550"] = {spellID = 318485, level = "II (25/|cffffffff35|r/60)", value = 35},
+	["6551"] = {spellID = 318486, level = "III (25/35/|cffffffff60|r)", value = 60},
+	["6552"] = {spellID = 318274, level = "I (|cffffffff25|r/50/75)", value = 25},
+	["6553"] = {spellID = 318487, level = "II (25/|cffffffff50|r/75)", value = 50},
+	["6554"] = {spellID = 318488, level = "III (25/50/|cffffffff75|r)", value = 75},
+	["6547"] = {spellID = 318303, level = "I (|cffffffff12|r/30)", value = 12},
+	["6548"] = {spellID = 318484, level = "II (12/|cffffffff30|r)", value = 30},
+	["6537"] = {spellID = 318276, level = "I (|cffffffff25|r/50/75)", value = 25},
+	["6538"] = {spellID = 318477, level = "II (25/|cffffffff50|r/75)", value = 50},
+	["6539"] = {spellID = 318478, level = "III (25/50/|cffffffff75|r)", value = 75},
+	["6543"] = {spellID = 318481, level = "I (|cffffffff10|r/35/66)", value = 10},
+	["6544"] = {spellID = 318482, level = "II (10/|cffffffff35|r/66)", value = 35},
+	["6545"] = {spellID = 318483, level = "III (10/35/|cffffffff66|r)", value = 66},
+	["6540"] = {spellID = 318286, level = "I (|cffffffff15|r/35/66)", value = 15},
+	["6541"] = {spellID = 318479, level = "II (15/|cffffffff35|r/66)", value = 35},
+	["6542"] = {spellID = 318480, level = "III (15/35/|cffffffff66|r)", value = 66},
+	["6573"] = {spellID = 318272, level = "(|cffffffff15|r)", value = 15},
+	["6546"] = {spellID = 318239, level = "(|cffffffff15|r)", value = 15},
+	["6571"] = {spellID = 318293, level = "(|cffffffff30|r)", value = 30},
+	["6572"] = {spellID = 316651, level = "(|cffffffff50|r)", value = 50},
+	["6567"] = {spellID = 318294, level = "(|cffffffff35|r)", value = 35},
+	["6568"] = {spellID = 316780, level = "(|cffffffff25|r)", value = 25},
+	["6570"] = {spellID = 318299, level = "(|cffffffff20|r)", value = 20},
+	["6569"] = {spellID = 317290, level = "(|cffffffff25|r)", value = 25},
+}
+
+local corruptionDataFix = {
+	["172199"] = "6571", -- Faralos, Empire's Dream
+	["172200"] = "6572", -- Sk'shuul Vaz
+	["172191"] = "6567", -- An'zig Vra
+	["172193"] = "6568", -- Whispering Eldritch Bow
+	["172198"] = "6570", -- Mar'kowa, the Mindpiercer
+	["172197"] = "6569", -- Unguent Caress
+	["172227"] = "6544", -- Shard of the Black Empire
+	["172196"] = "6541", -- Vorzz Yoq'al
+	["174106"] = "6550", -- Qwor N'lyeth
+	["172189"] = "6548", -- Eyestalk of Il'gynoth
+	["174108"] = "6553", -- Shgla'yos, Astral Malignity
+	["172187"] = "6539", -- Devastation's Hour
 }
 
 local linkCache = {}
 function TT:Corruption_Search(link)
 	local value = linkCache[link]
 	if not value then
-		local itemString = strmatch(link, "item:([%-?%d:]+)")
-		for index in gmatch(itemString, "%d+") do
-			if corruptionData[index] then
-				value = corruptionData[index]
-				linkCache[link] = value
-				break
+		local itemID, itemString = strmatch(link, "item:(%d+):([%-?%d:]+)")
+		local isCorruptedWeapon = corruptionDataFix[itemID]
+		if isCorruptedWeapon then
+			value = corruptionData[isCorruptedWeapon]
+			linkCache[link] = value
+		else
+			for index in gmatch(itemString, "%d+") do
+				if corruptionData[index] then
+					value = corruptionData[index]
+					linkCache[link] = value
+					break
+				end
 			end
 		end
 	end
@@ -132,27 +157,95 @@ function TT:Corruption_Summary(unit)
 			end
 		end
 	end
+end
 
+function TT:Corruption_Total()
+	local total = 0
+	for value, count in next, summaries do
+		local corruptionValue = value.value
+		total = total + corruptionValue * count
+	end
+	return total
+end
+
+function TT:Corruption_AddSummary()
 	GameTooltip:AddLine(" ")
 	for value, count in next, summaries do
-		GameTooltip:AddLine(count.." "..getIconString(value.icon)..value.name.." "..value.level, corruptionR, corruptionG, corruptionB)
+		GameTooltip:AddLine(count.." "..getIconString(value.icon)..value.name.." "..value.level, corruptionR,corruptionG,corruptionB)
 	end
 	if not next(summaries) then
-		GameTooltip:AddLine(NONE, corruptionR, corruptionG, corruptionB)
+		GameTooltip:AddLine(NONE, corruptionR,corruptionG,corruptionB)
 	end
 	GameTooltip:Show()
 end
 
 function TT:Corruption_PlayerSummary()
 	TT:Corruption_Summary("player")
+	TT:Corruption_AddSummary()
+end
+
+local tip = _G.NDui_iLvlTooltip
+local cloakResString = "(%d+) "..ITEM_MOD_CORRUPTION_RESISTANCE
+
+local essenceTextureIDs = {
+	[2967101] = true,
+	[3193842] = true,
+	[3193843] = true,
+	[3193844] = true,
+	[3193845] = true,
+	[3193846] = true,
+	[3193847] = true,
+}
+
+function TT:Corruption_SearchEssence()
+	local resistance = 0
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	tip:SetInventoryItem(InspectFrame.unit, 2)
+	for i = 1, 10 do
+		local tex = _G[tip:GetName().."Texture"..i]
+		local texture = tex and tex:IsShown() and tex:GetTexture()
+		if texture and essenceTextureIDs[texture] then
+			resistance = 10
+			break
+		end
+	end
+	return resistance
+end
+
+function TT:Corruption_SearchCloak()
+	local resistance = 0
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	tip:SetInventoryItem(InspectFrame.unit, 15)
+	for i = 1, tip:NumLines() do
+		local line = _G[tip:GetName().."TextLeft"..i]
+		local text = line and line:GetText()
+		local value = text and strmatch(text, cloakResString)
+		if value then
+			resistance = value
+		end
+	end
+	return resistance
 end
 
 function TT:Corruption_InspectSummary()
 	if not self.guid then return end
+
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 	GameTooltip:ClearLines()
-	GameTooltip:AddLine(L["CorruptionSummary"], 1,1,1)
+	GameTooltip:AddLine(CORRUPTION_TOOLTIP_TITLE, 1,1,1)
+	GameTooltip:AddLine(CORRUPTION_DESCRIPTION, 1,.8,0, 1)
+
 	TT:Corruption_Summary(InspectFrame.unit)
+	local total = TT:Corruption_Total()
+	local essence = TT:Corruption_SearchEssence()
+	local cloak = TT:Corruption_SearchCloak()
+	local resistance = essence + cloak
+
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddDoubleLine(CORRUPTION_TOOLTIP_LINE, total, 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(CORRUPTION_RESISTANCE_TOOLTIP_LINE, resistance, 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(TOTAL_CORRUPTION_TOOLTIP_LINE, max((total - resistance), 0), corruptionR,corruptionG,corruptionB, corruptionR,corruptionG,corruptionB)
+	TT:Corruption_AddSummary()
 end
 
 function TT:Corruption_CreateEye()
