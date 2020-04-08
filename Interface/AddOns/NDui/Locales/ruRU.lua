@@ -641,4 +641,3 @@ L["ShowCorruptionRank"] = "Show corruption rank" -- need translation
 L["ShowAllTip"] = "|nIf unchecked, you can only see the aura you cast.|n|nIf checked, the aura would be tracked from all casters." -- need translation
 L["AllowFriendsSpam"] = "Allow Friends' Spam" -- need translation
 L["AllowFriendsSpamTip"] = "|nAllow spam messages from party members, frineds and guild members, if checked." -- need translation
-L["CorruptionSummary"] = "Corruption Summary" -- need translation
