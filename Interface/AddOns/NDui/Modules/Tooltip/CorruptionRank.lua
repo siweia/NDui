@@ -59,14 +59,14 @@ local corruptionData = {
 	["6540"] = {spellID = 318286, level = "I (|cffffffff15|r/35/66)"},
 	["6541"] = {spellID = 318479, level = "II (15/|cffffffff35|r/66)"},
 	["6542"] = {spellID = 318480, level = "III (15/35/|cffffffff66|r)"},
-	["6573"] = {spellID = 318272, level = ""},
-	["6546"] = {spellID = 318239, level = ""},
-	["6571"] = {spellID = 318293, level = ""},
-	["6572"] = {spellID = 316651, level = ""},
-	["6567"] = {spellID = 318294, level = ""},
-	["6568"] = {spellID = 316780, level = ""},
-	["6570"] = {spellID = 318299, level = ""},
-	["6569"] = {spellID = 317290, level = ""},
+	["6573"] = {spellID = 318272, level = "(|cffffffff15|r)"},
+	["6546"] = {spellID = 318239, level = "(|cffffffff15|r)"},
+	["6571"] = {spellID = 318293, level = "(|cffffffff30|r)"},
+	["6572"] = {spellID = 316651, level = "(|cffffffff50|r)"},
+	["6567"] = {spellID = 318294, level = "(|cffffffff35|r)"},
+	["6568"] = {spellID = 316780, level = "(|cffffffff25|r)"},
+	["6570"] = {spellID = 318299, level = "(|cffffffff20|r)"},
+	["6569"] = {spellID = 317290, level = "(|cffffffff25|r)"},
 }
 
 local linkCache = {}
