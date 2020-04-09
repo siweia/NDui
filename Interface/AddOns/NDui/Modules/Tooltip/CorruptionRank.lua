@@ -13,9 +13,9 @@ local CORRUPTION_RESISTANCE_TOOLTIP_LINE = CORRUPTION_RESISTANCE_TOOLTIP_LINE
 local TOTAL_CORRUPTION_TOOLTIP_LINE = TOTAL_CORRUPTION_TOOLTIP_LINE
 
 local corruptionData = {
-	["6483"] = {spellID = 315607, level = "I (|cffffffff10|r/15/20)", value = 10},
-	["6484"] = {spellID = 315608, level = "II (10/|cffffffff15|r/20)", value = 15},
-	["6485"] = {spellID = 315609, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6483"] = {spellID = 315607, level = "I (|cffffffff8|r/12/16)", value = 8},
+	["6484"] = {spellID = 315608, level = "II (8/|cffffffff12|r/16)", value = 12},
+	["6485"] = {spellID = 315609, level = "III (8/12/|cffffffff16|r)", value = 16},
 	["6474"] = {spellID = 315544, level = "I (|cffffffff10|r/15/20)", value = 10},
 	["6475"] = {spellID = 315545, level = "II (10/|cffffffff15|r/20)", value = 15},
 	["6476"] = {spellID = 315546, level = "III (10/15/|cffffffff20|r)", value = 20},
@@ -28,9 +28,9 @@ local corruptionData = {
 	["6477"] = {spellID = 315549, level = "I (|cffffffff10|r/15/20)", value = 10},
 	["6478"] = {spellID = 315552, level = "II (10/|cffffffff15|r/20)", value = 15},
 	["6479"] = {spellID = 315553, level = "III (10/15/|cffffffff20|r)", value = 20},
-	["6493"] = {spellID = 315590, level = "I (|cffffffff10|r/15/20)", value = 10},
-	["6494"] = {spellID = 315591, level = "II (10/|cffffffff15|r/20)", value = 15},
-	["6495"] = {spellID = 315592, level = "III (10/15/|cffffffff20|r)", value = 20},
+	["6493"] = {spellID = 315590, level = "I (|cffffffff17|r/28/45)", value = 17},
+	["6494"] = {spellID = 315591, level = "II (17/|cffffffff28|r/45)", value = 28},
+	["6495"] = {spellID = 315592, level = "III (17/28/|cffffffff45|r)", value = 45},
 	["6437"] = {spellID = 315277, level = "I (|cffffffff10|r/15/20)", value = 10},
 	["6438"] = {spellID = 315281, level = "II (10/|cffffffff15|r/20)", value = 15},
 	["6439"] = {spellID = 315282, level = "III (10/15/|cffffffff20|r)", value = 20},
@@ -119,7 +119,8 @@ function TT:Corruption_Convert(name, icon, level)
 		local line = _G[self:GetName().."TextLeft"..i]
 		local text = line:GetText()
 		if text and strmatch(text, ITEM_MOD_CORRUPTION) then
-			line:SetText(text.." - "..getIconString(icon)..name.." "..level)
+			--line:SetText(text.." - "..getIconString(icon)..name.." "..level)
+			line:SetText("+"..getIconString(icon)..name.." "..level)
 			return
 		end
 	end
