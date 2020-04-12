@@ -402,8 +402,8 @@ SLASH_NDUI1 = "/ndui"
 
 function module:OnLogin()
 	-- Hide options
-	B.HideOption(Advanced_UseUIScale)
-	B.HideOption(Advanced_UIScaleSlider)
+	B.HideOption(Display_UseUIScale)
+	B.HideOption(Display_UIScaleSlider)
 
 	-- Tutorial and settings
 	ForceAddonSkins()
