@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local ipairs = ipairs
 
+local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
+
 --[[
 	职业大厅图标，取代自带的信息条
 ]]
@@ -19,7 +21,7 @@ hall.Category = {}
 
 local function RetrieveData(self)
 	local currency = C_Garrison.GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
-	self.name, self.amount, self.texture = GetCurrencyInfo(currency)
+	self.name, self.amount, self.texture = C_CurrencyInfo.GetCurrencyInfo(currency)
 
 	local categoryInfo = C_Garrison.GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	self.numCategory = #categoryInfo

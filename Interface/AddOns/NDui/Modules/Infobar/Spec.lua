@@ -6,10 +6,11 @@ local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Spec", C.Infobar.SpecPos)
 local format, wipe, select, next = string.format, table.wipe, select, next
 local SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS = SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS
-local SHOW_PVP_TALENT_LEVEL, PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = SHOW_PVP_TALENT_LEVEL, PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
+local PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
 local GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID
-local GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
+local GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, UnitLevel, C_CurrencyInfo.GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
 local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
+local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
 
 local function addIcon(texture)
 	texture = texture and "|T"..texture..":12:16:0:0:50:50:4:46:4:46|t" or ""
@@ -68,7 +69,7 @@ info.onEnter = function(self)
 		end
 	end
 
-	if UnitLevel("player") >= SHOW_PVP_TALENT_LEVEL then
+	if C_SpecializationInfo_CanPlayerUsePVPTalentUI() then
 		pvpTalents = C_SpecializationInfo_GetAllSelectedPvpTalentIDs()
 
 		if #pvpTalents > 0 then

@@ -59,7 +59,7 @@ local bonus = {
 	52835, 52839,	-- Honor
 	52837, 52840,	-- Resources
 }
-local bonusName = GetCurrencyInfo(1580)
+local bonusName = C_CurrencyInfo.GetCurrencyInfo(1580)
 
 local isTimeWalker, walkerTexture
 local function checkTimeWalker(event)
