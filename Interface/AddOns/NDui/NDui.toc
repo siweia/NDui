@@ -4,7 +4,7 @@
 ## Author: Siweia
 ## Notes: More than a UI.
 ## Version: 5.4.2
-## X-Support: BfA
+## X-Support: Alpha
 ## X-Website: https://github.com/siweia/NDui
 ## SavedVariables: NDuiADB
 ## SavedVariablesPerCharacter: NDuiDB
