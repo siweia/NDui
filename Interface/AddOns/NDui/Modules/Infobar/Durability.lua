@@ -25,9 +25,8 @@ local localSlots = {
 	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000}
 }
 
-local inform = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
+local inform = CreateFrame("Frame", nil, UIParent)
 inform:SetPoint("BOTTOM", info, "TOP", 0, 23)
-inform.Text:SetText(L["Low Durability"])
 inform:Hide()
 
 local function sortSlots(a, b)
@@ -79,7 +78,8 @@ info.eventList = {
 
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
-		B.ReskinClose(inform.CloseButton)
+		B.SetBD(inform)
+		B.CreateFS(inform, 14, L["Low Durability"])
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end
 
@@ -99,13 +99,13 @@ info.onEvent = function(self, event)
 		if isLowDurability() then inform:Show() else inform:Hide() end
 	end
 end
-
+--[[
 inform.CloseButton:HookScript("OnClick", function()
 	if InCombatLockdown() then
 		info:UnregisterEvent("UPDATE_INVENTORY_DURABILITY")
 		info:RegisterEvent("PLAYER_REGEN_ENABLED")
 	end
-end)
+end)]]
 
 info.onMouseUp = function(self, btn)
 	if btn == "MiddleButton" then
