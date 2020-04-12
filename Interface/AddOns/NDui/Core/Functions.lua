@@ -659,7 +659,7 @@ function B:ReskinCheck(forceSaturation)
 
 	self.forceSaturation = forceSaturation
 end
-
+--[[
 hooksecurefunc("TriStateCheckbox_SetState", function(_, checkButton)
 	if checkButton.forceSaturation then
 		local tex = checkButton:GetCheckedTexture()
@@ -670,7 +670,7 @@ hooksecurefunc("TriStateCheckbox_SetState", function(_, checkButton)
 			tex:SetVertexColor(1, .8, 0, .8)
 		end
 	end
-end)
+end)]]
 
 function B:ReskinRadio()
 	self:SetNormalTexture("")
