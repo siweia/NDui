@@ -9,7 +9,16 @@ DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isNewPatch = GetBuildInfo() == "8.3.0" -- keep it for future purpose
+DB.isNewPatch = select(4, GetBuildInfo()) > 90000 -- keep it for future purpose
+
+-- Deprecated
+LE_ITEM_QUALITY_POOR = Enum.ItemQuality.Poor
+LE_ITEM_QUALITY_COMMON = Enum.ItemQuality.Common
+LE_ITEM_QUALITY_RARE = Enum.ItemQuality.Rare
+LE_ITEM_QUALITY_HEIRLOOM = Enum.ItemQuality.Heirloom
+LE_ITEM_QUALITY_EPIC = Enum.ItemQuality.Epic
+LE_ITEM_QUALITY_LEGENDARY = Enum.ItemQuality.Legendary
+LE_ITEM_QUALITY_ARTIFACT = Enum.ItemQuality.Artifact
 
 -- Colors
 DB.MyName = UnitName("player")
