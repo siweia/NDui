@@ -18,7 +18,7 @@ local pairs, tonumber, tostring = pairs, tonumber, tostring
 local floor, ceil = math.floor, math.ceil
 local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 
-local dev = {"寧德"}
+local dev = {"寧德", "Huniverster"}
 local function isDeveloper()
 	for _, name in pairs(dev) do
 		if DB.MyName == name then
