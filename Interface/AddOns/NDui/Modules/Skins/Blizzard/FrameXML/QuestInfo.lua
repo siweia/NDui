@@ -30,13 +30,13 @@ tinsert(C.defaultThemes, function()
 	-- Quest objective text color
 	local function QuestInfo_GetQuestID()
 		if QuestInfoFrame.questLog then
-			return select(8, GetQuestLogTitle(GetQuestLogSelection()))
+			return C_QuestLog.GetSelectedQuest()
 		else
 			return GetQuestID()
 		end
 	end
 
-	local function colourObjectivesText()
+	local function colourObjectivesText(questID)
 		if not QuestInfoFrame.questLog then return end
 
 		local questID = QuestInfo_GetQuestID()

@@ -24,7 +24,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		self:GetFontString():SetTextColor(1, 1, 1)
 	end
 
-	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab", "LootJournalTab"}) do
+	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab"}) do
 		local tab = EncounterJournal.instanceSelect[tabName]
 		local text = tab:GetFontString()
 
@@ -343,48 +343,5 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			suggestion.reward.icon:SetMask("")
 			suggestion.reward.icon:SetTexCoord(unpack(DB.TexCoord))
 		end
-	end)
-
-	-- [[ Loot Journal ]]
-
-	EncounterJournal.LootJournal:GetRegions():Hide()
-	B.ReskinScroll(EncounterJournal.LootJournal.ItemSetsFrame.scrollBar)
-
-	local buttons = {
-		EncounterJournalEncounterFrameInfoDifficulty,
-		EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
-		EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
-		EncounterJournal.LootJournal.ItemSetsFrame.ClassButton,
-	}
-	for _, btn in pairs(buttons) do
-		B.StripTextures(btn)
-		B.Reskin(btn)
-	end
-
-	-- ItemSetsFrame
-
-	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "UpdateList", function(self)
-		local buttons = self.buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			if not button.styled then
-				button.ItemLevel:SetTextColor(1, 1, 1)
-				button.Background:Hide()
-				B.CreateBDFrame(button, .25)
-
-				button.styled = true
-			end
-		end
-	end)
-
-	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(_, button)
-		if not button.bg then
-			button.Border:SetAlpha(0)
-			button.bg = B.ReskinIcon(button.Icon)
-		end
-
-		local quality = select(3, GetItemInfo(button.itemID))
-		local color = DB.QualityColors[quality or 1]
-		button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end)
 end

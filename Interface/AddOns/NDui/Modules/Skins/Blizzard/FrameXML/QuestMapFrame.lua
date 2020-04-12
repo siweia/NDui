@@ -11,18 +11,24 @@ tinsert(C.defaultThemes, function()
 	-- [[ Quest scroll frame ]]
 
 	local QuestScrollFrame = QuestScrollFrame
-	local campaignHeader = QuestScrollFrame.Contents.WarCampaignHeader
-	local StoryHeader = QuestScrollFrame.Contents.StoryHeader
 
 	QuestMapFrame.VerticalSeparator:SetAlpha(0)
-	QuestScrollFrame.Background:SetAlpha(0)
+	QuestMapFrame.Background:SetAlpha(0)
+	QuestMapFrame.CampaignOverview.BG:SetAlpha(0)
+	B.ReskinScroll(QuestMapFrame.CampaignOverview.ScrollFrame.ScrollBar)
+
 	QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
 	QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)
-
 	B.ReskinScroll(QuestScrollFrame.ScrollBar)
 
-	for _, header in next, {campaignHeader, StoryHeader} do
+	local function header_OnEnter(self)
+		self.bg:SetBackdropColor(r, g, b, .25)
+	end
+	local function header_OnLeave(self)
+		self.bg:SetBackdropColor(0, 0, 0, .25)
+	end
+	local function reskinQuestHeader(header)
 		header.Background:SetAlpha(0)
 		header.HighlightTexture:Hide()
 		header.Text:SetPoint("TOPLEFT", 15, -20)
@@ -30,41 +36,11 @@ tinsert(C.defaultThemes, function()
 		local bg = B.CreateBDFrame(header, .25)
 		bg:SetPoint("TOPLEFT", 0, -14)
 		bg:SetPoint("BOTTOMRIGHT", -4, 5)
-		if header == campaignHeader then
-			local newTex = bg:CreateTexture(nil, "OVERLAY")
-			newTex:SetPoint("TOPRIGHT", -25, 3)
-			newTex:SetSize(50, 50)
-			newTex:SetBlendMode("ADD")
-			newTex:SetAlpha(0)
-			header.newTex = newTex
-		end
-
-		header:HookScript("OnEnter", function()
-			bg:SetBackdropColor(r, g, b, .25)
-		end)
-		header:HookScript("OnLeave", function()
-			bg:SetBackdropColor(0, 0, 0, .25)
-		end)
+		header.bg = bg
+		header:HookScript("OnEnter", header_OnEnter)
+		header:HookScript("OnLeave", header_OnLeave)
 	end
-
-	local idToTexture = {
-		[261] = "Interface\\Timer\\Alliance-Logo",
-		[262] = "Interface\\Timer\\Horde-Logo",
-	}
-	local function UpdateCampaignHeader()
-		campaignHeader.newTex:SetAlpha(0)
-		if campaignHeader:IsShown() then
-			local campaignID = C_CampaignInfo.GetCurrentCampaignID()
-			if campaignID then
-				local warCampaignInfo = C_CampaignInfo.GetCampaignInfo(campaignID)
-				local textureID = warCampaignInfo.uiTextureKitID
-				if textureID and idToTexture[textureID] then
-					campaignHeader.newTex:SetTexture(idToTexture[textureID])
-					campaignHeader.newTex:SetAlpha(.7)
-				end
-			end
-		end
-	end
+	reskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
 
 	-- [[ Quest details ]]
 
@@ -81,7 +57,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(DetailsFrame.AbandonButton)
 	B.Reskin(DetailsFrame.ShareButton)
 	B.Reskin(DetailsFrame.TrackButton)
-	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)
+	B.ReskinScroll(QuestMapDetailsScrollFrame.ScrollBar)
 
 	DetailsFrame.AbandonButton:ClearAllPoints()
 	DetailsFrame.AbandonButton:SetPoint("BOTTOMLEFT", DetailsFrame, -1, 0)
@@ -103,8 +79,6 @@ tinsert(C.defaultThemes, function()
 	-- Scroll frame
 
 	hooksecurefunc("QuestLogQuests_Update", function()
-		UpdateCampaignHeader()
-
 		for i = 6, QuestMapFrame.QuestsFrame.Contents:GetNumChildren() do
 			local child = select(i, QuestMapFrame.QuestsFrame.Contents:GetChildren())
 			if child.ButtonText then

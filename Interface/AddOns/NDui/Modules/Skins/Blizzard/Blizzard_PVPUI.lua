@@ -176,7 +176,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		if currencyRewards then
 			for _, reward in ipairs(currencyRewards) do
-				local name, _, texture, _, _, _, _, quality = GetCurrencyInfo(reward.id)
+				local name, _, texture, _, _, _, _, quality = C_CurrencyInfo.GetCurrencyInfo(reward.id)
 				if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
 					_, rewardTexture, _, rewardQuaility = CurrencyContainerUtil.GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
 				end
@@ -204,5 +204,4 @@ C.themes["Blizzard_PVPUI"] = function()
 	B.Reskin(ConquestFrame.JoinButton)
 	B.ReskinDropDown(HonorFrameTypeDropDown)
 	B.ReskinScroll(HonorFrameSpecificFrameScrollBar)
-	B.ReskinClose(PremadeGroupsPvPTutorialAlert.CloseButton)
 end
