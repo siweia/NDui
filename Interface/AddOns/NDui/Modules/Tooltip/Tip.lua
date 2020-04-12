@@ -397,7 +397,7 @@ function TT:ReskinTooltip()
 	end
 end
 
-function TT:GameTooltip_SetBackdropStyle()
+function TT:SharedTooltip_SetBackdropStyle()
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
 end
@@ -410,7 +410,7 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_ShowStatusBar", self.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", self.GameTooltip_ShowProgressBar)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", self.GameTooltip_SetDefaultAnchor)
-	hooksecurefunc("GameTooltip_SetBackdropStyle", self.GameTooltip_SetBackdropStyle)
+	hooksecurefunc("SharedTooltip_SetBackdropStyle", self.SharedTooltip_SetBackdropStyle)
 	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
 
 	-- Elements
@@ -450,9 +450,9 @@ TT:RegisterTooltips("NDui", function()
 		AutoCompleteBox,
 		FriendsTooltip,
 		QuestScrollFrame.StoryTooltip,
+		QuestScrollFrame.CampaignTooltip,
 		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
-		QuestScrollFrame.WarCampaignTooltip,
 		NamePlateTooltip,
 		QueueStatusFrame,
 		FloatingGarrisonFollowerTooltip,
