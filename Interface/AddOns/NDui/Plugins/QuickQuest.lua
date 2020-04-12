@@ -82,8 +82,12 @@ local ignoreQuestNPC = {
 local function GetQuestLogQuests(onlyComplete)
 	wipe(quests)
 
-	for index = 1, GetNumQuestLogEntries() do
-		local title, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(index)
+	for index = 1, C_QuestLog.GetNumQuestLogEntries() do
+		local info = C_QuestLog.GetInfo(index)
+		local title = info.title
+		local questID = info.questID
+		local isHeader = info.isHeader
+		local isComplete = C_QuestLog.IsComplete(questID)
 		if(not isHeader) then
 			if(onlyComplete and isComplete or not onlyComplete) then
 				quests[title] = questID
@@ -110,7 +114,7 @@ QuickQuest:Register("QUEST_GREETING", function()
 				if(not questID) then
 					SelectActiveQuest(index)
 				else
-					local _, _, worldQuest = GetQuestTagInfo(questID)
+					local _, _, worldQuest = C_QuestLog.GetQuestTagInfo(questID)
 					if(not worldQuest) then
 						SelectActiveQuest(index)
 					end
@@ -202,7 +206,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 				if(not questID) then
 					SelectGossipActiveQuest(index)
 				else
-					local _, _, worldQuest = GetQuestTagInfo(questID)
+					local _, _, worldQuest = C_QuestLog.GetQuestTagInfo(questID)
 					if(not worldQuest) then
 						SelectGossipActiveQuest(index)
 					end
@@ -349,7 +353,7 @@ local ignoreProgressNPC = {
 
 QuickQuest:Register("QUEST_PROGRESS", function()
 	if(IsQuestCompletable()) then
-		local id, _, worldQuest = GetQuestTagInfo(GetQuestID())
+		local id, _, worldQuest = C_QuestLog.GetQuestTagInfo(GetQuestID())
 		if id == 153 or worldQuest then return end
 		local npcID = GetNPCID()
 		if ignoreProgressNPC[npcID] then return end
@@ -430,12 +434,13 @@ local function AttemptAutoComplete(event)
 		end
 
 		local questID, popUpType = GetAutoQuestPopUp(1)
-		local _, _, worldQuest = GetQuestTagInfo(questID)
+		local _, _, worldQuest = C_QuestLog.GetQuestTagInfo(questID)
 		if not worldQuest then
+			local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
 			if(popUpType == "OFFER") then
-				ShowQuestOffer(GetQuestLogIndexByID(questID))
+				ShowQuestOffer(questLogIndex)
 			else
-				ShowQuestComplete(GetQuestLogIndexByID(questID))
+				ShowQuestComplete(questLogIndex)
 			end
 		end
 	else
