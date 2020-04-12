@@ -15,11 +15,11 @@ function Bar:CreateExtrabar()
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 250, 100}
 
 	--move the buttons into position and reparent them
-	ExtraActionBarFrame:SetParent(frame)
-	ExtraActionBarFrame:EnableMouse(false)
-	ExtraActionBarFrame:ClearAllPoints()
-	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
-	ExtraActionBarFrame.ignoreFramePositionManager = true
+	ExtraAbilityContainer:SetParent(frame)
+	ExtraAbilityContainer:EnableMouse(false)
+	ExtraAbilityContainer:ClearAllPoints()
+	ExtraAbilityContainer:SetPoint("CENTER", 0, 0)
+	ExtraAbilityContainer.ignoreFramePositionManager = true
 
 	--the extra button
 	local button = ExtraActionButton1
@@ -50,11 +50,11 @@ function Bar:CreateExtrabar()
 	ZoneAbilityFrame:ClearAllPoints()
 	ZoneAbilityFrame:SetPoint("CENTER", 0, 0)
 	ZoneAbilityFrame.ignoreFramePositionManager = true
-	ZoneAbilityFrameNormalTexture:SetAlpha(0)
+	--ZoneAbilityFrameNormalTexture:SetAlpha(0)
 	zoneFrame.mover = B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
-
+--[[
 	local spellButton = ZoneAbilityFrame.SpellButton
 	spellButton.Style:SetAlpha(0)
 	spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	B.ReskinIcon(spellButton.Icon, true)
+	B.ReskinIcon(spellButton.Icon, true)]]
 end
