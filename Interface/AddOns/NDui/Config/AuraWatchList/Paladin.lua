@@ -40,7 +40,6 @@ local list = {
 		{AuraID = 86659, UnitID = "player"},	-- 远古列王守卫
 		{AuraID = 231895, UnitID = "player"},	-- 征伐
 		{AuraID = 223819, UnitID = "player"},	-- 神圣意志
-		--{AuraID = 216413, UnitID = "player"},	-- 神圣意志
 		{AuraID = 209785, UnitID = "player"},	-- 正义之火
 		{AuraID = 217020, UnitID = "player"},	-- 狂热
 		{AuraID = 205191, UnitID = "player"},	-- 以眼还眼

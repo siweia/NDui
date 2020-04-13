@@ -80,7 +80,7 @@ oUF.Tags.Methods["color"] = function(unit)
 		return B.HexRGB(1, 1, 1)
 	end
 end
-oUF.Tags.Events["color"] = "UNIT_HEALTH UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
+oUF.Tags.Events["color"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
 oUF.Tags.Methods["afkdnd"] = function(unit)
 	if UnitIsAFK(unit) then
@@ -102,7 +102,7 @@ oUF.Tags.Methods["DDG"] = function(unit)
 		return "|cffCFCFCF"..PLAYER_OFFLINE.."|r"
 	end
 end
-oUF.Tags.Events["DDG"] = "UNIT_HEALTH UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
+oUF.Tags.Events["DDG"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
 -- Level tags
 oUF.Tags.Methods["fulllevel"] = function(unit)
