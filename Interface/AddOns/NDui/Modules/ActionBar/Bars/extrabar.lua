@@ -50,11 +50,17 @@ function Bar:CreateExtrabar()
 	ZoneAbilityFrame:ClearAllPoints()
 	ZoneAbilityFrame:SetPoint("CENTER", 0, 0)
 	ZoneAbilityFrame.ignoreFramePositionManager = true
-	--ZoneAbilityFrameNormalTexture:SetAlpha(0)
-	zoneFrame.mover = B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
---[[
-	local spellButton = ZoneAbilityFrame.SpellButton
-	spellButton.Style:SetAlpha(0)
-	spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	B.ReskinIcon(spellButton.Icon, true)]]
+	ZoneAbilityFrame.Style:SetAlpha(0)
+	zoneFrame.mover = B.Mover(ZoneAbilityFrame.SpellButtonContainer, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
+
+	hooksecurefunc(ZoneAbilityFrame, "UpdateDisplayedZoneAbilities", function(self)
+		for spellButton in self.SpellButtonContainer:EnumerateActive() do
+			if spellButton and not spellButton.styled then
+				spellButton.NormalTexture:SetAlpha(0)
+				spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+				B.ReskinIcon(spellButton.Icon, true)
+				spellButton.styled = true
+			end
+		end
+	end)
 end
