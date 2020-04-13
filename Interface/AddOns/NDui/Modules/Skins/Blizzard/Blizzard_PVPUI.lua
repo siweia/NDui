@@ -176,14 +176,14 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		if currencyRewards then
 			for _, reward in ipairs(currencyRewards) do
-				local name, _, texture, _, _, _, _, quality = C_CurrencyInfo.GetCurrencyInfo(reward.id)
+				local info = C_CurrencyInfo.GetCurrencyInfo(reward.id)
+				local name, texture, quality = info.name, info.iconFileID, info.quality
 				if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
 					_, rewardTexture, _, rewardQuaility = CurrencyContainerUtil.GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
 				end
 			end
 		end
 
-		local _
 		if not rewardTexture and itemRewards then
 			local reward = itemRewards[1]
 			if reward then

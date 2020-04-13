@@ -79,7 +79,7 @@ tinsert(C.defaultThemes, function()
 	-- Scroll frame
 
 	hooksecurefunc("QuestLogQuests_Update", function()
-		for i = 6, QuestMapFrame.QuestsFrame.Contents:GetNumChildren() do
+		for i = 1, QuestMapFrame.QuestsFrame.Contents:GetNumChildren() do
 			local child = select(i, QuestMapFrame.QuestsFrame.Contents:GetChildren())
 			if child.ButtonText then
 				if not child.styled then
