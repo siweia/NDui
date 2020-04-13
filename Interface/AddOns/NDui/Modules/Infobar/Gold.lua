@@ -7,9 +7,11 @@ local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
 
 local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
 local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
-local GetMoney, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo = GetMoney, GetNumWatchedTokens, GetBackpackCurrencyInfo, C_CurrencyInfo.GetCurrencyInfo
+local GetMoney, GetNumWatchedTokens = GetMoney, GetNumWatchedTokens
 local GetContainerNumSlots, GetContainerItemLink, GetItemInfo, GetContainerItemInfo, UseContainerItem = GetContainerNumSlots, GetContainerItemLink, GetItemInfo, GetContainerItemInfo, UseContainerItem
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
+local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
+local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
@@ -104,13 +106,14 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
 	for i = 1, GetNumWatchedTokens() do
-		local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
+		local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
+		local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
 		if name and i == 1 then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
 		end
 		if name and count then
-			local _, _, _, _, _, total = GetCurrencyInfo(currencyID)
+			local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
 			local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
 			if total > 0 then
 				GameTooltip:AddDoubleLine(name, count.."/"..total..iconTexture, 1,1,1, 1,1,1)

@@ -1,8 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local ipairs = ipairs
 
+local ipairs, unpack = ipairs, unpack
 local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
+local C_Garrison_GetCurrencyTypes = C_Garrison.GetCurrencyTypes
+local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
+local C_Garrison_IsPlayerInGarrison = C_Garrison.IsPlayerInGarrison
+local C_Garrison_GetClassSpecCategoryInfo = C_Garrison.GetClassSpecCategoryInfo
+local C_Garrison_RequestClassSpecCategoryInfo = C_Garrison.RequestClassSpecCategoryInfo
 
 --[[
 	职业大厅图标，取代自带的信息条
@@ -20,10 +25,11 @@ hall.Icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[DB.MyClass]))
 hall.Category = {}
 
 local function RetrieveData(self)
-	local currency = C_Garrison.GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
-	self.name, self.amount, self.texture = C_CurrencyInfo.GetCurrencyInfo(currency)
+	local currency = C_Garrison_GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
+	local info = C_CurrencyInfo_GetCurrencyInfo(currency)
+	self.name, self.amount, self.texture = info.name, info.quantity, info.iconFileID
 
-	local categoryInfo = C_Garrison.GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
+	local categoryInfo = C_Garrison_GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	self.numCategory = #categoryInfo
 	for i, category in ipairs(categoryInfo) do
 		self.Category[i] = {category.name, category.count, category.limit, category.description, category.icon}
@@ -31,7 +37,7 @@ local function RetrieveData(self)
 end
 
 local function hallIconOnEnter(self)
-	C_Garrison.RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
+	C_Garrison_RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	RetrieveData(self)
 
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 5, -5)
@@ -70,7 +76,7 @@ local function hallIconOnEvent(self, event, arg1)
 		GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
 		self:UnregisterEvent("ADDON_LOADED")
 	elseif event == "UNIT_AURA" or event == "PLAYER_ENTERING_WORLD" then
-		local inOrderHall = C_Garrison.IsPlayerInGarrison(LE_GARRISON_TYPE_7_0)
+		local inOrderHall = C_Garrison_IsPlayerInGarrison(LE_GARRISON_TYPE_7_0)
 		self:SetShown(inOrderHall)
 	elseif event == "MODIFIER_STATE_CHANGED" and arg1 == "LSHIFT" then
 		hallIconOnEnter(self)

@@ -8,7 +8,7 @@ local format, wipe, select, next = string.format, table.wipe, select, next
 local SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS = SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS
 local PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
 local GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID
-local GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, UnitLevel, C_CurrencyInfo.GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
+local GetTalentInfo, UnitLevel, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, UnitLevel, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
 local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
 local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
 
@@ -48,6 +48,8 @@ info.onEvent = function(self)
 end
 
 local pvpTalents
+local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(104).iconFileID
+
 info.onEnter = function(self)
 	local specIndex = GetSpecialization()
 	if not specIndex then return end
@@ -73,9 +75,8 @@ info.onEnter = function(self)
 		pvpTalents = C_SpecializationInfo_GetAllSelectedPvpTalentIDs()
 
 		if #pvpTalents > 0 then
-			local texture = select(3, GetCurrencyInfo(104))
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, .6,.8,1)
+			GameTooltip:AddLine(addIcon(pvpIconTexture).." "..PVP_TALENTS, .6,.8,1)
 			for _, talentID in next, pvpTalents do
 				local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
 				if name and unlocked then
