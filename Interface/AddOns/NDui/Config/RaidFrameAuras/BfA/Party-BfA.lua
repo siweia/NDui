@@ -262,6 +262,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
 module:RegisterDebuff(TIER, INSTANCE, 0, 298259, 6) -- 束缚粘液
 module:RegisterDebuff(TIER, INSTANCE, 0, 297257) -- 电荷充能
 module:RegisterDebuff(TIER, INSTANCE, 0, 303885) -- 爆裂喷发
+module:RegisterDebuff(TIER, INSTANCE, 0, 291928) -- 超荷电磁炮
 module:RegisterDebuff(TIER, INSTANCE, 0, 292267) -- 超荷电磁炮
 module:RegisterDebuff(TIER, INSTANCE, 0, 305699) -- 锁定
 module:RegisterDebuff(TIER, INSTANCE, 0, 285443) -- 烈焰火炮
