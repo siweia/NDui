@@ -13,6 +13,12 @@ function module:UpdateChannelNames(text, ...)
 		r, g, b = r*.7, g*.7, b*.7
 	end
 
+	-- Dev logo
+	local unitName = strmatch(text, "|Hplayer:([^|:]+)")
+	if unitName and DB.Devs[unitName] then
+		text = gsub(text, "(|Hplayer.+)", "|T"..DB.chatIcon..":14:24|t%1")
+	end
+
 	if NDuiDB["Chat"]["Oldname"] then
 		text = gsub(text, "|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
 		text = gsub(text, "|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")
