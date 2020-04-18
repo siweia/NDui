@@ -18,13 +18,11 @@ local pairs, tonumber, tostring = pairs, tonumber, tostring
 local floor, ceil = math.floor, math.ceil
 local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 
-local dev = {"寧德"}
+DB.Devs = {
+	["寧德-加尔"] = true,
+}
 local function isDeveloper()
-	for _, name in pairs(dev) do
-		if DB.MyName == name then
-			return true
-		end
-	end
+	return DB.Devs[DB.MyName.."-"..DB.MyRealm]
 end
 DB.isDeveloper = isDeveloper()
 
