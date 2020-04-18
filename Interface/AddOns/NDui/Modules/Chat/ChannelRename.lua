@@ -7,10 +7,10 @@ local BetterDate, time = BetterDate, time
 local INTERFACE_ACTION_BLOCKED = INTERFACE_ACTION_BLOCKED
 
 local timestampFormat = {
-	[2] = "[%I:%M %p] ",
-	[3] = "[%I:%M:%S %p] ",
-	[4] = "[%H:%M] ",
-	[5] = "[%H:%M:%S] ",
+	[2] = "%I:%M %p ",
+	[3] = "%I:%M:%S %p ",
+	[4] = "%H:%M ",
+	[5] = "%H:%M:%S ",
 }
 function module:UpdateChannelNames(text, ...)
 	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
