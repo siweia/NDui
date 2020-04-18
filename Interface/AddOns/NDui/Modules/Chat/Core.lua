@@ -207,12 +207,10 @@ function module:WhipserInvite()
 end
 
 -- Timestamp
-function module:UpdateTimestamp()
-	local greyStamp = DB.GreyColor.."[%H:%M:%S]|r "
-	if NDuiADB["Timestamp"] then
-		SetCVar("showTimestamps", greyStamp)
-	elseif GetCVar("showTimestamps") == greyStamp then
+function module:HideDefaultTimestamp()
+	if NDuiADB["TimestampFormat"] > 1 then
 		SetCVar("showTimestamps", "none")
+		B.HideOption(InterfaceOptionsSocialPanelTimestamps)
 	end
 end
 
@@ -286,7 +284,7 @@ function module:OnLogin()
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Add Elements
-	self:UpdateTimestamp()
+	self:HideDefaultTimestamp()
 	self:ChatWhisperSticky()
 	self:ChatFilter()
 	self:ChannelRename()
