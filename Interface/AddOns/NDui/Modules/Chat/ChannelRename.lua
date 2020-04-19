@@ -23,15 +23,17 @@ function module:UpdateChannelNames(text, ...)
 	-- Dev logo
 	local unitName = strmatch(text, "|Hplayer:([^|:]+)")
 	if unitName and DB.Devs[unitName] then
-		text = gsub(text, "(|Hplayer.+)", "|T"..DB.chatIcon..":14:24|t%1")
+		text = gsub(text, "(|Hplayer.+)", "|T"..DB.logoTex..":16:24|t%1")
 	end
 
 	-- Timestamp
 	if NDuiADB["TimestampFormat"] > 1 then
 		local currentTime = time()
-		local oldTimeStamp = gsub(BetterDate(CHAT_TIMESTAMP_FORMAT, currentTime), "%[([^]]*)%]", "%%[%1%%]")
+		local oldTimeStamp = CHAT_TIMESTAMP_FORMAT and gsub(BetterDate(CHAT_TIMESTAMP_FORMAT, currentTime), "%[([^]]*)%]", "%%[%1%%]")
+		if oldTimeStamp then
+			text = gsub(text, oldTimeStamp, "")
+		end
 		local timeStamp = BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", currentTime)
-		text = gsub(text, oldTimeStamp, "")
 		text = timeStamp..text
 	end
 
