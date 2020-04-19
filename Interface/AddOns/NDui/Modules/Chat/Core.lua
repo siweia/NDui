@@ -206,14 +206,6 @@ function module:WhipserInvite()
 	B:RegisterEvent("CHAT_MSG_BN_WHISPER", module.OnChatWhisper)
 end
 
--- Timestamp
-function module:HideDefaultTimestamp()
-	if NDuiADB["TimestampFormat"] > 1 then
-		SetCVar("showTimestamps", "none")
-		B.HideOption(InterfaceOptionsSocialPanelTimestamps)
-	end
-end
-
 -- Sticky whisper
 function module:ChatWhisperSticky()
 	if NDuiDB["Chat"]["Sticky"] then
@@ -284,7 +276,6 @@ function module:OnLogin()
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Add Elements
-	self:HideDefaultTimestamp()
 	self:ChatWhisperSticky()
 	self:ChatFilter()
 	self:ChannelRename()
