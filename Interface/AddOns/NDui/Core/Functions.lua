@@ -148,7 +148,7 @@ end
 
 function B:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
-	tex:SetInside(self)
+	tex:SetInside()
 	tex:SetTexture(DB.bdTex)
 	if NDuiDB["Skins"]["FlatMode"] then
 		tex:SetVertexColor(.3, .3, .3, .25)
