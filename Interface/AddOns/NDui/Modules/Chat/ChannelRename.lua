@@ -7,10 +7,10 @@ local BetterDate, time = BetterDate, time
 local INTERFACE_ACTION_BLOCKED = INTERFACE_ACTION_BLOCKED
 
 local timestampFormat = {
-	[2] = "%I:%M %p ",
-	[3] = "%I:%M:%S %p ",
-	[4] = "%H:%M ",
-	[5] = "%H:%M:%S ",
+	[2] = "[%I:%M %p] ",
+	[3] = "[%I:%M:%S %p] ",
+	[4] = "[%H:%M] ",
+	[5] = "[%H:%M:%S] ",
 }
 function module:UpdateChannelNames(text, ...)
 	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
@@ -28,7 +28,10 @@ function module:UpdateChannelNames(text, ...)
 
 	-- Timestamp
 	if NDuiADB["TimestampFormat"] > 1 then
-		local timeStamp = BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", time())
+		local currentTime = time()
+		local oldTimeStamp = gsub(BetterDate(CHAT_TIMESTAMP_FORMAT, currentTime), "%[([^]]*)%]", "%%[%1%%]")
+		local timeStamp = BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", currentTime)
+		text = gsub(text, oldTimeStamp, "")
 		text = timeStamp..text
 	end
 
