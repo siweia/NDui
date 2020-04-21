@@ -6,6 +6,7 @@ local TIER = 8 -- BfA
 local INSTANCE -- 5人本
 
 INSTANCE = 1023 -- 围攻伯拉勒斯
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -29,6 +30,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 272834) -- 粘稠的口水
 module:RegisterDebuff(TIER, INSTANCE, 0, 272713) -- 碾压重击
 
 INSTANCE = 1022 -- 地渊孢林
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -51,6 +53,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 266107) -- 嗜血成性
 module:RegisterDebuff(TIER, INSTANCE, 0, 260455) -- 锯齿利牙
 
 INSTANCE = 1030 -- 塞塔里斯神庙
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -73,6 +76,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 266923) -- 充电
 module:RegisterDebuff(TIER, INSTANCE, 0, 268007) -- 心脏打击
 
 INSTANCE = 1002 -- 托尔达戈
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -100,6 +104,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 256044) -- 致命狙击
 module:RegisterDebuff(TIER, INSTANCE, 0, 256474) -- 竭心毒剂
 
 INSTANCE = 1012 -- 暴富矿区
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -125,6 +130,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 260838)
 module:RegisterDebuff(TIER, INSTANCE, 0, 263637) -- 晾衣绳
 
 INSTANCE = 1021 -- 维克雷斯庄园
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -155,6 +161,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 268202) -- 死亡棱镜
 module:RegisterDebuff(TIER, INSTANCE, 0, 268086) -- 恐怖光环
 
 INSTANCE = 1001 -- 自由镇
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -174,6 +181,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 281357, 1) -- 水鼠啤酒
 module:RegisterDebuff(TIER, INSTANCE, 0, 278467, 3) -- 腐蚀酒
 
 INSTANCE = 1041 -- 诸王之眠
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -204,6 +212,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 268796) -- 穿刺长矛
 module:RegisterDebuff(TIER, INSTANCE, 0, 270289) -- 净化光线
 
 INSTANCE = 968 -- 阿塔达萨
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -226,6 +235,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 256577) -- 灵魂盛宴
 module:RegisterDebuff(TIER, INSTANCE, 0, 255558) -- 污血
 
 INSTANCE = 1036 -- 风暴神殿
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
@@ -252,6 +262,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 267037) -- 力量的低语
 module:RegisterDebuff(TIER, INSTANCE, 0, 276286) -- 切割旋风
 
 INSTANCE = 1178 -- 麦卡贡
+module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
