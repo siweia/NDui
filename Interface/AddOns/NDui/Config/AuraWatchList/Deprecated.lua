@@ -210,8 +210,8 @@ C.DeprecatedAuras = {
 		{AuraID = 248812, UnitID = "player"},	-- 反冲
 		{AuraID = 248801, UnitID = "player"},	-- 碎片爆发
 		{AuraID = 241729, UnitID = "player"},	-- 复仇的灵魂
-		{AuraID = 235213, UnitID = "player", Text = L["AW Light"]},	-- 光明灌注
-		{AuraID = 235240, UnitID = "player", Text = L["AW Fel"]},	-- 邪能灌注
+		{AuraID = 235213, UnitID = "player"},	-- 光明灌注
+		{AuraID = 235240, UnitID = "player"},	-- 邪能灌注
 		-- 堕落的化身
 		{AuraID = 234059, UnitID = "player"},	-- 释放混沌
 		{AuraID = 236494, UnitID = "player"},	-- 风蚀
@@ -241,8 +241,8 @@ C.DeprecatedAuras = {
 		{AuraID = 244091, UnitID = "player"},	-- 烧焦
 		{AuraID = 248815, UnitID = "player"},	-- 点燃
 		{AuraID = 244768, UnitID = "player"},	-- 荒芜凝视
-		{AuraID = 244055, UnitID = "player", Text = L["Shadow Side"]},	-- 暗影触痕
-		{AuraID = 244054, UnitID = "player", Text = L["Fire Side"]},	-- 烈焰触痕
+		{AuraID = 244055, UnitID = "player"},	-- 暗影触痕
+		{AuraID = 244054, UnitID = "player"},	-- 烈焰触痕
 		-- 安托兰统帅议会
 		{AuraID = 253290, UnitID = "player"},	-- 熵能爆裂
 		{AuraID = 244737, UnitID = "player"},	-- 震荡手雷
