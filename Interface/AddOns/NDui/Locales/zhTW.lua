@@ -1,7 +1,7 @@
 local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "zhTW" then return end
-
+-- Credit: EK
 L["From"] = "來自"
 L["Tell"] = "告訴"
 L["Ghost"] = "靈魂"
@@ -354,7 +354,7 @@ L["Spent"] = "花費"
 L["Deficit"] = "虧損"
 L["Profit"] = "盈利"
 L["Session"] = "本次登錄:"
-L["Character"] = "伺服器角色:"
+L["RealmCharacter"] = "伺服器角色:"
 L["Hidden"] = "隱藏"
 L["Hold Shift"] = "按住<Shift>展開"
 L["Default UI Memory Usage:"] = "系統插件資源耗用:"

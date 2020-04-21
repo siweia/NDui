@@ -92,7 +92,7 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 
 	local totalGold = 0
-	GameTooltip:AddLine(L["Character"], .6,.8,1)
+	GameTooltip:AddLine(L["RealmCharacter"], .6,.8,1)
 	local thisRealmList = NDuiADB["totalGold"][myRealm]
 	for k, v in pairs(thisRealmList) do
 		local gold, class = unpack(v)
