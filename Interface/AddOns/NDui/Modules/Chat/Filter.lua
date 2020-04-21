@@ -9,9 +9,11 @@ local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGui
 local Ambiguate, UnitIsUnit, GetTime, SetCVar = Ambiguate, UnitIsUnit, GetTime, SetCVar
 local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
 local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
+local IsCorruptedItem = IsCorruptedItem
 
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
 local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
+local ITEM_MOD_CORRUPTION = ITEM_MOD_CORRUPTION
 
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
@@ -175,6 +177,10 @@ local function isItemHasGem(link)
 	return ""
 end
 
+local function isItemCorrupted(link)
+	return IsCorruptedItem(link) and ITEM_MOD_CORRUPTION or ""
+end
+
 local itemCache = {}
 local function convertItemLevel(link)
 	if itemCache[link] then return itemCache[link] end
@@ -183,7 +189,7 @@ local function convertItemLevel(link)
 	if itemLink then
 		local name, itemLevel = isItemHasLevel(itemLink)
 		if name and itemLevel then
-			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..isItemHasGem(itemLink)..")]|h")
+			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..isItemCorrupted(itemLink)..isItemHasGem(itemLink)..")]|h")
 			itemCache[link] = link
 		end
 	end
