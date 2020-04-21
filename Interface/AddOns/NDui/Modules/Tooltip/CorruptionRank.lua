@@ -186,7 +186,7 @@ function TT:Corruption_PlayerSummary()
 end
 
 local tip = _G.NDui_iLvlTooltip
-local cloakResString = "(%d+) "..ITEM_MOD_CORRUPTION_RESISTANCE
+local cloakResString = "(%d+)%s?"..ITEM_MOD_CORRUPTION_RESISTANCE
 
 local essenceTextureIDs = {
 	[2967101] = true,
