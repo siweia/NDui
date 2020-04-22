@@ -13,7 +13,6 @@ local IsCorruptedItem = IsCorruptedItem
 
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
 local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
-local ITEM_MOD_CORRUPTION = ITEM_MOD_CORRUPTION
 
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "%-", "%."}
@@ -178,7 +177,7 @@ local function isItemHasGem(link)
 end
 
 local function isItemCorrupted(link)
-	return IsCorruptedItem(link) and ITEM_MOD_CORRUPTION or ""
+	return IsCorruptedItem(link) and "|T3004126:0:0:0:0:64:64:5:59:5:59|t" or ""
 end
 
 local itemCache = {}
@@ -189,7 +188,7 @@ local function convertItemLevel(link)
 	if itemLink then
 		local name, itemLevel = isItemHasLevel(itemLink)
 		if name and itemLevel then
-			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..isItemCorrupted(itemLink)..isItemHasGem(itemLink)..")]|h")
+			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemCorrupted(itemLink)..isItemHasGem(itemLink))
 			itemCache[link] = link
 		end
 	end
