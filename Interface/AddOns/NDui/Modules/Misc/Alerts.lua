@@ -102,7 +102,7 @@ function M:RareAlert_Update(id)
 
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		if NDuiDB["Misc"]["AlertinChat"] then
-			local currrentTime = "|cff00ff00["..date("%H:%M:%S").."]|r"
+			local currrentTime = NDuiADB["TimestampFormat"] == 1 and "|cff00ff00["..date("%H:%M:%S").."]|r" or ""
 			print(currrentTime.." -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		end
 		if not NDuiDB["Misc"]["RareAlertInWild"] or instType == "none" then
