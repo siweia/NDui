@@ -13,7 +13,6 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 313959) -- 灼热气泡
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 314347) -- 毒扼
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 309733) -- 疯狂燃烧
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307053) -- 岩浆池
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 311362) -- 升温
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 313250) -- 蠕行疯狂
 
 BOSS = 2365 -- 玛乌特
