@@ -812,7 +812,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Oldname", L["Default Channel"]},
 		{1, "Chat", "Sticky", L["Chat Sticky"].."*", true, nil, updateChatSticky},
 		{1, "Chat", "Chatbar", L["ShowChatbar"]},
-		{1, "Chat", "WhisperColor", L["Differ WhipserColor"].."*", true},
+		{1, "Chat", "WhisperColor", L["Differ WhisperColor"].."*", true},
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
 		{1, "Chat", "Freedom", L["Language Filter"]},
 		{4, "ACCOUNT", "TimestampFormat", L["TimestampFormat"].."*", true, {DISABLE, "03:27 PM", "03:27:32 PM", "15:27", "15:27:32"}},
