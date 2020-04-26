@@ -14,8 +14,8 @@ StaticPopupDialogs["AURORA_CLASSIC_WARNING"] = {
 	hideOnEscape = false,
 	whileDead = 1,
 	OnAccept = function()
-		DisableAddOn("Aurora")
-		DisableAddOn("AuroraClassic")
+		DisableAddOn("Aurora", true)
+		DisableAddOn("AuroraClassic", true)
 		ReloadUI()
 	end,
 }
