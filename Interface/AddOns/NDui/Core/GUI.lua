@@ -1410,7 +1410,6 @@ local function createDataFrame()
 end
 
 local function OpenGUI()
-	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	if f then f:Show() return end
 
 	-- Main Frame
@@ -1535,6 +1534,7 @@ function G:OnLogin()
 	end)
 
 	gui:SetScript("OnClick", function()
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		OpenGUI()
 		HideUIPanel(GameMenuFrame)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
