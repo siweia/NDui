@@ -166,21 +166,47 @@ tinsert(C.defaultThemes, function()
 	QuestLogPopupDetailFrame.ShareButton:SetPoint("LEFT", QuestLogPopupDetailFrame.AbandonButton, "RIGHT", 1, 0)
 	QuestLogPopupDetailFrame.ShareButton:SetPoint("RIGHT", QuestLogPopupDetailFrame.TrackButton, "LEFT", -1, 0)
 
-	-- Sync button
+	-- Party Sync button
 
 	local sessionManagement = QuestMapFrame.QuestSessionManagement
 	sessionManagement.BG:Hide()
 	B.CreateBDFrame(sessionManagement, .25)
 
-	local names = {"StartDialog", "CheckStartDialog", "CheckStopDialog", "CheckLeavePartyDialog"}
-	for _, name in next, names do
-		local dialog = QuestSessionManager[name]
-		B.StripTextures(dialog)
-		B.SetBD(dialog)
-		B.Reskin(dialog.ButtonContainer.Confirm)
-		B.Reskin(dialog.ButtonContainer.Decline)
-		if dialog.MinimizeButton then
-			B.ReskinArrow(dialog.MinimizeButton, "down")
+	local function reskinSessionDialog(_, dialog)
+		if not dialog.styled then
+			B.StripTextures(dialog)
+			B.SetBD(dialog)
+			B.Reskin(dialog.ButtonContainer.Confirm)
+			B.Reskin(dialog.ButtonContainer.Decline)
+			if dialog.MinimizeButton then
+				B.ReskinArrow(dialog.MinimizeButton, "down")
+			end
+
+			dialog.styled = true
 		end
 	end
+	hooksecurefunc(QuestSessionManager, "NotifyDialogShow", reskinSessionDialog)
+
+	local executeSessionCommand = sessionManagement.ExecuteSessionCommand
+	B.Reskin(executeSessionCommand)
+
+	local icon = executeSessionCommand:CreateTexture(nil, "ARTWORK")
+	icon:SetInside()
+	executeSessionCommand.normalIcon = icon
+
+	local sessionCommandToButtonAtlas = {
+		[_G.Enum.QuestSessionCommand.Start] = "QuestSharing-DialogIcon",
+		[_G.Enum.QuestSessionCommand.Stop] = "QuestSharing-Stop-DialogIcon"
+	}
+
+	hooksecurefunc(QuestMapFrame.QuestSessionManagement, "UpdateExecuteCommandAtlases", function(self, command)
+		self.ExecuteSessionCommand:SetNormalTexture("")
+		self.ExecuteSessionCommand:SetPushedTexture("")
+		self.ExecuteSessionCommand:SetDisabledTexture("")
+
+		local atlas = sessionCommandToButtonAtlas[command]
+		if atlas then
+			self.ExecuteSessionCommand.normalIcon:SetAtlas(atlas)
+		end
+	end)
 end)
