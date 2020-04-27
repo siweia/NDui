@@ -24,6 +24,7 @@
 	<Script file="elements\power.lua"/>
 	<Script file="elements\pvpclassificationindicator.lua"/>
 	<Script file="elements\questindicator.lua"/>
+	<Script file="elements\questsyncindicator.lua"/>
 	<Script file="elements\raidroleindicator.lua"/>
 	<Script file="elements\raidtargetindicator.lua"/>
 	<Script file="elements\range.lua"/>

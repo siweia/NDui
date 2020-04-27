@@ -7,7 +7,7 @@ local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate or 10
 local UnitAlternatePowerTextureInfo = UnitAlternatePowerTextureInfo
 local UnitIsDeadOrGhost, UnitIsConnected, UnitHasVehicleUI, UnitIsTapDenied, UnitIsPlayer = UnitIsDeadOrGhost, UnitIsConnected, UnitHasVehicleUI, UnitIsTapDenied, UnitIsPlayer
 local UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger = UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger
-local UnitClass, UnitReaction, UnitLevel, UnitClassification = UnitClass, UnitReaction, UnitLevel, UnitClassification
+local UnitClass, UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel = UnitClass, UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel
 local UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost = UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
 local GetNumArenaOpponentSpecs, GetCreatureDifficultyColor = GetNumArenaOpponentSpecs, GetCreatureDifficultyColor
@@ -106,30 +106,34 @@ oUF.Tags.Events["DDG"] = "UNIT_HEALTH UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_N
 
 -- Level tags
 oUF.Tags.Methods["fulllevel"] = function(unit)
-	local level = UnitLevel(unit)
+	if not UnitIsConnected(unit) then
+		return "??"
+	end
+
+	local realLevel = UnitLevel(unit)
+	local level = UnitEffectiveLevel(unit)
 	if UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) then
 		level = UnitBattlePetLevel(unit)
 	end
 
 	local color = B.HexRGB(GetCreatureDifficultyColor(level))
+	local str
 	if level > 0 then
-		level = color..level.."|r"
+		local realTag = level ~= realLevel and "*" or ""
+		str = color..level..realTag.."|r"
 	else
-		level = "|cffff0000??|r"
+		str = "|cffff0000??|r"
 	end
-	local str = level
 
 	local class = UnitClassification(unit)
-	if not UnitIsConnected(unit) then
-		str = "??"
-	elseif class == "worldboss" then
+	if class == "worldboss" then
 		str = "|cffff0000Boss|r"
 	elseif class == "rareelite" then
-		str = level.."|cff0080ffR|r+"
+		str = str.."|cff0080ffR|r+"
 	elseif class == "elite" then
-		str = level.."+"
+		str = str.."+"
 	elseif class == "rare" then
-		str = level.."|cff0080ffR|r"
+		str = str.."|cff0080ffR|r"
 	end
 
 	return str

@@ -344,6 +344,11 @@ function UF:CreateIcons(self)
 		rest:SetTexCoord(.445, .55, .648, .905)
 		rest:SetVertexColor(.6, .8, 1)
 		self.RestingIndicator = rest
+
+		local sync = self:CreateTexture(nil, "OVERLAY")
+		sync:SetPoint("CENTER", self, "BOTTOMLEFT", 16, 0)
+		sync:SetSize(28, 28)
+		self.QuestSyncIndicator = sync
 	elseif mystyle == "target" then
 		local quest = self:CreateTexture(nil, "OVERLAY")
 		quest:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 8)
