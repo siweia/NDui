@@ -220,24 +220,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	hooksecurefunc("PaperDollFrame_SetLevel", function()
-		local primaryTalentTree = GetSpecialization()
-		local classDisplayName, class = UnitClass("player")
-		local classColor = DB.ClassColors[class]
-		local classColorString = classColor.colorStr
-		local specName, _
-
-		if primaryTalentTree then
-			_, specName = GetSpecializationInfo(primaryTalentTree, nil, nil, nil, UnitSex("player"))
-		end
-
-		if specName and specName ~= "" then
-			CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), classColorString, specName, classDisplayName)
-		else
-			CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), classColorString, classDisplayName)
-		end
-	end)
-
 	PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
 	PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
 	GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
