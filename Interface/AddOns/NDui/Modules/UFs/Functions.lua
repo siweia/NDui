@@ -461,13 +461,13 @@ function UF:CreateCastBar(self)
 			self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
 		end
 	elseif mystyle == "nameplate" then
-		name:SetPoint("LEFT", cb, 0, -5)
-		timer:SetPoint("RIGHT", cb, 0, -5)
+		name:SetPoint("TOPLEFT", cb, "LEFT", 0, -1)
+		timer:SetPoint("TOPRIGHT", cb, "RIGHT", 0, -1)
 
 		local shield = cb:CreateTexture(nil, "OVERLAY")
 		shield:SetAtlas("nameplates-InterruptShield")
 		shield:SetSize(18, 18)
-		shield:SetPoint("CENTER", 0, -5)
+		shield:SetPoint("TOP", cb, "CENTER", 0, -1)
 		cb.Shield = shield
 
 		local iconSize = self:GetHeight()*2 + 5
