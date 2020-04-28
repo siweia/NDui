@@ -1188,6 +1188,7 @@ function UF:CreateQuestSync(self)
 	sync:SetPoint("CENTER", self, "BOTTOMLEFT", 16, 0)
 	sync:SetSize(28, 28)
 	sync:SetAtlas("QuestSharing-DialogIcon")
+	sync:Hide()
 
 	self.QuestSyncIndicator = sync
 	self:RegisterEvent("QUEST_SESSION_LEFT", updatePartySync, true)
