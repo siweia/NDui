@@ -344,11 +344,6 @@ function UF:CreateIcons(self)
 		rest:SetTexCoord(.445, .55, .648, .905)
 		rest:SetVertexColor(.6, .8, 1)
 		self.RestingIndicator = rest
-
-		local sync = self:CreateTexture(nil, "OVERLAY")
-		sync:SetPoint("CENTER", self, "BOTTOMLEFT", 16, 0)
-		sync:SetSize(28, 28)
-		self.QuestSyncIndicator = sync
 	elseif mystyle == "target" then
 		local quest = self:CreateTexture(nil, "OVERLAY")
 		quest:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 8)
@@ -1177,4 +1172,25 @@ function UF:CreatePVPClassify(self)
 	bu:SetPoint("LEFT", self, "RIGHT", 5, -2)
 
 	self.PvPClassificationIndicator = bu
+end
+
+local function updatePartySync(self)
+	local hasJoined = C_QuestSession.HasJoined()
+	if(hasJoined) then
+		self.QuestSyncIndicator:Show()
+	else
+		self.QuestSyncIndicator:Hide()
+	end
+end
+
+function UF:CreateQuestSync(self)
+	local sync = self:CreateTexture(nil, "OVERLAY")
+	sync:SetPoint("CENTER", self, "BOTTOMLEFT", 16, 0)
+	sync:SetSize(28, 28)
+	sync:SetAtlas("QuestSharing-DialogIcon")
+
+	self.QuestSyncIndicator = sync
+	self:RegisterEvent("QUEST_SESSION_LEFT", updatePartySync, true)
+	self:RegisterEvent("QUEST_SESSION_JOINED", updatePartySync, true)
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", updatePartySync, true)
 end

@@ -28,6 +28,7 @@ local function CreatePlayerStyle(self)
 	UF:CreatePrediction(self)
 	UF:CreateFCT(self)
 	UF:CreateAddPower(self)
+	UF:CreateQuestSync(self)
 
 	if NDuiDB["UFs"]["Castbars"] then
 		UF:ReskinMirrorBars()
