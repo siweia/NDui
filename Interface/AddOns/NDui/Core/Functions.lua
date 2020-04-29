@@ -309,7 +309,6 @@ function B:CreateSB(spark, r, g, b)
 	end
 end
 
-
 -- Reskin ui widgets
 local function Button_OnEnter(self)
 	if not self:IsEnabled() then return end
