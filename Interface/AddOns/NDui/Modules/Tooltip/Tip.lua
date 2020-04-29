@@ -384,22 +384,47 @@ function TT:ReskinTooltip()
 			end
 		end
 	end
-
-	if self.NumLines and self:NumLines() > 0 then
-		for index = 1, self:NumLines() do
-			if index == 1 then
-				_G[self:GetName().."TextLeft"..index]:SetFont(DB.TipFont[1], DB.TipFont[2] + 2, DB.TipFont[3])
-			else
-				_G[self:GetName().."TextLeft"..index]:SetFont(unpack(DB.TipFont))
-			end
-			_G[self:GetName().."TextRight"..index]:SetFont(unpack(DB.TipFont))
-		end
-	end
 end
 
 function TT:GameTooltip_SetBackdropStyle()
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
+end
+
+local function TooltipSetFont(font, size)
+	font:SetFont(DB.Font[1], size, DB.Font[3])
+	font:SetShadowColor(0, 0, 0, 0)
+end
+
+function TT:SetTooltipFonts()
+	local textSize = DB.Font[2] + 2
+	local headerSize = DB.Font[2] + 4
+
+	TooltipSetFont(GameTooltipHeaderText, headerSize)
+	TooltipSetFont(GameTooltipText, textSize)
+	TooltipSetFont(GameTooltipTextSmall, textSize)
+	if GameTooltip.hasMoney then
+		for i = 1, GameTooltip.numMoneyFrames do
+			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."PrefixText"], textSize)
+			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."SuffixText"], textSize)
+			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."GoldButtonText"], textSize)
+			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."SilverButtonText"], textSize)
+			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."CopperButtonText"], textSize)
+		end
+	end
+
+	-- Ignore header font size on DatatextTooltip
+	if DatatextTooltip then
+		TooltipSetFont(DatatextTooltipTextLeft1, textSize)
+		TooltipSetFont(DatatextTooltipTextRight1, textSize)
+	end
+
+	for i = 1, 2 do
+		for j = 1, 4 do
+			TooltipSetFont(_G["ShoppingTooltip"..i.."TextLeft"..j], textSize)
+			TooltipSetFont(_G["ShoppingTooltip"..i.."TextRight"..j], textSize)
+		end
+	end
 end
 
 function TT:OnLogin()
@@ -414,6 +439,7 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
 
 	-- Elements
+	self:SetTooltipFonts()
 	self:ReskinTooltipIcons()
 	self:SetupTooltipID()
 	self:TargetedInfo()
