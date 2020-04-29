@@ -310,7 +310,7 @@ local defaultSettings = {
 		RMRune = false,
 		DBMCount = "10",
 		EasyMarking = true,
-		BlockWQT = true,
+		BlockInvite = false,
 	},
 	Tutorial = {
 		Complete = false,
@@ -907,7 +907,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", nil, nil, updateFasterLoot},
 		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
-		{1, "Misc", "BlockWQT", L["BlockWQT"], true},
+		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", true},
 	},
 	[13] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

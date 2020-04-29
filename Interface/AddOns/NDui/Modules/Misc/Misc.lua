@@ -56,7 +56,7 @@ function M:OnLogin()
 	self:TradeTabs()
 	self:MoverQuestTracker()
 	self:CreateRM()
-	self:BlockWQTInvite()
+	self:BlockStrangerInvite()
 	self:OverrideAWQ()
 
 	-- Max camera distancee
@@ -653,46 +653,13 @@ do
 	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
 end
 
--- Button to block auto invite addons
-function M:BlockWQTInvite()
-	if not NDuiDB["Misc"]["BlockWQT"] then return end
-
-	local frame = CreateFrame("Frame", nil, StaticPopup1)
-	frame:SetPoint("TOP", StaticPopup1, "BOTTOM", 0, -3)
-	frame:SetSize(200, 31)
-	B.CreateBD(frame)
-	B.CreateTex(frame)
-	B.CreateSD(frame)
-	frame:Hide()
-
-	local WQTUsers = {}
-	local currentName
-
-	local bu = CreateFrame("Button", nil, frame)
-	bu:SetInside(frame, 5, 5)
-	B.CreateFS(bu, 15, L["DeclineNBlock"], "system")
-	bu.title = L["Tips"]
-	B.AddTooltip(bu, "ANCHOR_TOP", L["DeclineNBlockTips"], "info")
-	B.Reskin(bu)
-	bu:SetScript("OnClick", function()
-		if currentName then
-			WQTUsers[currentName] = true
-		end
-		StaticPopup_Hide("PARTY_INVITE")
-	end)
-
-	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, name)
-		if WQTUsers[name] then
+-- Block invite from strangers
+function M:BlockStrangerInvite()
+	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, _, _, _, _, _, _, guid)
+		if NDuiDB["Misc"]["BlockInvite"] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
+			DeclineGroup()
 			StaticPopup_Hide("PARTY_INVITE")
-			return
 		end
-		frame:Show()
-		currentName = name
-	end)
-
-	hooksecurefunc("StaticPopup_OnHide", function()
-		frame:Hide()
-		currentName = nil
 	end)
 end
 
