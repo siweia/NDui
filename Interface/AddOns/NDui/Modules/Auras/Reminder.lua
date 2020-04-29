@@ -16,8 +16,14 @@ function A:Reminder_Update(cfg)
 	local combat = cfg.combat
 	local instance = cfg.instance
 	local pvp = cfg.pvp
+	local cooldown = cfg.cooldown
 	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true
 	local inInst, instType = IsInInstance()
+
+	if cooldown and GetItemCooldown(cooldown) > 0 then -- check rune cooldown
+		frame:Hide()
+		return
+	end
 
 	if depend and not IsPlayerSpell(depend) then isPlayerSpell = false end
 	if spec and spec ~= GetSpecialization() then isRightSpec = false end
@@ -45,10 +51,14 @@ function A:Reminder_Create(cfg)
 	frame:SetSize(iconSize, iconSize)
 	B.PixelIcon(frame)
 	B.CreateSD(frame)
-	for spell in pairs(cfg.spells) do
-		frame.Icon:SetTexture(GetSpellTexture(spell))
-		break
+	local texture = cfg.texture
+	if not texture then
+		for spellID in pairs(cfg.spells) do
+			texture = GetSpellTexture(spellID)
+			break
+		end
 	end
+	frame.Icon:SetTexture(texture)
 	frame.text = B.CreateFS(frame, 14, L["Lack"], false, "TOP", 1, 15)
 	frame:Hide()
 	cfg.frame = frame
@@ -76,7 +86,22 @@ function A:Reminder_OnEvent()
 	A:Reminder_UpdateAnchor()
 end
 
+function A:Reminder_AddRune()
+	if GetItemCount(174906) == 0 then return end
+	if not groups then groups = {} end
+	tinsert(groups, {
+		spells = {
+			[317065] = true,
+			[270058] = true,
+		},
+		texture = 839983,
+		cooldown = 174906,
+		instance = true,
+	})
+end
+
 function A:InitReminder()
+	A:Reminder_AddRune()
 	if not groups then return end
 
 	if NDuiDB["Auras"]["Reminder"] then
