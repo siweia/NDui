@@ -984,6 +984,15 @@ do
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 	end
 
+	function B:ReskinFilterButton()
+		B.StripTextures(self)
+		B.Reskin(self)
+		self.Text:SetPoint("CENTER")
+		self.Icon:SetTexture(DB.arrowRight)
+		self.Icon:SetPoint("RIGHT", self, "RIGHT", -5, 0)
+		self.Icon:SetSize(8, 8)
+	end
+
 	function B:ReskinNavBar()
 		if self.navBarStyled then return end
 
