@@ -2,12 +2,14 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
+local pairs, tinsert, next = pairs, table.insert, next
+local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown
+local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
+local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
+
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = C.Auras.IconSize + 4
 local frames, parentFrame = {}
-local GetSpecialization, InCombatLockdown, GetZonePVPInfo, UnitInVehicle = GetSpecialization, InCombatLockdown, GetZonePVPInfo, UnitInVehicle
-local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
-local pairs, tinsert, next = pairs, table.insert, next
 
 function A:Reminder_Update(cfg)
 	local frame = cfg.frame
@@ -33,7 +35,7 @@ function A:Reminder_Update(cfg)
 	if not combat and not instance and not pvp then isInCombat, isInInst, isInPVP = true, true, true end
 
 	frame:Hide()
-	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle("player") then
+	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle("player") and not UnitIsDeadOrGhost("player") then
 		for i = 1, 32 do
 			local name, _, _, _, _, _, _, _, _, spellID = UnitBuff("player", i)
 			if not name then break end
