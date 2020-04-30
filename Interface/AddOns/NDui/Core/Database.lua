@@ -44,7 +44,6 @@ DB.QualityColors[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
 
 -- Fonts
 DB.Font = {STANDARD_TEXT_FONT, 12, "OUTLINE"}
-DB.TipFont = {GameTooltipText:GetFont(), 14, "OUTLINE"}
 DB.LineString = DB.GreyColor.."---------------"
 
 -- Textures

@@ -396,13 +396,14 @@ local function TooltipSetFont(font, size)
 	font:SetShadowColor(0, 0, 0, 0)
 end
 
-function TT:SetTooltipFonts()
+function TT:SetupTooltipFonts()
 	local textSize = DB.Font[2] + 2
 	local headerSize = DB.Font[2] + 4
 
 	TooltipSetFont(GameTooltipHeaderText, headerSize)
 	TooltipSetFont(GameTooltipText, textSize)
 	TooltipSetFont(GameTooltipTextSmall, textSize)
+
 	if GameTooltip.hasMoney then
 		for i = 1, GameTooltip.numMoneyFrames do
 			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."PrefixText"], textSize)
@@ -413,16 +414,12 @@ function TT:SetTooltipFonts()
 		end
 	end
 
-	-- Ignore header font size on DatatextTooltip
-	if DatatextTooltip then
-		TooltipSetFont(DatatextTooltipTextLeft1, textSize)
-		TooltipSetFont(DatatextTooltipTextRight1, textSize)
-	end
-
-	for i = 1, 2 do
-		for j = 1, 4 do
-			TooltipSetFont(_G["ShoppingTooltip"..i.."TextLeft"..j], textSize)
-			TooltipSetFont(_G["ShoppingTooltip"..i.."TextRight"..j], textSize)
+	for _, tt in ipairs(GameTooltip.shoppingTooltips) do
+		for i = 1, tt:GetNumRegions() do
+			local region = select(i, tt:GetRegions())
+			if region:IsObjectType("FontString") then
+				TooltipSetFont(region, textSize)
+			end
 		end
 	end
 end
@@ -439,7 +436,7 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
 
 	-- Elements
-	self:SetTooltipFonts()
+	self:SetupTooltipFonts()
 	self:ReskinTooltipIcons()
 	self:SetupTooltipID()
 	self:TargetedInfo()
