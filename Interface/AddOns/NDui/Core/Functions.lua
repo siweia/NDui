@@ -197,7 +197,7 @@ do
 					tip.essences[step][1] = selected		--essence texture if selected or nil
 					tip.essences[step][2] = tex:GetAtlas()	--atlas place 'tooltip-heartofazerothessence-major' or 'tooltip-heartofazerothessence-minor'
 					tip.essences[step][3] = texture			--border texture placed by the atlas
-	
+
 					step = step + 1
 					if selected then tip.gems[i-1] = nil end
 				else
@@ -627,7 +627,7 @@ do
 		self:SetTexCoord(unpack(DB.TexCoord))
 		return B.CreateBDFrame(self, nil, shadow)
 	end
-	
+
 	function B:PixelIcon(texture, highlight)
 		B.CreateBD(self)
 		self.Icon = self:CreateTexture(nil, "ARTWORK")
@@ -648,7 +648,7 @@ do
 			self.HL:SetInside()
 		end
 	end
-	
+
 	function B:AuraIcon(highlight)
 		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
 		self.CD:SetAllPoints()
@@ -656,17 +656,17 @@ do
 		B.PixelIcon(self, nil, highlight)
 		B.CreateSD(self)
 	end
-	
+
 	function B:CreateGear(name)
 		local bu = CreateFrame("Button", name, self)
-		bu:SetSize(22, 22)
+		bu:SetSize(24, 24)
 		bu.Icon = bu:CreateTexture(nil, "ARTWORK")
 		bu.Icon:SetAllPoints()
 		bu.Icon:SetTexture(DB.gearTex)
 		bu.Icon:SetTexCoord(0, .5, 0, .5)
 		bu:SetHighlightTexture(DB.gearTex)
 		bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-	
+
 		return bu
 	end
 
@@ -678,10 +678,10 @@ do
 		else
 			self:SetStatusBarColor(cr, cg, cb)
 		end
-	
+
 		local bg = B.SetBD(self)
 		self.Shadow = bg.Shadow
-	
+
 		if spark then
 			self.Spark = self:CreateTexture(nil, "OVERLAY")
 			self.Spark:SetTexture(DB.sparkTex)
@@ -695,7 +695,7 @@ do
 	-- Handle button
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
-	
+
 		if NDuiDB["Skins"]["FlatMode"] then
 			self.bgTex:SetVertexColor(cr / 4, cg / 4, cb / 4)
 		else
