@@ -5,6 +5,7 @@ local TT = B:GetModule("Tooltip")
 local select, strmatch, gmatch, format, next, wipe, max = select, strmatch, gmatch, format, next, wipe, max
 local IsCorruptedItem, GetSpellInfo = IsCorruptedItem, GetSpellInfo
 local GetInventoryItemLink, UnitGUID = GetInventoryItemLink, UnitGUID
+local IsShiftKeyDown = IsShiftKeyDown
 local ITEM_MOD_CORRUPTION = ITEM_MOD_CORRUPTION
 local CORRUPTION_TOOLTIP_TITLE = CORRUPTION_TOOLTIP_TITLE
 local CORRUPTION_DESCRIPTION = CORRUPTION_DESCRIPTION
@@ -119,8 +120,11 @@ function TT:Corruption_Convert(name, icon, level)
 		local line = _G[self:GetName().."TextLeft"..i]
 		local text = line:GetText()
 		if text and strmatch(text, ITEM_MOD_CORRUPTION) then
-			--line:SetText(text.." - "..getIconString(icon)..name.." "..level)
-			line:SetText("+"..getIconString(icon)..name.." "..level)
+			if IsShiftKeyDown() then
+				line:SetText(text.." - "..getIconString(icon)..name.." "..level)
+			else
+				line:SetText("+"..getIconString(icon)..name.." "..level)
+			end
 			return
 		end
 	end
