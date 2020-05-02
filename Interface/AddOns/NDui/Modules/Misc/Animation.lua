@@ -9,7 +9,7 @@ local needAnimation
 
 function M:Logo_PlayAnimation()
 	if needAnimation then
-		frame:Show()
+		M.logoFrame:Show()
 		needAnimation = false
 	end
 end
