@@ -31,6 +31,7 @@ local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend
 	Miscellaneous 各种有用没用的小玩意儿
 ]]
 function M:OnLogin()
+	self:LoginAnimation()
 	self:AddAlerts()
 	self:Expbar()
 	self:Focuser()

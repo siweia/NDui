@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Misc.lua"/>
+	<Script file="Animation.lua"/>
 	<Script file="Alerts.lua"/>
 	<Script file="ItemLevel.lua"/>
 	<Script file="ExpRep.lua"/>
