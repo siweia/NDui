@@ -39,7 +39,7 @@ function M:Logo_Create()
 	local delayTime = 3
 	local timer1 = .5
 	local timer2 = 2.5
-	local timer3 = .3
+	local timer3 = .2
 
 	local anim = frame:CreateAnimationGroup()
 
@@ -65,7 +65,7 @@ function M:Logo_Create()
 	delayTime = delayTime + timer2
 
 	anim.move3 = anim:CreateAnimation("Translation")
-	anim.move3:SetOffset(-60, 0)
+	anim.move3:SetOffset(-40, 0)
 	anim.move3:SetDuration(timer3)
 	anim.move3:SetStartDelay(delayTime)
 
