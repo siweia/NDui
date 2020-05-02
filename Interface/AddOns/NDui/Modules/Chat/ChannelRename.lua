@@ -23,7 +23,7 @@ function module:UpdateChannelNames(text, ...)
 	-- Dev logo
 	local unitName = strmatch(text, "|Hplayer:([^|:]+)")
 	if unitName and DB.Devs[unitName] then
-		text = gsub(text, "(|Hplayer.+)", "|T"..DB.chatLogo..":14:28|t%1")
+		text = gsub(text, "(|Hplayer.+)", "|T"..DB.chatLogo..":12:24|t%1")
 	end
 
 	-- Timestamp
