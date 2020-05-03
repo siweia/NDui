@@ -15,7 +15,7 @@
 - Ingame config panel.
 - Auras watcher for all classes with low usage.
 - oUF frameworks, include **PartyFrames**, **RaidFrames** and **Nameplates**.
-  - PartyFrame: simple spells cooldown watcher a nd buff indicator for group members.
+  - PartyFrame: simple spells cooldown watcher and buff indicator for group members.
   - RaidFrame: two mode for differ needs, configurable click cast and raid debuffs.
   - Nameplate: highlight special units, target and mouseover highlight, dispellable auras highlight, tank treat color, auras filter.
 - Chat spam filter, whisper invite.
