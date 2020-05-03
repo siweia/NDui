@@ -10,6 +10,7 @@ local needAnimation
 function M:Logo_PlayAnimation()
 	if needAnimation then
 		M.logoFrame:Show()
+		B:UnregisterEvent("LOADING_SCREEN_DISABLED", M.Logo_PlayAnimation)
 		needAnimation = false
 	end
 end
@@ -19,9 +20,9 @@ function M:Logo_CheckStatus(isInitialLogin)
 		needAnimation = true
 		M:Logo_Create()
 	else
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", M.Logo_CheckStatus)
 		B:UnregisterEvent("LOADING_SCREEN_DISABLED", M.Logo_PlayAnimation)
 	end
+	B:UnregisterEvent("PLAYER_ENTERING_WORLD", M.Logo_CheckStatus)
 end
 
 function M:Logo_Create()
