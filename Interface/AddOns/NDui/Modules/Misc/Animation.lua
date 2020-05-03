@@ -27,8 +27,8 @@ end
 
 function M:Logo_Create()
 	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:SetSize(200, 100)
-	frame:SetPoint("CENTER", -500, 350)
+	frame:SetSize(300, 150)
+	frame:SetPoint("BOTTOM", -500, GetScreenHeight()*.618)
 	frame:SetFrameStrata("HIGH")
 	frame:SetAlpha(0)
 	frame:Hide()
@@ -106,5 +106,6 @@ function M:LoginAnimation()
 			M:Logo_Create()
 		end
 		M.logoFrame:Show()
+		if DB.isDeveloper then print("Play logo") end
 	end
 end
