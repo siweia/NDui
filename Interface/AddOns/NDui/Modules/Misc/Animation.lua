@@ -27,7 +27,7 @@ end
 function M:Logo_Create()
 	local frame = CreateFrame("Frame", nil, UIParent)
 	frame:SetSize(300, 150)
-	frame:SetPoint("BOTTOM", -500, GetScreenHeight()*.618)
+	frame:SetPoint("CENTER", UIParent, "BOTTOM", -500, GetScreenHeight()*.618)
 	frame:SetFrameStrata("HIGH")
 	frame:SetAlpha(0)
 	frame:Hide()
