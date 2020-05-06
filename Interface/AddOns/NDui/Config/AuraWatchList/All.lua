@@ -309,6 +309,7 @@ local list = {
 		{AuraID = 292267, UnitID = "player"},	-- 超荷电磁炮
 		{AuraID = 305699, UnitID = "player"},	-- 锁定
 		{AuraID = 302274, UnitID = "player"},	-- 爆裂冲击
+		{AuraID = 298669, UnitID = "player"},	-- 跳电
 		{AuraID = 259533, UnitID = "player", Flash = true},	-- 艾泽里特催化剂，暴富
 	-- 尼奥罗萨
 		-- 黑龙帝王拉希奥
