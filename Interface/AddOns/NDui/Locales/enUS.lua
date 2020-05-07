@@ -635,3 +635,4 @@ L["ShowAllTip"] = "|nIf unchecked, you can only see the aura you cast.|n|nIf che
 L["AllowFriendsSpam"] = "Allow Friends' Spam"
 L["AllowFriendsSpamTip"] = "|nAllow spam messages from party members, frineds and guild members, if checked."
 L["TimestampFormat"] = "Timestamp Format"
+L["GlobalFontScale"] = "Font Scale"
