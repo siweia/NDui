@@ -106,6 +106,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 313227) -- 腐坏伤口
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 310019, 6) -- 充能锁链
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 310022, 6) -- 充能锁链
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 315252) -- 恐怖炼狱
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 316065) -- 腐化存续
 
 BOSS = 2366 -- 恩佐斯的外壳
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 307832) -- 恩佐斯的仆从

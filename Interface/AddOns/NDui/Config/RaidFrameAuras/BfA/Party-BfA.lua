@@ -280,3 +280,4 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 285443) -- 烈焰火炮
 module:RegisterDebuff(TIER, INSTANCE, 0, 301712) -- 突袭
 module:RegisterDebuff(TIER, INSTANCE, 0, 302274) -- 爆裂冲击
 module:RegisterDebuff(TIER, INSTANCE, 0, 298669) -- 跳电
+module:RegisterDebuff(TIER, INSTANCE, 0, 294929) -- 烈焰撕咬

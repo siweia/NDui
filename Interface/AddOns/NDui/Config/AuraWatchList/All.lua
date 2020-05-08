@@ -310,6 +310,7 @@ local list = {
 		{AuraID = 305699, UnitID = "player"},	-- 锁定
 		{AuraID = 302274, UnitID = "player"},	-- 爆裂冲击
 		{AuraID = 298669, UnitID = "player"},	-- 跳电
+		{AuraID = 294929, UnitID = "player"},	-- 烈焰撕咬
 		{AuraID = 259533, UnitID = "player", Flash = true},	-- 艾泽里特催化剂，暴富
 	-- 尼奥罗萨
 		-- 黑龙帝王拉希奥
@@ -379,6 +380,7 @@ local list = {
 		{AuraID = 310019, UnitID = "player"},	-- 充能锁链
 		{AuraID = 310022, UnitID = "player"},	-- 充能锁链
 		{AuraID = 315252, UnitID = "player"},	-- 恐怖炼狱
+		{AuraID = 316065, UnitID = "player"},	-- 腐化存续
 		-- 恩佐斯的外壳
 		{AuraID = 307832, UnitID = "player"},	-- 恩佐斯的仆从
 		{AuraID = 313334, UnitID = "player"},	-- 恩佐斯之赐
