@@ -9,7 +9,7 @@ tinsert(C.defaultThemes, function()
 		local oldSize = select(2, font:GetFont())
 		size = size or oldSize
 		local fontSize = floor(size*NDuiDB["Skins"]["FontScale"] + .5) -- round number
-		font:SetFont(DB.Font[1], size, DB.Font[3])
+		font:SetFont(DB.Font[1], fontSize, DB.Font[3])
 		font:SetShadowColor(0, 0, 0, 0)
 	end
 
