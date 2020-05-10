@@ -20,9 +20,10 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
+	local doubleBarType = _G.Enum.UIWidgetVisualizationType.DoubleStatusBar
 	local function reskinWidgetFrames()
 		for _, widgetFrame in pairs(_G.UIWidgetTopCenterContainerFrame.widgetFrames) do
-			if widgetFrame.widgetType == _G.Enum.UIWidgetVisualizationType.DoubleStatusBar then
+			if widgetFrame.widgetType == doubleBarType then
 				for _, bar in pairs({widgetFrame.LeftBar, widgetFrame.RightBar}) do
 					if not bar.styled then
 						bar.BG:SetAlpha(0)
@@ -33,10 +34,10 @@ tinsert(C.defaultThemes, function()
 						bar.SparkGlow:SetAlpha(0)
 						bar.BorderGlow:SetAlpha(0)
 						B.SetBD(bar)
+						hooksecurefunc(bar, "SetStatusBarAtlas", updateBarTexture)
 
 						bar.styled = true
 					end
-					hooksecurefunc(bar, "SetStatusBarAtlas", updateBarTexture)
 				end
 			end
 		end
