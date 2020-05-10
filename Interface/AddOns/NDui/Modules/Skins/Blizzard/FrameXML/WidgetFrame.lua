@@ -5,6 +5,46 @@ tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
 	-- Credit: ShestakUI
+	local atlasColors = {
+		["UI-Frame-Bar-Fill-Blue"] = {.2, .6, 1},
+		["UI-Frame-Bar-Fill-Red"] = {.9, .2, .2},
+		["UI-Frame-Bar-Fill-Yellow"] = {1, .6, 0},
+		["objectivewidget-bar-fill-left"] = {.2, .6, 1},
+		["objectivewidget-bar-fill-right"] = {.9, .2, .2}
+	}
+
+	local function updateBarTexture(self, atlas)
+		if atlasColors[atlas] then
+			self:SetStatusBarTexture(DB.normTex)
+			self:SetStatusBarColor(unpack(atlasColors[atlas]))
+		end
+	end
+
+	local function reskinWidgetFrames()
+		for _, widgetFrame in pairs(_G.UIWidgetTopCenterContainerFrame.widgetFrames) do
+			if widgetFrame.widgetType == _G.Enum.UIWidgetVisualizationType.DoubleStatusBar then
+				for _, bar in pairs({widgetFrame.LeftBar, widgetFrame.RightBar}) do
+					if not bar.styled then
+						bar.BG:SetAlpha(0)
+						bar.BorderLeft:SetAlpha(0)
+						bar.BorderRight:SetAlpha(0)
+						bar.BorderCenter:SetAlpha(0)
+						bar.Spark:SetAlpha(0)
+						bar.SparkGlow:SetAlpha(0)
+						bar.BorderGlow:SetAlpha(0)
+						B.SetBD(bar)
+
+						bar.styled = true
+					end
+					hooksecurefunc(bar, "SetStatusBarAtlas", updateBarTexture)
+				end
+			end
+		end
+	end
+
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", reskinWidgetFrames)
+	B:RegisterEvent("UPDATE_ALL_UI_WIDGETS", reskinWidgetFrames)
+
 	hooksecurefunc(_G.UIWidgetTemplateCaptureBarMixin, "Setup", function(widgetInfo)
 		widgetInfo.LeftLine:SetAlpha(0)
 		widgetInfo.RightLine:SetAlpha(0)
@@ -28,26 +68,26 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	local function reskinWidgetFrames()
-		for _, widgetFrame in pairs(_G.UIWidgetTopCenterContainerFrame.widgetFrames) do
-			if widgetFrame.widgetType == _G.Enum.UIWidgetVisualizationType.DoubleStatusBar then
-				for _, bar in pairs({widgetFrame.LeftBar, widgetFrame.RightBar}) do
-					if not bar.styled then
-						bar.BG:SetAlpha(0)
-						bar.BorderLeft:SetAlpha(0)
-						bar.BorderRight:SetAlpha(0)
-						bar.BorderCenter:SetAlpha(0)
-						bar.Spark:SetAlpha(0)
-						bar.SparkGlow:SetAlpha(0)
-						bar.BorderGlow:SetAlpha(0)
-						B.SetBD(bar)
+	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(widgetInfo)
+		local bar = widgetInfo.Bar
+		local atlas = bar:GetStatusBarAtlas()
+		updateBarTexture(bar, atlas)
 
-						bar.styled = true
-					end
-				end
-			end
+		if not bar.styled then
+			bar.BGLeft:SetAlpha(0)
+			bar.BGRight:SetAlpha(0)
+			bar.BGCenter:SetAlpha(0)
+			bar.BorderLeft:SetAlpha(0)
+			bar.BorderRight:SetAlpha(0)
+			bar.BorderCenter:SetAlpha(0)
+			bar.Spark:SetAlpha(0)
+			B.SetBD(bar)
+
+			bar.styled = true
 		end
-	end
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", reskinWidgetFrames)
-	B:RegisterEvent("UPDATE_ALL_UI_WIDGETS", reskinWidgetFrames)
+	end)
+
+	hooksecurefunc(_G.UIWidgetTemplateScenarioHeaderCurrenciesAndBackgroundMixin, "Setup", function(widgetInfo)
+		widgetInfo.Frame:SetAlpha(0)
+	end)
 end)
