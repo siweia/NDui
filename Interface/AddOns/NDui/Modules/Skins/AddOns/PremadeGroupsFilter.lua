@@ -43,6 +43,18 @@ function S:PGFSkin()
 		B.ReskinDropDown(self.Difficulty.DropDown)
 		B.StripTextures(self.Advanced)
 		B.ReskinInput(self.Expression)
+		if self.MoveableToggle then
+			B.ReskinArrow(self.MoveableToggle, "left")
+			self.MoveableToggle:SetPoint("TOPLEFT", 5, -5)
+		end
+		if self.MinimizeButton then
+			B.ReskinArrow(self.MinimizeButton, "down")
+			self.MinimizeButton:ClearAllPoints()
+			self.MinimizeButton:SetPoint("RIGHT", self.CloseButton, "LEFT", -3, 0)
+			B.ReskinArrow(self.MaximizeButton, "up")
+			self.MaximizeButton:ClearAllPoints()
+			self.MaximizeButton:SetPoint("RIGHT", self.CloseButton, "LEFT", -3, 0)
+		end
 
 		local names = {"Difficulty", "Ilvl", "Noilvl", "Defeated", "Members", "Tanks", "Heals", "Dps"}
 		for _, name in pairs(names) do
