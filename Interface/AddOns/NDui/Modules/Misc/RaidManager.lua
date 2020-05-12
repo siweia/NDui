@@ -515,3 +515,4 @@ function M:CreateRM()
 		UIWidgetTopCenterContainerFrame:SetPoint("TOP", 0, -35)
 	end
 end
+M:RegisterMisc("RaidManager", M.CreateRM)

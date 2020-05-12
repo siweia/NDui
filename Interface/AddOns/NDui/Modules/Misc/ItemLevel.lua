@@ -304,11 +304,12 @@ function M:ShowItemLevel()
 	B:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", M.ItemLevel_UpdatePlayer)
 
 	-- iLvl on InspectFrame
-	B:RegisterEvent("INSPECT_READY", self.ItemLevel_UpdateInspect)
+	B:RegisterEvent("INSPECT_READY", M.ItemLevel_UpdateInspect)
 
 	-- iLvl on FlyoutButtons
-	hooksecurefunc("EquipmentFlyout_DisplayButton", self.ItemLevel_FlyoutSetup)
+	hooksecurefunc("EquipmentFlyout_DisplayButton", M.ItemLevel_FlyoutSetup)
 
 	-- iLvl on ScrappingMachineFrame
-	B:RegisterEvent("ADDON_LOADED", self.ItemLevel_ScrappingShow)
+	B:RegisterEvent("ADDON_LOADED", M.ItemLevel_ScrappingShow)
 end
+M:RegisterMisc("GearInfo", M.ShowItemLevel)

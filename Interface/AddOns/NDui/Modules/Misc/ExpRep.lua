@@ -246,9 +246,11 @@ function M:Expbar()
 	rest:SetFrameLevel(bar:GetFrameLevel() - 1)
 	bar.restBar = rest
 
-	self:SetupScript(bar)
+	M:SetupScript(bar)
 end
+M:RegisterMisc("ExpRep", M.Expbar)
 
+-- Paragon reputation info
 function M:HookParagonRep()
 	local numFactions = GetNumFactions()
 	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
@@ -279,5 +281,6 @@ end
 
 function M:ParagonReputationSetup()
 	if not NDuiDB["Misc"]["ParagonRep"] then return end
-	hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
+	hooksecurefunc("ReputationFrame_Update", M.HookParagonRep)
 end
+M:RegisterMisc("ParagonRep", M.ParagonReputationSetup)

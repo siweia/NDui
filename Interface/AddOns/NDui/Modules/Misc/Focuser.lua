@@ -56,7 +56,8 @@ function M:Focuser()
 	SetOverrideBindingClick(FocuserButton, true, modifier.."-BUTTON"..mouseButton, "FocuserButton")
 
 	hooksecurefunc("CreateFrame", M.Focuser_CreateFrameHook)
-	self:Focuser_OnEvent()
-	B:RegisterEvent("PLAYER_REGEN_ENABLED", self.Focuser_OnEvent)
-	B:RegisterEvent("GROUP_ROSTER_UPDATE", self.Focuser_OnEvent)
+	M:Focuser_OnEvent()
+	B:RegisterEvent("PLAYER_REGEN_ENABLED", M.Focuser_OnEvent)
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", M.Focuser_OnEvent)
 end
+M:RegisterMisc("Focuser", M.Focuser)

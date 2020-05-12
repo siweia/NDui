@@ -123,3 +123,4 @@ function M:MissingStats()
 		PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
 	end)
 end
+M:RegisterMisc("MissingStats", M.MissingStats)

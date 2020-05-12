@@ -107,3 +107,4 @@ function M:LoginAnimation()
 		if DB.isDeveloper then print("Play logo") end
 	end
 end
+M:RegisterMisc("LoginAnimation", M.LoginAnimation)

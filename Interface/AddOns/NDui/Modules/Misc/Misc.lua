@@ -30,18 +30,21 @@ local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
 ]]
+local MISC_LIST = {}
+
+function M:RegisterMisc(name, func)
+	if not MISC_LIST[name] then
+		MISC_LIST[name] = func
+	end
+end
+
 function M:OnLogin()
-	self:LoginAnimation()
-	self:AddAlerts()
-	self:Expbar()
-	self:Focuser()
-	self:MailBox()
-	self:MissingStats()
-	self:ShowItemLevel()
-	self:QuickJoin()
-	self:QuestNotifier()
-	self:GuildBest()
-	self:ParagonReputationSetup()
+	for name, func in next, MISC_LIST do
+		if name and type(func) == "function" then
+			func()
+		end
+	end
+
 	self:NakedIcon()
 	self:ExtendInstance()
 	self:VehicleSeatMover()
@@ -49,14 +52,11 @@ function M:OnLogin()
 	self:MoveDurabilityFrame()
 	self:MoveTicketStatusFrame()
 	self:PetFilterTab()
-	self:AlertFrame_Setup()
 	self:UpdateScreenShot()
 	self:UpdateFasterLoot()
 	self:UpdateErrorBlocker()
 	self:TradeTargetInfo()
-	self:TradeTabs()
 	self:MoverQuestTracker()
-	self:CreateRM()
 	self:BlockStrangerInvite()
 	self:OverrideAWQ()
 

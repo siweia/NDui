@@ -350,3 +350,4 @@ function M:MailBox()
 	-- Hide Blizz
 	B.HideObject(OpenAllMail)
 end
+M:RegisterMisc("MailBox", M.MailBox)

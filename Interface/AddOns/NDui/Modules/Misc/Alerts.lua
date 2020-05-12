@@ -14,16 +14,6 @@ local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
 
-function M:AddAlerts()
-	self:SoloInfo()
-	self:RareAlert()
-	self:InterruptAlert()
-	self:VersionCheck()
-	self:ExplosiveAlert()
-	self:PlacedItemAlert()
-	self:UunatAlert()
-end
-
 --[[
 	SoloInfo是一个告知你当前副本难度的小工具，防止我有时候单刷时进错难度了。
 	instList左侧是副本ID，你可以使用"/getid"命令来获取当前副本的ID；右侧的是副本难度，常用的一般是：2为5H，4为25普通，6为25H。
@@ -459,3 +449,15 @@ function M:UunatAlert()
 		B:UnregisterEvent("ENCOUNTER_END", resetCount)
 	end
 end
+
+-- Init
+function M:AddAlerts()
+	M:SoloInfo()
+	M:RareAlert()
+	M:InterruptAlert()
+	M:VersionCheck()
+	M:ExplosiveAlert()
+	M:PlacedItemAlert()
+	M:UunatAlert()
+end
+M:RegisterMisc("Alerts", M.AddAlerts)

@@ -110,16 +110,17 @@ end
 
 function M:QuestNotifier()
 	if NDuiDB["Misc"]["QuestNotifier"] then
-		self:FindQuestComplete()
-		B:RegisterEvent("QUEST_ACCEPTED", self.FindQuestAccept)
-		B:RegisterEvent("QUEST_LOG_UPDATE", self.FindQuestComplete)
-		B:RegisterEvent("QUEST_TURNED_IN", self.FindWorldQuestComplete)
-		B:RegisterEvent("UI_INFO_MESSAGE", self.FindQuestProgress)
+		M:FindQuestComplete()
+		B:RegisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
+		B:RegisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
+		B:RegisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
+		B:RegisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
 	else
 		wipe(completedQuest)
-		B:UnregisterEvent("QUEST_ACCEPTED", self.FindQuestAccept)
-		B:UnregisterEvent("QUEST_LOG_UPDATE", self.FindQuestComplete)
-		B:UnregisterEvent("QUEST_TURNED_IN", self.FindWorldQuestComplete)
-		B:UnregisterEvent("UI_INFO_MESSAGE", self.FindQuestProgress)
+		B:UnregisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
+		B:UnregisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
+		B:UnregisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
+		B:UnregisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
 	end
 end
+M:RegisterMisc("QuestNotifier", M.QuestNotifier)
