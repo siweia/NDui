@@ -45,6 +45,7 @@ function M:OnLogin()
 		end
 	end
 
+	-- Init
 	self:NakedIcon()
 	self:ExtendInstance()
 	self:VehicleSeatMover()
@@ -354,6 +355,38 @@ function M:TradeTargetInfo()
 	hooksecurefunc("TradeFrame_Update", updateColor)
 end
 
+-- Block invite from strangers
+function M:BlockStrangerInvite()
+	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, _, _, _, _, _, _, guid)
+		if NDuiDB["Misc"]["BlockInvite"] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
+			DeclineGroup()
+			StaticPopup_Hide("PARTY_INVITE")
+		end
+	end)
+end
+
+-- Override default settings for AngryWorldQuests
+function M:OverrideAWQ()
+	if not IsAddOnLoaded("AngryWorldQuests") then return end
+
+	AngryWorldQuests_Config = AngryWorldQuests_Config or {}
+	AngryWorldQuests_CharacterConfig = AngryWorldQuests_CharacterConfig or {}
+
+	local settings = {
+		hideFilteredPOI = true,
+		showContinentPOI = true,
+		sortMethod = 2,
+	}
+	local function overrideOptions(_, key)
+		local value = settings[key]
+		if value then
+			AngryWorldQuests_Config[key] = value
+			AngryWorldQuests_CharacterConfig[key] = value
+		end
+	end
+	hooksecurefunc(AngryWorldQuests.Modules.Config, "Set", overrideOptions)
+end
+
 -- Archaeology counts
 do
 	local function CalculateArches(self)
@@ -651,36 +684,4 @@ do
 
 	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
 	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
-end
-
--- Block invite from strangers
-function M:BlockStrangerInvite()
-	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, _, _, _, _, _, _, guid)
-		if NDuiDB["Misc"]["BlockInvite"] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
-			DeclineGroup()
-			StaticPopup_Hide("PARTY_INVITE")
-		end
-	end)
-end
-
--- Override default settings for AngryWorldQuests
-function M:OverrideAWQ()
-	if not IsAddOnLoaded("AngryWorldQuests") then return end
-
-	AngryWorldQuests_Config = AngryWorldQuests_Config or {}
-	AngryWorldQuests_CharacterConfig = AngryWorldQuests_CharacterConfig or {}
-
-	local settings = {
-		hideFilteredPOI = true,
-		showContinentPOI = true,
-		sortMethod = 2,
-	}
-	local function overrideOptions(_, key)
-		local value = settings[key]
-		if value then
-			AngryWorldQuests_Config[key] = value
-			AngryWorldQuests_CharacterConfig[key] = value
-		end
-	end
-	hooksecurefunc(AngryWorldQuests.Modules.Config, "Set", overrideOptions)
 end
