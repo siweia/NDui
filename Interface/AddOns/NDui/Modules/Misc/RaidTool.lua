@@ -35,7 +35,9 @@ function M:RaidTool_Header()
 	B.Mover(frame, L["Raid Tool"], "RaidManager", C.Skins.RMPos)
 
 	M:RaidTool_Visibility(frame)
-	B:RegisterEvent("GROUP_ROSTER_UPDATE", M.RaidTool_Visibility)
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", function()
+		M:RaidTool_Visibility(frame)
+	end)
 
 	frame:RegisterForClicks("AnyUp")
 	frame:SetScript("OnClick", function(self, btn)
@@ -147,7 +149,7 @@ function M:RaidTool_RoleCount(parent)
 		"PLAYER_FLAGS_CHANGED",
 		"PLAYER_ENTERING_WORLD",
 	}
-	for _, event in eventList do
+	for _, event in next, eventList do
 		B:RegisterEvent(event, updateRoleCount)
 	end
 
@@ -255,7 +257,7 @@ function M:RaidTool_ReadyCheck(parent)
 				rc:SetTextColor(1, 1, 0)
 			end
 		end
-	end)
+	end
 	B:RegisterEvent("READY_CHECK", updateReadyCheck)
 	B:RegisterEvent("READY_CHECK_CONFIRM", updateReadyCheck)
 	B:RegisterEvent("READY_CHECK_FINISHED", updateReadyCheck)
