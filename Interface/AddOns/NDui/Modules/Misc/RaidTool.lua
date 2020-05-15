@@ -62,9 +62,9 @@ function M:RaidTool_Header()
 			LeaveParty()
 		end
 	end)
-	frame:HookScript("OnShow", function(self)
-		self:SetBackdropColor(0, 0, 0, .5)
-		self:SetBackdropBorderColor(0, 0, 0, 1)
+	frame:SetScript("OnHide", function(self)
+		self.bg:SetBackdropColor(0, 0, 0, .5)
+		self.bg:SetBackdropBorderColor(0, 0, 0, 1)
 	end)
 
 	return frame
