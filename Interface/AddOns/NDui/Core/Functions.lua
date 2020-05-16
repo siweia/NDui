@@ -409,7 +409,9 @@ do
 		if self.title then
 			GameTooltip:AddLine(self.title)
 		end
-		if tonumber(self.text) then
+		if strfind(self.text, "|H.+|h") then
+			GameTooltip:SetHyperlink(self.text)
+		elseif tonumber(self.text) then
 			GameTooltip:SetSpellByID(self.text)
 		elseif self.text then
 			local r, g, b = 1, 1, 1
