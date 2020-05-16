@@ -23,6 +23,11 @@ local function isCustomFilter(item)
 	return CustomFilterList[item.id]
 end
 
+local CustomJunkList = {}
+function module:UpdateCustomJunk()
+	B.SplitList(CustomJunkList, NDuiADB["CustomJunk"], true)
+end
+
 -- Default filter
 local function isItemInBag(item)
 	return item.bagID >= 0 and item.bagID <= 4
@@ -35,7 +40,7 @@ end
 local function isItemJunk(item)
 	if not NDuiDB["Bags"]["ItemFilter"] then return end
 	if not NDuiDB["Bags"]["FilterJunk"] then return end
-	return item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0
+	return item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 or CustomJunkList[tostring(item.id)]
 end
 
 local function isAzeriteArmor(item)
@@ -114,6 +119,8 @@ function module:GetFilters()
 	filters.bankFavourite = function(item) return isItemInBank(item) and isItemFavourite(item) end
 	filters.bagGoods = function(item) return isItemInBag(item) and isTradeGoods(item) end
 	filters.bankGoods = function(item) return isItemInBank(item) and isTradeGoods(item) end
+
+	module:UpdateCustomJunk()
 
 	return filters
 end
