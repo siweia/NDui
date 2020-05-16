@@ -347,7 +347,7 @@ local accountSettings = {
 	DisableInfobars = false,
 	PartyWatcherSpells = {},
 	ContactList = {},
-	CustomJunk = "",
+	CustomJunkList = {},
 }
 
 -- Initial settings
@@ -455,10 +455,6 @@ local function updateBagStatus()
 	end
 	_G.NDui_BackpackEquipment.label:SetText(label)
 	_G.NDui_BackpackBankEquipment.label:SetText(label)
-end
-
-local function updateCustomJunk()
-	B:GetModule("Bags"):UpdateCustomJunk()
 end
 
 local function updateActionbarScale()
@@ -659,9 +655,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", true, nil, updateBagStatus},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"]},
-		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
-		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 500, 0}, updateBagStatus, L["iLvlToShowTip"]},
-		{2, "ACCOUNT", "CustomJunk", "CustomJunk".."*", true, nil, updateCustomJunk, "CustomJunkTip"},
+		{1, "Bags", "DeleteButton", L["Bags DeleteButton"]},
+		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", true, {1, 500, 0}, updateBagStatus, L["iLvlToShowTip"]},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, 1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 0}},

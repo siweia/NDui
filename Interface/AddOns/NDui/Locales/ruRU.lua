@@ -636,3 +636,6 @@ L["AllowFriendsSpam"] = "Allow Friends' Spam" -- need translation
 L["AllowFriendsSpamTip"] = "|nAllow spam messages from party members, frineds and guild members, if checked." -- need translation
 L["TimestampFormat"] = "Timestamp Format" -- need translation
 L["GlobalFontScale"] = "Font Scale" -- need translation
+L["CustomJunkList"] = "Custom Junk List" -- need translation
+L["Incorrect ItemID"] = "Incorrect ItemID." -- need translation
+L["CustomJunkListTip"] = "|nEnter the itemID that you want to classify as junk.|n|nIf 'Autosell Junk' enabled, these items would be sold as well." -- need translation
