@@ -1169,7 +1169,7 @@ local function exportData()
 	end
 
 	for KEY, VALUE in pairs(NDuiADB) do
-		if KEY == "RaidAuraWatch" then
+		if KEY == "RaidAuraWatch" or KEY == "CustomJunkList" then
 			text = text..";ACCOUNT:"..KEY
 			for spellID in pairs(VALUE) do
 				text = text..":"..spellID
@@ -1284,7 +1284,7 @@ local function importData()
 			itemID = tonumber(itemID)
 			NDuiDB[key][spellID] = {spellID, duration, indicator, unit, itemID}
 		elseif key == "ACCOUNT" then
-			if value == "RaidAuraWatch" then
+			if value == "RaidAuraWatch" or value == "CustomJunkList" then
 				local spells = {select(3, strsplit(":", option))}
 				for _, spellID in next, spells do
 					NDuiADB[value][tonumber(spellID)] = true
