@@ -9,7 +9,7 @@
 	<Script file="MDGuildBest.lua"/>
 	<Script file="MissingStats.lua"/>
 	<Script file="Notifications.lua"/>
-	<Script file="OrderHall.lua"/>
+	<Script file="OrderHallIcon.lua"/>
 	<Script file="PetFilterTab.lua"/>
 	<Script file="QuestNotifier.lua"/>
 	<Script file="QuickJoin.lua"/>
