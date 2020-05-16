@@ -113,4 +113,4 @@ function M:OrderHall_OnInit()
 		B:RegisterEvent("ADDON_LOADED", M.OrderHall_OnLoad)
 	end
 end
-B:RegisterMisc("OrderHallIcon", M.OrderHall_OnInit)
+M:RegisterMisc("OrderHallIcon", M.OrderHall_OnInit)
