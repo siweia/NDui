@@ -17,7 +17,7 @@ function M:OrderHall_CreateIcon()
 	hall:SetPoint("TOP", 0, -30)
 	hall:SetFrameStrata("HIGH")
 	hall:Hide()
-	B.CreateMF(hall, true)
+	B.CreateMF(hall, nil, true)
 	B.RestoreMF(hall)
 	M.OrderHallIcon = hall
 
@@ -35,6 +35,7 @@ function M:OrderHall_CreateIcon()
 
 	-- Default objects
 	B.HideOption(OrderHallCommandBar)
+	B.HideObject(OrderHallCommandBar.CurrencyHitTest)
 	GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
 end
 
@@ -45,12 +46,13 @@ function M:OrderHall_Refresh()
 
 	local categoryInfo = C_Garrison_GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	for index, info in ipairs(categoryInfo) do
-		local category = self.Category[index]
-		if not category then category = {} end
-		category.name = info.name
-		category.count = info.count
-		category.limit = info.limit
-		category.description = info.description
+		local category = self.Category
+		if not category[index] then category[index] = {} end
+		category[index].name = info.name
+		category[index].count = info.count
+		category[index].limit = info.limit
+		category[index].description = info.description
+		category[index].icon = info.icon
 	end
 	self.numCategory = #categoryInfo
 end
@@ -61,8 +63,8 @@ function M:OrderHall_OnShiftDown(btn)
 	end
 end
 
-local function GetAmountString(self)
-	return self.amount..format(" |T%s:12:12:0:0:64:64:5:59:5:59|t ", self.texture)
+local function getIconString(texture)
+	return format("|T%s:12:12:0:0:64:64:5:59:5:59|t ", texture)
 end
 
 function M:OrderHall_OnEnter()
@@ -72,7 +74,7 @@ function M:OrderHall_OnEnter()
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(DB.MyColor.._G["ORDER_HALL_"..DB.MyClass])
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddDoubleLine(self.name, GetAmountString(self), 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(getIconString(self.texture)..self.name, self.amount, 1,1,1, 1,1,1)
 
 	local blank
 	for i = 1, self.numCategory do
@@ -81,9 +83,11 @@ function M:OrderHall_OnEnter()
 			blank = true
 		end
 		local category = self.Category[i]
-		GameTooltip:AddDoubleLine(category.name, category.count.."/"..category.limit, 1,1,1, 1,1,1)
-		if IsShiftKeyDown() then
-			GameTooltip:AddLine(category.description, .6,.8,1, 1)
+		if category then
+			GameTooltip:AddDoubleLine(getIconString(category.icon)..category.name, category.count.."/"..category.limit, 1,1,1, 1,1,1)
+			if IsShiftKeyDown() then
+				GameTooltip:AddLine(category.description, .6,.8,1, 1)
+			end
 		end
 	end
 
