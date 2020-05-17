@@ -635,3 +635,5 @@ L["AllowFriendsSpamTip"] = "|nAllow spam messages from party members, frineds an
 L["TimestampFormat"] = "Timestamp Format" -- need translation
 L["GlobalFontScale"] = "Font Scale" -- need translation
 L["NzothVision"] = "N'zoth Vision Count" -- need translation
+L["CustomJunkMode"] = "Custom Junk List" -- need translation
+L["JunkMode Enabled"] = "|nClick to tag item as junk.|nIf 'Autosell Junl' enabled, these items would be sold as well.|nThe list is saved account-wide." -- need translation
