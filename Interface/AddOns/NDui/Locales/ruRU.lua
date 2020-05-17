@@ -639,3 +639,4 @@ L["GlobalFontScale"] = "Font Scale" -- need translation
 L["CustomJunkList"] = "Custom Junk List" -- need translation
 L["Incorrect ItemID"] = "Incorrect ItemID." -- need translation
 L["CustomJunkListTip"] = "|nEnter the itemID that you want to classify as junk.|n|nIf 'Autosell Junk' enabled, these items would be sold as well.|n|nThe list is saved for all the characters." -- need translation
+L["NzothVision"] = "N'zoth Vision Count" -- need translation
