@@ -982,11 +982,7 @@ function G:SetupBagFilter(parent)
 
 	bagFilterGUI = createExtraGUI(parent, "NDuiGUI_BagFilterSetup", L["BagFilterSetup"].."*")
 
-	local frameData = {
-		[1] = {text = L["BagFilterSetup"].."*", offset = -25, height = 230},
-		[2] = {text = L["CustomJunkList"].."*", offset = -315, height = 200},
-	}
-	local barList = {}
+	local scroll = G:CreateScroll(bagFilterGUI, 260, 540)
 
 	local filterOptions = {
 		[1] = "FilterJunk",
@@ -1007,75 +1003,13 @@ function G:SetupBagFilter(parent)
 		Bags:UpdateAllBags()
 	end
 
-	local function createBar(parent, itemID)
-		local name, link, _, _, _, _, _, _, _, texture = GetItemInfo(itemID)
-		local bar = CreateFrame("Frame", nil, parent)
-		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
-		barList[itemID] = bar
+	local offset = 10
+	for _, value in ipairs(filterOptions) do
+		local box = createOptionCheck(scroll, offset, L[value])
+		box:SetChecked(NDuiDB["Bags"][value])
+		box.__value = value
+		box:SetScript("OnClick", filterOnClick)
 
-		local icon, close = G:CreateBarWidgets(bar, texture)
-		B.AddTooltip(icon, "ANCHOR_RIGHT", link)
-		close:SetScript("OnClick", function()
-			bar:Hide()
-			NDuiADB["CustomJunkList"][itemID] = nil
-			barList[itemID] = nil
-			sortBars(barList)
-			Bags:UpdateAllBags()
-		end)
-
-		local itemName = B.CreateFS(bar, 14, name, false, "LEFT", 30, 0)
-		itemName:SetWidth(180)
-		itemName:SetJustifyH("LEFT")
-
-		sortBars(barList)
-	end
-
-	local function addClick(parent)
-		local itemID = tonumber(parent.box:GetText())
-		if not itemID or not GetItemInfo(itemID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect ItemID"]) return end
-		if NDuiADB["CustomJunkList"][itemID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
-
-		NDuiADB["CustomJunkList"][itemID] = true
-		createBar(parent.child, itemID)
-		parent.box:SetText("")
-	end
-
-	for index, value in ipairs(frameData) do
-		B.CreateFS(bagFilterGUI, 14, value.text, "system", "TOPLEFT", 20, value.offset)
-
-		local frame = CreateFrame("Frame", nil, bagFilterGUI)
-		frame:SetSize(280, 250)
-		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
-		B.CreateBD(frame, .3)
-
-		local scroll = G:CreateScroll(frame, 240, value.height)
-		if index == 1 then
-			local offset = 10
-			for _, value in ipairs(filterOptions) do
-				local box = createOptionCheck(scroll.child, offset, L[value])
-				box:SetChecked(NDuiDB["Bags"][value])
-				box.__value = value
-				box:SetScript("OnClick", filterOnClick)
-		
-				offset = offset + 35
-			end
-		else
-			scroll.box = B.CreateEditBox(frame, 185, 25)
-			scroll.box:SetPoint("TOPLEFT", 10, -10)
-			scroll.box.title = L["Tips"]
-			B.AddTooltip(scroll.box, "ANCHOR_RIGHT", L["CustomJunkListTip"], "info")
-
-			scroll.add = B.CreateButton(frame, 70, 25, ADD)
-			scroll.add:SetPoint("TOPRIGHT", -8, -10)
-			scroll.add:SetScript("OnClick", function()
-				addClick(scroll)
-				Bags:UpdateAllBags()
-			end)
-	
-			for itemID in pairs(NDuiADB["CustomJunkList"]) do
-				createBar(scroll.child, itemID)
-			end
-		end
+		offset = offset + 35
 	end
 end
