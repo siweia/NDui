@@ -311,6 +311,7 @@ local defaultSettings = {
 		DBMCount = "10",
 		EasyMarking = true,
 		BlockInvite = false,
+		NzothVision = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -795,6 +796,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"].."*", nil, nil, updateExplosiveAlert},
 		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
 		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
+		{1, "Misc", "NzothVision", "|cff00cc4c"..L["NzothVision"], true},
 		{},--blank
 		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*"},

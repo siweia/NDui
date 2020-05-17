@@ -489,6 +489,8 @@ function M:NVision_Check()
 end
 
 function M:NVision_Init()
+	if not NDuiDB["Misc"]["NzothVision"] then return end
+	M:NVision_Check()
 	B:RegisterEvent("UPDATE_INSTANCE_INFO", M.NVision_Check)
 end
 
