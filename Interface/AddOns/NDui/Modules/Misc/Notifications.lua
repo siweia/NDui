@@ -409,10 +409,8 @@ function M:NVision_Create()
 
 	local frame = CreateFrame("Frame", nil, UIParent)
 	frame:SetSize(24, 24)
+	frame:SetPoint("TOP", PlayerPowerBarAlt, "BOTTOM")
 	frame.bars = {}
-	local mover = B.Mover(frame, L["NzothVision"], "NzothVision", {"TOP", 0, -35}, 240, 24)
-	frame:ClearAllPoints()
-	frame:SetPoint("CENTER", mover)
 
 	local barData = {
 		[1] = {
@@ -430,7 +428,7 @@ function M:NVision_Create()
 	for i, v in ipairs(barData) do
 		local bar = CreateFrame("StatusBar", nil, frame)
 		bar:SetSize(80, 20)
-		bar:SetPoint(v.anchorF, frame, v.anchorT, v.offset, 0)
+		bar:SetPoint(v.anchorF, frame, "CENTER", v.offset, 0)
 		bar:SetMinMaxValues(0, v.maxValue)
 		bar:SetValue(0)
 		bar:SetReverseFill(v.reverse)
