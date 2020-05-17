@@ -305,7 +305,6 @@ local defaultSettings = {
 		PlacedItemAlert = false,
 		RareAlertInWild = false,
 		ParagonRep = true,
-		UunatAlert = false,
 		InstantDelete = true,
 		RaidTool = true,
 		RMRune = false,
@@ -557,10 +556,6 @@ local function updateInterruptAlert()
 	B:GetModule("Misc"):InterruptAlert()
 end
 
-local function updateUunatAlert()
-	B:GetModule("Misc"):UunatAlert()
-end
-
 local function updateExplosiveAlert()
 	B:GetModule("Misc"):ExplosiveAlert()
 end
@@ -799,8 +794,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"].."*", nil, nil, updateExplosiveAlert},
 		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
-		{1, "Misc", "UunatAlert", L["Uunat Alert"].."*", nil, nil, updateUunatAlert},
-		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", true, nil, updateSoloInfo},
+		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
 		{},--blank
 		{1, "Misc", "RareAlerter", "|cff00cc4c"..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*"},

@@ -403,54 +403,7 @@ function M:PlacedItemAlert()
 	B:RegisterEvent("GROUP_JOINED", self.ItemAlert_CheckGroup)
 end
 
--- 乌纳特踩圈通报
-function M:UunatAlert_CheckAura()
-	for i = 1, 16 do
-		local name, _, _, _, _, _, _, _, _, spellID = UnitDebuff("player", i)
-		if not name then break end
-		if name and spellID == 284733 then
-			return true
-		end
-	end
-end
-
-local uunatCache = {}
-function M:UunatAlert_Update(...)
-	local _, eventType, _, _, _, _, _, _, destName, _, _, spellID = ...
-	if eventType == "SPELL_DAMAGE" and spellID == 285214 and not M:UunatAlert_CheckAura() then
-		uunatCache[destName] = (uunatCache[destName] or 0) + 1
-		SendChatMessage(format(L["UunatAlertString"], destName, uunatCache[destName]), msgChannel())
-	end
-end
-
-local function resetCount()
-	wipe(uunatCache)
-end
-
-function M:UunatAlert_CheckInstance()
-	local instID = select(8, GetInstanceInfo())
-	if instID == 2096 then
-		B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.UunatAlert_Update)
-		B:RegisterEvent("ENCOUNTER_END", resetCount)
-	else
-		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.UunatAlert_Update)
-		B:UnregisterEvent("ENCOUNTER_END", resetCount)
-	end
-end
-
-function M:UunatAlert()
-	if NDuiDB["Misc"]["UunatAlert"] then
-		self:UunatAlert_CheckInstance()
-		B:RegisterEvent("UPDATE_INSTANCE_INFO", self.UunatAlert_CheckInstance)
-	else
-		wipe(uunatCache)
-		B:UnregisterEvent("UPDATE_INSTANCE_INFO", self.UunatAlert_CheckInstance)
-		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", self.UunatAlert_Update)
-		B:UnregisterEvent("ENCOUNTER_END", resetCount)
-	end
-end
-
--- N'zoth Vision
+-- 大幻象水晶及箱子计数
 function M:NVision_Create()
 	if M.VisionFrame then M.VisionFrame:Show() return end
 
@@ -547,7 +500,6 @@ function M:AddAlerts()
 	M:VersionCheck()
 	M:ExplosiveAlert()
 	M:PlacedItemAlert()
-	M:UunatAlert()
 	M:NVision_Init()
 end
 M:RegisterMisc("Notifications", M.AddAlerts)
