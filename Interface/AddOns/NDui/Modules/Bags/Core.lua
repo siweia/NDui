@@ -284,6 +284,45 @@ local function favouriteOnClick(self)
 	end
 end
 
+local customJunkEnable
+function module:CreateJunkButton()
+	local enabledText = DB.InfoColor..L["JunkMode Enabled"]
+
+	local bu = B.CreateButton(self, 24, 24, true, "Interface\\BUTTONS\\UI-GroupLoot-Coin-Up")
+	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -3)
+	bu:SetScript("OnClick", function(self)
+		customJunkEnable = not customJunkEnable
+		if customJunkEnable then
+			self:SetBackdropBorderColor(1, .8, 0)
+			self.text = enabledText
+		else
+			self:SetBackdropBorderColor(0, 0, 0)
+			self.text = nil
+		end
+		self:GetScript("OnEnter")(self)
+	end)
+	bu.title = L["CustomJunkMode"]
+	B.AddTooltip(bu, "ANCHOR_TOP")
+
+	return bu
+end
+
+local function customJunkOnClick(self)
+	if not customJunkEnable then return end
+
+	local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
+	local price = select(11, GetItemInfo(itemID))
+	if texture and price > 0 then
+		if NDuiADB["CustomJunkList"][itemID] then
+			NDuiADB["CustomJunkList"][itemID] = nil
+		else
+			NDuiADB["CustomJunkList"][itemID] = true
+		end
+		ClearCursor()
+		module:UpdateAllBags()
+	end
+end
+
 function module:GetContainerEmptySlot(bagID)
 	for slotID = 1, GetContainerNumSlots(bagID) do
 		if not GetContainerItemID(bagID, slotID) then
@@ -421,6 +460,7 @@ function module:ButtonOnClick(btn)
 	deleteButtonOnClick(self)
 	favouriteOnClick(self)
 	splitOnClick(self)
+	customJunkOnClick(self)
 end
 
 function module:UpdateAllBags()
@@ -778,7 +818,8 @@ function module:OnLogin()
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[5] = module.CreateSplitButton(self)
 			buttons[6] = module.CreateFavouriteButton(self)
-			if deleteButton then buttons[7] = module.CreateDeleteButton(self) end
+			buttons[7] = module.CreateJunkButton(self)
+			if deleteButton then buttons[8] = module.CreateDeleteButton(self) end
 		elseif name == "Bank" then
 			module.CreateBagBar(self, settings, 7)
 			buttons[2] = module.CreateReagentButton(self, f)
