@@ -289,6 +289,7 @@ function module:CreateJunkButton()
 	local enabledText = DB.InfoColor..L["JunkMode Enabled"]
 
 	local bu = B.CreateButton(self, 24, 24, true, "Interface\\BUTTONS\\UI-GroupLoot-Coin-Up")
+	bu.Icon:SetPoint("TOPLEFT", C.mult, -3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -3)
 	bu:SetScript("OnClick", function(self)
 		customJunkEnable = not customJunkEnable
@@ -300,6 +301,7 @@ function module:CreateJunkButton()
 			self.text = nil
 		end
 		self:GetScript("OnEnter")(self)
+		module:UpdateAllBags()
 	end)
 	bu.title = L["CustomJunkMode"]
 	B.AddTooltip(bu, "ANCHOR_TOP")
@@ -665,7 +667,7 @@ function module:OnLogin()
 			end
 		end
 
-		if MerchantFrame:IsShown() and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
+		if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
 			self.junkIcon:SetAlpha(1)
 		else
 			self.junkIcon:SetAlpha(0)
