@@ -776,7 +776,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Auras", "Statue", L["Enable Statue"]},
 		{1, "Auras", "Totems", L["Enable Totems"], true},
-		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder},
+		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
 	},
 	[7] = {
 		{1, "Misc", "RaidTool", "|cff00cc4c"..L["Raid Manger"]},
