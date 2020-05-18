@@ -460,9 +460,9 @@ end
 function module:ButtonOnClick(btn)
 	if btn ~= "LeftButton" then return end
 	deleteButtonOnClick(self)
+	customJunkOnClick(self)
 	favouriteOnClick(self)
 	splitOnClick(self)
-	customJunkOnClick(self)
 end
 
 function module:UpdateAllBags()
