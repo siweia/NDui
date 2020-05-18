@@ -35,7 +35,7 @@ end
 local function isItemJunk(item)
 	if not NDuiDB["Bags"]["ItemFilter"] then return end
 	if not NDuiDB["Bags"]["FilterJunk"] then return end
-	return (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0
+	return (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice and item.sellPrice > 0
 end
 
 local function isAzeriteArmor(item)
