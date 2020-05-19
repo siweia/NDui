@@ -38,7 +38,7 @@ function M:Logo_Create()
 
 	local delayTime = 0
 	local timer1 = .5
-	local timer2 = 2.5
+	local timer2 = 2
 	local timer3 = .2
 
 	local anim = frame:CreateAnimationGroup()
