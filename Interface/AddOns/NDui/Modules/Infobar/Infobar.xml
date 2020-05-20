@@ -2,8 +2,8 @@
 	<Script file="Core.lua"/>
 	<Script file="Guild.lua"/>
 	<Script file="Friends.lua"/>
+	<Script file="Latency.lua"/>
 	<Script file="System.lua"/>
-	<Script file="Memory.lua"/>
 	<Script file="Location.lua"/>
 	<Script file="Time.lua"/>
 	<Script file="Gold.lua"/>
