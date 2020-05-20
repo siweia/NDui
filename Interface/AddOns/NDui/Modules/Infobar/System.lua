@@ -1,5 +1,6 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF
 if not C.Infobar.System then return end
 
 local module = B:GetModule("Infobar")
@@ -40,6 +41,12 @@ local function sortByCPU(a, b)
 	if a and b then
 		return (a[4] == b[4] and a[2] < b[2]) or a[4] > b[4]
 	end
+end
+
+local usageColor = {0, 1, 0, 1, 1, 0, 1, 0, 0}
+local function smoothColor(cur, max)
+	local r, g, b = oUF:RGBColorGradient(cur, max, unpack(usageColor))
+	return r, g, b
 end
 
 local infoTable = {}
@@ -133,9 +140,8 @@ info.onEnter = function(self)
 			if IsAddOnLoaded(data[1]) then
 				numEnabled = numEnabled + 1
 				if numEnabled <= maxShown then
-					local r = data[3] - totalMemory
-					local g = 1.5 - r
-					GameTooltip:AddDoubleLine(data[2], formatMemory(data[3]), 1,1,1, r,g,0)
+					local r, g, b = smoothColor(data[3], totalMemory)
+					GameTooltip:AddDoubleLine(data[2], formatMemory(data[3]), 1,1,1, r,g,b)
 				end
 			end
 		end
@@ -158,9 +164,8 @@ info.onEnter = function(self)
 			if IsAddOnLoaded(data[1]) then
 				numEnabled = numEnabled + 1
 				if numEnabled <= maxShown then
-					local r = data[4] / totalCPU
-					local g = 1.5 - r
-					GameTooltip:AddDoubleLine(data[2], format(usageString, data[4] / passedTime), 1,1,1, r,g,0)
+					local r, g, b = smoothColor(data[4], totalCPU)
+					GameTooltip:AddDoubleLine(data[2], format(usageString, data[4] / passedTime), 1,1,1, r,g,b)
 				end
 			end
 		end
