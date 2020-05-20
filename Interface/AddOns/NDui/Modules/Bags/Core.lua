@@ -285,9 +285,11 @@ function module:CreateFreeSlots()
 end
 
 local toggleButtons = {}
-function module:ResetToggleButtons()
-	for _, button in pairs(toggleButtons) do
-		button.__turnOff()
+function module:SelectToggleButton(id)
+	for index, button in pairs(toggleButtons) do
+		if index ~= id then
+			button.__turnOff()
+		end
 	end
 end
 
@@ -321,6 +323,7 @@ function module:CreateSplitButton()
 		splitEnable = nil
 	end
 	bu:SetScript("OnClick", function(self)
+		module:SelectToggleButton(1)
 		splitEnable = not splitEnable
 		if splitEnable then
 			self:SetBackdropBorderColor(1, .8, 0)
@@ -335,6 +338,8 @@ function module:CreateSplitButton()
 	bu:SetScript("OnHide", bu.__turnOff)
 	bu.title = L["QuickSplit"]
 	B.AddTooltip(bu, "ANCHOR_TOP")
+
+	toggleButtons[1] = bu
 
 	return bu
 end
@@ -368,6 +373,7 @@ function module:CreateFavouriteButton()
 		favouriteEnable = nil
 	end
 	bu:SetScript("OnClick", function(self)
+		module:SelectToggleButton(2)
 		favouriteEnable = not favouriteEnable
 		if favouriteEnable then
 			self:SetBackdropBorderColor(1, .8, 0)
@@ -380,6 +386,8 @@ function module:CreateFavouriteButton()
 	bu:SetScript("OnHide", bu.__turnOff)
 	bu.title = L["FavouriteMode"]
 	B.AddTooltip(bu, "ANCHOR_TOP")
+
+	toggleButtons[2] = bu
 
 	return bu
 end
@@ -412,6 +420,7 @@ function module:CreateJunkButton()
 		customJunkEnable = nil
 	end
 	bu:SetScript("OnClick", function(self)
+		module:SelectToggleButton(3)
 		customJunkEnable = not customJunkEnable
 		if customJunkEnable then
 			self:SetBackdropBorderColor(1, .8, 0)
@@ -425,6 +434,8 @@ function module:CreateJunkButton()
 	bu:SetScript("OnHide", bu.__turnOff)
 	bu.title = L["CustomJunkMode"]
 	B.AddTooltip(bu, "ANCHOR_TOP")
+
+	toggleButtons[3] = bu
 
 	return bu
 end
@@ -458,6 +469,7 @@ function module:CreateDeleteButton()
 		deleteEnable = nil
 	end
 	bu:SetScript("OnClick", function(self)
+		module:SelectToggleButton(4)
 		deleteEnable = not deleteEnable
 		if deleteEnable then
 			self:SetBackdropBorderColor(1, .8, 0)
@@ -470,6 +482,8 @@ function module:CreateDeleteButton()
 	bu:SetScript("OnHide", bu.__turnOff)
 	bu.title = L["ItemDeleteMode"]
 	B.AddTooltip(bu, "ANCHOR_TOP")
+
+	toggleButtons[4] = bu
 
 	return bu
 end
