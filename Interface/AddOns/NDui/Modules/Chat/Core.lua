@@ -79,7 +79,7 @@ function module:SkinChat()
 	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
-	if NDuiDB["Chat"]["Lock"] then B.StripTextures(self) end
+	--if NDuiDB["Chat"]["Lock"] then B.StripTextures(self) end
 	B.HideObject(self.buttonFrame)
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
