@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
 local _G = getfenv(0)
-local tonumber, select = tonumber, select
+local tonumber, select, strmatch = tonumber, select, strmatch
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
@@ -26,6 +26,8 @@ local GetSavedInstanceInfo = GetSavedInstanceInfo
 local SetSavedInstanceExtend = SetSavedInstanceExtend
 local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
 local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
+local GetMerchantNumItems = GetMerchantNumItems
+local HEADER_COLON, MERCHANT_ITEMS_PER_PAGE = HEADER_COLON, MERCHANT_ITEMS_PER_PAGE
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -59,6 +61,7 @@ function M:OnLogin()
 	self:MoverQuestTracker()
 	self:BlockStrangerInvite()
 	self:OverrideAWQ()
+	self:ReplaceContaminantName()
 
 	-- Max camera distancee
 	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
@@ -385,6 +388,31 @@ function M:OverrideAWQ()
 		end
 	end
 	hooksecurefunc(AngryWorldQuests.Modules.Config, "Set", overrideOptions)
+end
+
+-- Replace contaminant name
+function M:ReplaceContaminantName()
+	local itemString = GetItemInfo(177981)
+	itemString = strmatch(itemString, "(.+"..HEADER_COLON..")").."(.+)"
+
+	local function setupMisc()
+		local numItems = GetMerchantNumItems()
+		for i = 1, MERCHANT_ITEMS_PER_PAGE do
+			local index = (MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE + i
+			if index > numItems then return end
+
+			local button = _G["MerchantItem"..i.."ItemButton"]
+			if button and button:IsShown() then
+				local name = _G["MerchantItem"..i.."Name"]
+				local text = name and name:GetText()
+				local newString = text and strmatch(text, itemString)
+				if newString then
+					name:SetText(newString)
+				end
+			end
+		end
+	end
+	hooksecurefunc("MerchantFrame_UpdateMerchantInfo", setupMisc)
 end
 
 -- Archaeology counts
