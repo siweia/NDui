@@ -359,6 +359,7 @@ function TT:ReskinTooltip()
 		self:DisableDrawLayer("BACKGROUND")
 		self.bg = B.CreateBDFrame(self, .7, true)
 		self.bg:SetInside(self)
+		self.bg:SetFrameLevel(self:GetFrameLevel())
 		B.CreateTex(self.bg)
 
 		-- other gametooltip-like support
