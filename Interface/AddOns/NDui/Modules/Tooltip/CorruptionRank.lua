@@ -95,17 +95,16 @@ function TT:Corruption_Search(link)
 	if not value then
 		local itemID, itemString = strmatch(link, "item:(%d+):([%-?%d:]+)")
 		local isCorruptedWeapon = corruptionDataFix[itemID]
-		if isCorruptedWeapon then
+		for index in gmatch(itemString, "%d+") do
+			if corruptionData[index] then
+				value = corruptionData[index]
+				linkCache[link] = value
+				break
+			end
+		end
+		if not value and isCorruptedWeapon then
 			value = corruptionData[isCorruptedWeapon]
 			linkCache[link] = value
-		else
-			for index in gmatch(itemString, "%d+") do
-				if corruptionData[index] then
-					value = corruptionData[index]
-					linkCache[link] = value
-					break
-				end
-			end
 		end
 	end
 	return value
