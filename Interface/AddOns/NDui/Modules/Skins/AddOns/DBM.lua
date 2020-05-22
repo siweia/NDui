@@ -162,6 +162,8 @@ function S:DBMSkin()
 	DBM_AllSavedOptions["Default"]["EventSoundVictory"] = "None"
 	DBT_AllPersistentOptions["Default"]["DBM"].BarYOffset = 15
 	DBT_AllPersistentOptions["Default"]["DBM"].HugeBarYOffset = 15
+	DBT_AllPersistentOptions["Default"]["DBM"].ExpandUpwards = true
+	DBT_AllPersistentOptions["Default"]["DBM"].ExpandUpwardsLarge = true
 	if IsAddOnLoaded("DBM-VPYike") then
 		DBM_AllSavedOptions["Default"]["CountdownVoice"] = "VP:Yike"
 		DBM_AllSavedOptions["Default"]["ChosenVoicePack"] = "Yike"
