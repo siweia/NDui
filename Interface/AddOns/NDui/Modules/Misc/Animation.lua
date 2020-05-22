@@ -99,12 +99,13 @@ end
 function M:LoginAnimation()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", M.Logo_CheckStatus)
 
-	function PlayNDuiLogo()
+	SlashCmdList["NDUI_PLAYLOGO"] = function()
 		if not M.logoFrame then
 			M:Logo_Create()
 		end
 		M.logoFrame:Show()
 		if DB.isDeveloper then print("Play logo") end
 	end
+	SLASH_NDUI_PLAYLOGO1 = "/nlogo"
 end
 M:RegisterMisc("LoginAnimation", M.LoginAnimation)
