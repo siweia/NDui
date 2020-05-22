@@ -392,10 +392,21 @@ end
 
 -- Replace contaminant name
 function M:ReplaceContaminantName()
-	local itemString = GetItemInfo(177981)
-	itemString = strmatch(itemString, "(.+"..HEADER_COLON..")").."(.+)"
+	local itemString
+
+	local function updateItemString()
+		local itemName = GetItemInfo(177981)
+		if itemName then
+			return strmatch(itemName, "(.+"..HEADER_COLON..")").."(.+)"
+		end
+	end
 
 	local function setupMisc()
+		if not itemString then
+			itemString = updateItemString()
+		end
+		if not itemString then return end
+
 		local numItems = GetMerchantNumItems()
 		for i = 1, MERCHANT_ITEMS_PER_PAGE do
 			local index = (MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE + i
