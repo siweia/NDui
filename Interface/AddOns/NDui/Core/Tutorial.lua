@@ -31,6 +31,7 @@ local function ForceDefaultSettings()
 end
 
 local function ForceRaidFrame()
+	if InCombatLockdown() then return end
 	if not CompactUnitFrameProfiles then return end
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "useClassColors", true)
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "displayPowerBar", true)
