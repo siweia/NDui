@@ -175,7 +175,7 @@ end
 function TT:Corruption_AddSummary()
 	GameTooltip:AddLine(" ")
 	for value, count in next, summaries do
-		GameTooltip:AddLine("+"..count.." "..getIconString(value.icon)..value.name.." "..value.level, corruptionR,corruptionG,corruptionB)
+		GameTooltip:AddDoubleLine(getIconString(value.icon)..value.name.." "..value.level, "x"..count, corruptionR,corruptionG,corruptionB, 1,1,1)
 	end
 	if not next(summaries) then
 		GameTooltip:AddLine(NONE, corruptionR,corruptionG,corruptionB)
