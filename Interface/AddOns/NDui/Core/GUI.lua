@@ -95,6 +95,7 @@ local defaultSettings = {
 		NumGroups = 6,
 		SimpleMode = false,
 		SimpleModeSortByRole = true,
+		SimpleModeColumn = 5,
 		InstanceAuras = true,
 		RaidDebuffScale = 1,
 		SpecRaidPos = false,
@@ -699,7 +700,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidClickSets", "|cff00cc4c"..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "InstanceAuras", "|cff00cc4c"..L["Instance Auras"], nil, setupRaidDebuffs},
 		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, 1}, refreshRaidFrameIcons},
-		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"]},
+		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{},--blank
 		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
@@ -712,7 +713,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "RaidTextScale", L["UFTextScale"], true, {.8, 1.5, 2}, updateRaidTextScale},
 		{},--blank
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
-		{1, "UFs", "SimpleModeSortByRole", L["SimpleMode SortByRole"], true},
+		{1, "UFs", "SimpleModeSortByRole", L["SimpleMode SortByRole"]},
+		{3, "UFs", "SimpleModeColumn", L["SimpleMode Column"], true, {10, 40, 0}},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"], nil, setupNameplateFilter},
@@ -753,7 +755,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "AuraWatch", "Enable", "|cff00cc4c"..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
-		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"]},
+		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], true, {.8, 2, 1}},
 		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},

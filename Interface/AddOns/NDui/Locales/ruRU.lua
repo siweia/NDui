@@ -626,3 +626,5 @@ L["World Protocol"] = "World Protocol:" -- need translation
 L["Bandwidth"] = "Bandwidth:" -- need translation
 L["Download"] = "Download:" -- need translation
 L["SwitchSystemInfo"] = "SwitchMode" -- need translation
+L["ClickThroughTip"] = "|nIf enabled, the icon would be uninteractable, you can't select or mouseover them." -- need translation
+L["SimpleMode Column"] = "Units Per Column" -- need translation
