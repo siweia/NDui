@@ -370,10 +370,10 @@ function UF:OnLogin()
 		local raidMover
 		if NDuiDB["UFs"]["SimpleMode"] then
 			local groupingOrder, groupBy, sortMethod = "1,2,3,4,5,6,7,8", "GROUP", "INDEX"
-			if NDuiDB["UFs"]["SimpleModeSortByRole"] then
+			if NDuiDB["UFs"]["SMSortByRole"] then
 				groupingOrder, groupBy, sortMethod = "TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"
 			end
-			local unitsPerColumn = NDuiDB["UFs"]["SimpleModeColumn"]
+			local unitsPerColumn = NDuiDB["UFs"]["SMUnitsPerColumn"]
 			local maxColumns = B:Round(numGroups*5 / unitsPerColumn)
 
 			local function CreateGroup(name, i)
