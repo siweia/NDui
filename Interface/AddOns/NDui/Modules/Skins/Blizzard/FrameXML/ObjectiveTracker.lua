@@ -63,6 +63,7 @@ tinsert(C.defaultThemes, function()
 		bar:SetStatusBarTexture(DB.normTex)
 		bar:SetStatusBarColor(r, g, b)
 		bar.bg = B.SetBD(bar)
+		B:SmoothBar(bar)
 	end
 
 	local function reskinProgressbar(_, _, line)
