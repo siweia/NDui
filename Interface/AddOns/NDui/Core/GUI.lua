@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local G = B:RegisterModule("GUI")
 
 local tonumber, tostring, pairs, ipairs, next, select, type = tonumber, tostring, pairs, ipairs, next, select, type
-local tinsert, format, strsplit = table.insert, string.format, string.split
+local tinsert, format, strsplit, strfind = table.insert, string.format, string.split, string.find
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f, dataFrame = {}, {}
 
@@ -1237,7 +1237,7 @@ local function importData()
 			NDuiDB[key][value] = toBoolean(arg1)
 		elseif arg1 == "EMPTYTABLE" then
 			NDuiDB[key][value] = {}
-		elseif arg1 == "r" or arg1 == "g" or arg1 == "b" then
+		elseif strfind(value, "Color") and (arg1 == "r" or arg1 == "g" or arg1 == "b") then
 			local color = select(4, strsplit(":", option))
 			if NDuiDB[key][value] then
 				NDuiDB[key][value][arg1] = tonumber(color)
