@@ -43,9 +43,11 @@ tinsert(C.defaultThemes, function()
 				end
 			elseif widgetFrame.widgetType == Type_SpellDisplay then
 				if not widgetFrame.styled then
-					widgetFrame.Spell.DebuffBorder:SetTexture(nil)
-					local bg = B.ReskinIcon(widgetFrame.Spell.Icon)
-					bg:SetBackdropColor(1, 1, 1, .25)
+					local widgetSpell = widgetFrame.Spell
+					widgetSpell.IconMask:Hide()
+					widgetSpell.Border:SetTexture(nil)
+					widgetSpell.DebuffBorder:SetTexture(nil)
+					B.ReskinIcon(widgetSpell.Icon)
 
 					widgetFrame.styled = true
 				end
