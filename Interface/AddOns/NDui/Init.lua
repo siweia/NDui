@@ -71,8 +71,7 @@ end
 
 -- Init
 local function GetBestScale()
-	local scale = max(.4, min(1.15, 768 / DB.ScreenHeight))
-	return B:Round(scale, 2)
+	return max(.4, min(1.15, 768 / DB.ScreenHeight))
 end
 
 function B:SetupUIScale(init)
