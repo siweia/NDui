@@ -304,6 +304,8 @@ function UF:OnLogin()
 
 		-- Group Styles
 		if showPartyFrame then
+			UF:SyncWithZenTracker()
+
 			oUF:RegisterStyle("Party", CreatePartyStyle)
 			oUF:SetActiveStyle("Party")
 
