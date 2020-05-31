@@ -46,19 +46,18 @@ local function Update(self, event, unit, _, spellID)
 
 	if duration then
 		local thisTime = GetTime()
-		local button = element.spellIDToButton[spellID]
+		local button = element.spellToButton[spellID]
 		if not button then
 			if index == maxButtons then print("full limit") return end
 			index = index + 1
 			button = element[index]
 			button.lastTime = thisTime
-			button.CD:SetCooldown(thisTime, duration)
 			button.Icon:SetTexture(GetSpellTexture(spellID))
 			button.spellID = spellID
 			button:Show()
 
 			element.index = index
-			element.spellIDToButton[spellID] = button
+			element.spellToButton[spellID] = button
 		end
 
 		if talentCDFix and (duration >= thisTime-button.lastTime + 1) then -- allow 1s latency
@@ -67,13 +66,14 @@ local function Update(self, event, unit, _, spellID)
 		button.lastTime = thisTime
 		button.CD:SetCooldown(thisTime, duration)
 
-		if self.PostUpdate then self:PostUpdate(event, button, unit, spellID) end
+		if element.PostUpdate then element:PostUpdate(button, unit, spellID) end
 	end
 end
 
 local function ResetButtons(self)
 	local element = self.PartyWatcher
 	element.index = 0
+	wipe(element.spellToButton)
 	for i = 1, element.__max do
 		local button = element[i]
 		button.spellID = nil
@@ -87,7 +87,7 @@ local function Enable(self)
 	if element then
 		element.index = 0
 		element.maxButtons = #element
-		element.spellIDToButton = {}
+		element.spellToButton = {}
 		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", Update)
 		self:RegisterEvent("GROUP_ROSTER_UPDATE", ResetButtons, true)
 		self:RegisterEvent("GROUP_LEFT", ResetButtons, true)
