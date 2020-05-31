@@ -494,9 +494,6 @@ function UF:PartyWatcherPostUpdate(button, unit, spellID)
 	watchingList[guid][spellID] = button
 end
 
---[[
-	C_ChatInfo.SendAddonMessage("ZenTracker", "1:U:"..UnitGUID("player")..":136:60:25", "PARTY")
-]]
 function UF:HandleCDMessage(...)
 	local prefix, msg, distType, author = ...
 	if prefix ~= "ZenTracker" then return end
@@ -550,6 +547,8 @@ function UF:UpdateSyncStatus()
 end
 
 function UF:SyncWithZenTracker()
+	if not NDuiDB["UFs"]["PartyWatcherSync"] then return end
+
 	UF.myGUID = UnitGUID("player")
 	C_ChatInfo.RegisterAddonMessagePrefix("ZenTracker")
 	B:RegisterEvent("CHAT_MSG_ADDON", UF.HandleCDMessage)
@@ -603,7 +602,9 @@ function UF:InterruptIndicator(self)
 	buttons.PartySpells = NDuiADB["PartyWatcherSpells"]
 	buttons.TalentCDFix = C.TalentCDFix
 	self.PartyWatcher = buttons
-	self.PartyWatcher.PostUpdate = UF.PartyWatcherPostUpdate
+	if NDuiDB["UFs"]["PartyWatcherSync"] then
+		self.PartyWatcher.PostUpdate = UF.PartyWatcherPostUpdate
+	end
 end
 
 function UF:CreatePartyAltPower(self)
