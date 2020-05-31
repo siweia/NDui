@@ -629,3 +629,6 @@ L["SwitchSystemInfo"] = "SwitchMode" -- need translation
 L["ClickThroughTip"] = "|nIf enabled, the icon would be uninteractable, you can't select or mouseover them." -- need translation
 L["SimpleMode Column"] = "Units Per Column" -- need translation
 L["PartyAltPowerTip"] = "|nIf enabled, show special power in dungeons, eg corruption value in N'zoth Vision." -- need translation
+L["PartyWatcherTip"] = "|nIf enabled, show spell cooldown for your group members on PartyFrames. You can click the gear button to customize." -- need translation
+L["PartyWatcherSync"] = "Sync PartyWatcher Cooldown" -- need translation
+L["PartyWatcherSyncTip"] = "|nIf enabled, the cooldown status would sync with players who using PartyWatcher or ZenTracker(WA).|nThis might decrease your performance." -- need translation
