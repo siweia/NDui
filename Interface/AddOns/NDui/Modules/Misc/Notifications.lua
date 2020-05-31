@@ -214,6 +214,7 @@ end
 --[[
 	NDui版本过期提示
 ]]
+local lastVCTime, isVCInit = 0
 function M:VersionCheck_Compare(new, old)
 	local new1, new2 = strsplit(".", new)
 	new1, new2 = tonumber(new1), tonumber(new2)
@@ -229,25 +230,35 @@ function M:VersionCheck_Compare(new, old)
 end
 
 function M:VersionCheck_Create(text)
+	if not NDuiADB["VersionCheck"] then return end
+
 	local frame = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
 	frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 20, 70)
 	frame.Text:SetText(text)
 	frame:Show()
 end
 
-local hasChecked
-function M:VersionCheck_Initial()
-	if not hasChecked then
-		if M:VersionCheck_Compare(NDuiADB["DetectVersion"], DB.Version) == "IsNew" then
+function M:VersionCheck_Init()
+	if not isVCInit then
+		local status = M:VersionCheck_Compare(NDuiADB["DetectVersion"], DB.Version)
+		if status == "IsNew" then
 			local release = gsub(NDuiADB["DetectVersion"], "(%d+)$", "0")
 			M:VersionCheck_Create(format(L["Outdated NDui"], release))
+		elseif status == "IsOld" then
+			NDuiADB["DetectVersion"] = DB.Version
 		end
 
-		hasChecked = true
+		isVCInit = true
 	end
 end
 
-local lastTime = 0
+function M:VersionCheck_Send(channel)
+	if GetTime() - lastVCTime >= 10 then
+		C_ChatInfo_SendAddonMessage("NDuiVersionCheck", NDuiADB["DetectVersion"], channel)
+		lastVCTime = GetTime()
+	end
+end
+
 function M:VersionCheck_Update(...)
 	local prefix, msg, distType, author = ...
 	if prefix ~= "NDuiVersionCheck" then return end
@@ -257,35 +268,28 @@ function M:VersionCheck_Update(...)
 	if status == "IsNew" then
 		NDuiADB["DetectVersion"] = msg
 	elseif status == "IsOld" then
-		if GetTime() - lastTime > 10 then
-			C_ChatInfo_SendAddonMessage("NDuiVersionCheck", NDuiADB["DetectVersion"], distType)
-			lastTime = GetTime()
-		end
+		M:VersionCheck_Send(distType)
 	end
 
-	M:VersionCheck_Initial()
+	M:VersionCheck_Init()
 end
 
-local prevTime = 0
 function M:VersionCheck_UpdateGroup()
-	if not IsInGroup() or (GetTime()-prevTime < 10) then return end
-	prevTime = GetTime()
-	C_ChatInfo_SendAddonMessage("NDuiVersionCheck", DB.Version, msgChannel())
+	if not IsInGroup() then return end
+	M:VersionCheck_Send(msgChannel())
 end
 
 function M:VersionCheck()
-	hasChecked = not NDuiADB["VersionCheck"]
-
-	B:RegisterEvent("CHAT_MSG_ADDON", self.VersionCheck_Update)
-
-	M:VersionCheck_Initial()
+	M:VersionCheck_Init()
 	C_ChatInfo_RegisterAddonMessagePrefix("NDuiVersionCheck")
+	B:RegisterEvent("CHAT_MSG_ADDON", M.VersionCheck_Update)
+
 	if IsInGuild() then
 		C_ChatInfo_SendAddonMessage("NDuiVersionCheck", DB.Version, "GUILD")
+		lastVCTime = GetTime()
 	end
-
-	self:VersionCheck_UpdateGroup()
-	B:RegisterEvent("GROUP_ROSTER_UPDATE", self.VersionCheck_UpdateGroup)
+	M:VersionCheck_UpdateGroup()
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", M.VersionCheck_UpdateGroup)
 end
 
 --[[
