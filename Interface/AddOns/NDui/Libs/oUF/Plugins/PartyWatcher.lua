@@ -49,11 +49,12 @@ local function Update(self, event, unit, _, spellID)
 		for i = 1, maxButtons do
 			local button = element[i]
 			if button.spellID and button.spellID == spellID then
-				if talentCDFix and (thisTime-button.lastTime+1) <= duration then -- 1s latency
+				if talentCDFix and (duration >= thisTime-button.lastTime + 1) then -- allow 1s latency
 					duration = talentCDFix
 				end
 				button.lastTime = thisTime
 				button.CD:SetCooldown(thisTime, duration)
+				if self.PostUpdate then self:PostUpdate(event, unit, spellID) end
 				return
 			end
 		end
@@ -69,8 +70,6 @@ local function Update(self, event, unit, _, spellID)
 		button.spellID = spellID
 		button:Show()
 	end
-
-	if self.PostUpdate then self:PostUpdate(event, unit, spellID) end
 end
 
 local function ResetButtons(self)
