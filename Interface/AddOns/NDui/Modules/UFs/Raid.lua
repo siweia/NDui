@@ -7,7 +7,7 @@ local strmatch, format, wipe, tinsert = string.match, string.format, table.wipe,
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
 local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
 local InCombatLockdown = InCombatLockdown
-local GetTime, GetSpellCooldown, IsInRaid, IsInGroup = GetTime, GetSpellCooldown, IsInRaid, IsInGroup
+local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 
 -- RaidFrame Elements
@@ -524,7 +524,7 @@ function UF:SendCDMessage()
 				if enabled ~= 0 and start ~= 0 then
 					local remaining = start + duration - thisTime
 					if remaining < 0 then remaining = 0 end
-					C_ChatInfo_SendAddonMessage("ZenTracker", format("3:U:%s:%d:%.2f:%.2f:%s", UF.myGUID, spellID, duration, remaining, "-"), "PARTY") -- sync from others
+					C_ChatInfo_SendAddonMessage("ZenTracker", format("3:U:%s:%d:%.2f:%.2f:%s", UF.myGUID, spellID, duration, remaining, "-"), IsPartyLFG() and "INSTANCE_CHAT" or "PARTY") -- sync to others
 				end
 			end
 		end
@@ -537,7 +537,7 @@ function UF:UpdateSyncStatus()
 	if IsInGroup() and not IsInRaid() and NDuiDB["UFs"]["PartyFrame"] then
 		local thisTime = GetTime()
 		if thisTime - lastSyncTime > 5 then
-			C_ChatInfo_SendAddonMessage("ZenTracker", format("3:H:%s:0::0:1", UF.myGUID), "PARTY") -- sync to ZenTracker
+			C_ChatInfo_SendAddonMessage("ZenTracker", format("3:H:%s:0::0:1", UF.myGUID), IsPartyLFG() and "INSTANCE_CHAT" or "PARTY") -- handshake to ZenTracker
 			lastSyncTime = thisTime
 		end
 		B:RegisterEvent("SPELL_UPDATE_COOLDOWN", UF.SendCDMessage)
