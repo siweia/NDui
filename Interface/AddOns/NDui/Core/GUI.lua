@@ -187,7 +187,7 @@ local defaultSettings = {
 		Clock = false,
 		CombatPulse = true,
 		MapScale = 1,
-		MinmapScale = 1.4,
+		MinimapScale = 1.4,
 		ShowRecycleBin = true,
 		WhoPings = true,
 		MapReveal = true,
@@ -840,7 +840,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{},--blank
 		{3, "Map", "MapScale", L["Map Scale"], false, {1, 2, 1}},
-		{3, "Map", "MinmapScale", L["Minimap Scale"].."*", true, {1, 2, 1}, updateMinimapScale},
+		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", true, {1, 2, 1}, updateMinimapScale},
 	},
 	[10] = {
 		{1, "Skins", "BlizzardSkins", "|cff00cc4c"..L["BlizzardSkins"], nil, nil, nil, L["BlizzardSkinsTips"]},

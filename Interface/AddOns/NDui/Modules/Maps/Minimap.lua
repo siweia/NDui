@@ -321,7 +321,7 @@ function module:WhoPingsMyMap()
 end
 
 function module:UpdateMinimapScale()
-	local scale = NDuiDB["Map"]["MinmapScale"]
+	local scale = NDuiDB["Map"]["MinimapScale"]
 	Minimap:SetScale(scale)
 	Minimap.mover:SetSize(Minimap:GetWidth()*scale, Minimap:GetHeight()*scale)
 end
