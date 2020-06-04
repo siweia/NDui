@@ -322,6 +322,7 @@ local defaultSettings = {
 
 local accountSettings = {
 	ChatFilterList = "%*",
+	ChatFilterWhiteList = "",
 	TimestampFormat = 4,
 	NameplateFilter = {[1]={}, [2]={}},
 	RaidDebuffs = {},
@@ -476,6 +477,10 @@ end
 
 local function updateFilterList()
 	B:GetModule("Chat"):UpdateFilterList()
+end
+
+local function updateFilterWhiteList()
+	B:GetModule("Chat"):UpdateFilterWhiteList()
 end
 
 local function updateChatSize()
@@ -821,7 +826,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
 		{1, "Chat", "AllowFriends", L["AllowFriendsSpam"].."*", nil, nil, nil, L["AllowFriendsSpamTip"]},
-		{1, "Chat", "BlockStranger", "|cffff0000"..L["BlockStranger"].."*", true, nil, nil, L["BlockStrangerTip"]},
+		{1, "Chat", "BlockStranger", "|cffff0000"..L["BlockStranger"].."*", nil, nil, nil, L["BlockStrangerTip"]},
+		{2, "ACCOUNT", "ChatFilterWhiteList", "|cff00cc4c"..L["ChatFilterWhiteList"].."*", true, nil, updateFilterWhiteList, L["ChatFilterWhiteListTip"]},
 		{3, "Chat", "Matches", L["Keyword Match"].."*", false, {1, 3, 0}},
 		{2, "ACCOUNT", "ChatFilterList", L["Filter List"].."*", true, nil, updateFilterList, L["FilterListTip"]},
 		{},--blank
