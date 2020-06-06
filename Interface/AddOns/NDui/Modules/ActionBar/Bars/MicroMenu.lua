@@ -57,26 +57,28 @@ function Bar:MicroButton_Create(parent, data)
 	end
 end
 
-function Bar:MicroMenu_Lines()
+function Bar:MicroMenu_Lines(parent)
 	if not NDuiDB["Skins"]["MenuLine"] then return end
 
 	local cr, cg, cb = 0, 0, 0
 	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
 
-	-- MICROMENU
-	local mmbottomL = CreateFrame("Frame", nil, UIParent)
-	mmbottomL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 3)
-	B.CreateGF(mmbottomL, 210, C.mult, "Horizontal", cr, cg, cb, 0, .7)
-	local mmbottomR = CreateFrame("Frame", nil, UIParent)
-	mmbottomR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 3)
-	B.CreateGF(mmbottomR, 210, C.mult, "Horizontal", cr, cg, cb, .7, 0)
-
-	local mmtopL = CreateFrame("Frame", nil, UIParent)
-	mmtopL:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 24)
-	B.CreateGF(mmtopL, 230, C.mult, "Horizontal", cr, cg, cb, 0, .7)
-	local mmtopR = CreateFrame("Frame", nil, UIParent)
-	mmtopR:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 24)
-	B.CreateGF(mmtopR, 230, C.mult, "Horizontal", cr, cg, cb, .7, 0)
+	local width, height = 200, 20
+	local anchors = {
+		["LEFT"] = {.5, 0, .7, 0},
+		["RIGHT"] = {0, .5, 0, .7}
+	}
+	for anchor, v in pairs(anchors) do
+		local frame = CreateFrame("Frame", nil, parent)
+		frame:SetPoint(anchor, parent, "CENTER", 0, 0)
+		B.CreateGF(frame, width, height, "Horizontal", 0, 0, 0, v[1], v[2])
+		local bottomLine = CreateFrame("Frame", nil, parent)
+		bottomLine:SetPoint("TOP"..anchor, frame, "BOTTOM"..anchor, 0, 0)
+		B.CreateGF(bottomLine, width-25, C.mult, "Horizontal", cr, cg, cb, v[3], v[4])
+		local topLine = CreateFrame("Frame", nil, parent)
+		topLine:SetPoint("BOTTOM"..anchor, frame, "TOP"..anchor, 0, 0)
+		B.CreateGF(topLine, width+25, C.mult, "Horizontal", cr, cg, cb, v[3], v[4])
+	end
 end
 
 function Bar:MicroMenu()
@@ -85,7 +87,7 @@ function Bar:MicroMenu()
 	local menubar = CreateFrame("Frame", nil, UIParent)
 	menubar:SetSize(323, 22)
 	B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
-	Bar:MicroMenu_Lines()
+	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
 	local buttonInfo = {
