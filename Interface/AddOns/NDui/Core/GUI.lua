@@ -728,6 +728,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["SimpleRaidFrame"], nil, nil, nil, L["SimpleRaidFrameTip"]},
 		{3, "UFs", "SMUnitsPerColumn", L["SimpleMode Column"], nil, {10, 40, 0}},
 		{4, "UFs", "SMGroupByIndex", L["SimpleMode GroupBy"].."*", true, {GROUP, CLASS, ROLE}, updateSimpleModeGroupBy},
+		{nil, true},-- FIXME: dirty fix for now
+		{nil, true},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"], nil, setupNameplateFilter},
@@ -1112,9 +1114,11 @@ local function CreateOption(i)
 			end
 		-- Blank, no optType
 		else
-			local l = CreateFrame("Frame", nil, parent)
-			l:SetPoint("TOPLEFT", 25, -offset - 12)
-			B.CreateGF(l, 560, C.mult, "Horizontal", 1, 1, 1, .25, .25)
+			if not key then
+				local l = CreateFrame("Frame", nil, parent)
+				l:SetPoint("TOPLEFT", 25, -offset - 12)
+				B.CreateGF(l, 560, C.mult, "Horizontal", 1, 1, 1, .25, .25)
+			end
 			offset = offset + 35
 		end
 	end
