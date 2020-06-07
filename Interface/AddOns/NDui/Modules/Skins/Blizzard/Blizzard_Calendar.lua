@@ -63,6 +63,7 @@ C.themes["Blizzard_Calendar"] = function()
 	end
 	reskinCalendarPage(CalendarViewHolidayFrame)
 	reskinCalendarPage(CalendarCreateEventFrame)
+	reskinCalendarPage(CalendarViewEventFrame)
 	reskinCalendarPage(CalendarTexturePickerFrame)
 	reskinCalendarPage(CalendarEventPickerFrame)
 
