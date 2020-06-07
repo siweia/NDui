@@ -833,12 +833,16 @@ do
 		thumb.bg:SetBackdropBorderColor(0, 0, 0)
 	end
 
+	local function GrabScrollBarElement(frame, element)
+		local frameName = frame:GetDebugName()
+		return frame[element] or frameName and (_G[frameName..element] or strfind(frameName, element)) or nil
+	end
+
 	function B:ReskinScroll()
 		B.StripTextures(self:GetParent())
 		B.StripTextures(self)
 
-		local frameName = self.GetName and self:GetName()
-		local thumb = frameName and (_G[frameName.."ThumbTexture"] or _G[frameName.."thumbTexture"]) or self.GetThumbTexture and self:GetThumbTexture()
+		local thumb = GrabScrollBarElement(self, "ThumbTexture") or GrabScrollBarElement(self, "thumbTexture") or self.GetThumbTexture and self:GetThumbTexture()
 		if thumb then
 			thumb:SetAlpha(0)
 			thumb:SetWidth(17)
