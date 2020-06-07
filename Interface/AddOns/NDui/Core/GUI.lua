@@ -94,8 +94,8 @@ local defaultSettings = {
 		AutoRes = true,
 		NumGroups = 6,
 		SimpleMode = false,
-		SMSortByRole = true,
 		SMUnitsPerColumn = 20,
+		SMGroupByIndex = 1,
 		InstanceAuras = true,
 		RaidDebuffScale = 1,
 		SpecRaidPos = false,
@@ -542,6 +542,13 @@ local function refreshRaidFrameIcons()
 	B:GetModule("UnitFrames"):RefreshRaidFrameIcons()
 end
 
+local function updateSimpleModeGroupBy()
+	local UF = B:GetModule("UnitFrames")
+	if UF.UpdateSimpleModeHeader then
+		UF:UpdateSimpleModeHeader()
+	end
+end
+
 local function updateSmoothingAmount()
 	B:SetSmoothingAmount(NDuiDB["UFs"]["SmoothAmount"])
 end
@@ -718,9 +725,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 0}},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"], true, {.8, 1.5, 2}, updateRaidTextScale},
 		{},--blank
-		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["Simple RaidFrame"]},
-		{1, "UFs", "SMSortByRole", L["SimpleMode SortByRole"]},
-		{3, "UFs", "SMUnitsPerColumn", L["SimpleMode Column"], true, {10, 40, 0}},
+		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["SimpleRaidFrame"], nil, nil, nil, L["SimpleRaidFrameTip"]},
+		{3, "UFs", "SMUnitsPerColumn", L["SimpleMode Column"], nil, {10, 40, 0}},
+		{4, "UFs", "SMGroupByIndex", L["SimpleMode GroupBy"].."*", true, {GROUP, CLASS, ROLE}, updateSimpleModeGroupBy},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"], nil, setupNameplateFilter},
