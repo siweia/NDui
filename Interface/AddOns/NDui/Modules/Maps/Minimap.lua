@@ -116,7 +116,7 @@ function module:ReskinRegions()
 
 	local Invt = CreateFrame("Button", nil, UIParent)
 	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
-	Invt:SetSize(300, 80)
+	Invt:SetSize(250, 80)
 	Invt:Hide()
 	B.SetBD(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
