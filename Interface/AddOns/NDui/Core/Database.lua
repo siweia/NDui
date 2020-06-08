@@ -79,7 +79,6 @@ DB.textures = {
 	normal		= Media.."ActionBar\\gloss",
 	flash		= Media.."ActionBar\\flash",
 	pushed		= Media.."ActionBar\\pushed",
-	checked		= Media.."ActionBar\\checked",
 }
 DB.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
 DB.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
