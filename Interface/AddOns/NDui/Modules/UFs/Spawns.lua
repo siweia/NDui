@@ -373,12 +373,6 @@ function UF:OnLogin()
 		if NDuiDB["UFs"]["SimpleMode"] then
 			local unitsPerColumn = NDuiDB["UFs"]["SMUnitsPerColumn"]
 			local maxColumns = B:Round(numGroups*5 / unitsPerColumn)
-			local groupByIndex = NDuiDB["UFs"]["SMGroupByIndex"]
-			local groupByTypes = {
-				[1] = {"1,2,3,4,5,6,7,8", "GROUP", "INDEX"},
-				[2] = {"DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
-				[3] = {"TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"},
-			}
 
 			local function CreateGroup(name, i)
 				local group = oUF:SpawnHeader(name, nil, "solo,party,raid",
@@ -419,6 +413,11 @@ function UF:OnLogin()
 			local moverHeight = 20*scale*unitsPerColumn + 5*(unitsPerColumn-1)
 			raidMover = B.Mover(group, L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, moverWidth, moverHeight)
 
+			local groupByTypes = {
+				[1] = {"1,2,3,4,5,6,7,8", "GROUP", "INDEX"},
+				[2] = {"DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
+				[3] = {"TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"},
+			}
 			function UF:UpdateSimpleModeHeader()
 				local groupByIndex = NDuiDB["UFs"]["SMGroupByIndex"]
 				group:SetAttribute("groupingOrder", groupByTypes[groupByIndex][1])
