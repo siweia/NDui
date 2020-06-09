@@ -186,6 +186,7 @@ function Bar:StyleActionButton(button, cfg)
 	local count = _G[buttonName.."Count"]
 	local name = _G[buttonName.."Name"]
 	local border = _G[buttonName.."Border"]
+	local autoCastable = _G[buttonName.."AutoCastable"]
 	local NewActionTexture = button.NewActionTexture
 	local cooldown = _G[buttonName.."Cooldown"]
 	local normalTexture = button:GetNormalTexture()
@@ -214,7 +215,7 @@ function Bar:StyleActionButton(button, cfg)
 	SetupTexture(highlightTexture, cfg.highlightTexture, "SetHighlightTexture", button)
 	SetupTexture(checkedTexture, cfg.checkedTexture, "SetCheckedTexture", button)
 
-	checkedTexture:SetColorTexture(1, .8, 0, .25)
+	checkedTexture:SetColorTexture(1, .8, 0, .35)
 	highlightTexture:SetColorTexture(1, 1, 1, .25)
 
 	--cooldown
@@ -247,6 +248,10 @@ function Bar:StyleActionButton(button, cfg)
 		else
 			name:Hide()
 		end
+	end
+
+	if autoCastable then
+		autoCastable:SetOutside(button, cfg.autoCastSize, cfg.autoCastSize)
 	end
 
 	button.__styled = true
@@ -425,6 +430,7 @@ function Bar:ReskinBars()
 			},
 		},
 		buttonstyle = {file = ""},
+		autoCastSize = (C.bars.petbar.size/2 - C.bars.petbar.size/7.5),
 	}
 
 	Bar:StyleAllActionButtons(cfg)
