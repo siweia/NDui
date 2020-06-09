@@ -27,6 +27,16 @@ function module:UpdateChatSize()
 	if isScaling then return end
 	isScaling = true
 
+	if ChatFrame1:IsMovable() then
+		ChatFrame1:SetUserPlaced(true)
+	end
+	if ChatFrame1.FontStringContainer then
+		ChatFrame1.FontStringContainer:SetOutside(ChatFrame1)
+	end
+	if ChatFrame1:IsShown() then
+		ChatFrame1:Hide()
+		ChatFrame1:Show()
+	end
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
 	ChatFrame1:SetWidth(NDuiDB["Chat"]["ChatWidth"])
@@ -35,6 +45,7 @@ function module:UpdateChatSize()
 	if bg then
 		bg:SetHeight(NDuiDB["Chat"]["ChatHeight"] + 30)
 	end
+
 	isScaling = false
 end
 
