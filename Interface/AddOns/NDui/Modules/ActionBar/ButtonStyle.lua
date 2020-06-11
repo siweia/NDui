@@ -251,7 +251,8 @@ function Bar:StyleActionButton(button, cfg)
 	end
 
 	if autoCastable then
-		autoCastable:SetOutside(button, cfg.autoCastSize, cfg.autoCastSize)
+		autoCastable:SetTexCoord(.217, .765, .217, .765)
+		autoCastable:SetInside()
 	end
 
 	button.__styled = true
@@ -430,7 +431,6 @@ function Bar:ReskinBars()
 			},
 		},
 		buttonstyle = {file = ""},
-		autoCastSize = (C.bars.petbar.size/2 - C.bars.petbar.size/7.5),
 	}
 
 	Bar:StyleAllActionButtons(cfg)
