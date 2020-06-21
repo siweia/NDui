@@ -664,7 +664,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", true, nil, updateBagStatus},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"]},
 		{1, "Bags", "DeleteButton", L["Bags DeleteButton"]},
-		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", true, {1, 500, .1}, updateBagStatus, L["iLvlToShowTip"]},
+		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", true, {1, 500, 1}, updateBagStatus, L["iLvlToShowTip"]},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, .1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 1}},
