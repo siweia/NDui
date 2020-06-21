@@ -741,7 +741,7 @@ local function sliderValueChanged(self, v)
 end
 
 local function createOptionSlider(parent, title, minV, maxV, x, y, value, func)
-	local slider = B.CreateSlider(parent, title, minV, maxV, x, y)
+	local slider = B.CreateSlider(parent, title, minV, maxV, 1, x, y)
 	slider:SetValue(NDuiDB["UFs"][value])
 	slider.value:SetText(NDuiDB["UFs"][value])
 	slider.__value = value
