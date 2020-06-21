@@ -1473,11 +1473,13 @@ do
 		self:ClearFocus()
 	end
 
-	function B:CreateSlider(name, minValue, maxValue, x, y, width)
+	function B:CreateSlider(name, minValue, maxValue, step, x, y, width)
 		local slider = CreateFrame("Slider", nil, self, "OptionsSliderTemplate")
 		slider:SetPoint("TOPLEFT", x, y)
 		slider:SetWidth(width or 200)
 		slider:SetMinMaxValues(minValue, maxValue)
+		slider:SetValueStep(step)
+		slider:SetObeyStepOnDrag(true)
 		slider:SetHitRectInsets(0, 0, 0, 0)
 		B.ReskinSlider(slider)
 
