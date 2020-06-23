@@ -17,7 +17,7 @@ C.themes["Blizzard_TalkingHeadUI"] = function()
 	model.PortraitBg.SetAtlas = B.Dummy
 
 	local name = TalkingHeadFrame.NameFrame.Name
-	name:SetTextColor(1, 0.82, 0.02)
+	name:SetTextColor(1, .8, 0)
 	name.SetTextColor = B.Dummy
 	name:SetShadowColor(0, 0, 0, 0)
 

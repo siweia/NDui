@@ -17,19 +17,11 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 		LookingForGuildRolesFrameBg:Hide()
 		B.CreateBD(LookingForGuildCommentFrame, .25)
 		LookingForGuildCommentFrameBg:Hide()
+		B.StripTextures(LookingForGuildCommentInputFrame)
 		B.CreateBD(LookingForGuildCommentInputFrame, .12)
 		B.SetBD(GuildFinderRequestMembershipFrame)
-		for i = 1, 9 do
-			select(i, LookingForGuildCommentInputFrame:GetRegions()):Hide()
-		end
 		for i = 1, 3 do
-			for j = 1, 6 do
-				select(j, _G["LookingForGuildFrameTab"..i]:GetRegions()):Hide()
-				select(j, _G["LookingForGuildFrameTab"..i]:GetRegions()).Show = B.Dummy
-			end
-		end
-		for i = 1, 6 do
-			select(i, GuildFinderRequestMembershipFrameInputFrame:GetRegions()):Hide()
+			B.StripTextures(_G["LookingForGuildFrameTab"..i])
 		end
 		LookingForGuildFrameTabardBackground:Hide()
 		LookingForGuildFrameTabardEmblem:Hide()
@@ -45,6 +37,7 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 		B.ReskinCheck(LookingForGuildRPButton)
 		B.ReskinCheck(LookingForGuildWeekdaysButton)
 		B.ReskinCheck(LookingForGuildWeekendsButton)
+		B.StripTextures(GuildFinderRequestMembershipFrameInputFrame)
 		B.ReskinInput(GuildFinderRequestMembershipFrameInputFrame)
 
 		-- [[ Browse frame ]]
