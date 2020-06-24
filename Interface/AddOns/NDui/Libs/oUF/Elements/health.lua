@@ -93,8 +93,6 @@ local function UpdateColor(self, event, unit)
 		t = self.colors.disconnected
 	elseif(element.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)) then
 		t = self.colors.tapped
-	elseif(element.colorThreat and not UnitPlayerControlled(unit) and UnitThreatSituation('player', unit)) then
-		t =  self.colors.threat[UnitThreatSituation('player', unit)]
 	elseif(element.colorClass and UnitIsPlayer(unit)) or
 		(element.colorClassNPC and not UnitIsPlayer(unit)) or
 		(element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
@@ -247,6 +245,10 @@ local function Enable(self, unit)
 			self:RegisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		end
 
+		if(element.colorSelection) then
+			self:RegisterEvent('UNIT_FLAGS', ColorPath)
+		end
+
 		if(element.colorTapping) then
 			self:RegisterEvent('UNIT_FACTION', ColorPath)
 		end
@@ -272,6 +274,7 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 
 		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+		self:UnregisterEvent('UNIT_FLAGS', ColorPath)
 		self:UnregisterEvent('UNIT_FACTION', ColorPath)
 		self:UnregisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
 		self:UnregisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
