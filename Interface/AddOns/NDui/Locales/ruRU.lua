@@ -634,3 +634,7 @@ L["PartyAltPowerTip"] = "|nIf enabled, show special power in dungeons, eg corrup
 L["PartyWatcherTip"] = "|nIf enabled, show spell cooldown for your group members on PartyFrames. You can click the gear button to customize." -- need translation
 L["PartyWatcherSync"] = "Sync PartyWatcher Cooldown" -- need translation
 L["PartyWatcherSyncTip"] = "|nIf enabled, the cooldown status would sync with players who using PartyWatcher or ZenTracker(WA).|nThis might decrease your performance." -- need translation
+L["FrequentHealth"] = "Frequent health update" -- need translation
+L["FrequentHealthTip"] = "|nIf enabled, the healthbar on RaidFrames would update by time, instead of system events." -- need translation
+L["HealthFrequency"] = "Health update frequency" -- need translation
+L["HealthFrequencyTip"] = "|nIf 'Frequent health update' enabled, the lower you set, the faster the healthbar would update." -- need translation

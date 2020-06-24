@@ -495,6 +495,8 @@ function UF:OnLogin()
 			end
 		end
 
+		UF:UpdateRaidHealthMethod()
+
 		if raidMover then
 			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
 

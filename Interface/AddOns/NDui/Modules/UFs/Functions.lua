@@ -105,6 +105,16 @@ function UF:CreateHealthBar(self)
 	self.Health.bg = bg
 end
 
+function UF:UpdateRaidHealthMethod()
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == "raid" then
+			frame:SetHealthUpdateMethod(NDuiDB["UFs"]["FrequentHealth"])
+			frame:SetHealthUpdateSpeed(NDuiDB["UFs"]["HealthFrequency"])
+			frame.Health:ForceUpdate()
+		end
+	end
+end
+
 function UF:CreateHealthText(self)
 	local mystyle = self.mystyle
 	local textFrame = CreateFrame("Frame", nil, self)
