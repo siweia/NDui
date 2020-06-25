@@ -672,6 +672,20 @@ do
 		return bu
 	end
 
+	local function updateIconBorderColor(self, r, g, b)
+		if r == .65882 then r, g, b = 0, 0, 0 end
+		self.__owner.bg:SetBackdropBorderColor(r, g, b)
+	end
+	local function resetIconBorderColor(self)
+		self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+	function B:HookIconBorderColor()
+		self.__owner = self:GetParent()
+		if not self.__owner.bg then return end
+		hooksecurefunc(self, "SetVertexColor", updateIconBorderColor)
+		hooksecurefunc(self, "Hide", resetIconBorderColor)
+	end
+
 	-- Handle statusbar
 	function B:CreateSB(spark, r, g, b)
 		self:SetStatusBarTexture(DB.normTex)
