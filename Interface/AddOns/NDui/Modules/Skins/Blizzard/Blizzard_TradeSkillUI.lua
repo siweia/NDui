@@ -95,8 +95,8 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 		B.ReskinIcon(reagent.Icon)
 		reagent.NameFrame:Hide()
 		local bg = B.CreateBDFrame(reagent.NameFrame, .2)
-		bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, 0)
-		bg:SetPoint("BOTTOMRIGHT", -4, 0)
+		bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, C.mult)
+		bg:SetPoint("BOTTOMRIGHT", -4, C.mult)
 	end
 	B.Reskin(details.ViewGuildCraftersButton)
 
