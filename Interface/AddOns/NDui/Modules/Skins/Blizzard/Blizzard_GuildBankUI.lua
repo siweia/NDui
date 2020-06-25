@@ -64,32 +64,11 @@ C.themes["Blizzard_GuildBankUI"] = function()
 			button.icon:SetTexCoord(unpack(DB.TexCoord))
 			button.bg = B.CreateBDFrame(button, .3)
 			button.bg:SetBackdropColor(.3, .3, .3, .3)
-			button.IconBorder:SetAlpha(0)
 			button.searchOverlay:SetOutside()
+			button.IconBorder:SetAlpha(0)
+			B.HookIconBorderColor(button.IconBorder)
 		end
 	end
-
-	hooksecurefunc("GuildBankFrame_Update", function()
-		if GuildBankFrame.mode == "bank" then
-			local tab = GetCurrentGuildBankTab()
-			local button, index, column
-			for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
-				index = mod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
-				if index == 0 then
-					index = NUM_SLOTS_PER_GUILDBANK_GROUP
-				end
-				column = ceil((i-0.5)/NUM_SLOTS_PER_GUILDBANK_GROUP)
-				button = _G["GuildBankColumn"..column.."Button"..index]
-				local texture, _, _, _, quality = GetGuildBankItemInfo(tab, i)
-				if texture then
-					local color = DB.QualityColors[quality or 1]
-					button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-				else
-					button.bg:SetBackdropBorderColor(0, 0, 0)
-				end
-			end
-		end
-	end)
 
 	for i = 1, 8 do
 		local tab = _G["GuildBankTab"..i]

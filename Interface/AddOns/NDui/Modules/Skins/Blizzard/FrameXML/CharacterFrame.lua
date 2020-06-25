@@ -79,7 +79,7 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
-		B.CreateBD(slot, .25)
+		slot.bg = B.CreateBDFrame(slot.icon, .25)
 		cooldown:SetInside()
 
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
@@ -88,8 +88,7 @@ tinsert(C.defaultThemes, function()
 		slot.IconOverlay:SetInside()
 
 		border:SetAlpha(0)
-		hooksecurefunc(border, "SetVertexColor", function(_, r, g, b) slot:SetBackdropBorderColor(r, g, b) end)
-		hooksecurefunc(border, "Hide", function() slot:SetBackdropBorderColor(0, 0, 0) end)
+		B.HookIconBorderColor(border)
 
 		local popout = slot.popoutButton
 		popout:SetNormalTexture("")

@@ -16,14 +16,15 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 
 		local itemButton = itemDisplay.ItemButton
 		if itemButton.IconMask then itemButton.IconMask:Hide() end
-		if itemButton.IconBorder then itemButton.IconBorder:SetAlpha(0) end
+		if itemButton.IconBorder then
+			itemButton.IconBorder:SetAlpha(0)
+			B.HookIconBorderColor(itemButton.IconBorder)
+		end
 		itemButton.EmptyBackground:Hide()
 		itemButton:SetPushedTexture("")
 		itemButton.Highlight:SetColorTexture(1, 1, 1, .25)
 		itemButton.Highlight:SetAllPoints(itemButton.Icon)
-		local bg = B.ReskinIcon(itemButton.Icon)
-		hooksecurefunc(itemButton.IconBorder, "SetVertexColor", function(_, r, g, b) bg:SetBackdropBorderColor(r, g, b) end)
-		hooksecurefunc(itemButton.IconBorder, "Hide", function() bg:SetBackdropBorderColor(0, 0, 0) end)
+		itemButton.bg = B.ReskinIcon(itemButton.Icon)
 
 		B.ReskinInput(frame.QuantityInput.InputBox)
 		B.Reskin(frame.QuantityInput.MaxButton)
