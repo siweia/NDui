@@ -157,8 +157,10 @@ function UF:CheckTankStatus(unit)
 end
 
 -- Update unit color
-function UF.UpdateColor(element, unit)
-	local self = element.__owner
+function UF.UpdateColor(self, _, unit)
+	if not unit or self.unit ~= unit then return end
+
+	local element = self.Health
 	local name = self.unitName
 	local npcID = self.npcID
 	local isCustomUnit = customUnits[name] or customUnits[npcID]
@@ -237,7 +239,7 @@ function UF:UpdateThreatColor(_, unit)
 	if unit ~= self.unit then return end
 
 	UF.CheckTankStatus(self, unit)
-	UF.UpdateColor(self.Health, unit)
+	UF.UpdateColor(self, unit)
 end
 
 function UF:CreateThreatColor(self)
