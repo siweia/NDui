@@ -38,15 +38,15 @@ tinsert(C.defaultThemes, function()
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 			button.icon:SetTexCoord(unpack(DB.TexCoord))
-			B.CreateBDFrame(button, .25)
+			button.bg = B.CreateBDFrame(button.icon, .25)
 
 			-- easiest way to 'hide' it without breaking stuff
 			newItemTexture:SetDrawLayer("BACKGROUND")
 			newItemTexture:SetSize(1, 1)
 
-			border:SetOutside()
-			border:SetDrawLayer("BACKGROUND", 1)
 			searchOverlay:SetOutside()
+			border:SetAlpha(0)
+			B.HookIconBorderColor(border)
 		end
 
 		local f = B.CreateBDFrame(con, nil, true)
@@ -76,8 +76,6 @@ tinsert(C.defaultThemes, function()
 
 		for i = 1, frame.size do
 			local itemButton = _G[name.."Item"..i]
-
-			itemButton.IconBorder:SetTexture(DB.bdTex)
 			if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
 				itemButton.IconBorder:SetVertexColor(1, 1, 0)
 			end

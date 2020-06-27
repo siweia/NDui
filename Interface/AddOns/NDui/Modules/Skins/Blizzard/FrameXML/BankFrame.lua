@@ -28,21 +28,18 @@ tinsert(C.defaultThemes, function()
 		local questTexture = bu.IconQuestTexture
 		local searchOverlay = bu.searchOverlay
 
-		questTexture:SetDrawLayer("BACKGROUND")
-		questTexture:SetSize(1, 1)
-
-		border:SetTexture(DB.bdTex)
-		border.SetTexture = B.Dummy
-		border:SetOutside()
-		border:SetDrawLayer("BACKGROUND", 1)
-		searchOverlay:SetOutside()
-
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		bu.icon:SetTexCoord(unpack(DB.TexCoord))
-		B.CreateBDFrame(bu, .25)
+		bu.bg = B.CreateBDFrame(bu.icon, .25)
+
+		questTexture:SetDrawLayer("BACKGROUND")
+		questTexture:SetSize(1, 1)
+		searchOverlay:SetOutside()
+		border:SetAlpha(0)
+		B.HookIconBorderColor(border)
 	end
 
 	for i = 1, 28 do
@@ -57,16 +54,14 @@ tinsert(C.defaultThemes, function()
 		bag:SetNormalTexture("")
 		bag:SetPushedTexture("")
 		bag:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		bag.SlotHighlightTexture:SetTexture(DB.textures.pushed)
-
-		border:SetTexture(DB.bdTex)
-		border.SetTexture = B.Dummy
-		border:SetOutside()
-		border:SetDrawLayer("BACKGROUND", 1)
-		searchOverlay:SetOutside()
+		bag.SlotHighlightTexture:SetColorTexture(1, .8, 0, .25)
 
 		bag.icon:SetTexCoord(unpack(DB.TexCoord))
-		B.CreateBDFrame(bag, .25)
+		bag.bg = B.CreateBDFrame(bag.icon, .25)
+
+		searchOverlay:SetOutside()
+		border:SetAlpha(0)
+		B.HookIconBorderColor(border)
 	end
 
 	BankItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
@@ -100,6 +95,7 @@ tinsert(C.defaultThemes, function()
 		if not reagentButtonsStyled then
 			for i = 1, 98 do
 				styleBankButton(_G["ReagentBankFrameItem"..i])
+				BankFrameItemButton_Update(_G["ReagentBankFrameItem"..i])
 			end
 			reagentButtonsStyled = true
 		end
