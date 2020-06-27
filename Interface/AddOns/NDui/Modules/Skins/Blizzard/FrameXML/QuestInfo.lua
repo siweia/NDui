@@ -89,14 +89,12 @@ tinsert(C.defaultThemes, function()
 
 	local function restyleRewardButton(bu, isMapQuestInfo)
 		bu.NameFrame:Hide()
-		if bu.IconBorder then bu.IconBorder:SetAlpha(0) end
 
 		if isMapQuestInfo then
 			bu.Icon:SetSize(29, 29)
 		else
 			bu.Icon:SetSize(34, 34)
 		end
-
 		bu.bg = B.ReskinIcon(bu.Icon)
 
 		local bg = B.CreateBDFrame(bu, .25)

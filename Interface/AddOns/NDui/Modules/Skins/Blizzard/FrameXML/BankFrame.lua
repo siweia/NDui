@@ -24,22 +24,18 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(BankItemSearchBox)
 
 	local function styleBankButton(bu)
-		local border = bu.IconBorder
-		local questTexture = bu.IconQuestTexture
-		local searchOverlay = bu.searchOverlay
-
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		bu.searchOverlay:SetOutside()
 
 		bu.icon:SetTexCoord(unpack(DB.TexCoord))
 		bu.bg = B.CreateBDFrame(bu.icon, .25)
+		B.HookIconBorderColor(bu.IconBorder)
 
+		local questTexture = bu.IconQuestTexture
 		questTexture:SetDrawLayer("BACKGROUND")
 		questTexture:SetSize(1, 1)
-		searchOverlay:SetOutside()
-		border:SetAlpha(0)
-		B.HookIconBorderColor(border)
 	end
 
 	for i = 1, 28 do
@@ -48,20 +44,15 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, 7 do
 		local bag = BankSlotsFrame["Bag"..i]
-		local border = bag.IconBorder
-		local searchOverlay = bag.searchOverlay
-
 		bag:SetNormalTexture("")
 		bag:SetPushedTexture("")
 		bag:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bag.SlotHighlightTexture:SetColorTexture(1, .8, 0, .25)
+		bag.searchOverlay:SetOutside()
 
 		bag.icon:SetTexCoord(unpack(DB.TexCoord))
 		bag.bg = B.CreateBDFrame(bag.icon, .25)
-
-		searchOverlay:SetOutside()
-		border:SetAlpha(0)
-		B.HookIconBorderColor(border)
+		B.HookIconBorderColor(bag.IconBorder)
 	end
 
 	BankItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)

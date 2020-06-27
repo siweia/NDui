@@ -21,7 +21,6 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 		itemButton.Highlight:SetColorTexture(1, 1, 1, .25)
 		itemButton.Highlight:SetAllPoints(itemButton.Icon)
 		itemButton.bg = B.ReskinIcon(itemButton.Icon)
-		itemButton.IconBorder:SetAlpha(0)
 		B.HookIconBorderColor(itemButton.IconBorder)
 
 		B.ReskinInput(frame.QuantityInput.InputBox)

@@ -74,7 +74,6 @@ tinsert(C.defaultThemes, function()
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
 		local cooldown = _G["Character"..slots[i].."SlotCooldown"]
-		local border = slot.IconBorder
 
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
@@ -86,9 +85,7 @@ tinsert(C.defaultThemes, function()
 		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
 		slot.IconOverlay:SetAtlas("Nzoth-inventory-icon")
 		slot.IconOverlay:SetInside()
-
-		border:SetAlpha(0)
-		B.HookIconBorderColor(border)
+		B.HookIconBorderColor(slot.IconBorder)
 
 		local popout = slot.popoutButton
 		popout:SetNormalTexture("")

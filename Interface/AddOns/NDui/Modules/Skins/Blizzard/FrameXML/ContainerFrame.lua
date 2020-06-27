@@ -25,8 +25,6 @@ tinsert(C.defaultThemes, function()
 		for k = 1, MAX_CONTAINER_ITEMS do
 			local item = "ContainerFrame"..i.."Item"..k
 			local button = _G[item]
-			local border = button.IconBorder
-			local searchOverlay = button.searchOverlay
 			local questTexture = _G[item.."IconQuestTexture"]
 			local newItemTexture = button.NewItemTexture
 
@@ -44,9 +42,8 @@ tinsert(C.defaultThemes, function()
 			newItemTexture:SetDrawLayer("BACKGROUND")
 			newItemTexture:SetSize(1, 1)
 
-			searchOverlay:SetOutside()
-			border:SetAlpha(0)
-			B.HookIconBorderColor(border)
+			button.searchOverlay:SetOutside()
+			B.HookIconBorderColor(button.IconBorder)
 		end
 
 		local f = B.CreateBDFrame(con, nil, true)
