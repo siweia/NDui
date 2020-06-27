@@ -20,6 +20,7 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 
 DB.Devs = {
 	["寧德-加尔"] = true,
+	["图咿-万色星辰"] = true,
 }
 local function isDeveloper()
 	return DB.Devs[DB.MyName.."-"..DB.MyRealm]
