@@ -56,12 +56,8 @@ end
 
 function TT:ReskinRewardIcon()
 	self.Icon:SetTexCoord(unpack(DB.TexCoord))
-	self.bg = B.CreateBDFrame(self, 0)
-	self.bg:SetOutside(self.Icon)
-
-	local iconBorder = self.IconBorder
-	iconBorder:SetAlpha(0)
-	B.HookIconBorderColor(iconBorder)
+	self.bg = B.CreateBDFrame(self.Icon, 0)
+	B.HookIconBorderColor(self.IconBorder)
 end
 
 function TT:ReskinTooltipIcons()
