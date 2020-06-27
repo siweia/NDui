@@ -85,8 +85,9 @@ tinsert(C.defaultThemes, function()
 	ReagentBankFrame:HookScript("OnShow", function()
 		if not reagentButtonsStyled then
 			for i = 1, 98 do
-				styleBankButton(_G["ReagentBankFrameItem"..i])
-				BankFrameItemButton_Update(_G["ReagentBankFrameItem"..i])
+				local button = _G["ReagentBankFrameItem"..i]
+				styleBankButton(button)
+				BankFrameItemButton_Update(button)
 			end
 			reagentButtonsStyled = true
 		end
