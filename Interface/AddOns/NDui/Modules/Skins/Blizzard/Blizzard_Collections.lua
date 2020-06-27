@@ -549,10 +549,9 @@ C.themes["Blizzard_Collections"] = function()
 	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(_, itemFrame)
 		local ic = itemFrame.Icon
 		if not ic.bg then
-			itemFrame.IconBorder:Hide()
-			itemFrame.IconBorder.Show = B.Dummy
 			ic.bg = B.ReskinIcon(ic)
 		end
+		itemFrame.IconBorder:SetTexture("")
 
 		if itemFrame.collected then
 			local quality = C_TransmogCollection.GetSourceInfo(itemFrame.sourceID).quality
