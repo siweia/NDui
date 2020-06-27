@@ -579,12 +579,12 @@ TT:RegisterTooltips("NDui", function()
 		end)
 	end
 
-	if IsAddOnLoaded("MethodDungeonTools") then
+	if IsAddOnLoaded("MythicDungeonTools") then
 		local styledMDT
-		hooksecurefunc(MethodDungeonTools, "ShowInterface", function()
+		hooksecurefunc(MDT, "ShowInterface", function()
 			if not styledMDT then
-				TT.ReskinTooltip(MethodDungeonTools.tooltip)
-				TT.ReskinTooltip(MethodDungeonTools.pullTooltip)
+				TT.ReskinTooltip(MDT.tooltip)
+				TT.ReskinTooltip(MDT.pullTooltip)
 				styledMDT = true
 			end
 		end)
