@@ -56,7 +56,7 @@ tinsert(C.defaultThemes, function()
 	for _, highlight in pairs(tradeHighlights) do
 		B.StripTextures(highlight)
 		highlight:SetFrameStrata("HIGH")
-		local bg = B.CreateBDFrame(highlight, .25)
+		local bg = B.CreateBDFrame(highlight, 1)
 		bg:SetBackdropColor(0, 1, 0, .15)
 	end
 end)
