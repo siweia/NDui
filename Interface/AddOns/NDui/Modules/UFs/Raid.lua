@@ -495,7 +495,7 @@ function UF:PartyWatcherPostUpdate(button, unit, spellID)
 end
 
 function UF:HandleCDMessage(...)
-	local prefix, msg, distType, author = ...
+	local prefix, msg = ...
 	if prefix ~= "ZenTracker" then return end
 
 	local _, msgType, guid, spellID, duration, remaining = strsplit(":", msg)
@@ -519,7 +519,7 @@ function UF:SendCDMessage()
 	if thisTime - lastUpdate >= 5 then
 		local value = watchingList[UF.myGUID]
 		if value then
-			for spellID, button in pairs(value) do
+			for spellID in pairs(value) do
 				local start, duration, enabled = GetSpellCooldown(spellID)
 				if enabled ~= 0 and start ~= 0 then
 					local remaining = start + duration - thisTime
