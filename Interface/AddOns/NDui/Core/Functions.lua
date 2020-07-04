@@ -550,15 +550,15 @@ do
 
 			borders.TOP:Point("BOTTOMLEFT", borders.CENTER, "TOPLEFT", C.mult, -C.mult)
 			borders.TOP:Point("BOTTOMRIGHT", borders.CENTER, "TOPRIGHT", -C.mult, -C.mult)
-	
+
 			borders.BOTTOM:Point("TOPLEFT", borders.CENTER, "BOTTOMLEFT", C.mult, C.mult)
 			borders.BOTTOM:Point("TOPRIGHT", borders.CENTER, "BOTTOMRIGHT", -C.mult, C.mult)
-	
+
 			borders.LEFT:Point("TOPRIGHT", borders.TOP, "TOPLEFT", 0, 0)
 			borders.LEFT:Point("BOTTOMRIGHT", borders.BOTTOM, "BOTTOMLEFT", 0, 0)
-	
+
 			borders.RIGHT:Point("TOPLEFT", borders.TOP, "TOPRIGHT", 0, 0)
-			borders.RIGHT:Point("BOTTOMLEFT", borders.BOTTOM, "BOTTOMRIGHT", 0, 0)	
+			borders.RIGHT:Point("BOTTOMLEFT", borders.BOTTOM, "BOTTOMRIGHT", 0, 0)
 
 			hooksecurefunc(frame, "SetBackdropColor", B.SetBackdropColor_Hook)
 			hooksecurefunc(frame, "SetBackdropBorderColor", B.SetBackdropBorderColor_Hook)
