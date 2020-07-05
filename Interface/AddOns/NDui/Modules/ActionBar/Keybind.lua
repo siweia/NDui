@@ -9,7 +9,6 @@ local InCombatLockdown = InCombatLockdown
 local GetSpellBookItemName, GetMacroInfo = GetSpellBookItemName, GetMacroInfo
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown
 local GetBindingKey, SetBinding, SaveBindings, LoadBindings = GetBindingKey, SetBinding, SaveBindings, LoadBindings
-local OPTION_TOOLTIP_AUTO_SELF_CAST_NONE_KEY, KEY1, KEY_BINDING = OPTION_TOOLTIP_AUTO_SELF_CAST_NONE_KEY, KEY1, KEY_BINDING
 
 -- Button types
 local function hookActionButton(self)
@@ -71,9 +70,9 @@ function Bar:Bind_Create()
 		GameTooltip:AddLine(frame.name, 1,1,1)
 
 		if #frame.bindings == 0 then
-			GameTooltip:AddLine(OPTION_TOOLTIP_AUTO_SELF_CAST_NONE_KEY, .6,.6,.6)
+			GameTooltip:AddLine(L["No key set"], .6,.6,.6)
 		else
-			GameTooltip:AddDoubleLine(KEY1, KEY_BINDING, .6,.6,.6, .6,.6,.6)
+			GameTooltip:AddDoubleLine(L["KeyIndex"], L["KeyBinding"], .6,.6,.6, .6,.6,.6)
 			for i = 1, #frame.bindings do
 				GameTooltip:AddDoubleLine(i, frame.bindings[i])
 			end
@@ -189,7 +188,7 @@ function Bar:Bind_Listener(key)
 				SetBinding(frame.bindings[i])
 			end
 		end
-		print("|cffffff00"..UNBIND.."|r |cff00ff00"..frame.name.."|r")
+		print(format(L["Clear binds"], frame.name))
 
 		Bar:Bind_Update(frame.button, frame.spellmacro)
 		if frame.spellmacro ~= "MACRO" and not GameTooltip:IsForbidden() then GameTooltip:Hide() end
@@ -212,10 +211,10 @@ function Bar:Bind_Listener(key)
 	else
 		SetBinding(alt..ctrl..shift..key, frame.spellmacro.." "..frame.name)
 	end
-	print(alt..ctrl..shift..key.." |cff00ff00"..KEY1.."|r "..frame.name..".")
+	print(frame.name.." |cff00ff00"..L["KeyBoundTo"].."|r "..alt..ctrl..shift..key)
 
 	Bar:Bind_Update(frame.button, frame.spellmacro)
-	if frame.spellmacro ~= "MACRO" and not GameTooltip:IsForbidden() then GameTooltip:Hide() end
+	frame:GetScript("OnEnter")(self)
 end
 
 function Bar:Bind_HideFrame()
@@ -233,10 +232,10 @@ end
 function Bar:Bind_Deactivate(save)
 	if save == true then
 		SaveBindings(NDuiDB["Actionbar"]["BindType"])
-		print("|cffffff00"..KEY_BOUND.."|r")
+		print("|cff0080ffNDui|r: |cff00ff00"..L["Save keybinds"].."|r")
 	else
 		LoadBindings(NDuiDB["Actionbar"]["BindType"])
-		print("|cffffff00"..UNCHECK_ALL.."|r")
+		print("|cff0080ffNDui|r: |cffffff00"..L["Discard keybinds"].."|r")
 	end
 
 	Bar:Bind_HideFrame()
@@ -253,7 +252,7 @@ function Bar:Bind_CreateDialog()
 	frame:SetSize(320, 100)
 	frame:SetPoint("TOP", 0, -135)
 	B.SetBD(frame)
-	B.CreateFS(frame, 14, KEY_BINDING, false, "TOP", 0, -15)
+	B.CreateFS(frame, 16, KEY_BINDING, false, "TOP", 0, -10)
 
 	local text = B.CreateFS(frame, 14, CHARACTER_SPECIFIC_KEYBINDINGS, "system", "TOP", 0, -40)
 
@@ -279,7 +278,7 @@ end
 
 SlashCmdList["NDUI_KEYBIND"] = function(msg)
 	if msg ~= "" then return end -- don't mess up with this
-	if InCombatLockdown() then print("|cffffff00"..ERR_NOT_IN_COMBAT.."|r") return end
+	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 
 	Bar:Bind_Create()
 	Bar:Bind_Activate()
