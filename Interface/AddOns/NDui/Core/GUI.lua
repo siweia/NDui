@@ -338,7 +338,7 @@ local accountSettings = {
 	DetectVersion = DB.Version,
 	ResetDetails = true,
 	LockUIScale = false,
-	UIScale = .8,
+	UIScale = .71,
 	NumberFormat = 1,
 	VersionCheck = true,
 	DBMRequest = false,
@@ -1068,6 +1068,7 @@ local function CreateOption(i)
 				offset = offset + 70
 			end
 			local s = B.CreateSlider(parent, name, min, max, step, x, y)
+			s.__default = (key == "ACCOUNT" and accountSettings[value]) or defaultSettings[key][value]
 			s:SetValue(NDUI_VARIABLE(key, value))
 			s:SetScript("OnValueChanged", function(_, v)
 				local current = B:Round(tonumber(v), 2)

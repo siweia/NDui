@@ -1476,6 +1476,13 @@ do
 		self:ClearFocus()
 	end
 
+	local function resetSliderValue(self)
+		local slider = self.__owner
+		if slider.__default then
+			slider:SetValue(slider.__default)
+		end
+	end
+
 	function B:CreateSlider(name, minValue, maxValue, step, x, y, width)
 		local slider = CreateFrame("Slider", nil, self, "OptionsSliderTemplate")
 		slider:SetPoint("TOPLEFT", x, y)
@@ -1499,6 +1506,11 @@ do
 		slider.value:SetJustifyH("CENTER")
 		slider.value.__owner = slider
 		slider.value:SetScript("OnEnterPressed", updateSliderEditBox)
+
+		slider.clicker = CreateFrame("Button", nil, slider)
+		slider.clicker:SetAllPoints(slider.Text)
+		slider.clicker.__owner = slider
+		slider.clicker:SetScript("OnDoubleClick", resetSliderValue)
 
 		return slider
 	end
