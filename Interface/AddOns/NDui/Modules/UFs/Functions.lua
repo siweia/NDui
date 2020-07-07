@@ -159,6 +159,8 @@ function UF:CreateHealthText(self)
 		self:Tag(name, "[nplevel][name]")
 	elseif mystyle == "arena" then
 		self:Tag(name, "[arenaspec] [color][name]")
+	elseif mystyle == "raid" and NDuiDB["UFs"]["SimpleMode"] and NDuiDB["UFs"]["ShowTeamIndex"] and not self.isPartyPet and not self.isPartyFrame then
+		self:Tag(name, "[group].[color][name]")
 	else
 		self:Tag(name, "[color][name]")
 	end
