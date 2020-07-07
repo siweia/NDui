@@ -422,7 +422,7 @@ function M:NVision_Create()
 	local barData = {
 		[1] = {
 			anchorF = "RIGHT", anchorT = "LEFT", offset = -3,
-			texture = "Interface\\ICONS\\INV_Misc_Gem_FlameSpessarite_02",
+			texture = 134110,
 			color = {1, .8, 0}, reverse = false, maxValue = 10,
 		},
 		[2] = {
