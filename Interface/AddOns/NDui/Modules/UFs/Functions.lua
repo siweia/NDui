@@ -120,7 +120,7 @@ function UF:CreateHealthText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Health)
 
-	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12, NDuiDB["Nameplate"]["NameTextSize"]), "", false, "LEFT", 3, -1)
+	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12, NDuiDB["Nameplate"]["NameTextSize"]), "", false, "LEFT", 3, 0)
 	name:SetJustifyH("LEFT")
 	if mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
@@ -163,7 +163,7 @@ function UF:CreateHealthText(self)
 		self:Tag(name, "[color][name]")
 	end
 
-	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 13, NDuiDB["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, -1)
+	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 13, NDuiDB["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, 0)
 	if mystyle == "raid" then
 		self:Tag(hpval, "[raidhp]")
 		if self.isPartyPet then
@@ -273,8 +273,13 @@ function UF:CreatePowerText(self)
 	textFrame:SetAllPoints(self.Power)
 
 	local ppval = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12), "", false, "RIGHT", -3, 2)
-	if self.mystyle == "raid" then
+	local mystyle = self.mystyle
+	if mystyle == "raid" then
 		ppval:SetScale(NDuiDB["UFs"]["RaidTextScale"])
+	elseif mystyle == "player" then
+		ppval:SetPoint("RIGHT", -3, NDuiDB["UFs"]["PlayerPowerOffset"])
+	elseif mystyle == "focus" then
+		ppval:SetPoint("RIGHT", -3, NDuiDB["UFs"]["FocusPowerOffset"])
 	end
 	self:Tag(ppval, "[color][power]")
 	self.powerText = ppval
