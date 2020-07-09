@@ -81,7 +81,6 @@ local list = {
 		{AuraID = 203155, UnitID = "player"},	-- 狙击
 		{AuraID = 235712, UnitID = "player", Combat = true},	-- 回转稳定，橙手
 		{AuraID = 264735, UnitID = "player"},	-- 优胜劣汰
-		{AuraID = 281195, UnitID = "player"},	-- 优胜劣汰
 		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
 		{AuraID = 260395, UnitID = "player"},	-- 致命射击
 		{AuraID = 269502, UnitID = "player"},	-- 致命射击
