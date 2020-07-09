@@ -28,6 +28,16 @@ local function ForceDefaultSettings()
 	SetCVar("ffxGlow", 0)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
+	if DB.isDeveloper then
+		SetCVar("SpellQueueWindow", 250)
+		SetCVar("WorldTextScale", 1.2)
+		SetCVar("nameplateMotionSpeed", .025)
+		SetCVar("ShowClassColorInFriendlyNameplate", 1)
+		SetCVar("nameplateShowOnlyNames", 1)
+		SetCVar("floatingCombatTextFloatMode", 1)
+		SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)
+		SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 10)
+	end
 end
 
 local function ForceRaidFrame()
