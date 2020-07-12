@@ -660,6 +660,21 @@ do
 		return bu
 	end
 
+	local AtlasToQuality = {
+		["auctionhouse-itemicon-border-gray"] = LE_ITEM_QUALITY_POOR,
+		["auctionhouse-itemicon-border-white"] = LE_ITEM_QUALITY_COMMON,
+		["auctionhouse-itemicon-border-green"] = LE_ITEM_QUALITY_UNCOMMON,
+		["auctionhouse-itemicon-border-blue"] = LE_ITEM_QUALITY_RARE,
+		["auctionhouse-itemicon-border-purple"] = LE_ITEM_QUALITY_EPIC,
+		["auctionhouse-itemicon-border-orange"] = LE_ITEM_QUALITY_LEGENDARY,
+		["auctionhouse-itemicon-border-artifact"] = LE_ITEM_QUALITY_ARTIFACT,
+		["auctionhouse-itemicon-border-account"] = LE_ITEM_QUALITY_HEIRLOOM,
+	}
+	local function updateIconBorderColorByAtlas(self, atlas)
+		local quality = AtlasToQuality[atlas]
+		local color = DB.QualityColors[quality or 1]
+		self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+	end
 	local function updateIconBorderColor(self, r, g, b)
 		if r == .65882 then r, g, b = 0, 0, 0 end
 		self.__owner.bg:SetBackdropBorderColor(r, g, b)
@@ -671,7 +686,11 @@ do
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
 		if not self.__owner.bg then return end
-		hooksecurefunc(self, "SetVertexColor", updateIconBorderColor)
+		if self.__owner.useCircularIconBorder then
+			hooksecurefunc(self, "SetAtlas", updateIconBorderColorByAtlas)
+		else
+			hooksecurefunc(self, "SetVertexColor", updateIconBorderColor)
+		end
 		hooksecurefunc(self, "Hide", resetIconBorderColor)
 	end
 
