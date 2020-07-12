@@ -20,6 +20,7 @@ local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE
 local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
 local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE
 local PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE = PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE
+local HORRIFIC_VISION = SPLASH_BATTLEFORAZEROTH_8_3_0_FEATURE1_TITLE
 local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
 local GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo = GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo
@@ -102,7 +103,17 @@ local questlist = {
 	{name = L["Timewarped"], id = 55499, texture = 1129683},	-- WoD
 }
 
-local visionList = { 58151, 58155, 58156, 58167, 58168 }
+local lesserVisions = {58151, 58155, 58156, 58167, 58168}
+local horrificVisions = {
+	[1] = {id = 57848, desc = "470 (5+5)"},
+	[2] = {id = 57844, desc = "465 (5+4)"},
+	[3] = {id = 57847, desc = "460 (5+3)"},
+	[4] = {id = 57843, desc = "455 (5+2)"},
+	[5] = {id = 57846, desc = "450 (5+1)"},	
+	[6] = {id = 57842, desc = "445 (5+0)"},
+	[7] = {id = 57845, desc = "430 (3+0)"},
+	[8] = {id = 57841, desc = "420 (1+0)"},
+}
 
 -- Check Invasion Status
 local region = GetCVar("portal")
@@ -262,6 +273,14 @@ info.onEnter = function(self)
 		end
 	end
 
+	for _, v in ipairs(horrificVisions) do
+		if IsQuestFlaggedCompleted(v.id) then
+			addTitle(QUESTS_LABEL)
+			GameTooltip:AddDoubleLine(HORRIFIC_VISION, v.desc, 1,1,1, 0,1,0)
+			break
+		end
+	end
+
 	local iwqID = C_IslandsQueue_GetIslandsWeeklyQuestID()
 	if iwqID and UnitLevel("player") == 120 then
 		addTitle(QUESTS_LABEL)
@@ -275,7 +294,7 @@ info.onEnter = function(self)
 		end
 	end
 
-	for _, id in pairs(visionList) do
+	for _, id in pairs(lesserVisions) do
 		if IsQuestFlaggedCompleted(id) then
 			addTitle(QUESTS_LABEL)
 			GameTooltip:AddDoubleLine(L["LesserVision"], QUEST_COMPLETE, 1,1,1, 1,0,0)
