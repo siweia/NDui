@@ -24,6 +24,8 @@ local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo 
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
 local GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo = GetNumSavedInstances, GetSavedInstanceInfo, GetQuestObjectiveInfo
 local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
+local C_TaskQuest_GetThreatQuests = C_TaskQuest.GetThreatQuests
+local C_TaskQuest_GetQuestInfoByQuestID = C_TaskQuest.GetQuestInfoByQuestID
 local PVPGetConquestLevelInfo, IsPlayerAtEffectiveMaxLevel = PVPGetConquestLevelInfo, IsPlayerAtEffectiveMaxLevel
 
 local function updateTimerFormat(color, hour, minute)
@@ -167,6 +169,16 @@ local function GetNextLocation(nextTime, index)
 	return C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name
 end
 
+local cache, nzothAssaults = {}
+local function GetNzothThreatName(questID)
+	local name = cache[questID]
+	if not name then
+		name = C_TaskQuest_GetQuestInfoByQuestID(questID)
+		cache[questID] = name
+	end
+	return name
+end
+
 local title
 local function addTitle(text)
 	if not title then
@@ -189,7 +201,6 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(L["Local Time"], GameTime_GetLocalTime(true), .6,.8,1 ,1,1,1)
 	GameTooltip:AddDoubleLine(L["Realm Time"], GameTime_GetGameTime(true), .6,.8,1 ,1,1,1)
-
 
 	-- World bosses
 	title = false
@@ -269,6 +280,16 @@ info.onEnter = function(self)
 			addTitle(QUESTS_LABEL)
 			GameTooltip:AddDoubleLine(L["LesserVision"], QUEST_COMPLETE, 1,1,1, 1,0,0)
 			break
+		end
+	end
+
+	if not nzothAssaults then
+		nzothAssaults = C_TaskQuest_GetThreatQuests() or {}
+	end
+	for _, v in pairs(nzothAssaults) do
+		if IsQuestFlaggedCompleted(v) then
+			addTitle(QUESTS_LABEL)
+			GameTooltip:AddDoubleLine(GetNzothThreatName(v), QUEST_COMPLETE, 1,1,1, 1,0,0)
 		end
 	end
 
