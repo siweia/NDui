@@ -94,7 +94,7 @@ tinsert(C.defaultThemes, function()
 			bar.BorderRight:SetAlpha(0)
 			bar.BorderCenter:SetAlpha(0)
 			bar.Spark:SetAlpha(0)
-			B.CreateBDFrame(bar, .25)
+			B.SetBD(bar)
 
 			bar.styled = true
 		end
