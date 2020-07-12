@@ -42,7 +42,8 @@ local function UpdateBarValue(self, value)
 		if self.__owner.OverrideText then
 			self.__owner.OverrideText(self, value)
 		else
-			self.Text:SetFormattedText("%.1f", self.max - self.min - value)
+			local decimal = rangeing and "%.2f" or "%.1f"
+			self.Text:SetFormattedText(decimal, self.max - self.min - value)
 		end
 	end
 end
