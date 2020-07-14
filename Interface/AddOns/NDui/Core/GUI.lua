@@ -53,7 +53,7 @@ local defaultSettings = {
 		iLvlToShow = 1,
 
 		FilterJunk = true,
-		FilterConsumble = true,
+		FilterConsumable = true,
 		FilterAzerite = true,
 		FilterEquipment = true,
 		FilterLegendary = true,
