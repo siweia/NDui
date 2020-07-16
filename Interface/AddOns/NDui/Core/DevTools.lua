@@ -130,6 +130,8 @@ do
 		local channel
 		if IsInRaid() then
 			channel = "RAID"
+		elseif IsInGroup() then
+			channel = "PARTY"
 		elseif IsInGuild() then
 			channel = "GUILD"
 		end

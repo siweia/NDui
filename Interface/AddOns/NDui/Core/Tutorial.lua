@@ -29,7 +29,7 @@ local function ForceDefaultSettings()
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
 	if DB.isDeveloper then
-		SetCVar("SpellQueueWindow", 250)
+		SetCVar("SpellQueueWindow", 100)
 		SetCVar("WorldTextScale", 1.2)
 		SetCVar("nameplateMotionSpeed", .025)
 		SetCVar("ShowClassColorInFriendlyNameplate", 1)
