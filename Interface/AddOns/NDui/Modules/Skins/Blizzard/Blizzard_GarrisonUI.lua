@@ -22,27 +22,46 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		B.ReskinClose(self.CloseButton)
 		self.CloseButton:ClearAllPoints()
 		self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+		select(4, self.Stage:GetRegions()):Hide()
+		select(5, self.Stage:GetRegions()):Hide()
 
-		for i = 1, 3 do
-			local follower = self.Followers[i]
-			follower:GetRegions():Hide()
-			B.CreateBD(follower, .25)
-			B.ReskinGarrisonPortrait(follower.PortraitFrame)
-			follower.PortraitFrame:ClearAllPoints()
-			follower.PortraitFrame:SetPoint("TOPLEFT", 0, -3)
+		local bg = B.CreateBDFrame(self.Stage)
+		bg:SetPoint("TOPLEFT", 4, 1)
+		bg:SetPoint("BOTTOMRIGHT", -4, -1)
+		local overlay = self.Stage:CreateTexture()
+		overlay:SetDrawLayer("ARTWORK", 3)
+		overlay:SetAllPoints(bg)
+		overlay:SetColorTexture(0, 0, 0, .5)
+		local iconbg = select(16, self:GetRegions())
+		if iconbg then
+			iconbg:ClearAllPoints()
+			iconbg:SetPoint("TOPLEFT", 3, -1)
 		end
 
-		for i = 1, 10 do
-			select(i, self.RewardsFrame:GetRegions()):Hide()
+		if self.Followers then
+			for i = 1, 3 do
+				local follower = self.Followers[i]
+				follower:GetRegions():Hide()
+				B.CreateBD(follower, .25)
+				B.ReskinGarrisonPortrait(follower.PortraitFrame)
+				follower.PortraitFrame:ClearAllPoints()
+				follower.PortraitFrame:SetPoint("TOPLEFT", 0, -3)
+			end
 		end
-		B.CreateBD(self.RewardsFrame, .25)
+
+		if self.RewardsFrame then
+			for i = 1, 10 do
+				select(i, self.RewardsFrame:GetRegions()):Hide()
+			end
+			B.CreateBD(self.RewardsFrame, .25)
+
+			local overmaxItem = self.RewardsFrame.OvermaxItem
+			overmaxItem.IconBorder:SetAlpha(0)
+			B.ReskinIcon(overmaxItem.Icon)
+		end
 
 		local env = self.Stage.MissionEnvIcon
 		env.bg = B.ReskinIcon(env.Texture)
-
-		local overmaxItem = self.RewardsFrame.OvermaxItem
-		overmaxItem.IconBorder:SetAlpha(0)
-		B.ReskinIcon(overmaxItem.Icon)
 
 		if self.CostFrame then
 			self.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
@@ -52,22 +71,26 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	function B:ReskinMissionTabs()
 		for i = 1, 2 do
 			local tab = _G[self:GetName().."Tab"..i]
-			B.StripTextures(tab)
-			B.CreateBD(tab, .25)
-			if i == 1 then
-				tab:SetBackdropColor(r, g, b, .2)
+			if tab then
+				B.StripTextures(tab)
+				B.CreateBD(tab, .25)
+				if i == 1 then
+					tab:SetBackdropColor(r, g, b, .2)
+				end
 			end
 		end
 	end
 
 	function B:ReskinXPBar()
 		local xpBar = self.XPBar
-		xpBar:GetRegions():Hide()
-		xpBar.XPLeft:Hide()
-		xpBar.XPRight:Hide()
-		select(4, xpBar:GetRegions()):Hide()
-		xpBar:SetStatusBarTexture(DB.bdTex)
-		B.CreateBDFrame(xpBar, .25)
+		if xpBar then
+			xpBar:GetRegions():Hide()
+			xpBar.XPLeft:Hide()
+			xpBar.XPRight:Hide()
+			select(4, xpBar:GetRegions()):Hide()
+			xpBar:SetStatusBarTexture(DB.bdTex)
+			B.CreateBDFrame(xpBar, .25)
+		end
 	end
 
 	function B:ReskinGarrMaterial()
@@ -90,12 +113,16 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				B.StripTextures(button)
 				B.CreateBDFrame(button, .25)
 
-				rareText:ClearAllPoints()
-				rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
-				rareOverlay:SetDrawLayer("BACKGROUND")
-				rareOverlay:SetTexture(DB.bdTex)
-				rareOverlay:SetAllPoints()
-				rareOverlay:SetVertexColor(.098, .537, .969, .2)
+				if rareText then
+					rareText:ClearAllPoints()
+					rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
+				end
+				if rareOverlay then
+					rareOverlay:SetDrawLayer("BACKGROUND")
+					rareOverlay:SetTexture(DB.bdTex)
+					rareOverlay:SetAllPoints()
+					rareOverlay:SetVertexColor(.098, .537, .969, .2)
+				end
 
 				button.styled = true
 			end
@@ -105,13 +132,22 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	function B:ReskinMissionComplete()
 		local missionComplete = self.MissionComplete
 		local bonusRewards = missionComplete.BonusRewards
-		select(11, bonusRewards:GetRegions()):SetTextColor(1, .8, 0)
-		B.StripTextures(bonusRewards.Saturated)
-		for i = 1, 9 do
-			select(i, bonusRewards:GetRegions()):SetAlpha(0)
+		if bonusRewards then
+			select(11, bonusRewards:GetRegions()):SetTextColor(1, .8, 0)
+			B.StripTextures(bonusRewards.Saturated)
+			for i = 1, 9 do
+				select(i, bonusRewards:GetRegions()):SetAlpha(0)
+			end
+			B.CreateBD(bonusRewards)
 		end
-		B.CreateBD(bonusRewards)
-		B.Reskin(missionComplete.NextMissionButton)
+		if missionComplete.NextMissionButton then
+			B.Reskin(missionComplete.NextMissionButton)
+		end
+		if missionComplete.CompleteFrame then
+			B.Reskin(missionComplete.CompleteFrame.ContinueButton)
+			missionComplete.RewardsScreen.FinalRewardsPanel.ScrollRewards:SetTextColor(1, .8, 0)
+			B.Reskin(missionComplete.RewardsScreen.FinalRewardsPanel.ContinueButton)
+		end
 	end
 
 	function B:ReskinFollowerTab()
@@ -182,21 +218,34 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end
 
+	local function updateSpellAbilities(self, followerInfo)
+		local autoSpellInfo = followerInfo.autoSpellAbilities
+		for _ in ipairs(autoSpellInfo) do
+			local abilityFrame = self.autoSpellPool:Acquire()
+			if not abilityFrame.styled then
+				B.ReskinIcon(abilityFrame.Icon)
+				abilityFrame.styled = true
+			end
+		end
+	end
+
 	local function onShowFollower(followerList)
 		local self = followerList.followerTab
-		local abilitiesFrame = self.AbilitiesFrame
-		if not abilitiesFrame then return end
+		local abilities = self.AbilitiesFrame.Abilities
+		if not abilities then return end
 
-		local abilities = abilitiesFrame.Abilities
-		if abilities then
-			for i = 1, #abilities do
-				local iconButton = abilities[i].IconButton
-				local icon = iconButton and iconButton.Icon
-				if icon and not icon.bg then
-					iconButton.Border:SetAlpha(0)
-					icon.bg = B.ReskinIcon(icon)
-				end
+		if ability.IconButton then
+			if not self.numAbilitiesStyled then self.numAbilitiesStyled = 1 end
+			local numAbilitiesStyled = self.numAbilitiesStyled
+			local ability = abilities[numAbilitiesStyled]
+			while ability do
+				local icon = ability.IconButton.Icon
+				B.ReskinIcon(icon)
+
+				numAbilitiesStyled = numAbilitiesStyled + 1
+				ability = abilities[numAbilitiesStyled]
 			end
+			self.numAbilitiesStyled = numAbilitiesStyled
 		end
 
 		local equipment = abilitiesFrame.Equipment
@@ -245,6 +294,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		B.ReskinMissionPage(self.MissionTab.MissionPage)
 		B.StripTextures(self.FollowerTab)
 		B.ReskinXPBar(self.FollowerTab)
+		hooksecurefunc(self.FollowerTab, "UpdateAutoSpellAbilities", updateSpellAbilities)
 
 		for _, item in pairs({self.FollowerTab.ItemWeapon, self.FollowerTab.ItemArmor}) do
 			if item then
@@ -268,7 +318,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		local FollowerList = self.FollowerList
 		B.StripTextures(FollowerList)
-		B.ReskinInput(FollowerList.SearchBox)
+		if FollowerList.SearchBox then B.ReskinInput(FollowerList.SearchBox) end
 		B.ReskinScroll(FollowerList.listScroll.scrollBar)
 		B.ReskinGarrMaterial(FollowerList)
 		hooksecurefunc(FollowerList, "UpdateData", onUpdateData)
@@ -655,7 +705,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	hooksecurefunc(GarrisonMission, "UpdateMissionData", function(_, missionPage)
 		local buffsFrame = missionPage.BuffsFrame
-		if buffsFrame:IsShown() then
+		if buffsFrame and buffsFrame:IsShown() then
 			for i = 1, #buffsFrame.Buffs do
 				local buff = buffsFrame.Buffs[i]
 				if not buff.styled then
@@ -878,6 +928,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local BFAMissionFrame = BFAMissionFrame
 	B.ReskinMissionFrame(BFAMissionFrame)
+
+	-- [[ Covenant Mission UI]]
+	local CovenantMissionFrame = CovenantMissionFrame
+	B.ReskinMissionFrame(CovenantMissionFrame)
 
 	-- [[ Addon supports ]]
 
