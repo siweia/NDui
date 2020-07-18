@@ -438,7 +438,7 @@ function Bar:ReskinBars()
 	Bar:StyleAllActionButtons(cfg)
 
 	-- Update hotkeys
-	hooksecurefunc("ActionButton_UpdateHotkeys", Bar.UpdateHotKey)
+	hooksecurefunc(ActionBarActionButtonMixin, "UpdateHotkeys", Bar.UpdateHotKey)
 	hooksecurefunc("PetActionButton_SetHotkeys", Bar.UpdateHotKey)
 	if NDuiDB["Actionbar"]["Hotkeys"] then
 		Bar:UpdateStanceHotKey()

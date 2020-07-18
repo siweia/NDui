@@ -217,13 +217,11 @@ local function SetHealthUpdateMethod(self, state, force)
 
 		if state then
 			self.Health:SetScript('OnUpdate', onUpdateHealth)
-			self:UnregisterEvent('UNIT_HEALTH_FREQUENT', Path)
 			self:UnregisterEvent('UNIT_HEALTH', Path)
 			self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		else
 			self.Health:SetScript('OnUpdate', nil)
 			self:RegisterEvent('UNIT_HEALTH', Path) -- Needed for Pet Battles
-			self:RegisterEvent('UNIT_HEALTH_FREQUENT', Path)
 			self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		end
 	end
@@ -269,7 +267,6 @@ local function Disable(self)
 		element:Hide()
 
 		element:SetScript('OnUpdate', nil)
-		self:UnregisterEvent('UNIT_HEALTH_FREQUENT', Path)
 		self:UnregisterEvent('UNIT_HEALTH', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 

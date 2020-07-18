@@ -124,7 +124,4 @@ function Bar:MicroMenu()
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
-
-	CharacterMicroButtonAlert:EnableMouse(false)
-	B.HideOption(CharacterMicroButtonAlert)
 end

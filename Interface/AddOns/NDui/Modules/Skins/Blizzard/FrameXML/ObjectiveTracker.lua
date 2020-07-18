@@ -51,6 +51,7 @@ tinsert(C.defaultThemes, function()
 		ObjectiveTrackerBlocksFrame.QuestHeader,
 		ObjectiveTrackerBlocksFrame.AchievementHeader,
 		ObjectiveTrackerBlocksFrame.ScenarioHeader,
+		ObjectiveTrackerBlocksFrame.CampaignQuestHeader,
 		BONUS_OBJECTIVE_TRACKER_MODULE.Header,
 		WORLD_QUEST_TRACKER_MODULE.Header,
 		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader
@@ -67,6 +68,19 @@ tinsert(C.defaultThemes, function()
 	end
 
 	local function reskinProgressbar(_, _, line)
+		local progressBar = line.ProgressBar
+		local bar = progressBar.Bar
+
+		if not bar.bg then
+			bar:ClearAllPoints()
+			bar:SetPoint("LEFT")
+			reskinBarTemplate(bar)
+		end
+	end
+	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
+	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
+
+	local function reskinProgressbarWithIcon(_, _, line)
 		local progressBar = line.ProgressBar
 		local bar = progressBar.Bar
 		local icon = bar.Icon
@@ -87,9 +101,9 @@ tinsert(C.defaultThemes, function()
 			icon.bg:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
 		end
 	end
-	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
-	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
+	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
+	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
 
 	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(_, _, line)
 		local progressBar = line.ProgressBar
@@ -159,12 +173,34 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", B.AffixesSetup)
 
 	-- Minimize Button
-	local minimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
-	B.ReskinExpandOrCollapse(minimize)
-	minimize:GetNormalTexture():SetAlpha(0)
-	minimize.expTex:SetTexCoord(0.5625, 1, 0, 0.4375)
-	hooksecurefunc("ObjectiveTracker_Collapse", function() minimize.expTex:SetTexCoord(0, .4375, 0, .4375) end)
-	hooksecurefunc("ObjectiveTracker_Expand", function() minimize.expTex:SetTexCoord(.5625, 1, 0, .4375) end)
+	local function reskinMinimizeButton(button)
+		B.ReskinExpandOrCollapse(button)
+		button:GetNormalTexture():SetAlpha(0)
+		button:GetPushedTexture():SetAlpha(0)
+		button.expTex:SetTexCoord(0.5625, 1, 0, 0.4375)
+	end
+
+	local function updateMinimizeButton(button, collapsed)
+		if collapsed then
+			button.expTex:SetTexCoord(0, .4375, 0, .4375)
+		else
+			button.expTex:SetTexCoord(.5625, 1, 0, .4375)
+		end
+	end
+
+	local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
+	reskinMinimizeButton(mainMinimize)
+	mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
+	hooksecurefunc("ObjectiveTracker_Collapse", function() mainMinimize.expTex:SetTexCoord(0, .4375, 0, .4375) end)
+	hooksecurefunc("ObjectiveTracker_Expand", function() mainMinimize.expTex:SetTexCoord(.5625, 1, 0, .4375) end)
+
+	for _, header in pairs(headers) do
+		local minimize = header.MinimizeButton
+		if minimize then
+			reskinMinimizeButton(minimize)
+			hooksecurefunc(minimize, "SetCollapsed", updateMinimizeButton)
+		end
+	end
 
 	-- Show quest color and level
 	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
@@ -188,5 +224,5 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end
-	hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
+	--hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
 end)

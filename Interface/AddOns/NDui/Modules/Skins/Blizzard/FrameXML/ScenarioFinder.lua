@@ -6,11 +6,10 @@ tinsert(C.defaultThemes, function()
 
 	ScenarioFinderFrameInset:DisableDrawLayer("BORDER")
 	ScenarioQueueFrame.Bg:Hide()
-	ScenarioFinderFrameInset:GetRegions():Hide()
+	ScenarioFinderFrameInset:Hide()
 	ScenarioQueueFrameRandomScrollFrame:SetWidth(304)
 
 	B.Reskin(ScenarioQueueFrameFindGroupButton)
-	B.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 	B.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
 	B.ReskinScroll(ScenarioQueueFrameRandomScrollFrameScrollBar)
 	B.ReskinScroll(ScenarioQueueFrameSpecificScrollFrameScrollBar)

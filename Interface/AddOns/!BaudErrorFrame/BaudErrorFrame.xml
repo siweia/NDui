@@ -213,7 +213,6 @@
 				</Frames>
 				<Scripts>
 					<OnLoad>
-						self:SetBackdropBorderColor(0.37, 0.3, 0.3);
 						self.Entries = 8;
 						for Index = 1, self.Entries do
 							CreateFrame("Button",self:GetName().."Entry"..Index,self,"BaudErrorFrameEntryTemplate"):SetPoint("TOP",0,6-16*Index);
@@ -308,7 +307,6 @@
 				</Frames>
 				<Scripts>
 					<OnLoad>
-						self:SetBackdropBorderColor(0.37, 0.3, 0.3);
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -367,7 +365,6 @@
 		<Scripts>
 			<OnLoad>
 				BaudErrorFrame_OnLoad(self);
-				self:SetBackdropBorderColor(0.37, 0.3, 0.3);
 			</OnLoad>
 			<OnEvent function="BaudErrorFrame_OnEvent"/>
 			<OnShow>
