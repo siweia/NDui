@@ -38,7 +38,6 @@ local list = {
 		{AuraID = 155625, UnitID = "target", Caster = "player"},	-- 月火术
 		{AuraID = 164815, UnitID = "target", Caster = "player"},	-- 阳炎术
 		{AuraID = 102359, UnitID = "target", Caster = "player"},	-- 群体缠绕
-		{AuraID = 197637, UnitID = "target", Caster = "player"},	-- 星界增效
 		{AuraID = 202347, UnitID = "target", Caster = "player"},	-- 星辰耀斑
 		{AuraID = 127797, UnitID = "target", Caster = "player"},	-- 乌索尔旋风
 		{AuraID = 208253, UnitID = "target", Caster = "player"},	-- 加尼尔的精华
@@ -68,14 +67,11 @@ local list = {
 		{AuraID = 191034, UnitID = "player"},	-- 星辰坠落
 		{AuraID = 194223, UnitID = "player"},	-- 超凡之盟
 		{AuraID = 200851, UnitID = "player"},	-- 沉睡者之怒
-		{AuraID = 158792, UnitID = "player"},	-- 粉碎
 		{AuraID = 213708, UnitID = "player"},	-- 星河守护者
 		{AuraID = 213680, UnitID = "player"},	-- 艾露恩的卫士
 		{AuraID = 155835, UnitID = "player"},	-- 鬃毛倒竖
 		{AuraID = 114108, UnitID = "player"},	-- 丛林之魂
 		{AuraID = 207640, UnitID = "player"},	-- 丰饶
-		{AuraID = 164545, UnitID = "player"},	-- 日光增效
-		{AuraID = 164547, UnitID = "player"},	-- 月光增效
 		{AuraID = 202425, UnitID = "player"},	-- 艾露恩的战士
 		{AuraID = 232378, UnitID = "player"},	-- 星界和谐，奶德2T19
 		{AuraID = 208253, UnitID = "player"},	-- 加尼尔的精华，奶德神器

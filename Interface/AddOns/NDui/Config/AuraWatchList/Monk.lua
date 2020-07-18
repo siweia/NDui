@@ -46,7 +46,6 @@ local list = {
 		{AuraID = 215479, UnitID = "player"},	-- 铁骨酒
 		{AuraID = 214373, UnitID = "player"},	-- 酒有余香
 		{AuraID = 199888, UnitID = "player"},	-- 神龙之雾
-		{AuraID = 197206, UnitID = "player"},	-- 升腾状态
 		{AuraID = 116680, UnitID = "player"},	-- 雷光茶
 		{AuraID = 197908, UnitID = "player"},	-- 法力茶
 		{AuraID = 196741, UnitID = "player"},	-- 连击

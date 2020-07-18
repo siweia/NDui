@@ -250,7 +250,6 @@ local list = {
 		{AuraID = 192082, UnitID = "player"},	-- 狂风图腾
 		{AuraID = 201633, UnitID = "player"},	-- 大地图腾
 		{AuraID = 207498, UnitID = "player"},	-- 先祖护佑
-		{AuraID = 204150, UnitID = "player"},	-- 圣光护盾
 		{AuraID = 238698, UnitID = "player"},	-- 吸血光环
 		{AuraID = 209426, UnitID = "player"},	-- 幻影打击
 		{AuraID = 114018, UnitID = "player", Flash = true},	-- 帷幕
@@ -707,7 +706,6 @@ local list = {
 		{AuraID = 114052, UnitID = "target"},	-- 升腾 恢复
 		{AuraID = 204018, UnitID = "target"},	-- 破咒祝福
 		{AuraID = 205191, UnitID = "target"},	-- 以眼还眼 惩戒
-		{AuraID = 193526, UnitID = "target"},	-- 百发百中
 		{AuraID = 104773, UnitID = "target"},	-- 不灭决心
 		{AuraID = 199754, UnitID = "target"},	-- 还击
 		{AuraID = 120954, UnitID = "target"},	-- 壮胆酒

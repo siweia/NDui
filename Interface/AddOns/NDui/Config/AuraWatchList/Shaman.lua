@@ -19,7 +19,6 @@ local list = {
 		{AuraID = 211004, UnitID = "target", Caster = "player"},	-- 妖术
 		{AuraID = 211010, UnitID = "target", Caster = "player"},	-- 妖术
 		{AuraID = 211015, UnitID = "target", Caster = "player"},	-- 妖术
-		{AuraID = 188838, UnitID = "target", Caster = "player"},	-- 烈焰震击
 		{AuraID = 188389, UnitID = "target", Caster = "player"},	-- 烈焰震击
 		{AuraID = 118905, UnitID = "target", Caster = "player"},	-- 闪电奔涌图腾
 		{AuraID = 188089, UnitID = "target", Caster = "player"},	-- 大地之刺

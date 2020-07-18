@@ -64,7 +64,6 @@ local list = {
 		{AuraID = 267218, UnitID = "player"},	-- 虚空传送门
 		{AuraID = 113858, UnitID = "player"},	-- 黑暗灵魂：动荡
 		{AuraID = 113860, UnitID = "player"},	-- 黑暗灵魂：哀难
-		{AuraID = 266091, UnitID = "player"},	-- 统御魔典
 		{AuraID = 264571, UnitID = "player"},	-- 夜幕
 		{AuraID = 266030, UnitID = "player"},	-- 熵能返转
 	},

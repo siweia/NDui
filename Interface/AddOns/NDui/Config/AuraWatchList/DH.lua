@@ -56,7 +56,6 @@ local list = {
 		{AuraID = 216758, UnitID = "player"},	-- 无尽吸血
 		{AuraID = 263648, UnitID = "player", Value = true},	-- 灵魂壁障
 		{AuraID = 218561, UnitID = "player", Value = true},	-- 虹吸能量
-		{AuraID = 178740, UnitID = "player"},	-- 献祭光环
 		{AuraID = 258920, UnitID = "player"},	-- 献祭光环
 	},
 	["Focus Aura"] = {		-- 焦点光环组
