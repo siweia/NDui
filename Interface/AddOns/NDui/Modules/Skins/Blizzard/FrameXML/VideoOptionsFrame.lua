@@ -76,6 +76,7 @@ tinsert(C.defaultThemes, function()
 			"RaidGraphics_OutlineModeDropDown",
 			"Advanced_BufferingDropDown",
 			"Advanced_FilteringDropDown",
+			"Advanced_RTShadowQualityDropDown",
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",

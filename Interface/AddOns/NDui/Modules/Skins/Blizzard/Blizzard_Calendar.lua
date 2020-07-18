@@ -88,11 +88,9 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarTodayTextureGlow:Hide()
 	CalendarTodayTexture:Hide()
 
-	CalendarTodayFrame:SetBackdrop({
-		edgeFile = DB.bdTex,
-		edgeSize = C.mult,
-	})
-	CalendarTodayFrame:SetBackdropBorderColor(r, g, b)
+	local bg = B.CreateBDFrame(CalendarTodayFrame, 0)
+	bg:SetInside()
+	bg:SetBackdropBorderColor(r, g, b)
 
 	for i, class in ipairs(CLASS_SORT_ORDER) do
 		local bu = _G["CalendarClassButton"..i]

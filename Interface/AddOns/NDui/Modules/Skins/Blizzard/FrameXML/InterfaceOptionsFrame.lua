@@ -98,6 +98,7 @@ tinsert(C.defaultThemes, function()
 			InterfaceOptionsMousePanelLockCursorToScreen,
 			InterfaceOptionsAccessibilityPanelMovePad,
 			InterfaceOptionsAccessibilityPanelCinematicSubtitles,
+			InterfaceOptionsAccessibilityPanelOverrideFadeOut,
 			InterfaceOptionsAccessibilityPanelColorblindMode
 		}
 		for _, checkbox in next, checkboxes do
