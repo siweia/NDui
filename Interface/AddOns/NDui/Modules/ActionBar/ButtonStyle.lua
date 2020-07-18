@@ -173,6 +173,13 @@ function Bar:UpdateHotKey()
 	end
 end
 
+function Bar:HookHotKey(button)
+	Bar.UpdateHotKey(button)
+	if button.UpdateHotkeys then
+		hooksecurefunc(button, "UpdateHotkeys", Bar.UpdateHotKey)
+	end
+end
+
 function Bar:StyleActionButton(button, cfg)
 	if not button then return end
 	if button.__styled then return end
@@ -235,7 +242,7 @@ function Bar:StyleActionButton(button, cfg)
 	if hotkey then
 		if NDuiDB["Actionbar"]["Hotkeys"] then
 			hotkey:SetParent(overlay)
-			Bar.UpdateHotKey(button)
+			Bar:HookHotKey(button)
 			SetupFontString(hotkey, cfg.hotkey)
 		else
 			hotkey:Hide()
@@ -254,6 +261,8 @@ function Bar:StyleActionButton(button, cfg)
 		autoCastable:SetTexCoord(.217, .765, .217, .765)
 		autoCastable:SetInside()
 	end
+
+	Bar:RegisterButtonRange(button)
 
 	button.__styled = true
 end
@@ -296,7 +305,7 @@ function Bar:StyleExtraActionButton(cfg)
 	overlay:SetAllPoints()
 	if NDuiDB["Actionbar"]["Hotkeys"] then
 		hotkey:SetParent(overlay)
-		Bar.UpdateHotKey(button)
+		Bar:HookHotKey(button)
 		cfg.hotkey.font = {DB.Font[1], 13, DB.Font[3]}
 		SetupFontString(hotkey, cfg.hotkey)
 	else
@@ -310,13 +319,15 @@ function Bar:StyleExtraActionButton(cfg)
 		count:Hide()
 	end
 
+	Bar:RegisterButtonRange(button)
+
 	button.__styled = true
 end
 
 function Bar:UpdateStanceHotKey()
 	for i = 1, NUM_STANCE_SLOTS do
 		_G["StanceButton"..i.."HotKey"]:SetText(GetBindingKey("SHAPESHIFTBUTTON"..i))
-		Bar.UpdateHotKey(_G["StanceButton"..i])
+		Bar:HookHotKey(_G["StanceButton"..i])
 	end
 end
 
@@ -436,7 +447,6 @@ function Bar:ReskinBars()
 	Bar:StyleAllActionButtons(cfg)
 
 	-- Update hotkeys
-	hooksecurefunc(ActionBarActionButtonMixin, "UpdateHotkeys", Bar.UpdateHotKey)
 	hooksecurefunc("PetActionButton_SetHotkeys", Bar.UpdateHotKey)
 	if NDuiDB["Actionbar"]["Hotkeys"] then
 		Bar:UpdateStanceHotKey()
