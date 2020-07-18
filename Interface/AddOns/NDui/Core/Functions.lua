@@ -523,14 +523,17 @@ do
 	end
 
 	function B:SetBackdrop_Hook(a)
+		if self:IsForbidden() then return end
 		B:SetBackdrop(self, a)
 	end
 
 	function B:SetBackdropColor_Hook(r, g, b, a)
+		if self:IsForbidden() then return end
 		B:SetBackdropColor(self, r, g, b, a)
 	end
 
 	function B:SetBackdropBorderColor_Hook(r, g, b, a)
+		if self:IsForbidden() then return end
 		B:SetBackdropBorderColor(self, r, g, b, a)
 	end
 
