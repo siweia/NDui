@@ -84,8 +84,11 @@ function module:SetButtonColor(colorIndex)
 end
 
 function module:Register()
-	self:HookScript("OnShow", module.UpdateButtonStatus)
-	self:HookScript("OnHide", module.UpdateButtonStatus)
+	if not self.rangeRegister then
+		self:HookScript("OnShow", module.UpdateButtonStatus)
+		self:HookScript("OnHide", module.UpdateButtonStatus)
+		self.rangeRegister = true
+	end
 	self:SetScript("OnUpdate", nil)
 	module.UpdateButtonStatus(self)
 end
@@ -95,7 +98,7 @@ local function button_UpdateUsable(button)
 end
 
 function module:OnLogin()
-	hooksecurefunc("ActionButton_OnUpdate", self.Register)
-	hooksecurefunc("ActionButton_Update", self.UpdateButtonStatus)
-	hooksecurefunc("ActionButton_UpdateUsable", button_UpdateUsable)
+	hooksecurefunc(ActionBarActionButtonMixin, "OnUpdate", self.Register)
+	hooksecurefunc(ActionBarActionButtonMixin, "Update", self.UpdateButtonStatus)
+	hooksecurefunc(ActionBarActionButtonMixin, "UpdateUsable", button_UpdateUsable)
 end

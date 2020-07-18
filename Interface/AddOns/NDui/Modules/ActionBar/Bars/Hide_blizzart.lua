@@ -50,7 +50,7 @@ function Bar:HideBlizz()
 		for i = 1, 12 do
 			local button = _G[name..i]
 			button:SetAttribute("showgrid", showgrid)
-			ActionButton_ShowGrid(button, ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
+			button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
 		end
 	end
 

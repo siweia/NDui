@@ -71,7 +71,7 @@ end
 ]]
 
 local function updateContextMatch(button)
-	local item = button:GetItemInfo()
+	local item = button:GetItem()
 	local isItemSet = ScrappingMachineFrame and ScrappingMachineFrame:IsShown() and item and item.isInSet
 	button:SetAlpha((button.ItemContextOverlay:IsShown() or isItemSet) and .3 or 1)
 end

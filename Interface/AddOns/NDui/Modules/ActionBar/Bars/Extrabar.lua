@@ -15,11 +15,11 @@ function Bar:CreateExtrabar()
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 250, 100}
 
 	--move the buttons into position and reparent them
-	ExtraActionBarFrame:SetParent(frame)
-	ExtraActionBarFrame:EnableMouse(false)
-	ExtraActionBarFrame:ClearAllPoints()
-	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
-	ExtraActionBarFrame.ignoreFramePositionManager = true
+	ExtraAbilityContainer:SetParent(frame)
+	ExtraAbilityContainer:EnableMouse(false)
+	ExtraAbilityContainer:ClearAllPoints()
+	ExtraAbilityContainer:SetPoint("CENTER", 0, 0)
+	ExtraAbilityContainer.ignoreFramePositionManager = true
 
 	--the extra button
 	local button = ExtraActionButton1
@@ -46,15 +46,22 @@ function Bar:CreateExtrabar()
 	zoneFrame:SetHeight(cfg.size + 2*padding)
 	zoneFrame.Pos = {"BOTTOM", UIParent, "BOTTOM", -250, 100}
 
-	ZoneAbilityFrame:SetParent(zoneFrame)
-	ZoneAbilityFrame:ClearAllPoints()
-	ZoneAbilityFrame:SetPoint("CENTER", 0, 0)
-	ZoneAbilityFrame.ignoreFramePositionManager = true
-	ZoneAbilityFrameNormalTexture:SetAlpha(0)
-	zoneFrame.mover = B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
+	ZoneAbilityFrame.Style:SetAlpha(0)
+	local spellButtonContainer = ZoneAbilityFrame.SpellButtonContainer
+	spellButtonContainer:SetParent(zoneFrame)
+	spellButtonContainer:ClearAllPoints()
+	spellButtonContainer:SetPoint("CENTER", 0, 0)
+	spellButtonContainer.ignoreFramePositionManager = true
+	zoneFrame.mover = B.Mover(spellButtonContainer, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
 
-	local spellButton = ZoneAbilityFrame.SpellButton
-	spellButton.Style:SetAlpha(0)
-	spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	B.ReskinIcon(spellButton.Icon, true)
+	hooksecurefunc(ZoneAbilityFrame, "UpdateDisplayedZoneAbilities", function(self)
+		for spellButton in self.SpellButtonContainer:EnumerateActive() do
+			if spellButton and not spellButton.styled then
+				spellButton.NormalTexture:SetAlpha(0)
+				spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+				B.ReskinIcon(spellButton.Icon, true)
+				spellButton.styled = true
+			end
+		end
+	end)
 end

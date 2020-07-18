@@ -339,7 +339,7 @@ function TT:GameTooltip_ComparisonFix(anchorFrame, shoppingTooltip1, shoppingToo
 end
 
 -- Tooltip skin
-local fakeBg = CreateFrame("Frame", nil, UIParent)
+local fakeBg = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
 fakeBg:SetBackdrop({ bgFile = DB.bdTex, edgeFile = DB.bdTex, edgeSize = 1 })
 
 local function getBackdrop() return fakeBg:GetBackdrop() end
@@ -387,7 +387,7 @@ function TT:ReskinTooltip()
 	end
 end
 
-function TT:GameTooltip_SetBackdropStyle()
+function TT:SharedTooltip_SetBackdropStyle()
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
 end
@@ -433,7 +433,7 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_ShowStatusBar", self.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", self.GameTooltip_ShowProgressBar)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", self.GameTooltip_SetDefaultAnchor)
-	hooksecurefunc("GameTooltip_SetBackdropStyle", self.GameTooltip_SetBackdropStyle)
+	hooksecurefunc("SharedTooltip_SetBackdropStyle", self.SharedTooltip_SetBackdropStyle)
 	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
 
 	-- Elements
@@ -474,9 +474,9 @@ TT:RegisterTooltips("NDui", function()
 		AutoCompleteBox,
 		FriendsTooltip,
 		QuestScrollFrame.StoryTooltip,
+		QuestScrollFrame.CampaignTooltip,
 		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
-		QuestScrollFrame.WarCampaignTooltip,
 		NamePlateTooltip,
 		QueueStatusFrame,
 		FloatingGarrisonFollowerTooltip,

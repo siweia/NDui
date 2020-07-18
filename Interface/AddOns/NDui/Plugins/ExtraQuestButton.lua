@@ -255,7 +255,7 @@ end
 
 function ExtraQuestButton:QUEST_ACCEPTED(_, questLogIndex, questID)
 	if(questID and not IsQuestBounty(questID) and IsQuestTask(questID)) then
-		local _, _, worldQuestType = GetQuestTagInfo(questID)
+		local _, _, worldQuestType = C_QuestLog.GetQuestTagInfo(questID)
 		if(worldQuestType and not activeWorldQuests[questID]) then
 			activeWorldQuests[questID] = questLogIndex
 
@@ -401,12 +401,12 @@ local function GetClosestQuestItem()
 				areaID = itemAreas[tonumber(strmatch(itemLink, "item:(%d+)"))]
 			end
 
-			local _, _, _, _, _, isComplete = GetQuestLogTitle(questLogIndex)
+			local isComplete = C_QuestLog.IsComplete(questID)
 			if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
 				closestQuestLink = itemLink
 				closestQuestTexture = texture
 			elseif(not isComplete or (isComplete and showCompleted)) then
-				local distanceSq, onContinent = GetDistanceSqToQuest(questLogIndex)
+				local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questLogIndex)
 				if(onContinent and distanceSq <= shortestDistanceSq) then
 					shortestDistanceSq = distanceSq
 					closestQuestLink = itemLink
@@ -419,9 +419,11 @@ local function GetClosestQuestItem()
 	end
 
 	if(not closestQuestLink) then
-		for index = 1, GetNumQuestWatches() do
-			local questID, _, questLogIndex, _, _, isComplete = GetQuestWatchInfo(index)
+		for index = 1, C_QuestLog.GetNumQuestWatches() do
+			local questID = C_QuestLog.GetQuestIDForQuestWatchIndex(index)
 			if(questID and QuestHasPOIInfo(questID)) then
+				local isComplete = C_QuestLog.IsComplete(questID)
+				local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
 				local itemLink, texture, _, showCompleted = GetQuestLogSpecialItemInfo(questLogIndex)
 				if(itemLink) then
 					local areaID = questAreas[questID]
@@ -433,7 +435,7 @@ local function GetClosestQuestItem()
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
-						local distanceSq, onContinent = GetDistanceSqToQuest(questLogIndex)
+						local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questLogIndex)
 						if(onContinent and distanceSq <= shortestDistanceSq) then
 							shortestDistanceSq = distanceSq
 							closestQuestLink = itemLink
@@ -448,8 +450,11 @@ local function GetClosestQuestItem()
 	end
 
 	if(not closestQuestLink) then
-		for questLogIndex = 1, GetNumQuestLogEntries() do
-			local _, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questLogIndex)
+		for questLogIndex = 1, C_QuestLog.GetNumQuestLogEntries() do
+			local info = C_QuestLog.GetInfo(questLogIndex)
+			local questID = info.questID
+			local isHeader = info.isHeader
+			local isComplete = C_QuestLog.IsComplete(questID)
 			if(not isHeader and QuestHasPOIInfo(questID)) then
 				local itemLink, texture, _, showCompleted = GetQuestLogSpecialItemInfo(questLogIndex)
 				if(itemLink) then
@@ -462,7 +467,7 @@ local function GetClosestQuestItem()
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
-						local distanceSq, onContinent = GetDistanceSqToQuest(questLogIndex)
+						local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questLogIndex)
 						if(onContinent and distanceSq <= shortestDistanceSq) then
 							shortestDistanceSq = distanceSq
 							closestQuestLink = itemLink
