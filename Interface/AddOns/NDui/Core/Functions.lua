@@ -480,7 +480,7 @@ do
 		local frame = self
 		if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 
-		self.Shadow = CreateFrame("Frame", nil, frame)
+		self.Shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		self.Shadow:SetOutside(self, size or 4, size or 4)
 		self.Shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
 		self.Shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
@@ -527,6 +527,10 @@ do
 		end
 	end
 
+	function B:SetBackdrop_Hook(a)
+		B:SetBackdrop(self, a)
+	end
+
 	function B:SetBackdropColor_Hook(r, g, b, a)
 		B:SetBackdropColor(self, r, g, b, a)
 	end
@@ -568,7 +572,9 @@ do
 	-- Setup backdrop
 	C.frames = {}
 	function B:CreateBD(a)
-		self:SetBackdrop(nil)
+		if self.SetBackdrop then
+			self:SetBackdrop(nil)
+		end
 		B:PixelBorders(self)
 		B:SetBackdrop(self, a or NDuiDB["Skins"]["SkinAlpha"])
 		if not a then tinsert(C.frames, self) end
@@ -1616,6 +1622,9 @@ do
 			if mt.SetStatusBarTexture then hooksecurefunc(mt, "SetStatusBarTexture", DisablePixelSnap) end
 			mt.DisabledPixelSnap = true
 		end
+		if not object.SetBackdrop then mt.SetBackdrop = B.SetBackdrop_Hook end
+		if not object.SetBackdropColor then mt.SetBackdropColor = B.SetBackdropColor_Hook end
+		if not object.SetBackdropBorderColor then mt.SetBackdropBorderColor = B.SetBackdropBorderColor_Hook end
 	end
 
 	local handled = {["Frame"] = true}
