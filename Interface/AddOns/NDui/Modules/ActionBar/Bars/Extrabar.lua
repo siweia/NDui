@@ -46,13 +46,12 @@ function Bar:CreateExtrabar()
 	zoneFrame:SetHeight(cfg.size + 2*padding)
 	zoneFrame.Pos = {"BOTTOM", UIParent, "BOTTOM", -250, 100}
 
+	ZoneAbilityFrame:SetParent(zoneFrame)
+	ZoneAbilityFrame:ClearAllPoints()
+	ZoneAbilityFrame:SetPoint("CENTER", 0, 0)
+	ZoneAbilityFrame.ignoreFramePositionManager = true
 	ZoneAbilityFrame.Style:SetAlpha(0)
-	local spellButtonContainer = ZoneAbilityFrame.SpellButtonContainer
-	spellButtonContainer:SetParent(zoneFrame)
-	spellButtonContainer:ClearAllPoints()
-	spellButtonContainer:SetPoint("CENTER", 0, 0)
-	spellButtonContainer.ignoreFramePositionManager = true
-	zoneFrame.mover = B.Mover(spellButtonContainer, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
+	zoneFrame.mover = B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
 
 	hooksecurefunc(ZoneAbilityFrame, "UpdateDisplayedZoneAbilities", function(self)
 		for spellButton in self.SpellButtonContainer:EnumerateActive() do
