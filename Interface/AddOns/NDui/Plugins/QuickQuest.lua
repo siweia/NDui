@@ -135,17 +135,6 @@ QuickQuest:Register("QUEST_GREETING", function()
 	end
 end)
 
--- This should be part of the API, really
-local function GetAvailableGossipQuestInfo(index)
-	local name, level, isTrivial, frequency, isRepeatable, isLegendary, isIgnored = select(((index * 7) - 7) + 1, GetGossipAvailableQuests())
-	return name, level, isTrivial, isIgnored, isRepeatable, frequency == 2, frequency == 3, isLegendary
-end
-
-local function GetActiveGossipQuestInfo(index)
-	local name, level, isTrivial, isComplete, isLegendary, isIgnored = select(((index * 6) - 6) + 1, GetGossipActiveQuests())
-	return name, level, isTrivial, isIgnored, isComplete, isLegendary
-end
-
 local ignoreGossipNPC = {
 	-- Bodyguards
 	[86945] = true, -- Aeda Brightdawn (Horde)
@@ -197,57 +186,58 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 		return
 	end
 
-	local active = GetNumGossipActiveQuests()
+	local active = C_GossipInfo.GetNumActiveQuests()
 	if(active > 0) then
-		local logQuests = GetQuestLogQuests(true)
-		for index = 1, active do
-			local name, _, _, _, complete = GetActiveGossipQuestInfo(index)
+		local gossipQuests = C_GossipInfo.GetActiveQuests()
+		for index, questInfo in ipairs(gossipQuests) do
+			local name, complete, questID = questInfo.title, questInfo.isComplete, questInfo.questID
 			if(complete) then
-				local questID = logQuests[name]
 				if(not questID) then
-					SelectGossipActiveQuest(index)
+					C_GossipInfo.SelectActiveQuest(index)
 				else
 					local _, _, worldQuest = C_QuestLog.GetQuestTagInfo(questID)
 					if(not worldQuest) then
-						SelectGossipActiveQuest(index)
+						C_GossipInfo.SelectActiveQuest(index)
 					end
 				end
 			end
 		end
 	end
 
-	local available = GetNumGossipAvailableQuests()
+	local available = C_GossipInfo.GetNumAvailableQuests()
 	if(available > 0) then
-		for index = 1, available do
-			local _, _, trivial, ignored = GetAvailableGossipQuestInfo(index)
+		local GossipQuests = C_GossipInfo.GetAvailableQuests()
+		for index, questInfo in ipairs(GossipQuests) do
+			local trival, ignored = questInfo.isTrivial, questInfo.isIgnored
 			if((not trivial and not ignored) or IsTrackingHidden()) then
-				SelectGossipAvailableQuest(index)
+				C_GossipInfo.SelectAvailableQuest(index)
 			elseif(trivial and npcID == 64337) then
-				SelectGossipAvailableQuest(index)
+				C_GossipInfo.SelectAvailableQuest(index)
 			end
 		end
 	end
 
 	if(rogueClassHallInsignia[npcID]) then
-		return SelectGossipOption(1)
+		return C_GossipInfo.SelectOption(1)
 	end
 
 	if(available == 0 and active == 0) then
-		if GetNumGossipOptions() == 1 then
+		local numOptions = C_GossipInfo.GetNumOptions()
+		if numOptions == 1 then
 			if(npcID == 57850) then
-				return SelectGossipOption(1)
+				return C_GossipInfo.SelectOption(1)
 			end
 
 			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
 			if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
-				local _, type = GetGossipOptions()
-				if(type == "gossip") then
-					SelectGossipOption(1)
+				local gossipInfoTable = C_GossipInfo.GetOptions()
+				if gossipInfoTable[1].type == "gossip" then
+					C_GossipInfo.SelectOption(1)
 					return
 				end
 			end
-		elseif followerAssignees[npcID] and GetNumGossipOptions() > 1 then
-			return SelectGossipOption(1)
+		elseif followerAssignees[npcID] and numOptions > 1 then
+			return C_GossipInfo.SelectOption(1)
 		end
 	end
 end)
@@ -261,7 +251,7 @@ local darkmoonNPC = {
 QuickQuest:Register("GOSSIP_CONFIRM", function(index)
 	local npcID = GetNPCID()
 	if(npcID and darkmoonNPC[npcID]) then
-		SelectGossipOption(index, "", true)
+		C_GossipInfo.SelectOption(index, "", true)
 		StaticPopup_Hide("GOSSIP_CONFIRM")
 	end
 end)
