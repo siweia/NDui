@@ -47,24 +47,18 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	local tabs = {"overviewTab", "modelTab", "bossTab", "lootTab"}
 	for _, name in pairs(tabs) do
 		local tab = EncounterJournal.encounter.info[name]
-		tab:SetScale(.75)
-		tab:SetBackdrop({
-			bgFile = DB.bdTex,
-			edgeFile = DB.bdTex,
-			edgeSize = C.mult / .75,
-		})
-		tab:SetBackdropColor(0, 0, 0, .5)
-		tab:SetBackdropBorderColor(0, 0, 0)
+		local bg = B.SetBD(tab)
+		bg:SetInside(tab, 2, 2)
 
 		tab:SetNormalTexture("")
 		tab:SetPushedTexture("")
 		tab:SetDisabledTexture("")
 		local hl = tab:GetHighlightTexture()
 		hl:SetColorTexture(r, g, b, .2)
-		hl:SetInside()
+		hl:SetInside(bg)
 
 		if name == "overviewTab" then
-			tab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 13, -35)
+			tab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 10, -35)
 		end
 	end
 
