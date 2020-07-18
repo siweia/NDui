@@ -85,11 +85,12 @@ info.onEvent = function(self, event)
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end
 
+	local isLow = isLowDurability()
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent(event)
 		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 		getItemDurability()
-		if isLowDurability() then inform:Show() end
+		if isLow then inform:Show() end
 	else
 		local numSlots = getItemDurability()
 		if numSlots > 0 then
@@ -98,7 +99,7 @@ info.onEvent = function(self, event)
 			self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
 		end
 
-		if isLowDurability() then inform:Show() else inform:Hide() end
+		inform:SetShown(isLow)
 	end
 end
 
