@@ -22,6 +22,7 @@ DB.Devs = {
 	["寧德-加尔"] = true,
 	["图咿-万色星辰"] = true,
 	["Huniverster-Oribos"] = true,
+	["Rapidshot-Oribos"] = true,
 }
 local function isDeveloper()
 	return DB.Devs[DB.MyName.."-"..DB.MyRealm]
