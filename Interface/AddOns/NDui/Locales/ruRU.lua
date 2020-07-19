@@ -648,3 +648,7 @@ L["KeyBoundTo"] = "bound to" -- need translation
 L["Save keybinds"] = "Keybinds saved." -- need translation
 L["Discard keybinds"] = "Keybinds discarded." -- need translation
 L["Clear binds"] = "|cff00ff00All keybinds cleared for|r %s" -- need translation
+L["NameplateAuraFilter"] = "Auras Filter" -- need translation
+L["BlackNWhite"] = "White & Black List" -- need translation
+L["PlayerOnly"] = "List & Player" -- need translation
+L["IncludeCrowdControl"] = "List & Player & CCs" -- need translation
