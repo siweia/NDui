@@ -201,6 +201,7 @@ local defaultSettings = {
 		Enable = true,
 		maxAuras = 5,
 		AuraSize = 28,
+		AuraFilter = 3,
 		FriendlyCC = false,
 		HostileCC = true,
 		TankMode = false,
@@ -215,6 +216,7 @@ local defaultSettings = {
 		ShowPowerList = "",
 		VerticalSpacing = .7,
 		ShowPlayerPlate = false,
+		PPWidth = 175,
 		PPHeight = 5,
 		PPPHeight = 5,
 		PPPowerText = false,
@@ -225,7 +227,6 @@ local defaultSettings = {
 		OffTankColor = {r=.2, g=.7, b=.5},
 		DPSRevertThreat = false,
 		ExplosivesScale = false,
-		PPIconSize = 32,
 		AKSProgress = false,
 		PPHideOOC = true,
 		NameplateClassPower = false,
@@ -744,9 +745,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[5] = {
 		{1, "Nameplate", "Enable", "|cff00cc4c"..L["Enable Nameplate"], nil, setupNameplateFilter},
 		{},--blank
-		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
-		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*"},
+		{4, "Nameplate", "AuraFilter", L["NameplateAuraFilter"].."*", nil, {L["BlackNWhite"], L["PlayerOnly"], L["IncludeCrowdControl"]}, refreshNameplates},
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", true, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
+		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
+		{1, "Nameplate", "HostileCC", L["Hostile CC"].."*", true},
 		{1, "Nameplate", "FullHealth", L["Show FullHealth"].."*", nil, nil, refreshNameplates},
 		{1, "Nameplate", "ColorBorder", L["ColorBorder"].."*", true, nil, refreshNameplates},
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, updatePlateInsideView},
@@ -789,7 +791,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
 		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
-		{3, "Nameplate", "PPIconSize", L["PlayerPlate IconSize"], true, {30, 60, 1}, updatePlayerPlate}, -- FIX ME: need to refactor classpower
+		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"], true, {150, 300, 1}, updatePlayerPlate}, -- FIX ME: need to refactor classpower
 		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, updatePlayerPlate},
 		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, updatePlayerPlate},
 		{},--blank
