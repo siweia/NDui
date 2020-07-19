@@ -101,6 +101,18 @@ local function animIn_OnFinished(group)
 	frame.ants:SetAlpha(1)
 end
 
+local function overlayGlow_OnUpdate(self, elapsed)
+	AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed, 0.01)
+	local cooldown = self:GetParent().cooldown
+	-- we need some threshold to avoid dimming the glow during the gdc
+	-- (using 1500 exactly seems risky, what if casting speed is slowed or something?)
+	if(cooldown and cooldown:IsShown() and cooldown:GetCooldownDuration() > 3000) then
+		self:SetAlpha(.5)
+	else
+		self:SetAlpha(1)
+	end
+end
+
 local function createOverlayGlow()
 	numOverlays = numOverlays + 1
 
@@ -164,7 +176,7 @@ local function createOverlayGlow()
 	overlay.animOut:SetScript("OnFinished", overlayGlowAnimOutFinished)
 
 	-- scripts
-	overlay:SetScript("OnUpdate", ActionButton_OverlayGlowOnUpdate)
+	overlay:SetScript("OnUpdate", overlayGlow_OnUpdate)
 	overlay:SetScript("OnHide", overlayGlow_OnHide)
 
 	return overlay
