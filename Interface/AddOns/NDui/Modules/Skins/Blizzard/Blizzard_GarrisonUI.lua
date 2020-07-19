@@ -217,10 +217,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local abilities = self.AbilitiesFrame.Abilities
 		if not abilities then return end
 
+		if not self.numAbilitiesStyled then self.numAbilitiesStyled = 1 end
+		local numAbilitiesStyled = self.numAbilitiesStyled
+		local ability = abilities[numAbilitiesStyled]
 		if ability.IconButton then
-			if not self.numAbilitiesStyled then self.numAbilitiesStyled = 1 end
-			local numAbilitiesStyled = self.numAbilitiesStyled
-			local ability = abilities[numAbilitiesStyled]
 			while ability do
 				local icon = ability.IconButton.Icon
 				B.ReskinIcon(icon)

@@ -154,7 +154,7 @@ tinsert(C.defaultThemes, function()
 				local portrait = reward.PortraitFrame
 				if not reward.textBg then
 					B.ReskinGarrisonPortrait(portrait)
-					reward.textBg:Hide()
+					reward.BG:Hide()
 					reward.textBg = B.CreateBDFrame(reward, .25)
 				end
 
