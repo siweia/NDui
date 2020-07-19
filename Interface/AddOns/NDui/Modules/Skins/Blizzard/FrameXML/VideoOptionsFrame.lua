@@ -143,6 +143,7 @@ tinsert(C.defaultThemes, function()
 			"Display_RaidSettingsEnabledCheckBox",
 			"Advanced_MaxFPSCheckBox",
 			"Advanced_MaxFPSBKCheckBox",
+			"Advanced_TargetFPSCheckBox",
 			"NetworkOptionsPanelOptimizeSpeed",
 			"NetworkOptionsPanelUseIPv6",
 			"NetworkOptionsPanelAdvancedCombatLogging",
