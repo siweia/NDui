@@ -34,6 +34,15 @@ local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
 	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
+local function UpdateSpellStatus(button, spellID)
+	button.Icon:SetTexture(GetSpellTexture(spellID))
+	if IsUsableSpell(spellID) then
+		button.Icon:SetDesaturated(false)
+	else
+		button.Icon:SetDesaturated(true)
+	end
+end
+
 local boomGroups = {
 	[270339] = 186270,
 	[270332] = 259489,
@@ -41,53 +50,22 @@ local boomGroups = {
 }
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		UpdateCooldown(self.bu[1], 34026, true)
 		UpdateCooldown(self.bu[2], 217200, true)
 		UpdateBuff(self.bu[3], 106785, 272790, false, true, "END")
 		UpdateBuff(self.bu[4], 19574, 19574, true, false, true)
 		UpdateBuff(self.bu[5], 193530, 193530, true, false, true)
 
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		UpdateCooldown(self.bu[1], 19434, true)
-
-		do
-			local button = self.bu[2]
-			if IsPlayerSpell(271788) then
-				UpdateDebuff(button, 271788, 271788)
-			elseif IsPlayerSpell(131894) then
-				UpdateDebuff(button, 131894, 131894, true)
-			else
-				if IsPlayerSpell(260367) then
-					UpdateBuff(button, 260242, 260242)
-				else
-					UpdateCooldown(button, 257044, true)
-				end
-			end
-		end
+		UpdateCooldown(self.bu[2], 257044, true)
 
 		do
 			local button = self.bu[3]
-			if IsPlayerSpell(193533) then
-				local name, count, duration, expire, caster, spellID = GetUnitAura("target", 277959, "HARMFUL")
-				if not name then name, count, duration, expire, caster, spellID = GetUnitAura("player", 193534, "HELPFUL") end
-				if name and caster == "player" then
-					button.Count:SetText(count)
-					button.CD:SetCooldown(expire-duration, duration)
-					button.CD:Show()
-					button.Icon:SetDesaturated(false)
-					button.Icon:SetTexture(GetSpellTexture(spellID))
-				else
-					button.Count:SetText("")
-					button.CD:Hide()
-					button.Icon:SetDesaturated(true)
-					button.Icon:SetTexture(GetSpellTexture(193534))
-				end
-			elseif IsPlayerSpell(257284) then
-				UpdateDebuff(button, 257284, 257284)
-			else
-				UpdateCooldown(button, 257044, true)
-			end
+			UpdateCooldown(button, 53351)
+			UpdateSpellStatus(button, 53351)
 		end
 
 		do
@@ -97,13 +75,13 @@ function A:ChantLumos(self)
 			elseif IsPlayerSpell(120360) then
 				UpdateCooldown(button, 120360, true)
 			else
-				UpdateBuff(button, 260395, 260395)
+				UpdateBuff(button, 260242, 260242)
 			end
 		end
 
 		UpdateBuff(self.bu[5], 288613, 288613, true, false, true)
 
-	elseif GetSpecialization() == 3 then
+	elseif spec == 3 then
 		UpdateDebuff(self.bu[1], 259491, 259491, false, "END")
 
 		do
