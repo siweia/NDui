@@ -37,8 +37,8 @@
 	<Script file="Blizzard_MacroUI.lua"/>
 	<Script file="Blizzard_ObliterumUI.lua"/>
 	<Script file="Blizzard_OrderHallUI.lua"/>
+	<Script file="Blizzard_PlayerChoiceUI.lua"/>
 	<Script file="Blizzard_PVPUI.lua"/>
-	<Script file="Blizzard_QuestChoice.lua"/>
 	<Script file="Blizzard_RaidUI.lua"/>
 	<Script file="Blizzard_ScrappingMachineUI.lua"/>
 	<Script file="Blizzard_TalentUI.lua"/>
@@ -47,5 +47,4 @@
 	<Script file="Blizzard_TrainerUI.lua"/>
 	<Script file="Blizzard_Tutorial.lua"/>
 	<Script file="Blizzard_VoidStorageUI.lua"/>
-	<Script file="Blizzard_WarboardUI.lua"/>
 </Ui>
