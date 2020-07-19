@@ -51,7 +51,7 @@ function Bar:CreateExtrabar()
 	ZoneAbilityFrame:SetPoint("CENTER", 0, 0)
 	ZoneAbilityFrame.ignoreFramePositionManager = true
 	ZoneAbilityFrame.Style:SetAlpha(0)
-	zoneFrame.mover = B.Mover(ZoneAbilityFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
+	zoneFrame.mover = B.Mover(zoneFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
 
 	hooksecurefunc(ZoneAbilityFrame, "UpdateDisplayedZoneAbilities", function(self)
 		for spellButton in self.SpellButtonContainer:EnumerateActive() do
