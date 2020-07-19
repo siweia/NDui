@@ -466,7 +466,8 @@ function M:ReplaceContaminantName()
 
 				if level then
 					local name = item.Name
-					local newString = strmatch(name:GetText(), itemString)
+					local nameText = name and name:GetText()
+					local newString = nameText and strmatch(nameText, itemString)
 					if newString then
 						name:SetText(newString)
 					end
