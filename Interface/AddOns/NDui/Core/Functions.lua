@@ -774,6 +774,7 @@ do
 		"BottomRightTex",
 		"RightTex",
 		"MiddleTex",
+		"Center",
 	}
 	function B:Reskin(noHighlight)
 		if self.SetNormalTexture then self:SetNormalTexture("") end
