@@ -8,6 +8,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("LossOfControlFrame_SetUpDisplay", function(self)
 		if not styled then
 			B.ReskinIcon(self.Icon, true)
+			self.Cooldown:SetInside()
 
 			styled = true
 		end
