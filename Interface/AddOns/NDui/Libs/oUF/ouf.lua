@@ -193,8 +193,7 @@ for k, v in next, {
 	--]]
 	UpdateAllElements = function(self, event)
 		local unit = self.unit
-		if(not unitExists(unit)) then self:SetAlpha(0) return end
-		self:SetAlpha(1)
+		if(not unitExists(unit)) then return end
 
 		assert(type(event) == 'string', "Invalid argument 'event' in UpdateAllElements.")
 
@@ -738,7 +737,8 @@ function oUF:Spawn(unit, overrideName, noHandle)
 	walkObject(object, unit)
 
 	object:SetAttribute('unit', unit)
-	RegisterUnitWatch(object)
+	--RegisterUnitWatch(object)
+	RegisterStateDriver(object, "visibility", "[petbattle] hide; [@"..unit..",noexists] hide; show")
 
 	return object
 end
