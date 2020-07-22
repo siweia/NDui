@@ -641,7 +641,7 @@ do
 
 	function B:AuraIcon(highlight)
 		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
-		self.CD:SetAllPoints()
+		self.CD:SetInside()
 		self.CD:SetReverse(true)
 		B.PixelIcon(self, nil, highlight)
 		B.CreateSD(self)
