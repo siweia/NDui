@@ -9,7 +9,9 @@ local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
-local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
+local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
+local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
+local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 local IsCorruptedItem = IsCorruptedItem
@@ -639,6 +641,7 @@ function module:OnLogin()
 		self.Count:SetFont(unpack(DB.Font))
 		self.Cooldown:SetInside()
 		self.IconOverlay:SetInside()
+		self.IconOverlay2:SetInside()
 
 		B.CreateBD(self, .3)
 		self:SetBackdropColor(.3, .3, .3, .3)
@@ -693,6 +696,8 @@ function module:OnLogin()
 			return "AzeriteIconFrame"
 		elseif IsCorruptedItem(item.link) then
 			return "Nzoth-inventory-icon"
+		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
+			return "ConduitIconFrame", "ConduitIconFrame-Corners"
 		end
 	end
 
@@ -713,10 +718,15 @@ function module:OnLogin()
 			end
 		end
 
-		local atlas = GetIconOverlayAtlas(item)
+		local atlas, secondAtlas = GetIconOverlayAtlas(item)
+		if self.IconOverlay2 then self.IconOverlay2:Hide() end
 		if atlas then
 			self.IconOverlay:SetAtlas(atlas)
 			self.IconOverlay:Show()
+			if secondAtlas then
+				self.IconOverlay2:SetAtlas(secondAtlas)
+				self.IconOverlay2:Show()
+			end
 		else
 			self.IconOverlay:Hide()
 		end
