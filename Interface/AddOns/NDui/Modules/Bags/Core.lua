@@ -647,11 +647,6 @@ function module:OnLogin()
 		parentFrame:SetAllPoints()
 		parentFrame:SetFrameLevel(5)
 
-		self.junkIcon = parentFrame:CreateTexture(nil, "ARTWORK")
-		self.junkIcon:SetAtlas("bags-junkcoin")
-		self.junkIcon:SetSize(20, 20)
-		self.junkIcon:SetPoint("TOPRIGHT", 1, 0)
-
 		self.Favourite = parentFrame:CreateTexture(nil, "ARTWORK")
 		self.Favourite:SetAtlas("collections-icon-favorites")
 		self.Favourite:SetSize(30, 30)
@@ -710,10 +705,12 @@ function module:OnLogin()
 			end
 		end
 
-		if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
-			self.junkIcon:Show()
-		else
-			self.junkIcon:Hide()
+		if self.JunkIcon then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
+				self.JunkIcon:Show()
+			else
+				self.JunkIcon:Hide()
+			end
 		end
 
 		local atlas = GetIconOverlayAtlas(item)
@@ -759,9 +756,9 @@ function module:OnLogin()
 
 	function MyButton:OnUpdateQuest(item)
 		if item.questID and not item.questActive then
-			self.Quest:SetAlpha(1)
+			self.Quest:Show()
 		else
-			self.Quest:SetAlpha(0)
+			self.Quest:Hide()
 		end
 
 		if item.questID or item.isQuestItem then
