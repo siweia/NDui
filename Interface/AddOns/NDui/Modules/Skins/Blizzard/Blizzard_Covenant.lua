@@ -29,3 +29,7 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 		end
 	end)
 end
+
+C.themes["Blizzard_CovenantSanctum"] = function()
+	B.ReskinClose(CovenantSanctumFrameCloseButton)
+end
