@@ -56,15 +56,7 @@ function A:ChantLumos(self)
 
 		UpdateBuff(self.bu[5], 31821, 31821, true, true)
 	elseif GetSpecialization() == 2 then
-		do
-			local button = self.bu[1]
-			if IsPlayerSpell(213652) then
-				UpdateCooldown(button, 213652, true)
-			else
-				UpdateCooldown(button, 184092, true)
-			end
-		end
-
+		UpdateCooldown(self.bu[1], 31935, true)
 		UpdateBuff(self.bu[2], 53600, 132403, true, "END")
 		UpdateBuff(self.bu[3], 31884, 31884, true, true)
 		UpdateBuff(self.bu[4], 31850, 31850, true, true)
