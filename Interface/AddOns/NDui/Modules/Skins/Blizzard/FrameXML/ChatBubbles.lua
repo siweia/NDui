@@ -61,7 +61,7 @@ tinsert(C.defaultThemes, function()
 		local chatbubble = findChatBubble(self.msg)
 		if chatbubble or self.elapsed > .3 then
 			self:Hide()
-			if chatbubble and not chatbubble.styled then
+			if chatbubble and not chatbubble:IsForbidden() and not chatbubble.styled then
 				styleBubble(chatbubble)
 				chatbubble.styled = true
 			end
