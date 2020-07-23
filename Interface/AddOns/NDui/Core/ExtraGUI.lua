@@ -89,7 +89,7 @@ function G:SetupRaidDebuffs(parent)
 			end
 		end)
 	end
-
+--[[
 	local dungeons = {}
 	for _, dungeonID in next, C_ChallengeMode.GetMapTable() do
 		if dungeonID < 369 then
@@ -98,7 +98,14 @@ function G:SetupRaidDebuffs(parent)
 		end
 	end
 	local mechagon = EJ_GetInstanceInfo(1178)
-	tinsert(dungeons, mechagon)
+	tinsert(dungeons, mechagon)]]
+	local dungeons = {}
+	for dungeonID = 1182, 1189 do
+		local name = EJ_GetInstanceInfo(dungeonID)
+		if name then
+			tinsert(dungeons, name)
+		end
+	end
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1031),
@@ -106,6 +113,7 @@ function G:SetupRaidDebuffs(parent)
 		[3] = EJ_GetInstanceInfo(1177),
 		[4] = EJ_GetInstanceInfo(1179),
 		[5] = EJ_GetInstanceInfo(1180),
+		[6] = EJ_GetInstanceInfo(1190),
 	}
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
@@ -250,10 +258,12 @@ function G:SetupRaidDebuffs(parent)
 		local instName = self.text or self
 		local index = 0
 
-		for spellID, priority in pairs(C.RaidDebuffs[instName]) do
-			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]) then
-				index = index + 1
-				applyData(index, instName, spellID, priority)
+		if C.RaidDebuffs[instName] then
+			for spellID, priority in pairs(C.RaidDebuffs[instName]) do
+				if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]) then
+					index = index + 1
+					applyData(index, instName, spellID, priority)
+				end
 			end
 		end
 
