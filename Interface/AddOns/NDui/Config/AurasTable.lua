@@ -96,11 +96,8 @@ function module:RegisterDebuff(_, instID, _, spellID, level)
 	end
 
 	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end
-	if level then
-		if level > 6 then level = 6 end
-	else
-		level = 2
-	end
+	if not level then level = 2 end
+	if level > 6 then level = 6 end
 
 	RaidDebuffs[instName][spellID] = level
 end
