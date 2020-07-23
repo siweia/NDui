@@ -718,12 +718,15 @@ function module:OnLogin()
 			end
 		end
 
+		self.IconOverlay:SetVertexColor(1, 1, 1)
+		self.IconOverlay2:Hide()
 		local atlas, secondAtlas = GetIconOverlayAtlas(item)
-		if self.IconOverlay2 then self.IconOverlay2:Hide() end
 		if atlas then
 			self.IconOverlay:SetAtlas(atlas)
 			self.IconOverlay:Show()
 			if secondAtlas then
+				local color = DB.QualityColors[item.rarity or 1]
+				self.IconOverlay:SetVertexColor(color.r, color.g, color.b)
 				self.IconOverlay2:SetAtlas(secondAtlas)
 				self.IconOverlay2:Show()
 			end
