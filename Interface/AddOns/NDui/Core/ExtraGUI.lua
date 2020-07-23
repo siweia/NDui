@@ -250,10 +250,12 @@ function G:SetupRaidDebuffs(parent)
 		local instName = self.text or self
 		local index = 0
 
-		for spellID, priority in pairs(C.RaidDebuffs[instName]) do
-			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]) then
-				index = index + 1
-				applyData(index, instName, spellID, priority)
+		if C.RaidDebuffs[instName] then
+			for spellID, priority in pairs(C.RaidDebuffs[instName]) do
+				if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]) then
+					index = index + 1
+					applyData(index, instName, spellID, priority)
+				end
 			end
 		end
 
