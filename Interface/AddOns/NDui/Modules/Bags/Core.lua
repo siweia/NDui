@@ -638,26 +638,14 @@ function module:OnLogin()
 		self.Count:SetPoint("BOTTOMRIGHT", -1, 2)
 		self.Count:SetFont(unpack(DB.Font))
 		self.Cooldown:SetInside()
+		self.IconOverlay:SetInside()
 
 		B.CreateBD(self, .3)
 		self:SetBackdropColor(.3, .3, .3, .3)
 
-		self.Azerite = self:CreateTexture(nil, "ARTWORK")
-		self.Azerite:SetAtlas("AzeriteIconFrame")
-		self.Azerite:SetInside()
-
-		self.Corrupt = self:CreateTexture(nil, "ARTWORK")
-		self.Corrupt:SetAtlas("Nzoth-inventory-icon")
-		self.Corrupt:SetInside()
-
 		local parentFrame = CreateFrame("Frame", nil, self)
 		parentFrame:SetAllPoints()
 		parentFrame:SetFrameLevel(5)
-
-		self.junkIcon = parentFrame:CreateTexture(nil, "ARTWORK")
-		self.junkIcon:SetAtlas("bags-junkcoin")
-		self.junkIcon:SetSize(20, 20)
-		self.junkIcon:SetPoint("TOPRIGHT", 1, 0)
 
 		self.Favourite = parentFrame:CreateTexture(nil, "ARTWORK")
 		self.Favourite:SetAtlas("collections-icon-favorites")
@@ -699,6 +687,15 @@ function module:OnLogin()
 		return item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
 	end
 
+	local function GetIconOverlayAtlas(item)
+		if not item.link then return end
+		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
+			return "AzeriteIconFrame"
+		elseif IsCorruptedItem(item.link) then
+			return "Nzoth-inventory-icon"
+		end
+	end
+
 	function MyButton:OnUpdate(item)
 		if MerchantFrame:IsShown() then
 			if item.isInSet then
@@ -708,28 +705,26 @@ function module:OnLogin()
 			end
 		end
 
-		if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
-			self.junkIcon:SetAlpha(1)
-		else
-			self.junkIcon:SetAlpha(0)
+		if self.JunkIcon then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
+				self.JunkIcon:Show()
+			else
+				self.JunkIcon:Hide()
+			end
 		end
 
-		if item.link and C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
-			self.Azerite:SetAlpha(1)
+		local atlas = GetIconOverlayAtlas(item)
+		if atlas then
+			self.IconOverlay:SetAtlas(atlas)
+			self.IconOverlay:Show()
 		else
-			self.Azerite:SetAlpha(0)
-		end
-
-		if item.link and IsCorruptedItem(item.link) then
-			self.Corrupt:SetAlpha(1)
-		else
-			self.Corrupt:SetAlpha(0)
+			self.IconOverlay:Hide()
 		end
 
 		if NDuiDB["Bags"]["FavouriteItems"][item.id] then
-			self.Favourite:SetAlpha(1)
+			self.Favourite:Show()
 		else
-			self.Favourite:SetAlpha(0)
+			self.Favourite:Hide()
 		end
 
 		if NDuiDB["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
@@ -761,9 +756,9 @@ function module:OnLogin()
 
 	function MyButton:OnUpdateQuest(item)
 		if item.questID and not item.questActive then
-			self.Quest:SetAlpha(1)
+			self.Quest:Show()
 		else
-			self.Quest:SetAlpha(0)
+			self.Quest:Hide()
 		end
 
 		if item.questID or item.isQuestItem then
