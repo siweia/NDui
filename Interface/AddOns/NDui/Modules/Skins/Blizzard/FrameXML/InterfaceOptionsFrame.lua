@@ -52,6 +52,7 @@ tinsert(C.defaultThemes, function()
 			InterfaceOptionsCombatPanelAutoSelfCast,
 			InterfaceOptionsDisplayPanelRotateMinimap,
 			InterfaceOptionsDisplayPanelAJAlerts,
+			InterfaceOptionsDisplayPanelShowInGameNavigation,
 			InterfaceOptionsDisplayPanelShowTutorials,
 			InterfaceOptionsSocialPanelProfanityFilter,
 			InterfaceOptionsSocialPanelSpamFilter,
