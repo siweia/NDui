@@ -42,7 +42,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			for i = 1, 3 do
 				local follower = self.Followers[i]
 				follower:GetRegions():Hide()
-				B.CreateBD(follower, .25)
+				B.CreateBDFrame(follower, .25)
 				B.ReskinGarrisonPortrait(follower.PortraitFrame)
 				follower.PortraitFrame:ClearAllPoints()
 				follower.PortraitFrame:SetPoint("TOPLEFT", 0, -3)
@@ -53,7 +53,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			for i = 1, 10 do
 				select(i, self.RewardsFrame:GetRegions()):Hide()
 			end
-			B.CreateBD(self.RewardsFrame, .25)
+			B.CreateBDFrame(self.RewardsFrame, .25)
 
 			local overmaxItem = self.RewardsFrame.OvermaxItem
 			overmaxItem.IconBorder:SetAlpha(0)
@@ -73,9 +73,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			local tab = _G[self:GetName().."Tab"..i]
 			if tab then
 				B.StripTextures(tab)
-				B.CreateBD(tab, .25)
+				tab.bg = B.CreateBDFrame(tab, .25)
 				if i == 1 then
-					tab:SetBackdropColor(r, g, b, .2)
+					tab.bg:SetBackdropColor(r, g, b, .2)
 				end
 			end
 		end
@@ -138,7 +138,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			for i = 1, 9 do
 				select(i, bonusRewards:GetRegions()):SetAlpha(0)
 			end
-			B.CreateBD(bonusRewards)
+			B.CreateBDFrame(bonusRewards)
 		end
 		if missionComplete.NextMissionButton then
 			B.Reskin(missionComplete.NextMissionButton)
@@ -176,7 +176,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				button.BG:Hide()
 				button.Selection:SetTexture("")
 				button.AbilitiesBG:SetTexture("")
-				B.CreateBD(button, .25)
+				button.bg = B.CreateBDFrame(button, .25)
 
 				local hl = button:GetHighlightTexture()
 				hl:SetColorTexture(r, g, b, .1)
@@ -206,9 +206,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			end
 
 			if button.Selection:IsShown() then
-				button:SetBackdropColor(r, g, b, .2)
+				button.bg:SetBackdropColor(r, g, b, .2)
 			else
-				button:SetBackdropColor(0, 0, 0, .25)
+				button.bg:SetBackdropColor(0, 0, 0, .25)
 			end
 
 			if portrait and portrait.quality then
@@ -294,7 +294,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		B.ReskinMissionPage(self.MissionTab.MissionPage)
 		B.StripTextures(self.FollowerTab)
 		B.ReskinXPBar(self.FollowerTab)
-		hooksecurefunc(self.FollowerTab, "UpdateAutoSpellAbilities", updateSpellAbilities)
+		hooksecurefunc(self.FollowerTab, "UpdateCombatantStats", updateSpellAbilities)
 
 		for _, item in pairs({self.FollowerTab.ItemWeapon, self.FollowerTab.ItemArmor}) do
 			if item then
@@ -421,8 +421,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		select(i, TownHallBox:GetRegions()):Hide()
 	end
 
-	B.CreateBD(InfoBox, .25)
-	B.CreateBD(TownHallBox, .25)
+	B.CreateBDFrame(InfoBox, .25)
+	B.CreateBDFrame(TownHallBox, .25)
 	B.Reskin(InfoBox.UpgradeButton)
 	B.Reskin(TownHallBox.UpgradeButton)
 	GarrisonBuildingFrame.MapFrame.TownHall.TownHallName:SetTextColor(1, .8, 0)
@@ -450,7 +450,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local Confirmation = GarrisonBuildingFrame.Confirmation
 
 	Confirmation:GetRegions():Hide()
-	B.CreateBD(Confirmation)
+	B.CreateBDFrame(Confirmation)
 	B.Reskin(Confirmation.CancelButton)
 	B.Reskin(Confirmation.BuildButton)
 	B.Reskin(Confirmation.UpgradeButton)
@@ -465,7 +465,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	GarrisonCapacitiveDisplayFrameLeft:Hide()
 	GarrisonCapacitiveDisplayFrameMiddle:Hide()
 	GarrisonCapacitiveDisplayFrameRight:Hide()
-	B.CreateBD(GarrisonCapacitiveDisplayFrame.Count, .25)
+	B.CreateBDFrame(GarrisonCapacitiveDisplayFrame.Count, .25)
 	GarrisonCapacitiveDisplayFrame.Count:SetWidth(38)
 	GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)
 
@@ -604,6 +604,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local FollowerTab = GarrisonLandingPage.FollowerTab
 	B.ReskinXPBar(FollowerTab)
+	hooksecurefunc(FollowerTab, "UpdateCombatantStats", updateSpellAbilities)
 
 	-- Ship follower tab
 
@@ -781,7 +782,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end
 	GarrisonRecruitSelectFrame.TitleText:Show()
 	GarrisonRecruitSelectFrame.GarrCorners:Hide()
-	B.CreateBD(GarrisonRecruitSelectFrame)
+	B.CreateBDFrame(GarrisonRecruitSelectFrame)
 	B.ReskinClose(GarrisonRecruitSelectFrame.CloseButton)
 
 	-- Follower list
@@ -876,7 +877,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	for i = 1, 10 do
 		select(i, shipyardMission.RewardsFrame:GetRegions()):Hide()
 	end
-	B.CreateBD(shipyardMission.RewardsFrame, .25)
+	B.CreateBDFrame(shipyardMission.RewardsFrame, .25)
 
 	GarrisonShipyardFrame.MissionCompleteBackground:GetRegions():Hide()
 	GarrisonShipyardFrame.MissionTab.MissionList.CompleteDialog:GetRegions():Hide()
@@ -916,12 +917,12 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Zone support
 	local ZoneSupportMissionPage = OrderHallMissionFrame.MissionTab.ZoneSupportMissionPage
 	B.StripTextures(ZoneSupportMissionPage)
-	B.CreateBD(ZoneSupportMissionPage, .25)
+	B.CreateBDFrame(ZoneSupportMissionPage, .25)
 	B.ReskinClose(ZoneSupportMissionPage.CloseButton)
 	B.Reskin(ZoneSupportMissionPage.StartMissionButton)
 	B.ReskinIcon(ZoneSupportMissionPage.CombatAllySpell.iconTexture)
 	ZoneSupportMissionPage.Follower1:GetRegions():Hide()
-	B.CreateBD(ZoneSupportMissionPage.Follower1, .25)
+	B.CreateBDFrame(ZoneSupportMissionPage.Follower1, .25)
 	B.ReskinGarrisonPortrait(ZoneSupportMissionPage.Follower1.PortraitFrame)
 
 	-- [[ BFA Mission UI]]

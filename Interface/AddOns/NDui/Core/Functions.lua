@@ -597,7 +597,7 @@ do
 		if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 		local lvl = frame:GetFrameLevel()
 
-		local bg = CreateFrame("Frame", nil, frame)
+		local bg = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		bg:SetOutside(self)
 		bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 		B.CreateBD(bg, a)
@@ -623,10 +623,9 @@ do
 	end
 
 	function B:PixelIcon(texture, highlight)
-		B.CreateBD(self)
 		self.Icon = self:CreateTexture(nil, "ARTWORK")
 		self.Icon:SetInside()
-		self.Icon:SetTexCoord(unpack(DB.TexCoord))
+		B.ReskinIcon(self.Icon)
 		if texture then
 			local atlas = strmatch(texture, "Atlas:(.+)$")
 			if atlas then
@@ -727,17 +726,17 @@ do
 		if NDuiDB["Skins"]["FlatMode"] then
 			self.bgTex:SetVertexColor(cr / 4, cg / 4, cb / 4)
 		else
-			self:SetBackdropColor(cr, cg, cb, .25)
+			self.__bg:SetBackdropColor(cr, cg, cb, .25)
 		end
-		self:SetBackdropBorderColor(cr, cg, cb)
+		self.__bg:SetBackdropBorderColor(cr, cg, cb)
 	end
 	local function Button_OnLeave(self)
 		if NDuiDB["Skins"]["FlatMode"] then
 			self.bgTex:SetVertexColor(.3, .3, .3, .25)
 		else
-			self:SetBackdropColor(0, 0, 0, 0)
+			self.__bg:SetBackdropColor(0, 0, 0, 0)
 		end
-		self:SetBackdropBorderColor(0, 0, 0)
+		self.__bg:SetBackdropBorderColor(0, 0, 0)
 	end
 
 	local blizzRegions = {
@@ -790,8 +789,9 @@ do
 			end
 		end
 
-		B.CreateBD(self, 0)
-		self.bgTex = B.CreateGradient(self)
+		self.__bg = B.CreateBDFrame(self, 0)
+		self.__bg:SetAllPoints()
+		self.bgTex = B.CreateGradient(self.__bg)
 
 		if not noHighlight then
 			self:HookScript("OnEnter", Button_OnEnter)
@@ -937,8 +937,9 @@ do
 		end
 
 		B.StripTextures(self)
-		B.CreateBD(self, 0)
-		B.CreateGradient(self)
+		local bg = B.CreateBDFrame(self, 0)
+		bg:SetAllPoints()
+		B.CreateGradient(bg)
 
 		self:SetDisabledTexture(DB.bdTex)
 		local dis = self:GetDisabledTexture()
@@ -1195,17 +1196,17 @@ do
 	end
 
 	function B:ReskinGarrisonPortrait()
-		self.Portrait:ClearAllPoints()
-		self.Portrait:SetPoint("TOPLEFT", 4, -4)
-		self.PortraitRing:Hide()
+		if self.PortraitRing then self.PortraitRing:Hide() end
 		self.PortraitRingQuality:SetTexture("")
 		if self.Highlight then self.Highlight:Hide() end
 
-		self.LevelBorder:SetScale(.0001)
-		self.Level:ClearAllPoints()
-		self.Level:SetPoint("BOTTOM", self, 0, 12)
+		if self.LevelBorder then self.LevelBorder:SetScale(.0001) end
+		if self.Level then
+			self.Level:ClearAllPoints()
+			self.Level:SetPoint("BOTTOM", self, 0, 12)
+		end
 
-		self.squareBG = B.CreateBDFrame(self.Portrait, 1)
+		self.squareBG = B.CreateBDFrame(self.Portrait, 0)
 
 		if self.PortraitRingCover then
 			self.PortraitRingCover:SetColorTexture(0, 0, 0)
@@ -1221,7 +1222,7 @@ do
 	function B:StyleSearchButton()
 		B.StripTextures(self)
 		if self.icon then B.ReskinIcon(self.icon) end
-		B.CreateBD(self, .25)
+		B.CreateBDFrame(self, .25)
 
 		self:SetHighlightTexture(DB.bdTex)
 		local hl = self:GetHighlightTexture()
@@ -1299,7 +1300,7 @@ end
 -- GUI elements
 do
 	function B:CreateButton(width, height, text, fontSize)
-		local bu = CreateFrame("Button", nil, self)
+		local bu = CreateFrame("Button", nil, self, "BackdropTemplate")
 		bu:SetSize(width, height)
 		if type(text) == "boolean" then
 			B.PixelIcon(bu, fontSize, true)
@@ -1324,7 +1325,7 @@ do
 	end
 
 	function B:CreateEditBox(width, height)
-		local eb = CreateFrame("EditBox", nil, self)
+		local eb = CreateFrame("EditBox", nil, self, "BackdropTemplate")
 		eb:SetSize(width, height)
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 0, 0)
@@ -1374,7 +1375,7 @@ do
 	end
 
 	function B:CreateDropDown(width, height, data)
-		local dd = CreateFrame("Frame", nil, self)
+		local dd = CreateFrame("Frame", nil, self, "BackdropTemplate")
 		dd:SetSize(width, height)
 		B.CreateBD(dd)
 		dd:SetBackdropBorderColor(1, 1, 1, .2)
@@ -1382,12 +1383,9 @@ do
 		dd.Text:SetPoint("RIGHT", -5, 0)
 		dd.options = {}
 
-		local bu = CreateFrame("Button", nil, dd)
-		bu:SetPoint("RIGHT", -5, 0)
-		B.ReskinArrow(bu, "down")
-		bu:SetSize(18, 18)
-
-		local list = CreateFrame("Frame", nil, dd)
+		local bu = B.CreateGear(dd)
+		bu:SetPoint("LEFT", dd, "RIGHT", -2, 0)
+		local list = CreateFrame("Frame", nil, dd, "BackdropTemplate")
 		list:SetPoint("TOP", dd, "BOTTOM", 0, -2)
 		B.CreateBD(list, 1)
 		list:SetBackdropBorderColor(1, 1, 1, .2)
@@ -1399,7 +1397,7 @@ do
 
 		local opt, index = {}, 0
 		for i, j in pairs(data) do
-			opt[i] = CreateFrame("Button", nil, list)
+			opt[i] = CreateFrame("Button", nil, list, "BackdropTemplate")
 			opt[i]:SetPoint("TOPLEFT", 4, -4 - (i-1)*(height+2))
 			opt[i]:SetSize(width - 8, height)
 			B.CreateBD(opt[i])
@@ -1447,7 +1445,7 @@ do
 	function B:CreateColorSwatch(name, color)
 		color = color or {r=1, g=1, b=1}
 
-		local swatch = CreateFrame("Button", nil, self)
+		local swatch = CreateFrame("Button", nil, self, "BackdropTemplate")
 		swatch:SetSize(18, 18)
 		B.CreateBD(swatch, 1)
 		swatch.text = B.CreateFS(swatch, 14, name, false, "LEFT", 26, 0)
@@ -1584,9 +1582,9 @@ do
 			if mt.SetStatusBarTexture then hooksecurefunc(mt, "SetStatusBarTexture", DisablePixelSnap) end
 			mt.DisabledPixelSnap = true
 		end
-		if not object.SetBackdrop then mt.SetBackdrop = B.SetBackdrop_Hook end
-		if not object.SetBackdropColor then mt.SetBackdropColor = B.SetBackdropColor_Hook end
-		if not object.SetBackdropBorderColor then mt.SetBackdropBorderColor = B.SetBackdropBorderColor_Hook end
+	--	if not object.SetBackdrop then mt.SetBackdrop = B.SetBackdrop_Hook end
+	--	if not object.SetBackdropColor then mt.SetBackdropColor = B.SetBackdropColor_Hook end
+	--	if not object.SetBackdropBorderColor then mt.SetBackdropBorderColor = B.SetBackdropBorderColor_Hook end
 	end
 
 	local handled = {["Frame"] = true}

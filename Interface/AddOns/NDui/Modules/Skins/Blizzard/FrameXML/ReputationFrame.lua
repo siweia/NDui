@@ -19,7 +19,7 @@ tinsert(C.defaultThemes, function()
 				statusbar:SetStatusBarTexture(DB.bdTex)
 
 				if not statusbar.reskinned then
-					B.CreateBD(statusbar, .25)
+					B.CreateBDFrame(statusbar, .25)
 					statusbar.reskinned = true
 				end
 

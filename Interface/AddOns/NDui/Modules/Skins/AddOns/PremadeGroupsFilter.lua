@@ -34,9 +34,7 @@ function S:PGFSkin()
 		if styled then return end
 
 		B.StripTextures(self)
-		B.CreateBD(self)
-		B.CreateSD(self)
-		B.CreateTex(self)
+		B.SetBD(self)
 		B.ReskinClose(self.CloseButton)
 		B.Reskin(self.ResetButton)
 		B.Reskin(self.RefreshButton)

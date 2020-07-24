@@ -57,7 +57,7 @@ C.themes["Blizzard_GuildControlUI"] = function()
 
 				_G[tab.."Bg"]:Hide()
 				B.ReskinIcon(ownedTab.tabIcon)
-				B.CreateBD(bu, .25)
+				B.CreateBDFrame(bu, .25)
 				B.Reskin(bu.buy.button)
 				B.ReskinInput(ownedTab.editBox)
 

@@ -27,7 +27,7 @@ function M:GuildBest_UpdateTooltip()
 end
 
 function M:GuildBest_Create()
-	frame = CreateFrame("Frame", nil, ChallengesFrame)
+	frame = CreateFrame("Frame", nil, ChallengesFrame, "BackdropTemplate")
 	frame:SetPoint("BOTTOMRIGHT", -6, 80)
 	frame:SetSize(170, 105)
 	B.CreateBD(frame, .25)

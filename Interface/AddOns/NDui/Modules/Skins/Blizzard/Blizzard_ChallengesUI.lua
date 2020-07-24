@@ -14,7 +14,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			if bu and not bu.styled then
 				bu:GetRegions():SetAlpha(0)
 				bu.Icon:SetTexCoord(unpack(DB.TexCoord))
-				B.CreateBD(bu, 0)
+				B.CreateBDFrame(bu.Icon, 0)
 
 				bu.styled = true
 			end
@@ -30,14 +30,14 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			local party = mod.PartyFrame
 
 			B.StripTextures(scheduel)
-			B.CreateBD(scheduel, .25)
+			B.CreateBDFrame(scheduel, .25)
 			if scheduel.Entries then
 				for i = 1, 3 do
 					B.AffixesSetup(scheduel.Entries[i])
 				end
 			end
 			B.StripTextures(party)
-			B.CreateBD(party, .25)
+			B.CreateBDFrame(party, .25)
 
 			angryStyle = true
 		end

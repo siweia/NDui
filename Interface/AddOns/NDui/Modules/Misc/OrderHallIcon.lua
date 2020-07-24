@@ -38,7 +38,6 @@ function M:OrderHall_CreateIcon()
 	-- Default objects
 	B.HideOption(OrderHallCommandBar)
 	B.HideObject(OrderHallCommandBar.CurrencyHitTest)
-	GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
 end
 
 function M:OrderHall_Refresh()

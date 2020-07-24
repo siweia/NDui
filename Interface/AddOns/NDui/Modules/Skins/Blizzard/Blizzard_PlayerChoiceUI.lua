@@ -17,12 +17,12 @@ C.themes["Blizzard_PlayerChoiceUI"] = function()
 		if self.Middle then self.Middle:SetAlpha(0) end
 		if self.Right then self.Right:SetAlpha(0) end
 		if self.SetPushedTexture then self:SetPushedTexture("") end
+		local bg = B.CreateBDFrame(self, 0)
+		B.CreateGradient(bg)
 		self:SetHighlightTexture(DB.bdTex)
 		local hl = self:GetHighlightTexture()
 		hl:SetVertexColor(1, 1, 1, .25)
-		hl:SetInside()
-		B.CreateBD(self, 0)
-		B.CreateGradient(self)
+		hl:SetInside(bg)
 
 		self.styled = true
 	end

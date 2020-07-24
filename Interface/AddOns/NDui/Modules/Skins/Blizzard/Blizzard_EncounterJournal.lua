@@ -13,11 +13,11 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	local function onEnable(self)
 		self:SetHeight(self.storedHeight) -- prevent it from resizing
-		self:SetBackdropColor(0, 0, 0, 0)
+		self.__bg:SetBackdropColor(0, 0, 0, 0)
 	end
 
 	local function onDisable(self)
-		self:SetBackdropColor(r, g, b, .25)
+		self.__bg:SetBackdropColor(r, g, b, .25)
 	end
 
 	local function onClick(self)
@@ -40,7 +40,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		tab:HookScript("OnClick", onClick)
 	end
 
-	EncounterJournalInstanceSelectSuggestTab:SetBackdropColor(r, g, b, .25)
+	EncounterJournalInstanceSelectSuggestTab.__bg:SetBackdropColor(r, g, b, .25)
 
 	-- [[ Side tabs ]]
 
@@ -215,7 +215,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local result = EncounterJournalSearchResults
 		result:SetPoint("BOTTOMLEFT", EncounterJournal, "BOTTOMRIGHT", 15, -1)
 		B.StripTextures(result)
-		local bg = B.CreateBDFrame(result, nil, true)
+		local bg = B.SetBD(result)
 		bg:SetPoint("TOPLEFT", -10, 0)
 		bg:SetPoint("BOTTOMRIGHT")
 
@@ -224,11 +224,12 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			B.StripTextures(bu)
 			B.ReskinIcon(bu.icon)
 			bu.icon.SetTexCoord = B.Dummy
-			B.CreateBD(bu, .25)
+			local bg = B.CreateBDFrame(bu, .25)
+			bg:SetInside()
 			bu:SetHighlightTexture(DB.bdTex)
 			local hl = bu:GetHighlightTexture()
 			hl:SetVertexColor(r, g, b, .25)
-			hl:SetInside()
+			hl:SetInside(bg)
 		end
 	end
 
@@ -256,7 +257,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	local suggestion = suggestFrame.Suggestion1
 
 	suggestion.bg:Hide()
-	B.CreateBD(suggestion, .25)
+	B.CreateBDFrame(suggestion, .25)
 	suggestion.icon:SetPoint("TOPLEFT", 135, -15)
 	B.CreateBDFrame(suggestion.icon)
 
@@ -281,7 +282,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local suggestion = suggestFrame["Suggestion"..i]
 
 		suggestion.bg:Hide()
-		B.CreateBD(suggestion, .25)
+		B.CreateBDFrame(suggestion, .25)
 		suggestion.icon:SetPoint("TOPLEFT", 10, -10)
 		B.CreateBDFrame(suggestion.icon)
 

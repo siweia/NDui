@@ -31,5 +31,21 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 end
 
 C.themes["Blizzard_CovenantSanctum"] = function()
+	CovenantSanctumFrame:HookScript("OnShow", function(self)
+		if not self.bg then
+			self.bg = B.SetBD(self)
+			self.NineSlice:SetAlpha(0)
+			CovenantSanctumFrame.UpgradesTab.Background:SetAlpha(0)
+			B.CreateBDFrame(CovenantSanctumFrame.UpgradesTab.Background, .25)
+			CovenantSanctumFrame.UpgradesTab.TalentsList.Divider:SetAlpha(0)
+			B.CreateBDFrame(CovenantSanctumFrame.UpgradesTab.TalentsList, .25)
+			CovenantSanctumFrame.UpgradesTab.TalentsList.BackgroundTile:SetAlpha(0)
+			B.Reskin(CovenantSanctumFrame.UpgradesTab.DepositButton)
+			B.Reskin(CovenantSanctumFrame.UpgradesTab.TalentsList.UpgradeButton)
+		end
+	end)
 	B.ReskinClose(CovenantSanctumFrameCloseButton)
+	B.ReskinTab(CovenantSanctumFrameTab1)
+	B.ReskinTab(CovenantSanctumFrameTab2)
+	CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
 end

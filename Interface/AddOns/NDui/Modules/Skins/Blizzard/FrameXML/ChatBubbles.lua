@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-
+--[[
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
@@ -69,3 +69,4 @@ tinsert(C.defaultThemes, function()
 	end)
 	bubbleHook:Hide()
 end)
+]]
