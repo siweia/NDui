@@ -24,6 +24,33 @@ PetBattleFrameHider:SetAllPoints()
 PetBattleFrameHider:SetFrameStrata('LOW')
 RegisterStateDriver(PetBattleFrameHider, 'visibility', '[petbattle] hide; show')
 
+-- Temp fix RegisterUnitWatch, hopeasd
+local buggedUnit = {
+	target = true,
+	targettarget = true,
+	focus = true,
+	pet = true,
+	focustarget = true,
+	arena1 = true,
+	arena2 = true,
+	arena3 = true,
+	arena4 = true,
+	arena5 = true,
+	boss1 = true,
+	boss2 = true,
+	boss3 = true,
+	boss4 = true,
+	boss5 = true
+}
+local function RegisterUnitWatchFix(self, state)
+	if buggedUnit[self.unit] then
+		RegisterStateDriver(self, "visibility", "[petbattle] hide; [@"..self.unit..",noexists] hide; show")
+		self.bugFixed = true
+	else
+		RegisterUnitWatch(frame, state)
+	end
+end
+
 -- updating of "invalid" units.
 local function enableTargetUpdate(object)
 	object.onUpdateFrequency = object.onUpdateFrequency or .5
@@ -168,15 +195,17 @@ for k, v in next, {
 	* asState - if true, the frame's "state-unitexists" attribute will be set to a boolean value denoting whether the
 	            unit exists; if false, the frame will be shown if its unit exists, and hidden if it does not (boolean)
 	--]]
-	Enable = RegisterUnitWatch,
+	--Enable = RegisterUnitWatch,
+	Enable = RegisterUnitWatchFix,
 	--[[ frame:Disable()
 	Used to UnregisterUnitWatch for the given frame and hide it.
 
 	* self - unit frame
 	--]]
 	Disable = function(self)
-		UnregisterUnitWatch(self)
-		self:Hide()
+        UnregisterUnitWatch(self)
+        if self.bugFixed then self.bugFixed = false end
+        self:Hide()
 	end,
 	--[[ frame:IsEnabled()
 	Used to check if a unit frame is registered with the unit existence monitor. This is a reference to
@@ -184,7 +213,14 @@ for k, v in next, {
 
 	* self - unit frame
 	--]]
-	IsEnabled = UnitWatchRegistered,
+	--IsEnabled = UnitWatchRegistered,
+	IsEnabled = function(self)
+		if self.bugFixed ~= nil then
+			return self.bugFixed
+		else
+			UnitWatchRegistered(self)
+		end
+	end,
 	--[[ frame:UpdateAllElements(event)
 	Used to update all enabled elements on the given frame.
 
@@ -738,7 +774,7 @@ function oUF:Spawn(unit, overrideName, noHandle)
 
 	object:SetAttribute('unit', unit)
 	--RegisterUnitWatch(object)
-	RegisterStateDriver(object, "visibility", "[petbattle] hide; [@"..unit..",noexists] hide; show")
+	RegisterUnitWatchFix(object)
 
 	return object
 end
