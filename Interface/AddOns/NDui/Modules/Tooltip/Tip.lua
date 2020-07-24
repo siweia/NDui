@@ -363,9 +363,9 @@ function TT:ReskinTooltip()
 		B.CreateTex(self.bg)
 
 		-- other gametooltip-like support
-		self.GetBackdrop = getBackdrop
-		self.GetBackdropColor = getBackdropColor
-		self.GetBackdropBorderColor = getBackdropBorderColor
+		--self.GetBackdrop = getBackdrop
+		--self.GetBackdropColor = getBackdropColor
+		--self.GetBackdropBorderColor = getBackdropBorderColor
 
 		if self.StatusBar then
 			TT.ReskinStatusBar(self)
