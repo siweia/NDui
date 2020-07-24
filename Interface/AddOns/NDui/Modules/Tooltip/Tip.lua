@@ -355,7 +355,7 @@ function TT:ReskinTooltip()
 	self:SetScale(NDuiDB["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
-		self:SetBackdrop(nil)
+		if self.SetBackdrop then self:SetBackdrop(nil) end
 		self:DisableDrawLayer("BACKGROUND")
 		self.bg = B.CreateBDFrame(self, .7, true)
 		self.bg:SetInside(self)

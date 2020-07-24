@@ -186,11 +186,10 @@ tinsert(C.defaultThemes, function()
 		select(2, bu:GetRegions()):Hide()
 		local hl = bu:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetAllPoints(ic)
+		hl:SetInside()
 
 		ic:SetInside()
-		ic:SetTexCoord(unpack(DB.TexCoord))
-		B.CreateBD(bu, .25)
+		B.ReskinIcon(ic)
 	end
 
 	for _, bu in pairs(PaperDollEquipmentManagerPane.buttons) do
@@ -218,7 +217,9 @@ tinsert(C.defaultThemes, function()
 
 	PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
 	PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
-	GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
+	GearManagerDialogPopup:HookScript("OnShow", function(self)
+		self:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 3, 0)
+	end)
 
 	-- Token frame
 	TokenFramePopupCorner:Hide()

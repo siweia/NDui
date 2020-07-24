@@ -13,8 +13,8 @@ tinsert(C.defaultThemes, function()
 			itemButton:SetPushedTexture("")
 			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			itemButton.icon:SetTexCoord(unpack(DB.TexCoord))
-			B.CreateBD(itemButton)
-			B.CreateSD(itemButton)
+			local bg = B.CreateBDFrame(itemButton)
+			B.CreateSD(bg)
 
 			itemButton.styled = true
 		end
@@ -26,8 +26,8 @@ tinsert(C.defaultThemes, function()
 			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			rightButton:SetSize(25, 25)
 			rightButton.Icon:SetInside()
-			B.CreateBD(rightButton)
-			B.CreateSD(rightButton)
+			local bg = B.CreateBDFrame(rightButton)
+			B.CreateSD(bg)
 
 			rightButton.styled = true
 		end

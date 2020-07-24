@@ -118,5 +118,5 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	for i = 1, 9 do
 		select(i, guildFrame.Container:GetRegions()):Hide()
 	end
-	B.CreateBD(guildFrame.Container, .25)
+	B.CreateBDFrame(guildFrame.Container, .25)
 end

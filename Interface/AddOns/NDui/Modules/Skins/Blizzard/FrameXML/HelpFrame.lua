@@ -61,10 +61,7 @@ tinsert(C.defaultThemes, function()
 	HelpFrameGM_ResponseScrollFrame2ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame2, "TOPRIGHT", 1, -16)
 
 	for i = 1, 15 do
-		local bu = _G["HelpFrameKnowledgebaseScrollFrameButton"..i]
-		bu:DisableDrawLayer("ARTWORK")
-		B.CreateBD(bu, 0)
-		B.CreateGradient(bu)
+		B.Reskin(_G["HelpFrameKnowledgebaseScrollFrameButton"..i])
 	end
 
 	local function colourTab(f)

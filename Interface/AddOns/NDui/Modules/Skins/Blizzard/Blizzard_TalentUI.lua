@@ -225,11 +225,9 @@ C.themes["Blizzard_TalentUI"] = function()
 
 	local talentList = PlayerTalentFrameTalentsPvpTalentFrameTalentList
 	talentList:ClearAllPoints()
-	talentList:SetPoint("LEFT", PlayerTalentFrame, "RIGHT", 2, 0)
+	talentList:SetPoint("LEFT", PlayerTalentFrame, "RIGHT", 3, 0)
 	B.StripTextures(talentList)
-	B.CreateBD(talentList)
-	B.CreateSD(talentList)
-	B.CreateTex(talentList)
+	B.SetBD(talentList)
 	talentList.Inset:Hide()
 
 	B.StripTextures(PlayerTalentFrameTalentsPvpTalentFrame)

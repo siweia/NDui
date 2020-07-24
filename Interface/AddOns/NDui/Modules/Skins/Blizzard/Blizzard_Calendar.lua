@@ -9,11 +9,17 @@ C.themes["Blizzard_Calendar"] = function()
 		local bu = _G[dayButtonName]
 		bu:DisableDrawLayer("BACKGROUND")
 		bu:SetHighlightTexture(DB.bdTex)
+		local bg = B.CreateBDFrame(bu, .25)
+		bg:SetInside()
 		local hl = bu:GetHighlightTexture()
 		hl:SetVertexColor(r, g, b, .25)
+		hl:SetInside(bg)
 		hl.SetAlpha = B.Dummy
 
 		_G[dayButtonName.."DarkFrame"]:SetAlpha(.5)
+		_G[dayButtonName.."EventTexture"]:SetInside(bg)
+		_G[dayButtonName.."EventBackgroundTexture"]:SetAlpha(0)
+		_G[dayButtonName.."OverlayFrameTexture"]:SetInside(bg)
 
 		local eventButtonIndex = 1
 		local eventButton = _G[dayButtonName.."EventButton"..eventButtonIndex]
@@ -31,8 +37,6 @@ C.themes["Blizzard_Calendar"] = function()
 
 	CalendarViewEventDivider:Hide()
 	CalendarCreateEventDivider:Hide()
-	CalendarViewEventInviteList:GetRegions():Hide()
-	CalendarViewEventDescriptionContainer:GetRegions():Hide()
 	CalendarCreateEventFrameButtonBackground:Hide()
 	CalendarCreateEventMassInviteButtonBorder:Hide()
 	CalendarCreateEventCreateButtonBorder:Hide()
@@ -49,12 +53,16 @@ C.themes["Blizzard_Calendar"] = function()
 	B.StripTextures(CalendarClassTotalsButton)
 
 	B.StripTextures(CalendarFrame)
-	B.SetBD(CalendarFrame, 12, 0, -9, 4)
-	B.CreateBD(CalendarClassTotalsButton)
-	B.CreateBD(CalendarViewEventInviteList, .25)
-	B.CreateBD(CalendarViewEventDescriptionContainer, .25)
-	B.CreateBD(CalendarCreateEventInviteList, .25)
-	B.CreateBD(CalendarCreateEventDescriptionContainer, .25)
+	B.SetBD(CalendarFrame, 9, 0, -7, 1)
+	B.CreateBDFrame(CalendarClassTotalsButton)
+	B.StripTextures(CalendarViewEventInviteList)
+	B.CreateBDFrame(CalendarViewEventInviteList, .25)
+	B.StripTextures(CalendarViewEventDescriptionContainer)
+	B.CreateBDFrame(CalendarViewEventDescriptionContainer, .25)
+	B.StripTextures(CalendarCreateEventInviteList)
+	B.CreateBDFrame(CalendarCreateEventInviteList, .25)
+	B.StripTextures(CalendarCreateEventDescriptionContainer)
+	B.CreateBDFrame(CalendarCreateEventDescriptionContainer, .25)
 
 	local function reskinCalendarPage(frame)
 		B.StripTextures(frame)
@@ -108,21 +116,6 @@ C.themes["Blizzard_Calendar"] = function()
 	bg:SetPoint("BOTTOMRIGHT", -18, 1)
 	B.CreateGradient(bg)
 	B.ReskinArrow(CalendarFilterButton, "down")
-
-	for i = 1, 6 do
-		local vline = CreateFrame("Frame", nil, _G["CalendarDayButton"..i])
-		vline:SetHeight(546)
-		vline:SetWidth(1)
-		vline:SetPoint("TOP", _G["CalendarDayButton"..i], "TOPRIGHT")
-		B.CreateBD(vline)
-	end
-	for i = 1, 36, 7 do
-		local hline = CreateFrame("Frame", nil, _G["CalendarDayButton"..i])
-		hline:SetWidth(637)
-		hline:SetHeight(1)
-		hline:SetPoint("LEFT", _G["CalendarDayButton"..i], "TOPLEFT")
-		B.CreateBD(hline)
-	end
 
 	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
 	CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)

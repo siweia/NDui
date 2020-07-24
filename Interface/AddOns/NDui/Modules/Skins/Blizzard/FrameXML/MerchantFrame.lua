@@ -45,6 +45,7 @@ tinsert(C.defaultThemes, function()
 		button.bg = B.ReskinIcon(icon)
 		B.HookIconBorderColor(button.IconBorder)
 		button.IconOverlay:SetInside()
+		button.IconOverlay2:SetInside()
 
 		name:SetFontObject(Number12Font)
 		name:SetPoint("LEFT", button, "RIGHT", 2, 9)

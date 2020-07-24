@@ -32,11 +32,11 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournalTutorialButton.Ring:Hide()
 
 	B.StripTextures(MountJournal.MountCount)
-	B.CreateBD(MountJournal.MountCount, .25)
+	B.CreateBDFrame(MountJournal.MountCount, .25)
 	B.StripTextures(PetJournal.PetCount)
-	B.CreateBD(PetJournal.PetCount, .25)
+	B.CreateBDFrame(PetJournal.PetCount, .25)
 	PetJournal.PetCount:SetWidth(140)
-	B.CreateBD(MountJournal.MountDisplay.ModelScene, .25)
+	B.CreateBDFrame(MountJournal.MountDisplay.ModelScene, .25)
 	B.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
 
 	B.Reskin(MountJournalMountButton)
@@ -204,7 +204,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	card.PetInfo.icon.bg = B.ReskinIcon(card.PetInfo.icon)
 
-	B.CreateBD(card, .25)
+	B.CreateBDFrame(card, .25)
 
 	for i = 2, 12 do
 		select(i, card.xpBar:GetRegions()):Hide()
@@ -260,7 +260,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.setButton:GetRegions():SetPoint("TOPLEFT", bu.icon, -5, 5)
 		bu.setButton:GetRegions():SetPoint("BOTTOMRIGHT", bu.icon, 5, -5)
 
-		B.CreateBD(bu, .25)
+		B.CreateBDFrame(bu, .25)
 
 		for i = 2, 12 do
 			select(i, bu.xpBar:GetRegions()):Hide()

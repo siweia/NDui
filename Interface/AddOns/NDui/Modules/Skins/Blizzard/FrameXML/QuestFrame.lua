@@ -39,14 +39,12 @@ tinsert(C.defaultThemes, function()
 		local na = _G["QuestProgressItem"..i.."NameFrame"]
 		local co = _G["QuestProgressItem"..i.."Count"]
 		ic:SetSize(40, 40)
-		ic:SetTexCoord(unpack(DB.TexCoord))
-		ic:SetDrawLayer("OVERLAY")
-		B.CreateBD(bu, .25)
+		B.ReskinIcon(ic)
 		na:Hide()
 		co:SetDrawLayer("OVERLAY")
 
-		local line = CreateFrame("Frame", nil, bu)
-		line:SetSize(1, 40)
+		local line = CreateFrame("Frame", nil, bu, "BackdropTemplate")
+		line:SetSize(C.mult, 40)
 		line:SetPoint("RIGHT", ic, 1, 0)
 		B.CreateBD(line)
 	end

@@ -14,7 +14,7 @@ function module:Chatbar()
 	Chatbar:SetSize(width, height)
 
 	local function AddButton(r, g, b, text, func)
-		local bu = CreateFrame("Button", nil, Chatbar, "SecureActionButtonTemplate")
+		local bu = CreateFrame("Button", nil, Chatbar, "SecureActionButtonTemplate, BackdropTemplate")
 		bu:SetSize(width, height)
 		B.PixelIcon(bu, DB.normTex, true)
 		B.CreateSD(bu)

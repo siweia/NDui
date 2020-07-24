@@ -44,7 +44,7 @@ function M:PetTabs_Create()
 	-- Humanoid > Dragonkin > Magic > Flying > Aquatic > Elemental > Mechanical > Beast > Critter > Undead
 	local activeCount = 0
 	for petIndex, petType in ipairs({1, 2, 6, 3, 9, 7, 10, 8, 5, 4}) do
-		local btn = CreateFrame("Button", "PetJournalQuickFilterButton"..petIndex, PetJournal)
+		local btn = CreateFrame("Button", "PetJournalQuickFilterButton"..petIndex, PetJournal, "BackdropTemplate")
 		btn:SetSize(24, 24)
 		btn:SetPoint("TOPLEFT", PetJournalLeftInset, 6 + 25 * (petIndex-1), -33)
 		B.PixelIcon(btn, "Interface\\ICONS\\Pet_Type_"..PET_TYPE_SUFFIX[petType], true)
