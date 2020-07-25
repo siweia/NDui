@@ -850,7 +850,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.ReskinGarrisonPortrait(allyPortrait)
 	OrderHallMissionFrame:HookScript("OnShow", function()
 		if allyPortrait:IsShown() then
-			allyPortrait.squareBG:SetBackdropBorderColor(allyPortrait.PortraitRingQuality:GetVertexColor())
+			local color = DB.QualityColors[allyPortrait.quality or 1]
+			allyPortrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 		combatAlly.Available.AddFollowerButton.EmptyPortrait:SetAlpha(0)
 		combatAlly.Available.AddFollowerButton.PortraitHighlight:SetAlpha(0)
