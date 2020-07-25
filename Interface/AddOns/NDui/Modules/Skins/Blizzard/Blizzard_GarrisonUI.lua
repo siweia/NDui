@@ -13,29 +13,16 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	function B:ReskinMissionPage()
 		B.StripTextures(self)
 		local bg = B.CreateBDFrame(self, .25)
-		bg:SetPoint("BOTTOMRIGHT", 0, -10)
+		bg:SetPoint("TOPLEFT", 3, 2)
+		bg:SetPoint("BOTTOMRIGHT", -3, -10)
 
+		self.Stage.Header:SetAlpha(0)
 		if self.StartMissionFrame then B.StripTextures(self.StartMissionFrame) end
 		self.StartMissionButton.Flash:SetTexture("")
 		B.Reskin(self.StartMissionButton)
 		B.ReskinClose(self.CloseButton)
 		self.CloseButton:ClearAllPoints()
 		self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
---[[	select(4, self.Stage:GetRegions()):Hide()
-		select(5, self.Stage:GetRegions()):Hide()
-
-		local bg = B.CreateBDFrame(self.Stage)
-		bg:SetPoint("TOPLEFT", 4, 1)
-		bg:SetPoint("BOTTOMRIGHT", -4, -1)
-		local overlay = self.Stage:CreateTexture()
-		overlay:SetDrawLayer("ARTWORK", 3)
-		overlay:SetAllPoints(bg)
-		overlay:SetColorTexture(0, 0, 0, .5)]]
-		local iconbg = select(16, self:GetRegions())
-		if iconbg then
-			iconbg:ClearAllPoints()
-			iconbg:SetPoint("TOPLEFT", 3, -1)
-		end
 
 		if self.Followers then
 			for i = 1, 3 do
@@ -199,7 +186,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				for i = 1, #button.Counters do
 					local counter = button.Counters[i]
 					if counter and not counter.bg then
-						counter.Border:SetAlpha(0)
 						counter.bg = B.ReskinIcon(counter.Icon)
 					end
 				end
@@ -907,7 +893,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.ReskinGarrisonPortrait(allyPortrait)
 	OrderHallMissionFrame:HookScript("OnShow", function()
 		if allyPortrait:IsShown() then
-			allyPortrait.squareBG:SetBackdropBorderColor(allyPortrait.PortraitRingQuality:GetVertexColor())
+			local color = DB.QualityColors[allyPortrait.quality or 1]
+			allyPortrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 		combatAlly.Available.AddFollowerButton.EmptyPortrait:SetAlpha(0)
 		combatAlly.Available.AddFollowerButton.PortraitHighlight:SetAlpha(0)
