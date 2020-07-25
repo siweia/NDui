@@ -118,11 +118,11 @@ local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 
 function M:KeystoneInfo_Create()
 	local texture = select(10, GetItemInfo(158923)) or 525134
-	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo)
+	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "BackdropTemplate")
 	button:SetPoint("BOTTOMLEFT", 2, 67)
 	button:SetSize(35, 35)
 	B.PixelIcon(button, texture, true)
-	button:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
+	button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
 	button:SetScript("OnEnter", function(self)
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")

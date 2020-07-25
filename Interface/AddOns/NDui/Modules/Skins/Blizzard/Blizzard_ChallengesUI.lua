@@ -14,13 +14,14 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			if bu and not bu.styled then
 				bu:GetRegions():SetAlpha(0)
 				bu.Icon:SetTexCoord(unpack(DB.TexCoord))
+				bu.Icon:SetInside()
 				B.CreateBDFrame(bu.Icon, 0)
 
 				bu.styled = true
 			end
 			if i == 1 then
 				self.WeeklyInfo.Child.SeasonBest:ClearAllPoints()
-				self.WeeklyInfo.Child.SeasonBest:SetPoint("TOPLEFT", self.DungeonIcons[i], "TOPLEFT", 5, 20)
+				self.WeeklyInfo.Child.SeasonBest:SetPoint("BOTTOMLEFT", self.DungeonIcons[i], "TOPLEFT", 0, 2)
 			end
 		end
 
