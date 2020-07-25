@@ -31,17 +31,38 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 end
 
 C.themes["Blizzard_CovenantSanctum"] = function()
+	local function reskinTalentsList(self)
+		for frame in self.talentPool:EnumerateActive() do
+			if not frame.bg then
+				frame.Border:SetAlpha(0)
+				frame.Background:SetAlpha(0)
+				frame.bg = B.CreateBDFrame(frame, .25)
+				frame.bg:SetInside()
+				frame.Highlight:SetColorTexture(1, 1, 1, .25)
+				frame.Highlight:SetInside(frame.bg)
+				B.ReskinIcon(frame.Icon)
+				frame.Icon:SetPoint("TOPLEFT", 7, -7)
+			end
+		end
+	end
+
 	CovenantSanctumFrame:HookScript("OnShow", function(self)
 		if not self.bg then
 			self.bg = B.SetBD(self)
 			self.NineSlice:SetAlpha(0)
-			CovenantSanctumFrame.UpgradesTab.Background:SetAlpha(0)
-			B.CreateBDFrame(CovenantSanctumFrame.UpgradesTab.Background, .25)
-			CovenantSanctumFrame.UpgradesTab.TalentsList.Divider:SetAlpha(0)
-			B.CreateBDFrame(CovenantSanctumFrame.UpgradesTab.TalentsList, .25)
-			CovenantSanctumFrame.UpgradesTab.TalentsList.BackgroundTile:SetAlpha(0)
-			B.Reskin(CovenantSanctumFrame.UpgradesTab.DepositButton)
-			B.Reskin(CovenantSanctumFrame.UpgradesTab.TalentsList.UpgradeButton)
+			self.LevelFrame.Background:SetAlpha(0)
+
+			local upgradesTab = self.UpgradesTab
+			upgradesTab.Background:SetAlpha(0)
+			B.CreateBDFrame(upgradesTab.Background, .25)
+			B.Reskin(upgradesTab.DepositButton)
+
+			local talentsList = upgradesTab.TalentsList
+			talentsList.Divider:SetAlpha(0)
+			B.CreateBDFrame(talentsList, .25)
+			talentsList.BackgroundTile:SetAlpha(0)
+			B.Reskin(talentsList.UpgradeButton)
+			hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
 		end
 	end)
 	B.ReskinClose(CovenantSanctumFrameCloseButton)
