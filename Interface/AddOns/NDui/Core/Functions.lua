@@ -630,7 +630,7 @@ do
 	function B:PixelIcon(texture, highlight)
 		self.Icon = self:CreateTexture(nil, "ARTWORK")
 		self.Icon:SetInside()
-		B.ReskinIcon(self.Icon)
+		self.bg = B.ReskinIcon(self.Icon)
 		if texture then
 			local atlas = strmatch(texture, "Atlas:(.+)$")
 			if atlas then
@@ -1201,11 +1201,11 @@ do
 				tinsert(button.pixels, vline)
 
 				if name == "MaximizeButton" then
-					hline:SetPoint("TOPRIGHT", -4, -4)
-					vline:SetPoint("TOPRIGHT", -4, -4)
+					hline:Point("TOPRIGHT", -4, -4)
+					vline:Point("TOPRIGHT", -4, -4)
 				else
-					hline:SetPoint("BOTTOMLEFT", 4, 4)
-					vline:SetPoint("BOTTOMLEFT", 4, 4)
+					hline:Point("BOTTOMLEFT", 4, 4)
+					vline:Point("BOTTOMLEFT", 4, 4)
 				end
 
 				button:SetScript("OnEnter", B.Texture_OnEnter)
@@ -1226,20 +1226,34 @@ do
 		return bg
 	end
 
-	function B:ReskinGarrisonPortrait()
-		if self.PortraitRing then self.PortraitRing:Hide() end
-		self.PortraitRingQuality:SetTexture("")
-		if self.Highlight then self.Highlight:Hide() end
+	local AtlasToTexcoord = {
+		["Adventures-Tank"] = {.5, .75, 0, 1},
+		["Adventures-Healer"] = {.75, 1, 0, 1},
+		["Adventures-DPS"] = {.25, .5, 0, 1},
+	}
+	local function replaceFollowerRole(roleIcon, atlas)
+		roleIcon:SetTexture("Interface\\LFGFrame\\LFGROLE")
+		roleIcon:SetSize(18, 18)
+		local texcoord = AtlasToTexcoord[atlas]
+		if texcoord then
+			roleIcon:SetTexCoord(unpack(AtlasToTexcoord[atlas]))
+		end
+	end
 
-		if self.LevelBorder then self.LevelBorder:SetScale(.0001) end
-		if self.Level then
-			self.Level:ClearAllPoints()
-			self.Level:SetPoint("BOTTOM", self, 0, 12)
+	function B:ReskinGarrisonPortrait()
+		local level = self.Level or self.LevelText
+		if level then
+			level:ClearAllPoints()
+			level:SetPoint("BOTTOM", self, 0, 12)
+			if self.LevelCircle then self.LevelCircle:Hide() end
+			if self.LevelBorder then self.LevelBorder:SetScale(.0001) end
 		end
 
-		self.squareBG = B.CreateBDFrame(self.Portrait, 0)
+		self.squareBG = B.CreateBDFrame(self.Portrait, 1)
 
-		if self.PortraitRingCover then
+		if self.PortraitRing then
+			self.PortraitRing:Hide()
+			self.PortraitRingQuality:SetTexture("")
 			self.PortraitRingCover:SetColorTexture(0, 0, 0)
 			self.PortraitRingCover:SetAllPoints(self.squareBG)
 		end
@@ -1247,6 +1261,24 @@ do
 		if self.Empty then
 			self.Empty:SetColorTexture(0, 0, 0)
 			self.Empty:SetAllPoints(self.Portrait)
+		end
+		if self.Highlight then self.Highlight:Hide() end
+		if self.PuckBorder then self.PuckBorder:SetAlpha(0) end
+
+		if self.HealthBar then
+			self.HealthBar.Border:Hide()
+
+			local roleIcon = self.HealthBar.RoleIcon
+			roleIcon:ClearAllPoints()
+			roleIcon:SetPoint("TOPRIGHT", self.squareBG, 5, 5)
+			hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
+
+			local background = self.HealthBar.Background
+			background:SetAlpha(0)
+			background:ClearAllPoints()
+			background:SetPoint("TOPLEFT", self.squareBG, "BOTTOMLEFT", C.mult, 6)
+			background:SetPoint("BOTTOMRIGHT", self.squareBG, "BOTTOMRIGHT", -C.mult, C.mult)
+			self.HealthBar.Health:SetTexture(DB.normTex)
 		end
 	end
 
@@ -1335,7 +1367,6 @@ do
 		bu:SetSize(width, height)
 		if type(text) == "boolean" then
 			B.PixelIcon(bu, fontSize, true)
-			B.CreateBD(bu, .3)
 		else
 			B.Reskin(bu)
 			bu.text = B.CreateFS(bu, fontSize or 14, text, true)
