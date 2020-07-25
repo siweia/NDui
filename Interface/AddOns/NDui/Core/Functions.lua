@@ -1190,11 +1190,11 @@ do
 				tinsert(button.pixels, vline)
 
 				if name == "MaximizeButton" then
-					hline:SetPoint("TOPRIGHT", -4, -4)
-					vline:SetPoint("TOPRIGHT", -4, -4)
+					hline:Point("TOPRIGHT", -4, -4)
+					vline:Point("TOPRIGHT", -4, -4)
 				else
-					hline:SetPoint("BOTTOMLEFT", 4, 4)
-					vline:SetPoint("BOTTOMLEFT", 4, 4)
+					hline:Point("BOTTOMLEFT", 4, 4)
+					vline:Point("BOTTOMLEFT", 4, 4)
 				end
 
 				button:SetScript("OnEnter", B.Texture_OnEnter)
@@ -1218,7 +1218,6 @@ do
 	function B:ReskinGarrisonPortrait()
 		self.Portrait:ClearAllPoints()
 		self.Portrait:SetPoint("TOPLEFT", 4, -4)
-		self.Portrait:SetMask("Interface\\Buttons\\WHITE8X8")
 		self.PortraitRing:Hide()
 		self.PortraitRingQuality:SetTexture("")
 		if self.Highlight then self.Highlight:Hide() end
@@ -1325,7 +1324,6 @@ do
 		bu:SetSize(width, height)
 		if type(text) == "boolean" then
 			B.PixelIcon(bu, fontSize, true)
-			B.CreateBD(bu, .3)
 		else
 			B.Reskin(bu)
 			bu.text = B.CreateFS(bu, fontSize or 14, text, true)
