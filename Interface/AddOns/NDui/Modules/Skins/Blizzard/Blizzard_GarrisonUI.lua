@@ -13,16 +13,15 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	function B:ReskinMissionPage()
 		B.StripTextures(self)
 		local bg = B.CreateBDFrame(self, .25)
-		bg:SetPoint("TOPLEFT", 3, 2)
-		bg:SetPoint("BOTTOMRIGHT", -3, -10)
+		bg:SetPoint("BOTTOMRIGHT", 0, -10)
 
-		self.Stage.Header:SetAlpha(0)
+		if self.StartMissionFrame then B.StripTextures(self.StartMissionFrame) end
 		self.StartMissionButton.Flash:SetTexture("")
 		B.Reskin(self.StartMissionButton)
 		B.ReskinClose(self.CloseButton)
 		self.CloseButton:ClearAllPoints()
 		self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
-		select(4, self.Stage:GetRegions()):Hide()
+--[[	select(4, self.Stage:GetRegions()):Hide()
 		select(5, self.Stage:GetRegions()):Hide()
 
 		local bg = B.CreateBDFrame(self.Stage)
@@ -31,7 +30,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local overlay = self.Stage:CreateTexture()
 		overlay:SetDrawLayer("ARTWORK", 3)
 		overlay:SetAllPoints(bg)
-		overlay:SetColorTexture(0, 0, 0, .5)
+		overlay:SetColorTexture(0, 0, 0, .5)]]
 		local iconbg = select(16, self:GetRegions())
 		if iconbg then
 			iconbg:ClearAllPoints()
@@ -190,7 +189,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				end
 
 				if button.BusyFrame then
-					button.BusyFrame:SetInside()
+					button.BusyFrame:SetInside(button.bg)
 				end
 
 				button.restyled = true
@@ -200,6 +199,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				for i = 1, #button.Counters do
 					local counter = button.Counters[i]
 					if counter and not counter.bg then
+						counter.Border:SetAlpha(0)
 						counter.bg = B.ReskinIcon(counter.Icon)
 					end
 				end
@@ -231,21 +231,19 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local function onShowFollower(followerList)
 		local self = followerList.followerTab
-		local abilities = self.AbilitiesFrame.Abilities
-		if not abilities then return end
+		local abilitiesFrame = self.AbilitiesFrame
+		if not abilitiesFrame then return end
 
-		if not self.numAbilitiesStyled then self.numAbilitiesStyled = 1 end
-		local numAbilitiesStyled = self.numAbilitiesStyled
-		local ability = abilities[numAbilitiesStyled]
-		if ability.IconButton then
-			while ability do
-				local icon = ability.IconButton.Icon
-				B.ReskinIcon(icon)
-
-				numAbilitiesStyled = numAbilitiesStyled + 1
-				ability = abilities[numAbilitiesStyled]
+		local abilities = abilitiesFrame.Abilities
+		if abilities then
+			for i = 1, #abilities do
+				local iconButton = abilities[i].IconButton
+				local icon = iconButton and iconButton.Icon
+				if icon and not icon.bg then
+					iconButton.Border:SetAlpha(0)
+					icon.bg = B.ReskinIcon(icon)
+				end
 			end
-			self.numAbilitiesStyled = numAbilitiesStyled
 		end
 
 		local equipment = abilitiesFrame.Equipment
@@ -933,6 +931,37 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- [[ Covenant Mission UI]]
 	local CovenantMissionFrame = CovenantMissionFrame
 	B.ReskinMissionFrame(CovenantMissionFrame)
+	B.Reskin(HealFollowerButtonTemplate)
+	B.StripTextures(CombatLog.CombatLogMessageFrame)
+	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
+	CovenantMissionFrame.FollowerTab.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
+
+	local missionBoard = CovenantMissionFrame.MissionTab.MissionPage.Board
+	local completeBoard = CovenantMissionFrame.MissionComplete.Board
+	for _, board in pairs({missionBoard, completeBoard}) do
+		board:HookScript("OnShow", function(self)
+			for socketTexture in self.enemySocketFramePool:EnumerateActive() do
+				socketTexture:SetAlpha(0)
+			end
+			for enemyFrame in self.enemyFramePool:EnumerateActive() do
+				if not enemyFrame.styled then
+					B.ReskinGarrisonPortrait(enemyFrame)
+					enemyFrame.styled = true
+				end
+			end
+		end)
+		hooksecurefunc(board, "EnumerateFollowers", function(self)
+			for socketTexture in self.followerSocketFramePool:EnumerateActive() do
+				socketTexture:SetAlpha(0)
+			end
+			for followerFrame in self.followerFramePool:EnumerateActive() do
+				if not followerFrame.styled then
+					B.ReskinGarrisonPortrait(followerFrame)
+					followerFrame.styled = true
+				end
+			end
+		end)
+	end
 
 	-- [[ Addon supports ]]
 
