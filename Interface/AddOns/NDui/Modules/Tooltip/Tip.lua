@@ -361,6 +361,7 @@ function TT:ReskinTooltip()
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
 
+		-- FIXME
 		-- other gametooltip-like support
 		--self.GetBackdrop = getBackdrop
 		--self.GetBackdropColor = getBackdropColor

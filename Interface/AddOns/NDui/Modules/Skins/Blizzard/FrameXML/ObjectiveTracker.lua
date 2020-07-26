@@ -224,5 +224,5 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end
-	--hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
+	--hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel) -- FIXME
 end)
