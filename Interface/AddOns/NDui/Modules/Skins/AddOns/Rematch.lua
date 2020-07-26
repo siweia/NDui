@@ -429,7 +429,7 @@ function S:ReskinRematch()
 		local bg = B.CreateBDFrame(content.ScrollFrame, .25)
 		bg:SetPoint("TOPLEFT", 0, 5)
 		bg:SetPoint("BOTTOMRIGHT", 0, -2)
-		local bg = B.CreateBDFrame(content.ScrollFrame, nil, true)
+		local bg = B.SetBD(content.ScrollFrame)
 		bg:SetAllPoints(note)
 		for _, icon in pairs({"Left", "Right"}) do
 			local bu = content[icon.."Icon"]

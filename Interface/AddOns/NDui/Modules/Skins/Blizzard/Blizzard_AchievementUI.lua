@@ -210,7 +210,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end
 
 	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 26)
-	local headerbg = B.CreateBDFrame(AchievementFrameComparisonHeader, nil, true)
+	local headerbg = B.SetBD(AchievementFrameComparisonHeader)
 	headerbg:SetPoint("TOPLEFT", 20, -20)
 	headerbg:SetPoint("BOTTOMRIGHT", -28, -5)
 
@@ -269,7 +269,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	B.StripTextures(AchievementFrame.searchPreviewContainer)
 	AchievementFrame.searchPreviewContainer:ClearAllPoints()
 	AchievementFrame.searchPreviewContainer:SetPoint("TOPLEFT", AchievementFrame, "TOPRIGHT", 7, -2)
-	local bg = B.CreateBDFrame(AchievementFrame.searchPreviewContainer, nil, true)
+	local bg = B.SetBD(AchievementFrame.searchPreviewContainer)
 	bg:SetPoint("TOPLEFT", -3, 3)
 	bg:SetPoint("BOTTOMRIGHT", showAllSearchResults, 3, -3)
 
