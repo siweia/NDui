@@ -527,11 +527,6 @@ do
 		end
 	end
 
-	function B:SetBackdrop_Hook(a)
-		if self:IsForbidden() then return end
-		B:SetBackdrop(self, a)
-	end
-
 	function B:SetBackdropColor_Hook(r, g, b, a)
 		if self:IsForbidden() then return end
 		B:SetBackdropColor(self, r, g, b, a)
@@ -606,7 +601,9 @@ do
 		bg:SetOutside(self)
 		bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 		B.CreateBD(bg, a)
-		if gradient then B.CreateGradient(bg) end
+		if gradient then
+			self.__gradient = B.CreateGradient(bg)
+		end
 
 		return bg
 	end
@@ -630,9 +627,11 @@ do
 	end
 
 	function B:PixelIcon(texture, highlight)
+		self.bg = B.CreateBDFrame(self)
+		self.bg:SetAllPoints()
 		self.Icon = self:CreateTexture(nil, "ARTWORK")
 		self.Icon:SetInside()
-		self.bg = B.ReskinIcon(self.Icon)
+		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 		if texture then
 			local atlas = strmatch(texture, "Atlas:(.+)$")
 			if atlas then
@@ -731,7 +730,7 @@ do
 		if not self:IsEnabled() then return end
 
 		if NDuiDB["Skins"]["FlatMode"] then
-			self.bgTex:SetVertexColor(cr / 4, cg / 4, cb / 4)
+			self.__gradient:SetVertexColor(cr / 4, cg / 4, cb / 4)
 		else
 			self.__bg:SetBackdropColor(cr, cg, cb, .25)
 		end
@@ -739,7 +738,7 @@ do
 	end
 	local function Button_OnLeave(self)
 		if NDuiDB["Skins"]["FlatMode"] then
-			self.bgTex:SetVertexColor(.3, .3, .3, .25)
+			self.__gradient:SetVertexColor(.3, .3, .3, .25)
 		else
 			self.__bg:SetBackdropColor(0, 0, 0, 0)
 		end
@@ -796,9 +795,8 @@ do
 			end
 		end
 
-		self.__bg = B.CreateBDFrame(self, 0)
+		self.__bg = B.CreateBDFrame(self, 0, true)
 		self.__bg:SetAllPoints()
-		self.bgTex = B.CreateGradient(self.__bg)
 
 		if not noHighlight then
 			self:HookScript("OnEnter", Button_OnEnter)
@@ -882,10 +880,9 @@ do
 			thumb:SetWidth(17)
 			self.thumb = thumb
 
-			local bg = B.CreateBDFrame(self, 0)
+			local bg = B.CreateBDFrame(self, 0, true)
 			bg:SetPoint("TOPLEFT", thumb, 0, -2)
 			bg:SetPoint("BOTTOMRIGHT", thumb, 0, 4)
-			B.CreateGradient(bg)
 			thumb.bg = bg
 		end
 
@@ -909,10 +906,9 @@ do
 		B.ReskinArrow(down, "down")
 		down:SetSize(20, 20)
 
-		local bg = B.CreateBDFrame(self, 0)
+		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", 16, -4)
 		bg:SetPoint("BOTTOMRIGHT", -18, 8)
-		B.CreateGradient(bg)
 	end
 
 	-- Handle close button
@@ -953,9 +949,8 @@ do
 		end
 
 		B.StripTextures(self)
-		local bg = B.CreateBDFrame(self, 0)
+		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetAllPoints()
-		B.CreateGradient(bg)
 
 		self:SetDisabledTexture(DB.bdTex)
 		local dis = self:GetDisabledTexture()
@@ -987,10 +982,9 @@ do
 			end
 		end
 
-		local bg = B.CreateBDFrame(self, 0)
+		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", -2, 0)
 		bg:SetPoint("BOTTOMRIGHT")
-		B.CreateGradient(bg)
 
 		if height then self:SetHeight(height) end
 		if width then self:SetWidth(width) end
@@ -1069,10 +1063,9 @@ do
 		hl:SetPoint("BOTTOMRIGHT", -5, 5)
 		hl:SetVertexColor(cr, cg, cb, .25)
 
-		local bg = B.CreateBDFrame(self, 0)
+		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", 4, -4)
 		bg:SetPoint("BOTTOMRIGHT", -4, 4)
-		B.CreateGradient(bg)
 
 		local ch = self:GetCheckedTexture()
 		ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
@@ -1093,10 +1086,9 @@ do
 		ch:SetPoint("BOTTOMRIGHT", -4, 4)
 		ch:SetVertexColor(cr, cg, cb, .6)
 
-		local bg = B.CreateBDFrame(self, 0)
+		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", 3, -3)
 		bg:SetPoint("BOTTOMRIGHT", -3, 3)
-		B.CreateGradient(bg)
 		self.bg = bg
 
 		self:HookScript("OnEnter", Menu_OnEnter)
@@ -1123,10 +1115,9 @@ do
 		self:SetBackdrop(nil)
 		B.StripTextures(self)
 
-		local bg = B.CreateBDFrame(self, 0)
+		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", 14, -2)
 		bg:SetPoint("BOTTOMRIGHT", -15, 3)
-		B.CreateGradient(bg)
 
 		local thumb = self:GetThumbTexture()
 		thumb:SetTexture(DB.sparkTex)
@@ -1157,11 +1148,10 @@ do
 		self:SetHighlightTexture("")
 		self:SetPushedTexture("")
 
-		local bg = B.CreateBDFrame(self, .25)
+		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
 		bg:SetSize(13, 13)
 		bg:SetPoint("TOPLEFT", self:GetNormalTexture())
-		B.CreateGradient(bg)
 		self.bg = bg
 
 		self.expTex = bg:CreateTexture(nil, "OVERLAY")
@@ -1390,13 +1380,12 @@ do
 	end
 
 	function B:CreateEditBox(width, height)
-		local eb = CreateFrame("EditBox", nil, self, "BackdropTemplate")
+		local eb = CreateFrame("EditBox", nil, self)
 		eb:SetSize(width, height)
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 0, 0)
 		eb:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
-		B.CreateBD(eb, .3)
-		B.CreateGradient(eb)
+		B.CreateBDFrame(eb, .25, true)
 		eb:SetScript("OnEscapePressed", editBoxClearFocus)
 		eb:SetScript("OnEnterPressed", editBoxClearFocus)
 
@@ -1659,9 +1648,6 @@ do
 			if mt.SetStatusBarTexture then hooksecurefunc(mt, "SetStatusBarTexture", DisablePixelSnap) end
 			mt.DisabledPixelSnap = true
 		end
-	--	if not object.SetBackdrop then mt.SetBackdrop = B.SetBackdrop_Hook end
-	--	if not object.SetBackdropColor then mt.SetBackdropColor = B.SetBackdropColor_Hook end
-	--	if not object.SetBackdropBorderColor then mt.SetBackdropBorderColor = B.SetBackdropBorderColor_Hook end
 	end
 
 	local handled = {["Frame"] = true}
