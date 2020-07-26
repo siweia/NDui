@@ -25,7 +25,7 @@ tinsert(C.defaultThemes, function()
 		B.Reskin(bu, true)
 		bu.bg:SetTexture(DB.bdTex)
 		bu.bg:SetVertexColor(r, g, b, .2)
-		bu.bg:SetAllPoints(bu.bgTex)
+		bu.bg:SetAllPoints(bu.__bg)
 
 		bu.icon:SetPoint("LEFT", bu, "LEFT")
 		bu.icon:SetSize(iconSize, iconSize)

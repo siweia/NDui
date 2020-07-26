@@ -42,10 +42,9 @@ end
 function S:RematchInput()
 	self:DisableDrawLayer("BACKGROUND")
 	self:SetBackdrop(nil)
-	local bg = B.CreateBDFrame(self, 0)
+	local bg = B.CreateBDFrame(self, 0, true)
 	bg:SetPoint("TOPLEFT", 2, 0)
 	bg:SetPoint("BOTTOMRIGHT", -2, 0)
-	B.CreateGradient(bg)
 end
 
 local function scrollEndOnLeave(self)
@@ -73,7 +72,7 @@ end
 function S:RematchDropdown()
 	self:SetBackdrop(nil)
 	B.StripTextures(self, 0)
-	B.CreateGradient(B.CreateBDFrame(self, 0))
+	B.CreateBDFrame(self, 0, true)
 	if self.Icon then
 		self.Icon:SetAlpha(1)
 		B.CreateBDFrame(self.Icon)
@@ -465,10 +464,9 @@ function S:ReskinRematch()
 
 		if not button.styled then
 			button.Check:SetVertexColor(cr, cg, cb)
-			local bg = B.CreateBDFrame(button.Check, 0)
+			local bg = B.CreateBDFrame(button.Check, 0, true)
 			bg:SetPoint("TOPLEFT", button.Check, 4, -4)
 			bg:SetPoint("BOTTOMRIGHT", button.Check, -4, 4)
-			B.CreateGradient(bg)
 
 			button.styled = true
 		end
@@ -621,9 +619,7 @@ function S:ReskinRematch()
 			self.optType = opt[1]
 			local checkButton = self.CheckButton
 			if not checkButton.bg then
-				local bg = B.CreateBDFrame(checkButton, 0)
-				B.CreateGradient(bg)
-				checkButton.bg = bg
+				checkButton.bg = B.CreateBDFrame(checkButton, 0, true)
 				self.HeaderBack:SetTexture(nil)
 			end
 			checkButton.bg:SetBackdropColor(0, 0, 0, 0)
