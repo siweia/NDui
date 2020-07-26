@@ -190,4 +190,13 @@ tinsert(C.defaultThemes, function()
 			self.styled = true
 		end
 	end)
+
+	-- Deprecated
+	B.StripTextures(AudioOptionsFrame.Header)
+	AudioOptionsFrame.Header:ClearAllPoints()
+	AudioOptionsFrame.Header:SetPoint("TOP", AudioOptionsFrame, 0, 0)
+	B.SetBD(AudioOptionsFrame)
+	B.Reskin(AudioOptionsFrameOkay)
+	B.Reskin(AudioOptionsFrameCancel)
+	B.Reskin(AudioOptionsFrameDefaults)
 end)
