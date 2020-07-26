@@ -849,34 +849,35 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
 	CovenantMissionFrame.FollowerTab.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
 
-	local function reskinEnemyBoard(self)
-		for socketTexture in self.enemySocketFramePool:EnumerateActive() do
+	local function reskinAbilityIcon(self, anchor, yOffset)
+		self:ClearAllPoints()
+		self:SetPoint(anchor, self:GetParent().squareBG, "LEFT", -3, yOffset)
+		self.Border:SetAlpha(0)
+		self.CircleMask:Hide()
+		B.ReskinIcon(self.Icon)
+	end
+
+	local function reskinFollowerBoard(self, group)
+		for socketTexture in self[group.."SocketFramePool"]:EnumerateActive() do
 			socketTexture:SetAlpha(0)
 		end
-		for enemyFrame in self.enemyFramePool:EnumerateActive() do
-			if not enemyFrame.styled then
-				B.ReskinGarrisonPortrait(enemyFrame)
-				enemyFrame.styled = true
+		for frame in self[group.."FramePool"]:EnumerateActive() do
+			if not frame.styled then
+				B.ReskinGarrisonPortrait(frame)
+				reskinAbilityIcon(frame.AbilityOne, "BOTTOMRIGHT", 1)
+				reskinAbilityIcon(frame.AbilityTwo, "TOPRIGHT", -1)
+
+				frame.styled = true
 			end
 		end
 	end
-	local function reskinFollowerBoard(self)
-		for socketTexture in self.followerSocketFramePool:EnumerateActive() do
-			socketTexture:SetAlpha(0)
-		end
-		for followerFrame in self.followerFramePool:EnumerateActive() do
-			if not followerFrame.styled then
-				B.ReskinGarrisonPortrait(followerFrame)
-				followerFrame.styled = true
-			end
-		end
+
+	local function reskinMissionBoards(self)
+		reskinFollowerBoard(self, "enemy")
+		reskinFollowerBoard(self, "follower")
 	end
-	local function reskinMissionBoard(board)
-		board:HookScript("OnShow", reskinEnemyBoard)
-		hooksecurefunc(board, "EnumerateFollowers", reskinFollowerBoard)
-	end
-	reskinMissionBoard(CovenantMissionFrame.MissionTab.MissionPage.Board)
-	reskinMissionBoard(CovenantMissionFrame.MissionComplete.Board)
+	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", reskinMissionBoards)
+	CovenantMissionFrame.MissionComplete.Board:HookScript("OnShow", reskinMissionBoards)
 
 	hooksecurefunc(CovenantMissionFrame.MissionComplete.RewardsScreen, "SetRewards", function(self)
 		for rewardFrame in self.rewardsPool:EnumerateActive() do
