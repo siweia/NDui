@@ -49,7 +49,6 @@
 	<Script file="RaidFrame.lua"/>
 	<Script file="ReadyCheck.lua"/>
 	<Script file="RecruitAFriendFrame.lua"/>
-	<Script file="ReputationFrame.lua"/>
 	<Script file="ScenarioFinder.lua"/>
 	<Script file="ScriptErrorsFrame.lua"/>
 	<Script file="SpellBookFrame.lua"/>

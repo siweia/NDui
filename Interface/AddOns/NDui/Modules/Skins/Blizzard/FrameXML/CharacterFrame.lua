@@ -221,9 +221,51 @@ tinsert(C.defaultThemes, function()
 		self:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 3, 0)
 	end)
 
+	-- Reputation Frame
+	ReputationDetailCorner:Hide()
+	ReputationDetailDivider:Hide()
+	ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 3, -28)
+
+	local function UpdateFactionSkins()
+		for i = 1, GetNumFactions() do
+			local statusbar = _G["ReputationBar"..i.."ReputationBar"]
+			if statusbar then
+				statusbar:SetStatusBarTexture(DB.bdTex)
+
+				if not statusbar.reskinned then
+					B.CreateBDFrame(statusbar, .25)
+					statusbar.reskinned = true
+				end
+
+				_G["ReputationBar"..i.."Background"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarHighlight1"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarHighlight2"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarAtWarHighlight1"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarAtWarHighlight2"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarLeftTexture"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarRightTexture"]:SetTexture(nil)
+			end
+		end
+	end
+	ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
+	ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
+
+	for i = 1, NUM_FACTIONS_DISPLAYED do
+		local bu = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
+		B.ReskinExpandOrCollapse(bu)
+	end
+
+	B.StripTextures(ReputationDetailFrame)
+	B.SetBD(ReputationDetailFrame)
+	B.ReskinClose(ReputationDetailCloseButton)
+	B.ReskinCheck(ReputationDetailAtWarCheckBox)
+	B.ReskinCheck(ReputationDetailInactiveCheckBox)
+	B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+	B.ReskinScroll(ReputationListScrollFrameScrollBar)
+
 	-- Token frame
 	TokenFramePopupCorner:Hide()
-	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
+	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 3, -28)
 	B.StripTextures(TokenFramePopup)
 	B.SetBD(TokenFramePopup)
 	B.ReskinClose(TokenFramePopupCloseButton)
