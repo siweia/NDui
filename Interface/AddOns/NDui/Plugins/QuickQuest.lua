@@ -189,7 +189,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 	if(active > 0) then
 		local gossipQuests = C_GossipInfo.GetActiveQuests()
 		for index, questInfo in ipairs(gossipQuests) do
-			local name, complete, questID = questInfo.title, questInfo.isComplete, questInfo.questID
+			local complete, questID = questInfo.isComplete, questInfo.questID
 			if(complete) then
 				if(not questID) then
 					C_GossipInfo.SelectActiveQuest(index)
@@ -207,7 +207,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 	if(available > 0) then
 		local GossipQuests = C_GossipInfo.GetAvailableQuests()
 		for index, questInfo in ipairs(GossipQuests) do
-			local trival, ignored = questInfo.isTrivial, questInfo.isIgnored
+			local trivial, ignored = questInfo.isTrivial, questInfo.isIgnored
 			if((not trivial and not ignored) or IsTrackingHidden()) then
 				C_GossipInfo.SelectAvailableQuest(index)
 			elseif(trivial and npcID == 64337) then
