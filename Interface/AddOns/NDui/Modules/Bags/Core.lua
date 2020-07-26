@@ -68,10 +68,9 @@ function module:CreateInfoFrame()
 	search.isGlobal = true
 	search:SetPoint("LEFT", 0, 5)
 	search:DisableDrawLayer("BACKGROUND")
-	local bg = B.CreateBDFrame(search, 0)
+	local bg = B.CreateBDFrame(search, 0, true)
 	bg:SetPoint("TOPLEFT", -5, -5)
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
-	B.CreateGradient(bg)
 
 	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tag:SetFont(unpack(DB.Font))
@@ -920,6 +919,8 @@ function module:OnLogin()
 	end
 
 	function BagButton:OnUpdate()
+		self:SetBackdropBorderColor(0, 0, 0)
+
 		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
 		if not id then return end
 		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = GetItemInfo(id)
@@ -927,8 +928,6 @@ function module:OnLogin()
 		local color = DB.QualityColors[quality]
 		if not self.hidden and not self.notBought then
 			self:SetBackdropBorderColor(color.r, color.g, color.b)
-		else
-			self:SetBackdropBorderColor(0, 0, 0)
 		end
 
 		if classID == LE_ITEM_CLASS_CONTAINER then
