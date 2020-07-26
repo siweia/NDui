@@ -115,8 +115,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				bossButton.text.SetTextColor = B.Dummy
 
 				local hl = bossButton:GetHighlightTexture()
-				hl:SetColorTexture(r, g, b, .2)
-				hl:SetAllPoints(bossButton.bgTex)
+				hl:SetColorTexture(r, g, b, .25)
+				hl:SetInside(bossButton.__bg)
 
 				bossButton.creature:SetPoint("TOPLEFT", 0, -4)
 

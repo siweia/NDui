@@ -50,13 +50,13 @@ function S:RematchInput()
 end
 
 local function scrollEndOnLeave(self)
-	self.bgTex:SetVertexColor(1, .8, 0)
+	self.__texture:SetVertexColor(1, .8, 0)
 end
 
 local function reskinScrollEnd(self, direction)
 	B.ReskinArrow(self, direction)
 	self:SetSize(17, 12)
-	self.bgTex:SetVertexColor(1, .8, 0)
+	self.__texture:SetVertexColor(1, .8, 0)
 	self:HookScript("OnLeave", scrollEndOnLeave)
 end
 

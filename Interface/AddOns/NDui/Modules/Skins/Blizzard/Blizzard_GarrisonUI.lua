@@ -808,17 +808,17 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.SetBD(GarrisonMonumentFrame, nil, 6, -10, -6, 4)
 
 	do
-		local left = GarrisonMonumentFrame.LeftBtn
-		local right = GarrisonMonumentFrame.RightBtn
+		local leftButton = GarrisonMonumentFrame.LeftBtn
+		leftButton.Texture:Hide()
+		B.ReskinArrow(leftButton, "left")
+		leftButton:SetSize(35, 35)
+		leftButton.__texture:SetSize(16, 16)
 
-		left.Texture:Hide()
-		right.Texture:Hide()
-		B.ReskinArrow(left, "left")
-		B.ReskinArrow(right, "right")
-		left:SetSize(35, 35)
-		left.bgTex:SetSize(16, 16)
-		right:SetSize(35, 35)
-		right.bgTex:SetSize(16, 16)
+		local rightButton = GarrisonMonumentFrame.RightBtn
+		rightButton.Texture:Hide()
+		B.ReskinArrow(rightButton, "right")
+		rightButton:SetSize(35, 35)
+		rightButton.__texture:SetSize(16, 16)
 	end
 
 	-- [[ Shipyard ]]
