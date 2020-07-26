@@ -58,7 +58,7 @@ tinsert(C.defaultThemes, function()
 			navButton.arrowDown:SetAlpha(0)
 			navButton.selected:SetDrawLayer("BACKGROUND", 1)
 			navButton.selected:SetColorTexture(r, g, b, .25)
-			navButton.selected:SetAllPoints(navButton.bgTex)
+			navButton.selected:SetInside(navButton.__bg)
 
 			navButton:HookScript("OnClick", function()
 				moveNavButtons(self)
@@ -73,7 +73,7 @@ tinsert(C.defaultThemes, function()
 			tex:SetTexture(DB.arrowDown)
 			tex:SetSize(8, 8)
 			tex:SetPoint("CENTER")
-			arrowButton.bgTex = tex
+			arrowButton.__texture = tex
 
 			arrowButton:SetScript("OnEnter", B.Texture_OnEnter)
 			arrowButton:SetScript("OnLeave", B.Texture_OnLeave)

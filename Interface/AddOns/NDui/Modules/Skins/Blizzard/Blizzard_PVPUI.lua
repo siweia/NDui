@@ -18,7 +18,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		bu.Ring:Hide()
 		B.Reskin(bu, true)
-		bu.Background:SetAllPoints(bu.__bg)
+		bu.Background:SetInside(bu.__bg)
 		bu.Background:SetColorTexture(r, g, b, .25)
 
 		icon:SetPoint("LEFT", bu, "LEFT")
@@ -84,7 +84,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		B.Reskin(bu, true)
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-		bu.SelectedTexture:SetAllPoints(bu.__bg)
+		bu.SelectedTexture:SetInside(bu.__bg)
 
 		local reward = bu.Reward
 		if reward then
@@ -160,7 +160,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-		bu.SelectedTexture:SetAllPoints(bu.__bg)
+		bu.SelectedTexture:SetInside(bu.__bg)
 	end
 
 	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
