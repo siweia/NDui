@@ -132,7 +132,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
 		block.NormalBG:SetTexture("")
 		if not block.bg then
-			block.bg = B.SetBD(block.GlowTexture, 4, -2, -4, 2)
+			block.bg = B.SetBD(block.GlowTexture, nil, 4, -2, -4, 2)
 		end
 	end)
 
@@ -166,7 +166,7 @@ tinsert(C.defaultThemes, function()
 			block.StatusBar:SetHeight(10)
 
 			select(3, block:GetRegions()):Hide()
-			block.bg = B.SetBD(block, 4, -2, -4, 0)
+			block.bg = B.SetBD(block, nil, 4, -2, -4, 0)
 		end
 	end)
 

@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 C.themes["Blizzard_VoidStorageUI"] = function()
-	B.SetBD(VoidStorageFrame, 20, 0, 0, 20)
+	B.SetBD(VoidStorageFrame, nil, 20, 0, 0, 20)
 	B.CreateBDFrame(VoidStoragePurchaseFrame)
 	B.StripTextures(VoidStorageBorderFrame)
 	B.StripTextures(VoidStorageDepositFrame)
