@@ -141,6 +141,13 @@ local function ReskinFollowerTab(self)
 	end
 end
 
+local function UpdateFollowerQuality(self, followerInfo)
+	if followerInfo then
+		local color = DB.QualityColors[followerInfo.quality or 1]
+		self.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+	end
+end
+
 local function UpdateFollowerList(self)
 	local followerFrame = self:GetParent()
 	local scrollFrame = followerFrame.FollowerList.listScroll
@@ -165,6 +172,7 @@ local function UpdateFollowerList(self)
 				B.ReskinGarrisonPortrait(portrait)
 				portrait:ClearAllPoints()
 				portrait:SetPoint("TOPLEFT", 4, -1)
+				hooksecurefunc(portrait, "SetupPortrait", UpdateFollowerQuality)
 			end
 
 			if button.BusyFrame then
@@ -187,11 +195,6 @@ local function UpdateFollowerList(self)
 			button.bg:SetBackdropColor(r, g, b, .2)
 		else
 			button.bg:SetBackdropColor(0, 0, 0, .25)
-		end
-
-		if portrait and portrait.quality then
-			local color = DB.QualityColors[portrait.quality]
-			portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end
 end
