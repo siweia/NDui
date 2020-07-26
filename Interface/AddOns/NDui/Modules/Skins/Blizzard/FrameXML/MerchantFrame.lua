@@ -103,4 +103,12 @@ tinsert(C.defaultThemes, function()
 			MerchantRepairText:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 65, 73)
 		end
 	end)
+
+	-- StackSplitFrame
+
+	local StackSplitFrame = StackSplitFrame
+	B.StripTextures(StackSplitFrame)
+	B.SetBD(StackSplitFrame)
+	B.Reskin(StackSplitFrame.OkayButton)
+	B.Reskin(StackSplitFrame.CancelButton)
 end)
