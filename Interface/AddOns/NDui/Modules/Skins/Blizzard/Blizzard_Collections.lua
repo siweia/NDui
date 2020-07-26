@@ -601,7 +601,7 @@ C.themes["Blizzard_Collections"] = function()
 	WardrobeOutfitDropDown:SetHeight(32)
 	WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
 	B.StripTextures(WardrobeOutfitFrame)
-	B.CreateBDFrame(WardrobeOutfitFrame, .7, true)
+	B.SetBD(WardrobeOutfitFrame, .7)
 
 	hooksecurefunc(WardrobeOutfitFrame, "Update", function(self)
 		for i = 1, C_TransmogCollection.GetNumMaxOutfits() do

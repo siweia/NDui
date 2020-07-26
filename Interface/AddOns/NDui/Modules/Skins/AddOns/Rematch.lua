@@ -196,7 +196,7 @@ function S:ReskinRematch()
 			local bg = B.CreateBDFrame(menu.Title)
 			bg:SetBackdropColor(1, .8, .0, .25)
 			B.StripTextures(menu)
-			B.CreateBDFrame(menu, .7, true)
+			B.SetBD(menu, .7)
 		end
 
 		B.StripTextures(RematchJournal)
@@ -320,7 +320,7 @@ function S:ReskinRematch()
 		B.StripTextures(petCard.PinButton)
 		B.ReskinArrow(petCard.PinButton, "up")
 		petCard.PinButton:SetPoint("TOPLEFT", 5, -5)
-		local bg = B.CreateBDFrame(petCard.Title, .7, true)
+		local bg = B.SetBD(petCard.Title, .7)
 		bg:SetAllPoints(petCard)
 		S.RematchCard(petCard.Front)
 		S.RematchCard(petCard.Back)
@@ -334,7 +334,7 @@ function S:ReskinRematch()
 		-- RematchAbilityCard
 		local abilityCard = RematchAbilityCard
 		B.StripTextures(abilityCard, 15)
-		B.CreateBDFrame(abilityCard, .7, true)
+		B.SetBD(abilityCard, .7)
 		abilityCard.Hints.HintsBG:Hide()
 
 		-- RematchWinRecordCard
