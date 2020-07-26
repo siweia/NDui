@@ -357,10 +357,9 @@ function TT:ReskinTooltip()
 	if not self.tipStyled then
 		if self.SetBackdrop then self:SetBackdrop(nil) end
 		self:DisableDrawLayer("BACKGROUND")
-		self.bg = B.CreateBDFrame(self, .7, true)
+		self.bg = B.SetBD(self, .7)
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
-		B.CreateTex(self.bg)
 
 		-- other gametooltip-like support
 		--self.GetBackdrop = getBackdrop

@@ -12,8 +12,7 @@ tinsert(C.defaultThemes, function()
 				local backdrop = _G[name..i.."Backdrop"]
 				if backdrop and not backdrop.styled then
 					B.StripTextures(backdrop)
-					local bg = B.CreateBDFrame(backdrop, .7, true)
-					B.CreateTex(bg)
+					B.SetBD(backdrop, .7)
 
 					backdrop.styled = true
 				end

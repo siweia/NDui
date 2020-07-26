@@ -80,7 +80,7 @@ function UF:CreateHealthBar(self)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
-	health.backdrop = B.CreateBDFrame(health, 0, true) -- don't mess up with libs
+	health.backdrop = B.SetBD(health, 0) -- don't mess up with libs
 	health.shadow = health.backdrop.Shadow
 	B:SmoothBar(health)
 
@@ -908,7 +908,7 @@ function UF:CreateClassPower(self)
 		bars[i]:SetWidth((barWidth - 5*C.margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
-		B.CreateBDFrame(bars[i], 0, true)
+		B.SetBD(bars[i], 0)
 		if i == 1 then
 			bars[i]:SetPoint("BOTTOMLEFT")
 		else
@@ -945,7 +945,7 @@ function UF:StaggerBar(self)
 	stagger:SetPoint(unpack(C.UFs.BarPoint))
 	stagger:SetStatusBarTexture(DB.normTex)
 	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
-	B.CreateBDFrame(stagger, 0, true)
+	B.SetBD(stagger, 0)
 
 	local bg = stagger:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -979,7 +979,7 @@ function UF:CreateAltPower(self)
 	bar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -3)
 	bar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 	bar:SetHeight(2)
-	B.CreateBDFrame(bar, 0, true)
+	B.SetBD(bar, 0)
 
 	local text = B.CreateFS(bar, 14, "")
 	text:SetJustifyH("CENTER")
@@ -1085,7 +1085,7 @@ function UF:CreateAddPower(self)
 	bar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 	bar:SetHeight(4)
 	bar:SetStatusBarTexture(DB.normTex)
-	B.CreateBDFrame(bar, 0, true)
+	B.SetBD(bar, 0)
 	bar.colorPower = true
 
 	local bg = bar:CreateTexture(nil, "BACKGROUND")
