@@ -91,19 +91,17 @@ C.themes["Blizzard_AchievementUI"] = function()
 		ch:SetPushedTexture("")
 		ch:SetHighlightTexture(DB.bdTex)
 
-		local hl = ch:GetHighlightTexture()
-		hl:SetPoint("TOPLEFT", 4, -4)
-		hl:SetPoint("BOTTOMRIGHT", -4, 4)
-		hl:SetVertexColor(r, g, b, .25)
-
 		local check = ch:GetCheckedTexture()
 		check:SetDesaturated(true)
 		check:SetVertexColor(r, g, b)
 
-		local tex = B.CreateGradient(ch)
-		tex:SetPoint("TOPLEFT", 4, -4)
-		tex:SetPoint("BOTTOMRIGHT", -4, 4)
-		B.CreateBDFrame(tex)
+		local bg = B.CreateBDFrame(ch, 0, true)
+		bg:SetPoint("TOPLEFT", 2, -2)
+		bg:SetPoint("BOTTOMRIGHT", -2, 2)
+
+		local hl = ch:GetHighlightTexture()
+		hl:SetInside(bg)
+		hl:SetVertexColor(r, g, b, .25)
 	end
 
 	AchievementFrameAchievementsContainerButton1.background:SetPoint("TOPLEFT", AchievementFrameAchievementsContainerButton1, "TOPLEFT", 2, -3)

@@ -118,10 +118,9 @@ C.themes["Blizzard_Communities"] = function()
 				button:GetRegions():Hide()
 				button.Selection:SetAlpha(0)
 				button:SetHighlightTexture("")
-				button.bg = B.CreateBDFrame(button, 0)
+				button.bg = B.CreateBDFrame(button, 0, true)
 				button.bg:SetPoint("TOPLEFT", 5, -5)
 				button.bg:SetPoint("BOTTOMRIGHT", -10, 5)
-				B.CreateGradient(button.bg)
 			end
 
 			if button.Selection:IsShown() then
@@ -145,8 +144,7 @@ C.themes["Blizzard_Communities"] = function()
 	local bg1 = B.CreateBDFrame(CommunitiesFrame.Chat.InsetFrame, .25)
 	bg1:SetPoint("TOPLEFT", 1, -3)
 	bg1:SetPoint("BOTTOMRIGHT", -3, 22)
-	local bg2 = B.CreateBDFrame(CommunitiesFrame.ChatEditBox, 0)
-	B.CreateGradient(bg2)
+	local bg2 = B.CreateBDFrame(CommunitiesFrame.ChatEditBox, 0, true)
 	bg2:SetPoint("TOPLEFT", -5, -5)
 	bg2:SetPoint("BOTTOMRIGHT", 4, 5)
 

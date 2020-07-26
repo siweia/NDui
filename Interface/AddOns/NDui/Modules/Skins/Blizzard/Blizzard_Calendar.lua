@@ -112,10 +112,9 @@ C.themes["Blizzard_Calendar"] = function()
 	end
 
 	B.StripTextures(CalendarFilterFrame)
-	local bg = B.CreateBDFrame(CalendarFilterFrame, 0)
+	local bg = B.CreateBDFrame(CalendarFilterFrame, 0, true)
 	bg:SetPoint("TOPLEFT", 35, -1)
 	bg:SetPoint("BOTTOMRIGHT", -18, 1)
-	B.CreateGradient(bg)
 	B.ReskinArrow(CalendarFilterButton, "down")
 
 	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)

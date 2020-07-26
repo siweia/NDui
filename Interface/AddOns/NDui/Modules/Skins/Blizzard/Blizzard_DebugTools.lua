@@ -10,10 +10,9 @@ C.themes["Blizzard_DebugTools"] = function()
 	local bg, bu = EventTraceFrameScroll:GetRegions()
 	bg:Hide()
 	bu:SetAlpha(0)
-	bu:SetWidth(16)
-	bu.bg = B.CreateBDFrame(EventTraceFrame, 0)
+	bu:SetWidth(17)
+	bu.bg = B.CreateBDFrame(EventTraceFrame, 0, true)
 	bu.bg:SetAllPoints(bu)
-	B.CreateGradient(bu.bg)
 
 	-- Table Attribute Display
 	local function reskinTableAttribute(frame)

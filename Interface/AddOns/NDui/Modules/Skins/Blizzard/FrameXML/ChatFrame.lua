@@ -74,8 +74,7 @@ tinsert(C.defaultThemes, function()
 		local bu = _G[self:GetName().."ThumbTexture"]
 		bu:SetAlpha(0)
 		bu:SetWidth(16)
-		local bg = B.CreateBDFrame(bu)
-		B.CreateGradient(bg)
+		local bg = B.CreateBDFrame(bu, 0, true)
 		local down = self.ScrollToBottomButton
 		B.ReskinArrow(down, "down")
 		down:SetPoint("BOTTOMRIGHT", _G[self:GetName().."ResizeButton"], "TOPRIGHT", -4, -2)

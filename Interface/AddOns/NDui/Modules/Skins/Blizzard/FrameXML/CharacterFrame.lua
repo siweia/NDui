@@ -251,10 +251,9 @@ tinsert(C.defaultThemes, function()
 				bu.bg = B.ReskinIcon(bu.icon)
 
 				if bu.expandIcon then
-					bu.expBg = B.CreateBDFrame(bu.expandIcon, .25)
+					bu.expBg = B.CreateBDFrame(bu.expandIcon, 0, true)
 					bu.expBg:SetPoint("TOPLEFT", bu.expandIcon, -3, 3)
 					bu.expBg:SetPoint("BOTTOMRIGHT", bu.expandIcon, 3, -3)
-					B.CreateGradient(bu.expBg)
 				end
 
 				bu.styled = true
