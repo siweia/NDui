@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="AddonList.lua"/>
 	<Script file="AlertFrames.lua"/>
-	<Script file="AudioOptionsFrame.lua"/>
 	<Script file="BankFrame.lua"/>
 	<Script file="CharacterFrame.lua"/>
 	<Script file="ChatBubbles.lua"/>
@@ -55,7 +54,6 @@
 	<Script file="ScriptErrorsFrame.lua"/>
 	<Script file="SpellBookFrame.lua"/>
 	<Script file="SplashFrame.lua"/>
-	<Script file="StackSplitFrame.lua"/>
 	<Script file="StaticPopup.lua"/>
 	<Script file="TabardFrame.lua"/>
 	<Script file="TaxiFrame.lua"/>
