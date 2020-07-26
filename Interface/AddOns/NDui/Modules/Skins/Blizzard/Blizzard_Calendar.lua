@@ -53,7 +53,7 @@ C.themes["Blizzard_Calendar"] = function()
 	B.StripTextures(CalendarClassTotalsButton)
 
 	B.StripTextures(CalendarFrame)
-	B.SetBD(CalendarFrame, 9, 0, -7, 1)
+	B.SetBD(CalendarFrame, nil, 9, 0, -7, 1)
 	B.CreateBDFrame(CalendarClassTotalsButton)
 	B.StripTextures(CalendarViewEventInviteList)
 	B.CreateBDFrame(CalendarViewEventInviteList, .25)

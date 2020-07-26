@@ -814,7 +814,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local GarrisonMonumentFrame = GarrisonMonumentFrame
 
 	GarrisonMonumentFrame.Background:Hide()
-	B.SetBD(GarrisonMonumentFrame, 6, -10, -6, 4)
+	B.SetBD(GarrisonMonumentFrame, nil, 6, -10, -6, 4)
 
 	do
 		local left = GarrisonMonumentFrame.LeftBtn
