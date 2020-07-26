@@ -923,6 +923,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.ReskinMissionFrame(BFAMissionFrame)
 
 	-- [[ Covenant Mission UI]]
+
 	local CovenantMissionFrame = CovenantMissionFrame
 	B.ReskinMissionFrame(CovenantMissionFrame)
 	B.Reskin(HealFollowerButtonTemplate)
@@ -930,32 +931,42 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
 	CovenantMissionFrame.FollowerTab.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
 
-	local missionBoard = CovenantMissionFrame.MissionTab.MissionPage.Board
-	local completeBoard = CovenantMissionFrame.MissionComplete.Board
-	for _, board in pairs({missionBoard, completeBoard}) do
-		board:HookScript("OnShow", function(self)
-			for socketTexture in self.enemySocketFramePool:EnumerateActive() do
-				socketTexture:SetAlpha(0)
+	local function reskinEnemyBoard(self)
+		for socketTexture in self.enemySocketFramePool:EnumerateActive() do
+			socketTexture:SetAlpha(0)
+		end
+		for enemyFrame in self.enemyFramePool:EnumerateActive() do
+			if not enemyFrame.styled then
+				B.ReskinGarrisonPortrait(enemyFrame)
+				enemyFrame.styled = true
 			end
-			for enemyFrame in self.enemyFramePool:EnumerateActive() do
-				if not enemyFrame.styled then
-					B.ReskinGarrisonPortrait(enemyFrame)
-					enemyFrame.styled = true
-				end
-			end
-		end)
-		hooksecurefunc(board, "EnumerateFollowers", function(self)
-			for socketTexture in self.followerSocketFramePool:EnumerateActive() do
-				socketTexture:SetAlpha(0)
-			end
-			for followerFrame in self.followerFramePool:EnumerateActive() do
-				if not followerFrame.styled then
-					B.ReskinGarrisonPortrait(followerFrame)
-					followerFrame.styled = true
-				end
-			end
-		end)
+		end
 	end
+	local function reskinFollowerBoard(self)
+		for socketTexture in self.followerSocketFramePool:EnumerateActive() do
+			socketTexture:SetAlpha(0)
+		end
+		for followerFrame in self.followerFramePool:EnumerateActive() do
+			if not followerFrame.styled then
+				B.ReskinGarrisonPortrait(followerFrame)
+				followerFrame.styled = true
+			end
+		end
+	end
+	local function reskinMissionBoard(board)
+		board:HookScript("OnShow", reskinEnemyBoard)
+		hooksecurefunc(board, "EnumerateFollowers", reskinFollowerBoard)
+	end
+	reskinMissionBoard(CovenantMissionFrame.MissionTab.MissionPage.Board)
+	reskinMissionBoard(CovenantMissionFrame.MissionComplete.Board)
+
+	hooksecurefunc(CovenantMissionFrame.MissionComplete.RewardsScreen, "SetRewards", function(self)
+		for rewardFrame in self.rewardsPool:EnumerateActive() do
+			if rewardFrame.Icon and not rewardFrame.bg then
+				rewardFrame.bg = B.ReskinIcon(rewardFrame.Icon)
+			end
+		end
+	end)
 
 	-- [[ Addon supports ]]
 
