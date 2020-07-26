@@ -1191,7 +1191,7 @@ do
 		return bg
 	end
 
-	local AtlasToTexcoord = {
+	local AtlasToRoleTex = {
 		["Adventures-Tank"] = {.5, .75, 0, 1},
 		["Adventures-Healer"] = {.75, 1, 0, 1},
 		["Adventures-DPS"] = {.25, .5, 0, 1},
@@ -1199,9 +1199,9 @@ do
 	local function replaceFollowerRole(roleIcon, atlas)
 		roleIcon:SetTexture("Interface\\LFGFrame\\LFGROLE")
 		roleIcon:SetSize(18, 18)
-		local texcoord = AtlasToTexcoord[atlas]
+		local texcoord = AtlasToRoleTex[atlas]
 		if texcoord then
-			roleIcon:SetTexCoord(unpack(AtlasToTexcoord[atlas]))
+			roleIcon:SetTexCoord(unpack(texcoord))
 		end
 	end
 
@@ -1358,7 +1358,7 @@ do
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 0, 0)
 		eb:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
-		B.CreateBDFrame(eb, .25, true)
+		eb.bg = B.CreateBDFrame(eb, .25, true)
 		eb:SetScript("OnEscapePressed", editBoxClearFocus)
 		eb:SetScript("OnEnterPressed", editBoxClearFocus)
 
