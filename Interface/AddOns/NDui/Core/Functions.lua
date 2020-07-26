@@ -592,7 +592,7 @@ do
 	end
 
 	-- Handle frame
-	function B:CreateBDFrame(a, shadow)
+	function B:CreateBDFrame(a, gradient)
 		local frame = self
 		if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 		local lvl = frame:GetFrameLevel()
@@ -601,16 +601,18 @@ do
 		bg:SetOutside(self)
 		bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 		B.CreateBD(bg, a)
-		if shadow then B.CreateSD(bg) end
+		if gradient then B.CreateGradient(bg) end
+
 		return bg
 	end
 
 	function B:SetBD(x, y, x2, y2)
-		local bg = B.CreateBDFrame(self, nil, true)
+		local bg = B.CreateBDFrame(self)
 		if x then
 			bg:SetPoint("TOPLEFT", self, x, y)
 			bg:SetPoint("BOTTOMRIGHT", self, x2, y2)
 		end
+		B.CreateSD(bg)
 		B.CreateTex(bg)
 
 		return bg
