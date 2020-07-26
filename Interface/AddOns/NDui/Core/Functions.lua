@@ -611,8 +611,8 @@ do
 		return bg
 	end
 
-	function B:SetBD(x, y, x2, y2)
-		local bg = B.CreateBDFrame(self)
+	function B:SetBD(a, x, y, x2, y2)
+		local bg = B.CreateBDFrame(self, a)
 		if x then
 			bg:SetPoint("TOPLEFT", self, x, y)
 			bg:SetPoint("BOTTOMRIGHT", self, x2, y2)
