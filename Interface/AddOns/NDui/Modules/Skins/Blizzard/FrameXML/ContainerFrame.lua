@@ -46,7 +46,7 @@ tinsert(C.defaultThemes, function()
 			B.HookIconBorderColor(button.IconBorder)
 		end
 
-		local f = B.CreateBDFrame(con, nil, true)
+		local f = B.SetBD(con)
 		f:SetPoint("TOPLEFT", 8, -4)
 		f:SetPoint("BOTTOMRIGHT", -4, 3)
 
@@ -79,8 +79,12 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	BagItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
-	BagItemAutoSortButton:GetPushedTexture():SetTexCoord(.17, .83, .17, .83)
+	local function replaceSortTexture(texture)
+		texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version?
+		texture:SetTexCoord(unpack(DB.TexCoord))
+	end
+	replaceSortTexture(BagItemAutoSortButton:GetNormalTexture())
+	replaceSortTexture(BagItemAutoSortButton:GetPushedTexture())
 	B.CreateBDFrame(BagItemAutoSortButton)
 
 	local highlight = BagItemAutoSortButton:GetHighlightTexture()

@@ -263,7 +263,7 @@ function TT:ReskinStatusBar()
 	self.StatusBar:SetPoint("BOTTOMRIGHT", self.bg, "TOPRIGHT", -C.mult, 3)
 	self.StatusBar:SetStatusBarTexture(DB.normTex)
 	self.StatusBar:SetHeight(5)
-	B.CreateBDFrame(self.StatusBar, nil, true)
+	B.SetBD(self.StatusBar)
 end
 
 function TT:GameTooltip_ShowStatusBar()
