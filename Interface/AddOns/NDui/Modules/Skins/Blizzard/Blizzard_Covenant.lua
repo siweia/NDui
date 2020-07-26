@@ -20,7 +20,7 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 		end
 	end)
 
-	hooksecurefunc(CovenantPreviewFrame, "SetupTextureKits", function(self, button)
+	hooksecurefunc(CovenantPreviewFrame, "SetupTextureKits", function(_, button)
 		if button.IconBorder and not button.bg then
 			button.IconBorder:SetAlpha(0)
 			button.CircleMask:Hide()
