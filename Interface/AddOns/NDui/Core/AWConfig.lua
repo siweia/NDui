@@ -70,7 +70,7 @@ local function createPage(name)
 	local p = CreateFrame("Frame", nil, f, "BackdropTemplate")
 	p:SetPoint("TOPLEFT", 160, -70)
 	p:SetSize(620, 380)
-	B.CreateBD(p, .2)
+	B.CreateBD(p, .25)
 	B.CreateFS(p, 15, name, false, "TOPLEFT", 5, 20)
 	p:Hide()
 	return p
@@ -221,7 +221,7 @@ local function CreatePanel()
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(270, 30)
-		B.CreateBD(bar, .3)
+		B.CreateBD(bar, .25)
 		barTable[index][spellID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -273,7 +273,7 @@ local function CreatePanel()
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(270, 30)
-		B.CreateBD(bar, .3)
+		B.CreateBD(bar, .25)
 		barTable[index][intID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -361,7 +361,7 @@ local function CreatePanel()
 		tabs[i] = CreateFrame("Button", "$parentTab"..i, f, "BackdropTemplate")
 		tabs[i]:SetPoint("TOPLEFT", 20, -40 - i*30)
 		tabs[i]:SetSize(130, 28)
-		B.CreateBD(tabs[i], .3)
+		B.CreateBD(tabs[i], .25)
 		local label = B.CreateFS(tabs[i], 15, group, "system", "LEFT", 10, 0)
 		if i == 10 then
 			label:SetTextColor(0, .8, .3)

@@ -32,7 +32,7 @@ local function createExtraGUI(parent, name, title, bgFrame)
 		frame.bg = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		frame.bg:SetSize(280, 540)
 		frame.bg:SetPoint("TOPLEFT", 10, -50)
-		B.CreateBD(frame.bg, .3)
+		B.CreateBD(frame.bg, .25)
 	end
 
 	tinsert(extraGUIs, frame)
@@ -194,7 +194,7 @@ function G:SetupRaidDebuffs(parent)
 	local function createBar(index, texture)
 		local bar = CreateFrame("Frame", nil, scroll.child, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
+		B.CreateBD(bar, .25)
 		bar.index = index
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -340,7 +340,7 @@ function G:SetupClickCast(parent)
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
+		B.CreateBD(bar, .25)
 		barTable[clickSet] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -440,7 +440,7 @@ function G:SetupPartyWatcher(parent)
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
+		B.CreateBD(bar, .25)
 		barTable[spellID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -530,7 +530,7 @@ function G:SetupNameplateFilter(parent)
 		local name, _, texture = GetSpellInfo(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
+		B.CreateBD(bar, .25)
 		frameData[index].barList[spellID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -565,7 +565,7 @@ function G:SetupNameplateFilter(parent)
 		local frame = CreateFrame("Frame", nil, plateGUI, "BackdropTemplate")
 		frame:SetSize(280, 250)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
-		B.CreateBD(frame, .3)
+		B.CreateBD(frame, .25)
 
 		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, 185, 25)
@@ -608,7 +608,7 @@ function G:SetupBuffIndicator(parent)
 		local name, _, texture = GetSpellInfo(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
+		B.CreateBD(bar, .25)
 		frameData[index].barList[spellID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -681,7 +681,7 @@ function G:SetupBuffIndicator(parent)
 		local frame = CreateFrame("Frame", nil, buffIndicatorGUI, "BackdropTemplate")
 		frame:SetSize(280, 250)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
-		B.CreateBD(frame, .3)
+		B.CreateBD(frame, .25)
 
 		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, value.width, 25)
