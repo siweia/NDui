@@ -921,7 +921,7 @@ do
 			elseif self.bg then
 				self.bg:SetBackdropColor(cr, cg, cb, .25)
 			else
-				self.bgTex:SetVertexColor(cr, cg, cb)
+				self.__texture:SetVertexColor(cr, cg, cb)
 			end
 		end
 	end
@@ -934,7 +934,7 @@ do
 		elseif self.bg then
 			self.bg:SetBackdropColor(0, 0, 0, .25)
 		else
-			self.bgTex:SetVertexColor(1, 1, 1)
+			self.__texture:SetVertexColor(1, 1, 1)
 		end
 	end
 
@@ -1013,7 +1013,7 @@ do
 		tex:SetTexture(direcIndex[direction])
 		tex:SetSize(8, 8)
 		tex:SetPoint("CENTER")
-		self.bgTex = tex
+		self.__texture = tex
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)
@@ -1045,7 +1045,7 @@ do
 		tex:SetTexture(DB.arrowLeft)
 		tex:SetSize(8, 8)
 		tex:SetPoint("CENTER")
-		overflowButton.bgTex = tex
+		overflowButton.__texture = tex
 
 		overflowButton:HookScript("OnEnter", B.Texture_OnEnter)
 		overflowButton:HookScript("OnLeave", B.Texture_OnLeave)
