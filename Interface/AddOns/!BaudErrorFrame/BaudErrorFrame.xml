@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
 	<Script file="BaudErrorFrame.lua"/>
-	<Button name="BaudErrorFrameEntryTemplate" virtual="true">
+	<Button name="BaudErrorFrameEntryTemplate" virtual="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="1" y="16"/>
 		</Size>
@@ -81,7 +81,7 @@
 			</OnUpdate>
 		</Scripts>
 	</Button>
-	<Frame name="BaudErrorFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true">
+	<Frame name="BaudErrorFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="600" y="500"/>
 		</Size>
@@ -126,7 +126,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<Frame name="$parentListScrollBox">
+			<Frame name="$parentListScrollBox" inherits="BackdropTemplate">
 				<Size>
 					<AbsDimension x="1" y="148"/>
 				</Size>
@@ -213,6 +213,7 @@
 				</Frames>
 				<Scripts>
 					<OnLoad>
+						self:SetBackdropBorderColor(0.37, 0.3, 0.3);
 						self.Entries = 8;
 						for Index = 1, self.Entries do
 							CreateFrame("Button",self:GetName().."Entry"..Index,self,"BaudErrorFrameEntryTemplate"):SetPoint("TOP",0,6-16*Index);
@@ -220,7 +221,7 @@
 					</OnLoad>
 				</Scripts>
 			</Frame>
-			<Frame name="$parentDetailScrollBox">
+			<Frame name="$parentDetailScrollBox" inherits="BackdropTemplate">
 				<Size>
 					<AbsDimension x="500" y="258"/>
 				</Size>
@@ -307,6 +308,7 @@
 				</Frames>
 				<Scripts>
 					<OnLoad>
+						self:SetBackdropBorderColor(0.37, 0.3, 0.3);
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -365,6 +367,7 @@
 		<Scripts>
 			<OnLoad>
 				BaudErrorFrame_OnLoad(self);
+				self:SetBackdropBorderColor(0.37, 0.3, 0.3);
 			</OnLoad>
 			<OnEvent function="BaudErrorFrame_OnEvent"/>
 			<OnShow>
