@@ -190,8 +190,10 @@ DB.ReminderBuffs = {
 		},
 	},
 	SHAMAN = {
-		{	spells = {	-- 闪电之盾
-				[192106] = true,
+		{	spells = {
+				[192106] = true,	-- 闪电之盾
+				[974] = true,		-- 大地之盾
+				[52127] = true,		-- 水之护盾
 			},
 			depend = 192106,
 			combat = true,
