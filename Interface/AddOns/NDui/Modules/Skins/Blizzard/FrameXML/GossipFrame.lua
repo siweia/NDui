@@ -5,22 +5,22 @@ tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
 	local gsub = string.gsub
+
 	NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, "000000", "ffffff")
 	TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, "000000", "ffffff")
 	IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, "000000", "ffffff")
-
 	GossipGreetingText:SetTextColor(1, 1, 1)
-	NPCFriendshipStatusBar:GetRegions():Hide()
-	NPCFriendshipStatusBarNotch1:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch1:SetSize(1, 16)
-	NPCFriendshipStatusBarNotch2:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch2:SetSize(1, 16)
-	NPCFriendshipStatusBarNotch3:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch3:SetSize(1, 16)
-	NPCFriendshipStatusBarNotch4:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch4:SetSize(1, 16)
-	select(7, NPCFriendshipStatusBar:GetRegions()):Hide()
+
+	for i = 1, 4 do
+		local notch = _G["NPCFriendshipStatusBarNotch"..i]
+		if notch then
+			notch:SetColorTexture(0, 0, 0)
+			notch:SetSize(C.mult, 16)
+		end
+	end
 	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
+	B.StripTextures(NPCFriendshipStatusBar)
+	NPCFriendshipStatusBar:SetStatusBarTexture(DB.normTex)
 	B.CreateBDFrame(NPCFriendshipStatusBar, .25)
 
 	GossipFrameInset:Hide()
@@ -39,8 +39,5 @@ tinsert(C.defaultThemes, function()
 			titleButton = _G["GossipTitleButton"..index]
 		end
 	end
-
-	GossipFrame:HookScript("OnShow", function()
-		C_Timer.After(.01, resetFontString)
-	end)
+	hooksecurefunc("GossipFrameUpdate", resetFontString)
 end)
