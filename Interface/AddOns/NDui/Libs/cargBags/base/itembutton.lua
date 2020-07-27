@@ -95,6 +95,7 @@ function ItemButton:Create(tpl, parent)
 	if btnBIT then btnBIT:SetTexture("") end
 	if btnICO then btnICO:SetTexture("") end
 
+	button:RegisterForDrag("LeftButton") -- fix button drag in 9.0
 	hooksecurefunc(button, "UpdateItemContextOverlay", updateContextMatch)
 
 	return button
