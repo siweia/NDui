@@ -18,6 +18,11 @@ end
 
 INSTANCE = 1187 -- 伤逝剧场
 RegisterSeasonSpells(INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 333299) -- 荒芜诅咒
+module:RegisterDebuff(TIER, INSTANCE, 0, 319539) -- 无魂者
+module:RegisterDebuff(TIER, INSTANCE, 0, 326892) -- 锁定
+module:RegisterDebuff(TIER, INSTANCE, 0, 321768) -- 上钩了
+module:RegisterDebuff(TIER, INSTANCE, 0, 323825) -- 攫取裂隙
 
 INSTANCE = 1183 -- 凋魂之殇
 RegisterSeasonSpells(INSTANCE)
@@ -37,9 +42,18 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 322563) -- 被标记的猎物
 
 INSTANCE = 1188 -- 彼界
 RegisterSeasonSpells(INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 320786) -- 势不可挡
+module:RegisterDebuff(TIER, INSTANCE, 0, 334913) -- 死亡之主
+module:RegisterDebuff(TIER, INSTANCE, 0, 325725) -- 寰宇操控
+module:RegisterDebuff(TIER, INSTANCE, 0, 328987) -- 狂热
 
 INSTANCE = 1186 -- 晋升高塔
 RegisterSeasonSpells(INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 338729) -- 充能践踏
+module:RegisterDebuff(TIER, INSTANCE, 0, 338747) -- 净化冲击波
+module:RegisterDebuff(TIER, INSTANCE, 0, 327481) -- 黑暗长枪
+module:RegisterDebuff(TIER, INSTANCE, 0, 322818) -- 失去信心
+module:RegisterDebuff(TIER, INSTANCE, 0, 322817) -- 疑云密布
 
 INSTANCE = 1185 -- 赎罪大厅
 RegisterSeasonSpells(INSTANCE)
@@ -55,6 +69,10 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 326874) -- 脚踝撕咬
 
 INSTANCE = 1189 -- 赤红深渊
 RegisterSeasonSpells(INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 326827) -- 恐惧之缚
+module:RegisterDebuff(TIER, INSTANCE, 0, 326836) -- 镇压诅咒
+module:RegisterDebuff(TIER, INSTANCE, 0, 322554) -- 严惩
+module:RegisterDebuff(TIER, INSTANCE, 0, 321038) -- 烦扰之魂
 
 INSTANCE = 1182 -- 通灵战潮
 RegisterSeasonSpells(INSTANCE)

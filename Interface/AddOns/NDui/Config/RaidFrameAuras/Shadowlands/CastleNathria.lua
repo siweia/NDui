@@ -15,6 +15,9 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 334228) -- 不稳定的喷发
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 329298) -- 暴食瘴气
 
 BOSS = 2422 -- 太阳之王的救赎
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 333002) -- 劣民印记
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 326078) -- 灌注者的恩赐
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 325251) -- 骄傲之罪
 
 BOSS = 2418 -- 技师赛·墨克斯
 
@@ -29,6 +32,12 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 325382) -- 扭曲欲望
 BOSS = 2426 -- 猩红议会
 
 BOSS = 2394 -- 泥拳
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 335470) -- 锁链猛击
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 339181) -- 锁链猛击
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 331209) -- 怨恨凝视
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 335293) -- 锁链联结
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 335270) -- 捆住你们
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 335295) -- 粉碎锁链
 
 BOSS = 2425 -- 石裔干将
 
