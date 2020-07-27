@@ -234,16 +234,17 @@ f:SetScript("OnEvent", function()
 
 	if IsAddOnLoaded("NDui") then
 		local B, _, _, DB = unpack(NDui)
-		B.CreateMF(BaudErrorFrame)
 		if DB.isDeveloper then
 			RegisterTaintEvents(BaudErrorFrame)
 		end
-		BaudErrorFrame:SetBackdrop(nil)
+		B.CreateMF(BaudErrorFrame)
 		B.SetBD(BaudErrorFrame)
-		BaudErrorFrameListScrollBox:SetBackdrop(nil)
+
+		BaudErrorFrameBackground:SetAlpha(0)
+		BaudErrorFrameDetailScrollBoxBackground:SetAlpha(0)
 		BaudErrorFrameListScrollBoxHighlightTexture:SetVertexColor(DB.r, DB.g, DB.b, .25)
-		B.StripTextures(BaudErrorFrameDetailScrollBox)
 		B.CreateBDFrame(BaudErrorFrameDetailScrollBox, .25)
+
 		B.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
 		B.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
 		B.Reskin(BaudErrorFrameClearButton)
