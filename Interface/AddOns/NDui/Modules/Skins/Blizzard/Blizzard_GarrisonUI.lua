@@ -304,6 +304,32 @@ local function ReskinMissionFrame(self)
 	hooksecurefunc(FollowerList, "ShowFollower", UpdateFollowerAbilities)
 end
 
+-- Missions board in 9.0
+local function reskinAbilityIcon(self, anchor, yOffset)
+	self:ClearAllPoints()
+	self:SetPoint(anchor, self:GetParent().squareBG, "LEFT", -3, yOffset)
+	self.Border:SetAlpha(0)
+	self.CircleMask:Hide()
+	B.ReskinIcon(self.Icon)
+end
+local function reskinFollowerBoard(self, group)
+	for socketTexture in self[group.."SocketFramePool"]:EnumerateActive() do
+		socketTexture:SetAlpha(0)
+	end
+	for frame in self[group.."FramePool"]:EnumerateActive() do
+		if not frame.styled then
+			B.ReskinGarrisonPortrait(frame)
+			reskinAbilityIcon(frame.AbilityOne, "BOTTOMRIGHT", 1)
+			reskinAbilityIcon(frame.AbilityTwo, "TOPRIGHT", -1)
+
+			frame.styled = true
+		end
+	end
+end
+local function ReskinMissionBoards(self)
+	reskinFollowerBoard(self, "enemy")
+	reskinFollowerBoard(self, "follower")
+end
 
 C.themes["Blizzard_GarrisonUI"] = function()
 	-- Tooltips
@@ -862,35 +888,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
 	CovenantMissionFrame.FollowerTab.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
 
-	local function reskinAbilityIcon(self, anchor, yOffset)
-		self:ClearAllPoints()
-		self:SetPoint(anchor, self:GetParent().squareBG, "LEFT", -3, yOffset)
-		self.Border:SetAlpha(0)
-		self.CircleMask:Hide()
-		B.ReskinIcon(self.Icon)
-	end
-
-	local function reskinFollowerBoard(self, group)
-		for socketTexture in self[group.."SocketFramePool"]:EnumerateActive() do
-			socketTexture:SetAlpha(0)
-		end
-		for frame in self[group.."FramePool"]:EnumerateActive() do
-			if not frame.styled then
-				B.ReskinGarrisonPortrait(frame)
-				reskinAbilityIcon(frame.AbilityOne, "BOTTOMRIGHT", 1)
-				reskinAbilityIcon(frame.AbilityTwo, "TOPRIGHT", -1)
-
-				frame.styled = true
-			end
-		end
-	end
-
-	local function reskinMissionBoards(self)
-		reskinFollowerBoard(self, "enemy")
-		reskinFollowerBoard(self, "follower")
-	end
-	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", reskinMissionBoards)
-	CovenantMissionFrame.MissionComplete.Board:HookScript("OnShow", reskinMissionBoards)
+	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", ReskinMissionBoards)
+	CovenantMissionFrame.MissionComplete.Board:HookScript("OnShow", ReskinMissionBoards)
 
 	hooksecurefunc(CovenantMissionFrame.MissionComplete.RewardsScreen, "SetRewards", function(self)
 		for rewardFrame in self.rewardsPool:EnumerateActive() do
