@@ -742,9 +742,30 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		if waiting then return end
 
 		for i = 1, 3 do
-			local recruit = FollowerSelection["Recruit"..i]
-			local portrait = recruit.PortraitFrame
+			local frame = FollowerSelection["Recruit"..i]
+			local portrait = frame.PortraitFrame
 			portrait.squareBG:SetBackdropBorderColor(portrait.LevelBorder:GetVertexColor())
+
+			if frame:IsShown() then
+				local traits = frame.Traits.Entries
+				if traits then
+					for index = 1, #traits do
+						local trait = traits[index]
+						if not trait.bg then
+							trait.bg = B.ReskinIcon(trait.Icon)
+						end
+					end
+				end
+				local abilities = frame.Abilities.Entries
+				if abilities then
+					for index = 1, #abilities do
+						local ability = abilities[index]
+						if not ability.bg then
+							ability.bg = B.ReskinIcon(ability.Icon)
+						end
+					end
+				end
+			end
 		end
 	end)
 

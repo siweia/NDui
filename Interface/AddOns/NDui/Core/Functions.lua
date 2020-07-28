@@ -1211,9 +1211,9 @@ do
 		B.StripTextures(self)
 		local bg = B.SetBD(self)
 		local frameName = self.GetName and self:GetName()
-		local portrait = self.portrait or _G[frameName.."Portrait"]
+		local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName.."Portrait"])
 		if portrait then portrait:SetAlpha(0) end
-		local closeButton = self.CloseButton or _G[frameName.."CloseButton"]
+		local closeButton = self.CloseButton or (frameName and _G[frameName.."CloseButton"])
 		if closeButton then B.ReskinClose(closeButton) end
 		return bg
 	end
