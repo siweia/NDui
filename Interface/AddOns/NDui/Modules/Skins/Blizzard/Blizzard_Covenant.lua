@@ -30,21 +30,26 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 	end)
 end
 
-C.themes["Blizzard_CovenantSanctum"] = function()
-	local function reskinTalentsList(self)
-		for frame in self.talentPool:EnumerateActive() do
-			if not frame.bg then
-				frame.Border:SetAlpha(0)
-				frame.Background:SetAlpha(0)
-				frame.bg = B.CreateBDFrame(frame, .25)
-				frame.bg:SetInside()
-				frame.Highlight:SetColorTexture(1, 1, 1, .25)
-				frame.Highlight:SetInside(frame.bg)
-				B.ReskinIcon(frame.Icon)
-				frame.Icon:SetPoint("TOPLEFT", 7, -7)
-			end
+local function reskinTalentsList(self)
+	for frame in self.talentPool:EnumerateActive() do
+		if not frame.bg then
+			frame.Border:SetAlpha(0)
+			frame.Background:SetAlpha(0)
+			frame.bg = B.CreateBDFrame(frame, .25)
+			frame.bg:SetInside()
+			frame.Highlight:SetColorTexture(1, 1, 1, .25)
+			frame.Highlight:SetInside(frame.bg)
+			B.ReskinIcon(frame.Icon)
+			frame.Icon:SetPoint("TOPLEFT", 7, -7)
 		end
 	end
+end
+
+C.themes["Blizzard_CovenantSanctum"] = function()
+	B.ReskinClose(CovenantSanctumFrameCloseButton)
+	B.ReskinTab(CovenantSanctumFrameTab1)
+	B.ReskinTab(CovenantSanctumFrameTab2)
+	CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
 
 	CovenantSanctumFrame:HookScript("OnShow", function(self)
 		if not self.bg then
@@ -65,8 +70,4 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 			hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
 		end
 	end)
-	B.ReskinClose(CovenantSanctumFrameCloseButton)
-	B.ReskinTab(CovenantSanctumFrameTab1)
-	B.ReskinTab(CovenantSanctumFrameTab2)
-	CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
 end
