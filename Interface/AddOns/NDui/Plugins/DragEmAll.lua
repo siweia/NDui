@@ -88,6 +88,7 @@ local lodFrames = {
 	Blizzard_MacroUI			= { ["MacroFrame"] = false },
 	Blizzard_ObliterumUI		= { ["ObliterumForgeFrame"] = false },
 	Blizzard_OrderHallUI		= { ["OrderHallTalentFrame"] = false, },
+	Blizzard_RuneforgeUI		= { ["RuneforgeFrame"] = false, },
 	Blizzard_ScrappingMachineUI	= { ["ScrappingMachineFrame"] = false },
 	Blizzard_TalentUI			= { ["PlayerTalentFrame"] = false, ["PVPTalentPrestigeLevelDialog"] = false, },
 	Blizzard_TimeManager		= { ["TimeManagerFrame"] = false },
