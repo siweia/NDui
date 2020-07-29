@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local debugMode = true
+local debugMode = false
 local completedQuest, initComplete = {}
 local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
 local mod, tonumber, pairs, floor = mod, tonumber, pairs, math.floor
