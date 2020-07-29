@@ -427,11 +427,10 @@ local function AttemptAutoComplete(event)
 		local questID, popUpType = GetAutoQuestPopUp(1)
 		local _, _, worldQuest = C_QuestLog.GetQuestTagInfo(questID)
 		if not worldQuest then
-			local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
 			if(popUpType == "OFFER") then
-				ShowQuestOffer(questLogIndex)
+				ShowQuestOffer(questID)
 			else
-				ShowQuestComplete(questLogIndex)
+				ShowQuestComplete(questID)
 			end
 		end
 	else
