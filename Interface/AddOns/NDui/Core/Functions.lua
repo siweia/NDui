@@ -776,8 +776,8 @@ do
 		"MiddleTex",
 		"Center",
 	}
-	function B:Reskin(noHighlight)
-		if self.SetNormalTexture then self:SetNormalTexture("") end
+	function B:Reskin(noHighlight, override)
+		if self.SetNormalTexture and not override then self:SetNormalTexture("") end
 		if self.SetHighlightTexture then self:SetHighlightTexture("") end
 		if self.SetPushedTexture then self:SetPushedTexture("") end
 		if self.SetDisabledTexture then self:SetDisabledTexture("") end
