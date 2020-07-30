@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
-local strfind, strmatch, gsub = string.find, string.match, string.gsub
+local strfind, strmatch, gsub, strrep = string.find, string.match, string.gsub, string.rep
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
 local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
@@ -132,7 +132,7 @@ end
 
 -- Block addon msg
 local addonBlockList = {
-	"任务进度提示", "%[接受任务%]", "%(任务完成%)", "<大脚", "【爱不易】", "EUI[:_]", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*", "<iLvl>", ("%-"):rep(20),
+	"任务进度提示", "%[接受任务%]", "%(任务完成%)", "<大脚", "【爱不易】", "EUI[:_]", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*", "<iLvl>", strrep("%-", 20),
 	"<小队物品等级:.+>", "<LFG>", "进度:", "属性通报", "汐寒", "wow.+兑换码", "wow.+验证码", "【有爱插件】", "：.+>", "|Hspell.+=>"
 }
 
@@ -190,9 +190,9 @@ end
 
 local function isItemHasGem(link)
 	local stats = GetItemStats(link)
-	for index in pairs(stats) do
-		if strfind(index, "EMPTY_SOCKET_") then
-			return "|TInterface\\ItemSocketingFrame\\UI-EmptySocket-Prismatic:0|t"
+	for stat, count in pairs(stats) do
+		if strfind(stat, "EMPTY_SOCKET_") then
+			return strrep("|TInterface\\ItemSocketingFrame\\UI-EmptySocket-Prismatic:0|t", count)
 		end
 	end
 	return ""
