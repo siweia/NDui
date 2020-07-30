@@ -5,6 +5,8 @@ local module = B:GetModule("Maps")
 local strmatch, strfind, strupper = string.match, string.find, string.upper
 local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
 local cr, cg, cb = DB.r, DB.g, DB.b
+local LE_GARRISON_TYPE_6_0 = Enum.GarrisonType.Type_6_0
+local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
 
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
@@ -46,9 +48,9 @@ end
 
 function module:ReskinRegions()
 	-- Garrison
-	GarrisonLandingPageMinimapButton:ClearAllPoints()
-	GarrisonLandingPageMinimapButton:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
 	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(self)
+		self:ClearAllPoints()
+		self:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
 		self:GetNormalTexture():SetTexture(DB.garrTex)
 		self:GetPushedTexture():SetTexture(DB.garrTex)
 		self:GetHighlightTexture():SetTexture(DB.garrTex)
