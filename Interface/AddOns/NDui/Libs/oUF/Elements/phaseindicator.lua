@@ -46,14 +46,14 @@ local function Update(self, event, unit)
 		element:Hide()
 	end
 
-	--[[ Callback: PhaseIndicator:PostUpdate(isInSamePhase)
+	--[[ Callback: PhaseIndicator:PostUpdate(phaseReason)
 	Called after the element has been updated.
 
 	* self          - the PhaseIndicator element
-	* isInSamePhase - indicates whether the unit is in the same phase as the player (boolean)
+	* phaseReason - indicates whether the unit is in the same phase as the player (number)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(isInSamePhase)
+		return element:PostUpdate(phaseReason)
 	end
 end
 
