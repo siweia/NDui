@@ -114,6 +114,7 @@ oUF.Tags.Methods["fulllevel"] = function(unit)
 	local level = UnitEffectiveLevel(unit)
 	if UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) then
 		level = UnitBattlePetLevel(unit)
+		realLevel = level
 	end
 
 	local color = B.HexRGB(GetCreatureDifficultyColor(level))
