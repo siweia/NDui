@@ -30,7 +30,7 @@ C.themes["Blizzard_InspectUI"] = function()
 		slot.icon:SetInside()
 		slot.bg = B.CreateBDFrame(slot.icon, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		B.HookIconBorderColor(slot.IconBorder)
+		B.ReskinIconBorder(slot.IconBorder)
 
 		if not slot.Eye then
 			slot.Eye = slot:CreateTexture()

@@ -28,7 +28,7 @@ tinsert(C.defaultThemes, function()
 		button:SetPushedTexture("")
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.CreateBDFrame(button)
-		B.HookIconBorderColor(button.IconBorder)
+		B.ReskinIconBorder(button.IconBorder)
 
 		if not button.Eye then
 			button.Eye = button:CreateTexture()

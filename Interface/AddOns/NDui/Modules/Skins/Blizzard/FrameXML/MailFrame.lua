@@ -82,7 +82,7 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(button)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.CreateBDFrame(button, .25)
-		B.HookIconBorderColor(button.IconBorder)
+		B.ReskinIconBorder(button.IconBorder)
 	end
 
 	hooksecurefunc("SendMailFrame_Update", function()
@@ -100,7 +100,7 @@ tinsert(C.defaultThemes, function()
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.icon:SetTexCoord(texL, texR, texT, texB)
 		button.bg = B.CreateBDFrame(button, .25)
-		B.HookIconBorderColor(button.IconBorder)
+		B.ReskinIconBorder(button.IconBorder)
 	end
 
 	MailFont_Large:SetTextColor(1, 1, 1)

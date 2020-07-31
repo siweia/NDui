@@ -43,7 +43,7 @@ tinsert(C.defaultThemes, function()
 
 		icon:SetInside()
 		button.bg = B.ReskinIcon(icon)
-		B.HookIconBorderColor(button.IconBorder)
+		B.ReskinIconBorder(button.IconBorder)
 		button.IconOverlay:SetInside()
 		button.IconOverlay2:SetInside()
 

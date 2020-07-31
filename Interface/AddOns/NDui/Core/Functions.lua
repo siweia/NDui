@@ -686,11 +686,11 @@ do
 	local function resetIconBorderColor(self)
 		self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 	end
-	function B:HookIconBorderColor()
+	function B:ReskinIconBorder()
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
 		if not self.__owner.bg then return end
-		if self.__owner.useCircularIconBorder then
+		if self.__owner.useCircularIconBorder then -- for auction item display
 			hooksecurefunc(self, "SetAtlas", updateIconBorderColorByAtlas)
 		else
 			hooksecurefunc(self, "SetVertexColor", updateIconBorderColor)

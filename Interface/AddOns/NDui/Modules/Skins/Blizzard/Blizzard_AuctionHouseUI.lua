@@ -21,7 +21,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 		itemButton.Highlight:SetColorTexture(1, 1, 1, .25)
 		itemButton.Highlight:SetAllPoints(itemButton.Icon)
 		itemButton.bg = B.ReskinIcon(itemButton.Icon)
-		B.HookIconBorderColor(itemButton.IconBorder)
+		B.ReskinIconBorder(itemButton.IconBorder)
 
 		B.ReskinInput(frame.QuantityInput.InputBox)
 		B.Reskin(frame.QuantityInput.MaxButton)
@@ -118,7 +118,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 		local itemButton = itemDisplay.ItemButton
 		if itemButton.CircleMask then itemButton.CircleMask:Hide() end
 		itemButton.bg = B.ReskinIcon(itemButton.Icon)
-		B.HookIconBorderColor(itemButton.IconBorder)
+		B.ReskinIconBorder(itemButton.IconBorder)
 	end
 
 	local function reskinItemList(frame, hasHeader)
