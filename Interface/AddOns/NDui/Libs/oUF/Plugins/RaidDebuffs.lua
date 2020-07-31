@@ -134,8 +134,8 @@ local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, 
 		end
 
 		local c = DispellColor[debuffType] or DispellColor.none
-		if rd.ShowDebuffBorder and rd.Shadow then
-			rd.Shadow:SetBackdropBorderColor(c[1], c[2], c[3])
+		if rd.ShowDebuffBorder and rd.__shadow then
+			rd.__shadow:SetBackdropBorderColor(c[1], c[2], c[3])
 		end
 
 		if rd.glowFrame then

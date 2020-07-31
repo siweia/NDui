@@ -81,7 +81,7 @@ function UF:CreateHealthBar(self)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
 	health.backdrop = B.SetBD(health, 0) -- don't mess up with libs
-	health.shadow = health.backdrop.Shadow
+	health.shadow = health.backdrop.__shadow
 	B:SmoothBar(health)
 
 	local bg = health:CreateTexture(nil, "BACKGROUND")
