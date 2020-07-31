@@ -278,7 +278,7 @@ function UF:CreatePowerText(self)
 	local mystyle = self.mystyle
 	if mystyle == "raid" then
 		ppval:SetScale(NDuiDB["UFs"]["RaidTextScale"])
-	elseif mystyle == "player" then
+	elseif mystyle == "player" or mystyle == "target" then
 		ppval:SetPoint("RIGHT", -3, NDuiDB["UFs"]["PlayerPowerOffset"])
 	elseif mystyle == "focus" then
 		ppval:SetPoint("RIGHT", -3, NDuiDB["UFs"]["FocusPowerOffset"])
