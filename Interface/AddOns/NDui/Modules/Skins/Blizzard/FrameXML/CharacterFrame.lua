@@ -85,7 +85,7 @@ tinsert(C.defaultThemes, function()
 		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
 		slot.IconOverlay:SetAtlas("Nzoth-inventory-icon")
 		slot.IconOverlay:SetInside()
-		B.HookIconBorderColor(slot.IconBorder)
+		B.ReskinIconBorder(slot.IconBorder)
 
 		local popout = slot.popoutButton
 		popout:SetNormalTexture("")

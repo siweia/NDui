@@ -43,7 +43,7 @@ tinsert(C.defaultThemes, function()
 			newItemTexture:SetSize(1, 1)
 
 			button.searchOverlay:SetOutside()
-			B.HookIconBorderColor(button.IconBorder)
+			B.ReskinIconBorder(button.IconBorder)
 		end
 
 		local f = B.SetBD(con)

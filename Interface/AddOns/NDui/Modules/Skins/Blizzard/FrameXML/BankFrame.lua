@@ -31,7 +31,7 @@ tinsert(C.defaultThemes, function()
 
 		bu.icon:SetTexCoord(unpack(DB.TexCoord))
 		bu.bg = B.CreateBDFrame(bu.icon, .25)
-		B.HookIconBorderColor(bu.IconBorder)
+		B.ReskinIconBorder(bu.IconBorder)
 
 		local questTexture = bu.IconQuestTexture
 		questTexture:SetDrawLayer("BACKGROUND")
@@ -52,7 +52,7 @@ tinsert(C.defaultThemes, function()
 
 		bag.icon:SetTexCoord(unpack(DB.TexCoord))
 		bag.bg = B.CreateBDFrame(bag.icon, .25)
-		B.HookIconBorderColor(bag.IconBorder)
+		B.ReskinIconBorder(bag.IconBorder)
 	end
 
 	BankItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)

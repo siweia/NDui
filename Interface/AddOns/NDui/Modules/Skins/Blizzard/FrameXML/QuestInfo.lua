@@ -107,7 +107,7 @@ tinsert(C.defaultThemes, function()
 		local bu = rewardsFrame.RewardButtons[index]
 		if not bu.restyled then
 			restyleRewardButton(bu, rewardsFrame == MapQuestInfoRewardsFrame)
-			B.HookIconBorderColor(bu.IconBorder)
+			B.ReskinIconBorder(bu.IconBorder)
 
 			bu.restyled = true
 		end
