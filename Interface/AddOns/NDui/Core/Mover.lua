@@ -267,7 +267,7 @@ local function CreateConsole()
 
 	local frame = CreateFrame("Frame", nil, f)
 	frame:SetSize(212, 73)
-	frame:SetPoint("TOP", f, "BOTTOM", 0, -2)
+	frame:SetPoint("TOP", f, "BOTTOM", 0, -3)
 	B.SetBD(frame)
 	f.__trimText = B.CreateFS(frame, 12, NONE, "system", "BOTTOM", 0, 5)
 
