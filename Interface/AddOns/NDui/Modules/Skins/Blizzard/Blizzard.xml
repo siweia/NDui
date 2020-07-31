@@ -46,4 +46,5 @@
 	<Script file="Blizzard_TrainerUI.lua"/>
 	<Script file="Blizzard_Tutorial.lua"/>
 	<Script file="Blizzard_VoidStorageUI.lua"/>
+	<Script file="Blizzard_WeeklyRewards.lua"/>
 </Ui>
