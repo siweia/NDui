@@ -5,8 +5,12 @@ local module = B:GetModule("AurasTable")
 local TIER = 9
 local INSTANCE = 1190 -- 纳斯利亚堡
 local BOSS
-
+-- Credit: Luckyone, ElvUI
 BOSS = 2393 -- 啸翼
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 328897) -- 抽干
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 330713) -- 耳鸣之痛
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 329370) -- 致命降临
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 336494) -- 刺耳回声
 
 BOSS = 2429 -- 猎手阿尔迪莫
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 335304) -- 寻罪箭
@@ -53,5 +57,12 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 335270) -- 捆住你们
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 335295) -- 粉碎锁链
 
 BOSS = 2425 -- 石裔干将
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 334498) -- 地震岩层
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 333913) -- 邪恶撕裂
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 337643) -- 立足不稳
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 334765) -- 石化碎裂
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 333377) -- 邪恶印记
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 334616) -- 石化
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 334541) -- 石化诅咒
 
 BOSS = 2424 -- 德纳修斯大帝
