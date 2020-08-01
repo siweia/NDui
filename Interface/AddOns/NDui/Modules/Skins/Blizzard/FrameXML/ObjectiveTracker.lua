@@ -174,6 +174,37 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", B.AffixesSetup)
 
+	-- Block in jail tower
+	local mawBuffsBlock = ScenarioBlocksFrame.MawBuffsBlock
+	local bg = B.SetBD(mawBuffsBlock, nil, 20, -10, -20, 10)
+	bg:SetBackdropColor(0, .5, .5, .25)
+
+	local blockContainer = mawBuffsBlock.Container
+	B.StripTextures(blockContainer)
+	blockContainer:GetPushedTexture():SetAlpha(0)
+	blockContainer:GetHighlightTexture():SetAlpha(0)
+
+	local blockList = blockContainer.List
+	blockList.__bg = bg
+	blockList:HookScript("OnShow", function(self)
+		self.__bg:SetBackdropBorderColor(1, .8, 0, .5)
+
+		for mawBuff in self.buffPool:EnumerateActive() do
+			if mawBuff:IsShown() and not mawBuff.bg then
+				mawBuff.Border:SetAlpha(0)
+				mawBuff.CircleMask:Hide()
+				mawBuff.CountRing:SetAlpha(0)
+				mawBuff.HighlightBorder:SetColorTexture(1, 1, 1, .25)
+				mawBuff.bg = B.ReskinIcon(mawBuff.Icon)
+			end
+		end
+	end)
+	blockList:HookScript("OnHide", function(self)
+		self.__bg:SetBackdropBorderColor(0, 0, 0, 1)
+	end)
+	B.StripTextures(blockList)
+	B.SetBD(blockList)
+
 	-- Minimize Button
 	local function reskinMinimizeButton(button)
 		B.ReskinExpandOrCollapse(button)
