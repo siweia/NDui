@@ -168,7 +168,7 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = customUnits[name] or customUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	local status = self.feedbackUnit and UnitThreatSituation(self.feedbackUnit, unit) or false -- just in case
+	local status = UnitThreatSituation(self.feedbackUnit, unit) or false -- just in case
 	local customColor = NDuiDB["Nameplate"]["CustomColor"]
 	local secureColor = NDuiDB["Nameplate"]["SecureColor"]
 	local transColor = NDuiDB["Nameplate"]["TransColor"]
@@ -268,7 +268,7 @@ end
 function UF:UpdateTargetIndicator()
 	local style = NDuiDB["Nameplate"]["TargetIndicator"]
 	local element = self.TargetIndicator
-	local isNameOnly = self.isNameOnly
+	local isFriendly = self.isFriendly
 	if style == 1 then
 		element:Hide()
 	else
@@ -285,7 +285,7 @@ function UF:UpdateTargetIndicator()
 		elseif style == 4 then
 			element.TopArrow:Hide()
 			element.RightArrow:Hide()
-			if isNameOnly then
+			if isFriendly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -295,7 +295,7 @@ function UF:UpdateTargetIndicator()
 		elseif style == 5 then
 			element.TopArrow:Show()
 			element.RightArrow:Hide()
-			if isNameOnly then
+			if isFriendly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -305,7 +305,7 @@ function UF:UpdateTargetIndicator()
 		elseif style == 6 then
 			element.TopArrow:Hide()
 			element.RightArrow:Show()
-			if isNameOnly then
+			if isFriendly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -344,7 +344,7 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
 	frame.nameGlow:SetVertexColor(0, .6, 1)
 	frame.nameGlow:SetBlendMode("ADD")
-	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
+	frame.nameGlow:SetPoint("CENTER", 0, 10)
 
 	self.TargetIndicator = frame
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
@@ -757,97 +757,65 @@ function UF:RefreshNameplats()
 		nameplate.Castbar.Text:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
 		nameplate.healthValue:UpdateTag()
-		UF.UpdateNameplateAuras(nameplate)
-		UF.UpdateTargetIndicator(nameplate)
+		nameplate.Auras.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
+		UF:UpdateTargetIndicator(nameplate)
 		UF.UpdateTargetChange(nameplate)
 	end
 	UF:UpdateClickableSize()
 end
 
-function UF:RefreshAllPlates()
-	if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
-		UF:ResizePlayerPlate()
-	end
-	UF:RefreshNameplats()
-end
-
-local DisabledElements = {
-	"Health", "Castbar", "HealPredictionAndAbsorb", "PvPClassificationIndicator", "ThreatIndicator"
-}
-function UF:UpdatePlateByType()
+function UF:UpdatePlateByType(self)
 	local name = self.nameText
 	local hpval = self.healthValue
-	local title = self.npcTitle
 	local raidtarget = self.RaidTargetIndicator
-	local classify = self.ClassifyIndicator
-	local questIcon = self.questIcon
 
-	name:ClearAllPoints()
-	raidtarget:ClearAllPoints()
-
-	if self.isNameOnly then
-		for _, element in pairs(DisabledElements) do
-			if self:IsElementEnabled(element) then
-				self:DisableElement(element)
-			end
+	if self.isFriendly then
+		if self:IsElementEnabled("Health") then
+			self:DisableElement("Health")
+		end
+		if self:IsElementEnabled("Castbar") then
+			self:DisableElement("Castbar")
+		end
+		if self:IsElementEnabled("HealPredictionAndAbsorb") then
+			self:DisableElement("HealPredictionAndAbsorb")
+		end
+		if self:IsElementEnabled("PvPClassificationIndicator") then
+			self:DisableElement("PvPClassificationIndicator")
 		end
 
 		name:SetJustifyH("CENTER")
 		self:Tag(name, "[nplevel][color][name]")
 		name:UpdateTag()
-		name:SetPoint("CENTER", self, "BOTTOM")
-		hpval:Hide()
-		title:Show()
 
-		raidtarget:SetPoint("TOP", title, "BOTTOM", 0, -5)
+		hpval:Hide()
+
+		raidtarget:ClearAllPoints()
+		raidtarget:SetPoint("TOP", name, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
-		classify:Hide()
-		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
 	else
-		for _, element in pairs(DisabledElements) do
-			if not self:IsElementEnabled(element) then
-				self:EnableElement(element)
-			end
+		if not self:IsElementEnabled("Health") then
+			self:EnableElement("Health")
+		end
+		if not self:IsElementEnabled("Castbar") then
+			self:EnableElement("Castbar")
+		end
+		if not self:IsElementEnabled("HealPredictionAndAbsorb") then
+			self:EnableElement("HealPredictionAndAbsorb")
+		end
+		if not self:IsElementEnabled("PvPClassificationIndicator") then
+			self:EnableElement("PvPClassificationIndicator")
 		end
 
 		name:SetJustifyH("LEFT")
 		self:Tag(name, "[nplevel][name]")
 		name:UpdateTag()
-		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
-		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
-		hpval:Show()
-		title:Hide()
 
+		hpval:Show()
+
+		raidtarget:ClearAllPoints()
 		raidtarget:SetPoint("RIGHT", self, "LEFT", -3, 0)
 		raidtarget:SetParent(self.Health)
-		classify:Show()
-		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end
 	end
-
-	UF.UpdateTargetIndicator(self)
-end
-
-function UF:RefreshPlateType(unit)
-	self.reaction = UnitReaction(unit, "player")
-	self.isFriendly = self.reaction and self.reaction >= 5
-	self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or false
-
-	if self.previousType == nil or self.previousType ~= self.isNameOnly then
-		UF.UpdatePlateByType(self)
-		self.previousType = self.isNameOnly
-	end
-end
-
-function UF:OnUnitFactionChanged(unit)
-	local nameplate = C_NamePlate_GetNamePlateForUnit(unit, issecure())
-	local unitFrame = nameplate and nameplate.unitFrame
-	if unitFrame and unitFrame.unitName then
-		UF.RefreshPlateType(unitFrame, unit)
-	end
-end
-
-function UF:RefreshPlateOnFactionChanged()
-	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
 end
 
 function UF:PostUpdatePlates(event, unit)
@@ -861,6 +829,8 @@ function UF:PostUpdatePlates(event, unit)
 		end
 		self.npcID = B.GetNPCID(self.unitGUID)
 		self.isPlayer = UnitIsPlayer(unit)
+		self.reaction = UnitReaction(unit, "player")
+		self.isFriendly = self.reaction and self.reaction >= 5
 
 		local blizzPlate = self:GetParent().UnitFrame
 		self.widget = blizzPlate.WidgetContainer
@@ -872,14 +842,12 @@ function UF:PostUpdatePlates(event, unit)
 		end
 	end
 
-	if event ~= "NAME_PLATE_UNIT_REMOVED" then
-		UF.UpdateUnitPower(self)
-		UF.UpdateTargetChange(self)
-		UF.UpdateQuestUnit(self, event, unit)
-		UF.UpdateUnitClassify(self, unit)
-		UF.UpdateDungeonProgress(self, unit)
-		UF:UpdateClassPowerAnchor()
-	end
+	UF:UpdatePlateByType(self)
+	UF.UpdateUnitPower(self)
+	UF:UpdateTargetIndicator(self)
+	UF.UpdateTargetChange(self)
+	UF.UpdateQuestUnit(self, event, unit)
+	UF.UpdateUnitClassify(self, unit)
 	UF.UpdateExplosives(self, event, unit)
 end
 
