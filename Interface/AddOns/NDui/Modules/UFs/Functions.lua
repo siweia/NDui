@@ -142,9 +142,9 @@ function UF:CreateHealthText(self)
 		end
 		name:SetScale(NDuiDB["UFs"]["RaidTextScale"])
 	elseif mystyle == "nameplate" then
-		name:SetWidth(self:GetWidth()*.85)
 		name:ClearAllPoints()
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
 	else
 		name:SetWidth(self:GetWidth()*.55)
 	end
