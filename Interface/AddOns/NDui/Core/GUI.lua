@@ -240,7 +240,6 @@ local defaultSettings = {
 		ColorBorder = false,
 		QuestIndicator = true,
 		NameOnlyMode = false,
-		PPGCDTicker = true,
 	},
 	Skins = {
 		DBM = true,
@@ -787,6 +786,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true},
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
 		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
+		{1, "Nameplate", "NameOnlyMode", "|cff00cc4c"..L["NameOnlyMode"].."*", nil, nil, nil, L["NameOnlyModeTip"]},
 		{},--blank
 		{1, "Nameplate", "CustomUnitColor", "|cff00cc4c"..L["CustomUnitColor"].."*", nil, nil, updateCustomUnitList, L["CustomUnitColorTip"]},
 		{5, "Nameplate", "CustomColor", L["Custom Color"].."*", 2},

@@ -830,7 +830,7 @@ function UF:PostUpdatePlates(event, unit)
 		self.npcID = B.GetNPCID(self.unitGUID)
 		self.isPlayer = UnitIsPlayer(unit)
 		self.reaction = UnitReaction(unit, "player")
-		self.isFriendly = self.reaction and self.reaction >= 5
+		self.isFriendly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.reaction and self.reaction >= 5
 
 		local blizzPlate = self:GetParent().UnitFrame
 		self.widget = blizzPlate.WidgetContainer
