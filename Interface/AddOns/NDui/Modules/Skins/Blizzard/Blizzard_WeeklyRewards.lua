@@ -12,7 +12,10 @@ local function ReskinActivityFrame(frame, isObject)
 			frame.Border:SetPoint("LEFT", frame, "RIGHT", 3, 0)
 		end
 	end
-	B.CreateBDFrame(frame, 1)
+
+	if frame.Background then
+		B.CreateBDFrame(frame.Background, 1)
+	end
 end
 
 C.themes["Blizzard_WeeklyRewards"] = function()
