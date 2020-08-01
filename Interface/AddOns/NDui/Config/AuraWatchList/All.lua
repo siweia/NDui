@@ -156,10 +156,6 @@ local list = {
 		{AuraID = 280433, UnitID = "player"},	-- 呼啸狂沙
 		{AuraID = 271711, UnitID = "player"},	-- 压倒能量
 		{AuraID = 272733, UnitID = "player"},	-- 弦之韵律
-		--{AuraID = 268953, UnitID = "player", Text = L["Crit"]},	-- 元素回旋 爆击
-		--{AuraID = 268954, UnitID = "player", Text = L["Haste"]},	-- 急速
-		--{AuraID = 268955, UnitID = "player", Text = L["Mastery"]},	-- 精通
-		--{AuraID = 268956, UnitID = "player", Text = L["Versa"]},	-- 全能
 		{AuraID = 280780, UnitID = "player"},	-- 战斗荣耀
 		{AuraID = 280787, UnitID = "player"},	-- 反击之怒
 		{AuraID = 280385, UnitID = "player"},	-- 压力渐增
@@ -197,6 +193,8 @@ local list = {
 		{AuraID = 317020, UnitID = "player", Flash = true, Combat = true},	-- 虚空回响
 		{AuraID = 318378, UnitID = "player", Flash = true},	-- 坚定决心，橙披
 		{AuraID = 317859, UnitID = "player"},	-- 龙族强化，橙披
+		-- 盟约
+		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
