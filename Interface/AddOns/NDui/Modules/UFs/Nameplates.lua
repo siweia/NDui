@@ -746,7 +746,7 @@ function UF:UpdateNameplateAuras()
 	element:SetHeight((element.size + element.spacing) * 2)
 end
 
-function UF:RefreshAllPlates()
+function UF:RefreshNameplats()
 	for nameplate in pairs(platesList) do
 		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
 		nameplate.nameText:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
@@ -760,6 +760,13 @@ function UF:RefreshAllPlates()
 		UF.UpdateTargetChange(nameplate)
 	end
 	UF:UpdateClickableSize()
+end
+
+function UF:RefreshAllPlates()
+	if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+		UF:ResizePlayerPlate()
+	end
+	UF:RefreshNameplats()
 end
 
 local DisabledElements = {
@@ -856,7 +863,6 @@ end
 
 -- Player Nameplate
 local auras = B:GetModule("Auras")
-local margin = C.UFs.BarMargin
 
 function UF:PlateVisibility(event)
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
@@ -877,16 +883,20 @@ function UF:ResizePlayerPlate()
 	if plate then
 		local pWidth = NDuiDB["Nameplate"]["PPWidth"]
 		local pHeight, ppHeight = NDuiDB["Nameplate"]["PPHeight"], NDuiDB["Nameplate"]["PPPHeight"]
-		local iconSize = (pWidth - margin*4)/5
+		local iconSize = (pWidth - C.margin*4)/5
 		plate:SetSize(pWidth, pHeight + ppHeight + C.mult)
 		plate.mover:SetSize(pWidth, pHeight + ppHeight + C.mult)
 		plate.Health:SetHeight(pHeight)
 		plate.Power:SetHeight(ppHeight)
+		local classpower = _G.oUF_ClassPowerBar
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
-			_G.oUF_ClassPowerBar:SetHeight(pHeight)
-			for i = 1, 6 do
+			local cpWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or pWidth
+			classpower:SetSize(cpWidth, pHeight)
+			local max = bars.__max
+			for i = 1, max do
 				bars[i]:SetHeight(pHeight)
+				bars[i]:SetWidth((cpWidth - (max-1)*C.margin) / max)
 			end
 		end
 		if plate.Stagger then
@@ -901,8 +911,6 @@ function UF:ResizePlayerPlate()
 			plate.dices[1]:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, 8 + plate.Health:GetHeight())
 		end
 	end
-
-	UF:RefreshAllPlates()
 end
 
 function UF:CreatePlayerPlate()

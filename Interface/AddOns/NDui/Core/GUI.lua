@@ -532,10 +532,6 @@ local function updateRaidNameText()
 	B:GetModule("UnitFrames"):UpdateRaidNameText()
 end
 
-local function updatePlayerPlate()
-	B:GetModule("UnitFrames"):ResizePlayerPlate()
-end
-
 local function updateUFTextScale()
 	B:GetModule("UnitFrames"):UpdateTextScale()
 end
@@ -793,9 +789,9 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
 		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
-		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"], true, {150, 300, 1}, updatePlayerPlate}, -- FIX ME: need to refactor classpower
-		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, updatePlayerPlate},
-		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, updatePlayerPlate},
+		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", true, {150, 300, 1}, refreshNameplates},
+		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
+		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 		{},--blank
 		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"]},
 		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"], true},
