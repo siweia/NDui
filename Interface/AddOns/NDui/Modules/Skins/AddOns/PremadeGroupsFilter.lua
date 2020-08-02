@@ -11,7 +11,7 @@ function S:PGFSkin()
 	local tipStyled
 	hooksecurefunc(PremadeGroupsFilter.Debug, "PopupMenu_Initialize", function()
 		if tipStyled then return end
-		for i = 1, 15 do
+		for i = 1, PremadeGroupsFilterDialog:GetNumChildren() do
 			local child = select(i, PremadeGroupsFilterDialog:GetChildren())
 			if child and child.Shadow then
 				TT.ReskinTooltip(child)
