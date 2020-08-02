@@ -1059,8 +1059,7 @@ do
 		self:SetPushedTexture("")
 
 		local bg = B.CreateBDFrame(self, 0, true)
-		bg:SetPoint("TOPLEFT", 4, -4)
-		bg:SetPoint("BOTTOMRIGHT", -4, 4)
+		bg:SetInside(self, 4, 4)
 
 		self:SetHighlightTexture(DB.bdTex)
 		local hl = self:GetHighlightTexture()
@@ -1082,13 +1081,11 @@ do
 		self:SetCheckedTexture(DB.bdTex)
 
 		local ch = self:GetCheckedTexture()
-		ch:SetPoint("TOPLEFT", 4, -4)
-		ch:SetPoint("BOTTOMRIGHT", -4, 4)
+		ch:SetInside(self, 4, 4)
 		ch:SetVertexColor(cr, cg, cb, .6)
 
 		local bg = B.CreateBDFrame(self, 0, true)
-		bg:SetPoint("TOPLEFT", 3, -3)
-		bg:SetPoint("BOTTOMRIGHT", -3, 3)
+		bg:SetInside(self, 3, 3)
 		self.bg = bg
 
 		self:HookScript("OnEnter", Menu_OnEnter)
@@ -1101,13 +1098,11 @@ do
 
 		self:SetNormalTexture(DB.bdTex)
 		local nt = self:GetNormalTexture()
-		nt:SetPoint("TOPLEFT", 3, -3)
-		nt:SetPoint("BOTTOMRIGHT", -3, 3)
+		nt:SetInside(self, 3, 3)
 
 		local bg = _G[frameName.."SwatchBg"]
 		bg:SetColorTexture(0, 0, 0)
-		bg:SetPoint("TOPLEFT", 2, -2)
-		bg:SetPoint("BOTTOMRIGHT", -2, 2)
+		bg:SetInside(nil, 2, 2)
 	end
 
 	-- Handle slider
