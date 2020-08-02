@@ -70,8 +70,6 @@ local function gradientColor(perc)
 	return format("|cff%02x%02x%02x", r*255, g*255, b*255), r, g, b
 end
 
-local tip = B.ScanTip
-
 info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD",
 }
@@ -138,8 +136,8 @@ info.onEnter = function(self)
 			local slotIcon = "|T"..GetInventoryItemTexture("player", slot)..":13:15:0:0:50:50:4:46:4:46|t " or ""
 			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], floor(localSlots[i][3]*100).."%", 1,1,1, red+1,green,0)
 
-			tip:SetOwner(UIParent, "ANCHOR_NONE")
-			totalCost = totalCost + select(3, tip:SetInventoryItem("player", slot))
+			B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
+			totalCost = totalCost + select(3, B.ScanTip:SetInventoryItem("player", slot))
 		end
 	end
 
