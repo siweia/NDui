@@ -266,7 +266,7 @@ end
 function UF:UpdateTargetIndicator(self)
 	local style = NDuiDB["Nameplate"]["TargetIndicator"]
 	local element = self.TargetIndicator
-	local isFriendly = self.isFriendly
+	local isNameOnly = self.isNameOnly
 	if style == 1 then
 		element:Hide()
 	else
@@ -283,7 +283,7 @@ function UF:UpdateTargetIndicator(self)
 		elseif style == 4 then
 			element.TopArrow:Hide()
 			element.RightArrow:Hide()
-			if isFriendly then
+			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -293,7 +293,7 @@ function UF:UpdateTargetIndicator(self)
 		elseif style == 5 then
 			element.TopArrow:Show()
 			element.RightArrow:Hide()
-			if isFriendly then
+			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -303,7 +303,7 @@ function UF:UpdateTargetIndicator(self)
 		elseif style == 6 then
 			element.TopArrow:Hide()
 			element.RightArrow:Show()
-			if isFriendly then
+			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -517,9 +517,9 @@ function UF:AddCreatureIcon(self)
 end
 
 function UF:UpdateUnitClassify(unit)
-	local class = UnitClassification(unit)
 	if self.ClassifyIndicator then
-		if class and classify[class] then
+		local class = UnitClassification(unit)
+		if (not self.isNameOnly) and class and classify[class] then
 			local r, g, b, desature = unpack(classify[class])
 			self.ClassifyIndicator:SetVertexColor(r, g, b)
 			self.ClassifyIndicator:SetDesaturated(desature)
@@ -668,6 +668,13 @@ function UF:CreatePlates()
 	self.Health = health
 	self.Health.UpdateColor = UF.UpdateColor
 
+	local title = B.CreateFS(self, NDuiDB["Nameplate"]["NameTextSize"]-1)
+	title:ClearAllPoints()
+	title:SetPoint("TOP", self, "BOTTOM", 0, -10)
+	title:Hide()
+	self:Tag(title, "[npctitle]")
+	self.npcTitle = title
+
 	UF:CreateHealthText(self)
 	UF:CreateCastBar(self)
 	UF:CreateRaidMark(self)
@@ -748,14 +755,14 @@ local DisabledElements = {
 function UF:UpdatePlateByType(self)
 	local name = self.nameText
 	local hpval = self.healthValue
+	local title = self.npcTitle
 	local raidtarget = self.RaidTargetIndicator
 	local classify = self.ClassifyIndicator
 
 	name:ClearAllPoints()
 	raidtarget:ClearAllPoints()
-	classify:ClearAllPoints()
 
-	if self.isFriendly then
+	if self.isNameOnly then
 		for _, element in pairs(DisabledElements) do
 			if self:IsElementEnabled(element) then
 				self:DisableElement(element)
@@ -767,10 +774,11 @@ function UF:UpdatePlateByType(self)
 		name:UpdateTag()
 		name:SetPoint("CENTER", self, "BOTTOM")
 		hpval:Hide()
+		title:Show()
 
 		raidtarget:SetPoint("TOP", name, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
-		classify:SetPoint("CENTER", name, "BOTTOM", 0, -5)
+		classify:Hide()
 	else
 		for _, element in pairs(DisabledElements) do
 			if not self:IsElementEnabled(element) then
@@ -784,10 +792,11 @@ function UF:UpdatePlateByType(self)
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
 		hpval:Show()
+		title:Hide()
 
 		raidtarget:SetPoint("RIGHT", self, "LEFT", -3, 0)
 		raidtarget:SetParent(self.Health)
-		classify:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -6)
+		classify:Show()
 	end
 end
 
@@ -803,7 +812,8 @@ function UF:PostUpdatePlates(event, unit)
 		self.npcID = B.GetNPCID(self.unitGUID)
 		self.isPlayer = UnitIsPlayer(unit)
 		self.reaction = UnitReaction(unit, "player")
-		self.isFriendly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.reaction and self.reaction >= 5
+		self.isFriendly = self.reaction and self.reaction >= 5
+		self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly
 
 		local blizzPlate = self:GetParent().UnitFrame
 		self.widget = blizzPlate.WidgetContainer
