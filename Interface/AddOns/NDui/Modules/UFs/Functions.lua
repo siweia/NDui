@@ -798,7 +798,6 @@ function UF:CreateDebuffs(self)
 end
 
 -- Class Powers
-local margin = C.UFs.BarMargin
 local barWidth, barHeight = unpack(C.UFs.BarSize)
 
 function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
@@ -814,7 +813,7 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 
 	if diff then
 		for i = 1, max do
-			element[i]:SetWidth((barWidth - (max-1)*margin)/max)
+			element[i]:SetWidth((barWidth - (max-1)*C.margin)/max)
 		end
 		for i = max + 1, 6 do
 			element[i].bg:Hide()
@@ -871,7 +870,8 @@ end
 
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
-		barWidth, barHeight = self:GetWidth(), self.Health:GetHeight()
+		barWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or NDuiDB["Nameplate"]["PPWidth"]
+		barHeight = NDuiDB["Nameplate"]["PPHeight"]
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 
@@ -883,14 +883,14 @@ function UF:CreateClassPower(self)
 	for i = 1, 6 do
 		bars[i] = CreateFrame("StatusBar", nil, bar)
 		bars[i]:SetHeight(barHeight)
-		bars[i]:SetWidth((barWidth - 5*margin) / 6)
+		bars[i]:SetWidth((barWidth - 5*C.margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 		B.SetBD(bars[i], 0)
 		if i == 1 then
 			bars[i]:SetPoint("BOTTOMLEFT")
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", margin, 0)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", C.margin, 0)
 		end
 
 		bars[i].bg = bar:CreateTexture(nil, "BACKGROUND")
