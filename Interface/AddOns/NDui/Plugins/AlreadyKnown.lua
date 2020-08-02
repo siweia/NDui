@@ -16,7 +16,6 @@ local knowables = {
 	[LE_ITEM_CLASS_MISCELLANEOUS] = true,
 }
 local knowns = {}
-local tooltip = B.ScanTip
 
 local function isPetCollected(speciesID)
 	if not speciesID or speciesID == 0 then return end
@@ -37,16 +36,16 @@ local function IsAlreadyKnown(link, index)
 		if not name then return end
 
 		if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
-			local speciesID = tooltip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
+			local speciesID = B.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
 			return isPetCollected(speciesID)
 		else
 			if knowns[link] then return true end
 			if not knowables[itemClassID] then return end
 
-			tooltip:SetOwner(UIParent, "ANCHOR_NONE")
-			tooltip:SetHyperlink(link)
-			for i = 1, tooltip:NumLines() do
-				local text = _G[tooltip:GetName().."TextLeft"..i]:GetText() or ""
+			B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
+			B.ScanTip:SetHyperlink(link)
+			for i = 1, B.ScanTip:NumLines() do
+				local text = _G["NDui_ScanTooltipTextLeft"..i]:GetText() or ""
 				if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
 					knowns[link] = true
 					return true
