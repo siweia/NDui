@@ -345,8 +345,8 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
 	self.TargetIndicator = frame
-	UF:UpdateTargetIndicator(self)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
+	UF:UpdateTargetIndicator(self)
 end
 
 -- Quest progress
@@ -362,7 +362,6 @@ function UF:QuestIconCheck()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", CheckInstanceStatus)
 end
 
-local unitTip = B.ScanTip
 function UF:UpdateQuestUnit(_, unit)
 	if not NDuiDB["Nameplate"]["QuestIndicator"] then return end
 	if isInInstance then
@@ -374,11 +373,11 @@ function UF:UpdateQuestUnit(_, unit)
 	unit = unit or self.unit
 
 	local isLootQuest, questProgress
-	unitTip:SetOwner(UIParent, "ANCHOR_NONE")
-	unitTip:SetUnit(unit)
+	B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
+	B.ScanTip:SetUnit(unit)
 
-	for i = 2, unitTip:NumLines() do
-		local textLine = _G[unitTip:GetName().."TextLeft"..i]
+	for i = 2, B.ScanTip:NumLines() do
+		local textLine = _G["NDui_ScanTooltipTextLeft"..i]
 		local text = textLine:GetText()
 		if textLine and text then
 			local r, g, b = textLine:GetTextColor()
@@ -386,7 +385,7 @@ function UF:UpdateQuestUnit(_, unit)
 				if isInGroup and text == DB.MyName or not isInGroup then
 					isLootQuest = true
 
-					local questLine = _G[unitTip:GetName().."TextLeft"..(i+1)]
+					local questLine = _G["NDui_ScanTooltipTextLeft"..(i+1)]
 					local questText = questLine:GetText()
 					if questLine and questText then
 						local current, goal = strmatch(questText, "(%d+)/(%d+)")
@@ -799,6 +798,8 @@ function UF:UpdatePlateByType(self)
 		raidtarget:SetParent(self.Health)
 		classify:Show()
 	end
+
+	UF:UpdateTargetIndicator(self)
 end
 
 function UF:PostUpdatePlates(event, unit)
@@ -814,25 +815,28 @@ function UF:PostUpdatePlates(event, unit)
 		self.isPlayer = UnitIsPlayer(unit)
 		self.reaction = UnitReaction(unit, "player")
 		self.isFriendly = self.reaction and self.reaction >= 5
-		self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly
+		self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or false
 
 		local blizzPlate = self:GetParent().UnitFrame
 		self.widget = blizzPlate.WidgetContainer
+
+		if self.previousType == nil or self.previousType ~= self.isNameOnly then
+			UF:UpdatePlateByType(self)
+			self.previousType = self.isNameOnly
+		end
+		UF.UpdateUnitPower(self)
+		UF.UpdateTargetChange(self)
+		UF.UpdateQuestUnit(self, event, unit)
+		UF.UpdateUnitClassify(self, unit)
+		UF.UpdateDungeonProgress(self, unit)
+		UF:UpdateClassPowerAnchor()
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
 		end
 	end
 
-	UF:UpdatePlateByType(self)
-	UF.UpdateUnitPower(self)
-	UF:UpdateTargetIndicator(self)
-	UF.UpdateTargetChange(self)
-	UF.UpdateQuestUnit(self, event, unit)
-	UF.UpdateUnitClassify(self, unit)
 	UF.UpdateExplosives(self, event, unit)
-	UF.UpdateDungeonProgress(self, unit)
-	UF:UpdateClassPowerAnchor()
 end
 
 -- Player Nameplate
