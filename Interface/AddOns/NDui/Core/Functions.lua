@@ -1043,15 +1043,15 @@ do
 	function B:ReskinCheck(forceSaturation)
 		self:SetNormalTexture("")
 		self:SetPushedTexture("")
-		self:SetHighlightTexture(DB.bdTex)
-		local hl = self:GetHighlightTexture()
-		hl:SetPoint("TOPLEFT", 5, -5)
-		hl:SetPoint("BOTTOMRIGHT", -5, 5)
-		hl:SetVertexColor(cr, cg, cb, .25)
 
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", 4, -4)
 		bg:SetPoint("BOTTOMRIGHT", -4, 4)
+
+		self:SetHighlightTexture(DB.bdTex)
+		local hl = self:GetHighlightTexture()
+		hl:SetInside(bg)
+		hl:SetVertexColor(cr, cg, cb, .25)
 
 		local ch = self:GetCheckedTexture()
 		ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
