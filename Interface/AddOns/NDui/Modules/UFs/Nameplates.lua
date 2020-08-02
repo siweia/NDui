@@ -345,8 +345,8 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
 	self.TargetIndicator = frame
-	UF:UpdateTargetIndicator(self)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
+	UF:UpdateTargetIndicator(self)
 end
 
 -- Quest progress
@@ -799,6 +799,8 @@ function UF:UpdatePlateByType(self)
 		raidtarget:SetParent(self.Health)
 		classify:Show()
 	end
+
+	UF:UpdateTargetIndicator(self)
 end
 
 function UF:PostUpdatePlates(event, unit)
@@ -814,25 +816,28 @@ function UF:PostUpdatePlates(event, unit)
 		self.isPlayer = UnitIsPlayer(unit)
 		self.reaction = UnitReaction(unit, "player")
 		self.isFriendly = self.reaction and self.reaction >= 5
-		self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly
+		self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or false
 
 		local blizzPlate = self:GetParent().UnitFrame
 		self.widget = blizzPlate.WidgetContainer
+
+		if self.previousType == nil or self.previousType ~= self.isNameOnly then
+			UF:UpdatePlateByType(self)
+			self.previousType = self.isNameOnly
+		end
+		UF.UpdateUnitPower(self)
+		UF.UpdateTargetChange(self)
+		UF.UpdateQuestUnit(self, event, unit)
+		UF.UpdateUnitClassify(self, unit)
+		UF.UpdateDungeonProgress(self, unit)
+		UF:UpdateClassPowerAnchor()
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
 		end
 	end
 
-	UF:UpdatePlateByType(self)
-	UF.UpdateUnitPower(self)
-	UF:UpdateTargetIndicator(self)
-	UF.UpdateTargetChange(self)
-	UF.UpdateQuestUnit(self, event, unit)
-	UF.UpdateUnitClassify(self, unit)
 	UF.UpdateExplosives(self, event, unit)
-	UF.UpdateDungeonProgress(self, unit)
-	UF:UpdateClassPowerAnchor()
 end
 
 -- Player Nameplate
