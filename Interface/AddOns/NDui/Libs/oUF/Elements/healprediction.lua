@@ -152,6 +152,14 @@ end
 local function Disable(self)
 	local hp = self.HealPredictionAndAbsorb
 	if(hp) then
+		hp.myBar:Hide()
+		hp.otherBar:Hide()
+		hp.absorbBar:Hide()
+		hp.absorbBarOverlay:Hide()
+		hp.overAbsorbGlow:Hide()
+		hp.healAbsorbBar:Hide()
+		hp.overHealAbsorbGlow:Hide()
+
 		self:UnregisterEvent('UNIT_HEAL_PREDICTION', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		self:UnregisterEvent('UNIT_HEALTH_FREQUENT', Path)
