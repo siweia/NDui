@@ -801,16 +801,16 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "PPHealthHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
 		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 		{},--blank
+		{1, "Auras", "Statue", L["Enable Statue"]},
+		{1, "Auras", "Totems", L["Enable Totems"], true},
+		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
+		{},--blank
 		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"]},
 		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"], true},
 		{3, "Auras", "BuffSize", L["BuffSize"], nil, {24, 50, 1}},
 		{3, "Auras", "DebuffSize", L["DebuffSize"], true, {24, 50, 1}},
 		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"], nil, {10, 20, 1}},
 		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"], true, {10, 16, 1}},
-		{},--blank
-		{1, "Auras", "Statue", L["Enable Statue"]},
-		{1, "Auras", "Totems", L["Enable Totems"], true},
-		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
 	},
 	[7] = {
 		{1, "Misc", "RaidTool", "|cff00cc4c"..L["Raid Manger"]},
