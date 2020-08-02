@@ -618,7 +618,9 @@ do
 	-- Handle icons
 	function B:ReskinIcon(shadow)
 		self:SetTexCoord(unpack(DB.TexCoord))
-		return B.CreateBDFrame(self, nil, shadow)
+		local bg = B.CreateBDFrame(self)
+		if shadow then B.CreateSD(bg) end
+		return bg
 	end
 
 	function B:PixelIcon(texture, highlight)
