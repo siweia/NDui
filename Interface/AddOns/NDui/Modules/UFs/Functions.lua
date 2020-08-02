@@ -675,6 +675,21 @@ local function auraIconSize(w, n, s)
 	return (w-(n-1)*s)/n
 end
 
+function UF:UpdateTargetAuras()
+	local frame = _G.oUF_Target
+	if not frame then return end
+
+	local element = frame.Auras
+	element.iconsPerRow = NDuiDB["UFs"]["TargetAurasPerRow"]
+
+	local width = frame:GetWidth()
+	local maxLines = element.iconsPerRow and B:Round((element.numBuffs + element.numDebuffs)/element.iconsPerRow)
+	element.size = auraIconSize(width, element.iconsPerRow, element.spacing)
+	element:SetWidth(width)
+	element:SetHeight((element.size + element.spacing) * maxLines)
+	element:ForceUpdate()
+end
+
 function UF:CreateAuras(self)
 	local mystyle = self.mystyle
 	local bu = CreateFrame("Frame", nil, self)
@@ -687,7 +702,7 @@ function UF:CreateAuras(self)
 		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -10)
 		bu.numBuffs = 20
 		bu.numDebuffs = 15
-		bu.iconsPerRow = 9
+		bu.iconsPerRow = NDuiDB["UFs"]["TargetAurasPerRow"]
 	elseif mystyle == "tot" then
 		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -5)
 		bu.numBuffs = 0
