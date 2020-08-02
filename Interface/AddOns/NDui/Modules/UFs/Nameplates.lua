@@ -362,7 +362,7 @@ function UF:QuestIconCheck()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", CheckInstanceStatus)
 end
 
-local unitTip = CreateFrame("GameTooltip", "NDuiQuestUnitTip", nil, "GameTooltipTemplate")
+local unitTip = B.ScanTip
 function UF:UpdateQuestUnit(_, unit)
 	if not NDuiDB["Nameplate"]["QuestIndicator"] then return end
 	if isInInstance then
