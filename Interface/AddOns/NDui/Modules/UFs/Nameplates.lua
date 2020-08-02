@@ -776,7 +776,7 @@ function UF:UpdatePlateByType(self)
 		hpval:Hide()
 		title:Show()
 
-		raidtarget:SetPoint("TOP", name, "BOTTOM", 0, -5)
+		raidtarget:SetPoint("TOP", title, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
 		classify:Hide()
 	else
