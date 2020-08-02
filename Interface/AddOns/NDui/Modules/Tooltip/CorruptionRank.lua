@@ -188,7 +188,6 @@ function TT:Corruption_PlayerSummary()
 	TT:Corruption_AddSummary()
 end
 
-local tip = _G.NDui_ScanTooltip
 local cloakResString = "(%d+)%s?"..ITEM_MOD_CORRUPTION_RESISTANCE
 
 local essenceTextureIDs = {
