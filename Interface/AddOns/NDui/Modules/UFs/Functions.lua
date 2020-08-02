@@ -893,7 +893,7 @@ end
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
 		barWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or NDuiDB["Nameplate"]["PPWidth"]
-		barHeight = NDuiDB["Nameplate"]["PPBarHeight"]
+		barHeight = NDuiDB["Nameplate"]["PPHeight"]
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 

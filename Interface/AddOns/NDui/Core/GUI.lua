@@ -831,9 +831,15 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], true, {.8, 2, .1}},
 		{},--blank
-		{1, "Auras", "Statue", L["Enable Statue"]},
-		{1, "Auras", "Totems", L["Enable Totems"], true},
-		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
+		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
+		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
+		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
+		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
+		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
+		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
+		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", true, {150, 300, 1}, refreshNameplates},
+		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
+		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 		{},--blank
 		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"]},
 		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"], true},

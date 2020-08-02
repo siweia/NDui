@@ -764,6 +764,13 @@ function UF:RefreshNameplats()
 	UF:UpdateClickableSize()
 end
 
+function UF:RefreshAllPlates()
+	if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+		UF:ResizePlayerPlate()
+	end
+	UF:RefreshNameplats()
+end
+
 local DisabledElements = {
 	"Health", "Castbar", "HealPredictionAndAbsorb", "PvPClassificationIndicator"
 }
@@ -864,24 +871,22 @@ end
 function UF:ResizePlayerPlate()
 	local plate = _G.oUF_PlayerPlate
 	if plate then
-		local barWidth = NDuiDB["Nameplate"]["PPWidth"]
-		local barHeight = NDuiDB["Nameplate"]["PPBarHeight"]
-		local healthHeight = NDuiDB["Nameplate"]["PPHealthHeight"]
-		local powerHeight = NDuiDB["Nameplate"]["PPPowerHeight"]
-
-		plate:SetSize(barWidth, healthHeight + powerHeight + C.mult)
-		plate.mover:SetSize(barWidth, healthHeight + powerHeight + C.mult)
-		plate.Health:SetHeight(healthHeight)
-		plate.Power:SetHeight(powerHeight)
-
+		local pWidth = NDuiDB["Nameplate"]["PPWidth"]
+		local pHeight, ppHeight = NDuiDB["Nameplate"]["PPHeight"], NDuiDB["Nameplate"]["PPPHeight"]
+		local iconSize = (pWidth - C.margin*4)/5
+		plate:SetSize(pWidth, pHeight + ppHeight + C.mult)
+		plate.mover:SetSize(pWidth, pHeight + ppHeight + C.mult)
+		plate.Health:SetHeight(pHeight)
+		plate.Power:SetHeight(ppHeight)
+		local classpower = _G.oUF_ClassPowerBar
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
-			local classpowerWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or barWidth
-			_G.oUF_ClassPowerBar:SetSize(classpowerWidth, barHeight)
+			local cpWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or pWidth
+			classpower:SetSize(cpWidth, pHeight)
 			local max = bars.__max
 			for i = 1, max do
-				bars[i]:SetHeight(barHeight)
-				bars[i]:SetWidth((classpowerWidth - (max-1)*C.margin) / max)
+				bars[i]:SetHeight(pHeight)
+				bars[i]:SetWidth((cpWidth - (max-1)*C.margin) / max)
 			end
 		end
 		if plate.Stagger then
