@@ -654,7 +654,9 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 			return (button.isPlayer or caster == "pet") and NDuiADB["CornerBuffs"][DB.MyClass][spellID] or C.RaidBuffs["ALL"][spellID] or C.RaidBuffs["WARNING"][spellID]
 		end
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
-		if NDuiADB["NameplateFilter"][2][spellID] or C.BlackList[spellID] then
+		if element.__owner.isNameOnly then
+			return NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID]
+		elseif NDuiADB["NameplateFilter"][2][spellID] or C.BlackList[spellID] then
 			return false
 		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
 			return true
