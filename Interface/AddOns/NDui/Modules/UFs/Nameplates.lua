@@ -908,7 +908,14 @@ function UF:ResizePlayerPlate()
 			end
 		end
 		if plate.dices then
-			plate.dices[1]:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, 8 + plate.Health:GetHeight())
+			local size = (pWidth - 10)/6
+			for i = 1, 6 do
+				local dice = plate.dices[i]
+				dice:SetSize(size, size)
+				if i == 1 then
+					dice:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, 8 + plate.Health:GetHeight())
+				end
+			end
 		end
 	end
 end
