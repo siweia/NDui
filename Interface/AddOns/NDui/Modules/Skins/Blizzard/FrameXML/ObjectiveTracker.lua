@@ -1,6 +1,11 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local r, g, b = DB.r, DB.g, DB.b
+local select = select
+local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
+local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
+
 local function ReskinQuestIcon(_, block)
 	local itemButton = block.itemButton
 	if itemButton and not itemButton.styled then
@@ -127,10 +132,6 @@ local function ShowQuestLevel(_, _, _, title, level, _, isHeader, _, isComplete,
 end
 
 tinsert(C.defaultThemes, function()
-	local r, g, b = DB.r, DB.g, DB.b
-	local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
-	local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
-
 	-- QuestIcons
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", ReskinQuestIcon)
 	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", ReskinQuestIcon)
