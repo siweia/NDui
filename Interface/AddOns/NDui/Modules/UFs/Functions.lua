@@ -61,7 +61,7 @@ function UF:CreateHealthBar(self)
 	health:SetPoint("TOPRIGHT", self)
 	local healthHeight
 	if mystyle == "PlayerPlate" then
-		healthHeight = NDuiDB["Nameplate"]["PPHeight"]
+		healthHeight = NDuiDB["Nameplate"]["PPHealthHeight"]
 	elseif mystyle == "raid" then
 		if self.isPartyFrame then
 			healthHeight = NDuiDB["UFs"]["PartyHeight"]
@@ -228,7 +228,7 @@ function UF:CreatePowerBar(self)
 	power:SetPoint("BOTTOMRIGHT", self)
 	local powerHeight
 	if mystyle == "PlayerPlate" then
-		powerHeight = NDuiDB["Nameplate"]["PPPHeight"]
+		powerHeight = NDuiDB["Nameplate"]["PPPowerHeight"]
 	elseif mystyle == "raid" then
 		if self.isPartyFrame then
 			powerHeight = NDuiDB["UFs"]["PartyPowerHeight"]
@@ -871,7 +871,7 @@ end
 function UF:CreateClassPower(self)
 	if self.mystyle == "PlayerPlate" then
 		barWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or NDuiDB["Nameplate"]["PPWidth"]
-		barHeight = NDuiDB["Nameplate"]["PPHeight"]
+		barHeight = NDuiDB["Nameplate"]["PPBarHeight"]
 		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
 	end
 

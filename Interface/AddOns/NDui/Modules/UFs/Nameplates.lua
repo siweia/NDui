@@ -881,39 +881,43 @@ end
 function UF:ResizePlayerPlate()
 	local plate = _G.oUF_PlayerPlate
 	if plate then
-		local pWidth = NDuiDB["Nameplate"]["PPWidth"]
-		local pHeight, ppHeight = NDuiDB["Nameplate"]["PPHeight"], NDuiDB["Nameplate"]["PPPHeight"]
-		local iconSize = (pWidth - C.margin*4)/5
-		plate:SetSize(pWidth, pHeight + ppHeight + C.mult)
-		plate.mover:SetSize(pWidth, pHeight + ppHeight + C.mult)
-		plate.Health:SetHeight(pHeight)
-		plate.Power:SetHeight(ppHeight)
-		local classpower = _G.oUF_ClassPowerBar
+		local barWidth = NDuiDB["Nameplate"]["PPWidth"]
+		local barHeight = NDuiDB["Nameplate"]["PPBarHeight"]
+		local healthHeight = NDuiDB["Nameplate"]["PPHealthHeight"]
+		local powerHeight = NDuiDB["Nameplate"]["PPPowerHeight"]
+
+		plate:SetSize(barWidth, healthHeight + powerHeight + C.mult)
+		plate.mover:SetSize(barWidth, healthHeight + powerHeight + C.mult)
+		plate.Health:SetHeight(healthHeight)
+		plate.Power:SetHeight(powerHeight)
+
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
-			local cpWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or pWidth
-			classpower:SetSize(cpWidth, pHeight)
+			local classpowerWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or barWidth
+			_G.oUF_ClassPowerBar:SetSize(classpowerWidth, barHeight)
 			local max = bars.__max
 			for i = 1, max do
-				bars[i]:SetHeight(pHeight)
-				bars[i]:SetWidth((cpWidth - (max-1)*C.margin) / max)
+				bars[i]:SetHeight(barHeight)
+				bars[i]:SetWidth((classpowerWidth - (max-1)*C.margin) / max)
 			end
 		end
 		if plate.Stagger then
-			plate.Stagger:SetHeight(pHeight)
+			plate.Stagger:SetHeight(barHeight)
 		end
 		if plate.bu then
+			local iconSize = (barWidth - C.margin*4)/5
 			for i = 1, 5 do
 				plate.bu[i]:SetSize(iconSize, iconSize)
 			end
 		end
 		if plate.dices then
-			local size = (pWidth - 10)/6
+			local offset = NDuiDB["Nameplate"]["NameplateClassPower"] and C.margin or (C.margin*2 + barHeight)
+			local size = (barWidth - 10)/6
 			for i = 1, 6 do
 				local dice = plate.dices[i]
 				dice:SetSize(size, size)
 				if i == 1 then
-					dice:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, 8 + plate.Health:GetHeight())
+					dice:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, offset)
 				end
 			end
 		end
@@ -923,8 +927,8 @@ end
 function UF:CreatePlayerPlate()
 	self.mystyle = "PlayerPlate"
 	self:EnableMouse(false)
-	local pHeight, ppHeight = NDuiDB["Nameplate"]["PPHeight"], NDuiDB["Nameplate"]["PPPHeight"]
-	self:SetSize(NDuiDB["Nameplate"]["PPWidth"], pHeight + ppHeight + C.mult)
+	local healthHeight, powerHeight = NDuiDB["Nameplate"]["PPHealthHeight"], NDuiDB["Nameplate"]["PPPowerHeight"]
+	self:SetSize(NDuiDB["Nameplate"]["PPWidth"], healthHeight + powerHeight + C.mult)
 
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
