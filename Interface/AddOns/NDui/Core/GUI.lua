@@ -141,6 +141,7 @@ local defaultSettings = {
 		RaidTextScale = 1,
 		FrequentHealth = false,
 		HealthFrequency = .25,
+		TargetAurasPerRow = 9,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -545,6 +546,10 @@ local function refreshRaidFrameIcons()
 	B:GetModule("UnitFrames"):RefreshRaidFrameIcons()
 end
 
+local function updateTargetFrameAuras()
+	B:GetModule("UnitFrames"):UpdateTargetAuras()
+end
+
 local function updateSimpleModeGroupBy()
 	local UF = B:GetModule("UnitFrames")
 	if UF.UpdateSimpleModeHeader then
@@ -692,10 +697,11 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ClassPower", L["UFs ClassPower"]},
 		{1, "UFs", "RuneTimer", L["UFs RuneTimer"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
-		{1, "UFs", "ToTAuras", L["ToT Debuff"]},
-		{4, "UFs", "HealthColor", L["HealthColor"], true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}},
-		{3, "UFs", "UFTextScale", L["UFTextScale"], nil, {.8, 1.5, .05}, updateUFTextScale},
-		{3, "UFs", "SmoothAmount", "|cff00cc4c"..L["SmoothAmount"], true, {.15, .6, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
+		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
+		{4, "UFs", "HealthColor", L["HealthColor"], nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}},
+		{3, "UFs", "TargetAurasPerRow", L["TargetAurasPerRow"].."*", true, {5, 10, 1}, updateTargetFrameAuras},
+		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
+		{3, "UFs", "SmoothAmount", "|cff00cc4c"..L["SmoothAmount"].."*", true, {.15, .6, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
 		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"]},
@@ -731,7 +737,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{4, "UFs", "RaidHPMode", L["RaidHPMode"].."*", true, {L["DisableRaidHP"], L["RaidHPPercent"], L["RaidHPCurrent"], L["RaidHPLost"]}, updateRaidNameText},
 		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 1}},
 		{1, "UFs", "FrequentHealth", "|cff00cc4c"..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
-		{3, "UFs", "RaidTextScale", L["UFTextScale"], nil, {.8, 1.5, .05}, updateRaidTextScale},
+		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateRaidTextScale},
 		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
 		{},--blank
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["SimpleRaidFrame"], nil, nil, nil, L["SimpleRaidFrameTip"]},

@@ -744,6 +744,7 @@ function UF:UpdateNameplateAuras()
 	element.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
 	element:SetWidth(self:GetWidth())
 	element:SetHeight((element.size + element.spacing) * 2)
+	element:ForceUpdate()
 end
 
 function UF:RefreshNameplats()
