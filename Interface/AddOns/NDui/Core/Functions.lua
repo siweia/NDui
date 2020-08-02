@@ -169,7 +169,7 @@ do
 	local essenceDescription = GetSpellDescription(277253)
 	local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
 	local RETRIEVING_ITEM_INFO = RETRIEVING_ITEM_INFO
-	local tip = CreateFrame("GameTooltip", "NDui_iLvlTooltip", nil, "GameTooltipTemplate")
+	local tip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
 	B.ScanTip = tip
 
 	function B:InspectItemTextures()
@@ -279,7 +279,7 @@ do
 				tip:SetHyperlink(link)
 			end
 
-			local firstLine = _G.NDui_iLvlTooltipTextLeft1:GetText()
+			local firstLine = _G.NDui_ScanTooltipTextLeft1:GetText()
 			if firstLine == RETRIEVING_ITEM_INFO then
 				return "tooSoon"
 			end
