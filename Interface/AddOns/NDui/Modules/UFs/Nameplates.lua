@@ -764,52 +764,39 @@ function UF:RefreshNameplats()
 	UF:UpdateClickableSize()
 end
 
+local DisabledElements = {
+	"Health", "Castbar", "HealPredictionAndAbsorb", "PvPClassificationIndicator"
+}
 function UF:UpdatePlateByType(self)
 	local name = self.nameText
 	local hpval = self.healthValue
 	local raidtarget = self.RaidTargetIndicator
 
 	if self.isFriendly then
-		if self:IsElementEnabled("Health") then
-			self:DisableElement("Health")
-		end
-		if self:IsElementEnabled("Castbar") then
-			self:DisableElement("Castbar")
-		end
-		if self:IsElementEnabled("HealPredictionAndAbsorb") then
-			self:DisableElement("HealPredictionAndAbsorb")
-		end
-		if self:IsElementEnabled("PvPClassificationIndicator") then
-			self:DisableElement("PvPClassificationIndicator")
+		for _, element in pairs(DisabledElements) do
+			if self:IsElementEnabled(element) then
+				self:DisableElement(element)
+			end
 		end
 
 		name:SetJustifyH("CENTER")
 		self:Tag(name, "[nplevel][color][name]")
 		name:UpdateTag()
-
 		hpval:Hide()
 
 		raidtarget:ClearAllPoints()
 		raidtarget:SetPoint("TOP", name, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
 	else
-		if not self:IsElementEnabled("Health") then
-			self:EnableElement("Health")
-		end
-		if not self:IsElementEnabled("Castbar") then
-			self:EnableElement("Castbar")
-		end
-		if not self:IsElementEnabled("HealPredictionAndAbsorb") then
-			self:EnableElement("HealPredictionAndAbsorb")
-		end
-		if not self:IsElementEnabled("PvPClassificationIndicator") then
-			self:EnableElement("PvPClassificationIndicator")
+		for _, element in pairs(DisabledElements) do
+			if not self:IsElementEnabled(element) then
+				self:EnableElement(element)
+			end
 		end
 
 		name:SetJustifyH("LEFT")
 		self:Tag(name, "[nplevel][name]")
 		name:UpdateTag()
-
 		hpval:Show()
 
 		raidtarget:ClearAllPoints()
