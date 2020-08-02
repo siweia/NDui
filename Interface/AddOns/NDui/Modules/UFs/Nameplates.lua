@@ -263,7 +263,7 @@ function UF:UpdateTargetChange()
 	end
 end
 
-function UF:UpdateTargetIndicator(self)
+function UF:UpdateTargetIndicator()
 	local style = NDuiDB["Nameplate"]["TargetIndicator"]
 	local element = self.TargetIndicator
 	local isNameOnly = self.isNameOnly
@@ -346,7 +346,7 @@ function UF:AddTargetIndicator(self)
 
 	self.TargetIndicator = frame
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
-	UF:UpdateTargetIndicator(self)
+	UF.UpdateTargetIndicator(self)
 end
 
 -- Quest progress
@@ -706,9 +706,8 @@ function UF:UpdateClassPowerAnchor()
 	local nameplate = C_NamePlate.GetNamePlateForUnit("target")
 	if nameplate then
 		bar:SetParent(nameplate.unitFrame)
-		bar:SetScale(.7)
 		bar:ClearAllPoints()
-		bar:SetPoint("BOTTOM", nameplate.unitFrame, "TOP", 0, 26)
+		bar:SetPoint("BOTTOM", nameplate.unitFrame.nameText, "TOP", 0, 5)
 		bar:Show()
 	else
 		bar:Hide()
@@ -733,6 +732,20 @@ function UF:UpdateTargetClassPower()
 	end
 end
 
+function UF:UpdateNameplateAuras()
+	local element = self.Auras
+	if NDuiDB["Nameplate"]["ShowPlayerPlate"] and NDuiDB["Nameplate"]["NameplateClassPower"] then
+		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + _G.oUF_ClassPowerBar:GetHeight())
+	else
+		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
+	end
+	element.numTotal = NDuiDB["Nameplate"]["maxAuras"]
+	element.size = NDuiDB["Nameplate"]["AuraSize"]
+	element.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
+	element:SetWidth(self:GetWidth())
+	element:SetHeight((element.size + element.spacing) * 2)
+end
+
 function UF:RefreshAllPlates()
 	for nameplate in pairs(platesList) do
 		nameplate:SetSize(NDuiDB["Nameplate"]["PlateWidth"], NDuiDB["Nameplate"]["PlateHeight"])
@@ -742,8 +755,8 @@ function UF:RefreshAllPlates()
 		nameplate.Castbar.Text:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
 		nameplate.healthValue:UpdateTag()
-		nameplate.Auras.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
-		UF:UpdateTargetIndicator(nameplate)
+		UF.UpdateNameplateAuras(nameplate)
+		UF.UpdateTargetIndicator(nameplate)
 		UF.UpdateTargetChange(nameplate)
 	end
 	UF:UpdateClickableSize()
@@ -752,7 +765,7 @@ end
 local DisabledElements = {
 	"Health", "Castbar", "HealPredictionAndAbsorb", "PvPClassificationIndicator"
 }
-function UF:UpdatePlateByType(self)
+function UF:UpdatePlateByType()
 	local name = self.nameText
 	local hpval = self.healthValue
 	local title = self.npcTitle
@@ -799,7 +812,7 @@ function UF:UpdatePlateByType(self)
 		classify:Show()
 	end
 
-	UF:UpdateTargetIndicator(self)
+	UF.UpdateTargetIndicator(self)
 end
 
 function UF:PostUpdatePlates(event, unit)
@@ -821,21 +834,23 @@ function UF:PostUpdatePlates(event, unit)
 		self.widget = blizzPlate.WidgetContainer
 
 		if self.previousType == nil or self.previousType ~= self.isNameOnly then
-			UF:UpdatePlateByType(self)
+			UF.UpdatePlateByType(self)
 			self.previousType = self.isNameOnly
 		end
-		UF.UpdateUnitPower(self)
-		UF.UpdateTargetChange(self)
-		UF.UpdateQuestUnit(self, event, unit)
-		UF.UpdateUnitClassify(self, unit)
-		UF.UpdateDungeonProgress(self, unit)
-		UF:UpdateClassPowerAnchor()
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
 		end
 	end
 
+	if event ~= "NAME_PLATE_UNIT_REMOVED" then
+		UF.UpdateUnitPower(self)
+		UF.UpdateTargetChange(self)
+		UF.UpdateQuestUnit(self, event, unit)
+		UF.UpdateUnitClassify(self, unit)
+		UF.UpdateDungeonProgress(self, unit)
+		UF:UpdateClassPowerAnchor()
+	end
 	UF.UpdateExplosives(self, event, unit)
 end
 
@@ -869,6 +884,7 @@ function UF:ResizePlayerPlate()
 		plate.Power:SetHeight(ppHeight)
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
+			_G.oUF_ClassPowerBar:SetHeight(pHeight)
 			for i = 1, 6 do
 				bars[i]:SetHeight(pHeight)
 			end
@@ -885,6 +901,8 @@ function UF:ResizePlayerPlate()
 			plate.dices[1]:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, 8 + plate.Health:GetHeight())
 		end
 	end
+
+	UF:RefreshAllPlates()
 end
 
 function UF:CreatePlayerPlate()
