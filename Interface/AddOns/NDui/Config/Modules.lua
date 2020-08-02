@@ -2,6 +2,9 @@
 local _, ns = ...
 local _, C = unpack(ns)
 
+C.mult = 1
+C.margin = 3
+
 -- BUFF/DEBUFF相关
 C.Auras = {
 	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, 0},			-- BUFF默认位置
@@ -38,7 +41,6 @@ C.UFs = {
 
 	BarPoint		= {"TOPLEFT", 12, 4},								-- 资源条位置（以自身头像为基准）
 	BarSize			= {150, 5},											-- 资源条的尺寸（宽，长）
-	BarMargin		= 3,												-- 资源条间隔
 }
 
 -- 小地图
