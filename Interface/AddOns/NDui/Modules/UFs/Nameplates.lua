@@ -342,7 +342,7 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
 	frame.nameGlow:SetVertexColor(0, .6, 1)
 	frame.nameGlow:SetBlendMode("ADD")
-	frame.nameGlow:SetPoint("CENTER", 0, 10)
+	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
 	self.TargetIndicator = frame
 	UF:UpdateTargetIndicator(self)
@@ -513,19 +513,19 @@ function UF:AddCreatureIcon(self)
 	icon:SetSize(24, 24)
 	icon:Hide()
 
-	self.creatureIcon = icon
+	self.ClassifyIndicator = icon
 end
 
 function UF:UpdateUnitClassify(unit)
 	local class = UnitClassification(unit)
-	if self.creatureIcon then
+	if self.ClassifyIndicator then
 		if class and classify[class] then
 			local r, g, b, desature = unpack(classify[class])
-			self.creatureIcon:SetVertexColor(r, g, b)
-			self.creatureIcon:SetDesaturated(desature)
-			self.creatureIcon:Show()
+			self.ClassifyIndicator:SetVertexColor(r, g, b)
+			self.ClassifyIndicator:SetDesaturated(desature)
+			self.ClassifyIndicator:Show()
 		else
-			self.creatureIcon:Hide()
+			self.ClassifyIndicator:Hide()
 		end
 	end
 end
@@ -749,6 +749,11 @@ function UF:UpdatePlateByType(self)
 	local name = self.nameText
 	local hpval = self.healthValue
 	local raidtarget = self.RaidTargetIndicator
+	local classify = self.ClassifyIndicator
+
+	name:ClearAllPoints()
+	raidtarget:ClearAllPoints()
+	classify:ClearAllPoints()
 
 	if self.isFriendly then
 		for _, element in pairs(DisabledElements) do
@@ -760,11 +765,12 @@ function UF:UpdatePlateByType(self)
 		name:SetJustifyH("CENTER")
 		self:Tag(name, "[nplevel][color][name]")
 		name:UpdateTag()
+		name:SetPoint("CENTER", self, "BOTTOM")
 		hpval:Hide()
 
-		raidtarget:ClearAllPoints()
 		raidtarget:SetPoint("TOP", name, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
+		classify:SetPoint("CENTER", name, "BOTTOM", 0, -5)
 	else
 		for _, element in pairs(DisabledElements) do
 			if not self:IsElementEnabled(element) then
@@ -775,11 +781,13 @@ function UF:UpdatePlateByType(self)
 		name:SetJustifyH("LEFT")
 		self:Tag(name, "[nplevel][name]")
 		name:UpdateTag()
+		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
 		hpval:Show()
 
-		raidtarget:ClearAllPoints()
 		raidtarget:SetPoint("RIGHT", self, "LEFT", -3, 0)
 		raidtarget:SetParent(self.Health)
+		classify:SetPoint("BOTTOMLEFT", self, "LEFT", 0, -6)
 	end
 end
 
