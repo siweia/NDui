@@ -16,7 +16,7 @@ local knowables = {
 	[LE_ITEM_CLASS_MISCELLANEOUS] = true,
 }
 local knowns = {}
-local tooltip = CreateFrame("GameTooltip", "AlreadyKnownTooltip", nil, "GameTooltipTemplate")
+local tooltip = B.ScanTip
 
 local function isPetCollected(speciesID)
 	if not speciesID or speciesID == 0 then return end

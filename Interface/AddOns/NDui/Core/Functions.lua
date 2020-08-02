@@ -170,6 +170,7 @@ do
 	local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
 	local RETRIEVING_ITEM_INFO = RETRIEVING_ITEM_INFO
 	local tip = CreateFrame("GameTooltip", "NDui_iLvlTooltip", nil, "GameTooltipTemplate")
+	B.ScanTip = tip
 
 	function B:InspectItemTextures()
 		if not tip.gems then
