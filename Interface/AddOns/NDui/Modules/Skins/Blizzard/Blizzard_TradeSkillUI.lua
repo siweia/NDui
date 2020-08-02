@@ -1,6 +1,22 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function ReskinReagentButton(reagent)
+	reagent.bg = B.ReskinIcon(reagent.Icon)
+	reagent.NameFrame:Hide()
+	local bg = B.CreateBDFrame(reagent.NameFrame, .2)
+	bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, C.mult)
+	bg:SetPoint("BOTTOMRIGHT", -4, C.mult)
+	if reagent.SelectedTexture then
+		reagent.SelectedTexture:SetColorTexture(1, 1, 1, .25)
+		reagent.SelectedTexture:SetInside(reagent.bg)
+	end
+end
+
+local function ResetBordeAlpha(self)
+	self.IconBorder:SetAlpha(0)
+end
+
 C.themes["Blizzard_TradeSkillUI"] = function()
 	local r, g, b = DB.r, DB.g, DB.b
 
@@ -68,18 +84,18 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	end)
 
 	-- Recipe Details
-	local details = TradeSkillFrame.DetailsFrame
-	details.Background:Hide()
-	B.ReskinScroll(details.ScrollBar)
-	B.Reskin(details.CreateAllButton)
-	B.Reskin(details.CreateButton)
-	B.Reskin(details.ExitButton)
-	details.CreateMultipleInputBox:DisableDrawLayer("BACKGROUND")
-	B.ReskinInput(details.CreateMultipleInputBox)
-	B.ReskinArrow(details.CreateMultipleInputBox.DecrementButton, "left")
-	B.ReskinArrow(details.CreateMultipleInputBox.IncrementButton, "right")
+	local detailsFrame = TradeSkillFrame.DetailsFrame
+	detailsFrame.Background:Hide()
+	B.ReskinScroll(detailsFrame.ScrollBar)
+	B.Reskin(detailsFrame.CreateAllButton)
+	B.Reskin(detailsFrame.CreateButton)
+	B.Reskin(detailsFrame.ExitButton)
+	detailsFrame.CreateMultipleInputBox:DisableDrawLayer("BACKGROUND")
+	B.ReskinInput(detailsFrame.CreateMultipleInputBox)
+	B.ReskinArrow(detailsFrame.CreateMultipleInputBox.DecrementButton, "left")
+	B.ReskinArrow(detailsFrame.CreateMultipleInputBox.IncrementButton, "right")
 
-	local contents = details.Contents
+	local contents = detailsFrame.Contents
 	hooksecurefunc(contents.ResultIcon, "SetNormalTexture", function(self)
 		if not self.styled then
 			B.ReskinIcon(self:GetNormalTexture())
@@ -89,25 +105,13 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 		end
 	end)
 
-	local function reskinReagentButton(reagent)
-		reagent.bg = B.ReskinIcon(reagent.Icon)
-		reagent.NameFrame:Hide()
-		local bg = B.CreateBDFrame(reagent.NameFrame, .2)
-		bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, C.mult)
-		bg:SetPoint("BOTTOMRIGHT", -4, C.mult)
-		if reagent.SelectedTexture then
-			reagent.SelectedTexture:SetColorTexture(1, 1, 1, .25)
-			reagent.SelectedTexture:SetInside(reagent.bg)
-		end
-	end
-
 	for i = 1, #contents.Reagents do
-		reskinReagentButton(contents.Reagents[i])
+		ReskinReagentButton(contents.Reagents[i])
 	end
-	B.Reskin(details.ViewGuildCraftersButton)
+	B.Reskin(detailsFrame.ViewGuildCraftersButton)
 
 	for i = 1, #contents.OptionalReagents do
-		reskinReagentButton(contents.OptionalReagents[i])
+		ReskinReagentButton(contents.OptionalReagents[i])
 	end
 
 	local levelBar = contents.RecipeLevel
@@ -120,18 +124,15 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	TradeSkillFrame.TabardBorder:SetAlpha(0)
 	TradeSkillFrame.TabardBackground:SetAlpha(0)
 
-	local guildFrame = details.GuildFrame
+	local guildFrame = detailsFrame.GuildFrame
 	B.ReskinClose(guildFrame.CloseButton)
-	for i = 1, 10 do
-		select(i, guildFrame:GetRegions()):Hide()
-	end
-	guildFrame.Title:Show()
+	B.StripTextures(guildFrame)
 	B.SetBD(guildFrame)
 	guildFrame:ClearAllPoints()
 	guildFrame:SetPoint("BOTTOMLEFT", TradeSkillFrame, "BOTTOMRIGHT", 3, 0)
-	B.ReskinScroll(guildFrame.Container.ScrollFrame.scrollBar)
 	B.StripTextures(guildFrame.Container)
 	B.CreateBDFrame(guildFrame.Container, .25)
+	B.ReskinScroll(guildFrame.Container.ScrollFrame.scrollBar)
 
 	-- Optional reagents
 	local reagentList = TradeSkillFrame.OptionalReagentList
@@ -151,10 +152,6 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	bg:SetPoint("BOTTOMRIGHT", -25, 5)
 	B.ReskinScroll(scrollList.ScrollFrame.scrollBar)
 
-	local function resetBordeAlpha(self)
-		self.IconBorder:SetAlpha(0)
-	end
-
 	reagentList:HookScript("OnShow", function(self)
 		for i = 1, #scrollList.ScrollFrame.buttons do
 			local button = scrollList.ScrollFrame.buttons[i]
@@ -165,7 +162,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 				button.Icon:SetPoint("TOPLEFT", button, "TOPLEFT", 3, -3)
 				button.bg = B.ReskinIcon(button.Icon)
 				button.IconBorder:SetAlpha(0)
-				hooksecurefunc(button, "SetState", resetBordeAlpha)
+				hooksecurefunc(button, "SetState", ResetBordeAlpha)
 
 				button.NameFrame:Hide()
 				local bg = B.CreateBDFrame(button.NameFrame, .2)
