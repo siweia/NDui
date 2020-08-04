@@ -825,8 +825,9 @@ end
 
 function UF:OnUnitFactionChanged(unit)
 	local nameplate = C_NamePlate_GetNamePlateForUnit(unit, issecure())
-	if nameplate and nameplate.unitName then
-		UF.RefreshPlateType(nameplate, unit)
+	local unitFrame = nameplate and nameplate.unitFrame
+	if unitFrame and unitFrame.unitName then
+		UF.RefreshPlateType(unitFrame, unit)
 	end
 end
 
