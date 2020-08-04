@@ -232,6 +232,7 @@ function module:MapReveal()
 	if IsAddOnLoaded("Leatrix_Maps") then return end
 
 	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
+	bu:SetHitRectInsets(-5, -5, -5, -5)
 	bu:SetPoint("TOPRIGHT", -270, 0)
 	bu:SetSize(26, 26)
 	B.ReskinCheck(bu)
