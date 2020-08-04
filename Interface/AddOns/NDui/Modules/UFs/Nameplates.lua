@@ -5,13 +5,14 @@ local UF = B:GetModule("UnitFrames")
 local _G = getfenv(0)
 local strmatch, tonumber, pairs, unpack, rad = string.match, tonumber, pairs, unpack, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
-local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
+local UnitIsFriend, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitIsFriend, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
 local GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown
 local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
 local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
 local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
+local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local INTERRUPTED = INTERRUPTED
 
 -- Init
@@ -703,7 +704,7 @@ function UF:UpdateClassPowerAnchor()
 	if not isTargetClassPower then return end
 
 	local bar = _G.oUF_ClassPowerBar
-	local nameplate = C_NamePlate.GetNamePlateForUnit("target")
+	local nameplate = C_NamePlate_GetNamePlateForUnit("target")
 	if nameplate then
 		bar:SetParent(nameplate.unitFrame)
 		bar:ClearAllPoints()
@@ -823,6 +824,27 @@ function UF:UpdatePlateByType()
 	UF.UpdateTargetIndicator(self)
 end
 
+function UF:RefreshPlateType(unit)
+	self.isFriendly = UnitIsFriend(unit, "player")
+	self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or false
+
+	if self.previousType == nil or self.previousType ~= self.isNameOnly then
+		UF.UpdatePlateByType(self)
+		self.previousType = self.isNameOnly
+	end
+end
+
+function UF:OnUnitFactionChanged(unit)
+	local nameplate = C_NamePlate_GetNamePlateForUnit(unit, issecure())
+	if nameplate and nameplate.unitName then
+		UF.RefreshPlateType(nameplate, unit)
+	end
+end
+
+function UF:RefreshPlateOnFactionChanged()
+	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
+end
+
 function UF:PostUpdatePlates(event, unit)
 	if not self then return end
 
@@ -834,17 +856,11 @@ function UF:PostUpdatePlates(event, unit)
 		end
 		self.npcID = B.GetNPCID(self.unitGUID)
 		self.isPlayer = UnitIsPlayer(unit)
-		self.reaction = UnitReaction(unit, "player")
-		self.isFriendly = self.reaction and self.reaction >= 5
-		self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or false
 
 		local blizzPlate = self:GetParent().UnitFrame
 		self.widget = blizzPlate.WidgetContainer
 
-		if self.previousType == nil or self.previousType ~= self.isNameOnly then
-			UF.UpdatePlateByType(self)
-			self.previousType = self.isNameOnly
-		end
+		UF.RefreshPlateType(self, unit)
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
