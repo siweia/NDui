@@ -1130,9 +1130,9 @@ do
 		self:SetNormalTexture("")
 
 		if texture and texture ~= "" then
-			if texture:find("Plus") then
+			if strfind(texture, "Plus") then
 				self.expTex:SetTexCoord(0, .4375, 0, .4375)
-			elseif texture:find("Minus") then
+			elseif strfind(texture, "Minus") then
 				self.expTex:SetTexCoord(.5625, 1, 0, .4375)
 			end
 			self.bg:Show()
@@ -1162,8 +1162,9 @@ do
 		hooksecurefunc(self, "SetNormalTexture", UpdateExpandOrCollapse)
 	end
 
+	local buttonNames = {"MaximizeButton", "MinimizeButton"}
 	function B:ReskinMinMax()
-		for _, name in next, {"MaximizeButton", "MinimizeButton"} do
+		for _, name in next, buttonNames do
 			local button = self[name]
 			if button then
 				button:SetSize(17, 17)
