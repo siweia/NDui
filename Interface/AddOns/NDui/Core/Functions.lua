@@ -868,7 +868,7 @@ do
 		local thumb = GrabScrollBarElement(self, "ThumbTexture") or GrabScrollBarElement(self, "thumbTexture") or self.GetThumbTexture and self:GetThumbTexture()
 		if thumb then
 			thumb:SetAlpha(0)
-			thumb:SetWidth(17)
+			thumb:SetWidth(16)
 			self.thumb = thumb
 
 			local bg = B.CreateBDFrame(self, 0)
@@ -893,25 +893,20 @@ do
 		local frameName = self.GetName and self:GetName()
 		local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
 
-		down:ClearAllPoints()
-		down:SetPoint("RIGHT", -18, 2)
-		B.ReskinArrow(down, "down")
-		down:SetSize(20, 20)
-
 		local bg = B.CreateBDFrame(self, 0)
 		bg:SetPoint("TOPLEFT", 16, -4)
 		bg:SetPoint("BOTTOMRIGHT", -18, 8)
 		B.CreateGradient(bg)
+
+		down:ClearAllPoints()
+		down:SetPoint("RIGHT", bg, -2, 0)
+		B.ReskinArrow(down, "down")
 	end
 
 	-- Handle close button
 	function B:Texture_OnEnter()
 		if self:IsEnabled() then
-			if self.pixels then
-				for _, pixel in pairs(self.pixels) do
-					pixel:SetVertexColor(cr, cg, cb)
-				end
-			elseif self.bg then
+			if self.bg then
 				self.bg:SetBackdropColor(cr, cg, cb, .25)
 			else
 				self.bgTex:SetVertexColor(cr, cg, cb)
@@ -920,11 +915,7 @@ do
 	end
 
 	function B:Texture_OnLeave()
-		if self.pixels then
-			for _, pixel in pairs(self.pixels) do
-				pixel:SetVertexColor(1, 1, 1)
-			end
-		elseif self.bg then
+		if self.bg then
 			self.bg:SetBackdropColor(0, 0, 0, .25)
 		else
 			self.bgTex:SetVertexColor(1, 1, 1)
@@ -932,7 +923,7 @@ do
 	end
 
 	function B:ReskinClose(a1, p, a2, x, y)
-		self:SetSize(17, 17)
+		self:SetSize(16, 16)
 
 		if not a1 then
 			self:SetPoint("TOPRIGHT", -6, -6)
@@ -951,16 +942,11 @@ do
 		dis:SetDrawLayer("OVERLAY")
 		dis:SetAllPoints()
 
-		self.pixels = {}
-		for i = 1, 2 do
-			local tex = self:CreateTexture()
-			tex:SetColorTexture(1, 1, 1)
-			tex:SetSize(11, 2)
-			tex:SetPoint("CENTER")
-			tex:SetRotation(rad((i-1/2)*90))
-			tinsert(self.pixels, tex)
-		end
-
+		local tex = self:CreateTexture()
+		tex:SetTexture(DB.closeTex)
+		tex:SetAllPoints()
+		self.bgTex = tex
+	
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 	end
@@ -986,15 +972,19 @@ do
 	B.ReskinInput = B.ReskinEditBox -- Deprecated
 
 	-- Handle arrows
-	local direcIndex = {
-		["up"] = DB.arrowUp,
-		["down"] = DB.arrowDown,
-		["left"] = DB.arrowLeft,
-		["right"] = DB.arrowRight,
+	local arrowDegree = {
+		["up"] = 0,
+		["down"] = 180,
+		["left"] = 90,
+		["right"] = -90,
 	}
+	function B:SetupArrow(direction)
+		self:SetTexture(DB.ArrowUp)
+		self:SetRotation(rad(arrowDegree[direction]))
+	end
 
 	function B:ReskinArrow(direction)
-		self:SetSize(17, 17)
+		self:SetSize(16, 16)
 		B.Reskin(self, true)
 
 		self:SetDisabledTexture(DB.bdTex)
@@ -1004,9 +994,8 @@ do
 		dis:SetAllPoints()
 
 		local tex = self:CreateTexture(nil, "ARTWORK")
-		tex:SetTexture(direcIndex[direction])
-		tex:SetSize(8, 8)
-		tex:SetPoint("CENTER")
+		tex:SetAllPoints()
+		B.SetupArrow(tex, direction)
 		self.bgTex = tex
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
@@ -1017,9 +1006,9 @@ do
 		B.StripTextures(self)
 		B.Reskin(self)
 		self.Text:SetPoint("CENTER")
-		self.Icon:SetTexture(DB.arrowRight)
-		self.Icon:SetPoint("RIGHT", self, "RIGHT", -5, 0)
-		self.Icon:SetSize(8, 8)
+		B.SetupArrow(self.Icon, "right")
+		self.Icon:SetPoint("RIGHT")
+		self.Icon:SetSize(14, 14)
 	end
 
 	function B:ReskinNavBar()
@@ -1036,8 +1025,8 @@ do
 		B.Reskin(overflowButton, true)
 
 		local tex = overflowButton:CreateTexture(nil, "ARTWORK")
-		tex:SetTexture(DB.arrowLeft)
-		tex:SetSize(8, 8)
+		B.SetupArrow(tex, "left")
+		tex:SetSize(14, 14)
 		tex:SetPoint("CENTER")
 		overflowButton.bgTex = tex
 
@@ -1167,36 +1156,20 @@ do
 		for _, name in next, buttonNames do
 			local button = self[name]
 			if button then
-				button:SetSize(17, 17)
+				button:SetSize(16, 16)
 				button:ClearAllPoints()
 				button:SetPoint("CENTER", -3, 0)
 				B.Reskin(button)
 
-				button.pixels = {}
-
 				local tex = button:CreateTexture()
-				tex:SetColorTexture(1, 1, 1)
-				tex:SetSize(11, 2)
+				tex:SetSize(16, 16)
 				tex:SetPoint("CENTER")
-				tex:SetRotation(math.rad(45))
-				tinsert(button.pixels, tex)
-
-				local hline = button:CreateTexture()
-				hline:SetColorTexture(1, 1, 1)
-				hline:SetSize(7, 2)
-				tinsert(button.pixels, hline)
-
-				local vline = button:CreateTexture()
-				vline:SetColorTexture(1, 1, 1)
-				vline:SetSize(2, 7)
-				tinsert(button.pixels, vline)
+				button.bgTex = tex
 
 				if name == "MaximizeButton" then
-					hline:Point("TOPRIGHT", -4, -4)
-					vline:Point("TOPRIGHT", -4, -4)
+					B.SetupArrow(tex, "up")
 				else
-					hline:Point("BOTTOMLEFT", 4, 4)
-					vline:Point("BOTTOMLEFT", 4, 4)
+					B.SetupArrow(tex, "down")
 				end
 
 				button:SetScript("OnEnter", B.Texture_OnEnter)
