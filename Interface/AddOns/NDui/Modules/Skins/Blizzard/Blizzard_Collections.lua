@@ -285,9 +285,10 @@ C.themes["Blizzard_Collections"] = function()
 			spell.selected:SetTexture(DB.textures.pushed)
 			spell:GetRegions():Hide()
 
-			spell.FlyoutArrow:SetTexture(DB.arrowDown)
-			spell.FlyoutArrow:SetSize(8, 8)
-			spell.FlyoutArrow:SetTexCoord(0, 1, 0, 1)
+			local flyoutArrow = spell.FlyoutArrow
+			B.SetupArrow(flyoutArrow, "down")
+			flyoutArrow:SetSize(14, 14)
+			flyoutArrow:SetTexCoord(0, 1, 0, 1)
 
 			B.ReskinIcon(spell.icon)
 		end

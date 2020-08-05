@@ -70,8 +70,8 @@ tinsert(C.defaultThemes, function()
 			arrowButton:SetHighlightTexture("")
 
 			local tex = arrowButton:CreateTexture(nil, "ARTWORK")
-			tex:SetTexture(DB.arrowDown)
-			tex:SetSize(8, 8)
+			B.SetupArrow(tex, "down")
+			tex:SetSize(14, 14)
 			tex:SetPoint("CENTER")
 			arrowButton.bgTex = tex
 
