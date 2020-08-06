@@ -9,9 +9,11 @@ local select, pairs, ipairs, next, unpack = select, pairs, ipairs, next, unpack
 function S:RematchFilter()
 	B.StripTextures(self)
 	B.Reskin(self)
-	self.Arrow:SetTexture(DB.arrowRight)
-	self.Arrow:SetPoint("RIGHT", self, "RIGHT", -5, 0)
-	self.Arrow:SetSize(8, 8)
+	B.SetupArrow(self.Arrow, "right")
+	self.Arrow:ClearAllPoints()
+	self.Arrow:SetPoint("RIGHT")
+	self.Arrow.SetPoint = B.Dummy
+	self.Arrow:SetSize(14, 14)
 end
 
 function S:RematchIcon()
