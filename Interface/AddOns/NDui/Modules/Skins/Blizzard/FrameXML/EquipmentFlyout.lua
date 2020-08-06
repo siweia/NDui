@@ -4,19 +4,15 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	EquipmentFlyoutFrameHighlight:Hide()
-
 	local border = B.CreateBDFrame(EquipmentFlyoutFrame, 0)
-	border:SetBackdropBorderColor(1, 1, 1)
-	border:SetPoint("TOPLEFT", 2, -2)
-	border:SetPoint("BOTTOMRIGHT", -2, 2)
+	border:SetBackdropBorderColor(1, .8, 0)
+	border:SetInside(self, 3, 3)
+	EquipmentFlyoutFrameHighlight:SetAlpha(0)
 
 	local navFrame = EquipmentFlyoutFrame.NavigationFrame
-
 	EquipmentFlyoutFrameButtons.bg1:SetAlpha(0)
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
 	Test2:Hide() -- wat
-
 	navFrame:SetWidth(204)
 	navFrame:SetPoint("TOPLEFT", EquipmentFlyoutFrameButtons, "BOTTOMLEFT", 1, 0)
 
