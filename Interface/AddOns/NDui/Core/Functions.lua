@@ -1407,8 +1407,10 @@ do
 		dd.Text:SetPoint("RIGHT", -5, 0)
 		dd.options = {}
 
-		local bu = B.CreateGear(dd)
-		bu:SetPoint("LEFT", dd, "RIGHT", -2, 0)
+		local bu = CreateFrame("Button", nil, dd)
+		bu:SetPoint("RIGHT", -5, 0)
+		B.ReskinArrow(bu, "down")
+		bu:SetSize(18, 18)
 		local list = CreateFrame("Frame", nil, dd, "BackdropTemplate")
 		list:SetPoint("TOP", dd, "BOTTOM", 0, -2)
 		B.CreateBD(list, 1)
