@@ -898,14 +898,13 @@ do
 		local frameName = self.GetName and self:GetName()
 		local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
 
-		down:ClearAllPoints()
-		down:SetPoint("RIGHT", -18, 2)
-		B.ReskinArrow(down, "down")
-		down:SetSize(20, 20)
-
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", 16, -4)
 		bg:SetPoint("BOTTOMRIGHT", -18, 8)
+
+		down:ClearAllPoints()
+		down:SetPoint("RIGHT", bg, -2, 0)
+		B.ReskinArrow(down, "down")
 	end
 
 	-- Handle close button
@@ -950,8 +949,8 @@ do
 		local tex = self:CreateTexture()
 		tex:SetTexture(DB.closeTex)
 		tex:SetAllPoints()
-		self.bgTex = tex
-	
+		self.__texture = tex
+
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 	end
@@ -998,9 +997,8 @@ do
 		dis:SetAllPoints()
 
 		local tex = self:CreateTexture(nil, "ARTWORK")
-		tex:SetTexture(direcIndex[direction])
-		tex:SetSize(8, 8)
-		tex:SetPoint("CENTER")
+		tex:SetAllPoints()
+		B.SetupArrow(tex, direction)
 		self.__texture = tex
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
@@ -1158,17 +1156,13 @@ do
 				B.Reskin(button)
 
 				local tex = button:CreateTexture()
-				tex:SetSize(16, 16)
-				tex:SetPoint("CENTER")
-				button.bgTex = tex
-
+				tex:SetAllPoints()
 				if name == "MaximizeButton" then
-					hline:Point("TOPRIGHT", -4, -4)
-					vline:Point("TOPRIGHT", -4, -4)
+					B.SetupArrow(tex, "up")
 				else
-					hline:Point("BOTTOMLEFT", 4, 4)
-					vline:Point("BOTTOMLEFT", 4, 4)
+					B.SetupArrow(tex, "down")
 				end
+				button.__texture = tex
 
 				button:SetScript("OnEnter", B.Texture_OnEnter)
 				button:SetScript("OnLeave", B.Texture_OnLeave)
