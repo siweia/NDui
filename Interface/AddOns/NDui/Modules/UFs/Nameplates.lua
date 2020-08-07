@@ -802,7 +802,7 @@ function UF:UpdatePlateByType()
 		raidtarget:SetPoint("TOP", title, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
 		classify:Hide()
-		questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0)
+		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
 	else
 		for _, element in pairs(DisabledElements) do
 			if not self:IsElementEnabled(element) then
@@ -821,7 +821,7 @@ function UF:UpdatePlateByType()
 		raidtarget:SetPoint("RIGHT", self, "LEFT", -3, 0)
 		raidtarget:SetParent(self.Health)
 		classify:Show()
-		questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0)
+		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end
 	end
 
 	UF.UpdateTargetIndicator(self)
