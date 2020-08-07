@@ -92,12 +92,11 @@ tinsert(C.defaultThemes, function()
 		popout:SetHighlightTexture("")
 
 		local arrow = popout:CreateTexture(nil, "OVERLAY")
+		arrow:SetSize(14, 14)
 		if slot.verticalFlyout then
-			arrow:SetSize(14, 14)
 			B.SetupArrow(arrow, "down")
 			arrow:SetPoint("TOP", slot, "BOTTOM", 0, 1)
 		else
-			arrow:SetSize(14, 14)
 			B.SetupArrow(arrow, "right")
 			arrow:SetPoint("LEFT", slot, "RIGHT", -1, 0)
 		end
