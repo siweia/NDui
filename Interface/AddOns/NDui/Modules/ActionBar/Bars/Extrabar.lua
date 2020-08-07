@@ -15,8 +15,8 @@ function Bar:CreateExtrabar()
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 250, 100}
 
 	--move the buttons into position and reparent them
+	ExtraActionBarFrame:EnableMouse(false)
 	ExtraAbilityContainer:SetParent(frame)
-	ExtraAbilityContainer:EnableMouse(false)
 	ExtraAbilityContainer:ClearAllPoints()
 	ExtraAbilityContainer:SetPoint("CENTER", 0, 0)
 	ExtraAbilityContainer.ignoreFramePositionManager = true
