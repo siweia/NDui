@@ -6,7 +6,6 @@ local function ReskinQuestHeader(header, isCampaign)
 
 	header.Background:SetAlpha(.5)
 	if header.TopFiligree then header.TopFiligree:Hide() end
-	if header.SelectedHighlight then header.SelectedHighlight:SetTexture("") end
 	if header.CollapseButton then
 		B.StripTextures(header.CollapseButton, 0)
 		B.ReskinExpandOrCollapse(header.CollapseButton, true)
