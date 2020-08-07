@@ -336,6 +336,7 @@ do
 		"BG",
 		"border",
 		"Border",
+		"Background",
 		"BorderFrame",
 		"bottomInset",
 		"BottomInset",
@@ -1119,9 +1120,9 @@ do
 		self:SetNormalTexture("")
 
 		if texture and texture ~= "" then
-			if strfind(texture, "Plus") then
+			if strfind(texture, "Plus") or strfind(texture, "Closed") then
 				self.expTex:SetTexCoord(0, .4375, 0, .4375)
-			elseif strfind(texture, "Minus") then
+			elseif strfind(texture, "Minus") or strfind(texture, "Open") then
 				self.expTex:SetTexCoord(.5625, 1, 0, .4375)
 			end
 			self.bg:Show()
@@ -1131,7 +1132,7 @@ do
 		self.settingTexture = nil
 	end
 
-	function B:ReskinExpandOrCollapse()
+	function B:ReskinExpandOrCollapse(isAtlas)
 		self:SetHighlightTexture("")
 		self:SetPushedTexture("")
 
@@ -1148,7 +1149,11 @@ do
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)
-		hooksecurefunc(self, "SetNormalTexture", UpdateExpandOrCollapse)
+		if isAtlas then
+			hooksecurefunc(self, "SetNormalAtlas", UpdateExpandOrCollapse)
+		else
+			hooksecurefunc(self, "SetNormalTexture", UpdateExpandOrCollapse)
+		end
 	end
 
 	local buttonNames = {"MaximizeButton", "MinimizeButton"}
