@@ -275,7 +275,10 @@ function M:RaidTool_Marker(parent)
 		markerButton:SetPoint("RIGHT", parent, "LEFT", -3, 0)
 		markerButton:SetParent(parent)
 		markerButton:SetSize(28, 28)
-		if markerButton.__bg then markerButton.__bg:Hide() end
+		if not markerButton.__bg then
+			B.Reskin(markerButton)
+		end
+		markerButton.__bg:Hide()
 		B.ReskinMenuButton(markerButton)
 		markerButton:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
 		markerButton:GetNormalTexture():SetVertexColor(DB.r, DB.g, DB.b)
