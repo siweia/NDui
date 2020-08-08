@@ -5,7 +5,7 @@ local oUF = ns.oUF or oUF
 local AFK, DND, DEAD, PLAYER_OFFLINE, LEVEL = AFK, DND, DEAD, PLAYER_OFFLINE, LEVEL
 local format, strfind, GetCVarBool = format, strfind, GetCVarBool
 local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate or 10
-local UnitAlternatePowerTextureInfo = UnitAlternatePowerTextureInfo
+local GetUnitPowerBarTextureInfo = GetUnitPowerBarTextureInfo
 local UnitIsDeadOrGhost, UnitIsConnected, UnitHasVehicleUI, UnitIsTapDenied, UnitIsPlayer = UnitIsDeadOrGhost, UnitIsConnected, UnitHasVehicleUI, UnitIsTapDenied, UnitIsPlayer
 local UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger = UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger
 local UnitClass, UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel = UnitClass, UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel
@@ -232,7 +232,7 @@ oUF.Tags.Events["npctitle"] = "UNIT_NAME_UPDATE"
 oUF.Tags.Methods["altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	if cur > 0 then
-		local _, r, g, b = UnitAlternatePowerTextureInfo(unit, 2)
+		local _, r, g, b = GetUnitPowerBarTextureInfo(unit, 3)
 		if not r then r, g, b = 1, 1, 1 end
 		return B.HexRGB(r, g, b)..cur
 	end
