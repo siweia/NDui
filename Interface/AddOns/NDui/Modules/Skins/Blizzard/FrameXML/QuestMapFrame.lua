@@ -1,10 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function ReskinQuestHeader(header, isCampaign)
+local function ReskinQuestHeader(header)
 	if header.styled then return end
 
-	header.Background:SetAlpha(.5)
+	header.Background:SetAlpha(.7)
 	if header.TopFiligree then header.TopFiligree:Hide() end
 	if header.CollapseButton then
 		B.StripTextures(header.CollapseButton, 0)
@@ -31,25 +31,25 @@ end
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
+	-- Quest frame
+
 	local QuestMapFrame = QuestMapFrame
-
-	-- [[ Quest scroll frame ]]
-
-	local QuestScrollFrame = QuestScrollFrame
-
 	QuestMapFrame.VerticalSeparator:SetAlpha(0)
 	QuestMapFrame.Background:SetAlpha(0)
-	QuestMapFrame.CampaignOverview.BG:SetAlpha(0)
-	B.ReskinScroll(QuestMapFrame.CampaignOverview.ScrollFrame.ScrollBar)
 
+	local QuestScrollFrame = QuestScrollFrame
 	QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
 	QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)
+	ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
 	B.ReskinScroll(QuestScrollFrame.ScrollBar)
 
-	ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
+	local campaignOverview = QuestMapFrame.CampaignOverview
+	campaignOverview.BG:SetAlpha(0)
+	ReskinQuestHeader(campaignOverview.Header)
+	B.ReskinScroll(campaignOverview.ScrollFrame.ScrollBar)
 
-	-- [[ Quest details ]]
+	-- Quest details
 
 	local DetailsFrame = QuestMapFrame.DetailsFrame
 	local CompleteQuestFrame = DetailsFrame.CompleteQuestFrame
@@ -92,7 +92,7 @@ tinsert(C.defaultThemes, function()
 		end
 
 		for header in QuestScrollFrame.campaignHeaderFramePool:EnumerateActive() do
-			ReskinQuestHeader(header, true)
+			ReskinQuestHeader(header)
 		end
 	end)
 
