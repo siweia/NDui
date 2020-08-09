@@ -8,50 +8,45 @@ function Bar:CreateExtrabar()
 	local num = 1
 	local buttonList = {}
 
-	--create the frame to hold the buttons
+	-- ExtraActionButton
 	local frame = CreateFrame("Frame", "NDui_ActionBarExtra", UIParent, "SecureHandlerStateTemplate")
 	frame:SetWidth(num*cfg.size + (num-1)*margin + 2*padding)
 	frame:SetHeight(cfg.size + 2*padding)
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 250, 100}
 
-	--move the buttons into position and reparent them
 	ExtraActionBarFrame:EnableMouse(false)
 	ExtraAbilityContainer:SetParent(frame)
 	ExtraAbilityContainer:ClearAllPoints()
 	ExtraAbilityContainer:SetPoint("CENTER", 0, 0)
 	ExtraAbilityContainer.ignoreFramePositionManager = true
 
-	--the extra button
 	local button = ExtraActionButton1
-	table.insert(buttonList, button) --add the button object to the list
+	table.insert(buttonList, button)
 	button:SetSize(cfg.size, cfg.size)
 
-	--show/hide the frame on a given state driver
 	frame.frameVisibility = "[extrabar] show; hide"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	--create drag frame and drag functionality
 	if C.bars.userplaced then
 		frame.mover = B.Mover(frame, L["Extrabar"], "Extrabar", frame.Pos)
 	end
 
-	--create the mouseover functionality
 	if cfg.fader then
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
-	--zone ability
+	-- ZoneAbility
 	local zoneFrame = CreateFrame("Frame", "NDui_ActionBarZone", UIParent)
 	zoneFrame:SetWidth(cfg.size + 2*padding)
 	zoneFrame:SetHeight(cfg.size + 2*padding)
 	zoneFrame.Pos = {"BOTTOM", UIParent, "BOTTOM", -250, 100}
+	zoneFrame.mover = B.Mover(zoneFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
 
 	ZoneAbilityFrame:SetParent(zoneFrame)
 	ZoneAbilityFrame:ClearAllPoints()
-	ZoneAbilityFrame:SetPoint("CENTER", 0, 0)
+	ZoneAbilityFrame:SetPoint("CENTER", zoneFrame)
 	ZoneAbilityFrame.ignoreFramePositionManager = true
 	ZoneAbilityFrame.Style:SetAlpha(0)
-	zoneFrame.mover = B.Mover(zoneFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
 
 	hooksecurefunc(ZoneAbilityFrame, "UpdateDisplayedZoneAbilities", function(self)
 		for spellButton in self.SpellButtonContainer:EnumerateActive() do
@@ -61,6 +56,13 @@ function Bar:CreateExtrabar()
 				B.ReskinIcon(spellButton.Icon, true)
 				spellButton.styled = true
 			end
+		end
+	end)
+
+	-- Fix button visibility
+	hooksecurefunc(ZoneAbilityFrame, "SetParent", function(self, parent)
+		if parent == ExtraAbilityContainer then
+			self:SetParent(zoneFrame)
 		end
 	end)
 end
