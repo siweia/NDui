@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local function reskinTableAttribute(frame)
+	if frame.styled then return end
+
 	B.StripTextures(frame)
 	B.SetBD(frame)
 	B.ReskinClose(frame.CloseButton)
@@ -25,6 +27,8 @@ local function reskinTableAttribute(frame)
 	B.StripTextures(frame.ScrollFrameArt)
 	B.CreateBDFrame(frame.ScrollFrameArt, .25)
 	B.ReskinScroll(frame.LinesScrollFrame.ScrollBar)
+
+	frame.styled = true
 end
 
 C.themes["Blizzard_DebugTools"] = function()
