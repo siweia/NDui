@@ -33,7 +33,7 @@ end
 
 local function ReskinHeader(header)
 	header.Text:SetTextColor(r, g, b)
-	header.Background:Hide()
+	header.Background:SetTexture(nil)
 	local bg = header:CreateTexture(nil, "ARTWORK")
 	bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
 	bg:SetTexCoord(0, .66, 0, .31)

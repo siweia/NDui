@@ -17,7 +17,7 @@ function Bar:CreateExtrabar()
 	ExtraActionBarFrame:EnableMouse(false)
 	ExtraAbilityContainer:SetParent(frame)
 	ExtraAbilityContainer:ClearAllPoints()
-	ExtraAbilityContainer:SetPoint("CENTER", 0, 0)
+	ExtraAbilityContainer:SetPoint("CENTER", frame)
 	ExtraAbilityContainer.ignoreFramePositionManager = true
 
 	local button = ExtraActionButton1
