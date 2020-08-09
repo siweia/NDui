@@ -17,6 +17,8 @@ C.themes["Blizzard_DebugTools"] = function()
 
 	-- Table Attribute Display
 	local function reskinTableAttribute(frame)
+		if frame.styled then return end
+
 		B.StripTextures(frame)
 		B.SetBD(frame)
 		B.ReskinClose(frame.CloseButton)
@@ -40,6 +42,8 @@ C.themes["Blizzard_DebugTools"] = function()
 		B.StripTextures(frame.ScrollFrameArt)
 		B.CreateBDFrame(frame.ScrollFrameArt, .25)
 		B.ReskinScroll(frame.LinesScrollFrame.ScrollBar)
+
+		frame.styled = true
 	end
 
 	reskinTableAttribute(TableAttributeDisplay)
