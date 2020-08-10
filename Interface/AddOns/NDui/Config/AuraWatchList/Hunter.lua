@@ -33,6 +33,7 @@ local list = {
 		{AuraID = 19386, UnitID = "target", Caster = "player"},		-- 翼龙钉刺
 		{AuraID = 24394, UnitID = "target", Caster = "pet"},		-- 胁迫
 		{AuraID = 117526, UnitID = "target"},						-- 束缚射击
+		{AuraID = 257284, UnitID = "target"},						-- 猎人印记
 		{AuraID = 131894, UnitID = "target", Caster = "player"},	-- 夺命黑鸦
 		{AuraID = 199803, UnitID = "target", Caster = "player"},	-- 精确瞄准
 		{AuraID = 195645, UnitID = "target", Caster = "player"},	-- 摔绊
@@ -40,7 +41,6 @@ local list = {
 		{AuraID = 202900, UnitID = "target", Caster = "player"},	-- 毒蝎钉刺
 		{AuraID = 224729, UnitID = "target", Caster = "player"},	-- 爆裂射击
 		{AuraID = 213691, UnitID = "target", Caster = "player"},	-- 驱散射击
-		{AuraID = 257284, UnitID = "target", Caster = "player"},	-- 猎人印记
 		{AuraID = 162480, UnitID = "target", Caster = "player"},	-- 精钢陷阱
 		{AuraID = 162487, UnitID = "target", Caster = "player"},	-- 精钢陷阱
 		{AuraID = 259491, UnitID = "target", Caster = "player"},	-- 毒蛇钉刺
