@@ -58,7 +58,7 @@ function M:OnLogin()
 	self:UpdateFasterLoot()
 	self:UpdateErrorBlocker()
 	self:TradeTargetInfo()
-	self:MoverQuestTracker()
+	self:MoveQuestTracker()
 	self:BlockStrangerInvite()
 	self:OverrideAWQ()
 	self:ReplaceContaminantName()
@@ -218,7 +218,7 @@ function M:MoveTicketStatusFrame()
 end
 
 -- Reanchor ObjectiveTracker
-function M:MoverQuestTracker()
+function M:MoveQuestTracker()
 	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
 	frame:SetSize(240, 50)
 	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
