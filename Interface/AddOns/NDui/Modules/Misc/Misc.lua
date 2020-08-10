@@ -48,22 +48,30 @@ function M:OnLogin()
 	end
 
 	-- Init
-	M:NakedIcon()
-	M:ExtendInstance()
-	M:VehicleSeatMover()
-	M:UIWidgetFrameMover()
-	M:MoveDurabilityFrame()
-	M:MoveTicketStatusFrame()
-	M:UpdateScreenShot()
-	M:UpdateFasterLoot()
-	M:UpdateErrorBlocker()
-	M:TradeTargetInfo()
-	M:MoverQuestTracker()
-	M:BlockStrangerInvite()
-	M:OverrideAWQ()
-	M:ReplaceContaminantName()
-	M:ToggleBossBanner()
-	M:ToggleBossEmote()
+	self:NakedIcon()
+	self:ExtendInstance()
+	self:VehicleSeatMover()
+	self:UIWidgetFrameMover()
+	self:MoveDurabilityFrame()
+	self:MoveTicketStatusFrame()
+	self:UpdateScreenShot()
+	self:UpdateFasterLoot()
+	self:UpdateErrorBlocker()
+	self:TradeTargetInfo()
+	self:MoveQuestTracker()
+	self:BlockStrangerInvite()
+	self:OverrideAWQ()
+	self:ReplaceContaminantName()
+
+	-- Max camera distancee
+	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
+		SetCVar("cameraDistanceMaxZoomFactor", 2.6)
+	end
+
+	-- Hide Bossbanner
+	if NDuiDB["Misc"]["HideBanner"] then
+		BossBanner:UnregisterAllEvents()
+	end
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -231,7 +239,7 @@ function M:MoveTicketStatusFrame()
 end
 
 -- Reanchor ObjectiveTracker
-function M:MoverQuestTracker()
+function M:MoveQuestTracker()
 	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
 	frame:SetSize(240, 50)
 	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
