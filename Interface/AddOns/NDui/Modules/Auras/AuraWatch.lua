@@ -6,7 +6,7 @@ local maxFrames = 12 -- Max Tracked Auras
 local updater = CreateFrame("Frame")
 local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable = {}, {}, {}, {}, {}, {}, {}
 local pairs, select, tinsert, tremove, wipe = pairs, select, table.insert, table.remove, table.wipe
-local InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
+local InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty, UnitIsPlayer = InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty, UnitIsPlayer
 local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo = GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo
 local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
@@ -563,7 +563,7 @@ end
 function A:IsUnitWeNeed(value, name, flags)
 	if not value.UnitID then value.UnitID = "Player" end
 	if value.UnitID:lower() == "all" then
-		if name and (UnitInRaid(name) or UnitInParty(name) or checkPetFlags(flags, true)) then
+		if name and (UnitInRaid(name) or UnitInParty(name) or checkPetFlags(flags, true) or not UnitIsPlayer(name)) then
 			return true
 		end
 	elseif value.UnitID:lower() == "player" then
