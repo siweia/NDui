@@ -187,7 +187,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:SetAttribute("type", "item")
 
 	if(not self:GetPoint()) then
-		self:SetPoint("CENTER", ExtraActionButton1)
+		self:SetPoint("CENTER", _G.NDui_ActionBarExtra)
 	end
 
 	self:SetSize(ExtraActionButton1:GetSize())
@@ -406,7 +406,7 @@ local function GetClosestQuestItem()
 				closestQuestLink = itemLink
 				closestQuestTexture = texture
 			elseif(not isComplete or (isComplete and showCompleted)) then
-				local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questLogIndex)
+				local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questID)
 				if(onContinent and distanceSq <= shortestDistanceSq) then
 					shortestDistanceSq = distanceSq
 					closestQuestLink = itemLink
@@ -435,7 +435,7 @@ local function GetClosestQuestItem()
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
-						local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questLogIndex)
+						local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questID)
 						if(onContinent and distanceSq <= shortestDistanceSq) then
 							shortestDistanceSq = distanceSq
 							closestQuestLink = itemLink
@@ -467,7 +467,7 @@ local function GetClosestQuestItem()
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
-						local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questLogIndex)
+						local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questID)
 						if(onContinent and distanceSq <= shortestDistanceSq) then
 							shortestDistanceSq = distanceSq
 							closestQuestLink = itemLink
