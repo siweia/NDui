@@ -196,7 +196,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 		if _G.NDui_ActionBarExtra then
 			self:SetPoint("CENTER", _G.NDui_ActionBarExtra)
 		else
-			B.Mover(self, L["Extrabar"], "Extrabar", {"BOTTOM", UIParent, "BOTTOM", 250, 100})
+			B.Mover(self, L["ExtraQuestButton"], "Extrabar", {"BOTTOM", UIParent, "BOTTOM", 250, 100})
 		end
 	end
 

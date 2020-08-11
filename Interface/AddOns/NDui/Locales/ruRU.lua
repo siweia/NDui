@@ -656,3 +656,4 @@ L["IncludeCrowdControl"] = "List & Player & CCs" -- need translation
 L["NameOnlyMode"] = "Name Only Mode" -- need translation
 L["NameOnlyModeTip"] = "|nIf enabled, nameplate healthbar would be hidden on friendly units.|nAnd only shows auras from nameplate whitelist." -- need translation
 L["TargetAurasPerRow"] = "TargetFrame AurasPerRow" -- need translation
+L["ExtraQuestButton"] = "ExtraQuestButton" -- need translation
