@@ -30,6 +30,10 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 326078) -- 灌注者的恩赐
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 325251) -- 骄傲之罪
 
 BOSS = 2418 -- 技师赛·墨克斯
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 327902) -- 锁定
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 326302) -- 静滞陷阱
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 325236) -- 毁灭符文
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 327414) -- 附身
 
 BOSS = 2420 -- 伊涅瓦·暗脉女勋爵
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 325936) -- 共享认知
@@ -66,3 +70,8 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 334616) -- 石化
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 334541) -- 石化诅咒
 
 BOSS = 2424 -- 德纳修斯大帝
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 326851) -- 血债
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 327798) -- 罐装心能
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 327992) -- 荒芜
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 328276) -- 悔悟之行
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 326699) -- 罪孽烦扰
