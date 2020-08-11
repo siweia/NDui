@@ -186,15 +186,19 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:SetAttribute("_onattributechanged", onAttributeChanged)
 	self:SetAttribute("type", "item")
 
-	if(not self:GetPoint()) then
-		self:SetPoint("CENTER", _G.NDui_ActionBarExtra)
-	end
-
 	self:SetSize(ExtraActionButton1:GetSize())
 	self:SetScale(ExtraActionButton1:GetScale())
 	self:SetScript("OnLeave", B.HideTooltip)
 	self:SetClampedToScreen(true)
 	self:SetToplevel(true)
+
+	if(not self:GetPoint()) then
+		if _G.NDui_ActionBarExtra then
+			self:SetPoint("CENTER", _G.NDui_ActionBarExtra)
+		else
+			B.Mover(self, L["Extrabar"], "Extrabar", {"BOTTOM", UIParent, "BOTTOM", 250, 100})
+		end
+	end
 
 	self.updateTimer = 0
 	self.rangeTimer = 0
@@ -365,7 +369,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 		else
 			HotKey:Hide()
 		end
-		if NDuiDB["Actionbar"]["Enable"] then B:GetModule("Actionbar").UpdateHotKey(self) end
+		B:GetModule("Actionbar").UpdateHotKey(self)
 
 		if(InCombatLockdown()) then
 			self:RegisterEvent("PLAYER_REGEN_ENABLED")
