@@ -29,7 +29,7 @@ local function createExtraGUI(parent, name, title, bgFrame)
 	end
 
 	if bgFrame then
-		frame.bg = CreateFrame("Frame", nil, frame, "BackdropTemplate")
+		frame.bg = CreateFrame("Frame", nil, frame, "NDuiBackdropTemplate")
 		frame.bg:SetSize(280, 540)
 		frame.bg:SetPoint("TOPLEFT", 10, -50)
 		B.CreateBD(frame.bg, .25)
@@ -192,7 +192,7 @@ function G:SetupRaidDebuffs(parent)
 	end
 
 	local function createBar(index, texture)
-		local bar = CreateFrame("Frame", nil, scroll.child, "BackdropTemplate")
+		local bar = CreateFrame("Frame", nil, scroll.child, "NDuiBackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
 		bar.index = index
@@ -338,7 +338,7 @@ function G:SetupClickCast(parent)
 			texture = 136243
 		end
 
-		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		local bar = CreateFrame("Frame", nil, parent, "NDuiBackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
 		barTable[clickSet] = bar
@@ -438,7 +438,7 @@ function G:SetupPartyWatcher(parent)
 		if spellName == ARCANE_TORRENT then return end
 		local texture = GetSpellTexture(spellID)
 
-		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		local bar = CreateFrame("Frame", nil, parent, "NDuiBackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
 		barTable[spellID] = bar
@@ -528,7 +528,7 @@ function G:SetupNameplateFilter(parent)
 
 	local function createBar(parent, index, spellID)
 		local name, _, texture = GetSpellInfo(spellID)
-		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		local bar = CreateFrame("Frame", nil, parent, "NDuiBackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
 		frameData[index].barList[spellID] = bar
@@ -562,7 +562,7 @@ function G:SetupNameplateFilter(parent)
 
 	for index, value in ipairs(frameData) do
 		B.CreateFS(plateGUI, 14, value.text, "system", "TOPLEFT", 20, value.offset)
-		local frame = CreateFrame("Frame", nil, plateGUI, "BackdropTemplate")
+		local frame = CreateFrame("Frame", nil, plateGUI, "NDuiBackdropTemplate")
 		frame:SetSize(280, 250)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
 		B.CreateBD(frame, .25)
@@ -606,7 +606,7 @@ function G:SetupBuffIndicator(parent)
 
 	local function createBar(parent, index, spellID, anchor, r, g, b, showAll)
 		local name, _, texture = GetSpellInfo(spellID)
-		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		local bar = CreateFrame("Frame", nil, parent, "NDuiBackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
 		frameData[index].barList[spellID] = bar
@@ -678,7 +678,7 @@ function G:SetupBuffIndicator(parent)
 	for index, value in ipairs(frameData) do
 		B.CreateFS(buffIndicatorGUI, 14, value.text, "system", "TOPLEFT", 20, value.offset)
 
-		local frame = CreateFrame("Frame", nil, buffIndicatorGUI, "BackdropTemplate")
+		local frame = CreateFrame("Frame", nil, buffIndicatorGUI, "NDuiBackdropTemplate")
 		frame:SetSize(280, 250)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
 		B.CreateBD(frame, .25)
