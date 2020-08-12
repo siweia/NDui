@@ -1,4 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Frame name="NDuiBackdropTemplate" mixin="NDuiBackdropTemplateMixin" virtual="true">
+		<Scripts>
+			<OnLoad method="OnBackdropLoaded"/>
+			<OnSizeChanged method="OnBackdropSizeChanged"/>
+		</Scripts>
+	</Frame>
+
+	<Script file="BackdropTemplate.lua"/>
 	<Script file="Database.lua"/>
 	<Script file="Functions.lua"/>
 	<Script file="Smooth.lua"/>
