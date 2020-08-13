@@ -122,7 +122,9 @@ tinsert(C.defaultThemes, function()
 			InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown,
 			InterfaceOptionsCameraPanelStyleDropDown,
 			InterfaceOptionsMousePanelClickMoveStyleDropDown,
-			InterfaceOptionsAccessibilityPanelColorFilterDropDown
+			InterfaceOptionsAccessibilityPanelColorFilterDropDown,
+			InterfaceOptionsAccessibilityPanelMotionSicknessDropdown,
+			InterfaceOptionsAccessibilityPanelShakeIntensityDropdown,
 		}
 		for _, dropdown in next, dropdowns do
 			B.ReskinDropDown(dropdown)
