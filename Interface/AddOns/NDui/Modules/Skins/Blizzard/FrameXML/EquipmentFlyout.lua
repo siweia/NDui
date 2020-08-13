@@ -12,7 +12,6 @@ tinsert(C.defaultThemes, function()
 	local navFrame = EquipmentFlyoutFrame.NavigationFrame
 	EquipmentFlyoutFrameButtons.bg1:SetAlpha(0)
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
-	Test2:Hide() -- wat
 	navFrame:SetWidth(204)
 	navFrame:SetPoint("TOPLEFT", EquipmentFlyoutFrameButtons, "BOTTOMLEFT", 1, 0)
 
