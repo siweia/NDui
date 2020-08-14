@@ -163,7 +163,7 @@ function M:TradeTabs_FilterIcons()
 
 	local buttons = {}
 	for index, value in pairs(buttonList) do
-		local bu = CreateFrame("Button", nil, TradeSkillFrame, "NDuiBackdropTemplate")
+		local bu = CreateFrame("Button", nil, TradeSkillFrame, "BackdropTemplate")
 		bu:SetSize(22, 22)
 		bu:SetPoint("RIGHT", TradeSkillFrame.FilterButton, "LEFT", -5 - (index-1)*27, 0)
 		B.PixelIcon(bu, value[1], true)

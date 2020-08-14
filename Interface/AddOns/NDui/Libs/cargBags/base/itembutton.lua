@@ -70,18 +70,12 @@ end
 	@callback button:OnCreate(tpl)
 ]]
 
-local function updateContextMatch(button)
-	local item = button:GetItem()
-	local isItemSet = ScrappingMachineFrame and ScrappingMachineFrame:IsShown() and item and item.isInSet
-	button:SetAlpha((button.ItemContextOverlay:IsShown() or isItemSet) and .3 or 1)
-end
-
 function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1
 	local name = ("%sSlot%d"):format(impl.name, impl.numSlots)
 
-	local button = setmetatable(CreateFrame("ItemButton", name, parent, tpl..", NDuiBackdropTemplate"), self.__index)
+	local button = setmetatable(CreateFrame("ItemButton", name, parent, tpl..", BackdropTemplate"), self.__index)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
 	if(button.OnCreate) then button:OnCreate(tpl) end
@@ -96,7 +90,6 @@ function ItemButton:Create(tpl, parent)
 	if btnICO then btnICO:SetTexture("") end
 
 	button:RegisterForDrag("LeftButton") -- fix button drag in 9.0
-	hooksecurefunc(button, "UpdateItemContextOverlay", updateContextMatch)
 
 	return button
 end

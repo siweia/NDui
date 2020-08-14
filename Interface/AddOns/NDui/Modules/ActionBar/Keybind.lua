@@ -56,7 +56,7 @@ end
 function Bar:Bind_Create()
 	if Bar.keybindFrame then return end
 
-	local frame = CreateFrame("Frame", nil, UIParent, "NDuiBackdropTemplate")
+	local frame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
 	frame:SetFrameStrata("DIALOG")
 	frame:EnableMouse(true)
 	frame:EnableKeyboard(true)

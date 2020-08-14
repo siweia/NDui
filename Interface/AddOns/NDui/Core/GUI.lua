@@ -981,7 +981,7 @@ local function tabOnLeave(self)
 end
 
 local function CreateTab(parent, i, name)
-	local tab = CreateFrame("Button", nil, parent, "NDuiBackdropTemplate")
+	local tab = CreateFrame("Button", nil, parent, "BackdropTemplate")
 	tab:SetPoint("TOPLEFT", 20, -30*i - 20 + C.mult)
 	tab:SetSize(130, 28)
 	B.CreateBD(tab, .3)
@@ -1574,7 +1574,7 @@ local function OpenGUI()
 end
 
 function G:OnLogin()
-	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate, NDuiBackdropTemplate")
+	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate, BackdropTemplate")
 	gui:SetText(L["NDui Console"])
 	gui:SetPoint("TOP", GameMenuButtonAddons, "BOTTOM", 0, -21)
 	GameMenuFrame:HookScript("OnShow", function(self)

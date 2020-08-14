@@ -27,7 +27,7 @@ function M:GuildBest_UpdateTooltip()
 end
 
 function M:GuildBest_Create()
-	frame = CreateFrame("Frame", nil, ChallengesFrame, "NDuiBackdropTemplate")
+	frame = CreateFrame("Frame", nil, ChallengesFrame, "BackdropTemplate")
 	frame:SetPoint("BOTTOMRIGHT", -6, 80)
 	frame:SetSize(170, 105)
 	B.CreateBD(frame, .25)
@@ -118,7 +118,7 @@ local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 
 function M:KeystoneInfo_Create()
 	local texture = select(10, GetItemInfo(158923)) or 525134
-	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "NDuiBackdropTemplate")
+	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "BackdropTemplate")
 	button:SetPoint("BOTTOMLEFT", 2, 67)
 	button:SetSize(35, 35)
 	B.PixelIcon(button, texture, true)

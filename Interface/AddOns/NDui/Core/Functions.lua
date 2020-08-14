@@ -482,7 +482,7 @@ do
 		local frame = self
 		if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 
-		self.__shadow = CreateFrame("Frame", nil, frame, "NDuiBackdropTemplate")
+		self.__shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		self.__shadow:SetOutside(self, size or 4, size or 4)
 		self.__shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
 		self.__shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
@@ -599,7 +599,7 @@ do
 		if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 		local lvl = frame:GetFrameLevel()
 
-		local bg = CreateFrame("Frame", nil, frame, "NDuiBackdropTemplate")
+		local bg = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		bg:SetOutside(self)
 		bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 		B.CreateBD(bg, a)
@@ -1330,7 +1330,7 @@ end
 -- GUI elements
 do
 	function B:CreateButton(width, height, text, fontSize)
-		local bu = CreateFrame("Button", nil, self, "NDuiBackdropTemplate")
+		local bu = CreateFrame("Button", nil, self, "BackdropTemplate")
 		bu:SetSize(width, height)
 		if type(text) == "boolean" then
 			B.PixelIcon(bu, fontSize, true)
@@ -1404,7 +1404,7 @@ do
 	end
 
 	function B:CreateDropDown(width, height, data)
-		local dd = CreateFrame("Frame", nil, self, "NDuiBackdropTemplate")
+		local dd = CreateFrame("Frame", nil, self, "BackdropTemplate")
 		dd:SetSize(width, height)
 		B.CreateBD(dd)
 		dd:SetBackdropBorderColor(1, 1, 1, .2)
@@ -1416,7 +1416,7 @@ do
 		bu:SetPoint("RIGHT", -5, 0)
 		B.ReskinArrow(bu, "down")
 		bu:SetSize(18, 18)
-		local list = CreateFrame("Frame", nil, dd, "NDuiBackdropTemplate")
+		local list = CreateFrame("Frame", nil, dd, "BackdropTemplate")
 		list:SetPoint("TOP", dd, "BOTTOM", 0, -2)
 		B.CreateBD(list, 1)
 		list:SetBackdropBorderColor(1, 1, 1, .2)
@@ -1428,7 +1428,7 @@ do
 
 		local opt, index = {}, 0
 		for i, j in pairs(data) do
-			opt[i] = CreateFrame("Button", nil, list, "NDuiBackdropTemplate")
+			opt[i] = CreateFrame("Button", nil, list, "BackdropTemplate")
 			opt[i]:SetPoint("TOPLEFT", 4, -4 - (i-1)*(height+2))
 			opt[i]:SetSize(width - 8, height)
 			B.CreateBD(opt[i])
@@ -1476,7 +1476,7 @@ do
 	function B:CreateColorSwatch(name, color)
 		color = color or {r=1, g=1, b=1}
 
-		local swatch = CreateFrame("Button", nil, self, "NDuiBackdropTemplate")
+		local swatch = CreateFrame("Button", nil, self, "BackdropTemplate")
 		swatch:SetSize(18, 18)
 		B.CreateBD(swatch, 1)
 		swatch.text = B.CreateFS(swatch, 14, name, false, "LEFT", 26, 0)

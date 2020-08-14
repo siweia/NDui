@@ -264,7 +264,7 @@ function module:CreateFreeSlots()
 	local name = self.name
 	if not freeSlotContainer[name] then return end
 
-	local slot = CreateFrame("Button", name.."FreeSlot", self, "NDuiBackdropTemplate")
+	local slot = CreateFrame("Button", name.."FreeSlot", self, "BackdropTemplate")
 	slot:SetSize(self.iconSize, self.iconSize)
 	slot:SetHighlightTexture(DB.bdTex)
 	slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
