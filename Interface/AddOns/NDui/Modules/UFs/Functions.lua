@@ -368,12 +368,14 @@ function UF:CreateIcons(self)
 		self.QuestIndicator = quest
 	end
 
-	local parentFrame = CreateFrame("Frame", nil, self)
-	parentFrame:SetAllPoints()
-	parentFrame:SetFrameLevel(5)
-	local phase = parentFrame:CreateTexture(nil, "OVERLAY")
-	phase:SetPoint("CENTER", self.Health)
+	local phase = CreateFrame("Frame", nil, self)
 	phase:SetSize(24, 24)
+	phase:SetPoint("CENTER", self.Health)
+	phase:SetFrameLevel(5)
+	phase:EnableMouse(true)
+	local icon = phase:CreateTexture(nil, "OVERLAY")
+	icon:SetAllPoints()
+	phase.Icon = icon
 	self.PhaseIndicator = phase
 
 	local ri = self:CreateTexture(nil, "OVERLAY")
