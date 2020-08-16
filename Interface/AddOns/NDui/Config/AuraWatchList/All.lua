@@ -195,6 +195,7 @@ local list = {
 		{AuraID = 317859, UnitID = "player"},	-- 龙族强化，橙披
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
+		{AuraID = 310143, UnitID = "player", Combat = true},-- 灵魂变形
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
