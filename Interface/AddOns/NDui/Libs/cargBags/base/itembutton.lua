@@ -21,6 +21,8 @@ local _, ns = ...
 local cargBags = ns.cargBags
 
 local _G = _G
+local ReagentButtonInventorySlot = _G.ReagentButtonInventorySlot
+local ButtonInventorySlot = _G.ButtonInventorySlot
 
 --[[!
 	@class ItemButton
@@ -59,6 +61,11 @@ function ItemButton:New(bagID, slotID)
 	button:Show()
 	button:HookScript("OnEnter", button.OnEnter)
 	button:HookScript("OnLeave", button.OnLeave)
+	if bagID == -3 then
+		button.GetInventorySlot = ReagentButtonInventorySlot
+	elseif bagID == -1 then
+		button.GetInventorySlot = ButtonInventorySlot
+	end
 
 	return button
 end
