@@ -24,10 +24,10 @@ function M:PetTabs_Click(button)
 		end
 
 		if btn.isActive then
-			btn:SetBackdropBorderColor(1, 1, 1)
+			btn.bg:SetBackdropBorderColor(1, 1, 1)
 			activeCount = activeCount + 1
 		else
-			btn:SetBackdropBorderColor(0, 0, 0)
+			btn.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 		C_PetJournal_SetPetTypeFilter(btn.petType, btn.isActive)
 	end
@@ -51,7 +51,7 @@ function M:PetTabs_Create()
 
 		if C_PetJournal_IsPetTypeChecked(petType) then
 			btn.isActive = true
-			btn:SetBackdropBorderColor(1, 1, 1)
+			btn.bg:SetBackdropBorderColor(1, 1, 1)
 			activeCount = activeCount + 1
 		else
 			btn.isActive = false
@@ -64,7 +64,7 @@ function M:PetTabs_Create()
 		for petIndex in ipairs(PET_TYPE_SUFFIX) do
 			local btn = _G["PetJournalQuickFilterButton"..petIndex]
 			btn.isActive = false
-			btn:SetBackdropBorderColor(0, 0, 0)
+			btn.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
 end
