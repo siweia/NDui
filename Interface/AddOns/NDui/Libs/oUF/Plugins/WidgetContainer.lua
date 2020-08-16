@@ -5,7 +5,7 @@ local B, C, L, DB = unpack(ns)
 local ipairs = ipairs
 
 function B:Widget_DefaultLayout(sortedWidgets)
-    local widgetContainerFrame = self
+	local widgetContainerFrame = self
 	local horizontalRowContainer = nil
 	local horizontalRowHeight = 0
 	local horizontalRowWidth = 0
