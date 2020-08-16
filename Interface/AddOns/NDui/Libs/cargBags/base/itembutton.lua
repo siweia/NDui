@@ -107,6 +107,6 @@ end
 	@param item <table> [optional]
 	@return item <table>
 ]]
-function ItemButton:GetItemInfo(item)
+function ItemButton:GetInfo(item)
 	return self.implementation:GetItemInfo(self.bagID, self.slotID, item)
 end
