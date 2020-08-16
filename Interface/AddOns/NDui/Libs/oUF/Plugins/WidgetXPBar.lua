@@ -73,7 +73,7 @@ local function Update(self)
 	local element = npShown and self.WidgetXPBar
 	if not element then return end
 
-	local widget = self.widget
+	local widget = self.WidgetContainer
 	if not widget then Hide(element) return end
 
 	local unit = self.unit
