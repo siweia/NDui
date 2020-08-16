@@ -620,7 +620,7 @@ function UF:MouseoverIndicator(self)
 end
 
 -- NazjatarFollowerXP
-function UF:AddFollowerXP(self)
+function UF:AddWidgetXP(self)
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetSize(NDuiDB["Nameplate"]["PlateWidth"]*.75, NDuiDB["Nameplate"]["PlateHeight"])
 	bar:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
@@ -628,6 +628,15 @@ function UF:AddFollowerXP(self)
 	bar.ProgressText = B.CreateFS(bar, 12)
 
 	self.WidgetXPBar = bar
+end
+
+-- WidgetContainer
+function UF:AddWidgetContainer(self)
+	local widgetContainer = CreateFrame("Frame", nil, self, "UIWidgetContainerTemplate")
+	widgetContainer:SetPoint("BOTTOM", self, "TOP")
+	widgetContainer:Hide()
+
+	self.WidgetContainer = widgetContainer
 end
 
 -- Interrupt info on castbars
@@ -688,7 +697,8 @@ function UF:CreatePlates()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
 	self:Tag(self.powerText, "[nppp]")
 
-	UF:AddFollowerXP(self)
+	UF:AddWidgetXP(self)
+	UF:AddWidgetContainer(self)
 	UF:MouseoverIndicator(self)
 	UF:AddTargetIndicator(self)
 	UF:AddCreatureIcon(self)
@@ -844,17 +854,17 @@ function UF:PostUpdatePlates(event, unit)
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = self
 		end
-		self.npcID = B.GetNPCID(self.unitGUID)
 		self.isPlayer = UnitIsPlayer(unit)
-
-		local blizzPlate = self:GetParent().UnitFrame
-		self.widget = blizzPlate.WidgetContainer
+		self.npcID = B.GetNPCID(self.unitGUID)
+		self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), B.Widget_DefaultLayout, nil, unit)
 
 		UF.RefreshPlateType(self, unit)
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
 		end
+		self.npcID = nil
+		self.WidgetContainer:UnregisterForWidgetSet()
 	end
 
 	if event ~= "NAME_PLATE_UNIT_REMOVED" then
