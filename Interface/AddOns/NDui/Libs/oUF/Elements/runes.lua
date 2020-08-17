@@ -82,6 +82,7 @@ end
 
 local function UpdateColor(element, runeID)
 	local spec = GetSpecialization() or 0
+	if spec == 5 then spec = 1 end -- newbee dk spec
 
 	local color
 	if(spec ~= 0 and element.colorSpec) then
