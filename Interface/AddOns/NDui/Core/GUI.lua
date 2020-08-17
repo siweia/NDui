@@ -636,7 +636,7 @@ end
 
 local function updateSkinAlpha()
 	for _, frame in pairs(C.frames) do
-		B:SetBackdropColor(frame, 0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+		frame:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
 	end
 end
 
