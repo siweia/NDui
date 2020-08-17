@@ -910,7 +910,7 @@ function module:OnLogin()
 
 		self:SetSize(iconSize, iconSize)
 		B.CreateBD(self, .25)
-		self.Icon:SetAllPoints()
+		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 
