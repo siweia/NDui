@@ -493,89 +493,16 @@ end
 
 -- UI skins
 do
-	-- ls, Azil, and Simpy made this to replace Blizzard's SetBackdrop API while the textures can't snap
-	local PIXEL_BORDERS = {"TOP", "BOTTOM", "LEFT", "RIGHT"}
-
-	function B:SetBackdrop(frame, a)
-		local borders = frame.pixelBorders
-		if not borders then return end
-
-		local size = C.mult
-
-		borders.CENTER:SetPoint("TOPLEFT", frame)
-		borders.CENTER:SetPoint("BOTTOMRIGHT", frame)
-
-		borders.TOP:SetHeight(size)
-		borders.BOTTOM:SetHeight(size)
-		borders.LEFT:SetWidth(size)
-		borders.RIGHT:SetWidth(size)
-
-		B:SetBackdropColor(frame, 0, 0, 0, a)
-		B:SetBackdropBorderColor(frame, 0, 0, 0)
-	end
-
-	function B:SetBackdropColor(frame, r, g, b, a)
-		if frame.pixelBorders then
-			frame.pixelBorders.CENTER:SetVertexColor(r, g, b, a)
-		end
-	end
-
-	function B:SetBackdropBorderColor(frame, r, g, b, a)
-		if frame.pixelBorders then
-			for _, v in pairs(PIXEL_BORDERS) do
-				frame.pixelBorders[v]:SetVertexColor(r or 0, g or 0, b or 0, a)
-			end
-		end
-	end
-
-	function B:SetBackdropColor_Hook(r, g, b, a)
-		if self:IsForbidden() then return end
-		B:SetBackdropColor(self, r, g, b, a)
-	end
-
-	function B:SetBackdropBorderColor_Hook(r, g, b, a)
-		if self:IsForbidden() then return end
-		B:SetBackdropBorderColor(self, r, g, b, a)
-	end
-
-	function B:PixelBorders(frame)
-		if frame and not frame.pixelBorders then
-			local borders = {}
-			for _, v in pairs(PIXEL_BORDERS) do
-				borders[v] = frame:CreateTexture(nil, "BORDER", nil, 1)
-				borders[v]:SetTexture(DB.bdTex)
-			end
-
-			borders.CENTER = frame:CreateTexture(nil, "BACKGROUND", nil, -1)
-			borders.CENTER:SetTexture(DB.bdTex)
-
-			borders.TOP:SetPoint("BOTTOMLEFT", borders.CENTER, "TOPLEFT", C.mult, -C.mult)
-			borders.TOP:SetPoint("BOTTOMRIGHT", borders.CENTER, "TOPRIGHT", -C.mult, -C.mult)
-
-			borders.BOTTOM:SetPoint("TOPLEFT", borders.CENTER, "BOTTOMLEFT", C.mult, C.mult)
-			borders.BOTTOM:SetPoint("TOPRIGHT", borders.CENTER, "BOTTOMRIGHT", -C.mult, C.mult)
-
-			borders.LEFT:SetPoint("TOPRIGHT", borders.TOP, "TOPLEFT", 0, 0)
-			borders.LEFT:SetPoint("BOTTOMRIGHT", borders.BOTTOM, "BOTTOMLEFT", 0, 0)
-
-			borders.RIGHT:SetPoint("TOPLEFT", borders.TOP, "TOPRIGHT", 0, 0)
-			borders.RIGHT:SetPoint("BOTTOMLEFT", borders.BOTTOM, "BOTTOMRIGHT", 0, 0)
-
-			hooksecurefunc(frame, "SetBackdropColor", B.SetBackdropColor_Hook)
-			hooksecurefunc(frame, "SetBackdropBorderColor", B.SetBackdropBorderColor_Hook)
-
-			frame.pixelBorders = borders
-		end
-	end
-
 	-- Setup backdrop
 	C.frames = {}
 	function B:CreateBD(a)
-		if self.SetBackdrop then
-			self:SetBackdrop(nil)
-		end
-		B:PixelBorders(self)
-		B:SetBackdrop(self, a or NDuiDB["Skins"]["SkinAlpha"])
+		self:SetBackdrop({
+			bgFile = DB.bdTex,
+			edgeFile = DB.bdTex,
+			edgeSize = C.mult,
+		})
+		self:SetBackdropColor(0, 0, 0, a or NDuiDB["Skins"]["SkinAlpha"])
+		self:SetBackdropBorderColor(0, 0, 0)
 		if not a then tinsert(C.frames, self) end
 	end
 
