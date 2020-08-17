@@ -64,8 +64,10 @@ function B:Widget_DefaultLayout(sortedWidgets)
 			if needNewRowContainer then
 				if horizontalRowContainer then
 					horizontalRowContainer:SetSize(horizontalRowWidth, horizontalRowHeight)
-					totalWidth, totalHeight = totalWidth + horizontalRowWidth, totalHeight + horizontalRowHeight
-					horizontalRowHeight, horizontalRowWidth = 0, 0
+					totalWidth = totalWidth + horizontalRowWidth
+					totalHeight = totalHeight + horizontalRowHeight
+					horizontalRowHeight = 0
+					horizontalRowWidth = 0
 				end
 
 				local newHorizontalRowContainer = widgetContainerFrame.horizontalRowContainerPool:Acquire()
@@ -97,6 +99,14 @@ function B:Widget_DefaultLayout(sortedWidgets)
 				horizontalRowHeight = widgetHeight
 			end
 		end
+	end
+
+	if horizontalRowContainer then
+		horizontalRowContainer:SetSize(horizontalRowWidth, horizontalRowHeight)
+		totalWidth = totalWidth + horizontalRowWidth
+		totalHeight = totalHeight + horizontalRowHeight
+		horizontalRowHeight = 0
+		horizontalRowWidth = 0
 	end
 
 	widgetContainerFrame:SetSize(totalWidth, totalHeight)
