@@ -106,7 +106,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 			B.CreateBDFrame(frame.ScrollFrame, .25)
 			hooksecurefunc(frame, "RefreshScrollFrame", reskinListHeader)
 		else
-			hooksecurefunc(frame, "RefreshScrollFrame", reskinSummaryIcon)
+			hooksecurefunc(frame, "RefreshListDisplay", reskinSummaryIcon)
 		end
 	end
 
