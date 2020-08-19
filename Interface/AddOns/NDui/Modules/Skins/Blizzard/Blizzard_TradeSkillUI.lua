@@ -139,7 +139,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	B.StripTextures(reagentList)
 	B.SetBD(reagentList)
 	reagentList:ClearAllPoints()
-	reagentList:SetPoint("LEFT", TradeSkillFrame, "RIGHT", 40, 0)
+	reagentList:SetPoint("BOTTOMLEFT", TradeSkillFrame, "BOTTOMRIGHT", 40, 0)
 
 	reagentList.HideUnownedButton:SetSize(24, 24)
 	B.ReskinCheck(reagentList.HideUnownedButton)
