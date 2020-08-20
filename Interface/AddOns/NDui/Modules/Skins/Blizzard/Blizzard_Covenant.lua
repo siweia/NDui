@@ -46,7 +46,6 @@ local function reskinTalentsList(self)
 end
 
 C.themes["Blizzard_CovenantSanctum"] = function()
-	B.ReskinClose(CovenantSanctumFrameCloseButton)
 	B.ReskinTab(CovenantSanctumFrameTab1)
 	B.ReskinTab(CovenantSanctumFrameTab2)
 	CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
@@ -56,6 +55,8 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 			self.bg = B.SetBD(self)
 			self.NineSlice:SetAlpha(0)
 			self.LevelFrame.Background:SetAlpha(0)
+			B.ReskinClose(self.CloseButton)
+			self.CloseButton.Border:SetAlpha(0)
 
 			local upgradesTab = self.UpgradesTab
 			upgradesTab.Background:SetAlpha(0)
