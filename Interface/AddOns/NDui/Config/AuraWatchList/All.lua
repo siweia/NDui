@@ -51,6 +51,12 @@ local list = {
 		{AuraID = 33697, UnitID = "player"},	-- 血性狂怒 兽人
 		{AuraID = 292463, UnitID = "player"},	-- 帕库之拥 赞达拉
 		-- 饰品附魔
+		-- 9.0药水
+		{AuraID = 307159, UnitID = "player"},	-- 幽魂敏捷药水
+		{AuraID = 307162, UnitID = "player"},	-- 幽魂智力药水
+		{AuraID = 307163, UnitID = "player"},	-- 幽魂耐力药水
+		{AuraID = 307164, UnitID = "player"},	-- 幽魂力量药水
+
 		{AuraID = 229206, UnitID = "player"},	-- 延时之力
 
 		{AuraID = 251231, UnitID = "player"},	-- 钢肤药水
