@@ -6,5 +6,6 @@ C.themes["Blizzard_Soulbinds"] = function()
 	SoulbindViewer.Background:SetAlpha(0)
 	B.SetBD(SoulbindViewer)
 	B.ReskinClose(SoulbindViewer.CloseButton)
-	B.Reskin(SoulbindViewer.ActivateButton)
+	B.Reskin(SoulbindViewer.CommitConduitsButton)
+	B.Reskin(SoulbindViewer.ActivateSoulbindButton)
 end
