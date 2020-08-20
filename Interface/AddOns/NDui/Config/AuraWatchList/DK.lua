@@ -25,7 +25,6 @@ local list = {
 		{AuraID = 206977, UnitID = "target", Caster = "player"},	-- 血之镜像
 		{AuraID = 207167, UnitID = "target", Caster = "player"},	-- 致盲冰雨
 		{AuraID = 194310, UnitID = "target", Caster = "player"},	-- 溃烂之伤
-		{AuraID = 130736, UnitID = "target", Caster = "player"},	-- 灵魂收割
 		{AuraID = 156004, UnitID = "target", Caster = "player"},	-- 亵渎
 		{AuraID = 191748, UnitID = "target", Caster = "player"},	-- 诸界之灾
 	},
@@ -49,7 +48,6 @@ local list = {
 		{AuraID = 207127, UnitID = "player"},	-- 饥饿符文刃
 		{AuraID = 207256, UnitID = "player"},	-- 湮灭
 		{AuraID = 207319, UnitID = "player"},	-- 血肉之盾
-		{AuraID = 215711, UnitID = "player"},	-- 夺魂
 		{AuraID = 218100, UnitID = "player"},	-- 亵渎
 		{AuraID = 196770, UnitID = "player"},	-- 冷库严冬
 		{AuraID = 194879, UnitID = "player"},	-- 冰冷之爪
