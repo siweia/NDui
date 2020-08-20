@@ -114,6 +114,11 @@ function M:OnLogin()
 		if owner:GetID() < 1 then return end
 		_AddonTooltip_Update(owner)
 	end
+
+	-- Temp fix for RuneforgeUI
+	if not math.clamp then
+		math.clamp = Clamp
+	end
 end
 
 -- Get Naked
