@@ -10,24 +10,12 @@ C.themes["Blizzard_RuneforgeUI"] = function()
 
 	local powerFrame = frame.CraftingFrame.PowerFrame
 	B.StripTextures(powerFrame)
-	B.SetBD(powerFrame, nil, -10, 0, 10, 55)
-	powerFrame:ClearAllPoints()
-	powerFrame:SetPoint("LEFT", frame, "RIGHT", -10, 0)
+	B.SetBD(powerFrame, 1)
 
-	powerFrame:HookScript("OnShow", function(self)
-		if self.PowerList and self.PowerList.powerPool then
-			for button in self.PowerList.powerPool:EnumerateActive() do
-				if button:IsShown() and not button.bg then
-					button.Border:SetAlpha(0)
-					button.CircleMask:Hide()
-					button.bg = B.ReskinIcon(button.Icon)
-				end
-			end
-		end
-	end)
+	local pageControl = powerFrame.PageControl
+	B.ReskinArrow(pageControl.BackwardButton, "left")
+	B.ReskinArrow(pageControl.ForwardButton, "right")
 
-	local scrollBar = RuneforgeFrameScrollBar
-	B.ReskinScroll(scrollBar)
-	local anchorF, parent, anchorT, x, y = scrollBar:GetPoint()
-	scrollBar:SetPoint(anchorF, parent, anchorT, x-15, y)
+	local TT = B:GetModule("Tooltip")
+	TT.ReskinTooltip(frame.ResultTooltip)
 end
