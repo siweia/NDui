@@ -5,8 +5,6 @@ local module = B:GetModule("Maps")
 local strmatch, strfind, strupper = string.match, string.find, string.upper
 local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
 local cr, cg, cb = DB.r, DB.g, DB.b
-local LE_GARRISON_TYPE_6_0 = Enum.GarrisonType.Type_6_0
-local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
 
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
@@ -61,18 +59,6 @@ function module:ReskinRegions()
 			RecycleBinToggleButton.settled = true
 		end
 	end)
-	if not IsAddOnLoaded("GarrisonMissionManager") then
-		GarrisonLandingPageMinimapButton:RegisterForClicks("AnyUp")
-		GarrisonLandingPageMinimapButton:HookScript("OnClick", function(_, btn, down)
-			if btn == "MiddleButton" and not down then
-				HideUIPanel(GarrisonLandingPage)
-				ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
-			elseif btn == "RightButton" and not down then
-				HideUIPanel(GarrisonLandingPage)
-				ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
-			end
-		end)
-	end
 
 	-- QueueStatus Button
 	QueueStatusMinimapButton:ClearAllPoints()
