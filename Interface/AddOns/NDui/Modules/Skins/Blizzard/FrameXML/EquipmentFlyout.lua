@@ -4,11 +4,6 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	local border = B.CreateBDFrame(EquipmentFlyoutFrame, 0)
-	border:SetBackdropBorderColor(1, .8, 0)
-	border:SetInside(self, 3, 3)
-	EquipmentFlyoutFrameHighlight:SetAlpha(0)
-
 	local navFrame = EquipmentFlyoutFrame.NavigationFrame
 	EquipmentFlyoutFrameButtons.bg1:SetAlpha(0)
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
@@ -29,6 +24,7 @@ tinsert(C.defaultThemes, function()
 			button.Eye = button:CreateTexture()
 			button.Eye:SetAtlas("Nzoth-inventory-icon")
 			button.Eye:SetInside()
+			button.Eye:Hide()
 		end
 	end)
 
@@ -53,12 +49,7 @@ tinsert(C.defaultThemes, function()
 		local border = button.IconBorder
 		if not location or not border then return end
 
-		if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
-			border:Hide()
-		else
-			border:Show()
-		end
-
+		border:SetShown(location < EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION)
 		UpdateCorruption(button, location)
 	end)
 
