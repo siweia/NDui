@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local TT = B:GetModule("Tooltip")
 
 C.themes["Blizzard_BarbershopUI"] = function()
 	local frame = BarberShopFrame
@@ -12,6 +13,11 @@ end
 local function ReskinCustomizeButton(button)
 	B.Reskin(button)
 	button.__bg:SetInside(nil, 3, 3)
+end
+
+local function ReskinCustomizeTooltip(tooltip)
+	TT.ReskinTooltip(tooltip)
+	tooltip:SetScale(UIParent:GetScale())
 end
 
 C.themes["Blizzard_CharacterCustomize"] = function()
@@ -50,7 +56,6 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 		end
 	end)
 
-	local TT = B:GetModule("Tooltip")
-	TT.ReskinTooltip(CharCustomizeNoHeaderTooltip)
-	CharCustomizeNoHeaderTooltip:SetScale(UIParent:GetScale())
+	ReskinCustomizeTooltip(CharCustomizeTooltip)
+	ReskinCustomizeTooltip(CharCustomizeNoHeaderTooltip)
 end
