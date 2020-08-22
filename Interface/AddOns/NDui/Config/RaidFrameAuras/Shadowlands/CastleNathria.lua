@@ -62,7 +62,6 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 335295) -- 粉碎锁链
 
 BOSS = 2425 -- 石裔干将
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 334498) -- 地震岩层
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 333913) -- 邪恶撕裂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 337643) -- 立足不稳
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 334765) -- 石化碎裂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 333377) -- 邪恶印记
