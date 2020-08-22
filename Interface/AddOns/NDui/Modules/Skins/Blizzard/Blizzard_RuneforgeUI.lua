@@ -12,6 +12,19 @@ C.themes["Blizzard_RuneforgeUI"] = function()
 	B.StripTextures(powerFrame)
 	B.SetBD(powerFrame, 1)
 
+	hooksecurefunc(powerFrame.PowerList, "RefreshListDisplay", function(self)
+		if not self.elements then return end
+
+		for i = 1, self:GetNumElementFrames() do
+			local button = self.elements[i]
+			if button and not button.bg then
+				button.Border:SetAlpha(0)
+				button.CircleMask:Hide()
+				button.bg = B.ReskinIcon(button.Icon)
+			end
+		end
+	end)
+
 	local pageControl = powerFrame.PageControl
 	B.ReskinArrow(pageControl.BackwardButton, "left")
 	B.ReskinArrow(pageControl.ForwardButton, "right")
