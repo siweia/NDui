@@ -718,6 +718,7 @@ function module:OnLogin()
 		end
 
 		self.IconOverlay:SetVertexColor(1, 1, 1)
+		self.IconOverlay:Hide()
 		self.IconOverlay2:Hide()
 		local atlas, secondAtlas = GetIconOverlayAtlas(item)
 		if atlas then
@@ -729,8 +730,6 @@ function module:OnLogin()
 				self.IconOverlay2:SetAtlas(secondAtlas)
 				self.IconOverlay2:Show()
 			end
-		else
-			self.IconOverlay:Hide()
 		end
 
 		if NDuiDB["Bags"]["FavouriteItems"][item.id] then
