@@ -11,6 +11,11 @@ tinsert(C.defaultThemes, function()
 	IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, "000000", "ffffff")
 	GossipGreetingText:SetTextColor(1, 1, 1)
 
+	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
+	B.StripTextures(NPCFriendshipStatusBar)
+	NPCFriendshipStatusBar:SetStatusBarTexture(DB.normTex)
+	B.CreateBDFrame(NPCFriendshipStatusBar, .25)
+
 	for i = 1, 4 do
 		local notch = _G["NPCFriendshipStatusBarNotch"..i]
 		if notch then
@@ -18,10 +23,6 @@ tinsert(C.defaultThemes, function()
 			notch:SetSize(C.mult, 16)
 		end
 	end
-	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
-	B.StripTextures(NPCFriendshipStatusBar)
-	NPCFriendshipStatusBar:SetStatusBarTexture(DB.normTex)
-	B.CreateBDFrame(NPCFriendshipStatusBar, .25)
 
 	GossipFrameInset:Hide()
 	B.ReskinPortraitFrame(GossipFrame)
