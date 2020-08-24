@@ -35,7 +35,7 @@ C.themes["Blizzard_DebugTools"] = function()
 	-- EventTraceFrame
 	B.StripTextures(EventTraceFrame)
 	B.SetBD(EventTraceFrame)
-	B.ReskinClose(EventTraceFrameCloseButton, "TOPRIGHT", EventTraceFrame, "TOPRIGHT", -7, -7)
+	B.ReskinClose(EventTraceFrameCloseButton, EventTraceFrame, -7, -7)
 
 	local bg, bu = EventTraceFrameScroll:GetRegions()
 	bg:Hide()
