@@ -1,6 +1,17 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function ReskinEventList(frame)
+	B.StripTextures(frame)
+	B.CreateBDFrame(frame, .25)
+end
+
+local function ReskinCalendarPage(frame)
+	B.StripTextures(frame)
+	B.SetBD(frame)
+	B.StripTextures(frame.Header)
+end
+
 C.themes["Blizzard_Calendar"] = function()
 	local r, g, b = DB.r, DB.g, DB.b
 
@@ -55,28 +66,26 @@ C.themes["Blizzard_Calendar"] = function()
 	B.StripTextures(CalendarFrame)
 	B.SetBD(CalendarFrame, nil, 9, 0, -7, 1)
 	B.CreateBDFrame(CalendarClassTotalsButton)
-	B.StripTextures(CalendarViewEventInviteList)
-	B.CreateBDFrame(CalendarViewEventInviteList, .25)
-	B.StripTextures(CalendarViewEventDescriptionContainer)
-	B.CreateBDFrame(CalendarViewEventDescriptionContainer, .25)
-	B.StripTextures(CalendarCreateEventInviteList)
-	B.CreateBDFrame(CalendarCreateEventInviteList, .25)
-	B.StripTextures(CalendarCreateEventDescriptionContainer)
-	B.CreateBDFrame(CalendarCreateEventDescriptionContainer, .25)
 
-	local function reskinCalendarPage(frame)
-		B.StripTextures(frame)
-		B.SetBD(frame)
-		B.StripTextures(frame.Header)
-	end
-	reskinCalendarPage(CalendarViewHolidayFrame)
-	reskinCalendarPage(CalendarCreateEventFrame)
-	reskinCalendarPage(CalendarViewEventFrame)
-	reskinCalendarPage(CalendarTexturePickerFrame)
-	reskinCalendarPage(CalendarEventPickerFrame)
+	ReskinEventList(CalendarViewEventInviteList)
+	ReskinEventList(CalendarViewEventDescriptionContainer)
+	ReskinEventList(CalendarCreateEventInviteList)
+	ReskinEventList(CalendarCreateEventDescriptionContainer)
+
+	ReskinCalendarPage(CalendarViewHolidayFrame)
+	ReskinCalendarPage(CalendarCreateEventFrame)
+	ReskinCalendarPage(CalendarViewEventFrame)
+	ReskinCalendarPage(CalendarTexturePickerFrame)
+	ReskinCalendarPage(CalendarEventPickerFrame)
+	ReskinCalendarPage(CalendarViewRaidFrame)
 
 	local frames = {
-		CalendarViewEventTitleFrame, CalendarViewHolidayTitleFrame, CalendarViewRaidTitleFrame, CalendarCreateEventTitleFrame, CalendarTexturePickerTitleFrame, CalendarMassInviteTitleFrame
+		CalendarViewEventTitleFrame,
+		CalendarViewHolidayTitleFrame,
+		CalendarViewRaidTitleFrame,
+		CalendarCreateEventTitleFrame,
+		CalendarTexturePickerTitleFrame,
+		CalendarMassInviteTitleFrame
 	}
 	for _, titleFrame in next, frames do
 		B.StripTextures(titleFrame)
@@ -128,18 +137,30 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarCreateEventAMPMDropDown:SetWidth(90)
 
 	local line = CalendarMassInviteFrame:CreateTexture(nil, "BACKGROUND")
-	line:SetSize(240, 1)
+	line:SetSize(240, C.mult)
 	line:SetPoint("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
 	line:SetTexture(DB.bdTex)
 	line:SetVertexColor(0, 0, 0)
 
 	CalendarMassInviteFrame:ClearAllPoints()
 	CalendarMassInviteFrame:SetPoint("BOTTOMLEFT", CalendarCreateEventFrame, "BOTTOMRIGHT", 28, 0)
-
 	CalendarTexturePickerFrame:ClearAllPoints()
 	CalendarTexturePickerFrame:SetPoint("TOPLEFT", CalendarCreateEventFrame, "TOPRIGHT", 28, 0)
 
-	local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarMassInviteAcceptButton"}
+	local cbuttons = {
+		"CalendarViewEventAcceptButton",
+		"CalendarViewEventTentativeButton",
+		"CalendarViewEventDeclineButton",
+		"CalendarViewEventRemoveButton",
+		"CalendarCreateEventMassInviteButton",
+		"CalendarCreateEventCreateButton",
+		"CalendarCreateEventInviteButton",
+		"CalendarEventPickerCloseButton",
+		"CalendarCreateEventRaidInviteButton",
+		"CalendarTexturePickerAcceptButton",
+		"CalendarTexturePickerCancelButton",
+		"CalendarMassInviteAcceptButton"
+	}
 	for i = 1, #cbuttons do
 		local cbutton = _G[cbuttons[i]]
 		if not cbutton then
