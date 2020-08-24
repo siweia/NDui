@@ -76,6 +76,6 @@ C.themes["Blizzard_GMSurveyUI"] = function()
 	GMSurveyScrollFrameBottom:SetAlpha(0)
 	B.Reskin(GMSurveySubmitButton)
 	B.Reskin(GMSurveyCancelButton)
-	B.ReskinClose(GMSurveyCloseButton, "TOPRIGHT", GMSurveyFrame, "TOPRIGHT", -36, -4)
+	B.ReskinClose(GMSurveyCloseButton, GMSurveyFrame, -36, -4)
 	B.ReskinScroll(GMSurveyScrollFrameScrollBar)
 end

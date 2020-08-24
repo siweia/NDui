@@ -859,15 +859,14 @@ do
 		end
 	end
 
-	function B:ReskinClose(a1, p, a2, x, y)
-		self:SetSize(16, 16)
+	function B:ReskinClose(parent, xOffset, yOffset)
+		parent = parent or self:GetParent()
+		xOffset = xOffset or -6
+		yOffset = yOffset or -6
 
-		if not a1 then
-			self:SetPoint("TOPRIGHT", -6, -6)
-		else
-			self:ClearAllPoints()
-			self:SetPoint(a1, p, a2, x, y)
-		end
+		self:SetSize(16, 16)
+		self:ClearAllPoints()
+		self:SetPoint("TOPRIGHT", parent, "TOPRIGHT", xOffset, yOffset)
 
 		B.StripTextures(self)
 		local bg = B.CreateBDFrame(self, 0, true)

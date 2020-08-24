@@ -174,7 +174,7 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarViewEventTentativeButton.flashTexture:SetTexture("")
 	CalendarViewEventDeclineButton.flashTexture:SetTexture("")
 
-	B.ReskinClose(CalendarCloseButton, "TOPRIGHT", CalendarFrame, "TOPRIGHT", -14, -4)
+	B.ReskinClose(CalendarCloseButton, CalendarFrame, -14, -4)
 	B.ReskinClose(CalendarCreateEventCloseButton)
 	B.ReskinClose(CalendarViewEventCloseButton)
 	B.ReskinClose(CalendarViewHolidayCloseButton)

@@ -11,5 +11,5 @@ tinsert(C.defaultThemes, function()
 	TaxiFrame.TopTileStreaks:Hide()
 
 	B.SetBD(TaxiFrame, nil, 3, -23, -5, 3)
-	B.ReskinClose(TaxiFrame.CloseButton, "TOPRIGHT", TaxiRouteMap, "TOPRIGHT", -6, -6)
+	B.ReskinClose(TaxiFrame.CloseButton, TaxiRouteMap)
 end)
