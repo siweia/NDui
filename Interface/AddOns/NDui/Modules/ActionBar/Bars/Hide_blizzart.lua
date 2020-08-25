@@ -49,8 +49,10 @@ function Bar:HideBlizz()
 	local function buttonShowGrid(name, showgrid)
 		for i = 1, 12 do
 			local button = _G[name..i]
-			button:SetAttribute("showgrid", showgrid)
-			button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
+			if button then
+				button:SetAttribute("showgrid", showgrid)
+				button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
+			end
 		end
 	end
 
@@ -63,6 +65,7 @@ function Bar:HideBlizz()
 			local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
 			buttonShowGrid("ActionButton", showgrid)
 			buttonShowGrid("MultiBarBottomRightButton", showgrid)
+			buttonShowGrid("NDui_CustomBarButton", showgrid)
 			if updateAfterCombat then
 				B:UnregisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
 				updateAfterCombat = false
