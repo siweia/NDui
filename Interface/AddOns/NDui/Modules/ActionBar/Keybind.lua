@@ -146,7 +146,7 @@ function Bar:Bind_Update(button, spellmacro)
 		if not frame.name then return end
 
 		frame.action = tonumber(button.action)
-		if not frame.action or frame.action < 1 or frame.action > 132 then
+		if button.isCustomButton or not frame.action or frame.action < 1 or frame.action > 168 then
 			frame.bindstring = "CLICK "..frame.name..":LeftButton"
 		else
 			local modact = 1+(frame.action-1)%12

@@ -33,6 +33,11 @@ local defaultSettings = {
 		BindType = 1,
 		OverrideWA = false,
 		MicroMenu = true,
+		CustomBar = false,
+		CustomBarFader = false,
+		CustomBarButtonSize = 34,
+		CustomBarNumButtons = 12,
+		CustomBarNumPerRow = 12,
 	},
 	Bags = {
 		Enable = true,
@@ -471,6 +476,10 @@ local function updateActionbarScale()
 	B:GetModule("Actionbar"):UpdateAllScale()
 end
 
+local function updateCustomBar()
+	B:GetModule("Actionbar"):UpdateCustomBar()
+end
+
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -682,14 +691,20 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
 		{3, "Actionbar", "Scale", L["Actionbar Scale"].."*", true, {.8, 1.5, .1}, updateActionbarScale},
 		{},--blank
+		{1, "Actionbar", "CustomBar", "|cff00cc4c"..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
+		{1, "Actionbar", "CustomBarFader", L["CustomBarFader"]},
+		{3, "Actionbar", "CustomBarButtonSize", L["CustomBarButtonSize"].."*", true, {24, 60, 1}, updateCustomBar},
+		{3, "Actionbar", "CustomBarNumButtons", L["CustomBarNumButtons"].."*", nil, {1, 12, 1}, updateCustomBar},
+		{3, "Actionbar", "CustomBarNumPerRow", L["CustomBarNumPerRow"].."*", true, {1, 12, 1}, updateCustomBar},
+		{},--blank
+		{1, "Actionbar", "Cooldown", "|cff00cc4c"..L["Show Cooldown"]},
+		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*"},
+		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"], true},
+		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"]},
 		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
 		{1, "Actionbar", "Count", L["Actionbar Item Counts"]},
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
-		{},--blank
-		{1, "Actionbar", "Cooldown", "|cff00cc4c"..L["Show Cooldown"]},
-		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*"},
-		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
 	},
 	[2] = {
 		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
