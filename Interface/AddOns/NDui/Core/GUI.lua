@@ -659,11 +659,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
 		{1, "Actionbar", "Enable", "|cff00cc4c"..L["Enable Actionbar"]},
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], true},
-		{},--blank
 		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"]},
 		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"], true},
 		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
-		{3, "Actionbar", "Scale", L["Actionbar Scale"].."*", true, {.8, 1.5, .1}, updateActionbarScale},
+		{3, "Actionbar", "Scale", L["Actionbar Scale"].."*", true, {.8, 1.5, .01}, updateActionbarScale},
 		{},--blank
 		{1, "Actionbar", "CustomBar", "|cff00cc4c"..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
 		{1, "Actionbar", "CustomBarFader", L["CustomBarFader"]},

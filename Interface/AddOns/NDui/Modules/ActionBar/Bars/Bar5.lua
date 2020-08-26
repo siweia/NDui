@@ -1,32 +1,49 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
+
+local _G = _G
+local tinsert = tinsert
 local cfg = C.bars.bar5
+local margin, padding = C.bars.margin, C.bars.padding
+
+local function SetFrameSize(frame, size, num)
+	size = size or frame.buttonSize
+	num = num or frame.numButtons
+
+	frame:SetWidth(size + 2*padding)
+	frame:SetHeight(num*size + (num-1)*margin + 2*padding)
+	if not frame.mover then
+		frame.mover = B.Mover(frame, SHOW_MULTIBAR4_TEXT, "Bar5", frame.Pos)
+	else
+		frame.mover:SetSize(frame:GetSize())
+	end
+
+	if not frame.SetFrameSize then
+		frame.buttonSize = size
+		frame.numButtons = num
+		frame.SetFrameSize = SetFrameSize
+	end
+end
 
 function Bar:CreateBar5()
-	local padding, margin = 2, 2
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 	local layout = NDuiDB["Actionbar"]["Style"]
 
-	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "NDui_ActionBar5", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(cfg.size + 2*padding)
-	frame:SetHeight(num*cfg.size + (num-1)*margin + 2*padding)
 	if layout == 1 or layout == 4 or layout == 5 then
-		frame.Pos = {"RIGHT", UIParent, "RIGHT", -(frame:GetWidth()-1), 0}
+		frame.Pos = {"RIGHT", _G.NDui_ActionBar4, "LEFT", margin, 0}
 	else
 		frame.Pos = {"RIGHT", UIParent, "RIGHT", -1, 0}
 	end
 
-	--move the buttons into position and reparent them
 	MultiBarLeft:SetParent(frame)
 	MultiBarLeft:EnableMouse(false)
 
 	for i = 1, num do
 		local button = _G["MultiBarLeftButton"..i]
-		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(cfg.size, cfg.size)
+		tinsert(buttonList, button)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("TOPRIGHT", frame, -padding, -padding)
@@ -36,16 +53,12 @@ function Bar:CreateBar5()
 		end
 	end
 
-	--show/hide the frame on a given state driver
+	frame.buttonList = buttonList
+	SetFrameSize(frame, cfg.size, num)
+
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	--create drag frame and drag functionality
-	if C.bars.userplaced then
-		frame.mover = B.Mover(frame, SHOW_MULTIBAR4_TEXT, "Bar5", frame.Pos)
-	end
-
-	--create the mouseover functionality
 	if NDuiDB["Actionbar"]["Bar5Fade"] and cfg.fader then
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end

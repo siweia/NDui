@@ -1,18 +1,23 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
+
+local _G = _G
+local tinsert = tinsert
 local cfg = C.bars.extrabar
+local margin, padding = C.bars.margin, C.bars.padding
 
 function Bar:CreateExtrabar()
-	local padding, margin = 10, 5
 	local num = 1
 	local buttonList = {}
+	local size = cfg.size
 
 	-- ExtraActionButton
 	local frame = CreateFrame("Frame", "NDui_ActionBarExtra", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.size + (num-1)*margin + 2*padding)
-	frame:SetHeight(cfg.size + 2*padding)
+	frame:SetWidth(num*size + (num-1)*margin + 2*padding)
+	frame:SetHeight(size + 2*padding)
 	frame.Pos = {"BOTTOM", UIParent, "BOTTOM", 250, 100}
+	frame.mover = B.Mover(frame, L["Extrabar"], "Extrabar", frame.Pos)
 
 	ExtraActionBarFrame:EnableMouse(false)
 	ExtraAbilityContainer:SetParent(frame)
@@ -21,15 +26,11 @@ function Bar:CreateExtrabar()
 	ExtraAbilityContainer.ignoreFramePositionManager = true
 
 	local button = ExtraActionButton1
-	table.insert(buttonList, button)
-	button:SetSize(cfg.size, cfg.size)
+	tinsert(buttonList, button)
+	button:SetSize(size, size)
 
 	frame.frameVisibility = "[extrabar] show; hide"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
-
-	if C.bars.userplaced then
-		frame.mover = B.Mover(frame, L["Extrabar"], "Extrabar", frame.Pos)
-	end
 
 	if cfg.fader then
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
@@ -37,8 +38,8 @@ function Bar:CreateExtrabar()
 
 	-- ZoneAbility
 	local zoneFrame = CreateFrame("Frame", "NDui_ActionBarZone", UIParent)
-	zoneFrame:SetWidth(cfg.size + 2*padding)
-	zoneFrame:SetHeight(cfg.size + 2*padding)
+	zoneFrame:SetWidth(size + 2*padding)
+	zoneFrame:SetHeight(size + 2*padding)
 	zoneFrame.Pos = {"BOTTOM", UIParent, "BOTTOM", -250, 100}
 	zoneFrame.mover = B.Mover(zoneFrame, L["Zone Ability"], "ZoneAbility", zoneFrame.Pos)
 
