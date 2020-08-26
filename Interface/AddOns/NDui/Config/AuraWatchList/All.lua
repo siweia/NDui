@@ -614,8 +614,10 @@ local list = {
 	-- 幻象
 		{AuraID = 304975, UnitID = "target", Value = true},	-- 虚空哀嚎，吸收盾
 		{AuraID = 319643, UnitID = "target", Value = true},	-- 虚空哀嚎，吸收盾
-	-- 5人本
+	-- 大米
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
+	-- 9.0副本
+		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 	-- 8.0副本
 		{AuraID = 300011, UnitID = "target"},	-- 力场护盾，麦卡贡
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
