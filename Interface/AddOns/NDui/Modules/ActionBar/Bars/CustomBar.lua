@@ -58,12 +58,14 @@ function Bar:UpdateCustomBar()
 		else
 			button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
 		end
-		button:SetParent(frame)
+		button:SetAttribute("statehidden", false)
 		button:Show()
 	end
 
 	for i = num+1, 12 do
-		frame.buttons[i]:SetParent(B.HiddenFrame)
+		local button = frame.buttons[i]
+		button:SetAttribute("statehidden", true)
+		button:Hide()
 	end
 
 	local column = min(num, perRow)
