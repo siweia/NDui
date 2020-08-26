@@ -117,11 +117,8 @@ local function SetupCooldown(cooldown, cfg)
 	ApplyPoints(cooldown, cfg.points)
 end
 
-local function SetupBackdrop(button)
-	local bg = B.CreateBDFrame(button, .25)
-	bg:SetAllPoints()
-	B.CreateTex(bg)
-	B.CreateSD(bg)
+local function SetupBackdrop(icon)
+	local bg = B.SetBD(icon, .25)
 	if NDuiDB["Actionbar"]["Classcolor"] then
 		bg:SetBackdropColor(DB.r, DB.g, DB.b, .25)
 	else
@@ -210,7 +207,7 @@ function Bar:StyleActionButton(button, cfg)
 	if NewActionTexture then NewActionTexture:SetTexture(nil) end
 
 	--backdrop
-	SetupBackdrop(button)
+	SetupBackdrop(icon)
 
 	--textures
 	SetupTexture(icon, cfg.icon, "SetTexture", icon)
@@ -287,7 +284,7 @@ function Bar:StyleExtraActionButton(cfg)
 	local checkedTexture = button:GetCheckedTexture()
 
 	--backdrop
-	SetupBackdrop(button)
+	SetupBackdrop(icon)
 
 	--textures
 	SetupTexture(icon, cfg.icon, "SetTexture", icon)
