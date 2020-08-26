@@ -18,8 +18,8 @@ local barFader = {						-- 动作条显隐设置
 }
 
 C.bars = {
-	userplaced				= true,		-- 使其可通过游戏内命令移动
-
+	margin = 2,							-- 按键间距
+	padding = 2,						-- 边缘间距
 	-- BAR1 主动作条（下）
 	bar1 = {
 		size				= 34,		-- 动作条大小
