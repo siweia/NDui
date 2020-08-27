@@ -18,7 +18,7 @@ tinsert(C.defaultThemes, function()
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 
 	local iconSize = 60-2*C.mult
-	for i = 1, 4 do
+	for i = 1, 3 do
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
@@ -34,7 +34,7 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
 		local self = GroupFinderFrame
-		for i = 1, 4 do
+		for i = 1, 3 do
 			local button = self["groupButton"..i]
 			if i == index then
 				button.bg:Show()
