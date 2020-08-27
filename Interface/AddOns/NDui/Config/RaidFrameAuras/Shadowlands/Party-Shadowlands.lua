@@ -61,7 +61,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 335338) -- 哀伤仪式
 module:RegisterDebuff(TIER, INSTANCE, 0, 326891) -- 痛楚
 module:RegisterDebuff(TIER, INSTANCE, 0, 329321) -- 锯齿横扫
 module:RegisterDebuff(TIER, INSTANCE, 0, 319603) -- 羁石诅咒
-module:RegisterDebuff(TIER, INSTANCE, 0, 319611, 6) -- 变成石头
+module:RegisterDebuff(TIER, INSTANCE, 0, 319611) -- 变成石头
 module:RegisterDebuff(TIER, INSTANCE, 0, 325876) -- 湮灭诅咒
 module:RegisterDebuff(TIER, INSTANCE, 0, 326632) -- 石化血脉
 module:RegisterDebuff(TIER, INSTANCE, 0, 323650) -- 萦绕锁定
