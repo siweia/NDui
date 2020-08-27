@@ -123,6 +123,7 @@ local function ReskinMissionComplete(self)
 	end
 	if missionComplete.CompleteFrame then
 		B.Reskin(missionComplete.CompleteFrame.ContinueButton)
+		B.Reskin(missionComplete.CompleteFrame.SpeedButton)
 		missionComplete.RewardsScreen.FinalRewardsPanel.ScrollRewards:SetTextColor(1, .8, 0)
 		B.Reskin(missionComplete.RewardsScreen.FinalRewardsPanel.ContinueButton)
 	end
@@ -883,9 +884,12 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Covenant Mission UI
 	local CovenantMissionFrame = CovenantMissionFrame
 	ReskinMissionFrame(CovenantMissionFrame)
-	B.Reskin(HealFollowerButtonTemplate)
+	CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
 	B.StripTextures(CombatLog.CombatLogMessageFrame)
 	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
+
+	B.Reskin(HealFollowerButtonTemplate)
+	CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
 	B.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 
 	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", ReskinMissionBoards)
