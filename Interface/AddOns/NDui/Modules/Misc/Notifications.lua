@@ -4,12 +4,13 @@ local M = B:GetModule("Misc")
 
 local format, gsub, strsplit = string.format, string.gsub, string.split
 local pairs, tonumber, wipe, select = pairs, tonumber, wipe, select
-local GetInstanceInfo, GetAtlasInfo, PlaySound = GetInstanceInfo, GetAtlasInfo, PlaySound
+local GetInstanceInfo, PlaySound = GetInstanceInfo, PlaySound
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
 local GetSpellLink, GetSpellInfo = GetSpellLink, GetSpellInfo
 local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
+local C_Texture_GetAtlasInfo = C_Texture.GetAtlasInfo
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
@@ -83,7 +84,8 @@ function M:RareAlert_Update(id)
 		local instType = select(2, GetInstanceInfo())
 		local info = C_VignetteInfo_GetVignetteInfo(id)
 		if not info then return end
-		local filename, width, height, txLeft, txRight, txTop, txBottom = GetAtlasInfo(info.atlasName)
+		local info = C_Texture_GetAtlasInfo(info.atlasName)
+		local filename, width, height, txLeft, txRight, txTop, txBottom = info.filename, info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
 		if not filename then return end
 
 		local atlasWidth = width/(txRight-txLeft)
