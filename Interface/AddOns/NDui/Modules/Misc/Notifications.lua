@@ -84,8 +84,9 @@ function M:RareAlert_Update(id)
 		local instType = select(2, GetInstanceInfo())
 		local info = C_VignetteInfo_GetVignetteInfo(id)
 		if not info then return end
-		local info = C_Texture_GetAtlasInfo(info.atlasName)
-		local filename, width, height, txLeft, txRight, txTop, txBottom = info.filename, info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
+		local atlasInfo = C_Texture_GetAtlasInfo(info.atlasName)
+		if not atlasInfo then return end
+		local filename, width, height, txLeft, txRight, txTop, txBottom = atlasInfo.filename, atlasInfo.width, atlasInfo.height, atlasInfo.leftTexCoord, atlasInfo.rightTexCoord, atlasInfo.topTexCoord, atlasInfo.bottomTexCoord
 		if not filename then return end
 
 		local atlasWidth = width/(txRight-txLeft)
