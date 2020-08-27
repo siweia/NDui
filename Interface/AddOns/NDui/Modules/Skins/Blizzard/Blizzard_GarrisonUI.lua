@@ -894,7 +894,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.Reskin(HealFollowerButtonTemplate)
 	B.StripTextures(CombatLog.CombatLogMessageFrame)
 	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
-	CovenantMissionFrame.FollowerTab.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
+	--CovenantMissionFrame.FollowerTab.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
 
 	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", ReskinMissionBoards)
 	CovenantMissionFrame.MissionComplete.Board:HookScript("OnShow", ReskinMissionBoards)

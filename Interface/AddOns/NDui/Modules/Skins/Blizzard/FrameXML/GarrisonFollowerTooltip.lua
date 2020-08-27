@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
 	-- Tooltip close buttons
-	B.ReskinClose(ItemRefCloseButton)
+	B.ReskinClose(ItemRefTooltip.CloseButton)
 	B.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	B.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
