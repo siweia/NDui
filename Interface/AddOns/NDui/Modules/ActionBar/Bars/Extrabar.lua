@@ -4,8 +4,8 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert = tinsert
-local cfg = C.bars.extrabar
-local margin, padding = C.bars.margin, C.bars.padding
+local cfg = C.Bars.extrabar
+local margin, padding = C.Bars.margin, C.Bars.padding
 
 function Bar:CreateExtrabar()
 	local num = 1

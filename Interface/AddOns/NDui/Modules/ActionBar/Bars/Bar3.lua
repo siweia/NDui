@@ -4,8 +4,8 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert = tinsert
-local cfg = C.bars.bar3
-local margin, padding = C.bars.margin, C.bars.padding
+local cfg = C.Bars.bar3
+local margin, padding = C.Bars.margin, C.Bars.padding
 
 local function SetFrameSize(frame, size, num)
 	size = size or frame.buttonSize
@@ -45,7 +45,7 @@ function Bar:CreateBar3()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 	local layout = NDuiDB["Actionbar"]["Style"]
-	if layout > 3 then cfg = C.bars.bar2 end
+	if layout > 3 then cfg = C.Bars.bar2 end
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar3", UIParent, "SecureHandlerStateTemplate")
 	if layout == 4 then

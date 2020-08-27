@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 
 local padding, margin = 2, 2
-local cfg = C.bars.bar4
+local cfg = C.Bars.bar4
 
 function Bar:CreateCustomBar(anchor)
 	local showGrid = tonumber(GetCVar("alwaysShowActionBars"))
