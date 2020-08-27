@@ -1164,7 +1164,7 @@ do
 			local roleIcon = self.HealthBar.RoleIcon
 			roleIcon:ClearAllPoints()
 			roleIcon:SetPoint("TOPRIGHT", self.squareBG, 5, 5)
-			hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
+		--	hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
 
 			local background = self.HealthBar.Background
 			background:SetAlpha(0)
