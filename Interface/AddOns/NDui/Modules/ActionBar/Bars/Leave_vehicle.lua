@@ -4,8 +4,8 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert = tinsert
-local cfg = C.bars.leave_vehicle
-local margin, padding = C.bars.margin, C.bars.padding
+local cfg = C.Bars.leave_vehicle
+local margin, padding = C.Bars.margin, C.Bars.padding
 
 local function SetFrameSize(frame, size, num)
 	size = size or frame.buttonSize

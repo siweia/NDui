@@ -5,8 +5,8 @@ local Bar = B:RegisterModule("Actionbar")
 local _G = _G
 local tinsert, next = tinsert, next
 local GetActionTexture = GetActionTexture
-local cfg = C.bars.bar1
-local margin, padding = C.bars.margin, C.bars.padding
+local cfg = C.Bars.bar1
+local margin, padding = C.Bars.margin, C.Bars.padding
 
 local function UpdateActionbarScale(bar)
 	local frame = _G["NDui_Action"..bar]
