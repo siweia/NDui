@@ -28,7 +28,6 @@ local list = {
 		{AuraID = 209202, UnitID = "target", Caster = "player"},	-- 提尔之眼
 		{AuraID = 204301, UnitID = "target", Caster = "player"},	-- 祝福之盾
 		{AuraID = 204079, UnitID = "target", Caster = "player"},	-- 决一死战
-		{AuraID = 267799, UnitID = "target", Caster = "player"},	-- 处决审判
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 498, UnitID = "player"},		-- 圣佑术
