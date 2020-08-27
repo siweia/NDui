@@ -56,6 +56,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	local popup = PVPQueueFrame.NewSeasonPopup
 	B.Reskin(popup.Leave)
+	popup.Leave.__bg:SetFrameLevel(popup:GetFrameLevel() + 1)
 	popup.NewSeason:SetTextColor(1, .8, 0)
 	popup.SeasonDescription:SetTextColor(1, 1, 1)
 	popup.SeasonDescription2:SetTextColor(1, 1, 1)
