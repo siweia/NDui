@@ -1117,6 +1117,7 @@ do
 		["Adventures-Tank"] = {.5, .75, 0, 1},
 		["Adventures-Healer"] = {.75, 1, 0, 1},
 		["Adventures-DPS"] = {.25, .5, 0, 1},
+		["Adventures-DPS-Ranged"] = {.25, .5, 0, 1},
 	}
 	local function replaceFollowerRole(roleIcon, atlas)
 		roleIcon:SetTexture("Interface\\LFGFrame\\LFGROLE")
