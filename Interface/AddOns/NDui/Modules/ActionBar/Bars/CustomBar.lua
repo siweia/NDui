@@ -31,6 +31,7 @@ function Bar:CreateCustomBar(anchor)
 		button:SetAttribute("action", button.id)
 		frame.buttons[i] = button
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 	end
 
 	if NDuiDB["Actionbar"]["CustomBarFader"] and cfg.fader then

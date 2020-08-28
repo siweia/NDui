@@ -62,6 +62,7 @@ function Bar:CreateBar3()
 	for i = 1, num do
 		local button = _G["MultiBarBottomRightButton"..i]
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("TOPLEFT", frame, padding, -padding)

@@ -27,6 +27,7 @@ function Bar:CreateExtrabar()
 
 	local button = ExtraActionButton1
 	tinsert(buttonList, button)
+	tinsert(Bar.buttons, button)
 	button:SetSize(size, size)
 
 	frame.frameVisibility = "[extrabar] show; hide"

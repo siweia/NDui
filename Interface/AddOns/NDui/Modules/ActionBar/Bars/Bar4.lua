@@ -75,6 +75,7 @@ function Bar:CreateBar4()
 	for i = 1, num do
 		local button = _G["MultiBarRightButton"..i]
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 		button:ClearAllPoints()
 		if layout == 2 then
 			if i == 1 then

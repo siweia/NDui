@@ -42,6 +42,7 @@ function Bar:CreatePetbar()
 	for i = 1, num do
 		local button = _G["PetActionButton"..i]
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("LEFT", frame, padding, 0)

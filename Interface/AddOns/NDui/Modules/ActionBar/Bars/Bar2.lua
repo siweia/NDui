@@ -40,6 +40,7 @@ function Bar:CreateBar2()
 	for i = 1, num do
 		local button = _G["MultiBarBottomLeftButton"..i]
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("BOTTOMLEFT", frame, padding, padding)

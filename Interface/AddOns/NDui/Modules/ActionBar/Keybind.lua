@@ -3,8 +3,7 @@ local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 
 local _G = _G
-local tonumber, print, strfind, strupper = tonumber, print, strfind, strupper
-local EnumerateFrames = EnumerateFrames
+local pairs, tonumber, print, strfind, strupper = pairs, tonumber, print, strfind, strupper
 local InCombatLockdown = InCombatLockdown
 local GetSpellBookItemName, GetMacroInfo = GetSpellBookItemName, GetMacroInfo
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown
@@ -28,18 +27,17 @@ local function hookSpellButton(self)
 end
 
 function Bar:Bind_RegisterButton(button)
-	local action = ActionButton1:GetScript("OnClick")
 	local stance = StanceButton1:GetScript("OnClick")
 	local pet = PetActionButton1:GetScript("OnClick")
 
 	if button.IsProtected and button.IsObjectType and button.GetScript and button:IsObjectType("CheckButton") and button:IsProtected() then
 		local script = button:GetScript("OnClick")
-		if script == action then
-			button:HookScript("OnEnter", hookActionButton)
-		elseif script == stance then
+		if script == stance then
 			button:HookScript("OnEnter", hookStanceButton)
 		elseif script == pet then
 			button:HookScript("OnEnter", hookPetButton)
+		else
+			button:HookScript("OnEnter", hookActionButton)
 		end
 	end
 end
@@ -90,10 +88,8 @@ function Bar:Bind_Create()
 		end
 	end)
 
-	local button = EnumerateFrames()
-	while button do
+	for _, button in pairs(Bar.buttons) do
 		Bar:Bind_RegisterButton(button)
-		button = EnumerateFrames(button)
 	end
 
 	for i = 1, 12 do
