@@ -78,14 +78,18 @@ local isIgnored = {
 	[1943] = true,	-- 联盟激流堡
 	[2111] = true,	-- 黑海岸前线
 }
+local ignoredAtlas = {
+	["poi-graveyard-neutral"] = true, -- graveyard in maw
+}
 
 function M:RareAlert_Update(id)
 	if id and not cache[id] then
-		local instType = select(2, GetInstanceInfo())
 		local info = C_VignetteInfo_GetVignetteInfo(id)
-		if not info then return end
+		if not info or ignoredAtlas[info.atlasName] then return end
+
 		local atlasInfo = C_Texture_GetAtlasInfo(info.atlasName)
 		if not atlasInfo then return end
+
 		local file, width, height, txLeft, txRight, txTop, txBottom = atlasInfo.file, atlasInfo.width, atlasInfo.height, atlasInfo.leftTexCoord, atlasInfo.rightTexCoord, atlasInfo.topTexCoord, atlasInfo.bottomTexCoord
 		if not file then return end
 
@@ -98,7 +102,7 @@ function M:RareAlert_Update(id)
 			local currrentTime = NDuiADB["TimestampFormat"] == 1 and "|cff00ff00["..date("%H:%M:%S").."]|r" or ""
 			print(currrentTime.." -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		end
-		if not NDuiDB["Misc"]["RareAlertInWild"] or instType == "none" then
+		if not NDuiDB["Misc"]["RareAlertInWild"] or M.RareInstType == "none" then
 			PlaySound(23404, "master")
 		end
 
@@ -115,6 +119,7 @@ function M:RareAlert_CheckInstance()
 	else
 		B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
 	end
+	M.RareInstType = instanceType
 end
 
 function M:RareAlert()
