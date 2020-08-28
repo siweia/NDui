@@ -1,12 +1,20 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function updateSelectedTexture(texture, shown)
+	local button = texture.__owner
+	if shown then
+		button.bg:SetBackdropBorderColor(1, .8, 0)
+	else
+		button.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
 C.themes["Blizzard_RuneforgeUI"] = function()
 	local frame = RuneforgeFrame
 
-	local createFrame = frame.CreateFrame
-	B.Reskin(createFrame.CraftItemButton)
-	B.Reskin(createFrame.CloseButton)
+	B.ReskinClose(frame.CloseButton, nil, -70, -70)
+	B.Reskin(frame.CreateFrame.CraftItemButton)
 
 	local powerFrame = frame.CraftingFrame.PowerFrame
 	B.StripTextures(powerFrame)
@@ -21,6 +29,9 @@ C.themes["Blizzard_RuneforgeUI"] = function()
 				button.Border:SetAlpha(0)
 				button.CircleMask:Hide()
 				button.bg = B.ReskinIcon(button.Icon)
+				button.SelectedTexture:SetTexture("")
+				button.SelectedTexture.__owner = button
+				hooksecurefunc(button.SelectedTexture, "SetShown", updateSelectedTexture)
 			end
 		end
 	end)
