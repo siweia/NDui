@@ -132,6 +132,9 @@ local function CreatePanel()
 	f:SetFrameLevel(5)
 	tinsert(UISpecialFrames, "NDui_AWConfig")
 
+	local helpInfo = B.CreateHelpInfo(f, L["AWConfigTips"])
+	helpInfo:SetPoint("TOPLEFT", 20, -5)
+
 	auraWatchShow()
 	f:HookScript("OnShow", auraWatchShow)
 	f:HookScript("OnHide", auraWatchHide)

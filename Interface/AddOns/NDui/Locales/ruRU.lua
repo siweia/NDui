@@ -260,6 +260,7 @@ L["Mover Console"] = "NDui Mover"
 L["Grids"] = "Клетки"
 L["Reset Mover Confirm"] = "Вы уверены что хотите сбросить позиции рамок?"
 L["AWConfig Title"] = "Настройка NDui AuraWatch"
+L["AWConfigTips"] = "|nGet more tips by mouseover each option header.|nYou need to reload UI after setting changed." -- need translation
 L["Groups"] = "Группы"
 L["Player Aura"] = "Аура Игрока"
 L["Target Aura"] = "Аура Цели"
