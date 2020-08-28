@@ -9,7 +9,7 @@ local GetSpellBookItemName, GetMacroInfo = GetSpellBookItemName, GetMacroInfo
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown
 local GetBindingKey, SetBinding, SaveBindings, LoadBindings = GetBindingKey, SetBinding, SaveBindings, LoadBindings
 local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
-local NOT_BOUND, PRESS_KEY_TO_BIND = NOT_BOUND, PRESS_KEY_TO_BIND
+local NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION = NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION
 
 -- Button types
 local function hookActionButton(self)
@@ -256,7 +256,16 @@ function Bar:Bind_CreateDialog()
 	B.SetBD(frame)
 	B.CreateFS(frame, 16, QUICK_KEYBIND_MODE, false, "TOP", 0, -10)
 
+	local helpInfo = B.CreateHelpInfo(frame, "|n"..QUICK_KEYBIND_DESCRIPTION)
+	helpInfo:SetPoint("TOPRIGHT", 2, -2)
+
 	local text = B.CreateFS(frame, 14, CHARACTER_SPECIFIC_KEYBINDINGS, "system", "TOP", 0, -40)
+	local box = B.CreateCheckBox(frame)
+	box:SetChecked(NDuiDB["Actionbar"]["BindType"] == 2)
+	box:SetPoint("RIGHT", text, "LEFT", -5, -0)
+	box:SetScript("OnClick", function(self)
+		NDuiDB["Actionbar"]["BindType"] = self:GetChecked() and 2 or 1
+	end)
 
 	local button1 = B.CreateButton(frame, 120, 25, APPLY, 14)
 	button1:SetPoint("BOTTOMLEFT", 25, 10)
@@ -267,12 +276,6 @@ function Bar:Bind_CreateDialog()
 	button2:SetPoint("BOTTOMRIGHT", -25, 10)
 	button2:SetScript("OnClick", function()
 		Bar:Bind_Deactivate()
-	end)
-	local box = B.CreateCheckBox(frame)
-	box:SetChecked(NDuiDB["Actionbar"]["BindType"] == 2)
-	box:SetPoint("RIGHT", text, "LEFT", -5, -0)
-	box:SetScript("OnClick", function(self)
-		NDuiDB["Actionbar"]["BindType"] = self:GetChecked() and 2 or 1
 	end)
 
 	Bar.keybindDialog = frame
