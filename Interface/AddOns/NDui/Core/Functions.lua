@@ -594,6 +594,21 @@ do
 		return bu
 	end
 
+	function B:CreateHelpInfo(tooltip)
+		local bu = CreateFrame("Button", nil, self)
+		bu:SetSize(40, 40)
+		bu.Icon = bu:CreateTexture(nil, "ARTWORK")
+		bu.Icon:SetAllPoints()
+		bu.Icon:SetTexture(616343)
+		bu:SetHighlightTexture(616343)
+		if tooltip then
+			bu.title = L["Tips"]
+			B.AddTooltip(bu, "ANCHOR_BOTTOMLEFT", tooltip, "info")
+		end
+
+		return bu
+	end
+
 	local AtlasToQuality = {
 		["auctionhouse-itemicon-border-gray"] = LE_ITEM_QUALITY_POOR,
 		["auctionhouse-itemicon-border-white"] = LE_ITEM_QUALITY_COMMON,
