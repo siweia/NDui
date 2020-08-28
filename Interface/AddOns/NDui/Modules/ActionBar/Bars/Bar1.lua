@@ -66,6 +66,7 @@ function Bar:CreateBar1()
 	for i = 1, num do
 		local button = _G["ActionButton"..i]
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 		button:SetParent(frame)
 		button:ClearAllPoints()
 		if i == 1 then
@@ -124,6 +125,7 @@ end
 function Bar:OnLogin()
 	if not NDuiDB["Actionbar"]["Enable"] then return end
 
+	Bar.buttons = {}
 	Bar:CreateBar1()
 	Bar:CreateBar2()
 	Bar:CreateBar3()

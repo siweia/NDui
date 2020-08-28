@@ -44,6 +44,7 @@ function Bar:CreateBar5()
 	for i = 1, num do
 		local button = _G["MultiBarLeftButton"..i]
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("TOPRIGHT", frame, -padding, -padding)

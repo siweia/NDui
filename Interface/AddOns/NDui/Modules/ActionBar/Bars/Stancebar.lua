@@ -45,6 +45,7 @@ function Bar:CreateStancebar()
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
 		tinsert(buttonList, button)
+		tinsert(Bar.buttons, button)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
