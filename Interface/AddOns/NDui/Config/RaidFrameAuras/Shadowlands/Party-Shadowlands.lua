@@ -39,6 +39,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 323043) -- 放血
 module:RegisterDebuff(TIER, INSTANCE, 0, 322557) -- 灵魂分裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 331172) -- 心灵连接
 module:RegisterDebuff(TIER, INSTANCE, 0, 322563) -- 被标记的猎物
+module:RegisterDebuff(TIER, INSTANCE, 0, 341198) -- 易燃爆炸
 
 INSTANCE = 1188 -- 彼界
 RegisterSeasonSpells(INSTANCE)
