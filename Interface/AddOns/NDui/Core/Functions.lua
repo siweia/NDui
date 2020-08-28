@@ -43,11 +43,6 @@ do
 		return floor(number * mult + .5) / mult
 	end
 
-	function B:Scale(x)
-		local mult = C.mult
-		return mult * floor(x / mult + .5)
-	end
-
 	-- Cooldown calculation
 	local day, hour, minute = 86400, 3600, 60
 	function B.FormatTime(s)
@@ -483,7 +478,7 @@ do
 
 		self.__shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		self.__shadow:SetOutside(self, size or 4, size or 4)
-		self.__shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
+		self.__shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = size or 5})
 		self.__shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
 		self.__shadow:SetFrameLevel(1)
 
