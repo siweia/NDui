@@ -478,7 +478,7 @@ do
 
 		self.__shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		self.__shadow:SetOutside(self, size or 4, size or 4)
-		self.__shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = B:Scale(size or 5)})
+		self.__shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = size or 5})
 		self.__shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
 		self.__shadow:SetFrameLevel(1)
 
