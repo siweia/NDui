@@ -66,6 +66,7 @@ function ItemButton:New(bagID, slotID)
 	elseif bagID == -1 then
 		button.GetInventorySlot = ButtonInventorySlot
 	end
+	button.UpdateTooltip = button:GetScript("OnEnter") -- Fix tooltip update
 
 	return button
 end

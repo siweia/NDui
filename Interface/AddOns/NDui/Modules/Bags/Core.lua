@@ -763,10 +763,6 @@ function module:OnLogin()
 		else
 			self:SetBackdropColor(.3, .3, .3, .3)
 		end
-
-		if self:IsMouseOver() then
-			self:GetScript("OnEnter")(self) -- refresh tooltip
-		end
 	end
 
 	function MyButton:OnUpdateQuest(item)
