@@ -183,7 +183,7 @@ local function Visibility(self, event, unit)
 		end
 	end
 
-	local isEnabled = element.isEnabled
+	local isEnabled = element.__isEnabled
 	local powerType = unit == 'vehicle' and 'COMBO_POINTS' or ClassPowerType
 
 	if(shouldEnable) then
@@ -198,8 +198,22 @@ local function Visibility(self, event, unit)
 
 	if(shouldEnable and not isEnabled) then
 		ClassPowerEnable(self)
+
+		--[[ Callback: ClassPower:PostVisibility(isVisible)
+		Called after the element's visibility has been changed.
+
+		* self      - the ClassPower element
+		* isVisible - the current visibility state of the element (boolean)
+		--]]
+		if(element.PostVisibility) then
+			element:PostVisibility(true)
+		end
 	elseif(not shouldEnable and (isEnabled or isEnabled == nil)) then
 		ClassPowerDisable(self)
+
+		if(element.PostVisibility) then
+			element:PostVisibility(false)
+		end
 	elseif(shouldEnable and isEnabled) then
 		Path(self, event, unit, powerType)
 	end
@@ -225,7 +239,7 @@ do
 		self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
 		self:RegisterEvent('UNIT_MAXPOWER', Path)
 
-		self.ClassPower.isEnabled = true
+		self.ClassPower.__isEnabled = true
 
 		if(UnitHasVehicleUI('player')) then
 			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
@@ -243,7 +257,7 @@ do
 			element[i]:Hide()
 		end
 
-		self.ClassPower.isEnabled = false
+		element.__isEnabled = false
 		Path(self, 'ClassPowerDisable', 'player', ClassPowerType)
 	end
 

@@ -94,8 +94,9 @@ local UnitChannelInfo = UnitChannelInfo
 local FALLBACK_ICON = 136243
 
 local function updateSafeZone(self)
-	local safeZone = self.SafeZone
-	local width = self:GetWidth()
+	local sz = self.SafeZone
+	local horiz = self.horizontal
+	local width = horiz and self:GetWidth() or self:GetHeight()
 	local _, _, _, ms = GetNetStats()
 
 	local safeZoneRatio = (ms / 1e3) / self.max
@@ -103,7 +104,31 @@ local function updateSafeZone(self)
 		safeZoneRatio = 1
 	end
 
-	safeZone:SetWidth(width * safeZoneRatio)
+	sz[horiz and 'SetWidth' or 'SetHeight'](sz, width * safeZoneRatio)
+end
+
+local function positionSafeZone(self, isChanneling)
+	local sz = self.SafeZone
+	local horiz = self.horizontal
+
+	sz:ClearAllPoints()
+
+	if(not isChanneling) then
+		sz:SetPoint(
+			self:GetReverseFill()
+			and (horiz and 'LEFT' or 'BOTTOM')
+			or (horiz and 'RIGHT' or 'TOP')
+		)
+	else
+		sz:SetPoint(
+			self:GetReverseFill()
+			and (horiz and 'RIGHT' or 'TOP')
+			or (horiz and 'LEFT' or 'BOTTOM')
+		)
+	end
+
+	sz:SetPoint(horiz and 'TOP' or 'LEFT')
+	sz:SetPoint(horiz and 'BOTTOM' or 'RIGHT')
 end
 
 local function UNIT_SPELLCAST_START(self, event, unit)
@@ -142,12 +167,8 @@ local function UNIT_SPELLCAST_START(self, event, unit)
 		shield:Hide()
 	end
 
-	local sf = element.SafeZone
-	if(sf) then
-		sf:ClearAllPoints()
-		sf:SetPoint(element:GetReverseFill() and 'LEFT' or 'RIGHT')
-		sf:SetPoint('TOP')
-		sf:SetPoint('BOTTOM')
+	if(element.SafeZone) then
+		positionSafeZone(element)
 		updateSafeZone(element)
 	end
 
@@ -355,12 +376,8 @@ local function UNIT_SPELLCAST_CHANNEL_START(self, event, unit, _, spellID)
 		shield:Hide()
 	end
 
-	local sf = element.SafeZone
-	if(sf) then
-		sf:ClearAllPoints()
-		sf:SetPoint(element:GetReverseFill() and 'RIGHT' or 'LEFT')
-		sf:SetPoint('TOP')
-		sf:SetPoint('BOTTOM')
+	if(element.SafeZone) then
+		positionSafeZone(element, true)
 		updateSafeZone(element)
 	end
 
