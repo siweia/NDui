@@ -28,13 +28,12 @@ local function changelog()
 
 	f = CreateFrame("Frame", "NDuiChangeLog", UIParent)
 	f:SetPoint("CENTER")
-	f:SetScale(1.2)
 	f:SetFrameStrata("HIGH")
 	B.CreateMF(f)
 	B.SetBD(f)
-	B.CreateFS(f, 30, "NDui", true, "TOPLEFT", 10, 26)
-	B.CreateFS(f, 14, DB.Version, true, "TOPLEFT", 90, 14)
-	B.CreateFS(f, 16, L["Changelog"], true, "TOP", 0, -10)
+	B.CreateFS(f, 36, "NDui", true, "TOPLEFT", 10, 32)
+	B.CreateFS(f, 16, DB.Version, true, "TOPLEFT", 100, 16)
+	B.CreateFS(f, 18, L["Changelog"], true, "TOP", 0, -10)
 	local ll = CreateFrame("Frame", nil, f)
 	ll:SetPoint("TOP", -50, -35)
 	B.CreateGF(ll, 100, 1, "Horizontal", .7, .7, .7, 0, .7)
@@ -45,10 +44,10 @@ local function changelog()
 	lr:SetFrameStrata("HIGH")
 	local offset = 0
 	for n, t in pairs(hx) do
-		B.CreateFS(f, 12, n..": "..t, false, "TOPLEFT", 15, -(50 + offset))
-		offset = offset + 20
+		B.CreateFS(f, 14, n..": "..t, false, "TOPLEFT", 15, -(50 + offset))
+		offset = offset + 24
 	end
-	f:SetSize(400, 60 + offset)
+	f:SetSize(480, 60 + offset)
 	local close = B.CreateButton(f, 16, 16, "X")
 	close:SetPoint("TOPRIGHT", -10, -10)
 	close:SetScript("OnClick", function() f:Hide() end)
