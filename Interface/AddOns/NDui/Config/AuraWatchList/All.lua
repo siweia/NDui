@@ -273,6 +273,7 @@ local list = {
 		{AuraID = 311390, UnitID = "player"},	-- 疯狂：昆虫恐惧症，幻象
 		{AuraID = 306583, UnitID = "player"},	-- 灌铅脚步
 		{AuraID = 313698, UnitID = "player", Flash = true},	-- 泰坦之赐
+
 		{AuraID = 314478, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314483, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314411, UnitID = "player"},	-- 疑云密布
@@ -288,6 +289,10 @@ local list = {
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		{AuraID = 226512, UnitID = "player"},	-- 血池
 		{AuraID = 240447, UnitID = "player", Flash = true},	-- 践踏
+
+		{AuraID = 333299, UnitID = "player"},	-- 伤逝剧场，荒芜诅咒
+		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
+
 		{AuraID = 260954, UnitID = "player"},	-- 铁之凝视，围攻
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
 		{AuraID = 265773, UnitID = "player"},	-- 吐金，诸王
@@ -618,6 +623,7 @@ local list = {
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
 	-- 9.0副本
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
+		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，One With Death
 	-- 8.0副本
 		{AuraID = 300011, UnitID = "target"},	-- 力场护盾，麦卡贡
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
