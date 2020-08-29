@@ -6,9 +6,10 @@ local TIER = 9
 local INSTANCE -- 5人本
 
 local SEASON_SPELLS = {
-    ["209858"] = 2, -- 死疽
-    ["240443"] = 2, -- 爆裂
-    ["240559"] = 2, -- 重伤
+    [209858] = 2, -- 死疽
+    [240443] = 2, -- 爆裂
+    [240559] = 2, -- 重伤
+    [342494] = 2, -- 傲慢吹嘘
 }
 local function RegisterSeasonSpells(INSTANCE)
     for spellID, priority in pairs(SEASON_SPELLS) do
