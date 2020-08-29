@@ -23,6 +23,8 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 319539) -- 无魂者
 module:RegisterDebuff(TIER, INSTANCE, 0, 326892) -- 锁定
 module:RegisterDebuff(TIER, INSTANCE, 0, 321768) -- 上钩了
 module:RegisterDebuff(TIER, INSTANCE, 0, 323825) -- 攫取裂隙
+module:RegisterDebuff(TIER, INSTANCE, 0, 333231) -- 灼热之陨
+module:RegisterDebuff(TIER, INSTANCE, 0, 330532) -- 锯齿箭
 
 INSTANCE = 1183 -- 凋魂之殇
 RegisterSeasonSpells(INSTANCE)

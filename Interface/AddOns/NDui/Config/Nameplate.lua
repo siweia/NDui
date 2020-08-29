@@ -1,4 +1,4 @@
-local _, ns = ...
+	local _, ns = ...
 local _, C = unpack(ns)
 
 -- 法术白名单
@@ -44,6 +44,9 @@ C.WhiteList = {
 	[255968]	= true,
 	[255970]	= true,
 	[255972]	= true,
+
+	[320293]	= true,		-- 伤逝剧场，One With Death
+
 	[228318]	= true,		-- 激怒
 	[226510]	= true,		-- 血池
 	[277242]	= true,		-- 共生
