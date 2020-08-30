@@ -49,7 +49,7 @@ local function changelog()
 		offset = offset + 24
 	end
 	f:SetSize(480, 60 + offset)
-	local close = B.CreateButton(f, 16, 16, "X")
+	local close = B.CreateButton(f, 16, 16, true, DB.closeTex)
 	close:SetPoint("TOPRIGHT", -10, -10)
 	close:SetScript("OnClick", function() f:Hide() end)
 end

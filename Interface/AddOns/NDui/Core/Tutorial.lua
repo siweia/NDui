@@ -388,13 +388,13 @@ local function HelloWorld()
 		c1.." /ncl "..c2..L["Help Info9"],
 	}
 	for index, line in pairs(lines) do
-		B.CreateFS(welcome, 14, line, false, "TOPLEFT", 20, -100-index*20)
+		B.CreateFS(welcome, 14, line, false, "TOPLEFT", 20, -100-index*24)
 	end
 	B.CreateFS(welcome, 14, L["Help Info10"], false, "TOPLEFT", 20, -310)
 	B.CreateFS(welcome, 14, L["Help Info11"], false, "TOPLEFT", 20, -330)
 
 	if NDuiDB["Tutorial"]["Complete"] then
-		local close = B.CreateButton(welcome, 16, 16, "X")
+		local close = B.CreateButton(welcome, 16, 16, true, DB.closeTex)
 		close:SetPoint("TOPRIGHT", -10, -10)
 		close:SetScript("OnClick", function()
 			welcome:Hide()
