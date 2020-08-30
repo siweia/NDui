@@ -123,9 +123,10 @@ function Bar:CreateBar1()
 end
 
 function Bar:OnLogin()
+	Bar.buttons = {}
+
 	if not NDuiDB["Actionbar"]["Enable"] then return end
 
-	Bar.buttons = {}
 	Bar:CreateBar1()
 	Bar:CreateBar2()
 	Bar:CreateBar3()
