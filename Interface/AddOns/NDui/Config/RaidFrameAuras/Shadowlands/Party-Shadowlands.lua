@@ -9,7 +9,7 @@ local SEASON_SPELLS = {
     [209858] = 2, -- 死疽
     [240443] = 2, -- 爆裂
     [240559] = 2, -- 重伤
-    [342494] = 2, -- 傲慢吹嘘
+    [342494] = 2, -- 好战吹嘘
 }
 local function RegisterSeasonSpells(INSTANCE)
     for spellID, priority in pairs(SEASON_SPELLS) do
@@ -89,3 +89,6 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 328181) -- 冷冽之寒
 module:RegisterDebuff(TIER, INSTANCE, 0, 320170) -- 通灵箭
 module:RegisterDebuff(TIER, INSTANCE, 0, 323464) -- 黑暗脓液
 module:RegisterDebuff(TIER, INSTANCE, 0, 323198) -- 黑暗放逐
+module:RegisterDebuff(TIER, INSTANCE, 0, 327401) -- 共受苦难
+module:RegisterDebuff(TIER, INSTANCE, 0, 327397) -- 严酷命运
+module:RegisterDebuff(TIER, INSTANCE, 0, 322681) -- 肉钩
