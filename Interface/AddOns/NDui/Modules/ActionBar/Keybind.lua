@@ -7,7 +7,7 @@ local pairs, tonumber, print, strfind, strupper = pairs, tonumber, print, strfin
 local InCombatLockdown = InCombatLockdown
 local GetSpellBookItemName, GetMacroInfo = GetSpellBookItemName, GetMacroInfo
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown
-local GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings = GetBindingName, GetBindingKey, SetBinding, SaveBindings, LoadBindings
+local GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings = GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings
 local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
 local NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION = NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION
 
