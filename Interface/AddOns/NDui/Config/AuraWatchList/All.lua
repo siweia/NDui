@@ -292,6 +292,7 @@ local list = {
 
 		{AuraID = 333299, UnitID = "player"},	-- 伤逝剧场，荒芜诅咒
 		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
+		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
 
 		{AuraID = 260954, UnitID = "player"},	-- 铁之凝视，围攻
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
