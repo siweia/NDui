@@ -44,6 +44,13 @@ local function ReskinMissionPage(self)
 	if self.CostFrame then
 		self.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
 	end
+
+	if self.Stage.EnemyPowerValue then
+		self.Stage.EnemyPowerValue:SetWidth(100)
+		self.Stage.EnemyPowerValue:SetJustifyH("LEFT")
+		self.Stage.PartyPowerValue:SetWidth(100)
+		self.Stage.PartyPowerValue:SetJustifyH("LEFT")
+	end
 end
 
 local function ReskinMissionTabs(self)
