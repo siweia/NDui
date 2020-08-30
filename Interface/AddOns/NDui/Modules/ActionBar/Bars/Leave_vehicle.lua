@@ -32,7 +32,6 @@ local function VehicleButtonOnClick(self)
 end
 
 function Bar:CreateLeaveVehicle()
-	local padding, margin = 10, 5
 	local num = 1
 	local buttonList = {}
 
