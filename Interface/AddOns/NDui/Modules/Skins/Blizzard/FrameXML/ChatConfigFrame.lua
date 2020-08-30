@@ -11,8 +11,9 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ChatConfig_UpdateCheckboxes", function(frame)
 		if not FCF_GetCurrentChatFrame() then return end
 
+		local nameString = frame:GetName().."CheckBox"
 		for index in ipairs(frame.checkBoxTable) do
-			local checkBoxName = frame:GetName().."CheckBox"..index
+			local checkBoxName = nameString..index
 			local checkbox = _G[checkBoxName]
 			if checkbox and not checkbox.styled then
 				checkbox:SetBackdrop(nil)
@@ -27,13 +28,14 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
 		if frame.styled then return end
 
+		local nameString = frame:GetName().."CheckBox"
 		for index, value in ipairs(checkBoxTable) do
-			local checkBoxName = frame:GetName().."CheckBox"..index
+			local checkBoxName = nameString..index
 			B.ReskinCheck(_G[checkBoxName])
 
 			if value.subTypes then
-				for k in ipairs(value.subTypes) do
-					B.ReskinCheck(_G[checkBoxName.."_"..k])
+				for i in ipairs(value.subTypes) do
+					B.ReskinCheck(_G[checkBoxName.."_"..i])
 				end
 			end
 		end
