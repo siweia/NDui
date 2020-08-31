@@ -251,7 +251,7 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, NUM_FACTIONS_DISPLAYED do
 		local bu = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
-		B.ReskinExpandOrCollapse(bu)
+		B.ReskinCollapse(bu)
 	end
 
 	B.StripTextures(ReputationDetailFrame)

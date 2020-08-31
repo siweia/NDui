@@ -1067,7 +1067,7 @@ do
 		self.settingTexture = nil
 	end
 
-	function B:ReskinExpandOrCollapse(isAtlas)
+	function B:ReskinCollapse(isAtlas)
 		self:SetHighlightTexture("")
 		self:SetPushedTexture("")
 

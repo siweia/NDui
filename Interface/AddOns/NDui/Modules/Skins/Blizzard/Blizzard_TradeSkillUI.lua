@@ -68,7 +68,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 		for i = 1, #self.buttons do
 			local button = self.buttons[i]
 			if not button.styled then
-				B.ReskinExpandOrCollapse(button)
+				B.ReskinCollapse(button)
 				if button.SubSkillRankBar then
 					local bar = button.SubSkillRankBar
 					B.StripTextures(bar)

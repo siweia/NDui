@@ -8,7 +8,7 @@ local function ReskinQuestHeader(header)
 	if header.TopFiligree then header.TopFiligree:Hide() end
 	if header.CollapseButton then
 		B.StripTextures(header.CollapseButton, 0)
-		B.ReskinExpandOrCollapse(header.CollapseButton, true)
+		B.ReskinCollapse(header.CollapseButton, true)
 	end
 
 	header.styled = true
@@ -83,7 +83,7 @@ tinsert(C.defaultThemes, function()
 		for button in QuestScrollFrame.headerFramePool:EnumerateActive() do
 			if button.ButtonText then
 				if not button.styled then
-					B.ReskinExpandOrCollapse(button)
+					B.ReskinCollapse(button)
 					button:GetHighlightTexture():SetAlpha(0)
 
 					button.styled = true

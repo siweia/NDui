@@ -60,7 +60,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button)
 		if not button.expandOrCollapseButton.styled then
 			B.ReskinCheck(button.enableButton)
-			B.ReskinExpandOrCollapse(button.expandOrCollapseButton)
+			B.ReskinCollapse(button.expandOrCollapseButton)
 
 			button.expandOrCollapseButton.styled = true
 		end

@@ -68,7 +68,7 @@ tinsert(C.defaultThemes, function()
 
 			frame.bg = B.ReskinIcon(frame.Icon)
 
-			B.ReskinExpandOrCollapse(frame.ToggleButton)
+			B.ReskinCollapse(frame.ToggleButton)
 			frame.ToggleButton:GetNormalTexture():SetAlpha(0)
 			frame.ToggleButton:GetPushedTexture():SetAlpha(0)
 			frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
