@@ -1049,16 +1049,24 @@ do
 	end
 
 	-- Handle collapse
-	local function UpdateExpandOrCollapse(self, texture)
+	local function UpdateCollapseTexCoord(texture, collapsed)
+		if collapsed then
+			texture:SetTexCoord(0, .4375, 0, .4375)
+		else
+			texture:SetTexCoord(.5625, 1, 0, .4375)
+		end
+	end
+
+	local function ResetCollapseTexture(self, texture)
 		if self.settingTexture then return end
 		self.settingTexture = true
 		self:SetNormalTexture("")
 
 		if texture and texture ~= "" then
 			if strfind(texture, "Plus") or strfind(texture, "Closed") then
-				self.__texture:SetTexCoord(0, .4375, 0, .4375)
+				self.__texture:DoCollapse(true)
 			elseif strfind(texture, "Minus") or strfind(texture, "Open") then
-				self.__texture:SetTexCoord(.5625, 1, 0, .4375)
+				self.__texture:DoCollapse(false)
 			end
 			self.bg:Show()
 		else
@@ -1081,13 +1089,14 @@ do
 		self.__texture:SetSize(7, 7)
 		self.__texture:SetPoint("CENTER")
 		self.__texture:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		self.__texture.DoCollapse = UpdateCollapseTexCoord
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 		if isAtlas then
-			hooksecurefunc(self, "SetNormalAtlas", UpdateExpandOrCollapse)
+			hooksecurefunc(self, "SetNormalAtlas", ResetCollapseTexture)
 		else
-			hooksecurefunc(self, "SetNormalTexture", UpdateExpandOrCollapse)
+			hooksecurefunc(self, "SetNormalTexture", ResetCollapseTexture)
 		end
 	end
 
