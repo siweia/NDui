@@ -1,28 +1,97 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local r, g, b = DB.r, DB.g, DB.b
+
+local function onEnable(self)
+	self:SetHeight(self.storedHeight) -- prevent it from resizing
+	self.__bg:SetBackdropColor(0, 0, 0, 0)
+end
+
+local function onDisable(self)
+	self.__bg:SetBackdropColor(r, g, b, .25)
+end
+
+local function onClick(self)
+	self:GetFontString():SetTextColor(1, 1, 1)
+end
+
+local bossIndex = 1
+local function reskinBossButtons()
+	while true do
+		local button = _G["EncounterJournalBossButton"..bossIndex]
+		if not button then return end
+
+		B.Reskin(button, true)
+		local hl = button:GetHighlightTexture()
+		hl:SetColorTexture(r, g, b, .25)
+		hl:SetInside(button.__bg)
+
+		button.text:SetTextColor(1, 1, 1)
+		button.text.SetTextColor = B.Dummy
+		button.creature:SetPoint("TOPLEFT", 0, -4)
+
+		bossIndex = bossIndex + 1
+	end
+end
+
+local instIndex = 1
+local function reskinInstanceButton()
+	while true do
+		local button = EncounterJournal.instanceSelect.scroll.child["instance"..instIndex]
+		if not button then return end
+
+		button:SetNormalTexture("")
+		button:SetHighlightTexture("")
+		button:SetPushedTexture("")
+
+		local bg = B.CreateBDFrame(button.bgImage)
+		bg:SetPoint("TOPLEFT", 3, -3)
+		bg:SetPoint("BOTTOMRIGHT", -4, 2)
+
+		instIndex = instIndex + 1
+	end
+end
+
+local function reskinHeader(header)
+	header.flashAnim.Play = B.Dummy
+	for i = 4, 18 do
+		select(i, header.button:GetRegions()):SetTexture("")
+	end
+	B.Reskin(header.button)
+	header.descriptionBG:SetAlpha(0)
+	header.descriptionBGBottom:SetAlpha(0)
+	header.description:SetTextColor(1, 1, 1)
+	header.button.title:SetTextColor(1, 1, 1)
+	header.button.title.SetTextColor = B.Dummy
+	header.button.expandedIcon:SetWidth(20) -- don't wrap the text
+	header.button.expandedIcon.SetTextColor = B.Dummy
+	header.button.expandedIcon.SetTextColor = B.Dummy
+end
+
+local function reskinSectionHeader()
+	local index = 1
+	while true do
+		local header = _G["EncounterJournalInfoHeader"..index]
+		if not header then return end
+		if not header.styled then
+			reskinHeader(header)
+			header.button.bg = B.ReskinIcon(header.button.abilityIcon)
+			header.styled = true
+		end
+
+		if header.button.abilityIcon:IsShown() then
+			header.button.bg:Show()
+		else
+			header.button.bg:Hide()
+		end
+
+		index = index + 1
+	end
+end
+
 C.themes["Blizzard_EncounterJournal"] = function()
-	local r, g, b = DB.r, DB.g, DB.b
-
-	EncounterJournalEncounterFrameInfo:DisableDrawLayer("BACKGROUND")
-	EncounterJournalInstanceSelectBG:Hide()
-	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
-	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
-
 	-- [[ Dungeon / raid tabs ]]
-
-	local function onEnable(self)
-		self:SetHeight(self.storedHeight) -- prevent it from resizing
-		self.__bg:SetBackdropColor(0, 0, 0, 0)
-	end
-
-	local function onDisable(self)
-		self.__bg:SetBackdropColor(r, g, b, .25)
-	end
-
-	local function onClick(self)
-		self:GetFontString():SetTextColor(1, 1, 1)
-	end
 
 	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab"}) do
 		local tab = EncounterJournal.instanceSelect[tabName]
@@ -34,13 +103,14 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		text:SetPoint("CENTER")
 		text:SetTextColor(1, 1, 1)
 		B.Reskin(tab)
+		if tabName == "suggestTab" then
+			tab.__bg:SetBackdropColor(r, g, b, .25)
+		end
 
 		tab:HookScript("OnEnable", onEnable)
 		tab:HookScript("OnDisable", onDisable)
 		tab:HookScript("OnClick", onClick)
 	end
-
-	EncounterJournalInstanceSelectSuggestTab.__bg:SetBackdropColor(r, g, b, .25)
 
 	-- [[ Side tabs ]]
 
@@ -58,43 +128,28 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		hl:SetInside(bg)
 
 		if name == "overviewTab" then
-			tab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 10, -35)
+			tab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 9, -35)
 		end
 	end
 
 	-- [[ Instance select ]]
 
+	reskinInstanceButton()
+	hooksecurefunc("EncounterJournal_ListInstances", reskinInstanceButton)
 	B.ReskinDropDown(EncounterJournalInstanceSelectTierDropDown)
-
-	local index = 1
-	local function listInstances()
-		while true do
-			local bu = EncounterJournal.instanceSelect.scroll.child["instance"..index]
-			if not bu then return end
-
-			bu:SetNormalTexture("")
-			bu:SetHighlightTexture("")
-			bu:SetPushedTexture("")
-
-			local bg = B.CreateBDFrame(bu.bgImage)
-			bg:SetPoint("TOPLEFT", 3, -3)
-			bg:SetPoint("BOTTOMRIGHT", -4, 2)
-
-			index = index + 1
-		end
-	end
-
-	hooksecurefunc("EncounterJournal_ListInstances", listInstances)
-	listInstances()
 
 	-- [[ Encounter frame ]]
 
-	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildHeader:Hide()
-	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetFontObject("GameFontNormalLarge")
+	EncounterJournalEncounterFrameInfo:DisableDrawLayer("BACKGROUND")
+	EncounterJournalInstanceSelectBG:Hide()
+	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
+	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 
 	EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollChildLore:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetTextColor(1, 1, 1)
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildHeader:Hide()
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetFontObject("GameFontNormalLarge")
 	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildLoreDescription:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChild.overviewDescription.Text:SetTextColor(1, 1, 1)
@@ -102,69 +157,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.CreateBDFrame(EncounterJournalEncounterFrameInfoModelFrame, .25)
 	EncounterJournalEncounterFrameInfoCreatureButton1:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfoModelFrame, 0, -35)
 
-	do
-		local numBossButtons = 1
-		local bossButton
-
-		hooksecurefunc("EncounterJournal_DisplayInstance", function()
-			bossButton = _G["EncounterJournalBossButton"..numBossButtons]
-			while bossButton do
-				B.Reskin(bossButton, true)
-
-				bossButton.text:SetTextColor(1, 1, 1)
-				bossButton.text.SetTextColor = B.Dummy
-
-				local hl = bossButton:GetHighlightTexture()
-				hl:SetColorTexture(r, g, b, .25)
-				hl:SetInside(bossButton.__bg)
-
-				bossButton.creature:SetPoint("TOPLEFT", 0, -4)
-
-				numBossButtons = numBossButtons + 1
-				bossButton = _G["EncounterJournalBossButton"..numBossButtons]
-			end
-
-			-- move last tab
-			local _, point = EncounterJournalEncounterFrameInfoModelTab:GetPoint()
-			EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", point, "BOTTOM", 0, 1)
-		end)
-	end
-
-	local function reskinHeader(header)
-		header.flashAnim.Play = B.Dummy
-		for i = 4, 18 do
-			select(i, header.button:GetRegions()):SetTexture("")
-		end
-		B.Reskin(header.button)
-		header.descriptionBG:SetAlpha(0)
-		header.descriptionBGBottom:SetAlpha(0)
-		header.description:SetTextColor(1, 1, 1)
-		header.button.title:SetTextColor(1, 1, 1)
-		header.button.title.SetTextColor = B.Dummy
-		header.button.expandedIcon:SetTextColor(1, 1, 1)
-		header.button.expandedIcon.SetTextColor = B.Dummy
-	end
-
-	hooksecurefunc("EncounterJournal_ToggleHeaders", function()
-		local index = 1
-		local header = _G["EncounterJournalInfoHeader"..index]
-		while header do
-			if not header.styled then
-				reskinHeader(header)
-				header.button.bg = B.ReskinIcon(header.button.abilityIcon)
-				header.styled = true
-			end
-
-			if header.button.abilityIcon:IsShown() then
-				header.button.bg:Show()
-			else
-				header.button.bg:Hide()
-			end
-
-			index = index + 1
-			header = _G["EncounterJournalInfoHeader"..index]
-		end
-	end)
+	hooksecurefunc("EncounterJournal_DisplayInstance", reskinBossButtons)
+	hooksecurefunc("EncounterJournal_ToggleHeaders", reskinSectionHeader)
 
 	hooksecurefunc("EncounterJournal_SetUpOverview", function(self, _, index)
 		local header = self.overviews[index]
