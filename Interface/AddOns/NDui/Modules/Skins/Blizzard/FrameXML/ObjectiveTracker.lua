@@ -93,18 +93,14 @@ local function reskinTimerBar(_, _, line)
 end
 
 local function updateMinimizeButton(button, collapsed)
-	if collapsed then
-		button.__texture:SetTexCoord(0, .4375, 0, .4375)
-	else
-		button.__texture:SetTexCoord(.5625, 1, 0, .4375)
-	end
+	button.__texture:DoCollapse(collapsed)
 end
 
 local function reskinMinimizeButton(button)
 	B.ReskinCollapse(button)
 	button:GetNormalTexture():SetAlpha(0)
 	button:GetPushedTexture():SetAlpha(0)
-	button.__texture:SetTexCoord(.5625, 1, 0, .4375)
+	button.__texture:DoCollapse(false)
 	hooksecurefunc(button, "SetCollapsed", updateMinimizeButton)
 end
 
