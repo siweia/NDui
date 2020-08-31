@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 local select, unpack = select, unpack
 
-local function ReskinQuestIcon(_, block)
+local function reskinQuestIcon(_, block)
 	local itemButton = block.itemButton
 	if itemButton and not itemButton.styled then
 		itemButton:SetNormalTexture("")
@@ -29,7 +29,7 @@ local function ReskinQuestIcon(_, block)
 	end
 end
 
-local function ReskinHeader(header)
+local function reskinHeader(header)
 	header.Text:SetTextColor(r, g, b)
 	header.Background:SetTexture(nil)
 	local bg = header:CreateTexture(nil, "ARTWORK")
@@ -40,7 +40,7 @@ local function ReskinHeader(header)
 	bg:SetSize(250, 30)
 end
 
-local function ReskinBarTemplate(bar)
+local function reskinBarTemplate(bar)
 	if bar.bg then return end
 
 	B.StripTextures(bar)
@@ -50,25 +50,25 @@ local function ReskinBarTemplate(bar)
 	B:SmoothBar(bar)
 end
 
-local function ReskinProgressbar(_, _, line)
+local function reskinProgressbar(_, _, line)
 	local progressBar = line.ProgressBar
 	local bar = progressBar.Bar
 
 	if not bar.bg then
 		bar:ClearAllPoints()
 		bar:SetPoint("LEFT")
-		ReskinBarTemplate(bar)
+		reskinBarTemplate(bar)
 	end
 end
 
-local function ReskinProgressbarWithIcon(_, _, line)
+local function reskinProgressbarWithIcon(_, _, line)
 	local progressBar = line.ProgressBar
 	local bar = progressBar.Bar
 	local icon = bar.Icon
 
 	if not bar.bg then
 		bar:SetPoint("LEFT", 22, 0)
-		ReskinBarTemplate(bar)
+		reskinBarTemplate(bar)
 		BonusObjectiveTrackerProgressBar_PlayFlareAnim = B.Dummy
 
 		icon:SetMask(nil)
@@ -83,23 +83,16 @@ local function ReskinProgressbarWithIcon(_, _, line)
 	end
 end
 
-local function ReskinTimerBar(_, _, line)
+local function reskinTimerBar(_, _, line)
 	local timerBar = line.TimerBar
 	local bar = timerBar.Bar
 
 	if not bar.bg then
-		ReskinBarTemplate(bar)
+		reskinBarTemplate(bar)
 	end
 end
 
-local function ReskinMinimizeButton(button)
-	B.ReskinExpandOrCollapse(button)
-	button:GetNormalTexture():SetAlpha(0)
-	button:GetPushedTexture():SetAlpha(0)
-	button.expTex:SetTexCoord(.5625, 1, 0, .4375)
-end
-
-local function UpdateMinimizeButton(button, collapsed)
+local function updateMinimizeButton(button, collapsed)
 	if collapsed then
 		button.expTex:SetTexCoord(0, .4375, 0, .4375)
 	else
@@ -107,23 +100,31 @@ local function UpdateMinimizeButton(button, collapsed)
 	end
 end
 
+local function reskinMinimizeButton(button)
+	B.ReskinExpandOrCollapse(button)
+	button:GetNormalTexture():SetAlpha(0)
+	button:GetPushedTexture():SetAlpha(0)
+	button.expTex:SetTexCoord(.5625, 1, 0, .4375)
+	hooksecurefunc(button, "SetCollapsed", updateMinimizeButton)
+end
+
 tinsert(C.defaultThemes, function()
 	-- QuestIcons
-	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", ReskinQuestIcon)
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", ReskinQuestIcon)
-	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddObjective", ReskinQuestIcon)
+	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcon)
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcon)
+	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcon)
 
 	-- Reskin Progressbars
-	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", ReskinProgressbar)
-	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddProgressBar", ReskinProgressbar)
+	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
+	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 
-	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", ReskinProgressbarWithIcon)
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", ReskinProgressbarWithIcon)
-	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", ReskinProgressbarWithIcon)
+	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
+	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
 
-	hooksecurefunc(QUEST_TRACKER_MODULE, "AddTimerBar", ReskinTimerBar)
-	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddTimerBar", ReskinTimerBar)
-	hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, "AddTimerBar", ReskinTimerBar)
+	hooksecurefunc(QUEST_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
+	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
+	hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
 
 	-- Reskin Blocks
 	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
@@ -213,21 +214,18 @@ tinsert(C.defaultThemes, function()
 		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader
 	}
 	for _, header in pairs(headers) do
-		ReskinHeader(header)
+		reskinHeader(header)
 	end
 
 	-- Minimize Button
 	local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
-	ReskinMinimizeButton(mainMinimize)
+	reskinMinimizeButton(mainMinimize)
 	mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
-	hooksecurefunc("ObjectiveTracker_Expand", function() mainMinimize.expTex:SetTexCoord(.5625, 1, 0, .4375) end)
-	hooksecurefunc("ObjectiveTracker_Collapse", function() mainMinimize.expTex:SetTexCoord(0, .4375, 0, .4375) end)
 
 	for _, header in pairs(headers) do
 		local minimize = header.MinimizeButton
 		if minimize then
-			ReskinMinimizeButton(minimize)
-			hooksecurefunc(minimize, "SetCollapsed", UpdateMinimizeButton)
+			reskinMinimizeButton(minimize)
 		end
 	end
 end)
