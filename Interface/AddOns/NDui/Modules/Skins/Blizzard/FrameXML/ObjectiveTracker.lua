@@ -101,7 +101,7 @@ local function updateMinimizeButton(button, collapsed)
 end
 
 local function reskinMinimizeButton(button)
-	B.ReskinExpandOrCollapse(button)
+	B.ReskinCollapse(button)
 	button:GetNormalTexture():SetAlpha(0)
 	button:GetPushedTexture():SetAlpha(0)
 	button.__texture:SetTexCoord(.5625, 1, 0, .4375)

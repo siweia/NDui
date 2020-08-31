@@ -194,7 +194,7 @@ tinsert(C.defaultThemes, function()
 		for i = 1, num do
 			local bu = _G["InterfaceOptionsFrameAddOnsButton"..i.."Toggle"]
 			if bu and not bu.reskinned then
-				B.ReskinExpandOrCollapse(bu)
+				B.ReskinCollapse(bu)
 				bu:SetPushedTexture("")
 				bu.SetPushedTexture = B.Dummy
 				bu.reskinned = true
