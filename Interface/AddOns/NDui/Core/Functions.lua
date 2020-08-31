@@ -1056,9 +1056,9 @@ do
 
 		if texture and texture ~= "" then
 			if strfind(texture, "Plus") or strfind(texture, "Closed") then
-				self.expTex:SetTexCoord(0, .4375, 0, .4375)
+				self.__texture:SetTexCoord(0, .4375, 0, .4375)
 			elseif strfind(texture, "Minus") or strfind(texture, "Open") then
-				self.expTex:SetTexCoord(.5625, 1, 0, .4375)
+				self.__texture:SetTexCoord(.5625, 1, 0, .4375)
 			end
 			self.bg:Show()
 		else
@@ -1077,10 +1077,10 @@ do
 		bg:SetPoint("TOPLEFT", self:GetNormalTexture())
 		self.bg = bg
 
-		self.expTex = bg:CreateTexture(nil, "OVERLAY")
-		self.expTex:SetSize(7, 7)
-		self.expTex:SetPoint("CENTER")
-		self.expTex:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		self.__texture = bg:CreateTexture(nil, "OVERLAY")
+		self.__texture:SetSize(7, 7)
+		self.__texture:SetPoint("CENTER")
+		self.__texture:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)

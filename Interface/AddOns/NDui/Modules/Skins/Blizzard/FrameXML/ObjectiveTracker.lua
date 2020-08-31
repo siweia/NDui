@@ -94,9 +94,9 @@ end
 
 local function updateMinimizeButton(button, collapsed)
 	if collapsed then
-		button.expTex:SetTexCoord(0, .4375, 0, .4375)
+		button.__texture:SetTexCoord(0, .4375, 0, .4375)
 	else
-		button.expTex:SetTexCoord(.5625, 1, 0, .4375)
+		button.__texture:SetTexCoord(.5625, 1, 0, .4375)
 	end
 end
 
@@ -104,7 +104,7 @@ local function reskinMinimizeButton(button)
 	B.ReskinExpandOrCollapse(button)
 	button:GetNormalTexture():SetAlpha(0)
 	button:GetPushedTexture():SetAlpha(0)
-	button.expTex:SetTexCoord(.5625, 1, 0, .4375)
+	button.__texture:SetTexCoord(.5625, 1, 0, .4375)
 	hooksecurefunc(button, "SetCollapsed", updateMinimizeButton)
 end
 
