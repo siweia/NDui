@@ -12,7 +12,7 @@ C.themes["Blizzard_ChromieTimeUI"] = function()
 
 	local header = frame.Title
 	header:DisableDrawLayer("BACKGROUND")
-	header.Text:SetFontObject(SystemFont_Huge2)
+	header.Text:SetFontObject(SystemFont_Huge1)
 	B.CreateBDFrame(header, .25)
 
 	frame.CurrentlySelectedExpansionInfoFrame.Name:SetTextColor(1, .8, 0)
