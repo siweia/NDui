@@ -13,13 +13,9 @@ local NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION = NOT_BOUND, PRESS
 
 -- Button types
 local function hookActionButton(self)
-	Bar:Bind_Update(self)
-end
-local function hookStanceButton(self)
-	Bar:Bind_Update(self, "STANCE")
-end
-local function hookPetButton(self)
-	Bar:Bind_Update(self, "PET")
+	local pet = self.commandName and strfind(self.commandName, "^BONUSACTION") and "PET"
+	local stance = self.commandName and strfind(self.commandName, "^SHAPESHIFT") and "STANCE"
+	Bar:Bind_Update(self, pet or stance or nil)
 end
 local function hookMacroButton(self)
 	Bar:Bind_Update(self, "MACRO")
@@ -29,18 +25,8 @@ local function hookSpellButton(self)
 end
 
 function Bar:Bind_RegisterButton(button)
-	local stance = StanceButton1:GetScript("OnClick")
-	local pet = PetActionButton1:GetScript("OnClick")
-
-	if button.IsProtected and button.IsObjectType and button.GetScript and button:IsObjectType("CheckButton") and button:IsProtected() then
-		local script = button:GetScript("OnClick")
-		if script == stance then
-			button:HookScript("OnEnter", hookStanceButton)
-		elseif script == pet then
-			button:HookScript("OnEnter", hookPetButton)
-		else
-			button:HookScript("OnEnter", hookActionButton)
-		end
+	if button.IsProtected and button.IsObjectType and button:IsObjectType("CheckButton") and button:IsProtected() then
+		button:HookScript("OnEnter", hookActionButton)
 	end
 end
 
@@ -69,7 +55,7 @@ function Bar:Bind_Create()
 	frame:SetScript("OnEnter", function()
 		GameTooltip:SetOwner(frame, "ANCHOR_NONE")
 		GameTooltip:SetPoint("BOTTOM", frame, "TOP", 0, 2)
-		GameTooltip:AddLine(frame.name, .6,.8,1)
+		GameTooltip:AddLine(frame.tipName or frame.name, .6,.8,1)
 
 		if #frame.bindings == 0 then
 			GameTooltip:AddLine(NOT_BOUND, 1,0,0)
@@ -133,8 +119,9 @@ function Bar:Bind_Update(button, spellmacro)
 		frame.name = GetMacroInfo(frame.id)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "STANCE" or spellmacro == "PET" then
-		frame.name = GetBindingName(button.commandName)
+		frame.name = button:GetName()
 		if not frame.name then return end
+		frame.tipName = button.commandName and GetBindingName(button.commandName)
 
 		frame.id = tonumber(button:GetID())
 		if not frame.id or frame.id < 1 or frame.id > (spellmacro == "STANCE" and 10 or 12) then
@@ -144,8 +131,9 @@ function Bar:Bind_Update(button, spellmacro)
 		end
 		frame.bindings = {GetBindingKey(frame.bindstring)}
 	else
-		frame.name = GetBindingName(button.commandName)
+		frame.name = button:GetName()
 		if not frame.name then return end
+		frame.tipName = button.commandName and GetBindingName(button.commandName)
 
 		frame.action = tonumber(button.action)
 		if button.isCustomButton or not frame.action or frame.action < 1 or frame.action > 168 then
@@ -193,7 +181,7 @@ function Bar:Bind_Listener(key)
 				SetBinding(frame.bindings[i])
 			end
 		end
-		print(format(L["Clear binds"], frame.name))
+		print(format(L["Clear binds"], frame.tipName or frame.name))
 
 		Bar:Bind_Update(frame.button, frame.spellmacro)
 		return
@@ -214,7 +202,7 @@ function Bar:Bind_Listener(key)
 	else
 		SetBinding(alt..ctrl..shift..key, frame.spellmacro.." "..frame.name)
 	end
-	print(frame.name.." |cff00ff00"..L["KeyBoundTo"].."|r "..alt..ctrl..shift..key)
+	print((frame.tipName or frame.name).." |cff00ff00"..L["KeyBoundTo"].."|r "..alt..ctrl..shift..key)
 
 	Bar:Bind_Update(frame.button, frame.spellmacro)
 end

@@ -28,6 +28,7 @@ function Bar:CreateCustomBar(anchor)
 		button:SetSize(size, size)
 		button.id = (page-1)*12 + i
 		button.isCustomButton = true
+		button.commandName = L[name]..i
 		button:SetAttribute("action", button.id)
 		frame.buttons[i] = button
 		tinsert(buttonList, button)
