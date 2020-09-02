@@ -469,6 +469,8 @@ do
 	end
 
 	-- Backdrop shadow
+	local shadowBackdrop = {edgeFile = DB.glowTex}
+
 	function B:CreateSD(size, override)
 		if not override and not NDuiDB["Skins"]["Shadow"] then return end
 		if self.__shadow then return end
@@ -476,9 +478,10 @@ do
 		local frame = self
 		if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 
+		shadowBackdrop.edgeSize = size or 5
 		self.__shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")
 		self.__shadow:SetOutside(self, size or 4, size or 4)
-		self.__shadow:SetBackdrop({edgeFile = DB.glowTex, edgeSize = size or 5})
+		self.__shadow:SetBackdrop(shadowBackdrop)
 		self.__shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
 		self.__shadow:SetFrameLevel(1)
 
@@ -490,12 +493,11 @@ end
 do
 	-- Setup backdrop
 	C.frames = {}
+	local defaultBackdrop = {bgFile = DB.bdTex, edgeFile = DB.bdTex}
+
 	function B:CreateBD(a)
-		self:SetBackdrop({
-			bgFile = DB.bdTex,
-			edgeFile = DB.bdTex,
-			edgeSize = C.mult,
-		})
+		defaultBackdrop.edgeSize = C.mult
+		self:SetBackdrop(defaultBackdrop)
 		self:SetBackdropColor(0, 0, 0, a or NDuiDB["Skins"]["SkinAlpha"])
 		self:SetBackdropBorderColor(0, 0, 0)
 		if not a then tinsert(C.frames, self) end
