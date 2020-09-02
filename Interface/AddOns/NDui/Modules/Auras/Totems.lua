@@ -15,12 +15,12 @@ local function TotemsGo()
 	local Totembar = CreateFrame("Frame", nil, A.PetBattleFrameHider)
 	Totembar:SetSize(C.Auras.IconSize, C.Auras.IconSize)
 	for i = 1, 4 do
-		totem[i] = CreateFrame("Button", nil, Totembar)
+		totem[i] = CreateFrame("Frame", nil, Totembar)
 		totem[i]:SetSize(C.Auras.IconSize, C.Auras.IconSize)
 		if i == 1 then
 			totem[i]:SetPoint("CENTER", Totembar)
 		else
-			totem[i]:SetPoint("LEFT", totem[i-1], "RIGHT", 5, 0)
+			totem[i]:SetPoint("LEFT", totem[i-1], "RIGHT", C.margin, 0)
 		end
 		B.AuraIcon(totem[i])
 		totem[i].Icon:SetTexture(icons[i])
