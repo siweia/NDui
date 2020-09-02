@@ -159,6 +159,8 @@ local function tooltipOnEnter(self)
 		GameTooltip:SetInventoryItem("player", self.spellID)
 	elseif self.type == 4 then
 		GameTooltip:SetUnitAura(self.unitID, self.id, self.filter)
+	elseif self.type == 5 then
+		GameTooltip:SetTotem(self.spellID)
 	end
 	GameTooltip:Show()
 end
@@ -373,10 +375,9 @@ function A:AuraWatch_UpdateCD()
 					end
 				elseif value.TotemID then
 					local haveTotem, name, start, duration, icon = GetTotemInfo(value.TotemID)
-					local id = select(7, GetSpellInfo(name))
 					if haveTotem then
 						if group.Mode:lower() == "icon" then name = nil end
-						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, false, 1, id)
+						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, false, 5, value.TotemID)
 					end
 				end
 			end
