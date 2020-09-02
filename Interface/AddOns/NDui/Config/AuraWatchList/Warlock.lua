@@ -81,6 +81,10 @@ local list = {
 	["Spell Cooldown"] = {	-- 冷却计时组
 		{SlotID = 13},		-- 饰品1
 		{SlotID = 14},		-- 饰品2
+		{TotemID = 1},		-- 地狱火
+		{TotemID = 2},		-- 地狱火2？
+		{TotemID = 3},		-- 地狱火3？
+		{TotemID = 4},		-- 地狱火4？
 	},
 }
 
