@@ -68,8 +68,19 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 		ReskinActivityFrame(frame, true)
 	end
 
-	local confirmItemFrame = WeeklyRewardConfirmSelectionFrame.ItemFrame
-	confirmItemFrame.bg = B.ReskinIcon(confirmItemFrame.Icon)
-	B.ReskinIconBorder(confirmItemFrame.IconBorder)
-	WeeklyRewardConfirmSelectionFrameNameFrame:Hide()
+	hooksecurefunc(WeeklyRewardsFrame, "SelectReward", function(self)
+		local confirmSelectionFrame = self.confirmSelectionFrame
+		if confirmSelectionFrame and not confirmSelectionFrame.styled then
+			local itemFrame = confirmSelectionFrame.ItemFrame
+			itemFrame.bg = B.ReskinIcon(itemFrame.Icon)
+			B.ReskinIconBorder(itemFrame.IconBorder)
+
+			local nameframe = _G[confirmSelectionFrame:GetName().."NameFrame"]
+			if nameframe then
+				nameframe:Hide() -- not sure about the name, need reviewed
+			end
+
+			confirmSelectionFrame.styled = true
+		end
+	end)
 end
