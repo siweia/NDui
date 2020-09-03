@@ -83,7 +83,8 @@ tinsert(C.defaultThemes, function()
 		for button in QuestScrollFrame.headerFramePool:EnumerateActive() do
 			if button.ButtonText then
 				if not button.styled then
-					B.ReskinCollapse(button)
+					B.ReskinCollapse(button, true)
+					button:GetPushedTexture():SetAlpha(0)
 					button:GetHighlightTexture():SetAlpha(0)
 
 					button.styled = true
