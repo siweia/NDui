@@ -1088,8 +1088,7 @@ do
 		self.bg = bg
 
 		self.__texture = bg:CreateTexture(nil, "OVERLAY")
-		self.__texture:SetSize(7, 7)
-		self.__texture:SetPoint("CENTER")
+		self.__texture:SetInside(bg, 3, 3)
 		self.__texture:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
 		self.__texture.DoCollapse = UpdateCollapseTexCoord
 
