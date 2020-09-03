@@ -299,5 +299,5 @@ function TT:CorruptionRank()
 
 	hooksecurefunc("CharacterFrameCorruption_OnEnter", TT.Corruption_PlayerSummary)
 	CharacterStatsPane.ItemLevelFrame.Corruption:HookScript("OnEnter", TT.Corruption_PlayerSummary)
-	B:RegisterEvent("INSPECT_READY", TT.Corruption_UpdateInspect)
+	--B:RegisterEvent("INSPECT_READY", TT.Corruption_UpdateInspect) -- deprecated
 end
