@@ -97,6 +97,9 @@ local function ReskinMissionList(self)
 			button.LocBG:SetDrawLayer("BACKGROUND")
 			B.StripTextures(button)
 			B.CreateBDFrame(button, .25)
+			if button.CompleteCheck then
+				button.CompleteCheck:SetAtlas("Adventures-Checkmark")
+			end
 
 			if rareText then
 				rareText:ClearAllPoints()
@@ -129,9 +132,14 @@ local function ReskinMissionComplete(self)
 		B.Reskin(missionComplete.NextMissionButton)
 	end
 	if missionComplete.CompleteFrame then
+		B.StripTextures(missionComplete)
+		local bg = B.CreateBDFrame(missionComplete, .25)
+		bg:SetPoint("TOPLEFT", 3, 2)
+		bg:SetPoint("BOTTOMRIGHT", -3, -10)
+
+		B.StripTextures(missionComplete.CompleteFrame)
 		B.Reskin(missionComplete.CompleteFrame.ContinueButton)
 		B.Reskin(missionComplete.CompleteFrame.SpeedButton)
-		missionComplete.RewardsScreen.FinalRewardsPanel.ScrollRewards:SetTextColor(1, .8, 0)
 		B.Reskin(missionComplete.RewardsScreen.FinalRewardsPanel.ContinueButton)
 	end
 end
@@ -892,11 +900,18 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local CovenantMissionFrame = CovenantMissionFrame
 	ReskinMissionFrame(CovenantMissionFrame)
 	CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
+
+	CombatLog:DisableDrawLayer("BACKGROUND")
+	CombatLog.ElevatedFrame:SetAlpha(0)
 	B.StripTextures(CombatLog.CombatLogMessageFrame)
+	B.CreateBDFrame(CombatLog.CombatLogMessageFrame, .25)
 	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
 
 	B.Reskin(HealFollowerButtonTemplate)
 	CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
+	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
+	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
+	CovenantMissionFrame.MapTab:SetAlpha(0) -- not sure what does this for, need reviewed
 	B.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 
 	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", ReskinMissionBoards)
