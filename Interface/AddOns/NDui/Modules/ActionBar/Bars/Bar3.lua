@@ -58,6 +58,7 @@ function Bar:CreateBar3()
 
 	MultiBarBottomRight:SetParent(frame)
 	MultiBarBottomRight:EnableMouse(false)
+	MultiBarBottomRight.QuickKeybindGlow:SetTexture("")
 
 	for i = 1, num do
 		local button = _G["MultiBarBottomRightButton"..i]
