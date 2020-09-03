@@ -90,10 +90,14 @@ local function reskinSectionHeader()
 	end
 end
 
-C.themes["Blizzard_EncounterJournal"] = function()
-	-- [[ Dungeon / raid tabs ]]
+local function reskinFilterToggle(button)
+	B.StripTextures(button)
+	B.Reskin(button)
+end
 
-	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab"}) do
+C.themes["Blizzard_EncounterJournal"] = function()
+	-- Tabs
+	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab", "LootJournalTab"}) do
 		local tab = EncounterJournal.instanceSelect[tabName]
 		local text = tab:GetFontString()
 
@@ -112,8 +116,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		tab:HookScript("OnClick", onClick)
 	end
 
-	-- [[ Side tabs ]]
-
+	-- Side tabs
 	local tabs = {"overviewTab", "modelTab", "bossTab", "lootTab"}
 	for _, name in pairs(tabs) do
 		local tab = EncounterJournal.encounter.info[name]
@@ -132,14 +135,13 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 	end
 
-	-- [[ Instance select ]]
-
+	-- Instance select
 	reskinInstanceButton()
 	hooksecurefunc("EncounterJournal_ListInstances", reskinInstanceButton)
 	B.ReskinDropDown(EncounterJournalInstanceSelectTierDropDown)
+	B.ReskinScroll(EncounterJournalInstanceSelectScrollFrame.ScrollBar)
 
-	-- [[ Encounter frame ]]
-
+	-- Encounter frame
 	EncounterJournalEncounterFrameInfo:DisableDrawLayer("BACKGROUND")
 	EncounterJournalInstanceSelectBG:Hide()
 	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
@@ -197,8 +199,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
 	end
 
-	-- [[ Search results ]]
-
+	-- Search results
 	for i = 1, 5 do
 		B.StyleSearchButton(EncounterJournalSearchBox["sbutton"..i])
 	end
@@ -230,39 +231,41 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinClose(EncounterJournalSearchResultsCloseButton)
 	B.ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
 
-	-- [[ Various controls ]]
-
+	-- Various controls
 	B.ReskinPortraitFrame(EncounterJournal)
 	B.Reskin(EncounterJournalEncounterFrameInfoResetButton)
 	B.ReskinInput(EncounterJournalSearchBox)
-	B.ReskinScroll(EncounterJournalInstanceSelectScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
 
-	-- [[ Suggest frame ]]
+	local buttons = {
+		EncounterJournalEncounterFrameInfoDifficulty,
+		EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
+		EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
+	}
+	for _, button in pairs(buttons) do
+		reskinFilterToggle(button)
+	end
 
+	-- Suggest frame
 	local suggestFrame = EncounterJournal.suggestFrame
 
 	-- Suggestion 1
-
 	local suggestion = suggestFrame.Suggestion1
-
 	suggestion.bg:Hide()
 	B.CreateBDFrame(suggestion, .25)
 	suggestion.icon:SetPoint("TOPLEFT", 135, -15)
 	B.CreateBDFrame(suggestion.icon)
 
 	local centerDisplay = suggestion.centerDisplay
-
 	centerDisplay.title.text:SetTextColor(1, 1, 1)
 	centerDisplay.description.text:SetTextColor(.9, .9, .9)
 	B.Reskin(suggestion.button)
 
 	local reward = suggestion.reward
-
 	reward.text:SetTextColor(.9, .9, .9)
 	reward.iconRing:Hide()
 	reward.iconRingHighlight:SetTexture("")
@@ -271,7 +274,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinArrow(suggestion.nextButton, "right")
 
 	-- Suggestion 2 and 3
-
 	for i = 2, 3 do
 		local suggestion = suggestFrame["Suggestion"..i]
 
@@ -295,7 +297,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	end
 
 	-- Hook functions
-
 	hooksecurefunc("EJSuggestFrame_RefreshDisplay", function()
 		local self = suggestFrame
 
@@ -334,13 +335,29 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 	end)
 
-	local buttons = {
-		EncounterJournalEncounterFrameInfoDifficulty,
-		EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
-		EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
-	}
-	for _, button in pairs(buttons) do
-		B.StripTextures(button)
-		B.Reskin(button)
-	end
+	-- LootJournal
+
+	local lootJournal = EncounterJournal.LootJournal
+	B.StripTextures(lootJournal)
+	B.ReskinScroll(lootJournal.PowersFrame.ScrollBar)
+	reskinFilterToggle(lootJournal.ClassDropDownButton)
+
+	local iconColor = DB.QualityColors[LE_ITEM_QUALITY_LEGENDARY or 5] -- legendary color
+	hooksecurefunc(lootJournal.PowersFrame, "RefreshListDisplay", function(self)
+		if not self.elements then return end
+
+		for i = 1, self:GetNumElementFrames() do
+			local button = self.elements[i]
+			if button and not button.bg then
+				button.Background:SetAlpha(0)
+				button.CircleMask:Hide()
+				button.bg = B.ReskinIcon(button.Icon)
+				button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
+
+				local bg = B.CreateBDFrame(button, .25)
+				bg:SetPoint("TOPLEFT", 3, 0)
+				bg:SetPoint("BOTTOMRIGHT", -2, 1)
+			end
+		end
+	end)
 end
