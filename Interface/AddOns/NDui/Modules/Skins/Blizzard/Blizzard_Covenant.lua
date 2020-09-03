@@ -85,7 +85,9 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 			B.CreateBDFrame(upgradesTab.Background, .25)
 			B.Reskin(upgradesTab.DepositButton)
 			for _, frame in ipairs(upgradesTab.Upgrades) do
-				frame.RankBorder:SetAlpha(0)
+				if frame.RankBorder then
+					frame.RankBorder:SetAlpha(0)
+				end
 			end
 
 			local talentsList = upgradesTab.TalentsList
