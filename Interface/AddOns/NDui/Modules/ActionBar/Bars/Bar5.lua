@@ -40,6 +40,7 @@ function Bar:CreateBar5()
 
 	MultiBarLeft:SetParent(frame)
 	MultiBarLeft:EnableMouse(false)
+	MultiBarLeft.QuickKeybindGlow:SetTexture("")
 
 	for i = 1, num do
 		local button = _G["MultiBarLeftButton"..i]
