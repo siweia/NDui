@@ -167,6 +167,7 @@ local ignoreGossipNPC = {
 	[155261] = true, -- 肖恩·维克斯，斯坦索姆
 	[150122] = true, -- 荣耀堡法师
 	[150131] = true, -- 萨尔玛法师
+	[173021] = true, -- 刻符牛头人
 }
 
 local rogueClassHallInsignia = {
