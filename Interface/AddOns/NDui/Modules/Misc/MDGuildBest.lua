@@ -9,6 +9,7 @@ local Ambiguate, GetContainerNumSlots, GetContainerItemInfo = Ambiguate, GetCont
 local C_ChallengeMode_GetMapUIInfo, C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetMapUIInfo, C_ChallengeMode.GetGuildLeaders
 local format, strsplit, strmatch, tonumber, pairs, wipe, select = string.format, string.split, string.match, tonumber, pairs, wipe, select
 
+local hasAngryKeystones
 local frame
 
 function M:GuildBest_UpdateTooltip()
@@ -28,7 +29,7 @@ end
 
 function M:GuildBest_Create()
 	frame = CreateFrame("Frame", nil, ChallengesFrame, "BackdropTemplate")
-	frame:SetPoint("BOTTOMRIGHT", -6, 80)
+	frame:SetPoint("BOTTOMRIGHT", -8, 75)
 	frame:SetSize(170, 105)
 	B.CreateBD(frame, .25)
 	B.CreateFS(frame, 16, GUILD, "system", "TOPLEFT", 16, -6)
@@ -55,6 +56,10 @@ function M:GuildBest_Create()
 		end
 
 		frame.entries[i] = entry
+	end
+
+	if not hasAngryKeystones then
+		ChallengesFrame.WeeklyInfo.Child.Description:SetPoint("CENTER", 0, 20)
 	end
 end
 
@@ -85,7 +90,7 @@ function M:GuildBest_Update()
 		end
 	end
 
-	if not resize and IsAddOnLoaded("AngryKeystones") then
+	if not resize and hasAngryKeystones then
 		local schedule = AngryKeystones.Modules.Schedule.AffixFrame
 		frame:SetWidth(246)
 		frame:ClearAllPoints()
@@ -171,6 +176,7 @@ function M:KeystoneInfo_Update()
 end
 
 function M:GuildBest()
+	hasAngryKeystones = IsAddOnLoaded("AngryKeystones")
 	B:RegisterEvent("ADDON_LOADED", M.GuildBest_OnLoad)
 
 	M:KeystoneInfo_Update()
