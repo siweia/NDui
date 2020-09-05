@@ -32,22 +32,19 @@ function A:OnLogin()
 	B.HideObject(_G.TemporaryEnchantFrame)
 
 	-- Movers
-	self.BuffFrame = self:CreateAuraHeader("HELPFUL")
-	local buffAnchor = B.Mover(self.BuffFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos)
-	self.BuffFrame:ClearAllPoints()
-	self.BuffFrame:SetPoint("TOPRIGHT", buffAnchor)
+	A.BuffFrame = A:CreateAuraHeader("HELPFUL")
+	local buffAnchor = B.Mover(A.BuffFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos)
+	A.BuffFrame:ClearAllPoints()
+	A.BuffFrame:SetPoint("TOPRIGHT", buffAnchor)
 
-	self.DebuffFrame = self:CreateAuraHeader("HARMFUL")
-	local debuffAnchor = B.Mover(self.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -12})
-	self.DebuffFrame:ClearAllPoints()
-	self.DebuffFrame:SetPoint("TOPRIGHT", debuffAnchor)
+	A.DebuffFrame = A:CreateAuraHeader("HARMFUL")
+	local debuffAnchor = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -12})
+	A.DebuffFrame:ClearAllPoints()
+	A.DebuffFrame:SetPoint("TOPRIGHT", debuffAnchor)
 
 	-- Elements
-	if DB.MyClass == "MONK" then
-		self:MonkStatue()
-	end
-	self:Totems()
-	self:InitReminder()
+	A:Totems()
+	A:InitReminder()
 end
 
 local day, hour, minute = 86400, 3600, 60
