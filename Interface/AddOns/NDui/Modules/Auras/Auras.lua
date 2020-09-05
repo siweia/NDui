@@ -45,9 +45,8 @@ function A:OnLogin()
 	-- Elements
 	if DB.MyClass == "MONK" then
 		self:MonkStatue()
-	elseif DB.MyClass == "SHAMAN" then
-		self:Totems()
 	end
+	self:Totems()
 	self:InitReminder()
 end
 

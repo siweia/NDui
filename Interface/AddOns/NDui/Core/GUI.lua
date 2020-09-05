@@ -69,7 +69,8 @@ local defaultSettings = {
 	Auras = {
 		Reminder = true,
 		Totems = true,
-		DestroyTotems = true,
+		VerticleTotems = true,
+		TotemSize = 32,
 		Statue = true,
 		ClassAuras = true,
 		ReverseBuffs = false,
@@ -484,6 +485,11 @@ local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
 
+local function refreshTotemBar()
+	if not NDuiDB["Auras"]["Totems"] then return end
+	B:GetModule("Auras"):TotemBar_Init()
+end
+
 local function updateChatSticky()
 	B:GetModule("Chat"):ChatWhisperSticky()
 end
@@ -849,10 +855,17 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
-		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"]},
-		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", true, {150, 300, 1}, refreshNameplates},
-		{3, "Nameplate", "PPHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
-		{3, "Nameplate", "PPPHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
+		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"], true},
+		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
+		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
+		{3, "Nameplate", "PPHealthHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
+		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
+		{},--blank
+		{1, "Auras", "Statue", L["Enable Statue"]},
+		{1, "Auras", "Reminder", L["Enable Reminder"].."*", true, nil, updateReminder, L["ReminderTip"]},
+		{1, "Auras", "Totems", "|cff00cc4c"..L["Enable Totembar"]},
+		{1, "Auras", "VerticleTotems", L["VerticleTotems"].."*", nil, nil, refreshTotemBar},
+		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},
 		{},--blank
 		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"]},
 		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"], true},
