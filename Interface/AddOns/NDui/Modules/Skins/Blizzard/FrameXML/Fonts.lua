@@ -1,17 +1,21 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function ReskinFont(font, size)
+	if not font then
+		if DB.isDeveloper then print("UNKNOWN FONT.") end
+		return
+	end
+	local oldSize = select(2, font:GetFont())
+	size = size or oldSize
+	local fontSize = size*NDuiDB["Skins"]["FontScale"]
+	font:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	font:SetShadowColor(0, 0, 0, 0)
+end
+
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 	if not NDuiDB["Skins"]["FontOutline"] then return end
-
-	local function ReskinFont(font, size)
-		local oldSize = select(2, font:GetFont())
-		size = size or oldSize
-		local fontSize = size*NDuiDB["Skins"]["FontScale"]
-		font:SetFont(DB.Font[1], fontSize, DB.Font[3])
-		font:SetShadowColor(0, 0, 0, 0)
-	end
 
 	ReskinFont(RaidWarningFrame.slot1)
 	ReskinFont(RaidWarningFrame.slot2)
