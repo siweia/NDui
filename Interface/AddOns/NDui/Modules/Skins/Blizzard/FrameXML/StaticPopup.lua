@@ -1,24 +1,24 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local r, g, b = DB.r, DB.g, DB.b
+
+local function colorMinimize(f)
+	if f:IsEnabled() then
+		f.minimize:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearMinimize(f)
+	f.minimize:SetVertexColor(1, 1, 1)
+end
 
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	local r, g, b = DB.r, DB.g, DB.b
-
-	local function colourMinimize(f)
-		if f:IsEnabled() then
-			f.minimize:SetVertexColor(r, g, b)
-		end
-	end
-
-	local function clearMinimize(f)
-		f.minimize:SetVertexColor(1, 1, 1)
-	end
-
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local bu = _G["StaticPopup"..i.."ItemFrame"]
+		local icon = _G["StaticPopup"..i.."ItemFrameIconTexture"]
 		local close = _G["StaticPopup"..i.."CloseButton"]
 
 		local gold = _G["StaticPopup"..i.."MoneyInputFrameGold"]
@@ -26,31 +26,30 @@ tinsert(C.defaultThemes, function()
 		local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
 
 		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
-		_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(unpack(DB.TexCoord))
 
 		bu:SetNormalTexture("")
 		bu:SetHighlightTexture("")
 		bu:SetPushedTexture("")
-		B.CreateBDFrame(bu)
-		bu.IconBorder:SetAlpha(0)
-		frame["Border"]:Hide()
+		bu.bg = B.ReskinIcon(icon)
+		B.ReskinIconBorder(bu.IconBorder)
 
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
+		frame.Border:Hide()
 		B.SetBD(frame)
 		for j = 1, 4 do
 			B.Reskin(frame["button"..j])
 		end
-		B.Reskin(frame["extraButton"])
+		B.Reskin(frame.extraButton)
 		B.ReskinClose(close)
 
 		close.minimize = close:CreateTexture(nil, "OVERLAY")
-		close.minimize:SetSize(9, 1)
+		close.minimize:SetSize(9, C.mult)
 		close.minimize:SetPoint("CENTER")
 		close.minimize:SetTexture(DB.bdTex)
 		close.minimize:SetVertexColor(1, 1, 1)
-		close:HookScript("OnEnter", colourMinimize)
+		close:HookScript("OnEnter", colorMinimize)
 		close:HookScript("OnLeave", clearMinimize)
 
 		B.ReskinInput(_G["StaticPopup"..i.."EditBox"], 20)
@@ -100,14 +99,10 @@ tinsert(C.defaultThemes, function()
 			closeButton:SetPushedTexture("")
 
 			if info.closeButtonIsHide then
-				for _, pixel in pairs(closeButton.pixels) do
-					pixel:Hide()
-				end
+				closeButton.__texture:Hide()
 				closeButton.minimize:Show()
 			else
-				for _, pixel in pairs(closeButton.pixels) do
-					pixel:Show()
-				end
+				closeButton.__texture:Show()
 				closeButton.minimize:Hide()
 			end
 		end
