@@ -827,19 +827,22 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "HealthTextSize", L["HealthTextSize"].."*", true, {10, 30, 1}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {0, 10, 1}, refreshNameplates},
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 40, 1}, refreshNameplates},
-		{},--blank
+	},
+	[6] = {
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
+		{},--blank
 		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
 		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"], true},
+		{},--blank
 		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 		{3, "Nameplate", "PPHealthHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
 		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 	},
-	[6] = {
+	[7] = {
 		{1, "AuraWatch", "Enable", "|cff00cc4c"..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
