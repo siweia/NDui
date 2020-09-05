@@ -69,7 +69,8 @@ local defaultSettings = {
 	Auras = {
 		Reminder = true,
 		Totems = true,
-		DestroyTotems = true,
+		VerticleTotems = true,
+		TotemSize = 32,
 		Statue = true,
 		ClassAuras = true,
 		ReverseBuffs = false,
@@ -483,6 +484,11 @@ local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
 
+local function refreshTotemBar()
+	if not NDuiDB["Auras"]["Totems"] then return end
+	B:GetModule("Auras"):TotemBar_Init()
+end
+
 local function updateChatSticky()
 	B:GetModule("Chat"):ChatWhisperSticky()
 end
@@ -816,8 +822,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 		{},--blank
 		{1, "Auras", "Statue", L["Enable Statue"]},
-		{1, "Auras", "Totems", L["Enable Totems"], true},
-		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
+		{1, "Auras", "Reminder", L["Enable Reminder"].."*", true, nil, updateReminder, L["ReminderTip"]},
+		{1, "Auras", "Totems", "|cff00cc4c"..L["Enable Totembar"]},
+		{1, "Auras", "VerticleTotems", L["VerticleTotems"].."*", nil, nil, refreshTotemBar},
+		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},
 		{},--blank
 		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"]},
 		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"], true},
