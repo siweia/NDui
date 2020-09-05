@@ -650,6 +650,7 @@ local tabList = {
 	L["Unitframes"],
 	L["RaidFrame"],
 	L["Nameplate"],
+	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
@@ -801,19 +802,22 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "HealthTextSize", L["HealthTextSize"].."*", true, {10, 30, 1}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {0, 10, 1}, refreshNameplates},
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 40, 1}, refreshNameplates},
-		{},--blank
+	},
+	[6] = {
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
+		{},--blank
 		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
 		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"], true},
+		{},--blank
 		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 		{3, "Nameplate", "PPHealthHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
 		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 	},
-	[6] = {
+	[7] = {
 		{1, "AuraWatch", "Enable", "|cff00cc4c"..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
@@ -833,7 +837,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"], nil, {10, 20, 1}},
 		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"], true, {10, 16, 1}},
 	},
-	[7] = {
+	[8] = {
 		{1, "Misc", "RaidTool", "|cff00cc4c"..L["Raid Manger"]},
 		{1, "Misc", "RMRune", L["Runes Check"].."*"},
 		{1, "Misc", "EasyMarking", L["Easy Mark"].."*"},
@@ -857,7 +861,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*"},
 		{1, "Misc", "RareAlertInWild", L["RareAlertInWild"].."*", true},
 	},
-	[8] = {
+	[9] = {
 		{1, "Chat", "Lock", "|cff00cc4c"..L["Lock Chat"]},
 		{3, "Chat", "ChatWidth", L["LockChatWidth"].."*", nil, {200, 600, 1}, updateChatSize},
 		{3, "Chat", "ChatHeight", L["LockChatHeight"].."*", true, {100, 500, 1}, updateChatSize},
@@ -882,7 +886,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "GuildInvite", L["Guild Invite Only"].."*"},
 		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", true, nil, updateWhisperList},
 	},
-	[9] = {
+	[10] = {
 		{1, "Map", "Coord", L["Map Coords"]},
 		{},--blank
 		{1, "Map", "Calendar", L["Minimap Calendar"].."*", nil, nil, showCalendar},
@@ -895,7 +899,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Map", "MapScale", L["Map Scale"], false, {1, 2, .1}},
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", true, {1, 2, .1}, updateMinimapScale},
 	},
-	[10] = {
+	[11] = {
 		{1, "Skins", "BlizzardSkins", "|cff00cc4c"..L["BlizzardSkins"], nil, nil, nil, L["BlizzardSkinsTips"]},
 		{1, "Skins", "AlertFrames", L["ReskinAlertFrames"], true},
 		{1, "Skins", "DefaultBags", L["DefaultBags"], nil, nil, nil, L["DefaultBagsTips"]},
@@ -922,7 +926,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "PGFSkin", L["PGF Skin"]},
 		{1, "Skins", "Rematch", L["Rematch Skin"], true},
 	},
-	[11] = {
+	[12] = {
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"].."*"},
 		{1, "Tooltip", "Cursor", L["Follow Cursor"].."*"},
 		{1, "Tooltip", "ClassColor", L["Classcolor Border"].."*"},
@@ -941,7 +945,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
 		{1, "Tooltip", "CorruptionRank", "|cff00cc4c"..L["ShowCorruptionRank"]},
 	},
-	[12] = {
+	[13] = {
 		{1, "Misc", "ItemLevel", "|cff00cc4c"..L["Show ItemLevel"]},
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
@@ -962,7 +966,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", true},
 	},
-	[13] = {
+	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{1, "ACCOUNT", "DisableInfobars", L["DisableInfobars"], true},
 		{},--blank
