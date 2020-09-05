@@ -33,7 +33,6 @@ C.Auras = {
 
 	IconSize		= 32,												-- 相关职业助手图标大小
 	TotemsPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -450, 20},	-- 图腾助手默认位置
-	StatuePos		= {"TOPRIGHT", UIParent, "BOTTOM", -460, 300},		-- 武僧雕像默认位置
 
 	-- 技能监控各组初始位置
 	PlayerAuraPos	= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 309},	-- 玩家光环分组
