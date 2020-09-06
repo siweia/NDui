@@ -235,7 +235,7 @@ local defaultSettings = {
 		DPSRevertThreat = false,
 		ExplosivesScale = false,
 		AKSProgress = false,
-		PPHideOOC = true,
+		PPFadeout = true,
 		NameplateClassPower = false,
 		MaxPowerGlow = true,
 		NameTextSize = 14,
@@ -536,6 +536,10 @@ local function refreshNameplates()
 	B:GetModule("UnitFrames"):RefreshAllPlates()
 end
 
+local function togglePlateVisibility()
+	B:GetModule("UnitFrames"):TogglePlateVisibility()
+end
+
 local function updatePlateScale()
 	B:GetModule("UnitFrames"):UpdatePlateScale()
 end
@@ -810,7 +814,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
-		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"], true},
+		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
