@@ -826,9 +826,8 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[6] = {
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
-		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
 		{},--blank
-		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
+		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
