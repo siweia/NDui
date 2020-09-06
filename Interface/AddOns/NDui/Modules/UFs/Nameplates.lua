@@ -903,10 +903,10 @@ function UF:PlateVisibility(event)
 		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), 1)
 	else
-		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), .1)
-		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), .1)
-		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), .1)
-		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), .1)
+		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), 0)
+		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), 0)
+		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), 0)
+		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), 0)
 	end
 end
 
