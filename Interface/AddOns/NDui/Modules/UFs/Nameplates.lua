@@ -967,7 +967,6 @@ function UF:CreatePlayerPlate()
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
 	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
-	UF:CreateGCDTicker(self)
 
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Power)
@@ -975,6 +974,7 @@ function UF:CreatePlayerPlate()
 	self:Tag(self.powerText, "[pppower]")
 	UF:TogglePlatePower()
 
+	UF:CreateGCDTicker(self)
 	UF:UpdateTargetClassPower()
 	UF:TogglePlateVisibility()
 end
@@ -1036,4 +1036,15 @@ function UF:CreateGCDTicker(self)
 	ticker.spark = spark
 
 	ticker:SetScript("OnUpdate", UF.UpdateGCDTicker)
+	self.GCDTicker = ticker
+
+	UF:ToggleGCDTicker()
+end
+
+function UF:ToggleGCDTicker()
+	local plate = _G.oUF_PlayerPlate
+	local ticker = plate and plate.GCDTicker
+	if not ticker then return end
+
+	ticker:SetShown(NDuiDB["Nameplate"]["PPGCDTicker"])
 end
