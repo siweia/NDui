@@ -512,6 +512,14 @@ function module:UpdateAllBags()
 	end
 end
 
+function module:OpenBags()
+	OpenAllBags(true)
+end
+
+function module:CloseBags()
+	CloseAllBags()
+end
+
 function module:OnLogin()
 	if not NDuiDB["Bags"]["Enable"] then return end
 
@@ -917,17 +925,23 @@ function module:OnLogin()
 		end
 	end
 
-	-- Fixes
+	-- Sort order
+	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
+	SetInsertItemsLeftToRight(false)
+
+	-- Init
 	ToggleAllBags()
 	ToggleAllBags()
 	module.initComplete = true
 
+	B:RegisterEvent("TRADE_SHOW", module.OpenBags)
+	B:RegisterEvent("TRADE_CLOSED", module.CloseBags)
+	B:RegisterEvent("AUCTION_HOUSE_SHOW", module.OpenBags)
+	B:RegisterEvent("AUCTION_HOUSE_CLOSED", module.CloseBags)
+
+	-- Fixes
 	BankFrame.GetRight = function() return f.bank:GetRight() end
 	BankFrameItemButton_Update = B.Dummy
-
-	-- Sort order
-	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
-	SetInsertItemsLeftToRight(false)
 
 	-- Shift key alert
 	local function onUpdate(self, elapsed)
