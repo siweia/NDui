@@ -852,7 +852,7 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 			local color = element.__owner.colors.power[powerType]
 			r, g, b = color[1], color[2], color[3]
 		end
-		for i = 1, max do
+		for i = 1, #element do
 			element[i]:SetStatusBarColor(r, g, b)
 		end
 		element.prevColor = element.thisColor
