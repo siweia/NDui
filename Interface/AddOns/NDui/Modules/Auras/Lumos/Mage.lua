@@ -26,11 +26,11 @@ end
 
 function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		UpdateBuff(self.bu[1], 263725, 263725)
-		UpdateBuff(self.bu[2], 205025, 205025, true, true)
+		UpdateBuff(self.lumos[1], 263725, 263725)
+		UpdateBuff(self.lumos[2], 205025, 205025, true, true)
 
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			if IsPlayerSpell(116011) then
 				UpdateTotemAura(button, 609815, 116011)
 			elseif IsPlayerSpell(55342) then
@@ -40,11 +40,11 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[4], 12051, 12051, true)
-		UpdateBuff(self.bu[5], 12042, 12042, true, true)
+		UpdateBuff(self.lumos[4], 12051, 12051, true)
+		UpdateBuff(self.lumos[5], 12042, 12042, true, true)
 	elseif GetSpecialization() == 2 then
 		do
-			local button = self.bu[1]
+			local button = self.lumos[1]
 			local name, _, duration, expire, _, spellID = GetUnitAura("player", 48108, "HELPFUL")
 			if not name then name, _, duration, expire, _, spellID = GetUnitAura("player", 48107, "HELPFUL") end
 			if name then
@@ -60,7 +60,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[2]
+			local button = self.lumos[2]
 			if IsPlayerSpell(257541) then
 				UpdateCooldown(button, 257541, true)
 			elseif IsPlayerSpell(235870) then
@@ -71,7 +71,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			if IsPlayerSpell(116011) then
 				UpdateTotemAura(button, 609815, 116011)
 			elseif IsPlayerSpell(55342) then
@@ -82,7 +82,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[4]
+			local button = self.lumos[4]
 			if IsPlayerSpell(153561) then
 				UpdateCooldown(button, 153561, true)
 			elseif IsPlayerSpell(269650) then
@@ -92,13 +92,13 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[5], 190319, 190319, true, true)
+		UpdateBuff(self.lumos[5], 190319, 190319, true, true)
 	elseif GetSpecialization() == 3 then
-		UpdateBuff(self.bu[1], 30455, 44544)
-		UpdateBuff(self.bu[2], 44614, 190446)
+		UpdateBuff(self.lumos[1], 30455, 44544)
+		UpdateBuff(self.lumos[2], 44614, 190446)
 
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			if IsPlayerSpell(116011) then
 				UpdateTotemAura(button, 609815, 116011)
 			elseif IsPlayerSpell(55342) then
@@ -108,10 +108,10 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateCooldown(self.bu[4], 84714, true)
+		UpdateCooldown(self.lumos[4], 84714, true)
 
 		do
-			local button = self.bu[5]
+			local button = self.lumos[5]
 			if IsPlayerSpell(199786) then
 				UpdateBuff(button, 199786, 205473)
 			elseif IsPlayerSpell(205021) then

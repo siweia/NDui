@@ -10,9 +10,9 @@ function A:PostCreateLumos(self)
 		if not self.dotExp then return end
 		local elapsed = self.dotExp - GetTime()
 		if elapsed >= 7 then
-			self.bu[3].Icon:SetDesaturated(false)
+			self.lumos[3].Icon:SetDesaturated(false)
 		else
-			self.bu[3].Icon:SetDesaturated(true)
+			self.lumos[3].Icon:SetDesaturated(true)
 		end
 	end)
 	frame:Hide()
@@ -46,12 +46,12 @@ end
 
 function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		UpdateDebuff(self.bu[1], 172, 146739, false, "END")
-		UpdateDebuff(self.bu[2], 980, 980, false, "END")
+		UpdateDebuff(self.lumos[1], 172, 146739, false, "END")
+		UpdateDebuff(self.lumos[2], 980, 980, false, "END")
 
 		local shown
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			if IsPlayerSpell(108558) then
 				UpdateBuff(button, 108558, 264571)
 			elseif IsPlayerSpell(264106) then
@@ -67,7 +67,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[4]
+			local button = self.lumos[4]
 			if IsPlayerSpell(32388) then
 				UpdateDebuff(button, 32388, 32390, false, "END")
 			elseif IsPlayerSpell(48181) then
@@ -83,7 +83,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[5]
+			local button = self.lumos[5]
 			if IsPlayerSpell(63106) and not shown then
 				button.Count:SetText("")
 				local found
@@ -115,10 +115,10 @@ function A:ChantLumos(self)
 			end
 		end
 	elseif GetSpecialization() == 2 then
-		UpdateBuff(self.bu[1], 264178, 264173, false, true)
+		UpdateBuff(self.lumos[1], 264178, 264173, false, true)
 
 		do
-			local button = self.bu[2]
+			local button = self.lumos[2]
 			if IsPlayerSpell(265412) then
 				UpdateDebuff(button, 265412, 265412, false, "END")
 			elseif IsPlayerSpell(205145) then
@@ -128,10 +128,10 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateCooldown(self.bu[3], 104316, true)
+		UpdateCooldown(self.lumos[3], 104316, true)
 
 		do
-			local button = self.bu[4]
+			local button = self.lumos[4]
 			if IsPlayerSpell(267170) then
 				UpdateDebuff(button, 267170, 270569)
 			elseif IsPlayerSpell(264057) then
@@ -141,12 +141,12 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateCooldown(self.bu[5], 265187, true)
+		UpdateCooldown(self.lumos[5], 265187, true)
 	elseif GetSpecialization() == 3 then
-		UpdateDebuff(self.bu[1], 348, 157736, false, "END")
+		UpdateDebuff(self.lumos[1], 348, 157736, false, "END")
 
 		do
-			local button = self.bu[2]
+			local button = self.lumos[2]
 			if IsPlayerSpell(6353) then
 				UpdateCooldown(button, 6353, true)
 			elseif IsPlayerSpell(196412) then
@@ -157,7 +157,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			if IsPlayerSpell(205148) then
 				UpdateBuff(button, 205148, 266030)
 			elseif IsPlayerSpell(17877) then
@@ -175,7 +175,7 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateCooldown(self.bu[4], 80240, true)
-		UpdateTotemAura(self.bu[5], 136219, 1122)
+		UpdateCooldown(self.lumos[4], 80240, true)
+		UpdateTotemAura(self.lumos[5], 136219, 1122)
 	end
 end

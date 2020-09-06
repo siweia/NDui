@@ -936,10 +936,10 @@ function UF:ResizePlayerPlate()
 		if plate.Stagger then
 			plate.Stagger:SetHeight(barHeight)
 		end
-		if plate.bu then
+		if plate.lumos then
 			local iconSize = (barWidth - C.margin*4)/5
 			for i = 1, 5 do
-				plate.bu[i]:SetSize(iconSize, iconSize)
+				plate.lumos[i]:SetSize(iconSize, iconSize)
 			end
 		end
 		if plate.dices then
