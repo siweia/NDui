@@ -13,6 +13,7 @@ local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFa
 local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
+local GetSpellCooldown, GetTime = GetSpellCooldown, GetTime
 local INTERRUPTED = INTERRUPTED
 
 -- Init
@@ -955,6 +956,7 @@ function UF:CreatePlayerPlate()
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
 	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
+	UF:CreateGCDTicker(self)
 
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Power)
@@ -995,8 +997,22 @@ function UF:TogglePlateVisibility()
 	end
 end
 
+function UF:UpdateGCDTicker(elapsed)
+	local start, duration = GetSpellCooldown(61304)
+	if start > 0 and duration > 0 then
+		if self.duration ~= duration then
+			self:SetMinMaxValues(0, duration)
+			self.duration = duration
+		end
+		self:SetValue(GetTime() - start)
+		self.spark:Show()
+	else
+		self.spark:Hide()
+	end
+end
+
 function UF:CreateGCDTicker(self)
-	local ticker = CreateFrame("StatusBar", nil, self.Power)
+	local ticker = CreateFrame("StatusBar", nil, self)
 	ticker:SetFrameLevel(self:GetFrameLevel() + 3)
 	ticker:SetStatusBarTexture(DB.normTex)
 	ticker:GetStatusBarTexture():SetAlpha(0)
@@ -1010,15 +1026,4 @@ function UF:CreateGCDTicker(self)
 	ticker.spark = spark
 
 	ticker:SetScript("OnUpdate", UF.UpdateGCDTicker)
-	self.GCDTicker = ticker
-
-	UF:ToggleGCDTicker()
-end
-
-function UF:ToggleGCDTicker()
-	local plate = _G.oUF_PlayerPlate
-	local ticker = plate and plate.GCDTicker
-	if not ticker then return end
-
-	ticker:SetShown(NDuiDB["Nameplate"]["PPGCDTicker"])
 end
