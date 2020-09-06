@@ -8,7 +8,7 @@ local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, Un
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 
 local groups = DB.ReminderBuffs[DB.MyClass]
-local iconSize = C.Auras.IconSize + 4
+local iconSize = 36
 local frames, parentFrame = {}
 
 function A:Reminder_Update(cfg)
