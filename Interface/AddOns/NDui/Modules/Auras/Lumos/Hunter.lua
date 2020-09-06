@@ -52,18 +52,18 @@ local boomGroups = {
 function A:ChantLumos(self)
 	local spec = GetSpecialization()
 	if spec == 1 then
-		UpdateCooldown(self.bu[1], 34026, true)
-		UpdateCooldown(self.bu[2], 217200, true)
-		UpdateBuff(self.bu[3], 106785, 272790, false, true, "END")
-		UpdateBuff(self.bu[4], 19574, 19574, true, false, true)
-		UpdateBuff(self.bu[5], 193530, 193530, true, false, true)
+		UpdateCooldown(self.lumos[1], 34026, true)
+		UpdateCooldown(self.lumos[2], 217200, true)
+		UpdateBuff(self.lumos[3], 106785, 272790, false, true, "END")
+		UpdateBuff(self.lumos[4], 19574, 19574, true, false, true)
+		UpdateBuff(self.lumos[5], 193530, 193530, true, false, true)
 
 	elseif spec == 2 then
-		UpdateCooldown(self.bu[1], 19434, true)
-		UpdateCooldown(self.bu[2], 257044, true)
+		UpdateCooldown(self.lumos[1], 19434, true)
+		UpdateCooldown(self.lumos[2], 257044, true)
 
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			UpdateCooldown(button, 53351)
 			UpdateSpellStatus(button, 53351)
 		end
@@ -82,7 +82,7 @@ function A:ChantLumos(self)
 		UpdateBuff(self.lumos[5], 288613, 288613, true, false, true)
 
 	elseif spec == 3 then
-		UpdateDebuff(self.bu[1], 259491, 259491, false, "END")
+		UpdateDebuff(self.lumos[1], 259491, 259491, false, "END")
 
 		do
 			local button = self.lumos[2]

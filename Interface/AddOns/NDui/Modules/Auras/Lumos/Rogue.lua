@@ -58,9 +58,9 @@ function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		for i = 1, 6 do self.dices[i]:Hide() end
 
-		UpdateDebuff(self.bu[1], 703, 703, true)
-		UpdateDebuff(self.bu[2], 1943, 1943)
-		UpdateBuff(self.bu[3], 315496, 315496)
+		UpdateDebuff(self.lumos[1], 703, 703, true)
+		UpdateDebuff(self.lumos[2], 1943, 1943)
+		UpdateBuff(self.lumos[3], 315496, 315496)
 
 		do
 			local button = self.lumos[4]
@@ -75,11 +75,11 @@ function A:ChantLumos(self)
 
 		UpdateDebuff(self.lumos[5], 79140, 79140, true, true)
 	elseif GetSpecialization() == 2 then
-		UpdateBuff(self.bu[1], 315496, 315496)
-		UpdateCooldown(self.bu[2], 315341, true)
-		UpdateCooldown(self.bu[3], 315508, true)
-		UpdateBuff(self.bu[4], 13750, 13750, true, true)
-		UpdateBuff(self.bu[5], 13877, 13877, true)
+		UpdateBuff(self.lumos[1], 315496, 315496)
+		UpdateCooldown(self.lumos[2], 315341, true)
+		UpdateCooldown(self.lumos[3], 315508, true)
+		UpdateBuff(self.lumos[4], 13750, 13750, true, true)
+		UpdateBuff(self.lumos[5], 13877, 13877, true)
 
 		-- Dices
 		for i = 1, 6 do
@@ -91,10 +91,10 @@ function A:ChantLumos(self)
 	elseif GetSpecialization() == 3 then
 		for i = 1, 6 do self.dices[i]:Hide() end
 
-		UpdateBuff(self.bu[1], 315496, 315496)
-		UpdateDebuff(self.bu[2], 1943, 1943)
-		UpdateBuff(self.bu[3], 185313, 185422, true, true)
-		UpdateBuff(self.bu[4], 212283, 212283, true)
-		UpdateBuff(self.bu[5], 121471, 121471, true, true)
+		UpdateBuff(self.lumos[1], 315496, 315496)
+		UpdateDebuff(self.lumos[2], 1943, 1943)
+		UpdateBuff(self.lumos[3], 185313, 185422, true, true)
+		UpdateBuff(self.lumos[4], 212283, 212283, true)
+		UpdateBuff(self.lumos[5], 121471, 121471, true, true)
 	end
 end

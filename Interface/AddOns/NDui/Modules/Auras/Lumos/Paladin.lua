@@ -56,11 +56,11 @@ function A:ChantLumos(self)
 
 		UpdateBuff(self.lumos[5], 31821, 31821, true, true)
 	elseif GetSpecialization() == 2 then
-		UpdateCooldown(self.bu[1], 31935, true)
-		UpdateBuff(self.bu[2], 53600, 132403, true, "END")
-		UpdateBuff(self.bu[3], 31884, 31884, true, true)
-		UpdateBuff(self.bu[4], 31850, 31850, true, true)
-		UpdateBuff(self.bu[5], 86659, 86659, true, true)
+		UpdateCooldown(self.lumos[1], 31935, true)
+		UpdateBuff(self.lumos[2], 53600, 132403, true, "END")
+		UpdateBuff(self.lumos[3], 31884, 31884, true, true)
+		UpdateBuff(self.lumos[4], 31850, 31850, true, true)
+		UpdateBuff(self.lumos[5], 86659, 86659, true, true)
 	elseif GetSpecialization() == 3 then
 		do
 			local button = self.lumos[1]
