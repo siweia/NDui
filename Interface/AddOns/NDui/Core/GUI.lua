@@ -232,7 +232,6 @@ local defaultSettings = {
 		AKSProgress = false,
 		PPHideOOC = true,
 		NameplateClassPower = false,
-		MaxPowerGlow = true,
 		NameTextSize = 14,
 		HealthTextSize = 16,
 		MinScale = 1,
@@ -791,8 +790,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], true, {.8, 2, .1}},
 		{},--blank
 		{1, "Nameplate", "ShowPlayerPlate", "|cff00cc4c"..L["Enable PlayerPlate"]},
-		{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
-		{1, "Nameplate", "MaxPowerGlow", L["MaxPowerGlow"]},
+		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
 		{1, "Nameplate", "PPHideOOC", L["Fadeout OOC"], true},
