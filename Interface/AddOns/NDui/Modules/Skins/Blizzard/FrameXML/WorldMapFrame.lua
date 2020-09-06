@@ -19,6 +19,7 @@ tinsert(C.defaultThemes, function()
 	overlayFrames[3].ActiveTexture:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Toggle")
 
 	local sideToggle = WorldMapFrame.SidePanelToggle
+	sideToggle:SetFrameLevel(3)
 	sideToggle.OpenButton:GetRegions():Hide()
 	B.ReskinArrow(sideToggle.OpenButton, "right")
 	sideToggle.CloseButton:GetRegions():Hide()
