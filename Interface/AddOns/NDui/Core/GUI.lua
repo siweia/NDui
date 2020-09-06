@@ -662,7 +662,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "Cooldown", "|cff00cc4c"..L["Show Cooldown"]},
 		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*"},
-		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"], true},
+		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
 	},
 	[2] = {
 		{1, "Bags", "Enable", "|cff00cc4c"..L["Enable Bags"]},
