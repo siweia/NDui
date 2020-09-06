@@ -123,11 +123,13 @@ end
 local function UpdateVisibility(self)
 	if InCombatLockdown() then return end
 	for i = 1, 5 do
-		self.lumos[i].Count:SetTextColor(1, 1, 1)
-		self.lumos[i].Count:SetText("")
-		self.lumos[i].CD:Hide()
-		self.lumos[i]:SetScript("OnUpdate", nil)
-		B.HideOverlayGlow(self.lumos[i].glowFrame)
+		local bu = self.lumos[i]
+		bu.Count:SetTextColor(1, 1, 1)
+		bu.Count:SetText("")
+		bu.CD:Hide()
+		bu:SetScript("OnUpdate", nil)
+		bu.Icon:SetDesaturated(true)
+		B.HideOverlayGlow(bu.glowFrame)
 	end
 	if A.PostUpdateVisibility then A:PostUpdateVisibility(self) end
 end
