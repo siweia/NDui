@@ -296,6 +296,8 @@ local list = {
 		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
 		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
 		{AuraID = 322681, UnitID = "player"},	-- 通灵战潮，肉钩
+		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
+		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
 
 		{AuraID = 260954, UnitID = "player"},	-- 铁之凝视，围攻
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
