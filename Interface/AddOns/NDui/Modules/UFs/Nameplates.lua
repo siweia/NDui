@@ -968,13 +968,6 @@ function UF:CreatePlayerPlate()
 	UF:TogglePlateVisibility()
 end
 
-function UF:TogglePlatePower()
-	local plate = _G.oUF_PlayerPlate
-	if not plate then return end
-
-	plate.powerText:SetShown(NDuiDB["Nameplate"]["PPPowerText"])
-end
-
 function UF:TogglePlateVisibility()
 	local plate = _G.oUF_PlayerPlate
 	if not plate then return end
@@ -993,20 +986,6 @@ function UF:TogglePlateVisibility()
 		plate:UnregisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility)
 		plate:UnregisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility)
 		UF.PlateVisibility(plate, "PLAYER_REGEN_DISABLED")
-	end
-end
-
-function UF:UpdateGCDTicker(elapsed)
-	local start, duration = GetSpellCooldown(61304)
-	if start > 0 and duration > 0 then
-		if self.duration ~= duration then
-			self:SetMinMaxValues(0, duration)
-			self.duration = duration
-		end
-		self:SetValue(GetTime() - start)
-		self.spark:Show()
-	else
-		self.spark:Hide()
 	end
 end
 
