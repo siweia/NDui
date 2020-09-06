@@ -956,9 +956,8 @@ function UF:CreatePlayerPlate()
 	UF:StaggerBar(self)
 	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
 
-	local textFrame = CreateFrame("Frame", nil, self.Power)
-	textFrame:SetAllPoints()
-	textFrame:SetFrameLevel(self:GetFrameLevel() + 5)
+	local textFrame = CreateFrame("Frame", nil, self)
+	textFrame:SetAllPoints(self.Power)
 	self.powerText = B.CreateFS(textFrame, 14)
 	self:Tag(self.powerText, "[pppower]")
 	UF:TogglePlatePower()
@@ -966,6 +965,13 @@ function UF:CreatePlayerPlate()
 	UF:CreateGCDTicker(self)
 	UF:UpdateTargetClassPower()
 	UF:TogglePlateVisibility()
+end
+
+function UF:TogglePlatePower()
+	local plate = _G.oUF_PlayerPlate
+	if not plate then return end
+
+	plate.powerText:SetShown(NDuiDB["Nameplate"]["PPPowerText"])
 end
 
 function UF:TogglePlateVisibility()
