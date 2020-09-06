@@ -481,6 +481,20 @@ local function updateCustomBar()
 	B:GetModule("Actionbar"):UpdateCustomBar()
 end
 
+local function updateBuffFrame()
+	local A = B:GetModule("Auras")
+	A:UpdateOptions()
+	A:UpdateHeader(A.BuffFrame)
+	A.BuffFrame.mover:SetSize(A.BuffFrame:GetSize())
+end
+
+local function updateDebuffFrame()
+	local A = B:GetModule("Auras")
+	A:UpdateOptions()
+	A:UpdateHeader(A.DebuffFrame)
+	A.DebuffFrame.mover:SetSize(A.DebuffFrame:GetSize())
+end
+
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -856,12 +870,12 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
 		{},--blank
-		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"]},
-		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"], true},
-		{3, "Auras", "BuffSize", L["BuffSize"], nil, {24, 50, 1}},
-		{3, "Auras", "DebuffSize", L["DebuffSize"], true, {24, 50, 1}},
-		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"], nil, {10, 20, 1}},
-		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"], true, {10, 16, 1}},
+		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"].."*", nil, nil, updateBuffFrame},
+		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"].."*", true, nil, updateDebuffFrame},
+		{3, "Auras", "BuffSize", L["BuffSize"].."*", nil, {24, 50, 1}, updateBuffFrame},
+		{3, "Auras", "DebuffSize", L["DebuffSize"].."*", true, {24, 50, 1}, updateDebuffFrame},
+		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"].."*", nil, {10, 20, 1}, updateBuffFrame},
+		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"].."*", true, {10, 16, 1}, updateDebuffFrame},
 	},
 	[8] = {
 		{1, "Misc", "RaidTool", "|cff00cc4c"..L["Raid Manger"]},

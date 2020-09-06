@@ -33,14 +33,14 @@ function A:OnLogin()
 
 	-- Movers
 	A.BuffFrame = A:CreateAuraHeader("HELPFUL")
-	local buffAnchor = B.Mover(A.BuffFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos)
+	A.BuffFrame.mover = B.Mover(A.BuffFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos)
 	A.BuffFrame:ClearAllPoints()
-	A.BuffFrame:SetPoint("TOPRIGHT", buffAnchor)
+	A.BuffFrame:SetPoint("TOPRIGHT", A.BuffFrame.mover)
 
 	A.DebuffFrame = A:CreateAuraHeader("HARMFUL")
-	local debuffAnchor = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -12})
+	A.DebuffFrame.mover = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", A.BuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 	A.DebuffFrame:ClearAllPoints()
-	A.DebuffFrame:SetPoint("TOPRIGHT", debuffAnchor)
+	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
 
 	-- Elements
 	A:Totems()
@@ -168,6 +168,15 @@ function A:OnAttributeChanged(attribute, value)
 	end
 end
 
+function A:UpdateOptions()
+	A.settings.Buffs.size = NDuiDB["Auras"]["BuffSize"]
+	A.settings.Buffs.wrapAfter = NDuiDB["Auras"]["BuffsPerRow"]
+	A.settings.Buffs.reverseGrow = NDuiDB["Auras"]["ReverseBuffs"]
+	A.settings.Debuffs.size = NDuiDB["Auras"]["DebuffSize"]
+	A.settings.Debuffs.wrapAfter = NDuiDB["Auras"]["DebuffsPerRow"]
+	A.settings.Debuffs.reverseGrow = NDuiDB["Auras"]["ReverseDebuffs"]
+end
+
 function A:UpdateHeader(header)
 	local cfg = A.settings.Debuffs
 	if header:GetAttribute("filter") == "HELPFUL" then
@@ -190,12 +199,16 @@ function A:UpdateHeader(header)
 	header:SetAttribute("wrapYOffset", -(cfg.size + cfg.offset))
 	header:SetAttribute("template", format("NDuiAuraTemplate%d", cfg.size))
 
+	local fontSize = floor(cfg.size/30*12 + .5)
 	local index = 1
 	local child = select(index, header:GetChildren())
 	while child do
 		if (floor(child:GetWidth() * 100 + .5) / 100) ~= cfg.size then
 			child:SetSize(cfg.size, cfg.size)
 		end
+
+		child.count:SetFont(DB.Font[1], fontSize, DB.Font[3])
+		child.timer:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
 		--Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
 		if index > (cfg.maxWraps * cfg.wrapAfter) and child:IsShown() then
