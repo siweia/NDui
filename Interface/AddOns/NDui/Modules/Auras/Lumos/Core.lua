@@ -166,7 +166,7 @@ function A:CreateLumos(self)
 
 		local fontParent = CreateFrame("Frame", nil, bu)
 		fontParent:SetAllPoints()
-		fontParent:SetFrameLevel(bu:GetFrameLevel() + 5)
+		fontParent:SetFrameLevel(bu:GetFrameLevel() + 6)
 		bu.Count = B.CreateFS(fontParent, 16, "", false, "BOTTOM", 0, -10)
 		if i == 1 then
 			bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -5)
