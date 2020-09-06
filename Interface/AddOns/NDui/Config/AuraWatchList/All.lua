@@ -627,7 +627,7 @@ local list = {
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
 	-- 9.0副本
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
-		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，One With Death
+		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
 	-- 8.0副本
 		{AuraID = 300011, UnitID = "target"},	-- 力场护盾，麦卡贡
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
