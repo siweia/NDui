@@ -893,10 +893,10 @@ function UF:PlateVisibility(event)
 		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), 1)
 	else
-		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), .1)
-		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), .1)
-		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), .1)
-		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), .1)
+		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), 0)
+		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), 0)
+		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), 0)
+		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), 0)
 	end
 end
 
@@ -926,10 +926,10 @@ function UF:ResizePlayerPlate()
 		if plate.Stagger then
 			plate.Stagger:SetHeight(barHeight)
 		end
-		if plate.bu then
+		if plate.lumos then
 			local iconSize = (barWidth - C.margin*4)/5
 			for i = 1, 5 do
-				plate.bu[i]:SetSize(iconSize, iconSize)
+				plate.lumos[i]:SetSize(iconSize, iconSize)
 			end
 		end
 		if plate.dices then
@@ -966,12 +966,26 @@ function UF:CreatePlayerPlate()
 	end
 
 	UF:UpdateTargetClassPower()
-
-	if NDuiDB["Nameplate"]["PPHideOOC"] then
-		self:RegisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
-		self:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility, true)
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility, true)
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility, true)
-	end
+	UF:TogglePlateVisibility()
 end
+
+function UF:TogglePlateVisibility()
+	local plate = _G.oUF_PlayerPlate
+	if not plate then return end
+
+	if NDuiDB["Nameplate"]["PPFadeout"] then
+		plate:RegisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
+		plate:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
+		plate:RegisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility, true)
+		plate:RegisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility, true)
+		plate:RegisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility, true)
+		UF.PlateVisibility(plate)
+	else
+		plate:UnregisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
+		plate:UnregisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
+		plate:UnregisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility)
+		plate:UnregisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility)
+		plate:UnregisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility)
+		UF.PlateVisibility(plate, "PLAYER_REGEN_DISABLED")
+	end
+end 

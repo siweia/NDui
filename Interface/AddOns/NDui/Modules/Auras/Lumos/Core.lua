@@ -123,11 +123,13 @@ end
 local function UpdateVisibility(self)
 	if InCombatLockdown() then return end
 	for i = 1, 5 do
-		self.bu[i].Count:SetTextColor(1, 1, 1)
-		self.bu[i].Count:SetText("")
-		self.bu[i].CD:Hide()
-		self.bu[i]:SetScript("OnUpdate", nil)
-		B.HideOverlayGlow(self.bu[i].glowFrame)
+		local bu = self.lumos[i]
+		bu.Count:SetTextColor(1, 1, 1)
+		bu.Count:SetText("")
+		bu.CD:Hide()
+		bu:SetScript("OnUpdate", nil)
+		bu.Icon:SetDesaturated(true)
+		B.HideOverlayGlow(bu.glowFrame)
 	end
 	if A.PostUpdateVisibility then A:PostUpdateVisibility(self) end
 end
@@ -156,7 +158,7 @@ end
 function A:CreateLumos(self)
 	if not A.ChantLumos then return end
 
-	self.bu = {}
+	self.lumos = {}
 	local iconSize = (NDuiDB["Nameplate"]["PPWidth"] - C.margin*4)/5
 	for i = 1, 5 do
 		local bu = CreateFrame("Frame", nil, self.Health)
@@ -169,12 +171,12 @@ function A:CreateLumos(self)
 		fontParent:SetFrameLevel(bu:GetFrameLevel() + 6)
 		bu.Count = B.CreateFS(fontParent, 16, "", false, "BOTTOM", 0, -10)
 		if i == 1 then
-			bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -5)
+			bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -C.margin)
 		else
-			bu:SetPoint("LEFT", self.bu[i-1], "RIGHT", C.margin, 0)
+			bu:SetPoint("LEFT", self.lumos[i-1], "RIGHT", C.margin, 0)
 		end
 
-		self.bu[i] = bu
+		self.lumos[i] = bu
 	end
 
 	if A.PostCreateLumos then A:PostCreateLumos(self) end

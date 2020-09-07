@@ -31,11 +31,11 @@ end
 
 function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		UpdateCooldown(self.bu[1], 20473, true)
-		UpdateCooldown(self.bu[2], 85222, true)
+		UpdateCooldown(self.lumos[1], 20473, true)
+		UpdateCooldown(self.lumos[2], 85222, true)
 
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			if IsPlayerSpell(114165) then
 				UpdateCooldown(button, 114165, true)
 			elseif IsPlayerSpell(105809) then
@@ -46,7 +46,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[4]
+			local button = self.lumos[4]
 			if IsPlayerSpell(216331) then
 				UpdateBuff(button, 216331, 216331, true, true)
 			else
@@ -54,10 +54,10 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[5], 31821, 31821, true, true)
+		UpdateBuff(self.lumos[5], 31821, 31821, true, true)
 	elseif GetSpecialization() == 2 then
 		do
-			local button = self.bu[1]
+			local button = self.lumos[1]
 			if IsPlayerSpell(213652) then
 				UpdateCooldown(button, 213652, true)
 			else
@@ -65,13 +65,13 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.bu[2], 53600, 132403, true, "END")
-		UpdateBuff(self.bu[3], 31884, 31884, true, true)
-		UpdateBuff(self.bu[4], 31850, 31850, true, true)
-		UpdateBuff(self.bu[5], 86659, 86659, true, true)
+		UpdateBuff(self.lumos[2], 53600, 132403, true, "END")
+		UpdateBuff(self.lumos[3], 31884, 31884, true, true)
+		UpdateBuff(self.lumos[4], 31850, 31850, true, true)
+		UpdateBuff(self.lumos[5], 86659, 86659, true, true)
 	elseif GetSpecialization() == 3 then
 		do
-			local button = self.bu[1]
+			local button = self.lumos[1]
 			if IsPlayerSpell(267610) then
 				UpdateBuff(button, 267610, 267611, false, "END")
 			elseif IsPlayerSpell(267798) then
@@ -82,7 +82,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[2]
+			local button = self.lumos[2]
 			if IsPlayerSpell(24275) then
 				UpdateCooldown(button, 24275)
 				UpdateSpellStatus(button, 24275)
@@ -94,7 +94,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[3]
+			local button = self.lumos[3]
 			if IsPlayerSpell(271580) then
 				UpdateBuff(button, 271580, 271581)
 			elseif IsPlayerSpell(205228) then
@@ -105,7 +105,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[4]
+			local button = self.lumos[4]
 			if IsPlayerSpell(223817) then
 				UpdateBuff(button, 223817, 223819, false, true)
 			elseif IsPlayerSpell(84963) then
@@ -127,7 +127,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.bu[5]
+			local button = self.lumos[5]
 			if IsPlayerSpell(231895) then
 				UpdateBuff(button, 231895, 231895, true, true)
 				button.Count:SetTextColor(1, 1, 1)
