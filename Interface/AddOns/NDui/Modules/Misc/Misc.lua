@@ -63,11 +63,6 @@ function M:OnLogin()
 	self:OverrideAWQ()
 	self:ReplaceContaminantName()
 
-	-- Max camera distancee
-	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
-		SetCVar("cameraDistanceMaxZoomFactor", 2.6)
-	end
-
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
 		BossBanner:UnregisterAllEvents()
