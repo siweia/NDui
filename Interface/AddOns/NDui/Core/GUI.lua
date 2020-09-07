@@ -311,7 +311,7 @@ local defaultSettings = {
 		HideBanner = true,
 		HideBossEmote = false,
 		PetFilter = true,
-		QuestNotifier = false,
+		QuestNotification = false,
 		QuestProgress = false,
 		OnlyCompleteRing = false,
 		ExplosiveCount = false,
@@ -633,8 +633,8 @@ local function updateSoloInfo()
 	B:GetModule("Misc"):SoloInfo()
 end
 
-local function updateQuestNotifier()
-	B:GetModule("Misc"):QuestNotifier()
+local function updateQuestNotification()
+	B:GetModule("Misc"):QuestNotification()
 end
 
 local function updateScreenShot()
@@ -873,7 +873,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "EasyMarking", L["Easy Mark"].."*"},
 		{2, "Misc", "DBMCount", L["Countdown Sec"].."*", true},
 		{},--blank
-		{1, "Misc", "QuestNotifier", "|cff00cc4c"..L["QuestNotifier"].."*", nil, nil, updateQuestNotifier},
+		{1, "Misc", "QuestNotification", "|cff00cc4c"..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
 		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"].."*", true},
 		{},--blank
