@@ -665,3 +665,4 @@ L["CustomBarFader"] = "CustomBar Fading" -- need translation
 L["CustomBarButtonSize"] = "Button Size" -- need translation
 L["CustomBarNumButtons"] = "Max Buttons" -- need translation
 L["CustomBarNumPerRow"] = "Buttons Per Row" -- need translation
+L["HideBossEmote"] = "Hide RaidBossEmoteFrame" -- need translation

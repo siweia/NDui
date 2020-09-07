@@ -310,6 +310,7 @@ local defaultSettings = {
 		AutoQuest = false,
 		HideTalking = true,
 		HideBanner = true,
+		HideBossEmote = false,
 		PetFilter = true,
 		QuestNotifier = false,
 		QuestProgress = false,
@@ -649,6 +650,14 @@ local function updateErrorBlocker()
 	B:GetModule("Misc"):UpdateErrorBlocker()
 end
 
+local function toggleBossBanner()
+	B:GetModule("Misc"):ToggleBossBanner()
+end
+
+local function toggleBossEmote()
+	B:GetModule("Misc"):ToggleBossEmote()
+end
+
 local function updateSkinAlpha()
 	for _, frame in pairs(C.frames) do
 		frame:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
@@ -976,21 +985,22 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
+		{1, "Misc", "HideTalking", L["No Talking"]},
+		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
+		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
+		{1, "Misc", "HideBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
+		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
+		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
+		{},--blank
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
-		{1, "Misc", "HideTalking", L["No Talking"]},
-		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
-		{1, "Misc", "Focuser", L["Easy Focus"]},
-		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
-		{},--blank
 		{1, "Misc", "Mail", L["Mail Tool"]},
 		{1, "Misc", "TradeTabs", L["TradeTabs"], true},
 		{1, "Misc", "PetFilter", L["Show PetFilter"]},
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", true, nil, updateScreenShot},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", nil, nil, updateFasterLoot},
-		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
-		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
-		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", true},
+		{1, "Misc", "Focuser", L["Easy Focus"], true},
+		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*"},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

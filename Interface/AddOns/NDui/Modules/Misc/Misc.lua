@@ -62,6 +62,8 @@ function M:OnLogin()
 	M:BlockStrangerInvite()
 	M:OverrideAWQ()
 	M:ReplaceContaminantName()
+	M:ToggleBossBanner()
+	M:ToggleBossEmote()
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
@@ -108,6 +110,27 @@ function M:OnLogin()
 		if not owner then return end
 		if owner:GetID() < 1 then return end
 		_AddonTooltip_Update(owner)
+	end
+end
+
+-- Hide boss banner
+function M:ToggleBossBanner()
+	if NDuiDB["Misc"]["HideBanner"] then
+		BossBanner:UnregisterAllEvents()
+	else
+		BossBanner:RegisterEvent("BOSS_KILL")
+		BossBanner:RegisterEvent("ENCOUNTER_LOOT_RECEIVED")
+	end
+end
+
+-- Hide boss emote
+function M:ToggleBossEmote()
+	if NDuiDB["Misc"]["HideBossEmote"] then
+		RaidBossEmoteFrame:UnregisterAllEvents()
+	else
+		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
+		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_WHISPER")
+		RaidBossEmoteFrame:RegisterEvent("CLEAR_BOSS_EMOTES")
 	end
 end
 
