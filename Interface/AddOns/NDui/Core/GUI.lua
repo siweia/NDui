@@ -295,7 +295,6 @@ local defaultSettings = {
 		GemNEnchant = true,
 		AzeriteTraits = true,
 		MissingStats = true,
-		HideErrors = true,
 		SoloInfo = true,
 		RareAlerter = true,
 		AlertinChat = false,
@@ -651,10 +650,6 @@ local function updateFasterLoot()
 	B:GetModule("Misc"):UpdateFasterLoot()
 end
 
-local function updateErrorBlocker()
-	B:GetModule("Misc"):UpdateErrorBlocker()
-end
-
 local function toggleBossBanner()
 	B:GetModule("Misc"):ToggleBossBanner()
 end
@@ -996,7 +991,6 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
 		{1, "Misc", "HideBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
-		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
 		{},--blank
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
