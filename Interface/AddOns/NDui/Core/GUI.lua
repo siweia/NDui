@@ -522,6 +522,10 @@ local function refreshNameplates()
 	B:GetModule("UnitFrames"):RefreshAllPlates()
 end
 
+local function togglePlatePower()
+	B:GetModule("UnitFrames"):TogglePlatePower()
+end
+
 local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
@@ -801,7 +805,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
-		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"]},
+		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},

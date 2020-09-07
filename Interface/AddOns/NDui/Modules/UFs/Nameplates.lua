@@ -726,7 +726,6 @@ function UF:UpdateTargetClassPower()
 	else
 		isTargetClassPower = false
 		bar:SetParent(playerPlate.Health)
-		bar:SetScale(1)
 		bar:ClearAllPoints()
 		bar:SetPoint("BOTTOMLEFT", playerPlate.Health, "TOPLEFT", 0, 3)
 		bar:Show()
@@ -958,15 +957,22 @@ function UF:CreatePlayerPlate()
 	UF:StaggerBar(self)
 	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
 
-	if NDuiDB["Nameplate"]["PPPowerText"] then
-		local textFrame = CreateFrame("Frame", nil, self.Power)
-		textFrame:SetAllPoints()
-		local power = B.CreateFS(textFrame, 14, "")
-		self:Tag(power, "[pppower]")
-	end
+	local textFrame = CreateFrame("Frame", nil, self.Power)
+	textFrame:SetAllPoints()
+	textFrame:SetFrameLevel(self:GetFrameLevel() + 5)
+	self.powerText = B.CreateFS(textFrame, 14)
+	self:Tag(self.powerText, "[pppower]")
+	UF:TogglePlatePower()
 
 	UF:UpdateTargetClassPower()
 	UF:TogglePlateVisibility()
+end
+
+function UF:TogglePlatePower()
+	local plate = _G.oUF_PlayerPlate
+	if not plate then return end
+
+	plate.powerText:SetShown(NDuiDB["Nameplate"]["PPPowerText"])
 end
 
 function UF:TogglePlateVisibility()
