@@ -45,7 +45,8 @@ C.WhiteList = {
 	[255970]	= true,
 	[255972]	= true,
 
-	[320293]	= true,		-- 伤逝剧场，One With Death
+	[320293]	= true,		-- 伤逝剧场，融入死亡
+	[336449]	= true,		-- 凋魂之殇，玛卓克萨斯之墓
 
 	[228318]	= true,		-- 激怒
 	[226510]	= true,		-- 血池
@@ -202,6 +203,8 @@ C.CustomUnits = {
 	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
 	[GetSectionInfo(20561)] = true,	-- 惊魂淤血
 	[GetSectionInfo(21329)] = true,	-- 聚合增生
+
+	[GetSectionInfo(22161)] = true,	-- 魔药炸弹
 }
 
 -- 显示能量值的单位
