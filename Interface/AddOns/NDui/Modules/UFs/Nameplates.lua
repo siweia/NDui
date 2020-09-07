@@ -957,8 +957,8 @@ function UF:CreatePlayerPlate()
 	UF:StaggerBar(self)
 	if NDuiDB["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
 
-	local textFrame = CreateFrame("Frame", nil, self)
-	textFrame:SetAllPoints(self.Power)
+	local textFrame = CreateFrame("Frame", nil, self.Power)
+	textFrame:SetAllPoints()
 	textFrame:SetFrameLevel(self:GetFrameLevel() + 5)
 	self.powerText = B.CreateFS(textFrame, 14)
 	self:Tag(self.powerText, "[pppower]")
