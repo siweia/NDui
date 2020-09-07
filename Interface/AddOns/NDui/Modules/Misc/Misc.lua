@@ -48,25 +48,22 @@ function M:OnLogin()
 	end
 
 	-- Init
-	self:NakedIcon()
-	self:ExtendInstance()
-	self:VehicleSeatMover()
-	self:UIWidgetFrameMover()
-	self:MoveDurabilityFrame()
-	self:MoveTicketStatusFrame()
-	self:UpdateScreenShot()
-	self:UpdateFasterLoot()
-	self:UpdateErrorBlocker()
-	self:TradeTargetInfo()
-	self:MoverQuestTracker()
-	self:BlockStrangerInvite()
-	self:OverrideAWQ()
-	self:ReplaceContaminantName()
-
-	-- Hide Bossbanner
-	if NDuiDB["Misc"]["HideBanner"] then
-		BossBanner:UnregisterAllEvents()
-	end
+	M:NakedIcon()
+	M:ExtendInstance()
+	M:VehicleSeatMover()
+	M:UIWidgetFrameMover()
+	M:MoveDurabilityFrame()
+	M:MoveTicketStatusFrame()
+	M:UpdateScreenShot()
+	M:UpdateFasterLoot()
+	M:UpdateErrorBlocker()
+	M:TradeTargetInfo()
+	M:MoverQuestTracker()
+	M:BlockStrangerInvite()
+	M:OverrideAWQ()
+	M:ReplaceContaminantName()
+	M:ToggleBossBanner()
+	M:ToggleBossEmote()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -108,6 +105,27 @@ function M:OnLogin()
 		if not owner then return end
 		if owner:GetID() < 1 then return end
 		_AddonTooltip_Update(owner)
+	end
+end
+
+-- Hide Bossbanner
+function M:ToggleBossBanner()
+	if NDuiDB["Misc"]["HideBanner"] then
+		BossBanner:UnregisterAllEvents()
+	else
+		BossBanner:RegisterEvent("BOSS_KILL")
+		BossBanner:RegisterEvent("ENCOUNTER_LOOT_RECEIVED")
+	end
+end
+
+-- Hide boss emote
+function M:ToggleBossEmote()
+	if NDuiDB["Misc"]["HideBossEmote"] then
+		RaidBossEmoteFrame:UnregisterAllEvents()
+	else
+		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
+		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_WHISPER")
+		RaidBossEmoteFrame:RegisterEvent("CLEAR_BOSS_EMOTES")
 	end
 end
 

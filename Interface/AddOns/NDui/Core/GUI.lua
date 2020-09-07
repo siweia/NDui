@@ -304,6 +304,7 @@ local defaultSettings = {
 		AutoQuest = false,
 		HideTalking = true,
 		HideBanner = true,
+		HideBossEmote = false,
 		PetFilter = true,
 		QuestNotifier = false,
 		QuestProgress = false,
@@ -606,6 +607,14 @@ end
 
 local function updateErrorBlocker()
 	B:GetModule("Misc"):UpdateErrorBlocker()
+end
+
+local function toggleBossBanner()
+	B:GetModule("Misc"):ToggleBossBanner()
+end
+
+local function toggleBossEmote()
+	B:GetModule("Misc"):ToggleBossEmote()
 end
 
 local function updateSkinAlpha()
@@ -926,9 +935,10 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
 		{1, "Misc", "HideTalking", L["No Talking"]},
-		{1, "Misc", "HideBanner", L["Hide Bossbanner"], true},
+		{1, "Misc", "HideBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
 		{1, "Misc", "Focuser", L["Easy Focus"]},
 		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
+		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
 		{},--blank
 		{1, "Misc", "Mail", L["Mail Tool"]},
 		{1, "Misc", "TradeTabs", L["TradeTabs"], true},
