@@ -62,6 +62,8 @@ function M:OnLogin()
 	M:BlockStrangerInvite()
 	M:OverrideAWQ()
 	M:ReplaceContaminantName()
+	M:ToggleBossBanner()
+	M:ToggleBossEmote()
 
 	-- Hide Bossbanner
 	if NDuiDB["Misc"]["HideBanner"] then
@@ -111,7 +113,7 @@ function M:OnLogin()
 	end
 end
 
--- Hide Bossbanner
+-- Hide boss banner
 function M:ToggleBossBanner()
 	if NDuiDB["Misc"]["HideBanner"] then
 		BossBanner:UnregisterAllEvents()
