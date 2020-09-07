@@ -239,6 +239,7 @@ local defaultSettings = {
 		ColorBorder = false,
 		QuestIndicator = true,
 		NameOnlyMode = false,
+		PPGCDTicker = true,
 	},
 	Skins = {
 		DBM = true,
@@ -530,6 +531,10 @@ local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
 
+local function toggleGCDTicker()
+	B:GetModule("UnitFrames"):ToggleGCDTicker()
+end
+
 local function updatePlateScale()
 	B:GetModule("UnitFrames"):UpdatePlateScale()
 end
@@ -807,6 +812,7 @@ local optionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], true},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
+		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
