@@ -26,11 +26,6 @@ local function SetFrameSize(frame, size, num)
 	end
 end
 
-local function VehicleButtonOnClick(self)
-	if UnitOnTaxi("player") then TaxiRequestEarlyLanding() else VehicleExit() end
-	self:SetChecked(false)
-end
-
 function Bar:CreateLeaveVehicle()
 	local num = 1
 	local buttonList = {}
@@ -48,14 +43,17 @@ function Bar:CreateLeaveVehicle()
 	button:RegisterForClicks("AnyUp")
 	button.icon:SetTexture("INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up")
 	button.icon:SetTexCoord(.216, .784, .216, .784)
-	button:SetNormalTexture(nil)
-	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	button:GetPushedTexture():SetTexture(DB.textures.pushed)
-	B.SetBD(button)
+	button.__lockIcon = true
 
-	button:SetScript("OnClick", VehicleButtonOnClick)
 	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
 	button:SetScript("OnLeave", B.HideTooltip)
+	button:SetScript("OnClick", function(self)
+		if UnitOnTaxi("player") then TaxiRequestEarlyLanding() else VehicleExit() end
+		self:SetChecked(true)
+	end)
+	button:SetScript("OnShow", function(self)
+		self:SetChecked(false)
+	end)
 
 	frame.buttonList = buttonList
 	SetFrameSize(frame, cfg.size, num)

@@ -210,7 +210,9 @@ function Bar:StyleActionButton(button, cfg)
 	SetupBackdrop(icon)
 
 	--textures
-	SetupTexture(icon, cfg.icon, "SetTexture", icon)
+	if not button.__lockIcon then
+		SetupTexture(icon, cfg.icon, "SetTexture", icon)
+	end
 	SetupTexture(flash, cfg.flash, "SetTexture", flash)
 	SetupTexture(flyoutBorder, cfg.flyoutBorder, "SetTexture", flyoutBorder)
 	SetupTexture(flyoutBorderShadow, cfg.flyoutBorderShadow, "SetTexture", flyoutBorderShadow)
@@ -353,6 +355,8 @@ function Bar:StyleAllActionButtons(cfg)
 	for i = 1, NUM_POSSESS_SLOTS do
 		Bar:StyleActionButton(_G["PossessButton"..i], cfg)
 	end
+	--leave vehicle
+	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"], cfg)
 	--extra action button
 	Bar:StyleExtraActionButton(cfg)
 	--spell flyout
