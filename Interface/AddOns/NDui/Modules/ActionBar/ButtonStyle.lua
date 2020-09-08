@@ -210,7 +210,9 @@ function Bar:StyleActionButton(button, cfg)
 	SetupBackdrop(icon)
 
 	--textures
-	SetupTexture(icon, cfg.icon, "SetTexture", icon)
+	if not button.__lockIcon then
+		SetupTexture(icon, cfg.icon, "SetTexture", icon)
+	end
 	SetupTexture(flash, cfg.flash, "SetTexture", flash)
 	SetupTexture(flyoutBorder, cfg.flyoutBorder, "SetTexture", flyoutBorder)
 	SetupTexture(flyoutBorderShadow, cfg.flyoutBorderShadow, "SetTexture", flyoutBorderShadow)
