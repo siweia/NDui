@@ -61,19 +61,15 @@ function A:ChantLumos(self)
 	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 19434, true)
 		UpdateCooldown(self.lumos[2], 257044, true)
-
-		do
-			local button = self.lumos[3]
-			UpdateCooldown(button, 53351)
-			UpdateSpellStatus(button, 53351)
-		end
+		UpdateBuff(self.lumos[3], 257622, 257622)
 
 		do
 			local button = self.lumos[4]
 			if IsPlayerSpell(260402) then
 				UpdateBuff(button, 260402, 260402, true, false, true)
-			elseif IsPlayerSpell(120360) then
-				UpdateCooldown(button, 120360, true)
+			elseif IsPlayerSpell(321460) then
+				UpdateCooldown(button, 53351)
+				UpdateSpellStatus(button, 53351)
 			else
 				UpdateBuff(button, 260242, 260242)
 			end
