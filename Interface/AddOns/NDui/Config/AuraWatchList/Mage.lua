@@ -70,6 +70,7 @@ local list = {
 		{AuraID = 264774, UnitID = "player"},	-- 三之准则
 		{AuraID = 269651, UnitID = "player"},	-- 火焰冲撞
 		{AuraID = 190446, UnitID = "player"},	-- 冰冷智慧
+		{AuraID = 321363, UnitID = "player"},	-- z专注魔法
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 44457, UnitID = "focus", Caster = "player"},	-- 活动炸弹
