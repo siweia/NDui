@@ -96,6 +96,7 @@ local list = {
 		{AuraID = 288613, UnitID = "player"},	-- 百发百中
 		{AuraID = 274447, UnitID = "player"},	-- 千里之目
 		{AuraID = 260243, UnitID = "player"},	-- 乱射
+		{AuraID = 342076, UnitID = "player"},	-- 行云流水
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱
