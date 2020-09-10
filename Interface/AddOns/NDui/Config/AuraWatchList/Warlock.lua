@@ -12,6 +12,7 @@ local list = {
 		{AuraID = 196099, UnitID = "player"},	-- 牺牲魔典
 	},
 	["Target Aura"] = {		-- 目标光环组
+		{AuraID = 603, UnitID = "target", Caster = "player"},		-- 末日降临
 		{AuraID = 980, UnitID = "target", Caster = "player"},		-- 痛楚
 		{AuraID = 710, UnitID = "target", Caster = "player"},		-- 放逐术
 		{AuraID = 6358, UnitID = "target", Caster = "pet"},			-- 魅惑
@@ -25,18 +26,13 @@ local list = {
 		{AuraID = 30283, UnitID = "target", Caster = "player"},		-- 暗影之怒
 		{AuraID = 80240, UnitID = "target", Caster = "player"},		-- 浩劫
 		{AuraID = 146739, UnitID = "target", Caster = "player"},	-- 腐蚀术
-		{AuraID = 233490, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233496, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233497, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233498, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233499, UnitID = "target", Caster = "player"},	-- 痛苦无常
+		{AuraID = 316099, UnitID = "target", Caster = "player"},	-- 痛苦无常
 		{AuraID = 118699, UnitID = "target", Caster = "player"},	-- 恐惧
 		{AuraID = 205181, UnitID = "target", Caster = "player"},	-- 暗影烈焰
 		{AuraID = 157736, UnitID = "target", Caster = "player"},	-- 献祭
 		{AuraID = 196414, UnitID = "target", Caster = "player"},	-- 根除
 		{AuraID = 199890, UnitID = "target", Caster = "player"},	-- 语言诅咒
 		{AuraID = 199892, UnitID = "target", Caster = "player"},	-- 虚弱诅咒
-		{AuraID = 265412, UnitID = "target", Caster = "player"},	-- 厄运
 		{AuraID = 270569, UnitID = "target", Caster = "player"},	-- 来自阴影
 		{AuraID = 278350, UnitID = "target", Caster = "player"},	-- 邪恶污染
 		{AuraID = 205179, UnitID = "target", Caster = "player"},	-- 诡异魅影
@@ -81,10 +77,6 @@ local list = {
 	["Spell Cooldown"] = {	-- 冷却计时组
 		{SlotID = 13},		-- 饰品1
 		{SlotID = 14},		-- 饰品2
-		{TotemID = 1},		-- 地狱火
-		{TotemID = 2},		-- 地狱火2？
-		{TotemID = 3},		-- 地狱火3？
-		{TotemID = 4},		-- 地狱火4？
 	},
 }
 
