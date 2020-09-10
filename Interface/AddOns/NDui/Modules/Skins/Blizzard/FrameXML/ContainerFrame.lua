@@ -1,6 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local MAX_CONTAINER_ITEMS = 36
+
+local function replaceSortTexture(texture)
+	texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version
+	texture:SetTexCoord(unpack(DB.TexCoord))
+end
+
 tinsert(C.defaultThemes, function()
 	if NDuiDB["Bags"]["Enable"] then return end
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
@@ -12,11 +19,7 @@ tinsert(C.defaultThemes, function()
 		local con = _G["ContainerFrame"..i]
 		local name = _G["ContainerFrame"..i.."Name"]
 
-		for j = 1, 5 do
-			select(j, con:GetRegions()):SetAlpha(0)
-		end
-		select(7, con:GetRegions()):SetAlpha(0)
-
+		B.StripTextures(con, true)
 		con.PortraitButton.Highlight:SetTexture("")
 
 		name:ClearAllPoints()
@@ -79,10 +82,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	local function replaceSortTexture(texture)
-		texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version?
-		texture:SetTexCoord(unpack(DB.TexCoord))
-	end
 	replaceSortTexture(BagItemAutoSortButton:GetNormalTexture())
 	replaceSortTexture(BagItemAutoSortButton:GetPushedTexture())
 	B.CreateBDFrame(BagItemAutoSortButton)
