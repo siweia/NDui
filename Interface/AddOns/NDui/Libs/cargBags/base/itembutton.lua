@@ -61,12 +61,16 @@ function ItemButton:New(bagID, slotID)
 	button:Show()
 	button:HookScript("OnEnter", button.OnEnter)
 	button:HookScript("OnLeave", button.OnLeave)
+	button.ttt=tpl
 	if bagID == -3 then
 		button.GetInventorySlot = ReagentButtonInventorySlot
+		button.UpdateTooltip = BankFrameItemButton_OnEnter
 	elseif bagID == -1 then
 		button.GetInventorySlot = ButtonInventorySlot
+		button.UpdateTooltip = BankFrameItemButton_OnEnter
+	else
+		button.UpdateTooltip = ContainerFrameItemButton_OnUpdate
 	end
-	button.UpdateTooltip = button:GetScript("OnEnter") -- Fix tooltip update
 
 	return button
 end
