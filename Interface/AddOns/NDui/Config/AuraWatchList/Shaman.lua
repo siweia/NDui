@@ -69,6 +69,7 @@ local list = {
 		{AuraID = 224126, UnitID = "player"},	-- 冰
 		{AuraID = 224127, UnitID = "player"},	-- 电
 		{AuraID = 187878, UnitID = "player"},	-- 毁灭闪电
+		{AuraID = 288675, UnitID = "player"},	-- 浪潮汹涌
 		{AuraID = 320125, UnitID = "player"},	-- 回响震击
 		{AuraID = 344179, UnitID = "player", Combat = true},	-- 漩涡武器
 	},
