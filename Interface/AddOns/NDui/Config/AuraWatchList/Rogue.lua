@@ -34,7 +34,7 @@ local list = {
 		{AuraID = 245389, UnitID = "target", Caster = "player"},	-- 淬毒之刃
 		{AuraID = 121411, UnitID = "target", Caster = "player"},	-- 猩红风暴
 		{AuraID = 255909, UnitID = "target", Caster = "player"},	-- 欺凌
-		{AuraID = 91021, UnitID = "target", Caster = "player"},		-- 洞悉弱点
+		{AuraID = 316220, UnitID = "target", Caster = "player"},	-- 洞悉弱点
 		{AuraID = 315341, UnitID = "target", Caster = "player"},	-- 正中眉心
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
