@@ -199,6 +199,26 @@ DB.ReminderBuffs = {
 			instance = true,
 			pvp = true,
 		},
+		{	spells = {
+				[33757] = true,		-- 风怒武器
+			},
+			depend = 33757,
+			combat = true,
+			instance = true,
+			pvp = true,
+			weaponIndex = 1,
+			spec = 2,
+		},
+		{	spells = {
+				[318038] = true,	-- 火舌武器
+			},
+			depend = 318038,
+			combat = true,
+			instance = true,
+			pvp = true,
+			weaponIndex = 2,
+			spec = 2,
+		},
 	},
 	ROGUE = {
 		{	spells = {	-- 伤害类毒药
