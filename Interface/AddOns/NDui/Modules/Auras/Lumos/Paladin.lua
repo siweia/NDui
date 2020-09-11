@@ -31,8 +31,8 @@ end
 
 function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		UpdateCooldown(self.lumos[1], 20473, true)
-		UpdateCooldown(self.lumos[2], 85222, true)
+		UpdateCooldown(self.lumos[1], 35395, true)
+		UpdateCooldown(self.lumos[2], 20473, true)
 
 		do
 			local button = self.lumos[3]
@@ -65,9 +65,9 @@ function A:ChantLumos(self)
 		do
 			local button = self.lumos[1]
 			if IsPlayerSpell(267610) then
-				UpdateBuff(button, 267610, 267611, false, "END")
-			elseif IsPlayerSpell(267798) then
-				UpdateDebuff(button, 267798, 267799, true, true)
+				UpdateBuff(button, 267610, 267611)
+			elseif IsPlayerSpell(343527) then
+				UpdateDebuff(button, 343527, 343527, true)
 			else
 				UpdateBuff(button, 20271, 269571, true)
 			end
@@ -75,46 +75,20 @@ function A:ChantLumos(self)
 
 		do
 			local button = self.lumos[2]
-			if IsPlayerSpell(24275) then
-				UpdateCooldown(button, 24275)
-				UpdateSpellStatus(button, 24275)
-			elseif IsPlayerSpell(231832) then
-				UpdateBuff(button, 184575, 231832, true)
-			else
-				UpdateBuff(button, 35395, 209785, true)
-			end
+			UpdateCooldown(button, 24275)
+			UpdateSpellStatus(button, 24275)
 		end
 
-		do
-			local button = self.lumos[3]
-			if IsPlayerSpell(271580) then
-				UpdateBuff(button, 271580, 271581)
-			elseif IsPlayerSpell(205228) then
-				UpdateCooldown(button, 205228, true)
-			else
-				UpdateCooldown(button, 255937, true)
-			end
-		end
+		UpdateCooldown(self.lumos[3], 255937, true)
 
 		do
 			local button = self.lumos[4]
 			if IsPlayerSpell(223817) then
-				UpdateBuff(button, 223817, 223819, false, true)
-			elseif IsPlayerSpell(84963) then
-				UpdateBuff(button, 84963, 84963, false, "END")
+				UpdateBuff(button, 223817, 223819, true, true)
+			elseif IsPlayerSpell(105809) then
+				UpdateBuff(button, 105809, 105809, true)
 			else
-				button.Icon:SetTexture(GetSpellTexture(184662))
-				local name, _, duration, expire, _, _, value = GetUnitAura("player", 184662, "HELPFUL")
-				if name then
-					button.Count:SetText(B.Numb(value))
-					button.CD:SetCooldown(expire-duration, duration)
-					button.CD:Show()
-					button.Icon:SetDesaturated(false)
-				else
-					button.Count:SetText("")
-					UpdateCooldown(button, 184662)
-				end
-				button.Count:SetTextColor(1, 1, 1)
+				UpdateBuff(button, 152262, 152262, true)
 			end
 		end
 
