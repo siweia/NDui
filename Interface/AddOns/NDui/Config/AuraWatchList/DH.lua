@@ -26,6 +26,7 @@ local list = {
 		{AuraID = 211881, UnitID = "target", Caster = "player"},	-- 邪能爆发
 		{AuraID = 247456, UnitID = "target", Caster = "player"},	-- 脆弱
 		{AuraID = 258860, UnitID = "target", Caster = "player"},	-- 黑暗鞭笞
+		{AuraID = 268178, UnitID = "target", Caster = "player"},	-- 虚空掠夺者
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 162264, UnitID = "player"},	-- 恶魔变形

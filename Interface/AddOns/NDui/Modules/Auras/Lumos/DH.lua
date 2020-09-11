@@ -27,15 +27,7 @@ end
 
 function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		do
-			local button = self.lumos[1]
-			if IsPlayerSpell(258920) then
-				UpdateBuff(button, 258920, 258920, true)
-			else
-				UpdateSpellStatus(button, 162794)
-			end
-		end
-
+		UpdateBuff(self.lumos[1], 258920, 258920, true)
 		UpdateBuff(self.lumos[2], 188499, 188499, true, true)
 		UpdateCooldown(self.lumos[3], 198013, true)
 		UpdateCooldown(self.lumos[4], 179057, true)
@@ -47,9 +39,9 @@ function A:ChantLumos(self)
 			button.Count:SetText(GetSpellCount(spellID))
 		end
 
-		UpdateBuff(self.lumos[2], 178740, 178740, true)
-		UpdateDebuff(self.lumos[3], 204021, 207744, true, true)
-		UpdateBuff(self.lumos[4], 203720, 203819, true, "END")
+		UpdateBuff(self.lumos[2], 258920, 258920, true)
+		UpdateBuff(self.lumos[3], 203720, 203819, true, "END")
+		UpdateDebuff(self.lumos[4], 204021, 207771, true, true)
 		UpdateBuff(self.lumos[5], 187827, 187827, true, true)
 	end
 end
