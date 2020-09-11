@@ -31,8 +31,8 @@ function A:ChantLumos(self)
 
 		do
 			local button = self.lumos[3]
-			if IsPlayerSpell(260694) then
-				UpdateDebuff(button, 260694, 269808, true)
+			if IsPlayerSpell(320125) then
+				UpdateBuff(button, 320125, 320125, true)
 			elseif IsPlayerSpell(117014) then
 				UpdateCooldown(button, 117014, true)
 			else
@@ -58,45 +58,27 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateCooldown(self.lumos[5], 198067, true)
+		UpdateTotemAura(self.lumos[5], 135790, 198067)
 	elseif GetSpecialization() == 2 then
-		UpdateBuff(self.lumos[1], 194084, 194084, false, "END")
+		UpdateCooldown(self.lumos[1], 17364, true)
 
 		do
 			local button = self.lumos[2]
-			if IsPlayerSpell(210853) then
-				UpdateBuff(button, 210853, 196834)
-			elseif IsPlayerSpell(210727) then
-				UpdateCooldown(button, 187837, true)
-			else
-				UpdateDebuff(button, 192087, 268429)
-			end
-		end
-
-		do
-			local button = self.lumos[3]
-			if IsPlayerSpell(197992) then
-				local name, _, duration, expire = GetUnitAura("player", 202004, "HELPFUL")
-				if name then
-					button.CD:SetCooldown(expire-duration, duration)
-					button.CD:Show()
-					button.Icon:SetDesaturated(false)
-					button.Count:SetText("")
-					button.Icon:SetTexture(GetSpellTexture(197992))
-				else
-					UpdateCooldown(button, 193786, true)
-				end
+			if IsPlayerSpell(117014) then
+				UpdateCooldown(button, 117014, true)
 			elseif IsPlayerSpell(262647) then
 				UpdateBuff(button, 262647, 262652)
 			else
-				UpdateCooldown(button, 193786, true)
+				UpdateDebuff(button, 60103, 334168, true)
 			end
 		end
 
+		UpdateBuff(self.lumos[3], 344179, 344179)
+
 		do
 			local button = self.lumos[4]
-			if IsPlayerSpell(197211) then
-				UpdateBuff(button, 197211, 197211)
+			if IsPlayerSpell(320137) then
+				UpdateCooldown(button, 320137, true)
 			elseif IsPlayerSpell(197214) then
 				UpdateCooldown(button, 197214, true)
 			else
@@ -111,7 +93,7 @@ function A:ChantLumos(self)
 			elseif IsPlayerSpell(114051) then
 				UpdateBuff(button, 114051, 114051, true, true)
 			else
-				UpdateCooldown(button, 51533, true)
+				UpdateTotemAura(button, 237577, 51533)
 			end
 		end
 	elseif GetSpecialization() == 3 then
