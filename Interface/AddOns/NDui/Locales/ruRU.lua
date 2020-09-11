@@ -422,6 +422,7 @@ L["Dungeons Intro"] = "|nВыберите подземелья, к которы�
 L["Raid Intro"] = "|nВыберите рейды, к которым относится ID."
 L["ExplosiveCount"] = "Кол-во сфер - "
 L["Explosive Alert"] = "Кол-во сфер в M+"
+L["ExplosiveAlertTip"] = "|nIf checked, send explosives count in your group after mythic+ dungeon completed." -- need translation
 L["UFs QuakeTimer"] = "Показывать таймер землетрясений"
 L["QuakeTimer"] = "Таймер землетрясений"
 L["Castbar LagString"] = "Задержка на полосе заклинаний"
