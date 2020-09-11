@@ -10,9 +10,15 @@ local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 local GetMoney, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo = GetMoney, GetNumWatchedTokens, GetBackpackCurrencyInfo, GetCurrencyInfo
 local GetContainerNumSlots, GetContainerItemLink, GetItemInfo, GetContainerItemInfo, UseContainerItem = GetContainerNumSlots, GetContainerItemLink, GetItemInfo, GetContainerItemInfo, UseContainerItem
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
+local Ambiguate = Ambiguate
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
+
+local crossRealms = GetAutoCompleteRealms()
+if not crossRealms or #crossRealms == 0 then
+	crossRealms = {[1]=myRealm}
+end
 
 local function getClassIcon(class)
 	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
@@ -46,7 +52,9 @@ info.onEvent = function(self, event)
 	self.text:SetText(module:GetMoneyString(newMoney))
 
 	if not NDuiADB["totalGold"][myRealm] then NDuiADB["totalGold"][myRealm] = {} end
-	NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
+	if not NDuiADB["totalGold"][myRealm][myName] then NDuiADB["totalGold"][myRealm][myName] = {} end
+	NDuiADB["totalGold"][myRealm][myName][1] = GetMoney()
+	NDuiADB["totalGold"][myRealm][myName][2] = DB.MyClass
 
 	oldMoney = newMoney
 end
@@ -56,7 +64,11 @@ StaticPopupDialogs["RESETGOLD"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		wipe(NDuiADB["totalGold"][myRealm])
+		for _, realm in pairs(crossRealms) do
+			if NDuiADB["totalGold"][realm] then
+				wipe(NDuiADB["totalGold"][realm])
+			end
+		end
 		NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
 	end,
 	whileDead = 1,
@@ -93,12 +105,17 @@ info.onEnter = function(self)
 
 	local totalGold = 0
 	GameTooltip:AddLine(L["RealmCharacter"], .6,.8,1)
-	local thisRealmList = NDuiADB["totalGold"][myRealm]
-	for k, v in pairs(thisRealmList) do
-		local gold, class = unpack(v)
-		local r, g, b = B.ClassColor(class)
-		GameTooltip:AddDoubleLine(getClassIcon(class)..k, module:GetMoneyString(gold), r,g,b, 1,1,1)
-		totalGold = totalGold + gold
+	for _, realm in pairs(crossRealms) do
+		local thisRealmList = NDuiADB["totalGold"][realm]
+		if thisRealmList then
+			for k, v in pairs(thisRealmList) do
+				local name = Ambiguate(k.."-"..realm, "none")
+				local gold, class = unpack(v)
+				local r, g, b = B.ClassColor(class)
+				GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+				totalGold = totalGold + gold
+			end
+		end
 	end
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
