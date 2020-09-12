@@ -63,6 +63,8 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 338747) -- 净化冲击波
 module:RegisterDebuff(TIER, INSTANCE, 0, 327481) -- 黑暗长枪
 module:RegisterDebuff(TIER, INSTANCE, 0, 322818) -- 失去信心
 module:RegisterDebuff(TIER, INSTANCE, 0, 322817) -- 疑云密布
+module:RegisterDebuff(TIER, INSTANCE, 0, 324154) -- 暗影迅步
+module:RegisterDebuff(TIER, INSTANCE, 0, 335805) -- 执政官的壁垒
 
 INSTANCE = 1185 -- 赎罪大厅
 RegisterSeasonSpells(INSTANCE)

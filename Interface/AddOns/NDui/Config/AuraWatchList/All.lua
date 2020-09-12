@@ -299,6 +299,7 @@ local list = {
 		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
 		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
 		{AuraID = 323569, UnitID = "player", Flash = true},	-- 彼界，溅洒精魂
+		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
 
 		{AuraID = 260954, UnitID = "player"},	-- 铁之凝视，围攻
 		{AuraID = 272421, UnitID = "player"},	-- 瞄准火炮，围攻
