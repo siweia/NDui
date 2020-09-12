@@ -77,6 +77,7 @@ info.eventList = {
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
 		local bg = B.SetBD(inform)
+		bg:SetBackdropColor(1, 0, 0, .5)
 		bg:SetBackdropBorderColor(1, 0, 0)
 		B.CreateFS(inform, 14, L["Low Durability"])
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
