@@ -79,8 +79,8 @@ local function ReskinXPBar(self)
 end
 
 local function ReskinGarrMaterial(self)
+	B.StripTextures(self.MaterialFrame)
 	self.MaterialFrame.Icon:SetTexCoord(unpack(DB.TexCoord))
-	self.MaterialFrame:GetRegions():Hide()
 	local bg = B.CreateBDFrame(self.MaterialFrame, .25)
 	bg:SetPoint("TOPLEFT", 5, -5)
 	bg:SetPoint("BOTTOMRIGHT", -5, 6)
@@ -142,6 +142,9 @@ local function ReskinMissionComplete(self)
 		B.Reskin(missionComplete.CompleteFrame.SpeedButton)
 		B.Reskin(missionComplete.RewardsScreen.FinalRewardsPanel.ContinueButton)
 	end
+	if missionComplete.MissionInfo then
+		B.StripTextures(missionComplete.MissionInfo)
+	end
 end
 
 local function ReskinFollowerTab(self)
@@ -182,7 +185,7 @@ local function UpdateFollowerList(self)
 			local hl = button:GetHighlightTexture()
 			hl:SetColorTexture(r, g, b, .1)
 			hl:ClearAllPoints()
-			hl:SetInside(button)
+			hl:SetInside(button.bg)
 
 			if portrait then
 				B.ReskinGarrisonPortrait(portrait)
@@ -339,6 +342,7 @@ local function reskinFollowerBoard(self, group)
 	for frame in self[group.."FramePool"]:EnumerateActive() do
 		if not frame.styled then
 			B.ReskinGarrisonPortrait(frame)
+			frame.PuckShadow:SetAlpha(0)
 			reskinAbilityIcon(frame.AbilityOne, "BOTTOMRIGHT", 1)
 			reskinAbilityIcon(frame.AbilityTwo, "TOPRIGHT", -1)
 
@@ -535,8 +539,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		for _, reward in pairs(button.Rewards) do
 			reward:GetRegions():Hide()
-			reward.IconBorder:SetAlpha(0)
-			B.ReskinIcon(reward.Icon)
+			reward.bg = B.ReskinIcon(reward.Icon)
+			B.ReskinIconBorder(reward.IconBorder)
 			reward:ClearAllPoints()
 			reward:SetPoint("TOPRIGHT", -4, -4)
 		end
@@ -621,15 +625,19 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards)
-		if not self.numRewardsStyled then self.numRewardsStyled = 0 end
+	hooksecurefunc("GarrisonFollowerButton_SetCounterButton", function(button, _, index)
+		local counter = button.Counters[index]
+		if counter and not counter.styled then
+			B.ReskinIcon(counter.Icon)
+			counter.styled = true
+		end
+	end)
 
-		while self.numRewardsStyled < #rewards do
-			self.numRewardsStyled = self.numRewardsStyled + 1
-			local reward = self.Rewards[self.numRewardsStyled]
-			reward:GetRegions():Hide()
-			reward.IconBorder:SetAlpha(0)
-			B.ReskinIcon(reward.Icon)
+	hooksecurefunc("GarrisonMissionButton_SetReward", function(frame, rewards)
+		if not frame.bg then
+			frame:GetRegions():Hide()
+			frame.bg = B.ReskinIcon(frame.Icon)
+			B.ReskinIconBorder(frame.IconBorder)
 		end
 	end)
 
@@ -912,6 +920,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
 
 	B.Reskin(HealFollowerButtonTemplate)
+	local bg = B.CreateBDFrame(CovenantMissionFrame.FollowerTab, .25)
+	bg:SetPoint("TOPLEFT", 3, 2)
+	bg:SetPoint("BOTTOMRIGHT", -3, -10)
 	CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
@@ -920,14 +931,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", ReskinMissionBoards)
 	CovenantMissionFrame.MissionComplete.Board:HookScript("OnShow", ReskinMissionBoards)
-
-	hooksecurefunc(CovenantMissionFrame.MissionComplete.RewardsScreen, "SetRewards", function(self)
-		for rewardFrame in self.rewardsPool:EnumerateActive() do
-			if rewardFrame.Icon and not rewardFrame.bg then
-				rewardFrame.bg = B.ReskinIcon(rewardFrame.Icon)
-			end
-		end
-	end)
 
 	-- Addon supports
 
