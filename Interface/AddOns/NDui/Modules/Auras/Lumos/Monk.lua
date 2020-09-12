@@ -45,20 +45,9 @@ function A:ChantLumos(self)
 			button.Icon:SetTexture(GetSpellTexture(115069))
 		end
 
-		do
-			local button = self.lumos[2]
-			local count = GetSpellCount(115072)
-			button.Count:SetText(count)
-			if count > 0 then
-				button.Icon:SetDesaturated(false)
-			else
-				button.Icon:SetDesaturated(true)
-			end
-			button.Icon:SetTexture(GetSpellTexture(115072))
-		end
-
+		UpdateBuff(self.lumos[2], 322507, 322507, true)
 		UpdateBuff(self.lumos[3], 115308, 215479, true, "END")
-		UpdateBuff(self.lumos[4], 195630, 195630, false, "END")
+		A:UpdateTotemAura(self.lumos[4], 608951, 132578, true)
 
 		do
 			local button = self.lumos[5]
@@ -99,17 +88,17 @@ function A:ChantLumos(self)
 			UpdateSpellStatus(button, 101546)
 		end
 
-		UpdateBuff(self.lumos[4], 137639, 137639, true)
-
 		do
-			local button = self.lumos[5]
-			if IsPlayerSpell(123904) then
-				A:UpdateTotemAura(button, 620832, 123904, true)
-			elseif IsPlayerSpell(116847) then
-				UpdateBuff(button, 116847, 116847, false, true)
+			local button = self.lumos[4]
+			if IsPlayerSpell(152175) then
+				UpdateCooldown(button, 152175, true)
+			elseif IsPlayerSpell(152173) then
+				UpdateBuff(button, 152173, 152173, true, true)
 			else
-				UpdateBuff(button, 196741, 196741)
+				UpdateBuff(button, 137639, 137639, true)
 			end
 		end
+
+		A:UpdateTotemAura(self.lumos[5], 620832, 123904, true)
 	end
 end
