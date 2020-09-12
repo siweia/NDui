@@ -385,7 +385,7 @@ local function HelloWorld()
 	lr:SetFrameStrata("HIGH")
 	B.CreateFS(welcome, 14, L["Help Info1"], false, "TOPLEFT", 20, -50)
 	B.CreateFS(welcome, 14, L["Help Info2"], false, "TOPLEFT", 20, -70)
-	B.CreateFS(welcome, 16, DB.Version, true, "BOTTOMRIGHT", -5, 5)
+	B.CreateFS(welcome, 16, DB.Version, false, "BOTTOMRIGHT", -5, 5)
 
 	local c1, c2 = "|c00FFFF00", "|c0000FF00"
 	local lines = {
