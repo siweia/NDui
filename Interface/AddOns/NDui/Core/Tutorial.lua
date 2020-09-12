@@ -273,6 +273,15 @@ local function ForceAddonSkins()
 end
 
 -- Tutorial
+local function CreateWatermark(parent)
+	local logo = parent:CreateTexture(nil, "BACKGROUND")
+	logo:SetPoint("BOTTOMRIGHT", 10, 0)
+	logo:SetTexture(DB.logoTex)
+	logo:SetTexCoord(0, 1, 0, .75)
+	logo:SetSize(200, 75)
+	logo:SetAlpha(.3)
+end
+
 local tutor
 local function YesTutor()
 	if tutor then tutor:Show() return end
@@ -282,7 +291,7 @@ local function YesTutor()
 	tutor:SetFrameStrata("HIGH")
 	B.CreateMF(tutor)
 	B.SetBD(tutor)
-	B.CreateFS(tutor, 36, "NDui", true, "TOPLEFT", 10, 32)
+	CreateWatermark(tutor)
 	local ll = CreateFrame("Frame", nil, tutor)
 	ll:SetPoint("TOP", -40, -32)
 	B.CreateGF(ll, 80, 1, "Horizontal", .7, .7, .7, 0, .7)
@@ -364,8 +373,7 @@ local function HelloWorld()
 	welcome:SetFrameStrata("HIGH")
 	B.CreateMF(welcome)
 	B.SetBD(welcome)
-	B.CreateFS(welcome, 36, "NDui", true, "TOPLEFT", 10, 32)
-	B.CreateFS(welcome, 16, DB.Version, true, "TOPLEFT", 100, 16)
+	CreateWatermark(welcome)
 	B.CreateFS(welcome, 18, L["Help Title"], true, "TOP", 0, -10)
 	local ll = CreateFrame("Frame", nil, welcome)
 	ll:SetPoint("TOP", -50, -35)
@@ -377,6 +385,7 @@ local function HelloWorld()
 	lr:SetFrameStrata("HIGH")
 	B.CreateFS(welcome, 14, L["Help Info1"], false, "TOPLEFT", 20, -50)
 	B.CreateFS(welcome, 14, L["Help Info2"], false, "TOPLEFT", 20, -70)
+	B.CreateFS(welcome, 16, DB.Version, true, "BOTTOMRIGHT", -5, 5)
 
 	local c1, c2 = "|c00FFFF00", "|c0000FF00"
 	local lines = {
