@@ -75,7 +75,7 @@ C.themes["Blizzard_TalentUI"] = function()
 
 			local roleIcon = bu.roleIcon
 			roleIcon:SetTexture(DB.rolesTex)
-			B.CreateBDFrame(roleIcon)
+			B.CreateBDFrame(roleIcon):SetFrameLevel(2)
 			if role then
 				roleIcon:SetTexCoord(B.GetRoleTexCoord(role))
 			end
