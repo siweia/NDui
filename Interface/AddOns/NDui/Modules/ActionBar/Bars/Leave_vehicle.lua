@@ -26,6 +26,7 @@ function Bar:CreateLeaveVehicle()
 	button:RegisterForClicks("AnyUp")
 	button.icon:SetTexture("INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up")
 	button.icon:SetTexCoord(.216, .784, .216, .784)
+	button.icon:SetDrawLayer("ARTWORK")
 	button.__lockIcon = true
 
 	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
