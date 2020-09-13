@@ -43,7 +43,7 @@ local function ApplyPoints(self, points)
 end
 
 local function ApplyTexCoord(texture, texCoord)
-	if not texCoord then return end
+	if texture.__lockdown or not texCoord then return end
 	texture:SetTexCoord(unpack(texCoord))
 end
 
@@ -205,9 +205,7 @@ function Bar:StyleActionButton(button, cfg)
 	SetupBackdrop(button)
 
 	--textures
-	if not button.__lockIcon then
-		SetupTexture(icon, cfg.icon, "SetTexture", icon)
-	end
+	SetupTexture(icon, cfg.icon, "SetTexture", icon)
 	SetupTexture(flash, cfg.flash, "SetTexture", flash)
 	SetupTexture(flyoutBorder, cfg.flyoutBorder, "SetTexture", flyoutBorder)
 	SetupTexture(flyoutBorderShadow, cfg.flyoutBorderShadow, "SetTexture", flyoutBorderShadow)
