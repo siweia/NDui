@@ -48,6 +48,8 @@ local list = {
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 5217, UnitID = "player"},		-- 猛虎之怒
+		{AuraID = 48517, UnitID = "player"},	-- 日蚀
+		{AuraID = 48518, UnitID = "player"},	-- 月蚀
 		{AuraID = 52610, UnitID = "player"},	-- 野蛮咆哮
 		{AuraID = 69369, UnitID = "player"},	-- 掠食者的迅捷
 		{AuraID = 61336, UnitID = "player"},	-- 生存本能
@@ -103,7 +105,6 @@ local list = {
 	["Spell Cooldown"] = {	-- 冷却计时组
 		{SlotID = 13},		-- 饰品1
 		{SlotID = 14},		-- 饰品2
-		{TotemID = 1},		-- 蘑菇
 		{SpellID = 61336},	-- 生存本能
 	},
 }
