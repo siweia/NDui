@@ -1025,14 +1025,14 @@ do
 	-- Color swatch
 	function B:ReskinColorSwatch()
 		local frameName = self.GetName and self:GetName()
+		local swatchBg = frameName and _G[frameName.."SwatchBg"]
+		if swatchBg then
+			swatchBg:SetColorTexture(0, 0, 0)
+			swatchBg:SetInside(nil, 2, 2)
+		end
 
 		self:SetNormalTexture(DB.bdTex)
-		local nt = self:GetNormalTexture()
-		nt:SetInside(self, 3, 3)
-
-		local bg = _G[frameName.."SwatchBg"]
-		bg:SetColorTexture(0, 0, 0)
-		bg:SetInside(nil, 2, 2)
+		self:GetNormalTexture():SetInside(self, 3, 3)
 	end
 
 	-- Handle slider
@@ -1128,9 +1128,13 @@ do
 		local bg = B.SetBD(self)
 		local frameName = self.GetName and self:GetName()
 		local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName.."Portrait"])
-		if portrait then portrait:SetAlpha(0) end
+		if portrait then
+			portrait:SetAlpha(0)
+		end
 		local closeButton = self.CloseButton or (frameName and _G[frameName.."CloseButton"])
-		if closeButton then B.ReskinClose(closeButton) end
+		if closeButton then
+			B.ReskinClose(closeButton)
+		end
 		return bg
 	end
 
