@@ -146,7 +146,7 @@ C.themes["Blizzard_TalentUI"] = function()
 
 			local roleIcon = bu.roleIcon
 			roleIcon:SetTexture(DB.rolesTex)
-			B.CreateBDFrame(roleIcon)
+			B.CreateBDFrame(roleIcon):SetFrameLevel(2)
 			local role = GetSpecializationRole(i, false, bu.isPet)
 			if role then
 				roleIcon:SetTexCoord(B.GetRoleTexCoord(role))
