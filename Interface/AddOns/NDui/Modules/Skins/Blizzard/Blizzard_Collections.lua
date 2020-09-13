@@ -6,7 +6,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- [[ General ]]
 
-	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal)
+	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal) -- need this for Rematch skin
 	for i = 1, 5 do
 		local tab = _G["CollectionsJournalTab"..i]
 		B.ReskinTab(tab)
