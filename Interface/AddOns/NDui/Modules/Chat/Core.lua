@@ -41,10 +41,6 @@ function module:UpdateChatSize()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
 	ChatFrame1:SetWidth(NDuiDB["Chat"]["ChatWidth"])
 	ChatFrame1:SetHeight(NDuiDB["Chat"]["ChatHeight"])
-	local bg = ChatFrame1.gradientBG
-	if bg then
-		bg:SetHeight(NDuiDB["Chat"]["ChatHeight"] + 30)
-	end
 
 	isScaling = false
 end
@@ -90,7 +86,6 @@ function module:SkinChat()
 	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
-	--if NDuiDB["Chat"]["Lock"] then B.StripTextures(self) end
 	B.HideObject(self.buttonFrame)
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
@@ -236,28 +231,6 @@ function module:UpdateTabColors(selected)
 	end
 end
 
-function module:ChatFrameBackground()
-	if not NDuiDB["Chat"]["Lock"] then return end
-	if not NDuiDB["Skins"]["ChatLine"] then return end
-
-	local cr, cg, cb = 0, 0, 0
-	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
-
-	local Linfobar = CreateFrame("Frame", nil, UIParent)
-	Linfobar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 3)
-	B.CreateGF(Linfobar, 450, ChatFrame1:GetHeight() + 30, "Horizontal", 0, 0, 0, .5, 0)
-	local Linfobar1 = CreateFrame("Frame", nil, Linfobar)
-	Linfobar1:SetPoint("BOTTOM", Linfobar, "TOP")
-	B.CreateGF(Linfobar1, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
-	local Linfobar2 = CreateFrame("Frame", nil, Linfobar)
-	Linfobar2:SetPoint("BOTTOM", Linfobar, "BOTTOM", 0, 18)
-	B.CreateGF(Linfobar2, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
-	local Linfobar3 = CreateFrame("Frame", nil, Linfobar)
-	Linfobar3:SetPoint("TOP", Linfobar, "BOTTOM")
-	B.CreateGF(Linfobar3, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
-	ChatFrame1.gradientBG = Linfobar
-end
-
 function module:OnLogin()
 	fontOutline = NDuiDB["Skins"]["FontOutline"] and "OUTLINE" or ""
 
@@ -294,7 +267,6 @@ function module:OnLogin()
 	self:ChatCopy()
 	self:UrlCopy()
 	self:WhisperInvite()
-	self:ChatFrameBackground()
 
 	-- Lock chatframe
 	if NDuiDB["Chat"]["Lock"] then
