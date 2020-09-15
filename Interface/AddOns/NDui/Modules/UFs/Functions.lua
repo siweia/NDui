@@ -931,6 +931,7 @@ function UF:CreateClassPower(self)
 		bars.colorSpec = true
 		bars.sortOrder = "asc"
 		bars.PostUpdate = UF.PostUpdateRunes
+		bars.__max = 6
 		self.Runes = bars
 	else
 		bars.PostUpdate = UF.PostUpdateClassPower
