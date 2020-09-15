@@ -102,16 +102,7 @@ function G:SetupRaidDebuffs(parent)
 			end
 		end)
 	end
-	--[[
-	local dungeons = {}
-	for _, dungeonID in next, C_ChallengeMode.GetMapTable() do
-		if dungeonID < 369 then
-			local name = C_ChallengeMode.GetMapUIInfo(dungeonID)
-			tinsert(dungeons, name)
-		end
-	end
-	local mechagon = EJ_GetInstanceInfo(1178)
-	tinsert(dungeons, mechagon)]]
+
 	local dungeons = {}
 	for dungeonID = 1182, 1189 do
 		local name = EJ_GetInstanceInfo(dungeonID)
@@ -119,6 +110,16 @@ function G:SetupRaidDebuffs(parent)
 			tinsert(dungeons, name)
 		end
 	end
+
+	-- Deprecated, left them for SL eve
+	--[[
+	local bfaDungeons = {1023, 1022, 1030, 1002, 1012, 1021, 1001, 1041, 968, 1036, 1178}
+	for _, dungeonID in pairs(bfaDungeons) do
+		local name = EJ_GetInstanceInfo(dungeonID)
+		if name then
+			tinsert(dungeons, name)
+		end
+	end]]
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1031),
