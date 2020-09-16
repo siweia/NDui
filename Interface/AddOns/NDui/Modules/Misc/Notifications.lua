@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local format, gsub, strsplit = string.format, string.gsub, string.split
+local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
 local pairs, tonumber, wipe, select = pairs, tonumber, wipe, select
 local GetInstanceInfo, PlaySound = GetInstanceInfo, PlaySound
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
@@ -70,7 +70,7 @@ end
 	发现稀有/事件时的通报插件
 ]]
 local cache = {}
-local isIgnored = {
+local isIgnoredZone = {
 	[1153] = true,	-- 部落要塞
 	[1159] = true,	-- 联盟要塞
 	[1803] = true,	-- 涌泉海滩
@@ -78,14 +78,18 @@ local isIgnored = {
 	[1943] = true,	-- 联盟激流堡
 	[2111] = true,	-- 黑海岸前线
 }
-local ignoredAtlas = {
-	["poi-graveyard-neutral"] = true, -- graveyard in maw
-}
+
+local function isUsefulAtlas(info)
+	local atlas = info.atlasName
+	if atlas then
+		return strfind(atlas, "[Vv]ignette")
+	end
+end
 
 function M:RareAlert_Update(id)
 	if id and not cache[id] then
 		local info = C_VignetteInfo_GetVignetteInfo(id)
-		if not info or ignoredAtlas[info.atlasName] then return end
+		if not info or not isUsefulAtlas(info) then return end
 
 		local atlasInfo = C_Texture_GetAtlasInfo(info.atlasName)
 		if not atlasInfo then return end
@@ -114,7 +118,7 @@ end
 
 function M:RareAlert_CheckInstance()
 	local _, instanceType, _, _, maxPlayers, _, _, instID = GetInstanceInfo()
-	if (instID and isIgnored[instID]) or (instanceType == "scenario" and (maxPlayers == 3 or maxPlayers == 6)) then
+	if (instID and isIgnoredZone[instID]) or (instanceType == "scenario" and (maxPlayers == 3 or maxPlayers == 6)) then
 		B:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
 	else
 		B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
