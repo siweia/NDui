@@ -38,7 +38,7 @@ function module:UpdateChatSize()
 		ChatFrame1:Show()
 	end
 	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 30)
+	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 30)
 	ChatFrame1:SetWidth(NDuiDB["Chat"]["ChatWidth"])
 	ChatFrame1:SetHeight(NDuiDB["Chat"]["ChatHeight"])
 
@@ -60,7 +60,9 @@ function module:SkinChat()
 	if self:GetMaxLines() < maxLines then
 		self:SetMaxLines(maxLines)
 	end
-	B.SetBD(self.Background)
+
+	self.__background = B.SetBD(self.Background)
+	self.__background:SetShown(NDuiDB["Chat"]["ShowBG"])
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
@@ -90,6 +92,15 @@ function module:SkinChat()
 	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
 
 	self.styled = true
+end
+
+function module:ToggleChatBackground()
+	for _, chatFrameName in ipairs(CHAT_FRAMES) do
+		local frame = _G[chatFrameName]
+		if frame.__background then
+			frame.__background:SetShown(NDuiDB["Chat"]["ShowBG"])
+		end
+	end
 end
 
 -- Swith channels by Tab
