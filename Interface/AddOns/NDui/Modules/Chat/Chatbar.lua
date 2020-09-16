@@ -10,7 +10,7 @@ function module:Chatbar()
 	local width, height, padding, buttonList = 40, 8, 5, {}
 	local tinsert, pairs = table.insert, pairs
 
-	local Chatbar = CreateFrame("Frame", nil, UIParent)
+	local Chatbar = CreateFrame("Frame", "NDui_ChatBar", UIParent)
 	Chatbar:SetSize(width, height)
 
 	local function AddButton(r, g, b, text, func)
@@ -138,7 +138,27 @@ function module:Chatbar()
 
 	-- Mover
 	local width = (#buttonList-1)*(padding+width) + width
-	local mover = B.Mover(Chatbar, L["Chatbar"], "Chatbar", {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 9}, width, 20)
+	local mover = B.Mover(Chatbar, L["Chatbar"], "Chatbar", {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 3}, width, 20)
 	Chatbar:ClearAllPoints()
-	Chatbar:SetPoint("BOTTOMLEFT", mover)
+	Chatbar:SetPoint("BOTTOMLEFT", mover, 5, 5)
+
+	module:ChatBarBackground()
+end
+
+function module:ChatBarBackground()
+	if not NDuiDB["Skins"]["ChatLine"] then return end
+
+	local cr, cg, cb = 0, 0, 0
+	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
+
+	local parent = _G["NDui_ChatBar"]
+	local frame = CreateFrame("Frame", nil, parent)
+	frame:SetPoint("LEFT", parent, "LEFT", -5, 0)
+	B.CreateGF(frame, 450, 18, "Horizontal", 0, 0, 0, .5, 0)
+	local bottomLine = CreateFrame("Frame", nil, parent)
+	bottomLine:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", 0, 0)
+	B.CreateGF(bottomLine, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
+	local topLine = CreateFrame("Frame", nil, parent)
+	topLine:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 0)
+	B.CreateGF(topLine, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
 end
