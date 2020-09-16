@@ -32,6 +32,7 @@ local list = {
 		{AuraID = 214621, UnitID = "target", Caster = "player"},	-- 教派分歧
 		{AuraID = 152118, UnitID = "target", Caster = "player"},	-- 意志洞悉
 		{AuraID = 204213, UnitID = "target", Caster = "player"},	-- 净化邪恶
+		{AuraID = 335467, UnitID = "target", Caster = "player"},	-- 噬灵疫病
 		{AuraID = 17, UnitID = "target", Caster = "player", Value = true},		-- 真言术：盾
 		{AuraID = 208772, UnitID = "target", Caster = "player", Value = true},	-- 惩击
 		{AuraID = 271466, UnitID = "target", Caster = "player", Value = true},	-- 微光屏障
