@@ -666,3 +666,4 @@ L["CustomBarButtonSize"] = "Button Size" -- need translation
 L["CustomBarNumButtons"] = "Max Buttons" -- need translation
 L["CustomBarNumPerRow"] = "Buttons Per Row" -- need translation
 L["HideBossEmote"] = "Hide RaidBossEmoteFrame" -- need translation
+L["ShowChatBackground"] = "Show chat background" -- need translation
