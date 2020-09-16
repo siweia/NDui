@@ -38,7 +38,7 @@ function module:UpdateChatSize()
 		ChatFrame1:Show()
 	end
 	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 28)
+	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 30)
 	ChatFrame1:SetWidth(NDuiDB["Chat"]["ChatWidth"])
 	ChatFrame1:SetHeight(NDuiDB["Chat"]["ChatHeight"])
 
@@ -60,6 +60,7 @@ function module:SkinChat()
 	if self:GetMaxLines() < maxLines then
 		self:SetMaxLines(maxLines)
 	end
+	B.SetBD(self.Background)
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
@@ -86,6 +87,7 @@ function module:SkinChat()
 	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
+	B.StripTextures(self)
 	B.HideObject(self.buttonFrame)
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
