@@ -60,6 +60,7 @@ local list = {
 		{AuraID = 307495, UnitID = "player"},	-- 幻影火焰药水
 		{AuraID = 307496, UnitID = "player"},	-- 神圣觉醒药水
 		{AuraID = 307497, UnitID = "player"},	-- 死亡偏执药水
+		{AuraID = 344314, UnitID = "player"},	-- 心华之速药水
 
 		{AuraID = 229206, UnitID = "player"},	-- 延时之力
 
