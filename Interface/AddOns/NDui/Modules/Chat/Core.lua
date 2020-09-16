@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
 
+local _G = _G
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
 local ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate = ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate
@@ -9,6 +10,7 @@ local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, 
 local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local InviteToGroup = C_PartyInfo.InviteUnit
+local GeneralDockManager = GeneralDockManager
 
 local maxLines = 1024
 local fontOutline, isBattleNet
@@ -65,10 +67,8 @@ function module:SkinChat()
 	eb:ClearAllPoints()
 	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 4, 26)
 	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -17, 50)
+	B.StripTextures(eb, 2)
 	B.SetBD(eb)
-	for i = 3, 8 do
-		select(i, eb:GetRegions()):SetAlpha(0)
-	end
 
 	local lang = _G[name.."EditBoxLanguage"]
 	lang:GetRegions():SetAlpha(0)
@@ -83,7 +83,6 @@ function module:SkinChat()
 	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
-	B.StripTextures(self)
 	B.HideObject(self.buttonFrame)
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
