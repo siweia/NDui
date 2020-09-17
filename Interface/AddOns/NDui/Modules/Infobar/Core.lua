@@ -37,8 +37,8 @@ function module:RegisterInfobar(name, point)
 
 	local info = CreateFrame("Frame", nil, UIParent)
 	info:SetHitRectInsets(0, 0, -10, -10)
-	info.text = info:CreateFontString(nil, "OVERLAY")
-	info.text:SetFont(DB.Font[1], C.Infobar.FontSize, DB.Font[3])
+	info.text = B.CreateFS(info, C.Infobar.FontSize)
+	info.text:ClearAllPoints()
 	if C.Infobar.AutoAnchor then
 		info.point = point
 	else
