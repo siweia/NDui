@@ -4,9 +4,14 @@ local B, C, L, DB = unpack(ns)
 -- Blizzard_CovenantPreviewUI
 
 C.themes["Blizzard_CovenantPreviewUI"] = function()
+	local CovenantPreviewFrame = CovenantPreviewFrame
 	B.Reskin(CovenantPreviewFrame.SelectButton)
-	CovenantPreviewFrame.InfoPanel.Description:SetTextColor(1, 1, 1)
-	CovenantPreviewFrame.InfoPanel.AbilitiesLabel:SetTextColor(1, .8, 0)
+
+	local infoPanel = CovenantPreviewFrame.InfoPanel
+	infoPanel.Name:SetTextColor(1, .8, 0)
+	infoPanel.Location:SetTextColor(1, 1, 1)
+	infoPanel.Description:SetTextColor(1, 1, 1)
+	infoPanel.AbilitiesLabel:SetTextColor(1, .8, 0)
 
 	hooksecurefunc(CovenantPreviewFrame, "TryShow", function(self)
 		if not self.bg then
@@ -68,6 +73,8 @@ local function HideRenownLevelBorder(frame)
 end
 
 C.themes["Blizzard_CovenantSanctum"] = function()
+	local CovenantSanctumFrame = CovenantSanctumFrame
+
 	B.ReskinTab(CovenantSanctumFrameTab1)
 	B.ReskinTab(CovenantSanctumFrameTab2)
 	CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
