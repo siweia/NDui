@@ -59,7 +59,6 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 322746) -- 堕落之血
 INSTANCE = 1186 -- 晋升高塔
 RegisterSeasonSpells(INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 338729) -- 充能践踏
-module:RegisterDebuff(TIER, INSTANCE, 0, 338747) -- 净化冲击波
 module:RegisterDebuff(TIER, INSTANCE, 0, 327481) -- 黑暗长枪
 module:RegisterDebuff(TIER, INSTANCE, 0, 322818) -- 失去信心
 module:RegisterDebuff(TIER, INSTANCE, 0, 322817) -- 疑云密布

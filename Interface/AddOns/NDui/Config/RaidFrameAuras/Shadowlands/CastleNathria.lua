@@ -9,8 +9,6 @@ local BOSS
 BOSS = 2393 -- 啸翼
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 328897) -- 抽干
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 330713) -- 耳鸣之痛
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 329370) -- 致命降临
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 336494) -- 刺耳回声
 
 BOSS = 2429 -- 猎手阿尔迪莫
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 335304) -- 寻罪箭
@@ -57,7 +55,6 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 335470) -- 锁链猛击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 339181) -- 锁链猛击
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 331209) -- 怨恨凝视
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 335293) -- 锁链联结
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 335270) -- 捆住你们
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 335295) -- 粉碎锁链
 
 BOSS = 2425 -- 石裔干将
