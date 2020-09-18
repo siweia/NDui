@@ -136,7 +136,6 @@ function module:RecycleBin()
 		["MinimapBackdrop"] = true,
 		["TimeManagerClockButton"] = true,
 		["FeedbackUIButton"] = true,
-		["HelpOpenTicketButton"] = true,
 		["MiniMapBattlefieldFrame"] = true,
 		["QueueStatusMinimapButton"] = true,
 		["GarrisonLandingPageMinimapButton"] = true,
