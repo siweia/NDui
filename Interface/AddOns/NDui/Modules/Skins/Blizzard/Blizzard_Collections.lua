@@ -533,6 +533,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.Background:Hide()
 		bu.HighlightTexture:SetTexture("")
 		B.ReskinIcon(bu.Icon)
+		bu.IconCover:SetOutside(bu.Icon)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
