@@ -491,6 +491,7 @@ info.onEvent = function(self, event, arg1)
 	end
 end
 
+local initFixed
 info.onEnter = function(self)
 	local thisTime = GetTime()
 	if not prevTime or (thisTime-prevTime > 5) then
@@ -527,6 +528,11 @@ info.onEnter = function(self)
 	info:FriendsPanel_Init()
 	info:FriendsPanel_Update()
 	infoFrame.friendCountText:SetText(format("%s: %s/%s", GUILD_ONLINE_LABEL, totalOnline, totalFriends))
+
+	if not initFixed then
+		infoFrame.scrollFrame.scrollBar:SetValue(0)
+		initFixed = true
+	end
 end
 
 local function delayLeave()
