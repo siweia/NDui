@@ -39,10 +39,23 @@ end
 
 -- Blizzard_CovenantSanctum
 
-local function ReskinTalentsList(self)
+local function replaceIconString(self, text)
+	if self.isSetting then return end -- prevent stack overflow
+	self.isSetting = true
+
+	text = text or self:GetText()
+	if strmatch(text, "|T.+|t") then
+		self:SetText(gsub(text, "|T(.-):[%d+:]+|t", "|T%1:14:14:0:0:64:64:5:59:5:59|t"))
+	end
+
+	self.isSetting = nil
+end
+
+local function reskinTalentsList(self)
 	for frame in self.talentPool:EnumerateActive() do
 		if not frame.bg then
 			frame.Border:SetAlpha(0)
+			frame.IconBorder:SetAlpha(0)
 			frame.Background:SetAlpha(0)
 			frame.bg = B.CreateBDFrame(frame, .25)
 			frame.bg:SetInside()
@@ -50,11 +63,14 @@ local function ReskinTalentsList(self)
 			frame.Highlight:SetInside(frame.bg)
 			B.ReskinIcon(frame.Icon)
 			frame.Icon:SetPoint("TOPLEFT", 7, -7)
+
+			replaceIconString(frame.InfoText)
+			hooksecurefunc(frame.InfoText, "SetText", replaceIconString)
 		end
 	end
 end
 
-local function HideRenownLevelBorder(frame)
+local function hideRenownLevelBorder(frame)
 	if not frame.styled then
 		frame.Divider:SetAlpha(0)
 		frame.BackgroundTile:SetAlpha(0)
@@ -68,6 +84,17 @@ local function HideRenownLevelBorder(frame)
 			button.LevelBorder:SetAlpha(0)
 
 			button.styled = true
+		end
+	end
+end
+
+local function replaceCurrencies(displayGroup)
+	for frame in displayGroup.currencyFramePool:EnumerateActive() do
+		if not frame.styled then
+			replaceIconString(frame.Text)
+			hooksecurefunc(frame.Text, "SetText", replaceIconString)
+
+			frame.styled = true
 		end
 	end
 end
@@ -96,15 +123,17 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 					frame.RankBorder:SetAlpha(0)
 				end
 			end
+			upgradesTab.CurrencyBackground:SetAlpha(0)
+			replaceCurrencies(upgradesTab.CurrencyDisplayGroup)
 
 			local talentsList = upgradesTab.TalentsList
 			talentsList.Divider:SetAlpha(0)
 			B.CreateBDFrame(talentsList, .25)
 			talentsList.BackgroundTile:SetAlpha(0)
 			B.Reskin(talentsList.UpgradeButton)
-			hooksecurefunc(talentsList, "Refresh", ReskinTalentsList)
+			hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
 
-			hooksecurefunc(self.RenownTab, "Refresh", HideRenownLevelBorder)
+			hooksecurefunc(self.RenownTab, "Refresh", hideRenownLevelBorder)
 		end
 	end)
 end
