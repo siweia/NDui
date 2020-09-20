@@ -897,16 +897,17 @@ end
 local auras = B:GetModule("Auras")
 
 function UF:PlateVisibility(event)
+	local alpha = NDuiDB["Nameplate"]["PPFadeoutAlpha"]
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
 		UIFrameFadeIn(self.Health, .3, self.Health:GetAlpha(), 1)
 		UIFrameFadeIn(self.Health.bg, .3, self.Health.bg:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), 1)
 	else
-		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), 0)
-		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), 0)
-		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), 0)
-		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), 0)
+		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), alpha)
+		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), alpha)
+		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), alpha)
+		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), alpha)
 	end
 end
 
