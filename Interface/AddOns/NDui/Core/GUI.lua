@@ -1252,7 +1252,7 @@ local function exportData()
 						end
 					end
 				else
-					if NDuiDB[KEY][key] ~= G.DefaultSettings[KEY][key] then
+					if NDuiDB[KEY][key] ~= G.DefaultSettings[KEY][key] then -- don't export default settings
 						text = text..";"..KEY..":"..key..":"..tostring(value)
 					end
 				end
@@ -1315,6 +1315,20 @@ local function toBoolean(value)
 	end
 end
 
+local function reloadDefaultSettings()
+	for i, j in pairs(G.DefaultSettings) do
+		if type(j) == "table" then
+			if not NDuiDB[i] then NDuiDB[i] = {} end
+			for k, v in pairs(j) do
+				NDuiDB[i][k] = v
+			end
+		else
+			NDuiDB[i] = j
+		end
+	end
+	NDuiDB["BFA"] = true -- don't empty data on next loading
+end
+
 local function importData()
 	local profile = dataFrame.editBox:GetText()
 	if B:IsBase64(profile) then profile = B:Decode(profile) end
@@ -1324,6 +1338,9 @@ local function importData()
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Import data error"])
 		return
 	end
+
+	-- we don't export default settings, so need to reload it
+	reloadDefaultSettings()
 
 	for i = 2, #options do
 		local option = options[i]
