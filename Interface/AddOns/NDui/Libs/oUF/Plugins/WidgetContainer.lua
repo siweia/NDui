@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 -- Credit: ElvUI
 local ipairs = ipairs
+local UIWidgetSetLayoutDirection = Enum.UIWidgetSetLayoutDirection
+local UIWidgetLayoutDirection = Enum.UIWidgetLayoutDirection
 
 function B:Widget_DefaultLayout(sortedWidgets)
 	local widgetContainerFrame = self
@@ -17,11 +19,11 @@ function B:Widget_DefaultLayout(sortedWidgets)
 	for index, widgetFrame in ipairs(sortedWidgets) do
 		widgetFrame:ClearAllPoints()
 
-		local widgetSetUsesVertical = widgetContainerFrame.widgetSetLayoutDirection == Enum.UIWidgetSetLayoutDirection.Vertical
-		local widgetUsesVertical = widgetFrame.layoutDirection == Enum.UIWidgetLayoutDirection.Vertical
+		local widgetSetUsesVertical = widgetContainerFrame.widgetSetLayoutDirection == UIWidgetSetLayoutDirection.Vertical
+		local widgetUsesVertical = widgetFrame.layoutDirection == UIWidgetLayoutDirection.Vertical
 
-		local useOverlapLayout = widgetFrame.layoutDirection == Enum.UIWidgetLayoutDirection.Overlap
-		local useVerticalLayout = widgetUsesVertical or (widgetFrame.layoutDirection == Enum.UIWidgetLayoutDirection.Default and widgetSetUsesVertical)
+		local useOverlapLayout = widgetFrame.layoutDirection == UIWidgetLayoutDirection.Overlap
+		local useVerticalLayout = widgetUsesVertical or (widgetFrame.layoutDirection == UIWidgetLayoutDirection.Default and widgetSetUsesVertical)
 
 		if useOverlapLayout then
 			local anchor = widgetContainerFrame[widgetSetUsesVertical and 'verticalAnchorPoint' or 'horizontalAnchorPoint']
@@ -59,7 +61,7 @@ function B:Widget_DefaultLayout(sortedWidgets)
 			end
 			totalHeight = totalHeight + height
 		else
-			local forceNewRow = widgetFrame.layoutDirection == Enum.UIWidgetLayoutDirection.HorizontalForceNewRow
+			local forceNewRow = widgetFrame.layoutDirection == UIWidgetLayoutDirection.HorizontalForceNewRow
 			local needNewRowContainer = not horizontalRowContainer or forceNewRow
 			if needNewRowContainer then
 				if horizontalRowContainer then
