@@ -9,7 +9,6 @@ local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGui
 local Ambiguate, UnitIsUnit, GetTime, SetCVar = Ambiguate, UnitIsUnit, GetTime, SetCVar
 local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
 local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
-local IsCorruptedItem = IsCorruptedItem
 
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
 local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
@@ -217,11 +216,6 @@ local function isItemHasGem(link)
 	return text
 end
 
-local corruptedString = "|T3004126:0:0:0:0:64:64:5:59:5:59|t"
-local function isItemCorrupted(link)
-	return IsCorruptedItem(link) and corruptedString or ""
-end
-
 local itemCache = {}
 local function convertItemLevel(link)
 	if itemCache[link] then return itemCache[link] end
@@ -230,7 +224,7 @@ local function convertItemLevel(link)
 	if itemLink then
 		local name, itemLevel = isItemHasLevel(itemLink)
 		if name and itemLevel then
-			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemCorrupted(itemLink)..isItemHasGem(itemLink))
+			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemHasGem(itemLink))
 			itemCache[link] = link
 		end
 	end
