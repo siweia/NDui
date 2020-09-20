@@ -8,7 +8,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f, dataFrame = {}, {}
 
 -- Default Settings
-local defaultSettings = {
+G.DefaultSettings = {
 	BFA = false,
 	Mover = {},
 	InternalCD = {},
@@ -333,7 +333,7 @@ local defaultSettings = {
 	},
 }
 
-local accountSettings = {
+G.AccountSettings = {
 	ChatFilterList = "%*",
 	ChatFilterWhiteList = "",
 	TimestampFormat = 4,
@@ -407,8 +407,8 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		NDuiDB["BFA"] = true
 	end
 
-	InitialSettings(defaultSettings, NDuiDB, true)
-	InitialSettings(accountSettings, NDuiADB)
+	InitialSettings(G.DefaultSettings, NDuiDB, true)
+	InitialSettings(G.AccountSettings, NDuiADB)
 	B:SetupUIScale(true)
 	DB.normTex = textureList[NDuiADB["TexStyle"]]
 
@@ -1137,7 +1137,7 @@ local function CreateOption(i)
 				offset = offset + 70
 			end
 			local s = B.CreateSlider(parent, name, min, max, step, x, y)
-			s.__default = (key == "ACCOUNT" and accountSettings[value]) or defaultSettings[key][value]
+			s.__default = (key == "ACCOUNT" and G.AccountSettings[value]) or G.DefaultSettings[key][value]
 			s:SetValue(NDUI_VARIABLE(key, value))
 			s:SetScript("OnValueChanged", function(_, v)
 				local current = B:Round(tonumber(v), 2)
@@ -1252,7 +1252,7 @@ local function exportData()
 						end
 					end
 				else
-					if NDuiDB[KEY][key] ~= defaultSettings[KEY][key] then
+					if NDuiDB[KEY][key] ~= G.DefaultSettings[KEY][key] then
 						text = text..";"..KEY..":"..key..":"..tostring(value)
 					end
 				end
