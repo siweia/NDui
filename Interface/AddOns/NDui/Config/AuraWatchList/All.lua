@@ -207,6 +207,7 @@ local list = {
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 310143, UnitID = "player", Combat = true},-- 灵魂变形
+		{AuraID = 324867, UnitID = "player", Value = true},	-- 血肉铸造
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
