@@ -611,6 +611,15 @@ do
 		return bu
 	end
 
+	function B:CreateWatermark()
+		local logo = self:CreateTexture(nil, "BACKGROUND")
+		logo:SetPoint("BOTTOMRIGHT", 10, 0)
+		logo:SetTexture(DB.logoTex)
+		logo:SetTexCoord(0, 1, 0, .75)
+		logo:SetSize(200, 75)
+		logo:SetAlpha(.3)
+	end
+
 	local AtlasToQuality = {
 		["auctionhouse-itemicon-border-gray"] = LE_ITEM_QUALITY_POOR,
 		["auctionhouse-itemicon-border-white"] = LE_ITEM_QUALITY_COMMON,
