@@ -14,6 +14,7 @@ local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetSpellCooldown, GetTime = GetSpellCooldown, GetTime
+local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local INTERRUPTED = INTERRUPTED
 
 -- Init
@@ -620,17 +621,6 @@ function UF:MouseoverIndicator(self)
 	self.HighlightUpdater = f
 end
 
--- NazjatarFollowerXP
-function UF:AddWidgetXP(self)
-	local bar = CreateFrame("StatusBar", nil, self)
-	bar:SetSize(NDuiDB["Nameplate"]["PlateWidth"]*.75, NDuiDB["Nameplate"]["PlateHeight"])
-	bar:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
-	B.CreateSB(bar, false, 0, .7, 1)
-	bar.ProgressText = B.CreateFS(bar, 12)
-
-	self.WidgetXPBar = bar
-end
-
 -- WidgetContainer
 function UF:AddWidgetContainer(self)
 	local widgetContainer = CreateFrame("Frame", nil, self, "UIWidgetContainerTemplate")
@@ -698,7 +688,6 @@ function UF:CreatePlates()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
 	self:Tag(self.powerText, "[nppp]")
 
-	UF:AddWidgetXP(self)
 	UF:AddWidgetContainer(self)
 	UF:MouseoverIndicator(self)
 	UF:AddTargetIndicator(self)
@@ -804,6 +793,9 @@ function UF:UpdatePlateByType(self)
 		raidtarget:ClearAllPoints()
 		raidtarget:SetPoint("TOP", name, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
+		classify:Hide()
+		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
+		if self.widgetsOnly then name:Hide() end
 	else
 		for _, element in pairs(DisabledElements) do
 			if not self:IsElementEnabled(element) then
@@ -814,6 +806,9 @@ function UF:UpdatePlateByType(self)
 		name:SetJustifyH("LEFT")
 		self:Tag(name, "[nplevel][name]")
 		name:UpdateTag()
+		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
+		name:Show()
 		hpval:Show()
 
 		raidtarget:ClearAllPoints()
@@ -825,8 +820,9 @@ function UF:UpdatePlateByType(self)
 end
 
 function UF:RefreshPlateType(unit)
-	self.isFriendly = UnitIsFriend(unit, "player")
-	self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or false
+	self.reaction = UnitReaction(unit, "player")
+	self.isFriendly = self.reaction and self.reaction >= 5
+	self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or self.widgetsOnly or false
 
 	if self.previousType == nil or self.previousType ~= self.isNameOnly then
 		UF.UpdatePlateByType(self)
@@ -857,6 +853,7 @@ function UF:PostUpdatePlates(event, unit)
 		end
 		self.isPlayer = UnitIsPlayer(unit)
 		self.npcID = B.GetNPCID(self.unitGUID)
+		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 		self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), B.Widget_DefaultLayout, nil, unit)
 
 		UF.RefreshPlateType(self, unit)
