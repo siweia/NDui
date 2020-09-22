@@ -273,7 +273,7 @@ hooksecurefunc("QuestObjectiveSetupBlockButton_Item", function(block, questLogIn
 	local questID = C_QuestLog_GetQuestIDForLogIndex(questLogIndex)
 	if questID and activeWorldQuests[questID] then return end
 
-	if C_QuestLog_IsWorldQuest(questID) and isQuestComplete then
+	if C_QuestLog_IsWorldQuest(questID) and not isQuestComplete then
 		activeWorldQuests[questID] = true
 		ExtraQuestButton:Update()
 	end
