@@ -6,6 +6,21 @@ local ipairs = ipairs
 local UIWidgetSetLayoutDirection = Enum.UIWidgetSetLayoutDirection
 local UIWidgetLayoutDirection = Enum.UIWidgetLayoutDirection
 
+local function reskinWidgetBar(bar)
+	if bar and not bar.styled then
+		bar.BGLeft:SetAlpha(0)
+		bar.BGRight:SetAlpha(0)
+		bar.BGCenter:SetAlpha(0)
+		bar.BorderLeft:SetAlpha(0)
+		bar.BorderRight:SetAlpha(0)
+		bar.BorderCenter:SetAlpha(0)
+		bar.Spark:SetAlpha(0)
+		B.SetBD(bar)
+
+		bar.styled = true
+	end
+end
+
 function B:Widget_DefaultLayout(sortedWidgets)
 	local widgetContainerFrame = self
 	local horizontalRowContainer = nil
@@ -18,6 +33,7 @@ function B:Widget_DefaultLayout(sortedWidgets)
 
 	for index, widgetFrame in ipairs(sortedWidgets) do
 		widgetFrame:ClearAllPoints()
+		reskinWidgetBar(widgetFrame.Bar)
 
 		local widgetSetUsesVertical = widgetContainerFrame.widgetSetLayoutDirection == UIWidgetSetLayoutDirection.Vertical
 		local widgetUsesVertical = widgetFrame.layoutDirection == UIWidgetLayoutDirection.Vertical
