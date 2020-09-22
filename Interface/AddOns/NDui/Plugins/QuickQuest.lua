@@ -450,7 +450,7 @@ local function AttemptAutoComplete(event)
 			end
 		end
 	else
-		CC_Timer_After(1, AttemptAutoComplete)
+		C_Timer_After(1, AttemptAutoComplete)
 	end
 
 	if event == "PLAYER_REGEN_ENABLED" then
