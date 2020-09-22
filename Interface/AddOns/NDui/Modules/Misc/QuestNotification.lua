@@ -2,14 +2,23 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local debugMode = true
-local completedQuest, initComplete = {}
 local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
-local mod, tonumber, pairs, floor = mod, tonumber, pairs, math.floor
+local wipe, mod, tonumber, pairs, floor = wipe, mod, tonumber, pairs, math.floor
+local IsPartyLFG, IsInRaid, IsInGroup = IsPartyLFG, IsInRaid, IsInGroup
+local PlaySound, SendChatMessage, GetQuestLink = PlaySound, SendChatMessage, GetQuestLink
+local C_QuestLog_GetInfo = C_QuestLog.GetInfo
+local C_QuestLog_IsComplete = C_QuestLog.IsComplete
+local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
+local C_QuestLog_GetQuestTagInfo = C_QuestLog.GetQuestTagInfo
+local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
+local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
 local QUEST_COMPLETE = QUEST_COMPLETE
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
+
+local debugMode = true
+local completedQuest, initComplete = {}
 
 local function acceptText(link, daily)
 	if daily then
@@ -77,23 +86,23 @@ end
 
 function M:FindQuestAccept(questID)
 	local link = GetQuestLink(questID)
-	local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
+	local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
 	if link and questLogIndex then
-		local info = C_QuestLog.GetInfo(questLogIndex)
+		local info = C_QuestLog_GetInfo(questLogIndex)
 		local frequency = info.frequency
-		local tagID, _, worldQuestType = C_QuestLog.GetQuestTagInfo(questID)
+		local tagID, _, worldQuestType = C_QuestLog_GetQuestTagInfo(questID)
 		if tagID == 109 or worldQuestType == LE_QUEST_TAG_TYPE_PROFESSION then return end
 		sendQuestMsg(acceptText(link, frequency == LE_QUEST_FREQUENCY_DAILY))
 	end
 end
 
 function M:FindQuestComplete()
-	for i = 1, C_QuestLog.GetNumQuestLogEntries() do
-		local info = C_QuestLog.GetInfo(i)
+	for i = 1, C_QuestLog_GetNumQuestLogEntries() do
+		local info = C_QuestLog_GetInfo(i)
 		local questID = info.questID
 		local link = GetQuestLink(questID)
-		local isComplete = C_QuestLog.IsComplete(questID)
-		local isWorldQuest = C_QuestLog.IsWorldQuest(questID)
+		local isComplete = C_QuestLog_IsComplete(questID)
+		local isWorldQuest = C_QuestLog_IsWorldQuest(questID)
 		if link and isComplete and not completedQuest[questID] and not isWorldQuest then
 			if initComplete then
 				sendQuestMsg(completeText(link))
@@ -105,7 +114,7 @@ function M:FindQuestComplete()
 end
 
 function M:FindWorldQuestComplete(questID)
-	if C_QuestLog.IsWorldQuest(questID) then
+	if C_QuestLog_IsWorldQuest(questID) then
 		local link = GetQuestLink(questID)
 		if link and not completedQuest[questID] then
 			sendQuestMsg(completeText(link))
