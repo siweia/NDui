@@ -4,29 +4,23 @@ local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 local select, unpack = select, unpack
 
-local function reskinQuestIcon(_, block)
-	local itemButton = block.itemButton
-	if itemButton and not itemButton.styled then
-		itemButton:SetNormalTexture("")
-		itemButton:SetPushedTexture("")
-		itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		itemButton.icon:SetTexCoord(unpack(DB.TexCoord))
-		B.SetBD(itemButton)
+local function reskinQuestIcon(button)
+	if not button or button.styled then return end
 
-		itemButton.styled = true
+	button:SetNormalTexture("")
+	button:SetPushedTexture("")
+	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	local icon = button.icon or button.Icon
+	if icon then
+		B.ReskinIcon(icon, true)
 	end
 
-	local rightButton = block.rightButton
-	if rightButton and not rightButton.styled then
-		rightButton:SetNormalTexture("")
-		rightButton:SetPushedTexture("")
-		rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		rightButton:SetSize(25, 25)
-		rightButton.Icon:SetInside()
-		B.SetBD(rightButton)
+	button.styled = true
+end
 
-		rightButton.styled = true
-	end
+local function reskinQuestIcons(_, block)
+	reskinQuestIcon(block.itemButton)
+	reskinQuestIcon(block.rightButton)
 end
 
 local function reskinHeader(header)
@@ -106,9 +100,9 @@ end
 
 tinsert(C.defaultThemes, function()
 	-- QuestIcons
-	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcon)
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcon)
-	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcon)
+	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
+	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
 
 	-- Reskin Progressbars
 	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
