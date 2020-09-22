@@ -37,7 +37,7 @@ tinsert(C.defaultThemes, function()
 	for event in next, events do
 		bubbleHook:RegisterEvent(event)
 	end
-	bubbleHook:SetScript("OnEvent", function(self, event, msg)
+	bubbleHook:SetScript("OnEvent", function(self, event)
 		if GetCVarBool(events[event]) then
 			self.elapsed = 0
 			self:Show()

@@ -152,7 +152,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	bg:SetPoint("BOTTOMRIGHT", -25, 5)
 	B.ReskinScroll(scrollList.ScrollFrame.scrollBar)
 
-	reagentList:HookScript("OnShow", function(self)
+	reagentList:HookScript("OnShow", function()
 		for i = 1, #scrollList.ScrollFrame.buttons do
 			local button = scrollList.ScrollFrame.buttons[i]
 			if not button.bg then

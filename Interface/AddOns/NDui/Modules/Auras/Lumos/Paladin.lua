@@ -4,10 +4,6 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "PALADIN" then return end
 
-local function GetUnitAura(unit, spell, filter)
-	return A:GetUnitAura(unit, spell, filter)
-end
-
 local function UpdateCooldown(button, spellID, texture)
 	return A:UpdateCooldown(button, spellID, texture)
 end
