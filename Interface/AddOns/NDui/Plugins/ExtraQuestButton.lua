@@ -6,6 +6,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local _G = _G
+local math_huge = math.huge
 local tonumber, next, type, strmatch = tonumber, next, type, strmatch
 local RegisterStateDriver, InCombatLockdown = RegisterStateDriver, InCombatLockdown
 local GetItemCooldown, GetItemCount, GetTime = GetItemCooldown, GetItemCount, GetTime
@@ -403,7 +404,7 @@ end
 
 local function GetClosestQuestItem()
 	local closestQuestLink, closestQuestTexture
-	local shortestDistanceSq = 62500 -- 250 yards²
+	local shortestDistanceSq = math_huge
 	local numItems = 0
 	local currentMapID = C_Map_GetBestMapForUnit("player")
 
@@ -503,6 +504,10 @@ local function GetClosestQuestItem()
 end
 
 local ticker
+local function updateTicker()
+	ExtraQuestButton:Update()
+end
+
 function ExtraQuestButton:Update()
 	if HasExtraActionBar() or self.locked then return end
 
@@ -514,7 +519,7 @@ function ExtraQuestButton:Update()
 	end
 
 	if numItems > 0 and not ticker then
-		ticker = C_Timer_NewTicker(30, ExtraQuestButton.Update) -- might want to lower this
+		ticker = C_Timer_NewTicker(30, updateTicker) -- might want to lower this
 	elseif numItems == 0 and ticker then
 		ticker:Cancel()
 		ticker = nil
