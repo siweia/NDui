@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local debugMode = false
+local debugMode = true
 local completedQuest, initComplete = {}
 local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
 local mod, tonumber, pairs, floor = mod, tonumber, pairs, math.floor
@@ -91,10 +91,10 @@ function M:FindQuestComplete()
 	for i = 1, C_QuestLog.GetNumQuestLogEntries() do
 		local info = C_QuestLog.GetInfo(i)
 		local questID = info.questID
-		local isComplete = C_QuestLog.IsComplete(questID)
 		local link = GetQuestLink(questID)
-		local worldQuest = select(3, C_QuestLog.GetQuestTagInfo(questID))
-		if link and isComplete and not completedQuest[questID] and not worldQuest then
+		local isComplete = C_QuestLog.IsComplete(questID)
+		local isWorldQuest = C_QuestLog.IsWorldQuest(questID)
+		if link and isComplete and not completedQuest[questID] and not isWorldQuest then
 			if initComplete then
 				sendQuestMsg(completeText(link))
 			end
@@ -105,7 +105,7 @@ function M:FindQuestComplete()
 end
 
 function M:FindWorldQuestComplete(questID)
-	if QuestUtils_IsQuestWorldQuest(questID) then
+	if C_QuestLog.IsWorldQuest(questID) then
 		local link = GetQuestLink(questID)
 		if link and not completedQuest[questID] then
 			sendQuestMsg(completeText(link))
