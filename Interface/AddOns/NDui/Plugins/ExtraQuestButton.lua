@@ -7,11 +7,10 @@ local B, C, L, DB = unpack(ns)
 
 local _G = _G
 local tonumber, next, type, strmatch = tonumber, next, type, strmatch
-local GetItemCooldown, GetItemCount, GetTime
-local IsItemInRange, ItemHasRange, HasExtraActionBar
-local RegisterStateDriver, InCombatLockdown
-local GetBindingKey, GetBindingText
-local GetQuestLogSpecialItemInfo, QuestHasPOIInfo
+local RegisterStateDriver, InCombatLockdown = RegisterStateDriver, InCombatLockdown
+local GetItemCooldown, GetItemCount, GetTime = GetItemCooldown, GetItemCount, GetTime
+local IsItemInRange, ItemHasRange, HasExtraActionBar = IsItemInRange, ItemHasRange, HasExtraActionBar
+local GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo = GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo
 local C_Timer_NewTicker = C_Timer.NewTicker
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_QuestLog_GetInfo = C_QuestLog.GetInfo
