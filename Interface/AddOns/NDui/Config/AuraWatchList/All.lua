@@ -61,9 +61,10 @@ local list = {
 		{AuraID = 307496, UnitID = "player"},	-- 神圣觉醒药水
 		{AuraID = 307497, UnitID = "player"},	-- 死亡偏执药水
 		{AuraID = 344314, UnitID = "player"},	-- 心华之速药水
+		-- 9.0饰品
+		{AuraID = 345228, UnitID = "player"},	-- 角斗士徽章
 
 		{AuraID = 229206, UnitID = "player"},	-- 延时之力
-
 		{AuraID = 251231, UnitID = "player"},	-- 钢肤药水
 		{AuraID = 279151, UnitID = "player"},	-- 智力药水
 		{AuraID = 279152, UnitID = "player"},	-- 敏捷药水
