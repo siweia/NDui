@@ -6,7 +6,6 @@ local cfg = C.Bars.bar4
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 function Bar:CreateCustomBar(anchor)
-	local showGrid = tonumber(GetCVar("alwaysShowActionBars"))
 	local size = NDuiDB["Actionbar"]["CustomBarButtonSize"]
 	local num = 12
 	local name = "NDui_CustomBar"

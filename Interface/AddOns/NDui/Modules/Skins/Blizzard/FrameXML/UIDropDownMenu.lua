@@ -33,7 +33,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	hooksecurefunc("ToggleDropDownMenu", function(level, _, dropDownFrame, anchorName)
+	hooksecurefunc("ToggleDropDownMenu", function(level)
 		if not level then level = 1 end
 
 		local listFrame = _G["DropDownList"..level]

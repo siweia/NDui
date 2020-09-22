@@ -4,7 +4,7 @@ local r, g, b = DB.r, DB.g, DB.b
 
 -- /run UIParent_OnEvent({}, "WEEKLY_REWARDS_SHOW")
 
-local function updateSelection(frame, state)
+local function updateSelection(frame)
 	if not frame.bg then return end
 
 	if frame.SelectedTexture:IsShown() then

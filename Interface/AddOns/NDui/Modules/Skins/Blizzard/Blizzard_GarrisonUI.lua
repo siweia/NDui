@@ -633,7 +633,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("GarrisonMissionButton_SetReward", function(frame, rewards)
+	hooksecurefunc("GarrisonMissionButton_SetReward", function(frame)
 		if not frame.bg then
 			frame:GetRegions():Hide()
 			frame.bg = B.ReskinIcon(frame.Icon)

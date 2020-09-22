@@ -45,15 +45,6 @@ local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
 	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
-local function UpdateSpellStatus(button, spellID)
-	button.Icon:SetTexture(GetSpellTexture(spellID))
-	if IsUsableSpell(spellID) then
-		button.Icon:SetDesaturated(false)
-	else
-		button.Icon:SetDesaturated(true)
-	end
-end
-
 function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
 		for i = 1, 6 do self.dices[i]:Hide() end

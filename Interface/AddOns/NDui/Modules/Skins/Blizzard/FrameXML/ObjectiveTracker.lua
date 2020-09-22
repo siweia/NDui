@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local r, g, b = DB.r, DB.g, DB.b
-local select, unpack = select, unpack
+local select, pairs = select, pairs
 
 local function reskinQuestIcon(button)
 	if not button or button.styled then return end

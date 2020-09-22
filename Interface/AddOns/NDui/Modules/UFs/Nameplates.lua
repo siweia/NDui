@@ -1009,7 +1009,7 @@ function UF:TogglePlateVisibility()
 	end
 end
 
-function UF:UpdateGCDTicker(elapsed)
+function UF:UpdateGCDTicker()
 	local start, duration = GetSpellCooldown(61304)
 	if start > 0 and duration > 0 then
 		if self.duration ~= duration then
