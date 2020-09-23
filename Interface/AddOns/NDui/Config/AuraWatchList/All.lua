@@ -209,6 +209,9 @@ local list = {
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 310143, UnitID = "player", Combat = true},-- 灵魂变形
 		{AuraID = 324867, UnitID = "player", Value = true},	-- 血肉铸造
+		{AuraID = 323558, UnitID = "player"},	-- 申斥回响2
+		{AuraID = 323559, UnitID = "player"},	-- 申斥回响3
+		{AuraID = 323560, UnitID = "player"},	-- 申斥回响4
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量

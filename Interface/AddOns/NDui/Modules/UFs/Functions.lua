@@ -857,6 +857,17 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 		end
 		element.prevColor = element.thisColor
 	end
+
+	local chargedPowerPoints = GetUnitChargedPowerPoints(element.__owner.unit)
+	local chargedIndex = chargedPowerPoints and chargedPowerPoints[1]
+	if chargedIndex then
+		local bar = element[chargedIndex]
+		element.chargeStar:SetParent(bar)
+		element.chargeStar:SetPoint("CENTER", bar)
+		element.chargeStar:Show()
+	else
+		element.chargeStar:Hide()
+	end
 end
 
 function UF:OnUpdateRunes(elapsed)
@@ -934,6 +945,12 @@ function UF:CreateClassPower(self)
 		bars.__max = 6
 		self.Runes = bars
 	else
+		local chargeStar = bar:CreateTexture()
+		chargeStar:SetAtlas("VignetteKill")
+		chargeStar:SetSize(24, 24)
+		chargeStar:Hide()
+		bars.chargeStar = chargeStar
+
 		bars.PostUpdate = UF.PostUpdateClassPower
 		self.ClassPower = bars
 	end
