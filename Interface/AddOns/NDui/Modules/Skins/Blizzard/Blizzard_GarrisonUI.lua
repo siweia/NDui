@@ -96,11 +96,12 @@ local function ReskinMissionList(self)
 
 			button.LocBG:SetDrawLayer("BACKGROUND")
 			B.StripTextures(button)
-			B.CreateBDFrame(button, .25)
+			B.CreateBDFrame(button, .25, true)
+			button.Highlight:SetColorTexture(.6, .8, 1, .15)
+
 			if button.CompleteCheck then
 				button.CompleteCheck:SetAtlas("Adventures-Checkmark")
 			end
-
 			if rareText then
 				rareText:ClearAllPoints()
 				rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
@@ -110,6 +111,9 @@ local function ReskinMissionList(self)
 				rareOverlay:SetTexture(DB.bdTex)
 				rareOverlay:SetAllPoints()
 				rareOverlay:SetVertexColor(.098, .537, .969, .2)
+			end
+			if button.Overlay and button.Overlay.Overlay then
+				button.Overlay.Overlay:SetAllPoints()
 			end
 
 			button.styled = true
@@ -335,9 +339,23 @@ local function reskinAbilityIcon(self, anchor, yOffset)
 	self.CircleMask:Hide()
 	B.ReskinIcon(self.Icon)
 end
+
+local function updateFollowerColorOnBoard(self, _, info)
+	if self.squareBG then
+		local color = DB.QualityColors[info.quality or 0]
+		self.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+	end
+end
+
+local function resetFollowerColorOnBoard(self)
+	if self.squareBG then
+		self.squareBG:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
 local function reskinFollowerBoard(self, group)
 	for socketTexture in self[group.."SocketFramePool"]:EnumerateActive() do
-		socketTexture:SetAlpha(0)
+		socketTexture:DisableDrawLayer("BACKGROUND") -- we need the bufficons
 	end
 	for frame in self[group.."FramePool"]:EnumerateActive() do
 		if not frame.styled then
@@ -345,11 +363,16 @@ local function reskinFollowerBoard(self, group)
 			frame.PuckShadow:SetAlpha(0)
 			reskinAbilityIcon(frame.AbilityOne, "BOTTOMRIGHT", 1)
 			reskinAbilityIcon(frame.AbilityTwo, "TOPRIGHT", -1)
+			if frame.SetFollowerGUID then
+				hooksecurefunc(frame, "SetFollowerGUID", updateFollowerColorOnBoard)
+				hooksecurefunc(frame, "SetEmpty", resetFollowerColorOnBoard)
+			end
 
 			frame.styled = true
 		end
 	end
 end
+
 local function ReskinMissionBoards(self)
 	reskinFollowerBoard(self, "enemy")
 	reskinFollowerBoard(self, "follower")
