@@ -111,8 +111,8 @@ local function Visibility(self, event, unit)
 	element.__barInfo = barInfo
 	if(barInfo and (barInfo.showOnRaid and (UnitInParty(unit) or UnitInRaid(unit))
 		or not barInfo.hideFromOthers or UnitIsUnit(unit, 'player')
-		or UnitIsUnit(self.realUnit, 'player'))
-	) then
+		or UnitIsUnit(self.realUnit, 'player')))
+	then
 		self:RegisterEvent('UNIT_POWER_UPDATE', Path)
 		self:RegisterEvent('UNIT_MAXPOWER', Path)
 
