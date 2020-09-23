@@ -52,6 +52,7 @@ local _, PlayerClass = UnitClass('player')
 -- sourced from FrameXML/Constants.lua
 local SPEC_MAGE_ARCANE = SPEC_MAGE_ARCANE or 1
 local SPEC_MONK_WINDWALKER = SPEC_MONK_WINDWALKER or 3
+local SPEC_PALADIN_RETRIBUTION = SPEC_PALADIN_RETRIBUTION or 3
 local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION or 3
 local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
 local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
@@ -81,7 +82,7 @@ local function UpdateColor(element, powerType)
 end
 
 local function Update(self, event, unit, powerType)
-	if(not (unit and (UnitIsUnit(unit, 'player') and powerType == ClassPowerType
+	if(not (unit and (UnitIsUnit(unit, 'player') and (not powerType or powerType == ClassPowerType)
 		or unit == 'vehicle' and powerType == 'COMBO_POINTS'))) then
 		return
 	end
@@ -239,6 +240,10 @@ do
 		self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
 		self:RegisterEvent('UNIT_MAXPOWER', Path)
 
+		if(PlayerClass == 'ROGUE') then
+			self:RegisterEvent('UNIT_POWER_POINT_CHARGE', Path)
+		end
+
 		self.ClassPower.__isEnabled = true
 
 		if(UnitHasVehicleUI('player')) then
@@ -251,6 +256,7 @@ do
 	function ClassPowerDisable(self)
 		self:UnregisterEvent('UNIT_POWER_FREQUENT', Path)
 		self:UnregisterEvent('UNIT_MAXPOWER', Path)
+		self:UnregisterEvent('UNIT_POWER_POINT_CHARGE', Path)
 
 		local element = self.ClassPower
 		for i = 1, #element do
