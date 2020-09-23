@@ -777,6 +777,12 @@ function UF:UpdatePlateByType(self)
 	local name = self.nameText
 	local hpval = self.healthValue
 	local raidtarget = self.RaidTargetIndicator
+	local classify = self.ClassifyIndicator
+	local questIcon = self.questIcon
+
+	name:SetShown(not self.widgetsOnly)
+	name:ClearAllPoints()
+	raidtarget:ClearAllPoints()
 
 	if self.isFriendly then
 		for _, element in pairs(DisabledElements) do
@@ -795,7 +801,6 @@ function UF:UpdatePlateByType(self)
 		raidtarget:SetParent(self)
 		classify:Hide()
 		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
-		if self.widgetsOnly then name:Hide() end
 	else
 		for _, element in pairs(DisabledElements) do
 			if not self:IsElementEnabled(element) then
@@ -808,7 +813,6 @@ function UF:UpdatePlateByType(self)
 		name:UpdateTag()
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
-		name:Show()
 		hpval:Show()
 
 		raidtarget:ClearAllPoints()
