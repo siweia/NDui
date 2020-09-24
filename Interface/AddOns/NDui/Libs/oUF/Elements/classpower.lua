@@ -52,7 +52,6 @@ local _, PlayerClass = UnitClass('player')
 -- sourced from FrameXML/Constants.lua
 local SPEC_MAGE_ARCANE = SPEC_MAGE_ARCANE or 1
 local SPEC_MONK_WINDWALKER = SPEC_MONK_WINDWALKER or 3
-local SPEC_PALADIN_RETRIBUTION = SPEC_PALADIN_RETRIBUTION or 3
 local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION or 3
 local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
 local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
@@ -98,7 +97,7 @@ local function Update(self, event, unit, powerType)
 		element:PreUpdate()
 	end
 
-	local cur, max, mod, oldMax
+	local cur, max, mod, oldMax, chargedPowerPointIndex
 	if(event ~= 'ClassPowerDisable') then
 		local powerID = unit == 'vehicle' and SPELL_POWER_COMBO_POINTS or ClassPowerID
 		cur = UnitPower(unit, powerID, true)
@@ -111,6 +110,12 @@ local function Update(self, event, unit, powerType)
 		-- BUG: Destruction is supposed to show partial soulshards, but Affliction and Demonology should only show full ones
 		if(ClassPowerType == 'SOUL_SHARDS' and GetSpecialization() ~= SPEC_WARLOCK_DESTRUCTION) then
 			cur = cur - cur % 1
+		end
+
+		if(PlayerClass == 'ROGUE') then
+			local chargedPoints = GetUnitChargedPowerPoints(unit)
+			-- according to Blizzard there will only be one
+			chargedPowerPointIndex = chargedPoints and chargedPoints[1]
 		end
 
 		local numActive = cur + 0.9
@@ -139,14 +144,15 @@ local function Update(self, event, unit, powerType)
 	--[[ Callback: ClassPower:PostUpdate(cur, max, hasMaxChanged, powerType)
 	Called after the element has been updated.
 
-	* self          - the ClassPower element
-	* cur           - the current amount of power (number)
-	* max           - the maximum amount of power (number)
-	* hasMaxChanged - indicates whether the maximum amount has changed since the last update (boolean)
-	* powerType     - the active power type (string)
+	* self                   - the ClassPower element
+	* cur                    - the current amount of power (number)
+	* max                    - the maximum amount of power (number)
+	* hasMaxChanged          - indicates whether the maximum amount has changed since the last update (boolean)
+	* powerType              - the active power type (string)
+	* chargedPowerPointIndex - the index of the currently charged power point (number?)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(cur, max, oldMax ~= max, powerType)
+		return element:PostUpdate(cur, max, oldMax ~= max, powerType, chargedPowerPointIndex)
 	end
 end
 
