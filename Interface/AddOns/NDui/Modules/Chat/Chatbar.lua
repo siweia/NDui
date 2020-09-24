@@ -146,7 +146,7 @@ function module:Chatbar()
 end
 
 function module:ChatBarBackground()
-	if not NDuiDB["Skins"]["ChatLine"] then return end
+	if not NDuiDB["Skins"]["ChatbarLine"] then return end
 
 	local cr, cg, cb = 0, 0, 0
 	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
