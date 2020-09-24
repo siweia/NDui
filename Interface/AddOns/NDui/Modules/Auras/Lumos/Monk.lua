@@ -31,22 +31,9 @@ end
 
 function A:ChantLumos(self)
 	if GetSpecialization() == 1 then
-		do
-			local button = self.lumos[1]
-			local stagger, staggerAgainstTarget = C_PaperDollInfo.GetStaggerPercentage("player")
-			local amount = staggerAgainstTarget or stagger
-			if amount > 0 then
-				button.Count:SetText(floor(amount))
-				button.Icon:SetDesaturated(false)
-			else
-				button.Count:SetText("")
-				button.Icon:SetDesaturated(true)
-			end
-			button.Icon:SetTexture(GetSpellTexture(115069))
-		end
-
-		UpdateBuff(self.lumos[2], 322507, 322507, true)
-		UpdateBuff(self.lumos[3], 115308, 215479, true, "END")
+		UpdateCooldown(self.lumos[1], 121253, true)
+		UpdateBuff(self.lumos[2], 215479, 215479, false, "END")
+		UpdateBuff(self.lumos[3], 322507, 322507, true)
 		A:UpdateTotemAura(self.lumos[4], 608951, 132578, true)
 
 		do
