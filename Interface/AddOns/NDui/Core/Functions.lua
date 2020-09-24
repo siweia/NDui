@@ -1046,7 +1046,7 @@ do
 	end
 
 	-- Handle slider
-	function B:ReskinSlider(verticle)
+	function B:ReskinSlider(vertical)
 		self:SetBackdrop(nil)
 		B.StripTextures(self)
 
@@ -1057,7 +1057,7 @@ do
 		local thumb = self:GetThumbTexture()
 		thumb:SetTexture(DB.sparkTex)
 		thumb:SetBlendMode("ADD")
-		if verticle then thumb:SetRotation(rad(90)) end
+		if vertical then thumb:SetRotation(rad(90)) end
 	end
 
 	-- Handle collapse
