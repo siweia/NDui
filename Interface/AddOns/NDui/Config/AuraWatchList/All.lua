@@ -207,11 +207,20 @@ local list = {
 		{AuraID = 317859, UnitID = "player"},	-- 龙族强化，橙披
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
+		{AuraID = 323546, UnitID = "player"},	-- 饕餮狂乱
+		{AuraID = 326860, UnitID = "player"},	-- 陨落僧众
 		{AuraID = 310143, UnitID = "player", Combat = true},-- 灵魂变形
+		{AuraID = 327104, UnitID = "player"},	-- 妖魂踏
 		{AuraID = 324867, UnitID = "player", Value = true},	-- 血肉铸造
+		{AuraID = 325748, UnitID = "player"},	-- 激变蜂群
+		{AuraID = 325216, UnitID = "player"},	-- 骨尘酒
+		{AuraID = 324220, UnitID = "player"},	-- 死神之躯
 		{AuraID = 323558, UnitID = "player"},	-- 申斥回响2
 		{AuraID = 323559, UnitID = "player"},	-- 申斥回响3
 		{AuraID = 323560, UnitID = "player"},	-- 申斥回响4
+		{AuraID = 338142, UnitID = "player"},	-- 自审强化
+		{AuraID = 310454, UnitID = "player"},	-- 精序兵戈
+		{AuraID = 325013, UnitID = "player"},	-- 晋升者之赐
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
