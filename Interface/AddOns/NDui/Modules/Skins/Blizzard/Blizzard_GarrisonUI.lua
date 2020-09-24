@@ -365,6 +365,8 @@ local function reskinFollowerBoard(self, group)
 			reskinAbilityIcon(frame.AbilityTwo, "TOPRIGHT", -1)
 			if frame.SetFollowerGUID then
 				hooksecurefunc(frame, "SetFollowerGUID", updateFollowerColorOnBoard)
+			end
+			if frame.SetEmpty then
 				hooksecurefunc(frame, "SetEmpty", resetFollowerColorOnBoard)
 			end
 
