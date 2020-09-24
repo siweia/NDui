@@ -825,7 +825,7 @@ end
 -- Class Powers
 local barWidth, barHeight = unpack(C.UFs.BarSize)
 
-function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
+function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowerPointIndex)
 	if not cur or cur == 0 then
 		for i = 1, 6 do
 			element[i].bg:Hide()
@@ -858,10 +858,8 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 		element.prevColor = element.thisColor
 	end
 
-	local chargedPowerPoints = GetUnitChargedPowerPoints(element.__owner.unit)
-	local chargedIndex = chargedPowerPoints and chargedPowerPoints[1]
-	if chargedIndex then
-		local bar = element[chargedIndex]
+	if chargedPowerPointIndex then
+		local bar = element[chargedPowerPointIndex]
 		element.chargeStar:SetParent(bar)
 		element.chargeStar:SetPoint("CENTER", bar)
 		element.chargeStar:Show()
