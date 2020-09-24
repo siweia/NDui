@@ -216,20 +216,28 @@ function info:GuildPanel_Init()
 	scrollFrame:SetPoint("TOPLEFT", 10, -100)
 	infoFrame.scrollFrame = scrollFrame
 
-	local bar = CreateFrame("Slider", "$parentScrollBar", scrollFrame, "HybridScrollBarTemplate")
-	bar:SetPoint("LEFT", scrollFrame, "RIGHT", -1, 0)
-	bar.doNotHide = true
-	B.ReskinScroll(bar)
-	scrollFrame.scrollBar = bar
+	local scrollBar = CreateFrame("Slider", "$parentScrollBar", scrollFrame, "HybridScrollBarTemplate")
+	scrollBar.doNotHide = true
+	B.ReskinScroll(scrollBar)
+	scrollFrame.scrollBar = scrollBar
 
-	scrollFrame.buttons = {}
-	for i = 1, 16 do
-		scrollFrame.buttons[i] = info:GuildPanel_CreateButton(scrollFrame, i)
+	local scrollChild = scrollFrame.scrollChild
+	local numButtons = 16 + 1
+	local buttonHeight = 22
+	local buttons = {}
+	for i = 1, numButtons do
+		buttons[i] = info:GuildPanel_CreateButton(scrollChild, i)
 	end
 
-	scrollFrame.buttonHeight = 22
+	scrollFrame.buttons = buttons
+	scrollFrame.buttonHeight = buttonHeight
 	scrollFrame.update = info.GuildPanel_Update
 	scrollFrame:SetScript("OnMouseWheel", info.GuildPanel_OnMouseWheel)
+	scrollChild:SetSize(scrollFrame:GetWidth(), numButtons * buttonHeight)
+	scrollFrame:SetVerticalScroll(0)
+	scrollFrame:UpdateScrollChildRect()
+	scrollBar:SetMinMaxValues(0, numButtons * buttonHeight)
+	scrollBar:SetValue(0)
 end
 
 C_Timer_After(5, function()
@@ -317,7 +325,6 @@ info.onEvent = function(self, event, arg1)
 	end
 end
 
-local initFixed
 info.onEnter = function()
 	if not IsInGuild() then return end
 	if NDuiFriendsFrame and NDuiFriendsFrame:IsShown() then
@@ -327,11 +334,6 @@ info.onEnter = function()
 	info:GuildPanel_Init()
 	info:GuildPanel_Refresh()
 	info:GuildPanel_SortUpdate()
-
-	if not initFixed then
-		infoFrame.scrollFrame.scrollBar:SetValue(0)
-		initFixed = true
-	end
 end
 
 local function delayLeave()

@@ -183,20 +183,28 @@ function info:FriendsPanel_Init()
 	scrollFrame:SetPoint("TOPLEFT", 10, -35)
 	infoFrame.scrollFrame = scrollFrame
 
-	local bar = CreateFrame("Slider", "$parentScrollBar", scrollFrame, "HybridScrollBarTemplate")
-	bar:SetPoint("LEFT", scrollFrame, "RIGHT", -1, 0)
-	bar.doNotHide = true
-	B.ReskinScroll(bar)
-	scrollFrame.scrollBar = bar
+	local scrollBar = CreateFrame("Slider", "$parentScrollBar", scrollFrame, "HybridScrollBarTemplate")
+	scrollBar.doNotHide = true
+	B.ReskinScroll(scrollBar)
+	scrollFrame.scrollBar = scrollBar
 
-	scrollFrame.buttons = {}
-	for i = 1, 20 do
-		scrollFrame.buttons[i] = info:FriendsPanel_CreateButton(scrollFrame, i)
+	local scrollChild = scrollFrame.scrollChild
+	local numButtons = 20 + 1
+	local buttonHeight = 22
+	local buttons = {}
+	for i = 1, numButtons do
+		buttons[i] = info:FriendsPanel_CreateButton(scrollChild, i)
 	end
 
-	scrollFrame.buttonHeight = 22
+	scrollFrame.buttons = buttons
+	scrollFrame.buttonHeight = buttonHeight
 	scrollFrame.update = info.FriendsPanel_Update
 	scrollFrame:SetScript("OnMouseWheel", info.FriendsPanel_OnMouseWheel)
+	scrollChild:SetSize(scrollFrame:GetWidth(), numButtons * buttonHeight)
+	scrollFrame:SetVerticalScroll(0)
+	scrollFrame:UpdateScrollChildRect()
+	scrollBar:SetMinMaxValues(0, numButtons * buttonHeight)
+	scrollBar:SetValue(0)
 
 	B.CreateFS(infoFrame, 13, DB.LineString, false, "BOTTOMRIGHT", -12, 42)
 	local whspInfo = DB.InfoColor..DB.RightButton..L["Whisper"]
@@ -491,7 +499,6 @@ info.onEvent = function(self, event, arg1)
 	end
 end
 
-local initFixed
 info.onEnter = function(self)
 	local thisTime = GetTime()
 	if not prevTime or (thisTime-prevTime > 5) then
@@ -528,11 +535,6 @@ info.onEnter = function(self)
 	info:FriendsPanel_Init()
 	info:FriendsPanel_Update()
 	infoFrame.friendCountText:SetText(format("%s: %s/%s", GUILD_ONLINE_LABEL, totalOnline, totalFriends))
-
-	if not initFixed then
-		infoFrame.scrollFrame.scrollBar:SetValue(0)
-		initFixed = true
-	end
 end
 
 local function delayLeave()
