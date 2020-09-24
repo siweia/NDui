@@ -449,7 +449,7 @@ do
 		self:SetFrameStrata("BACKGROUND")
 		local gf = self:CreateTexture(nil, "BACKGROUND")
 		gf:SetAllPoints()
-		gf:SetTexture(DB.normTex)
+		gf:SetTexture(DB.bdTex)
 		gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
 	end
 
