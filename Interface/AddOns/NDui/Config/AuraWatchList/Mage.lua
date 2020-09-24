@@ -42,6 +42,8 @@ local list = {
 		{AuraID = 210134, UnitID = "target", Caster = "player"},	-- 奥术侵蚀
 		{AuraID = 199786, UnitID = "target", Caster = "player"},	-- 冰川尖刺
 		{AuraID = 210824, UnitID = "target", Caster = "player"},	-- 大法师之触
+		{AuraID = 307443, UnitID = "target", Caster = "player"},	-- 摧残火花
+		{AuraID = 314793, UnitID = "target", Caster = "player"},	-- 折磨之镜
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 66, UnitID = "player"},		-- 隐形术
