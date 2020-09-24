@@ -20,6 +20,7 @@ local channelingTicks = {
 	[205065] = 6,	-- 虚空洪流
 	[234153] = 5,	-- 吸取生命
 	[291944] = 6,	-- 再生
+	[314791] = 4,	-- 变易幻能
 }
 
 if DB.MyClass == "PRIEST" then
