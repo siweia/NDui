@@ -69,7 +69,7 @@ G.DefaultSettings = {
 	Auras = {
 		Reminder = true,
 		Totems = true,
-		VerticleTotems = true,
+		VerticalTotems = true,
 		TotemSize = 32,
 		ClassAuras = true,
 		ReverseBuffs = false,
@@ -861,7 +861,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], true, {.8, 2, .1}},
 		{},--blank
 		{1, "Auras", "Totems", "|cff00cc4c"..L["Enable Totembar"]},
-		{1, "Auras", "VerticleTotems", L["VerticleTotems"].."*", nil, nil, refreshTotemBar},
+		{1, "Auras", "VerticalTotems", L["VerticalTotems"].."*", nil, nil, refreshTotemBar},
 		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},
 		{},--blank
 		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},

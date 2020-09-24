@@ -10,10 +10,10 @@ local GetTotemInfo = GetTotemInfo
 local totems = {}
 
 function A:TotemBar_Init()
-	local verticle = NDuiDB["Auras"]["VerticleTotems"]
+	local vertical = NDuiDB["Auras"]["VerticalTotems"]
 	local iconSize = NDuiDB["Auras"]["TotemSize"]
-	local width = verticle and (iconSize + margin*2) or (iconSize*4 + margin*5)
-	local height = verticle and (iconSize*4 + margin*5) or (iconSize + margin*2)
+	local width = vertical and (iconSize + margin*2) or (iconSize*4 + margin*5)
+	local height = vertical and (iconSize*4 + margin*5) or (iconSize + margin*2)
 
 	local totemBar = _G["NDui_TotemBar"]
 	if not totemBar then
@@ -45,7 +45,7 @@ function A:TotemBar_Init()
 		totem:ClearAllPoints()
 		if i == 1 then
 			totem:SetPoint("BOTTOMLEFT", margin, margin)
-		elseif verticle then
+		elseif vertical then
 			totem:SetPoint("BOTTOM", totems[i-1], "TOP", 0, margin)
 		else
 			totem:SetPoint("LEFT", totems[i-1], "RIGHT", margin, 0)
