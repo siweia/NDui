@@ -366,10 +366,10 @@ G.AccountSettings = {
 }
 
 -- Initial settings
-local textureList = {
-	[1] = DB.normTex,
-	[2] = DB.gradTex,
-	[3] = DB.flatTex,
+G.TextureList = {
+	[1] = {texture = DB.normTex, name = L["Highlight"]},
+	[2] = {texture = DB.gradTex, name = L["Gradient"]},
+	[3] = {texture = DB.flatTex, name = L["Flat"]},
 }
 
 local function InitialSettings(source, target, fullClean)
@@ -410,7 +410,10 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	InitialSettings(G.DefaultSettings, NDuiDB, true)
 	InitialSettings(G.AccountSettings, NDuiADB)
 	B:SetupUIScale(true)
-	DB.normTex = textureList[NDuiADB["TexStyle"]]
+	if not G.TextureList[NDuiADB["TexStyle"]] then
+		NDuiADB["TexStyle"] = 2 -- reset value if not exists
+	end
+	DB.normTex = G.TextureList[NDuiADB["TexStyle"]].texture
 
 	self:UnregisterAllEvents()
 end)
@@ -681,7 +684,7 @@ end
 local function AddTextureToOption(parent, index)
 	local tex = parent[index]:CreateTexture()
 	tex:SetInside(nil, 4, 4)
-	tex:SetTexture(textureList[index])
+	tex:SetTexture(G.TextureList[index].texture)
 	tex:SetVertexColor(cr, cg, cb)
 end
 
@@ -1016,7 +1019,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, .01}},
 		{1, "ACCOUNT", "LockUIScale", "|cff00cc4c"..L["Lock UIScale"], true},
 		{},--blank
-		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {L["Highlight"], L["Gradient"], L["Flat"]}},
+		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 	},
 }
@@ -1159,6 +1162,12 @@ local function CreateOption(i)
 			end
 		-- Dropdown
 		elseif optType == 4 then
+			if value == "TexStyle" then
+				for _, v in ipairs(G.TextureList) do
+					tinsert(data, v.name)
+				end
+			end
+
 			local dd = B.CreateDropDown(parent, 200, 28, data)
 			if horizon then
 				dd:SetPoint("TOPLEFT", 345, -offset + 45)
