@@ -678,6 +678,13 @@ local function resetDetails()
 	StaticPopup_Show("RESET_DETAILS")
 end
 
+local function AddTextureToOption(parent, index)
+	local tex = parent[index]:CreateTexture()
+	tex:SetInside(nil, 4, 4)
+	tex:SetTexture(textureList[index])
+	tex:SetVertexColor(cr, cg, cb)
+end
+
 -- Config
 G.TabList = {
 	L["Actionbar"],
@@ -1178,6 +1185,9 @@ local function CreateOption(i)
 					NDUI_VARIABLE(key, value, i)
 					if callback then callback() end
 				end)
+				if value == "TexStyle" then
+					AddTextureToOption(opt, i) -- texture preview
+				end
 			end
 
 			B.CreateFS(dd, 14, name, "system", "CENTER", 0, 25)
