@@ -52,6 +52,10 @@ function module:TimerOnUpdate(elapsed)
 	end
 end
 
+function module:ScalerOnSizeChanged(...)
+	module.OnSizeChanged(self.timer, ...)
+end
+
 function module:OnCreate()
 	local scaler = CreateFrame("Frame", nil, self)
 	scaler:SetAllPoints(self)
@@ -60,6 +64,7 @@ function module:OnCreate()
 	timer:Hide()
 	timer:SetAllPoints(scaler)
 	timer:SetScript("OnUpdate", module.TimerOnUpdate)
+	scaler.timer = timer
 
 	local text = timer:CreateFontString(nil, "BACKGROUND")
 	text:SetPoint("CENTER", 2, 0)
@@ -67,9 +72,7 @@ function module:OnCreate()
 	timer.text = text
 
 	module.OnSizeChanged(timer, scaler:GetSize())
-	scaler:SetScript("OnSizeChanged", function(_, ...)
-		module.OnSizeChanged(timer, ...)
-	end)
+	scaler:SetScript("OnSizeChanged", module.ScalerOnSizeChanged)
 
 	self.timer = timer
 	return timer
