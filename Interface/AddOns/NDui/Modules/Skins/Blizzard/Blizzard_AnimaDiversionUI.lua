@@ -24,4 +24,6 @@ C.themes["Blizzard_AnimaDiversionUI"] = function()
 			end
 		end
 	end)
+
+	B.Reskin(frame.ReinforceInfoFrame.AnimaNodeReinforceButton)
 end
