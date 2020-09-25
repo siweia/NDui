@@ -90,7 +90,7 @@ function M:Logo_Create()
 		frame:Hide()
 	end)
 	anim.fadeIn:SetScript("OnFinished", function()
-		PlaySound(soundID, "master")
+		PlaySound(soundID)
 	end)
 
 	M.logoFrame = frame
