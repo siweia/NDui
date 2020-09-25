@@ -28,6 +28,7 @@ local list = {
 		{AuraID = 194310, UnitID = "target", Caster = "player"},	-- 溃烂之伤
 		{AuraID = 156004, UnitID = "target", Caster = "player"},	-- 亵渎
 		{AuraID = 191748, UnitID = "target", Caster = "player"},	-- 诸界之灾
+		{AuraID = 312202, UnitID = "target", Caster = "player"},	-- 失格者之梏
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 63560, UnitID = "pet"},		-- 黑暗突变

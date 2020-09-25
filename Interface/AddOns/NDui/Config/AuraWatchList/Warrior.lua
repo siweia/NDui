@@ -20,12 +20,12 @@ local list = {
 		{AuraID = 5246, UnitID = "target", Caster = "player"},		-- 破胆
 		{AuraID = 12323, UnitID = "target", Caster = "player"},		-- 刺耳怒吼
 		{AuraID = 105771, UnitID = "target", Caster = "player"},	-- 冲锋：定身
-		{AuraID = 115767, UnitID = "target", Caster = "player"},	-- 重伤
 		{AuraID = 132169, UnitID = "target", Caster = "player"},	-- 风暴之锤
 		{AuraID = 132168, UnitID = "target", Caster = "player"},	-- 震荡波
 		{AuraID = 208086, UnitID = "target", Caster = "player"},	-- 巨人打击
 		{AuraID = 115804, UnitID = "target", Caster = "player"},	-- 致死
 		{AuraID = 280773, UnitID = "target", Caster = "player"},	-- 破城者
+		{AuraID = 317491, UnitID = "target", Caster = "player", Value = true},	-- 有罪
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 871, UnitID = "player"},		-- 盾墙

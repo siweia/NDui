@@ -54,6 +54,8 @@ local list = {
 		{AuraID = 277959, UnitID = "target", Caster = "player"},	-- 稳固瞄准
 		{AuraID = 217200, UnitID = "target", Caster = "player"},	-- 倒刺射击
 		{AuraID = 336746, UnitID = "target", Caster = "player"},	-- 魂铸余烬，橙装
+		{AuraID = 328275, UnitID = "target", Caster = "player"},	-- 野性印记
+		{AuraID = 324149, UnitID = "target", Caster = "player"},	-- 劫掠射击
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 19574, UnitID = "player"},	-- 狂野怒火

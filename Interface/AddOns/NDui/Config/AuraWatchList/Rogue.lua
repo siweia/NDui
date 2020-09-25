@@ -36,6 +36,9 @@ local list = {
 		{AuraID = 255909, UnitID = "target", Caster = "player"},	-- 欺凌
 		{AuraID = 316220, UnitID = "target", Caster = "player"},	-- 洞悉弱点
 		{AuraID = 315341, UnitID = "target", Caster = "player"},	-- 正中眉心
+		{AuraID = 328305, UnitID = "target", Caster = "player"},	-- 败血刃伤
+		{AuraID = 323654, UnitID = "target", Caster = "player"},	-- Flagellation
+		{AuraID = 324073, UnitID = "target", Caster = "player"},	-- 锯齿骨刺
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 1966, UnitID = "player"},		-- 佯攻
