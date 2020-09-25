@@ -24,6 +24,7 @@ local list = {
 		{AuraID = 48181, UnitID = "target", Caster = "player"},		-- 鬼影缠身
 		{AuraID = 63106, UnitID = "target", Caster = "player"},		-- 生命虹吸
 		{AuraID = 30283, UnitID = "target", Caster = "player"},		-- 暗影之怒
+		{AuraID = 32390, UnitID = "target", Caster = "player"},		-- 暗影之拥
 		{AuraID = 80240, UnitID = "target", Caster = "player"},		-- 浩劫
 		{AuraID = 146739, UnitID = "target", Caster = "player"},	-- 腐蚀术
 		{AuraID = 316099, UnitID = "target", Caster = "player"},	-- 痛苦无常
@@ -36,8 +37,10 @@ local list = {
 		{AuraID = 270569, UnitID = "target", Caster = "player"},	-- 来自阴影
 		{AuraID = 278350, UnitID = "target", Caster = "player"},	-- 邪恶污染
 		{AuraID = 205179, UnitID = "target", Caster = "player"},	-- 诡异魅影
-		{AuraID = 32390, UnitID = "target", Caster = "player"},		-- 暗影之拥
 		{AuraID = 265931, UnitID = "target", Caster = "player"},	-- 燃烧
+		{AuraID = 312321, UnitID = "target", Caster = "player"},	-- 碎魂奉纳
+		{AuraID = 325640, UnitID = "target", Caster = "player"},	-- 灵魂腐化
+		{AuraID = 322170, UnitID = "target", Caster = "player"},	-- 灾祸降临
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 89751, UnitID = "pet"},		-- 魔刃风暴

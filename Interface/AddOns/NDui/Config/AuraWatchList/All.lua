@@ -211,16 +211,29 @@ local list = {
 		{AuraID = 326860, UnitID = "player"},	-- 陨落僧众
 		{AuraID = 310143, UnitID = "player", Combat = true},-- 灵魂变形
 		{AuraID = 327104, UnitID = "player"},	-- 妖魂踏
+		{AuraID = 327710, UnitID = "player"},	-- 善行法夜
+		{AuraID = 328933, UnitID = "player"},	-- 法夜输灵
+		{AuraID = 328281, UnitID = "player"},	-- 凛冬祝福
+		{AuraID = 328282, UnitID = "player"},	-- 阳春祝福
+		{AuraID = 328620, UnitID = "player"},	-- 仲夏祝福
+		{AuraID = 328622, UnitID = "player"},	-- 暮秋祝福
 		{AuraID = 324867, UnitID = "player", Value = true},	-- 血肉铸造
+		{AuraID = 328204, UnitID = "player"},	-- 征服者之锤
 		{AuraID = 325748, UnitID = "player"},	-- 激变蜂群
+		{AuraID = 315443, UnitID = "player"},	-- 憎恶附肢
+		{AuraID = 325299, UnitID = "player"},	-- 屠戮箭
+		{AuraID = 327164, UnitID = "player"},	-- 始源之潮
 		{AuraID = 325216, UnitID = "player"},	-- 骨尘酒
+		{AuraID = 343672, UnitID = "player"},	-- 征服者之狂
 		{AuraID = 324220, UnitID = "player"},	-- 死神之躯
+		{AuraID = 311648, UnitID = "player"},	-- 云集之雾
 		{AuraID = 323558, UnitID = "player"},	-- 申斥回响2
 		{AuraID = 323559, UnitID = "player"},	-- 申斥回响3
 		{AuraID = 323560, UnitID = "player"},	-- 申斥回响4
 		{AuraID = 338142, UnitID = "player"},	-- 自审强化
 		{AuraID = 310454, UnitID = "player"},	-- 精序兵戈
 		{AuraID = 325013, UnitID = "player"},	-- 晋升者之赐
+		{AuraID = 308495, UnitID = "player"},	-- 共鸣箭
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
