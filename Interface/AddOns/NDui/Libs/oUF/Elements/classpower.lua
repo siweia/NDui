@@ -97,7 +97,7 @@ local function Update(self, event, unit, powerType)
 		element:PreUpdate()
 	end
 
-	local cur, max, mod, oldMax, chargedPowerPointIndex
+	local cur, max, mod, oldMax, chargedIndex
 	if(event ~= 'ClassPowerDisable') then
 		local powerID = unit == 'vehicle' and SPELL_POWER_COMBO_POINTS or ClassPowerID
 		cur = UnitPower(unit, powerID, true)
@@ -115,7 +115,7 @@ local function Update(self, event, unit, powerType)
 		if(PlayerClass == 'ROGUE') then
 			local chargedPoints = GetUnitChargedPowerPoints(unit)
 			-- according to Blizzard there will only be one
-			chargedPowerPointIndex = chargedPoints and chargedPoints[1]
+			chargedIndex = chargedPoints and chargedPoints[1]
 		end
 
 		local numActive = cur + 0.9
@@ -144,15 +144,15 @@ local function Update(self, event, unit, powerType)
 	--[[ Callback: ClassPower:PostUpdate(cur, max, hasMaxChanged, powerType)
 	Called after the element has been updated.
 
-	* self                   - the ClassPower element
-	* cur                    - the current amount of power (number)
-	* max                    - the maximum amount of power (number)
-	* hasMaxChanged          - indicates whether the maximum amount has changed since the last update (boolean)
-	* powerType              - the active power type (string)
-	* chargedPowerPointIndex - the index of the currently charged power point (number?)
+	* self          - the ClassPower element
+	* cur           - the current amount of power (number)
+	* max           - the maximum amount of power (number)
+	* hasMaxChanged - indicates whether the maximum amount has changed since the last update (boolean)
+	* powerType     - the active power type (string)
+	* chargedIndex  - the index of the currently charged power point (number?)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(cur, max, oldMax ~= max, powerType, chargedPowerPointIndex)
+		return element:PostUpdate(cur, max, oldMax ~= max, powerType, chargedIndex)
 	end
 end
 
