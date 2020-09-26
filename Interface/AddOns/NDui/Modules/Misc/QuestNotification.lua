@@ -17,7 +17,7 @@ local QUEST_COMPLETE = QUEST_COMPLETE
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 
-local debugMode = true
+local debugMode = false
 local completedQuest, initComplete = {}
 
 local function acceptText(link, daily)
@@ -125,7 +125,6 @@ end
 
 function M:QuestNotification()
 	if NDuiDB["Misc"]["QuestNotification"] then
-		M:FindQuestComplete()
 		B:RegisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:RegisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
 		B:RegisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
