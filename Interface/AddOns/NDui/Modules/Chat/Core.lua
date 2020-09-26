@@ -48,7 +48,6 @@ end
 
 local function BlackBackground(self)
 	local frame = B.SetBD(self.Background)
-	frame:SetPoint("BOTTOMRIGHT", 26, -7)
 	frame:SetShown(NDuiDB["Chat"]["ChatBGType"] == 2)
 
 	return frame
