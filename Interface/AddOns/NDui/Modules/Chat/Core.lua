@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
+local cr, cg, cb = DB.r, DB.g, DB.b
 
 local _G = _G
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
@@ -63,6 +64,16 @@ function module:SkinChat()
 
 	self.__background = B.SetBD(self.Background)
 	self.__background:SetShown(NDuiDB["Chat"]["ShowBG"])
+
+	self.__gradient = CreateFrame("Frame", nil, self)
+	B.CreateGF(self.__gradient, 1, 1, "Horizontal", 0, 0, 0, .7, 0)
+	self.__gradient:SetOutside(self.Background)
+	self.__gradient:SetFrameLevel(0)
+	local line = self.__gradient:CreateTexture(nil, "BACKGROUND")
+	line:SetTexture(DB.bdTex)
+	line:SetPoint("BOTTOMLEFT", self.__gradient, "TOPLEFT")
+	line:SetPoint("TOPRIGHT", self.__gradient, "TOPRIGHT", 0, C.mult)
+	line:SetGradientAlpha("Horizontal", cr, cg, cb, .5, cr, cg, cb, 0)
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
