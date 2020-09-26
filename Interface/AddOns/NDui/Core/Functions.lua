@@ -453,6 +453,23 @@ do
 		gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
 	end
 
+	local orientationAbbr = {
+		["V"] = "Vertical",
+		["H"] = "Horizontal",
+	}
+	function B:SetGradient(orientation, r, g, b, a1, a2, width, height)
+		orientation = orientationAbbr[orientation]
+		if not orientation then return end
+
+		local tex = self:CreateTexture(nil, "BACKGROUND")
+		tex:SetTexture(DB.bdTex)
+		tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+		if width then tex:SetWidth(width) end
+		if height then tex:SetHeight(height) end
+
+		return tex
+	end
+
 	-- Background texture
 	function B:CreateTex()
 		if self.Tex then return end
