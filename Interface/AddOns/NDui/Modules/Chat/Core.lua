@@ -63,12 +63,13 @@ function module:SkinChat()
 	end
 
 	self.__background = B.SetBD(self.Background)
-	self.__background:SetShown(NDuiDB["Chat"]["ShowBG"])
+	self.__background:SetShown(NDuiDB["Chat"]["ChatBGType"] == 2)
 
 	self.__gradient = CreateFrame("Frame", nil, self)
 	B.CreateGF(self.__gradient, 1, 1, "Horizontal", 0, 0, 0, .7, 0)
 	self.__gradient:SetOutside(self.Background)
 	self.__gradient:SetFrameLevel(0)
+	self.__gradient:SetShown(NDuiDB["Chat"]["ChatBGType"] == 3)
 	local line = self.__gradient:CreateTexture(nil, "BACKGROUND")
 	line:SetTexture(DB.bdTex)
 	line:SetPoint("BOTTOMLEFT", self.__gradient, "TOPLEFT")
@@ -109,7 +110,10 @@ function module:ToggleChatBackground()
 	for _, chatFrameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[chatFrameName]
 		if frame.__background then
-			frame.__background:SetShown(NDuiDB["Chat"]["ShowBG"])
+			frame.__background:SetShown(NDuiDB["Chat"]["ChatBGType"] == 2)
+		end
+		if frame.__gradient then
+			frame.__gradient:SetShown(NDuiDB["Chat"]["ChatBGType"] == 3)
 		end
 	end
 end
