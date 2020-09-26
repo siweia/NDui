@@ -191,7 +191,7 @@ G.DefaultSettings = {
 		ChatHeight = 190,
 		BlockStranger = false,
 		AllowFriends = true,
-		ChatBGType = 1,
+		ChatBGType = 2,
 	},
 	Map = {
 		Coord = true,
@@ -919,7 +919,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
 		{1, "Chat", "Freedom", L["Language Filter"], true},
 		{4, "ACCOUNT", "TimestampFormat", L["TimestampFormat"].."*", nil, {DISABLE, "03:27 PM", "03:27:32 PM", "15:27", "15:27:32"}},
-		{4, "Chat", "ChatBGType", "ChatBGType".."*", true, {DISABLE, "BLACK", "GRADIENT"}, toggleChatBackground},
+		{4, "Chat", "ChatBGType", L["ChatBGType"].."*", true, {DISABLE, L["Default Dark"], L["Gradient"]}, toggleChatBackground},
 		{},--blank
 		{1, "Chat", "EnableFilter", "|cff00cc4c"..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
