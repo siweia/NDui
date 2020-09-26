@@ -78,27 +78,25 @@ function module:BackgroundLines()
 	local cr, cg, cb = 0, 0, 0
 	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
 
-	-- TOPLEFT
-	local Tinfobar = CreateFrame("Frame", nil, UIParent)
-	Tinfobar:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 0, -3)
-	B.CreateGF(Tinfobar, 550, 18, "Horizontal", 0, 0, 0, .5, 0)
-	local Tinfobar1 = CreateFrame("Frame", nil, Tinfobar)
-	Tinfobar1:SetPoint("BOTTOM", Tinfobar, "TOP")
-	B.CreateGF(Tinfobar1, 550, C.mult, "Horizontal", cr, cg, cb, .7, 0)
-	local Tinfobar2 = CreateFrame("Frame", nil, Tinfobar)
-	Tinfobar2:SetPoint("TOP", Tinfobar, "BOTTOM")
-	B.CreateGF(Tinfobar2, 550, C.mult, "Horizontal", cr, cg, cb, .7, 0)
+	local parent = UIParent
+	local width, height = 450, 18
+	local anchors = {
+		[1] = {"TOPLEFT", -3, .5, 0},
+		[2] = {"BOTTOMRIGHT", 3, 0, .5},
+	}
+	for _, v in pairs(anchors) do
+		local frame = CreateFrame("Frame", nil, parent)
+		frame:SetPoint(v[1], parent, v[1], 0, v[2])
+		frame:SetSize(width, height)
+		frame:SetFrameStrata("BACKGROUND")
 
-	-- BOTTOMRIGHT
-	local Rinfobar = CreateFrame("Frame", nil, UIParent)
-	Rinfobar:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", 0, 3)
-	B.CreateGF(Rinfobar, 450, 18, "Horizontal", 0, 0, 0, 0, .5)
-	local Rinfobar1 = CreateFrame("Frame", nil, Rinfobar)
-	Rinfobar1:SetPoint("BOTTOM", Rinfobar, "TOP")
-	B.CreateGF(Rinfobar1, 450, C.mult, "Horizontal", cr, cg, cb, 0, .7)
-	local Rinfobar2 = CreateFrame("Frame", nil, Rinfobar)
-	Rinfobar2:SetPoint("TOP", Rinfobar, "BOTTOM")
-	B.CreateGF(Rinfobar2, 450, C.mult, "Horizontal", cr, cg, cb, 0, .7)
+		local tex = B.SetGradient(frame, "H", 0, 0, 0, v[3], v[4], width, height)
+		tex:SetPoint("CENTER")
+		local bottomLine = B.SetGradient(frame, "H", cr, cg, cb, v[3], v[4], width, C.mult)
+		bottomLine:SetPoint("TOP", frame, "BOTTOM")
+		local topLine = B.SetGradient(frame, "H", cr, cg, cb, v[3], v[4], width, C.mult)
+		topLine:SetPoint("BOTTOM", frame, "TOP")
+	end
 end
 
 function module:OnLogin()

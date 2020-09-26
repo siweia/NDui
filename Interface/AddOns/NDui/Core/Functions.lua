@@ -443,16 +443,7 @@ do
 		return frame
 	end
 
-	-- Gradient Frame
-	function B:CreateGF(w, h, o, r, g, b, a1, a2)
-		self:SetSize(w, h)
-		self:SetFrameStrata("BACKGROUND")
-		local gf = self:CreateTexture(nil, "BACKGROUND")
-		gf:SetAllPoints()
-		gf:SetTexture(DB.bdTex)
-		gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
-	end
-
+	-- Gradient texture
 	local orientationAbbr = {
 		["V"] = "Vertical",
 		["H"] = "Horizontal",

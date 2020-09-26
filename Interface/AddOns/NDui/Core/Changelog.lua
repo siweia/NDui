@@ -35,14 +35,12 @@ local function changelog()
 	B.SetBD(f)
 	B.CreateFS(f, 18, DB.Version.." "..L["Changelog"], true, "TOP", 0, -10)
 	B.CreateWatermark(f)
-	local ll = CreateFrame("Frame", nil, f)
+
+	local ll = B.SetGradient(f, "H", .7, .7, .7, 0, .5, 100, C.mult)
 	ll:SetPoint("TOP", -50, -35)
-	B.CreateGF(ll, 100, 1, "Horizontal", .7, .7, .7, 0, .7)
-	ll:SetFrameStrata("HIGH")
-	local lr = CreateFrame("Frame", nil, f)
+	local lr = B.SetGradient(f, "H", .7, .7, .7, .5, 0, 100, C.mult)
 	lr:SetPoint("TOP", 50, -35)
-	B.CreateGF(lr, 100, 1, "Horizontal", .7, .7, .7, .7, 0)
-	lr:SetFrameStrata("HIGH")
+
 	local offset = 0
 	for n, t in pairs(hx) do
 		B.CreateFS(f, 14, n..": "..t, false, "TOPLEFT", 15, -(50 + offset))
