@@ -145,7 +145,7 @@ G.DefaultSettings = {
 		SmoothAmount = .3,
 		RaidTextScale = 1,
 		FrequentHealth = false,
-		HealthFrequency = .25,
+		HealthFrequency = .2,
 		TargetAurasPerRow = 9,
 
 		PlayerWidth = 245,
@@ -803,7 +803,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 1}},
 		{1, "UFs", "FrequentHealth", "|cff00cc4c"..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateRaidTextScale},
-		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
+		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.01, .2, .01}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
 		{},--blank
 		{1, "UFs", "SimpleMode", "|cff00cc4c"..L["SimpleRaidFrame"], nil, nil, nil, L["SimpleRaidFrameTip"]},
 		{3, "UFs", "SMUnitsPerColumn", L["SimpleMode Column"], nil, {10, 40, 1}},
