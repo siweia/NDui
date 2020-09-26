@@ -175,7 +175,6 @@ G.DefaultSettings = {
 	Chat = {
 		Sticky = false,
 		Lock = true,
-		ShowBG = true,
 		Invite = true,
 		Freedom = true,
 		Keyword = "raid",
@@ -910,7 +909,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[9] = {
 		{1, "Chat", "Lock", "|cff00cc4c"..L["Lock Chat"]},
-		{1, "Chat", "ShowBG", L["ShowChatBackground"].."*", true, nil, toggleChatBackground},
 		{3, "Chat", "ChatWidth", L["LockChatWidth"].."*", nil, {200, 600, 1}, updateChatSize},
 		{3, "Chat", "ChatHeight", L["LockChatHeight"].."*", true, {100, 500, 1}, updateChatSize},
 		{},--blank
