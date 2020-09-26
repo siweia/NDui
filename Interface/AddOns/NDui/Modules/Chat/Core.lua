@@ -46,6 +46,29 @@ function module:UpdateChatSize()
 	isScaling = false
 end
 
+local function BlackBackground(self)
+	local frame = B.SetBD(self.Background)
+	frame:SetPoint("BOTTOMRIGHT", 26, -7)
+	frame:SetShown(NDuiDB["Chat"]["ChatBGType"] == 2)
+
+	return frame
+end
+
+local function GradientBackground(self)
+	local frame = CreateFrame("Frame", nil, self)
+	frame:SetAllPoints(self.Background)
+	frame:SetFrameLevel(0)
+	frame:SetShown(NDuiDB["Chat"]["ChatBGType"] == 3)
+
+	local tex = B.SetGradient(frame, "H", 0, 0, 0, .7, 0)
+	tex:SetOutside()
+	local line = B.SetGradient(frame, "H", cr, cg, cb, .5, 0, nil, C.mult)
+	line:SetPoint("BOTTOMLEFT", frame, "TOPLEFT")
+	line:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT")
+
+	return frame
+end
+
 function module:SkinChat()
 	if not self or self.styled then return end
 
@@ -62,19 +85,8 @@ function module:SkinChat()
 		self:SetMaxLines(maxLines)
 	end
 
-	self.__background = B.SetBD(self.Background)
-	self.__background:SetShown(NDuiDB["Chat"]["ChatBGType"] == 2)
-
-	self.__gradient = CreateFrame("Frame", nil, self)
-	B.CreateGF(self.__gradient, 1, 1, "Horizontal", 0, 0, 0, .7, 0)
-	self.__gradient:SetOutside(self.Background)
-	self.__gradient:SetFrameLevel(0)
-	self.__gradient:SetShown(NDuiDB["Chat"]["ChatBGType"] == 3)
-	local line = self.__gradient:CreateTexture(nil, "BACKGROUND")
-	line:SetTexture(DB.bdTex)
-	line:SetPoint("BOTTOMLEFT", self.__gradient, "TOPLEFT")
-	line:SetPoint("TOPRIGHT", self.__gradient, "TOPRIGHT", 0, C.mult)
-	line:SetGradientAlpha("Horizontal", cr, cg, cb, .5, cr, cg, cb, 0)
+	self.__background = BlackBackground(self)
+	self.__gradient = GradientBackground(self)
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
