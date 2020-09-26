@@ -60,7 +60,7 @@ local function GradientBackground(self)
 	frame:SetFrameLevel(0)
 	frame:SetShown(NDuiDB["Chat"]["ChatBGType"] == 3)
 
-	local tex = B.SetGradient(frame, "H", 0, 0, 0, .7, 0)
+	local tex = B.SetGradient(frame, "H", 0, 0, 0, .5, 0)
 	tex:SetOutside()
 	local line = B.SetGradient(frame, "H", cr, cg, cb, .5, 0, nil, C.mult)
 	line:SetPoint("BOTTOMLEFT", frame, "TOPLEFT")

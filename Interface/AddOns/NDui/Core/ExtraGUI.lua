@@ -748,9 +748,8 @@ end
 
 local function createOptionTitle(parent, title, offset)
 	B.CreateFS(parent, 14, title, nil, "TOP", 0, offset)
-	local l = CreateFrame("Frame", nil, parent)
-	l:SetPoint("TOPLEFT", 30, offset-20)
-	B.CreateGF(l, 200, C.mult, "Horizontal", 1, 1, 1, .25, .25)
+	local line = B.SetGradient(parent, "H", 1, 1, 1, .25, .25, 200, C.mult)
+	line:SetPoint("TOPLEFT", 30, offset-20)
 end
 
 local function sliderValueChanged(self, v)

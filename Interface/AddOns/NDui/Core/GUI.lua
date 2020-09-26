@@ -1213,9 +1213,8 @@ local function CreateOption(i)
 		-- Blank, no optType
 		else
 			if not key then
-				local l = CreateFrame("Frame", nil, parent)
-				l:SetPoint("TOPLEFT", 25, -offset - 12)
-				B.CreateGF(l, 560, C.mult, "Horizontal", 1, 1, 1, .25, .25)
+				local line = B.SetGradient(parent, "H", 1, 1, 1, .25, .25, 560, C.mult)
+				line:SetPoint("TOPLEFT", 25, -offset - 12)
 			end
 			offset = offset + 35
 		end
