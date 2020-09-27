@@ -79,9 +79,13 @@ local function ReskinXPBar(self)
 end
 
 local function ReskinGarrMaterial(self)
-	B.StripTextures(self.MaterialFrame)
-	self.MaterialFrame.Icon:SetTexCoord(unpack(DB.TexCoord))
-	local bg = B.CreateBDFrame(self.MaterialFrame, .25)
+	local frame = self.MaterialFrame
+	frame.BG:Hide()
+	if frame.LeftFiligree then frame.LeftFiligree:Hide() end
+	if frame.RightFiligree then frame.RightFiligree:Hide() end
+
+	B.ReskinIcon(frame.Icon)
+	local bg = B.CreateBDFrame(frame, .25)
 	bg:SetPoint("TOPLEFT", 5, -5)
 	bg:SetPoint("BOTTOMRIGHT", -5, 6)
 end
