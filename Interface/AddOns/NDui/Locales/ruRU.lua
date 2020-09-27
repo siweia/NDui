@@ -668,3 +668,5 @@ L["CustomBarNumButtons"] = "Max Buttons" -- need translation
 L["CustomBarNumPerRow"] = "Buttons Per Row" -- need translation
 L["HideBossEmote"] = "Hide RaidBossEmoteFrame" -- need translation
 L["ChatBGType"] = "ChatBackgroundType" -- need translation
+L["ShowSolo"] = "Show on solo" -- need translation
+L["ShowSoloTip"] = "|nIf checked, the partyframe or raidframe would be visible even you are solo." -- need translation
