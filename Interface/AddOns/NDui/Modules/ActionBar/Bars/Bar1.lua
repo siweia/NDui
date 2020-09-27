@@ -10,9 +10,10 @@ local margin, padding = C.Bars.margin, C.Bars.padding
 
 local function UpdateActionbarScale(bar)
 	local frame = _G["NDui_Action"..bar]
+	if not frame then return end
+
 	local size = frame.buttonSize * NDuiDB["Actionbar"]["Scale"]
 	frame:SetFrameSize(size)
-
 	for _, button in pairs(frame.buttonList) do
 		button:SetSize(size, size)
 	end

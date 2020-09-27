@@ -59,6 +59,7 @@ L["Changelog"] = "Список изменений"
 L["Auto Quest"] = "Автоквест"
 L["Main Actionbar"] = "Главная панель команд"
 L["StanceBar"] = "Панель стоек"
+L["ShowStanceBar"] = "Show StanceBar" -- need translation
 L["Extrabar"] = "Дополнительная панель команд"
 L["LeaveVehicle"] = "Кнопка выхода из транспорта"
 L["Pet Actionbar"] = "Панель команд питомца"

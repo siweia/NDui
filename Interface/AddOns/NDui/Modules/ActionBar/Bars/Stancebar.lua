@@ -36,22 +36,24 @@ function Bar:CreateStancebar()
 	frame.Pos = {"BOTTOMLEFT", anchor, "TOPLEFT", 0, margin}
 
 	-- StanceBar
-	StanceBarFrame:SetParent(frame)
-	StanceBarFrame:EnableMouse(false)
-	StanceBarLeft:SetTexture(nil)
-	StanceBarMiddle:SetTexture(nil)
-	StanceBarRight:SetTexture(nil)
+	if NDuiDB["Actionbar"]["ShowStance"] then
+		StanceBarFrame:SetParent(frame)
+		StanceBarFrame:EnableMouse(false)
+		StanceBarLeft:SetTexture(nil)
+		StanceBarMiddle:SetTexture(nil)
+		StanceBarRight:SetTexture(nil)
 
-	for i = 1, num do
-		local button = _G["StanceButton"..i]
-		tinsert(buttonList, button)
-		tinsert(Bar.buttons, button)
-		button:ClearAllPoints()
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
-		else
-			local previous = _G["StanceButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
+		for i = 1, num do
+			local button = _G["StanceButton"..i]
+			tinsert(buttonList, button)
+			tinsert(Bar.buttons, button)
+			button:ClearAllPoints()
+			if i == 1 then
+				button:SetPoint("BOTTOMLEFT", frame, padding, padding)
+			else
+				local previous = _G["StanceButton"..i-1]
+				button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
+			end
 		end
 	end
 
