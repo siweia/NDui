@@ -102,6 +102,7 @@ local function ReskinMissionList(self)
 			B.StripTextures(button)
 			B.CreateBDFrame(button, .25, true)
 			button.Highlight:SetColorTexture(.6, .8, 1, .15)
+			button.Highlight:SetAllPoints()
 
 			if button.CompleteCheck then
 				button.CompleteCheck:SetAtlas("Adventures-Checkmark")
