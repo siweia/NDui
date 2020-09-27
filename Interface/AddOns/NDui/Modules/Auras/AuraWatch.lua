@@ -6,7 +6,7 @@ local maxFrames = 12 -- Max Tracked Auras
 local updater = CreateFrame("Frame")
 local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable = {}, {}, {}, {}, {}, {}, {}
 local pairs, select, tinsert, tremove, wipe = pairs, select, table.insert, table.remove, table.wipe
-local InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty, UnitIsPlayer = InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty, UnitIsPlayer
+local InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitBuff, UnitDebuff, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
 local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo = GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo
 local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
@@ -561,10 +561,10 @@ local function checkPetFlags(sourceFlags, all)
 	end
 end
 
-function A:IsUnitWeNeed(value, name, flags)
+function A:IsUnitWeNeed(value, guid, name, flags)
 	if not value.UnitID then value.UnitID = "Player" end
 	if value.UnitID:lower() == "all" then
-		if name and (UnitInRaid(name) or UnitInParty(name) or checkPetFlags(flags, true) or not UnitIsPlayer(name)) then
+		if name and (UnitInRaid(name) or UnitInParty(name) or checkPetFlags(flags, true) or not GetPlayerInfoByGUID(guid)) then
 			return true
 		end
 	elseif value.UnitID:lower() == "player" then
@@ -574,10 +574,10 @@ function A:IsUnitWeNeed(value, name, flags)
 	end
 end
 
-function A:IsAuraTracking(value, eventType, sourceName, sourceFlags, destName, destFlags)
-	if value.OnSuccess and eventType == "SPELL_CAST_SUCCESS" and A:IsUnitWeNeed(value, sourceName, sourceFlags) then
+function A:IsAuraTracking(value, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags)
+	if value.OnSuccess and eventType == "SPELL_CAST_SUCCESS" and A:IsUnitWeNeed(value, sourceGUID, sourceName, sourceFlags) then
 		return true
-	elseif not value.OnSuccess and eventList[eventType] and A:IsUnitWeNeed(value, destName, destFlags) then
+	elseif not value.OnSuccess and eventList[eventType] and A:IsUnitWeNeed(value, destGUID, destName, destFlags) then
 		return true
 	end
 end
@@ -589,7 +589,7 @@ function A:AuraWatch_UpdateInt(_, ...)
 
 	local timestamp, eventType, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, spellID = ...
 	local value = IntCD.List[spellID]
-	if value and cache[timestamp] ~= spellID and A:IsAuraTracking(value, eventType, sourceName, sourceFlags, destName, destFlags) then
+	if value and cache[timestamp] ~= spellID and A:IsAuraTracking(value, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags) then
 		local guid, name = destGUID, destName
 		if value.OnSuccess then guid, name = sourceGUID, sourceName end
 
