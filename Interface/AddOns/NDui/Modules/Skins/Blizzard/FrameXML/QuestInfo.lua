@@ -137,7 +137,7 @@ tinsert(C.defaultThemes, function()
 	end
 
 	-- Others
-	hooksecurefunc("QuestInfo_Display", function()
+	hooksecurefunc("QuestInfo_Display", function(template, parentFrame)
 		colourObjectivesText()
 
         local rewardsFrame = QuestInfoFrame.rewardsFrame
@@ -186,6 +186,16 @@ tinsert(C.defaultThemes, function()
 
 					spellReward.styled = true
 				end
+			end
+		end
+
+		-- Brighter color for seal text from campaign quest
+		if template.canHaveSealMaterial then
+			local text = QuestInfoSealFrame.Text:GetText()
+			if text and text:find("|cff042c54") then
+				QuestInfoSealFrame.Text:SetText(string.gsub(text, "|cff042c54", "|cff1C86EE"))
+			elseif text and text:find("|cff480404") then
+					QuestInfoSealFrame.Text:SetText(string.gsub(text, "|cff480404", "|cffc20606"))
 			end
 		end
 	end)
