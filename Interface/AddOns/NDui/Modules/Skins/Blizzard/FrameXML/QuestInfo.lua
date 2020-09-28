@@ -251,4 +251,19 @@ tinsert(C.defaultThemes, function()
 	for _, font in pairs(whitish) do
 		SetTextColor_White(font)
 	end
+
+	-- Replace seal signature string
+	local replacedColorStr = {
+		["480404"] = "c20606",
+		["042c54"] = "1c86ee",
+	}
+	hooksecurefunc(QuestInfoSealFrame.Text, "SetText", function(self, text)
+		if text and text ~= "" then
+			local colorStr, rawText = strmatch(text, "|cff(%x%x%x%x%x%x)(.-)|r")
+			if colorStr and rawText then
+				colorStr = replacedColorStr[colorStr] or "99ccff"
+				self:SetFormattedText("|cff%s%s|r", colorStr, rawText)
+			end
+		end
+	end)
 end)
