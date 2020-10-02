@@ -360,7 +360,7 @@ local ignoreProgressNPC = {
 
 QuickQuest:Register("QUEST_PROGRESS", function()
 	if IsQuestCompletable() then
-		local info = C_QuestLog_GetQuestTagInfo(questID)
+		local info = C_QuestLog_GetQuestTagInfo(GetQuestID())
 		if info and (info.tagID == 153 or info.worldQuestType) then return end
 
 		local npcID = GetNPCID()
