@@ -6,7 +6,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local _G = _G
-local math_huge = math.huge
 local tonumber, next, type, strmatch = tonumber, next, type, strmatch
 local RegisterStateDriver, InCombatLockdown = RegisterStateDriver, InCombatLockdown
 local GetItemCooldown, GetItemCount, GetTime = GetItemCooldown, GetItemCount, GetTime
@@ -404,7 +403,7 @@ end
 
 local function GetClosestQuestItem()
 	local closestQuestLink, closestQuestTexture
-	local shortestDistanceSq = math_huge
+	local shortestDistanceSq = 1e5
 	local numItems = 0
 	local currentMapID = C_Map_GetBestMapForUnit("player")
 
