@@ -113,7 +113,7 @@ function A:Reminder_AddRune()
 end
 
 function A:InitReminder()
-	A:Reminder_AddRune()
+	--A:Reminder_AddRune()
 	if not groups then return end
 
 	if NDuiDB["Auras"]["Reminder"] then
