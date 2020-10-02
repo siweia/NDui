@@ -52,6 +52,7 @@ local function reskinTalentsList(self)
 		if not frame.bg then
 			frame.Border:SetAlpha(0)
 			frame.IconBorder:SetAlpha(0)
+			frame.TierBorder:SetAlpha(0)
 			frame.Background:SetAlpha(0)
 			frame.bg = B.CreateBDFrame(frame, .25)
 			frame.bg:SetInside()
@@ -115,8 +116,8 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 			B.CreateBDFrame(upgradesTab.Background, .25)
 			B.Reskin(upgradesTab.DepositButton)
 			for _, frame in ipairs(upgradesTab.Upgrades) do
-				if frame.RankBorder then
-					frame.RankBorder:SetAlpha(0)
+				if frame.TierBorder then
+					frame.TierBorder:SetAlpha(0)
 				end
 			end
 			upgradesTab.CurrencyBackground:SetAlpha(0)
@@ -126,6 +127,7 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 			talentsList.Divider:SetAlpha(0)
 			B.CreateBDFrame(talentsList, .25)
 			talentsList.BackgroundTile:SetAlpha(0)
+			talentsList.IntroBox.Background:Hide()
 			B.Reskin(talentsList.UpgradeButton)
 			hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
 
