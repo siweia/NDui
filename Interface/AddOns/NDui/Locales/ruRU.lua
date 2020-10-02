@@ -670,3 +670,7 @@ L["HideBossEmote"] = "Hide RaidBossEmoteFrame" -- need translation
 L["ChatBGType"] = "ChatBackgroundType" -- need translation
 L["ShowSolo"] = "Show on solo" -- need translation
 L["ShowSoloTip"] = "|nIf checked, the partyframe or raidframe would be visible even you are solo." -- need translation
+L["ShowMarkerBar"] = "World Markers Bar" -- need translation
+L["Grid"] = "Grid" -- need translation
+L["Horizontal"] = "Horizontal" -- need translation
+L["Vertical"] = "Vertical" -- need translation

@@ -327,6 +327,7 @@ G.DefaultSettings = {
 		RMRune = false,
 		DBMCount = "10",
 		EasyMarking = true,
+		ShowMarkerBar = 4,
 		BlockInvite = false,
 		NzothVision = true,
 	},
@@ -663,6 +664,10 @@ local function toggleBossEmote()
 	B:GetModule("Misc"):ToggleBossEmote()
 end
 
+local function updateMarkerGrid()
+	B:GetModule("Misc"):RaidTool_UpdateGrid()
+end
+
 local function updateSkinAlpha()
 	for _, frame in pairs(C.frames) do
 		frame:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
@@ -891,8 +896,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[8] = {
 		{1, "Misc", "RaidTool", "|cff00cc4c"..L["Raid Manger"]},
 		{1, "Misc", "RMRune", L["Runes Check"].."*"},
-		{1, "Misc", "EasyMarking", L["Easy Mark"].."*"},
-		{2, "Misc", "DBMCount", L["Countdown Sec"].."*", true},
+		{1, "Misc", "EasyMarking", L["Easy Mark"].."*", true},
+		{2, "Misc", "DBMCount", L["Countdown Sec"].."*"},
+		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", true, {L["Grid"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid},
 		{},--blank
 		{1, "Misc", "QuestNotification", "|cff00cc4c"..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
