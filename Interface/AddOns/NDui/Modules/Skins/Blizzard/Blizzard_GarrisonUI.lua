@@ -44,13 +44,6 @@ local function ReskinMissionPage(self)
 	if self.CostFrame then
 		self.CostFrame.CostIcon:SetTexCoord(unpack(DB.TexCoord))
 	end
-
-	if self.Stage.EnemyPowerValue then
-		self.Stage.EnemyPowerValue:SetWidth(100)
-		self.Stage.EnemyPowerValue:SetJustifyH("LEFT")
-		self.Stage.PartyPowerValue:SetWidth(100)
-		self.Stage.PartyPowerValue:SetJustifyH("LEFT")
-	end
 end
 
 local function ReskinMissionTabs(self)
@@ -956,6 +949,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
+	B.Reskin(CovenantMissionFrameFollowers.HealAllButton)
 	CovenantMissionFrame.MapTab:SetAlpha(0) -- not sure what does this for, need reviewed
 	B.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 
