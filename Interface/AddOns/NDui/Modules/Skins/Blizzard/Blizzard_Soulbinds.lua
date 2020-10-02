@@ -1,15 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function UpdateButtonRank(button)
-	if not button.levelText then
-		button.levelText = B.CreateFS(button, 14)
-		button.levelText:ClearAllPoints()
-		button.levelText:SetPoint("BOTTOMLEFT", button.Icon)
-	end
-	button.levelText:SetText(button.conduitData.conduitRank)
-end
-
 local function ReskinConduitList(frame)
 	local header = frame.CategoryButton.Container
 	if not header.styled then
@@ -27,8 +18,6 @@ local function ReskinConduitList(frame)
 				element:SetColorTexture(1, 1, 1, .25)
 			end
 			button.PendingBackground:SetColorTexture(1, .8, 0, .25)
-			UpdateButtonRank(button)
-			hooksecurefunc(button, "UpdateVisuals", UpdateButtonRank)
 
 			button.styled = true
 		end
