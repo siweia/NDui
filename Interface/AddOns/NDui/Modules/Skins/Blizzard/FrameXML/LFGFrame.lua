@@ -11,15 +11,15 @@ local function styleRewardButton(button)
 	local nameFrame = _G[buttonName.."NameFrame"]
 	local border = button.IconBorder
 
+	button.bg = B.ReskinIcon(icon)
+	local bg = B.CreateBDFrame(button, .25)
+	bg:SetPoint("TOPLEFT", button.bg, "TOPRIGHT")
+	bg:SetPoint("BOTTOMRIGHT", button.bg, "BOTTOMRIGHT", 100, 0)
+
 	if shortageBorder then shortageBorder:SetAlpha(0) end
 	if count then count:SetDrawLayer("OVERLAY") end
 	if nameFrame then nameFrame:SetAlpha(0) end
-	if border then border:SetAlpha(0) end
-
-	local icbg = B.ReskinIcon(icon)
-	local bg = B.CreateBDFrame(button, .25)
-	bg:SetPoint("TOPLEFT", icbg, "TOPRIGHT")
-	bg:SetPoint("BOTTOMRIGHT", icbg, "BOTTOMRIGHT", 100, 0)
+	if border then B.ReskinIconBorder(border) end
 
 	button.styled = true
 end
