@@ -25,6 +25,7 @@ tinsert(C.defaultThemes, function()
 	end
 
 	GossipFrameInset:Hide()
+	GossipFrame.Background:Hide()
 	B.ReskinPortraitFrame(GossipFrame)
 	B.Reskin(GossipFrameGreetingGoodbyeButton)
 	B.ReskinScroll(GossipGreetingScrollFrameScrollBar)
