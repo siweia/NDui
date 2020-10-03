@@ -1156,18 +1156,16 @@ do
 		return bg
 	end
 
-	local AtlasToRoleTex = {
-		["Adventures-Tank"] = {.5, .75, 0, 1},
-		["Adventures-Healer"] = {.75, 1, 0, 1},
-		["Adventures-DPS"] = {.25, .5, 0, 1},
-		["Adventures-DPS-Ranged"] = {.25, .5, 0, 1},
+	local ReplacedRoleTex = {
+		["Adventures-Tank"] = "Soulbinds_Tree_Conduit_Icon_Protect",
+		["Adventures-Healer"] = "ui_adv_health",
+		["Adventures-DPS"] = "ui_adv_atk",
+		["Adventures-DPS-Ranged"] = "Soulbinds_Tree_Conduit_Icon_Utility",
 	}
 	local function replaceFollowerRole(roleIcon, atlas)
-		roleIcon:SetTexture("Interface\\LFGFrame\\LFGROLE")
-		roleIcon:SetSize(18, 18)
-		local texcoord = AtlasToRoleTex[atlas]
-		if texcoord then
-			roleIcon:SetTexCoord(unpack(texcoord))
+		local newAtlas = ReplacedRoleTex[atlas]
+		if newAtlas then
+			roleIcon:SetAtlas(newAtlas)
 		end
 	end
 
@@ -1201,8 +1199,8 @@ do
 
 			local roleIcon = self.HealthBar.RoleIcon
 			roleIcon:ClearAllPoints()
-			roleIcon:SetPoint("TOPRIGHT", self.squareBG, 5, 5)
-		--	hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
+			roleIcon:SetPoint("CENTER", self.squareBG, "TOPRIGHT")
+			hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
 
 			local background = self.HealthBar.Background
 			background:SetAlpha(0)
