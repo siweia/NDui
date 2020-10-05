@@ -424,11 +424,12 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
 
 	-- Elements
-	self:SetupTooltipFonts()
-	self:ReskinTooltipIcons()
-	self:SetupTooltipID()
-	self:TargetedInfo()
-	self:AzeriteArmor()
+	TT:SetupTooltipFonts()
+	TT:ReskinTooltipIcons()
+	TT:SetupTooltipID()
+	TT:TargetedInfo()
+	TT:AzeriteArmor()
+	TT:ConduitCollectionData()
 end
 
 -- Tooltip Skin Registration
