@@ -340,7 +340,7 @@ end
 
 local function updateFollowerColorOnBoard(self, _, info)
 	if self.squareBG then
-		local color = DB.QualityColors[info.quality or 0]
+		local color = DB.QualityColors[info.quality or 1]
 		self.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 end
