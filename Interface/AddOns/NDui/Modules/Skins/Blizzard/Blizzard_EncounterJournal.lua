@@ -200,6 +200,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	end
 
 	-- Search results
+	EncounterJournalSearchBox:SetFrameLevel(15)
 	for i = 1, 5 do
 		B.StyleSearchButton(EncounterJournalSearchBox["sbutton"..i])
 	end
