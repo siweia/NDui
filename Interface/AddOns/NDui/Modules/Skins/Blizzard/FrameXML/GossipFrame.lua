@@ -1,14 +1,39 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local gsub, strmatch = gsub, strmatch
+
+local function replaceGossipFormat(button, textFormat, text)
+	local newFormat, count = gsub(textFormat, "000000", "ffffff")
+	if count > 0 then
+		button:SetFormattedText(newFormat, text)
+	end
+end
+
+local replacedGossipColor = {
+	["000000"] = "ffffff",
+	["414141"] = "7b8489", -- lighter color for some gossip options
+}
+local function replaceGossipText(button, text)
+	if text and text ~= "" then
+		local newText, count = gsub(text, ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59") -- replace icon texture
+		if count > 0 then
+			text = newText
+			button:SetFormattedText("%s", text)
+		end
+
+		local colorStr, rawText = strmatch(text, "|c[fF][fF](%x%x%x%x%x%x)(.-)|r")
+		colorStr = replacedGossipColor[colorStr]
+		if colorStr and rawText then
+			button:SetFormattedText("|cff%s%s|r", colorStr, rawText)
+		end
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	local gsub = string.gsub
-
-	NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, "000000", "ffffff")
-	TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, "000000", "ffffff")
-	IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, "000000", "ffffff")
+	QuestFont:SetTextColor(1, 1, 1)
 	GossipGreetingText:SetTextColor(1, 1, 1)
 
 	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
@@ -30,16 +55,15 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(GossipFrameGreetingGoodbyeButton)
 	B.ReskinScroll(GossipGreetingScrollFrameScrollBar)
 
-	local function resetFontString()
-		local index = 1
-		local titleButton = _G["GossipTitleButton"..index]
-		while titleButton do
-			if titleButton:GetText() ~= nil then
-				titleButton:SetText(gsub(titleButton:GetText(), ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59"))
+	hooksecurefunc("GossipFrameUpdate", function()
+		for button in GossipFrame.titleButtonPool:EnumerateActive() do
+			if not button.styled then
+				replaceGossipText(button, button:GetText())
+				hooksecurefunc(button, "SetText", replaceGossipText)
+				hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+
+				button.styled = true
 			end
-			index = index + 1
-			titleButton = _G["GossipTitleButton"..index]
 		end
-	end
-	hooksecurefunc("GossipFrameUpdate", resetFontString)
+	end)
 end)
