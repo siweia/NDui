@@ -506,13 +506,9 @@ function UF:CreateCastBar(self)
 	cb.Text = name
 	cb.OnUpdate = B.OnCastbarUpdate
 	cb.PostCastStart = B.PostCastStart
-	cb.PostChannelStart = B.PostCastStart
 	cb.PostCastStop = B.PostCastStop
-	cb.PostChannelStop = B.PostChannelStop
-	cb.PostCastFailed = B.PostCastFailed
-	cb.PostCastInterrupted = B.PostCastFailed
+	cb.PostCastFail = B.PostCastFailed
 	cb.PostCastInterruptible = B.PostUpdateInterruptible
-	cb.PostCastNotInterruptible = B.PostUpdateInterruptible
 
 	self.Castbar = cb
 end
