@@ -18,6 +18,8 @@ local function ReskinConduitList(frame)
 				element:SetColorTexture(1, 1, 1, .25)
 			end
 			button.PendingBackground:SetColorTexture(1, .8, 0, .25)
+			button.Spec.IconOverlay:Hide()
+			B.ReskinIcon(button.Spec.Icon):SetFrameLevel(8)
 
 			button.styled = true
 		end
