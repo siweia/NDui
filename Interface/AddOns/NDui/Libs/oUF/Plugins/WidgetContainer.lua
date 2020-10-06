@@ -7,7 +7,7 @@ local UIWidgetSetLayoutDirection = Enum.UIWidgetSetLayoutDirection
 local UIWidgetLayoutDirection = Enum.UIWidgetLayoutDirection
 
 local function reskinWidgetBar(bar)
-	if bar and not bar.styled then
+	if bar and bar.BGLeft and not bar.styled then
 		bar.BGLeft:SetAlpha(0)
 		bar.BGRight:SetAlpha(0)
 		bar.BGCenter:SetAlpha(0)
