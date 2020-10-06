@@ -35,13 +35,13 @@ local function IsAlreadyKnown(link, index)
 	if linkType == "battlepet" then
 		return isPetCollected(linkID)
 	elseif linkType == "item" then
-		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
+		local name, _, _, level, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
 		if not name then return end
 
 		if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
 			local speciesID = B.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
 			return isPetCollected(speciesID)
-		elseif TT.ConduitData[linkID] then
+		elseif TT.ConduitData[linkID] and TT.ConduitData[linkID] >= level then
 			return true
 		else
 			if knowns[link] then return true end

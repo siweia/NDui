@@ -2,8 +2,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
-local pairs, tonumber, strmatch = pairs, tonumber, strmatch
+local pairs, tonumber, strmatch, select = pairs, tonumber, strmatch, select
+local GetItemInfo = GetItemInfo
 local C_Soulbinds_GetConduitCollection = C_Soulbinds.GetConduitCollection
+local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local COLLECTED_STRING = " |cffff0000("..COLLECTED..")|r"
 
 TT.ConduitData = {}
@@ -12,7 +14,7 @@ function TT:Conduit_UpdateCollection()
 	for i = 0, 2 do
 		local collectionData = C_Soulbinds_GetConduitCollection(i)
 		for _, value in pairs(collectionData) do
-			TT.ConduitData[value.conduitItemID] = true
+			TT.ConduitData[value.conduitItemID] = value.conduitItemLevel
 		end
 	end
 end
@@ -20,9 +22,13 @@ end
 function TT:Conduit_CheckStatus()
 	local _, link = self:GetItem()
 	if not link then return end
+	if not C_Soulbinds_IsItemConduitByItemInfo(link) then return end
 
 	local itemID = strmatch(link, "item:(%d*)")
-	if itemID and TT.ConduitData[tonumber(itemID)] then
+	local level = select(4, GetItemInfo(link))
+	local knownLevel = itemID and TT.ConduitData[tonumber(itemID)]
+
+	if knownLevel and knownLevel >= level then
 		local textLine = _G[self:GetName().."TextLeft1"]
 		local text = textLine and textLine:GetText()
 		if text and text ~= "" then
