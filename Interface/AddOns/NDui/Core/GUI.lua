@@ -898,7 +898,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "RMRune", L["Runes Check"].."*"},
 		{1, "Misc", "EasyMarking", L["Easy Mark"].."*", true},
 		{2, "Misc", "DBMCount", L["Countdown Sec"].."*"},
-		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", true, {L["Grid"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid},
+		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", true, {L["Grids"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid},
 		{},--blank
 		{1, "Misc", "QuestNotification", "|cff00cc4c"..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
