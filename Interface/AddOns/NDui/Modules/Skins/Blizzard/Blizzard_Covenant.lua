@@ -11,7 +11,9 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 	infoPanel.Name:SetTextColor(1, .8, 0)
 	infoPanel.Location:SetTextColor(1, 1, 1)
 	infoPanel.Description:SetTextColor(1, 1, 1)
-	infoPanel.AbilitiesLabel:SetTextColor(1, .8, 0)
+	infoPanel.AbilitiesFrame.AbilitiesLabel:SetTextColor(1, .8, 0)
+	infoPanel.SoulbindsFrame.SoulbindsLabel:SetTextColor(1, .8, 0)
+	infoPanel.CovenantFeatureFrame.Label:SetTextColor(1, .8, 0)
 
 	hooksecurefunc(CovenantPreviewFrame, "TryShow", function(self)
 		if not self.bg then
@@ -23,17 +25,10 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 			self.ModelSceneContainer.ModelSceneBorder:SetAlpha(0)
 			B.CreateBDFrame(self.Title, .25)
 			B.ReskinClose(self.CloseButton)
+			self.CloseButton.Border:SetAlpha(0)
 			self.bg = B.SetBD(self)
 		end
-	end)
-
-	hooksecurefunc(CovenantPreviewFrame, "SetupTextureKits", function(_, button)
-		if button.IconBorder and not button.bg then
-			button.IconBorder:SetAlpha(0)
-			button.CircleMask:Hide()
-			button.Background:SetAlpha(0)
-			button.bg = B.ReskinIcon(button.Icon)
-		end
+		self.CloseButton:SetPoint("TOPRIGHT", -6, -6)
 	end)
 end
 
