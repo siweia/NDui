@@ -78,6 +78,18 @@ local function UpdateColor(element, powerType)
 			bg:SetVertexColor(r * mu, g * mu, b * mu)
 		end
 	end
+
+	--[[ Callback: ClassPower:PostUpdateColor(r, g, b)
+	Called after the element color has been updated.
+
+	* self - the ClassPower element
+	* r    - the red component of the used color (number)[0-1]
+	* g    - the green component of the used color (number)[0-1]
+	* b    - the blue component of the used color (number)[0-1]
+	--]]
+	if(element.PostUpdateColor) then
+		element:PostUpdateColor(r, g, b)
+	end
 end
 
 local function Update(self, event, unit, powerType)
@@ -319,7 +331,7 @@ local function Enable(self, unit)
 		for i = 1, #element do
 			local bar = element[i]
 			if(bar:IsObjectType('StatusBar')) then
-				if(not bar:GetStatusBarTexture()) then
+				if(not (bar:GetStatusBarTexture() or bar:GetStatusBarAtlas())) then
 					bar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 				end
 
