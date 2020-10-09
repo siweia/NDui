@@ -1078,7 +1078,7 @@ function UF:CreatePrediction(self)
 	}
 end
 
-function UF.PostUpdateAddPower(element, _, cur, max)
+function UF.PostUpdateAddPower(element, cur, max)
 	if element.Text and max > 0 then
 		local perc = cur/max * 100
 		if perc == 100 then

@@ -64,7 +64,7 @@ function UF:UpdateThreatBorder(_, unit)
 	local status = UnitThreatSituation(unit)
 
 	if status and status > 1 then
-		local r, g, b = GetThreatStatusColor(status)
+		local r, g, b = unpack(oUF.colors.threat[status])
 		element:SetBackdropBorderColor(r, g, b)
 		element:Show()
 	else
