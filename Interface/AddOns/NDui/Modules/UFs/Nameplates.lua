@@ -5,7 +5,7 @@ local UF = B:GetModule("UnitFrames")
 local _G = getfenv(0)
 local strmatch, tonumber, pairs, unpack, rad = string.match, tonumber, pairs, unpack, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
-local UnitIsFriend, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitIsFriend, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
+local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
 local GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown
 local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
 local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
@@ -169,7 +169,7 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = customUnits[name] or customUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	local status = UnitThreatSituation(self.feedbackUnit, unit) or false -- just in case
+	local status = self.feedbackUnit and UnitThreatSituation(self.feedbackUnit, unit) or false -- just in case
 	local customColor = NDuiDB["Nameplate"]["CustomColor"]
 	local secureColor = NDuiDB["Nameplate"]["SecureColor"]
 	local transColor = NDuiDB["Nameplate"]["TransColor"]
@@ -269,7 +269,7 @@ end
 function UF:UpdateTargetIndicator()
 	local style = NDuiDB["Nameplate"]["TargetIndicator"]
 	local element = self.TargetIndicator
-	local isFriendly = self.isFriendly
+	local isNameOnly = self.isNameOnly
 	if style == 1 then
 		element:Hide()
 	else
@@ -286,7 +286,7 @@ function UF:UpdateTargetIndicator()
 		elseif style == 4 then
 			element.TopArrow:Hide()
 			element.RightArrow:Hide()
-			if isFriendly then
+			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -296,7 +296,7 @@ function UF:UpdateTargetIndicator()
 		elseif style == 5 then
 			element.TopArrow:Show()
 			element.RightArrow:Hide()
-			if isFriendly then
+			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -306,7 +306,7 @@ function UF:UpdateTargetIndicator()
 		elseif style == 6 then
 			element.TopArrow:Hide()
 			element.RightArrow:Show()
-			if isFriendly then
+			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
 			else
@@ -345,11 +345,11 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
 	frame.nameGlow:SetVertexColor(0, .6, 1)
 	frame.nameGlow:SetBlendMode("ADD")
-	frame.nameGlow:SetPoint("CENTER", 0, 10)
+	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
 	self.TargetIndicator = frame
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
-	UF:UpdateTargetIndicator(self)
+	UF.UpdateTargetIndicator(self)
 end
 
 -- Quest progress
@@ -756,8 +756,8 @@ function UF:RefreshNameplats()
 		nameplate.Castbar.Text:SetFont(DB.Font[1], NDuiDB["Nameplate"]["NameTextSize"], DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], NDuiDB["Nameplate"]["HealthTextSize"], DB.Font[3])
 		nameplate.healthValue:UpdateTag()
-		nameplate.Auras.showDebuffType = NDuiDB["Nameplate"]["ColorBorder"]
-		UF:UpdateTargetIndicator(nameplate)
+		UF.UpdateNameplateAuras(nameplate)
+		UF.UpdateTargetIndicator(nameplate)
 		UF.UpdateTargetChange(nameplate)
 	end
 	UF:UpdateClickableSize()
@@ -771,11 +771,12 @@ function UF:RefreshAllPlates()
 end
 
 local DisabledElements = {
-	"Health", "Castbar", "HealPredictionAndAbsorb", "PvPClassificationIndicator"
+	"Health", "Castbar", "HealPredictionAndAbsorb", "PvPClassificationIndicator", "ThreatIndicator"
 }
-function UF:UpdatePlateByType(self)
+function UF:UpdatePlateByType()
 	local name = self.nameText
 	local hpval = self.healthValue
+	local title = self.npcTitle
 	local raidtarget = self.RaidTargetIndicator
 	local classify = self.ClassifyIndicator
 	local questIcon = self.questIcon
@@ -784,7 +785,7 @@ function UF:UpdatePlateByType(self)
 	name:ClearAllPoints()
 	raidtarget:ClearAllPoints()
 
-	if self.isFriendly then
+	if self.isNameOnly then
 		for _, element in pairs(DisabledElements) do
 			if self:IsElementEnabled(element) then
 				self:DisableElement(element)
@@ -794,10 +795,11 @@ function UF:UpdatePlateByType(self)
 		name:SetJustifyH("CENTER")
 		self:Tag(name, "[nplevel][color][name]")
 		name:UpdateTag()
+		name:SetPoint("CENTER", self, "BOTTOM")
 		hpval:Hide()
+		title:Show()
 
-		raidtarget:ClearAllPoints()
-		raidtarget:SetPoint("TOP", name, "BOTTOM", 0, -5)
+		raidtarget:SetPoint("TOP", title, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
 		classify:Hide()
 		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
@@ -814,13 +816,15 @@ function UF:UpdatePlateByType(self)
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
 		hpval:Show()
+		title:Hide()
 
-		raidtarget:ClearAllPoints()
 		raidtarget:SetPoint("RIGHT", self, "LEFT", -3, 0)
 		raidtarget:SetParent(self.Health)
+		classify:Show()
+		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end
 	end
 
-	UF:UpdateTargetIndicator(self)
+	UF.UpdateTargetIndicator(self)
 end
 
 function UF:RefreshPlateType(unit)
@@ -876,12 +880,7 @@ function UF:PostUpdatePlates(event, unit)
 		UF.UpdateUnitClassify(self, unit)
 		UF.UpdateDungeonProgress(self, unit)
 		UF:UpdateClassPowerAnchor()
-	elseif event == "NAME_PLATE_UNIT_REMOVED" then
-		if self.unitGUID then
-			guidToPlate[self.unitGUID] = nil
-		end
 	end
-
 	UF.UpdateExplosives(self, event, unit)
 end
 
@@ -906,22 +905,24 @@ end
 function UF:ResizePlayerPlate()
 	local plate = _G.oUF_PlayerPlate
 	if plate then
-		local pWidth = NDuiDB["Nameplate"]["PPWidth"]
-		local pHeight, ppHeight = NDuiDB["Nameplate"]["PPHeight"], NDuiDB["Nameplate"]["PPPHeight"]
-		local iconSize = (pWidth - C.margin*4)/5
-		plate:SetSize(pWidth, pHeight + ppHeight + C.mult)
-		plate.mover:SetSize(pWidth, pHeight + ppHeight + C.mult)
-		plate.Health:SetHeight(pHeight)
-		plate.Power:SetHeight(ppHeight)
-		local classpower = _G.oUF_ClassPowerBar
+		local barWidth = NDuiDB["Nameplate"]["PPWidth"]
+		local barHeight = NDuiDB["Nameplate"]["PPBarHeight"]
+		local healthHeight = NDuiDB["Nameplate"]["PPHealthHeight"]
+		local powerHeight = NDuiDB["Nameplate"]["PPPowerHeight"]
+
+		plate:SetSize(barWidth, healthHeight + powerHeight + C.mult)
+		plate.mover:SetSize(barWidth, healthHeight + powerHeight + C.mult)
+		plate.Health:SetHeight(healthHeight)
+		plate.Power:SetHeight(powerHeight)
+
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
-			local cpWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or pWidth
-			classpower:SetSize(cpWidth, pHeight)
+			local classpowerWidth = NDuiDB["Nameplate"]["NameplateClassPower"] and NDuiDB["Nameplate"]["PlateWidth"] or barWidth
+			_G.oUF_ClassPowerBar:SetSize(classpowerWidth, barHeight)
 			local max = bars.__max
 			for i = 1, max do
-				bars[i]:SetHeight(pHeight)
-				bars[i]:SetWidth((cpWidth - (max-1)*C.margin) / max)
+				bars[i]:SetHeight(barHeight)
+				bars[i]:SetWidth((classpowerWidth - (max-1)*C.margin) / max)
 			end
 		end
 		if plate.Stagger then
@@ -1014,7 +1015,7 @@ function UF:UpdateGCDTicker()
 end
 
 function UF:CreateGCDTicker(self)
-	local ticker = CreateFrame("StatusBar", nil, self)
+	local ticker = CreateFrame("StatusBar", nil, self.Power)
 	ticker:SetFrameLevel(self:GetFrameLevel() + 3)
 	ticker:SetStatusBarTexture(DB.normTex)
 	ticker:GetStatusBarTexture():SetAlpha(0)
