@@ -17,19 +17,20 @@ local function UpdateDebuff(button, spellID, auraID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		UpdateCooldown(self.lumos[1], 47540, true)
 		UpdateCooldown(self.lumos[2], 194509, true)
 		UpdateBuff(self.lumos[3], 47536, 47536, true, true)
 		UpdateBuff(self.lumos[4], 33206, 33206, true, true)
 		UpdateCooldown(self.lumos[5], 62618, true)
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 34861, true)
 		UpdateCooldown(self.lumos[2], 2050, true)
 		UpdateBuff(self.lumos[3], 64843, 64843, true, true)
 		UpdateBuff(self.lumos[4], 64901, 64901, true, true)
 		UpdateCooldown(self.lumos[5], 47788, true)
-	elseif GetSpecialization() == 3 then
+	elseif spec == 3 then
 		UpdateDebuff(self.lumos[1], 589, 589)
 		UpdateDebuff(self.lumos[2], 34914, 34914)
 		UpdateCooldown(self.lumos[3], 8092, true)

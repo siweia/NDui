@@ -30,7 +30,8 @@ local function UpdateSpellStatus(button, spellID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		do
 			local button = self.lumos[1]
 			local name, count, duration, expire = GetUnitAura("player", 7384, "HELPFUL")
@@ -67,7 +68,7 @@ function A:ChantLumos(self)
 				UpdateBuff(button, 227847, 227847, true, true)
 			end
 		end
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 23881, true)
 		UpdateCooldown(self.lumos[2], 85288, true)
 
@@ -83,7 +84,7 @@ function A:ChantLumos(self)
 
 		UpdateBuff(self.lumos[4], 184362, 184362, false, true)
 		UpdateBuff(self.lumos[5], 1719, 1719, true, true)
-	elseif GetSpecialization() == 3 then
+	elseif spec == 3 then
 		UpdateDebuff(self.lumos[1], 1160, 1160, true)
 
 		do

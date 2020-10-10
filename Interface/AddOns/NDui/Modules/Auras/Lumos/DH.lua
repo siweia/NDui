@@ -26,13 +26,14 @@ local function UpdateSpellStatus(button, spellID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		UpdateBuff(self.lumos[1], 258920, 258920, true)
 		UpdateBuff(self.lumos[2], 188499, 188499, true, true)
 		UpdateCooldown(self.lumos[3], 198013, true)
 		UpdateCooldown(self.lumos[4], 179057, true)
 		UpdateBuff(self.lumos[5], 191427, 162264, true, true)
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		do
 			local button, spellID = self.lumos[1], 228477
 			UpdateSpellStatus(button, spellID)

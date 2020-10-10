@@ -46,7 +46,8 @@ local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		for i = 1, 6 do self.dices[i]:Hide() end
 
 		UpdateDebuff(self.lumos[1], 703, 703, true)
@@ -65,7 +66,7 @@ function A:ChantLumos(self)
 		end
 
 		UpdateDebuff(self.lumos[5], 79140, 79140, true, true)
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		UpdateBuff(self.lumos[1], 315496, 315496)
 		UpdateCooldown(self.lumos[2], 315341, true)
 		UpdateCooldown(self.lumos[3], 315508, true)
@@ -79,7 +80,7 @@ function A:ChantLumos(self)
 			bu:Show()
 			UpdateBuff(bu, diceSpell, diceSpell)
 		end
-	elseif GetSpecialization() == 3 then
+	elseif spec == 3 then
 		for i = 1, 6 do self.dices[i]:Hide() end
 
 		UpdateBuff(self.lumos[1], 315496, 315496)

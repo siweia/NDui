@@ -30,7 +30,8 @@ local function UpdateSpellStatus(button, spellID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		UpdateCooldown(self.lumos[1], 121253, true)
 		UpdateBuff(self.lumos[2], 215479, 215479, false, "END")
 		UpdateBuff(self.lumos[3], 322507, 322507, true)
@@ -59,13 +60,13 @@ function A:ChantLumos(self)
 				B.HideOverlayGlow(button)
 			end
 		end
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 115151, true)
 		UpdateCooldown(self.lumos[2], 191837, true)
 		UpdateBuff(self.lumos[3], 116680, 116680, true, true)
 		UpdateTargetBuff(self.lumos[4], 116849, 116849, true)
 		UpdateCooldown(self.lumos[5], 115310, true)
-	elseif GetSpecialization() == 3 then
+	elseif spec == 3 then
 		UpdateCooldown(self.lumos[1], 113656, true)
 		UpdateCooldown(self.lumos[2], 107428, true)
 

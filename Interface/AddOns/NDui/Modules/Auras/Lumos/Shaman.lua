@@ -25,7 +25,8 @@ local function UpdateTotemAura(button, texture, spellID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		UpdateDebuff(self.lumos[1], 188389, 188389, true, "END")
 		UpdateBuff(self.lumos[2], 51505, 77762, true)
 
@@ -59,7 +60,7 @@ function A:ChantLumos(self)
 		end
 
 		UpdateTotemAura(self.lumos[5], 135790, 198067)
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 17364, true)
 
 		do
@@ -96,7 +97,7 @@ function A:ChantLumos(self)
 				UpdateTotemAura(button, 237577, 51533)
 			end
 		end
-	elseif GetSpecialization() == 3 then
+	elseif spec == 3 then
 		UpdateCooldown(self.lumos[1], 61295, true)
 
 		do
