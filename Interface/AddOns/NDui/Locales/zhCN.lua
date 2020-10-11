@@ -670,3 +670,4 @@ L["ShowSoloTip"] = "|n勾选后，即时你不在队伍中，也会显示小队�
 L["ShowMarkerBar"] = "世界标记助手"
 L["Horizontal"] = "水平"
 L["Vertical"] = "纵向"
+L["IncorrectExpansion"] = "当前使用NDui只能运行在新资料片%s中，请回滚至5.10.0版本。"

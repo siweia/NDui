@@ -670,3 +670,4 @@ L["ShowSoloTip"] = "|nIf checked, the partyframe or raidframe would be visible e
 L["ShowMarkerBar"] = "World Markers Bar" -- need translation
 L["Horizontal"] = "Horizontal" -- need translation
 L["Vertical"] = "Vertical" -- need translation
+L["IncorrectExpansion"] = "Current version of NDui is only available in expansion %s, please roll back to version 5.10.0." -- need translation
