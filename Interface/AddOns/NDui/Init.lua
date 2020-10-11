@@ -105,7 +105,10 @@ local function IncorrectExpansion()
 	local f = CreateFrame("Frame", nil, UIParent)
 	f:SetPoint("CENTER")
 	f:SetSize(10, 10)
-	B.CreateFS(f, 20, format(L["IncorrectExpansion"], "|cff00ff00"..EXPANSION_NAME8.."|r"))
+	local text = f:CreateFontString()
+	text:SetPoint("CENTER")
+	text:SetFont(STANDARD_TEXT_FONT, 20, "OUTLINE")
+	text:SetText(L["IncorrectExpansion"])
 end
 
 B:RegisterEvent("PLAYER_LOGIN", function()

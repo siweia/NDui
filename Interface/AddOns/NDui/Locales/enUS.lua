@@ -670,4 +670,4 @@ L["ShowSoloTip"] = "|nIf checked, the PartyFrame or RaidFrame would be visible e
 L["ShowMarkerBar"] = "World Markers Bar"
 L["Horizontal"] = "Horizontal"
 L["Vertical"] = "Vertical"
-L["IncorrectExpansion"] = "Current version of NDui is only available in expansion %s, please roll back to version 5.10.0."
+L["IncorrectExpansion"] = "Current version of NDui is only available in expansion 9.0, please roll back to version 5.10.0."
