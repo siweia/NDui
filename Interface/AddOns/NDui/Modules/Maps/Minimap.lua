@@ -361,6 +361,34 @@ function module:ShowCalendar()
 	end
 end
 
+function module:SetupHybridMinimap()
+	local mapCanvas = HybridMinimap.MapCanvas
+
+	mapCanvas:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
+	mapCanvas:SetScript("OnMouseWheel", function(_, zoom)
+		if zoom > 0 then
+			Minimap_ZoomIn()
+		else
+			Minimap_ZoomOut()
+		end
+	end)
+	mapCanvas:SetScript("OnMouseUp", function(_, btn)
+		if btn == "MiddleButton" then
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+			ToggleCalendar()
+		elseif btn == "RightButton" then
+			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, Minimap, -(Minimap:GetWidth()*.7), (Minimap:GetWidth()*.3))
+		end
+	end)
+end
+
+function module:HybridMinimapOnLoad(addon)
+	if addon == "Blizzard_HybridMinimap" then
+		module:SetupHybridMinimap()
+		B:UnregisterEvent(self, module.HybridMinimapOnLoad)
+	end
+end
+
 function module:SetupMinimap()
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
@@ -423,4 +451,7 @@ function module:SetupMinimap()
 	self:ReskinRegions()
 	self:RecycleBin()
 	self:WhoPingsMyMap()
+
+	-- HybridMinimap
+	B:RegisterEvent("ADDON_LOADED", module.HybridMinimapOnLoad)
 end
