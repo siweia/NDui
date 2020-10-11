@@ -61,11 +61,6 @@ function M:OnLogin()
 	M:ToggleBossBanner()
 	M:ToggleBossEmote()
 
-	-- Hide Bossbanner
-	if NDuiDB["Misc"]["HideBanner"] then
-		BossBanner:UnregisterAllEvents()
-	end
-
 	-- Unregister talent event
 	if PlayerTalentFrame then
 		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
