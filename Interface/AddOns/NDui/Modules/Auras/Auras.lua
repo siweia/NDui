@@ -105,7 +105,6 @@ function A:UpdateAuras(button, index)
 			else
 				button.timeLeft = timeLeft
 			end
-			-- need reviewed
 			button.nextUpdate = -1
 			A.UpdateTimer(button, 0)
 		else

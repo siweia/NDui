@@ -112,7 +112,7 @@ function module:SkinChat()
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
 
-	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
+	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error
 
 	self.styled = true
 end
