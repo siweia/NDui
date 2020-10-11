@@ -949,7 +949,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[10] = {
 		{1, "Map", "Coord", L["Map Coords"]},
 		{},--blank
-		{1, "Map", "Calendar", L["Minimap Calendar"].."*", nil, nil, showCalendar},
+		{1, "Map", "Calendar", L["MinimapCalendar"].."*", nil, nil, showCalendar, L["MinimapCalendarTip"]},
 		{1, "Map", "Clock", L["Minimap Clock"].."*", true, nil, showMinimapClock},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},
