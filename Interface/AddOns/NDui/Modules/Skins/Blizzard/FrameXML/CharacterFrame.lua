@@ -54,11 +54,6 @@ tinsert(C.defaultThemes, function()
 		self.AzeriteTexture:SetDrawLayer("BORDER", 1)
 	end
 
-	local function UpdateCorruption(self)
-		local itemLink = GetInventoryItemLink("player", self:GetID())
-		self.IconOverlay:SetShown(itemLink and IsCorruptedItem(itemLink))
-	end
-
 	local function UpdateHighlight(self)
 		local highlight = self:GetHighlightTexture()
 		highlight:SetColorTexture(1, 1, 1, .25)
@@ -83,7 +78,6 @@ tinsert(C.defaultThemes, function()
 
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
 		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
-		slot.IconOverlay:SetAtlas("Nzoth-inventory-icon")
 		slot.IconOverlay:SetInside()
 		B.ReskinIconBorder(slot.IconBorder)
 
@@ -115,7 +109,6 @@ tinsert(C.defaultThemes, function()
 			button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
 			colourPopout(button.popoutButton)
 		end
-		UpdateCorruption(button)
 		UpdateHighlight(button)
 	end)
 
