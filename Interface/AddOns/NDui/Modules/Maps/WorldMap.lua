@@ -119,15 +119,17 @@ function module:WorldMapScale()
 
 	B.CreateMF(WorldMapFrame, nil, true)
 	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
+end
 
+function module:OnLogin()
 	-- Remove from frame manager
+	WorldMapFrame:ClearAllPoints()
+	WorldMapFrame:SetPoint("CENTER") -- init anchor
 	WorldMapFrame:SetAttribute("UIPanelLayout-area", nil)
 	WorldMapFrame:SetAttribute("UIPanelLayout-enabled", false)
 	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
 	tinsert(UISpecialFrames, "WorldMapFrame")
-end
 
-function module:OnLogin()
 	self:WorldMapScale()
 	self:SetupCoords()
 	self:SetupMinimap()
