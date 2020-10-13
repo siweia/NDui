@@ -383,14 +383,13 @@ function module:Minimap_OnMouseUp(btn)
 		ToggleCalendar()
 	elseif btn == "RightButton" then
 		ToggleDropDownMenu(1, nil, NDuiMiniMapTrackingDropDown, "cursor")
-	else
+	elseif self.mover then
 		Minimap_OnClick(self)
 	end
 end
 
 function module:SetupHybridMinimap()
 	local mapCanvas = HybridMinimap.MapCanvas
-
 	mapCanvas:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
 	mapCanvas:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
 	mapCanvas:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
