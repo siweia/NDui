@@ -5,21 +5,17 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local strmatch, tonumber, next, wipe, ipairs, select = strmatch, tonumber, next, wipe, ipairs, select
-local UnitGUID, IsShiftKeyDown = UnitGUID, IsShiftKeyDown
+local next, wipe, ipairs, select = next, wipe, ipairs, select
+local UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink = UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink
 local GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo = GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo
-local GetNumActiveQuests, GetActiveTitle, SelectActiveQuest = GetNumActiveQuests, GetActiveTitle, SelectActiveQuest
+local GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest = GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest
 local IsQuestCompletable, GetNumQuestItems, GetQuestItemLink = IsQuestCompletable, GetNumQuestItems, GetQuestItemLink
 local QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest = QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest
 local GetNumQuestChoices, GetQuestReward, GetItemInfo, GetQuestItemInfo = GetNumQuestChoices, GetQuestReward, GetItemInfo, GetQuestItemInfo
 local GetNumAvailableQuests, GetAvailableQuestInfo, SelectAvailableQuest = GetNumAvailableQuests, GetAvailableQuestInfo, SelectAvailableQuest
 local GetNumAutoQuestPopUps, GetAutoQuestPopUp, ShowQuestOffer, ShowQuestComplete = GetNumAutoQuestPopUps, GetAutoQuestPopUp, ShowQuestOffer, ShowQuestComplete
-local C_Timer_After = C_Timer.After
-local C_QuestLog_GetInfo = C_QuestLog.GetInfo
-local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
 local C_QuestLog_GetQuestTagInfo = C_QuestLog.GetQuestTagInfo
-local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
 local C_GossipInfo_GetNumOptions = C_GossipInfo.GetNumOptions
@@ -31,7 +27,7 @@ local C_GossipInfo_SelectAvailableQuest = C_GossipInfo.SelectAvailableQuest
 local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
 local MINIMAP_TRACKING_TRIVIAL_QUESTS = MINIMAP_TRACKING_TRIVIAL_QUESTS
 
-local logQuests, choiceQueue = {}
+local choiceQueue
 
 -- Minimap checkbox
 local created
@@ -108,37 +104,17 @@ local ignoreQuestNPC = {
 	[143555] = true,	-- 山德·希尔伯曼，祖达萨PVP军需官
 }
 
-local function UpdateQuestLogQuests()
-	wipe(logQuests)
-
-	for index = 1, C_QuestLog_GetNumQuestLogEntries() do
-		local info = C_QuestLog_GetInfo(index)
-		local title = info.title
-		local questID = info.questID
-		local isHeader = info.isHeader
-		local isComplete = C_QuestLog_IsComplete(questID)
-		if not isHeader and isComplete then
-			logQuests[title] = questID
-		end
-	end
-end
-
 QuickQuest:Register("QUEST_GREETING", function()
 	local npcID = GetNPCID()
 	if ignoreQuestNPC[npcID] then return end
 
 	local active = GetNumActiveQuests()
 	if active > 0 then
-		UpdateQuestLogQuests()
-		-- maybe a better way here, need reviewed
 		for index = 1, active do
-			local name, complete = GetActiveTitle(index)
-			if complete then
-				local questID = logQuests[name]
-				local isWorldQuest = C_QuestLog_IsWorldQuest(questID)
-				if not questID or not isWorldQuest then
-					SelectActiveQuest(index)
-				end
+			local _, isComplete = GetActiveTitle(index)
+			local questID = GetActiveQuestID(index)
+			if isComplete and not C_QuestLog_IsWorldQuest(questID) then
+				SelectActiveQuest(index)
 			end
 		end
 	end
@@ -211,12 +187,10 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 
 	local active = C_GossipInfo_GetNumActiveQuests()
 	if active > 0 then
-		local gossipQuests = C_GossipInfo_GetActiveQuests()
-		for index, questInfo in ipairs(gossipQuests) do
-			local complete = questInfo.isComplete
+		for index, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
 			local questID = questInfo.questID
 			local isWorldQuest = questID and C_QuestLog_IsWorldQuest(questID)
-			if complete and (not questID or not isWorldQuest) then
+			if questInfo.isComplete and (not questID or not isWorldQuest) then
 				C_GossipInfo_SelectActiveQuest(index)
 			end
 		end
@@ -224,10 +198,9 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 
 	local available = C_GossipInfo_GetNumAvailableQuests()
 	if available > 0 then
-		local GossipQuests = C_GossipInfo_GetAvailableQuests()
-		for index, questInfo in ipairs(GossipQuests) do
-			local trivial, ignored = questInfo.isTrivial, questInfo.isIgnored
-			if (not trivial and not ignored) or IsTrackingHidden() or (trivial and npcID == 64337) then
+		for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
+			local trivial = questInfo.isTrivial
+			if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
 				C_GossipInfo_SelectAvailableQuest(index)
 			end
 		end
@@ -371,14 +344,16 @@ QuickQuest:Register("QUEST_PROGRESS", function()
 			for index = 1, requiredItems do
 				local link = GetQuestItemLink("required", index)
 				if link then
-					local id = tonumber(strmatch(link, "item:(%d+)"))
+					local id = GetItemInfoFromHyperlink(link)
 					for _, itemID in next, itemBlacklist do
 						if itemID == id then
+							CloseQuest()
 							return
 						end
 					end
 				else
 					choiceQueue = "QUEST_PROGRESS"
+					GetQuestItemInfo("required", index)
 					return
 				end
 			end
@@ -416,7 +391,8 @@ QuickQuest:Register("QUEST_COMPLETE", function()
 			local link = GetQuestItemLink("choice", index)
 			if link then
 				local value = select(11, GetItemInfo(link))
-				value = cashRewards[tonumber(strmatch(link, "item:(%d+):"))] or value
+				local itemID = GetItemInfoFromHyperlink(itemLink)
+				value = cashRewards[itemID] or value
 
 				if value > bestValue then
 					bestValue, bestIndex = value, index
@@ -449,13 +425,10 @@ local function AttemptAutoComplete(event)
 				ShowQuestComplete(questID)
 			end
 		end
-	else
-		C_Timer_After(1, AttemptAutoComplete)
 	end
 
 	if event == "PLAYER_REGEN_ENABLED" then
-		QuickQuest:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		QuickQuest:UnregisterEvent(event)
 	end
 end
-QuickQuest:Register("PLAYER_LOGIN", AttemptAutoComplete)
-QuickQuest:Register("QUEST_AUTOCOMPLETE", AttemptAutoComplete)
+QuickQuest:Register("QUEST_LOG_UPDATE", AttemptAutoComplete)
