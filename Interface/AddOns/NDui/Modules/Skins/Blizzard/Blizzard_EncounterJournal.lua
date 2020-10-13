@@ -1,29 +1,102 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local r, g, b = DB.r, DB.g, DB.b
+
+local function onEnable(self)
+	self:SetHeight(self.storedHeight) -- prevent it from resizing
+	self.__bg:SetBackdropColor(0, 0, 0, 0)
+end
+
+local function onDisable(self)
+	self.__bg:SetBackdropColor(r, g, b, .25)
+end
+
+local function onClick(self)
+	self:GetFontString():SetTextColor(1, 1, 1)
+end
+
+local bossIndex = 1
+local function reskinBossButtons()
+	while true do
+		local button = _G["EncounterJournalBossButton"..bossIndex]
+		if not button then return end
+
+		B.Reskin(button, true)
+		local hl = button:GetHighlightTexture()
+		hl:SetColorTexture(r, g, b, .25)
+		hl:SetInside(button.__bg)
+
+		button.text:SetTextColor(1, 1, 1)
+		button.text.SetTextColor = B.Dummy
+		button.creature:SetPoint("TOPLEFT", 0, -4)
+
+		bossIndex = bossIndex + 1
+	end
+end
+
+local instIndex = 1
+local function reskinInstanceButton()
+	while true do
+		local button = EncounterJournal.instanceSelect.scroll.child["instance"..instIndex]
+		if not button then return end
+
+		button:SetNormalTexture("")
+		button:SetHighlightTexture("")
+		button:SetPushedTexture("")
+
+		local bg = B.CreateBDFrame(button.bgImage)
+		bg:SetPoint("TOPLEFT", 3, -3)
+		bg:SetPoint("BOTTOMRIGHT", -4, 2)
+
+		instIndex = instIndex + 1
+	end
+end
+
+local function reskinHeader(header)
+	header.flashAnim.Play = B.Dummy
+	for i = 4, 18 do
+		select(i, header.button:GetRegions()):SetTexture("")
+	end
+	B.Reskin(header.button)
+	header.descriptionBG:SetAlpha(0)
+	header.descriptionBGBottom:SetAlpha(0)
+	header.description:SetTextColor(1, 1, 1)
+	header.button.title:SetTextColor(1, 1, 1)
+	header.button.title.SetTextColor = B.Dummy
+	header.button.expandedIcon:SetWidth(20) -- don't wrap the text
+	header.button.expandedIcon.SetTextColor = B.Dummy
+	header.button.expandedIcon.SetTextColor = B.Dummy
+end
+
+local function reskinSectionHeader()
+	local index = 1
+	while true do
+		local header = _G["EncounterJournalInfoHeader"..index]
+		if not header then return end
+		if not header.styled then
+			reskinHeader(header)
+			header.button.bg = B.ReskinIcon(header.button.abilityIcon)
+			header.styled = true
+		end
+
+		if header.button.abilityIcon:IsShown() then
+			header.button.bg:Show()
+		else
+			header.button.bg:Hide()
+		end
+
+		index = index + 1
+	end
+end
+
+local function reskinFilterToggle(button)
+	B.StripTextures(button)
+	B.Reskin(button)
+end
+
 C.themes["Blizzard_EncounterJournal"] = function()
-	local r, g, b = DB.r, DB.g, DB.b
-
-	EncounterJournalEncounterFrameInfo:DisableDrawLayer("BACKGROUND")
-	EncounterJournalInstanceSelectBG:Hide()
-	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
-	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
-
-	-- [[ Dungeon / raid tabs ]]
-
-	local function onEnable(self)
-		self:SetHeight(self.storedHeight) -- prevent it from resizing
-		self:SetBackdropColor(0, 0, 0, 0)
-	end
-
-	local function onDisable(self)
-		self:SetBackdropColor(r, g, b, .25)
-	end
-
-	local function onClick(self)
-		self:GetFontString():SetTextColor(1, 1, 1)
-	end
-
+	-- Tabs
 	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab", "LootJournalTab"}) do
 		local tab = EncounterJournal.instanceSelect[tabName]
 		local text = tab:GetFontString()
@@ -34,73 +107,51 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		text:SetPoint("CENTER")
 		text:SetTextColor(1, 1, 1)
 		B.Reskin(tab)
+		if tabName == "suggestTab" then
+			tab.__bg:SetBackdropColor(r, g, b, .25)
+		end
 
 		tab:HookScript("OnEnable", onEnable)
 		tab:HookScript("OnDisable", onDisable)
 		tab:HookScript("OnClick", onClick)
 	end
 
-	EncounterJournalInstanceSelectSuggestTab:SetBackdropColor(r, g, b, .25)
-
-	-- [[ Side tabs ]]
-
+	-- Side tabs
 	local tabs = {"overviewTab", "modelTab", "bossTab", "lootTab"}
 	for _, name in pairs(tabs) do
 		local tab = EncounterJournal.encounter.info[name]
-		tab:SetScale(.75)
-		tab:SetBackdrop({
-			bgFile = DB.bdTex,
-			edgeFile = DB.bdTex,
-			edgeSize = C.mult / .75,
-		})
-		tab:SetBackdropColor(0, 0, 0, .5)
-		tab:SetBackdropBorderColor(0, 0, 0)
+		local bg = B.SetBD(tab)
+		bg:SetInside(tab, 2, 2)
 
 		tab:SetNormalTexture("")
 		tab:SetPushedTexture("")
 		tab:SetDisabledTexture("")
 		local hl = tab:GetHighlightTexture()
 		hl:SetColorTexture(r, g, b, .2)
-		hl:SetInside()
+		hl:SetInside(bg)
 
 		if name == "overviewTab" then
-			tab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 13, -35)
+			tab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 9, -35)
 		end
 	end
 
-	-- [[ Instance select ]]
-
+	-- Instance select
+	reskinInstanceButton()
+	hooksecurefunc("EncounterJournal_ListInstances", reskinInstanceButton)
 	B.ReskinDropDown(EncounterJournalInstanceSelectTierDropDown)
+	B.ReskinScroll(EncounterJournalInstanceSelectScrollFrame.ScrollBar)
 
-	local index = 1
-	local function listInstances()
-		while true do
-			local bu = EncounterJournal.instanceSelect.scroll.child["instance"..index]
-			if not bu then return end
-
-			bu:SetNormalTexture("")
-			bu:SetHighlightTexture("")
-			bu:SetPushedTexture("")
-
-			local bg = B.CreateBDFrame(bu.bgImage)
-			bg:SetPoint("TOPLEFT", 3, -3)
-			bg:SetPoint("BOTTOMRIGHT", -4, 2)
-
-			index = index + 1
-		end
-	end
-
-	hooksecurefunc("EncounterJournal_ListInstances", listInstances)
-	listInstances()
-
-	-- [[ Encounter frame ]]
-
-	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildHeader:Hide()
-	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetFontObject("GameFontNormalLarge")
+	-- Encounter frame
+	EncounterJournalEncounterFrameInfo:DisableDrawLayer("BACKGROUND")
+	EncounterJournalInstanceSelectBG:Hide()
+	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
+	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 
 	EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollChildLore:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetTextColor(1, 1, 1)
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildHeader:Hide()
+	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetFontObject("GameFontNormalLarge")
 	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildLoreDescription:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetTextColor(1, 1, 1)
 	EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChild.overviewDescription.Text:SetTextColor(1, 1, 1)
@@ -108,69 +159,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.CreateBDFrame(EncounterJournalEncounterFrameInfoModelFrame, .25)
 	EncounterJournalEncounterFrameInfoCreatureButton1:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfoModelFrame, 0, -35)
 
-	do
-		local numBossButtons = 1
-		local bossButton
-
-		hooksecurefunc("EncounterJournal_DisplayInstance", function()
-			bossButton = _G["EncounterJournalBossButton"..numBossButtons]
-			while bossButton do
-				B.Reskin(bossButton, true)
-
-				bossButton.text:SetTextColor(1, 1, 1)
-				bossButton.text.SetTextColor = B.Dummy
-
-				local hl = bossButton:GetHighlightTexture()
-				hl:SetColorTexture(r, g, b, .2)
-				hl:SetAllPoints(bossButton.bgTex)
-
-				bossButton.creature:SetPoint("TOPLEFT", 0, -4)
-
-				numBossButtons = numBossButtons + 1
-				bossButton = _G["EncounterJournalBossButton"..numBossButtons]
-			end
-
-			-- move last tab
-			local _, point = EncounterJournalEncounterFrameInfoModelTab:GetPoint()
-			EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", point, "BOTTOM", 0, 1)
-		end)
-	end
-
-	local function reskinHeader(header)
-		header.flashAnim.Play = B.Dummy
-		for i = 4, 18 do
-			select(i, header.button:GetRegions()):SetTexture("")
-		end
-		B.Reskin(header.button)
-		header.descriptionBG:SetAlpha(0)
-		header.descriptionBGBottom:SetAlpha(0)
-		header.description:SetTextColor(1, 1, 1)
-		header.button.title:SetTextColor(1, 1, 1)
-		header.button.title.SetTextColor = B.Dummy
-		header.button.expandedIcon:SetTextColor(1, 1, 1)
-		header.button.expandedIcon.SetTextColor = B.Dummy
-	end
-
-	hooksecurefunc("EncounterJournal_ToggleHeaders", function()
-		local index = 1
-		local header = _G["EncounterJournalInfoHeader"..index]
-		while header do
-			if not header.styled then
-				reskinHeader(header)
-				header.button.bg = B.ReskinIcon(header.button.abilityIcon)
-				header.styled = true
-			end
-
-			if header.button.abilityIcon:IsShown() then
-				header.button.bg:Show()
-			else
-				header.button.bg:Hide()
-			end
-
-			index = index + 1
-			header = _G["EncounterJournalInfoHeader"..index]
-		end
-	end)
+	hooksecurefunc("EncounterJournal_DisplayInstance", reskinBossButtons)
+	hooksecurefunc("EncounterJournal_ToggleHeaders", reskinSectionHeader)
 
 	hooksecurefunc("EncounterJournal_SetUpOverview", function(self, _, index)
 		local header = self.overviews[index]
@@ -209,8 +199,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
 	end
 
-	-- [[ Search results ]]
-
+	-- Search results
+	EncounterJournalSearchBox:SetFrameLevel(15)
 	for i = 1, 5 do
 		B.StyleSearchButton(EncounterJournalSearchBox["sbutton"..i])
 	end
@@ -221,7 +211,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local result = EncounterJournalSearchResults
 		result:SetPoint("BOTTOMLEFT", EncounterJournal, "BOTTOMRIGHT", 15, -1)
 		B.StripTextures(result)
-		local bg = B.CreateBDFrame(result, nil, true)
+		local bg = B.SetBD(result)
 		bg:SetPoint("TOPLEFT", -10, 0)
 		bg:SetPoint("BOTTOMRIGHT")
 
@@ -230,50 +220,53 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			B.StripTextures(bu)
 			B.ReskinIcon(bu.icon)
 			bu.icon.SetTexCoord = B.Dummy
-			B.CreateBD(bu, .25)
+			local bg = B.CreateBDFrame(bu, .25)
+			bg:SetInside()
 			bu:SetHighlightTexture(DB.bdTex)
 			local hl = bu:GetHighlightTexture()
 			hl:SetVertexColor(r, g, b, .25)
-			hl:SetInside()
+			hl:SetInside(bg)
 		end
 	end
 
 	B.ReskinClose(EncounterJournalSearchResultsCloseButton)
 	B.ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
 
-	-- [[ Various controls ]]
-
+	-- Various controls
 	B.ReskinPortraitFrame(EncounterJournal)
 	B.Reskin(EncounterJournalEncounterFrameInfoResetButton)
 	B.ReskinInput(EncounterJournalSearchBox)
-	B.ReskinScroll(EncounterJournalInstanceSelectScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollBar)
 	B.ReskinScroll(EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
 
-	-- [[ Suggest frame ]]
+	local buttons = {
+		EncounterJournalEncounterFrameInfoDifficulty,
+		EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
+		EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
+	}
+	for _, button in pairs(buttons) do
+		reskinFilterToggle(button)
+	end
 
+	-- Suggest frame
 	local suggestFrame = EncounterJournal.suggestFrame
 
 	-- Suggestion 1
-
 	local suggestion = suggestFrame.Suggestion1
-
 	suggestion.bg:Hide()
-	B.CreateBD(suggestion, .25)
+	B.CreateBDFrame(suggestion, .25)
 	suggestion.icon:SetPoint("TOPLEFT", 135, -15)
 	B.CreateBDFrame(suggestion.icon)
 
 	local centerDisplay = suggestion.centerDisplay
-
 	centerDisplay.title.text:SetTextColor(1, 1, 1)
 	centerDisplay.description.text:SetTextColor(.9, .9, .9)
 	B.Reskin(suggestion.button)
 
 	local reward = suggestion.reward
-
 	reward.text:SetTextColor(.9, .9, .9)
 	reward.iconRing:Hide()
 	reward.iconRingHighlight:SetTexture("")
@@ -282,12 +275,11 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinArrow(suggestion.nextButton, "right")
 
 	-- Suggestion 2 and 3
-
 	for i = 2, 3 do
 		local suggestion = suggestFrame["Suggestion"..i]
 
 		suggestion.bg:Hide()
-		B.CreateBD(suggestion, .25)
+		B.CreateBDFrame(suggestion, .25)
 		suggestion.icon:SetPoint("TOPLEFT", 10, -10)
 		B.CreateBDFrame(suggestion.icon)
 
@@ -306,7 +298,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	end
 
 	-- Hook functions
-
 	hooksecurefunc("EJSuggestFrame_RefreshDisplay", function()
 		local self = suggestFrame
 
@@ -345,46 +336,29 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 	end)
 
-	-- [[ Loot Journal ]]
+	-- LootJournal
 
-	EncounterJournal.LootJournal:GetRegions():Hide()
-	B.ReskinScroll(EncounterJournal.LootJournal.ItemSetsFrame.scrollBar)
+	local lootJournal = EncounterJournal.LootJournal
+	B.StripTextures(lootJournal)
+	B.ReskinScroll(lootJournal.PowersFrame.ScrollBar)
+	reskinFilterToggle(lootJournal.ClassDropDownButton)
 
-	local buttons = {
-		EncounterJournalEncounterFrameInfoDifficulty,
-		EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
-		EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
-		EncounterJournal.LootJournal.ItemSetsFrame.ClassButton,
-	}
-	for _, btn in pairs(buttons) do
-		B.StripTextures(btn)
-		B.Reskin(btn)
-	end
+	local iconColor = DB.QualityColors[LE_ITEM_QUALITY_LEGENDARY or 5] -- legendary color
+	hooksecurefunc(lootJournal.PowersFrame, "RefreshListDisplay", function(self)
+		if not self.elements then return end
 
-	-- ItemSetsFrame
+		for i = 1, self:GetNumElementFrames() do
+			local button = self.elements[i]
+			if button and not button.bg then
+				button.Background:SetAlpha(0)
+				button.CircleMask:Hide()
+				button.bg = B.ReskinIcon(button.Icon)
+				button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
 
-	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "UpdateList", function(self)
-		local buttons = self.buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			if not button.styled then
-				button.ItemLevel:SetTextColor(1, 1, 1)
-				button.Background:Hide()
-				B.CreateBDFrame(button, .25)
-
-				button.styled = true
+				local bg = B.CreateBDFrame(button, .25)
+				bg:SetPoint("TOPLEFT", 3, 0)
+				bg:SetPoint("BOTTOMRIGHT", -2, 1)
 			end
 		end
-	end)
-
-	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(_, button)
-		if not button.bg then
-			button.Border:SetAlpha(0)
-			button.bg = B.ReskinIcon(button.Icon)
-		end
-
-		local quality = select(3, GetItemInfo(button.itemID))
-		local color = DB.QualityColors[quality or 1]
-		button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end)
 end

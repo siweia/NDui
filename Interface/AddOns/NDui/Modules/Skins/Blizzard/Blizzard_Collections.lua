@@ -6,7 +6,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- [[ General ]]
 
-	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal)
+	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal) -- need this for Rematch skin
 	for i = 1, 5 do
 		local tab = _G["CollectionsJournalTab"..i]
 		B.ReskinTab(tab)
@@ -32,11 +32,11 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournalTutorialButton.Ring:Hide()
 
 	B.StripTextures(MountJournal.MountCount)
-	B.CreateBD(MountJournal.MountCount, .25)
+	B.CreateBDFrame(MountJournal.MountCount, .25)
 	B.StripTextures(PetJournal.PetCount)
-	B.CreateBD(PetJournal.PetCount, .25)
+	B.CreateBDFrame(PetJournal.PetCount, .25)
 	PetJournal.PetCount:SetWidth(140)
-	B.CreateBD(MountJournal.MountDisplay.ModelScene, .25)
+	B.CreateBDFrame(MountJournal.MountDisplay.ModelScene, .25)
 	B.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
 
 	B.Reskin(MountJournalMountButton)
@@ -204,7 +204,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	card.PetInfo.icon.bg = B.ReskinIcon(card.PetInfo.icon)
 
-	B.CreateBD(card, .25)
+	B.CreateBDFrame(card, .25)
 
 	for i = 2, 12 do
 		select(i, card.xpBar:GetRegions()):Hide()
@@ -260,7 +260,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.setButton:GetRegions():SetPoint("TOPLEFT", bu.icon, -5, 5)
 		bu.setButton:GetRegions():SetPoint("BOTTOMRIGHT", bu.icon, 5, -5)
 
-		B.CreateBD(bu, .25)
+		B.CreateBDFrame(bu, .25)
 
 		for i = 2, 12 do
 			select(i, bu.xpBar:GetRegions()):Hide()
@@ -533,6 +533,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.Background:Hide()
 		bu.HighlightTexture:SetTexture("")
 		B.ReskinIcon(bu.Icon)
+		bu.IconCover:SetOutside(bu.Icon)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
@@ -602,7 +603,7 @@ C.themes["Blizzard_Collections"] = function()
 	WardrobeOutfitDropDown:SetHeight(32)
 	WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
 	B.StripTextures(WardrobeOutfitFrame)
-	B.CreateBDFrame(WardrobeOutfitFrame, .7, true)
+	B.SetBD(WardrobeOutfitFrame, .7)
 
 	hooksecurefunc(WardrobeOutfitFrame, "Update", function(self)
 		for i = 1, C_TransmogCollection.GetNumMaxOutfits() do
@@ -620,10 +621,9 @@ C.themes["Blizzard_Collections"] = function()
 	B.StripTextures(WardrobeOutfitEditFrame)
 	WardrobeOutfitEditFrame.EditBox:DisableDrawLayer("BACKGROUND")
 	B.SetBD(WardrobeOutfitEditFrame)
-	local bg = B.CreateBDFrame(WardrobeOutfitEditFrame.EditBox, .25)
+	local bg = B.CreateBDFrame(WardrobeOutfitEditFrame.EditBox, .25, true)
 	bg:SetPoint("TOPLEFT", -5, -3)
 	bg:SetPoint("BOTTOMRIGHT", 5, 3)
-	B.CreateGradient(bg)
 	B.Reskin(WardrobeOutfitEditFrame.AcceptButton)
 	B.Reskin(WardrobeOutfitEditFrame.CancelButton)
 	B.Reskin(WardrobeOutfitEditFrame.DeleteButton)

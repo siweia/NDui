@@ -14,13 +14,14 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			if bu and not bu.styled then
 				bu:GetRegions():SetAlpha(0)
 				bu.Icon:SetTexCoord(unpack(DB.TexCoord))
-				B.CreateBD(bu, 0)
+				bu.Icon:SetInside()
+				B.CreateBDFrame(bu.Icon, 0)
 
 				bu.styled = true
 			end
 			if i == 1 then
 				self.WeeklyInfo.Child.SeasonBest:ClearAllPoints()
-				self.WeeklyInfo.Child.SeasonBest:SetPoint("TOPLEFT", self.DungeonIcons[i], "TOPLEFT", 5, 20)
+				self.WeeklyInfo.Child.SeasonBest:SetPoint("BOTTOMLEFT", self.DungeonIcons[i], "TOPLEFT", 0, 2)
 			end
 		end
 
@@ -30,14 +31,14 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			local party = mod.PartyFrame
 
 			B.StripTextures(scheduel)
-			B.CreateBD(scheduel, .25)
+			B.CreateBDFrame(scheduel, .25)
 			if scheduel.Entries then
 				for i = 1, 3 do
 					B.AffixesSetup(scheduel.Entries[i])
 				end
 			end
 			B.StripTextures(party)
-			B.CreateBD(party, .25)
+			B.CreateBDFrame(party, .25)
 
 			angryStyle = true
 		end
@@ -66,6 +67,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 	-- New season
 	local noticeFrame = ChallengesFrame.SeasonChangeNoticeFrame
 	B.Reskin(noticeFrame.Leave)
+	noticeFrame.Leave.__bg:SetFrameLevel(noticeFrame:GetFrameLevel() + 1)
 	noticeFrame.NewSeason:SetTextColor(1, .8, 0)
 	noticeFrame.SeasonDescription:SetTextColor(1, 1, 1)
 	noticeFrame.SeasonDescription2:SetTextColor(1, 1, 1)

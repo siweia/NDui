@@ -50,7 +50,7 @@ function UF:CreateTargetBorder(self)
 	border:SetOutside(self.Health.backdrop, C.mult+3, C.mult+3, self.Power.backdrop)
 	border:SetBackdropBorderColor(1, 1, 1)
 	border:Hide()
-	self.Shadow = nil
+	self.__shadow = nil
 
 	self.TargetBorder = border
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetBorder, true)
@@ -64,7 +64,7 @@ function UF:UpdateThreatBorder(_, unit)
 	local status = UnitThreatSituation(unit)
 
 	if status and status > 1 then
-		local r, g, b = GetThreatStatusColor(status)
+		local r, g, b = unpack(oUF.colors.threat[status])
 		element:SetBackdropBorderColor(r, g, b)
 		element:Show()
 	else
@@ -77,7 +77,7 @@ function UF:CreateThreatBorder(self)
 	threatIndicator:SetOutside(self.Health.backdrop, C.mult+3, C.mult+3, self.Power.backdrop)
 	threatIndicator:SetBackdropBorderColor(.7, .7, .7)
 	threatIndicator:SetFrameLevel(0)
-	self.Shadow = nil
+	self.__shadow = nil
 
 	self.ThreatIndicator = threatIndicator
 	self.ThreatIndicator.Override = UF.UpdateThreatBorder
@@ -121,7 +121,7 @@ function UF:CreateRaidDebuffs(self)
 	bu:SetPoint("RIGHT", -15, 0)
 	bu:SetFrameLevel(self:GetFrameLevel() + 3)
 	B.CreateSD(bu, 3, true)
-	bu.Shadow:SetFrameLevel(self:GetFrameLevel() + 2)
+	bu.__shadow:SetFrameLevel(self:GetFrameLevel() + 2)
 	bu:SetScale(scale)
 	bu:Hide()
 

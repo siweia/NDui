@@ -42,6 +42,8 @@ local list = {
 		{AuraID = 210134, UnitID = "target", Caster = "player"},	-- 奥术侵蚀
 		{AuraID = 199786, UnitID = "target", Caster = "player"},	-- 冰川尖刺
 		{AuraID = 210824, UnitID = "target", Caster = "player"},	-- 大法师之触
+		{AuraID = 307443, UnitID = "target", Caster = "player"},	-- 摧残火花
+		{AuraID = 314793, UnitID = "target", Caster = "player"},	-- 折磨之镜
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 66, UnitID = "player"},		-- 隐形术
@@ -70,6 +72,7 @@ local list = {
 		{AuraID = 264774, UnitID = "player"},	-- 三之准则
 		{AuraID = 269651, UnitID = "player"},	-- 火焰冲撞
 		{AuraID = 190446, UnitID = "player"},	-- 冰冷智慧
+		{AuraID = 321363, UnitID = "player"},	-- 专注魔法
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 44457, UnitID = "focus", Caster = "player"},	-- 活动炸弹

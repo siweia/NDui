@@ -34,21 +34,13 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	for i = 1, MAX_REQUIRED_ITEMS do
-		local bu = _G["QuestProgressItem"..i]
 		local ic = _G["QuestProgressItem"..i.."IconTexture"]
 		local na = _G["QuestProgressItem"..i.."NameFrame"]
 		local co = _G["QuestProgressItem"..i.."Count"]
 		ic:SetSize(40, 40)
-		ic:SetTexCoord(unpack(DB.TexCoord))
-		ic:SetDrawLayer("OVERLAY")
-		B.CreateBD(bu, .25)
+		B.ReskinIcon(ic)
 		na:Hide()
 		co:SetDrawLayer("OVERLAY")
-
-		local line = CreateFrame("Frame", nil, bu)
-		line:SetSize(1, 40)
-		line:SetPoint("RIGHT", ic, 1, 0)
-		B.CreateBD(line)
 	end
 
 	QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off

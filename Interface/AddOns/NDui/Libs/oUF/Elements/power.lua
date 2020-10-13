@@ -18,23 +18,20 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
 ## Options
 
 .frequentUpdates                  - Indicates whether to use UNIT_POWER_FREQUENT instead UNIT_POWER_UPDATE to update the
-                                    bar. Only valid for the player and pet units (boolean)
-.displayAltPower                  - Use this to let the widget display alternate power if the unit has one. If no
-                                    alternate power the display will fall back to primary power (boolean)
-.useAtlas                         - Use this to let the widget use an atlas for its texture if `.atlas` is defined on
-                                    the widget or an atlas is present in `self.colors.power` for the appropriate power
-                                    type (boolean)
-.atlas                            - A custom atlas (string)
+                                    bar (boolean)
+.displayAltPower                  - Use this to let the widget display alternative power, if the unit has one.
+                                    By default, it does so only for raid and party units. If none, the display will fall
+                                    back to the primary power (boolean)
 .smoothGradient                   - 9 color values to be used with the .colorSmooth option (table)
 .considerSelectionInCombatHostile - Indicates whether selection should be considered hostile while the unit is in
                                     combat with the player (boolean)
 
 The following options are listed by priority. The first check that returns true decides the color of the bar.
 
-.colorTapping      - Use `self.colors.tapping` to color the bar if the unit isn't tapped by the player (boolean)
 .colorDisconnected - Use `self.colors.disconnected` to color the bar if the unit is offline (boolean)
-.altPowerColor     - The RGB values to use for a fixed color if the alt power bar is being displayed instead of primary
-                     power bar (table)
+.colorTapping      - Use `self.colors.tapping` to color the bar if the unit isn't tapped by the player (boolean)
+.colorThreat       - Use `self.colors.threat[threat]` to color the bar based on the unit's threat status. `threat` is
+                     defined by the first return of [UnitThreatSituation](https://wow.gamepedia.com/API_UnitThreatSituation) (boolean)
 .colorPower        - Use `self.colors.power[token]` to color the bar based on the unit's power type. This method will
                      fall-back to `:GetAlternativeColor()` if it can't find a color matching the token. If this function
                      isn't defined, then it will attempt to color based upon the alternative power colors returned by
@@ -58,11 +55,6 @@ The following options are listed by priority. The first check that returns true 
 
 .multiplier - A multiplier used to tint the background based on the main widgets R, G and B values. Defaults to 1
               (number)[0-1]
-
-## Attributes
-
-.disconnected - Indicates whether the unit is disconnected (boolean)
-.tapped       - Indicates whether the unit is tapped by the player (boolean)
 
 ## Examples
 
@@ -90,7 +82,7 @@ The following options are listed by priority. The first check that returns true 
     Background.multiplier = .5
 
     -- Register it with oUF
-	Power.bg = Background
+    Power.bg = Background
     self.Power = Power
 --]]
 
@@ -103,86 +95,105 @@ local unitSelectionType = Private.unitSelectionType
 -- sourced from FrameXML/UnitPowerBarAlt.lua
 local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate or 10
 
-local function getDisplayPower(unit)
-	local _, min, _, _, _, _, showOnRaid = UnitAlternatePowerInfo(unit)
-	if(showOnRaid) then
-		return ALTERNATE_POWER_INDEX, min
+--[[ Override: Power:GetDisplayPower()
+Used to get info on the unit's alternative power, if any.
+Should return the power type index (see [Enum.PowerType.Alternate](https://wow.gamepedia.com/Enum_Unit.PowerType))
+and the minimum value for the given power type (see [info.minPower](https://wow.gamepedia.com/API_GetUnitPowerBarInfo))
+or nil if the unit has no alternative (alternate) power or it should not be
+displayed. In case of a nil return, the element defaults to the primary power
+type and zero for the minimum value.
+
+* self - the Power element
+--]]
+local function GetDisplayPower(element)
+	local unit = element.__owner.unit
+	local barInfo = GetUnitPowerBarInfo(unit)
+	if(barInfo and barInfo.showOnRaid and (UnitInParty(unit) or UnitInRaid(unit))) then
+		return ALTERNATE_POWER_INDEX, barInfo.minPower
 	end
 end
 
-local function UpdateColor(element, unit, cur, min, max, displayType)
-	local parent = element.__owner
+local function UpdateColor(self, event, unit)
+	if(self.unit ~= unit) then return end
+	local element = self.Power
+
 	local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
 
 	local r, g, b, t
-	if(element.colorTapping and element.tapped) then
-		t = parent.colors.tapped
-	elseif(element.colorDisconnected and element.disconnected) then
-		t = parent.colors.disconnected
-	elseif(displayType == ALTERNATE_POWER_INDEX and element.altPowerColor) then
-		t = element.altPowerColor
+	if(element.colorDisconnected and not UnitIsConnected(unit)) then
+		t = self.colors.disconnected
+	elseif(element.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)) then
+		t = self.colors.tapped
+	elseif(element.colorThreat and not UnitPlayerControlled(unit) and UnitThreatSituation('player', unit)) then
+		t =  self.colors.threat[UnitThreatSituation('player', unit)]
 	elseif(element.colorPower) then
-		t = parent.colors.power[ptoken]
-		if(not t) then
-			if(element.GetAlternativeColor) then
-				r, g, b = element:GetAlternativeColor(unit, ptype, ptoken, altR, altG, altB)
-			elseif(altR) then
-				r, g, b = altR, altG, altB
-
-				if(r > 1 or g > 1 or b > 1) then
-					-- BUG: As of 7.0.3, altR, altG, altB may be in 0-1 or 0-255 range.
-					r, g, b = r / 255, g / 255, b / 255
+		if(element.displayType ~= ALTERNATE_POWER_INDEX) then
+			t = self.colors.power[ptoken or ptype]
+			if(not t) then
+				if(element.GetAlternativeColor) then
+					r, g, b = element:GetAlternativeColor(unit, ptype, ptoken, altR, altG, altB)
+				elseif(altR) then
+					r, g, b = altR, altG, altB
+					if(r > 1 or g > 1 or b > 1) then
+						-- BUG: As of 7.0.3, altR, altG, altB may be in 0-1 or 0-255 range.
+						r, g, b = r / 255, g / 255, b / 255
+					end
 				end
-			else
-				t = parent.colors.power[ptype]
 			end
+		else
+			t = self.colors.power[ALTERNATE_POWER_INDEX]
 		end
-	elseif(element.colorClass and UnitIsPlayer(unit)) or
-		(element.colorClassNPC and not UnitIsPlayer(unit)) or
-		(element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
+	elseif(element.colorClass and UnitIsPlayer(unit))
+		or (element.colorClassNPC and not UnitIsPlayer(unit))
+		or (element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
-		t = parent.colors.class[class]
+		t = self.colors.class[class]
 	elseif(element.colorSelection and unitSelectionType(unit, element.considerSelectionInCombatHostile)) then
-		t = parent.colors.selection[unitSelectionType(unit, element.considerSelectionInCombatHostile)]
+		t = self.colors.selection[unitSelectionType(unit, element.considerSelectionInCombatHostile)]
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then
-		t = parent.colors.reaction[UnitReaction(unit, 'player')]
+		t = self.colors.reaction[UnitReaction(unit, 'player')]
 	elseif(element.colorSmooth) then
-		local adjust = 0 - (min or 0)
-		r, g, b = parent:ColorGradient(cur + adjust, max + adjust, unpack(element.smoothGradient or parent.colors.smooth))
+		local adjust = 0 - (element.min or 0)
+		r, g, b = self:ColorGradient((element.cur or 1) + adjust, (element.max or 1) + adjust, unpack(element.smoothGradient or self.colors.smooth))
 	end
 
 	if(t) then
 		r, g, b = t[1], t[2], t[3]
 	end
 
-	t = parent.colors.power[ptoken or ptype]
+	if(b) then
+		element:SetStatusBarColor(r, g, b)
 
-	local atlas = element.atlas or (t and t.atlas)
-	if(element.useAtlas and atlas and displayType ~= ALTERNATE_POWER_INDEX) then
-		element:SetStatusBarAtlas(atlas)
-		element:SetStatusBarColor(1, 1, 1)
-
-		if(element.colorTapping or element.colorDisconnected) then
-			t = element.disconnected and parent.colors.disconnected or parent.colors.tapped
-			element:GetStatusBarTexture():SetDesaturated(element.disconnected or element.tapped)
-		end
-
-		if(t and (r or g or b)) then
-			r, g, b = t[1], t[2], t[3]
-		end
-	else
-		element:SetStatusBarTexture(element.texture)
-
-		if(r or g or b) then
-			element:SetStatusBarColor(r, g, b)
+		local bg = element.bg
+		if(bg) then
+			local mu = bg.multiplier or 1
+			bg:SetVertexColor(r * mu, g * mu, b * mu)
 		end
 	end
 
-	local bg = element.bg
-	if(bg and b) then
-		local mu = bg.multiplier or 1
-		bg:SetVertexColor(r * mu, g * mu, b * mu)
+	--[[ Callback: Power:PostUpdateColor(unit, r, g, b)
+	Called after the element color has been updated.
+
+	* self - the Power element
+	* unit - the unit for which the update has been triggered (string)
+	* r    - the red component of the used color (number)[0-1]
+	* g    - the green component of the used color (number)[0-1]
+	* b    - the blue component of the used color (number)[0-1]
+	--]]
+	if(element.PostUpdateColor) then
+		element:PostUpdateColor(unit, r, g, b)
 	end
+end
+
+local function ColorPath(self, ...)
+	--[[ Override: Power.UpdateColor(self, event, unit)
+	Used to completely override the internal function for updating the widgets' colors.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	--]]
+	(self.Power.UpdateColor or UpdateColor) (self, ...)
 end
 
 local function Update(self, event, unit)
@@ -201,46 +212,34 @@ local function Update(self, event, unit)
 
 	local displayType, min
 	if(element.displayAltPower) then
-		displayType, min = getDisplayPower(unit)
+		displayType, min = element:GetDisplayPower()
 	end
 
 	local cur, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
-	local disconnected = not UnitIsConnected(unit)
-	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 	element:SetMinMaxValues(min or 0, max)
 
-	if(disconnected) then
-		element:SetValue(max)
-	else
+	if(UnitIsConnected(unit)) then
 		element:SetValue(cur)
+	else
+		element:SetValue(max)
 	end
 
-	element.disconnected = disconnected
-	element.tapped = tapped
-
-	--[[ Override: Power:UpdateColor(unit, cur, min, max, displayType)
-	Used to completely override the internal function for updating the widget's colors.
-
-	* self        - the Power element
-	* unit        - the unit for which the update has been triggered (string)
-	* cur         - the unit's current power value (number)
-	* min         - the unit's minimum possible power value (number)
-	* max         - the unit's maximum possible power value (number)
-	* displayType - the alternative power display type if applicable (number?)[Enum.PowerType.Alternate]
-	--]]
-	element:UpdateColor(unit, cur, min, max, displayType)
+	element.cur = cur
+	element.min = min
+	element.max = max
+	element.displayType = displayType
 
 	--[[ Callback: Power:PostUpdate(unit, cur, min, max)
 	Called after the element has been updated.
 
-	* self       - the Power element
-	* unit       - the unit for which the update has been triggered (string)
-	* cur        - the unit's current power value (number)
-	* min        - the unit's minimum possible power value (number)
-	* max        - the unit's maximum possible power value (number)
+	* self - the Power element
+	* unit - the unit for which the update has been triggered (string)
+	* cur  - the unit's current power value (number)
+	* min  - the unit's minimum possible power value (number)
+	* max  - the unit's maximum possible power value (number)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(unit, cur, min, max)
+		element:PostUpdate(unit, cur, min, max)
 	end
 end
 
@@ -253,23 +252,98 @@ local function Path(self, ...)
 	* unit  - the unit accompanying the event (string)
 	* ...   - the arguments accompanying the event
 	--]]
-	return (self.Power.Override or Update) (self, ...)
+	(self.Power.Override or Update) (self, ...);
+
+	ColorPath(self, ...)
 end
 
 local function ForceUpdate(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
---[[ Power:SetFrequentUpdates(state)
+--[[ Power:SetColorDisconnected(state, isForced)
+Used to toggle coloring if the unit is offline.
+
+* self     - the Power element
+* state    - the desired state (boolean)
+* isForced - forces the event update even if the state wasn't changed (boolean)
+--]]
+local function SetColorDisconnected(element, state, isForced)
+	if(element.colorDisconnected ~= state or isForced) then
+		element.colorDisconnected = state
+		if(state) then
+			element.__owner:RegisterEvent('UNIT_CONNECTION', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+		end
+	end
+end
+
+--[[ Power:SetColorSelection(state, isForced)
+Used to toggle coloring by the unit's selection.
+
+* self     - the Power element
+* state    - the desired state (boolean)
+* isForced - forces the event update even if the state wasn't changed (boolean)
+--]]
+local function SetColorSelection(element, state, isForced)
+	if(element.colorSelection ~= state or isForced) then
+		element.colorSelection = state
+		if(state) then
+			element.__owner:RegisterEvent('UNIT_FLAGS', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_FLAGS', ColorPath)
+		end
+	end
+end
+
+--[[ Power:SetColorTapping(state, isForced)
+Used to toggle coloring if the unit isn't tapped by the player.
+
+* self     - the Power element
+* state    - the desired state (boolean)
+* isForced - forces the event update even if the state wasn't changed (boolean)
+--]]
+local function SetColorTapping(element, state, isForced)
+	if(element.colorTapping ~= state or isForced) then
+		element.colorTapping = state
+		if(state) then
+			element.__owner:RegisterEvent('UNIT_FACTION', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_FACTION', ColorPath)
+		end
+	end
+end
+
+--[[ Power:SetColorThreat(state, isForced)
+Used to toggle coloring by the unit's threat status.
+
+* self     - the Power element
+* state    - the desired state (boolean)
+* isForced - forces the event update even if the state wasn't changed (boolean)
+--]]
+local function SetColorThreat(element, state, isForced)
+	if(element.colorThreat ~= state or isForced) then
+		element.colorThreat = state
+		if(state) then
+			element.__owner:RegisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		end
+	end
+end
+
+--[[ Power:SetFrequentUpdates(state, isForced)
 Used to toggle frequent updates.
 
-* self  - the Power element
-* state - the desired state of frequent updates (boolean)
+* self     - the Power element
+* state    - the desired state (boolean)
+* isForced - forces the event update even if the state wasn't changed (boolean)
 --]]
-local function SetFrequentUpdates(element, state)
-	if(element.frequentUpdates ~= state) then
+local function SetFrequentUpdates(element, state, isForced)
+	if(element.frequentUpdates ~= state or isForced) then
 		element.frequentUpdates = state
-		if(element.frequentUpdates) then
+		if(state) then
 			element.__owner:UnregisterEvent('UNIT_POWER_UPDATE', Path)
 			element.__owner:RegisterEvent('UNIT_POWER_FREQUENT', Path)
 		else
@@ -284,7 +358,27 @@ local function Enable(self)
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
+		element.SetColorDisconnected = SetColorDisconnected
+		element.SetColorSelection = SetColorSelection
+		element.SetColorTapping = SetColorTapping
+		element.SetColorThreat = SetColorThreat
 		element.SetFrequentUpdates = SetFrequentUpdates
+
+		if(element.colorDisconnected) then
+			self:RegisterEvent('UNIT_CONNECTION', ColorPath)
+		end
+
+		if(element.colorSelection) then
+			self:RegisterEvent('UNIT_FLAGS', ColorPath)
+		end
+
+		if(element.colorTapping) then
+			self:RegisterEvent('UNIT_FACTION', ColorPath)
+		end
+
+		if(element.colorThreat) then
+			self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		end
 
 		if(element.frequentUpdates) then
 			self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
@@ -292,21 +386,17 @@ local function Enable(self)
 			self:RegisterEvent('UNIT_POWER_UPDATE', Path)
 		end
 
-		self:RegisterEvent('UNIT_POWER_BAR_SHOW', Path)
-		self:RegisterEvent('UNIT_POWER_BAR_HIDE', Path)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)
-		self:RegisterEvent('UNIT_CONNECTION', Path)
 		self:RegisterEvent('UNIT_MAXPOWER', Path)
-		self:RegisterEvent('UNIT_FACTION', Path) -- For tapping
-		self:RegisterEvent('UNIT_FLAGS', Path) -- For selection
+		self:RegisterEvent('UNIT_POWER_BAR_HIDE', Path)
+		self:RegisterEvent('UNIT_POWER_BAR_SHOW', Path)
 
-		if(element:IsObjectType('StatusBar')) then
-			element.texture = element:GetStatusBarTexture() and element:GetStatusBarTexture():GetTexture() or [[Interface\TargetingFrame\UI-StatusBar]]
-			element:SetStatusBarTexture(element.texture)
+		if(element:IsObjectType('StatusBar') and not (element:GetStatusBarTexture() or element:GetStatusBarAtlas())) then
+			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 
-		if(not element.UpdateColor) then
-			element.UpdateColor = UpdateColor
+		if(not element.GetDisplayPower) then
+			element.GetDisplayPower = GetDisplayPower
 		end
 
 		element:Show()
@@ -320,15 +410,16 @@ local function Disable(self)
 	if(element) then
 		element:Hide()
 
+		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
+		self:UnregisterEvent('UNIT_MAXPOWER', Path)
+		self:UnregisterEvent('UNIT_POWER_BAR_HIDE', Path)
+		self:UnregisterEvent('UNIT_POWER_BAR_SHOW', Path)
 		self:UnregisterEvent('UNIT_POWER_FREQUENT', Path)
 		self:UnregisterEvent('UNIT_POWER_UPDATE', Path)
-		self:UnregisterEvent('UNIT_POWER_BAR_SHOW', Path)
-		self:UnregisterEvent('UNIT_POWER_BAR_HIDE', Path)
-		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
-		self:UnregisterEvent('UNIT_CONNECTION', Path)
-		self:UnregisterEvent('UNIT_MAXPOWER', Path)
-		self:UnregisterEvent('UNIT_FACTION', Path)
-		self:UnregisterEvent('UNIT_FLAGS', Path)
+		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+		self:UnregisterEvent('UNIT_FACTION', ColorPath)
+		self:UnregisterEvent('UNIT_FLAGS', ColorPath)
+		self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
 	end
 end
 

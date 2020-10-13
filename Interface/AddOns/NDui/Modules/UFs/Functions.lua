@@ -80,8 +80,8 @@ function UF:CreateHealthBar(self)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
-	health.backdrop = B.CreateBDFrame(health, 0, true) -- don't mess up with libs
-	health.shadow = health.backdrop.Shadow
+	health.backdrop = B.SetBD(health, 0) -- don't mess up with libs
+	health.shadow = health.backdrop.__shadow
 	B:SmoothBar(health)
 
 	local bg = health:CreateTexture(nil, "BACKGROUND")
@@ -360,6 +360,7 @@ function UF:CreateIcons(self)
 		rest:SetTexture("Interface\\PLAYERFRAME\\DruidEclipse")
 		rest:SetTexCoord(.445, .55, .648, .905)
 		rest:SetVertexColor(.6, .8, 1)
+		rest:SetAlpha(.7)
 		self.RestingIndicator = rest
 	elseif mystyle == "target" then
 		local quest = self:CreateTexture(nil, "OVERLAY")
@@ -368,12 +369,14 @@ function UF:CreateIcons(self)
 		self.QuestIndicator = quest
 	end
 
-	local parentFrame = CreateFrame("Frame", nil, self)
-	parentFrame:SetAllPoints()
-	parentFrame:SetFrameLevel(5)
-	local phase = parentFrame:CreateTexture(nil, "OVERLAY")
-	phase:SetPoint("CENTER", self.Health)
+	local phase = CreateFrame("Frame", nil, self)
 	phase:SetSize(24, 24)
+	phase:SetPoint("CENTER", self.Health)
+	phase:SetFrameLevel(5)
+	phase:EnableMouse(true)
+	local icon = phase:CreateTexture(nil, "OVERLAY")
+	icon:SetAllPoints()
+	phase.Icon = icon
 	self.PhaseIndicator = phase
 
 	local ri = self:CreateTexture(nil, "OVERLAY")
@@ -504,13 +507,9 @@ function UF:CreateCastBar(self)
 	cb.Text = name
 	cb.OnUpdate = B.OnCastbarUpdate
 	cb.PostCastStart = B.PostCastStart
-	cb.PostChannelStart = B.PostCastStart
 	cb.PostCastStop = B.PostCastStop
-	cb.PostChannelStop = B.PostChannelStop
-	cb.PostCastFailed = B.PostCastFailed
-	cb.PostCastInterrupted = B.PostCastFailed
+	cb.PostCastFail = B.PostCastFailed
 	cb.PostCastInterruptible = B.PostUpdateInterruptible
-	cb.PostCastNotInterruptible = B.PostUpdateInterruptible
 
 	self.Castbar = cb
 end
@@ -823,7 +822,7 @@ end
 -- Class Powers
 local barWidth, barHeight = unpack(C.UFs.BarSize)
 
-function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
+function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedIndex)
 	if not cur or cur == 0 then
 		for i = 1, 6 do
 			element[i].bg:Hide()
@@ -854,6 +853,17 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 			element[i]:SetStatusBarColor(r, g, b)
 		end
 		element.prevColor = element.thisColor
+	end
+
+	if chargedIndex and chargedIndex ~= element.thisCharge then
+		local bar = element[chargedIndex]
+		element.chargeStar:SetParent(bar)
+		element.chargeStar:SetPoint("CENTER", bar)
+		element.chargeStar:Show()
+		element.thisCharge = chargedIndex
+	else
+		element.chargeStar:Hide()
+		element.thisCharge = nil
 	end
 end
 
@@ -908,7 +918,7 @@ function UF:CreateClassPower(self)
 		bars[i]:SetWidth((barWidth - 5*C.margin) / 6)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
-		B.CreateBDFrame(bars[i], 0, true)
+		B.SetBD(bars[i], 0)
 		if i == 1 then
 			bars[i]:SetPoint("BOTTOMLEFT")
 		else
@@ -932,6 +942,12 @@ function UF:CreateClassPower(self)
 		bars.__max = 6
 		self.Runes = bars
 	else
+		local chargeStar = bar:CreateTexture()
+		chargeStar:SetAtlas("VignetteKill")
+		chargeStar:SetSize(24, 24)
+		chargeStar:Hide()
+		bars.chargeStar = chargeStar
+
 		bars.PostUpdate = UF.PostUpdateClassPower
 		self.ClassPower = bars
 	end
@@ -945,7 +961,7 @@ function UF:StaggerBar(self)
 	stagger:SetPoint(unpack(C.UFs.BarPoint))
 	stagger:SetStatusBarTexture(DB.normTex)
 	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
-	B.CreateBDFrame(stagger, 0, true)
+	B.SetBD(stagger, 0)
 
 	local bg = stagger:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -979,7 +995,7 @@ function UF:CreateAltPower(self)
 	bar:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -3)
 	bar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 	bar:SetHeight(2)
-	B.CreateBDFrame(bar, 0, true)
+	B.SetBD(bar, 0)
 
 	local text = B.CreateFS(bar, 14, "")
 	text:SetJustifyH("CENTER")
@@ -1037,10 +1053,8 @@ function UF:CreatePrediction(self)
 	oag:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -5, -2)
 
 	local hab = CreateFrame("StatusBar", nil, self)
-	hab:SetPoint("TOP")
-	hab:SetPoint("BOTTOM")
-	hab:SetPoint("RIGHT", self.Health:GetStatusBarTexture())
-	hab:SetWidth(self.Health:GetWidth())
+	hab:SetPoint("TOPLEFT", self.Health)
+	hab:SetPoint("BOTTOMRIGHT", self.Health:GetStatusBarTexture())
 	hab:SetReverseFill(true)
 	hab:SetStatusBarTexture(DB.normTex)
 	hab:SetStatusBarColor(0, .5, .8, .5)
@@ -1065,7 +1079,7 @@ function UF:CreatePrediction(self)
 	}
 end
 
-function UF.PostUpdateAddPower(element, _, cur, max)
+function UF.PostUpdateAddPower(element, cur, max)
 	if element.Text and max > 0 then
 		local perc = cur/max * 100
 		if perc == 100 then
@@ -1085,7 +1099,7 @@ function UF:CreateAddPower(self)
 	bar:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 	bar:SetHeight(4)
 	bar:SetStatusBarTexture(DB.normTex)
-	B.CreateBDFrame(bar, 0, true)
+	B.SetBD(bar, 0)
 	bar.colorPower = true
 
 	local bg = bar:CreateTexture(nil, "BACKGROUND")

@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
 local _G = getfenv(0)
-local tonumber, select, strmatch = tonumber, select, strmatch
+local select = select
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
@@ -26,8 +26,6 @@ local GetSavedInstanceInfo = GetSavedInstanceInfo
 local SetSavedInstanceExtend = SetSavedInstanceExtend
 local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
 local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
-local GetMerchantNumItems, GetMerchantItemID = GetMerchantNumItems, GetMerchantItemID
-local MERCHANT_ITEMS_PER_PAGE = MERCHANT_ITEMS_PER_PAGE
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -56,12 +54,10 @@ function M:OnLogin()
 	M:MoveTicketStatusFrame()
 	M:UpdateScreenShot()
 	M:UpdateFasterLoot()
-	M:UpdateErrorBlocker()
 	M:TradeTargetInfo()
-	M:MoverQuestTracker()
+	M:MoveQuestTracker()
 	M:BlockStrangerInvite()
 	M:OverrideAWQ()
-	M:ReplaceContaminantName()
 	M:ToggleBossBanner()
 	M:ToggleBossEmote()
 
@@ -108,7 +104,7 @@ function M:OnLogin()
 	end
 end
 
--- Hide Bossbanner
+-- Hide boss banner
 function M:ToggleBossBanner()
 	if NDuiDB["Misc"]["HideBanner"] then
 		BossBanner:UnregisterAllEvents()
@@ -231,7 +227,7 @@ function M:MoveTicketStatusFrame()
 end
 
 -- Reanchor ObjectiveTracker
-function M:MoverQuestTracker()
+function M:MoveQuestTracker()
 	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
 	frame:SetSize(240, 50)
 	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
@@ -294,60 +290,6 @@ function M:UpdateFasterLoot()
 	end
 end
 
--- Hide errors in combat
-local erList = {
-	[ERR_ABILITY_COOLDOWN] = true,
-	[ERR_ATTACK_MOUNTED] = true,
-	[ERR_OUT_OF_ENERGY] = true,
-	[ERR_OUT_OF_FOCUS] = true,
-	[ERR_OUT_OF_HEALTH] = true,
-	[ERR_OUT_OF_MANA] = true,
-	[ERR_OUT_OF_RAGE] = true,
-	[ERR_OUT_OF_RANGE] = true,
-	[ERR_OUT_OF_RUNES] = true,
-	[ERR_OUT_OF_HOLY_POWER] = true,
-	[ERR_OUT_OF_RUNIC_POWER] = true,
-	[ERR_OUT_OF_SOUL_SHARDS] = true,
-	[ERR_OUT_OF_ARCANE_CHARGES] = true,
-	[ERR_OUT_OF_COMBO_POINTS] = true,
-	[ERR_OUT_OF_CHI] = true,
-	[ERR_OUT_OF_POWER_DISPLAY] = true,
-	[ERR_SPELL_COOLDOWN] = true,
-	[ERR_ITEM_COOLDOWN] = true,
-	[SPELL_FAILED_BAD_IMPLICIT_TARGETS] = true,
-	[SPELL_FAILED_BAD_TARGETS] = true,
-	[SPELL_FAILED_CASTER_AURASTATE] = true,
-	[SPELL_FAILED_NO_COMBO_POINTS] = true,
-	[SPELL_FAILED_SPELL_IN_PROGRESS] = true,
-	[SPELL_FAILED_TARGET_AURASTATE] = true,
-	[ERR_NO_ATTACK_TARGET] = true,
-}
-
-local isRegistered = true
-function M:ErrorBlockerOnEvent(_, text)
-	if InCombatLockdown() and erList[text] then
-		if isRegistered then
-			UIErrorsFrame:UnregisterEvent(self)
-			isRegistered = false
-		end
-	else
-		if not isRegistered then
-			UIErrorsFrame:RegisterEvent(self)
-			isRegistered = true
-		end
-	end
-end
-
-function M:UpdateErrorBlocker()
-	if NDuiDB["Misc"]["HideErrors"] then
-		B:RegisterEvent("UI_ERROR_MESSAGE", M.ErrorBlockerOnEvent)
-	else
-		isRegistered = true
-		UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE")
-		B:UnregisterEvent("UI_ERROR_MESSAGE", M.ErrorBlockerOnEvent)
-	end
-end
-
 -- TradeFrame hook
 function M:TradeTargetInfo()
 	local infoText = B.CreateFS(TradeFrame, 16, "")
@@ -401,94 +343,6 @@ function M:OverrideAWQ()
 		end
 	end
 	hooksecurefunc(AngryWorldQuests.Modules.Config, "Set", overrideOptions)
-end
-
--- Replace contaminant name
-local contaminantsLevel = {
-	[177955] = "I",		-- 致命之势
-	[177965] = "II",	-- 致命之势
-	[177966] = "III",	-- 致命之势
-	[177967] = "III",	-- 虚空回响
-	[177968] = "II",	-- 虚空回响
-	[177969] = "I",		-- 虚空回响
-	[177970] = "I",		-- 闪避者
-	[177971] = "II",	-- 闪避者
-	[177972] = "III",	-- 闪避者
-	[177973] = "I",		-- 权宜之计
-	[177974] = "II",	-- 权宜之计
-	[177975] = "III",	-- 权宜之计
-	[177976] = "",		-- 须臾洞察
-	[177977] = "",		-- 龟裂创伤
-	[177978] = "I",		-- 磨砺心灵
-	[177979] = "II",	-- 磨砺心灵
-	[177980] = "III",	-- 磨砺心灵
-	[177981] = "I",		-- 不可言喻的真相
-	[177982] = "II",	-- 不可言喻的真相
-	[177983] = "I",		-- 无尽之星
-	[177984] = "II",	-- 无尽之星
-	[177985] = "III",	-- 无尽之星
-	[177986] = "I",		-- 娴熟
-	[177987] = "II",	-- 娴熟
-	[177988] = "III",	-- 娴熟
-	[177989] = "I",		-- 急速脉搏
-	[177990] = "II",	-- 急速脉搏
-	[177991] = "III",	-- 急速脉搏
-	[177992] = "I",		-- 暴戾
-	[177993] = "II",	-- 暴戾
-	[177994] = "III",	-- 暴戾
-	[177995] = "I",		-- 虹吸者
-	[177996] = "II",	-- 虹吸者
-	[177997] = "III",	-- 虹吸者
-	[177998] = "I",		-- 击穿
-	[177999] = "II",	-- 击穿
-	[178000] = "III",	-- 击穿
-	[178001] = "I",		-- 活力涌动
-	[178002] = "II",	-- 活力涌动
-	[178003] = "III",	-- 活力涌动
-	[178004] = "I",		-- 暮光毁灭
-	[178005] = "II",	-- 暮光毁灭
-	[178006] = "III",	-- 暮光毁灭
-	[178007] = "I",		-- 扭曲的附肢
-	[178008] = "II",	-- 扭曲的附肢
-	[178009] = "III",	-- 扭曲的附肢
-	[178010] = "I",		-- 多才多艺
-	[178011] = "II",	-- 多才多艺
-	[178012] = "III",	-- 多才多艺
-	[178013] = "I",		-- 虚空仪式
-	[178014] = "II",	-- 虚空仪式
-	[178015] = "III",	-- 虚空仪式
-}
-function M:ReplaceContaminantName()
-	local itemString = HEADER_COLON.."(.+)"
-
-	local function setupMisc()
-		local numItems = GetMerchantNumItems()
-		for i = 1, MERCHANT_ITEMS_PER_PAGE do
-			local index = (MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE + i
-			if index > numItems then return end
-
-			local item = _G["MerchantItem"..i]
-			local button = item.ItemButton
-			if button and button:IsShown() then
-				local id = GetMerchantItemID(index)
-				local level = id and contaminantsLevel[id]
-				if not button.levelString then
-					button.levelString = B.CreateFS(button, 14, "", nil, "TOPLEFT", 3, -3)
-				end
-				button.levelString:SetText(level or "")
-
-				if level then
-					local name = item.Name
-					local nameText = name and name:GetText()
-					local newString = nameText and strmatch(nameText, itemString)
-					if newString then
-						name:SetText(newString)
-					end
-				end
-			end
-		end
-	end
-	hooksecurefunc("MerchantFrame_UpdateMerchantInfo", setupMisc)
 end
 
 -- Archaeology counts

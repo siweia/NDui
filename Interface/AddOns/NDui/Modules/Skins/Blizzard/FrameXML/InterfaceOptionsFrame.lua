@@ -52,6 +52,7 @@ tinsert(C.defaultThemes, function()
 			InterfaceOptionsCombatPanelAutoSelfCast,
 			InterfaceOptionsDisplayPanelRotateMinimap,
 			InterfaceOptionsDisplayPanelAJAlerts,
+			InterfaceOptionsDisplayPanelShowInGameNavigation,
 			InterfaceOptionsDisplayPanelShowTutorials,
 			InterfaceOptionsSocialPanelProfanityFilter,
 			InterfaceOptionsSocialPanelSpamFilter,
@@ -98,6 +99,7 @@ tinsert(C.defaultThemes, function()
 			InterfaceOptionsMousePanelLockCursorToScreen,
 			InterfaceOptionsAccessibilityPanelMovePad,
 			InterfaceOptionsAccessibilityPanelCinematicSubtitles,
+			InterfaceOptionsAccessibilityPanelOverrideFadeOut,
 			InterfaceOptionsAccessibilityPanelColorblindMode
 		}
 		for _, checkbox in next, checkboxes do
@@ -120,7 +122,9 @@ tinsert(C.defaultThemes, function()
 			InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown,
 			InterfaceOptionsCameraPanelStyleDropDown,
 			InterfaceOptionsMousePanelClickMoveStyleDropDown,
-			InterfaceOptionsAccessibilityPanelColorFilterDropDown
+			InterfaceOptionsAccessibilityPanelColorFilterDropDown,
+			InterfaceOptionsAccessibilityPanelMotionSicknessDropdown,
+			InterfaceOptionsAccessibilityPanelShakeIntensityDropdown,
 		}
 		for _, dropdown in next, dropdowns do
 			B.ReskinDropDown(dropdown)
@@ -190,7 +194,7 @@ tinsert(C.defaultThemes, function()
 		for i = 1, num do
 			local bu = _G["InterfaceOptionsFrameAddOnsButton"..i.."Toggle"]
 			if bu and not bu.reskinned then
-				B.ReskinExpandOrCollapse(bu)
+				B.ReskinCollapse(bu)
 				bu:SetPushedTexture("")
 				bu.SetPushedTexture = B.Dummy
 				bu.reskinned = true

@@ -26,26 +26,37 @@ local function UpdateSpellStatus(button, spellID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
-		UpdateBuff(self.lumos[1], 164545, 164545)
-		UpdateBuff(self.lumos[2], 164547, 164547)
+	local spec = GetSpecialization()
+	if spec == 1 then
+		local currentPower = UnitPower("player", 8)
+		do
+			local button = self.lumos[1]
+			local count = GetSpellCount(190984)
+			UpdateBuff(button, 190984, 48517)
+			button.Count:SetText(count > 0 and count)
+		end
+
+		do
+			local button = self.lumos[2]
+			local count = GetSpellCount(194153)
+			UpdateBuff(button, 194153, 48518)
+			button.Count:SetText(count > 0 and count)
+		end
 
 		do
 			local button = self.lumos[3]
 			UpdateSpellStatus(button, 78674)
-			button.Count:SetText(floor(UnitPower("player", 8)/40))
+			button.Count:SetText(floor(currentPower/30))
 		end
 
 		do
 			local button = self.lumos[4]
-			if IsPlayerSpell(114107) then
-				UpdateSpellStatus(button, 191034)
-				button.Count:SetText(floor(UnitPower("player", 8)/40))
-			elseif IsPlayerSpell(202345) then
-				UpdateBuff(button, 279709, 279709)
+			if IsPlayerSpell(274281) then
+				UpdateCooldown(button, 274281, true)
+			elseif IsPlayerSpell(202770) then
+				UpdateCooldown(button, 202770, true)
 			else
-				UpdateSpellStatus(button, 191034)
-				button.Count:SetText(floor(UnitPower("player", 8)/50))
+				UpdateBuff(button, 343648, 343648)
 			end
 		end
 
@@ -57,46 +68,35 @@ function A:ChantLumos(self)
 				UpdateBuff(button, 194223, 194223, true, true)
 			end
 		end
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		UpdateDebuff(self.lumos[1], 1822, 155722, false, "END")
 		UpdateDebuff(self.lumos[2], 1079, 1079, false, "END")
 
 		do
 			local button = self.lumos[3]
-			if IsPlayerSpell(155580) then
-				UpdateDebuff(button, 155625, 155625, false, "END")
-			else
-				UpdateBuff(button, 5217, 5217, true, true)
-			end
-		end
-
-		do
-			local button = self.lumos[4]
-			if IsPlayerSpell(52610) then
-				UpdateBuff(button, 52610, 52610, false, true)
-			elseif IsPlayerSpell(202028) then
-				UpdateCooldown(button, 202028, true)
-			elseif IsPlayerSpell(102543) then
-				UpdateBuff(button, 102543, 102543, true, true)
-			else
-				UpdateBuff(button, 106951, 106951, true, true)
-			end
-		end
-
-		do
-			local button = self.lumos[5]
 			if IsPlayerSpell(274837) then
 				UpdateCooldown(button, 274837, true)
-			elseif IsPlayerSpell(155672) then
+			elseif IsPlayerSpell(319439) then
 				UpdateBuff(button, 145152, 145152)
 			else
 				UpdateBuff(button, 135700, 135700)
 			end
 		end
-	elseif GetSpecialization() == 3 then
+
+		UpdateBuff(self.lumos[4], 5217, 5217, true, true)
+
+		do
+			local button = self.lumos[5]
+			if IsPlayerSpell(102543) then
+				UpdateBuff(button, 102543, 102543, true, true)
+			else
+				UpdateBuff(button, 106951, 106951, true, true)
+			end
+		end
+	elseif spec == 3 then
 		UpdateBuff(self.lumos[1], 192081, 192081, false, "END")
 		UpdateBuff(self.lumos[2], 22842, 22842, true)
-		UpdateBuff(self.lumos[3], 22812, 22812, true, true)
+		UpdateBuff(self.lumos[3], 22812, 22812, true)
 
 		do
 			local button = self.lumos[4]
@@ -110,30 +110,11 @@ function A:ChantLumos(self)
 		end
 
 		UpdateBuff(self.lumos[5], 61336, 61336, true, true)
-	elseif GetSpecialization() == 4 then
-		do
-			local button = self.lumos[1]
-			if IsPlayerSpell(207383) then
-				UpdateBuff(button, 207383, 207640)
-			elseif IsPlayerSpell(102351) then
-				UpdateCooldown(button, 102351, true)
-			else
-				UpdateCooldown(button, 18562, true)
-			end
-		end
-
-		UpdateCooldown(self.lumos[2], 48438, true)
-		A:UpdateAura(self.lumos[3], "target", 102342, "HELPFUL", 102342, true)
-
-		do
-			local button = self.lumos[4]
-			if IsPlayerSpell(197721) then
-				UpdateBuff(button, 197721, 197721, true)
-			else
-				UpdateBuff(button, 29166, 29166, true, true)
-			end
-		end
-
+	elseif spec == 4 then
+		UpdateCooldown(self.lumos[1], 18562, true)
+		UpdateCooldown(self.lumos[2], 132158, true)
+		UpdateCooldown(self.lumos[3], 102342, true)
+		UpdateBuff(self.lumos[4], 29166, 29166, true, true)
 		UpdateBuff(self.lumos[5], 740, 157982, true)
 	end
 end

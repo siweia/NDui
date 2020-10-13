@@ -18,14 +18,14 @@ tinsert(C.defaultThemes, function()
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 
 	local iconSize = 60-2*C.mult
-	for i = 1, 4 do
+	for i = 1, 3 do
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
 		B.Reskin(bu, true)
 		bu.bg:SetTexture(DB.bdTex)
 		bu.bg:SetVertexColor(r, g, b, .2)
-		bu.bg:SetAllPoints(bu.bgTex)
+		bu.bg:SetInside(bu.__bg)
 
 		bu.icon:SetPoint("LEFT", bu, "LEFT")
 		bu.icon:SetSize(iconSize, iconSize)
@@ -34,7 +34,7 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
 		local self = GroupFinderFrame
-		for i = 1, 4 do
+		for i = 1, 3 do
 			local button = self["groupButton"..i]
 			if i == index then
 				button.bg:Show()
@@ -48,5 +48,4 @@ tinsert(C.defaultThemes, function()
 	B.ReskinTab(PVEFrameTab1)
 	B.ReskinTab(PVEFrameTab2)
 	B.ReskinTab(PVEFrameTab3)
-	B.ReskinClose(PremadeGroupsPvETutorialAlert.CloseButton)
 end)

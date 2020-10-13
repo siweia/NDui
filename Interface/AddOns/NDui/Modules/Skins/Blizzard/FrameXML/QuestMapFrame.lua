@@ -1,87 +1,74 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function ReskinQuestHeader(header, isCalling)
+	if header.styled then return end
+
+	header.Background:SetAlpha(.7)
+	if header.Divider then header.Divider:Hide() end
+	if header.TopFiligree then header.TopFiligree:Hide() end
+
+	local collapseButton = isCalling and header or header.CollapseButton
+	if collapseButton then
+		collapseButton:GetPushedTexture():SetAlpha(0)
+		collapseButton:GetHighlightTexture():SetAlpha(0)
+		B.ReskinCollapse(collapseButton, true)
+		collapseButton.bg:SetFrameLevel(6)
+	end
+
+	header.styled = true
+end
+
+local function ReskinSessionDialog(_, dialog)
+	if not dialog.styled then
+		B.StripTextures(dialog)
+		B.SetBD(dialog)
+		B.Reskin(dialog.ButtonContainer.Confirm)
+		B.Reskin(dialog.ButtonContainer.Decline)
+		if dialog.MinimizeButton then
+			B.ReskinArrow(dialog.MinimizeButton, "down")
+		end
+
+		dialog.styled = true
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	local r, g, b = DB.r, DB.g, DB.b
+	-- Quest frame
 
 	local QuestMapFrame = QuestMapFrame
-
-	-- [[ Quest scroll frame ]]
+	QuestMapFrame.VerticalSeparator:SetAlpha(0)
+	QuestMapFrame.Background:SetAlpha(0)
 
 	local QuestScrollFrame = QuestScrollFrame
-	local campaignHeader = QuestScrollFrame.Contents.WarCampaignHeader
-	local StoryHeader = QuestScrollFrame.Contents.StoryHeader
-
-	QuestMapFrame.VerticalSeparator:SetAlpha(0)
-	QuestScrollFrame.Background:SetAlpha(0)
 	QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
 	QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)
-
+	ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
 	B.ReskinScroll(QuestScrollFrame.ScrollBar)
 
-	for _, header in next, {campaignHeader, StoryHeader} do
-		header.Background:SetAlpha(0)
-		header.HighlightTexture:Hide()
-		header.Text:SetPoint("TOPLEFT", 15, -20)
+	local campaignOverview = QuestMapFrame.CampaignOverview
+	campaignOverview.BG:SetAlpha(0)
+	ReskinQuestHeader(campaignOverview.Header)
+	B.ReskinScroll(campaignOverview.ScrollFrame.ScrollBar)
 
-		local bg = B.CreateBDFrame(header, .25)
-		bg:SetPoint("TOPLEFT", 0, -14)
-		bg:SetPoint("BOTTOMRIGHT", -4, 5)
-		if header == campaignHeader then
-			local newTex = bg:CreateTexture(nil, "OVERLAY")
-			newTex:SetPoint("TOPRIGHT", -25, 3)
-			newTex:SetSize(50, 50)
-			newTex:SetBlendMode("ADD")
-			newTex:SetAlpha(0)
-			header.newTex = newTex
-		end
-
-		header:HookScript("OnEnter", function()
-			bg:SetBackdropColor(r, g, b, .25)
-		end)
-		header:HookScript("OnLeave", function()
-			bg:SetBackdropColor(0, 0, 0, .25)
-		end)
-	end
-
-	local idToTexture = {
-		[261] = "Interface\\Timer\\Alliance-Logo",
-		[262] = "Interface\\Timer\\Horde-Logo",
-	}
-	local function UpdateCampaignHeader()
-		campaignHeader.newTex:SetAlpha(0)
-		if campaignHeader:IsShown() then
-			local campaignID = C_CampaignInfo.GetCurrentCampaignID()
-			if campaignID then
-				local warCampaignInfo = C_CampaignInfo.GetCampaignInfo(campaignID)
-				local textureID = warCampaignInfo.uiTextureKitID
-				if textureID and idToTexture[textureID] then
-					campaignHeader.newTex:SetTexture(idToTexture[textureID])
-					campaignHeader.newTex:SetAlpha(.7)
-				end
-			end
-		end
-	end
-
-	-- [[ Quest details ]]
+	-- Quest details
 
 	local DetailsFrame = QuestMapFrame.DetailsFrame
-	local RewardsFrame = DetailsFrame.RewardsFrame
 	local CompleteQuestFrame = DetailsFrame.CompleteQuestFrame
 
 	B.StripTextures(DetailsFrame)
-	select(6, DetailsFrame.ShareButton:GetRegions()):SetAlpha(0)
-	select(7, DetailsFrame.ShareButton:GetRegions()):SetAlpha(0)
+	B.StripTextures(DetailsFrame.RewardsFrame)
+	B.StripTextures(DetailsFrame.ShareButton)
 	DetailsFrame.SealMaterialBG:SetAlpha(0)
 
 	B.Reskin(DetailsFrame.BackButton)
 	B.Reskin(DetailsFrame.AbandonButton)
 	B.Reskin(DetailsFrame.ShareButton)
 	B.Reskin(DetailsFrame.TrackButton)
-	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)
+	B.ReskinScroll(QuestMapDetailsScrollFrame.ScrollBar)
 
 	DetailsFrame.AbandonButton:ClearAllPoints()
 	DetailsFrame.AbandonButton:SetPoint("BOTTOMLEFT", DetailsFrame, -1, 0)
@@ -95,34 +82,33 @@ tinsert(C.defaultThemes, function()
 	DetailsFrame.TrackButton:SetPoint("LEFT", DetailsFrame.ShareButton, "RIGHT", 1, 0)
 	DetailsFrame.TrackButton:SetWidth(96)
 
-	-- Rewards frame
-
-	RewardsFrame.Background:SetAlpha(0)
-	select(2, RewardsFrame:GetRegions()):SetAlpha(0)
-
 	-- Scroll frame
 
 	hooksecurefunc("QuestLogQuests_Update", function()
-		UpdateCampaignHeader()
+		for button in QuestScrollFrame.headerFramePool:EnumerateActive() do
+			if button.ButtonText then
+				if not button.styled then
+					B.ReskinCollapse(button, true)
+					button:GetPushedTexture():SetAlpha(0)
+					button:GetHighlightTexture():SetAlpha(0)
 
-		for i = 6, QuestMapFrame.QuestsFrame.Contents:GetNumChildren() do
-			local child = select(i, QuestMapFrame.QuestsFrame.Contents:GetChildren())
-			if child.ButtonText then
-				if not child.styled then
-					B.ReskinExpandOrCollapse(child)
-					child.styled = true
+					button.styled = true
 				end
-				child:SetHighlightTexture("")
 			end
+		end
+
+		for header in QuestScrollFrame.campaignHeaderFramePool:EnumerateActive() do
+			ReskinQuestHeader(header)
+		end
+
+		for header in QuestScrollFrame.covenantCallingsHeaderFramePool:EnumerateActive() do
+			ReskinQuestHeader(header, true)
 		end
 	end)
 
 	-- Complete quest frame
-	CompleteQuestFrame:GetRegions():SetAlpha(0)
-	select(2, CompleteQuestFrame:GetRegions()):SetAlpha(0)
-	select(6, CompleteQuestFrame.CompleteButton:GetRegions()):SetAlpha(0)
-	select(7, CompleteQuestFrame.CompleteButton:GetRegions()):SetAlpha(0)
-
+	B.StripTextures(CompleteQuestFrame)
+	B.StripTextures(CompleteQuestFrame.CompleteButton)
 	B.Reskin(CompleteQuestFrame.CompleteButton)
 
 	-- [[ Quest log popup detail frame ]]
@@ -153,11 +139,11 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(ShowMapButton)
 
 	ShowMapButton:HookScript("OnEnter", function(self)
-		self.Text:SetTextColor(GameFontHighlight:GetTextColor())
+		self.Text:SetTextColor(1, 1, 1)
 	end)
 
 	ShowMapButton:HookScript("OnLeave", function(self)
-		self.Text:SetTextColor(GameFontNormal:GetTextColor())
+		self.Text:SetTextColor(1, .8, 0)
 	end)
 
 	-- Bottom buttons
@@ -172,20 +158,7 @@ tinsert(C.defaultThemes, function()
 	sessionManagement.BG:Hide()
 	B.CreateBDFrame(sessionManagement, .25)
 
-	local function reskinSessionDialog(_, dialog)
-		if not dialog.styled then
-			B.StripTextures(dialog)
-			B.SetBD(dialog)
-			B.Reskin(dialog.ButtonContainer.Confirm)
-			B.Reskin(dialog.ButtonContainer.Decline)
-			if dialog.MinimizeButton then
-				B.ReskinArrow(dialog.MinimizeButton, "down")
-			end
-
-			dialog.styled = true
-		end
-	end
-	hooksecurefunc(QuestSessionManager, "NotifyDialogShow", reskinSessionDialog)
+	hooksecurefunc(QuestSessionManager, "NotifyDialogShow", ReskinSessionDialog)
 
 	local executeSessionCommand = sessionManagement.ExecuteSessionCommand
 	B.Reskin(executeSessionCommand)

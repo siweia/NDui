@@ -57,7 +57,7 @@ C.themes["Blizzard_GuildControlUI"] = function()
 
 				_G[tab.."Bg"]:Hide()
 				B.ReskinIcon(ownedTab.tabIcon)
-				B.CreateBD(bu, .25)
+				B.CreateBDFrame(bu, .25)
 				B.Reskin(bu.buy.button)
 				B.ReskinInput(ownedTab.editBox)
 
@@ -67,21 +67,16 @@ C.themes["Blizzard_GuildControlUI"] = function()
 					ch:SetPushedTexture("")
 					ch:SetHighlightTexture(DB.bdTex)
 
-					local hl = ch:GetHighlightTexture()
-					hl:SetPoint("TOPLEFT", 5, -5)
-					hl:SetPoint("BOTTOMRIGHT", -5, 5)
-					hl:SetVertexColor(r, g, b, .2)
-
 					local check = ch:GetCheckedTexture()
 					check:SetDesaturated(true)
 					check:SetVertexColor(r, g, b)
 
-					local tex = B.CreateGradient(ch)
-					tex:SetPoint("TOPLEFT", 5, -5)
-					tex:SetPoint("BOTTOMRIGHT", -5, 5)
+					local bg = B.CreateBDFrame(ch, 0, true)
+					bg:SetInside(ch, 4, 4)
 
-					local bg = B.CreateBDFrame(ch, 1)
-					bg:SetOutside(tex)
+					local hl = ch:GetHighlightTexture()
+					hl:SetInside(bg)
+					hl:SetVertexColor(r, g, b, .25)
 				end
 
 				bu.styled = true

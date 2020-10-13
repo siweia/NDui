@@ -18,15 +18,14 @@ local list = {
 		{AuraID = 1160, UnitID = "target", Caster = "player"},		-- 挫志怒吼
 		{AuraID = 6343, UnitID = "target", Caster = "player"},		-- 雷霆一击
 		{AuraID = 5246, UnitID = "target", Caster = "player"},		-- 破胆
-		{AuraID = 7922, UnitID = "target", Caster = "player"},		-- 冲锋：昏迷
 		{AuraID = 12323, UnitID = "target", Caster = "player"},		-- 刺耳怒吼
 		{AuraID = 105771, UnitID = "target", Caster = "player"},	-- 冲锋：定身
-		{AuraID = 115767, UnitID = "target", Caster = "player"},	-- 重伤
 		{AuraID = 132169, UnitID = "target", Caster = "player"},	-- 风暴之锤
 		{AuraID = 132168, UnitID = "target", Caster = "player"},	-- 震荡波
 		{AuraID = 208086, UnitID = "target", Caster = "player"},	-- 巨人打击
 		{AuraID = 115804, UnitID = "target", Caster = "player"},	-- 致死
 		{AuraID = 280773, UnitID = "target", Caster = "player"},	-- 破城者
+		{AuraID = 317491, UnitID = "target", Caster = "player", Value = true},	-- 有罪
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 871, UnitID = "player"},		-- 盾墙
@@ -36,7 +35,6 @@ local list = {
 		{AuraID = 85739, UnitID = "player"},	-- 血肉顺劈
 		{AuraID = 46924, UnitID = "player"},	-- 剑刃风暴
 		{AuraID = 227847, UnitID = "player"},	-- 剑刃风暴
-		{AuraID = 12292, UnitID = "player"},	-- 浴血奋战
 		{AuraID = 23920, UnitID = "player"},	-- 法术反射
 		{AuraID = 18499, UnitID = "player"},	-- 狂暴之怒
 		{AuraID = 52437, UnitID = "player"},	-- 猝死
@@ -59,7 +57,6 @@ local list = {
 		{AuraID = 202539, UnitID = "player"},	-- 狂乱
 		{AuraID = 118000, UnitID = "player"},	-- 巨龙怒吼
 		{AuraID = 209706, UnitID = "player"},	-- 粉碎防御
-		{AuraID = 188923, UnitID = "player"},	-- 顺劈斩
 		{AuraID = 197690, UnitID = "player"},	-- 防御姿态
 		{AuraID = 118038, UnitID = "player"},	-- 剑在人在
 		{AuraID = 201009, UnitID = "player"},	-- 主宰

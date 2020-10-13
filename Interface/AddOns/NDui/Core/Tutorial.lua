@@ -279,28 +279,24 @@ local function YesTutor()
 	if tutor then tutor:Show() return end
 	tutor = CreateFrame("Frame", nil, UIParent)
 	tutor:SetPoint("CENTER")
-	tutor:SetSize(400, 250)
+	tutor:SetSize(480, 300)
 	tutor:SetFrameStrata("HIGH")
-	tutor:SetScale(1.2)
 	B.CreateMF(tutor)
 	B.SetBD(tutor)
-	B.CreateFS(tutor, 30, "NDui", true, "TOPLEFT", 10, 25)
-	local ll = CreateFrame("Frame", nil, tutor)
-	ll:SetPoint("TOP", -40, -32)
-	B.CreateGF(ll, 80, 1, "Horizontal", .7, .7, .7, 0, .7)
-	ll:SetFrameStrata("HIGH")
-	local lr = CreateFrame("Frame", nil, tutor)
-	lr:SetPoint("TOP", 40, -32)
-	B.CreateGF(lr, 80, 1, "Horizontal", .7, .7, .7, .7, 0)
-	lr:SetFrameStrata("HIGH")
+	B.CreateWatermark(tutor)
 
-	local title = B.CreateFS(tutor, 12, "", true, "TOP", 0, -10)
-	local body = B.CreateFS(tutor, 12, "", false, "TOPLEFT", 20, -50)
+	local ll = B.SetGradient(tutor, "H", .7, .7, .7, 0, .5, 80, C.mult)
+	ll:SetPoint("TOP", -40, -32)
+	local lr = B.SetGradient(tutor, "H", .7, .7, .7, .5, 0, 80, C.mult)
+	lr:SetPoint("TOP", 40, -32)
+
+	local title = B.CreateFS(tutor, 14, "", true, "TOP", 0, -10)
+	local body = B.CreateFS(tutor, 14, "", false, "TOPLEFT", 20, -50)
 	body:SetPoint("BOTTOMRIGHT", -20, 50)
 	body:SetJustifyV("TOP")
 	body:SetJustifyH("LEFT")
 	body:SetWordWrap(true)
-	local foot = B.CreateFS(tutor, 12, "", false, "BOTTOM", 0, 10)
+	local foot = B.CreateFS(tutor, 14, "", false, "BOTTOM", 0, 10)
 
 	local pass = B.CreateButton(tutor, 50, 20, L["Skip"])
 	pass:SetPoint("BOTTOMLEFT", 10, 10)
@@ -362,24 +358,20 @@ local function HelloWorld()
 
 	welcome = CreateFrame("Frame", "NDui_Tutorial", UIParent)
 	welcome:SetPoint("CENTER")
-	welcome:SetSize(350, 400)
-	welcome:SetScale(1.2)
+	welcome:SetSize(420, 480)
 	welcome:SetFrameStrata("HIGH")
 	B.CreateMF(welcome)
 	B.SetBD(welcome)
-	B.CreateFS(welcome, 30, "NDui", true, "TOPLEFT", 10, 25)
-	B.CreateFS(welcome, 14, DB.Version, true, "TOPLEFT", 90, 13)
-	B.CreateFS(welcome, 16, L["Help Title"], true, "TOP", 0, -10)
-	local ll = CreateFrame("Frame", nil, welcome)
+	B.CreateWatermark(welcome)
+	B.CreateFS(welcome, 18, L["Help Title"], true, "TOP", 0, -10)
+
+	local ll = B.SetGradient(welcome, "H", .7, .7, .7, 0, .5, 100, C.mult)
 	ll:SetPoint("TOP", -50, -35)
-	B.CreateGF(ll, 100, 1, "Horizontal", .7, .7, .7, 0, .7)
-	ll:SetFrameStrata("HIGH")
-	local lr = CreateFrame("Frame", nil, welcome)
+	local lr = B.SetGradient(welcome, "H", .7, .7, .7, .5, 0, 100, C.mult)
 	lr:SetPoint("TOP", 50, -35)
-	B.CreateGF(lr, 100, 1, "Horizontal", .7, .7, .7, .7, 0)
-	lr:SetFrameStrata("HIGH")
-	B.CreateFS(welcome, 12, L["Help Info1"], false, "TOPLEFT", 20, -50)
-	B.CreateFS(welcome, 12, L["Help Info2"], false, "TOPLEFT", 20, -70)
+
+	B.CreateFS(welcome, 14, L["Help Info1"], false, "TOPLEFT", 20, -50)
+	B.CreateFS(welcome, 14, L["Help Info2"], false, "TOPLEFT", 20, -70)
 
 	local c1, c2 = "|c00FFFF00", "|c0000FF00"
 	local lines = {
@@ -390,13 +382,13 @@ local function HelloWorld()
 		c1.." /ncl "..c2..L["Help Info9"],
 	}
 	for index, line in pairs(lines) do
-		B.CreateFS(welcome, 12, line, false, "TOPLEFT", 20, -100-index*20)
+		B.CreateFS(welcome, 14, line, false, "TOPLEFT", 20, -100-index*24)
 	end
-	B.CreateFS(welcome, 12, L["Help Info10"], false, "TOPLEFT", 20, -310)
-	B.CreateFS(welcome, 12, L["Help Info11"], false, "TOPLEFT", 20, -330)
+	B.CreateFS(welcome, 14, L["Help Info10"], false, "TOPLEFT", 20, -310)
+	B.CreateFS(welcome, 14, L["Help Info11"], false, "TOPLEFT", 20, -330)
 
 	if NDuiDB["Tutorial"]["Complete"] then
-		local close = B.CreateButton(welcome, 16, 16, "X")
+		local close = B.CreateButton(welcome, 16, 16, true, DB.closeTex)
 		close:SetPoint("TOPRIGHT", -10, -10)
 		close:SetScript("OnClick", function()
 			welcome:Hide()
@@ -415,8 +407,8 @@ SLASH_NDUI1 = "/ndui"
 
 function module:OnLogin()
 	-- Hide options
-	B.HideOption(Advanced_UseUIScale)
-	B.HideOption(Advanced_UIScaleSlider)
+	B.HideOption(Display_UseUIScale)
+	B.HideOption(Display_UIScaleSlider)
 
 	-- Tutorial and settings
 	ForceAddonSkins()

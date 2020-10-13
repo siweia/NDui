@@ -61,7 +61,7 @@ local function Update(self, event, unit)
 
 	local r, g, b
 	if(status and status > 0) then
-		r, g, b = GetThreatStatusColor(status)
+		r, g, b = unpack(self.colors.threat[status])
 
 		if(element.SetVertexColor) then
 			element:SetVertexColor(r, g, b)

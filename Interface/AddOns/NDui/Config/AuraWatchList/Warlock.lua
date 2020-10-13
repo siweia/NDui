@@ -12,6 +12,7 @@ local list = {
 		{AuraID = 196099, UnitID = "player"},	-- 牺牲魔典
 	},
 	["Target Aura"] = {		-- 目标光环组
+		{AuraID = 603, UnitID = "target", Caster = "player"},		-- 末日降临
 		{AuraID = 980, UnitID = "target", Caster = "player"},		-- 痛楚
 		{AuraID = 710, UnitID = "target", Caster = "player"},		-- 放逐术
 		{AuraID = 6358, UnitID = "target", Caster = "pet"},			-- 魅惑
@@ -23,25 +24,23 @@ local list = {
 		{AuraID = 48181, UnitID = "target", Caster = "player"},		-- 鬼影缠身
 		{AuraID = 63106, UnitID = "target", Caster = "player"},		-- 生命虹吸
 		{AuraID = 30283, UnitID = "target", Caster = "player"},		-- 暗影之怒
+		{AuraID = 32390, UnitID = "target", Caster = "player"},		-- 暗影之拥
 		{AuraID = 80240, UnitID = "target", Caster = "player"},		-- 浩劫
 		{AuraID = 146739, UnitID = "target", Caster = "player"},	-- 腐蚀术
-		{AuraID = 233490, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233496, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233497, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233498, UnitID = "target", Caster = "player"},	-- 痛苦无常
-		{AuraID = 233499, UnitID = "target", Caster = "player"},	-- 痛苦无常
+		{AuraID = 316099, UnitID = "target", Caster = "player"},	-- 痛苦无常
 		{AuraID = 118699, UnitID = "target", Caster = "player"},	-- 恐惧
 		{AuraID = 205181, UnitID = "target", Caster = "player"},	-- 暗影烈焰
 		{AuraID = 157736, UnitID = "target", Caster = "player"},	-- 献祭
 		{AuraID = 196414, UnitID = "target", Caster = "player"},	-- 根除
 		{AuraID = 199890, UnitID = "target", Caster = "player"},	-- 语言诅咒
 		{AuraID = 199892, UnitID = "target", Caster = "player"},	-- 虚弱诅咒
-		{AuraID = 265412, UnitID = "target", Caster = "player"},	-- 厄运
 		{AuraID = 270569, UnitID = "target", Caster = "player"},	-- 来自阴影
 		{AuraID = 278350, UnitID = "target", Caster = "player"},	-- 邪恶污染
 		{AuraID = 205179, UnitID = "target", Caster = "player"},	-- 诡异魅影
-		{AuraID = 32390, UnitID = "target", Caster = "player"},		-- 暗影之拥
 		{AuraID = 265931, UnitID = "target", Caster = "player"},	-- 燃烧
+		{AuraID = 312321, UnitID = "target", Caster = "player"},	-- 碎魂奉纳
+		{AuraID = 325640, UnitID = "target", Caster = "player"},	-- 灵魂腐化
+		{AuraID = 322170, UnitID = "target", Caster = "player"},	-- 灾祸降临
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 89751, UnitID = "pet"},		-- 魔刃风暴
@@ -64,7 +63,6 @@ local list = {
 		{AuraID = 267218, UnitID = "player"},	-- 虚空传送门
 		{AuraID = 113858, UnitID = "player"},	-- 黑暗灵魂：动荡
 		{AuraID = 113860, UnitID = "player"},	-- 黑暗灵魂：哀难
-		{AuraID = 266091, UnitID = "player"},	-- 统御魔典
 		{AuraID = 264571, UnitID = "player"},	-- 夜幕
 		{AuraID = 266030, UnitID = "player"},	-- 熵能返转
 	},

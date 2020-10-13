@@ -18,6 +18,8 @@ tinsert(C.defaultThemes, function()
 	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)
 	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
 
+	B.ReskinCheck(TransmogAndMountDressupFrame.ShowMountCheckButton)
+
 	-- SideDressUp
 
 	B.StripTextures(SideDressUpFrame, 0)

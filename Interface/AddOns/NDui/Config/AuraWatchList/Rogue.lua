@@ -30,12 +30,15 @@ local list = {
 		{AuraID = 209786, UnitID = "target", Caster = "player"},	-- 赤喉之咬
 		{AuraID = 196958, UnitID = "target", Caster = "player"},	-- 暗影打击
 		{AuraID = 196937, UnitID = "target", Caster = "player"},	-- 鬼魅攻击
-		{AuraID = 199804, UnitID = "target", Caster = "player"},	-- 正中眉心
 		{AuraID = 192925, UnitID = "target", Caster = "player"},	-- 遇刺者之血
 		{AuraID = 245389, UnitID = "target", Caster = "player"},	-- 淬毒之刃
 		{AuraID = 121411, UnitID = "target", Caster = "player"},	-- 猩红风暴
 		{AuraID = 255909, UnitID = "target", Caster = "player"},	-- 欺凌
-		{AuraID = 91021, UnitID = "target", Caster = "player"},		-- 洞悉弱点
+		{AuraID = 316220, UnitID = "target", Caster = "player"},	-- 洞悉弱点
+		{AuraID = 315341, UnitID = "target", Caster = "player"},	-- 正中眉心
+		{AuraID = 328305, UnitID = "target", Caster = "player"},	-- 败血刃伤
+		{AuraID = 323654, UnitID = "target", Caster = "player"},	-- Flagellation
+		{AuraID = 324073, UnitID = "target", Caster = "player"},	-- 锯齿骨刺
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 1966, UnitID = "player"},		-- 佯攻
@@ -71,6 +74,7 @@ local list = {
 		{AuraID = 51690, UnitID = "player"},	-- 影舞步
 		{AuraID = 277925, UnitID = "player"},	-- 袖剑旋风
 		{AuraID = 196980, UnitID = "player"},	-- 暗影大师
+		{AuraID = 315496, UnitID = "player"},	-- 切割
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 6770, UnitID = "focus", Caster = "player"},	-- 闷棍

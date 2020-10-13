@@ -7,7 +7,7 @@ local MIN_DURATION = 2.5                    -- the minimum duration to show cool
 local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local ICON_SIZE = 36
 local hideNumbers, active, hooked = {}, {}, {}
-local pairs, floor, strfind = pairs, math.floor, string.find
+local pairs, strfind = pairs, string.find
 local GetTime, GetActionCooldown = GetTime, GetActionCooldown
 
 function module:StopTimer()
@@ -52,6 +52,10 @@ function module:TimerOnUpdate(elapsed)
 	end
 end
 
+function module:ScalerOnSizeChanged(...)
+	module.OnSizeChanged(self.timer, ...)
+end
+
 function module:OnCreate()
 	local scaler = CreateFrame("Frame", nil, self)
 	scaler:SetAllPoints(self)
@@ -60,6 +64,7 @@ function module:OnCreate()
 	timer:Hide()
 	timer:SetAllPoints(scaler)
 	timer:SetScript("OnUpdate", module.TimerOnUpdate)
+	scaler.timer = timer
 
 	local text = timer:CreateFontString(nil, "BACKGROUND")
 	text:SetPoint("CENTER", 2, 0)
@@ -67,9 +72,7 @@ function module:OnCreate()
 	timer.text = text
 
 	module.OnSizeChanged(timer, scaler:GetSize())
-	scaler:SetScript("OnSizeChanged", function(_, ...)
-		module.OnSizeChanged(timer, ...)
-	end)
+	scaler:SetScript("OnSizeChanged", module.ScalerOnSizeChanged)
 
 	self.timer = timer
 	return timer
@@ -178,7 +181,7 @@ function module:OnLogin()
 			module.RegisterActionButton(frame)
 		end
 	end
-	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", module.RegisterActionButton)
+	hooksecurefunc(ActionBarButtonEventsFrameMixin, "RegisterFrame", module.RegisterActionButton)
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)

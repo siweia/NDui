@@ -20,7 +20,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 	end
 
 	B.SetBD(BlackMarketFrame)
-	B.CreateBD(BlackMarketFrame.HotDeal, .25)
+	B.CreateBDFrame(BlackMarketFrame.HotDeal, .25)
 	B.Reskin(BlackMarketFrame.BidButton)
 	B.ReskinClose(BlackMarketFrame.CloseButton)
 	B.ReskinInput(BlackMarketBidPriceGold)

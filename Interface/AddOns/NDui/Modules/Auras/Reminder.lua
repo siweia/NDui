@@ -6,9 +6,10 @@ local pairs, tinsert, next = pairs, table.insert, next
 local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
+local GetWeaponEnchantInfo = GetWeaponEnchantInfo
 
 local groups = DB.ReminderBuffs[DB.MyClass]
-local iconSize = C.Auras.IconSize + 4
+local iconSize = 36
 local frames, parentFrame = {}
 
 function A:Reminder_Update(cfg)
@@ -21,6 +22,7 @@ function A:Reminder_Update(cfg)
 	local cooldown = cfg.cooldown
 	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true
 	local inInst, instType = IsInInstance()
+	local weaponIndex = cfg.weaponIndex
 
 	if cooldown and GetItemCooldown(cooldown) > 0 then -- check rune cooldown
 		frame:Hide()
@@ -36,12 +38,20 @@ function A:Reminder_Update(cfg)
 
 	frame:Hide()
 	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle("player") and not UnitIsDeadOrGhost("player") then
-		for i = 1, 32 do
-			local name, _, _, _, _, _, _, _, _, spellID = UnitBuff("player", i)
-			if not name then break end
-			if name and cfg.spells[spellID] then
+		if weaponIndex then
+			local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
+			if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then
 				frame:Hide()
 				return
+			end
+		else
+			for i = 1, 32 do
+				local name, _, _, _, _, _, _, _, _, spellID = UnitBuff("player", i)
+				if not name then break end
+				if name and cfg.spells[spellID] then
+					frame:Hide()
+					return
+				end
 			end
 		end
 		frame:Show()
@@ -103,7 +113,7 @@ function A:Reminder_AddRune()
 end
 
 function A:InitReminder()
-	A:Reminder_AddRune()
+	--A:Reminder_AddRune()
 	if not groups then return end
 
 	if NDuiDB["Auras"]["Reminder"] then

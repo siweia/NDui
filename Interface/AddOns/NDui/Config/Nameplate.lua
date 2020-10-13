@@ -44,6 +44,10 @@ C.WhiteList = {
 	[255968]	= true,
 	[255970]	= true,
 	[255972]	= true,
+
+	[320293]	= true,		-- 伤逝剧场，融入死亡
+	[336449]	= true,		-- 凋魂之殇，玛卓克萨斯之墓
+
 	[228318]	= true,		-- 激怒
 	[226510]	= true,		-- 血池
 	[277242]	= true,		-- 共生
@@ -52,6 +56,7 @@ C.WhiteList = {
 	[302418]	= true,		-- 女王法令：势不可挡
 	[302419]	= true,		-- 虚空视界
 	[302421]	= true,		-- 女王法令：隐藏
+	[343502]	= true,		-- 鼓舞
 	-- Raids
 	[312266]	= true,		-- 烟幕，拉希奥
 	[313175]	= true,		-- 硬化核心
@@ -198,6 +203,8 @@ C.CustomUnits = {
 	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
 	[GetSectionInfo(20561)] = true,	-- 惊魂淤血
 	[GetSectionInfo(21329)] = true,	-- 聚合增生
+
+	[GetSectionInfo(22161)] = true,	-- 魔药炸弹
 }
 
 -- 显示能量值的单位

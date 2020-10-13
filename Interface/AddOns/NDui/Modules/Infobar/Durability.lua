@@ -1,16 +1,20 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF
 if not C.Infobar.Durability then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Durability", C.Infobar.DurabilityPos)
 
-local format, gsub, sort, floor, modf, select = string.format, string.gsub, table.sort, math.floor, math.modf, select
+local format, sort, floor, select = string.format, table.sort, math.floor, select
 local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture = GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture
 local GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
 local GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney
 local C_Timer_After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair = C_Timer.After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair
+local HelpTip = HelpTip
+
 local repairCostString = gsub(REPAIR_COST, HEADER_COLON, ":")
+local lowDurabilityCap = .25
 
 local localSlots = {
 	[1] = {1, INVTYPE_HEAD, 1000},
@@ -25,10 +29,20 @@ local localSlots = {
 	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000}
 }
 
-local inform = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
-inform:SetPoint("BOTTOM", info, "TOP", 0, 23)
-inform.Text:SetText(L["Low Durability"])
-inform:Hide()
+local function hideAlertWhileCombat()
+	if InCombatLockdown() then
+		info:RegisterEvent("PLAYER_REGEN_ENABLED")
+		info:UnregisterEvent("UPDATE_INVENTORY_DURABILITY")
+	end
+end
+
+local lowDurabilityInfo = {
+	text = L["Low Durability"],
+	buttonStyle = HelpTip.ButtonStyle.Okay,
+	targetPoint = HelpTip.Point.TopEdgeCenter,
+	onAcknowledgeCallback = hideAlertWhileCombat,
+	offsetY = 10,
+}
 
 local function sortSlots(a, b)
 	if a and b then
@@ -36,7 +50,7 @@ local function sortSlots(a, b)
 	end
 end
 
-local function getItemDurability()
+local function UpdateAllSlots()
 	local numSlots = 0
 	for i = 1, 10 do
 		localSlots[i][3] = 1000
@@ -47,6 +61,7 @@ local function getItemDurability()
 				localSlots[i][3] = current/max
 				numSlots = numSlots + 1
 			end
+			localSlots[i][4] = "|T"..GetInventoryItemTexture("player", index)..":13:15:0:0:50:50:4:46:4:46|t " or ""
 		end
 	end
 	sort(localSlots, sortSlots)
@@ -56,18 +71,15 @@ end
 
 local function isLowDurability()
 	for i = 1, 10 do
-		if localSlots[i][3] < .25 then
+		if localSlots[i][3] < lowDurabilityCap then
 			return true
 		end
 	end
 end
 
-local function gradientColor(perc)
-	perc = perc > 1 and 1 or perc < 0 and 0 or perc -- Stay between 0-1
-	local seg, relperc = modf(perc*2)
-	local r1, g1, b1, r2, g2, b2 = select(seg*3+1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0) -- R -> Y -> G
-	local r, g, b = r1+(r2-r1)*relperc, g1+(g2-g1)*relperc, b1+(b2-b1)*relperc
-	return format("|cff%02x%02x%02x", r*255, g*255, b*255), r, g, b
+local function getDurabilityColor(cur, max)
+	local r, g, b = oUF:RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	return r, g, b
 end
 
 info.eventList = {
@@ -76,33 +88,30 @@ info.eventList = {
 
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
-		B.ReskinClose(inform.CloseButton)
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		self:UnregisterEvent(event)
 	end
+
+	local numSlots = UpdateAllSlots()
+	local isLow = isLowDurability()
 
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent(event)
 		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
-		getItemDurability()
-		if isLowDurability() then inform:Show() end
 	else
-		local numSlots = getItemDurability()
 		if numSlots > 0 then
-			self.text:SetText(format(gsub("[color]%d|r%%"..L["D"], "%[color%]", (gradientColor(floor(localSlots[1][3]*100)/100))), floor(localSlots[1][3]*100)))
+			local r, g, b = getDurabilityColor(floor(localSlots[1][3]*100), 100)
+			self.text:SetFormattedText("%s%%|r"..L["D"], B.HexRGB(r, g, b)..floor(localSlots[1][3]*100))
 		else
 			self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
 		end
+	end
 
-		if isLowDurability() then inform:Show() else inform:Hide() end
+	if isLow then
+		HelpTip:Show(info, lowDurabilityInfo)
+	else
+		HelpTip:Hide(info, L["Low Durability"])
 	end
 end
-
-inform.CloseButton:HookScript("OnClick", function()
-	if InCombatLockdown() then
-		info:UnregisterEvent("UPDATE_INVENTORY_DURABILITY")
-		info:RegisterEvent("PLAYER_REGEN_ENABLED")
-	end
-end)
 
 info.onMouseUp = function(self, btn)
 	if btn == "MiddleButton" then
@@ -131,10 +140,9 @@ info.onEnter = function(self)
 	for i = 1, 10 do
 		if localSlots[i][3] ~= 1000 then
 			local slot = localSlots[i][1]
-			local green = localSlots[i][3]*2
-			local red = 1 - green
-			local slotIcon = "|T"..GetInventoryItemTexture("player", slot)..":13:15:0:0:50:50:4:46:4:46|t " or ""
-			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], floor(localSlots[i][3]*100).."%", 1,1,1, red+1,green,0)
+			local cur = floor(localSlots[i][3]*100)
+			local slotIcon = localSlots[i][4]
+			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], cur.."%", 1,1,1, getDurabilityColor(cur, 100))
 
 			B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
 			totalCost = totalCost + select(3, B.ScanTip:SetInventoryItem("player", slot))

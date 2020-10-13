@@ -12,6 +12,7 @@ local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture = BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture
 local BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor = BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor
+local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_GetOffset, HybridScrollFrame_Update
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 local C_BattleNet_GetFriendNumGameAccounts = C_BattleNet.GetFriendNumGameAccounts
 local C_BattleNet_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
@@ -24,8 +25,8 @@ local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
 local CLIENT_WOW_CLASSIC = "WoV" -- for sorting
 
 local r, g, b = DB.r, DB.g, DB.b
-local friendsFrame, menuFrame, updateRequest
-local menuList, buttons, friendTable, bnetTable = {}, {}, {}, {}
+local infoFrame, menuFrame, updateRequest, prevTime
+local menuList, friendTable, bnetTable = {}, {}, {}
 local activeZone, inactiveZone = "|cff4cff4c", DB.GreyColor
 local noteString = "|T"..DB.copyTex..":12|t %s"
 local broadcastString = "|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)"
@@ -143,10 +144,10 @@ local function buildBNetTable(num)
 	sort(bnetTable, sortBNFriends)
 end
 
-local function onUpdate(self, elapsed)
+local function isPanelCanHide(self, elapsed)
 	self.timer = (self.timer or 0) + elapsed
 	if self.timer > .1 then
-		if not friendsFrame:IsMouseOver() then
+		if not infoFrame:IsMouseOver() then
 			self:Hide()
 			self:SetScript("OnUpdate", nil)
 		end
@@ -155,49 +156,67 @@ local function onUpdate(self, elapsed)
 	end
 end
 
-local function setupFriendsFrame()
-	if friendsFrame then friendsFrame:Show() return end
+function info:FriendsPanel_Init()
+	if infoFrame then infoFrame:Show() return end
 
-	friendsFrame = CreateFrame("Frame", "NDuiFriendsFrame", info)
-	friendsFrame:SetSize(400, 495)
-	friendsFrame:SetPoint("TOPLEFT", UIParent, 15, -30)
-	friendsFrame:SetClampedToScreen(true)
-	friendsFrame:SetFrameStrata("DIALOG")
-	local bg = B.SetBD(friendsFrame)
+	infoFrame = CreateFrame("Frame", "NDuiFriendsFrame", info)
+	infoFrame:SetSize(400, 495)
+	infoFrame:SetPoint("TOPLEFT", UIParent, 15, -30)
+	infoFrame:SetClampedToScreen(true)
+	infoFrame:SetFrameStrata("DIALOG")
+	local bg = B.SetBD(infoFrame)
 	bg:SetBackdropColor(0, 0, 0, .7)
 
-	friendsFrame:SetScript("OnLeave", function(self)
-		self:SetScript("OnUpdate", onUpdate)
+	infoFrame:SetScript("OnLeave", function(self)
+		self:SetScript("OnUpdate", isPanelCanHide)
 	end)
-	friendsFrame:SetScript("OnHide", function()
+	infoFrame:SetScript("OnHide", function()
 		if menuFrame and menuFrame:IsShown() then menuFrame:Hide() end
 	end)
 
-	B.CreateFS(friendsFrame, 16, "|cff0099ff"..FRIENDS_LIST, nil, "TOPLEFT", 15, -10)
-	friendsFrame.numFriends = B.CreateFS(friendsFrame, 14, "-/-", nil, "TOPRIGHT", -15, -12)
-	friendsFrame.numFriends:SetTextColor(0, .6, 1)
+	B.CreateFS(infoFrame, 16, "|cff0099ff"..FRIENDS_LIST, nil, "TOPLEFT", 15, -10)
+	infoFrame.friendCountText = B.CreateFS(infoFrame, 14, "-/-", nil, "TOPRIGHT", -15, -12)
+	infoFrame.friendCountText:SetTextColor(0, .6, 1)
 
-	local scrollFrame = CreateFrame("ScrollFrame", nil, friendsFrame, "UIPanelScrollFrameTemplate")
-	scrollFrame:SetSize(380, 400)
+	local scrollFrame = CreateFrame("ScrollFrame", "NDuiFriendsInfobarScrollFrame", infoFrame, "HybridScrollFrameTemplate")
+	scrollFrame:SetSize(370, 400)
 	scrollFrame:SetPoint("TOPLEFT", 10, -35)
-	module.ReskinScrollBar(scrollFrame)
+	infoFrame.scrollFrame = scrollFrame
 
-	local roster = CreateFrame("Frame", nil, scrollFrame)
-	roster:SetSize(380, 1)
-	scrollFrame:SetScrollChild(roster)
-	friendsFrame.roster = roster
+	local scrollBar = CreateFrame("Slider", "$parentScrollBar", scrollFrame, "HybridScrollBarTemplate")
+	scrollBar.doNotHide = true
+	B.ReskinScroll(scrollBar)
+	scrollFrame.scrollBar = scrollBar
 
-	B.CreateFS(friendsFrame, 13, DB.LineString, false, "BOTTOMRIGHT", -12, 42)
+	local scrollChild = scrollFrame.scrollChild
+	local numButtons = 20 + 1
+	local buttonHeight = 22
+	local buttons = {}
+	for i = 1, numButtons do
+		buttons[i] = info:FriendsPanel_CreateButton(scrollChild, i)
+	end
+
+	scrollFrame.buttons = buttons
+	scrollFrame.buttonHeight = buttonHeight
+	scrollFrame.update = info.FriendsPanel_Update
+	scrollFrame:SetScript("OnMouseWheel", info.FriendsPanel_OnMouseWheel)
+	scrollChild:SetSize(scrollFrame:GetWidth(), numButtons * buttonHeight)
+	scrollFrame:SetVerticalScroll(0)
+	scrollFrame:UpdateScrollChildRect()
+	scrollBar:SetMinMaxValues(0, numButtons * buttonHeight)
+	scrollBar:SetValue(0)
+
+	B.CreateFS(infoFrame, 13, DB.LineString, false, "BOTTOMRIGHT", -12, 42)
 	local whspInfo = DB.InfoColor..DB.RightButton..L["Whisper"]
-	B.CreateFS(friendsFrame, 13, whspInfo, false, "BOTTOMRIGHT", -15, 26)
+	B.CreateFS(infoFrame, 13, whspInfo, false, "BOTTOMRIGHT", -15, 26)
 	local invtInfo = DB.InfoColor.."ALT +"..DB.LeftButton..L["Invite"]
-	B.CreateFS(friendsFrame, 13, invtInfo, false, "BOTTOMRIGHT", -15, 10)
+	B.CreateFS(infoFrame, 13, invtInfo, false, "BOTTOMRIGHT", -15, 10)
 end
 
 local function createInviteMenu()
 	if menuFrame then return end
 
-	menuFrame = CreateFrame("Frame", "FriendsInfobarMenu", friendsFrame, "UIDropDownMenuTemplate")
+	menuFrame = CreateFrame("Frame", "FriendsInfobarMenu", infoFrame, "UIDropDownMenuTemplate")
 	menuFrame:SetFrameStrata("TOOLTIP")
 	menuList[1] = {text = L["Join or Invite"], isTitle = true, notCheckable = true}
 end
@@ -264,7 +283,7 @@ end
 
 local function buttonOnEnter(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:SetPoint("TOPLEFT", friendsFrame, "TOPRIGHT", 5, 0)
+	GameTooltip:SetPoint("TOPLEFT", infoFrame, "TOPRIGHT", 5, 0)
 	GameTooltip:ClearLines()
 	if self.isBNet then
 		GameTooltip:AddLine(L["BN"], 0,.6,1)
@@ -327,13 +346,13 @@ local function buttonOnEnter(self)
 	GameTooltip:Show()
 end
 
-local function createRoster(parent, i)
+function info:FriendsPanel_CreateButton(parent, index)
 	local button = CreateFrame("Button", nil, parent)
-	button:SetSize(380, 20)
+	button:SetSize(370, 20)
+	button:SetPoint("TOPLEFT", 0, - (index-1) *20)
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetAllPoints()
 	button.HL:SetColorTexture(r, g, b, .2)
-	button.index = i
 
 	button.status = button:CreateTexture(nil, "ARTWORK")
 	button.status:SetPoint("LEFT", button, 5, 0)
@@ -362,42 +381,12 @@ local function createRoster(parent, i)
 	return button
 end
 
-local previous = 0
-local function updateAnchor()
-	for i = 1, previous do
-		if i == 1 then
-			buttons[i]:SetPoint("TOPLEFT")
-		else
-			buttons[i]:SetPoint("TOP", buttons[i-1], "BOTTOM")
-		end
-		buttons[i]:Show()
-	end
-end
+function info:FriendsPanel_UpdateButton(button)
+	local index = button.index
+	local onlineFriends = info.onlineFriends
 
-local function updateFriendsFrame()
-	local onlineFriends = C_FriendList_GetNumOnlineFriends()
-	local _, onlineBNet = BNGetNumFriends()
-	local totalOnline = onlineFriends + onlineBNet
-	if totalOnline ~= previous then
-		if totalOnline > previous then
-			for i = previous+1, totalOnline do
-				if not buttons[i] then
-					buttons[i] = createRoster(friendsFrame.roster, i)
-				end
-			end
-		elseif totalOnline < previous then
-			for i = totalOnline+1, previous do
-				buttons[i]:Hide()
-			end
-		end
-		previous = totalOnline
-
-		updateAnchor()
-	end
-
-	for i = 1, #friendTable do
-		local button = buttons[i]
-		local name, level, class, area, status = unpack(friendTable[i])
+	if index <= onlineFriends then
+		local name, level, class, area, status = unpack(friendTable[index])
 		button.status:SetTexture(status)
 		local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
 		local levelColor = B.HexRGB(GetQuestDifficultyColor(level))
@@ -407,12 +396,10 @@ local function updateFriendsFrame()
 		button.gameIcon:SetTexture(BNet_GetClientTexture(BNET_CLIENT_WOW))
 
 		button.isBNet = nil
-		button.data = friendTable[i]
-	end
-
-	for i = 1, #bnetTable do
-		local button = buttons[i+onlineFriends]
-		local _, accountName, charName, canCooperate, client, status, class, _, infoText = unpack(bnetTable[i])
+		button.data = friendTable[index]
+	else
+		local bnetIndex = index-onlineFriends
+		local _, accountName, charName, canCooperate, client, status, class, _, infoText = unpack(bnetTable[bnetIndex])
 
 		button.status:SetTexture(status)
 		local zoneColor = inactiveZone
@@ -435,8 +422,58 @@ local function updateFriendsFrame()
 		end
 
 		button.isBNet = true
-		button.data = bnetTable[i]
+		button.data = bnetTable[bnetIndex]
 	end
+end
+
+function info:FriendsPanel_Update()
+	local scrollFrame = NDuiFriendsInfobarScrollFrame
+	local usedHeight = 0
+	local buttons = scrollFrame.buttons
+	local height = scrollFrame.buttonHeight
+	local numFriendButtons = info.totalOnline
+	local offset = HybridScrollFrame_GetOffset(scrollFrame)
+
+	for i = 1, #buttons do
+		local button = buttons[i]
+		local index = offset + i
+		if index <= numFriendButtons then
+			button.index = index
+			info:FriendsPanel_UpdateButton(button)
+			usedHeight = usedHeight + height
+			button:Show()
+		else
+			button.index = nil
+			button:Hide()
+		end
+	end
+
+	HybridScrollFrame_Update(scrollFrame, numFriendButtons*height, usedHeight)
+end
+
+function info:FriendsPanel_OnMouseWheel(delta)
+	local scrollBar = self.scrollBar
+	local step = delta*self.buttonHeight
+	if IsShiftKeyDown() then
+		step = step*19
+	end
+	scrollBar:SetValue(scrollBar:GetValue() - step)
+	info:FriendsPanel_Update()
+end
+
+function info:FriendsPanel_Refresh()
+	local numFriends = C_FriendList_GetNumFriends()
+	local onlineFriends = C_FriendList_GetNumOnlineFriends()
+	local numBNet, onlineBNet = BNGetNumFriends()
+	local totalOnline = onlineFriends + onlineBNet
+	local totalFriends = numFriends + numBNet
+
+	info.numFriends = numFriends
+	info.onlineFriends = onlineFriends
+	info.numBNet = numBNet
+	info.onlineBNet = onlineBNet
+	info.totalOnline = totalOnline
+	info.totalFriends = totalFriends
 end
 
 info.eventList = {
@@ -453,19 +490,26 @@ info.onEvent = function(self, event, arg1)
 		if not strfind(arg1, onlineString) and not strfind(arg1, offlineString) then return end
 	end
 
-	local onlineFriends = C_FriendList_GetNumOnlineFriends()
-	local _, onlineBNet = BNGetNumFriends()
-	self.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, onlineFriends + onlineBNet))
+	info:FriendsPanel_Refresh()
+	self.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, info.totalOnline))
 
 	updateRequest = false
-	if friendsFrame and friendsFrame:IsShown() then info:onEnter() end
+	if infoFrame and infoFrame:IsShown() then
+		info:onEnter()
+	end
 end
 
 info.onEnter = function(self)
-	local numFriends, onlineFriends = C_FriendList_GetNumFriends(), C_FriendList_GetNumOnlineFriends()
-	local numBNet, onlineBNet = BNGetNumFriends()
-	local totalOnline = onlineFriends + onlineBNet
-	local totalFriends = numFriends + numBNet
+	local thisTime = GetTime()
+	if not prevTime or (thisTime-prevTime > 5) then
+		info:FriendsPanel_Refresh()
+		prevTime = thisTime
+	end
+
+	local numFriends = info.numFriends
+	local numBNet = info.numBNet
+	local totalOnline = info.totalOnline
+	local totalFriends = info.totalFriends
 
 	if totalOnline == 0 then
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
@@ -484,20 +528,23 @@ info.onEnter = function(self)
 		updateRequest = true
 	end
 
-	if NDuiGuildInfobar and NDuiGuildInfobar:IsShown() then NDuiGuildInfobar:Hide() end
-	setupFriendsFrame()
-	friendsFrame.numFriends:SetText(format("%s: %s/%s", GUILD_ONLINE_LABEL, totalOnline, totalFriends))
-	updateFriendsFrame()
+	if NDuiGuildInfobar and NDuiGuildInfobar:IsShown() then
+		NDuiGuildInfobar:Hide()
+	end
+
+	info:FriendsPanel_Init()
+	info:FriendsPanel_Update()
+	infoFrame.friendCountText:SetText(format("%s: %s/%s", GUILD_ONLINE_LABEL, totalOnline, totalFriends))
 end
 
 local function delayLeave()
-	if MouseIsOver(friendsFrame) then return end
-	friendsFrame:Hide()
+	if MouseIsOver(infoFrame) then return end
+	infoFrame:Hide()
 end
 
 info.onLeave = function()
 	GameTooltip:Hide()
-	if not friendsFrame then return end
+	if not infoFrame then return end
 	C_Timer_After(.1, delayLeave)
 end
 
@@ -505,6 +552,6 @@ info.onMouseUp = function(_, btn)
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 
 	if btn ~= "LeftButton" then return end
-	if friendsFrame then friendsFrame:Hide() end
+	if infoFrame then infoFrame:Hide() end
 	ToggleFriendsFrame()
 end

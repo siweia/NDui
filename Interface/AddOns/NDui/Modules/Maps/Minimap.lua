@@ -2,6 +2,7 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Maps")
 
+local _G = _G
 local strmatch, strfind, strupper = string.match, string.find, string.upper
 local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
 local cr, cg, cb = DB.r, DB.g, DB.b
@@ -9,7 +10,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 function module:CreatePulse()
 	if not NDuiDB["Map"]["CombatPulse"] then return end
 
-	local bg = B.CreateBDFrame(Minimap, nil, true)
+	local bg = B.SetBD(Minimap)
 	local anim = bg:CreateAnimationGroup()
 	anim:SetLooping("BOUNCE")
 	anim.fader = anim:CreateAnimation("Alpha")
@@ -46,9 +47,9 @@ end
 
 function module:ReskinRegions()
 	-- Garrison
-	GarrisonLandingPageMinimapButton:ClearAllPoints()
-	GarrisonLandingPageMinimapButton:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
 	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(self)
+		self:ClearAllPoints()
+		self:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
 		self:GetNormalTexture():SetTexture(DB.garrTex)
 		self:GetPushedTexture():SetTexture(DB.garrTex)
 		self:GetHighlightTexture():SetTexture(DB.garrTex)
@@ -59,18 +60,6 @@ function module:ReskinRegions()
 			RecycleBinToggleButton.settled = true
 		end
 	end)
-	if not IsAddOnLoaded("GarrisonMissionManager") then
-		GarrisonLandingPageMinimapButton:RegisterForClicks("AnyUp")
-		GarrisonLandingPageMinimapButton:HookScript("OnClick", function(_, btn, down)
-			if btn == "MiddleButton" and not down then
-				HideUIPanel(GarrisonLandingPage)
-				ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
-			elseif btn == "RightButton" and not down then
-				HideUIPanel(GarrisonLandingPage)
-				ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
-			end
-		end)
-	end
 
 	-- QueueStatus Button
 	QueueStatusMinimapButton:ClearAllPoints()
@@ -148,7 +137,6 @@ function module:RecycleBin()
 		["MinimapBackdrop"] = true,
 		["TimeManagerClockButton"] = true,
 		["FeedbackUIButton"] = true,
-		["HelpOpenTicketButton"] = true,
 		["MiniMapBattlefieldFrame"] = true,
 		["QueueStatusMinimapButton"] = true,
 		["GarrisonLandingPageMinimapButton"] = true,
@@ -166,20 +154,21 @@ function module:RecycleBin()
 	bu:SetHighlightTexture(DB.binTex)
 	B.AddTooltip(bu, "ANCHOR_LEFT", L["Minimap RecycleBin"], "white")
 
+	local width, height, alpha = 220, 40, .5
 	local bin = CreateFrame("Frame", "RecycleBinFrame", UIParent)
 	bin:SetPoint("BOTTOMRIGHT", bu, "BOTTOMLEFT", -3, 10)
-	bin:Hide()
-	B.CreateGF(bin, 220, 40, "Horizontal", 0, 0, 0, 0, .7)
-	local topLine = CreateFrame("Frame", nil, bin)
-	topLine:SetPoint("BOTTOMRIGHT", bin, "TOPRIGHT", 1, 0)
-	B.CreateGF(topLine, 220, 1, "Horizontal", cr, cg, cb, 0, .7)
-	local bottomLine = CreateFrame("Frame", nil, bin)
-	bottomLine:SetPoint("TOPRIGHT", bin, "BOTTOMRIGHT", 1, 0)
-	B.CreateGF(bottomLine, 220, 1, "Horizontal", cr, cg, cb, 0, .7)
-	local rightLine = CreateFrame("Frame", nil, bin)
-	rightLine:SetPoint("LEFT", bin, "RIGHT", 0, 0)
-	B.CreateGF(rightLine, 1, 40, "Vertical", cr, cg, cb, .7, .7)
+	bin:SetSize(width, height)
 	bin:SetFrameStrata("TOOLTIP")
+	bin:Hide()
+
+	local tex = B.SetGradient(bin, "H", 0, 0, 0, 0, alpha, width, height)
+	tex:SetPoint("CENTER")
+	local topLine = B.SetGradient(bin, "H", cr, cg, cb, 0, alpha, width, C.mult)
+	topLine:SetPoint("BOTTOM", bin, "TOP")
+	local bottomLine = B.SetGradient(bin, "H", cr, cg, cb, 0, alpha, width, C.mult)
+	bottomLine:SetPoint("TOP", bin, "BOTTOM")
+	local rightLine = B.SetGradient(bin, "V", cr, cg, cb, alpha, alpha, C.mult, 40 + C.mult*2)
+	rightLine:SetPoint("LEFT", bin, "RIGHT")
 
 	local function hideBinButton()
 		bin:Hide()
@@ -373,6 +362,46 @@ function module:ShowCalendar()
 	end
 end
 
+function module:Minimap_OnMouseWheel(zoom)
+	if zoom > 0 then
+		Minimap_ZoomIn()
+	else
+		Minimap_ZoomOut()
+	end
+end
+
+local NDuiMiniMapTrackingDropDown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
+NDuiMiniMapTrackingDropDown:SetID(1)
+NDuiMiniMapTrackingDropDown:SetClampedToScreen(true)
+NDuiMiniMapTrackingDropDown:Hide()
+NDuiMiniMapTrackingDropDown.noResize = true
+_G.UIDropDownMenu_Initialize(NDuiMiniMapTrackingDropDown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
+
+function module:Minimap_OnMouseUp(btn)
+	if btn == "MiddleButton" then
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+		ToggleCalendar()
+	elseif btn == "RightButton" then
+		ToggleDropDownMenu(1, nil, NDuiMiniMapTrackingDropDown, "cursor")
+	elseif self.mover then
+		Minimap_OnClick(self)
+	end
+end
+
+function module:SetupHybridMinimap()
+	local mapCanvas = HybridMinimap.MapCanvas
+	mapCanvas:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
+	mapCanvas:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	mapCanvas:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
+end
+
+function module:HybridMinimapOnLoad(addon)
+	if addon == "Blizzard_HybridMinimap" then
+		module:SetupHybridMinimap()
+		B:UnregisterEvent(self, module.HybridMinimapOnLoad)
+	end
+end
+
 function module:SetupMinimap()
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
@@ -388,27 +417,10 @@ function module:SetupMinimap()
 	self:ShowMinimapClock()
 	self:ShowCalendar()
 
-	-- Mousewheel Zoom
+	-- Minimap clicks
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", function(_, zoom)
-		if zoom > 0 then
-			Minimap_ZoomIn()
-		else
-			Minimap_ZoomOut()
-		end
-	end)
-
-	-- Click Func
-	Minimap:SetScript("OnMouseUp", function(self, btn)
-		if btn == "MiddleButton" then
-			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-			ToggleCalendar()
-		elseif btn == "RightButton" then
-			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, -(self:GetWidth()*.7), (self:GetWidth()*.3))
-		else
-			Minimap_OnClick(self)
-		end
-	end)
+	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	Minimap:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
 
 	-- Hide Blizz
 	local frames = {
@@ -435,4 +447,7 @@ function module:SetupMinimap()
 	self:ReskinRegions()
 	self:RecycleBin()
 	self:WhoPingsMyMap()
+
+	-- HybridMinimap
+	B:RegisterEvent("ADDON_LOADED", module.HybridMinimapOnLoad)
 end

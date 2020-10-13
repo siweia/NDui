@@ -21,6 +21,8 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 DB.Devs = {
 	["寧德-加尔"] = true,
 	["图咿-万色星辰"] = true,
+	["Huniverster-Oribos"] = true,
+	["Huniverster-Torghast"] = true,
 }
 local function isDeveloper()
 	return DB.Devs[DB.MyName.."-"..DB.MyRealm]
@@ -140,6 +142,24 @@ do
 	end
 	SLASH_NDUI_VER_CHECK1 = "/nduiver"
 end
+
+SlashCmdList["NDUI_GET_INSTANCES"] = function()
+	if not EncounterJournal then return end
+	local tierID = EJ_GetCurrentTier()
+	print("local _, ns = ...")
+	print("local B, C, L, DB = unpack(ns)")
+	print("local module = B:GetModule(\"AurasTable\")")
+	print("local TIER = "..tierID)
+	print("local INSTANCE")
+	local i = 0
+	while true do
+		i = i + 1
+		local instID, instName = EJ_GetInstanceByIndex(i, false)
+		if not instID then return end
+		print("INSTANCE = "..instID.." -- "..instName)
+	end
+end
+SLASH_NDUI_GET_INSTANCES1 = "/getinst"
 
 SlashCmdList["NDUI_GET_ENCOUNTERS"] = function()
 	if not EncounterJournal then return end

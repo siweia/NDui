@@ -20,6 +20,8 @@ local channelingTicks = {
 	[205065] = 6,	-- 虚空洪流
 	[234153] = 5,	-- 吸取生命
 	[291944] = 6,	-- 再生
+	[314791] = 4,	-- 变易幻能
+	[324631] = 8,	-- 血肉铸造
 }
 
 if DB.MyClass == "PRIEST" then
@@ -153,13 +155,6 @@ function B:PostCastStop()
 		self:SetStatusBarColor(unpack(CastbarCompleteColor))
 		self.fadeOut = true
 	end
-	self:SetValue(self.max)
-	self:Show()
-end
-
-function B:PostChannelStop()
-	self.fadeOut = true
-	self:SetValue(0)
 	self:Show()
 end
 

@@ -1,17 +1,21 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function ReskinFont(font, size)
+	if not font then
+		if DB.isDeveloper then print("UNKNOWN FONT.") end
+		return
+	end
+	local oldSize = select(2, font:GetFont())
+	size = size or oldSize
+	local fontSize = size*NDuiDB["Skins"]["FontScale"]
+	font:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	font:SetShadowColor(0, 0, 0, 0)
+end
+
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 	if not NDuiDB["Skins"]["FontOutline"] then return end
-
-	local function ReskinFont(font, size)
-		local oldSize = select(2, font:GetFont())
-		size = size or oldSize
-		local fontSize = size*NDuiDB["Skins"]["FontScale"]
-		font:SetFont(DB.Font[1], fontSize, DB.Font[3])
-		font:SetShadowColor(0, 0, 0, 0)
-	end
 
 	ReskinFont(RaidWarningFrame.slot1)
 	ReskinFont(RaidWarningFrame.slot2)
@@ -44,6 +48,8 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(NumberFont_Shadow_Med)
 	ReskinFont(NumberFont_Shadow_Small)
 	ReskinFont(Number12Font, 12)
+	ReskinFont(Number15Font)
+	ReskinFont(Number16Font)
 	ReskinFont(Number13FontYellow)
 	ReskinFont(Number13FontWhite)
 	ReskinFont(Number13FontGray)
@@ -77,7 +83,6 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(SystemFont_Shadow_Med1_Outline)
 	ReskinFont(SystemFont_Shadow_Med2)
 	ReskinFont(SystemFont_Shadow_Med3)
-	ReskinFont(SystemFont_Shadow_Outline_Huge2)
 	ReskinFont(SystemFont_Shadow_Huge1)
 	ReskinFont(SystemFont_Shadow_Huge2)
 	ReskinFont(SystemFont_Shadow_Huge3)
@@ -96,7 +101,6 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(SystemFont_WTF2, 64)
 	ReskinFont(Tooltip_Med)
 	ReskinFont(Tooltip_Small)
-	ReskinFont(HelpFrameKnowledgebaseNavBarHomeButtonText)
 	ReskinFont(Game11Font)
 	ReskinFont(Game12Font)
 	ReskinFont(Game13Font)
@@ -110,6 +114,7 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(Game30Font)
 	ReskinFont(Game32Font)
 	ReskinFont(Game36Font)
+	ReskinFont(Game40Font)
 	ReskinFont(Game42Font)
 	ReskinFont(Game46Font)
 	ReskinFont(Game48Font)

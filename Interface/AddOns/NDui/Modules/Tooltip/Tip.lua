@@ -263,7 +263,7 @@ function TT:ReskinStatusBar()
 	self.StatusBar:SetPoint("BOTTOMRIGHT", self.bg, "TOPRIGHT", -C.mult, 3)
 	self.StatusBar:SetStatusBarTexture(DB.normTex)
 	self.StatusBar:SetHeight(5)
-	B.CreateBDFrame(self.StatusBar, nil, true)
+	B.SetBD(self.StatusBar)
 end
 
 function TT:GameTooltip_ShowStatusBar()
@@ -339,13 +339,6 @@ function TT:GameTooltip_ComparisonFix(anchorFrame, shoppingTooltip1, shoppingToo
 end
 
 -- Tooltip skin
-local fakeBg = CreateFrame("Frame", nil, UIParent)
-fakeBg:SetBackdrop({ bgFile = DB.bdTex, edgeFile = DB.bdTex, edgeSize = 1 })
-
-local function getBackdrop() return fakeBg:GetBackdrop() end
-local function getBackdropColor() return 0, 0, 0, .7 end
-local function getBackdropBorderColor() return 0, 0, 0 end
-
 function TT:ReskinTooltip()
 	if not self then
 		if DB.isDeveloper then print("Unknown tooltip spotted.") end
@@ -355,20 +348,20 @@ function TT:ReskinTooltip()
 	self:SetScale(NDuiDB["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
-		self:SetBackdrop(nil)
+		if self.SetBackdrop then self:SetBackdrop(nil) end
 		self:DisableDrawLayer("BACKGROUND")
-		self.bg = B.CreateBDFrame(self, .7, true)
+		self.bg = B.SetBD(self, .7)
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
-		B.CreateTex(self.bg)
-
-		-- other gametooltip-like support
-		self.GetBackdrop = getBackdrop
-		self.GetBackdropColor = getBackdropColor
-		self.GetBackdropBorderColor = getBackdropBorderColor
 
 		if self.StatusBar then
 			TT.ReskinStatusBar(self)
+		end
+
+		if self.GetBackdrop then
+			self.GetBackdrop = self.bg.GetBackdrop
+			self.GetBackdropColor = self.bg.GetBackdropColor
+			self.GetBackdropBorderColor = self.bg.GetBackdropBorderColor
 		end
 
 		self.tipStyled = true
@@ -387,7 +380,7 @@ function TT:ReskinTooltip()
 	end
 end
 
-function TT:GameTooltip_SetBackdropStyle()
+function TT:SharedTooltip_SetBackdropStyle()
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
 end
@@ -427,22 +420,22 @@ end
 
 function TT:OnLogin()
 	GameTooltip.StatusBar = GameTooltipStatusBar
-	GameTooltip:HookScript("OnTooltipCleared", self.OnTooltipCleared)
-	GameTooltip:HookScript("OnTooltipSetUnit", self.OnTooltipSetUnit)
-	GameTooltip.StatusBar:SetScript("OnValueChanged", self.StatusBar_OnValueChanged)
-	hooksecurefunc("GameTooltip_ShowStatusBar", self.GameTooltip_ShowStatusBar)
-	hooksecurefunc("GameTooltip_ShowProgressBar", self.GameTooltip_ShowProgressBar)
-	hooksecurefunc("GameTooltip_SetDefaultAnchor", self.GameTooltip_SetDefaultAnchor)
-	hooksecurefunc("GameTooltip_SetBackdropStyle", self.GameTooltip_SetBackdropStyle)
-	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
+	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
+	GameTooltip:HookScript("OnTooltipSetUnit", TT.OnTooltipSetUnit)
+	GameTooltip.StatusBar:SetScript("OnValueChanged", TT.StatusBar_OnValueChanged)
+	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
+	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
+	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
+	hooksecurefunc("SharedTooltip_SetBackdropStyle", TT.SharedTooltip_SetBackdropStyle)
+	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
 
 	-- Elements
-	self:SetupTooltipFonts()
-	self:ReskinTooltipIcons()
-	self:SetupTooltipID()
-	self:TargetedInfo()
-	self:AzeriteArmor()
-	self:CorruptionRank()
+	TT:SetupTooltipFonts()
+	TT:ReskinTooltipIcons()
+	TT:SetupTooltipID()
+	TT:TargetedInfo()
+	TT:AzeriteArmor()
+	TT:ConduitCollectionData()
 end
 
 -- Tooltip Skin Registration
@@ -474,9 +467,9 @@ TT:RegisterTooltips("NDui", function()
 		AutoCompleteBox,
 		FriendsTooltip,
 		QuestScrollFrame.StoryTooltip,
+		QuestScrollFrame.CampaignTooltip,
 		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
-		QuestScrollFrame.WarCampaignTooltip,
 		NamePlateTooltip,
 		QueueStatusFrame,
 		FloatingGarrisonFollowerTooltip,
@@ -491,7 +484,8 @@ TT:RegisterTooltips("NDui", function()
 		PetBattlePrimaryUnitTooltip,
 		FloatingBattlePetTooltip,
 		FloatingPetBattleAbilityTooltip,
-		IMECandidatesFrame
+		IMECandidatesFrame,
+		QuickKeybindTooltip
 	}
 	for _, f in pairs(tooltips) do
 		f:HookScript("OnShow", TT.ReskinTooltip)

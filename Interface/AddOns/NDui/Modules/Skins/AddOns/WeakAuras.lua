@@ -14,8 +14,8 @@ local function ReskinWA()
 				f.bg.__icon = f.icon
 				f.bg:HookScript("OnUpdate", function(self)
 					self:SetAlpha(self.__icon:GetAlpha())
-					if self.Shadow then
-						self.Shadow:SetAlpha(self.__icon:GetAlpha())
+					if self.__shadow then
+						self.__shadow:SetAlpha(self.__icon:GetAlpha())
 					end
 				end)
 

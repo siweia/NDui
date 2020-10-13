@@ -14,6 +14,7 @@ local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetSpellCooldown, GetTime = GetSpellCooldown, GetTime
+local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local INTERRUPTED = INTERRUPTED
 
 -- Init
@@ -620,15 +621,13 @@ function UF:MouseoverIndicator(self)
 	self.HighlightUpdater = f
 end
 
--- NazjatarFollowerXP
-function UF:AddFollowerXP(self)
-	local bar = CreateFrame("StatusBar", nil, self)
-	bar:SetSize(NDuiDB["Nameplate"]["PlateWidth"]*.75, NDuiDB["Nameplate"]["PlateHeight"])
-	bar:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
-	B.CreateSB(bar, false, 0, .7, 1)
-	bar.ProgressText = B.CreateFS(bar, 12)
+-- WidgetContainer
+function UF:AddWidgetContainer(self)
+	local widgetContainer = CreateFrame("Frame", nil, self, "UIWidgetContainerTemplate")
+	widgetContainer:SetPoint("BOTTOM", self, "TOP")
+	widgetContainer:Hide()
 
-	self.WidgetXPBar = bar
+	self.WidgetContainer = widgetContainer
 end
 
 -- Interrupt info on castbars
@@ -663,7 +662,7 @@ function UF:CreatePlates()
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
-	health.backdrop = B.CreateBDFrame(health, nil, true) -- don't mess up with libs
+	health.backdrop = B.SetBD(health) -- don't mess up with libs
 	B:SmoothBar(health)
 
 	self.Health = health
@@ -689,7 +688,7 @@ function UF:CreatePlates()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
 	self:Tag(self.powerText, "[nppp]")
 
-	UF:AddFollowerXP(self)
+	UF:AddWidgetContainer(self)
 	UF:MouseoverIndicator(self)
 	UF:AddTargetIndicator(self)
 	UF:AddCreatureIcon(self)
@@ -782,6 +781,7 @@ function UF:UpdatePlateByType()
 	local classify = self.ClassifyIndicator
 	local questIcon = self.questIcon
 
+	name:SetShown(not self.widgetsOnly)
 	name:ClearAllPoints()
 	raidtarget:ClearAllPoints()
 
@@ -830,7 +830,7 @@ end
 function UF:RefreshPlateType(unit)
 	self.reaction = UnitReaction(unit, "player")
 	self.isFriendly = self.reaction and self.reaction >= 5
-	self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or false
+	self.isNameOnly = NDuiDB["Nameplate"]["NameOnlyMode"] and self.isFriendly or self.widgetsOnly or false
 
 	if self.previousType == nil or self.previousType ~= self.isNameOnly then
 		UF.UpdatePlateByType(self)
@@ -859,17 +859,18 @@ function UF:PostUpdatePlates(event, unit)
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = self
 		end
-		self.npcID = B.GetNPCID(self.unitGUID)
 		self.isPlayer = UnitIsPlayer(unit)
-
-		local blizzPlate = self:GetParent().UnitFrame
-		self.widget = blizzPlate.WidgetContainer
+		self.npcID = B.GetNPCID(self.unitGUID)
+		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
+		self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), B.Widget_DefaultLayout, nil, unit)
 
 		UF.RefreshPlateType(self, unit)
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
 		end
+		self.npcID = nil
+		self.WidgetContainer:UnregisterForWidgetSet()
 	end
 
 	if event ~= "NAME_PLATE_UNIT_REMOVED" then
@@ -887,16 +888,17 @@ end
 local auras = B:GetModule("Auras")
 
 function UF:PlateVisibility(event)
+	local alpha = NDuiDB["Nameplate"]["PPFadeoutAlpha"]
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
 		UIFrameFadeIn(self.Health, .3, self.Health:GetAlpha(), 1)
 		UIFrameFadeIn(self.Health.bg, .3, self.Health.bg:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), 1)
 	else
-		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), 0)
-		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), 0)
-		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), 0)
-		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), 0)
+		UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), alpha)
+		UIFrameFadeOut(self.Health.bg, 2, self.Health.bg:GetAlpha(), alpha)
+		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), alpha)
+		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), alpha)
 	end
 end
 
@@ -927,7 +929,7 @@ function UF:ResizePlayerPlate()
 			plate.Stagger:SetHeight(barHeight)
 		end
 		if plate.lumos then
-			local iconSize = (barWidth - C.margin*4)/5
+			local iconSize = (barWidth+2*C.mult - C.margin*4)/5
 			for i = 1, 5 do
 				plate.lumos[i]:SetSize(iconSize, iconSize)
 			end
@@ -998,7 +1000,7 @@ function UF:TogglePlateVisibility()
 	end
 end
 
-function UF:UpdateGCDTicker(elapsed)
+function UF:UpdateGCDTicker()
 	local start, duration = GetSpellCooldown(61304)
 	if start > 0 and duration > 0 then
 		if self.duration ~= duration then

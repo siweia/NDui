@@ -37,8 +37,9 @@ tinsert(C.defaultThemes, function()
 		bu.icon:SetTexCoord(unpack(DB.TexCoord))
 		bu.icon:SetInside()
 		bu.IconOverlay:SetInside()
+		bu.IconOverlay2:SetInside()
 		bu.bg = B.CreateBDFrame(bu.icon, .25)
-		B.HookIconBorderColor(bu.IconBorder)
+		B.ReskinIconBorder(bu.IconBorder)
 	end
 
 	for i = 1, MAX_TRADE_ITEMS do

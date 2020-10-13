@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Chat")
+local cr, cg, cb = DB.r, DB.g, DB.b
 
 local _G = _G
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
@@ -13,7 +14,7 @@ local InviteToGroup = C_PartyInfo.InviteUnit
 local GeneralDockManager = GeneralDockManager
 
 local maxLines = 1024
-local fontOutline, isBattleNet
+local fontOutline
 
 function module:TabSetAlpha(alpha)
 	if self.glow:IsShown() and alpha ~= 1 then
@@ -45,6 +46,28 @@ function module:UpdateChatSize()
 	isScaling = false
 end
 
+local function BlackBackground(self)
+	local frame = B.SetBD(self.Background)
+	frame:SetShown(NDuiDB["Chat"]["ChatBGType"] == 2)
+
+	return frame
+end
+
+local function GradientBackground(self)
+	local frame = CreateFrame("Frame", nil, self)
+	frame:SetOutside(self.Background)
+	frame:SetFrameLevel(0)
+	frame:SetShown(NDuiDB["Chat"]["ChatBGType"] == 3)
+
+	local tex = B.SetGradient(frame, "H", 0, 0, 0, .5, 0)
+	tex:SetOutside()
+	local line = B.SetGradient(frame, "H", cr, cg, cb, .5, 0, nil, C.mult)
+	line:SetPoint("BOTTOMLEFT", frame, "TOPLEFT")
+	line:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT")
+
+	return frame
+end
+
 function module:SkinChat()
 	if not self or self.styled then return end
 
@@ -61,8 +84,8 @@ function module:SkinChat()
 		self:SetMaxLines(maxLines)
 	end
 
-	self.__background = B.SetBD(self.Background)
-	self.__background:SetShown(NDuiDB["Chat"]["ShowBG"])
+	self.__background = BlackBackground(self)
+	self.__gradient = GradientBackground(self)
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
@@ -89,7 +112,7 @@ function module:SkinChat()
 	B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
 
-	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
+	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error
 
 	self.styled = true
 end
@@ -98,7 +121,10 @@ function module:ToggleChatBackground()
 	for _, chatFrameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[chatFrameName]
 		if frame.__background then
-			frame.__background:SetShown(NDuiDB["Chat"]["ShowBG"])
+			frame.__background:SetShown(NDuiDB["Chat"]["ChatBGType"] == 2)
+		end
+		if frame.__gradient then
+			frame.__gradient:SetShown(NDuiDB["Chat"]["ChatBGType"] == 3)
 		end
 	end
 end
@@ -234,26 +260,31 @@ end
 -- Tab colors
 function module:UpdateTabColors(selected)
 	if self.glow:IsShown() then
-		if isBattleNet then
+		if self.whisperIndex == 1 then
+			self.Text:SetTextColor(1, .5, 1)
+		elseif self.whisperIndex == 2 then
 			self.Text:SetTextColor(0, 1, .96)
 		else
-			self.Text:SetTextColor(1, .5, 1)
+			self.Text:SetTextColor(1, .8, 0)
 		end
 	elseif selected then
 		self.Text:SetTextColor(1, .8, 0)
+		self.whisperIndex = 0
 	else
 		self.Text:SetTextColor(.5, .5, .5)
+		self.whisperIndex = 0
 	end
 end
 
 function module:UpdateTabEventColors(event)
 	local tab = _G[self:GetName().."Tab"]
+	local selected = GeneralDockManager.selected:GetID() == tab:GetID()
 	if event == "CHAT_MSG_WHISPER" then
-		isBattleNet = nil
-		FCFTab_UpdateColors(tab, GeneralDockManager.selected:GetID() == tab:GetID())
+		tab.whisperIndex = 1
+		module.UpdateTabColors(tab, selected)
 	elseif event == "CHAT_MSG_BN_WHISPER" then
-		isBattleNet = true
-		FCFTab_UpdateColors(tab, GeneralDockManager.selected:GetID() == tab:GetID())
+		tab.whisperIndex = 2
+		module.UpdateTabColors(tab, selected)
 	end
 end
 

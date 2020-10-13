@@ -2,14 +2,15 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local format, gsub, strsplit = string.format, string.gsub, string.split
+local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
 local pairs, tonumber, wipe, select = pairs, tonumber, wipe, select
-local GetInstanceInfo, GetAtlasInfo, PlaySound = GetInstanceInfo, GetAtlasInfo, PlaySound
+local GetInstanceInfo, PlaySound = GetInstanceInfo, PlaySound
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
 local GetSpellLink, GetSpellInfo = GetSpellLink, GetSpellInfo
 local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
+local C_Texture_GetAtlasInfo = C_Texture.GetAtlasInfo
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
@@ -69,7 +70,7 @@ end
 	发现稀有/事件时的通报插件
 ]]
 local cache = {}
-local isIgnored = {
+local isIgnoredZone = {
 	[1153] = true,	-- 部落要塞
 	[1159] = true,	-- 联盟要塞
 	[1803] = true,	-- 涌泉海滩
@@ -78,24 +79,34 @@ local isIgnored = {
 	[2111] = true,	-- 黑海岸前线
 }
 
+local function isUsefulAtlas(info)
+	local atlas = info.atlasName
+	if atlas then
+		return strfind(atlas, "[Vv]ignette")
+	end
+end
+
 function M:RareAlert_Update(id)
 	if id and not cache[id] then
-		local instType = select(2, GetInstanceInfo())
 		local info = C_VignetteInfo_GetVignetteInfo(id)
-		if not info then return end
-		local filename, width, height, txLeft, txRight, txTop, txBottom = GetAtlasInfo(info.atlasName)
-		if not filename then return end
+		if not info or not isUsefulAtlas(info) then return end
+
+		local atlasInfo = C_Texture_GetAtlasInfo(info.atlasName)
+		if not atlasInfo then return end
+
+		local file, width, height, txLeft, txRight, txTop, txBottom = atlasInfo.file, atlasInfo.width, atlasInfo.height, atlasInfo.leftTexCoord, atlasInfo.rightTexCoord, atlasInfo.topTexCoord, atlasInfo.bottomTexCoord
+		if not file then return end
 
 		local atlasWidth = width/(txRight-txLeft)
 		local atlasHeight = height/(txBottom-txTop)
-		local tex = format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
+		local tex = format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", file, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		if NDuiDB["Misc"]["AlertinChat"] then
 			local currrentTime = NDuiADB["TimestampFormat"] == 1 and "|cff00ff00["..date("%H:%M:%S").."]|r" or ""
 			print(currrentTime.." -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		end
-		if not NDuiDB["Misc"]["RareAlertInWild"] or instType == "none" then
+		if not NDuiDB["Misc"]["RareAlertInWild"] or M.RareInstType == "none" then
 			PlaySound(23404, "master")
 		end
 
@@ -107,11 +118,12 @@ end
 
 function M:RareAlert_CheckInstance()
 	local _, instanceType, _, _, maxPlayers, _, _, instID = GetInstanceInfo()
-	if (instID and isIgnored[instID]) or (instanceType == "scenario" and (maxPlayers == 3 or maxPlayers == 6)) then
+	if (instID and isIgnoredZone[instID]) or (instanceType == "scenario" and (maxPlayers == 3 or maxPlayers == 6)) then
 		B:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
 	else
 		B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
 	end
+	M.RareInstType = instanceType
 end
 
 function M:RareAlert()

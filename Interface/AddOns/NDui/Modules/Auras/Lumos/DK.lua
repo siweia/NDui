@@ -41,17 +41,16 @@ local function UpdateBuffValue(button, spellID)
 		button.CD:SetCooldown(expire-duration, duration)
 		button.CD:Show()
 		button.Icon:SetDesaturated(false)
-		B.ShowOverlayGlow(button.glowFrame)
 	else
 		button.Count:SetText("")
 		UpdateCooldown(button, spellID)
-		B.HideOverlayGlow(button.glowFrame)
 	end
 	button.Count:SetTextColor(1, 1, 1)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		do
 			local button = self.lumos[1]
 			local price = 45
@@ -75,7 +74,7 @@ function A:ChantLumos(self)
 		UpdateBuff(self.lumos[3], 49028, 81256, true, false, true)
 		UpdateBuffValue(self.lumos[4], 48707)
 		UpdateBuff(self.lumos[5], 55233, 55233, true, false, true)
-	elseif GetSpecialization() == 2 then
+	elseif spec == 2 then
 		do
 			local button = self.lumos[1]
 			if IsPlayerSpell(253593) then
@@ -89,19 +88,19 @@ function A:ChantLumos(self)
 
 		do
 			local button = self.lumos[2]
-			if IsPlayerSpell(279302) then
-				UpdateCooldown(button, 279302, true)
+			if IsPlayerSpell(321995) then
+				UpdateBuff(button, 321995, 321995, true)
 			elseif IsPlayerSpell(194913) then
 				UpdateCooldown(button, 194913, true)
 			else
-				UpdateBuff(button, 211805, 211805)
+				UpdateBuff(button, 196770, 196770, true)
 			end
 		end
 
-		UpdateBuff(self.lumos[3], 196770, 196770, true)
-		UpdateBuffValue(self.lumos[4], 51271)
-		UpdateBuff(self.lumos[5], 47568, 47568, true, false, true)
-	elseif GetSpecialization() == 3 then
+		UpdateBuffValue(self.lumos[3], 51271)
+		UpdateBuff(self.lumos[4], 47568, 47568, true, false, true)
+		UpdateCooldown(self.lumos[5], 279302, true)
+	elseif spec == 3 then
 		do
 			local button = self.lumos[1]
 			local name, _, duration, expire = GetUnitAura("player", 51460, "HELPFUL")

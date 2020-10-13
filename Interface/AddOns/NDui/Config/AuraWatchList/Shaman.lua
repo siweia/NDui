@@ -19,7 +19,6 @@ local list = {
 		{AuraID = 211004, UnitID = "target", Caster = "player"},	-- 妖术
 		{AuraID = 211010, UnitID = "target", Caster = "player"},	-- 妖术
 		{AuraID = 211015, UnitID = "target", Caster = "player"},	-- 妖术
-		{AuraID = 188838, UnitID = "target", Caster = "player"},	-- 烈焰震击
 		{AuraID = 188389, UnitID = "target", Caster = "player"},	-- 烈焰震击
 		{AuraID = 118905, UnitID = "target", Caster = "player"},	-- 闪电奔涌图腾
 		{AuraID = 188089, UnitID = "target", Caster = "player"},	-- 大地之刺
@@ -28,6 +27,7 @@ local list = {
 		{AuraID = 207778, UnitID = "target", Caster = "player"},	-- 蒺藜
 		{AuraID = 207400, UnitID = "target", Caster = "player"},	-- 先祖活力
 		{AuraID = 269808, UnitID = "target", Caster = "player"},	-- 元素外露
+		{AuraID = 334168, UnitID = "target", Caster = "player"},	-- 鞭笞烈焰
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 73920, UnitID = "player"},	-- 治疗之雨
@@ -46,10 +46,7 @@ local list = {
 		{AuraID = 114052, UnitID = "player"},	-- 升腾 恢复
 		{AuraID = 108271, UnitID = "player"},	-- 星界转移
 		{AuraID = 204945, UnitID = "player"},	-- 毁灭之风
-		{AuraID = 198300, UnitID = "player"},	-- 集束风暴
 		{AuraID = 201846, UnitID = "player"},	-- 风暴使者
-		{AuraID = 194084, UnitID = "player"},	-- 火舌
-		{AuraID = 196834, UnitID = "player"},	-- 冰封
 		{AuraID = 199055, UnitID = "player"},	-- 毁灭释放
 		{AuraID = 201898, UnitID = "player"},	-- 风歌
 		{AuraID = 215785, UnitID = "player"},	-- 灼热之手
@@ -72,6 +69,9 @@ local list = {
 		{AuraID = 224126, UnitID = "player"},	-- 冰
 		{AuraID = 224127, UnitID = "player"},	-- 电
 		{AuraID = 187878, UnitID = "player"},	-- 毁灭闪电
+		{AuraID = 288675, UnitID = "player"},	-- 浪潮汹涌
+		{AuraID = 320125, UnitID = "player"},	-- 回响震击
+		{AuraID = 344179, UnitID = "player", Combat = true},	-- 漩涡武器
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 51514, UnitID = "focus", Caster = "player"},	-- 妖术

@@ -5,13 +5,32 @@ local _, C = unpack(ns)
 C.mult = 1
 C.margin = 3
 
+-- 动作条
+local barFader = {
+	fadeInAlpha = 1,													-- 显示时的透明度
+	fadeInDuration = .3,												-- 显示耗时
+	fadeOutAlpha = .1,													-- 渐隐后的透明度
+	fadeOutDuration = .8,												-- 渐隐耗时
+	fadeOutDelay = .5,													-- 延迟渐隐
+}
+C.Bars = {
+	margin = 2,															-- 按键间距
+	padding = 2,														-- 边缘间距
+	bar1 = {size = 34, fader = nil},									-- BAR1 主动作条（下）
+	bar2 = {size = 34, fader = nil},									-- BAR2 主动作条（上）
+	bar3 = {size = 32, fader = nil},									-- BAR3 主动作条两侧
+	bar4 = {size = 32, fader = barFader},								-- BAR4 右边动作条1
+	bar5 = {size = 32, fader = barFader},								-- BAR5 右边动作条2
+	petbar = {size = 26, fader = nil},									-- PETBAR 宠物动作条
+	stancebar = {size = 30, fader = nil},								-- STANCE + POSSESSBAR 姿态条
+	extrabar = {size = 56, fader = nil},								-- EXTRABAR 额外动作条
+	leave_vehicle = {size = 32, fader = nil},							-- VEHICLE EXIT 离开载具按钮
+}
+
 -- BUFF/DEBUFF相关
 C.Auras = {
 	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, 0},			-- BUFF默认位置
-
-	IconSize		= 32,												-- 相关职业助手图标大小
-	TotemsPos		= {"CENTER", UIParent, "CENTER", 0, -190},			-- 图腾助手默认位置
-	StatuePos		= {"TOPRIGHT", UIParent, "BOTTOM", -460, 300},		-- 武僧雕像默认位置
+	TotemsPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -450, 20},	-- 图腾助手默认位置
 
 	-- 技能监控各组初始位置
 	PlayerAuraPos	= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 309},	-- 玩家光环分组

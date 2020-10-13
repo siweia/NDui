@@ -54,11 +54,6 @@ tinsert(C.defaultThemes, function()
 		self.AzeriteTexture:SetDrawLayer("BORDER", 1)
 	end
 
-	local function UpdateCorruption(self)
-		local itemLink = GetInventoryItemLink("player", self:GetID())
-		self.IconOverlay:SetShown(itemLink and IsCorruptedItem(itemLink))
-	end
-
 	local function UpdateHighlight(self)
 		local highlight = self:GetHighlightTexture()
 		highlight:SetColorTexture(1, 1, 1, .25)
@@ -83,9 +78,8 @@ tinsert(C.defaultThemes, function()
 
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
 		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
-		slot.IconOverlay:SetAtlas("Nzoth-inventory-icon")
 		slot.IconOverlay:SetInside()
-		B.HookIconBorderColor(slot.IconBorder)
+		B.ReskinIconBorder(slot.IconBorder)
 
 		local popout = slot.popoutButton
 		popout:SetNormalTexture("")
@@ -115,7 +109,6 @@ tinsert(C.defaultThemes, function()
 			button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
 			colourPopout(button.popoutButton)
 		end
-		UpdateCorruption(button)
 		UpdateHighlight(button)
 	end)
 
@@ -185,11 +178,10 @@ tinsert(C.defaultThemes, function()
 		select(2, bu:GetRegions()):Hide()
 		local hl = bu:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetAllPoints(ic)
+		hl:SetInside()
 
 		ic:SetInside()
-		ic:SetTexCoord(unpack(DB.TexCoord))
-		B.CreateBD(bu, .25)
+		B.ReskinIcon(ic)
 	end
 
 	for _, bu in pairs(PaperDollEquipmentManagerPane.buttons) do
@@ -217,11 +209,55 @@ tinsert(C.defaultThemes, function()
 
 	PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
 	PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
-	GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
+	GearManagerDialogPopup:HookScript("OnShow", function(self)
+		self:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 3, 0)
+	end)
+
+	-- Reputation Frame
+	ReputationDetailCorner:Hide()
+	ReputationDetailDivider:Hide()
+	ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 3, -28)
+
+	local function UpdateFactionSkins()
+		for i = 1, GetNumFactions() do
+			local statusbar = _G["ReputationBar"..i.."ReputationBar"]
+			if statusbar then
+				statusbar:SetStatusBarTexture(DB.bdTex)
+
+				if not statusbar.reskinned then
+					B.CreateBDFrame(statusbar, .25)
+					statusbar.reskinned = true
+				end
+
+				_G["ReputationBar"..i.."Background"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarHighlight1"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarHighlight2"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarAtWarHighlight1"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarAtWarHighlight2"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarLeftTexture"]:SetTexture(nil)
+				_G["ReputationBar"..i.."ReputationBarRightTexture"]:SetTexture(nil)
+			end
+		end
+	end
+	ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
+	ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
+
+	for i = 1, NUM_FACTIONS_DISPLAYED do
+		local bu = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
+		B.ReskinCollapse(bu)
+	end
+
+	B.StripTextures(ReputationDetailFrame)
+	B.SetBD(ReputationDetailFrame)
+	B.ReskinClose(ReputationDetailCloseButton)
+	B.ReskinCheck(ReputationDetailAtWarCheckBox)
+	B.ReskinCheck(ReputationDetailInactiveCheckBox)
+	B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+	B.ReskinScroll(ReputationListScrollFrameScrollBar)
 
 	-- Token frame
 	TokenFramePopupCorner:Hide()
-	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
+	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 3, -28)
 	B.StripTextures(TokenFramePopup)
 	B.SetBD(TokenFramePopup)
 	B.ReskinClose(TokenFramePopupCloseButton)
@@ -250,10 +286,9 @@ tinsert(C.defaultThemes, function()
 				bu.bg = B.ReskinIcon(bu.icon)
 
 				if bu.expandIcon then
-					bu.expBg = B.CreateBDFrame(bu.expandIcon, .25)
+					bu.expBg = B.CreateBDFrame(bu.expandIcon, 0, true)
 					bu.expBg:SetPoint("TOPLEFT", bu.expandIcon, -3, 3)
 					bu.expBg:SetPoint("BOTTOMRIGHT", bu.expandIcon, 3, -3)
-					B.CreateGradient(bu.expBg)
 				end
 
 				bu.styled = true

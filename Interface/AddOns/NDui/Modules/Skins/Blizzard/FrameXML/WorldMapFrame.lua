@@ -14,8 +14,9 @@ tinsert(C.defaultThemes, function()
 
 	local overlayFrames = WorldMapFrame.overlayFrames
 	B.ReskinDropDown(overlayFrames[1])
-	overlayFrames[2]:DisableDrawLayer("BACKGROUND")
-	overlayFrames[2]:DisableDrawLayer("OVERLAY")
+	B.StripTextures(overlayFrames[2], 3)
+	B.StripTextures(overlayFrames[3], 3)
+	overlayFrames[3].ActiveTexture:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Toggle")
 
 	local sideToggle = WorldMapFrame.SidePanelToggle
 	sideToggle:SetFrameLevel(3)

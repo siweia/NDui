@@ -1,6 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local MAX_CONTAINER_ITEMS = 36
+
+local function replaceSortTexture(texture)
+	texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version
+	texture:SetTexCoord(unpack(DB.TexCoord))
+end
+
 tinsert(C.defaultThemes, function()
 	if NDuiDB["Bags"]["Enable"] then return end
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
@@ -12,11 +19,7 @@ tinsert(C.defaultThemes, function()
 		local con = _G["ContainerFrame"..i]
 		local name = _G["ContainerFrame"..i.."Name"]
 
-		for j = 1, 5 do
-			select(j, con:GetRegions()):SetAlpha(0)
-		end
-		select(7, con:GetRegions()):SetAlpha(0)
-
+		B.StripTextures(con, true)
 		con.PortraitButton.Highlight:SetTexture("")
 
 		name:ClearAllPoints()
@@ -43,14 +46,14 @@ tinsert(C.defaultThemes, function()
 			newItemTexture:SetSize(1, 1)
 
 			button.searchOverlay:SetOutside()
-			B.HookIconBorderColor(button.IconBorder)
+			B.ReskinIconBorder(button.IconBorder)
 		end
 
-		local f = B.CreateBDFrame(con, nil, true)
+		local f = B.SetBD(con)
 		f:SetPoint("TOPLEFT", 8, -4)
 		f:SetPoint("BOTTOMRIGHT", -4, 3)
 
-		B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"], "TOPRIGHT", con, "TOPRIGHT", -6, -6)
+		B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"])
 	end
 
 	for i = 1, 3 do
@@ -79,8 +82,8 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	BagItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
-	BagItemAutoSortButton:GetPushedTexture():SetTexCoord(.17, .83, .17, .83)
+	replaceSortTexture(BagItemAutoSortButton:GetNormalTexture())
+	replaceSortTexture(BagItemAutoSortButton:GetPushedTexture())
 	B.CreateBDFrame(BagItemAutoSortButton)
 
 	local highlight = BagItemAutoSortButton:GetHighlightTexture()

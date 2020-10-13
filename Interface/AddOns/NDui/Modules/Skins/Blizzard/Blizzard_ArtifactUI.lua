@@ -26,7 +26,7 @@ C.themes["Blizzard_ArtifactUI"] = function()
 	for i = 1, 6 do
 		local set = ArtifactFrame.AppearancesTab.appearanceSetPool:Acquire()
 		set.Background:Hide()
-		local bg = B.CreateGradient(set)
+		local bg = B.CreateBDFrame(set, 0, true)
 		bg:SetPoint("TOPLEFT", 10, -5)
 		bg:SetPoint("BOTTOMRIGHT", -10, 5)
 		for j = 1, 4 do

@@ -45,82 +45,20 @@ local function UpdateTotemAura(button, texture, spellID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		UpdateDebuff(self.lumos[1], 172, 146739, false, "END")
 		UpdateDebuff(self.lumos[2], 980, 980, false, "END")
-
-		local shown
-		do
-			local button = self.lumos[3]
-			if IsPlayerSpell(108558) then
-				UpdateBuff(button, 108558, 264571)
-			elseif IsPlayerSpell(264106) then
-				UpdateCooldown(button, 264106, true)
-			else
-				if IsPlayerSpell(63106) and not shown then
-					UpdateDebuff(button, 63106, 63106, false, "END")
-					shown = true
-				else
-					UpdateDebuff(button, 198590, 198590)
-				end
-			end
-		end
-
-		do
-			local button = self.lumos[4]
-			if IsPlayerSpell(32388) then
-				UpdateDebuff(button, 32388, 32390, false, "END")
-			elseif IsPlayerSpell(48181) then
-				UpdateDebuff(button, 48181, 48181, true)
-			else
-				if IsPlayerSpell(63106) and not shown then
-					UpdateDebuff(button, 63106, 63106, false, "END")
-					shown = true
-				else
-					UpdateBuff(button, 108503, 196099)
-				end
-			end
-		end
-
-		do
-			local button = self.lumos[5]
-			if IsPlayerSpell(63106) and not shown then
-				button.Count:SetText("")
-				local found
-				for slot = 1, 4 do
-					local haveTotem, _, start, dur, icon = GetTotemInfo(slot)
-					if haveTotem and icon == 1416161 then
-						button.CD:SetCooldown(start, dur)
-						button.CD:Show()
-						button.Icon:SetDesaturated(false)
-						button.Icon:SetTexture(icon)
-						found = true
-						break
-					end
-				end
-				if not found then
-					local name, _, duration, expire, caster = GetUnitAura("target", 63106, "HARMFUL")
-					if name and caster == "player" then
-						button.CD:SetCooldown(expire-duration, duration)
-						button.CD:Show()
-						button.Icon:SetDesaturated(false)
-						button.Icon:SetTexture(GetSpellTexture(63106))
-					else
-						UpdateCooldown(button, 205180)
-						button.Icon:SetTexture(1416161)
-					end
-				end
-			else
-				UpdateTotemAura(button, 1416161, 205180)
-			end
-		end
-	elseif GetSpecialization() == 2 then
+		UpdateDebuff(self.lumos[3], 316099, 316099, false, "END")
+		UpdateDebuff(self.lumos[4], 32388, 32390, false, "END")
+		UpdateTotemAura(self.lumos[5], 1416161, 205180)
+	elseif spec == 2 then
 		UpdateBuff(self.lumos[1], 264178, 264173, false, true)
 
 		do
 			local button = self.lumos[2]
-			if IsPlayerSpell(265412) then
-				UpdateDebuff(button, 265412, 265412, false, "END")
+			if IsPlayerSpell(603) then
+				UpdateDebuff(button, 603, 603)
 			elseif IsPlayerSpell(205145) then
 				UpdateBuff(button, 205145, 205146)
 			else
@@ -141,8 +79,8 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateCooldown(self.lumos[5], 265187, true)
-	elseif GetSpecialization() == 3 then
+		UpdateTotemAura(self.lumos[5], 2065628, 265187)
+	elseif spec == 3 then
 		UpdateDebuff(self.lumos[1], 348, 157736, false, "END")
 
 		do

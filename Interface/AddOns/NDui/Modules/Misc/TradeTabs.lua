@@ -154,16 +154,16 @@ function M:TradeTabs_FilterIcons()
 		local value = self.__value
 		if value[3]() then
 			value[4](false)
-			self:SetBackdropBorderColor(0, 0, 0)
+			self.bg:SetBackdropBorderColor(0, 0, 0)
 		else
 			value[4](true)
-			self:SetBackdropBorderColor(1, .8, 0)
+			self.bg:SetBackdropBorderColor(1, .8, 0)
 		end
 	end
 
 	local buttons = {}
 	for index, value in pairs(buttonList) do
-		local bu = CreateFrame("Button", nil, TradeSkillFrame)
+		local bu = CreateFrame("Button", nil, TradeSkillFrame, "BackdropTemplate")
 		bu:SetSize(22, 22)
 		bu:SetPoint("RIGHT", TradeSkillFrame.FilterButton, "LEFT", -5 - (index-1)*27, 0)
 		B.PixelIcon(bu, value[1], true)
@@ -177,9 +177,9 @@ function M:TradeTabs_FilterIcons()
 	local function updateFilterStatus()
 		for index, value in pairs(buttonList) do
 			if value[3]() then
-				buttons[index]:SetBackdropBorderColor(1, .8, 0)
+				buttons[index].bg:SetBackdropBorderColor(1, .8, 0)
 			else
-				buttons[index]:SetBackdropBorderColor(0, 0, 0)
+				buttons[index].bg:SetBackdropBorderColor(0, 0, 0)
 			end
 		end
 	end

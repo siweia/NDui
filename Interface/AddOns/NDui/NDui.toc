@@ -1,10 +1,10 @@
-## Interface: 80300
+## Interface: 90001
 ## Title: |cff0080ffNDui|r
 ## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
 ## Notes: More than a UI.
-## Version: 5.10.0
-## X-Support: BfA
+## Version: 5.8.134
+## X-Support: SL
 ## X-Website: https://github.com/siweia/NDui
 ## SavedVariables: NDuiADB
 ## SavedVariablesPerCharacter: NDuiDB

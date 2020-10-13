@@ -9,10 +9,11 @@ local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
-local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
+local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
+local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
+local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
-local IsCorruptedItem = IsCorruptedItem
 
 local sortCache = {}
 function module:ReverseSort()
@@ -66,10 +67,9 @@ function module:CreateInfoFrame()
 	search.isGlobal = true
 	search:SetPoint("LEFT", 0, 5)
 	search:DisableDrawLayer("BACKGROUND")
-	local bg = B.CreateBDFrame(search, 0)
+	local bg = B.CreateBDFrame(search, 0, true)
 	bg:SetPoint("TOPLEFT", -5, -5)
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
-	B.CreateGradient(bg)
 
 	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tag:SetFont(unpack(DB.Font))
@@ -170,10 +170,10 @@ function module:CreateBagToggle()
 	bu:SetScript("OnClick", function()
 		B:TogglePanel(self.BagBar)
 		if self.BagBar:IsShown() then
-			bu:SetBackdropBorderColor(1, .8, 0)
+			bu.bg:SetBackdropBorderColor(1, .8, 0)
 			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 		else
-			bu:SetBackdropBorderColor(0, 0, 0)
+			bu.bg:SetBackdropBorderColor(0, 0, 0)
 			PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 		end
 	end)
@@ -186,12 +186,19 @@ end
 function module:CreateSortButton(name)
 	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Pet_Broom")
 	bu:SetScript("OnClick", function()
+		if NDuiDB["Bags"]["BagSortMode"] == 3 then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["BagSortDisabled"])
+			return
+		end
+
 		if name == "Bank" then
 			SortBankBags()
 		elseif name == "Reagent" then
 			SortReagentBankBags()
 		else
-			if NDuiDB["Bags"]["ReverseSort"] then
+			if NDuiDB["Bags"]["BagSortMode"] == 1 then
+				SortBags()
+			elseif NDuiDB["Bags"]["BagSortMode"] == 2 then
 				if InCombatLockdown() then
 					UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 				else
@@ -200,8 +207,6 @@ function module:CreateSortButton(name)
 					module.Bags.isSorting = true
 					C_Timer_After(.5, module.ReverseSort)
 				end
-			else
-				SortBags()
 			end
 		end
 	end)
@@ -263,7 +268,7 @@ function module:CreateFreeSlots()
 	local name = self.name
 	if not freeSlotContainer[name] then return end
 
-	local slot = CreateFrame("Button", name.."FreeSlot", self)
+	local slot = CreateFrame("Button", name.."FreeSlot", self, "BackdropTemplate")
 	slot:SetSize(self.iconSize, self.iconSize)
 	slot:SetHighlightTexture(DB.bdTex)
 	slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
@@ -317,7 +322,7 @@ function module:CreateSplitButton()
 	bu.Icon:SetPoint("TOPLEFT", -1, 3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", 1, -3)
 	bu.__turnOff = function()
-		bu:SetBackdropBorderColor(0, 0, 0)
+		bu.bg:SetBackdropBorderColor(0, 0, 0)
 		bu.text = nil
 		splitFrame:Hide()
 		splitEnable = nil
@@ -326,7 +331,7 @@ function module:CreateSplitButton()
 		module:SelectToggleButton(1)
 		splitEnable = not splitEnable
 		if splitEnable then
-			self:SetBackdropBorderColor(1, .8, 0)
+			self.bg:SetBackdropBorderColor(1, .8, 0)
 			self.text = enabledText
 			splitFrame:Show()
 			editbox:SetText(NDuiDB["Bags"]["SplitCount"])
@@ -368,7 +373,7 @@ function module:CreateFavouriteButton()
 	bu.Icon:SetPoint("TOPLEFT", -5, 0)
 	bu.Icon:SetPoint("BOTTOMRIGHT", 5, -5)
 	bu.__turnOff = function()
-		bu:SetBackdropBorderColor(0, 0, 0)
+		bu.bg:SetBackdropBorderColor(0, 0, 0)
 		bu.text = nil
 		favouriteEnable = nil
 	end
@@ -376,7 +381,7 @@ function module:CreateFavouriteButton()
 		module:SelectToggleButton(2)
 		favouriteEnable = not favouriteEnable
 		if favouriteEnable then
-			self:SetBackdropBorderColor(1, .8, 0)
+			self.bg:SetBackdropBorderColor(1, .8, 0)
 			self.text = enabledText
 		else
 			self.__turnOff()
@@ -415,7 +420,7 @@ function module:CreateJunkButton()
 	bu.Icon:SetPoint("TOPLEFT", C.mult, -3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -3)
 	bu.__turnOff = function()
-		bu:SetBackdropBorderColor(0, 0, 0)
+		bu.bg:SetBackdropBorderColor(0, 0, 0)
 		bu.text = nil
 		customJunkEnable = nil
 	end
@@ -423,7 +428,7 @@ function module:CreateJunkButton()
 		module:SelectToggleButton(3)
 		customJunkEnable = not customJunkEnable
 		if customJunkEnable then
-			self:SetBackdropBorderColor(1, .8, 0)
+			self.bg:SetBackdropBorderColor(1, .8, 0)
 			self.text = enabledText
 		else
 			bu.__turnOff()
@@ -464,7 +469,7 @@ function module:CreateDeleteButton()
 	bu.Icon:SetPoint("TOPLEFT", 3, -2)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -1, 2)
 	bu.__turnOff = function()
-		bu:SetBackdropBorderColor(0, 0, 0)
+		bu.bg:SetBackdropBorderColor(0, 0, 0)
 		bu.text = nil
 		deleteEnable = nil
 	end
@@ -472,7 +477,7 @@ function module:CreateDeleteButton()
 		module:SelectToggleButton(4)
 		deleteEnable = not deleteEnable
 		if deleteEnable then
-			self:SetBackdropBorderColor(1, .8, 0)
+			self.bg:SetBackdropBorderColor(1, .8, 0)
 			self.text = enabledText
 		else
 			bu.__turnOff()
@@ -647,6 +652,7 @@ function module:OnLogin()
 		self.Count:SetFont(unpack(DB.Font))
 		self.Cooldown:SetInside()
 		self.IconOverlay:SetInside()
+		self.IconOverlay2:SetInside()
 
 		B.CreateBD(self, .3)
 		self:SetBackdropColor(.3, .3, .3, .3)
@@ -699,8 +705,8 @@ function module:OnLogin()
 		if not item.link then return end
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			return "AzeriteIconFrame"
-		elseif IsCorruptedItem(item.link) then
-			return "Nzoth-inventory-icon"
+		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
+			return "ConduitIconFrame", "ConduitIconFrame-Corners"
 		end
 	end
 
@@ -721,12 +727,19 @@ function module:OnLogin()
 			end
 		end
 
-		local atlas = GetIconOverlayAtlas(item)
+		self.IconOverlay:SetVertexColor(1, 1, 1)
+		self.IconOverlay:Hide()
+		self.IconOverlay2:Hide()
+		local atlas, secondAtlas = GetIconOverlayAtlas(item)
 		if atlas then
 			self.IconOverlay:SetAtlas(atlas)
 			self.IconOverlay:Show()
-		else
-			self.IconOverlay:Hide()
+			if secondAtlas then
+				local color = DB.QualityColors[item.rarity or 1]
+				self.IconOverlay:SetVertexColor(color.r, color.g, color.b)
+				self.IconOverlay2:SetAtlas(secondAtlas)
+				self.IconOverlay2:Show()
+			end
 		end
 
 		if NDuiDB["Bags"]["FavouriteItems"][item.id] then
@@ -902,11 +915,13 @@ function module:OnLogin()
 
 		self:SetSize(iconSize, iconSize)
 		B.CreateBD(self, .25)
-		self.Icon:SetAllPoints()
+		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 
 	function BagButton:OnUpdate()
+		self:SetBackdropBorderColor(0, 0, 0)
+
 		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
 		if not id then return end
 		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = GetItemInfo(id)
@@ -914,8 +929,6 @@ function module:OnLogin()
 		local color = DB.QualityColors[quality]
 		if not self.hidden and not self.notBought then
 			self:SetBackdropBorderColor(color.r, color.g, color.b)
-		else
-			self:SetBackdropBorderColor(0, 0, 0)
 		end
 
 		if classID == LE_ITEM_CLASS_CONTAINER then
@@ -926,7 +939,7 @@ function module:OnLogin()
 	end
 
 	-- Sort order
-	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
+	SetSortBagsRightToLeft(NDuiDB["Bags"]["BagSortMode"] == 1)
 	SetInsertItemsLeftToRight(false)
 
 	-- Init
@@ -936,8 +949,6 @@ function module:OnLogin()
 
 	B:RegisterEvent("TRADE_SHOW", module.OpenBags)
 	B:RegisterEvent("TRADE_CLOSED", module.CloseBags)
-	B:RegisterEvent("AUCTION_HOUSE_SHOW", module.OpenBags)
-	B:RegisterEvent("AUCTION_HOUSE_CLOSED", module.CloseBags)
 
 	-- Fixes
 	BankFrame.GetRight = function() return f.bank:GetRight() end

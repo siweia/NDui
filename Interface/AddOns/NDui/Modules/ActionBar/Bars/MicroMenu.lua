@@ -65,19 +65,21 @@ function Bar:MicroMenu_Lines(parent)
 
 	local width, height = 200, 20
 	local anchors = {
-		["LEFT"] = {.5, 0, .7, 0},
-		["RIGHT"] = {0, .5, 0, .7}
+		["LEFT"] = {.5, 0},
+		["RIGHT"] = {0, .5}
 	}
 	for anchor, v in pairs(anchors) do
 		local frame = CreateFrame("Frame", nil, parent)
 		frame:SetPoint(anchor, parent, "CENTER", 0, 0)
-		B.CreateGF(frame, width, height, "Horizontal", 0, 0, 0, v[1], v[2])
-		local bottomLine = CreateFrame("Frame", nil, parent)
+		frame:SetSize(width, height)
+		frame:SetFrameStrata("BACKGROUND")
+
+		local tex = B.SetGradient(frame, "H", 0, 0, 0, v[1], v[2], width, height)
+		tex:SetPoint("CENTER")
+		local bottomLine = B.SetGradient(frame, "H", cr, cg, cb, v[1], v[2], width-25, C.mult)
 		bottomLine:SetPoint("TOP"..anchor, frame, "BOTTOM"..anchor, 0, 0)
-		B.CreateGF(bottomLine, width-25, C.mult, "Horizontal", cr, cg, cb, v[3], v[4])
-		local topLine = CreateFrame("Frame", nil, parent)
+		local topLine = B.SetGradient(frame, "H", cr, cg, cb, v[1], v[2], width+25, C.mult)
 		topLine:SetPoint("BOTTOM"..anchor, frame, "TOP"..anchor, 0, 0)
-		B.CreateGF(topLine, width+25, C.mult, "Horizontal", cr, cg, cb, v[3], v[4])
 	end
 end
 
@@ -124,7 +126,4 @@ function Bar:MicroMenu()
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
-
-	CharacterMicroButtonAlert:EnableMouse(false)
-	B.HideOption(CharacterMicroButtonAlert)
 end

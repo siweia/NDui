@@ -1,46 +1,69 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local gsub, strmatch = gsub, strmatch
+
+local function replaceGossipFormat(button, textFormat, text)
+	local newFormat, count = gsub(textFormat, "000000", "ffffff")
+	if count > 0 then
+		button:SetFormattedText(newFormat, text)
+	end
+end
+
+local replacedGossipColor = {
+	["000000"] = "ffffff",
+	["414141"] = "7b8489", -- lighter color for some gossip options
+}
+local function replaceGossipText(button, text)
+	if text and text ~= "" then
+		local newText, count = gsub(text, ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59") -- replace icon texture
+		if count > 0 then
+			text = newText
+			button:SetFormattedText("%s", text)
+		end
+
+		local colorStr, rawText = strmatch(text, "|c[fF][fF](%x%x%x%x%x%x)(.-)|r")
+		colorStr = replacedGossipColor[colorStr]
+		if colorStr and rawText then
+			button:SetFormattedText("|cff%s%s|r", colorStr, rawText)
+		end
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
 
-	local gsub = string.gsub
-	NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, "000000", "ffffff")
-	TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, "000000", "ffffff")
-	IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, "000000", "ffffff")
-
+	QuestFont:SetTextColor(1, 1, 1)
 	GossipGreetingText:SetTextColor(1, 1, 1)
-	NPCFriendshipStatusBar:GetRegions():Hide()
-	NPCFriendshipStatusBarNotch1:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch1:SetSize(1, 16)
-	NPCFriendshipStatusBarNotch2:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch2:SetSize(1, 16)
-	NPCFriendshipStatusBarNotch3:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch3:SetSize(1, 16)
-	NPCFriendshipStatusBarNotch4:SetColorTexture(0, 0, 0)
-	NPCFriendshipStatusBarNotch4:SetSize(1, 16)
-	select(7, NPCFriendshipStatusBar:GetRegions()):Hide()
+
 	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
+	B.StripTextures(NPCFriendshipStatusBar)
+	NPCFriendshipStatusBar:SetStatusBarTexture(DB.normTex)
 	B.CreateBDFrame(NPCFriendshipStatusBar, .25)
 
+	for i = 1, 4 do
+		local notch = _G["NPCFriendshipStatusBarNotch"..i]
+		if notch then
+			notch:SetColorTexture(0, 0, 0)
+			notch:SetSize(C.mult, 16)
+		end
+	end
+
 	GossipFrameInset:Hide()
+	if GossipFrame.Background then GossipFrame.Background:Hide() end
 	B.ReskinPortraitFrame(GossipFrame)
 	B.Reskin(GossipFrameGreetingGoodbyeButton)
 	B.ReskinScroll(GossipGreetingScrollFrameScrollBar)
 
-	local function resetFontString()
-		local index = 1
-		local titleButton = _G["GossipTitleButton"..index]
-		while titleButton do
-			if titleButton:GetText() ~= nil then
-				titleButton:SetText(gsub(titleButton:GetText(), ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59"))
-			end
-			index = index + 1
-			titleButton = _G["GossipTitleButton"..index]
-		end
-	end
+	hooksecurefunc("GossipFrameUpdate", function()
+		for button in GossipFrame.titleButtonPool:EnumerateActive() do
+			if not button.styled then
+				replaceGossipText(button, button:GetText())
+				hooksecurefunc(button, "SetText", replaceGossipText)
+				hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
 
-	GossipFrame:HookScript("OnShow", function()
-		C_Timer.After(.01, resetFontString)
+				button.styled = true
+			end
+		end
 	end)
 end)

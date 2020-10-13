@@ -95,8 +95,7 @@ info.onMouseUp = function(_, btn)
 		ToggleFrame(WorldMapFrame)
 	elseif btn == "RightButton" then
 		local hasUnit = UnitExists("target") and not UnitIsPlayer("target")
-		local unitName = nil
-		if hasUnit then unitName = UnitName("target") end
-		ChatFrame_OpenChat(format("%s: %s (%s) %s", L["My Position"], zone, formatCoords(), unitName or ""), SELECTED_DOCK_FRAME)
+		local unitName = hasUnit and UnitName("target") or ""
+		ChatFrame_OpenChat(format("%s: %s (%s) %s", L["My Position"], zone, formatCoords(), unitName), SELECTED_DOCK_FRAME)
 	end
 end

@@ -55,7 +55,7 @@ function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
 	local isBankBag = (bagID>=5 and bagID<=11)
-	local button = setmetatable(CreateFrame("ItemButton", name), self.__index)
+	local button = setmetatable(CreateFrame("ItemButton", name, nil, "BackdropTemplate"), self.__index)
 
 	local invID = (isBankBag and bagID-4) or ContainerIDToInventoryID(bagID)
 	button.invID = invID

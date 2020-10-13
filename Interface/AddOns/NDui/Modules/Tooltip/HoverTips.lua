@@ -22,6 +22,8 @@ local linkTypes = {
 	currency = true,
 	keystone = true,
 	azessence = true,
+	mawpower = true,
+	conduit = true,
 }
 
 function TT:HyperLink_SetPet(link)

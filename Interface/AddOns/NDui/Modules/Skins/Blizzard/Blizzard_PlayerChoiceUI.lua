@@ -1,22 +1,36 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-C.themes["Blizzard_WarboardUI"] = function()
-	local function forceProgressText(self)
-		if self.styled then return end
+local function WhitenProgressText(self)
+	if self.styled then return end
 
-		self:SetTextColor(1, 1, 1)
-		self.SetTextColor = B.Dummy
-		self.styled = true
-	end
+	self:SetTextColor(1, 1, 1)
+	self.SetTextColor = B.Dummy
+	self.styled = true
+end
 
-	hooksecurefunc(WarboardQuestChoiceFrame, "Update", function(self)
+local function ReskinFirstOptionButton(self)
+	if not self or self.__bg then return end
+
+	B.StripTextures(self, true)
+	B.Reskin(self)
+end
+
+local function ReskinSecondOptionButton(self)
+	if not self or self.__bg then return end
+
+	B.Reskin(self, nil, true)
+end
+
+C.themes["Blizzard_PlayerChoiceUI"] = function()
+	hooksecurefunc(PlayerChoiceFrame, "Update", function(self)
 		if not self.bg then
-			self.Background:Hide()
-			self.NineSlice:Hide()
+			self.BlackBackground:SetAlpha(0)
+			self.Background:SetAlpha(0)
+			self.NineSlice:SetAlpha(0)
 			self.Title:DisableDrawLayer("BACKGROUND")
 			self.Title.Text:SetTextColor(1, .8, 0)
-			self.Title.Text:SetFontObject(SystemFont_Huge2)
+			self.Title.Text:SetFontObject(SystemFont_Huge1)
 			self.BorderFrame.Header:SetAlpha(0)
 			B.CreateBDFrame(self.Title, .25)
 			B.ReskinClose(self.CloseButton)
@@ -24,7 +38,8 @@ C.themes["Blizzard_WarboardUI"] = function()
 			self.bg = B.SetBD(self)
 		end
 
-		self.CloseButton:SetPoint("TOPRIGHT", -2, -2)
+		self.CloseButton:SetPoint("TOPRIGHT", self.bg, -2, -2)
+		self.bg:SetShown(not IsInJailersTower())
 
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
@@ -50,8 +65,12 @@ C.themes["Blizzard_WarboardUI"] = function()
 				for j = 1, child:GetNumChildren() do
 					local child2 = select(j, child:GetChildren())
 					if child2 then
-						if child2.Text then forceProgressText(child2.Text) end
-						if child2.LeadingText then forceProgressText(child2.LeadingText) end
+						if child2.Text then
+							WhitenProgressText(child2.Text)
+						end
+						if child2.LeadingText then
+							WhitenProgressText(child2.LeadingText)
+						end
 						if child2.Icon and not child2.Icon.bg then
 							child2.Icon.bg = B.ReskinIcon(child2.Icon)
 						end
@@ -59,15 +78,8 @@ C.themes["Blizzard_WarboardUI"] = function()
 				end
 			end
 
-			if not option.bg then
-				B.Reskin(option.OptionButtonsContainer.OptionButton1)
-				B.Reskin(option.OptionButtonsContainer.OptionButton2)
-				option.Background:SetAlpha(0)
-				local bg = B.CreateBDFrame(option, .25)
-				bg:SetPoint("TOPLEFT", -4, 0)
-				bg:SetPoint("BOTTOMRIGHT", 4, 0)
-				option.bg = bg
-			end
+			ReskinFirstOptionButton(option.OptionButtonsContainer.button1)
+			ReskinSecondOptionButton(option.OptionButtonsContainer.button2)
 		end
 	end)
 end

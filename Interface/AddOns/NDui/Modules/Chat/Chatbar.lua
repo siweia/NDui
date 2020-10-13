@@ -14,7 +14,7 @@ function module:Chatbar()
 	Chatbar:SetSize(width, height)
 
 	local function AddButton(r, g, b, text, func)
-		local bu = CreateFrame("Button", nil, Chatbar, "SecureActionButtonTemplate")
+		local bu = CreateFrame("Button", nil, Chatbar, "SecureActionButtonTemplate, BackdropTemplate")
 		bu:SetSize(width, height)
 		B.PixelIcon(bu, DB.normTex, true)
 		B.CreateSD(bu)
@@ -146,19 +146,21 @@ function module:Chatbar()
 end
 
 function module:ChatBarBackground()
-	if not NDuiDB["Skins"]["ChatLine"] then return end
+	if not NDuiDB["Skins"]["ChatbarLine"] then return end
 
 	local cr, cg, cb = 0, 0, 0
 	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
 
 	local parent = _G["NDui_ChatBar"]
+	local width, height, alpha = 450, 18, .5
 	local frame = CreateFrame("Frame", nil, parent)
 	frame:SetPoint("LEFT", parent, "LEFT", -5, 0)
-	B.CreateGF(frame, 450, 18, "Horizontal", 0, 0, 0, .5, 0)
-	local bottomLine = CreateFrame("Frame", nil, parent)
-	bottomLine:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", 0, 0)
-	B.CreateGF(bottomLine, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
-	local topLine = CreateFrame("Frame", nil, parent)
-	topLine:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 0, 0)
-	B.CreateGF(topLine, 450, C.mult, "Horizontal", cr, cg, cb, .7, 0)
+	frame:SetSize(width, height)
+
+	local tex = B.SetGradient(frame, "H", 0, 0, 0, alpha, 0, width, height)
+	tex:SetPoint("CENTER")
+	local bottomLine = B.SetGradient(frame, "H", cr, cg, cb, alpha, 0, width, C.mult)
+	bottomLine:SetPoint("TOP", frame, "BOTTOM")
+	local topLine = B.SetGradient(frame, "H", cr, cg, cb, alpha, 0, width, C.mult)
+	topLine:SetPoint("BOTTOM", frame, "TOP")
 end

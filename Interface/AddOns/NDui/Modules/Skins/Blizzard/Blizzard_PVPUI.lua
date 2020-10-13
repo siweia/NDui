@@ -18,7 +18,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		bu.Ring:Hide()
 		B.Reskin(bu, true)
-		bu.Background:SetAllPoints(bu.bgTex)
+		bu.Background:SetInside(bu.__bg)
 		bu.Background:SetColorTexture(r, g, b, .25)
 
 		icon:SetPoint("LEFT", bu, "LEFT")
@@ -56,7 +56,9 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	local popup = PVPQueueFrame.NewSeasonPopup
 	B.Reskin(popup.Leave)
+	popup.Leave.__bg:SetFrameLevel(popup:GetFrameLevel() + 1)
 	popup.NewSeason:SetTextColor(1, .8, 0)
+	popup.SeasonRewardText:SetTextColor(1, .8, 0)
 	popup.SeasonDescription:SetTextColor(1, 1, 1)
 	popup.SeasonDescription2:SetTextColor(1, 1, 1)
 
@@ -65,7 +67,6 @@ C.themes["Blizzard_PVPUI"] = function()
 	SeasonRewardFrame.Ring:Hide()
 	local bg = B.ReskinIcon(SeasonRewardFrame.Icon)
 	bg:SetFrameLevel(4)
-	select(3, SeasonRewardFrame:GetRegions()):SetTextColor(1, .8, 0)
 
 	local seasonReward = PVPQueueFrame.HonorInset.RatedPanel.SeasonRewardFrame
 	seasonReward.Ring:Hide()
@@ -84,7 +85,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		B.Reskin(bu, true)
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-		bu.SelectedTexture:SetAllPoints(bu.bgTex)
+		bu.SelectedTexture:SetInside(bu.__bg)
 
 		local reward = bu.Reward
 		if reward then
@@ -123,17 +124,13 @@ C.themes["Blizzard_PVPUI"] = function()
 		bu:SetNormalTexture("")
 		bu:SetHighlightTexture("")
 
-		local bg = B.CreateBDFrame(bu, 0)
+		local bg = B.CreateBDFrame(bu, 0, true)
 		bg:SetPoint("TOPLEFT", 2, 0)
 		bg:SetPoint("BOTTOMRIGHT", -1, 2)
 
-		bu.tex = B.CreateGradient(bu)
-		bu.tex:SetDrawLayer("BACKGROUND")
-		bu.tex:SetInside(bg)
-
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-		bu.SelectedTexture:SetAllPoints(bu.tex)
+		bu.SelectedTexture:SetInside(bg)
 
 		B.ReskinIcon(bu.Icon)
 		bu.Icon:SetPoint("TOPLEFT", 5, -3)
@@ -164,7 +161,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-		bu.SelectedTexture:SetAllPoints(bu.bgTex)
+		bu.SelectedTexture:SetInside(bu.__bg)
 	end
 
 	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
@@ -176,14 +173,14 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		if currencyRewards then
 			for _, reward in ipairs(currencyRewards) do
-				local name, _, texture, _, _, _, _, quality = GetCurrencyInfo(reward.id)
+				local info = C_CurrencyInfo.GetCurrencyInfo(reward.id)
+				local name, texture, quality = info.name, info.iconFileID, info.quality
 				if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
 					_, rewardTexture, _, rewardQuaility = CurrencyContainerUtil.GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
 				end
 			end
 		end
 
-		local _
 		if not rewardTexture and itemRewards then
 			local reward = itemRewards[1]
 			if reward then
@@ -204,5 +201,4 @@ C.themes["Blizzard_PVPUI"] = function()
 	B.Reskin(ConquestFrame.JoinButton)
 	B.ReskinDropDown(HonorFrameTypeDropDown)
 	B.ReskinScroll(HonorFrameSpecificFrameScrollBar)
-	B.ReskinClose(PremadeGroupsPvPTutorialAlert.CloseButton)
 end

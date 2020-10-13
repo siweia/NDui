@@ -30,7 +30,8 @@ local function UpdateSpellStatus(button, spellID)
 end
 
 function A:ChantLumos(self)
-	if GetSpecialization() == 1 then
+	local spec = GetSpecialization()
+	if spec == 1 then
 		do
 			local button = self.lumos[1]
 			local name, count, duration, expire = GetUnitAura("player", 7384, "HELPFUL")
@@ -46,7 +47,16 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateSpellStatus(self.lumos[2], 163201)
+		do
+			local button = self.lumos[2]
+			UpdateCooldown(button, 163201)
+			if IsPlayerSpell(281001) then
+				UpdateSpellStatus(button, 281000)
+			else
+				UpdateSpellStatus(button, 163201)
+			end
+		end
+
 		UpdateDebuff(self.lumos[3], 167105, 208086, true, true)
 		UpdateBuff(self.lumos[4], 260708, 260708, true, "END")
 
@@ -58,11 +68,12 @@ function A:ChantLumos(self)
 				UpdateBuff(button, 227847, 227847, true, true)
 			end
 		end
-	elseif GetSpecialization() == 2 then
-		UpdateCooldown(self.lumos[1], 85288, true)
+	elseif spec == 2 then
+		UpdateCooldown(self.lumos[1], 23881, true)
+		UpdateCooldown(self.lumos[2], 85288, true)
 
 		do
-			local button = self.lumos[2]
+			local button = self.lumos[3]
 			UpdateCooldown(button, 5308)
 			if IsPlayerSpell(206315) then
 				UpdateSpellStatus(button, 280735)
@@ -71,27 +82,9 @@ function A:ChantLumos(self)
 			end
 		end
 
-		do
-			local button = self.lumos[3]
-			if IsPlayerSpell(215571) then
-				local name, _, duration, expire = GetUnitAura("player", 215572, "HELPFUL")
-				if name then
-					button.CD:SetCooldown(expire-duration, duration)
-					button.CD:Show()
-					button.Icon:SetDesaturated(false)
-					button.Icon:SetTexture(GetSpellTexture(215572))
-				else
-					button.CD:Hide()
-					UpdateSpellStatus(button, 184367)
-				end
-			else
-				UpdateSpellStatus(button, 184367)
-			end
-		end
-
-		UpdateBuff(self.lumos[4], 184362, 184362, true, true)
+		UpdateBuff(self.lumos[4], 184362, 184362, false, true)
 		UpdateBuff(self.lumos[5], 1719, 1719, true, true)
-	elseif GetSpecialization() == 3 then
+	elseif spec == 3 then
 		UpdateDebuff(self.lumos[1], 1160, 1160, true)
 
 		do
@@ -109,7 +102,7 @@ function A:ChantLumos(self)
 		end
 
 		UpdateBuff(self.lumos[3], 12975, 12975, true, true)
-		UpdateBuff(self.lumos[4], 23920, 23920, true)
+		UpdateBuff(self.lumos[4], 107574, 107574, true)
 		UpdateBuff(self.lumos[5], 871, 871, true, true)
 	end
 end
