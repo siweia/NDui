@@ -361,25 +361,29 @@ function module:ShowCalendar()
 	end
 end
 
+function module:Minimap_OnMouseWheel(zoom)
+	if zoom > 0 then
+		Minimap_ZoomIn()
+	else
+		Minimap_ZoomOut()
+	end
+end
+
+function module:Minimap_OnMouseUp(btn)
+	if btn == "MiddleButton" then
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+		ToggleCalendar()
+	elseif btn == "RightButton" then
+		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, Minimap, -(Minimap:GetWidth()*.7), (Minimap:GetWidth()*.3))
+	end
+end
+
 function module:SetupHybridMinimap()
 	local mapCanvas = HybridMinimap.MapCanvas
 
 	mapCanvas:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
-	mapCanvas:SetScript("OnMouseWheel", function(_, zoom)
-		if zoom > 0 then
-			Minimap_ZoomIn()
-		else
-			Minimap_ZoomOut()
-		end
-	end)
-	mapCanvas:SetScript("OnMouseUp", function(_, btn)
-		if btn == "MiddleButton" then
-			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-			ToggleCalendar()
-		elseif btn == "RightButton" then
-			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, Minimap, -(Minimap:GetWidth()*.7), (Minimap:GetWidth()*.3))
-		end
-	end)
+	mapCanvas:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	mapCanvas:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
 end
 
 function module:HybridMinimapOnLoad(addon)
@@ -404,27 +408,10 @@ function module:SetupMinimap()
 	self:ShowMinimapClock()
 	self:ShowCalendar()
 
-	-- Mousewheel Zoom
+	-- Minimap clicks
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", function(_, zoom)
-		if zoom > 0 then
-			Minimap_ZoomIn()
-		else
-			Minimap_ZoomOut()
-		end
-	end)
-
-	-- Click Func
-	Minimap:SetScript("OnMouseUp", function(self, btn)
-		if btn == "MiddleButton" then
-			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-			ToggleCalendar()
-		elseif btn == "RightButton" then
-			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, -(self:GetWidth()*.7), (self:GetWidth()*.3))
-		else
-			Minimap_OnClick(self)
-		end
-	end)
+	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	Minimap:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
 
 	-- Hide Blizz
 	local frames = {
