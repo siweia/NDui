@@ -2,6 +2,7 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Maps")
 
+local _G = _G
 local strmatch, strfind, strupper = string.match, string.find, string.upper
 local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
 local cr, cg, cb = DB.r, DB.g, DB.b
@@ -369,12 +370,21 @@ function module:Minimap_OnMouseWheel(zoom)
 	end
 end
 
+local NDuiMiniMapTrackingDropDown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
+NDuiMiniMapTrackingDropDown:SetID(1)
+NDuiMiniMapTrackingDropDown:SetClampedToScreen(true)
+NDuiMiniMapTrackingDropDown:Hide()
+NDuiMiniMapTrackingDropDown.noResize = true
+_G.UIDropDownMenu_Initialize(NDuiMiniMapTrackingDropDown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
+
 function module:Minimap_OnMouseUp(btn)
 	if btn == "MiddleButton" then
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		ToggleCalendar()
 	elseif btn == "RightButton" then
-		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, Minimap, -(Minimap:GetWidth()*.7), (Minimap:GetWidth()*.3))
+		ToggleDropDownMenu(1, nil, NDuiMiniMapTrackingDropDown, "cursor")
+	else
+		Minimap_OnClick(self)
 	end
 end
 
