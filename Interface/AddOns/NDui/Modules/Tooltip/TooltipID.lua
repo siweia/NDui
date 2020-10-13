@@ -4,6 +4,7 @@ local TT = B:GetModule("Tooltip")
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
 local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
+local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
 local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
 local BAGSLOT, BANK = BAGSLOT, BANK
@@ -67,7 +68,7 @@ end
 function TT:SetItemID()
 	local link = select(2, self:GetItem())
 	if link then
-		local id = strmatch(link, "item:(%d+):")
+		local id = GetItemInfoFromHyperlink(link)
 		local keystone = strmatch(link, "|Hkeystone:([0-9]+):")
 		if keystone then id = tonumber(keystone) end
 		if id then TT.AddLineForID(self, id, types.item) end
