@@ -244,10 +244,12 @@ end
 function M:VersionCheck_Create(text)
 	if not NDuiADB["VersionCheck"] then return end
 
-	local frame = CreateFrame("Frame", nil, nil, "MicroButtonAlertTemplate")
-	frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 20, 70)
-	frame.Text:SetText(text)
-	frame:Show()
+	HelpTip:Show(ChatFrame1, {
+		text = text,
+		buttonStyle = HelpTip.ButtonStyle.Okay,
+		targetPoint = HelpTip.Point.TopEdgeCenter,
+		offsetY = 10,
+	})
 end
 
 function M:VersionCheck_Init()
