@@ -5,7 +5,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local next, wipe, ipairs, select = next, wipe, ipairs, select
+local next, ipairs, select = next, ipairs, select
 local UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink = UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink
 local GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo = GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo
 local GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest = GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest
