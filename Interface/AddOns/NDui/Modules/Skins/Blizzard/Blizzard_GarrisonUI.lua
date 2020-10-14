@@ -630,9 +630,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	hooksecurefunc("GarrisonMissonListTab_SetSelected", function(tab, isSelected)
 		if isSelected then
-			tab:SetBackdropColor(r, g, b, .2)
+			tab.bg:SetBackdropColor(r, g, b, .2)
 		else
-			tab:SetBackdropColor(0, 0, 0, .25)
+			tab.bg:SetBackdropColor(0, 0, 0, .25)
 		end
 	end)
 
