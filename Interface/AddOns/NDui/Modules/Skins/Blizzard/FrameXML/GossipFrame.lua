@@ -66,4 +66,16 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end)
+
+	-- Text on QuestFrame
+	QuestFrameGreetingPanel:HookScript("OnShow", function(self)
+		for button in self.titleButtonPool:EnumerateActive() do
+			if not button.styled then
+				replaceGossipText(button, button:GetText())
+				hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+
+				button.styled = true
+			end
+		end
+	end)
 end)
