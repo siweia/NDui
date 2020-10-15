@@ -62,13 +62,13 @@ local list = {
 		{AuraID = 307497, UnitID = "player"},	-- 死亡偏执药水
 		{AuraID = 344314, UnitID = "player"},	-- 心华之速药水
 		-- 9.0饰品
-		{AuraID = 345228, UnitID = "player"},	-- 角斗士徽章
-		{AuraID = 344662, UnitID = "player"},	-- 碎裂心智
-		{AuraID = 345439, UnitID = "player"},	-- 赤红华尔兹
-		{AuraID = 345019, UnitID = "player"},	-- 潜伏的掠食者
-		{AuraID = 345530, UnitID = "player"},	-- 过载的心能电池
+	--	{AuraID = 345228, UnitID = "player"},	-- 角斗士徽章
+	--	{AuraID = 344662, UnitID = "player"},	-- 碎裂心智
+	--	{AuraID = 345439, UnitID = "player"},	-- 赤红华尔兹
+	--	{AuraID = 345019, UnitID = "player"},	-- 潜伏的掠食者
+	--	{AuraID = 345530, UnitID = "player"},	-- 过载的心能电池
+	--	{AuraID = 345541, UnitID = "player"},	-- 天域涌动
 		{AuraID = 336588, UnitID = "player"},	-- 唤醒者的复叶
-		{AuraID = 345541, UnitID = "player"},	-- 天域涌动
 		{AuraID = 311444, UnitID = "player", Value = true},	-- 不屈套牌
 		{AuraID = 336465, UnitID = "player", Value = true},	-- 脉冲光辉护盾
 
