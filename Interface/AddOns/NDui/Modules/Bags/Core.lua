@@ -710,12 +710,10 @@ function module:OnLogin()
 	end
 
 	function MyButton:OnUpdate(item)
-		if MerchantFrame:IsShown() then
-			if item.isInSet then
-				self:SetAlpha(.5)
-			else
-				self:SetAlpha(1)
-			end
+		if MerchantFrame:IsShown() and item.isInSet then
+			self:SetAlpha(.3)
+		else
+			self:SetAlpha(1)
 		end
 
 		if self.JunkIcon then
