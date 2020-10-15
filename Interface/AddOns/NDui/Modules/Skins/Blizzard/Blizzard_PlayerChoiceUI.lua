@@ -82,4 +82,25 @@ C.themes["Blizzard_PlayerChoiceUI"] = function()
 			ReskinSecondOptionButton(option.OptionButtonsContainer.button2)
 		end
 	end)
+
+	-- artifact selection
+	hooksecurefunc(PlayerChoiceFrame, "SetupRewards", function(self)
+		for i = 1, self.numActiveOptions do
+			local optionFrameRewards = self.Options[i].RewardsFrame.Rewards
+			for button in optionFrameRewards.ItemRewardsPool:EnumerateActive() do
+				if not button.styled then
+					button.Name:SetTextColor(.9, .8, .5)
+					button.IconBorder:SetAlpha(0)
+					B.ReskinIcon(button.Icon)
+
+					button.styled = true
+				end
+			end
+		end
+		--[[
+			pools haven't seen yet:
+			optionFrameRewards.CurrencyRewardsPool
+			optionFrameRewards.ReputationRewardsPool
+		]]
+	end)
 end
