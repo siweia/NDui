@@ -391,7 +391,7 @@ QuickQuest:Register("QUEST_COMPLETE", function()
 			local link = GetQuestItemLink("choice", index)
 			if link then
 				local value = select(11, GetItemInfo(link))
-				local itemID = GetItemInfoFromHyperlink(itemLink)
+				local itemID = GetItemInfoFromHyperlink(link)
 				value = cashRewards[itemID] or value
 
 				if value > bestValue then
