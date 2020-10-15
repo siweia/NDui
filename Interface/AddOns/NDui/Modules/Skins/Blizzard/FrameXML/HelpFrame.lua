@@ -2,12 +2,12 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local function LoadPrepatchHelpFrame()
-    local r, g, b = DB.r, DB.g, DB.b
+	local r, g, b = DB.r, DB.g, DB.b
 
 	B.StripTextures(HelpFrame)
 	B.SetBD(HelpFrame)
 	B.StripTextures(HelpFrame.Header)
-    B.ReskinClose(HelpFrameCloseButton)
+	B.ReskinClose(HelpFrameCloseButton)
 
 	B.StripTextures(HelpFrameMainInset)
 	B.StripTextures(HelpFrameLeftInset)
