@@ -101,7 +101,7 @@ local function UpdatePixelScale(event)
 	isScaling = false
 end
 
-local function IncorrectExpansion()
+local function IncorrectExpansion() -- left it for the future
 	local f = CreateFrame("Frame", nil, UIParent)
 	f:SetPoint("CENTER")
 	f:SetSize(10, 10)
@@ -112,11 +112,6 @@ local function IncorrectExpansion()
 end
 
 B:RegisterEvent("PLAYER_LOGIN", function()
-	if not DB.isNewPatch then
-		IncorrectExpansion()
-		return
-	end
-
 	-- Initial
 	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)

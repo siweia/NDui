@@ -404,8 +404,6 @@ end
 local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
-	if not DB.isNewPatch then return end
-
 	if addon ~= "NDui" then return end
 	if not NDuiDB["BFA"] then
 		NDuiDB = {}
