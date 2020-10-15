@@ -114,7 +114,7 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(Game30Font)
 	ReskinFont(Game32Font)
 	ReskinFont(Game36Font)
-	ReskinFont(Game40Font)
+	ReskinFont(Game40Font) -- not in prepatch
 	ReskinFont(Game42Font)
 	ReskinFont(Game46Font)
 	ReskinFont(Game48Font)
