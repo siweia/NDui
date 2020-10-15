@@ -46,7 +46,7 @@ local function isAzeriteArmor(item)
 	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) and not (NDuiDB["Bags"]["ItemSetFilter"] and item.isInSet)
 end
 
-local function isArtifactRelic(item)
+function module:IsArtifactRelic(item)
 	return item.classID == LE_ITEM_CLASS_GEM and item.subClassID == LE_ITEM_GEM_ARTIFACTRELIC
 end
 
@@ -56,7 +56,7 @@ local function isItemEquipment(item)
 	if NDuiDB["Bags"]["ItemSetFilter"] then
 		return item.isInSet
 	else
-		return item.level and item.rarity > LE_ITEM_QUALITY_COMMON and (isArtifactRelic(item) or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
+		return item.level and item.rarity > LE_ITEM_QUALITY_COMMON and (module:IsArtifactRelic(item) or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
 	end
 end
 
