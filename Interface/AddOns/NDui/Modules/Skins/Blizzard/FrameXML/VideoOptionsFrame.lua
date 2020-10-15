@@ -99,8 +99,8 @@ tinsert(C.defaultThemes, function()
 		}
 		for i = 1, #dropdowns do
 			local dropdown = _G[dropdowns[i]]
-			if not dropdown and DB.isDeveloper then
-				print(dropdowns[i], "not found.")
+			if not dropdown then
+				if DB.isDeveloper then print(dropdowns[i], "not found.") end
 			else
 				B.ReskinDropDown(dropdown)
 			end
@@ -135,8 +135,8 @@ tinsert(C.defaultThemes, function()
 		}
 		for i = 1, #sliders do
 			local slider = _G[sliders[i]]
-			if not slider and DB.isDeveloper then
-				print(sliders[i], "not found.")
+			if not slider then
+				if DB.isDeveloper then print(sliders[i], "not found.") end
 			else
 				B.ReskinSlider(slider)
 			end
@@ -167,8 +167,8 @@ tinsert(C.defaultThemes, function()
 		}
 		for i = 1, #checkboxes do
 			local checkbox = _G[checkboxes[i]]
-			if not checkbox and DB.isDeveloper then
-				print(checkboxes[i], "not found.")
+			if not checkbox then
+				if DB.isDeveloper then print(checkbox[i], "not found.") end
 			else
 				B.ReskinCheck(checkbox)
 			end
