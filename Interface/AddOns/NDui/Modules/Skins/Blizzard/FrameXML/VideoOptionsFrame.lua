@@ -80,7 +80,7 @@ tinsert(C.defaultThemes, function()
 			"Advanced_BufferingDropDown",
 			"Advanced_FilteringDropDown",
 			"Advanced_RTShadowQualityDropDown",
-			"Advanced_SSAOTypeDropDown",
+			"Advanced_SSAOTypeDropDown", -- not in ptr
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",
@@ -99,7 +99,7 @@ tinsert(C.defaultThemes, function()
 		}
 		for i = 1, #dropdowns do
 			local dropdown = _G[dropdowns[i]]
-			if not dropdown then
+			if not dropdown and DB.isDeveloper then
 				print(dropdowns[i], "not found.")
 			else
 				B.ReskinDropDown(dropdown)
@@ -135,7 +135,7 @@ tinsert(C.defaultThemes, function()
 		}
 		for i = 1, #sliders do
 			local slider = _G[sliders[i]]
-			if not slider then
+			if not slider and DB.isDeveloper then
 				print(sliders[i], "not found.")
 			else
 				B.ReskinSlider(slider)
@@ -167,7 +167,7 @@ tinsert(C.defaultThemes, function()
 		}
 		for i = 1, #checkboxes do
 			local checkbox = _G[checkboxes[i]]
-			if not checkbox then
+			if not checkbox and DB.isDeveloper then
 				print(checkboxes[i], "not found.")
 			else
 				B.ReskinCheck(checkbox)

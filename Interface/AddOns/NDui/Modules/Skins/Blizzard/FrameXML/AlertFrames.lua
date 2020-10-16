@@ -152,13 +152,13 @@ tinsert(C.defaultThemes, function()
 		elseif frame.queue == WorldQuestCompleteAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
-				frame.bg:SetPoint("TOPLEFT", 3, -9)
-				frame.bg:SetPoint("BOTTOMRIGHT", -3, 6)
+				frame.bg:SetPoint("TOPLEFT", 4, -7)
+				frame.bg:SetPoint("BOTTOMRIGHT", -4, 8)
 
 				B.ReskinIcon(frame.QuestTexture)
 				frame.shine:SetTexture("")
 				frame:DisableDrawLayer("BORDER")
-				select(6, frame:GetRegions()):SetFontObject(NumberFont_GameNormal)
+				frame.ToastText:SetFontObject(NumberFont_GameNormal)
 			end
 		elseif frame.queue == GarrisonTalentAlertSystem then
 			if not frame.bg then

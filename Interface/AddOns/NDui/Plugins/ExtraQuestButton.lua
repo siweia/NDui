@@ -6,9 +6,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local _G = _G
-local tonumber, next, type, strmatch = tonumber, next, type, strmatch
+local next, type, sqrt, GetTime = next, type, sqrt, GetTime
 local RegisterStateDriver, InCombatLockdown = RegisterStateDriver, InCombatLockdown
-local GetItemCooldown, GetItemCount, GetTime = GetItemCooldown, GetItemCount, GetTime
+local GetItemCooldown, GetItemCount, GetItemInfoFromHyperlink = GetItemCooldown, GetItemCount, GetItemInfoFromHyperlink
 local IsItemInRange, ItemHasRange, HasExtraActionBar = IsItemInRange, ItemHasRange, HasExtraActionBar
 local GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo = GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo
 local C_Timer_NewTicker = C_Timer.NewTicker
@@ -145,6 +145,7 @@ local onAttributeChanged = [[
 	elseif name == "state-visible" then
 		if value == "show" then
 			self:CallMethod("Update")
+			self:Show()
 		else
 			self:Hide()
 			self:ClearBindings()
@@ -154,9 +155,12 @@ local onAttributeChanged = [[
 	if self:IsShown() and (name == "item" or name == "binding") then
 		self:ClearBindings()
 
-		local key = GetBindingKey("EXTRAACTIONBUTTON1")
-		if key then
-			self:SetBindingClick(1, key, self, "LeftButton")
+		local key1, key2 = GetBindingKey("EXTRAACTIONBUTTON1")
+		if key1 then
+			self:SetBindingClick(1, key1, self, 'LeftButton')
+		end
+		if key2 then
+			self:SetBindingClick(2, key2, self, 'LeftButton')
 		end
 	end
 ]]
@@ -360,8 +364,8 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 		self.Icon:SetTexture(texture)
 		if itemLink == self.itemLink and self:IsShown() then return end
 
-		local itemID = strmatch(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
-		self.itemID = tonumber(itemID)
+		local itemID = GetItemInfoFromHyperlink(itemLink)
+		self.itemID = itemID
 		self.itemLink = itemLink
 
 		if blacklist[itemID] then return end
@@ -401,9 +405,16 @@ function ExtraQuestButton:RemoveItem()
 	end
 end
 
+local function GetQuestDistance(questID)
+	local distanceSq, onContinent = C_QuestLog_GetDistanceSqToQuest(questID)
+	if onContinent then
+		return sqrt(distanceSq)
+	end
+end
+
 local function GetClosestQuestItem()
 	local closestQuestLink, closestQuestTexture
-	local shortestDistanceSq = 1e5
+	local closestDistance = 1e5
 	local numItems = 0
 	local currentMapID = C_Map_GetBestMapForUnit("player")
 
@@ -415,7 +426,7 @@ local function GetClosestQuestItem()
 			if itemLink then
 				local areaID = questAreas[questID]
 				if not areaID then
-					areaID = itemAreas[tonumber(strmatch(itemLink, "item:(%d+)"))]
+					areaID = itemAreas[GetItemInfoFromHyperlink(itemLink)]
 				end
 
 				local isComplete = C_QuestLog_IsComplete(questID)
@@ -423,9 +434,9 @@ local function GetClosestQuestItem()
 					closestQuestLink = itemLink
 					closestQuestTexture = texture
 				elseif not isComplete or showCompleted then
-					local distanceSq = C_QuestLog_GetDistanceSqToQuest(questID)
-					if distanceSq <= shortestDistanceSq then
-						shortestDistanceSq = distanceSq
+					local distance = GetQuestDistance(questID)
+					if distance and distance <= closestDistance then
+						closestDistance = distance
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					end
@@ -446,16 +457,16 @@ local function GetClosestQuestItem()
 				if itemLink then
 					local areaID = questAreas[questID]
 					if not areaID then
-						areaID = itemAreas[tonumber(strmatch(itemLink, "item:(%d+)"))]
+						areaID = itemAreas[GetItemInfoFromHyperlink(itemLink)]
 					end
 
 					if areaID and (type(areaID) == "boolean" or areaID == currentMapID) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
-					elseif not isComplete or (isComplete and showCompleted) then
-						local distanceSq, onContinent = C_QuestLog_GetDistanceSqToQuest(questID)
-						if onContinent and distanceSq <= shortestDistanceSq then
-							shortestDistanceSq = distanceSq
+					elseif not isComplete or showCompleted then
+						local distance = GetQuestDistance(questID)
+						if distance and distance <= closestDistance then
+							closestDistance = distance
 							closestQuestLink = itemLink
 							closestQuestTexture = texture
 						end
@@ -478,16 +489,16 @@ local function GetClosestQuestItem()
 				if itemLink then
 					local areaID = questAreas[questID]
 					if not areaID then
-						areaID = itemAreas[tonumber(strmatch(itemLink, "item:(%d+)"))]
+						areaID = itemAreas[GetItemInfoFromHyperlink(itemLink)]
 					end
 
 					if areaID and (type(areaID) == "boolean" or areaID == currentMapID) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
-					elseif not isComplete or (isComplete and showCompleted) then
-						local distanceSq, onContinent = C_QuestLog_GetDistanceSqToQuest(questID)
-						if onContinent and distanceSq <= shortestDistanceSq then
-							shortestDistanceSq = distanceSq
+					elseif not isComplete or showCompleted then
+						local distance = GetQuestDistance(questID)
+						if distance and distance <= closestDistance then
+							closestDistance = distance
 							closestQuestLink = itemLink
 							closestQuestTexture = texture
 						end

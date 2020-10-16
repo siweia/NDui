@@ -2,6 +2,7 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Maps")
 
+local _G = _G
 local strmatch, strfind, strupper = string.match, string.find, string.upper
 local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
 local cr, cg, cb = DB.r, DB.g, DB.b
@@ -361,6 +362,46 @@ function module:ShowCalendar()
 	end
 end
 
+function module:Minimap_OnMouseWheel(zoom)
+	if zoom > 0 then
+		Minimap_ZoomIn()
+	else
+		Minimap_ZoomOut()
+	end
+end
+
+local NDuiMiniMapTrackingDropDown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
+NDuiMiniMapTrackingDropDown:SetID(1)
+NDuiMiniMapTrackingDropDown:SetClampedToScreen(true)
+NDuiMiniMapTrackingDropDown:Hide()
+NDuiMiniMapTrackingDropDown.noResize = true
+_G.UIDropDownMenu_Initialize(NDuiMiniMapTrackingDropDown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
+
+function module:Minimap_OnMouseUp(btn)
+	if btn == "MiddleButton" then
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+		ToggleCalendar()
+	elseif btn == "RightButton" then
+		ToggleDropDownMenu(1, nil, NDuiMiniMapTrackingDropDown, "cursor")
+	elseif self.mover then
+		Minimap_OnClick(self)
+	end
+end
+
+function module:SetupHybridMinimap()
+	local mapCanvas = HybridMinimap.MapCanvas
+	mapCanvas:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
+	mapCanvas:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	mapCanvas:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
+end
+
+function module:HybridMinimapOnLoad(addon)
+	if addon == "Blizzard_HybridMinimap" then
+		module:SetupHybridMinimap()
+		B:UnregisterEvent(self, module.HybridMinimapOnLoad)
+	end
+end
+
 function module:SetupMinimap()
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
@@ -376,27 +417,10 @@ function module:SetupMinimap()
 	self:ShowMinimapClock()
 	self:ShowCalendar()
 
-	-- Mousewheel Zoom
+	-- Minimap clicks
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", function(_, zoom)
-		if zoom > 0 then
-			Minimap_ZoomIn()
-		else
-			Minimap_ZoomOut()
-		end
-	end)
-
-	-- Click Func
-	Minimap:SetScript("OnMouseUp", function(self, btn)
-		if btn == "MiddleButton" then
-			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-			ToggleCalendar()
-		elseif btn == "RightButton" then
-			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, -(self:GetWidth()*.7), (self:GetWidth()*.3))
-		else
-			Minimap_OnClick(self)
-		end
-	end)
+	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	Minimap:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
 
 	-- Hide Blizz
 	local frames = {
@@ -423,4 +447,7 @@ function module:SetupMinimap()
 	self:ReskinRegions()
 	self:RecycleBin()
 	self:WhoPingsMyMap()
+
+	-- HybridMinimap
+	B:RegisterEvent("ADDON_LOADED", module.HybridMinimapOnLoad)
 end

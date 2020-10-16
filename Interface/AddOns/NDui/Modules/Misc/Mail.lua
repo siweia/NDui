@@ -5,7 +5,7 @@ local M = B:GetModule("Misc")
 local wipe, select, pairs, tonumber = wipe, select, pairs, tonumber
 local strsplit, strfind = strsplit, strfind
 local InboxItemCanDelete, DeleteInboxItem = InboxItemCanDelete, DeleteInboxItem
-local GetInboxHeaderInfo, GetInboxItem, GetInboxItemLink, GetItemInfo = GetInboxHeaderInfo, GetInboxItem, GetInboxItemLink, GetItemInfo
+local GetInboxHeaderInfo, GetInboxItem, GetItemInfo = GetInboxHeaderInfo, GetInboxItem, GetItemInfo
 local inboxItems = {}
 
 function M:MailBox_DelectClick()
@@ -45,7 +45,7 @@ function M:InboxItem_OnEnter()
 				local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID)
 				if itemName then
 					local r, g, b = GetItemQualityColor(itemQuality)
-					GameTooltip:AddDoubleLine(" |T"..itemTexture..":12:12:0:0:50:50:4:46:4:46|t "..itemName, value, r, g, b)
+					GameTooltip:AddDoubleLine(" |T"..itemTexture..":12:12:0:0:50:50:4:46:4:46|t "..itemName, count, r, g, b)
 				end
 			end
 			GameTooltip:Show()

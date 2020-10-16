@@ -19,8 +19,8 @@ Each tag will be updated individually and the output will follow the tags order.
 output string regardless of whether the surrounding tag functions return a value. I.e. `"[curhp]/[maxhp]"` will resolve
 to something like `2453/5000`.
 
-There's also an optional prefix and suffix that are separated from the tag name by `$>` and `$<` respectively,
-for example, `"[==$>name<$==]"` will resolve to `==Thrall==`, and `"[perhp$<%]"` will resole to `100%`, however, said
+There's also an optional prefix and suffix that are separated from the tag name by `$>` and `<$` respectively,
+for example, `"[==$>name<$==]"` will resolve to `==Thrall==`, and `"[perhp<$%]"` will resole to `100%`, however, said
 affixes will only be added if the tag function returns a non-empty string, if it returns `nil` or `""` affixes will be
 omitted.
 
@@ -29,7 +29,7 @@ defined via `()` at the end of a tag and separated by commas (`,`). For example,
 additional arguments, `"a"`, `"r"`, `"g"`, and `"s"` will be passed to the name tag function, what to do with them,
 however, is up to a developer to decide.
 
-The full tag syntax looks like this: `"[prefix$>tag$<suffix(a,r,g,s)]"`. The order of optional elements is important,
+The full tag syntax looks like this: `"[prefix$>tag<$suffix(a,r,g,s)]"`. The order of optional elements is important,
 while they can be independently omitted, they can't be reordered.
 
 A `Tag Function` is used to replace a single tag in a tag string by its output. A tag function receives only two
@@ -643,7 +643,7 @@ local funcPool = {}
 local tmp = {}
 
 local function getBracketData(tag)
-	-- full tag syntax: '[prefix$>tag-name$<suffix(a,r,g,s)]'
+	-- full tag syntax: '[prefix$>tag-name<$suffix(a,r,g,s)]'
 	local suffixEnd = (tag:match('()%(') or -1) - 1
 
 	local prefixEnd, prefixOffset = tag:match('()%$>'), 1
@@ -654,7 +654,7 @@ local function getBracketData(tag)
 		prefixOffset = 3
 	end
 
-	local suffixStart, suffixOffset = tag:match('%$<()', prefixEnd), 1
+	local suffixStart, suffixOffset = tag:match('%<$()', prefixEnd), 1
 	if(not suffixStart) then
 		suffixStart = suffixEnd + 1
 	else
@@ -886,7 +886,7 @@ end
 
 local function strip(tag)
 	-- remove prefix, custom args, and suffix
-	return tag:gsub('%[.-%$>', '['):gsub('%(.-%)%]', ']'):gsub('$<.-%]', ']')
+	return tag:gsub('%[.-%$>', '['):gsub('%(.-%)%]', ']'):gsub('<$.-%]', ']')
 end
 
 oUF.Tags = {

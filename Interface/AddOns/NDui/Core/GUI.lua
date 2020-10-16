@@ -47,7 +47,7 @@ G.DefaultSettings = {
 		BagsWidth = 12,
 		BankWidth = 14,
 		BagsiLvl = true,
-		ReverseSort = false,
+		BagSortMode = 1,
 		ItemFilter = true,
 		ItemSetFilter = false,
 		DeleteButton = true,
@@ -404,6 +404,8 @@ end
 local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
+	if not DB.isNewPatch then return end
+
 	if addon ~= "NDui" then return end
 	if not NDuiDB["BFA"] then
 		NDuiDB = {}
@@ -464,7 +466,7 @@ local function setupAuraWatch()
 end
 
 local function updateBagSortOrder()
-	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
+	SetSortBagsRightToLeft(NDuiDB["Bags"]["BagSortMode"] == 1)
 end
 
 local function updateBagStatus()
@@ -745,12 +747,12 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
 		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"].."*", true, nil, updateBagStatus, L["ItemSetFilterTips"]},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
-		{1, "Bags", "ReverseSort", L["Bags ReverseSort"].."*", true, nil, updateBagSortOrder},
-		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
-		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", true, nil, updateBagStatus},
+		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", true, nil, updateBagStatus, L["SpecialBagsColorTip"]},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"]},
-		{1, "Bags", "DeleteButton", L["Bags DeleteButton"]},
-		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", true, {1, 500, 1}, updateBagStatus, L["iLvlToShowTip"]},
+		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
+		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", nil, nil, updateBagStatus},
+		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 500, 1}, updateBagStatus, L["iLvlToShowTip"]},
+		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, .1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 1}},
@@ -947,7 +949,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[10] = {
 		{1, "Map", "Coord", L["Map Coords"]},
 		{},--blank
-		{1, "Map", "Calendar", L["Minimap Calendar"].."*", nil, nil, showCalendar},
+		{1, "Map", "Calendar", L["MinimapCalendar"].."*", nil, nil, showCalendar, L["MinimapCalendarTip"]},
 		{1, "Map", "Clock", L["Minimap Clock"].."*", true, nil, showMinimapClock},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},

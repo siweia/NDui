@@ -360,6 +360,7 @@ function UF:CreateIcons(self)
 		rest:SetTexture("Interface\\PLAYERFRAME\\DruidEclipse")
 		rest:SetTexCoord(.445, .55, .648, .905)
 		rest:SetVertexColor(.6, .8, 1)
+		rest:SetAlpha(.7)
 		self.RestingIndicator = rest
 	elseif mystyle == "target" then
 		local quest = self:CreateTexture(nil, "OVERLAY")

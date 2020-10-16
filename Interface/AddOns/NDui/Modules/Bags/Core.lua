@@ -14,7 +14,6 @@ local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
-local IsCorruptedItem = IsCorruptedItem
 
 local sortCache = {}
 function module:ReverseSort()
@@ -187,12 +186,19 @@ end
 function module:CreateSortButton(name)
 	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Pet_Broom")
 	bu:SetScript("OnClick", function()
+		if NDuiDB["Bags"]["BagSortMode"] == 3 then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["BagSortDisabled"])
+			return
+		end
+
 		if name == "Bank" then
 			SortBankBags()
 		elseif name == "Reagent" then
 			SortReagentBankBags()
 		else
-			if NDuiDB["Bags"]["ReverseSort"] then
+			if NDuiDB["Bags"]["BagSortMode"] == 1 then
+				SortBags()
+			elseif NDuiDB["Bags"]["BagSortMode"] == 2 then
 				if InCombatLockdown() then
 					UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 				else
@@ -201,8 +207,6 @@ function module:CreateSortButton(name)
 					module.Bags.isSorting = true
 					C_Timer_After(.5, module.ReverseSort)
 				end
-			else
-				SortBags()
 			end
 		end
 	end)
@@ -701,8 +705,6 @@ function module:OnLogin()
 		if not item.link then return end
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			return "AzeriteIconFrame"
-		elseif IsCorruptedItem(item.link) then
-			return "Nzoth-inventory-icon"
 		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
 			return "ConduitIconFrame", "ConduitIconFrame-Corners"
 		end
@@ -937,7 +939,7 @@ function module:OnLogin()
 	end
 
 	-- Sort order
-	SetSortBagsRightToLeft(not NDuiDB["Bags"]["ReverseSort"])
+	SetSortBagsRightToLeft(NDuiDB["Bags"]["BagSortMode"] == 1)
 	SetInsertItemsLeftToRight(false)
 
 	-- Init

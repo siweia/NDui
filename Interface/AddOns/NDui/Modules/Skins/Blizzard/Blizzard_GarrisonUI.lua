@@ -949,7 +949,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
-	B.Reskin(CovenantMissionFrameFollowers.HealAllButton)
+	if CovenantMissionFrameFollowers.HealAllButton then
+		B.Reskin(CovenantMissionFrameFollowers.HealAllButton) -- not in ptr
+	end
 	CovenantMissionFrame.MapTab:SetAlpha(0) -- not sure what does this for, need reviewed
 	B.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 

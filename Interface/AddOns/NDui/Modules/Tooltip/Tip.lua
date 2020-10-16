@@ -358,6 +358,12 @@ function TT:ReskinTooltip()
 			TT.ReskinStatusBar(self)
 		end
 
+		if self.GetBackdrop then
+			self.GetBackdrop = self.bg.GetBackdrop
+			self.GetBackdropColor = self.bg.GetBackdropColor
+			self.GetBackdropBorderColor = self.bg.GetBackdropBorderColor
+		end
+
 		self.tipStyled = true
 	end
 
@@ -414,14 +420,14 @@ end
 
 function TT:OnLogin()
 	GameTooltip.StatusBar = GameTooltipStatusBar
-	GameTooltip:HookScript("OnTooltipCleared", self.OnTooltipCleared)
-	GameTooltip:HookScript("OnTooltipSetUnit", self.OnTooltipSetUnit)
-	GameTooltip.StatusBar:SetScript("OnValueChanged", self.StatusBar_OnValueChanged)
-	hooksecurefunc("GameTooltip_ShowStatusBar", self.GameTooltip_ShowStatusBar)
-	hooksecurefunc("GameTooltip_ShowProgressBar", self.GameTooltip_ShowProgressBar)
-	hooksecurefunc("GameTooltip_SetDefaultAnchor", self.GameTooltip_SetDefaultAnchor)
-	hooksecurefunc("SharedTooltip_SetBackdropStyle", self.SharedTooltip_SetBackdropStyle)
-	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
+	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
+	GameTooltip:HookScript("OnTooltipSetUnit", TT.OnTooltipSetUnit)
+	GameTooltip.StatusBar:SetScript("OnValueChanged", TT.StatusBar_OnValueChanged)
+	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
+	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
+	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
+	hooksecurefunc("SharedTooltip_SetBackdropStyle", TT.SharedTooltip_SetBackdropStyle)
+	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
 
 	-- Elements
 	TT:SetupTooltipFonts()

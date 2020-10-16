@@ -122,6 +122,14 @@ function module:WorldMapScale()
 end
 
 function module:OnLogin()
+	-- Remove from frame manager
+	WorldMapFrame:ClearAllPoints()
+	WorldMapFrame:SetPoint("CENTER") -- init anchor
+	WorldMapFrame:SetAttribute("UIPanelLayout-area", nil)
+	WorldMapFrame:SetAttribute("UIPanelLayout-enabled", false)
+	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
+	tinsert(UISpecialFrames, "WorldMapFrame")
+
 	self:WorldMapScale()
 	self:SetupCoords()
 	self:SetupMinimap()
