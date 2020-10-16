@@ -95,7 +95,7 @@ function M:FindQuestAccept(questID)
 		    return
 		end
 		
-		sendQuestMsg(acceptText(link, frequency == LE_QUEST_FREQUENCY_DAILY))
+		sendQuestMsg(acceptText(link, info.frequency == Enum.QuestFrequency.Daily))
 	end
 end
 
