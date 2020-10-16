@@ -145,7 +145,6 @@ local onAttributeChanged = [[
 	elseif name == "state-visible" then
 		if value == "show" then
 			self:CallMethod("Update")
-			self:Show()
 		else
 			self:Hide()
 			self:ClearBindings()
