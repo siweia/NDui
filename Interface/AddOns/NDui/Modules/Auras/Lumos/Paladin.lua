@@ -66,7 +66,7 @@ function A:ChantLumos(self)
 			elseif IsPlayerSpell(343527) then
 				UpdateDebuff(button, 343527, 343527, true)
 			else
-				UpdateBuff(button, 20271, 269571, true)
+				UpdateCooldown(button, 20271, true)
 			end
 		end
 
@@ -81,7 +81,7 @@ function A:ChantLumos(self)
 		do
 			local button = self.lumos[4]
 			if IsPlayerSpell(223817) then
-				UpdateBuff(button, 223817, 223819, true, true)
+				UpdateBuff(button, 223817, 223819, nil, true)
 			elseif IsPlayerSpell(105809) then
 				UpdateBuff(button, 105809, 105809, true)
 			else
