@@ -339,6 +339,12 @@ function TT:GameTooltip_ComparisonFix(anchorFrame, shoppingTooltip1, shoppingToo
 end
 
 -- Tooltip skin
+local fakeBg = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+fakeBg:SetBackdrop({ bgFile = DB.bdTex, edgeFile = DB.bdTex, edgeSize = 1 })
+local function __GetBackdrop() return fakeBg:GetBackdrop() end
+local function __GetBackdropColor() return 0, 0, 0, .7 end
+local function __GetBackdropBorderColor() return 0, 0, 0 end
+
 function TT:ReskinTooltip()
 	if not self then
 		if DB.isDeveloper then print("Unknown tooltip spotted.") end
@@ -359,9 +365,9 @@ function TT:ReskinTooltip()
 		end
 
 		if self.GetBackdrop then
-			self.GetBackdrop = self.bg.GetBackdrop
-			self.GetBackdropColor = self.bg.GetBackdropColor
-			self.GetBackdropBorderColor = self.bg.GetBackdropBorderColor
+			self.GetBackdrop = __GetBackdrop
+			self.GetBackdropColor = __GetBackdropColor
+			self.GetBackdropBorderColor = __GetBackdropBorderColor
 		end
 
 		self.tipStyled = true
