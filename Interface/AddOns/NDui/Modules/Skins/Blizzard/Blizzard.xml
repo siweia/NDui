@@ -34,6 +34,7 @@
 	<Script file="Blizzard_ItemUpgradeUI.lua"/>
 	<Script file="Blizzard_LookingForGuildUI.lua"/>
 	<Script file="Blizzard_MacroUI.lua"/>
+	<Script file="Blizzard_NewPlayerExperienceGuide.lua"/>
 	<Script file="Blizzard_ObliterumUI.lua"/>
 	<Script file="Blizzard_PartyPoseUI.lua"/>
 	<Script file="Blizzard_PlayerChoiceUI.lua"/>

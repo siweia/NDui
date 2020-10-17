@@ -349,6 +349,8 @@ do
 		"Portrait",
 		"portrait",
 		"ScrollFrameBorder",
+		"ScrollUpBorder",
+		"ScrollDownBorder",
 	}
 	function B:StripTextures(kill)
 		local frameName = self.GetName and self:GetName()
