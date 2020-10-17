@@ -624,7 +624,8 @@ end
 -- WidgetContainer
 function UF:AddWidgetContainer(self)
 	local widgetContainer = CreateFrame("Frame", nil, self, "UIWidgetContainerTemplate")
-	widgetContainer:SetPoint("BOTTOM", self, "TOP")
+	widgetContainer:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
+	widgetContainer:SetScale(1/NDuiADB["UIScale"]) -- need reviewed
 	widgetContainer:Hide()
 
 	self.WidgetContainer = widgetContainer
