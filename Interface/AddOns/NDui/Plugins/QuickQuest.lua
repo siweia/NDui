@@ -168,6 +168,8 @@ local ignoreGossipNPC = {
 	[171787] = true, -- 文官阿得赖斯提斯
 	[171795] = true, -- 月莓女勋爵
 	[171821] = true, -- 德拉卡女男爵
+	[172558] = true, -- 艾拉·引路者（导师）
+	[172572] = true, -- 瑟蕾丝特·贝利文科（导师）
 }
 
 local rogueClassHallInsignia = {
