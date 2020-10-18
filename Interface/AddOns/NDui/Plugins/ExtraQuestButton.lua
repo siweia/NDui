@@ -11,7 +11,6 @@ local RegisterStateDriver, InCombatLockdown = RegisterStateDriver, InCombatLockd
 local IsItemInRange, ItemHasRange, HasExtraActionBar = IsItemInRange, ItemHasRange, HasExtraActionBar
 local GetItemCooldown, GetItemCount, GetItemIcon, GetItemInfoFromHyperlink = GetItemCooldown, GetItemCount, GetItemIcon, GetItemInfoFromHyperlink
 local GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo = GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo
-local C_Timer_NewTicker = C_Timer.NewTicker
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_QuestLog_GetInfo = C_QuestLog.GetInfo
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
