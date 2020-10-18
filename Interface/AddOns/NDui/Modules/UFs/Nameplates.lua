@@ -38,10 +38,6 @@ function UF:UpdatePlateAlpha()
 	SetCVar("nameplateMaxAlpha", NDuiDB["Nameplate"]["MinAlpha"])
 end
 
-function UF:UpdatePlateRange()
-	SetCVar("nameplateMaxDistance", NDuiDB["Nameplate"]["Distance"])
-end
-
 function UF:UpdatePlateSpacing()
 	SetCVar("nameplateOverlapV", NDuiDB["Nameplate"]["VerticalSpacing"])
 end
@@ -56,7 +52,6 @@ function UF:SetupCVars()
 	UF:PlateInsideView()
 	SetCVar("nameplateOverlapH", .8)
 	UF:UpdatePlateSpacing()
-	UF:UpdatePlateRange()
 	UF:UpdatePlateAlpha()
 	SetCVar("nameplateSelectedAlpha", 1)
 	SetCVar("showQuestTrackingTooltips", 1)
