@@ -6,10 +6,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local _G = _G
-local next, type, sqrt, GetTime = next, type, sqrt, GetTime
+local next, type, sqrt, GetTime, format = next, type, sqrt, GetTime, format
 local RegisterStateDriver, InCombatLockdown = RegisterStateDriver, InCombatLockdown
-local GetItemCooldown, GetItemCount, GetItemInfoFromHyperlink = GetItemCooldown, GetItemCount, GetItemInfoFromHyperlink
 local IsItemInRange, ItemHasRange, HasExtraActionBar = IsItemInRange, ItemHasRange, HasExtraActionBar
+local GetItemCooldown, GetItemCount, GetItemIcon, GetItemInfoFromHyperlink = GetItemCooldown, GetItemCount, GetItemIcon, GetItemInfoFromHyperlink
 local GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo = GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo
 local C_Timer_NewTicker = C_Timer.NewTicker
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
@@ -20,8 +20,10 @@ local C_QuestLog_GetNumQuestWatches = C_QuestLog.GetNumQuestWatches
 local C_QuestLog_GetDistanceSqToQuest = C_QuestLog.GetDistanceSqToQuest
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
-local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
+local C_QuestLog_GetNumWorldQuestWatches = C_QuestLog.GetNumWorldQuestWatches
 local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
+local C_QuestLog_GetQuestIDForWorldQuestWatchIndex = C_QuestLog.GetQuestIDForWorldQuestWatchIndex
+local MAX_DISTANCE_YARDS = 1e5
 
 -- Warlords of Draenor intro quest items which inspired this addon
 local blacklist = {
@@ -30,96 +32,74 @@ local blacklist = {
 	[109164] = true,
 }
 
--- Quests with incorrect or missing quest area blobs
-local questAreas = {
-	-- Global
-	[24629] = true,
-	-- Icecrown
-	[14108] = 170,
-	-- Northern Barrens
-	[13998] = 11,
-	-- Un'Goro Crater
-	[24735] = 78,
-	-- Darkmoon Island
-	[29506] = 407,
-	[29510] = 407,
-	[29515] = 407,
-	[29516] = 407,
-	[29517] = 407,
-	-- Mulgore
-	[24440] = 7,
-	[14491] = 7,
-	[24456] = 7,
-	[24524] = 7,
-	-- Mount Hyjal
-	[25577] = 198,
+-- quests that doesn't have a defined area on the map (questID = bool/mapID/{mapID,...})
+-- these have low priority during collision
+local inaccurateQuestAreas = {
+	[11731] = {84, 87, 103}, -- alliance capitals (missing Darnassus)
+	[11921] = {84, 87, 103}, -- alliance capitals (missing Darnassus)
+	[11922] = {18, 85, 88, 110}, -- horde capitals
+	[11926] = {18, 85, 88, 110}, -- horde capitals
+	[12779] = 124, -- Scarlet Enclave (Death Knight starting zone)
+	[13998] = 11, -- Northern Barrens
+	[14246] = 66, -- Desolace
+	[24440] = 7, -- Mulgore
+	[24456] = 7, -- Mulgore
+	[24524] = 7, -- Mulgore
+	[24629] = {84, 85, 87, 88, 103, 110}, -- major capitals (missing Darnassus & Undercity)
+	[25577] = 198, -- Mount Hyjal
+	[29506] = 407, -- Darkmoon Island
+	[29510] = 407, -- Darkmoon Island
+	[29515] = 407, -- Darkmoon Island
+	[29516] = 407, -- Darkmoon Island
+	[29517] = 407, -- Darkmoon Island
+	[49813] = true, -- anywhere
+	[49846] = true, -- anywhere
+	[49860] = true, -- anywhere
+	[49864] = true, -- anywhere
+	[25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
+	[25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 }
 
--- Quests items with incorrect or missing quest area blobs
-local itemAreas = {
-	-- Global
-	[34862] = true,
-	[34833] = true,
-	[39700] = true,
-	[155915] = true,
-	[156474] = true,
-	[156477] = true,
-	[155918] = true,
-	-- Deepholm
-	[58167] = 207,
-	[60490] = 207,
-	-- Ashenvale
-	[35237] = 63,
-	-- Thousand Needles
-	[56011] = 64,
-	-- Tanaris
-	[52715] = 71,
-	-- The Jade Forest
-	[84157] = 371,
-	[89769] = 371,
-	-- Hellfire Peninsula
-	[28038] = 100,
-	[28132] = 100,
-	-- Borean Tundra
-	[35352] = 114,
-	[34772] = 114,
-	[34711] = 114,
-	[35288] = 114,
-	[34782] = 114,
-	-- Dragonblight
-	[37881] = 115,
-	[37923] = 115,
-	[44450] = 115,
-	[37887] = 115,
-	-- Zul'Drak
-	[41161] = 121,
-	[39157] = 121,
-	[39206] = 121,
-	[39238] = 121,
-	[39664] = 121,
-	[38699] = 121,
-	[41390] = 121,
-	-- Grizzly Hills
-	[38083] = 116,
-	[35797] = 116,
-	[37716] = 116,
-	[35739] = 116,
-	[36851] = 116,
-	-- Icecrown
-	[41265] = 170,
-	-- Dalaran (Broken Isles)
-	[129047] = 625,
-	-- Stormheim
-	[128287] = 634,
-	[129161] = 634,
-	-- Azsuna
-	[118330] = 630,
-	-- Suramar
-	[133882] = 680,
-	-- Tiragarde Sound
-	[154878] = 895,
-	-- Mechagon
-	[168813] = 1462,
+-- items that should be used for a quest but aren't (questID = itemID)
+-- these have low priority during collision
+local questItems = {
+	-- (TODO: test if we need to associate any of these items with a zone directly instead)
+	[10129] = 28038, -- Hellfire Peninsula
+	[10146] = 28038, -- Hellfire Peninsula
+	[10162] = 28132, -- Hellfire Peninsula
+	[10163] = 28132, -- Hellfire Peninsula
+	[10346] = 28132, -- Hellfire Peninsula
+	[10347] = 28132, -- Hellfire Peninsula
+	[11617] = 34772, -- Borean Tundra
+	[11633] = 34782, -- Borean Tundra
+	[11894] = 35288, -- Borean Tundra
+	[11982] = 35734, -- Grizzly Hills
+	[11986] = 35739, -- Grizzly Hills
+	[11989] = 38083, -- Grizzly Hills
+	[12026] = 35739, -- Grizzly Hills
+	[12415] = 37716, -- Grizzly Hills
+	[12007] = 35797, -- Grizzly Hills
+	[12456] = 37881, -- Dragonblight
+	[12470] = 37923, -- Dragonblight
+	[12484] = 38149, -- Grizzly Hills
+	[12661] = 41390, -- Zul'Drak
+	[12713] = 38699, -- Zul'Drak
+	[12861] = 41161, -- Zul'Drak
+	[13343] = 44450, -- Dragonblight
+	[29821] = 84157, -- Jade Forest
+	[31112] = 84157, -- Jade Forest
+	[31769] = 89769, -- Jade Forest
+	[35237] = 11891, -- Ashenvale
+	[36848] = 36851, -- Grizzly Hills
+	[37565] = 118330, -- Azsuna
+	[39385] = 128287, -- Stormheim
+	[39847] = 129047, -- Dalaran (Broken Isles)
+	[40003] = 129161, -- Stormheim
+	[40965] = 133882, -- Suramar
+	[43827] = 129161, -- Stormheim
+	[49402] = 154878, -- Tiragarde Sound
+	[50164] = 154878, -- Tiragarde Sound
+	[51646] = 154878, -- Tiragarde Sound
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
@@ -156,10 +136,10 @@ local onAttributeChanged = [[
 
 		local key1, key2 = GetBindingKey("EXTRAACTIONBUTTON1")
 		if key1 then
-			self:SetBindingClick(1, key1, self, 'LeftButton')
+			self:SetBindingClick(1, key1, self, "LeftButton")
 		end
 		if key2 then
-			self:SetBindingClick(2, key2, self, 'LeftButton')
+			self:SetBindingClick(2, key2, self, "LeftButton")
 		end
 	end
 ]]
@@ -265,28 +245,6 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent("QUEST_ACCEPTED")
 	self:RegisterEvent("ZONE_CHANGED")
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	self:RegisterEvent("QUEST_TURNED_IN")
-end
-
-local activeWorldQuests = {}
-
-hooksecurefunc("QuestObjectiveSetupBlockButton_Item", function(block, questLogIndex, isQuestComplete)
-	if not block.itemButton then return end
-
-	local questID = C_QuestLog_GetQuestIDForLogIndex(questLogIndex)
-	if questID and activeWorldQuests[questID] then return end
-
-	if C_QuestLog_IsWorldQuest(questID) and not isQuestComplete then
-		activeWorldQuests[questID] = true
-		ExtraQuestButton:Update()
-	end
-end)
-
-function ExtraQuestButton:QUEST_TURNED_IN(_, questID)
-	if activeWorldQuests[questID] then
-		activeWorldQuests[questID] = nil
-		self:Update()
-	end
 end
 
 ExtraQuestButton:SetScript("OnEnter", function(self)
@@ -360,13 +318,11 @@ ExtraQuestButton:SetScript("OnDisable", function(self)
 	self.HotKey:Hide()
 end)
 
-function ExtraQuestButton:SetItem(itemLink, texture)
+function ExtraQuestButton:SetItem(itemLink)
 	if HasExtraActionBar() then return end
 
 	if itemLink then
-		self.Icon:SetTexture(texture)
-		if itemLink == self.itemLink and self:IsShown() then return end
-
+		self.Icon:SetTexture(GetItemIcon(itemLink))
 		local itemID = GetItemInfoFromHyperlink(itemLink)
 		self.itemID = itemID
 		self.itemLink = itemLink
@@ -408,133 +364,104 @@ function ExtraQuestButton:RemoveItem()
 	end
 end
 
-local function GetQuestDistance(questID, isWorldQuest)
-	local distanceSq, onContinent = C_QuestLog_GetDistanceSqToQuest(questID)
-	if isWorldQuest or onContinent then
-		return sqrt(distanceSq)
+local function GetQuestDistanceWithItem(questID)
+	local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
+	if not questLogIndex then return end
+
+	local itemLink, _, _, showWhenComplete = GetQuestLogSpecialItemInfo(questLogIndex)
+	if not itemLink then
+		local fallbackItemID = questItems[questID]
+		if fallbackItemID then
+			itemLink = format("|Hitem:%d|h", fallbackItemID)
+		end
+	end
+	if not itemLink then return end
+	if GetItemCount(itemLink) == 0 then return end
+
+	local shouldShowItem = not C_QuestLog_IsComplete(questID) or showWhenComplete
+	local distanceSq = C_QuestLog_GetDistanceSqToQuest(questID)
+	local distanceYd = distanceSq and sqrt(distanceSq)
+	if shouldShowItem and distanceYd and distanceYd <= MAX_DISTANCE_YARDS then
+		return distanceYd, itemLink
+	end
+
+	local questMapID = inaccurateQuestAreas[questID]
+	if questMapID then
+		local currentMapID = C_Map_GetBestMapForUnit("player")
+		if type(questMapID) == "boolean" then
+			return MAX_DISTANCE_YARDS-1, itemLink
+		elseif type(questMapID) == "number" then
+			if questMapID == currentMapID then
+				return MAX_DISTANCE_YARDS-2, itemLink
+			end
+		elseif type(questMapID) == "table" then
+			for _, mapID in next, questMapID do
+				if mapID == currentMapID then
+					return MAX_DISTANCE_YARDS-2, itemLink
+				end
+			end
+		end
 	end
 end
 
 local function GetClosestQuestItem()
-	local closestQuestLink, closestQuestTexture
-	local closestDistance = 1e5
-	local numItems = 0
-	local currentMapID = C_Map_GetBestMapForUnit("player")
+	local closestQuestItemLink
+	local closestDistance = MAX_DISTANCE_YARDS
 
-	-- XXX: temporary solution for the above
-	for questID in next, activeWorldQuests do
-		local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
-		if questLogIndex then
-			local itemLink, texture, _, showCompleted = GetQuestLogSpecialItemInfo(questLogIndex)
-			if itemLink then
-				local areaID = questAreas[questID]
-				if not areaID then
-					areaID = itemAreas[GetItemInfoFromHyperlink(itemLink)]
-				end
-
-				local isComplete = C_QuestLog_IsComplete(questID)
-				if areaID and (type(areaID) == "boolean" or areaID == currentMapID) then
-					closestQuestLink = itemLink
-					closestQuestTexture = texture
-				elseif not isComplete or showCompleted then
-					local distance = GetQuestDistance(questID, true)
-					if distance and distance <= closestDistance then
-						closestDistance = distance
-						closestQuestLink = itemLink
-						closestQuestTexture = texture
-					end
-				end
-
-				numItems = numItems + 1
+	for index = 1, C_QuestLog_GetNumWorldQuestWatches() do
+		-- this only tracks supertracked worldquests,
+		-- e.g. stuff the player has shift-clicked on the map
+		local questID = C_QuestLog_GetQuestIDForWorldQuestWatchIndex(index)
+		if questID then
+			local distance, itemLink = GetQuestDistanceWithItem(questID)
+			if distance and distance <= closestDistance then
+				closestDistance = distance
+				closestQuestItemLink = itemLink
 			end
 		end
 	end
 
-	if not closestQuestLink then
+	if not closestQuestItemLink then
 		for index = 1, C_QuestLog_GetNumQuestWatches() do
 			local questID = C_QuestLog_GetQuestIDForQuestWatchIndex(index)
 			if questID and QuestHasPOIInfo(questID) then
-				local isComplete = C_QuestLog_IsComplete(questID)
-				local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
-				local itemLink, texture, _, showCompleted = GetQuestLogSpecialItemInfo(questLogIndex)
-				if itemLink then
-					local areaID = questAreas[questID]
-					if not areaID then
-						areaID = itemAreas[GetItemInfoFromHyperlink(itemLink)]
-					end
-
-					if areaID and (type(areaID) == "boolean" or areaID == currentMapID) then
-						closestQuestLink = itemLink
-						closestQuestTexture = texture
-					elseif not isComplete or showCompleted then
-						local distance = GetQuestDistance(questID)
-						if distance and distance <= closestDistance then
-							closestDistance = distance
-							closestQuestLink = itemLink
-							closestQuestTexture = texture
-						end
-					end
-
-					numItems = numItems + 1
+				local distance, itemLink = GetQuestDistanceWithItem(questID)
+				if distance and distance <= closestDistance then
+					closestDistance = distance
+					closestQuestItemLink = itemLink
 				end
 			end
 		end
 	end
 
-	if not closestQuestLink then
-		for questLogIndex = 1, C_QuestLog_GetNumQuestLogEntries() do
-			local info = C_QuestLog_GetInfo(questLogIndex)
+	if not closestQuestItemLink then
+		for index = 1, C_QuestLog_GetNumQuestLogEntries() do
+			local info = C_QuestLog_GetInfo(index)
 			local questID = info.questID
-			local isHeader = info.isHeader
-			local isComplete = C_QuestLog_IsComplete(questID)
-			if info and not isHeader and QuestHasPOIInfo(questID) then
-				local itemLink, texture, _, showCompleted = GetQuestLogSpecialItemInfo(questLogIndex)
-				if itemLink then
-					local areaID = questAreas[questID]
-					if not areaID then
-						areaID = itemAreas[GetItemInfoFromHyperlink(itemLink)]
-					end
-
-					if areaID and (type(areaID) == "boolean" or areaID == currentMapID) then
-						closestQuestLink = itemLink
-						closestQuestTexture = texture
-					elseif not isComplete or showCompleted then
-						local distance = GetQuestDistance(questID)
-						if distance and distance <= closestDistance then
-							closestDistance = distance
-							closestQuestLink = itemLink
-							closestQuestTexture = texture
-						end
-					end
-
-					numItems = numItems + 1
+			if info and not info.isHeader and (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
+				local distance, itemLink = GetQuestDistanceWithItem(questID)
+				if distance and distance <= closestDistance then
+					closestDistance = distance
+					closestQuestItemLink = itemLink
 				end
 			end
 		end
 	end
 
-	return closestQuestLink, closestQuestTexture, numItems
+	return closestQuestItemLink
 end
 
-local ticker
-local function updateTicker()
-	ExtraQuestButton:Update()
+function ExtraQuestButton:GetItemLink()
+	return self.itemLink
 end
 
 function ExtraQuestButton:Update()
 	if HasExtraActionBar() or self.locked then return end
 
-	local itemLink, texture, numItems = GetClosestQuestItem()
-	if itemLink then
-		self:SetItem(itemLink, texture)
+	local itemLink = GetClosestQuestItem()
+	if itemLink and itemLink ~= self:GetItemLink() then
+		self:SetItem(itemLink)
 	elseif self:IsShown() then
 		self:RemoveItem()
-	end
-
-	if numItems > 0 and not ticker then
-		ticker = C_Timer_NewTicker(30, updateTicker) -- might want to lower this
-	elseif numItems == 0 and ticker then
-		ticker:Cancel()
-		ticker = nil
 	end
 end
