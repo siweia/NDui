@@ -935,7 +935,7 @@ function UF:ResizePlayerPlate()
 			local size = (barWidth - 10)/6
 			for i = 1, 6 do
 				local dice = plate.dices[i]
-				dice:SetSize(size, size)
+				dice:SetSize(size, size/2)
 				if i == 1 then
 					dice:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, offset)
 				end

@@ -14,14 +14,19 @@ local diceSpells = {
 }
 
 function A:PostCreateLumos(self)
+	local tex1, tex2, tex3, tex4 = unpack(DB.TexCoord)
+	tex3 = tex3 + 1/4
+	tex4 = tex4 - 1/4
+
 	local iconSize = (self:GetWidth() - 10)/6
 	local buttons = {}
 	local offset = NDuiDB["Nameplate"]["NameplateClassPower"] and C.margin or (C.margin*2 + NDuiDB["Nameplate"]["PPBarHeight"])
 	for i = 1, 6 do
 		local bu = CreateFrame("Frame", nil, self.Health)
-		bu:SetSize(iconSize, iconSize)
+		bu:SetSize(iconSize, iconSize/2)
 		bu.Text = B.CreateFS(bu, 12, diceSpells[i].text, false, "TOP", 1, 12)
 		B.AuraIcon(bu)
+		bu.Icon:SetTexCoord(tex1, tex2, tex3, tex4)
 		if i == 1 then
 			bu:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, offset)
 		else
