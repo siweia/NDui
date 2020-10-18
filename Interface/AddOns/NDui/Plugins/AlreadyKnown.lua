@@ -112,7 +112,7 @@ local function Hook_UpdateAuctionHouse(self)
 				if button.rowData.itemKey.itemID == 82800 then -- BattlePet
 					itemLink = format("|Hbattlepet:%d::::::|h[Dummy]|h", button.rowData.itemKey.battlePetSpeciesID)
 				else -- Normal item
-					itemLink = format("item:%d", button.rowData.itemKey.itemID)
+					itemLink = format("|Hitem:%d", button.rowData.itemKey.itemID)
 				end
 
 				if itemLink and IsAlreadyKnown(itemLink) then
