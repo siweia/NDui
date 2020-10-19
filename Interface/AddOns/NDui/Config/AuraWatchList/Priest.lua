@@ -10,8 +10,6 @@ local list = {
 		{AuraID = 121557, UnitID = "player"},	-- 天堂之羽
 		{AuraID = 194022, UnitID = "player"},	-- 意志坚定
 		{AuraID = 214121, UnitID = "player"},	-- 身心合一
-		{AuraID = 17, UnitID = "player", Caster = "player"},		-- 真言术：盾
-		{AuraID = 194384, UnitID = "player", Caster = "player"},	-- 救赎
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 139, UnitID = "target", Caster = "player"},		-- 恢复
@@ -41,6 +39,8 @@ local list = {
 		{AuraID = 271466, UnitID = "target", Caster = "player", Value = true},	-- 微光屏障
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
+		{AuraID = 17, UnitID = "player", Caster = "player"},	-- 真言术：盾
+		{AuraID = 194384, UnitID = "player", Caster = "player"},	-- 救赎
 		{AuraID = 27827, UnitID = "player"},	-- 救赎之魂
 		{AuraID = 10060, UnitID = "player"},	-- 能量灌注
 		{AuraID = 47536, UnitID = "player"},	-- 全神贯注
