@@ -238,13 +238,9 @@ function Bar:StyleActionButton(button, cfg)
 		end
 	end
 	if hotkey then
-		if NDuiDB["Actionbar"]["Hotkeys"] then
-			hotkey:SetParent(overlay)
-			Bar:HookHotKey(button)
-			SetupFontString(hotkey, cfg.hotkey)
-		else
-			hotkey:Hide()
-		end
+		hotkey:SetParent(overlay)
+		Bar:HookHotKey(button)
+		SetupFontString(hotkey, cfg.hotkey)
 	end
 	if name then
 		if NDuiDB["Actionbar"]["Macro"] then
@@ -301,14 +297,12 @@ function Bar:StyleExtraActionButton(cfg)
 	--hotkey, count
 	local overlay = CreateFrame("Frame", nil, button)
 	overlay:SetAllPoints()
-	if NDuiDB["Actionbar"]["Hotkeys"] then
-		hotkey:SetParent(overlay)
-		Bar:HookHotKey(button)
-		cfg.hotkey.font = {DB.Font[1], 13, DB.Font[3]}
-		SetupFontString(hotkey, cfg.hotkey)
-	else
-		hotkey:Hide()
-	end
+
+	hotkey:SetParent(overlay)
+	Bar:HookHotKey(button)
+	cfg.hotkey.font = {DB.Font[1], 13, DB.Font[3]}
+	SetupFontString(hotkey, cfg.hotkey)
+
 	if NDuiDB["Actionbar"]["Count"] then
 		count:SetParent(overlay)
 		cfg.count.font = {DB.Font[1], 16, DB.Font[3]}
@@ -449,8 +443,6 @@ function Bar:ReskinBars()
 
 	-- Update hotkeys
 	hooksecurefunc("PetActionButton_SetHotkeys", Bar.UpdateHotKey)
-	if NDuiDB["Actionbar"]["Hotkeys"] then
-		Bar:UpdateStanceHotKey()
-		B:RegisterEvent("UPDATE_BINDINGS", Bar.UpdateStanceHotKey)
-	end
+	Bar:UpdateStanceHotKey()
+	B:RegisterEvent("UPDATE_BINDINGS", Bar.UpdateStanceHotKey)
 end

@@ -485,6 +485,15 @@ local function updateCustomBar()
 	B:GetModule("Actionbar"):UpdateCustomBar()
 end
 
+local function updateHotkeys()
+	local Bar = B:GetModule("Actionbar")
+	for _, button in pairs(Bar.buttons) do
+		if button.UpdateHotkeys then
+			button:UpdateHotkeys()
+		end
+	end
+end
+
 local function updateBuffFrame()
 	local A = B:GetModule("Auras")
 	A:UpdateOptions()
@@ -729,7 +738,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*"},
 		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
 		{},--blank
-		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"]},
+		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
 		{1, "Actionbar", "Count", L["Actionbar Item Counts"]},
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
