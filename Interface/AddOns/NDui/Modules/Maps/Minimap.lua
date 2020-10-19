@@ -50,6 +50,7 @@ function module:CreatePulse()
 end
 
 local function ToggleLandingPage(_, ...)
+	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	if not C_Garrison.HasGarrison(...) then return end
 	ShowGarrisonLandingPage(...)
 end
