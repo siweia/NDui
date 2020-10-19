@@ -674,3 +674,4 @@ L["BagSortMode"] = "Тип сортировки сумок"
 L["BagSortDisabled"] = "Сортировка сумок выключена."
 L["Forward"] = "Вперёд"
 L["Backward"] = "Назад"
+L["SwitchGarrisonType"] = "Right click to switch garrisons" -- need translation
