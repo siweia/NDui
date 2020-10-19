@@ -24,7 +24,7 @@ function S:PGFSkin()
 	hooksecurefunc(PremadeGroupsFilterDialog, "SetPoint", function(self, _, parent)
 		if parent ~= LFGListFrame then
 			self:ClearAllPoints()
-			self:SetPoint("TOPLEFT", LFGListFrame, "TOPRIGHT", 5, C.mult)
+			self:SetPoint("TOPLEFT", LFGListFrame, "TOPRIGHT", 5, 0)
 		end
 	end)
 
