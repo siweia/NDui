@@ -9,7 +9,6 @@
 ## SavedVariables: NDuiADB
 ## SavedVariablesPerCharacter: NDuiDB
 
-TaintLess.xml
 Init.lua
 Locales\Locales.xml
 Core\Core.xml
