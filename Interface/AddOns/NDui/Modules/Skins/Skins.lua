@@ -142,7 +142,7 @@ end
 
 function S:LoadWithAddOn(addonName, value, func)
 	local function loadFunc(event, addon)
-		if value and not NDuiDB["Skins"][value] then return end
+		if not NDuiDB["Skins"][value] then return end
 
 		if event == "PLAYER_ENTERING_WORLD" then
 			B:UnregisterEvent(event, loadFunc)
