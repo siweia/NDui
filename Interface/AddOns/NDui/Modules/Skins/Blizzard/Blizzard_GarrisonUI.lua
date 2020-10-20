@@ -1007,10 +1007,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 
 		C_Timer.After(.1, function()
-			print(1)
 			local WarPlanFrame = _G.WarPlanFrame
 			if not WarPlanFrame then return end
-			print(12)
 
 			B.StripTextures(WarPlanFrame)
 			B.SetBD(WarPlanFrame)
