@@ -489,7 +489,7 @@ local function updateHotkeys()
 	local Bar = B:GetModule("Actionbar")
 	for _, button in pairs(Bar.buttons) do
 		if button.UpdateHotkeys then
-			button:UpdateHotkeys()
+			button:UpdateHotkeys(button.buttonType)
 		end
 	end
 end
