@@ -997,6 +997,47 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			f:UnregisterEvent(event)
 		end
 	end)
+
+	-- WarPlan
+	if IsAddOnLoaded("WarPlan") then
+		local function reskinWarPlanFont(font, r, g, b)
+			if not NDuiDB["Skins"]["FontOutline"] then return end
+			if not font then return end
+			font:SetTextColor(r, g, b)
+		end
+
+		C_Timer.After(.1, function()
+			print(1)
+			local WarPlanFrame = _G.WarPlanFrame
+			if not WarPlanFrame then return end
+			print(12)
+
+			B.StripTextures(WarPlanFrame)
+			B.SetBD(WarPlanFrame)
+			B.StripTextures(WarPlanFrame.ArtFrame)
+			B.ReskinClose(WarPlanFrame.ArtFrame.CloseButton)
+			reskinWarPlanFont(WarPlanFrame.ArtFrame.TitleText, 1, .8, 0)
+
+			local missions = WarPlanFrame.TaskBoard.Missions
+			for i = 1, #missions do
+				local button = missions[i]
+				reskinWarPlanFont(button.XPReward, 1, 1, 1)
+				reskinWarPlanFont(button.Description, .8, .8, .8)
+				reskinWarPlanFont(button.CDTDisplay, 1, 1, 1)
+
+				local groups = button.Groups
+				if groups then
+					for j = 1, #groups do
+						local group = groups[j]
+						B.Reskin(group)
+						reskinWarPlanFont(group.Features, 1, .8, 0)
+					end
+				end
+			end
+
+			B.Reskin(WarPlanFrame.TaskBoard.AllPurposeButton)
+		end)
+	end
 end
 
 C.themes["Blizzard_OrderHallUI"] = function()
