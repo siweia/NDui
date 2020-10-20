@@ -458,8 +458,10 @@ function ExtraQuestButton:Update()
 	if HasExtraActionBar() or self.locked then return end
 
 	local itemLink = GetClosestQuestItem()
-	if itemLink and itemLink ~= self:GetItemLink() then
-		self:SetItem(itemLink)
+	if itemLink then
+		if itemLink ~= self:GetItemLink() then
+			self:SetItem(itemLink)
+		end
 	elseif self:IsShown() then
 		self:RemoveItem()
 	end
