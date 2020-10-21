@@ -10,7 +10,7 @@ local GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown = GetIns
 local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
 local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
-local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
+local IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax = IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetSpellCooldown, GetTime = GetSpellCooldown, GetTime
@@ -171,6 +171,8 @@ function UF:UpdateColor(_, unit)
 	local insecureColor = NDuiDB["Nameplate"]["InsecureColor"]
 	local revertThreat = NDuiDB["Nameplate"]["DPSRevertThreat"]
 	local offTankColor = NDuiDB["Nameplate"]["OffTankColor"]
+	local executeRatio = NDuiDB["Nameplate"]["ExecuteRatio"]
+	local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
@@ -230,6 +232,12 @@ function UF:UpdateColor(_, unit)
 		end
 	else
 		self.ThreatIndicator:Hide()
+	end
+
+	if executeRatio > 0 and healthPerc <= executeRatio then
+		self.nameText:SetTextColor(1, 0, 0)
+	else
+		self.nameText:SetTextColor(1, 1, 1)
 	end
 end
 

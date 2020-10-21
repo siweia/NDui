@@ -675,3 +675,5 @@ L["BagSortDisabled"] = "Сортировка сумок выключена."
 L["Forward"] = "Вперёд"
 L["Backward"] = "Назад"
 L["SwitchGarrisonType"] = "Right click to switch garrisons" -- need translation
+L["ExecuteRatio"] = "Unit Execute Ratio" -- need translation
+L["ExecuteRatioTip"] = "|nIf unit health percentage lower than the execute cap you set, its nametext color turns into red.|nThe execute indicator would be disabled on 0." -- need translation
