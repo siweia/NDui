@@ -1016,6 +1016,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			B.ReskinClose(WarPlanFrame.ArtFrame.CloseButton)
 			reskinWarPlanFont(WarPlanFrame.ArtFrame.TitleText, 1, .8, 0)
 
+			B.Reskin(WarPlanFrame.TaskBoard.AllPurposeButton)
 			local missions = WarPlanFrame.TaskBoard.Missions
 			for i = 1, #missions do
 				local button = missions[i]
@@ -1033,7 +1034,14 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				end
 			end
 
-			B.Reskin(WarPlanFrame.TaskBoard.AllPurposeButton)
+			local entries = WarPlanFrame.HistoryFrame.Entries
+			for i = 1, #entries do
+				local entry = entries[i]
+				entry:DisableDrawLayer("BACKGROUND")
+				B.ReskinIcon(entry.Icon)
+				entry.Name:SetFontObject("Number12Font")
+				entry.Detail:SetFontObject("Number12Font")
+			end
 		end)
 	end
 end
