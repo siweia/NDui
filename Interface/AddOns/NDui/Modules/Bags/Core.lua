@@ -11,6 +11,7 @@ local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetConta
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
+local IsCosmeticItem = IsCosmeticItem
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 
@@ -725,8 +726,11 @@ function module:OnLogin()
 
 	local function GetIconOverlayAtlas(item)
 		if not item.link then return end
+
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			return "AzeriteIconFrame"
+		elseif IsCosmeticItem and IsCosmeticItem(item.link) then
+			return "CosmeticIconFrame"
 		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
 			return "ConduitIconFrame", "ConduitIconFrame-Corners"
 		end
@@ -764,7 +768,7 @@ function module:OnLogin()
 
 		if NDuiDB["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
 			local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level < NDuiDB["Bags"]["iLvlToShow"] then level = "" end
+			if level <= NDuiDB["Bags"]["iLvlToShow"] then level = "" end
 			local color = DB.QualityColors[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
