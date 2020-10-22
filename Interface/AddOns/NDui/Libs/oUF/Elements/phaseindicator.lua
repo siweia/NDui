@@ -42,19 +42,20 @@ Used to populate the tooltip when the widget is hovered.
 * self - the PhaseIndicator widget
 --]]
 local function UpdateTooltip(element)
-	local unit = element.__owner.unit
-	local reason = UnitPhaseReason(unit)
-	local text = reason and PartyUtil.GetPhasedReasonString(reason, unit) or ''
-
-	GameTooltip:SetText(text, nil, nil, nil, nil, true)
-	GameTooltip:Show()
+	local text = PartyUtil.GetPhasedReasonString(element.reason, element.__owner.unit)
+	if(text) then
+		GameTooltip:SetText(text, nil, nil, nil, nil, true)
+		GameTooltip:Show()
+	end
 end
 
 local function onEnter(element)
 	if(not element:IsVisible()) then return end
 
-	GameTooltip:SetOwner(element, 'ANCHOR_BOTTOMRIGHT')
-	element:UpdateTooltip()
+	if(element.reason) then
+		GameTooltip:SetOwner(element, 'ANCHOR_BOTTOMRIGHT')
+		element:UpdateTooltip()
+	end
 end
 
 local function onLeave()
@@ -75,21 +76,26 @@ local function Update(self, event, unit)
 		element:PreUpdate()
 	end
 
-	local isInSamePhase = not UnitPhaseReason(unit)
-	if(not isInSamePhase and UnitIsPlayer(unit) and UnitIsConnected(unit)) then
+	-- BUG: UnitPhaseReason returns wrong data for friendly NPCs in phased scenarios like WM or Chromie Time
+	-- https://github.com/Stanzilla/WoWUIBugs/issues/49
+	local phaseReason = UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitPhaseReason(unit) or nil
+	if(phaseReason) then
 		element:Show()
 	else
 		element:Hide()
 	end
 
-	--[[ Callback: PhaseIndicator:PostUpdate(isInSamePhase)
+	element.reason = phaseReason
+
+	--[[ Callback: PhaseIndicator:PostUpdate(isInSamePhase, phaseReason)
 	Called after the element has been updated.
 
 	* self          - the PhaseIndicator element
 	* isInSamePhase - indicates whether the unit is in the same phase as the player (boolean)
+	* phaseReason   - the reason why the unit is in a different phase (number?)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(isInSamePhase)
+		return element:PostUpdate(not phaseReason, phaseReason)
 	end
 end
 
