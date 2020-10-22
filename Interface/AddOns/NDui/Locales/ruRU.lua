@@ -678,3 +678,4 @@ L["SwitchGarrisonType"] = "Right click to switch garrisons" -- need translation
 L["ExecuteRatio"] = "Unit Execute Ratio" -- need translation
 L["ExecuteRatioTip"] = "|nIf unit health percentage lower than the execute cap you set, its nametext color turns into red.|nThe execute indicator would be disabled on 0." -- need translation
 L["FCTFontSize"] = "CombatText font size" -- need translation
+L["AutoDepositTip"] = "|nLeft click to deposit reagents, right click to switch auto deposit.|nIf the button border shown, the reagents from your bags would auto deposit once you open your BankFrame." -- need translation

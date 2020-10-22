@@ -154,12 +154,35 @@ function module:CreateBankButton(f)
 	return bu
 end
 
+local function updateDepositButtonStatus(bu)
+	if NDuiDB["Bags"]["AutoDeposit"] then
+		bu.bg:SetBackdropBorderColor(1, .8, 0)
+	else
+		bu.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
+function module:AutoDeposit()
+	if NDuiDB["Bags"]["AutoDeposit"] then
+		DepositReagentBank()
+	end
+end
+
 function module:CreateDepositButton()
 	local bu = B.CreateButton(self, 24, 24, true, "Atlas:GreenCross")
 	bu.Icon:SetOutside()
-	bu:SetScript("OnClick", DepositReagentBank)
+	bu:RegisterForClicks("AnyUp")
+	bu:SetScript("OnClick", function(_, btn)
+		if btn == "RightButton" then
+			NDuiDB["Bags"]["AutoDeposit"] = not NDuiDB["Bags"]["AutoDeposit"]
+			updateDepositButtonStatus(bu)
+		else
+			DepositReagentBank()
+		end
+	end)
 	bu.title = REAGENTBANK_DEPOSIT
-	B.AddTooltip(bu, "ANCHOR_TOP")
+	B.AddTooltip(bu, "ANCHOR_TOP", DB.InfoColor..L["AutoDepositTip"])
+	updateDepositButtonStatus(bu)
 
 	return bu
 end
@@ -940,6 +963,7 @@ function module:OnLogin()
 
 	B:RegisterEvent("TRADE_SHOW", module.OpenBags)
 	B:RegisterEvent("TRADE_CLOSED", module.CloseBags)
+	B:RegisterEvent("BANKFRAME_OPENED", module.AutoDeposit)
 
 	-- Fixes
 	BankFrame.GetRight = function() return f.bank:GetRight() end

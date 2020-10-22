@@ -57,6 +57,7 @@ G.DefaultSettings = {
 		SplitCount = 1,
 		SpecialBagsColor = false,
 		iLvlToShow = 1,
+		AutoDeposit = false,
 
 		FilterJunk = true,
 		FilterConsumable = true,
