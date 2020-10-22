@@ -94,9 +94,11 @@ end
 C.themes["Blizzard_CovenantSanctum"] = function()
 	local CovenantSanctumFrame = CovenantSanctumFrame
 
-	B.ReskinTab(CovenantSanctumFrameTab1)
-	B.ReskinTab(CovenantSanctumFrameTab2)
-	CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
+	if not DB.isNewPatch then
+		B.ReskinTab(CovenantSanctumFrameTab1)
+		B.ReskinTab(CovenantSanctumFrameTab2)
+		CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
+	end
 
 	CovenantSanctumFrame:HookScript("OnShow", function(self)
 		if not self.bg then
@@ -126,7 +128,31 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 			B.Reskin(talentsList.UpgradeButton)
 			hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
 
-			hooksecurefunc(self.RenownTab, "Refresh", hideRenownLevelBorder)
+			if not DB.isNewPatch then
+				hooksecurefunc(self.RenownTab, "Refresh", hideRenownLevelBorder)
+			end
+		end
+	end)
+end
+
+-- Covenant renown
+C.themes["Blizzard_CovenantRenown"] = function()
+	local CovenantRenownFrame = CovenantRenownFrame
+
+	B.SetBD(CovenantRenownFrame)
+	B.ReskinClose(CovenantRenownFrame.CloseButton)
+
+	hooksecurefunc(CovenantRenownFrame, "SetUpTextureKits", function(self)
+		B.StripTextures(self)
+		self.CloseButton.Border:Hide()
+	end)
+
+	hooksecurefunc(CovenantRenownFrame.TrackFrame, "Init", function(self)
+		for _, element in next, self.Elements do
+			if not element.styled then
+				element.LevelBorder:SetAlpha(0)
+				element.styled = true
+			end
 		end
 	end)
 end
