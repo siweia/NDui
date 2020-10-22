@@ -329,8 +329,8 @@ function module:OnLogin()
 	-- Lock chatframe
 	if NDuiDB["Chat"]["Lock"] then
 		hooksecurefunc("FCF_SavePositionAndDimensions", self.UpdateChatSize)
-		self:UpdateChatSize()
 		B:RegisterEvent("UI_SCALE_CHANGED", self.UpdateChatSize)
+		self:UpdateChatSize()
 	end
 
 	-- ProfanityFilter
