@@ -1208,10 +1208,6 @@ function UF:CreateFCT(self)
 
 	fcf.font = DB.Font[1]
 	fcf.fontFlags = DB.Font[3]
-	fcf.showPets = NDuiDB["UFs"]["PetCombatText"]
-	fcf.showHots = NDuiDB["UFs"]["HotsDots"]
-	fcf.showAutoAttack = NDuiDB["UFs"]["AutoAttack"]
-	fcf.showOverHealing = NDuiDB["UFs"]["FCTOverHealing"]
 	fcf.abbreviateNumbers = true
 	self.FloatingCombatFeedback = fcf
 

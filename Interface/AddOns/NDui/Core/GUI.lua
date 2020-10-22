@@ -784,11 +784,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "SmoothAmount", "|cff00cc4c"..L["SmoothAmount"].."*", true, {.15, .6, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
 		{},--blank
 		{1, "UFs", "CombatText", "|cff00cc4c"..L["UFs CombatText"]},
-		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"]},
-		{1, "UFs", "PetCombatText", L["CombatText ShowPets"], true},
-		{1, "UFs", "HotsDots", L["CombatText HotsDots"]},
-		{1, "UFs", "FCTOverHealing", L["CombatText OverHealing"]},
-		{3, "UFs", "FCTFontSize", L["FCTFontSize"].."*", true, {15, 40, 1}},
+		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"].."*"},
+		{1, "UFs", "PetCombatText", L["CombatText ShowPets"].."*", true},
+		{1, "UFs", "HotsDots", L["CombatText HotsDots"].."*"},
+		{1, "UFs", "FCTOverHealing", L["CombatText OverHealing"].."*"},
+		{3, "UFs", "FCTFontSize", L["FCTFontSize"].."*", true, {12, 40, 1}},
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", "|cff00cc4c"..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
