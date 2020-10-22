@@ -226,6 +226,7 @@ DB.ReminderBuffs = {
 				[8679] = true,		-- 致伤药膏
 				[315584] = true,	-- 速效药膏
 			},
+			depend = 315584,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -234,6 +235,7 @@ DB.ReminderBuffs = {
 				[3408] = true,		-- 减速药膏
 				[5761] = true,		-- 迟钝药膏
 			},
+			depend = 3408,
 			pvp = true,
 		},
 	},
