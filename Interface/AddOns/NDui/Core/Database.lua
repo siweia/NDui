@@ -226,6 +226,7 @@ DB.ReminderBuffs = {
 				[8679] = true,		-- 致伤药膏
 				[315584] = true,	-- 速效药膏
 			},
+			texture = 132273,
 			depend = 315584,
 			combat = true,
 			instance = true,
