@@ -12,8 +12,8 @@ local channelingTicks = {
 	[755] = 3,		-- 生命通道
 	[5143] = 5, 	-- 奥术飞弹
 	[12051] = 3, 	-- 唤醒
-	[15407] = 4,	-- 精神鞭笞
-	[47758] = 3,	-- 苦修
+	[15407] = 6,	-- 精神鞭笞
+	[47757] = 3,	-- 苦修
 	[64843] = 4,	-- 神圣赞美诗
 	[198590] = 5,	-- 吸取灵魂
 	[205021] = 5,	-- 冰霜射线
@@ -25,7 +25,7 @@ local channelingTicks = {
 }
 
 if DB.MyClass == "PRIEST" then
-	local penanceID = 47758
+	local penanceID = 47757
 	local function updateTicks()
 		local numTicks = 3
 		if IsPlayerSpell(193134) then numTicks = 4 end
