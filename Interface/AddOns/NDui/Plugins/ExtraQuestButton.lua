@@ -57,6 +57,7 @@ local inaccurateQuestAreas = {
 	[49864] = true, -- anywhere
 	[25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
+	[34461] = 590, -- Horde Garrison
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
