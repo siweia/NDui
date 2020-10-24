@@ -290,7 +290,7 @@ G.DefaultSettings = {
 		HideRealm = false,
 		HideTitle = false,
 		HideJunkGuild = true,
-		AzeriteArmor = false,
+		AzeriteArmor = true,
 		OnlyArmorIcons = false,
 		ConduitInfo = true,
 	},
