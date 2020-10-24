@@ -292,6 +292,7 @@ G.DefaultSettings = {
 		HideJunkGuild = true,
 		AzeriteArmor = false,
 		OnlyArmorIcons = false,
+		ConduitInfo = true,
 	},
 	Misc = {
 		Mail = true,
@@ -1009,6 +1010,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Tooltip", "AzeriteArmor", "|cff00cc4c"..L["Show AzeriteArmor"]},
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
+		{1, "Tooltip", "ConduitInfo", "|cff00cc4c"..L["Show ConduitInfo"]},
 	},
 	[13] = {
 		{1, "Misc", "ItemLevel", "|cff00cc4c"..L["Show ItemLevel"]},
