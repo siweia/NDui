@@ -315,6 +315,7 @@ function module:OnLogin()
 
 	-- Default
 	SetCVar("chatStyle", "classic")
+	SetCVar("whisperMode", "inline") -- blizz reset this on NPE
 	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
