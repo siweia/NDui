@@ -62,11 +62,10 @@ tinsert(C.defaultThemes, function()
 			frame.NameBorderLeft:Hide()
 			frame.NameBorderRight:Hide()
 			frame.NameBorderMid:Hide()
-			frame.IconBorder:Hide()
-
 			frame.WinnerRoll:SetTextColor(.9, .9, .9)
 
 			frame.bg = B.ReskinIcon(frame.Icon)
+			B.ReskinIconBorder(frame.IconBorder)
 
 			B.ReskinCollapse(frame.ToggleButton)
 			frame.ToggleButton:GetNormalTexture():SetAlpha(0)
@@ -83,8 +82,6 @@ tinsert(C.defaultThemes, function()
 				frame.WinnerName:SetVertexColor(color.r, color.g, color.b)
 			end
 		end
-
-		frame.bg:SetBackdropBorderColor(frame.IconBorder:GetVertexColor())
 	end)
 
 	-- [[ Player frame ]]
