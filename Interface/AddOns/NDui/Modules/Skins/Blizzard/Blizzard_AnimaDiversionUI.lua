@@ -16,8 +16,13 @@ C.themes["Blizzard_AnimaDiversionUI"] = function()
 	B.SetBD(frame)
 	B.ReskinClose(frame.CloseButton)
 	frame.AnimaDiversionCurrencyFrame.Background:SetAlpha(0)
-	if not DB.isNewPatch then
-		B.ReskinIcon(frame.AnimaDiversionCurrencyFrame.CurrencyFrame.CurrencyIcon)
+
+	local currencyFrame = frame.AnimaDiversionCurrencyFrame.CurrencyFrame
+	if DB.isNewPatch then
+		replaceIconString(currencyFrame.Quantity)
+		hooksecurefunc(currencyFrame.Quantity, "SetText", replaceIconString)
+	else
+		B.ReskinIcon(currencyFrame.CurrencyIcon)
 	end
 
 	local infoFrame = frame.SelectPinInfoFrame
