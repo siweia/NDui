@@ -79,8 +79,6 @@ function module:UpdateMapID()
 end
 
 function module:SetupCoords()
-	if not NDuiDB["Map"]["Coord"] then return end
-
 	playerCoords = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
 	cursorCoords = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
@@ -121,7 +119,9 @@ function module:WorldMapScale()
 	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
 end
 
-function module:OnLogin()
+function module:SetupWorldMap()
+	if NDuiDB["Map"]["DisableMap"] then return end
+
 	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()
 	WorldMapFrame:SetPoint("CENTER") -- init anchor
@@ -132,6 +132,10 @@ function module:OnLogin()
 
 	self:WorldMapScale()
 	self:SetupCoords()
-	self:SetupMinimap()
 	self:MapReveal()
+end
+
+function module:OnLogin()
+	self:SetupWorldMap()
+	self:SetupMinimap()
 end

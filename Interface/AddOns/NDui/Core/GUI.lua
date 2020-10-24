@@ -198,7 +198,7 @@ G.DefaultSettings = {
 		ChatBGType = 2,
 	},
 	Map = {
-		Coord = true,
+		DisableMap = false,
 		Clock = false,
 		CombatPulse = true,
 		MapScale = 1,
@@ -954,16 +954,15 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", true, nil, updateWhisperList},
 	},
 	[10] = {
-		{1, "Map", "Coord", L["Map Coords"]},
+		{1, "Map", "DisableMap", "|cffff0000"..L["DisableMap"], nil, nil, nil, L["DisableMapTip"]},
+		{3, "Map", "MapScale", L["Map Scale"], false, {1, 2, .1}},
 		{},--blank
 		{1, "Map", "Calendar", L["MinimapCalendar"].."*", nil, nil, showCalendar, L["MinimapCalendarTip"]},
 		{1, "Map", "Clock", L["Minimap Clock"].."*", true, nil, showMinimapClock},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
-		{1, "Misc", "ExpRep", L["Show Expbar"], true},
-		{},--blank
-		{3, "Map", "MapScale", L["Map Scale"], false, {1, 2, .1}},
+		{1, "Misc", "ExpRep", L["Show Expbar"]},
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", true, {1, 2, .1}, updateMinimapScale},
 	},
 	[11] = {
