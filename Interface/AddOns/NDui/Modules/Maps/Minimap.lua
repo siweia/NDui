@@ -51,7 +51,10 @@ end
 
 local function ToggleLandingPage(_, ...)
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-	if not C_Garrison.HasGarrison(...) then return end
+	if not C_Garrison.HasGarrison(...) then
+		UIErrorsFrame:AddMessage(DB.InfoColor..CONTRIBUTION_TOOLTIP_UNLOCKED_WHEN_ACTIVE)
+		return
+	end
 	ShowGarrisonLandingPage(...)
 end
 
@@ -73,12 +76,12 @@ function module:ReskinRegions()
 
 	local menuFrame = CreateFrame("Frame", "NDuiGarrisonTypeMenu", GarrisonLandingPageMinimapButton, "UIDropDownMenuTemplate")
 	local menuList = {
-		{text =	GARRISON_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_6_0, notCheckable = true},
-		{text =	ORDER_HALL_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_7_0, notCheckable = true},
-		{text =	WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_8_0, notCheckable = true},
 		{text =	GARRISON_TYPE_9_0_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_9_0, notCheckable = true},
+		{text =	WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_8_0, notCheckable = true},
+		{text =	ORDER_HALL_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_7_0, notCheckable = true},
+		{text =	GARRISON_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_6_0, notCheckable = true},
 	}
-	GarrisonLandingPageMinimapButton:HookScript("OnMouseUp", function(self, btn)
+	GarrisonLandingPageMinimapButton:HookScript("OnMouseDown", function(self, btn)
 		if btn == "RightButton" then
 			HideUIPanel(GarrisonLandingPage)
 			EasyMenu(menuList, menuFrame, self, -80, 0, "MENU", 1)
