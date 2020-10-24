@@ -310,6 +310,12 @@ function UF:UpdateTextScale()
 			frame.nameText:SetScale(scale)
 			frame.healthValue:SetScale(scale)
 			if frame.powerText then frame.powerText:SetScale(scale) end
+			local castbar = frame.Castbar
+			if castbar then
+				castbar.Text:SetScale(scale)
+				castbar.Time:SetScale(scale)
+				if castbar.Lag then  castbar.Lag:SetScale(scale) end
+			end
 		end
 	end
 end
@@ -482,7 +488,9 @@ function UF:CreateCastBar(self)
 		cb.SafeZone = safe
 
 		if NDuiDB["UFs"]["LagString"] then
-			local lag = B.CreateFS(cb, 10, "", false, "CENTER", -6, 17)
+			local lag = B.CreateFS(cb, 10)
+			lag:ClearAllPoints()
+			lag:SetPoint("BOTTOM", cb, "TOP", 0, 2)
 			cb.Lag = lag
 			self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
 		end
