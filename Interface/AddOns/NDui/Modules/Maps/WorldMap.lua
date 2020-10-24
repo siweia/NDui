@@ -126,6 +126,10 @@ function module:SetupWorldMap()
 	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
 	tinsert(UISpecialFrames, "WorldMapFrame")
 
+	-- Hide stuff
+	WorldMapFrame.BlackoutFrame:SetAlpha(0)
+	WorldMapFrame.BlackoutFrame:EnableMouse(false)
+
 	self:WorldMapScale()
 	self:SetupCoords()
 	self:MapReveal()
