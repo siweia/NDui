@@ -259,21 +259,19 @@ end
 
 -- Tab colors
 function module:UpdateTabColors(selected)
-	if self.glow:IsShown() then
-		self.Text:SetTextColor(.5, .5, .5)
-		if self.whisperIndex == 1 then
-			self.glow:SetVertexColor(1, .5, 1)
-		elseif self.whisperIndex == 2 then
-			self.glow:SetVertexColor(0, 1, .96)
-		else
-			self.glow:SetVertexColor(1, .8, 0)
-		end
-	elseif selected then
+	if selected then
 		self.Text:SetTextColor(1, .8, 0)
 		self.whisperIndex = 0
 	else
 		self.Text:SetTextColor(.5, .5, .5)
-		self.whisperIndex = 0
+	end
+
+	if self.whisperIndex == 1 then
+		self.glow:SetVertexColor(1, .5, 1)
+	elseif self.whisperIndex == 2 then
+		self.glow:SetVertexColor(0, 1, .96)
+	else
+		self.glow:SetVertexColor(1, .8, 0)
 	end
 end
 
