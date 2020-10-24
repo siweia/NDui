@@ -91,8 +91,8 @@ function module:SetupCoords()
 end
 
 function module:UpdateMapScale()
-	if self.isMaximized and self:GetScale() ~= 1 then
-		self:SetScale(1)
+	if self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MaxMapScale"] then
+		self:SetScale(NDuiDB["Map"]["MaxMapScale"])
 	elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then
 		self:SetScale(NDuiDB["Map"]["MapScale"])
 	end
@@ -100,7 +100,7 @@ end
 
 function module:UpdateMapAnchor()
 	module.UpdateMapScale(self)
-	if not self.isMaximized then B.RestoreMF(self) end
+	B.RestoreMF(self)
 end
 
 function module:WorldMapScale()

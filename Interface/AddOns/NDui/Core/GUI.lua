@@ -202,6 +202,7 @@ G.DefaultSettings = {
 		Clock = false,
 		CombatPulse = true,
 		MapScale = 1,
+		MaxMapScale = 1,
 		MinimapScale = 1.4,
 		ShowRecycleBin = true,
 		WhoPings = true,
@@ -956,6 +957,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[10] = {
 		{1, "Map", "DisableMap", "|cffff0000"..L["DisableMap"], nil, nil, nil, L["DisableMapTip"]},
 		{3, "Map", "MapScale", L["Map Scale"].."*", false, {.8, 2, .1}},
+		{3, "Map", "MaxMapScale", L["Maximize Map Scale"].."*", true, {.5, 1, .1}},
 		{},--blank
 		{1, "Map", "Calendar", L["MinimapCalendar"].."*", nil, nil, showCalendar, L["MinimapCalendarTip"]},
 		{1, "Map", "Clock", L["Minimap Clock"].."*", true, nil, showMinimapClock},
