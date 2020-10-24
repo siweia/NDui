@@ -11,7 +11,7 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
-local currentMapID, playerCoords, cursorCoords, mapScale
+local currentMapID, playerCoords, cursorCoords
 
 function module:GetPlayerMapPos(mapID)
 	tempVec2D.x, tempVec2D.y = UnitPosition("player")
@@ -93,8 +93,8 @@ end
 function module:UpdateMapScale()
 	if self.isMaximized and self:GetScale() ~= 1 then
 		self:SetScale(1)
-	elseif not self.isMaximized and self:GetScale() ~= mapScale then
-		self:SetScale(mapScale)
+	elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then
+		self:SetScale(NDuiDB["Map"]["MapScale"])
 	end
 end
 
@@ -104,15 +104,11 @@ function module:UpdateMapAnchor()
 end
 
 function module:WorldMapScale()
-	mapScale = NDuiDB["Map"]["MapScale"]
-
 	-- Fix worldmap cursor when scaling
-	if mapScale > 1 then
-		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-			local scale = WorldMapFrame:GetScale()
-			return x / scale, y / scale
-		end
+	WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+		local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+		local scale = WorldMapFrame:GetScale()
+		return x / scale, y / scale
 	end
 
 	B.CreateMF(WorldMapFrame, nil, true)
