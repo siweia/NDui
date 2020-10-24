@@ -679,6 +679,6 @@ L["FCTFontSize"] = "CombatText font size" -- need translation
 L["AutoDepositTip"] = "|nLeft click to deposit reagents, right click to switch auto deposit.|nIf the button border shown, the reagents from your bags would auto deposit once you open your BankFrame." -- need translation
 L["Show ConduitInfo"] = "Collected conduit info" -- need translation
 L["DisableMap"] = "Disable enhanced Worldmap" -- need translation
-L["DisableMapTip"] = "|nIf disabled, the map coords, scale, mover and map fog reveal will all be disabled." -- need translation
+L["DisableMapTip"] = "|nIf disabled, the map coords, scale, mover and map fog reveal will all be disabled.|nIf you have addon LeatrixMaps or Mapster enabled, the enhanced worldmap would turn off automatically." -- need translation
 L["Map Scale"] = "Minimize map scale" -- need translation
 L["Maximize Map Scale"] = "Maximize map scale" -- need translation

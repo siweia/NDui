@@ -117,6 +117,8 @@ end
 
 function module:SetupWorldMap()
 	if NDuiDB["Map"]["DisableMap"] then return end
+	if IsAddOnLoaded("Mapster") then return end
+	if IsAddOnLoaded("Leatrix_Maps") then return end
 
 	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()
