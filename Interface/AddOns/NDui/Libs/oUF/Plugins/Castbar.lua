@@ -9,27 +9,34 @@ local CastbarFailColor = {1, .1, 0}
 
 local channelingTicks = {
 	[740] = 4,		-- 宁静
-	[755] = 3,		-- 生命通道
-	[5143] = 5, 	-- 奥术飞弹
-	[12051] = 3, 	-- 唤醒
+	[755] = 5,		-- 生命通道
+	[5143] = 4, 	-- 奥术飞弹
+	[12051] = 6, 	-- 唤醒
 	[15407] = 6,	-- 精神鞭笞
 	[47757] = 3,	-- 苦修
+	[47758] = 3,	-- 苦修
+	[48045] = 6,	-- 精神灼烧
 	[64843] = 4,	-- 神圣赞美诗
+	[120360] = 15,	-- 弹幕射击
+	[198013] = 10,	-- 眼棱
 	[198590] = 5,	-- 吸取灵魂
 	[205021] = 5,	-- 冰霜射线
 	[205065] = 6,	-- 虚空洪流
+	[206931] = 3,	-- 饮血者
+	[212084] = 10,	-- 邪能毁灭
 	[234153] = 5,	-- 吸取生命
-	[291944] = 6,	-- 再生
+	[257044] = 7,	-- 急速射击
+	[291944] = 6,	-- 再生，赞达拉巨魔
 	[314791] = 4,	-- 变易幻能
-	[324631] = 8,	-- 血肉铸造
+	[324631] = 8,	-- 血肉铸造，盟约
 }
 
 if DB.MyClass == "PRIEST" then
-	local penanceID = 47757
 	local function updateTicks()
 		local numTicks = 3
 		if IsPlayerSpell(193134) then numTicks = 4 end
-		channelingTicks[penanceID] = numTicks
+		channelingTicks[47757] = numTicks
+		channelingTicks[47758] = numTicks
 	end
 	B:RegisterEvent("PLAYER_LOGIN", updateTicks)
 	B:RegisterEvent("PLAYER_TALENT_UPDATE", updateTicks)
