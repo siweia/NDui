@@ -435,6 +435,15 @@ local function favouriteOnClick(self)
 	end
 end
 
+StaticPopupDialogs["NDUI_WIPE_JUNK_LIST"] = {
+	text = L["Reset junklist warning"],
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		wipe(NDuiADB["CustomJunkList"])
+	end,
+	whileDead = 1,
+}
 local customJunkEnable
 function module:CreateJunkButton()
 	local enabledText = DB.InfoColor..L["JunkMode Enabled"]
@@ -448,6 +457,11 @@ function module:CreateJunkButton()
 		customJunkEnable = nil
 	end
 	bu:SetScript("OnClick", function(self)
+		if IsAltKeyDown() and IsControlKeyDown() then
+			StaticPopup_Show("NDUI_WIPE_JUNK_LIST")
+			return
+		end
+
 		module:SelectToggleButton(3)
 		customJunkEnable = not customJunkEnable
 		if customJunkEnable then
