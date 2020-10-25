@@ -76,11 +76,12 @@ C.themes["Blizzard_Collections"] = function()
 			bu.selectedTexture:SetTexture("")
 
 			local bg = B.CreateBDFrame(bu, .25)
-			bg:SetPoint("TOPLEFT", 0, -1)
+			bg:SetPoint("TOPLEFT", 3, -1)
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			bu.bg = bg
 
-			icon.bg = B.ReskinIcon(icon)
+			icon:SetSize(42, 42)
+			B.ReskinIcon(icon)
 			bu.name:SetParent(bg)
 
 			if bu.DragButton then
@@ -103,20 +104,10 @@ C.themes["Blizzard_Collections"] = function()
 		for i = 1, #buttons do
 			local bu = buttons[i]
 			if bu.bg then
-				if bu.index ~= nil then
-					bu.bg:Show()
-					bu.icon:Show()
-					bu.icon.bg:Show()
-
-					if bu.selectedTexture:IsShown() then
-						bu.bg:SetBackdropColor(r, g, b, .25)
-					else
-						bu.bg:SetBackdropColor(0, 0, 0, .25)
-					end
+				if bu.selectedTexture:IsShown() then
+					bu.bg:SetBackdropColor(r, g, b, .25)
 				else
-					bu.bg:Hide()
-					bu.icon:Hide()
-					bu.icon.bg:Hide()
+					bu.bg:SetBackdropColor(0, 0, 0, .25)
 				end
 			end
 		end
@@ -136,11 +127,9 @@ C.themes["Blizzard_Collections"] = function()
 					local petID, _, isOwned = C_PetJournal.GetPetInfoByIndex(index)
 
 					if petID and isOwned then
-						local _, _, _, _, rarity = C_PetJournal.GetPetStats(petID)
-
+						local rarity = select(5, C_PetJournal.GetPetStats(petID))
 						if rarity then
-							local color = ITEM_QUALITY_COLORS[rarity-1]
-							bu.name:SetTextColor(color.r, color.g, color.b)
+							bu.name:SetTextColor(GetItemQualityColor(rarity-1))
 						else
 							bu.name:SetTextColor(1, 1, 1)
 						end
@@ -269,11 +258,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.xpBar:SetStatusBarTexture(DB.bdTex)
 		B.CreateBDFrame(bu.xpBar, .25)
 
-		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarLeft"]:Hide()
-		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarRight"]:Hide()
-		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarMiddle"]:Hide()
-		_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarBGMiddle"]:Hide()
-
+		B.StripTextures(bu.healthFrame.healthBar)
 		bu.healthFrame.healthBar:SetStatusBarTexture(DB.bdTex)
 		B.CreateBDFrame(bu.healthFrame.healthBar, .25)
 
@@ -344,25 +329,25 @@ C.themes["Blizzard_Collections"] = function()
 
 	local shouldChangeTextColor = true
 
-	local changeTextColor = function(toyString)
-		if shouldChangeTextColor then
-			shouldChangeTextColor = false
+	local function changeTextColor(text, r, g, b)
+		if text.isSetting then return end
+		text.isSetting = true
 
-			local self = toyString:GetParent()
+		local bu = text:GetParent()
+		local itemID = bu.itemID
 
-			if PlayerHasToy(self.itemID) then
-				local _, _, quality = GetItemInfo(self.itemID)
-				if quality then
-					toyString:SetTextColor(GetItemQualityColor(quality))
-				else
-					toyString:SetTextColor(1, 1, 1)
-				end
+		if PlayerHasToy(itemID) then
+			local quality = select(3, GetItemInfo(itemID))
+			if quality then
+				text:SetTextColor(GetItemQualityColor(quality))
 			else
-				toyString:SetTextColor(.5, .5, .5)
+				text:SetTextColor(1, 1, 1)
 			end
-
-			shouldChangeTextColor = true
+		else
+			text:SetTextColor(.5, .5, .5)
 		end
+
+		text.isSetting = nil
 	end
 
 	local buttons = ToyBox.iconsFrame
@@ -532,13 +517,14 @@ C.themes["Blizzard_Collections"] = function()
 		local bu = ScrollFrame.buttons[i]
 		bu.Background:Hide()
 		bu.HighlightTexture:SetTexture("")
+		bu.Icon:SetSize(42, 42)
 		B.ReskinIcon(bu.Icon)
 		bu.IconCover:SetOutside(bu.Icon)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
 		bu.SelectedTexture:ClearAllPoints()
-		bu.SelectedTexture:SetPoint("TOPLEFT", 1, -2)
+		bu.SelectedTexture:SetPoint("TOPLEFT", 4, -2)
 		bu.SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
 		B.CreateBDFrame(bu.SelectedTexture, .25)
 	end
