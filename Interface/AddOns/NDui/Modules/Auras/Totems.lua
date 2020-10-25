@@ -1,7 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
-local margin = C.margin
 
 local _G = _G
 local GetTotemInfo = GetTotemInfo
@@ -10,6 +9,7 @@ local GetTotemInfo = GetTotemInfo
 local totems = {}
 
 function A:TotemBar_Init()
+	local margin = C.margin
 	local vertical = NDuiDB["Auras"]["VerticalTotems"]
 	local iconSize = NDuiDB["Auras"]["TotemSize"]
 	local width = vertical and (iconSize + margin*2) or (iconSize*4 + margin*5)

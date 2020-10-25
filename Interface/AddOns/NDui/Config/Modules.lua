@@ -2,9 +2,6 @@
 local _, ns = ...
 local _, C = unpack(ns)
 
-C.mult = 1
-C.margin = 3
-
 -- 动作条
 local barFader = {
 	fadeInAlpha = 1,													-- 显示时的透明度

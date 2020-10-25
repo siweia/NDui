@@ -116,6 +116,7 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
 	B:SetSmoothingAmount(NDuiDB["UFs"]["SmoothAmount"])
+	C.margin = 3
 
 	for _, module in next, initQueue do
 		if module.OnLogin then
