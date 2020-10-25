@@ -61,7 +61,8 @@ local list = {
 		{AuraID = 195630, UnitID = "player"},	-- 醉拳大师
 		{AuraID = 115295, UnitID = "player", Value = true},			-- 金钟罩
 		{AuraID = 116847, UnitID = "player"},	-- 碧玉疾风
-		{AuraID = 322507, UnitID = "player"},	-- 天神酒
+		{AuraID = 322507, UnitID = "player", Value = true},	-- 天神酒
+		{AuraID = 325092, UnitID = "player"},	-- 净化真气
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 115078, UnitID = "focus", Caster = "player"},		-- 分筋错骨

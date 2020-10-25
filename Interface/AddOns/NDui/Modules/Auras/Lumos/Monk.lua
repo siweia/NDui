@@ -4,10 +4,6 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "MONK" then return end
 
-local function GetUnitAura(unit, spell, filter)
-	return A:GetUnitAura(unit, spell, filter)
-end
-
 local function UpdateCooldown(button, spellID, texture)
 	return A:UpdateCooldown(button, spellID, texture)
 end
@@ -35,31 +31,8 @@ function A:ChantLumos(self)
 		UpdateCooldown(self.lumos[1], 121253, true)
 		UpdateBuff(self.lumos[2], 215479, 215479, false, "END")
 		UpdateBuff(self.lumos[3], 322507, 322507, true)
-		A:UpdateTotemAura(self.lumos[4], 608951, 132578, true)
-
-		do
-			local button = self.lumos[5]
-			local name, _, duration, expire, _, spellID = GetUnitAura("player", 124275, "HARMFUL")
-			if not name then name, _, duration, expire, _, spellID = GetUnitAura("player", 124274, "HARMFUL") end
-			if not name then name, _, duration, expire, _, spellID = GetUnitAura("player", 124273, "HARMFUL") end
-
-			if name and duration > 0 then
-				button.CD:SetCooldown(expire-10, 10)
-				button.CD:Show()
-				button.Icon:SetDesaturated(false)
-			else
-				button.CD:Hide()
-				button.Icon:SetDesaturated(true)
-			end
-			local texture = spellID and GetSpellTexture(spellID) or 463281
-			button.Icon:SetTexture(texture)
-
-			if button.Icon:GetTexture() == GetSpellTexture(124273) then
-				B.ShowOverlayGlow(button)
-			else
-				B.HideOverlayGlow(button)
-			end
-		end
+		UpdateBuff(self.lumos[4], 325092, 325092, nil, "END")
+		A:UpdateTotemAura(self.lumos[5], 608951, 132578, true)
 	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 115151, true)
 		UpdateCooldown(self.lumos[2], 191837, true)
