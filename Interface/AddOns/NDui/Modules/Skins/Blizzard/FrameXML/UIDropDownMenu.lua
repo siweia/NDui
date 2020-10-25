@@ -26,7 +26,7 @@ tinsert(C.defaultThemes, function()
 				if backdrop and not backdrop.styled then
 					B.StripTextures(backdrop)
 					B.SetBD(backdrop, .7)
-	
+
 					backdrop.styled = true
 				end
 			end

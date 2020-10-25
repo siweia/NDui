@@ -100,20 +100,20 @@ function M:MailBox_ContactList()
 		button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 		button.HL:SetAllPoints()
 		button.HL:SetColorTexture(1, 1, 1, .25)
-	
+
 		button.name = B.CreateFS(button, 13, text, false, "LEFT", 10, 0)
 		button.name:SetPoint("RIGHT", button, "LEFT", 230, 0)
 		button.name:SetJustifyH("LEFT")
 		button.name:SetTextColor(r, g, b)
-	
+
 		button:RegisterForClicks("AnyUp")
 		button:SetScript("OnClick", buttonOnClick)
-	
+
 		button.delete = B.CreateButton(button, 20, 20, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
 		button.delete:SetPoint("LEFT", button, "RIGHT", 5, 0)
 		button.delete.__owner = button
 		button.delete:SetScript("OnClick", deleteOnClick)
-	
+
 		return button
 	end
 

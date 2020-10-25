@@ -218,7 +218,7 @@ function M:RaidTool_ReadyCheck(parent)
 		rc:SetText("")
 		count, total = 0, 0
 	end
-	
+
 	local function updateReadyCheck(event)
 		if event == "READY_CHECK_FINISHED" then
 			if count == total then
