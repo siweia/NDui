@@ -1006,7 +1006,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			font:SetTextColor(r, g, b)
 		end
 
-		C_Timer.After(.1, function()
+		C_Timer.After(.2, function()
 			local WarPlanFrame = _G.WarPlanFrame
 			if not WarPlanFrame then return end
 
