@@ -649,7 +649,9 @@ do
 		self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 	local function updateIconBorderColor(self, r, g, b)
-		if r == .65882 then r, g, b = 0, 0, 0 end
+		if (r==.65882 and g==.65882 and b==.65882) or (r==1 and g==1 and b==1) then
+			r, g, b = 0, 0, 0
+		end
 		self.__owner.bg:SetBackdropBorderColor(r, g, b)
 	end
 	local function resetIconBorderColor(self)
