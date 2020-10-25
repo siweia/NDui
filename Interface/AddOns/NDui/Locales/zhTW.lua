@@ -683,3 +683,4 @@ L["DisableMapTip"] = "|n關閉後，世界地圖的坐標、縮放、移動，�
 L["Map Scale"] = "最小化的地圖縮放"
 L["Maximize Map Scale"] = "最大化的地圖縮放"
 L["Reset junklist warning"] = "你想要清空自定義垃圾列表嗎？"
+L["AddContactTip"] = "|n輸入你想要添加為聯絡人的玩家名字，格式為'玩家名字-服務器名字'。|n如果不填寫服務器名字，則默認與你同服。|n你可以自定義名字的顔色來予以分類。"
