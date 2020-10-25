@@ -684,3 +684,5 @@ L["Map Scale"] = "Minimize map scale" -- need translation
 L["Maximize Map Scale"] = "Maximize map scale" -- need translation
 L["Reset junklist warning"] = "Are you sure to wipe the custom junk list?" -- need translation
 L["AddContactTip"] = "|nModify the contact list you need, the input format is 'UnitName-RealmName'.|nYou only need to enter name if unit is in the same realm with you.|nYou can customize text color for classify." -- need translation
+L["FoundIncompatibleAddon"] = "Incompatible AddOns:" -- need translation
+L["DisableIncompatibleAddon"] = "Disable All!" -- need translation
