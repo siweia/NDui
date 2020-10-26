@@ -42,6 +42,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinArrow(InboxPrevPageButton, "left")
 	B.ReskinArrow(InboxNextPageButton, "right")
 
+	B.CreateBDFrame(OpenMailScrollFrame, .25)
 	local bg = B.CreateBDFrame(SendMailScrollFrame, .25)
 	bg:SetPoint("TOPLEFT", 6, 0)
 
