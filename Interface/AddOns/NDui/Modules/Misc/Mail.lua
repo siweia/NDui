@@ -329,7 +329,7 @@ function M:MailBox_CollectCurrent()
 end
 
 function M:CollectCurrentButton()
-	local button = M:MailBox_CreatButton(OpenMailFrame, 82, 22, "收件", {"RIGHT", "OpenMailReplyButton", "LEFT", -1, 0})
+	local button = M:MailBox_CreatButton(OpenMailFrame, 82, 22, L["TakeAll"], {"RIGHT", "OpenMailReplyButton", "LEFT", -1, 0})
 	button:SetScript("OnClick", M.MailBox_CollectCurrent)
 end
 

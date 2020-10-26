@@ -686,6 +686,7 @@ L["Reset junklist warning"] = "Are you sure to wipe the custom junk list?" -- ne
 L["AddContactTip"] = "|nModify the contact list you need, the input format is 'UnitName-RealmName'.|nYou only need to enter name if unit is in the same realm with you.|nYou can customize text color for classify." -- need translation
 L["FoundIncompatibleAddon"] = "Incompatible AddOns:" -- need translation
 L["DisableIncompatibleAddon"] = "Disable All!" -- need translation
+L["TakeAll"] = "Take all" -- need translation
 L["TotalGold"] = "Total Gold" -- need translation
 L["MailIsCOD"] = "You can't auto collect Cash on Delivery" -- need translation
 L["MapRevealGlow"] = "Map reveal shadow" -- need translation
