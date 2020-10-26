@@ -527,6 +527,8 @@ end
 
 -- Incompatible check
 local IncompatibleAddOns = {
+	["Aurora"] = true,
+	["AuroraClassic"] = true,
 	["BigFoot"] = true,
 	["!!!163UI!!!"] = true,
 }

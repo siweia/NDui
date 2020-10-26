@@ -8,25 +8,6 @@ local IsAddOnLoaded = IsAddOnLoaded
 C.defaultThemes = {}
 C.themes = {}
 
-StaticPopupDialogs["AURORA_CLASSIC_WARNING"] = {
-	text = L["AuroraClassic warning"],
-	button1 = DISABLE,
-	hideOnEscape = false,
-	whileDead = 1,
-	OnAccept = function()
-		DisableAddOn("Aurora", true)
-		DisableAddOn("AuroraClassic", true)
-		ReloadUI()
-	end,
-}
-function S:DetectAurora()
-	if DB.isDeveloper then return end
-
-	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then
-		StaticPopup_Show("AURORA_CLASSIC_WARNING")
-	end
-end
-
 function S:LoadDefaultSkins()
 	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then return end
 
@@ -56,7 +37,6 @@ function S:LoadDefaultSkins()
 end
 
 function S:OnLogin()
-	self:DetectAurora()
 	self:LoadDefaultSkins()
 
 	-- Add Skins
