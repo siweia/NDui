@@ -217,7 +217,11 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 					else
 						texture:Hide()
 					end
-					texture:SetVertexColor(.6, .6, .6)
+					if NDuiDB["Map"]["MapRevealGlow"] then
+						texture:SetVertexColor(.7, .7, .7)
+					else
+						texture:SetVertexColor(1, 1, 1)
+					end
 
 					tinsert(overlayTextures, texture)
 				end

@@ -688,3 +688,5 @@ L["FoundIncompatibleAddon"] = "Incompatible AddOns:" -- need translation
 L["DisableIncompatibleAddon"] = "Disable All!" -- need translation
 L["TotalGold"] = "Total Gold" -- need translation
 L["MailIsCOD"] = "You can't auto collect Cash on Delivery" -- need translation
+L["MapRevealGlow"] = "Map reveal shadow" -- need translation
+L["MapRevealGlowTip"] = "|nIf checked, once you enable map reveal, the unexplore areas will stay under a light shadow." -- need translation
