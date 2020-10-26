@@ -1006,7 +1006,30 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			font:SetTextColor(r, g, b)
 		end
 
-		C_Timer.After(.5, function()
+		local function reskinWarPlanMissions(self)
+			local missions = self.TaskBoard.Missions
+			for i = 1, #missions do
+				local button = missions[i]
+				if not button.styled then
+					reskinWarPlanFont(button.XPReward, 1, 1, 1)
+					reskinWarPlanFont(button.Description, .8, .8, .8)
+					reskinWarPlanFont(button.CDTDisplay, 1, 1, 1)
+
+					local groups = button.Groups
+					if groups then
+						for j = 1, #groups do
+							local group = groups[j]
+							B.Reskin(group)
+							reskinWarPlanFont(group.Features, 1, .8, 0)
+						end
+					end
+
+					button.styled = true
+				end
+			end
+		end
+
+		C_Timer.After(.1, function()
 			local WarPlanFrame = _G.WarPlanFrame
 			if not WarPlanFrame then return end
 
@@ -1016,23 +1039,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			B.ReskinClose(WarPlanFrame.ArtFrame.CloseButton)
 			reskinWarPlanFont(WarPlanFrame.ArtFrame.TitleText, 1, .8, 0)
 
+			reskinWarPlanMissions(WarPlanFrame)
+			WarPlanFrame:HookScript("OnShow", reskinWarPlanMissions)
 			B.Reskin(WarPlanFrame.TaskBoard.AllPurposeButton)
-			local missions = WarPlanFrame.TaskBoard.Missions
-			for i = 1, #missions do
-				local button = missions[i]
-				reskinWarPlanFont(button.XPReward, 1, 1, 1)
-				reskinWarPlanFont(button.Description, .8, .8, .8)
-				reskinWarPlanFont(button.CDTDisplay, 1, 1, 1)
-
-				local groups = button.Groups
-				if groups then
-					for j = 1, #groups do
-						local group = groups[j]
-						B.Reskin(group)
-						reskinWarPlanFont(group.Features, 1, .8, 0)
-					end
-				end
-			end
 
 			local entries = WarPlanFrame.HistoryFrame.Entries
 			for i = 1, #entries do
