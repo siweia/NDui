@@ -687,3 +687,4 @@ L["AddContactTip"] = "|n輸入你想要添加為聯絡人的玩家名字，格�
 L["FoundIncompatibleAddon"] = "檢測到不兼容插件:"
 L["DisableIncompatibleAddon"] = "禁用列表插件"
 L["TotalGold"] = "總計金幣"
+L["MailIsCOD"] = "無法自動收取付款取信的郵件"

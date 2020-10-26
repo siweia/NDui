@@ -4,11 +4,12 @@ local M = B:GetModule("Misc")
 
 local wipe, select, pairs, tonumber = wipe, select, pairs, tonumber
 local strsplit, strfind = strsplit, strfind
-local InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney = InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney
+local InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem = InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem
 local GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo = GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo
 local C_Timer_After = C_Timer.After
 local C_Mail_HasInboxMoney = C_Mail.HasInboxMoney
 local C_Mail_IsCommandPending = C_Mail.IsCommandPending
+local ATTACHMENTS_MAX_RECEIVE, ERR_MAIL_DELETE_ITEM_ERROR = ATTACHMENTS_MAX_RECEIVE, ERR_MAIL_DELETE_ITEM_ERROR
 local NORMAL_STRING = GUILDCONTROL_OPTION16
 local OPENING_STRING = OPEN_ALL_MAIL_BUTTON_OPENING
 
@@ -280,20 +281,56 @@ function M:UpdateOpeningText(opening)
 	end
 end
 
+function M:MailBox_CreatButton(parent, width, height, text, anchor)
+	local button = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
+	button:SetSize(width, height)
+	button:SetPoint(unpack(anchor))
+	button:SetText(text)
+	if NDuiDB["Skins"]["BlizzardSkins"] then B.Reskin(button) end
+
+	return button
+end
+
 function M:CollectGoldButton()
 	OpenAllMail:ClearAllPoints()
 	OpenAllMail:SetPoint("TOPLEFT", InboxFrame, "TOPLEFT", 50, -35)
 
-	local button = CreateFrame("Button", nil, InboxFrame, "UIPanelButtonTemplate")
-	button:SetSize(120, 24)
-	button:SetPoint("LEFT", OpenAllMail, "RIGHT", 3, 0)
-	if NDuiDB["Skins"]["BlizzardSkins"] then B.Reskin(button) end
-	M.GoldButton = button
-	M:UpdateOpeningText()
-
+	local button = M:MailBox_CreatButton(InboxFrame, 120, 24, "", {"LEFT", OpenAllMail, "RIGHT", 3, 0})
 	button:SetScript("OnClick", M.MailBox_CollectAllGold)
 	button:SetScript("OnEnter", M.TotalCash_OnEnter)
 	button:SetScript("OnLeave", M.TotalCash_OnLeave)
+
+	M.GoldButton = button
+	M:UpdateOpeningText()
+end
+
+function M:MailBox_CollectAttachment()
+	for i = 1, ATTACHMENTS_MAX_RECEIVE do
+		local attachmentButton = OpenMailFrame.OpenMailAttachments[i]
+		if attachmentButton:IsShown() then
+			TakeInboxItem(InboxFrame.openMailID, i)
+			C_Timer_After(timeToWait, M.MailBox_CollectAttachment)
+			return
+		end
+	end
+end
+
+function M:MailBox_CollectCurrent()
+	if OpenMailFrame.cod then
+		UIErrorsFrame:AddMessage(DB.InfoColor..L["MailIsCOD"])
+		return
+	end
+
+	local currentID = InboxFrame.openMailID
+	if C_Mail_HasInboxMoney(currentID) then
+		TakeInboxMoney(currentID)
+	end
+	M:MailBox_CollectAttachment()
+end
+
+function M:CollectCurrentButton()
+	local button = M:MailBox_CreatButton(OpenMailFrame, 82, 22, "收件", {"RIGHT", "OpenMailReplyButton", "LEFT", -1, 0})
+	button:SetScript("OnClick", M.MailBox_CollectCurrent)
 end
 
 function M:MailBox()
@@ -320,5 +357,6 @@ function M:MailBox()
 
 	M.GetMoneyString = B:GetModule("Infobar").GetMoneyString
 	M:CollectGoldButton()
+	M:CollectCurrentButton()
 end
 M:RegisterMisc("MailBox", M.MailBox)

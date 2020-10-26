@@ -687,3 +687,4 @@ L["AddContactTip"] = "|nModify the contact list you need, the input format is 'U
 L["FoundIncompatibleAddon"] = "Incompatible AddOns:"
 L["DisableIncompatibleAddon"] = "Disable All!"
 L["TotalGold"] = "Total Gold"
+L["MailIsCOD"] = "You can't auto collect Cash on Delivery"
