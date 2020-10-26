@@ -4,9 +4,16 @@ local M = B:GetModule("Misc")
 
 local wipe, select, pairs, tonumber = wipe, select, pairs, tonumber
 local strsplit, strfind = strsplit, strfind
-local InboxItemCanDelete, DeleteInboxItem = InboxItemCanDelete, DeleteInboxItem
-local GetInboxHeaderInfo, GetInboxItem, GetItemInfo = GetInboxHeaderInfo, GetInboxItem, GetItemInfo
-local inboxItems = {}
+local InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney = InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney
+local GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo = GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo
+local C_Timer_After = C_Timer.After
+local C_Mail_HasInboxMoney = C_Mail.HasInboxMoney
+local C_Mail_IsCommandPending = C_Mail.IsCommandPending
+local NORMAL_STRING = GUILDCONTROL_OPTION16
+local OPENING_STRING = OPEN_ALL_MAIL_BUTTON_OPENING
+
+local mailIndex, timeToWait, totalCash, inboxItems = 0, .15, 0, {}
+local isGoldCollecting
 
 function M:MailBox_DelectClick()
 	local selectedID = self.id + (InboxFrame.pageNum-1)*7
@@ -218,6 +225,77 @@ function M:MailBox_ContactList()
 	M:ContactList_Refresh()
 end
 
+function M:MailBox_CollectGold()
+	if mailIndex > 0 then
+		if not C_Mail_IsCommandPending() then
+			if C_Mail_HasInboxMoney(mailIndex) then
+				TakeInboxMoney(mailIndex)
+			end
+			mailIndex = mailIndex - 1
+		end
+		C_Timer_After(timeToWait, M.MailBox_CollectGold)
+	else
+		isGoldCollecting = false
+		M:UpdateOpeningText()
+	end
+end
+
+function M:MailBox_CollectAllGold()
+	if isGoldCollecting then return end
+	if totalCash == 0 then return end
+
+	isGoldCollecting = true
+	mailIndex = GetInboxNumItems()
+	M:UpdateOpeningText(true)
+	M:MailBox_CollectGold()
+end
+
+function M:TotalCash_OnEnter()
+	local numItems = GetInboxNumItems()
+	if numItems == 0 then return end
+
+	for i = 1, numItems do
+		totalCash = totalCash + select(5, GetInboxHeaderInfo(i))
+	end
+
+	if totalCash > 0 then
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:AddLine(L["TotalGold"])
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(M:GetMoneyString(totalCash, true), 1,1,1)
+		GameTooltip:Show()
+	end
+end
+
+function M:TotalCash_OnLeave()
+	B:HideTooltip()
+	totalCash = 0
+end
+
+function M:UpdateOpeningText(opening)
+	if opening then
+		M.GoldButton:SetText(OPENING_STRING)
+	else
+		M.GoldButton:SetText(NORMAL_STRING)
+	end
+end
+
+function M:CollectGoldButton()
+	OpenAllMail:ClearAllPoints()
+	OpenAllMail:SetPoint("TOPLEFT", InboxFrame, "TOPLEFT", 50, -35)
+
+	local button = CreateFrame("Button", nil, InboxFrame, "UIPanelButtonTemplate")
+	button:SetSize(120, 24)
+	button:SetPoint("LEFT", OpenAllMail, "RIGHT", 3, 0)
+	if NDuiDB["Skins"]["BlizzardSkins"] then B.Reskin(button) end
+	M.GoldButton = button
+	M:UpdateOpeningText()
+
+	button:SetScript("OnClick", M.MailBox_CollectAllGold)
+	button:SetScript("OnEnter", M.TotalCash_OnEnter)
+	button:SetScript("OnLeave", M.TotalCash_OnLeave)
+end
+
 function M:MailBox()
 	if not NDuiDB["Misc"]["Mail"] then return end
 	if IsAddOnLoaded("Postal") then return end
@@ -239,5 +317,8 @@ function M:MailBox()
 		InboxTooMuchMail:ClearAllPoints()
 		InboxTooMuchMail:SetPoint("BOTTOM", MailFrame, "TOP", 0, 5)
 	end
+
+	M.GetMoneyString = B:GetModule("Infobar").GetMoneyString
+	M:CollectGoldButton()
 end
 M:RegisterMisc("MailBox", M.MailBox)
