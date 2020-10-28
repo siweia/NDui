@@ -120,7 +120,7 @@ function M.GuildBest_OnLoad(event, addon)
 end
 
 -- Keystone Info
-local myFullName = DB.MyName.."-"..DB.MyRealm
+local myFullName = DB.MyFullName
 local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 
 function M:KeystoneInfo_Create()

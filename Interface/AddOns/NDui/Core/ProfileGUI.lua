@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local G = B:GetModule("GUI")
 
 local cr, cg, cb = DB.r, DB.g, DB.b
-local myFullName = DB.MyName.."-"..DB.MyRealm
+local myFullName = DB.MyFullName
 
 -- Static popups
 StaticPopupDialogs["RESET_NDUI"] = {

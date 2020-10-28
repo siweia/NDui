@@ -25,7 +25,7 @@ DB.Devs = {
 	["Huniverster-Torghast"] = true,
 }
 local function isDeveloper()
-	return DB.Devs[DB.MyName.."-"..DB.MyRealm]
+	return DB.Devs[DB.MyFullName]
 end
 DB.isDeveloper = isDeveloper()
 
