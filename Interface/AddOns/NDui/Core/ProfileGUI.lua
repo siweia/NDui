@@ -13,6 +13,7 @@ StaticPopupDialogs["RESET_NDUI"] = {
 	OnAccept = function()
 		NDuiDB = {}
 		NDuiADB = {}
+		NDuiPDB = {}
 		ReloadUI()
 	end,
 	whileDead = 1,
@@ -23,9 +24,8 @@ StaticPopupDialogs["NDUI_RESET_PROFILE"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		print("Reset current profile.")
-		--wipe(C.db)
-		--ReloadUI()
+		wipe(C.db)
+		ReloadUI()
 	end,
 	whileDead = 1,
 }
@@ -35,9 +35,8 @@ StaticPopupDialogs["NDUI_APPLY_PROFILE"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		print("Apply selected profile.")
-		--NDuiADB["ProfileIndex"][myFullName] = G.currentProfile
-		--ReloadUI()
+		NDuiADB["ProfileIndex"][myFullName] = G.currentProfile
+		ReloadUI()
 	end,
 	whileDead = 1,
 }
@@ -47,10 +46,15 @@ StaticPopupDialogs["NDUI_DOWNLOAD_PROFILE"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		print("Download selected profile.")
-		--wipe(NDuiPDB[NDuiADB["ProfileIndex"][myFullName]])
-		--NDuiPDB[NDuiADB["ProfileIndex"][myFullName]] = NDuiPDB[G.currentProfile]
-		--ReloadUI()
+		local profileIndex = NDuiADB["ProfileIndex"][myFullName]
+		if G.currentProfile == 1 then
+			NDuiPDB[profileIndex-1] = NDuiDB
+		elseif profileIndex == 1 then
+			NDuiDB = NDuiPDB[G.currentProfile-1]
+		else
+			NDuiPDB[profileIndex-1] = NDuiPDB[G.currentProfile-1]
+		end
+		ReloadUI()
 	end,
 	whileDead = 1,
 }
@@ -60,9 +64,12 @@ StaticPopupDialogs["NDUI_UPLOAD_PROFILE"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		print("Upload selected profile.")
-		--wipe(NDuiPDB[G.currentProfile])
-		--NDuiPDB[G.currentProfile] = C.db
+		local profileIndex = NDuiADB["ProfileIndex"][myFullName]
+		if G.currentProfile == 1 then
+			NDuiDB = C.db
+		else
+			NDuiPDB[G.currentProfile-1] = C.db
+		end
 	end,
 	whileDead = 1,
 }
@@ -182,31 +189,31 @@ function G:CreateProfileGUI(parent)
 	local import = B.CreateButton(parent, 120, 24, L["Import"])
 	import:SetPoint("BOTTOMLEFT", 10, 10)
 	import:SetScript("OnClick", function()
-		f:Hide()
-		createDataFrame()
-		dataFrame.Header:SetText(L["Import Header"])
-		dataFrame.text:SetText(L["Import"])
-		dataFrame.editBox:SetText("")
+		parent:GetParent():Hide()
+		G:CreateDataFrame()
+		G.ProfileDataFrame.Header:SetText(L["Import Header"])
+		G.ProfileDataFrame.text:SetText(L["Import"])
+		G.ProfileDataFrame.editBox:SetText("")
 	end)
 
 	local export = B.CreateButton(parent, 120, 24, L["Export"])
 	export:SetPoint("LEFT", import, "RIGHT", 3, 0)
 	export:SetScript("OnClick", function()
-		f:Hide()
-		createDataFrame()
-		dataFrame.Header:SetText(L["Export Header"])
-		dataFrame.text:SetText(OKAY)
+		parent:GetParent():Hide()
+		G:CreateDataFrame()
+		G.ProfileDataFrame.Header:SetText(L["Export Header"])
+		G.ProfileDataFrame.text:SetText(OKAY)
 		G:ExportGUIData()
 	end)
 
 	B.CreateFS(parent, 14, "配置管理", "system", "TOPLEFT", 10, -10)
-	local text = "你可以在这里管理你的插件配置。默认是基于你的角色进行存储，不进行账号之间的共享。你也可以切换到共享配置，这样多个角色就可以使用同一个设置，而无需进行配置的导入和导出。"
+	local text = "你可以在这里管理你的插件配置，使用前请先备份一次你的数据。默认是基于你的角色进行存储，不进行账号之间的共享。你也可以切换到共享配置，这样多个角色就可以使用同一个设置，而无需进行配置的导入和导出。|n数据的导入和导出，只支持当前使用的存档配置。"
 	local description = B.CreateFS(parent, 14, text, nil, "TOPLEFT", 10, -35)
 	description:SetPoint("TOPRIGHT", -10, -30)
 	description:SetWordWrap(true)
 	description:SetJustifyH("LEFT")
 
-	G.currentProfile = 1
+	G.currentProfile = NDuiADB["ProfileIndex"][DB.MyFullName]
 
 	local numBars = 6
 	local panel = B.CreateBDFrame(parent, .25)

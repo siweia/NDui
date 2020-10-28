@@ -1514,7 +1514,7 @@ local function updateTooltip()
 	end
 end
 
-local function createDataFrame()
+function G:CreateDataFrame()
 	if dataFrame then dataFrame:Show() return end
 
 	dataFrame = CreateFrame("Frame", nil, UIParent)
@@ -1578,6 +1578,8 @@ local function createDataFrame()
 	end)
 	accept:HookScript("OnLeave", B.HideTooltip)
 	dataFrame.text = accept.text
+
+	G.ProfileDataFrame = dataFrame
 end
 
 local function scrollBarHook(self, delta)
