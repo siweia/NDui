@@ -286,7 +286,7 @@ function M:MailBox_CreatButton(parent, width, height, text, anchor)
 	button:SetSize(width, height)
 	button:SetPoint(unpack(anchor))
 	button:SetText(text)
-	if NDuiDB["Skins"]["BlizzardSkins"] then B.Reskin(button) end
+	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(button) end
 
 	return button
 end
@@ -334,7 +334,7 @@ function M:CollectCurrentButton()
 end
 
 function M:MailBox()
-	if not NDuiDB["Misc"]["Mail"] then return end
+	if not C.db["Misc"]["Mail"] then return end
 	if IsAddOnLoaded("Postal") then return end
 
 	-- Delete buttons

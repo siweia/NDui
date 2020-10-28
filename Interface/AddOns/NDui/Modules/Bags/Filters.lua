@@ -20,7 +20,7 @@ local CustomFilterList = {
 }
 
 local function isCustomFilter(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["ItemFilter"] then return end
 	return CustomFilterList[item.id]
 end
 
@@ -34,16 +34,16 @@ local function isItemInBank(item)
 end
 
 local function isItemJunk(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterJunk"] then return end
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterJunk"] then return end
 	return (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice and item.sellPrice > 0
 end
 
 local function isAzeriteArmor(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterAzerite"] then return end
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterAzerite"] then return end
 	if not item.link then return end
-	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) and not (NDuiDB["Bags"]["ItemSetFilter"] and item.isInSet)
+	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) and not (C.db["Bags"]["ItemSetFilter"] and item.isInSet)
 end
 
 function module:IsArtifactRelic(item)
@@ -51,9 +51,9 @@ function module:IsArtifactRelic(item)
 end
 
 local function isItemEquipment(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterEquipment"] then return end
-	if NDuiDB["Bags"]["ItemSetFilter"] then
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterEquipment"] then return end
+	if C.db["Bags"]["ItemSetFilter"] then
 		return item.isInSet
 	else
 		return item.level and item.rarity > LE_ITEM_QUALITY_COMMON and (module:IsArtifactRelic(item) or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
@@ -61,15 +61,15 @@ local function isItemEquipment(item)
 end
 
 local function isItemConsumable(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterConsumable"] then return end
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterConsumable"] then return end
 	if isCustomFilter(item) == false then return end
 	return isCustomFilter(item) or (item.classID and (item.classID == LE_ITEM_CLASS_CONSUMABLE or item.classID == LE_ITEM_CLASS_ITEM_ENHANCEMENT))
 end
 
 local function isItemLegendary(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterLegendary"] then return end
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterLegendary"] then return end
 	return item.rarity == LE_ITEM_QUALITY_LEGENDARY
 end
 
@@ -77,25 +77,25 @@ local isPetToy = {
 	[174925] = true,
 }
 local function isMountAndPet(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterMount"] then return end
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterMount"] then return end
 	return (not isPetToy[item.id]) and item.classID == LE_ITEM_CLASS_MISCELLANEOUS and (item.subClassID == LE_ITEM_MISCELLANEOUS_MOUNT or item.subClassID == LE_ITEM_MISCELLANEOUS_COMPANION_PET)
 end
 
 local function isItemFavourite(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterFavourite"] then return end
-	return item.id and NDuiDB["Bags"]["FavouriteItems"][item.id]
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterFavourite"] then return end
+	return item.id and C.db["Bags"]["FavouriteItems"][item.id]
 end
 
 local function isEmptySlot(item)
-	if not NDuiDB["Bags"]["GatherEmpty"] then return end
+	if not C.db["Bags"]["GatherEmpty"] then return end
 	return module.initComplete and not item.texture and module.BagsType[item.bagID] == 0
 end
 
 local function isTradeGoods(item)
-	if not NDuiDB["Bags"]["ItemFilter"] then return end
-	if not NDuiDB["Bags"]["FilterGoods"] then return end
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterGoods"] then return end
 	return item.classID == LE_ITEM_CLASS_TRADEGOODS
 end
 

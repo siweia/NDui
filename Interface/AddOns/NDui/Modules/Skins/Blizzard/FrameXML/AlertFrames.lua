@@ -7,7 +7,7 @@ local function fixBg(frame)
 		frame = frame:GetParent()
 	end
 	if frame.bg then
-		frame.bg:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+		frame.bg:SetBackdropColor(0, 0, 0, C.db["Skins"]["SkinAlpha"])
 		if frame.bg.__shadow then
 			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
 		end
@@ -17,7 +17,7 @@ end
 local function fixParentbg(frame)
 	frame = frame:GetParent():GetParent()
 	if frame.bg then
-		frame.bg:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+		frame.bg:SetBackdropColor(0, 0, 0, C.db["Skins"]["SkinAlpha"])
 		if frame.bg.__shadow then
 			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
 		end
@@ -43,7 +43,7 @@ local function fixAnim(frame)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["AlertFrames"] then return end
+	if not C.db["Skins"]["AlertFrames"] then return end
 
 	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
 

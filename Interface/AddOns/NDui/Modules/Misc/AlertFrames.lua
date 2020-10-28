@@ -107,7 +107,7 @@ local function MoveTalkingHead()
 end
 
 local function NoTalkingHeads()
-	if not NDuiDB["Misc"]["HideTalking"] then return end
+	if not C.db["Misc"]["HideTalking"] then return end
 
 	hooksecurefunc(TalkingHeadFrame, "Show", function(self)
 		self:Hide()

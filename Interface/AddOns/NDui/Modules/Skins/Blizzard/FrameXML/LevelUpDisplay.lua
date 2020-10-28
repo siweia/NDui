@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	LevelUpDisplaySide:HookScript("OnShow", function(self)
 		for i = 1, #self.unlockList do

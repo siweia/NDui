@@ -9,7 +9,7 @@ local UnitExists, UnitIsUnit, UnitIsDeadOrGhost, UnitName = UnitExists, UnitIsUn
 local targetTable = {}
 
 function TT:ScanTargets()
-	if not NDuiDB["Tooltip"]["TargetBy"] then return end
+	if not C.db["Tooltip"]["TargetBy"] then return end
 	if not IsInGroup() then return end
 
 	local _, unit = self:GetUnit()

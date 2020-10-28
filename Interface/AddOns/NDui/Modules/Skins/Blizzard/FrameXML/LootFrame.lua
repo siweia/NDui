@@ -2,8 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
-	if not NDuiDB["Skins"]["Loot"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["Loot"] then return end
 
 	LootFramePortraitOverlay:Hide()
 

@@ -231,7 +231,7 @@ function M:SetupScript(bar)
 end
 
 function M:Expbar()
-	if not NDuiDB["Misc"]["ExpRep"] then return end
+	if not C.db["Misc"]["ExpRep"] then return end
 
 	local bar = CreateFrame("StatusBar", nil, MinimapCluster)
 	bar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 5, -5)
@@ -281,7 +281,7 @@ function M:HookParagonRep()
 end
 
 function M:ParagonReputationSetup()
-	if not NDuiDB["Misc"]["ParagonRep"] then return end
+	if not C.db["Misc"]["ParagonRep"] then return end
 	hooksecurefunc("ReputationFrame_Update", M.HookParagonRep)
 end
 M:RegisterMisc("ParagonRep", M.ParagonReputationSetup)

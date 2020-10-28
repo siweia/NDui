@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 function S:SkadaSkin()
-	if not NDuiDB["Skins"]["Skada"] then return end
+	if not C.db["Skins"]["Skada"] then return end
 	if not IsAddOnLoaded("Skada") then return end
 
 	local pairs, ipairs, tinsert = pairs, ipairs, table.insert

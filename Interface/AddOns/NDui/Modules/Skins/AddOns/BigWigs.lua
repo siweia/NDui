@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 function S:BigWigsSkin()
-	if not NDuiDB["Skins"]["Bigwigs"] or not IsAddOnLoaded("BigWigs") then return end
+	if not C.db["Skins"]["Bigwigs"] or not IsAddOnLoaded("BigWigs") then return end
 	if not BigWigs3DB then return end
 
 	local function removeStyle(bar)

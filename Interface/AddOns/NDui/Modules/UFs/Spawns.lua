@@ -7,8 +7,8 @@ local format, tostring = string.format, tostring
 
 -- Units
 local function SetUnitFrameSize(self, unit)
-	local width = NDuiDB["UFs"][unit.."Width"]
-	local height = NDuiDB["UFs"][unit.."Height"] + NDuiDB["UFs"][unit.."PowerHeight"] + C.mult
+	local width = C.db["UFs"][unit.."Width"]
+	local height = C.db["UFs"][unit.."Height"] + C.db["UFs"][unit.."PowerHeight"] + C.mult
 	self:SetSize(width, height)
 end
 
@@ -30,18 +30,18 @@ local function CreatePlayerStyle(self)
 	UF:CreateAddPower(self)
 	UF:CreateQuestSync(self)
 
-	if NDuiDB["UFs"]["Castbars"] then
+	if C.db["UFs"]["Castbars"] then
 		UF:ReskinMirrorBars()
 		UF:ReskinTimerTrakcer(self)
 	end
-	if NDuiDB["UFs"]["ClassPower"] and not NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+	if C.db["UFs"]["ClassPower"] and not C.db["Nameplate"]["ShowPlayerPlate"] then
 		UF:CreateClassPower(self)
 		UF:StaggerBar(self)
 	end
-	if not NDuiDB["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
-	if NDuiDB["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
-	if NDuiDB["UFs"]["SwingBar"] then UF:CreateSwing(self) end
-	if NDuiDB["UFs"]["QuakeTimer"] then UF:CreateQuakeTimer(self) end
+	if not C.db["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
+	if C.db["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
+	if C.db["UFs"]["SwingBar"] then UF:CreateSwing(self) end
+	if C.db["UFs"]["QuakeTimer"] then UF:CreateQuakeTimer(self) end
 end
 
 local function CreateTargetStyle(self)
@@ -89,7 +89,7 @@ local function CreateToTStyle(self)
 	UF:CreatePowerBar(self)
 	UF:CreateRaidMark(self)
 
-	if NDuiDB["UFs"]["ToTAuras"] then UF:CreateAuras(self) end
+	if C.db["UFs"]["ToTAuras"] then UF:CreateAuras(self) end
 end
 
 local function CreateFocusTargetStyle(self)
@@ -194,20 +194,20 @@ end
 
 -- Spawns
 function UF:OnLogin()
-	local horizonRaid = NDuiDB["UFs"]["HorizonRaid"]
-	local horizonParty = NDuiDB["UFs"]["HorizonParty"]
-	local numGroups = NDuiDB["UFs"]["NumGroups"]
-	local scale = NDuiDB["UFs"]["SimpleRaidScale"]/10
-	local raidWidth, raidHeight = NDuiDB["UFs"]["RaidWidth"], NDuiDB["UFs"]["RaidHeight"]
-	local reverse = NDuiDB["UFs"]["ReverseRaid"]
-	local showPartyFrame = NDuiDB["UFs"]["PartyFrame"]
-	local partyWidth, partyHeight = NDuiDB["UFs"]["PartyWidth"], NDuiDB["UFs"]["PartyHeight"]
-	local showPartyPetFrame = NDuiDB["UFs"]["PartyPetFrame"]
-	local petWidth, petHeight = NDuiDB["UFs"]["PartyPetWidth"], NDuiDB["UFs"]["PartyPetHeight"]
-	local showTeamIndex = NDuiDB["UFs"]["ShowTeamIndex"]
-	local showSolo = NDuiDB["UFs"]["ShowSolo"]
+	local horizonRaid = C.db["UFs"]["HorizonRaid"]
+	local horizonParty = C.db["UFs"]["HorizonParty"]
+	local numGroups = C.db["UFs"]["NumGroups"]
+	local scale = C.db["UFs"]["SimpleRaidScale"]/10
+	local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
+	local reverse = C.db["UFs"]["ReverseRaid"]
+	local showPartyFrame = C.db["UFs"]["PartyFrame"]
+	local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
+	local showPartyPetFrame = C.db["UFs"]["PartyPetFrame"]
+	local petWidth, petHeight = C.db["UFs"]["PartyPetWidth"], C.db["UFs"]["PartyPetHeight"]
+	local showTeamIndex = C.db["UFs"]["ShowTeamIndex"]
+	local showSolo = C.db["UFs"]["ShowSolo"]
 
-	if NDuiDB["Nameplate"]["Enable"] then
+	if C.db["Nameplate"]["Enable"] then
 		UF:SetupCVars()
 		UF:BlockAddons()
 		UF:CreateUnitTable()
@@ -223,7 +223,7 @@ function UF:OnLogin()
 		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
 	end
 
-	if NDuiDB["Nameplate"]["ShowPlayerPlate"] then
+	if C.db["Nameplate"]["ShowPlayerPlate"] then
 		oUF:RegisterStyle("PlayerPlate", UF.CreatePlayerPlate)
 		oUF:SetActiveStyle("PlayerPlate")
 		local plate = oUF:Spawn("player", "oUF_PlayerPlate", true)
@@ -233,7 +233,7 @@ function UF:OnLogin()
 	-- Default Clicksets for RaidFrame
 	UF:DefaultClickSets()
 
-	if NDuiDB["UFs"]["Enable"] then
+	if C.db["UFs"]["Enable"] then
 		-- Register
 		oUF:RegisterStyle("Player", CreatePlayerStyle)
 		oUF:RegisterStyle("Target", CreateTargetStyle)
@@ -280,7 +280,7 @@ function UF:OnLogin()
 			end
 		end
 
-		if NDuiDB["UFs"]["Arena"] then
+		if C.db["UFs"]["Arena"] then
 			oUF:RegisterStyle("Arena", CreateArenaStyle)
 			oUF:SetActiveStyle("Arena")
 			local arena = {}
@@ -293,7 +293,7 @@ function UF:OnLogin()
 		UF:UpdateTextScale()
 	end
 
-	if NDuiDB["UFs"]["RaidFrame"] then
+	if C.db["UFs"]["RaidFrame"] then
 		UF:AddClickSetsListener()
 
 		-- Hide Default RaidFrame
@@ -312,7 +312,7 @@ function UF:OnLogin()
 			oUF:SetActiveStyle("Party")
 
 			local xOffset, yOffset = 5, 5
-			local partyFrameHeight = partyHeight + NDuiDB["UFs"]["PartyPowerHeight"] + C.mult
+			local partyFrameHeight = partyHeight + C.db["UFs"]["PartyPowerHeight"] + C.mult
 			local moverWidth = horizonParty and (partyWidth*5+xOffset*4) or partyWidth
 			local moverHeight = horizonParty and partyFrameHeight or (partyFrameHeight*5+yOffset*4)
 			local groupingOrder = horizonParty and "TANK,HEALER,DAMAGER,NONE" or "NONE,DAMAGER,HEALER,TANK"
@@ -342,7 +342,7 @@ function UF:OnLogin()
 				oUF:RegisterStyle("PartyPet", CreatePartyPetStyle)
 				oUF:SetActiveStyle("PartyPet")
 
-				local petFrameHeight = petHeight + NDuiDB["UFs"]["PartyPetPowerHeight"] + C.mult
+				local petFrameHeight = petHeight + C.db["UFs"]["PartyPetPowerHeight"] + C.mult
 				local petMoverWidth = horizonParty and (petWidth*5+xOffset*4) or petWidth
 				local petMoverHeight = horizonParty and petFrameHeight or (petFrameHeight*5+yOffset*4)
 
@@ -372,8 +372,8 @@ function UF:OnLogin()
 		oUF:SetActiveStyle("Raid")
 
 		local raidMover
-		if NDuiDB["UFs"]["SimpleMode"] then
-			local unitsPerColumn = NDuiDB["UFs"]["SMUnitsPerColumn"]
+		if C.db["UFs"]["SimpleMode"] then
+			local unitsPerColumn = C.db["UFs"]["SMUnitsPerColumn"]
 			local maxColumns = B:Round(numGroups*5 / unitsPerColumn)
 
 			local function CreateGroup(name, i)
@@ -421,14 +421,14 @@ function UF:OnLogin()
 				[3] = {"TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"},
 			}
 			function UF:UpdateSimpleModeHeader()
-				local groupByIndex = NDuiDB["UFs"]["SMGroupByIndex"]
+				local groupByIndex = C.db["UFs"]["SMGroupByIndex"]
 				group:SetAttribute("groupingOrder", groupByTypes[groupByIndex][1])
 				group:SetAttribute("groupBy", groupByTypes[groupByIndex][2])
 				group:SetAttribute("sortMethod", groupByTypes[groupByIndex][3])
 			end
 			UF:UpdateSimpleModeHeader()
 		else
-			local raidFrameHeight = raidHeight + NDuiDB["UFs"]["RaidPowerHeight"] + C.mult
+			local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
 
 			local function CreateGroup(name, i)
 				local group = oUF:SpawnHeader(name, nil, "solo,party,raid",
@@ -500,18 +500,18 @@ function UF:OnLogin()
 		UF:UpdateRaidHealthMethod()
 
 		if raidMover then
-			if not NDuiDB["UFs"]["SpecRaidPos"] then return end
+			if not C.db["UFs"]["SpecRaidPos"] then return end
 
 			local function UpdateSpecPos(event, ...)
 				local unit, _, spellID = ...
 				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
 					if not GetSpecialization() then return end
 					local specIndex = GetSpecialization()
-					if not NDuiDB["Mover"]["RaidPos"..specIndex] then
-						NDuiDB["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
+					if not C.db["Mover"]["RaidPos"..specIndex] then
+						C.db["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
 					end
 					raidMover:ClearAllPoints()
-					raidMover:SetPoint(unpack(NDuiDB["Mover"]["RaidPos"..specIndex]))
+					raidMover:SetPoint(unpack(C.db["Mover"]["RaidPos"..specIndex]))
 				end
 			end
 			B:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateSpecPos)
@@ -520,7 +520,7 @@ function UF:OnLogin()
 			raidMover:HookScript("OnDragStop", function()
 				if not GetSpecialization() then return end
 				local specIndex = GetSpecialization()
-				NDuiDB["Mover"]["RaidPos"..specIndex] = NDuiDB["Mover"]["RaidFrame"]
+				C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
 			end)
 		end
 	end

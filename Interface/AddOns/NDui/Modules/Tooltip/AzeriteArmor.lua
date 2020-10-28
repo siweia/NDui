@@ -91,7 +91,7 @@ function TT:Azerite_UpdateItem()
 
 		if tooltipText ~= "" then
 			local line = _G[self:GetName().."TextLeft"..lineIndex]
-			if NDuiDB["Tooltip"]["OnlyArmorIcons"] then
+			if C.db["Tooltip"]["OnlyArmorIcons"] then
 				line:SetText(tooltipText)
 				_G[self:GetName().."TextLeft"..lineIndex+1]:SetText("")
 			else
@@ -104,7 +104,7 @@ function TT:Azerite_UpdateItem()
 end
 
 function TT:AzeriteArmor()
-	if not NDuiDB["Tooltip"]["AzeriteArmor"] then return end
+	if not C.db["Tooltip"]["AzeriteArmor"] then return end
 	if IsAddOnLoaded("AzeriteTooltip") then return end
 
 	GameTooltip:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)

@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
 function module:Chatbar()
-	if not NDuiDB["Chat"]["Chatbar"] then return end
+	if not C.db["Chat"]["Chatbar"] then return end
 
 	local chatFrame = SELECTED_DOCK_FRAME
 	local editBox = chatFrame.editBox
@@ -146,10 +146,10 @@ function module:Chatbar()
 end
 
 function module:ChatBarBackground()
-	if not NDuiDB["Skins"]["ChatbarLine"] then return end
+	if not C.db["Skins"]["ChatbarLine"] then return end
 
 	local cr, cg, cb = 0, 0, 0
-	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
+	if C.db["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
 
 	local parent = _G["NDui_ChatBar"]
 	local width, height, alpha = 450, 18, .5

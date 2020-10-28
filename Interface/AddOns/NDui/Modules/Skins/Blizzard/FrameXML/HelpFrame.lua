@@ -122,7 +122,7 @@ local function LoadPrepatchHelpFrame()
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	if not DB.isNewPatch then
 		LoadPrepatchHelpFrame()

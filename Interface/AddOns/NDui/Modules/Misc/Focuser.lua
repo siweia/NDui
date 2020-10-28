@@ -47,7 +47,7 @@ function M.Focuser_OnEvent(event)
 end
 
 function M:Focuser()
-	if not NDuiDB["Misc"]["Focuser"] then return end
+	if not C.db["Misc"]["Focuser"] then return end
 
 	-- Keybinding override so that models can be shift/alt/ctrl+clicked
 	local f = CreateFrame("CheckButton", "FocuserButton", UIParent, "SecureActionButtonTemplate")

@@ -75,7 +75,7 @@ local function setupAttribute(self)
 end
 
 local Enable = function(self)
-	if not NDuiDB["UFs"]["AutoRes"] then return end
+	if not C.db["UFs"]["AutoRes"] then return end
 
 	if InCombatLockdown() then
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", setupAttribute, true)
@@ -85,7 +85,7 @@ local Enable = function(self)
 end
 
 local Disable = function(self)
-	if NDuiDB["UFs"]["AutoRes"] then return end
+	if C.db["UFs"]["AutoRes"] then return end
 
 	self:SetAttribute("*type3", nil)
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED", setupAttribute)

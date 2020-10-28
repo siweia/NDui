@@ -83,7 +83,7 @@ function module:StartTimer(start, duration)
 	if self.noCooldownCount or hideNumbers[self] then return end
 
 	local frameName = self.GetName and self:GetName()
-	if NDuiDB["Actionbar"]["OverrideWA"] and frameName and strfind(frameName, "WeakAuras") then
+	if C.db["Actionbar"]["OverrideWA"] and frameName and strfind(frameName, "WeakAuras") then
 		self.noCooldownCount = true
 		return
 	end
@@ -167,7 +167,7 @@ function module:RegisterActionButton()
 end
 
 function module:OnLogin()
-	if not NDuiDB["Actionbar"]["Cooldown"] then return end
+	if not C.db["Actionbar"]["Cooldown"] then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", module.StartTimer)

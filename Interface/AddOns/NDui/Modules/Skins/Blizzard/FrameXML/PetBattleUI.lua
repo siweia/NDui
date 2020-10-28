@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["PetBattle"] then return end
+	if not C.db["Skins"]["PetBattle"] then return end
 
 	local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
 

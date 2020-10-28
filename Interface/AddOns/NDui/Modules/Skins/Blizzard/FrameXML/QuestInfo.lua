@@ -114,7 +114,7 @@ local function SetTextColor_White(font)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	-- Item reward highlight
 	QuestInfoItemHighlight:GetRegions():Hide()

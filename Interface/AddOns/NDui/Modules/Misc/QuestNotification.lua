@@ -35,7 +35,7 @@ local function completeText(title)
 end
 
 local function sendQuestMsg(msg)
-	if NDuiDB["Misc"]["OnlyCompleteRing"] then return end
+	if C.db["Misc"]["OnlyCompleteRing"] then return end
 
 	if debugMode and DB.isDeveloper then
 		print(msg)
@@ -66,8 +66,8 @@ local questMatches = {
 }
 
 function M:FindQuestProgress(_, msg)
-	if not NDuiDB["Misc"]["QuestProgress"] then return end
-	if NDuiDB["Misc"]["OnlyCompleteRing"] then return end
+	if not C.db["Misc"]["QuestProgress"] then return end
+	if C.db["Misc"]["OnlyCompleteRing"] then return end
 
 	for _, pattern in pairs(questMatches) do
 		if strmatch(msg, pattern) then
@@ -125,7 +125,7 @@ function M:FindWorldQuestComplete(questID)
 end
 
 function M:QuestNotification()
-	if NDuiDB["Misc"]["QuestNotification"] then
+	if C.db["Misc"]["QuestNotification"] then
 		B:RegisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:RegisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
 		B:RegisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)

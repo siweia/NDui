@@ -58,7 +58,7 @@ do
 		elseif s > 3 then
 			return format("|cffffff00%d|r", s), s - floor(s)
 		else
-			if NDuiDB["Actionbar"]["DecimalCD"] then
+			if C.db["Actionbar"]["DecimalCD"] then
 				return format("|cffff0000%.1f|r", s), s - format("%.1f", s)
 			else
 				return format("|cffff0000%d|r", s + .5), s - floor(s)
@@ -485,7 +485,7 @@ do
 	local shadowBackdrop = {edgeFile = DB.glowTex}
 
 	function B:CreateSD(size, override)
-		if not override and not NDuiDB["Skins"]["Shadow"] then return end
+		if not override and not C.db["Skins"]["Shadow"] then return end
 		if self.__shadow then return end
 
 		local frame = self
@@ -511,7 +511,7 @@ do
 	function B:CreateBD(a)
 		defaultBackdrop.edgeSize = C.mult
 		self:SetBackdrop(defaultBackdrop)
-		self:SetBackdropColor(0, 0, 0, a or NDuiDB["Skins"]["SkinAlpha"])
+		self:SetBackdropColor(0, 0, 0, a or C.db["Skins"]["SkinAlpha"])
 		self:SetBackdropBorderColor(0, 0, 0)
 		if not a then tinsert(C.frames, self) end
 	end
@@ -520,7 +520,7 @@ do
 		local tex = self:CreateTexture(nil, "BORDER")
 		tex:SetInside()
 		tex:SetTexture(DB.bdTex)
-		if NDuiDB["Skins"]["FlatMode"] then
+		if C.db["Skins"]["FlatMode"] then
 			tex:SetVertexColor(.3, .3, .3, .25)
 		else
 			tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
@@ -698,7 +698,7 @@ do
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
 
-		if NDuiDB["Skins"]["FlatMode"] then
+		if C.db["Skins"]["FlatMode"] then
 			self.__gradient:SetVertexColor(cr / 4, cg / 4, cb / 4)
 		else
 			self.__bg:SetBackdropColor(cr, cg, cb, .25)
@@ -706,7 +706,7 @@ do
 		self.__bg:SetBackdropBorderColor(cr, cg, cb)
 	end
 	local function Button_OnLeave(self)
-		if NDuiDB["Skins"]["FlatMode"] then
+		if C.db["Skins"]["FlatMode"] then
 			self.__gradient:SetVertexColor(.3, .3, .3, .25)
 		else
 			self.__bg:SetBackdropColor(0, 0, 0, 0)
@@ -781,7 +781,7 @@ do
 		self.bg:SetBackdropBorderColor(0, 0, 0)
 	end
 	local function Menu_OnMouseUp(self)
-		self.bg:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+		self.bg:SetBackdropColor(0, 0, 0, C.db["Skins"]["SkinAlpha"])
 	end
 	local function Menu_OnMouseDown(self)
 		self.bg:SetBackdropColor(cr, cg, cb, .25)

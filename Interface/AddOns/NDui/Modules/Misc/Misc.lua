@@ -90,7 +90,7 @@ function M:OnLogin()
 
 	-- Instant delete
 	hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
-		if NDuiDB["Misc"]["InstantDelete"] then
+		if C.db["Misc"]["InstantDelete"] then
 			self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 		end
 	end)
@@ -106,7 +106,7 @@ end
 
 -- Hide boss banner
 function M:ToggleBossBanner()
-	if NDuiDB["Misc"]["HideBanner"] then
+	if C.db["Misc"]["HideBanner"] then
 		BossBanner:UnregisterAllEvents()
 	else
 		BossBanner:RegisterEvent("BOSS_KILL")
@@ -116,7 +116,7 @@ end
 
 -- Hide boss emote
 function M:ToggleBossEmote()
-	if NDuiDB["Misc"]["HideBossEmote"] then
+	if C.db["Misc"]["HideBossEmote"] then
 		RaidBossEmoteFrame:UnregisterAllEvents()
 	else
 		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
@@ -260,7 +260,7 @@ function M:UpdateScreenShot()
 		end)
 	end
 
-	if NDuiDB["Misc"]["Screenshot"] then
+	if C.db["Misc"]["Screenshot"] then
 		B:RegisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
 	else
 		M.ScreenShotFrame:Hide()
@@ -283,7 +283,7 @@ function M:DoFasterLoot()
 end
 
 function M:UpdateFasterLoot()
-	if NDuiDB["Misc"]["FasterLoot"] then
+	if C.db["Misc"]["FasterLoot"] then
 		B:RegisterEvent("LOOT_READY", M.DoFasterLoot)
 	else
 		B:UnregisterEvent("LOOT_READY", M.DoFasterLoot)
@@ -316,7 +316,7 @@ end
 -- Block invite from strangers
 function M:BlockStrangerInvite()
 	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, _, _, _, _, _, _, guid)
-		if NDuiDB["Misc"]["BlockInvite"] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
+		if C.db["Misc"]["BlockInvite"] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
 			DeclineGroup()
 			StaticPopup_Hide("PARTY_INVITE")
 		end

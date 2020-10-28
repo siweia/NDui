@@ -63,7 +63,7 @@ function module:AddNewAuraWatch(class, list)
 end
 
 function module:AddDeprecatedGroup()
-	if not NDuiDB["AuraWatch"]["DeprecatedAuras"] then return end
+	if not C.db["AuraWatch"]["DeprecatedAuras"] then return end
 
 	for name, value in pairs(C.DeprecatedAuras) do
 		for _, list in pairs(AuraWatchList["ALL"]) do

@@ -55,7 +55,7 @@ function M:SoloInfo_Update()
 end
 
 function M:SoloInfo()
-	if NDuiDB["Misc"]["SoloInfo"] then
+	if C.db["Misc"]["SoloInfo"] then
 		self:SoloInfo_Update()
 		B:RegisterEvent("UPDATE_INSTANCE_INFO", self.SoloInfo_Update)
 		B:RegisterEvent("PLAYER_DIFFICULTY_CHANGED", self.SoloInfo_Update)
@@ -102,11 +102,11 @@ function M:RareAlert_Update(id)
 		local tex = format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", file, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
-		if NDuiDB["Misc"]["AlertinChat"] then
+		if C.db["Misc"]["AlertinChat"] then
 			local currrentTime = NDuiADB["TimestampFormat"] == 1 and "|cff00ff00["..date("%H:%M:%S").."]|r" or ""
 			print(currrentTime.." -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
 		end
-		if not NDuiDB["Misc"]["RareAlertInWild"] or M.RareInstType == "none" then
+		if not C.db["Misc"]["RareAlertInWild"] or M.RareInstType == "none" then
 			PlaySound(23404, "master")
 		end
 
@@ -127,7 +127,7 @@ function M:RareAlert_CheckInstance()
 end
 
 function M:RareAlert()
-	if NDuiDB["Misc"]["RareAlerter"] then
+	if C.db["Misc"]["RareAlerter"] then
 		self:RareAlert_CheckInstance()
 		B:RegisterEvent("UPDATE_INSTANCE_INFO", self.RareAlert_CheckInstance)
 	else
@@ -177,13 +177,13 @@ local blackList = {
 }
 
 function M:IsAllyPet(sourceFlags)
-	if DB:IsMyPet(sourceFlags) or (not NDuiDB["Misc"]["OwnInterrupt"] and (sourceFlags == DB.PartyPetFlags or sourceFlags == DB.RaidPetFlags)) then
+	if DB:IsMyPet(sourceFlags) or (not C.db["Misc"]["OwnInterrupt"] and (sourceFlags == DB.PartyPetFlags or sourceFlags == DB.RaidPetFlags)) then
 		return true
 	end
 end
 
 function M:InterruptAlert_Update(...)
-	if NDuiDB["Misc"]["AlertInInstance"] and (not IsInInstance() or IsPartyLFG()) then return end
+	if C.db["Misc"]["AlertInInstance"] and (not IsInInstance() or IsPartyLFG()) then return end
 
 	local _, eventType, _, sourceGUID, sourceName, sourceFlags, _, _, destName, _, _, spellID, _, _, extraskillID, _, _, auraType = ...
 	if not sourceGUID or sourceName == destName then return end
@@ -192,11 +192,11 @@ function M:InterruptAlert_Update(...)
 		local infoText = infoType[eventType]
 		if infoText then
 			if infoText == L["BrokenSpell"] then
-				if not NDuiDB["Misc"]["BrokenSpell"] then return end
+				if not C.db["Misc"]["BrokenSpell"] then return end
 				if auraType and auraType == AURA_TYPE_BUFF or blackList[spellID] then return end
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(extraskillID), destName..GetSpellLink(spellID)), msgChannel())
 			else
-				if NDuiDB["Misc"]["OwnInterrupt"] and sourceName ~= DB.MyName and not M:IsAllyPet(sourceFlags) then return end
+				if C.db["Misc"]["OwnInterrupt"] and sourceName ~= DB.MyName and not M:IsAllyPet(sourceFlags) then return end
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(spellID), destName..GetSpellLink(extraskillID)), msgChannel())
 			end
 		end
@@ -212,7 +212,7 @@ function M:InterruptAlert_CheckGroup()
 end
 
 function M:InterruptAlert()
-	if NDuiDB["Misc"]["Interrupt"] then
+	if C.db["Misc"]["Interrupt"] then
 		self:InterruptAlert_CheckGroup()
 		B:RegisterEvent("GROUP_LEFT", self.InterruptAlert_CheckGroup)
 		B:RegisterEvent("GROUP_JOINED", self.InterruptAlert_CheckGroup)
@@ -324,7 +324,7 @@ function M:Explosive_Update(...)
 		local overkill = select(index, ...)
 		if overkill and overkill > 0 then
 			local name = strsplit("-", sourceName or UNKNOWN)
-			local cache = NDuiDB["Misc"]["ExplosiveCache"]
+			local cache = C.db["Misc"]["ExplosiveCache"]
 			if not cache[name] then cache[name] = 0 end
 			cache[name] = cache[name] + 1
 		end
@@ -332,13 +332,13 @@ function M:Explosive_Update(...)
 end
 
 local function startCount()
-	wipe(NDuiDB["Misc"]["ExplosiveCache"])
+	wipe(C.db["Misc"]["ExplosiveCache"])
 	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
 end
 
 local function endCount()
 	local text
-	for name, count in pairs(NDuiDB["Misc"]["ExplosiveCache"]) do
+	for name, count in pairs(C.db["Misc"]["ExplosiveCache"]) do
 		text = (text or L["ExplosiveCount"])..name.."("..count..") "
 	end
 	if text then SendChatMessage(text, "PARTY") end
@@ -367,7 +367,7 @@ function M.Explosive_CheckAffixes(event)
 end
 
 function M:ExplosiveAlert()
-	if NDuiDB["Misc"]["ExplosiveCount"] then
+	if C.db["Misc"]["ExplosiveCount"] then
 		self:Explosive_CheckAffixes()
 		B:RegisterEvent("PLAYER_ENTERING_WORLD", self.Explosive_CheckAffixes)
 	else
@@ -395,7 +395,7 @@ local itemList = {
 }
 
 function M:ItemAlert_Update(unit, _, spellID)
-	if not NDuiDB["Misc"]["PlacedItemAlert"] then return end
+	if not C.db["Misc"]["PlacedItemAlert"] then return end
 
 	if (UnitInRaid(unit) or UnitInParty(unit)) and spellID and itemList[spellID] and lastTime ~= GetTime() then
 		local who = UnitName(unit)
@@ -509,7 +509,7 @@ function M:NVision_Check()
 		end
 
 		if RaidBossEmoteFrame.__isOff then
-			if not NDuiDB["Misc"]["HideBossEmote"] then
+			if not C.db["Misc"]["HideBossEmote"] then
 				RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
 				RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_WHISPER")
 				RaidBossEmoteFrame:RegisterEvent("CLEAR_BOSS_EMOTES")
@@ -520,7 +520,7 @@ function M:NVision_Check()
 end
 
 function M:NVision_Init()
-	if not NDuiDB["Misc"]["NzothVision"] then return end
+	if not C.db["Misc"]["NzothVision"] then return end
 	M:NVision_Check()
 	B:RegisterEvent("UPDATE_INSTANCE_INFO", M.NVision_Check)
 end

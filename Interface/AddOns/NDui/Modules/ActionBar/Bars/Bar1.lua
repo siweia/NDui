@@ -12,7 +12,7 @@ local function UpdateActionbarScale(bar)
 	local frame = _G["NDui_Action"..bar]
 	if not frame then return end
 
-	local size = frame.buttonSize * NDuiDB["Actionbar"]["Scale"]
+	local size = frame.buttonSize * C.db["Actionbar"]["Scale"]
 	frame:SetFrameSize(size)
 	for _, button in pairs(frame.buttonList) do
 		button:SetSize(size, size)
@@ -20,7 +20,7 @@ local function UpdateActionbarScale(bar)
 end
 
 function Bar:UpdateAllScale()
-	if not NDuiDB["Actionbar"]["Enable"] then return end
+	if not C.db["Actionbar"]["Enable"] then return end
 
 	UpdateActionbarScale("Bar1")
 	UpdateActionbarScale("Bar2")
@@ -55,7 +55,7 @@ end
 function Bar:CreateBar1()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
-	local layout = NDuiDB["Actionbar"]["Style"]
+	local layout = C.db["Actionbar"]["Style"]
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar1", UIParent, "SecureHandlerStateTemplate")
 	if layout == 5 then
@@ -130,7 +130,7 @@ end
 function Bar:OnLogin()
 	Bar.buttons = {}
 
-	if not NDuiDB["Actionbar"]["Enable"] then return end
+	if not C.db["Actionbar"]["Enable"] then return end
 
 	Bar:CreateBar1()
 	Bar:CreateBar2()

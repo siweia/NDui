@@ -24,7 +24,7 @@ function S:DBMSkin()
 	end
 
 	if not IsAddOnLoaded("DBM-Core") then return end
-	if not NDuiDB["Skins"]["DBM"] then return end
+	if not C.db["Skins"]["DBM"] then return end
 
 	local buttonsize = 24
 

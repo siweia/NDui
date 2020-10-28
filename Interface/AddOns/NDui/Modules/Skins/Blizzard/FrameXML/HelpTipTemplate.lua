@@ -13,7 +13,7 @@ local function reskinHelpTips(self)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	reskinHelpTips(HelpTip)
 	hooksecurefunc(HelpTip, "Show", reskinHelpTips)

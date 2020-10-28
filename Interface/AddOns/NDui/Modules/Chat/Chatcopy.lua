@@ -58,7 +58,7 @@ function module:ChatCopy_OnClick(btn)
 		end
 	elseif btn == "RightButton" then
 		B:TogglePanel(menu)
-		NDuiDB["Chat"]["ChatMenu"] = menu:IsShown()
+		C.db["Chat"]["ChatMenu"] = menu:IsShown()
 	end
 end
 
@@ -66,7 +66,7 @@ function module:ChatCopy_CreateMenu()
 	menu = CreateFrame("Frame", nil, UIParent)
 	menu:SetSize(25, 100)
 	menu:SetPoint("TOPRIGHT", _G.ChatFrame1, 22, 0)
-	menu:SetShown(NDuiDB["Chat"]["ChatMenu"])
+	menu:SetShown(C.db["Chat"]["ChatMenu"])
 
 	_G.ChatFrameMenuButton:ClearAllPoints()
 	_G.ChatFrameMenuButton:SetPoint("TOP", menu)

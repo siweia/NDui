@@ -8,7 +8,7 @@ local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel
 local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
 function M:MissingStats()
-	if not NDuiDB["Misc"]["MissingStats"] then return end
+	if not C.db["Misc"]["MissingStats"] then return end
 	if IsAddOnLoaded("DejaCharacterStats") then return end
 
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)

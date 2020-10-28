@@ -13,17 +13,17 @@ function A:OnLogin()
 	A.settings = {
 		Buffs = {
 			offset = 12,
-			size = NDuiDB["Auras"]["BuffSize"],
-			wrapAfter = NDuiDB["Auras"]["BuffsPerRow"],
+			size = C.db["Auras"]["BuffSize"],
+			wrapAfter = C.db["Auras"]["BuffsPerRow"],
 			maxWraps = 3,
-			reverseGrow = NDuiDB["Auras"]["ReverseBuffs"],
+			reverseGrow = C.db["Auras"]["ReverseBuffs"],
 		},
 		Debuffs = {
 			offset = 12,
-			size = NDuiDB["Auras"]["DebuffSize"],
-			wrapAfter = NDuiDB["Auras"]["DebuffsPerRow"],
+			size = C.db["Auras"]["DebuffSize"],
+			wrapAfter = C.db["Auras"]["DebuffsPerRow"],
 			maxWraps = 1,
-			reverseGrow = NDuiDB["Auras"]["ReverseDebuffs"],
+			reverseGrow = C.db["Auras"]["ReverseDebuffs"],
 		},
 	}
 
@@ -168,12 +168,12 @@ function A:OnAttributeChanged(attribute, value)
 end
 
 function A:UpdateOptions()
-	A.settings.Buffs.size = NDuiDB["Auras"]["BuffSize"]
-	A.settings.Buffs.wrapAfter = NDuiDB["Auras"]["BuffsPerRow"]
-	A.settings.Buffs.reverseGrow = NDuiDB["Auras"]["ReverseBuffs"]
-	A.settings.Debuffs.size = NDuiDB["Auras"]["DebuffSize"]
-	A.settings.Debuffs.wrapAfter = NDuiDB["Auras"]["DebuffsPerRow"]
-	A.settings.Debuffs.reverseGrow = NDuiDB["Auras"]["ReverseDebuffs"]
+	A.settings.Buffs.size = C.db["Auras"]["BuffSize"]
+	A.settings.Buffs.wrapAfter = C.db["Auras"]["BuffsPerRow"]
+	A.settings.Buffs.reverseGrow = C.db["Auras"]["ReverseBuffs"]
+	A.settings.Debuffs.size = C.db["Auras"]["DebuffSize"]
+	A.settings.Debuffs.wrapAfter = C.db["Auras"]["DebuffsPerRow"]
+	A.settings.Debuffs.reverseGrow = C.db["Auras"]["ReverseDebuffs"]
 end
 
 function A:UpdateHeader(header)

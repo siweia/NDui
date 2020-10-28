@@ -10,8 +10,8 @@ local totems = {}
 
 function A:TotemBar_Init()
 	local margin = C.margin
-	local vertical = NDuiDB["Auras"]["VerticalTotems"]
-	local iconSize = NDuiDB["Auras"]["TotemSize"]
+	local vertical = C.db["Auras"]["VerticalTotems"]
+	local iconSize = C.db["Auras"]["TotemSize"]
 	local width = vertical and (iconSize + margin*2) or (iconSize*4 + margin*5)
 	local height = vertical and (iconSize*4 + margin*5) or (iconSize + margin*2)
 
@@ -74,7 +74,7 @@ function A:TotemBar_Update()
 end
 
 function A:Totems()
-	if not NDuiDB["Auras"]["Totems"] then return end
+	if not C.db["Auras"]["Totems"] then return end
 
 	A:TotemBar_Init()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", A.TotemBar_Update)

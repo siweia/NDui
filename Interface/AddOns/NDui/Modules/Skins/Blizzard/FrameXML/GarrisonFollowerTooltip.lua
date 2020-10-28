@@ -7,7 +7,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	B.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	-- Tooltips
 	function B:ReskinGarrisonTooltip()

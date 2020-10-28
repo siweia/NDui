@@ -29,7 +29,7 @@ end
 function Bar:CreateBar5()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
-	local layout = NDuiDB["Actionbar"]["Style"]
+	local layout = C.db["Actionbar"]["Style"]
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar5", UIParent, "SecureHandlerStateTemplate")
 	if layout == 1 or layout == 4 or layout == 5 then
@@ -61,7 +61,7 @@ function Bar:CreateBar5()
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	if NDuiDB["Actionbar"]["Bar5Fade"] and cfg.fader then
+	if C.db["Actionbar"]["Bar5Fade"] and cfg.fader then
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 end

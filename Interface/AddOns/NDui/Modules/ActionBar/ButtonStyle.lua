@@ -119,7 +119,7 @@ end
 
 local function SetupBackdrop(icon)
 	local bg = B.SetBD(icon, .25)
-	if NDuiDB["Actionbar"]["Classcolor"] then
+	if C.db["Actionbar"]["Classcolor"] then
 		bg:SetBackdropColor(DB.r, DB.g, DB.b, .25)
 	else
 		bg:SetBackdropColor(.2, .2, .2, .25)
@@ -152,7 +152,7 @@ local replaces = {
 
 function Bar:UpdateHotKey()
 	local hotkey = _G[self:GetName().."HotKey"]
-	if hotkey and hotkey:IsShown() and not NDuiDB["Actionbar"]["Hotkeys"] then
+	if hotkey and hotkey:IsShown() and not C.db["Actionbar"]["Hotkeys"] then
 		hotkey:Hide()
 		return
 	end
@@ -230,7 +230,7 @@ function Bar:StyleActionButton(button, cfg)
 	local overlay = CreateFrame("Frame", nil, button)
 	overlay:SetAllPoints()
 	if count then
-		if NDuiDB["Actionbar"]["Count"] then
+		if C.db["Actionbar"]["Count"] then
 			count:SetParent(overlay)
 			SetupFontString(count, cfg.count)
 		else
@@ -243,7 +243,7 @@ function Bar:StyleActionButton(button, cfg)
 		SetupFontString(hotkey, cfg.hotkey)
 	end
 	if name then
-		if NDuiDB["Actionbar"]["Macro"] then
+		if C.db["Actionbar"]["Macro"] then
 			name:SetParent(overlay)
 			SetupFontString(name, cfg.name)
 		else
@@ -303,7 +303,7 @@ function Bar:StyleExtraActionButton(cfg)
 	cfg.hotkey.font = {DB.Font[1], 13, DB.Font[3]}
 	SetupFontString(hotkey, cfg.hotkey)
 
-	if NDuiDB["Actionbar"]["Count"] then
+	if C.db["Actionbar"]["Count"] then
 		count:SetParent(overlay)
 		cfg.count.font = {DB.Font[1], 16, DB.Font[3]}
 		SetupFontString(count, cfg.count)

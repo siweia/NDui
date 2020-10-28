@@ -13,7 +13,7 @@ local function clearMinimize(f)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]

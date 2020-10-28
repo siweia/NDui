@@ -31,7 +31,7 @@ local function replaceGossipText(button, text)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	QuestFont:SetTextColor(1, 1, 1)
 	GossipGreetingText:SetTextColor(1, 1, 1)

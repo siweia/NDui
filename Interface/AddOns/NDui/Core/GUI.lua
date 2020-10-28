@@ -484,14 +484,14 @@ local function setupAuraWatch()
 end
 
 local function updateBagSortOrder()
-	SetSortBagsRightToLeft(NDuiDB["Bags"]["BagSortMode"] == 1)
+	SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
 end
 
 local function updateBagStatus()
 	B:GetModule("Bags"):UpdateAllBags()
 
 	local label = BAG_FILTER_EQUIPMENT
-	if NDuiDB["Bags"]["ItemSetFilter"] then
+	if C.db["Bags"]["ItemSetFilter"] then
 		label = L["Equipement Set"]
 	end
 	_G.NDui_BackpackEquipment.label:SetText(label)
@@ -534,7 +534,7 @@ local function updateReminder()
 end
 
 local function refreshTotemBar()
-	if not NDuiDB["Auras"]["Totems"] then return end
+	if not C.db["Auras"]["Totems"] then return end
 	B:GetModule("Auras"):TotemBar_Init()
 end
 
@@ -638,7 +638,7 @@ local function updateRaidHealthMethod()
 end
 
 local function updateSmoothingAmount()
-	B:SetSmoothingAmount(NDuiDB["UFs"]["SmoothAmount"])
+	B:SetSmoothingAmount(C.db["UFs"]["SmoothAmount"])
 end
 
 local function updateMinimapScale()
@@ -695,7 +695,7 @@ end
 
 local function updateSkinAlpha()
 	for _, frame in pairs(C.frames) do
-		frame:SetBackdropColor(0, 0, 0, NDuiDB["Skins"]["SkinAlpha"])
+		frame:SetBackdropColor(0, 0, 0, C.db["Skins"]["SkinAlpha"])
 	end
 end
 
@@ -1117,9 +1117,9 @@ local function NDUI_VARIABLE(key, value, newValue)
 		end
 	else
 		if newValue ~= nil then
-			NDuiDB[key][value] = newValue
+			C.db[key][value] = newValue
 		else
-			return NDuiDB[key][value]
+			return C.db[key][value]
 		end
 	end
 end
@@ -1276,7 +1276,7 @@ local bloodlustFilter = {
 
 function G:ExportGUIData()
 	local text = "NDuiSettings:"..DB.Version..":"..DB.MyName..":"..DB.MyClass
-	for KEY, VALUE in pairs(NDuiDB) do
+	for KEY, VALUE in pairs(C.db) do
 		if type(VALUE) == "table" then
 			for key, value in pairs(VALUE) do
 				if type(value) == "table" then
@@ -1312,7 +1312,7 @@ function G:ExportGUIData()
 						end
 					end
 				else
-					if NDuiDB[KEY][key] ~= G.DefaultSettings[KEY][key] then -- don't export default settings
+					if C.db[KEY][key] ~= G.DefaultSettings[KEY][key] then -- don't export default settings
 						text = text..";"..KEY..":"..key..":"..tostring(value)
 					end
 				end
@@ -1378,15 +1378,15 @@ end
 local function reloadDefaultSettings()
 	for i, j in pairs(G.DefaultSettings) do
 		if type(j) == "table" then
-			if not NDuiDB[i] then NDuiDB[i] = {} end
+			if not C.db[i] then C.db[i] = {} end
 			for k, v in pairs(j) do
-				NDuiDB[i][k] = v
+				C.db[i][k] = v
 			end
 		else
-			NDuiDB[i] = j
+			C.db[i] = j
 		end
 	end
-	NDuiDB["BFA"] = true -- don't empty data on next loading
+	C.db["BFA"] = true -- don't empty data on next loading
 end
 
 function G:ImportGUIData()
@@ -1406,18 +1406,18 @@ function G:ImportGUIData()
 		local option = options[i]
 		local key, value, arg1 = strsplit(":", option)
 		if arg1 == "true" or arg1 == "false" then
-			NDuiDB[key][value] = toBoolean(arg1)
+			C.db[key][value] = toBoolean(arg1)
 		elseif arg1 == "EMPTYTABLE" then
-			NDuiDB[key][value] = {}
+			C.db[key][value] = {}
 		elseif strfind(value, "Color") and (arg1 == "r" or arg1 == "g" or arg1 == "b") then
 			local color = select(4, strsplit(":", option))
-			if NDuiDB[key][value] then
-				NDuiDB[key][value][arg1] = tonumber(color)
+			if C.db[key][value] then
+				C.db[key][value][arg1] = tonumber(color)
 			end
 		elseif key == "AuraWatchList" then
 			if value == "Switcher" then
 				local index, state = select(3, strsplit(":", option))
-				NDuiDB[key][value][tonumber(index)] = toBoolean(state)
+				C.db[key][value][tonumber(index)] = toBoolean(state)
 			else
 				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
 				value = tonumber(value)
@@ -1428,30 +1428,30 @@ function G:ImportGUIData()
 				timeless = toBoolean(timeless)
 				combat = toBoolean(combat)
 				flash = toBoolean(flash)
-				if not NDuiDB[key][value] then NDuiDB[key][value] = {} end
-				NDuiDB[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
+				if not C.db[key][value] then C.db[key][value] = {} end
+				C.db[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
 			end
 		elseif value == "FavouriteItems" then
 			local items = {select(3, strsplit(":", option))}
 			for _, itemID in next, items do
-				NDuiDB[key][value][tonumber(itemID)] = true
+				C.db[key][value][tonumber(itemID)] = true
 			end
 		elseif key == "Mover" or key == "AuraWatchMover" then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
 			value = tonumber(value) or value
 			x = tonumber(x)
 			y = tonumber(y)
-			NDuiDB[key][value] = {relFrom, parent, relTo, x, y}
+			C.db[key][value] = {relFrom, parent, relTo, x, y}
 		elseif key == "RaidClickSets" then
 			if DB.MyClass == class then
-				NDuiDB[key][value] = {select(3, strsplit(":", option))}
+				C.db[key][value] = {select(3, strsplit(":", option))}
 			end
 		elseif key == "InternalCD" then
 			local spellID, duration, indicator, unit, itemID = select(3, strsplit(":", option))
 			spellID = tonumber(spellID)
 			duration = tonumber(duration)
 			itemID = tonumber(itemID)
-			NDuiDB[key][spellID] = {spellID, duration, indicator, unit, itemID}
+			C.db[key][spellID] = {spellID, duration, indicator, unit, itemID}
 		elseif key == "ACCOUNT" then
 			if value == "RaidAuraWatch" or value == "CustomJunkList" then
 				local spells = {select(3, strsplit(":", option))}
@@ -1492,9 +1492,9 @@ function G:ImportGUIData()
 			end
 		elseif tonumber(arg1) then
 			if value == "DBMCount" then
-				NDuiDB[key][value] = arg1
+				C.db[key][value] = arg1
 			else
-				NDuiDB[key][value] = tonumber(arg1)
+				C.db[key][value] = tonumber(arg1)
 			end
 		end
 	end
@@ -1682,5 +1682,5 @@ function G:OnLogin()
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 	end)
 
-	if NDuiDB["Skins"]["BlizzardSkins"] then B.Reskin(gui) end
+	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(gui) end
 end

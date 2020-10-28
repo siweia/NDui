@@ -17,7 +17,7 @@ local function isCheckTexture(check)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	hooksecurefunc("UIDropDownMenu_CreateFrames", function()
 		for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do

@@ -32,11 +32,11 @@ function Bar:CreateStancebar()
 	local buttonList = {}
 
 	local frame = CreateFrame("Frame", "NDui_ActionBarStance", UIParent, "SecureHandlerStateTemplate")
-	local anchor = NDuiDB["Actionbar"]["Style"] == 4 and _G.NDui_ActionBar3 or _G.NDui_ActionBar2
+	local anchor = C.db["Actionbar"]["Style"] == 4 and _G.NDui_ActionBar3 or _G.NDui_ActionBar2
 	frame.Pos = {"BOTTOMLEFT", anchor, "TOPLEFT", 0, margin}
 
 	-- StanceBar
-	if NDuiDB["Actionbar"]["ShowStance"] then
+	if C.db["Actionbar"]["ShowStance"] then
 		StanceBarFrame:SetParent(frame)
 		StanceBarFrame:EnableMouse(false)
 		StanceBarLeft:SetTexture(nil)

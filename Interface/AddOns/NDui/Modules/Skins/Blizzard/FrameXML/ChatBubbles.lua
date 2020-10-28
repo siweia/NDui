@@ -26,7 +26,7 @@ local function reskinChatBubble(chatbubble)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	local events = {
 		CHAT_MSG_SAY = "chatBubbles",

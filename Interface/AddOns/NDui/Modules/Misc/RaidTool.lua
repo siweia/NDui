@@ -359,14 +359,14 @@ function M:RaidTool_BuffChecker(parent)
 				end
 			end
 		end
-		if not NDuiDB["Misc"]["RMRune"] then NoBuff[numGroups] = {} end
+		if not C.db["Misc"]["RMRune"] then NoBuff[numGroups] = {} end
 
 		if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and #NoBuff[6] == 0 then
 			sendMsg(L["Buffs Ready"])
 		else
 			sendMsg(L["Raid Buff Check"])
 			for i = 1, 5 do sendResult(i) end
-			if NDuiDB["Misc"]["RMRune"] then sendResult(numGroups) end
+			if C.db["Misc"]["RMRune"] then sendResult(numGroups) end
 		end
 	end
 
@@ -408,7 +408,7 @@ function M:RaidTool_BuffChecker(parent)
 			if IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid())) then
 				if IsAddOnLoaded("DBM-Core") then
 					if reset then
-						SlashCmdList["DEADLYBOSSMODS"]("pull "..NDuiDB["Misc"]["DBMCount"])
+						SlashCmdList["DEADLYBOSSMODS"]("pull "..C.db["Misc"]["DBMCount"])
 					else
 						SlashCmdList["DEADLYBOSSMODS"]("pull 0")
 					end
@@ -416,7 +416,7 @@ function M:RaidTool_BuffChecker(parent)
 				elseif IsAddOnLoaded("BigWigs") then
 					if not SlashCmdList["BIGWIGSPULL"] then LoadAddOn("BigWigs_Plugins") end
 					if reset then
-						SlashCmdList["BIGWIGSPULL"](NDuiDB["Misc"]["DBMCount"])
+						SlashCmdList["BIGWIGSPULL"](C.db["Misc"]["DBMCount"])
 					else
 						SlashCmdList["BIGWIGSPULL"]("0")
 					end
@@ -534,7 +534,7 @@ function M:RaidTool_EasyMarker()
 	}
 
 	WorldFrame:HookScript("OnMouseDown", function(_, btn)
-		if not NDuiDB["Misc"]["EasyMarking"] then return end
+		if not C.db["Misc"]["EasyMarking"] then return end
 
 		if btn == "LeftButton" and IsControlKeyDown() and UnitExists("mouseover") then
 			if not IsInGroup() or (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
@@ -604,7 +604,7 @@ function M:RaidTool_UpdateGrid()
 	if not frame then return end
 
 	local size, margin = 24, 5
-	local showType = NDuiDB["Misc"]["ShowMarkerBar"]
+	local showType = C.db["Misc"]["ShowMarkerBar"]
 	local perRow = markerTypeToRow[showType]
 
 	for i = 1, 9 do
@@ -635,7 +635,7 @@ function M:RaidTool_Misc()
 end
 
 function M:RaidTool_Init()
-	if not NDuiDB["Misc"]["RaidTool"] then return end
+	if not C.db["Misc"]["RaidTool"] then return end
 
 	local frame = M:RaidTool_Header()
 	M:RaidTool_RoleCount(frame)

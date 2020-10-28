@@ -4,8 +4,8 @@ local S = B:GetModule("Skins")
 local TT = B:GetModule("Tooltip")
 
 function S:PGFSkin()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
-	if not NDuiDB["Skins"]["PGFSkin"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["PGFSkin"] then return end
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
 	local tipStyled

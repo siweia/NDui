@@ -73,10 +73,10 @@ function module:LoadInfobar(info)
 end
 
 function module:BackgroundLines()
-	if not NDuiDB["Skins"]["InfobarLine"] then return end
+	if not C.db["Skins"]["InfobarLine"] then return end
 
 	local cr, cg, cb = 0, 0, 0
-	if NDuiDB["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
+	if C.db["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
 
 	local parent = UIParent
 	local width, height = 450, 18

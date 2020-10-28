@@ -101,9 +101,9 @@ end
 function module:CreateRestoreButton(f)
 	local bu = B.CreateButton(self, 24, 24, true, "Atlas:transmog-icon-revert")
 	bu:SetScript("OnClick", function()
-		NDuiDB["TempAnchor"][f.main:GetName()] = nil
-		NDuiDB["TempAnchor"][f.bank:GetName()] = nil
-		NDuiDB["TempAnchor"][f.reagent:GetName()] = nil
+		C.db["TempAnchor"][f.main:GetName()] = nil
+		C.db["TempAnchor"][f.bank:GetName()] = nil
+		C.db["TempAnchor"][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
 		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 		f.bank:ClearAllPoints()
@@ -156,7 +156,7 @@ function module:CreateBankButton(f)
 end
 
 local function updateDepositButtonStatus(bu)
-	if NDuiDB["Bags"]["AutoDeposit"] then
+	if C.db["Bags"]["AutoDeposit"] then
 		bu.bg:SetBackdropBorderColor(1, .8, 0)
 	else
 		bu.bg:SetBackdropBorderColor(0, 0, 0)
@@ -164,7 +164,7 @@ local function updateDepositButtonStatus(bu)
 end
 
 function module:AutoDeposit()
-	if NDuiDB["Bags"]["AutoDeposit"] then
+	if C.db["Bags"]["AutoDeposit"] then
 		DepositReagentBank()
 	end
 end
@@ -175,7 +175,7 @@ function module:CreateDepositButton()
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
 		if btn == "RightButton" then
-			NDuiDB["Bags"]["AutoDeposit"] = not NDuiDB["Bags"]["AutoDeposit"]
+			C.db["Bags"]["AutoDeposit"] = not C.db["Bags"]["AutoDeposit"]
 			updateDepositButtonStatus(bu)
 		else
 			DepositReagentBank()
@@ -209,7 +209,7 @@ end
 function module:CreateSortButton(name)
 	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Pet_Broom")
 	bu:SetScript("OnClick", function()
-		if NDuiDB["Bags"]["BagSortMode"] == 3 then
+		if C.db["Bags"]["BagSortMode"] == 3 then
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["BagSortDisabled"])
 			return
 		end
@@ -219,9 +219,9 @@ function module:CreateSortButton(name)
 		elseif name == "Reagent" then
 			SortReagentBankBags()
 		else
-			if NDuiDB["Bags"]["BagSortMode"] == 1 then
+			if C.db["Bags"]["BagSortMode"] == 1 then
 				SortBags()
-			elseif NDuiDB["Bags"]["BagSortMode"] == 2 then
+			elseif C.db["Bags"]["BagSortMode"] == 2 then
 				if InCombatLockdown() then
 					UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT)
 				else
@@ -324,7 +324,7 @@ end
 local splitEnable
 local function saveSplitCount(self)
 	local count = self:GetText() or ""
-	NDuiDB["Bags"]["SplitCount"] = tonumber(count) or 1
+	C.db["Bags"]["SplitCount"] = tonumber(count) or 1
 end
 
 function module:CreateSplitButton()
@@ -357,7 +357,7 @@ function module:CreateSplitButton()
 			self.bg:SetBackdropBorderColor(1, .8, 0)
 			self.text = enabledText
 			splitFrame:Show()
-			editbox:SetText(NDuiDB["Bags"]["SplitCount"])
+			editbox:SetText(C.db["Bags"]["SplitCount"])
 		else
 			self.__turnOff()
 		end
@@ -378,8 +378,8 @@ local function splitOnClick(self)
 	PickupContainerItem(self.bagID, self.slotID)
 
 	local texture, itemCount, locked = GetContainerItemInfo(self.bagID, self.slotID)
-	if texture and not locked and itemCount and itemCount > NDuiDB["Bags"]["SplitCount"] then
-		SplitContainerItem(self.bagID, self.slotID, NDuiDB["Bags"]["SplitCount"])
+	if texture and not locked and itemCount and itemCount > C.db["Bags"]["SplitCount"] then
+		SplitContainerItem(self.bagID, self.slotID, C.db["Bags"]["SplitCount"])
 
 		local bagID, slotID = module:GetEmptySlot("Main")
 		if slotID then
@@ -425,10 +425,10 @@ local function favouriteOnClick(self)
 
 	local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	if texture and quality > LE_ITEM_QUALITY_POOR then
-		if NDuiDB["Bags"]["FavouriteItems"][itemID] then
-			NDuiDB["Bags"]["FavouriteItems"][itemID] = nil
+		if C.db["Bags"]["FavouriteItems"][itemID] then
+			C.db["Bags"]["FavouriteItems"][itemID] = nil
 		else
-			NDuiDB["Bags"]["FavouriteItems"][itemID] = true
+			C.db["Bags"]["FavouriteItems"][itemID] = true
 		end
 		ClearCursor()
 		module:UpdateAllBags()
@@ -563,16 +563,16 @@ function module:CloseBags()
 end
 
 function module:OnLogin()
-	if not NDuiDB["Bags"]["Enable"] then return end
+	if not C.db["Bags"]["Enable"] then return end
 
 	-- Settings
-	local bagsScale = NDuiDB["Bags"]["BagsScale"]
-	local bagsWidth = NDuiDB["Bags"]["BagsWidth"]
-	local bankWidth = NDuiDB["Bags"]["BankWidth"]
-	local iconSize = NDuiDB["Bags"]["IconSize"]
-	local deleteButton = NDuiDB["Bags"]["DeleteButton"]
-	local itemSetFilter = NDuiDB["Bags"]["ItemSetFilter"]
-	local showNewItem = NDuiDB["Bags"]["ShowNewItem"]
+	local bagsScale = C.db["Bags"]["BagsScale"]
+	local bagsWidth = C.db["Bags"]["BagsWidth"]
+	local bankWidth = C.db["Bags"]["BankWidth"]
+	local iconSize = C.db["Bags"]["IconSize"]
+	local deleteButton = C.db["Bags"]["DeleteButton"]
+	local itemSetFilter = C.db["Bags"]["ItemSetFilter"]
+	local showNewItem = C.db["Bags"]["ShowNewItem"]
 
 	-- Init
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
@@ -774,15 +774,15 @@ function module:OnLogin()
 			end
 		end
 
-		if NDuiDB["Bags"]["FavouriteItems"][item.id] then
+		if C.db["Bags"]["FavouriteItems"][item.id] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()
 		end
 
-		if NDuiDB["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
+		if C.db["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
 			local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level <= NDuiDB["Bags"]["iLvlToShow"] then level = "" end
+			if level <= C.db["Bags"]["iLvlToShow"] then level = "" end
 			local color = DB.QualityColors[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
@@ -798,7 +798,7 @@ function module:OnLogin()
 			end
 		end
 
-		if NDuiDB["Bags"]["SpecialBagsColor"] then
+		if C.db["Bags"]["SpecialBagsColor"] then
 			local bagType = module.BagsType[item.bagID]
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self:SetBackdropColor(unpack(color))
@@ -837,7 +837,7 @@ function module:OnLogin()
 		local _, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
 		local width = columns * (iconSize+spacing)-spacing
 		if self.freeSlot then
-			if NDuiDB["Bags"]["GatherEmpty"] then
+			if C.db["Bags"]["GatherEmpty"] then
 				local numSlots = #self.buttons + 1
 				local row = ceil(numSlots / columns)
 				local col = numSlots % columns
@@ -971,7 +971,7 @@ function module:OnLogin()
 	end
 
 	-- Sort order
-	SetSortBagsRightToLeft(NDuiDB["Bags"]["BagSortMode"] == 1)
+	SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
 	SetInsertItemsLeftToRight(false)
 
 	-- Init

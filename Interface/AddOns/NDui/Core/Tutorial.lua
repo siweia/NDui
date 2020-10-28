@@ -61,7 +61,7 @@ local function ForceChatSettings()
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
-	NDuiDB["Chat"]["Lock"] = true
+	C.db["Chat"]["Lock"] = true
 end
 
 StaticPopupDialogs["RELOAD_NDUI"] = {
@@ -340,7 +340,7 @@ local function YesTutor()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Tutorial Complete"])
 			pass:Hide()
 		elseif currentPage == 5 then
-			NDuiDB["Tutorial"]["Complete"] = true
+			C.db["Tutorial"]["Complete"] = true
 			tutor:Hide()
 			StaticPopup_Show("RELOAD_NDUI")
 			currentPage = 0
@@ -387,7 +387,7 @@ local function HelloWorld()
 	B.CreateFS(welcome, 14, L["Help Info10"], false, "TOPLEFT", 20, -310)
 	B.CreateFS(welcome, 14, L["Help Info11"], false, "TOPLEFT", 20, -330)
 
-	if NDuiDB["Tutorial"]["Complete"] then
+	if C.db["Tutorial"]["Complete"] then
 		local close = B.CreateButton(welcome, 16, 16, true, DB.closeTex)
 		close:SetPoint("TOPRIGHT", -10, -10)
 		close:SetScript("OnClick", function()
@@ -412,5 +412,5 @@ function module:OnLogin()
 
 	-- Tutorial and settings
 	ForceAddonSkins()
-	if not NDuiDB["Tutorial"]["Complete"] then HelloWorld() end
+	if not C.db["Tutorial"]["Complete"] then HelloWorld() end
 end

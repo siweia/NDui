@@ -31,7 +31,7 @@ function Bar:CreatePetbar()
 	local buttonList = {}
 
 	local frame = CreateFrame("Frame", "NDui_ActionBarPet", UIParent, "SecureHandlerStateTemplate")
-	local anchor = NDuiDB["Actionbar"]["Style"] == 4 and _G.NDui_ActionBar3 or _G.NDui_ActionBar2
+	local anchor = C.db["Actionbar"]["Style"] == 4 and _G.NDui_ActionBar3 or _G.NDui_ActionBar2
 	frame.Pos = {"BOTTOM", anchor, "TOP", 0, margin}
 
 	PetActionBarFrame:SetParent(frame)

@@ -1001,7 +1001,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- WarPlan
 	if IsAddOnLoaded("WarPlan") then
 		local function reskinWarPlanFont(font, r, g, b)
-			if not NDuiDB["Skins"]["FontOutline"] then return end
+			if not C.db["Skins"]["FontOutline"] then return end
 			if not font then return end
 			font:SetTextColor(r, g, b)
 		end

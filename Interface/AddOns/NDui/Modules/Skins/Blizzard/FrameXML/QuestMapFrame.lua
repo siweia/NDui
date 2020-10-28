@@ -34,7 +34,7 @@ local function ReskinSessionDialog(_, dialog)
 end
 
 tinsert(C.defaultThemes, function()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	-- Quest frame
 

@@ -77,7 +77,7 @@ function M:PetTabs_Load(addon)
 end
 
 function M:PetTabs_Init()
-	if not NDuiDB["Misc"]["PetFilter"] then return end
+	if not C.db["Misc"]["PetFilter"] then return end
 
 	if IsAddOnLoaded("Blizzard_Collections") then
 		M:PetTabs_Create()

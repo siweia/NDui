@@ -5,7 +5,7 @@ local S = B:GetModule("Skins")
 local _G = getfenv(0)
 
 function S:PostalSkin()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not IsAddOnLoaded("Postal") then return end
 	if not PostalOpenAllButton then return end -- update your postal
 

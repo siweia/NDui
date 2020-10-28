@@ -220,10 +220,10 @@ end
 
 function Bar:Bind_Deactivate(save)
 	if save == true then
-		SaveBindings(NDuiDB["Actionbar"]["BindType"])
+		SaveBindings(C.db["Actionbar"]["BindType"])
 		print("|cff0080ffNDui|r: |cff00ff00"..L["Save keybinds"].."|r")
 	else
-		LoadBindings(NDuiDB["Actionbar"]["BindType"])
+		LoadBindings(C.db["Actionbar"]["BindType"])
 		print("|cff0080ffNDui|r: |cffffff00"..L["Discard keybinds"].."|r")
 	end
 
@@ -248,10 +248,10 @@ function Bar:Bind_CreateDialog()
 
 	local text = B.CreateFS(frame, 14, CHARACTER_SPECIFIC_KEYBINDINGS, "system", "TOP", 0, -40)
 	local box = B.CreateCheckBox(frame)
-	box:SetChecked(NDuiDB["Actionbar"]["BindType"] == 2)
+	box:SetChecked(C.db["Actionbar"]["BindType"] == 2)
 	box:SetPoint("RIGHT", text, "LEFT", -5, -0)
 	box:SetScript("OnClick", function(self)
-		NDuiDB["Actionbar"]["BindType"] = self:GetChecked() and 2 or 1
+		C.db["Actionbar"]["BindType"] = self:GetChecked() and 2 or 1
 	end)
 
 	local button1 = B.CreateButton(frame, 120, 25, APPLY, 14)

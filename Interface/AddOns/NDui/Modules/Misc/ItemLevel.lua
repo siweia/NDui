@@ -100,7 +100,7 @@ local function GetSlotItemLocation(id)
 end
 
 function M:ItemLevel_UpdateTraits(button, id, link)
-	if not NDuiDB["Misc"]["AzeriteTraits"] then return end
+	if not C.db["Misc"]["AzeriteTraits"] then return end
 
 	local empoweredItemLocation = GetSlotItemLocation(id)
 	if not empoweredItemLocation then return end
@@ -183,7 +183,7 @@ end
 function M:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 	C_Timer.After(.1, function()
 		local quality = select(3, GetItemInfo(link))
-		local info = B.GetItemLevel(link, unit, index, NDuiDB["Misc"]["GemNEnchant"])
+		local info = B.GetItemLevel(link, unit, index, C.db["Misc"]["GemNEnchant"])
 		if info == "tooSoon" then return end
 		M:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	end)
@@ -208,7 +208,7 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 			local link = GetInventoryItemLink(unit, index)
 			if link then
 				local quality = select(3, GetItemInfo(link))
-				local info = B.GetItemLevel(link, unit, index, NDuiDB["Misc"]["GemNEnchant"])
+				local info = B.GetItemLevel(link, unit, index, C.db["Misc"]["GemNEnchant"])
 				if info == "tooSoon" then
 					M:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 				else
@@ -300,7 +300,7 @@ function M.ItemLevel_ScrappingShow(event, addon)
 end
 
 function M:ShowItemLevel()
-	if not NDuiDB["Misc"]["ItemLevel"] then return end
+	if not C.db["Misc"]["ItemLevel"] then return end
 
 	-- iLvl on CharacterFrame
 	CharacterFrame:HookScript("OnShow", M.ItemLevel_UpdatePlayer)

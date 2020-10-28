@@ -448,8 +448,8 @@ function S:ReskinRematchElements()
 end
 
 function S:ReskinRematch()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
-	if not NDuiDB["Skins"]["Rematch"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["Rematch"] then return end
 
 	local RematchJournal = RematchJournal
 	if not RematchJournal then return end

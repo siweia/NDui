@@ -16,7 +16,7 @@ function module:UpdateChannelNames(text, ...)
 	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
 
 	local r, g, b = ...
-	if NDuiDB["Chat"]["WhisperColor"] and strfind(text, L["Tell"].." |H[BN]*player.+%]") then
+	if C.db["Chat"]["WhisperColor"] and strfind(text, L["Tell"].." |H[BN]*player.+%]") then
 		r, g, b = r*.7, g*.7, b*.7
 	end
 
@@ -37,7 +37,7 @@ function module:UpdateChannelNames(text, ...)
 		text = timeStamp..text
 	end
 
-	if NDuiDB["Chat"]["Oldname"] then
+	if C.db["Chat"]["Oldname"] then
 		text = gsub(text, "|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
 		text = gsub(text, "|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")
 		return self.oldAddMsg(self, text, r, g, b)
@@ -69,7 +69,7 @@ function module:ChannelRename()
 	CHAT_SAY_GET = "%s "
 	CHAT_YELL_GET = "%s "
 
-	if NDuiDB["Chat"]["Oldname"] then return end
+	if C.db["Chat"]["Oldname"] then return end
 	--guild
 	CHAT_GUILD_GET = "|Hchannel:GUILD|h[G]|h %s "
 	CHAT_OFFICER_GET = "|Hchannel:OFFICER|h[O]|h %s "

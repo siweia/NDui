@@ -18,15 +18,15 @@ function B:CreateMF(parent, saved)
 		frame:StopMovingOrSizing()
 		if not saved then return end
 		local orig, _, tar, x, y = frame:GetPoint()
-		NDuiDB["TempAnchor"][frame:GetName()] = {orig, "UIParent", tar, x, y}
+		C.db["TempAnchor"][frame:GetName()] = {orig, "UIParent", tar, x, y}
 	end)
 end
 
 function B:RestoreMF()
 	local name = self:GetName()
-	if name and NDuiDB["TempAnchor"][name] then
+	if name and C.db["TempAnchor"][name] then
 		self:ClearAllPoints()
-		self:SetPoint(unpack(NDuiDB["TempAnchor"][name]))
+		self:SetPoint(unpack(C.db["TempAnchor"][name]))
 	end
 end
 
@@ -46,10 +46,10 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	mover.text = B.CreateFS(mover, DB.Font[2], text)
 	mover.text:SetWordWrap(true)
 
-	if not NDuiDB[key][value] then
+	if not C.db[key][value] then
 		mover:SetPoint(unpack(anchor))
 	else
-		mover:SetPoint(unpack(NDuiDB[key][value]))
+		mover:SetPoint(unpack(C.db[key][value]))
 	end
 	mover:EnableMouse(true)
 	mover:SetMovable(true)
@@ -131,7 +131,7 @@ function M:DoTrim(trimX, trimY)
 		f.__y.__current = y
 		mover:ClearAllPoints()
 		mover:SetPoint(point, UIParent, point, x, y)
-		NDuiDB[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
+		C.db[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
 	end
 end
 
@@ -145,7 +145,7 @@ function M:Mover_OnClick(btn)
 	elseif IsControlKeyDown() and btn == "RightButton" then
 		self:ClearAllPoints()
 		self:SetPoint(unpack(self.__anchor))
-		NDuiDB[self.__key][self.__value] = nil
+		C.db[self.__key][self.__value] = nil
 	end
 	updater.__owner = self
 	M.UpdateTrimFrame(self)
@@ -176,7 +176,7 @@ function M:Mover_OnDragStop()
 
 	self:ClearAllPoints()
 	self:SetPoint(orig, "UIParent", tar, x, y)
-	NDuiDB[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
+	C.db[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
 	M.UpdateTrimFrame(self)
 	updater:Hide()
 end
@@ -206,8 +206,8 @@ StaticPopupDialogs["RESET_MOVER"] = {
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		wipe(NDuiDB["Mover"])
-		wipe(NDuiDB["AuraWatchMover"])
+		wipe(C.db["Mover"])
+		wipe(C.db["AuraWatchMover"])
 		ReloadUI()
 	end,
 }

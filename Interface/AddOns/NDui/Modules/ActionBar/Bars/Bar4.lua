@@ -11,7 +11,7 @@ local function SetFrameSize(frame, size, num)
 	size = size or frame.buttonSize
 	num = num or frame.numButtons
 
-	local layout = NDuiDB["Actionbar"]["Style"]
+	local layout = C.db["Actionbar"]["Style"]
 	if layout == 2 then
 		frame:SetWidth(25*size + 25*margin + 2*padding)
 		frame:SetHeight(2*size + margin + 2*padding)
@@ -58,7 +58,7 @@ end
 function Bar:CreateBar4()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
-	local layout = NDuiDB["Actionbar"]["Style"]
+	local layout = C.db["Actionbar"]["Style"]
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar4", UIParent, "SecureHandlerStateTemplate")
 	if layout == 2 then
@@ -119,7 +119,7 @@ function Bar:CreateBar4()
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	if NDuiDB["Actionbar"]["Bar4Fade"] and cfg.fader then
+	if C.db["Actionbar"]["Bar4Fade"] and cfg.fader then
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 

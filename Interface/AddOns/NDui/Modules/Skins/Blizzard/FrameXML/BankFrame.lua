@@ -2,9 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if NDuiDB["Bags"]["Enable"] then return end
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
-	if not NDuiDB["Skins"]["DefaultBags"] then return end
+	if C.db["Bags"]["Enable"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["DefaultBags"] then return end
 
 	-- [[ Bank ]]
 

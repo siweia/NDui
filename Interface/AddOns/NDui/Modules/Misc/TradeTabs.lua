@@ -90,7 +90,7 @@ function M:TradeTabs_Update()
 end
 
 function M:TradeTabs_Reskin()
-	if not NDuiDB["Skins"]["BlizzardSkins"] then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	for _, tab in pairs(tabList) do
 		tab:SetCheckedTexture(DB.textures.pushed)
@@ -214,7 +214,7 @@ function M.TradeTabs_OnEvent(event, addon)
 end
 
 function M:TradeTabs()
-	if not NDuiDB["Misc"]["TradeTabs"] then return end
+	if not C.db["Misc"]["TradeTabs"] then return end
 
 	B:RegisterEvent("ADDON_LOADED", M.TradeTabs_OnEvent)
 end

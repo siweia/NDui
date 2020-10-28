@@ -353,7 +353,7 @@ function G:SetupClickCast(parent)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", value, "system")
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			NDuiDB["RaidClickSets"][clickSet] = nil
+			C.db["RaidClickSets"][clickSet] = nil
 			barTable[clickSet] = nil
 			sortBars(barTable)
 		end)
@@ -390,7 +390,7 @@ function G:SetupClickCast(parent)
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			NDuiDB["RaidClickSets"] = nil
+			C.db["RaidClickSets"] = nil
 			ReloadUI()
 		end,
 		whileDead = 1,
@@ -406,10 +406,10 @@ function G:SetupClickCast(parent)
 		if (not tonumber(value)) and value ~= "target" and value ~= "focus" and value ~= "follow" and not strmatch(value, "/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
 		if not modKey or modKey == NONE then modKey = "" end
 		local clickSet = modKey..key
-		if NDuiDB["RaidClickSets"][clickSet] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
+		if C.db["RaidClickSets"][clickSet] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
 
-		NDuiDB["RaidClickSets"][clickSet] = {key, modKey, value}
-		createBar(scroll.child, NDuiDB["RaidClickSets"][clickSet])
+		C.db["RaidClickSets"][clickSet] = {key, modKey, value}
+		createBar(scroll.child, C.db["RaidClickSets"][clickSet])
 		clearEdit(options)
 	end
 
@@ -425,7 +425,7 @@ function G:SetupClickCast(parent)
 		clearEdit(options)
 	end)
 
-	for _, v in pairs(NDuiDB["RaidClickSets"]) do
+	for _, v in pairs(C.db["RaidClickSets"]) do
 		createBar(scroll.child, v)
 	end
 end
@@ -755,14 +755,14 @@ end
 local function sliderValueChanged(self, v)
 	local current = tonumber(format("%.0f", v))
 	self.value:SetText(current)
-	NDuiDB["UFs"][self.__value] = current
+	C.db["UFs"][self.__value] = current
 	self.__update()
 end
 
 local function createOptionSlider(parent, title, minV, maxV, defaultV, x, y, value, func)
 	local slider = B.CreateSlider(parent, title, minV, maxV, 1, x, y)
-	slider:SetValue(NDuiDB["UFs"][value])
-	slider.value:SetText(NDuiDB["UFs"][value])
+	slider:SetValue(C.db["UFs"][value])
+	slider.value:SetText(C.db["UFs"][value])
 	slider.__value = value
 	slider.__update = func
 	slider.__default = defaultV
@@ -770,15 +770,15 @@ local function createOptionSlider(parent, title, minV, maxV, defaultV, x, y, val
 end
 
 local function SetUnitFrameSize(self, unit)
-	local width = NDuiDB["UFs"][unit.."Width"]
-	local healthHeight = NDuiDB["UFs"][unit.."Height"]
-	local powerHeight = NDuiDB["UFs"][unit.."PowerHeight"]
+	local width = C.db["UFs"][unit.."Width"]
+	local healthHeight = C.db["UFs"][unit.."Height"]
+	local powerHeight = C.db["UFs"][unit.."PowerHeight"]
 	local height = healthHeight + powerHeight + C.mult
 	self:SetSize(width, height)
 	self.Health:SetHeight(healthHeight)
 	self.Power:SetHeight(powerHeight)
 	if self.powerText then
-		self.powerText:SetPoint("RIGHT", -3, NDuiDB["UFs"][unit.."PowerOffset"])
+		self.powerText:SetPoint("RIGHT", -3, C.db["UFs"][unit.."PowerOffset"])
 	end
 end
 
@@ -878,8 +878,8 @@ function G:SetupRaidFrame(parent)
 	local function resizeRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.mystyle == "raid" and not frame.isPartyFrame and not frame.isPartyPet then
-				if NDuiDB["UFs"]["SimpleMode"] then
-					local scale = NDuiDB["UFs"]["SimpleRaidScale"]/10
+				if C.db["UFs"]["SimpleMode"] then
+					local scale = C.db["UFs"]["SimpleRaidScale"]/10
 					local frameWidth = 100*scale
 					local frameHeight = 20*scale
 					local powerHeight = 2*scale
@@ -930,8 +930,8 @@ function G:SetupCastbar(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	createOptionTitle(scroll.child, L["Castbar Colors"], -10)
-	createOptionSwatch(scroll.child, L["Interruptible Color"], NDuiDB["UFs"]["CastingColor"], 40, -40)
-	createOptionSwatch(scroll.child, L["NotInterruptible Color"], NDuiDB["UFs"]["NotInterruptColor"], 40, -70)
+	createOptionSwatch(scroll.child, L["Interruptible Color"], C.db["UFs"]["CastingColor"], 40, -40)
+	createOptionSwatch(scroll.child, L["NotInterruptible Color"], C.db["UFs"]["NotInterruptColor"], 40, -70)
 
 	local defaultValue = {
 		["Player"] = {300, 20},
@@ -947,7 +947,7 @@ function G:SetupCastbar(parent)
 
 	local function updatePlayerCastbar()
 		if _G.oUF_Player then
-			local width, height = NDuiDB["UFs"]["PlayerCBWidth"], NDuiDB["UFs"]["PlayerCBHeight"]
+			local width, height = C.db["UFs"]["PlayerCBWidth"], C.db["UFs"]["PlayerCBHeight"]
 			_G.oUF_Player.Castbar:SetSize(width, height)
 			_G.oUF_Player.Castbar.Icon:SetSize(height, height)
 			_G.oUF_Player.Castbar.mover:Show()
@@ -967,7 +967,7 @@ function G:SetupCastbar(parent)
 
 	local function updateTargetCastbar()
 		if _G.oUF_Target then
-			local width, height = NDuiDB["UFs"]["TargetCBWidth"], NDuiDB["UFs"]["TargetCBHeight"]
+			local width, height = C.db["UFs"]["TargetCBWidth"], C.db["UFs"]["TargetCBHeight"]
 			_G.oUF_Target.Castbar:SetSize(width, height)
 			_G.oUF_Target.Castbar.Icon:SetSize(height, height)
 			_G.oUF_Target.Castbar.mover:Show()
@@ -978,7 +978,7 @@ function G:SetupCastbar(parent)
 
 	local function updateFocusCastbar()
 		if _G.oUF_Focus then
-			local width, height = NDuiDB["UFs"]["FocusCBWidth"], NDuiDB["UFs"]["FocusCBHeight"]
+			local width, height = C.db["UFs"]["FocusCBWidth"], C.db["UFs"]["FocusCBHeight"]
 			_G.oUF_Focus.Castbar:SetSize(width, height)
 			_G.oUF_Focus.Castbar.Icon:SetSize(height, height)
 			_G.oUF_Focus.Castbar.mover:Show()
@@ -1026,15 +1026,15 @@ function G:SetupBagFilter(parent)
 	local Bags = B:GetModule("Bags")
 	local function filterOnClick(self)
 		local value = self.__value
-		NDuiDB["Bags"][value] = not NDuiDB["Bags"][value]
-		self:SetChecked(NDuiDB["Bags"][value])
+		C.db["Bags"][value] = not C.db["Bags"][value]
+		self:SetChecked(C.db["Bags"][value])
 		Bags:UpdateAllBags()
 	end
 
 	local offset = 10
 	for _, value in ipairs(filterOptions) do
 		local box = createOptionCheck(scroll, offset, L[value])
-		box:SetChecked(NDuiDB["Bags"][value])
+		box:SetChecked(C.db["Bags"][value])
 		box.__value = value
 		box:SetScript("OnClick", filterOnClick)
 

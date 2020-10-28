@@ -91,10 +91,10 @@ function module:SetupCoords()
 end
 
 function module:UpdateMapScale()
-	if self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MaxMapScale"] then
-		self:SetScale(NDuiDB["Map"]["MaxMapScale"])
-	elseif not self.isMaximized and self:GetScale() ~= NDuiDB["Map"]["MapScale"] then
-		self:SetScale(NDuiDB["Map"]["MapScale"])
+	if self.isMaximized and self:GetScale() ~= C.db["Map"]["MaxMapScale"] then
+		self:SetScale(C.db["Map"]["MaxMapScale"])
+	elseif not self.isMaximized and self:GetScale() ~= C.db["Map"]["MapScale"] then
+		self:SetScale(C.db["Map"]["MapScale"])
 	end
 end
 
@@ -116,7 +116,7 @@ function module:WorldMapScale()
 end
 
 function module:SetupWorldMap()
-	if NDuiDB["Map"]["DisableMap"] then return end
+	if C.db["Map"]["DisableMap"] then return end
 	if IsAddOnLoaded("Mapster") then return end
 	if IsAddOnLoaded("Leatrix_Maps") then return end
 
