@@ -20,7 +20,7 @@ StaticPopupDialogs["RESET_NDUI"] = {
 }
 
 StaticPopupDialogs["NDUI_RESET_PROFILE"] = {
-	text = "你确定重置当前配置吗？",
+	text = L["Reset current profile?"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -31,7 +31,7 @@ StaticPopupDialogs["NDUI_RESET_PROFILE"] = {
 }
 
 StaticPopupDialogs["NDUI_APPLY_PROFILE"] = {
-	text = "你确定载入所选配置吗？",
+	text = L["Apply selected profile?"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -42,7 +42,7 @@ StaticPopupDialogs["NDUI_APPLY_PROFILE"] = {
 }
 
 StaticPopupDialogs["NDUI_DOWNLOAD_PROFILE"] = {
-	text = "你确定将所选配置替换你当前的配置吗？",
+	text = L["Download selected profile?"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -60,7 +60,7 @@ StaticPopupDialogs["NDUI_DOWNLOAD_PROFILE"] = {
 }
 
 StaticPopupDialogs["NDUI_UPLOAD_PROFILE"] = {
-	text = "你确定将当前使用的配置覆盖所选的配置吗？",
+	text = L["Upload current profile?"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -104,6 +104,42 @@ function G:Upload_OnClick()
 	StaticPopup_Show("NDUI_UPLOAD_PROFILE")
 end
 
+function G:FindProfleUser(icon)
+	icon.list = {}
+	for name, index in pairs(NDuiADB["ProfileIndex"]) do
+		if index == icon.index then
+			tinsert(icon.list, name)
+		end
+	end
+end
+
+function G:Icon_OnEnter()
+	if #self.list == 0 then return end
+
+	GameTooltip:SetOwner(self, "ANCHOR_TOP")
+	GameTooltip:ClearLines()
+	GameTooltip:AddLine(L["SharedCharacters"])
+	GameTooltip:AddLine(" ")
+	for _, name in pairs(self.list) do
+		GameTooltip:AddLine(name, 1,1,1)
+	end
+	GameTooltip:Show()
+end
+
+function G:Note_OnEscape()
+	self:SetText(NDuiADB["ProfileNames"][self.index])
+end
+
+function G:Note_OnEnter()
+	local text = self:GetText()
+	if text == "" then
+		NDuiADB["ProfileNames"][self.index] = self.__defaultText
+		self:SetText(self.__defaultText)
+	else
+		NDuiADB["ProfileNames"][self.index] = text
+	end
+end
+
 function G:CreateProfileBar(parent, index)
 	local bar = B.CreateBDFrame(parent, .25)
 	bar:ClearAllPoints()
@@ -120,33 +156,44 @@ function G:CreateProfileBar(parent, index)
 	else
 		B.PixelIcon(icon, 235423, true) -- share
 		icon.Icon:SetTexCoord(.6, .9, .1, .4)
+		icon.index = index
+		G:FindProfleUser(icon)
+		icon:SetScript("OnEnter", G.Icon_OnEnter)
+		icon:SetScript("OnLeave", B.HideTooltip)
 	end
 
 	local note = B.CreateEditBox(bar, 150, 32)
 	note:SetPoint("LEFT", icon, "RIGHT", 5, 0)
 	note:SetMaxLetters(20)
 	if index == 1 then
-		note:SetText("角色配置")
+		note.__defaultText = L["DefaultCharacterProfile"]
 	else
-		note:SetText("共享配置"..(index - 1))
+		note.__defaultText = L["DefaultSharedProfile"]..(index - 1)
 	end
-	note.title = "配置名称"
-	B.AddTooltip(note, "ANCHOR_TOP", "|n自定义你的配置名称。", "info")
+	if not NDuiADB["ProfileNames"][index] then
+		NDuiADB["ProfileNames"][index] = note.__defaultText
+	end
+	note:SetText(NDuiADB["ProfileNames"][index])
+	note.index = index
+	note:HookScript("OnEnterPressed", G.Note_OnEnter)
+	note:HookScript("OnEscapePressed", G.Note_OnEscape)
+	note.title = L["ProfileName"]
+	B.AddTooltip(note, "ANCHOR_TOP", L["ProfileNameTip"], "info")
 
-	local reset = G:CreateProfileIcon(bar, 1, "Atlas:transmog-icon-revert", "重置当前配置", "|n重置当前配置，并载入默认设置，需要重载插件后生效。")
+	local reset = G:CreateProfileIcon(bar, 1, "Atlas:transmog-icon-revert", L["ResetProfile"], L["ResetProfileTip"])
 	reset:SetScript("OnClick", G.Reset_OnClick)
 	bar.reset = reset
 
-	local apply = G:CreateProfileIcon(bar, 2, "Interface\\RAIDFRAME\\ReadyCheck-Ready", "启用所选配置", "|n切换至所选配置，需要重载插件后生效。")
+	local apply = G:CreateProfileIcon(bar, 2, "Interface\\RAIDFRAME\\ReadyCheck-Ready", L["SelectProfile"], L["SelectProfileTip"])
 	apply:SetScript("OnClick", G.Apply_OnClick)
 	bar.apply = apply
 
-	local download = G:CreateProfileIcon(bar, 3, "Atlas:streamcinematic-downloadicon", "替换当前配置", "|n读取所选配置，并覆盖你当前使用的配置，需要重载插件后生效。")
+	local download = G:CreateProfileIcon(bar, 3, "Atlas:streamcinematic-downloadicon", L["DownloadProfile"], L["DownloadProfileTip"])
 	download.Icon:SetTexCoord(.25, .75, .25, .75)
 	download:SetScript("OnClick", G.Download_OnClick)
 	bar.download = download
 
-	local upload = G:CreateProfileIcon(bar, 4, "Atlas:bags-icon-addslots", "覆盖所选配置", "|n将你当前使用的配置，覆盖到所选配置栏位。")
+	local upload = G:CreateProfileIcon(bar, 4, "Atlas:bags-icon-addslots", L["UploadProfile"], L["UploadProfileTip"])
 	upload.Icon:SetInside(nil, 6, 6)
 	upload:SetScript("OnClick", G.Upload_OnClick)
 	bar.upload = upload
@@ -206,9 +253,8 @@ function G:CreateProfileGUI(parent)
 		G:ExportGUIData()
 	end)
 
-	B.CreateFS(parent, 14, "配置管理", "system", "TOPLEFT", 10, -10)
-	local text = "你可以在这里管理你的插件配置，使用前请先备份一次你的数据。默认是基于你的角色进行存储，不进行账号之间的共享。你也可以切换到共享配置，这样多个角色就可以使用同一个设置，而无需进行配置的导入和导出。|n数据的导入和导出，只支持当前使用的存档配置。"
-	local description = B.CreateFS(parent, 14, text, nil, "TOPLEFT", 10, -35)
+	B.CreateFS(parent, 14, L["Profile Management"], "system", "TOPLEFT", 10, -10)
+	local description = B.CreateFS(parent, 14, L["Profile Description"], nil, "TOPLEFT", 10, -35)
 	description:SetPoint("TOPRIGHT", -10, -30)
 	description:SetWordWrap(true)
 	description:SetJustifyH("LEFT")

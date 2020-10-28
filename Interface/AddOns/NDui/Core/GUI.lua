@@ -372,6 +372,7 @@ G.AccountSettings = {
 	ContactList = {},
 	CustomJunkList = {},
 	ProfileIndex = {},
+	ProfileNames = {}
 }
 
 -- Initial settings
@@ -736,7 +737,7 @@ G.TabList = {
 	L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
-	"Profile"
+	L["Profile"],
 }
 
 G.OptionList = { -- type, key, value, name, horizon, doubleline
