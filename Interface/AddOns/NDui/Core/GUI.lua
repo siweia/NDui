@@ -371,6 +371,7 @@ G.AccountSettings = {
 	PartyWatcherSpells = {},
 	ContactList = {},
 	CustomJunkList = {},
+	ProfileIndex = {},
 }
 
 -- Initial settings
@@ -410,13 +411,27 @@ local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
-	if not NDuiDB["BFA"] then
-		NDuiDB = {}
-		NDuiDB["BFA"] = true
+
+	InitialSettings(G.AccountSettings, NDuiADB)
+	if not next(NDuiPDB) then
+		for i = 1, 5 do NDuiPDB[i] = {} end
 	end
 
-	InitialSettings(G.DefaultSettings, NDuiDB, true)
-	InitialSettings(G.AccountSettings, NDuiADB)
+	if not NDuiADB["ProfileIndex"][DB.MyFullName] then
+		NDuiADB["ProfileIndex"][DB.MyFullName] = 1
+	end
+
+	if NDuiADB["ProfileIndex"][DB.MyFullName] == 1 then
+		C.db = NDuiDB
+		if not C.db["BFA"] then
+			wipe(C.db)
+			C.db["BFA"] = true
+		end
+	else
+		C.db = NDuiPDB[NDuiADB["ProfileIndex"][DB.MyFullName] - 1]
+	end
+	InitialSettings(G.DefaultSettings, C.db, true)
+
 	B:SetupUIScale(true)
 	if not G.TextureList[NDuiADB["TexStyle"]] then
 		NDuiADB["TexStyle"] = 2 -- reset value if not exists
@@ -721,6 +736,7 @@ G.TabList = {
 	L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
+	"Profile"
 }
 
 G.OptionList = { -- type, key, value, name, horizon, doubleline
@@ -1045,6 +1061,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
+	},
+	[15] = {
 	},
 }
 
@@ -1611,42 +1629,7 @@ local function OpenGUI()
 		CreateOption(i)
 	end
 
-	local reset = B.CreateButton(f, 120, 20, L["NDui Reset"])
-	reset:SetPoint("BOTTOMLEFT", 25, 15)
-	StaticPopupDialogs["RESET_NDUI"] = {
-		text = L["Reset NDui Check"],
-		button1 = YES,
-		button2 = NO,
-		OnAccept = function()
-			NDuiDB = {}
-			NDuiADB = {}
-			ReloadUI()
-		end,
-		whileDead = 1,
-	}
-	reset:SetScript("OnClick", function()
-		StaticPopup_Show("RESET_NDUI")
-	end)
-
-	local import = B.CreateButton(f, 59, 20, L["Import"])
-	import:SetPoint("BOTTOMLEFT", reset, "TOPLEFT", 0, 2)
-	import:SetScript("OnClick", function()
-		f:Hide()
-		createDataFrame()
-		dataFrame.Header:SetText(L["Import Header"])
-		dataFrame.text:SetText(L["Import"])
-		dataFrame.editBox:SetText("")
-	end)
-
-	local export = B.CreateButton(f, 59, 20, L["Export"])
-	export:SetPoint("BOTTOMRIGHT", reset, "TOPRIGHT", 0, 2)
-	export:SetScript("OnClick", function()
-		f:Hide()
-		createDataFrame()
-		dataFrame.Header:SetText(L["Export Header"])
-		dataFrame.text:SetText(OKAY)
-		G:ExportGUIData()
-	end)
+	G:CreateProfileGUI(guiPage[15]) -- profile GUI
 
 	local helpInfo = B.CreateHelpInfo(f, L["Option* Tips"])
 	helpInfo:SetPoint("TOPLEFT", 20, -5)

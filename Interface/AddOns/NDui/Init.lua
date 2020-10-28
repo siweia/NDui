@@ -4,7 +4,7 @@ ns[2] = {}			-- C, Config
 ns[3] = {}			-- L, Locales
 ns[4] = {}			-- DB, Database
 
-NDuiDB, NDuiADB = {}, {}
+NDuiDB, NDuiADB, NDuiPDB = {}, {}, {}
 
 local B, C, L, DB = unpack(ns)
 local pairs, next, tinsert = pairs, next, table.insert
