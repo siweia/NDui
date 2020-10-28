@@ -24,6 +24,7 @@ LE_ITEM_QUALITY_HEIRLOOM = Enum.ItemQuality.Heirloom
 -- Colors
 DB.MyName = UnitName("player")
 DB.MyRealm = GetRealmName()
+DB.MyFullName = DB.MyName.."-"..DB.MyRealm
 DB.MyClass = select(2, UnitClass("player"))
 DB.MyFaction = UnitFactionGroup("player")
 DB.ClassList = {}
