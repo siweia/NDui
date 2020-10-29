@@ -104,24 +104,39 @@ function G:Upload_OnClick()
 	StaticPopup_Show("NDUI_UPLOAD_PROFILE")
 end
 
+function G:GetClassFromGoldInfo(fullName)
+	local name, realm = strsplit("-", fullName)
+	local class = "NONE"
+	if NDuiADB["totalGold"][realm] and NDuiADB["totalGold"][realm][name] then
+		class = NDuiADB["totalGold"][realm][name][2]
+	end
+	return class
+end
+
 function G:FindProfleUser(icon)
 	icon.list = {}
-	for name, index in pairs(NDuiADB["ProfileIndex"]) do
+	for fullName, index in pairs(NDuiADB["ProfileIndex"]) do
 		if index == icon.index then
-			tinsert(icon.list, name)
+			icon.list[fullName] = G:GetClassFromGoldInfo(fullName)
 		end
 	end
 end
 
 function G:Icon_OnEnter()
-	if #self.list == 0 then return end
+	if not next(self.list) then return end
 
 	GameTooltip:SetOwner(self, "ANCHOR_TOP")
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(L["SharedCharacters"])
 	GameTooltip:AddLine(" ")
-	for _, name in pairs(self.list) do
-		GameTooltip:AddLine(name, 1,1,1)
+	local r, g, b
+	for name, class in pairs(self.list) do
+		if class == "NONE" then
+			r, g, b = .5, .5, .5
+		else
+			r, g, b = B.ClassColor(class)
+		end
+		GameTooltip:AddLine(name, r, g, b)
 	end
 	GameTooltip:Show()
 end
