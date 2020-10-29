@@ -934,6 +934,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Covenant Mission UI
 	local CovenantMissionFrame = CovenantMissionFrame
 	ReskinMissionFrame(CovenantMissionFrame)
+	CovenantMissionFrame.RaisedBorder:SetAlpha(0)
 	CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
 
 	CombatLog:DisableDrawLayer("BACKGROUND")

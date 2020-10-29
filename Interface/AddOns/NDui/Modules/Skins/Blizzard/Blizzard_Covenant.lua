@@ -142,17 +142,8 @@ C.themes["Blizzard_CovenantRenown"] = function()
 	B.SetBD(CovenantRenownFrame)
 	B.ReskinClose(CovenantRenownFrame.CloseButton)
 
-	hooksecurefunc(CovenantRenownFrame, "SetUpTextureKits", function(self)
+	hooksecurefunc(CovenantRenownFrame, "SetUpCovenantData", function(self)
 		B.StripTextures(self)
 		self.CloseButton.Border:Hide()
-	end)
-
-	hooksecurefunc(CovenantRenownFrame.TrackFrame, "Init", function(self)
-		for _, element in next, self.Elements do
-			if not element.styled then
-				element.LevelBorder:SetAlpha(0)
-				element.styled = true
-			end
-		end
 	end)
 end
