@@ -177,7 +177,7 @@ function G:CreateProfileBar(parent, index)
 		icon:SetScript("OnLeave", B.HideTooltip)
 	end
 
-	local note = B.CreateEditBox(bar, 150, 32)
+	local note = B.CreateEditBox(bar, 150, 30)
 	note:SetPoint("LEFT", icon, "RIGHT", 5, 0)
 	note:SetMaxLetters(20)
 	if index == 1 then
