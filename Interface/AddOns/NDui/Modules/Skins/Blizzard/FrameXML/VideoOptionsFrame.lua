@@ -80,7 +80,7 @@ tinsert(C.defaultThemes, function()
 			"Advanced_BufferingDropDown",
 			"Advanced_FilteringDropDown",
 			"Advanced_RTShadowQualityDropDown",
-			"Advanced_SSAOTypeDropDown", -- not in ptr
+			"Advanced_SSAOTypeDropDown", -- not in prepatch
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",
