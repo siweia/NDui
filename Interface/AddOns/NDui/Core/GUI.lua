@@ -1361,6 +1361,10 @@ function G:ExportGUIData()
 			for name, color in pairs(VALUE) do
 				text = text..";ACCOUNT:"..KEY..":"..name..":"..color
 			end
+		elseif KEY == "ProfileIndex" or KEY == "ProfileNames" then
+			for k, v in pairs(VALUE) do
+				text = text..";ACCOUNT:"..KEY..":"..k..":"..v
+			end
 		end
 	end
 
@@ -1489,7 +1493,13 @@ function G:ImportGUIData()
 				end
 			elseif value == "ContactList" then
 				local name, r, g, b = select(3, strsplit(":", option))
-				NDuiADB["ContactList"][name] = r..":"..g..":"..b
+				NDuiADB[value][name] = r..":"..g..":"..b
+			elseif value == "ProfileIndex" then
+				local name, index = select(3, strsplit(":", option))
+				NDuiADB[value][name] = tonumber(index)
+			elseif value == "ProfileNames" then
+				local index, name = select(3, strsplit(":", option))
+				NDuiADB[value][tonumber(index)] = name
 			end
 		elseif tonumber(arg1) then
 			if value == "DBMCount" then
