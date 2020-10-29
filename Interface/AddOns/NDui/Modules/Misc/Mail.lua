@@ -188,7 +188,7 @@ function M:MailBox_ContactList()
 		if not strfind(text, "-") then text = text.."-"..DB.MyRealm end -- complete player realm name
 		if NDuiADB["ContactList"][text] then return end -- unit exists
 
-		local r, g, b = swatch.tex:GetVertexColor()
+		local r, g, b = swatch.tex:GetColor()
 		NDuiADB["ContactList"][text] = r..":"..g..":"..b
 		M:ContactList_Refresh()
 		editbox:SetText("")

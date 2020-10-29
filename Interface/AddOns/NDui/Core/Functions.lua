@@ -1448,6 +1448,15 @@ do
 		ColorPickerFrame:Show()
 	end
 
+	local function GetSwatchTexColor(tex)
+		local r, g, b = tex:GetVertexColor()
+		r = B:Round(r, 2)
+		g = B:Round(g, 2)
+		b = B:Round(b, 2)
+		print(r,g,b)
+		return r, g, b
+	end
+
 	function B:CreateColorSwatch(name, color)
 		color = color or {r=1, g=1, b=1}
 
@@ -1459,6 +1468,7 @@ do
 		tex:SetInside()
 		tex:SetTexture(DB.bdTex)
 		tex:SetVertexColor(color.r, color.g, color.b)
+		tex.GetColor = GetSwatchTexColor
 
 		swatch.tex = tex
 		swatch.color = color

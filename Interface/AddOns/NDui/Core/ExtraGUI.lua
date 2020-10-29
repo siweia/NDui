@@ -651,7 +651,7 @@ function G:SetupBuffIndicator(parent)
 			if NDuiADB["RaidAuraWatch"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 			NDuiADB["RaidAuraWatch"][spellID] = true
 		else
-			anchor, r, g, b = parent.dd.Text:GetText(), parent.swatch.tex:GetVertexColor()
+			anchor, r, g, b = parent.dd.Text:GetText(), parent.swatch.tex:GetColor()
 			showAll = parent.showAll:GetChecked() or nil
 			if NDuiADB["CornerBuffs"][DB.MyClass][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 			anchor = decodeAnchor[anchor]
