@@ -837,7 +837,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "FrequentHealth", "|cff00cc4c"..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
 		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
 		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"]},
-		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.01, .2, .01}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
+		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.02, .2, .01}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
 		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 1}},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
 		{4, "UFs", "RaidHealthColor", L["HealthColor"], nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}},
