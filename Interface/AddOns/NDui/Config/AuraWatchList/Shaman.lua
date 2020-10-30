@@ -23,7 +23,6 @@ local list = {
 		{AuraID = 118905, UnitID = "target", Caster = "player"},	-- 闪电奔涌图腾
 		{AuraID = 188089, UnitID = "target", Caster = "player"},	-- 大地之刺
 		{AuraID = 197209, UnitID = "target", Caster = "player"},	-- 避雷针
-		{AuraID = 196840, UnitID = "target", Caster = "player"},	-- 冰霜震击
 		{AuraID = 207778, UnitID = "target", Caster = "player"},	-- 蒺藜
 		{AuraID = 207400, UnitID = "target", Caster = "player"},	-- 先祖活力
 		{AuraID = 269808, UnitID = "target", Caster = "player"},	-- 元素外露
@@ -60,7 +59,6 @@ local list = {
 		{AuraID = 280615, UnitID = "player"},	-- 迅捷洪流
 		{AuraID = 273323, UnitID = "player"},	-- 闪电护盾超载
 		{AuraID = 272737, UnitID = "player"},	-- 无穷力量
-		{AuraID = 260734, UnitID = "player"},	-- 元素宗师
 		{AuraID = 263806, UnitID = "player"},	-- 呼啸狂风
 		{AuraID = 191634, UnitID = "player"},	-- 风暴守护者
 		{AuraID = 202004, UnitID = "player"},	-- 山崩
