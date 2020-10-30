@@ -96,6 +96,13 @@ C.themes["Blizzard_Communities"] = function()
 	B.ReskinArrow(CommunitiesFrame.AddToChatButton, "down")
 	B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
 
+	local calendarButton = CommunitiesFrame.CommunitiesCalendarButton
+	calendarButton:SetSize(24, 24)
+	calendarButton:SetNormalTexture(1103070)
+	calendarButton:SetPushedTexture(nil)
+	calendarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	B.ReskinIcon(calendarButton:GetNormalTexture())
+
 	for _, name in next, {"GuildFinderFrame", "InvitationFrame", "TicketFrame", "CommunityFinderFrame", "ClubFinderInvitationFrame"} do
 		local frame = CommunitiesFrame[name]
 		if frame then
