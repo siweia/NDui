@@ -170,7 +170,7 @@ end
 function A:RemoveSpellFromAuraList()
 	if IsAltKeyDown() and IsControlKeyDown() and self.type == 4 and self.spellID then
 		C.db["AuraWatchList"]["IgnoreSpells"][self.spellID] = true
-		print(format(L["AddToIgnoreList"], DB.InfoString, self.spellID))
+		print(format(L["AddToIgnoreList"], DB.NDuiString, self.spellID))
 	end
 end
 

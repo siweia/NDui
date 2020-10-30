@@ -221,10 +221,10 @@ end
 function Bar:Bind_Deactivate(save)
 	if save == true then
 		SaveBindings(C.db["Actionbar"]["BindType"])
-		print("|cff0080ffNDui|r: |cff00ff00"..L["Save keybinds"].."|r")
+		print(DB.NDuiString.." |cff00ff00"..L["Save keybinds"].."|r")
 	else
 		LoadBindings(C.db["Actionbar"]["BindType"])
-		print("|cff0080ffNDui|r: |cffffff00"..L["Discard keybinds"].."|r")
+		print(DB.NDuiString.." |cffffff00"..L["Discard keybinds"].."|r")
 	end
 
 	Bar:Bind_HideFrame()
