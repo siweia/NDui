@@ -414,36 +414,6 @@ function S:ReskinRematchElements()
 	bg:SetPoint("TOPLEFT", border, 6, -5)
 	bg:SetPoint("BOTTOMRIGHT", border, -6, 5)
 
-	-- RematchNotes
-	local note = RematchNotes
-	B.StripTextures(note)
-	B.ReskinClose(note.CloseButton)
-	S:RematchLockButton(note.LockButton)
-	note.LockButton:SetPoint("TOPLEFT")
-
-	local content = note.Content
-	B.StripTextures(content)
-	B.ReskinScroll(content.ScrollFrame.ScrollBar)
-	local bg = B.CreateBDFrame(content.ScrollFrame, .25)
-	bg:SetPoint("TOPLEFT", 0, 5)
-	bg:SetPoint("BOTTOMRIGHT", 0, -2)
-	local bg = B.SetBD(content.ScrollFrame)
-	bg:SetAllPoints(note)
-	for _, icon in pairs({"Left", "Right"}) do
-		local bu = content[icon.."Icon"]
-		local mask = content[icon.."CircleMask"]
-		if mask then
-			mask:Hide()
-		else
-			bu:SetMask(nil)
-		end
-		B.ReskinIcon(bu)
-	end
-
-	B.Reskin(note.Controls.DeleteButton)
-	B.Reskin(note.Controls.UndoButton)
-	B.Reskin(note.Controls.SaveButton)
-
 	styled = true
 end
 
@@ -478,6 +448,43 @@ function S:ReskinRematch()
 		S:ReskinRematchElements()
 
 		RematchJournal.styled = true
+	end)
+
+	hooksecurefunc(RematchNotes, "OnShow", function(self)
+		if self.styled then return end
+
+		B.StripTextures(self)
+		B.ReskinClose(self.CloseButton)
+		S:RematchLockButton(self.LockButton)
+		self.LockButton:SetPoint("TOPLEFT")
+	
+		local content = self.Content
+		B.ReskinScroll(content.ScrollFrame.ScrollBar)
+		local bg = B.CreateBDFrame(content.ScrollFrame, .25)
+		bg:SetPoint("TOPLEFT", 0, 5)
+		bg:SetPoint("BOTTOMRIGHT", 0, -2)
+		local bg = B.SetBD(content.ScrollFrame)
+		bg:SetAllPoints(self)
+		local icons = {}
+		for _, icon in pairs({"Left", "Right"}) do
+			local bu = content[icon.."Icon"]
+			local mask = content[icon.."CircleMask"]
+			mask:Hide()
+			B.ReskinIcon(bu)
+			icons[bu] = bu:GetTexture()
+		end
+
+		-- fix content icon texture
+		B.StripTextures(content)
+		for bu, tex in pairs(icons) do
+			bu:SetTexture(tex)
+		end
+	
+		B.Reskin(self.Controls.DeleteButton)
+		B.Reskin(self.Controls.UndoButton)
+		B.Reskin(self.Controls.SaveButton)
+
+		self.styled = true
 	end)
 
 	hooksecurefunc(Rematch, "FillPetTypeIcon", function(_, texture, _, prefix)
