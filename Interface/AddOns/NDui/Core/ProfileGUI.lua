@@ -117,7 +117,9 @@ function G:FindProfleUser(icon)
 	icon.list = {}
 	for fullName, index in pairs(NDuiADB["ProfileIndex"]) do
 		if index == icon.index then
-			icon.list[fullName] = G:GetClassFromGoldInfo(fullName)
+			local name, realm = strsplit("-", fullName)
+			if not icon.list[realm] then icon.list[realm] = {} end
+			icon.list[realm][Ambiguate(fullName, "none")] = G:GetClassFromGoldInfo(fullName)
 		end
 	end
 end
@@ -130,13 +132,15 @@ function G:Icon_OnEnter()
 	GameTooltip:AddLine(L["SharedCharacters"])
 	GameTooltip:AddLine(" ")
 	local r, g, b
-	for name, class in pairs(self.list) do
-		if class == "NONE" then
-			r, g, b = .5, .5, .5
-		else
-			r, g, b = B.ClassColor(class)
+	for realm, value in pairs(self.list) do
+		for name, class in pairs(value) do
+			if class == "NONE" then
+				r, g, b = .5, .5, .5
+			else
+				r, g, b = B.ClassColor(class)
+			end
+			GameTooltip:AddLine(name, r, g, b)
 		end
-		GameTooltip:AddLine(name, r, g, b)
 	end
 	GameTooltip:Show()
 end
