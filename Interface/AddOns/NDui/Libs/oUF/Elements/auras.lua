@@ -171,6 +171,7 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 		button.caster = caster
 		button.filter = filter
 		button.isDebuff = isDebuff
+		button.spellID = spellID -- NDui: need this for aura ignore list
 		button.isPlayer = caster == 'player' or caster == 'vehicle'
 
 		--[[ Override: Auras:CustomFilter(unit, button, ...)

@@ -17,6 +17,7 @@ G.DefaultSettings = {
 	TempAnchor = {},
 	AuraWatchList = {
 		Switcher = {},
+		IgnoreSpells = {},
 	},
 	Actionbar = {
 		Enable = true,

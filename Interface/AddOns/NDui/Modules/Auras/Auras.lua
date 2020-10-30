@@ -93,7 +93,7 @@ end
 function A:UpdateAuras(button, index)
 	local filter = button:GetParent():GetAttribute("filter")
 	local unit = button:GetParent():GetAttribute("unit")
-	local name, texture, count, debuffType, duration, expirationTime = UnitAura(unit, index, filter)
+	local name, texture, count, debuffType, duration, expirationTime, _, _, _, spellID = UnitAura(unit, index, filter)
 
 	if name then
 		if duration > 0 and expirationTime then
@@ -126,6 +126,7 @@ function A:UpdateAuras(button, index)
 			button:SetBackdropBorderColor(0, 0, 0)
 		end
 
+		button.spellID = spellID
 		button.icon:SetTexture(texture)
 		button.offset = nil
 	end
@@ -241,6 +242,13 @@ function A:CreateAuraHeader(filter)
 	return header
 end
 
+function A:RemoveSpellFromIgnoreList()
+	if IsAltKeyDown() and IsControlKeyDown() and self.spellID and C.db["AuraWatchList"]["IgnoreSpells"][self.spellID] then
+		C.db["AuraWatchList"]["IgnoreSpells"][self.spellID] = nil
+		print(format(L["RemoveFromIgnoreList"], DB.InfoString, self.spellID))
+	end
+end
+
 function A:CreateAuraIcon(button)
 	local header = button:GetParent()
 	local cfg = A.settings.Debuffs
@@ -269,4 +277,5 @@ function A:CreateAuraIcon(button)
 	B.CreateSD(button)
 
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
+	button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
 end

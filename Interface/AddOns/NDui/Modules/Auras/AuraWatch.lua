@@ -167,6 +167,13 @@ local function tooltipOnEnter(self)
 	GameTooltip:Show()
 end
 
+function A:RemoveSpellFromAuraList()
+	if IsAltKeyDown() and IsControlKeyDown() and self.type == 4 and self.spellID then
+		C.db["AuraWatchList"]["IgnoreSpells"][self.spellID] = true
+		print(format(L["AddToIgnoreList"], DB.InfoString, self.spellID))
+	end
+end
+
 local function enableTooltip(self)
 	self:EnableMouse(true)
 	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
@@ -174,6 +181,7 @@ local function enableTooltip(self)
 	self.HL:SetAllPoints(self.Icon)
 	self:SetScript("OnEnter", tooltipOnEnter)
 	self:SetScript("OnLeave", B.HideTooltip)
+	self:SetScript("OnMouseDown", A.RemoveSpellFromAuraList)
 end
 
 -- Icon mode
@@ -389,7 +397,7 @@ function A:AuraWatch_UpdateCD()
 end
 
 -- UpdateAura
-function A:AuraWatch_SetupAura(index, UnitID, name, icon, count, duration, expires, id, filter, flash)
+function A:AuraWatch_SetupAura(index, UnitID, name, icon, count, duration, expires, id, filter, flash, spellID)
 	if not index then return end
 
 	local frames = FrameList[index]
@@ -419,11 +427,14 @@ function A:AuraWatch_SetupAura(index, UnitID, name, icon, count, duration, expir
 	frame.unitID = UnitID
 	frame.id = id
 	frame.filter = filter
+	frame.spellID = spellID
 
 	frames.Index = (frames.Index + 1 > maxFrames) and maxFrames or frames.Index + 1
 end
 
 function A:AuraWatch_UpdateAura(spellID, UnitID, index, bool)
+	if C.db["AuraWatchList"]["IgnoreSpells"][spellID] then return end -- ignore spells
+
 	for KEY, VALUE in pairs(AuraList) do
 		local value = VALUE.List[spellID]
 		if value and value.AuraID and value.UnitID == UnitID then
@@ -446,7 +457,7 @@ function A:AuraWatch_UpdateAura(spellID, UnitID, index, bool)
 				end
 			end
 			if value.Timeless then duration, expires = 0, 0 end
-			return KEY, value.UnitID, name, icon, count, duration, expires, index, filter, value.Flash
+			return KEY, value.UnitID, name, icon, count, duration, expires, index, filter, value.Flash, spellID
 		end
 	end
 	return false

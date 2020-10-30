@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 local oUF = ns.oUF or oUF
 local UF = B:RegisterModule("UnitFrames")
+local AURA = B:GetModule("Auras")
+
 local format, floor = string.format, math.floor
 local pairs, next = pairs, next
 
@@ -588,6 +590,7 @@ function UF.PostCreateIcon(element, button)
 
 	button.overlay:SetTexture(nil)
 	button.stealable:SetAtlas("bags-newitem")
+	button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
 
 	if element.disableCooldown then button.timer = B.CreateFS(button, 12, "") end
 end
