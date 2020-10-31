@@ -23,7 +23,7 @@ local debugMode = false
 local completedQuest, initComplete = {}
 
 local function GetQuestLinkOrName(questID)
-	return GetQuestLink(questID) or C_QuestLog_GetTitleForQuestID(questID)
+	return GetQuestLink(questID) or C_QuestLog_GetTitleForQuestID(questID) or ""
 end
 
 local function acceptText(questID, daily)
