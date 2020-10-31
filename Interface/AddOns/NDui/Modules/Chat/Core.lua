@@ -73,7 +73,6 @@ function module:SkinChat()
 
 	local name = self:GetName()
 	local fontSize = select(2, self:GetFont())
-	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
 	self:SetMinResize(100, 50)
 	self:SetFont(DB.Font[1], fontSize, fontOutline)
