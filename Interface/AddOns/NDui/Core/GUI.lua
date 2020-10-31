@@ -1293,6 +1293,11 @@ function G:ExportGUIData()
 							for k, v in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..k..":"..tostring(v)
 							end
+						elseif key == "IgnoreSpells" then
+							text = text..";"..KEY..":"..key
+							for spellID in pairs(value) do
+								text = text..":"..tostring(spellID)
+							end
 						else
 							for spellID, k in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..spellID
@@ -1424,6 +1429,11 @@ function G:ImportGUIData()
 			if value == "Switcher" then
 				local index, state = select(3, strsplit(":", option))
 				C.db[key][value][tonumber(index)] = toBoolean(state)
+			elseif value == "IgnoreSpells" then
+				local spells = {select(3, strsplit(":", option))}
+				for _, spellID in next, spells do
+					C.db[key][value][tonumber(spellID)] = true
+				end
 			else
 				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
 				value = tonumber(value)
