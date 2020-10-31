@@ -76,6 +76,25 @@ StaticPopupDialogs["NDUI_UPLOAD_PROFILE"] = {
 	whileDead = 1,
 }
 
+StaticPopupDialogs["NDUI_DELETE_UNIT_PROFILE"] = {
+	text = "",
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function(self)
+		NDuiADB["ProfileIndex"][self.text.text_arg1] = nil
+	end,
+	OnShow = function(self)
+		local class = self.text.text_arg2
+		if class == "NONE" then
+			r, g, b = .5, .5, .5
+		else
+			r, g, b = B.ClassColor(class)
+		end
+		self.text:SetText(format(L["Delete unit profile?"], B.HexRGB(r, g, b), self.text.text_arg1))
+	end,
+	whileDead = 1,
+}
+
 function G:CreateProfileIcon(bar, index, texture, title, description)
 	local button = CreateFrame("Button", nil, bar)
 	button:SetSize(32, 32)
@@ -182,7 +201,7 @@ function G:CreateProfileBar(parent, index)
 		icon:SetScript("OnLeave", B.HideTooltip)
 	end
 
-	local note = B.CreateEditBox(bar, 150, 30)
+	local note = B.CreateEditBox(bar, 150, 32)
 	note:SetPoint("LEFT", icon, "RIGHT", 5, 0)
 	note:SetMaxLetters(20)
 	if index == 1 then
@@ -246,6 +265,27 @@ function G:UpdateCurrentProfile()
 	end
 end
 
+function G:Delete_OnEnter()
+	local text = self:GetText()
+	if not text or text == "" then return end
+	local name, realm = strsplit("-", text)
+	if not realm then
+		realm = DB.MyRealm
+		text = name.."-"..realm
+	end
+
+	if NDuiADB["ProfileIndex"][text] then
+		self:SetText(text)
+		StaticPopup_Show("NDUI_DELETE_UNIT_PROFILE", text, G:GetClassFromGoldInfo(name, realm))
+	else
+		UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect unit name"])
+	end
+end
+
+function G:Delete_OnEscape()
+	self:SetText("")
+end
+
 function G:CreateProfileGUI(parent)
 	local reset = B.CreateButton(parent, 120, 24, L["NDui Reset"])
 	reset:SetPoint("BOTTOMRIGHT", -10, 10)
@@ -264,7 +304,7 @@ function G:CreateProfileGUI(parent)
 	end)
 
 	local export = B.CreateButton(parent, 120, 24, L["Export"])
-	export:SetPoint("LEFT", import, "RIGHT", 3, 0)
+	export:SetPoint("LEFT", import, "RIGHT", 5, 0)
 	export:SetScript("OnClick", function()
 		parent:GetParent():Hide()
 		G:CreateDataFrame()
@@ -279,12 +319,19 @@ function G:CreateProfileGUI(parent)
 	description:SetWordWrap(true)
 	description:SetJustifyH("LEFT")
 
+	local delete = B.CreateEditBox(parent, 245, 26)
+	delete:SetPoint("BOTTOMLEFT", import, "TOPLEFT", 0, 10)
+	delete:HookScript("OnEnterPressed", G.Delete_OnEnter)
+	delete:HookScript("OnEscapePressed", G.Delete_OnEscape)
+	delete.title = L["DeleteUnitProfile"]
+	B.AddTooltip(delete, "ANCHOR_TOP", L["DeleteUnitProfileTip"], "info")
+
 	G.currentProfile = NDuiADB["ProfileIndex"][DB.MyFullName]
 
 	local numBars = 6
 	local panel = B.CreateBDFrame(parent, .25)
 	panel:ClearAllPoints()
-	panel:SetPoint("BOTTOMLEFT", 10, 80)
+	panel:SetPoint("BOTTOMLEFT", delete, "TOPLEFT", 0, 10)
 	panel:SetWidth(parent:GetWidth() - 20)
 	panel:SetHeight(15 + numBars*45)
 	panel:SetFrameLevel(11)

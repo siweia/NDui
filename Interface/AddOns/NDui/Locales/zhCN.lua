@@ -712,3 +712,7 @@ L["Profile Description"] = "你可以在这里管理你的插件配置，使用�
 L["SharedCharacters"] = "同配置角色"
 L["AddToIgnoreList"] = "%s 法术ID %s 现已添加至技能监控屏蔽列表。你可以按住 CTRL+ALT 键点击目标的Buff等，以解除屏蔽。"
 L["RemoveFromIgnoreList"] = "%s 法术ID %s 现已从技能监控屏蔽列表中移除。你可以按住 CTRL+ALT 键点击技能监控图标，以重新屏蔽。"
+L["DeleteUnitProfile"] = "删除指定角色配置"
+L["DeleteUnitProfileTip"] = "|n输入角色的全名来删除其配置选择信息，格式为'名字-服务器'。如果没有填写服务器，则默认该角色与你同服。|n|n按ESC键清空输入框，按Enter键确认。"
+L["Delete unit profile?"] = "你确定删除角色 %s%s|r 的配置选择信息吗？"
+L["Incorrect unit name"] = "你输入的角色名称不存在。"
