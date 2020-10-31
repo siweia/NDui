@@ -105,7 +105,6 @@ end
 
 function TT:AzeriteArmor()
 	if not C.db["Tooltip"]["AzeriteArmor"] then return end
-	if IsAddOnLoaded("AzeriteTooltip") then return end
 
 	GameTooltip:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)
