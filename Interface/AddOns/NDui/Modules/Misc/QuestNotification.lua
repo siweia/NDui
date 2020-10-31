@@ -2,9 +2,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
-local wipe, mod, tonumber, pairs, floor = wipe, mod, tonumber, pairs, math.floor
+local strmatch, strfind, gsub, format, floor = strmatch, strfind, gsub, format, floor
+local wipe, mod, tonumber, pairs, print = wipe, mod, tonumber, pairs, print
 local IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage = IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage
+local GetQuestLink = GetQuestLink
 local C_QuestLog_GetInfo = C_QuestLog.GetInfo
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
@@ -14,24 +15,29 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
-local QUEST_COMPLETE = QUEST_COMPLETE
+local DAILY, QUEST_COMPLETE = DAILY, QUEST_COMPLETE
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 
 local debugMode = false
 local completedQuest, initComplete = {}
 
-local function acceptText(title, daily)
+local function GetQuestLinkOrName(questID)
+	return GetQuestLink(questID) or C_QuestLog_GetTitleForQuestID(questID)
+end
+
+local function acceptText(questID, daily)
+	local title = GetQuestLinkOrName(questID)
 	if daily then
-		return format("%s: [%s]%s", L["AcceptQuest"], DAILY, title)
+		return format("%s [%s]%s", L["AcceptQuest"], DAILY, title)
 	else
-		return format("%s: %s", L["AcceptQuest"], title)
+		return format("%s %s", L["AcceptQuest"], title)
 	end
 end
 
-local function completeText(title)
+local function completeText(questID)
 	PlaySound(soundKitID, "Master")
-	return format("%s %s", title, QUEST_COMPLETE)
+	return format("%s %s", GetQuestLinkOrName(questID), QUEST_COMPLETE)
 end
 
 local function sendQuestMsg(msg)
@@ -93,7 +99,7 @@ function M:FindQuestAccept(questID)
 	if questLogIndex then
 		local info = C_QuestLog_GetInfo(questLogIndex)
 		if info then
-			sendQuestMsg(acceptText(info.title, info.frequency == LE_QUEST_FREQUENCY_DAILY))
+			sendQuestMsg(acceptText(questID, info.frequency == LE_QUEST_FREQUENCY_DAILY))
 		end
 	end
 end
@@ -101,12 +107,10 @@ end
 function M:FindQuestComplete()
 	for i = 1, C_QuestLog_GetNumQuestLogEntries() do
 		local questID = C_QuestLog_GetQuestIDForLogIndex(i)
-		local title = C_QuestLog_GetTitleForQuestID(questID)
-		local isComplete = C_QuestLog_IsComplete(questID)
-		local isWorldQuest = C_QuestLog_IsWorldQuest(questID)
-		if title and isComplete and not completedQuest[questID] and not isWorldQuest then
+		local isComplete = questID and C_QuestLog_IsComplete(questID)
+		if isComplete and not completedQuest[questID] and not C_QuestLog_IsWorldQuest(questID) then
 			if initComplete then
-				sendQuestMsg(completeText(title))
+				sendQuestMsg(completeText(questID))
 			end
 			completedQuest[questID] = true
 		end
@@ -116,9 +120,8 @@ end
 
 function M:FindWorldQuestComplete(questID)
 	if C_QuestLog_IsWorldQuest(questID) then
-		local title = C_QuestLog_GetTitleForQuestID(questID)
-		if title and not completedQuest[questID] then
-			sendQuestMsg(completeText(title))
+		if questID and not completedQuest[questID] then
+			sendQuestMsg(completeText(questID))
 			completedQuest[questID] = true
 		end
 	end
