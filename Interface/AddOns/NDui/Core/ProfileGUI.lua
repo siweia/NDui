@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local G = B:GetModule("GUI")
 
+local pairs, strsplit, Ambiguate = pairs, strsplit, Ambiguate
+local SetPortraitTexture, StaticPopup_Show = SetPortraitTexture, StaticPopup_Show
 local cr, cg, cb = DB.r, DB.g, DB.b
 local myFullName = DB.MyFullName
 
@@ -104,8 +106,7 @@ function G:Upload_OnClick()
 	StaticPopup_Show("NDUI_UPLOAD_PROFILE")
 end
 
-function G:GetClassFromGoldInfo(fullName)
-	local name, realm = strsplit("-", fullName)
+function G:GetClassFromGoldInfo(name, realm)
 	local class = "NONE"
 	if NDuiADB["totalGold"][realm] and NDuiADB["totalGold"][realm][name] then
 		class = NDuiADB["totalGold"][realm][name][2]
@@ -119,7 +120,7 @@ function G:FindProfleUser(icon)
 		if index == icon.index then
 			local name, realm = strsplit("-", fullName)
 			if not icon.list[realm] then icon.list[realm] = {} end
-			icon.list[realm][Ambiguate(fullName, "none")] = G:GetClassFromGoldInfo(fullName)
+			icon.list[realm][Ambiguate(fullName, "none")] = G:GetClassFromGoldInfo(name, realm)
 		end
 	end
 end
