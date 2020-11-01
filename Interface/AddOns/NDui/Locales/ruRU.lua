@@ -713,6 +713,6 @@ L["SharedCharacters"] = "Shared Characters" -- need translation
 L["AddToIgnoreList"] = "%s SpellID %s is now added to the ignored AuraWatch list. You can hold CTRL+ALT and click unit aura icon to remove from list." -- need translation
 L["RemoveFromIgnoreList"] = "%s SpellID %s is now removed from the ignored AuraWatch list. You can hold CTRL+ALT and click AuraWatch icon to rejoin the list." -- need translation
 L["DeleteUnitProfile"] = "Delete unit profile" -- need translation
-L["DeleteUnitProfileTip"] = "|nEnter the character name that you intend to delete its profile, the input format is 'UnitName-RealmName'. You only need to enter name if unit is in the same realm with you.|n|nPress key ESC to clear editbox, press key Enter to confirm." -- need translation
+L["DeleteUnitProfileTip"] = "|nEnter the character name that you intend to delete its profile, the input format is 'UnitName-RealmName'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm." -- need translation
 L["Delete unit profile?"] = "Are you sure to delete %s%s|r profile info?" -- need translation
 L["Incorrect unit name"] = "Invalid character name." -- need translation

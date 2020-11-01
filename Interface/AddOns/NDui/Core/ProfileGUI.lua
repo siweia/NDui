@@ -81,6 +81,10 @@ StaticPopupDialogs["NDUI_DELETE_UNIT_PROFILE"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function(self)
+		local name, realm = strsplit("-", self.text.text_arg1)
+		if NDuiADB["totalGold"][realm] and NDuiADB["totalGold"][realm][name] then
+			NDuiADB["totalGold"][realm][name] = nil
+		end
 		NDuiADB["ProfileIndex"][self.text.text_arg1] = nil
 	end,
 	OnShow = function(self)
@@ -272,10 +276,10 @@ function G:Delete_OnEnter()
 	if not realm then
 		realm = DB.MyRealm
 		text = name.."-"..realm
+		self:SetText(text)
 	end
 
-	if NDuiADB["ProfileIndex"][text] then
-		self:SetText(text)
+	if NDuiADB["ProfileIndex"][text] or (NDuiADB["totalGold"][realm] and NDuiADB["totalGold"][realm][name]) then
 		StaticPopup_Show("NDUI_DELETE_UNIT_PROFILE", text, G:GetClassFromGoldInfo(name, realm))
 	else
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect unit name"])
