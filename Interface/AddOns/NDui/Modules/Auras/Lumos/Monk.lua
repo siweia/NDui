@@ -29,10 +29,10 @@ function A:ChantLumos(self)
 	local spec = GetSpecialization()
 	if spec == 1 then
 		UpdateCooldown(self.lumos[1], 121253, true)
-		UpdateBuff(self.lumos[2], 215479, 215479, false, "END")
-		UpdateBuff(self.lumos[3], 322507, 322507, true)
+		UpdateCooldown(self.lumos[2], 322101, true)
+		UpdateBuff(self.lumos[3], 215479, 215479)
 		UpdateBuff(self.lumos[4], 325092, 325092, nil, "END")
-		A:UpdateTotemAura(self.lumos[5], 608951, 132578, true)
+		UpdateBuff(self.lumos[5], 322507, 322507, true)
 	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 115151, true)
 		UpdateCooldown(self.lumos[2], 191837, true)
