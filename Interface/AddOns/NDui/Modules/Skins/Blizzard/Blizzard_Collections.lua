@@ -104,6 +104,8 @@ C.themes["Blizzard_Collections"] = function()
 		for i = 1, #buttons do
 			local bu = buttons[i]
 			if bu.bg then
+				bu.icon:SetShown(bu.index ~= nil)
+
 				if bu.selectedTexture:IsShown() then
 					bu.bg:SetBackdropColor(r, g, b, .25)
 				else
