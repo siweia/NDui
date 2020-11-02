@@ -40,6 +40,7 @@ local function reskinHeader(header)
 	bg:SetVertexColor(r, g, b, .8)
 	bg:SetPoint("BOTTOMLEFT", 0, -4)
 	bg:SetSize(250, 30)
+	header.bg = bg -- accessable for other addons
 end
 
 local function reskinBarTemplate(bar)
