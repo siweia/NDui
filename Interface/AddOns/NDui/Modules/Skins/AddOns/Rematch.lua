@@ -457,7 +457,7 @@ function S:ReskinRematch()
 		B.ReskinClose(self.CloseButton)
 		S:RematchLockButton(self.LockButton)
 		self.LockButton:SetPoint("TOPLEFT")
-	
+
 		local content = self.Content
 		B.ReskinScroll(content.ScrollFrame.ScrollBar)
 		local bg = B.CreateBDFrame(content.ScrollFrame, .25)
@@ -479,7 +479,7 @@ function S:ReskinRematch()
 		for bu, tex in pairs(icons) do
 			bu:SetTexture(tex)
 		end
-	
+
 		B.Reskin(self.Controls.DeleteButton)
 		B.Reskin(self.Controls.UndoButton)
 		B.Reskin(self.Controls.SaveButton)

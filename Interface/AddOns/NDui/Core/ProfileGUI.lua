@@ -189,7 +189,7 @@ function G:CreateProfileBar(parent, index)
 	bar:SetPoint("TOPLEFT", 10, -10 - 45*(index-1))
 	bar:SetSize(570, 40)
 	bar.index = index
-	
+
 	local icon = CreateFrame("Frame", nil, bar)
 	icon:SetSize(32, 32)
 	icon:SetPoint("LEFT", 5, 0)
