@@ -30,6 +30,7 @@ function A:ChantLumos(self)
 	if spec == 1 then
 		UpdateCooldown(self.lumos[1], 121253, true)
 		UpdateCooldown(self.lumos[2], 322101, true)
+		self.lumos[2].Count:SetText(GetSpellCount(322101))
 		UpdateBuff(self.lumos[3], 215479, 215479)
 		UpdateBuff(self.lumos[4], 325092, 325092, nil, "END")
 		UpdateBuff(self.lumos[5], 322507, 322507, true)
