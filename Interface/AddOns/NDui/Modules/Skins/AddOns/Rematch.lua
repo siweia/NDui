@@ -95,7 +95,8 @@ function S:RematchCard()
 	B.StripTextures(self.Middle)
 	B.CreateBDFrame(self.Middle, .25)
 	if self.Middle.XP then S.RematchXP(self.Middle.XP) end
-	B.StripTextures(self.Bottom)
+	if self.Bottom.AbilitiesBG then self.Bottom.AbilitiesBG:Hide() end
+	if self.Bottom.BottomBG then self.Bottom.BottomBG:Hide() end
 	local bg = B.CreateBDFrame(self.Bottom, .25)
 	bg:SetPoint("TOPLEFT", -C.mult, -3)
 end
