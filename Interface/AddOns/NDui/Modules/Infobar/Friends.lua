@@ -25,13 +25,17 @@ local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
 local CLIENT_WOW_CLASSIC = "WoV" -- for sorting
 
 local r, g, b = DB.r, DB.g, DB.b
-local infoFrame, menuFrame, updateRequest, prevTime
-local menuList, friendTable, bnetTable = {}, {}, {}
+local infoFrame, updateRequest, prevTime
+local friendTable, bnetTable = {}, {}
 local activeZone, inactiveZone = "|cff4cff4c", DB.GreyColor
 local noteString = "|T"..DB.copyTex..":12|t %s"
 local broadcastString = "|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)"
 local onlineString = gsub(ERR_FRIEND_ONLINE_SS, ".+h", "")
 local offlineString = gsub(ERR_FRIEND_OFFLINE_S, "%%s", "")
+
+local menuList = {
+	[1] = {text = L["Join or Invite"], isTitle = true, notCheckable = true}
+}
 
 local function sortFriends(a, b)
 	if a[1] and b[1] then
@@ -171,7 +175,7 @@ function info:FriendsPanel_Init()
 		self:SetScript("OnUpdate", isPanelCanHide)
 	end)
 	infoFrame:SetScript("OnHide", function()
-		if menuFrame and menuFrame:IsShown() then menuFrame:Hide() end
+		if B.EasyMenu:IsShown() then B.EasyMenu:Hide() end
 	end)
 
 	B.CreateFS(infoFrame, 16, "|cff0099ff"..FRIENDS_LIST, nil, "TOPLEFT", 15, -10)
@@ -213,14 +217,6 @@ function info:FriendsPanel_Init()
 	B.CreateFS(infoFrame, 13, invtInfo, false, "BOTTOMRIGHT", -15, 10)
 end
 
-local function createInviteMenu()
-	if menuFrame then return end
-
-	menuFrame = CreateFrame("Frame", "FriendsInfobarMenu", infoFrame, "UIDropDownMenuTemplate")
-	menuFrame:SetFrameStrata("TOOLTIP")
-	menuList[1] = {text = L["Join or Invite"], isTitle = true, notCheckable = true}
-end
-
 local function inviteFunc(_, bnetIDGameAccount, guid)
 	FriendsFrame_InviteOrRequestToJoin(guid, bnetIDGameAccount)
 end
@@ -229,11 +225,11 @@ local function buttonOnClick(self, btn)
 	if btn == "LeftButton" then
 		if IsAltKeyDown() then
 			if self.isBNet then
-				createInviteMenu()
-
 				local index = 2
 				if #menuList > 1 then
-					for i = 2, #menuList do menuList[i] = nil end
+					for i = 2, #menuList do
+						wipe(menuList[i])
+					end
 				end
 
 				local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(self.data[1])
@@ -266,7 +262,7 @@ local function buttonOnClick(self, btn)
 				if index == 3 then
 					FriendsFrame_InviteOrRequestToJoin(lastGameAccountGUID, lastGameAccountID)
 				else
-					EasyMenu(menuList, menuFrame, self, 0, 0, "MENU", 1)
+					EasyMenu(menuList, B.EasyMenu, self, 0, 0, "MENU", 1)
 				end
 			else
 				InviteToGroup(self.data[1])

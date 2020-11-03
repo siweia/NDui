@@ -74,7 +74,6 @@ function module:ReskinRegions()
 		end
 	end)
 
-	local menuFrame = CreateFrame("Frame", "NDuiGarrisonTypeMenu", GarrisonLandingPageMinimapButton, "UIDropDownMenuTemplate")
 	local menuList = {
 		{text =	GARRISON_TYPE_9_0_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_9_0, notCheckable = true},
 		{text =	WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_8_0, notCheckable = true},
@@ -84,7 +83,7 @@ function module:ReskinRegions()
 	GarrisonLandingPageMinimapButton:HookScript("OnMouseDown", function(self, btn)
 		if btn == "RightButton" then
 			HideUIPanel(GarrisonLandingPage)
-			EasyMenu(menuList, menuFrame, self, -80, 0, "MENU", 1)
+			EasyMenu(menuList, B.EasyMenu, self, -80, 0, "MENU", 1)
 		end
 	end)
 	GarrisonLandingPageMinimapButton:SetScript("OnEnter", function(self)

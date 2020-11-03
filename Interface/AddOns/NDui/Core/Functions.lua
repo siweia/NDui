@@ -170,6 +170,7 @@ do
 	local essenceDescription = GetSpellDescription(277253)
 	local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
 	local RETRIEVING_ITEM_INFO = RETRIEVING_ITEM_INFO
+
 	local tip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
 	B.ScanTip = tip
 
@@ -384,6 +385,9 @@ end
 
 -- UI widgets
 do
+	-- Dropdown menu
+	B.EasyMenu = CreateFrame("Frame", "NDui_EasyMenu", UIParent, "UIDropDownMenuTemplate")
+
 	-- Fontstring
 	function B:CreateFS(size, text, color, anchor, x, y)
 		local fs = self:CreateFontString(nil, "OVERLAY")

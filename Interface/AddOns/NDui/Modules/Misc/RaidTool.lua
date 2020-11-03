@@ -520,7 +520,6 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
-	local menuFrame = CreateFrame("Frame", "NDui_EastMarking", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
 		{text = RAID_TARGET_NONE, func = function() SetRaidTarget("target", 0) end},
 		{text = B.HexRGB(1, .92, 0)..RAID_TARGET_1.." "..ICON_LIST[1].."12|t", func = function() SetRaidTarget("target", 1) end},
@@ -546,7 +545,7 @@ function M:RaidTool_EasyMarker()
 						menuList[i+1].checked = false
 					end
 				end
-				EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 1)
+				EasyMenu(menuList, B.EasyMenu, "cursor", 0, 0, "MENU", 1)
 			end
 		end
 	end)

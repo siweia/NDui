@@ -17,7 +17,6 @@ local function addIcon(texture)
 	return texture
 end
 
-local menuFrame = CreateFrame("Frame", "SpecInfobarMenu", info, "UIDropDownMenuTemplate")
 local menuList = {
 	{text = CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true},
 	{text = SPECIALIZATION, hasArrow = true, notCheckable = true},
@@ -139,7 +138,7 @@ info.onMouseUp = function(self, btn)
 			end
 		end
 
-		EasyMenu(menuList, menuFrame, self, -80, 100, "MENU", 1)
+		EasyMenu(menuList, B.EasyMenu, self, -80, 100, "MENU", 1)
 		GameTooltip:Hide()
 	end
 end
