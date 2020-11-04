@@ -981,6 +981,10 @@ function module:OnLogin()
 
 	B:RegisterEvent("TRADE_SHOW", module.OpenBags)
 	B:RegisterEvent("TRADE_CLOSED", module.CloseBags)
+	if not DB.isNewPatch then
+		B:RegisterEvent("AUCTION_HOUSE_SHOW", module.OpenBags)
+		B:RegisterEvent("AUCTION_HOUSE_CLOSED", module.CloseBags)
+	end
 	B:RegisterEvent("BANKFRAME_OPENED", module.AutoDeposit)
 
 	-- Fixes
