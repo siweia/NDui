@@ -530,6 +530,7 @@ local IncompatibleAddOns = {
 	["Aurora"] = true,
 	["AuroraClassic"] = true,
 	["BigFoot"] = true,
+	["_ShiGuang"] = true,
 	["!!!163UI!!!"] = true,
 }
 local AddonDependency = {
