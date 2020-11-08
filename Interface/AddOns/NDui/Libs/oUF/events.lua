@@ -3,6 +3,7 @@ local oUF = ns.oUF
 local Private = oUF.Private
 
 local argcheck = Private.argcheck
+local xpcall = Private.xpcall
 local error = Private.error
 local validateUnit = Private.validateUnit
 local frame_metatable = Private.frame_metatable
@@ -124,17 +125,10 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 			end
 		end
 	else
-		self[event] = func
-
-		if(not self:GetScript('OnEvent')) then
-			self:SetScript('OnEvent', onEvent)
-		end
-
+		local isOK
 		if(unitless or self.__eventless) then
-			registerEvent(self, event)
+			isOK = xpcall(registerEvent, self, event)
 		else
-			self.unitEvents = self.unitEvents or {}
-			self.unitEvents[event] = true
 			-- UpdateUnits will take care of unit event registration for header
 			-- units in case we don't have a valid unit yet
 			local unit1, unit2 = self.unit
@@ -143,7 +137,19 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 					unit2 = secondaryUnits[event][unit1]
 				end
 
-				registerUnitEvent(self, event, unit1, unit2 or '')
+				isOK = xpcall(registerUnitEvent, self, event, unit1, unit2 or '')
+				if(isOK) then
+					self.unitEvents = self.unitEvents or {}
+					self.unitEvents[event] = true
+				end
+			end
+		end
+
+		if(isOK) then
+			self[event] = func
+
+			if(not self:GetScript('OnEvent')) then
+				self:SetScript('OnEvent', onEvent)
 			end
 		end
 	end

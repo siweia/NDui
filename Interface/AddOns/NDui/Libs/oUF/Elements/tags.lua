@@ -106,6 +106,7 @@ local _, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
+local xpcall = Private.xpcall
 local unitExists = Private.unitExists
 
 local _PATTERN = '%[..-%]+'
@@ -775,8 +776,10 @@ end
 local function registerEvent(fontstr, event)
 	if(not events[event]) then events[event] = {} end
 
-	eventFrame:RegisterEvent(event)
-	table.insert(events[event], fontstr)
+	local isOK = xpcall(eventFrame.RegisterEvent, eventFrame, event)
+	if(isOK) then
+		table.insert(events[event], fontstr)
+	end
 end
 
 local function registerEvents(fontstr, tagstr)

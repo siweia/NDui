@@ -61,3 +61,11 @@ function Private.unitSelectionType(unit, considerHostile)
 		return selectionTypes[UnitSelectionType(unit, true)]
 	end
 end
+
+local function errorHandler(...)
+	return geterrorhandler()(...)
+end
+
+function Private.xpcall(func, ...)
+	return xpcall(func, errorHandler, ...)
+end
