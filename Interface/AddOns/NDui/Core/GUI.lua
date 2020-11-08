@@ -496,8 +496,12 @@ local function updateBagStatus()
 	if C.db["Bags"]["ItemSetFilter"] then
 		label = L["Equipement Set"]
 	end
-	_G.NDui_BackpackEquipment.label:SetText(label)
-	_G.NDui_BackpackBankEquipment.label:SetText(label)
+	if _G.NDui_BackpackEquipment then
+		_G.NDui_BackpackEquipment.label:SetText(label)
+	end
+	if _G.NDui_BackpackBankEquipment then
+		_G.NDui_BackpackBankEquipment.label:SetText(label)
+	end
 end
 
 local function updateActionbarScale()
