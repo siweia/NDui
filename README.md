@@ -52,7 +52,7 @@ You can also contact me via [GitHub](https://github.com/siweia/NDui).
 <br>A: Make sure you know the options from GUI panel and **the slash cmd list from /ndui**.</br>
 
 **Q: How to change opacity of UI? How to disable the font outlines?**
-<br>A: /ac.</br>
+<br>A: GUI-Skins.</br>
 
 **Q: How to setup the spells on pensonal resource bar?**
 <br>A: Search folder "Lumos" and find your own class, it can only be changed in LUA files.</br>
