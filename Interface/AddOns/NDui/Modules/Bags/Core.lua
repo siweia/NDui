@@ -810,6 +810,11 @@ function module:OnLogin()
 		else
 			self:SetBackdropColor(.3, .3, .3, .3)
 		end
+
+		-- Hide empty tooltip
+		if not GetContainerItemInfo(item.bagID, item.slotID) then
+			GameTooltip:Hide()
+		end
 	end
 
 	function MyButton:OnUpdateQuest(item)
