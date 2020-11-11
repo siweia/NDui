@@ -571,7 +571,6 @@ function module:OnLogin()
 	local bankWidth = C.db["Bags"]["BankWidth"]
 	local iconSize = C.db["Bags"]["IconSize"]
 	local deleteButton = C.db["Bags"]["DeleteButton"]
-	local itemSetFilter = C.db["Bags"]["ItemSetFilter"]
 	local showNewItem = C.db["Bags"]["ShowNewItem"]
 
 	-- Init
@@ -609,6 +608,9 @@ function module:OnLogin()
 		f.equipment = MyContainer:New("Equipment", {Columns = bagsWidth, Parent = f.main})
 		f.equipment:SetFilter(filters.bagEquipment, true)
 
+		f.equipSet = MyContainer:New("EquipSet", {Columns = bagsWidth, Parent = f.main})
+		f.equipSet:SetFilter(filters.bagEquipSet, true)
+
 		f.consumable = MyContainer:New("Consumable", {Columns = bagsWidth, Parent = f.main})
 		f.consumable:SetFilter(filters.bagConsumable, true)
 
@@ -635,6 +637,9 @@ function module:OnLogin()
 		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = bankWidth, Parent = f.bank})
 		f.bankEquipment:SetFilter(filters.bankEquipment, true)
 
+		f.bankEquipSet = MyContainer:New("BankEquipSet", {Columns = bankWidth, Parent = f.bank})
+		f.bankEquipSet:SetFilter(filters.bankEquipSet, true)
+
 		f.bankConsumable = MyContainer:New("BankConsumable", {Columns = bankWidth, Parent = f.bank})
 		f.bankConsumable:SetFilter(filters.bankConsumable, true)
 
@@ -649,8 +654,8 @@ function module:OnLogin()
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
 
-		module.BagGroup = {f.azeriteItem, f.equipment, f.bagCompanion, f.bagGoods, f.consumable, f.bagFavourite, f.junk}
-		module.BankGroup = {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankGoods, f.bankConsumable, f.bankFavourite}
+		module.BagGroup = {f.azeriteItem, f.equipment, f.equipSet, f.bagCompanion, f.bagGoods, f.consumable, f.bagFavourite, f.junk}
+		module.BankGroup = {f.bankAzeriteItem, f.bankEquipment, f.bankEquipSet, f.bankLegendary, f.bankCompanion, f.bankGoods, f.bankConsumable, f.bankFavourite}
 	end
 
 	local initBagType
@@ -876,11 +881,9 @@ function module:OnLogin()
 		if strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]
 		elseif strmatch(name, "Equipment$") then
-			if itemSetFilter then
-				label = L["Equipement Set"]
-			else
-				label = BAG_FILTER_EQUIPMENT
-			end
+			label = BAG_FILTER_EQUIPMENT
+		elseif strmatch(name, "EquipSet$") then
+			label = L["Equipement Set"]
 		elseif name == "BankLegendary" then
 			label = LOOT_JOURNAL_LEGENDARIES
 		elseif strmatch(name, "Consumable$") then

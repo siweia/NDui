@@ -50,7 +50,6 @@ G.DefaultSettings = {
 		BagsiLvl = true,
 		BagSortMode = 1,
 		ItemFilter = true,
-		ItemSetFilter = false,
 		DeleteButton = true,
 		FavouriteItems = {},
 		GatherEmpty = false,
@@ -68,6 +67,7 @@ G.DefaultSettings = {
 		FilterMount = true,
 		FilterFavourite = true,
 		FilterGoods = false,
+		FilterEquipSet = false,
 	},
 	Auras = {
 		Reminder = true,
@@ -492,17 +492,6 @@ end
 
 local function updateBagStatus()
 	B:GetModule("Bags"):UpdateAllBags()
-
-	local label = BAG_FILTER_EQUIPMENT
-	if C.db["Bags"]["ItemSetFilter"] then
-		label = L["Equipement Set"]
-	end
-	if _G.NDui_BackpackEquipment then
-		_G.NDui_BackpackEquipment.label:SetText(label)
-	end
-	if _G.NDui_BackpackBankEquipment then
-		_G.NDui_BackpackBankEquipment.label:SetText(label)
-	end
 end
 
 local function updateActionbarScale()
@@ -780,12 +769,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
 		{},--blank
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
-		{1, "Bags", "ItemSetFilter", L["Use ItemSetFilter"].."*", true, nil, updateBagStatus, L["ItemSetFilterTips"]},
-		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
-		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", true, nil, updateBagStatus, L["SpecialBagsColorTip"]},
-		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"]},
+		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", true, nil, updateBagStatus},
+		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
 		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", nil, nil, updateBagStatus},
+		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"], true},
 		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 500, 1}, updateBagStatus, L["iLvlToShowTip"]},
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder},
 		{},--blank

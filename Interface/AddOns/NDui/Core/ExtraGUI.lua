@@ -1017,10 +1017,11 @@ function G:SetupBagFilter(parent)
 		[2] = "FilterConsumable",
 		[3] = "FilterAzerite",
 		[4] = "FilterEquipment",
-		[5] = "FilterLegendary",
-		[6] = "FilterMount",
-		[7] = "FilterFavourite",
-		[8] = "FilterGoods",
+		[5] = "FilterEquipSet",
+		[6] = "FilterLegendary",
+		[7] = "FilterMount",
+		[8] = "FilterFavourite",
+		[9] = "FilterGoods",
 	}
 
 	local Bags = B:GetModule("Bags")
