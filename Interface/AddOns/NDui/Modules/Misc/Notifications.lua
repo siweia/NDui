@@ -84,7 +84,7 @@ local isIgnoredZone = {
 local function isUsefulAtlas(info)
 	local atlas = info.atlasName
 	if atlas then
-		return strfind(atlas, "[Vv]ignette")
+		return strfind(atlas, "[Vv]ignette") or (atlas == "nazjatar-nagaevent")
 	end
 end
 
