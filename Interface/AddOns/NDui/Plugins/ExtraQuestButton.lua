@@ -60,6 +60,7 @@ local inaccurateQuestAreas = {
 	[25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[34461] = 590, -- Horde Garrison
+	[60004] = 118, -- 前夕任务：英勇之举
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -385,10 +386,11 @@ local function GetQuestDistanceWithItem(questID)
 	if not itemLink then return end
 	if GetItemCount(itemLink) == 0 then return end
 
-	local shouldShowItem = not C_QuestLog_IsComplete(questID) or showWhenComplete
+	if C_QuestLog_IsComplete(questID) and not showWhenComplete then return end
+
 	local distanceSq = C_QuestLog_GetDistanceSqToQuest(questID)
 	local distanceYd = distanceSq and sqrt(distanceSq)
-	if IsQuestOnMap(questID) and shouldShowItem and distanceYd and distanceYd <= MAX_DISTANCE_YARDS then
+	if IsQuestOnMap(questID) and distanceYd and distanceYd <= MAX_DISTANCE_YARDS then
 		return distanceYd, itemLink
 	end
 
