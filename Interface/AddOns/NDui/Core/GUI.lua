@@ -1326,14 +1326,8 @@ local function OpenGUI()
 	credit.Icon:SetAllPoints()
 	credit.Icon:SetTexture(DB.creditTex)
 	credit:SetHighlightTexture(DB.creditTex)
-	credit:SetScript("OnEnter", function()
-		GameTooltip:ClearLines()
-		GameTooltip:SetOwner(credit, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:AddLine("Credits:")
-		GameTooltip:AddLine(GetAddOnMetadata("NDui", "X-Credits"), .6,.8,1, 1)
-		GameTooltip:Show()
-	end)
-	credit:SetScript("OnLeave", B.HideTooltip)
+	credit.title = "Credits"
+	B.AddTooltip(credit, "ANCHOR_BOTTOMLEFT", "|n"..GetAddOnMetadata("NDui", "X-Credits"), "info")
 
 	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then
