@@ -38,11 +38,13 @@ local function setupCheckButton()
 	mono:SetPoint("TOPRIGHT", -140, 0)
 	mono:SetSize(26, 26)
 	B.ReskinCheck(mono)
-	mono.text = B.CreateFS(mono, 14, L["Auto Quest"], false, "LEFT", 25, 0)
+	mono.text = B.CreateFS(mono, 14, L["AutoQuest"], false, "LEFT", 25, 0)
 	mono:SetChecked(C.db["Misc"]["AutoQuest"])
 	mono:SetScript("OnClick", function(self)
 		C.db["Misc"]["AutoQuest"] = self:GetChecked()
 	end)
+	mono.title = L["Tips"]
+	B.AddTooltip(mono, "ANCHOR_BOTTOMLEFT", L["AutoQuestTip"], "info")
 
 	created = true
 end
