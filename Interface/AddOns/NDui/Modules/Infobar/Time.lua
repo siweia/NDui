@@ -190,6 +190,35 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
+-- Prepatch rare start
+local npcList = {}
+local index = 21
+for npc = 174048, 174067 do
+	index = index - 1
+	npcList[npc] = index
+end
+
+B:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", function(event, id)
+	local info = id and C_VignetteInfo.GetVignetteInfo(id)
+	local npcID = info and B.GetNPCID(info.objectGUID)
+	local turnIndex = npcID and npcList[npcID]
+	if turnIndex then
+		NDuiADB["LastRareTime"] = time()
+		NDuiADB["LastRareIndex"] = turnIndex
+	end
+end)
+
+local function GetNextPrepatchRareTime(index, round)
+	local closeTurn = index - NDuiADB["LastRareIndex"]
+	local closeTime = NDuiADB["LastRareTime"] + closeTurn * 1200
+	if closeTurn <= 0 then
+		return closeTime + (round+1) * 24000
+	else
+		return closeTime + round * 24000
+	end
+end
+-- Prepatch rare end
+
 local title
 local function addTitle(text)
 	if not title then
@@ -335,6 +364,16 @@ info.onEnter = function(self)
 		local nextLocation = GetNextLocation(nextTime, index)
 		GameTooltip:AddDoubleLine(L["Next Invasion"]..nextLocation, date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
 	end
+
+	-- Prepatch rare start
+	if NDuiADB["LastRareTime"] > 0 and GetItemCount(183634) == 0 then
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(GetItemInfo(183634), .6,.8,1)
+		GameTooltip:AddDoubleLine("Next time", date("%m/%d %H:%M", GetNextPrepatchRareTime(10, 0)), 1,1,1, 1,1,1)
+		GameTooltip:AddDoubleLine("Next time", date("%m/%d %H:%M", GetNextPrepatchRareTime(10, 1)), 1,1,1, 1,1,1)
+		GameTooltip:AddDoubleLine("Next time", date("%m/%d %H:%M", GetNextPrepatchRareTime(10, 2)), 1,1,1, 1,1,1)
+	end
+	-- Prepatch rare end
 
 	-- Help Info
 	GameTooltip:AddDoubleLine(" ", DB.LineString)

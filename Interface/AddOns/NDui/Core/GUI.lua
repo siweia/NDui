@@ -373,7 +373,10 @@ G.AccountSettings = {
 	ContactList = {},
 	CustomJunkList = {},
 	ProfileIndex = {},
-	ProfileNames = {}
+	ProfileNames = {},
+
+	LastRareTime = 0,
+	LastRareIndex = 0,
 }
 
 -- Initial settings
