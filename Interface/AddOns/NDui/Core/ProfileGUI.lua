@@ -445,7 +445,11 @@ function G:ExportGUIData()
 			end
 		elseif KEY == "ContactList" then
 			for name, color in pairs(VALUE) do
-				text = text..";ACCOUNT:"..KEY..":"..name..":"..color
+				local r, g, b = strsplit(":", color)
+				r = B:Round(r, 2)
+				g = B:Round(g, 2)
+				b = B:Round(b, 2)
+				text = text..";ACCOUNT:"..KEY..":"..name..":"..r..":"..g..":"..b
 			end
 		elseif KEY == "ProfileIndex" or KEY == "ProfileNames" then
 			for k, v in pairs(VALUE) do
