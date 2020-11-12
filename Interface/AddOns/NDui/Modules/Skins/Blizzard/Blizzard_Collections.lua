@@ -329,9 +329,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- Toys!
 
-	local shouldChangeTextColor = true
-
-	local function changeTextColor(text, r, g, b)
+	local function changeTextColor(text)
 		if text.isSetting then return end
 		text.isSetting = true
 
