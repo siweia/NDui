@@ -88,6 +88,7 @@ StaticPopupDialogs["NDUI_DELETE_UNIT_PROFILE"] = {
 		NDuiADB["ProfileIndex"][self.text.text_arg1] = nil
 	end,
 	OnShow = function(self)
+		local r, g, b
 		local class = self.text.text_arg2
 		if class == "NONE" then
 			r, g, b = .5, .5, .5
