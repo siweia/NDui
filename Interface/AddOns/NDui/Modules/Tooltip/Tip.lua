@@ -552,9 +552,12 @@ TT:RegisterTooltips("NDui", function()
 		if BSYC_EventAlertTooltip then
 			TT.ReskinTooltip(BSYC_EventAlertTooltip)
 		end
-		-- Lib minimap icon
+		-- Libs
 		if LibDBIconTooltip then
 			TT.ReskinTooltip(LibDBIconTooltip)
+		end
+		if AceConfigDialogTooltip then
+			TT.ReskinTooltip(AceConfigDialogTooltip)
 		end
 		-- TomTom
 		if TomTomTooltip then
