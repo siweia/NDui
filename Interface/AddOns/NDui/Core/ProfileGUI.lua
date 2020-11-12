@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local G = B:GetModule("GUI")
 
 local pairs, strsplit, Ambiguate = pairs, strsplit, Ambiguate
+local strfind, tostring, select = strfind, tostring, select
 local SetPortraitTexture, StaticPopup_Show = SetPortraitTexture, StaticPopup_Show
 local cr, cg, cb = DB.r, DB.g, DB.b
 local myFullName = DB.MyFullName
@@ -66,7 +67,6 @@ StaticPopupDialogs["NDUI_UPLOAD_PROFILE"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		local profileIndex = NDuiADB["ProfileIndex"][myFullName]
 		if G.currentProfile == 1 then
 			NDuiDB = C.db
 		else
@@ -156,7 +156,7 @@ function G:Icon_OnEnter()
 	GameTooltip:AddLine(L["SharedCharacters"])
 	GameTooltip:AddLine(" ")
 	local r, g, b
-	for realm, value in pairs(self.list) do
+	for _, value in pairs(self.list) do
 		for name, class in pairs(value) do
 			if class == "NONE" then
 				r, g, b = .5, .5, .5
@@ -346,4 +346,341 @@ function G:CreateProfileGUI(parent)
 	end
 
 	G:UpdateCurrentProfile()
+end
+
+-- Data transfer
+local bloodlustFilter = {
+	[57723] = true,
+	[57724] = true,
+	[80354] = true,
+	[264689] = true
+}
+
+function G:ExportGUIData()
+	local text = "NDuiSettings:"..DB.Version..":"..DB.MyName..":"..DB.MyClass
+	for KEY, VALUE in pairs(C.db) do
+		if type(VALUE) == "table" then
+			for key, value in pairs(VALUE) do
+				if type(value) == "table" then
+					if value.r then
+						for k, v in pairs(value) do
+							text = text..";"..KEY..":"..key..":"..k..":"..v
+						end
+					elseif key == "ExplosiveCache" then
+						text = text..";"..KEY..":"..key..":EMPTYTABLE"
+					elseif KEY == "AuraWatchList" then
+						if key == "Switcher" then
+							for k, v in pairs(value) do
+								text = text..";"..KEY..":"..key..":"..k..":"..tostring(v)
+							end
+						elseif key == "IgnoreSpells" then
+							text = text..";"..KEY..":"..key
+							for spellID in pairs(value) do
+								text = text..":"..tostring(spellID)
+							end
+						else
+							for spellID, k in pairs(value) do
+								text = text..";"..KEY..":"..key..":"..spellID
+								if k[5] == nil then k[5] = false end
+								for _, v in ipairs(k) do
+									text = text..":"..tostring(v)
+								end
+							end
+						end
+					elseif KEY == "Mover" or KEY == "RaidClickSets" or KEY == "InternalCD" or KEY == "AuraWatchMover" then
+						text = text..";"..KEY..":"..key
+						for _, v in ipairs(value) do
+							text = text..":"..tostring(v)
+						end
+					elseif key == "FavouriteItems" then
+						text = text..";"..KEY..":"..key
+						for itemID in pairs(value) do
+							text = text..":"..tostring(itemID)
+						end
+					end
+				else
+					if C.db[KEY][key] ~= G.DefaultSettings[KEY][key] then -- don't export default settings
+						text = text..";"..KEY..":"..key..":"..tostring(value)
+					end
+				end
+			end
+		end
+	end
+
+	for KEY, VALUE in pairs(NDuiADB) do
+		if KEY == "RaidAuraWatch" or KEY == "CustomJunkList" then
+			text = text..";ACCOUNT:"..KEY
+			for spellID in pairs(VALUE) do
+				text = text..":"..spellID
+			end
+		elseif KEY == "RaidDebuffs" then
+			for instName, value in pairs(VALUE) do
+				for spellID, prio in pairs(value) do
+					text = text..";ACCOUNT:"..KEY..":"..instName..":"..spellID..":"..prio
+				end
+			end
+		elseif KEY == "NameplateFilter" then
+			for index, value in pairs(VALUE) do
+				text = text..";ACCOUNT:"..KEY..":"..index
+				for spellID in pairs(value) do
+					text = text..":"..spellID
+				end
+			end
+		elseif KEY == "CornerBuffs" then
+			for class, value in pairs(VALUE) do
+				for spellID, data in pairs(value) do
+					if not bloodlustFilter[spellID] and class == DB.MyClass then
+						local anchor, color, filter = unpack(data)
+						text = text..";ACCOUNT:"..KEY..":"..class..":"..spellID..":"..anchor..":"..color[1]..":"..color[2]..":"..color[3]..":"..tostring(filter or false)
+					end
+				end
+			end
+		elseif KEY == "PartyWatcherSpells" then
+			text = text..";ACCOUNT:"..KEY
+			for spellID, duration in pairs(VALUE) do
+				local name = GetSpellInfo(spellID)
+				if name then
+					text = text..":"..spellID..":"..duration
+				end
+			end
+		elseif KEY == "ContactList" then
+			for name, color in pairs(VALUE) do
+				text = text..";ACCOUNT:"..KEY..":"..name..":"..color
+			end
+		elseif KEY == "ProfileIndex" or KEY == "ProfileNames" then
+			for k, v in pairs(VALUE) do
+				text = text..";ACCOUNT:"..KEY..":"..k..":"..v
+			end
+		end
+	end
+
+	G.ProfileDataFrame.editBox:SetText(B:Encode(text))
+	G.ProfileDataFrame.editBox:HighlightText()
+end
+
+local function toBoolean(value)
+	if value == "true" then
+		return true
+	elseif value == "false" then
+		return false
+	end
+end
+
+local function reloadDefaultSettings()
+	for i, j in pairs(G.DefaultSettings) do
+		if type(j) == "table" then
+			if not C.db[i] then C.db[i] = {} end
+			for k, v in pairs(j) do
+				C.db[i][k] = v
+			end
+		else
+			C.db[i] = j
+		end
+	end
+	C.db["BFA"] = true -- don't empty data on next loading
+end
+
+function G:ImportGUIData()
+	local profile = G.ProfileDataFrame.editBox:GetText()
+	if B:IsBase64(profile) then profile = B:Decode(profile) end
+	local options = {strsplit(";", profile)}
+	local title, _, _, class = strsplit(":", options[1])
+	if title ~= "NDuiSettings" then
+		UIErrorsFrame:AddMessage(DB.InfoColor..L["Import data error"])
+		return
+	end
+
+	-- we don't export default settings, so need to reload it
+	reloadDefaultSettings()
+
+	for i = 2, #options do
+		local option = options[i]
+		local key, value, arg1 = strsplit(":", option)
+		if arg1 == "true" or arg1 == "false" then
+			C.db[key][value] = toBoolean(arg1)
+		elseif arg1 == "EMPTYTABLE" then
+			C.db[key][value] = {}
+		elseif strfind(value, "Color") and (arg1 == "r" or arg1 == "g" or arg1 == "b") then
+			local color = select(4, strsplit(":", option))
+			if C.db[key][value] then
+				C.db[key][value][arg1] = tonumber(color)
+			end
+		elseif key == "AuraWatchList" then
+			if value == "Switcher" then
+				local index, state = select(3, strsplit(":", option))
+				C.db[key][value][tonumber(index)] = toBoolean(state)
+			elseif value == "IgnoreSpells" then
+				local spells = {select(3, strsplit(":", option))}
+				for _, spellID in next, spells do
+					C.db[key][value][tonumber(spellID)] = true
+				end
+			else
+				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
+				value = tonumber(value)
+				arg1 = tonumber(arg1)
+				spellID = tonumber(spellID)
+				stack = tonumber(stack)
+				amount = toBoolean(amount)
+				timeless = toBoolean(timeless)
+				combat = toBoolean(combat)
+				flash = toBoolean(flash)
+				if not C.db[key][value] then C.db[key][value] = {} end
+				C.db[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
+			end
+		elseif value == "FavouriteItems" then
+			local items = {select(3, strsplit(":", option))}
+			for _, itemID in next, items do
+				C.db[key][value][tonumber(itemID)] = true
+			end
+		elseif key == "Mover" or key == "AuraWatchMover" then
+			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
+			value = tonumber(value) or value
+			x = tonumber(x)
+			y = tonumber(y)
+			C.db[key][value] = {relFrom, parent, relTo, x, y}
+		elseif key == "RaidClickSets" then
+			if DB.MyClass == class then
+				C.db[key][value] = {select(3, strsplit(":", option))}
+			end
+		elseif key == "InternalCD" then
+			local spellID, duration, indicator, unit, itemID = select(3, strsplit(":", option))
+			spellID = tonumber(spellID)
+			duration = tonumber(duration)
+			itemID = tonumber(itemID)
+			C.db[key][spellID] = {spellID, duration, indicator, unit, itemID}
+		elseif key == "ACCOUNT" then
+			if value == "RaidAuraWatch" or value == "CustomJunkList" then
+				local spells = {select(3, strsplit(":", option))}
+				for _, spellID in next, spells do
+					NDuiADB[value][tonumber(spellID)] = true
+				end
+			elseif value == "RaidDebuffs" then
+				local instName, spellID, priority = select(3, strsplit(":", option))
+				if not NDuiADB[value][instName] then NDuiADB[value][instName] = {} end
+				NDuiADB[value][instName][tonumber(spellID)] = tonumber(priority)
+			elseif value == "NameplateFilter" then
+				local spells = {select(4, strsplit(":", option))}
+				for _, spellID in next, spells do
+					NDuiADB[value][tonumber(arg1)][tonumber(spellID)] = true
+				end
+			elseif value == "CornerBuffs" then
+				local class, spellID, anchor, r, g, b, filter = select(3, strsplit(":", option))
+				spellID = tonumber(spellID)
+				r = tonumber(r)
+				g = tonumber(g)
+				b = tonumber(b)
+				filter = toBoolean(filter)
+				if not NDuiADB[value][class] then NDuiADB[value][class] = {} end
+				NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
+			elseif value == "PartyWatcherSpells" then
+				local options = {strsplit(":", option)}
+				local index = 3
+				local spellID = options[index]
+				while spellID do
+					local duration = options[index+1]
+					NDuiADB[value][tonumber(spellID)] = tonumber(duration) or 0
+					index = index + 2
+					spellID = options[index]
+				end
+			elseif value == "ContactList" then
+				local name, r, g, b = select(3, strsplit(":", option))
+				NDuiADB[value][name] = r..":"..g..":"..b
+			elseif value == "ProfileIndex" then
+				local name, index = select(3, strsplit(":", option))
+				NDuiADB[value][name] = tonumber(index)
+			elseif value == "ProfileNames" then
+				local index, name = select(3, strsplit(":", option))
+				NDuiADB[value][tonumber(index)] = name
+			end
+		elseif tonumber(arg1) then
+			if value == "DBMCount" then
+				C.db[key][value] = arg1
+			else
+				C.db[key][value] = tonumber(arg1)
+			end
+		end
+	end
+end
+
+local function updateTooltip()
+	local dataFrame = G.ProfileDataFrame
+	local profile = dataFrame.editBox:GetText()
+	if B:IsBase64(profile) then profile = B:Decode(profile) end
+	local option = strsplit(";", profile)
+	local title, version, name, class = strsplit(":", option)
+	if title == "NDuiSettings" then
+		dataFrame.version = version
+		dataFrame.name = name
+		dataFrame.class = class
+	else
+		dataFrame.version = nil
+	end
+end
+
+function G:CreateDataFrame()
+	if G.ProfileDataFrame then G.ProfileDataFrame:Show() return end
+
+	local dataFrame = CreateFrame("Frame", nil, UIParent)
+	dataFrame:SetPoint("CENTER")
+	dataFrame:SetSize(500, 500)
+	dataFrame:SetFrameStrata("DIALOG")
+	B.CreateMF(dataFrame)
+	B.SetBD(dataFrame)
+	dataFrame.Header = B.CreateFS(dataFrame, 16, L["Export Header"], true, "TOP", 0, -5)
+
+	local scrollArea = CreateFrame("ScrollFrame", nil, dataFrame, "UIPanelScrollFrameTemplate")
+	scrollArea:SetPoint("TOPLEFT", 10, -30)
+	scrollArea:SetPoint("BOTTOMRIGHT", -28, 40)
+	B.CreateBDFrame(scrollArea, .25)
+	B.ReskinScroll(scrollArea.ScrollBar)
+
+	local editBox = CreateFrame("EditBox", nil, dataFrame)
+	editBox:SetMultiLine(true)
+	editBox:SetMaxLetters(99999)
+	editBox:EnableMouse(true)
+	editBox:SetAutoFocus(true)
+	editBox:SetFont(DB.Font[1], 14)
+	editBox:SetWidth(scrollArea:GetWidth())
+	editBox:SetHeight(scrollArea:GetHeight())
+	editBox:SetScript("OnEscapePressed", function() dataFrame:Hide() end)
+	scrollArea:SetScrollChild(editBox)
+	dataFrame.editBox = editBox
+
+	StaticPopupDialogs["NDUI_IMPORT_DATA"] = {
+		text = L["Import data warning"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			G:ImportGUIData()
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
+	local accept = B.CreateButton(dataFrame, 100, 20, OKAY)
+	accept:SetPoint("BOTTOM", 0, 10)
+	accept:SetScript("OnClick", function(self)
+		if self.text:GetText() ~= OKAY and dataFrame.editBox:GetText() ~= "" then
+			StaticPopup_Show("NDUI_IMPORT_DATA")
+		end
+		dataFrame:Hide()
+	end)
+	accept:HookScript("OnEnter", function(self)
+		if dataFrame.editBox:GetText() == "" then return end
+		updateTooltip()
+
+		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 10)
+		GameTooltip:ClearLines()
+		if dataFrame.version then
+			GameTooltip:AddLine(L["Data Info"])
+			GameTooltip:AddDoubleLine(L["Version"], dataFrame.version, .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(L["Character"], dataFrame.name, .6,.8,1, B.ClassColor(dataFrame.class))
+		else
+			GameTooltip:AddLine(L["Data Exception"], 1,0,0)
+		end
+		GameTooltip:Show()
+	end)
+	accept:HookScript("OnLeave", B.HideTooltip)
+	dataFrame.text = accept.text
+
+	G.ProfileDataFrame = dataFrame
 end
