@@ -157,9 +157,6 @@ function M:ContactList_OnMouseWheel(delta)
 end
 
 function M:MailBox_ContactList()
-	local bars = {}
-	local barIndex = 0
-
 	local bu = B.CreateGear(SendMailFrame)
 	bu:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 3, 0)
 
