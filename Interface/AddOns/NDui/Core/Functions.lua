@@ -1458,7 +1458,6 @@ do
 		r = B:Round(r, 2)
 		g = B:Round(g, 2)
 		b = B:Round(b, 2)
-		print(r,g,b)
 		return r, g, b
 	end
 
