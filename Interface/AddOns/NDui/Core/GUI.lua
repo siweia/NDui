@@ -1266,6 +1266,47 @@ local function CreateOption(i)
 	footer:SetPoint("TOPLEFT", 25, -offset)
 end
 
+local function resetUrlBox(self)
+	self:SetText(self.url)
+	self:HighlightText()
+end
+
+local function CreateContactBox(parent, text, url, index)
+	B.CreateFS(parent, 14, text, "system", "TOP", 0, -50 - (index-1) * 60)
+	local box = B.CreateEditBox(parent, 250, 24)
+	box:SetPoint("TOP", 0, -70 - (index-1) * 60)
+	box.url = url
+	resetUrlBox(box)
+	box:SetScript("OnTextChanged", resetUrlBox)
+	box:SetScript("OnCursorChanged", resetUrlBox)
+end
+
+function G:AddContactFrame()
+	if G.ContactFrame then G.ContactFrame:Show() return end
+
+	local frame = CreateFrame("Frame", nil, UIParent)
+	frame:SetSize(300, 300)
+	frame:SetPoint("CENTER")
+	B.SetBD(frame)
+	B.CreateWatermark(frame)
+
+	B.CreateFS(frame, 16, L["Contact"], true, "TOP", 0, -10)
+	local ll = B.SetGradient(frame, "H", .7, .7, .7, 0, .5, 80, C.mult)
+	ll:SetPoint("TOP", -40, -32)
+	local lr = B.SetGradient(frame, "H", .7, .7, .7, .5, 0, 80, C.mult)
+	lr:SetPoint("TOP", 40, -32)
+
+	CreateContactBox(frame, "NGA.CN", "https://bbs.nga.cn/read.php?tid=5483616", 1)
+	CreateContactBox(frame, "GitHub", "https://github.com/siweia/NDui", 2)
+	CreateContactBox(frame, "Discord", "https://discord.gg/WXgrfBm", 3)
+
+	local back = B.CreateButton(frame, 120, 20, OKAY)
+	back:SetPoint("BOTTOM", 0, 15)
+	back:SetScript("OnClick", function() frame:Hide() end)
+
+	G.ContactFrame = frame
+end
+
 local function scrollBarHook(self, delta)
 	local scrollBar = self.ScrollBar
 	scrollBar:SetValue(scrollBar:GetValue() - delta*35)
@@ -1285,6 +1326,13 @@ local function OpenGUI()
 	B.SetBD(f)
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
 	B.CreateFS(f, 16, DB.Version.." ("..DB.Support..")", false, "TOP", 0, -30)
+
+	local contact = B.CreateButton(f, 130, 20, L["Contact"])
+	contact:SetPoint("BOTTOMLEFT", 20, 15)
+	contact:SetScript("OnClick", function()
+		f:Hide()
+		G:AddContactFrame()
+	end)
 
 	local close = B.CreateButton(f, 80, 20, CLOSE)
 	close:SetPoint("BOTTOMRIGHT", -20, 15)
