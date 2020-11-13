@@ -33,6 +33,7 @@ local frames = {
 	["PetitionFrame"] = false,
 	["PetStableFrame"] = false,
 	["PVEFrame"] = false,
+	["QuestFrame"] = false,
 	["RaidParentFrame"] = false,
 	["ReputationFrame"] = true,
 	["SendMailFrame"] = true,
