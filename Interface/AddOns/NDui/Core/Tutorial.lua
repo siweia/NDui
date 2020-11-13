@@ -290,7 +290,7 @@ local function YesTutor()
 	local lr = B.SetGradient(tutor, "H", .7, .7, .7, .5, 0, 80, C.mult)
 	lr:SetPoint("TOP", 40, -32)
 
-	local title = B.CreateFS(tutor, 14, "", true, "TOP", 0, -10)
+	local title = B.CreateFS(tutor, 16, "", true, "TOP", 0, -10)
 	local body = B.CreateFS(tutor, 14, "", false, "TOPLEFT", 20, -50)
 	body:SetPoint("BOTTOMRIGHT", -20, 50)
 	body:SetJustifyV("TOP")
