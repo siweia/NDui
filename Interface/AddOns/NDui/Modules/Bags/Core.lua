@@ -572,6 +572,7 @@ function module:OnLogin()
 	local iconSize = C.db["Bags"]["IconSize"]
 	local deleteButton = C.db["Bags"]["DeleteButton"]
 	local showNewItem = C.db["Bags"]["ShowNewItem"]
+	local hasCanIMogIt = IsAddOnLoaded("CanIMogIt")
 
 	-- Init
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
@@ -716,6 +717,12 @@ function module:OnLogin()
 		end
 
 		self:HookScript("OnClick", module.ButtonOnClick)
+
+		if hasCanIMogIt then
+			self.canIMogIt = parentFrame:CreateTexture(nil, "OVERLAY")
+			self.canIMogIt:SetSize(13, 13)
+			self.canIMogIt:SetPoint(unpack(CanIMogIt.ICON_LOCATIONS[CanIMogItOptions["iconLocation"]]))
+		end
 	end
 
 	function MyButton:ItemOnEnter()
@@ -752,6 +759,19 @@ function module:OnLogin()
 			return "CosmeticIconFrame"
 		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
 			return "ConduitIconFrame", "ConduitIconFrame-Corners"
+		end
+	end
+
+	local function UpdateCanIMogIt(self, item)
+		if not self.canIMogIt then return end
+
+		local text, unmodifiedText = CanIMogIt:GetTooltipText(nil, item.bagID, item.slotID)
+		if text and text ~= "" then
+			local icon = CanIMogIt.tooltipOverlayIcons[unmodifiedText]
+			self.canIMogIt:SetTexture(icon)
+			self.canIMogIt:Show()
+		else
+			self.canIMogIt:Hide()
 		end
 	end
 
@@ -815,6 +835,9 @@ function module:OnLogin()
 		if not GetContainerItemInfo(item.bagID, item.slotID) then
 			GameTooltip:Hide()
 		end
+
+		-- Support CanIMogIt
+		UpdateCanIMogIt(self, item)
 	end
 
 	function MyButton:OnUpdateQuest(item)
