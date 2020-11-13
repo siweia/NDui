@@ -610,6 +610,7 @@ L["FilterLegendary"] = "Фильтр легендарок"
 L["FilterMount"] = "Фильтр транспорта и питомцев"
 L["FilterFavourite"] = "Фильтр предпочтительного"
 L["FilterGoods"] = "Хозяйственные товары"
+L["FilterQuest"] = "Filter quest items" -- need translation
 L["Max Rank"] = "Макс.ранг"
 L["SmoothAmount"] = "Частота плавности"
 L["SmoothAmountTip"] = "|nНастраивает частоту плавности для полос здоровья.|nЧем меньше, тем плавнее."
