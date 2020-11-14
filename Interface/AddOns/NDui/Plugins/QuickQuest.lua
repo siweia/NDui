@@ -7,14 +7,15 @@ local B, C, L, DB = unpack(ns)
 
 local next, ipairs, select = next, ipairs, select
 local UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink = UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink
-local GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo = GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo
+local GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo, GetQuestID = GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo, GetQuestID
 local GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest = GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest
-local IsQuestCompletable, GetNumQuestItems, GetQuestItemLink = IsQuestCompletable, GetNumQuestItems, GetQuestItemLink
-local QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest = QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest
+local IsQuestCompletable, GetNumQuestItems, GetQuestItemLink, QuestIsFromAreaTrigger = IsQuestCompletable, GetNumQuestItems, GetQuestItemLink, QuestIsFromAreaTrigger
+local QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest, AcknowledgeAutoAcceptQuest = QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest, AcknowledgeAutoAcceptQuest
 local GetNumQuestChoices, GetQuestReward, GetItemInfo, GetQuestItemInfo = GetNumQuestChoices, GetQuestReward, GetItemInfo, GetQuestItemInfo
 local GetNumAvailableQuests, GetAvailableQuestInfo, SelectAvailableQuest = GetNumAvailableQuests, GetAvailableQuestInfo, SelectAvailableQuest
 local GetNumAutoQuestPopUps, GetAutoQuestPopUp, ShowQuestOffer, ShowQuestComplete = GetNumAutoQuestPopUps, GetAutoQuestPopUp, ShowQuestOffer, ShowQuestComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
+local C_QuestLog_IsQuestTrivial = C_QuestLog.IsQuestTrivial
 local C_QuestLog_GetQuestTagInfo = C_QuestLog.GetQuestTagInfo
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
@@ -250,7 +251,11 @@ QuickQuest:Register("GOSSIP_CONFIRM", function(index)
 end)
 
 QuickQuest:Register("QUEST_DETAIL", function()
-	if not QuestGetAutoAccept() then
+	if QuestIsFromAreaTrigger() then
+		AcceptQuest()
+	elseif QuestGetAutoAccept() then
+		AcknowledgeAutoAcceptQuest()
+	elseif not C_QuestLog_IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
 		AcceptQuest()
 	end
 end)
@@ -425,7 +430,7 @@ local function AttemptAutoComplete(event)
 		if not C_QuestLog_IsWorldQuest(questID) then
 			if popUpType == "OFFER" then
 				ShowQuestOffer(questID)
-			else
+			elseif popUpType == "COMPLETE" then
 				ShowQuestComplete(questID)
 			end
 		end
