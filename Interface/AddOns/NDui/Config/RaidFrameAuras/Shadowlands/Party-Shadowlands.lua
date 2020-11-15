@@ -83,6 +83,8 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 326827) -- 恐惧之缚
 module:RegisterDebuff(TIER, INSTANCE, 0, 326836) -- 镇压诅咒
 module:RegisterDebuff(TIER, INSTANCE, 0, 322554) -- 严惩
 module:RegisterDebuff(TIER, INSTANCE, 0, 321038) -- 烦扰之魂
+module:RegisterDebuff(TIER, INSTANCE, 0, 328593) -- 苦痛刑罚
+module:RegisterDebuff(TIER, INSTANCE, 0, 325254) -- 钢铁尖刺
 
 INSTANCE = 1182 -- 通灵战潮
 RegisterSeasonSpells(INSTANCE)

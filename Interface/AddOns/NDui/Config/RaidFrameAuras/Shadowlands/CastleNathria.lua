@@ -44,6 +44,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 325382) -- 扭曲欲望
 BOSS = 2426 -- 猩红议会
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327773) -- 吸取精华
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327052) -- 吸取精华
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 346651) -- 吸取精华
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 328334) -- 战术冲锋
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 330848) -- 跳错了
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 331706) -- 红字
@@ -64,6 +65,9 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 334765) -- 石化碎裂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 333377) -- 邪恶印记
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 334616) -- 石化
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 334541) -- 石化诅咒
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 339690) -- 晶化
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 342655) -- 不稳定的心能灌注
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 342698) -- 不稳定的心能感染
 
 BOSS = 2424 -- 德纳修斯大帝
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 326851) -- 血债
