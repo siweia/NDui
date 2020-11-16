@@ -481,11 +481,6 @@ local function setupNameplateFilter()
 	G:SetupNameplateFilter(guiPage[5])
 end
 
-local function setupAuraWatch()
-	f:Hide()
-	SlashCmdList["NDUI_AWCONFIG"]()
-end
-
 local function updateBagSortOrder()
 	SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
 end
@@ -900,7 +895,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
 	},
 	[7] = {
-		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
+		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"]},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
@@ -1307,6 +1302,46 @@ function G:AddContactFrame()
 	G.ContactFrame = frame
 end
 
+local function toggleUIMover()
+	f:Hide()
+	SlashCmdList["NDUI_MOVER"]()
+end
+local function toggleAuraWatch()
+	f:Hide()
+	SlashCmdList["NDUI_AWCONFIG"]()
+end
+local function toggleQuickKeybind()
+	f:Hide()
+	SlashCmdList["NDUI_KEYBIND"]()
+end
+local function toggleContactFrame()
+	f:Hide()
+	G:AddContactFrame()
+end
+
+function G:CreateCmdIcons()
+	local iconData = {
+		[1] = {"Interface\\CURSOR\\UnableUI-Cursor-Move", toggleUIMover, L["Mover Console"]},
+		[2] = {"Interface\\SPELLBOOK\\Spellbook-Icon", toggleAuraWatch, L["AuraWatch"]},
+		[3] = {"Interface\\MacroFrame\\MacroFrame-Icon", toggleQuickKeybind, QUICK_KEYBIND_MODE},
+		[4] = {"Interface\\FriendsFrame\\Battlenet-Portrait", toggleContactFrame, L["Contact"]},
+	}
+	local previous
+	for i = 1, 4 do
+		local button = B.CreateButton(f, 30, 30, true, iconData[i][1])
+		if i == 1 then
+			button.Icon:SetInside(nil, 3, 3)
+			button:SetPoint("BOTTOMLEFT", 20, 15)
+		else
+			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
+		end
+		button:SetScript("OnClick", iconData[i][2])
+		B.AddTooltip(button, "ANCHOR_TOP", iconData[i][3], "info")
+
+		previous = button
+	end
+end
+
 local function scrollBarHook(self, delta)
 	local scrollBar = self.ScrollBar
 	scrollBar:SetValue(scrollBar:GetValue() - delta*35)
@@ -1327,12 +1362,7 @@ local function OpenGUI()
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
 	B.CreateFS(f, 16, DB.Version.." ("..DB.Support..")", false, "TOP", 0, -30)
 
-	local contact = B.CreateButton(f, 130, 20, L["Contact"])
-	contact:SetPoint("BOTTOMLEFT", 20, 15)
-	contact:SetScript("OnClick", function()
-		f:Hide()
-		G:AddContactFrame()
-	end)
+	G:CreateCmdIcons()
 
 	local close = B.CreateButton(f, 80, 20, CLOSE)
 	close:SetPoint("BOTTOMRIGHT", -20, 15)
