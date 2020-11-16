@@ -377,7 +377,7 @@ local function HelloWorld()
 	local lines = {
 		c1.." /ww "..c2..L["Help Info12"],
 		c1.." /bb "..c2..L["Help Info5"],
-		c1.." /mm "..c2..L["Help Info6"],
+		c1.." /mm /mmm "..c2..L["Help Info6"],
 		c1.." /rl "..c2..L["Help Info7"],
 		c1.." /ncl "..c2..L["Help Info9"],
 	}

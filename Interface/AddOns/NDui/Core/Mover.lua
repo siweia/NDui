@@ -353,6 +353,7 @@ SlashCmdList["NDUI_MOVER"] = function()
 	M:UnlockElements()
 end
 SLASH_NDUI_MOVER1 = "/mm"
+SLASH_NDUI_MOVER2 = "/mmm"
 
 function M:OnLogin()
 	updater = CreateFrame("Frame")

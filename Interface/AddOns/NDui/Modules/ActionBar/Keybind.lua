@@ -268,8 +268,7 @@ function Bar:Bind_CreateDialog()
 	Bar.keybindDialog = frame
 end
 
-SlashCmdList["NDUI_KEYBIND"] = function(msg)
-	if msg ~= "" then return end -- don't mess up with this
+SlashCmdList["NDUI_KEYBIND"] = function()
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 
 	Bar:Bind_Create()
