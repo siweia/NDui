@@ -1319,24 +1319,32 @@ local function toggleContactFrame()
 	G:AddContactFrame()
 end
 
+local function ShowCmdTooltip(self)
+	GameTooltip:SetOwner(self, "ANCHOR_TOP")
+	GameTooltip:ClearLines()
+	GameTooltip:AddLine(self.tooltip)
+	GameTooltip:Show()
+end
+
 function G:CreateCmdIcons()
 	local iconData = {
-		[1] = {"Interface\\CURSOR\\UnableUI-Cursor-Move", toggleUIMover, L["Mover Console"]},
-		[2] = {"Interface\\SPELLBOOK\\Spellbook-Icon", toggleAuraWatch, L["AuraWatch"]},
-		[3] = {"Interface\\MacroFrame\\MacroFrame-Icon", toggleQuickKeybind, QUICK_KEYBIND_MODE},
-		[4] = {"Interface\\FriendsFrame\\Battlenet-Portrait", toggleContactFrame, L["Contact"]},
+		[1] = {"M", toggleUIMover, L["Mover Console"]},
+		[2] = {"A", toggleAuraWatch, L["AuraWatch"]},
+		[3] = {"K", toggleQuickKeybind, QUICK_KEYBIND_MODE},
+		[4] = {"C", toggleContactFrame, L["Contact"]},
 	}
 	local previous
 	for i = 1, 4 do
-		local button = B.CreateButton(f, 30, 30, true, iconData[i][1])
+		local button = B.CreateButton(f, 30, 20, iconData[i][1])
 		if i == 1 then
-			button.Icon:SetInside(nil, 3, 3)
 			button:SetPoint("BOTTOMLEFT", 20, 15)
 		else
 			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
 		end
 		button:SetScript("OnClick", iconData[i][2])
-		B.AddTooltip(button, "ANCHOR_TOP", iconData[i][3], "info")
+		button.tooltip = iconData[i][3]
+		button:HookScript("OnEnter", ShowCmdTooltip)
+		button:HookScript("OnLeave", B.HideTooltip)
 
 		previous = button
 	end
