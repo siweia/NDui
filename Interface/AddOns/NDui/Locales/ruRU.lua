@@ -722,3 +722,4 @@ L["CooldownCompleted"] = "%s is now available." -- need translation
 L["SendActionCD"] = "Send actionbar cooldown" -- need translation
 L["SendActionCDTip"] = "|nIf enabled, you can mouse wheel on actionbar button, and send its cooldown status to your group.|n|nOnly available for NDui default actionbar." -- need translation
 L["Contact"] = "Contact" -- need translation
+L["UnlockUI"] = "Unlock UI" -- need translation
