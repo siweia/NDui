@@ -412,8 +412,8 @@ function Bar:ReskinBars()
 		},
 		cooldown = {
 			points = {
-				{"TOPLEFT", C.mult, -C.mult},
-				{"BOTTOMRIGHT", -C.mult, C.mult},
+				{"TOPLEFT", 0, 0},
+				{"BOTTOMRIGHT", 0, 0},
 			},
 		},
 		name = {
