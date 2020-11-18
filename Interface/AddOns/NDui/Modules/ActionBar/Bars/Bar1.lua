@@ -119,7 +119,7 @@ function Bar:CreateBar1()
 			else
 				icon:Hide()
 			end
-			Bar.UpdateButtonUsable(button)
+			button:UpdateUsable()
 		end
 	end
 	B:RegisterEvent("SPELL_UPDATE_ICON", FixActionBarTexture)
