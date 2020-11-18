@@ -573,6 +573,7 @@ function module:OnLogin()
 	local deleteButton = C.db["Bags"]["DeleteButton"]
 	local showNewItem = C.db["Bags"]["ShowNewItem"]
 	local hasCanIMogIt = IsAddOnLoaded("CanIMogIt")
+	local hasPawn = IsAddOnLoaded("Pawn")
 
 	-- Init
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
@@ -781,6 +782,14 @@ function module:OnLogin()
 		end
 	end
 
+	local function UpdatePawnArrow(self, item)
+		if not hasPawn then return end
+		if not PawnIsContainerItemAnUpgrade then return end
+		if self.UpgradeIcon then
+			self.UpgradeIcon:SetShown(PawnIsContainerItemAnUpgrade(item.bagID, item.slotID))
+		end
+	end
+
 	function MyButton:OnUpdate(item)
 		if self.JunkIcon then
 			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
@@ -844,6 +853,9 @@ function module:OnLogin()
 
 		-- Support CanIMogIt
 		UpdateCanIMogIt(self, item)
+
+		-- Support Pawn
+		UpdatePawnArrow(self, item)
 	end
 
 	function MyButton:OnUpdateQuest(item)
