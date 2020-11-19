@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 -- Fix Alertframe bg
 local function fixBg(frame)
-	if frame:GetObjectType() == "AnimationGroup" then
+	if frame:IsObjectType("AnimationGroup") then
 		frame = frame:GetParent()
 	end
 	if frame.bg then
