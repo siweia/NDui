@@ -131,6 +131,7 @@ function module:SetupWorldMap()
 	-- Hide stuff
 	WorldMapFrame.BlackoutFrame:SetAlpha(0)
 	WorldMapFrame.BlackoutFrame:EnableMouse(false)
+	QuestMapFrame:SetScript("OnHide", nil) -- fix map toggle taint
 
 	self:WorldMapScale()
 	self:SetupCoords()
