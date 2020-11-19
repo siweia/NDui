@@ -963,7 +963,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local buttons = MissionList.listScroll.buttons
 		for i = 1, #buttons do
 			local bu = select(3, buttons[i]:GetChildren())
-			if bu and bu:GetObjectType() == "Button" and not bu.styled then
+			if bu and bu:IsObjectType("Button") and not bu.styled then
 				B.Reskin(bu)
 				bu:SetSize(60, 45)
 				bu.styled = true
@@ -972,9 +972,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end
 
 	local function buttonOnShow(MissionPage)
-		for i = 18, 26 do
+		for i = 18, 27 do
 			local bu = select(i, MissionPage:GetChildren())
-			if bu and bu:GetObjectType() == "Button" and not bu.styled then
+			if bu and bu:IsObjectType("Button") and not bu.styled then
 				B.Reskin(bu)
 				bu:SetSize(50, 45)
 				bu.styled = true
