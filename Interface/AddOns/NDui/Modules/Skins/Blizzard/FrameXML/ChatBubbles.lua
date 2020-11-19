@@ -13,11 +13,7 @@ local function reskinChatBubble(chatbubble)
 		bg:SetScale(UIParent:GetEffectiveScale())
 		bg:SetInside(frame, 6, 6)
 
-		if DB.isNewPatch then
-			frame:DisableDrawLayer("BORDER")
-		else
-			frame:SetBackdrop(nil)
-		end
+		frame:DisableDrawLayer("BORDER")
 		frame.Tail:SetAlpha(0)
 		frame.String:SetFont(DB.Font[1], 13, DB.Font[3])
 	end
