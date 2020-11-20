@@ -108,18 +108,18 @@ function Bar:CreateBar1()
 	]])
 	RegisterStateDriver(frame, "page", actionPage)
 
-	-- Fix button texture, need reviewed
+	-- Fix button texture
 	local function FixActionBarTexture()
 		for _, button in next, buttonList do
 			local icon = button.icon
 			local texture = GetActionTexture(button.action)
 			if texture then
 				icon:SetTexture(texture)
+				icon:SetVertexColor(1, 1, 1) -- force it turn bright, needs review
 				icon:Show()
 			else
 				icon:Hide()
 			end
-			button:UpdateUsable()
 		end
 	end
 	B:RegisterEvent("SPELL_UPDATE_ICON", FixActionBarTexture)
