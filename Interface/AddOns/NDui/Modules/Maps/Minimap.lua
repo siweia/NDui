@@ -214,7 +214,7 @@ function module:RecycleBin()
 
 	local secureAddons = {
 		["GatherMatePin"] = true,
-		["HandyNotesPin"] = true,
+		["HandyNotes.-Pin"] = true,
 	}
 	local function isButtonSecure(name)
 		for addonName in pairs(secureAddons) do
