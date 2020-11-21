@@ -22,6 +22,16 @@ StaticPopupDialogs["RESET_NDUI"] = {
 	whileDead = 1,
 }
 
+StaticPopupDialogs["RESET_NDUI_HELPINFO"] = {
+	text = L["Reset NDui Helpinfo"],
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		wipe(NDuiADB["Help"])
+	end,
+	whileDead = 1,
+}
+
 StaticPopupDialogs["NDUI_RESET_PROFILE"] = {
 	text = L["Reset current profile?"],
 	button1 = YES,
@@ -298,6 +308,12 @@ function G:CreateProfileGUI(parent)
 		StaticPopup_Show("RESET_NDUI")
 	end)
 
+	local restore = B.CreateButton(parent, 120, 24, L["Reset Help"])
+	restore:SetPoint("BOTTOM", reset, "TOP", 0, 2)
+	restore:SetScript("OnClick", function()
+		StaticPopup_Show("RESET_NDUI_HELPINFO")
+	end)
+
 	local import = B.CreateButton(parent, 120, 24, L["Import"])
 	import:SetPoint("BOTTOMLEFT", 10, 10)
 	import:SetScript("OnClick", function()
@@ -324,8 +340,8 @@ function G:CreateProfileGUI(parent)
 	description:SetWordWrap(true)
 	description:SetJustifyH("LEFT")
 
-	local delete = B.CreateEditBox(parent, 245, 26)
-	delete:SetPoint("BOTTOMLEFT", import, "TOPLEFT", 0, 10)
+	local delete = B.CreateEditBox(parent, 245, 24)
+	delete:SetPoint("BOTTOMLEFT", import, "TOPLEFT", 0, 2)
 	delete:HookScript("OnEnterPressed", G.Delete_OnEnter)
 	delete:HookScript("OnEscapePressed", G.Delete_OnEscape)
 	delete.title = L["DeleteUnitProfile"]

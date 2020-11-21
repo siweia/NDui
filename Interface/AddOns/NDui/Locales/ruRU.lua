@@ -720,3 +720,5 @@ L["Donation"] = "Donations @%s" -- need translation
 L["BagSortTip"] = "|nIf you have empty slots after bag sort, please disable bags module, and turn off all bags filter in default ui containers." -- need translation
 L["ChatScrollHelp"] = "Scroll multi-lines by holding Ctrl key, and scroll to top or bottom by holding Shift key." -- need translation
 L["MinimapHelp"] = "Scroll minimap to zoom in or out, middle click to toggle calendar, right click to toggle track menu." -- need translation
+L["Reset Help"] = "Reset Helpinfo" -- need translation
+L["Reset NDui Helpinfo"] = "Are you sure to reset all help info?" -- need translation
