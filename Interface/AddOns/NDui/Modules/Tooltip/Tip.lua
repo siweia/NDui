@@ -570,6 +570,10 @@ TT:RegisterTooltips("NDui", function()
 		if LootBarToolTip then
 			TT.ReskinTooltip(LootBarToolTip)
 		end
+		-- Narcissus
+		if NarciGameTooltip then
+			TT.ReskinTooltip(NarciGameTooltip)
+		end
 	end)
 
 	if IsAddOnLoaded("BattlePetBreedID") then
