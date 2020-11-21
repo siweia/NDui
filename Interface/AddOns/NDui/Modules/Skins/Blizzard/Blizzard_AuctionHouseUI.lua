@@ -43,7 +43,7 @@ local function MoveMoneyDisplay(frame, relF, parent, relT, x, y, reset)
 	if not relF then
 		relF, parent, relT, x, y = frame:GetPoint()
 	end
-	frame:SetPoint(relF, parent, relT, 18, 0, true)
+	frame:SetPoint(relF, parent, relT, x + 24, y, true)
 end
 
 local function reskinListIcon(frame)
