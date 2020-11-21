@@ -344,22 +344,25 @@ local function HelloWorld()
 	local lr = B.SetGradient(welcome, "H", .7, .7, .7, .5, 0, 100, C.mult)
 	lr:SetPoint("TOP", 50, -35)
 
-	B.CreateFS(welcome, 14, L["Help Info1"], false, "TOPLEFT", 20, -50)
-	B.CreateFS(welcome, 14, L["Help Info2"], false, "TOPLEFT", 20, -70)
+	local intro = B.CreateFS(welcome, 14, "", false, "TOPLEFT", 20, -70)
+	intro:SetPoint("BOTTOMRIGHT", -20, 50)
+	intro:SetWordWrap(true)
+	intro:SetJustifyV("TOP")
+	intro:SetJustifyH("LEFT")
 
-	local c1, c2 = "|c00FFFF00", "|c0000FF00"
+	local c1, c2 = "|cffFFFF00", "|cff00FF00"
 	local lines = {
-		c1.." /ww "..c2..L["Help Info12"],
-		c1.." /bb "..c2..L["Help Info5"],
-		c1.." /mm /mmm "..c2..L["Help Info6"],
-		c1.." /rl "..c2..L["Help Info7"],
-		c1.." /ncl "..c2..L["Help Info9"],
+		c1.." /ww "..c2..L["Cmd ww intro"].."|r",
+		" /bb "..c2..L["Cmd bb intro"].."|r",
+		" /mm /mmm "..c2..L["Cmd mm intro"].."|r",
+		" /rl "..c2..L["Cmd rl intro"].."|r",
+		" /ncl "..c2..L["Cmd ncl intro"].."|r",
 	}
-	for index, line in pairs(lines) do
-		B.CreateFS(welcome, 14, line, false, "TOPLEFT", 20, -100-index*24)
+	local text = L["Help Intro"].."|n|n"
+	for _, line in pairs(lines) do
+		text = text.."|n|n"..line
 	end
-	B.CreateFS(welcome, 14, L["Help Info10"], false, "TOPLEFT", 20, -310)
-	B.CreateFS(welcome, 14, L["Help Info11"], false, "TOPLEFT", 20, -330)
+	intro:SetText(text)
 
 	if C.db["Tutorial"]["Complete"] then
 		local close = B.CreateButton(welcome, 16, 16, true, DB.closeTex)
