@@ -320,7 +320,7 @@ local function YesTutor()
 		elseif currentPage == 3 then
 			C.db["Tutorial"]["Complete"] = true
 			tutor:Hide()
-			ReloadUI()
+			StaticPopup_Show("RELOAD_NDUI")
 		end
 		TurnNextPage()
 	end)
