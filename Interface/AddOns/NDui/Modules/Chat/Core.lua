@@ -305,7 +305,9 @@ function module:OnLogin()
 	fontOutline = C.db["Skins"]["FontOutline"] and "OUTLINE" or ""
 
 	for i = 1, NUM_CHAT_WINDOWS do
-		module.SkinChat(_G["ChatFrame"..i])
+		local chatframe = _G["ChatFrame"..i]
+		module.SkinChat(chatframe)
+		ChatFrame_RemoveMessageGroup(chatframe, "CHANNEL")
 	end
 
 	hooksecurefunc("FCF_OpenTemporaryWindow", function()
@@ -343,9 +345,10 @@ function module:OnLogin()
 
 	-- Lock chatframe
 	if C.db["Chat"]["Lock"] then
-		hooksecurefunc("FCF_SavePositionAndDimensions", module.UpdateChatSize)
-		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
 		module:UpdateChatSize()
+		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
+		hooksecurefunc("FCF_SavePositionAndDimensions", module.UpdateChatSize)
+		FCF_SavePositionAndDimensions(ChatFrame1)
 	end
 
 	-- ProfanityFilter

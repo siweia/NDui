@@ -357,7 +357,7 @@ G.AccountSettings = {
 	GuildSortOrder = true,
 	DetectVersion = DB.Version,
 	ResetDetails = true,
-	LockUIScale = false,
+	LockUIScale = true,
 	UIScale = .71,
 	NumberFormat = 1,
 	VersionCheck = true,
@@ -1329,6 +1329,15 @@ local function scrollBarHook(self, delta)
 	local scrollBar = self.ScrollBar
 	scrollBar:SetValue(scrollBar:GetValue() - delta*35)
 end
+
+StaticPopupDialogs["RELOAD_NDUI"] = {
+	text = L["ReloadUI Required"],
+	button1 = APPLY,
+	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
+	OnAccept = function()
+		ReloadUI()
+	end,
+}
 
 local function OpenGUI()
 	if f then f:Show() return end

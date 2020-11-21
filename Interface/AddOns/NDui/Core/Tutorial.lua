@@ -13,16 +13,11 @@ print("|cff70C0F5------------------------")
 local function ForceDefaultSettings()
 	SetCVar("autoLootDefault", 1)
 	SetCVar("alwaysCompareItems", 1)
-	SetCVar("useCompactPartyFrames", 1)
-	SetCVar("lootUnderMouse", 1)
 	SetCVar("autoSelfCast", 1)
-	SetCVar("nameplateShowEnemies", 1)
-	SetCVar("nameplateShowAll", 1)
-	SetCVar("nameplateMotion", 1)
+	SetCVar("lootUnderMouse", 1)
 	SetCVar("screenshotQuality", 10)
 	SetCVar("showTutorials", 0)
 	SetCVar("ActionButtonUseKeyDown", 1)
-	SetCVar("alwaysShowActionBars", 1)
 	SetCVar("lockActionBars", 1)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
@@ -34,44 +29,29 @@ local function ForceDefaultSettings()
 	SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)
 	SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 10)
 	SetActionBarToggles(1, 1, 1, 1)
+	if not InCombatLockdown() then
+		SetCVar("nameplateMotion", 1)
+		SetCVar("nameplateShowAll", 1)
+		SetCVar("nameplateShowEnemies", 1)
+		SetCVar("alwaysShowActionBars", 1)
+	end
 	if DB.isDeveloper then
 		SetCVar("ffxGlow", 0)
 		SetCVar("SpellQueueWindow", 100)
 		SetCVar("nameplateShowOnlyNames", 1)
-		SetCVar("ShowClassColorInFriendlyNameplate", 1)
 	end
 end
 
 local function ForceRaidFrame()
 	if InCombatLockdown() then return end
 	if not CompactUnitFrameProfiles then return end
+	SetCVar("useCompactPartyFrames", 1)
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "useClassColors", true)
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "displayPowerBar", true)
 	SetRaidProfileOption(CompactUnitFrameProfiles.selectedProfile, "displayBorder", false)
 	CompactUnitFrameProfiles_ApplyCurrentSettings()
 	CompactUnitFrameProfiles_UpdateCurrentPanel()
 end
-
-local function ForceChatSettings()
-	B:GetModule("Chat"):UpdateChatSize()
-
-	for i = 1, NUM_CHAT_WINDOWS do
-		local cf = _G["ChatFrame"..i]
-		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
-	end
-	FCF_SavePositionAndDimensions(ChatFrame1)
-
-	C.db["Chat"]["Lock"] = true
-end
-
-StaticPopupDialogs["RELOAD_NDUI"] = {
-	text = L["ReloadUI Required"],
-	button1 = APPLY,
-	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
-	OnAccept = function()
-		ReloadUI()
-	end,
-}
 
 -- DBM bars
 local function ForceDBMOptions()
@@ -300,38 +280,36 @@ local function YesTutor()
 
 	local pass = B.CreateButton(tutor, 50, 20, L["Skip"])
 	pass:SetPoint("BOTTOMLEFT", 10, 10)
+	pass:Hide()
 	local apply = B.CreateButton(tutor, 50, 20, APPLY)
 	apply:SetPoint("BOTTOMRIGHT", -10, 10)
 
-	local titles = {L["Default Settings"], L["ChatFrame"], UI_SCALE, L["Skins"], L["Tips"]}
+	local titles = {L["Default Settings"], L["Skins"], L["Tips"]}
 	local function RefreshText(page)
 		title:SetText(titles[page])
 		body:SetText(L["Tutorial Page"..page])
-		foot:SetText(page.."/5")
+		foot:SetText(page.."/3")
 	end
 	RefreshText(1)
 
 	local currentPage = 1
-	pass:SetScript("OnClick", function()
-		if currentPage > 3 then pass:Hide() end
+	local function TurnNextPage()
 		currentPage = currentPage + 1
 		RefreshText(currentPage)
 		PlaySound(SOUNDKIT.IG_QUEST_LOG_OPEN)
+	end
+
+	pass:SetScript("OnClick", function()
+		pass:Hide()
+		TurnNextPage()
 	end)
 	apply:SetScript("OnClick", function()
-		pass:Show()
 		if currentPage == 1 then
 			ForceDefaultSettings()
 			ForceRaidFrame()
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Default Settings Check"])
+			pass:Show()
 		elseif currentPage == 2 then
-			ForceChatSettings()
-			UIErrorsFrame:AddMessage(DB.InfoColor..L["Chat Settings Check"])
-		elseif currentPage == 3 then
-			NDuiADB["LockUIScale"] = true
-			B:SetupUIScale()
-			UIErrorsFrame:AddMessage(DB.InfoColor..L["UIScale Check"])
-		elseif currentPage == 4 then
 			NDuiADB["DBMRequest"] = true
 			NDuiADB["SkadaRequest"] = true
 			NDuiADB["BWRequest"] = true
@@ -339,16 +317,12 @@ local function YesTutor()
 			NDuiADB["ResetDetails"] = true
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Tutorial Complete"])
 			pass:Hide()
-		elseif currentPage == 5 then
+		elseif currentPage == 3 then
 			C.db["Tutorial"]["Complete"] = true
 			tutor:Hide()
-			StaticPopup_Show("RELOAD_NDUI")
-			currentPage = 0
+			ReloadUI()
 		end
-
-		currentPage = currentPage + 1
-		RefreshText(currentPage)
-		PlaySound(SOUNDKIT.IG_QUEST_LOG_OPEN)
+		TurnNextPage()
 	end)
 end
 
