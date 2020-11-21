@@ -28,6 +28,7 @@ local list = {
 		{AuraID = 80240, UnitID = "target", Caster = "player"},		-- 浩劫
 		{AuraID = 146739, UnitID = "target", Caster = "player"},	-- 腐蚀术
 		{AuraID = 316099, UnitID = "target", Caster = "player"},	-- 痛苦无常
+		{AuraID = 342938, UnitID = "target", Caster = "player"},	-- 痛苦无常(PVP蔓延痛苦)
 		{AuraID = 118699, UnitID = "target", Caster = "player"},	-- 恐惧
 		{AuraID = 205181, UnitID = "target", Caster = "player"},	-- 暗影烈焰
 		{AuraID = 157736, UnitID = "target", Caster = "player"},	-- 献祭
