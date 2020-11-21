@@ -212,17 +212,21 @@ function module:RecycleBin()
 		C_Timer_After(.5, hideBinButton)
 	end
 
-	local secureAddons = {
+	local ignoredButtons = {
 		["GatherMatePin"] = true,
 		["HandyNotes.-Pin"] = true,
 	}
-	local function isButtonSecure(name)
-		for addonName in pairs(secureAddons) do
+	local function isButtonIgnored(name)
+		for addonName in pairs(ignoredButtons) do
 			if strmatch(name, addonName) then
 				return true
 			end
 		end
 	end
+
+	local isGoodLookingIcon = {
+		["Narci_MinimapButton"] = true,
+	}
 
 	local currentIndex, pendingTime, timeThreshold = 0, 5, 12
 	local buttons, numMinimapChildren = {}, 0
@@ -231,7 +235,7 @@ function module:RecycleBin()
 		[136467] = true,
 	}
 
-	local function ReskinMinimapButton(child)
+	local function ReskinMinimapButton(child, name)
 		for j = 1, child:GetNumRegions() do
 			local region = select(j, child:GetRegions())
 			if region:IsObjectType("Texture") then
@@ -241,7 +245,9 @@ function module:RecycleBin()
 				end
 				region:ClearAllPoints()
 				region:SetAllPoints()
-				region:SetTexCoord(unpack(DB.TexCoord))
+				if not isGoodLookingIcon[name] then
+					region:SetTexCoord(unpack(DB.TexCoord))
+				end
 			end
 			child:SetSize(34, 34)
 			B.CreateSD(child, 3, 3)
@@ -288,8 +294,8 @@ function module:RecycleBin()
 				local child = select(i, Minimap:GetChildren())
 				local name = child and child.GetName and child:GetName()
 				if name and not child.isExamed and not blackList[name] then
-					if (child:IsObjectType("Button") or strmatch(strupper(name), "BUTTON")) and not isButtonSecure(name) then
-						ReskinMinimapButton(child)
+					if (child:IsObjectType("Button") or strmatch(strupper(name), "BUTTON")) and not isButtonIgnored(name) then
+						ReskinMinimapButton(child, name)
 					end
 					child.isExamed = true
 				end
