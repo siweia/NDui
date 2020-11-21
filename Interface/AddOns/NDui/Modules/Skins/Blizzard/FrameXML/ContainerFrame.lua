@@ -8,6 +8,33 @@ local function replaceSortTexture(texture)
 	texture:SetTexCoord(unpack(DB.TexCoord))
 end
 
+local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
+local bagIDToInvID = {
+	[1] = 20,
+	[2] = 21,
+	[3] = 22,
+	[4] = 23,
+	[5] = 80,
+	[6] = 81,
+	[7] = 82,
+	[8] = 83,
+	[9] = 84,
+	[10] = 85,
+	[11] = 86,
+}
+
+local function createBagIcon(frame, index)
+	if not frame.bagIcon then
+		frame.bagIcon = frame.PortraitButton:CreateTexture()
+		B.ReskinIcon(frame.bagIcon)
+		frame.bagIcon:SetPoint("TOPLEFT", 5, -3)
+		frame.bagIcon:SetSize(32, 32)
+	end
+	if index == 1 then
+		frame.bagIcon:SetTexture(backpackTexture) -- backpack
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if C.db["Bags"]["Enable"] then return end
 	if not C.db["Skins"]["BlizzardSkins"] then return end
@@ -21,6 +48,7 @@ tinsert(C.defaultThemes, function()
 
 		B.StripTextures(con, true)
 		con.PortraitButton.Highlight:SetTexture("")
+		createBagIcon(con, i)
 
 		name:ClearAllPoints()
 		name:SetPoint("TOP", 0, -10)
@@ -29,7 +57,6 @@ tinsert(C.defaultThemes, function()
 			local item = "ContainerFrame"..i.."Item"..k
 			local button = _G[item]
 			local questTexture = _G[item.."IconQuestTexture"]
-			local newItemTexture = button.NewItemTexture
 
 			questTexture:SetDrawLayer("BACKGROUND")
 			questTexture:SetSize(1, 1)
@@ -40,10 +67,6 @@ tinsert(C.defaultThemes, function()
 
 			button.icon:SetTexCoord(unpack(DB.TexCoord))
 			button.bg = B.CreateBDFrame(button.icon, .25)
-
-			-- easiest way to 'hide' it without breaking stuff
-			newItemTexture:SetDrawLayer("BACKGROUND")
-			newItemTexture:SetSize(1, 1)
 
 			button.searchOverlay:SetOutside()
 			B.ReskinIconBorder(button.IconBorder)
@@ -78,6 +101,14 @@ tinsert(C.defaultThemes, function()
 			local itemButton = _G[name.."Item"..i]
 			if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
 				itemButton.IconBorder:SetVertexColor(1, 1, 0)
+			end
+		end
+
+		if frame.bagIcon then
+			local invID = bagIDToInvID[frame:GetID()]
+			if invID then
+				local icon = GetInventoryItemTexture("player", invID)
+				frame.bagIcon:SetTexture(icon or backpackTexture)
 			end
 		end
 	end)
