@@ -25,10 +25,19 @@ C.themes["Blizzard_InspectUI"] = function()
 		slot.bg = B.CreateBDFrame(slot.icon, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		B.ReskinIconBorder(slot.IconBorder)
+		slot.IconOverlay:SetAtlas("CosmeticIconFrame")
+		slot.IconOverlay:SetInside()
+	end
+
+	local function UpdateCosmetic(self)
+		local unit = InspectFrame.unit
+		local itemLink = unit and GetInventoryItemLink(unit, self:GetID())
+		self.IconOverlay:SetShown(itemLink and IsCosmeticItem(itemLink))
 	end
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
 		button.icon:SetShown(button.hasItem)
+		UpdateCosmetic(button)
 	end)
 
 	-- Talents
