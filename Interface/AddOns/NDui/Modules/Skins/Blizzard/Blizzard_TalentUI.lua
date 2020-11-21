@@ -19,6 +19,8 @@ local function ReskinPvPTalent(self)
 		self:GetRegions():SetAlpha(0)
 		self.Selected:SetColorTexture(r, g, b, .25)
 		self.Selected:SetDrawLayer("BACKGROUND")
+		self.Selected:SetInside(bg)
+
 		self.styled = true
 	end
 end
