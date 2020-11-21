@@ -724,3 +724,4 @@ L["SendActionCDTip"] = "|nIf enabled, you can mouse wheel on actionbar button, a
 L["Contact"] = "Contact"
 L["UnlockUI"] = "Unlock UI"
 L["Donation"] = "Donations @%s"
+L["BagSortTip"] = "|nIf you have empty slots after bag sort, please disable bags module, and turn off all bags filter in default ui containers."

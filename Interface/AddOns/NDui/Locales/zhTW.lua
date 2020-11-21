@@ -724,3 +724,4 @@ L["SendActionCDTip"] = "|n啟用後，當你指向任意動作條時，可以滾
 L["Contact"] = "聯係方式"
 L["UnlockUI"] = "介面移動"
 L["Donation"] = "來自%s的打賞"
+L["BagSortTip"] = "|n若整理完存在空格，請禁用背包后，關閉游戲自帶背包的過濾功能。"
