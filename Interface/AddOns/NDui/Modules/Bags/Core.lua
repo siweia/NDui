@@ -762,7 +762,7 @@ function module:OnLogin()
 
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			return "AzeriteIconFrame"
-		elseif IsCosmeticItem and IsCosmeticItem(item.link) then
+		elseif IsCosmeticItem(item.link) then
 			return "CosmeticIconFrame"
 		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
 			return "ConduitIconFrame", "ConduitIconFrame-Corners"
