@@ -385,6 +385,11 @@ end
 
 -- UI widgets
 do
+	-- HelpTip
+	function B.HelpInfoAcknowledge(callbackArg)
+		NDuiADB["Help"][callbackArg] = true
+	end
+
 	-- Dropdown menu
 	B.EasyMenu = CreateFrame("Frame", "NDui_EasyMenu", UIParent, "UIDropDownMenuTemplate")
 

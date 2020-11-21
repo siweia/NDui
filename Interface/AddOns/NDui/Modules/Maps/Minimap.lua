@@ -464,6 +464,23 @@ function module:HybridMinimapOnLoad(addon)
 	end
 end
 
+local minimapInfo = {
+	text = L["MinimapHelp"],
+	buttonStyle = HelpTip.ButtonStyle.GotIt,
+	targetPoint = HelpTip.Point.LeftEdgeBottom,
+	onAcknowledgeCallback = B.HelpInfoAcknowledge,
+	callbackArg = "MinimapInfo",
+	alignment = 3,
+}
+
+function module:ShowMinimapHelpInfo()
+	Minimap:HookScript("OnEnter", function()
+		if not NDuiADB["Help"]["MinimapInfo"] then
+			HelpTip:Show(MinimapCluster, minimapInfo)
+		end
+	end)
+end
+
 function module:SetupMinimap()
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
@@ -509,6 +526,7 @@ function module:SetupMinimap()
 	self:ReskinRegions()
 	self:RecycleBin()
 	self:WhoPingsMyMap()
+	self:ShowMinimapHelpInfo()
 
 	-- HybridMinimap
 	B:RegisterEvent("ADDON_LOADED", module.HybridMinimapOnLoad)
