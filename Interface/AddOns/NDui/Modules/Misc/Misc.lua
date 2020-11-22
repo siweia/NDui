@@ -427,11 +427,16 @@ do
 		end
 	end)
 
-	local count = 0
-	PlayerPowerBarAlt:HookScript("OnEnter", function()
-		if count < 5 then
-			UIErrorsFrame:AddMessage(DB.InfoColor..L["Drag AltBar Tip"])
-			count = count + 1
+	local altPowerInfo = {
+		text = L["Drag AltBar Tip"],
+		buttonStyle = HelpTip.ButtonStyle.GotIt,
+		targetPoint = HelpTip.Point.RightEdgeCenter,
+		onAcknowledgeCallback = B.HelpInfoAcknowledge,
+		callbackArg = "AltPower",
+	}
+	PlayerPowerBarAlt:HookScript("OnEnter", function(self)
+		if not NDuiADB["Help"]["AltPower"] then
+			HelpTip:Show(self, altPowerInfo)
 		end
 	end)
 end
