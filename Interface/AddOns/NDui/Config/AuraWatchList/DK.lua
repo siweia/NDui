@@ -33,6 +33,7 @@ local list = {
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 63560, UnitID = "pet"},		-- 黑暗突变
 		{AuraID = 47568, UnitID = "player"},	-- 符文武器增效
+		{AuraID = 49039, UnitID = "player"},	-- 巫妖之躯
 		{AuraID = 81141, UnitID = "player"},	-- 赤色天灾
 		{AuraID = 48265, UnitID = "player"},	-- 死亡脚步
 		{AuraID = 55233, UnitID = "player"},	-- 吸血鬼之血
