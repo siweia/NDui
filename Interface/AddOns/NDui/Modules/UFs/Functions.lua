@@ -63,9 +63,17 @@ end
 
 local function UpdateHealthColorByIndex(health, index)
 	health.colorClass = (index == 2)
-	health.colorTapping = (index == 2)
 	health.colorReaction = (index == 2)
-	health.colorDisconnected = (index == 2)
+	if health.SetColorTapping then
+		health:SetColorTapping(index == 2)
+	else
+		health.colorTapping = (index == 2)
+	end
+	if health.SetColorDisconnected then
+		health:SetColorDisconnected(index == 2)
+	else
+		health.colorDisconnected = (index == 2)
+	end
 	health.colorSmooth = (index == 3)
 	if index == 1 then
 		health:SetStatusBarColor(.1, .1, .1)
@@ -243,9 +251,17 @@ end
 local function UpdatePowerColorByIndex(power, index)
 	power.colorPower = (index == 2)
 	power.colorClass = (index ~= 2)
-	power.colorTapping = (index ~= 2)
-	power.colorDisconnected = (index ~= 2)
 	power.colorReaction = (index ~= 2)
+	if power.SetColorTapping then
+		power:SetColorTapping(index ~= 2)
+	else
+		power.colorTapping = (index ~= 2)
+	end
+	if power.SetColorDisconnected then
+		power:SetColorDisconnected(index ~= 2)
+	else
+		power.colorDisconnected = (index ~= 2)
+	end
 end
 
 function UF:UpdatePowerBarColor(self, force)
