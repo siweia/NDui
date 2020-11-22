@@ -722,3 +722,4 @@ L["ChatScrollHelp"] = "滾輪時按住Ctrl鍵可一次滾動多行，按住Shift
 L["MinimapHelp"] = "滑鼠滾輪可以縮放區域，滑鼠中鍵點擊打開行事曆，右鍵點擊打開追蹤菜單。"
 L["Reset Help"] = "重置幫助提示"
 L["Reset NDui Helpinfo"] = "你想要重置所有幫助提示嗎？"
+L["HideAllID"] = "關閉所有法術及物品訊息"

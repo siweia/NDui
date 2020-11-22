@@ -86,6 +86,8 @@ function TT:UpdateSpellCaster(...)
 end
 
 function TT:SetupTooltipID()
+	if C.db["Tooltip"]["HideAllID"] then return end
+
 	-- Update all
 	hooksecurefunc(GameTooltip, "SetHyperlink", TT.SetHyperLinkID)
 	hooksecurefunc(ItemRefTooltip, "SetHyperlink", TT.SetHyperLinkID)

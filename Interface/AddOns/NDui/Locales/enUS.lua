@@ -722,3 +722,4 @@ L["ChatScrollHelp"] = "Scroll multi-lines by holding Ctrl key, and scroll to top
 L["MinimapHelp"] = "Scroll minimap to zoom in or out, middle click to toggle calendar, right click to toggle track menu."
 L["Reset Help"] = "Reset Helpinfo"
 L["Reset NDui Helpinfo"] = "Are you sure to reset all help info?"
+L["HideAllID"] = "Hide all info IDs"
