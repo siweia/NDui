@@ -721,4 +721,4 @@ L["BagSortTip"] = "|n若整理完存在空格，请禁用背包后，关闭游�
 L["ChatScrollHelp"] = "滚轮时按住Ctrl键可一次滚动多行，按住Shift键快速滚动置顶或置底。"
 L["MinimapHelp"] = "鼠标滚轮可以缩放区域，鼠标中键点击打开日历，右键点击打开追踪菜单。"
 L["Reset Help"] = "重置帮助提示"
-L["Reset NDui Helpinfo"] = "你想要重置所有帮助提示吗？"
+L["Reset NDui Helpinfo"] = "你想要重置所有帮助提示吗？看来你不是真的懂。"
