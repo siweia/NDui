@@ -583,13 +583,21 @@ function M:CheckIncompatible()
 end
 
 -- Send cooldown status
+local function GetRemainTime(second)
+	if second > 60 then
+		return format("%d:%.2d", second/60, second%60)
+	else
+		return format("%ds", second)
+	end
+end
+
 local lastCDSend = 0
 function M:SendCurrentSpell(thisTime, spellID)
 	local start, duration = GetSpellCooldown(spellID)
 	local spellLink = GetSpellLink(spellID)
 	if start and duration > 0 then
 		local remain = start + duration - thisTime
-		SendChatMessage(format(L["CooldownRemaining"], spellLink, remain), msgChannel())
+		SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), msgChannel())
 	else
 		SendChatMessage(format(L["CooldownCompleted"], spellLink), msgChannel())
 	end
@@ -599,7 +607,7 @@ function M:SendCurrentItem(thisTime, itemID, itemLink)
 	local start, duration = GetItemCooldown(itemID)
 	if start and duration > 0 then
 		local remain = start + duration - thisTime
-		SendChatMessage(format(L["CooldownRemaining"], itemLink, remain), msgChannel())
+		SendChatMessage(format(L["CooldownRemaining"], itemLink, GetRemainTime(remain)), msgChannel())
 	else
 		SendChatMessage(format(L["CooldownCompleted"], itemLink), msgChannel())
 	end
