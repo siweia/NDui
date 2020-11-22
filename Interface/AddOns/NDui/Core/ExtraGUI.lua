@@ -243,7 +243,7 @@ function G:SetupRaidDebuffs(parent)
 			self:SetText(prio)
 		end)
 		prioBox.title = L["Tips"]
-		B.AddTooltip(prioBox, "ANCHOR_RIGHT", L["Prio Editbox"], "info")
+		B.AddTooltip(prioBox, "ANCHOR_TOPRIGHT", L["Prio Editbox"], "info")
 		bar.prioBox = prioBox
 
 		return bar
@@ -697,7 +697,7 @@ function G:SetupBuffIndicator(parent)
 		scroll.box:SetPoint("TOPLEFT", 10, -10)
 		scroll.box:SetMaxLetters(6)
 		scroll.box.title = L["Tips"]
-		B.AddTooltip(scroll.box, "ANCHOR_RIGHT", L["ID Intro"], "info")
+		B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info")
 
 		scroll.add = B.CreateButton(frame, 45, 25, ADD)
 		scroll.add:SetPoint("TOPRIGHT", -8, -10)
@@ -735,7 +735,7 @@ function G:SetupBuffIndicator(parent)
 			showAll:SetHitRectInsets(0, 0, 0, 0)
 			showAll.bg:SetBackdropBorderColor(1, .8, 0, .5)
 			showAll.title = L["Tips"]
-			B.AddTooltip(showAll, "ANCHOR_RIGHT", L["ShowAllTip"], "info")
+			B.AddTooltip(showAll, "ANCHOR_TOPRIGHT", L["ShowAllTip"], "info")
 			scroll.showAll = showAll
 
 			for spellID, value in pairs(NDuiADB["CornerBuffs"][DB.MyClass]) do
