@@ -38,12 +38,12 @@ local function reskinSellPanel(frame)
 	end
 end
 
-local function MoveMoneyDisplay(frame, relF, parent, relT, x, y, reset)
+local function MoveMoneyDisplay(frame, relF, parent, relT, _, _, reset)
 	if reset then return end
 	if not relF then
-		relF, parent, relT, x, y = frame:GetPoint()
+		relF, parent, relT = frame:GetPoint()
 	end
-	frame:SetPoint(relF, parent, relT, x + 24, y, true)
+	frame:SetPoint(relF, parent, relT, 18, 0, true)
 end
 
 local function reskinListIcon(frame)
