@@ -35,10 +35,6 @@ function module:UpdateChatSize()
 	if ChatFrame1.FontStringContainer then
 		ChatFrame1.FontStringContainer:SetOutside(ChatFrame1)
 	end
-	if ChatFrame1:IsShown() then
-		ChatFrame1:Hide()
-		ChatFrame1:Show()
-	end
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 30)
 	ChatFrame1:SetWidth(C.db["Chat"]["ChatWidth"])
