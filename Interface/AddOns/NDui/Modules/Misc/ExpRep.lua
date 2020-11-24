@@ -7,7 +7,7 @@ local M = B:GetModule("Misc")
 ]]
 local format, pairs, select = string.format, pairs, select
 local min, mod, floor = math.min, mod, math.floor
-local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
+local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL -- FIXME: don't forget to remove this on 10.0 prepatch
 local MAX_REPUTATION_REACTION = MAX_REPUTATION_REACTION
 local FACTION_BAR_COLORS = FACTION_BAR_COLORS
 local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
