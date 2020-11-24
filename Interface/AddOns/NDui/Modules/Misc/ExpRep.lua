@@ -7,7 +7,6 @@ local M = B:GetModule("Misc")
 ]]
 local format, pairs, select = string.format, pairs, select
 local min, mod, floor = math.min, mod, math.floor
-local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL -- FIXME: don't forget to remove this on 10.0 prepatch
 local MAX_REPUTATION_REACTION = MAX_REPUTATION_REACTION
 local FACTION_BAR_COLORS = FACTION_BAR_COLORS
 local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
@@ -20,6 +19,7 @@ local GetText, UnitSex, BreakUpLargeNumbers, GetNumFactions, GetFactionInfo = Ge
 local GetWatchedFactionInfo, GetFriendshipReputation, GetFriendshipReputationRanks = GetWatchedFactionInfo, GetFriendshipReputation, GetFriendshipReputationRanks
 local HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP = HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP
 local IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel = IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel
+local IsPlayerAtEffectiveMaxLevel = IsPlayerAtEffectiveMaxLevel
 local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
 local C_AzeriteItem_HasActiveAzeriteItem = C_AzeriteItem.HasActiveAzeriteItem
@@ -34,7 +34,7 @@ function M:ExpBar_Update()
 	local rest = self.restBar
 	if rest then rest:Hide() end
 
-	if UnitLevel("player") < MAX_PLAYER_LEVEL then
+	if not IsPlayerAtEffectiveMaxLevel() then
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
 		self:SetStatusBarColor(0, .7, 1)
 		self:SetMinMaxValues(0, mxp)
@@ -107,12 +107,11 @@ function M:ExpBar_Update()
 end
 
 function M:ExpBar_UpdateTooltip()
-	local myLevel = UnitLevel("player")
 	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 	GameTooltip:ClearLines()
-	GameTooltip:AddLine(LEVEL.." "..myLevel, 0,.6,1)
+	GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), 0,.6,1)
 
-	if myLevel < MAX_PLAYER_LEVEL then
+	if not IsPlayerAtEffectiveMaxLevel() then
 		GameTooltip:AddLine(" ")
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
 		GameTooltip:AddDoubleLine(XP..":", BreakUpLargeNumbers(xp).." / "..BreakUpLargeNumbers(mxp).." ("..format("%.1f%%)", xp/mxp*100), .6,.8,1, 1,1,1)
