@@ -96,6 +96,7 @@ local function ForceDBMOptions()
 	DBM_AllSavedOptions["Default"]["SpecialWarningX"] = 0
 	DBM_AllSavedOptions["Default"]["SpecialWarningY"] = -260
 	DBM_AllSavedOptions["Default"]["SpecialWarningFontStyle"] = DB.Font[3]
+	DBM_AllSavedOptions["Default"]["HideQuestTooltips"] = false
 	DBM_AllSavedOptions["Default"]["HideObjectivesFrame"] = false
 	DBM_AllSavedOptions["Default"]["WarningFontSize"] = 18
 	DBM_AllSavedOptions["Default"]["SpecialWarningFontSize2"] = 24
