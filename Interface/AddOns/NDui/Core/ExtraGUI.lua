@@ -1019,7 +1019,7 @@ function G:SetupBagFilter(parent)
 		[4] = "FilterEquipment",
 		[5] = "FilterEquipSet",
 		[6] = "FilterLegendary",
-		[7] = "FilterMount",
+		[7] = "FilterCollection",
 		[8] = "FilterFavourite",
 		[9] = "FilterGoods",
 		[10] = "FilterQuest",
