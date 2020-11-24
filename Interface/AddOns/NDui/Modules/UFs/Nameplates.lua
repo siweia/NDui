@@ -629,7 +629,7 @@ end
 function UF:AddWidgetContainer(self)
 	local widgetContainer = CreateFrame("Frame", nil, self, "UIWidgetContainerTemplate")
 	widgetContainer:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
-	widgetContainer:SetScale(1/NDuiADB["UIScale"])
+	widgetContainer:SetScale(B:Round(1/NDuiADB["UIScale"], 2))
 	widgetContainer:Hide()
 
 	self.WidgetContainer = widgetContainer
