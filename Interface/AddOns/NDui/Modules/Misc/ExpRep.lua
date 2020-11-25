@@ -22,13 +22,17 @@ local IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel = IsWatchingH
 local IsPlayerAtEffectiveMaxLevel = IsPlayerAtEffectiveMaxLevel
 local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
-local C_AzeriteItem_HasActiveAzeriteItem = C_AzeriteItem.HasActiveAzeriteItem
 local C_AzeriteItem_IsAzeriteItemAtMaxLevel = C_AzeriteItem.IsAzeriteItemAtMaxLevel
 local C_AzeriteItem_FindActiveAzeriteItem = C_AzeriteItem.FindActiveAzeriteItem
 local C_AzeriteItem_GetAzeriteItemXPInfo = C_AzeriteItem.GetAzeriteItemXPInfo
 local C_AzeriteItem_GetPowerLevel = C_AzeriteItem.GetPowerLevel
 local C_ArtifactUI_IsEquippedArtifactDisabled = C_ArtifactUI.IsEquippedArtifactDisabled
 local C_ArtifactUI_GetEquippedArtifactInfo = C_ArtifactUI.GetEquippedArtifactInfo
+
+local function IsAzeriteAvailable()
+	local itemLocation = C_AzeriteItem_FindActiveAzeriteItem()
+	return itemLocation and itemLocation:IsEquipmentSlot() and not C_AzeriteItem_IsAzeriteItemAtMaxLevel()
+end
 
 function M:ExpBar_Update()
 	local rest = self.restBar
@@ -73,20 +77,13 @@ function M:ExpBar_Update()
 		self:SetMinMaxValues(0, barMax)
 		self:SetValue(current)
 		self:Show()
-	elseif C_AzeriteItem_HasActiveAzeriteItem() then
-		local isMaxLevel = C_AzeriteItem_IsAzeriteItemAtMaxLevel()
-		if isMaxLevel then
-			self:Hide()
-		else
-			local azeriteItemLocation = C_AzeriteItem_FindActiveAzeriteItem()
-			if azeriteItemLocation then
-				local xp, totalLevelXP = C_AzeriteItem_GetAzeriteItemXPInfo(azeriteItemLocation)
-				self:SetStatusBarColor(.9, .8, .6)
-				self:SetMinMaxValues(0, totalLevelXP)
-				self:SetValue(xp)
-				self:Show()
-			end
-		end
+	elseif IsAzeriteAvailable() then
+		local azeriteItemLocation = C_AzeriteItem_FindActiveAzeriteItem()
+		local xp, totalLevelXP = C_AzeriteItem_GetAzeriteItemXPInfo(azeriteItemLocation)
+		self:SetStatusBarColor(.9, .8, .6)
+		self:SetMinMaxValues(0, totalLevelXP)
+		self:SetValue(xp)
+		self:Show()
 	elseif HasArtifactEquipped() then
 		if C_ArtifactUI_IsEquippedArtifactDisabled() then
 			self:SetStatusBarColor(.6, .6, .6)
@@ -160,20 +157,16 @@ function M:ExpBar_UpdateTooltip()
 		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.." / "..barMax, .6,.8,1, 1,1,1)
 	end
 
-	if C_AzeriteItem_HasActiveAzeriteItem() then
+	if IsAzeriteAvailable() then
 		local azeriteItemLocation = C_AzeriteItem_FindActiveAzeriteItem()
 		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
 		local xp, totalLevelXP = C_AzeriteItem_GetAzeriteItemXPInfo(azeriteItemLocation)
 		local currentLevel = C_AzeriteItem_GetPowerLevel(azeriteItemLocation)
-		local isMaxLevel = C_AzeriteItem_IsAzeriteItemAtMaxLevel()
-		if not isMaxLevel then
-			azeriteItem:ContinueWithCancelOnItemLoad(function()
-				local azeriteItemName = azeriteItem:GetItemName()
-				GameTooltip:AddLine(" ")
-				GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 0,.6,1)
-				GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(xp).." / "..BreakUpLargeNumbers(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", .6,.8,1, 1,1,1)
-			end)
-		end
+		azeriteItem:ContinueWithCancelOnItemLoad(function()
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(azeriteItem:GetItemName().." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 0,.6,1)
+			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(xp).." / "..BreakUpLargeNumbers(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", .6,.8,1, 1,1,1)
+		end)
 	end
 
 	if HasArtifactEquipped() then
@@ -204,7 +197,7 @@ function M:SetupScript(bar)
 		"PLAYER_ENTERING_WORLD",
 		"UPDATE_FACTION",
 		"ARTIFACT_XP_UPDATE",
-		"UNIT_INVENTORY_CHANGED",
+		"PLAYER_EQUIPMENT_CHANGED",
 		"ENABLE_XP_GAIN",
 		"DISABLE_XP_GAIN",
 		"AZERITE_ITEM_EXPERIENCE_CHANGED",
