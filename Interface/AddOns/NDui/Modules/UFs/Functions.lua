@@ -555,6 +555,7 @@ function UF:CreateCastBar(self)
 			lag:ClearAllPoints()
 			lag:SetPoint("BOTTOM", cb, "TOP", 0, 2)
 			cb.Lag = lag
+			self:RegisterEvent("GLOBAL_MOUSE_UP", B.OnCastSent, true) -- Fix quests with WorldFrame interaction
 			self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
 		end
 	elseif mystyle == "nameplate" then
