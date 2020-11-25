@@ -6,6 +6,7 @@ local select, pairs = select, pairs
 
 local function reskinQuestIcon(button)
 	if not button then return end
+	if not button.SetNormalTexture then return end
 
 	if not button.styled then
 		button:SetSize(24, 24)
