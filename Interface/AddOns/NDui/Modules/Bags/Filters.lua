@@ -115,14 +115,14 @@ function module:GetFilters()
 	filters.bagAzeriteItem = function(item) return isItemInBag(item) and isAzeriteArmor(item) end
 	filters.bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 	filters.bagEquipSet = function(item) return isItemInBag(item) and isItemEquipSet(item) end
-	filters.bagConsumable = function(item) return isItemInBag(item) and isItemConsumable(item) end
+	filters.bagConsumable = function(item) return isItemInBag(item) and isItemConsumable(item) and not isItemCollection(item) end
 	filters.bagsJunk = function(item) return isItemInBag(item) and isItemJunk(item) end
 	filters.onlyBank = function(item) return isItemInBank(item) and not isItemEquipment(item) and not isItemLegendary(item) and not isItemConsumable(item) and not isAzeriteArmor(item) and not isItemCollection(item) and not isItemFavourite(item) and not isEmptySlot(item) and not isTradeGoods(item) and not isItemEquipSet(item) and not isQuestItem(item) end
 	filters.bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
 	filters.bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	filters.bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
 	filters.bankEquipSet = function(item) return isItemInBank(item) and isItemEquipSet(item) end
-	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) end
+	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) and not isItemCollection(item) end
 	filters.onlyReagent = function(item) return item.bagID == -3 and not isEmptySlot(item) end
 	filters.bagCollection = function(item) return isItemInBag(item) and isItemCollection(item) end
 	filters.bankCollection = function(item) return isItemInBank(item) and isItemCollection(item) end
