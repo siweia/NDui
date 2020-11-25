@@ -340,7 +340,6 @@ function ExtraQuestButton:SetItem(itemLink)
 
 	if itemLink then
 		self.Icon:SetTexture(GetItemIcon(itemLink))
-		if itemLink == self.itemLink and self:IsShown() then return end
 		local itemID = GetItemInfoFromHyperlink(itemLink)
 		self.itemID = itemID
 		self.itemLink = itemLink
@@ -470,7 +469,9 @@ function ExtraQuestButton:Update()
 
 	local itemLink = GetClosestQuestItem()
 	if itemLink then
-		self:SetItem(itemLink)
+		if itemLink ~= self.itemLink then
+			self:SetItem(itemLink)
+		end
 	elseif self:IsShown() then
 		self:RemoveItem()
 	end
