@@ -109,6 +109,8 @@ local function reskinMinimizeButton(button)
 end
 
 tinsert(C.defaultThemes, function()
+	if IsAddOnLoaded("!KalielsTracker") then return end
+
 	-- QuestIcons
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)
 	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
