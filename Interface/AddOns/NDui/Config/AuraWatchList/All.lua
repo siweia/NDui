@@ -335,6 +335,7 @@ local list = {
 		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
 		{AuraID = 322681, UnitID = "player"},	-- 通灵战潮，肉钩
 		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
+		{AuraID = 327893, UnitID = "player", Flash = true},	-- 彼界，邦桑迪的热情
 		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
 		{AuraID = 323569, UnitID = "player", Flash = true},	-- 彼界，溅洒精魂
 		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
@@ -670,6 +671,8 @@ local list = {
 	-- 9.0副本
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
+		{AuraID = 321368, UnitID = "target", Value = true},	-- 凋魂，冰缚之盾
+		{AuraID = 327416, UnitID = "target", Value = true},	-- 堡垒，心能回灌
 	-- 8.0副本
 		{AuraID = 300011, UnitID = "target"},	-- 力场护盾，麦卡贡
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
