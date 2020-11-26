@@ -57,7 +57,15 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateDebuff(self.lumos[3], 167105, 208086, true, true)
+		do
+			local button = self.lumos[3]
+			if IsPlayerSpell(262161) then
+				UpdateDebuff(button, 262161, 208086, true, true)
+			else
+				UpdateDebuff(button, 167105, 208086, true, true)
+			end
+		end
+
 		UpdateBuff(self.lumos[4], 260708, 260708, true, "END")
 
 		do
