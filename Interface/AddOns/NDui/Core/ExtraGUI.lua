@@ -107,15 +107,6 @@ function G:SetupRaidDebuffs(parent)
 		end
 	end
 
-	-- Deprecated, left them for SL prepatch
-	local bfaDungeons = {1023, 1022, 1030, 1002, 1012, 1021, 1001, 1041, 968, 1036, 1178}
-	for _, dungeonID in pairs(bfaDungeons) do
-		local name = EJ_GetInstanceInfo(dungeonID)
-		if name then
-			tinsert(dungeons, name)
-		end
-	end
-
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1031),
 		[2] = EJ_GetInstanceInfo(1176),
