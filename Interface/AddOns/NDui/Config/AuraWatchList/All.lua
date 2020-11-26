@@ -328,6 +328,7 @@ local list = {
 		{AuraID = 226512, UnitID = "player"},	-- 血池
 		{AuraID = 240447, UnitID = "player", Flash = true},	-- 践踏
 
+		{AuraID = 327107, UnitID = "player"},	-- 赤红，闪耀光辉
 		{AuraID = 333299, UnitID = "player"},	-- 伤逝剧场，荒芜诅咒
 		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
 		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
