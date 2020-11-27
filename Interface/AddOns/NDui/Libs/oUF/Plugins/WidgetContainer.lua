@@ -21,8 +21,7 @@ local function reskinWidgetBar(bar)
 	end
 end
 
-function B:Widget_DefaultLayout(sortedWidgets)
-	local widgetContainerFrame = self
+function B.Widget_DefaultLayout(widgetContainerFrame, sortedWidgets)
 	local horizontalRowContainer = nil
 	local horizontalRowHeight = 0
 	local horizontalRowWidth = 0
@@ -42,13 +41,30 @@ function B:Widget_DefaultLayout(sortedWidgets)
 		local useVerticalLayout = widgetUsesVertical or (widgetFrame.layoutDirection == UIWidgetLayoutDirection.Default and widgetSetUsesVertical)
 
 		if useOverlapLayout then
-			local anchor = widgetContainerFrame[widgetSetUsesVertical and 'verticalAnchorPoint' or 'horizontalAnchorPoint']
+			-- This widget uses overlap layout
 
-			widgetFrame:SetPoint(anchor, index == 1 and widgetContainerFrame or sortedWidgets[index - 1], anchor, 0, 0)
+			if index == 1 then
+				if widgetSetUsesVertical then
+					widgetFrame:SetPoint(widgetContainerFrame.verticalAnchorPoint, widgetContainerFrame)
+				else
+					widgetFrame:SetPoint(widgetContainerFrame.horizontalAnchorPoint, widgetContainerFrame)
+				end
+			else
+				local relative = sortedWidgets[index - 1]
+				if widgetSetUsesVertical then
+					widgetFrame:SetPoint(widgetContainerFrame.verticalAnchorPoint, relative, widgetContainerFrame.verticalAnchorPoint, 0, 0)
+				else
+					widgetFrame:SetPoint(widgetContainerFrame.horizontalAnchorPoint, relative, widgetContainerFrame.horizontalAnchorPoint, 0, 0)
+				end
+			end
 
 			local width, height = widgetFrame:GetSize()
-			if width > totalWidth then totalWidth = width end
-			if height > totalHeight then totalHeight = height end
+			if width > totalWidth then
+				totalWidth = width
+			end
+			if height > totalHeight then
+				totalHeight = height
+			end
 
 			widgetFrame:SetParent(widgetContainerFrame)
 		elseif useVerticalLayout then
@@ -62,7 +78,8 @@ function B:Widget_DefaultLayout(sortedWidgets)
 					horizontalRowContainer:SetSize(horizontalRowWidth, horizontalRowHeight)
 					totalWidth = totalWidth + horizontalRowWidth
 					totalHeight = totalHeight + horizontalRowHeight
-					horizontalRowHeight, horizontalRowWidth = 0, 0
+					horizontalRowHeight = 0
+					horizontalRowWidth = 0
 					horizontalRowContainer = nil
 				end
 
@@ -81,6 +98,7 @@ function B:Widget_DefaultLayout(sortedWidgets)
 			local needNewRowContainer = not horizontalRowContainer or forceNewRow
 			if needNewRowContainer then
 				if horizontalRowContainer then
+					--horizontalRowContainer:Layout()
 					horizontalRowContainer:SetSize(horizontalRowWidth, horizontalRowHeight)
 					totalWidth = totalWidth + horizontalRowWidth
 					totalHeight = totalHeight + horizontalRowHeight
@@ -99,7 +117,7 @@ function B:Widget_DefaultLayout(sortedWidgets)
 
 					totalHeight = totalHeight + widgetContainerFrame.verticalAnchorYOffset
 				end
-				widgetFrame:SetPoint("TOPLEFT", newHorizontalRowContainer)
+				widgetFrame:SetPoint('TOPLEFT', newHorizontalRowContainer)
 				widgetFrame:SetParent(newHorizontalRowContainer)
 
 				horizontalRowWidth = horizontalRowWidth + widgetFrame:GetWidth()
@@ -123,8 +141,6 @@ function B:Widget_DefaultLayout(sortedWidgets)
 		horizontalRowContainer:SetSize(horizontalRowWidth, horizontalRowHeight)
 		totalWidth = totalWidth + horizontalRowWidth
 		totalHeight = totalHeight + horizontalRowHeight
-		horizontalRowHeight = 0
-		horizontalRowWidth = 0
 	end
 
 	widgetContainerFrame:SetSize(totalWidth, totalHeight)
