@@ -43,6 +43,15 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 322557) -- 灵魂分裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 331172) -- 心灵连接
 module:RegisterDebuff(TIER, INSTANCE, 0, 322563) -- 被标记的猎物
 module:RegisterDebuff(TIER, INSTANCE, 0, 341198) -- 易燃爆炸
+module:RegisterDebuff(TIER, INSTANCE, 0, 325418) -- 不稳定的酸液
+module:RegisterDebuff(TIER, INSTANCE, 0, 326092) -- 衰弱毒药
+module:RegisterDebuff(TIER, INSTANCE, 0, 325021) -- 纱雾撕裂
+module:RegisterDebuff(TIER, INSTANCE, 0, 325224) -- 心能注入
+module:RegisterDebuff(TIER, INSTANCE, 0, 322486) -- 过度生长
+module:RegisterDebuff(TIER, INSTANCE, 0, 322487) -- 过度生长
+module:RegisterDebuff(TIER, INSTANCE, 0, 323137) -- 迷乱花粉
+module:RegisterDebuff(TIER, INSTANCE, 0, 328756) -- 憎恨之容
+module:RegisterDebuff(TIER, INSTANCE, 0, 321828) -- 肉饼蛋糕
 
 INSTANCE = 1188 -- 彼界
 RegisterSeasonSpells(INSTANCE)
@@ -105,3 +114,10 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 323198) -- 黑暗放逐
 module:RegisterDebuff(TIER, INSTANCE, 0, 327401) -- 共受苦难
 module:RegisterDebuff(TIER, INSTANCE, 0, 327397) -- 严酷命运
 module:RegisterDebuff(TIER, INSTANCE, 0, 322681) -- 肉钩
+module:RegisterDebuff(TIER, INSTANCE, 0, 333492) -- 通灵粘液
+module:RegisterDebuff(TIER, INSTANCE, 0, 321807) -- 白骨剥离
+module:RegisterDebuff(TIER, INSTANCE, 0, 323347) -- 黑暗纠缠
+module:RegisterDebuff(TIER, INSTANCE, 0, 320788) -- 冻结之缚
+module:RegisterDebuff(TIER, INSTANCE, 0, 320839) -- 衰弱
+module:RegisterDebuff(TIER, INSTANCE, 0, 343556) -- 病态凝视
+module:RegisterDebuff(TIER, INSTANCE, 0, 338606) -- 病态凝视
