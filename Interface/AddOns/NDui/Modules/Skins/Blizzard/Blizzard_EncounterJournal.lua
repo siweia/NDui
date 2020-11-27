@@ -341,6 +341,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	local lootJournal = EncounterJournal.LootJournal
 	B.StripTextures(lootJournal)
 	B.ReskinScroll(lootJournal.PowersFrame.ScrollBar)
+	reskinFilterToggle(lootJournal.RuneforgePowerFilterDropDownButton)
 	reskinFilterToggle(lootJournal.ClassDropDownButton)
 
 	local iconColor = DB.QualityColors[LE_ITEM_QUALITY_LEGENDARY or 5] -- legendary color
@@ -351,6 +352,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			local button = self.elements[i]
 			if button and not button.bg then
 				button.Background:SetAlpha(0)
+				button.UnavailableBackground:SetAlpha(0)
 				button.CircleMask:Hide()
 				button.bg = B.ReskinIcon(button.Icon)
 				button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
