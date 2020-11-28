@@ -49,7 +49,7 @@ local function sendQuestMsg(msg)
 		SendChatMessage(msg, "INSTANCE_CHAT")
 	elseif IsInRaid() then
 		SendChatMessage(msg, "RAID")
-	elseif IsInGroup() and not IsInRaid() then
+	elseif IsInGroup() then
 		SendChatMessage(msg, "PARTY")
 	end
 end
