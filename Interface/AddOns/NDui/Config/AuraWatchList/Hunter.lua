@@ -85,7 +85,7 @@ local list = {
 		{AuraID = 203155, UnitID = "player"},	-- 狙击
 		{AuraID = 235712, UnitID = "player", Combat = true},	-- 回转稳定，橙手
 		{AuraID = 264735, UnitID = "player"},	-- 优胜劣汰
-		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
+		{AuraID = 260242, UnitID = "player", Flash = true},	-- 弹无虚发
 		{AuraID = 260395, UnitID = "player"},	-- 致命射击
 		{AuraID = 269502, UnitID = "player"},	-- 致命射击
 		{AuraID = 281036, UnitID = "player"},	-- 凶暴野兽
@@ -95,7 +95,7 @@ local list = {
 		{AuraID = 265898, UnitID = "player"},	-- 接战协定
 		{AuraID = 268552, UnitID = "player"},	-- 蝰蛇毒液
 		{AuraID = 260249, UnitID = "player"},	-- 掠食者
-		{AuraID = 257622, UnitID = "player", Text = "A"},	-- 技巧射击
+		{AuraID = 257622, UnitID = "player", Text = "AoE"},	-- 技巧射击
 		{AuraID = 288613, UnitID = "player"},	-- 百发百中
 		{AuraID = 274447, UnitID = "player"},	-- 千里之目
 		{AuraID = 260243, UnitID = "player"},	-- 乱射
