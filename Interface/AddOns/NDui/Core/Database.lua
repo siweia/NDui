@@ -164,6 +164,7 @@ DB.ReminderBuffs = {
 			spells = {
 				[345545] = true,
 			},
+			equip = true,
 			instance = true,
 			combat = true,
 		},

@@ -6,7 +6,7 @@ local pairs, tinsert, next = pairs, table.insert, next
 local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
-local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
 
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = 36
@@ -20,13 +20,17 @@ function A:Reminder_Update(cfg)
 	local instance = cfg.instance
 	local pvp = cfg.pvp
 	local itemID = cfg.itemID
-	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true
+	local equip = cfg.equip
+	local isPlayerSpell, isRightSpec, isEquipped, isInCombat, isInInst, isInPVP = true, true, true
 	local inInst, instType = IsInInstance()
 	local weaponIndex = cfg.weaponIndex
 
-	if itemID and (GetItemCount(itemID) == 0 or GetItemCooldown(itemID) > 0) then -- check item cooldown
-		frame:Hide()
-		return
+	if itemID then
+		if equip and not IsEquippedItem(itemID) then isEquipped = false end
+		if GetItemCount(itemID) == 0 or (not isEquipped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+			frame:Hide()
+			return
+		end
 	end
 
 	if depend and not IsPlayerSpell(depend) then isPlayerSpell = false end
@@ -99,13 +103,12 @@ function A:Reminder_OnEvent()
 end
 
 function A:Reminder_AddItemGroup()
-	if not groups then groups = {} end
-
 	for _, value in pairs(DB.ReminderBuffs["ITEMS"]) do
-		if not value.disable then
+		if not value.disable and GetItemCount(value.itemID) > 0 then
 			if not value.texture then
 				value.texture = GetItemIcon(value.itemID)
 			end
+			if not groups then groups = {} end
 			tinsert(groups, value)
 		end
 	end
