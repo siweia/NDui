@@ -7,8 +7,10 @@ local strmatch, format, wipe, tinsert = string.match, string.format, table.wipe,
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
 local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
 local InCombatLockdown = InCombatLockdown
-local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG
+local GetTime, GetSpellCooldown, IsInRaid, IsInGroup = GetTime, GetSpellCooldown, IsInRaid, IsInGroup
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
+local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
 -- RaidFrame Elements
 function UF:CreateRaidIcons(self)
@@ -513,6 +515,15 @@ function UF:HandleCDMessage(...)
 	end
 end
 
+local function SendPartySyncMsg(text)
+	if IsInRaid() or not IsInGroup() then return end
+	if not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+		C_ChatInfo_SendAddonMessage("ZenTracker", text, "INSTANCE_CHAT")
+	else
+		C_ChatInfo_SendAddonMessage("ZenTracker", text, "PARTY")
+	end
+end
+
 local lastUpdate = 0
 function UF:SendCDMessage()
 	local thisTime = GetTime()
@@ -524,7 +535,7 @@ function UF:SendCDMessage()
 				if enabled ~= 0 and start ~= 0 then
 					local remaining = start + duration - thisTime
 					if remaining < 0 then remaining = 0 end
-					C_ChatInfo_SendAddonMessage("ZenTracker", format("3:U:%s:%d:%.2f:%.2f:%s", UF.myGUID, spellID, duration, remaining, "-"), IsPartyLFG() and "INSTANCE_CHAT" or "PARTY") -- sync to others
+					SendPartySyncMsg(format("3:U:%s:%d:%.2f:%.2f:%s", UF.myGUID, spellID, duration, remaining, "-")) -- sync to others
 				end
 			end
 		end
@@ -537,7 +548,7 @@ function UF:UpdateSyncStatus()
 	if IsInGroup() and not IsInRaid() and C.db["UFs"]["PartyFrame"] then
 		local thisTime = GetTime()
 		if thisTime - lastSyncTime > 5 then
-			C_ChatInfo_SendAddonMessage("ZenTracker", format("3:H:%s:0::0:1", UF.myGUID), IsPartyLFG() and "INSTANCE_CHAT" or "PARTY") -- handshake to ZenTracker
+			SendPartySyncMsg(format("3:H:%s:0::0:1", UF.myGUID)) -- handshake to ZenTracker
 			lastSyncTime = thisTime
 		end
 		B:RegisterEvent("SPELL_UPDATE_COOLDOWN", UF.SendCDMessage)
