@@ -172,6 +172,8 @@ local list = {
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		-- 5人本
 		{AuraID = 327107, UnitID = "player"},	-- 赤红，闪耀光辉
+		{AuraID = 324092, UnitID = "player", Flash = true},	-- 赤红，闪耀光辉
+		{AuraID = 328737, UnitID = "player", Flash = true},	-- 赤红，光辉残片
 		{AuraID = 333299, UnitID = "player"},	-- 伤逝剧场，荒芜诅咒
 		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
 		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
@@ -182,7 +184,9 @@ local list = {
 		{AuraID = 327893, UnitID = "player", Flash = true},	-- 彼界，邦桑迪的热情
 		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
 		{AuraID = 323569, UnitID = "player", Flash = true},	-- 彼界，溅洒精魂
+		{AuraID = 328453, UnitID = "player"},	-- 晋升高塔，压迫
 		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
+		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
 
 	},
 	["Warning"] = { -- 目标重要光环组

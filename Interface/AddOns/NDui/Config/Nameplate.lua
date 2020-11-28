@@ -204,7 +204,8 @@ C.CustomUnits = {
 	[GetSectionInfo(20561)] = true,	-- 惊魂淤血
 	[GetSectionInfo(21329)] = true,	-- 聚合增生
 
-	[GetSectionInfo(22161)] = true,	-- 魔药炸弹
+	[GetSectionInfo(22161)] = true,	-- 魔药炸弹，通灵
+	[GetSectionInfo(21891)] = true,	-- 融合具象，赤红
 }
 
 -- 显示能量值的单位
@@ -216,4 +217,6 @@ C.ShowPowerList = {
 	[GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
 	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
 	[GetSectionInfo(18539)] = true,	-- 碾压者
+
+	[GetSectionInfo(21891)] = true,	-- 融合具象，赤红
 }
