@@ -737,7 +737,7 @@ G.TabList = {
 	L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
-	NewFeatureTag..L["Profile"],
+	L["Profile"],
 }
 
 G.OptionList = { -- type, key, value, name, horizon, doubleline
@@ -1357,14 +1357,14 @@ local function OpenGUI()
 	B.CreateFS(f, 18, L["NDui Console"], true, "TOP", 0, -10)
 	B.CreateFS(f, 16, DB.Version.." ("..DB.Support..")", false, "TOP", 0, -30)
 
-	local contact = B.CreateButton(f, 130, 20, L["Contact"])
+	local contact = B.CreateButton(f, 130, 20, NewFeatureTag..L["Contact"])
 	contact:SetPoint("BOTTOMLEFT", 20, 15)
 	contact:SetScript("OnClick", function()
 		f:Hide()
 		G:AddContactFrame()
 	end)
 
-	local unlock = B.CreateButton(f, 130, 20, L["UnlockUI"])
+	local unlock = B.CreateButton(f, 130, 20, NewFeatureTag..L["UnlockUI"])
 	unlock:SetPoint("BOTTOM", contact, "TOP", 0, 2)
 	unlock:SetScript("OnClick", function()
 		f:Hide()
