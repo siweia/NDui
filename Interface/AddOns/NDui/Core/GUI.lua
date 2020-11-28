@@ -60,7 +60,7 @@ G.DefaultSettings = {
 
 		FilterJunk = true,
 		FilterConsumable = true,
-		FilterAzerite = true,
+		FilterAzerite = false,
 		FilterEquipment = true,
 		FilterLegendary = true,
 		FilterCollection = true,
