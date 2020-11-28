@@ -159,6 +159,23 @@ DB.BuffList = {
 
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
+	ITEMS = {
+		{	itemID = 178742, -- 瓶装毒素饰品
+			spells = {
+				[345545] = true,
+			},
+			instance = true,
+			combat = true,
+		},
+		{	itemID = 174906, -- 属性符文
+			spells = {
+				[317065] = true,
+				[270058] = true,
+			},
+			instance = true,
+			disable = true,
+		},
+	},
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,

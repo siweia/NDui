@@ -19,12 +19,12 @@ function A:Reminder_Update(cfg)
 	local combat = cfg.combat
 	local instance = cfg.instance
 	local pvp = cfg.pvp
-	local cooldown = cfg.cooldown
+	local itemID = cfg.itemID
 	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true
 	local inInst, instType = IsInInstance()
 	local weaponIndex = cfg.weaponIndex
 
-	if cooldown and GetItemCooldown(cooldown) > 0 then -- check rune cooldown
+	if itemID and (GetItemCount(itemID) == 0 or GetItemCooldown(itemID) > 0) then -- check item cooldown
 		frame:Hide()
 		return
 	end
@@ -98,23 +98,23 @@ function A:Reminder_OnEvent()
 	A:Reminder_UpdateAnchor()
 end
 
-function A:Reminder_AddRune()
-	if GetItemCount(174906) == 0 then return end
+function A:Reminder_AddItemGroup()
 	if not groups then groups = {} end
-	tinsert(groups, {
-		spells = {
-			[317065] = true,
-			[270058] = true,
-		},
-		texture = 839983,
-		cooldown = 174906,
-		instance = true,
-	})
+
+	for _, value in pairs(DB.ReminderBuffs["ITEMS"]) do
+		if not value.disable then
+			if not value.texture then
+				value.texture = GetItemIcon(value.itemID)
+			end
+			tinsert(groups, value)
+		end
+	end
 end
 
 function A:InitReminder()
-	--A:Reminder_AddRune()
-	if not groups then return end
+	A:Reminder_AddItemGroup()
+
+	if not groups or not next(groups) then return end
 
 	if C.db["Auras"]["Reminder"] then
 		if not parentFrame then
