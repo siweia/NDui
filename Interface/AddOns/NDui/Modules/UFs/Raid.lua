@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF or oUF
 local UF = B:GetModule("UnitFrames")
 
-local strmatch, format, wipe, tinsert = string.match, string.format, table.wipe, table.insert
+local strmatch, format, wipe = strmatch, format, wipe
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
 local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
 local InCombatLockdown = InCombatLockdown
@@ -372,34 +372,33 @@ function UF:UpdateBuffIndicator(event, unit)
 			if not name then break end
 			local value = spellList[spellID]
 			if value and (value[3] or caster == "player" or caster == "pet") then
-				for _, bu in pairs(buttons) do
-					if bu.anchor == value[1] then
-						if C.db["UFs"]["BuffIndicatorType"] == 3 then
-							if duration and duration > 0 then
-								bu.expiration = expiration
-								bu:SetScript("OnUpdate", UF.BuffIndicatorOnUpdate)
-							else
-								bu:SetScript("OnUpdate", nil)
-							end
-							bu.timer:SetTextColor(unpack(value[2]))
+				local bu = buttons[value[1]]
+				if bu then
+					if C.db["UFs"]["BuffIndicatorType"] == 3 then
+						if duration and duration > 0 then
+							bu.expiration = expiration
+							bu:SetScript("OnUpdate", UF.BuffIndicatorOnUpdate)
 						else
-							if duration and duration > 0 then
-								bu.cd:SetCooldown(expiration - duration, duration)
-								bu.cd:Show()
-							else
-								bu.cd:Hide()
-							end
-							if C.db["UFs"]["BuffIndicatorType"] == 1 then
-								bu.icon:SetVertexColor(unpack(value[2]))
-							else
-								bu.icon:SetTexture(texture)
-							end
+							bu:SetScript("OnUpdate", nil)
 						end
-						if count > 1 then bu.count:SetText(count) end
-						bu:Show()
-						found[bu.anchor] = true
-						break
+						bu.timer:SetTextColor(unpack(value[2]))
+					else
+						if duration and duration > 0 then
+							bu.cd:SetCooldown(expiration - duration, duration)
+							bu.cd:Show()
+						else
+							bu.cd:Hide()
+						end
+						if C.db["UFs"]["BuffIndicatorType"] == 1 then
+							bu.icon:SetVertexColor(unpack(value[2]))
+						else
+							bu.icon:SetTexture(texture)
+						end
 					end
+
+					if count > 1 then bu.count:SetText(count) end
+					bu:Show()
+					found[bu.anchor] = true
 				end
 			end
 		end
@@ -463,7 +462,7 @@ function UF:CreateBuffIndicator(self)
 		bu.count = B.CreateFS(bu, 12, "")
 
 		bu.anchor = anchor
-		tinsert(buttons, bu)
+		buttons[anchor] = bu
 
 		UF:RefreshBuffIndicator(bu)
 	end
