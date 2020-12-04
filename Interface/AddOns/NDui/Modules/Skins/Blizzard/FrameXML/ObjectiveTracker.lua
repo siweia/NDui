@@ -143,11 +143,13 @@ tinsert(C.defaultThemes, function()
 		if widgetFrame and widgetFrame.Frame then
 			widgetFrame.Frame:SetAlpha(0)
 
-			for i = 1, widgetFrame.CurrencyContainer:GetNumChildren() do
-				local bu = select(i, widgetFrame.CurrencyContainer:GetChildren())
-				if bu and bu.Icon and not bu.styled then
-					B.ReskinIcon(bu.Icon)
-					bu.styled = true
+			if widgetFrame.CurrencyContainer then -- this may be removed, needs review
+				for i = 1, widgetFrame.CurrencyContainer:GetNumChildren() do
+					local bu = select(i, widgetFrame.CurrencyContainer:GetChildren())
+					if bu and bu.Icon and not bu.styled then
+						B.ReskinIcon(bu.Icon)
+						bu.styled = true
+					end
 				end
 			end
 		end
