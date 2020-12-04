@@ -70,6 +70,10 @@ local list = {
 		{AuraID = 336588, UnitID = "player"},	-- 唤醒者的复叶
 		{AuraID = 311444, UnitID = "player", Value = true},	-- 不屈套牌
 		{AuraID = 336465, UnitID = "player", Value = true},	-- 脉冲光辉护盾
+		{AuraID = 330366, UnitID = "player", Text = L["Crit"]},	-- 不可思议的量子装置，暴击
+		{AuraID = 330367, UnitID = "player", Text = L["Versa"]},	-- 不可思议的量子装置，全能
+		{AuraID = 330368, UnitID = "player", Text = L["Haste"]},	-- 不可思议的量子装置，急速
+		{AuraID = 330380, UnitID = "player", Text = L["Mastery"]},	-- 不可思议的量子装置，精通
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 323546, UnitID = "player"},	-- 饕餮狂乱
