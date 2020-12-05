@@ -226,9 +226,8 @@ local function UpdateSpellAbilities(self, followerInfo)
 		local abilityFrame = self.autoSpellPool:Acquire()
 		if not abilityFrame.styled then
 			B.ReskinIcon(abilityFrame.Icon)
-			if abilityFrame.SpellBorder then
-				abilityFrame.SpellBorder:Hide()
-			end
+			if abilityFrame.IconMask then abilityFrame.IconMask:Hide() end
+			if abilityFrame.SpellBorder then abilityFrame.SpellBorder:Hide() end
 
 			abilityFrame.styled = true
 		end
