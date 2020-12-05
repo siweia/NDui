@@ -100,6 +100,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 328593) -- 苦痛刑罚
 module:RegisterDebuff(TIER, INSTANCE, 0, 325254) -- 钢铁尖刺
 module:RegisterDebuff(TIER, INSTANCE, 0, 335306) -- 尖刺镣铐
 module:RegisterDebuff(TIER, INSTANCE, 0, 327814) -- 邪恶创口
+module:RegisterDebuff(TIER, INSTANCE, 0, 331415) -- 邪恶创口
 module:RegisterDebuff(TIER, INSTANCE, 0, 328737) -- 光辉残片
 module:RegisterDebuff(TIER, INSTANCE, 0, 324092) -- 闪耀光辉
 
