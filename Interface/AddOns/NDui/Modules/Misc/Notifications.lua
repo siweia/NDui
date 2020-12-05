@@ -563,10 +563,6 @@ function M:CheckIncompatible()
 		end
 		frame:SetSize(300, 100 + offset)
 
-		local close = B.CreateButton(frame, 16, 16, true, DB.closeTex)
-		close:SetPoint("TOPRIGHT", -10, -10)
-		close:SetScript("OnClick", function() frame:Hide() end)
-
 		local disable = B.CreateButton(frame, 150, 25, L["DisableIncompatibleAddon"])
 		disable:SetPoint("BOTTOM", 0, 10)
 		disable.text:SetTextColor(1, 0, 0)
