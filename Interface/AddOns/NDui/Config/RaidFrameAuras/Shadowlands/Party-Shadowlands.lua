@@ -77,6 +77,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 317661) -- 险恶毒液
 module:RegisterDebuff(TIER, INSTANCE, 0, 328331) -- 严刑逼供
 module:RegisterDebuff(TIER, INSTANCE, 0, 323195) -- 净化冲击波
 module:RegisterDebuff(TIER, INSTANCE, 0, 328453) -- 压迫
+module:RegisterDebuff(TIER, INSTANCE, 0, 331997) -- 心能澎湃
 
 INSTANCE = 1185 -- 赎罪大厅
 RegisterSeasonSpells(INSTANCE)
