@@ -144,4 +144,5 @@ function B.Widget_DefaultLayout(widgetContainerFrame, sortedWidgets)
 	end
 
 	widgetContainerFrame:SetSize(totalWidth, totalHeight)
+	widgetContainerFrame:Show()
 end

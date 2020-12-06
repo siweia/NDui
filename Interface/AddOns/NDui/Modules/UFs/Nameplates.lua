@@ -631,6 +631,7 @@ function UF:AddWidgetContainer(self)
 	widgetContainer:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -10)
 	widgetContainer:SetScale(B:Round(1/NDuiADB["UIScale"], 2))
 	widgetContainer:Hide()
+	widgetContainer.showAndHideOnWidgetSetRegistration = false
 
 	self.WidgetContainer = widgetContainer
 end
