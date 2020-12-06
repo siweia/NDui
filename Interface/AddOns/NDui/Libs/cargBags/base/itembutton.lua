@@ -23,6 +23,8 @@ local cargBags = ns.cargBags
 local _G = _G
 local ReagentButtonInventorySlot = _G.ReagentButtonInventorySlot
 local ButtonInventorySlot = _G.ButtonInventorySlot
+local BANK_CONTAINER = BANK_CONTAINER or -1
+local REAGENTBANK_CONTAINER = REAGENTBANK_CONTAINER or -3
 
 --[[!
 	@class ItemButton
@@ -37,8 +39,14 @@ local ItemButton = cargBags:NewClass("ItemButton", nil, "ItemButton")
 ]]
 function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagID
-	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "",
-      (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or "";
+	return (bagID == REAGENTBANK_CONTAINER and "ReagentBankItemButtonGenericTemplate")
+		or (bagID == BANK_CONTAINER and "BankItemButtonGenericTemplate")
+		or (bagID and "ContainerFrameItemButtonTemplate")
+		or "",
+		(bagID == REAGENTBANK_CONTAINER and ReagentBankFrame)
+		or (bagID == BANK_CONTAINER and BankFrame)
+		or (bagID and _G["ContainerFrame"..(bagID + 1)])
+		or ""
 end
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
@@ -49,6 +57,14 @@ local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end
 	@param slotID <number>
 	@return button <ItemButton>
 ]]
+local function BankSplitStack(button, split)
+	SplitContainerItem(BANK_CONTAINER, button:GetID(), split)
+end
+
+local function ReagenBankSplitStack(button, split)
+	SplitContainerItem(REAGENTBANK_CONTAINER, button:GetID(), split)
+end
+
 function ItemButton:New(bagID, slotID)
 	self.recycled = self.recycled or setmetatable({}, mt_gen_key)
 
@@ -61,12 +77,14 @@ function ItemButton:New(bagID, slotID)
 	button:Show()
 	button:HookScript("OnEnter", button.OnEnter)
 	button:HookScript("OnLeave", button.OnLeave)
-	if bagID == -3 then
+	if bagID == REAGENTBANK_CONTAINER then
 		button.GetInventorySlot = ReagentButtonInventorySlot
 		button.UpdateTooltip = BankFrameItemButton_OnEnter
-	elseif bagID == -1 then
+		button.SplitStack = ReagenBankSplitStack
+	elseif bagID == BANK_CONTAINER then
 		button.GetInventorySlot = ButtonInventorySlot
 		button.UpdateTooltip = BankFrameItemButton_OnEnter
+		button.SplitStack = BankSplitStack
 	else
 		button.UpdateTooltip = ContainerFrameItemButton_OnUpdate
 	end
