@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
 local GetSpellCooldown, GetSpellInfo, GetItemCooldown, GetItemCount, GetItemInfo = GetSpellCooldown, GetSpellInfo, GetItemCooldown, GetItemCount, GetItemInfo
-local IsPassiveSpell, IsCurrentSpell, CastSpell, IsPlayerSpell = IsPassiveSpell, IsCurrentSpell, CastSpell, IsPlayerSpell
+local IsPassiveSpell, IsCurrentSpell, IsPlayerSpell = IsPassiveSpell, IsCurrentSpell, IsPlayerSpell
 local GetProfessions, GetProfessionInfo, GetSpellBookItemInfo = GetProfessions, GetProfessionInfo, GetSpellBookItemInfo
 local PlayerHasToy, C_ToyBox_IsToyUsable, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.IsToyUsable, C_ToyBox.GetToyInfo
 local C_TradeSkillUI_GetOnlyShowSkillUpRecipes, C_TradeSkillUI_SetOnlyShowSkillUpRecipes = C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes
@@ -30,9 +30,9 @@ function M:UpdateProfessions()
 	local profs = {prof1, prof2, fish, cook}
 
 	if DB.MyClass == "DEATHKNIGHT" then
-		M:TradeTabs_Create(nil, RUNEFORGING_ID)
+		M:TradeTabs_Create(RUNEFORGING_ID)
 	elseif DB.MyClass == "ROGUE" and IsPlayerSpell(PICK_LOCK) then
-		M:TradeTabs_Create(nil, PICK_LOCK)
+		M:TradeTabs_Create(PICK_LOCK)
 	end
 
 	local isCook
@@ -47,9 +47,9 @@ function M:UpdateProfessions()
 				if not IsPassiveSpell(slotID, BOOKTYPE_PROFESSION) then
 					local spellID = select(2, GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION))
 					if i == 1 then
-						M:TradeTabs_Create(slotID, spellID)
+						M:TradeTabs_Create(spellID)
 					else
-						M:TradeTabs_Create(nil, spellID)
+						M:TradeTabs_Create(spellID)
 					end
 				end
 			end
@@ -57,10 +57,10 @@ function M:UpdateProfessions()
 	end
 
 	if isCook and PlayerHasToy(CHEF_HAT) and C_ToyBox_IsToyUsable(CHEF_HAT) then
-		M:TradeTabs_Create(nil, nil, CHEF_HAT)
+		M:TradeTabs_Create(nil, CHEF_HAT)
 	end
 	if GetItemCount(THERMAL_ANVIL) > 0 then
-		M:TradeTabs_Create(nil, nil, nil, THERMAL_ANVIL)
+		M:TradeTabs_Create(nil, nil, THERMAL_ANVIL)
 	end
 end
 
@@ -101,12 +101,8 @@ function M:TradeTabs_Reskin()
 	end
 end
 
-function M:TradeTabs_OnClick()
-	CastSpell(self.slotID, BOOKTYPE_PROFESSION)
-end
-
 local index = 1
-function M:TradeTabs_Create(slotID, spellID, toyID, itemID)
+function M:TradeTabs_Create(spellID, toyID, itemID)
 	local name, _, texture
 	if toyID then
 		_, name, texture = C_ToyBox_GetToyInfo(toyID)
@@ -118,16 +114,11 @@ function M:TradeTabs_Create(slotID, spellID, toyID, itemID)
 
 	local tab = CreateFrame("CheckButton", nil, TradeSkillFrame, "SpellBookSkillLineTabTemplate, SecureActionButtonTemplate")
 	tab.tooltip = name
-	tab.slotID = slotID
 	tab.spellID = spellID
 	tab.itemID = toyID or itemID
 	tab.type = (toyID and "toy") or (itemID and "item") or "spell"
-	if slotID then
-		tab:SetScript("OnClick", M.TradeTabs_OnClick)
-	else
-		tab:SetAttribute("type", tab.type)
-		tab:SetAttribute(tab.type, name)
-	end
+	tab:SetAttribute("type", tab.type)
+	tab:SetAttribute(tab.type, spellID or name)
 	tab:SetNormalTexture(texture)
 	tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	tab:Show()
