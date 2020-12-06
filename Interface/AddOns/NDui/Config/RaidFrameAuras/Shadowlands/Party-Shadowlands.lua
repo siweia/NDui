@@ -52,6 +52,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 322487) -- 过度生长
 module:RegisterDebuff(TIER, INSTANCE, 0, 323137) -- 迷乱花粉
 module:RegisterDebuff(TIER, INSTANCE, 0, 328756) -- 憎恨之容
 module:RegisterDebuff(TIER, INSTANCE, 0, 321828) -- 肉饼蛋糕
+module:RegisterDebuff(TIER, INSTANCE, 0, 340191) -- 再生辐光
 
 INSTANCE = 1188 -- 彼界
 RegisterSeasonSpells(INSTANCE)
