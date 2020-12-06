@@ -11,9 +11,6 @@ tinsert(C.defaultThemes, function()
 
 	-- Tooltips
 	function B:ReskinGarrisonTooltip()
-		for i = 1, 9 do
-			select(i, self:GetRegions()):Hide()
-		end
 		if self.Icon then B.ReskinIcon(self.Icon) end
 		if self.CloseButton then B.ReskinClose(self.CloseButton) end
 	end
