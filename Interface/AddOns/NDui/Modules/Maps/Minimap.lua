@@ -452,7 +452,6 @@ function module:Minimap_OnMouseUp(btn)
 end
 
 function module:SetupHybridMinimap()
-	HybridMinimap:SetFrameStrata("LOW")
 	HybridMinimap.CircleMask:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 end
 
