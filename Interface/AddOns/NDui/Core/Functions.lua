@@ -119,6 +119,7 @@ do
 	function B.SplitList(list, variable, cleanup)
 		if cleanup then wipe(list) end
 		for word in gmatch(variable, "%S+") do
+			word = tonumber(word) or word -- use number if exists, needs review
 			list[word] = true
 		end
 	end
