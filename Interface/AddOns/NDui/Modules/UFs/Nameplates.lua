@@ -441,10 +441,10 @@ function UF:AddQuestIcon(self)
 
 	local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
 	qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
-	qicon:SetSize(28, 28)
+	qicon:SetSize(30, 30)
 	qicon:SetAtlas(DB.questTex)
 	qicon:Hide()
-	local count = B.CreateFS(self, 18, "", nil, "LEFT", 0, 0)
+	local count = B.CreateFS(self, 20, "", nil, "LEFT", 0, 0)
 	count:SetPoint("LEFT", qicon, "RIGHT", -4, 0)
 	count:SetTextColor(.6, .8, 1)
 
