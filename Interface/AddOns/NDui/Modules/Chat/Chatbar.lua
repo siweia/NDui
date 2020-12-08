@@ -108,6 +108,7 @@ function module:Chatbar()
 		end
 		B:RegisterEvent("PLAYER_ENTERING_WORLD", isInChannel)
 		B:RegisterEvent("CHANNEL_UI_UPDATE", isInChannel)
+		hooksecurefunc("ChatConfigChannelSettings_UpdateCheckboxes", isInChannel) -- toggle in chatconfig
 
 		wc:SetScript("OnClick", function(_, btn)
 			if wc.inChannel then
