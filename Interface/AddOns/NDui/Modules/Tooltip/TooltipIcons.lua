@@ -8,8 +8,9 @@ local newString = "0:0:64:64:5:59:5:59"
 
 function TT:SetupTooltipIcon(icon)
 	local title = icon and _G[self:GetName().."TextLeft1"]
-	if title then
-		title:SetFormattedText("|T%s:20:20:"..newString..":%d|t %s", icon, 20, title:GetText())
+	local titleText = title and title:GetText()
+	if titleText then
+		title:SetFormattedText("|T%s:20:20:"..newString..":%d|t %s", icon, 20, titleText)
 	end
 
 	for i = 2, self:NumLines() do
