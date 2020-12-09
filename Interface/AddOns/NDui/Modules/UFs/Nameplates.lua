@@ -625,16 +625,6 @@ function UF:MouseoverIndicator(self)
 	self.HighlightUpdater = f
 end
 
--- WidgetContainer
-function UF:AddWidgetContainer(self)
-	local widgetContainer = CreateFrame("Frame", nil, self, "UIWidgetContainerNoResizeTemplate")
-	widgetContainer:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -10)
-	widgetContainer:SetScale(B:Round(1/NDuiADB["UIScale"], 2))
-	widgetContainer:Hide()
-
-	self.WidgetContainer = widgetContainer
-end
-
 -- Interrupt info on castbars
 local guidToPlate = {}
 function UF:UpdateCastbarInterrupt(...)
@@ -693,7 +683,6 @@ function UF:CreatePlates()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
 	self:Tag(self.powerText, "[nppp]")
 
-	UF:AddWidgetContainer(self)
 	UF:MouseoverIndicator(self)
 	UF:AddTargetIndicator(self)
 	UF:AddCreatureIcon(self)
@@ -808,6 +797,11 @@ function UF:UpdatePlateByType()
 		raidtarget:SetParent(self)
 		classify:Hide()
 		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
+
+		if self.widgetContainer then
+			self.widgetContainer:ClearAllPoints()
+			self.widgetContainer:SetPoint("TOP", title, "BOTTOM", 0, -5)
+		end
 	else
 		for _, element in pairs(DisabledElements) do
 			if not self:IsElementEnabled(element) then
@@ -827,6 +821,11 @@ function UF:UpdatePlateByType()
 		raidtarget:SetParent(self.Health)
 		classify:Show()
 		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end
+
+		if self.widgetContainer then
+			self.widgetContainer:ClearAllPoints()
+			self.widgetContainer:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
+		end
 	end
 
 	UF.UpdateTargetIndicator(self)
@@ -867,7 +866,13 @@ function UF:PostUpdatePlates(event, unit)
 		self.isPlayer = UnitIsPlayer(unit)
 		self.npcID = B.GetNPCID(self.unitGUID)
 		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
-		self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), B.Widget_DefaultLayout, nil, unit)
+
+		local blizzPlate = self:GetParent().UnitFrame
+		self.widgetContainer = blizzPlate.WidgetContainer
+		if self.widgetContainer then
+			self.widgetContainer:SetParent(self)
+			self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
+		end
 
 		UF.RefreshPlateType(self, unit)
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
@@ -875,7 +880,6 @@ function UF:PostUpdatePlates(event, unit)
 			guidToPlate[self.unitGUID] = nil
 		end
 		self.npcID = nil
-		self.WidgetContainer:UnregisterForWidgetSet()
 	end
 
 	if event ~= "NAME_PLATE_UNIT_REMOVED" then
