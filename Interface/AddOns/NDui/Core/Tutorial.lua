@@ -38,7 +38,6 @@ local function ForceDefaultSettings()
 	if DB.isDeveloper then
 		SetCVar("ffxGlow", 0)
 		SetCVar("SpellQueueWindow", 100)
-		SetCVar("nameplateShowOnlyNames", 1)
 	end
 end
 
