@@ -109,7 +109,7 @@ end
 
 local function GetMawBuffsAnchor(frame)
 	local center = frame:GetCenter()
-	if center and center < DB.ScreenWidth/2 then
+	if center and center < GetScreenWidth()/2 then
 		return "LEFT"
 	else
 		return "RIGHT"
@@ -210,7 +210,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	-- Maw buffs block
+	-- MawBuffsBlock
 	ScenarioBlocksFrame.MawBuffsBlock.Container:HookScript("OnClick", function(container)
 		local direc = GetMawBuffsAnchor(container)
 		if not container.lastDirec or container.lastDirec ~= direc then
