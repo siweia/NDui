@@ -32,6 +32,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 327902) -- 锁定
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 326302) -- 静滞陷阱
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 325236) -- 毁灭符文
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327414) -- 附身
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 340860) -- 枯萎之触
 
 BOSS = 2420 -- 伊涅瓦·暗脉女勋爵
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 325936) -- 共享认知

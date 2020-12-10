@@ -32,6 +32,7 @@ local list = {
 		{AuraID = 5116, UnitID = "target", Caster = "player"},		-- 震荡射击
 		{AuraID = 19386, UnitID = "target", Caster = "player"},		-- 翼龙钉刺
 		{AuraID = 24394, UnitID = "target", Caster = "pet"},		-- 胁迫
+		{AuraID = 321538, UnitID = "target", Caster = "pet"},		-- 血溅十方
 		{AuraID = 117526, UnitID = "target"},						-- 束缚射击
 		{AuraID = 257284, UnitID = "target"},						-- 猎人印记
 		{AuraID = 131894, UnitID = "target", Caster = "player"},	-- 夺命黑鸦

@@ -209,6 +209,9 @@ local list = {
 		{AuraID = 345561, UnitID = "target", Value = true},	-- 晋升，生命连结
 		{AuraID = 323149, UnitID = "target", Value = true},	-- 仙林，黑暗之拥
 		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
+
+		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
+		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
