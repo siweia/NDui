@@ -26,6 +26,7 @@ BOSS = 2422 -- 太阳之王的救赎
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 333002) -- 劣民印记
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 326078) -- 灌注者的恩赐
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 325251) -- 骄傲之罪
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 339251) -- 干涸之魂
 
 BOSS = 2418 -- 技师赛·墨克斯
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327902) -- 锁定
