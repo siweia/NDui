@@ -72,7 +72,10 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 342698) -- 不稳定的心能感染
 
 BOSS = 2424 -- 德纳修斯大帝
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 326851) -- 血债
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 327798) -- 罐装心能
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 327796) -- 罐装心能
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327992) -- 荒芜
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 328276) -- 悔悟之行
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 326699) -- 罪孽烦扰
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 329181) -- 毁灭痛苦
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 335873) -- 积恨
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 329951) -- 穿刺
