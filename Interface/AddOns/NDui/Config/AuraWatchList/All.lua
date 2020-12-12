@@ -127,9 +127,10 @@ local list = {
 		{AuraID = 32182, UnitID = "player"},	-- 英勇
 		{AuraID = 80353, UnitID = "player"},	-- 时间扭曲
 		{AuraID = 264667, UnitID = "player"},	-- 原始狂怒
-		{AuraID = 178207, UnitID = "player"},	-- 鼓
+		{AuraID = 178207, UnitID = "player"},	-- 狂怒战鼓
 		{AuraID = 230935, UnitID = "player"},	-- 高山战鼓
 		{AuraID = 256740, UnitID = "player"},	-- 漩涡战鼓
+		{AuraID = 309658, UnitID = "player"},	-- 死亡凶蛮战鼓
 		{AuraID = 102364, UnitID = "player"},	-- 青铜龙的祝福
 		{AuraID = 292686, UnitID = "player"},	-- 制皮鼓
 		-- 团队增益或减伤
