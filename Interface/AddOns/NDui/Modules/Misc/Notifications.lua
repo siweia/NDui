@@ -580,7 +580,7 @@ function M:CheckIncompatible()
 
 		local disable = B.CreateButton(frame, 150, 25, L["DisableIncompatibleAddon"])
 		disable:SetPoint("BOTTOM", 0, 10)
-		disable.text:SetTextColor(1, 0, 0)
+		disable.text:SetTextColor(1, .8, 0)
 		disable:SetScript("OnClick", function()
 			for _, addon in pairs(IncompatibleList) do
 				DisableAddOn(addon, true)
