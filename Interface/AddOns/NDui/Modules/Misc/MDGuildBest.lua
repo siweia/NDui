@@ -8,6 +8,7 @@ local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
 local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
 local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
+local GREAT_VAULT_REWARDS = GREAT_VAULT_REWARDS
 local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
 local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
@@ -143,12 +144,16 @@ function M:KeystoneInfo_Create()
 			GameTooltip:AddDoubleLine(format(color.."%s:|r", name), format("%s%s(%s)|r", factionColor, dungeon, level))
 		end
 		GameTooltip:AddDoubleLine(" ", DB.LineString)
+		GameTooltip:AddDoubleLine(" ", DB.LeftButton..GREAT_VAULT_REWARDS.." ", 1,1,1, .6,.8,1)
 		GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["Reset Gold"].." ", 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	button:SetScript("OnLeave", B.HideTooltip)
 	button:SetScript("OnMouseUp", function(_, btn)
-		if btn == "MiddleButton" then
+		if btn == "LeftButton" then
+			if not WeeklyRewardsFrame then WeeklyRewards_LoadUI() end
+			B:TogglePanel(WeeklyRewardsFrame)
+		elseif btn == "MiddleButton" then
 			wipe(NDuiADB["KeystoneInfo"])
 		end
 	end)
