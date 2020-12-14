@@ -104,6 +104,7 @@ local list = {
 		{AuraID = 325013, UnitID = "player"},	-- 晋升者之赐
 		{AuraID = 308495, UnitID = "player"},	-- 共鸣箭
 		{AuraID = 328908, UnitID = "player"},	-- 战斗冥想
+		{AuraID = 345499, UnitID = "player"},	-- 执政官的祝福
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
@@ -208,6 +209,7 @@ local list = {
 		-- 5人本
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
+		{AuraID = 333737, UnitID = "target"},	-- 凋魂，凝结之疾
 		{AuraID = 321368, UnitID = "target", Value = true},	-- 凋魂，冰缚之盾
 		{AuraID = 327416, UnitID = "target", Value = true},	-- 晋升，心能回灌
 		{AuraID = 345561, UnitID = "target", Value = true},	-- 晋升，生命连结
