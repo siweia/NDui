@@ -4,14 +4,20 @@ local M = B:GetModule("Misc")
 
 local format, strsplit, tonumber, pairs, wipe = format, strsplit, tonumber, pairs, wipe
 local Ambiguate = Ambiguate
+local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
 local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
 local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
-local GREAT_VAULT_REWARDS = GREAT_VAULT_REWARDS
+local C_WeeklyRewards_GetActivities = C_WeeklyRewards.GetActivities
+local C_WeeklyRewards_GetExampleRewardItemHyperlinks = C_WeeklyRewards.GetExampleRewardItemHyperlinks
 local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
 local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
+local WEEKLY_REWARDS_MYTHIC, GREAT_VAULT_REWARDS, UNKNOWN = WEEKLY_REWARDS_MYTHIC, GREAT_VAULT_REWARDS, UNKNOWN
+local WEEKLY_TYPE_RAID = Enum.WeeklyRewardChestThresholdType.Raid
+local WEEKLY_TYPE_RANKED_PVP = Enum.WeeklyRewardChestThresholdType.RankedPvP
+local WEEKLY_TYPE_MYTHIC_PLUS = Enum.WeeklyRewardChestThresholdType.MythicPlus
 
 local hasAngryKeystones
 local frame
@@ -115,20 +121,95 @@ function M.GuildBest_OnLoad(event, addon)
 	if addon == "Blizzard_ChallengesUI" then
 		hooksecurefunc("ChallengesFrame_Update", M.GuildBest_Update)
 		M:KeystoneInfo_Create()
+		M:WeeklyInfo_Create()
 
 		B:UnregisterEvent(event, M.GuildBest_OnLoad)
 	end
 end
 
 -- Keystone Info
-local myFullName = DB.MyFullName
-local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
+local rewardOrder = {
+	[1] = 4,
+	[2] = 5,
+	[3] = 6,
+	[4] = 7,
+	[5] = 8,
+	[6] = 9,
+	[7] = 1,
+	[8] = 2,
+	[9] = 3,
+}
+local indexToTitle = {
+	[1] = PVP,
+	[4] = RAIDS,
+	[7] = MYTHIC_DUNGEONS,
+}
+
+function M:GetWeeklyRewardName(info)
+	local rewardName
+	if info.type == WEEKLY_TYPE_RANKED_PVP then
+		rewardName = PVPUtil.GetTierName(info.level)
+	elseif info.type == WEEKLY_TYPE_MYTHIC_PLUS then
+		rewardName = format(WEEKLY_REWARDS_MYTHIC, info.level)
+	elseif info.type == WEEKLY_TYPE_RAID then
+		rewardName = DifficultyUtil.GetDifficultyName(info.level)
+	end
+	local itemLink = C_WeeklyRewards_GetExampleRewardItemHyperlinks(info.id)
+	local itemLevel = itemLink and GetDetailedItemLevelInfo(itemLink) or UNKNOWN
+	return rewardName, itemLevel
+end
+
+function M:WeeklyInfo_Create()
+	local texture = "Interface\\Icons\\Inv_legion_chest_Valajar"
+	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "BackdropTemplate")
+	button:SetPoint("BOTTOMLEFT", 36, 67)
+	button:SetSize(32, 32)
+	B.PixelIcon(button, texture, true)
+	button.bg:SetBackdropBorderColor(1, .8, 0)
+	button:SetScript("OnEnter", function(self)
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:AddLine(GREAT_VAULT_REWARDS)
+	
+		local activities = C_WeeklyRewards_GetActivities()
+		for index, newIndex in ipairs(rewardOrder) do
+			local info = activities[newIndex]
+			if info then
+				if index % 3 == 1 then
+					GameTooltip:AddLine(" ")
+					GameTooltip:AddLine(indexToTitle[index], .6,.8,1)
+				end
+	
+				if info.progress < info.threshold then
+					GameTooltip:AddDoubleLine("R"..info.index..": "..info.progress.."/"..info.threshold, INCOMPLETE, 1,1,1, 1,0,0)
+				else
+					local rewardName, itemLevel = M:GetWeeklyRewardName(info)
+					if rewardName then
+						GameTooltip:AddDoubleLine("R"..info.index..": "..rewardName, itemLevel, 1,1,1, 0,1,0)
+					end
+				end
+			end
+		end
+
+		GameTooltip:AddDoubleLine(" ", DB.LineString)
+		GameTooltip:AddDoubleLine(" ", DB.LeftButton..RATED_PVP_WEEKLY_VAULT.." ", 1,1,1, .6,.8,1)
+		GameTooltip:Show()
+	end)
+	button:SetScript("OnLeave", B.HideTooltip)
+	button:SetScript("OnMouseUp", function(_, btn)
+		if btn == "LeftButton" then
+			if not WeeklyRewardsFrame then WeeklyRewards_LoadUI() end
+			B:TogglePanel(WeeklyRewardsFrame)
+		end
+	end)
+end
 
 function M:KeystoneInfo_Create()
 	local texture = select(10, GetItemInfo(158923)) or 525134
+	local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "BackdropTemplate")
 	button:SetPoint("BOTTOMLEFT", 2, 67)
-	button:SetSize(35, 35)
+	button:SetSize(32, 32)
 	B.PixelIcon(button, texture, true)
 	button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
 	button:SetScript("OnEnter", function(self)
@@ -144,16 +225,12 @@ function M:KeystoneInfo_Create()
 			GameTooltip:AddDoubleLine(format(color.."%s:|r", name), format("%s%s(%s)|r", factionColor, dungeon, level))
 		end
 		GameTooltip:AddDoubleLine(" ", DB.LineString)
-		GameTooltip:AddDoubleLine(" ", DB.LeftButton..GREAT_VAULT_REWARDS.." ", 1,1,1, .6,.8,1)
 		GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["Reset Gold"].." ", 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	button:SetScript("OnLeave", B.HideTooltip)
 	button:SetScript("OnMouseUp", function(_, btn)
-		if btn == "LeftButton" then
-			if not WeeklyRewardsFrame then WeeklyRewards_LoadUI() end
-			B:TogglePanel(WeeklyRewardsFrame)
-		elseif btn == "MiddleButton" then
+		if btn == "MiddleButton" then
 			wipe(NDuiADB["KeystoneInfo"])
 		end
 	end)
@@ -169,9 +246,9 @@ end
 function M:KeystoneInfo_Update()
 	local mapID, keystoneLevel = M:KeystoneInfo_UpdateBag()
 	if mapID then
-		NDuiADB["KeystoneInfo"][myFullName] = mapID..":"..keystoneLevel..":"..DB.MyClass..":"..DB.MyFaction
+		NDuiADB["KeystoneInfo"][DB.MyFullName] = mapID..":"..keystoneLevel..":"..DB.MyClass..":"..DB.MyFaction
 	else
-		NDuiADB["KeystoneInfo"][myFullName] = nil
+		NDuiADB["KeystoneInfo"][DB.MyFullName] = nil
 	end
 end
 
