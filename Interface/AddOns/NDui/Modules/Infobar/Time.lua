@@ -5,7 +5,7 @@ if not C.Infobar.Time then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Time", C.Infobar.TimePos)
 local time, date = time, date
-local strfind, format, floor = string.find, string.format, math.floor
+local strfind, format, floor, strmatch = strfind, format, floor, strmatch
 local mod, tonumber, pairs, ipairs, select = mod, tonumber, pairs, ipairs, select
 local C_Map_GetMapInfo = C_Map.GetMapInfo
 local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
@@ -13,8 +13,10 @@ local C_Calendar_SetAbsMonth = C_Calendar.SetAbsMonth
 local C_Calendar_OpenCalendar = C_Calendar.OpenCalendar
 local C_Calendar_GetNumDayEvents = C_Calendar.GetNumDayEvents
 local C_Calendar_GetNumPendingInvites = C_Calendar.GetNumPendingInvites
+local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
 local C_AreaPoiInfo_GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
 local C_IslandsQueue_GetIslandsWeeklyQuestID = C_IslandsQueue.GetIslandsWeeklyQuestID
+local C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo
 local TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR = TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR
 local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES
 local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
@@ -190,6 +192,16 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
+-- Torghast
+local TorghastWidgets = {
+	{nameID = 2925, levelID = 2930}, -- Fracture Chambers
+	{nameID = 2926, levelID = 2932}, -- Skoldus Hall
+	{nameID = 2924, levelID = 2934}, -- Soulforges
+	{nameID = 2927, levelID = 2936}, -- Coldheart Interstitia
+	{nameID = 2928, levelID = 2938}, -- Mort'regar
+	{nameID = 2929, levelID = 2940}, -- The Upper Reaches
+}
+
 local title
 local function addTitle(text)
 	if not title then
@@ -334,6 +346,22 @@ info.onEnter = function(self)
 		end
 		local nextLocation = GetNextLocation(nextTime, index)
 		GameTooltip:AddDoubleLine(L["Next Invasion"]..nextLocation, date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
+	end
+
+	-- Torghast
+	local TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
+	if IsQuestFlaggedCompleted(60136) and TorghastInfo then
+		title = false
+		for _, value in pairs(TorghastWidgets) do
+			local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
+			if nameInfo and nameInfo.shownState == 1 then
+				addTitle(TorghastInfo.name)
+				local nameText = strmatch(nameInfo.text, "|n|cffffffff(.+)|r") or UNKNOWN
+				local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
+				local levelText = strmatch(levelInfo.text, "|cFF00FF00(.+)|r") or UNKNOWN
+				GameTooltip:AddDoubleLine(nameText, levelText, 1,1,1, 1,1,1)
+			end
+		end
 	end
 
 	-- Help Info
