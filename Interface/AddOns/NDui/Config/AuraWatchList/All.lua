@@ -198,7 +198,9 @@ local list = {
 		-- 团本
 		{AuraID = 346035, UnitID = "player"},	-- 眩目步法，猩红议会
 		{AuraID = 331636, UnitID = "player", Flash = true},	-- 黑暗伴舞，猩红议会
-
+		{AuraID = 335293, UnitID = "player"},	-- 锁链联结，泥拳
+		{AuraID = 327039, UnitID = "player"},	-- 喂食时间，德纳修斯
+		{AuraID = 327089, UnitID = "player"},	-- 喂食时间，德纳修斯
 	},
 	["Warning"] = { -- 目标重要光环组
 		-- 大幻象
@@ -219,6 +221,10 @@ local list = {
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
 		{AuraID = 346792, UnitID = "target"},	-- 罪触之刃，猩红议会
+		{AuraID = 331314, UnitID = "target"},	-- 毁灭冲击，泥拳
+		{AuraID = 341250, UnitID = "target"},	-- 恐怖暴怒，泥拳
+		{AuraID = 329636, UnitID = "target", Value = true},	-- 坚岩形态，干将
+		{AuraID = 329808, UnitID = "target", Value = true},	-- 坚岩形态，干将
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
