@@ -383,7 +383,11 @@ info.onMouseUp = function(_, btn)
 		ToggleTimeManager()
 	elseif btn == "MiddleButton" then
 		if not WeeklyRewardsFrame then LoadAddOn("Blizzard_WeeklyRewards") end
-		B:TogglePanel(WeeklyRewardsFrame)
+		if InCombatLockdown() then
+			B:TogglePanel(WeeklyRewardsFrame)
+		else
+			ToggleFrame(WeeklyRewardsFrame)
+		end
 	else
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		ToggleCalendar()
