@@ -21,7 +21,7 @@ local TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR = TIMEMANAGER_TICKER_
 local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES
 local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
 local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE
-local PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT = PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT
+local PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT, UNKNOWN = PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT, UNKNOWN
 local HORRIFIC_VISION = SPLASH_BATTLEFORAZEROTH_8_3_0_FEATURE1_TITLE
 local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
@@ -202,6 +202,10 @@ local TorghastWidgets = {
 	{nameID = 2929, levelID = 2940}, -- The Upper Reaches
 }
 
+local function CleanupLevelName(text)
+	return gsub(text, "|n", "")
+end
+
 local title
 local function addTitle(text)
 	if not title then
@@ -254,6 +258,22 @@ info.onEnter = function(self)
 			addTitle(RAID_INFO)
 			if extended then r,g,b = .3,1,.3 else r,g,b = 1,1,1 end
 			GameTooltip:AddDoubleLine(name.." - "..diffName, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
+		end
+	end
+
+	-- Torghast
+	local TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
+	if IsQuestFlaggedCompleted(60136) and TorghastInfo then
+		title = false
+		for _, value in pairs(TorghastWidgets) do
+			local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
+			if nameInfo and nameInfo.shownState == 1 then
+				addTitle(TorghastInfo.name)
+				local nameText = CleanupLevelName(nameInfo.text)
+				local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
+				local levelText = levelInfo and CleanupLevelName(levelInfo.text) or UNKNOWN
+				GameTooltip:AddDoubleLine(nameText, levelText)
+			end
 		end
 	end
 
@@ -346,22 +366,6 @@ info.onEnter = function(self)
 		end
 		local nextLocation = GetNextLocation(nextTime, index)
 		GameTooltip:AddDoubleLine(L["Next Invasion"]..nextLocation, date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
-	end
-
-	-- Torghast
-	local TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
-	if IsQuestFlaggedCompleted(60136) and TorghastInfo then
-		title = false
-		for _, value in pairs(TorghastWidgets) do
-			local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
-			if nameInfo and nameInfo.shownState == 1 then
-				addTitle(TorghastInfo.name)
-				local nameText = strmatch(nameInfo.text, "|n|cffffffff(.+)|r") or UNKNOWN
-				local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
-				local levelText = strmatch(levelInfo.text, "|cFF00FF00(.+)|r") or UNKNOWN
-				GameTooltip:AddDoubleLine(nameText, levelText, 1,1,1, 1,1,1)
-			end
-		end
 	end
 
 	-- Help Info
