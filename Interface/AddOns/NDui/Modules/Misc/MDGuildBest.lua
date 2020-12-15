@@ -4,6 +4,7 @@ local M = B:GetModule("Misc")
 
 local format, strsplit, tonumber, pairs, wipe = format, strsplit, tonumber, pairs, wipe
 local Ambiguate = Ambiguate
+local C_MythicPlus_GetRunHistory = C_MythicPlus.GetRunHistory
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
 local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
@@ -11,9 +12,11 @@ local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeyston
 local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
 local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
+local WEEKLY_REWARDS_MYTHIC_TOP_RUNS = WEEKLY_REWARDS_MYTHIC_TOP_RUNS
 
 local hasAngryKeystones
 local frame
+local WeeklyRunsThreshold = 10
 
 function M:GuildBest_UpdateTooltip()
 	local leaderInfo = self.leaderInfo
@@ -25,7 +28,7 @@ function M:GuildBest_UpdateTooltip()
 	GameTooltip:AddLine(format(CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
 	for i = 1, #leaderInfo.members do
 		local classColorStr = DB.ClassColors[leaderInfo.members[i].classFileName].colorStr
-		GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr,leaderInfo.members[i].name));
+		GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr,leaderInfo.members[i].name))
 	end
 	GameTooltip:Show()
 end
@@ -114,8 +117,37 @@ function M.GuildBest_OnLoad(event, addon)
 	if addon == "Blizzard_ChallengesUI" then
 		hooksecurefunc("ChallengesFrame_Update", M.GuildBest_Update)
 		M:KeystoneInfo_Create()
+		ChallengesFrame.WeeklyInfo.Child.WeeklyChest:HookScript("OnEnter", M.KeystoneInfo_WeeklyRuns)
 
 		B:UnregisterEvent(event, M.GuildBest_OnLoad)
+	end
+end
+
+local function sortHistory(entry1, entry2)
+	if entry1.level == entry2.level then
+		return entry1.mapChallengeModeID < entry2.mapChallengeModeID
+	else
+		return entry1.level > entry2.level
+	end
+end
+
+function M:KeystoneInfo_WeeklyRuns()
+	local runHistory = C_MythicPlus_GetRunHistory(false, true)
+	if #runHistory > 0 then
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), .6,.8,1)
+		sort(runHistory, sortHistory)
+
+		for i = 1, WeeklyRunsThreshold do
+			local runInfo = runHistory[i]
+			if not runInfo then break end
+
+			local name = C_ChallengeMode_GetMapUIInfo(runInfo.mapChallengeModeID)
+			local r,g,b = 0,1,0
+			if not runInfo.completed then r,g,b = 1,0,0 end
+			GameTooltip:AddDoubleLine(name, "Lv."..runInfo.level, 1,1,1, r,g,b)
+		end
+		GameTooltip:Show()
 	end
 end
 
