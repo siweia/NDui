@@ -193,7 +193,7 @@ local function GetNzothThreatName(questID)
 end
 
 -- Torghast
-local TorghastWidgets = {
+local TorghastWidgets, TorghastInfo = {
 	{nameID = 2925, levelID = 2930}, -- Fracture Chambers
 	{nameID = 2926, levelID = 2932}, -- Skoldus Hall
 	{nameID = 2924, levelID = 2934}, -- Soulforges
@@ -262,8 +262,10 @@ info.onEnter = function(self)
 	end
 
 	-- Torghast
-	local TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
-	if IsQuestFlaggedCompleted(60136) and TorghastInfo then
+	if not TorghastInfo then
+		TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
+	end
+	if TorghastInfo and IsQuestFlaggedCompleted(60136) then
 		title = false
 		for _, value in pairs(TorghastWidgets) do
 			local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
