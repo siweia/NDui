@@ -60,6 +60,7 @@ C.CustomUnits = {
 	[170851] = true,	-- 易爆魔药炸弹，通灵
 	[165556] = true,	-- 瞬息具象，赤红
 	-- Raids
+	[GetSectionInfo(21953)] = true,	-- 灵能灌注者，凯子
 	[175992] = true,	-- 忠实的侍从，猩红议会
 }
 
