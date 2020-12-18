@@ -391,6 +391,7 @@ end
 ]]
 local lastTime = 0
 local itemList = {
+	[67826] = true,		-- 基维斯
 	[226241] = true,	-- 宁神圣典
 	[256230] = true,	-- 静心圣典
 	[185709] = true,	-- 焦糖鱼宴
