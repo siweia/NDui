@@ -196,6 +196,9 @@ local list = {
 		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
 		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
 		-- 团本
+		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
+		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
+		{AuraID = 329298, UnitID = "player"},	-- 暴食胀气，毁灭者
 		{AuraID = 346035, UnitID = "player"},	-- 眩目步法，猩红议会
 		{AuraID = 331636, UnitID = "player", Flash = true},	-- 黑暗伴舞，猩红议会
 		{AuraID = 335293, UnitID = "player"},	-- 锁链联结，泥拳

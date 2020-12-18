@@ -67,4 +67,5 @@ C.CustomUnits = {
 -- 显示能量值的单位
 C.ShowPowerList = {
 	[165556] = true,	-- 瞬息具象，赤红
+	[GetSectionInfo(22339)] = true,	-- 巴加斯特之影，猎手
 }
