@@ -195,6 +195,7 @@ local list = {
 		{AuraID = 328453, UnitID = "player"},	-- 晋升高塔，压迫
 		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
 		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
+		{AuraID = 334496, UnitID = "player"},	-- 仙林，催眠光粉
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
@@ -215,11 +216,13 @@ local list = {
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
 		{AuraID = 333737, UnitID = "target"},	-- 凋魂，凝结之疾
+		{AuraID = 328175, UnitID = "target"},	-- 凋魂，凝结之疾
 		{AuraID = 321368, UnitID = "target", Value = true},	-- 凋魂，冰缚之盾
 		{AuraID = 327416, UnitID = "target", Value = true},	-- 晋升，心能回灌
 		{AuraID = 345561, UnitID = "target", Value = true},	-- 晋升，生命连结
 		{AuraID = 323149, UnitID = "target", Value = true},	-- 仙林，黑暗之拥
 		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
+		{AuraID = 323059, UnitID = "target", Flash = true},	-- 仙林，宗主之怒
 		-- 团本
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
