@@ -115,6 +115,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 341215) -- 动荡心能
 module:RegisterDebuff(TIER, INSTANCE, 0, 323792) -- 心能力场
 module:RegisterDebuff(TIER, INSTANCE, 0, 330683) -- 原始心能
 module:RegisterDebuff(TIER, INSTANCE, 0, 328434) -- 胁迫
+module:RegisterDebuff(TIER, INSTANCE, 0, 27638)  -- 斜掠
 
 INSTANCE = 1185 -- 赎罪大厅
 RegisterSeasonSpells(INSTANCE)
