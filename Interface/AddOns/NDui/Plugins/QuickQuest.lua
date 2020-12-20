@@ -105,6 +105,7 @@ local ignoreQuestNPC = {
 	[150987] = true,	-- 肖恩·维克斯，斯坦索姆
 	[150563] = true,	-- 斯卡基特，麦卡贡订单日常
 	[143555] = true,	-- 山德·希尔伯曼，祖达萨PVP军需官
+	[168430] = true,	-- 戴克泰丽丝，格里恩挑战
 }
 
 QuickQuest:Register("QUEST_GREETING", function()
