@@ -135,7 +135,7 @@ local onAttributeChanged = [[
 		end
 	end
 
-	if self:IsShown() and (name == "item" or name == "binding") then
+	if self:IsShown() then
 		self:ClearBindings()
 
 		local key1, key2 = GetBindingKey("EXTRAACTIONBUTTON1")
