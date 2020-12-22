@@ -49,6 +49,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 324982) -- 共受苦难
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 324983) -- 共受苦难
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 332664) -- 浓缩心能
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 325382) -- 扭曲欲望
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 325117) -- 心能释放
 
 BOSS = 2426 -- 猩红议会
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327773) -- 吸取精华
