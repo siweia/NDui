@@ -192,6 +192,7 @@ local list = {
 		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
 		{AuraID = 323687, UnitID = "player"},	-- 彼界，奥术闪电
 		{AuraID = 323692, UnitID = "player"},	-- 彼界，奥术易伤
+		{AuraID = 331379, UnitID = "player"},	-- 彼界，润滑剂
 		{AuraID = 327893, UnitID = "player", Flash = true},	-- 彼界，邦桑迪的热情
 		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
 		{AuraID = 323569, UnitID = "player", Flash = true},	-- 彼界，溅洒精魂
@@ -227,6 +228,7 @@ local list = {
 		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
 		{AuraID = 323059, UnitID = "target", Flash = true},	-- 仙林，宗主之怒
 		{AuraID = 326771, UnitID = "target"},	-- 赎罪大厅，岩石监视者
+		{AuraID = 331275, UnitID = "target", Flash = true},	-- 剧场，不灭护卫
 		-- 团本
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
