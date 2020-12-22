@@ -106,6 +106,7 @@ local ignoreQuestNPC = {
 	[150563] = true,	-- 斯卡基特，麦卡贡订单日常
 	[143555] = true,	-- 山德·希尔伯曼，祖达萨PVP军需官
 	[168430] = true,	-- 戴克泰丽丝，格里恩挑战
+	[160248] = true,	-- 档案员费安，罪魂碎片
 }
 
 QuickQuest:Register("QUEST_GREETING", function()
@@ -340,6 +341,7 @@ local ignoreProgressNPC = {
 	[141584] = true,
 	[326027] = true, -- 运输站回收生成器DX-82
 	[150563] = true, -- 斯卡基特，麦卡贡订单日常
+	[160248] = true, -- 档案员费安，罪魂碎片
 }
 
 QuickQuest:Register("QUEST_PROGRESS", function()
