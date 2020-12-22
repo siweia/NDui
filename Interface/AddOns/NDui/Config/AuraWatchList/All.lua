@@ -191,6 +191,7 @@ local list = {
 		{AuraID = 345323, UnitID = "player", Flash = true},	-- 通灵战潮，勇士之赐
 		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
 		{AuraID = 323687, UnitID = "player"},	-- 彼界，奥术闪电
+		{AuraID = 323692, UnitID = "player"},	-- 彼界，奥术易伤
 		{AuraID = 327893, UnitID = "player", Flash = true},	-- 彼界，邦桑迪的热情
 		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
 		{AuraID = 323569, UnitID = "player", Flash = true},	-- 彼界，溅洒精魂
