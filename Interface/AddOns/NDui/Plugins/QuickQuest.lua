@@ -107,6 +107,8 @@ local ignoreQuestNPC = {
 	[143555] = true,	-- 山德·希尔伯曼，祖达萨PVP军需官
 	[168430] = true,	-- 戴克泰丽丝，格里恩挑战
 	[160248] = true,	-- 档案员费安，罪魂碎片
+	[127037] = true,	-- 纳毕鲁
+	[326027] = true,	-- 运输站回收生成器DX-82
 }
 
 QuickQuest:Register("QUEST_GREETING", function()
@@ -333,24 +335,13 @@ local itemBlacklist = {
 	[31664] = 88604, -- Nat's Fishing Journal
 }
 
-local ignoreProgressNPC = {
-	[119388] = true,
-	[127037] = true,
-	[126954] = true,
-	[124312] = true,
-	[141584] = true,
-	[326027] = true, -- 运输站回收生成器DX-82
-	[150563] = true, -- 斯卡基特，麦卡贡订单日常
-	[160248] = true, -- 档案员费安，罪魂碎片
-}
-
 QuickQuest:Register("QUEST_PROGRESS", function()
 	if IsQuestCompletable() then
 		local info = C_QuestLog_GetQuestTagInfo(GetQuestID())
 		if info and (info.tagID == 153 or info.worldQuestType) then return end
 
 		local npcID = GetNPCID()
-		if ignoreProgressNPC[npcID] then return end
+		if ignoreQuestNPC[npcID] then return end
 
 		local requiredItems = GetNumQuestItems()
 		if requiredItems > 0 then
