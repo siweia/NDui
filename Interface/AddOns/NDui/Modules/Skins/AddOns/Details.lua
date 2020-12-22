@@ -71,7 +71,7 @@ local function ReskinDetails()
 				height = 96
 				EmbedWindow(instance2, -3, 140, 320, height)
 			end
-			EmbedWindow(instance1, -3, 25, 320, height)
+			EmbedWindow(instance1, -3, 24, 320, height)
 		end
 	end
 
@@ -95,7 +95,7 @@ local function ReskinDetails()
 	end
 	Details.OpenWelcomeWindow = function()
 		if instance1 then
-			EmbedWindow(instance1, -3, 25, 320, 190)
+			EmbedWindow(instance1, -3, 24, 320, 190)
 			instance1:SetBarSettings(18, "normTex")
 			instance1:SetBarTextSettings(14, DB.Font[1], nil, nil, nil, true, true, nil, nil, nil, nil, nil, nil, false, nil, false, nil)
 		end
