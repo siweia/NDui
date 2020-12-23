@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
 local _G = getfenv(0)
-local select = select
+local select, floor, unpack = select, floor, unpack
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
@@ -26,6 +26,8 @@ local GetSavedInstanceInfo = GetSavedInstanceInfo
 local SetSavedInstanceExtend = SetSavedInstanceExtend
 local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
 local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
+local C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo
+local C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -59,6 +61,7 @@ function M:OnLogin()
 	M:BlockStrangerInvite()
 	M:ToggleBossBanner()
 	M:ToggleBossEmote()
+	M:MawWidgetFrame()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -320,6 +323,72 @@ function M:BlockStrangerInvite()
 			StaticPopup_Hide("PARTY_INVITE")
 		end
 	end)
+end
+
+-- Maw widget frame
+local function GetMawBarValue()
+	local widgetInfo = C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo(2885)
+	if widgetInfo and widgetInfo.shownState == 1 then
+		local value = widgetInfo.progressVal
+		return floor(value / 1000), value % 1000
+	end
+end
+
+local MawRankColor = {
+	[0] = {.6, .8, 1},
+	[1] = {0, .7, .3},
+	[2] = {0, 1, 0},
+	[3] = {1, .8, 0},
+	[4] = {1, .5, 0},
+	[5] = {1, 0, 0}
+}
+function M:UpdateMawBarLayout()
+	local bar = M.mawbar
+	local rank, value = GetMawBarValue()
+	if rank then
+		bar:SetStatusBarColor(unpack(MawRankColor[rank]))
+		bar:SetValue(value)
+		bar.text:SetText("Lv"..rank.." - "..value.."/1000")
+		bar:Show()
+		UIWidgetTopCenterContainerFrame:Hide()
+	else
+		bar:Hide()
+		UIWidgetTopCenterContainerFrame:Show()
+	end
+end
+
+function M:MawWidgetFrame()
+	if M.mawbar then return end
+
+	local bar = CreateFrame("StatusBar", nil, UIParent)
+	bar:SetPoint("TOP", 0, -50)
+	bar:SetSize(200, 16)
+	bar:SetMinMaxValues(0, 1000)
+	bar.text = B.CreateFS(bar, 14)
+	B.CreateSB(bar)
+	B:SmoothBar(bar)
+	M.mawbar = bar
+
+	bar:SetScript("OnEnter", function(self)
+		local rank = GetMawBarValue()
+		local widgetInfo = rank and C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo(2873 + rank)
+		if widgetInfo and widgetInfo.shownState == 1 then
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -10)
+			local header, nonHeader = SplitTextIntoHeaderAndNonHeader(widgetInfo.tooltip)
+			if header then
+				GameTooltip:AddLine(header, nil,nil,nil, 1)
+			end
+			if nonHeader then
+				GameTooltip:AddLine(nonHeader, nil,nil,nil, 1)
+			end
+			GameTooltip:Show()
+		end
+	end)
+	bar:SetScript("OnLeave", B.HideTooltip)
+
+	M:UpdateMawBarLayout()
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", M.UpdateMawBarLayout)
+	B:RegisterEvent("UPDATE_UI_WIDGET", M.UpdateMawBarLayout)
 end
 
 -- Archaeology counts
