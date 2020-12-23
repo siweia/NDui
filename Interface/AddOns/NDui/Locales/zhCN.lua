@@ -723,3 +723,5 @@ L["MinimapHelp"] = "鼠标滚轮可以缩放区域，鼠标中键点击打开日
 L["Reset Help"] = "重置帮助提示"
 L["Reset NDui Helpinfo"] = "你想要重置所有帮助提示吗？看来你不是真的懂。"
 L["HideAllID"] = "关闭所有法术及物品信息"
+L["MawThreatBar"] = "启用噬渊威胁值进度条"
+L["MawThreatBarTip"] = "|n启用后，禁用系统的噬渊威胁值信息，改用进度条显示。"

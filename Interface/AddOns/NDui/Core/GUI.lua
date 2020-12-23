@@ -338,6 +338,7 @@ G.DefaultSettings = {
 		BlockInvite = false,
 		NzothVision = true,
 		SendActionCD = false,
+		MawThreatBar = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -1053,6 +1054,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", true, nil, updateScreenShot},
 		{1, "Misc", "Focuser", L["Easy Focus"]},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", true},
+		{1, "Misc", "MawThreatBar", NewFeatureTag..L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

@@ -336,8 +336,8 @@ end
 
 local MawRankColor = {
 	[0] = {.6, .8, 1},
-	[1] = {0, .7, .3},
-	[2] = {0, 1, 0},
+	[1] = {0, 1, 0},
+	[2] = {0, .7, .3},
 	[3] = {1, .8, 0},
 	[4] = {1, .5, 0},
 	[5] = {1, 0, 0}
@@ -358,6 +358,7 @@ function M:UpdateMawBarLayout()
 end
 
 function M:MawWidgetFrame()
+	if not C.db["Misc"]["MawThreatBar"] then return end
 	if M.mawbar then return end
 
 	local bar = CreateFrame("StatusBar", nil, UIParent)

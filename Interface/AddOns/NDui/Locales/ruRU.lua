@@ -723,3 +723,5 @@ L["MinimapHelp"] = "Прокрутите миникарту для увелич�
 L["Reset Help"] = "Сброс Helpinfo"
 L["Reset NDui Helpinfo"] = "Вы уверены, что сбросите всё HelpInfo?"
 L["HideAllID"] = "Скрыть все IDs"
+L["MawThreatBar"] = "ThreatBar in Maw" -- need translation
+L["MawThreatBarTip"] = "|nIf enabled, disable default threat status UI in maw, and replace with statusbar." -- need translation

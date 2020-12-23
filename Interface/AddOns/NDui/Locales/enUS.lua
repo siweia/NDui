@@ -723,3 +723,5 @@ L["MinimapHelp"] = "Scroll minimap to zoom in or out, middle click to toggle cal
 L["Reset Help"] = "Reset Helpinfo"
 L["Reset NDui Helpinfo"] = "Are you sure to reset all help info?"
 L["HideAllID"] = "Hide all info IDs"
+L["MawThreatBar"] = "ThreatBar in Maw"
+L["MawThreatBarTip"] = "|nIf enabled, disable default threat status UI in maw, and replace with statusbar."
