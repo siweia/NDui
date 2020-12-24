@@ -326,11 +326,12 @@ function M:BlockStrangerInvite()
 end
 
 -- Maw widget frame
+local maxValue = 1000
 local function GetMawBarValue()
 	local widgetInfo = C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo(2885)
 	if widgetInfo and widgetInfo.shownState == 1 then
 		local value = widgetInfo.progressVal
-		return floor(value / 1000), value % 1000
+		return floor(value / maxValue), value % maxValue
 	end
 end
 
@@ -347,8 +348,13 @@ function M:UpdateMawBarLayout()
 	local rank, value = GetMawBarValue()
 	if rank then
 		bar:SetStatusBarColor(unpack(MawRankColor[rank]))
-		bar:SetValue(value)
-		bar.text:SetText("Lv"..rank.." - "..value.."/1000")
+		if rank == 5 then
+			bar.text:SetText("Lv"..rank)
+			bar:SetValue(maxValue)
+		else
+			bar.text:SetText("Lv"..rank.." - "..value.."/"..maxValue)
+			bar:SetValue(value)
+		end
 		bar:Show()
 		UIWidgetTopCenterContainerFrame:Hide()
 	else
