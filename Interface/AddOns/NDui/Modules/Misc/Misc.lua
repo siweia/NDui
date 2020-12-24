@@ -370,6 +370,8 @@ function M:MawWidgetFrame()
 	B:SmoothBar(bar)
 	M.mawbar = bar
 
+	B.Mover(bar, L["MawThreatBar"], "MawThreatBar", {"TOP", UIParent, 0, -50})
+
 	bar:SetScript("OnEnter", function(self)
 		local rank = GetMawBarValue()
 		local widgetInfo = rank and C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo(2873 + rank)
