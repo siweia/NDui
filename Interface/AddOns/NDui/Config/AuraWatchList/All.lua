@@ -190,7 +190,7 @@ local list = {
 		{AuraID = 335161, UnitID = "player"},	-- 通灵战潮，残存心能
 		{AuraID = 345323, UnitID = "player", Flash = true},	-- 通灵战潮，勇士之赐
 		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
-		{AuraID = 323687, UnitID = "player"},	-- 彼界，奥术闪电
+		{AuraID = 323687, UnitID = "player", Flash = true},	-- 彼界，奥术闪电
 		{AuraID = 323692, UnitID = "player"},	-- 彼界，奥术易伤
 		{AuraID = 331379, UnitID = "player"},	-- 彼界，润滑剂
 		{AuraID = 327893, UnitID = "player", Flash = true},	-- 彼界，邦桑迪的热情
@@ -204,6 +204,7 @@ local list = {
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
 		{AuraID = 329298, UnitID = "player"},	-- 暴食胀气，毁灭者
+		{AuraID = 325936, UnitID = "player"},	-- 共享认知，勋爵
 		{AuraID = 346035, UnitID = "player"},	-- 眩目步法，猩红议会
 		{AuraID = 331636, UnitID = "player", Flash = true},	-- 黑暗伴舞，猩红议会
 		{AuraID = 335293, UnitID = "player"},	-- 锁链联结，泥拳
