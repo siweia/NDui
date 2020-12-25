@@ -898,9 +898,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
-		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
-		{3, "Nameplate", "PPHealthHeight", L["PlayerPlate HPHeight"].."*", false, {5, 15, 1}, refreshNameplates},
-		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {5, 15, 1}, refreshNameplates},
+		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
+		{3, "Nameplate", "PPHealthHeight", L["PlayerPlate HPHeight"].."*", false, {2, 15, 1}, refreshNameplates},
+		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
 	},
 	[7] = {
 		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
