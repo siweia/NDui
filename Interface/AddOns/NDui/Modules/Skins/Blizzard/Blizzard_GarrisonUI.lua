@@ -1080,12 +1080,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			end
 		end
 
-		C_Timer.After(.1, function()
+		local function SearchMissionBoard()
 			local missionTab = CovenantMissionFrame.MissionTab
 			for i = 1, missionTab:GetNumChildren() do
 				local child = select(i, missionTab:GetChildren())
 				if child and child.MissionList then
 					VenturePlanFrame = child
+					break
 				end
 			end
 			if not VenturePlanFrame then return end
@@ -1106,7 +1107,14 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					if texture then
 						texture:SetTexCoord(unpack(DB.TexCoord))
 					end
+					break
 				end
+			end
+		end
+
+		CovenantMissionFrame:HookScript("OnShow", function()
+			if not VenturePlanFrame then
+				C_Timer.After(.1, SearchMissionBoard)
 			end
 		end)
 	end
