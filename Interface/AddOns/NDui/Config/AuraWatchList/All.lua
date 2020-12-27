@@ -221,17 +221,25 @@ local list = {
 		-- 5人本
 		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
+		{AuraID = 333227, UnitID = "target", Flash = true},	-- 彼界，不死之怒
 		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
+		{AuraID = 331275, UnitID = "target", Flash = true},	-- 伤逝剧场，不灭护卫
+		{AuraID = 336449, UnitID = "target"},	-- 凋魂，玛卓克萨斯之墓
+		{AuraID = 336451, UnitID = "target"},	-- 凋魂，玛卓克萨斯之壁
 		{AuraID = 333737, UnitID = "target"},	-- 凋魂，凝结之疾
 		{AuraID = 328175, UnitID = "target"},	-- 凋魂，凝结之疾
 		{AuraID = 321368, UnitID = "target", Value = true},	-- 凋魂，冰缚之盾
 		{AuraID = 327416, UnitID = "target", Value = true},	-- 晋升，心能回灌
 		{AuraID = 345561, UnitID = "target", Value = true},	-- 晋升，生命连结
+		{AuraID = 317936, UnitID = "target"},	-- 晋升，弃誓信条
 		{AuraID = 323149, UnitID = "target", Value = true},	-- 仙林，黑暗之拥
 		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
 		{AuraID = 323059, UnitID = "target", Flash = true},	-- 仙林，宗主之怒
+		{AuraID = 336499, UnitID = "target"},	-- 仙林，猜谜游戏
 		{AuraID = 326771, UnitID = "target"},	-- 赎罪大厅，岩石监视者
-		{AuraID = 331275, UnitID = "target", Flash = true},	-- 剧场，不灭护卫
+		{AuraID = 326450, UnitID = "target"},	-- 赎罪大厅，忠心的野兽
+		{AuraID = 322433, UnitID = "target"},	-- 赤红深渊，石肤术
+		{AuraID = 321402, UnitID = "target"},	-- 赤红深渊，饱餐
 		-- 团本
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
