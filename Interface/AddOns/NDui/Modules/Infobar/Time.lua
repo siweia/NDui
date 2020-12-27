@@ -7,6 +7,7 @@ local info = module:RegisterInfobar("Time", C.Infobar.TimePos)
 local time, date = time, date
 local strfind, format, floor, strmatch = strfind, format, floor, strmatch
 local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
+local IsShiftKeyDown = IsShiftKeyDown
 local C_Map_GetMapInfo = C_Map.GetMapInfo
 local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
 local C_Calendar_SetAbsMonth = C_Calendar.SetAbsMonth
@@ -207,7 +208,15 @@ local function addTitle(text)
 	end
 end
 
+info.onShiftDown = function()
+	if info.entered then
+		info:onEnter()
+	end
+end
+
 info.onEnter = function(self)
+	self.entered = true
+
 	RequestRaidInfo()
 
 	local r,g,b
@@ -301,6 +310,7 @@ info.onEnter = function(self)
 	end
 
 	if IsShiftKeyDown() then
+		-- Nzoth relavants
 		for _, v in ipairs(horrificVisions) do
 			if IsQuestFlaggedCompleted(v.id) then
 				addTitle(QUESTS_LABEL)
@@ -352,9 +362,15 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..RATED_PVP_WEEKLY_VAULT.." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Toggle Clock"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
+
+	B:RegisterEvent("MODIFIER_STATE_CHANGED", info.onShiftDown)
 end
 
-info.onLeave = B.HideTooltip
+info.onLeave = function(self)
+	self.entered = true
+	B.HideTooltip()
+	B:UnregisterEvent("MODIFIER_STATE_CHANGED", info.onShiftDown)
+end
 
 info.onMouseUp = function(_, btn)
 	if btn == "RightButton" then
