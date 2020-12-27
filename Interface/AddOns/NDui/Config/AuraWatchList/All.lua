@@ -138,6 +138,7 @@ local list = {
 		{AuraID = 1022, UnitID = "player"},		-- 保护祝福
 		{AuraID = 6940, UnitID = "player"},		-- 牺牲祝福
 		{AuraID = 1044, UnitID = "player"},		-- 自由祝福
+		{AuraID = 10060, UnitID = "player"},	-- 能量灌注
 		{AuraID = 77761, UnitID = "player"},	-- 狂奔怒吼
 		{AuraID = 77764, UnitID = "player"},	-- 狂奔怒吼
 		{AuraID = 31821, UnitID = "player"},	-- 光环掌握
@@ -218,6 +219,7 @@ local list = {
 		-- 大米
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
 		-- 5人本
+		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
 		{AuraID = 333737, UnitID = "target"},	-- 凋魂，凝结之疾
