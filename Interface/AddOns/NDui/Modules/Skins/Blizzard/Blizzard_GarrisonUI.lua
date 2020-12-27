@@ -988,7 +988,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	f:RegisterEvent("ADDON_LOADED")
 	f:SetScript("OnEvent", function(_, event, addon)
 		if addon == "GarrisonMissionManager" then
-			for _, frame in next, {GarrisonMissionFrame, OrderHallMissionFrame, BFAMissionFrame, CovenantMissionFrame} do
+			for _, frame in next, {GarrisonMissionFrame, OrderHallMissionFrame, BFAMissionFrame} do
 				if frame then
 					hooksecurefunc(frame.MissionTab.MissionList, "Update", buttonOnUpdate)
 					frame.MissionTab.MissionPage:HookScript("OnShow", buttonOnShow)
