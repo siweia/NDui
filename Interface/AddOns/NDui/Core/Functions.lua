@@ -1468,6 +1468,13 @@ do
 		return r, g, b
 	end
 
+	local function resetColorPicker(swatch)
+		local defaultColor = swatch.__default
+		if defaultColor then
+			ColorPickerFrame:SetColorRGB(defaultColor.r, defaultColor.g, defaultColor.b)
+		end
+	end
+
 	function B:CreateColorSwatch(name, color)
 		color = color or {r=1, g=1, b=1}
 
@@ -1484,6 +1491,7 @@ do
 		swatch.tex = tex
 		swatch.color = color
 		swatch:SetScript("OnClick", openColorPicker)
+		swatch:SetScript("OnDoubleClick", resetColorPicker)
 
 		return swatch
 	end
