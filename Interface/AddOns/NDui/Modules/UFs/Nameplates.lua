@@ -751,12 +751,18 @@ function UF:UpdateNameplateAuras()
 end
 
 function UF:RefreshNameplats()
+	local plateHeight = C.db["Nameplate"]["PlateHeight"]
+	local nameTextSize = C.db["Nameplate"]["NameTextSize"]
+	local iconSize = plateHeight*2 + 5
+
 	for nameplate in pairs(platesList) do
-		nameplate:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
-		nameplate.nameText:SetFont(DB.Font[1], C.db["Nameplate"]["NameTextSize"], DB.Font[3])
-		nameplate.npcTitle:SetFont(DB.Font[1], C.db["Nameplate"]["NameTextSize"]-1, DB.Font[3])
-		nameplate.Castbar.Time:SetFont(DB.Font[1], C.db["Nameplate"]["NameTextSize"], DB.Font[3])
-		nameplate.Castbar.Text:SetFont(DB.Font[1], C.db["Nameplate"]["NameTextSize"], DB.Font[3])
+		nameplate:SetSize(C.db["Nameplate"]["PlateWidth"], plateHeight)
+		nameplate.nameText:SetFont(DB.Font[1], nameTextSize, DB.Font[3])
+		nameplate.npcTitle:SetFont(DB.Font[1], nameTextSize-1, DB.Font[3])
+		nameplate.Castbar.Icon:SetSize(iconSize, iconSize)
+		nameplate.Castbar:SetHeight(plateHeight)
+		nameplate.Castbar.Time:SetFont(DB.Font[1], nameTextSize, DB.Font[3])
+		nameplate.Castbar.Text:SetFont(DB.Font[1], nameTextSize, DB.Font[3])
 		nameplate.healthValue:SetFont(DB.Font[1], C.db["Nameplate"]["HealthTextSize"], DB.Font[3])
 		nameplate.healthValue:UpdateTag()
 		UF.UpdateNameplateAuras(nameplate)
