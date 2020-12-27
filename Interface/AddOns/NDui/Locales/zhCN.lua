@@ -726,3 +726,6 @@ L["Reset NDui Helpinfo"] = "你想要重置所有帮助提示吗？看来你不�
 L["HideAllID"] = "关闭所有法术及物品信息"
 L["MawThreatBar"] = "噬渊威胁值进度条"
 L["MawThreatBarTip"] = "|n启用后，禁用系统的噬渊威胁值信息，改用进度条显示。"
+L["ColoredTarget"] = "染色目标姓名板"
+L["ColoredTargetTip"] = "|n启用后，染色你当前的目标姓名板，优先级高于自定义及仇恨染色。|n你可以在下面的选项中自定义这个颜色。"
+L["TargetNP Color"] = "目标姓名板颜色"

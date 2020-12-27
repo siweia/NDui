@@ -174,12 +174,15 @@ function UF:UpdateColor(_, unit)
 	local offTankColor = C.db["Nameplate"]["OffTankColor"]
 	local executeRatio = C.db["Nameplate"]["ExecuteRatio"]
 	local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
+	local targetColor = C.db["Nameplate"]["TargetColor"]
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
-		if isCustomUnit then
+		if C.db["Nameplate"]["ColoredTarget"] and UnitIsUnit(unit, "target") then
+			r, g, b = targetColor.r, targetColor.g, targetColor.b
+		elseif isCustomUnit then
 			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif isPlayer and isFriendly then
 			if C.db["Nameplate"]["FriendlyCC"] then
@@ -261,12 +264,17 @@ end
 -- Target indicator
 function UF:UpdateTargetChange()
 	local element = self.TargetIndicator
-	if C.db["Nameplate"]["TargetIndicator"] == 1 then return end
+	local unit = self.unit
 
-	if UnitIsUnit(self.unit, "target") and not UnitIsUnit(self.unit, "player") then
-		element:Show()
-	else
-		element:Hide()
+	if C.db["Nameplate"]["TargetIndicator"] ~= 1 then
+		if UnitIsUnit(unit, "target") and not UnitIsUnit(unit, "player") then
+			element:Show()
+		else
+			element:Hide()
+		end
+	end
+	if C.db["Nameplate"]["ColoredTarget"] then
+		UF.UpdateColor(self, _, unit)
 	end
 end
 
@@ -352,6 +360,7 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
 	self.TargetIndicator = frame
+	self.TargetIndicator.__owner = self
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
 	UF.UpdateTargetIndicator(self)
 end

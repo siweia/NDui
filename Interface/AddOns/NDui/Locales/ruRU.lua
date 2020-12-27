@@ -726,3 +726,6 @@ L["Reset NDui Helpinfo"] = "Вы уверены, что сбросите всё 
 L["HideAllID"] = "Скрыть все IDs"
 L["MawThreatBar"] = "Око утробы"
 L["MawThreatBarTip"] = "|nЕсли включено, заменяет стандартное ОКО тюремщика в утробе."
+L["ColoredTarget"] = "Colored Target Nameplate" -- need translation
+L["ColoredTargetTip"] = "|nIf enabled, colored your target nameplate, its priority is higher than custom color and threat color.|nYou can customize your color below." -- need translation
+L["TargetNP Color"] = "Target Nameplate Color" -- need translation
