@@ -323,7 +323,7 @@ local function CreatePanel()
 	}
 
 	local preSet = {
-		[1] = {1, true},
+		[1] = {1, false},
 		[2] = {1, true},
 		[3] = {2, true},
 		[4] = {2, false},
