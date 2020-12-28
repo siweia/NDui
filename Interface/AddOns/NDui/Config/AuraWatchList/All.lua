@@ -218,6 +218,7 @@ local list = {
 		{AuraID = 319643, UnitID = "target", Value = true},	-- 虚空哀嚎，吸收盾
 		-- 大米
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
+		{AuraID = 343502, UnitID = "target"},	-- 鼓舞光环
 		-- 5人本
 		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
