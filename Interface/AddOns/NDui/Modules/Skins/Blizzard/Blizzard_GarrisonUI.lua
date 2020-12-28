@@ -1093,8 +1093,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 			reskinVenturePlan(VenturePlanFrame)
 			VenturePlanFrame:HookScript("OnShow", reskinVenturePlan)
-			B.Reskin(VenturePlanFrame.CopyBox.ResetButton)
-			B.ReskinClose(VenturePlanFrame.CopyBox.CloseButton2)
+
+			local copyBox = VenturePlanFrame.CopyBox
+			B.Reskin(copyBox.ResetButton)
+			B.ReskinClose(copyBox.CloseButton2)
+			reskinWidgetFont(copyBox.Intro, 1, 1, 1)
+			reskinWidgetFont(copyBox.FirstInputBoxLabel, 1, .8, 0)
+			reskinWidgetFont(copyBox.SecondInputBoxLabel, 1, .8, 0)
 
 			local missionBoard = CovenantMissionFrame.MissionTab.MissionPage.Board
 			for i = 1, missionBoard:GetNumChildren() do
