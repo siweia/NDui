@@ -360,7 +360,6 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
 	self.TargetIndicator = frame
-	self.TargetIndicator.__owner = self
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
 	UF.UpdateTargetIndicator(self)
 end
