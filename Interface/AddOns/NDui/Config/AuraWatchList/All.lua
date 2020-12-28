@@ -223,6 +223,9 @@ local list = {
 		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 		{AuraID = 333227, UnitID = "target", Flash = true},	-- 彼界，不死之怒
+		{AuraID = 228626, UnitID = "target"},	-- 彼界，怨灵之瓮
+		{AuraID = 324010, UnitID = "target"},	-- 彼界，发射
+		{AuraID = 320132, UnitID = "target"},	-- 彼界，暗影之怒
 		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
 		{AuraID = 331275, UnitID = "target", Flash = true},	-- 伤逝剧场，不灭护卫
 		{AuraID = 336449, UnitID = "target"},	-- 凋魂，玛卓克萨斯之墓
