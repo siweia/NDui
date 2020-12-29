@@ -20,7 +20,7 @@ local INTERRUPTED = INTERRUPTED
 -- Init
 function UF:PlateInsideView()
 	if C.db["Nameplate"]["InsideView"] then
-		SetCVar("nameplateOtherTopInset", .05)
+		SetCVar("nameplateOtherTopInset", .08)
 		SetCVar("nameplateOtherBottomInset", .08)
 	else
 		SetCVar("nameplateOtherTopInset", -1)
