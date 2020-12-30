@@ -68,6 +68,7 @@ local list = {
 		{AuraID = 345530, UnitID = "player"},	-- 过载的心能电池
 		{AuraID = 345541, UnitID = "player"},	-- 天域涌动
 		{AuraID = 336588, UnitID = "player"},	-- 唤醒者的复叶
+		{AuraID = 348139, UnitID = "player"},	-- 导师的圣钟
 		{AuraID = 311444, UnitID = "player", Value = true},	-- 不屈套牌
 		{AuraID = 336465, UnitID = "player", Value = true},	-- 脉冲光辉护盾
 		{AuraID = 330366, UnitID = "player", Text = L["Crit"]},	-- 不可思议的量子装置，暴击
