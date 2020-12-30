@@ -188,6 +188,7 @@ local list = {
 		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
 		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
 		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
+		{AuraID = 323471, UnitID = "player", Flash = true},	-- 通灵战潮，切肉飞刀
 		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
 		{AuraID = 322681, UnitID = "player"},	-- 通灵战潮，肉钩
 		{AuraID = 335161, UnitID = "player"},	-- 通灵战潮，残存心能
@@ -223,6 +224,7 @@ local list = {
 		{AuraID = 343502, UnitID = "target"},	-- 鼓舞光环
 		-- 5人本
 		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
+		{AuraID = 343470, UnitID = "target", Value = true},	-- 通灵战潮，碎骨之盾
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 		{AuraID = 333227, UnitID = "target", Flash = true},	-- 彼界，不死之怒
 		{AuraID = 228626, UnitID = "target"},	-- 彼界，怨灵之瓮
