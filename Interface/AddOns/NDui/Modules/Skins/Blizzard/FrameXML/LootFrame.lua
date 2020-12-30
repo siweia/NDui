@@ -49,31 +49,28 @@ tinsert(C.defaultThemes, function()
 
 	-- Bonus roll
 
-	do
-		local frame = BonusRollFrame
+	BonusRollFrame.Background:SetAlpha(0)
+	BonusRollFrame.IconBorder:Hide()
+	BonusRollFrame.BlackBackgroundHoist.Background:Hide()
+	BonusRollFrame.SpecRing:SetAlpha(0)
+	B.SetBD(BonusRollFrame)
 
-		frame.Background:SetAlpha(0)
-		frame.IconBorder:Hide()
-		frame.BlackBackgroundHoist.Background:Hide()
-		frame.SpecRing:SetAlpha(0)
+	local specIcon = BonusRollFrame.SpecIcon
+	specIcon:ClearAllPoints()
+	specIcon:SetPoint("TOPRIGHT", -90, -18)
+	local bg = B.ReskinIcon(specIcon)
+	hooksecurefunc("BonusRollFrame_StartBonusRoll", function()
+		bg:SetShown(specIcon:IsShown())
+	end)
 
-		local specIcon = frame.SpecIcon
-		specIcon:ClearAllPoints()
-		specIcon:SetPoint("TOPRIGHT", -90, -18)
-		local bg = B.ReskinIcon(specIcon)
-		hooksecurefunc("BonusRollFrame_StartBonusRoll", function()
-			bg:SetShown(specIcon:IsShown())
-		end)
+	local promptFrame = BonusRollFrame.PromptFrame
+	B.ReskinIcon(promptFrame.Icon)
+	promptFrame.Timer.Bar:SetTexture(DB.normTex)
+	B.CreateBDFrame(promptFrame.Timer, .25)
 
-		B.ReskinIcon(frame.PromptFrame.Icon)
-		frame.PromptFrame.Timer.Bar:SetTexture(DB.normTex)
-		B.SetBD(frame)
-		B.CreateBDFrame(frame.PromptFrame.Timer, .25)
-
-		local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"
-		BONUS_ROLL_COST = BONUS_ROLL_COST:gsub(from, to)
-		BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
-	end
+	local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"
+	BONUS_ROLL_COST = BONUS_ROLL_COST:gsub(from, to)
+	BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
 	-- Loot Roll Frame
 
@@ -105,6 +102,17 @@ tinsert(C.defaultThemes, function()
 				local color = DB.QualityColors[quality]
 				frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
+		end
+	end)
+
+	-- Bossbanner
+
+	hooksecurefunc("BossBanner_ConfigureLootFrame", function(lootFrame)
+		if not lootFrame.bg then
+			local iconHitBox = lootFrame.IconHitBox
+			iconHitBox.bg = B.ReskinIcon(lootFrame.Icon)
+			iconHitBox.IconBorder:SetTexture(nil)
+			B.ReskinIconBorder(iconHitBox.IconBorder, true)
 		end
 	end)
 end)
