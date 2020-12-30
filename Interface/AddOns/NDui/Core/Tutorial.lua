@@ -21,7 +21,6 @@ local function ForceDefaultSettings()
 	SetCVar("lockActionBars", 1)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
-	SetCVar("WorldTextScale", 1.2)
 	SetCVar("cameraDistanceMaxZoomFactor", 2.6)
 	SetCVar("floatingCombatTextFloatMode", 1)
 	SetCVar("floatingCombatTextCombatDamage", 1)
@@ -37,6 +36,7 @@ local function ForceDefaultSettings()
 	end
 	if DB.isDeveloper then
 		SetCVar("ffxGlow", 0)
+		SetCVar("WorldTextScale", 1.2)
 		SetCVar("SpellQueueWindow", 100)
 	end
 end
