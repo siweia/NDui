@@ -157,6 +157,7 @@ local list = {
 		{AuraID = 116849, UnitID = "player"},	-- 作茧缚命
 		{AuraID = 204018, UnitID = "player"},	-- 破咒祝福
 		{AuraID = 102342, UnitID = "player"},	-- 铁木树皮
+		{AuraID = 145629, UnitID = "player"},	-- 反魔法领域
 		{AuraID = 156910, UnitID = "player"},	-- 信仰道标
 		{AuraID = 192082, UnitID = "player"},	-- 狂风图腾
 		{AuraID = 201633, UnitID = "player"},	-- 大地图腾
