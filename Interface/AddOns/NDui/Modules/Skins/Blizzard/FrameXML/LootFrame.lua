@@ -107,12 +107,17 @@ tinsert(C.defaultThemes, function()
 
 	-- Bossbanner
 
+	local function updateBGAlpha(border, alpha)
+		border:GetParent().bg:SetAlpha(alpha)
+	end
+
 	hooksecurefunc("BossBanner_ConfigureLootFrame", function(lootFrame)
 		if not lootFrame.bg then
 			local iconHitBox = lootFrame.IconHitBox
 			iconHitBox.bg = B.ReskinIcon(lootFrame.Icon)
 			iconHitBox.IconBorder:SetTexture(nil)
 			B.ReskinIconBorder(iconHitBox.IconBorder, true)
+			hooksecurefunc(iconHitBox.IconBorder, "SetAlpha", updateBGAlpha)
 		end
 	end)
 end)
