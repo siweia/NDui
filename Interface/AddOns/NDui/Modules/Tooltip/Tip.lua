@@ -595,7 +595,8 @@ TT:RegisterTooltips("NDui", function()
 		end)
 	end
 
-	if IsAddOnLoaded("MythicDungeonTools") then
+	-- MDT and DT
+	if MDT and MDT.ShowInterface then
 		local styledMDT
 		hooksecurefunc(MDT, "ShowInterface", function()
 			if not styledMDT then
