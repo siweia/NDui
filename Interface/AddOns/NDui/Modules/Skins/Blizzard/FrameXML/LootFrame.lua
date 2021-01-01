@@ -115,6 +115,7 @@ tinsert(C.defaultThemes, function()
 		if not lootFrame.bg then
 			local iconHitBox = lootFrame.IconHitBox
 			iconHitBox.bg = B.ReskinIcon(lootFrame.Icon)
+			iconHitBox.bg:SetAlpha(0)
 			iconHitBox.IconBorder:SetTexture(nil)
 			B.ReskinIconBorder(iconHitBox.IconBorder, true)
 
