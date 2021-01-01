@@ -1,11 +1,17 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function HideIconBG(anim)
+	anim.__owner.IconHitBox.bg:SetAlpha(0)
+end
+
+local function ShowIconBG(anim)
+	anim.__owner.IconHitBox.bg:SetAlpha(1)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["Loot"] then return end
-
-	LootFramePortraitOverlay:Hide()
 
 	hooksecurefunc("LootFrame_UpdateButton", function(index)
 		local ic = _G["LootButton"..index.."IconTexture"]
@@ -46,9 +52,9 @@ tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(LootFrame)
 	B.ReskinArrow(LootFrameUpButton, "up")
 	B.ReskinArrow(LootFrameDownButton, "down")
+	LootFramePortraitOverlay:Hide()
 
 	-- Bonus roll
-
 	BonusRollFrame.Background:SetAlpha(0)
 	BonusRollFrame.IconBorder:Hide()
 	BonusRollFrame.BlackBackgroundHoist.Background:Hide()
@@ -73,7 +79,6 @@ tinsert(C.defaultThemes, function()
 	BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
 	-- Loot Roll Frame
-
 	hooksecurefunc("GroupLootFrame_OpenNewFrame", function()
 		for i = 1, NUM_GROUP_LOOT_FRAMES do
 			local frame = _G["GroupLootFrame"..i]
@@ -106,18 +111,16 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Bossbanner
-
-	local function updateBGAlpha(border, alpha)
-		border:GetParent().bg:SetAlpha(alpha)
-	end
-
 	hooksecurefunc("BossBanner_ConfigureLootFrame", function(lootFrame)
 		if not lootFrame.bg then
 			local iconHitBox = lootFrame.IconHitBox
 			iconHitBox.bg = B.ReskinIcon(lootFrame.Icon)
 			iconHitBox.IconBorder:SetTexture(nil)
 			B.ReskinIconBorder(iconHitBox.IconBorder, true)
-			hooksecurefunc(iconHitBox.IconBorder, "SetAlpha", updateBGAlpha)
+
+			lootFrame.Anim.__owner = lootFrame
+			lootFrame.Anim:HookScript("OnPlay", HideIconBG)
+			lootFrame.Anim:HookScript("OnFinished", ShowIconBG)
 		end
 	end)
 end)
