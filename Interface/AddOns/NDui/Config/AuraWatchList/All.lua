@@ -241,7 +241,7 @@ local list = {
 		{AuraID = 345561, UnitID = "target", Value = true},	-- 晋升，生命连结
 		{AuraID = 317936, UnitID = "target"},	-- 晋升，弃誓信条
 		{AuraID = 327812, UnitID = "target"},	-- 晋升，振奋英气
-		{AuraID = 323149, UnitID = "target", Value = true},	-- 仙林，黑暗之拥
+		{AuraID = 323149, UnitID = "target"},	-- 仙林，黑暗之拥
 		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
 		{AuraID = 323059, UnitID = "target", Flash = true},	-- 仙林，宗主之怒
 		{AuraID = 336499, UnitID = "target"},	-- 仙林，猜谜游戏
