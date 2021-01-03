@@ -5,7 +5,11 @@ tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	for i = 1, 4 do
-		B.ReskinTab(_G["FriendsFrameTab"..i])
+		local tab = _G["FriendsFrameTab"..i]
+		if tab then
+			B.ReskinTab(tab)
+			B.ResetTabAnchor(tab)
+		end
 	end
 	FriendsFrameIcon:Hide()
 	B.StripTextures(IgnoreListFrame)
