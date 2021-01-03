@@ -425,7 +425,7 @@ function G:ExportGUIData()
 	end
 
 	for KEY, VALUE in pairs(NDuiADB) do
-		if KEY == "RaidAuraWatch" or KEY == "CustomJunkList" then
+		if KEY == "RaidAuraWatch" then
 			text = text..";ACCOUNT:"..KEY
 			for spellID in pairs(VALUE) do
 				text = text..":"..spellID
@@ -570,7 +570,7 @@ function G:ImportGUIData()
 			itemID = tonumber(itemID)
 			C.db[key][spellID] = {spellID, duration, indicator, unit, itemID}
 		elseif key == "ACCOUNT" then
-			if value == "RaidAuraWatch" or value == "CustomJunkList" then
+			if value == "RaidAuraWatch" then
 				local spells = {select(3, strsplit(":", option))}
 				for _, spellID in next, spells do
 					NDuiADB[value][tonumber(spellID)] = true
