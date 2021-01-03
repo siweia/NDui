@@ -79,6 +79,7 @@ tinsert(C.defaultThemes, function()
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
 		slot.bg = B.CreateBDFrame(slot.icon, .25)
+		slot.bg:SetFrameLevel(3) -- higher than portrait
 		cooldown:SetInside()
 
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
