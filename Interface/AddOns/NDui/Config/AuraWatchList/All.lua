@@ -185,6 +185,7 @@ local list = {
 		{AuraID = 327107, UnitID = "player"},	-- 赤红，闪耀光辉
 		{AuraID = 324092, UnitID = "player", Flash = true},	-- 赤红，闪耀光辉
 		{AuraID = 328737, UnitID = "player", Flash = true},	-- 赤红，光辉残片
+		{AuraID = 326891, UnitID = "player", Flash = true},	-- 赎罪大厅，痛楚
 		{AuraID = 333299, UnitID = "player"},	-- 伤逝剧场，荒芜诅咒
 		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
 		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
@@ -233,6 +234,7 @@ local list = {
 		{AuraID = 320132, UnitID = "target"},	-- 彼界，暗影之怒
 		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
 		{AuraID = 331275, UnitID = "target", Flash = true},	-- 伤逝剧场，不灭护卫
+		{AuraID = 330725, UnitID = "target", Flash = true},	-- 伤逝剧场，暗影易伤
 		{AuraID = 336449, UnitID = "target"},	-- 凋魂，玛卓克萨斯之墓
 		{AuraID = 336451, UnitID = "target"},	-- 凋魂，玛卓克萨斯之壁
 		{AuraID = 333737, UnitID = "target"},	-- 凋魂，凝结之疾
