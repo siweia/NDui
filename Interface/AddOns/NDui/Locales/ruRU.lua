@@ -394,6 +394,7 @@ L["WheelDown"] = "КолёсикоВниз"
 L["Wheel"] = "Колёсико"
 L["ExplosivesScale"] = "Масштаб индикаторов для сфер"
 L["DPS Revert Threat"] = "Обратить цвета, если не танк"
+L["RevertThreatTip"] = "|nIf 'Force TankMode Colored' enabled, swap their threat status color for non-tank classes." -- need translation
 L["Secure Color"] = "Безопасный цвет"
 L["Trans Color"] = "Переходный цвет"
 L["Insecure Color"] = "Небезопасный"
