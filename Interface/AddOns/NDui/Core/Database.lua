@@ -128,11 +128,6 @@ B:RegisterEvent("PLAYER_TALENT_UPDATE", CheckRole)
 -- Raidbuff Checklist
 DB.BuffList = {
 	[1] = {		-- 合剂
-		298836,	-- 敏捷360
-		298837,	-- 智力360
-		298839,	-- 耐力360
-		298841,	-- 力量360
-
 		307166,	-- 大锅
 		307185,	-- 通用合剂
 		307187,	-- 耐力合剂
