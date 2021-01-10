@@ -514,10 +514,6 @@ function G:SetupPartyWatcher(parent)
 	end)
 
 	local menuList = {}
-	local function addIcon(texture)
-		texture = texture and "|T"..texture..":12:12:0:0:50:50:4:46:4:46|t " or ""
-		return texture
-	end
 	local function AddSpellFromPreset(_, spellID, duration)
 		options[1]:SetText(spellID)
 		options[2]:SetText(duration)
@@ -529,10 +525,22 @@ function G:SetupPartyWatcher(parent)
 		local color = B.HexRGB(B.ClassColor(class))
 		local localClassName = LOCALIZED_CLASS_NAMES_MALE[class]
 		menuList[index] = {text = color..localClassName, notCheckable = true, hasArrow = true, menuList = {}}
+
 		for spellID, duration in pairs(value) do
 			local spellName, _, texture = GetSpellInfo(spellID)
 			if spellName then
-				tinsert(menuList[index].menuList, {text = addIcon(texture)..spellName, notCheckable = true, arg1 = spellID, arg2 = duration, func = AddSpellFromPreset})
+				tinsert(menuList[index].menuList, {
+					text = spellName,
+					icon = texture,
+					tCoordLeft = .08,
+					tCoordRight = .92,
+					tCoordTop = .08,
+					tCoordBottom = .92,
+					arg1 = spellID,
+					arg2 = duration,
+					func = AddSpellFromPreset,
+					notCheckable = true,
+				})
 			end
 		end
 		index = index + 1
