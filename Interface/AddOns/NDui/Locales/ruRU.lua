@@ -124,6 +124,7 @@ L["RaidAuras ClickThrough"] = "Отключить подсказки аур"
 L["Horizon RaidFrame"] = "Горизонтальные рамки рейда"
 L["SimpleMode Scale"] = "Масштаб простого режима"
 L["Spec RaidPos"] = "Сохранять позиции по специальностям"
+L["SpecRaidPosTip"] = "|nIf enabled, the partyframes and raidframes would save their anchors for each spec." -- need translation
 L["Lock Chat"] = "Заблокировать настройки чата"
 L["Chat Sticky"] = "Оставаться в /w если шепчетесь."
 L["Whisper Invite"] = "Инвайт в шёпот"

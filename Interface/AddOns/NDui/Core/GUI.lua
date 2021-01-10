@@ -835,7 +835,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{},--blank
 		{1, "UFs", "ShowSolo", L["ShowSolo"], nil, nil, nil, L["ShowSoloTip"]},
-		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true},
+		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
 		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"]},
 		{1, "UFs", "FrequentHealth", HeaderTag..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
 		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
