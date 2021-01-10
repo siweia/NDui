@@ -730,3 +730,4 @@ L["MawThreatBarTip"] = "|n启用后，禁用系统的噬渊威胁值信息，改
 L["ColoredTarget"] = "染色目标姓名板"
 L["ColoredTargetTip"] = "|n启用后，染色你当前的目标姓名板，优先级高于自定义及仇恨染色。|n你可以在下面的选项中自定义这个颜色。"
 L["TargetNP Color"] = "目标姓名板颜色"
+L["GUIPanelHelp"] = "你可以在这里查看控制台帮助信息。"

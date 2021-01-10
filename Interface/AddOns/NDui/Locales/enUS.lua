@@ -730,3 +730,4 @@ L["MawThreatBarTip"] = "|nIf enabled, disable default threat status UI in maw, a
 L["ColoredTarget"] = "Colored Target Nameplate"
 L["ColoredTargetTip"] = "|nIf enabled, colored your target nameplate, its priority is higher than custom color and threat color.|nYou can customize your color below."
 L["TargetNP Color"] = "Target Nameplate Color"
+L["GUIPanelHelp"] = "More help info for GUI panel."
