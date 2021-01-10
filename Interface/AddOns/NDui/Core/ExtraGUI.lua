@@ -473,8 +473,9 @@ function G:SetupPartyWatcher(parent)
 	options[2] = G:CreateEditbox(frame, L["Cooldown*"], 120, -30, L["Cooldown Intro"])
 
 	local scroll = G:CreateScroll(frame, 240, 410)
-	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
+	scroll.reset = B.CreateButton(frame, 55, 25, RESET)
 	scroll.reset:SetPoint("TOPLEFT", 10, -80)
+	scroll.reset.text:SetTextColor(1, 0, 0)
 	StaticPopupDialogs["RESET_NDUI_PARTYWATCHER"] = {
 		text = L["Reset your raiddebuffs list?"],
 		button1 = YES,
@@ -500,16 +501,47 @@ function G:SetupPartyWatcher(parent)
 		clearEdit(options)
 	end
 
-	scroll.add = B.CreateButton(frame, 70, 25, ADD)
+	scroll.add = B.CreateButton(frame, 55, 25, ADD)
 	scroll.add:SetPoint("TOPRIGHT", -10, -80)
 	scroll.add:SetScript("OnClick", function()
 		addClick(scroll, options)
 	end)
 
-	scroll.clear = B.CreateButton(frame, 70, 25, KEY_NUMLOCK_MAC)
-	scroll.clear:SetPoint("RIGHT", scroll.add, "LEFT", -10, 0)
+	scroll.clear = B.CreateButton(frame, 55, 25, KEY_NUMLOCK_MAC)
+	scroll.clear:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
 	scroll.clear:SetScript("OnClick", function()
 		clearEdit(options)
+	end)
+
+	local menuList = {}
+	local function addIcon(texture)
+		texture = texture and "|T"..texture..":12:12:0:0:50:50:4:46:4:46|t " or ""
+		return texture
+	end
+	local function AddSpellFromPreset(_, spellID, duration)
+		options[1]:SetText(spellID)
+		options[2]:SetText(duration)
+		DropDownList1:Hide()
+	end
+
+	local index = 1
+	for class, value in pairs(C.PartySpellsDB) do
+		local color = B.HexRGB(B.ClassColor(class))
+		local localClassName = LOCALIZED_CLASS_NAMES_MALE[class]
+		menuList[index] = {text = color..localClassName, notCheckable = true, hasArrow = true, menuList = {}}
+		for spellID, duration in pairs(value) do
+			local spellName, _, texture = GetSpellInfo(spellID)
+			if spellName then
+				tinsert(menuList[index].menuList, {text = addIcon(texture)..spellName, notCheckable = true, arg1 = spellID, arg2 = duration, func = AddSpellFromPreset})
+			end
+		end
+		index = index + 1
+	end
+	scroll.preset = B.CreateButton(frame, 55, 25, L["Preset"])
+	scroll.preset:SetPoint("RIGHT", scroll.clear, "LEFT", -5, 0)
+	scroll.preset.text:SetTextColor(1, .8, 0)
+	scroll.preset:SetScript("OnClick", function(self)
+		EasyMenu(menuList, B.EasyMenu, self, -100, 100, "MENU", 1)
 	end)
 
 	for spellID, duration in pairs(C.PartySpells) do

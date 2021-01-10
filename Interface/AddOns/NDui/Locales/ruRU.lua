@@ -731,3 +731,4 @@ L["ColoredTarget"] = "Colored Target Nameplate" -- need translation
 L["ColoredTargetTip"] = "|nIf enabled, colored your target nameplate, its priority is higher than custom color and threat color.|nYou can customize your color below." -- need translation
 L["TargetNP Color"] = "Target Nameplate Color" -- need translation
 L["GUIPanelHelp"] = "More help info for GUI panel." -- need translation
+L["Preset"] = "Preset" -- need translation
