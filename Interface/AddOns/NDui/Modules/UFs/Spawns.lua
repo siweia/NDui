@@ -128,6 +128,7 @@ local function CreateBossStyle(self)
 	UF:CreateAltPower(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
+	UF:CreateClickSets(self)
 end
 
 local function CreateArenaStyle(self)
