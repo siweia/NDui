@@ -416,12 +416,17 @@ function G:SetupClickCast(parent)
 	end
 end
 
+local function updatePartyWatcherSpells()
+	B:GetModule("UnitFrames"):UpdatePartyWatcherSpells()
+end
+
 function G:SetupPartyWatcher(parent)
 	local guiName = "NDuiGUI_PartyWatcher"
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
 	local panel = createExtraGUI(parent, guiName, L["AddPartyWatcher"].."*", true)
+	panel:SetScript("OnHide", updatePartyWatcherSpells)
 
 	local barTable = {}
 	local ARCANE_TORRENT = GetSpellInfo(25046)
@@ -440,7 +445,11 @@ function G:SetupPartyWatcher(parent)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID, "system")
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			NDuiADB["PartyWatcherSpells"][spellID] = nil
+			if C.PartySpells[spellID] then
+				NDuiADB["PartySpells"][spellID] = 0
+			else
+				NDuiADB["PartySpells"][spellID] = nil
+			end
 			barTable[spellID] = nil
 			sortBars(barTable)
 		end)
@@ -471,7 +480,7 @@ function G:SetupPartyWatcher(parent)
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			wipe(NDuiADB["PartyWatcherSpells"])
+			wipe(NDuiADB["PartySpells"])
 			ReloadUI()
 		end,
 		whileDead = 1,
@@ -484,9 +493,9 @@ function G:SetupPartyWatcher(parent)
 		local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
 		if not spellID or not duration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 		if not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		if NDuiADB["PartyWatcherSpells"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+		if NDuiADB["PartySpells"][spellID] and NDuiADB["PartySpells"][spellID] ~= 0 then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-		NDuiADB["PartyWatcherSpells"][spellID] = duration
+		NDuiADB["PartySpells"][spellID] = duration
 		createBar(scroll.child, spellID, duration)
 		clearEdit(options)
 	end
@@ -503,8 +512,19 @@ function G:SetupPartyWatcher(parent)
 		clearEdit(options)
 	end)
 
-	for spellID, duration in pairs(NDuiADB["PartyWatcherSpells"]) do
-		createBar(scroll.child, spellID, duration)
+	for spellID, duration in pairs(C.PartySpells) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			local modDuration = NDuiADB["PartySpells"][spellID]
+			if not modDuration or modDuration > 0 then
+				createBar(scroll.child, spellID, duration)
+			end
+		end
+	end
+	for spellID, duration in pairs(NDuiADB["PartySpells"]) do
+		if duration > 0 then
+			createBar(scroll.child, spellID, duration)
+		end
 	end
 end
 

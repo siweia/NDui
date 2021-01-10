@@ -374,12 +374,12 @@ G.AccountSettings = {
 	KeystoneInfo = {},
 	AutoBubbles = false,
 	DisableInfobars = false,
-	PartyWatcherSpells = {},
 	ContactList = {},
 	CustomJunkList = {},
 	ProfileIndex = {},
 	ProfileNames = {},
 	Help = {},
+	PartySpells = {},
 }
 
 -- Initial settings

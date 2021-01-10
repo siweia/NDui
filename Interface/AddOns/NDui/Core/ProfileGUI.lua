@@ -452,7 +452,7 @@ function G:ExportGUIData()
 					end
 				end
 			end
-		elseif KEY == "PartyWatcherSpells" then
+		elseif KEY == "PartySpells" then
 			text = text..";ACCOUNT:"..KEY
 			for spellID, duration in pairs(VALUE) do
 				local name = GetSpellInfo(spellID)
@@ -593,7 +593,7 @@ function G:ImportGUIData()
 				filter = toBoolean(filter)
 				if not NDuiADB[value][class] then NDuiADB[value][class] = {} end
 				NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
-			elseif value == "PartyWatcherSpells" then
+			elseif value == "PartySpells" then
 				local options = {strsplit(":", option)}
 				local index = 3
 				local spellID = options[index]

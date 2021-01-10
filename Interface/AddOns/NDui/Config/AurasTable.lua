@@ -103,13 +103,16 @@ function module:RegisterDebuff(_, instID, _, spellID, level)
 end
 
 -- Party watcher spells
-function module:UpdatePartyWatcherSpells()
-	if not next(NDuiADB["PartyWatcherSpells"]) then
-		for spellID, duration in pairs(C.PartySpells) do
-			local name = GetSpellInfo(spellID)
-			if name then
-				NDuiADB["PartyWatcherSpells"][spellID] = duration
+function module:CheckPartySpells()
+	for spellID, duration in pairs(C.PartySpells) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			local modDuration = NDuiADB["PartySpells"][spellID]
+			if modDuration and modDuration == duration then 
+				NDuiADB["PartySpells"][spellID] = nil
 			end
+		else
+			if DB.isDeveloper then print("Invalid partyspell ID: "..spellID) end
 		end
 	end
 end
@@ -138,7 +141,7 @@ function module:OnLogin()
 		B.CopyTable(C.CornerBuffs[DB.MyClass], NDuiADB["CornerBuffs"][DB.MyClass])
 	end
 
-	self:UpdatePartyWatcherSpells()
+	self:CheckPartySpells()
 
 	-- Filter bloodlust for healers
 	local bloodlustList = {57723, 57724, 80354, 264689}
