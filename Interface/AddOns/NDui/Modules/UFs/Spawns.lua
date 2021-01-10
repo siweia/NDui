@@ -306,6 +306,7 @@ function UF:OnLogin()
 		end
 
 		-- Group Styles
+		local partyMover
 		if showPartyFrame then
 			UF:SyncWithZenTracker()
 
@@ -335,7 +336,7 @@ function UF:OnLogin()
 			self:SetHeight(%d)
 			]]):format(partyWidth, partyFrameHeight))
 
-			local partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0}, moverWidth, moverHeight)
+			partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0}, moverWidth, moverHeight)
 			party:ClearAllPoints()
 			party:SetPoint("BOTTOMLEFT", partyMover)
 
@@ -500,29 +501,47 @@ function UF:OnLogin()
 
 		UF:UpdateRaidHealthMethod()
 
-		if raidMover then
-			if not C.db["UFs"]["SpecRaidPos"] then return end
-
+		if C.db["UFs"]["SpecRaidPos"] then
 			local function UpdateSpecPos(event, ...)
 				local unit, _, spellID = ...
-				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "PLAYER_ENTERING_WORLD" then
-					if not GetSpecialization() then return end
+				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "ON_LOGIN" then
 					local specIndex = GetSpecialization()
+					if not specIndex then return end
+
 					if not C.db["Mover"]["RaidPos"..specIndex] then
 						C.db["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
 					end
-					raidMover:ClearAllPoints()
-					raidMover:SetPoint(unpack(C.db["Mover"]["RaidPos"..specIndex]))
+					if raidMover then
+						raidMover:ClearAllPoints()
+						raidMover:SetPoint(unpack(C.db["Mover"]["RaidPos"..specIndex]))
+					end
+
+					if not C.db["Mover"]["PartyPos"..specIndex] then
+						C.db["Mover"]["PartyPos"..specIndex] = {"LEFT", "UIParent", "LEFT", 350, 0}
+					end
+					if partyMover then
+						partyMover:ClearAllPoints()
+						partyMover:SetPoint(unpack(C.db["Mover"]["PartyPos"..specIndex]))
+					end
 				end
 			end
-			B:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateSpecPos)
+			UpdateSpecPos("ON_LOGIN")
 			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos)
 
-			raidMover:HookScript("OnDragStop", function()
-				if not GetSpecialization() then return end
-				local specIndex = GetSpecialization()
-				C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
-			end)
+			if raidMover then
+				raidMover:HookScript("OnDragStop", function()
+					local specIndex = GetSpecialization()
+					if not specIndex then return end
+					C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
+				end)
+			end
+			if partyMover then
+				partyMover:HookScript("OnDragStop", function()
+					local specIndex = GetSpecialization()
+					if not specIndex then return end
+					C.db["Mover"]["PartyPos"..specIndex] = C.db["Mover"]["PartyFrame"]
+				end)
+			end
 		end
 	end
 end
