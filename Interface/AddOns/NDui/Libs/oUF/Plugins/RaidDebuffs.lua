@@ -180,8 +180,8 @@ local function Update(self, _, unit)
 
 		if rd.ShowDispellableDebuff and debuffType and (not isCharmed) and (not canAttack) then
 			if rd.FilterDispellableDebuff then
-				prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or 2
-				if prio == 2 then debuffType = nil end
+				prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or invalidPrio
+				if prio == invalidPrio then debuffType = nil end
 			else
 				prio = DispellPriority[debuffType]
 			end
