@@ -108,7 +108,7 @@ end
 
 -- Hide boss banner
 function M:ToggleBossBanner()
-	if C.db["Misc"]["HideBanner"] then
+	if C.db["Misc"]["HideBossBanner"] then
 		BossBanner:UnregisterAllEvents()
 	else
 		BossBanner:RegisterEvent("BOSS_KILL")
