@@ -178,7 +178,7 @@ local list = {
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
 		{AuraID = 340880, UnitID = "player"},	-- 傲慢
-		{AuraID = 226512, UnitID = "player"},	-- 血池
+		{AuraID = 226512, UnitID = "player", Flash = true},	-- 血池
 		{AuraID = 240447, UnitID = "player", Flash = true},	-- 践踏
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		-- 5人本
@@ -214,8 +214,10 @@ local list = {
 		{AuraID = 346035, UnitID = "player"},	-- 眩目步法，猩红议会
 		{AuraID = 331636, UnitID = "player", Flash = true},	-- 黑暗伴舞，猩红议会
 		{AuraID = 335293, UnitID = "player"},	-- 锁链联结，泥拳
-		{AuraID = 327039, UnitID = "player"},	-- 喂食时间，德纳修斯
+		{AuraID = 333913, UnitID = "player"},	-- 锁链联结，泥拳
+		{AuraID = 327039, UnitID = "player"},	-- 邪恶撕裂，干将
 		{AuraID = 327089, UnitID = "player"},	-- 喂食时间，德纳修斯
+		{AuraID = 327796, UnitID = "player"},	-- 午夜猎手，德纳修斯
 	},
 	["Warning"] = { -- 目标重要光环组
 		-- 大幻象
