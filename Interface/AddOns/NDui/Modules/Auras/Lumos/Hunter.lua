@@ -10,6 +10,7 @@ function A:PostCreateLumos(self)
 	boom:SetSize(iconSize, iconSize)
 	boom:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
 	B.AuraIcon(boom)
+	boom:Hide()
 
 	self.boom = boom
 end

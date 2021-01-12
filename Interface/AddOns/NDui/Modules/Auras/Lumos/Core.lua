@@ -121,7 +121,8 @@ function A:UpdateTotemAura(button, texture, spellID, glow)
 end
 
 local function UpdateVisibility(self)
-	if InCombatLockdown() then return end
+	if InCombatLockdown() or self.lumos.onFire then return end
+
 	for i = 1, 5 do
 		local bu = self.lumos[i]
 		bu.Count:SetTextColor(1, 1, 1)
@@ -159,6 +160,8 @@ function A:CreateLumos(self)
 	if not A.ChantLumos then return end
 
 	self.lumos = {}
+	self.lumos.onFire = C.db["Nameplate"]["PPOnFire"]
+
 	local iconSize = (C.db["Nameplate"]["PPWidth"]+2*C.mult - C.margin*4)/5
 	for i = 1, 5 do
 		local bu = CreateFrame("Frame", nil, self.Health)
@@ -182,7 +185,11 @@ function A:CreateLumos(self)
 	if A.PostCreateLumos then A:PostCreateLumos(self) end
 
 	UpdateIcons(self)
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", TurnOn, true)
+	if self.lumos.onFire then
+		TurnOn(self)
+	else
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", TurnOn, true)
+	end
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", UpdateIcons, true)
 end
