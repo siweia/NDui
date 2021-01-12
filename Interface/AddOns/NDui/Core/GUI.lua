@@ -732,7 +732,7 @@ G.TabList = {
 	L["Unitframes"],
 	NewFeatureTag..L["RaidFrame"],
 	NewFeatureTag..L["Nameplate"],
-	L["PlayerPlate"],
+	NewFeatureTag..L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
@@ -896,7 +896,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"]},
 		{},--blank
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
-		{1, "Nameplate", "PPOnFire", L["PlayerPlate OnFire"], true, nil, nil, L["PPOnFireTip"]},
+		{1, "Nameplate", "PPOnFire", NewFeatureTag..L["PlayerPlate OnFire"], true, nil, nil, L["PPOnFireTip"]},
 		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], nil},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
