@@ -135,8 +135,12 @@ local function UpdateVisibility(self)
 	if A.PostUpdateVisibility then A:PostUpdateVisibility(self) end
 end
 
+local lumosUnits = {
+	["player"] = true,
+	["target"] = true,
+}
 local function UpdateIcons(self, event, unit)
-	if event == "UNIT_AURA" and unit ~= "player" and unit ~= "target" then return end
+	if event == "UNIT_AURA" and not lumosUnits[unit] then return end
 	A:ChantLumos(self)
 	UpdateVisibility(self)
 end
@@ -154,6 +158,13 @@ local function TurnOff(self)
 	self:UnregisterEvent("SPELL_UPDATE_COOLDOWN", UpdateIcons)
 	self:UnregisterEvent("SPELL_UPDATE_CHARGES", UpdateIcons)
 	UpdateVisibility(self)
+end
+
+local function OnTalentUpdate(self, event)
+	UpdateIcons(self, event)
+	if self.lumos.onFire then
+		if A.PostUpdateVisibility then A:PostUpdateVisibility(self) end
+	end
 end
 
 function A:CreateLumos(self)
@@ -191,5 +202,5 @@ function A:CreateLumos(self)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", TurnOn, true)
 	end
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", UpdateIcons, true)
+	self:RegisterEvent("PLAYER_TALENT_UPDATE", OnTalentUpdate, true)
 end
