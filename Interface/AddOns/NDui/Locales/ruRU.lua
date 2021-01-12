@@ -732,3 +732,4 @@ L["ColoredTargetTip"] = "|nIf enabled, colored your target nameplate, its priori
 L["TargetNP Color"] = "Target Nameplate Color" -- need translation
 L["GUIPanelHelp"] = "More help info for GUI panel." -- need translation
 L["Preset"] = "Preset" -- need translation
+L["InstanceAurasTip"] = "|nShow major debuffs in raid and dungeon.|nOnly show dispellable debuffs if disabled." -- need translation
