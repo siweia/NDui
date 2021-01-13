@@ -552,19 +552,9 @@ function G:SetupPartyWatcher(parent)
 		EasyMenu(menuList, B.EasyMenu, self, -100, 100, "MENU", 1)
 	end)
 
-	for spellID, duration in pairs(C.PartySpells) do
-		local name = GetSpellInfo(spellID)
-		if name then
-			local modDuration = NDuiADB["PartySpells"][spellID]
-			if not modDuration or modDuration > 0 then
-				createBar(scroll.child, spellID, duration)
-			end
-		end
-	end
-	for spellID, duration in pairs(NDuiADB["PartySpells"]) do
-		if duration > 0 then
-			createBar(scroll.child, spellID, duration)
-		end
+	local UF = B:GetModule("UnitFrames")
+	for spellID, duration in pairs(UF.PartyWatcherSpells) do
+		createBar(scroll.child, spellID, duration)
 	end
 end
 

@@ -491,23 +491,23 @@ function UF:RefreshRaidFrameIcons()
 end
 
 -- Partywatcher
-local partyWatcherSpells = {}
+UF.PartyWatcherSpells = {}
 function UF:UpdatePartyWatcherSpells()
-	wipe(partyWatcherSpells)
+	wipe(UF.PartyWatcherSpells)
 
 	for spellID, duration in pairs(C.PartySpells) do
 		local name = GetSpellInfo(spellID)
 		if name then
 			local modDuration = NDuiADB["PartySpells"][spellID]
 			if not modDuration or modDuration > 0 then
-				partyWatcherSpells[spellID] = duration
+				UF.PartyWatcherSpells[spellID] = duration
 			end
 		end
 	end
 
 	for spellID, duration in pairs(NDuiADB["PartySpells"]) do
 		if duration > 0 then
-			partyWatcherSpells[spellID] = duration
+			UF.PartyWatcherSpells[spellID] = duration
 		end
 	end
 end
@@ -633,7 +633,7 @@ function UF:InterruptIndicator(self)
 	end
 
 	buttons.__max = maxIcons
-	buttons.PartySpells = partyWatcherSpells
+	buttons.PartySpells = UF.PartyWatcherSpells
 	buttons.TalentCDFix = C.TalentCDFix
 	self.PartyWatcher = buttons
 	if C.db["UFs"]["PartyWatcherSync"] then
