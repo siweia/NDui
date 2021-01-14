@@ -357,13 +357,33 @@ function UF:BuffIndicatorOnUpdate(elapsed)
 	B.CooldownOnUpdate(self, elapsed, true)
 end
 
+UF.CornerSpells = {}
+function UF:UpdateCornerSpells()
+	wipe(UF.CornerSpells)
+
+	for spellID, value in pairs(C.CornerBuffs[DB.MyClass]) do
+		local modData = NDuiADB["CornerSpells"][DB.MyClass]
+		if not (modData and modData[spellID]) then
+			local r, g, b = unpack(value[2])
+			UF.CornerSpells[spellID] = {value[1], {r, g, b}, value[3]}
+		end
+	end
+
+	for spellID, value in pairs(NDuiADB["CornerSpells"][DB.MyClass]) do
+		if next(value) then
+			local r, g, b = unpack(value[2])
+			UF.CornerSpells[spellID] = {value[1], {r, g, b}, value[3]}
+		end
+	end
+end
+
 local found = {}
 local auraFilter = {"HELPFUL", "HARMFUL"}
 
 function UF:UpdateBuffIndicator(event, unit)
 	if event == "UNIT_AURA" and self.unit ~= unit then return end
 
-	local spellList = NDuiADB["CornerBuffs"][DB.MyClass]
+	local spellList = UF.CornerSpells
 	local buttons = self.BuffIndicator
 	unit = self.unit
 

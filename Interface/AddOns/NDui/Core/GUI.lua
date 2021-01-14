@@ -369,7 +369,6 @@ G.AccountSettings = {
 	SkadaRequest = false,
 	BWRequest = false,
 	RaidAuraWatch = {},
-	CornerBuffs = {},
 	RaidClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},
@@ -381,6 +380,7 @@ G.AccountSettings = {
 	ProfileNames = {},
 	Help = {},
 	PartySpells = {},
+	CornerSpells = {},
 }
 
 -- Initial settings

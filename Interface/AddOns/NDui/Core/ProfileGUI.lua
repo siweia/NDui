@@ -443,7 +443,7 @@ function G:ExportGUIData()
 					text = text..":"..spellID
 				end
 			end
-		elseif KEY == "CornerBuffs" then
+		elseif KEY == "CornerSpells" then
 			for class, value in pairs(VALUE) do
 				for spellID, data in pairs(value) do
 					if not bloodlustFilter[spellID] and class == DB.MyClass then
@@ -584,7 +584,7 @@ function G:ImportGUIData()
 				for _, spellID in next, spells do
 					NDuiADB[value][tonumber(arg1)][tonumber(spellID)] = true
 				end
-			elseif value == "CornerBuffs" then
+			elseif value == "CornerSpells" then
 				local class, spellID, anchor, r, g, b, filter = select(3, strsplit(":", option))
 				spellID = tonumber(spellID)
 				r = tonumber(r)

@@ -310,6 +310,7 @@ function UF:OnLogin()
 		if showPartyFrame then
 			UF:SyncWithZenTracker()
 			UF:UpdatePartyWatcherSpells()
+			UF:UpdateCornerSpells()
 
 			oUF:RegisterStyle("Party", CreatePartyStyle)
 			oUF:SetActiveStyle("Party")

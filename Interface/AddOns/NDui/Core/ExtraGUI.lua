@@ -627,12 +627,17 @@ function G:SetupNameplateFilter(parent)
 	end
 end
 
+local function updateCornerSpells()
+	B:GetModule("UnitFrames"):UpdateCornerSpells()
+end
+
 function G:SetupBuffIndicator(parent)
 	local guiName = "NDuiGUI_BuffIndicator"
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
 	local panel = createExtraGUI(parent, guiName)
+	panel:SetScript("OnHide", updateCornerSpells)
 
 	local frameData = {
 		[1] = {text = L["RaidBuffWatch"].."*", offset = -25, width = 160, barList = {}},
@@ -664,7 +669,12 @@ function G:SetupBuffIndicator(parent)
 			if index == 1 then
 				NDuiADB["RaidAuraWatch"][spellID] = nil
 			else
-				NDuiADB["CornerBuffs"][DB.MyClass][spellID] = nil
+				local value = C.CornerBuffs[DB.MyClass][spellID]
+				if value then
+					NDuiADB["CornerSpells"][DB.MyClass][spellID] = {}
+				else
+					NDuiADB["CornerSpells"][DB.MyClass][spellID] = nil
+				end
 			end
 			frameData[index].barList[spellID] = nil
 			sortBars(frameData[index].barList)
@@ -690,9 +700,10 @@ function G:SetupBuffIndicator(parent)
 		else
 			anchor, r, g, b = parent.dd.Text:GetText(), parent.swatch.tex:GetColor()
 			showAll = parent.showAll:GetChecked() or nil
-			if NDuiADB["CornerBuffs"][DB.MyClass][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+			local modValue = NDuiADB["CornerSpells"][DB.MyClass][spellID]
+			if modValue and modValue[1] or C.CornerBuffs[DB.MyClass][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 			anchor = decodeAnchor[anchor]
-			NDuiADB["CornerBuffs"][DB.MyClass][spellID] = {anchor, {r, g, b}, showAll}
+			NDuiADB["CornerSpells"][DB.MyClass][spellID] = {anchor, {r, g, b}, showAll}
 		end
 		createBar(parent.child, index, spellID, anchor, r, g, b, showAll)
 		parent.box:SetText("")
@@ -707,7 +718,7 @@ function G:SetupBuffIndicator(parent)
 			if currentIndex == 1 then
 				NDuiADB["RaidAuraWatch"] = nil
 			else
-				NDuiADB["CornerBuffs"][DB.MyClass] = nil
+				wipe(NDuiADB["CornerSpells"][DB.MyClass])
 			end
 			ReloadUI()
 		end,
@@ -775,9 +786,18 @@ function G:SetupBuffIndicator(parent)
 			B.AddTooltip(showAll, "ANCHOR_TOPRIGHT", L["ShowAllTip"], "info")
 			scroll.showAll = showAll
 
-			for spellID, value in pairs(NDuiADB["CornerBuffs"][DB.MyClass]) do
-				local r, g, b = unpack(value[2])
-				createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])
+			for spellID, value in pairs(C.CornerBuffs[DB.MyClass]) do
+				local modData = NDuiADB["CornerSpells"][DB.MyClass]
+				if not (modData and modData[spellID]) then
+					local r, g, b = unpack(value[2])
+					createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])
+				end
+			end
+			for spellID, value in pairs(NDuiADB["CornerSpells"][DB.MyClass]) do
+				if next(value) then
+					local r, g, b = unpack(value[2])
+					createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])
+				end
 			end
 		end
 	end

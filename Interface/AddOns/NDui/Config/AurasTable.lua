@@ -117,6 +117,26 @@ function module:CheckPartySpells()
 	end
 end
 
+function module:CheckCornerSpells()
+	if not NDuiADB["CornerSpells"][DB.MyClass] then NDuiADB["CornerSpells"][DB.MyClass] = {} end
+	local data = C.CornerBuffs[DB.MyClass]
+	if not data then return end
+
+	for spellID, value in pairs(data) do
+		local name = GetSpellInfo(spellID)
+		if not name then
+			if DB.isDeveloper then print("Invalid cornerspell ID: "..spellID) end
+		end
+	end
+
+	for spellID, value in pairs(NDuiADB["CornerSpells"][DB.MyClass]) do
+		local locValue = C.CornerBuffs[DB.MyClass][spellID]
+		if not next(value) and locValue == nil then
+			NDuiADB["CornerSpells"][DB.MyClass][spellID] = nil
+		end
+	end
+end
+
 function module:OnLogin()
 	for instName, value in pairs(RaidDebuffs) do
 		for spell, priority in pairs(value) do
@@ -131,23 +151,19 @@ function module:OnLogin()
 		end
 	end
 
-	self:AddDeprecatedGroup()
+	module:AddDeprecatedGroup()
 	C.AuraWatchList = AuraWatchList
 	C.RaidBuffs = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
 
-	if not NDuiADB["CornerBuffs"][DB.MyClass] then NDuiADB["CornerBuffs"][DB.MyClass] = {} end
-	if not next(NDuiADB["CornerBuffs"][DB.MyClass]) then
-		B.CopyTable(C.CornerBuffs[DB.MyClass], NDuiADB["CornerBuffs"][DB.MyClass])
-	end
-
-	self:CheckPartySpells()
+	module:CheckPartySpells()
+	module:CheckCornerSpells()
 
 	-- Filter bloodlust for healers
 	local bloodlustList = {57723, 57724, 80354, 264689}
 	local function filterBloodlust()
 		for _, spellID in pairs(bloodlustList) do
-			NDuiADB["CornerBuffs"][DB.MyClass][spellID] = DB.Role ~= "Healer" and {"BOTTOMLEFT", {1, .8, 0}, true} or nil
+			NDuiADB["CornerSpells"][DB.MyClass][spellID] = DB.Role ~= "Healer" and {"BOTTOMLEFT", {1, .8, 0}, true} or nil
 			C.RaidBuffs["WARNING"][spellID] = (DB.Role ~= "Healer")
 		end
 	end
