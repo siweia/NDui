@@ -554,8 +554,10 @@ function G:SetupPartyWatcher(parent)
 	end)
 
 	local UF = B:GetModule("UnitFrames")
-	for spellID, duration in pairs(UF.PartyWatcherSpells) do
-		createBar(scroll.child, spellID, duration)
+	if UF.PartyWatcherSpells then
+		for spellID, duration in pairs(UF.PartyWatcherSpells) do
+			createBar(scroll.child, spellID, duration)
+		end
 	end
 end
 
@@ -786,15 +788,9 @@ function G:SetupBuffIndicator(parent)
 			B.AddTooltip(showAll, "ANCHOR_TOPRIGHT", L["ShowAllTip"], "info")
 			scroll.showAll = showAll
 
-			for spellID, value in pairs(C.CornerBuffs[DB.MyClass]) do
-				local modData = NDuiADB["CornerSpells"][DB.MyClass]
-				if not (modData and modData[spellID]) then
-					local r, g, b = unpack(value[2])
-					createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])
-				end
-			end
-			for spellID, value in pairs(NDuiADB["CornerSpells"][DB.MyClass]) do
-				if next(value) then
+			local UF = B:GetModule("UnitFrames")
+			if UF.CornerSpells then
+				for spellID, value in pairs(UF.CornerSpells) do
 					local r, g, b = unpack(value[2])
 					createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])
 				end

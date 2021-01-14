@@ -130,8 +130,7 @@ function module:CheckCornerSpells()
 	end
 
 	for spellID, value in pairs(NDuiADB["CornerSpells"][DB.MyClass]) do
-		local locValue = C.CornerBuffs[DB.MyClass][spellID]
-		if not next(value) and locValue == nil then
+		if not next(value) and C.CornerBuffs[DB.MyClass][spellID] == nil then
 			NDuiADB["CornerSpells"][DB.MyClass][spellID] = nil
 		end
 	end
