@@ -494,7 +494,8 @@ function G:SetupPartyWatcher(parent)
 		local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
 		if not spellID or not duration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 		if not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		if NDuiADB["PartySpells"][spellID] and NDuiADB["PartySpells"][spellID] ~= 0 then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+		local modDuration = NDuiADB["PartySpells"][spellID]
+		if modDuration and modDuration ~= 0 or C.PartySpells[spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		NDuiADB["PartySpells"][spellID] = duration
 		createBar(scroll.child, spellID, duration)
