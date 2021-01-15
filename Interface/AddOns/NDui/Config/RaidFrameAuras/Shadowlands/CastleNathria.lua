@@ -98,3 +98,4 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 329951) -- 穿刺
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327039) -- 喂食时间
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327089) -- 喂食时间
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 332794) -- 致命灵巧
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 329906) -- 屠戮
