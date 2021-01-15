@@ -735,7 +735,7 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 		if C.db["UFs"]["RaidBuffIndicator"] then
 			return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
 		else
-			return (button.isPlayer or caster == "pet") and NDuiADB["CornerSpells"][DB.MyClass][spellID] or C.RaidBuffs["ALL"][spellID] or C.RaidBuffs["WARNING"][spellID]
+			return (button.isPlayer or caster == "pet") and UF.CornerSpells[spellID] or C.RaidBuffs["ALL"][spellID] or C.RaidBuffs["WARNING"][spellID]
 		end
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if element.__owner.isNameOnly then
