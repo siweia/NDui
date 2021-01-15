@@ -554,10 +554,8 @@ function G:SetupPartyWatcher(parent)
 	end)
 
 	local UF = B:GetModule("UnitFrames")
-	if UF.PartyWatcherSpells then
-		for spellID, duration in pairs(UF.PartyWatcherSpells) do
-			createBar(scroll.child, spellID, duration)
-		end
+	for spellID, duration in pairs(UF.PartyWatcherSpells) do
+		createBar(scroll.child, spellID, duration)
 	end
 end
 
@@ -789,11 +787,9 @@ function G:SetupBuffIndicator(parent)
 			scroll.showAll = showAll
 
 			local UF = B:GetModule("UnitFrames")
-			if UF.CornerSpells then
-				for spellID, value in pairs(UF.CornerSpells) do
-					local r, g, b = unpack(value[2])
-					createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])
-				end
+			for spellID, value in pairs(UF.CornerSpells) do
+				local r, g, b = unpack(value[2])
+				createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])
 			end
 		end
 	end
