@@ -99,3 +99,4 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 327039) -- 喂食时间
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 327089) -- 喂食时间
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 332794) -- 致命灵巧
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 329906) -- 屠戮
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 334016, 6) -- 落选者
