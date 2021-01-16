@@ -296,6 +296,7 @@ function UF:OnLogin()
 
 	if C.db["UFs"]["RaidFrame"] then
 		UF:AddClickSetsListener()
+		UF:UpdateCornerSpells()
 
 		-- Hide Default RaidFrame
 		if CompactRaidFrameManager_SetSetting then
@@ -310,7 +311,6 @@ function UF:OnLogin()
 		if showPartyFrame then
 			UF:SyncWithZenTracker()
 			UF:UpdatePartyWatcherSpells()
-			UF:UpdateCornerSpells()
 
 			oUF:RegisterStyle("Party", CreatePartyStyle)
 			oUF:SetActiveStyle("Party")
