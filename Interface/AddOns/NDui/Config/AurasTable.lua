@@ -117,6 +117,7 @@ function module:CheckPartySpells()
 	end
 end
 
+C.bloodlustID = {57723, 57724, 80354, 264689}
 function module:CheckCornerSpells()
 	if not NDuiADB["CornerSpells"][DB.MyClass] then NDuiADB["CornerSpells"][DB.MyClass] = {} end
 	local data = C.CornerBuffs[DB.MyClass]
@@ -130,7 +131,7 @@ function module:CheckCornerSpells()
 	end
 
 	for spellID, value in pairs(NDuiADB["CornerSpells"][DB.MyClass]) do
-		if not next(value) and C.CornerBuffs[DB.MyClass][spellID] == nil then
+		if not next(value) and C.CornerBuffs[DB.MyClass][spellID] == nil or C.bloodlustID[spellID] then
 			NDuiADB["CornerSpells"][DB.MyClass][spellID] = nil
 		end
 	end
@@ -159,9 +160,8 @@ function module:OnLogin()
 	module:CheckCornerSpells()
 
 	-- Filter bloodlust for healers
-	local bloodlustID = {57723, 57724, 80354, 264689}
 	local function filterBloodlust()
-		for _, spellID in pairs(bloodlustID) do
+		for _, spellID in pairs(C.bloodlustID) do
 			C.RaidBuffs["WARNING"][spellID] = (DB.Role ~= "Healer")
 		end
 	end
