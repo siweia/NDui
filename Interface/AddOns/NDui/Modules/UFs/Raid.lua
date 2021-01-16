@@ -377,9 +377,8 @@ function UF:UpdateCornerSpells()
 	end
 end
 
-local bloodlustID = {57723, 57724, 80354, 264689}
 local bloodlustList = {}
-for _, spellID in pairs(bloodlustID) do
+for _, spellID in pairs(C.bloodlustID) do
 	bloodlustList[spellID] = {"BOTTOMLEFT", {1, .8, 0}, true}
 end
 
@@ -398,7 +397,7 @@ function UF:UpdateBuffIndicator(event, unit)
 		for i = 1, 32 do
 			local name, texture, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
 			if not name then break end
-			local value = spellList[spellID] or (bloodlustList[spellID] and DB.Role ~= "HEALER")
+			local value = spellList[spellID] or (DB.Role ~= "HEALER" and bloodlustList[spellID])
 			if value and (value[3] or caster == "player" or caster == "pet") then
 				local bu = buttons[value[1]]
 				if bu then
