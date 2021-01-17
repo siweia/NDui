@@ -204,10 +204,10 @@ local list = {
 		{AuraID = 327893, UnitID = "player", Flash = true},	-- 彼界，邦桑迪的热情
 		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
 		{AuraID = 323569, UnitID = "player", Flash = true},	-- 彼界，溅洒精魂
+		{AuraID = 334496, UnitID = "player"},	-- 彼界，催眠光粉
 		{AuraID = 328453, UnitID = "player"},	-- 晋升高塔，压迫
 		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
 		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
-		{AuraID = 334496, UnitID = "player"},	-- 仙林，催眠光粉
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
