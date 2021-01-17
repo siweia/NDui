@@ -397,7 +397,7 @@ function UF:UpdateBuffIndicator(event, unit)
 		for i = 1, 32 do
 			local name, texture, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
 			if not name then break end
-			local value = spellList[spellID] or (DB.Role ~= "HEALER" and bloodlustList[spellID])
+			local value = spellList[spellID] or (DB.Role ~= "Healer" and bloodlustList[spellID])
 			if value and (value[3] or caster == "player" or caster == "pet") then
 				local bu = buttons[value[1]]
 				if bu then
