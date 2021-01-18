@@ -1105,6 +1105,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			reskinWidgetFont(copyBox.Intro, 1, 1, 1)
 			reskinWidgetFont(copyBox.FirstInputBoxLabel, 1, .8, 0)
 			reskinWidgetFont(copyBox.SecondInputBoxLabel, 1, .8, 0)
+			reskinWidgetFont(copyBox.VersionText, 1, 1, 1)
 
 			local missionBoard = CovenantMissionFrame.MissionTab.MissionPage.Board
 			for i = 1, missionBoard:GetNumChildren() do
