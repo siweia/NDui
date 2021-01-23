@@ -2,6 +2,10 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
+local oUF = ns.oUF
+local Private = oUF.Private
+local unitExists = Private.unitExists
+
 local _G = getfenv(0)
 local strmatch, tonumber, pairs, unpack, rad = string.match, tonumber, pairs, unpack, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
@@ -144,10 +148,12 @@ function UF:UpdateGroupRoles()
 end
 
 function UF:CheckTankStatus(unit)
-	local index = unit.."target"
-	local unitRole = isInGroup and UnitExists(index) and not UnitIsUnit(index, "player") and groupRoles[UnitName(index)] or "NONE"
+	if not unitExists(unit) then return end
+
+	local unitTarget = unit.."target"
+	local unitRole = isInGroup and unitExists(unitTarget) and not UnitIsUnit(unitTarget, "player") and groupRoles[UnitName(unitTarget)] or "NONE"
 	if unitRole == "TANK" and DB.Role == "Tank" then
-		self.feedbackUnit = index
+		self.feedbackUnit = unitTarget
 		self.isOffTank = true
 	else
 		self.feedbackUnit = "player"
