@@ -191,6 +191,7 @@ local list = {
 		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
 		{AuraID = 330725, UnitID = "player", Flash = true},	-- 伤逝剧场，暗影易伤
 		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
+		{AuraID = 331399, UnitID = "player"},	-- 凋魂之殇，感染毒雨
 		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
 		{AuraID = 323471, UnitID = "player", Flash = true},	-- 通灵战潮，切肉飞刀
 		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
