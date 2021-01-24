@@ -746,7 +746,7 @@ G.TabList = {
 	L["Skins"],
 	L["Tooltip"],
 	NewFeatureTag..L["Misc"],
-	L["UI Settings"],
+	NewFeatureTag..L["UI Settings"],
 	L["Profile"],
 }
 
@@ -1078,7 +1078,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
-		{2, "ACCOUNT", "CustomTex", L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
+		{2, "ACCOUNT", "CustomTex", NewFeatureTag..L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
 	},
 	[15] = {
 	},
