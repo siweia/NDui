@@ -595,6 +595,7 @@ L["BlockStrangerTip"] = "|n启用后，只接受来自队友、好友以及公�
 L["LesserVision"] = "恩佐斯的小幻象"
 L["UFs PartyAltPower"] = "显示小队特殊能量"
 L["BlockInvite"] = "屏蔽陌生人组队邀请"
+L["BlockInviteTip"] = "|n启用后，只接受来自好友以及公会成员的组队邀请。"
 L["BagFilterSetup"] = "背包过滤设置"
 L["FilterJunk"] = "过滤垃圾物品"
 L["FilterAzerite"] = "过滤艾泽里特护甲"

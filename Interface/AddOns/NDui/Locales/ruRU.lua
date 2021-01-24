@@ -595,6 +595,7 @@ L["BlockStrangerTip"] = "|nЕсли выбрано, то принимать со
 L["LesserVision"] = "Малое видение Н'Зота"
 L["UFs PartyAltPower"] = "Альт.ресурс группы"
 L["BlockInvite"] = "Блокировать приглашения от незнакомцев"
+L["BlockInviteTip"] = "|nIf checked, only accept invites from friends and guild members." -- need translation
 L["BagFilterSetup"] = "Настройка фильтра сумок"
 L["FilterJunk"] = "Фильтр хлама"
 L["FilterAzerite"] = "Фильтр азеритовой брони"

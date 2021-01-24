@@ -595,6 +595,7 @@ L["BlockStrangerTip"] = "|nIf checked, only accept whispers from party or raid m
 L["LesserVision"] = "Lesser Vision of N'Zoth"
 L["UFs PartyAltPower"] = "Show Party AltPower"
 L["BlockInvite"] = "Block invite from strangers"
+L["BlockInviteTip"] = "|nIf checked, only accept invites from friends and guild members."
 L["BagFilterSetup"] = "BagFilter Setup"
 L["FilterJunk"] = "Filter junk"
 L["FilterAzerite"] = "Filter azerite armors"
