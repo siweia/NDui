@@ -581,6 +581,7 @@ local unitlessEvents = {
 	NEUTRAL_FACTION_SELECT_RESULT = true,
 	PARTY_LEADER_CHANGED = true,
 	PLAYER_LEVEL_UP = true,
+	PLAYER_TALENT_UPDATE = true,
 	PLAYER_TARGET_CHANGED = true,
 	PLAYER_UPDATE_RESTING = true,
 	RUNE_POWER_UPDATE = true,
@@ -647,7 +648,7 @@ local function getBracketData(tag)
 	-- full tag syntax: '[prefix$>tag-name<$suffix(a,r,g,s)]'
 	local suffixEnd = (tag:match('()%(') or -1) - 1
 
-	local prefixEnd, prefixOffset = tag:match('()%$>'), 1
+	local prefixEnd, prefixOffset = tag:match('()$>'), 1
 	if(not prefixEnd) then
 		prefixEnd = 1
 	else
@@ -655,7 +656,7 @@ local function getBracketData(tag)
 		prefixOffset = 3
 	end
 
-	local suffixStart, suffixOffset = tag:match('%<$()', prefixEnd), 1
+	local suffixStart, suffixOffset = tag:match('<$()', prefixEnd), 1
 	if(not suffixStart) then
 		suffixStart = suffixEnd + 1
 	else
@@ -709,7 +710,7 @@ local function getTagFunc(tagstr)
 							end
 						end
 					elseif(suffixStart - suffixEnd ~= 1) then
-						local suffix = bracket:sub(suffixStart, -2)
+						local suffix = bracket:sub(suffixStart, suffixEnd)
 
 						tagFunc = function(unit, realUnit)
 							local str
@@ -901,7 +902,7 @@ end
 
 local function strip(tag)
 	-- remove prefix, custom args, and suffix
-	return tag:gsub('%[.-%$>', '['):gsub('%(.-%)%]', ']'):gsub('<$.-%]', ']')
+	return tag:gsub('%[.-$>', '['):gsub('%(.-%)%]', ']'):gsub('<$.-%]', ']')
 end
 
 oUF.Tags = {
