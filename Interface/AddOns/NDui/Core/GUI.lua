@@ -382,6 +382,7 @@ G.AccountSettings = {
 	Help = {},
 	PartySpells = {},
 	CornerSpells = {},
+	CustomTex = "",
 }
 
 -- Initial settings
@@ -443,10 +444,14 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	InitialSettings(G.DefaultSettings, C.db, true)
 
 	B:SetupUIScale(true)
-	if not G.TextureList[NDuiADB["TexStyle"]] then
-		NDuiADB["TexStyle"] = 2 -- reset value if not exists
+	if NDuiADB["CustomTex"] ~= "" then
+		DB.normTex = "Interface\\"..NDuiADB["CustomTex"]
+	else
+		if not G.TextureList[NDuiADB["TexStyle"]] then
+			NDuiADB["TexStyle"] = 2 -- reset value if not exists
+		end
+		DB.normTex = G.TextureList[NDuiADB["TexStyle"]].texture
 	end
-	DB.normTex = G.TextureList[NDuiADB["TexStyle"]].texture
 
 	self:UnregisterAllEvents()
 end)
@@ -933,7 +938,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},
 		{1, "Misc", "RMRune", L["Runes Check"].."*"},
 		{1, "Misc", "EasyMarking", L["Easy Mark"].."*", true},
-		{2, "Misc", "DBMCount", L["Countdown Sec"].."*"},
+		{2, "Misc", "DBMCount", L["DBMCount"].."*", nil, nil, nil, L["DBMCountTip"]},
 		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", true, {L["Grids"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid},
 		{},--blank
 		{1, "Misc", "QuestNotification", HeaderTag..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
@@ -978,7 +983,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Chat", "Invite", HeaderTag..L["Whisper Invite"]},
 		{1, "Chat", "GuildInvite", L["Guild Invite Only"].."*"},
-		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", true, nil, updateWhisperList},
+		{2, "Chat", "Keyword", L["Whisper Keyword"].."*", true, nil, updateWhisperList, L["WhisperKeywordTip"]},
 	},
 	[10] = {
 		{1, "Map", "DisableMap", "|cffff0000"..L["DisableMap"], nil, nil, nil, L["DisableMapTip"]},
@@ -1073,6 +1078,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
+		{2, "ACCOUNT", "CustomTex", L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
 	},
 	[15] = {
 	},
@@ -1184,12 +1190,12 @@ local function CreateOption(i)
 				NDUI_VARIABLE(key, value, eb:GetText())
 				if callback then callback() end
 			end)
+
+			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
 			eb.title = L["Tips"]
 			local tip = L["EditBox Tip"]
 			if tooltip then tip = tooltip.."|n"..tip end
 			B.AddTooltip(eb, "ANCHOR_RIGHT", tip, "info")
-
-			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
 		-- Slider
 		elseif optType == 3 then
 			local min, max, step = unpack(data)
