@@ -735,3 +735,5 @@ L["Preset"] = "Пресет"
 L["InstanceAurasTip"] = "|nShow major debuffs in raid and dungeon.|nOnly show dispellable debuffs if disabled." -- need translation
 L["PlayerPlate OnFire"] = "Always refresh auras" -- need translation
 L["PPOnFireTip"] = "|nIf enabled, the auras on playerplate will continue update even out of combat." -- need translation
+L["MDGuildBest"] = "Show Mythic+ GuildBest" -- need translation
+L["MDGuildBestTip"] = "|nShow weekly best in your guild on the mythic keystone panel. And show an icon to record your account keystone info." -- need translation

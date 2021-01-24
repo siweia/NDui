@@ -200,6 +200,8 @@ function M:KeystoneInfo_Update()
 end
 
 function M:GuildBest()
+	if not C.db["Misc"]["MDGuildBest"] then return end
+
 	hasAngryKeystones = IsAddOnLoaded("AngryKeystones")
 	B:RegisterEvent("ADDON_LOADED", M.GuildBest_OnLoad)
 
