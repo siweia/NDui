@@ -183,6 +183,7 @@ local list = {
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		-- 5人本
 		{AuraID = 327107, UnitID = "player"},	-- 赤红，闪耀光辉
+		{AuraID = 340433, UnitID = "player"},	-- 赤红，堕罪之赐
 		{AuraID = 324092, UnitID = "player", Flash = true},	-- 赤红，闪耀光辉
 		{AuraID = 328737, UnitID = "player", Flash = true},	-- 赤红，光辉残片
 		{AuraID = 326891, UnitID = "player", Flash = true},	-- 赎罪大厅，痛楚
@@ -246,6 +247,7 @@ local list = {
 		{AuraID = 321368, UnitID = "target", Value = true},	-- 凋魂，冰缚之盾
 		{AuraID = 327416, UnitID = "target", Value = true},	-- 晋升，心能回灌
 		{AuraID = 345561, UnitID = "target", Value = true},	-- 晋升，生命连结
+		{AuraID = 339917, UnitID = "target", Value = true},	-- 晋升，命运之矛
 		{AuraID = 317936, UnitID = "target"},	-- 晋升，弃誓信条
 		{AuraID = 327812, UnitID = "target"},	-- 晋升，振奋英气
 		{AuraID = 323149, UnitID = "target"},	-- 仙林，黑暗之拥
