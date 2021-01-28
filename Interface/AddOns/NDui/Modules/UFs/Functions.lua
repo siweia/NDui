@@ -782,6 +782,7 @@ function UF:CreateAuras(self)
 	bu.initialAnchor = "TOPLEFT"
 	bu["growth-y"] = "DOWN"
 	bu.spacing = 3
+	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 	if mystyle == "target" then
 		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -10)
 		bu.numBuffs = 20
