@@ -264,8 +264,8 @@ local list = {
 		{AuraID = 346792, UnitID = "target"},	-- 罪触之刃，猩红议会
 		{AuraID = 331314, UnitID = "target"},	-- 毁灭冲击，泥拳
 		{AuraID = 341250, UnitID = "target"},	-- 恐怖暴怒，泥拳
-		{AuraID = 329636, UnitID = "target", Value = true},	-- 坚岩形态，干将
-		{AuraID = 329808, UnitID = "target", Value = true},	-- 坚岩形态，干将
+		{AuraID = 329636, UnitID = "target", Flash = true},	-- 坚岩形态，干将
+		{AuraID = 329808, UnitID = "target", Flash = true},	-- 坚岩形态，干将
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
