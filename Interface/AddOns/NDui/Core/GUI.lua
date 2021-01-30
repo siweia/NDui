@@ -832,14 +832,14 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
 		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], nil, nil, nil, L["PartyWatcherSyncTip"]},
 		{},--blank
+		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
+		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
 		{1, "UFs", "RaidBuffIndicator", HeaderTag..L["RaidBuffIndicator"], nil, setupBuffIndicator, nil, L["RaidBuffIndicatorTip"]},
 		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"].."*", nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}, refreshRaidFrameIcons},
 		{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
-		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "InstanceAuras", HeaderTag..L["Instance Auras"], nil, setupRaidDebuffs, nil, L["InstanceAurasTip"]},
-		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
-		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
+		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{},--blank
 		{1, "UFs", "ShowSolo", L["ShowSolo"], nil, nil, nil, L["ShowSoloTip"]},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
