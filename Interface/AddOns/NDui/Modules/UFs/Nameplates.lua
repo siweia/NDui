@@ -349,8 +349,8 @@ function UF:AddTargetIndicator(self)
 	frame.RightArrow:SetPoint("LEFT", frame, "RIGHT", 3, 0)
 	frame.RightArrow:SetRotation(rad(-90))
 
-	frame.Glow = B.CreateSD(frame, 10, true)
-	frame.Glow:SetOutside(self.Health.backdrop, 10, 10)
+	frame.Glow = B.CreateSD(frame, 8, true)
+	frame.Glow:SetOutside(self.Health.backdrop, 8, 8)
 	frame.Glow:SetBackdropBorderColor(1, 1, 1)
 	frame.Glow:SetFrameLevel(0)
 
@@ -819,7 +819,6 @@ function UF:UpdatePlateByType()
 		title:Show()
 
 		raidtarget:SetPoint("TOP", title, "BOTTOM", 0, -5)
-		raidtarget:SetParent(self)
 		classify:Hide()
 		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
 
@@ -842,8 +841,7 @@ function UF:UpdatePlateByType()
 		hpval:Show()
 		title:Hide()
 
-		raidtarget:SetPoint("RIGHT", self, "LEFT", -3, 0)
-		raidtarget:SetParent(self.Health)
+		raidtarget:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", 0, 3)
 		classify:Show()
 		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end
 

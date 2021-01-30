@@ -481,8 +481,7 @@ function UF:CreateRaidMark(self)
 	if mystyle == "raid" then
 		ri:SetPoint("TOP", self, 0, 10)
 	elseif mystyle == "nameplate" then
-		ri:SetPoint("RIGHT", self, "LEFT", -3, 0)
-		ri:SetParent(self.Health)
+		ri:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", 0, 3)
 	else
 		ri:SetPoint("CENTER", self, "TOP")
 	end
@@ -571,8 +570,7 @@ function UF:CreateCastBar(self)
 
 		local iconSize = self:GetHeight()*2 + 5
 		cb.Icon:SetSize(iconSize, iconSize)
-		cb.Icon:ClearAllPoints()
-		cb.Icon:SetPoint("BOTTOMLEFT", cb, "BOTTOMRIGHT", 5, 0)
+		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
 		cb.timeToHold = .5
 
 		cb.glowFrame = B.CreateGlowFrame(cb, iconSize)
