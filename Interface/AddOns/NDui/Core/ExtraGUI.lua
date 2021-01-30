@@ -1092,3 +1092,89 @@ function G:SetupBagFilter(parent)
 		offset = offset + 35
 	end
 end
+
+local function refreshMajorSpells()
+	B:GetModule("UnitFrames"):RefreshMajorSpells()
+end
+
+function G:PlateCastbarGlow(parent)
+	local guiName = "NDuiGUI_PlateCastbarGlow"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["PlateCastbarGlow"].."*", true)
+	panel:SetScript("OnHide", refreshMajorSpells)
+
+	local barTable = {}
+
+	local function createBar(parent, spellID)
+		local spellName = GetSpellInfo(spellID)
+		local texture = GetSpellTexture(spellID)
+
+		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		bar:SetSize(220, 30)
+		B.CreateBD(bar, .25)
+		barTable[spellID] = bar
+
+		local icon, close = G:CreateBarWidgets(bar, texture)
+		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID, "system")
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			barTable[spellID] = nil
+			if C.MajorSpells[spellID] then
+				NDuiADB["MajorSpells"][spellID] = false
+			else
+				NDuiADB["MajorSpells"][spellID] = nil
+			end
+			sortBars(barTable)
+		end)
+
+		local name = B.CreateFS(bar, 14, spellName, false, "LEFT", 30, 0)
+		name:SetWidth(120)
+		name:SetJustifyH("LEFT")
+
+		sortBars(barTable)
+	end
+
+	local frame = panel.bg
+	local scroll = G:CreateScroll(frame, 240, 450)
+	scroll.box = G:CreateEditbox(frame, "ID*", 10, -30, L["ID Intro"], 100, 30)
+
+	local function addClick(button)
+		local parent = button.__owner
+		local spellID = tonumber(parent.box:GetText())
+		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		local modValue = NDuiADB["MajorSpells"][spellID]
+		if modValue or modValue == nil and C.MajorSpells[spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+		NDuiADB["MajorSpells"][spellID] = true
+		createBar(parent.child, spellID)
+		parent.box:SetText("")
+	end
+	scroll.add = B.CreateButton(frame, 70, 25, ADD)
+	scroll.add:SetPoint("LEFT", scroll.box, "RIGHT", 10, 0)
+	scroll.add.__owner = scroll
+	scroll.add:SetScript("OnClick", addClick)
+
+	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
+	scroll.reset:SetPoint("LEFT", scroll.add, "RIGHT", 10, 0)
+	StaticPopupDialogs["RESET_NDUI_MAJORSPELLS"] = {
+		text = L["Reset your raiddebuffs list?"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			NDuiADB["MajorSpells"] = {}
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
+	scroll.reset:SetScript("OnClick", function()
+		StaticPopup_Show("RESET_NDUI_MAJORSPELLS")
+	end)
+
+	local UF = B:GetModule("UnitFrames")
+	for spellID, value in pairs(UF.MajorSpells) do
+		if value then
+			createBar(scroll.child, spellID)
+		end
+	end
+end

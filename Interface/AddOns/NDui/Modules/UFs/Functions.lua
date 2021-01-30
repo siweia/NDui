@@ -574,6 +574,9 @@ function UF:CreateCastBar(self)
 		cb.Icon:ClearAllPoints()
 		cb.Icon:SetPoint("BOTTOMLEFT", cb, "BOTTOMRIGHT", 5, 0)
 		cb.timeToHold = .5
+
+		cb.glowFrame = B.CreateGlowFrame(cb, iconSize)
+		cb.glowFrame:SetPoint("CENTER", cb.Icon)
 	end
 
 	if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then

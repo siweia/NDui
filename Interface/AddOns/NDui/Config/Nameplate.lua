@@ -93,3 +93,8 @@ C.ShowPowerList = {
 	[165556] = true,	-- 赤红深渊，瞬息具象
 	[GetSectionInfo(22339)] = true,	-- 猎手阿尔迪莫，巴加斯特之影
 }
+
+-- 重要读条高亮
+C.MajorSpells = {
+	[341969] = true,	-- 伤势剧场，凋零释放
+}
