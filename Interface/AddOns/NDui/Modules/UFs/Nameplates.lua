@@ -891,7 +891,7 @@ function UF:PostUpdatePlates(event, unit)
 		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 
 		local blizzPlate = self:GetParent().UnitFrame
-		self.widgetContainer = blizzPlate.WidgetContainer
+		self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
 		if self.widgetContainer then
 			self.widgetContainer:SetParent(self)
 			self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
