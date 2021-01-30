@@ -450,7 +450,7 @@ function UF:AddQuestIcon(self)
 	if not C.db["Nameplate"]["QuestIndicator"] then return end
 
 	local qicon = self:CreateTexture(nil, "OVERLAY", nil, 2)
-	qicon:SetPoint("LEFT", self.nameText, "RIGHT", -1, 0)
+	qicon:SetPoint("LEFT", self, "RIGHT", -1, 0)
 	qicon:SetSize(30, 30)
 	qicon:SetAtlas(DB.questTex)
 	qicon:Hide()
@@ -798,6 +798,7 @@ function UF:UpdatePlateByType()
 	local title = self.npcTitle
 	local raidtarget = self.RaidTargetIndicator
 	local classify = self.ClassifyIndicator
+	local questIcon = self.questIcon
 
 	name:SetShown(not self.widgetsOnly)
 	name:ClearAllPoints()
@@ -820,6 +821,7 @@ function UF:UpdatePlateByType()
 		raidtarget:SetPoint("TOP", title, "BOTTOM", 0, -5)
 		raidtarget:SetParent(self)
 		classify:Hide()
+		if questIcon then questIcon:SetPoint("LEFT", name, "RIGHT", -1, 0) end
 
 		if self.widgetContainer then
 			self.widgetContainer:ClearAllPoints()
@@ -843,6 +845,7 @@ function UF:UpdatePlateByType()
 		raidtarget:SetPoint("RIGHT", self, "LEFT", -3, 0)
 		raidtarget:SetParent(self.Health)
 		classify:Show()
+		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end
 
 		if self.widgetContainer then
 			self.widgetContainer:ClearAllPoints()
