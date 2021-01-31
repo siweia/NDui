@@ -92,7 +92,7 @@ end
 
 -- Tags
 local function GetNumFreeSlots(name)
-	if name == "Main" then
+	if name == "Bag" then
 		return CalculateTotalNumberOfFreeBagSlots()
 	elseif name == "Bank" then
 		local numFreeSlots = GetContainerNumFreeSlots(-1)
