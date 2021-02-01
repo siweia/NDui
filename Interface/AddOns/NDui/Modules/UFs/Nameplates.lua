@@ -148,7 +148,7 @@ function UF:CheckThreatStatus(unit)
 
 	local unitTarget = unit.."target"
 	local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, "player") and groupRoles[UnitName(unitTarget)] or "NONE"
-	if unitRole == "TANK" and DB.Role == "Tank" then
+	if DB.Role == "Tank" and unitRole == "TANK" then
 		return true, UnitThreatSituation(unitTarget, unit)
 	else
 		return false, UnitThreatSituation(unit)
