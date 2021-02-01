@@ -151,7 +151,7 @@ function UF:CheckThreatStatus(unit)
 	if DB.Role == "Tank" and unitRole == "TANK" then
 		return true, UnitThreatSituation(unitTarget, unit)
 	else
-		return false, UnitThreatSituation(unit)
+		return false, UnitThreatSituation("player", unit)
 	end
 end
 
