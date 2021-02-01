@@ -143,17 +143,15 @@ function UF:UpdateGroupRoles()
 	B:RegisterEvent("GROUP_LEFT", resetGroupRoles)
 end
 
-function UF:CheckTankStatus(unit)
+function UF:CheckThreatStatus(unit)
 	if not UnitExists(unit) then return end
 
 	local unitTarget = unit.."target"
 	local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, "player") and groupRoles[UnitName(unitTarget)] or "NONE"
 	if unitRole == "TANK" and DB.Role == "Tank" then
-		self.feedbackUnit = unitTarget
-		self.isOffTank = true
+		return true, UnitThreatSituation(unitTarget, unit)
 	else
-		self.feedbackUnit = "player"
-		self.isOffTank = false
+		return false, UnitThreatSituation(unit)
 	end
 end
 
@@ -167,7 +165,7 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = customUnits[name] or customUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	local status = self.feedbackUnit and UnitThreatSituation(self.feedbackUnit, unit) or false -- just in case
+	local isOffTank, status = UF:CheckThreatStatus(unit)
 	local customColor = C.db["Nameplate"]["CustomColor"]
 	local secureColor = C.db["Nameplate"]["SecureColor"]
 	local transColor = C.db["Nameplate"]["TransColor"]
@@ -203,7 +201,7 @@ function UF:UpdateColor(_, unit)
 					if DB.Role ~= "Tank" and revertThreat then
 						r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
 					else
-						if self.isOffTank then
+						if isOffTank then
 							r, g, b = offTankColor.r, offTankColor.g, offTankColor.b
 						else
 							r, g, b = secureColor.r, secureColor.g, secureColor.b
@@ -226,18 +224,15 @@ function UF:UpdateColor(_, unit)
 		element:SetStatusBarColor(r, g, b)
 	end
 
-	if isCustomUnit or (not C.db["Nameplate"]["TankMode"] and DB.Role ~= "Tank") then
-		if status and status == 3 then
+	self.ThreatIndicator:Hide()
+	if status and (isCustomUnit or (not C.db["Nameplate"]["TankMode"] and DB.Role ~= "Tank")) then
+		if status == 3 then
 			self.ThreatIndicator:SetBackdropBorderColor(1, 0, 0)
 			self.ThreatIndicator:Show()
-		elseif status and (status == 2 or status == 1) then
+		elseif status == 2 or status == 1 then
 			self.ThreatIndicator:SetBackdropBorderColor(1, 1, 0)
 			self.ThreatIndicator:Show()
-		else
-			self.ThreatIndicator:Hide()
 		end
-	else
-		self.ThreatIndicator:Hide()
 	end
 
 	if executeRatio > 0 and healthPerc <= executeRatio then
@@ -250,7 +245,6 @@ end
 function UF:UpdateThreatColor(_, unit)
 	if unit ~= self.unit then return end
 
-	UF.CheckTankStatus(self, unit)
 	UF.UpdateColor(self, _, unit)
 end
 
