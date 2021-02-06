@@ -61,6 +61,7 @@ local list = {
 		{AuraID = 307497, UnitID = "player"},	-- 死亡偏执药水
 		{AuraID = 344314, UnitID = "player"},	-- 心华之速药水
 		-- 9.0饰品
+		{AuraID = 344231, UnitID = "player"},	-- 赤红陈酿
 		{AuraID = 345228, UnitID = "player"},	-- 角斗士徽章
 		{AuraID = 344662, UnitID = "player"},	-- 碎裂心智
 		{AuraID = 345439, UnitID = "player"},	-- 赤红华尔兹
