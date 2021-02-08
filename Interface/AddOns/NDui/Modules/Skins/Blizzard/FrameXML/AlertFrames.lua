@@ -250,8 +250,8 @@ tinsert(C.defaultThemes, function()
 		elseif frame.queue == DungeonCompletionAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
-				frame.bg:SetPoint("TOPLEFT", 2, -10)
-				frame.bg:SetPoint("BOTTOMRIGHT", 0, 2)
+				frame.bg:SetPoint("TOPLEFT", 3, -8)
+				frame.bg:SetPoint("BOTTOMRIGHT", -3, 8)
 
 				B.ReskinIcon(frame.dungeonTexture)
 				frame:DisableDrawLayer("Border")
