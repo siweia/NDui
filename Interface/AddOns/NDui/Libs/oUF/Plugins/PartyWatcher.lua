@@ -33,6 +33,9 @@
 ]]
 local _, ns = ...
 local oUF = ns.oUF
+
+local wipe = wipe
+local GetNumGroupMembers = GetNumGroupMembers
 local GetTime, GetSpellTexture = GetTime, GetSpellTexture
 
 local function Update(self, event, unit, _, spellID)
@@ -81,6 +84,15 @@ local function ResetButtons(self)
 	end
 end
 
+local function ResetButtonsWithCheck(self)
+	local element = self.PartyWatcher
+	local numMembers = GetNumGroupMembers()
+	if not element.lastCount or element.lastCount ~= numMembers then
+		ResetButtons(self)
+		element.lastCount = numMembers
+	end
+end
+
 local function Enable(self)
 	local element = self.PartyWatcher
 
@@ -89,9 +101,9 @@ local function Enable(self)
 		element.maxButtons = #element
 		element.spellToButton = {}
 		self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", Update)
-		self:RegisterEvent("GROUP_ROSTER_UPDATE", ResetButtons, true)
 		self:RegisterEvent("GROUP_LEFT", ResetButtons, true)
 		self:RegisterEvent("CHALLENGE_MODE_START", ResetButtons, true)
+		self:RegisterEvent("GROUP_ROSTER_UPDATE", ResetButtonsWithCheck, true)
 		return true
 	end
 end
@@ -101,9 +113,9 @@ local function Disable(self)
 
 	if element then
 		self:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", Update)
-		self:UnregisterEvent("GROUP_ROSTER_UPDATE", ResetButtons)
 		self:UnregisterEvent("GROUP_LEFT", ResetButtons)
 		self:UnregisterEvent("CHALLENGE_MODE_START", ResetButtons)
+		self:UnregisterEvent("GROUP_ROSTER_UPDATE", ResetButtonsWithCheck)
 	end
 end
 
