@@ -14,6 +14,7 @@ local knowables = {
 	[LE_ITEM_CLASS_CONSUMABLE] = true,
 	[LE_ITEM_CLASS_RECIPE] = true,
 	[LE_ITEM_CLASS_MISCELLANEOUS] = true,
+	[LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true,
 }
 local knowns = {}
 
