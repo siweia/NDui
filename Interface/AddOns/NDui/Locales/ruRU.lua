@@ -742,5 +742,5 @@ L["MDGuildBest"] = "Показать Mythic + GuildBest"
 L["MDGuildBestTip"] = "|nПоказать лучшие недельные результаты вашей гильдии на панели мифик ключей. И показать значок, чтобы записать информацию о рекорде вашей учетной записи."
 L["CustomTex"] = "Пользовательский путь текстуры"
 L["CustomTexTip"] = "|nПоместите текстуру в папку «Интерфейс» и введите здесь имя текстуры, чтобы заменить стиль.|nНеправильная текстура будет отображаться как зеленый блок.|nОставьте поле редактирования пустым, чтобы отключить пользовательскую текстуру. Перезагрузка интерфейса."
-L["PlateCastbarGlow"] = "Marjor spells glow" -- need translation
+L["PlateCastbarGlow"] = "Major spells glow" -- need translation
 L["PlateCastbarGlowTip"] = "|nIf unit is casting a major spell, highlight its castbar icon.|nClick the GEAR ICON to customize your list." -- need translation
