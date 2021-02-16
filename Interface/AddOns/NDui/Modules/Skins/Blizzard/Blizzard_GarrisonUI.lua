@@ -1072,6 +1072,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 						reskinWidgetFont(mission.CDTDisplay, 1, .8, 0)
 					end
 					B.Reskin(mission.ViewButton)
+					if mission.DoomRunButton then B.Reskin(mission.DoomRunButton) end
 
 					for j = 1, mission.statLine:GetNumRegions() do
 						local stat = select(j, mission.statLine:GetRegions())
