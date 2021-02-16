@@ -741,6 +741,6 @@ L["PPOnFireTip"] = "|nIf enabled, the auras on playerplate will continue update 
 L["MDGuildBest"] = "Show Mythic+ GuildBest"
 L["MDGuildBestTip"] = "|nShow weekly best in your guild on the mythic keystone panel. And show an icon to record your account keystone info."
 L["CustomTex"] = "Custom Texture Path"
-L["CustomTexTip"] = "|nPut your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block.|nLeave the editbox empty to disable custom texture. Require UI reload."
+L["CustomTexTip"] = "|nPut your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block, you might need to restart your game client.|nLeave the editbox empty to disable custom texture. Require UI reload."
 L["PlateCastbarGlow"] = "Major spells glow"
 L["PlateCastbarGlowTip"] = "|nIf unit is casting a major spell, highlight its castbar icon.|nClick the GEAR ICON to customize your list."
