@@ -324,13 +324,13 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.rarity = tonumber(rarity) or 0
 			i.id = tonumber(id) or 0
 			i.name = name
-			i.level = tonumber(level)
+			i.level = tonumber(level) or 0
 			i.link = clink
 		elseif clink:find("keystone") then
 			local data = strmatch(clink, "|H(.-)|h(.-)|h")
 			local level = strmatch(data, "%w+:%d+:%d+:(%d+)")
 			i.name, _, _, _, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc = GetItemInfo(i.id)
-			i.level = level
+			i.level = tonumber(level) or 0
 			i.link = clink
 		end
 	end
