@@ -661,4 +661,6 @@ function M:WorldQuestTool()
 
 		hasFound = true
 	end)
+
+	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", resetActionButtons)
 end
