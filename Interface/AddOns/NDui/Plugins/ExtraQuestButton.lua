@@ -105,6 +105,7 @@ local questItems = {
 	[51646] = 154878, -- Tiragarde Sound
 	[60649] = 180170, -- Ardenweald
 	[60609] = 180008, -- Ardenweald
+	[60188] = 178464, -- Ardenweald
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
