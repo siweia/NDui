@@ -802,14 +802,14 @@ function module:OnLogin()
 			self.Favourite:Hide()
 		end
 
+		self.iLvl:SetText("")
 		if C.db["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
 			local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level <= C.db["Bags"]["iLvlToShow"] then level = "" end
-			local color = DB.QualityColors[item.rarity]
-			self.iLvl:SetText(level)
-			self.iLvl:SetTextColor(color.r, color.g, color.b)
-		else
-			self.iLvl:SetText("")
+			if level > C.db["Bags"]["iLvlToShow"] then
+				local color = DB.QualityColors[item.rarity]
+				self.iLvl:SetText(level)
+				self.iLvl:SetTextColor(color.r, color.g, color.b)
+			end
 		end
 
 		if self.glowFrame then
