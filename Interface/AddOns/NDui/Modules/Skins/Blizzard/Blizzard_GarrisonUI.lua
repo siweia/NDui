@@ -1121,7 +1121,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					if texture then
 						texture:SetTexCoord(unpack(DB.TexCoord))
 					end
-					break
 				end
 			end
 		end
