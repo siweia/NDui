@@ -640,6 +640,9 @@ function M:WorldQuestTool()
 		hasFound = nil
 	end
 
+	local fixedStrings = {
+		["低扫"] = "横扫",
+	}
 	B:RegisterEvent("CHAT_MSG_MONSTER_SAY", function(_, msg)
 		if not GetOverrideBarSkin() or not C_QuestLog_GetLogIndexForQuestID(59585) then
 			resetActionButtons()
@@ -647,6 +650,7 @@ function M:WorldQuestTool()
 		end
 
 		msg = gsub(msg, "[。%.]", "")
+		msg = fixedStrings[msg] or msg
 
 		for i = 1, 3 do
 			local button = _G["ActionButton"..i]
