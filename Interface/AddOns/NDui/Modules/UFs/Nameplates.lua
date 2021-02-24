@@ -548,7 +548,7 @@ function UF:UpdateExplosives(event, unit)
 
 	local npcID = self.npcID
 	if event == "NAME_PLATE_UNIT_ADDED" and npcID == id then
-		self:SetScale(NDuiADB["UIScale"]*1.25)
+		self:SetScale(NDuiADB["UIScale"]*1.5)
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		self:SetScale(NDuiADB["UIScale"])
 	end
