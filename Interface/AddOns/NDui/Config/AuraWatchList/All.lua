@@ -201,6 +201,7 @@ local list = {
 		{AuraID = 331399, UnitID = "player"},	-- 凋魂之殇，感染毒雨
 		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
 		{AuraID = 323471, UnitID = "player", Flash = true},	-- 通灵战潮，切肉飞刀
+		{AuraID = 328181, UnitID = "player"},	-- 通灵战潮，凌冽之寒
 		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
 		{AuraID = 322681, UnitID = "player"},	-- 通灵战潮，肉钩
 		{AuraID = 335161, UnitID = "player"},	-- 通灵战潮，残存心能
