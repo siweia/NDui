@@ -1058,7 +1058,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- VenturePlan
 	if IsAddOnLoaded("VenturePlan") then
-		local VenturePlanFrame
+		local VenturePlanFrame, VP_CopyBox
 
 		local function reskinVenturePlan(self)
 			local missions = self.MissionList.Missions
@@ -1091,24 +1091,31 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			local missionTab = CovenantMissionFrame.MissionTab
 			for i = 1, missionTab:GetNumChildren() do
 				local child = select(i, missionTab:GetChildren())
-				if child and child.MissionList then
-					VenturePlanFrame = child
-					break
+				if child then
+					for i = 1, child:GetNumChildren() do
+						local child2 = select(i, child:GetChildren())
+						if child2 and child2.FirstInputBoxLabel then
+							VenturePlanFrame = child
+							VP_CopyBox = child2
+							break
+						end
+					end
 				end
 			end
 			if not VenturePlanFrame then return end
 
-			reskinVenturePlan(VenturePlanFrame)
-			VenturePlanFrame:HookScript("OnShow", reskinVenturePlan)
-			if VenturePlanFrame.UnButton then B.Reskin(VenturePlanFrame.UnButton) end
+			--reskinVenturePlan(VenturePlanFrame)
+			--VenturePlanFrame:HookScript("OnShow", reskinVenturePlan)
+			--if VenturePlanFrame.UnButton then B.Reskin(VenturePlanFrame.UnButton) end
 
-			local copyBox = VenturePlanFrame.CopyBox
-			B.Reskin(copyBox.ResetButton)
-			B.ReskinClose(copyBox.CloseButton2)
-			reskinWidgetFont(copyBox.Intro, 1, 1, 1)
-			reskinWidgetFont(copyBox.FirstInputBoxLabel, 1, .8, 0)
-			reskinWidgetFont(copyBox.SecondInputBoxLabel, 1, .8, 0)
-			reskinWidgetFont(copyBox.VersionText, 1, 1, 1)
+			if VP_CopyBox then
+				B.Reskin(VP_CopyBox.ResetButton)
+				B.ReskinClose(VP_CopyBox.CloseButton2)
+				reskinWidgetFont(VP_CopyBox.Intro, 1, 1, 1)
+				reskinWidgetFont(VP_CopyBox.FirstInputBoxLabel, 1, .8, 0)
+				reskinWidgetFont(VP_CopyBox.SecondInputBoxLabel, 1, .8, 0)
+				reskinWidgetFont(VP_CopyBox.VersionText, 1, 1, 1)
+			end
 
 			local missionBoard = CovenantMissionFrame.MissionTab.MissionPage.Board
 			for i = 1, missionBoard:GetNumChildren() do

@@ -188,6 +188,7 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Text color
+	GameFontBlack:SetTextColor(1, 1, 1)
 	GameFontBlackMedium:SetTextColor(1, 1, 1)
 	CoreAbilityFont:SetTextColor(1, 1, 1)
 end)
