@@ -1058,32 +1058,48 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- VenturePlan
 	if IsAddOnLoaded("VenturePlan") then
-		local VenturePlanFrame, VP_CopyBox
+		local VenturePlanFrame, VP_CopyBox, VP_Missions, VP_UnButton, VP_Follower
 
 		local function reskinVenturePlan(self)
-			local missions = self.MissionList.Missions
-			for i = 1, #missions do
-				local mission = missions[i]
-				if not mission.styled then
-					reskinWidgetFont(mission.Description, .8, .8, .8)
-					if mission.CDTDisplay.GetFontString then
-						reskinWidgetFont(mission.CDTDisplay:GetFontString(), 1, .8, 0)
-					else
-						reskinWidgetFont(mission.CDTDisplay, 1, .8, 0)
-					end
-					B.Reskin(mission.ViewButton)
-					if mission.DoomRunButton then B.Reskin(mission.DoomRunButton) end
-					if mission.TentativeClear then B.Reskin(mission.TentativeClear) end
-
-					for j = 1, mission.statLine:GetNumRegions() do
-						local stat = select(j, mission.statLine:GetRegions())
-						if stat and stat:IsObjectType("FontString") then
-							reskinWidgetFont(stat, 1, 1, 1)
+			if not VP_Missions then
+				local missionList = self:GetChildren()
+				B.StripTextures(missionList)
+				local background, frame = missionList:GetChildren()
+				B.StripTextures(background)
+				B.CreateBDFrame(background, .25)
+				VP_Missions = frame
+			end
+			if VP_Missions then
+				for i = 1, VP_Missions:GetNumChildren() do
+					local mission = select(i, VP_Missions:GetChildren())
+					if not mission.styled then
+						for j = 1, mission:GetNumChildren() do
+							local button = select(j, mission:GetChildren())
+							if button:IsObjectType("Button") and button ~= mission.CDTDisplay then
+								B.Reskin(button)
+							end
 						end
+						reskinWidgetFont(mission.CDTDisplay:GetFontString(), 0, 1, 0)
+						mission.styled = true
 					end
-
-					mission.styled = true
 				end
+			end
+
+			if not VP_UnButton then
+				VP_UnButton = select(8, self:GetChildren())
+			end
+			if VP_UnButton and not VP_UnButton.styled then
+				B.Reskin(VP_UnButton)
+				VP_UnButton.styled = true
+			end
+		end
+
+		local function reskinFollowerBG()
+			if VP_Follower then return end
+			VP_Follower = select(15, CovenantMissionFrame:GetChildren())
+			if VP_Follower then
+				B.StripTextures(VP_Follower)
+				B.CreateBDFrame(VP_Follower, .25)
 			end
 		end
 
@@ -1102,11 +1118,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					end
 				end
 			end
-			if not VenturePlanFrame then return end
 
-			--reskinVenturePlan(VenturePlanFrame)
-			--VenturePlanFrame:HookScript("OnShow", reskinVenturePlan)
-			--if VenturePlanFrame.UnButton then B.Reskin(VenturePlanFrame.UnButton) end
+			if VenturePlanFrame then
+				reskinVenturePlan(VenturePlanFrame)
+				VenturePlanFrame:HookScript("OnShow", reskinVenturePlan)
+			end
 
 			if VP_CopyBox then
 				B.Reskin(VP_CopyBox.ResetButton)
@@ -1117,7 +1133,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				reskinWidgetFont(VP_CopyBox.VersionText, 1, 1, 1)
 			end
 
-			local missionBoard = CovenantMissionFrame.MissionTab.MissionPage.Board
+			local missionPage = CovenantMissionFrame.MissionTab.MissionPage
+			missionPage:HookScript("OnShow", reskinFollowerBG)
+
+			local missionBoard = missionPage.Board
 			for i = 1, missionBoard:GetNumChildren() do
 				local child = select(i, missionBoard:GetChildren())
 				if child and child:IsObjectType("Button") then
