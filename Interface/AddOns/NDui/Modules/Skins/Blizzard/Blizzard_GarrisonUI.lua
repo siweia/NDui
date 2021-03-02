@@ -1074,7 +1074,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					B.Reskin(widget.ResetButton)
 					B.ReskinClose(widget.CloseButton2)
 					reskinWidgetFont(widget.Intro, 1, 1, 1)
+					B.ReskinEditBox(widget.FirstInputBox)
 					reskinWidgetFont(widget.FirstInputBoxLabel, 1, .8, 0)
+					B.ReskinEditBox(widget.SecondInputBox)
 					reskinWidgetFont(widget.SecondInputBoxLabel, 1, .8, 0)
 					reskinWidgetFont(widget.VersionText, 1, 1, 1)
 				elseif otype == "MissionList" then
@@ -1104,6 +1106,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				elseif otype == "ProgressBar" then
 					B.StripTextures(widget)
 					B.CreateBDFrame(widget, 1)
+				elseif otype == "MissionToast" then
+					widget.Background:Hide()
+					B.SetBD(widget)
+					widget.Outcome:SetFontObject("Game13Font")
+					widget.Detail:SetFontObject("Game13Font")
 				end
 			end
 		end
