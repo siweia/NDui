@@ -9,7 +9,7 @@ DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isNewPatch = select(4, GetBuildInfo()) > 90001 -- beta
+DB.isNewPatch = select(4, GetBuildInfo()) >= 90005 -- 9.0.5
 
 -- Deprecated
 LE_ITEM_QUALITY_POOR = Enum.ItemQuality.Poor

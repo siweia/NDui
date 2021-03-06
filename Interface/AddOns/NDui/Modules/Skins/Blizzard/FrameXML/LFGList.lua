@@ -44,7 +44,11 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(SearchPanel.RefreshButton)
 	B.Reskin(SearchPanel.BackButton)
 	B.Reskin(SearchPanel.SignUpButton)
-	B.Reskin(SearchPanel.ScrollFrame.StartGroupButton)
+	if DB.isNewPatch then
+		B.Reskin(SearchPanel.ScrollFrame.ScrollChild.StartGroupButton)
+	else
+		B.Reskin(SearchPanel.ScrollFrame.StartGroupButton)
+	end
 	B.ReskinInput(SearchPanel.SearchBox)
 	B.ReskinScroll(SearchPanel.ScrollFrame.scrollBar)
 
