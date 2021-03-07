@@ -117,6 +117,7 @@ function B:OnCastSent()
 end
 
 local function UpdateSpellTarget(self, unit)
+	if not C.db["Nameplate"]["CastTarget"] then return end
 	if not unit then return end
 	local unitTarget = unit.."target"
 	if UnitExists(unitTarget) then

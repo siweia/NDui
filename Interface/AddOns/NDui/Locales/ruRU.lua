@@ -745,3 +745,5 @@ L["CustomTexTip"] = "|nПоместите текстуру в папку «Ин�
 L["PlateCastbarGlow"] = "Major spells glow" -- need translation
 L["PlateCastbarGlowTip"] = "|nIf unit is casting a major spell, highlight its castbar icon.|nClick the GEAR ICON to customize your list." -- need translation
 L["ExplosivesScaleTip"] = "|nIf enabled, the nameplate for Explosives would scale to 1.5." -- need translation
+L["PlateCastTarget"] = "Show target of spell" -- need translation
+L["PlateCastTargetTip"] = "|nIf enabled, show nameplate target of casting spell." -- need translation

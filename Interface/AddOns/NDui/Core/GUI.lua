@@ -257,6 +257,7 @@ G.DefaultSettings = {
 		ColoredTarget = false,
 		TargetColor = {r=0, g=.6, b=1},
 		CastbarGlow = true,
+		CastTarget = false,
 	},
 	Skins = {
 		DBM = true,
@@ -879,6 +880,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
 		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
 		{1, "Nameplate", "CastbarGlow", NewFeatureTag..L["PlateCastbarGlow"].."*", nil, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
+		{1, "Nameplate", "CastTarget", NewFeatureTag..L["PlateCastTarget"].."*", true, nil, nil, L["PlateCastTargetTip"]},
 		{},--blank
 		{1, "Nameplate", "ColoredTarget", HeaderTag..L["ColoredTarget"].."*", nil, nil, nil, L["ColoredTargetTip"]},
 		{5, "Nameplate", "TargetColor", L["TargetNP Color"].."*"},

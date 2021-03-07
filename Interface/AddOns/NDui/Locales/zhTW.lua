@@ -745,3 +745,5 @@ L["CustomTexTip"] = "|n將你的自定義材質放置在Interface目錄下，然
 L["PlateCastbarGlow"] = "重要施法條高亮"
 L["PlateCastbarGlowTip"] = "|n當目標施放你覺得重要的法術時，高亮其法術圖標。|n點擊齒輪可以自定義這個列表。"
 L["ExplosivesScaleTip"] = "|n啟用後，對於史詩鑰石地下城中的对于史诗钥石地下城中的易爆，放大其名條至1.5倍。"
+L["PlateCastTarget"] = "顯示法術目標"
+L["PlateCastTargetTip"] = "|n啟用後，顯示單位施法時的法術目標。"

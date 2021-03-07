@@ -745,3 +745,5 @@ L["CustomTexTip"] = "|nPut your texture under 'Interface' folder, and input the 
 L["PlateCastbarGlow"] = "Major spells glow"
 L["PlateCastbarGlowTip"] = "|nIf unit is casting a major spell, highlight its castbar icon.|nClick the GEAR ICON to customize your list."
 L["ExplosivesScaleTip"] = "|nIf enabled, the nameplate for Explosives would scale to 1.5."
+L["PlateCastTarget"] = "Show target of spell"
+L["PlateCastTargetTip"] = "|nIf enabled, show nameplate target of casting spell."
