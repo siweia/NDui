@@ -752,7 +752,7 @@ G.TabList = {
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	NewFeatureTag..L["Misc"],
+	L["Misc"],
 	NewFeatureTag..L["UI Settings"],
 	L["Profile"],
 }
@@ -1078,7 +1078,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "Focuser", L["Easy Focus"]},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", true, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "MawThreatBar", L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
-		{1, "Misc", "MDGuildBest", NewFeatureTag..L["MDGuildBest"], true, nil, nil, L["MDGuildBestTip"]},
+		{1, "Misc", "MDGuildBest", L["MDGuildBest"], true, nil, nil, L["MDGuildBestTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
