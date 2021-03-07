@@ -527,8 +527,8 @@ function UF:CreateCastBar(self)
 		cb:SetHeight(self:GetHeight())
 	end
 
-	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, C.db["Nameplate"]["NameTextSize"]), "11", false, "RIGHT", -2, 0)
-	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, C.db["Nameplate"]["NameTextSize"]), "11", false, "LEFT", 2, 0)
+	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, C.db["Nameplate"]["NameTextSize"]), "", false, "RIGHT", -2, 0)
+	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, C.db["Nameplate"]["NameTextSize"]), "", false, "LEFT", 2, 0)
 	name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
 	name:SetJustifyH("LEFT")
 
@@ -575,6 +575,12 @@ function UF:CreateCastBar(self)
 
 		cb.glowFrame = B.CreateGlowFrame(cb, iconSize)
 		cb.glowFrame:SetPoint("CENTER", cb.Icon)
+
+		local spellTarget = B.CreateFS(cb, C.db["Nameplate"]["NameTextSize"]+3)
+		spellTarget:ClearAllPoints()
+		spellTarget:SetJustifyH("LEFT")
+		spellTarget:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
+		cb.spellTarget = spellTarget
 	end
 
 	if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then
@@ -587,6 +593,7 @@ function UF:CreateCastBar(self)
 	cb.Text = name
 	cb.OnUpdate = B.OnCastbarUpdate
 	cb.PostCastStart = B.PostCastStart
+	cb.PostCastUpdate = B.PostCastUpdate
 	cb.PostCastStop = B.PostCastStop
 	cb.PostCastFail = B.PostCastFailed
 	cb.PostCastInterruptible = B.PostUpdateInterruptible
