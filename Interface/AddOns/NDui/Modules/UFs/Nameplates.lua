@@ -996,6 +996,7 @@ function UF:CreatePlayerPlate()
 
 	UF:CreateHealthBar(self)
 	UF:CreatePowerBar(self)
+	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
 	if C.db["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
