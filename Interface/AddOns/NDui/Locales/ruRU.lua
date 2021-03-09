@@ -747,3 +747,6 @@ L["PlateCastbarGlowTip"] = "|nIf unit is casting a major spell, highlight its ca
 L["ExplosivesScaleTip"] = "|nIf enabled, the nameplate for Explosives would scale to 1.5." -- need translation
 L["PlateCastTarget"] = "Show target of spell" -- need translation
 L["PlateCastTargetTip"] = "|nIf enabled, show nameplate target of casting spell." -- need translation
+L["ColoredFocus"] = "Colored Focus Nameplate" -- need translation
+L["ColoredFocusTip"] = "|nIf enabled, colored your focus nameplate, its priority is higher than custom color and threat color.|nYou can customize your color below." -- need translation
+L["FocusNP Color"] = "Focus Nameplate Color" -- need translation

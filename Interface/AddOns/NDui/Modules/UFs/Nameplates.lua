@@ -175,6 +175,7 @@ function UF:UpdateColor(_, unit)
 	local executeRatio = C.db["Nameplate"]["ExecuteRatio"]
 	local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
 	local targetColor = C.db["Nameplate"]["TargetColor"]
+	local focusColor = C.db["Nameplate"]["FocusColor"]
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
@@ -182,6 +183,8 @@ function UF:UpdateColor(_, unit)
 	else
 		if C.db["Nameplate"]["ColoredTarget"] and UnitIsUnit(unit, "target") then
 			r, g, b = targetColor.r, targetColor.g, targetColor.b
+		elseif C.db["Nameplate"]["ColoredFocus"] and UnitIsUnit(unit, "focus") then
+			r, g, b = focusColor.r, focusColor.g, focusColor.b
 		elseif isCustomUnit then
 			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif isPlayer and isFriendly then
@@ -255,6 +258,12 @@ function UF:CreateThreatColor(self)
 
 	self.ThreatIndicator = threatIndicator
 	self.ThreatIndicator.Override = UF.UpdateThreatColor
+end
+
+function UF:UpdateFocusColor()
+	if C.db["Nameplate"]["ColoredFocus"] then
+		UF.UpdateThreatColor(self, _, self.unit)
+	end
 end
 
 -- Target indicator
@@ -699,6 +708,8 @@ function UF:CreatePlates()
 	UF:AddCreatureIcon(self)
 	UF:AddQuestIcon(self)
 	UF:AddDungeonProgress(self)
+
+	self:RegisterEvent("PLAYER_FOCUS_CHANGED", UF.UpdateFocusColor, true)
 
 	platesList[self] = self:GetName()
 end
