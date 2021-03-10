@@ -1062,7 +1062,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "ConduitInfo", HeaderTag..L["Show ConduitInfo"]},
 	},
 	[13] = {
-		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemLevel"]},
+		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemLevel"], nil, nil, nil, L["ItemLevelTip"]},
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank

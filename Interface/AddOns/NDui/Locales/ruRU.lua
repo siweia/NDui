@@ -196,6 +196,7 @@ L["Group Roles"] = "Иконка выбранной роли"
 L["Show TargetedBy"] = "Показывать кто выбрал целью"
 L["Mail Tool"] = "Включить модуль почты"
 L["Show ItemLevel"] = "Уровень предметов в окне персонажа"
+L["ItemLevelTip"] = "|nIf enabled, show itemlevel on CharacterFrame, InspectFrame, MerchantFrame and some other frames." -- need translation
 L["Show MissingStats"] = "Полные хар-ки в окне персонажа"
 L["Language Filter"] = "Выключить фильтр лексики"
 L["SoloInfo"] = "Уведом. о сложности подземелий"
