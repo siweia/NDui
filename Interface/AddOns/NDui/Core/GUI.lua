@@ -1074,8 +1074,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
-		{1, "Misc", "FasterSkip", NewFeatureTag..L["FasterMovieSkip"], nil, nil, nil, L["FasterMovieSkipTip"]},
-		{1, "Misc", "EnhanceDressup", NewFeatureTag..L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
+		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
+		{1, "Misc", "FasterSkip", NewFeatureTag..L["FasterMovieSkip"], true, nil, nil, L["FasterMovieSkipTip"]},
+		{},--blank
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
 		{1, "Misc", "Mail", L["Mail Tool"]},
@@ -1083,9 +1084,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "PetFilter", L["Show PetFilter"]},
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", true, nil, updateScreenShot},
 		{1, "Misc", "Focuser", L["Easy Focus"]},
-		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", true, nil, nil, L["BlockInviteTip"]},
-		{1, "Misc", "MawThreatBar", L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
 		{1, "Misc", "MDGuildBest", L["MDGuildBest"], true, nil, nil, L["MDGuildBestTip"]},
+		{1, "Misc", "MawThreatBar", L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
+		{1, "Misc", "EnhanceDressup", NewFeatureTag..L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
