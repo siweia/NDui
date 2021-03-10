@@ -751,3 +751,5 @@ L["PlateCastTargetTip"] = "|n啟用後，顯示名條單位施法時的當前目
 L["ColoredFocus"] = "染色焦點名條"
 L["ColoredFocusTip"] = "|n啟用後，染色你的焦點名條，優先級高於自定義及仇恨染色。|n你可以在下面的選項中自定義這個顔色。"
 L["FocusNP Color"] = "焦點名條顔色"
+L["FasterMovieSkip"] = "快速跳過過場動畫"
+L["FasterMovieSkipTip"] = "|n啟用後，你可以直接使用空格鍵、回車鍵及ESC鍵來跳過過場動畫。"

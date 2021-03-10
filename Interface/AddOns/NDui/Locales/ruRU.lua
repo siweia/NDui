@@ -751,3 +751,5 @@ L["PlateCastTargetTip"] = "|nIf enabled, show nameplate target of casting spell.
 L["ColoredFocus"] = "Colored Focus Nameplate" -- need translation
 L["ColoredFocusTip"] = "|nIf enabled, colored your focus nameplate, its priority is higher than custom color and threat color.|nYou can customize your color below." -- need translation
 L["FocusNP Color"] = "Focus Nameplate Color" -- need translation
+L["FasterMovieSkip"] = "Faster movie skip" -- need translation
+L["FasterMovieSkipTip"] = "|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation." -- need translation

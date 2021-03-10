@@ -346,6 +346,7 @@ G.DefaultSettings = {
 		SendActionCD = false,
 		MawThreatBar = true,
 		MDGuildBest = true,
+		FasterSkip = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -754,7 +755,7 @@ G.TabList = {
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	L["Misc"],
+	NewFeatureTag..L["Misc"],
 	NewFeatureTag..L["UI Settings"],
 	L["Profile"],
 }
@@ -1072,6 +1073,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
+		{1, "Misc", "FasterSkip", NewFeatureTag..L["FasterMovieSkip"], nil, nil, nil, L["FasterMovieSkipTip"]},
 		{},--blank
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},

@@ -751,3 +751,5 @@ L["PlateCastTargetTip"] = "|n启用后，显示姓名板单位施法时的当前
 L["ColoredFocus"] = "染色焦点姓名板"
 L["ColoredFocusTip"] = "|n启用后，染色你的焦点姓名板，优先级高于自定义及仇恨染色。|n你可以在下面的选项中自定义这个颜色。"
 L["FocusNP Color"] = "焦点姓名板颜色"
+L["FasterMovieSkip"] = "快速跳过过场动画"
+L["FasterMovieSkipTip"] = "|n启用后，你可以直接使用空格键、回车键及ESC键来跳过过场动画。"
