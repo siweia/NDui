@@ -618,7 +618,7 @@ function module:OnLogin()
 		f.main = MyContainer:New("Bag", {Columns = bagsWidth, Bags = "bags"})
 		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 		f.main:SetFilter(filters.onlyBags, true)
-	
+
 		AddNewContainer("Bank", 9, "BankFavourite", filters.bankFavourite)
 		AddNewContainer("Bank", 3, "BankEquipSet", filters.bankEquipSet)
 		AddNewContainer("Bank", 1, "BankAzeriteItem", filters.bankAzeriteItem)

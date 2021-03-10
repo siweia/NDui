@@ -821,7 +821,7 @@ do
 		hl:SetInside(bg)
 		hl:SetVertexColor(cr, cg, cb, .25)
 	end
-  
+
 	function B:ResetTabAnchor()
 		local text = self.Text or (self.GetName and _G[self:GetName().."Text"])
 		if text then
