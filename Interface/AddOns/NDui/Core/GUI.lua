@@ -346,7 +346,7 @@ G.DefaultSettings = {
 		SendActionCD = false,
 		MawThreatBar = true,
 		MDGuildBest = true,
-		FasterSkip = true,
+		FasterSkip = false,
 	},
 	Tutorial = {
 		Complete = false,
