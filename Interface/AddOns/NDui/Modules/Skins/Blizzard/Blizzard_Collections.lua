@@ -600,31 +600,6 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinDropDown(WardrobeOutfitDropDown)
 	WardrobeOutfitDropDown:SetHeight(32)
 	WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
-	B.StripTextures(WardrobeOutfitFrame)
-	B.SetBD(WardrobeOutfitFrame, .7)
-
-	hooksecurefunc(WardrobeOutfitFrame, "Update", function(self)
-		for i = 1, C_TransmogCollection.GetNumMaxOutfits() do
-			local button = self.Buttons[i]
-			if button and button:IsShown() and not button.styled then
-				B.ReskinIcon(button.Icon)
-				button.Selection:SetColorTexture(1, 1, 1, .25)
-				button.Highlight:SetColorTexture(r, g, b, .25)
-
-				button.styled = true
-			end
-		end
-	end)
-
-	B.StripTextures(WardrobeOutfitEditFrame)
-	WardrobeOutfitEditFrame.EditBox:DisableDrawLayer("BACKGROUND")
-	B.SetBD(WardrobeOutfitEditFrame)
-	local bg = B.CreateBDFrame(WardrobeOutfitEditFrame.EditBox, .25, true)
-	bg:SetPoint("TOPLEFT", -5, -3)
-	bg:SetPoint("BOTTOMRIGHT", 5, 3)
-	B.Reskin(WardrobeOutfitEditFrame.AcceptButton)
-	B.Reskin(WardrobeOutfitEditFrame.CancelButton)
-	B.Reskin(WardrobeOutfitEditFrame.DeleteButton)
 
 	-- HPetBattleAny
 	local reskinHPet
