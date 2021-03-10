@@ -66,6 +66,7 @@ function M:OnLogin()
 	M:MawWidgetFrame()
 	M:WorldQuestTool()
 	M:FasterMovieSkip()
+	M:EnhanceDressup()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -696,4 +697,24 @@ function M:FasterMovieSkip()
 			end
 		end
 	end)
+end
+
+function M:EnhanceDressup()
+	if not C.db["Misc"]["EnhanceDressup"] then return end
+
+	local parent = _G.DressUpFrameResetButton
+	local button = M:MailBox_CreatButton(parent, 80, 22, L["Undress"], {"RIGHT", parent, "LEFT", -1, 0})
+	button:RegisterForClicks("AnyUp")
+	button:SetScript("OnClick", function(_, btn)
+		local actor = DressUpFrame.ModelScene:GetPlayerActor()
+		if not actor then return end
+
+		if btn == "LeftButton" then
+			actor:Undress()
+		else
+			actor:UndressSlot(19)
+		end
+	end)
+
+	B.AddTooltip(button, "ANCHOR_TOP", format(L["UndressButtonTip"], DB.LeftButton, DB.RightButton))
 end

@@ -753,3 +753,7 @@ L["ColoredFocusTip"] = "|n启用后，染色你的焦点姓名板，优先级高
 L["FocusNP Color"] = "焦点姓名板颜色"
 L["FasterMovieSkip"] = "快速跳过过场动画"
 L["FasterMovieSkipTip"] = "|n启用后，你可以直接使用空格键、回车键及ESC键来跳过过场动画。"
+L["Undress"] = "卸装"
+L["UndressButtonTip"] = "%s卸下全身|n%s卸下战袍"
+L["EnhanceDressup"] = "增强试衣间"
+L["EnhanceDressupTip"] = "|n启用后，在试衣间添加一个快速卸下装备的按钮。"

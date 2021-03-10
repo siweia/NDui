@@ -347,6 +347,7 @@ G.DefaultSettings = {
 		MawThreatBar = true,
 		MDGuildBest = true,
 		FasterSkip = false,
+		EnhanceDressup = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -1074,7 +1075,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "FasterSkip", NewFeatureTag..L["FasterMovieSkip"], nil, nil, nil, L["FasterMovieSkipTip"]},
-		{},--blank
+		{1, "Misc", "EnhanceDressup", NewFeatureTag..L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
 		{1, "Misc", "Mail", L["Mail Tool"]},

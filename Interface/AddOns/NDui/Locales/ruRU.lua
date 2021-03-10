@@ -753,3 +753,7 @@ L["ColoredFocusTip"] = "|nIf enabled, colored your focus nameplate, its priority
 L["FocusNP Color"] = "Focus Nameplate Color" -- need translation
 L["FasterMovieSkip"] = "Faster movie skip" -- need translation
 L["FasterMovieSkipTip"] = "|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation." -- need translation
+L["Undress"] = "Undress" -- need translation
+L["UndressButtonTip"] = "%sUndress all|n%sUndress tabard" -- need translation
+L["EnhanceDressup"] = "Enhanced DressUp" -- need translation
+L["EnhanceDressupTip"] = "|nIf enabled, add a button to undress items on DressUpFrame." -- need translation
