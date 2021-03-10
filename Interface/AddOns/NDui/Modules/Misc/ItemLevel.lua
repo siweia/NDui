@@ -299,6 +299,19 @@ function M.ItemLevel_ScrappingShow(event, addon)
 	end
 end
 
+function M:ItemLevel_UpdateMerchant(link)
+	local quality = link and select(3, GetItemInfo(link)) or nil
+	if quality then
+		if not self.iLvl then
+			self.iLvl = B.CreateFS(self.ItemButton, DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
+		end
+		local level = B.GetItemLevel(link)
+		local color = DB.QualityColors[quality]
+		self.iLvl:SetText(level)
+		self.iLvl:SetTextColor(color.r, color.g, color.b)
+	end
+end
+
 function M:ShowItemLevel()
 	if not C.db["Misc"]["ItemLevel"] then return end
 
@@ -314,5 +327,8 @@ function M:ShowItemLevel()
 
 	-- iLvl on ScrappingMachineFrame
 	B:RegisterEvent("ADDON_LOADED", M.ItemLevel_ScrappingShow)
+
+	-- iLvl on MerchantFrame
+	hooksecurefunc("MerchantFrameItem_UpdateQuality", M.ItemLevel_UpdateMerchant)
 end
 M:RegisterMisc("GearInfo", M.ShowItemLevel)
