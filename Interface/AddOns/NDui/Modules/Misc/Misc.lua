@@ -276,13 +276,14 @@ end
 -- Faster Looting
 local lootDelay = 0
 function M:DoFasterLoot()
-	if GetTime() - lootDelay >= .3 then
-		lootDelay = GetTime()
+	local thisTime = GetTime()
+	if thisTime - lootDelay >= .3 then
+		lootDelay = thisTime
 		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
 			for i = GetNumLootItems(), 1, -1 do
 				LootSlot(i)
 			end
-			lootDelay = GetTime()
+			lootDelay = thisTime
 		end
 	end
 end
