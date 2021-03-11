@@ -149,16 +149,8 @@ end
 info.onLeave = B.HideTooltip
 
 -- Auto selljunk
-local sellCount, stop, cache = 0, true, {}
+local stop, cache = true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
-
-local function stopSelling(tell)
-	stop = true
-	if sellCount > 0 and tell then
-		print(format("|cff99CCFF%s|r%s", L["Selljunk Calculate"], module:GetMoneyString(sellCount, true)))
-	end
-	sellCount = 0
-end
 
 local function startSelling()
 	if stop then return end
@@ -168,9 +160,8 @@ local function startSelling()
 			local link = GetContainerItemLink(bag, slot)
 			if link then
 				local price = select(11, GetItemInfo(link))
-				local _, count, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(bag, slot)
+				local _, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(bag, slot)
 				if (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and price > 0 and not cache["b"..bag.."s"..slot] then
-					sellCount = sellCount + price*count
 					cache["b"..bag.."s"..slot] = true
 					UseContainerItem(bag, slot)
 					C_Timer_After(.15, startSelling)
@@ -191,10 +182,8 @@ local function updateSelling(event, ...)
 		wipe(cache)
 		startSelling()
 		B:RegisterEvent("UI_ERROR_MESSAGE", updateSelling)
-	elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
-		stopSelling(false)
-	elseif event == "MERCHANT_CLOSED" then
-		stopSelling(true)
+	elseif event == "UI_ERROR_MESSAGE" and arg == errorText or event == "MERCHANT_CLOSED" then
+		stop = true
 	end
 end
 B:RegisterEvent("MERCHANT_SHOW", updateSelling)
