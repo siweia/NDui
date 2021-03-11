@@ -664,6 +664,7 @@ L["ChatBGType"] = "Тип фонового чата"
 L["ShowSolo"] = "Показывать в соло"
 L["ShowSoloTip"] = "|nЕсли выбрано, рамки группы или рейда будут видны даже в соло."
 L["ShowMarkerBar"] = "Панель меток"
+L["ShowMarkerBarTip"] = "|nLeft click to place mark, right click to remove mark.|nOnly works when you have the right to do so." -- need translation
 L["Horizontal"] = "По горизонтали"
 L["Vertical"] = "По вертикали"
 L["IncorrectExpansion"] = "Эта версия NDui доступна только в обновлении 9.0, пожалуйста вернитесь на версию NDui 5.10.0."
