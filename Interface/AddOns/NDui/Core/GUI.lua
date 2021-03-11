@@ -339,7 +339,7 @@ G.DefaultSettings = {
 		RaidTool = true,
 		RMRune = false,
 		DBMCount = "10",
-		EasyMarking = true,
+		EasyMarkKey = 1,
 		ShowMarkerBar = 4,
 		BlockInvite = false,
 		NzothVision = true,
@@ -954,8 +954,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[8] = {
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},
 		{1, "Misc", "RMRune", L["Runes Check"].."*"},
-		{1, "Misc", "EasyMarking", L["Easy Mark"].."*", true},
-		{2, "Misc", "DBMCount", L["DBMCount"].."*", nil, nil, nil, L["DBMCountTip"]},
+		{2, "Misc", "DBMCount", L["DBMCount"].."*", true, nil, nil, L["DBMCountTip"]},
+		{4, "Misc", "EasyMarkKey", L["EasyMark"].."*", nil, {"CTRL", "ALT", "SHIFT", DISABLE}, nil, L["EasyMarkTip"]},
 		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", true, {L["Grids"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid},
 		{},--blank
 		{1, "Misc", "QuestNotification", HeaderTag..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
