@@ -8,6 +8,7 @@ local strfind, strmatch, gsub = string.find, string.match, string.gsub
 local buttonsize = 24
 
 local function ReskinDBMIcon(icon, frame)
+	if not icon then return end
 	if not icon.styled then
 		icon:SetSize(buttonsize, buttonsize)
 		icon.SetSize = B.Dummy
@@ -25,6 +26,7 @@ local function ReskinDBMIcon(icon, frame)
 end
 
 local function ReskinDBMBar(bar, frame)
+	if not bar then return end
 	if not bar.styled then
 		B.StripTextures(bar)
 		B.CreateSB(bar, true)
@@ -64,7 +66,7 @@ local function ApplyDBMStyle(self)
 	ReskinDBMIcon(icon1, frame)
 	ReskinDBMIcon(icon2, frame)
 	ReskinDBMBar(tbar, frame)
-	texture:SetTexture(DB.normTex)
+	if texture then texture:SetTexture(DB.normTex) end
 
 	name:ClearAllPoints()
 	name:SetPoint("LEFT", frame, "LEFT", 2, 8)
