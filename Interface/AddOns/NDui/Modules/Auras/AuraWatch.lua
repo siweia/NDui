@@ -364,12 +364,12 @@ function A:AuraWatch_UpdateCD()
 					if group.Mode:lower() == "icon" then name = nil end
 					if charges and maxCharges and maxCharges > 1 and charges < maxCharges then
 						A:AuraWatch_SetupCD(KEY, name, icon, chargeStart, chargeDuration, true, 1, value.SpellID, charges)
-					elseif start and duration > 5 then
+					elseif start and duration > 3 then
 						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, true, 1, value.SpellID)
 					end
 				elseif value.ItemID then
 					local start, duration = GetItemCooldown(value.ItemID)
-					if start and duration > 5 then
+					if start and duration > 3 then
 						local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(value.ItemID)
 						if group.Mode:lower() == "icon" then name = nil end
 						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, false, 2, value.ItemID)
