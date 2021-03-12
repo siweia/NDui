@@ -12,6 +12,7 @@ local GetContainerNumSlots, GetContainerItemLink, GetItemInfo, GetContainerItemI
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
 local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
+local slotString = L["Bags"]..": %s%d"
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
@@ -26,6 +27,14 @@ local function getClassIcon(class)
 	c1, c2, c3, c4 = (c1+.03)*50, (c2-.03)*50, (c3+.03)*50, (c4-.03)*50
 	local classStr = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:"..c1..":"..c2..":"..c3..":"..c4.."|t "
 	return classStr or ""
+end
+
+local function getSlotString(num)
+	if num < 10 then
+		return format(slotString, "|cffff0000", num)
+	else
+		return format(slotString, "|cff00ff00", num)
+	end
 end
 
 info.eventList = {
@@ -50,7 +59,11 @@ info.onEvent = function(self, event)
 	else								-- Gained Moeny
 		profit = profit + change
 	end
-	self.text:SetText(module:GetMoneyString(newMoney))
+	if NDuiADB["ShowSlots"] then
+		self.text:SetText(getSlotString(CalculateTotalNumberOfFreeBagSlots()))
+	else
+		self.text:SetText(module:GetMoneyString(newMoney))
+	end
 
 	if not NDuiADB["totalGold"][myRealm] then NDuiADB["totalGold"][myRealm] = {} end
 	if not NDuiADB["totalGold"][myRealm][myName] then NDuiADB["totalGold"][myRealm][myName] = {} end
@@ -76,8 +89,18 @@ StaticPopupDialogs["RESETGOLD"] = {
 }
 
 info.onMouseUp = function(self, btn)
-	if IsControlKeyDown() and btn == "RightButton" then
-		StaticPopup_Show("RESETGOLD")
+	if btn == "RightButton" then
+		if IsControlKeyDown() then
+			StaticPopup_Show("RESETGOLD")
+		else
+			NDuiADB["ShowSlots"] = not NDuiADB["ShowSlots"]
+			if NDuiADB["ShowSlots"] then
+				self:RegisterEvent("BAG_UPDATE")
+			else
+				self:UnregisterEvent("BAG_UPDATE")
+			end
+			self:onEvent()
+		end
 	elseif btn == "MiddleButton" then
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
 		self:onEnter()
@@ -141,6 +164,7 @@ info.onEnter = function(self)
 	end
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Currency Panel"].." ", 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Switch Mode"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", "CTRL +"..DB.RightButton..L["Reset Gold"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()

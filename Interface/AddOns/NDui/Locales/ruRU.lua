@@ -759,3 +759,4 @@ L["UndressButtonTip"] = "%sUndress all|n%sUndress tabard" -- need translation
 L["EnhanceDressup"] = "Enhanced DressUp" -- need translation
 L["EnhanceDressupTip"] = "|nIf enabled, add a button to undress items on DressUpFrame." -- need translation
 L["UseVellum"] = "Right click to use vellum" -- need translation
+L["Switch Mode"] = "Switch mode" -- need translation
