@@ -494,10 +494,12 @@ function UF:OnLogin()
 
 				if showTeamIndex then
 					local parent = _G["oUF_Raid"..i.."UnitButton1"]
-					local teamIndex = B.CreateFS(parent, 12, format(GROUP_NUMBER, i))
-					teamIndex:ClearAllPoints()
-					teamIndex:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 5)
-					teamIndex:SetTextColor(.6, .8, 1)
+					if parent then
+						local teamIndex = B.CreateFS(parent, 12, format(GROUP_NUMBER, i))
+						teamIndex:ClearAllPoints()
+						teamIndex:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 5)
+						teamIndex:SetTextColor(.6, .8, 1)
+					end
 				end
 			end
 		end
