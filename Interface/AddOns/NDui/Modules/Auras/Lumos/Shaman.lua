@@ -62,7 +62,11 @@ function A:ChantLumos(self)
 		do
 			local button = self.lumos[5]
 			if IsPlayerSpell(192249) then
-				UpdateTotemAura(button, 1020304, 192249)
+				if IsPlayerSpell(117013) then
+					UpdateCooldown(button, 192249, true)
+				else
+					UpdateTotemAura(button, 1020304, 192249)
+				end
 			else
 				UpdateTotemAura(button, 135790, 198067)
 			end
