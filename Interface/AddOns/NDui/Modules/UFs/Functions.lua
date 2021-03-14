@@ -1169,7 +1169,7 @@ function UF:CreatePrediction(self)
 		overHealAbsorbGlow = ohg,
 		maxOverflow = 1,
 	}
-	self.predFrame = frame
+	self.predicFrame = frame
 end
 
 function UF.PostUpdateAddPower(element, cur, max)
