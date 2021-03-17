@@ -1215,6 +1215,8 @@ do
 		end
 		if self.Highlight then self.Highlight:Hide() end
 		if self.PuckBorder then self.PuckBorder:SetAlpha(0) end
+		if self.TroopStackBorder1 then self.TroopStackBorder1:SetAlpha(0) end
+		if self.TroopStackBorder2 then self.TroopStackBorder2:SetAlpha(0) end
 
 		if self.HealthBar then
 			self.HealthBar.Border:Hide()
