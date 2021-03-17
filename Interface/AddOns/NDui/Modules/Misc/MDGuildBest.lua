@@ -133,9 +133,10 @@ end
 
 function M:KeystoneInfo_WeeklyRuns()
 	local runHistory = C_MythicPlus_GetRunHistory(false, true)
-	if #runHistory > 0 then
+	local numRuns = runHistory and #runHistory
+	if numRuns > 0 then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), .6,.8,1)
+		GameTooltip:AddDoubleLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), "("..numRuns..")", .6,.8,1)
 		sort(runHistory, sortHistory)
 
 		for i = 1, WeeklyRunsThreshold do
