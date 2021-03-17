@@ -229,6 +229,7 @@ local list = {
 		{AuraID = 335293, UnitID = "player"},	-- 锁链联结，泥拳
 		{AuraID = 333913, UnitID = "player"},	-- 锁链联结，泥拳
 		{AuraID = 327039, UnitID = "player"},	-- 邪恶撕裂，干将
+		{AuraID = 344655, UnitID = "player"},	-- 震荡易伤，干将
 		{AuraID = 327089, UnitID = "player"},	-- 喂食时间，德纳修斯
 		{AuraID = 327796, UnitID = "player"},	-- 午夜猎手，德纳修斯
 	},

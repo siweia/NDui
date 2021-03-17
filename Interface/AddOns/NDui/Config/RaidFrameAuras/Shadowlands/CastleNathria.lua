@@ -85,6 +85,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 342698) -- 不稳定的心能感染
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 343881) -- 锯齿撕裂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 333913) -- 邪恶撕裂
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 334771) -- 溢血之心
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 344655) -- 震荡易伤
 
 BOSS = 2424 -- 德纳修斯大帝
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 326851) -- 血债
