@@ -1195,6 +1195,7 @@ function UF:CreateAddPower(self)
 	bar:SetStatusBarTexture(DB.normTex)
 	B.SetBD(bar, 0)
 	bar.colorPower = true
+	B:SmoothBar(bar)
 
 	local bg = bar:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
