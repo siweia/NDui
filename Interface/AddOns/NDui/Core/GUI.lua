@@ -803,8 +803,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, .1}},
 		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 1}},
-		{3, "Bags", "BagsWidth", L["Bags Width"], false, {12, 40, 1}},
-		{3, "Bags", "BankWidth", L["Bank Width"], true, {12, 40, 1}},
+		{3, "Bags", "BagsWidth", L["Bags Width"], false, {10, 40, 1}},
+		{3, "Bags", "BankWidth", L["Bank Width"], true, {10, 40, 1}},
 	},
 	[3] = {
 		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
