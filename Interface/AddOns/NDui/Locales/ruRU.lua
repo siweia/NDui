@@ -761,4 +761,4 @@ L["EnhanceDressupTip"] = "|nЕсли включено, добавляет кно
 L["UseVellum"] = "ПКМ - Материал для свитка наложения чар"
 L["Switch Mode"] = "Сменить режим"
 L["DispellableOnly"] = "Dispellable spells only" -- need translation
-L["DispellableOnlyTip"] = "If disabled, all the auras from magic, curse, disease and poison would show on raidframe. The icon border is colorful when dispellable." -- need translation
+L["DispellableOnlyTip"] = "|nOnly show your dispellable debuffs.|nIf disabled, all the auras from magic, curse, disease and poison would show on raidframe.|nThe icon border would be colored when dispellable." -- need translation

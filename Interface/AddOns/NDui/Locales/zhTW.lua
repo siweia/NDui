@@ -761,4 +761,4 @@ L["EnhanceDressupTip"] = "|n啟用後，在試衣間添加一個快速卸下裝�
 L["UseVellum"] = "右鍵附魔至羊皮紙"
 L["Switch Mode"] = "切換模式"
 L["DispellableOnly"] = "只顯示可供驅散的負面效果"
-L["DispellableOnlyTip"] = "如果關閉，將始終顯示魔法、詛咒、疾病及中毒效果。對於你可以驅散的法術，圖標邊框是帶有顔色的。"
+L["DispellableOnlyTip"] = "|n只顯示你可以驅散的負面效果。|n如果關閉，將始終顯示魔法、詛咒、疾病及中毒效果。|n對於你可以驅散的法術，圖標邊框是帶有顔色的。"
