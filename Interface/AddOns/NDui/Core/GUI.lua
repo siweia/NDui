@@ -749,7 +749,7 @@ G.TabList = {
 	L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
-	L["RaidFrame"],
+	NewFeatureTag..L["RaidFrame"],
 	NewFeatureTag..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
