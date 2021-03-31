@@ -104,6 +104,7 @@ G.DefaultSettings = {
 		SMUnitsPerColumn = 20,
 		SMGroupByIndex = 1,
 		InstanceAuras = true,
+		DispellOnly = false,
 		RaidDebuffScale = 1,
 		SpecRaidPos = false,
 		RaidHealthColor = 1,
@@ -850,6 +851,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"].."*", nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}, refreshRaidFrameIcons},
 		{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{1, "UFs", "InstanceAuras", HeaderTag..L["Instance Auras"], nil, setupRaidDebuffs, nil, L["InstanceAurasTip"]},
+		{1, "UFs", "DispellOnly", L["DispellableOnly"], nil, nil, nil, L["DispellableOnlyTip"]},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{},--blank

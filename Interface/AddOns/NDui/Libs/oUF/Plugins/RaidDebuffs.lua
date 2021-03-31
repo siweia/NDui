@@ -171,7 +171,7 @@ local function Update(self, _, unit)
 		if not name then break end
 
 		if rd.ShowDispellableDebuff and debuffType and (not isCharmed) and (not canAttack) then
-			if rd.FilterDispellableDebuff then
+			if C.db["UFs"]["DispellOnly"] then
 				prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or invalidPrio
 				if prio == invalidPrio then debuffType = nil end
 			else

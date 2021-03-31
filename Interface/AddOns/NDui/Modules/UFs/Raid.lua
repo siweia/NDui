@@ -145,7 +145,6 @@ function UF:CreateRaidDebuffs(self)
 
 	bu.ShowDispellableDebuff = true
 	bu.ShowDebuffBorder = true
-	bu.FilterDispellableDebuff = true
 	if C.db["UFs"]["InstanceAuras"] then
 		if not next(debuffList) then UF:UpdateRaidDebuffs() end
 		bu.Debuffs = debuffList
