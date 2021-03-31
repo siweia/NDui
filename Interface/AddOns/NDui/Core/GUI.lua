@@ -753,12 +753,12 @@ G.TabList = {
 	NewFeatureTag..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
-	NewFeatureTag..L["Raid Tools"],
+	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	NewFeatureTag..L["Misc"],
+	L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
@@ -851,7 +851,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"].."*", nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}, refreshRaidFrameIcons},
 		{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{1, "UFs", "InstanceAuras", HeaderTag..L["Instance Auras"], nil, setupRaidDebuffs, nil, L["InstanceAurasTip"]},
-		{1, "UFs", "DispellOnly", L["DispellableOnly"], nil, nil, nil, L["DispellableOnlyTip"]},
+		{1, "UFs", "DispellOnly", NewFeatureTag..L["DispellableOnly"], nil, nil, nil, L["DispellableOnlyTip"]},
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{},--blank
@@ -891,7 +891,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "CastTarget", NewFeatureTag..L["PlateCastTarget"].."*", true, nil, nil, L["PlateCastTargetTip"]},
 		{},--blank
 		{1, "Nameplate", "ColoredTarget", HeaderTag..L["ColoredTarget"].."*", nil, nil, nil, L["ColoredTargetTip"]},
-		{1, "Nameplate", "ColoredFocus", NewFeatureTag..HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
+		{1, "Nameplate", "ColoredFocus", HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
 		{5, "Nameplate", "TargetColor", L["TargetNP Color"].."*"},
 		{5, "Nameplate", "FocusColor", L["FocusNP Color"].."*", 2},
 		{},--blank
@@ -958,7 +958,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},
 		{1, "Misc", "RMRune", L["Runes Check"].."*"},
 		{2, "Misc", "DBMCount", L["DBMCount"].."*", true, nil, nil, L["DBMCountTip"]},
-		{4, "Misc", "EasyMarkKey", NewFeatureTag..L["EasyMark"].."*", nil, {"CTRL", "ALT", "SHIFT", DISABLE}, nil, L["EasyMarkTip"]},
+		{4, "Misc", "EasyMarkKey", L["EasyMark"].."*", nil, {"CTRL", "ALT", "SHIFT", DISABLE}, nil, L["EasyMarkTip"]},
 		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", true, {L["Grids"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid, L["ShowMarkerBarTip"]},
 		{},--blank
 		{1, "Misc", "QuestNotification", HeaderTag..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
@@ -1078,7 +1078,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
-		{1, "Misc", "FasterSkip", NewFeatureTag..L["FasterMovieSkip"], true, nil, nil, L["FasterMovieSkipTip"]},
+		{1, "Misc", "FasterSkip", L["FasterMovieSkip"], true, nil, nil, L["FasterMovieSkipTip"]},
 		{},--blank
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
@@ -1089,7 +1089,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "Focuser", L["Easy Focus"]},
 		{1, "Misc", "MDGuildBest", L["MDGuildBest"], true, nil, nil, L["MDGuildBestTip"]},
 		{1, "Misc", "MawThreatBar", L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
-		{1, "Misc", "EnhanceDressup", NewFeatureTag..L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
+		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
