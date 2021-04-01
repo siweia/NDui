@@ -390,7 +390,6 @@ local function Enable(self, unit)
 		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
 		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
 		self:RegisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', CastInterruptible)
-		self:RegisterEvent('UNIT_AURA', CastInterruptible) -- might need this on inspiring
 
 		element.holdTime = 0
 
@@ -441,7 +440,6 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
 		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
 		self:UnregisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', CastInterruptible)
-		self:UnregisterEvent('UNIT_AURA', CastInterruptible)
 
 		element:SetScript('OnUpdate', nil)
 
