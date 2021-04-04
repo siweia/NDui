@@ -112,6 +112,18 @@ function S:SetToggleDirection(frame)
 	open:SetPoint(rel1, parent, rel1, -x, -y)
 	open:SetSize(width, height)
 	open.text:SetText(str2)
+
+	if C.db["Skins"]["ToggleDirection"] == 5 then
+		close:SetScale(.001)
+		close:SetAlpha(0)
+		open:SetScale(.001)
+		open:SetAlpha(0)
+	else
+		close:SetScale(1)
+		close:SetAlpha(1)
+		open:SetScale(1)
+		open:SetAlpha(1)
+	end
 end
 
 function S:RefreshToggleDirection()
