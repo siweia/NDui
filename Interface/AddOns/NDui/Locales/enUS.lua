@@ -761,6 +761,6 @@ L["EnhanceDressupTip"] = "|nIf enabled, add a button to undress items on DressUp
 L["UseVellum"] = "Right click to use vellum"
 L["Switch Mode"] = "Switch mode"
 L["DispellableOnly"] = "Dispellable spells only"
-L["DispellableOnlyTip"] = "|nOnly show your dispellable debuffs.|nIf disabled, all the auras from magic, curse, disease and poison would show on raidframe.|nThe icon border would be colored when dispellable."
+L["DispellableOnlyTip"] = "|nOnly show your dispellable debuffs. The icon border would be colored when dispellable.|nIf disabled, all the auras from magic, curse, disease and poison would show on raidframe."
 L["GreyBackdrop"] = "Show grey backdrop"
 L["GreyBackdropTip"] = "|nIf you found background is too dark to tell the frame border, enable this option."

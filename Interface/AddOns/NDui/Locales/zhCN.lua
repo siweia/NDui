@@ -761,6 +761,6 @@ L["EnhanceDressupTip"] = "|n启用后，在试衣间添加一个快速卸下装�
 L["UseVellum"] = "右键附魔至羊皮纸"
 L["Switch Mode"] = "切换模式"
 L["DispellableOnly"] = "只显示可供驱散的负面效果"
-L["DispellableOnlyTip"] = "|n只显示你可以驱散的负面效果。|n如若关闭，将始终显示魔法、诅咒、疾病及中毒效果。|n对于你可以驱散的法术，图标边框是带有颜色的。"
+L["DispellableOnlyTip"] = "|n只显示你可以驱散的负面效果。对于你可以驱散的法术，图标边框是带有颜色的。|n如若关闭，将始终显示魔法、诅咒、疾病及中毒效果。"
 L["GreyBackdrop"] = "灰色面板边框"
 L["GreyBackdropTip"] = "|n当背景颜色调整为全黑时，如果看不清面板边框，可以启用这个选项。"
