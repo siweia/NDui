@@ -157,7 +157,7 @@ function M:Mover_OnEnter()
 end
 
 function M:Mover_OnLeave()
-	self.bg:SetBackdropBorderColor(0, 0, 0)
+	B.SetBorderColor(self.bg)
 	self.text:SetTextColor(1, 1, 1)
 end
 

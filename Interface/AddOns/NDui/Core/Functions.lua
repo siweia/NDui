@@ -518,11 +518,19 @@ do
 	C.frames = {}
 	local defaultBackdrop = {bgFile = DB.bdTex, edgeFile = DB.bdTex}
 
+	function B:SetBorderColor()
+		if C.db["Skins"]["GreyBD"] then
+			self:SetBackdropBorderColor(1, 1, 1, .2)
+		else
+			self:SetBackdropBorderColor(0, 0, 0)
+		end
+	end
+
 	function B:CreateBD(a)
 		defaultBackdrop.edgeSize = C.mult
 		self:SetBackdrop(defaultBackdrop)
 		self:SetBackdropColor(0, 0, 0, a or C.db["Skins"]["SkinAlpha"])
-		self:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(self)
 		if not a then tinsert(C.frames, self) end
 	end
 
@@ -721,7 +729,7 @@ do
 		else
 			self.__bg:SetBackdropColor(0, 0, 0, 0)
 		end
-		self.__bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(self.__bg)
 	end
 
 	local blizzRegions = {
@@ -788,7 +796,7 @@ do
 		self.bg:SetBackdropBorderColor(cr, cg, cb)
 	end
 	local function Menu_OnLeave(self)
-		self.bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(self.bg)
 	end
 	local function Menu_OnMouseUp(self)
 		self.bg:SetBackdropColor(0, 0, 0, C.db["Skins"]["SkinAlpha"])
@@ -843,7 +851,7 @@ do
 		local thumb = self.thumb
 		if not thumb then return end
 		thumb.bg:SetBackdropColor(0, 0, 0, 0)
-		thumb.bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(thumb.bg)
 	end
 
 	local function GrabScrollBarElement(frame, element)

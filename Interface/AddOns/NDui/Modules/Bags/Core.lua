@@ -161,7 +161,7 @@ local function updateDepositButtonStatus(bu)
 	if C.db["Bags"]["AutoDeposit"] then
 		bu.bg:SetBackdropBorderColor(1, .8, 0)
 	else
-		bu.bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(bu.bg)
 	end
 end
 
@@ -198,7 +198,7 @@ function module:CreateBagToggle()
 			bu.bg:SetBackdropBorderColor(1, .8, 0)
 			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 		else
-			bu.bg:SetBackdropBorderColor(0, 0, 0)
+			B.SetBorderColor(bu.bg)
 			PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
 		end
 	end)
@@ -347,7 +347,7 @@ function module:CreateSplitButton()
 	bu.Icon:SetPoint("TOPLEFT", -1, 3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", 1, -3)
 	bu.__turnOff = function()
-		bu.bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(bu.bg)
 		bu.text = nil
 		splitFrame:Hide()
 		splitEnable = nil
@@ -398,7 +398,7 @@ function module:CreateFavouriteButton()
 	bu.Icon:SetPoint("TOPLEFT", -5, 0)
 	bu.Icon:SetPoint("BOTTOMRIGHT", 5, -5)
 	bu.__turnOff = function()
-		bu.bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(bu.bg)
 		bu.text = nil
 		favouriteEnable = nil
 	end
@@ -454,7 +454,7 @@ function module:CreateJunkButton()
 	bu.Icon:SetPoint("TOPLEFT", C.mult, -3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -3)
 	bu.__turnOff = function()
-		bu.bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(bu.bg)
 		bu.text = nil
 		customJunkEnable = nil
 	end
@@ -508,7 +508,7 @@ function module:CreateDeleteButton()
 	bu.Icon:SetPoint("TOPLEFT", 3, -2)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -1, 2)
 	bu.__turnOff = function()
-		bu.bg:SetBackdropBorderColor(0, 0, 0)
+		B.SetBorderColor(bu.bg)
 		bu.text = nil
 		deleteEnable = nil
 	end
