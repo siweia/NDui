@@ -398,7 +398,7 @@ function UF:CreatePortrait(self)
 	if not C.db["UFs"]["Portrait"] then return end
 
 	local portrait = CreateFrame("PlayerModel", nil, self.Health)
-	portrait:SetAllPoints()
+	portrait:SetInside()
 	portrait:SetAlpha(.2)
 	self.Portrait = portrait
 
