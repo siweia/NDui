@@ -762,3 +762,5 @@ L["UseVellum"] = "ПКМ - Материал для свитка наложени
 L["Switch Mode"] = "Сменить режим"
 L["DispellableOnly"] = "Dispellable spells only" -- need translation
 L["DispellableOnlyTip"] = "|nOnly show your dispellable debuffs.|nIf disabled, all the auras from magic, curse, disease and poison would show on raidframe.|nThe icon border would be colored when dispellable." -- need translation
+L["GreyBackdrop"] = "Show grey backdrop" -- need translation
+L["GreyBackdropTip"] = "|nIf you found background is too dark to tell the frame border, enable this option." -- need translation
