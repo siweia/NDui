@@ -751,13 +751,13 @@ G.TabList = {
 	L["Bags"],
 	L["Unitframes"],
 	NewFeatureTag..L["RaidFrame"],
-	NewFeatureTag..L["Nameplate"],
+	L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
-	L["Skins"],
+	NewFeatureTag..L["Skins"],
 	L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
@@ -889,7 +889,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
 		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
 		{1, "Nameplate", "CastbarGlow", L["PlateCastbarGlow"].."*", nil, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
-		{1, "Nameplate", "CastTarget", NewFeatureTag..L["PlateCastTarget"].."*", true, nil, nil, L["PlateCastTargetTip"]},
+		{1, "Nameplate", "CastTarget", L["PlateCastTarget"].."*", true, nil, nil, L["PlateCastTargetTip"]},
 		{},--blank
 		{1, "Nameplate", "ColoredTarget", HeaderTag..L["ColoredTarget"].."*", nil, nil, nil, L["ColoredTargetTip"]},
 		{1, "Nameplate", "ColoredFocus", HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
@@ -1029,7 +1029,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "FlatMode", L["FlatMode"], true},
 		{1, "Skins", "Shadow", L["Shadow"]},
 		{1, "Skins", "FontOutline", L["FontOutline"], true},
-		{1, "Skins", "GreyBD", L["GreyBackdrop"], nil, nil, nil, L["GreyBackdropTip"]},
+		{1, "Skins", NewFeatureTag.."GreyBD", L["GreyBackdrop"], nil, nil, nil, L["GreyBackdropTip"]},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", nil, {0, 1, .05}, updateSkinAlpha},
 		{3, "Skins", "FontScale", L["GlobalFontScale"], true, {.5, 1.5, .05}},
 		{},--blank
@@ -1040,7 +1040,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Skins", "Skada", L["Skada Skin"]},
 		{1, "Skins", "Details", L["Details Skin"], nil, resetDetails},
-		{4, "Skins", "ToggleDirection", L["ToggleDirection"].."*", true, {L["LEFT"], L["RIGHT"], L["TOP"], L["BOTTOM"], DISABLE}, updateToggleDirection},
+		{4, "Skins", NewFeatureTag.."ToggleDirection", L["ToggleDirection"].."*", true, {L["LEFT"], L["RIGHT"], L["TOP"], L["BOTTOM"], DISABLE}, updateToggleDirection},
 		{},--blank
 		{1, "Skins", "DBM", L["DBM Skin"]},
 		{1, "Skins", "Bigwigs", L["Bigwigs Skin"], true},
