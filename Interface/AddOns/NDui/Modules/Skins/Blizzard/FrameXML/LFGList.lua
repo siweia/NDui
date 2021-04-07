@@ -44,11 +44,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(SearchPanel.RefreshButton)
 	B.Reskin(SearchPanel.BackButton)
 	B.Reskin(SearchPanel.SignUpButton)
-	if DB.isNewPatch then
-		B.Reskin(SearchPanel.ScrollFrame.ScrollChild.StartGroupButton)
-	else
-		B.Reskin(SearchPanel.ScrollFrame.StartGroupButton)
-	end
+	B.Reskin(SearchPanel.ScrollFrame.ScrollChild.StartGroupButton)
 	B.ReskinInput(SearchPanel.SearchBox)
 	B.ReskinScroll(SearchPanel.ScrollFrame.scrollBar)
 
@@ -173,11 +169,24 @@ tinsert(C.defaultThemes, function()
 
 	-- [[ Role count ]]
 
+	local function HandleRoleAnchor(self, role)
+		self[role.."Count"]:SetWidth(22)
+		self[role.."Count"]:SetFontObject(Game13Font)
+		self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
+	end
+
 	hooksecurefunc("LFGListGroupDataDisplayRoleCount_Update", function(self)
 		if not self.styled then
 			B.ReskinRole(self.TankIcon, "TANK")
 			B.ReskinRole(self.HealerIcon, "HEALER")
 			B.ReskinRole(self.DamagerIcon, "DPS")
+
+			self.HealerIcon:SetPoint("RIGHT", self.DamagerIcon, "LEFT", -22, 0)
+			self.TankIcon:SetPoint("RIGHT", self.HealerIcon, "LEFT", -22, 0)
+
+			HandleRoleAnchor(self, "Tank")
+			HandleRoleAnchor(self, "Healer")
+			HandleRoleAnchor(self, "Damager")
 
 			self.styled = true
 		end
