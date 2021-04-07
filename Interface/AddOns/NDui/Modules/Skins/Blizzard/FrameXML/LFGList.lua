@@ -1,6 +1,20 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function Highlight_OnEnter(self)
+	self.hl:Show()
+end
+
+local function Highlight_OnLeave(self)
+	self.hl:Hide()
+end
+
+local function HandleRoleAnchor(self, role)
+	self[role.."Count"]:SetWidth(22)
+	self[role.."Count"]:SetFontObject(Game13Font)
+	self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -37,6 +51,14 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	hooksecurefunc("LFGListSearchEntry_UpdateExpiration", function(self)
+		local expirationTime = self.ExpirationTime
+		if not expirationTime.fontStyled then
+			expirationTime:SetWidth(42)
+			expirationTime.fontStyled = true
+		end
+	end)
+
 	-- [[ Search panel ]]
 
 	local SearchPanel = LFGListFrame.SearchPanel
@@ -52,14 +74,6 @@ tinsert(C.defaultThemes, function()
 	SearchPanel.RefreshButton.Icon:SetPoint("CENTER")
 	SearchPanel.ResultsInset:Hide()
 	B.StripTextures(SearchPanel.AutoCompleteFrame)
-
-	local function resultOnEnter(self)
-		self.hl:Show()
-	end
-
-	local function resultOnLeave(self)
-		self.hl:Hide()
-	end
 
 	local numResults = 1
 	hooksecurefunc("LFGListSearchPanel_UpdateAutoComplete", function(self)
@@ -88,8 +102,8 @@ tinsert(C.defaultThemes, function()
 			hl:Hide()
 			result.hl = hl
 
-			result:HookScript("OnEnter", resultOnEnter)
-			result:HookScript("OnLeave", resultOnLeave)
+			result:HookScript("OnEnter", Highlight_OnEnter)
+			result:HookScript("OnLeave", Highlight_OnLeave)
 
 			numResults = numResults + 1
 		end
@@ -100,14 +114,6 @@ tinsert(C.defaultThemes, function()
 	local ApplicationViewer = LFGListFrame.ApplicationViewer
 	ApplicationViewer.InfoBackground:Hide()
 	ApplicationViewer.Inset:Hide()
-
-	local function headerOnEnter(self)
-		self.hl:Show()
-	end
-
-	local function headerOnLeave(self)
-		self.hl:Hide()
-	end
 
 	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader"}) do
 		local header = ApplicationViewer[headerName]
@@ -124,8 +130,8 @@ tinsert(C.defaultThemes, function()
 		hl:Hide()
 		header.hl = hl
 
-		header:HookScript("OnEnter", headerOnEnter)
-		header:HookScript("OnLeave", headerOnLeave)
+		header:HookScript("OnEnter", Highlight_OnEnter)
+		header:HookScript("OnLeave", Highlight_OnLeave)
 	end
 
 	ApplicationViewer.RoleColumnHeader:SetPoint("LEFT", ApplicationViewer.NameColumnHeader, "RIGHT", 1, 0)
@@ -168,12 +174,6 @@ tinsert(C.defaultThemes, function()
 	B.ReskinCheck(LFGListFrame.ApplicationViewer.AutoAcceptButton)
 
 	-- [[ Role count ]]
-
-	local function HandleRoleAnchor(self, role)
-		self[role.."Count"]:SetWidth(22)
-		self[role.."Count"]:SetFontObject(Game13Font)
-		self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
-	end
 
 	hooksecurefunc("LFGListGroupDataDisplayRoleCount_Update", function(self)
 		if not self.styled then
