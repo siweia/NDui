@@ -10,9 +10,45 @@ local function Highlight_OnLeave(self)
 end
 
 local function HandleRoleAnchor(self, role)
-	self[role.."Count"]:SetWidth(22)
+	self[role.."Count"]:SetWidth(24)
 	self[role.."Count"]:SetFontObject(Game13Font)
 	self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
+end
+
+local roleCache = {}
+local roleOrder = {
+	["TANK"] = 1,
+	["HEALER"] = 2,
+	["DAMAGER"] = 3,
+}
+local roleAtlas = {
+	[1] = "groupfinder-icon-role-large-tank",
+	[2] = "groupfinder-icon-role-large-heal",
+	[3] = "groupfinder-icon-role-large-dps",
+}
+
+local function sortRoleOrder(a, b)
+	if a and b then
+		return a[1] < b[1]
+	end
+end
+
+local function UpdateGroupRoles(self)
+	wipe(roleCache)
+
+	local count = 0
+	for i = 1, 5 do
+		local role, class = C_LFGList.GetSearchResultMemberInfo(self.resultID, i)
+		local roleIndex = role and roleOrder[role]
+		if roleIndex then
+			count = count + 1
+			if not roleCache[count] then roleCache[count] = {} end
+			roleCache[count][1] = roleIndex
+			roleCache[count][2] = class
+		end
+	end
+
+	sort(roleCache, sortRoleOrder)
 end
 
 tinsert(C.defaultThemes, function()
@@ -189,6 +225,55 @@ tinsert(C.defaultThemes, function()
 			HandleRoleAnchor(self, "Damager")
 
 			self.styled = true
+		end
+	end)
+
+	hooksecurefunc("LFGListGroupDataDisplayEnumerate_Update", function(self, numPlayers)
+		UpdateGroupRoles(self:GetParent():GetParent())
+
+		for i = 1, 5 do
+			local icon = self.Icons[i]
+			if not icon.bg then
+				if i > 1 then
+					icon:ClearAllPoints()
+					icon:SetPoint("RIGHT", self.Icons[i-1], "LEFT", -4, 0)
+				end
+				icon:SetSize(22, 22)
+				icon.bg = B.CreateBDFrame(icon, .25)
+
+				icon.role = self:CreateTexture(nil, "OVERLAY")
+				icon.role:SetSize(18, 18)
+				icon.role:SetPoint("CENTER", icon, "BOTTOM")
+			end
+
+			if i > numPlayers then
+				icon.bg:Hide()
+				icon.role:Hide()
+			else
+				icon.bg:Show()
+				icon.role:Show()
+			end
+		end
+
+		local iconIndex = numPlayers
+		for i = 1, #roleCache do
+			local roleInfo = roleCache[i]
+			local icon = self.Icons[iconIndex]
+			if roleInfo then
+				icon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
+				local tcoords = CLASS_ICON_TCOORDS[roleInfo[2]]
+				icon:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
+				icon.role:SetAtlas(roleAtlas[roleInfo[1]])
+				icon.bg:Show()
+				iconIndex = iconIndex - 1
+			end
+		end
+
+		for i = 1, iconIndex do
+			local icon = self.Icons[i]
+			icon:SetTexCoord(0, 1, 0, 1)
+			icon.role:SetAtlas(nil)
+			icon.bg:Hide()
 		end
 	end)
 
