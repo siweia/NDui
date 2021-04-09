@@ -10,7 +10,7 @@ local function Highlight_OnLeave(self)
 end
 
 local function HandleRoleAnchor(self, role)
-	self[role.."Count"]:SetWidth(22)
+	self[role.."Count"]:SetWidth(24)
 	self[role.."Count"]:SetFontObject(Game13Font)
 	self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
 end
