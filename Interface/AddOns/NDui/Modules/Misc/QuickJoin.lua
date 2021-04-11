@@ -58,11 +58,17 @@ local function sortRoleOrder(a, b)
 end
 
 local function UpdateGroupRoles(self)
+	if not self.__owner then
+		self.__owner = self:GetParent():GetParent()
+	end
+	local resultID = self.__owner.resultID
+	if not resultID then return end
+
 	wipe(roleCache)
 
 	local count = 0
 	for i = 1, 5 do
-		local role, class = C_LFGList_GetSearchResultMemberInfo(self.resultID, i)
+		local role, class = C_LFGList_GetSearchResultMemberInfo(resultID, i)
 		local roleIndex = role and roleOrder[role]
 		if roleIndex then
 			count = count + 1
@@ -76,7 +82,7 @@ local function UpdateGroupRoles(self)
 end
 
 function M:ReplaceGroupRoles(numPlayers, _, disabled)
-	UpdateGroupRoles(self:GetParent():GetParent())
+	UpdateGroupRoles(self)
 
 	for i = 1, 5 do
 		local icon = self.Icons[i]
