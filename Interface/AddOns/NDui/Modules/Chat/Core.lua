@@ -128,10 +128,10 @@ end
 -- Swith channels by Tab
 local cycles = {
 	{ chatType = "SAY", use = function() return 1 end },
-    { chatType = "PARTY", use = function() return IsInGroup() end },
-    { chatType = "RAID", use = function() return IsInRaid() end },
-    { chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
-    { chatType = "GUILD", use = function() return IsInGuild() end },
+	{ chatType = "PARTY", use = function() return IsInGroup() end },
+	{ chatType = "RAID", use = function() return IsInRaid() end },
+	{ chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
+	{ chatType = "GUILD", use = function() return IsInGuild() end },
 	{ chatType = "CHANNEL", use = function(_, editbox)
 		if GetCVar("portal") ~= "CN" then return false end
 		local channels, inWorldChannel, number = {GetChannelList()}
@@ -149,25 +149,25 @@ local cycles = {
 			return false
 		end
 	end },
-    { chatType = "SAY", use = function() return 1 end },
+	{ chatType = "SAY", use = function() return 1 end },
 }
 
 function module:UpdateTabChannelSwitch()
 	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
-    local currChatType = self:GetAttribute("chatType")
-    for i, curr in ipairs(cycles) do
-        if curr.chatType == currChatType then
-            local h, r, step = i+1, #cycles, 1
-            if IsShiftKeyDown() then h, r, step = i-1, 1, -1 end
-            for j = h, r, step do
-                if cycles[j]:use(self, currChatType) then
-                    self:SetAttribute("chatType", cycles[j].chatType)
-                    ChatEdit_UpdateHeader(self)
-                    return
-                end
-            end
-        end
-    end
+	local currChatType = self:GetAttribute("chatType")
+	for i, curr in ipairs(cycles) do
+		if curr.chatType == currChatType then
+			local h, r, step = i+1, #cycles, 1
+			if IsShiftKeyDown() then h, r, step = i-1, 1, -1 end
+			for j = h, r, step do
+				if cycles[j]:use(self, currChatType) then
+					self:SetAttribute("chatType", cycles[j].chatType)
+					ChatEdit_UpdateHeader(self)
+					return
+				end
+			end
+		end
+	end
 end
 hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
 

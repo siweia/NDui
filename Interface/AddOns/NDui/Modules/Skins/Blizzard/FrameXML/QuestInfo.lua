@@ -165,8 +165,8 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("QuestInfo_Display", function()
 		colorObjectivesText()
 
-        local rewardsFrame = QuestInfoFrame.rewardsFrame
-        local isQuestLog = QuestInfoFrame.questLog ~= nil
+		local rewardsFrame = QuestInfoFrame.rewardsFrame
+		local isQuestLog = QuestInfoFrame.questLog ~= nil
 		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
 
 		if numSpellRewards > 0 then

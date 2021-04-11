@@ -465,7 +465,7 @@ end
 
 function A:UpdateAuraWatch(UnitID)
 	local index = 1
-    while true do
+	while true do
 		local name, _, _, _, _, _, _, _, _, spellID = UnitBuff(UnitID, index)
 		if not name then break end
 		A:AuraWatch_SetupAura(A:AuraWatch_UpdateAura(spellID, UnitID, index, true))
@@ -473,7 +473,7 @@ function A:UpdateAuraWatch(UnitID)
 	end
 
 	local index = 1
-    while true do
+	while true do
 		local name, _, _, _, _, _, _, _, _, spellID = UnitDebuff(UnitID, index)
 		if not name then break end
 		A:AuraWatch_SetupAura(A:AuraWatch_UpdateAura(spellID, UnitID, index, false))

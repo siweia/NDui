@@ -29,7 +29,7 @@ if (tonumber(UIDD_REFRESH_OVERREAD_PATCH_VERSION) or 0) < 3 then
 		for i=1, UIDROPDOWNMENU_MAXLEVELS do
 			for j=1+_G["DropDownList" .. i].numButtons, UIDROPDOWNMENU_MAXBUTTONS do
 				local b, _ = _G["DropDownList" .. i .. "Button" .. j]
-				_ = issecurevariable(b, "checked")      or purgeKey(b, "checked")
+				_ = issecurevariable(b, "checked") or purgeKey(b, "checked")
 				_ = issecurevariable(b, "notCheckable") or purgeKey(b, "notCheckable")
 			end
 		end

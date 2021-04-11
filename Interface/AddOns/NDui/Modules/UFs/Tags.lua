@@ -69,7 +69,7 @@ oUF.Tags.Methods["power"] = function(unit)
 		end
 	else
 		return per
-    end
+	end
 end
 oUF.Tags.Events["power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
