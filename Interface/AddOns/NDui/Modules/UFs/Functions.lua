@@ -917,12 +917,10 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedInde
 		for i = 1, 6 do
 			element[i].bg:Hide()
 		end
-		element.prevColor = nil
-		return
-	end
-
-	for i = 1, max do
-		element[i].bg:Show()
+	else
+		for i = 1, max do
+			element[i].bg:Show()
+		end
 	end
 
 	if diff then
