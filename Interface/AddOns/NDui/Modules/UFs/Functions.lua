@@ -1153,6 +1153,7 @@ function UF:CreatePrediction(self)
 	hab:SetReverseFill(true)
 	hab:SetStatusBarTexture(DB.normTex)
 	hab:SetStatusBarColor(0, .5, .8, .5)
+	hab:SetFrameLevel(frame:GetFrameLevel())
 
 	local ohg = frame:CreateTexture(nil, "ARTWORK", nil, 1)
 	ohg:SetWidth(15)
