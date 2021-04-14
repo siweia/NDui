@@ -17,6 +17,9 @@ local function RegisterSeasonSpells(INSTANCE)
 	end
 end
 
+INSTANCE = 1194 -- 塔扎维什，帷纱集市
+RegisterSeasonSpells(INSTANCE)
+
 INSTANCE = 1187 -- 伤逝剧场
 RegisterSeasonSpells(INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 333299) -- 荒芜诅咒
