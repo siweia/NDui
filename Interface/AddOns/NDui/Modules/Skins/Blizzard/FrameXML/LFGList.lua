@@ -15,6 +15,19 @@ local function HandleRoleAnchor(self, role)
 	self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
 end
 
+local atlasToRole = {
+	["groupfinder-icon-role-large-tank"] = "TANK",
+	["groupfinder-icon-role-large-heal"] = "HEALER",
+	["groupfinder-icon-role-large-dps"] = "DAMAGER",
+}
+local function ReplaceApplicantRoles(texture, atlas)
+	local role = atlasToRole[atlas]
+	if role then
+		texture:SetTexture(DB.rolesTex)
+		texture:SetTexCoord(B.GetRoleTexCoord(role))
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -151,6 +164,20 @@ tinsert(C.defaultThemes, function()
 			B.Reskin(button.InviteButton)
 
 			button.styled = true
+		end
+	end)
+
+	hooksecurefunc("LFGListApplicationViewer_UpdateRoleIcons", function(member)
+		if not member.styled then
+			for i = 1, 3 do
+				local button = member["RoleIcon"..i]
+				local texture = button:GetNormalTexture()
+				ReplaceApplicantRoles(texture, LFG_LIST_GROUP_DATA_ATLASES[button.role])
+				hooksecurefunc(texture, "SetAtlas", ReplaceApplicantRoles)
+				B.CreateBDFrame(button)
+			end
+
+			member.styled = true
 		end
 	end)
 
