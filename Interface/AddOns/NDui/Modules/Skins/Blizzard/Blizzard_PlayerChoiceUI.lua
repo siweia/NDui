@@ -22,6 +22,7 @@ local function ReskinSecondOptionButton(self)
 	B.Reskin(self, nil, true)
 end
 
+-- Note: isNewPatch, PlayerChoiceUI rename to PlayerChoice
 C.themes["Blizzard_PlayerChoiceUI"] = function()
 	hooksecurefunc(PlayerChoiceFrame, "Update", function(self)
 		if not self.bg then

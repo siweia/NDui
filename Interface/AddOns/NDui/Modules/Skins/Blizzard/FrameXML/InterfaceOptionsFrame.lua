@@ -102,6 +102,11 @@ tinsert(C.defaultThemes, function()
 			InterfaceOptionsAccessibilityPanelOverrideFadeOut,
 			InterfaceOptionsAccessibilityPanelColorblindMode
 		}
+		if DB.isNewPatch then
+			tinsert(checkboxes, InterfaceOptionsAccessibilityPanelSpeechToText)
+			tinsert(checkboxes, InterfaceOptionsAccessibilityPanelTextToSpeech)
+			tinsert(checkboxes, InterfaceOptionsAccessibilityPanelRemoteTextToSpeech)
+		end
 		for _, checkbox in next, checkboxes do
 			B.ReskinCheck(checkbox)
 		end

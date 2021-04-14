@@ -610,10 +610,16 @@ end)
 
 TT:RegisterTooltips("Blizzard_DebugTools", function()
 	TT.ReskinTooltip(FrameStackTooltip)
-	TT.ReskinTooltip(EventTraceTooltip)
 	FrameStackTooltip:SetScale(UIParent:GetScale())
-	EventTraceTooltip:SetParent(UIParent)
-	EventTraceTooltip:SetFrameStrata("TOOLTIP")
+	if not DB.isNewPatch then
+		TT.ReskinTooltip(EventTraceTooltip)
+		EventTraceTooltip:SetParent(UIParent)
+		EventTraceTooltip:SetFrameStrata("TOOLTIP")
+	end
+end)
+
+TT:RegisterTooltips("Blizzard_EventTrace", function()
+	TT.ReskinTooltip(EventTraceTooltip)
 end)
 
 TT:RegisterTooltips("Blizzard_Collections", function()

@@ -16,8 +16,10 @@ C.themes["Blizzard_RuneforgeUI"] = function()
 
 	local createFrame = frame.CreateFrame
 	B.Reskin(createFrame.CraftItemButton)
-	B.ReplaceIconString(createFrame.Cost.Text)
-	hooksecurefunc(createFrame.Cost.Text, "SetText", B.ReplaceIconString)
+	if createFrame.Cost.Text then -- isNewPatch
+		B.ReplaceIconString(createFrame.Cost.Text)
+		hooksecurefunc(createFrame.Cost.Text, "SetText", B.ReplaceIconString)
+	end
 
 	local powerFrame = frame.CraftingFrame.PowerFrame
 	B.StripTextures(powerFrame)

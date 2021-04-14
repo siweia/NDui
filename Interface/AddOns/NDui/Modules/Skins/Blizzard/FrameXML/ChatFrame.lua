@@ -134,4 +134,51 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end)
+
+	-- TextToSpeech
+	if DB.isNewPatch then
+		TextToSpeechButton:DisableDrawLayer("BACKGROUND")
+
+		B.StripTextures(TextToSpeechFrame)
+		B.SetBD(TextToSpeechFrame)
+		B.StripTextures(TextToSpeechFrame.Header)
+
+		TextToSpeechFramePanelContainer:SetBackdrop(nil)
+		B.CreateBDFrame(TextToSpeechFramePanelContainer, .25)
+		TextToSpeechFramePanelContainerChatTypeContainer:SetBackdrop(nil)
+		B.CreateBDFrame(TextToSpeechFramePanelContainerChatTypeContainer, .25)
+
+		B.Reskin(TextToSpeechFramePlaySampleButton)
+		B.Reskin(TextToSpeechFrameDefaults)
+		B.Reskin(TextToSpeechFrameOkay)
+
+		B.ReskinDropDown(TextToSpeechFrameTtsVoiceDropdown)
+		B.ReskinSlider(TextToSpeechFrameAdjustRateSlider)
+		B.ReskinSlider(TextToSpeechFrameAdjustVolumeSlider)
+
+		local checkboxes = {
+			"PlaySoundWhenEnteringChatWindowCheckButton",
+			"PlayActivitySoundWhenNotFocusedCheckButton",
+			"PlaySoundSeparatingChatLinesCheckButton",
+			"AddCharacterNameToSpeechCheckButton",
+			"UseAlternateVoiceForSystemMessagesCheckButton",
+		}
+		for _, checkbox in pairs(checkboxes) do
+			B.ReskinCheck(TextToSpeechFramePanelContainer[checkbox])
+		end
+
+		hooksecurefunc("TextToSpeechFrame_Update", function()
+			local checkBoxNameString = "TextToSpeechFramePanelContainerChatTypeContainerCheckBox"
+			local checkBoxName, checkBox
+			local checkBoxTable = TextToSpeechFramePanelContainerChatTypeContainer.checkBoxTable or {}
+			for index, value in ipairs(checkBoxTable) do
+				checkBoxName = checkBoxNameString..index
+				checkBox = _G[checkBoxName]
+				if checkBox and not checkBox.styled then
+					B.ReskinCheck(checkBox)
+					checkBox.styled = true
+				end
+			end
+		end)
+	end
 end)

@@ -90,5 +90,7 @@ function Bar:HideBlizz()
 	-- Update token panel
 	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 	-- Fake ExtraActionButton
-	B:RegisterEvent("ADDON_LOADED", hideFakeExtraBar)
+	if not DB.isNewPatch then
+		B:RegisterEvent("ADDON_LOADED", hideFakeExtraBar)
+	end
 end
