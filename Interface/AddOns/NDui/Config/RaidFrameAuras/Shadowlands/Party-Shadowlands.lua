@@ -17,8 +17,10 @@ local function RegisterSeasonSpells(INSTANCE)
 	end
 end
 
-INSTANCE = 1194 -- 塔扎维什，帷纱集市
-RegisterSeasonSpells(INSTANCE)
+if DB.isNewPatch then
+	INSTANCE = 1194 -- 塔扎维什，帷纱集市
+	RegisterSeasonSpells(INSTANCE)
+end
 
 INSTANCE = 1187 -- 伤逝剧场
 RegisterSeasonSpells(INSTANCE)
