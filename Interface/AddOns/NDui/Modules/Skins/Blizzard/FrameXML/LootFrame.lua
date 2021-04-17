@@ -1,14 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function HideIconBG(frame)
-	frame.IconHitBox.bg:SetAlpha(0)
-end
-
-local function ShowIconBG(anim)
-	anim.__owner.IconHitBox.bg:SetAlpha(1)
-end
-
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["Loot"] then return end
@@ -114,14 +106,12 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("BossBanner_ConfigureLootFrame", function(lootFrame)
 		local iconHitBox = lootFrame.IconHitBox
 		if not iconHitBox.bg then
-			iconHitBox.bg = B.ReskinIcon(lootFrame.Icon)
-			iconHitBox.bg:SetAlpha(0)
-			iconHitBox.IconBorder:SetTexture(nil)
+			iconHitBox.bg = B.CreateBDFrame(iconHitBox)
+			iconHitBox.bg:SetOutside(lootFrame.Icon)
+			lootFrame.Icon:SetTexCoord(unpack(DB.TexCoord))
 			B.ReskinIconBorder(iconHitBox.IconBorder, true)
-
-			lootFrame.Anim.__owner = lootFrame
-			lootFrame.Anim:HookScript("OnFinished", ShowIconBG)
-			lootFrame:HookScript("OnHide", HideIconBG)
 		end
+
+		iconHitBox.IconBorder:SetTexture(nil)
 	end)
 end)
