@@ -112,8 +112,8 @@ tinsert(C.defaultThemes, function()
 
 	-- Bossbanner
 	hooksecurefunc("BossBanner_ConfigureLootFrame", function(lootFrame)
-		if not lootFrame.bg then
-			local iconHitBox = lootFrame.IconHitBox
+		local iconHitBox = lootFrame.IconHitBox
+		if not iconHitBox.bg then
 			iconHitBox.bg = B.ReskinIcon(lootFrame.Icon)
 			iconHitBox.bg:SetAlpha(0)
 			iconHitBox.IconBorder:SetTexture(nil)
