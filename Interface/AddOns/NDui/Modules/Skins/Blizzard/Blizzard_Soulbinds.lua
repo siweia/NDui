@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local function ReskinConduitList(frame)
 	local header = frame.CategoryButton.Container
-	if not header.styled then
+	if header and not header.styled then
 		header:DisableDrawLayer("BACKGROUND")
 		local bg = B.CreateBDFrame(header, .25)
 		bg:SetPoint("TOPLEFT", 2, 0)
@@ -13,11 +13,13 @@ local function ReskinConduitList(frame)
 	end
 
 	for button in frame.pool:EnumerateActive() do
-		if not button.styled then
-			for _, element in ipairs(button.Hovers) do
-				element:SetColorTexture(1, 1, 1, .25)
+		if button and not button.styled then
+			if not DB.isNewPatch then
+				for _, element in ipairs(button.Hovers) do
+					element:SetColorTexture(1, 1, 1, .25)
+				end
+				button.PendingBackground:SetColorTexture(1, .8, 0, .25)
 			end
-			button.PendingBackground:SetColorTexture(1, .8, 0, .25)
 			button.Spec.IconOverlay:Hide()
 			B.ReskinIcon(button.Spec.Icon):SetFrameLevel(8)
 
@@ -43,5 +45,16 @@ C.themes["Blizzard_Soulbinds"] = function()
 		for i = 1, 3 do
 			hooksecurefunc(scrollBox.ScrollTarget.Lists[i], "UpdateLayout", ReskinConduitList)
 		end
+	else
+		-- blizzard recreate conduit list for each time you open the panel
+		hooksecurefunc(SoulbindViewer.ConduitList.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local list = select(i, self.ScrollTarget:GetChildren())
+				if list and not list.hooked then
+					hooksecurefunc(list, "Layout", ReskinConduitList)
+					list.hooked = true
+				end
+			end
+		end)
 	end
 end
