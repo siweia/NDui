@@ -82,8 +82,15 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(QuestNPCModelTextFrame)
 	B.SetBD(QuestNPCModelTextFrame)
 
-	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
-		x = x + 6
-		QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
-	end)
+	if DB.isNewPatch then
+		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, _, x, y)
+			x = x + 6
+			QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
+		end)
+	else
+		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
+			x = x + 6
+			QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
+		end)
+	end
 end)
