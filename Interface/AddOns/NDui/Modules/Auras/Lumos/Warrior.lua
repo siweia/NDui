@@ -82,10 +82,11 @@ function A:ChantLumos(self)
 
 		do
 			local button = self.lumos[3]
-			UpdateCooldown(button, 5308)
 			if IsPlayerSpell(206315) then
+				UpdateCooldown(button, 280735)
 				UpdateSpellStatus(button, 280735)
 			else
+				UpdateCooldown(button, 5308)
 				UpdateSpellStatus(button, 5308)
 			end
 		end
