@@ -167,6 +167,19 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	hooksecurefunc("ScenarioSpellButton_UpdateCooldown", function(spellButton)
+		if not spellButton.styled then
+			local bg = B.ReskinIcon(spellButton.Icon)
+			spellButton:SetNormalTexture(nil)
+			spellButton:SetPushedTexture(nil)
+			local hl = spellButton:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetInside(bg)
+
+			spellButton.styled = true
+		end
+	end)
+
 	hooksecurefunc("Scenario_ChallengeMode_ShowBlock", function()
 		local block = ScenarioChallengeModeBlock
 		if not block.bg then
