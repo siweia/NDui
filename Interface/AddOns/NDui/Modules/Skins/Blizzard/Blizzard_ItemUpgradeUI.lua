@@ -34,4 +34,8 @@ C.themes["Blizzard_ItemUpgradeUI"] = function()
 	B.StripTextures(ItemUpgradeFrameMoneyFrame)
 	B.ReskinIcon(ItemUpgradeFrameMoneyFrame.Currency.icon)
 	B.Reskin(ItemUpgradeFrameUpgradeButton)
+
+	if DB.isNewPatch then
+		B.ReskinDropDown(ItemUpgradeFrame.UpgradeLevelDropDown.DropDownMenu)
+	end
 end
