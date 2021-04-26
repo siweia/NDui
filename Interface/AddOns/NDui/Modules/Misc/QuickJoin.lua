@@ -58,13 +58,13 @@ local function sortRoleOrder(a, b)
 end
 
 local function UpdateGroupRoles(self)
+	wipe(roleCache)
+
 	if not self.__owner then
 		self.__owner = self:GetParent():GetParent()
 	end
 	local resultID = self.__owner.resultID
 	if not resultID then return end
-
-	wipe(roleCache)
 
 	local count = 0
 	for i = 1, 5 do
