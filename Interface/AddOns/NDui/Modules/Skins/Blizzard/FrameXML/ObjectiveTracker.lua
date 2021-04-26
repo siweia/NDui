@@ -116,6 +116,10 @@ local function GetMawBuffsAnchor(frame)
 	end
 end
 
+local function replaceTimerBarTexture(self)
+	self.TimerBar:SetStatusBarTexture(DB.normTex)
+end
+
 tinsert(C.defaultThemes, function()
 	if IsAddOnLoaded("!KalielsTracker") then return end
 
@@ -149,19 +153,17 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, "Update", function()
 		local widgetContainer = ScenarioStageBlock.WidgetContainer
-		if not widgetContainer then return end
+		if widgetContainer.widgetFrames then
+			for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
+				if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
 
-		local widgetFrame = widgetContainer:GetChildren()
-		if widgetFrame and widgetFrame.Frame then
-			widgetFrame.Frame:SetAlpha(0)
+				local timerBar = widgetFrame.TimerBar
+				if timerBar and not timerBar.styled then
+					B.CreateBDFrame(timerBar, .25)
+					B:SmoothBar(bar)
+					hooksecurefunc(widgetFrame, "Setup", replaceTimerBarTexture)
 
-			if widgetFrame.CurrencyContainer then -- this may be removed, needs review
-				for i = 1, widgetFrame.CurrencyContainer:GetNumChildren() do
-					local bu = select(i, widgetFrame.CurrencyContainer:GetChildren())
-					if bu and bu.Icon and not bu.styled then
-						B.ReskinIcon(bu.Icon)
-						bu.styled = true
-					end
+					timerBar.styled = true
 				end
 			end
 		end
