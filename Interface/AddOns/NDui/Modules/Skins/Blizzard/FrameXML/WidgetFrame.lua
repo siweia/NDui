@@ -17,20 +17,20 @@ local function updateBarTexture(self, atlas)
 	end
 end
 
-local function ReskinWidgetStatusBar(self)
-	local bar = self.Bar
-	local atlas = bar:GetStatusBarAtlas()
-	updateBarTexture(bar, atlas)
-
-	if not bar.styled then
-		bar.BGLeft:SetAlpha(0)
-		bar.BGRight:SetAlpha(0)
-		bar.BGCenter:SetAlpha(0)
-		bar.BorderLeft:SetAlpha(0)
-		bar.BorderRight:SetAlpha(0)
-		bar.BorderCenter:SetAlpha(0)
-		bar.Spark:SetAlpha(0)
+local function ReskinWidgetStatusBar(bar)
+	if bar and not bar.styled then
+		if bar.BG then bar.BG:SetAlpha(0) end
+		if bar.BGLeft then bar.BGLeft:SetAlpha(0) end
+		if bar.BGRight then bar.BGRight:SetAlpha(0) end
+		if bar.BGCenter then bar.BGCenter:SetAlpha(0) end
+		if bar.BorderLeft then bar.BorderLeft:SetAlpha(0) end
+		if bar.BorderRight then bar.BorderRight:SetAlpha(0) end
+		if bar.BorderCenter then bar.BorderCenter:SetAlpha(0) end
+		if bar.Spark then bar.Spark:SetAlpha(0) end
+		if bar.SparkGlow then bar.SparkGlow:SetAlpha(0) end
+		if bar.BorderGlow then bar.BorderGlow:SetAlpha(0) end
 		B.SetBD(bar)
+		hooksecurefunc(bar, "SetStatusBarAtlas", updateBarTexture)
 
 		bar.styled = true
 	end
@@ -45,17 +45,8 @@ local function ReskinWidgetFrames()
 		local widgetType = widgetFrame.widgetType
 		if widgetType == Type_DoubleStatusBar then
 			if not widgetFrame.styled then
-				for _, bar in pairs({widgetFrame.LeftBar, widgetFrame.RightBar}) do
-					bar.BG:SetAlpha(0)
-					bar.BorderLeft:SetAlpha(0)
-					bar.BorderRight:SetAlpha(0)
-					bar.BorderCenter:SetAlpha(0)
-					bar.Spark:SetAlpha(0)
-					bar.SparkGlow:SetAlpha(0)
-					bar.BorderGlow:SetAlpha(0)
-					B.SetBD(bar)
-					hooksecurefunc(bar, "SetStatusBarAtlas", updateBarTexture)
-				end
+				ReskinWidgetStatusBar(widgetFrame.LeftBar)
+				ReskinWidgetStatusBar(widgetFrame.RightBar)
 
 				widgetFrame.styled = true
 			end
@@ -70,7 +61,7 @@ local function ReskinWidgetFrames()
 				widgetFrame.styled = true
 			end
 		elseif widgetType == Type_StatusBar then
-			ReskinWidgetStatusBar(widgetFrame)
+			ReskinWidgetStatusBar(widgetFrame.Bar)
 		end
 	end
 end
@@ -81,7 +72,9 @@ tinsert(C.defaultThemes, function()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", ReskinWidgetFrames)
 	B:RegisterEvent("UPDATE_ALL_UI_WIDGETS", ReskinWidgetFrames)
 
-	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", ReskinWidgetStatusBar)
+	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
+		ReskinWidgetStatusBar(self.Bar)
+	end)
 
 	hooksecurefunc(_G.UIWidgetTemplateCaptureBarMixin, "Setup", function(self)
 		self.LeftLine:SetAlpha(0)
