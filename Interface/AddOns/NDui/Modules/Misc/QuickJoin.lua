@@ -8,7 +8,9 @@ local M = B:GetModule("Misc")
 	2.双击搜索结果，快速申请
 	3.自动隐藏部分窗口
 ]]
-local wipe, sort = wipe, sort
+local select, wipe, sort = select, wipe, sort
+local UnitClass, UnitGroupRolesAssigned = UnitClass, UnitGroupRolesAssigned
+local HideUIPanel = HideUIPanel
 local C_Timer_After = C_Timer.After
 local C_LFGList_GetSearchResultMemberInfo = C_LFGList.GetSearchResultMemberInfo
 local LFG_LIST_GROUP_DATA_ATLASES = LFG_LIST_GROUP_DATA_ATLASES
@@ -57,6 +59,25 @@ local function sortRoleOrder(a, b)
 	end
 end
 
+local function GetPartyMemberInfo(index)
+	local unit = "player"
+	if index > 1 then unit = "party"..(index-1) end
+
+	local class = select(2, UnitClass(unit))
+	if not class then return end
+	local role = UnitGroupRolesAssigned(unit)
+	if role == "NONE" then role = "DAMAGER" end
+	return role, class
+end
+
+local function GetCorrectRoleInfo(resultID, i)
+	if resultID then
+		return C_LFGList_GetSearchResultMemberInfo(resultID, i)
+	else
+		return GetPartyMemberInfo(i)
+	end
+end
+
 local function UpdateGroupRoles(self)
 	wipe(roleCache)
 
@@ -64,11 +85,10 @@ local function UpdateGroupRoles(self)
 		self.__owner = self:GetParent():GetParent()
 	end
 	local resultID = self.__owner.resultID
-	if not resultID then return end
 
 	local count = 0
 	for i = 1, 5 do
-		local role, class = C_LFGList_GetSearchResultMemberInfo(resultID, i)
+		local role, class = GetCorrectRoleInfo(resultID, i)
 		local roleIndex = role and roleOrder[role]
 		if roleIndex then
 			count = count + 1
