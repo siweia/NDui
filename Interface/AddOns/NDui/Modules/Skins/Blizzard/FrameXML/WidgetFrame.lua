@@ -7,10 +7,11 @@ local atlasColors = {
 	["UI-Frame-Bar-Fill-Red"] = {.9, .2, .2},
 	["UI-Frame-Bar-Fill-Yellow"] = {1, .6, 0},
 	["objectivewidget-bar-fill-left"] = {.2, .6, 1},
-	["objectivewidget-bar-fill-right"] = {.9, .2, .2}
+	["objectivewidget-bar-fill-right"] = {.9, .2, .2},
+	["EmberCourtScenario-Tracker-barfill"] = {.9, .2, .2},
 }
 
-local function updateBarTexture(self, atlas)
+function B:ReplaceWidgetBarTexture(atlas)
 	if atlasColors[atlas] then
 		self:SetStatusBarTexture(DB.normTex)
 		self:SetStatusBarColor(unpack(atlasColors[atlas]))
@@ -30,7 +31,7 @@ local function ReskinWidgetStatusBar(bar)
 		if bar.SparkGlow then bar.SparkGlow:SetAlpha(0) end
 		if bar.BorderGlow then bar.BorderGlow:SetAlpha(0) end
 		B.SetBD(bar)
-		hooksecurefunc(bar, "SetStatusBarAtlas", updateBarTexture)
+		hooksecurefunc(bar, "SetStatusBarAtlas", B.ReplaceWidgetBarTexture)
 
 		bar.styled = true
 	end

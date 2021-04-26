@@ -116,10 +116,6 @@ local function GetMawBuffsAnchor(frame)
 	end
 end
 
-local function replaceTimerBarTexture(self)
-	self.TimerBar:SetStatusBarTexture(DB.normTex)
-end
-
 tinsert(C.defaultThemes, function()
 	if IsAddOnLoaded("!KalielsTracker") then return end
 
@@ -157,13 +153,13 @@ tinsert(C.defaultThemes, function()
 			for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
 				if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
 
-				local timerBar = widgetFrame.TimerBar
-				if timerBar and not timerBar.styled then
-					B.CreateBDFrame(timerBar, .25)
+				local bar = widgetFrame.TimerBar
+				if bar and not bar.styled then
 					B:SmoothBar(bar)
-					hooksecurefunc(widgetFrame, "Setup", replaceTimerBarTexture)
+					B.CreateBDFrame(bar, .25)
+					hooksecurefunc(bar, "SetStatusBarAtlas", B.ReplaceWidgetBarTexture)
 
-					timerBar.styled = true
+					bar.styled = true
 				end
 			end
 		end
