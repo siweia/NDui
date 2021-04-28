@@ -154,12 +154,18 @@ tinsert(C.defaultThemes, function()
 				if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
 
 				local bar = widgetFrame.TimerBar
-				if bar and not bar.styled then
+				if bar and not bar.bg then
 					B:SmoothBar(bar)
-					B.CreateBDFrame(bar, .25)
 					hooksecurefunc(bar, "SetStatusBarAtlas", B.ReplaceWidgetBarTexture)
+					bar.bg = B.CreateBDFrame(bar, .25)
+				end
 
-					bar.styled = true
+				if widgetFrame.CurrencyContainer then
+					for currencyFrame in widgetFrame.currencyPool:EnumerateActive() do
+						if not currencyFrame.bg then
+							currencyFrame.bg = B.ReskinIcon(currencyFrame.Icon)
+						end
+					end
 				end
 			end
 		end
