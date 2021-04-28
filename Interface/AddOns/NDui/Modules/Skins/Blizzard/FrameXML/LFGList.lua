@@ -219,6 +219,14 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	hooksecurefunc("LFGListGroupDataDisplayPlayerCount_Update", function(self)
+		if not self.styled then
+			self.Count:SetWidth(24)
+
+			self.styled = true
+		end
+	end)
+
 	-- Activity finder
 
 	local ActivityFinder = EntryCreation.ActivityFinder
