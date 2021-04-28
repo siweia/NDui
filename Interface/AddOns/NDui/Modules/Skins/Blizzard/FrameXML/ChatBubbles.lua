@@ -15,7 +15,6 @@ local function reskinChatBubble(chatbubble)
 
 		frame:DisableDrawLayer("BORDER")
 		frame.Tail:SetAlpha(0)
-		frame.String:SetFont(DB.Font[1], 13, DB.Font[3])
 	end
 
 	chatbubble.styled = true
