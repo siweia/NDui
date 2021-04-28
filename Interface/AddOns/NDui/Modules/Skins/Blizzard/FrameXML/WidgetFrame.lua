@@ -1,7 +1,11 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
--- Credit: ShestakUI
+local Type_StatusBar = _G.Enum.UIWidgetVisualizationType.StatusBar
+local Type_CaptureBar = _G.Enum.UIWidgetVisualizationType.CaptureBar
+local Type_SpellDisplay = _G.Enum.UIWidgetVisualizationType.SpellDisplay
+local Type_DoubleStatusBar = _G.Enum.UIWidgetVisualizationType.DoubleStatusBar
+
 local atlasColors = {
 	["UI-Frame-Bar-Fill-Blue"] = {.2, .6, 1},
 	["UI-Frame-Bar-Fill-Red"] = {.9, .2, .2},
@@ -37,32 +41,65 @@ local function ReskinWidgetStatusBar(bar)
 	end
 end
 
-local Type_StatusBar = _G.Enum.UIWidgetVisualizationType.StatusBar
-local Type_SpellDisplay = _G.Enum.UIWidgetVisualizationType.SpellDisplay
-local Type_DoubleStatusBar = _G.Enum.UIWidgetVisualizationType.DoubleStatusBar
+local function ReskinDoubleStatusBarWidget(self)
+	if not self.styled then
+		ReskinWidgetStatusBar(self.LeftBar)
+		ReskinWidgetStatusBar(self.RightBar)
+
+		self.styled = true
+	end
+end
+
+local function ReskinCaptureBarWidget(self)
+	self.LeftBar:SetTexture(DB.normTex)
+	self.NeutralBar:SetTexture(DB.normTex)
+	self.RightBar:SetTexture(DB.normTex)
+
+	self.LeftBar:SetVertexColor(.2, .6, 1)
+	self.NeutralBar:SetVertexColor(.8, .8, .8)
+	self.RightBar:SetVertexColor(.9, .2, .2)
+
+	if not self.bg then
+		self.LeftLine:SetAlpha(0)
+		self.RightLine:SetAlpha(0)
+		self.BarBackground:SetAlpha(0)
+		self.Glow1:SetAlpha(0)
+		self.Glow2:SetAlpha(0)
+		self.Glow3:SetAlpha(0)
+
+		self.bg = B.SetBD(self)
+		self.bg:SetPoint("TOPLEFT", self.LeftBar, -2, 2)
+		self.bg:SetPoint("BOTTOMRIGHT", self.RightBar, 2, -2)
+	end
+end
+
+local function ReskinSpellDisplayWidget(self)
+	if not self.styled then
+		local widgetSpell = self.Spell
+		widgetSpell.IconMask:Hide()
+		widgetSpell.Border:SetTexture(nil)
+		widgetSpell.DebuffBorder:SetTexture(nil)
+		B.ReskinIcon(widgetSpell.Icon)
+
+		self.styled = true
+	end
+end
 
 local function ReskinWidgetFrames()
 	for _, widgetFrame in pairs(_G.UIWidgetTopCenterContainerFrame.widgetFrames) do
 		local widgetType = widgetFrame.widgetType
 		if widgetType == Type_DoubleStatusBar then
-			if not widgetFrame.styled then
-				ReskinWidgetStatusBar(widgetFrame.LeftBar)
-				ReskinWidgetStatusBar(widgetFrame.RightBar)
-
-				widgetFrame.styled = true
-			end
+			ReskinDoubleStatusBarWidget(widgetFrame)
 		elseif widgetType == Type_SpellDisplay then
-			if not widgetFrame.styled then
-				local widgetSpell = widgetFrame.Spell
-				widgetSpell.IconMask:Hide()
-				widgetSpell.Border:SetTexture(nil)
-				widgetSpell.DebuffBorder:SetTexture(nil)
-				B.ReskinIcon(widgetSpell.Icon)
-
-				widgetFrame.styled = true
-			end
+			ReskinSpellDisplayWidget(widgetFrame)
 		elseif widgetType == Type_StatusBar then
 			ReskinWidgetStatusBar(widgetFrame.Bar)
+		end
+	end
+
+	for _, widgetFrame in pairs(_G.UIWidgetBelowMinimapContainerFrame.widgetFrames) do
+		if widgetFrame.widgetType == Type_CaptureBar then
+			ReskinCaptureBarWidget(widgetFrame)
 		end
 	end
 end
@@ -77,26 +114,7 @@ tinsert(C.defaultThemes, function()
 		ReskinWidgetStatusBar(self.Bar)
 	end)
 
-	hooksecurefunc(_G.UIWidgetTemplateCaptureBarMixin, "Setup", function(self)
-		self.LeftLine:SetAlpha(0)
-		self.RightLine:SetAlpha(0)
-		self.BarBackground:SetAlpha(0)
-		self.Glow1:SetAlpha(0)
-		self.Glow2:SetAlpha(0)
-		self.Glow3:SetAlpha(0)
-
-		self.LeftBar:SetTexture(DB.normTex)
-		self.NeutralBar:SetTexture(DB.normTex)
-		self.RightBar:SetTexture(DB.normTex)
-
-		self.LeftBar:SetVertexColor(.2, .6, 1)
-		self.NeutralBar:SetVertexColor(.8, .8, .8)
-		self.RightBar:SetVertexColor(.9, .2, .2)
-
-		if not self.bg then
-			self.bg = B.SetBD(self)
-			self.bg:SetPoint("TOPLEFT", self.LeftBar, -2, 2)
-			self.bg:SetPoint("BOTTOMRIGHT", self.RightBar, 2, -2)
-		end
-	end)
+	hooksecurefunc(_G.UIWidgetTemplateCaptureBarMixin, "Setup", ReskinCaptureBarWidget)
+	hooksecurefunc(_G.UIWidgetTemplateSpellDisplayMixin, "Setup", ReskinSpellDisplayWidget)
+	hooksecurefunc(_G.UIWidgetTemplateDoubleStatusBarMixin, "Setup", ReskinDoubleStatusBarWidget)
 end)
