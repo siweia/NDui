@@ -10,10 +10,11 @@ local M = B:GetModule("Misc")
 ]]
 local select, wipe, sort = select, wipe, sort
 local UnitClass, UnitGroupRolesAssigned = UnitClass, UnitGroupRolesAssigned
-local HideUIPanel = HideUIPanel
+local StaticPopup_Hide, HideUIPanel = StaticPopup_Hide, HideUIPanel
 local C_Timer_After = C_Timer.After
 local C_LFGList_GetSearchResultMemberInfo = C_LFGList.GetSearchResultMemberInfo
-local LFG_LIST_GROUP_DATA_ATLASES = LFG_LIST_GROUP_DATA_ATLASES
+local ApplicationViewerFrame = _G.LFGListFrame.ApplicationViewer
+local LFG_LIST_GROUP_DATA_ATLASES = _G.LFG_LIST_GROUP_DATA_ATLASES
 
 function M:HookApplicationClick()
 	if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
@@ -70,10 +71,10 @@ local function GetPartyMemberInfo(index)
 	return role, class
 end
 
-local function GetCorrectRoleInfo(resultID, i)
-	if resultID then
-		return C_LFGList_GetSearchResultMemberInfo(resultID, i)
-	else
+local function GetCorrectRoleInfo(frame, i)
+	if frame.resultID then
+		return C_LFGList_GetSearchResultMemberInfo(frame.resultID, i)
+	elseif frame == ApplicationViewerFrame then
 		return GetPartyMemberInfo(i)
 	end
 end
@@ -84,11 +85,10 @@ local function UpdateGroupRoles(self)
 	if not self.__owner then
 		self.__owner = self:GetParent():GetParent()
 	end
-	local resultID = self.__owner.resultID
 
 	local count = 0
 	for i = 1, 5 do
-		local role, class = GetCorrectRoleInfo(resultID, i)
+		local role, class = GetCorrectRoleInfo(self.__owner, i)
 		local roleIndex = role and roleOrder[role]
 		if roleIndex then
 			count = count + 1
