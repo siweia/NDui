@@ -690,9 +690,7 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 		button.icon:SetDesaturated(false)
 	end
 
-	if style == "raid" and C.db["UFs"]["RaidBuffIndicator"] then
-		button.iconbg:SetBackdropBorderColor(1, 0, 0)
-	elseif element.showDebuffType and button.isDebuff then
+	if element.showDebuffType and button.isDebuff then
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		button.iconbg:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
@@ -761,6 +759,21 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 		end
 	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
 		return true
+	end
+end
+
+function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
+	if UF.CornerSpells[spellID] or element.__owner.RaidDebuffs.spellID == spellID then
+		return false
+	elseif isBossAura or SpellIsPriorityAura(spellID) then
+		return true
+	else
+		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
+		if hasCustom then
+			return showForMySpec or (alwaysShowMine and (caster == "player" or caster == "pet" or caster == "vehicle"))
+		else
+			return true
+		end
 	end
 end
 
@@ -896,12 +909,21 @@ function UF:CreateDebuffs(self)
 		bu.num = 10
 		bu.iconsPerRow = 5
 		bu.CustomFilter = UF.CustomFilter
+	elseif mystyle == "raid" then
+		bu.initialAnchor = "BOTTOMLEFT"
+		bu:SetPoint("BOTTOMLEFT", self.Power, "TOPLEFT", C.mult, C.mult)
+		bu.num = 3
+		bu.iconsPerRow = 6
+		bu["growth-x"] = "RIGHT"
+		bu.CustomFilter = UF.RaidDebuffFilter
+		bu.disableMouse = true
 	end
 
 	local width = self:GetWidth()
-	bu.size = auraIconSize(width, bu.iconsPerRow, bu.spacing)
+	local maxLines = bu.iconsPerRow and floor(bu.num/bu.iconsPerRow + .5) or 1
+	bu.size = bu.iconsPerRow and auraIconSize(width, bu.iconsPerRow, bu.spacing) or bu.size
 	bu:SetWidth(self:GetWidth())
-	bu:SetHeight((bu.size + bu.spacing) * floor(bu.num/bu.iconsPerRow + .5))
+	bu:SetHeight((bu.size + bu.spacing) * maxLines)
 
 	bu.PostCreateIcon = UF.PostCreateIcon
 	bu.PostUpdateIcon = UF.PostUpdateIcon

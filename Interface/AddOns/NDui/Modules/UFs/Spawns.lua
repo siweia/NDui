@@ -165,6 +165,7 @@ local function CreateRaidStyle(self)
 	UF:CreateRaidDebuffs(self)
 	UF:CreateThreatBorder(self)
 	UF:CreateAuras(self)
+	UF:CreateDebuffs(self)
 	UF:CreateBuffIndicator(self)
 end
 
