@@ -165,6 +165,7 @@ local function CreateRaidStyle(self)
 	UF:CreateRaidDebuffs(self)
 	UF:CreateThreatBorder(self)
 	UF:CreateAuras(self)
+	if not C.db["UFs"]["RaidBuffIndicator"] then UF:CreateBuffs(self) end
 	UF:CreateDebuffs(self)
 	UF:CreateBuffIndicator(self)
 end

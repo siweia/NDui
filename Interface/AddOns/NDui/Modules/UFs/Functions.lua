@@ -739,11 +739,7 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 			return true
 		end
 	elseif style == "raid" then
-		if C.db["UFs"]["RaidBuffIndicator"] then
-			return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
-		else
-			return (button.isPlayer or caster == "pet") and UF.CornerSpells[spellID] or C.RaidBuffs["ALL"][spellID] or C.RaidBuffs["WARNING"][spellID]
-		end
+		return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if element.__owner.isNameOnly then
 			return NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID]
@@ -760,6 +756,10 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
 		return true
 	end
+end
+
+function UF.RaidBuffFilter(_, _, button, _, _, _, _, _, _, caster, _, _, spellID)
+	return (button.isPlayer or caster == "pet") and UF.CornerSpells[spellID]
 end
 
 function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
@@ -821,18 +821,11 @@ function UF:CreateAuras(self)
 		bu.numDebuffs = 14
 		bu.iconsPerRow = 7
 	elseif mystyle == "raid" then
-		if C.db["UFs"]["RaidBuffIndicator"] then
-			bu.initialAnchor = "LEFT"
-			bu:SetPoint("LEFT", self, 15, 0)
-			bu.size = 18*C.db["UFs"]["SimpleRaidScale"]/10
-			bu.numTotal = 1
-			bu.disableCooldown = true
-		else
-			bu:SetPoint("BOTTOMLEFT", self.Health)
-			bu.numTotal = C.db["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 6
-			bu.iconsPerRow = 6
-			bu.spacing = 2
-		end
+		bu.initialAnchor = "LEFT"
+		bu:SetPoint("LEFT", self, 15, 0)
+		bu.size = 18*C.db["UFs"]["SimpleRaidScale"]/10
+		bu.numTotal = 1
+		bu.disableCooldown = true
 		bu.gap = false
 		bu.disableMouse = C.db["UFs"]["AurasClickThrough"]
 	elseif mystyle == "nameplate" then
@@ -879,6 +872,15 @@ function UF:CreateBuffs(self)
 	bu.iconsPerRow = 6
 	bu.onlyShowPlayer = false
 
+	if self.mystyle == "raid" then
+		bu.initialAnchor = "BOTTOMRIGHT"
+		bu["growth-x"] = "LEFT"
+		bu:SetPoint("BOTTOMRIGHT", self.Health, -C.mult, C.mult)
+		bu.num = 3
+		bu.CustomFilter = UF.RaidBuffFilter
+		bu.disableMouse = true
+	end
+
 	local width = self:GetWidth()
 	bu.size = auraIconSize(width, bu.iconsPerRow, bu.spacing)
 	bu:SetWidth(self:GetWidth())
@@ -911,10 +913,10 @@ function UF:CreateDebuffs(self)
 		bu.CustomFilter = UF.CustomFilter
 	elseif mystyle == "raid" then
 		bu.initialAnchor = "BOTTOMLEFT"
-		bu:SetPoint("BOTTOMLEFT", self.Power, "TOPLEFT", C.mult, C.mult)
+		bu["growth-x"] = "RIGHT"
+		bu:SetPoint("BOTTOMLEFT", self.Health, C.mult, C.mult)
 		bu.num = 3
 		bu.iconsPerRow = 6
-		bu["growth-x"] = "RIGHT"
 		bu.CustomFilter = UF.RaidDebuffFilter
 		bu.disableMouse = true
 	end
