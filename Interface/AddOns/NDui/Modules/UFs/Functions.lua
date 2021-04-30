@@ -8,6 +8,7 @@ local AURA = B:GetModule("Auras")
 local format, floor = string.format, math.floor
 local pairs, next = pairs, next
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
+local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura = SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
@@ -758,8 +759,18 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 	end
 end
 
-function UF.RaidBuffFilter(_, _, button, _, _, _, _, _, _, caster, _, _, spellID)
-	return (button.isPlayer or caster == "pet") and UF.CornerSpells[spellID]
+function UF.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
+	if isBossAura then
+		return true
+	else
+		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
+		local isPlayerSpell = (caster == "player" or caster == "pet" or caster == "vehicle")
+		if hasCustom then
+			return showForMySpec or (alwaysShowMine and isPlayerSpell)
+		else
+			return isPlayerSpell and canApplyAura and not SpellIsSelfBuff(spellID)
+		end
+	end
 end
 
 function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
@@ -875,8 +886,9 @@ function UF:CreateBuffs(self)
 	if self.mystyle == "raid" then
 		bu.initialAnchor = "BOTTOMRIGHT"
 		bu["growth-x"] = "LEFT"
+		bu:ClearAllPoints()
 		bu:SetPoint("BOTTOMRIGHT", self.Health, -C.mult, C.mult)
-		bu.num = 3
+		bu.num = C.db["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 3
 		bu.CustomFilter = UF.RaidBuffFilter
 		bu.disableMouse = true
 	end
@@ -915,7 +927,7 @@ function UF:CreateDebuffs(self)
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-x"] = "RIGHT"
 		bu:SetPoint("BOTTOMLEFT", self.Health, C.mult, C.mult)
-		bu.num = 3
+		bu.num = C.db["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 3
 		bu.iconsPerRow = 6
 		bu.CustomFilter = UF.RaidDebuffFilter
 		bu.disableMouse = true
