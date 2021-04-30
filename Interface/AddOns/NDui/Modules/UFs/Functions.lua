@@ -740,7 +740,12 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 			return true
 		end
 	elseif style == "raid" then
-		return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
+		if C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID] then
+			element.__owner.rawSpellID = spellID
+			return true
+		else
+			element.__owner.rawSpellID = nil
+		end
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if element.__owner.isNameOnly then
 			return NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID]
@@ -774,7 +779,8 @@ function UF.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, can
 end
 
 function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
-	if UF.CornerSpells[spellID] or element.__owner.RaidDebuffs.spellID == spellID then
+	local parent = element.__owner
+	if UF.CornerSpells[spellID] or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
 		return false
 	elseif isBossAura or SpellIsPriorityAura(spellID) then
 		return true
@@ -838,7 +844,7 @@ function UF:CreateAuras(self)
 		bu.numTotal = 1
 		bu.disableCooldown = true
 		bu.gap = false
-		bu.disableMouse = C.db["UFs"]["AurasClickThrough"]
+		bu.disableMouse = true
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-y"] = "UP"
