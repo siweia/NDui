@@ -890,7 +890,7 @@ function UF:CreateBuffs(self)
 		bu["growth-x"] = "LEFT"
 		bu:ClearAllPoints()
 		bu:SetPoint("BOTTOMRIGHT", self.Health, -C.mult, C.mult)
-		bu.num = C.db["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 3
+		bu.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
 		bu.size = C.db["UFs"]["RaidBuffSize"]
 		bu.CustomFilter = UF.RaidBuffFilter
 		bu.disableMouse = true
@@ -930,7 +930,7 @@ function UF:CreateDebuffs(self)
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-x"] = "RIGHT"
 		bu:SetPoint("BOTTOMLEFT", self.Health, C.mult, C.mult)
-		bu.num = C.db["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 3
+		bu.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
 		bu.size = C.db["UFs"]["RaidDebuffSize"]
 		bu.CustomFilter = UF.RaidDebuffFilter
 		bu.disableMouse = true
@@ -943,11 +943,12 @@ function UF:CreateDebuffs(self)
 	self.Debuffs = bu
 end
 
-function UF:UpdateRaidDebuffSize()
+function UF:UpdateRaidAuras()
 	for _, frame in pairs(oUF.objects) do
 		if frame.mystyle == "raid" then
 			local debuff = frame.Debuffs
 			if debuff then
+				debuff.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
 				debuff.size = C.db["UFs"]["RaidDebuffSize"]
 				UF:UpdateAuraContainer(frame, debuff, debuff.num)
 				debuff:ForceUpdate()
@@ -955,6 +956,7 @@ function UF:UpdateRaidDebuffSize()
 
 			local buff = frame.Buffs
 			if buff then
+				buff.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
 				buff.size = C.db["UFs"]["RaidBuffSize"]
 				UF:UpdateAuraContainer(frame, buff, buff.num)
 				buff:ForceUpdate()

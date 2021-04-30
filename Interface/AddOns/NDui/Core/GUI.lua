@@ -659,8 +659,8 @@ local function updateSimpleModeGroupBy()
 	end
 end
 
-local function updateRaidDebuffSize()
-	B:GetModule("UnitFrames"):UpdateRaidDebuffSize()
+local function updateRaidAuras()
+	B:GetModule("UnitFrames"):UpdateRaidAuras()
 end
 
 local function updateRaidHealthMethod()
@@ -864,10 +864,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 
-		{1, "UFs", "ShowRaidDebuff", NewTag.."ShowRaidDebuff", nil, nil, nil, "ShowRaidDebuffTip"},
-		{1, "UFs", "ShowRaidBuff", NewTag.."ShowRaidBuff", true, nil, nil, "ShowRaidBuffTip"},
-		{3, "UFs", "RaidDebuffSize", NewTag.."RaidDebuffSize".."*", nil, {5, 30, 1}, updateRaidDebuffSize},
-		{3, "UFs", "RaidBuffSize", NewTag.."RaidBuffSize".."*", true, {5, 30, 1}, updateRaidDebuffSize},
+		{1, "UFs", "ShowRaidDebuff", NewTag.."ShowRaidDebuff", nil, nil, updateRaidAuras, "ShowRaidDebuffTip"},
+		{1, "UFs", "ShowRaidBuff", NewTag.."ShowRaidBuff", true, nil, updateRaidAuras, "ShowRaidBuffTip"},
+		{3, "UFs", "RaidDebuffSize", NewTag.."RaidDebuffSize".."*", nil, {5, 30, 1}, updateRaidAuras},
+		{3, "UFs", "RaidBuffSize", NewTag.."RaidBuffSize".."*", true, {5, 30, 1}, updateRaidAuras},
 		{},--blank
 		{1, "UFs", "ShowSolo", L["ShowSolo"], nil, nil, nil, L["ShowSoloTip"]},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
