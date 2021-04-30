@@ -798,6 +798,15 @@ local function auraIconSize(w, n, s)
 	return (w-(n-1)*s)/n
 end
 
+function UF:UpdateAuraContainer(parent, element, maxAuras)
+	local width = parent:GetWidth()
+	local iconsPerRow = element.iconsPerRow
+	local maxLines = iconsPerRow and B:Round(maxAuras/iconsPerRow) or 2
+	element.size = iconsPerRow and auraIconSize(width, iconsPerRow, element.spacing) or element.size
+	element:SetWidth(width)
+	element:SetHeight((element.size + element.spacing) * maxLines)
+end
+
 function UF:UpdateTargetAuras()
 	local frame = _G.oUF_Target
 	if not frame then return end
@@ -805,11 +814,7 @@ function UF:UpdateTargetAuras()
 	local element = frame.Auras
 	element.iconsPerRow = C.db["UFs"]["TargetAurasPerRow"]
 
-	local width = frame:GetWidth()
-	local maxLines = element.iconsPerRow and B:Round((element.numBuffs + element.numDebuffs)/element.iconsPerRow)
-	element.size = auraIconSize(width, element.iconsPerRow, element.spacing)
-	element:SetWidth(width)
-	element:SetHeight((element.size + element.spacing) * maxLines)
+	UF:UpdateAuraContainer(frame, element, element.numBuffs + element.numDebuffs)
 	element:ForceUpdate()
 end
 
@@ -860,13 +865,7 @@ function UF:CreateAuras(self)
 		bu.disableMouse = true
 	end
 
-	local width = self:GetWidth()
-	local maxAuras = bu.numTotal or bu.numBuffs + bu.numDebuffs
-	local maxLines = bu.iconsPerRow and floor(maxAuras/bu.iconsPerRow + .5) or 2
-	bu.size = bu.iconsPerRow and auraIconSize(width, bu.iconsPerRow, bu.spacing) or bu.size
-	bu:SetWidth(width)
-	bu:SetHeight((bu.size + bu.spacing) * maxLines)
-
+	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
 	bu.showStealableBuffs = true
 	bu.CustomFilter = UF.CustomFilter
 	bu.PostCreateIcon = UF.PostCreateIcon
@@ -884,10 +883,7 @@ function UF:CreateBuffs(self)
 	bu.initialAnchor = "BOTTOMLEFT"
 	bu["growth-x"] = "RIGHT"
 	bu["growth-y"] = "UP"
-	bu.num = 6
 	bu.spacing = 3
-	bu.iconsPerRow = 6
-	bu.onlyShowPlayer = false
 
 	if self.mystyle == "raid" then
 		bu.initialAnchor = "BOTTOMRIGHT"
@@ -895,15 +891,16 @@ function UF:CreateBuffs(self)
 		bu:ClearAllPoints()
 		bu:SetPoint("BOTTOMRIGHT", self.Health, -C.mult, C.mult)
 		bu.num = C.db["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 3
+		bu.size = C.db["UFs"]["RaidBuffSize"]
 		bu.CustomFilter = UF.RaidBuffFilter
 		bu.disableMouse = true
+	else
+		bu.num = 6
+		bu.iconsPerRow = 6
+		bu.onlyShowPlayer = false
 	end
 
-	local width = self:GetWidth()
-	bu.size = auraIconSize(width, bu.iconsPerRow, bu.spacing)
-	bu:SetWidth(self:GetWidth())
-	bu:SetHeight((bu.size + bu.spacing) * floor(bu.num/bu.iconsPerRow + .5))
-
+	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.showStealableBuffs = true
 	bu.PostCreateIcon = UF.PostCreateIcon
 	bu.PostUpdateIcon = UF.PostUpdateIcon
@@ -934,21 +931,36 @@ function UF:CreateDebuffs(self)
 		bu["growth-x"] = "RIGHT"
 		bu:SetPoint("BOTTOMLEFT", self.Health, C.mult, C.mult)
 		bu.num = C.db["UFs"]["SimpleMode"] and not self.isPartyFrame and 0 or 3
-		bu.iconsPerRow = 6
+		bu.size = C.db["UFs"]["RaidDebuffSize"]
 		bu.CustomFilter = UF.RaidDebuffFilter
 		bu.disableMouse = true
 	end
 
-	local width = self:GetWidth()
-	local maxLines = bu.iconsPerRow and floor(bu.num/bu.iconsPerRow + .5) or 1
-	bu.size = bu.iconsPerRow and auraIconSize(width, bu.iconsPerRow, bu.spacing) or bu.size
-	bu:SetWidth(self:GetWidth())
-	bu:SetHeight((bu.size + bu.spacing) * maxLines)
-
+	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.PostCreateIcon = UF.PostCreateIcon
 	bu.PostUpdateIcon = UF.PostUpdateIcon
 
 	self.Debuffs = bu
+end
+
+function UF:UpdateRaidDebuffSize()
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == "raid" then
+			local debuff = frame.Debuffs
+			if debuff then
+				debuff.size = C.db["UFs"]["RaidDebuffSize"]
+				UF:UpdateAuraContainer(frame, debuff, debuff.num)
+				debuff:ForceUpdate()
+			end
+
+			local buff = frame.Buffs
+			if buff then
+				buff.size = C.db["UFs"]["RaidBuffSize"]
+				UF:UpdateAuraContainer(frame, buff, buff.num)
+				buff:ForceUpdate()
+			end
+		end
+	end
 end
 
 -- Class Powers
