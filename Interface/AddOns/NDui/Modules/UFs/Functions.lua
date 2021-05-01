@@ -170,15 +170,13 @@ function UF:CreateHealthText(self)
 			name:SetPoint("LEFT", 3, -1)
 		elseif C.db["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			name:SetPoint("LEFT", 4, 0)
-		elseif C.db["UFs"]["RaidBuffIndicator"] then
+		else
 			name:SetJustifyH("CENTER")
 			if C.db["UFs"]["RaidHPMode"] ~= 1 then
 				name:SetPoint("TOP", 0, -3)
 			else
 				name:SetPoint("CENTER")
 			end
-		else
-			name:SetPoint("TOPLEFT", 2, -2)
 		end
 		name:SetScale(C.db["UFs"]["RaidTextScale"])
 	elseif mystyle == "nameplate" then
@@ -213,12 +211,10 @@ function UF:CreateHealthText(self)
 			self:Tag(hpval, "[hp]")
 		elseif C.db["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
-		elseif C.db["UFs"]["RaidBuffIndicator"] then
+		else
 			hpval:ClearAllPoints()
 			hpval:SetPoint("BOTTOM", 0, 1)
 			hpval:SetJustifyH("CENTER")
-		else
-			hpval:SetPoint("RIGHT", -3, -7)
 		end
 		hpval:SetScale(C.db["UFs"]["RaidTextScale"])
 	elseif mystyle == "nameplate" then
@@ -239,15 +235,13 @@ function UF:UpdateRaidNameText()
 			name:ClearAllPoints()
 			if C.db["UFs"]["SimpleMode"] and not frame.isPartyFrame then
 				name:SetPoint("LEFT", 4, 0)
-			elseif C.db["UFs"]["RaidBuffIndicator"] then
+			else
 				name:SetJustifyH("CENTER")
 				if C.db["UFs"]["RaidHPMode"] ~= 1 then
 					name:SetPoint("TOP", 0, -3)
 				else
 					name:SetPoint("CENTER")
 				end
-			else
-				name:SetPoint("TOPLEFT", 2, -2)
 			end
 			frame.healthValue:UpdateTag()
 		end
