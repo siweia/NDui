@@ -995,7 +995,7 @@ function G:SetupCastbar(parent)
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(parent, L["Castbar Width"], 200, 400, defaultValue[value][1], 30, offset-60, value.."CBWidth", func)
+		createOptionSlider(parent, L["Castbar Width"], 100, 800, defaultValue[value][1], 30, offset-60, value.."CBWidth", func)
 		createOptionSlider(parent, L["Castbar Height"], 10, 50, defaultValue[value][2], 30, offset-130, value.."CBHeight", func)
 	end
 
