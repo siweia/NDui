@@ -55,11 +55,11 @@ C.themes["Blizzard_PlayerChoiceUI"] = function()
 
 				if child.Spell then
 					if not child.Spell.bg then
-						child.Spell.Border:SetTexture("")
-						child.Spell.IconMask:Hide()
+						child.Spell.Border:SetAlpha(0)
 						child.Spell.bg = B.ReskinIcon(child.Spell.Icon)
 					end
 
+					child.Spell.IconMask:Hide()
 					child.Spell.Text:SetTextColor(1, 1, 1)
 				end
 
