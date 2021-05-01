@@ -104,6 +104,10 @@ local function ReskinWidgetFrames()
 	end
 end
 
+local ignoredWidgetIDs = {
+	[3273] = true, -- Torghast progressbar
+}
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -111,6 +115,7 @@ tinsert(C.defaultThemes, function()
 	B:RegisterEvent("UPDATE_ALL_UI_WIDGETS", ReskinWidgetFrames)
 
 	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
+		if ignoredWidgetIDs[self.widgetID] then return end
 		ReskinWidgetStatusBar(self.Bar)
 	end)
 
