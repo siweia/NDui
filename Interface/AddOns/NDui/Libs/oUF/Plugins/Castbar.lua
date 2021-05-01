@@ -69,7 +69,7 @@ function B:OnCastbarUpdate(elapsed)
 	if self.casting or self.channeling then
 		local decimal = self.decimal
 
-		local duration = self.casting and self.duration + elapsed or self.duration - elapsed
+		local duration = self.casting and (self.duration + elapsed) or (self.duration - elapsed)
 		if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
 			self.casting = nil
 			self.channeling = nil
