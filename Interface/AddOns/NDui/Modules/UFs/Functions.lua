@@ -946,23 +946,36 @@ end
 function UF:UpdateRaidAuras()
 	for _, frame in pairs(oUF.objects) do
 		if frame.mystyle == "raid" then
-			local debuff = frame.Debuffs
-			if debuff then
-				debuff.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
-				debuff.size = C.db["UFs"]["RaidDebuffSize"]
-				UF:UpdateAuraContainer(frame, debuff, debuff.num)
-				debuff:ForceUpdate()
+			local debuffs = frame.Debuffs
+			if debuffs then
+				debuffs.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
+				debuffs.size = C.db["UFs"]["RaidDebuffSize"]
+				UF:UpdateAuraContainer(frame, debuffs, debuffs.num)
+				debuffs:ForceUpdate()
 			end
 
-			local buff = frame.Buffs
-			if buff then
-				buff.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
-				buff.size = C.db["UFs"]["RaidBuffSize"]
-				UF:UpdateAuraContainer(frame, buff, buff.num)
-				buff:ForceUpdate()
+			local buffs = frame.Buffs
+			if buffs then
+				buffs.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
+				buffs.size = C.db["UFs"]["RaidBuffSize"]
+				UF:UpdateAuraContainer(frame, buffs, buffs.num)
+				buffs:ForceUpdate()
 			end
 		end
 	end
+end
+
+local function refreshAurasElements(self)
+	local buffs = self.Buffs
+	if buffs then buffs:ForceUpdate() end
+
+	local debuffs = self.Debuffs
+	if debuffs then debuffs:ForceUpdate() end
+end
+
+function UF:RefreshAurasByCombat(self)
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", refreshAurasElements, true)
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", refreshAurasElements, true)
 end
 
 -- Class Powers

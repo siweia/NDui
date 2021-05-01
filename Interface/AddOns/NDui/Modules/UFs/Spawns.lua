@@ -167,6 +167,7 @@ local function CreateRaidStyle(self)
 	UF:CreateAuras(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
+	UF:RefreshAurasByCombat(self)
 	UF:CreateBuffIndicator(self)
 end
 
