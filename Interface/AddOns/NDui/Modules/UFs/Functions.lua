@@ -685,6 +685,9 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 		button:SetSize(element.size, element.size)
 	end
 
+	local fontSize = element.fontSize or element.size*.6
+	button.count:SetFont(DB.Font[1], fontSize, DB.Font[3])
+
 	if button.isDebuff and filteredStyle[style] and not button.isPlayer then
 		button.icon:SetDesaturated(true)
 	else
@@ -894,6 +897,7 @@ function UF:CreateBuffs(self)
 		bu.size = C.db["UFs"]["RaidBuffSize"]
 		bu.CustomFilter = UF.RaidBuffFilter
 		bu.disableMouse = true
+		bu.fontSize = C.db["UFs"]["RaidBuffSize"]-2
 	else
 		bu.num = 6
 		bu.iconsPerRow = 6
@@ -934,6 +938,7 @@ function UF:CreateDebuffs(self)
 		bu.size = C.db["UFs"]["RaidDebuffSize"]
 		bu.CustomFilter = UF.RaidDebuffFilter
 		bu.disableMouse = true
+		bu.fontSize = C.db["UFs"]["RaidDebuffSize"]-2
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.num)
@@ -950,6 +955,7 @@ function UF:UpdateRaidAuras()
 			if debuffs then
 				debuffs.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
 				debuffs.size = C.db["UFs"]["RaidDebuffSize"]
+				debuffs.fontSize = C.db["UFs"]["RaidDebuffSize"]-2
 				UF:UpdateAuraContainer(frame, debuffs, debuffs.num)
 				debuffs:ForceUpdate()
 			end
@@ -958,6 +964,7 @@ function UF:UpdateRaidAuras()
 			if buffs then
 				buffs.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
 				buffs.size = C.db["UFs"]["RaidBuffSize"]
+				buffs.fontSize = C.db["UFs"]["RaidBuffSize"]-2
 				UF:UpdateAuraContainer(frame, buffs, buffs.num)
 				buffs:ForceUpdate()
 			end
