@@ -57,7 +57,7 @@
 	<Script file="TradeFrame.lua"/>
 	<Script file="TutorialFrame.lua"/>
 	<Script file="UIDropDownMenu.lua"/>
+	<Script file="UIWidgets.lua"/>
 	<Script file="VideoOptionsFrame.lua"/>
-	<Script file="WidgetFrame.lua"/>
 	<Script file="WorldMapFrame.lua"/>
 </Ui>
