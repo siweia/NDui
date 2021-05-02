@@ -119,8 +119,13 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	tab.spellID = spellID
 	tab.itemID = toyID or itemID
 	tab.type = (toyID and "toy") or (itemID and "item") or "spell"
-	tab:SetAttribute("type", tab.type)
-	tab:SetAttribute(tab.type, spellID or name)
+	if spellID == 818 then -- cooking fire
+		tab:SetAttribute("type", "macro")
+		tab:SetAttribute("macrotext", "/cast [@player]"..name)
+	else
+		tab:SetAttribute("type", tab.type)
+		tab:SetAttribute(tab.type, spellID or name)
+	end
 	tab:SetNormalTexture(texture)
 	tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	tab:Show()
