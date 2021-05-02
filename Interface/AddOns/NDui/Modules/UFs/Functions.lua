@@ -775,9 +775,14 @@ function UF.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, can
 	end
 end
 
+local debuffBlackList = {
+	[206151] = true,
+}
 function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
 	local parent = element.__owner
-	if (C.db["UFs"]["RaidBuffIndicator"] and UF.CornerSpells[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
+	if debuffBlackList[spellID] then
+		return false
+	elseif (C.db["UFs"]["RaidBuffIndicator"] and UF.CornerSpells[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
 		return false
 	elseif isBossAura or SpellIsPriorityAura(spellID) then
 		return true
