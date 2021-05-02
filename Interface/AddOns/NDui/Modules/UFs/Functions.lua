@@ -932,6 +932,7 @@ function UF:CreateDebuffs(self)
 		bu.size = C.db["UFs"]["RaidDebuffSize"]
 		bu.CustomFilter = UF.RaidDebuffFilter
 		bu.disableMouse = true
+		bu.showDebuffType = true
 		bu.fontSize = C.db["UFs"]["RaidDebuffSize"]-2
 	end
 
