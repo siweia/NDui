@@ -41,11 +41,9 @@ C.themes["Blizzard_PlayerChoice"] = function()
 			ReskinOptionText(optionFrame.OptionText, 1, 1, 1)
 
 			local optionButtonsContainer = optionFrame.OptionButtonsContainer
-			if optionButtonsContainer then
-				if optionButtonsContainer.buttonPool then
-					for button in optionButtonsContainer.buttonPool:EnumerateActive() do
-						ReskinOptionButton(button)
-					end
+			if optionButtonsContainer and optionButtonsContainer.buttonPool then
+				for button in optionButtonsContainer.buttonPool:EnumerateActive() do
+					ReskinOptionButton(button)
 				end
 			end
 
@@ -68,6 +66,13 @@ C.themes["Blizzard_PlayerChoice"] = function()
 					PlayerChoiceBaseOptionCurrencyRewardTemplate
 					PlayerChoiceBaseOptionReputationRewardTemplate
 				]]
+			end
+
+			local widgetContainer = optionFrame.WidgetContainer
+			if widgetContainer and widgetContainer.widgetFrames then
+				for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
+					ReskinOptionText(widgetFrame.Text, 1, 1, 1)
+				end
 			end
 		end
 	end)
