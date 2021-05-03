@@ -25,7 +25,6 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 			self.ModelSceneContainer.ModelSceneBorder:SetAlpha(0)
 			B.CreateBDFrame(self.Title, .25)
 			B.ReskinClose(self.CloseButton)
-			self.CloseButton.Border:SetAlpha(0)
 			self.bg = B.SetBD(self)
 		end
 		self.CloseButton:SetPoint("TOPRIGHT", -6, -6)
@@ -74,7 +73,6 @@ C.themes["Blizzard_CovenantSanctum"] = function()
 			self.NineSlice:SetAlpha(0)
 			self.LevelFrame.Background:SetAlpha(0)
 			B.ReskinClose(self.CloseButton)
-			self.CloseButton.Border:SetAlpha(0)
 		end
 	end)
 
@@ -101,13 +99,14 @@ end
 
 -- Covenant renown
 C.themes["Blizzard_CovenantRenown"] = function()
-	local CovenantRenownFrame = CovenantRenownFrame
-
-	B.SetBD(CovenantRenownFrame)
-	B.ReskinClose(CovenantRenownFrame.CloseButton)
-
 	hooksecurefunc(CovenantRenownFrame, "SetUpCovenantData", function(self)
 		B.StripTextures(self)
-		self.CloseButton.Border:Hide()
+
+		if not self.styled then
+			B.SetBD(self)
+			B.ReskinClose(self.CloseButton)
+
+			self.styled = true
+		end
 	end)
 end

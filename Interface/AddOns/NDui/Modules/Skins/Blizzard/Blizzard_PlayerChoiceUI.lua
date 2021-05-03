@@ -35,7 +35,6 @@ C.themes["Blizzard_PlayerChoiceUI"] = function()
 			self.BorderFrame.Header:SetAlpha(0)
 			B.CreateBDFrame(self.Title, .25)
 			B.ReskinClose(self.CloseButton)
-			self.CloseButton.Border:SetAlpha(0)
 			self.bg = B.SetBD(self)
 		end
 
