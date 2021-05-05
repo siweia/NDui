@@ -128,8 +128,11 @@ tinsert(C.defaultThemes, function()
 	ApplicationViewer.InfoBackground:Hide()
 	ApplicationViewer.Inset:Hide()
 
-	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader"}) do
+	local prevHeader
+	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader", "DungeonScoreColumnHeader"}) do
 		local header = ApplicationViewer[headerName]
+		if not header then break end -- isNewPatch
+
 		B.StripTextures(header)
 		header.Label:SetFont(DB.Font[1], 14, DB.Font[3])
 		header.Label:SetShadowColor(0, 0, 0, 0)
@@ -145,10 +148,12 @@ tinsert(C.defaultThemes, function()
 
 		header:HookScript("OnEnter", Highlight_OnEnter)
 		header:HookScript("OnLeave", Highlight_OnLeave)
-	end
 
-	ApplicationViewer.RoleColumnHeader:SetPoint("LEFT", ApplicationViewer.NameColumnHeader, "RIGHT", 1, 0)
-	ApplicationViewer.ItemLevelColumnHeader:SetPoint("LEFT", ApplicationViewer.RoleColumnHeader, "RIGHT", 1, 0)
+		if prevHeader then
+			header:SetPoint("LEFT", prevHeader, "RIGHT", C.mult, 0)
+		end
+		prevHeader = header
+	end
 
 	B.Reskin(ApplicationViewer.RefreshButton)
 	B.Reskin(ApplicationViewer.RemoveEntryButton)
