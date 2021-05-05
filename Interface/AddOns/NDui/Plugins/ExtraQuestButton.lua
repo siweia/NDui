@@ -164,13 +164,16 @@ function ExtraQuestButton:BAG_UPDATE_COOLDOWN()
 	end
 end
 
-function ExtraQuestButton:BAG_UPDATE_DELAYED()
-	self:Update()
-
+function ExtraQuestButton:UpdateCount()
 	if self:IsShown() then
 		local count = GetItemCount(self.itemLink)
 		self.Count:SetText(count and count > 1 and count or "")
 	end
+end
+
+function ExtraQuestButton:BAG_UPDATE_DELAYED()
+	self:Update()
+	self:UpdateCount()
 end
 
 function ExtraQuestButton:UpdateAttributes()
@@ -366,6 +369,7 @@ function ExtraQuestButton:SetItem(itemLink)
 		B:GetModule("Actionbar").UpdateHotKey(self)
 
 		self:UpdateAttributes()
+		self:UpdateCount()
 		self.updateRange = hasRange
 	end
 end
