@@ -382,6 +382,14 @@ local function ReskinMissionBoards(self)
 	reskinFollowerBoard(self, "follower")
 end
 
+-- Blizzard didn't set color for currency reward, incorrect color presents after scroll
+local function FixCurrencyRewardBorder(icon)
+	local reward = icon:GetParent()
+	if reward and not reward.itemID then
+		reward.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
 C.themes["Blizzard_GarrisonUI"] = function()
 	-- Tooltips
 	B.ReskinGarrisonTooltip(GarrisonFollowerAbilityWithoutCountersTooltip)
@@ -568,8 +576,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			reward:GetRegions():Hide()
 			reward.bg = B.ReskinIcon(reward.Icon)
 			B.ReskinIconBorder(reward.IconBorder)
-			reward:ClearAllPoints()
-			reward:SetPoint("TOPRIGHT", -4, -4)
+			hooksecurefunc(reward.Icon, "SetTexture", FixCurrencyRewardBorder)
 		end
 	end
 
