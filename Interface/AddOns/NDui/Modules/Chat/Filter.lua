@@ -198,6 +198,7 @@ local socketWatchList = {
 	["PUNCHCARDBLUE"] = true,
 	["PUNCHCARDRED"] = true,
 	["PUNCHCARDYELLOW"] = true,
+	["DOMINATION"] = true,
 }
 
 local function GetSocketTexture(socket, count)
