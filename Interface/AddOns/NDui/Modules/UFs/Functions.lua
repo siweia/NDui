@@ -953,7 +953,7 @@ function UF:UpdateRaidAuras()
 		if frame.mystyle == "raid" then
 			local debuffs = frame.Debuffs
 			if debuffs then
-				debuffs.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
+				debuffs.num = ((C.db["UFs"]["SimpleMode"] and not frame.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
 				debuffs.size = C.db["UFs"]["RaidDebuffSize"]
 				debuffs.fontSize = C.db["UFs"]["RaidDebuffSize"]-2
 				UF:UpdateAuraContainer(frame, debuffs, debuffs.num)
@@ -962,7 +962,7 @@ function UF:UpdateRaidAuras()
 
 			local buffs = frame.Buffs
 			if buffs then
-				buffs.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
+				buffs.num = ((C.db["UFs"]["SimpleMode"] and not frame.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
 				buffs.size = C.db["UFs"]["RaidBuffSize"]
 				buffs.fontSize = C.db["UFs"]["RaidBuffSize"]-2
 				UF:UpdateAuraContainer(frame, buffs, buffs.num)
