@@ -1070,6 +1070,20 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- VenturePlan, 4.12a and higher
 	if IsAddOnLoaded("VenturePlan") then
+		local ANIMA_SPELLID = {[347555] = 3, [345706] = 5, [336327] = 35, [336456] = 250}
+		local function GetAnimaMultiplier(itemID)
+			local _, spellID = GetItemSpell(itemID)
+			return ANIMA_SPELLID[spellID]
+		end
+		local function SetAnimaActualCount(self, text)
+			local mult = GetAnimaMultiplier(self.__owner.itemID)
+			if mult then
+				if text == "" then text = 1 end
+				text = text * mult
+				self:SetFormattedText("%s", text)
+			end
+		end
+
 		function VPEX_OnUIObjectCreated(otype, widget, peek)
 			if widget:IsObjectType("Frame") then
 				if otype == "MissionButton" then
@@ -1124,6 +1138,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					if widget.Background then widget.Background:Hide() end
 					if widget.Detail then widget.Detail:SetFontObject("Game13Font") end
 					if widget.Outcome then widget.Outcome:SetFontObject("Game13Font") end
+				elseif otype == "RewardFrame" then
+					if widget.Quantity then
+						widget.Quantity.__owner = widget
+						hooksecurefunc(widget.Quantity, "SetText", SetAnimaActualCount)
+					end
 				end
 			end
 		end
