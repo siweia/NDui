@@ -137,7 +137,7 @@ tinsert(C.defaultThemes, function()
 
 	-- TextToSpeech
 	if DB.isNewPatch then
-		TextToSpeechButton:DisableDrawLayer("BACKGROUND")
+		B.StripTextures(TextToSpeechButton, 5)
 
 		B.StripTextures(TextToSpeechFrame)
 		B.SetBD(TextToSpeechFrame)
