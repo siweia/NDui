@@ -76,8 +76,10 @@ tinsert(C.defaultThemes, function()
 			frame.Background:SetTexture("")
 			frame.Icon.Overlay:SetTexture("")
 			-- otherwise it hides
-			frame.Shield.Points:Show()
-			frame.Shield.Icon:Show()
+			if not DB.isNewPatch then
+				frame.Shield.Points:Show()
+				frame.Shield.Icon:Show()
+			end
 		elseif frame.queue == CriteriaAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)

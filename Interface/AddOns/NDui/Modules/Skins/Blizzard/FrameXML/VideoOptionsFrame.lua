@@ -62,7 +62,8 @@ tinsert(C.defaultThemes, function()
 			"Graphics_ProjectedTexturesDropDown",
 			"Graphics_ShadowsDropDown",
 			"Graphics_LiquidDetailDropDown",
-			"Graphics_SunshaftsDropDown",
+			"Graphics_SunshaftsDropDown",	-- isNewPatch, removed in 38627
+			"Graphics_ComputeEffectsDropDown",	-- isNewPatch, add in 38627
 			"Graphics_ParticleDensityDropDown",
 			"Graphics_SSAODropDown",
 			"Graphics_DepthEffectsDropDown",
@@ -72,7 +73,7 @@ tinsert(C.defaultThemes, function()
 			"RaidGraphics_ProjectedTexturesDropDown",
 			"RaidGraphics_ShadowsDropDown",
 			"RaidGraphics_LiquidDetailDropDown",
-			"RaidGraphics_SunshaftsDropDown",
+			"RaidGraphics_SunshaftsDropDown",	-- isNewPatch, removed in 38627
 			"RaidGraphics_ParticleDensityDropDown",
 			"RaidGraphics_SSAODropDown",
 			"RaidGraphics_DepthEffectsDropDown",

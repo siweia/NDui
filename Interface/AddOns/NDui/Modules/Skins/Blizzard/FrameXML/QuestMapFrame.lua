@@ -75,6 +75,9 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(DetailsFrame)
 	B.StripTextures(DetailsFrame.RewardsFrame)
 	B.StripTextures(DetailsFrame.ShareButton)
+	if DB.isNewPatch then
+		DetailsFrame.Bg:SetAlpha(0)
+	end
 	DetailsFrame.SealMaterialBG:SetAlpha(0)
 
 	B.Reskin(DetailsFrame.BackButton)
