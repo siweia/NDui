@@ -63,7 +63,6 @@ tinsert(C.defaultThemes, function()
 			"Graphics_ShadowsDropDown",
 			"Graphics_LiquidDetailDropDown",
 			"Graphics_SunshaftsDropDown",	-- isNewPatch, removed in 38627
-			"Graphics_ComputeEffectsDropDown",	-- isNewPatch, add in 38627
 			"Graphics_ParticleDensityDropDown",
 			"Graphics_SSAODropDown",
 			"Graphics_DepthEffectsDropDown",
@@ -98,6 +97,12 @@ tinsert(C.defaultThemes, function()
 			"InterfaceOptionsLanguagesPanelLocaleDropDown",
 			"InterfaceOptionsLanguagesPanelAudioLocaleDropDown"
 		}
+		if DB.isNewPatch then
+			tinsert(dropdowns, "Graphics_ComputeEffectsDropDown")
+			tinsert(dropdowns, "RaidGraphics_ComputeEffectsDropDown")
+			tremove(dropdowns, 11)
+			tremove(dropdowns, 20)
+		end
 		for i = 1, #dropdowns do
 			local dropdown = _G[dropdowns[i]]
 			if not dropdown then
