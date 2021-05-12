@@ -21,8 +21,7 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 DB.Devs = {
 	["寧德-加尔"] = true,
 	["图咿-万色星辰"] = true,
-	["Huniverster-Oribos"] = true,
-	["Huniverster-Torghast"] = true,
+	["Huniverster-Broxigar"] = true,
 }
 local function isDeveloper()
 	return DB.Devs[DB.MyFullName]
