@@ -52,10 +52,7 @@ tinsert(C.defaultThemes, function()
 		if frame.queue == AchievementAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
-				if DB.isNewPatch then
-					frame.bg:SetPoint("TOPLEFT", 0, -17)
-					frame.bg:SetPoint("BOTTOMRIGHT", 0, 14)
-				else
+				if not DB.isNewPatch then
 					frame.bg:SetPoint("TOPLEFT", 0, -7)
 					frame.bg:SetPoint("BOTTOMRIGHT", 0, 8)
 					frame.OldAchievement:SetTexture("")
@@ -79,6 +76,14 @@ tinsert(C.defaultThemes, function()
 			if not DB.isNewPatch then
 				frame.Shield.Points:Show()
 				frame.Shield.Icon:Show()
+			else
+				if frame.GuildBanner:IsShown() then
+					frame.bg:SetPoint("TOPLEFT", 2, -29)
+					frame.bg:SetPoint("BOTTOMRIGHT", -2, 4)
+				else
+					frame.bg:SetPoint("TOPLEFT", frame, -2, -17)
+					frame.bg:SetPoint("BOTTOMRIGHT", 2, 12)
+				end
 			end
 		elseif frame.queue == CriteriaAlertSystem then
 			if not frame.bg then
