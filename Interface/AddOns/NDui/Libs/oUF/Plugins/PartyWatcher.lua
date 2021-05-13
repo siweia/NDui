@@ -76,6 +76,7 @@ end
 local function ResetButtons(self)
 	local element = self.PartyWatcher
 	element.index = 0
+	element.lastCount = nil
 	wipe(element.spellToButton)
 	for i = 1, element.__max do
 		local button = element[i]
