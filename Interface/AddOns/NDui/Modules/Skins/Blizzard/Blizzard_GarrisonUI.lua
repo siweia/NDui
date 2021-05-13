@@ -576,7 +576,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			reward:GetRegions():Hide()
 			reward.bg = B.ReskinIcon(reward.Icon)
 			B.ReskinIconBorder(reward.IconBorder)
-			hooksecurefunc(reward.Icon, "SetTexture", FixCurrencyRewardBorder)	-- isNewPatch, blizzard fix this in patch 9.1.0.38627
+			if not DB.isNewPatch then
+				hooksecurefunc(reward.Icon, "SetTexture", FixCurrencyRewardBorder)	-- isNewPatch, blizzard fix this in patch 9.1.0.38627
+			end
 		end
 	end
 
