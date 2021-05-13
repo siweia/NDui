@@ -1072,6 +1072,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- VenturePlan, 4.12a and higher
 	if IsAddOnLoaded("VenturePlan") then
+		local ANIMA_TEXTURE = 3528288
 		local ANIMA_SPELLID = {[347555] = 3, [345706] = 5, [336327] = 35, [336456] = 250}
 		local function GetAnimaMultiplier(itemID)
 			local _, spellID = GetItemSpell(itemID)
@@ -1083,6 +1084,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				if text == "" then text = 1 end
 				text = text * mult
 				self:SetFormattedText("%s", text)
+				self.__owner.Icon:SetTexture(ANIMA_TEXTURE)
 			end
 		end
 
