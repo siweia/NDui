@@ -8,6 +8,8 @@
 	<Script file="units.lua"/>
 	<Script file="colors.lua"/>
 
+	<Script file='Plugins\RaidDebuffs.lua' />
+
 	<Script file="elements\additionalpower.lua"/>
 	<Script file="elements\alternativepower.lua"/>
 	<Script file="elements\assistantindicator.lua"/>
@@ -40,7 +42,6 @@
 	<Script file='Plugins\Castbar.lua' />
 	<Script file='Plugins\FloatingCombatFeedback.lua' />
 	<Script file='Plugins\QuakeTimer.lua' />
-	<Script file='Plugins\RaidDebuffs.lua' />
 	<Script file='Plugins\Swing.lua' />
 	<Script file='Plugins\PartyWatcher.lua' />
 
