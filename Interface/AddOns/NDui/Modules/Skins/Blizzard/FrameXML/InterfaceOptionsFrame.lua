@@ -34,6 +34,9 @@ tinsert(C.defaultThemes, function()
 			"InterfaceOptionsSocialPanelTwitterLoginButton",
 			"InterfaceOptionsDisplayPanelResetTutorials",
 		}
+		if DB.isNewPatch then
+			tinsert(buttons, "InterfaceOptionsAccessibilityPanelConfigureTextToSpeech")
+		end
 		for _, buttonName in pairs(buttons) do
 			local button = _G[buttonName]
 			if not button then
@@ -105,13 +108,16 @@ tinsert(C.defaultThemes, function()
 			"InterfaceOptionsAccessibilityPanelMovePad",
 			"InterfaceOptionsAccessibilityPanelCinematicSubtitles",
 			"InterfaceOptionsAccessibilityPanelOverrideFadeOut",
-			"InterfaceOptionsAccessibilityPanelColorblindMode",
+			"InterfaceOptionsAccessibilityPanelColorblindMode",	-- isNewPatch, removed in 38709
 		}
 		if DB.isNewPatch then
 			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelSpeechToText")
 			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelTextToSpeech")
 			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelRemoteTextToSpeech")
 			tremove(checkboxes, 17)
+			tremove(checkboxes, 61)
+			tinsert(checkboxes, "InterfaceOptionsColorblindPanelColorblindMode")
+			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelQuestTextContrast")
 		end
 		for _, boxName in pairs(checkboxes) do
 			local checkbox = _G[boxName]
@@ -138,10 +144,14 @@ tinsert(C.defaultThemes, function()
 			"InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown",
 			"InterfaceOptionsCameraPanelStyleDropDown",
 			"InterfaceOptionsMousePanelClickMoveStyleDropDown",
-			"InterfaceOptionsAccessibilityPanelColorFilterDropDown",
+			"InterfaceOptionsAccessibilityPanelColorFilterDropDown", -- isNewPatch, removed in 38709
 			"InterfaceOptionsAccessibilityPanelMotionSicknessDropdown",
 			"InterfaceOptionsAccessibilityPanelShakeIntensityDropdown",
 		}
+		if DB.isNewPatch then
+			tremove(dropdowns, 16)
+			tinsert(dropdowns, "InterfaceOptionsColorblindPanelColorFilterDropDown")
+		end
 		for _, ddName in pairs(dropdowns) do
 			local dropdown = _G[ddName]
 			if not dropdown then
@@ -156,8 +166,12 @@ tinsert(C.defaultThemes, function()
 			"InterfaceOptionsCameraPanelFollowSpeedSlider",
 			"InterfaceOptionsMousePanelMouseSensitivitySlider",
 			"InterfaceOptionsMousePanelMouseLookSpeedSlider",
-			"InterfaceOptionsAccessibilityPanelColorblindStrengthSlider",
+			"InterfaceOptionsAccessibilityPanelColorblindStrengthSlider", -- isNewPatch, removed in 38709
 		}
+		if DB.isNewPatch then
+			tremove(sliders, 5)
+			tinsert(sliders, "InterfaceOptionsColorblindPanelColorblindStrengthSlider")
+		end
 		for _, sliderName in pairs(sliders) do
 			local slider = _G[sliderName]
 			if not slider then
