@@ -536,15 +536,15 @@ function UF:CreateCastBar(self)
 	end
 
 	if mystyle == "player" then
-		local safe = cb:CreateTexture(nil,"OVERLAY")
-		safe:SetTexture(DB.normTex)
-		safe:SetVertexColor(1, 0, 0, .6)
-		safe:SetPoint("TOPRIGHT")
-		safe:SetPoint("BOTTOMRIGHT")
-		cb:SetFrameLevel(10)
-		cb.SafeZone = safe
-
 		if C.db["UFs"]["LagString"] then
+			local safe = cb:CreateTexture(nil, "OVERLAY")
+			safe:SetTexture(DB.normTex)
+			safe:SetVertexColor(1, 0, 0, .6)
+			safe:SetPoint("TOPRIGHT")
+			safe:SetPoint("BOTTOMRIGHT")
+			cb:SetFrameLevel(10)
+			cb.SafeZone = safe
+
 			local lag = B.CreateFS(cb, 10)
 			lag:ClearAllPoints()
 			lag:SetPoint("BOTTOM", cb, "TOP", 0, 2)

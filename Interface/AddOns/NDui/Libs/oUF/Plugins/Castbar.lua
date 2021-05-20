@@ -149,15 +149,15 @@ function B:PostCastStart(unit)
 		if self.Lag then self.Lag:Hide() end
 	elseif unit == "player" then
 		local safeZone = self.SafeZone
-		if not safeZone then return end
-
-		safeZone.timeDiff = 0
-		if safeZone.castSent then
-			safeZone.timeDiff = GetTime() - safeZone.sendTime
-			safeZone.timeDiff = safeZone.timeDiff > self.max and self.max or safeZone.timeDiff
-			safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + .001) / self.max)
-			safeZone:Show()
-			safeZone.castSent = false
+		if safeZone then
+			safeZone.timeDiff = 0
+			if safeZone.castSent then
+				safeZone.timeDiff = GetTime() - safeZone.sendTime
+				safeZone.timeDiff = safeZone.timeDiff > self.max and self.max or safeZone.timeDiff
+				safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + .001) / self.max)
+				safeZone:Show()
+				safeZone.castSent = nil
+			end
 		end
 
 		local numTicks = 0
