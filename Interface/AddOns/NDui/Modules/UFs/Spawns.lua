@@ -513,9 +513,22 @@ function UF:OnLogin()
 				return group
 			end
 
+			local function CreateTeamIndex(header)
+				local parent = _G[header:GetName().."UnitButton1"]
+				if parent and not parent.teamIndex then
+					local teamIndex = B.CreateFS(parent, 12, format(GROUP_NUMBER, header.index))
+					teamIndex:ClearAllPoints()
+					teamIndex:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 5)
+					teamIndex:SetTextColor(.6, .8, 1)
+
+					parent.teamIndex = teamIndex
+				end
+			end
+
 			local groups = {}
 			for i = 1, numGroups do
 				groups[i] = CreateGroup("oUF_Raid"..i, i)
+				groups[i].index = i
 				groups[i].groupType = "raid"
 				tinsert(UF.headers, groups[i])
 				RegisterStateDriver(groups[i], "visibility", GetRaidVisibility())
@@ -551,13 +564,8 @@ function UF:OnLogin()
 				end
 
 				if showTeamIndex then
-					local parent = _G["oUF_Raid"..i.."UnitButton1"]
-					if parent then
-						local teamIndex = B.CreateFS(parent, 12, format(GROUP_NUMBER, i))
-						teamIndex:ClearAllPoints()
-						teamIndex:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 5)
-						teamIndex:SetTextColor(.6, .8, 1)
-					end
+					CreateTeamIndex(groups[i])
+					groups[i]:HookScript("OnShow", CreateTeamIndex)
 				end
 			end
 		end
