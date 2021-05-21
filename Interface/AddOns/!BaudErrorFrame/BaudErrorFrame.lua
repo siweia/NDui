@@ -32,7 +32,10 @@ function BaudErrorFrame_OnLoad(self)
 	end
 	SLASH_BaudErrorFrame1 = "/bauderror"
 	SLASH_BaudErrorFrame2 = "/bef"
-	seterrorhandler(BaudErrorFrameHandler)
+
+	local old_seterrorhandler = seterrorhandler
+	old_seterrorhandler(BaudErrorFrameHandler)
+	seterrorhandler = function() end
 
 	local soundButton = CreateFrame("Frame", nil, BaudErrorFrame)
 	soundButton:SetSize(25, 25)
@@ -115,7 +118,7 @@ function BaudErrorFrameShowError(Error)
 end
 
 function BaudErrorFrameAdd(Error, Retrace)
-	if Error:match("script ran too long") then return end
+	if Error:match("script ran too long") and not enableTaint then return end
 
 	for _, Value in pairs(ErrorList) do
 		if Value.Error == Error then
