@@ -46,6 +46,7 @@ function S:OnLogin()
 	self:PGFSkin()
 	self:ReskinRematch()
 	self:PostalSkin()
+	self:OtherSkins()
 
 	-- Register skin
 	local media = LibStub and LibStub("LibSharedMedia-3.0", true)
