@@ -413,13 +413,15 @@ function TT:SetupTooltipFonts()
 	TooltipSetFont(GameTooltipText, textSize)
 	TooltipSetFont(GameTooltipTextSmall, textSize)
 
+	if not GameTooltip.hasMoney then
+		SetTooltipMoney(GameTooltip, 1, nil, "", "")
+		SetTooltipMoney(GameTooltip, 1, nil, "", "")
+		GameTooltip_ClearMoney(GameTooltip)
+	end
 	if GameTooltip.hasMoney then
 		for i = 1, GameTooltip.numMoneyFrames do
 			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."PrefixText"], textSize)
 			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."SuffixText"], textSize)
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."GoldButtonText"], textSize)
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."SilverButtonText"], textSize)
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."CopperButtonText"], textSize)
 		end
 	end
 
