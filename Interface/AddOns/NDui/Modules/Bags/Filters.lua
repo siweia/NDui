@@ -8,6 +8,7 @@ local LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT = LE_ITEM_CLASS_C
 local LE_ITEM_CLASS_MISCELLANEOUS, LE_ITEM_MISCELLANEOUS_MOUNT, LE_ITEM_MISCELLANEOUS_COMPANION_PET = LE_ITEM_CLASS_MISCELLANEOUS, LE_ITEM_MISCELLANEOUS_MOUNT, LE_ITEM_MISCELLANEOUS_COMPANION_PET
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS
 local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
+local C_Item_IsAnimaItemByID = C_Item.IsAnimaItemByID
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 
 -- Custom filter
@@ -108,6 +109,12 @@ local function isQuestItem(item)
 	return item.questID or item.isQuestItem
 end
 
+local function isAnimaItem(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterAnima"] then return end
+	return item.id and C_Item_IsAnimaItemByID(item.id)
+end
+
 function module:GetFilters()
 	local filters = {}
 
@@ -132,6 +139,8 @@ function module:GetFilters()
 	filters.bankGoods = function(item) return isItemInBank(item) and isTradeGoods(item) end
 	filters.bagQuest = function(item) return isItemInBag(item) and isQuestItem(item) end
 	filters.bankQuest = function(item) return isItemInBank(item) and isQuestItem(item) end
+	filters.bagAnima = function(item) return isItemInBag(item) and isAnimaItem(item) end
+	filters.bankAnima = function(item) return isItemInBank(item) and isAnimaItem(item) end
 
 	return filters
 end

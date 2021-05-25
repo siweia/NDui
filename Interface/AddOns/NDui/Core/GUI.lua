@@ -67,6 +67,7 @@ G.DefaultSettings = {
 		FilterGoods = false,
 		FilterQuest = false,
 		FilterEquipSet = false,
+		FilterAnima = false,
 	},
 	Auras = {
 		Reminder = true,
