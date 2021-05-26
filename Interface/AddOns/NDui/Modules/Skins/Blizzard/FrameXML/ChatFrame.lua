@@ -157,7 +157,6 @@ tinsert(C.defaultThemes, function()
 		B.ReskinSlider(TextToSpeechFrameAdjustVolumeSlider)
 
 		local checkboxes = {
-			"PlaySoundWhenEnteringChatWindowCheckButton",
 			"PlayActivitySoundWhenNotFocusedCheckButton",
 			"PlaySoundSeparatingChatLinesCheckButton",
 			"AddCharacterNameToSpeechCheckButton",
@@ -170,13 +169,15 @@ tinsert(C.defaultThemes, function()
 		hooksecurefunc("TextToSpeechFrame_Update", function()
 			local checkBoxNameString = "TextToSpeechFramePanelContainerChatTypeContainerCheckBox"
 			local checkBoxName, checkBox
-			local checkBoxTable = TextToSpeechFramePanelContainerChatTypeContainer.checkBoxTable or {}
-			for index, value in ipairs(checkBoxTable) do
-				checkBoxName = checkBoxNameString..index
-				checkBox = _G[checkBoxName]
-				if checkBox and not checkBox.styled then
-					B.ReskinCheck(checkBox)
-					checkBox.styled = true
+			local checkBoxTable = TextToSpeechFramePanelContainerChatTypeContainer.checkBoxTable
+			if checkBoxTable then
+				for index, value in ipairs(checkBoxTable) do
+					checkBoxName = checkBoxNameString..index
+					checkBox = _G[checkBoxName]
+					if checkBox and not checkBox.styled then
+						B.ReskinCheck(checkBox)
+						checkBox.styled = true
+					end
 				end
 			end
 		end)
