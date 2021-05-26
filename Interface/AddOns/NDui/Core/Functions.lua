@@ -165,7 +165,7 @@ end
 -- Itemlevel
 do
 	local iLvlDB = {}
-	local itemLevelString = gsub(ITEM_LEVEL, "%%d", "")
+	local itemLevelString = "^"..gsub(ITEM_LEVEL, "%%d", "")
 	local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
 	local essenceTextureID = 2975691
 	local essenceDescription = GetSpellDescription(277253)
