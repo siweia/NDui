@@ -80,6 +80,11 @@ local list = {
 		{AuraID = 330367, UnitID = "player", Text = L["Versa"]},	-- 不可思议的量子装置，全能
 		{AuraID = 330368, UnitID = "player", Text = L["Haste"]},	-- 不可思议的量子装置，急速
 		{AuraID = 330380, UnitID = "player", Text = L["Mastery"]},	-- 不可思议的量子装置，精通
+		-- isNewPatch
+	--	{AuraID = 351872, UnitID = "player"},	-- 钢铁尖刺
+	--	{AuraID = 355316, UnitID = "player"},	-- 安海尔德之盾
+	--	{AuraID = 356326, UnitID = "player"},	-- 折磨洞察
+	--	{AuraID = 355333, UnitID = "player"},	-- 回收的聚变增幅器
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 323546, UnitID = "player"},	-- 饕餮狂乱
