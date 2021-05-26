@@ -116,6 +116,7 @@ local list = {
 		{AuraID = 342774, UnitID = "player"},	-- 繁华原野
 		{AuraID = 333218, UnitID = "player"},	-- 废土礼节
 		{AuraID = 336885, UnitID = "player"},	-- 抚慰阴影
+		{AuraID = 324156, UnitID = "player"},	-- 劫掠射击
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
