@@ -36,6 +36,7 @@ tinsert(C.defaultThemes, function()
 		}
 		if DB.isNewPatch then
 			tinsert(buttons, "InterfaceOptionsAccessibilityPanelConfigureTextToSpeech")
+			tinsert(buttons, "InterfaceOptionsAccessibilityPanelRemoteTextToSpeechVoicePlaySample")
 		end
 		for _, buttonName in pairs(buttons) do
 			local button = _G[buttonName]
@@ -151,6 +152,7 @@ tinsert(C.defaultThemes, function()
 		if DB.isNewPatch then
 			tremove(dropdowns, 16)
 			tinsert(dropdowns, "InterfaceOptionsColorblindPanelColorFilterDropDown")
+			tinsert(dropdowns, "InterfaceOptionsAccessibilityPanelRemoteTextToSpeechVoiceDropdown")
 		end
 		for _, ddName in pairs(dropdowns) do
 			local dropdown = _G[ddName]
