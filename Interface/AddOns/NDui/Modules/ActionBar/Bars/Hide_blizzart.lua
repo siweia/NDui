@@ -85,6 +85,10 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
+	-- Fix maw block anchor
+	if DB.isNewPatch then
+		MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
+	end
 	-- Update button grid
 	hooksecurefunc("MultiActionBar_UpdateGridVisibility", toggleButtonGrid)
 	-- Update token panel
