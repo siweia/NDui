@@ -21,8 +21,11 @@ local InviteToGroup = C_PartyInfo.InviteUnit
 local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL
 local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 local RAF_RECRUIT_FRIEND, RAF_RECRUITER_FRIEND = RAF_RECRUIT_FRIEND, RAF_RECRUITER_FRIEND
+local EXPANSION_NAME0 = EXPANSION_NAME0
 local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
-local CLIENT_WOW_CLASSIC = "WoV" -- for sorting
+local WOW_PROJECT_60 = WOW_PROJECT_CLASSIC or 2
+local WOW_PROJECT_TBC = WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5
+local CLIENT_WOW_DIFF = "WoV" -- for sorting
 
 local r, g, b = DB.r, DB.g, DB.b
 local infoFrame, updateRequest, prevTime
@@ -78,7 +81,7 @@ local function GetOnlineInfoText(client, isMobile, rafLinkType, locationText)
 		return UNKNOWN
 	end
 	if isMobile then
-		return LOCATION_MOBILE_APP
+		return "APP"
 	end
 	if (client == BNET_CLIENT_WOW) and (rafLinkType ~= Enum.RafLinkType.None) and not isMobile then
 		if rafLinkType == Enum.RafLinkType.Recruit then
@@ -133,12 +136,18 @@ local function buildBNetTable(num)
 					status = FRIENDS_TEXTURE_DND
 				end
 
+				if wowProjectID == WOW_PROJECT_60 then
+					gameText = EXPANSION_NAME0
+				elseif wowProjectID == WOW_PROJECT_TBC then
+					gameText = gsub(gameText, "%s%-.+", "")
+				end
+
 				local infoText = GetOnlineInfoText(client, isMobile, rafLinkType, gameText)
 				if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
 					infoText = GetOnlineInfoText(client, isMobile, rafLinkType, zoneName)
 				end
 
-				if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_CLASSIC end
+				if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_DIFF end
 
 				tinsert(bnetTable, {i, accountName, charName, canCooperate, client, status, class, level, infoText, note, broadcastText, broadcastTime})
 			end
@@ -302,6 +311,15 @@ local function buttonOnEnter(self)
 			if client == BNET_CLIENT_WOW then
 				if charName ~= "" then -- fix for weird account
 					realmName = (DB.MyRealm == realmName or realmName == "") and "" or "-"..realmName
+
+					-- Get TBC realm name from richPresence
+					if wowProjectID == WOW_PROJECT_TBC then
+						local realm, count = gsub(gameText, "^.-%-%s", "")
+						if count > 0 then
+							realmName = "-"..realm
+						end
+					end
+
 					class = DB.ClassList[class]
 					local classColor = B.HexRGB(B.ClassColor(class))
 					if faction == "Horde" then
@@ -409,7 +427,7 @@ function info:FriendsPanel_UpdateButton(button)
 		end
 		button.name:SetText(format("%s%s|r (%s|r)", DB.InfoColor, accountName, name))
 		button.zone:SetText(format("%s%s", zoneColor, infoText))
-		if client == CLIENT_WOW_CLASSIC then
+		if client == CLIENT_WOW_DIFF then
 			button.gameIcon:SetTexture(BNet_GetClientTexture(BNET_CLIENT_WOW))
 			button.gameIcon:SetVertexColor(.3, .3, .3)
 		else
