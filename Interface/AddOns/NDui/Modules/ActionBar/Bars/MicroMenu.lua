@@ -16,6 +16,17 @@ function Bar:MicroButton_SetupTexture(icon, texture)
 	icon:SetVertexColor(r, g, b)
 end
 
+local function ResetButtonParent(button, parent)
+	if parent ~= button.__owner then
+		button:SetParent(button.__owner)
+	end
+end
+
+local function ResetButtonAnchor(button)
+	button:ClearAllPoints()
+	button:SetAllPoints()
+end
+
 function Bar:MicroButton_Create(parent, data)
 	local texture, method, tooltip = unpack(data)
 
@@ -30,9 +41,10 @@ function Bar:MicroButton_Create(parent, data)
 		local button = _G[method]
 		button:SetHitRectInsets(0, 0, 0, 0)
 		button:SetParent(bu)
-		button:ClearAllPoints(bu)
-		button:SetAllPoints(bu)
-		button.SetPoint = B.Dummy
+		button.__owner = bu
+		hooksecurefunc(button, "SetParent", ResetButtonParent)
+		ResetButtonAnchor(button)
+		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
 		button:UnregisterAllEvents()
 		button:SetNormalTexture(nil)
 		button:SetPushedTexture(nil)
