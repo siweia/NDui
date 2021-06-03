@@ -3,11 +3,6 @@ local B, C, L, DB = unpack(ns)
 
 local MAX_CONTAINER_ITEMS = 36
 
-local function replaceSortTexture(texture)
-	texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version
-	texture:SetTexCoord(unpack(DB.TexCoord))
-end
-
 local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
 local bagIDToInvID = {
 	[1] = 20,
@@ -35,10 +30,44 @@ local function createBagIcon(frame, index)
 	end
 end
 
+local function replaceSortTexture(texture)
+	texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version
+	texture:SetTexCoord(unpack(DB.TexCoord))
+end
+
+local function ReskinSortButton(button)
+	replaceSortTexture(button:GetNormalTexture())
+	replaceSortTexture(button:GetPushedTexture())
+	B.CreateBDFrame(button)
+
+	local highlight = button:GetHighlightTexture()
+	highlight:SetColorTexture(1, 1, 1, .25)
+	highlight:SetAllPoints(button)
+end
+
+local function styleBankButton(bu)
+	bu:SetNormalTexture("")
+	bu:SetPushedTexture("")
+	bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	bu.searchOverlay:SetOutside()
+
+	bu.icon:SetTexCoord(unpack(DB.TexCoord))
+	bu.bg = B.CreateBDFrame(bu.icon, .25)
+	B.ReskinIconBorder(bu.IconBorder)
+
+	local questTexture = bu.IconQuestTexture
+	if questTexture then
+		questTexture:SetDrawLayer("BACKGROUND")
+		questTexture:SetSize(1, 1)
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if C.db["Bags"]["Enable"] then return end
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["DefaultBags"] then return end
+
+	-- [[ Bags ]]
 
 	BackpackTokenFrame:GetRegions():Hide()
 
@@ -113,11 +142,63 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	replaceSortTexture(BagItemAutoSortButton:GetNormalTexture())
-	replaceSortTexture(BagItemAutoSortButton:GetPushedTexture())
-	B.CreateBDFrame(BagItemAutoSortButton)
+	ReskinSortButton(BagItemAutoSortButton)
 
-	local highlight = BagItemAutoSortButton:GetHighlightTexture()
-	highlight:SetColorTexture(1, 1, 1, .25)
-	highlight:SetAllPoints(BagItemAutoSortButton)
+	-- [[ Bank ]]
+
+	BankSlotsFrame:DisableDrawLayer("BORDER")
+	BankPortraitTexture:Hide()
+	BankFrameMoneyFrameInset:Hide()
+	BankFrameMoneyFrameBorder:Hide()
+
+	-- "item slots" and "bag slots" text
+	select(9, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
+	select(10, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
+
+	B.ReskinPortraitFrame(BankFrame)
+	B.Reskin(BankFramePurchaseButton)
+	B.ReskinTab(BankFrameTab1)
+	B.ReskinTab(BankFrameTab2)
+	B.ReskinInput(BankItemSearchBox)
+
+	for i = 1, 28 do
+		styleBankButton(_G["BankFrameItem"..i])
+	end
+
+	for i = 1, 7 do
+		styleBankButton(BankSlotsFrame["Bag"..i])
+	end
+
+	ReskinSortButton(BankItemAutoSortButton)
+
+	hooksecurefunc("BankFrameItemButton_Update", function(button)
+		if not button.isBag and button.IconQuestTexture:IsShown() then
+			button.IconBorder:SetVertexColor(1, 1, 0)
+		end
+	end)
+
+	-- [[ Reagent bank ]]
+
+	ReagentBankFrame:DisableDrawLayer("BACKGROUND")
+	ReagentBankFrame:DisableDrawLayer("BORDER")
+	ReagentBankFrame:DisableDrawLayer("ARTWORK")
+
+	B.Reskin(ReagentBankFrame.DespositButton)
+	B.Reskin(ReagentBankFrameUnlockInfoPurchaseButton)
+
+	-- make button more visible
+	B.StripTextures(ReagentBankFrameUnlockInfo)
+	ReagentBankFrameUnlockInfoBlackBG:SetColorTexture(.1, .1, .1)
+
+	local reagentButtonsStyled = false
+	ReagentBankFrame:HookScript("OnShow", function()
+		if not reagentButtonsStyled then
+			for i = 1, 98 do
+				local button = _G["ReagentBankFrameItem"..i]
+				styleBankButton(button)
+				BankFrameItemButton_Update(button)
+			end
+			reagentButtonsStyled = true
+		end
+	end)
 end)
