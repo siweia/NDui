@@ -65,24 +65,28 @@ local function styleBar(bar)
 	bar.candyBarDuration:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
 end
 
+local styleData = {
+	apiVersion = 1,
+	version = 3,
+	GetSpacing = function(bar) return bar:GetHeight()+5 end,
+	ApplyStyle = styleBar,
+	BarStopped = removeStyle,
+	fontSizeNormal = 13,
+	fontSizeEmphasized = 14,
+	fontOutline = "OUTLINE",
+	GetStyleName = function() return "NDui" end,
+}
+
 local function registerStyle()
 	if not BigWigsAPI then return end
-	BigWigsAPI:RegisterBarStyle("NDui", {
-		apiVersion = 1,
-		version = 3,
-		GetSpacing = function(bar) return bar:GetHeight()+5 end,
-		ApplyStyle = styleBar,
-		BarStopped = removeStyle,
-		fontSizeNormal = 13,
-		fontSizeEmphasized = 14,
-		fontOutline = "OUTLINE",
-		GetStyleName = function() return "NDui" end,
-	})
 
-	local bars = BigWigs:GetPlugin("Bars", true)
-	hooksecurefunc(bars, "SetBarStyle", function(self, style)
-		if style ~= "NDui" then
-			self:SetBarStyle("NDui")
+	BigWigsAPI:RegisterBarStyle("NDui", styleData)
+	-- Force to use NDui style
+	local pending = true
+	hooksecurefunc(BigWigsAPI, "GetBarStyle", function(_, key)
+		if pending then
+			BigWigsAPI.GetBarStyle = function() return styleData end
+			pending = nil
 		end
 	end)
 end
