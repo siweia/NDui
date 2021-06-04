@@ -54,7 +54,6 @@ local list = {
 		{AuraID = 44544, UnitID = "player"},	-- 寒冰指
 		{AuraID = 48108, UnitID = "player"},	-- 炎爆术！
 		{AuraID = 48107, UnitID = "player"},	-- 热力迸发
-		{AuraID = 157913, UnitID = "player"},	-- 隐没
 		{AuraID = 108843, UnitID = "player"},	-- 炽热疾速
 		{AuraID = 116267, UnitID = "player"},	-- 咒术洪流
 		{AuraID = 116014, UnitID = "player"},	-- 能量符文
