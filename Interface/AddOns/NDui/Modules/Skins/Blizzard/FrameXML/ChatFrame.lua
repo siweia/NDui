@@ -1,10 +1,61 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local r, g, b = DB.r, DB.g, DB.b
+
+local function scrollOnEnter(self)
+	self.thumbBG:SetBackdropColor(r, g, b, .25)
+	self.thumbBG:SetBackdropBorderColor(r, g, b)
+end
+
+local function scrollOnLeave(self)
+	self.thumbBG:SetBackdropColor(0, 0, 0, 0)
+	self.thumbBG:SetBackdropBorderColor(0, 0, 0)
+end
+
+local function ReskinChatScroll(self)
+	local bu = _G[self:GetName().."ThumbTexture"]
+	bu:SetAlpha(0)
+	bu:SetWidth(16)
+	local bg = B.CreateBDFrame(bu, 0, true)
+	local down = self.ScrollToBottomButton
+	B.ReskinArrow(down, "down")
+	down:SetPoint("BOTTOMRIGHT", _G[self:GetName().."ResizeButton"], "TOPRIGHT", -4, -2)
+
+	self.ScrollBar.thumbBG = bg
+	self.ScrollBar:HookScript("OnEnter", scrollOnEnter)
+	self.ScrollBar:HookScript("OnLeave", scrollOnLeave)
+end
+
+local function reskinPickerOptions(self)
+	local scrollTarget = self.ScrollBox.ScrollTarget
+	if scrollTarget then
+		for i = 1, scrollTarget:GetNumChildren() do
+			local child = select(i, scrollTarget:GetChildren())
+			if not child.styled then
+				child.UnCheck:SetTexture(nil)
+				child.Highlight:SetColorTexture(r, g, b, .25)
+
+				local check = child.Check
+				check:SetColorTexture(r, g, b, .6)
+				check:SetSize(10, 10)
+				check:SetPoint("LEFT", 2, 0)
+				B.CreateBDFrame(check, .25)
+
+				child.styled = true
+			end
+		end
+	end
+end
+
+local function ReskinVoicePicker(voicePicker)
+	local customFrame = voicePicker:GetChildren()
+	B.StripTextures(customFrame)
+	B.SetBD(customFrame, .7)
+	voicePicker:HookScript("OnShow", reskinPickerOptions)
+end
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
-
-	local r, g, b = DB.r, DB.g, DB.b
 
 	-- Battlenet toast frame
 	BNToastFrame:SetBackdrop(nil)
@@ -49,6 +100,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc(QuickJoinToastButton, "ShowToast", function() bg:Show() end)
 	hooksecurefunc(QuickJoinToastButton, "HideToast", function() bg:Hide() end)
 
+	-- ChatFrame
 	B.Reskin(ChatFrameChannelButton)
 	ChatFrameChannelButton:SetSize(20, 20)
 	B.Reskin(ChatFrameToggleVoiceDeafenButton)
@@ -60,32 +112,8 @@ tinsert(C.defaultThemes, function()
 	ChatFrameMenuButton:SetNormalTexture(homeTex)
 	ChatFrameMenuButton:SetPushedTexture(homeTex)
 
-	local function scrollOnEnter(self)
-		self.thumbBG:SetBackdropColor(r, g, b, .25)
-		self.thumbBG:SetBackdropBorderColor(r, g, b)
-	end
-
-	local function scrollOnLeave(self)
-		self.thumbBG:SetBackdropColor(0, 0, 0, 0)
-		self.thumbBG:SetBackdropBorderColor(0, 0, 0)
-	end
-
-	local function reskinScroll(self)
-		local bu = _G[self:GetName().."ThumbTexture"]
-		bu:SetAlpha(0)
-		bu:SetWidth(16)
-		local bg = B.CreateBDFrame(bu, 0, true)
-		local down = self.ScrollToBottomButton
-		B.ReskinArrow(down, "down")
-		down:SetPoint("BOTTOMRIGHT", _G[self:GetName().."ResizeButton"], "TOPRIGHT", -4, -2)
-
-		self.ScrollBar.thumbBG = bg
-		self.ScrollBar:HookScript("OnEnter", scrollOnEnter)
-		self.ScrollBar:HookScript("OnLeave", scrollOnLeave)
-	end
-
 	for i = 1, NUM_CHAT_WINDOWS do
-		reskinScroll(_G["ChatFrame"..i])
+		ReskinChatScroll(_G["ChatFrame"..i])
 	end
 
 	-- ChannelFrame
@@ -149,10 +177,12 @@ tinsert(C.defaultThemes, function()
 		B.CreateBDFrame(TextToSpeechFramePanelContainerChatTypeContainer, .25)
 
 		B.Reskin(TextToSpeechFramePlaySampleButton)
+		B.Reskin(TextToSpeechFramePlaySampleAlternateButton)
 		B.Reskin(TextToSpeechFrameDefaults)
 		B.Reskin(TextToSpeechFrameOkay)
 
 		B.ReskinDropDown(TextToSpeechFrameTtsVoiceDropdown)
+		B.ReskinDropDown(TextToSpeechFrameTtsVoiceAlternateDropdown)
 		B.ReskinSlider(TextToSpeechFrameAdjustRateSlider)
 		B.ReskinSlider(TextToSpeechFrameAdjustVolumeSlider)
 
@@ -167,10 +197,10 @@ tinsert(C.defaultThemes, function()
 		end
 
 		hooksecurefunc("TextToSpeechFrame_Update", function()
-			local checkBoxNameString = "TextToSpeechFramePanelContainerChatTypeContainerCheckBox"
-			local checkBoxName, checkBox
 			local checkBoxTable = TextToSpeechFramePanelContainerChatTypeContainer.checkBoxTable
 			if checkBoxTable then
+				local checkBoxNameString = "TextToSpeechFramePanelContainerChatTypeContainerCheckBox"
+				local checkBoxName, checkBox
 				for index, value in ipairs(checkBoxTable) do
 					checkBoxName = checkBoxNameString..index
 					checkBox = _G[checkBoxName]
@@ -182,28 +212,8 @@ tinsert(C.defaultThemes, function()
 			end
 		end)
 
-		-- voice picker
-		local voicePicker = TextToSpeechFramePanelContainer.VoicePicker
-		local customFrame = voicePicker:GetChildren()
-		B.StripTextures(customFrame)
-		B.SetBD(customFrame)
-
-		voicePicker:HookScript("OnShow", function(self)
-			for i = 1, self.ScrollBox.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollBox.ScrollTarget:GetChildren())
-				if not child.styled then
-					child.UnCheck:SetTexture(nil)
-					child.Highlight:SetColorTexture(r, g, b, .25)
-
-					local check = child.Check
-					check:SetColorTexture(r, g, b, .6)
-					check:SetSize(10, 10)
-					check:SetPoint("LEFT", 2, 0)
-					B.CreateBDFrame(check, .25)
-
-					child.styled = true
-				end
-			end
-		end)
+		-- voice pickers
+		ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
+		ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
 	end
 end)
