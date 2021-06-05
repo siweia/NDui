@@ -1,6 +1,39 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function reskinMerchantItem(item)
+	local name = item.Name
+	local button = item.ItemButton
+	local icon = button.icon
+	local moneyFrame = _G[item:GetName().."MoneyFrame"]
+
+	B.StripTextures(item)
+	B.CreateBDFrame(item, .25)
+
+	B.StripTextures(button)
+	button:ClearAllPoints()
+	button:SetPoint("LEFT", item, 4, 0)
+	local hl = button:GetHighlightTexture()
+	hl:SetColorTexture(1, 1, 1, .25)
+	hl:SetInside()
+
+	icon:SetInside()
+	button.bg = B.ReskinIcon(icon)
+	B.ReskinIconBorder(button.IconBorder)
+	button.IconOverlay:SetInside()
+	button.IconOverlay2:SetInside()
+
+	name:SetFontObject(Number12Font)
+	name:SetPoint("LEFT", button, "RIGHT", 2, 9)
+	moneyFrame:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 3, 0)
+end
+
+local function reskinMerchantInteract(button)
+	button:SetPushedTexture("")
+	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	B.CreateBDFrame(button)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -25,33 +58,6 @@ tinsert(C.defaultThemes, function()
 		B.ReskinTab(_G["MerchantFrameTab"..i])
 	end
 
-	local function reskinMerchantItem(item)
-		local name = item.Name
-		local button = item.ItemButton
-		local icon = button.icon
-		local moneyFrame = _G[item:GetName().."MoneyFrame"]
-
-		B.StripTextures(item)
-		B.CreateBDFrame(item, .25)
-
-		B.StripTextures(button)
-		button:ClearAllPoints()
-		button:SetPoint("LEFT", item, 4, 0)
-		local hl = button:GetHighlightTexture()
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside()
-
-		icon:SetInside()
-		button.bg = B.ReskinIcon(icon)
-		B.ReskinIconBorder(button.IconBorder)
-		button.IconOverlay:SetInside()
-		button.IconOverlay2:SetInside()
-
-		name:SetFontObject(Number12Font)
-		name:SetPoint("LEFT", button, "RIGHT", 2, 9)
-		moneyFrame:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 3, 0)
-	end
-
 	for i = 1, BUYBACK_ITEMS_PER_PAGE do
 		local item = _G["MerchantItem"..i]
 		reskinMerchantItem(item)
@@ -66,12 +72,6 @@ tinsert(C.defaultThemes, function()
 
 	MerchantBuyBackItem:SetHeight(44)
 	reskinMerchantItem(MerchantBuyBackItem)
-
-	local function reskinMerchantInteract(button)
-		button:SetPushedTexture("")
-		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		B.CreateBDFrame(button)
-	end
 
 	reskinMerchantInteract(MerchantGuildBankRepairButton)
 	MerchantGuildBankRepairButtonIcon:SetTexCoord(.595, .8075, .05, .52)
