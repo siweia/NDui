@@ -25,6 +25,10 @@ tinsert(C.defaultThemes, function()
 		B.Reskin(InterfaceOptionsFrameOkay)
 		B.Reskin(InterfaceOptionsFrameCancel)
 
+		if CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG then
+			CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG:Hide()
+		end
+
 		local line = InterfaceOptionsFrame:CreateTexture(nil, "ARTWORK")
 		line:SetSize(C.mult, 546)
 		line:SetPoint("LEFT", 205, 10)
