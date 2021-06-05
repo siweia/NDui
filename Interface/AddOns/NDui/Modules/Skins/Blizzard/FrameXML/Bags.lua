@@ -45,7 +45,7 @@ local function ReskinSortButton(button)
 	highlight:SetAllPoints(button)
 end
 
-local function styleBankButton(bu)
+local function ReskinBagSlot(bu)
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -85,20 +85,10 @@ tinsert(C.defaultThemes, function()
 		for k = 1, MAX_CONTAINER_ITEMS do
 			local item = "ContainerFrame"..i.."Item"..k
 			local button = _G[item]
-			local questTexture = _G[item.."IconQuestTexture"]
-
-			questTexture:SetDrawLayer("BACKGROUND")
-			questTexture:SetSize(1, 1)
-
-			button:SetNormalTexture("")
-			button:SetPushedTexture("")
-			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
-			button.icon:SetTexCoord(unpack(DB.TexCoord))
-			button.bg = B.CreateBDFrame(button.icon, .25)
-
-			button.searchOverlay:SetOutside()
-			B.ReskinIconBorder(button.IconBorder)
+			if not button.IconQuestTexture then
+				button.IconQuestTexture = _G[item.."IconQuestTexture"]
+			end
+			ReskinBagSlot(button)
 		end
 
 		local f = B.SetBD(con)
@@ -162,11 +152,11 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(BankItemSearchBox)
 
 	for i = 1, 28 do
-		styleBankButton(_G["BankFrameItem"..i])
+		ReskinBagSlot(_G["BankFrameItem"..i])
 	end
 
 	for i = 1, 7 do
-		styleBankButton(BankSlotsFrame["Bag"..i])
+		ReskinBagSlot(BankSlotsFrame["Bag"..i])
 	end
 
 	ReskinSortButton(BankItemAutoSortButton)
@@ -195,7 +185,7 @@ tinsert(C.defaultThemes, function()
 		if not reagentButtonsStyled then
 			for i = 1, 98 do
 				local button = _G["ReagentBankFrameItem"..i]
-				styleBankButton(button)
+				ReskinBagSlot(button)
 				BankFrameItemButton_Update(button)
 			end
 			reagentButtonsStyled = true
