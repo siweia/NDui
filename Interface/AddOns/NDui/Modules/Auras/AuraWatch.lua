@@ -604,6 +604,7 @@ local cache = {}
 local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
 function A:AuraWatch_UpdateInt(event, ...)
 	if not IntCD.List then return end
+
 	if event == "UNIT_SPELLCAST_SUCCEEDED" then
 		local unit, _, spellID = ...
 		local value = IntCD.List[spellID]
