@@ -774,3 +774,4 @@ L["RaidDebuffSize"] = "RaidDebuffs size" -- need translation
 L["SmartRaid"] = "Raidframe by group counts" -- need translation
 L["SmartRaidTip"] = "|nIf enabled, only show raidframe if there are more than 5 members in your group.|nIf disabled, show raidframe when in raid, show partyframe when in party.|n|nOnly available if partyframe enabled." -- need translation
 L["EquipColor"] = "Equip item border" -- need translation
+L["LanguageFilterTip"] = "You need to uncheck language filter in GUI and restart your game client to get access into CN battlenet support." -- need translation

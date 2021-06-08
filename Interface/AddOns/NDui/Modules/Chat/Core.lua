@@ -377,6 +377,10 @@ function module:OnLogin()
 	if C.db["Chat"]["Freedom"] then
 		if GetCVar("portal") == "CN" then
 			ConsoleExec("portal TW")
+
+			HelpFrame:HookScript("OnShow", function()
+				UIErrorsFrame:AddMessage(DB.InfoColor..L["LanguageFilterTip"])
+			end)
 		end
 		SetCVar("profanityFilter", 0)
 	else
