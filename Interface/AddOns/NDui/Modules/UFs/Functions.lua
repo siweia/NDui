@@ -756,8 +756,10 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 			local auraFilter = C.db["Nameplate"]["AuraFilter"]
 			return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and (caster == "player" or caster == "pet" or caster == "vehicle"))
 		end
-	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
-		return true
+	elseif style == "focus" then
+		return (not button.isDebuff and isStealable) or (button.isDebuff and name)
+	else
+		return (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
 	end
 end
 
@@ -841,9 +843,8 @@ function UF:CreateAuras(self)
 		bu.iconsPerRow = 5
 	elseif mystyle == "focus" then
 		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -10)
-		bu.numBuffs = 0
-		bu.numDebuffs = 14
-		bu.iconsPerRow = 7
+		bu.numTotal = 23
+		bu.iconsPerRow = 8
 	elseif mystyle == "raid" then
 		bu.initialAnchor = "LEFT"
 		bu:SetPoint("LEFT", self, 15, 0)
