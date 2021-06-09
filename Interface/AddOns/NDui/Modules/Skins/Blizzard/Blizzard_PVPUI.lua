@@ -83,8 +83,18 @@ C.themes["Blizzard_PVPUI"] = function()
 	popup.Leave.__bg:SetFrameLevel(popup:GetFrameLevel() + 1)
 	popup.NewSeason:SetTextColor(1, .8, 0)
 	popup.SeasonRewardText:SetTextColor(1, .8, 0)
-	popup.SeasonDescription:SetTextColor(1, 1, 1)
-	popup.SeasonDescription2:SetTextColor(1, 1, 1)
+	if DB.isNewPatch then
+		popup.SeasonDescriptionHeader:SetTextColor(1, 1, 1)
+
+		popup:HookScript("OnShow", function(self)
+			for _, description in pairs(self.SeasonDescriptions) do
+				description:SetTextColor(1, 1, 1)
+			end
+		end)
+	else
+		popup.SeasonDescription:SetTextColor(1, 1, 1)
+		popup.SeasonDescription2:SetTextColor(1, 1, 1)
+	end
 
 	local SeasonRewardFrame = popup.SeasonRewardFrame
 	SeasonRewardFrame.CircleMask:Hide()
