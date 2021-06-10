@@ -1,6 +1,23 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function UpdateProgressItemQuality(self)
+	local button = self.__owner
+	local index = button.__id
+	local buttonType = button.type
+	local objectType = button.objectType
+
+	local quality
+	if objectType == "item" then
+		quality = select(4, GetQuestItemInfo(buttonType, index))
+	elseif objectType == "currency" then
+		quality = select(4, GetQuestCurrencyInfo(buttonType, index))
+	end
+
+	local color = DB.QualityColors[quality or 1]
+	button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -13,6 +30,7 @@ tinsert(C.defaultThemes, function()
 	QuestFrameDetailPanel:DisableDrawLayer("BORDER")
 	QuestFrameRewardPanel:DisableDrawLayer("BORDER")
 	QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
+
 	QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
 	QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
 	QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
@@ -35,8 +53,15 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, MAX_REQUIRED_ITEMS do
 		local button = _G["QuestProgressItem"..i]
-		B.ReskinIcon(button.Icon)
 		button.NameFrame:Hide()
+		button.bg = B.ReskinIcon(button.Icon)
+		button.__id = i
+		button.Icon.__owner = button
+		hooksecurefunc(button.Icon, "SetTexture", UpdateProgressItemQuality)
+	
+		local bg = B.CreateBDFrame(button, .25)
+		bg:SetPoint("TOPLEFT", button.bg, "TOPRIGHT", 2, 0)
+		bg:SetPoint("BOTTOMRIGHT", button.bg, 100, 0)
 	end
 
 	QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
@@ -49,9 +74,13 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	for _, questButton in pairs({"QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton"}) do
-		B.Reskin(_G[questButton])
-	end
+	B.Reskin(QuestFrameAcceptButton)
+	B.Reskin(QuestFrameDeclineButton)
+	B.Reskin(QuestFrameCompleteQuestButton)
+	B.Reskin(QuestFrameCompleteButton)
+	B.Reskin(QuestFrameGoodbyeButton)
+	B.Reskin(QuestFrameGreetingGoodbyeButton)
+
 	B.ReskinScroll(QuestProgressScrollFrameScrollBar)
 	B.ReskinScroll(QuestRewardScrollFrameScrollBar)
 	B.ReskinScroll(QuestDetailScrollFrameScrollBar)
