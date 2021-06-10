@@ -53,7 +53,8 @@ C.themes["Blizzard_TalentUI"] = function()
 
 	for _, frame in pairs({PlayerTalentFrameSpecialization, PlayerTalentFramePetSpecialization}) do
 		B.StripTextures(frame)
-		for _, child in pairs({frame:GetChildren()}) do
+		for i = 1, frame:GetNumChildren() do
+			local child = select(i, frame:GetChildren())
 			if child:IsObjectType("Frame") and not child:GetName() then
 				B.StripTextures(child)
 			end

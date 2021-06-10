@@ -10,8 +10,9 @@ local function reskinCommunityTab(tab)
 	hl:SetAllPoints(tab.Icon)
 end
 
+local cardGroup = {"First", "Second", "Third"}
 local function reskinGuildCards(cards)
-	for _, name in pairs({"First", "Second", "Third"}) do
+	for _, name in pairs(cardGroup) do
 		local guildCard = cards[name.."Card"]
 		B.StripTextures(guildCard)
 		B.CreateBDFrame(guildCard, .25)
