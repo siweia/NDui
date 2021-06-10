@@ -509,8 +509,9 @@ TT:RegisterTooltips("NDui", function()
 	end
 
 	-- DropdownMenu
+	local dropdowns = {"DropDownList", "L_DropDownList", "Lib_DropDownList"}
 	local function reskinDropdown()
-		for _, name in pairs({"DropDownList", "L_DropDownList", "Lib_DropDownList"}) do
+		for _, name in pairs(dropdowns) do
 			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
 				local menu = _G[name..i.."MenuBackdrop"]
 				if menu and not menu.styled then
