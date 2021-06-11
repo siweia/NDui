@@ -23,17 +23,10 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinPortraitFrame(QuestFrame)
 
-	B.StripTextures(QuestFrameDetailPanel)
-	B.StripTextures(QuestFrameRewardPanel)
-	B.StripTextures(QuestFrameProgressPanel)
-	B.StripTextures(QuestFrameGreetingPanel)
-
-	hooksecurefunc("QuestFrame_SetMaterial", function(frame)
-		_G[frame:GetName().."MaterialTopLeft"]:Hide()
-		_G[frame:GetName().."MaterialTopRight"]:Hide()
-		_G[frame:GetName().."MaterialBotLeft"]:Hide()
-		_G[frame:GetName().."MaterialBotRight"]:Hide()
-	end)
+	B.StripTextures(QuestFrameDetailPanel, 0)
+	B.StripTextures(QuestFrameRewardPanel, 0)
+	B.StripTextures(QuestFrameProgressPanel, 0)
+	B.StripTextures(QuestFrameGreetingPanel, 0)
 
 	local line = QuestFrameGreetingPanel:CreateTexture()
 	line:SetColorTexture(1, 1, 1, .25)
