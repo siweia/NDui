@@ -138,6 +138,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(QuestLogPopupDetailFrame.AbandonButton)
 	B.Reskin(QuestLogPopupDetailFrame.TrackButton)
 	B.Reskin(QuestLogPopupDetailFrame.ShareButton)
+	QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
 
 	-- Show map button
 

@@ -23,18 +23,11 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinPortraitFrame(QuestFrame)
 
-	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
-	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")
-	QuestFrameRewardPanel:DisableDrawLayer("BACKGROUND")
-	QuestFrameGreetingPanel:DisableDrawLayer("BACKGROUND")
-	QuestFrameDetailPanel:DisableDrawLayer("BORDER")
-	QuestFrameRewardPanel:DisableDrawLayer("BORDER")
-	QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
+	B.StripTextures(QuestFrameDetailPanel)
+	B.StripTextures(QuestFrameRewardPanel)
+	B.StripTextures(QuestFrameProgressPanel)
+	B.StripTextures(QuestFrameGreetingPanel)
 
-	QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
-	QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
-	QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
-	QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
 	hooksecurefunc("QuestFrame_SetMaterial", function(frame)
 		_G[frame:GetName().."MaterialTopLeft"]:Hide()
 		_G[frame:GetName().."MaterialTopRight"]:Hide()
@@ -107,9 +100,9 @@ tinsert(C.defaultThemes, function()
 	-- Quest NPC model
 
 	B.StripTextures(QuestModelScene)
-	B.SetBD(QuestModelScene)
 	B.StripTextures(QuestNPCModelTextFrame)
-	B.SetBD(QuestNPCModelTextFrame)
+	local bg = B.SetBD(QuestModelScene)
+	bg:SetOutside(nil, nil, nil, QuestNPCModelTextFrame)
 
 	if DB.isNewPatch then
 		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, _, x, y)
