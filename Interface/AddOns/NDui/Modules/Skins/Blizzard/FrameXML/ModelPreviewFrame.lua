@@ -14,6 +14,8 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(ModelPreviewFrame)
 	B.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")
 	B.ReskinArrow(Display.ModelScene.RotateRightButton, "right")
+	B.ReskinArrow(Display.ModelScene.CarouselLeftButton, "left")
+	B.ReskinArrow(Display.ModelScene.CarouselRightButton, "right")
 	B.ReskinClose(ModelPreviewFrameCloseButton)
 	B.Reskin(ModelPreviewFrame.CloseButton)
 
