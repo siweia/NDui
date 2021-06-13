@@ -1256,7 +1256,7 @@ end
 function UF.PostUpdateAddPower(element, cur, max)
 	if element.Text and max > 0 then
 		local perc = cur/max * 100
-		if perc == 100 then
+		if perc > 95 then
 			perc = ""
 			element:SetAlpha(0)
 		else
