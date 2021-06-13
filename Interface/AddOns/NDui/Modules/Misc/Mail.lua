@@ -330,6 +330,44 @@ function M:CollectCurrentButton()
 	button:SetScript("OnClick", M.MailBox_CollectCurrent)
 end
 
+function M:LastMailSaver()
+	local mailSaver = CreateFrame("CheckButton", nil, SendMailFrame, "OptionsCheckButtonTemplate")
+	mailSaver:SetHitRectInsets(0, 0, 0, 0)
+	mailSaver:SetPoint("RIGHT", MailFrame.CloseButton, "LEFT", -3, 0)
+	mailSaver:SetSize(24, 24)
+	B.ReskinCheck(mailSaver)
+	mailSaver.bg:SetBackdropBorderColor(1, .8, 0, .5)
+
+	mailSaver:SetChecked(C.db["Misc"]["MailSaver"])
+	mailSaver:SetScript("OnClick", function(self)
+		C.db["Misc"]["MailSaver"] = self:GetChecked()
+	end)
+	B.AddTooltip(mailSaver, "ANCHOR_TOP", "保存上次寄件人")
+
+	local resetPending
+	hooksecurefunc("SendMailFrame_SendMail", function()
+		if C.db["Misc"]["MailSaver"] then
+			C.db["Misc"]["MailTarget"] = SendMailNameEditBox:GetText()
+			resetPending = true
+		else
+			resetPending = nil
+		end
+	end)
+
+	hooksecurefunc(SendMailNameEditBox, "SetText", function(self, text)
+		if resetPending and text == "" then
+			self:SetText(C.db["Misc"]["MailTarget"])
+			resetPending = nil
+		end
+	end)
+
+	SendMailFrame:HookScript("OnShow", function()
+		if C.db["Misc"]["MailSaver"] then
+			SendMailNameEditBox:SetText(C.db["Misc"]["MailTarget"])
+		end
+	end)
+end
+
 function M:MailBox()
 	if not C.db["Misc"]["Mail"] then return end
 	if IsAddOnLoaded("Postal") then return end
@@ -355,5 +393,6 @@ function M:MailBox()
 	M.GetMoneyString = B:GetModule("Infobar").GetMoneyString
 	M:CollectGoldButton()
 	M:CollectCurrentButton()
+	M:LastMailSaver()
 end
 M:RegisterMisc("MailBox", M.MailBox)
