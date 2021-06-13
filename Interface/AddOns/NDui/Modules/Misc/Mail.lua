@@ -342,7 +342,7 @@ function M:LastMailSaver()
 	mailSaver:SetScript("OnClick", function(self)
 		C.db["Misc"]["MailSaver"] = self:GetChecked()
 	end)
-	B.AddTooltip(mailSaver, "ANCHOR_TOP", "保存上次寄件人")
+	B.AddTooltip(mailSaver, "ANCHOR_TOP", L["SaveMailTarget"])
 
 	local resetPending
 	hooksecurefunc("SendMailFrame_SendMail", function()
