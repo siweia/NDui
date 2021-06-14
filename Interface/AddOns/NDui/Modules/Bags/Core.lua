@@ -831,7 +831,7 @@ function module:OnLogin()
 		end
 
 		-- Hide empty tooltip
-		if not GetContainerItemInfo(item.bagID, item.slotID) then
+		if GameTooltip:GetOwner() == self and not GetContainerItemInfo(item.bagID, item.slotID) then
 			GameTooltip:Hide()
 		end
 
