@@ -45,7 +45,6 @@ function S:OnLogin()
 	self:BigWigsSkin()
 	self:PGFSkin()
 	self:ReskinRematch()
-	self:PostalSkin()
 	self:OtherSkins()
 
 	-- Register skin
