@@ -202,7 +202,7 @@ G.DefaultSettings = {
 		ChatWidth = 380,
 		ChatHeight = 190,
 		BlockStranger = false,
-		AllowFriends = true,
+		BlockSpammer = false,
 		ChatBGType = 2,
 	},
 	Map = {
@@ -781,7 +781,7 @@ G.TabList = {
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
-	L["ChatFrame"],
+	NewTag..L["ChatFrame"],
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
@@ -1031,7 +1031,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Chat", "EnableFilter", HeaderTag..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},
-		{1, "Chat", "AllowFriends", L["AllowFriendsSpam"].."*", nil, nil, nil, L["AllowFriendsSpamTip"]},
+		{1, "Chat", "BlockSpammer", NewTag..L["BlockSpammer"].."*", nil, nil, nil, L["BlockSpammerTip"]},
 		{1, "Chat", "BlockStranger", "|cffff0000"..L["BlockStranger"].."*", nil, nil, nil, L["BlockStrangerTip"]},
 		{2, "ACCOUNT", "ChatFilterWhiteList", HeaderTag..L["ChatFilterWhiteList"].."*", true, nil, updateFilterWhiteList, L["ChatFilterWhiteListTip"]},
 		{3, "Chat", "Matches", L["Keyword Match"].."*", false, {1, 3, 1}},
