@@ -189,7 +189,10 @@ local list = {
 		{AuraID = 306583, UnitID = "player"},	-- 灌铅脚步
 		{AuraID = 313698, UnitID = "player", Flash = true},	-- 泰坦之赐
 		-- 常驻词缀
-		{AuraID = 342466, UnitID = "player"},	-- 狂妄吹嘘
+		{AuraID = 355732, UnitID = "player"},	-- 融化灵魂
+		{AuraID = 356667, UnitID = "player"},	-- 刺骨之寒
+		{AuraID = 356925, UnitID = "player"},	-- 屠戮
+		{AuraID = 342466, UnitID = "player"},	-- 狂妄吹嘘，S1
 		{AuraID = 209858, UnitID = "player"},	-- 死疽溃烂
 		{AuraID = 240559, UnitID = "player"},	-- 重伤
 		{AuraID = 340880, UnitID = "player"},	-- 傲慢

@@ -9,7 +9,10 @@ local SEASON_SPELLS = {
 	[209858] = 2, -- 死疽
 	[240443] = 2, -- 爆裂
 	[240559] = 2, -- 重伤
-	[342494] = 2, -- 狂妄吹嘘
+	[342494] = 2, -- 狂妄吹嘘，S1
+	[355732] = 2, -- 融化灵魂
+	[356667] = 2, -- 刺骨之寒
+	[356925] = 2, -- 屠戮
 }
 local function RegisterSeasonSpells(INSTANCE)
 	for spellID, priority in pairs(SEASON_SPELLS) do
