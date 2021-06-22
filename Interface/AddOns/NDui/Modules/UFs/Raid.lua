@@ -417,7 +417,7 @@ function UF:UpdateBuffIndicator(event, unit)
 						end
 					end
 
-					if count > 1 then bu.count:SetText(count) end
+					bu.count:SetText(count > 1 and count)
 					bu:Show()
 					found[bu.anchor] = true
 				end
