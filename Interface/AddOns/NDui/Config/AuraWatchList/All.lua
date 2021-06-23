@@ -230,6 +230,16 @@ local list = {
 		{AuraID = 328453, UnitID = "player"},	-- 晋升高塔，压迫
 		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
 		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
+		{AuraID = 356011, UnitID = "player"},	-- 集市，光线切分者
+		{AuraID = 353421, UnitID = "player"},	-- 集市，精力
+		{AuraID = 347949, UnitID = "player", Flash = true},	-- 集市，审讯
+		{AuraID = 355915, UnitID = "player"},	-- 集市，约束雕文
+		{AuraID = 347771, UnitID = "player"},	-- 集市，加急
+		{AuraID = 346962, UnitID = "player", Flash = true},	-- 集市，现金汇款
+		{AuraID = 348567, UnitID = "player"},	-- 集市，爵士乐
+		{AuraID = 349627, UnitID = "player"},	-- 集市，暴食
+		{AuraID = 350010, UnitID = "player", Flash = true},	-- 集市，被吞噬的心能
+		{AuraID = 347481, UnitID = "player"},	-- 集市，奥能手里波
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
@@ -245,6 +255,7 @@ local list = {
 		{AuraID = 327796, UnitID = "player"},	-- 午夜猎手，德纳修斯
 	},
 	["Warning"] = { -- 目标重要光环组
+		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
 		-- 大幻象
 		{AuraID = 304975, UnitID = "target", Value = true},	-- 虚空哀嚎，吸收盾
 		{AuraID = 319643, UnitID = "target", Value = true},	-- 虚空哀嚎，吸收盾

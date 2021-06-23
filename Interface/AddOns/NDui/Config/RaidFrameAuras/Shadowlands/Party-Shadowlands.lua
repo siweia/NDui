@@ -23,6 +23,13 @@ end
 if DB.isNewPatch then
 	INSTANCE = 1194 -- 塔扎维什，帷纱集市
 	RegisterSeasonSpells(INSTANCE)
+	module:RegisterDebuff(TIER, INSTANCE, 0, 356011) -- 光线切分者
+	module:RegisterDebuff(TIER, INSTANCE, 0, 347949, 6) -- 审讯
+	module:RegisterDebuff(TIER, INSTANCE, 0, 345770) -- 扣押违禁品
+	module:RegisterDebuff(TIER, INSTANCE, 0, 355915) -- 约束雕文
+	module:RegisterDebuff(TIER, INSTANCE, 0, 346962) -- 现金汇款
+	module:RegisterDebuff(TIER, INSTANCE, 0, 349627) -- 暴食
+	module:RegisterDebuff(TIER, INSTANCE, 0, 347481) -- 奥能手里波
 end
 
 INSTANCE = 1187 -- 伤逝剧场
