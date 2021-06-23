@@ -928,7 +928,7 @@ function module:OnLogin()
 		elseif strmatch(name, "Quest") then
 			label = QUESTS_LABEL
 		elseif strmatch(name, "Anima") then
-			label = ANIMA
+			label = POWER_TYPE_ANIMA
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
