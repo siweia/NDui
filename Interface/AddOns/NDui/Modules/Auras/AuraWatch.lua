@@ -408,7 +408,7 @@ function A:AuraWatch_SetupAura(index, UnitID, name, icon, count, duration, expir
 	local frame = frames[frames.Index]
 	if frame then frame:Show() end
 	if frame.Icon then frame.Icon:SetTexture(icon) end
-	if frame.Count then frame.Count:SetText(count > 1 and count or nil) end
+	if frame.Count then frame.Count:SetText(count > 1 and count) end
 	if frame.Cooldown then
 		frame.Cooldown:SetReverse(true)
 		frame.Cooldown:SetCooldown(expires-duration, duration)
