@@ -108,6 +108,7 @@ function TT:SetupTooltipID()
 
 	-- Items
 	GameTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
+	GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
