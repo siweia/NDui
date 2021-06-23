@@ -12,6 +12,7 @@ local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPrior
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
+oUF.colors.debuff.none = {0, 0, 0}
 
 local function ReplacePowerColor(name, index, color)
 	oUF.colors.power[name] = color
