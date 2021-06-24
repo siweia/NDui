@@ -147,7 +147,7 @@ function module:CheckMajorSpells()
 				NDuiADB["MajorSpells"][spellID] = nil
 			end
 		else
-			if DB.isDeveloper then print("Invalid cornerspell ID: "..spellID) end
+			if DB.isDeveloper then print("Invalid majorspells ID: "..spellID) end
 		end
 	end
 
