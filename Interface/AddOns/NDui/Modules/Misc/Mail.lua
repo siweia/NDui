@@ -66,6 +66,7 @@ local contactList = {}
 function M:ContactButton_OnClick()
 	local text = self.name:GetText() or ""
 	SendMailNameEditBox:SetText(text)
+	SendMailNameEditBox:SetCursorPosition(0)
 end
 
 function M:ContactButton_Delete()
@@ -356,8 +357,8 @@ function M:LastMailSaver()
 
 	hooksecurefunc(SendMailNameEditBox, "SetText", function(self, text)
 		if resetPending and text == "" then
-			self:SetText(C.db["Misc"]["MailTarget"])
 			resetPending = nil
+			self:SetText(C.db["Misc"]["MailTarget"])
 		end
 	end)
 
@@ -384,12 +385,17 @@ function M:MailBox()
 	-- Custom contact list
 	M:MailBox_ContactList()
 
-	-- Replace the alert frame
+	-- Default elements
 	if InboxTooMuchMail then
 		InboxTooMuchMail:ClearAllPoints()
 		InboxTooMuchMail:SetPoint("BOTTOM", MailFrame, "TOP", 0, 5)
 	end
+	SendMailNameEditBox:SetWidth(175)
+	SendMailNameEditBoxMiddle:SetWidth(166)
+	SendMailCostMoneyFrame:ClearAllPoints()
+	SendMailCostMoneyFrame:SetPoint("BOTTOMRIGHT", MailFrame, 0, 63)
 
+	-- Other elements
 	M.GetMoneyString = B:GetModule("Infobar").GetMoneyString
 	M:CollectGoldButton()
 	M:CollectCurrentButton()
