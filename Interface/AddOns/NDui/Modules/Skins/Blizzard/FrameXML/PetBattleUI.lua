@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local LE_BATTLE_PET_ALLY = LE_BATTLE_PET_ALLY or Enum.BattlePetOwner.Ally -- isNewPatch, deprecated in 9.1
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["PetBattle"] then return end
 
