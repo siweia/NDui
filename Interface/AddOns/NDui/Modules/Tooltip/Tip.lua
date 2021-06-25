@@ -243,11 +243,11 @@ function TT:OnTooltipSetUnit()
 		else
 			self.StatusBar:Hide()
 		end
+
+		TT.InspectUnitSpecAndLevel(self, unit)
 	else
 		self.StatusBar:SetStatusBarColor(0, .9, 0)
 	end
-
-	TT.InspectUnitSpecAndLevel(self)
 end
 
 function TT:StatusBar_OnValueChanged(value)

@@ -240,12 +240,10 @@ function TT:InspectUnit(unit, forced)
 	end
 end
 
-function TT:InspectUnitSpecAndLevel()
+function TT:InspectUnitSpecAndLevel(unit)
 	if C.db["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
 
-	local _, unit = self:GetUnit()
 	if not unit or not CanInspect(unit) then return end
-
 	currentUNIT, currentGUID = unit, UnitGUID(unit)
 	if not cache[currentGUID] then cache[currentGUID] = {} end
 
