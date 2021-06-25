@@ -239,7 +239,11 @@ local list = {
 		{AuraID = 348567, UnitID = "player"},	-- 集市，爵士乐
 		{AuraID = 349627, UnitID = "player"},	-- 集市，暴食
 		{AuraID = 350010, UnitID = "player", Flash = true},	-- 集市，被吞噬的心能
+		{AuraID = 346828, UnitID = "player", Flash = true},	-- 集市，消毒区域
+		{AuraID = 355581, UnitID = "player", Flash = true},	-- 集市，连环爆裂
+		{AuraID = 346961, UnitID = "player", Flash = true},	-- 集市，净化之地
 		{AuraID = 347481, UnitID = "player"},	-- 集市，奥能手里波
+		{AuraID = 350013, UnitID = "player"},	-- 集市，暴食盛宴
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
@@ -253,6 +257,9 @@ local list = {
 		{AuraID = 344655, UnitID = "player"},	-- 震荡易伤，干将
 		{AuraID = 327089, UnitID = "player"},	-- 喂食时间，德纳修斯
 		{AuraID = 327796, UnitID = "player"},	-- 午夜猎手，德纳修斯
+
+		{AuraID = 347283, UnitID = "player"},	-- 捕食者之嚎，塔拉格鲁
+		{AuraID = 347286, UnitID = "player"},	-- 不散之惧，塔拉格鲁
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
@@ -292,6 +299,12 @@ local list = {
 		{AuraID = 326450, UnitID = "target"},	-- 赎罪大厅，忠心的野兽
 		{AuraID = 322433, UnitID = "target"},	-- 赤红深渊，石肤术
 		{AuraID = 321402, UnitID = "target"},	-- 赤红深渊，饱餐
+		{AuraID = 355640, UnitID = "target"},	-- 集市，重装方阵
+		{AuraID = 355782, UnitID = "target"},	-- 集市，力量增幅器
+		{AuraID = 351086, UnitID = "target"},	-- 集市，势不可挡
+		{AuraID = 347840, UnitID = "target"},	-- 集市，野性
+		{AuraID = 347992, UnitID = "target"},	-- 集市，回旋防弹衣
+		{AuraID = 347840, UnitID = "target"},	-- 集市，野性
 		-- 团本
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手

@@ -30,6 +30,19 @@ if DB.isNewPatch then
 	module:RegisterDebuff(TIER, INSTANCE, 0, 346962) -- 现金汇款
 	module:RegisterDebuff(TIER, INSTANCE, 0, 349627) -- 暴食
 	module:RegisterDebuff(TIER, INSTANCE, 0, 347481) -- 奥能手里波
+	module:RegisterDebuff(TIER, INSTANCE, 0, 350804) -- 坍缩能量
+	module:RegisterDebuff(TIER, INSTANCE, 0, 350885) -- 超光速震荡
+	module:RegisterDebuff(TIER, INSTANCE, 0, 351101) -- 能量碎片
+	module:RegisterDebuff(TIER, INSTANCE, 0, 350013) -- 暴食盛宴
+	module:RegisterDebuff(TIER, INSTANCE, 0, 355641) -- 闪烁
+	module:RegisterDebuff(TIER, INSTANCE, 0, 355451) -- 逆流
+	module:RegisterDebuff(TIER, INSTANCE, 0, 351956) -- 高价值目标
+	module:RegisterDebuff(TIER, INSTANCE, 0, 346297) -- 动荡爆炸
+	module:RegisterDebuff(TIER, INSTANCE, 0, 347728) -- 群殴
+	module:RegisterDebuff(TIER, INSTANCE, 0, 356408) -- 大地践踏
+	module:RegisterDebuff(TIER, INSTANCE, 0, 347744) -- 迅斩
+	module:RegisterDebuff(TIER, INSTANCE, 0, 350134) -- 永恒吐息
+	module:RegisterDebuff(TIER, INSTANCE, 0, 355465) -- 投掷巨石
 end
 
 INSTANCE = 1187 -- 伤逝剧场
