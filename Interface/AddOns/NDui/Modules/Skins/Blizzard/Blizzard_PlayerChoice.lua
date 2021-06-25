@@ -56,7 +56,7 @@ C.themes["Blizzard_PlayerChoice"] = function()
 						B.StripTextures(itemButton, 1)
 						itemButton.bg = B.ReskinIcon(itemButton:GetRegions(), nil)
 						B.ReskinIconBorder(itemButton.IconBorder, true)
-	
+
 						rewardFrame.styled = true
 					end
 				end
