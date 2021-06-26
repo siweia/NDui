@@ -70,6 +70,7 @@ INSTANCE = 1183 -- 凋魂之殇
 RegisterSeasonSpells(INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 336258) -- 落单狩猎
 module:RegisterDebuff(TIER, INSTANCE, 0, 331818) -- 暗影伏击
+module:RegisterDebuff(TIER, INSTANCE, 0, 333353) -- 暗影伏击
 module:RegisterDebuff(TIER, INSTANCE, 0, 329110) -- 软泥注射
 module:RegisterDebuff(TIER, INSTANCE, 0, 325552) -- 毒性裂击
 module:RegisterDebuff(TIER, INSTANCE, 0, 336301) -- 裹体之网

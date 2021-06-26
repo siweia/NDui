@@ -122,6 +122,7 @@ local list = {
 		{AuraID = 333218, UnitID = "player"},	-- 废土礼节
 		{AuraID = 336885, UnitID = "player"},	-- 抚慰阴影
 		{AuraID = 324156, UnitID = "player", Flash = true},	-- 劫掠射击
+		{AuraID = 328900, UnitID = "player"},	-- 放下过去
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
@@ -211,6 +212,7 @@ local list = {
 		{AuraID = 330725, UnitID = "player", Flash = true},	-- 伤逝剧场，暗影易伤
 		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
 		{AuraID = 331399, UnitID = "player"},	-- 凋魂之殇，感染毒雨
+		{AuraID = 333353, UnitID = "player"},	-- 凋魂之殇，暗影伏击
 		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
 		{AuraID = 323471, UnitID = "player", Flash = true},	-- 通灵战潮，切肉飞刀
 		{AuraID = 328181, UnitID = "player"},	-- 通灵战潮，凌冽之寒
