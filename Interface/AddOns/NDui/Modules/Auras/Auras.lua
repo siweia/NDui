@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF or oUF
 local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
@@ -120,7 +121,7 @@ function A:UpdateAuras(button, index)
 		end
 
 		if filter == "HARMFUL" then
-			local color = DebuffTypeColor[debuffType or "none"]
+			local color = oUF.colors.debuff[debuffType or "none"]
 			button:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
 			button:SetBackdropBorderColor(0, 0, 0)
