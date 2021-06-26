@@ -86,7 +86,7 @@ function info:GuildPanel_UpdateButton(button)
 
 	local zonecolor = DB.GreyColor
 	if UnitInRaid(name) or UnitInParty(name) then
-		zonecolor = "|cff4c4cff"
+		zonecolor = DB.InfoColor
 	elseif GetRealZoneText() == zone then
 		zonecolor = "|cff4cff4c"
 	end
