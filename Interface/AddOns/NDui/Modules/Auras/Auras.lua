@@ -5,7 +5,6 @@ local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
 local format, floor, strmatch, select, unpack = format, floor, strmatch, select, unpack
-local DebuffTypeColor = _G.DebuffTypeColor
 local UnitAura, GetTime = UnitAura, GetTime
 local GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo
 
@@ -122,7 +121,7 @@ function A:UpdateAuras(button, index)
 
 		if filter == "HARMFUL" then
 			local color = oUF.colors.debuff[debuffType or "none"]
-			button:SetBackdropBorderColor(color.r, color.g, color.b)
+			button:SetBackdropBorderColor(color[1], color[2], color[3])
 		else
 			button:SetBackdropBorderColor(0, 0, 0)
 		end
