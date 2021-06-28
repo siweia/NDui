@@ -63,6 +63,7 @@ function M:InboxItem_OnEnter()
 end
 
 local contactList = {}
+local contactListByRealm = {}
 
 function M:ContactButton_OnClick()
 	local text = self.name:GetText() or ""
@@ -100,16 +101,25 @@ end
 
 function M:ContactList_Refresh()
 	wipe(contactList)
+	wipe(contactListByRealm)
+
+	for fullname, color in pairs(NDuiADB["ContactList"]) do
+		local name, realm = strsplit("-", fullname)
+		if not contactListByRealm[realm] then contactListByRealm[realm] = {} end
+		contactListByRealm[realm][name] = color
+	end
 
 	local count = 0
-	for name, color in pairs(NDuiADB["ContactList"]) do
-		count = count + 1
-		local r, g, b = strsplit(":", color)
-		if not contactList[count] then contactList[count] = {} end
-		contactList[count].name = name
-		contactList[count].r = r
-		contactList[count].g = g
-		contactList[count].b = b
+	for realm, value in pairs(contactListByRealm) do
+		for name, color in pairs(value) do
+			count = count + 1
+			local r, g, b = strsplit(":", color)
+			if not contactList[count] then contactList[count] = {} end
+			contactList[count].name = name.."-"..realm
+			contactList[count].r = r
+			contactList[count].g = g
+			contactList[count].b = b
+		end
 	end
 
 	M:ContactList_Update()
