@@ -97,14 +97,14 @@ function M:GuildBest_Update()
 	end
 
 	if not resize and hasAngryKeystones then
-		local schedule = AngryKeystones.Modules.Schedule.AffixFrame
+		local schedule = AngryKeystones.Modules.Schedule
 		frame:SetWidth(246)
 		frame:ClearAllPoints()
-		frame:SetPoint("BOTTOMLEFT", schedule, "TOPLEFT", 0, 10)
+		frame:SetPoint("BOTTOMLEFT", schedule.AffixFrame, "TOPLEFT", 0, 10)
 
 		self.WeeklyInfo.Child.ThisWeekLabel:SetPoint("TOP", -135, -25)
 		if DB.isNewPatch then
-			self.WeeklyInfo.Child.DungeonScoreInfo:SetPoint("TOP", -140, -210)
+			schedule.KeystoneText:SetScale(.0001)
 		end
 
 		local affix = self.WeeklyInfo.Child.Affixes[1]
