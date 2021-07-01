@@ -352,6 +352,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			local button = self.elements[i]
 			if button and not button.bg then
 				button.Background:SetAlpha(0)
+				button.BackgroundOverlay:SetAlpha(0)
+				button.UnavailableOverlay:SetAlpha(0)
 				button.UnavailableBackground:SetAlpha(0)
 				button.CircleMask:Hide()
 				button.bg = B.ReskinIcon(button.Icon)
