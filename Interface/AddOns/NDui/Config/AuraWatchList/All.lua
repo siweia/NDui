@@ -45,6 +45,7 @@ local module = B:GetModule("AurasTable")
 -- 全职业的相关监控
 local list = {
 	["Enchant Aura"] = {	-- 附魔及饰品组
+		{AuraID = 354808, UnitID = "player"},	-- 棱彩之光，1万币的小宠物
 		-- 种族天赋
 		{AuraID = 26297, UnitID = "player"},	-- 狂暴 巨魔
 		{AuraID = 20572, UnitID = "player"},	-- 血性狂怒 兽人
@@ -80,7 +81,6 @@ local list = {
 		{AuraID = 330367, UnitID = "player", Text = L["Versa"]},	-- 不可思议的量子装置，全能
 		{AuraID = 330368, UnitID = "player", Text = L["Haste"]},	-- 不可思议的量子装置，急速
 		{AuraID = 330380, UnitID = "player", Text = L["Mastery"]},	-- 不可思议的量子装置，精通
-		-- isNewPatch
 		{AuraID = 351872, UnitID = "player"},	-- 钢铁尖刺
 		{AuraID = 355316, UnitID = "player"},	-- 安海尔德之盾
 		{AuraID = 356326, UnitID = "player"},	-- 折磨洞察
