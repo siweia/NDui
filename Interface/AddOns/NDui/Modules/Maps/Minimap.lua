@@ -202,7 +202,7 @@ function module:RecycleBin()
 	topLine:SetPoint("BOTTOM", bin, "TOP")
 	local bottomLine = B.SetGradient(bin, "H", cr, cg, cb, 0, alpha, width, C.mult)
 	bottomLine:SetPoint("TOP", bin, "BOTTOM")
-	local rightLine = B.SetGradient(bin, "V", cr, cg, cb, alpha, alpha, C.mult, 40 + C.mult*2)
+	local rightLine = B.SetGradient(bin, "V", cr, cg, cb, alpha, alpha, C.mult, height + C.mult*2)
 	rightLine:SetPoint("LEFT", bin, "RIGHT")
 
 	local function hideBinButton()
@@ -229,6 +229,8 @@ function module:RecycleBin()
 		["Narci_MinimapButton"] = true,
 	}
 
+	local iconsPerRow = 10
+	local rowMult = iconsPerRow/2 - 1
 	local currentIndex, pendingTime, timeThreshold = 0, 5, 12
 	local buttons, numMinimapChildren = {}, 0
 	local removedTextures = {
@@ -315,25 +317,35 @@ function module:RecycleBin()
 
 	local function SortRubbish()
 		if #buttons == 0 then return end
-		local lastbutton
-		for _, button in pairs(buttons) do
+
+		local numShown, lastbutton = 0
+		for index, button in pairs(buttons) do
 			if next(button) and button:IsShown() then -- fix for fuxking AHDB
 				button:ClearAllPoints()
 				if not lastbutton then
-					button:SetPoint("RIGHT", bin, -3, 0)
+					button:SetPoint("BOTTOMRIGHT", bin, -3, 3)
+				elseif mod(index, iconsPerRow) == 1 then
+					button:SetPoint("BOTTOM", buttons[index - iconsPerRow], "TOP", 0, 3)
 				else
 					button:SetPoint("RIGHT", lastbutton, "LEFT", -3, 0)
 				end
 				lastbutton = button
+				numShown = numShown + 1
 			end
 		end
+
+		local row = numShown == 0 and 1 or B:Round((numShown + rowMult) / iconsPerRow)
+		local newHeight = row*37 + 3
+		bin:SetHeight(newHeight)
+		tex:SetHeight(newHeight)
+		rightLine:SetHeight(newHeight + 2*C.mult)
 	end
 
 	bu:SetScript("OnClick", function()
-		SortRubbish()
 		if bin:IsShown() then
 			clickFunc()
 		else
+			SortRubbish()
 			UIFrameFadeIn(bin, .5, 0, 1)
 		end
 	end)
