@@ -5,11 +5,12 @@ copyrighted to its authors with all rights reserved.
 
 The author of this addon hereby grants you the following rights:
 
-1. 	You may make modifications to this addon for private use only except
-	if you have been granted explicit permission by the author.
+1. 	You may make modifications to this addon for private use only, you
+	may not publicize any portion of this addon except you have been granted
+	explicit permission by the author.
 
 2. 	Do not modify the name of this addon, including the addon folders and
-	"NDui.toc" file without permission.
+	files without permission.
 
 3.	Do not embed the contents of this addon within another addon without
 	permission or reference.
