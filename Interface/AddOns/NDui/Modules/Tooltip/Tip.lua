@@ -4,6 +4,7 @@ local TT = B:RegisterModule("Tooltip")
 
 local strfind, format, strupper, strlen, pairs, unpack = string.find, string.format, string.upper, string.len, pairs, unpack
 local ICON_LIST = ICON_LIST
+local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 local PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE = PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE
 local YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE = YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE
 local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
@@ -16,6 +17,8 @@ local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIs
 local UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel
 local GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild = GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild
 local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAuras, C_PetBattles.GetAuraInfo
+local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
+local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -118,6 +121,17 @@ function TT:OnTooltipCleared()
 	if self.roleFrame and self.roleFrame:GetAlpha() ~= 0 then
 		self.roleFrame:SetAlpha(0)
 		self.roleFrame.bg:SetAlpha(0)
+	end
+end
+
+function TT:ShowUnitMythicPlusScore(unit)
+	if not C.db["Tooltip"]["MDScore"] then return end
+
+	local summary = C_PlayerInfo_GetPlayerMythicPlusRatingSummary(unit)
+	local score = summary and summary.currentSeasonScore
+	if score and score > 0 then
+		local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or HIGHLIGHT_FONT_COLOR
+		GameTooltip:AddLine(format(L["MythicScore"], color:WrapTextInColorCode(score)))
 	end
 end
 
@@ -245,6 +259,7 @@ function TT:OnTooltipSetUnit()
 		end
 
 		TT.InspectUnitSpecAndLevel(self, unit)
+		TT.ShowUnitMythicPlusScore(self, unit)
 	else
 		self.StatusBar:SetStatusBarColor(0, .9, 0)
 	end

@@ -778,3 +778,6 @@ L["BlockSpammer"] = "Block spammer message" -- need translation
 L["BlockSpammerTip"] = "|nIf enanbled, repeat messages spammer will be blocked, you won't receive any messages from it any more." -- need translation
 L["PetTrash"] = "Pet trash currencies" -- need translation
 L["PetTrashTip"] = "|nIn patch 9.1, you can buy 3 battle pets by using specific trash items. Keep this enabled, will sort these items into Collection Filter, and won't be sold by auto junk selling." -- need translation
+L["MythicScore"] = "Mythic Score: %s" -- need translation
+L["MDScore"] = "Show Mythic+ Rating" -- need translation
+L["MDScoreTip"] = "|nIf enabled, show unit Mythic+ Rating at current season.|nHide tooltip info if unit score is ZERO." -- need translation
