@@ -173,49 +173,47 @@ tinsert(C.defaultThemes, function()
 	ChatConfigMoveFilterDownButton:SetPoint("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0)
 
 	-- TextToSpeech
-	if DB.isNewPatch then
-		B.StripTextures(TextToSpeechButton, 5)
+	B.StripTextures(TextToSpeechButton, 5)
 
-		B.Reskin(TextToSpeechFramePlaySampleButton)
-		B.Reskin(TextToSpeechFramePlaySampleAlternateButton)
-		B.Reskin(TextToSpeechDefaultButton)
+	B.Reskin(TextToSpeechFramePlaySampleButton)
+	B.Reskin(TextToSpeechFramePlaySampleAlternateButton)
+	B.Reskin(TextToSpeechDefaultButton)
 
-		B.ReskinDropDown(TextToSpeechFrameTtsVoiceDropdown)
-		B.ReskinDropDown(TextToSpeechFrameTtsVoiceAlternateDropdown)
-		B.ReskinSlider(TextToSpeechFrameAdjustRateSlider)
-		B.ReskinSlider(TextToSpeechFrameAdjustVolumeSlider)
+	B.ReskinDropDown(TextToSpeechFrameTtsVoiceDropdown)
+	B.ReskinDropDown(TextToSpeechFrameTtsVoiceAlternateDropdown)
+	B.ReskinSlider(TextToSpeechFrameAdjustRateSlider)
+	B.ReskinSlider(TextToSpeechFrameAdjustVolumeSlider)
 
-		local checkboxes = {
-			"PlayActivitySoundWhenNotFocusedCheckButton",
-			"PlaySoundSeparatingChatLinesCheckButton",
-			"AddCharacterNameToSpeechCheckButton",
-			"NarrateMyMessagesCheckButton",
-			"UseAlternateVoiceForSystemMessagesCheckButton",
-		}
-		for _, checkbox in pairs(checkboxes) do
-			B.ReskinCheck(TextToSpeechFramePanelContainer[checkbox])
-		end
+	local checkboxes = {
+		"PlayActivitySoundWhenNotFocusedCheckButton",
+		"PlaySoundSeparatingChatLinesCheckButton",
+		"AddCharacterNameToSpeechCheckButton",
+		"NarrateMyMessagesCheckButton",
+		"UseAlternateVoiceForSystemMessagesCheckButton",
+	}
+	for _, checkbox in pairs(checkboxes) do
+		B.ReskinCheck(TextToSpeechFramePanelContainer[checkbox])
+	end
 
-		hooksecurefunc("TextToSpeechFrame_UpdateMessageCheckboxes", function(frame)
-			local checkBoxTable = frame.checkBoxTable
-			if checkBoxTable then
-				local checkBoxNameString = frame:GetName().."CheckBox"
-				local checkBoxName, checkBox
-				for index in ipairs(checkBoxTable) do
-					checkBoxName = checkBoxNameString..index
-					checkBox = _G[checkBoxName]
-					if checkBox and not checkBox.styled then
-						B.ReskinCheck(checkBox)
-						checkBox.styled = true
-					end
+	hooksecurefunc("TextToSpeechFrame_UpdateMessageCheckboxes", function(frame)
+		local checkBoxTable = frame.checkBoxTable
+		if checkBoxTable then
+			local checkBoxNameString = frame:GetName().."CheckBox"
+			local checkBoxName, checkBox
+			for index in ipairs(checkBoxTable) do
+				checkBoxName = checkBoxNameString..index
+				checkBox = _G[checkBoxName]
+				if checkBox and not checkBox.styled then
+					B.ReskinCheck(checkBox)
+					checkBox.styled = true
 				end
 			end
-		end)
+		end
+	end)
 
-		-- voice pickers
-		ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
-		ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
+	-- voice pickers
+	ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
+	ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
 
-		B.StripTextures(ChatConfigTextToSpeechChannelSettingsLeft)
-	end
+	B.StripTextures(ChatConfigTextToSpeechChannelSettingsLeft)
 end)

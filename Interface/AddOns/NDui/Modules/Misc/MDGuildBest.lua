@@ -103,9 +103,7 @@ function M:GuildBest_Update()
 		frame:SetPoint("BOTTOMLEFT", schedule.AffixFrame, "TOPLEFT", 0, 10)
 
 		self.WeeklyInfo.Child.ThisWeekLabel:SetPoint("TOP", -135, -25)
-		if DB.isNewPatch then
-			schedule.KeystoneText:SetScale(.0001)
-		end
+		schedule.KeystoneText:SetScale(.0001)
 
 		local affix = self.WeeklyInfo.Child.Affixes[1]
 		if affix then

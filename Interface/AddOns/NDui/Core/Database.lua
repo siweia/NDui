@@ -178,7 +178,6 @@ DB.ReminderBuffs = {
 			equip = true,
 			instance = true,
 			combat = true,
-			disable = not DB.isNewPatch,
 		},
 	},
 	MAGE = {

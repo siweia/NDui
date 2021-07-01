@@ -47,12 +47,10 @@ tinsert(C.defaultThemes, function()
 			"InterfaceOptionsCameraPanel",
 			"InterfaceOptionsMousePanel",
 			"InterfaceOptionsAccessibilityPanel",
+			"InterfaceOptionsColorblindPanel",
 			"CompactUnitFrameProfiles",
 			"CompactUnitFrameProfilesGeneralOptionsFrame",
 		}
-		if DB.isNewPatch then
-			tinsert(interfacePanels, "InterfaceOptionsColorblindPanel")
-		end
 		for _, name in pairs(interfacePanels) do
 			local frame = _G[name]
 			if frame then

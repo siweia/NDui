@@ -52,12 +52,6 @@ tinsert(C.defaultThemes, function()
 		if frame.queue == AchievementAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
-				if not DB.isNewPatch then
-					frame.bg:SetPoint("TOPLEFT", 0, -7)
-					frame.bg:SetPoint("BOTTOMRIGHT", 0, 8)
-					frame.OldAchievement:SetTexture("")
-				end
-
 				frame.Unlocked:SetTextColor(1, .8, 0)
 				frame.Unlocked:SetFontObject(NumberFont_GameNormal)
 				frame.GuildName:ClearAllPoints()
@@ -72,30 +66,18 @@ tinsert(C.defaultThemes, function()
 			frame.glow:SetTexture("")
 			frame.Background:SetTexture("")
 			frame.Icon.Overlay:SetTexture("")
-			-- otherwise it hides
-			if not DB.isNewPatch then
-				frame.Shield.Points:Show()
-				frame.Shield.Icon:Show()
+			if frame.GuildBanner:IsShown() then
+				frame.bg:SetPoint("TOPLEFT", 2, -29)
+				frame.bg:SetPoint("BOTTOMRIGHT", -2, 4)
 			else
-				if frame.GuildBanner:IsShown() then
-					frame.bg:SetPoint("TOPLEFT", 2, -29)
-					frame.bg:SetPoint("BOTTOMRIGHT", -2, 4)
-				else
-					frame.bg:SetPoint("TOPLEFT", frame, -2, -17)
-					frame.bg:SetPoint("BOTTOMRIGHT", 2, 12)
-				end
+				frame.bg:SetPoint("TOPLEFT", frame, -2, -17)
+				frame.bg:SetPoint("BOTTOMRIGHT", 2, 12)
 			end
 		elseif frame.queue == CriteriaAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
-				if DB.isNewPatch then
-					frame.bg:SetPoint("TOPLEFT", frame, 5, -7)
-					frame.bg:SetPoint("BOTTOMRIGHT", frame, 18, 10)
-				else
-					frame.bg:SetPoint("TOPLEFT", frame, -18, 5)
-					frame.bg:SetPoint("BOTTOMRIGHT", frame, 18, -1)
-					frame.Icon:SetScale(.8)
-				end
+				frame.bg:SetPoint("TOPLEFT", frame, 5, -7)
+				frame.bg:SetPoint("BOTTOMRIGHT", frame, 18, 10)
 
 				frame.Unlocked:SetTextColor(1, .8, 0)
 				frame.Unlocked:SetFontObject(NumberFont_GameNormal)

@@ -32,20 +32,6 @@ local function reskinTableAttribute(frame)
 end
 
 C.themes["Blizzard_DebugTools"] = function()
-	if not DB.isNewPatch then
-		-- EventTraceFrame
-		B.StripTextures(EventTraceFrame)
-		B.SetBD(EventTraceFrame)
-		B.ReskinClose(EventTraceFrameCloseButton, EventTraceFrame, -7, -7)
-
-		local bg, bu = EventTraceFrameScroll:GetRegions()
-		bg:Hide()
-		bu:SetAlpha(0)
-		bu:SetWidth(16)
-		bu.bg = B.CreateBDFrame(EventTraceFrame, 0, true)
-		bu.bg:SetAllPoints(bu)
-	end
-
 	-- Table Attribute Display
 	reskinTableAttribute(TableAttributeDisplay)
 	hooksecurefunc(TableInspectorMixin, "InspectTable", reskinTableAttribute)

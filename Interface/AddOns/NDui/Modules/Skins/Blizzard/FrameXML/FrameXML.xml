@@ -22,7 +22,6 @@
 	<Script file="HelpTipTemplate.lua"/>
 	<Script file="InterfaceOptionsFrame.lua"/>
 	<Script file="ItemTextFrame.lua"/>
-	<Script file="LevelUpDisplay.lua"/>
 	<Script file="LFGFrame.lua"/>
 	<Script file="LFGList.lua"/>
 	<Script file="LootFrame.lua"/>

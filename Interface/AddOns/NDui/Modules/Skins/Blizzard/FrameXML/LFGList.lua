@@ -131,7 +131,6 @@ tinsert(C.defaultThemes, function()
 	local prevHeader
 	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader", "DungeonScoreColumnHeader"}) do
 		local header = ApplicationViewer[headerName]
-		if not header then break end -- isNewPatch
 
 		B.StripTextures(header)
 		header.Label:SetFont(DB.Font[1], 14, DB.Font[3])

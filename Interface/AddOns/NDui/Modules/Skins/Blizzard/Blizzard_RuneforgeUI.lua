@@ -36,13 +36,9 @@ C.themes["Blizzard_RuneforgeUI"] = function()
 
 	local createFrame = frame.CreateFrame
 	B.Reskin(createFrame.CraftItemButton)
-	if not DB.isNewPatch then
-		B.ReplaceIconString(createFrame.Cost.Text)
-		hooksecurefunc(createFrame.Cost.Text, "SetText", B.ReplaceIconString)
-	else
-		hooksecurefunc(frame.CurrencyDisplay, "SetCurrencies", SetCurrenciesHook)
-		hooksecurefunc(createFrame.Cost.Currencies, "SetCurrencies", SetCurrenciesHook)
-	end
+
+	hooksecurefunc(frame.CurrencyDisplay, "SetCurrencies", SetCurrenciesHook)
+	hooksecurefunc(createFrame.Cost.Currencies, "SetCurrencies", SetCurrenciesHook)
 
 	local powerFrame = frame.CraftingFrame.PowerFrame
 	B.StripTextures(powerFrame)
