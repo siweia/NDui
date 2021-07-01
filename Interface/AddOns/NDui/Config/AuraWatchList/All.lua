@@ -124,6 +124,7 @@ local list = {
 		{AuraID = 324156, UnitID = "player", Flash = true},	-- 劫掠射击
 		{AuraID = 328900, UnitID = "player"},	-- 放下过去
 		{AuraID = 333961, UnitID = "player"},	-- 行动的召唤：布隆
+		{AuraID = 333943, UnitID = "player"},	-- 源生重槌
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
