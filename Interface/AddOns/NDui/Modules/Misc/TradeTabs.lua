@@ -236,7 +236,7 @@ function M:TradeTabs_QuickEnchanting()
 
 	local createButton = detailsFrame.CreateButton
 	createButton:RegisterForClicks("AnyUp")
-	createButton:HookScript("OnClick", function(self, btn)
+	createButton:HookScript("OnClick", function(_, btn)
 		if btn == "RightButton" and isEnchanting then
 			UseItemByName(ENCHANTING_VELLUM)
 		end

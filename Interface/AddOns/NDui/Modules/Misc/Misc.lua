@@ -680,24 +680,28 @@ function M:FasterMovieSkip()
 	if not C.db["Misc"]["FasterSkip"] then return end
 
 	-- Allow space bar, escape key and enter key to cancel cinematic without confirmation
+	if CinematicFrame.closeDialog and not CinematicFrame.closeDialog.confirmButton then
+		CinematicFrame.closeDialog.confirmButton = CinematicFrameCloseDialogConfirmButton
+	end
+
 	CinematicFrame:HookScript("OnKeyDown", function(self, key)
 		if key == "ESCAPE" then
-			if CinematicFrame:IsShown() and CinematicFrame.closeDialog and CinematicFrameCloseDialogConfirmButton then
-				CinematicFrameCloseDialog:Hide()
+			if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
+				self.closeDialog:Hide()
 			end
 		end
 	end)
 	CinematicFrame:HookScript("OnKeyUp", function(self, key)
 		if key == "SPACE" or key == "ESCAPE" or key == "ENTER" then
-			if CinematicFrame:IsShown() and CinematicFrame.closeDialog and CinematicFrameCloseDialogConfirmButton then
-				CinematicFrameCloseDialogConfirmButton:Click()
+			if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
+				self.closeDialog.confirmButton:Click()
 			end
 		end
 	end)
 	MovieFrame:HookScript("OnKeyUp", function(self, key)
 		if key == "SPACE" or key == "ESCAPE" or key == "ENTER" then
-			if MovieFrame:IsShown() and MovieFrame.CloseDialog and MovieFrame.CloseDialog.ConfirmButton then
-				MovieFrame.CloseDialog.ConfirmButton:Click()
+			if self:IsShown() and self.CloseDialog and self.CloseDialog.ConfirmButton then
+				self.CloseDialog.ConfirmButton:Click()
 			end
 		end
 	end)

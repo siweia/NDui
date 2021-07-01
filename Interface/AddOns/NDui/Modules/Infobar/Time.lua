@@ -5,7 +5,7 @@ if not C.Infobar.Time then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Time", C.Infobar.TimePos)
 local time, date = time, date
-local strfind, format, floor, strmatch = strfind, format, floor, strmatch
+local strfind, format, floor = strfind, format, floor
 local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
 local IsShiftKeyDown = IsShiftKeyDown
 local C_Map_GetMapInfo = C_Map.GetMapInfo

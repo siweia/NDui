@@ -125,7 +125,7 @@ function module:CheckCornerSpells()
 	local data = C.CornerBuffs[DB.MyClass]
 	if not data then return end
 
-	for spellID, value in pairs(data) do
+	for spellID in pairs(data) do
 		local name = GetSpellInfo(spellID)
 		if not name then
 			if DB.isDeveloper then print("Invalid cornerspell ID: "..spellID) end
