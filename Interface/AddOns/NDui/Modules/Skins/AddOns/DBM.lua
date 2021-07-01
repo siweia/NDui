@@ -143,8 +143,8 @@ function S:DBMSkin()
 		DBM_AllSavedOptions["Default"]["ChosenVoicePack"] = "Yike"
 	end
 	if not DBT_AllPersistentOptions["Default"] then DBT_AllPersistentOptions["Default"] = {} end
-	DBT_AllPersistentOptions["Default"]["DBM"].BarYOffset = 15
-	DBT_AllPersistentOptions["Default"]["DBM"].HugeBarYOffset = 15
+	DBT_AllPersistentOptions["Default"]["DBM"].BarYOffset = 8
+	DBT_AllPersistentOptions["Default"]["DBM"].HugeBarYOffset = 8
 	DBT_AllPersistentOptions["Default"]["DBM"].ExpandUpwards = true
 	DBT_AllPersistentOptions["Default"]["DBM"].ExpandUpwardsLarge = true
 end
