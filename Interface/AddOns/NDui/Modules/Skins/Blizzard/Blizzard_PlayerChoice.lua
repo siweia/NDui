@@ -15,6 +15,11 @@ local function ReskinOptionButton(self)
 	B.Reskin(self)
 end
 
+local function ShouldHideBackground()
+	local instID = select(3, GetInstanceInfo())
+	return IsInJailersTower() or instID == 8
+end
+
 C.themes["Blizzard_PlayerChoice"] = function()
 	hooksecurefunc(PlayerChoiceFrame, "TryShow", function(self)
 		if not self.bg then
@@ -29,8 +34,9 @@ C.themes["Blizzard_PlayerChoice"] = function()
 			self.bg = B.SetBD(self)
 		end
 
-		self.CloseButton:SetPoint("TOPRIGHT", self.bg, -2, -2)
-		self.bg:SetShown(not IsInInstance())
+		self.CloseButton:SetPoint("TOPRIGHT", self.bg, -4, -4)
+		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end -- no border for some templates
+		self.bg:SetShown(not ShouldHideBackground())
 
 		for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
 			local header = optionFrame.Header
