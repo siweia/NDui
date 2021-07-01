@@ -179,6 +179,7 @@ info.onLeave = B.HideTooltip
 -- Auto selljunk
 local stop, cache = true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
+local BAG = B:GetModule("Bags")
 
 local function startSelling()
 	if stop then return end
@@ -189,7 +190,7 @@ local function startSelling()
 			if link then
 				local price = select(11, GetItemInfo(link))
 				local _, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(bag, slot)
-				if (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and price > 0 and not cache["b"..bag.."s"..slot] then
+				if (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and (not BAG:IsPetTrashCurrency(itemID)) and price > 0 and not cache["b"..bag.."s"..slot] then
 					cache["b"..bag.."s"..slot] = true
 					UseContainerItem(bag, slot)
 					C_Timer_After(.15, startSelling)

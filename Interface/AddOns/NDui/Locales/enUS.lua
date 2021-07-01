@@ -776,3 +776,5 @@ L["LanguageFilterTip"] = "You need to uncheck language filter in GUI and restart
 L["SaveMailTarget"] = "Save mail recipient"
 L["BlockSpammer"] = "Block spammer message"
 L["BlockSpammerTip"] = "|nIf enanbled, repeat messages spammer will be blocked, you won't receive any messages from it any more."
+L["PetTrash"] = "Pet trash currencies"
+L["PetTrashTip"] = "|nIn patch 9.1, you can buy 3 battle pets by using specific trash items. Keep this enabled, will sort these items into Collection Filter, and won't be sold by auto junk selling."

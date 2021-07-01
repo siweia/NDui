@@ -776,3 +776,5 @@ L["LanguageFilterTip"] = "需要在控制台取消关闭语言过滤器，并重
 L["SaveMailTarget"] = "保存上次的收件人"
 L["BlockSpammer"] = "阻止刷屏者的消息"
 L["BlockSpammerTip"] = "|n启用后，在聊天中重复广告刷屏的玩家会被屏蔽，你不再收到来自他的任何消息。"
+L["PetTrash"] = "关注宠物垃圾货币"
+L["PetTrashTip"] = "|n9.1补丁中，在奥利波斯可以用特定的垃圾物品兑换3只小宠物，启用此选项会把这些物品归类到藏品过滤中，不会被自动清理。"

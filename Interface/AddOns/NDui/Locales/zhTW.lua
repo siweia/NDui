@@ -776,3 +776,5 @@ L["LanguageFilterTip"] = "需要在控制臺取消關閉語言過濾器，並重
 L["SaveMailTarget"] = "保存上次的收件人"
 L["BlockSpammer"] = "阻止刷屏者的訊息"
 L["BlockSpammerTip"] = "|n啟用後，在聊天中重複廣告刷屏的玩家會被屏蔽，你不再接收他的任何訊息。"
+L["PetTrash"] = "關注寵物垃圾貨幣"
+L["PetTrashTip"] = "|n9.1補丁中，在奧睿博司可以用特定的垃圾物品兌換3只小寵物，啟用此選項會把這些物品歸類到收藏中，不會被自動清理。"

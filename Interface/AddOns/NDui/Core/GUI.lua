@@ -57,6 +57,7 @@ G.DefaultSettings = {
 		SpecialBagsColor = false,
 		iLvlToShow = 1,
 		AutoDeposit = false,
+		PetTrash = true,
 
 		FilterJunk = true,
 		FilterConsumable = true,
@@ -774,7 +775,7 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 
 G.TabList = {
 	NewTag..L["Actionbar"],
-	L["Bags"],
+	NewTag..L["Bags"],
 	L["Unitframes"],
 	NewTag..L["RaidFrame"],
 	L["Nameplate"],
@@ -827,6 +828,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"], true},
+		{1, "Bags", "PetTrash", NewTag..L["PetTrash"], nil, nil, nil, L["PetTrashTip"]},
 		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 500, 1}, nil, L["iLvlToShowTip"]},
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
