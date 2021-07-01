@@ -1102,7 +1102,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
 		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"]},
-		{1, "Tooltip", "MDScore", NewTag..L["MDScore"], true, nil, nil, L["MDScoreTip"]},
+		{1, "Tooltip", "MDScore", NewTag..L["MDScore"].."*", true, nil, nil, L["MDScoreTip"]},
 		{},--blank
 		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
