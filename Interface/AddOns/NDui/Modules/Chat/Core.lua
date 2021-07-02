@@ -326,6 +326,21 @@ function module:PlayWhisperSound(event)
 	end
 end
 
+local function FixLanguageFilterSideEffects()
+	HelpFrame:HookScript("OnShow", function()
+		UIErrorsFrame:AddMessage(DB.InfoColor..L["LanguageFilterTip"])
+	end)
+
+	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
+	function C_BattleNet.GetFriendGameAccountInfo(...)
+		local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
+		if gameAccountInfo then
+			gameAccountInfo.isInCurrentRegion = true
+		end
+		return gameAccountInfo
+	end
+end
+
 function module:OnLogin()
 	fontOutline = C.db["Skins"]["FontOutline"] and "OUTLINE" or ""
 
@@ -382,10 +397,7 @@ function module:OnLogin()
 	if C.db["Chat"]["Freedom"] then
 		if GetCVar("portal") == "CN" then
 			ConsoleExec("portal TW")
-
-			HelpFrame:HookScript("OnShow", function()
-				UIErrorsFrame:AddMessage(DB.InfoColor..L["LanguageFilterTip"])
-			end)
+			FixLanguageFilterSideEffects()
 		end
 		SetCVar("profanityFilter", 0)
 	else
