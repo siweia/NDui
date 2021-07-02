@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local wipe, select, pairs, tonumber = wipe, select, pairs, tonumber
-local strsplit, strfind = strsplit, strfind
+local strsplit, strfind, tinsert = strsplit, strfind, tinsert
 local InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem = InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem
 local GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo = GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo
 local GetSendMailPrice, GetMoney = GetSendMailPrice, GetMoney
@@ -99,6 +99,15 @@ function M:ContactButton_Create(parent, index)
 	return button
 end
 
+local function GenerateDataByRealm(realm)
+	if contactListByRealm[realm] then
+		for name, color in pairs(contactListByRealm[realm]) do
+			local r, g, b = strsplit(":", color)
+			tinsert(contactList, {name = name.."-"..realm, r = r, g = g, b = b})
+		end
+	end
+end
+
 function M:ContactList_Refresh()
 	wipe(contactList)
 	wipe(contactListByRealm)
@@ -109,16 +118,11 @@ function M:ContactList_Refresh()
 		contactListByRealm[realm][name] = color
 	end
 
-	local count = 0
+	GenerateDataByRealm(DB.MyRealm)
+
 	for realm, value in pairs(contactListByRealm) do
-		for name, color in pairs(value) do
-			count = count + 1
-			local r, g, b = strsplit(":", color)
-			if not contactList[count] then contactList[count] = {} end
-			contactList[count].name = name.."-"..realm
-			contactList[count].r = r
-			contactList[count].g = g
-			contactList[count].b = b
+		if realm ~= DB.MyRealm then
+			GenerateDataByRealm(realm)
 		end
 	end
 
