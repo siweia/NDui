@@ -90,11 +90,6 @@ local function ReskinSpellDisplayWidget(self)
 	end
 end
 
-local ignoredWidgetIDs = {
-	[3246] = true, -- Torghast progressbar
-	[3273] = true, -- Torghast progressbar
-}
-
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -129,7 +124,6 @@ tinsert(C.defaultThemes, function()
 
 	-- needs review, might remove this in the future
 	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
-		if ignoredWidgetIDs[self.widgetID] then return end
 		ReskinWidgetStatusBar(self.Bar)
 	end)
 end)
