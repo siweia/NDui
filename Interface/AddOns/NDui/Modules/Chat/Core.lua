@@ -339,6 +339,15 @@ local function FixLanguageFilterSideEffects()
 		end
 		return gameAccountInfo
 	end
+
+	local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+	function C_BattleNet.GetFriendAccountInfo(...)
+		local accountInfo = OLD_GetFriendAccountInfo(...)
+		if accountInfo and accountInfo.gameAccountInfo then
+			accountInfo.gameAccountInfo.isInCurrentRegion = true
+		end
+		return accountInfo
+	end
 end
 
 function module:OnLogin()
