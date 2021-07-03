@@ -315,25 +315,31 @@ function module:RecycleBin()
 		end
 	end
 
+	local shownButtons = {}
 	local function SortRubbish()
 		if #buttons == 0 then return end
 
-		local numShown, lastbutton = 0
+		wipe(shownButtons)
 		for index, button in pairs(buttons) do
 			if next(button) and button:IsShown() then -- fix for fuxking AHDB
-				button:ClearAllPoints()
-				if not lastbutton then
-					button:SetPoint("BOTTOMRIGHT", bin, -3, 3)
-				elseif mod(index, iconsPerRow) == 1 then
-					button:SetPoint("BOTTOM", buttons[index - iconsPerRow], "TOP", 0, 3)
-				else
-					button:SetPoint("RIGHT", lastbutton, "LEFT", -3, 0)
-				end
-				lastbutton = button
-				numShown = numShown + 1
+				tinsert(shownButtons, button)
 			end
 		end
 
+		local lastbutton
+		for index, button in pairs(shownButtons) do
+			button:ClearAllPoints()
+			if not lastbutton then
+				button:SetPoint("BOTTOMRIGHT", bin, -3, 3)
+			elseif mod(index, iconsPerRow) == 1 then
+				button:SetPoint("BOTTOM", buttons[index - iconsPerRow], "TOP", 0, 3)
+			else
+				button:SetPoint("RIGHT", lastbutton, "LEFT", -3, 0)
+			end
+			lastbutton = button
+		end
+
+		local numShown = #shownButtons
 		local row = numShown == 0 and 1 or B:Round((numShown + rowMult) / iconsPerRow)
 		local newHeight = row*37 + 3
 		bin:SetHeight(newHeight)
