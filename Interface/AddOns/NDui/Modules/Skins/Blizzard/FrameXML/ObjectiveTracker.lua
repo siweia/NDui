@@ -203,6 +203,29 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", B.AffixesSetup)
 
+	-- Block in jail tower
+	local mawBuffsBlock = ScenarioBlocksFrame.MawBuffsBlock
+	local bg = B.SetBD(mawBuffsBlock, nil, 20, -10, -20, 10)
+
+	local blockContainer = mawBuffsBlock.Container
+	B.StripTextures(blockContainer)
+	blockContainer:GetPushedTexture():SetAlpha(0)
+	blockContainer:GetHighlightTexture():SetAlpha(0)
+
+	local blockList = blockContainer.List
+	B.StripTextures(blockList)
+	blockList.__bg = bg
+	local bg = B.SetBD(blockList)
+	bg:SetPoint("TOPLEFT", 7, -12)
+	bg:SetPoint("BOTTOMRIGHT", -7, 12)
+
+	blockList:HookScript("OnShow", function(self)
+		self.__bg:SetBackdropBorderColor(1, .8, 0, .7)
+	end)
+	blockList:HookScript("OnHide", function(self)
+		self.__bg:SetBackdropBorderColor(0, 0, 0, 1)
+	end)
+
 	-- Reskin Headers
 	local headers = {
 		ObjectiveTrackerBlocksFrame.QuestHeader,
