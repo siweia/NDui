@@ -332,7 +332,7 @@ function module:RecycleBin()
 			if not lastbutton then
 				button:SetPoint("BOTTOMRIGHT", bin, -3, 3)
 			elseif mod(index, iconsPerRow) == 1 then
-				button:SetPoint("BOTTOM", buttons[index - iconsPerRow], "TOP", 0, 3)
+				button:SetPoint("BOTTOM", shownButtons[index - iconsPerRow], "TOP", 0, 3)
 			else
 				button:SetPoint("RIGHT", lastbutton, "LEFT", -3, 0)
 			end
