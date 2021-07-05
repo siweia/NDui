@@ -703,11 +703,11 @@ function S:ReskinRematch()
 				checkButton.bg:SetPoint("TOPLEFT", checkButton, -3, 3)
 				checkButton.bg:SetPoint("BOTTOMRIGHT", checkButton, 3, -3)
 
-				local isCollapsed = RematchSettings.CollapsedOptHeaders[opt[3]]
-				if isCollapsed then
-					checkButton:SetTexCoord(0, .4375, 0, .4375)
-				else
+				local isExpanded = RematchSettings.ExpandedOptHeaders[opt[3]]
+				if isExpanded then
 					checkButton:SetTexCoord(.5625, 1, 0, .4375)
+				else
+					checkButton:SetTexCoord(0, .4375, 0, .4375)
 				end
 				if self.headerIndex == 0 and panel.allCollapsed then
 					checkButton:SetTexCoord(0, .4375, 0, .4375)
