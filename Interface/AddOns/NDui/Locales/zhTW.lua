@@ -781,3 +781,4 @@ L["PetTrashTip"] = "|n9.1補丁中，在奧睿博司可以用特定的垃圾物�
 L["MythicScore"] = "傳奇分數: %s"
 L["MDScore"] = "顯示目標傳奇鑰石分數"
 L["MDScoreTip"] = "|n啟用後，顯示目標在當前賽季的傳奇鑰石分數。|n當分數為0時不顯示信息。"
+L["ToggleCastbarTip"] = "|n施法條開關，無需重載插件。"

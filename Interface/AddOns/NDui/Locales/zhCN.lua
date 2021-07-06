@@ -781,3 +781,4 @@ L["PetTrashTip"] = "|n9.1补丁中，在奥利波斯可以用特定的垃圾物�
 L["MythicScore"] = "史诗评分: %s"
 L["MDScore"] = "显示目标史诗钥石评分"
 L["MDScoreTip"] = "|n启用后，显示目标在当前赛季的史诗钥石评分。|n当分数为0时不显示信息。"
+L["ToggleCastbarTip"] = "|n施法条开关，无需重载插件。"

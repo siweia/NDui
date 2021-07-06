@@ -781,3 +781,4 @@ L["PetTrashTip"] = "|nIn patch 9.1, you can buy 3 battle pets by using specific 
 L["MythicScore"] = "Mythic Score: %s" -- need translation
 L["MDScore"] = "Show Mythic+ Rating" -- need translation
 L["MDScoreTip"] = "|nIf enabled, show unit Mythic+ Rating at current season.|nHide tooltip info if unit score is ZERO." -- need translation
+L["ToggleCastbarTip"] = "|nOption to toggle castbars, no need to reload UI." -- need translation

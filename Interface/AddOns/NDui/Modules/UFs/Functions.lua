@@ -597,6 +597,16 @@ function UF:CreateCastBar(self)
 	self.Castbar = cb
 end
 
+function UF:ToggleCastBar(unit)
+	if not self or not unit then return end
+
+	if C.db["UFs"][unit.."CB"] and not self:IsElementEnabled("Castbar") then
+		self:EnableElement("Castbar")
+	elseif not C.db["UFs"][unit.."CB"] and self:IsElementEnabled("Castbar") then
+		self:DisableElement("Castbar")
+	end
+end
+
 local function reskinTimerBar(bar)
 	bar:SetSize(280, 15)
 	B.StripTextures(bar)

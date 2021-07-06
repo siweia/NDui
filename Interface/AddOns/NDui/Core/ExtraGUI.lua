@@ -994,7 +994,24 @@ function G:SetupCastbar(parent)
 		["Focus"] = {320, 20},
 	}
 
+	local UF = B:GetModule("UnitFrames")
+
+	local function toggleCastbar(self)
+		local value = self.__value.."CB"
+		C.db["UFs"][value] = not C.db["UFs"][value]
+		self:SetChecked(C.db["UFs"][value])
+		UF.ToggleCastBar(_G["oUF_"..self.__value], self.__value)
+	end
+
 	local function createOptionGroup(parent, title, offset, value, func)
+		local box = B.CreateCheckBox(parent)
+		box:SetPoint("TOPLEFT", parent, 30, offset + 6)
+		box:SetChecked(C.db["UFs"][value.."CB"])
+		box.__value = value
+		box:SetScript("OnClick", toggleCastbar)
+		box.title = L["Tips"]
+		B.AddTooltip(box, "ANCHOR_RIGHT", L["ToggleCastbarTip"], "info")
+
 		createOptionTitle(parent, title, offset)
 		createOptionSlider(parent, L["Castbar Width"], 100, 800, defaultValue[value][1], 30, offset-60, value.."CBWidth", func)
 		createOptionSlider(parent, L["Castbar Height"], 10, 50, defaultValue[value][2], 30, offset-130, value.."CBHeight", func)

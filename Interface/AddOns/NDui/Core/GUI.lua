@@ -178,10 +178,13 @@ G.DefaultSettings = {
 
 		CastingColor = {r=.3, g=.7, b=1},
 		NotInterruptColor = {r=1, g=.5, b=.5},
+		PlayerCB = true,
 		PlayerCBWidth = 300,
 		PlayerCBHeight = 20,
+		TargetCB = true,
 		TargetCBWidth = 280,
 		TargetCBHeight = 20,
+		FocusCB = true,
 		FocusCBWidth = 320,
 		FocusCBHeight = 20,
 	},
