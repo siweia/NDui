@@ -15,11 +15,6 @@ local function ReskinOptionButton(self)
 	B.Reskin(self)
 end
 
-local function ShouldHideBackground()
-	local instID = select(3, GetInstanceInfo())
-	return IsInJailersTower() or instID == 8
-end
-
 local function ReskinSpellWidget(spell)
 	if not spell.bg then
 		spell.Border:SetAlpha(0)
@@ -46,7 +41,7 @@ C.themes["Blizzard_PlayerChoice"] = function()
 
 		self.CloseButton:SetPoint("TOPRIGHT", self.bg, -4, -4)
 		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end -- no border for some templates
-		self.bg:SetShown(not ShouldHideBackground())
+		self.bg:SetShown(self.Background:IsShown())
 
 		for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
 			local header = optionFrame.Header
