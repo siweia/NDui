@@ -6,7 +6,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 local _G = _G
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
-local ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate, GetTime
+local ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime
 local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant
 local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected, PlaySound = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected, PlaySound
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
@@ -145,17 +145,8 @@ local cycles = {
 	{ chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
 	{ chatType = "GUILD", use = function() return IsInGuild() end },
 	{ chatType = "CHANNEL", use = function(_, editbox)
-		if GetCVar("portal") ~= "CN" then return false end
-		local channels, inWorldChannel, number = {GetChannelList()}
-		for i = 1, #channels do
-			if channels[i] == "大脚世界频道" then
-				inWorldChannel = true
-				number = channels[i-1]
-				break
-			end
-		end
-		if inWorldChannel then
-			editbox:SetAttribute("channelTarget", number)
+		if module.InWorldChannel and module.WorldChannelID then
+			editbox:SetAttribute("channelTarget", module.WorldChannelID)
 			return true
 		else
 			return false
