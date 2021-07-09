@@ -2,6 +2,21 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
+local chatSwitchInfo = {
+	text = L["ChatSwitchHelp"],
+	buttonStyle = HelpTip.ButtonStyle.GotIt,
+	targetPoint = HelpTip.Point.TopEdgeCenter,
+	offsetY = 5,
+	onAcknowledgeCallback = B.HelpInfoAcknowledge,
+	callbackArg = "ChatSwitch",
+}
+
+local function chatSwitchTip()
+	if not NDuiADB["Help"]["ChatSwitch"] then
+		HelpTip:Show(ChatFrame1.editBox, chatSwitchInfo)
+	end
+end
+
 function module:Chatbar()
 	if not C.db["Chat"]["Chatbar"] then return end
 
@@ -22,7 +37,10 @@ function module:Chatbar()
 		bu:SetHitRectInsets(0, 0, -8, -8)
 		bu:RegisterForClicks("AnyUp")
 		if text then B.AddTooltip(bu, "ANCHOR_TOP", B.HexRGB(r, g, b)..text) end
-		if func then bu:SetScript("OnClick", func) end
+		if func then
+			bu:SetScript("OnClick", func)
+			bu:HookScript("OnClick", chatSwitchTip)
+		end
 
 		tinsert(buttonList, bu)
 		return bu
