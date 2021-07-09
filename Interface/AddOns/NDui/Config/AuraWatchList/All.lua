@@ -85,6 +85,7 @@ local list = {
 		{AuraID = 355316, UnitID = "player"},	-- 安海尔德之盾
 		{AuraID = 356326, UnitID = "player"},	-- 折磨洞察
 		{AuraID = 355333, UnitID = "player"},	-- 回收的聚变增幅器
+		{AuraID = 357185, UnitID = "player"},	-- 忠诚的力量，低语威能碎片
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 323546, UnitID = "player"},	-- 饕餮狂乱
