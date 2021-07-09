@@ -77,6 +77,7 @@ end
 
 -- 特殊单位的染色列表
 C.CustomUnits = {
+	[179823] = true,	-- 圣物收集者
 	-- Nzoth vision
 	[153401] = true, 	-- 克熙尔支配者
 	[157610] = true, 	-- 克熙尔支配者
