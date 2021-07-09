@@ -41,7 +41,7 @@ C.themes["Blizzard_PlayerChoice"] = function()
 
 		self.CloseButton:SetPoint("TOPRIGHT", self.bg, -4, -4)
 		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end -- no border for some templates
-		self.bg:SetShown(self.Background:IsShown())
+		self.bg:SetShown(self.uiTextureKit ~= "jailerstower")
 
 		for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
 			local header = optionFrame.Header
