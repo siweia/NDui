@@ -54,6 +54,7 @@ function M:OnLogin()
 	M:ExtendInstance()
 	M:VehicleSeatMover()
 	M:UIWidgetFrameMover()
+	M:MoveMawBuffsFrame()
 	M:MoveDurabilityFrame()
 	M:MoveTicketStatusFrame()
 	M:UpdateScreenShot()
@@ -210,6 +211,21 @@ function M:UIWidgetFrameMover()
 	B.Mover(frame, L["UIWidgetFrame"], "UIWidgetFrame", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -20})
 
 	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, "SetPoint", function(self, _, parent)
+		if parent == "MinimapCluster" or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint("TOPRIGHT", frame)
+		end
+	end)
+end
+
+-- Reanchor MawBuffsBelowMinimapFrame
+function M:MoveMawBuffsFrame()
+	local frame = CreateFrame("Frame", "NDuiMawBuffsMover", UIParent)
+	frame:SetSize(235, 28)
+	local mover = B.Mover(frame, MAW_POWER_DESCRIPTION, "MawBuffs", {"BOTTOMRIGHT", UIParent, "RIGHT", -225, -80})
+	frame:SetPoint("TOPLEFT", mover, 4, 12)
+
+	hooksecurefunc(MawBuffsBelowMinimapFrame, "SetPoint", function(self, _, parent)
 		if parent == "MinimapCluster" or parent == MinimapCluster then
 			self:ClearAllPoints()
 			self:SetPoint("TOPRIGHT", frame)
