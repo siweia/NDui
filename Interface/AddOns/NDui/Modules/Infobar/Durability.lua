@@ -118,7 +118,7 @@ info.onMouseUp = function(self, btn)
 		NDuiADB["RepairType"] = mod(NDuiADB["RepairType"] + 1, 3)
 		self:onEnter()
 	else
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleCharacter("PaperDollFrame")
 	end
 end

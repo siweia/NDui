@@ -91,7 +91,7 @@ end
 
 info.onMouseUp = function(_, btn)
 	if btn == "LeftButton" then
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleFrame(WorldMapFrame)
 	elseif btn == "RightButton" then
 		local hasUnit = UnitExists("target") and not UnitIsPlayer("target")
