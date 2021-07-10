@@ -3,4 +3,5 @@
 	<Include file="oUF\oUF.xml"/>
 	<Script file="LibButtonGlow.lua"/>
 	<Script file="LibBase64.lua"/>
+	<Script file="LibShowUIPanel-1.0.lua"/>
 </Ui>
