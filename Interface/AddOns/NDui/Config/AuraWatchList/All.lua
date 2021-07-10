@@ -126,6 +126,8 @@ local list = {
 		{AuraID = 328900, UnitID = "player"},	-- 放下过去
 		{AuraID = 333961, UnitID = "player"},	-- 行动的召唤：布隆
 		{AuraID = 333943, UnitID = "player"},	-- 源生重槌
+		-- 心能
+		{AuraID = 357852, UnitID = "player"},	-- 激励
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
@@ -249,6 +251,10 @@ local list = {
 		{AuraID = 346961, UnitID = "player", Flash = true},	-- 集市，净化之地
 		{AuraID = 347481, UnitID = "player"},	-- 集市，奥能手里波
 		{AuraID = 350013, UnitID = "player"},	-- 集市，暴食盛宴
+		{AuraID = 350885, UnitID = "player"},	-- 集市，超光速震荡
+		{AuraID = 350804, UnitID = "player"},	-- 集市，坍缩能量
+		{AuraID = 349999, UnitID = "player"},	-- 集市，心能引爆
+		{AuraID = 359019, UnitID = "player", Flash = true},	-- 集市，快拍提速
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
@@ -310,6 +316,7 @@ local list = {
 		{AuraID = 347840, UnitID = "target"},	-- 集市，野性
 		{AuraID = 347992, UnitID = "target"},	-- 集市，回旋防弹衣
 		{AuraID = 347840, UnitID = "target"},	-- 集市，野性
+		{AuraID = 347015, UnitID = "target", Flash = true},	-- 集市，强化防御
 		-- 团本
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
