@@ -478,7 +478,7 @@ function TT:OnLogin()
 	TT:TargetedInfo()
 	TT:AzeriteArmor()
 	TT:ConduitCollectionData()
-	TT:ShowDomiInfo()
+	TT:DominationRank()
 end
 
 -- Tooltip Skin Registration

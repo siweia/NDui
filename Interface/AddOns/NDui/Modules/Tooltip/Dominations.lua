@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
-local format, strfind, strmatch = format, strfind, strmatch
+local select, format, strfind, strmatch, tonumber = select, format, strfind, strmatch, tonumber
 local GetItemInfo, GetItemInfoFromHyperlink = GetItemInfo, GetItemInfoFromHyperlink
 local DOMI_RANK_STRING = "%s (%d/5)"
 
@@ -90,7 +90,7 @@ function TT:Domination_UpdateText(name, rank)
 	end
 end
 
-function TT:Donimation_CheckStatus()
+function TT:Domination_CheckStatus()
 	local _, link = self:GetItem()
 	if not link then return end
 
@@ -116,10 +116,9 @@ function TT:Donimation_CheckStatus()
 	end
 end
 
-function TT:ShowDomiInfo()
-	GameTooltip:HookScript("OnTooltipSetItem", TT.Donimation_CheckStatus)
-	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Donimation_CheckStatus)
-	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Donimation_CheckStatus)
-	GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.Donimation_CheckStatus)
-	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Donimation_CheckStatus)
+function TT:DominationRank()
+	GameTooltip:HookScript("OnTooltipSetItem", TT.Domination_CheckStatus)
+	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Domination_CheckStatus)
+	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Domination_CheckStatus)
+	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Domination_CheckStatus)
 end
