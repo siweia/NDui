@@ -783,3 +783,5 @@ L["MDScore"] = "Show Mythic+ Rating" -- need translation
 L["MDScoreTip"] = "|nIf enabled, show unit Mythic+ Rating at current season.|nHide tooltip info if unit score is ZERO." -- need translation
 L["ToggleCastbarTip"] = "|nOption to toggle castbars, no need to reload UI." -- need translation
 L["ChatSwitchHelp"] = "Press key Tab to switch available channels, it's a bit silly to click on bars all the time." -- need translation
+L["DomiRank"] = "Shards of Domination" -- need translation
+L["DomiRankTip"] = "|nShow rank on shards of domination and domination armors." -- need translation

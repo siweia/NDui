@@ -317,6 +317,7 @@ G.DefaultSettings = {
 		ConduitInfo = true,
 		HideAllID = false,
 		MDScore = false,
+		DomiRank = true,
 	},
 	Misc = {
 		Mail = true,
@@ -1107,9 +1108,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "MDScore", NewTag..L["MDScore"].."*", nil, nil, nil, L["MDScoreTip"]},
 		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
 		{},--blank
+		{1, "Tooltip", "DomiRank", NewTag..L["DomiRank"], nil, nil, nil, L["DomiRankTip"]},
+		{1, "Tooltip", "ConduitInfo", L["Show ConduitInfo"], true},
+		{},--blank
 		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
-		{1, "Tooltip", "ConduitInfo", HeaderTag..L["Show ConduitInfo"]},
 	},
 	[13] = {
 		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemLevel"], nil, nil, nil, L["ItemLevelTip"]},
