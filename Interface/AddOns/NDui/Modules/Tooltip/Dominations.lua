@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
+local format, strfind, strmatch = format, strfind, strmatch
+local GetItemInfo, GetItemInfoFromHyperlink = GetItemInfo, GetItemInfoFromHyperlink
 local DOMI_RANK_STRING = "%s (%d/5)"
 
 TT.DomiData = {
@@ -60,6 +62,34 @@ TT.DomiData = {
 	[187314] = 5, -- 征兆雷弗碎片
 }
 
+local domiTextureIDs = {
+	[457655] = true,
+	[1003591] = true,
+	[1392550] = true,
+}
+
+local nameCache = {}
+local function GetDomiName(itemID)
+	local name = nameCache[itemID]
+	if not name then
+		name = GetItemInfo(itemID)
+		nameCache[itemID] = name
+	end
+	return name
+end
+
+function TT:Domination_UpdateText(name, rank)
+	local tex = _G[self:GetName().."Texture1"]
+	local texture = tex and tex:IsShown() and tex:GetTexture()
+	if texture and domiTextureIDs[texture] then
+		local textLine = select(2, tex:GetPoint())
+		local text = textLine and textLine:GetText()
+		if text then
+			textLine:SetText(text.."|n"..format(DOMI_RANK_STRING, name, rank))
+		end
+	end
+end
+
 function TT:Donimation_CheckStatus()
 	local _, link = self:GetItem()
 	if not link then return end
@@ -68,10 +98,20 @@ function TT:Donimation_CheckStatus()
 	local rank = itemID and TT.DomiData[itemID]
 
 	if rank then
+		-- Domi rank on gems
 		local textLine = _G[self:GetName().."TextLeft2"]
 		local text = textLine and textLine:GetText()
 		if text and strfind(text, "|cFF66BBFF") then
 			textLine:SetFormattedText(DOMI_RANK_STRING, text, rank)
+		end
+	else
+		-- Domi rank on gears
+		local gemID = strmatch(link, "item:%d+:%d*:(%d*):")
+		itemID = tonumber(gemID)
+		rank = itemID and TT.DomiData[itemID]
+		if rank then
+			local name = GetDomiName(itemID)
+			TT.Domination_UpdateText(self, name, rank)
 		end
 	end
 end
