@@ -59,7 +59,7 @@ local function showtip(self)
 	GameTooltip:Show()
 	if not cache[self.id] then
 		local name = GetItemInfo(self.id)
-		print(name, self.id)
+		print("["..self.id.."] = 1, -- "..name)
 		cache[self.id] = true
 	end
 end
