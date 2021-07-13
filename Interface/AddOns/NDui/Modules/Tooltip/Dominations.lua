@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
+local DOMI_RANK_STRING = "%s (%d/5)"
+
 TT.DomiData = {
 	[187063] = 1, -- 克尔碎片
 	[187287] = 2, -- 不祥克尔碎片
@@ -58,44 +60,6 @@ TT.DomiData = {
 	[187314] = 5, -- 征兆雷弗碎片
 }
 
-local cache = {}
-local function showtip(self)
-	GameTooltip:ClearLines()
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 3)
-	GameTooltip:SetHyperlink(select(2, GetItemInfo(self.id)))
-	GameTooltip:Show()
-	if not cache[self.id] then
-		local name = GetItemInfo(self.id)
-		print("["..self.id.."] = 1, -- "..name)
-		cache[self.id] = true
-	end
-end
-
-function TT:TestDomi()
-	local buttons = {}
-	local i= 1
-	for itemID in pairs(dominationData) do
-		local f = CreateFrame("Button", nil, UIParent)
-		f:SetSize(50, 50)
-		local tex = f:CreateTexture()
-		tex:SetAllPoints()
-		tex:SetTexture(GetItemIcon(itemID))
-		buttons[i] = f
-
-		f.id = itemID
-		f:SetScript("OnLeave", B.HideTooltip)
-		f:SetScript("OnEnter", showtip)
-		if i == 1 then
-			f:SetPoint("CENTER", -200, 200)
-		elseif mod(i, 9) == 1 then
-			f:SetPoint("TOP", buttons[i-9], "BOTTOM", 0, -5)
-		else
-			f:SetPoint("LEFT", buttons[i-1], "RIGHT", 5, 0)
-		end
-		i = i + 1
-	end
-end
-
 function TT:Donimation_CheckStatus()
 	local _, link = self:GetItem()
 	if not link then return end
@@ -107,7 +71,7 @@ function TT:Donimation_CheckStatus()
 		local textLine = _G[self:GetName().."TextLeft2"]
 		local text = textLine and textLine:GetText()
 		if text and strfind(text, "|cFF66BBFF") then
-			textLine:SetText(text.." "..rank.."/5")
+			textLine:SetFormattedText(DOMI_RANK_STRING, text, rank)
 		end
 	end
 end
