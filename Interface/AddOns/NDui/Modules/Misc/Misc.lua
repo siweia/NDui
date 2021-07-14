@@ -222,7 +222,7 @@ end
 function M:MoveMawBuffsFrame()
 	local frame = CreateFrame("Frame", "NDuiMawBuffsMover", UIParent)
 	frame:SetSize(235, 28)
-	local mover = B.Mover(frame, MAW_POWER_DESCRIPTION, "MawBuffs", {"TOPRIGHT", UIParent, -80, -225})
+	local mover = B.Mover(frame, MAW_POWER_DESCRIPTION, "MawBuffs", {"TOPRIGHT", UIParent, -90, -225})
 	frame:SetPoint("TOPLEFT", mover, 4, 12)
 
 	hooksecurefunc(MawBuffsBelowMinimapFrame, "SetPoint", function(self, _, parent)
