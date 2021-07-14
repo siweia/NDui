@@ -316,7 +316,7 @@ G.DefaultSettings = {
 		OnlyArmorIcons = false,
 		ConduitInfo = true,
 		HideAllID = false,
-		MDScore = false,
+		MDScore = true,
 		DomiRank = true,
 	},
 	Misc = {
