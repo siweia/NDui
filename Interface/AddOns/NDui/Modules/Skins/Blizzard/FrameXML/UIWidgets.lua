@@ -78,16 +78,13 @@ local function ReskinPVPCaptureBar(self)
 	end
 end
 
-local function ReskinSpellDisplayWidget(self)
-	if not self.styled then
-		local widgetSpell = self.Spell
-		widgetSpell.IconMask:Hide()
-		widgetSpell.Border:SetTexture(nil)
-		widgetSpell.DebuffBorder:SetTexture(nil)
-		B.ReskinIcon(widgetSpell.Icon)
-
-		self.styled = true
+local function ReskinSpellDisplayWidget(spell)
+	if not spell.bg then
+		spell.Border:SetAlpha(0)
+		spell.DebuffBorder:SetAlpha(0)
+		spell.bg = B.ReskinIcon(spell.Icon)
 	end
+	spell.IconMask:Hide()
 end
 
 tinsert(C.defaultThemes, function()
@@ -99,7 +96,7 @@ tinsert(C.defaultThemes, function()
 			if widgetType == Type_DoubleStatusBar then
 				ReskinDoubleStatusBarWidget(widgetFrame)
 			elseif widgetType == Type_SpellDisplay then
-				ReskinSpellDisplayWidget(widgetFrame)
+				ReskinSpellDisplayWidget(widgetFrame.Spell)
 			elseif widgetType == Type_StatusBar then
 				ReskinWidgetStatusBar(widgetFrame.Bar)
 			end
@@ -133,7 +130,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc(_G.BottomScenarioWidgetContainerBlock.WidgetContainer, "UpdateWidgetLayout", function(self)
 		for _, widgetFrame in pairs(self.widgetFrames) do
 			if widgetFrame.widgetType == Type_SpellDisplay then
-				ReskinSpellDisplayWidget(widgetFrame)
+				ReskinSpellDisplayWidget(widgetFrame.Spell)
 			end
 		end
 	end)
