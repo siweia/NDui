@@ -1020,7 +1020,7 @@ function module:OnLogin()
 	B:RegisterEvent("BANKFRAME_OPENED", module.AutoDeposit)
 
 	-- Fixes
-	--BankFrame.GetRight = function() return f.bank:GetRight() end	-- maybe useless for now
+	BankFrame.GetRight = function() return f.bank:GetRight() end
 	BankFrameItemButton_Update = B.Dummy
 
 	-- Shift key alert
