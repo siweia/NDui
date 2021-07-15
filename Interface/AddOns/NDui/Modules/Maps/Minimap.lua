@@ -327,25 +327,23 @@ function module:RecycleBin()
 			end
 		end
 
-		local lastbutton
-		for index, button in pairs(shownButtons) do
-			button:ClearAllPoints()
-			if not lastbutton then
-				button:SetPoint("BOTTOMRIGHT", bin, -3, 3)
-			elseif mod(index, iconsPerRow) == 1 then
-				button:SetPoint("BOTTOM", shownButtons[index - iconsPerRow], "TOP", 0, 3)
-			else
-				button:SetPoint("RIGHT", lastbutton, "LEFT", -3, 0)
-			end
-			lastbutton = button
-		end
-
 		local numShown = #shownButtons
 		local row = numShown == 0 and 1 or B:Round((numShown + rowMult) / iconsPerRow)
 		local newHeight = row*37 + 3
 		bin:SetHeight(newHeight)
 		tex:SetHeight(newHeight)
 		rightLine:SetHeight(newHeight + 2*C.mult)
+
+		for index, button in pairs(shownButtons) do
+			button:ClearAllPoints()
+			if index == 1 then
+				button:SetPoint("BOTTOMRIGHT", bin, -3, 3)
+			elseif row > 1 and mod(index, row) == 1 or row == 1 then
+				button:SetPoint("RIGHT", shownButtons[index - row], "LEFT", -3, 0)
+			else
+				button:SetPoint("BOTTOM", shownButtons[index - 1], "TOP", 0, 3)
+			end
+		end
 	end
 
 	bu:SetScript("OnClick", function()
