@@ -194,7 +194,7 @@ local blackList = {
 }
 
 function M:IsAllyPet(sourceFlags)
-	if DB:IsMyPet(sourceFlags) or (not C.db["Misc"]["OwnInterrupt"] and (sourceFlags == DB.PartyPetFlags or sourceFlags == DB.RaidPetFlags)) then
+	if DB:IsMyPet(sourceFlags) or sourceFlags == DB.PartyPetFlags or sourceFlags == DB.RaidPetFlags then
 		return true
 	end
 end
@@ -211,10 +211,10 @@ function M:InterruptAlert_Update(...)
 				if auraType and auraType == AURA_TYPE_BUFF or blackList[spellID] then return end
 				sourceSpellID, destSpellID = extraskillID, spellID
 			elseif infoText == L["Interrupt"] then
-				if C.db["Misc"]["OwnInterrupt"] and sourceName ~= DB.MyName and not M:IsAllyPet(sourceFlags) then return end
+				if C.db["Misc"]["OwnInterrupt"] and sourceName ~= DB.MyName and not DB:IsMyPet(sourceFlags) then return end
 				sourceSpellID, destSpellID = spellID, extraskillID
 			else
-				if C.db["Misc"]["OwnDispell"] and sourceName ~= DB.MyName and not M:IsAllyPet(sourceFlags) then return end
+				if C.db["Misc"]["OwnDispell"] and sourceName ~= DB.MyName and not DB:IsMyPet(sourceFlags) then return end
 				sourceSpellID, destSpellID = spellID, extraskillID
 			end
 
