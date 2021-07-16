@@ -125,7 +125,7 @@ function TT:OnTooltipCleared()
 end
 
 function TT:ShowUnitMythicPlusScore(unit)
-	if not C.db["Tooltip"]["MDScore"] then return end
+	if not C.db["Tooltip"]["MythicScore"] then return end
 
 	local summary = C_PlayerInfo_GetPlayerMythicPlusRatingSummary(unit)
 	local score = summary and summary.currentSeasonScore
