@@ -287,6 +287,7 @@ local function onUpdateHealth(self, elapsed)
 end
 
 local function SetHealthUpdateSpeed(self, state)
+	if state < .1 then state = .1 end
 	onUpdateWait = state
 end
 
