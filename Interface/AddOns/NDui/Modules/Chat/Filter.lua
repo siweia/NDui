@@ -56,7 +56,7 @@ function module:GetFilterResult(event, msg, name, flag, guid)
 	end
 
 	if C.db["Chat"]["BlockStranger"] and event == "CHAT_MSG_WHISPER" then -- Block strangers
-		module.MuteThisTime = true
+		module.MuteCache[name] = GetTime()
 		return true
 	end
 
@@ -165,7 +165,7 @@ function module:UpdateAddOnBlocker(event, msg, author)
 			elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
 				module:ToggleChatBubble(true)
 			elseif event == "CHAT_MSG_WHISPER" then
-				module.MuteThisTime = true
+				module.MuteCache[name] = GetTime()
 			end
 			return true
 		end
