@@ -612,6 +612,10 @@ TT:RegisterTooltips("NDui", function()
 		if NarciGameTooltip then
 			TT.ReskinTooltip(NarciGameTooltip)
 		end
+		-- Altoholic
+		if AltoTooltip then
+			TT.ReskinTooltip(AltoTooltip)
+		end
 	end)
 
 	if IsAddOnLoaded("BattlePetBreedID") then
