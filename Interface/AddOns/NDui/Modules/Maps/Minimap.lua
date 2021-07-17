@@ -194,7 +194,6 @@ function module:RecycleBin()
 	local bin = CreateFrame("Frame", "RecycleBinFrame", UIParent)
 	bin:SetPoint("BOTTOMRIGHT", bu, "BOTTOMLEFT", -3, 10)
 	bin:SetSize(width, height)
-	bin:SetFrameStrata("TOOLTIP")
 	bin:Hide()
 
 	local tex = B.SetGradient(bin, "H", 0, 0, 0, 0, alpha, width, height)
