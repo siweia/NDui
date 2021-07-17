@@ -117,7 +117,7 @@ function TT:Domination_CheckStatus()
 end
 
 function TT:DominationRank()
-	if not NDuiDB["Tooltip"]["DomiRank"] then return end
+	if not C.db["Tooltip"]["DomiRank"] then return end
 
 	GameTooltip:HookScript("OnTooltipSetItem", TT.Domination_CheckStatus)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Domination_CheckStatus)
