@@ -240,9 +240,11 @@ function M:InterruptAlert()
 		self:InterruptAlert_CheckGroup()
 		B:RegisterEvent("GROUP_LEFT", self.InterruptAlert_CheckGroup)
 		B:RegisterEvent("GROUP_JOINED", self.InterruptAlert_CheckGroup)
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", self.InterruptAlert_CheckGroup)
 	else
 		B:UnregisterEvent("GROUP_LEFT", self.InterruptAlert_CheckGroup)
 		B:UnregisterEvent("GROUP_JOINED", self.InterruptAlert_CheckGroup)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", self.InterruptAlert_CheckGroup)
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.InterruptAlert_Update)
 	end
 end
