@@ -60,7 +60,9 @@ local inaccurateQuestAreas = {
 	[25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[34461] = 590, -- Horde Garrison
+	[59809] = true,
 	[60004] = 118, -- 前夕任务：英勇之举
+	[63971] = 1543, -- 法夜突袭，蜗牛践踏
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -103,9 +105,12 @@ local questItems = {
 	[49402] = 154878, -- Tiragarde Sound
 	[50164] = 154878, -- Tiragarde Sound
 	[51646] = 154878, -- Tiragarde Sound
+	[58586] = 174465, -- Venthyr Covenant
+	[59063] = 175137, -- Night Fae Covenant
+	[59809] = 177904, -- Night Fae Covenant
+	[60188] = 178464, -- Night Fae Covenant
 	[60649] = 180170, -- Ardenweald
 	[60609] = 180008, -- Ardenweald
-	[60188] = 178464, -- Ardenweald
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
@@ -397,6 +402,7 @@ local function GetQuestDistanceWithItem(questID)
 	end
 	if not itemLink then return end
 	if GetItemCount(itemLink) == 0 then return end
+	if blacklist[itemID] then return end
 
 	if C_QuestLog_IsComplete(questID) and not showWhenComplete then return end
 
