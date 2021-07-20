@@ -803,5 +803,5 @@ function M:DomiExtractor()
 		if M.DomiExtButton then
 			M.DomiExtButton:SetAlpha(GetSocketTypes(1) == "Domination" and GetExistingSocketInfo(1) and 1 or 0)
 		end
-	end)		
+	end)
 end
