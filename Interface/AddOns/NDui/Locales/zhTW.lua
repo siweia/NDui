@@ -789,3 +789,4 @@ L["ChatSwitchHelp"] = "按Tab鍵能直接在可用的頻道之間切換，一直
 L["DomiRank"] = "顯示統御碎片等級"
 L["DomiRankTip"] = "|n在統御碎片及統御護甲上顯示當前碎片等級。"
 L["Tormentors of Torghast"] = "托迦司的折磨者"
+L["Drop"] = "取下"

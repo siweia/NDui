@@ -789,3 +789,4 @@ L["ChatSwitchHelp"] = "Press key Tab to switch available channels, it's a bit si
 L["DomiRank"] = "Shards of Domination" -- need translation
 L["DomiRankTip"] = "|nShow rank on shards of domination and domination armors." -- need translation
 L["Tormentors of Torghast"] = "Tormentors of Torghast" -- need translation
+L["Drop"] = "Drop" -- need translation

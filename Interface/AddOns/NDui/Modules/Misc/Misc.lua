@@ -30,6 +30,7 @@ local C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo = C_UIWidgetMa
 local C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local GetOverrideBarSkin, GetActionInfo, GetSpellInfo = GetOverrideBarSkin, GetActionInfo, GetSpellInfo
+local GetItemCount, GetSocketTypes, GetExistingSocketInfo = GetItemCount, GetSocketTypes, GetExistingSocketInfo
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -69,6 +70,7 @@ function M:OnLogin()
 	M:FasterMovieSkip()
 	M:EnhanceDressup()
 	M:FuckTrainSound()
+	M:DomiExtractor()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -772,4 +774,34 @@ function M:FuckTrainSound()
 	for _, soundID in pairs(trainSounds) do
 		MuteSoundFile(soundID)
 	end
+end
+
+function M:DomiExtractor()
+	local EXTRACTOR_ID = 187532
+
+	local function CreateExtractButton()
+		if not ItemSocketingFrame then return end
+		if M.DomiExtButton then return end
+		if GetItemCount(EXTRACTOR_ID) == 0 then return end
+		ItemSocketingSocketButton:SetWidth(80)
+		if InCombatLockdown() then return end
+
+		local button = CreateFrame("Button", nil, ItemSocketingFrame, "UIPanelButtonTemplate, SecureActionButtonTemplate")
+		button:SetSize(80, 22)
+		button:SetText(L["Drop"])
+		button:SetPoint("RIGHT", ItemSocketingSocketButton, "LEFT", -3, 0)
+		button:SetAttribute("type", "macro")
+		button:SetAttribute("macrotext", "/use item:"..EXTRACTOR_ID.."\n/click ItemSocketingSocket1")
+		if C.db["Skins"]["BlizzardSkins"] then B.Reskin(button) end
+
+		M.DomiExtButton = button
+	end
+
+	hooksecurefunc("ItemSocketingFrame_LoadUI", function()
+		CreateExtractButton()
+
+		if M.DomiExtButton then
+			M.DomiExtButton:SetAlpha(GetSocketTypes(1) == "Domination" and GetExistingSocketInfo(1) and 1 or 0)
+		end
+	end)		
 end
