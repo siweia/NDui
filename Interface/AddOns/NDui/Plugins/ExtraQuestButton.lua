@@ -402,7 +402,7 @@ local function GetQuestDistanceWithItem(questID)
 	end
 	if not itemLink then return end
 	if GetItemCount(itemLink) == 0 then return end
-	if blacklist[itemID] then return end
+	if blacklist[GetItemInfoFromHyperlink(itemLink)] then return end
 
 	if C_QuestLog_IsComplete(questID) and not showWhenComplete then return end
 
