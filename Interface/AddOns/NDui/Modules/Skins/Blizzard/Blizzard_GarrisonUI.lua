@@ -1145,6 +1145,22 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end
 end
 
+local atlasToColor = {
+	["none"] = {0, 0, 0},
+	["orderhalltalents-spellborder"] = {0, 0, 0},
+	["orderhalltalents-spellborder-green"] = {.08, .7, 0},
+	["orderhalltalents-spellborder-yellow"] = {1, .8, 0},
+}
+
+local function updateTalentBorder(bu, atlas)
+	if not bu.bg then return end
+
+	local color = atlasToColor[atlas] or atlasToColor["none"]
+	if color then
+		bu.bg:SetBackdropBorderColor(color[1], color[2], color[3])
+	end
+end
+
 C.themes["Blizzard_OrderHallUI"] = function()
 	-- Talent Frame
 	local OrderHallTalentFrame = OrderHallTalentFrame
@@ -1159,19 +1175,16 @@ C.themes["Blizzard_OrderHallUI"] = function()
 		if self.CurrencyBG then self.CurrencyBG:SetAlpha(0) end
 		B.StripTextures(self)
 
-		for i = 1, self:GetNumChildren() do
-			local bu = select(i, self:GetChildren())
-			if bu and bu.talent then
+		if self.buttonPool then
+			for bu in self.buttonPool:EnumerateActive() do
 				bu.Border:SetAlpha(0)
+
 				if not bu.bg then
 					bu.Highlight:SetColorTexture(1, 1, 1, .25)
 					bu.bg = B.ReskinIcon(bu.Icon)
-				end
 
-				if bu.talent.selected then
-					bu.bg:SetBackdropBorderColor(1, 1, 0)
-				else
-					bu.bg:SetBackdropBorderColor(0, 0, 0)
+					updateTalentBorder(bu, bu.Border:GetAtlas())
+					hooksecurefunc(bu, "SetBorder", updateTalentBorder)
 				end
 			end
 		end
