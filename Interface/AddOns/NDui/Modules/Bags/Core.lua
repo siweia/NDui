@@ -738,7 +738,7 @@ function module:OnLogin()
 	}
 
 	local function isItemNeedsLevel(item)
-		return item.link and item.level and item.rarity > 1 and (module:IsArtifactRelic(item) or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
+		return item.link and item.quality > 1 and module:IsItemHasLevel(item)
 	end
 
 	local function GetIconOverlayAtlas(item)
@@ -776,7 +776,7 @@ function module:OnLogin()
 
 	function MyButton:OnUpdate(item)
 		if self.JunkIcon then
-			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.sellPrice > 0 then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -791,7 +791,7 @@ function module:OnLogin()
 			self.IconOverlay:SetAtlas(atlas)
 			self.IconOverlay:Show()
 			if secondAtlas then
-				local color = DB.QualityColors[item.rarity or 1]
+				local color = DB.QualityColors[item.quality or 1]
 				self.IconOverlay:SetVertexColor(color.r, color.g, color.b)
 				self.IconOverlay2:SetAtlas(secondAtlas)
 				self.IconOverlay2:Show()
@@ -805,10 +805,16 @@ function module:OnLogin()
 		end
 
 		self.iLvl:SetText("")
-		if C.db["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
-			local level = B.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level > C.db["Bags"]["iLvlToShow"] then
-				local color = DB.QualityColors[item.rarity]
+		if C.db["Bags"]["BagsiLvl"] then
+			local level = item.level -- ilvl for keystone and battlepet
+			if not level and isItemNeedsLevel(item) then
+				local ilvl = B.GetItemLevel(item.link, item.bagID, item.slotID)
+				if ilvl and ilvl > C.db["Bags"]["iLvlToShow"] then
+					level = ilvl
+				end
+			end
+			if level then
+				local color = DB.QualityColors[item.quality]
 				self.iLvl:SetText(level)
 				self.iLvl:SetTextColor(color.r, color.g, color.b)
 			end
@@ -851,8 +857,8 @@ function module:OnLogin()
 
 		if item.questID or item.isQuestItem then
 			self:SetBackdropBorderColor(.8, .8, 0)
-		elseif item.rarity and item.rarity > -1 then
-			local color = DB.QualityColors[item.rarity]
+		elseif item.quality and item.quality > -1 then
+			local color = DB.QualityColors[item.quality]
 			self:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
 			self:SetBackdropBorderColor(0, 0, 0)

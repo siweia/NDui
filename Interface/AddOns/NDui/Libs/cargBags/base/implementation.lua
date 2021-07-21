@@ -30,8 +30,10 @@ Implementation.instances = {}
 Implementation.itemKeys = {}
 
 local toBagSlot = cargBags.ToBagSlot
-local LE_ITEM_CLASS_MISCELLANEOUS = LE_ITEM_CLASS_MISCELLANEOUS or 15
-local LE_ITEM_MISCELLANEOUS_COMPANION_PET = LE_ITEM_MISCELLANEOUS_COMPANION_PET or 2
+local LE_ITEM_CLASS_MISCELLANEOUS = Enum.ItemClass.Miscellaneous or 15
+local LE_ITEM_MISCELLANEOUS_COMPANION_PET = Enum.ItemMiscellaneousSubclass.CompanionPet or 2
+local PET_CAGE = 82800
+local MYTHIC_KEYSTONE = 180653
 
 --[[!
 	Creates a new instance of the class
@@ -302,36 +304,26 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	i.bagID = bagID
 	i.slotID = slotID
 
-	local clink = GetContainerItemLink(bagID, slotID)
+	local texture, count, locked, quality, _, _, itemLink, _, noValue, itemID = GetContainerItemInfo(bagID, slotID)
 
-	if(clink) then
-		i.texture, i.count, i.locked, i.quality = GetContainerItemInfo(bagID, slotID)
+	if itemLink then
+		i.texture, i.count, i.locked, i.quality, i.link, i.id = texture, count, locked, quality, itemLink, itemID
+		i.hasPrice = not noValue
+		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
 		i.cdStart, i.cdFinish, i.cdEnable = GetContainerItemCooldown(bagID, slotID)
 		i.isQuestItem, i.questID, i.questActive = GetContainerItemQuestInfo(bagID, slotID)
-		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
-		i.id = GetContainerItemID(bagID, slotID)
+		i.name, _, _, _, _, i.type, i.subType, _, i.equipLoc, _, _, i.classID, i.subClassID = GetItemInfo(itemLink)
 
-		local texture
-		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice, i.classID, i.subClassID = GetItemInfo(clink)
-		i.texture = i.texture or texture
-		i.rarity = i.rarity or i.quality
-
-		if clink:find("battlepet") then
-			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
-			local _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
+		if itemID == PET_CAGE then
+			local petID, petLevel, petName = strmatch(itemLink, "|H%w+:(%d+):(%d+):.-|h%[(.-)%]|h")
+			i.name = petName
+			i.id = tonumber(petID) or 0
+			i.level = tonumber(petLevel) or 0
 			i.classID = LE_ITEM_CLASS_MISCELLANEOUS
 			i.subClassID = LE_ITEM_MISCELLANEOUS_COMPANION_PET
-			i.rarity = tonumber(rarity) or 0
-			i.id = tonumber(id) or 0
-			i.name = name
-			i.level = tonumber(level) or 0
-			i.link = clink
-		elseif clink:find("keystone") then
-			local data = strmatch(clink, "|H(.-)|h(.-)|h")
-			local level = strmatch(data, "%w+:%d+:%d+:(%d+)")
-			i.name, _, _, _, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc = GetItemInfo(i.id)
-			i.level = tonumber(level) or 0
-			i.link = clink
+		elseif itemID == MYTHIC_KEYSTONE then
+			i.level, i.name = strmatch(itemLink, "|H%w+:%d+:%d+:(%d+):.-|h%[(.-)%]|h")
+			i.level = tonumber(i.level) or 0
 		end
 	end
 	return i
