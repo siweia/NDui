@@ -612,12 +612,13 @@ function M:RaidTool_UpdateGrid()
 	local frame = _G["NDui_WorldMarkers"]
 	if not frame then return end
 
-	local size, margin = 28, 5
+	local size, margin = C.db["Misc"]["MarkerSize"], 5
 	local showType = C.db["Misc"]["ShowMarkerBar"]
 	local perRow = markerTypeToRow[showType]
 
 	for i = 1, 9 do
 		local button = frame.buttons[i]
+		button:SetSize(size, size)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("TOPLEFT", frame, margin, -margin)

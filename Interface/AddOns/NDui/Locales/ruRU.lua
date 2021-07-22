@@ -790,3 +790,4 @@ L["DomiRank"] = "Shards of Domination" -- need translation
 L["DomiRankTip"] = "|nShow rank on shards of domination and domination armors." -- need translation
 L["Tormentors of Torghast"] = "Tormentors of Torghast" -- need translation
 L["Drop"] = "Drop" -- need translation
+L["MarkerSize"] = "World marker size" -- need translation
