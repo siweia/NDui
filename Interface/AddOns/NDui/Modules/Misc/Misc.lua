@@ -666,22 +666,24 @@ function M:WorldQuestTool()
 	end
 
 	local fixedStrings = {
-		["低扫"] = "横扫",
+		["横扫"] = "低扫",
+		["突刺"] = "突袭",
 	}
+	local function isActionMatch(msg, text)
+		return text and strfind(msg, text)
+	end
+
 	B:RegisterEvent("CHAT_MSG_MONSTER_SAY", function(_, msg)
-		if not GetOverrideBarSkin() or not C_QuestLog_GetLogIndexForQuestID(59585) then
+		if not GetOverrideBarSkin() or (not C_QuestLog_GetLogIndexForQuestID(59585) and not C_QuestLog_GetLogIndexForQuestID(64271)) then
 			resetActionButtons()
 			return
 		end
-
-		msg = gsub(msg, "[。%.]", "")
-		msg = fixedStrings[msg] or msg
 
 		for i = 1, 3 do
 			local button = _G["ActionButton"..i]
 			local _, spellID = GetActionInfo(button.action)
 			local name = spellID and GetSpellInfo(spellID)
-			if name and name == msg then
+			if isActionMatch(msg, fixedStrings[name]) or isActionMatch(msg, name) then
 				B.ShowOverlayGlow(button)
 			else
 				B.HideOverlayGlow(button)
