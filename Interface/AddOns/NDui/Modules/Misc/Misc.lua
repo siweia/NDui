@@ -782,41 +782,79 @@ function M:DomiExtractor()
 	local EXTRACTOR_ID = 187532
 	local TT = B:GetModule("Tooltip")
 
-	local menuList = {}
-
-	local function PutOnDomiShard(_, bagID, slotID)
-		PickupContainerItem(bagID, slotID)
+	local function TryOnShard(self)
+		if not self.itemLink then return end
+		PickupContainerItem(self.bagID, self.slotID)
 		ClickSocketButton(1)
 		ClearCursor()
 	end
 
-	local function RefreshDomiList()
-		wipe(menuList)
+	local function ShowShardTooltip(self)
+		if not self.itemLink then return end
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+		GameTooltip:SetHyperlink(self.itemLink)
+		GameTooltip:Show()
+	end
+
+	local foundShards = {}
+	local function RefreshShardsList()
+		wipe(foundShards)
 
 		for bagID = 0, 4 do
 			for slotID = 1, GetContainerNumSlots(bagID) do
-				local itemID = GetContainerItemID(bagID, slotID)
-				local rank = itemID and TT.DomiData[itemID]
+				local _, _, _, _, _, _, itemLink, _, _, itemID = GetContainerItemInfo(bagID, slotID)
+				local rank = itemID and TT.DomiRankData[itemID]
 				if rank then
-					tinsert(menuList, {
-						text = TT:GetDomiName(itemID),
-						icon = GetItemIcon(itemID),
-						tCoordLeft = .08,
-						tCoordRight = .92,
-						tCoordTop = .08,
-						tCoordBottom = .92,
-						arg1 = bagID,
-						arg2 = slotID,
-						func = PutOnDomiShard,
-						notCheckable = true
-					})
+					local index = TT.DomiIndexData[itemID]
+					if not index then break end
+
+					local button = M.DomiShardsFrame.icons[index]
+					button.bagID = bagID
+					button.slotID = slotID
+					button.itemLink = itemLink
+					button.count:SetText(rank)
+					button.Icon:SetDesaturated(false)
+
+					foundShards[index] = true
 				end
+			end
+		end
+
+		for index, button in pairs(M.DomiShardsFrame.icons) do
+			if not foundShards[index] then
+				button.itemLink = nil
+				button.count:SetText("")
+				button.Icon:SetDesaturated(true)
 			end
 		end
 	end
 
-	RefreshDomiList()
-	B:RegisterEvent("BAG_UPDATE", RefreshDomiList)
+	local function CreateDomiShards()
+		local frame = CreateFrame("Frame", "NDuiDomiShards", ItemSocketingFrame)
+		frame:SetSize(102, 102)
+		frame:SetPoint("RIGHT", -35, 30)
+		frame.icons = {}
+		M.DomiShardsFrame = frame
+
+		for index, value in pairs(TT.DomiDataByGroup) do
+			for itemID in pairs(value) do
+				local button = CreateFrame("Button", nil, frame)
+				button:SetSize(30, 30)
+				button:SetPoint("TOPLEFT", 3 + mod(index-1, 3)*33, -3 - floor((index-1) / 3)*33)
+				B.PixelIcon(button, GetItemIcon(itemID), true)
+				button:SetScript("OnClick", TryOnShard)
+				button:SetScript("OnLeave", B.HideTooltip)
+				button:SetScript("OnEnter", ShowShardTooltip)
+				button.count = B.CreateFS(button, 12, "", "system", "BOTTOMRIGHT", -3, 3)
+				frame.icons[index] = button
+				break
+			end
+		end
+
+		RefreshShardsList()
+		B:RegisterEvent("BAG_UPDATE", RefreshShardsList)
+	end
 
 	local function CreateExtractButton()
 		if not ItemSocketingFrame then return end
@@ -833,16 +871,7 @@ function M:DomiExtractor()
 		button:SetAttribute("macrotext", "/use item:"..EXTRACTOR_ID.."\n/click ItemSocketingSocket1")
 		if C.db["Skins"]["BlizzardSkins"] then B.Reskin(button) end
 
-		local button2 = CreateFrame("Button", "NDuiDomiButton", ItemSocketingFrame, "UIPanelButtonTemplate")
-		button2:SetSize(80, 22)
-		button2:SetFrameLevel(3)
-		button2:SetText("碎片")
-		button2:SetPoint("RIGHT", ItemSocketingSocketButton, "LEFT", -3, 0)
-		button2:SetScript("OnClick", function(self)
-			EasyMenu(menuList, B.EasyMenu, self, -100, 100, "MENU", 1)
-		end)
-		if C.db["Skins"]["BlizzardSkins"] then B.Reskin(button2) end
-		M.DomiSelectButton = button2
+		CreateDomiShards()
 
 		M.DomiExtButton = button
 	end
@@ -854,8 +883,8 @@ function M:DomiExtractor()
 			M.DomiExtButton:SetAlpha(GetSocketTypes(1) == "Domination" and GetExistingSocketInfo(1) and 1 or 0)
 		end
 
-		if M.DomiSelectButton then
-			M.DomiSelectButton:SetShown(GetSocketTypes(1) == "Domination" and not GetExistingSocketInfo(1))
+		if M.DomiShardsFrame then
+			M.DomiShardsFrame:SetShown(GetSocketTypes(1) == "Domination" and not GetExistingSocketInfo(1))
 		end
 	end)
 end

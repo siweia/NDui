@@ -72,11 +72,13 @@ TT.DomiDataByGroup = {
 	},
 }
 
-TT.DomiData = {}
+TT.DomiRankData = {}
+TT.DomiIndexData = {}
 
-for _, value in pairs(TT.DomiDataByGroup) do
+for index, value in pairs(TT.DomiDataByGroup) do
 	for itemID, rank in pairs(value) do
-		TT.DomiData[itemID] = rank
+		TT.DomiRankData[itemID] = rank
+		TT.DomiIndexData[itemID] = index
 	end
 end
 
@@ -113,7 +115,7 @@ function TT:Domination_CheckStatus()
 	if not link then return end
 
 	local itemID = GetItemInfoFromHyperlink(link)
-	local rank = itemID and TT.DomiData[itemID]
+	local rank = itemID and TT.DomiRankData[itemID]
 
 	if rank then
 		-- Domi rank on gems
@@ -126,7 +128,7 @@ function TT:Domination_CheckStatus()
 		-- Domi rank on gears
 		local gemID = strmatch(link, "item:%d+:%d*:(%d*):")
 		itemID = tonumber(gemID)
-		rank = itemID and TT.DomiData[itemID]
+		rank = itemID and TT.DomiRankData[itemID]
 		if rank then
 			local name = TT:GetDomiName(itemID)
 			TT.Domination_UpdateText(self, name, rank)
