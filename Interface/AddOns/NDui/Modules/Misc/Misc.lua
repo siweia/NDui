@@ -780,6 +780,43 @@ end
 
 function M:DomiExtractor()
 	local EXTRACTOR_ID = 187532
+	local TT = B:GetModule("Tooltip")
+
+	local menuList = {}
+
+	local function PutOnDomiShard(_, bagID, slotID)
+		PickupContainerItem(bagID, slotID)
+		ClickSocketButton(1)
+		ClearCursor()
+	end
+
+	local function RefreshDomiList()
+		wipe(menuList)
+
+		for bagID = 0, 4 do
+			for slotID = 1, GetContainerNumSlots(bagID) do
+				local itemID = GetContainerItemID(bagID, slotID)
+				local rank = itemID and TT.DomiData[itemID]
+				if rank then
+					tinsert(menuList, {
+						text = TT:GetDomiName(itemID),
+						icon = GetItemIcon(itemID),
+						tCoordLeft = .08,
+						tCoordRight = .92,
+						tCoordTop = .08,
+						tCoordBottom = .92,
+						arg1 = bagID,
+						arg2 = slotID,
+						func = PutOnDomiShard,
+						notCheckable = true
+					})
+				end
+			end
+		end
+	end
+
+	RefreshDomiList()
+	B:RegisterEvent("BAG_UPDATE", RefreshDomiList)
 
 	local function CreateExtractButton()
 		if not ItemSocketingFrame then return end
@@ -788,13 +825,24 @@ function M:DomiExtractor()
 		ItemSocketingSocketButton:SetWidth(80)
 		if InCombatLockdown() then return end
 
-		local button = CreateFrame("Button", nil, ItemSocketingFrame, "UIPanelButtonTemplate, SecureActionButtonTemplate")
+		local button = CreateFrame("Button", "NDuiExtractorButton", ItemSocketingFrame, "UIPanelButtonTemplate, SecureActionButtonTemplate")
 		button:SetSize(80, 22)
 		button:SetText(L["Drop"])
 		button:SetPoint("RIGHT", ItemSocketingSocketButton, "LEFT", -3, 0)
 		button:SetAttribute("type", "macro")
 		button:SetAttribute("macrotext", "/use item:"..EXTRACTOR_ID.."\n/click ItemSocketingSocket1")
 		if C.db["Skins"]["BlizzardSkins"] then B.Reskin(button) end
+
+		local button2 = CreateFrame("Button", "NDuiDomiButton", ItemSocketingFrame, "UIPanelButtonTemplate")
+		button2:SetSize(80, 22)
+		button2:SetFrameLevel(3)
+		button2:SetText("碎片")
+		button2:SetPoint("RIGHT", ItemSocketingSocketButton, "LEFT", -3, 0)
+		button2:SetScript("OnClick", function(self)
+			EasyMenu(menuList, B.EasyMenu, self, -100, 100, "MENU", 1)
+		end)
+		if C.db["Skins"]["BlizzardSkins"] then B.Reskin(button2) end
+		M.DomiSelectButton = button2
 
 		M.DomiExtButton = button
 	end
@@ -804,6 +852,10 @@ function M:DomiExtractor()
 
 		if M.DomiExtButton then
 			M.DomiExtButton:SetAlpha(GetSocketTypes(1) == "Domination" and GetExistingSocketInfo(1) and 1 or 0)
+		end
+
+		if M.DomiSelectButton then
+			M.DomiSelectButton:SetShown(GetSocketTypes(1) == "Domination" and not GetExistingSocketInfo(1))
 		end
 	end)
 end

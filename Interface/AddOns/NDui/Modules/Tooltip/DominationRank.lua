@@ -69,7 +69,7 @@ local domiTextureIDs = {
 }
 
 local nameCache = {}
-local function GetDomiName(itemID)
+function TT:GetDomiName(itemID)
 	local name = nameCache[itemID]
 	if not name then
 		name = GetItemInfo(itemID)
@@ -110,7 +110,7 @@ function TT:Domination_CheckStatus()
 		itemID = tonumber(gemID)
 		rank = itemID and TT.DomiData[itemID]
 		if rank then
-			local name = GetDomiName(itemID)
+			local name = TT:GetDomiName(itemID)
 			TT.Domination_UpdateText(self, name, rank)
 		end
 	end
