@@ -52,7 +52,7 @@ local function Skin_WeakAuras(f, fType)
 			f.bg:SetFrameLevel(0)
 			UpdateIconTexCoord(f.icon)
 			hooksecurefunc(f.icon, "SetTexCoord", UpdateIconTexCoord)
-			f.iconFrame:SetAllPoints(f.icon)
+			--f.iconFrame:SetAllPoints(f.icon) -- needs review
 			B.SetBD(f.iconFrame)
 
 			f.styled = true
