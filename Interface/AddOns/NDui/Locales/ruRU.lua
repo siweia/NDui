@@ -791,3 +791,5 @@ L["DomiRankTip"] = "|nShow rank on shards of domination and domination armors." 
 L["Tormentors of Torghast"] = "Tormentors of Torghast" -- need translation
 L["Drop"] = "Drop" -- need translation
 L["MarkerSize"] = "World marker size" -- need translation
+L["WhisperSound"] = "Whisper message sound" -- need translation
+L["WhisperSoundTip"] = "|nPlay sound when the new whisper message is more than 5 seconds from previous one." -- need translation

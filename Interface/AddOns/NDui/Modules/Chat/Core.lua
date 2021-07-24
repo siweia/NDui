@@ -304,6 +304,8 @@ local whisperEvents = {
 	["CHAT_MSG_BN_WHISPER"] = true,
 }
 function module:PlayWhisperSound(event, _, author)
+	if not C.db["Chat"]["WhisperSound"] then return end
+
 	if whisperEvents[event] then
 		local name = Ambiguate(author, "none")
 		local currentTime = GetTime()

@@ -791,3 +791,5 @@ L["DomiRankTip"] = "|n在统御碎片和统御护甲上显示当前碎片等级�
 L["Tormentors of Torghast"] = "托加斯特的折磨者"
 L["Drop"] = "取下"
 L["MarkerSize"] = "世界标记图标大小"
+L["WhisperSound"] = "密语消息提示音"
+L["WhisperSoundTip"] = "|n启用后，当距离上一条密语超过5秒时，播放消息提示音。"
