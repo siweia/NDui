@@ -837,13 +837,13 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
 		{},--blank
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
-		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", true, nil, updateBagStatus},
-		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
-		{1, "Bags", "DeleteButton", L["Bags DeleteButton"], true},
-		{1, "Bags", "PetTrash", L["PetTrash"], nil, nil, nil, L["PetTrashTip"]},
+		{1, "Bags", "MutliRows", NewTag..L["MutliRows"].."*", true, nil, updateBagAnchor, L["MutliRowsTip"]},
+		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
+		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", true, nil, updateBagStatus, L["SpecialBagsColorTip"]},
+		{1, "Bags", "DeleteButton", L["Bags DeleteButton"]},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"], true},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", nil, nil, updateBagStatus},
-		{1, "Bags", "MutliRows", NewTag..L["MutliRows"].."*", true, nil, updateBagAnchor, L["MutliRowsTip"]},
+		{1, "Bags", "PetTrash", L["PetTrash"], true, nil, nil, L["PetTrashTip"]},
 		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 500, 1}, nil, L["iLvlToShowTip"]},
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
