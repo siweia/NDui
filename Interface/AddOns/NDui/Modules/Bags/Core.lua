@@ -828,7 +828,7 @@ function module:OnLogin()
 			end
 		end
 
-		if C.db["Bags"]["FavouriteItems"][item.id] then
+		if C.db["Bags"]["FavouriteItems"][item.id] and not C.db["Bags"]["ItemFilter"] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()
