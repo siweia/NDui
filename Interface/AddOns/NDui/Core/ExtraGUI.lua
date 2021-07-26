@@ -1096,6 +1096,7 @@ function G:SetupBagFilter(parent)
 		[9] = "FilterGoods",
 		[10] = "FilterQuest",
 		[11] = "FilterAnima",
+		[12] = "FilterRelic",
 	}
 
 	local Bags = B:GetModule("Bags")

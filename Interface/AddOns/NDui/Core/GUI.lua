@@ -71,6 +71,7 @@ G.DefaultSettings = {
 		FilterQuest = false,
 		FilterEquipSet = false,
 		FilterAnima = false,
+		FilterRelic = false,
 	},
 	Auras = {
 		Reminder = true,
@@ -836,7 +837,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
 		{},--blank
-		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
+		{1, "Bags", "ItemFilter", NewTag..L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
 		{1, "Bags", "MutliRows", NewTag..L["MutliRows"].."*", true, nil, updateBagAnchor, L["MutliRowsTip"]},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", true, nil, updateBagStatus, L["SpecialBagsColorTip"]},

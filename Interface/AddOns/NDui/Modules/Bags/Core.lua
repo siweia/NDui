@@ -632,16 +632,17 @@ function module:OnLogin()
 	end
 
 	function Backpack:OnInit()
-		AddNewContainer("Bag", 10, "Junk", filters.bagsJunk)
-		AddNewContainer("Bag", 9, "BagFavourite", filters.bagFavourite)
+		AddNewContainer("Bag", 11, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 10, "BagFavourite", filters.bagFavourite)
 		AddNewContainer("Bag", 3, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 1, "AzeriteItem", filters.bagAzeriteItem)
 		AddNewContainer("Bag", 2, "Equipment", filters.bagEquipment)
 		AddNewContainer("Bag", 4, "BagCollection", filters.bagCollection)
-		AddNewContainer("Bag", 7, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 8, "Consumable", filters.bagConsumable)
 		AddNewContainer("Bag", 5, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 8, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 9, "BagQuest", filters.bagQuest)
 		AddNewContainer("Bag", 6, "BagAnima", filters.bagAnima)
+		AddNewContainer("Bag", 7, "BagRelic", filters.bagRelic)
 
 		f.main = MyContainer:New("Bag", {Columns = bagsWidth, Bags = "bags"})
 		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
@@ -966,6 +967,8 @@ function module:OnLogin()
 			label = QUESTS_LABEL
 		elseif strmatch(name, "Anima") then
 			label = POWER_TYPE_ANIMA
+		elseif name == "BagRelic" then
+			label = L["KorthiaRelic"]
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
