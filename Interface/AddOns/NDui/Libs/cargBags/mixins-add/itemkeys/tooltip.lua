@@ -21,38 +21,37 @@ LICENSE
 DESCRIPTION:
 	Item keys which require tooltip parsing to work
 ]]
-local parent, ns = ...
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 
-local tipName = parent.."Tooltip"
-local tooltip
-
-local function generateTooltip()
-	tooltip = CreateFrame("GameTooltip", tipName)
-	tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
-	tooltip:AddFontStrings(
-		tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
-		tooltip:CreateFontString("$parentTextRight1", nil, "GameTooltipText")
-	)
-end
+local bindTypeToString = {
+	[ITEM_BIND_ON_USE] = "equip",
+	[ITEM_BIND_ON_EQUIP] = "equip",
+	[ITEM_BIND_ON_PICKUP] = "pickup",
+	[ITEM_SOULBOUND] = "soul",
+	[ITEM_BIND_QUEST] = "quest",
+	[ITEM_ACCOUNTBOUND] = "account",
+	[ITEM_BIND_TO_ACCOUNT] = "account",
+	[ITEM_BNETACCOUNTBOUND] = "account",
+}
 
 cargBags.itemKeys["bindOn"] = function(i)
-	if(not i.link) then return end
+	if not i.link then return end
 
-	if(not tooltip) then generateTooltip() end
-	tooltip:ClearLines()
-	tooltip:SetBagItem(i.bagID, i.slotID)
-	local bound = _G[tipName.."TextLeft2"] and _G[tipName.."TextLeft2"]:GetText()
-	if(not bound) then return end
+	local tip = B.ScanTip
+	if not tip then return end
 
-	local bindOn
-	if(bound:match(ITEM_BIND_ON_EQUIP)) then bindOn = "equip"
-	elseif(bound:match(ITEM_SOULBOUND)) then bindOn = "soul"
-	elseif(bound:match(ITEM_BIND_QUEST)) then bindOn = "quest"
-	elseif(bound:match(ITEM_BIND_TO_ACCOUNT)) then bindOn = "account"
-	elseif(bound:match(ITEM_BIND_ON_PICKUP)) then bindOn = "pickup"
-	elseif(bound:match(ITEM_BIND_ON_USE)) then bindOn = "use" end
-
-	i.bindOn = bindOn
-	return bindOn
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	tip:SetBagItem(i.bagID, i.slotID)
+ 
+	for j = 2, 4 do
+		local line = _G["NDui_ScanTooltipTextLeft"..j]
+		local lineText = line and line:GetText()
+		local bindOn = lineText and bindTypeToString[lineText]
+		if bindOn then
+			i.bindOn = bindOn
+			return bindOn
+		end
+	end
 end
