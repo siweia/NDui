@@ -48,7 +48,7 @@ function module:UpdateAnchors(parent, bags)
 			index = index + 1
 
 			bag:ClearAllPoints()
-			if (index-1) % 4 == 0 then
+			if (index-1) % 4 == 0 and C.db["Bags"]["MutliRows"] then
 				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-4], "BOTTOMLEFT", -5, 0)
 			else
 				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
@@ -895,6 +895,11 @@ function module:OnLogin()
 		end
 	end
 
+	function module:UpdateAllAnchors()
+		module:UpdateAnchors(f.main, ContainerGroups["Bag"])
+		module:UpdateAnchors(f.bank, ContainerGroups["Bank"])
+	end
+
 	function MyContainer:OnContentsChanged()
 		self:SortButtons("bagSlot")
 
@@ -929,8 +934,7 @@ function module:OnLogin()
 		end
 		self:SetSize(width + xOffset*2, height + offset)
 
-		module:UpdateAnchors(f.main, ContainerGroups["Bag"])
-		module:UpdateAnchors(f.bank, ContainerGroups["Bank"])
+		module:UpdateAllAnchors()
 	end
 
 	function MyContainer:OnCreate(name, settings)
