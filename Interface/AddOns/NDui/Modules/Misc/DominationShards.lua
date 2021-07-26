@@ -74,7 +74,7 @@ function M:DomiShards_ListFrame()
 		for itemID in pairs(value) do
 			local button = CreateFrame("Button", nil, frame)
 			button:SetSize(30, 30)
-			button:SetPoint("TOPLEFT", 3 + mod(index-1, 3)*33, -3 - floor((index-1) / 3)*33)
+			button:SetPoint("TOPLEFT", 3 + mod(index-1, 3)*33, -3 - floor((index-1)/3)*33)
 			B.PixelIcon(button, GetItemIcon(itemID), true)
 			button:SetScript("OnClick", M.DomiShard_Equip)
 			button:SetScript("OnEnter", M.DomiShard_ShowTooltip)
