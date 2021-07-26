@@ -58,7 +58,7 @@ G.DefaultSettings = {
 		iLvlToShow = 1,
 		AutoDeposit = false,
 		PetTrash = true,
-		MutliRows = true,
+		MutliRows = false,
 
 		FilterJunk = true,
 		FilterConsumable = true,
