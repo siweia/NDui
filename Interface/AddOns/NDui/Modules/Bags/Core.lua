@@ -33,19 +33,29 @@ function module:ReverseSort()
 	module:UpdateAllBags()
 end
 
+local anchorCache = {}
 function module:UpdateAnchors(parent, bags)
 	if not parent:IsShown() then return end
 
-	local anchor = parent
+	wipe(anchorCache)
+
+	local index = 1
+	anchorCache[index] = parent
+
 	for _, bag in ipairs(bags) do
 		if bag:GetHeight() > 45 then
 			bag:Show()
+			index = index + 1
+
+			bag:ClearAllPoints()
+			if (index-1) % 4 == 0 then
+				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-4], "BOTTOMLEFT", -5, 0)
+			else
+				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
+			end
+			anchorCache[index] = bag
 		else
 			bag:Hide()
-		end
-		if bag:IsShown() then
-			bag:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, 5)
-			anchor = bag
 		end
 	end
 end
@@ -57,7 +67,7 @@ end
 function module:CreateInfoFrame()
 	local infoFrame = CreateFrame("Button", nil, self)
 	infoFrame:SetPoint("TOPLEFT", 10, 0)
-	infoFrame:SetSize(160, 32)
+	infoFrame:SetSize(140, 32)
 	local icon = infoFrame:CreateTexture()
 	icon:SetSize(24, 24)
 	icon:SetPoint("LEFT")
