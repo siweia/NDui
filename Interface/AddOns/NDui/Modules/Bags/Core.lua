@@ -74,10 +74,8 @@ local BagSmartFilter = {
 		text = strlower(text)
 		if text == "boe" then
 			return item.bindOn == "equip"
-		elseif IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) then
-			return true
 		else
-			return IsItemMatched(item.name, text)
+			return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text)
 		end
 	end,
 	_default = "default",
@@ -103,9 +101,8 @@ function module:CreateInfoFrame()
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
 	search.textFilters = BagSmartFilter
 
-	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
-	tag:SetFont(unpack(DB.Font))
-	tag:SetPoint("LEFT", icon, "RIGHT", 5, 0)
+	infoFrame.title = SEARCH
+	B.AddTooltip(infoFrame, "ANCHOR_TOPLEFT", DB.InfoColor..L["BagSearchTip"])
 end
 
 function module:CreateBagBar(settings, columns)

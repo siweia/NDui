@@ -795,3 +795,4 @@ L["WhisperSound"] = "Whisper message sound" -- need translation
 L["WhisperSoundTip"] = "|nPlay sound when the new whisper message is more than 5 seconds from previous one." -- need translation
 L["MutliRows"] = "Anchor by rows" -- need translation
 L["MutliRowsTip"] = "|nIf item filter enabled, every four bags will anchor into one row." -- need translation
+L["BagSearchTip"] = "|nClick to search your bag items.|nYou can type in item names or item equip locations.|n'boe' for items that bind on equip and 'quest' for quest items." -- need translation
