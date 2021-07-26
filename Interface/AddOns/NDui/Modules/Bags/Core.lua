@@ -61,8 +61,27 @@ function module:UpdateAnchors(parent, bags)
 end
 
 local function highlightFunction(button, match)
-	button:SetAlpha(match and 1 or .3)
+	button.searchOverlay:SetShown(not match)
 end
+
+local function IsItemMatched(type, text)
+	if not type or type == "" then return end
+	return strmatch(type, text)
+end
+
+local BagSmartFilter = {
+	default = function(item, text)
+		text = strlower(text)
+		if text == "boe" then
+			return item.bindOn == "equip"
+		elseif IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) then
+			return true
+		else
+			return IsItemMatched(item.name, text)
+		end
+	end,
+	_default = "default",
+}
 
 function module:CreateInfoFrame()
 	local infoFrame = CreateFrame("Button", nil, self)
@@ -82,6 +101,7 @@ function module:CreateInfoFrame()
 	local bg = B.CreateBDFrame(search, 0, true)
 	bg:SetPoint("TOPLEFT", -5, -5)
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
+	search.textFilters = BagSmartFilter
 
 	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tag:SetFont(unpack(DB.Font))
