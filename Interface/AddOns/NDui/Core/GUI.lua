@@ -58,7 +58,7 @@ G.DefaultSettings = {
 		iLvlToShow = 1,
 		AutoDeposit = false,
 		PetTrash = true,
-		MutliRows = false,
+		MultiRows = false,
 
 		FilterJunk = true,
 		FilterConsumable = true,
@@ -838,7 +838,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
 		{},--blank
 		{1, "Bags", "ItemFilter", NewTag..L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
-		{1, "Bags", "MutliRows", NewTag..L["MutliRows"].."*", true, nil, updateBagAnchor, L["MutliRowsTip"]},
+		{1, "Bags", "MultiRows", NewTag..L["MultiRows"].."*", true, nil, updateBagAnchor, L["MultiRowsTip"]},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", true, nil, updateBagStatus, L["SpecialBagsColorTip"]},
 		{1, "Bags", "DeleteButton", L["Bags DeleteButton"]},

@@ -48,7 +48,7 @@ function module:UpdateAnchors(parent, bags)
 			index = index + 1
 
 			bag:ClearAllPoints()
-			if (index-1) % 4 == 0 and C.db["Bags"]["MutliRows"] then
+			if (index-1) % 4 == 0 and C.db["Bags"]["MultiRows"] then
 				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-4], "BOTTOMLEFT", -5, 0)
 			else
 				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
