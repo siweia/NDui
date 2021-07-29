@@ -3,8 +3,9 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
 local gsub, strfind, strmatch = string.gsub, string.find, string.match
-local BetterDate, time = BetterDate, time
+local BetterDate, time, date, GetCVarBool = BetterDate, time, date, GetCVarBool
 local INTERFACE_ACTION_BLOCKED = INTERFACE_ACTION_BLOCKED
+local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
 
 local timestampFormat = {
 	[2] = "[%I:%M %p] ",
@@ -12,6 +13,20 @@ local timestampFormat = {
 	[4] = "[%H:%M] ",
 	[5] = "[%H:%M:%S] ",
 }
+
+local function GetCurrentTime()
+	local locTime = time()
+	local realmTime = not GetCVarBool("timeMgrUseLocalTime") and C_DateAndTime_GetCurrentCalendarTime()
+	if realmTime then
+		realmTime.day = realmTime.monthDay
+		realmTime.min = realmTime.minute
+		realmTime.sec = date("%S") -- no sec value for realm time
+		realmTime = time(realmTime)
+	end
+
+	return locTime, realmTime
+end
+
 function module:UpdateChannelNames(text, ...)
 	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
 
@@ -28,12 +43,12 @@ function module:UpdateChannelNames(text, ...)
 
 	-- Timestamp
 	if NDuiADB["TimestampFormat"] > 1 then
-		local currentTime = time()
-		local oldTimeStamp = CHAT_TIMESTAMP_FORMAT and gsub(BetterDate(CHAT_TIMESTAMP_FORMAT, currentTime), "%[([^]]*)%]", "%%[%1%%]")
+		local locTime, realmTime = GetCurrentTime()
+		local oldTimeStamp = CHAT_TIMESTAMP_FORMAT and gsub(BetterDate(CHAT_TIMESTAMP_FORMAT, locTime), "%[([^]]*)%]", "%%[%1%%]")
 		if oldTimeStamp then
 			text = gsub(text, oldTimeStamp, "")
 		end
-		local timeStamp = BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", currentTime)
+		local timeStamp = BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", realmTime or locTime)
 		text = timeStamp..text
 	end
 
