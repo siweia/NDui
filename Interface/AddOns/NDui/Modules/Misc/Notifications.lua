@@ -565,7 +565,9 @@ local IncompatibleAddOns = {
 	["_ShiGuang"] = true,
 	["!!!163UI!!!"] = true,
 	["Aurora"] = true,
-	["AuroraClassic"] = true,
+	["AuroraClassic"] = true, -- my own addon
+	["DomiRank"] = true, -- my own addon
+	["MDGuildBest"] = true, -- my own addon
 	["SexyMap"] = true,
 }
 local AddonDependency = {
