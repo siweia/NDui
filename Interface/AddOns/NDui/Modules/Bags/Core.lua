@@ -81,15 +81,35 @@ local BagSmartFilter = {
 	_default = "default",
 }
 
+local function ShowWidgetButtons(self)
+	for index, button in pairs(self.__owner.widgetButtons) do
+		if index ~= 1 then
+			button:Show()
+		end
+	end
+end
+
+local function HideWidgetButtons(self)
+	for index, button in pairs(self.__owner.widgetButtons) do
+		if index ~= 1 then
+			button:Hide()
+		end
+	end
+end
+
 function module:CreateInfoFrame()
 	local infoFrame = CreateFrame("Button", nil, self)
 	infoFrame:SetPoint("TOPLEFT", 10, 0)
 	infoFrame:SetSize(140, 32)
-	local icon = infoFrame:CreateTexture()
-	icon:SetSize(24, 24)
-	icon:SetPoint("LEFT")
-	icon:SetTexture("Interface\\Minimap\\Tracking\\None")
-	icon:SetTexCoord(1, 0, 0, 1)
+	local icon = infoFrame:CreateTexture(nil, "ARTWORK")
+	icon:SetSize(20, 20)
+	icon:SetPoint("LEFT", 0, -1)
+	icon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+	icon:SetVertexColor(DB.r, DB.g, DB.b)
+	local hl = infoFrame:CreateTexture(nil, "HIGHLIGHT")
+	hl:SetSize(20, 20)
+	hl:SetPoint("LEFT", 0, -1)
+	hl:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
 
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
@@ -101,9 +121,13 @@ function module:CreateInfoFrame()
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
 	search.textFilters = BagSmartFilter
 
-	local tag = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
+	search.__owner = self
+	search:HookScript("OnShow", HideWidgetButtons)
+	search:HookScript("OnHide", ShowWidgetButtons)
+
+	local tag = self:SpawnPlugin("TagDisplay", "[money]", search)
 	tag:SetFont(unpack(DB.Font))
-	tag:SetPoint("LEFT", icon, "RIGHT", 5, 0)
+	tag:SetPoint("TOPRIGHT", self, -50, -10)
 
 	infoFrame.title = SEARCH
 	B.AddTooltip(infoFrame, "ANCHOR_TOPLEFT", DB.InfoColor..L["BagSearchTip"])
@@ -126,7 +150,7 @@ function module:CreateBagBar(settings, columns)
 end
 
 function module:CreateCloseButton()
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
 	bu:SetScript("OnClick", CloseAllBags)
 	bu.title = CLOSE
 	B.AddTooltip(bu, "ANCHOR_TOP")
@@ -135,7 +159,7 @@ function module:CreateCloseButton()
 end
 
 function module:CreateRestoreButton(f)
-	local bu = B.CreateButton(self, 24, 24, true, "Atlas:transmog-icon-revert")
+	local bu = B.CreateButton(self, 22, 22, true, "Atlas:transmog-icon-revert")
 	bu:SetScript("OnClick", function()
 		C.db["TempAnchor"][f.main:GetName()] = nil
 		C.db["TempAnchor"][f.bank:GetName()] = nil
@@ -155,7 +179,7 @@ function module:CreateRestoreButton(f)
 end
 
 function module:CreateReagentButton(f)
-	local bu = B.CreateButton(self, 24, 24, true, "Atlas:Reagents")
+	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Reagents")
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -C.mult)
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
@@ -177,7 +201,7 @@ function module:CreateReagentButton(f)
 end
 
 function module:CreateBankButton(f)
-	local bu = B.CreateButton(self, 24, 24, true, "Atlas:Banker")
+	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 		ReagentBankFrame:Hide()
@@ -206,7 +230,7 @@ function module:AutoDeposit()
 end
 
 function module:CreateDepositButton()
-	local bu = B.CreateButton(self, 24, 24, true, "Atlas:GreenCross")
+	local bu = B.CreateButton(self, 22, 22, true, "Atlas:GreenCross")
 	bu.Icon:SetOutside()
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
@@ -225,7 +249,7 @@ function module:CreateDepositButton()
 end
 
 function module:CreateBagToggle()
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Buttons\\Button-Backpack-Up")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\Button-Backpack-Up")
 	bu:SetScript("OnClick", function()
 		B:TogglePanel(self.BagBar)
 		if self.BagBar:IsShown() then
@@ -243,7 +267,7 @@ function module:CreateBagToggle()
 end
 
 function module:CreateSortButton(name)
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Icons\\INV_Pet_Broom")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\INV_Pet_Broom")
 	bu:SetScript("OnClick", function()
 		if C.db["Bags"]["BagSortMode"] == 3 then
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["BagSortDisabled"])
@@ -377,7 +401,7 @@ function module:CreateSplitButton()
 	editbox:SetJustifyH("CENTER")
 	editbox:SetScript("OnTextChanged", saveSplitCount)
 
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\HELPFRAME\\ReportLagIcon-AuctionHouse")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\HELPFRAME\\ReportLagIcon-AuctionHouse")
 	bu.Icon:SetPoint("TOPLEFT", -1, 3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", 1, -3)
 	bu.__turnOff = function()
@@ -428,7 +452,7 @@ local favouriteEnable
 function module:CreateFavouriteButton()
 	local enabledText = DB.InfoColor..L["FavouriteMode Enabled"]
 
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Common\\friendship-heart")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Common\\friendship-heart")
 	bu.Icon:SetPoint("TOPLEFT", -5, 0)
 	bu.Icon:SetPoint("BOTTOMRIGHT", 5, -5)
 	bu.__turnOff = function()
@@ -484,7 +508,7 @@ local customJunkEnable
 function module:CreateJunkButton()
 	local enabledText = DB.InfoColor..L["JunkMode Enabled"]
 
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\BUTTONS\\UI-GroupLoot-Coin-Up")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\BUTTONS\\UI-GroupLoot-Coin-Up")
 	bu.Icon:SetPoint("TOPLEFT", C.mult, -3)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -3)
 	bu.__turnOff = function()
@@ -538,7 +562,7 @@ local deleteEnable
 function module:CreateDeleteButton()
 	local enabledText = DB.InfoColor..L["DeleteMode Enabled"]
 
-	local bu = B.CreateButton(self, 24, 24, true, "Interface\\Buttons\\UI-GroupLoot-Pass-Up")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\UI-GroupLoot-Pass-Up")
 	bu.Icon:SetPoint("TOPLEFT", 3, -2)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -1, 2)
 	bu.__turnOff = function()
@@ -1010,11 +1034,12 @@ function module:OnLogin()
 			local bu = buttons[i]
 			if not bu then break end
 			if i == 1 then
-				bu:SetPoint("TOPRIGHT", -5, -3)
+				bu:SetPoint("TOPRIGHT", -5, -5)
 			else
 				bu:SetPoint("RIGHT", buttons[i-1], "LEFT", -3, 0)
 			end
 		end
+		self.widgetButtons = buttons
 
 		self:HookScript("OnShow", B.RestoreMF)
 	end
