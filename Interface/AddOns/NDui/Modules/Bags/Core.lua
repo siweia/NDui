@@ -111,8 +111,11 @@ end
 
 function module:CreateBagBar(settings, columns)
 	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
-	local width, height = bagBar:LayoutButtons("grid", columns, 5, 5, -5)
-	bagBar:SetSize(width + 10, height + 10)
+	local spacing = 3
+	local offset = 5
+	local _, height = bagBar:LayoutButtons("grid", columns, spacing, offset, -offset)
+	local width = columns * (self.iconSize + spacing)-spacing
+	bagBar:SetSize(width + offset*2, height + offset*2)
 	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagBar)
 	bagBar.highlightFunction = highlightFunction
@@ -979,7 +982,9 @@ function module:OnLogin()
 			return
 		end
 
+		self.iconSize = iconSize
 		module.CreateInfoFrame(self)
+		module.CreateFreeSlots(self)
 
 		local buttons = {}
 		buttons[1] = module.CreateCloseButton(self)
@@ -1012,9 +1017,6 @@ function module:OnLogin()
 		end
 
 		self:HookScript("OnShow", B.RestoreMF)
-
-		self.iconSize = iconSize
-		module.CreateFreeSlots(self)
 	end
 
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
