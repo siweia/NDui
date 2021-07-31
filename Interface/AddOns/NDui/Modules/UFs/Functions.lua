@@ -6,7 +6,8 @@ local UF = B:RegisterModule("UnitFrames")
 local AURA = B:GetModule("Auras")
 
 local format, floor = string.format, math.floor
-local pairs, next = pairs, next
+local pairs, next, unpack = pairs, next, unpack
+local UnitGUID, IsItemInRange = UnitGUID, IsItemInRange
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura = SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura
 
