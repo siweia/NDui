@@ -1426,3 +1426,61 @@ function UF:CreateQuestSync(self)
 	self:RegisterEvent("QUEST_SESSION_JOINED", updatePartySync, true)
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", updatePartySync, true)
 end
+
+-- Demonic Gateway
+local GatewayTexs = {
+	[59262] = 607512, -- green
+	[59271] = 607513, -- purple
+}
+local function DGI_UpdateGlow()
+	local frame = _G.oUF_Focus
+	if not frame then return end
+
+	local element = frame.DemonicGatewayIndicator
+	if element:IsShown() and IsItemInRange(37727, "focus") then
+		B.ShowOverlayGlow(element.glowFrame)
+	else
+		B.HideOverlayGlow(element.glowFrame)
+	end
+end
+
+local function DGI_Visibility()
+	local frame = _G.oUF_Focus
+	if not frame then return end
+
+	local element = frame.DemonicGatewayIndicator
+	local guid = UnitGUID("focus")
+	local npcID = guid and B.GetNPCID(guid)
+	local isGate = npcID and GatewayTexs[npcID]
+
+	element:SetTexture(isGate)
+	element:SetShown(isGate)
+	element.updater:SetShown(isGate)
+	DGI_UpdateGlow()
+end
+
+local function DGI_OnUpdate(self, elapsed)
+	self.elapsed = (self.elapsed or 0) + 0.1
+	if self.elapsed > .1 then
+		DGI_UpdateGlow()
+
+		self.elapsed = 0
+	end
+end
+
+function UF:DemonicGatewayIcon(self)
+	local icon = self:CreateTexture(nil, "ARTWORK")
+	icon:SetPoint("CENTER")
+	icon:SetSize(22, 22)
+	icon:SetTexture(607512) -- 607513 for purple
+	icon:SetTexCoord(unpack(DB.TexCoord))
+	icon.glowFrame = B.CreateGlowFrame(self, 22)
+
+	local updater = CreateFrame("Frame")
+	updater:SetScript("OnUpdate", DGI_OnUpdate)
+	updater:Hide()
+
+	self.DemonicGatewayIndicator = icon
+	self.DemonicGatewayIndicator.updater = updater
+	B:RegisterEvent("PLAYER_FOCUS_CHANGED", DGI_Visibility)
+end

@@ -77,6 +77,7 @@ local function CreateFocusStyle(self)
 	UF:CreateIcons(self)
 	UF:CreatePrediction(self)
 	UF:CreateAuras(self)
+	UF:DemonicGatewayIcon(self)
 end
 
 local function CreateToTStyle(self)
