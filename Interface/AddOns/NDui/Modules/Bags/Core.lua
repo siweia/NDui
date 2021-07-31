@@ -1090,6 +1090,20 @@ function module:OnLogin()
 	B:RegisterEvent("TRADE_CLOSED", module.CloseBags)
 	B:RegisterEvent("BANKFRAME_OPENED", module.AutoDeposit)
 
+	-- Update infobar slots
+	local INFO = B:GetModule("Infobar")
+	if INFO.modules then
+		for _, info in pairs(INFO.modules) do
+			if info.name == "Gold" then
+				Backpack.OnOpen = function()
+					if not NDuiADB["ShowSlots"] then return end
+					info:onEvent()
+				end
+				break
+			end
+		end
+	end
+
 	-- Fixes
 	BankFrame.GetRight = function() return f.bank:GetRight() end
 	BankFrameItemButton_Update = B.Dummy
