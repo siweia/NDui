@@ -127,7 +127,7 @@ function module:CreateInfoFrame()
 
 	local tag = self:SpawnPlugin("TagDisplay", "[money]", search)
 	tag:SetFont(unpack(DB.Font))
-	tag:SetPoint("TOPRIGHT", self, -50, -10)
+	tag:SetPoint("TOPRIGHT", self, -50, -8)
 
 	infoFrame.title = SEARCH
 	B.AddTooltip(infoFrame, "ANCHOR_TOPLEFT", DB.InfoColor..L["BagSearchTip"])
