@@ -1036,7 +1036,7 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 		end
 	end
 
-	for i = 1, max do
+	for i = 1, 6 do
 		local bar = element[i]
 		if not bar.chargeStar then break end
 
