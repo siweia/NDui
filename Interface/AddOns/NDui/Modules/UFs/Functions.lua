@@ -1001,7 +1001,7 @@ end
 -- Class Powers
 local barWidth, barHeight = unpack(C.UFs.BarSize)
 
-function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedIndex)
+function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowerPoints)
 	if not cur or cur == 0 then
 		for i = 1, 6 do
 			element[i].bg:Hide()
@@ -1036,15 +1036,11 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedInde
 		end
 	end
 
-	if chargedIndex and chargedIndex ~= element.thisCharge then
-		local bar = element[chargedIndex]
-		element.chargeStar:SetParent(bar)
-		element.chargeStar:SetPoint("CENTER", bar)
-		element.chargeStar:Show()
-		element.thisCharge = chargedIndex
-	else
-		element.chargeStar:Hide()
-		element.thisCharge = nil
+	for i = 1, max do
+		local bar = element[i]
+		if not bar.chargeStar then break end
+
+		bar.chargeStar:SetShown(chargedPowerPoints and tContains(chargedPowerPoints, i))
 	end
 end
 
@@ -1113,6 +1109,14 @@ function UF:CreateClassPower(self)
 
 		if DB.MyClass == "DEATHKNIGHT" and C.db["UFs"]["RuneTimer"] then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
+		elseif DB.MyClass == "ROGUE" then
+			local chargeStar = bars[i]:CreateTexture()
+			chargeStar:SetAtlas("VignetteKill")
+			chargeStar:SetDesaturated(true)
+			chargeStar:SetSize(22, 22)
+			chargeStar:SetPoint("CENTER")
+			chargeStar:Hide()
+			bars[i].chargeStar = chargeStar
 		end
 	end
 
@@ -1123,12 +1127,6 @@ function UF:CreateClassPower(self)
 		bars.__max = 6
 		self.Runes = bars
 	else
-		local chargeStar = bar:CreateTexture()
-		chargeStar:SetAtlas("VignetteKill")
-		chargeStar:SetSize(24, 24)
-		chargeStar:Hide()
-		bars.chargeStar = chargeStar
-
 		bars.PostUpdate = UF.PostUpdateClassPower
 		self.ClassPower = bars
 	end
