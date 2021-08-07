@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 local function ReskinDetails()
+	if not C.db["Skins"]["Details"] then return end
+
 	local Details = _G.Details
 	-- instance table can be nil sometimes
 	Details.tabela_instancias = Details.tabela_instancias or {}
@@ -104,4 +106,4 @@ local function ReskinDetails()
 	NDuiADB["ResetDetails"] = false
 end
 
-S:LoadWithAddOn("Details", "Details", ReskinDetails)
+S:RegisterSkin("Details", ReskinDetails)

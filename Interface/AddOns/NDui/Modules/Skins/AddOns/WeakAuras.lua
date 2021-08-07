@@ -52,7 +52,7 @@ local function Skin_WeakAuras(f, fType)
 			f.bg:SetFrameLevel(0)
 			UpdateIconTexCoord(f.icon)
 			hooksecurefunc(f.icon, "SetTexCoord", UpdateIconTexCoord)
-			--f.iconFrame:SetAllPoints(f.icon) -- needs review
+			f.iconFrame:SetAllPoints(f.icon) -- needs review
 			B.SetBD(f.iconFrame)
 
 			f.styled = true
@@ -61,6 +61,8 @@ local function Skin_WeakAuras(f, fType)
 end
 
 local function ReskinWA()
+	if not C.db["Skins"]["WeakAuras"] then return end
+
 	local regionTypes = WeakAuras.regionTypes
 	local Create_Icon, Modify_Icon = regionTypes.icon.create, regionTypes.icon.modify
 	local Create_AuraBar, Modify_AuraBar = regionTypes.aurabar.create, regionTypes.aurabar.modify
@@ -87,12 +89,11 @@ local function ReskinWA()
 		Skin_WeakAuras(region, "aurabar")
 	end
 
-	for weakAura in pairs(WeakAuras.regions) do
-		local regions = WeakAuras.regions[weakAura]
+	for weakAura, regions in pairs(WeakAuras.regions) do
 		if regions.regionType == "icon" or regions.regionType == "aurabar" then
 			Skin_WeakAuras(regions.region, regions.regionType)
 		end
 	end
 end
 
-S:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)
+S:RegisterSkin("WeakAuras", ReskinWA)

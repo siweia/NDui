@@ -7,8 +7,23 @@ local IsAddOnLoaded = IsAddOnLoaded
 
 C.defaultThemes = {}
 C.themes = {}
+C.otherSkins = {}
 
-function S:LoadDefaultSkins()
+function S:RegisterSkin(addonName, func)
+	C.otherSkins[addonName] = func
+end
+
+function S:LoadSkins(list)
+	for addonName, func in pairs(list) do
+		local isLoaded, isFinished = IsAddOnLoaded(addonName)
+		if isLoaded and isFinished then
+			func()
+			list[addonName] = nil
+		end
+	end
+end
+
+function S:LoadAddOnSkins()
 	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then return end
 
 	-- Reskin Blizzard UIs
@@ -17,15 +32,12 @@ function S:LoadDefaultSkins()
 	end
 	wipe(C.defaultThemes)
 
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
-	for addonName, func in pairs(C.themes) do
-		local isLoaded, isFinished = IsAddOnLoaded(addonName)
-		if isLoaded and isFinished then
-			func()
-			C.themes[addonName] = nil
-		end
+	if not C.db["Skins"]["BlizzardSkins"] then
+		wipe(C.themes)
 	end
+
+	S:LoadSkins(C.themes) -- blizzard ui
+	S:LoadSkins(C.otherSkins) -- other addons
 
 	B:RegisterEvent("ADDON_LOADED", function(_, addonName)
 		local func = C.themes[addonName]
@@ -33,11 +45,17 @@ function S:LoadDefaultSkins()
 			func()
 			C.themes[addonName] = nil
 		end
+
+		local func = C.otherSkins[addonName]
+		if func then
+			func()
+			C.otherSkins[addonName] = nil
+		end
 	end)
 end
 
 function S:OnLogin()
-	self:LoadDefaultSkins()
+	self:LoadAddOnSkins()
 
 	-- Add Skins
 	self:DBMSkin()
@@ -130,24 +148,4 @@ function S:RefreshToggleDirection()
 	for _, frame in pairs(toggleFrames) do
 		S:SetToggleDirection(frame)
 	end
-end
-
-function S:LoadWithAddOn(addonName, value, func)
-	local function loadFunc(event, addon)
-		if not C.db["Skins"][value] then return end
-
-		if event == "PLAYER_ENTERING_WORLD" then
-			B:UnregisterEvent(event, loadFunc)
-			if IsAddOnLoaded(addonName) then
-				func()
-				B:UnregisterEvent("ADDON_LOADED", loadFunc)
-			end
-		elseif event == "ADDON_LOADED" and addon == addonName then
-			func()
-			B:UnregisterEvent(event, loadFunc)
-		end
-	end
-
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", loadFunc)
-	B:RegisterEvent("ADDON_LOADED", loadFunc)
 end

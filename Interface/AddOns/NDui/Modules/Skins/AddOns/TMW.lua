@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
 local function ReskinTMW()
+	if not C.db["Skins"]["TMW"] then return end
+
 	TMW.Classes.Icon:PostHookMethod("OnNewInstance", function(self)
 		if not self.bg then
 			self.bg = B.SetBD(self)
@@ -14,4 +16,4 @@ local function ReskinTMW()
 	end)
 end
 
-S:LoadWithAddOn("TellMeWhen", "TMW", ReskinTMW)
+S:RegisterSkin("TellMeWhen", ReskinTMW)
