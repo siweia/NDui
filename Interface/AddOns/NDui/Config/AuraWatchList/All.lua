@@ -88,6 +88,8 @@ local list = {
 		{AuraID = 357185, UnitID = "player"},	-- 忠诚的力量，低语威能碎片
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
+		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
+		{AuraID = 354054, UnitID = "player", Flash = true, Text = L["Versa"]}, -- 致命缺陷，全能
 		{AuraID = 323546, UnitID = "player"},	-- 饕餮狂乱
 		{AuraID = 326860, UnitID = "player"},	-- 陨落僧众
 		{AuraID = 310143, UnitID = "player", Combat = true},-- 灵魂变形
