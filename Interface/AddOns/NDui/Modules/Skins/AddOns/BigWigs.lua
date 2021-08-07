@@ -107,15 +107,5 @@ function S:BigWigsSkin()
 		end)
 	end
 
-	if IsAddOnLoaded("BigWigs_Plugins") then
-		registerStyle()
-	else
-		local function loadStyle(event, addon)
-			if addon == "BigWigs_Plugins" then
-				registerStyle()
-				B:UnregisterEvent(event, loadStyle)
-			end
-		end
-		B:RegisterEvent("ADDON_LOADED", loadStyle)
-	end
+	S:RegisterSkin("BigWigs_Plugins", registerStyle)
 end
