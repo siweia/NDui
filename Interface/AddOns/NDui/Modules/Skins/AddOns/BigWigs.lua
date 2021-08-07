@@ -77,7 +77,8 @@ local styleData = {
 	GetStyleName = function() return "NDui" end,
 }
 
-local function registerStyle()
+function S:RegisterBWStyle()
+	if not C.db["Skins"]["Bigwigs"] then return end
 	if not BigWigsAPI then return end
 
 	BigWigsAPI:RegisterBarStyle("NDui", styleData)
@@ -92,8 +93,7 @@ local function registerStyle()
 end
 
 function S:BigWigsSkin()
-	if not C.db["Skins"]["Bigwigs"] or not IsAddOnLoaded("BigWigs") then return end
-	if not BigWigs3DB then return end
+	if not C.db["Skins"]["Bigwigs"] then return end
 
 	if BigWigsLoader and BigWigsLoader.RegisterMessage then
 		BigWigsLoader.RegisterMessage(_, "BigWigs_FrameCreated", function(_, frame, name)
@@ -106,6 +106,7 @@ function S:BigWigsSkin()
 			end
 		end)
 	end
-
-	S:RegisterSkin("BigWigs_Plugins", registerStyle)
 end
+
+S:RegisterSkin("BigWigs", S.BigWigsSkin)
+S:RegisterSkin("BigWigs_Plugins", S.RegisterBWStyle)
