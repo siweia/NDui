@@ -14,6 +14,8 @@ function S:RegisterSkin(addonName, func)
 end
 
 function S:LoadSkins(list)
+	if not next(list) then return end
+
 	for addonName, func in pairs(list) do
 		local isLoaded, isFinished = IsAddOnLoaded(addonName)
 		if isLoaded and isFinished then
@@ -60,7 +62,6 @@ function S:OnLogin()
 	-- Add Skins
 	self:DBMSkin()
 	self:SkadaSkin()
-	self:BigWigsSkin()
 	self:PGFSkin()
 	self:ReskinRematch()
 	self:OtherSkins()
