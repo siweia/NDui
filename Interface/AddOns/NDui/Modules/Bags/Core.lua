@@ -392,7 +392,7 @@ function module:CreateSplitButton()
 
 	local splitFrame = CreateFrame("Frame", nil, self)
 	splitFrame:SetSize(100, 50)
-	splitFrame:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
+	splitFrame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -5)
 	B.CreateFS(splitFrame, 14, L["SplitCount"], "system", "TOP", 1, -5)
 	B.SetBD(splitFrame)
 	splitFrame:Hide()
