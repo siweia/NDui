@@ -151,6 +151,8 @@ function module:CreateCollapseArrow()
 	C.db["Bags"]["HideWidgets"] = not C.db["Bags"]["HideWidgets"] -- reset before toggle
 	ToggleWidgetButtons(bu)
 	bu:SetScript("OnClick", ToggleWidgetButtons)
+
+	self.widgetArrow = bu
 end
 
 function module:CreateBagBar(settings, columns)
@@ -266,18 +268,22 @@ function module:CreateDepositButton()
 	return bu
 end
 
+local function ToggleBackpacks(self)
+	local parent = self.__owner
+	B:TogglePanel(parent.BagBar)
+	if parent.BagBar:IsShown() then
+		self.bg:SetBackdropBorderColor(1, .8, 0)
+		PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
+	else
+		B.SetBorderColor(self.bg)
+		PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
+	end
+end
+
 function module:CreateBagToggle()
 	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\Button-Backpack-Up")
-	bu:SetScript("OnClick", function()
-		B:TogglePanel(self.BagBar)
-		if self.BagBar:IsShown() then
-			bu.bg:SetBackdropBorderColor(1, .8, 0)
-			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
-		else
-			B.SetBorderColor(bu.bg)
-			PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
-		end
-	end)
+	bu.__owner = self
+	bu:SetScript("OnClick", ToggleBackpacks)
 	bu.title = BACKPACK_TOOLTIP
 	B.AddTooltip(bu, "ANCHOR_TOP")
 
