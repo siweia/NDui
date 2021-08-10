@@ -7,7 +7,7 @@ local tinsert, strsplit, format = table.insert, string.split, string.format
 local IsInGroup, IsInRaid, IsInInstance = IsInGroup, IsInRaid, IsInInstance
 local UnitIsGroupLeader, UnitIsGroupAssistant = UnitIsGroupLeader, UnitIsGroupAssistant
 local IsPartyLFG, IsLFGComplete, HasLFGRestrictions = IsPartyLFG, IsLFGComplete, HasLFGRestrictions
-local GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex = GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex
+local GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget = GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget
 local GetSpellCharges, GetSpellInfo, UnitAura = GetSpellCharges, GetSpellInfo, UnitAura
 local GetTime, SendChatMessage, IsAddOnLoaded = GetTime, SendChatMessage, IsAddOnLoaded
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown, InCombatLockdown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown, InCombatLockdown
@@ -520,17 +520,30 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
-	local menuList = {
-		{text = RAID_TARGET_NONE, func = function() SetRaidTarget("target", 0) end},
-		{text = B.HexRGB(1, .92, 0)..RAID_TARGET_1.." "..ICON_LIST[1].."12|t", func = function() SetRaidTarget("target", 1) end},
-		{text = B.HexRGB(.98, .57, 0)..RAID_TARGET_2.." "..ICON_LIST[2].."12|t", func = function() SetRaidTarget("target", 2) end},
-		{text = B.HexRGB(.83, .22, .9)..RAID_TARGET_3.." "..ICON_LIST[3].."12|t", func = function() SetRaidTarget("target", 3) end},
-		{text = B.HexRGB(.04, .95, 0)..RAID_TARGET_4.." "..ICON_LIST[4].."12|t", func = function() SetRaidTarget("target", 4) end},
-		{text = B.HexRGB(.7, .82, .875)..RAID_TARGET_5.." "..ICON_LIST[5].."12|t", func = function() SetRaidTarget("target", 5) end},
-		{text = B.HexRGB(0, .71, 1)..RAID_TARGET_6.." "..ICON_LIST[6].."12|t", func = function() SetRaidTarget("target", 6) end},
-		{text = B.HexRGB(1, .24, .168)..RAID_TARGET_7.." "..ICON_LIST[7].."12|t", func = function() SetRaidTarget("target", 7) end},
-		{text = B.HexRGB(.98, .98, .98)..RAID_TARGET_8.." "..ICON_LIST[8].."12|t", func = function() SetRaidTarget("target", 8) end},
-	}
+	local order = {"8", "7", "6", "5", "4", "3", "2", "1", "NONE"}
+	local menuList = {}
+
+	local function GetMenuTitle(color, text)
+		return (color and B.HexRGB(color) or "")..text
+	end
+
+	local function SetRaidTargetByIndex(_, arg1)
+		SetRaidTarget("target", arg1)
+	end
+
+	for index, value in pairs(order) do
+		local blizz = _G.UnitPopupButtons["RAID_TARGET_"..value]
+		menuList[index] = {
+			text = GetMenuTitle(blizz.color, blizz.text),
+			icon = blizz.icon,
+			tCoordLeft = blizz.tCoordLeft,
+			tCoordRight = blizz.tCoordRight,
+			tCoordTop = blizz.tCoordTop,
+			tCoordBottom = blizz.tCoordBottom,
+			arg1 = 9 - index,
+			func = SetRaidTargetByIndex,
+		}
+	end
 
 	local function GetModifiedState()
 		local index = C.db["Misc"]["EasyMarkKey"]
@@ -548,12 +561,13 @@ function M:RaidTool_EasyMarker()
 	WorldFrame:HookScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" and GetModifiedState() and UnitExists("mouseover") then
 			if not IsInGroup() or (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
-				local ricon = GetRaidTargetIndex("mouseover")
+				local index = GetRaidTargetIndex("mouseover")
 				for i = 1, 8 do
-					if ricon == i then
-						menuList[i+1].checked = true
+					local menu = menuList[i]
+					if menu.arg1 == index then
+						menu.checked = true
 					else
-						menuList[i+1].checked = false
+						menu.checked = false
 					end
 				end
 				EasyMenu(menuList, B.EasyMenu, "cursor", 0, 0, "MENU", 1)
