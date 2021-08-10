@@ -148,6 +148,7 @@ function module:CreateCollapseArrow()
 	bu.tag = tag
 
 	bu.__owner = self
+	C.db["Bags"]["HideWidgets"] = not C.db["Bags"]["HideWidgets"] -- reset before toggle
 	ToggleWidgetButtons(bu)
 	bu:SetScript("OnClick", ToggleWidgetButtons)
 end
