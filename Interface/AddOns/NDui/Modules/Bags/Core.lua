@@ -175,12 +175,16 @@ local function CloseOrRestoreBags(self, btn)
 	if btn == "RightButton" then
 		local bag = self.__owner.main
 		local bank = self.__owner.bank
+		local reagent = self.__owner.reagent
 		C.db["TempAnchor"][bag:GetName()] = nil
 		C.db["TempAnchor"][bank:GetName()] = nil
+		C.db["TempAnchor"][reagent:GetName()] = nil
 		bag:ClearAllPoints()
-		bag:SetPoint("BOTTOMRIGHT", -50, 320)
+		bag:SetPoint("BOTTOMRIGHT", -50, 50)
 		bank:ClearAllPoints()
 		bank:SetPoint("BOTTOMRIGHT", bag, "BOTTOMLEFT", -10, 0)
+		reagent:ClearAllPoints()
+		reagent:SetPoint("BOTTOMLEFT", bank)
 		PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
 	else
 		CloseAllBags()
