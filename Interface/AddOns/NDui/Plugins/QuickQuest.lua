@@ -109,6 +109,7 @@ local ignoreQuestNPC = {
 	[160248] = true,	-- 档案员费安，罪魂碎片
 	[127037] = true,	-- 纳毕鲁
 	[326027] = true,	-- 运输站回收生成器DX-82
+	[162804] = true,	-- 威娜莉
 }
 
 QuickQuest:Register("QUEST_GREETING", function()
