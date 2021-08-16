@@ -1,7 +1,7 @@
 local _, ns = ...
 local _, _, L = unpack(ns)
---if GetLocale() ~= "frFR" then return end
-
+if GetLocale() ~= "frFR" then return end
+-- Credit: Zeddicus40
 L["From"] = "De"
 L["Tell"] = "Dire"
 L["Ghost"] = "Fantôme"
@@ -477,7 +477,6 @@ L["HealthColor"] = "Couleur de la barre de santé"
 L["Default Dark"] = "Sombre par défaut"
 L["ClassColorHP"] = "Couleur de classe"
 L["GradientHP"] = "Dégradé de pourcentage"
-L["Bags DeleteButton"] = "Ajouter bouton de destruction d'objet"
 L["DeleteMode Enabled"] = "|nVous pouvez détruire le conteneur en maintenant CTRL+ALT. L'objet peut être d'héritage ou sa qualité est inférieure à rare (bleu)."
 L["ItemDeleteMode"] = "Mode de suppression d'objet"
 L["Trait"] = "Trait"

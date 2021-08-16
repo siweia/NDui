@@ -3,4 +3,5 @@
 	<Script file="zhCN.lua"/>
 	<Script file="zhTW.lua"/>
 	<Script file="ruRU.lua"/>
+	<Script file="frFR.lua"/>
 </Ui>
