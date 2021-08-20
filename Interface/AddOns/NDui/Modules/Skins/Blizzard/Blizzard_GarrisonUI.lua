@@ -1085,8 +1085,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 			local mult = (self:GetHeight()-135)/72
 			if mult == floor(mult) then -- only adjust the unmodified VP
-				local fl = C_Garrison.GetFollowers(123)
-				self:SetHeight(135 + 68*ceil(#fl/4))
+				self:SetHeight(mult*68 + 135)
 			end
 			self.isSetting = nil
 		end
@@ -1095,9 +1094,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			if self.isSetting then return end
 			self.isSetting = true
 
-			local mult = (self:GetHeight()+130)/72
+			local mult = (y+130)/72
 			if mult == floor(mult) then -- only adjust the unmodified VP
-				self:SetPoint(anchor, x, (y+130)/72*68 - 130)
+				self:SetPoint(anchor, x, mult*68 - 130)
 			end
 			self.isSetting = nil
 		end
