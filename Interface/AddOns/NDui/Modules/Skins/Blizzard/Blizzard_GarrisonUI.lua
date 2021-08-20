@@ -1079,6 +1079,28 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				self.__owner.Icon:SetTexture(ANIMA_TEXTURE)
 			end
 		end
+		local function AdjustFollowerList(self)
+			if self.isSetting then return end
+			self.isSetting = true
+
+			local mult = (self:GetHeight()-135)/72
+			if mult == floor(mult) then -- only adjust the unmodified VP
+				local fl = C_Garrison.GetFollowers(123)
+				self:SetHeight(135 + 68*ceil(#fl/4))
+			end
+			self.isSetting = nil
+		end
+		local function AdjustFollowerButton(self, anchor, x, y)
+			if y == -35 then return end -- troops
+			if self.isSetting then return end
+			self.isSetting = true
+
+			local mult = (self:GetHeight()+130)/72
+			if mult == floor(mult) then -- only adjust the unmodified VP
+				self:SetPoint(anchor, x, (y+130)/72*68 - 130)
+			end
+			self.isSetting = nil
+		end
 
 		function VPEX_OnUIObjectCreated(otype, widget, peek)
 			if widget:IsObjectType("Frame") then
@@ -1123,11 +1145,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				elseif otype == "FollowerList" then
 					B.StripTextures(widget)
 					B.CreateBDFrame(widget, .25)
+					hooksecurefunc(widget, "SetHeight", AdjustFollowerList)
 				elseif otype == "FollowerListButton" then
 					peek("TextLabel"):SetFontObject("Game12Font")
 				elseif otype == "ProgressBar" then
 					B.StripTextures(widget)
 					B.CreateBDFrame(widget, 1)
+					hooksecurefunc(widget, "SetPoint", AdjustFollowerButton)
 				elseif otype == "MissionToast" then
 					B.SetBD(widget)
 					if widget.Icon then widget.Icon:Show() end
