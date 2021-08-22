@@ -791,6 +791,8 @@ end
 
 local debuffBlackList = {
 	[206151] = true,
+	[296847] = true,
+	[338906] = true,
 }
 function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
 	local parent = element.__owner
