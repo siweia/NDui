@@ -28,8 +28,6 @@ local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Upd
 local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
 local C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo
 local C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo
-local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
-local GetOverrideBarSkin, GetActionInfo, GetSpellInfo = GetOverrideBarSkin, GetActionInfo, GetSpellInfo
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -65,7 +63,6 @@ function M:OnLogin()
 	M:ToggleBossBanner()
 	M:ToggleBossEmote()
 	M:MawWidgetFrame()
-	M:WorldQuestTool()
 	M:FasterMovieSkip()
 	M:EnhanceDressup()
 	M:FuckTrainSound()
@@ -648,50 +645,6 @@ do
 
 	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
 	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
-end
-
-function M:WorldQuestTool()
-	if not C.db["Actionbar"]["Enable"] then return end
-	--https://www.wowhead.com/quest=59585/well-make-an-aspirant-out-of-you
-
-	local hasFound
-	local function resetActionButtons()
-		if not hasFound then return end
-		for i = 1, 3 do
-			B.HideOverlayGlow(_G["ActionButton"..i])
-		end
-		hasFound = nil
-	end
-
-	local fixedStrings = {
-		["横扫"] = "低扫",
-		["突刺"] = "突袭",
-	}
-	local function isActionMatch(msg, text)
-		return text and strfind(msg, text)
-	end
-
-	B:RegisterEvent("CHAT_MSG_MONSTER_SAY", function(_, msg)
-		if not GetOverrideBarSkin() or (not C_QuestLog_GetLogIndexForQuestID(59585) and not C_QuestLog_GetLogIndexForQuestID(64271)) then
-			resetActionButtons()
-			return
-		end
-
-		for i = 1, 3 do
-			local button = _G["ActionButton"..i]
-			local _, spellID = GetActionInfo(button.action)
-			local name = spellID and GetSpellInfo(spellID)
-			if isActionMatch(msg, fixedStrings[name]) or isActionMatch(msg, name) then
-				B.ShowOverlayGlow(button)
-			else
-				B.HideOverlayGlow(button)
-			end
-		end
-
-		hasFound = true
-	end)
-
-	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", resetActionButtons)
 end
 
 function M:FasterMovieSkip()
