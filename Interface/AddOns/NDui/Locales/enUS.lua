@@ -797,3 +797,4 @@ L["WhisperSoundTip"] = "|nPlay sound when the new whisper message is more than 5
 L["MultiRows"] = "Anchor by rows"
 L["MultiRowsTip"] = "|nIf item filter enabled, every four bags will anchor into one row."
 L["BagSearchTip"] = "|nClick to search your bag items.|nYou can type in item names or item equip locations.|n'boe' for items that bind on equip and 'quest' for quest items."
+L["MousewheelQuestTip"] = "Mousewheel up on blue circles, mousewheel down on red circles, try harder!"

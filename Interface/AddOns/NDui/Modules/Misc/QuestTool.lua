@@ -57,7 +57,7 @@ function M:QuestTool_Set()
 			ClearOverrideBindings(M.QuestHandler)
 			SetOverrideBindingClick(M.QuestHandler, true, "MOUSEWHEELUP", GetOverrideButton(1))
 			SetOverrideBindingClick(M.QuestHandler, true, "MOUSEWHEELDOWN", GetOverrideButton(2))
-			M.QuestTip:SetText("靠近蓝圈时滚轮上，滚近红圈时滚轮下。用力滚！")
+			M.QuestTip:SetText(L["MousewheelQuestTip"])
 			M.QuestTip:Show()
 
 			if M.isDelay then
@@ -120,6 +120,8 @@ function M:QuestTool()
 	local text = B.CreateFS(handler, 20)
 	text:ClearAllPoints()
 	text:SetPoint("TOP", UIParent, 0, -250)
+	text:SetWidth(800)
+	text:SetWordWrap(true)
 	text:Hide()
 	M.QuestTip = text
 
