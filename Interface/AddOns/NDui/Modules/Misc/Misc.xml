@@ -13,6 +13,7 @@
 	<Script file="OrderHallIcon.lua"/>
 	<Script file="PetFilterTab.lua"/>
 	<Script file="QuestNotification.lua"/>
+	<Script file="QuestTool.lua"/>
 	<Script file="QuickJoin.lua"/>
 	<Script file="RaidTool.lua"/>
 	<Script file="TradeTabs.lua"/>
