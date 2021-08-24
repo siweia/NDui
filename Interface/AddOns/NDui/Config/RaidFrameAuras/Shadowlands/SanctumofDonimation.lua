@@ -55,7 +55,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 348987) -- 好战者枷锁
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 350927) -- 好战者枷锁
 
 BOSS = 2443 -- 痛楚工匠莱兹纳尔
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 356472) -- 萦绕烈焰
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 356472) -- 萦绕烈焰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 355505) -- 影铸锁链
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 355506) -- 影铸锁链
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 348456) -- 烈焰套索陷阱
