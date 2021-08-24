@@ -797,4 +797,5 @@ L["WhisperSoundTip"] = "|nJouer un son lorsqu'un nouveau chuchotement est à plu
 L["MultiRows"] = "Ancrer par ligne"
 L["MultiRowsTip"] = "|nSi le filtre d'objet est activé, tous les quatre sacs s'ancreront sur une seule ligne."
 L["BagSearchTip"] = "|nCliquez pour rechercher des articles dans votre sac.|nVous pouvez taper des noms d'articles ou des emplacements d'équipement. |n'boe' pour les objets qui se lient quand équipé et 'quest' pour les objets de quête."
-L["MousewheelQuestTip"] = "Mousewheel up on blue circles, mousewheel down on red circles, try harder!" -- need translation
+L["SpellTip356464"] = "Mousewheel up on blue circles, mousewheel down on red circles, try harder!" -- need translation
+L["SpellTip356151"] = "Mousewhell up when Wilderling speeds up!" -- need translation

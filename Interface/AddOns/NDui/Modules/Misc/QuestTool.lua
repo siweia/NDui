@@ -16,6 +16,14 @@ local watchQuests = {
 }
 local activeQuests = {}
 
+function M:GetOverrideIndex(spellID)
+	if spellID == 356464 then
+		return 1, 2
+	elseif spellID == 356151 then
+		return 1
+	end
+end
+
 local function GetActionSpell(index)
 	local button = _G["ActionButton"..index]
 	local _, spellID = GetActionInfo(button.action)
@@ -47,22 +55,28 @@ function M:QuestTool_Remove(questID)
 end
 
 function M:QuestTool_Set()
-	if activeQuests[64018] and GetActionSpell(1) == 356464 then
+	local spellID = GetActionSpell(1)
+	if activeQuests[64018] and spellID == 356464 or spellID == 356151 then
 		if InCombatLockdown() then
 			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_Set)
 			M.isDelay = true
 		else
-			M.isHandling = true
+			local index1, index2 = M:GetOverrideIndex(spellID)
+			if index1 then
+				ClearOverrideBindings(M.QuestHandler)
+				SetOverrideBindingClick(M.QuestHandler, true, "MOUSEWHEELUP", GetOverrideButton(index1))
+				if index2 then
+					SetOverrideBindingClick(M.QuestHandler, true, "MOUSEWHEELDOWN", GetOverrideButton(index2))
+				end
 
-			ClearOverrideBindings(M.QuestHandler)
-			SetOverrideBindingClick(M.QuestHandler, true, "MOUSEWHEELUP", GetOverrideButton(1))
-			SetOverrideBindingClick(M.QuestHandler, true, "MOUSEWHEELDOWN", GetOverrideButton(2))
-			M.QuestTip:SetText(L["MousewheelQuestTip"])
-			M.QuestTip:Show()
+				M.QuestTip:SetText(L["SpellTip"..spellID])
+				M.QuestTip:Show()
+				M.isHandling = true
 
-			if M.isDelay then
-				B:UnrgisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_Set)
-				M.isDelay = nil
+				if M.isDelay then
+					B:UnrgisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_Set)
+					M.isDelay = nil
+				end
 			end
 		end
 	end
@@ -119,7 +133,7 @@ function M:QuestTool()
 
 	local text = B.CreateFS(handler, 20)
 	text:ClearAllPoints()
-	text:SetPoint("TOP", UIParent, 0, -250)
+	text:SetPoint("TOP", UIParent, 0, -200)
 	text:SetWidth(800)
 	text:SetWordWrap(true)
 	text:Hide()
