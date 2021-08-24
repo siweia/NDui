@@ -69,7 +69,7 @@ function M:DomiShards_ListFrame()
 
 	local frame = CreateFrame("Frame", "NDuiDomiShards", ItemSocketingFrame)
 	frame:SetSize(frameSize, frameSize)
-	frame:SetPoint("BOTTOMLEFT", 22, 3)
+	frame:SetPoint("BOTTOMLEFT", 32, 3)
 	frame.icons = {}
 	M.DomiShardsFrame = frame
 
