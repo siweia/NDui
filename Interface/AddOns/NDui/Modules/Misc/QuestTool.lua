@@ -12,14 +12,15 @@ local watchQuests = {
 	[59585] = true, -- https://www.wowhead.com/quest=59585/well-make-an-aspirant-out-of-you
 	[64271] = true, -- https://www.wowhead.com/quest=64271/a-more-civilized-way
 	-- mousewheel
-	[64018] = true, -- https://www.wowhead.com/quest=64018/the-weight-of-stone
+	[60657] = 333960, -- https://www.wowhead.com/quest=60657/aid-from-above
+	[64018] = 356464, -- https://www.wowhead.com/quest=64018/the-weight-of-stone
 }
 local activeQuests = {}
 
 function M:GetOverrideIndex(spellID)
 	if spellID == 356464 then
 		return 1, 2
-	elseif spellID == 356151 then
+	elseif spellID == 356151 or spellID == 333960 then
 		return 1
 	end
 end
@@ -35,16 +36,16 @@ local function GetOverrideButton(index)
 end
 
 function M:QuestTool_Init()
-	for questID in pairs(watchQuests) do
+	for questID, value in pairs(watchQuests) do
 		if C_QuestLog_GetLogIndexForQuestID(questID) then
-			activeQuests[questID] = true
+			activeQuests[questID] = value
 		end
 	end
 end
 
 function M:QuestTool_Accept(questID)
 	if watchQuests[questID] then
-		activeQuests[questID] = true
+		activeQuests[questID] = watchQuests[questID]
 	end
 end
 
@@ -54,9 +55,13 @@ function M:QuestTool_Remove(questID)
 	end
 end
 
+function M:QuestTool_IsMatched(questID, spellID)
+	return activeQuests[questID] == spellID
+end
+
 function M:QuestTool_Set()
 	local spellID = GetActionSpell(1)
-	if activeQuests[64018] and spellID == 356464 or spellID == 356151 then
+	if M:QuestTool_IsMatched(60657, spellID) or M:QuestTool_IsMatched(64018, spellID) or spellID == 356151 then
 		if InCombatLockdown() then
 			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_Set)
 			M.isDelay = true
@@ -145,7 +150,7 @@ function M:QuestTool()
 	B:RegisterEvent("QUEST_REMOVED", M.QuestTool_Remove)
 
 	-- Vehicle button quests
-	M.QuestTool_Set() -- may need this for ui reload
+	C_Timer.After(.1, M.QuestTool_Set) -- may need this for ui reload
 	B:RegisterEvent("UNIT_ENTERED_VEHICLE", M.QuestTool_Set)
 	B:RegisterEvent("UNIT_EXITED_VEHICLE", M.QuestTool_Clear)
 
