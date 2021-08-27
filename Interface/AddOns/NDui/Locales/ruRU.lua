@@ -798,4 +798,5 @@ L["MultiRows"] = "Якорь по строкам"
 L["MultiRowsTip"] = "|nЕсли включен фильтр предметов, каждые четыре сумки будут привязаны к одной строке."
 L["BagSearchTip"] = "|nЩелкни чтобы искать предметы в сумках.|nВы можете ввести названия предметов или места их получения.|n'boe' для боешек и 'задание' для квестовых предметов."
 L["SpellTip356464"] = "Mousewheel up on blue circles, mousewheel down on red circles, try harder!" -- need translation
+L["SpellTip333960"] = "Mousewheel up on blue circles, try harder!" -- need translation
 L["SpellTip356151"] = "Mousewhell up when Wilderling speeds up!" -- need translation
