@@ -55,13 +55,13 @@ function M:QuestTool_Remove(questID)
 	end
 end
 
-function M:QuestTool_IsMatched(questID, spellID)
+function M:QuestTool_IsMatch(questID, spellID)
 	return activeQuests[questID] == spellID
 end
 
 function M:QuestTool_Set()
 	local spellID = GetActionSpell(1)
-	if M:QuestTool_IsMatched(60657, spellID) or M:QuestTool_IsMatched(64018, spellID) or spellID == 356151 then
+	if M:QuestTool_IsMatch(60657, spellID) or M:QuestTool_IsMatch(64018, spellID) or spellID == 356151 then
 		if InCombatLockdown() then
 			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_Set)
 			M.isDelay = true
@@ -150,7 +150,7 @@ function M:QuestTool()
 	B:RegisterEvent("QUEST_REMOVED", M.QuestTool_Remove)
 
 	-- Vehicle button quests
-	C_Timer.After(.1, M.QuestTool_Set) -- may need this for ui reload
+	C_Timer.After(10, M.QuestTool_Set) -- may need this for ui reload
 	B:RegisterEvent("UNIT_ENTERED_VEHICLE", M.QuestTool_Set)
 	B:RegisterEvent("UNIT_EXITED_VEHICLE", M.QuestTool_Clear)
 
