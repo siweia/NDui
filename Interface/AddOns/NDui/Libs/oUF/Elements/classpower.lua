@@ -162,7 +162,7 @@ local function Update(self, event, unit, powerType)
 	* max           - the maximum amount of power (number)
 	* hasMaxChanged - indicates whether the maximum amount has changed since the last update (boolean)
 	* powerType     - the active power type (string)
-	* chargedPowerPoints  - the index-es of the currently charged power point (number?)
+	* chargedPowerPoints  - the indices of the currently charged power points
 	--]]
 	if(element.PostUpdate) then
 		return element:PostUpdate(cur, max, oldMax ~= max, powerType, chargedPowerPoints)
