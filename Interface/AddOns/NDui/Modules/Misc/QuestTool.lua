@@ -9,6 +9,7 @@ local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 
 local watchQuests = {
 	-- check npc
+	[60739] = true, -- https://www.wowhead.com/quest=60739/tough-crowd
 	[62453] = true, -- https://www.wowhead.com/quest=62453/into-the-unknown
 	-- glow
 	[59585] = true, -- https://www.wowhead.com/quest=59585/well-make-an-aspirant-out-of-you
@@ -20,6 +21,7 @@ local watchQuests = {
 local activeQuests = {}
 
 local questNPCs = {
+	[170080] = true, -- Boggart
 	[174498] = true, -- Shimmersod
 }
 
@@ -65,11 +67,11 @@ function M:QuestTool_IsMatch(questID, spellID)
 	return activeQuests[questID] == spellID
 end
 
-function M:QuestTool_Set()
+function M:QuestTool_SetAction()
 	local spellID = GetActionSpell(1)
 	if M:QuestTool_IsMatch(60657, spellID) or M:QuestTool_IsMatch(64018, spellID) or spellID == 356151 then
 		if InCombatLockdown() then
-			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_Set)
+			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_SetAction)
 			M.isDelay = true
 		else
 			local index1, index2 = M:GetOverrideIndex(spellID)
@@ -85,7 +87,7 @@ function M:QuestTool_Set()
 				M.isHandling = true
 
 				if M.isDelay then
-					B:UnrgisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_Set)
+					B:UnrgisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_SetAction)
 					M.isDelay = nil
 				end
 			end
@@ -93,7 +95,7 @@ function M:QuestTool_Set()
 	end
 end
 
-function M:QuestTool_Clear()
+function M:QuestTool_ClearAction()
 	if M.isHandling then
 		M.isHandling = nil
 		ClearOverrideBindings(M.QuestHandler)
@@ -137,7 +139,7 @@ function M:QuestTool_ClearGlow()
 end
 
 function M:QuestTool_SetQuestUnit()
-	if not activeQuests[62453] then return end
+	if not activeQuests[60739] and not activeQuests[62453] then return end
 
 	local guid = UnitGUID("mouseover")
 	local npcID = guid and B.GetNPCID(guid)
@@ -166,9 +168,9 @@ function M:QuestTool()
 	B:RegisterEvent("QUEST_REMOVED", M.QuestTool_Remove)
 
 	-- Vehicle button quests
-	C_Timer.After(10, M.QuestTool_Set) -- may need this for ui reload
-	B:RegisterEvent("UNIT_ENTERED_VEHICLE", M.QuestTool_Set)
-	B:RegisterEvent("UNIT_EXITED_VEHICLE", M.QuestTool_Clear)
+	C_Timer.After(10, M.QuestTool_SetAction) -- may need this for ui reload
+	B:RegisterEvent("UNIT_ENTERED_VEHICLE", M.QuestTool_SetAction)
+	B:RegisterEvent("UNIT_EXITED_VEHICLE", M.QuestTool_ClearAction)
 
 	-- Override button quests
 	B:RegisterEvent("CHAT_MSG_MONSTER_SAY", M.QuestTool_SetGlow)
