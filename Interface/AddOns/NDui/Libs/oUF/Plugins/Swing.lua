@@ -3,7 +3,7 @@
 -- NDui MOD
 -------------------------
 local _, ns = ...
-local oUF = ns.oUF or oUF
+local oUF = ns.oUF
 
 local strfind = string.find
 local GetTime = GetTime

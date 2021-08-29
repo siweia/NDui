@@ -1,5 +1,5 @@
 local _, ns = ...
-local oUF = ns.oUF or oUF
+local oUF = ns.oUF
 
 local function UpdateFillBar(frame, previousTexture, bar, amount)
 	if amount == 0 then

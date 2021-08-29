@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF or oUF
+local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
 local strmatch, format, wipe = strmatch, format, wipe

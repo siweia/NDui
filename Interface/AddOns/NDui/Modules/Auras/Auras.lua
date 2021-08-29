@@ -1,6 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF or oUF
+local oUF = ns.oUF
 local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
