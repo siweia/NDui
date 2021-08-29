@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, strfind = pairs, strfind
+local UnitGUID = UnitGUID
 local GetActionInfo, GetSpellInfo, GetOverrideBarSkin = GetActionInfo, GetSpellInfo, GetOverrideBarSkin
 local ClearOverrideBindings, SetOverrideBindingClick, InCombatLockdown = ClearOverrideBindings, SetOverrideBindingClick, InCombatLockdown
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID

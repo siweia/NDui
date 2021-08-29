@@ -246,7 +246,7 @@ function TT:OnTooltipSetUnit()
 
 		if not isPlayer and isShiftKeyDown then
 			local guid = UnitGUID(unit)
-			local npcID = B.GetNPCID(guid)
+			local npcID = guid and B.GetNPCID(guid)
 			if npcID then
 				self:AddLine(format(npcIDstring, npcID))
 			end
