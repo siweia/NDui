@@ -800,3 +800,4 @@ L["BagSearchTip"] = "|nCliquez pour rechercher des articles dans votre sac.|nVou
 L["SpellTip356464"] = "Mousewheel up on blue circles, mousewheel down on red circles, try harder!" -- need translation
 L["SpellTip333960"] = "Mousewheel up on blue circles, try harder!" -- need translation
 L["SpellTip356151"] = "Mousewhell up when Wilderling speeds up!" -- need translation
+L["NPCisTrue"] = "This is |cffff0000T|cffff7f00R|cffffff00U|cff00ff00E" -- need translation

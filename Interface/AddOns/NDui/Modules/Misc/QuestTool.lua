@@ -8,6 +8,7 @@ local ClearOverrideBindings, SetOverrideBindingClick, InCombatLockdown = ClearOv
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 
 local watchQuests = {
+	[62453] = true, -- https://www.wowhead.com/quest=62453/into-the-unknown
 	-- glow
 	[59585] = true, -- https://www.wowhead.com/quest=59585/well-make-an-aspirant-out-of-you
 	[64271] = true, -- https://www.wowhead.com/quest=64271/a-more-civilized-way
@@ -130,6 +131,16 @@ function M:QuestTool_ClearGlow()
 	end
 end
 
+function M:QuestTool_SetQuestUnit()
+	if not activeQuests[62453] then return end
+
+	local guid = UnitGUID("mouseover")
+	local npcID = guid and B.GetNPCID(guid)
+	if npcID == 174498 then
+		self:AddLine(L["NPCisTrue"])
+	end
+end
+
 function M:QuestTool()
 	if not C.db["Actionbar"]["Enable"] then return end
 
@@ -157,6 +168,9 @@ function M:QuestTool()
 	-- Override button quests
 	B:RegisterEvent("CHAT_MSG_MONSTER_SAY", M.QuestTool_SetGlow)
 	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", M.QuestTool_ClearGlow)
+
+	-- Night fae
+	GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
 end
 
 M:RegisterMisc("QuestTool", M.QuestTool)

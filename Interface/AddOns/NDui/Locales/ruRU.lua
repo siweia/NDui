@@ -800,3 +800,4 @@ L["BagSearchTip"] = "|nЩелкни чтобы искать предметы в 
 L["SpellTip356464"] = "Нажми на синие круги, нажми на красные круги, старайся сильнее!"
 L["SpellTip333960"] = "Нажми на синие круги, старайся сильнее!"
 L["SpellTip356151"] = "Mousewhell up when Wilderling speeds up!" -- need translation
+L["NPCisTrue"] = "This is |cffff0000T|cffff7f00R|cffffff00U|cff00ff00E" -- need translation

@@ -800,3 +800,4 @@ L["BagSearchTip"] = "|n點擊對背包進行搜索。|n你可以搜索物品的�
 L["SpellTip356464"] = "靠近藍圈時滾輪上，靠近紅圈時滾輪下，用力！"
 L["SpellTip333960"] = "靠近藍圈時滾輪上，用力！"
 L["SpellTip356151"] = "當屏幕出現黃字提示時，滾動鼠標滾輪上！"
+L["NPCisTrue"] = "|cffff0000這|cffff7f00是|cffffff00真|cff00ff00的"
