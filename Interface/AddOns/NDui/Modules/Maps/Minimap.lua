@@ -320,7 +320,7 @@ function module:RecycleBin()
 		if #buttons == 0 then return end
 
 		wipe(shownButtons)
-		for index, button in pairs(buttons) do
+		for _, button in pairs(buttons) do
 			if next(button) and button:IsShown() then -- fix for fuxking AHDB
 				tinsert(shownButtons, button)
 			end

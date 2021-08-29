@@ -1461,7 +1461,7 @@ local function DGI_Visibility()
 end
 
 local function DGI_OnUpdate(self, elapsed)
-	self.elapsed = (self.elapsed or 0) + 0.1
+	self.elapsed = (self.elapsed or 0) + elapsed
 	if self.elapsed > .1 then
 		DGI_UpdateGlow()
 

@@ -121,7 +121,7 @@ function M:ContactList_Refresh()
 
 	GenerateDataByRealm(DB.MyRealm)
 
-	for realm, value in pairs(contactListByRealm) do
+	for realm in pairs(contactListByRealm) do
 		if realm ~= DB.MyRealm then
 			GenerateDataByRealm(realm)
 		end

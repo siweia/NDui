@@ -89,7 +89,7 @@ local function ReskinWA()
 		Skin_WeakAuras(region, "aurabar")
 	end
 
-	for weakAura, regions in pairs(WeakAuras.regions) do
+	for _, regions in pairs(WeakAuras.regions) do
 		if regions.regionType == "icon" or regions.regionType == "aurabar" then
 			Skin_WeakAuras(regions.region, regions.regionType)
 		end

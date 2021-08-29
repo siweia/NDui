@@ -637,7 +637,7 @@ end
 
 -- Interrupt info on castbars
 function UF:UpdateSpellInterruptor(...)
-	local eventType, _, sourceGUID, sourceName, _, _, destGUID = ...
+	local _, _, sourceGUID, sourceName, _, _, destGUID = ...
 	if destGUID == self.unitGUID and sourceGUID and sourceName and sourceName ~= "" then
 		local _, class = GetPlayerInfoByGUID(sourceGUID)
 		local r, g, b = B.ClassColor(class)
