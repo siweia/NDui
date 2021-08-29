@@ -8,6 +8,7 @@ local ClearOverrideBindings, SetOverrideBindingClick, InCombatLockdown = ClearOv
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 
 local watchQuests = {
+	-- check npc
 	[62453] = true, -- https://www.wowhead.com/quest=62453/into-the-unknown
 	-- glow
 	[59585] = true, -- https://www.wowhead.com/quest=59585/well-make-an-aspirant-out-of-you
@@ -17,6 +18,10 @@ local watchQuests = {
 	[64018] = 356464, -- https://www.wowhead.com/quest=64018/the-weight-of-stone
 }
 local activeQuests = {}
+
+local questNPCs = {
+	[174498] = true, -- Shimmersod
+}
 
 function M:GetOverrideIndex(spellID)
 	if spellID == 356464 then
@@ -136,7 +141,7 @@ function M:QuestTool_SetQuestUnit()
 
 	local guid = UnitGUID("mouseover")
 	local npcID = guid and B.GetNPCID(guid)
-	if npcID == 174498 then
+	if questNPCs[npcID] then
 		self:AddLine(L["NPCisTrue"])
 	end
 end
