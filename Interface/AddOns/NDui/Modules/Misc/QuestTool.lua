@@ -83,7 +83,7 @@ function M:QuestTool_SetAction()
 					SetOverrideBindingClick(M.QuestHandler, true, "MOUSEWHEELDOWN", GetOverrideButton(index2))
 				end
 
-				M.QuestTip:SetText(L["SpellTip"..spellID])
+				M.QuestTip:SetText(DB.NDuiString.." "..L["SpellTip"..spellID])
 				M.QuestTip:Show()
 				M.isHandling = true
 
@@ -151,6 +151,7 @@ end
 
 function M:QuestTool()
 	if not C.db["Actionbar"]["Enable"] then return end
+	if not C.db["Misc"]["QuestTool"] then return end
 
 	local handler = CreateFrame("Frame", nil, UIParent)
 	M.QuestHandler = handler
@@ -177,7 +178,7 @@ function M:QuestTool()
 	B:RegisterEvent("CHAT_MSG_MONSTER_SAY", M.QuestTool_SetGlow)
 	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", M.QuestTool_ClearGlow)
 
-	-- Night fae
+	-- Check npc in quests
 	GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
 end
 

@@ -370,6 +370,7 @@ G.DefaultSettings = {
 		MDGuildBest = true,
 		FasterSkip = false,
 		EnhanceDressup = true,
+		QuestTool = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -1140,7 +1141,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "FasterSkip", L["FasterMovieSkip"], true, nil, nil, L["FasterMovieSkipTip"]},
-		{},--blank
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
 		{1, "Misc", "Mail", L["Mail Tool"]},
@@ -1151,6 +1151,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MDGuildBest", L["MDGuildBest"], true, nil, nil, L["MDGuildBestTip"]},
 		{1, "Misc", "MawThreatBar", L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
 		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
+		{1, "Misc", "QuestTool", NewTag..L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

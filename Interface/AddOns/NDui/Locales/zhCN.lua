@@ -801,3 +801,5 @@ L["SpellTip356464"] = "靠近蓝圈时滚轮上，滚近红圈时滚轮下，用
 L["SpellTip333960"] = "靠近蓝圈时滚轮上，用力！"
 L["SpellTip356151"] = "当屏幕出现黄字提示时，使劲滚动鼠标滚轮上！"
 L["NPCisTrue"] = "|cffff0000这|cffff7f00是|cffffff00真|cff00ff00的"
+L["QuestTool"] = "任务助手"
+L["QuestToolTip"] = "|n启用后，帮助你更好的完成部分任务及世界任务。"

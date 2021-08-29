@@ -801,3 +801,5 @@ L["SpellTip356464"] = "Mousewheel up on blue circles, mousewheel down on red cir
 L["SpellTip333960"] = "Mousewheel up on blue circles, try harder!"
 L["SpellTip356151"] = "Mousewhell up when Wilderling speeds up!"
 L["NPCisTrue"] = "This is |cffff0000T|cffff7f00R|cffffff00U|cff00ff00E"
+L["QuestTool"] = "Quests Tool"
+L["QuestToolTip"] = "|nIf enabled, add tips for some quests and world quests."
