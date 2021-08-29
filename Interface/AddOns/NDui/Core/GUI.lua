@@ -790,18 +790,18 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 
 G.TabList = {
 	L["Actionbar"],
-	NewTag..L["Bags"],
+	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
 	L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
-	NewTag..L["Raid Tools"],
-	NewTag..L["ChatFrame"],
+	L["Raid Tools"],
+	L["ChatFrame"],
 	L["Maps"],
 	L["Skins"],
-	NewTag..L["Tooltip"],
-	L["Misc"],
+	L["Tooltip"],
+	NewTag..L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
@@ -837,7 +837,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
 		{},--blank
-		{1, "Bags", "ItemFilter", NewTag..L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
+		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
 		{1, "Bags", "MultiRows", NewTag..L["MultiRows"].."*", true, nil, updateBagAnchor, L["MultiRowsTip"]},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", true, nil, updateBagStatus, L["SpecialBagsColorTip"]},
@@ -1013,7 +1013,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Misc", "EasyMarkKey", L["EasyMark"].."*", nil, {"CTRL", "ALT", "SHIFT", DISABLE}, nil, L["EasyMarkTip"]},
 		{2, "Misc", "DBMCount", L["DBMCount"].."*", true, nil, nil, L["DBMCountTip"]},
 		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", nil, {L["Grids"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid, L["ShowMarkerBarTip"]},
-		{3, "Misc", "MarkerSize", NewTag..L["MarkerSize"].."*", true, {20, 50, 1}, updateMarkerGrid},
+		{3, "Misc", "MarkerSize", L["MarkerSize"].."*", true, {20, 50, 1}, updateMarkerGrid},
 		{},--blank
 		{1, "Misc", "QuestNotification", HeaderTag..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
@@ -1046,7 +1046,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "WhisperColor", L["Differ WhisperColor"].."*", true},
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
 		{1, "Chat", "Freedom", L["Language Filter"], true},
-		{1, "Chat", "WhisperSound", NewTag..L["WhisperSound"].."*", nil, nil, nil, L["WhisperSoundTip"]},
+		{1, "Chat", "WhisperSound", L["WhisperSound"].."*", nil, nil, nil, L["WhisperSoundTip"]},
 		{4, "ACCOUNT", "TimestampFormat", L["TimestampFormat"].."*", nil, {DISABLE, "03:27 PM", "03:27:32 PM", "15:27", "15:27:32"}},
 		{4, "Chat", "ChatBGType", L["ChatBGType"].."*", true, {DISABLE, L["Default Dark"], L["Gradient"]}, toggleChatBackground},
 		{},--blank
@@ -1119,10 +1119,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},
 		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
-		{1, "Tooltip", "MythicScore", NewTag..L["MDScore"].."*", nil, nil, nil, L["MDScoreTip"]},
+		{1, "Tooltip", "MythicScore", L["MDScore"].."*", nil, nil, nil, L["MDScoreTip"]},
 		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
 		{},--blank
-		{1, "Tooltip", "DomiRank", NewTag..L["DomiRank"], nil, nil, nil, L["DomiRankTip"]},
+		{1, "Tooltip", "DomiRank", L["DomiRank"], nil, nil, nil, L["DomiRankTip"]},
 		{1, "Tooltip", "ConduitInfo", L["Show ConduitInfo"], true},
 		{},--blank
 		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
