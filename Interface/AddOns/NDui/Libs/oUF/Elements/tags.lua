@@ -692,7 +692,7 @@ local function getTagFunc(tagstr)
 						tagFunc = function(unit, realUnit)
 							local str
 							if(customArgs) then
-								str = tag(unit, realUnit, strsplit(',', customArgs))
+								str = tag(unit, realUnit, string.split(',', customArgs))
 							else
 								str = tag(unit, realUnit)
 							end
@@ -705,7 +705,7 @@ local function getTagFunc(tagstr)
 						tagFunc = function(unit, realUnit)
 							local str
 							if(customArgs) then
-								str = tag(unit, realUnit, strsplit(',', customArgs))
+								str = tag(unit, realUnit, string.split(',', customArgs))
 							else
 								str = tag(unit, realUnit)
 							end
@@ -728,7 +728,7 @@ local function getTagFunc(tagstr)
 				nierror(string.format('Attempted to use invalid tag %s.', bracket))
 
 				format_[idx] = bracket
-				format = string.format(format, unpack(format_, 1, numTags))
+				format = format:format(unpack(format_, 1, numTags))
 				format_[idx] = '%s'
 
 				numTags = numTags - 1

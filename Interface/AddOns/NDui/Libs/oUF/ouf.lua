@@ -10,7 +10,7 @@ local Private = oUF.Private
 
 local argcheck = Private.argcheck
 local error = Private.error
-local print = Private.print
+local print = Private.print --luacheck: no unused
 local unitExists = Private.unitExists
 
 local styles, style = {}
@@ -43,7 +43,7 @@ local function enableTargetUpdate(object)
 end
 Private.enableTargetUpdate = enableTargetUpdate
 
-local function updateActiveUnit(self, event, unit)
+local function updateActiveUnit(self)
 	-- Calculate units to work with
 	local realUnit, modUnit = SecureButton_GetUnit(self), SecureButton_GetModifiedUnit(self)
 
@@ -351,8 +351,8 @@ local function initObject(unit, style, styleFunc, header, ...)
 
 		-- Make Clique kinda happy
 		if(not object.isNamePlate) then
-			_G.ClickCastFrames = ClickCastFrames or {}
-			ClickCastFrames[object] = true
+			_G.ClickCastFrames = _G.ClickCastFrames or {}
+			_G.ClickCastFrames[object] = true
 		end
 	end
 end
@@ -549,7 +549,7 @@ local function generateName(unit, ...)
 end
 
 do
-	local function styleProxy(self, frame, ...)
+	local function styleProxy(self, frame)
 		return walkObject(_G[frame])
 	end
 
@@ -689,8 +689,8 @@ do
 		]])
 		header:SetAttribute('oUF-headerType', isPetHeader and 'pet' or 'group')
 
-		if(Clique) then
-			SecureHandlerSetFrameRef(header, 'clickcast_header', Clique.header)
+		if(_G.Clique) then
+			SecureHandlerSetFrameRef(header, 'clickcast_header', _G.Clique.header)
 		end
 
 		if(header:GetAttribute('showParty')) then
@@ -758,7 +758,7 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 	argcheck(nameplateCallback, 3, 'function', 'nil')
 	argcheck(nameplateCVars, 4, 'table', 'nil')
 	if(not style) then return error('Unable to create frame. No styles have been registered.') end
-	if(oUF_NamePlateDriver) then return error('oUF nameplate driver has already been initialized.') end
+	if(_G.oUF_NamePlateDriver) then return error('oUF nameplate driver has already been initialized.') end
 
 	local style = style
 	local prefix = namePrefix or generateName()
