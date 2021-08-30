@@ -261,7 +261,7 @@ local function Update(self, event, ...)
 				if value.isPeriod and not C.db["UFs"]["HotsDots"] then return end
 
 				local amount, _, _, _, _, _, critical, _, crushing = select(value.index, ...)
-				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
+				texture = getFloatingIconTexture(value.iconType, spellID, (isPet and not isPlayer))
 				text = "-"..formatNumber(self, amount)
 
 				if critical or crushing then
