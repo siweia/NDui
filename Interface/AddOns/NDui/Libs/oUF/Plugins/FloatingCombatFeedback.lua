@@ -158,22 +158,22 @@ local function flush(self)
 end
 
 local eventFilter = {
-	["SWING_DAMAGE"] = {suffix = "DAMAGE", index = 12, iconType = "swing", autoAttack = true},
-	["RANGE_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "range", autoAttack = true},
-	["SPELL_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell"},
-	["SPELL_PERIODIC_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell", isPeriod = true},
-	["SPELL_BUILDING_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell"},
+	["SWING_DAMAGE"] = {suffix = "DAMAGE", index = 10, iconType = "swing", autoAttack = true},
+	["RANGE_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "range", autoAttack = true},
+	["SPELL_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "spell"},
+	["SPELL_PERIODIC_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "spell", isPeriod = true},
+	["SPELL_BUILDING_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "spell"},
 
-	["SPELL_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell"},
-	["SPELL_PERIODIC_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell", isPeriod = true},
-	["SPELL_BUILDING_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell"},
+	["SPELL_HEAL"] = {suffix = "HEAL", index = 13, iconType = "spell"},
+	["SPELL_PERIODIC_HEAL"] = {suffix = "HEAL", index = 13, iconType = "spell", isPeriod = true},
+	["SPELL_BUILDING_HEAL"] = {suffix = "HEAL", index = 13, iconType = "spell"},
 
-	["SWING_MISSED"] = {suffix = "MISS", index = 12, iconType = "swing", autoAttack = true},
-	["RANGE_MISSED"] = {suffix = "MISS", index = 15, iconType = "range", autoAttack = true},
-	["SPELL_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell"},
-	["SPELL_PERIODIC_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell", isPeriod = true},
+	["SWING_MISSED"] = {suffix = "MISS", index = 10, iconType = "swing", autoAttack = true},
+	["RANGE_MISSED"] = {suffix = "MISS", index = 13, iconType = "range", autoAttack = true},
+	["SPELL_MISSED"] = {suffix = "MISS", index = 13, iconType = "spell"},
+	["SPELL_PERIODIC_MISSED"] = {suffix = "MISS", index = 13, iconType = "spell", isPeriod = true},
 
-	["ENVIRONMENTAL_DAMAGE"] = {suffix = "ENVIRONMENT", index = 12, iconType = "env"},
+	["ENVIRONMENTAL_DAMAGE"] = {suffix = "ENVIRONMENT", index = 10, iconType = "env"},
 }
 
 local envTexture = {
@@ -234,7 +234,7 @@ end
 
 local playerGUID = UnitGUID("player")
 
-local function onEvent(self, event, ...)
+local function Update(self, event, ...)
 	local element = self.FloatingCombatFeedback
 	local unit = self.unit
 
@@ -246,15 +246,14 @@ local function onEvent(self, event, ...)
 	local multiplier = 1
 	local text, color, texture, critMark
 
-	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local _, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = ...
+	if eventFilter[event] then
+		local _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = ...
 		local isPlayer = playerGUID == sourceGUID
-		local atTarget = UnitGUID("target") == destGUID
-		local atPlayer = playerGUID == destGUID
+		local isRightUnit = element.unitGUID == destGUID
 		local isPet = C.db["UFs"]["PetCombatText"] and DB:IsMyPet(sourceFlags)
 
-		if (unit == "target" and (isPlayer or isPet) and atTarget) or (unit == "player" and atPlayer) then
-			local value = eventFilter[eventType]
+		if isRightUnit and (unit == "target" and (isPlayer or isPet) or unit == "player") then
+			local value = eventFilter[event]
 			if not value then return end
 
 			if value.suffix == "DAMAGE" then
@@ -339,14 +338,6 @@ local function onEvent(self, event, ...)
 	end
 end
 
-local function Update(self, event, ...)
-	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		onEvent(self, event, CombatLogGetCurrentEventInfo())
-	else
-		onEvent(self, event, ...)
-	end
-end
-
 local function Path(self, ...)
 	return (self.FloatingCombatFeedback.Override or Update) (self, ...)
 end
@@ -380,7 +371,10 @@ local function Enable(self, unit)
 	element:SetScript("OnHide", flush)
 	element:SetScript("OnShow", flush)
 
-	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path, true)
+	for event in pairs(eventFilter) do
+		self:RegisterCombatEvent(event, Path)
+	end
+
 	if unit == "player" then
 		element.xDirection = -1
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path, true)
@@ -399,7 +393,9 @@ local function Disable(self)
 		element:SetScript("OnShow", nil)
 		element:SetScript("OnUpdate", nil)
 
-		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path)
+		for event in pairs(eventFilter) do
+			self:UnregisterCombatEvent(event, Path)
+		end
 		self:UnregisterEvent("PLAYER_REGEN_DISABLED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Path)
 	end
