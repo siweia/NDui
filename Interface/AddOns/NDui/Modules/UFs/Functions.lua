@@ -494,6 +494,10 @@ local function createBarMover(bar, text, value, anchor)
 	bar.mover = mover
 end
 
+local function updateSpellTarget(self, _, unit)
+	B.PostCastUpdate(self.Castbar, unit)
+end
+
 function UF:CreateCastBar(self)
 	local mystyle = self.mystyle
 	if mystyle ~= "nameplate" and not C.db["UFs"]["Castbars"] then return end
@@ -578,6 +582,8 @@ function UF:CreateCastBar(self)
 		spellTarget:SetJustifyH("LEFT")
 		spellTarget:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
 		cb.spellTarget = spellTarget
+
+		self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
 	end
 
 	if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then
