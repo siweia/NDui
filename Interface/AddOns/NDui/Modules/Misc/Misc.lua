@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
 local _G = getfenv(0)
-local select, floor, unpack = select, floor, unpack
+local select, floor, unpack, tonumber, gsub, strsplit = select, floor, unpack, tonumber, gsub, strsplit
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
@@ -28,6 +28,7 @@ local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Upd
 local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
 local C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo
 local C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo
+local C_Map_GetMapInfo, C_Map_GetBestMapForUnit = C_Map.GetMapInfo, C_Map.GetBestMapForUnit
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -66,6 +67,7 @@ function M:OnLogin()
 	M:FasterMovieSkip()
 	M:EnhanceDressup()
 	M:FuckTrainSound()
+	M:JerryWay()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -727,4 +729,40 @@ function M:FuckTrainSound()
 	for _, soundID in pairs(trainSounds) do
 		MuteSoundFile(soundID)
 	end
+end
+
+function M:JerryWay()
+	if IsAddOnLoaded("TomTom") then return end
+
+	local pointString = DB.InfoColor.."|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)]|h|r"
+
+	local function GetCorrectCoord(x)
+		x = tonumber(x)
+		if x then
+			if x > 100 then
+				return 100
+			elseif x < 0 then
+				return 0
+			end
+			return x
+		end
+	end
+
+	SlashCmdList["NDUI_JERRY_WAY"] = function(msg)
+		msg = gsub(msg, "(%d)[%.,] (%d)", "%1 %2")
+		local x, y = strsplit(" ", msg)
+		if x and y then
+			local mapID = C_Map_GetBestMapForUnit("player")
+			if mapID then
+				local mapInfo = C_Map_GetMapInfo(mapID)
+				local mapName = mapInfo and mapInfo.name
+				if mapName then
+					x = GetCorrectCoord(x)
+					y = GetCorrectCoord(y)
+					print(format(pointString, mapID, x*100, y*100, mapName, x, y))
+				end
+			end
+		end
+	end
+	SLASH_NDUI_JERRY_WAY1 = "/way"
 end
