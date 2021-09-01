@@ -878,6 +878,10 @@ function UF:RefreshPlateOnFactionChanged()
 	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
 end
 
+UF.ShowTargetNPCs = {
+	[165251] = true, -- 仙林狐狸
+	[174773] = true, -- 怨毒怪
+}
 function UF:PostUpdatePlates(event, unit)
 	if not self then return end
 
@@ -908,7 +912,7 @@ function UF:PostUpdatePlates(event, unit)
 		UF.UpdateDungeonProgress(self, unit)
 		UF:UpdateClassPowerAnchor()
 
-		self.tarName:SetShown(self.npcID == 174773)
+		self.tarName:SetShown(UF.ShowTargetNPCs[self.npcID])
 	end
 	UF.UpdateExplosives(self, event, unit)
 end
