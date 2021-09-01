@@ -3,6 +3,7 @@
 -- NDui MOD
 -------------------------
 local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 
 local strfind, select = strfind, select
@@ -31,7 +32,12 @@ local function SwingStopped(element)
 end
 
 local function UpdateBarMinMaxValues(self)
-	self:SetMinMaxValues(0, self.max - self.min)
+	local maxValue = self.max - self.min
+	if maxValue < 0 then
+		maxValue = 1
+		if DB.isDeveloper then print("error swing calculation!") end -- needs review,
+	end
+	self:SetMinMaxValues(0, maxValue)
 end
 
 local function UpdateBarValue(self, value)
@@ -321,7 +327,7 @@ local function ParryHaste(self, ...)
 		if percentage > .6 then
 			swingMH.max = now + swingMH.speed * .6
 			swingMH.min = now - (swingMH.max - now) * percentage / (1 - percentage)
-			UpdateBarMinMaxValues(swingMH)
+			UpdateBarMinMaxValues(swingMH) -- needs review
 		elseif percentage > .2 then
 			swingMH.max = now + swingMH.speed * .2
 			swingMH.min = now - (swingMH.max - now) * percentage / (1 - percentage)
