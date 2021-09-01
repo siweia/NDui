@@ -803,3 +803,4 @@ L["SpellTip356151"] = "當屏幕出現黃字提示時，滾動鼠標滾輪上！
 L["NPCisTrue"] = "|cffff0000這|cffff7f00是|cffffff00真|cff00ff00的"
 L["QuestTool"] = "任務助手"
 L["QuestToolTip"] = "|n啟用後，幫助你更好的解部分任務及世界任務。"
+L["CatchButterfly"] = "靠近蝴蝶，然後滾輪上！"

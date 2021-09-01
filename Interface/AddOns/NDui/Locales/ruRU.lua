@@ -803,3 +803,4 @@ L["SpellTip356151"] = "Mousewhell up when Wilderling speeds up!" -- need transla
 L["NPCisTrue"] = "This is |cffff0000T|cffff7f00R|cffffff00U|cff00ff00E" -- need translation
 L["QuestTool"] = "Quests Tool" -- need translation
 L["QuestToolTip"] = "|nIf enabled, add tips for some quests and world quests." -- need translation
+L["CatchButterfly"] = "Get close to butterflies and mouse scroll up." -- need translation

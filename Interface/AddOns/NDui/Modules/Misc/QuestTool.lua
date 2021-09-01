@@ -3,10 +3,12 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, strfind = pairs, strfind
-local UnitGUID = UnitGUID
+local UnitGUID, InCombatLockdown = UnitGUID, InCombatLockdown
 local GetActionInfo, GetSpellInfo, GetOverrideBarSkin = GetActionInfo, GetSpellInfo, GetOverrideBarSkin
-local ClearOverrideBindings, SetOverrideBindingClick, InCombatLockdown = ClearOverrideBindings, SetOverrideBindingClick, InCombatLockdown
+local ClearOverrideBindings, SetOverrideBindingClick, SetBinding = ClearOverrideBindings, SetOverrideBindingClick, SetBinding
+local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
+local C_QuestLog_GetDistanceSqToQuest = C_QuestLog.GetDistanceSqToQuest
 
 local watchQuests = {
 	-- check npc
@@ -18,6 +20,8 @@ local watchQuests = {
 	-- mousewheel
 	[60657] = 333960, -- https://www.wowhead.com/quest=60657/aid-from-above
 	[64018] = 356464, -- https://www.wowhead.com/quest=64018/the-weight-of-stone
+	-- others
+	[62459] = true, -- https://www.wowhead.com/quest=62459/go-beyond -- questItem = 183725
 }
 local activeQuests = {}
 
@@ -88,7 +92,7 @@ function M:QuestTool_SetAction()
 				M.isHandling = true
 
 				if M.isDelay then
-					B:UnregisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_SetAction)
+					B:UnrgisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_SetAction)
 					M.isDelay = nil
 				end
 			end
@@ -149,6 +153,19 @@ function M:QuestTool_SetQuestUnit()
 	end
 end
 
+function M:QuestTool_UpdateBinding()
+	if activeQuests[62459] and not C_QuestLog_IsComplete(62459) and C_QuestLog_GetDistanceSqToQuest(62459) < 35000 then
+		SetBinding("MOUSEWHEELUP", "EXTRAACTIONBUTTON1")
+		M.isBinding = true
+		M.QuestTip:SetText(DB.NDuiString.." "..L["CatchButterfly"])
+		M.QuestTip:Show()
+	elseif M.isBinding then
+		SetBinding("MOUSEWHEELUP", M.SavedKey)
+		M.isBinding = nil
+		M.QuestTip:Hide()
+	end
+end
+
 function M:QuestTool()
 	if not C.db["Actionbar"]["Enable"] then return end
 	if not C.db["Misc"]["QuestTool"] then return end
@@ -180,6 +197,12 @@ function M:QuestTool()
 
 	-- Check npc in quests
 	GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
+
+	-- Quest items
+	M.SavedKey = GetBindingFromClick("MOUSEWHEELUP")
+	M:QuestTool_UpdateBinding()
+	B:RegisterEvent("ZONE_CHANGED", M.QuestTool_UpdateBinding)
+	B:RegisterEvent("ZONE_CHANGED_INDOORS", M.QuestTool_UpdateBinding)
 end
 
 M:RegisterMisc("QuestTool", M.QuestTool)
