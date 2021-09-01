@@ -92,7 +92,7 @@ function M:QuestTool_SetAction()
 				M.isHandling = true
 
 				if M.isDelay then
-					B:UnrgisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_SetAction)
+					B:UnregisterEvent("PLAYER_REGEN_ENABLED", M.QuestTool_SetAction)
 					M.isDelay = nil
 				end
 			end
