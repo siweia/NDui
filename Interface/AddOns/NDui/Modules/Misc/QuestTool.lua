@@ -167,7 +167,6 @@ function M:QuestTool_UpdateBinding()
 end
 
 function M:QuestTool()
-	if not C.db["Actionbar"]["Enable"] then return end
 	if not C.db["Misc"]["QuestTool"] then return end
 
 	local handler = CreateFrame("Frame", nil, UIParent)
@@ -192,8 +191,10 @@ function M:QuestTool()
 	B:RegisterEvent("UNIT_EXITED_VEHICLE", M.QuestTool_ClearAction)
 
 	-- Override button quests
-	B:RegisterEvent("CHAT_MSG_MONSTER_SAY", M.QuestTool_SetGlow)
-	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", M.QuestTool_ClearGlow)
+	if C.db["Actionbar"]["Enable"] then
+		B:RegisterEvent("CHAT_MSG_MONSTER_SAY", M.QuestTool_SetGlow)
+		B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", M.QuestTool_ClearGlow)
+	end
 
 	-- Check npc in quests
 	GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
