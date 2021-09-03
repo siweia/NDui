@@ -57,9 +57,17 @@ C.themes["Blizzard_GuildUI"] = function()
 	B.ReskinPortraitFrame(GuildFrame)
 	B.StripTextures(GuildMemberDetailFrame)
 	B.SetBD(GuildMemberDetailFrame)
-	GuildMemberNoteBackground:SetBackdrop(nil)
+	if DB.isNewPatch then
+		GuildMemberNoteBackground.NineSlice:SetAlpha(0)
+	else
+		GuildMemberNoteBackground:SetBackdrop(nil)
+	end
 	B.CreateBDFrame(GuildMemberNoteBackground, .25)
-	GuildMemberOfficerNoteBackground:SetBackdrop(nil)
+	if DB.isNewPatch then
+		GuildMemberOfficerNoteBackground.NineSlice:SetAlpha(0)
+	else
+		GuildMemberOfficerNoteBackground:SetBackdrop(nil)
+	end
 	B.CreateBDFrame(GuildMemberOfficerNoteBackground, .25)
 	B.SetBD(GuildLogFrame)
 	B.CreateBDFrame(GuildLogContainer, .25)
@@ -174,7 +182,11 @@ C.themes["Blizzard_GuildUI"] = function()
 	for i = 1, 5 do
 		local bu = _G["GuildInfoFrameApplicantsContainerButton"..i]
 
-		bu:SetBackdrop(nil)
+		if DB.isNewPatch then
+			bu.NineSlice:SetAlpha(0)
+		else
+			bu:SetBackdrop(nil)
+		end
 		bu:SetHighlightTexture("")
 
 		local bg = B.CreateBDFrame(bu, .25)

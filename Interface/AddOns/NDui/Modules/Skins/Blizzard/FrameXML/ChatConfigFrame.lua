@@ -45,7 +45,11 @@ tinsert(C.defaultThemes, function()
 			local checkBoxName = nameString..index
 			local checkbox = _G[checkBoxName]
 			if checkbox and not checkbox.styled then
-				checkbox:SetBackdrop(nil)
+				if DB.isNewPatch then
+					checkbox.NineSlice:SetAlpha(0)
+				else
+					checkbox:SetBackdrop(nil)
+				end
 				local bg = B.CreateBDFrame(checkbox, .25)
 				bg:SetInside()
 				B.ReskinCheck(_G[checkBoxName.."Check"])

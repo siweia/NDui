@@ -9,7 +9,11 @@ C.themes["Blizzard_MacroUI"] = function()
 	B.StripTextures(MacroPopupFrame)
 	B.StripTextures(MacroPopupFrame.BorderBox)
 	B.StripTextures(MacroPopupScrollFrame)
-	MacroFrameTextBackground:SetBackdrop(nil)
+	if DB.isNewPatch then
+		MacroFrameTextBackground.NineSlice:SetAlpha(0)
+	else
+		MacroFrameTextBackground:SetBackdrop(nil)
+	end
 
 	MacroPopupFrame:SetHeight(525)
 	MacroNewButton:ClearAllPoints()
