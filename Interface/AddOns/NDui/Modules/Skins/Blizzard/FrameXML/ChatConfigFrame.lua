@@ -178,6 +178,9 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(TextToSpeechFramePlaySampleButton)
 	B.Reskin(TextToSpeechFramePlaySampleAlternateButton)
 	B.Reskin(TextToSpeechDefaultButton)
+	if DB.isNewPatch then
+		B.ReskinCheck(TextToSpeechCharacterSpecificButton)
+	end
 
 	B.ReskinDropDown(TextToSpeechFrameTtsVoiceDropdown)
 	B.ReskinDropDown(TextToSpeechFrameTtsVoiceAlternateDropdown)
