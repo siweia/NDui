@@ -86,6 +86,7 @@ local list = {
 		{AuraID = 356326, UnitID = "player"},	-- 折磨洞察
 		{AuraID = 355333, UnitID = "player"},	-- 回收的聚变增幅器
 		{AuraID = 357185, UnitID = "player"},	-- 忠诚的力量，低语威能碎片
+		{AuraID = 357773, UnitID = "player"},	-- 神圣使命，九武神长柄
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
