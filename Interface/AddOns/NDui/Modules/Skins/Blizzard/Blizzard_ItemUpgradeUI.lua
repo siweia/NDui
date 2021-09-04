@@ -15,18 +15,29 @@ C.themes["Blizzard_ItemUpgradeUI"] = function()
 	B.ReskinPortraitFrame(ItemUpgradeFrame)
 
 	if DB.isNewPatch then
-		local itemButton = ItemUpgradeFrame.UpgradeItemButton
-
+		hooksecurefunc(ItemUpgradeFrame, "Update", function(self)
+			if self.upgradeInfo then
+				self.UpgradeItemButton:SetPushedTexture(nil)
+			end
+		end)
 		local bg = B.CreateBDFrame(ItemUpgradeFrame, .25)
 		bg:SetPoint("TOPLEFT", 20, -25)
 		bg:SetPoint("BOTTOMRIGHT", -20, 375)
+
+		local itemButton = ItemUpgradeFrame.UpgradeItemButton
+		itemButton.ButtonFrame:Hide()
+		itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		itemButton.bg = B.ReskinIcon(itemButton.icon)
+		B.ReskinIconBorder(itemButton.IconBorder)
+
 		B.ReskinDropDown(ItemUpgradeFrame.ItemInfo.Dropdown)
 		B.Reskin(ItemUpgradeFrame.UpgradeButton)
+		ItemUpgradeFramePlayerCurrenciesBorder:Hide()
+
 		B.CreateBDFrame(ItemUpgradeFrameLeftItemPreviewFrame, .25)
 		ItemUpgradeFrameLeftItemPreviewFrame.NineSlice:SetAlpha(0)
 		B.CreateBDFrame(ItemUpgradeFrameRightItemPreviewFrame, .25)
 		ItemUpgradeFrameRightItemPreviewFrame.NineSlice:SetAlpha(0)
-		ItemUpgradeFramePlayerCurrenciesBorder:Hide()
 
 		hooksecurefunc(ItemUpgradeFrame.UpgradeCostFrame, "GetIconFrame", reskinCurrencyIcon)
 		hooksecurefunc(ItemUpgradeFrame.PlayerCurrencies, "GetIconFrame", reskinCurrencyIcon)
