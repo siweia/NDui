@@ -48,6 +48,21 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
 
 	-- AlertFrames
+	local garrAlertTemplate = {
+		[GarrisonMissionAlertSystem] = true,
+		[GarrisonRandomMissionAlertSystem] = true,
+		[GarrisonShipMissionAlertSystem] = true,
+		[GarrisonShipFollowerAlertSystem] = true,
+	}
+
+	local newAlertTemplate = {
+		[NewPetAlertSystem] = true,
+		[NewMountAlertSystem] = true,
+		[NewToyAlertSystem] = true,
+		[NewRuneforgePowerAlertSystem] = true,
+		[NewCosmeticAlertFrameSystem] = true,
+	}
+
 	hooksecurefunc(AlertFrame, "AddAlertFrame", function(_, frame)
 		if frame.queue == AchievementAlertSystem then
 			if not frame.bg then
@@ -191,7 +206,7 @@ tinsert(C.defaultThemes, function()
 				frame.shine:SetTexture("")
 			end
 			frame.FollowerBG:SetTexture("")
-		elseif frame.queue == GarrisonMissionAlertSystem or frame.queue == GarrisonRandomMissionAlertSystem or frame.queue == GarrisonShipMissionAlertSystem or frame.queue == GarrisonShipFollowerAlertSystem then
+		elseif garrAlertTemplate[frame.queue] then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
 				frame.bg:SetPoint("TOPLEFT", 8, -8)
@@ -291,7 +306,7 @@ tinsert(C.defaultThemes, function()
 				frame.Background3:SetTexture("")
 				frame.glow:SetTexture("")
 			end
-		elseif frame.queue == NewPetAlertSystem or frame.queue == NewMountAlertSystem or frame.queue == NewToyAlertSystem or frame.queue == NewRuneforgePowerAlertSystem then
+		elseif newAlertTemplate[frame.queue] then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
 				frame.bg:SetPoint("TOPLEFT", 12, -13)
