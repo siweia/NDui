@@ -7,14 +7,6 @@ local function reskinPanelSection(frame)
 	_G[frame:GetName().."Title"]:SetPoint("BOTTOMLEFT", frame, "TOPLEFT", 5, 2)
 end
 
-local function hideBackdrop(frame)
-	if DB.isNewPatch then
-		frame.NineSlice:SetAlpha(0)
-	else
-		frame:SetBackdrop(nil)
-	end
-end
-
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -41,9 +33,9 @@ tinsert(C.defaultThemes, function()
 		line:SetPoint("LEFT", 205, 30)
 		line:SetColorTexture(1, 1, 1, .25)
 
-		hideBackdrop(Display_)
-		hideBackdrop(Graphics_)
-		hideBackdrop(RaidGraphics_)
+		B.HideBackdrop(Display_) -- isNewPatch
+		B.HideBackdrop(Graphics_) -- isNewPatch
+		B.HideBackdrop(RaidGraphics_) -- isNewPatch
 		GraphicsButton:DisableDrawLayer("BACKGROUND")
 		RaidButton:DisableDrawLayer("BACKGROUND")
 

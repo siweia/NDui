@@ -47,12 +47,7 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 
 		for i = 1, 5 do
 			local bu = _G["LookingForGuildBrowseFrameContainerButton"..i]
-
-			if DB.isNewPatch then
-				bu.NineSlice:SetAlpha(0)
-			else
-				bu:SetBackdrop(nil)
-			end
+			B.HideBackdrop(bu) -- isNewPatch
 			bu:SetHighlightTexture("")
 
 			-- my client crashes if I put this in a var? :x

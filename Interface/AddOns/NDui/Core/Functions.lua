@@ -547,6 +547,14 @@ do
 		return tex
 	end
 
+	function B:HideBackdrop()
+		if DB.isNewPatch then
+			self.NineSlice:SetAlpha(0)
+		else
+			self:SetBackdrop(nil)
+		end
+	end
+
 	-- Handle frame
 	function B:CreateBDFrame(a, gradient)
 		local frame = self

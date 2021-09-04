@@ -378,11 +378,7 @@ function TT:ReskinTooltip()
 	self:SetScale(C.db["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
-		if DB.isNewPatch then
-			if self.NineSlice then self.NineSlice:SetAlpha(0) end
-		else
-			if self.SetBackdrop then self:SetBackdrop(nil) end
-		end
+		B.HideBackdrop(self) -- isNewPatch
 		self:DisableDrawLayer("BACKGROUND")
 		self.bg = B.SetBD(self, .7)
 		self.bg:SetInside(self)
