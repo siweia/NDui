@@ -55,6 +55,8 @@ tinsert(C.defaultThemes, function()
 		[GarrisonShipFollowerAlertSystem] = true,
 	}
 
+	if not NewCosmeticAlertFrameSystem then NewCosmeticAlertFrameSystem = 123 end
+
 	local newAlertTemplate = {
 		[NewPetAlertSystem] = true,
 		[NewMountAlertSystem] = true,
