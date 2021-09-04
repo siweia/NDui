@@ -260,17 +260,29 @@ function M:ItemLevel_FlyoutSetup()
 	if self.iLvl then self.iLvl:SetText("") end
 
 	local location = self.location
-	if not location or location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
-		return
-	end
+	if not location then return end
 
-	local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
-	if voidStorage then return end
-	local quality = select(13, EquipmentManager_GetItemInfoByLocation(location))
-	if bags then
-		M.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+	if tonumber(location) then
+		if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then return end
+
+		local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
+		if voidStorage then return end
+		local quality = select(13, EquipmentManager_GetItemInfoByLocation(location))
+		if bags then
+			M.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+		else
+			M.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+		end
 	else
-		M.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+		local itemLocation = self:GetItemLocation()
+		local quality = itemLocation and C_Item.GetItemQuality(itemLocation)
+		if itemLocation:IsBagAndSlot() then
+			local bag, slot = itemLocation:GetBagAndSlot()
+			M.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+		elseif itemLocation:IsEquipmentSlot() then
+			local slot = itemLocation:GetEquipmentSlot()
+			M.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+		end
 	end
 end
 
@@ -338,7 +350,13 @@ function M:ShowItemLevel()
 	B:RegisterEvent("INSPECT_READY", M.ItemLevel_UpdateInspect)
 
 	-- iLvl on FlyoutButtons
-	hooksecurefunc("EquipmentFlyout_DisplayButton", M.ItemLevel_FlyoutSetup)
+	hooksecurefunc("EquipmentFlyout_UpdateItems", function()
+		for _, button in pairs(EquipmentFlyoutFrame.buttons) do
+			if button:IsShown() then
+				M.ItemLevel_FlyoutSetup(button)
+			end
+		end
+	end)
 
 	-- iLvl on ScrappingMachineFrame
 	B:RegisterEvent("ADDON_LOADED", M.ItemLevel_ScrappingShow)
