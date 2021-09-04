@@ -551,7 +551,7 @@ do
 		if DB.isNewPatch then
 			self.NineSlice:SetAlpha(0)
 		else
-			self:SetBackdrop(nil)
+			if self.SetBackdrop then self:SetBackdrop(nil) end
 		end
 	end
 
