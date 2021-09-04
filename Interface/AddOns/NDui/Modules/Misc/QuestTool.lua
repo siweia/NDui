@@ -3,12 +3,12 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, strfind = pairs, strfind
-local UnitGUID, InCombatLockdown = UnitGUID, InCombatLockdown
+local UnitGUID, InCombatLockdown, IsResting = UnitGUID, InCombatLockdown, IsResting
 local GetActionInfo, GetSpellInfo, GetOverrideBarSkin = GetActionInfo, GetSpellInfo, GetOverrideBarSkin
 local ClearOverrideBindings, SetOverrideBindingClick, SetBinding = ClearOverrideBindings, SetOverrideBindingClick, SetBinding
-local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local C_QuestLog_GetDistanceSqToQuest = C_QuestLog.GetDistanceSqToQuest
+local C_GossipInfo_SelectOption, C_GossipInfo_GetNumOptions = C_GossipInfo.SelectOption, C_GossipInfo.GetNumOptions
 
 local watchQuests = {
 	-- check npc
@@ -154,7 +154,7 @@ function M:QuestTool_SetQuestUnit()
 end
 
 function M:QuestTool_UpdateBinding()
-	if activeQuests[62459] and not C_QuestLog_IsComplete(62459) and C_QuestLog_GetDistanceSqToQuest(62459) < 35000 then
+	if activeQuests[62459] and not IsResting() and C_QuestLog_GetDistanceSqToQuest(62459) < 35000 then
 		SetBinding("MOUSEWHEELUP", "EXTRAACTIONBUTTON1")
 		M.isBinding = true
 		M.QuestTip:SetText(DB.NDuiString.." "..L["CatchButterfly"])
@@ -204,6 +204,25 @@ function M:QuestTool()
 	M:QuestTool_UpdateBinding()
 	B:RegisterEvent("ZONE_CHANGED", M.QuestTool_UpdateBinding)
 	B:RegisterEvent("ZONE_CHANGED_INDOORS", M.QuestTool_UpdateBinding)
+
+	-- Auto gossip
+	local firstStep
+	B:RegisterEvent("GOSSIP_SHOW", function()
+		local guid = UnitGUID("npc")
+		local npcID = guid and B.GetNPCID(guid)
+		if npcID == 174498 then
+			C_GossipInfo_SelectOption(3)
+		elseif npcID == 174371 then
+			if GetItemCount(183961) == 0 then return end
+			if C_GossipInfo_GetNumOptions() ~= 5 then return end
+			if firstStep then
+				C_GossipInfo_SelectOption(5)
+			else
+				C_GossipInfo_SelectOption(2)
+				firstStep = true
+			end
+		end
+	end)
 end
 
 M:RegisterMisc("QuestTool", M.QuestTool)
