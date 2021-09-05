@@ -389,8 +389,9 @@ function module:WhoPingsMyMap()
 end
 
 function module:UpdateMinimapScale()
-	local size = Minimap:GetWidth()
+	local size = C.db["Map"]["MinimapSize"]
 	local scale = C.db["Map"]["MinimapScale"]
+	Minimap:SetSize(size, size)
 	Minimap:SetScale(scale)
 	Minimap.mover:SetSize(size*scale, size*scale)
 end

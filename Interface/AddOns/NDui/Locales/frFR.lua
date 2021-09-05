@@ -140,6 +140,7 @@ L["Keyword Match"] = "Filtrer les correspondances"
 L["Filter List"] = "Liste de filtres"
 L["Minimap Clock"] = "Afficher l'horloge sur la minicarte"
 L["Minimap Scale"] = "Echelle de la minicarte"
+L["Minimap Size"] = "Minimap Size" -- need translation
 L["Minimap Pulse"] = "Bordure de la minicarte clignotant"
 L["Minimap RecycleBin"] = "Collecteur d'icones"
 L["Show RecycleBin"] = "Collecteur d'icones sur la minicarte"
