@@ -91,14 +91,11 @@ info.onEvent = function(self, event)
 		self:UnregisterEvent(event)
 	end
 
-	local numSlots = UpdateAllSlots()
-	local isLow = isLowDurability()
-
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent(event)
 		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	else
-		if numSlots > 0 then
+		if UpdateAllSlots() > 0 then
 			local r, g, b = getDurabilityColor(floor(localSlots[1][3]*100), 100)
 			self.text:SetFormattedText("%s%%|r"..L["D"], B.HexRGB(r, g, b)..floor(localSlots[1][3]*100))
 		else
@@ -106,7 +103,7 @@ info.onEvent = function(self, event)
 		end
 	end
 
-	if isLow then
+	if isLowDurability() then
 		HelpTip:Show(info, lowDurabilityInfo)
 	else
 		HelpTip:Hide(info, L["Low Durability"])
