@@ -126,7 +126,7 @@ local list = {
 		{AuraID = 333218, UnitID = "player"},	-- 废土礼节
 		{AuraID = 336885, UnitID = "player"},	-- 抚慰阴影
 		{AuraID = 324156, UnitID = "player", Flash = true},	-- 劫掠射击
-		{AuraID = 328900, UnitID = "player"},	-- 放下过去
+		--{AuraID = 328900, UnitID = "player"},	-- 放下过去
 		{AuraID = 333961, UnitID = "player"},	-- 行动的召唤：布隆
 		{AuraID = 333943, UnitID = "player"},	-- 源生重槌
 		-- S2，心能/统御碎片

@@ -61,6 +61,7 @@ local list = {
 		{AuraID = 218561, UnitID = "player", Value = true},	-- 虹吸能量
 		{AuraID = 258920, UnitID = "player"},	-- 献祭光环
 		{AuraID = 343312, UnitID = "player"},	-- 狂怒凝视
+		{AuraID = 203981, UnitID = "player", Combat = true},	-- 灵魂残片
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 	},
