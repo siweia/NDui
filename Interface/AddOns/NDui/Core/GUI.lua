@@ -1075,7 +1075,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
-		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {1, 2, .1}, updateMinimapScale},
+		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
 		{3, "Map", "MinimapSize", NewTag..L["Minimap Size"].."*", true, {100, 500, 1}, updateMinimapScale},
 	},
 	[11] = {
