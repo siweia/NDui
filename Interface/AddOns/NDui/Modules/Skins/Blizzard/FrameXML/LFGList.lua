@@ -203,6 +203,10 @@ tinsert(C.defaultThemes, function()
 	end
 	B.ReskinDropDown(EntryCreation.GroupDropDown)
 	B.ReskinDropDown(EntryCreation.ActivityDropDown)
+	if DB.isNewPatch then
+		B.ReskinCheck(EntryCreation.MythicPlusRating.CheckButton)
+		B.ReskinInput(EntryCreation.MythicPlusRating.EditBox)
+	end
 	B.ReskinCheck(EntryCreation.ItemLevel.CheckButton)
 	B.ReskinCheck(EntryCreation.VoiceChat.CheckButton)
 	B.ReskinCheck(EntryCreation.PrivateGroup.CheckButton)
@@ -241,7 +245,7 @@ tinsert(C.defaultThemes, function()
 
 	ActivityFinder.Background:SetTexture("")
 	B.StripTextures(ActivityFinder.Dialog)
-	B.ReskinInput(ActivityFinder.Dialog)
+	B.SetBD(ActivityFinder.Dialog)
 	B.Reskin(ActivityFinder.Dialog.SelectButton)
 	B.Reskin(ActivityFinder.Dialog.CancelButton)
 	B.ReskinInput(ActivityFinder.Dialog.EntryBox)
