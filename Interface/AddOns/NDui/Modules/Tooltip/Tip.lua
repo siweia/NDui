@@ -124,14 +124,18 @@ function TT:OnTooltipCleared()
 	end
 end
 
+function TT.GetDungeonScore(score)
+	local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or HIGHLIGHT_FONT_COLOR
+	return color:WrapTextInColorCode(score)
+end
+
 function TT:ShowUnitMythicPlusScore(unit)
 	if not C.db["Tooltip"]["MythicScore"] then return end
 
 	local summary = C_PlayerInfo_GetPlayerMythicPlusRatingSummary(unit)
 	local score = summary and summary.currentSeasonScore
 	if score and score > 0 then
-		local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or HIGHLIGHT_FONT_COLOR
-		GameTooltip:AddLine(format(L["MythicScore"], color:WrapTextInColorCode(score)))
+		GameTooltip:AddLine(format(L["MythicScore"], TT.GetDungeonScore(score)))
 	end
 end
 

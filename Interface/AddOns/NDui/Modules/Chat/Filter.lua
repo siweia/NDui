@@ -227,26 +227,32 @@ end
 
 local itemCache = {}
 local function convertItemLevel(link)
+	if not link then return end
 	if itemCache[link] then return itemCache[link] end
 
-	local itemLink = strmatch(link, "|Hitem:.-|h")
-	if itemLink then
-		local name, itemLevel = isItemHasLevel(itemLink)
-		if name and itemLevel then
-			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemHasGem(itemLink))
-			itemCache[link] = link
-		end
+	local name, itemLevel = isItemHasLevel(link)
+	if name and itemLevel then
+		link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemHasGem(link))
+		itemCache[link] = link
 	end
 	return link
 end
 
+local GetDungeonScoreInColor
+local function formatDungeonScore(link, score)
+	return score and gsub(link, "|h%[(.-)%]|h", "|h["..format(L["MythicScore"], GetDungeonScoreInColor(score)).."]|h")
+end
+
 function module:UpdateChatItemLevel(_, msg, ...)
 	msg = gsub(msg, "(|Hitem:%d+:.-|h.-|h)", convertItemLevel)
+	msg = gsub(msg, "(|HdungeonScore:(%d+):.-|h.-|h)", formatDungeonScore)
 	return false, msg, ...
 end
 
 function module:ChatFilter()
 	if C.db["Chat"]["ChatItemLevel"] then
+		GetDungeonScoreInColor = B:GetModule("Tooltip").GetDungeonScore
+	
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_LOOT", self.UpdateChatItemLevel)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateChatItemLevel)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateChatItemLevel)
