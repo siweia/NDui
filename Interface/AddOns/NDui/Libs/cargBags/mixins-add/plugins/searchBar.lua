@@ -82,6 +82,10 @@ local function onEnter(search)
 	if(search.OnEnterPressed) then search:OnEnterPressed() end
 end
 
+local function onHide(self)
+	onEscape(self.Search)
+end
+
 cargBags:RegisterPlugin("SearchBar", function(self, target)
 	local search = CreateFrame("EditBox", nil, self)
 	search:SetFontObject(GameFontHighlight)
@@ -117,6 +121,7 @@ cargBags:RegisterPlugin("SearchBar", function(self, target)
 	search:SetScript("OnTextChanged", doSearch)
 	search:SetScript("OnEscapePressed", onEscape)
 	search:SetScript("OnEnterPressed", onEnter)
+	self:HookScript("OnHide", onHide)
 
 	if(target) then
 		search:SetAutoFocus(true)
