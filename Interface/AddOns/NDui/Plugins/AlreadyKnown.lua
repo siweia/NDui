@@ -137,6 +137,33 @@ local function Hook_UpdateAuctionHouse(self)
 end
 
 -- guild bank frame
+local MAX_GUILDBANK_SLOTS_PER_TAB = MAX_GUILDBANK_SLOTS_PER_TAB or 98
+local NUM_SLOTS_PER_GUILDBANK_GROUP = NUM_SLOTS_PER_GUILDBANK_GROUP or 14
+
+local function GuildBankFrame_Update(self)
+	if self.mode ~= "bank" then return end
+
+	local button, index, column, texture, locked
+	local tab = GetCurrentGuildBankTab()
+	for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
+		index = mod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
+		if index == 0 then index = NUM_SLOTS_PER_GUILDBANK_GROUP end
+
+		column = ceil((i-.5)/NUM_SLOTS_PER_GUILDBANK_GROUP)
+		button = self.Columns[column].Buttons[index]
+		if button and button:IsShown() then
+			texture, _, locked = GetGuildBankItemInfo(tab, i)
+			if texture and not locked then
+				if IsAlreadyKnown(GetGuildBankItemLink(tab, i), i) then
+					SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
+				else
+					SetItemButtonTextureVertexColor(button, 1, 1, 1)
+				end
+			end
+		end
+	end
+end
+
 local function Hook_GuildBankUpdate()
 	if GuildBankFrame.mode ~= "bank" then return end
 
@@ -167,7 +194,11 @@ f:SetScript("OnEvent", function(_, event, addon)
 		hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList, "RefreshScrollFrame", Hook_UpdateAuctionHouse)
 		hookCount = hookCount + 1
 	elseif addon == "Blizzard_GuildBankUI" then
-		hooksecurefunc("GuildBankFrame_Update", Hook_GuildBankUpdate)
+		if DB.isNewPatch then
+			hooksecurefunc(GuildBankFrame, "Update", GuildBankFrame_Update)
+		else
+			hooksecurefunc("GuildBankFrame_Update", Hook_GuildBankUpdate)
+		end
 		hookCount = hookCount + 1
 	end
 
