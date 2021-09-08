@@ -1183,6 +1183,7 @@ do
 	function B:ReskinPortraitFrame()
 		B.StripTextures(self)
 		local bg = B.SetBD(self)
+		bg:SetAllPoints(self)
 		local frameName = self.GetName and self:GetName()
 		local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName.."Portrait"])
 		if portrait then
