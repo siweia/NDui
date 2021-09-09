@@ -116,12 +116,18 @@ function B:OnCastSent()
 	element.SafeZone.castSent = true
 end
 
+local function ResetSpellTarget(self)
+	if self.spellTarget then
+		self.spellTarget:SetText("")
+	end
+end
+
 local function UpdateSpellTarget(self, unit)
 	if not C.db["Nameplate"]["CastTarget"] then return end
-	if not self.spellTarget or not unit then return end
+	if not self.spellTarget then return end
 
-	local unitTarget = unit.."target"
-	if UnitExists(unitTarget) then
+	local unitTarget = unit and unit.."target"
+	if unitTarget and UnitExists(unitTarget) then
 		local nameString
 		if UnitIsUnit(unitTarget, "player") then
 			nameString = format("|cffff0000%s|r", ">"..strupper(YOU).."<")
@@ -129,12 +135,8 @@ local function UpdateSpellTarget(self, unit)
 			nameString = B.HexRGB(B.UnitColor(unitTarget))..UnitName(unitTarget)
 		end
 		self.spellTarget:SetText(nameString)
-	end
-end
-
-local function ResetSpellTarget(self)
-	if self.spellTarget then
-		self.spellTarget:SetText("")
+	else
+		ResetSpellTarget(self) -- when unit loses target
 	end
 end
 
