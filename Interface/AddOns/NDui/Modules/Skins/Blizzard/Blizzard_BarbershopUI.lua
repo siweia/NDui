@@ -12,7 +12,7 @@ end
 
 local function ReskinCustomizeButton(button)
 	B.Reskin(button)
-	button.__bg:SetInside(nil, 3, 3)
+	button.__bg:SetInside(nil, 5, 5)
 end
 
 local function ReskinCustomizeTooltip(tooltip)
@@ -28,6 +28,9 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 	ReskinCustomizeButton(frame.SmallButtons.ZoomInButton)
 	ReskinCustomizeButton(frame.SmallButtons.RotateLeftButton)
 	ReskinCustomizeButton(frame.SmallButtons.RotateRightButton)
+	if DB.isNewPatch then
+		ReskinCustomizeButton(frame.RandomizeAppearanceButton)
+	end
 
 	hooksecurefunc(frame, "SetSelectedCatgory", function(self)
 		for button in self.selectionPopoutPool:EnumerateActive() do
