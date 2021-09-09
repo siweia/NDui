@@ -28,9 +28,7 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 	ReskinCustomizeButton(frame.SmallButtons.ZoomInButton)
 	ReskinCustomizeButton(frame.SmallButtons.RotateLeftButton)
 	ReskinCustomizeButton(frame.SmallButtons.RotateRightButton)
-	if DB.isNewPatch then
-		ReskinCustomizeButton(frame.RandomizeAppearanceButton)
-	end
+	ReskinCustomizeButton(frame.RandomizeAppearanceButton)
 
 	hooksecurefunc(frame, "SetSelectedCatgory", function(self)
 		for button in self.selectionPopoutPool:EnumerateActive() do
