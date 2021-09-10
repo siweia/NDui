@@ -195,7 +195,7 @@ function UF:UpdateColor(_, unit)
 			end
 		elseif isPlayer and (not isFriendly) and C.db["Nameplate"]["HostileCC"] then
 			r, g, b = B.UnitColor(unit)
-		elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
+		elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnits[npcID] then
 			r, g, b = .6, .6, .6
 		else
 			r, g, b = UnitSelectionColor(unit, true)

@@ -109,6 +109,17 @@ C.ShowPowerList = {
 	[GetSectionInfo(22339)] = true,	-- 猎手阿尔迪莫，巴加斯特之影
 }
 
+-- 显示姓名板单位的目标
+C.ShowTargetNPCs = {
+	[165251] = true,	-- 仙林狐狸
+	[174773] = true,	-- 怨毒怪
+}
+
+-- 无效目标
+C.TrashUnits = {
+	[166589] = true,	-- 活化武器，赤红
+}
+
 -- 重要读条高亮
 C.MajorSpells = {
 	[358967] = true,	-- S2，地狱烈火
@@ -136,10 +147,4 @@ C.MajorSpells = {
 	[326831] = true,	-- 赤红深渊，恐惧之缚
 	[324667] = true,	-- 凋魂，潜行幼蛛
 	[328400] = true,	-- 凋魂，软泥浪潮
-}
-
--- 显示姓名板单位的目标
-C.ShowTargetNPCs = {
-	[165251] = true,	-- 仙林狐狸
-	[174773] = true,	-- 怨毒怪
 }
