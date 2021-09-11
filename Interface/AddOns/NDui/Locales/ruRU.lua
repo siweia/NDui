@@ -393,6 +393,7 @@ L["PlayerPlate Fadeout"] = "Затухание после боя"
 L["PlayerPlate FadeoutAlpha"] = "Прозрачность затухания"
 L["PlayerPlate GCDTicker"] = "Включить маятник ГКД"
 L["OnlyCompleteRing"] = "Только звук завершения"
+L["OnlyCompleteRingTip"] = "|nIf checked, no longer announce any messages. Only play sound when quests completed." -- need translation
 L["Stranger"] = "Незнакомец"
 L["Reverse RaidFrame"] = "Обратить рамки рейда"
 L["Show AzeriteArmor"] = "Показывать инфо о азеритовой броне"

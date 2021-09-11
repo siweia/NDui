@@ -1018,7 +1018,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Misc", "QuestNotification", HeaderTag..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
-		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"].."*", true},
+		{1, "Misc", "OnlyCompleteRing", L["OnlyCompleteRing"].."*", true, nil, nil, L["OnlyCompleteRingTip"]},
 		{},--blank
 		{1, "Misc", "InterruptAlert", HeaderTag..L["InterruptAlert"].."*", nil, nil, updateInterruptAlert},
 		{1, "Misc", "OwnInterrupt", L["OwnInterrupt"].."*", true},

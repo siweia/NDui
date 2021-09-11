@@ -393,6 +393,7 @@ L["PlayerPlate Fadeout"] = "Fondu après combat"
 L["PlayerPlate FadeoutAlpha"] = "Fondu Alpha"
 L["PlayerPlate GCDTicker"] = "Activer le GCD Ticker"
 L["OnlyCompleteRing"] = "Jouer que le son de complétion"
+L["OnlyCompleteRingTip"] = "|nIf checked, no longer announce any messages. Only play sound when quests completed." -- need translation
 L["Stranger"] = "Etranger"
 L["Reverse RaidFrame"] = "Inverser le grossissement cadre de raid"
 L["Show AzeriteArmor"] = "Montrer les info des armures d'Azerite"
