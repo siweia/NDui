@@ -759,7 +759,9 @@ function M:JerryWay()
 				if mapName then
 					x = GetCorrectCoord(x)
 					y = GetCorrectCoord(y)
-					print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
+					if x and y then
+						print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
+					end
 				end
 			end
 		end
