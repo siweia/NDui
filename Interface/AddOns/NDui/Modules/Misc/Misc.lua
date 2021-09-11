@@ -734,7 +734,7 @@ end
 function M:JerryWay()
 	if IsAddOnLoaded("TomTom") then return end
 
-	local pointString = DB.InfoColor.."|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)]|h|r"
+	local pointString = DB.InfoColor.."|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r"
 
 	local function GetCorrectCoord(x)
 		x = tonumber(x)
@@ -750,7 +750,7 @@ function M:JerryWay()
 
 	SlashCmdList["NDUI_JERRY_WAY"] = function(msg)
 		msg = gsub(msg, "(%d)[%.,] (%d)", "%1 %2")
-		local x, y = strsplit(" ", msg)
+		local x, y, z = strmatch(msg, "(%S+)%s(%S+)(.*)")
 		if x and y then
 			local mapID = C_Map_GetBestMapForUnit("player")
 			if mapID then
@@ -759,7 +759,7 @@ function M:JerryWay()
 				if mapName then
 					x = GetCorrectCoord(x)
 					y = GetCorrectCoord(y)
-					print(format(pointString, mapID, x*100, y*100, mapName, x, y))
+					print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
 				end
 			end
 		end
