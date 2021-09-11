@@ -534,7 +534,8 @@ TT:RegisterTooltips("NDui", function()
 		FloatingBattlePetTooltip,
 		FloatingPetBattleAbilityTooltip,
 		IMECandidatesFrame,
-		QuickKeybindTooltip
+		QuickKeybindTooltip,
+		GameSmallHeaderTooltip,
 	}
 	for _, f in pairs(tooltips) do
 		f:HookScript("OnShow", TT.ReskinTooltip)
