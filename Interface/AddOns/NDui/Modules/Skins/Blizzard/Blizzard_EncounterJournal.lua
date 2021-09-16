@@ -184,7 +184,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	local items = EncounterJournal.encounter.info.lootScroll.buttons
 	for i = 1, #items do
-		local item = items[i]
+		local item = DB.isNewPatch and items[i].lootFrame or items[i]
 		item.boss:SetTextColor(1, 1, 1)
 		item.slot:SetTextColor(1, 1, 1)
 		item.armorType:SetTextColor(1, 1, 1)
