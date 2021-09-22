@@ -52,6 +52,7 @@ end
 DB.QualityColors[-1] = {r = 0, g = 0, b = 0}
 DB.QualityColors[LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
 DB.QualityColors[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
+DB.QualityColors[99] = {r = 1, g = 0, b = 0}
 
 -- Fonts
 DB.Font = {STANDARD_TEXT_FONT, 12, "OUTLINE"}
