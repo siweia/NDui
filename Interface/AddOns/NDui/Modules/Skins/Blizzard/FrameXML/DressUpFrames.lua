@@ -1,6 +1,15 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function ResetToggleTexture(button, texture)
+	button:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+	button:GetNormalTexture():SetInside()
+	button:SetNormalTexture(texture)
+	button:GetPushedTexture():SetTexCoord(unpack(DB.TexCoord))
+	button:GetPushedTexture():SetInside()
+	button:SetPushedTexture(texture)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -15,6 +24,27 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(DressUpFrameOutfitDropDown)
 	B.ReskinDropDown(DressUpFrameOutfitDropDown)
 	B.ReskinMinMax(DressUpFrame.MaximizeMinimizeFrame)
+
+	if DB.isNewPatch then
+		B.Reskin(DressUpFrame.LinkButton)
+		B.Reskin(DressUpFrame.ToggleOutfitDetailsButton)
+		ResetToggleTexture(DressUpFrame.ToggleOutfitDetailsButton, 1392954) -- 70_professions_scroll_01
+
+		B.StripTextures(DressUpFrame.OutfitDetailsPanel)
+		local bg = B.SetBD(DressUpFrame.OutfitDetailsPanel)
+		bg:SetInside(nil, 11, 11)
+
+		hooksecurefunc(DressUpFrame.OutfitDetailsPanel, "Refresh", function(self)
+			if self.slotPool then
+				for slot in self.slotPool:EnumerateActive() do
+					if not slot.bg then
+						slot.bg = B.ReskinIcon(slot.Icon)
+						B.ReskinIconBorder(slot.IconBorder, true, true)
+					end
+				end
+			end
+		end)
+	end
 
 	DressUpFrameOutfitDropDown:SetHeight(32)
 	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)

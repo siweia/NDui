@@ -216,6 +216,10 @@ tinsert(C.defaultThemes, function()
 		B.ReskinInput(entryCreation.MythicPlusRating.EditBox)
 		B.ReskinCheck(entryCreation.PVPRating.CheckButton)
 		B.ReskinInput(entryCreation.PVPRating.EditBox)
+		if entryCreation.PvpItemLevel then -- I do believe blizz will rename Pvp into PvP in future build
+			B.ReskinCheck(entryCreation.PvpItemLevel.CheckButton)
+			B.ReskinInput(entryCreation.PvpItemLevel.EditBox)
+		end
 	end
 	B.ReskinCheck(entryCreation.ItemLevel.CheckButton)
 	B.ReskinCheck(entryCreation.VoiceChat.CheckButton)
