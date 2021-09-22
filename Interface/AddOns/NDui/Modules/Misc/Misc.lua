@@ -698,6 +698,11 @@ function M:EnhanceDressup()
 	end)
 
 	B.AddTooltip(button, "ANCHOR_TOP", format(L["UndressButtonTip"], DB.LeftButton, DB.RightButton))
+
+	if DB.isNewPatch then
+		DressUpFrame.LinkButton:SetWidth(80)
+		DressUpFrame.LinkButton:SetText(SOCIAL_SHARE_TEXT)
+	end
 end
 
 function M:FuckTrainSound()
