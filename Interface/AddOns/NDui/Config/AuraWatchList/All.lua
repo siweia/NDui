@@ -133,6 +133,7 @@ local list = {
 		-- S2，心能/统御碎片
 		{AuraID = 357852, UnitID = "player"},	-- 激励
 		{AuraID = 356364, UnitID = "player"},	-- 冰冷的心
+		{AuraID = 356043, UnitID = "player"},	-- 森罗万象
 		-- 炼金石
 		{AuraID = 60233, UnitID = "player"},	-- 敏捷
 		{AuraID = 60229, UnitID = "player"},	-- 力量
