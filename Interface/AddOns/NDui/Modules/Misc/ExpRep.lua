@@ -53,17 +53,17 @@ function M:ExpBar_Update()
 	elseif GetWatchedFactionInfo() then
 		local _, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-		if friendID then
+		if C_Reputation_IsFactionParagon(factionID) then
+			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+			currentValue = mod(currentValue, threshold)
+			barMin, barMax, value = 0, threshold, currentValue
+		elseif friendID then
 			if nextFriendThreshold then
 				barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
 			else
 				barMin, barMax, value = 0, 1, 1
 			end
 			standing = 5
-		elseif C_Reputation_IsFactionParagon(factionID) then
-			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-			currentValue = mod(currentValue, threshold)
-			barMin, barMax, value = 0, threshold, currentValue
 		else
 			if standing == MAX_REPUTATION_REACTION then barMin, barMax, value = 0, 1, 1 end
 		end
