@@ -110,7 +110,6 @@ local ignoreQuestNPC = {
 	[127037] = true,	-- 纳毕鲁
 	[326027] = true,	-- 运输站回收生成器DX-82
 	[162804] = true,	-- 威娜莉
-	[160929] = true,	-- 威娜莉
 }
 
 C.IgnoreQuestNPC = {}
