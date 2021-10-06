@@ -110,11 +110,14 @@ local ignoreQuestNPC = {
 	[127037] = true,	-- 纳毕鲁
 	[326027] = true,	-- 运输站回收生成器DX-82
 	[162804] = true,	-- 威娜莉
+	[160929] = true,	-- 威娜莉
 }
+
+C.IgnoreQuestNPC = {}
 
 QuickQuest:Register("QUEST_GREETING", function()
 	local npcID = GetNPCID()
-	if ignoreQuestNPC[npcID] then return end
+	if C.IgnoreQuestNPC[npcID] then return end
 
 	local active = GetNumActiveQuests()
 	if active > 0 then
@@ -202,7 +205,7 @@ local autoGossipTypes = {
 
 QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
-	if ignoreQuestNPC[npcID] then return end
+	if C.IgnoreQuestNPC[npcID] then return end
 
 	local active = C_GossipInfo_GetNumActiveQuests()
 	if active > 0 then
@@ -271,7 +274,9 @@ QuickQuest:Register("QUEST_DETAIL", function()
 	elseif QuestGetAutoAccept() then
 		AcknowledgeAutoAcceptQuest()
 	elseif not C_QuestLog_IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
-		AcceptQuest()
+		if not C.IgnoreQuestNPC[GetNPCID()] then
+			AcceptQuest()
+		end
 	end
 end)
 
@@ -351,7 +356,7 @@ QuickQuest:Register("QUEST_PROGRESS", function()
 		if info and (info.tagID == 153 or info.worldQuestType) then return end
 
 		local npcID = GetNPCID()
-		if ignoreQuestNPC[npcID] then return end
+		if C.IgnoreQuestNPC[npcID] then return end
 
 		local requiredItems = GetNumQuestItems()
 		if requiredItems > 0 then
@@ -446,3 +451,62 @@ local function AttemptAutoComplete(event)
 	end
 end
 QuickQuest:Register("QUEST_LOG_UPDATE", AttemptAutoComplete)
+
+-- Handle ignore list
+local function UpdateIgnoreList()
+	wipe(C.IgnoreQuestNPC)
+
+	for npcID, value in pairs(ignoreQuestNPC) do
+		C.IgnoreQuestNPC[npcID] = value
+	end
+
+	for npcID, value in pairs(C.db["Misc"]["IgnoreQuestNPC"]) do
+		if value and ignoreQuestNPC[npcID] then
+			C.db["Misc"]["IgnoreQuestNPC"][npcID] = nil
+		else
+			C.IgnoreQuestNPC[npcID] = value
+		end
+	end
+end
+
+local function UnitQuickQuestStatus(self)
+	if not self.__ignore then
+		self.__ignore = B.CreateFS(self, 14, IGNORED)
+		self.__ignore:SetTextColor(1, 0, 0)
+		self.__ignore:ClearAllPoints()
+		self.__ignore:SetPoint("TOP", self, "BOTTOM", 0, -3)
+
+		UpdateIgnoreList()
+	end
+
+	local npcID = GetNPCID()
+	local isIgnored = npcID and C.IgnoreQuestNPC[npcID]
+	self.__ignore:SetShown(isIgnored)
+end
+
+local function ToggleQuickQuestStatus(self)
+	if not self.__ignore then return end
+
+	self.__ignore:SetShown(not self.__ignore:IsShown())
+	local npcID = GetNPCID()
+	if self.__ignore:IsShown() then
+		if ignoreQuestNPC[npcID] then
+			C.db["Misc"]["IgnoreQuestNPC"][npcID] = nil
+		else
+			C.db["Misc"]["IgnoreQuestNPC"][npcID] = true
+		end
+	else
+		if ignoreQuestNPC[npcID] then
+			C.db["Misc"]["IgnoreQuestNPC"][npcID] = false
+		else
+			C.db["Misc"]["IgnoreQuestNPC"][npcID] = nil
+		end
+	end
+
+	UpdateIgnoreList()
+end
+
+QuestNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
+QuestNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
+GossipNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
+GossipNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)

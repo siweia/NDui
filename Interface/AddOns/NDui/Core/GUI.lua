@@ -345,6 +345,7 @@ G.DefaultSettings = {
 		BrokenAlert = false,
 		FasterLoot = true,
 		AutoQuest = false,
+		IgnoreQuestNPC = {},
 		HideTalking = true,
 		HideBossBanner = false,
 		HideBossEmote = false,
