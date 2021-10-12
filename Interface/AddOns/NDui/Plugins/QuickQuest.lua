@@ -470,21 +470,26 @@ end
 
 local function UnitQuickQuestStatus(self)
 	if not self.__ignore then
-		self.__ignore = B.CreateFS(self, 14, IGNORED)
-		self.__ignore:SetTextColor(1, 0, 0)
-		self.__ignore:ClearAllPoints()
-		self.__ignore:SetPoint("TOP", self, "BOTTOM", 0, -3)
+		local frame = CreateFrame("Frame", nil, self)
+		frame:SetSize(100, 14)
+		frame:SetPoint("TOP", self, "BOTTOM", 0, -2)
+		frame.title = L["Tips"]
+		B.AddTooltip(frame, "ANCHOR_RIGHT", L["AutoQuestIgnoreTip"], "info")
+		B.CreateFS(frame, 14, IGNORED):SetTextColor(1, 0, 0)
+
+		self.__ignore = frame
 
 		UpdateIgnoreList()
 	end
 
 	local npcID = GetNPCID()
-	local isIgnored = npcID and C.IgnoreQuestNPC[npcID]
+	local isIgnored = C.db["Misc"]["AutoQuest"] and npcID and C.IgnoreQuestNPC[npcID]
 	self.__ignore:SetShown(isIgnored)
 end
 
 local function ToggleQuickQuestStatus(self)
 	if not self.__ignore then return end
+	if not IsAltKeyDown() then return end
 
 	self.__ignore:SetShown(not self.__ignore:IsShown())
 	local npcID = GetNPCID()
