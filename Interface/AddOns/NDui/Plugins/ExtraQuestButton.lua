@@ -113,6 +113,20 @@ local questItems = {
 	[60609] = 180008, -- Ardenweald
 }
 
+-- items that needs to be shown, but not. (itemID = bool/mapID)
+local completeShownItems = {
+	[35797] = 116, -- Grizzly Hills
+	[60273] = 50, -- Northern Stranglethorn Vale
+	[52853] = true, -- Mount Hyjal
+	[41058] = 120, -- Storm Peaks
+	[177904] = true,
+}
+
+-- items that needs to be hidden, but not. (itemID = bool/mapID)
+local completeHiddenItems = {
+	[186199] = true, -- Lady Moonberry's Wand
+}
+
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent("PLAYER_LOGIN")
@@ -402,9 +416,14 @@ local function GetQuestDistanceWithItem(questID)
 	end
 	if not itemLink then return end
 	if GetItemCount(itemLink) == 0 then return end
-	if blacklist[GetItemInfoFromHyperlink(itemLink)] then return end
 
-	if C_QuestLog_IsComplete(questID) and not showWhenComplete then return end
+	local itemID = GetItemInfoFromHyperlink(itemLink)
+	if blacklist[itemID] then return end
+
+	if C_QuestLog_IsComplete(questID) then
+		if showWhenComplete and completeHiddenItems[itemID] then return end -- hide item when quest completed
+		if not showWhenComplete and not completeShownItems[itemID] then return end -- show item even quest completed
+	end
 
 	local distanceSq = C_QuestLog_GetDistanceSqToQuest(questID)
 	local distanceYd = distanceSq and sqrt(distanceSq)
