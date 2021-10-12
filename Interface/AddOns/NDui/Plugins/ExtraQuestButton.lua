@@ -113,7 +113,7 @@ local questItems = {
 	[60609] = 180008, -- Ardenweald
 }
 
--- items that needs to be shown, but not. (itemID = bool/mapID)
+-- items that need to be shown, but not. (itemID = bool/mapID)
 local completeShownItems = {
 	[35797] = 116, -- Grizzly Hills
 	[60273] = 50, -- Northern Stranglethorn Vale
@@ -122,9 +122,10 @@ local completeShownItems = {
 	[177904] = true,
 }
 
--- items that needs to be hidden, but not. (itemID = bool/mapID)
+-- items that need to be hidden, but not. (itemID = bool/mapID)
 local completeHiddenItems = {
 	[186199] = true, -- Lady Moonberry's Wand
+	[187012] = true, -- Unbalanced Riftstone
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
