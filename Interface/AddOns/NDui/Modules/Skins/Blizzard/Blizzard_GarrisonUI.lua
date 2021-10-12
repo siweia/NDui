@@ -1101,6 +1101,19 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			self.isSetting = nil
 		end
 
+		local ReplacedRoleTex = {
+			["adventures-tank"] = "Soulbinds_Tree_Conduit_Icon_Protect",
+			["adventures-healer"] = "ui_adv_health",
+			["adventures-dps"] = "ui_adv_atk",
+			["adventures-dps-ranged"] = "Soulbinds_Tree_Conduit_Icon_Utility",
+		}
+		local function replaceFollowerRole(roleIcon, atlas)
+			local newAtlas = ReplacedRoleTex[atlas]
+			if newAtlas then
+				roleIcon:SetAtlas(newAtlas)
+			end
+		end
+
 		function VPEX_OnUIObjectCreated(otype, widget, peek)
 			if widget:IsObjectType("Frame") then
 				if otype == "MissionButton" then
@@ -1147,7 +1160,19 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					B.CreateBDFrame(widget, .25)
 					hooksecurefunc(widget, "SetHeight", AdjustFollowerList)
 				elseif otype == "FollowerListButton" then
+					B.StripTextures(widget)
+					widget.bg = B.CreateBDFrame(peek("Portrait"), 1)
+
+					B.CreateBDFrame(peek("HealthBG"), .25)
+					peek("HealthBG"):ClearAllPoints()
+					peek("HealthBG"):SetPoint("TOPLEFT", widget.bg, "BOTTOMLEFT", 0, 6)
+					peek("HealthBG"):SetPoint("BOTTOMRIGHT", widget.bg, "BOTTOMRIGHT", 0, -6)
+					peek("HealthFrameR"):Hide()
 					peek("TextLabel"):SetFontObject("Game12Font")
+
+					peek("RoleB"):Hide()
+					hooksecurefunc(peek("Role"), "SetAtlas", replaceFollowerRole)
+
 					hooksecurefunc(widget, "SetPoint", AdjustFollowerButton)
 				elseif otype == "ProgressBar" then
 					B.StripTextures(widget)
