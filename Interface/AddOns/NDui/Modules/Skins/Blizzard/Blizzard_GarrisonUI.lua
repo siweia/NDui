@@ -1141,6 +1141,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					widget:SetHighlightTexture(nil)
 					widget:SetPushedTexture(DB.textures.pushed)
 					widget.Icon:SetTexCoord(unpack(DB.TexCoord))
+					widget:SetSize(46, 46)
 				elseif otype == "FollowerList" then
 					B.StripTextures(widget)
 					B.CreateBDFrame(widget, .25)
