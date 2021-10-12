@@ -1160,17 +1160,45 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					B.CreateBDFrame(widget, .25)
 					hooksecurefunc(widget, "SetHeight", AdjustFollowerList)
 				elseif otype == "FollowerListButton" then
-					B.StripTextures(widget)
 					widget.bg = B.CreateBDFrame(peek("Portrait"), 1)
+					peek("Hi"):SetColorTexture(1, 1, 1, .25)
+					peek("Hi"):SetInside(widget.bg)
+					peek("PortraitR"):Hide()
+					peek("PortraitT"):SetTexture(nil)
+					peek("PortraitT").__owner = widget
+					hooksecurefunc(peek("PortraitT"), "SetShown", function(portrait, show)
+						if show then
+							portrait.__owner.bg:SetBackdropBorderColor(.6, 0, 0)
+						else
+							portrait.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+						end
+					end)
 
-					B.CreateBDFrame(peek("HealthBG"), .25)
+					if peek("EC") then
+						peek("EC"):SetTexture(nil)
+						peek("EC").__shadow = B.CreateSD(peek("Portrait"), 5, true)
+						peek("EC").__shadow:SetBackdropBorderColor(peek("EC"):GetVertexColor())
+						hooksecurefunc(peek("EC"), "SetShown", function(border, show)
+							border.__shadow:SetShown(show)
+						end)
+					end
+
+					B.CreateBDFrame(peek("HealthBG"), .25):SetFrameLevel(1)
 					peek("HealthBG"):ClearAllPoints()
-					peek("HealthBG"):SetPoint("TOPLEFT", widget.bg, "BOTTOMLEFT", 0, 6)
-					peek("HealthBG"):SetPoint("BOTTOMRIGHT", widget.bg, "BOTTOMRIGHT", 0, -6)
+					peek("HealthBG"):SetPoint("TOPLEFT", peek("Portrait"), "BOTTOMLEFT", 0, 10)
+					peek("HealthBG"):SetPoint("BOTTOMRIGHT", peek("Portrait"), "BOTTOMRIGHT")
+					peek("Health"):SetHeight(10)
 					peek("HealthFrameR"):Hide()
 					peek("TextLabel"):SetFontObject("Game12Font")
+					peek("TextLabel"):ClearAllPoints()
+					peek("TextLabel"):SetPoint("CENTER", peek("HealthBG"), 1, 0)
 
+					peek("Favorite"):ClearAllPoints()
+					peek("Favorite"):SetPoint("TOPLEFT", -2, 2)
+					peek("Favorite"):SetSize(30, 30)
 					peek("RoleB"):Hide()
+					peek("Role"):ClearAllPoints()
+					peek("Role"):SetPoint("CENTER", widget.bg, "TOPRIGHT")
 					hooksecurefunc(peek("Role"), "SetAtlas", replaceFollowerRole)
 
 					hooksecurefunc(widget, "SetPoint", AdjustFollowerButton)
