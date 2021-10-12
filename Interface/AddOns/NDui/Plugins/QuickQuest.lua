@@ -6,6 +6,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local next, ipairs, select = next, ipairs, select
+local IsAltKeyDown = IsAltKeyDown
 local UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink = UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink
 local GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo, GetQuestID = GetNumTrackingTypes, GetTrackingInfo, GetInstanceInfo, GetQuestID
 local GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest = GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest
@@ -489,6 +490,7 @@ end
 
 local function ToggleQuickQuestStatus(self)
 	if not self.__ignore then return end
+	if not C.db["Misc"]["AutoQuest"] then return end
 	if not IsAltKeyDown() then return end
 
 	self.__ignore:SetShown(not self.__ignore:IsShown())
