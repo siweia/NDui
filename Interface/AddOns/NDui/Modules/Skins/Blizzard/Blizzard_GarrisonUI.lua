@@ -1114,6 +1114,18 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			end
 		end
 
+		local function updateSelectedBorder(portrait, show)
+			if show then
+				portrait.__owner.bg:SetBackdropBorderColor(.6, 0, 0)
+			else
+				portrait.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+			end
+		end
+
+		local function updateActiveGlow(border, show)
+			border.__shadow:SetShown(show)
+		end
+
 		function VPEX_OnUIObjectCreated(otype, widget, peek)
 			if widget:IsObjectType("Frame") then
 				if otype == "MissionButton" then
@@ -1166,21 +1178,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					peek("PortraitR"):Hide()
 					peek("PortraitT"):SetTexture(nil)
 					peek("PortraitT").__owner = widget
-					hooksecurefunc(peek("PortraitT"), "SetShown", function(portrait, show)
-						if show then
-							portrait.__owner.bg:SetBackdropBorderColor(.6, 0, 0)
-						else
-							portrait.__owner.bg:SetBackdropBorderColor(0, 0, 0)
-						end
-					end)
+					hooksecurefunc(peek("PortraitT"), "SetShown", updateSelectedBorder)
 
 					if peek("EC") then
 						peek("EC"):SetTexture(nil)
 						peek("EC").__shadow = B.CreateSD(peek("Portrait"), 5, true)
 						peek("EC").__shadow:SetBackdropBorderColor(peek("EC"):GetVertexColor())
-						hooksecurefunc(peek("EC"), "SetShown", function(border, show)
-							border.__shadow:SetShown(show)
-						end)
+						hooksecurefunc(peek("EC"), "SetShown", updateActiveGlow)
 					end
 
 					B.CreateBDFrame(peek("HealthBG"), .25):SetFrameLevel(1)
