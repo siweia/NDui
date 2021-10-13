@@ -1126,6 +1126,41 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			border.__shadow:SetShown(show)
 		end
 
+		local abilityIndex1, abilityIndex2
+		local function GetAbilitiesIndex(frame)
+			if not abilityIndex1 then
+				for i = 1, frame:GetNumRegions() do
+					local region = select(i, frame:GetRegions())
+					if region then
+						local width, height = region:GetSize()
+						if width == 17 and height == 17 then
+							if abilityIndex1 then
+								abilityIndex2 = i
+							else
+								abilityIndex1 = i
+							end
+						end
+					end
+				end
+			end
+			return abilityIndex1, abilityIndex2
+		end
+
+		local function reskinFollowerAbility(frame, index, first)
+			local ability = select(index, frame:GetRegions())
+			ability:SetMask(nil)
+			ability.bg = B.ReskinIcon(ability)
+			tinsert(frame.__abilities, ability)
+			select(2, ability:GetPoint()):SetAlpha(0)
+			ability:SetPoint("CENTER", frame, "LEFT", 0, first and 15 or -5)
+		end
+
+		local function updateVisibleAbilities(self)
+			for _, ability in pairs(self.__owner.__abilities) do
+				ability.bg:SetShown(ability:IsShown())
+			end
+		end
+
 		function VPEX_OnUIObjectCreated(otype, widget, peek)
 			if widget:IsObjectType("Frame") then
 				if otype == "MissionButton" then
@@ -1200,10 +1235,22 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					peek("Favorite"):ClearAllPoints()
 					peek("Favorite"):SetPoint("TOPLEFT", -2, 2)
 					peek("Favorite"):SetSize(30, 30)
+					peek("Blip"):SetSize(18, 20)
+					peek("Blip"):SetPoint("BOTTOMRIGHT", -8, 12)
 					peek("RoleB"):Hide()
 					peek("Role"):ClearAllPoints()
 					peek("Role"):SetPoint("CENTER", widget.bg, "TOPRIGHT")
 					hooksecurefunc(peek("Role"), "SetAtlas", replaceFollowerRole)
+
+					local frame = peek("Health"):GetParent()
+					if frame then
+						frame.__abilities = {}
+						local index1, index2 = GetAbilitiesIndex(frame)
+						reskinFollowerAbility(frame, index1, true)
+						reskinFollowerAbility(frame, index2)
+						peek("HealthBG").__owner = frame
+						hooksecurefunc(peek("HealthBG"), "SetGradient", updateVisibleAbilities)
+					end
 
 					hooksecurefunc(widget, "SetPoint", AdjustFollowerButton)
 				elseif otype == "ProgressBar" then
