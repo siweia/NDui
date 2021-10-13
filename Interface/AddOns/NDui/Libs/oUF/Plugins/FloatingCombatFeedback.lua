@@ -14,7 +14,6 @@ local m_cos, m_sin, m_pi, m_random = _G.math.cos, _G.math.sin, _G.math.pi, _G.ma
 local UnitGUID = _G.UnitGUID
 local GetSpellTexture = _G.GetSpellTexture
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
-local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
 local ENTERING_COMBAT = _G.ENTERING_COMBAT
 local LEAVING_COMBAT = _G.LEAVING_COMBAT
 local PET_ATTACK_TEXTURE = _G.PET_ATTACK_TEXTURE
