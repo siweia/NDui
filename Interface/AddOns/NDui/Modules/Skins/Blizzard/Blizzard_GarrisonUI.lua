@@ -1150,9 +1150,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			local ability = select(index, frame:GetRegions())
 			ability:SetMask(nil)
 			ability.bg = B.ReskinIcon(ability)
+			ability.bg:SetFrameLevel(4)
 			tinsert(frame.__abilities, ability)
 			select(2, ability:GetPoint()):SetAlpha(0)
-			ability:SetPoint("CENTER", frame, "LEFT", 0, first and 15 or -5)
+			ability:SetPoint("CENTER", frame, "LEFT", 11, first and 15 or -5)
 		end
 
 		local function updateVisibleAbilities(self)
@@ -1161,6 +1162,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			end
 		end
 
+		local VPFollowers, VPTroops = {}, {}
 		function VPEX_OnUIObjectCreated(otype, widget, peek)
 			if widget:IsObjectType("Frame") then
 				if otype == "MissionButton" then
@@ -1206,6 +1208,15 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					B.StripTextures(widget)
 					B.CreateBDFrame(widget, .25)
 					hooksecurefunc(widget, "SetHeight", AdjustFollowerList)
+
+					for i, troop in pairs(VPTroops) do
+						troop:ClearAllPoints()
+						troop:SetPoint("TOPLEFT", (i-1)*60+5, -35)
+					end
+					for i, follower in pairs(VPFollowers) do
+						follower:ClearAllPoints()
+						follower:SetPoint("TOPLEFT", ((i-1)%5)*60+5, -floor((i-1)/5)*60-130)
+					end
 				elseif otype == "FollowerListButton" then
 					widget.bg = B.CreateBDFrame(peek("Portrait"), 1)
 					peek("Hi"):SetColorTexture(1, 1, 1, .25)
@@ -1220,6 +1231,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 						peek("EC").__shadow = B.CreateSD(peek("Portrait"), 5, true)
 						peek("EC").__shadow:SetBackdropBorderColor(peek("EC"):GetVertexColor())
 						hooksecurefunc(peek("EC"), "SetShown", updateActiveGlow)
+						tinsert(VPFollowers, widget)
+					else
+						tinsert(VPTroops, widget)
 					end
 
 					B.CreateBDFrame(peek("HealthBG"), .25):SetFrameLevel(1)
