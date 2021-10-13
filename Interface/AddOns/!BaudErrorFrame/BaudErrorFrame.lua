@@ -211,7 +211,12 @@ end
 
 function BaudErrorFrameEditBoxUpdate()
 	if ErrorList[SelectedError] then
-		BaudErrorFrameEditBox.TextShown = colorStack(ErrorList[SelectedError].Error.."\nCount: "..ErrorList[SelectedError].Count.."\n\nCall Stack:\n"..ErrorList[SelectedError].Stack)
+		local errorMsg = ErrorList[SelectedError].Error
+		local errorStr = strmatch(errorMsg, "near '(.*)'")
+		if errorStr and strbyte(errorStr) == 229 then -- fix utf8 str error
+			errorMsg = gsub(errorMsg, "('.*')$", "UTF8 string")
+		end
+		BaudErrorFrameEditBox.TextShown = colorStack(errorMsg.."\nCount: "..ErrorList[SelectedError].Count.."\n\nCall Stack:\n"..ErrorList[SelectedError].Stack)
 	else
 		BaudErrorFrameEditBox.TextShown = ""
 	end
