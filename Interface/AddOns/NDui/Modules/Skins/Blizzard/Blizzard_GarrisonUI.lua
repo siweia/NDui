@@ -1083,10 +1083,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			if self.isSetting then return end
 			self.isSetting = true
 
-			local mult = (height-135)/72
-			if mult == floor(mult) then -- only adjust the unmodified VP
-				self:SetHeight(mult*68 + 135)
-			end
+			local numFollowers = #C_Garrison.GetFollowers(123)
+			self:SetHeight(135 + 60*ceil(numFollowers/5)) -- 5 follower per row, support up to 35 followers in the future
+
 			self.isSetting = nil
 		end
 		local function AdjustFollowerButton(self, anchor, x, y)
