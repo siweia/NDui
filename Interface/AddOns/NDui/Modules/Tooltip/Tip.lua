@@ -155,7 +155,8 @@ function TT:OnTooltipSetUnit()
 	local unit = TT.GetUnit(self)
 	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
-		local hexColor = B.HexRGB(B.UnitColor(unit))
+		local r, g, b = B.UnitColor(unit)
+		local hexColor = B.HexRGB(r, g, b)
 		local ricon = GetRaidTargetIndex(unit)
 		local text = GameTooltipTextLeft1:GetText()
 		if ricon and ricon > 8 then ricon = nil end
@@ -264,7 +265,7 @@ function TT:OnTooltipSetUnit()
 			end
 		end
 
-		self.StatusBar:SetStatusBarColor(B.UnitColor(unit))
+		self.StatusBar:SetStatusBarColor(r, g, b)
 
 		TT.InspectUnitSpecAndLevel(self, unit)
 		TT.ShowUnitMythicPlusScore(self, unit)

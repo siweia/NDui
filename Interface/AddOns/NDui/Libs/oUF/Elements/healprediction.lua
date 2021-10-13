@@ -1,7 +1,7 @@
 local _, ns = ...
 local oUF = ns.oUF
 
-local function UpdateFillBar(frame, previousTexture, bar, amount)
+local function UpdateFillBar(frame, previousTexture, bar, amount, maxHealth)
 	if amount == 0 then
 		bar:Hide()
 		if bar.overlay then
@@ -14,9 +14,7 @@ local function UpdateFillBar(frame, previousTexture, bar, amount)
 	bar:SetPoint("BOTTOMLEFT", previousTexture, "BOTTOMRIGHT", 0, 0)
 
 	local totalWidth, totalHeight = frame.Health:GetSize()
-	local totalMax = UnitHealthMax(frame.unit)
-
-	local barSize = (amount / totalMax) * totalWidth
+	local barSize = (amount / maxHealth) * totalWidth
 	bar:SetWidth(barSize)
 	bar:Show()
 	if bar.overlay then
@@ -78,10 +76,10 @@ local function Update(self, event, unit)
 
 	local previousTexture = self.Health:GetStatusBarTexture()
 
-	previousTexture = UpdateFillBar(self, previousTexture, hp.myBar, myIncomingHeal)
-	previousTexture = UpdateFillBar(self, previousTexture, hp.otherBar, allIncomingHeal)
+	previousTexture = UpdateFillBar(self, previousTexture, hp.myBar, myIncomingHeal, maxHealth)
+	previousTexture = UpdateFillBar(self, previousTexture, hp.otherBar, allIncomingHeal, maxHealth)
 	if hp.absorbBar then
-		previousTexture = UpdateFillBar(self, previousTexture, hp.absorbBar, absorb)
+		previousTexture = UpdateFillBar(self, previousTexture, hp.absorbBar, absorb, maxHealth)
 	end
 	if hp.healAbsorbBar then
 		if healAbsorb > 0 then
