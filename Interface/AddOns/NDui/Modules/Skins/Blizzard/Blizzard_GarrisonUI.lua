@@ -1148,15 +1148,17 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local function reskinFollowerAbility(frame, index, first)
 			local ability = select(index, frame:GetRegions())
 			ability:SetMask(nil)
+			ability:SetSize(12, 12)
 			ability.bg = B.ReskinIcon(ability)
-			ability.bg:SetFrameLevel(4)
+			ability.bg:SetFrameLevel(5)
 			tinsert(frame.__abilities, ability)
 			select(2, ability:GetPoint()):SetAlpha(0)
-			ability:SetPoint("CENTER", frame, "LEFT", 11, first and 15 or -5)
+			ability:SetPoint("CENTER", frame, "LEFT", 11, first and 11 or -1)
 		end
 
 		local function updateVisibleAbilities(self)
 			for _, ability in pairs(self.__owner.__abilities) do
+				ability:SetDesaturated(not self.__owner.Health:IsShown())
 				ability.bg:SetShown(ability:IsShown())
 			end
 		end
@@ -1235,10 +1237,14 @@ C.themes["Blizzard_GarrisonUI"] = function()
 						tinsert(VPTroops, widget)
 					end
 
-					B.CreateBDFrame(peek("HealthBG"), .25):SetFrameLevel(1)
 					peek("HealthBG"):ClearAllPoints()
 					peek("HealthBG"):SetPoint("TOPLEFT", peek("Portrait"), "BOTTOMLEFT", 0, 10)
 					peek("HealthBG"):SetPoint("BOTTOMRIGHT", peek("Portrait"), "BOTTOMRIGHT")
+					local line = widget:CreateTexture(nil, "ARTWORK")
+					line:SetColorTexture(0, 0, 0)
+					line:SetSize(peek("HealthBG"):GetWidth(), C.mult)
+					line:SetPoint("BOTTOM", peek("HealthBG"), "TOP")
+
 					peek("Health"):SetHeight(10)
 					peek("HealthFrameR"):Hide()
 					peek("TextLabel"):SetFontObject("Game12Font")
@@ -1258,6 +1264,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					local frame = peek("Health"):GetParent()
 					if frame then
 						frame.__abilities = {}
+						frame.Health = peek("Health")
 						local index1, index2 = GetAbilitiesIndex(frame)
 						reskinFollowerAbility(frame, index1, true)
 						reskinFollowerAbility(frame, index2)
