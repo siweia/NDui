@@ -59,10 +59,11 @@ end
 oUF.Tags.Events["hp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
 oUF.Tags.Methods["power"] = function(unit)
-	local cur = UnitPower(unit)
-	local per = oUF.Tags.Methods["perpp"](unit) or 0
+	local cur, maxPower = UnitPower(unit), UnitPowerMax(unit)
+	local per = maxPower == 0 and 0 or B:Round(cur/maxPower * 100)
+
 	if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
-		if per < 100 and UnitPowerType(unit) == 0 then
+		if per < 100 and UnitPowerType(unit) == 0 and maxPower ~= 0 then
 			return B.Numb(cur).." | "..per
 		else
 			return B.Numb(cur)
