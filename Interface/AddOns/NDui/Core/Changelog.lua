@@ -29,12 +29,14 @@ local f
 local function changelog()
 	if f then f:Show() return end
 
+	local majorVersion = gsub(DB.Version, "%.%d+$", ".0")
+
 	f = CreateFrame("Frame", "NDuiChangeLog", UIParent)
 	f:SetPoint("CENTER")
 	f:SetFrameStrata("HIGH")
 	B.CreateMF(f)
 	B.SetBD(f)
-	B.CreateFS(f, 18, DB.Version.." "..L["Changelog"], true, "TOP", 0, -10)
+	B.CreateFS(f, 18, majorVersion.." "..L["Changelog"], true, "TOP", 0, -10)
 	B.CreateWatermark(f)
 
 	local ll = B.SetGradient(f, "H", .7, .7, .7, 0, .5, 100, C.mult)
