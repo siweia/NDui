@@ -1258,7 +1258,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					peek("Blip"):SetPoint("BOTTOMRIGHT", -8, 12)
 					peek("RoleB"):Hide()
 					peek("Role"):ClearAllPoints()
-					peek("Role"):SetPoint("CENTER", widget.bg, "TOPRIGHT")
+					peek("Role"):SetPoint("CENTER", widget.bg, "TOPRIGHT", -2, -2)
 					hooksecurefunc(peek("Role"), "SetAtlas", replaceFollowerRole)
 
 					local frame = peek("Health"):GetParent()

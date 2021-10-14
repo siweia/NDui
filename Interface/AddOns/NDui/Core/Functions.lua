@@ -1250,7 +1250,7 @@ do
 
 			local roleIcon = self.HealthBar.RoleIcon
 			roleIcon:ClearAllPoints()
-			roleIcon:SetPoint("CENTER", self.squareBG, "TOPRIGHT")
+			roleIcon:SetPoint("CENTER", self.squareBG, "TOPRIGHT", -2, -2)
 			replaceFollowerRole(roleIcon, roleIcon:GetAtlas())
 			hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
 
