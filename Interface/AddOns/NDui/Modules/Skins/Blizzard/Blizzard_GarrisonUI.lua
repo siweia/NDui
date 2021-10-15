@@ -1157,8 +1157,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 
 		local function updateVisibleAbilities(self)
+			local showHealth = self.__owner.__health:IsShown()
 			for _, ability in pairs(self.__owner.__abilities) do
-				ability:SetDesaturated(not self.__owner.Health:IsShown())
+				ability:SetDesaturated(not showHealth)
 				ability.bg:SetShown(ability:IsShown())
 			end
 		end
@@ -1264,7 +1265,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					local frame = peek("Health"):GetParent()
 					if frame then
 						frame.__abilities = {}
-						frame.Health = peek("Health")
+						frame.__health = peek("Health")
 						local index1, index2 = GetAbilitiesIndex(frame)
 						reskinFollowerAbility(frame, index1, true)
 						reskinFollowerAbility(frame, index2)
