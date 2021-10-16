@@ -769,7 +769,7 @@ function UF:UpdateNameplateSize()
 	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
 	local nameTextSize = C.db["Nameplate"]["NameTextSize"]
 	local healthTextSize = C.db["Nameplate"]["HealthTextSize"]
-	if self.plateType == "FriendPlate" then
+	if C.db["Nameplate"]["FriendPlate"] and self.isFriendly then -- cannot use plateType here
 		plateWidth, plateHeight = C.db["Nameplate"]["FriendPlateWidth"], C.db["Nameplate"]["FriendPlateHeight"]
 		nameTextSize = C.db["Nameplate"]["FriendNameSize"]
 		healthTextSize = C.db["Nameplate"]["FriendHealthSize"]

@@ -810,14 +810,16 @@ end
 local function sliderValueChanged(self, v)
 	local current = tonumber(format("%.0f", v))
 	self.value:SetText(current)
-	C.db["UFs"][self.__value] = current
+	C.db[self.__key][self.__value] = current
 	self.__update()
 end
 
-local function createOptionSlider(parent, title, minV, maxV, defaultV, x, y, value, func)
+local function createOptionSlider(parent, title, minV, maxV, defaultV, x, y, value, func, key)
 	local slider = B.CreateSlider(parent, title, minV, maxV, 1, x, y)
-	slider:SetValue(C.db["UFs"][value])
-	slider.value:SetText(C.db["UFs"][value])
+	local key = key or "UFs"
+	slider:SetValue(C.db[key][value])
+	slider.value:SetText(C.db[key][value])
+	slider.__key = key
 	slider.__value = value
 	slider.__update = func
 	slider.__default = defaultV
@@ -1202,4 +1204,29 @@ function G:PlateCastbarGlow(parent)
 			createBar(scroll.child, spellID)
 		end
 	end
+end
+
+function G:SetupNameplateSize(parent)
+	local guiName = "NDuiGUI_PlateSizeSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, "姓名板尺寸设置".."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local optionValues = {
+		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize", "HealthTextSize"},
+		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize", "FriendHealthSize"},
+	}
+	local function createOptionGroup(parent, title, offset, value, func)
+		createOptionTitle(parent, title, offset)
+		createOptionSlider(parent, L["NP Width"], 50, 500, 190, 30, offset-60, optionValues[value][1], func, "Nameplate")
+		createOptionSlider(parent, L["NP Height"], 5, 100, 8, 30, offset-130, optionValues[value][2], func, "Nameplate")
+		createOptionSlider(parent, L["NameTextSize"], 10, 50, 14, 30, offset-200, optionValues[value][3], func, "Nameplate")
+		createOptionSlider(parent, L["HealthTextSize"], 10, 50, 16, 30, offset-270, optionValues[value][4], func, "Nameplate")
+	end
+
+	local UF = B:GetModule("UnitFrames")
+	createOptionGroup(scroll.child, "敌方姓名板", -10, "enemy", UF.RefreshAllPlates)
+	createOptionGroup(scroll.child, "友方姓名板", -350, "friend", UF.RefreshAllPlates)
 end
