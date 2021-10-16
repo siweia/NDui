@@ -1211,7 +1211,7 @@ function G:SetupNameplateSize(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, "姓名板尺寸设置".."*")
+	local panel = createExtraGUI(parent, guiName, L["NameplateSize"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local optionValues = {
@@ -1227,6 +1227,6 @@ function G:SetupNameplateSize(parent)
 	end
 
 	local UF = B:GetModule("UnitFrames")
-	createOptionGroup(scroll.child, "敌方姓名板", -10, "enemy", UF.RefreshAllPlates)
-	createOptionGroup(scroll.child, "友方姓名板", -350, "friend", UF.RefreshAllPlates)
+	createOptionGroup(scroll.child, L["HostileNameplate"], -10, "enemy", UF.RefreshAllPlates)
+	createOptionGroup(scroll.child, L["FriendlyNameplate"], -350, "friend", UF.RefreshAllPlates)
 end

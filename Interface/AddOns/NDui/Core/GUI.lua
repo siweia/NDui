@@ -804,15 +804,15 @@ G.TabList = {
 	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
-	L["Nameplate"],
+	NewTag..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
-	NewTag..L["Maps"],
+	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	NewTag..L["Misc"],
+	L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
@@ -939,7 +939,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateFilter},
-		{1, "Nameplate", "FriendPlate", L["FriendPlate"].."*", nil, setupNameplateSize, refreshNameplates, L["FriendPlateTip"]},
+		{1, "Nameplate", "FriendPlate", NewTag..L["FriendPlate"].."*", nil, setupNameplateSize, refreshNameplates, L["FriendPlateTip"]},
 		{1, "Nameplate", "NameOnlyMode", L["NameOnlyMode"].."*", true, nil, nil, L["NameOnlyModeTip"]},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
@@ -1083,7 +1083,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
-		{3, "Map", "MinimapSize", NewTag..L["Minimap Size"].."*", true, {100, 500, 1}, updateMinimapScale},
+		{3, "Map", "MinimapSize", L["Minimap Size"].."*", true, {100, 500, 1}, updateMinimapScale},
 	},
 	[11] = {
 		{1, "Skins", "BlizzardSkins", HeaderTag..L["BlizzardSkins"], nil, nil, nil, L["BlizzardSkinsTips"]},
@@ -1160,7 +1160,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MDGuildBest", L["MDGuildBest"], true, nil, nil, L["MDGuildBestTip"]},
 		{1, "Misc", "MawThreatBar", L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
 		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
-		{1, "Misc", "QuestTool", NewTag..L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
+		{1, "Misc", "QuestTool", L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
