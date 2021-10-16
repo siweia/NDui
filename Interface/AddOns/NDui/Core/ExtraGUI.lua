@@ -1221,7 +1221,7 @@ function G:SetupNameplateSize(parent)
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionSlider(parent, L["NP Width"], 50, 500, 190, 30, offset-60, optionValues[value][1], func, "Nameplate")
-		createOptionSlider(parent, L["NP Height"], 5, 100, 8, 30, offset-130, optionValues[value][2], func, "Nameplate")
+		createOptionSlider(parent, L["NP Height"], 5, 50, 8, 30, offset-130, optionValues[value][2], func, "Nameplate")
 		createOptionSlider(parent, L["NameTextSize"], 10, 50, 14, 30, offset-200, optionValues[value][3], func, "Nameplate")
 		createOptionSlider(parent, L["HealthTextSize"], 10, 50, 16, 30, offset-270, optionValues[value][4], func, "Nameplate")
 	end
