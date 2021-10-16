@@ -275,6 +275,11 @@ G.DefaultSettings = {
 		FocusColor = {r=1, g=.8, b=0},
 		CastbarGlow = true,
 		CastTarget = false,
+		FriendPlate = false,
+		FriendPlateWidth = 190,
+		FriendPlateHeight = 8,
+		FriendNameSize = 14,
+		FriendHealthSize = 16,
 	},
 	Skins = {
 		DBM = true,
@@ -930,7 +935,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateFilter},
-		{1, "Nameplate", "NameOnlyMode", L["NameOnlyMode"].."*", true, nil, nil, L["NameOnlyModeTip"]},
+		{1, "Nameplate", "NameOnlyMode", L["NameOnlyMode"].."*", nil, nil, nil, L["NameOnlyModeTip"]},
+		{1, "Nameplate", "FriendPlate", L["FriendPlate"].."*", true, nil, refreshNameplates, L["FriendPlateTip"]},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{4, "Nameplate", "AuraFilter", L["NameplateAuraFilter"].."*", true, {L["BlackNWhite"], L["PlayerOnly"], L["IncludeCrowdControl"]}, refreshNameplates},

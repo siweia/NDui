@@ -762,7 +762,7 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 			element.__owner.rawSpellID = nil
 		end
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
-		if element.__owner.isNameOnly then
+		if element.__owner.plateType == "NameOnly" then
 			return NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID]
 		elseif NDuiADB["NameplateFilter"][2][spellID] or C.BlackList[spellID] then
 			return false
