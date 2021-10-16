@@ -1215,8 +1215,8 @@ function G:SetupNameplateSize(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local optionValues = {
-		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize", "HealthTextSize"},
-		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize", "FriendHealthSize"},
+		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize", "HealthTextSize", "HealthTextOffset"},
+		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize", "FriendHealthSize", "FriendHealthOffset"},
 	}
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
@@ -1224,9 +1224,10 @@ function G:SetupNameplateSize(parent)
 		createOptionSlider(parent, L["NP Height"], 5, 50, 8, 30, offset-130, optionValues[value][2], func, "Nameplate")
 		createOptionSlider(parent, L["NameTextSize"], 10, 50, 14, 30, offset-200, optionValues[value][3], func, "Nameplate")
 		createOptionSlider(parent, L["HealthTextSize"], 10, 50, 16, 30, offset-270, optionValues[value][4], func, "Nameplate")
+		createOptionSlider(parent, L["Health Offset"], -50, 50, 5, 30, offset-340, optionValues[value][5], func, "Nameplate")
 	end
 
 	local UF = B:GetModule("UnitFrames")
 	createOptionGroup(scroll.child, L["HostileNameplate"], -10, "enemy", UF.RefreshAllPlates)
-	createOptionGroup(scroll.child, L["FriendlyNameplate"], -350, "friend", UF.RefreshAllPlates)
+	createOptionGroup(scroll.child, L["FriendlyNameplate"], -420, "friend", UF.RefreshAllPlates)
 end

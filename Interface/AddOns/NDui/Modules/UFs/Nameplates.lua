@@ -769,10 +769,12 @@ function UF:UpdateNameplateSize()
 	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
 	local nameTextSize = C.db["Nameplate"]["NameTextSize"]
 	local healthTextSize = C.db["Nameplate"]["HealthTextSize"]
+	local healthTextOffset = C.db["Nameplate"]["HealthTextOffset"]
 	if C.db["Nameplate"]["FriendPlate"] and self.isFriendly and not C.db["Nameplate"]["NameOnlyMode"] then -- cannot use plateType here
 		plateWidth, plateHeight = C.db["Nameplate"]["FriendPlateWidth"], C.db["Nameplate"]["FriendPlateHeight"]
 		nameTextSize = C.db["Nameplate"]["FriendNameSize"]
 		healthTextSize = C.db["Nameplate"]["FriendHealthSize"]
+		healthTextOffset = C.db["Nameplate"]["FriendHealthOffset"]
 	end
 
 	local font, fontFlag = DB.Font[1], DB.Font[3]
@@ -789,6 +791,7 @@ function UF:UpdateNameplateSize()
 	self.Castbar.Text:SetFont(font, nameTextSize, fontFlag)
 	self.Castbar.spellTarget:SetFont(font, nameTextSize+3, fontFlag)
 	self.healthValue:SetFont(font, healthTextSize, fontFlag)
+	self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
 	self.healthValue:UpdateTag()
 end
 

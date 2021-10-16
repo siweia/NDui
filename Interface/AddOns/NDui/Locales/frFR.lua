@@ -538,6 +538,7 @@ L["UnitFrame Size"] = "Redimensionner le cadre d'unité"
 L["Health Width"] = "Largeur de la santé"
 L["Health Height"] = "Hauteur de la santé"
 L["Power Height"] = "Hauteur de la puissance"
+L["Health Offset"] = "Health Y-Offset" -- need translation
 L["Power Offset"] = "Décalage de puissance en Y"
 L["Player&Target"] = "CU Joueur&Cible"
 L["Pet&*Target"] = "CU familiers & cibles"

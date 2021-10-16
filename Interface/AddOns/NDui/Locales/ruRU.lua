@@ -538,6 +538,7 @@ L["UnitFrame Size"] = "Размер рамок"
 L["Health Width"] = "Ширина здоровья"
 L["Health Height"] = "Высота здоровья"
 L["Power Height"] = "Высота ресурса"
+L["Health Offset"] = "Health Y-Offset" -- need translation
 L["Power Offset"] = "Вертикальный отступ ресурса"
 L["Player&Target"] = "Игрок и цель"
 L["Pet&*Target"] = "Питомец и цель"
