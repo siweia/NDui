@@ -738,6 +738,8 @@ function G:SetupBuffIndicator(parent)
 		GameTooltip:Show()
 	end
 
+	local UF = B:GetModule("UnitFrames")
+
 	for index, value in ipairs(frameData) do
 		B.CreateFS(panel, 14, value.text, "system", "TOPLEFT", 20, value.offset)
 
@@ -792,7 +794,6 @@ function G:SetupBuffIndicator(parent)
 			B.AddTooltip(showAll, "ANCHOR_TOPRIGHT", L["ShowAllTip"], "info")
 			scroll.showAll = showAll
 
-			local UF = B:GetModule("UnitFrames")
 			for spellID, value in pairs(UF.CornerSpells) do
 				local r, g, b = unpack(value[2])
 				createBar(scroll.child, index, spellID, value[1], r, g, b, value[3])

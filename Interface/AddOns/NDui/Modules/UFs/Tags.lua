@@ -35,11 +35,11 @@ local function ValueAndPercent(cur, per)
 end
 
 local function GetUnitHealthPerc(unit)
-	local unitMaxHealth = UnitHealthMax(unit)
+	local unitHealth, unitMaxHealth = UnitHealth(unit), UnitHealthMax(unit)
 	if unitMaxHealth == 0 then
-		return 0
+		return 0, unitHealth
 	else
-		return B:Round(UnitHealth(unit) / unitMaxHealth * 100, 1)
+		return B:Round(unitHealth / unitMaxHealth * 100, 1), unitHealth
 	end
 end
 
@@ -47,8 +47,7 @@ oUF.Tags.Methods["hp"] = function(unit)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		return oUF.Tags.Methods["DDG"](unit)
 	else
-		local per = GetUnitHealthPerc(unit) or 0
-		local cur = UnitHealth(unit)
+		local per, cur = GetUnitHealthPerc(unit)
 		if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
 			return ValueAndPercent(cur, per)
 		else
@@ -169,9 +168,8 @@ oUF.Tags.Events["raidhp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CO
 
 -- Nameplate tags
 oUF.Tags.Methods["nphp"] = function(unit)
-	local per = GetUnitHealthPerc(unit) or 0
+	local per, cur = GetUnitHealthPerc(unit)
 	if C.db["Nameplate"]["FullHealth"] then
-		local cur = UnitHealth(unit)
 		return ValueAndPercent(cur, per)
 	elseif per < 100 then
 		return ColorPercent(per)
