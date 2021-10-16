@@ -817,7 +817,7 @@ end
 
 local function createOptionSlider(parent, title, minV, maxV, defaultV, x, y, value, func, key)
 	local slider = B.CreateSlider(parent, title, minV, maxV, 1, x, y)
-	local key = key or "UFs"
+	if not key then key = "UFs" end
 	slider:SetValue(C.db[key][value])
 	slider.value:SetText(C.db[key][value])
 	slider.__key = key
