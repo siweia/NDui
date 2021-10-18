@@ -191,6 +191,7 @@ function M:KeystoneInfo_Create()
 	button:SetScript("OnMouseUp", function(_, btn)
 		if btn == "MiddleButton" then
 			wipe(NDuiADB["KeystoneInfo"])
+			M:KeystoneInfo_Update() -- update own keystone info after reset
 		end
 	end)
 end
