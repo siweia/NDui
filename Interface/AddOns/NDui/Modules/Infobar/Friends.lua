@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 if not C.Infobar.Friends then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar("Friends", C.Infobar.FriendsPos)
+local info = module:RegisterInfobar("Friend", C.Infobar.FriendsPos)
 
 local strfind, format, sort, wipe, unpack, tinsert = string.find, string.format, table.sort, table.wipe, unpack, table.insert
 local C_Timer_After = C_Timer.After

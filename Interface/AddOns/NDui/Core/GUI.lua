@@ -381,6 +381,8 @@ G.DefaultSettings = {
 		FasterSkip = false,
 		EnhanceDressup = true,
 		QuestTool = true,
+		LeftInfoStr = "[guild][friend][latency][system][location]",
+		RightInfoStr = "[spec][durability][gold][time]",
 	},
 	Tutorial = {
 		Complete = false,
@@ -771,6 +773,10 @@ local function updateMarkerGrid()
 	B:GetModule("Misc"):RaidTool_UpdateGrid()
 end
 
+local function updateInfobarAnchor()
+	Infobar_UpdateAnchor()
+end
+
 local function updateSkinAlpha()
 	for _, frame in pairs(C.frames) do
 		frame:SetBackdropColor(0, 0, 0, C.db["Skins"]["SkinAlpha"])
@@ -1145,6 +1151,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
+		{1, "ACCOUNT", "DisableInfobars", L["DisableInfobars"]},
+		{2, "Misc", "LeftInfoStr", "左侧信息条", nil, nil, updateInfobarAnchor, L["CustomTexTip"]},
+		{2, "Misc", "RightInfoStr", "右侧信息条", true, nil, updateInfobarAnchor, L["CustomTexTip"]},
+		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
 		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
@@ -1167,7 +1177,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
-		{1, "ACCOUNT", "DisableInfobars", L["DisableInfobars"], true},
 		{},--blank
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, .01}},
 		{1, "ACCOUNT", "LockUIScale", HeaderTag..L["Lock UIScale"], true},

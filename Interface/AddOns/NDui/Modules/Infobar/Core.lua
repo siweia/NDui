@@ -1,13 +1,15 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local module = B:RegisterModule("Infobar")
+local INFO = B:RegisterModule("Infobar")
 local tinsert, pairs, unpack = table.insert, pairs, unpack
 
 local GOLD_AMOUNT_SYMBOL = format("|cffffd700%s|r", GOLD_AMOUNT_SYMBOL)
 local SILVER_AMOUNT_SYMBOL = format("|cffd0d0d0%s|r", SILVER_AMOUNT_SYMBOL)
 local COPPER_AMOUNT_SYMBOL = format("|cffc77050%s|r", COPPER_AMOUNT_SYMBOL)
 
-function module:GetMoneyString(money, full)
+INFO.Modules = {}
+
+function INFO:GetMoneyString(money, full)
 	if money >= 1e6 and not full then
 		return format(" %.0f%s", money / 1e4, GOLD_AMOUNT_SYMBOL)
 	else
@@ -32,7 +34,7 @@ function module:GetMoneyString(money, full)
 	end
 end
 
-function module:RegisterInfobar(name, point)
+function INFO:RegisterInfobar(name, point)
 	if not self.modules then self.modules = {} end
 
 	local info = CreateFrame("Frame", nil, UIParent)
@@ -48,10 +50,12 @@ function module:RegisterInfobar(name, point)
 	info.name = name
 	tinsert(self.modules, info)
 
+	self.Modules[strlower(name)] = info
+
 	return info
 end
 
-function module:LoadInfobar(info)
+function INFO:LoadInfobar(info)
 	if info.eventList then
 		for _, event in pairs(info.eventList) do
 			info:RegisterEvent(event)
@@ -72,34 +76,34 @@ function module:LoadInfobar(info)
 	end
 end
 
-function module:BackgroundLines()
-	if not C.db["Skins"]["InfobarLine"] then return end
-
+function INFO:BackgroundLines()
 	local cr, cg, cb = 0, 0, 0
 	if C.db["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
 
 	local parent = UIParent
 	local width, height = 450, 18
 	local anchors = {
-		[1] = {"TOPLEFT", -3, .5, 0},
-		[2] = {"BOTTOMRIGHT", 3, 0, .5},
+		[1] = {"TOPLEFT", -3, .5, 0, "LeftInfobar"},
+		[2] = {"BOTTOMRIGHT", 3, 0, .5, "RightInfobar"},
 	}
 	for _, v in pairs(anchors) do
-		local frame = CreateFrame("Frame", nil, parent)
-		frame:SetPoint(v[1], parent, v[1], 0, v[2])
+		local frame = CreateFrame("Frame", "NDui"..v[5], parent)
 		frame:SetSize(width, height)
 		frame:SetFrameStrata("BACKGROUND")
+		B.Mover(frame, v[5], v[5], {v[1], parent, v[1], 0, v[2]})
 
-		local tex = B.SetGradient(frame, "H", 0, 0, 0, v[3], v[4], width, height)
-		tex:SetPoint("CENTER")
-		local bottomLine = B.SetGradient(frame, "H", cr, cg, cb, v[3], v[4], width, C.mult)
-		bottomLine:SetPoint("TOP", frame, "BOTTOM")
-		local topLine = B.SetGradient(frame, "H", cr, cg, cb, v[3], v[4], width, C.mult)
-		topLine:SetPoint("BOTTOM", frame, "TOP")
+		if C.db["Skins"]["InfobarLine"] then
+			local tex = B.SetGradient(frame, "H", 0, 0, 0, v[3], v[4], width, height)
+			tex:SetPoint("CENTER")
+			local bottomLine = B.SetGradient(frame, "H", cr, cg, cb, v[3], v[4], width, C.mult)
+			bottomLine:SetPoint("TOP", frame, "BOTTOM")
+			local topLine = B.SetGradient(frame, "H", cr, cg, cb, v[3], v[4], width, C.mult)
+			topLine:SetPoint("BOTTOM", frame, "TOP")
+		end
 	end
 end
 
-function module:OnLogin()
+function INFO:OnLogin()
 	if NDuiADB["DisableInfobars"] then return end
 
 	if not self.modules then return end
@@ -110,7 +114,9 @@ function module:OnLogin()
 	self:BackgroundLines()
 	self.loginTime = GetTime()
 
-	if not C.Infobar.AutoAnchor then return end
+	Infobar_UpdateAnchor()
+
+	if not C.Infobar.Auto2Anchor then return end
 	for index, info in pairs(self.modules) do
 		if index == 1 or index == 6 then
 			info.text:SetPoint(unpack(info.point))
@@ -119,5 +125,51 @@ function module:OnLogin()
 		else
 			info.text:SetPoint("RIGHT", self.modules[index-1], "LEFT", -30, 0)
 		end
+	end
+end
+
+local leftModules, rightModules = {}, {}
+
+function Infobar_UpdateValues()
+	wipe(leftModules)
+	for name in gmatch(C.db["Misc"]["LeftInfoStr"], "%[(%w+)%]") do
+		if INFO.Modules[name] then
+			tinsert(leftModules, name) -- left to right
+		end
+	end
+
+	wipe(rightModules)
+	for name in gmatch(C.db["Misc"]["RightInfoStr"], "%[(%w+)%]") do
+		if INFO.Modules[name] then
+			tinsert(rightModules, 1, name) -- right to left
+		end
+	end
+end
+
+function Infobar_UpdateAnchor()
+	Infobar_UpdateValues()
+
+	local previousLeft
+	for index, name in pairs(leftModules) do
+		local info = INFO.Modules[name]
+		info.text:ClearAllPoints()
+		if index == 1 then
+			info.text:SetPoint("LEFT", _G["NDuiLeftInfobar"], 15, 0)
+		else
+			info.text:SetPoint("LEFT", previousLeft, "RIGHT", 30, 0)
+		end
+		previousLeft = info
+	end
+
+	local previousRight
+	for index, name in pairs(rightModules) do
+		local info = INFO.Modules[name]
+		info.text:ClearAllPoints()
+		if index == 1 then
+			info.text:SetPoint("RIGHT", _G["NDuiRightInfobar"], -15, 0)
+		else
+			info.text:SetPoint("RIGHT", previousRight, "LEFT", -30, 0)
+		end
+		previousRight = info
 	end
 end
