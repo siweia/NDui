@@ -113,7 +113,7 @@ function INFO:Infobar_UpdateValues()
 	local modules = INFO.modules
 
 	wipe(INFO.leftModules)
-	for name in gmatch(C.db["Misc"]["LeftInfoStr"], "%[(%w+)%]") do
+	for name in gmatch(C.db["Misc"]["InfoStrLeft"], "%[(%w+)%]") do
 		if modules[name] and not modules[name].isActive then
 			modules[name].isActive = true
 			tinsert(INFO.leftModules, name) -- left to right
@@ -121,7 +121,7 @@ function INFO:Infobar_UpdateValues()
 	end
 
 	wipe(INFO.rightModules)
-	for name in gmatch(C.db["Misc"]["RightInfoStr"], "%[(%w+)%]") do
+	for name in gmatch(C.db["Misc"]["InfoStrRight"], "%[(%w+)%]") do
 		if modules[name] and not modules[name].isActive then
 			modules[name].isActive = true
 			tinsert(INFO.rightModules, 1, name) -- right to left
