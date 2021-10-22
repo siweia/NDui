@@ -96,7 +96,7 @@ function INFO:BackgroundLines()
 		local frame = CreateFrame("Frame", "NDui"..v[5], parent)
 		frame:SetSize(width, height)
 		frame:SetFrameStrata("BACKGROUND")
-		B.Mover(frame, v[5], v[5], {v[1], parent, v[1], 0, v[2]})
+		B.Mover(frame, L[v[5]], v[5], {v[1], parent, v[1], 0, v[2]})
 
 		if C.db["Skins"]["InfobarLine"] then
 			local tex = B.SetGradient(frame, "H", 0, 0, 0, v[3], v[4], width, height)

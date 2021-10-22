@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 if not C.Infobar.Location then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar("Location", C.Infobar.LocationPos)
+local info = module:RegisterInfobar("Zone", C.Infobar.LocationPos)
 local mapModule = B:GetModule("Maps")
 
 local format, unpack = string.format, unpack

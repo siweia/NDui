@@ -4,7 +4,7 @@ local oUF = ns.oUF
 if not C.Infobar.System then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar("System", C.Infobar.SystemPos)
+local info = module:RegisterInfobar("Fps", C.Infobar.SystemPos)
 
 local ipairs, tinsert, wipe, sort = ipairs, tinsert, wipe, sort
 local format, floor, min, max = format, floor, min, max

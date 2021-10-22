@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 if not C.Infobar.Latency then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar("Latency", C.Infobar.LatencyPos)
+local info = module:RegisterInfobar("Ping", C.Infobar.LatencyPos)
 
 local max, format = max, format
 local GetNetStats, GetNetIpTypes, GetCVarBool = GetNetStats, GetNetIpTypes, GetCVarBool

@@ -4,7 +4,7 @@ local oUF = ns.oUF
 if not C.Infobar.Durability then return end
 
 local module = B:GetModule("Infobar")
-local info = module:RegisterInfobar("Durability", C.Infobar.DurabilityPos)
+local info = module:RegisterInfobar("Dura", C.Infobar.DurabilityPos)
 
 local format, sort, floor, select = string.format, table.sort, math.floor, select
 local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture = GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture
