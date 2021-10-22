@@ -383,6 +383,8 @@ G.DefaultSettings = {
 		QuestTool = true,
 		LeftInfoStr = "[guild][friend][latency][system][location]",
 		RightInfoStr = "[spec][durability][gold][time]",
+		InfoSize = 13,
+		MaxAddOns = 12,
 	},
 	Tutorial = {
 		Complete = false,
@@ -773,8 +775,20 @@ local function updateMarkerGrid()
 	B:GetModule("Misc"):RaidTool_UpdateGrid()
 end
 
-local function updateInfobarAnchor()
-	Infobar_UpdateAnchor()
+local function updateInfobarAnchor(self)
+	if self:GetText() == "" then
+		self:SetText(self.__default)
+		C.db[self.__key][self.__value] = self:GetText()
+	end
+
+	local INFO = B:GetModule("Infobar")
+	if INFO.Infobar_UpdateAnchor then
+		INFO:Infobar_UpdateAnchor()
+	end
+end
+
+local function updateInfobarSize()
+	B:GetModule("Infobar"):UpdateInfobarSize()
 end
 
 local function updateSkinAlpha()
@@ -1151,7 +1165,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
-		{1, "ACCOUNT", "DisableInfobars", L["DisableInfobars"]},
+		{1, "ACCOUNT", "DisableInfobars", HeaderTag..L["DisableInfobars"]},
+		{3, "Misc", "MaxAddOns", "系统信息插件数量", nil,  {1, 50, 1}, nil, L["CustomTexTip"]},
+		{3, "Misc", "InfoSize", "信息条文字大小", true,  {10, 50, 1}, updateInfobarSize, L["CustomTexTip"]},
 		{2, "Misc", "LeftInfoStr", "左侧信息条", nil, nil, updateInfobarAnchor, L["CustomTexTip"]},
 		{2, "Misc", "RightInfoStr", "右侧信息条", true, nil, updateInfobarAnchor, L["CustomTexTip"]},
 		{},--blank
@@ -1281,6 +1297,9 @@ local function CreateOption(i)
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)
 			eb:SetMaxLetters(999)
+			eb.__key = key
+			eb.__value = value
+			eb.__default = (key == "ACCOUNT" and G.AccountSettings[value]) or G.DefaultSettings[key][value]
 			if horizon then
 				eb:SetPoint("TOPLEFT", 345, -offset + 45)
 			else
@@ -1291,9 +1310,9 @@ local function CreateOption(i)
 			eb:HookScript("OnEscapePressed", function()
 				eb:SetText(NDUI_VARIABLE(key, value))
 			end)
-			eb:HookScript("OnEnterPressed", function()
+			eb:HookScript("OnEnterPressed", function(self)
 				NDUI_VARIABLE(key, value, eb:GetText())
-				if callback then callback() end
+				if callback then callback(self) end
 			end)
 
 			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)

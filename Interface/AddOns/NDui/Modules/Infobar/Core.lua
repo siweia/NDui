@@ -1,13 +1,14 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local INFO = B:RegisterModule("Infobar")
-local tinsert, pairs, unpack = table.insert, pairs, unpack
 
+local tinsert, pairs, unpack = table.insert, pairs, unpack
 local GOLD_AMOUNT_SYMBOL = format("|cffffd700%s|r", GOLD_AMOUNT_SYMBOL)
 local SILVER_AMOUNT_SYMBOL = format("|cffd0d0d0%s|r", SILVER_AMOUNT_SYMBOL)
 local COPPER_AMOUNT_SYMBOL = format("|cffc77050%s|r", COPPER_AMOUNT_SYMBOL)
 
-INFO.Modules = {}
+INFO.modules = {}
+INFO.leftModules, INFO.rightModules = {}, {}
 
 function INFO:GetMoneyString(money, full)
 	if money >= 1e6 and not full then
@@ -35,24 +36,29 @@ function INFO:GetMoneyString(money, full)
 end
 
 function INFO:RegisterInfobar(name, point)
-	if not self.modules then self.modules = {} end
-
 	local info = CreateFrame("Frame", nil, UIParent)
 	info:SetHitRectInsets(0, 0, -10, -10)
-	info.text = B.CreateFS(info, C.Infobar.FontSize)
+	info.text = B.CreateFS(info, 12)
 	info.text:ClearAllPoints()
-	if C.Infobar.AutoAnchor then
-		info.point = point
-	else
+	if C.Infobar.CustomAnchor then
 		info.text:SetPoint(unpack(point))
 	end
 	info:SetAllPoints(info.text)
-	info.name = name
-	tinsert(self.modules, info)
 
-	self.Modules[strlower(name)] = info
+	INFO.modules[strlower(name)] = info
 
 	return info
+end
+
+function INFO:UpdateInfobarSize()
+	for _, info in pairs(INFO.modules) do
+		info.text:SetFont(DB.Font[1], C.db["Misc"]["InfoSize"], DB.Font[3])
+	end
+end
+
+local function info_OnEvent(self, ...)
+	if not self.isActive then return end
+	self:onEvent(...)
 end
 
 function INFO:LoadInfobar(info)
@@ -60,7 +66,7 @@ function INFO:LoadInfobar(info)
 		for _, event in pairs(info.eventList) do
 			info:RegisterEvent(event)
 		end
-		info:SetScript("OnEvent", info.onEvent)
+		info:SetScript("OnEvent", info_OnEvent)
 	end
 	if info.onEnter then
 		info:SetScript("OnEnter", info.onEnter)
@@ -103,55 +109,37 @@ function INFO:BackgroundLines()
 	end
 end
 
-function INFO:OnLogin()
-	if NDuiADB["DisableInfobars"] then return end
+function INFO:Infobar_UpdateValues()
+	local modules = INFO.modules
 
-	if not self.modules then return end
-	for _, info in pairs(self.modules) do
-		self:LoadInfobar(info)
-	end
-
-	self:BackgroundLines()
-	self.loginTime = GetTime()
-
-	Infobar_UpdateAnchor()
-
-	if not C.Infobar.Auto2Anchor then return end
-	for index, info in pairs(self.modules) do
-		if index == 1 or index == 6 then
-			info.text:SetPoint(unpack(info.point))
-		elseif index < 6 then
-			info.text:SetPoint("LEFT", self.modules[index-1], "RIGHT", 20, 0)
-		else
-			info.text:SetPoint("RIGHT", self.modules[index-1], "LEFT", -30, 0)
-		end
-	end
-end
-
-local leftModules, rightModules = {}, {}
-
-function Infobar_UpdateValues()
-	wipe(leftModules)
+	wipe(INFO.leftModules)
 	for name in gmatch(C.db["Misc"]["LeftInfoStr"], "%[(%w+)%]") do
-		if INFO.Modules[name] then
-			tinsert(leftModules, name) -- left to right
+		if modules[name] and not modules[name].isActive then
+			modules[name].isActive = true
+			tinsert(INFO.leftModules, name) -- left to right
 		end
 	end
 
-	wipe(rightModules)
+	wipe(INFO.rightModules)
 	for name in gmatch(C.db["Misc"]["RightInfoStr"], "%[(%w+)%]") do
-		if INFO.Modules[name] then
-			tinsert(rightModules, 1, name) -- right to left
+		if modules[name] and not modules[name].isActive then
+			modules[name].isActive = true
+			tinsert(INFO.rightModules, 1, name) -- right to left
 		end
 	end
 end
 
-function Infobar_UpdateAnchor()
-	Infobar_UpdateValues()
+function INFO:Infobar_UpdateAnchor()
+	for _, info in pairs(INFO.modules) do
+		info:Hide()
+		info.isActive = false
+	end
+
+	INFO:Infobar_UpdateValues()
 
 	local previousLeft
-	for index, name in pairs(leftModules) do
-		local info = INFO.Modules[name]
+	for index, name in pairs(INFO.leftModules) do
+		local info = INFO.modules[name]
 		info.text:ClearAllPoints()
 		if index == 1 then
 			info.text:SetPoint("LEFT", _G["NDuiLeftInfobar"], 15, 0)
@@ -159,11 +147,14 @@ function Infobar_UpdateAnchor()
 			info.text:SetPoint("LEFT", previousLeft, "RIGHT", 30, 0)
 		end
 		previousLeft = info
+
+		info:Show()
+		if info.onEvent then info:onEvent() end
 	end
 
 	local previousRight
-	for index, name in pairs(rightModules) do
-		local info = INFO.Modules[name]
+	for index, name in pairs(INFO.rightModules) do
+		local info = INFO.modules[name]
 		info.text:ClearAllPoints()
 		if index == 1 then
 			info.text:SetPoint("RIGHT", _G["NDuiRightInfobar"], -15, 0)
@@ -171,5 +162,24 @@ function Infobar_UpdateAnchor()
 			info.text:SetPoint("RIGHT", previousRight, "LEFT", -30, 0)
 		end
 		previousRight = info
+
+		info:Show()
+		if info.onEvent then info:onEvent() end
+	end
+end
+
+function INFO:OnLogin()
+	if NDuiADB["DisableInfobars"] then return end
+
+	for _, info in pairs(INFO.modules) do
+		INFO:LoadInfobar(info)
+	end
+
+	INFO.loginTime = GetTime()
+	INFO:BackgroundLines()
+	INFO:UpdateInfobarSize()
+
+	if not C.Infobar.CustomAnchor then
+		INFO:Infobar_UpdateAnchor()
 	end
 end

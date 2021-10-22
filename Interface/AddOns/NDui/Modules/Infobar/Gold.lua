@@ -115,8 +115,7 @@ info.onMouseUp = function(self, btn)
 end
 
 info.onEnter = function(self)
-	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:SetPoint("BOTTOMRIGHT", UIParent, -15, 30)
+	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 15)
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(CURRENCY, 0,.6,1)
 	GameTooltip:AddLine(" ")
@@ -198,6 +197,7 @@ local function startSelling()
 end
 
 local function updateSelling(event, ...)
+	if not info.isActive then return end
 	if not NDuiADB["AutoSell"] then return end
 
 	local _, arg = ...
