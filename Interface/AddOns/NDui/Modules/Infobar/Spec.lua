@@ -53,7 +53,8 @@ info.onEnter = function(self)
 	local specIndex = GetSpecialization()
 	if not specIndex or specIndex == 5 then return end
 
-	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 15)
+	local _, anchor, offset = module:GetTooltipAnchor(info)
+	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
 	GameTooltip:ClearLines()
 	GameTooltip:AddLine(TALENTS_BUTTON, 0,.6,1)
 	GameTooltip:AddLine(" ")

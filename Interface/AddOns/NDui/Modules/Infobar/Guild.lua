@@ -161,12 +161,22 @@ local function isPanelCanHide(self, elapsed)
 	end
 end
 
+local function updateInfoFrameAnchor(frame)
+	local relFrom, relTo, offset = module:GetTooltipAnchor(info)
+	frame:ClearAllPoints()
+	frame:SetPoint(relFrom, info, relTo, 0, offset)
+end
+
 function info:GuildPanel_Init()
-	if infoFrame then infoFrame:Show() return end
+	if infoFrame then
+		infoFrame:Show()
+		updateInfoFrameAnchor(infoFrame)
+		return
+	end
 
 	infoFrame = CreateFrame("Frame", "NDuiGuildInfobar", info)
 	infoFrame:SetSize(335, 495)
-	infoFrame:SetPoint("TOPLEFT", UIParent, 15, -30)
+	updateInfoFrameAnchor(infoFrame)
 	infoFrame:SetClampedToScreen(true)
 	infoFrame:SetFrameStrata("TOOLTIP")
 	local bg = B.SetBD(infoFrame)

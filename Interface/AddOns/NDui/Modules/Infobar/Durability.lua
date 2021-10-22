@@ -128,7 +128,8 @@ local repairlist = {
 
 info.onEnter = function(self)
 	local total, equipped = GetAverageItemLevel()
-	GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 15)
+	local _, anchor, offset = module:GetTooltipAnchor(info)
+	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
 	GameTooltip:ClearLines()
 	GameTooltip:AddDoubleLine(DURABILITY, format("%s: %d/%d", STAT_AVERAGE_ITEM_LEVEL, equipped, total), 0,.6,1, 0,.6,1)
 	GameTooltip:AddLine(" ")

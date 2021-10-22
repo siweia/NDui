@@ -168,6 +168,15 @@ function INFO:Infobar_UpdateAnchor()
 	end
 end
 
+function INFO:GetTooltipAnchor(info)
+	local _, height = info:GetCenter()
+	if height and height > GetScreenHeight()/2 then
+		return "TOP", "BOTTOM", -15
+	else
+		return "BOTTOM", "TOP", 15
+	end
+end
+
 function INFO:OnLogin()
 	if NDuiADB["DisableInfobars"] then return end
 

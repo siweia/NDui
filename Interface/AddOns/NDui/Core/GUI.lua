@@ -1165,12 +1165,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
-		{1, "ACCOUNT", "DisableInfobars", HeaderTag..L["DisableInfobars"]},
-		{3, "Misc", "MaxAddOns", "系统信息插件数量", nil,  {1, 50, 1}, nil, L["CustomTexTip"]},
-		{3, "Misc", "InfoSize", "信息条文字大小", true,  {10, 50, 1}, updateInfobarSize, L["CustomTexTip"]},
-		{2, "Misc", "LeftInfoStr", "左侧信息条", nil, nil, updateInfobarAnchor, L["CustomTexTip"]},
-		{2, "Misc", "RightInfoStr", "右侧信息条", true, nil, updateInfobarAnchor, L["CustomTexTip"]},
-		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
 		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
@@ -1193,6 +1187,12 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
+		{},--blank
+		{1, "ACCOUNT", "DisableInfobars", HeaderTag..L["DisableInfobars"]},
+		{3, "Misc", "MaxAddOns", "系统信息插件数量", nil,  {1, 50, 1}, nil, L["CustomTexTip"]},
+		{3, "Misc", "InfoSize", "信息条文字大小", true,  {10, 50, 1}, updateInfobarSize, L["CustomTexTip"]},
+		{2, "Misc", "LeftInfoStr", "左侧信息条", nil, nil, updateInfobarAnchor, L["CustomTexTip"]},
+		{2, "Misc", "RightInfoStr", "右侧信息条", true, nil, updateInfobarAnchor, L["CustomTexTip"]},
 		{},--blank
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, .01}},
 		{1, "ACCOUNT", "LockUIScale", HeaderTag..L["Lock UIScale"], true},

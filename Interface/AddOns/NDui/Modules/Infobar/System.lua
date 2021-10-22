@@ -127,7 +127,8 @@ info.onEnter = function(self)
 	local maxAddOns = C.db["Misc"]["MaxAddOns"]
 	local maxShown = isShiftKeyDown and #infoTable or min(maxAddOns, #infoTable)
 
-	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
+	local _, anchor, offset = module:GetTooltipAnchor(info)
+	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
 	GameTooltip:ClearLines()
 
 	if self.showMemory or not scriptProfileStatus then
