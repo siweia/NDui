@@ -684,10 +684,7 @@ function module:OnLogin()
 	local ContainerGroups = {["Bag"] = {}, ["Bank"] = {}}
 
 	local function AddNewContainer(bagType, index, name, filter)
-		local width = bagsWidth
-		if bagType == "Bank" then width = bankWidth end
-
-		local newContainer = MyContainer:New(name, {Columns = width, BagType = bagType})
+		local newContainer = MyContainer:New(name, {BagType = bagType})
 		newContainer:SetFilter(filter, true)
 		ContainerGroups[bagType][index] = newContainer
 	end
@@ -705,7 +702,7 @@ function module:OnLogin()
 		AddNewContainer("Bag", 6, "BagAnima", filters.bagAnima)
 		AddNewContainer("Bag", 7, "BagRelic", filters.bagRelic)
 
-		f.main = MyContainer:New("Bag", {Columns = bagsWidth, Bags = "bags", BagType = "Bag"})
+		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 		f.main:SetFilter(filters.onlyBags, true)
 
@@ -720,12 +717,12 @@ function module:OnLogin()
 		AddNewContainer("Bank", 9, "BankQuest", filters.bankQuest)
 		AddNewContainer("Bank", 7, "BankAnima", filters.bankAnima)
 
-		f.bank = MyContainer:New("Bank", {Columns = bankWidth, Bags = "bank", BagType = "Bank"})
+		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
 		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:Hide()
 
-		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth, Bags = "bankreagent", BagType = "Bank"})
+		f.reagent = MyContainer:New("Reagent", {Bags = "bankreagent", BagType = "Bank"})
 		f.reagent:SetFilter(filters.onlyReagent, true)
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
@@ -960,10 +957,18 @@ function module:OnLogin()
 		module:UpdateAnchors(f.bank, ContainerGroups["Bank"])
 	end
 
+	function module:GetContainerColumns(bagType)
+		if bagType == "Bag" then
+			return C.db["Bags"]["BagsWidth"]
+		elseif bagType == "Bank" then
+			return C.db["Bags"]["BankWidth"]
+		end
+	end
+
 	function MyContainer:OnContentsChanged(gridOnly)
 		self:SortButtons("bagSlot")
 
-		local columns = self.Settings.Columns
+		local columns = module:GetContainerColumns(self.Settings.BagType)
 		local offset = 38
 		local spacing = 3
 		local xOffset = 5
