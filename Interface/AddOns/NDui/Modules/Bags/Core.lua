@@ -155,18 +155,23 @@ function module:CreateCollapseArrow()
 	self.widgetArrow = bu
 end
 
-function module:CreateBagBar(settings, columns)
-	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
+local function updateBagBar(bar)
 	local spacing = 3
 	local offset = 5
-	local _, height = bagBar:LayoutButtons("grid", columns, spacing, offset, -offset)
-	local width = columns * (self.iconSize + spacing)-spacing
-	bagBar:SetSize(width + offset*2, height + offset*2)
+	local width, height = bar:LayoutButtons("grid", bar.columns, spacing, offset, -offset)
+	bar:SetSize(width + offset*2, height + offset*2)
+end
+
+function module:CreateBagBar(settings, columns)
+	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
 	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagBar)
 	bagBar.highlightFunction = highlightFunction
 	bagBar.isGlobal = true
 	bagBar:Hide()
+	bagBar.columns = columns
+	bagBar.UpdateAnchor = updateBagBar
+	bagBar:UpdateAnchor()
 
 	self.BagBar = bagBar
 end
@@ -702,7 +707,7 @@ function module:OnLogin()
 		AddNewContainer("Bag", 6, "BagAnima", filters.bagAnima)
 		AddNewContainer("Bag", 7, "BagRelic", filters.bagRelic)
 
-		f.main = MyContainer:New("Bag", {Columns = bagsWidth, Bags = "bags"})
+		f.main = MyContainer:New("Bag", {Columns = bagsWidth, Bags = "bags", BagType = "Bag"})
 		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
 		f.main:SetFilter(filters.onlyBags, true)
 
@@ -717,12 +722,12 @@ function module:OnLogin()
 		AddNewContainer("Bank", 9, "BankQuest", filters.bankQuest)
 		AddNewContainer("Bank", 7, "BankAnima", filters.bankAnima)
 
-		f.bank = MyContainer:New("Bank", {Columns = bankWidth, Bags = "bank"})
+		f.bank = MyContainer:New("Bank", {Columns = bankWidth, Bags = "bank", BagType = "Bank"})
 		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
 		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:Hide()
 
-		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth, Bags = "bankreagent"})
+		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth, Bags = "bankreagent", BagType = "Bank"})
 		f.reagent:SetFilter(filters.onlyReagent, true)
 		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
 		f.reagent:Hide()
@@ -743,6 +748,7 @@ function module:OnLogin()
 
 		if not initBagType then
 			module:UpdateAllBags() -- Initialize bagType
+			module:UpdateBagSize()
 			initBagType = true
 		end
 	end
@@ -956,7 +962,7 @@ function module:OnLogin()
 		module:UpdateAnchors(f.bank, ContainerGroups["Bank"])
 	end
 
-	function MyContainer:OnContentsChanged()
+	function MyContainer:OnContentsChanged(gridOnly)
 		self:SortButtons("bagSlot")
 
 		local columns = self.Settings.Columns
@@ -964,8 +970,7 @@ function module:OnLogin()
 		local spacing = 3
 		local xOffset = 5
 		local yOffset = -offset + xOffset
-		local _, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
-		local width = columns * (iconSize+spacing)-spacing
+		local width, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
 		if self.freeSlot then
 			if C.db["Bags"]["GatherEmpty"] then
 				local numSlots = #self.buttons + 1
@@ -990,7 +995,9 @@ function module:OnLogin()
 		end
 		self:SetSize(width + xOffset*2, height + offset)
 
-		module:UpdateAllAnchors()
+		if not gridOnly then
+			module:UpdateAllAnchors()
+		end
 	end
 
 	function MyContainer:OnCreate(name, settings)
@@ -1070,6 +1077,28 @@ function module:OnLogin()
 		if name == "Bag" then module.CreateCollapseArrow(self) end
 
 		self:HookScript("OnShow", B.RestoreMF)
+	end
+
+	local function updateBagSize(button)
+		button:SetSize(iconSize, iconSize)
+		button.glowFrame:SetSize(iconSize+8, iconSize+8)
+	end
+
+	function module:UpdateBagSize()
+		iconSize = C.db["Bags"]["IconSize"]
+		for _, container in pairs(Backpack.contByName) do
+			container:ApplyToButtons(updateBagSize)
+			if container.freeSlot then
+				container.freeSlot:SetSize(iconSize, iconSize)
+			end
+			if container.BagBar then
+				for _, bagButton in pairs(container.BagBar.buttons) do
+					bagButton:SetSize(iconSize, iconSize)
+				end
+				container.BagBar:UpdateAnchor()
+			end
+			container:OnContentsChanged(true)
+		end
 	end
 
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")

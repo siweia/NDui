@@ -564,6 +564,10 @@ local function updateBagAnchor()
 	B:GetModule("Bags"):UpdateAllAnchors()
 end
 
+local function updateBagSize()
+	B:GetModule("Bags"):UpdateBagSize()
+end
+
 local function updateActionbarScale()
 	B:GetModule("Actionbar"):UpdateAllScale()
 end
@@ -882,7 +886,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
 		{3, "Bags", "BagsScale", L["Bags Scale"], false, {.5, 1.5, .1}},
-		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 1}},
+		{3, "Bags", "IconSize", L["Bags IconSize"], true, {30, 42, 1}, updateBagSize},
 		{3, "Bags", "BagsWidth", L["Bags Width"], false, {10, 40, 1}},
 		{3, "Bags", "BankWidth", L["Bank Width"], true, {10, 40, 1}},
 	},
