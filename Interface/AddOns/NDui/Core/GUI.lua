@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local G = B:RegisterModule("GUI")
 
+local unpack, strfind = unpack, strfind
 local tonumber, pairs, ipairs, next, type, tinsert = tonumber, pairs, ipairs, next, type, tinsert
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
@@ -1246,7 +1247,7 @@ local function CreateTab(parent, i, name)
 	return tab
 end
 
-local function NDUI_VARIABLE(key, value, newValue)
+local function CheckUIOption(key, value, newValue)
 	if key == "ACCOUNT" then
 		if newValue ~= nil then
 			NDuiADB[value] = newValue
@@ -1259,6 +1260,14 @@ local function NDUI_VARIABLE(key, value, newValue)
 		else
 			return C.db[key][value]
 		end
+	end
+end
+
+G.needUIReload = nil
+
+local function CheckUIReload(name)
+	if not strfind(name, "%*") then
+		G.needUIReload = true
 	end
 end
 
@@ -1278,9 +1287,10 @@ local function CreateOption(i)
 				offset = offset + 35
 			end
 			cb.name = B.CreateFS(cb, 14, name, false, "LEFT", 30, 0)
-			cb:SetChecked(NDUI_VARIABLE(key, value))
+			cb:SetChecked(CheckUIOption(key, value))
 			cb:SetScript("OnClick", function()
-				NDUI_VARIABLE(key, value, cb:GetChecked())
+				CheckUIOption(key, value, cb:GetChecked())
+				CheckUIReload(name)
 				if callback then callback() end
 			end)
 			if data and type(data) == "function" then
@@ -1305,12 +1315,13 @@ local function CreateOption(i)
 				eb:SetPoint("TOPLEFT", 35, -offset - 25)
 				offset = offset + 70
 			end
-			eb:SetText(NDUI_VARIABLE(key, value))
+			eb:SetText(CheckUIOption(key, value))
 			eb:HookScript("OnEscapePressed", function()
-				eb:SetText(NDUI_VARIABLE(key, value))
+				eb:SetText(CheckUIOption(key, value))
 			end)
 			eb:HookScript("OnEnterPressed", function(self)
-				NDUI_VARIABLE(key, value, eb:GetText())
+				CheckUIOption(key, value, eb:GetText())
+				CheckUIReload(name)
 				if callback then callback(self) end
 			end)
 
@@ -1331,14 +1342,15 @@ local function CreateOption(i)
 			end
 			local s = B.CreateSlider(parent, name, min, max, step, x, y)
 			s.__default = (key == "ACCOUNT" and G.AccountSettings[value]) or G.DefaultSettings[key][value]
-			s:SetValue(NDUI_VARIABLE(key, value))
+			s:SetValue(CheckUIOption(key, value))
 			s:SetScript("OnValueChanged", function(_, v)
 				local current = B:Round(tonumber(v), 2)
-				NDUI_VARIABLE(key, value, current)
+				CheckUIOption(key, value, current)
+				CheckUIReload(name)
 				s.value:SetText(current)
 				if callback then callback() end
 			end)
-			s.value:SetText(B:Round(NDUI_VARIABLE(key, value), 2))
+			s.value:SetText(B:Round(CheckUIOption(key, value), 2))
 			if tooltip then
 				s.title = L["Tips"]
 				B.AddTooltip(s, "ANCHOR_RIGHT", tooltip, "info")
@@ -1358,12 +1370,12 @@ local function CreateOption(i)
 				dd:SetPoint("TOPLEFT", 35, -offset - 25)
 				offset = offset + 70
 			end
-			dd.Text:SetText(data[NDUI_VARIABLE(key, value)])
+			dd.Text:SetText(data[CheckUIOption(key, value)])
 
 			local opt = dd.options
 			dd.button:HookScript("OnClick", function()
 				for num = 1, #data do
-					if num == NDUI_VARIABLE(key, value) then
+					if num == CheckUIOption(key, value) then
 						opt[num]:SetBackdropColor(1, .8, 0, .3)
 						opt[num].selected = true
 					else
@@ -1374,7 +1386,8 @@ local function CreateOption(i)
 			end)
 			for i in pairs(data) do
 				opt[i]:HookScript("OnClick", function()
-					NDUI_VARIABLE(key, value, i)
+					CheckUIOption(key, value, i)
+					CheckUIReload(name)
 					if callback then callback() end
 				end)
 				if value == "TexStyle" then
@@ -1389,7 +1402,7 @@ local function CreateOption(i)
 			end
 		-- Colorswatch
 		elseif optType == 5 then
-			local swatch = B.CreateColorSwatch(parent, name, NDUI_VARIABLE(key, value))
+			local swatch = B.CreateColorSwatch(parent, name, CheckUIOption(key, value))
 			local width = 25 + (horizon or 0)*155
 			if horizon then
 				swatch:SetPoint("TOPLEFT", width, -offset + 30)
@@ -1520,7 +1533,10 @@ local function OpenGUI()
 	ok:SetScript("OnClick", function()
 		B:SetupUIScale()
 		f:Hide()
-		StaticPopup_Show("RELOAD_NDUI")
+		if G.needUIReload then
+			StaticPopup_Show("RELOAD_NDUI")
+			G.needUIReload = nil
+		end
 	end)
 
 	for i, name in pairs(G.TabList) do
