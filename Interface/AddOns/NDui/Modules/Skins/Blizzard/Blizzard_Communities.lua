@@ -64,8 +64,7 @@ local function updateNameFrame(self)
 	if memberInfo and memberInfo.classID then
 		local classInfo = C_CreatureInfo.GetClassInfo(memberInfo.classID)
 		if classInfo then
-			local tcoords = CLASS_ICON_TCOORDS[classInfo.classFile]
-			self.Class:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
+			B.ClassIconTexCoord(self.Class, classInfo.classFile)
 		end
 	end
 end
@@ -80,8 +79,7 @@ local function updateMemberName(self, info)
 
 	local classTag = select(2, GetClassInfo(info.classID))
 	if classTag then
-		local tcoords = CLASS_ICON_TCOORDS[classTag]
-		class:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
+		B.ClassIconTexCoord(class, classTag)
 	end
 end
 

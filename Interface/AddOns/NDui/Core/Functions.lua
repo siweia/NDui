@@ -707,6 +707,12 @@ do
 		hooksecurefunc(self, "Hide", resetIconBorderColor)
 	end
 
+	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
+	function B:ClassIconTexCoord(class)
+		local tcoords = CLASS_ICON_TCOORDS[class]
+		self:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
+	end
+
 	-- Handle statusbar
 	function B:CreateSB(spark, r, g, b)
 		self:SetStatusBarTexture(DB.normTex)
