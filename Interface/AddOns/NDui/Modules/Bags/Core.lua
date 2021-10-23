@@ -659,7 +659,6 @@ function module:OnLogin()
 	if not C.db["Bags"]["Enable"] then return end
 
 	-- Settings
-	local bagsScale = C.db["Bags"]["BagsScale"]
 	local bagsWidth = C.db["Bags"]["BagsWidth"]
 	local bankWidth = C.db["Bags"]["BankWidth"]
 	local iconSize = C.db["Bags"]["IconSize"]
@@ -670,7 +669,6 @@ function module:OnLogin()
 	-- Init
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")
 	Backpack:RegisterBlizzard()
-	Backpack:SetScale(bagsScale)
 	Backpack:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
 	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
