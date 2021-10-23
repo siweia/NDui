@@ -44,6 +44,7 @@ G.DefaultSettings = {
 	Bags = {
 		Enable = true,
 		IconSize = 34,
+		FontSize = 12,
 		BagsWidth = 12,
 		BankWidth = 14,
 		BagsiLvl = true,
@@ -827,7 +828,7 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 
 G.TabList = {
 	L["Actionbar"],
-	L["Bags"],
+	NewTag..L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
 	NewTag..L["Nameplate"],
@@ -885,6 +886,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
 		{3, "Bags", "IconSize", L["Bags IconSize"].."*", nil, {20, 50, 1}, updateBagSize},
+		{3, "Bags", "FontSize", NewTag..L["Bags FontSize"].."*", true, {10, 50, 1}, updateBagSize},
 		{3, "Bags", "BagsWidth", L["Bags Width"].."*", false, {10, 40, 1}, updateBagSize},
 		{3, "Bags", "BankWidth", L["Bank Width"].."*", true, {10, 40, 1}, updateBagSize},
 	},
@@ -1191,10 +1193,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{},--blank
 		{1, "ACCOUNT", "DisableInfobars", HeaderTag..L["DisableInfobars"]},
-		{3, "Misc", "MaxAddOns", L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
-		{3, "Misc", "InfoSize", L["InfobarFontSize"].."*", true,  {10, 50, 1}, updateInfobarSize},
-		{2, "Misc", "InfoStrLeft", L["LeftInfobar"].."*", nil, nil, updateInfobarAnchor, L["InfobarStrTip"]},
-		{2, "Misc", "InfoStrRight", L["RightInfobar"].."*", true, nil, updateInfobarAnchor, L["InfobarStrTip"]},
+		{3, "Misc", "MaxAddOns", NewTag..L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
+		{3, "Misc", "InfoSize", NewTag..L["InfobarFontSize"].."*", true,  {10, 50, 1}, updateInfobarSize},
+		{2, "Misc", "InfoStrLeft", NewTag..L["LeftInfobar"].."*", nil, nil, updateInfobarAnchor, L["InfobarStrTip"]},
+		{2, "Misc", "InfoStrRight", NewTag..L["RightInfobar"].."*", true, nil, updateInfobarAnchor, L["InfobarStrTip"]},
 		{},--blank
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, .01}},
 		{1, "ACCOUNT", "LockUIScale", HeaderTag..L["Lock UIScale"], true},

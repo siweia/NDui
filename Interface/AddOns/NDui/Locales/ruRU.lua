@@ -177,6 +177,7 @@ L["WeakAuras Skin"] = "Тема для WeakAuras"
 L["Bags"] = "Инвентарь"
 L["Enable Bags"] = "Включить инвентарь"
 L["Bags IconSize"] = "Размер слотов"
+L["Bags FontSize"] = "Bags FontSize" -- need translation
 L["Bags Width"] = "Ширина инвентаря"
 L["Bank Width"] = "Ширина банка"
 L["Bags Itemlevel"] = "Показывать уровень предметов"

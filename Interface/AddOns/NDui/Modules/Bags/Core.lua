@@ -397,10 +397,11 @@ function module:CreateFreeSlots()
 	slot.__name = name
 
 	local tag = self:SpawnPlugin("TagDisplay", "[space]", slot)
-	tag:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
+	tag:SetFont(DB.Font[1], C.db["Bags"]["FontSize"] + 2, DB.Font[3])
 	tag:SetTextColor(.6, .8, 1)
 	tag:SetPoint("CENTER", 1, 0)
 	tag.__name = name
+	slot.tag = tag
 
 	self.freeSlot = slot
 end
@@ -770,7 +771,7 @@ function module:OnLogin()
 		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 		self.Count:SetPoint("BOTTOMRIGHT", -1, 2)
-		self.Count:SetFont(unpack(DB.Font))
+		self.Count:SetFont(DB.Font[1], C.db["Bags"]["FontSize"], DB.Font[3])
 		self.Cooldown:SetInside()
 		self.IconOverlay:SetInside()
 		self.IconOverlay2:SetInside()
@@ -788,7 +789,7 @@ function module:OnLogin()
 		self.Favourite:SetPoint("TOPLEFT", -12, 9)
 
 		self.Quest = B.CreateFS(self, 30, "!", "system", "LEFT", 3, 0)
-		self.iLvl = B.CreateFS(self, 12, "", false, "BOTTOMLEFT", 1, 2)
+		self.iLvl = B.CreateFS(self, C.db["Bags"]["FontSize"], "", false, "BOTTOMLEFT", 1, 2)
 
 		if showNewItem then
 			self.glowFrame = B.CreateGlowFrame(self, iconSize)
@@ -1085,6 +1086,8 @@ function module:OnLogin()
 	local function updateBagSize(button)
 		button:SetSize(iconSize, iconSize)
 		button.glowFrame:SetSize(iconSize+8, iconSize+8)
+		button.Count:SetFont(DB.Font[1], C.db["Bags"]["FontSize"], DB.Font[3])
+		button.iLvl:SetFont(DB.Font[1], C.db["Bags"]["FontSize"], DB.Font[3])
 	end
 
 	function module:UpdateBagSize()
@@ -1093,6 +1096,7 @@ function module:OnLogin()
 			container:ApplyToButtons(updateBagSize)
 			if container.freeSlot then
 				container.freeSlot:SetSize(iconSize, iconSize)
+				container.freeSlot.tag:SetFont(DB.Font[1], C.db["Bags"]["FontSize"]+2, DB.Font[3])
 			end
 			if container.BagBar then
 				for _, bagButton in pairs(container.BagBar.buttons) do

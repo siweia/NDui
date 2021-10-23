@@ -177,6 +177,7 @@ L["WeakAuras Skin"] = "Apparence de WeakAura"
 L["Bags"] = "Sacs"
 L["Enable Bags"] = "Activer les sacs consolidés"
 L["Bags IconSize"] = "Taille des icones des sacs"
+L["Bags FontSize"] = "Bags FontSize" -- need translation
 L["Bags Width"] = "Largeur des sacs"
 L["Bank Width"] = "Largeur de la banque"
 L["Bags Itemlevel"] = "Afficher l'Ilvl dans les sacs"
