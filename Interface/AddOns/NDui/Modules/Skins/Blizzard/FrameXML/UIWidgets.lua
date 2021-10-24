@@ -135,6 +135,11 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	-- if font outline enabled in tooltip, fix text shows in two lines on Torghast info
+	hooksecurefunc(_G.UIWidgetTemplateTextWithStateMixin, "Setup", function(self)
+		self.Text:SetWidth(self.Text:GetStringWidth() + 2)
+	end)
+
 	-- needs review, might remove this in the future
 	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
 		ReskinWidgetStatusBar(self.Bar)
