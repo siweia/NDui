@@ -42,6 +42,7 @@ function INFO:RegisterInfobar(name, point)
 	info.text:ClearAllPoints()
 	if C.Infobar.CustomAnchor then
 		info.text:SetPoint(unpack(point))
+		info.isActive = true
 	end
 	info:SetAllPoints(info.text)
 
@@ -130,6 +131,8 @@ function INFO:Infobar_UpdateValues()
 end
 
 function INFO:Infobar_UpdateAnchor()
+	if C.Infobar.CustomAnchor then return end
+
 	for _, info in pairs(INFO.modules) do
 		info:Hide()
 		info.isActive = false
@@ -187,8 +190,5 @@ function INFO:OnLogin()
 	INFO.loginTime = GetTime()
 	INFO:BackgroundLines()
 	INFO:UpdateInfobarSize()
-
-	if not C.Infobar.CustomAnchor then
-		INFO:Infobar_UpdateAnchor()
-	end
+	INFO:Infobar_UpdateAnchor()
 end
