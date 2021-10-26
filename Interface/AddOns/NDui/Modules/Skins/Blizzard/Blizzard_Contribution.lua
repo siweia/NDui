@@ -12,6 +12,11 @@ C.themes["Blizzard_Contribution"] = function()
 		if not self.styled then
 			self.Header.Text:SetTextColor(1, .8, 0)
 			B.Reskin(self.ContributeButton)
+			B.ReplaceIconString(self.ContributeButton)
+			hooksecurefunc(self.ContributeButton, "SetText", B.ReplaceIconString)
+
+			B.StripTextures(self.Status)
+			B.CreateBDFrame(self.Status, .25)
 
 			self.styled = true
 		end
