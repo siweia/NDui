@@ -178,8 +178,8 @@ function M:MailBox_ContactList()
 	bu:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 20, 0)
 
 	local list = CreateFrame("Frame", nil, bu)
-	list:SetSize(200, 424)
-	list:SetPoint("TOPLEFT", MailFrame, "TOPRIGHT", 3, 0)
+	list:SetSize(200, 422)
+	list:SetPoint("TOPLEFT", MailFrame, "TOPRIGHT", 3, -C.mult)
 	list:SetFrameStrata("Tooltip")
 	B.SetBD(list)
 	B.CreateFS(list, 14, L["ContactList"], "system", "TOP", 0, -5)
@@ -189,7 +189,7 @@ function M:MailBox_ContactList()
 	end)
 
 	local editbox = B.CreateEditBox(list, 120, 20)
-	editbox:SetPoint("TOPLEFT", 5, -25)
+	editbox:SetPoint("TOPLEFT", 4, -25)
 	editbox.title = L["Tips"]
 	B.AddTooltip(editbox, "ANCHOR_BOTTOMRIGHT", DB.InfoColor..L["AddContactTip"])
 	local swatch = B.CreateColorSwatch(list, "")
@@ -209,8 +209,8 @@ function M:MailBox_ContactList()
 	end)
 
 	local scrollFrame = CreateFrame("ScrollFrame", "NDuiMailBoxScrollFrame", list, "HybridScrollFrameTemplate")
-	scrollFrame:SetSize(175, 370)
-	scrollFrame:SetPoint("BOTTOMLEFT", 5, 5)
+	scrollFrame:SetSize(175, 368)
+	scrollFrame:SetPoint("BOTTOMLEFT", 4, 4)
 	B.CreateBDFrame(scrollFrame, .25)
 	list.scrollFrame = scrollFrame
 
