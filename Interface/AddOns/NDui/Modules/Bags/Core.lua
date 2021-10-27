@@ -974,7 +974,8 @@ function module:OnLogin()
 		local spacing = 3
 		local xOffset = 5
 		local yOffset = -offset + xOffset
-		local width, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
+		local _, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
+		local width = columns * (iconSize+spacing)-spacing
 		if self.freeSlot then
 			if C.db["Bags"]["GatherEmpty"] then
 				local numSlots = #self.buttons + 1
