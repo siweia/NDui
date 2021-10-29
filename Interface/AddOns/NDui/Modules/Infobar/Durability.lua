@@ -210,7 +210,6 @@ local function merchantClose()
 end
 
 local function merchantShow()
-	if not info.isActive then return end
 	if IsShiftKeyDown() or NDuiADB["RepairType"] == 0 or not CanMerchantRepair() then return end
 	autoRepair()
 	B:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)

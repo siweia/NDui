@@ -198,7 +198,6 @@ local function startSelling()
 end
 
 local function updateSelling(event, ...)
-	if not info.isActive then return end
 	if not NDuiADB["AutoSell"] then return end
 
 	local _, arg = ...
