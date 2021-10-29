@@ -966,7 +966,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateFilter},
-		{1, "Nameplate", "FriendPlate", NewTag..L["FriendPlate"].."*", nil, setupNameplateSize, refreshNameplates, L["FriendPlateTip"]},
+		{1, "Nameplate", "FriendPlate", NewTag..L["NameplateSize"].."*", nil, setupNameplateSize, refreshNameplates, L["FriendPlateTip"]},
 		{1, "Nameplate", "NameOnlyMode", L["NameOnlyMode"].."*", true, nil, nil, L["NameOnlyModeTip"]},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},

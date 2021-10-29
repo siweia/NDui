@@ -808,7 +808,6 @@ L["NPCisTrue"] = "|cffff0000正|cffff7f00確|cffffff00的|cff00ff00任|cff00ffff
 L["QuestTool"] = "任務助手"
 L["QuestToolTip"] = "|n啟用後，幫助你更好的解部分任務及世界任務。"
 L["CatchButterfly"] = "靠近蝴蝶，然後滾輪上！"
-L["FriendPlate"] = "友方名條獨立尺寸"
 L["FriendPlateTip"] = "|n點擊右側齒輪，可對名條進行尺寸調節。|n|n啟用後，你可以為友方名條設置單獨的尺寸，以區分敵方名條。|n不啟用，則全部使用敵方名條的設定。|n|n你必須關閉友方名條名字模式才能生效友方獨立尺寸。"
 L["NameplateSize"] = "名條尺寸設置"
 L["HostileNameplate"] = "敵方名條"

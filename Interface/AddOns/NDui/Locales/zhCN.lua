@@ -808,7 +808,6 @@ L["NPCisTrue"] = "|cffff0000正|cffff7f00确|cffffff00的|cff00ff00任|cff00ffff
 L["QuestTool"] = "任务助手"
 L["QuestToolTip"] = "|n启用后，帮助你更好的完成部分任务及世界任务。"
 L["CatchButterfly"] = "靠近蝴蝶，然后滚轮上！"
-L["FriendPlate"] = "友方姓名板独立尺寸"
 L["FriendPlateTip"] = "|n点击右侧齿轮，可对姓名板进行尺寸调节。|n|n启用后，你可以为友方姓名板设置单独的尺寸，以区分敌方姓名板。|n不启用，则全部使用敌方姓名板设置。|n|n你必须关闭友方名字模式才能生效友方独立尺寸。"
 L["NameplateSize"] = "姓名板尺寸设置"
 L["HostileNameplate"] = "敌方姓名板"
