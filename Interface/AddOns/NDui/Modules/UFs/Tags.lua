@@ -193,6 +193,12 @@ oUF.Tags.Methods["nppp"] = function(unit)
 end
 oUF.Tags.Events["nppp"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
+local NPClassifies = {
+	rare = "  ",
+	elite = "  ",
+	rareelite = "  ",
+	worldboss = "  ",
+}
 oUF.Tags.Methods["nplevel"] = function(unit)
 	local level = UnitLevel(unit)
 	if level and level ~= UnitLevel("player") then
@@ -205,7 +211,8 @@ oUF.Tags.Methods["nplevel"] = function(unit)
 		level = ""
 	end
 
-	return level
+	local class = UnitClassification(unit)
+	return (class and NPClassifies[class] or "")..level
 end
 oUF.Tags.Events["nplevel"] = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED"
 
