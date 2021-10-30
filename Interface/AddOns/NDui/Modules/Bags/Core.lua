@@ -896,7 +896,7 @@ function module:OnLogin()
 		if C.db["Bags"]["BagsiLvl"] then
 			local level = item.level -- ilvl for keystone and battlepet
 			if not level and isItemNeedsLevel(item) then
-				local ilvl = B.GetItemLevel(item.link, item.bagID, item.slotID)
+				local ilvl = B.GetItemLevel(item.link, item.bagID ~= -1 and item.bagID, item.slotID) -- SetBagItem return nil for default bank slots
 				if ilvl and ilvl > C.db["Bags"]["iLvlToShow"] then
 					level = ilvl
 				end
