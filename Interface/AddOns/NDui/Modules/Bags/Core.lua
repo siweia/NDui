@@ -12,7 +12,7 @@ local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsCosmeticItem = IsCosmeticItem
-local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
+local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 
 local sortCache = {}
@@ -40,6 +40,7 @@ function module:UpdateAnchors(parent, bags)
 	wipe(anchorCache)
 
 	local index = 1
+	local perRow = C.db["Bags"]["BagsPerRow"]
 	anchorCache[index] = parent
 
 	for _, bag in ipairs(bags) do
@@ -48,8 +49,8 @@ function module:UpdateAnchors(parent, bags)
 			index = index + 1
 
 			bag:ClearAllPoints()
-			if C.db["Bags"]["MultiRows"] and (index-1) % 4 == 0 then
-				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-4], "BOTTOMLEFT", -5, 0)
+			if (index-1) % perRow == 0 then
+				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
 			else
 				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
 			end
@@ -253,7 +254,7 @@ local function updateDepositButtonStatus(bu)
 end
 
 function module:AutoDeposit()
-	if C.db["Bags"]["AutoDeposit"] then
+	if C.db["Bags"]["AutoDeposit"] and not IsShiftKeyDown() then
 		DepositReagentBank()
 	end
 end
