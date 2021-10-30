@@ -59,6 +59,7 @@ G.DefaultSettings = {
 		AutoDeposit = false,
 		PetTrash = true,
 		BagsPerRow = 6,
+		HideWidgets = true,
 
 		FilterJunk = true,
 		FilterConsumable = true,
