@@ -34,7 +34,7 @@ function module:ReverseSort()
 end
 
 local anchorCache = {}
-function module:UpdateAnchors(parent, bags)
+function module:UpdateAnchors(parent, bags, isBank)
 	if not parent:IsShown() then return end
 
 	wipe(anchorCache)
@@ -50,9 +50,17 @@ function module:UpdateAnchors(parent, bags)
 
 			bag:ClearAllPoints()
 			if (index-1) % perRow == 0 then
-				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
+				if isBank then
+					bag:SetPoint("TOPLEFT", anchorCache[index-perRow], "TOPRIGHT", 5, 0)
+				else
+					bag:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
+				end
 			else
-				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
+				if isBank then
+					bag:SetPoint("TOPLEFT", anchorCache[index-1], "BOTTOMLEFT", 0, -5)
+				else
+					bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
+				end
 			end
 			anchorCache[index] = bag
 		else
@@ -186,11 +194,11 @@ local function CloseOrRestoreBags(self, btn)
 		C.db["TempAnchor"][bank:GetName()] = nil
 		C.db["TempAnchor"][reagent:GetName()] = nil
 		bag:ClearAllPoints()
-		bag:SetPoint("BOTTOMRIGHT", -50, 50)
+		bag:SetPoint("BOTTOMRIGHT", -50, 100)
 		bank:ClearAllPoints()
-		bank:SetPoint("BOTTOMRIGHT", bag, "BOTTOMLEFT", -10, 0)
+		bank:SetPoint("TOPLEFT", 20, -50)
 		reagent:ClearAllPoints()
-		reagent:SetPoint("BOTTOMLEFT", bank)
+		reagent:SetPoint("TOPLEFT", bank)
 		PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
 	else
 		CloseAllBags()
@@ -705,7 +713,7 @@ function module:OnLogin()
 		AddNewContainer("Bag", 7, "BagRelic", filters.bagRelic)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
-		f.main:SetPoint("BOTTOMRIGHT", -50, 50)
+		f.main:SetPoint("BOTTOMRIGHT", -50, 100)
 		f.main:SetFilter(filters.onlyBags, true)
 
 		AddNewContainer("Bank", 10, "BankFavourite", filters.bankFavourite)
@@ -720,13 +728,13 @@ function module:OnLogin()
 		AddNewContainer("Bank", 7, "BankAnima", filters.bankAnima)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
-		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
+		f.bank:SetPoint("TOPLEFT", 20, -50)
 		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:Hide()
 
 		f.reagent = MyContainer:New("Reagent", {Bags = "bankreagent", BagType = "Bank"})
 		f.reagent:SetFilter(filters.onlyReagent, true)
-		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
+		f.reagent:SetPoint("TOPLEFT", f.bank)
 		f.reagent:Hide()
 
 		for bagType, groups in pairs(ContainerGroups) do
@@ -956,7 +964,7 @@ function module:OnLogin()
 
 	function module:UpdateAllAnchors()
 		module:UpdateAnchors(f.main, ContainerGroups["Bag"])
-		module:UpdateAnchors(f.bank, ContainerGroups["Bank"])
+		module:UpdateAnchors(f.bank, ContainerGroups["Bank"], true)
 	end
 
 	function module:GetContainerColumns(bagType)
