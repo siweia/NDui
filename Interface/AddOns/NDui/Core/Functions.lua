@@ -258,8 +258,10 @@ do
 
 			for i = 1, tip:NumLines() do
 				local line = _G[tip:GetName().."TextLeft"..i]
-				if line then
-					local text = line:GetText() or ""
+				if not line then break end
+
+				local text = line:GetText()
+				if text then
 					if i == 1 and text == RETRIEVING_ITEM_INFO then
 						return "tooSoon"
 					else
@@ -289,14 +291,14 @@ do
 
 			for i = 2, 5 do
 				local line = _G[tip:GetName().."TextLeft"..i]
-				if line then
-					local text = line:GetText() or ""
-					local found = strfind(text, itemLevelString)
-					if found then
-						local level = strmatch(text, "(%d+)%)?$")
-						iLvlDB[link] = tonumber(level)
-						break
-					end
+				if not line then break end
+
+				local text = line:GetText()
+				local found = text and strfind(text, itemLevelString)
+				if found then
+					local level = strmatch(text, "(%d+)%)?$")
+					iLvlDB[link] = tonumber(level)
+					break
 				end
 			end
 
