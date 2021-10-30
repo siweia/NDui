@@ -2,7 +2,7 @@
 ![1](http://wx4.sinaimg.cn/large/7112bfffgy1fwr835r4grj21hc0u0kjm.jpg)
 
 # NDui Intro
-- This is not just an UI that changes your ingame appearence.
+- This is not just a UI that changes your ingame appearence.
 - It contains build-in auras watcher and toolbar for all specs and talents.
 - Locales include 简体中文, 繁體中文, English, Russian and French.
 - Published Pages:
