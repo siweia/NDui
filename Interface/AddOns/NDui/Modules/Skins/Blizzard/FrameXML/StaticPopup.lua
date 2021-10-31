@@ -33,6 +33,10 @@ tinsert(C.defaultThemes, function()
 		bu.bg = B.ReskinIcon(icon)
 		B.ReskinIconBorder(bu.IconBorder)
 
+		local bg = B.CreateBDFrame(bu, .25)
+		bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 2, 0)
+		bg:SetPoint("BOTTOMRIGHT", bu.bg, 115, 0)
+
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
