@@ -820,3 +820,4 @@ L["InfobarStrTip"] = "|n根据你输入的字符组合对信息条进行排序:|
 L["BagsPerRow"] = "每列背包数量"
 L["BagsPerRowTip"] = "|n开启背包物品分类存放后，每一列允许堆叠的最大背包数量。"
 L["PlateAuras"] = "姓名板法术监控"
+L["QuickJoinInfo"] = "你可以双击快速申请队伍，按住ALT键双击则需输入备注。"

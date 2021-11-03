@@ -820,3 +820,4 @@ L["InfobarStrTip"] = "|nAnchor the infobars by the strings below:|n[guild] guild
 L["BagsPerRow"] = "Bags Per Row"
 L["BagsPerRowTip"] = "|nIf Bags ItemFilter enabled, change the bags per row for anchoring."
 L["PlateAuras"] = "Nameplate Auras"
+L["QuickJoinInfo"] = "Quick apply group by double click. And leave comment by holding key ALT and double click."

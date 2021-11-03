@@ -145,6 +145,21 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 	end
 end
 
+function M:QuickJoin_ShowTips()
+	local quickJoinInfo = {
+		text = L["QuickJoinInfo"],
+		buttonStyle = HelpTip.ButtonStyle.GotIt,
+		targetPoint = HelpTip.Point.RightEdgeCenter,
+		onAcknowledgeCallback = B.HelpInfoAcknowledge,
+		callbackArg = "QuickJoin",
+	}
+	LFGListFrame.SearchPanel.SignUpButton:HookScript("OnShow", function()
+		if not NDuiADB["Help"]["QuickJoin"] then
+			HelpTip:Show(PVEFrame, quickJoinInfo)
+		end
+	end)
+end
+
 function M:QuickJoin()
 	for i = 1, 10 do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
@@ -152,6 +167,7 @@ function M:QuickJoin()
 			bu:HookScript("OnDoubleClick", M.HookApplicationClick)
 		end
 	end
+	M:QuickJoin_ShowTips()
 
 	hooksecurefunc("LFGListInviteDialog_Accept", function()
 		if PVEFrame:IsShown() then HideUIPanel(PVEFrame) end

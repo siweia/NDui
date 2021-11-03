@@ -820,3 +820,4 @@ L["InfobarStrTip"] = "|n根據你輸入的字符組合對訊息條進行排序:|
 L["BagsPerRow"] = "每列背包數量"
 L["BagsPerRowTip"] = "|n開啟背包物品分類存放後，每一列允許堆叠的最大背包數量。"
 L["PlateAuras"] = "名條法術監控"
+L["QuickJoinInfo"] = "你可以雙擊快速申請隊伍，按住ALT雙擊則需輸入備注。"
