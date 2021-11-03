@@ -872,11 +872,13 @@ function G:SetupUnitFrame(parent)
 		end
 	end
 
+	local UF = B:GetModule("UnitFrames")
 	local mainFrames = {_G.oUF_Player, _G.oUF_Target}
 	local function updatePlayerSize()
 		for _, frame in pairs(mainFrames) do
 			SetUnitFrameSize(frame, "Player")
 		end
+		UF:UpdateTargetAuras()
 	end
 	createOptionGroup(scroll.child, L["Player&Target"], -10, "Player", updatePlayerSize)
 
