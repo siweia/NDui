@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local G = B:RegisterModule("GUI")
 
-local unpack, strfind = unpack, strfind
+local unpack, strfind, strsub = unpack, strfind, strsub
 local tonumber, pairs, ipairs, next, type, tinsert = tonumber, pairs, ipairs, next, type, tinsert
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
@@ -596,6 +596,11 @@ local function updateEquipColor()
 	end
 end
 
+local function toggleBarFader(self)
+	local name = strsub(self.__value, 1, 4)
+	B:GetModule("Actionbar"):ToggleBarFader(name)
+end
+
 local function updateBuffFrame()
 	local A = B:GetModule("Auras")
 	A:UpdateOptions()
@@ -852,8 +857,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true},
-		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"]},
-		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"], true},
+		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
+		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
 		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
 		{3, "Actionbar", "Scale", L["Actionbar Scale"].."*", true, {.5, 1.5, .01}, updateActionbarScale},
 		{},--blank
@@ -1294,12 +1299,13 @@ local function CreateOption(i)
 				cb:SetPoint("TOPLEFT", 20, -offset)
 				offset = offset + 35
 			end
+			cb.__value = value
 			cb.name = B.CreateFS(cb, 14, name, false, "LEFT", 30, 0)
 			cb:SetChecked(CheckUIOption(key, value))
-			cb:SetScript("OnClick", function()
+			cb:SetScript("OnClick", function(self)
 				CheckUIOption(key, value, cb:GetChecked())
 				CheckUIReload(name)
-				if callback then callback() end
+				if callback then callback(self) end
 			end)
 			if data and type(data) == "function" then
 				local bu = B.CreateGear(parent)
