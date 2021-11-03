@@ -62,7 +62,7 @@ function Bar:CreateBar5()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	if cfg.fader then
-		frame.isDisable = not C.db["Actionbar"]["Bar5Fade"]
+		frame.isDisable = not C.db["Actionbar"]["Bar5Fader"]
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 end

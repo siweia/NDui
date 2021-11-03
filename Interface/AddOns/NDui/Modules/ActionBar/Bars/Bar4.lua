@@ -59,7 +59,7 @@ function Bar:ToggleBarFader(name)
 	local frame = _G["NDui_Action"..name]
 	if not frame then return end
 
-	frame.isDisable = not C.db["Actionbar"][name.."Fade"]
+	frame.isDisable = not C.db["Actionbar"][name.."Fader"]
 	if frame.isDisable then
 		Bar:StartFadeIn(frame)
 	else
@@ -132,7 +132,7 @@ function Bar:CreateBar4()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	if cfg.fader then
-		frame.isDisable = not C.db["Actionbar"]["Bar4Fade"]
+		frame.isDisable = not C.db["Actionbar"]["Bar4Fader"]
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 

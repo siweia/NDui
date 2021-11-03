@@ -10,7 +10,7 @@ local margin, padding = C.Bars.margin, C.Bars.padding
 function Bar:CreateCustomBar(anchor)
 	local size = C.db["Actionbar"]["CustomBarButtonSize"]
 	local num = 12
-	local name = "NDui_CustomBar"
+	local name = "NDui_ActionBarX"
 	local page = 8
 
 	local frame = CreateFrame("Frame", name, UIParent, "SecureHandlerStateTemplate")
@@ -36,7 +36,8 @@ function Bar:CreateCustomBar(anchor)
 		tinsert(Bar.buttons, button)
 	end
 
-	if C.db["Actionbar"]["CustomBarFader"] and cfg.fader then
+	if cfg.fader then
+		frame.isDisable = not C.db["Actionbar"]["BarXFader"]
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
@@ -44,7 +45,7 @@ function Bar:CreateCustomBar(anchor)
 end
 
 function Bar:UpdateCustomBar()
-	local frame = _G.NDui_CustomBar
+	local frame = _G.NDui_ActionBarX
 	if not frame then return end
 
 	local size = C.db["Actionbar"]["CustomBarButtonSize"]

@@ -49,7 +49,7 @@ local function toggleButtonGrid()
 		local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
 		buttonShowGrid("ActionButton", showgrid)
 		buttonShowGrid("MultiBarBottomRightButton", showgrid)
-		buttonShowGrid("NDui_CustomBarButton", showgrid)
+		buttonShowGrid("NDui_ActionBarXButton", showgrid)
 		if updateAfterCombat then
 			B:UnregisterEvent("PLAYER_REGEN_ENABLED", toggleButtonGrid)
 			updateAfterCombat = false

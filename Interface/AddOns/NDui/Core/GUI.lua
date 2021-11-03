@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local G = B:RegisterModule("GUI")
 
-local unpack, strfind, strsub = unpack, strfind, strsub
+local unpack, strfind, gsub = unpack, strfind, gsub
 local tonumber, pairs, ipairs, next, type, tinsert = tonumber, pairs, ipairs, next, type, tinsert
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
@@ -27,14 +27,14 @@ G.DefaultSettings = {
 		Cooldown = true,
 		DecimalCD = true,
 		Style = 1,
-		Bar4Fade = false,
-		Bar5Fade = true,
+		Bar4Fader = false,
+		Bar5Fader = true,
 		Scale = 1,
 		BindType = 1,
 		OverrideWA = false,
 		MicroMenu = true,
 		CustomBar = false,
-		CustomBarFader = false,
+		BarXFader = false,
 		CustomBarButtonSize = 34,
 		CustomBarNumButtons = 12,
 		CustomBarNumPerRow = 12,
@@ -597,7 +597,7 @@ local function updateEquipColor()
 end
 
 local function toggleBarFader(self)
-	local name = strsub(self.__value, 1, 4)
+	local name = gsub(self.__value, "Fader", "")
 	B:GetModule("Actionbar"):ToggleBarFader(name)
 end
 
@@ -857,13 +857,13 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true},
-		{1, "Actionbar", "Bar4Fade", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
-		{1, "Actionbar", "Bar5Fade", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
+		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
+		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
 		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
 		{3, "Actionbar", "Scale", L["Actionbar Scale"].."*", true, {.5, 1.5, .01}, updateActionbarScale},
 		{},--blank
 		{1, "Actionbar", "CustomBar", HeaderTag..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
-		{1, "Actionbar", "CustomBarFader", L["CustomBarFader"]},
+		{1, "Actionbar", "BarXFader", L["CustomBarFader"].."*", nil, nil, toggleBarFader},
 		{3, "Actionbar", "CustomBarButtonSize", L["CustomBarButtonSize"].."*", true, {24, 60, 1}, updateCustomBar},
 		{3, "Actionbar", "CustomBarNumButtons", L["CustomBarNumButtons"].."*", nil, {1, 12, 1}, updateCustomBar},
 		{3, "Actionbar", "CustomBarNumPerRow", L["CustomBarNumPerRow"].."*", true, {1, 12, 1}, updateCustomBar},
