@@ -30,7 +30,7 @@ function Bar:UpdateAllScale()
 	Bar:UpdateActionSize("Bar4")
 	Bar:UpdateActionSize("Bar5")
 	Bar:UpdateActionSize("BarPet")
-	Bar:UpdateActionSize("BarStance")
+	Bar:UpdateStanceBar()
 	UpdateActionbarScale("BarExit")
 end
 
@@ -115,7 +115,7 @@ function Bar:CreateBar1()
 	local layout = C.db["Actionbar"]["Style"]
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar1", UIParent, "SecureHandlerStateTemplate")
-	frame.mover = B.Mover(frame, "Bar1", "Bar1", {"BOTTOM", UIParent, "BOTTOM", 0, 24})
+	frame.mover = B.Mover(frame, L["Actionbar"].."1", "Bar1", {"BOTTOM", UIParent, "BOTTOM", 0, 24})
 
 	for i = 1, num do
 		local button = _G["ActionButton"..i]

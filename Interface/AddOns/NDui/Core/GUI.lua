@@ -67,7 +67,6 @@ G.DefaultSettings = {
 		BarPetPerRow = 10,
 		BarStanceSize = 30,
 		BarStanceFont = 12,
-		BarStanceNum = 10,
 		BarStancePerRow = 10,
 	},
 	Bags = {
@@ -603,6 +602,10 @@ local function setupActionBar()
 	G:SetupActionBar(guiPage[1])
 end
 
+local function setupStanceBar()
+	G:SetupStanceBar(guiPage[1])
+end
+
 local function updateActionbarScale()
 	B:GetModule("Actionbar"):UpdateAllScale()
 end
@@ -889,7 +892,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"]},
-		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true},
+		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
 		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
 		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
