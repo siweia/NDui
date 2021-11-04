@@ -34,29 +34,33 @@ function module:ReverseSort()
 end
 
 local anchorCache = {}
-function module:UpdateAnchors(parent, bags, isBank)
-	if not parent:IsShown() then return end
 
+function module:UpdateAnchors(parent, bags, atBank)
 	wipe(anchorCache)
 
 	local index = 1
 	local perRow = C.db["Bags"]["BagsPerRow"]
 	anchorCache[index] = parent
 
-	for _, bag in ipairs(bags) do
+	for i = 1, #bags do
+		local bag = bags[i]
 		if bag:GetHeight() > 45 then
 			bag:Show()
 			index = index + 1
 
 			bag:ClearAllPoints()
-			if (index-1) % perRow == 0 then
-				if isBank then
+			if atBank and index <= perRow then
+				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
+			elseif atBank and index == perRow+1 then
+				bag:SetPoint("TOPLEFT", anchorCache[index-1], "TOPRIGHT", 5, 0)
+			elseif (index-1) % perRow == 0 then
+				if atBank then
 					bag:SetPoint("TOPLEFT", anchorCache[index-perRow], "TOPRIGHT", 5, 0)
 				else
 					bag:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
 				end
 			else
-				if isBank then
+				if atBank then
 					bag:SetPoint("TOPLEFT", anchorCache[index-1], "BOTTOMLEFT", 0, -5)
 				else
 					bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
