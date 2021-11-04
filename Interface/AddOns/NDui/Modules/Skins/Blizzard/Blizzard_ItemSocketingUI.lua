@@ -40,7 +40,7 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 			socket.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 
-		B.HideBackdrop(ItemSocketingDescription) -- isNewPatch
+		ItemSocketingDescription:HideBackdrop()
 	end)
 
 	B.ReskinPortraitFrame(ItemSocketingFrame)

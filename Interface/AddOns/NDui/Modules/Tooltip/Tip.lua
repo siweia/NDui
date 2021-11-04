@@ -387,7 +387,7 @@ function TT:ReskinTooltip()
 	self:SetScale(C.db["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
-		B.HideBackdrop(self) -- isNewPatch
+		self:HideBackdrop()
 		self:DisableDrawLayer("BACKGROUND")
 		self.bg = B.SetBD(self, .7)
 		self.bg:SetInside(self)
@@ -417,11 +417,6 @@ function TT:ReskinTooltip()
 			end
 		end
 	end
-end
-
-function TT:SharedTooltip_SetBackdropStyle()
-	if not self.tipStyled then return end
-	self:SetBackdrop(nil)
 end
 
 local function TooltipSetFont(font, size)
@@ -476,9 +471,6 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
-	if not DB.isNewPatch then
-		hooksecurefunc("SharedTooltip_SetBackdropStyle", TT.SharedTooltip_SetBackdropStyle)
-	end
 	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
 	TT:SetupTooltipFonts()
 	GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
