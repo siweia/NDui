@@ -64,11 +64,8 @@ C.themes["Blizzard_GuildUI"] = function()
 	B.CreateBDFrame(GuildLogContainer, .25)
 	B.SetBD(GuildNewsFiltersFrame)
 	B.SetBD(GuildTextEditFrame)
+	B.StripTextures(GuildTextEditContainer)
 	B.CreateBDFrame(GuildTextEditContainer, .25)
-	B.CreateBDFrame(GuildRecruitmentInterestFrame, .25)
-	B.CreateBDFrame(GuildRecruitmentAvailabilityFrame, .25)
-	B.CreateBDFrame(GuildRecruitmentRolesFrame, .25)
-	B.CreateBDFrame(GuildRecruitmentLevelFrame, .25)
 	for i = 1, 5 do
 		B.ReskinTab(_G["GuildFrameTab"..i])
 	end
@@ -80,6 +77,7 @@ C.themes["Blizzard_GuildUI"] = function()
 	GuildFrameTabardEmblem:Hide()
 	GuildFrameTabardBorder:Hide()
 	B.StripTextures(GuildInfoFrameInfo)
+	B.StripTextures(GuildInfoFrameTab1)
 	GuildMemberDetailCorner:Hide()
 	B.StripTextures(GuildLogFrame)
 	B.StripTextures(GuildLogContainer)
@@ -89,18 +87,6 @@ C.themes["Blizzard_GuildUI"] = function()
 	GuildNewsFrame:GetRegions():Hide()
 	GuildRewardsFrame:GetRegions():Hide()
 	GuildNewsBossModelShadowOverlay:Hide()
-
-	GuildRecruitmentCommentInputFrameTop:Hide()
-	GuildRecruitmentCommentInputFrameTopLeft:Hide()
-	GuildRecruitmentCommentInputFrameTopRight:Hide()
-	GuildRecruitmentCommentInputFrameBottom:Hide()
-	GuildRecruitmentCommentInputFrameBottomLeft:Hide()
-	GuildRecruitmentCommentInputFrameBottomRight:Hide()
-	GuildRecruitmentInterestFrameBg:Hide()
-	GuildRecruitmentAvailabilityFrameBg:Hide()
-	GuildRecruitmentRolesFrameBg:Hide()
-	GuildRecruitmentLevelFrameBg:Hide()
-	GuildRecruitmentCommentFrameBg:Hide()
 	GuildNewsFrameHeader:SetAlpha(0)
 
 	GuildFrameBottomInset:DisableDrawLayer("BACKGROUND")
@@ -141,16 +127,8 @@ C.themes["Blizzard_GuildUI"] = function()
 	B.ReskinScroll(GuildInfoDetailsFrameScrollBar)
 	B.ReskinScroll(GuildLogScrollFrameScrollBar)
 	B.ReskinScroll(GuildTextEditScrollFrameScrollBar)
-	B.ReskinScroll(GuildRecruitmentCommentInputFrameScrollFrameScrollBar)
-	B.ReskinScroll(GuildInfoFrameApplicantsContainerScrollBar)
 	B.ReskinDropDown(GuildRosterViewDropdown)
 	B.ReskinDropDown(GuildMemberRankDropdown)
-	B.ReskinInput(GuildRecruitmentCommentInputFrame)
-
-	GuildRecruitmentCommentInputFrame:SetWidth(312)
-	GuildRecruitmentCommentEditBox:SetWidth(284)
-	GuildRecruitmentCommentFrame:ClearAllPoints()
-	GuildRecruitmentCommentFrame:SetPoint("TOPLEFT", GuildRecruitmentLevelFrame, "BOTTOMLEFT", 0, 1)
 
 	B.ReskinCheck(GuildRosterShowOfflineButton)
 	for i = 1, 7 do
@@ -169,20 +147,6 @@ C.themes["Blizzard_GuildUI"] = function()
 	GuildMemberDetailFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 3, -28)
 	GuildLogFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 3, 0)
 	GuildTextEditFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 3, 0)
-
-	for i = 1, 5 do
-		local bu = _G["GuildInfoFrameApplicantsContainerButton"..i]
-		B.HideBackdrop(bu) -- isNewPatch
-		bu:SetHighlightTexture("")
-
-		local bg = B.CreateBDFrame(bu, .25)
-		bg:ClearAllPoints()
-		bg:SetPoint("TOPLEFT", 0, 0)
-		bg:SetPoint("BOTTOMRIGHT", 0, 1)
-
-		bu:GetRegions():SetTexture(DB.bdTex)
-		bu:GetRegions():SetVertexColor(r, g, b, .2)
-	end
 
 	GuildFactionBarProgress:SetTexture(DB.bdTex)
 	GuildFactionBarLeft:Hide()
@@ -239,37 +203,9 @@ C.themes["Blizzard_GuildUI"] = function()
 		"GuildTextEditFrameAcceptButton",
 		"GuildMemberGroupInviteButton",
 		"GuildMemberRemoveButton",
-		"GuildRecruitmentInviteButton",
-		"GuildRecruitmentMessageButton",
-		"GuildRecruitmentDeclineButton",
-		"GuildRecruitmentListGuildButton"
 	}
 	for i = 1, #gbuttons do
 		B.Reskin(_G[gbuttons[i]])
-	end
-
-	local checkboxes = {
-		"GuildRecruitmentQuestButton",
-		"GuildRecruitmentDungeonButton",
-		"GuildRecruitmentRaidButton",
-		"GuildRecruitmentPvPButton",
-		"GuildRecruitmentRPButton",
-		"GuildRecruitmentWeekdaysButton",
-		"GuildRecruitmentWeekendsButton"
-	}
-	for i = 1, #checkboxes do
-		B.ReskinCheck(_G[checkboxes[i]])
-	end
-
-	B.ReskinCheck(GuildRecruitmentTankButton:GetChildren())
-	B.ReskinCheck(GuildRecruitmentHealerButton:GetChildren())
-	B.ReskinCheck(GuildRecruitmentDamagerButton:GetChildren())
-
-	B.ReskinRadio(GuildRecruitmentLevelAnyButton)
-	B.ReskinRadio(GuildRecruitmentLevelMaxButton)
-
-	for i = 1, 3 do
-		B.StripTextures(_G["GuildInfoFrameTab"..i])
 	end
 
 	-- Tradeskill View
