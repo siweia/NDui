@@ -5,7 +5,7 @@ local Bar = B:GetModule("Actionbar")
 local _G = _G
 local tinsert = tinsert
 local cfg = C.Bars.bar2
-local margin, padding = C.Bars.margin, C.Bars.padding
+local margin = C.Bars.margin
 
 function Bar:CreateBar2()
 	local num = NUM_ACTIONBAR_BUTTONS

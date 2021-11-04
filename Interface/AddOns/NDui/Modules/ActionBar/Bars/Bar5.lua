@@ -10,7 +10,6 @@ local margin = C.Bars.margin
 function Bar:CreateBar5()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
-	local layout = C.db["Actionbar"]["Style"]
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar5", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["Actionbar"].."5", "Bar5", {"RIGHT", _G.NDui_ActionBar4, "LEFT", margin, 0})

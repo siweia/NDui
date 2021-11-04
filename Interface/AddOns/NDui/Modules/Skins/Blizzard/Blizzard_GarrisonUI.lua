@@ -1079,7 +1079,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				self.__owner.Icon:SetTexture(ANIMA_TEXTURE)
 			end
 		end
-		local function AdjustFollowerList(self, height)
+		local function AdjustFollowerList(self)
 			if self.isSetting then return end
 			self.isSetting = true
 

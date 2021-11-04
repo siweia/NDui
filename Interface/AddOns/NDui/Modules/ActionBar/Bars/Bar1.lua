@@ -97,7 +97,6 @@ end
 function Bar:CreateBar1()
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
-	local layout = C.db["Actionbar"]["Style"]
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar1", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["Actionbar"].."1", "Bar1", {"BOTTOM", UIParent, "BOTTOM", 0, 24})

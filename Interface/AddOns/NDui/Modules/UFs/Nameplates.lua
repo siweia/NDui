@@ -406,7 +406,7 @@ function UF:UpdateQuestUnit(_, unit)
 
 	unit = unit or self.unit
 
-	local startLooking, isLootQuest, questProgress
+	local startLooking, isLootQuest, questProgress -- FIXME: isLootQuest in old expansion
 	B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
 	B.ScanTip:SetUnit(unit)
 
@@ -809,10 +809,6 @@ function UF:UpdateNameplateSize()
 end
 
 function UF:RefreshNameplats()
-	local plateHeight = C.db["Nameplate"]["PlateHeight"]
-	local nameTextSize = C.db["Nameplate"]["NameTextSize"]
-	local iconSize = plateHeight*2 + 5
-
 	for nameplate in pairs(platesList) do
 		UF.UpdateNameplateSize(nameplate)
 		UF.UpdateNameplateAuras(nameplate)

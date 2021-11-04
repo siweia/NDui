@@ -669,8 +669,6 @@ function module:OnLogin()
 	if not C.db["Bags"]["Enable"] then return end
 
 	-- Settings
-	local bagsWidth = C.db["Bags"]["BagsWidth"]
-	local bankWidth = C.db["Bags"]["BankWidth"]
 	local iconSize = C.db["Bags"]["IconSize"]
 	local showNewItem = C.db["Bags"]["ShowNewItem"]
 	local hasCanIMogIt = IsAddOnLoaded("CanIMogIt")
