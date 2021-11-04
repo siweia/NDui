@@ -26,10 +26,8 @@ G.DefaultSettings = {
 		Classcolor = false,
 		Cooldown = true,
 		DecimalCD = true,
-		Style = 1,
 		Bar4Fader = false,
 		Bar5Fader = true,
-		Scale = 1,
 		BindType = 1,
 		OverrideWA = false,
 		MicroMenu = true,
@@ -606,10 +604,6 @@ local function setupStanceBar()
 	G:SetupStanceBar(guiPage[1])
 end
 
-local function updateActionbarScale()
-	B:GetModule("Actionbar"):UpdateAllScale()
-end
-
 local function updateCustomBar()
 	B:GetModule("Actionbar"):UpdateCustomBar()
 end
@@ -895,8 +889,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
 		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
-		{4, "Actionbar", "Style", L["Actionbar Style"], false, {L["BarStyle1"], L["BarStyle2"], L["BarStyle3"], L["BarStyle4"], L["BarStyle5"]}},
-		{3, "Actionbar", "Scale", L["Actionbar Scale"].."*", true, {.5, 1.5, .01}, updateActionbarScale},
 		{},--blank
 		{1, "Actionbar", "CustomBar", HeaderTag..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
 		{1, "Actionbar", "BarXFader", L["CustomBarFader"].."*", nil, nil, toggleBarFader},
