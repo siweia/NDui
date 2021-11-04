@@ -43,7 +43,7 @@ end
 
 function S:RematchInput()
 	self:DisableDrawLayer("BACKGROUND")
-	self:SetBackdrop(nil)
+	self:HideBackdrop()
 	local bg = B.CreateBDFrame(self, 0, true)
 	bg:SetPoint("TOPLEFT", 2, 0)
 	bg:SetPoint("BOTTOMRIGHT", -2, 0)
@@ -72,14 +72,14 @@ function S:RematchScroll()
 end
 
 function S:RematchDropdown()
-	self:SetBackdrop(nil)
+	self:HideBackdrop()
 	B.StripTextures(self, 0)
 	B.CreateBDFrame(self, 0, true)
 	if self.Icon then
 		self.Icon:SetAlpha(1)
 		B.CreateBDFrame(self.Icon)
 	end
-	local arrow = self:GetChildren()
+	local arrow = select(2, self:GetChildren())
 	B.ReskinArrow(arrow, "down")
 end
 
@@ -90,7 +90,7 @@ function S:RematchXP()
 end
 
 function S:RematchCard()
-	self:SetBackdrop(nil)
+	self:HideBackdrop()
 	if self.Source then B.StripTextures(self.Source) end
 	B.StripTextures(self.Middle)
 	B.CreateBDFrame(self.Middle, .25)
@@ -193,7 +193,7 @@ function S:RematchTeamGroup(panel)
 end
 
 function S:RematchFlyoutButton(flyout)
-	flyout:SetBackdrop(nil)
+	flyout:HideBackdrop()
 	for i = 1, 2 do
 		S.RematchIcon(flyout.Abilities[i])
 	end
@@ -260,7 +260,7 @@ function S:ReskinRematchElements()
 	-- RematchPetPanel
 	B.StripTextures(RematchPetPanel.Top)
 	B.Reskin(RematchPetPanel.Top.Toggle)
-	RematchPetPanel.Top.TypeBar:SetBackdrop(nil)
+	RematchPetPanel.Top.TypeBar.NineSlice:SetAlpha(0)
 	for i = 1, 10 do
 		S.RematchIcon(RematchPetPanel.Top.TypeBar.Buttons[i])
 	end
@@ -296,7 +296,7 @@ function S:ReskinRematchElements()
 	B.StripTextures(target)
 	B.CreateBDFrame(target, .25)
 	S.RematchFilter(target.TargetButton)
-	target.ModelBorder:SetBackdrop(nil)
+	target.ModelBorder:HideBackdrop()
 	target.ModelBorder:DisableDrawLayer("BACKGROUND")
 	B.CreateBDFrame(target.ModelBorder, .25)
 	B.StripTextures(target.LoadSaveButton)
@@ -426,7 +426,7 @@ function S:ReskinRematchElements()
 	B.CreateBDFrame(iconPicker, .25)
 
 	B.ReskinScroll(dialog.MultiLine.ScrollBar)
-	select(2, dialog.MultiLine:GetChildren()):SetBackdrop(nil)
+	select(2, dialog.MultiLine:GetChildren()):HideBackdrop()
 	local bg = B.CreateBDFrame(dialog.MultiLine, .25)
 	bg:SetPoint("TOPLEFT", -5, 5)
 	bg:SetPoint("BOTTOMRIGHT", 5, -5)
