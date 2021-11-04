@@ -219,6 +219,10 @@ function Bar:StyleActionButton(button, cfg)
 	if button.GetCheckedTexture then checkedTexture = button:GetCheckedTexture() end
 	local floatingBG = _G[buttonName.."FloatingBG"]
 
+	--pet stuff
+	local petShine = _G[buttonName.."Shine"]
+	if petShine then petShine:SetInside() end
+
 	--hide stuff
 	if floatingBG then floatingBG:Hide() end
 	if NewActionTexture then NewActionTexture:SetTexture(nil) end

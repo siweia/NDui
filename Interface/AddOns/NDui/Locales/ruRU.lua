@@ -49,7 +49,6 @@ L["Changelog"] = "Список изменений"
 L["AutoQuest"] = "Автоквест"
 L["AutoQuestTip"] = "|nЕсли флажок установлен, квесты будут выполняться автоматически.|nОкно наград с одной единственной наградой также будет закрыто автоматически.|n|nВы можете удерживать клавишу SHIFT, чтобы временно остановить автоматизацию.|n|nYou can add npc into block list and no longer auto interact with them, by holding key ALT and click npc name on GossipFrame or QuestFrame." -- need translation
 L["AutoQuestIgnoreTip"] = "|nYou no longer auto interact quests with current NPC. You can hold key ALT and click the name above to undo this." -- need translation
-L["Main Actionbar"] = "Главная панель умений"
 L["StanceBar"] = "Панель стоек"
 L["ShowStanceBar"] = "Панель стоек"
 L["Extrabar"] = "Дополнительная панель умений"

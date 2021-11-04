@@ -32,8 +32,8 @@ function Bar:CreateStancebar()
 	local buttonList = {}
 
 	local frame = CreateFrame("Frame", "NDui_ActionBarStance", UIParent, "SecureHandlerStateTemplate")
-	local anchor = C.db["Actionbar"]["Style"] == 4 and _G.NDui_ActionBar3 or _G.NDui_ActionBar2
-	frame.Pos = {"BOTTOMLEFT", anchor, "TOPLEFT", 0, margin}
+	frame.Pos = {"BOTTOMLEFT", _G.NDui_ActionBar2, "TOPLEFT", 0, margin}
+	frame.mover = B.Mover(frame, L["StanceBar"], "StanceBar", frame.Pos)
 
 	-- StanceBar
 	if C.db["Actionbar"]["ShowStance"] then
@@ -47,13 +47,6 @@ function Bar:CreateStancebar()
 			local button = _G["StanceButton"..i]
 			tinsert(buttonList, button)
 			tinsert(Bar.buttons, button)
-			button:ClearAllPoints()
-			if i == 1 then
-				button:SetPoint("BOTTOMLEFT", frame, padding, padding)
-			else
-				local previous = _G["StanceButton"..i-1]
-				button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
-			end
 		end
 	end
 
@@ -67,16 +60,10 @@ function Bar:CreateStancebar()
 		local button = _G["PossessButton"..i]
 		tinsert(buttonList, button)
 		button:ClearAllPoints()
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
-		else
-			local previous = _G["PossessButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
-		end
+		button:SetPoint("CENTER", buttonList[i])
 	end
 
-	frame.buttonList = buttonList
-	SetFrameSize(frame, cfg.size, num)
+	frame.buttons = buttonList
 
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)

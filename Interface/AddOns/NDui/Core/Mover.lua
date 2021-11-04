@@ -186,7 +186,7 @@ end
 function M:UnlockElements()
 	for i = 1, #MoverList do
 		local mover = MoverList[i]
-		if not mover:IsShown() then
+		if not mover:IsShown() and not mover.isDisable then
 			mover:Show()
 		end
 	end

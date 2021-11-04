@@ -8,17 +8,12 @@ local cfg = C.Bars.bar4
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 function Bar:CreateCustomBar(anchor)
-	local size = C.db["Actionbar"]["CustomBarButtonSize"]
 	local num = 12
 	local name = "NDui_ActionBarX"
 	local page = 8
 
 	local frame = CreateFrame("Frame", name, UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*size + (num-1)*margin + 2*padding)
-	frame:SetHeight(size + 2*padding)
-	frame:SetPoint(unpack(anchor))
 	frame.mover = B.Mover(frame, L[name], "CustomBar", anchor)
-	frame.buttons = {}
 
 	RegisterStateDriver(frame, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show")
 	RegisterStateDriver(frame, "page", page)
@@ -26,15 +21,14 @@ function Bar:CreateCustomBar(anchor)
 	local buttonList = {}
 	for i = 1, num do
 		local button = CreateFrame("CheckButton", "$parentButton"..i, frame, "ActionBarButtonTemplate")
-		button:SetSize(size, size)
 		button.id = (page-1)*12 + i
 		button.isCustomButton = true
 		button.commandName = L[name]..i
 		button:SetAttribute("action", button.id)
-		frame.buttons[i] = button
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
 	end
+	frame.buttons = buttonList
 
 	if cfg.fader then
 		frame.isDisable = not C.db["Actionbar"]["BarXFader"]

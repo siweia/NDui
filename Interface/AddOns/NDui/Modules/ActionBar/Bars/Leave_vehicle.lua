@@ -56,7 +56,7 @@ function Bar:CreateLeaveVehicle()
 		self:SetChecked(false)
 	end)
 
-	frame.buttonList = buttonList
+	frame.buttons = buttonList
 	SetFrameSize(frame, cfg.size, num)
 
 	frame.frameVisibility = "[canexitvehicle]c;[mounted]m;n"

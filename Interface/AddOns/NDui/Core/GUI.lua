@@ -40,6 +40,35 @@ G.DefaultSettings = {
 		CustomBarNumPerRow = 12,
 		ShowStance = true,
 		EquipColor = false,
+
+		Bar1Size = 34,
+		Bar1Font = 12,
+		Bar1Num = 12,
+		Bar1PerRow = 12,
+		Bar2Size = 34,
+		Bar2Font = 12,
+		Bar2Num = 12,
+		Bar2PerRow = 12,
+		Bar3Size = 32,
+		Bar3Font = 12,
+		Bar3Num = 0,
+		Bar3PerRow = 12,
+		Bar4Size = 32,
+		Bar4Font = 12,
+		Bar4Num = 12,
+		Bar4PerRow = 1,
+		Bar5Size = 32,
+		Bar5Font = 12,
+		Bar5Num = 12,
+		Bar5PerRow = 1,
+		BarPetSize = 26,
+		BarPetFont = 12,
+		BarPetNum = 10,
+		BarPetPerRow = 10,
+		BarStanceSize = 30,
+		BarStanceFont = 12,
+		BarStanceNum = 10,
+		BarStancePerRow = 10,
 	},
 	Bags = {
 		Enable = true,
@@ -570,6 +599,10 @@ local function updateBagSize()
 	B:GetModule("Bags"):UpdateBagSize()
 end
 
+local function setupActionBar()
+	G:SetupActionBar(guiPage[1])
+end
+
 local function updateActionbarScale()
 	B:GetModule("Actionbar"):UpdateAllScale()
 end
@@ -853,7 +886,7 @@ G.TabList = {
 
 G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
-		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"]},
+		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true},
