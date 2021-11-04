@@ -583,7 +583,7 @@ do
 		end
 	end
 
-	B:RegisterEvent("ADDON_LOADED", setupMisc)
+	--B:RegisterEvent("ADDON_LOADED", setupMisc) -- FIXME: collections is not dragable atm
 end
 
 -- Select target when click on raid units
