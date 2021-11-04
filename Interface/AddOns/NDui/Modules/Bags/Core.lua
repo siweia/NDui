@@ -35,7 +35,7 @@ end
 
 local anchorCache = {}
 
-function module:UpdateAnchors(parent, bags, atBank)
+function module:UpdateBagsAnchor(parent, bags)
 	wipe(anchorCache)
 
 	local index = 1
@@ -49,22 +49,40 @@ function module:UpdateAnchors(parent, bags, atBank)
 			index = index + 1
 
 			bag:ClearAllPoints()
-			if atBank and index <= perRow then
+			if (index-1) % perRow == 0 then
+				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
+			else
 				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
-			elseif atBank and index == perRow+1 then
+			end
+			anchorCache[index] = bag
+		else
+			bag:Hide()
+		end
+	end
+end
+
+function module:UpdateBankAnchor(parent, bags)
+	wipe(anchorCache)
+
+	local index = 1
+	local perRow = C.db["Bags"]["BankPerRow"]
+	anchorCache[index] = parent
+
+	for i = 1, #bags do
+		local bag = bags[i]
+		if bag:GetHeight() > 45 then
+			bag:Show()
+			index = index + 1
+
+			bag:ClearAllPoints()
+			if index <= perRow then
+				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
+			elseif index == perRow+1 then
 				bag:SetPoint("TOPLEFT", anchorCache[index-1], "TOPRIGHT", 5, 0)
 			elseif (index-1) % perRow == 0 then
-				if atBank then
-					bag:SetPoint("TOPLEFT", anchorCache[index-perRow], "TOPRIGHT", 5, 0)
-				else
-					bag:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
-				end
+				bag:SetPoint("TOPLEFT", anchorCache[index-perRow], "TOPRIGHT", 5, 0)
 			else
-				if atBank then
-					bag:SetPoint("TOPLEFT", anchorCache[index-1], "BOTTOMLEFT", 0, -5)
-				else
-					bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
-				end
+				bag:SetPoint("TOPLEFT", anchorCache[index-1], "BOTTOMLEFT", 0, -5)
 			end
 			anchorCache[index] = bag
 		else
@@ -965,8 +983,8 @@ function module:OnLogin()
 	end
 
 	function module:UpdateAllAnchors()
-		module:UpdateAnchors(f.main, ContainerGroups["Bag"])
-		module:UpdateAnchors(f.bank, ContainerGroups["Bank"], true)
+		module:UpdateBagsAnchor(f.main, ContainerGroups["Bag"])
+		module:UpdateBankAnchor(f.bank, ContainerGroups["Bank"])
 	end
 
 	function module:GetContainerColumns(bagType)
