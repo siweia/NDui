@@ -749,14 +749,14 @@ function module:OnLogin()
 		AddNewContainer("Bank", 7, "BankAnima", filters.bankAnima)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
-		f.bank.__anchor = {"BOTTOMLEFT", 50, 50}
+		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
 		f.bank:SetPoint(unpack(f.bank.__anchor))
 		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:Hide()
 
 		f.reagent = MyContainer:New("Reagent", {Bags = "bankreagent", BagType = "Bank"})
 		f.reagent:SetFilter(filters.onlyReagent, true)
-		f.reagent.__anchor = {"TOPLEFT", f.bank}
+		f.reagent.__anchor = {"BOTTOMLEFT", f.bank}
 		f.reagent:SetPoint(unpack(f.reagent.__anchor))
 		f.reagent:Hide()
 

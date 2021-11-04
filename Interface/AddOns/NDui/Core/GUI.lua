@@ -865,7 +865,7 @@ local HeaderTag = "|cff00cc4c"
 local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 
 G.TabList = {
-	L["Actionbar"],
+	NewTag..L["Actionbar"],
 	NewTag..L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
@@ -884,10 +884,10 @@ G.TabList = {
 
 G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
-		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
+		{1, "Actionbar", "Enable", NewTag..HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"]},
-		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
+		{1, "Actionbar", "ShowStance", NewTag..L["ShowStanceBar"], true, setupStanceBar},
 		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
 		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
 		{},--blank
