@@ -21,7 +21,7 @@ C.Bars = {
 	petbar = {size = 26, fader = nil},									-- PETBAR 宠物动作条
 	stancebar = {size = 30, fader = nil},								-- STANCE + POSSESSBAR 姿态条
 	extrabar = {size = 52, fader = nil},								-- EXTRABAR 额外动作条
-	leave_vehicle = {size = 32, fader = nil},							-- VEHICLE EXIT 离开载具按钮
+	leave_vehicle = {size = 40, fader = nil},							-- VEHICLE EXIT 离开载具按钮
 }
 
 -- BUFF/DEBUFF相关
