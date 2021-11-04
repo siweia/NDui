@@ -1240,7 +1240,7 @@ function G:SetupActionBar(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, "ActionBar DIY".."*")
+	local panel = createExtraGUI(parent, guiName, L["ActionbarSetup"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local Bar = B:GetModule("Actionbar")
@@ -1261,10 +1261,10 @@ function G:SetupActionBar(parent)
 			Bar:UpdateActionSize(value)
 		end
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(parent, L["CustomBarButtonSize"], 20, 80, data[1], 30, offset-60, value.."Size", updateBarScale, "Actionbar")
-		createOptionSlider(parent, color..L["CustomBarNumButtons"], data[2], data[3], data[4], 30, offset-130, value.."Num", updateBarScale, "Actionbar")
-		createOptionSlider(parent, L["CustomBarNumPerRow"], 1, data[3], data[5], 30, offset-200, value.."PerRow", updateBarScale, "Actionbar")
-		createOptionSlider(parent, "动作条文本字号", 8, 20, 12, 30, offset-270, value.."Font", updateBarScale, "Actionbar")
+		createOptionSlider(parent, L["ButtonSize"], 20, 80, data[1], 30, offset-60, value.."Size", updateBarScale, "Actionbar")
+		createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], 30, offset-130, value.."Num", updateBarScale, "Actionbar")
+		createOptionSlider(parent, L["ButtonsPerRow"], 1, data[3], data[5], 30, offset-200, value.."PerRow", updateBarScale, "Actionbar")
+		createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, 30, offset-270, value.."Font", updateBarScale, "Actionbar")
 	end
 
 	createOptionGroup(scroll.child, "Bar1", -10, "Bar1")
