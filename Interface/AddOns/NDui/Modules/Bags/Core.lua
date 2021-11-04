@@ -518,8 +518,8 @@ function module:CreateFavouriteButton()
 	local enabledText = DB.InfoColor..L["FavouriteMode Enabled"]
 
 	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Common\\friendship-heart")
-	bu.Icon:SetPoint("TOPLEFT", -5, 0)
-	bu.Icon:SetPoint("BOTTOMRIGHT", 5, -5)
+	bu.Icon:SetPoint("TOPLEFT", -5, 2.5)
+	bu.Icon:SetPoint("BOTTOMRIGHT", 5, -1.5)
 	bu.__turnOff = function()
 		B.SetBorderColor(bu.bg)
 		bu.text = nil
