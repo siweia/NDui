@@ -376,9 +376,11 @@ do
 							region:SetAlpha(0)
 						elseif i ~= kill then
 							region:SetTexture("")
+							region:SetAtlas("")
 						end
 					else
 						region:SetTexture("")
+						region:SetAtlas("")
 					end
 				end
 			end
@@ -796,6 +798,7 @@ do
 			region = buttonName and _G[buttonName..region] or self[region]
 			if region then
 				region:SetAlpha(0)
+				region:Hide()
 			end
 		end
 
