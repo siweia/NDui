@@ -817,3 +817,4 @@ L["BankPerRowTip"] = "|nIf Bags ItemFilter enabled, change the bank bags per row
 L["PlateAuras"] = "Nameplate Auras" -- need translation
 L["QuickJoinInfo"] = "Quick apply group by double click. And leave comment by holding key ALT and double click." -- need translation
 L["ActionbarSetup"] = "Actionbar Setup" -- need translation
+L["BaudErrorTip"] = "UI errors popup out, click the number below to check and report." -- need translation

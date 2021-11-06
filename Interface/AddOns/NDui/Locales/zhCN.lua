@@ -817,3 +817,4 @@ L["BankPerRowTip"] = "|n开启背包物品分类存放后，每一列允许堆�
 L["PlateAuras"] = "姓名板法术监控"
 L["QuickJoinInfo"] = "你可以双击快速申请队伍，按住ALT键双击则需输入备注。"
 L["ActionbarSetup"] = "动作条设置"
+L["BaudErrorTip"] = "你的插件报错了，点击下方数字查看并反馈。"

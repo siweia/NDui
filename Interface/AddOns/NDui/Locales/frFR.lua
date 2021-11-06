@@ -817,3 +817,4 @@ L["BankPerRowTip"] = "|nSi le filtre d'objet de sac est activé, modifiez les sa
 L["PlateAuras"] = "Auras de plaque de nom"
 L["QuickJoinInfo"] = "Demande de groupe rapide par double clic. Laissez un commentaire en maintenant la touche ALT enfoncée et double-cliquez ."
 L["ActionbarSetup"] = "Paramètres de barres d'action"
+L["BaudErrorTip"] = "UI errors popup out, click the number below to check and report." -- need translation
