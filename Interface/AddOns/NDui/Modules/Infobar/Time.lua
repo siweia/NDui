@@ -29,8 +29,6 @@ local GetNumSavedInstances, GetSavedInstanceInfo = GetNumSavedInstances, GetSave
 local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local C_TaskQuest_GetThreatQuests = C_TaskQuest.GetThreatQuests
 local C_TaskQuest_GetQuestInfoByQuestID = C_TaskQuest.GetQuestInfoByQuestID
-local CONQUEST_CURRENCY_ID = Constants.CurrencyConsts.CONQUEST_CURRENCY_ID
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool("timeMgrUseMilitaryTime") then
@@ -287,15 +285,6 @@ info.onEnter = function(self)
 
 	-- Quests
 	title = false
-
-	local currencyInfo = C_CurrencyInfo_GetCurrencyInfo(CONQUEST_CURRENCY_ID)
-	local totalEarned = currencyInfo.totalEarned
-	if currencyInfo and totalEarned > 0 then
-		addTitle(QUESTS_LABEL)
-		local maxProgress = currencyInfo.maxQuantity
-		local progress = min(totalEarned, maxProgress)
-		GameTooltip:AddDoubleLine(currencyInfo.name, progress.."/"..maxProgress, 1,1,1, 1,1,1)
-	end
 
 	for _, v in pairs(questlist) do
 		if v.name and IsQuestFlaggedCompleted(v.id) then
