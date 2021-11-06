@@ -370,7 +370,7 @@ G.DefaultSettings = {
 		MissingStats = true,
 		SoloInfo = true,
 		RareAlerter = true,
-		AlertinChat = false,
+		RarePrint = true,
 		Focuser = true,
 		ExpRep = true,
 		Screenshot = true,
@@ -1106,7 +1106,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "NzothVision", L["NzothVision"], true},
 		{},--blank
 		{1, "Misc", "RareAlerter", HeaderTag..L["Rare Alert"].."*", nil, nil, updateRareAlert},
-		{1, "Misc", "AlertinChat", L["Alert In Chat"].."*"},
+		{1, "Misc", "RarePrint", L["Alert In Chat"].."*"},
 		{1, "Misc", "RareAlertInWild", L["RareAlertInWild"].."*", true},
 	},
 	[9] = {

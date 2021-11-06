@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 
 local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
 local pairs, tonumber, wipe, select = pairs, tonumber, wipe, select
-local GetInstanceInfo, PlaySound = GetInstanceInfo, PlaySound
+local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
@@ -12,7 +12,9 @@ local GetSpellLink, GetSpellInfo, GetSpellCooldown = GetSpellLink, GetSpellInfo,
 local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
 local GetItemInfo, GetItemInfoFromHyperlink = GetItemInfo, GetItemInfoFromHyperlink
 local C_Timer_After = C_Timer.After
+local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
+local C_VignetteInfo_GetVignettePosition = C_VignetteInfo.GetVignettePosition
 local C_Texture_GetAtlasInfo = C_Texture.GetAtlasInfo
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
@@ -107,12 +109,21 @@ function M:RareAlert_Update(id)
 		local atlasWidth = width/(txRight-txLeft)
 		local atlasHeight = height/(txBottom-txTop)
 		local tex = format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", file, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-
+	
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
-		if C.db["Misc"]["AlertinChat"] then
+
+		if C.db["Misc"]["RarePrint"] then
 			local currrentTime = NDuiADB["TimestampFormat"] == 1 and "|cff00ff00["..date("%H:%M:%S").."]|r" or ""
-			print(currrentTime.." -> "..DB.InfoColor..L["Rare Found"]..tex..(info.name or ""))
+			local nameString
+			local mapID = C_Map_GetBestMapForUnit("player")
+			local position = mapID and C_VignetteInfo_GetVignettePosition(info.vignetteGUID, mapID)
+			if position then
+				local x, y = position:GetXY()
+				nameString = format(M.RareString, mapID, x*10000, y*10000, info.name, x*100, y*100, "")
+			end
+			print(currrentTime.." -> "..tex..DB.InfoColor..(nameString or info.name or ""))
 		end
+
 		if not C.db["Misc"]["RareAlertInWild"] or M.RareInstType == "none" then
 			PlaySound(23404, "master")
 		end
@@ -134,6 +145,8 @@ function M:RareAlert_CheckInstance()
 end
 
 function M:RareAlert()
+	M.RareString = "|Hworldmap:%d+:%d+:%d+|h[%s (%.1f, %.1f)%s]|h|r"
+
 	if C.db["Misc"]["RareAlerter"] then
 		self:RareAlert_CheckInstance()
 		B:RegisterEvent("UPDATE_INSTANCE_INFO", self.RareAlert_CheckInstance)
