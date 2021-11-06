@@ -44,6 +44,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		B.Reskin(bu, true)
 		bu.Background:SetInside(bu.__bg)
 		bu.Background:SetColorTexture(r, g, b, .25)
+		bu.Background:SetAlpha(1)
 
 		icon:SetPoint("LEFT", bu, "LEFT")
 		icon:SetSize(iconSize, iconSize)
@@ -64,13 +65,12 @@ C.themes["Blizzard_PVPUI"] = function()
 	PVPQueueFrame.CategoryButton3.Icon:SetTexture("Interface\\Icons\\ability_warrior_offensivestance")
 
 	hooksecurefunc("PVPQueueFrame_SelectButton", function(index)
-		local self = PVPQueueFrame
 		for i = 1, 3 do
-			local bu = self["CategoryButton"..i]
+			local bu = PVPQueueFrame["CategoryButton"..i]
 			if i == index then
-				bu.Background:SetAlpha(1)
+				bu.Background:Show()
 			else
-				bu.Background:SetAlpha(0)
+				bu.Background:Hide()
 			end
 		end
 	end)

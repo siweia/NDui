@@ -23,8 +23,7 @@ tinsert(C.defaultThemes, function()
 
 		bu.ring:Hide()
 		B.Reskin(bu, true)
-		bu.bg:SetTexture(DB.bdTex)
-		bu.bg:SetVertexColor(r, g, b, .2)
+		bu.bg:SetColorTexture(r, g, b, .25)
 		bu.bg:SetInside(bu.__bg)
 
 		bu.icon:SetPoint("LEFT", bu, "LEFT")
@@ -33,9 +32,8 @@ tinsert(C.defaultThemes, function()
 	end
 
 	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
-		local self = GroupFinderFrame
 		for i = 1, 3 do
-			local button = self["groupButton"..i]
+			local button = GroupFinderFrame["groupButton"..i]
 			if i == index then
 				button.bg:Show()
 			else
