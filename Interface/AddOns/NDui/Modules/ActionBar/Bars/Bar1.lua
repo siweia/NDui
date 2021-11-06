@@ -177,4 +177,5 @@ function Bar:OnLogin()
 	Bar:ReskinBars()
 	Bar:UpdateAllScale()
 	Bar:MicroMenu()
+	Bar:UpdateActionbarStyle()
 end

@@ -12,6 +12,7 @@
 	<Script file="Bars\Hide_blizzart.lua"/>
 	<Script file="Bars\Fader.lua"/>
 	<Script file="Bars\MicroMenu.lua"/>
+	<Script file="Bars\StylePreset.lua"/>
 
 	<Script file="ButtonRange.lua"/>
 	<Script file="Keybind.lua"/>
