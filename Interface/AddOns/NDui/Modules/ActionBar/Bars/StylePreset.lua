@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 
-local valueIndex = {
+local indexToValue = {
 	[1] = "Bar1Size",
 	[2] = "Bar1Font",
 	[3] = "Bar1Num",
@@ -34,7 +34,13 @@ local valueIndex = {
 	[24] = "BarPetPerRow",
 }
 
-function Bar:UpdateActionbarStyle(preset)
+local valueToIndex = {}
+for index, value in pairs(indexToValue) do
+	valueToIndex[value] = index
+end
+
+-- NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10
+function Bar:ImportActionbarStyle(preset)
 	if not preset then return end
 
 	local values = {strsplit(":", preset)}
@@ -43,7 +49,15 @@ function Bar:UpdateActionbarStyle(preset)
 	for index = 2, #values do
 		local value = values[index]
 		value = tonumber(value)
-		C.db["Actionbar"][valueIndex[index-1]] = value
+		C.db["Actionbar"][indexToValue[index-1]] = value
 	end
 	Bar:UpdateAllScale()
+end
+
+function Bar:ExportActionbarStyle()
+	local styleStr = "NAB"
+	for index, value in ipairs(indexToValue) do
+		styleStr = styleStr..":"..C.db["Actionbar"][value]
+	end
+	print(styleStr)
 end
