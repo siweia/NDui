@@ -778,33 +778,6 @@ function M:BaudErrorFrameHelpTip()
 	local button, count = _G.BaudErrorFrameMinimapButton, _G.BaudErrorFrameMinimapCount
 	if not button then return end
 
-	-- RGB on error text
-	local r, g, b, mult = 10, 0, 0, 1
-	local updater = CreateFrame("Frame")
-	updater:Hide()
-	updater:SetScript("OnUpdate", function(self, elapsed)
-		self.elapsed = (self.elapsed or 0) + elapsed
-		if self.elapsed > .08 then
-			if r == 0 and g > b then b = b + mult
-			elseif g == 0 and b > r then r = r + mult
-			elseif b == 0 and r > g then g = g + mult
-			elseif r == 0 and g <= b then g = g - mult
-			elseif g == 0 and b <= r then b = b - mult
-			elseif b == 0 and r <= g then r = r - mult
-			end
-			count:SetTextColor(r/10, g/10, b/10)
-
-			self.elapsed = 0
-		end
-	end)
-	hooksecurefunc(button, "Show", function()
-		updater:Show()
-	end)
-	hooksecurefunc(button, "Hide", function()
-		updater:Hide()
-	end)
-
-	-- Helptip
 	local errorInfo = {
 		text = L["BaudErrorTip"],
 		buttonStyle = HelpTip.ButtonStyle.GotIt,
