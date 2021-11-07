@@ -33,6 +33,10 @@ local indexToValue = {
 	[22] = "BarPetFont",
 	[23] = "BarPetNum",
 	[24] = "BarPetPerRow",
+
+	[25] = "BarStanceSize",
+	[26] = "BarStanceFont",
+	[27] = "BarStancePerRow",
 }
 
 local moverValues = {
@@ -43,6 +47,7 @@ local moverValues = {
 	[5] = "Bar4",
 	[6] = "Bar5",
 	[7] = "PetBar",
+	[8] = "StanceBar",
 }
 
 local abbrToAnchor = {
@@ -60,17 +65,17 @@ local anchorToAbbr = {}
 for abbr, anchor in pairs(abbrToAnchor) do
 	anchorToAbbr[anchor] = abbr
 end
-
---/run gogo(_, "NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10:0B24:0B60:-271B26:271B26:-1BR336:-35BR336:0B100")
--- NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10
+-- NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:-271B26:271B26:-1BR336:-35BR336:0B100:-202B100 -- default
+-- NAB:34:12:12:12:34:12:12:12:34:12:12:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:0B96:271B26:-1BR336:-35BR336:0B134:-200B138 3x12
+-- NAB:34:12:12:12:34:12:12:12:34:12:12:6:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:-108B24:-108B60:216B24:271B26:-1TR-336:-35TR-336:0B98:-200B138
 function Bar:ImportActionbarStyle(preset)
 	if not preset then return end
 
 	local values = {strsplit(":", preset)}
-	if values[1] ~= "NAB" then return end
+	if values[1] ~= "NAB" then return end -- NDui Actionbar
 
 	local numValues = #values
-	local maxOptions = numValues - 7
+	local maxOptions = numValues - #Bar.movers
 
 	for index = 2, maxOptions do
 		local value = values[index]
@@ -80,11 +85,10 @@ function Bar:ImportActionbarStyle(preset)
 	Bar:UpdateAllScale()
 
 	for index = maxOptions+1, numValues do
-		local value = values[index]
-		local x, point, y = strmatch(values[index], "(-*%d+)(%a+)(-*%d+)")
 		local moverIndex = index - maxOptions
 		local mover = Bar.movers[moverIndex]
 		if mover then
+			local x, point, y = strmatch(values[index], "(-*%d+)(%a+)(-*%d+)")
 			x, y = tonumber(x), tonumber(y)
 			point = abbrToAnchor[point]
 			mover:ClearAllPoints()
