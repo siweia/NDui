@@ -14,8 +14,12 @@ function Bar:CreateBar3()
 	local frame = CreateFrame("Frame", "NDui_ActionBar3", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["Actionbar"].."3L", "Bar3L", {"RIGHT", _G.NDui_ActionBar1, "TOPLEFT", -margin, -padding/2})
 	local child = CreateFrame("Frame", nil, frame)
+	child:SetSize(1, 1)
 	child.mover = B.Mover(child, L["Actionbar"].."3R", "Bar3R", {"LEFT", _G.NDui_ActionBar1, "TOPRIGHT", margin, -padding/2})
 	frame.child = child
+
+	Bar.movers[3] = frame.mover
+	Bar.movers[4] = child.mover
 
 	MultiBarBottomRight:SetParent(frame)
 	MultiBarBottomRight:EnableMouse(false)

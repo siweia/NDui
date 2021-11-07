@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
+local M = B:GetModule("Mover")
 
 local indexToValue = {
 	[1] = "Bar1Size",
@@ -34,11 +35,33 @@ local indexToValue = {
 	[24] = "BarPetPerRow",
 }
 
-local valueToIndex = {}
-for index, value in pairs(indexToValue) do
-	valueToIndex[value] = index
+local moverValues = {
+	[1] = "Bar1",
+	[2] = "Bar2",
+	[3] = "Bar3L",
+	[4] = "Bar3R",
+	[5] = "Bar4",
+	[6] = "Bar5",
+	[7] = "PetBar",
+}
+
+local abbrToAnchor = {
+	["TL"] = "TOPLEFT",
+	["T"] = "TOP",
+	["TR"] = "TOPRIGHT",
+	["L"] = "LEFT",
+	["R"] = "RIGHT",
+	["BL"] = "BOTTOMLEFT",
+	["B"] = "BOTTOM",
+	["BR"] = "BOTTOMRIGHT",
+}
+
+local anchorToAbbr = {}
+for abbr, anchor in pairs(abbrToAnchor) do
+	anchorToAbbr[anchor] = abbr
 end
 
+--/run gogo(_, "NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10:0B24:0B60:-271B26:271B26:-1BR336:-35BR336:0B100")
 -- NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10
 function Bar:ImportActionbarStyle(preset)
 	if not preset then return end
@@ -46,18 +69,43 @@ function Bar:ImportActionbarStyle(preset)
 	local values = {strsplit(":", preset)}
 	if values[1] ~= "NAB" then return end
 
-	for index = 2, #values do
+	local numValues = #values
+	local maxOptions = numValues - 7
+
+	for index = 2, maxOptions do
 		local value = values[index]
 		value = tonumber(value)
 		C.db["Actionbar"][indexToValue[index-1]] = value
 	end
 	Bar:UpdateAllScale()
+
+	for index = maxOptions+1, numValues do
+		local value = values[index]
+		local x, point, y = strmatch(values[index], "(-*%d+)(%a+)(-*%d+)")
+		local moverIndex = index - maxOptions
+		local mover = Bar.movers[moverIndex]
+		if mover then
+			x, y = tonumber(x), tonumber(y)
+			point = abbrToAnchor[point]
+			mover:ClearAllPoints()
+			mover:SetPoint(point, "UIParent", point, x, y)
+			C.db["Mover"][moverValues[moverIndex]] = {point, "UIParent", point, x, y}
+		end
+	end
 end
+gogo = Bar.ImportActionbarStyle
 
 function Bar:ExportActionbarStyle()
 	local styleStr = "NAB"
 	for index, value in ipairs(indexToValue) do
 		styleStr = styleStr..":"..C.db["Actionbar"][value]
 	end
+
+	for index, mover in ipairs(Bar.movers) do
+		local x, y, point = M:CalculateMoverPoints(mover)
+		styleStr = styleStr..":"..x..anchorToAbbr[point]..y
+	end
+
 	print(styleStr)
 end
+hehe = Bar.ExportActionbarStyle

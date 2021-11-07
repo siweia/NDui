@@ -13,6 +13,7 @@ function Bar:CreatePetbar()
 
 	local frame = CreateFrame("Frame", "NDui_ActionBarPet", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["Pet Actionbar"], "PetBar", {"BOTTOM", _G.NDui_ActionBar2, "TOP", 0, margin})
+	Bar.movers[7] = frame.mover
 
 	PetActionBarFrame:SetParent(frame)
 	PetActionBarFrame:EnableMouse(false)

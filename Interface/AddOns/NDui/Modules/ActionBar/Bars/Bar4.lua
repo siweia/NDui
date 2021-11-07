@@ -60,6 +60,7 @@ function Bar:CreateBar4()
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar4", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["Actionbar"].."4", "Bar4", {"RIGHT", UIParent, "RIGHT", -1, 0})
+	Bar.movers[5] = frame.mover
 
 	MultiBarRight:SetParent(frame)
 	MultiBarRight:EnableMouse(false)

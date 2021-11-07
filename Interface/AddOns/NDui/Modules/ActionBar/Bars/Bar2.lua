@@ -13,6 +13,7 @@ function Bar:CreateBar2()
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar2", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["Actionbar"].."2", "Bar2", {"BOTTOM", _G.NDui_ActionBar1, "TOP", 0, -margin})
+	Bar.movers[2] = frame.mover
 
 	MultiBarBottomLeft:SetParent(frame)
 	MultiBarBottomLeft:EnableMouse(false)

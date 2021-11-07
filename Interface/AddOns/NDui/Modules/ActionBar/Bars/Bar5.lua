@@ -13,6 +13,7 @@ function Bar:CreateBar5()
 
 	local frame = CreateFrame("Frame", "NDui_ActionBar5", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["Actionbar"].."5", "Bar5", {"RIGHT", _G.NDui_ActionBar4, "LEFT", margin, 0})
+	Bar.movers[6] = frame.mover
 
 	MultiBarLeft:SetParent(frame)
 	MultiBarLeft:EnableMouse(false)
