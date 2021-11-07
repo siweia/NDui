@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 local M = B:GetModule("Mover")
 
+local strsplit, tonumber, strmatch, ipairs = strsplit, tonumber, strmatch, ipairs
+
 local optionValues = {
 	[1] = "Bar1Size",
 	[2] = "Bar1Font",
@@ -107,5 +109,5 @@ function Bar:ExportActionbarStyle()
 		styleStr = styleStr..":"..x..anchorToAbbr[point]..y
 	end
 
-	print(styleStr)
+	return styleStr
 end
