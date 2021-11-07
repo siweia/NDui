@@ -29,6 +29,7 @@ local function SetCurrenciesHook(self)
 		end
 	end
 end
+B.SetCurrenciesHook = SetCurrenciesHook
 
 C.themes["Blizzard_RuneforgeUI"] = function()
 	local frame = RuneforgeFrame

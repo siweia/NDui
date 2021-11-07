@@ -78,6 +78,10 @@ local function reskinReforgeUI(frame, index)
 	if buttonFrame.AzeriteRespecButton then B.Reskin(buttonFrame.AzeriteRespecButton) end
 	if buttonFrame.ActionButton then B.Reskin(buttonFrame.ActionButton) end
 	if buttonFrame.Currency then B.ReskinIcon(buttonFrame.Currency.icon) end
+
+	if frame.DescriptionCurrencies then
+		hooksecurefunc(frame.DescriptionCurrencies, "SetCurrencies", B.SetCurrenciesHook)
+	end
 end
 
 C.themes["Blizzard_AzeriteRespecUI"] = function()
