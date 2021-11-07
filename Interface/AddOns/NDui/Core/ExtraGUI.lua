@@ -1291,7 +1291,7 @@ function G:SetupStanceBar(parent)
 end
 
 function G:SetupActionbarStyle(parent)
-	local frame = CreateFrame("Frame", "NDuiActionbarStyleFrame", parent)
+	local frame = CreateFrame("Frame", "NDuiActionbarStyleFrame", parent.child)
 	frame:SetSize(150, 34)
 	frame:SetPoint("TOPRIGHT", -130, -15)
 	B.CreateBDFrame(frame, .25)
@@ -1314,5 +1314,9 @@ function G:SetupActionbarStyle(parent)
 		bu:SetPoint("LEFT", (i-1)*29 + 5, 0)
 		bu.index = i
 		bu:SetScript("OnClick", applyBarStyle)
+		if i > 3 then
+			bu:Disable()
+			bu:SetAlpha(.5)
+		end
 	end
 end
