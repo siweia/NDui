@@ -90,7 +90,7 @@ function Bar:UpdateActionSize(name)
 		frame:SetWidth(column*size + (column-1)*margin + 2*padding)
 		frame:SetHeight(size*rows + (rows-1)*margin + 2*padding)
 		frame.mover:SetSize(frame:GetSize())
-		if frame.mover2 then frame.mover2.isDisable = true end
+		if frame.child then frame.child.mover.isDisable = true end
 	end
 end
 
@@ -177,5 +177,5 @@ function Bar:OnLogin()
 	Bar:ReskinBars()
 	Bar:UpdateAllScale()
 	Bar:MicroMenu()
-	Bar:UpdateActionbarStyle()
+	--Bar:UpdateActionbarStyle()
 end
