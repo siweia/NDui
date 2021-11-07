@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 local M = B:GetModule("Mover")
 
-local indexToValue = {
+local optionValues = {
 	[1] = "Bar1Size",
 	[2] = "Bar1Font",
 	[3] = "Bar1Num",
@@ -65,9 +65,7 @@ local anchorToAbbr = {}
 for abbr, anchor in pairs(abbrToAnchor) do
 	anchorToAbbr[anchor] = abbr
 end
--- NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:-271B26:271B26:-1BR336:-35BR336:0B100:-202B100 -- default
--- NAB:34:12:12:12:34:12:12:12:34:12:12:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:0B96:271B26:-1BR336:-35BR336:0B134:-200B138 3x12
--- NAB:34:12:12:12:34:12:12:12:34:12:12:6:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:-108B24:-108B60:216B24:271B26:-1TR-336:-35TR-336:0B98:-200B138
+
 function Bar:ImportActionbarStyle(preset)
 	if not preset then return end
 
@@ -80,7 +78,7 @@ function Bar:ImportActionbarStyle(preset)
 	for index = 2, maxOptions do
 		local value = values[index]
 		value = tonumber(value)
-		C.db["Actionbar"][indexToValue[index-1]] = value
+		C.db["Actionbar"][optionValues[index-1]] = value
 	end
 	Bar:UpdateAllScale()
 
@@ -97,11 +95,10 @@ function Bar:ImportActionbarStyle(preset)
 		end
 	end
 end
-gogo = Bar.ImportActionbarStyle
 
 function Bar:ExportActionbarStyle()
 	local styleStr = "NAB"
-	for index, value in ipairs(indexToValue) do
+	for index, value in ipairs(optionValues) do
 		styleStr = styleStr..":"..C.db["Actionbar"][value]
 	end
 
@@ -112,4 +109,3 @@ function Bar:ExportActionbarStyle()
 
 	print(styleStr)
 end
-hehe = Bar.ExportActionbarStyle

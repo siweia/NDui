@@ -1601,6 +1601,7 @@ local function OpenGUI()
 	end
 
 	G:CreateProfileGUI(guiPage[15]) -- profile GUI
+	G:SetupActionbarStyle(guiPage[1])
 
 	local helpInfo = B.CreateHelpInfo(f, L["Option* Tips"])
 	helpInfo:SetPoint("TOPLEFT", 20, -5)

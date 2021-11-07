@@ -1289,3 +1289,30 @@ function G:SetupStanceBar(parent)
 	createOptionSlider(parent, L["ButtonsPerRow"], 1, 10, 10, 30, offset-130, "BarStancePerRow", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, 30, offset-200, "BarStanceFont", Bar.UpdateStanceBar, "Actionbar")
 end
+
+function G:SetupActionbarStyle(parent)
+	local frame = CreateFrame("Frame", "NDuiActionbarStyleFrame", parent)
+	frame:SetSize(150, 34)
+	frame:SetPoint("TOPRIGHT", -130, -15)
+	B.CreateBDFrame(frame, .25)
+
+	local Bar = B:GetModule("Actionbar")
+
+	local styleString = {
+		[1] = "NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:-271B26:271B26:-1BR336:-35BR336:0B100:-202B100",
+		[2] = "NAB:34:12:12:12:34:12:12:12:34:12:12:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:0B96:271B26:-1BR336:-35BR336:0B134:-200B138",
+		[3] = "NAB:34:12:12:12:34:12:12:12:34:12:12:6:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:-108B24:-108B60:216B24:271B26:-1TR-336:-35TR-336:0B98:-200B138",
+	}
+	local function applyBarStyle(self)
+		local str = styleString[self.index]
+		if not str then return end
+		Bar:ImportActionbarStyle(str)
+	end
+
+	for i = 1, 5 do
+		local bu = B.CreateButton(frame, 24, 24, i)
+		bu:SetPoint("LEFT", (i-1)*29 + 5, 0)
+		bu.index = i
+		bu:SetScript("OnClick", applyBarStyle)
+	end
+end
