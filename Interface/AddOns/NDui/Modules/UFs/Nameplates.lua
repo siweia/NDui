@@ -780,18 +780,20 @@ end
 
 function UF:UpdateNameplateSize()
 	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
-	local nameTextSize = C.db["Nameplate"]["NameTextSize"]
+	local plateCBHeight, plateCBOffset = C.db["Nameplate"]["PlateCBHeight"], C.db["Nameplate"]["PlateCBOffset"]
+	local nameTextSize, CBTextSize = C.db["Nameplate"]["NameTextSize"], C.db["Nameplate"]["CBTextSize"]
 	local healthTextSize = C.db["Nameplate"]["HealthTextSize"]
 	local healthTextOffset = C.db["Nameplate"]["HealthTextOffset"]
 	if C.db["Nameplate"]["FriendPlate"] and self.isFriendly and not C.db["Nameplate"]["NameOnlyMode"] then -- cannot use plateType here
 		plateWidth, plateHeight = C.db["Nameplate"]["FriendPlateWidth"], C.db["Nameplate"]["FriendPlateHeight"]
-		nameTextSize = C.db["Nameplate"]["FriendNameSize"]
+		plateCBHeight, plateCBOffset = C.db["Nameplate"]["FriendPlateCBHeight"], C.db["Nameplate"]["FriendPlateCBOffset"]
+		nameTextSize, CBTextSize = C.db["Nameplate"]["FriendNameSize"], C.db["Nameplate"]["FriendCBTextSize"]
 		healthTextSize = C.db["Nameplate"]["FriendHealthSize"]
 		healthTextOffset = C.db["Nameplate"]["FriendHealthOffset"]
 	end
 
 	local font, fontFlag = DB.Font[1], DB.Font[3]
-	local iconSize = plateHeight*2 + 5
+	local iconSize = plateHeight + plateCBHeight + 5
 
 	self:SetSize(plateWidth, plateHeight)
 	self.nameText:SetFont(font, nameTextSize, fontFlag)
@@ -799,10 +801,14 @@ function UF:UpdateNameplateSize()
 	self.tarName:SetFont(font, nameTextSize+4, fontFlag)
 	self.Castbar.Icon:SetSize(iconSize, iconSize)
 	self.Castbar.glowFrame:SetSize(iconSize+8, iconSize+8)
-	self.Castbar:SetHeight(plateHeight)
-	self.Castbar.Time:SetFont(font, nameTextSize, fontFlag)
-	self.Castbar.Text:SetFont(font, nameTextSize, fontFlag)
-	self.Castbar.spellTarget:SetFont(font, nameTextSize+3, fontFlag)
+	self.Castbar:SetHeight(plateCBHeight)
+	self.Castbar.Time:SetFont(font, CBTextSize, fontFlag)
+	self.Castbar.Time:SetPoint("TOPRIGHT", self.Castbar, "RIGHT", 0, plateCBOffset)
+	self.Castbar.Text:SetFont(font, CBTextSize, fontFlag)
+	self.Castbar.Text:SetPoint("TOPLEFT", self.Castbar, "LEFT", 0, plateCBOffset)
+	self.Castbar.Shield:SetPoint("TOP", self.Castbar, "CENTER", 0, plateCBOffset)
+	self.Castbar.Shield:SetSize(CBTextSize + 4, CBTextSize + 4)
+	self.Castbar.spellTarget:SetFont(font, CBTextSize+3, fontFlag)
 	self.healthValue:SetFont(font, healthTextSize, fontFlag)
 	self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
 	self.healthValue:UpdateTag()
