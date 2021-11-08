@@ -80,6 +80,7 @@ function Bar:ImportActionbarStyle(preset)
 	for index = 2, maxOptions do
 		local value = values[index]
 		value = tonumber(value)
+		if not value then return end -- stop if string incorrect
 		C.db["Actionbar"][optionValues[index-1]] = value
 	end
 	Bar:UpdateAllScale()
