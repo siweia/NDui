@@ -2,18 +2,21 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
+local tinsert, pairs = tinsert, pairs
+local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
+
 local chatSwitchInfo = {
 	text = L["ChatSwitchHelp"],
 	buttonStyle = HelpTip.ButtonStyle.GotIt,
 	targetPoint = HelpTip.Point.TopEdgeCenter,
-	offsetY = 5,
+	offsetY = 50,
 	onAcknowledgeCallback = B.HelpInfoAcknowledge,
 	callbackArg = "ChatSwitch",
 }
 
 local function chatSwitchTip()
 	if not NDuiADB["Help"]["ChatSwitch"] then
-		HelpTip:Show(ChatFrame1.editBox, chatSwitchInfo)
+		HelpTip:Show(ChatFrame1, chatSwitchInfo)
 	end
 end
 
@@ -23,7 +26,6 @@ function module:Chatbar()
 	local chatFrame = SELECTED_DOCK_FRAME
 	local editBox = chatFrame.editBox
 	local width, height, padding, buttonList = 40, 8, 5, {}
-	local tinsert, pairs = table.insert, pairs
 
 	local Chatbar = CreateFrame("Frame", "NDui_ChatBar", UIParent)
 	Chatbar:SetSize(width, height)
@@ -79,7 +81,7 @@ function module:Chatbar()
 			end
 		end},
 		{.25, 1, .25, GUILD.."/"..OFFICER, function(_, btn)
-			if btn == "RightButton" and C_GuildInfo.CanEditOfficerNote() then
+			if btn == "RightButton" and C_GuildInfo_IsGuildOfficer() then
 				ChatFrame_OpenChat("/o ", chatFrame)
 			else
 				ChatFrame_OpenChat("/g ", chatFrame)
