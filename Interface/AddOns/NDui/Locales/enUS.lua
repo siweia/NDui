@@ -821,3 +821,6 @@ L["BaudErrorTip"] = "UI errors popup out, click the number below to check and re
 L["ApplyBarStyle"] = "Load this bar style by holding key CTRL and click."
 L["CastbarTextSize"] = "Castbar Text Size"
 L["CastbarTextOffset"] = "Castbar Text Y-Offset"
+L["StyleStringError"] = "Your actionbar style string is incorrect."
+L["ExportActionbarStyle"] = "Export the actionbar style you currently used."
+L["ImportActionbarStyle"] = "Import the actionbar style from others."

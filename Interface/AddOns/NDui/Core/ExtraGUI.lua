@@ -4,7 +4,7 @@ local G = B:GetModule("GUI")
 
 local _G = _G
 local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
-local min, max, strmatch, tonumber = min, max, strmatch, tonumber
+local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonumber
 local GetSpellInfo, GetSpellTexture = GetSpellInfo, GetSpellTexture
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
@@ -1313,6 +1313,12 @@ function G:SetupActionbarStyle(parent)
 		[1] = _G.DEFAULT,
 		[2] = "3X12",
 		[3] = "2X18",
+		[4] = L["Export"],
+		[5] = L["Import"],
+	}
+	local tooltips = {
+		[4] = L["ExportActionbarStyle"],
+		[5] = L["ImportActionbarStyle"],
 	}
 
 	local function applyBarStyle(self)
@@ -1322,24 +1328,97 @@ function G:SetupActionbarStyle(parent)
 		Bar:ImportActionbarStyle(str)
 	end
 
+	StaticPopupDialogs["NDUI_BARSTYLE_EXPORT"] = {
+		text = L["Export"],
+		button1 = OKAY,
+		OnShow = function(self)
+			self.editBox:SetText(Bar:ExportActionbarStyle())
+			self.editBox:HighlightText()
+		end,
+		EditBoxOnEscapePressed = function(self)
+			self:GetParent():Hide()
+		end,
+		whileDead = 1,
+		hasEditBox = 1,
+		editBoxWidth = 250,
+	}
+
+	StaticPopupDialogs["NDUI_BARSTYLE_IMPORT"] = {
+		text = L["Import"],
+		button1 = OKAY,
+		button2 = CANCEL,
+		OnShow = function(self)
+			self.button1:Disable()
+		end,
+		OnAccept = function(self)
+			Bar:ImportActionbarStyle(self.editBox:GetText())
+		end,
+		EditBoxOnTextChanged = function(self)
+			local button1 = self:GetParent().button1
+			local text = self:GetText()
+			local found = text and strfind(text, "^NAB:")
+			if found then
+				button1:Enable()
+			else
+				button1:Disable()
+			end
+		end,
+		EditBoxOnEscapePressed = function(self)
+			self:GetParent():Hide()
+		end,
+		whileDead = 1,
+		showAlert = 1,
+		hasEditBox = 1,
+		editBoxWidth = 250,
+	}
+
+	local function exportBarStyle()
+		StaticPopup_Hide("NDUI_BARSTYLE_IMPORT")
+		StaticPopup_Show("NDUI_BARSTYLE_EXPORT")
+	end
+
+	local function importBarStyle()
+		StaticPopup_Hide("NDUI_BARSTYLE_EXPORT")
+		StaticPopup_Show("NDUI_BARSTYLE_IMPORT")
+	end
+
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", function()
+		StaticPopup_Hide("NDUI_BARSTYLE_EXPORT")
+		StaticPopup_Hide("NDUI_BARSTYLE_IMPORT")
+	end)
+
 	local function styleOnEnter(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(styleName[self.index])
-		GameTooltip:AddLine(L["ApplyBarStyle"], .6,.8,1,1)
+		GameTooltip:AddLine(self.title)
+		GameTooltip:AddLine(self.tip, .6,.8,1,1)
 		GameTooltip:Show()
 	end
 
+	local function GetButtonText(i)
+		if i == 4 then
+			return "|T"..DB.ArrowUp..":16|t"
+		elseif i == 5 then
+			return "|T"..DB.ArrowUp..":16:16:0:0:1:1:0:1:1:0|t"
+		else
+			return i
+		end
+	end
+
 	for i = 1, 5 do
-		local bu = B.CreateButton(frame, size, size, i)
+		local bu = B.CreateButton(frame, size, size, GetButtonText(i))
 		bu:SetPoint("LEFT", (i-1)*(size + padding) + padding, 0)
 		bu.index = i
-		bu:SetScript("OnClick", applyBarStyle)
+		bu.title = styleName[i]
+		bu.tip = tooltips[i] or L["ApplyBarStyle"]
+		if i == 4 then
+			bu:SetScript("OnClick", exportBarStyle)
+		elseif i == 5 then
+			bu:SetScript("OnClick", importBarStyle)
+		else
+			bu:SetScript("OnClick", applyBarStyle)
+		end
 		bu:HookScript("OnEnter", styleOnEnter)
 		bu:HookScript("OnLeave", B.HideTooltip)
-		if i > 3 then
-			bu:Disable()
-			bu:SetAlpha(.5)
-		end
 	end
 end

@@ -80,7 +80,10 @@ function Bar:ImportActionbarStyle(preset)
 	for index = 2, maxOptions do
 		local value = values[index]
 		value = tonumber(value)
-		if not value then return end -- stop if string incorrect
+		if not value then -- stop if string incorrect
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["StyleStringError"])
+			return
+		end
 		C.db["Actionbar"][optionValues[index-1]] = value
 	end
 	Bar:UpdateAllScale()
@@ -92,9 +95,14 @@ function Bar:ImportActionbarStyle(preset)
 			local x, point, y = strmatch(values[index], "(-*%d+)(%a+)(-*%d+)")
 			x, y = tonumber(x), tonumber(y)
 			point = abbrToAnchor[point]
-			mover:ClearAllPoints()
-			mover:SetPoint(point, "UIParent", point, x, y)
-			C.db["Mover"][moverValues[moverIndex]] = {point, "UIParent", point, x, y}
+			if point and x and y then
+				mover:ClearAllPoints()
+				mover:SetPoint(point, "UIParent", point, x, y)
+				C.db["Mover"][moverValues[moverIndex]] = {point, "UIParent", point, x, y}
+			else
+				UIErrorsFrame:AddMessage(DB.InfoColor..L["StyleStringError"])
+				return
+			end
 		end
 	end
 end

@@ -821,3 +821,6 @@ L["BaudErrorTip"] = "你的插件報錯了，點擊下方數字查看並反饋�
 L["ApplyBarStyle"] = "按住Ctrl鍵並點擊以載入該快捷列佈局。"
 L["CastbarTextSize"] = "施法條文本字號"
 L["CastbarTextOffset"] = "施法條文本垂直偏移"
+L["StyleStringError"] = "你輸入的快捷列佈局存在錯誤。"
+L["ExportActionbarStyle"] = "導出當前使用的快捷列佈局。"
+L["ImportActionbarStyle"] = "導入他人分享的快捷列佈局。"

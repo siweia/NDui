@@ -821,3 +821,6 @@ L["BaudErrorTip"] = "你的插件报错了，点击下方数字查看并反馈�
 L["ApplyBarStyle"] = "按住Ctrl键并点击以载入该动作条布局。"
 L["CastbarTextSize"] = "施法条文本字号"
 L["CastbarTextOffset"] = "施法条文本垂直偏移"
+L["StyleStringError"] = "你输入的动作条布局存在错误。"
+L["ExportActionbarStyle"] = "导出当前使用的动作条布局。"
+L["ImportActionbarStyle"] = "导入他人分享的动作条布局。"
