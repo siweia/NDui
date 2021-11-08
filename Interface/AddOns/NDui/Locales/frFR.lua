@@ -818,3 +818,4 @@ L["PlateAuras"] = "Auras de plaque de nom"
 L["QuickJoinInfo"] = "Demande de groupe rapide par double clic. Laissez un commentaire en maintenant la touche ALT enfoncée et double-cliquez ."
 L["ActionbarSetup"] = "Paramètres de barres d'action"
 L["BaudErrorTip"] = "UI errors popup out, click the number below to check and report." -- need translation
+L["ApplyBarStyle"] = "Load this bar style by holding key CTRL and click." -- need translation

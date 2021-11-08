@@ -7,6 +7,7 @@ local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
 local min, max, strmatch, tonumber = min, max, strmatch, tonumber
 local GetSpellInfo, GetSpellTexture = GetSpellInfo, GetSpellTexture
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
+local IsControlKeyDown = IsControlKeyDown
 
 local function sortBars(barTable)
 	local num = 1
@@ -1322,7 +1323,7 @@ function G:SetupActionbarStyle(parent)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(styleName[self.index])
-		GameTooltip:AddLine("按住Ctrl键点击载入该动作条布局。", .6,.8,1,1)
+		GameTooltip:AddLine(L["ApplyBarStyle"], .6,.8,1,1)
 		GameTooltip:Show()
 	end
 
