@@ -1291,9 +1291,11 @@ function G:SetupStanceBar(parent)
 end
 
 function G:SetupActionbarStyle(parent)
+	local size, padding = 30, 3
+
 	local frame = CreateFrame("Frame", "NDuiActionbarStyleFrame", parent.child)
-	frame:SetSize(150, 34)
-	frame:SetPoint("TOPRIGHT", -130, -15)
+	frame:SetSize((size+padding)*5 + padding, size + 2*padding)
+	frame:SetPoint("TOPRIGHT", -100, -15)
 	B.CreateBDFrame(frame, .25)
 
 	local Bar = B:GetModule("Actionbar")
@@ -1303,17 +1305,34 @@ function G:SetupActionbarStyle(parent)
 		[2] = "NAB:34:12:12:12:34:12:12:12:34:12:12:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:0B96:271B26:-1BR336:-35BR336:0B134:-200B138",
 		[3] = "NAB:34:12:12:12:34:12:12:12:34:12:12:6:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:-108B24:-108B60:216B24:271B26:-1TR-336:-35TR-336:0B98:-200B138",
 	}
+	local styleName = {
+		[1] = _G.DEFAULT,
+		[2] = "3X12",
+		[3] = "2X18",
+	}
+
 	local function applyBarStyle(self)
+		if not IsControlKeyDown() then return end
 		local str = styleString[self.index]
 		if not str then return end
 		Bar:ImportActionbarStyle(str)
 	end
 
+	local function styleOnEnter(self)
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(styleName[self.index])
+		GameTooltip:AddLine("按住Ctrl键点击载入该动作条布局。", .6,.8,1,1)
+		GameTooltip:Show()
+	end
+
 	for i = 1, 5 do
-		local bu = B.CreateButton(frame, 24, 24, i)
-		bu:SetPoint("LEFT", (i-1)*29 + 5, 0)
+		local bu = B.CreateButton(frame, size, size, i)
+		bu:SetPoint("LEFT", (i-1)*(size + padding) + padding, 0)
 		bu.index = i
 		bu:SetScript("OnClick", applyBarStyle)
+		bu:HookScript("OnEnter", styleOnEnter)
+		bu:HookScript("OnLeave", B.HideTooltip)
 		if i > 3 then
 			bu:Disable()
 			bu:SetAlpha(.5)
