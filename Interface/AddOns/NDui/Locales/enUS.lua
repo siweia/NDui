@@ -819,3 +819,5 @@ L["QuickJoinInfo"] = "Quick apply group by double click. And leave comment by ho
 L["ActionbarSetup"] = "Actionbar Setup"
 L["BaudErrorTip"] = "UI errors popup out, click the number below to check and report."
 L["ApplyBarStyle"] = "Load this bar style by holding key CTRL and click."
+L["CastbarTextSize"] = "Castbar Text Size"
+L["CastbarTextOffset"] = "Castbar Text Y-Offset"

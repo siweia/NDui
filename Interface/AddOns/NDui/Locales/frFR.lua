@@ -819,3 +819,5 @@ L["QuickJoinInfo"] = "Demande de groupe rapide par double clic. Laissez un comme
 L["ActionbarSetup"] = "Paramètres de barres d'action"
 L["BaudErrorTip"] = "UI errors popup out, click the number below to check and report." -- need translation
 L["ApplyBarStyle"] = "Load this bar style by holding key CTRL and click." -- need translation
+L["CastbarTextSize"] = "Castbar Text Size" -- need translation
+L["CastbarTextOffset"] = "Castbar Text Y-Offset" -- need translation
