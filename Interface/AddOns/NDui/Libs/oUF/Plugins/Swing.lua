@@ -18,6 +18,10 @@ local OffhandID = GetInventoryItemID("player", 17)
 local RangedID = GetInventoryItemID("player", 18)
 local playerGUID = UnitGUID("player")
 
+local function RoundPercent(percent)
+	return B:Round(percent, 2)
+end
+
 local function SwingStopped(element)
 	local bar = element.__owner
 	local swing = bar.Twohand
@@ -166,14 +170,14 @@ local function MeleeChange(self, _, unit)
 	else
 		if ohspeed then
 			if swingMH.speed and swingMH.speed ~= mhspeed then
-				local percentage = ((swingMH.max or 10) - now) / (swingMH.speed)
+				local percentage = RoundPercent(((swingMH.max or 10) - now) / swingMH.speed)
 				swingMH.min = now - mhspeed * (1 - percentage)
 				swingMH.max = now + mhspeed * percentage
 				UpdateBarMinMaxValues(swingMH)
 				swingMH.speed = mhspeed
 			end
 			if swingOH.speed and swingOH.speed ~= ohspeed then
-				local percentage = ((swingOH.max or 10)- now) / (swingOH.speed)
+				local percentage = RoundPercent(((swingOH.max or 10)- now) / swingOH.speed)
 				swingOH.min = now - ohspeed * (1 - percentage)
 				swingOH.max = now + ohspeed * percentage
 				UpdateBarMinMaxValues(swingOH)
@@ -181,7 +185,7 @@ local function MeleeChange(self, _, unit)
 			end
 		else
 			if swing.max and swing.speed ~= mhspeed then
-				local percentage = (swing.max - now) / (swing.speed)
+				local percentage = RoundPercent((swing.max - now) / swing.speed)
 				swing.min = now - mhspeed * (1 - percentage)
 				swing.max = now + mhspeed * percentage
 				UpdateBarMinMaxValues(swing)
@@ -211,7 +215,7 @@ local function RangedChange(self, _, unit)
 		swing:SetScript("OnUpdate", OnDurationUpdate)
 	else
 		if swing.speed ~= speed then
-			local percentage = (swing.max - now) / (swing.speed)
+			local percentage = RoundPercent((swing.max - now) / swing.speed)
 			swing.min = now - speed * (1 - percentage)
 			swing.max = now + speed * percentage
 			swing.speed = speed
@@ -300,14 +304,6 @@ local function Melee(self, event, _, sourceGUID)
 	lasthit = now
 end
 
-local function FixedRange(value) -- needs review
-	if value > 1 then
-		return 1
-	elseif value < 0 then
-		return 0
-	end
-end
-
 local function ParryHaste(self, ...)
 	local destGUID, _, _, _, missType = select(7, ...)
 
@@ -325,7 +321,7 @@ local function ParryHaste(self, ...)
 
 	-- needed calculations, so the timer doesnt jump on parryhaste
 	if dualwield then
-		local percentage = FixedRange((swingMH.max - now) / swingMH.speed)
+		local percentage = RoundPercent((swingMH.max - now) / swingMH.speed)
 
 		if percentage > .6 then
 			swingMH.max = now + swingMH.speed * .6
@@ -337,7 +333,7 @@ local function ParryHaste(self, ...)
 			UpdateBarMinMaxValues(swingMH)
 		end
 
-		percentage = FixedRange((swingOH.max - now) / swingOH.speed)
+		percentage = RoundPercent((swingOH.max - now) / swingOH.speed)
 
 		if percentage > .6 then
 			swingOH.max = now + swingOH.speed * .6
@@ -349,7 +345,7 @@ local function ParryHaste(self, ...)
 			UpdateBarMinMaxValues(swingOH)
 		end
 	else
-		local percentage = FixedRange((swing.max - now) / swing.speed)
+		local percentage = RoundPercent((swing.max - now) / swing.speed)
 
 		if percentage > .6 then
 			swing.max = now + swing.speed * .6
