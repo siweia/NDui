@@ -480,6 +480,7 @@ do
 
 	-- Background texture
 	function B:CreateTex()
+		if not C.db["Skins"]["BgTex"] then return end
 		if self.__bgTex then return end
 
 		local frame = self

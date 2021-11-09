@@ -583,6 +583,7 @@ L["RaidFrame Size"] = "Размер рамок рейда"
 L["RaidDebuffScale"] = "Масштаб дебаффов рейда"
 L["FlatMode"] = "Плоский стиль кнопок"
 L["Shadow"] = "Тень фона"
+L["BgTex"] = "Background texture" -- need translation
 L["SkinAlpha"] = "Прозрачность темы"
 L["FontOutline"] = "Контур глобального шрифта"
 L["DefaultBags"] = "Сменить тему стандартных сумок"

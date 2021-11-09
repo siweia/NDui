@@ -583,6 +583,7 @@ L["RaidFrame Size"] = "Redimensionner les cadres de raid"
 L["RaidDebuffScale"] = "Échelle des affaiblissements de raid"
 L["FlatMode"] = "Boutons de style plat"
 L["Shadow"] = "Ombre d'arrière-plan"
+L["BgTex"] = "Background texture" -- need translation
 L["SkinAlpha"] = "Opacité de l'apparence"
 L["FontOutline"] = "Contour de police global"
 L["DefaultBags"] = "Changer l'apparence des sacs par défaut"
