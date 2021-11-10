@@ -1397,9 +1397,9 @@ function G:SetupActionbarStyle(parent)
 
 	local function GetButtonText(i)
 		if i == 4 then
-			return "|T"..DB.ArrowUp..":16|t"
+			return "|T"..DB.ArrowUp..":18|t"
 		elseif i == 5 then
-			return "|T"..DB.ArrowUp..":16:16:0:0:1:1:0:1:1:0|t"
+			return "|T"..DB.ArrowUp..":18:18:0:0:1:1:0:1:1:0|t"
 		else
 			return i
 		end
