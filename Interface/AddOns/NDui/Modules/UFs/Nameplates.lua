@@ -16,6 +16,10 @@ local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetSpellCooldown, GetTime = GetSpellCooldown, GetTime
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local INTERRUPTED, THREAT_TOOLTIP = INTERRUPTED, THREAT_TOOLTIP
+local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
+local C_NamePlate_SetNamePlateFriendlySize = C_NamePlate.SetNamePlateFriendlySize
+local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyClickThrough
+local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
 
 -- Init
 function UF:PlateInsideView()
@@ -51,8 +55,15 @@ function UF:UpdateClickableSize()
 	if C.db["Nameplate"]["FriendPlate"] and not C.db["Nameplate"]["NameOnlyMode"] then
 		friendPlateWidth, friendPlateHeight = C.db["Nameplate"]["FriendPlateWidth"], C.db["Nameplate"]["FriendPlateHeight"]
 	end
-	C_NamePlate.SetNamePlateEnemySize(plateWidth*uiScale, plateHeight*uiScale+40)
-	C_NamePlate.SetNamePlateFriendlySize(friendPlateWidth*uiScale, friendPlateHeight*uiScale+40)
+	C_NamePlate_SetNamePlateEnemySize(plateWidth*uiScale, plateHeight*uiScale+40)
+	C_NamePlate_SetNamePlateFriendlySize(friendPlateWidth*uiScale, friendPlateHeight*uiScale+40)
+end
+
+function UF:UpdatePlateClickThru()
+	if InCombatLockdown() then return end
+
+	C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])
+	C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
 end
 
 function UF:SetupCVars()
@@ -75,6 +86,7 @@ function UF:SetupCVars()
 
 	UF:UpdateClickableSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateOptions", UF.UpdateClickableSize)
+	UF:UpdatePlateClickThru()
 end
 
 function UF:BlockAddons()
