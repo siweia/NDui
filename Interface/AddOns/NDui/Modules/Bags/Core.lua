@@ -1118,7 +1118,9 @@ function module:OnLogin()
 
 	local function updateBagSize(button)
 		button:SetSize(iconSize, iconSize)
-		button.glowFrame:SetSize(iconSize+8, iconSize+8)
+		if button.glowFrame then
+			button.glowFrame:SetSize(iconSize+8, iconSize+8)
+		end
 		button.Count:SetFont(DB.Font[1], C.db["Bags"]["FontSize"], DB.Font[3])
 		button.iLvl:SetFont(DB.Font[1], C.db["Bags"]["FontSize"], DB.Font[3])
 	end
