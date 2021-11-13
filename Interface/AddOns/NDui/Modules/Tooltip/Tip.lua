@@ -263,7 +263,7 @@ function TT:OnTooltipSetUnit()
 			if npcID then
 				local reaction = UnitReaction(unit, "player")
 				local standingText = reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction]
-				self:AddDoubleLine(format(npcIDstring, standingText or "", npcID))
+				self:AddLine(format(npcIDstring, standingText or "", npcID))
 			end
 		end
 
