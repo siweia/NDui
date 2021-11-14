@@ -335,9 +335,7 @@ function module:PlayWhisperSound(event, _, author)
 end
 
 local function FixLanguageFilterSideEffects()
-	HelpFrame:HookScript("OnShow", function()
-		UIErrorsFrame:AddMessage(DB.InfoColor..L["LanguageFilterTip"])
-	end)
+	B.CreateFS(HelpFrame, 18, L["LanguageFilterTip"], "system",  "TOP", 0, 30)
 
 	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
 	function C_BattleNet.GetFriendGameAccountInfo(...)
