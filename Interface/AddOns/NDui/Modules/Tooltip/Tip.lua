@@ -465,6 +465,12 @@ function TT:FixRecipeItemNameWidth()
 	end
 end
 
+function TT:ResetUnit(btn)
+	if btn == "LSHIFT" and UnitExists("mouseover") then
+		GameTooltip:SetUnit("mouseover")
+	end
+end
+
 function TT:OnLogin()
 	GameTooltip.StatusBar = GameTooltipStatusBar
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
@@ -484,6 +490,7 @@ function TT:OnLogin()
 	TT:AzeriteArmor()
 	TT:ConduitCollectionData()
 	TT:DominationRank()
+	B:RegisterEvent("MODIFIER_STATE_CHANGED", TT.ResetUnit)
 end
 
 -- Tooltip Skin Registration

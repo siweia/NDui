@@ -34,13 +34,6 @@ local updater = CreateFrame("Frame")
 updater:SetScript("OnUpdate", TT.InspectOnUpdate)
 updater:Hide()
 
-function TT:ResetUnit(btn)
-	if btn == "LSHIFT" and UnitExists("mouseover") then
-		GameTooltip:SetUnit("mouseover")
-	end
-end
-B:RegisterEvent("MODIFIER_STATE_CHANGED", TT.ResetUnit)
-
 function TT:GetInspectInfo(...)
 	if self == "UNIT_INVENTORY_CHANGED" then
 		local unit = ...
