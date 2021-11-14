@@ -622,6 +622,8 @@ function G:SetupNameplateFilter(parent)
 		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, 185, 25)
 		scroll.box:SetPoint("TOPLEFT", 10, -10)
+		scroll.box.title = L["Tips"]
+		B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info")
 		scroll.add = B.CreateButton(frame, 70, 25, ADD)
 		scroll.add:SetPoint("TOPRIGHT", -8, -10)
 		scroll.add:SetScript("OnClick", function()
