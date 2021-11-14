@@ -827,3 +827,5 @@ L["ExportActionbarStyle"] = "Export the actionbar style you currently used." -- 
 L["ImportActionbarStyle"] = "Import the actionbar style from others." -- need translation
 L["Friendly ClickThru"] = "Friendly Nameplate ClickThru" -- need translation
 L["Enemy ClickThru"] = "Enemy Nameplate ClickThru" -- need translation
+L["MenuButton"] = "Кнопки всплывающего меню"
+L["MenuButtonTip"] = "|nСоздаёт цветные кнопки в меню, для добавления друзей, приглашений в гильдию и копирования имени."

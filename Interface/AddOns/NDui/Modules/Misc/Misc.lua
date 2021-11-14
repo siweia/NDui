@@ -29,6 +29,7 @@ local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend
 local C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo
 local C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo
 local C_Map_GetMapInfo, C_Map_GetBestMapForUnit = C_Map.GetMapInfo, C_Map.GetBestMapForUnit
+local UnitIsPlayer, GuildInvite, C_FriendList_AddFriend = UnitIsPlayer, GuildInvite, C_FriendList.AddFriend
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -68,6 +69,7 @@ function M:OnLogin()
 	M:EnhanceDressup()
 	M:FuckTrainSound()
 	M:JerryWay()
+	M:QuickMenuButton()
 	M:BaudErrorFrameHelpTip()
 
 	-- Unregister talent event
@@ -794,5 +796,66 @@ function M:BaudErrorFrameHelpTip()
 				HelpTip:Show(button, errorInfo)
 			end
 		end
+	end)
+end
+
+-- Buttons to enhance popup menu
+function M:MenuButton_AddFriend()
+	C_FriendList_AddFriend(M.MenuButtonName)
+end
+
+function M:MenuButton_CopyName()
+	local editBox = ChatEdit_ChooseBoxForSend()
+	local hasText = (editBox:GetText() ~= "")
+	ChatEdit_ActivateChat(editBox)
+	editBox:Insert(M.MenuButtonName)
+	if not hasText then editBox:HighlightText() end
+end
+
+function M:MenuButton_GuildInvite()
+	GuildInvite(M.MenuButtonName)
+end
+
+function M:QuickMenuButton()
+	if not C.db["Misc"]["MenuButton"] then return end
+
+	local menuList = {
+		{text = ADD_FRIEND, func = M.MenuButton_AddFriend, color = {0, .6, 1}},
+		{text = gsub(CHAT_GUILD_INVITE_SEND, HEADER_COLON, ""), func = M.MenuButton_GuildInvite, color = {0, .8, 0}},
+		{text = COPY_NAME, func = M.MenuButton_CopyName, color = {1, 0, 0}},
+	}
+
+	local frame = CreateFrame("Frame", "NDuiMenuButtonFrame", DropDownList1)
+	frame:SetSize(10, 10)
+	frame:SetPoint("TOPLEFT")
+	frame:Hide()
+	for i = 1, 3 do
+		local button = CreateFrame("Button", nil, frame)
+		button:SetSize(25, 10)
+		button:SetPoint("TOPLEFT", frame, (i-1)*28 + 2, -2)
+		B.PixelIcon(button, nil, true)
+		button.Icon:SetColorTexture(unpack(menuList[i].color))
+		button:SetScript("OnClick", menuList[i].func)
+		B.AddTooltip(button, "ANCHOR_TOP", menuList[i].text)
+	end
+
+	hooksecurefunc("ToggleDropDownMenu", function(level, _, dropdownMenu)
+		if level and level > 1 then return end
+
+		local name = dropdownMenu.name
+		local unit = dropdownMenu.unit
+		local isPlayer = unit and UnitIsPlayer(unit)
+		local isFriendMenu = dropdownMenu == FriendsDropDown and not dropdownMenu.bnetIDAccount -- menus on FriendsFrame
+		if not name or (not isPlayer and not dropdownMenu.chatType and not isFriendMenu) then
+			frame:Hide()
+			return
+		end
+
+		local server = dropdownMenu.server
+		if not server or server == "" then
+			server = DB.MyRealm
+		end
+		M.MenuButtonName = name.."-"..server
+		frame:Show()
 	end)
 end

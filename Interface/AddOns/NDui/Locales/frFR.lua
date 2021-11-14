@@ -827,3 +827,5 @@ L["ExportActionbarStyle"] = "Export the actionbar style you currently used." -- 
 L["ImportActionbarStyle"] = "Import the actionbar style from others." -- need translation
 L["Friendly ClickThru"] = "Friendly Nameplate ClickThru" -- need translation
 L["Enemy ClickThru"] = "Enemy Nameplate ClickThru" -- need translation
+L["MenuButton"] = "Popup menu buttons" -- need translation
+L["MenuButtonTip"] = "|nCreate colorful buttons on popup menu to add friend, guild invite and copy name." -- need translation

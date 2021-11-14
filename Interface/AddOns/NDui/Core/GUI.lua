@@ -424,6 +424,7 @@ G.DefaultSettings = {
 		InfoStrRight = "[spec][dura][gold][time]",
 		InfoSize = 13,
 		MaxAddOns = 12,
+		MenuButton = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -890,8 +891,8 @@ G.TabList = {
 	L["Maps"],
 	NewTag..L["Skins"],
 	L["Tooltip"],
-	L["Misc"],
-	NewTag..L["UI Settings"],
+	NewTag..L["Misc"],
+	L["UI Settings"],
 	L["Profile"],
 }
 
@@ -1243,15 +1244,16 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MawThreatBar", L["MawThreatBar"], nil, nil, nil, L["MawThreatBarTip"]},
 		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
 		{1, "Misc", "QuestTool", L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
+		{1, "Misc", "MenuButton", NewTag..L["MenuButton"], true, nil, nil, L["MenuButtonTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{},--blank
 		{1, "ACCOUNT", "DisableInfobars", HeaderTag..L["DisableInfobars"]},
-		{3, "Misc", "MaxAddOns", NewTag..L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
-		{3, "Misc", "InfoSize", NewTag..L["InfobarFontSize"].."*", true,  {10, 50, 1}, updateInfobarSize},
-		{2, "Misc", "InfoStrLeft", NewTag..L["LeftInfobar"].."*", nil, nil, updateInfobarAnchor, L["InfobarStrTip"]},
-		{2, "Misc", "InfoStrRight", NewTag..L["RightInfobar"].."*", true, nil, updateInfobarAnchor, L["InfobarStrTip"]},
+		{3, "Misc", "MaxAddOns", L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
+		{3, "Misc", "InfoSize", L["InfobarFontSize"].."*", true,  {10, 50, 1}, updateInfobarSize},
+		{2, "Misc", "InfoStrLeft", L["LeftInfobar"].."*", nil, nil, updateInfobarAnchor, L["InfobarStrTip"]},
+		{2, "Misc", "InfoStrRight", L["RightInfobar"].."*", true, nil, updateInfobarAnchor, L["InfobarStrTip"]},
 		{},--blank
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, .01}},
 		{1, "ACCOUNT", "LockUIScale", HeaderTag..L["Lock UIScale"], true},
