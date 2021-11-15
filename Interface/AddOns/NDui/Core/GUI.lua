@@ -38,6 +38,7 @@ G.DefaultSettings = {
 		CustomBarNumPerRow = 12,
 		ShowStance = true,
 		EquipColor = false,
+		VehButtonSize = 34,
 
 		Bar1Size = 34,
 		Bar1Font = 12,

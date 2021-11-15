@@ -1278,6 +1278,9 @@ function G:SetupActionBar(parent)
 	createOptionGroup(scroll.child, L["Actionbar"].."4", -1000, "Bar4")
 	createOptionGroup(scroll.child, L["Actionbar"].."5", -1330, "Bar5")
 	createOptionGroup(scroll.child, L["Pet Actionbar"], -1660, "BarPet")
+
+	createOptionTitle(scroll.child, L["LeaveVehicle"], -1990)
+	createOptionSlider(scroll.child, L["ButtonSize"], 20, 80, 34, 30, -2050, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
 end
 
 function G:SetupStanceBar(parent)

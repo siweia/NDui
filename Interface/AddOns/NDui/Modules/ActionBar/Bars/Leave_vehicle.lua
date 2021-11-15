@@ -4,22 +4,29 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert = tinsert
+local UnitOnTaxi, TaxiRequestEarlyLanding, VehicleExit = UnitOnTaxi, TaxiRequestEarlyLanding, VehicleExit
 local cfg = C.Bars.leave_vehicle
-local margin, padding = C.Bars.margin, C.Bars.padding
+local padding = C.Bars.padding
+
+function Bar:UpdateVehicleButton()
+	local frame = _G["NDui_ActionBarExit"]
+	if not frame then return end
+
+	local size = C.db["Actionbar"]["VehButtonSize"]
+	local framSize = size + 2*padding
+	frame.buttons[1]:SetSize(size, size)
+	frame:SetSize(framSize, framSize)
+	frame.mover:SetSize(framSize, framSize)
+end
 
 function Bar:CreateLeaveVehicle()
-	local num = 1
-	local size = cfg.size
 	local buttonList = {}
 
 	local frame = CreateFrame("Frame", "NDui_ActionBarExit", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*size + (num-1)*margin + 2*padding)
-	frame:SetHeight(size + 2*padding)
 	frame.mover = B.Mover(frame, L["LeaveVehicle"], "LeaveVehicle", {"BOTTOM", UIParent, "BOTTOM", 320, 100})
 
 	local button = CreateFrame("CheckButton", "NDui_LeaveVehicleButton", frame, "ActionButtonTemplate, SecureHandlerClickTemplate")
 	tinsert(buttonList, button)
-	button:SetSize(size, size)
 	button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 	button:RegisterForClicks("AnyUp")
 	button.icon:SetTexture("INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up")

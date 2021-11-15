@@ -17,6 +17,7 @@ function Bar:UpdateAllScale()
 	Bar:UpdateActionSize("Bar5")
 	Bar:UpdateActionSize("BarPet")
 	Bar:UpdateStanceBar()
+	Bar:UpdateVehicleButton()
 end
 
 function Bar:UpdateFontSize(button, fontSize)
