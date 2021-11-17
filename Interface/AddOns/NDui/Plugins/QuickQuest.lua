@@ -182,6 +182,8 @@ local ignoreGossipNPC = {
 	[172558] = true, -- 艾拉·引路者（导师）
 	[172572] = true, -- 瑟蕾丝特·贝利文科（导师）
 	[175513] = true, -- 纳斯利亚审判官，傲慢
+	[165196] = true, -- 灰烬王庭
+	[180458] = true, -- 灰烬王庭，大帝幻象
 }
 
 local rogueClassHallInsignia = {
