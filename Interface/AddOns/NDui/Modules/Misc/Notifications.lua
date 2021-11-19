@@ -199,6 +199,7 @@ local blackList = {
 	[207685] = true,	-- 悲苦咒符
 	[226943] = true,	-- 心灵炸弹
 	[228600] = true,	-- 冰川尖刺
+	[331866] = true,	-- 混沌代理人
 }
 
 function M:IsAllyPet(sourceFlags)
