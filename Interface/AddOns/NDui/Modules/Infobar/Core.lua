@@ -16,15 +16,13 @@ function INFO:GetMoneyString(money, full)
 	else
 		if money > 0 then
 			local moneyString = ""
-			local gold = floor(money / 1e4)
+			local gold, silver, copper = floor(money/1e4), floor(money/100) % 100, money % 100
 			if gold > 0 then
 				moneyString = " "..gold..GOLD_AMOUNT_SYMBOL
 			end
-			local silver = floor((money - (gold * 1e4)) / 100)
 			if silver > 0 then
 				moneyString = moneyString.." "..silver..SILVER_AMOUNT_SYMBOL
 			end
-			local copper = mod(money, 100)
 			if copper > 0 then
 				moneyString = moneyString.." "..copper..COPPER_AMOUNT_SYMBOL
 			end
