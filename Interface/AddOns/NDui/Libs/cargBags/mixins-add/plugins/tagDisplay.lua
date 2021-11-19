@@ -40,6 +40,7 @@ CALLBACKS
 	:OnTagUpdate(event) - When the tag is updated
 ]]
 local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 
 local tagPool, tagEvents, object = {}, {}
@@ -141,15 +142,28 @@ tagPool["currencies"] = function(self)
 end
 tagEvents["currencies"] = tagEvents["currency"]
 
+local atlasCache = {}
+local function createAtlasCoin(coin)
+	local str = atlasCache[coin]
+	if not str then
+		local info = C_Texture.GetAtlasInfo("coin-"..coin)
+		if info then
+			str = B:GetTextureStrByAtlas(info, 16, 16)
+			atlasCache[coin] = str
+		end
+	end
+	return str
+end
+
 tagPool["money"] = function(self)
 	local money = GetMoney() or 0
-	local str
+	local str = ""
+	local gold, silver, copper = floor(money/1e4), floor(money/100) % 100, money % 100
 
-	local g,s,c = floor(money/1e4), floor(money/100) % 100, money % 100
+	if gold > 0 then str = str..gold..createAtlasCoin("gold").." " end
+	if silver > 0 then str = str..silver..createAtlasCoin("silver").." " end
+	if copper > 0 then str = str..copper..createAtlasCoin("copper").." " end
 
-	if(g > 0) then str = (str and str.." " or "") .. g .. createIcon("Interface\\MoneyFrame\\UI-GoldIcon", self.iconValues) end
-	if(s > 0) then str = (str and str.." " or "") .. s .. createIcon("Interface\\MoneyFrame\\UI-SilverIcon", self.iconValues) end
-	if(c > 0) then str = (str and str.." " or "") .. c .. createIcon("Interface\\MoneyFrame\\UI-CopperIcon", self.iconValues) end
 	return str
 end
 tagEvents["money"] = { "PLAYER_MONEY" }
