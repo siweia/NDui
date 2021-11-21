@@ -330,11 +330,17 @@ function TT:GameTooltip_ShowProgressBar()
 end
 
 -- Anchor and mover
-local anchorIndex = {
+local cursorIndex = {
 	[1] = "ANCHOR_NONE",
 	[2] = "ANCHOR_CURSOR_LEFT",
 	[3] = "ANCHOR_CURSOR",
 	[4] = "ANCHOR_CURSOR_RIGHT"
+}
+local anchorIndex = {
+	[1] = "TOPLEFT",
+	[2] = "TOPRIGHT",
+	[3] = "BOTTOMLEFT",
+	[4] = "BOTTOMRIGHT",
 }
 local mover
 function TT:GameTooltip_SetDefaultAnchor(parent)
@@ -342,13 +348,13 @@ function TT:GameTooltip_SetDefaultAnchor(parent)
 	if not parent then return end
 
 	local mode = C.db["Tooltip"]["CursorMode"]
-	self:SetOwner(parent, anchorIndex[mode])
+	self:SetOwner(parent, cursorIndex[mode])
 	if mode == 1 then
 		if not mover then
-			mover = B.Mover(self, L["Tooltip"], "GameTooltip", C.Tooltips.TipPos, 240, 120)
+			mover = B.Mover(self, L["Tooltip"], "GameTooltip", C.Tooltips.TipPos, 100, 100)
 		end
 		self:ClearAllPoints()
-		self:SetPoint("BOTTOMRIGHT", mover)
+		self:SetPoint(anchorIndex[C.db["Tooltip"]["TipAnchor"]], mover)
 	end
 end
 

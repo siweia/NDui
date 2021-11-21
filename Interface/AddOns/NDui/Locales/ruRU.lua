@@ -830,3 +830,5 @@ L["Enemy ClickThru"] = "Enemy Nameplate ClickThru" -- need translation
 L["MenuButton"] = "Кнопки всплывающего меню"
 L["MenuButtonTip"] = "|nСоздаёт цветные кнопки в меню, для добавления друзей, приглашений в гильдию и копирования имени."
 L["MicroMenuTip"] = "|nMicromenu is designed to work with NDui build-in actionbars together, it may cause some taint issue if you use it separately." -- need translation
+L["TipAnchor"] = "Tooltip anchor" -- need translation
+L["TipAnchorTip"] = "|nModify GameTooltip initial anchor, which would extend to the oppsite direction." -- need translation
