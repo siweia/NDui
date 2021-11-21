@@ -3,6 +3,12 @@ local B, C, L, DB = unpack(ns)
 
 local function reskinPartyPose(frame)
 	B.StripTextures(frame)
+	if frame.Border then
+		frame.Border:SetAlpha(0)
+	end
+	if frame.OverlayElements then
+		frame.OverlayElements.Topper:SetAlpha(0)
+	end
 	B.SetBD(frame)
 	B.Reskin(frame.LeaveButton)
 	B.StripTextures(frame.ModelScene)
