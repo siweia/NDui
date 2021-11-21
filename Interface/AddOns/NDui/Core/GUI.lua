@@ -352,7 +352,7 @@ G.DefaultSettings = {
 	},
 	Tooltip = {
 		CombatHide = false,
-		Cursor = false,
+		CursorMode = 1,
 		ItemQuality = false,
 		HideRank = false,
 		FactionIcon = true,
@@ -891,7 +891,7 @@ G.TabList = {
 	L["ChatFrame"],
 	L["Maps"],
 	NewTag..L["Skins"],
-	L["Tooltip"],
+	NewTag..L["Tooltip"],
 	NewTag..L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
@@ -902,7 +902,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Enable", NewTag..HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, nil, nil, L["MicroMenuTip"]},
-		{1, "Actionbar", "ShowStance", NewTag..L["ShowStanceBar"], true, setupStanceBar},
+		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
 		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
 		{},--blank
@@ -1200,8 +1200,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[12] = {
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"].."*"},
-		{1, "Tooltip", "Cursor", L["Follow Cursor"].."*"},
-		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
+		{1, "Tooltip", "ItemQuality", NewTag..L["ShowItemQuality"].."*", true},
+		{4, "Tooltip", "CursorMode", NewTag..L["Follow Cursor"].."*", nil, {DISABLE, L["LEFT"], L["TOP"], L["RIGHT"]}},
 		{3, "Tooltip", "Scale", L["Tooltip Scale"].."*", true, {.5, 1.5, .1}},
 		{},--blank
 		{1, "Tooltip", "HideTitle", L["Hide Title"].."*"},
