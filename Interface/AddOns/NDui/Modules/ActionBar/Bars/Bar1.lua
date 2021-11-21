@@ -162,6 +162,7 @@ end
 
 function Bar:OnLogin()
 	Bar.buttons = {}
+	Bar:MicroMenu()
 
 	if not C.db["Actionbar"]["Enable"] then return end
 
@@ -179,5 +180,4 @@ function Bar:OnLogin()
 	Bar:HideBlizz()
 	Bar:ReskinBars()
 	Bar:UpdateAllScale()
-	Bar:MicroMenu()
 end
