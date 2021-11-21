@@ -353,7 +353,7 @@ G.DefaultSettings = {
 	Tooltip = {
 		CombatHide = false,
 		Cursor = false,
-		ClassColor = false,
+		ItemQuality = false,
 		HideRank = false,
 		FactionIcon = true,
 		LFDRole = false,
@@ -1201,7 +1201,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[12] = {
 		{1, "Tooltip", "CombatHide", L["Hide Tooltip"].."*"},
 		{1, "Tooltip", "Cursor", L["Follow Cursor"].."*"},
-		{1, "Tooltip", "ClassColor", L["Classcolor Border"].."*"},
+		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
 		{3, "Tooltip", "Scale", L["Tooltip Scale"].."*", true, {.5, 1.5, .1}},
 		{},--blank
 		{1, "Tooltip", "HideTitle", L["Hide Title"].."*"},

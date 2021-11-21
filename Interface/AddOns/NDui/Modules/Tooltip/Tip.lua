@@ -409,7 +409,7 @@ function TT:ReskinTooltip()
 	end
 
 	B.SetBorderColor(self.bg)
-	if C.db["Tooltip"]["ClassColor"] and self.GetItem then
+	if C.db["Tooltip"]["ItemQuality"] and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
