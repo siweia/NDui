@@ -300,11 +300,11 @@ local function Melee(self, event, _, sourceGUID)
 	lasthit = now
 end
 
-local function FixedRange(value) -- needs review
-	if value > 1 then
-		return 1
-	elseif value < 0 then
+local function GetHasteMult(speed, now, percentage)
+	if percentage == 1 then
 		return 0
+	else
+		return (speed - now) * percentage / (1 - percentage)
 	end
 end
 
@@ -325,39 +325,39 @@ local function ParryHaste(self, ...)
 
 	-- needed calculations, so the timer doesnt jump on parryhaste
 	if dualwield then
-		local percentage = FixedRange((swingMH.max - now) / swingMH.speed)
+		local percentage = (swingMH.max - now) / swingMH.speed
 
 		if percentage > .6 then
 			swingMH.max = now + swingMH.speed * .6
-			swingMH.min = now - (swingMH.max - now) * percentage / (1 - percentage)
+			swingMH.min = now - GetHasteMult(swingMH.max, now, percentage)
 			UpdateBarMinMaxValues(swingMH)
 		elseif percentage > .2 then
 			swingMH.max = now + swingMH.speed * .2
-			swingMH.min = now - (swingMH.max - now) * percentage / (1 - percentage)
+			swingMH.min = now - GetHasteMult(swingMH.max, now, percentage)
 			UpdateBarMinMaxValues(swingMH)
 		end
 
-		percentage = FixedRange((swingOH.max - now) / swingOH.speed)
+		percentage = (swingOH.max - now) / swingOH.speed
 
 		if percentage > .6 then
 			swingOH.max = now + swingOH.speed * .6
-			swingOH.min = now - (swingOH.max - now) * percentage / (1 - percentage)
+			swingOH.min = now - GetHasteMult(swingOH.max, now, percentage)
 			UpdateBarMinMaxValues(swingOH)
 		elseif percentage > .2 then
 			swingOH.max = now + swingOH.speed * .2
-			swingOH.min = now - (swingOH.max - now) * percentage / (1 - percentage)
+			swingOH.min = now - GetHasteMult(swingOH.max, now, percentage)
 			UpdateBarMinMaxValues(swingOH)
 		end
 	else
-		local percentage = FixedRange((swing.max - now) / swing.speed)
+		local percentage = (swing.max - now) / swing.speed
 
 		if percentage > .6 then
 			swing.max = now + swing.speed * .6
-			swing.min = now - (swing.max - now) * percentage / (1 - percentage)
+			swing.min = now - GetHasteMult(swing.max, now, percentage)
 			UpdateBarMinMaxValues(swing)
 		elseif percentage > .2 then
 			swing.max = now + swing.speed * .2
-			swing.min = now - (swing.max - now) * percentage / (1 - percentage)
+			swing.min = now - GetHasteMult(swing.max, now, percentage)
 			UpdateBarMinMaxValues(swing)
 		end
 	end
@@ -465,7 +465,7 @@ local function Enable(self, unit)
 		if not bar.disableMelee then
 			self:RegisterCombatEvent("SWING_DAMAGE", Melee)
 			self:RegisterCombatEvent("SWING_MISSED", Melee)
-			--self:RegisterCombatEvent("SWING_MISSED", ParryHaste)
+			self:RegisterCombatEvent("SWING_MISSED", ParryHaste)
 			self:RegisterEvent("UNIT_ATTACK_SPEED", MeleeChange)
 		end
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", Ooc, true)
@@ -484,7 +484,7 @@ local function Disable(self)
 		if not bar.disableMelee then
 			self:UnregisterCombatEvent("SWING_DAMAGE", Melee)
 			self:UnregisterCombatEvent("SWING_MISSED", Melee)
-			--self:UnregisterCombatEvent("SWING_MISSED", ParryHaste)
+			self:UnregisterCombatEvent("SWING_MISSED", ParryHaste)
 			self:UnregisterEvent("UNIT_ATTACK_SPEED", MeleeChange)
 		end
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Ooc)
