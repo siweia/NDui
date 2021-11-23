@@ -6,31 +6,31 @@ tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["Loot"] then return end
 
 	hooksecurefunc("LootFrame_UpdateButton", function(index)
-		local ic = _G["LootButton"..index.."IconTexture"]
-		if not ic then return end
+		local name = "LootButton"..index
+		local bu = _G[name]
+		if not bu:IsShown() then return end
 
-		if not ic.bg then
-			local bu = _G["LootButton"..index]
+		local nameFrame = _G[name.."NameFrame"]
+		local questTexture = _G[name.."IconQuestTexture"]
 
-			_G["LootButton"..index.."IconQuestTexture"]:SetAlpha(0)
-			_G["LootButton"..index.."NameFrame"]:Hide()
-
+		if not bu.bg then
+			nameFrame:Hide()
+			questTexture:SetAlpha(0)
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			bu.IconBorder:SetAlpha(0)
+			bu.bg = B.ReskinIcon(bu.icon)
 
-			local bd = B.CreateBDFrame(bu, .25)
-			bd:SetPoint("TOPLEFT")
-			bd:SetPoint("BOTTOMRIGHT", 114, 0)
-
-			ic.bg = B.ReskinIcon(ic)
+			local bg = B.CreateBDFrame(bu, .25)
+			bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 1, 0)
+			bg:SetPoint("BOTTOMRIGHT", bu.bg, 115, 0)
 		end
 
-		if select(7, GetLootSlotInfo(index)) then
-			ic.bg:SetBackdropBorderColor(1, 1, 0)
+		if questTexture:IsShown() then
+			bu.bg:SetBackdropBorderColor(.8, .8, 0)
 		else
-			ic.bg:SetBackdropBorderColor(0, 0, 0)
+			bu.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end)
 
