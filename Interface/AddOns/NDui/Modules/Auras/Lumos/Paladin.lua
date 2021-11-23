@@ -57,7 +57,15 @@ function A:ChantLumos(self)
 		UpdateBuff(self.lumos[2], 53600, 132403, true, "END")
 		UpdateBuff(self.lumos[3], 31884, 31884, true, true)
 		UpdateBuff(self.lumos[4], 31850, 31850, true, true)
-		UpdateBuff(self.lumos[5], 86659, 86659, true, true)
+
+		do
+			local button = self.lumos[5]
+			if IsPlayerSpell(212641) then
+				UpdateBuff(button, 212641, 212641, true, true)
+			else
+				UpdateBuff(button, 86659, 86659, true, true)
+			end
+		end
 	elseif spec == 3 then
 		do
 			local button = self.lumos[1]
