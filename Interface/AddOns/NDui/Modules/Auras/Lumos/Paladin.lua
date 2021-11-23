@@ -4,6 +4,9 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "PALADIN" then return end
 
+local IsUsableSpell, IsPlayerSpell = IsUsableSpell, IsPlayerSpell
+local GetCurrentGlyphNameForSpell = GetCurrentGlyphNameForSpell
+
 local function UpdateCooldown(button, spellID, texture)
 	return A:UpdateCooldown(button, spellID, texture)
 end
@@ -23,6 +26,16 @@ local function UpdateSpellStatus(button, spellID)
 	else
 		button.Icon:SetDesaturated(true)
 	end
+end
+
+local function checkQueenGlyph()
+	local name, spellID = GetCurrentGlyphNameForSpell(86659)
+	A.hasQueenGlyph = name and spellID == 212642
+end
+
+function A:PostCreateLumos()
+	checkQueenGlyph()
+	B:RegisterEvent("SPELLS_CHANGED", checkQueenGlyph)
 end
 
 function A:ChantLumos(self)
@@ -60,7 +73,7 @@ function A:ChantLumos(self)
 
 		do
 			local button = self.lumos[5]
-			if IsPlayerSpell(212641) then
+			if A.hasQueenGlyph then
 				UpdateBuff(button, 212641, 212641, true, true)
 			else
 				UpdateBuff(button, 86659, 86659, true, true)
