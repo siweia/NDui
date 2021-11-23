@@ -644,6 +644,7 @@ L["Save keybinds"] = "Назначения клавиш сохранены."
 L["Discard keybinds"] = "Назначения клавиш отменены."
 L["Clear binds"] = "|cff00ff00Все назначения клавиш сброшены за|r %s"
 L["UnbindTip"] = "Нажмите ESC или правую кнопку мыши, чтобы снять назначение."
+L["KeybindingTip"] = "You can even keybind your spellbook spells or macros without placing them to your actionbars." -- need translation
 L["NameplateAuraFilter"] = "Фильтр Аур"
 L["BlackNWhite"] = "Белый и Чёрный списки"
 L["PlayerOnly"] = "Списки и Игрок"

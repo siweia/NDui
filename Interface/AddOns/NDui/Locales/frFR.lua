@@ -644,6 +644,7 @@ L["Save keybinds"] = "Raccourcis clavier enregistrés."
 L["Discard keybinds"] = "Les raccourcis clavier ont été annulés."
 L["Clear binds"] = "|cff00ff00Tous les raccourcis ont été effacées pour|r %s"
 L["UnbindTip"] = "Appuyez sur la touche ECHAP ou clic droit pour délier cette action."
+L["KeybindingTip"] = "You can even keybind your spellbook spells or macros without placing them to your actionbars." -- need translation
 L["NameplateAuraFilter"] = "Filtre d'auras"
 L["BlackNWhite"] = "Liste blanche et noire"
 L["PlayerOnly"] = "Liste & Joueur"
