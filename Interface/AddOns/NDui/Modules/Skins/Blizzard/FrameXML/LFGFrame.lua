@@ -13,8 +13,8 @@ local function styleRewardButton(button)
 
 	button.bg = B.ReskinIcon(icon)
 	local bg = B.CreateBDFrame(button, .25)
-	bg:SetPoint("TOPLEFT", button.bg, "TOPRIGHT")
-	bg:SetPoint("BOTTOMRIGHT", button.bg, "BOTTOMRIGHT", 100, 0)
+	bg:SetPoint("TOPLEFT", button.bg, "TOPRIGHT", 1, 0)
+	bg:SetPoint("BOTTOMRIGHT", button.bg, "BOTTOMRIGHT", 105, 0)
 
 	if shortageBorder then shortageBorder:SetAlpha(0) end
 	if count then count:SetDrawLayer("OVERLAY") end
