@@ -731,12 +731,9 @@ local function bolsterPreUpdate(element)
 end
 
 local function bolsterPostUpdate(element)
-	if not element.bolsterIndex then return end
-	for _, button in pairs(element) do
-		if button == element.bolsterIndex then
-			button.count:SetText(element.bolster)
-			return
-		end
+	local button = element.bolsterIndex
+	if button then
+		button.count:SetText(element.bolster)
 	end
 end
 
