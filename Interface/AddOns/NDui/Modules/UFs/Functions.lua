@@ -741,7 +741,7 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 	local fontSize = element.fontSize or element.size*.6
 	button.count:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
-	if button.isDebuff and filteredStyle[style] and not button.isPlayer then
+	if C.db["UFs"]["DesaturateIcon"] and button.isDebuff and filteredStyle[style] and not button.isPlayer then
 		button.icon:SetDesaturated(true)
 	else
 		button.icon:SetDesaturated(false)

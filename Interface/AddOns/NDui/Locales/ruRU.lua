@@ -835,3 +835,5 @@ L["ShowHealthCurrent"] = "Current value" -- need translation
 L["ShowHealthPercent"] = "Current value percent" -- need translation
 L["ShowHealthLoss"] = "Loss value" -- need translation
 L["ShowHealthLossPercent"] = "Loss value percent" -- need translation
+L["DesaturateIcon"] = "Desaturate auras from others" -- need translation
+L["DesaturateIconTip"] = "|nIf checked, only color auras from player, and desaturate auras from other players." -- need translation

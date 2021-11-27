@@ -191,6 +191,7 @@ G.DefaultSettings = {
 		ShowRaidDebuff = true,
 		RaidDebuffSize = 12,
 		SmartRaid = false,
+		DesaturateIcon = true,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -966,6 +967,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RuneTimer", L["UFs RuneTimer"], true},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
+		{1, "UFs", "DesaturateIcon", L["DesaturateIcon"].."*", nil, nil, nil, L["DesaturateIconTip"]},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateUFTextScale},
 		{3, "UFs", "TargetAurasPerRow", L["TargetAurasPerRow"].."*", true, {5, 20, 1}, updateTargetFrameAuras},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
