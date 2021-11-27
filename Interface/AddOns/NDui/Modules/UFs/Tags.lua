@@ -34,15 +34,6 @@ local function ValueAndPercent(cur, per)
 	end
 end
 
-local function GetUnitHealthPerc(unit)
-	local unitHealth, unitMaxHealth = UnitHealth(unit), UnitHealthMax(unit)
-	if unitMaxHealth == 0 then
-		return 0, unitHealth, unitMaxHealth
-	else
-		return B:Round(unitHealth / unitMaxHealth * 100, 1), unitHealth, unitMaxHealth
-	end
-end
-
 local function GetCurrentAndMax(cur, max)
 	if cur == max then
 		return B.Numb(max)
@@ -56,15 +47,17 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 		return oUF.Tags.Methods["DDG"](unit)
 	end
 
-	local per, cur, max = GetUnitHealthPerc(unit)
+	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	local per = max == 0 and 0 or B:Round(cur/max * 100, 1)
+
 	if arg1 == "currentpercent" then
 		return ValueAndPercent(cur, per)
 	elseif arg1 == "currentmax" then
 		return GetCurrentAndMax(cur, max)
-	elseif arg1 == "percent" then
-		return per < 100 and ColorPercent(per)
 	elseif arg1 == "current" then
 		return B.Numb(cur)
+	elseif arg1 == "percent" then
+		return per < 100 and ColorPercent(per)
 	elseif arg1 == "loss" then
 		local loss = max - cur
 		return loss ~= 0 and B.Numb(loss)
@@ -74,6 +67,28 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	end
 end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
+
+oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
+	local cur, max = UnitPower(unit), UnitPowerMax(unit)
+	local per = max == 0 and 0 or B:Round(cur/max * 100)
+
+	if arg1 == "currentpercent" then
+		return ValueAndPercent(cur, per)
+	elseif arg1 == "currentmax" then
+		return GetCurrentAndMax(cur, max)
+	elseif arg1 == "current" then
+		return B.Numb(cur)
+	elseif arg1 == "percent" then
+		return per < 100 and ColorPercent(per)
+	elseif arg1 == "loss" then
+		local loss = max - cur
+		return loss ~= 0 and B.Numb(loss)
+	elseif arg1 == "losspercent" then
+		local loss = max - cur
+		return loss ~= 0 and B:Round(loss/max*100, 1)
+	end
+end
+oUF.Tags.Events["VariousMP"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 oUF.Tags.Methods["power"] = function(unit)
 	local cur, maxPower = UnitPower(unit), UnitPowerMax(unit)
