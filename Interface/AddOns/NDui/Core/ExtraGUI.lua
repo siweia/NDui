@@ -845,8 +845,9 @@ local function updateDropdownHighlight(self)
 end
 
 local function updateDropdownState(self)
-	C.db[self.__owner.__key][self.__owner.__value] = self.index
-	if self.__owner.__func then self.__owner.__func() end
+	local dd = self.__owner
+	C.db[dd.__key][dd.__value] = self.index
+	if dd.__func then dd.__func() end
 end
 
 local function createOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)

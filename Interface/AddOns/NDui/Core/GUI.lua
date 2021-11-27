@@ -1339,6 +1339,49 @@ local function CheckUIReload(name)
 	end
 end
 
+local function onCheckboxClick(self)
+	CheckUIOption(self.__key, self.__value, self:GetChecked())
+	CheckUIReload(self.__name)
+	if self.__callback then self:__callback() end
+end
+
+local function restoreEditbox(self)
+	self:SetText(CheckUIOption(self.__key, self.__value))
+end
+local function acceptEditbox(self)
+	CheckUIOption(self.__key, self.__value, self:GetText())
+	CheckUIReload(self.__name)
+	if self.__callback then self:__callback() end
+end
+
+local function onSliderChanged(self, v)
+	local current = B:Round(tonumber(v), 2)
+	CheckUIOption(self.__key, self.__value, current)
+	CheckUIReload(self.__name)
+	self.value:SetText(current)
+	if self.__callback then self:__callback() end
+end
+
+local function updateDropdownSelection(self)
+	local dd = self.__owner
+	for i = 1, #dd.__options do
+		local option = dd.options[i]
+		if i == CheckUIOption(dd.__key, dd.__value) then
+			option:SetBackdropColor(1, .8, 0, .3)
+			option.selected = true
+		else
+			option:SetBackdropColor(0, 0, 0, .3)
+			option.selected = false
+		end
+	end
+end
+local function updateDropdownClick(self)
+	local dd = self.__owner
+	CheckUIOption(dd.__key, dd.__value, self.index)
+	CheckUIReload(dd.__name)
+	if dd.__callback then dd:__callback() end
+end
+
 local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
@@ -1354,14 +1397,13 @@ local function CreateOption(i)
 				cb:SetPoint("TOPLEFT", 20, -offset)
 				offset = offset + 35
 			end
+			cb.__key = key
 			cb.__value = value
+			cb.__name = name
+			cb.__callback = callback
 			cb.name = B.CreateFS(cb, 14, name, false, "LEFT", 30, 0)
 			cb:SetChecked(CheckUIOption(key, value))
-			cb:SetScript("OnClick", function(self)
-				CheckUIOption(key, value, cb:GetChecked())
-				CheckUIReload(name)
-				if callback then callback(self) end
-			end)
+			cb:SetScript("OnClick", onCheckboxClick)
 			if data and type(data) == "function" then
 				local bu = B.CreateGear(parent)
 				bu:SetPoint("LEFT", cb.name, "RIGHT", -2, 1)
@@ -1377,6 +1419,8 @@ local function CreateOption(i)
 			eb:SetMaxLetters(999)
 			eb.__key = key
 			eb.__value = value
+			eb.__name = name
+			eb.__callback = callback
 			eb.__default = (key == "ACCOUNT" and G.AccountSettings[value]) or G.DefaultSettings[key][value]
 			if horizon then
 				eb:SetPoint("TOPLEFT", 345, -offset + 45)
@@ -1385,14 +1429,8 @@ local function CreateOption(i)
 				offset = offset + 70
 			end
 			eb:SetText(CheckUIOption(key, value))
-			eb:HookScript("OnEscapePressed", function()
-				eb:SetText(CheckUIOption(key, value))
-			end)
-			eb:HookScript("OnEnterPressed", function(self)
-				CheckUIOption(key, value, eb:GetText())
-				CheckUIReload(name)
-				if callback then callback(self) end
-			end)
+			eb:HookScript("OnEscapePressed", restoreEditbox)
+			eb:HookScript("OnEnterPressed", acceptEditbox)
 
 			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
 			eb.title = L["Tips"]
@@ -1410,15 +1448,13 @@ local function CreateOption(i)
 				offset = offset + 70
 			end
 			local s = B.CreateSlider(parent, name, min, max, step, x, y)
+			s.__key = key
+			s.__value = value
+			s.__name = name
+			s.__callback = callback
 			s.__default = (key == "ACCOUNT" and G.AccountSettings[value]) or G.DefaultSettings[key][value]
 			s:SetValue(CheckUIOption(key, value))
-			s:SetScript("OnValueChanged", function(_, v)
-				local current = B:Round(tonumber(v), 2)
-				CheckUIOption(key, value, current)
-				CheckUIReload(name)
-				s.value:SetText(current)
-				if callback then callback() end
-			end)
+			s:SetScript("OnValueChanged", onSliderChanged)
 			s.value:SetText(B:Round(CheckUIOption(key, value), 2))
 			if tooltip then
 				s.title = L["Tips"]
@@ -1440,27 +1476,18 @@ local function CreateOption(i)
 				offset = offset + 70
 			end
 			dd.Text:SetText(data[CheckUIOption(key, value)])
+			dd.__key = key
+			dd.__value = value
+			dd.__name = name
+			dd.__options = data
+			dd.__callback = callback
+			dd.button.__owner = dd
+			dd.button:HookScript("OnClick", updateDropdownSelection)
 
-			local opt = dd.options
-			dd.button:HookScript("OnClick", function()
-				for num = 1, #data do
-					if num == CheckUIOption(key, value) then
-						opt[num]:SetBackdropColor(1, .8, 0, .3)
-						opt[num].selected = true
-					else
-						opt[num]:SetBackdropColor(0, 0, 0, .3)
-						opt[num].selected = false
-					end
-				end
-			end)
-			for i in pairs(data) do
-				opt[i]:HookScript("OnClick", function()
-					CheckUIOption(key, value, i)
-					CheckUIReload(name)
-					if callback then callback() end
-				end)
+			for i = 1, #data do
+				dd.options[i]:HookScript("OnClick", updateDropdownClick)
 				if value == "TexStyle" then
-					AddTextureToOption(opt, i) -- texture preview
+					AddTextureToOption(dd.options, i) -- texture preview
 				end
 			end
 
