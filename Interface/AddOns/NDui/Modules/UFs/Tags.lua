@@ -90,22 +90,6 @@ oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
 end
 oUF.Tags.Events["VariousMP"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
-oUF.Tags.Methods["power"] = function(unit)
-	local cur, maxPower = UnitPower(unit), UnitPowerMax(unit)
-	local per = maxPower == 0 and 0 or B:Round(cur/maxPower * 100)
-
-	if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
-		if per < 100 and UnitPowerType(unit) == 0 and maxPower ~= 0 then
-			return B.Numb(cur).." | "..per
-		else
-			return B.Numb(cur)
-		end
-	else
-		return per
-	end
-end
-oUF.Tags.Events["power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
-
 oUF.Tags.Methods["color"] = function(unit)
 	local class = select(2, UnitClass(unit))
 	local reaction = UnitReaction(unit, "player")
