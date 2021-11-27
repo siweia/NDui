@@ -210,7 +210,7 @@ function UF:CreateHealthText(self)
 		self:Tag(hpval, "[raidhp]")
 		if self.isPartyPet then
 			hpval:SetPoint("RIGHT", -3, -1)
-			self:Tag(hpval, "[hp]")
+			self:Tag(hpval, "[VariousHP(percent)]")
 		elseif C.db["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
 		else
@@ -221,9 +221,9 @@ function UF:CreateHealthText(self)
 		hpval:SetScale(C.db["UFs"]["RaidTextScale"])
 	elseif mystyle == "nameplate" then
 		hpval:SetPoint("RIGHT", self, 0, 5)
-		self:Tag(hpval, "[nphp]")
+		self:Tag(hpval, "[VariousHP(currentpercent)]")
 	else
-		self:Tag(hpval, "[hp]")
+		self:Tag(hpval, "[VariousHP(percent)]")
 	end
 
 	self.nameText = name
@@ -528,8 +528,8 @@ function UF:CreateCastBar(self)
 		cb:SetHeight(self:GetHeight())
 	end
 
-	local timer = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, C.db["Nameplate"]["NameTextSize"]), "", false, "RIGHT", -2, 0)
-	local name = B.CreateFS(cb, retVal(self, 12, 12, 12, 12, C.db["Nameplate"]["NameTextSize"]), "", false, "LEFT", 2, 0)
+	local timer = B.CreateFS(cb, 12, "", false, "RIGHT", -2, 0)
+	local name = B.CreateFS(cb, 12, "", false, "LEFT", 2, 0)
 	name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
 	name:SetJustifyH("LEFT")
 

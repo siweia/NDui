@@ -75,20 +75,6 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
-oUF.Tags.Methods["hp"] = function(unit)
-	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
-		return oUF.Tags.Methods["DDG"](unit)
-	else
-		local per, cur = GetUnitHealthPerc(unit)
-		if (unit == "player" and not UnitHasVehicleUI(unit)) or unit == "target" or unit == "focus" then
-			return ValueAndPercent(cur, per)
-		else
-			return ColorPercent(per)
-		end
-	end
-end
-oUF.Tags.Events["hp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
-
 oUF.Tags.Methods["power"] = function(unit)
 	local cur, maxPower = UnitPower(unit), UnitPowerMax(unit)
 	local per = maxPower == 0 and 0 or B:Round(cur/maxPower * 100)
@@ -182,33 +168,19 @@ oUF.Tags.Events["fulllevel"] = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_C
 
 -- RaidFrame tags
 oUF.Tags.Methods["raidhp"] = function(unit)
-	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
-		return oUF.Tags.Methods["DDG"](unit)
-	elseif C.db["UFs"]["RaidHPMode"] == 2 then
-		local per = GetUnitHealthPerc(unit) or 0
-		return ColorPercent(per)
+	local healthType
+	if C.db["UFs"]["RaidHPMode"] == 2 then
+		healthType = "percent"
 	elseif C.db["UFs"]["RaidHPMode"] == 3 then
-		local cur = UnitHealth(unit)
-		return B.Numb(cur)
+		healthType = "current"
 	elseif C.db["UFs"]["RaidHPMode"] == 4 then
-		local loss = UnitHealthMax(unit) - UnitHealth(unit)
-		if loss == 0 then return end
-		return B.Numb(loss)
+		healthType = "loss"
 	end
+	return oUF.Tags.Methods["VariousHP"](unit, _, healthType)
 end
-oUF.Tags.Events["raidhp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
+oUF.Tags.Events["raidhp"] = oUF.Tags.Events["VariousHP"]
 
 -- Nameplate tags
-oUF.Tags.Methods["nphp"] = function(unit)
-	local per, cur = GetUnitHealthPerc(unit)
-	if C.db["Nameplate"]["FullHealth"] then
-		return ValueAndPercent(cur, per)
-	elseif per < 100 then
-		return ColorPercent(per)
-	end
-end
-oUF.Tags.Events["nphp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION"
-
 oUF.Tags.Methods["nppp"] = function(unit)
 	local per = oUF.Tags.Methods["perpp"](unit)
 	local color

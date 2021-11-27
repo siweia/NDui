@@ -803,6 +803,7 @@ function UF:UpdateNameplateSize()
 		healthTextSize = C.db["Nameplate"]["FriendHealthSize"]
 		healthTextOffset = C.db["Nameplate"]["FriendHealthOffset"]
 	end
+	local healthTag = C.db["Nameplate"]["FullHealth"] and "[VariousHP(currentpercent)]" or "[VariousHP(percent)]"
 
 	local font, fontFlag = DB.Font[1], DB.Font[3]
 	local iconSize = plateHeight + plateCBHeight + 5
@@ -823,6 +824,7 @@ function UF:UpdateNameplateSize()
 	self.Castbar.spellTarget:SetFont(font, CBTextSize+3, fontFlag)
 	self.healthValue:SetFont(font, healthTextSize, fontFlag)
 	self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
+	self:Tag(self.healthValue, healthTag)
 	self.healthValue:UpdateTag()
 end
 
