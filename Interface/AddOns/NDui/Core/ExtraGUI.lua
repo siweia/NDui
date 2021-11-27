@@ -851,7 +851,7 @@ local function updateDropdownState(self)
 end
 
 local function createOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)
-	local dd = G:CreateDropdown(parent, L["HealthValueType"], 40, yOffset, options, tooltip, 180, 28)
+	local dd = G:CreateDropdown(parent, title, 40, yOffset, options, tooltip, 180, 28)
 	dd.__key = key
 	dd.__value = value
 	dd.__default = default
@@ -895,21 +895,26 @@ function G:SetupUnitFrame(parent)
 		["Boss"] = {100, 300},
 	}
 
-	local defaultValue = { -- healthWidth, healthHeight, powerHeight, healthTag, powerOffset
-		["Player"] = {245, 24, 4, 2, 2},
-		["Focus"] = {200, 22, 3, 2, 2},
+	local defaultValue = { -- healthWidth, healthHeight, powerHeight, healthTag, powerTag, powerOffset
+		["Player"] = {245, 24, 4, 2, 4, 2},
+		["Focus"] = {200, 22, 3, 2, 4, 2},
 		["Pet"] = {120, 18, 2, 5},
-		["Boss"] = {150, 22, 2, 5},
+		["Boss"] = {150, 22, 2, 5, 5},
 	}
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionDropdown(parent, L["HealthValueType"], offset-50, G.HealthValues, nil, "UFs", value.."HPTag", defaultValue[value][4], func)
-		createOptionSlider(parent, L["Health Width"], sliderRange[value][1], sliderRange[value][2], defaultValue[value][1], offset-110, value.."Width", func)
-		createOptionSlider(parent, L["Health Height"], 15, 50, defaultValue[value][2], offset-180, value.."Height", func)
-		createOptionSlider(parent, L["Power Height"], 2, 30, defaultValue[value][3], offset-250, value.."PowerHeight", func)
-		if defaultValue[value][5] then
-			createOptionSlider(parent, L["Power Offset"], -20, 20, defaultValue[value][4], offset-320, value.."PowerOffset", func)
+		local mult = 0
+		if value ~= "Pet" then
+			mult = 55
+			createOptionDropdown(parent, L["PowerValueType"], offset-50-mult, G.HealthValues, nil, "UFs", value.."MPTag", defaultValue[value][4], func)
+		end
+		createOptionSlider(parent, L["Health Width"], sliderRange[value][1], sliderRange[value][2], defaultValue[value][1], offset-110-mult, value.."Width", func)
+		createOptionSlider(parent, L["Health Height"], 15, 50, defaultValue[value][2], offset-180-mult, value.."Height", func)
+		createOptionSlider(parent, L["Power Height"], 2, 30, defaultValue[value][3], offset-250-mult, value.."PowerHeight", func)
+		if defaultValue[value][6] then
+			createOptionSlider(parent, L["Power Offset"], -20, 20, defaultValue[value][4], offset-320-mult, value.."PowerOffset", func)
 		end
 	end
 
@@ -919,6 +924,7 @@ function G:SetupUnitFrame(parent)
 		for _, frame in pairs(mainFrames) do
 			SetUnitFrameSize(frame, "Player")
 			UF.UpdateFrameHealthTag(frame)
+			UF.UpdateFramePowerTag(frame)
 		end
 		UF:UpdateTargetAuras()
 	end
@@ -929,9 +935,10 @@ function G:SetupUnitFrame(parent)
 		if frame then
 			SetUnitFrameSize(frame, "Focus")
 			UF.UpdateFrameHealthTag(frame)
+			UF.UpdateFramePowerTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["FocusUF"], -390, "Focus", updateFocusSize)
+	createOptionGroup(scroll.child, L["FocusUF"], -450, "Focus", updateFocusSize)
 
 	local subFrames = {_G.oUF_Pet, _G.oUF_ToT, _G.oUF_FocusTarget}
 	local function updatePetSize()
@@ -940,17 +947,18 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFrameHealthTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["Pet&*Target"], -770, "Pet", updatePetSize)
+	createOptionGroup(scroll.child, L["Pet&*Target"], -890, "Pet", updatePetSize)
 
 	local function updateBossSize()
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.mystyle == "boss" or frame.mystyle == "arena" then
 				SetUnitFrameSize(frame, "Boss")
 				UF.UpdateFrameHealthTag(frame)
+				UF.UpdateFramePowerTag(frame)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["Boss&Arena"], -1080, "Boss", updateBossSize)
+	createOptionGroup(scroll.child, L["Boss&Arena"], -1200, "Boss", updateBossSize)
 end
 
 function G:SetupRaidFrame(parent)

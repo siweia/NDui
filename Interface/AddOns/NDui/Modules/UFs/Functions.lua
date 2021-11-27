@@ -157,7 +157,7 @@ function UF:UpdateRaidHealthMethod()
 	end
 end
 
-UF.HealthValueByIndex = {
+UF.VariousTagIndex = {
 	[1] = "",
 	[2] = "currentpercent",
 	[3] = "currentmax",
@@ -167,24 +167,21 @@ UF.HealthValueByIndex = {
 	[7] = "losspercent",
 }
 
-function UF:UpdateFrameHealthTag(healthValue)
+function UF:UpdateFrameHealthTag()
 	local mystyle = self.mystyle
 	local valueType
 	if mystyle == "player" or mystyle == "target" then
-		valueType = UF.HealthValueByIndex[C.db["UFs"]["PlayerHPTag"]]
+		valueType = UF.VariousTagIndex[C.db["UFs"]["PlayerHPTag"]]
 	elseif mystyle == "focus" then
-		valueType = UF.HealthValueByIndex[C.db["UFs"]["FocusHPTag"]]
+		valueType = UF.VariousTagIndex[C.db["UFs"]["FocusHPTag"]]
 	elseif mystyle == "boss" or mystyle == "arena" then
-		valueType = UF.HealthValueByIndex[C.db["UFs"]["BossHPTag"]]
+		valueType = UF.VariousTagIndex[C.db["UFs"]["BossHPTag"]]
 	else
-		valueType = UF.HealthValueByIndex[C.db["UFs"]["PetHPTag"]]
+		valueType = UF.VariousTagIndex[C.db["UFs"]["PetHPTag"]]
 	end
 
-	if not healthValue then
-		healthValue = self.healthValue
-	end		
-	self:Tag(healthValue, "[VariousHP("..valueType..")]")
-	healthValue:UpdateTag()
+	self:Tag(self.healthValue, "[VariousHP("..valueType..")]")
+	self.healthValue:UpdateTag()
 end
 
 function UF:CreateHealthText(self)
@@ -193,6 +190,7 @@ function UF:CreateHealthText(self)
 	textFrame:SetAllPoints(self.Health)
 
 	local name = B.CreateFS(textFrame, retVal(self, 13, 12, 12, 12, C.db["Nameplate"]["NameTextSize"]), "", false, "LEFT", 3, 0)
+	self.nameText = name
 	name:SetJustifyH("LEFT")
 	if mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
@@ -236,6 +234,7 @@ function UF:CreateHealthText(self)
 	end
 
 	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 13, C.db["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, 0)
+	self.healthValue = hpval
 	if mystyle == "raid" then
 		self:Tag(hpval, "[raidhp]")
 		if self.isPartyPet then
@@ -253,11 +252,8 @@ function UF:CreateHealthText(self)
 		hpval:SetPoint("RIGHT", self, 0, 5)
 		self:Tag(hpval, "[VariousHP(currentpercent)]")
 	else
-		UF.UpdateFrameHealthTag(self, hpval)
+		UF.UpdateFrameHealthTag(self)
 	end
-
-	self.nameText = name
-	self.healthValue = hpval
 end
 
 function UF:UpdateRaidNameText()
@@ -361,6 +357,21 @@ function UF:CreatePowerBar(self)
 	UF:UpdatePowerBarColor(self)
 end
 
+function UF:UpdateFramePowerTag()
+	local mystyle = self.mystyle
+	local valueType
+	if mystyle == "player" or mystyle == "target" then
+		valueType = UF.VariousTagIndex[C.db["UFs"]["PlayerMPTag"]]
+	elseif mystyle == "focus" then
+		valueType = UF.VariousTagIndex[C.db["UFs"]["FocusMPTag"]]
+	else
+		valueType = UF.VariousTagIndex[C.db["UFs"]["BossMPTag"]]
+	end
+
+	self:Tag(self.powerText, "[color][VariousMP("..valueType..")]")
+	self.powerText:UpdateTag()
+end
+
 function UF:CreatePowerText(self)
 	local textFrame = CreateFrame("Frame", nil, self)
 	textFrame:SetAllPoints(self.Power)
@@ -374,8 +385,8 @@ function UF:CreatePowerText(self)
 	elseif mystyle == "focus" then
 		ppval:SetPoint("RIGHT", -3, C.db["UFs"]["FocusPowerOffset"])
 	end
-	self:Tag(ppval, "[color][power]")
 	self.powerText = ppval
+	UF.UpdateFramePowerTag(self)
 end
 
 local textScaleFrames = {
