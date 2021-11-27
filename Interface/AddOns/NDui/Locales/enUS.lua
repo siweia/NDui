@@ -390,7 +390,6 @@ L["OnlyCompleteRingTip"] = "|nIf checked, no longer announce any messages. Only 
 L["Stranger"] = "Stranger"
 L["Reverse RaidFrame"] = "RaidFrame Reverse Grow"
 L["Show AzeriteArmor"] = "Show AzeriteArmor Info"
-L["Show FullHealth"] = "Show Health Value"
 L["WheelUp"] = "WheelUp"
 L["WheelDown"] = "WheelDown"
 L["Wheel"] = "Wheel"

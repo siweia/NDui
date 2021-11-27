@@ -390,7 +390,6 @@ L["OnlyCompleteRingTip"] = "|n啟用後，不進行任何通報，只在任務�
 L["Stranger"] = "陌生人"
 L["Reverse RaidFrame"] = "隊伍閒反序排列"
 L["Show AzeriteArmor"] = "顯示艾澤萊晶岩護甲資訊"
-L["Show FullHealth"] = "顯示血量具體數值"
 L["WheelUp"] = "滾輪上"
 L["WheelDown"] = "滾輪下"
 L["Wheel"] = "滾輪"

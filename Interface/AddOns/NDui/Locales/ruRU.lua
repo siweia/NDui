@@ -390,7 +390,6 @@ L["OnlyCompleteRingTip"] = "|nЕсли выбрано, не анонсирует
 L["Stranger"] = "Незнакомец"
 L["Reverse RaidFrame"] = "Обратить рамки рейда"
 L["Show AzeriteArmor"] = "Показывать инфо о азеритовой броне"
-L["Show FullHealth"] = "Показывать значение здоровья"
 L["WheelUp"] = "КолёсикоВверх"
 L["WheelDown"] = "КолёсикоВниз"
 L["Wheel"] = "Колёсико"

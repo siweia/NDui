@@ -390,7 +390,6 @@ L["OnlyCompleteRingTip"] = "|nSi coché, n'annonce plus aucun message. Ne jouez 
 L["Stranger"] = "Etranger"
 L["Reverse RaidFrame"] = "Inverser le grossissement cadre de raid"
 L["Show AzeriteArmor"] = "Montrer les info des armures d'Azerite"
-L["Show FullHealth"] = "Afficher la valeur de la santé"
 L["WheelUp"] = "Molette Haut"
 L["WheelDown"] = "Molette Bas"
 L["Wheel"] = "Molette"
