@@ -157,6 +157,36 @@ function UF:UpdateRaidHealthMethod()
 	end
 end
 
+UF.HealthValueByIndex = {
+	[1] = "",
+	[2] = "currentpercent",
+	[3] = "currentmax",
+	[4] = "current",
+	[5] = "percent",
+	[6] = "loss",
+	[7] = "losspercent",
+}
+
+function UF:UpdateFrameHealthTag(healthValue)
+	local mystyle = self.mystyle
+	local valueType
+	if mystyle == "player" or mystyle == "target" then
+		valueType = UF.HealthValueByIndex[C.db["UFs"]["PlayerHPTag"]]
+	elseif mystyle == "focus" then
+		valueType = UF.HealthValueByIndex[C.db["UFs"]["FocusHPTag"]]
+	elseif mystyle == "boss" or mystyle == "arena" then
+		valueType = UF.HealthValueByIndex[C.db["UFs"]["BossHPTag"]]
+	else
+		valueType = UF.HealthValueByIndex[C.db["UFs"]["PetHPTag"]]
+	end
+
+	if not healthValue then
+		healthValue = self.healthValue
+	end		
+	self:Tag(healthValue, "[VariousHP("..valueType..")]")
+	healthValue:UpdateTag()
+end
+
 function UF:CreateHealthText(self)
 	local mystyle = self.mystyle
 	local textFrame = CreateFrame("Frame", nil, self)
@@ -223,7 +253,7 @@ function UF:CreateHealthText(self)
 		hpval:SetPoint("RIGHT", self, 0, 5)
 		self:Tag(hpval, "[VariousHP(currentpercent)]")
 	else
-		self:Tag(hpval, "[VariousHP(percent)]")
+		UF.UpdateFrameHealthTag(self, hpval)
 	end
 
 	self.nameText = name

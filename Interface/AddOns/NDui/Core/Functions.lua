@@ -1450,6 +1450,7 @@ do
 		bu:SetSize(18, 18)
 		local list = CreateFrame("Frame", nil, dd, "BackdropTemplate")
 		list:SetPoint("TOP", dd, "BOTTOM", 0, -2)
+		RaiseFrameLevel(list)
 		B.CreateBD(list, 1)
 		list:SetBackdropBorderColor(1, 1, 1, .2)
 		list:Hide()
@@ -1467,6 +1468,7 @@ do
 			local text = B.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
 			text:SetPoint("RIGHT", -5, 0)
 			opt[i].text = j
+			opt[i].index = i
 			opt[i].__owner = dd
 			opt[i]:SetScript("OnClick", optOnClick)
 			opt[i]:SetScript("OnEnter", optOnEnter)

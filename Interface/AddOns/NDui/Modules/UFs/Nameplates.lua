@@ -790,16 +790,6 @@ function UF:UpdateNameplateAuras()
 	element:ForceUpdate()
 end
 
-local healthValueByIndex = {
-	[1] = "",
-	[2] = "currentpercent",
-	[3] = "currentmax",
-	[4] = "current",
-	[5] = "percent",
-	[6] = "loss",
-	[7] = "losspercent",
-}
-
 function UF:UpdateNameplateSize()
 	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
 	local plateCBHeight, plateCBOffset = C.db["Nameplate"]["PlateCBHeight"], C.db["Nameplate"]["PlateCBOffset"]
@@ -832,7 +822,7 @@ function UF:UpdateNameplateSize()
 	self.Castbar.spellTarget:SetFont(font, CBTextSize+3, fontFlag)
 	self.healthValue:SetFont(font, healthTextSize, fontFlag)
 	self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
-	self:Tag(self.healthValue, "[VariousHP("..healthValueByIndex[C.db["Nameplate"]["HealthType"]]..")]")
+	self:Tag(self.healthValue, "[VariousHP("..UF.HealthValueByIndex[C.db["Nameplate"]["HealthType"]]..")]")
 	self.healthValue:UpdateTag()
 end
 
