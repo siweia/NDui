@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local UF
 
 local unpack, GetTime, IsPlayerSpell = unpack, GetTime, IsPlayerSpell
 local UnitInVehicle, UnitIsUnit = UnitInVehicle, UnitIsUnit
@@ -174,7 +175,9 @@ function B:PostCastStart(unit)
 
 	if self.__owner.mystyle == "nameplate" then
 		-- Major spells
-		if C.db["Nameplate"]["CastbarGlow"] and B:GetModule("UnitFrames").MajorSpells[self.spellID] then
+		if not UF then UF = B:GetModule("UnitFrames") end
+
+		if C.db["Nameplate"]["CastbarGlow"] and UF.MajorSpells[self.spellID] then
 			B.ShowOverlayGlow(self.glowFrame)
 		else
 			B.HideOverlayGlow(self.glowFrame)
