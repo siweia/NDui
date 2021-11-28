@@ -267,11 +267,12 @@ function UF:OnLogin()
 		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
 	end
 
-	if C.db["Nameplate"]["ShowPlayerPlate"] then
+	do -- a playerplate-like PlayerFrame
 		oUF:RegisterStyle("PlayerPlate", UF.CreatePlayerPlate)
 		oUF:SetActiveStyle("PlayerPlate")
 		local plate = oUF:Spawn("player", "oUF_PlayerPlate", true)
 		plate.mover = B.Mover(plate, L["PlayerPlate"], "PlayerPlate", C.UFs.PlayerPlate)
+		UF:TogglePlayerPlate()
 	end
 
 	do	-- fake nameplate for target class power

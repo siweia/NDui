@@ -736,7 +736,13 @@ local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
 
+local function togglePlayerPlate()
+	refreshNameplates()
+	B:GetModule("UnitFrames"):TogglePlayerPlate()
+end
+
 local function toggleTargetClassPower()
+	refreshNameplates()
 	B:GetModule("UnitFrames"):ToggleTargetClassPower()
 end
 
@@ -1080,7 +1086,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", nil, {.5, 1.5, .1}, updatePlateSpacing},
 	},
 	[6] = {
-		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"]},
+		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},

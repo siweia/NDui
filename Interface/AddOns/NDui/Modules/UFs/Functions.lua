@@ -1126,7 +1126,7 @@ function UF:CreateClassPower(self)
 	local barPoint = {"TOPLEFT", 12, 4}
 	if self.mystyle == "PlayerPlate" then
 		barWidth, barHeight = C.db["Nameplate"]["PPWidth"], C.db["Nameplate"]["PPBarHeight"]
-		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
+		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, C.margin}
 	elseif self.mystyle == "targetplate" then
 		barWidth, barHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PPBarHeight"]
 		barPoint = {"CENTER", self}

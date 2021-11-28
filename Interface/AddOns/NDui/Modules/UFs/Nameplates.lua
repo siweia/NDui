@@ -820,10 +820,9 @@ function UF:RefreshNameplats()
 end
 
 function UF:RefreshAllPlates()
-	if C.db["Nameplate"]["ShowPlayerPlate"] then
-		UF:ResizePlayerPlate()
-	end
+	UF:ResizePlayerPlate()
 	UF:RefreshNameplats()
+	UF:ResizeTargetPower()
 end
 
 local DisabledElements = {
@@ -955,8 +954,6 @@ function UF:PostUpdatePlates(event, unit)
 end
 
 -- Player Nameplate
-local auras = B:GetModule("Auras")
-
 function UF:PlateVisibility(event)
 	local alpha = C.db["Nameplate"]["PPFadeoutAlpha"]
 	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
@@ -1006,9 +1003,14 @@ function UF:ResizePlayerPlate()
 			end
 		end
 		if plate.dices then
+			local parent = C.db["Nameplate"]["TargetPower"] and plate.Health or plate.classPowerBar
 			local size = (barWidth - 10)/6
 			for i = 1, 6 do
-				plate.dices[i]:SetSize(size, size/2)
+				local dice = plate.dices[i]
+				dice:SetSize(size, size/2)
+				if i == 1 then
+					dice:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, C.margin)
+				end
 			end
 		end
 	end
@@ -1025,7 +1027,9 @@ function UF:CreatePlayerPlate()
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
-	if C.db["Auras"]["ClassAuras"] then auras:CreateLumos(self) end
+	if C.db["Auras"]["ClassAuras"] then
+		B:GetModule("Auras"):CreateLumos(self)
+	end
 
 	local textFrame = CreateFrame("Frame", nil, self.Power)
 	textFrame:SetAllPoints()
@@ -1036,6 +1040,17 @@ function UF:CreatePlayerPlate()
 
 	UF:CreateGCDTicker(self)
 	UF:TogglePlateVisibility()
+end
+
+function UF:TogglePlayerPlate()
+	local plate = _G.oUF_PlayerPlate
+	if not plate then return end
+
+	if C.db["Nameplate"]["ShowPlayerPlate"] then
+		plate:Enable()
+	else
+		plate:Disable()
+	end
 end
 
 function UF:TogglePlatePower()
@@ -1095,20 +1110,47 @@ function UF:ToggleTargetClassPower()
 	local plate = _G.oUF_TargetPlate
 	if not plate then return end
 
+	local playerPlate = _G.oUF_PlayerPlate
 	if C.db["Nameplate"]["TargetPower"] then
 		plate:Enable()
 		if not plate:IsElementEnabled("ClassPower") then
 			plate:EnableElement("ClassPower")
 			plate.ClassPower:ForceUpdate()
 		end
+		if playerPlate then
+			if playerPlate:IsElementEnabled("ClassPower") then
+				playerPlate:DisableElement("ClassPower")
+			end
+		end
 	else
 		plate:Disable()
 		if plate:IsElementEnabled("ClassPower") then
 			plate:DisableElement("ClassPower")
 		end
+		if playerPlate then
+			if not playerPlate:IsElementEnabled("ClassPower") then
+				playerPlate:EnableElement("ClassPower")
+				playerPlate.ClassPower:ForceUpdate()
+			end
+		end
 	end
+end
 
-	UF:UpdateTargetClassPower()
+function UF:ResizeTargetPower()
+	local plate = _G.oUF_TargetPlate
+	if not plate then return end
+
+	local barWidth = C.db["Nameplate"]["PlateWidth"]
+	local barHeight = C.db["Nameplate"]["PPBarHeight"]
+	local bars = plate.ClassPower or plate.Runes
+	if bars then
+		plate.classPowerBar:SetSize(barWidth, barHeight)
+		local max = bars.__max
+		for i = 1, max do
+			bars[i]:SetHeight(barHeight)
+			bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
+		end
+	end
 end
 
 function UF:UpdateGCDTicker()
