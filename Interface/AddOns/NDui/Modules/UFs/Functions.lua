@@ -1211,6 +1211,48 @@ function UF:StaggerBar(self)
 	self.Stagger.bg = bg
 end
 
+function UF:ToggleUFClassPower()
+	local playerFrame = _G.oUF_Player
+	if not playerFrame then return end
+
+	if C.db["UFs"]["ClassPower"] then
+		if playerFrame.ClassPower then
+			if not playerFrame:IsElementEnabled("ClassPower") then
+				playerFrame:EnableElement("ClassPower")
+				playerFrame.ClassPower:ForceUpdate()
+			end
+		end
+		if playerFrame.Runes then
+			if not playerFrame:IsElementEnabled("Runes") then
+				playerFrame:EnableElement("Runes")
+				playerFrame.Runes:ForceUpdate()
+			end
+		end
+		if playerFrame.Stagger then
+			if not playerFrame:IsElementEnabled("Stagger") then
+				playerFrame:EnableElement("Stagger")
+				playerFrame.Stagger:ForceUpdate()
+			end
+		end
+	else
+		if playerFrame.ClassPower then
+			if playerFrame:IsElementEnabled("ClassPower") then
+				playerFrame:DisableElement("ClassPower")
+			end
+		end
+		if playerFrame.Runes then
+			if playerFrame:IsElementEnabled("Runes") then
+				playerFrame:DisableElement("Runes")
+			end
+		end
+		if playerFrame.Stagger then
+			if playerFrame:IsElementEnabled("Stagger") then
+				playerFrame:DisableElement("Stagger")
+			end
+		end
+	end
+end
+
 function UF:UpdateUFClassPower()
 	local playerFrame = _G.oUF_Player
 	if not playerFrame then return end

@@ -774,6 +774,10 @@ local function updateUFTextScale()
 	B:GetModule("UnitFrames"):UpdateTextScale()
 end
 
+local function toggleUFClassPower()
+	B:GetModule("UnitFrames"):ToggleUFClassPower()
+end
+
 local function updateRaidTextScale()
 	B:GetModule("UnitFrames"):UpdateRaidTextScale()
 end
@@ -982,7 +986,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "Arena", L["Arena Frame"]},
 		{1, "UFs", "Portrait", L["UFs Portrait"], true},
-		{1, "UFs", "ClassPower", L["UFs ClassPower"], nil, setupClassPower},
+		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", nil, setupClassPower, toggleUFClassPower},
 		{1, "UFs", "DesaturateIcon", L["DesaturateIcon"].."*", true, nil, nil, L["DesaturateIconTip"]},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},

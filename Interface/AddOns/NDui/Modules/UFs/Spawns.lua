@@ -29,14 +29,12 @@ local function CreatePlayerStyle(self)
 	UF:CreateFCT(self)
 	UF:CreateAddPower(self)
 	UF:CreateQuestSync(self)
+	UF:CreateClassPower(self)
+	UF:StaggerBar(self)
 
 	if C.db["UFs"]["Castbars"] then
 		UF:ReskinMirrorBars()
 		UF:ReskinTimerTrakcer(self)
-	end
-	if C.db["UFs"]["ClassPower"] then
-		UF:CreateClassPower(self)
-		UF:StaggerBar(self)
 	end
 	if not C.db["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 	if C.db["UFs"]["PlayerDebuff"] then UF:CreateDebuffs(self) end
@@ -299,6 +297,7 @@ function UF:OnLogin()
 		local player = oUF:Spawn("player", "oUF_Player")
 		B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos)
 		UF.ToggleCastBar(player, "Player")
+		UF:ToggleUFClassPower()
 
 		oUF:SetActiveStyle("Target")
 		local target = oUF:Spawn("target", "oUF_Target")
