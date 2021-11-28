@@ -1073,7 +1073,7 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 
 	if diff then
 		for i = 1, max do
-			element[i]:SetWidth((element.__owner.classPowerBar:GetWidth() - (max-1)*C.margin)/max)
+			element[i]:SetWidth((element.__owner.ClassPowerBar:GetWidth() - (max-1)*C.margin)/max)
 		end
 		for i = max + 1, 6 do
 			element[i].bg:Hide()
@@ -1132,6 +1132,7 @@ function UF:CreateClassPower(self)
 		barPoint = {"CENTER", self}
 	end
 
+	local isDK = DB.MyClass == "DEATHKNIGHT"
 	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
 	bar:SetSize(barWidth, barHeight)
 	bar:SetPoint(unpack(barPoint))
@@ -1150,12 +1151,12 @@ function UF:CreateClassPower(self)
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", C.margin, 0)
 		end
 
-		bars[i].bg = bar:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg = (isDK and bars[i] or bar):CreateTexture(nil, "BACKGROUND")
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg.multiplier = .25
 
-		if DB.MyClass == "DEATHKNIGHT" and C.db["UFs"]["RuneTimer"] then
+		if isDK and C.db["UFs"]["RuneTimer"] then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
 		elseif DB.MyClass == "ROGUE" then
 			local chargeStar = bars[i]:CreateTexture()
@@ -1168,7 +1169,7 @@ function UF:CreateClassPower(self)
 		end
 	end
 
-	if DB.MyClass == "DEATHKNIGHT" then
+	if isDK then
 		bars.colorSpec = true
 		bars.sortOrder = "asc"
 		bars.PostUpdate = UF.PostUpdateRunes
@@ -1179,7 +1180,7 @@ function UF:CreateClassPower(self)
 		self.ClassPower = bars
 	end
 
-	self.classPowerBar = bar
+	self.ClassPowerBar = bar
 end
 
 function UF:StaggerBar(self)

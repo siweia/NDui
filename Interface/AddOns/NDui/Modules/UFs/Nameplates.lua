@@ -986,7 +986,7 @@ function UF:ResizePlayerPlate()
 
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
-			plate.classPowerBar:SetSize(barWidth, barHeight)
+			plate.ClassPowerBar:SetSize(barWidth, barHeight)
 			local max = bars.__max
 			for i = 1, max do
 				bars[i]:SetHeight(barHeight)
@@ -1003,7 +1003,7 @@ function UF:ResizePlayerPlate()
 			end
 		end
 		if plate.dices then
-			local parent = C.db["Nameplate"]["TargetPower"] and plate.Health or plate.classPowerBar
+			local parent = C.db["Nameplate"]["TargetPower"] and plate.Health or plate.ClassPowerBar
 			local size = (barWidth - 10)/6
 			for i = 1, 6 do
 				local dice = plate.dices[i]
@@ -1094,7 +1094,7 @@ function UF:UpdateTargetClassPower()
 	local plate = _G.oUF_TargetPlate
 	if not plate then return end
 
-	local bar = plate.classPowerBar
+	local bar = plate.ClassPowerBar
 	local nameplate = C_NamePlate_GetNamePlateForUnit("target")
 	if nameplate then
 		bar:SetParent(nameplate.unitFrame)
@@ -1113,24 +1113,50 @@ function UF:ToggleTargetClassPower()
 	local playerPlate = _G.oUF_PlayerPlate
 	if C.db["Nameplate"]["TargetPower"] then
 		plate:Enable()
-		if not plate:IsElementEnabled("ClassPower") then
-			plate:EnableElement("ClassPower")
-			plate.ClassPower:ForceUpdate()
+		if plate.ClassPower then
+			if not plate:IsElementEnabled("ClassPower") then
+				plate:EnableElement("ClassPower")
+				plate.ClassPower:ForceUpdate()
+			end
+			if playerPlate then
+				if playerPlate:IsElementEnabled("ClassPower") then
+					playerPlate:DisableElement("ClassPower")
+				end
+			end
 		end
-		if playerPlate then
-			if playerPlate:IsElementEnabled("ClassPower") then
-				playerPlate:DisableElement("ClassPower")
+		if plate.Runes then
+			if not plate:IsElementEnabled("Runes") then
+				plate:EnableElement("Runes")
+				plate.Runes:ForceUpdate()
+			end
+			if playerPlate then
+				if playerPlate:IsElementEnabled("Runes") then
+					playerPlate:DisableElement("Runes")
+				end
 			end
 		end
 	else
 		plate:Disable()
-		if plate:IsElementEnabled("ClassPower") then
-			plate:DisableElement("ClassPower")
+		if plate.ClassPower then
+			if plate:IsElementEnabled("ClassPower") then
+				plate:DisableElement("ClassPower")
+			end
+			if playerPlate then
+				if not playerPlate:IsElementEnabled("ClassPower") then
+					playerPlate:EnableElement("ClassPower")
+					playerPlate.ClassPower:ForceUpdate()
+				end
+			end
 		end
-		if playerPlate then
-			if not playerPlate:IsElementEnabled("ClassPower") then
-				playerPlate:EnableElement("ClassPower")
-				playerPlate.ClassPower:ForceUpdate()
+		if plate.Runes then
+			if plate:IsElementEnabled("Runes") then
+				plate:DisableElement("Runes")
+			end
+			if playerPlate then
+				if not playerPlate:IsElementEnabled("Runes") then
+					playerPlate:EnableElement("Runes")
+					playerPlate.Runes:ForceUpdate()
+				end
 			end
 		end
 	end
@@ -1144,7 +1170,7 @@ function UF:ResizeTargetPower()
 	local barHeight = C.db["Nameplate"]["PPBarHeight"]
 	local bars = plate.ClassPower or plate.Runes
 	if bars then
-		plate.classPowerBar:SetSize(barWidth, barHeight)
+		plate.ClassPowerBar:SetSize(barWidth, barHeight)
 		local max = bars.__max
 		for i = 1, max do
 			bars[i]:SetHeight(barHeight)

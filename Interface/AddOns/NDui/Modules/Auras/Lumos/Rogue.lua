@@ -20,7 +20,7 @@ function A:PostCreateLumos(self)
 
 	local iconSize = (self:GetWidth() - 10)/6
 	local buttons = {}
-	local parent = C.db["Nameplate"]["TargetPower"] and self.Health or self.classPowerBar
+	local parent = C.db["Nameplate"]["TargetPower"] and self.Health or self.ClassPowerBar
 	for i = 1, 6 do
 		local bu = CreateFrame("Frame", nil, self.Health)
 		bu:SetSize(iconSize, iconSize/2)
