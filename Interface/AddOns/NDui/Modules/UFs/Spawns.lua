@@ -34,7 +34,7 @@ local function CreatePlayerStyle(self)
 		UF:ReskinMirrorBars()
 		UF:ReskinTimerTrakcer(self)
 	end
-	if C.db["UFs"]["ClassPower"] and not C.db["Nameplate"]["ShowPlayerPlate"] then
+	if C.db["UFs"]["ClassPower"] then
 		UF:CreateClassPower(self)
 		UF:StaggerBar(self)
 	end
@@ -272,6 +272,13 @@ function UF:OnLogin()
 		oUF:SetActiveStyle("PlayerPlate")
 		local plate = oUF:Spawn("player", "oUF_PlayerPlate", true)
 		plate.mover = B.Mover(plate, L["PlayerPlate"], "PlayerPlate", C.UFs.PlayerPlate)
+	end
+
+	do	-- fake nameplate for target class power
+		oUF:RegisterStyle("TargetPlate", UF.CreateTargetPlate)
+		oUF:SetActiveStyle("TargetPlate")
+		oUF:Spawn("player", "oUF_TargetPlate", true)
+		UF:ToggleTargetClassPower()
 	end
 
 	-- Default Clicksets for RaidFrame

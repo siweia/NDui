@@ -297,7 +297,7 @@ G.DefaultSettings = {
 		PPFadeout = true,
 		PPFadeoutAlpha = 0,
 		PPOnFire = false,
-		NameplateClassPower = false,
+		TargetPower = false,
 		MinScale = 1,
 		MinAlpha = 1,
 		ColorBorder = false,
@@ -736,6 +736,10 @@ local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
 
+local function toggleTargetClassPower()
+	B:GetModule("UnitFrames"):ToggleTargetClassPower()
+end
+
 local function toggleGCDTicker()
 	B:GetModule("UnitFrames"):ToggleGCDTicker()
 end
@@ -893,7 +897,7 @@ G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["Sho
 G.TabList = {
 	L["Actionbar"],
 	L["Bags"],
-	L["Unitframes"],
+	NewTag..L["Unitframes"],
 	L["RaidFrame"],
 	NewTag..L["Nameplate"],
 	L["PlayerPlate"],
@@ -954,7 +958,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Bags", "BankWidth", L["Bank Width"].."*", true, {10, 40, 1}, updateBagSize},
 	},
 	[3] = {
-		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
+		{1, "UFs", "Enable", NewTag..HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
 		{},--blank
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"]},
@@ -1039,8 +1043,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 40, 1}, refreshNameplates},
 		{},--blank
-		{4, "Nameplate", "NameType", L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
-		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates},
+		{4, "Nameplate", "NameType", NewTag..L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
+		{4, "Nameplate", "HealthType", NewTag..L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates},
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", "|cffff0000"..L["ExecuteRatio"].."*", true, {0, 90, 1}, nil, L["ExecuteRatioTip"]},
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
@@ -1077,14 +1081,14 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[6] = {
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"]},
+		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
 		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
-		{1, "Nameplate", "PPOnFire", L["PlayerPlate OnFire"], true, nil, nil, L["PPOnFireTip"]},
-		{1, "Nameplate", "NameplateClassPower", L["Nameplate ClassPower"], nil},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
+		{1, "Nameplate", "PPOnFire", L["PlayerPlate OnFire"], nil, nil, nil, L["PPOnFireTip"]},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
-		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
 		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
+		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},

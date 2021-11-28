@@ -728,40 +728,6 @@ function UF:CreatePlates()
 	platesList[self] = self:GetName()
 end
 
--- Classpower on target nameplate
-local isTargetClassPower
-function UF:UpdateClassPowerAnchor()
-	if not isTargetClassPower then return end
-
-	local bar = _G.oUF_ClassPowerBar
-	local nameplate = C_NamePlate_GetNamePlateForUnit("target")
-	if nameplate then
-		bar:SetParent(nameplate.unitFrame)
-		bar:ClearAllPoints()
-		bar:SetPoint("BOTTOM", nameplate.unitFrame.nameText, "TOP", 0, 5)
-		bar:Show()
-	else
-		bar:Hide()
-	end
-end
-
-function UF:UpdateTargetClassPower()
-	local bar = _G.oUF_ClassPowerBar
-	local playerPlate = _G.oUF_PlayerPlate
-	if not bar or not playerPlate then return end
-
-	if C.db["Nameplate"]["NameplateClassPower"] then
-		isTargetClassPower = true
-		UF:UpdateClassPowerAnchor()
-	else
-		isTargetClassPower = false
-		bar:SetParent(playerPlate.Health)
-		bar:ClearAllPoints()
-		bar:SetPoint("BOTTOMLEFT", playerPlate.Health, "TOPLEFT", 0, 3)
-		bar:Show()
-	end
-end
-
 function UF:ToggleNameplateAuras()
 	if C.db["Nameplate"]["PlateAuras"] then
 		if not self:IsElementEnabled("Auras") then
@@ -780,8 +746,8 @@ function UF:UpdateNameplateAuras()
 	if not C.db["Nameplate"]["PlateAuras"] then return end
 
 	local element = self.Auras
-	if C.db["Nameplate"]["ShowPlayerPlate"] and C.db["Nameplate"]["NameplateClassPower"] then
-		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + _G.oUF_ClassPowerBar:GetHeight())
+	if C.db["Nameplate"]["TargetPower"] then
+		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
 	else
 		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 	end
@@ -942,7 +908,7 @@ function UF:RefreshPlateType(unit)
 end
 
 function UF:OnUnitFactionChanged(unit)
-	local nameplate = C_NamePlate_GetNamePlateForUnit(unit, issecure())
+	local nameplate = C_NamePlate_GetNamePlateForUnit(unit)
 	local unitFrame = nameplate and nameplate.unitFrame
 	if unitFrame and unitFrame.unitName then
 		UF.RefreshPlateType(unitFrame, unit)
@@ -981,7 +947,7 @@ function UF:PostUpdatePlates(event, unit)
 		UF.UpdateQuestUnit(self, event, unit)
 		UF.UpdateUnitClassify(self, unit)
 		UF.UpdateDungeonProgress(self, unit)
-		UF:UpdateClassPowerAnchor()
+		UF:UpdateTargetClassPower()
 
 		self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
 	end
@@ -1023,12 +989,11 @@ function UF:ResizePlayerPlate()
 
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
-			local classpowerWidth = C.db["Nameplate"]["NameplateClassPower"] and C.db["Nameplate"]["PlateWidth"] or barWidth
-			_G.oUF_ClassPowerBar:SetSize(classpowerWidth, barHeight)
+			plate.classPowerBar:SetSize(barWidth, barHeight)
 			local max = bars.__max
 			for i = 1, max do
 				bars[i]:SetHeight(barHeight)
-				bars[i]:SetWidth((classpowerWidth - (max-1)*C.margin) / max)
+				bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
 			end
 		end
 		if plate.Stagger then
@@ -1041,14 +1006,9 @@ function UF:ResizePlayerPlate()
 			end
 		end
 		if plate.dices then
-			local offset = C.db["Nameplate"]["NameplateClassPower"] and C.margin or (C.margin*2 + barHeight)
 			local size = (barWidth - 10)/6
 			for i = 1, 6 do
-				local dice = plate.dices[i]
-				dice:SetSize(size, size/2)
-				if i == 1 then
-					dice:SetPoint("BOTTOMLEFT", plate.Health, "TOPLEFT", 0, offset)
-				end
+				plate.dices[i]:SetSize(size, size/2)
 			end
 		end
 	end
@@ -1075,7 +1035,6 @@ function UF:CreatePlayerPlate()
 	UF:TogglePlatePower()
 
 	UF:CreateGCDTicker(self)
-	UF:UpdateTargetClassPower()
 	UF:TogglePlateVisibility()
 end
 
@@ -1105,6 +1064,51 @@ function UF:TogglePlateVisibility()
 		plate:UnregisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility)
 		UF.PlateVisibility(plate, "PLAYER_REGEN_DISABLED")
 	end
+end
+
+-- Target nameplate
+function UF:CreateTargetPlate()
+	self.mystyle = "targetplate"
+	self:EnableMouse(false)
+	self:SetSize(10, 10)
+
+	UF:CreateClassPower(self)
+end
+
+function UF:UpdateTargetClassPower()
+	local plate = _G.oUF_TargetPlate
+	if not plate then return end
+
+	local bar = plate.classPowerBar
+	local nameplate = C_NamePlate_GetNamePlateForUnit("target")
+	if nameplate then
+		bar:SetParent(nameplate.unitFrame)
+		bar:ClearAllPoints()
+		bar:SetPoint("BOTTOM", nameplate.unitFrame.nameText, "TOP", 0, 5)
+		bar:Show()
+	else
+		bar:Hide()
+	end
+end
+
+function UF:ToggleTargetClassPower()
+	local plate = _G.oUF_TargetPlate
+	if not plate then return end
+
+	if C.db["Nameplate"]["TargetPower"] then
+		plate:Enable()
+		if not plate:IsElementEnabled("ClassPower") then
+			plate:EnableElement("ClassPower")
+			plate.ClassPower:ForceUpdate()
+		end
+	else
+		plate:Disable()
+		if plate:IsElementEnabled("ClassPower") then
+			plate:DisableElement("ClassPower")
+		end
+	end
+
+	UF:UpdateTargetClassPower()
 end
 
 function UF:UpdateGCDTicker()

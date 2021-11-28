@@ -914,8 +914,8 @@ function UF:CreateAuras(self)
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-y"] = "UP"
-		if C.db["Nameplate"]["ShowPlayerPlate"] and C.db["Nameplate"]["NameplateClassPower"] then
-			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + _G.oUF_ClassPowerBar:GetHeight())
+		if C.db["Nameplate"]["TargetPower"] then
+			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
 		else
 			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 		end
@@ -1045,8 +1045,6 @@ function UF:RefreshAurasByCombat(self)
 end
 
 -- Class Powers
-local barWidth, barHeight = unpack(C.UFs.BarSize)
-
 function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowerPoints)
 	if not cur or cur == 0 then
 		for i = 1, 6 do
@@ -1075,7 +1073,7 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 
 	if diff then
 		for i = 1, max do
-			element[i]:SetWidth((barWidth - (max-1)*C.margin)/max)
+			element[i]:SetWidth((element.__owner.classPowerBar:GetWidth() - (max-1)*C.margin)/max)
 		end
 		for i = max + 1, 6 do
 			element[i].bg:Hide()
@@ -1124,15 +1122,19 @@ function UF.PostUpdateRunes(element, runemap)
 end
 
 function UF:CreateClassPower(self)
+	local barWidth, barHeight = 150, 5
+	local barPoint = {"TOPLEFT", 12, 4}
 	if self.mystyle == "PlayerPlate" then
-		barWidth = C.db["Nameplate"]["NameplateClassPower"] and C.db["Nameplate"]["PlateWidth"] or C.db["Nameplate"]["PPWidth"]
-		barHeight = C.db["Nameplate"]["PPBarHeight"]
-		C.UFs.BarPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
+		barWidth, barHeight = C.db["Nameplate"]["PPWidth"], C.db["Nameplate"]["PPBarHeight"]
+		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
+	elseif self.mystyle == "targetplate" then
+		barWidth, barHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PPBarHeight"]
+		barPoint = {"CENTER", self}
 	end
 
-	local bar = CreateFrame("Frame", "oUF_ClassPowerBar", self.Health)
+	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
 	bar:SetSize(barWidth, barHeight)
-	bar:SetPoint(unpack(C.UFs.BarPoint))
+	bar:SetPoint(unpack(barPoint))
 
 	local bars = {}
 	for i = 1, 6 do
@@ -1176,14 +1178,23 @@ function UF:CreateClassPower(self)
 		bars.PostUpdate = UF.PostUpdateClassPower
 		self.ClassPower = bars
 	end
+
+	self.classPowerBar = bar
 end
 
 function UF:StaggerBar(self)
 	if DB.MyClass ~= "MONK" then return end
 
+	local barWidth, barHeight = 150, 5
+	local barPoint = {"TOPLEFT", 12, 4}
+	if self.mystyle == "PlayerPlate" then
+		barWidth, barHeight = C.db["Nameplate"]["PPWidth"], C.db["Nameplate"]["PPBarHeight"]
+		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
+	end
+
 	local stagger = CreateFrame("StatusBar", nil, self.Health)
 	stagger:SetSize(barWidth, barHeight)
-	stagger:SetPoint(unpack(C.UFs.BarPoint))
+	stagger:SetPoint(unpack(barPoint))
 	stagger:SetStatusBarTexture(DB.normTex)
 	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
 	B.SetBD(stagger, 0)
