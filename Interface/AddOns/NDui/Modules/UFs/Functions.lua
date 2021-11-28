@@ -1092,13 +1092,11 @@ function UF:OnUpdateRunes(elapsed)
 	local duration = self.duration + elapsed
 	self.duration = duration
 	self:SetValue(duration)
-
-	if self.timer then
+	self.timer:SetText(nil)
+	if C.db["UFs"]["RuneTimer"] then
 		local remain = self.runeDuration - duration
 		if remain > 0 then
 			self.timer:SetText(B.FormatTime(remain))
-		else
-			self.timer:SetText(nil)
 		end
 	end
 end
@@ -1111,7 +1109,7 @@ function UF.PostUpdateRunes(element, runemap)
 			if runeReady then
 				rune:SetAlpha(1)
 				rune:SetScript("OnUpdate", nil)
-				if rune.timer then rune.timer:SetText(nil) end
+				rune.timer:SetText(nil)
 			elseif start then
 				rune:SetAlpha(.6)
 				rune.runeDuration = duration
@@ -1122,8 +1120,8 @@ function UF.PostUpdateRunes(element, runemap)
 end
 
 function UF:CreateClassPower(self)
-	local barWidth, barHeight = 150, 5
-	local barPoint = {"TOPLEFT", 12, 4}
+	local barWidth, barHeight = C.db["UFs"]["CPWidth"], C.db["UFs"]["CPHeight"]
+	local barPoint = {"BOTTOMLEFT", self, "TOPLEFT", C.db["UFs"]["CPxOffset"], C.db["UFs"]["CPyOffset"]}
 	if self.mystyle == "PlayerPlate" then
 		barWidth, barHeight = C.db["Nameplate"]["PPWidth"], C.db["Nameplate"]["PPBarHeight"]
 		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, C.margin}
@@ -1156,7 +1154,7 @@ function UF:CreateClassPower(self)
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg.multiplier = .25
 
-		if isDK and C.db["UFs"]["RuneTimer"] then
+		if isDK then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
 		elseif DB.MyClass == "ROGUE" then
 			local chargeStar = bars[i]:CreateTexture()
@@ -1186,11 +1184,11 @@ end
 function UF:StaggerBar(self)
 	if DB.MyClass ~= "MONK" then return end
 
-	local barWidth, barHeight = 150, 5
-	local barPoint = {"TOPLEFT", 12, 4}
+	local barWidth, barHeight = C.db["UFs"]["CPWidth"], C.db["UFs"]["CPHeight"]
+	local barPoint = {"BOTTOMLEFT", self, "TOPLEFT", C.db["UFs"]["CPxOffset"], C.db["UFs"]["CPyOffset"]}
 	if self.mystyle == "PlayerPlate" then
 		barWidth, barHeight = C.db["Nameplate"]["PPWidth"], C.db["Nameplate"]["PPBarHeight"]
-		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, 3}
+		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, C.margin}
 	end
 
 	local stagger = CreateFrame("StatusBar", nil, self.Health)
@@ -1211,6 +1209,29 @@ function UF:StaggerBar(self)
 
 	self.Stagger = stagger
 	self.Stagger.bg = bg
+end
+
+function UF:UpdateUFClassPower()
+	local playerFrame = _G.oUF_Player
+	if not playerFrame then return end
+
+	local barWidth, barHeight = C.db["UFs"]["CPWidth"], C.db["UFs"]["CPHeight"]
+	local xOffset, yOffset = C.db["UFs"]["CPxOffset"], C.db["UFs"]["CPyOffset"]
+	local bars = playerFrame.ClassPower or playerFrame.Runes
+	if bars then
+		playerFrame.ClassPowerBar:SetSize(barWidth, barHeight)
+		playerFrame.ClassPowerBar:SetPoint("BOTTOMLEFT", playerFrame, "TOPLEFT", xOffset, yOffset)
+		local max = bars.__max
+		for i = 1, max do
+			bars[i]:SetHeight(barHeight)
+			bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
+		end
+	end
+
+	if playerFrame.Stagger then
+		playerFrame.Stagger:SetSize(barWidth, barHeight)
+		playerFrame.Stagger:SetPoint("BOTTOMLEFT", playerFrame, "TOPLEFT", xOffset, yOffset)
+	end
 end
 
 function UF.PostUpdateAltPower(element, _, cur, _, max)

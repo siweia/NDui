@@ -889,10 +889,10 @@ function G:SetupUnitFrame(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local sliderRange = {
-		["Player"] = {150, 300},
-		["Focus"] = {150, 300},
-		["Pet"] = {100, 200},
-		["Boss"] = {100, 300},
+		["Player"] = {150, 400},
+		["Focus"] = {150, 400},
+		["Pet"] = {100, 300},
+		["Boss"] = {100, 400},
 	}
 
 	local defaultValue = { -- healthWidth, healthHeight, powerHeight, healthTag, powerTag, powerOffset
@@ -1129,7 +1129,7 @@ end
 
 local function createOptionCheck(parent, offset, text)
 	local box = B.CreateCheckBox(parent)
-	box:SetPoint("TOPLEFT", 10, -offset)
+	box:SetPoint("TOPLEFT", 10, offset)
 	B.CreateFS(box, 14, text, false, "LEFT", 30, 0)
 	return box
 end
@@ -1167,7 +1167,7 @@ function G:SetupBagFilter(parent)
 
 	local offset = 10
 	for _, value in ipairs(filterOptions) do
-		local box = createOptionCheck(scroll, offset, L[value])
+		local box = createOptionCheck(scroll, -offset, L[value])
 		box:SetChecked(C.db["Bags"][value])
 		box.__value = value
 		box:SetScript("OnClick", filterOnClick)
@@ -1347,6 +1347,30 @@ function G:SetupStanceBar(parent)
 	createOptionSlider(parent, L["ButtonSize"], 20, 80, 30, offset-60, "BarStanceSize", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonsPerRow"], 1, 10, 10, offset-130, "BarStancePerRow", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, "BarStanceFont", Bar.UpdateStanceBar, "Actionbar")
+end
+
+function G:SetupUFClassPower(parent)
+	local guiName = "NDuiGUI_ClassPowerSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["UFs ClassPower"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local UF = B:GetModule("UnitFrames")
+	local parent, offset = scroll.child, -10
+
+	local box = createOptionCheck(parent, offset, L["UFs RuneTimer"])
+	box:SetChecked(C.db["UFs"]["RuneTimer"])
+	box:SetScript("OnClick", function()
+		C.db["UFs"]["RuneTimer"] = not C.db["UFs"]["RuneTimer"]
+		box:SetChecked(C.db["UFs"]["RuneTimer"])
+	end)
+
+	createOptionSlider(parent, "Width", 100, 400, 150, offset-70, "CPWidth", UF.UpdateUFClassPower)
+	createOptionSlider(parent, "Height", 2, 30, 5, offset-140, "CPHeight", UF.UpdateUFClassPower)
+	createOptionSlider(parent, "xOffset", -20, 200, 12, offset-210, "CPxOffset", UF.UpdateUFClassPower)
+	createOptionSlider(parent, "yOffset", -200, 20, -2, offset-280, "CPyOffset", UF.UpdateUFClassPower)
 end
 
 function G:SetupActionbarStyle(parent)

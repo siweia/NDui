@@ -161,6 +161,10 @@ G.DefaultSettings = {
 		RaidClickSets = false,
 		ShowTeamIndex = false,
 		ClassPower = true,
+		CPWidth = 150,
+		CPHeight = 5,
+		CPxOffset = 12,
+		CPyOffset = -2,
 		QuakeTimer = true,
 		LagString = true,
 		RuneTimer = true,
@@ -563,6 +567,10 @@ end
 
 local function setupCastbar()
 	G:SetupCastbar(guiPage[3])
+end
+
+local function setupClassPower()
+	G:SetupUFClassPower(guiPage[3])
 end
 
 local function setupRaidFrame()
@@ -974,11 +982,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "Arena", L["Arena Frame"]},
 		{1, "UFs", "Portrait", L["UFs Portrait"], true},
-		{1, "UFs", "ClassPower", L["UFs ClassPower"]},
-		{1, "UFs", "RuneTimer", L["UFs RuneTimer"], true},
+		{1, "UFs", "ClassPower", L["UFs ClassPower"], nil, setupClassPower},
+		{1, "UFs", "DesaturateIcon", L["DesaturateIcon"].."*", true, nil, nil, L["DesaturateIconTip"]},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
-		{1, "UFs", "DesaturateIcon", L["DesaturateIcon"].."*", nil, nil, nil, L["DesaturateIconTip"]},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateUFTextScale},
 		{3, "UFs", "TargetAurasPerRow", L["TargetAurasPerRow"].."*", true, {5, 20, 1}, updateTargetFrameAuras},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
