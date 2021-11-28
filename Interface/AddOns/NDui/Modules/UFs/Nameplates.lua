@@ -549,16 +549,19 @@ end
 
 function UF:UpdateUnitClassify(unit)
 	if not self.ClassifyIndicator then return end
+	if not unit then unit = self.unit end
 
-	local class = UnitClassification(unit)
-	local classify = class and NPClassifies[class]
-	if classify then
-		local r, g, b, desature = unpack(classify)
-		self.ClassifyIndicator:SetVertexColor(r, g, b)
-		self.ClassifyIndicator:SetDesaturated(desature)
-		self.ClassifyIndicator:Show()
-	else
-		self.ClassifyIndicator:Hide()
+	self.ClassifyIndicator:Hide()
+
+	if self.__tagIndex > 3 then
+		local class = UnitClassification(unit)
+		local classify = class and NPClassifies[class]
+		if classify then
+			local r, g, b, desature = unpack(classify)
+			self.ClassifyIndicator:SetVertexColor(r, g, b)
+			self.ClassifyIndicator:SetDesaturated(desature)
+			self.ClassifyIndicator:Show()
+		end
 	end
 end
 
@@ -790,6 +793,13 @@ function UF:UpdateNameplateAuras()
 	element:ForceUpdate()
 end
 
+UF.PlateNameTags = {
+	[1] = "",
+	[2] = "[name]",
+	[3] = "[nplevel][name]",
+	[4] = "[nprare][name]",
+	[5] = "[nprare][nplevel][name]",
+}
 function UF:UpdateNameplateSize()
 	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
 	local plateCBHeight, plateCBOffset = C.db["Nameplate"]["PlateCBHeight"], C.db["Nameplate"]["PlateCBOffset"]
@@ -805,9 +815,15 @@ function UF:UpdateNameplateSize()
 	end
 	local font, fontFlag = DB.Font[1], DB.Font[3]
 	local iconSize = plateHeight + plateCBHeight + 5
+	local nameType = C.db["Nameplate"]["NameType"]
 
 	self:SetSize(plateWidth, plateHeight)
 	self.nameText:SetFont(font, nameTextSize, fontFlag)
+	if self.plateType ~= "NameOnly" then
+		self:Tag(self.nameText, UF.PlateNameTags[nameType])
+		self.nameText:UpdateTag()
+		self.__tagIndex = nameType
+	end
 	self.npcTitle:SetFont(font, nameTextSize-1, fontFlag)
 	self.tarName:SetFont(font, nameTextSize+4, fontFlag)
 	self.Castbar.Icon:SetSize(iconSize, iconSize)
@@ -829,6 +845,7 @@ end
 function UF:RefreshNameplats()
 	for nameplate in pairs(platesList) do
 		UF.UpdateNameplateSize(nameplate)
+		UF.UpdateUnitClassify(nameplate)
 		UF.UpdateNameplateAuras(nameplate)
 		UF.UpdateTargetIndicator(nameplate)
 		UF.UpdateTargetChange(nameplate)
@@ -865,7 +882,8 @@ function UF:UpdatePlateByType()
 		end
 
 		name:SetJustifyH("CENTER")
-		self:Tag(name, "[nplevel][color][name]")
+		self:Tag(name, "[nprare][nplevel][color][name]")
+		self.__tagIndex = 6
 		name:UpdateTag()
 		name:SetPoint("CENTER", self, "BOTTOM")
 		hpval:Hide()
@@ -886,8 +904,6 @@ function UF:UpdatePlateByType()
 		end
 
 		name:SetJustifyH("LEFT")
-		self:Tag(name, "[nplevel][name]")
-		name:UpdateTag()
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
 		hpval:Show()
