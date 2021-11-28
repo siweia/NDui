@@ -986,7 +986,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "Arena", L["Arena Frame"]},
 		{1, "UFs", "Portrait", L["UFs Portrait"], true},
-		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", nil, setupClassPower, toggleUFClassPower},
+		{1, "UFs", "ClassPower", NewTag..L["UFs ClassPower"].."*", nil, setupClassPower, toggleUFClassPower},
 		{1, "UFs", "DesaturateIcon", L["DesaturateIcon"].."*", true, nil, nil, L["DesaturateIconTip"]},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
@@ -1107,7 +1107,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
 		{},--blank
-		{3, "Nameplate", "PPWidth", L["PlayerPlate HPWidth"].."*", false, {150, 300, 1}, refreshNameplates},
+		{3, "Nameplate", "PPWidth", L["Width"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
 		{3, "Nameplate", "PPHealthHeight", L["PlayerPlate HPHeight"].."*", false, {2, 15, 1}, refreshNameplates},
 		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
