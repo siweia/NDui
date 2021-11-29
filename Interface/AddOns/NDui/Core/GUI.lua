@@ -126,6 +126,10 @@ G.DefaultSettings = {
 		Enable = true,
 		Portrait = true,
 		PlayerDebuff = false,
+		TargetAuras = true,
+		TargetBuff = true,
+		TargetDebuff = true,
+		TargetDebuffFilter = false,
 		ToTAuras = false,
 		Arena = true,
 		Castbars = true,
@@ -573,6 +577,10 @@ local function setupClassPower()
 	G:SetupUFClassPower(guiPage[3])
 end
 
+local function setupUFTargetAuras()
+	G:SetupUFTargetAuras(guiPage[3])
+end
+
 local function setupRaidFrame()
 	G:SetupRaidFrame(guiPage[4])
 end
@@ -990,6 +998,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "DesaturateIcon", L["DesaturateIcon"].."*", true, nil, nil, L["DesaturateIconTip"]},
 		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
 		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
+		{1, "UFs", "TargetAuras", "TargetAuras".."*", nil, setupUFTargetAuras},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateUFTextScale},
 		{3, "UFs", "TargetAurasPerRow", L["TargetAurasPerRow"].."*", true, {5, 20, 1}, updateTargetFrameAuras},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},

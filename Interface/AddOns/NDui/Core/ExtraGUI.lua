@@ -1127,10 +1127,24 @@ function G:SetupCastbar(parent)
 	end)
 end
 
-local function createOptionCheck(parent, offset, text)
+local function toggleOptionCheck(self)
+	local value = C.db[self.__key][self.__value]
+	value = not value
+	self:SetChecked(value)
+	C.db[self.__key][self.__value] = value
+	if self.__callback then self:__callback() end
+end
+
+local function createOptionCheck(parent, offset, text, key, value, callback)
 	local box = B.CreateCheckBox(parent)
 	box:SetPoint("TOPLEFT", 10, offset)
+	box:SetChecked(C.db[key][value])
+	box.__key = key
+	box.__value = value
+	box.__callback = callback
 	B.CreateFS(box, 14, text, false, "LEFT", 30, 0)
+	box:SetScript("OnClick", toggleOptionCheck)
+
 	return box
 end
 
@@ -1157,21 +1171,14 @@ function G:SetupBagFilter(parent)
 		[12] = "FilterRelic",
 	}
 
-	local Bags = B:GetModule("Bags")
-	local function filterOnClick(self)
-		local value = self.__value
-		C.db["Bags"][value] = not C.db["Bags"][value]
-		self:SetChecked(C.db["Bags"][value])
-		Bags:UpdateAllBags()
+	local BAG = B:GetModule("Bags")
+	local function updateAllBags()
+		BAG:UpdateAllBags()
 	end
 
 	local offset = 10
 	for _, value in ipairs(filterOptions) do
-		local box = createOptionCheck(scroll, -offset, L[value])
-		box:SetChecked(C.db["Bags"][value])
-		box.__value = value
-		box:SetScript("OnClick", filterOnClick)
-
+		createOptionCheck(scroll, -offset, L[value], "Bags", value, updateAllBags)
 		offset = offset + 35
 	end
 end
@@ -1360,17 +1367,27 @@ function G:SetupUFClassPower(parent)
 	local UF = B:GetModule("UnitFrames")
 	local parent, offset = scroll.child, -10
 
-	local box = createOptionCheck(parent, offset, L["UFs RuneTimer"])
-	box:SetChecked(C.db["UFs"]["RuneTimer"])
-	box:SetScript("OnClick", function()
-		C.db["UFs"]["RuneTimer"] = not C.db["UFs"]["RuneTimer"]
-		box:SetChecked(C.db["UFs"]["RuneTimer"])
-	end)
-
+	createOptionCheck(parent, offset, L["UFs RuneTimer"], "UFs", "RuneTimer")
 	createOptionSlider(parent, L["Width"], 100, 400, 150, offset-70, "CPWidth", UF.UpdateUFClassPower)
 	createOptionSlider(parent, L["Height"], 2, 30, 5, offset-140, "CPHeight", UF.UpdateUFClassPower)
 	createOptionSlider(parent, L["xOffset"], -20, 200, 12, offset-210, "CPxOffset", UF.UpdateUFClassPower)
 	createOptionSlider(parent, L["yOffset"], -200, 20, -2, offset-280, "CPyOffset", UF.UpdateUFClassPower)
+end
+
+function G:SetupUFTargetAuras(parent)
+	local guiName = "NDuiGUI_TargetAurasSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, "TargetAuras".."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local UF = B:GetModule("UnitFrames")
+	local parent, offset = scroll.child, -10
+
+	createOptionCheck(parent, offset, "ShowBuff", "UFs", "TargetBuff")
+	createOptionCheck(parent, offset-35, "ShowDebuff", "UFs", "TargetDebuff")
+	createOptionCheck(parent, offset-70, "OnlyMyDebuff", "UFs", "TargetDebuffFilter")
 end
 
 function G:SetupActionbarStyle(parent)
