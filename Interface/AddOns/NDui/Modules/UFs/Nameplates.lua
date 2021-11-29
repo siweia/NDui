@@ -626,6 +626,20 @@ function UF:UpdateMouseoverShown()
 	end
 end
 
+function UF:HighlightOnUpdate(elapsed)
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed > .1 then
+		if not UF.IsMouseoverUnit(self.__owner) then
+			self:Hide()
+		end
+		self.elapsed = 0
+	end
+end
+
+function UF:HighlightOnHide()
+	self.__owner.HighlightIndicator:Hide()
+end
+
 function UF:MouseoverIndicator(self)
 	local highlight = CreateFrame("Frame", nil, self.Health)
 	highlight:SetAllPoints(self)
@@ -636,22 +650,13 @@ function UF:MouseoverIndicator(self)
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
 
-	local f = CreateFrame("Frame", nil, self)
-	f:SetScript("OnUpdate", function(_, elapsed)
-		f.elapsed = (f.elapsed or 0) + elapsed
-		if f.elapsed > .1 then
-			if not UF.IsMouseoverUnit(self) then
-				f:Hide()
-			end
-			f.elapsed = 0
-		end
-	end)
-	f:HookScript("OnHide", function()
-		highlight:Hide()
-	end)
+	local updater = CreateFrame("Frame", nil, self)
+	updater.__owner = self
+	updater:SetScript("OnUpdate", UF.HighlightOnUpdate)
+	updater:HookScript("OnHide", UF.HighlightOnHide)
 
 	self.HighlightIndicator = highlight
-	self.HighlightUpdater = f
+	self.HighlightUpdater = updater
 end
 
 -- Interrupt info on castbars
