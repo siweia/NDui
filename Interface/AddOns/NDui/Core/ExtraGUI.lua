@@ -907,7 +907,7 @@ function G:SetupUnitFrame(parent)
 		createOptionDropdown(parent, L["HealthValueType"], offset-50, G.HealthValues, nil, "UFs", value.."HPTag", defaultValue[value][4], func)
 		local mult = 0
 		if value ~= "Pet" then
-			mult = 55
+			mult = 60
 			createOptionDropdown(parent, L["PowerValueType"], offset-50-mult, G.HealthValues, nil, "UFs", value.."MPTag", defaultValue[value][4], func)
 		end
 		createOptionSlider(parent, L["Width"], sliderRange[value][1], sliderRange[value][2], defaultValue[value][1], offset-110-mult, value.."Width", func)
@@ -926,7 +926,7 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFrameHealthTag(frame)
 			UF.UpdateFramePowerTag(frame)
 		end
-		UF:UpdateTargetAuras()
+		UF:UpdateUFAuras()
 	end
 	createOptionGroup(scroll.child, L["Player&Target"], -10, "Player", updatePlayerSize)
 
@@ -1374,20 +1374,38 @@ function G:SetupUFClassPower(parent)
 	createOptionSlider(parent, L["yOffset"], -200, 20, -2, offset-280, "CPyOffset", UF.UpdateUFClassPower)
 end
 
-function G:SetupUFTargetAuras(parent)
-	local guiName = "NDuiGUI_TargetAurasSetup"
+function G:SetupUFAuras(parent)
+	local guiName = "NDuiGUI_UnitFrameAurasSetup"
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, "TargetAuras".."*")
+	local panel = createExtraGUI(parent, guiName, L["ShowAuras"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local UF = B:GetModule("UnitFrames")
 	local parent, offset = scroll.child, -10
 
-	createOptionCheck(parent, offset, "ShowBuff", "UFs", "TargetBuff")
-	createOptionCheck(parent, offset-35, "ShowDebuff", "UFs", "TargetDebuff")
-	createOptionCheck(parent, offset-70, "OnlyMyDebuff", "UFs", "TargetDebuffFilter")
+	local defaultData = {
+		["Player"] = {1, 1, 9},
+		["Target"] = {2, 2, 9},
+		["Focus"] = {3, 2, 9},
+		["ToT"] = {1, 1, 5},
+	}
+	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"]}
+	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"]}
+
+	local function createOptionGroup(parent, title, offset, value, func)
+		local default = defaultData[value]
+		createOptionTitle(parent, title, offset)
+		createOptionDropdown(parent, L["BuffType"], offset-50, buffOptions, nil, "UFs", value.."BuffType", default[1], func)
+		createOptionDropdown(parent, L["DebuffType"], offset-110, debuffOptions, nil, "UFs", value.."DebuffType", default[2], func)
+		createOptionSlider(parent, L["IconsPerRow"], 5, 20, default[3], offset-180, value.."AurasPerRow", func)
+	end
+
+	createOptionGroup(parent, L["PlayerUF"], offset, "Player", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["TargetUF"], offset-240, "Target", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["TotUF"], offset-480, "ToT", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["FocusUF"], offset-720, "Focus", UF.UpdateUFAuras)
 end
 
 function G:SetupActionbarStyle(parent)

@@ -125,12 +125,7 @@ G.DefaultSettings = {
 	UFs = {
 		Enable = true,
 		Portrait = true,
-		PlayerDebuff = false,
-		TargetAuras = true,
-		TargetBuff = true,
-		TargetDebuff = true,
-		TargetDebuffFilter = false,
-		ToTAuras = false,
+		ShowAuras = true,
 		Arena = true,
 		Castbars = true,
 		SwingBar = false,
@@ -193,13 +188,12 @@ G.DefaultSettings = {
 		RaidTextScale = 1,
 		FrequentHealth = false,
 		HealthFrequency = .2,
-		TargetAurasPerRow = 9,
 		ShowRaidBuff = false,
 		RaidBuffSize = 12,
 		ShowRaidDebuff = true,
 		RaidDebuffSize = 12,
 		SmartRaid = false,
-		DesaturateIcon = true,
+		Desaturate = true,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -234,6 +228,19 @@ G.DefaultSettings = {
 		FocusCB = true,
 		FocusCBWidth = 320,
 		FocusCBHeight = 20,
+
+		PlayerBuffType = 1,
+		PlayerDebuffType = 1,
+		PlayerAurasPerRow = 9,
+		TargetBuffType = 2,
+		TargetDebuffType = 2,
+		TargetAurasPerRow = 9,
+		FocusBuffType = 3,
+		FocusDebuffType = 2,
+		FocusAurasPerRow = 8,
+		ToTBuffType = 1,
+		ToTDebuffType = 1,
+		ToTAurasPerRow = 5,
 	},
 	Chat = {
 		Sticky = false,
@@ -577,8 +584,8 @@ local function setupClassPower()
 	G:SetupUFClassPower(guiPage[3])
 end
 
-local function setupUFTargetAuras()
-	G:SetupUFTargetAuras(guiPage[3])
+local function setupUFAuras()
+	G:SetupUFAuras(guiPage[3])
 end
 
 local function setupRaidFrame()
@@ -786,16 +793,16 @@ local function toggleUFClassPower()
 	B:GetModule("UnitFrames"):ToggleUFClassPower()
 end
 
+local function toggleAllAuras()
+	B:GetModule("UnitFrames"):ToggleAllAuras()
+end
+
 local function updateRaidTextScale()
 	B:GetModule("UnitFrames"):UpdateRaidTextScale()
 end
 
 local function refreshRaidFrameIcons()
 	B:GetModule("UnitFrames"):RefreshRaidFrameIcons()
-end
-
-local function updateTargetFrameAuras()
-	B:GetModule("UnitFrames"):UpdateTargetAuras()
 end
 
 local function updateSimpleModeGroupBy()
@@ -985,6 +992,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[3] = {
 		{1, "UFs", "Enable", NewTag..HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
+		{1, "UFs", "Arena", L["Arena Frame"], true},
 		{},--blank
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"]},
@@ -992,15 +1000,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "LagString", L["Castbar LagString"]},
 		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true},
 		{},--blank
-		{1, "UFs", "Arena", L["Arena Frame"]},
-		{1, "UFs", "Portrait", L["UFs Portrait"], true},
 		{1, "UFs", "ClassPower", NewTag..L["UFs ClassPower"].."*", nil, setupClassPower, toggleUFClassPower},
-		{1, "UFs", "DesaturateIcon", L["DesaturateIcon"].."*", true, nil, nil, L["DesaturateIconTip"]},
-		{1, "UFs", "PlayerDebuff", L["Player Debuff"]},
-		{1, "UFs", "ToTAuras", L["ToT Debuff"], true},
-		{1, "UFs", "TargetAuras", "TargetAuras".."*", nil, setupUFTargetAuras},
-		{4, "UFs", "HealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateUFTextScale},
-		{3, "UFs", "TargetAurasPerRow", L["TargetAurasPerRow"].."*", true, {5, 20, 1}, updateTargetFrameAuras},
+		{1, "UFs", "Portrait", L["UFs Portrait"], true},
+		{1, "UFs", "ShowAuras", L["ShowAuras"].."*", nil, setupUFAuras, toggleAllAuras},
+		{1, "UFs", "Desaturate", L["DesaturateIcon"].."*", nil, nil, nil, L["DesaturateIconTip"]},
+		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateUFTextScale},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{3, "UFs", "SmoothAmount", HeaderTag..L["SmoothAmount"].."*", true, {.15, .6, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
 		{},--blank
