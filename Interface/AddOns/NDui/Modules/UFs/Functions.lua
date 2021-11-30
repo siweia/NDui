@@ -914,6 +914,7 @@ function UF:UpdateUFAuras()
 end
 
 function UF:ToggleUFAuras(frame, enable)
+	if not frame then return end
 	if enable then
 		if not frame:IsElementEnabled("Auras") then
 			frame:EnableElement("Auras")
