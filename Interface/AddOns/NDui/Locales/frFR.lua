@@ -846,3 +846,4 @@ L["ShowDispell"] = "Dispellable" -- need translation
 L["BlockOthers"] = "Block others" -- need translation
 L["DebuffColor"] = "Show debuff color" -- need translation
 L["DebuffColorTip"] = "|nDebuff icon border shows in debuff type color." -- need translation
+L["ClassColor Name"] = "Show classcolor name" -- need translation

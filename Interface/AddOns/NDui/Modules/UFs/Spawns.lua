@@ -296,7 +296,6 @@ function UF:OnLogin()
 		local player = oUF:Spawn("player", "oUF_Player")
 		B.Mover(player, L["PlayerUF"], "PlayerUF", C.UFs.PlayerPos)
 		UF.ToggleCastBar(player, "Player")
-		UF:ToggleUFClassPower()
 
 		oUF:SetActiveStyle("Target")
 		local target = oUF:Spawn("target", "oUF_Target")
@@ -343,6 +342,7 @@ function UF:OnLogin()
 			end
 		end
 
+		UF:ToggleUFClassPower()
 		UF:UpdateTextScale()
 		UF:ToggleAllAuras()
 	end

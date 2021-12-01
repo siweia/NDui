@@ -184,6 +184,32 @@ function UF:UpdateFrameHealthTag()
 	self.healthValue:UpdateTag()
 end
 
+function UF:UpdateFrameNameTag()
+	local name = self.nameText
+	if not name then return end
+
+	local mystyle = self.mystyle
+	if mystyle == "nameplate" then return end
+
+	local value = mystyle == "raid" and "RCCName" or "CCName"
+	local colorTag = C.db["UFs"][value] and "[color]" or ""
+
+	if mystyle == "player" then
+		self:Tag(name, " "..colorTag.."[name]")
+	elseif mystyle == "target" then
+		self:Tag(name, "[fulllevel] "..colorTag.."[name][afkdnd]")
+	elseif mystyle == "focus" then
+		self:Tag(name, colorTag.."[name][afkdnd]")
+	elseif mystyle == "arena" then
+		self:Tag(name, "[arenaspec] "..colorTag.."[name]")
+	elseif mystyle == "raid" and C.db["UFs"]["SimpleMode"] and C.db["UFs"]["ShowTeamIndex"] and not self.isPartyPet and not self.isPartyFrame then
+		self:Tag(name, "[group]."..colorTag.."[name]")
+	else
+		self:Tag(name, colorTag.."[name]")
+	end
+	name:UpdateTag()
+end
+
 function UF:CreateHealthText(self)
 	local mystyle = self.mystyle
 	local textFrame = CreateFrame("Frame", nil, self)
@@ -213,25 +239,12 @@ function UF:CreateHealthText(self)
 		name:ClearAllPoints()
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
+		self:Tag(name, "[nplevel][name]")
 	else
 		name:SetWidth(self:GetWidth()*.55)
 	end
 
-	if mystyle == "player" then
-		self:Tag(name, " [color][name]")
-	elseif mystyle == "target" then
-		self:Tag(name, "[fulllevel] [color][name][afkdnd]")
-	elseif mystyle == "focus" then
-		self:Tag(name, "[color][name][afkdnd]")
-	elseif mystyle == "nameplate" then
-		self:Tag(name, "[nplevel][name]")
-	elseif mystyle == "arena" then
-		self:Tag(name, "[arenaspec] [color][name]")
-	elseif mystyle == "raid" and C.db["UFs"]["SimpleMode"] and C.db["UFs"]["ShowTeamIndex"] and not self.isPartyPet and not self.isPartyFrame then
-		self:Tag(name, "[group].[color][name]")
-	else
-		self:Tag(name, "[color][name]")
-	end
+	UF.UpdateFrameNameTag(self)
 
 	local hpval = B.CreateFS(textFrame, retVal(self, 14, 13, 13, 13, C.db["Nameplate"]["HealthTextSize"]), "", false, "RIGHT", -3, 0)
 	self.healthValue = hpval
@@ -416,6 +429,8 @@ function UF:UpdateTextScale()
 			UF:UpdateHealthBarColor(frame, true)
 			UF:UpdatePowerBarColor(frame, true)
 		end
+
+		UF.UpdateFrameNameTag(frame)
 	end
 end
 
