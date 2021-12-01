@@ -45,8 +45,7 @@ local function setupCheckButton()
 	mono:SetScript("OnClick", function(self)
 		C.db["Misc"]["AutoQuest"] = self:GetChecked()
 	end)
-	mono.title = L["Tips"]
-	B.AddTooltip(mono, "ANCHOR_BOTTOMLEFT", L["AutoQuestTip"], "info")
+	B.AddTooltip(mono, "ANCHOR_BOTTOMLEFT", L["AutoQuestTip"], "info", true)
 
 	created = true
 end
@@ -476,8 +475,7 @@ local function UnitQuickQuestStatus(self)
 		local frame = CreateFrame("Frame", nil, self)
 		frame:SetSize(100, 14)
 		frame:SetPoint("TOP", self, "BOTTOM", 0, -2)
-		frame.title = L["Tips"]
-		B.AddTooltip(frame, "ANCHOR_RIGHT", L["AutoQuestIgnoreTip"], "info")
+		B.AddTooltip(frame, "ANCHOR_RIGHT", L["AutoQuestIgnoreTip"], "info", true)
 		B.CreateFS(frame, 14, IGNORED):SetTextColor(1, 0, 0)
 
 		self.__ignore = frame

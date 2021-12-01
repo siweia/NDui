@@ -1456,8 +1456,7 @@ local function CreateOption(i)
 				bu:SetScript("OnClick", data)
 			end
 			if tooltip then
-				cb.title = L["Tips"]
-				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info")
+				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info", true)
 			end
 		-- Editbox
 		elseif optType == 2 then
@@ -1479,10 +1478,9 @@ local function CreateOption(i)
 			eb:HookScript("OnEnterPressed", acceptEditbox)
 
 			B.CreateFS(eb, 14, name, "system", "CENTER", 0, 25)
-			eb.title = L["Tips"]
 			local tip = L["EditBox Tip"]
 			if tooltip then tip = tooltip.."|n"..tip end
-			B.AddTooltip(eb, "ANCHOR_RIGHT", tip, "info")
+			B.AddTooltip(eb, "ANCHOR_RIGHT", tip, "info", true)
 		-- Slider
 		elseif optType == 3 then
 			local min, max, step = unpack(data)
@@ -1503,8 +1501,7 @@ local function CreateOption(i)
 			s:SetScript("OnValueChanged", onSliderChanged)
 			s.value:SetText(B:Round(CheckUIOption(key, value), 2))
 			if tooltip then
-				s.title = L["Tips"]
-				B.AddTooltip(s, "ANCHOR_RIGHT", tooltip, "info")
+				B.AddTooltip(s, "ANCHOR_RIGHT", tooltip, "info", true)
 			end
 		-- Dropdown
 		elseif optType == 4 then
@@ -1539,8 +1536,7 @@ local function CreateOption(i)
 
 			B.CreateFS(dd, 14, name, "system", "CENTER", 0, 25)
 			if tooltip then
-				dd.title = L["Tips"]
-				B.AddTooltip(dd, "ANCHOR_RIGHT", tooltip, "info")
+				B.AddTooltip(dd, "ANCHOR_RIGHT", tooltip, "info", true)
 			end
 		-- Colorswatch
 		elseif optType == 5 then

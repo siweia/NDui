@@ -653,8 +653,7 @@ do
 		bu.Icon:SetTexture(616343)
 		bu:SetHighlightTexture(616343)
 		if tooltip then
-			bu.title = L["Tips"]
-			B.AddTooltip(bu, "ANCHOR_BOTTOMLEFT", tooltip, "info")
+			B.AddTooltip(bu, "ANCHOR_BOTTOMLEFT", tooltip, "info", true)
 		end
 
 		return bu
