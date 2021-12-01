@@ -184,7 +184,6 @@ G.DefaultSettings = {
 		UFTextScale = 1,
 		PartyAltPower = true,
 		PartyWatcherSync = true,
-		SmoothAmount = .3,
 		RaidTextScale = 1,
 		FrequentHealth = false,
 		HealthFrequency = .2,
@@ -498,6 +497,7 @@ G.AccountSettings = {
 	CornerSpells = {},
 	CustomTex = "",
 	MajorSpells = {},
+	SmoothAmount = .25,
 }
 
 -- Initial settings
@@ -825,7 +825,7 @@ local function updateRaidHealthMethod()
 end
 
 local function updateSmoothingAmount()
-	B:SetSmoothingAmount(C.db["UFs"]["SmoothAmount"])
+	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])
 end
 
 local function updateAllHeaders()
@@ -945,7 +945,7 @@ G.TabList = {
 	L["Skins"],
 	NewTag..L["Tooltip"],
 	NewTag..L["Misc"],
-	L["UI Settings"],
+	NewTag..L["UI Settings"],
 	L["Profile"],
 }
 
@@ -1300,8 +1300,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
-		{},--blank
-		{1, "ACCOUNT", "DisableInfobars", HeaderTag..L["DisableInfobars"]},
+		{1, "ACCOUNT", "DisableInfobars", "|cffff0000"..L["DisableInfobars"], true},
 		{3, "Misc", "MaxAddOns", L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
 		{3, "Misc", "InfoSize", L["InfobarFontSize"].."*", true,  {10, 50, 1}, updateInfobarSize},
 		{2, "Misc", "InfoStrLeft", L["LeftInfobar"].."*", nil, nil, updateInfobarAnchor, L["InfobarStrTip"]},
@@ -1313,7 +1312,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 		{2, "ACCOUNT", "CustomTex", L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
-		{3, "UFs", "SmoothAmount", L["SmoothAmount"].."*", true, {.15, .6, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
+		{3, "ACCOUNT", "SmoothAmount", NewTag..L["SmoothAmount"].."*", true, {.15, .6, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
 	},
 	[15] = {
 	},
