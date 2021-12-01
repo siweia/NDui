@@ -1069,8 +1069,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "NameOnlyMode", L["NameOnlyMode"].."*", true, nil, nil, L["NameOnlyModeTip"]},
 		{},--blank
 		{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
-		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates},
-		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", nil, nil, refreshNameplates},
+		{1, "Nameplate", "Desaturate", NewTag..L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
+		{1, "Nameplate", "DebuffColor", NewTag..L["DebuffColor"].."*", nil, nil, refreshNameplates, L["DebuffColorTip"]},
 		{4, "Nameplate", "AuraFilter", L["NameplateAuraFilter"].."*", true, {L["BlackNWhite"], L["PlayerOnly"], L["IncludeCrowdControl"]}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 40, 1}, refreshNameplates},
