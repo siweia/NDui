@@ -741,7 +741,7 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 	local fontSize = element.fontSize or element.size*.6
 	button.count:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
-	if C.db["UFs"]["Desaturate"] and button.isDebuff and filteredStyle[style] and not button.isPlayer then
+	if element.desaturateDebuff and button.isDebuff and filteredStyle[style] and not button.isPlayer then
 		button.icon:SetDesaturated(true)
 	else
 		button.icon:SetDesaturated(false)
@@ -894,6 +894,8 @@ function UF:ConfigureAuras(element)
 	element.numBuffs = C.db["UFs"][value.."BuffType"] ~= 1 and 20 or 0
 	element.numDebuffs = C.db["UFs"][value.."DebuffType"] ~= 1 and 16 or 0
 	element.iconsPerRow = C.db["UFs"][value.."AurasPerRow"]
+	element.showDebuffType = C.db["UFs"]["DebuffColor"]
+	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
 end
 
 function UF:RefreshUFAuras(frame)
@@ -944,7 +946,6 @@ function UF:CreateAuras(self)
 	bu["growth-y"] = "DOWN"
 	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
-	bu.showDebuffType = true
 	if mystyle == "player" then
 		bu.initialAnchor = "TOPRIGHT"
 		bu["growth-x"] = "LEFT"
@@ -992,7 +993,8 @@ function UF:CreateAuras(self)
 		end
 		bu.numTotal = C.db["Nameplate"]["maxAuras"]
 		bu.size = C.db["Nameplate"]["AuraSize"]
-		bu.showDebuffType = C.db["Nameplate"]["ColorBorder"]
+		bu.showDebuffType = C.db["Nameplate"]["DebuffColor"]
+		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 		bu.gap = false
 		bu.disableMouse = true
 		bu.CustomFilter = UF.CustomFilter

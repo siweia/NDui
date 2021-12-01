@@ -455,10 +455,11 @@ do
 		end
 		GameTooltip:Show()
 	end
-	function B:AddTooltip(anchor, text, color)
+	function B:AddTooltip(anchor, text, color, showTips)
 		self.anchor = anchor
 		self.text = text
 		self.color = color
+		if showTips then self.title = L["Tips"] end
 		self:SetScript("OnEnter", Tooltip_OnEnter)
 		self:SetScript("OnLeave", B.HideTooltip)
 	end

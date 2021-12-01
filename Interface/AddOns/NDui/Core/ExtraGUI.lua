@@ -1135,7 +1135,7 @@ local function toggleOptionCheck(self)
 	if self.__callback then self:__callback() end
 end
 
-local function createOptionCheck(parent, offset, text, key, value, callback)
+local function createOptionCheck(parent, offset, text, key, value, callback, tooltip)
 	local box = B.CreateCheckBox(parent)
 	box:SetPoint("TOPLEFT", 10, offset)
 	box:SetChecked(C.db[key][value])
@@ -1144,6 +1144,9 @@ local function createOptionCheck(parent, offset, text, key, value, callback)
 	box.__callback = callback
 	B.CreateFS(box, 14, text, false, "LEFT", 30, 0)
 	box:SetScript("OnClick", toggleOptionCheck)
+	if tooltip then
+		B.AddTooltip(box, "ANCHOR_RIGHT", tooltip, "info", true)
+	end
 
 	return box
 end
@@ -1402,10 +1405,12 @@ function G:SetupUFAuras(parent)
 		createOptionSlider(parent, L["IconsPerRow"], 5, 20, default[3], offset-180, value.."AurasPerRow", func)
 	end
 
-	createOptionGroup(parent, L["PlayerUF"], offset, "Player", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["TargetUF"], offset-240, "Target", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["TotUF"], offset-480, "ToT", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["FocusUF"], offset-720, "Focus", UF.UpdateUFAuras)
+	createOptionCheck(parent, offset, L["DesaturateIcon"], "UFs", "Desaturate", UF.UpdateUFAuras, L["DesaturateIconTip"])
+	createOptionCheck(parent, offset-35, L["DebuffColor"], "UFs", "DebuffColor", UF.UpdateUFAuras, L["DebuffColorTip"])
+	createOptionGroup(parent, L["PlayerUF"], offset-70, "Player", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["TargetUF"], offset-310, "Target", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["TotUF"], offset-550, "ToT", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["FocusUF"], offset-790, "Focus", UF.UpdateUFAuras)
 end
 
 function G:SetupActionbarStyle(parent)

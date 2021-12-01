@@ -758,7 +758,8 @@ function UF:UpdateNameplateAuras()
 	end
 	element.numTotal = C.db["Nameplate"]["maxAuras"]
 	element.size = C.db["Nameplate"]["AuraSize"]
-	element.showDebuffType = C.db["Nameplate"]["ColorBorder"]
+	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
+	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 	element:SetWidth(self:GetWidth())
 	element:SetHeight((element.size + element.spacing) * 2)
 	element:ForceUpdate()
