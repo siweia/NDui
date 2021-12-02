@@ -859,3 +859,125 @@ function M:QuickMenuButton()
 		frame:Show()
 	end)
 end
+
+-- Temp fix for group leader rating
+do
+	hooksecurefunc("LFGListUtil_SetSearchEntryTooltip", function(tooltip, resultID, autoAcceptOption)
+		local searchResultInfo = C_LFGList.GetSearchResultInfo(resultID);
+		local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode);
+
+		local memberCounts = C_LFGList.GetSearchResultMemberCounts(resultID);
+		tooltip:SetText(searchResultInfo.name, 1, 1, 1, true);
+		tooltip:AddLine(activityInfo.fullName); -- MOD from activityName
+
+		if (searchResultInfo.playstyle > 0) then
+			local playstyleString = C_LFGList.GetPlaystyleString(searchResultInfo.playstyle, activityInfo);
+			GameTooltip_AddColoredLine(tooltip, playstyleString, GREEN_FONT_COLOR);
+		end
+		if ( searchResultInfo.comment and searchResultInfo.comment == "" and searchResultInfo.questID ) then
+			searchResultInfo.comment = LFGListUtil_GetQuestDescription(searchResultInfo.questID);
+		end
+		if ( searchResultInfo.comment ~= "" ) then
+			tooltip:AddLine(string.format(LFG_LIST_COMMENT_FORMAT, searchResultInfo.comment), LFG_LIST_COMMENT_FONT_COLOR.r, LFG_LIST_COMMENT_FONT_COLOR.g, LFG_LIST_COMMENT_FONT_COLOR.b, true);
+		end
+		tooltip:AddLine(" ");
+		if ( searchResultInfo.requiredDungeonScore > 0 ) then
+			tooltip:AddLine(GROUP_FINDER_MYTHIC_RATING_REQ_TOOLTIP:format(searchResultInfo.requiredDungeonScore));
+		end
+		if ( searchResultInfo.requiredPvpRating > 0 ) then
+			tooltip:AddLine(GROUP_FINDER_PVP_RATING_REQ_TOOLTIP:format(searchResultInfo.requiredPvpRating));
+		end
+		if ( searchResultInfo.requiredItemLevel > 0 ) then
+			if(activityInfo.isPvpActivity) then
+				tooltip:AddLine(LFG_LIST_TOOLTIP_ILVL_PVP:format(searchResultInfo.requiredItemLevel));
+			else
+				tooltip:AddLine(LFG_LIST_TOOLTIP_ILVL:format(searchResultInfo.requiredItemLevel));
+			end
+		end
+		if ( activityInfo.useHonorLevel and searchResultInfo.requiredHonorLevel > 0 ) then
+			tooltip:AddLine(LFG_LIST_TOOLTIP_HONOR_LEVEL:format(searchResultInfo.requiredHonorLevel));
+		end
+		if ( searchResultInfo.voiceChat ~= "" ) then
+			tooltip:AddLine(string.format(LFG_LIST_TOOLTIP_VOICE_CHAT, searchResultInfo.voiceChat), nil, nil, nil, true);
+		end
+		if ( searchResultInfo.requiredItemLevel > 0 or (activityInfo.useHonorLevel and searchResultInfo.requiredHonorLevel > 0) or searchResultInfo.voiceChat ~= "" or  searchResultInfo.requiredDungeonScore > 0 or searchResultInfo.requiredPvpRating > 0 ) then
+			tooltip:AddLine(" ");
+		end
+
+		if ( searchResultInfo.leaderName ) then
+			tooltip:AddLine(string.format(LFG_LIST_TOOLTIP_LEADER, searchResultInfo.leaderName));
+		end
+
+		if( activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo) then
+			GameTooltip_AddNormalLine(tooltip, PVP_RATING_GROUP_FINDER:format(searchResultInfo.leaderPvpRatingInfo.activityName, searchResultInfo.leaderPvpRatingInfo.rating, PVPUtil.GetTierName(searchResultInfo.leaderPvpRatingInfo.tier)));
+		elseif ( activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore) then -- MOD from isMythicPlusActivity
+			local color = C_ChallengeMode.GetDungeonScoreRarityColor(searchResultInfo.leaderOverallDungeonScore);
+			if(not color) then
+				color = HIGHLIGHT_FONT_COLOR;
+			end
+			GameTooltip_AddNormalLine(tooltip, DUNGEON_SCORE_LEADER:format(color:WrapTextInColorCode(searchResultInfo.leaderOverallDungeonScore)));
+		end
+
+		if(activityInfo.isMythicPlusActivity and searchResultInfo.leaderDungeonScoreInfo) then
+			local leaderDungeonScoreInfo = searchResultInfo.leaderDungeonScoreInfo;
+			local color = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor(leaderDungeonScoreInfo.mapScore);
+			if (not color) then
+				color = HIGHLIGHT_FONT_COLOR;
+			end
+			if(leaderDungeonScoreInfo.mapScore == 0) then
+				GameTooltip_AddNormalLine(tooltip, DUNGEON_SCORE_PER_DUNGEON_NO_RATING:format(leaderDungeonScoreInfo.mapName, leaderDungeonScoreInfo.mapScore));
+			elseif (leaderDungeonScoreInfo.finishedSuccess) then
+				GameTooltip_AddNormalLine(tooltip, DUNGEON_SCORE_DUNGEON_RATING:format(leaderDungeonScoreInfo.mapName, color:WrapTextInColorCode(leaderDungeonScoreInfo.mapScore), leaderDungeonScoreInfo.bestRunLevel));
+			else
+				GameTooltip_AddNormalLine(tooltip, DUNGEON_SCORE_DUNGEON_RATING_OVERTIME:format(leaderDungeonScoreInfo.mapName, color:WrapTextInColorCode(leaderDungeonScoreInfo.mapScore), leaderDungeonScoreInfo.bestRunLevel));
+			end
+		end
+		if ( searchResultInfo.age > 0 ) then
+			tooltip:AddLine(string.format(LFG_LIST_TOOLTIP_AGE, SecondsToTime(searchResultInfo.age, false, false, 1, false)));
+		end
+
+		if ( searchResultInfo.leaderName or searchResultInfo.age > 0 ) then
+			tooltip:AddLine(" ");
+		end
+
+		if ( activityInfo.displayType == LE_LFG_LIST_DISPLAY_TYPE_CLASS_ENUMERATE ) then
+			tooltip:AddLine(string.format(LFG_LIST_TOOLTIP_MEMBERS_SIMPLE, searchResultInfo.numMembers));
+			for i=1, searchResultInfo.numMembers do
+				local role, class, classLocalized = C_LFGList.GetSearchResultMemberInfo(resultID, i);
+				local classColor = RAID_CLASS_COLORS[class] or NORMAL_FONT_COLOR;
+				tooltip:AddLine(string.format(LFG_LIST_TOOLTIP_CLASS_ROLE, classLocalized, _G[role]), classColor.r, classColor.g, classColor.b);
+			end
+		else
+			tooltip:AddLine(string.format(LFG_LIST_TOOLTIP_MEMBERS, searchResultInfo.numMembers, memberCounts.TANK, memberCounts.HEALER, memberCounts.DAMAGER));
+		end
+
+		if ( searchResultInfo.numBNetFriends + searchResultInfo.numCharFriends + searchResultInfo.numGuildMates > 0 ) then
+			tooltip:AddLine(" ");
+			tooltip:AddLine(LFG_LIST_TOOLTIP_FRIENDS_IN_GROUP);
+			tooltip:AddLine(LFGListSearchEntryUtil_GetFriendList(resultID), 1, 1, 1, true);
+		end
+
+		local completedEncounters = C_LFGList.GetSearchResultEncounterInfo(resultID);
+		if ( completedEncounters and #completedEncounters > 0 ) then
+			tooltip:AddLine(" ");
+			tooltip:AddLine(LFG_LIST_BOSSES_DEFEATED);
+			for i=1, #completedEncounters do
+				tooltip:AddLine(completedEncounters[i], RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b);
+			end
+		end
+
+		autoAcceptOption = autoAcceptOption or LFG_LIST_UTIL_ALLOW_AUTO_ACCEPT_LINE;
+
+		if autoAcceptOption == LFG_LIST_UTIL_ALLOW_AUTO_ACCEPT_LINE and searchResultInfo.autoAccept then
+			tooltip:AddLine(" ");
+			tooltip:AddLine(LFG_LIST_TOOLTIP_AUTO_ACCEPT, LIGHTBLUE_FONT_COLOR:GetRGB());
+		end
+
+		if ( searchResultInfo.isDelisted ) then
+			tooltip:AddLine(" ");
+			tooltip:AddLine(LFG_LIST_ENTRY_DELISTED, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b, true);
+		end
+
+		tooltip:Show();
+	end)
+end
