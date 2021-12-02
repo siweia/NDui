@@ -252,7 +252,7 @@ function UF:CreateHealthText(self)
 		self:Tag(hpval, "[raidhp]")
 		if self.isPartyPet then
 			hpval:SetPoint("RIGHT", -3, -1)
-			self:Tag(hpval, "[VariousHP(percent)]")
+			self:Tag(hpval, "[VariousHP(current)]")
 		elseif C.db["UFs"]["SimpleMode"] and not self.isPartyFrame then
 			hpval:SetPoint("RIGHT", -4, 0)
 		else
