@@ -141,6 +141,8 @@ function BagButton:OnLeave()
 end
 
 function BagButton:OnClick(btn)
+	if InCombatLockdown() then UIErrorsFrame:AddMessage("|cff99ccff"..ERR_NOT_IN_COMBAT) return end -- PutItemInBag is secure in combat
+
 	if(self.notBought) then
 		BankFrame.nextSlotCost = GetBankSlotCost(GetNumBankSlots())
 		return StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
