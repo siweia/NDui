@@ -388,8 +388,8 @@ function UF:OnLogin()
 			"point", horizonParty and "LEFT" or "BOTTOM",
 			"columnAnchorPoint", "LEFT",
 			"oUF-initialConfigFunction", ([[
-			self:SetWidth(%d)
-			self:SetHeight(%d)
+				self:SetWidth(%d)
+				self:SetHeight(%d)
 			]]):format(partyWidth, partyFrameHeight))
 
 			party.groupType = "party"
@@ -418,9 +418,9 @@ function UF:OnLogin()
 				"point", horizonParty and "LEFT" or "BOTTOM",
 				"columnAnchorPoint", "LEFT",
 				"oUF-initialConfigFunction", ([[
-				self:SetWidth(%d)
-				self:SetHeight(%d)
-				self:SetAttribute("unitsuffix", "pet")
+					self:SetWidth(%d)
+					self:SetHeight(%d)
+					self:SetAttribute("unitsuffix", "pet")
 				]]):format(petWidth, petFrameHeight))
 
 				partyPet.groupType = "party"
@@ -457,8 +457,8 @@ function UF:OnLogin()
 				"point", "TOP",
 				"columnAnchorPoint", "LEFT",
 				"oUF-initialConfigFunction", ([[
-				self:SetWidth(%d)
-				self:SetHeight(%d)
+					self:SetWidth(%d)
+					self:SetHeight(%d)
 				]]):format(100*scale, 20*scale))
 				return group
 			end
@@ -518,8 +518,8 @@ function UF:OnLogin()
 				"point", horizonRaid and "LEFT" or "TOP",
 				"columnAnchorPoint", "LEFT",
 				"oUF-initialConfigFunction", ([[
-				self:SetWidth(%d)
-				self:SetHeight(%d)
+					self:SetWidth(%d)
+					self:SetHeight(%d)
 				]]):format(raidWidth, raidFrameHeight))
 				return group
 			end
