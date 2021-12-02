@@ -109,11 +109,11 @@ end
 
 function Bar:ExportActionbarStyle()
 	local styleStr = "NAB"
-	for index, value in ipairs(optionValues) do
+	for _, value in ipairs(optionValues) do
 		styleStr = styleStr..":"..C.db["Actionbar"][value]
 	end
 
-	for index, mover in ipairs(Bar.movers) do
+	for _, mover in ipairs(Bar.movers) do
 		local x, y, point = M:CalculateMoverPoints(mover)
 		styleStr = styleStr..":"..x..anchorToAbbr[point]..y
 	end

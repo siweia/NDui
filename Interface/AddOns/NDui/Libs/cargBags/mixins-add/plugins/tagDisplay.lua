@@ -155,7 +155,7 @@ local function createAtlasCoin(coin)
 	return str
 end
 
-tagPool["money"] = function(self)
+tagPool["money"] = function()
 	local money = GetMoney() or 0
 	local str = ""
 	local gold, silver, copper = floor(money/1e4), floor(money/100) % 100, money % 100
