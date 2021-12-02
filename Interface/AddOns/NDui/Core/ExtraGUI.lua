@@ -802,7 +802,7 @@ function G:SetupBuffIndicator(parent)
 end
 
 local function createOptionTitle(parent, title, offset)
-	B.CreateFS(parent, 14, title, nil, "TOP", 0, offset)
+	B.CreateFS(parent, 14, title, "system", "TOP", 0, offset)
 	local line = B.SetGradient(parent, "H", 1, 1, 1, .25, .25, 200, C.mult)
 	line:SetPoint("TOPLEFT", 30, offset-20)
 end
@@ -1027,7 +1027,6 @@ end
 local function createOptionSwatch(parent, name, value, x, y)
 	local swatch = B.CreateColorSwatch(parent, name, value)
 	swatch:SetPoint("TOPLEFT", x, y)
-	swatch.text:SetTextColor(1, .8, 0)
 end
 
 function G:SetupCastbar(parent)
@@ -1137,7 +1136,7 @@ local function createOptionCheck(parent, offset, text, key, value, callback, too
 	box.__key = key
 	box.__value = value
 	box.__callback = callback
-	B.CreateFS(box, 14, text, "system", "LEFT", 30, 0)
+	B.CreateFS(box, 14, text, nil, "LEFT", 30, 0)
 	box:SetScript("OnClick", toggleOptionCheck)
 	if tooltip then
 		B.AddTooltip(box, "ANCHOR_RIGHT", tooltip, "info", true)
