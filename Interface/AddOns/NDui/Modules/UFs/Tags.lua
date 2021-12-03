@@ -167,13 +167,15 @@ oUF.Tags.Events["fulllevel"] = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_C
 
 -- RaidFrame tags
 oUF.Tags.Methods["raidhp"] = function(unit)
-	local healthType
-	if C.db["UFs"]["RaidHPMode"] == 2 then
+	local healthMode, healthType = C.db["UFs"]["RaidHPMode"]
+	if healthMode == 2 then
 		healthType = "percent"
-	elseif C.db["UFs"]["RaidHPMode"] == 3 then
+	elseif healthMode == 3 then
 		healthType = "current"
-	elseif C.db["UFs"]["RaidHPMode"] == 4 then
+	elseif healthMode == 4 then
 		healthType = "loss"
+	elseif healthMode == 5 then
+		healthType = "losspercent"
 	end
 	return oUF.Tags.Methods["VariousHP"](unit, _, healthType)
 end

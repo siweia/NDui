@@ -203,7 +203,7 @@ function UF:UpdateFrameNameTag()
 	elseif mystyle == "arena" then
 		self:Tag(name, "[arenaspec] "..colorTag.."[name]")
 	elseif self.isSimpleMode and C.db["UFs"]["ShowTeamIndex"] then
-		self:Tag(name, "[group]."..colorTag.."[name]")
+		self:Tag(name, "[group] "..colorTag.."[name]")
 	else
 		self:Tag(name, colorTag.."[name]")
 	end

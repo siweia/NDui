@@ -606,6 +606,10 @@ local function setupRaidFrame()
 	G:SetupRaidFrame(guiPage[4])
 end
 
+local function setupSimpleRaidFrame()
+	G:SetupSimpleRaidFrame(guiPage[4])
+end
+
 local function setupRaidDebuffs()
 	G:SetupRaidDebuffs(guiPage[4])
 end
@@ -821,13 +825,6 @@ local function refreshRaidFrameIcons()
 	B:GetModule("UnitFrames"):RefreshRaidFrameIcons()
 end
 
-local function updateSimpleModeGroupBy()
-	local UF = B:GetModule("UnitFrames")
-	if UF.UpdateSimpleModeHeader then
-		UF:UpdateSimpleModeHeader()
-	end
-end
-
 local function updateRaidAuras()
 	B:GetModule("UnitFrames"):UpdateRaidAuras()
 end
@@ -947,7 +944,7 @@ G.TabList = {
 	L["Actionbar"],
 	L["Bags"],
 	NewTag..L["Unitframes"],
-	L["RaidFrame"],
+	NewTag..L["RaidFrame"],
 	NewTag..L["Nameplate"],
 	NewTag..L["PlayerPlate"],
 	L["Auras"],
@@ -1031,14 +1028,15 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
+		{1, "UFs", "SimpleMode", NewTag..L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
 		{},--blank
 		{1, "UFs", "PartyFrame", HeaderTag..L["UFs PartyFrame"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["UFs PartyPetFrame"], true},
 		{1, "UFs", "HorizonParty", L["Horizon PartyFrame"]},
 		{1, "UFs", "PartyAltPower", L["UFs PartyAltPower"], true, nil, nil, L["PartyAltPowerTip"]},
 		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},
-		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"], true},
-		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], nil, nil, nil, L["PartyWatcherSyncTip"]},
+		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"]},
+		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], true, nil, nil, L["PartyWatcherSyncTip"]},
 		{},--blank
 		{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, nil, updateRaidAuras, L["ShowRaidDebuffTip"]},
 		{1, "UFs", "ShowRaidBuff", L["ShowRaidBuff"].."*", true, nil, updateRaidAuras, L["ShowRaidBuffTip"]},
@@ -1067,13 +1065,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"]},
 		{1, "UFs", "RCCName", NewTag..L["ClassColor Name"].."*", true, nil, updateUFTextScale},
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateRaidTextScale},
-		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"]}, updateRaidNameText},
+		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidNameText},
 		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 1}},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
-		{},--blank
-		{1, "UFs", "SimpleMode", HeaderTag..L["SimpleRaidFrame"], nil, nil, nil, L["SimpleRaidFrameTip"]},
-		{3, "UFs", "SMUnitsPerColumn", L["SimpleMode Column"], nil, {10, 40, 1}},
-		{4, "UFs", "SMGroupByIndex", L["SimpleMode GroupBy"].."*", true, {GROUP, CLASS, ROLE}, updateSimpleModeGroupBy},
 		{nil, true},-- FIXME: dirty fix for now
 		{nil, true},
 	},

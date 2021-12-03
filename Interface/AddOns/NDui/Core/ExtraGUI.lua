@@ -811,7 +811,7 @@ local function sliderValueChanged(self, v)
 	local current = tonumber(format("%.0f", v))
 	self.value:SetText(current)
 	C.db[self.__key][self.__value] = current
-	self.__update()
+	if self.__update then self.__update() end
 end
 
 local function createOptionSlider(parent, title, minV, maxV, defaultV, yOffset, value, func, key)
@@ -986,24 +986,12 @@ function G:SetupRaidFrame(parent)
 
 	local function resizeRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.mystyle == "raid" and not frame.isPartyFrame and not frame.isPartyPet then
-				if frame.isSimpleMode then
-					local scale = C.db["UFs"]["SimpleRaidScale"]/10
-					local frameWidth = 100*scale
-					local frameHeight = 20*scale
-					local powerHeight = 2*scale
-					local healthHeight = frameHeight - powerHeight
-					frame:SetSize(frameWidth, frameHeight)
-					frame.Health:SetHeight(healthHeight)
-					frame.Power:SetHeight(powerHeight)
-				else
-					SetUnitFrameSize(frame, "Raid")
-				end
+			if frame.mystyle == "raid" and not frame.isPartyFrame and not frame.isPartyPet and not frame.isSimpleMode then
+				SetUnitFrameSize(frame, "Raid")
 			end
 		end
 	end
 	createOptionGroup(scroll.child, L["RaidFrame"], -10, "Raid", resizeRaidFrame)
-	createOptionSlider(scroll.child, "|cff00cc4c"..L["SimpleMode Scale"], 8, 15, 10, -280, "SimpleRaidScale", resizeRaidFrame)
 
 	local function resizePartyFrame()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -1012,7 +1000,7 @@ function G:SetupRaidFrame(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["PartyFrame"], -370, "Party", resizePartyFrame)
+	createOptionGroup(scroll.child, L["PartyFrame"], -300, "Party", resizePartyFrame)
 
 	local function resizePartyPetFrame()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -1021,7 +1009,41 @@ function G:SetupRaidFrame(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["PartyPetFrame"], -660, "PartyPet", resizePartyPetFrame)
+	createOptionGroup(scroll.child, L["PartyPetFrame"], -590, "PartyPet", resizePartyPetFrame)
+end
+
+function G:SetupSimpleRaidFrame(parent)
+	local guiName = "NDuiGUI_SimpleRaidFrameSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["SimpleRaidFrame"])
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local UF = B:GetModule("UnitFrames")
+
+	local function updateSimpleModeGroupBy()
+		if UF.UpdateSimpleModeHeader then
+			UF:UpdateSimpleModeHeader()
+		end
+	end
+	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"].."*", -30, {GROUP, CLASS, ROLE}, nil, "UFs", "SMGroupByIndex", 1, updateSimpleModeGroupBy)
+
+	local function resizeSimpleRaidFrame()
+		for _, frame in pairs(ns.oUF.objects) do
+			if frame.isSimpleMode then
+				local scale = C.db["UFs"]["SimpleRaidScale"]/10
+				local frameWidth = 100*scale
+				local frameHeight = 20*scale
+				local powerHeight = 2*scale
+				local healthHeight = frameHeight - powerHeight
+				frame:SetSize(frameWidth, frameHeight)
+				frame.Health:SetHeight(healthHeight)
+				frame.Power:SetHeight(powerHeight)
+			end
+		end
+	end
+	createOptionSlider(scroll.child, L["SimpleMode Scale"].."*", 8, 15, 10, -100, "SimpleRaidScale", resizeSimpleRaidFrame)
+	createOptionSlider(scroll.child, L["SimpleMode Column"], 10, 40, 20, -180, "SMUnitsPerColumn")
 end
 
 local function createOptionSwatch(parent, name, value, x, y)
