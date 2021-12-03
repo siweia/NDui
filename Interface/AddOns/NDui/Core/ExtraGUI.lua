@@ -934,7 +934,7 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFramePowerTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["FocusUF"], -450, "Focus", updateFocusSize)
+	createOptionGroup(scroll.child, L["FocusUF"], -480, "Focus", updateFocusSize)
 
 	local subFrames = {_G.oUF_Pet, _G.oUF_ToT, _G.oUF_FocusTarget}
 	local function updatePetSize()
@@ -943,7 +943,7 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFrameHealthTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["Pet&*Target"], -890, "Pet", updatePetSize)
+	createOptionGroup(scroll.child, L["Pet&*Target"], -950, "Pet", updatePetSize)
 
 	local function updateBossSize()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -954,7 +954,7 @@ function G:SetupUnitFrame(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["Boss&Arena"], -1200, "Boss", updateBossSize)
+	createOptionGroup(scroll.child, L["Boss&Arena"], -1290, "Boss", updateBossSize)
 end
 
 function G:SetupRaidFrame(parent)
@@ -1012,7 +1012,7 @@ function G:SetupRaidFrame(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["PartyFrame"], -340, "Party", resizePartyFrame)
+	createOptionGroup(scroll.child, L["PartyFrame"], -370, "Party", resizePartyFrame)
 
 	local function resizePartyPetFrame()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -1021,7 +1021,7 @@ function G:SetupRaidFrame(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["PartyPetFrame"], -600, "PartyPet", resizePartyPetFrame)
+	createOptionGroup(scroll.child, L["PartyPetFrame"], -660, "PartyPet", resizePartyPetFrame)
 end
 
 local function createOptionSwatch(parent, name, value, x, y)
@@ -1292,7 +1292,7 @@ function G:SetupNameplateSize(parent)
 
 	local UF = B:GetModule("UnitFrames")
 	createOptionGroup(scroll.child, L["HostileNameplate"], -10, "enemy", UF.RefreshAllPlates)
-	createOptionGroup(scroll.child, L["FriendlyNameplate"], -630, "friend", UF.RefreshAllPlates)
+	createOptionGroup(scroll.child, L["FriendlyNameplate"], -650, "friend", UF.RefreshAllPlates)
 end
 
 function G:SetupActionBar(parent)
@@ -1327,14 +1327,14 @@ function G:SetupActionBar(parent)
 	end
 
 	createOptionGroup(scroll.child, L["Actionbar"].."1", -10, "Bar1")
-	createOptionGroup(scroll.child, L["Actionbar"].."2", -340, "Bar2")
-	createOptionGroup(scroll.child, L["Actionbar"].."3", -670, "Bar3", "|cffff0000")
-	createOptionGroup(scroll.child, L["Actionbar"].."4", -1000, "Bar4")
-	createOptionGroup(scroll.child, L["Actionbar"].."5", -1330, "Bar5")
-	createOptionGroup(scroll.child, L["Pet Actionbar"], -1660, "BarPet")
+	createOptionGroup(scroll.child, L["Actionbar"].."2", -370, "Bar2")
+	createOptionGroup(scroll.child, L["Actionbar"].."3", -730, "Bar3", "|cffff0000")
+	createOptionGroup(scroll.child, L["Actionbar"].."4", -1090, "Bar4")
+	createOptionGroup(scroll.child, L["Actionbar"].."5", -1450, "Bar5")
+	createOptionGroup(scroll.child, L["Pet Actionbar"], -1810, "BarPet")
 
-	createOptionTitle(scroll.child, L["LeaveVehicle"], -1990)
-	createOptionSlider(scroll.child, L["ButtonSize"], 20, 80, 34, -2050, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
+	createOptionTitle(scroll.child, L["LeaveVehicle"], -2170)
+	createOptionSlider(scroll.child, L["ButtonSize"], 20, 80, 34, -2230, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
 end
 
 function G:SetupStanceBar(parent)
