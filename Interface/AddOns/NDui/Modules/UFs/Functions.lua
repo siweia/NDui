@@ -118,7 +118,7 @@ function UF:CreateHealthBar(self)
 			healthHeight = C.db["UFs"]["PartyHeight"]
 		elseif self.isPartyPet then
 			healthHeight = C.db["UFs"]["PartyPetHeight"]
-		elseif C.db["UFs"]["SimpleMode"] then
+		elseif self.isSimpleMode then
 			local scale = C.db["UFs"]["SimpleRaidScale"]/10
 			healthHeight = 20*scale - 2*scale - C.mult
 		else
@@ -202,7 +202,7 @@ function UF:UpdateFrameNameTag()
 		self:Tag(name, colorTag.."[name][afkdnd]")
 	elseif mystyle == "arena" then
 		self:Tag(name, "[arenaspec] "..colorTag.."[name]")
-	elseif mystyle == "raid" and C.db["UFs"]["SimpleMode"] and C.db["UFs"]["ShowTeamIndex"] and not self.isPartyPet and not self.isPartyFrame then
+	elseif self.isSimpleMode and C.db["UFs"]["ShowTeamIndex"] then
 		self:Tag(name, "[group]."..colorTag.."[name]")
 	else
 		self:Tag(name, colorTag.."[name]")
@@ -224,7 +224,7 @@ function UF:CreateHealthText(self)
 		if self.isPartyPet then
 			name:SetWidth(self:GetWidth()*.55)
 			name:SetPoint("LEFT", 3, -1)
-		elseif C.db["UFs"]["SimpleMode"] and not self.isPartyFrame then
+		elseif self.isSimpleMode then
 			name:SetPoint("LEFT", 4, 0)
 		else
 			name:SetJustifyH("CENTER")
@@ -253,7 +253,7 @@ function UF:CreateHealthText(self)
 		if self.isPartyPet then
 			hpval:SetPoint("RIGHT", -3, -1)
 			self:Tag(hpval, "[VariousHP(current)]")
-		elseif C.db["UFs"]["SimpleMode"] and not self.isPartyFrame then
+		elseif self.isSimpleMode then
 			hpval:SetPoint("RIGHT", -4, 0)
 		else
 			hpval:ClearAllPoints()
@@ -274,7 +274,7 @@ function UF:UpdateRaidNameText()
 		if frame.mystyle == "raid" and not frame.isPartyPet then
 			local name = frame.nameText
 			name:ClearAllPoints()
-			if C.db["UFs"]["SimpleMode"] and not frame.isPartyFrame then
+			if frame.isSimpleMode then
 				name:SetPoint("LEFT", 4, 0)
 			else
 				name:SetJustifyH("CENTER")
@@ -341,7 +341,7 @@ function UF:CreatePowerBar(self)
 			powerHeight = C.db["UFs"]["PartyPowerHeight"]
 		elseif self.isPartyPet then
 			powerHeight = C.db["UFs"]["PartyPetPowerHeight"]
-		elseif C.db["UFs"]["SimpleMode"] then
+		elseif self.isSimpleMode then
 			powerHeight = 2*C.db["UFs"]["SimpleRaidScale"]/10
 		else
 			powerHeight = C.db["UFs"]["RaidPowerHeight"]
@@ -1036,7 +1036,7 @@ function UF:CreateBuffs(self)
 		bu["growth-x"] = "LEFT"
 		bu:ClearAllPoints()
 		bu:SetPoint("BOTTOMRIGHT", self.Health, -C.mult, C.mult)
-		bu.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
+		bu.num = (self.isSimpleMode or not C.db["UFs"]["ShowRaidBuff"]) and 0 or 3
 		bu.size = C.db["UFs"]["RaidBuffSize"]
 		bu.CustomFilter = UF.RaidBuffFilter
 		bu.disableMouse = true
@@ -1073,7 +1073,7 @@ function UF:CreateDebuffs(self)
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-x"] = "RIGHT"
 		bu:SetPoint("BOTTOMLEFT", self.Health, C.mult, C.mult)
-		bu.num = ((C.db["UFs"]["SimpleMode"] and not self.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
+		bu.num = (self.isSimpleMode or not C.db["UFs"]["ShowRaidDebuff"]) and 0 or 3
 		bu.size = C.db["UFs"]["RaidDebuffSize"]
 		bu.CustomFilter = UF.RaidDebuffFilter
 		bu.disableMouse = true
@@ -1092,7 +1092,7 @@ function UF:UpdateRaidAuras()
 		if frame.mystyle == "raid" then
 			local debuffs = frame.Debuffs
 			if debuffs then
-				debuffs.num = ((C.db["UFs"]["SimpleMode"] and not frame.isPartyFrame) or (not C.db["UFs"]["ShowRaidDebuff"])) and 0 or 3
+				debuffs.num = (frame.isSimpleMode or not C.db["UFs"]["ShowRaidDebuff"]) and 0 or 3
 				debuffs.size = C.db["UFs"]["RaidDebuffSize"]
 				debuffs.fontSize = C.db["UFs"]["RaidDebuffSize"]-2
 				UF:UpdateAuraContainer(frame, debuffs, debuffs.num)
@@ -1101,7 +1101,7 @@ function UF:UpdateRaidAuras()
 
 			local buffs = frame.Buffs
 			if buffs then
-				buffs.num = ((C.db["UFs"]["SimpleMode"] and not frame.isPartyFrame) or (not C.db["UFs"]["ShowRaidBuff"])) and 0 or 3
+				buffs.num = (frame.isSimpleMode or not C.db["UFs"]["ShowRaidBuff"]) and 0 or 3
 				buffs.size = C.db["UFs"]["RaidBuffSize"]
 				buffs.fontSize = C.db["UFs"]["RaidBuffSize"]-2
 				UF:UpdateAuraContainer(frame, buffs, buffs.num)

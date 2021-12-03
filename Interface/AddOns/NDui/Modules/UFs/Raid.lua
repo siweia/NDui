@@ -459,7 +459,7 @@ end
 
 function UF:CreateBuffIndicator(self)
 	if not C.db["UFs"]["RaidBuffIndicator"] then return end
-	if C.db["UFs"]["SimpleMode"] and not self.isPartyFrame then return end
+	if self.isSimpleMode then return end
 
 	local anchors = {"TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT"}
 	local buttons = {}
