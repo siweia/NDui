@@ -1161,7 +1161,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Auras", "BuffSize", L["BuffSize"].."*", nil, {24, 50, 1}, updateBuffFrame},
 		{3, "Auras", "DebuffSize", L["DebuffSize"].."*", true, {24, 50, 1}, updateDebuffFrame},
 		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"].."*", nil, {10, 20, 1}, updateBuffFrame},
-		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"].."*", true, {10, 16, 1}, updateDebuffFrame},
+		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"].."*", true, {10, 20, 1}, updateDebuffFrame},
 	},
 	[8] = {
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},
