@@ -1320,7 +1320,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 		{2, "ACCOUNT", "CustomTex", L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
-		{3, "ACCOUNT", "SmoothAmount", NewTag..L["SmoothAmount"].."*", true, {.15, .6, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
+		{3, "ACCOUNT", "SmoothAmount", NewTag..L["SmoothAmount"].."*", true, {.15, .6, .01}, updateSmoothingAmount, L["SmoothAmountTip"]},
 	},
 	[15] = {
 	},
