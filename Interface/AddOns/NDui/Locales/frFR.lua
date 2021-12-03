@@ -847,3 +847,7 @@ L["BlockOthers"] = "Block others" -- need translation
 L["DebuffColor"] = "Show debuff color" -- need translation
 L["DebuffColorTip"] = "|nDebuff icon border shows in debuff type color." -- need translation
 L["ClassColor Name"] = "Show classcolor name" -- need translation
+L["BuffFrame"] = "NDui BuffFrame" -- need translation
+L["BuffFrameTip"] = "|nReplace the default BuffFrame on the TOPRIGHT of your screen." -- need translation
+L["HideBlizUI"] = "Hide Blizz UI" -- need translation
+L["HideBlizBuffTip"] = "|nHide the default BuffFrame.|nThe default BuffFrame will be disabled once you have NDui BuffFrame enabled." -- need translation

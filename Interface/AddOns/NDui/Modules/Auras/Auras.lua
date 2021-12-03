@@ -9,6 +9,22 @@ local UnitAura, GetTime = UnitAura, GetTime
 local GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo
 
 function A:OnLogin()
+	A:HideBlizBuff()
+	A:BuildBuffFrame()
+	A:Totems()
+	A:InitReminder()
+end
+
+function A:HideBlizBuff()
+	if not C.db["Auras"]["BuffFrame"] and not C.db["Auras"]["HideBlizBuff"] then return end
+
+	B.HideObject(_G.BuffFrame)
+	B.HideObject(_G.TemporaryEnchantFrame)
+end
+
+function A:BuildBuffFrame()
+	if not C.db["Auras"]["BuffFrame"] then return end
+
 	-- Config
 	A.settings = {
 		Buffs = {
@@ -27,10 +43,6 @@ function A:OnLogin()
 		},
 	}
 
-	-- HideBlizz
-	B.HideObject(_G.BuffFrame)
-	B.HideObject(_G.TemporaryEnchantFrame)
-
 	-- Movers
 	A.BuffFrame = A:CreateAuraHeader("HELPFUL")
 	A.BuffFrame.mover = B.Mover(A.BuffFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos)
@@ -41,10 +53,6 @@ function A:OnLogin()
 	A.DebuffFrame.mover = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", A.BuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 	A.DebuffFrame:ClearAllPoints()
 	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
-
-	-- Elements
-	A:Totems()
-	A:InitReminder()
 end
 
 local day, hour, minute = 86400, 3600, 60

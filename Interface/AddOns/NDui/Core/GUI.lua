@@ -108,6 +108,8 @@ G.DefaultSettings = {
 		VerticalTotems = true,
 		TotemSize = 32,
 		ClassAuras = true,
+		BuffFrame = true,
+		HideBlizBuff = false,
 		ReverseBuffs = false,
 		BuffSize = 30,
 		BuffsPerRow = 16,
@@ -682,6 +684,7 @@ end
 
 local function updateBuffFrame()
 	local A = B:GetModule("Auras")
+	if not A.settings then return end
 	A:UpdateOptions()
 	A:UpdateHeader(A.BuffFrame)
 	A.BuffFrame.mover:SetSize(A.BuffFrame:GetSize())
@@ -689,6 +692,7 @@ end
 
 local function updateDebuffFrame()
 	local A = B:GetModule("Auras")
+	if not A.settings then return end
 	A:UpdateOptions()
 	A:UpdateHeader(A.DebuffFrame)
 	A.DebuffFrame.mover:SetSize(A.DebuffFrame:GetSize())
@@ -1142,6 +1146,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
 		{},--blank
+		{1, "Auras", "BuffFrame", NewTag..HeaderTag..L["BuffFrame"], nil, nil, nil, L["BuffFrameTip"]},
+		{1, "Auras", "HideBlizBuff", NewTag..L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
 		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"].."*", nil, nil, updateBuffFrame},
 		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"].."*", true, nil, updateDebuffFrame},
 		{3, "Auras", "BuffSize", L["BuffSize"].."*", nil, {24, 50, 1}, updateBuffFrame},
