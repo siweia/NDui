@@ -1383,10 +1383,10 @@ function G:SetupUFAuras(parent)
 	local parent, offset = scroll.child, -10
 
 	local defaultData = {
-		["Player"] = {1, 1, 9},
-		["Target"] = {2, 2, 9},
-		["Focus"] = {3, 2, 9},
-		["ToT"] = {1, 1, 5},
+		["Player"] = {1, 1, 9, 20, 20},
+		["Target"] = {2, 2, 9, 20, 20},
+		["Focus"] = {3, 2, 9, 20, 20},
+		["ToT"] = {1, 1, 5, 6, 6},
 	}
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"]}
@@ -1396,16 +1396,19 @@ function G:SetupUFAuras(parent)
 		createOptionTitle(parent, title, offset)
 		createOptionDropdown(parent, L["BuffType"], offset-50, buffOptions, nil, "UFs", value.."BuffType", default[1], func)
 		createOptionDropdown(parent, L["DebuffType"], offset-110, debuffOptions, nil, "UFs", value.."DebuffType", default[2], func)
-		createOptionSlider(parent, L["IconsPerRow"], 5, 20, default[3], offset-180, value.."AurasPerRow", func)
+		createOptionSlider(parent, L["MaxBuffs"], 1, 40, default[4], offset-180, value.."NumBuff", func)
+		createOptionSlider(parent, L["MaxDebuffs"], 1, 40, default[5], offset-250, value.."NumDebuff", func)
+		createOptionSlider(parent, L["IconsPerRow"], 5, 20, default[3], offset-320, value.."AurasPerRow", func)
 	end
 
 	createOptionTitle(parent, GENERAL, offset)
 	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", UF.UpdateUFAuras, L["DesaturateIconTip"])
 	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", UF.UpdateUFAuras, L["DebuffColorTip"])
-	createOptionGroup(parent, L["PlayerUF"], offset-110, "Player", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["TargetUF"], offset-350, "Target", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["TotUF"], offset-580, "ToT", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["FocusUF"], offset-830, "Focus", UF.UpdateUFAuras)
+
+	createOptionGroup(parent, L["PlayerUF"], offset-140, "Player", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["TargetUF"], offset-550, "Target", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["TotUF"], offset-950, "ToT", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["FocusUF"], offset-1370, "Focus", UF.UpdateUFAuras)
 end
 
 function G:SetupActionbarStyle(parent)

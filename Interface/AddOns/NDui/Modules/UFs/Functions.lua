@@ -906,8 +906,8 @@ end
 
 function UF:ConfigureAuras(element)
 	local value = element.__value
-	element.numBuffs = C.db["UFs"][value.."BuffType"] ~= 1 and 20 or 0
-	element.numDebuffs = C.db["UFs"][value.."DebuffType"] ~= 1 and 16 or 0
+	element.numBuffs = C.db["UFs"][value.."BuffType"] ~= 1 and C.db["UFs"][value.."NumBuff"] or 0
+	element.numDebuffs = C.db["UFs"][value.."DebuffType"] ~= 1 and C.db["UFs"][value.."NumDebuff"] or 0
 	element.iconsPerRow = C.db["UFs"][value.."AurasPerRow"]
 	element.showDebuffType = C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
@@ -975,9 +975,6 @@ function UF:CreateAuras(self)
 		bu.CustomFilter = UF.UnitCustomFilter
 	elseif mystyle == "tot" then
 		bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -5)
-		bu.numBuffs = 0
-		bu.numDebuffs = 10
-		bu.iconsPerRow = 5
 		bu.__value = "ToT"
 		UF:ConfigureAuras(bu)
 		bu.CustomFilter = UF.UnitCustomFilter
