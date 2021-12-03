@@ -7,29 +7,6 @@ local function ReskinEventTraceButton(button)
 	button.MouseoverOverlay:SetAlpha(0)
 end
 
-local function reskinScrollArrow(self, direction)
-	self.Texture:SetAlpha(0)
-	self.Overlay:SetAlpha(0)
-	local tex = self:CreateTexture(nil, "ARTWORK")
-	tex:SetAllPoints()
-	B.CreateBDFrame(tex, .25)
-	B.SetupArrow(tex, direction)
-	self.__texture = tex
-
-	self:HookScript("OnEnter", B.Texture_OnEnter)
-	self:HookScript("OnLeave", B.Texture_OnLeave)
-end
-
-local function reskinEventTraceScrollBar(scrollBar)
-	B.StripTextures(scrollBar)
-	reskinScrollArrow(scrollBar.Back, "up")
-	reskinScrollArrow(scrollBar.Forward, "down")
-
-	local thumb = scrollBar:GetThumb()
-	B.StripTextures(thumb, 0)
-	B.CreateBDFrame(thumb, 0, true)
-end
-
 local function reskinScrollChild(self)
 	for i = 1, self.ScrollTarget:GetNumChildren() do
 		local child = select(i, self.ScrollTarget:GetChildren())
@@ -58,7 +35,7 @@ end
 
 local function ReskinEventTraceFrame(frame)
 	reskinEventTraceScrollBox(frame.ScrollBox)
-	reskinEventTraceScrollBar(frame.ScrollBar)
+	B.ReskinTrimScroll(frame.ScrollBar)
 end
 
 C.themes["Blizzard_EventTrace"] = function()
