@@ -1109,7 +1109,7 @@ function G:SetupCastbar(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["Player Castbar"], -110, "Player", updatePlayerCastbar)
+	createOptionGroup(scroll.child, L["Player Castbar"], -140, "Player", updatePlayerCastbar)
 
 	local function updateTargetCastbar()
 		if _G.oUF_Target then
@@ -1120,7 +1120,7 @@ function G:SetupCastbar(parent)
 			_G.oUF_Target.Castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
-	createOptionGroup(scroll.child, L["Target Castbar"], -310, "Target", updateTargetCastbar)
+	createOptionGroup(scroll.child, L["Target Castbar"], -360, "Target", updateTargetCastbar)
 
 	local function updateFocusCastbar()
 		if _G.oUF_Focus then
@@ -1131,7 +1131,7 @@ function G:SetupCastbar(parent)
 			_G.oUF_Focus.Castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
-	createOptionGroup(scroll.child, L["Focus Castbar"], -510, "Focus", updateFocusCastbar)
+	createOptionGroup(scroll.child, L["Focus Castbar"], -580, "Focus", updateFocusCastbar)
 
 	panel:HookScript("OnHide", function()
 		if _G.oUF_Player then
@@ -1429,7 +1429,7 @@ function G:SetupUFAuras(parent)
 
 	createOptionGroup(parent, L["PlayerUF"], offset-140, "Player", UF.UpdateUFAuras)
 	createOptionGroup(parent, L["TargetUF"], offset-550, "Target", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["TotUF"], offset-950, "ToT", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["TotUF"], offset-960, "ToT", UF.UpdateUFAuras)
 	createOptionGroup(parent, L["FocusUF"], offset-1370, "Focus", UF.UpdateUFAuras)
 end
 
