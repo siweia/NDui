@@ -5,9 +5,17 @@ if not DB.isNewPatch then return end
 
 local function updateNewGlow(self)
 	if self.NewOutline:IsShown() then
-		self.bg:SetBackdropBorderColor(0, .8, 0)
+		self.bg:SetBackdropBorderColor(0, .7, .08)
 	else
 		self.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
+local function updateIconGlow(self, show)
+	if show then
+		self.__owner.bg:SetBackdropBorderColor(0, .7, .08)
+	else
+		self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
@@ -15,8 +23,8 @@ local function reskinScrollChild(self)
 	for i = 1, self.ScrollTarget:GetNumChildren() do
 		local child = select(i, self.ScrollTarget:GetChildren())
 		local icon = child and child.Icon
-		if icon and not icon.styled then
-			B.ReskinIcon(icon)
+		if icon and not icon.bg then
+			icon.bg = B.ReskinIcon(icon)
 			child.Background:Hide()
 			child.bg = B.CreateBDFrame(child.Background, .25)
 
@@ -29,9 +37,30 @@ local function reskinScrollChild(self)
 			child.BindingText:SetFontObject(Game12Font)
 			hooksecurefunc(child, "Init", updateNewGlow)
 
-			icon.styled = true
+			local iconHighlight = child.IconHighlight
+			iconHighlight:SetTexture("")
+			iconHighlight.__owner = icon
+			hooksecurefunc(iconHighlight, "SetShown", updateIconGlow)
 		end
 	end
+end
+
+local function updateButtonSelection(button, isSelected)
+	if isSelected then
+		button.bg:SetBackdropBorderColor(1, .8, 0)
+	else
+		button.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
+local function reskinPortraitIcon(button, texture)
+	B.StripTextures(button)
+	button.Portrait:SetTexture(texture)
+	button.bg = B.ReskinIcon(button.Portrait)
+	button.bg:SetBackdropColor(0, 0, 0)
+	button.Highlight:SetColorTexture(1, 1, 1, .25)
+	button.Highlight:SetInside(button.bg)
+	hooksecurefunc(button, "SetSelectedState", updateButtonSelection)
 end
 
 C.themes["Blizzard_ClickBindingUI"] = function()
@@ -48,4 +77,7 @@ C.themes["Blizzard_ClickBindingUI"] = function()
 
 	frame.ScrollBoxBackground:Hide()
 	hooksecurefunc(frame.ScrollBox, "Update", reskinScrollChild)
+
+	reskinPortraitIcon(frame.SpellbookPortrait, 136830)
+	reskinPortraitIcon(frame.MacrosPortrait, 136377)
 end
