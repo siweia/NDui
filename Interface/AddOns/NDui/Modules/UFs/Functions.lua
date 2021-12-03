@@ -428,9 +428,8 @@ function UF:UpdateTextScale()
 			end
 			UF:UpdateHealthBarColor(frame, true)
 			UF:UpdatePowerBarColor(frame, true)
+			UF.UpdateFrameNameTag(frame)
 		end
-
-		UF.UpdateFrameNameTag(frame)
 	end
 end
 
@@ -443,6 +442,7 @@ function UF:UpdateRaidTextScale()
 			if frame.powerText then frame.powerText:SetScale(scale) end
 			UF:UpdateHealthBarColor(frame, true)
 			UF:UpdatePowerBarColor(frame, true)
+			UF.UpdateFrameNameTag(frame)
 		end
 	end
 end
