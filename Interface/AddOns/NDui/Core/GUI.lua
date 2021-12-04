@@ -1040,8 +1040,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AurasClickThrough", L["RaidAuras ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{},--blank
-		{1, "UFs", "RaidClickSets", L["Enable ClickSets"], nil, setupClickCast},
-		{1, "UFs", "AutoRes", L["UFs AutoRes"], true},
+		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
+		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		{},--blank
 		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
 		{1, "UFs", "FrequentHealth", HeaderTag..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
@@ -1063,6 +1063,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},
 		{1, "Nameplate", "FriendPlate", L["FriendPlate"].."*", nil, nil, refreshNameplates, L["FriendPlateTip"]},
 		{1, "Nameplate", "NameOnlyMode", L["NameOnlyMode"].."*", true, nil, nil, L["NameOnlyModeTip"]},
+		{4, "Nameplate", "NameType", NewTag..L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
+		{4, "Nameplate", "HealthType", NewTag..L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
 		{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
 		{1, "Nameplate", "Desaturate", NewTag..L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
@@ -1071,8 +1073,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 40, 1}, refreshNameplates},
 		{},--blank
-		{4, "Nameplate", "NameType", NewTag..L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
-		{4, "Nameplate", "HealthType", NewTag..L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", "|cffff0000"..L["ExecuteRatio"].."*", true, {0, 90, 1}, nil, L["ExecuteRatioTip"]},
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
@@ -1124,6 +1124,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "PPPowerHeight", L["PlayerPlate MPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
 	},
 	[7] = {
+		{1, "Auras", "BuffFrame", NewTag..HeaderTag..L["BuffFrame"], nil, setupBuffFrame, nil, L["BuffFrameTip"]},
+		{1, "Auras", "HideBlizBuff", NewTag..L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
+		{},--blank
 		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
@@ -1135,9 +1138,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},
 		{},--blank
 		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
-		{},--blank
-		{1, "Auras", "BuffFrame", NewTag..HeaderTag..L["BuffFrame"], nil, setupBuffFrame, nil, L["BuffFrameTip"]},
-		{1, "Auras", "HideBlizBuff", NewTag..L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
 	},
 	[8] = {
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},
