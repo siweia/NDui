@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("AurasTable")
 
+if not DB.isNewPatch then return end
+
 local TIER = 9
 local INSTANCE = 1195 -- 初诞者圣墓
 local BOSS
