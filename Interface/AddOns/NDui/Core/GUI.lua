@@ -1116,7 +1116,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
 		{},--blank
 		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", false, {.5, 1, .1}, updatePlateScale},
-		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.5, 1, .1}, updatePlateAlpha},
+		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.3, 1, .1}, updatePlateAlpha},
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", nil, {.5, 1.5, .1}, updatePlateSpacing},
 	},
 	[6] = {
