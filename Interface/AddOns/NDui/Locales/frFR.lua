@@ -846,4 +846,4 @@ L["BuffFrame"] = "NDui BuffFrame" -- need translation
 L["BuffFrameTip"] = "|nReplace the default BuffFrame on the TOPRIGHT of your screen." -- need translation
 L["HideBlizUI"] = "Hide Blizz UI" -- need translation
 L["HideBlizBuffTip"] = "|nHide the default BuffFrame.|nThe default BuffFrame will be disabled once you have NDui BuffFrame enabled." -- need translation
-L["ReverseGrow"] = "Anchor reverse group" -- need translation
+L["ReverseGrow"] = "Anchor reverse grow" -- need translation
