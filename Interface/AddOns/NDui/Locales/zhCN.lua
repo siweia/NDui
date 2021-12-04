@@ -847,3 +847,4 @@ L["BuffFrameTip"] = "|n替换显示默认处于屏幕右上角的Buff和Debuff�
 L["HideBlizUI"] = "隐藏暴雪框体"
 L["HideBlizBuffTip"] = "|n隐藏暴雪Buff框体。|n当你启用NDui的Buff框体时，会自动禁用暴雪自带的Buff框体。"
 L["ReverseGrow"] = "反方向增长排列"
+L["100PercentTip"] = "|n启用百分比显示时，如果百分比为100%则不显示。"

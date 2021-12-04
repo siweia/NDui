@@ -847,3 +847,4 @@ L["BuffFrameTip"] = "|nReplace the default BuffFrame on the TOPRIGHT of your scr
 L["HideBlizUI"] = "Hide Blizz UI" -- need translation
 L["HideBlizBuffTip"] = "|nHide the default BuffFrame.|nThe default BuffFrame will be disabled once you have NDui BuffFrame enabled." -- need translation
 L["ReverseGrow"] = "Anchor reverse grow" -- need translation
+L["100PercentTip"] = "|nPercentage would be hidden once unit over 100%." -- need translation

@@ -850,13 +850,17 @@ local function updateDropdownState(self)
 end
 
 local function createOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)
-	local dd = G:CreateDropdown(parent, title, 40, yOffset, options, tooltip, 180, 28)
+	local dd = G:CreateDropdown(parent, title, 40, yOffset, options, nil, 180, 28)
 	dd.__key = key
 	dd.__value = value
 	dd.__default = default
 	dd.__options = options
 	dd.__func = func
 	dd.Text:SetText(options[C.db[key][value]])
+
+	if tooltip then
+		B.AddTooltip(dd, "ANCHOR_TOP", tooltip, "info", true)
+	end
 
 	dd.button.__owner = dd
 	dd.button:HookScript("OnClick", updateDropdownHighlight)
@@ -903,11 +907,11 @@ function G:SetupUnitFrame(parent)
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionDropdown(parent, L["HealthValueType"], offset-50, G.HealthValues, nil, "UFs", value.."HPTag", defaultValue[value][4], func)
+		createOptionDropdown(parent, L["HealthValueType"], offset-50, G.HealthValues, L["100PercentTip"], "UFs", value.."HPTag", defaultValue[value][4], func)
 		local mult = 0
 		if value ~= "Pet" then
 			mult = 60
-			createOptionDropdown(parent, L["PowerValueType"], offset-50-mult, G.HealthValues, nil, "UFs", value.."MPTag", defaultValue[value][4], func)
+			createOptionDropdown(parent, L["PowerValueType"], offset-50-mult, G.HealthValues, L["100PercentTip"], "UFs", value.."MPTag", defaultValue[value][4], func)
 		end
 		createOptionSlider(parent, L["Width"], sliderRange[value][1], sliderRange[value][2], defaultValue[value][1], offset-110-mult, value.."Width", func)
 		createOptionSlider(parent, L["Height"], 15, 50, defaultValue[value][2], offset-180-mult, value.."Height", func)

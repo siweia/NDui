@@ -1053,7 +1053,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"]},
 		{1, "UFs", "RCCName", NewTag..L["ClassColor Name"].."*", true, nil, updateRaidTextScale},
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateRaidTextScale},
-		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidNameText},
+		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidNameText, L["100PercentTip"]},
 		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 1}},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
 		{nil, true},-- FIXME: dirty fix for now
@@ -1072,7 +1072,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 40, 1}, refreshNameplates},
 		{},--blank
 		{4, "Nameplate", "NameType", NewTag..L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
-		{4, "Nameplate", "HealthType", NewTag..L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates},
+		{4, "Nameplate", "HealthType", NewTag..L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", "|cffff0000"..L["ExecuteRatio"].."*", true, {0, 90, 1}, nil, L["ExecuteRatioTip"]},
 		{1, "Nameplate", "FriendlyCC", L["Friendly CC"].."*"},
