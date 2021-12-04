@@ -32,14 +32,14 @@ function A:BuildBuffFrame()
 			size = C.db["Auras"]["BuffSize"],
 			wrapAfter = C.db["Auras"]["BuffsPerRow"],
 			maxWraps = 3,
-			reverseGrow = C.db["Auras"]["ReverseBuffs"],
+			reverseGrow = C.db["Auras"]["ReverseBuff"],
 		},
 		Debuffs = {
 			offset = 12,
 			size = C.db["Auras"]["DebuffSize"],
 			wrapAfter = C.db["Auras"]["DebuffsPerRow"],
 			maxWraps = 1,
-			reverseGrow = C.db["Auras"]["ReverseDebuffs"],
+			reverseGrow = C.db["Auras"]["ReverseDebuff"],
 		},
 	}
 
@@ -179,10 +179,10 @@ end
 function A:UpdateOptions()
 	A.settings.Buffs.size = C.db["Auras"]["BuffSize"]
 	A.settings.Buffs.wrapAfter = C.db["Auras"]["BuffsPerRow"]
-	A.settings.Buffs.reverseGrow = C.db["Auras"]["ReverseBuffs"]
+	A.settings.Buffs.reverseGrow = C.db["Auras"]["ReverseBuff"]
 	A.settings.Debuffs.size = C.db["Auras"]["DebuffSize"]
 	A.settings.Debuffs.wrapAfter = C.db["Auras"]["DebuffsPerRow"]
-	A.settings.Debuffs.reverseGrow = C.db["Auras"]["ReverseDebuffs"]
+	A.settings.Debuffs.reverseGrow = C.db["Auras"]["ReverseDebuff"]
 end
 
 function A:UpdateHeader(header)

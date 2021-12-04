@@ -110,10 +110,10 @@ G.DefaultSettings = {
 		ClassAuras = true,
 		BuffFrame = true,
 		HideBlizBuff = false,
-		ReverseBuffs = false,
+		ReverseBuff = false,
 		BuffSize = 30,
 		BuffsPerRow = 16,
-		ReverseDebuffs = false,
+		ReverseDebuff = false,
 		DebuffSize = 30,
 		DebuffsPerRow = 16,
 	},
@@ -638,6 +638,10 @@ local function setupPlateCastbarGlow()
 	G:PlateCastbarGlow(guiPage[5])
 end
 
+local function setupBuffFrame()
+	G:SetupBuffFrame(guiPage[7])
+end
+
 local function setupAuraWatch()
 	f:Hide()
 	SlashCmdList["NDUI_AWCONFIG"]()
@@ -692,22 +696,6 @@ end
 local function toggleBarFader(self)
 	local name = gsub(self.__value, "Fader", "")
 	B:GetModule("Actionbar"):ToggleBarFader(name)
-end
-
-local function updateBuffFrame()
-	local A = B:GetModule("Auras")
-	if not A.settings then return end
-	A:UpdateOptions()
-	A:UpdateHeader(A.BuffFrame)
-	A.BuffFrame.mover:SetSize(A.BuffFrame:GetSize())
-end
-
-local function updateDebuffFrame()
-	local A = B:GetModule("Auras")
-	if not A.settings then return end
-	A:UpdateOptions()
-	A:UpdateHeader(A.DebuffFrame)
-	A.DebuffFrame.mover:SetSize(A.DebuffFrame:GetSize())
 end
 
 local function updateReminder()
@@ -947,7 +935,7 @@ G.TabList = {
 	NewTag..L["RaidFrame"],
 	NewTag..L["Nameplate"],
 	NewTag..L["PlayerPlate"],
-	L["Auras"],
+	NewTag..L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
@@ -1148,14 +1136,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
 		{},--blank
-		{1, "Auras", "BuffFrame", NewTag..HeaderTag..L["BuffFrame"], nil, nil, nil, L["BuffFrameTip"]},
+		{1, "Auras", "BuffFrame", NewTag..HeaderTag..L["BuffFrame"], nil, setupBuffFrame, nil, L["BuffFrameTip"]},
 		{1, "Auras", "HideBlizBuff", NewTag..L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
-		{1, "Auras", "ReverseBuffs", L["ReverseBuffs"].."*", nil, nil, updateBuffFrame},
-		{1, "Auras", "ReverseDebuffs", L["ReverseDebuffs"].."*", true, nil, updateDebuffFrame},
-		{3, "Auras", "BuffSize", L["BuffSize"].."*", nil, {24, 50, 1}, updateBuffFrame},
-		{3, "Auras", "DebuffSize", L["DebuffSize"].."*", true, {24, 50, 1}, updateDebuffFrame},
-		{3, "Auras", "BuffsPerRow", L["BuffsPerRow"].."*", nil, {10, 20, 1}, updateBuffFrame},
-		{3, "Auras", "DebuffsPerRow", L["DebuffsPerRow"].."*", true, {10, 20, 1}, updateDebuffFrame},
 	},
 	[8] = {
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},

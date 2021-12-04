@@ -1564,3 +1564,40 @@ function G:SetupActionbarStyle(parent)
 		bu:HookScript("OnLeave", B.HideTooltip)
 	end
 end
+
+function G:SetupBuffFrame(parent)
+	local guiName = "NDuiGUI_BuffFrameSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["BuffFrame"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local A = B:GetModule("Auras")
+	local parent, offset = scroll.child, -10
+	local defaultSize, defaultPerRow = 30, 16
+
+	local function updateBuffFrame()
+		if not A.settings then return end
+		A:UpdateOptions()
+		A:UpdateHeader(A.BuffFrame)
+		A.BuffFrame.mover:SetSize(A.BuffFrame:GetSize())
+	end
+	
+	local function updateDebuffFrame()
+		if not A.settings then return end
+		A:UpdateOptions()
+		A:UpdateHeader(A.DebuffFrame)
+		A.DebuffFrame.mover:SetSize(A.DebuffFrame:GetSize())
+	end
+
+	local function createOptionGroup(parent, title, offset, value, func)
+		createOptionTitle(parent, title, offset)
+		createOptionCheck(parent, offset-35, L["ReverseGrow"], "Auras", "Reverse"..value, func)
+		createOptionSlider(parent, L["Auras Size"], 20, 60, defaultSize, offset-100, value.."Size", func, "Auras")
+		createOptionSlider(parent, L["IconsPerRow"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
+	end
+
+	createOptionGroup(parent, "Buffs", offset, "Buff", updateBuffFrame)
+	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", updateDebuffFrame)
+end
