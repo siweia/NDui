@@ -78,6 +78,10 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
+	-- Hide blizz options
+	SetCVar("multiBarRightVerticalLayout", 0)
+	InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
+	InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
 	-- Fix maw block anchor
 	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 	-- Update button grid
