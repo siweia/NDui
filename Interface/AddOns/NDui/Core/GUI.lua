@@ -181,6 +181,9 @@ G.DefaultSettings = {
 		PartyPetWidth = 100,
 		PartyPetHeight = 22,
 		PartyPetPowerHeight = 2,
+		PartyPetPerCol = 5,
+		PartyPetMaxCol = 1,
+		RaidPets = false,
 		HealthColor = 1,
 		BuffIndicatorType = 1,
 		BuffIndicatorScale = 1,
@@ -611,6 +614,10 @@ local function setupSimpleRaidFrame()
 	G:SetupSimpleRaidFrame(guiPage[4])
 end
 
+local function setupPartyPetFrame()
+	G:SetupPartyPetFrame(guiPage[4])
+end
+
 local function setupRaidDebuffs()
 	G:SetupRaidDebuffs(guiPage[4])
 end
@@ -1020,7 +1027,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SimpleMode", NewTag..L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
 		{},--blank
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, nil, nil, L["PartyFrameTip"]},
-		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true},
+		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame},
 		{1, "UFs", "HorizonParty", L["Horizon PartyFrame"]},
 		{1, "UFs", "PartyAltPower", L["UFs PartyAltPower"], true, nil, nil, L["PartyAltPowerTip"]},
 		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},

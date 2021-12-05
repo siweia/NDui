@@ -810,6 +810,30 @@ local function createOptionTitle(parent, title, offset)
 	line:SetPoint("TOPLEFT", 30, offset-20)
 end
 
+local function toggleOptionCheck(self)
+	local value = C.db[self.__key][self.__value]
+	value = not value
+	self:SetChecked(value)
+	C.db[self.__key][self.__value] = value
+	if self.__callback then self:__callback() end
+end
+
+local function createOptionCheck(parent, offset, text, key, value, callback, tooltip)
+	local box = B.CreateCheckBox(parent)
+	box:SetPoint("TOPLEFT", 10, offset)
+	box:SetChecked(C.db[key][value])
+	box.__key = key
+	box.__value = value
+	box.__callback = callback
+	B.CreateFS(box, 14, text, nil, "LEFT", 30, 0)
+	box:SetScript("OnClick", toggleOptionCheck)
+	if tooltip then
+		B.AddTooltip(box, "ANCHOR_RIGHT", tooltip, "info", true)
+	end
+
+	return box
+end
+
 local function sliderValueChanged(self, v)
 	local current = tonumber(format("%.0f", v))
 	self.value:SetText(current)
@@ -1034,7 +1058,7 @@ function G:SetupSimpleRaidFrame(parent)
 		end
 	end
 	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"].."*", -30, {GROUP, CLASS, ROLE}, nil, "UFs", "SMRGroupBy", 1, updateSimpleModeGroupBy)
-	createOptionSlider(scroll.child, L["SimpleMode Column"].."*", 1, 40, 20, -100, "SMRPerCol", updateSimpleModeGroupBy)
+	createOptionSlider(scroll.child, L["UnitsPerColumn"].."*", 5, 40, 20, -100, "SMRPerCol", updateSimpleModeGroupBy)
 	createOptionSlider(scroll.child, L["Num Groups"].."*", 1, 8, 6, -180, "SMRGroups", updateSimpleModeGroupBy)
 
 	local function resizeSimpleRaidFrame()
@@ -1056,6 +1080,40 @@ function G:SetupSimpleRaidFrame(parent)
 		updateSimpleModeGroupBy()
 	end
 	createOptionSlider(scroll.child, L["SimpleMode Scale"].."*", 8, 15, 10, -260, "SMRScale", resizeSimpleRaidFrame)
+end
+
+function G:SetupPartyPetFrame(parent)
+	local guiName = "NDuiGUI_PartyPetFrameSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["PartyPetFrame"])
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local UF = B:GetModule("UnitFrames")
+
+	local function updatePartyPetHeader()
+		if UF.UpdatePartyPetHeader then
+			UF:UpdatePartyPetHeader()
+		end
+	end
+
+	local function resizePartyPetFrame()
+		for _, frame in pairs(ns.oUF.objects) do
+			if frame.isPartyPet then
+				SetUnitFrameSize(frame, "PartyPet")
+			end
+		end
+
+		updatePartyPetHeader()
+	end
+
+	createOptionCheck(scroll.child, -10, L["ShowInRaid"].."*", "UFs", "RaidPets", UF.UpdateAllHeaders)
+	createOptionSlider(scroll.child, L["Width"], 60, 200, 100, -90, "PartyPetWidth", resizePartyPetFrame)
+	createOptionSlider(scroll.child, L["Height"], 20, 60, 22, -160, "PartyPetHeight", resizePartyPetFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 2, 30, 2, -230, "PartyPetPowerHeight", resizePartyPetFrame)
+	createOptionSlider(scroll.child, L["UnitsPerColumn"].."*", 5, 40, 5, -300, "PartyPetPerCol", updatePartyPetHeader)
+	createOptionSlider(scroll.child, L["MaxColumns"].."*", 1, 5, 1, -370, "PartyPetMaxCol", updatePartyPetHeader)
 end
 
 local function createOptionSwatch(parent, name, key, value, x, y)
@@ -1154,30 +1212,6 @@ function G:SetupCastbar(parent)
 		if _G.oUF_Target then _G.oUF_Target.Castbar.mover:Hide() end
 		if _G.oUF_Focus then _G.oUF_Focus.Castbar.mover:Hide() end
 	end)
-end
-
-local function toggleOptionCheck(self)
-	local value = C.db[self.__key][self.__value]
-	value = not value
-	self:SetChecked(value)
-	C.db[self.__key][self.__value] = value
-	if self.__callback then self:__callback() end
-end
-
-local function createOptionCheck(parent, offset, text, key, value, callback, tooltip)
-	local box = B.CreateCheckBox(parent)
-	box:SetPoint("TOPLEFT", 10, offset)
-	box:SetChecked(C.db[key][value])
-	box.__key = key
-	box.__value = value
-	box.__callback = callback
-	B.CreateFS(box, 14, text, nil, "LEFT", 30, 0)
-	box:SetScript("OnClick", toggleOptionCheck)
-	if tooltip then
-		B.AddTooltip(box, "ANCHOR_RIGHT", tooltip, "info", true)
-	end
-
-	return box
 end
 
 function G:SetupBagFilter(parent)
