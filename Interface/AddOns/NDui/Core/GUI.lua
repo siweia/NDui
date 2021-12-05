@@ -257,6 +257,12 @@ G.DefaultSettings = {
 		ToTBuffType = 1,
 		ToTDebuffType = 1,
 		ToTAurasPerRow = 5,
+		BossNumBuff = 6,
+		BossNumDebuff = 6,
+		BossBuffType = 2,
+		BossDebuffType = 3,
+		BossBuffPerRow = 6,
+		BossDebuffPerRow = 6,
 	},
 	Chat = {
 		Sticky = false,

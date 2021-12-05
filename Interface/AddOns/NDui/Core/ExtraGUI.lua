@@ -1445,18 +1445,24 @@ function G:SetupUFAuras(parent)
 		["Target"] = {2, 2, 9, 20, 20},
 		["Focus"] = {3, 2, 9, 20, 20},
 		["ToT"] = {1, 1, 5, 6, 6},
+		["Boss"] = {2, 3, 6, 6, 6},
 	}
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"]}
 
-	local function createOptionGroup(parent, title, offset, value, func)
+	local function createOptionGroup(parent, title, offset, value, func, isBoss)
 		local default = defaultData[value]
 		createOptionTitle(parent, title, offset)
 		createOptionDropdown(parent, L["BuffType"], offset-50, buffOptions, nil, "UFs", value.."BuffType", default[1], func)
 		createOptionDropdown(parent, L["DebuffType"], offset-110, debuffOptions, nil, "UFs", value.."DebuffType", default[2], func)
 		createOptionSlider(parent, L["MaxBuffs"], 1, 40, default[4], offset-180, value.."NumBuff", func)
 		createOptionSlider(parent, L["MaxDebuffs"], 1, 40, default[5], offset-250, value.."NumDebuff", func)
-		createOptionSlider(parent, L["IconsPerRow"], 5, 20, default[3], offset-320, value.."AurasPerRow", func)
+		if isBoss then
+			createOptionSlider(parent, "Buff "..L["IconsPerRow"], 5, 20, default[3], offset-320, value.."BuffPerRow", func)
+			createOptionSlider(parent, "Debuff "..L["IconsPerRow"], 5, 20, default[3], offset-390, value.."DebuffPerRow", func)
+		else
+			createOptionSlider(parent, L["IconsPerRow"], 5, 20, default[3], offset-320, value.."AurasPerRow", func)
+		end
 	end
 
 	createOptionTitle(parent, GENERAL, offset)
@@ -1467,6 +1473,7 @@ function G:SetupUFAuras(parent)
 	createOptionGroup(parent, L["TargetUF"], offset-550, "Target", UF.UpdateUFAuras)
 	createOptionGroup(parent, L["TotUF"], offset-960, "ToT", UF.UpdateUFAuras)
 	createOptionGroup(parent, L["FocusUF"], offset-1370, "Focus", UF.UpdateUFAuras)
+	createOptionGroup(parent, L["BossFrame"], offset-1780, "Boss", UF.UpdateUFAuras, true)
 end
 
 function G:SetupActionbarStyle(parent)
