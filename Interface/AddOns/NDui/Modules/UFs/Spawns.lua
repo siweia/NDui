@@ -242,11 +242,22 @@ function UF:UpdateAllHeaders()
 	end
 end
 
+local function GetGroupFilterByIndex(numGroups)
+	local groupFilter
+	for i = 1, numGroups do
+		if not groupFilter then
+			groupFilter = i
+		else
+			groupFilter = groupFilter..","..i
+		end
+	end
+	return groupFilter
+end
+
 function UF:OnLogin()
 	local horizonRaid = C.db["UFs"]["HorizonRaid"]
 	local horizonParty = C.db["UFs"]["HorizonParty"]
 	local numGroups = C.db["UFs"]["NumGroups"]
-	local scale = C.db["UFs"]["SimpleRaidScale"]/10
 	local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
 	local reverse = C.db["UFs"]["ReverseRaid"]
 	local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
@@ -444,10 +455,9 @@ function UF:OnLogin()
 			oUF:RegisterStyle("Raid", CreateSimpleRaidStyle)
 			oUF:SetActiveStyle("Raid")
 
-			local unitsPerColumn = C.db["UFs"]["SMUnitsPerColumn"]
-			local maxColumns = B:Round(numGroups*5 / unitsPerColumn)
+			local scale = C.db["UFs"]["SMRScale"]/10
 
-			local function CreateGroup(name, i)
+			local function CreateGroup(name)
 				local group = oUF:SpawnHeader(name, nil, nil,
 				"showPlayer", true,
 				"showSolo", true,
@@ -455,9 +465,6 @@ function UF:OnLogin()
 				"showRaid", true,
 				"xoffset", 5,
 				"yOffset", -5,
-				"groupFilter", tostring(i),
-				"maxColumns", maxColumns,
-				"unitsPerColumn", unitsPerColumn,
 				"columnSpacing", 5,
 				"point", "TOP",
 				"columnAnchorPoint", "LEFT",
@@ -468,27 +475,11 @@ function UF:OnLogin()
 				return group
 			end
 
-			local groupFilter
-			if numGroups == 4 then
-				groupFilter = "1,2,3,4"
-			elseif numGroups == 5 then
-				groupFilter = "1,2,3,4,5"
-			elseif numGroups == 6 then
-				groupFilter = "1,2,3,4,5,6"
-			elseif numGroups == 7 then
-				groupFilter = "1,2,3,4,5,6,7"
-			elseif numGroups == 8 then
-				groupFilter = "1,2,3,4,5,6,7,8"
-			end
-
-			local group = CreateGroup("oUF_Raid", groupFilter)
+			local group = CreateGroup("oUF_Raid")
 			group.groupType = "raid"
 			tinsert(UF.headers, group)
 			RegisterStateDriver(group, "visibility", GetRaidVisibility())
-
-			local moverWidth = (100*scale*maxColumns + 5*(maxColumns-1))
-			local moverHeight = 20*scale*unitsPerColumn + 5*(unitsPerColumn-1)
-			raidMover = B.Mover(group, L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, moverWidth, moverHeight)
+			raidMover = B.Mover(group, L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50})
 
 			local groupByTypes = {
 				[1] = {"1,2,3,4,5,6,7,8", "GROUP", "INDEX"},
@@ -496,11 +487,28 @@ function UF:OnLogin()
 				[3] = {"TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"},
 			}
 			function UF:UpdateSimpleModeHeader()
-				local groupByIndex = C.db["UFs"]["SMGroupByIndex"]
+				for i = 1, group:GetNumChildren() do
+					select(i, group:GetChildren()):ClearAllPoints()
+				end
+
+				local groupByIndex = C.db["UFs"]["SMRGroupBy"]
+				local unitsPerColumn = C.db["UFs"]["SMRPerCol"]
+				local numGroups = C.db["UFs"]["SMRGroups"]
+				local scale = C.db["UFs"]["SMRScale"]/10
+				local maxColumns = ceil(numGroups*5 / unitsPerColumn)
+
 				group:SetAttribute("groupingOrder", groupByTypes[groupByIndex][1])
 				group:SetAttribute("groupBy", groupByTypes[groupByIndex][2])
 				group:SetAttribute("sortMethod", groupByTypes[groupByIndex][3])
+				group:SetAttribute("groupFilter", GetGroupFilterByIndex(numGroups))
+				group:SetAttribute("unitsPerColumn", unitsPerColumn)
+				group:SetAttribute("maxColumns", maxColumns)
+
+				local moverWidth = (100*scale*maxColumns + 5*(maxColumns-1))
+				local moverHeight = 20*scale*unitsPerColumn + 5*(unitsPerColumn-1)
+				raidMover:SetSize(moverWidth, moverHeight)
 			end
+
 			UF:UpdateSimpleModeHeader()
 		else
 			oUF:RegisterStyle("Raid", CreateRaidStyle)

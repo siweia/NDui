@@ -119,7 +119,7 @@ function UF:CreateHealthBar(self)
 		elseif self.isPartyPet then
 			healthHeight = C.db["UFs"]["PartyPetHeight"]
 		elseif self.isSimpleMode then
-			local scale = C.db["UFs"]["SimpleRaidScale"]/10
+			local scale = C.db["UFs"]["SMRScale"]/10
 			healthHeight = 20*scale - 2*scale - C.mult
 		else
 			healthHeight = C.db["UFs"]["RaidHeight"]
@@ -342,7 +342,7 @@ function UF:CreatePowerBar(self)
 		elseif self.isPartyPet then
 			powerHeight = C.db["UFs"]["PartyPetPowerHeight"]
 		elseif self.isSimpleMode then
-			powerHeight = 2*C.db["UFs"]["SimpleRaidScale"]/10
+			powerHeight = 2*C.db["UFs"]["SMRScale"]/10
 		else
 			powerHeight = C.db["UFs"]["RaidPowerHeight"]
 		end
@@ -988,7 +988,7 @@ function UF:CreateAuras(self)
 	elseif mystyle == "raid" then
 		bu.initialAnchor = "LEFT"
 		bu:SetPoint("LEFT", self, 15, 0)
-		bu.size = 18*C.db["UFs"]["SimpleRaidScale"]/10
+		bu.size = 18*C.db["UFs"]["SMRScale"]/10
 		bu.numTotal = 1
 		bu.disableCooldown = true
 		bu.gap = false

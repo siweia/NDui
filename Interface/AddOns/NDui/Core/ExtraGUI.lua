@@ -1033,12 +1033,14 @@ function G:SetupSimpleRaidFrame(parent)
 			UF:UpdateSimpleModeHeader()
 		end
 	end
-	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"].."*", -30, {GROUP, CLASS, ROLE}, nil, "UFs", "SMGroupByIndex", 1, updateSimpleModeGroupBy)
+	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"].."*", -30, {GROUP, CLASS, ROLE}, nil, "UFs", "SMRGroupBy", 1, updateSimpleModeGroupBy)
+	createOptionSlider(scroll.child, L["SimpleMode Column"].."*", 1, 40, 20, -100, "SMRPerCol", updateSimpleModeGroupBy)
+	createOptionSlider(scroll.child, L["Num Groups"].."*", 1, 8, 6, -180, "SMRGroups", updateSimpleModeGroupBy)
 
 	local function resizeSimpleRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.isSimpleMode then
-				local scale = C.db["UFs"]["SimpleRaidScale"]/10
+				local scale = C.db["UFs"]["SMRScale"]/10
 				local frameWidth = 100*scale
 				local frameHeight = 20*scale
 				local powerHeight = 2*scale
@@ -1046,11 +1048,14 @@ function G:SetupSimpleRaidFrame(parent)
 				frame:SetSize(frameWidth, frameHeight)
 				frame.Health:SetHeight(healthHeight)
 				frame.Power:SetHeight(powerHeight)
+				frame.Auras.size = 18*scale/10
+				UF:UpdateAuraContainer(frame, frame.Auras, 1)
 			end
 		end
+
+		updateSimpleModeGroupBy()
 	end
-	createOptionSlider(scroll.child, L["SimpleMode Scale"].."*", 8, 15, 10, -100, "SimpleRaidScale", resizeSimpleRaidFrame)
-	createOptionSlider(scroll.child, L["SimpleMode Column"], 10, 40, 20, -180, "SMUnitsPerColumn")
+	createOptionSlider(scroll.child, L["SimpleMode Scale"].."*", 8, 15, 10, -260, "SMRScale", resizeSimpleRaidFrame)
 end
 
 local function createOptionSwatch(parent, name, key, value, x, y)
