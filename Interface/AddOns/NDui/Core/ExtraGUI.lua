@@ -998,13 +998,11 @@ function G:SetupRaidFrame(parent)
 
 	local minRange = {
 		["Party"] = {80, 25},
-		["PartyPet"] = {80, 20},
 		["Raid"] = {60, 25},
 	}
 
 	local defaultValue = {
 		["Party"] = {100, 32, 2},
-		["PartyPet"] = {100, 22, 2},
 		["Raid"] = {80, 32, 2},
 	}
 
@@ -1032,15 +1030,6 @@ function G:SetupRaidFrame(parent)
 		end
 	end
 	createOptionGroup(scroll.child, L["PartyFrame"], -300, "Party", resizePartyFrame)
-
-	local function resizePartyPetFrame()
-		for _, frame in pairs(ns.oUF.objects) do
-			if frame.isPartyPet then
-				SetUnitFrameSize(frame, "PartyPet")
-			end
-		end
-	end
-	createOptionGroup(scroll.child, L["PartyPetFrame"], -590, "PartyPet", resizePartyPetFrame)
 end
 
 function G:SetupSimpleRaidFrame(parent)
@@ -1048,7 +1037,7 @@ function G:SetupSimpleRaidFrame(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["SimpleRaidFrame"])
+	local panel = createExtraGUI(parent, guiName, L["SimpleRaidFrame"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local UF = B:GetModule("UnitFrames")
 
@@ -1057,9 +1046,9 @@ function G:SetupSimpleRaidFrame(parent)
 			UF:UpdateSimpleModeHeader()
 		end
 	end
-	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"].."*", -30, {GROUP, CLASS, ROLE}, nil, "UFs", "SMRGroupBy", 1, updateSimpleModeGroupBy)
-	createOptionSlider(scroll.child, L["UnitsPerColumn"].."*", 5, 40, 20, -100, "SMRPerCol", updateSimpleModeGroupBy)
-	createOptionSlider(scroll.child, L["Num Groups"].."*", 1, 8, 6, -180, "SMRGroups", updateSimpleModeGroupBy)
+	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"], -30, {GROUP, CLASS, ROLE}, nil, "UFs", "SMRGroupBy", 1, updateSimpleModeGroupBy)
+	createOptionSlider(scroll.child, L["UnitsPerColumn"], 5, 40, 20, -100, "SMRPerCol", updateSimpleModeGroupBy)
+	createOptionSlider(scroll.child, L["Num Groups"], 1, 8, 6, -180, "SMRGroups", updateSimpleModeGroupBy)
 
 	local function resizeSimpleRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -1079,7 +1068,7 @@ function G:SetupSimpleRaidFrame(parent)
 
 		updateSimpleModeGroupBy()
 	end
-	createOptionSlider(scroll.child, L["SimpleMode Scale"].."*", 8, 15, 10, -260, "SMRScale", resizeSimpleRaidFrame)
+	createOptionSlider(scroll.child, L["SimpleMode Scale"], 8, 15, 10, -260, "SMRScale", resizeSimpleRaidFrame)
 end
 
 function G:SetupPartyPetFrame(parent)
@@ -1087,7 +1076,7 @@ function G:SetupPartyPetFrame(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["PartyPetFrame"])
+	local panel = createExtraGUI(parent, guiName, L["PartyPetFrame"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local UF = B:GetModule("UnitFrames")
@@ -1108,12 +1097,12 @@ function G:SetupPartyPetFrame(parent)
 		updatePartyPetHeader()
 	end
 
-	createOptionCheck(scroll.child, -10, L["ShowInRaid"].."*", "UFs", "RaidPets", UF.UpdateAllHeaders)
+	createOptionCheck(scroll.child, -10, L["ShowInRaid"], "UFs", "RaidPets", UF.UpdateAllHeaders)
 	createOptionSlider(scroll.child, L["Width"], 60, 200, 100, -90, "PartyPetWidth", resizePartyPetFrame)
 	createOptionSlider(scroll.child, L["Height"], 20, 60, 22, -160, "PartyPetHeight", resizePartyPetFrame)
 	createOptionSlider(scroll.child, L["Power Height"], 2, 30, 2, -230, "PartyPetPowerHeight", resizePartyPetFrame)
-	createOptionSlider(scroll.child, L["UnitsPerColumn"].."*", 5, 40, 5, -300, "PartyPetPerCol", updatePartyPetHeader)
-	createOptionSlider(scroll.child, L["MaxColumns"].."*", 1, 5, 1, -370, "PartyPetMaxCol", updatePartyPetHeader)
+	createOptionSlider(scroll.child, L["UnitsPerColumn"], 5, 40, 5, -300, "PartyPetPerCol", updatePartyPetHeader)
+	createOptionSlider(scroll.child, L["MaxColumns"], 1, 5, 1, -370, "PartyPetMaxCol", updatePartyPetHeader)
 end
 
 local function createOptionSwatch(parent, name, key, value, x, y)
