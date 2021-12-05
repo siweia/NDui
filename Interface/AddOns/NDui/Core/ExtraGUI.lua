@@ -1053,9 +1053,10 @@ function G:SetupSimpleRaidFrame(parent)
 	createOptionSlider(scroll.child, L["SimpleMode Column"], 10, 40, 20, -180, "SMUnitsPerColumn")
 end
 
-local function createOptionSwatch(parent, name, value, x, y)
-	local swatch = B.CreateColorSwatch(parent, name, value)
+local function createOptionSwatch(parent, name, key, value, x, y)
+	local swatch = B.CreateColorSwatch(parent, name, C.db[key][value])
 	swatch:SetPoint("TOPLEFT", x, y)
+	swatch.__default = G.DefaultSettings[key][value]
 end
 
 function G:SetupCastbar(parent)
@@ -1067,8 +1068,8 @@ function G:SetupCastbar(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	createOptionTitle(scroll.child, L["Castbar Colors"], -10)
-	createOptionSwatch(scroll.child, L["Interruptible Color"], C.db["UFs"]["CastingColor"], 40, -40)
-	createOptionSwatch(scroll.child, L["NotInterruptible Color"], C.db["UFs"]["NotInterruptColor"], 40, -70)
+	createOptionSwatch(scroll.child, L["Interruptible Color"], "UFs", "CastingColor", 40, -40)
+	createOptionSwatch(scroll.child, L["NotInterruptible Color"], "UFs", "NotInterruptColor", 40, -70)
 
 	local defaultValue = {
 		["Player"] = {300, 20},
