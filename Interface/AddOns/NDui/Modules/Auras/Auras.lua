@@ -75,6 +75,13 @@ function A:FormatAuraTime(s)
 end
 
 function A:UpdateTimer(elapsed)
+	local onTooltip = GameTooltip:IsOwned(self)
+
+	if not self.timeLeft and not onTooltip then
+		self:SetScript("OnUpdate", nil)
+		return
+	end
+
 	if self.offset then
 		local expiration = select(self.offset, GetWeaponEnchantInfo())
 		if expiration then
@@ -82,7 +89,7 @@ function A:UpdateTimer(elapsed)
 		else
 			self.timeLeft = 0
 		end
-	else
+	elseif self.timeLeft then
 		self.timeLeft = self.timeLeft - elapsed
 	end
 
@@ -91,53 +98,52 @@ function A:UpdateTimer(elapsed)
 		return
 	end
 
-	if self.timeLeft >= 0 then
+	if self.timeLeft and self.timeLeft >= 0 then
 		local timer, nextUpdate = A:FormatAuraTime(self.timeLeft)
 		self.nextUpdate = nextUpdate
 		self.timer:SetText(timer)
 	end
+
+	if onTooltip then A:Button_SetTooltip(self) end
 end
 
 function A:UpdateAuras(button, index)
-	local filter = button:GetParent():GetAttribute("filter")
-	local unit = button:GetParent():GetAttribute("unit")
+	local unit, filter = button.header:GetAttribute("unit"), button.filter
 	local name, texture, count, debuffType, duration, expirationTime, _, _, _, spellID = UnitAura(unit, index, filter)
+	if not name then return end
 
-	if name then
-		if duration > 0 and expirationTime then
-			local timeLeft = expirationTime - GetTime()
-			if not button.timeLeft then
-				button.nextUpdate = -1
-				button.timeLeft = timeLeft
-				button:SetScript("OnUpdate", A.UpdateTimer)
-			else
-				button.timeLeft = timeLeft
-			end
+	if duration > 0 and expirationTime then
+		local timeLeft = expirationTime - GetTime()
+		if not button.timeLeft then
 			button.nextUpdate = -1
-			A.UpdateTimer(button, 0)
+			button.timeLeft = timeLeft
+			button:SetScript("OnUpdate", A.UpdateTimer)
 		else
-			button.timeLeft = nil
-			button.timer:SetText("")
-			button:SetScript("OnUpdate", nil)
+			button.timeLeft = timeLeft
 		end
-
-		if count and count > 1 then
-			button.count:SetText(count)
-		else
-			button.count:SetText("")
-		end
-
-		if filter == "HARMFUL" then
-			local color = oUF.colors.debuff[debuffType or "none"]
-			button:SetBackdropBorderColor(color[1], color[2], color[3])
-		else
-			button:SetBackdropBorderColor(0, 0, 0)
-		end
-
-		button.spellID = spellID
-		button.icon:SetTexture(texture)
-		button.offset = nil
+		button.nextUpdate = -1
+		A.UpdateTimer(button, 0)
+	else
+		button.timeLeft = nil
+		button.timer:SetText("")
 	end
+
+	if count and count > 1 then
+		button.count:SetText(count)
+	else
+		button.count:SetText("")
+	end
+
+	if filter == "HARMFUL" then
+		local color = oUF.colors.debuff[debuffType or "none"]
+		button:SetBackdropBorderColor(color[1], color[2], color[3])
+	else
+		button:SetBackdropBorderColor(0, 0, 0)
+	end
+
+	button.spellID = spellID
+	button.icon:SetTexture(texture)
+	button.offset = nil
 end
 
 function A:UpdateTempEnchant(button, index)
@@ -163,7 +169,6 @@ function A:UpdateTempEnchant(button, index)
 	else
 		button.offset = nil
 		button.timeLeft = nil
-		button:SetScript("OnUpdate", nil)
 		button.timer:SetText("")
 	end
 end
@@ -187,7 +192,7 @@ end
 
 function A:UpdateHeader(header)
 	local cfg = A.settings.Debuffs
-	if header:GetAttribute("filter") == "HELPFUL" then
+	if header.filter == "HELPFUL" then
 		cfg = A.settings.Buffs
 		header:SetAttribute("consolidateTo", 0)
 		header:SetAttribute("weaponTemplate", format("NDuiAuraTemplate%d", cfg.size))
@@ -236,6 +241,7 @@ function A:CreateAuraHeader(filter)
 	header:SetClampedToScreen(true)
 	header:SetAttribute("unit", "player")
 	header:SetAttribute("filter", filter)
+	header.filter = filter
 	RegisterStateDriver(header, "visibility", "[petbattle] hide; show")
 	RegisterAttributeDriver(header, "unit", "[vehicleui] vehicle; player")
 
@@ -257,10 +263,27 @@ function A:RemoveSpellFromIgnoreList()
 	end
 end
 
+function A:Button_SetTooltip(button)
+	if button:GetAttribute("index") then
+		GameTooltip:SetUnitAura(button.header:GetAttribute("unit"), button:GetID(), button.filter)
+	elseif button:GetAttribute("target-slot") then
+		GameTooltip:SetInventoryItem("player", button:GetID())
+	end
+end
+
+function A:Button_OnEnter()
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", -5, -5)
+	-- Update tooltip
+	self.nextUpdate = -1
+	self:SetScript("OnUpdate", A.UpdateTimer)
+end
+
 function A:CreateAuraIcon(button)
-	local header = button:GetParent()
+	button.header = button:GetParent()
+	button.filter = button.header.filter
+
 	local cfg = A.settings.Debuffs
-	if header:GetAttribute("filter") == "HELPFUL" then
+	if button.filter == "HELPFUL" then
 		cfg = A.settings.Buffs
 	end
 	local fontSize = floor(cfg.size/30*12 + .5)
@@ -284,6 +307,9 @@ function A:CreateAuraIcon(button)
 	B.CreateBD(button, .25)
 	B.CreateSD(button)
 
+	button:RegisterForClicks("RightButtonUp")
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
 	button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
+	button:SetScript("OnEnter", A.Button_OnEnter)
+	button:SetScript("OnLeave", B.HideTooltip)
 end
