@@ -122,6 +122,7 @@ local list = {
 		{AuraID = 345499, UnitID = "player"},	-- 执政官的祝福
 		{AuraID = 339461, UnitID = "player"},	-- 猎手坚韧
 		{AuraID = 325381, UnitID = "player", Flash = true},	-- 争先打击
+		{AuraID = 351414, UnitID = "player", Flash = true},	-- 切肉者之眼
 		{AuraID = 342774, UnitID = "player"},	-- 繁华原野
 		{AuraID = 333218, UnitID = "player"},	-- 废土礼节
 		{AuraID = 336885, UnitID = "player"},	-- 抚慰阴影
