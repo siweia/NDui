@@ -111,7 +111,7 @@ end
 function B:OnCastSent()
 	local element = self.Castbar
 	if not element.SafeZone then return end
-	element.SafeZone.sendTime = GetTime()
+	element.__sendTime = GetTime()
 end
 
 local function ResetSpellTarget(self)
@@ -162,7 +162,7 @@ function B:PostCastStart(unit)
 		end
 	elseif unit == "player" then
 		if safeZone then
-			local sendTime = safeZone.sendTime
+			local sendTime = self.__sendTime
 			local timeDiff = sendTime and min((GetTime() - sendTime), self.max)
 			if timeDiff and timeDiff ~= 0 then
 				safeZone:SetWidth(self:GetWidth() * timeDiff / self.max)
@@ -173,7 +173,7 @@ function B:PostCastStart(unit)
 				safeZone:Hide()
 				lagString:Hide()
 			end
-			safeZone.sendTime = nil
+			self.__sendTime = nil
 		end
 
 		local numTicks = 0

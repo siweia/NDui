@@ -554,6 +554,22 @@ local function updateSpellTarget(self, _, unit)
 	B.PostCastUpdate(self.Castbar, unit)
 end
 
+function UF:ToggleCastBarLatency(frame)
+	frame = frame or _G.oUF_Player
+	if not frame then return end
+
+	if C.db["UFs"]["LagString"] then
+		frame:RegisterEvent("GLOBAL_MOUSE_UP", B.OnCastSent, true) -- Fix quests with WorldFrame interaction
+		frame:RegisterEvent("GLOBAL_MOUSE_DOWN", B.OnCastSent, true)
+		frame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
+	else
+		frame:UnregisterEvent("GLOBAL_MOUSE_UP", B.OnCastSent)
+		frame:UnregisterEvent("GLOBAL_MOUSE_DOWN", B.OnCastSent)
+		frame:UnregisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent)
+		if frame.Castbar then frame.Castbar.__sendTime = nil end
+	end
+end
+
 function UF:CreateCastBar(self)
 	local mystyle = self.mystyle
 	if mystyle ~= "nameplate" and not C.db["UFs"]["Castbars"] then return end
@@ -611,7 +627,7 @@ function UF:CreateCastBar(self)
 		lagStr:SetPoint("BOTTOM", cb, "TOP", 0, 2)
 		cb.LagString = lagStr
 
-		self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
+		UF:ToggleCastBarLatency(self)
 	elseif mystyle == "nameplate" then
 		name:SetPoint("TOPLEFT", cb, "LEFT", 0, -1)
 		timer:SetPoint("TOPRIGHT", cb, "RIGHT", 0, -1)
