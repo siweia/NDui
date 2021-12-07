@@ -2,8 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF
 
-local unpack, GetTime, IsPlayerSpell = unpack, GetTime, IsPlayerSpell
-local UnitInVehicle, UnitIsUnit = UnitInVehicle, UnitIsUnit
+local unpack, pairs, min, format, strupper = unpack, pairs, min, format, strupper
+local GetTime, IsPlayerSpell, UnitName = GetTime, IsPlayerSpell, UnitName
+local UnitInVehicle, UnitIsUnit, UnitExists = UnitInVehicle, UnitIsUnit, UnitExists
 
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
@@ -82,9 +83,6 @@ function B:OnCastbarUpdate(elapsed)
 				self.Time:SetFormattedText(decimal.." | |cffff0000"..decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
 			else
 				self.Time:SetFormattedText(decimal.." | "..decimal, duration, self.max)
-				if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
-					self.Lag:SetFormattedText("%d ms", self.SafeZone.timeDiff * 1000)
-				end
 			end
 		else
 			if duration > 1e4 then
@@ -114,7 +112,6 @@ function B:OnCastSent()
 	local element = self.Castbar
 	if not element.SafeZone then return end
 	element.SafeZone.sendTime = GetTime()
-	element.SafeZone.castSent = true
 end
 
 local function ResetSpellTarget(self)
@@ -155,20 +152,28 @@ function B:PostCastStart(unit)
 	self:SetAlpha(1)
 	self.Spark:Show()
 
+	local safeZone = self.SafeZone
+	local lagString = self.LagString
+
 	if unit == "vehicle" or UnitInVehicle("player") then
-		if self.SafeZone then self.SafeZone:Hide() end
-		if self.Lag then self.Lag:Hide() end
-	elseif unit == "player" then
-		local safeZone = self.SafeZone
 		if safeZone then
-			safeZone.timeDiff = 0
-			if safeZone.castSent then
-				safeZone.timeDiff = GetTime() - safeZone.sendTime
-				safeZone.timeDiff = safeZone.timeDiff > self.max and self.max or safeZone.timeDiff
-				safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + .001) / self.max)
+			safeZone:Hide()
+			lagString:Hide()
+		end
+	elseif unit == "player" then
+		if safeZone then
+			local sendTime = safeZone.sendTime
+			local timeDiff = sendTime and min((GetTime() - sendTime), self.max)
+			if timeDiff and timeDiff ~= 0 then
+				safeZone:SetWidth(self:GetWidth() * timeDiff / self.max)
 				safeZone:Show()
-				safeZone.castSent = nil
+				lagString:SetFormattedText("%d ms", timeDiff * 1000)
+				lagString:Show()
+			else
+				safeZone:Hide()
+				lagString:Hide()
 			end
+			safeZone.sendTime = nil
 		end
 
 		local numTicks = 0

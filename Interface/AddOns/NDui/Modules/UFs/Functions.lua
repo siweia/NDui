@@ -598,23 +598,20 @@ function UF:CreateCastBar(self)
 	end
 
 	if mystyle == "player" then
-		if C.db["UFs"]["LagString"] then
-			local safe = cb:CreateTexture(nil, "OVERLAY")
-			safe:SetTexture(DB.normTex)
-			safe:SetVertexColor(1, 0, 0, .6)
-			safe:SetPoint("TOPRIGHT")
-			safe:SetPoint("BOTTOMRIGHT")
-			cb:SetFrameLevel(10)
-			cb.SafeZone = safe
+		local safeZone = cb:CreateTexture(nil, "OVERLAY")
+		safeZone:SetTexture(DB.normTex)
+		safeZone:SetVertexColor(1, 0, 0, .6)
+		safeZone:SetPoint("TOPRIGHT")
+		safeZone:SetPoint("BOTTOMRIGHT")
+		cb:SetFrameLevel(10)
+		cb.SafeZone = safeZone
 
-			local lag = B.CreateFS(cb, 10)
-			lag:ClearAllPoints()
-			lag:SetPoint("BOTTOM", cb, "TOP", 0, 2)
-			cb.Lag = lag
-			self:RegisterEvent("GLOBAL_MOUSE_UP", B.OnCastSent, true) -- Fix quests with WorldFrame interaction
-			self:RegisterEvent("GLOBAL_MOUSE_DOWN", B.OnCastSent, true)
-			self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
-		end
+		local lagStr = B.CreateFS(cb, 10)
+		lagStr:ClearAllPoints()
+		lagStr:SetPoint("BOTTOM", cb, "TOP", 0, 2)
+		cb.LagString = lagStr
+
+		self:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
 	elseif mystyle == "nameplate" then
 		name:SetPoint("TOPLEFT", cb, "LEFT", 0, -1)
 		timer:SetPoint("TOPRIGHT", cb, "RIGHT", 0, -1)
