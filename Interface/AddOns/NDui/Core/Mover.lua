@@ -18,6 +18,7 @@ function B:CreateMF(parent, saved)
 		frame:StopMovingOrSizing()
 		if not saved then return end
 		local orig, _, tar, x, y = frame:GetPoint()
+		x, y = B:Round(x), B:Round(y)
 		C.db["TempAnchor"][frame:GetName()] = {orig, "UIParent", tar, x, y}
 	end)
 end

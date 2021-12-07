@@ -1528,6 +1528,9 @@ do
 	local function updatePicker()
 		local swatch = ColorPickerFrame.__swatch
 		local r, g, b = ColorPickerFrame:GetColorRGB()
+		r = B:Round(r, 2)
+		g = B:Round(g, 2)
+		b = B:Round(b, 2)
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b = r, g, b
 	end
@@ -1564,8 +1567,9 @@ do
 		end
 	end
 
+	local whiteColor = {r=1, g=1, b=1}
 	function B:CreateColorSwatch(name, color)
-		color = color or {r=1, g=1, b=1}
+		color = color or whiteColor
 
 		local swatch = CreateFrame("Button", nil, self, "BackdropTemplate")
 		swatch:SetSize(18, 18)
