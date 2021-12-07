@@ -77,7 +77,7 @@ end
 function A:UpdateTimer(elapsed)
 	local onTooltip = GameTooltip:IsOwned(self)
 
-	if not self.timeLeft and not onTooltip then
+	if not (self.timeLeft or self.offset or onTooltip) then
 		self:SetScript("OnUpdate", nil)
 		return
 	end
