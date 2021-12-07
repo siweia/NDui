@@ -524,6 +524,7 @@ L["FreeSlots"] = "Total des emplacements libre"
 L["Bags GatherEmpty"] = "Collecter des emplacements vides"
 L["Castbar Settings"] = "Paramètres de la barre d'incantation"
 L["Castbar Colors"] = "Couleurs de la barre d'incantation"
+L["PlayerCastingColor"] = "Player casting color" -- need translation
 L["Interruptible Color"] = "Couleur interruptible"
 L["NotInterruptible Color"] = "Couleur non-interruptible"
 L["Castbar Height"] = "Hauteur de la barre d'incantation"

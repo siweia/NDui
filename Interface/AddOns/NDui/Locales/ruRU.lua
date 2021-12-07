@@ -524,6 +524,7 @@ L["FreeSlots"] = "Свободно слотов"
 L["Bags GatherEmpty"] = "Собирать пустые слоты в один"
 L["Castbar Settings"] = "Настройки полосы заклинаний"
 L["Castbar Colors"] = "Цвета полосы заклинаний"
+L["PlayerCastingColor"] = "Player casting color" -- need translation
 L["Interruptible Color"] = "Цвет прерываемого"
 L["NotInterruptible Color"] = "Цвет не прерываемого"
 L["Castbar Height"] = "Высота полосы заклинаний"

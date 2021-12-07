@@ -141,11 +141,19 @@ local function UpdateSpellTarget(self, unit)
 	end
 end
 
+local function UpdateCastBarColor(self, unit)
+	local color = C.db["UFs"]["CastingColor"]
+	if unit == "player" then
+		color = C.db["UFs"]["OwnCastColor"]
+	elseif not UnitIsUnit(unit, "player") and self.notInterruptible then
+		color = C.db["UFs"]["NotInterruptColor"]
+	end
+	self:SetStatusBarColor(color.r, color.g, color.b)
+end
+
 function B:PostCastStart(unit)
 	self:SetAlpha(1)
 	self.Spark:Show()
-	local color = C.db["UFs"]["CastingColor"]
-	self:SetStatusBarColor(color.r, color.g, color.b)
 
 	if unit == "vehicle" or UnitInVehicle("player") then
 		if self.SafeZone then self.SafeZone:Hide() end
@@ -168,10 +176,9 @@ function B:PostCastStart(unit)
 			numTicks = channelingTicks[self.spellID] or 0
 		end
 		updateCastBarTicks(self, numTicks)
-	elseif not UnitIsUnit(unit, "player") and self.notInterruptible then
-		color = C.db["UFs"]["NotInterruptColor"]
-		self:SetStatusBarColor(color.r, color.g, color.b)
 	end
+
+	UpdateCastBarColor(self, unit)
 
 	if self.__owner.mystyle == "nameplate" then
 		-- Major spells
@@ -193,11 +200,7 @@ function B:PostCastUpdate(unit)
 end
 
 function B:PostUpdateInterruptible(unit)
-	local color = C.db["UFs"]["CastingColor"]
-	if not UnitIsUnit(unit, "player") and self.notInterruptible then
-		color = C.db["UFs"]["NotInterruptColor"]
-	end
-	self:SetStatusBarColor(color.r, color.g, color.b)
+	UpdateCastBarColor(self, unit)
 end
 
 function B:PostCastStop()
