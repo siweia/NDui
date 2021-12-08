@@ -6,6 +6,8 @@ local format, max = string.format, math.max
 local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
 local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
 local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
+local STAT_HASTE = STAT_HASTE
+local HIGHLIGHT_FONT_COLOR_CODE, FONT_COLOR_CODE_CLOSE = HIGHLIGHT_FONT_COLOR_CODE, FONT_COLOR_CODE_CLOSE
 
 function M:MissingStats()
 	if not C.db["Misc"]["MissingStats"] then return end
@@ -121,6 +123,23 @@ function M:MissingStats()
 			displayItemLevel = displayItemLevel.." / "..avgItemLevel
 		end
 		PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
+	end)
+
+	hooksecurefunc("PaperDollFrame_SetLabelAndText", function(statFrame, label, _, isPercentage)
+		if isPercentage or label == STAT_HASTE then
+			statFrame.Value:SetText(B:Round(statFrame.numericValue, 2).."%")
+		end
+	end)
+
+	hooksecurefunc("PaperDollFrame_UpdateStats", function()
+		for statFrame in CharacterStatsPane.statsFramePool:EnumerateActive() do
+			if not statFrame.styled then
+				statFrame.Label:SetFontObject(Game13Font)
+				statFrame.Value:SetFontObject(Game13Font)
+
+				statFrame.styled = true
+			end
+		end
 	end)
 end
 M:RegisterMisc("MissingStats", M.MissingStats)
