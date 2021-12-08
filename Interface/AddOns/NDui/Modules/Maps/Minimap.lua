@@ -393,7 +393,17 @@ function module:UpdateMinimapScale()
 	local scale = C.db["Map"]["MinimapScale"]
 	Minimap:SetSize(size, size)
 	Minimap:SetScale(scale)
-	Minimap.mover:SetSize(size*scale, size*scale)
+	if Minimap.mover then
+		Minimap.mover:SetSize(size*scale, size*scale)
+	end
+end
+
+function GetMinimapShape() -- LibDBIcon
+	if not module.initialized then
+		module:UpdateMinimapScale()
+		module.initialized = true
+	end
+	return "SQUARE"
 end
 
 function module:ShowMinimapClock()
