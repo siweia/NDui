@@ -33,7 +33,10 @@ local toBagSlot = cargBags.ToBagSlot
 local LE_ITEM_CLASS_MISCELLANEOUS = Enum.ItemClass.Miscellaneous or 15
 local LE_ITEM_MISCELLANEOUS_COMPANION_PET = Enum.ItemMiscellaneousSubclass.CompanionPet or 2
 local PET_CAGE = 82800
-local MYTHIC_KEYSTONE = 180653
+local MYTHIC_KEYSTONES = {
+	[180653] = true,
+	[187786] = true, -- Timewarped
+}
 
 --[[!
 	Creates a new instance of the class
@@ -322,7 +325,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.level = tonumber(petLevel) or 0
 			i.classID = LE_ITEM_CLASS_MISCELLANEOUS
 			i.subClassID = LE_ITEM_MISCELLANEOUS_COMPANION_PET
-		elseif itemID == MYTHIC_KEYSTONE then
+		elseif MYTHIC_KEYSTONES[itemID] then
 			i.level, i.name = strmatch(itemLink, "|H%w+:%d+:%d+:(%d+):.-|h%[(.-)%]|h")
 			i.level = tonumber(i.level) or 0
 		end
