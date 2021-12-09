@@ -204,6 +204,10 @@ local autoGossipTypes = {
 	["trainer"] = true,
 }
 
+local ignoreInstances = {
+	[1571] = true, -- 枯法者
+	[1626] = true, -- 群星庭院
+}
 QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
 	if C.IgnoreQuestNPC[npcID] then return end
@@ -241,11 +245,12 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 			end
 
 			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-			if instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626) then
+			if instance ~= "raid" and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
 				local gossipInfoTable = C_GossipInfo_GetOptions()
 				local gType = gossipInfoTable[1] and gossipInfoTable[1].type
 				if gType and autoGossipTypes[gType] then
 					C_GossipInfo_SelectOption(1)
+					print(13)
 					return
 				end
 			end
