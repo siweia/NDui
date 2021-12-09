@@ -232,7 +232,9 @@ end
 
 local function GetPartyPetVisibility()
 	local visibility = "[group:party,nogroup:raid] show;hide"
-	if C.db["UFs"]["RaidPets"] then
+	if C.db["UFs"]["PartyPetVsby"] == 2 then
+		visibility = "[group:raid] show;hide"
+	elseif C.db["UFs"]["PartyPetVsby"] == 3 then
 		visibility = "[group] show;hide"
 	end
 	if C.db["UFs"]["ShowSolo"] then

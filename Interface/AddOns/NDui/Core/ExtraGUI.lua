@@ -1097,7 +1097,7 @@ function G:SetupPartyPetFrame(parent)
 		updatePartyPetHeader()
 	end
 
-	createOptionCheck(scroll.child, -10, L["ShowInRaid"], "UFs", "RaidPets", UF.UpdateAllHeaders)
+	createOptionDropdown(scroll.child, L["Visibility"], -30, {L["ShowInParty"], L["ShowInRaid"], L["ShowInGroup"]}, nil, "UFs", "PartyPetVsby", 1, UF.UpdateAllHeaders)
 	createOptionSlider(scroll.child, L["Width"], 60, 200, 100, -90, "PartyPetWidth", resizePartyPetFrame)
 	createOptionSlider(scroll.child, L["Height"], 20, 60, 22, -160, "PartyPetHeight", resizePartyPetFrame)
 	createOptionSlider(scroll.child, L["Power Height"], 2, 30, 2, -230, "PartyPetPowerHeight", resizePartyPetFrame)
