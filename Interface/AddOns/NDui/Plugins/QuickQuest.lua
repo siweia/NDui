@@ -250,7 +250,6 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 				local gType = gossipInfoTable[1] and gossipInfoTable[1].type
 				if gType and autoGossipTypes[gType] then
 					C_GossipInfo_SelectOption(1)
-					print(13)
 					return
 				end
 			end
