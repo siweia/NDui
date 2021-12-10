@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
-local pairs, wipe, select = pairs, wipe, select
+local pairs, tonumber, wipe, select = pairs, tonumber, wipe, select
 local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
@@ -262,29 +262,12 @@ end
 	NDui版本过期提示
 ]]
 local lastVCTime, isVCInit = 0
-local function dc(str) return B:Decode(str) end
-local tn, fv = tonumber, dc("NS4wLjA=")
-local function gm(str) return tn(dc(str)) end
-local sm, fm = gm("Nw=="), gm("NQ==")
+function M:VersionCheck_Compare(new, old)
+	local new1, new2 = strsplit(".", new)
+	new1, new2 = tonumber(new1), tonumber(new2)
 
-local function HandleVersonTag(version, isOwn, author)
-	local major, minor = strsplit(".", version)
-	major, minor = tn(major), tn(minor)
-	if major > sm then
-		major = fm
-		if isOwn then
-			DB.Version = fv
-			M:VersionCheck_Init(true)
-		elseif DB.isDeveloper and author then
-			print("|cffff0000Moron:|r "..author)
-		end
-	end
-	return major, minor
-end
-
-function M:VersionCheck_Compare(new, old, isOwn, author)
-	local new1, new2 = HandleVersonTag(new, nil, author)
-	local old1, old2 = HandleVersonTag(old, isOwn, author)
+	local old1, old2 = strsplit(".", old)
+	old1, old2 = tonumber(old1), tonumber(old2)
 
 	if new1 > old1 or (new1 == old1 and new2 > old2) then
 		return "IsNew"
@@ -304,9 +287,9 @@ function M:VersionCheck_Create(text)
 	})
 end
 
-function M:VersionCheck_Init(force)
-	if not isVCInit or force then
-		local status = M:VersionCheck_Compare(NDuiADB["DetectVersion"], DB.Version, true)
+function M:VersionCheck_Init()
+	if not isVCInit then
+		local status = M:VersionCheck_Compare(NDuiADB["DetectVersion"], DB.Version)
 		if status == "IsNew" then
 			local release = gsub(NDuiADB["DetectVersion"], "(%d+)$", "0")
 			M:VersionCheck_Create(format(L["Outdated NDui"], release))
@@ -330,7 +313,7 @@ function M:VersionCheck_Update(...)
 	if prefix ~= "NDuiVersionCheck" then return end
 	if Ambiguate(author, "none") == DB.MyName then return end
 
-	local status = M:VersionCheck_Compare(msg, NDuiADB["DetectVersion"], nil, author)
+	local status = M:VersionCheck_Compare(msg, NDuiADB["DetectVersion"])
 	if status == "IsNew" then
 		NDuiADB["DetectVersion"] = msg
 	elseif status == "IsOld" then
