@@ -1309,14 +1309,14 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
-		{1, "ACCOUNT", "DisableInfobars", "|cffff0000"..L["DisableInfobars"], true},
+		{1, "ACCOUNT", "LockUIScale", L["Lock UIScale"]},
+		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], true, {.4, 1.15, .01}},
+		{},--blank
+		{1, "ACCOUNT", "DisableInfobars", "|cffff0000"..L["DisableInfobars"]},
 		{3, "Misc", "MaxAddOns", L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
 		{3, "Misc", "InfoSize", L["InfobarFontSize"].."*", true,  {10, 50, 1}, updateInfobarSize},
 		{2, "Misc", "InfoStrLeft", L["LeftInfobar"].."*", nil, nil, updateInfobarAnchor, L["InfobarStrTip"]},
 		{2, "Misc", "InfoStrRight", L["RightInfobar"].."*", true, nil, updateInfobarAnchor, L["InfobarStrTip"]},
-		{},--blank
-		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], false, {.4, 1.15, .01}},
-		{1, "ACCOUNT", "LockUIScale", HeaderTag..L["Lock UIScale"], true},
 		{},--blank
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
