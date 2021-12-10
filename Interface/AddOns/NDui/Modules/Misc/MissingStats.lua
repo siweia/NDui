@@ -127,7 +127,7 @@ function M:MissingStats()
 
 	hooksecurefunc("PaperDollFrame_SetLabelAndText", function(statFrame, label, _, isPercentage)
 		if isPercentage or label == STAT_HASTE then
-			statFrame.Value:SetText(B:Round(statFrame.numericValue, 2).."%")
+			statFrame.Value:SetFormattedText("%.2f%%", statFrame.numericValue)
 		end
 	end)
 
