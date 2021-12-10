@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
-local pairs, tonumber, wipe, select = pairs, tonumber, wipe, select
+local pairs, wipe, select = pairs, wipe, select
 local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
@@ -262,13 +262,23 @@ end
 	NDui版本过期提示
 ]]
 local lastVCTime, isVCInit = 0
-function M:VersionCheck_Compare(new, old)
-	local new1, new2 = strsplit(".", new)
-	new1, new2 = tonumber(new1), tonumber(new2)
+local tn = tonumber
 
-	local old1, old2 = strsplit(".", old)
-	old1, old2 = tonumber(old1), tonumber(old2)
+local function HandleVersonTag(version)
+	local major, minor = strsplit(".", version)
+	major, minor = tn(major), tn(minor)
+	if B:CV(major) then
+		major, minor = 0, 0
+		if DB.isDeveloper and author then
+			print("Moron: "..author)
+		end
+	end
+	return major, minor
+end
 
+function M:VersionCheck_Compare(new, old, author)
+	local new1, new2 = HandleVersonTag(new, author)
+	local old1, old2 = HandleVersonTag(old)
 	if new1 > old1 or (new1 == old1 and new2 > old2) then
 		return "IsNew"
 	elseif new1 < old1 or (new1 == old1 and new2 < old2) then
@@ -313,7 +323,7 @@ function M:VersionCheck_Update(...)
 	if prefix ~= "NDuiVersionCheck" then return end
 	if Ambiguate(author, "none") == DB.MyName then return end
 
-	local status = M:VersionCheck_Compare(msg, NDuiADB["DetectVersion"])
+	local status = M:VersionCheck_Compare(msg, NDuiADB["DetectVersion"], author)
 	if status == "IsNew" then
 		NDuiADB["DetectVersion"] = msg
 	elseif status == "IsOld" then
