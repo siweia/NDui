@@ -97,6 +97,13 @@ function module:StartTimer(start, duration)
 		timer.enabled = true
 		timer.nextUpdate = 0
 
+		-- wait for blizz to fix itself
+		local charge = parent and parent.chargeCooldown
+		local chargeTimer = charge and charge.timer
+		if chargeTimer and chargeTimer ~= timer then
+			module.StopTimer(chargeTimer)
+		end
+
 		if timer.fontScale >= MIN_SCALE then
 			timer:Show()
 		end
