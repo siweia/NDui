@@ -1478,11 +1478,12 @@ function G:SetupUFAuras(parent)
 end
 
 function G:SetupActionbarStyle(parent)
+	local maxButtons = 6
 	local size, padding = 30, 3
 
 	local frame = CreateFrame("Frame", "NDuiActionbarStyleFrame", parent.child)
-	frame:SetSize((size+padding)*5 + padding, size + 2*padding)
-	frame:SetPoint("TOPRIGHT", -100, -15)
+	frame:SetSize((size+padding)*maxButtons + padding, size + 2*padding)
+	frame:SetPoint("TOPRIGHT", -85, -15)
 	B.CreateBDFrame(frame, .25)
 
 	local Bar = B:GetModule("Actionbar")
@@ -1491,17 +1492,19 @@ function G:SetupActionbarStyle(parent)
 		[1] = "NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:-271B26:271B26:-1BR336:-35BR336:0B100:-202B100",
 		[2] = "NAB:34:12:12:12:34:12:12:12:34:12:12:12:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:0B96:271B26:-1BR336:-35BR336:0B134:-200B138",
 		[3] = "NAB:34:12:12:12:34:12:12:12:34:12:12:6:32:12:12:1:32:12:12:1:26:12:10:10:30:12:10:-108B24:-108B60:216B24:271B26:-1TR-336:-35TR-336:0B98:-310B100",
+		[4] = "NAB:34:12:12:12:34:12:12:12:32:12:12:6:32:12:12:6:32:12:12:1:26:12:10:10:30:12:10:0B24:0B60:536BL26:271B26:-536BR26:-1TR-336:0B100:-202B100",
 	}
 	local styleName = {
 		[1] = _G.DEFAULT,
 		[2] = "3X12",
 		[3] = "2X18",
-		[4] = L["Export"],
-		[5] = L["Import"],
+		[4] = "12+24+12",
+		[5] = L["Export"],
+		[6] = L["Import"],
 	}
 	local tooltips = {
-		[4] = L["ExportActionbarStyle"],
-		[5] = L["ImportActionbarStyle"],
+		[5] = L["ExportActionbarStyle"],
+		[6] = L["ImportActionbarStyle"],
 	}
 
 	local function applyBarStyle(self)
@@ -1579,24 +1582,24 @@ function G:SetupActionbarStyle(parent)
 	end
 
 	local function GetButtonText(i)
-		if i == 4 then
+		if i == 5 then
 			return "|T"..DB.ArrowUp..":18|t"
-		elseif i == 5 then
+		elseif i == 6 then
 			return "|T"..DB.ArrowUp..":18:18:0:0:1:1:0:1:1:0|t"
 		else
 			return i
 		end
 	end
 
-	for i = 1, 5 do
+	for i = 1, maxButtons do
 		local bu = B.CreateButton(frame, size, size, GetButtonText(i))
 		bu:SetPoint("LEFT", (i-1)*(size + padding) + padding, 0)
 		bu.index = i
 		bu.title = styleName[i]
 		bu.tip = tooltips[i] or L["ApplyBarStyle"]
-		if i == 4 then
+		if i == 5 then
 			bu:SetScript("OnClick", exportBarStyle)
-		elseif i == 5 then
+		elseif i == 6 then
 			bu:SetScript("OnClick", importBarStyle)
 		else
 			bu:SetScript("OnClick", applyBarStyle)
