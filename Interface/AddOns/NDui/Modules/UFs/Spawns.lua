@@ -276,15 +276,6 @@ local function ResetHeaderPoints(header)
 end
 
 function UF:OnLogin()
-	local horizonRaid = C.db["UFs"]["HorizonRaid"]
-	local horizonParty = C.db["UFs"]["HorizonParty"]
-	local numGroups = C.db["UFs"]["NumGroups"]
-	local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
-	local reverse = C.db["UFs"]["ReverseRaid"]
-	local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
-	local petWidth, petHeight = C.db["UFs"]["PartyPetWidth"], C.db["UFs"]["PartyPetHeight"]
-	local showTeamIndex = C.db["UFs"]["ShowTeamIndex"]
-
 	if C.db["Nameplate"]["Enable"] then
 		UF:SetupCVars()
 		UF:BlockAddons()
@@ -407,6 +398,8 @@ function UF:OnLogin()
 			oUF:SetActiveStyle("Party")
 
 			local xOffset, yOffset = 5, 5
+			local horizonParty = C.db["UFs"]["HorizonParty"]
+			local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
 			local partyFrameHeight = partyHeight + C.db["UFs"]["PartyPowerHeight"] + C.mult
 			local moverWidth = horizonParty and (partyWidth*5+xOffset*4) or partyWidth
 			local moverHeight = horizonParty and partyFrameHeight or (partyFrameHeight*5+yOffset*4)
@@ -463,7 +456,7 @@ function UF:OnLogin()
 				tinsert(UF.headers, partyPet)
 				RegisterStateDriver(partyPet, "visibility", GetPartyPetVisibility())
 
-				local petMover = B.Mover(partyPet, L["PartyPetFrame"], "PartyPetFrame", {"TOPLEFT", partyMover, "BOTTOMLEFT", 0, -5})
+				local petMover = B.Mover(partyPet, L["PartyPetFrame"], "PartyPet", {"TOPLEFT", partyMover, "BOTTOMLEFT", 0, -5})
 
 				function UF:UpdatePartyPetHeader()
 					ResetHeaderPoints(partyPet)
@@ -547,6 +540,11 @@ function UF:OnLogin()
 			oUF:RegisterStyle("Raid", CreateRaidStyle)
 			oUF:SetActiveStyle("Raid")
 
+			local numGroups = C.db["UFs"]["NumGroups"]
+			local reverse = C.db["UFs"]["ReverseRaid"]
+			local horizonRaid = C.db["UFs"]["HorizonRaid"]
+			local showTeamIndex = C.db["UFs"]["ShowTeamIndex"]
+			local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
 			local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
 
 			local function CreateGroup(name, i)
