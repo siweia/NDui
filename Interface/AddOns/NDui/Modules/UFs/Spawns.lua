@@ -231,9 +231,19 @@ local function GetRaidVisibility()
 end
 
 local function GetPartyPetVisibility()
-	local visibility = "[group:party,nogroup:raid] show;hide"
-	if C.db["UFs"]["PartyPetVsby"] == 2 then
-		visibility = "[group:raid] show;hide"
+	local visibility
+	if C.db["UFs"]["PartyPetVsby"] == 1 then
+		if C.db["UFs"]["SmartRaid"] then
+			visibility = "[@raid6,noexists,group] show;hide"
+		else
+			visibility = "[group:party,nogroup:raid] show;hide"
+		end
+	elseif C.db["UFs"]["PartyPetVsby"] == 2 then
+		if C.db["UFs"]["SmartRaid"] then
+			visibility = "[@raid6,exists] show;hide"
+		else
+			visibility = "[group:raid] show;hide"
+		end
 	elseif C.db["UFs"]["PartyPetVsby"] == 3 then
 		visibility = "[group] show;hide"
 	end
