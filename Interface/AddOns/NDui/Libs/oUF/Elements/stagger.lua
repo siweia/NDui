@@ -192,11 +192,13 @@ local function Enable(self, unit)
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 
-		MonkStaggerBar:UnregisterEvent('PLAYER_ENTERING_WORLD')
-		MonkStaggerBar:UnregisterEvent('PLAYER_SPECIALIZATION_CHANGED')
-		MonkStaggerBar:UnregisterEvent('UNIT_DISPLAYPOWER')
-		MonkStaggerBar:UnregisterEvent('UNIT_EXITED_VEHICLE')
-		MonkStaggerBar:UnregisterEvent('UPDATE_VEHICLE_ACTIONBAR')
+		if self.mystyle == "player" then -- NDui: only disable MonkStaggerBar for oUF_Player
+			MonkStaggerBar:UnregisterEvent('PLAYER_ENTERING_WORLD')
+			MonkStaggerBar:UnregisterEvent('PLAYER_SPECIALIZATION_CHANGED')
+			MonkStaggerBar:UnregisterEvent('UNIT_DISPLAYPOWER')
+			MonkStaggerBar:UnregisterEvent('UNIT_EXITED_VEHICLE')
+			MonkStaggerBar:UnregisterEvent('UPDATE_VEHICLE_ACTIONBAR')
+		end
 
 		element:Hide()
 
