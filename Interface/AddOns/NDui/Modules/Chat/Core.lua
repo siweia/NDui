@@ -367,9 +367,9 @@ function module:ToggleLanguageFilter()
 		if GetCVar("portal") == "CN" then
 			ConsoleExec("portal TW")
 			FixLanguageFilterSideEffects()
+			hasCNFix = true
 		end
 		SetCVar("profanityFilter", 0)
-		hasCNFix = true
 	else
 		if hasCNFix then
 			ConsoleExec("portal CN")
