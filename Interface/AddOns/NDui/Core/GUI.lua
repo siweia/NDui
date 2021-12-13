@@ -746,6 +746,10 @@ local function toggleChatBackground()
 	B:GetModule("Chat"):ToggleChatBackground()
 end
 
+local function toggleLanguageFilter()
+	B:GetModule("Chat"):ToggleLanguageFilter()
+end
+
 local function updateToggleDirection()
 	B:GetModule("Skins"):RefreshToggleDirection()
 end
@@ -1196,7 +1200,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Chatbar", L["ShowChatbar"]},
 		{1, "Chat", "WhisperColor", L["Differ WhisperColor"].."*", true},
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
-		{1, "Chat", "Freedom", L["Language Filter"], true},
+		{1, "Chat", "Freedom", L["Language Filter"].."*", true, nil, toggleLanguageFilter},
 		{1, "Chat", "WhisperSound", L["WhisperSound"].."*", nil, nil, nil, L["WhisperSoundTip"]},
 		{4, "ACCOUNT", "TimestampFormat", L["TimestampFormat"].."*", nil, {DISABLE, "03:27 PM", "03:27:32 PM", "15:27", "15:27:32"}},
 		{4, "Chat", "ChatBGType", L["ChatBGType"].."*", true, {DISABLE, L["Default Dark"], L["Gradient"]}, toggleChatBackground},

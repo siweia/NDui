@@ -334,8 +334,13 @@ function module:PlayWhisperSound(event, _, author)
 	end
 end
 
+-- ProfanityFilter
+local sideEffectFixed
 local function FixLanguageFilterSideEffects()
-	B.CreateFS(HelpFrame, 18, L["LanguageFilterTip"], "system",  "TOP", 0, 30)
+	if sideEffectFixed then return end
+	sideEffectFixed = true
+
+	B.CreateFS(HelpFrame, 18, "需要在控制台取消关闭语言过滤器，并重载插件后才可以正常连接国服战网支持。", "system",  "TOP", 0, 30)
 
 	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
 	function C_BattleNet.GetFriendGameAccountInfo(...)
@@ -353,6 +358,23 @@ local function FixLanguageFilterSideEffects()
 			accountInfo.gameAccountInfo.isInCurrentRegion = true
 		end
 		return accountInfo
+	end
+end
+
+local hasCNFix
+function module:ToggleLanguageFilter()
+	if C.db["Chat"]["Freedom"] then
+		if GetCVar("portal") == "CN" then
+			ConsoleExec("portal TW")
+			FixLanguageFilterSideEffects()
+		end
+		SetCVar("profanityFilter", 0)
+		hasCNFix = true
+	else
+		if hasCNFix then
+			ConsoleExec("portal CN")
+		end
+		SetCVar("profanityFilter", 1)
 	end
 end
 
@@ -399,6 +421,7 @@ function module:OnLogin()
 	module:ChatCopy()
 	module:UrlCopy()
 	module:WhisperInvite()
+	module:ToggleLanguageFilter()
 
 	-- Lock chatframe
 	if C.db["Chat"]["Lock"] then
@@ -406,17 +429,5 @@ function module:OnLogin()
 		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
 		hooksecurefunc("FCF_SavePositionAndDimensions", module.UpdateChatSize)
 		FCF_SavePositionAndDimensions(ChatFrame1)
-	end
-
-	-- ProfanityFilter
-	if not BNFeaturesEnabledAndConnected() then return end
-	if C.db["Chat"]["Freedom"] then
-		if GetCVar("portal") == "CN" then
-			ConsoleExec("portal TW")
-			FixLanguageFilterSideEffects()
-		end
-		SetCVar("profanityFilter", 0)
-	else
-		SetCVar("profanityFilter", 1)
 	end
 end
