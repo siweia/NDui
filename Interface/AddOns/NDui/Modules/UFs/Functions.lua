@@ -1259,6 +1259,11 @@ function UF:CreateClassPower(self)
 	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
 	bar:SetSize(barWidth, barHeight)
 	bar:SetPoint(unpack(barPoint))
+	-- show bg while size changed
+	bar.bg = B.SetBD(bar)
+	bar.bg:SetFrameLevel(5)
+	bar.bg:SetBackdropBorderColor(1, .8, 0)
+	bar.bg:Hide()
 
 	local bars = {}
 	for i = 1, 6 do
@@ -1388,6 +1393,7 @@ function UF:UpdateUFClassPower()
 	if bars then
 		playerFrame.ClassPowerBar:SetSize(barWidth, barHeight)
 		playerFrame.ClassPowerBar:SetPoint("BOTTOMLEFT", playerFrame, "TOPLEFT", xOffset, yOffset)
+		playerFrame.ClassPowerBar.bg:Show()
 		local max = bars.__max
 		for i = 1, max do
 			bars[i]:SetHeight(barHeight)
