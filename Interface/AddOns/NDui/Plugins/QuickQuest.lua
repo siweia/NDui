@@ -189,6 +189,7 @@ local rogueClassHallInsignia = {
 	[97004] = true, -- "Red" Jack Findle
 	[96782] = true, -- Lucian Trias
 	[93188] = true, -- Mongar
+	[107486] = true, -- CoS rumors
 }
 
 local followerAssignees = {
