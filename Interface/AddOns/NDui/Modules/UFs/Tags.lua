@@ -168,6 +168,8 @@ oUF.Tags.Events["fulllevel"] = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_C
 -- RaidFrame tags
 oUF.Tags.Methods["raidhp"] = function(unit)
 	local healthMode, healthType = C.db["UFs"]["RaidHPMode"]
+	if healthMode == 1 then return end
+
 	if healthMode == 2 then
 		healthType = "percent"
 	elseif healthMode == 3 then
