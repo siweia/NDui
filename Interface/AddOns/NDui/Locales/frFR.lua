@@ -754,6 +754,7 @@ L["RaidDebuffSize"] = "Taille des affaiblissements de raid"
 L["SmartRaid"] = "Cadres de raid par nombre de groupes"
 L["SmartRaidTip"] = "|nSi activé, n'afficher le cadre de raid que s'il y a plus de 5 membres dans votre groupe.|nSi désactivé, afficher le cadre de raid en raid, afficher le cadre de groupe en groupe.|n|nSeulement disponible si le cadre de groupe est activé."
 L["EquipColor"] = "Bordure d'objet équipé"
+L["LanguageFilterTip"] = "You need to uncheck language filter in GUI and reload ui to get access into CN battlenet support." -- need translation
 L["SaveMailTarget"] = "Enregistrer le destinataire"
 L["BlockSpammer"] = "Bloquer les messages du spammeur"
 L["BlockSpammerTip"] = "|nSi activé, les messages de spammeurs seront bloqués, vous ne recevrez plus aucun message d'eux."

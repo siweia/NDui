@@ -754,6 +754,7 @@ L["RaidDebuffSize"] = "Размер дебаффов рейда"
 L["SmartRaid"] = "Рамки рейда по размеру группы"
 L["SmartRaidTip"] = "|nЕсли включено, отображает рамки рейда только тогда, когдо в вашей группе 5 человек.|nЕсли выключено, показывает рамки рейда, если в рейде. фрейм группы, если в группе =).|n|n Доступно только если включены фрейм группы."
 L["EquipColor"] = "Рамки под цвет предметов"
+L["LanguageFilterTip"] = "You need to uncheck language filter in GUI and reload ui to get access into CN battlenet support." -- need translation
 L["SaveMailTarget"] = "Сохранить получателя"
 L["BlockSpammer"] = "Блокировать СПАМ"
 L["BlockSpammerTip"] = "|nЕсли включено, повторяющиеся сообщения будут считаться спамом и их отправитель будет заблокирован для Вас."
