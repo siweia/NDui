@@ -21,7 +21,12 @@ local function reskinRewardIcon(itemFrame)
 		itemFrame.Icon:SetPoint("LEFT", 6, 0)
 		itemFrame.bg = B.ReskinIcon(itemFrame.Icon)
 		itemFrame.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
-		B.CreateBDFrame(itemFrame, .25)
+	end
+end
+
+local function fixBg(anim) -- color reset for the first time game launched
+	if anim.bg then
+		anim.bg:SetBackdropColor(0, 0, 0, .25)
 	end
 end
 
@@ -33,6 +38,11 @@ local function ReskinActivityFrame(frame, isObject)
 			frame.LockIcon:SetVertexColor(r, g, b)
 			hooksecurefunc(frame, "SetSelectionState", updateSelection)
 			hooksecurefunc(frame.ItemFrame, "SetDisplayedItem", reskinRewardIcon)
+
+			if frame.SheenAnim then
+				frame.SheenAnim.bg = B.CreateBDFrame(frame.ItemFrame, .25)
+				frame.SheenAnim:HookScript("OnFinished", fixBg)
+			end
 		else
 			frame.Border:SetTexCoord(.926, 1, 0, 1)
 			frame.Border:SetSize(25, 137)
