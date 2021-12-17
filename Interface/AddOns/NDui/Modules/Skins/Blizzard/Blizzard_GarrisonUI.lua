@@ -1119,7 +1119,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					local region = select(i, frame:GetRegions())
 					if region then
 						local width, height = region:GetSize()
-						if width == 17 and height == 17 then
+						if B:Round(width) == 17 and B:Round(height) == 17 then
 							if abilityIndex1 then
 								abilityIndex2 = i
 							else
