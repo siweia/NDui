@@ -225,10 +225,8 @@ local function UpdateFollowerList(self)
 	end
 end
 
-local function UpdateSpellAbilities(self, followerInfo)
-	local autoSpellInfo = followerInfo.autoSpellAbilities
-	for _ in ipairs(autoSpellInfo) do
-		local abilityFrame = self.autoSpellPool:Acquire()
+local function UpdateSpellAbilities(self)
+	for abilityFrame in self.autoSpellPool:EnumerateActive() do
 		if not abilityFrame.styled then
 			B.ReskinIcon(abilityFrame.Icon)
 			if abilityFrame.IconMask then abilityFrame.IconMask:Hide() end
@@ -314,7 +312,7 @@ local function ReskinMissionFrame(self)
 	ReskinMissionPage(self.MissionTab.MissionPage)
 	B.StripTextures(self.FollowerTab)
 	ReskinXPBar(self.FollowerTab)
-	hooksecurefunc(self.FollowerTab, "UpdateCombatantStats", UpdateSpellAbilities)
+	hooksecurefunc(self.FollowerTab, "UpdateAutoSpellAbilities", UpdateSpellAbilities)
 
 	reskinFollowerItem(self.FollowerTab.ItemWeapon)
 	reskinFollowerItem(self.FollowerTab.ItemArmor)
@@ -622,7 +620,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Follower tab
 	local followerTab = GarrisonLandingPage.FollowerTab
 	ReskinXPBar(followerTab)
-	hooksecurefunc(followerTab, "UpdateCombatantStats", UpdateSpellAbilities)
+	hooksecurefunc(followerTab, "UpdateAutoSpellAbilities", UpdateSpellAbilities)
 
 	-- Ship follower tab
 	local followerTab = GarrisonLandingPage.ShipFollowerTab
