@@ -18,7 +18,7 @@ local C_VignetteInfo_GetVignettePosition = C_VignetteInfo.GetVignettePosition
 local C_Texture_GetAtlasInfo = C_Texture.GetAtlasInfo
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
-local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
+local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 
 --[[
 	SoloInfo是一个告知你当前副本难度的小工具，防止我有时候单刷时进错难度了。
@@ -376,51 +376,40 @@ function M:Explosive_Update(...)
 	end
 end
 
-local function startCount()
-	wipe(C.db["Misc"]["ExplosiveCache"])
-	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
-end
-
-local function endCount()
+function M:Explosive_SendResult()
 	local text
 	for name, count in pairs(C.db["Misc"]["ExplosiveCache"]) do
 		text = (text or L["ExplosiveCount"])..name.."("..count..") "
 	end
 	if text then SendChatMessage(text, "PARTY") end
+
 	B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
 end
 
-local function pauseCount()
-	local name, _, instID = GetInstanceInfo()
-	if name and instID == 8 then
+function M.Explosive_CheckAffixes(event)
+	local _, affixes = C_ChallengeMode_GetActiveKeystoneInfo()
+	if affixes[3] and affixes[3] == 13 then
+		if event == "CHALLENGE_MODE_START" then
+			wipe(C.db["Misc"]["ExplosiveCache"])
+		end
 		B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
+		B:RegisterEvent("CHALLENGE_MODE_COMPLETED", M.Explosive_SendResult)
 	else
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
+		B:UnregisterEvent("CHALLENGE_MODE_COMPLETED", M.Explosive_SendResult)
 	end
-end
-
-function M.Explosive_CheckAffixes(event)
-	local affixes = C_MythicPlus_GetCurrentAffixes()
-	if not affixes then return end
-
-	if affixes[3] and affixes[3].id == 13 then
-		B:RegisterEvent("CHALLENGE_MODE_START", startCount)
-		B:RegisterEvent("CHALLENGE_MODE_COMPLETED", endCount)
-		B:RegisterEvent("UPDATE_INSTANCE_INFO", pauseCount)
-	end
-	B:UnregisterEvent("PLAYER_ENTERING_WORLD", M.Explosive_CheckAffixes)
 end
 
 function M:ExplosiveAlert()
 	if C.db["Misc"]["ExplosiveCount"] then
-		self:Explosive_CheckAffixes()
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", self.Explosive_CheckAffixes)
+		M:Explosive_CheckAffixes()
+		B:RegisterEvent("ZONE_CHANGED_NEW_AREA", M.Explosive_CheckAffixes)
+		B:RegisterEvent("CHALLENGE_MODE_START", M.Explosive_CheckAffixes)
 	else
-		B:UnregisterEvent("CHALLENGE_MODE_START", startCount)
-		B:UnregisterEvent("CHALLENGE_MODE_COMPLETED", endCount)
-		B:UnregisterEvent("UPDATE_INSTANCE_INFO", pauseCount)
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", self.Explosive_CheckAffixes)
-		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", self.Explosive_Update)
+		B:UnregisterEvent("ZONE_CHANGED_NEW_AREA", M.Explosive_CheckAffixes)
+		B:UnregisterEvent("CHALLENGE_MODE_START", M.Explosive_CheckAffixes)
+		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
+		B:UnregisterEvent("CHALLENGE_MODE_COMPLETED", M.Explosive_SendResult)
 	end
 end
 
