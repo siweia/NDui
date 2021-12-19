@@ -26,44 +26,50 @@
 local _, ns = ...
 local oUF = ns.oUF
 
-local _G = getfenv(0)
+local strfind, GetTime = strfind, GetTime
+local UnitCastingInfo, UnitChannelInfo, UnitDebuff = UnitCastingInfo, UnitChannelInfo, UnitDebuff
+local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
+
 local DEBUFF_MAX_DISPLAY = _G.DEBUFF_MAX_DISPLAY
-local format, strfind = string.format, string.find
+local failedColor, passedColor = {1, 0, 0}, {0, 1, 0}
+local QUAKE_SPELLID = 240447
 
-local function updateTimer(self)
-	local duration = self.expires - GetTime()
+local function updateTimer(element)
+	local current = GetTime()
+	local duration = element.expires - current
 	if duration < 0 then
-		self:Hide()
+		element:Hide()
 	else
-		local timer = self.duration - duration
-		self:SetValue(timer)
-		if self.Text then
-			self.Text:SetText(format(self.timerFormat, timer, self.duration))
+		local timer = element.duration - duration
+		element:SetValue(timer)
+		if element.Text then
+			element.Text:SetFormattedText(element.timerFormat, timer, element.duration)
 		end
 
-		if self.endTime and self.endTime - GetTime() >= duration and not self.notInterruptible then
-			self:SetStatusBarColor(unpack(self.failColor))
+		if element.endTime and element.endTime - current >= duration and not element.notInterruptible then
+			element:SetStatusBarColor(element.failColor[1], element.failColor[2], element.failColor[3])
 		else
-			self:SetStatusBarColor(unpack(self.passColor))
+			element:SetStatusBarColor(element.passColor[1], element.passColor[2], element.passColor[3])
 		end
-		self:Show()
+		element:Show()
 	end
 end
 
 local function onEvent(self, event, unit)
 	if not unit or unit ~= "player" then return end
-	local element = self.QuakeTimer
 
+	local element = self.QuakeTimer
 	if event == "UNIT_AURA" then
 		local found
 		for i = 1, DEBUFF_MAX_DISPLAY do
 			local name, texture, _, _, duration, expires, _, _, _, spellID = UnitDebuff(unit, i)
-			if name and spellID == 240447 then
+			if not name then break end
+			if spellID == QUAKE_SPELLID then
 				element.duration = duration
 				element.expires = expires
 				element:SetMinMaxValues(0, duration)
-				if element.SpellName then element.SpellName:SetText(name) end
 				if element.Icon then element.Icon:SetTexture(texture) end
+				if element.SpellName then element.SpellName:SetText(name) end
 
 				found = true
 				break
@@ -73,13 +79,13 @@ local function onEvent(self, event, unit)
 	elseif strfind(event, "START") then
 		local name, _, _, _, endTime, _, _, notInterruptible = UnitCastingInfo(unit)
 		if not name then
-			name, _, _, _, endTime, _, _, notInterruptible = UnitChannelInfo(unit)
+			name, _, _, _, endTime, _, notInterruptible = UnitChannelInfo(unit)
 		end
-		if not name then return end
-
-		endTime = endTime / 1e3
-		element.endTime = endTime
-		element.notInterruptible = notInterruptible
+		if name then
+			endTime = endTime / 1e3
+			element.endTime = endTime
+			element.notInterruptible = notInterruptible
+		end
 	elseif strfind(event, "STOP") then
 		element.endTime = nil
 		element.notInterruptible = false
@@ -88,47 +94,47 @@ local function onEvent(self, event, unit)
 	if self.PostUpdate then self:PostUpdate(event, unit) end
 end
 
-local function Update(self)
-	local name, _, instID = GetInstanceInfo()
-	if name and instID == 8 then
-		self:RegisterEvent("UNIT_AURA", onEvent)
-		self:RegisterEvent("UNIT_SPELLCAST_START", onEvent)
-		self:RegisterEvent("UNIT_SPELLCAST_STOP", onEvent)
-		self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START", onEvent)
-		self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", onEvent)
-	else
-		self:UnregisterEvent("UNIT_AURA", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_START", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_STOP", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", onEvent)
-	end
+local function EnableQuakeTimer(self)
+	self:RegisterEvent("UNIT_AURA", onEvent)
+	self:RegisterEvent("UNIT_SPELLCAST_START", onEvent)
+	self:RegisterEvent("UNIT_SPELLCAST_STOP", onEvent)
+	self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START", onEvent)
+	self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", onEvent)
 end
 
-local function checkAffixes(self, event)
-	local affixes = C_MythicPlus.GetCurrentAffixes()
-	if not affixes then return end
-	if affixes[3] and affixes[3].id == 14 then
-		Update(self)
-		self:RegisterEvent(event, Update, true)
-		self:RegisterEvent("CHALLENGE_MODE_START", Update, true)
+local function DisableQuakeTimer(self)
+	self.QuakeTimer:Hide()
+	self:UnregisterEvent("UNIT_AURA", onEvent)
+	self:UnregisterEvent("UNIT_SPELLCAST_START", onEvent)
+	self:UnregisterEvent("UNIT_SPELLCAST_STOP", onEvent)
+	self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START", onEvent)
+	self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", onEvent)
+end
+
+local function CheckCurrentAffixes(self)
+	local _, affixes = C_ChallengeMode_GetActiveKeystoneInfo()
+	if affixes[3] and affixes[3] == 14 then
+		EnableQuakeTimer(self)
+	else
+		DisableQuakeTimer(self)
 	end
-	self:UnregisterEvent(event, checkAffixes)
 end
 
 local function Enable(self)
 	local element = self.QuakeTimer
 
 	if element then
-		element.failColor = element.failColor or {1, 0, 0}
-		element.passColor = element.passColor or {0, 1, 0}
+		element.failColor = element.failColor or failedColor
+		element.passColor = element.passColor or passedColor
 		element.timerFormat = element.timerFormat or "%.2f | %.2f"
 		if not element:GetStatusBarTexture() then
 			element:SetStatusBarTexture([[Interface\ChatFrame\ChatFrameBackground]])
 		end
 		element:SetScript("OnUpdate", updateTimer)
 
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", checkAffixes, true)
+		CheckCurrentAffixes(self)
+		self:RegisterEvent("ZONE_CHANGED_NEW_AREA", CheckCurrentAffixes, true)
+		self:RegisterEvent("CHALLENGE_MODE_START", CheckCurrentAffixes, true)
 		return true
 	end
 end
@@ -137,14 +143,9 @@ local function Disable(self)
 	local element = self.QuakeTimer
 
 	if element then
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD", checkAffixes)
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD", Update)
-		self:UnregisterEvent("CHALLENGE_MODE_START", Update)
-		self:UnregisterEvent("UNIT_AURA", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_START", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_STOP", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START", onEvent)
-		self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", onEvent)
+		DisableQuakeTimer(self)
+		self:UnregisterEvent("ZONE_CHANGED_NEW_AREA", CheckCurrentAffixes)
+		self:UnregisterEvent("CHALLENGE_MODE_START", CheckCurrentAffixes)
 	end
 end
 
