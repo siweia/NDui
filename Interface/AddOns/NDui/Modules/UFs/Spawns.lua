@@ -172,12 +172,12 @@ local function CreateRaidStyle(self)
 end
 
 local function CreateSimpleRaidStyle(self)
-	self.isSimpleMode = true
+	self.raidType = "simple"
 	CreateRaidStyle(self)
 end
 
 local function CreatePartyStyle(self)
-	self.isPartyFrame = true
+	self.raidType = "party"
 	CreateRaidStyle(self)
 	UF:InterruptIndicator(self)
 	UF:CreatePartyAltPower(self)
@@ -185,7 +185,7 @@ end
 
 local function CreatePartyPetStyle(self)
 	self.mystyle = "raid"
-	self.isPartyPet = true
+	self.raidType = "pet"
 	self.Range = UFRangeAlpha
 	self.disableTooltip = C.db["UFs"]["HideTip"]
 

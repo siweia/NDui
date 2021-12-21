@@ -1015,7 +1015,7 @@ function G:SetupRaidFrame(parent)
 
 	local function resizeRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.mystyle == "raid" and not frame.isPartyFrame and not frame.isPartyPet and not frame.isSimpleMode then
+			if frame.mystyle == "raid" and not frame.raidType then
 				SetUnitFrameSize(frame, "Raid")
 			end
 		end
@@ -1024,7 +1024,7 @@ function G:SetupRaidFrame(parent)
 
 	local function resizePartyFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.isPartyFrame then
+			if frame.raidType = "party" then
 				SetUnitFrameSize(frame, "Party")
 			end
 		end
@@ -1052,7 +1052,7 @@ function G:SetupSimpleRaidFrame(parent)
 
 	local function resizeSimpleRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.isSimpleMode then
+			if frame.raidType == "simple" then
 				local scale = C.db["UFs"]["SMRScale"]/10
 				local frameWidth = 100*scale
 				local frameHeight = 20*scale
@@ -1089,7 +1089,7 @@ function G:SetupPartyPetFrame(parent)
 
 	local function resizePartyPetFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.isPartyPet then
+			if frame.raidType = "pet" then
 				SetUnitFrameSize(frame, "PartyPet")
 			end
 		end
