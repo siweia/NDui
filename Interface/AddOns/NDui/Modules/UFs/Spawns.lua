@@ -6,6 +6,8 @@ local UF = B:GetModule("UnitFrames")
 local format, tostring = string.format, tostring
 
 -- Units
+local UFRangeAlpha = {insideAlpha = 1, outsideAlpha = .4}
+
 local function SetUnitFrameSize(self, unit)
 	local width = C.db["UFs"][unit.."Width"]
 	local height = C.db["UFs"][unit.."Height"] + C.db["UFs"][unit.."PowerHeight"] + C.mult
@@ -147,9 +149,7 @@ end
 
 local function CreateRaidStyle(self)
 	self.mystyle = "raid"
-	self.Range = {
-		insideAlpha = 1, outsideAlpha = .4,
-	}
+	self.Range = UFRangeAlpha
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
@@ -185,9 +185,7 @@ end
 local function CreatePartyPetStyle(self)
 	self.mystyle = "raid"
 	self.isPartyPet = true
-	self.Range = {
-		insideAlpha = 1, outsideAlpha = .4,
-	}
+	self.Range = UFRangeAlpha
 
 	UF:CreateHeader(self)
 	UF:CreateHealthBar(self)
