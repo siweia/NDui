@@ -45,12 +45,16 @@ end
 
 -- Elements
 local function UF_OnEnter(self)
-	UnitFrame_OnEnter(self)
+	if not self.disableTooltip then
+		UnitFrame_OnEnter(self)
+	end
 	self.Highlight:Show()
 end
 
 local function UF_OnLeave(self)
-	UnitFrame_OnLeave(self)
+	if not self.disableTooltip then
+		UnitFrame_OnLeave(self)
+	end
 	self.Highlight:Hide()
 end
 
@@ -443,6 +447,7 @@ function UF:UpdateRaidTextScale()
 			UF:UpdateHealthBarColor(frame, true)
 			UF:UpdatePowerBarColor(frame, true)
 			UF.UpdateFrameNameTag(frame)
+			frame.disableTooltip = C.db["UFs"]["HideTip"]
 		end
 	end
 end
