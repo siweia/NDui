@@ -72,7 +72,7 @@ local lodFrames = {
 	Blizzard_BlackMarketUI		= { ["BlackMarketFrame"] = false },
 	Blizzard_Calendar			= { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true, ["CalendarEventPickerFrame"] = false },
 	Blizzard_ChallengesUI		= { ["ChallengesKeystoneFrame"] = false },
-	Blizzard_Collections		= { ["WardrobeFrame"] = false, ["WardrobeOutfitEditFrame"] = false },
+	--Blizzard_Collections		= { ["WardrobeFrame"] = false, ["WardrobeOutfitEditFrame"] = false }, -- FIXME: blizz bug in collection mover
 	Blizzard_CovenantRenown		= { ["CovenantRenownFrame"] = false, },
 	Blizzard_CovenantSanctum	= { ["CovenantSanctumFrame"] = false, },
 	Blizzard_Communities		= { ["CommunitiesFrame"] = false, ["CommunitiesSettingsDialog"] = false, ["CommunitiesGuildLogFrame"] = false, ["CommunitiesTicketManagerDialog"] = false, ["CommunitiesAvatarPickerDialog"] = false, ["CommunitiesFrame.NotificationSettingsDialog"] = false, ["ClubFinderCommunityAndGuildFinderFrame.RequestToJoinFrame"] = false},
