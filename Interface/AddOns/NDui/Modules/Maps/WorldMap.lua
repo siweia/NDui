@@ -14,6 +14,7 @@ local tempVec2D = CreateVector2D(0, 0)
 local currentMapID, playerCoords, cursorCoords
 
 function module:GetPlayerMapPos(mapID)
+	if not mapID then return end
 	tempVec2D.x, tempVec2D.y = UnitPosition("player")
 	if not tempVec2D.x then return end
 
