@@ -67,7 +67,7 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 		return loss ~= 0 and B:Round(loss/max*100, 1)
 	end
 end
-oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
+oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED PARTY_MEMBER_ENABLE PARTY_MEMBER_DISABLE"
 
 oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
