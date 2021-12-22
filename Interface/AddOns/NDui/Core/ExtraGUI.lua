@@ -1024,7 +1024,7 @@ function G:SetupRaidFrame(parent)
 
 	local function resizePartyFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.raidType = "party" then
+			if frame.raidType == "party" then
 				SetUnitFrameSize(frame, "Party")
 			end
 		end
@@ -1089,7 +1089,7 @@ function G:SetupPartyPetFrame(parent)
 
 	local function resizePartyPetFrame()
 		for _, frame in pairs(ns.oUF.objects) do
-			if frame.raidType = "pet" then
+			if frame.raidType == "pet" then
 				SetUnitFrameSize(frame, "PartyPet")
 			end
 		end

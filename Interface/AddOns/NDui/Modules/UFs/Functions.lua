@@ -118,9 +118,9 @@ function UF:CreateHealthBar(self)
 	if mystyle == "PlayerPlate" then
 		healthHeight = C.db["Nameplate"]["PPHealthHeight"]
 	elseif mystyle == "raid" then
-		if self.raidType = "party" then
+		if self.raidType == "party" then
 			healthHeight = C.db["UFs"]["PartyHeight"]
-		elseif self.raidType = "pet" then
+		elseif self.raidType == "pet" then
 			healthHeight = C.db["UFs"]["PartyPetHeight"]
 		elseif self.raidType == "simple" then
 			local scale = C.db["UFs"]["SMRScale"]/10
@@ -225,7 +225,7 @@ function UF:CreateHealthText(self)
 	if mystyle == "raid" then
 		name:SetWidth(self:GetWidth()*.95)
 		name:ClearAllPoints()
-		if self.raidType = "pet" then
+		if self.raidType == "pet" then
 			name:SetWidth(self:GetWidth()*.55)
 			name:SetPoint("LEFT", 3, -1)
 		elseif self.raidType == "simple" then
@@ -254,7 +254,7 @@ function UF:CreateHealthText(self)
 	self.healthValue = hpval
 	if mystyle == "raid" then
 		self:Tag(hpval, "[raidhp]")
-		if self.raidType = "pet" then
+		if self.raidType == "pet" then
 			hpval:SetPoint("RIGHT", -3, -1)
 			self:Tag(hpval, "[VariousHP(current)]")
 		elseif self.raidType == "simple" then
@@ -275,7 +275,7 @@ end
 
 function UF:UpdateRaidNameText()
 	for _, frame in pairs(oUF.objects) do
-		if frame.mystyle == "raid" and not frame.raidType = "pet" then
+		if frame.mystyle == "raid" and not frame.raidType == "pet" then
 			local name = frame.nameText
 			name:ClearAllPoints()
 			if frame.raidType == "simple" then
@@ -341,9 +341,9 @@ function UF:CreatePowerBar(self)
 	if mystyle == "PlayerPlate" then
 		powerHeight = C.db["Nameplate"]["PPPowerHeight"]
 	elseif mystyle == "raid" then
-		if self.raidType = "party" then
+		if self.raidType == "party" then
 			powerHeight = C.db["UFs"]["PartyPowerHeight"]
-		elseif self.raidType = "pet" then
+		elseif self.raidType == "pet" then
 			powerHeight = C.db["UFs"]["PartyPetPowerHeight"]
 		elseif self.raidType == "simple" then
 			powerHeight = 2*C.db["UFs"]["SMRScale"]/10
