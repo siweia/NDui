@@ -30,7 +30,7 @@ local list = {
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 871, UnitID = "player"},		-- 盾墙
 		{AuraID = 1719, UnitID = "player"},		-- 战吼
-		{AuraID = 7384, UnitID = "player"},		-- 压制
+		{AuraID = 7384, UnitID = "player", Stack = 2, Flash = true}, -- 压制
 		{AuraID = 12975, UnitID = "player"},	-- 破釜沉舟
 		{AuraID = 85739, UnitID = "player"},	-- 血肉顺劈
 		{AuraID = 46924, UnitID = "player"},	-- 剑刃风暴
