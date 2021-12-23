@@ -97,7 +97,7 @@ end
 
 local function IsItemMatched(type, text)
 	if not type or type == "" then return end
-	return strmatch(type, text)
+	return strmatch(strlower(type), text)
 end
 
 local BagSmartFilter = {
