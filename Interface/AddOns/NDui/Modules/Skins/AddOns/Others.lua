@@ -86,7 +86,6 @@ local function restyleMRTWidget(self)
 		self.styled = true
 	end
 	iconTexture:SetTexCoord(unpack(DB.TexCoord))
-	self.__bg:SetShown(bar:GetWidth() ~= 0)
 
 	local parent = self.parent
 	if parent.optionIconPosition == 3 or parent.optionIconTitles then
@@ -96,6 +95,7 @@ local function restyleMRTWidget(self)
 	else
 		self.icon:SetPoint("LEFT", self, -3, 0)
 	end
+	self.__bg:SetShown(parent.optionAlphaTimeLine ~= 0)
 end
 
 function S:MRT_Skin()
