@@ -487,11 +487,7 @@ function UF:OnLogin()
 				"showSolo", true,
 				"showParty", true,
 				"showRaid", true,
-				"xOffset", 5,
-				"yOffset", -5,
 				"columnSpacing", 5,
-				"point", "TOP",
-				"columnAnchorPoint", "LEFT",
 				"oUF-initialConfigFunction", ([[
 					self:SetWidth(%d)
 					self:SetHeight(%d)
