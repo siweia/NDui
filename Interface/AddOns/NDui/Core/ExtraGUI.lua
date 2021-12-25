@@ -1027,7 +1027,7 @@ function G:SetupRaidFrame(parent)
 		end
 	end
 
-	createOptionDropdown(scroll.child, "GrowthDirection", -30, options, "|nMod growth direction", "UFs", "RaidDirec", 1, updateRaidDirection)
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -30, options, L["RaidDirectionTip"], "UFs", "RaidDirec", 1, updateRaidDirection)
 	createOptionSlider(scroll.child, L["Width"], 60, 200, defaultValue[1], -100, "RaidWidth", resizeRaidFrame)
 	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -180, "RaidHeight", resizeRaidFrame)
 	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -260, "RaidPowerHeight", resizeRaidFrame)

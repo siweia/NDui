@@ -146,9 +146,7 @@ G.DefaultSettings = {
 		RaidDebuffScale = 1,
 		SpecRaidPos = false,
 		RaidHealthColor = 1,
-		HorizonRaid = false,
 		HorizonParty = false,
-		ReverseRaid = false,
 		ShowSolo = false,
 		RaidWidth = 80,
 		RaidHeight = 32,
@@ -858,15 +856,6 @@ local function updateAllHeaders()
 	B:GetModule("UnitFrames"):UpdateAllHeaders()
 end
 
-local function updateRaidGroups()
-	local UF = B:GetModule("UnitFrames")
-	if UF.UpdateNumRaidGroups then
-		CreateAndUpdateRaidHeader(1)
-		UF:UpdateNumRaidGroups()
-		UF:UpdateAllHeaders()
-	end
-end
-
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -1081,22 +1070,17 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		{},--blank
-		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
-		{1, "UFs", "FrequentHealth", HeaderTag..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
-		{1, "UFs", "SmartRaid", NewTag..L["SmartRaid"].."*", nil, nil, updateAllHeaders, L["SmartRaidTip"]},
-		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"], nil, nil, updateRaidTextScale},
-		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
-		{1, "UFs", "HorizonRaid", L["Horizon RaidFrame"]},
-		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
-		{1, "UFs", "ReverseRaid", L["Reverse RaidFrame"]},
-		{1, "UFs", "RCCName", NewTag..L["ClassColor Name"].."*", true, nil, updateRaidTextScale},
-		{1, "UFs", "HideTip", NewTag..L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidNameText, L["100PercentTip"]},
-	--	{3, "UFs", "NumGroups", L["Num Groups"].."*", nil, {2, 8, 1}, updateRaidGroups},
-		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateRaidTextScale},
-		{nil, true},-- FIXME: dirty fix for now
-		{nil, true},
+		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
+		{1, "UFs", "SmartRaid", HeaderTag..L["SmartRaid"].."*", nil, nil, updateAllHeaders, L["SmartRaidTip"]},
+		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
+		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"], nil, nil, updateRaidTextScale},
+		{1, "UFs", "RCCName", NewTag..L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
+		{1, "UFs", "FrequentHealth", HeaderTag..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
+		{1, "UFs", "HideTip", NewTag..L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
+		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], nil, nil, nil, L["SpecRaidPosTip"]},
+		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},

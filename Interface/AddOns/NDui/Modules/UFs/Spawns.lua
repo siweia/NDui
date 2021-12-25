@@ -290,14 +290,14 @@ local function ResetHeaderPoints(header)
 end
 
 UF.GrowthDirections = {
-	[1] = {name = "DOWN_RIGHT", point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", relAnchor = "TOPRIGHT", x = 5, y = 0},
-	[2] = {name = "DOWN_LEFT", point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPRIGHT", relAnchor = "TOPLEFT", x = -5, y = 0},
-	[3] = {name = "UP_RIGHT", point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", relAnchor = "BOTTOMRIGHT", x = 5, y = 0},
-	[4] = {name = "UP_LEFT", point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMRIGHT", relAnchor = "BOTTOMLEFT", x = -5, y = 0},
-	[5] = {name = "RIGHT_DOWN", point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", relAnchor = "BOTTOMLEFT", x = 0, y = -5},
-	[6] = {name = "RIGHT_UP", point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "BOTTOMLEFT", relAnchor = "TOPLEFT", x = 0, y = 5},
-	[7] = {name = "LEFT_DOWN", point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", relAnchor = "BOTTOMRIGHT", x = 0, y = -5},
-	[8] = {name = "LEFT_UP", point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "BOTTOMRIGHT", relAnchor = "TOPRIGHT", x = 0, y = 5},
+	[1] = {name = L["DOWN_RIGHT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", relAnchor = "TOPRIGHT", x = 5, y = 0},
+	[2] = {name = L["DOWN_LEFT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPRIGHT", relAnchor = "TOPLEFT", x = -5, y = 0},
+	[3] = {name = L["UP_RIGHT"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", relAnchor = "BOTTOMRIGHT", x = 5, y = 0},
+	[4] = {name = L["UP_LEFT"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMRIGHT", relAnchor = "BOTTOMLEFT", x = -5, y = 0},
+	[5] = {name = L["RIGHT_DOWN"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", relAnchor = "BOTTOMLEFT", x = 0, y = -5},
+	[6] = {name = L["RIGHT_UP"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "BOTTOMLEFT", relAnchor = "TOPLEFT", x = 0, y = 5},
+	[7] = {name = L["LEFT_DOWN"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", relAnchor = "BOTTOMRIGHT", x = 0, y = -5},
+	[8] = {name = L["LEFT_UP"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "BOTTOMRIGHT", relAnchor = "TOPRIGHT", x = 0, y = 5},
 }
 
 function UF:OnLogin()
@@ -565,12 +565,7 @@ function UF:OnLogin()
 			oUF:RegisterStyle("Raid", CreateRaidStyle)
 			oUF:SetActiveStyle("Raid")
 
-			--local numGroups = C.db["UFs"]["NumGroups"]
-			local reverse = C.db["UFs"]["ReverseRaid"]
-			local horizonRaid = C.db["UFs"]["HorizonRaid"]
 			local showTeamIndex = C.db["UFs"]["ShowTeamIndex"]
-			--local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
-			--local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
 
 			local function CreateGroup(name, i, width, height)
 				local group = oUF:SpawnHeader(name, nil, nil,
@@ -604,50 +599,6 @@ function UF:OnLogin()
 					parent.teamIndex = teamIndex
 				end
 			end
---[[
-			local groups = {}
-			for i = 1, numGroups do
-				groups[i] = CreateGroup("oUF_Raid"..i, i)
-				groups[i].index = i
-				groups[i].groupType = "raid"
-				tinsert(UF.headers, groups[i])
-				RegisterStateDriver(groups[i], "visibility", GetRaidVisibility())
-
-				if i == 1 then
-					if horizonRaid then
-						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (raidWidth+5)*5-5, (raidFrameHeight+(showTeamIndex and 20 or 5))*numGroups - (showTeamIndex and 20 or 5))
-						if reverse then
-							groups[i]:ClearAllPoints()
-							groups[i]:SetPoint("BOTTOMLEFT", raidMover)
-						end
-					else
-						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50}, (raidWidth+5)*numGroups-5, (raidFrameHeight+5)*5-5)
-						if reverse then
-							groups[i]:ClearAllPoints()
-							groups[i]:SetPoint("TOPRIGHT", raidMover)
-						end
-					end
-				else
-					if horizonRaid then
-						if reverse then
-							groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, showTeamIndex and 20 or 5)
-						else
-							groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, showTeamIndex and -20 or -5)
-						end
-					else
-						if reverse then
-							groups[i]:SetPoint("TOPRIGHT", groups[i-1], "TOPLEFT", -5, 0)
-						else
-							groups[i]:SetPoint("TOPLEFT", groups[i-1], "TOPRIGHT", 5, 0)
-						end
-					end
-				end
-
-				if showTeamIndex then
-					CreateTeamIndex(groups[i])
-					groups[i]:HookScript("OnShow", CreateTeamIndex)
-				end
-			end]]
 
 			local groups = {}
 
