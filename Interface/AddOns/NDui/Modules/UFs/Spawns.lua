@@ -112,6 +112,7 @@ local function CreatePetStyle(self)
 	UF:CreateHealthText(self)
 	UF:CreatePowerBar(self)
 	UF:CreateRaidMark(self)
+	UF:CreateAuras(self)
 end
 
 local function CreateBossStyle(self)
