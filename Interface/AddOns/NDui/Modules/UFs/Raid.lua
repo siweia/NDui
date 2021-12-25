@@ -610,10 +610,9 @@ function UF:SyncWithZenTracker()
 	B:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateSyncStatus)
 end
 
-function UF:InterruptIndicator(self)
-	if not C.db["UFs"]["PartyWatcher"] then return end
-
-	local horizon = C.db["UFs"]["HorizonParty"]
+local function UpdateWatcherAnchor(element)
+	local self = element.__owner
+	local horizon = C.db["UFs"]["PartyDirec"] > 2
 	local otherSide = C.db["UFs"]["PWOnRight"]
 	local relF = horizon and "BOTTOMLEFT" or "TOPRIGHT"
 	local relT = "TOPLEFT"
@@ -624,34 +623,46 @@ function UF:InterruptIndicator(self)
 		relF = "TOPLEFT"
 		relT = horizon and "BOTTOMLEFT" or "TOPRIGHT"
 		xOffset = horizon and 0 or 5
-		yOffset = horizon and -(self.Power:GetHeight()+8) or 0
+		yOffset = horizon and -5 or 0
 		margin = 2
 	end
 	local rel1 = not horizon and not otherSide and "RIGHT" or "LEFT"
 	local rel2 = not horizon and not otherSide and "LEFT" or "RIGHT"
-	local buttons = {}
-	local maxIcons = 6
-	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()+self.Power:GetHeight()+3)
-	if iconSize > 34 then iconSize = 34 end
+	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or self:GetHeight()
+	if iconSize > 40 then iconSize = 40 end
 
-	for i = 1, maxIcons do
-		local bu = CreateFrame("Frame", nil, self)
+	for i = 1, element.__max do
+		local bu = element[i]
 		bu:SetSize(iconSize, iconSize)
-		B.AuraIcon(bu)
-		bu.CD:SetReverse(false)
+		bu:ClearAllPoints()
 		if i == 1 then
 			bu:SetPoint(relF, self, relT, xOffset, yOffset)
 		elseif i == 4 and horizon then
-			bu:SetPoint(relF, buttons[i-3], relT, 0, margin)
+			bu:SetPoint(relF, element[i-3], relT, 0, margin)
 		else
-			bu:SetPoint(rel1, buttons[i-1], rel2, margin, 0)
+			bu:SetPoint(rel1, element[i-1], rel2, margin, 0)
 		end
+	end
+end
+
+function UF:InterruptIndicator(self)
+	if not C.db["UFs"]["PartyWatcher"] then return end
+
+	local buttons = {}
+	local maxIcons = 6
+	for i = 1, maxIcons do
+		local bu = CreateFrame("Frame", nil, self)
+		B.AuraIcon(bu)
+		bu.CD:SetReverse(false)
 		bu:Hide()
 
 		buttons[i] = bu
 	end
 
+	buttons.__owner = self
 	buttons.__max = maxIcons
+	UpdateWatcherAnchor(buttons)
+	buttons.UpdateAnchor = UpdateWatcherAnchor
 	buttons.PartySpells = UF.PartyWatcherSpells
 	buttons.TalentCDFix = C.TalentCDFix
 	self.PartyWatcher = buttons
@@ -660,27 +671,52 @@ function UF:InterruptIndicator(self)
 	end
 end
 
-function UF:CreatePartyAltPower(self)
-	if not C.db["UFs"]["PartyAltPower"] then return end
+local function UpdateAltPowerAnchor(element)
+	if C.db["UFs"]["PartyAltPower"] then
+		local self = element.__owner
+		local horizon = C.db["UFs"]["PartyDirec"] > 2
+		local relF = horizon and "TOP" or "LEFT"
+		local relT = horizon and "BOTTOM" or "RIGHT"
+		local xOffset = horizon and 0 or 5
+		local yOffset = horizon and -5 or 0
+		local otherSide = C.db["UFs"]["PWOnRight"]
+		if otherSide then
+			xOffset = horizon and 0 or -5
+			yOffset = horizon and 5 or 0
+		end
 
-	local horizon = C.db["UFs"]["HorizonParty"]
-	local relF = horizon and "TOP" or "LEFT"
-	local relT = horizon and "BOTTOM" or "RIGHT"
-	local xOffset = horizon and 0 or 5
-	local yOffset = horizon and -5 or 0
-	local otherSide = C.db["UFs"]["PWOnRight"]
-	if otherSide then
-		xOffset = horizon and 0 or -5
-		yOffset = horizon and 5 or 0
-	end
-
-	local altPower = B.CreateFS(self, 16, "")
-	altPower:ClearAllPoints()
-	if otherSide then
-		altPower:SetPoint(relT, self, relF, xOffset, yOffset)
+		element:Show()
+		element:ClearAllPoints()
+		if otherSide then
+			element:SetPoint(relT, self, relF, xOffset, yOffset)
+		else
+			local parent = horizon and self.Power or self
+			element:SetPoint(relF, parent, relT, xOffset, yOffset)
+		end
 	else
-		local parent = horizon and self.Power or self
-		altPower:SetPoint(relF, parent, relT, xOffset, yOffset)
+		element:Hide()
 	end
+end
+
+function UF:CreatePartyAltPower(self)
+	local altPower = B.CreateFS(self, 16, "")
 	self:Tag(altPower, "[altpower]")
+	altPower.__owner = self
+	UpdateAltPowerAnchor(altPower)
+
+	self.altPower = altPower
+	self.altPower.UpdateAnchor = UpdateAltPowerAnchor
+end
+
+function UF:UpdatePartyElements()
+	for _, frame in pairs(oUF.objects) do
+		if frame.raidType == "party" then
+			if frame.altPower then
+				frame.altPower:UpdateAnchor()
+			end
+			if frame.PartyWatcher then
+				frame.PartyWatcher:UpdateAnchor()
+			end
+		end
+	end
 end

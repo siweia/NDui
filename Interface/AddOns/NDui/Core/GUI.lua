@@ -146,7 +146,6 @@ G.DefaultSettings = {
 		RaidDebuffScale = 1,
 		SpecRaidPos = false,
 		RaidHealthColor = 1,
-		HorizonParty = false,
 		ShowSolo = false,
 		RaidWidth = 80,
 		RaidHeight = 32,
@@ -171,6 +170,7 @@ G.DefaultSettings = {
 		RuneTimer = true,
 		RaidBuffIndicator = true,
 		PartyFrame = true,
+		PartyDirec = 2,
 		PartyWatcher = true,
 		PWOnRight = false,
 		PartyWidth = 100,
@@ -864,6 +864,10 @@ local function updateTeamIndex()
 	updateRaidTextScale()
 end
 
+local function updatePartyElements()
+	B:GetModule("UnitFrames"):UpdatePartyElements()
+end
+
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -1055,10 +1059,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", NewTag..HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame},
-		{1, "UFs", "HorizonParty", L["Horizon PartyFrame"]},
-		{1, "UFs", "PartyAltPower", L["UFs PartyAltPower"], true, nil, nil, L["PartyAltPowerTip"]},
 		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},
-		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"]},
+		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"].."*", nil, nil, updatePartyElements},
 		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], true, nil, nil, L["PartyWatcherSyncTip"]},
 		{},--blank
 		{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, nil, updateRaidAuras, L["ShowRaidDebuffTip"]},

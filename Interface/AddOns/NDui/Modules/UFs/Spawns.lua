@@ -289,6 +289,13 @@ local function ResetHeaderPoints(header)
 	end
 end
 
+UF.PartyDirections = {
+	[1] = {name = L["GO_DOWN"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", order = "TANK,HEALER,DAMAGER,NONE"},
+	[2] = {name = L["GO_UP"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", order = "NONE,DAMAGER,HEALER,TANK"},
+	[3] = {name = L["GO_RIGHT"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", order = "NONE,DAMAGER,HEALER,TANK"},
+	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", order = "TANK,HEALER,DAMAGER,NONE"},
+}
+
 UF.GrowthDirections = {
 	[1] = {name = L["DOWN_RIGHT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", relAnchor = "TOPRIGHT", x = 5, y = 0},
 	[2] = {name = L["DOWN_LEFT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPRIGHT", relAnchor = "TOPLEFT", x = -5, y = 0},
@@ -422,38 +429,50 @@ function UF:OnLogin()
 			oUF:RegisterStyle("Party", CreatePartyStyle)
 			oUF:SetActiveStyle("Party")
 
-			local xOffset, yOffset = 5, 5
-			local horizonParty = C.db["UFs"]["HorizonParty"]
-			local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
-			local partyFrameHeight = partyHeight + C.db["UFs"]["PartyPowerHeight"] + C.mult
-			local moverWidth = horizonParty and (partyWidth*5+xOffset*4) or partyWidth
-			local moverHeight = horizonParty and partyFrameHeight or (partyFrameHeight*5+yOffset*4)
-			local groupingOrder = horizonParty and "TANK,HEALER,DAMAGER,NONE" or "NONE,DAMAGER,HEALER,TANK"
+			local function CreatePartyHeader(name, width, height)
+				local group = oUF:SpawnHeader(name, nil, nil,
+				"showPlayer", true,
+				"showSolo", true,
+				"showParty", true,
+				"showRaid", true,
+				"sortMethod", "NAME",
+				"columnAnchorPoint", "LEFT",
+				"oUF-initialConfigFunction", ([[
+					self:SetWidth(%d)
+					self:SetHeight(%d)
+				]]):format(width, height))
+				return group
+			end
 
-			local party = oUF:SpawnHeader("oUF_Party", nil, nil,
-			"showPlayer", true,
-			"showSolo", true,
-			"showParty", true,
-			"showRaid", true,
-			"xOffset", xOffset,
-			"yOffset", yOffset,
-			"groupingOrder", groupingOrder,
-			"groupBy", "ASSIGNEDROLE",
-			"sortMethod", "NAME",
-			"point", horizonParty and "LEFT" or "BOTTOM",
-			"columnAnchorPoint", "LEFT",
-			"oUF-initialConfigFunction", ([[
-				self:SetWidth(%d)
-				self:SetHeight(%d)
-			]]):format(partyWidth, partyFrameHeight))
+			function UF:CreateAndUpdatePartyHeader()
+				local index = C.db["UFs"]["PartyDirec"]
+				local sortData = UF.PartyDirections[index]
+				local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
+				local partyFrameHeight = partyHeight + C.db["UFs"]["PartyPowerHeight"] + C.mult
 
-			party.groupType = "party"
-			tinsert(UF.headers, party)
-			RegisterStateDriver(party, "visibility", GetPartyVisibility())
+				if not party then
+					party = CreatePartyHeader("oUF_Party", partyWidth, partyFrameHeight)
+					party.groupType = "party"
+					tinsert(UF.headers, party)
+					RegisterStateDriver(party, "visibility", GetPartyVisibility())
+					partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0})
+				end
 
-			partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0}, moverWidth, moverHeight)
-			party:ClearAllPoints()
-			party:SetPoint("BOTTOMLEFT", partyMover)
+				local moverWidth = index < 3 and partyWidth or (partyWidth+5)*5-5
+				local moverHeight = index < 3 and (partyFrameHeight+5)*5-5 or partyFrameHeight
+				partyMover:SetSize(moverWidth, moverHeight)
+				party:ClearAllPoints()
+				party:SetPoint(sortData.initAnchor, partyMover)
+
+				ResetHeaderPoints(party)
+				party:SetAttribute("point", sortData.point)
+				party:SetAttribute("xOffset", sortData.xOffset)
+				party:SetAttribute("yOffset", sortData.yOffset)
+				party:SetAttribute("groupingOrder", sortData.order)
+				party:SetAttribute("groupBy", "ASSIGNEDROLE")
+			end
+
+			UF:CreateAndUpdatePartyHeader()
 
 			if C.db["UFs"]["PartyPetFrame"] then
 				oUF:RegisterStyle("PartyPet", CreatePartyPetStyle)

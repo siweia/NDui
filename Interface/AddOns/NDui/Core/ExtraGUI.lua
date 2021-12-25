@@ -1082,6 +1082,7 @@ function G:SetupPartyFrame(parent)
 
 	local panel = createExtraGUI(parent, guiName, L["PartyFrame"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
+	local UF = B:GetModule("UnitFrames")
 
 	local function resizePartyFrame()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -1089,12 +1090,22 @@ function G:SetupPartyFrame(parent)
 				SetUnitFrameSize(frame, "Party")
 			end
 		end
+		if UF.CreateAndUpdatePartyHeader then
+			UF:CreateAndUpdatePartyHeader()
+		end
+		UF:UpdatePartyElements()
 	end
 
 	local defaultValue = {100, 32, 2}
-	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -40, "PartyWidth", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -120, "PartyHeight", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -200, "PartyPowerHeight", resizePartyFrame)
+	local options = {}
+	for i = 1, 4 do
+		options[i] = UF.PartyDirections[i].name
+	end
+	createOptionCheck(scroll.child, -10, L["UFs PartyAltPower"], "UFs", "PartyAltPower", resizePartyFrame, L["PartyAltPowerTip"])
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -70, options, L["RaidDirectionTip"], "UFs", "PartyDirec", 1, resizePartyFrame)
+	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -150, "PartyWidth", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -230, "PartyHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -310, "PartyPowerHeight", resizePartyFrame)
 end
 
 function G:SetupPartyPetFrame(parent)
