@@ -1139,12 +1139,18 @@ function G:SetupPartyPetFrame(parent)
 		updatePartyPetHeader()
 	end
 
-	createOptionDropdown(scroll.child, L["Visibility"], -30, {L["ShowInParty"], L["ShowInRaid"], L["ShowInGroup"]}, nil, "UFs", "PartyPetVsby", 1, UF.UpdateAllHeaders)
-	createOptionSlider(scroll.child, L["Width"], 60, 200, 100, -90, "PartyPetWidth", resizePartyPetFrame)
-	createOptionSlider(scroll.child, L["Height"], 20, 60, 22, -160, "PartyPetHeight", resizePartyPetFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 2, 30, 2, -230, "PartyPetPowerHeight", resizePartyPetFrame)
-	createOptionSlider(scroll.child, L["UnitsPerColumn"], 5, 40, 5, -300, "PartyPetPerCol", updatePartyPetHeader)
-	createOptionSlider(scroll.child, L["MaxColumns"], 1, 5, 1, -370, "PartyPetMaxCol", updatePartyPetHeader)
+	local options = {}
+	for i = 1, 4 do
+		options[i] = UF.RaidDirections[i].name
+	end
+
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -30, options, nil, "UFs", "PetDirec", 1, updatePartyPetHeader)
+	createOptionDropdown(scroll.child, L["Visibility"], -90, {L["ShowInParty"], L["ShowInRaid"], L["ShowInGroup"]}, nil, "UFs", "PartyPetVsby", 1, UF.UpdateAllHeaders)
+	createOptionSlider(scroll.child, L["Width"], 60, 200, 100, -150, "PartyPetWidth", resizePartyPetFrame)
+	createOptionSlider(scroll.child, L["Height"], 20, 60, 22, -220, "PartyPetHeight", resizePartyPetFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 2, 30, 2, -290, "PartyPetPowerHeight", resizePartyPetFrame)
+	createOptionSlider(scroll.child, L["UnitsPerColumn"], 5, 40, 5, -360, "PartyPetPerCol", updatePartyPetHeader)
+	createOptionSlider(scroll.child, L["MaxColumns"], 1, 5, 1, -430, "PartyPetMaxCol", updatePartyPetHeader)
 end
 
 local function createOptionSwatch(parent, name, key, value, x, y)

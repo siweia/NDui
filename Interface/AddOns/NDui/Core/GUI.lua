@@ -184,6 +184,7 @@ G.DefaultSettings = {
 		PartyPetPerCol = 5,
 		PartyPetMaxCol = 1,
 		PartyPetVsby = 1,
+		PetDirec = 1,
 		HealthColor = 1,
 		BuffIndicatorType = 1,
 		BuffIndicatorScale = 1,

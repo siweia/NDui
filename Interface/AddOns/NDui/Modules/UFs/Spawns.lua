@@ -510,13 +510,20 @@ function UF:OnLogin()
 					local petFrameHeight = petHeight + petPowerHeight + C.mult
 					local petsPerColumn = C.db["UFs"]["PartyPetPerCol"]
 					local maxColumns = C.db["UFs"]["PartyPetMaxCol"]
+					local sortData = UF.RaidDirections[C.db["UFs"]["PetDirec"]]
 
+					partyPet:SetAttribute("point", sortData.point)
+					partyPet:SetAttribute("xOffset", sortData.xOffset)
+					partyPet:SetAttribute("yOffset", sortData.yOffset)
+					partyPet:SetAttribute("columnAnchorPoint", sortData.columnAnchorPoint)
 					partyPet:SetAttribute("unitsPerColumn", petsPerColumn)
 					partyPet:SetAttribute("maxColumns", maxColumns)
 
 					local moverWidth = (petWidth*maxColumns + 5*(maxColumns-1))
 					local moverHeight = petFrameHeight*petsPerColumn + 5*(petsPerColumn-1)
 					petMover:SetSize(moverWidth, moverHeight)
+					partyPet:ClearAllPoints()
+					partyPet:SetPoint(sortData.initAnchor, petMover)
 				end
 
 				UF:UpdatePartyPetHeader()
@@ -529,8 +536,7 @@ function UF:OnLogin()
 			oUF:SetActiveStyle("Raid")
 
 			local scale = C.db["UFs"]["SMRScale"]/10
-			local index = C.db["UFs"]["SMRDirec"]
-			local sortData = UF.RaidDirections[index]
+			local sortData = UF.RaidDirections[C.db["UFs"]["SMRDirec"]]
 
 			local function CreateGroup(name)
 				local group = oUF:SpawnHeader(name, nil, nil,
