@@ -862,3 +862,4 @@ L["RIGHT_DOWN"] = "Right and Down" -- need translation
 L["RIGHT_UP"] = "Right and Up" -- need translation
 L["LEFT_DOWN"] = "Left and Down" -- need translation
 L["LEFT_UP"] = "Left and Up" -- need translation
+L["SMRDirectionTip"] = "|nOption to change the growth direction for SimpleRaidFrame, require UI reload." -- need translation

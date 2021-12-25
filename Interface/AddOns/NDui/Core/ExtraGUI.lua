@@ -1045,14 +1045,19 @@ function G:SetupSimpleRaidFrame(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local UF = B:GetModule("UnitFrames")
 
+	local options = {}
+	for i = 1, 4 do
+		options[i] = UF.RaidDirections[i].name
+	end
 	local function updateSimpleModeGroupBy()
 		if UF.UpdateSimpleModeHeader then
 			UF:UpdateSimpleModeHeader()
 		end
 	end
-	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"], -30, {GROUP, CLASS, ROLE}, nil, "UFs", "SMRGroupBy", 1, updateSimpleModeGroupBy)
-	createOptionSlider(scroll.child, L["UnitsPerColumn"], 5, 40, 20, -100, "SMRPerCol", updateSimpleModeGroupBy)
-	createOptionSlider(scroll.child, L["Num Groups"], 1, 8, 6, -180, "SMRGroups", updateSimpleModeGroupBy)
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -30, options, L["SMRDirectionTip"], "UFs", "SMRDirec", 1) -- needs review, cannot live toggle atm due to blizz error
+	createOptionDropdown(scroll.child, L["SimpleMode GroupBy"], -90, {GROUP, CLASS, ROLE}, nil, "UFs", "SMRGroupBy", 1, updateSimpleModeGroupBy)
+	createOptionSlider(scroll.child, L["UnitsPerColumn"], 5, 40, 20, -160, "SMRPerCol", updateSimpleModeGroupBy)
+	createOptionSlider(scroll.child, L["Num Groups"], 1, 8, 6, -240, "SMRGroups", updateSimpleModeGroupBy)
 
 	local function resizeSimpleRaidFrame()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -1072,7 +1077,7 @@ function G:SetupSimpleRaidFrame(parent)
 
 		updateSimpleModeGroupBy()
 	end
-	createOptionSlider(scroll.child, L["SimpleMode Scale"], 8, 15, 10, -260, "SMRScale", resizeSimpleRaidFrame)
+	createOptionSlider(scroll.child, L["SimpleMode Scale"], 8, 15, 10, -320, "SMRScale", resizeSimpleRaidFrame)
 end
 
 function G:SetupPartyFrame(parent)

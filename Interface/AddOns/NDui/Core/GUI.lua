@@ -141,6 +141,7 @@ G.DefaultSettings = {
 		SMRPerCol = 20,
 		SMRGroupBy = 1,
 		SMRGroups = 6,
+		SMRDirec = 1,
 		InstanceAuras = true,
 		DispellOnly = false,
 		RaidDebuffScale = 1,
