@@ -1006,6 +1006,7 @@ function G:SetupRaidFrame(parent)
 	local function updateRaidDirection()
 		if UF.CreateAndUpdateRaidHeader then
 			UF:CreateAndUpdateRaidHeader(true)
+			UF:UpdateRaidTeamIndex()
 		end
 	end
 
@@ -1023,6 +1024,7 @@ function G:SetupRaidFrame(parent)
 	local function updateNumGroups()
 		if UF.CreateAndUpdateRaidHeader then
 			UF:CreateAndUpdateRaidHeader()
+			UF:UpdateRaidTeamIndex()
 			UF:UpdateAllHeaders()
 		end
 	end

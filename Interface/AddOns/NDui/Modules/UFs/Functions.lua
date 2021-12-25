@@ -206,7 +206,7 @@ function UF:UpdateFrameNameTag()
 		self:Tag(name, colorTag.."[name][afkdnd]")
 	elseif mystyle == "arena" then
 		self:Tag(name, "[arenaspec] "..colorTag.."[name]")
-	elseif self.raidType == "simple" and C.db["UFs"]["ShowTeamIndex"] then
+	elseif self.raidType == "simple" and C.db["UFs"]["TeamIndex"] then
 		self:Tag(name, "[group] "..colorTag.."[name]")
 	else
 		self:Tag(name, colorTag.."[name]")

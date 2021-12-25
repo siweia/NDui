@@ -565,8 +565,6 @@ function UF:OnLogin()
 			oUF:RegisterStyle("Raid", CreateRaidStyle)
 			oUF:SetActiveStyle("Raid")
 
-			local showTeamIndex = C.db["UFs"]["ShowTeamIndex"]
-
 			local function CreateGroup(name, i, width, height)
 				local group = oUF:SpawnHeader(name, nil, nil,
 				"showPlayer", true,
@@ -588,15 +586,43 @@ function UF:OnLogin()
 				return group
 			end
 
+			local teamIndexes = {}
+
 			local function CreateTeamIndex(header)
 				local parent = _G[header:GetName().."UnitButton1"]
 				if parent and not parent.teamIndex then
 					local teamIndex = B.CreateFS(parent, 12, format(GROUP_NUMBER, header.index))
-					teamIndex:ClearAllPoints()
-					teamIndex:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 5)
 					teamIndex:SetTextColor(.6, .8, 1)
+					teamIndex:SetShown(C.db["UFs"]["TeamIndex"])
+					teamIndex.__owner = header
+					teamIndexes[header.index] = teamIndex
 
 					parent.teamIndex = teamIndex
+				end
+			end
+
+			local teamIndexAnchor = {
+				[1] = {"BOTTOMLEFT", "TOPLEFT", 0, 5},
+				[2] = {"BOTTOMLEFT", "TOPLEFT", 0, 5},
+				[3] = {"TOPLEFT", "BOTTOMLEFT", 0, -5},
+				[4] = {"TOPLEFT", "BOTTOMLEFT", 0, -5},
+				[5] = {"TOPRIGHT", "TOPLEFT", -5, 0},
+				[6] = {"TOPRIGHT", "TOPLEFT", -5, 0},
+				[7] = {"TOPLEFT", "TOPRIGHT", 5, 0},
+				[8] = {"TOPLEFT", "TOPRIGHT", 5, 0},
+			}
+			function UF:UpdateRaidTeamIndex()
+				local showIndex = C.db["UFs"]["TeamIndex"]
+				local direc = C.db["UFs"]["RaidDirec"]
+				for index, teamIndex in pairs(teamIndexes) do
+					if not showIndex then
+						teamIndex:Hide()
+					else
+						teamIndex:Show()
+						teamIndex:ClearAllPoints()
+						local anchor = teamIndexAnchor[direc]
+						teamIndex:SetPoint(anchor[1], teamIndex.__owner, anchor[2], anchor[3], anchor[4])
+					end
 				end
 			end
 
@@ -618,10 +644,8 @@ function UF:OnLogin()
 						tinsert(UF.headers, group)
 						RegisterStateDriver(group, "visibility", GetRaidVisibility())
 
-						if showTeamIndex then
-							CreateTeamIndex(groups[i])
-							groups[i]:HookScript("OnShow", CreateTeamIndex)
-						end
+						CreateTeamIndex(group)
+						group:HookScript("OnShow", CreateTeamIndex)
 
 						groups[i] = group
 					end
@@ -657,6 +681,7 @@ function UF:OnLogin()
 			end
 
 			UF:CreateAndUpdateRaidHeader(true)
+			UF:UpdateRaidTeamIndex()
 		end
 
 		UF:UpdateRaidHealthMethod()

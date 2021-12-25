@@ -160,7 +160,7 @@ G.DefaultSettings = {
 		FCTFontSize = 18,
 		PetCombatText = true,
 		RaidClickSets = false,
-		ShowTeamIndex = false,
+		TeamIndex = false,
 		ClassPower = true,
 		CPWidth = 150,
 		CPHeight = 5,
@@ -856,6 +856,14 @@ local function updateAllHeaders()
 	B:GetModule("UnitFrames"):UpdateAllHeaders()
 end
 
+local function updateTeamIndex()
+	local UF = B:GetModule("UnitFrames")
+	if UF.UpdateRaidTeamIndex then
+		UF:UpdateRaidTeamIndex()
+	end
+	updateRaidTextScale()
+end
+
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -1075,7 +1083,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
 		{1, "UFs", "SmartRaid", HeaderTag..L["SmartRaid"].."*", nil, nil, updateAllHeaders, L["SmartRaidTip"]},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
-		{1, "UFs", "ShowTeamIndex", L["RaidFrame TeamIndex"], nil, nil, updateRaidTextScale},
+		{1, "UFs", "TeamIndex", L["RaidFrame TeamIndex"].."*", nil, nil, updateTeamIndex},
 		{1, "UFs", "RCCName", NewTag..L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{1, "UFs", "FrequentHealth", HeaderTag..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
 		{1, "UFs", "HideTip", NewTag..L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
