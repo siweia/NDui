@@ -1000,7 +1000,7 @@ function G:SetupRaidFrame(parent)
 	local defaultValue = {80, 32, 2, 6}
 	local options = {}
 	for i = 1, 8 do
-		options[i] = UF.GrowthDirections[i].name
+		options[i] = UF.RaidDirections[i].name
 	end
 
 	local function updateRaidDirection()
@@ -1102,7 +1102,7 @@ function G:SetupPartyFrame(parent)
 		options[i] = UF.PartyDirections[i].name
 	end
 	createOptionCheck(scroll.child, -10, L["UFs PartyAltPower"], "UFs", "PartyAltPower", resizePartyFrame, L["PartyAltPowerTip"])
-	createOptionDropdown(scroll.child, L["GrowthDirection"], -70, options, L["RaidDirectionTip"], "UFs", "PartyDirec", 1, resizePartyFrame)
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -70, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
 	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -150, "PartyWidth", resizePartyFrame)
 	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -230, "PartyHeight", resizePartyFrame)
 	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -310, "PartyPowerHeight", resizePartyFrame)

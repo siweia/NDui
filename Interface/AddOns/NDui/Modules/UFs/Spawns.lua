@@ -296,7 +296,7 @@ UF.PartyDirections = {
 	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", order = "TANK,HEALER,DAMAGER,NONE"},
 }
 
-UF.GrowthDirections = {
+UF.RaidDirections = {
 	[1] = {name = L["DOWN_RIGHT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", relAnchor = "TOPRIGHT", x = 5, y = 0},
 	[2] = {name = L["DOWN_LEFT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPRIGHT", relAnchor = "TOPLEFT", x = -5, y = 0},
 	[3] = {name = L["UP_RIGHT"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", relAnchor = "BOTTOMRIGHT", x = 5, y = 0},
@@ -653,7 +653,7 @@ function UF:OnLogin()
 				local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
 				local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
 
-				local sortData = UF.GrowthDirections[index]
+				local sortData = UF.RaidDirections[index]
 				for i = 1, numGroups do
 					local group = groups[i]
 					if not group then
