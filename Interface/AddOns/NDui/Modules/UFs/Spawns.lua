@@ -262,7 +262,11 @@ function UF:UpdateAllHeaders()
 		elseif header.groupType == "pet" then
 			RegisterStateDriver(header, "visibility", GetPartyPetVisibility())
 		elseif header.groupType == "raid" then
-			RegisterStateDriver(header, "visibility", GetRaidVisibility())
+			if header.__disabled then
+				RegisterStateDriver(header, "visibility", "hide")
+			else
+				RegisterStateDriver(header, "visibility", GetRaidVisibility())
+			end
 		end
 	end
 end
@@ -284,6 +288,17 @@ local function ResetHeaderPoints(header)
 		select(i, header:GetChildren()):ClearAllPoints()
 	end
 end
+
+UF.GrowthDirections = {
+	[1] = {name = "DOWN_RIGHT", point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", relAnchor = "TOPRIGHT", x = 5, y = 0},
+	[2] = {name = "DOWN_LEFT", point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPRIGHT", relAnchor = "TOPLEFT", x = -5, y = 0},
+	[3] = {name = "UP_RIGHT", point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", relAnchor = "BOTTOMRIGHT", x = 5, y = 0},
+	[4] = {name = "UP_LEFT", point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMRIGHT", relAnchor = "BOTTOMLEFT", x = -5, y = 0},
+	[5] = {name = "RIGHT_DOWN", point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", relAnchor = "BOTTOMLEFT", x = 0, y = -5},
+	[6] = {name = "RIGHT_UP", point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "BOTTOMLEFT", relAnchor = "TOPLEFT", x = 0, y = 5},
+	[7] = {name = "LEFT_DOWN", point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", relAnchor = "BOTTOMRIGHT", x = 0, y = -5},
+	[8] = {name = "LEFT_UP", point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "BOTTOMRIGHT", relAnchor = "TOPRIGHT", x = 0, y = 5},
+}
 
 function UF:OnLogin()
 	if C.db["Nameplate"]["Enable"] then
@@ -420,7 +435,7 @@ function UF:OnLogin()
 			"showSolo", true,
 			"showParty", true,
 			"showRaid", true,
-			"xoffset", xOffset,
+			"xOffset", xOffset,
 			"yOffset", yOffset,
 			"groupingOrder", groupingOrder,
 			"groupBy", "ASSIGNEDROLE",
@@ -452,7 +467,7 @@ function UF:OnLogin()
 				"showSolo", true,
 				"showParty", true,
 				"showRaid", true,
-				"xoffset", 5,
+				"xOffset", 5,
 				"yOffset", -5,
 				"columnSpacing", 5,
 				"point", "TOP",
@@ -501,7 +516,7 @@ function UF:OnLogin()
 				"showSolo", true,
 				"showParty", true,
 				"showRaid", true,
-				"xoffset", 5,
+				"xOffset", 5,
 				"yOffset", -5,
 				"columnSpacing", 5,
 				"point", "TOP",
@@ -550,21 +565,19 @@ function UF:OnLogin()
 			oUF:RegisterStyle("Raid", CreateRaidStyle)
 			oUF:SetActiveStyle("Raid")
 
-			local numGroups = C.db["UFs"]["NumGroups"]
+			--local numGroups = C.db["UFs"]["NumGroups"]
 			local reverse = C.db["UFs"]["ReverseRaid"]
 			local horizonRaid = C.db["UFs"]["HorizonRaid"]
 			local showTeamIndex = C.db["UFs"]["ShowTeamIndex"]
-			local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
-			local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
+			--local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
+			--local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
 
-			local function CreateGroup(name, i)
+			local function CreateGroup(name, i, width, height)
 				local group = oUF:SpawnHeader(name, nil, nil,
 				"showPlayer", true,
 				"showSolo", true,
 				"showParty", true,
 				"showRaid", true,
-				"xoffset", 5,
-				"yOffset", -5,
 				"groupFilter", tostring(i),
 				"groupingOrder", "1,2,3,4,5,6,7,8",
 				"groupBy", "GROUP",
@@ -572,12 +585,11 @@ function UF:OnLogin()
 				"maxColumns", 1,
 				"unitsPerColumn", 5,
 				"columnSpacing", 5,
-				"point", horizonRaid and "LEFT" or "TOP",
 				"columnAnchorPoint", "LEFT",
 				"oUF-initialConfigFunction", ([[
 					self:SetWidth(%d)
 					self:SetHeight(%d)
-				]]):format(raidWidth, raidFrameHeight))
+				]]):format(width, height))
 				return group
 			end
 
@@ -592,7 +604,7 @@ function UF:OnLogin()
 					parent.teamIndex = teamIndex
 				end
 			end
-
+--[[
 			local groups = {}
 			for i = 1, numGroups do
 				groups[i] = CreateGroup("oUF_Raid"..i, i)
@@ -635,7 +647,65 @@ function UF:OnLogin()
 					CreateTeamIndex(groups[i])
 					groups[i]:HookScript("OnShow", CreateTeamIndex)
 				end
+			end]]
+
+			local groups = {}
+
+			function UF:CreateAndUpdateRaidHeader(direction)
+				local index = C.db["UFs"]["RaidDirec"]
+				local numGroups = C.db["UFs"]["NumGroups"]
+				local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
+				local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
+
+				local sortData = UF.GrowthDirections[index]
+				for i = 1, numGroups do
+					local group = groups[i]
+					if not group then
+						group = CreateGroup("oUF_Raid"..i, i, raidWidth, raidFrameHeight)
+						group.index = i
+						group.groupType = "raid"
+						tinsert(UF.headers, group)
+						RegisterStateDriver(group, "visibility", GetRaidVisibility())
+
+						if showTeamIndex then
+							CreateTeamIndex(groups[i])
+							groups[i]:HookScript("OnShow", CreateTeamIndex)
+						end
+
+						groups[i] = group
+					end
+
+					if not raidMover and i == 1 then
+						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50})
+					end
+					local numX = index < 5 and numGroups or 5
+					local numY = index < 5 and 5 or numGroups
+					raidMover:SetSize(numX*(raidWidth+5)-5, numY*(raidFrameHeight+5)-5)
+
+					if direction then
+						ResetHeaderPoints(group)
+						group:SetAttribute("point", sortData.point)
+						group:SetAttribute("xOffset", sortData.xOffset)
+						group:SetAttribute("yOffset", sortData.yOffset)
+					end
+
+					group:ClearAllPoints()
+					if i == 1 then
+						group:SetPoint(sortData.initAnchor, raidMover)
+					else
+						group:SetPoint(sortData.initAnchor, groups[i-1], sortData.relAnchor, sortData.x, sortData.y)
+					end
+				end
+
+				for i = 1, 8 do
+					local group = groups[i]
+					if group then
+						group.__disabled = i > C.db["UFs"]["NumGroups"]
+					end
+				end
 			end
+
+			UF:CreateAndUpdateRaidHeader(true)
 		end
 
 		UF:UpdateRaidHealthMethod()

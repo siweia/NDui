@@ -135,6 +135,7 @@ G.DefaultSettings = {
 		RaidFrame = true,
 		AutoRes = true,
 		NumGroups = 6,
+		RaidDirec = 1,
 		SimpleMode = false,
 		SMRScale = 10,
 		SMRPerCol = 20,
@@ -622,6 +623,10 @@ local function setupSimpleRaidFrame()
 	G:SetupSimpleRaidFrame(guiPage[4])
 end
 
+local function setupPartyFrame()
+	G:SetupPartyFrame(guiPage[4])
+end
+
 local function setupPartyPetFrame()
 	G:SetupPartyPetFrame(guiPage[4])
 end
@@ -853,6 +858,15 @@ local function updateAllHeaders()
 	B:GetModule("UnitFrames"):UpdateAllHeaders()
 end
 
+local function updateRaidGroups()
+	local UF = B:GetModule("UnitFrames")
+	if UF.UpdateNumRaidGroups then
+		CreateAndUpdateRaidHeader(1)
+		UF:UpdateNumRaidGroups()
+		UF:UpdateAllHeaders()
+	end
+end
+
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -1042,7 +1056,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", NewTag..L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
 		{},--blank
-		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, nil, nil, L["PartyFrameTip"]},
+		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", NewTag..HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame},
 		{1, "UFs", "HorizonParty", L["Horizon PartyFrame"]},
 		{1, "UFs", "PartyAltPower", L["UFs PartyAltPower"], true, nil, nil, L["PartyAltPowerTip"]},
@@ -1079,8 +1093,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HideTip", NewTag..L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidNameText, L["100PercentTip"]},
-		{3, "UFs", "NumGroups", L["Num Groups"], nil, {4, 8, 1}},
-		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
+	--	{3, "UFs", "NumGroups", L["Num Groups"].."*", nil, {2, 8, 1}, updateRaidGroups},
+		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateRaidTextScale},
 		{nil, true},-- FIXME: dirty fix for now
 		{nil, true},
 	},

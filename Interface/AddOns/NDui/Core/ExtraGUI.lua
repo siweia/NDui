@@ -993,24 +993,20 @@ function G:SetupRaidFrame(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["RaidFrame Size"])
+	local panel = createExtraGUI(parent, guiName, L["RaidFrame"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
+	local UF = B:GetModule("UnitFrames")
 
-	local minRange = {
-		["Party"] = {80, 25},
-		["Raid"] = {60, 25},
-	}
+	local defaultValue = {80, 32, 2, 6}
+	local options = {}
+	for i = 1, 8 do
+		options[i] = UF.GrowthDirections[i].name
+	end
 
-	local defaultValue = {
-		["Party"] = {100, 32, 2},
-		["Raid"] = {80, 32, 2},
-	}
-
-	local function createOptionGroup(parent, title, offset, value, func)
-		createOptionTitle(parent, title, offset)
-		createOptionSlider(parent, L["Width"], minRange[value][1], 200, defaultValue[value][1], offset-60, value.."Width", func)
-		createOptionSlider(parent, L["Height"], minRange[value][2], 60, defaultValue[value][2], offset-130, value.."Height", func)
-		createOptionSlider(parent, L["Power Height"], 2, 30, defaultValue[value][3], offset-200, value.."PowerHeight", func)
+	local function updateRaidDirection()
+		if UF.CreateAndUpdateRaidHeader then
+			UF:CreateAndUpdateRaidHeader(true)
+		end
 	end
 
 	local function resizeRaidFrame()
@@ -1019,17 +1015,23 @@ function G:SetupRaidFrame(parent)
 				SetUnitFrameSize(frame, "Raid")
 			end
 		end
-	end
-	createOptionGroup(scroll.child, L["RaidFrame"], -10, "Raid", resizeRaidFrame)
-
-	local function resizePartyFrame()
-		for _, frame in pairs(ns.oUF.objects) do
-			if frame.raidType == "party" then
-				SetUnitFrameSize(frame, "Party")
-			end
+		if UF.CreateAndUpdateRaidHeader then
+			UF:CreateAndUpdateRaidHeader()
 		end
 	end
-	createOptionGroup(scroll.child, L["PartyFrame"], -300, "Party", resizePartyFrame)
+
+	local function updateNumGroups()
+		if UF.CreateAndUpdateRaidHeader then
+			UF:CreateAndUpdateRaidHeader()
+			UF:UpdateAllHeaders()
+		end
+	end
+
+	createOptionDropdown(scroll.child, "GrowthDirection", -30, options, "|nMod growth direction", "UFs", "RaidDirec", 1, updateRaidDirection)
+	createOptionSlider(scroll.child, L["Width"], 60, 200, defaultValue[1], -100, "RaidWidth", resizeRaidFrame)
+	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -180, "RaidHeight", resizeRaidFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -260, "RaidPowerHeight", resizeRaidFrame)
+	createOptionSlider(scroll.child, L["Num Groups"], 2, 8, defaultValue[4], -340, "NumGroups", updateNumGroups)
 end
 
 function G:SetupSimpleRaidFrame(parent)
@@ -1069,6 +1071,28 @@ function G:SetupSimpleRaidFrame(parent)
 		updateSimpleModeGroupBy()
 	end
 	createOptionSlider(scroll.child, L["SimpleMode Scale"], 8, 15, 10, -260, "SMRScale", resizeSimpleRaidFrame)
+end
+
+function G:SetupPartyFrame(parent)
+	local guiName = "NDuiGUI_PartyFrameSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["PartyFrame"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local function resizePartyFrame()
+		for _, frame in pairs(ns.oUF.objects) do
+			if frame.raidType == "party" then
+				SetUnitFrameSize(frame, "Party")
+			end
+		end
+	end
+
+	local defaultValue = {100, 32, 2}
+	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -40, "PartyWidth", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -120, "PartyHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -200, "PartyPowerHeight", resizePartyFrame)
 end
 
 function G:SetupPartyPetFrame(parent)
