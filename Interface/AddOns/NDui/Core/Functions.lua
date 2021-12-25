@@ -873,20 +873,6 @@ do
 	hooksecurefunc("PanelTemplates_DeselectTab", B.ResetTabAnchor)
 
 	-- Handle scrollframe
-	local function Scroll_OnEnter(self)
-		local thumb = self.thumb
-		if not thumb then return end
-		thumb.bg:SetBackdropColor(cr, cg, cb, .25)
-		thumb.bg:SetBackdropBorderColor(cr, cg, cb)
-	end
-
-	local function Scroll_OnLeave(self)
-		local thumb = self.thumb
-		if not thumb then return end
-		thumb.bg:SetBackdropColor(0, 0, 0, 0)
-		B.SetBorderColor(thumb.bg)
-	end
-
 	local function GrabScrollBarElement(frame, element)
 		local frameName = frame:GetDebugName()
 		return frame[element] or frameName and (_G[frameName..element] or strfind(frameName, element)) or nil
@@ -900,20 +886,15 @@ do
 		if thumb then
 			thumb:SetAlpha(0)
 			thumb:SetWidth(16)
-			self.thumb = thumb
-
 			local bg = B.CreateBDFrame(self, 0, true)
 			bg:SetPoint("TOPLEFT", thumb, 0, -2)
 			bg:SetPoint("BOTTOMRIGHT", thumb, 0, 4)
-			thumb.bg = bg
+			bg:SetBackdropColor(cr, cg, cb, .75)
 		end
 
 		local up, down = self:GetChildren()
 		B.ReskinArrow(up, "up")
 		B.ReskinArrow(down, "down")
-
-		self:HookScript("OnEnter", Scroll_OnEnter)
-		self:HookScript("OnLeave", Scroll_OnLeave)
 	end
 
 	-- WowTrimScrollBar
@@ -954,7 +935,7 @@ do
 		local thumb = self:GetThumb()
 		if thumb then
 			B.StripTextures(thumb, 0)
-			B.CreateBDFrame(thumb, 0, true)
+			B.CreateBDFrame(thumb, 0, true):SetBackdropBorderColor(cr, cg, cb, .75)
 		end
 	end
 
