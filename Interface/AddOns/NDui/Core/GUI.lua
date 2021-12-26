@@ -136,6 +136,7 @@ G.DefaultSettings = {
 		AutoRes = true,
 		NumGroups = 6,
 		RaidDirec = 1,
+		RaidRows = 1,
 		SimpleMode = false,
 		SMRScale = 10,
 		SMRPerCol = 20,
@@ -865,7 +866,8 @@ end
 
 local function updateTeamIndex()
 	local UF = B:GetModule("UnitFrames")
-	if UF.UpdateRaidTeamIndex then
+	if UF.CreateAndUpdateRaidHeader then
+		UF:CreateAndUpdateRaidHeader()
 		UF:UpdateRaidTeamIndex()
 	end
 	updateRaidTextScale()

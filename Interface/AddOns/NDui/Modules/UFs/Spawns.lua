@@ -298,14 +298,14 @@ UF.PartyDirections = {
 }
 
 UF.RaidDirections = {
-	[1] = {name = L["DOWN_RIGHT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", relAnchor = "TOPRIGHT", x = 5, y = 0, columnAnchorPoint = "LEFT"},
-	[2] = {name = L["DOWN_LEFT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPRIGHT", relAnchor = "TOPLEFT", x = -5, y = 0, columnAnchorPoint = "RIGHT"},
-	[3] = {name = L["UP_RIGHT"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", relAnchor = "BOTTOMRIGHT", x = 5, y = 0, columnAnchorPoint = "LEFT"},
-	[4] = {name = L["UP_LEFT"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMRIGHT", relAnchor = "BOTTOMLEFT", x = -5, y = 0, columnAnchorPoint = "RIGHT"},
-	[5] = {name = L["RIGHT_DOWN"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", relAnchor = "BOTTOMLEFT", x = 0, y = -5, columnAnchorPoint = "TOP"},
-	[6] = {name = L["RIGHT_UP"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "BOTTOMLEFT", relAnchor = "TOPLEFT", x = 0, y = 5, columnAnchorPoint = "BOTTOM"},
-	[7] = {name = L["LEFT_DOWN"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", relAnchor = "BOTTOMRIGHT", x = 0, y = -5, columnAnchorPoint = "TOP"},
-	[8] = {name = L["LEFT_UP"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "BOTTOMRIGHT", relAnchor = "TOPRIGHT", x = 0, y = 5, columnAnchorPoint = "BOTTOM"},
+	[1] = {name = L["DOWN_RIGHT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", relAnchor = "TOPRIGHT", x = 5, y = 0, columnAnchorPoint = "LEFT", multX = 1, multY = -1},
+	[2] = {name = L["DOWN_LEFT"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPRIGHT", relAnchor = "TOPLEFT", x = -5, y = 0, columnAnchorPoint = "RIGHT", multX = -1, multY = -1},
+	[3] = {name = L["UP_RIGHT"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", relAnchor = "BOTTOMRIGHT", x = 5, y = 0, columnAnchorPoint = "LEFT", multX = 1, multY = 1},
+	[4] = {name = L["UP_LEFT"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMRIGHT", relAnchor = "BOTTOMLEFT", x = -5, y = 0, columnAnchorPoint = "RIGHT", multX = -1, multY = 1},
+	[5] = {name = L["RIGHT_DOWN"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", relAnchor = "BOTTOMLEFT", x = 0, y = -5, columnAnchorPoint = "TOP", multX = 1, multY = -1},
+	[6] = {name = L["RIGHT_UP"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "BOTTOMLEFT", relAnchor = "TOPLEFT", x = 0, y = 5, columnAnchorPoint = "BOTTOM", multX = 1, multY = 1},
+	[7] = {name = L["LEFT_DOWN"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", relAnchor = "BOTTOMRIGHT", x = 0, y = -5, columnAnchorPoint = "TOP", multX = -1, multY = -1},
+	[8] = {name = L["LEFT_UP"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "BOTTOMRIGHT", relAnchor = "TOPRIGHT", x = 0, y = 5, columnAnchorPoint = "BOTTOM", multX = -1, multY = 1},
 }
 
 function UF:OnLogin()
@@ -614,14 +614,14 @@ function UF:OnLogin()
 
 			local teamIndexes = {}
 			local teamIndexAnchor = {
-				[1] = {"BOTTOMLEFT", "TOPLEFT", 0, 5},
-				[2] = {"BOTTOMLEFT", "TOPLEFT", 0, 5},
-				[3] = {"TOPLEFT", "BOTTOMLEFT", 0, -5},
-				[4] = {"TOPLEFT", "BOTTOMLEFT", 0, -5},
-				[5] = {"TOPRIGHT", "TOPLEFT", -5, 0},
-				[6] = {"TOPRIGHT", "TOPLEFT", -5, 0},
-				[7] = {"TOPLEFT", "TOPRIGHT", 5, 0},
-				[8] = {"TOPLEFT", "TOPRIGHT", 5, 0},
+				[1] = {"BOTTOM", "TOP", 0, 5},
+				[2] = {"BOTTOM", "TOP", 0, 5},
+				[3] = {"TOP", "BOTTOM", 0, -5},
+				[4] = {"TOP", "BOTTOM", 0, -5},
+				[5] = {"RIGHT", "LEFT", -5, 0},
+				[6] = {"RIGHT", "LEFT", -5, 0},
+				[7] = {"LEFT", "RIGHT", 5, 0},
+				[8] = {"LEFT", "RIGHT", 5, 0},
 			}
 
 			local function UpdateTeamIndex(teamIndex, showIndex, direc)
@@ -640,7 +640,7 @@ function UF:OnLogin()
 				local direc = C.db["UFs"]["RaidDirec"]
 				local parent = _G[header:GetName().."UnitButton1"]
 				if parent and not parent.teamIndex then
-					local teamIndex = B.CreateFS(parent, 12, format(GROUP_NUMBER, header.index))
+					local teamIndex = B.CreateFS(parent, 14, header.index)
 					teamIndex:SetTextColor(.6, .8, 1)
 					teamIndex.__owner = parent
 					UpdateTeamIndex(teamIndex, showIndex, direc)
@@ -662,9 +662,11 @@ function UF:OnLogin()
 
 			function UF:CreateAndUpdateRaidHeader(direction)
 				local index = C.db["UFs"]["RaidDirec"]
+				local rows = C.db["UFs"]["RaidRows"]
 				local numGroups = C.db["UFs"]["NumGroups"]
 				local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
 				local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
+				local indexSpacing = C.db["UFs"]["TeamIndex"] and 20 or 0
 
 				local sortData = UF.RaidDirections[index]
 				for i = 1, numGroups do
@@ -674,10 +676,9 @@ function UF:OnLogin()
 						group.index = i
 						group.groupType = "raid"
 						tinsert(UF.headers, group)
+						RegisterStateDriver(group, "visibility", "show")
 						RegisterStateDriver(group, "visibility", GetRaidVisibility())
-
 						CreateTeamIndex(group)
-						group:HookScript("OnShow", CreateTeamIndex)
 
 						groups[i] = group
 					end
@@ -685,9 +686,17 @@ function UF:OnLogin()
 					if not raidMover and i == 1 then
 						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50})
 					end
-					local numX = index < 5 and numGroups or 5
-					local numY = index < 5 and 5 or numGroups
-					raidMover:SetSize(numX*(raidWidth+5)-5, numY*(raidFrameHeight+5)-5)
+
+					local groupWidth = index < 5 and raidWidth+5 or (raidWidth+5)*5
+					local groupHeight = index < 5 and (raidFrameHeight+5)*5 or raidFrameHeight+5
+					local numX = ceil(numGroups/rows)
+					local numY = min(rows, numGroups)
+					local indexSpacings = indexSpacing*(numY-1)
+					if index < 5 then
+						raidMover:SetSize(groupWidth*numX - 5, groupHeight*numY - 5 + indexSpacings)
+					else
+						raidMover:SetSize(groupWidth*numY - 5 + indexSpacings, groupHeight*numX - 5)
+					end
 
 					if direction then
 						ResetHeaderPoints(group)
@@ -699,8 +708,16 @@ function UF:OnLogin()
 					group:ClearAllPoints()
 					if i == 1 then
 						group:SetPoint(sortData.initAnchor, raidMover)
+					elseif (i-1) % rows == 0 then
+						group:SetPoint(sortData.initAnchor, groups[i-rows], sortData.relAnchor, sortData.x, sortData.y)
 					else
-						group:SetPoint(sortData.initAnchor, groups[i-1], sortData.relAnchor, sortData.x, sortData.y)
+						local x = floor((i-1)/rows)
+						local y = (i-1)%rows
+						if index < 5 then
+							group:SetPoint(sortData.initAnchor, raidMover, sortData.initAnchor, sortData.multX*groupWidth*x, sortData.multY*(groupHeight+indexSpacing)*y)
+						else
+							group:SetPoint(sortData.initAnchor, raidMover, sortData.initAnchor, sortData.multX*(groupWidth+indexSpacing)*y, sortData.multY*groupHeight*x)
+						end
 					end
 				end
 
