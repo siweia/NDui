@@ -103,6 +103,14 @@ C.CustomUnits = {
 	-- Raids
 	[175992] = true,	-- 猩红议会，忠实的侍从
 	[GetSectionInfo(21953)] = true,	-- 凯子，灵能灌注者
+	-- Condemned Demon
+	[169430] = true,
+	[169428] = true,
+	[168932] = true,
+	[169425] = true,
+	[169429] = true,
+	[169421] = true,
+	[169426] = true,
 }
 
 -- 显示能量值的单位
