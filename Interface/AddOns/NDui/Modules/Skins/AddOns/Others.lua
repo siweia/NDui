@@ -132,6 +132,18 @@ function S:MRT_Skin()
 			end
 		end)
 	end
+
+	-- Consumables
+	local buttons = MRTConsumables and MRTConsumables.buttons
+	if buttons then
+		for i = 1, 8 do
+			local button = buttons[i]
+			local icon = button and button.texture
+			if icon then
+				B.ReskinIcon(icon)
+			end
+		end
+	end
 end
 
 function S:OtherSkins()
