@@ -1034,7 +1034,7 @@ function G:SetupRaidFrame(parent)
 	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -180, "RaidHeight", resizeRaidFrame)
 	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -260, "RaidPowerHeight", resizeRaidFrame)
 	createOptionSlider(scroll.child, L["Num Groups"], 2, 8, defaultValue[4], -340, "NumGroups", updateNumGroups)
-	createOptionSlider(scroll.child, "RaidRows", 1, 8, defaultValue[5], -420, "RaidRows", updateNumGroups)
+	createOptionSlider(scroll.child, L["RaidRows"], 1, 8, defaultValue[5], -420, "RaidRows", updateNumGroups)
 end
 
 function G:SetupSimpleRaidFrame(parent)
