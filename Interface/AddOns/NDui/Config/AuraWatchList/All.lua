@@ -131,6 +131,7 @@ local list = {
 		{AuraID = 333961, UnitID = "player"},	-- 行动的召唤：布隆
 		{AuraID = 333943, UnitID = "player"},	-- 源生重槌
 		{AuraID = 339928, UnitID = "player", Flash = true},	-- 残酷投射
+		{AuraID = 352917, UnitID = "player"},	-- 崭新决心
 		-- S2，心能/统御碎片
 		{AuraID = 357852, UnitID = "player"},	-- 激励
 		{AuraID = 356364, UnitID = "player"},	-- 冰冷的心
