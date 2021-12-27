@@ -31,7 +31,7 @@ function TT:Conduit_CheckStatus()
 	if knownLevel and level and knownLevel >= level then
 		local textLine = _G[self:GetName().."TextLeft1"]
 		local text = textLine and textLine:GetText()
-		if text and text ~= "" then
+		if text then
 			textLine:SetText(text..COLLECTED_STRING)
 		end
 	end
