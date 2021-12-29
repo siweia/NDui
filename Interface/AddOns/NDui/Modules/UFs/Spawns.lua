@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
-local format, tostring = string.format, tostring
+local tostring = tostring
 
 -- Units
 local UFRangeAlpha = {insideAlpha = 1, outsideAlpha = .4}
@@ -427,6 +427,7 @@ function UF:OnLogin()
 			UF:SyncWithZenTracker()
 			UF:UpdatePartyWatcherSpells()
 
+			local party
 			oUF:RegisterStyle("Party", CreatePartyStyle)
 			oUF:SetActiveStyle("Party")
 
@@ -653,7 +654,7 @@ function UF:OnLogin()
 			function UF:UpdateRaidTeamIndex()
 				local showIndex = C.db["UFs"]["TeamIndex"]
 				local direc = C.db["UFs"]["RaidDirec"]
-				for index, teamIndex in pairs(teamIndexes) do
+				for _, teamIndex in pairs(teamIndexes) do
 					UpdateTeamIndex(teamIndex, showIndex, direc)
 				end
 			end
