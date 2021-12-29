@@ -428,7 +428,7 @@ function UF:UpdateQuestUnit(_, unit)
 		local text = textLine and textLine:GetText()
 		if not text then break end
 
-		if text ~= "" then
+		if text ~= " " then
 			if isInGroup and text == DB.MyName or (not isInGroup and isQuestTitle(textLine)) then
 				startLooking = true
 			elseif startLooking then
