@@ -77,6 +77,10 @@ end
 local function restyleMRTWidget(self)
 	local iconTexture = self.iconTexture
 	local bar = self.statusbar
+	local parent = self.parent
+	local width = parent.barWidth or 100
+	local mult = (parent.iconSize or 24) + 5
+	local offset = 3
 
 	if not self.styled then
 		B.SetBD(iconTexture)
@@ -86,16 +90,23 @@ local function restyleMRTWidget(self)
 		self.styled = true
 	end
 	iconTexture:SetTexCoord(unpack(DB.TexCoord))
-
-	local parent = self.parent
-	if parent.optionIconPosition == 3 or parent.optionIconTitles then
-		-- do nothing
-	elseif parent.optionIconPosition == 2 then
-		self.icon:SetPoint("RIGHT", self, 3, 0)
-	else
-		self.icon:SetPoint("LEFT", self, -3, 0)
-	end
 	self.__bg:SetShown(parent.optionAlphaTimeLine ~= 0)
+
+	if parent.optionIconPosition == 3 or parent.optionIconTitles then
+		self.statusbar:SetPoint("RIGHT", self, -offset, 0)
+		mult = 0
+	elseif parent.optionIconPosition == 2 then
+		self.icon:SetPoint("RIGHT", self, -offset, 0)
+		self.statusbar:SetPoint("LEFT", self, offset, 0)
+		self.statusbar:SetPoint("RIGHT", self, -mult, 0)
+	else
+		self.icon:SetPoint("LEFT", self, offset, 0)
+		self.statusbar:SetPoint("LEFT", self, mult, 0)
+		self.statusbar:SetPoint("RIGHT", self, -offset, 0)
+	end
+
+	self.timeline.width = width - mult - offset
+	self.timeline:SetWidth(self.timeline.width)
 end
 
 local MRTLoaded
