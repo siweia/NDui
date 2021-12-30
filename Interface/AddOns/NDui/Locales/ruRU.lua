@@ -868,3 +868,4 @@ L["GO_RIGHT"] = "Go right" -- need translation
 L["GO_LEFT"] = "Go left" -- need translation
 L["SMRDirectionTip"] = "|nOption to change the growth direction for SimpleRaidFrame, require UI reload." -- need translation
 L["RaidRows"] = "Groups per row" -- need translation
+L["BottomBox"] = "Editbox on bottom" -- need translation

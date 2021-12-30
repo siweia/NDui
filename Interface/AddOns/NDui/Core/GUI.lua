@@ -294,6 +294,7 @@ G.DefaultSettings = {
 		BlockSpammer = false,
 		ChatBGType = 2,
 		WhisperSound = true,
+		BottomBox = false,
 	},
 	Map = {
 		DisableMap = false,
@@ -762,6 +763,10 @@ local function toggleLanguageFilter()
 	B:GetModule("Chat"):ToggleLanguageFilter()
 end
 
+local function toggleEditBoxAnchor()
+	B:GetModule("Chat"):ToggleEditBoxAnchor()
+end
+
 local function updateToggleDirection()
 	B:GetModule("Skins"):RefreshToggleDirection()
 end
@@ -1221,6 +1226,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
 		{1, "Chat", "Freedom", L["Language Filter"].."*", true, nil, toggleLanguageFilter},
 		{1, "Chat", "WhisperSound", L["WhisperSound"].."*", nil, nil, nil, L["WhisperSoundTip"]},
+		{1, "Chat", "BottomBox", L["BottomBox"].."*", true, nil, toggleEditBoxAnchor},
 		{4, "ACCOUNT", "TimestampFormat", L["TimestampFormat"].."*", nil, {DISABLE, "03:27 PM", "03:27:32 PM", "15:27", "15:27:32"}},
 		{4, "Chat", "ChatBGType", L["ChatBGType"].."*", true, {DISABLE, L["Default Dark"], L["Gradient"]}, toggleChatBackground},
 		{},--blank

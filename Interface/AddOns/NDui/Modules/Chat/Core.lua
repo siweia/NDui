@@ -67,6 +67,25 @@ local function GradientBackground(self)
 	return frame
 end
 
+local chatEditboxes = {}
+local function UpdateEditBoxAnchor(eb)
+	local parent = eb.__owner
+	eb:ClearAllPoints()
+	if C.db["Chat"]["BottomBox"] then
+		eb:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 4, -10)
+		eb:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", -15, -34)
+	else
+		eb:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 4, 26)
+		eb:SetPoint("TOPRIGHT", parent, "TOPRIGHT", -15, 50)
+	end
+end
+
+function module:ToggleEditBoxAnchor()
+	for _, eb in pairs(chatEditboxes) do
+		UpdateEditBoxAnchor(eb)
+	end
+end
+
 function module:SkinChat()
 	if not self or self.styled then return end
 
@@ -87,11 +106,12 @@ function module:SkinChat()
 
 	local eb = _G[name.."EditBox"]
 	eb:SetAltArrowKeyMode(false)
-	eb:ClearAllPoints()
-	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 4, 26)
-	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -17, 50)
+	eb:SetClampedToScreen(true)
+	eb.__owner = self
+	UpdateEditBoxAnchor(eb)
 	B.StripTextures(eb, 2)
 	B.SetBD(eb)
+	tinsert(chatEditboxes, eb)
 
 	local lang = _G[name.."EditBoxLanguage"]
 	lang:GetRegions():SetAlpha(0)
