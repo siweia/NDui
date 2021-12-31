@@ -477,37 +477,40 @@ function UF:OnLogin()
 			UF:CreateAndUpdatePartyHeader()
 
 			if C.db["UFs"]["PartyPetFrame"] then
+				local partyPet, petMover
 				oUF:RegisterStyle("PartyPet", CreatePartyPetStyle)
 				oUF:SetActiveStyle("PartyPet")
 
-				local petWidth, petHeight, petPowerHeight = C.db["UFs"]["PartyPetWidth"], C.db["UFs"]["PartyPetHeight"], C.db["UFs"]["PartyPetPowerHeight"]
-				local petFrameHeight = petHeight + petPowerHeight + C.mult
-
-				local partyPet = oUF:SpawnHeader("oUF_PartyPet", "SecureGroupPetHeaderTemplate", nil,
-				"showPlayer", true,
-				"showSolo", true,
-				"showParty", true,
-				"showRaid", true,
-				"columnSpacing", 5,
-				"oUF-initialConfigFunction", ([[
-					self:SetWidth(%d)
-					self:SetHeight(%d)
-				]]):format(petWidth, petFrameHeight))
-
-				partyPet.groupType = "pet"
-				tinsert(UF.headers, partyPet)
-				RegisterStateDriver(partyPet, "visibility", GetPartyPetVisibility())
-
-				local petMover = B.Mover(partyPet, L["PartyPetFrame"], "PartyPet", {"TOPLEFT", partyMover, "BOTTOMLEFT", 0, -5})
+				local function CreatePetGroup(name, width, height)
+					local group = oUF:SpawnHeader(name, "SecureGroupPetHeaderTemplate", nil,
+					"showPlayer", true,
+					"showSolo", true,
+					"showParty", true,
+					"showRaid", true,
+					"columnSpacing", 5,
+					"oUF-initialConfigFunction", ([[
+						self:SetWidth(%d)
+						self:SetHeight(%d)
+					]]):format(width, height))
+					return group
+				end
 
 				function UF:UpdatePartyPetHeader()
-					ResetHeaderPoints(partyPet)
-
 					local petWidth, petHeight, petPowerHeight = C.db["UFs"]["PartyPetWidth"], C.db["UFs"]["PartyPetHeight"], C.db["UFs"]["PartyPetPowerHeight"]
 					local petFrameHeight = petHeight + petPowerHeight + C.mult
 					local petsPerColumn = C.db["UFs"]["PartyPetPerCol"]
 					local maxColumns = C.db["UFs"]["PartyPetMaxCol"]
-					local sortData = UF.RaidDirections[C.db["UFs"]["PetDirec"]]
+					local index = C.db["UFs"]["PetDirec"]
+					local sortData = UF.RaidDirections[index]
+
+					if not partyPet then
+						partyPet = CreatePetGroup("oUF_PartyPet", petWidth, petFrameHeight)
+						partyPet.groupType = "pet"
+						tinsert(UF.headers, partyPet)
+						RegisterStateDriver(partyPet, "visibility", GetPartyPetVisibility())
+						petMover = B.Mover(partyPet, L["PartyPetFrame"], "PartyPet", {"TOPLEFT", partyMover, "BOTTOMLEFT", 0, -5})
+					end
+					ResetHeaderPoints(partyPet)
 
 					partyPet:SetAttribute("point", sortData.point)
 					partyPet:SetAttribute("xOffset", sortData.xOffset)
@@ -516,8 +519,12 @@ function UF:OnLogin()
 					partyPet:SetAttribute("unitsPerColumn", petsPerColumn)
 					partyPet:SetAttribute("maxColumns", maxColumns)
 
-					local moverWidth = (petWidth*maxColumns + 5*(maxColumns-1))
-					local moverHeight = petFrameHeight*petsPerColumn + 5*(petsPerColumn-1)
+					local moverWidth = (petWidth+5)*maxColumns - 5
+					local moverHeight = (petFrameHeight+5)*petsPerColumn - 5
+					if index > 4 then
+						moverWidth = (petWidth+5)*petsPerColumn - 5
+						moverHeight = (petFrameHeight+5)*maxColumns - 5
+					end
 					petMover:SetSize(moverWidth, moverHeight)
 					partyPet:ClearAllPoints()
 					partyPet:SetPoint(sortData.initAnchor, petMover)

@@ -1141,7 +1141,7 @@ function G:SetupPartyPetFrame(parent)
 	end
 
 	local options = {}
-	for i = 1, 4 do
+	for i = 1, 8 do
 		options[i] = UF.RaidDirections[i].name
 	end
 
