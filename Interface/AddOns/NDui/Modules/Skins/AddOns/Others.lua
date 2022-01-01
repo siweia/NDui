@@ -107,6 +107,10 @@ local function restyleMRTWidget(self)
 
 	self.timeline.width = width - mult - offset
 	self.timeline:SetWidth(self.timeline.width)
+	self.border.top:Hide()
+	self.border.bottom:Hide()
+	self.border.left:Hide()
+	self.border.right:Hide()
 end
 
 local MRTLoaded
