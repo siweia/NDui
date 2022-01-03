@@ -30,7 +30,7 @@ local classification = {
 local npcIDstring = "%s "..DB.InfoColor.."%s"
 
 function TT:GetUnit()
-	local _, unit = self and self:GetUnit()
+	local _, unit = self:GetUnit()
 	if not unit then
 		local mFocus = GetMouseFocus()
 		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit"))) or "mouseover"
