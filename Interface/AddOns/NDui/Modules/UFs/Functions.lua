@@ -214,6 +214,24 @@ function UF:UpdateFrameNameTag()
 	name:UpdateTag()
 end
 
+local function UpdateRaidNameAnchor(self, name)
+	name:SetWidth(self:GetWidth()*.95)
+	name:ClearAllPoints()
+	if self.raidType == "pet" then
+		name:SetWidth(self:GetWidth()*.55)
+		name:SetPoint("LEFT", 3, -1)
+	elseif self.raidType == "simple" then
+		name:SetPoint("LEFT", 4, 0)
+	else
+		name:SetJustifyH("CENTER")
+		if C.db["UFs"]["RaidHPMode"] ~= 1 then
+			name:SetPoint("TOP", 0, -3)
+		else
+			name:SetPoint("CENTER")
+		end
+	end
+end
+
 function UF:CreateHealthText(self)
 	local mystyle = self.mystyle
 	local textFrame = CreateFrame("Frame", nil, self)
@@ -223,21 +241,7 @@ function UF:CreateHealthText(self)
 	self.nameText = name
 	name:SetJustifyH("LEFT")
 	if mystyle == "raid" then
-		name:SetWidth(self:GetWidth()*.95)
-		name:ClearAllPoints()
-		if self.raidType == "pet" then
-			name:SetWidth(self:GetWidth()*.55)
-			name:SetPoint("LEFT", 3, -1)
-		elseif self.raidType == "simple" then
-			name:SetPoint("LEFT", 4, 0)
-		else
-			name:SetJustifyH("CENTER")
-			if C.db["UFs"]["RaidHPMode"] ~= 1 then
-				name:SetPoint("TOP", 0, -3)
-			else
-				name:SetPoint("CENTER")
-			end
-		end
+		UpdateRaidNameAnchor(self, name)
 		name:SetScale(C.db["UFs"]["RaidTextScale"])
 	elseif mystyle == "nameplate" then
 		name:ClearAllPoints()
@@ -256,7 +260,6 @@ function UF:CreateHealthText(self)
 		self:Tag(hpval, "[raidhp]")
 		if self.raidType == "pet" then
 			hpval:SetPoint("RIGHT", -3, -1)
-			self:Tag(hpval, "[VariousHP(current)]")
 		elseif self.raidType == "simple" then
 			hpval:SetPoint("RIGHT", -4, 0)
 		else
@@ -270,26 +273,6 @@ function UF:CreateHealthText(self)
 		self:Tag(hpval, "[VariousHP(currentpercent)]")
 	else
 		UF.UpdateFrameHealthTag(self)
-	end
-end
-
-function UF:UpdateRaidNameText()
-	for _, frame in pairs(oUF.objects) do
-		if frame.mystyle == "raid" and not frame.raidType == "pet" then
-			local name = frame.nameText
-			name:ClearAllPoints()
-			if frame.raidType == "simple" then
-				name:SetPoint("LEFT", 4, 0)
-			else
-				name:SetJustifyH("CENTER")
-				if C.db["UFs"]["RaidHPMode"] ~= 1 then
-					name:SetPoint("TOP", 0, -3)
-				else
-					name:SetPoint("CENTER")
-				end
-			end
-			frame.healthValue:UpdateTag()
-		end
 	end
 end
 
@@ -441,8 +424,10 @@ function UF:UpdateRaidTextScale()
 	local scale = C.db["UFs"]["RaidTextScale"]
 	for _, frame in pairs(oUF.objects) do
 		if frame.mystyle == "raid" then
+			UpdateRaidNameAnchor(frame, frame.nameText)
 			frame.nameText:SetScale(scale)
 			frame.healthValue:SetScale(scale)
+			frame.healthValue:UpdateTag()
 			if frame.powerText then frame.powerText:SetScale(scale) end
 			UF:UpdateHealthBarColor(frame, true)
 			UF:UpdatePowerBarColor(frame, true)
