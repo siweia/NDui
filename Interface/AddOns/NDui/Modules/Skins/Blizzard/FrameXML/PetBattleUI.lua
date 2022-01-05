@@ -1,12 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
 local LE_BATTLE_PET_ALLY = Enum.BattlePetOwner.Ally
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["PetBattle"] then return end
 
-	local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
+	local mult = C.mult
 
 	-- Head Frame
 	local frame = PetBattleFrame
@@ -35,7 +36,7 @@ tinsert(C.defaultThemes, function()
 		unit.ActualHealthBar:SetTexture(DB.normTex)
 		unit.healthBg = B.SetBD(unit.ActualHealthBar)
 		unit.healthBg:ClearAllPoints()
-		unit.healthBg:SetWidth(252)
+		unit.healthBg:SetWidth(unit.healthBarWidth + 2*mult)
 		unit.HealthText:ClearAllPoints()
 		unit.HealthText:SetPoint("CENTER", unit.healthBg)
 
@@ -63,8 +64,8 @@ tinsert(C.defaultThemes, function()
 
 		if index == 1 then
 			unit.ActualHealthBar:SetPoint("BOTTOMLEFT", unit.Icon, "BOTTOMRIGHT", 0, 0)
-			unit.healthBg:SetPoint("TOPLEFT", unit.ActualHealthBar, -1, 1)
-			unit.healthBg:SetPoint("BOTTOMLEFT", unit.ActualHealthBar, -1, -1)
+			unit.healthBg:SetPoint("TOPLEFT", unit.ActualHealthBar, -mult, mult)
+			unit.healthBg:SetPoint("BOTTOMLEFT", unit.ActualHealthBar, -mult, -mult)
 			unit.ActualHealthBar:SetGradient("VERTICAL", .26, 1, .22, .13, .5, .11)
 			unit.petIcon:SetPoint("BOTTOMLEFT", unit.ActualHealthBar, "TOPLEFT", 0, 4)
 			unit.Name:SetPoint("LEFT", unit.petIcon, "RIGHT", 5, 0)
@@ -75,8 +76,8 @@ tinsert(C.defaultThemes, function()
 			end
 		else
 			unit.ActualHealthBar:SetPoint("BOTTOMRIGHT", unit.Icon, "BOTTOMLEFT", 0, 0)
-			unit.healthBg:SetPoint("TOPRIGHT", unit.ActualHealthBar, 1, 1)
-			unit.healthBg:SetPoint("BOTTOMRIGHT", unit.ActualHealthBar, 1, -1)
+			unit.healthBg:SetPoint("TOPRIGHT", unit.ActualHealthBar, mult, mult)
+			unit.healthBg:SetPoint("BOTTOMRIGHT", unit.ActualHealthBar, mult, -mult)
 			unit.ActualHealthBar:SetGradient("VERTICAL", 1, .12, .24, .5, .06, .12)
 			unit.petIcon:SetPoint("BOTTOMRIGHT", unit.ActualHealthBar, "TOPRIGHT", 0, 4)
 			unit.Name:SetPoint("RIGHT", unit.petIcon, "LEFT", -5, 0)
@@ -108,8 +109,10 @@ tinsert(C.defaultThemes, function()
 		unit.ActualHealthBar:SetPoint("TOPLEFT", unit.Icon, "BOTTOMLEFT", 1, -4)
 		unit.ActualHealthBar:SetTexture(DB.normTex)
 		unit.healthBg = B.SetBD(unit.ActualHealthBar)
-		unit.healthBg:SetPoint("TOPLEFT", unit.ActualHealthBar, -1, 1)
-		unit.healthBg:SetPoint("BOTTOMRIGHT", unit.ActualHealthBar, "TOPLEFT", 37, -8)
+		unit.healthBg:ClearAllPoints()
+		unit.healthBg:SetPoint("TOPLEFT", unit.ActualHealthBar, -mult, mult)
+		unit.healthBg:SetPoint("BOTTOMLEFT", unit.ActualHealthBar, -mult, -mult)
+		unit.healthBg:SetWidth(unit.healthBarWidth + 2*mult)
 		unit.healthBg:SetFrameLevel(unit:GetFrameLevel())
 
 		if index < 3 then
