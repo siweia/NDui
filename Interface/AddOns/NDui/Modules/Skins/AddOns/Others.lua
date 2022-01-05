@@ -4,6 +4,7 @@ local S = B:GetModule("Skins")
 
 local _G = _G
 local strfind = strfind
+local cr, cg, cb = DB.r, DB.g, DB.b
 
 function S:FriendGroups()
 	if not IsAddOnLoaded("FriendGroups") then return end
@@ -161,6 +162,69 @@ function S:MRT_Skin()
 	end
 end
 
+local function updateSoulshapeButtons(self)
+	local buttons = self.buttons
+	for i = 1, #buttons do
+		local bu = buttons[i]
+		if not bu.bg then
+			local bg = B.CreateBDFrame(bu, .25)
+			bg:SetPoint("TOPLEFT", 3, -1)
+			bg:SetPoint("BOTTOMRIGHT", 0, 1)
+			bu.bg = bg
+
+			B.ReskinIcon(bu.icon)
+			bu.selectedTexture:SetAlpha(0)
+			bu.background:SetTexture(nil)
+			bu:SetHighlightTexture(nil)
+
+			local critterIcon = bu.critterIcon
+			critterIcon:SetTexture("Interface\\ICONS\\Pet_Type_Critter")
+			critterIcon:SetTexCoord(0, 1, 0, 1)
+			critterIcon:SetSize(40, 40)
+			critterIcon:SetAlpha(.5)
+		end
+
+		if bu.selected then
+			bu.bg:SetBackdropColor(cr, cg, cb, .25)
+		else
+			bu.bg:SetBackdropColor(0, 0, 0, .25)
+		end
+	end
+end
+
+function S:SoulshapeJournal()
+	if not IsAddOnLoaded("SoulshapeJournal") then return end
+	if not SoulshapeCollectionPanel then return end
+
+	CollectionsJournalCoverTab:SetAlpha(0)
+	B.ReskinTab(CollectionsJournalSecureTab0)
+
+	local styled
+	SoulshapeCollectionPanel:HookScript("OnShow", function(frame)
+		if styled then return end
+		styled = true
+
+		B.StripTextures(frame)
+		B.SetBD(frame, 1) -- on top of mount journal
+		B.ReskinClose(frame.CloseButton)
+		B.ReskinScroll(frame.ScrollFrame.ScrollBar)
+		B.ReskinArrow(frame.SoulshapeDisplay.ModelScene.RotateLeftButton, "left")
+		B.ReskinArrow(frame.SoulshapeDisplay.ModelScene.RotateRightButton, "right")
+		B.StripTextures(SoulshapeCollectionPanelCount)
+		B.CreateBDFrame(SoulshapeCollectionPanelCount, .25)
+
+		local searchBox, _, filterButton = select(9, frame:GetChildren())
+		B.ReskinInput(searchBox)
+		filterButton.Icon = select(12, filterButton:GetRegions())
+		if filterButton.Icon then
+			B.ReskinFilterButton(filterButton)
+		end
+
+		hooksecurefunc(frame.ScrollFrame, "update", updateSoulshapeButtons)
+		hooksecurefunc(frame.ScrollFrame, "UpdateButtons", updateSoulshapeButtons)
+	end)
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -168,4 +232,5 @@ function S:OtherSkins()
 	S:PostalSkin()
 	S:SoulbindsTalents()
 	S:MRT_Skin()
+	S:SoulshapeJournal()
 end
