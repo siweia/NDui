@@ -864,7 +864,7 @@ end
 -- Enhanced ColorPickerFrame
 local function translateColor(r)
 	if not r then r = "ff" end
-	return B:Round(tonumber(r, 16)/255, 2)
+	return tonumber(r, 16)/255
 end
 
 function M:EnhancedPicker_UpdateColor()
@@ -935,20 +935,20 @@ function M:EnhancedPicker()
 	end
 	colorBar:SetWidth(count*22)
 
-	pickerFrame.__boxR = createCodeBox(45, 1, "R")
-	pickerFrame.__boxG = createCodeBox(45, 2, "G")
-	pickerFrame.__boxB = createCodeBox(45, 3, "B")
+	pickerFrame.__boxR = createCodeBox(45, 1, "|cffff0000R")
+	pickerFrame.__boxG = createCodeBox(45, 2, "|cff00ff00G")
+	pickerFrame.__boxB = createCodeBox(45, 3, "|cff0000ffB")
 	pickerFrame.__boxH = createCodeBox(70, 4, "#")
 
 	pickerFrame:HookScript("OnColorSelect", function(self)
 		local r, g, b = self:GetColorRGB()
-		r = B:Round(r*255)
-		g = B:Round(g*255)
-		b = B:Round(b*255)
+		r = r*255
+		g = g*255
+		b = b*255
 
 		self.__boxR:SetText(r)
 		self.__boxG:SetText(g)
 		self.__boxB:SetText(b)
-		self.__boxH:SetText(format("%02x%02x%02x", r*255, g*255, b*255))
+		self.__boxH:SetText(format("%02x%02x%02x", r, g, b))
 	end)
 end
