@@ -942,9 +942,9 @@ function M:EnhancedPicker()
 
 	pickerFrame:HookScript("OnColorSelect", function(self)
 		local r, g, b = self:GetColorRGB()
-		r = r*255
-		g = g*255
-		b = b*255
+		r = B:Round(r*255)
+		g = B:Round(g*255)
+		b = B:Round(b*255)
 
 		self.__boxR:SetText(r)
 		self.__boxG:SetText(g)
