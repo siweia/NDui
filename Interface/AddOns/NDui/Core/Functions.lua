@@ -1056,10 +1056,14 @@ do
 	function B:ReskinFilterButton()
 		B.StripTextures(self)
 		B.Reskin(self)
-		self.Text:SetPoint("CENTER")
-		B.SetupArrow(self.Icon, "right")
-		self.Icon:SetPoint("RIGHT")
-		self.Icon:SetSize(14, 14)
+		if self.Text then
+			self.Text:SetPoint("CENTER")
+		end
+		if self.Icon then
+			B.SetupArrow(self.Icon, "right")
+			self.Icon:SetPoint("RIGHT")
+			self.Icon:SetSize(14, 14)
+		end
 	end
 
 	function B:ReskinNavBar()
