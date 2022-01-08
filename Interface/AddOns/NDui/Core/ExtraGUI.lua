@@ -1014,6 +1014,7 @@ function G:SetupRaidFrame(parent)
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.mystyle == "raid" and not frame.raidType then
 				SetUnitFrameSize(frame, "Raid")
+				UF.UpdateRaidNameAnchor(frame, frame.nameText)
 			end
 		end
 		if UF.CreateAndUpdateRaidHeader then
@@ -1073,6 +1074,7 @@ function G:SetupSimpleRaidFrame(parent)
 				frame.Power:SetHeight(powerHeight)
 				frame.Auras.size = 18*scale/10
 				UF:UpdateAuraContainer(frame, frame.Auras, 1)
+				UF.UpdateRaidNameAnchor(frame, frame.nameText)
 			end
 		end
 
@@ -1094,6 +1096,7 @@ function G:SetupPartyFrame(parent)
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.raidType == "party" then
 				SetUnitFrameSize(frame, "Party")
+				UF.UpdateRaidNameAnchor(frame, frame.nameText)
 			end
 		end
 		if UF.CreateAndUpdatePartyHeader then
@@ -1134,6 +1137,7 @@ function G:SetupPartyPetFrame(parent)
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.raidType == "pet" then
 				SetUnitFrameSize(frame, "PartyPet")
+				UF.UpdateRaidNameAnchor(frame, frame.nameText)
 			end
 		end
 

@@ -214,7 +214,7 @@ function UF:UpdateFrameNameTag()
 	name:UpdateTag()
 end
 
-local function UpdateRaidNameAnchor(self, name)
+function UF:UpdateRaidNameAnchor(name)
 	name:ClearAllPoints()
 	if self.raidType == "pet" then
 		if C.db["UFs"]["RaidHPMode"] ~= 1 then
@@ -249,7 +249,7 @@ function UF:CreateHealthText(self)
 	self.nameText = name
 	name:SetJustifyH("LEFT")
 	if mystyle == "raid" then
-		UpdateRaidNameAnchor(self, name)
+		UF.UpdateRaidNameAnchor(self, name)
 		name:SetScale(C.db["UFs"]["RaidTextScale"])
 	elseif mystyle == "nameplate" then
 		name:ClearAllPoints()
@@ -432,7 +432,7 @@ function UF:UpdateRaidTextScale()
 	local scale = C.db["UFs"]["RaidTextScale"]
 	for _, frame in pairs(oUF.objects) do
 		if frame.mystyle == "raid" then
-			UpdateRaidNameAnchor(frame, frame.nameText)
+			UF.UpdateRaidNameAnchor(frame, frame.nameText)
 			frame.nameText:SetScale(scale)
 			frame.healthValue:SetScale(scale)
 			frame.healthValue:UpdateTag()
