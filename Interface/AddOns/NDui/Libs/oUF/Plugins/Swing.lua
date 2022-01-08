@@ -3,7 +3,6 @@
 -- NDui MOD
 -------------------------
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 
 local select = select
@@ -74,8 +73,7 @@ do
 			end
 		end
 
-		local spell = UnitCastingInfo("player")
-		if slam == spell then
+		if UnitCastingInfo("player") == slam then
 			-- slamelapsed: time to add for one slam
 			slamelapsed = slamelapsed + elapsed
 			-- slamtime: needed for meleeing hack (see some lines above)
