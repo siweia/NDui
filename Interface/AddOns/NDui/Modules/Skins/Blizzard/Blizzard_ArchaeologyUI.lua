@@ -74,4 +74,11 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	B.SetBD(ArcheologyDigsiteProgressBar.FillBar)
 	ArcheologyDigsiteProgressBar.FillBar:SetStatusBarTexture(DB.bdTex)
 	ArcheologyDigsiteProgressBar.FillBar:SetStatusBarColor(.7, .3, .2)
+
+	local ticks = {}
+	ArcheologyDigsiteProgressBar:HookScript("OnShow", function(self)
+		local bar = self.FillBar
+		if not bar then return end
+		B:CreateAndUpdateBarTicks(bar, ticks, bar.fillBarMax)
+	end)
 end
