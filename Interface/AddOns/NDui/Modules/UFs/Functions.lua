@@ -549,7 +549,7 @@ local function createBarMover(bar, text, value, anchor)
 end
 
 local function updateSpellTarget(self, _, unit)
-	B.PostCastUpdate(self.Castbar, unit)
+	UF.PostCastUpdate(self.Castbar, unit)
 end
 
 function UF:ToggleCastBarLatency(frame)
