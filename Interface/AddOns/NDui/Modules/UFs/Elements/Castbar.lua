@@ -1,14 +1,15 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local UF
+local UF = B:GetModule("UnitFrames")
 
-local unpack, pairs, min, format, strupper = unpack, pairs, min, format, strupper
+local unpack, min, format, strupper = unpack, min, format, strupper
 local GetTime, IsPlayerSpell, UnitName = GetTime, IsPlayerSpell, UnitName
 local UnitInVehicle, UnitIsUnit, UnitExists = UnitInVehicle, UnitIsUnit, UnitExists
 
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
 
+local ticks = {}
 local channelingTicks = {
 	[740] = 4,		-- 宁静
 	[755] = 5,		-- 生命通道
@@ -44,30 +45,7 @@ if DB.MyClass == "PRIEST" then
 	B:RegisterEvent("PLAYER_TALENT_UPDATE", updateTicks)
 end
 
-local ticks = {}
-local function updateCastBarTicks(bar, numTicks)
-	if numTicks and numTicks > 0 then
-		local delta = bar:GetWidth() / numTicks
-		for i = 1, numTicks do
-			if not ticks[i] then
-				ticks[i] = bar:CreateTexture(nil, "OVERLAY")
-				ticks[i]:SetTexture(DB.normTex)
-				ticks[i]:SetVertexColor(0, 0, 0, .7)
-				ticks[i]:SetWidth(C.mult)
-				ticks[i]:SetHeight(bar:GetHeight())
-			end
-			ticks[i]:ClearAllPoints()
-			ticks[i]:SetPoint("CENTER", bar, "LEFT", delta * i, 0 )
-			ticks[i]:Show()
-		end
-	else
-		for _, tick in pairs(ticks) do
-			tick:Hide()
-		end
-	end
-end
-
-function B:OnCastbarUpdate(elapsed)
+function UF:OnCastbarUpdate(elapsed)
 	if self.casting or self.channeling then
 		local decimal = self.decimal
 
@@ -108,7 +86,7 @@ function B:OnCastbarUpdate(elapsed)
 	end
 end
 
-function B:OnCastSent()
+function UF:OnCastSent()
 	local element = self.Castbar
 	if not element.SafeZone then return end
 	element.__sendTime = GetTime()
@@ -148,7 +126,7 @@ local function UpdateCastBarColor(self, unit)
 	self:SetStatusBarColor(color.r, color.g, color.b)
 end
 
-function B:PostCastStart(unit)
+function UF:PostCastStart(unit)
 	self:SetAlpha(1)
 	self.Spark:Show()
 
@@ -180,15 +158,13 @@ function B:PostCastStart(unit)
 		if self.channeling then
 			numTicks = channelingTicks[self.spellID] or 0
 		end
-		updateCastBarTicks(self, numTicks)
+		B:CreateAndUpdateBarTicks(self, ticks, numTicks)
 	end
 
 	UpdateCastBarColor(self, unit)
 
 	if self.__owner.mystyle == "nameplate" then
 		-- Major spells
-		if not UF then UF = B:GetModule("UnitFrames") end
-
 		if C.db["Nameplate"]["CastbarGlow"] and UF.MajorSpells[self.spellID] then
 			B.ShowOverlayGlow(self.glowFrame)
 		else
@@ -200,15 +176,15 @@ function B:PostCastStart(unit)
 	end
 end
 
-function B:PostCastUpdate(unit)
+function UF:PostCastUpdate(unit)
 	UpdateSpellTarget(self, unit)
 end
 
-function B:PostUpdateInterruptible(unit)
+function UF:PostUpdateInterruptible(unit)
 	UpdateCastBarColor(self, unit)
 end
 
-function B:PostCastStop()
+function UF:PostCastStop()
 	if not self.fadeOut then
 		self:SetStatusBarColor(unpack(CastbarCompleteColor))
 		self.fadeOut = true
@@ -217,7 +193,7 @@ function B:PostCastStop()
 	ResetSpellTarget(self)
 end
 
-function B:PostCastFailed()
+function UF:PostCastFailed()
 	self:SetStatusBarColor(unpack(CastbarFailColor))
 	self:SetValue(self.max)
 	self.fadeOut = true

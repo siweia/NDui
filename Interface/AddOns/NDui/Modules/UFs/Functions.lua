@@ -557,13 +557,13 @@ function UF:ToggleCastBarLatency(frame)
 	if not frame then return end
 
 	if C.db["UFs"]["LagString"] then
-		frame:RegisterEvent("GLOBAL_MOUSE_UP", B.OnCastSent, true) -- Fix quests with WorldFrame interaction
-		frame:RegisterEvent("GLOBAL_MOUSE_DOWN", B.OnCastSent, true)
-		frame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent, true)
+		frame:RegisterEvent("GLOBAL_MOUSE_UP", UF.OnCastSent, true) -- Fix quests with WorldFrame interaction
+		frame:RegisterEvent("GLOBAL_MOUSE_DOWN", UF.OnCastSent, true)
+		frame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", UF.OnCastSent, true)
 	else
-		frame:UnregisterEvent("GLOBAL_MOUSE_UP", B.OnCastSent)
-		frame:UnregisterEvent("GLOBAL_MOUSE_DOWN", B.OnCastSent)
-		frame:UnregisterEvent("CURRENT_SPELL_CAST_CHANGED", B.OnCastSent)
+		frame:UnregisterEvent("GLOBAL_MOUSE_UP", UF.OnCastSent)
+		frame:UnregisterEvent("GLOBAL_MOUSE_DOWN", UF.OnCastSent)
+		frame:UnregisterEvent("CURRENT_SPELL_CAST_CHANGED", UF.OnCastSent)
 		if frame.Castbar then frame.Castbar.__sendTime = nil end
 	end
 end
@@ -661,12 +661,12 @@ function UF:CreateCastBar(self)
 
 	cb.Time = timer
 	cb.Text = name
-	cb.OnUpdate = B.OnCastbarUpdate
-	cb.PostCastStart = B.PostCastStart
-	cb.PostCastUpdate = B.PostCastUpdate
-	cb.PostCastStop = B.PostCastStop
-	cb.PostCastFail = B.PostCastFailed
-	cb.PostCastInterruptible = B.PostUpdateInterruptible
+	cb.OnUpdate = UF.OnCastbarUpdate
+	cb.PostCastStart = UF.PostCastStart
+	cb.PostCastUpdate = UF.PostCastUpdate
+	cb.PostCastStop = UF.PostCastStop
+	cb.PostCastFail = UF.PostCastFailed
+	cb.PostCastInterruptible = UF.PostUpdateInterruptible
 
 	self.Castbar = cb
 end

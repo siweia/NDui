@@ -4,4 +4,6 @@
 	<Script file="Raid.lua"/>
 	<Script file="Nameplates.lua"/>
 	<Script file="Spawns.lua"/>
+
+	<Script file="Elements\Castbar.lua"/>
 </Ui>
