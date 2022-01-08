@@ -744,6 +744,29 @@ do
 		end
 	end
 
+	function B:CreateAndUpdateBarTicks(bar, ticks, numTicks)
+		for i = 1, #ticks do
+			ticks[i]:Hide()
+		end
+
+		if numTicks and numTicks > 0 then
+			local width, height = bar:GetSize()
+			local delta = width / numTicks
+			for i = 1, numTicks-1 do
+				if not ticks[i] then
+					ticks[i] = bar:CreateTexture(nil, "OVERLAY")
+					ticks[i]:SetTexture(DB.normTex)
+					ticks[i]:SetVertexColor(0, 0, 0, .7)
+					ticks[i]:SetWidth(C.mult)
+					ticks[i]:SetHeight(height)
+				end
+				ticks[i]:ClearAllPoints()
+				ticks[i]:SetPoint("RIGHT", bar, "LEFT", delta * i, 0 )
+				ticks[i]:Show()
+			end
+		end
+	end
+
 	-- Handle button
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
