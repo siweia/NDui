@@ -215,27 +215,31 @@ function UF:UpdateFrameNameTag()
 end
 
 function UF:UpdateRaidNameAnchor(name)
-	name:ClearAllPoints()
 	if self.raidType == "pet" then
-		if C.db["UFs"]["RaidHPMode"] ~= 1 then
-			name:SetWidth(self:GetWidth()*.55)
-			name:SetJustifyH("LEFT")
-			name:SetPoint("LEFT", 3, -1)
-		else
+		name:ClearAllPoints()
+		if C.db["UFs"]["RaidHPMode"] == 1 then
 			name:SetWidth(self:GetWidth()*.95)
 			name:SetJustifyH("CENTER")
 			name:SetPoint("CENTER")
+		else
+			name:SetWidth(self:GetWidth()*.65)
+			name:SetJustifyH("LEFT")
+			name:SetPoint("LEFT", 3, -1)
 		end
 	elseif self.raidType == "simple" then
-		name:SetWidth(self:GetWidth()*.55)
-		name:SetPoint("LEFT", 4, 0)
+		if C.db["UFs"]["RaidHPMode"] == 1 then
+			name:SetWidth(self:GetWidth()*.95)
+		else
+			name:SetWidth(self:GetWidth()*.65)
+		end
 	else
+		name:ClearAllPoints()
 		name:SetWidth(self:GetWidth()*.95)
 		name:SetJustifyH("CENTER")
-		if C.db["UFs"]["RaidHPMode"] ~= 1 then
-			name:SetPoint("TOP", 0, -3)
-		else
+		if C.db["UFs"]["RaidHPMode"] == 1 then
 			name:SetPoint("CENTER")
+		else
+			name:SetPoint("TOP", 0, -3)
 		end
 	end
 end
