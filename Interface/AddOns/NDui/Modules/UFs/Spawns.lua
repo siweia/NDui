@@ -293,8 +293,8 @@ end
 UF.PartyDirections = {
 	[1] = {name = L["GO_DOWN"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", order = "TANK,HEALER,DAMAGER,NONE"},
 	[2] = {name = L["GO_UP"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", order = "NONE,DAMAGER,HEALER,TANK"},
-	[3] = {name = L["GO_RIGHT"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", order = "NONE,DAMAGER,HEALER,TANK"},
-	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", order = "TANK,HEALER,DAMAGER,NONE"},
+	[3] = {name = L["GO_RIGHT"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", order = "TANK,HEALER,DAMAGER,NONE"},
+	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", order = "NONE,DAMAGER,HEALER,TANK"},
 }
 
 UF.RaidDirections = {
