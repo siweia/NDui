@@ -871,3 +871,5 @@ L["RaidRows"] = "Groups per row" -- need translation
 L["BottomBox"] = "Editbox on bottom" -- need translation
 L["BlockDBM"] = "Block DBM Auras" -- need translation
 L["BlockDBMTip"] = "|nIf enabled, nameplate auras add by DBM will be removed, and auto presents in nameplate white list." -- need translation
+L["DescRole"] = "Sort by reverse roles" -- need translation
+L["DescRoleTip"] = "|nIf checked, sort your party order by 'Damager Healer Tank' within growth direction.|n|nIf unchecked, sort your party order by 'Tank Healer Damager' within growth direction." -- need translation

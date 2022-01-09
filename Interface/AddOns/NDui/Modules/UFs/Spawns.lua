@@ -291,10 +291,10 @@ local function ResetHeaderPoints(header)
 end
 
 UF.PartyDirections = {
-	[1] = {name = L["GO_DOWN"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", order = "TANK,HEALER,DAMAGER,NONE"},
-	[2] = {name = L["GO_UP"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", order = "NONE,DAMAGER,HEALER,TANK"},
-	[3] = {name = L["GO_RIGHT"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", order = "TANK,HEALER,DAMAGER,NONE"},
-	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", order = "NONE,DAMAGER,HEALER,TANK"},
+	[1] = {name = L["GO_DOWN"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT"},
+	[2] = {name = L["GO_UP"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT"},
+	[3] = {name = L["GO_RIGHT"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT"},
+	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT"},
 }
 
 UF.RaidDirections = {
@@ -446,6 +446,9 @@ function UF:OnLogin()
 				return group
 			end
 
+			local ascRole = "TANK,HEALER,DAMAGER,NONE"
+			local descRole = "NONE,DAMAGER,HEALER,TANK"
+
 			function UF:CreateAndUpdatePartyHeader()
 				local index = C.db["UFs"]["PartyDirec"]
 				local sortData = UF.PartyDirections[index]
@@ -470,7 +473,7 @@ function UF:OnLogin()
 				party:SetAttribute("point", sortData.point)
 				party:SetAttribute("xOffset", sortData.xOffset)
 				party:SetAttribute("yOffset", sortData.yOffset)
-				party:SetAttribute("groupingOrder", sortData.order)
+				party:SetAttribute("groupingOrder", C.db["UFs"]["DescRole"] and descRole or ascRole)
 				party:SetAttribute("groupBy", "ASSIGNEDROLE")
 			end
 

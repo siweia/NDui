@@ -205,6 +205,7 @@ G.DefaultSettings = {
 		CCName = true,
 		RCCName = true,
 		HideTip = false,
+		DescRole = true,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
