@@ -4,10 +4,12 @@ local TT = B:GetModule("Tooltip")
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
 local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
-local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
+local GetItemInfoFromHyperlink, IsPlayerSpell = GetItemInfoFromHyperlink, IsPlayerSpell
 local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
 local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
+local C_MountJournal_GetMountFromSpell = C_MountJournal.GetMountFromSpell
 local BAGSLOT, BANK = BAGSLOT, BANK
+local LEARNT_STRING = "|cffff0000"..ALREADY_LEARNED.."|r"
 
 local types = {
 	spell = SPELLS.."ID:",
@@ -26,6 +28,11 @@ function TT:AddLineForID(id, linkType, noadd)
 		local text = line:GetText()
 		if text and text == linkType then return end
 	end
+
+	if linkType == types.spell and IsPlayerSpell(id) and C_MountJournal_GetMountFromSpell(id) then
+		self:AddLine(LEARNT_STRING)
+	end
+
 	if not noadd then self:AddLine(" ") end
 
 	if linkType == types.item then
