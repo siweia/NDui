@@ -10,11 +10,14 @@ local function ReskinDetails()
 	Details.tabela_instancias = Details.tabela_instancias or {}
 	Details.instances_amount = Details.instances_amount or 5
 	-- toggle windows on init
-	Details:ReabrirTodasInstancias()
+	--Details:ReabrirTodasInstancias()
 
 	local function setupInstance(instance)
 		if instance.styled then return end
-		if not instance.baseframe then return end
+		if not instance.baseframe then
+			instance:ShowWindow()
+			instance.wasHidden = true
+		end
 
 		instance:ChangeSkin("Minimalistic")
 		instance:InstanceWallpaper(false)
@@ -39,6 +42,9 @@ local function ReskinDetails()
 			close:HookScript("OnClick", function()
 				instance:HideWindow()
 			end)
+			if instance.wasHidden then
+				close:Click()
+			end
 		end
 
 		instance.styled = true
