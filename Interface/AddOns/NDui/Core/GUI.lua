@@ -1070,7 +1070,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SimpleMode", NewTag..L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
 		{},--blank
 		{1, "UFs", "PartyFrame", NewTag..HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
-		{1, "UFs", "PartyPetFrame", NewTag..HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame},
+		{1, "UFs", "PartyPetFrame", NewTag..HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"].."*", nil, nil, updatePartyElements},
 		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], true, nil, nil, L["PartyWatcherSyncTip"]},

@@ -545,6 +545,7 @@ L["Bags ShowNewItem"] = "Surbrillance sur nouvel objet"
 L["UFTextScale"] = "Échelle de texte des CU"
 L["InstantDelete"] = "Passer EFFACER suppression d'objet"
 L["PartyPetFrame"] = "Cadre de familiers de groupe"
+L["PartyPetTip"] = "|nYou must enable PartyFrame as well." -- need translation
 L["ToggleDirection"] = "Basculer la Direction"
 L["Show AzeriteTraits"] = "Afficher les traits d'Azérite"
 L["ContactList"] = "Liste de contacts"

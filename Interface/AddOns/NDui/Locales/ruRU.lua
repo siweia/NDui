@@ -545,6 +545,7 @@ L["Bags ShowNewItem"] = "Подсвечивать новые предметы"
 L["UFTextScale"] = "Масштаб текста рамок"
 L["InstantDelete"] = "Авто заполнение 'УДАЛИТЬ'"
 L["PartyPetFrame"] = "Рамка питомцев группы"
+L["PartyPetTip"] = "|nYou must enable PartyFrame as well." -- need translation
 L["ToggleDirection"] = "Переключить направление"
 L["Show AzeriteTraits"] = "Показывать азеритовые таланты"
 L["ContactList"] = "Контакты"
