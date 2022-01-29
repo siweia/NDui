@@ -225,6 +225,21 @@ function S:SoulshapeJournal()
 	end)
 end
 
+function S:ATT()
+	if not IsAddOnLoaded("AllTheThings") then return end
+
+	local frame = _G["AllTheThings-Window-CurrentInstance"]
+	if frame then
+		B.SetBD(frame, nil, 2, -2, -2, 2)
+		B.ReskinClose(frame.CloseButton, nil, -4, -4)
+		B.ReskinScroll(frame.ScrollBar)
+		frame.Grip:SetTexture([[Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up]])
+		local up = frame.ScrollBar:GetChildren()
+		up:ClearAllPoints()
+		up:SetPoint("TOPRIGHT", 0, 10)
+	end
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -233,4 +248,5 @@ function S:OtherSkins()
 	S:SoulbindsTalents()
 	S:MRT_Skin()
 	S:SoulshapeJournal()
+	S:ATT()
 end
