@@ -34,11 +34,17 @@ local updater = CreateFrame("Frame")
 updater:SetScript("OnUpdate", TT.InspectOnUpdate)
 updater:Hide()
 
+local lastTime = 0
 function TT:GetInspectInfo(...)
 	if self == "UNIT_INVENTORY_CHANGED" then
-		local unit = ...
-		if UnitGUID(unit) == currentGUID then
-			TT:InspectUnit(unit, true)
+		local thisTime = GetTime()
+		if thisTime - lastTime > .1 then
+			lastTime = thisTime
+
+			local unit = ...
+			if UnitGUID(unit) == currentGUID then
+				TT:InspectUnit(unit, true)
+			end
 		end
 	elseif self == "INSPECT_READY" then
 		local guid = ...
