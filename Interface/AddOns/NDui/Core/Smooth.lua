@@ -118,5 +118,5 @@ function B:DesmoothBar(bar)
 end
 
 function B:SetSmoothingAmount(amount)
-	AMOUNT = clamp(amount, .15, .6)
+	AMOUNT = clamp(amount, .1, 1)
 end
