@@ -103,6 +103,9 @@ local list = {
 		{AuraID = 274447, UnitID = "player"},	-- 千里之目
 		{AuraID = 260243, UnitID = "player"},	-- 乱射
 		{AuraID = 342076, UnitID = "player"},	-- 行云流水
+
+		{AuraID = 363760, UnitID = "player", Flash = true},	-- 杀戮狂乱，兽王4T
+		{AuraID = 363805, UnitID = "player", Flash = true},	-- 疯狂掷弹兵，生存2T
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱
