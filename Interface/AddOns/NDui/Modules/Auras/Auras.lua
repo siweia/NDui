@@ -4,9 +4,9 @@ local oUF = ns.oUF
 local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
-local format, floor, strmatch, select, unpack = format, floor, strmatch, select, unpack
+local format, floor, strmatch, select, unpack, tonumber = format, floor, strmatch, select, unpack, tonumber
 local UnitAura, GetTime = UnitAura, GetTime
-local GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo
+local GetInventoryItemQuality, GetInventoryItemTexture, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetWeaponEnchantInfo
 
 function A:OnLogin()
 	A:HideBlizBuff()
@@ -77,18 +77,13 @@ end
 function A:UpdateTimer(elapsed)
 	local onTooltip = GameTooltip:IsOwned(self)
 
-	if not (self.timeLeft or self.offset or onTooltip) then
+	if not (self.timeLeft or self.expiration or onTooltip) then
 		self:SetScript("OnUpdate", nil)
 		return
 	end
 
-	if self.offset then
-		local expiration = select(self.offset, GetWeaponEnchantInfo())
-		if expiration then
-			self.timeLeft = expiration / 1e3
-		else
-			self.timeLeft = 0
-		end
+	if self.expiration then
+		self.timeLeft = self.expiration / 1e3
 	elseif self.timeLeft then
 		self.timeLeft = self.timeLeft - elapsed
 	end
@@ -143,31 +138,23 @@ function A:UpdateAuras(button, index)
 
 	button.spellID = spellID
 	button.icon:SetTexture(texture)
-	button.offset = nil
+	button.expiration = nil
 end
 
 function A:UpdateTempEnchant(button, index)
-	local quality = GetInventoryItemQuality("player", index)
-	button.icon:SetTexture(GetInventoryItemTexture("player", index))
-
-	local offset = 2
-	local weapon = button:GetName():sub(-1)
-	if strmatch(weapon, "2") then
-		offset = 6
-	end
-
-	if quality then
-		button:SetBackdropBorderColor(GetItemQualityColor(quality))
-	end
-
-	local expirationTime = select(offset, GetWeaponEnchantInfo())
+	local expirationTime = select(button.enchantOffset, GetWeaponEnchantInfo())
 	if expirationTime then
-		button.offset = offset
+		local quality = GetInventoryItemQuality("player", index)
+		local color = DB.QualityColors[quality or 1]
+		button:SetBackdropBorderColor(color.r, color.g, color.b)
+		button.icon:SetTexture(GetInventoryItemTexture("player", index))
+
+		button.expiration = expirationTime
 		button:SetScript("OnUpdate", A.UpdateTimer)
 		button.nextUpdate = -1
 		A.UpdateTimer(button, 0)
 	else
-		button.offset = nil
+		button.expiration = nil
 		button.timeLeft = nil
 		button.timer:SetText("")
 	end
@@ -239,6 +226,8 @@ function A:CreateAuraHeader(filter)
 
 	local header = CreateFrame("Frame", name, UIParent, "SecureAuraHeaderTemplate")
 	header:SetClampedToScreen(true)
+	header:UnregisterEvent("UNIT_AURA") -- we only need to watch player and vehicle
+	header:RegisterUnitEvent("UNIT_AURA", "player", "vehicle")
 	header:SetAttribute("unit", "player")
 	header:SetAttribute("filter", filter)
 	header.filter = filter
@@ -278,9 +267,14 @@ function A:Button_OnEnter()
 	self:SetScript("OnUpdate", A.UpdateTimer)
 end
 
+local indexToOffset = {2, 6, 10}
+
 function A:CreateAuraIcon(button)
 	button.header = button:GetParent()
 	button.filter = button.header.filter
+	button.name = button:GetName()
+	local enchantIndex = tonumber(strmatch(button.name, "TempEnchant(%d)$"))
+	button.enchantOffset = indexToOffset[enchantIndex]
 
 	local cfg = A.settings.Debuffs
 	if button.filter == "HELPFUL" then
