@@ -17,18 +17,19 @@ local function isMessageProtected(msg)
 	return msg and (msg ~= gsub(msg, "(:?|?)|K(.-)|k", canChangeMessage))
 end
 
-local function replaceMessage(msg)
+local function replaceMessage(msg, r, g, b)
+	local hexRGB = B.HexRGB(r, g, b)
 	msg = gsub(msg, "(|TInterface(.*)|t)", "")
-	msg = gsub(msg, "(|c%x%x%x%x%x%x%x%x", "")
-	return msg
+	return format("%s%s|r", hexRGB, msg)
 end
 
 function module:GetChatLines()
 	local index = 1
 	for i = 1, self:GetNumMessages() do
-		local msg = self:GetMessageInfo(i)
+		local msg, r, g, b = self:GetMessageInfo(i)
 		if msg and not isMessageProtected(msg) then
-			msg = replaceMessage(msg)
+			r, g, b = r or 1, g or 1, b or 1
+			msg = replaceMessage(msg, r, g, b)
 			lines[index] = tostring(msg)
 			index = index + 1
 		end
