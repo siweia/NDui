@@ -9,26 +9,27 @@ local function ReskinDetails()
 	-- instance table can be nil sometimes
 	Details.tabela_instancias = Details.tabela_instancias or {}
 	Details.instances_amount = Details.instances_amount or 5
-	-- toggle windows on init
-	--Details:ReabrirTodasInstancias()
 
 	local function setupInstance(instance)
 		if instance.styled then return end
+		-- if window is hidden on init, show it and hide later
 		if not instance.baseframe then
 			instance:ShowWindow()
 			instance.wasHidden = true
 		end
+		-- reset texture if using Details default texture
+		local needReset = instance.row_info.texture == "BantoBar"
 
 		instance:ChangeSkin("Minimalistic")
 		instance:InstanceWallpaper(false)
 		instance:DesaturateMenu(true)
 		instance:HideMainIcon(false)
-		instance:SetBackdropTexture("Details Ground")
+		instance:SetBackdropTexture("None")
 		instance:MenuAnchor(16, 3)
 		instance:ToolbarMenuButtonsSize(1)
 		instance:AttributeMenu(true, 0, 3, DB.Font[1], 13, {1, 1, 1}, 1, true)
-		instance:SetBarSettings(NDuiADB["ResetDetails"] and 18 or nil, NDuiADB["ResetDetails"] and "normTex" or nil)
-		instance:SetBarTextSettings(NDuiADB["ResetDetails"] and 14 or nil, DB.Font[1], nil, nil, nil, true, true, nil, nil, nil, nil, nil, nil, false, nil, false, nil)
+		instance:SetBarSettings(needReset and 18, needReset and "normTex")
+		instance:SetBarTextSettings(needReset and 14, DB.Font[1], nil, nil, nil, true, true)
 
 		local bg = B.SetBD(instance.baseframe)
 		bg:SetPoint("TOPLEFT", -1, 18)
@@ -42,6 +43,7 @@ local function ReskinDetails()
 			close:HookScript("OnClick", function()
 				instance:HideWindow()
 			end)
+			-- hide window if hidden on init
 			if instance.wasHidden then
 				close:Click()
 			end
