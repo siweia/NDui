@@ -274,6 +274,9 @@ local function SetupAnchor()
 		local value = AuraList[key]
 		local direction, interval = value.Direction, value.Interval
 		-- check whether using CENTER direction
+		if value.Mode == "BAR" and direction == "CENTER" then
+			direction = "UP" -- sorry, no "CENTER" for bars mode
+		end
 		if not hasCentralize then
 			hasCentralize = direction == "CENTER"
 		end
