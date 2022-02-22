@@ -11,7 +11,6 @@ local function SetupInstance(instance)
 	end
 	-- reset texture if using Details default texture
 	local needReset = instance.row_info.texture == "BantoBar"
-print("need", needReset)
 	instance:ChangeSkin("Minimalistic")
 	instance:InstanceWallpaper(false)
 	instance:DesaturateMenu(true)
@@ -65,6 +64,23 @@ local function IsDefaultAnchor(instance)
 	return (relF == "CENTER" and relT == "CENTER" and isDefaultOffset(x) and isDefaultOffset(y))
 end
 
+function S:ResetDetailsAnchor(force)
+	local Details = _G.Details
+	if not Details then return end
+
+	local instance1 = Details:GetInstance(1)
+	local instance2 = Details:GetInstance(2)
+	if instance1 and (force or IsDefaultAnchor(instance1)) then
+		if instance2 then
+			height = 96
+			EmbedWindow(instance2, -3, 140, 320, height)
+		end
+		EmbedWindow(instance1, -3, 24, 320, height)
+	end
+
+	return instance1, instance2
+end
+
 local function ReskinDetails()
 	if not C.db["Skins"]["Details"] then return end
 
@@ -82,18 +98,7 @@ local function ReskinDetails()
 	end
 
 	-- Reanchor
-	local instance1 = Details:GetInstance(1)
-	local instance2 = Details:GetInstance(2)
-
-	local height = 190
-	if IsDefaultAnchor(instance1) then
-		print("isdefault")
-		if instance2 then
-			height = 96
-			EmbedWindow(instance2, -3, 140, 320, height)
-		end
-		EmbedWindow(instance1, -3, 24, 320, height)
-	end
+	local instance1, instance2 = S:ResetDetailsAnchor()
 
 	local listener = Details:CreateEventListener()
 	listener:RegisterEvent("DETAILS_INSTANCE_OPEN")
@@ -121,8 +126,6 @@ local function ReskinDetails()
 			instance1:SetBarTextSettings(14, DB.Font[1], nil, nil, nil, true, true)
 		end
 	end
-
-	NDuiADB["ResetDetails"] = false
 end
 
 S:RegisterSkin("Details", ReskinDetails)

@@ -315,7 +315,6 @@ local function YesTutor()
 			NDuiADB["SkadaRequest"] = true
 			NDuiADB["BWRequest"] = true
 			ForceAddonSkins()
-			NDuiADB["ResetDetails"] = true
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["Tutorial Complete"])
 			pass:Hide()
 		elseif currentPage == 3 then
