@@ -10,6 +10,7 @@ local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 local AuraWatchList = {}
 local groups = {
 	-- groups name = direction, interval, mode, iconsize, position, barwidth
+	-- Direction "CENTER" for ICONS only, which sort by midpoint.
 	["Player Aura"] = {"LEFT", 5, "ICON", 22, C.Auras.PlayerAuraPos},
 	["Target Aura"] = {"RIGHT", 5, "ICON", 36, C.Auras.TargetAuraPos},
 	["Special Aura"] = {"LEFT", 5, "ICON", 36, C.Auras.SpecialPos},
