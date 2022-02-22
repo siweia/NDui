@@ -19,12 +19,12 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 360403) -- 力场
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 364904) -- 反物质
 
 BOSS = 2459 -- 道茜歌妮，堕落先知
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 361751) -- Disintegration Halo
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 364289) -- Staggering Barrage
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 361018) -- Staggering Barrage Mythic 1
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 360960) -- Staggering Barrage Mythic 2
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 361225) -- Encroaching Dominion
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 361966) -- Infused Strikes
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 361751) -- 衰变光环
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 364289) -- 震颤弹幕
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 361018) -- 震颤弹幕M
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360960) -- 震颤弹幕M
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 361225) -- 侵蚀统御
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 361966) -- 注能打击
 
 BOSS = 2470 -- 圣物匠赛·墨克斯
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 362803) -- 移位雕文
@@ -61,10 +61,10 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 363795) -- 解构能量2
 
 BOSS = 2465 -- 司垢莱克斯，无穷噬灭者
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 364522) -- 吞噬之血[可驱散]
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 359976) -- Riftmaw
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 359981) -- Rend
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 360098) -- Warp Sickness
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 366070) -- Volatile Residue
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 359976) -- 裂隙之喉
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 359981) -- 撕裂
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360098) -- 折跃恶感
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 366070) -- 不稳定的残渣
 
 BOSS = 2463 -- 回收者黑伦度斯
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 361309) -- 碎光射线
