@@ -11,7 +11,7 @@ local function SetupInstance(instance)
 	end
 	-- reset texture if using Details default texture
 	local needReset = instance.row_info.texture == "BantoBar"
-
+print("need", needReset)
 	instance:ChangeSkin("Minimalistic")
 	instance:InstanceWallpaper(false)
 	instance:DesaturateMenu(true)
@@ -54,6 +54,17 @@ local function EmbedWindow(instance, x, y, width, height)
 	instance:LockInstance(true)
 end
 
+local function isDefaultOffset(offset)
+	return offset and abs(offset) < 10
+end
+
+local function IsDefaultAnchor(instance)
+	local frame = instance and instance.baseframe
+	if not frame then return end
+	local relF, _, relT, x, y = frame:GetPoint()
+	return (relF == "CENTER" and relT == "CENTER" and isDefaultOffset(x) and isDefaultOffset(y))
+end
+
 local function ReskinDetails()
 	if not C.db["Skins"]["Details"] then return end
 
@@ -74,15 +85,14 @@ local function ReskinDetails()
 	local instance1 = Details:GetInstance(1)
 	local instance2 = Details:GetInstance(2)
 
-	if NDuiADB["ResetDetails"] then
-		local height = 190
-		if instance1 then
-			if instance2 then
-				height = 96
-				EmbedWindow(instance2, -3, 140, 320, height)
-			end
-			EmbedWindow(instance1, -3, 24, 320, height)
+	local height = 190
+	if IsDefaultAnchor(instance1) then
+		print("isdefault")
+		if instance2 then
+			height = 96
+			EmbedWindow(instance2, -3, 140, 320, height)
 		end
+		EmbedWindow(instance1, -3, 24, 320, height)
 	end
 
 	local listener = Details:CreateEventListener()
