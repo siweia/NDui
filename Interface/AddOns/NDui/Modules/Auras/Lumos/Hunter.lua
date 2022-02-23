@@ -35,7 +35,7 @@ function A:ToggleFocusCalculation()
 
 	local spec = GetSpecialization()
 	if C.db["Auras"]["MMT29X4"] and spec == 2 then
-		if self ~= "PLAYER_SPECIALIZATION_CHANGED" or self == "PLAYER_SPECIALIZATION_CHANGED" and spec ~= oldSpec then -- don't reset when talent changed only
+		if self ~= "PLAYER_SPECIALIZATION_CHANGED" or spec ~= oldSpec then -- don't reset when talent changed only
 			A.MMFocus.cost = 0 -- reset calculation when switch on
 		end
 		A.MMFocus:Show()
