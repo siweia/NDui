@@ -29,17 +29,22 @@ function A:UpdateFocusCost(unit, _, spellID)
 	focusCal:SetFormattedText("%d/40", focusCal.cost%40)
 end
 
+local oldSpec
 function A:ToggleFocusCalculation()
 	if not A.MMFocus then return end
 
-	if C.db["Auras"]["MMT29X4"] then
-		A.MMFocus.cost = 0 -- reset calculation when switch on
+	local spec = GetSpecialization()
+	if C.db["Auras"]["MMT29X4"] and spec == 2 then
+		if self ~= "PLAYER_SPECIALIZATION_CHANGED" or self == "PLAYER_SPECIALIZATION_CHANGED" and spec ~= oldSpec then -- don't reset when talent changed only
+			A.MMFocus.cost = 0 -- reset calculation when switch on
+		end
 		A.MMFocus:Show()
 		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 	else
 		A.MMFocus:Hide()
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 	end
+	oldSpec = spec
 end
 
 function A:PostCreateLumos(self)
@@ -57,6 +62,7 @@ function A:PostCreateLumos(self)
 	A.MMFocus:ClearAllPoints()
 	A.MMFocus:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
 	A:ToggleFocusCalculation()
+	B:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", A.ToggleFocusCalculation)
 end
 
 function A:PostUpdateVisibility(self)
