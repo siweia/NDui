@@ -4,41 +4,41 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "HUNTER" then return end
 
-local focusCal
-local amount, old = 0
+local pairs, GetSpellPowerCost = pairs, GetSpellPowerCost
+local POWER_TYPE_FOCUS = 2
 
-local function fixRange(a)
-	if a >= 33 and a <= 37 then
-		return 35
-	elseif a >= 18 and a <= 22 then
-		return 20
-	elseif a >= 8 and a <= 12 then
-		return 10
+local function GetSpellCost(spellID)
+	local costTable = GetSpellPowerCost(spellID)
+	if costTable then
+		for _, costInfo in pairs(costTable) do
+			if costInfo.type == POWER_TYPE_FOCUS then
+				return costInfo.cost
+			end
+		end
 	end
 end
 
-local function updateAmount(_, unit)
+function A:UpdateFocusCost(unit, _, spellID)
 	if unit ~= "player" then return end
-	local cur = UnitPower(unit)
-	if old and old > cur then
-		local spent = old - cur
-		amount = fixRange(spent) + amount
+
+	local focusCal = A.MMFocus
+	local cost = GetSpellCost(spellID)
+	if cost then
+		focusCal.cost = focusCal.cost + cost
+		print(cost, GetSpellInfo(spellID), nil)
 	end
-	old = cur
-	focusCal:SetFormattedText("%d/40", amount%40)
+	focusCal:SetFormattedText("%d/40", focusCal.cost%40)
 end
 
 function A:ToggleFocusCalculation()
-	if not focusCal then return end
+	if not A.MMFocus then return end
+
 	if C.db["Auras"]["MMT29X4"] then
-		focusCal:Show()
-		updateAmount(_, "player")
-		B:RegisterEvent("UNIT_POWER_FREQUENT", updateAmount)
-		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", updateAmount)
+		A.MMFocus:Show()
+		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 	else
-		focusCal:Hide()
-		B:UnregisterEvent("UNIT_POWER_FREQUENT", updateAmount)
-		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", updateAmount)
+		A.MMFocus:Hide()
+		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 	end
 end
 
@@ -52,10 +52,11 @@ function A:PostCreateLumos(self)
 
 	self.boom = boom
 
-	-- MM hunter tier sets
-	focusCal = B.CreateFS(self.Health, 16)
-	focusCal:ClearAllPoints()
-	focusCal:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
+	-- MM hunter T29 4sets
+	A.MMFocus = B.CreateFS(self.Health, 16)
+	A.MMFocus:ClearAllPoints()
+	A.MMFocus:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
+	A.MMFocus.cost = 0
 	A:ToggleFocusCalculation()
 end
 
