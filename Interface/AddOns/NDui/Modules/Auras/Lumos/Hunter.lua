@@ -25,7 +25,6 @@ function A:UpdateFocusCost(unit, _, spellID)
 	local cost = GetSpellCost(spellID)
 	if cost then
 		focusCal.cost = focusCal.cost + cost
-		print(cost, GetSpellInfo(spellID), nil)
 	end
 	focusCal:SetFormattedText("%d/40", focusCal.cost%40)
 end
