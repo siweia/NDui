@@ -34,6 +34,7 @@ function A:ToggleFocusCalculation()
 	if not A.MMFocus then return end
 
 	if C.db["Auras"]["MMT29X4"] then
+		A.MMFocus.cost = 0 -- reset calculation when switch on
 		A.MMFocus:Show()
 		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 	else
@@ -56,7 +57,6 @@ function A:PostCreateLumos(self)
 	A.MMFocus = B.CreateFS(self.Health, 16)
 	A.MMFocus:ClearAllPoints()
 	A.MMFocus:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
-	A.MMFocus.cost = 0
 	A:ToggleFocusCalculation()
 end
 
