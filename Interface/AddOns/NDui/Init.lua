@@ -26,6 +26,9 @@ host:SetScript("OnEvent", function(_, event, ...)
 end)
 
 function B:RegisterEvent(event, func, unit1, unit2)
+	if event == "CLEU" then
+		event = "COMBAT_LOG_EVENT_UNFILTERED"
+	end
 	if not events[event] then
 		events[event] = {}
 		if unit1 then
@@ -39,6 +42,9 @@ function B:RegisterEvent(event, func, unit1, unit2)
 end
 
 function B:UnregisterEvent(event, func)
+	if event == "CLEU" then
+		event = "COMBAT_LOG_EVENT_UNFILTERED"
+	end
 	local funcs = events[event]
 	if funcs and funcs[func] then
 		funcs[func] = nil
