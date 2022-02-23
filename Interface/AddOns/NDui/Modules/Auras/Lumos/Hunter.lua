@@ -4,6 +4,44 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "HUNTER" then return end
 
+local focusCal
+local amount, old = 0
+
+local function fixRange(a)
+	if a >= 33 and a <= 37 then
+		return 35
+	elseif a >= 18 and a <= 22 then
+		return 20
+	elseif a >= 8 and a <= 12 then
+		return 10
+	end
+end
+
+local function updateAmount(_, unit)
+	if unit ~= "player" then return end
+	local cur = UnitPower(unit)
+	if old and old > cur then
+		local spent = old - cur
+		amount = fixRange(spent) + amount
+	end
+	old = cur
+	focusCal:SetFormattedText("%d/40", amount%40)
+end
+
+function A:ToggleFocusCalculation()
+	if not focusCal then return end
+	if C.db["Auras"]["MMT29X4"] then
+		focusCal:Show()
+		updateAmount(_, "player")
+		B:RegisterEvent("UNIT_POWER_FREQUENT", updateAmount)
+		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", updateAmount)
+	else
+		focusCal:Hide()
+		B:UnregisterEvent("UNIT_POWER_FREQUENT", updateAmount)
+		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", updateAmount)
+	end
+end
+
 function A:PostCreateLumos(self)
 	local iconSize = self.lumos[1]:GetWidth()
 	local boom = CreateFrame("Frame", nil, self.Health)
@@ -13,6 +51,12 @@ function A:PostCreateLumos(self)
 	boom:Hide()
 
 	self.boom = boom
+
+	-- MM hunter tier sets
+	focusCal = B.CreateFS(self.Health, 16)
+	focusCal:ClearAllPoints()
+	focusCal:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
+	A:ToggleFocusCalculation()
 end
 
 function A:PostUpdateVisibility(self)
