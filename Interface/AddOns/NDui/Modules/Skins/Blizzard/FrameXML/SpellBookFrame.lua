@@ -63,7 +63,7 @@ tinsert(C.defaultThemes, function()
 			ic.bg:SetShown(ic:IsShown())
 		end
 
-		if self.ClickBindingIconCover and self.ClickBindingIconCover:IsShown() then -- isNewPatch, clickcast in 9.2
+		if self.ClickBindingIconCover and self.ClickBindingIconCover:IsShown() then
 			self.SpellName:SetTextColor(.7, .7, .7)
 		end
 	end)
