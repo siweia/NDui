@@ -22,6 +22,12 @@ function B:ReplaceWidgetBarTexture(atlas)
 	end
 end
 
+local function ResetLabelColor(text, _, _, _, force)
+	if not force then
+		text:SetTextColor(1, 1, 1, true)
+	end
+end
+
 local function ReskinWidgetStatusBar(bar)
 	if bar and not bar.styled then
 		if bar.BG then bar.BG:SetAlpha(0) end
@@ -37,6 +43,8 @@ local function ReskinWidgetStatusBar(bar)
 		if bar.Label then
 			bar.Label:SetPoint("CENTER", 0, -5)
 			bar.Label:SetFontObject(Game12Font)
+			ResetLabelColor(bar.Label)
+			hooksecurefunc(bar.Label, "SetTextColor", ResetLabelColor)
 		end
 		B.SetBD(bar)
 		B.ReplaceWidgetBarTexture(bar, bar:GetStatusBarAtlas())
