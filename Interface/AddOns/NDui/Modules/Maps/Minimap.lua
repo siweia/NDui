@@ -375,7 +375,7 @@ function module:WhoPingsMyMap()
 	anim.fader:SetStartDelay(3)
 
 	B:RegisterEvent("MINIMAP_PING", function(_, unit)
-		if unit == "player" then return end -- ignore player ping
+		if UnitIsUnit(unit, "player") then return end -- ignore player ping
 
 		local class = select(2, UnitClass(unit))
 		local r, g, b = B.ClassColor(class)
