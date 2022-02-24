@@ -116,10 +116,8 @@ function G:SetupRaidDebuffs(parent)
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1190),
 		[2] = EJ_GetInstanceInfo(1193),
+		[3] = EJ_GetInstanceInfo(1195),
 	}
-	if DB.isNewPatch then
-		raids[3] = EJ_GetInstanceInfo(1195)
-	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()

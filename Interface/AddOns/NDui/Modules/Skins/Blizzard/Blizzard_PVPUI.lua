@@ -114,20 +114,18 @@ C.themes["Blizzard_PVPUI"] = function()
 	bonusFrame.WorldBattlesTexture:Hide()
 	bonusFrame.ShadowOverlay:Hide()
 
-	for _, bonusButton in pairs({"RandomBGButton", "RandomEpicBGButton", "Arena1Button", "BrawlButton", "SpecialEventButton", "BrawlButton2"}) do
+	for _, bonusButton in pairs({"RandomBGButton", "RandomEpicBGButton", "Arena1Button", "BrawlButton", "BrawlButton2"}) do
 		local bu = bonusFrame[bonusButton]
-		if bu then -- isNewPatch, SpecialEventButton renamed to BrawlButton2 removed in 9.2
-			B.Reskin(bu, true)
-			bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-			bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-			bu.SelectedTexture:SetInside(bu.__bg)
+		B.Reskin(bu, true)
+		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
+		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+		bu.SelectedTexture:SetInside(bu.__bg)
 
-			local reward = bu.Reward
-			if reward then
-				reward.Border:Hide()
-				reward.CircleMask:Hide()
-				reward.Icon.bg = B.ReskinIcon(reward.Icon)
-			end
+		local reward = bu.Reward
+		if reward then
+			reward.Border:Hide()
+			reward.CircleMask:Hide()
+			reward.Icon.bg = B.ReskinIcon(reward.Icon)
 		end
 	end
 
