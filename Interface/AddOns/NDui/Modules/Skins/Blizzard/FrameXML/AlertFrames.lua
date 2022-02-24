@@ -392,4 +392,17 @@ tinsert(C.defaultThemes, function()
 			frame.IconBorder:SetTexture("")
 		end
 	end)
+
+	-- Event toast
+	hooksecurefunc(EventToastManagerFrame, "DisplayToast", function(self)
+		local toast = self.currentDisplayingToast
+		local border = toast and toast.IconBorder
+		if border then
+			if not border.bg then
+				border:SetTexture("")
+				border.bg = B.ReskinIcon(toast.Icon)
+			end
+			border.bg:SetBackdropBorderColor(border:GetVertexColor())
+		end
+	end)
 end)
