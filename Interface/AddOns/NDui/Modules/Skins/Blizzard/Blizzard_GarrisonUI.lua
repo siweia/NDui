@@ -1337,5 +1337,14 @@ C.themes["Blizzard_OrderHallUI"] = function()
 				end
 			end
 		end
+
+		if self.talentRankPool then
+			for rank in self.talentRankPool:EnumerateActive() do
+				if not rank.styled then
+					rank.Background:SetAlpha(0)
+					rank.styled = true
+				end
+			end
+		end
 	end)
 end
