@@ -207,6 +207,10 @@ local list = {
 		{AuraID = 306583, UnitID = "player"},	-- 灌铅脚步
 		{AuraID = 313698, UnitID = "player", Flash = true},	-- 泰坦之赐
 		-- 常驻词缀
+		{AuraID = 366288, UnitID = "player"},	-- 解构
+		{AuraID = 368239, UnitID = "player", Flash = true, Text = "CD"},	-- 减CD密文
+		{AuraID = 368240, UnitID = "player", Flash = true, Text = L["Haste"]},	-- 急速密文
+		{AuraID = 368241, UnitID = "player", Flash = true, Text = L["Speed"]},	-- 移速密文
 		{AuraID = 358777, UnitID = "player"},	-- 痛苦之链
 		{AuraID = 355732, UnitID = "player"},	-- 融化灵魂
 		{AuraID = 356667, UnitID = "player"},	-- 刺骨之寒

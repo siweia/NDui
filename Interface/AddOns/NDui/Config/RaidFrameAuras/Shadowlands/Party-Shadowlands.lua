@@ -15,6 +15,8 @@ local SEASON_SPELLS = {
 	[356667] = 2, -- 刺骨之寒
 	[356925] = 2, -- 屠戮
 	[358777] = 2, -- 痛苦之链
+	[366288] = 2, -- 猛力砸击，S3
+	[366297] = 2, -- 解构，S3
 }
 local function RegisterSeasonSpells(INSTANCE)
 	for spellID, priority in pairs(SEASON_SPELLS) do
