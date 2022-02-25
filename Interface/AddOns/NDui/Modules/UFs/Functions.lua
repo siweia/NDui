@@ -758,6 +758,12 @@ local filteredStyle = {
 	["arena"] = true,
 }
 
+local replaceEncryptedIcons = {
+	[368078] = 348567, -- 移速
+	[368079] = 348567, -- 移速
+	[368103] = 648208, -- 急速
+	[368243] = 237538, -- CD
+}
 function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuffType)
 	if duration then button.iconbg:Show() end
 
@@ -793,6 +799,11 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 			button:SetScript("OnUpdate", nil)
 			button.timer:Hide()
 		end
+	end
+
+	local newTexture = replaceEncryptedIcons[button.spellID]
+	if newTexture then
+		button.icon:SetTexture(newTexture)
 	end
 end
 
