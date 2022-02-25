@@ -876,3 +876,4 @@ L["DescRole"] = "Trier par rôles inversés"
 L["DescRoleTip"] = "|nSi cette case est cochée, triez votre ordre de groupe par 'DPS Soin Tank' dans le sens de la croissance.|n|nSi décoché, triez votre ordre de groupe par 'Tank Soin DPS' dans le sens de la croissance."
 L["MMT29X4"] = "Marksman T29 X4" -- need translation
 L["MMT29X4Tip"] = "|nIf enabled, show hunter focus cost on top of PlayerPlate, for T29 tier sets.|n|nNumber will reset from 0 once you turn on this, you might need to re-equip your item sets to match its calculation." -- need translation
+L["AutoHide"] = "AutoHide" -- need translation

@@ -876,3 +876,4 @@ L["DescRole"] = "Sort by reverse roles" -- need translation
 L["DescRoleTip"] = "|nIf checked, sort your party order by 'Damager Healer Tank' within growth direction.|n|nIf unchecked, sort your party order by 'Tank Healer Damager' within growth direction." -- need translation
 L["MMT29X4"] = "Marksman T29 X4" -- need translation
 L["MMT29X4Tip"] = "|nIf enabled, show hunter focus cost on top of PlayerPlate, for T29 tier sets.|n|nNumber will reset from 0 once you turn on this, you might need to re-equip your item sets to match its calculation." -- need translation
+L["AutoHide"] = "AutoHide" -- need translation

@@ -181,14 +181,21 @@ function module:RecycleBin()
 		["RecycleBinToggleButton"] = true,
 	}
 
+	local function updateRecycleTip(bu)
+		bu.text = DB.RightButton..L["AutoHide"]..": "..(NDuiADB["AutoRecycle"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED)
+	end
+
 	local bu = CreateFrame("Button", "RecycleBinToggleButton", Minimap)
 	bu:SetSize(30, 30)
 	bu:SetPoint("BOTTOMRIGHT", 4, -6)
+	bu:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
 	bu.Icon:SetAllPoints()
 	bu.Icon:SetTexture(DB.binTex)
 	bu:SetHighlightTexture(DB.binTex)
-	B.AddTooltip(bu, "ANCHOR_LEFT", L["Minimap RecycleBin"], "white")
+	bu.title = DB.InfoColor..L["Minimap RecycleBin"]
+	B.AddTooltip(bu, "ANCHOR_LEFT")
+	updateRecycleTip(bu)
 
 	local width, height, alpha = 220, 40, .5
 	local bin = CreateFrame("Frame", "RecycleBinFrame", UIParent)
@@ -208,9 +215,11 @@ function module:RecycleBin()
 	local function hideBinButton()
 		bin:Hide()
 	end
-	local function clickFunc()
-		UIFrameFadeOut(bin, .5, 1, 0)
-		C_Timer_After(.5, hideBinButton)
+	local function clickFunc(force)
+		if force == 1 or NDuiADB["AutoRecycle"] then
+			UIFrameFadeOut(bin, .5, 1, 0)
+			C_Timer_After(.5, hideBinButton)
+		end
 	end
 
 	local ignoredButtons = {
@@ -345,12 +354,18 @@ function module:RecycleBin()
 		end
 	end
 
-	bu:SetScript("OnClick", function()
-		if bin:IsShown() then
-			clickFunc()
+	bu:SetScript("OnClick", function(_, btn)
+		if btn == "RightButton" then
+			NDuiADB["AutoRecycle"] = not NDuiADB["AutoRecycle"]
+			updateRecycleTip(bu)
+			bu:GetScript("OnEnter")(bu)
 		else
-			SortRubbish()
-			UIFrameFadeIn(bin, .5, 0, 1)
+			if bin:IsShown() then
+				clickFunc(1)
+			else
+				SortRubbish()
+				UIFrameFadeIn(bin, .5, 0, 1)
+			end
 		end
 	end)
 

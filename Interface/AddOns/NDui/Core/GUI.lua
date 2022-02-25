@@ -530,6 +530,7 @@ G.AccountSettings = {
 	CustomTex = "",
 	MajorSpells = {},
 	SmoothAmount = .25,
+	AutoRecycle = true,
 }
 
 -- Initial settings
