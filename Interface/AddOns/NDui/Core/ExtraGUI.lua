@@ -1256,6 +1256,42 @@ function G:SetupCastbar(parent)
 	end)
 end
 
+function G:SetupSwingBars(parent)
+	local guiName = "NDuiGUI_SwingSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["UFs SwingBar"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local UF = B:GetModule("UnitFrames")
+	local parent, offset = scroll.child, -10
+	local frame = _G.oUF_Player
+
+	local function configureSwingBars()
+		if not frame then return end
+
+		local width, height = C.db["UFs"]["SwingWidth"], C.db["UFs"]["SwingHeight"]
+		frame.Swing:SetSize(width, height)
+		frame.Swing.Offhand:SetHeight(height)
+		frame.Swing.mover:SetSize(width, height)
+		frame.Swing.mover:Show()
+
+		frame.Swing.Text:SetShown(C.db["UFs"]["SwingTimer"])
+		frame.Swing.TextMH:SetShown(C.db["UFs"]["SwingTimer"])
+		frame.Swing.TextOH:SetShown(C.db["UFs"]["SwingTimer"])
+	end
+
+	createOptionCheck(parent, offset, L["UFs SwingTimer"], "UFs", "SwingTimer", configureSwingBars, L["SwingTimer Tip"])
+	createOptionSlider(parent, L["Width"], 50, 1000, 275, offset-70, "SwingWidth", configureSwingBars)
+	createOptionSlider(parent, L["Height"], 1, 50, 3, offset-140, "SwingHeight", configureSwingBars)
+
+	panel:HookScript("OnHide", function()
+		local mover = frame and frame.Swing and frame.Swing.mover
+		if mover then mover:Hide() end
+	end)
+end
+
 function G:SetupBagFilter(parent)
 	local guiName = "NDuiGUI_BagFilterSetup"
 	toggleExtraGUI(guiName)

@@ -37,7 +37,7 @@ end
 local function UpdateBarValue(self, value)
 	self:SetValue(value)
 
-	if self.Text then
+	if self.Text and self.Text:IsShown() then
 		if self.__owner.OverrideText then
 			self.__owner.OverrideText(self, value)
 		else
