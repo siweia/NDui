@@ -336,6 +336,7 @@ local list = {
 		{AuraID = 347992, UnitID = "target"},	-- 集市，回旋防弹衣
 		{AuraID = 347840, UnitID = "target"},	-- 集市，野性
 		{AuraID = 347015, UnitID = "target", Flash = true},	-- 集市，强化防御
+		{AuraID = 349933, UnitID = "target", Flash = true, Value = true},	-- 集市，狂热鞭笞协议
 		-- 团本
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
