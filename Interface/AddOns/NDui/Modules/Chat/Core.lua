@@ -361,37 +361,18 @@ local function FixLanguageFilterSideEffects()
 	sideEffectFixed = true
 
 	B.CreateFS(HelpFrame, 18, L["LanguageFilterTip"], "system",  "TOP", 0, 30)
-
-	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
-	function C_BattleNet.GetFriendGameAccountInfo(...)
-		local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
-		if gameAccountInfo then
-			gameAccountInfo.isInCurrentRegion = true
-		end
-		return gameAccountInfo
-	end
-
-	local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
-	function C_BattleNet.GetFriendAccountInfo(...)
-		local accountInfo = OLD_GetFriendAccountInfo(...)
-		if accountInfo and accountInfo.gameAccountInfo then
-			accountInfo.gameAccountInfo.isInCurrentRegion = true
-		end
-		return accountInfo
-	end
+	module:CNLanguageFilterFix()
 end
 
-local hasCNFix
 function module:ToggleLanguageFilter()
 	if C.db["Chat"]["Freedom"] then
 		if GetCVar("portal") == "CN" then
 			ConsoleExec("portal TW")
 			FixLanguageFilterSideEffects()
-			hasCNFix = true
 		end
 		SetCVar("profanityFilter", 0)
 	else
-		if hasCNFix then
+		if sideEffectFixed then
 			ConsoleExec("portal CN")
 		end
 		SetCVar("profanityFilter", 1)

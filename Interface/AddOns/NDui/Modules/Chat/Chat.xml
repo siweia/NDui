@@ -5,4 +5,5 @@
 	<Script file="Chatbar.lua"/>
 	<Script file="Urlcopy.lua"/>
 	<Script file="Filter.lua"/>
+	<Script file="CNFilterFix.lua"/>
 </Ui>
