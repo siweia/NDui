@@ -3,6 +3,6 @@
 ## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Simpy, Tuller, zork.
 ## Author: Siweia
 ## Notes: Empty toc for Curseforge
-## Version: 6.19.7
+## Version: 6.20.0
 ## X-Support: SL
 ## X-Website: https://github.com/siweia/NDui
