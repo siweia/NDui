@@ -36,7 +36,7 @@ end
 local function _UnitPopup_IsInGroupWithPlayer(dropdownMenu)
 	local accountInfo = dropdownMenu.accountInfo
 	local gameAccountInfo = accountInfo and accountInfo.gameAccountInfo
-	if gameAccountInfo.characterName then
+	if gameAccountInfo and gameAccountInfo.characterName then
 		return UnitInParty(gameAccountInfo.characterName) or UnitInRaid(gameAccountInfo.characterName)
 	elseif dropdownMenu.guid then
 		return IsGUIDInGroup(dropdownMenu.guid)
