@@ -29,6 +29,11 @@ function A:UpdateFocusCost(unit, _, spellID)
 	focusCal:SetFormattedText("%d/40", focusCal.cost%40)
 end
 
+function A:ResetFocusCost()
+	A.MMFocus.cost = 0
+	A.MMFocus:SetFormattedText("%d/40", A.MMFocus.cost%40)
+end
+
 local oldSpec
 function A:ToggleFocusCalculation()
 	if not A.MMFocus then return end
@@ -40,9 +45,11 @@ function A:ToggleFocusCalculation()
 		end
 		A.MMFocus:Show()
 		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
+		B:RegisterEvent("PLAYER_DEAD", A.ResetFocusCost)
 	else
 		A.MMFocus:Hide()
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
+		B:UnregisterEvent("PLAYER_DEAD", A.ResetFocusCost)
 	end
 	oldSpec = spec
 end
