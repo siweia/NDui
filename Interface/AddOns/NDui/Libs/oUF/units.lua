@@ -119,6 +119,12 @@ local function updateArenaPreparation(self, event)
 		-- semi-recursive call for when the player zones into an arena
 		updateArenaPreparation(self, 'ARENA_PREP_OPPONENT_SPECIALIZATIONS')
 	elseif(event == 'ARENA_PREP_OPPONENT_SPECIALIZATIONS') then
+		if(InCombatLockdown()) then
+			-- prevent calling protected functions if entering arena while in combat
+			self:RegisterEvent('PLAYER_REGEN_ENABLED', updateArenaPreparation, true)
+			return
+		end
+
 		if(self.PreUpdate) then
 			self:PreUpdate(event)
 		end
@@ -159,6 +165,9 @@ local function updateArenaPreparation(self, event)
 		if(self.PostUpdate) then
 			self:PostUpdate(event)
 		end
+	elseif(event == 'PLAYER_REGEN_ENABLED') then
+		self:UnregisterEvent(event, updateArenaPreparation)
+		updateArenaPreparation(self, 'ARENA_PREP_OPPONENT_SPECIALIZATIONS')
 	end
 end
 
