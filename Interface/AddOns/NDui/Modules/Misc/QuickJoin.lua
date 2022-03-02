@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
+local TT = B:GetModule("Tooltip")
 
 --[[
 	QuickJoin 优化系统自带的预创建功能
@@ -8,16 +9,20 @@ local M = B:GetModule("Misc")
 	2.自动隐藏部分窗口
 	3.美化LFG的相关职业图标
 	4.自动邀请申请
+	5.显示队长分数，并简写集市钥石
 ]]
-local select, wipe, sort = select, wipe, sort
-local UnitClass, UnitGroupRolesAssigned = UnitClass, UnitGroupRolesAssigned
-local StaticPopup_Hide, HideUIPanel = StaticPopup_Hide, HideUIPanel
+local select, wipe, sort, gsub = select, wipe, sort, gsub
+local StaticPopup_Hide, HideUIPanel, GetTime = StaticPopup_Hide, HideUIPanel, GetTime
+local UnitIsGroupLeader, UnitClass, UnitGroupRolesAssigned = UnitIsGroupLeader, UnitClass, UnitGroupRolesAssigned
 local C_Timer_After, IsAltKeyDown = C_Timer.After, IsAltKeyDown
+local C_LFGList_GetSearchResultInfo = C_LFGList.GetSearchResultInfo
+local C_LFGList_GetActivityInfoTable = C_LFGList.GetActivityInfoTable
 local C_LFGList_GetSearchResultMemberInfo = C_LFGList.GetSearchResultMemberInfo
-local UnitIsGroupLeader, GetTime = UnitIsGroupLeader, GetTime
+
 local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
 local ApplicationViewerFrame = _G.LFGListFrame.ApplicationViewer
 local LFG_LIST_GROUP_DATA_ATLASES = _G.LFG_LIST_GROUP_DATA_ATLASES
+local scoreFormat = DB.GreyColor.."(%s) |r%s"
 
 function M:HookApplicationClick()
 	if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
@@ -197,10 +202,26 @@ function M:AddAutoAcceptButton()
 	end)
 end
 
+function M:ShowLeaderOverallScore()
+	local resultID = self.resultID
+	local searchResultInfo = resultID and C_LFGList_GetSearchResultInfo(resultID)
+	if searchResultInfo then
+		local activityInfo = C_LFGList_GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
+		local leaderOverallScore = searchResultInfo.leaderOverallDungeonScore
+		if activityInfo and activityInfo.isMythicPlusActivity and leaderOverallScore then
+			local oldName = self.ActivityName:GetText() 
+			oldName = gsub(oldName, ".-"..HEADER_COLON, "") -- Tazavesh
+			self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(leaderOverallScore), oldName)
+		end
+	end
+end
+
 function M:QuickJoin()
 	for i = 1, 10 do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
 		if bu then
+			bu.Name:SetFontObject(Game14Font)
+			bu.ActivityName:SetFontObject(Game13Font)
 			bu:HookScript("OnDoubleClick", M.HookApplicationClick)
 		end
 	end
@@ -214,6 +235,7 @@ function M:QuickJoin()
 	hooksecurefunc("LFGListInviteDialog_Show", M.HookDialogOnShow)
 
 	hooksecurefunc("LFGListGroupDataDisplayEnumerate_Update", M.ReplaceGroupRoles)
+	hooksecurefunc("LFGListSearchEntry_Update", M.ShowLeaderOverallScore)
 
 	M:AddAutoAcceptButton()
 end
