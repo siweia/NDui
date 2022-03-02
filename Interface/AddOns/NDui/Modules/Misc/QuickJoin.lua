@@ -7,12 +7,15 @@ local M = B:GetModule("Misc")
 	1.双击搜索结果，快速申请
 	2.自动隐藏部分窗口
 	3.美化LFG的相关职业图标
+	4.自动邀请申请
 ]]
 local select, wipe, sort = select, wipe, sort
 local UnitClass, UnitGroupRolesAssigned = UnitClass, UnitGroupRolesAssigned
 local StaticPopup_Hide, HideUIPanel = StaticPopup_Hide, HideUIPanel
 local C_Timer_After, IsAltKeyDown = C_Timer.After, IsAltKeyDown
 local C_LFGList_GetSearchResultMemberInfo = C_LFGList.GetSearchResultMemberInfo
+local UnitIsGroupLeader, GetTime = UnitIsGroupLeader, GetTime
+local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
 local ApplicationViewerFrame = _G.LFGListFrame.ApplicationViewer
 local LFG_LIST_GROUP_DATA_ATLASES = _G.LFG_LIST_GROUP_DATA_ATLASES
 
@@ -160,6 +163,40 @@ function M:QuickJoin_ShowTips()
 	end)
 end
 
+function M:AddAutoAcceptButton()
+	local bu = B.CreateCheckBox(ApplicationViewerFrame)
+	bu:SetSize(24, 24)
+	bu:SetHitRectInsets(0, -130, 0, 0)
+	bu:SetPoint("BOTTOMLEFT", ApplicationViewerFrame.InfoBackground, 12, 5)
+	B.CreateFS(bu, 14, _G.LFG_LIST_AUTO_ACCEPT, "system", "LEFT", 24, 0)
+
+	local lastTime = 0
+	B:RegisterEvent("LFG_LIST_APPLICANT_LIST_UPDATED", function()
+		if not bu:GetChecked() then return end
+		if not UnitIsGroupLeader("player", LE_PARTY_CATEGORY_HOME) then return end
+
+		local buttons = ApplicationViewerFrame.ScrollFrame.buttons
+		for i = 1, #buttons do
+			local button = buttons[i]
+			if button.applicantID and button.InviteButton:IsEnabled() then
+				button.InviteButton:Click()
+			end
+		end
+
+		if ApplicationViewerFrame:IsShown() then
+			local now = GetTime()
+			if now - lastTime > 1 then
+				lastTime = now
+				ApplicationViewerFrame.RefreshButton:Click()
+			end
+		end
+	end)
+
+	hooksecurefunc("LFGListApplicationViewer_UpdateInfo", function(self)
+		bu:SetShown(UnitIsGroupLeader("player", LE_PARTY_CATEGORY_HOME) and not self.AutoAcceptButton:IsShown())
+	end)
+end
+
 function M:QuickJoin()
 	for i = 1, 10 do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
@@ -177,5 +214,7 @@ function M:QuickJoin()
 	hooksecurefunc("LFGListInviteDialog_Show", M.HookDialogOnShow)
 
 	hooksecurefunc("LFGListGroupDataDisplayEnumerate_Update", M.ReplaceGroupRoles)
+
+	M:AddAutoAcceptButton()
 end
 M:RegisterMisc("QuickJoin", M.QuickJoin)
