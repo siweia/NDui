@@ -49,7 +49,7 @@ local eventSpentIndex = {
 }
 
 function A:CheckTrickState(...)
-	local timeStamp, eventType, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, _, _, spellID, _, _, extraskillID, _, _, auraType = ...
+	local _, eventType, _, sourceGUID, _, _, _, _, _, _, _, spellID = ...
 	if eventSpentIndex[eventType] and spellID == 257622 and sourceGUID == playerGUID then
 		A.MMFocus.trickActive = eventSpentIndex[eventType]
 	end
