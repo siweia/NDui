@@ -286,9 +286,10 @@ local list = {
 		{AuraID = 344655, UnitID = "player"},	-- 震荡易伤，干将
 		{AuraID = 327089, UnitID = "player"},	-- 喂食时间，德纳修斯
 		{AuraID = 327796, UnitID = "player"},	-- 午夜猎手，德纳修斯
-
 		{AuraID = 347283, UnitID = "player"},	-- 捕食者之嚎，塔拉格鲁
 		{AuraID = 347286, UnitID = "player"},	-- 不散之惧，塔拉格鲁
+		{AuraID = 360403, UnitID = "player"},	-- 力场，警戒卫士
+		{AuraID = 361751, UnitID = "player", Flash = true},	-- 衰变光环，道茜歌妮
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
@@ -346,6 +347,9 @@ local list = {
 		{AuraID = 341250, UnitID = "target"},	-- 恐怖暴怒，泥拳
 		{AuraID = 329636, UnitID = "target", Flash = true},	-- 坚岩形态，干将
 		{AuraID = 329808, UnitID = "target", Flash = true},	-- 坚岩形态，干将
+		{AuraID = 367573, UnitID = "target", Flash = true},	-- 源生壁垒，圣物匠
+		{AuraID = 368684, UnitID = "target", Value = true},	-- 回收，黑伦度斯
+		{AuraID = 361651, UnitID = "target", Value = true},	-- 虹吸屏障，道茜歌妮
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
