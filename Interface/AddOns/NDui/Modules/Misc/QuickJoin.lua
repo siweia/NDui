@@ -103,6 +103,7 @@ local function UpdateGroupRoles(self)
 			if not roleCache[count] then roleCache[count] = {} end
 			roleCache[count][1] = roleIndex
 			roleCache[count][2] = class
+			roleCache[count][3] = i == 1
 		end
 	end
 
@@ -126,6 +127,12 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 			icon.role = self:CreateTexture(nil, "OVERLAY")
 			icon.role:SetSize(17, 17)
 			icon.role:SetPoint("TOPLEFT", icon, -4, 5)
+
+			icon.leader = self:CreateTexture(nil, "OVERLAY")
+			icon.leader:SetSize(14, 14)
+			icon.leader:SetPoint("TOP", icon, 3 , 7)
+			icon.leader:SetTexture("Interface\\GroupFrame\\UI-Group-LeaderIcon")
+			icon.leader:SetRotation(rad(-15))
 		end
 
 		if i > numPlayers then
@@ -134,7 +141,10 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 			icon.role:Show()
 			icon.role:SetDesaturated(disabled)
 			icon.role:SetAlpha(disabled and .5 or 1)
+			icon.leader:SetDesaturated(disabled)
+			icon.leader:SetAlpha(disabled and .5 or 1)
 		end
+		icon.leader:Hide()
 	end
 
 	local iconIndex = numPlayers
@@ -144,6 +154,7 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 			local icon = self.Icons[iconIndex]
 			icon:SetAtlas(LFG_LIST_GROUP_DATA_ATLASES[roleInfo[2]])
 			icon.role:SetAtlas(roleAtlas[roleInfo[1]])
+			icon.leader:SetShown(roleInfo[3])
 			iconIndex = iconIndex - 1
 		end
 	end
