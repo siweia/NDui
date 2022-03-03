@@ -361,7 +361,24 @@ local function FixLanguageFilterSideEffects()
 	sideEffectFixed = true
 
 	B.CreateFS(HelpFrame, 18, L["LanguageFilterTip"], "system",  "TOP", 0, 30)
-	module:CNLanguageFilterFix()
+
+	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
+	function C_BattleNet.GetFriendGameAccountInfo(...)
+		local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
+		if gameAccountInfo then
+			gameAccountInfo.isInCurrentRegion = true
+		end
+		return gameAccountInfo
+	end
+
+	local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+	function C_BattleNet.GetFriendAccountInfo(...)
+		local accountInfo = OLD_GetFriendAccountInfo(...)
+		if accountInfo and accountInfo.gameAccountInfo then
+			accountInfo.gameAccountInfo.isInCurrentRegion = true
+		end
+		return accountInfo
+	end
 end
 
 function module:ToggleLanguageFilter()
