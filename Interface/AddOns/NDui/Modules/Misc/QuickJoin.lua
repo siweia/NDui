@@ -217,6 +217,8 @@ function M:ShowLeaderOverallScore()
 end
 
 function M:QuickJoin()
+	if not C.db["Misc"]["QuickJoin"] then return end
+
 	for i = 1, 10 do
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
 		if bu then

@@ -877,3 +877,5 @@ L["MMT29X4Tip"] = "|nIf enabled, show hunter focus cost on top of PlayerPlate, f
 L["AutoHide"] = "AutoHide"
 L["Speed"] = "Speed"
 L["OffhandOnTop"] = "Offhand timer on top"
+L["EnhancedPremade"] = "Enhanced Premade"
+L["EnhancedPremadeTip"] = "|nQuick apply by double click, hide group join notice, styled group roles, auto invite applicants, show leader overall score, abbr keystone name for Tazavesh."

@@ -877,3 +877,5 @@ L["MMT29X4Tip"] = "|n启用后，在个人资源条上方显示4件套的集中�
 L["AutoHide"] = "自动关闭"
 L["Speed"] = "速度"
 L["OffhandOnTop"] = "副手计时条在上"
+L["EnhancedPremade"] = "增强系统预创建"
+L["EnhancedPremadeTip"] = "|n添加双击申请、自动隐藏进组提示、美化列表职责图标、自动邀请申请、显示队长分数、简写集市钥石等。"
