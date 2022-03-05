@@ -237,13 +237,20 @@ function M:ReplaceFindGroupButton()
 	bu:SetText(LFG_LIST_FIND_A_GROUP)
 	bu:SetSize(135, 22)
 	bu:SetPoint("BOTTOMRIGHT", -3, 4)
+
+	local lastCategory = 0
 	bu:SetScript("OnClick", function()
 		local selectedCategory = categorySelection.selectedCategory
 		if not selectedCategory then return end
 
-		LFGListSearchPanel_SetCategory(searchPanel, selectedCategory, categorySelection.selectedFilters, LFGListFrame.baseFilters)
-		LFGListSearchPanel_DoSearch(searchPanel)
-		LFGListFrame_SetActivePanel(LFGListFrame, searchPanel)
+		if lastCategory ~= selectedCategory then
+			categorySelection.FindGroupButton:Click()
+		else
+			LFGListSearchPanel_SetCategory(searchPanel, selectedCategory, categorySelection.selectedFilters, LFGListFrame.baseFilters)
+			LFGListSearchPanel_DoSearch(searchPanel)
+			LFGListFrame_SetActivePanel(LFGListFrame, searchPanel)
+		end
+		lastCategory = selectedCategory
 	end)
 
 	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(bu) end
