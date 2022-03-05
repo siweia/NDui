@@ -67,7 +67,7 @@ function module:OnCreate()
 	scaler.timer = timer
 
 	local text = timer:CreateFontString(nil, "BACKGROUND")
-	text:SetPoint("CENTER", 2, 0)
+	text:SetPoint("CENTER", 1, 0)
 	text:SetJustifyH("CENTER")
 	timer.text = text
 
