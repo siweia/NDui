@@ -229,6 +229,8 @@ function M:ShowLeaderOverallScore()
 end
 
 function M:ReplaceFindGroupButton()
+	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
+
 	local searchPanel = LFGListFrame.SearchPanel
 	local categorySelection = LFGListFrame.CategorySelection
 	categorySelection.FindGroupButton:Hide()
@@ -246,6 +248,7 @@ function M:ReplaceFindGroupButton()
 		if lastCategory ~= selectedCategory then
 			categorySelection.FindGroupButton:Click()
 		else
+			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 			LFGListSearchPanel_SetCategory(searchPanel, selectedCategory, categorySelection.selectedFilters, LFGListFrame.baseFilters)
 			LFGListSearchPanel_DoSearch(searchPanel)
 			LFGListFrame_SetActivePanel(LFGListFrame, searchPanel)
