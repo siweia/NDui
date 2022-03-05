@@ -237,7 +237,7 @@ function M:ReplaceFindGroupButton()
 	bu:SetText(LFG_LIST_FIND_A_GROUP)
 	bu:SetSize(135, 22)
 	bu:SetPoint("BOTTOMRIGHT", -3, 4)
-	bu:SetScript("OnClick", function(self)
+	bu:SetScript("OnClick", function()
 		local selectedCategory = categorySelection.selectedCategory
 		if not selectedCategory then return end
 
