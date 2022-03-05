@@ -34,7 +34,8 @@ function S:PGFSkin()
 		if styled then return end
 
 		B.StripTextures(self)
-		B.SetBD(self)
+		self:SetHeight(PVEFrame:GetHeight())
+		B.SetBD(self):SetAllPoints()
 		B.ReskinClose(self.CloseButton)
 		B.Reskin(self.ResetButton)
 		B.Reskin(self.RefreshButton)
