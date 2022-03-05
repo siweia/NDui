@@ -19,8 +19,9 @@ local C_LFGList_GetSearchResultInfo = C_LFGList.GetSearchResultInfo
 local C_LFGList_GetActivityInfoTable = C_LFGList.GetActivityInfoTable
 local C_LFGList_GetSearchResultMemberInfo = C_LFGList.GetSearchResultMemberInfo
 
+local LFGListFrame = _G.LFGListFrame
+local ApplicationViewerFrame = LFGListFrame.ApplicationViewer
 local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
-local ApplicationViewerFrame = _G.LFGListFrame.ApplicationViewer
 local LFG_LIST_GROUP_DATA_ATLASES = _G.LFG_LIST_GROUP_DATA_ATLASES
 local scoreFormat = DB.GreyColor.."(%s) |r%s"
 
@@ -227,6 +228,27 @@ function M:ShowLeaderOverallScore()
 	end
 end
 
+function M:ReplaceFindGroupButton()
+	local searchPanel = LFGListFrame.SearchPanel
+	local categorySelection = LFGListFrame.CategorySelection
+	categorySelection.FindGroupButton:Hide()
+
+	local bu = CreateFrame("Button", nil, categorySelection, "LFGListMagicButtonTemplate")
+	bu:SetText(LFG_LIST_FIND_A_GROUP)
+	bu:SetSize(135, 22)
+	bu:SetPoint("BOTTOMRIGHT", -3, 4)
+	bu:SetScript("OnClick", function(self)
+		local selectedCategory = categorySelection.selectedCategory
+		if not selectedCategory then return end
+
+		LFGListSearchPanel_SetCategory(searchPanel, selectedCategory, categorySelection.selectedFilters, LFGListFrame.baseFilters)
+		LFGListSearchPanel_DoSearch(searchPanel)
+		LFGListFrame_SetActivePanel(LFGListFrame, searchPanel)
+	end)
+
+	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(bu) end
+end
+
 function M:QuickJoin()
 	if not C.db["Misc"]["QuickJoin"] then return end
 
@@ -251,5 +273,6 @@ function M:QuickJoin()
 	hooksecurefunc("LFGListSearchEntry_Update", M.ShowLeaderOverallScore)
 
 	M:AddAutoAcceptButton()
+	M:ReplaceFindGroupButton()
 end
 M:RegisterMisc("QuickJoin", M.QuickJoin)
