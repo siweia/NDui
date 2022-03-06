@@ -219,11 +219,14 @@ function M:ShowLeaderOverallScore()
 	local searchResultInfo = resultID and C_LFGList_GetSearchResultInfo(resultID)
 	if searchResultInfo then
 		local activityInfo = C_LFGList_GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
-		local leaderOverallScore = searchResultInfo.leaderOverallDungeonScore
-		if activityInfo and activityInfo.isMythicPlusActivity and leaderOverallScore then
-			local oldName = self.ActivityName:GetText() 
-			oldName = gsub(oldName, ".-"..HEADER_COLON, "") -- Tazavesh
-			self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(leaderOverallScore), oldName)
+		if activityInfo then
+			local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore
+				or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
+			if showScore then
+				local oldName = self.ActivityName:GetText() 
+				oldName = gsub(oldName, ".-"..HEADER_COLON, "") -- Tazavesh
+				self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
+			end
 		end
 	end
 end
@@ -259,6 +262,41 @@ function M:ReplaceFindGroupButton()
 	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(bu) end
 end
 
+local function clickSortButton(self)
+	self.__owner.Sorting.SortingExpression:SetText(self.sortStr)
+	self.__owner.RefreshButton:Click()
+end
+
+local function createSortButton(parent, texture, sortStr)
+	local bu = B.CreateButton(parent, 24, 24, true, texture)
+	bu.sortStr = sortStr
+	bu.__owner = parent
+	bu:SetScript("OnClick", clickSortButton)
+	B.AddTooltip(bu, "ANCHOR_RIGHT", CLUB_FINDER_SORT_BY)
+
+	tinsert(parent.__sortBu, bu)
+end
+
+function M:AddPGFSortingExpression()
+	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
+
+	local PGFDialog = _G.PremadeGroupsFilterDialog
+	PGFDialog.__sortBu = {}
+
+	createSortButton(PGFDialog, 525134, "mprating desc")
+	createSortButton(PGFDialog, 1455894, "pvprating desc")
+	createSortButton(PGFDialog, 237538, "age asc")
+
+	for i = 1, #PGFDialog.__sortBu do
+		local bu = PGFDialog.__sortBu[i]
+		if i == 1 then
+			bu:SetPoint("BOTTOMLEFT", PGFDialog, "BOTTOMRIGHT", 3, 0)
+		else
+			bu:SetPoint("BOTTOM", PGFDialog.__sortBu[i-1], "TOP", 0, 3)
+		end
+	end
+end
+
 function M:QuickJoin()
 	if not C.db["Misc"]["QuickJoin"] then return end
 
@@ -266,7 +304,7 @@ function M:QuickJoin()
 		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
 		if bu then
 			bu.Name:SetFontObject(Game14Font)
-			bu.ActivityName:SetFontObject(Game13Font)
+			bu.ActivityName:SetFontObject(Game12Font)
 			bu:HookScript("OnDoubleClick", M.HookApplicationClick)
 		end
 	end
@@ -284,5 +322,6 @@ function M:QuickJoin()
 
 	M:AddAutoAcceptButton()
 	M:ReplaceFindGroupButton()
+	M:AddPGFSortingExpression()
 end
 M:RegisterMisc("QuickJoin", M.QuickJoin)
