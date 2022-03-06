@@ -8,11 +8,13 @@ function S:PGFSkin()
 	if not C.db["Skins"]["PGFSkin"] then return end
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
+	local PGFDialog = _G.PremadeGroupsFilterDialog
+
 	local tipStyled
 	hooksecurefunc(PremadeGroupsFilter.Debug, "PopupMenu_Initialize", function()
 		if tipStyled then return end
-		for i = 1, PremadeGroupsFilterDialog:GetNumChildren() do
-			local child = select(i, PremadeGroupsFilterDialog:GetChildren())
+		for i = 1, PGFDialog:GetNumChildren() do
+			local child = select(i, PGFDialog:GetChildren())
 			if child and child.Shadow then
 				TT.ReskinTooltip(child)
 				tipStyled = true
@@ -21,7 +23,7 @@ function S:PGFSkin()
 		end
 	end)
 
-	hooksecurefunc(PremadeGroupsFilterDialog, "SetPoint", function(self, _, parent)
+	hooksecurefunc(PGFDialog, "SetPoint", function(self, _, parent)
 		if parent ~= LFGListFrame then
 			self:ClearAllPoints()
 			self:SetPoint("TOPLEFT", LFGListFrame, "TOPRIGHT", 5, 0)
@@ -30,11 +32,10 @@ function S:PGFSkin()
 
 	local pairs = pairs
 	local styled
-	hooksecurefunc(PremadeGroupsFilterDialog, "Show", function(self)
+	hooksecurefunc(PGFDialog, "Show", function(self)
 		if styled then return end
 
 		B.StripTextures(self)
-		self:SetHeight(PVEFrame:GetHeight())
 		B.SetBD(self):SetAllPoints()
 		B.ReskinClose(self.CloseButton)
 		B.Reskin(self.ResetButton)
@@ -72,6 +73,12 @@ function S:PGFSkin()
 		end
 
 		styled = true
+	end)
+
+	hooksecurefunc(PGFDialog, "SetSize", function(self, width, height)
+		if height == 427 then
+			self:SetSize(width, 428)
+		end
 	end)
 
 	B.ReskinCheck(UsePFGButton)
