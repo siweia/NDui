@@ -350,6 +350,7 @@ local list = {
 		{AuraID = 367573, UnitID = "target", Flash = true},	-- 源生壁垒，圣物匠
 		{AuraID = 368684, UnitID = "target", Value = true},	-- 回收，黑伦度斯
 		{AuraID = 361651, UnitID = "target", Value = true},	-- 虹吸屏障，道茜歌妮
+		{AuraID = 362505, UnitID = "target", Flash = true},	-- 统御之握，安度因
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
