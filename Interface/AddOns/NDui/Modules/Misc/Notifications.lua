@@ -200,6 +200,7 @@ local blackList = {
 	[226943] = true,	-- 心灵炸弹
 	[228600] = true,	-- 冰川尖刺
 	[331866] = true,	-- 混沌代理人
+	[354051] = true,	-- 轻盈步
 }
 
 function M:IsAllyPet(sourceFlags)
