@@ -91,6 +91,8 @@ local list = {
 		{AuraID = 367241, UnitID = "player"},	-- 原初印记
 		{AuraID = 363522, UnitID = "player"},	-- 角斗士的永恒结界
 		{AuraID = 362699, UnitID = "player"},	-- 角斗士的决心
+		{AuraID = 345231, UnitID = "player"},	-- 角斗士的纹章
+		{AuraID = 368641, UnitID = "player"},	-- 最终符文
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
