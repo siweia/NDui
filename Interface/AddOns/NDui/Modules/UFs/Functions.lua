@@ -465,7 +465,7 @@ end
 
 local roleTexes = {
 	["TANK"] = DB.tankTex,
-	["HEALER"] = DB.healerTex,
+	["HEALER"] = DB.healTex,
 	["DAMAGER"] = DB.dpsTex,
 }
 local function postUpdateRole(element, role)
