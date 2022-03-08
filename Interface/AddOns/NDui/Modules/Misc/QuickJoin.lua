@@ -62,6 +62,7 @@ local roleAtlas = {
 	[2] = "groupfinder-icon-role-large-heal",
 	[3] = "groupfinder-icon-role-large-dps",
 }
+local roleTexes = {DB.tankTex, DB.healTex, DB.dpsTex}
 
 local function sortRoleOrder(a, b)
 	if a and b then
@@ -125,11 +126,11 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 			end
 			icon:SetSize(26, 26)
 
-			icon.role = self:CreateTexture(nil, "OVERLAY")
-			icon.role:SetSize(17, 17)
-			icon.role:SetPoint("TOPLEFT", icon, -4, 5)
+			icon.role = self:CreateTexture(nil, "OVERLAY", nil, 2)
+			icon.role:SetSize(16, 16)
+			icon.role:SetPoint("TOPLEFT", icon, -3, 3)
 
-			icon.leader = self:CreateTexture(nil, "OVERLAY")
+			icon.leader = self:CreateTexture(nil, "OVERLAY", nil, 1)
 			icon.leader:SetSize(14, 14)
 			icon.leader:SetPoint("TOP", icon, 3 , 7)
 			icon.leader:SetTexture("Interface\\GroupFrame\\UI-Group-LeaderIcon")
@@ -154,7 +155,8 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 		if roleInfo then
 			local icon = self.Icons[iconIndex]
 			icon:SetAtlas(LFG_LIST_GROUP_DATA_ATLASES[roleInfo[2]])
-			icon.role:SetAtlas(roleAtlas[roleInfo[1]])
+			--icon.role:SetAtlas(roleAtlas[roleInfo[1]])
+			icon.role:SetTexture(roleTexes[roleInfo[1]])
 			icon.leader:SetShown(roleInfo[3])
 			iconIndex = iconIndex - 1
 		end
