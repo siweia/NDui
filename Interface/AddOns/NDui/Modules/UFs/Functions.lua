@@ -463,14 +463,15 @@ function UF:CreatePortrait(self)
 	self.Health.bg:SetParent(self)
 end
 
-local roleTexCoord = {
-	["TANK"] = {.5, .75, 0, 1},
-	["HEALER"] = {.75, 1, 0, 1},
-	["DAMAGER"] = {.25, .5, 0, 1},
+local roleTexes = {
+	["TANK"] = DB.tankTex,
+	["HEALER"] = DB.healerTex,
+	["DAMAGER"] = DB.dpsTex,
 }
 local function postUpdateRole(element, role)
 	if element:IsShown() then
-		element:SetTexCoord(unpack(roleTexCoord[role]))
+		element:SetTexture(roleTexes[role])
+		element:SetTexCoord(0, 1, 0, 1)
 	end
 end
 
@@ -514,8 +515,7 @@ function UF:CreateIcons(self)
 	else
 		ri:SetPoint("TOPRIGHT", self, 0, 8)
 	end
-	ri:SetSize(12, 12)
-	ri:SetTexture("Interface\\LFGFrame\\LFGROLE")
+	ri:SetSize(15, 15)
 	ri.PostUpdate = postUpdateRole
 	self.GroupRoleIndicator = ri
 
