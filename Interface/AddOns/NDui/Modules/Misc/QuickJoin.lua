@@ -325,7 +325,7 @@ function M:AddDungeonsFilter()
 
 	searchPanel.RefreshButton:HookScript("OnMouseDown", function(self, btn)
 		if btn ~= "RightButton" then return end
-		EasyMenu(menuList, B.EasyMenu, self, 0, 50, "MENU")
+		EasyMenu(menuList, B.EasyMenu, self, 25, 50, "MENU")
 	end)
 
 	searchPanel.RefreshButton:HookScript("OnEnter", function()
