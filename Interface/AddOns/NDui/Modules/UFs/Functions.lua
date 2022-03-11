@@ -463,15 +463,9 @@ function UF:CreatePortrait(self)
 	self.Health.bg:SetParent(self)
 end
 
-local roleTexes = {
-	["TANK"] = DB.tankTex,
-	["HEALER"] = DB.healTex,
-	["DAMAGER"] = DB.dpsTex,
-}
 local function postUpdateRole(element, role)
 	if element:IsShown() then
-		element:SetTexture(roleTexes[role])
-		element:SetTexCoord(0, 1, 0, 1)
+		B.ReskinSmallRole(element, role)
 	end
 end
 
