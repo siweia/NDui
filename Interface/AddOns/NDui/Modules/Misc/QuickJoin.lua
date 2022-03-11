@@ -11,19 +11,24 @@ local TT = B:GetModule("Tooltip")
 	4.自动邀请申请
 	5.显示队长分数，并简写集市钥石
 ]]
-local select, wipe, sort, gsub = select, wipe, sort, gsub
+local select, wipe, sort, gsub, tremove = select, wipe, sort, gsub, tremove
 local StaticPopup_Hide, HideUIPanel, GetTime = StaticPopup_Hide, HideUIPanel, GetTime
 local UnitIsGroupLeader, UnitClass, UnitGroupRolesAssigned = UnitIsGroupLeader, UnitClass, UnitGroupRolesAssigned
 local C_Timer_After, IsAltKeyDown = C_Timer.After, IsAltKeyDown
 local C_LFGList_GetSearchResultInfo = C_LFGList.GetSearchResultInfo
 local C_LFGList_GetActivityInfoTable = C_LFGList.GetActivityInfoTable
 local C_LFGList_GetSearchResultMemberInfo = C_LFGList.GetSearchResultMemberInfo
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 
-local LFGListFrame = _G.LFGListFrame
-local ApplicationViewerFrame = LFGListFrame.ApplicationViewer
+local HEADER_COLON = _G.HEADER_COLON
 local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
 local LFG_LIST_GROUP_DATA_ATLASES = _G.LFG_LIST_GROUP_DATA_ATLASES
 local scoreFormat = DB.GreyColor.."(%s) |r%s"
+
+local LFGListFrame = _G.LFGListFrame
+local ApplicationViewerFrame = LFGListFrame.ApplicationViewer
+local searchPanel = LFGListFrame.SearchPanel
+local categorySelection = LFGListFrame.CategorySelection
 
 function M:HookApplicationClick()
 	if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
@@ -230,8 +235,6 @@ end
 function M:ReplaceFindGroupButton()
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
-	local searchPanel = LFGListFrame.SearchPanel
-	local categorySelection = LFGListFrame.CategorySelection
 	categorySelection.FindGroupButton:Hide()
 
 	local bu = CreateFrame("Button", nil, categorySelection, "LFGListMagicButtonTemplate")
@@ -256,6 +259,96 @@ function M:ReplaceFindGroupButton()
 	end)
 
 	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(bu) end
+end
+
+function M:AddDungeonsFilter()
+	local mapData = {
+		[0] = {mapID = 375, aID = 703}, -- 仙林
+		[1] = {mapID = 376, aID = 713}, -- 通灵
+		[2] = {mapID = 377, aID = 695}, -- 彼界
+		[3] = {mapID = 378, aID = 699}, -- 赎罪
+		[4] = {mapID = 379, aID = 691}, -- 凋魂
+		[5] = {mapID = 380, aID = 705}, -- 赤红
+		[6] = {mapID = 381, aID = 709}, -- 晋升
+		[7] = {mapID = 382, aID = 717}, -- 剧场
+		[8] = {mapID = 391, aID = 1016}, -- 街道
+		[9] = {mapID = 392, aID = 1017}, -- 宏图
+	}
+
+	local function GetDungeonNameByID(mapID)
+		local name = C_ChallengeMode_GetMapUIInfo(mapID)
+		name = gsub(name, ".-"..HEADER_COLON, "") -- abbr Tazavesh
+		return name
+	end
+
+	local allOn
+	local filterIDs = {}
+
+	local function toggleAll()
+		allOn = not allOn
+		for i = 0, 9 do
+			mapData[i].isOn = allOn
+			filterIDs[mapData[i].aID] = allOn
+		end
+		UIDropDownMenu_Refresh(B.EasyMenu)
+		LFGListSearchPanel_DoSearch(searchPanel)
+	end
+
+	local menuList = {
+		[1] = {text = _G.SPECIFIC_DUNGEONS, isTitle = true, notCheckable = true},
+		[2] = {text = _G.SWITCH, notCheckable = true, keepShownOnClick = true, func = toggleAll},
+	}
+
+	local function onClick(self, index, aID)
+		allOn = true
+		mapData[index].isOn = not mapData[index].isOn
+		filterIDs[aID] = mapData[index].isOn
+		LFGListSearchPanel_DoSearch(searchPanel)
+	end
+
+	local function onCheck(self)
+		return mapData[self.arg1].isOn
+	end
+
+	for i = 0, 9 do
+		local value = mapData[i]
+		menuList[i+3] = {
+			text = GetDungeonNameByID(value.mapID),
+			arg1 = i,
+			arg2 = value.aID,
+			func = onClick,
+			checked = onCheck,
+			keepShownOnClick = true,
+		}
+		filterIDs[value.aID] = false
+	end
+
+	searchPanel.RefreshButton:HookScript("OnMouseDown", function(self, btn)
+		if btn ~= "RightButton" then return end
+		EasyMenu(menuList, B.EasyMenu, self, 0, 50, "MENU")
+	end)
+
+	searchPanel.RefreshButton:HookScript("OnEnter", function()
+		GameTooltip:AddLine(DB.RightButton.._G.SPECIFIC_DUNGEONS)
+		GameTooltip:Show()
+	end)
+
+	hooksecurefunc("LFGListUtil_SortSearchResults", function(results)
+		if categorySelection.selectedCategory ~= 2 then return end
+		if not allOn then return end
+
+		for i = #results, 1, -1 do
+			local resultID = results[i]
+			local searchResultInfo = C_LFGList_GetSearchResultInfo(resultID)
+			local aID = searchResultInfo and searchResultInfo.activityID
+			if aID and not filterIDs[aID] then
+				tremove(results, i)
+			end
+		end
+		searchPanel.totalResults = #results
+
+		return true
+	end)
 end
 
 local function clickSortButton(self)
@@ -318,6 +411,7 @@ function M:QuickJoin()
 
 	M:AddAutoAcceptButton()
 	M:ReplaceFindGroupButton()
+	M:AddDungeonsFilter()
 	M:AddPGFSortingExpression()
 end
 M:RegisterMisc("QuickJoin", M.QuickJoin)
