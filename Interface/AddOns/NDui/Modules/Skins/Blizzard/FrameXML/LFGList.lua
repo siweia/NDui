@@ -219,9 +219,9 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("LFGListGroupDataDisplayRoleCount_Update", function(self)
 		if not self.styled then
-			B.ReskinRole(self.TankIcon, "TANK")
-			B.ReskinRole(self.HealerIcon, "HEALER")
-			B.ReskinRole(self.DamagerIcon, "DPS")
+			B.ReskinSmallRole(self.TankIcon, "TANK")
+			B.ReskinSmallRole(self.HealerIcon, "HEALER")
+			B.ReskinSmallRole(self.DamagerIcon, "DPS")
 
 			self.HealerIcon:SetPoint("RIGHT", self.DamagerIcon, "LEFT", -22, 0)
 			self.TankIcon:SetPoint("RIGHT", self.HealerIcon, "LEFT", -22, 0)
