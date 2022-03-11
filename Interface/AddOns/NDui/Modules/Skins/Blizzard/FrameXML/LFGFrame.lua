@@ -213,13 +213,14 @@ tinsert(C.defaultThemes, function()
 		if incentiveIndex then
 			local tex
 			if incentiveIndex == LFG_ROLE_SHORTAGE_PLENTIFUL then
-				tex = "Interface\\Icons\\INV_Misc_Coin_19"
+				tex = "coin-copper"
 			elseif incentiveIndex == LFG_ROLE_SHORTAGE_UNCOMMON then
-				tex = "Interface\\Icons\\INV_Misc_Coin_18"
+				tex = "coin-silver"
 			elseif incentiveIndex == LFG_ROLE_SHORTAGE_RARE then
-				tex = "Interface\\Icons\\INV_Misc_Coin_17"
+				tex = "coin-gold"
 			end
-			roleButton.incentiveIcon.texture:SetTexture(tex)
+			roleButton.incentiveIcon.texture:SetInside()
+			roleButton.incentiveIcon.texture:SetAtlas(tex)
 		end
 
 		updateRoleBonus(roleButton)
