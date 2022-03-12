@@ -87,7 +87,33 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 367634) -- 强化邪恶之星
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 364020) -- 诅咒进军
 
 BOSS = 2457 -- 恐惧双王
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360287) -- 苦痛打击[坦的常驻DEBUFF]
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 359963) -- 开裂静脉[坦的常驻DEBUFF]
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360012) -- 腐臭之云
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360008) -- 腐臭之云
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360241) -- 不安梦境
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360146) -- 恐惧战栗
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 364985) -- 啃噬伤口
 
 BOSS = 2467 -- 莱葛隆
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 362172) -- 腐蚀伤口
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 362137) -- 腐蚀伤口
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 361548) -- 黑暗之蚀
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 362806) -- 黑暗之蚀
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 362206) -- 事件视界
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 362081) -- 宇宙喷射
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 363598) -- 不稳定的反物质
 
 BOSS = 2464 -- 典狱长
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360281) -- 咒罚符文
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 362401) -- 折磨
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 363893) -- 殉难
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 363886) -- 禁锢
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 366545) -- 残害
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 362397) -- 强迫
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 369868) -- 粉碎冲击
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 360425) -- 秽邪之地
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 365150) -- 统御符文
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 365219) -- 痛苦之链
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 365222) -- 痛苦之链
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 365153) -- 统御意志
