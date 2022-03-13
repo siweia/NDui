@@ -61,7 +61,8 @@ local function UpdateAllSlots()
 				localSlots[i][3] = current/max
 				numSlots = numSlots + 1
 			end
-			localSlots[i][4] = "|T"..GetInventoryItemTexture("player", index)..":13:15:0:0:50:50:4:46:4:46|t " or ""
+			local iconTexture = GetInventoryItemTexture("player", index) or 134400
+			localSlots[i][4] = "|T"..iconTexture..":13:15:0:0:50:50:4:46:4:46|t " or ""
 		end
 	end
 	sort(localSlots, sortSlots)
