@@ -389,13 +389,16 @@ function UF:OnLogin()
 		oUF:RegisterStyle("Boss", CreateBossStyle)
 		oUF:SetActiveStyle("Boss")
 		local boss = {}
-		for i = 1, MAX_BOSS_FRAMES do
+		for i = 1, 8 do -- MAX_BOSS_FRAMES, 8 in 9.2?
 			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
 			local moverWidth, moverHeight = boss[i]:GetWidth(), boss[i]:GetHeight()+8
+			local title = i > 5 and "Boss"..i or L["BossFrame"]..i
 			if i == 1 then
-				boss[i].mover = B.Mover(boss[i], L["BossFrame"]..i, "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, moverWidth, moverHeight)
+				boss[i].mover = B.Mover(boss[i], title, "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, moverWidth, moverHeight)
+			elseif i == 6 then
+				boss[i].mover = B.Mover(boss[i], title, "Boss"..i, {"BOTTOMLEFT", boss[1].mover, "BOTTOMRIGHT", 50, 0}, moverWidth, moverHeight)
 			else
-				boss[i].mover = B.Mover(boss[i], L["BossFrame"]..i, "Boss"..i, {"BOTTOMLEFT", boss[i-1], "TOPLEFT", 0, 50}, moverWidth, moverHeight)
+				boss[i].mover = B.Mover(boss[i], title, "Boss"..i, {"BOTTOMLEFT", boss[i-1], "TOPLEFT", 0, 50}, moverWidth, moverHeight)
 			end
 		end
 
