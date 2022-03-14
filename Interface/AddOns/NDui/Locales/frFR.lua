@@ -879,3 +879,7 @@ L["Speed"] = "Speed" -- need translation
 L["OffhandOnTop"] = "Offhand timer on top" -- need translation
 L["EnhancedPremade"] = "Enhanced Premade" -- need translation
 L["EnhancedPremadeTip"] = "|nQuick apply by double click, hide group join notice, styled group roles, auto invite applicants, show leader overall score, abbr keystone name for Tazavesh." -- need translation
+L["PlateHarmWidth"] = "Enemy clickable width" -- need translation
+L["PlateHarmHeight"] = "Enemy clickable height" -- need translation
+L["PlateHelpWidth"] = "Friendly clickable width" -- need translation
+L["PlateHelpHeight"] = "Friendly clickable height" -- need translation

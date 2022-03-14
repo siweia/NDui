@@ -51,13 +51,11 @@ function UF:UpdateClickableSize()
 	if InCombatLockdown() then return end
 
 	local uiScale = NDuiADB["UIScale"]
-	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
-	local friendPlateWidth, friendPlateHeight = plateWidth, plateHeight
-	if C.db["Nameplate"]["FriendPlate"] and not C.db["Nameplate"]["NameOnlyMode"] then
-		friendPlateWidth, friendPlateHeight = C.db["Nameplate"]["FriendPlateWidth"], C.db["Nameplate"]["FriendPlateHeight"]
-	end
-	C_NamePlate_SetNamePlateEnemySize(plateWidth*uiScale, plateHeight*uiScale+40)
-	C_NamePlate_SetNamePlateFriendlySize(friendPlateWidth*uiScale, friendPlateHeight*uiScale+40)
+	local harmWidth, harmHeight = C.db["Nameplate"]["HarmWidth"], C.db["Nameplate"]["HarmHeight"]
+	local helpWidth, helpHeight = C.db["Nameplate"]["HelpWidth"], C.db["Nameplate"]["HelpHeight"]
+
+	C_NamePlate_SetNamePlateEnemySize(harmWidth*uiScale, harmHeight*uiScale)
+	C_NamePlate_SetNamePlateFriendlySize(helpWidth*uiScale, helpHeight*uiScale)
 end
 
 function UF:UpdatePlateClickThru()

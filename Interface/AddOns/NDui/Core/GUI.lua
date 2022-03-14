@@ -385,6 +385,10 @@ G.DefaultSettings = {
 		FriendNameSize = 14,
 		FriendHealthSize = 16,
 		FriendHealthOffset = 5,
+		HarmWidth = 190,
+		HarmHeight = 60,
+		HelpWidth = 190,
+		HelpHeight = 60,
 	},
 	Skins = {
 		DBM = true,
@@ -789,6 +793,10 @@ local function updatePlateSpacing()
 	B:GetModule("UnitFrames"):UpdatePlateSpacing()
 end
 
+local function updateClickableSize()
+	B:GetModule("UnitFrames"):UpdateClickableSize()
+end
+
 local function updateCustomUnitList()
 	B:GetModule("UnitFrames"):CreateUnitTable()
 end
@@ -1169,6 +1177,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", false, {.5, 1, .1}, updatePlateScale},
 		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.3, 1, .1}, updatePlateAlpha},
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", nil, {.5, 1.5, .1}, updatePlateSpacing},
+		{3, "Nameplate", "HarmWidth", L["PlateHarmWidth"].."*", false, {1, 500, 1}, updateClickableSize},
+		{3, "Nameplate", "HarmHeight", L["PlateHarmHeight"].."*", true, {1, 500, 1}, updateClickableSize},
+		{3, "Nameplate", "HelpWidth", L["PlateHelpWidth"].."*", false, {1, 500, 1}, updateClickableSize},
+		{3, "Nameplate", "HelpHeight", L["PlateHelpHeight"].."*", true, {1, 500, 1}, updateClickableSize},
 	},
 	[6] = {
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
