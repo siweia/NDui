@@ -130,12 +130,6 @@ local function CreateBossStyle(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
 	UF:CreateClickSets(self)
-	self:Show()
-	self.Hide = self.Show
-	self.Castbar:Show()
-	self.Castbar:SetAlpha(1)
-	self.Castbar.SetAlpha = B.Dummy
-	self.Castbar.Hide = self.Castbar.Show
 end
 
 local function CreateArenaStyle(self)
