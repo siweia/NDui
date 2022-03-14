@@ -130,6 +130,12 @@ local function CreateBossStyle(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
 	UF:CreateClickSets(self)
+	self:Show()
+	self.Hide = self.Show
+	self.Castbar:Show()
+	self.Castbar:SetAlpha(1)
+	self.Castbar.SetAlpha = B.Dummy
+	self.Castbar.Hide = self.Castbar.Show
 end
 
 local function CreateArenaStyle(self)
@@ -389,7 +395,7 @@ function UF:OnLogin()
 			if i == 1 then
 				boss[i].mover = B.Mover(boss[i], L["BossFrame"]..i, "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, moverWidth, moverHeight)
 			else
-				boss[i].mover = B.Mover(boss[i], L["BossFrame"]..i, "Boss"..i, {"BOTTOM", boss[i-1], "TOP", 0, 50}, moverWidth, moverHeight)
+				boss[i].mover = B.Mover(boss[i], L["BossFrame"]..i, "Boss"..i, {"BOTTOMLEFT", boss[i-1], "TOPLEFT", 0, 50}, moverWidth, moverHeight)
 			end
 		end
 
