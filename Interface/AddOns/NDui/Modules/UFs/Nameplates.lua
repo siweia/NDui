@@ -6,7 +6,7 @@ local _G = getfenv(0)
 local floor, strmatch, tonumber, pairs, unpack, rad = floor, string.match, tonumber, pairs, unpack, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
 local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
-local UnitClassification, UnitExists, InCombatLockdown = UnitClassification, UnitExists, InCombatLockdown
+local UnitClassification, UnitExists, InCombatLockdown, UnitCanAttack = UnitClassification, UnitExists, InCombatLockdown, UnitCanAttack
 local C_Scenario_GetInfo, C_Scenario_GetStepInfo = C_Scenario.GetInfo, C_Scenario.GetStepInfo
 local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
@@ -889,7 +889,7 @@ end
 
 function UF:RefreshPlateType(unit)
 	self.reaction = UnitReaction(unit, "player")
-	self.isFriendly = self.reaction and self.reaction >= 5
+	self.isFriendly = self.reaction and self.reaction >= 4 and not UnitCanAttack("player", unit)
 	if C.db["Nameplate"]["NameOnlyMode"] and self.isFriendly or self.widgetsOnly then
 		self.plateType = "NameOnly"
 	elseif C.db["Nameplate"]["FriendPlate"] and self.isFriendly then
