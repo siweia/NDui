@@ -72,6 +72,7 @@ function UF:SetupCVars()
 	UF:UpdatePlateAlpha()
 	SetCVar("nameplateSelectedAlpha", 1)
 	SetCVar("showQuestTrackingTooltips", 1)
+	SetCVar("predictedHealth", 1)
 
 	UF:UpdatePlateScale()
 	SetCVar("nameplateSelectedScale", 1)
