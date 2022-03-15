@@ -882,4 +882,4 @@ L["EnhancedPremadeTip"] = "|n添加双击申请、自动隐藏进组提示、美
 L["PlateHarmWidth"] = "敌方姓名板交互宽度"
 L["PlateHarmHeight"] = "敌方姓名板交互高度"
 L["PlateHelpWidth"] = "友方姓名板交互宽度"
-L["PlateHelpHeight"] = "友方姓名板交互宽度"
+L["PlateHelpHeight"] = "友方姓名板交互高度"
