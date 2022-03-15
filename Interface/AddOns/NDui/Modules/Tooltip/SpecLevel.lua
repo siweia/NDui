@@ -43,6 +43,14 @@ local T29Sets = {
 	[188892] = true, [188893] = true, [188894] = true, [188896] = true, [188898] = true,
 }
 
+local formatSets = {
+	[1] = " |cff14b200(1/4)", -- green
+	[2] = " |cff0091f2(2/4)", -- blue
+	[3] = " |cff0091f2(3/4)", -- blue
+	[4] = " |cffc745f9(4/4)", -- purple
+	[5] = " |cffc745f9(5/5)", -- purple
+}
+
 function TT:InspectOnUpdate(elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
 	if self.elapsed > frequency then
@@ -219,7 +227,7 @@ function TT:GetUnitItemLevel(unit)
 
 		if ilvl > 0 then ilvl = format("%.1f", ilvl) end
 		if boa > 0 then ilvl = ilvl.." |cff00ccff("..boa..HEIRLOOMS..")" end
-		if sets > 0 then ilvl = ilvl.." |cffffcc00("..sets.."/4)" end
+		if sets > 0 then ilvl = ilvl..formatSets[sets] end
 	else
 		ilvl = nil
 	end
