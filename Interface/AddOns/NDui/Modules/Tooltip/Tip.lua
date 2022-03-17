@@ -95,35 +95,25 @@ function TT:InsertFactionFrame(faction)
 	self.factionFrame:SetAlpha(.5)
 end
 
-local roleTex = {
-	["HEALER"] = {.066, .222, .133, .445},
-	["TANK"] = {.375, .532, .133, .445},
-	["DAMAGER"] = {.66, .813, .133, .445},
-}
-
 function TT:InsertRoleFrame(role)
 	if not self.roleFrame then
 		local f = self:CreateTexture(nil, "OVERLAY")
-		f:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, -2)
-		f:SetSize(20, 20)
-		f:SetTexture("Interface\\LFGFrame\\UI-LFG-ICONS-ROLEBACKGROUNDS")
-		f.bg = B.CreateBDFrame(f)
+		f:SetPoint("TOPRIGHT", self, -2, -2)
+		f:SetSize(18, 18)
 		self.roleFrame = f
 	end
-	self.roleFrame:SetTexCoord(unpack(roleTex[role]))
-	self.roleFrame:SetAlpha(1)
-	self.roleFrame.bg:SetAlpha(1)
+	self.roleFrame:SetTexture(B.GetRoleTex(role))
+	self.roleFrame:Show()
 end
 
 function TT:OnTooltipCleared()
 	if self:IsForbidden() then return end
 
-	if self.factionFrame and self.factionFrame:GetAlpha() ~= 0 then
-		self.factionFrame:SetAlpha(0)
+	if self.factionFrame and self.factionFrame:IsShown() then
+		self.factionFrame:Hide()
 	end
-	if self.roleFrame and self.roleFrame:GetAlpha() ~= 0 then
-		self.roleFrame:SetAlpha(0)
-		self.roleFrame.bg:SetAlpha(0)
+	if self.roleFrame and self.roleFrame:IsShown() then
+		self.roleFrame:Hide()
 	end
 
 	GameTooltip_ClearMoney(self)
