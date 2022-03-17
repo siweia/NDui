@@ -236,14 +236,20 @@ end
 oUF.Tags.Events["pppower"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 oUF.Tags.Methods["npctitle"] = function(unit)
-	if UnitIsPlayer(unit) then return end
+	local isPlayer = UnitIsPlayer(unit)
+	if isPlayer and C.db["Nameplate"]["NameOnlyGuild"] then
+		local guildName = GetGuildInfo(unit)
+		if guildName then
+			return "<"..guildName..">"
+		end
+	elseif not isPlayer and C.db["Nameplate"]["NameOnlyTitle"] then
+		B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
+		B.ScanTip:SetUnit(unit)
 
-	B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
-	B.ScanTip:SetUnit(unit)
-
-	local title = _G[format("NDui_ScanTooltipTextLeft%d", GetCVarBool("colorblindmode") and 3 or 2)]:GetText()
-	if title and not strfind(title, "^"..LEVEL) then
-		return title
+		local title = _G[format("NDui_ScanTooltipTextLeft%d", GetCVarBool("colorblindmode") and 3 or 2)]:GetText()
+		if title and not strfind(title, "^"..LEVEL) then
+			return title
+		end
 	end
 end
 oUF.Tags.Events["npctitle"] = "UNIT_NAME_UPDATE"

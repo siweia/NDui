@@ -1450,6 +1450,22 @@ function G:SetupNameplateSize(parent)
 	createOptionGroup(scroll.child, L["FriendlyNameplate"], -650, "friend", UF.RefreshAllPlates)
 end
 
+function G:SetupNameOnlySize(parent)
+	local guiName = "NDuiGUI_NameOnlySetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["NameOnlyMode"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent, offset = scroll.child, -10
+
+	local UF = B:GetModule("UnitFrames")
+	createOptionCheck(parent, offset, L["ShowNPCTitle"], "Nameplate", "NameOnlyTitle", UF.RefreshAllPlates)
+	createOptionCheck(parent, offset-35, L["ShowUnitGuild"], "Nameplate", "NameOnlyGuild", UF.RefreshAllPlates)
+	createOptionSlider(parent, L["NameTextSize"], 10, 50, 14, offset-105, "NameOnlyTextSize", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["TitleTextSize"], 10, 50, 12, offset-175, "NameOnlyTitleSize", UF.RefreshAllPlates, "Nameplate")
+end
+
 function G:SetupActionBar(parent)
 	local guiName = "NDuiGUI_ActionBarSetup"
 	toggleExtraGUI(guiName)

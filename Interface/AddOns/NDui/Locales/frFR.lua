@@ -883,3 +883,6 @@ L["PlateHarmWidth"] = "Enemy clickable width" -- need translation
 L["PlateHarmHeight"] = "Enemy clickable height" -- need translation
 L["PlateHelpWidth"] = "Friendly clickable width" -- need translation
 L["PlateHelpHeight"] = "Friendly clickable height" -- need translation
+L["ShowNPCTitle"] = "NPC title info" -- need translation
+L["ShowUnitGuild"] = "Show guild info" -- need translation
+L["TitleTextSize"] = "Info text size" -- need translation
