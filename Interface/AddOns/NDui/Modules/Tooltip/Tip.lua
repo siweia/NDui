@@ -89,10 +89,11 @@ function TT:InsertFactionFrame(faction)
 		f:SetPoint("TOPRIGHT", 0, -5)
 		f:SetBlendMode("ADD")
 		f:SetScale(.3)
+		f:SetAlpha(.7)
 		self.factionFrame = f
 	end
 	self.factionFrame:SetTexture("Interface\\Timer\\"..faction.."-Logo")
-	self.factionFrame:SetAlpha(.5)
+	self.factionFrame:Show()
 end
 
 function TT:InsertRoleFrame(role)
