@@ -175,7 +175,7 @@ DB.ReminderBuffs = {
 			instance = true,
 			disable = true,
 		},
-		{	itemID = 185818, -- 究极秘术
+		{	itemID = 190958, -- 究极秘术
 			spells = {
 				[351952] = true,
 			},
