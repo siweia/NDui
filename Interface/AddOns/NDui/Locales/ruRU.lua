@@ -886,3 +886,7 @@ L["PlateHelpHeight"] = "Friendly clickable height" -- need translation
 L["ShowNPCTitle"] = "NPC title info" -- need translation
 L["ShowUnitGuild"] = "Show guild info" -- need translation
 L["TitleTextSize"] = "Info text size" -- need translation
+L["CVarOnlyNames"] = "CVar show only names" -- need translation
+L["CVarOnlyNamesTip"] = "|nIf checked, only show names on blizzard nameplates. Require UI reload." -- need translation
+L["CVarShowNPCs"] = "CVar always show npc" -- need translation
+L["CVarShowNPCsTip"] = "|nIf checked, always show npc nameplates. Or only shows when selected." -- need translation

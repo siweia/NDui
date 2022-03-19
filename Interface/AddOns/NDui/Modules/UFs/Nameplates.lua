@@ -23,7 +23,7 @@ local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyC
 local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
 
 -- Init
-function UF:PlateInsideView()
+function UF:UpdatePlateCVars()
 	if C.db["Nameplate"]["InsideView"] then
 		SetCVar("nameplateOtherTopInset", .05)
 		SetCVar("nameplateOtherBottomInset", .08)
@@ -31,20 +31,14 @@ function UF:PlateInsideView()
 		SetCVar("nameplateOtherTopInset", -1)
 		SetCVar("nameplateOtherBottomInset", -1)
 	end
-end
 
-function UF:UpdatePlateScale()
 	SetCVar("namePlateMinScale", C.db["Nameplate"]["MinScale"])
 	SetCVar("namePlateMaxScale", C.db["Nameplate"]["MinScale"])
-end
-
-function UF:UpdatePlateAlpha()
 	SetCVar("nameplateMinAlpha", C.db["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateMaxAlpha", C.db["Nameplate"]["MinAlpha"])
-end
-
-function UF:UpdatePlateSpacing()
 	SetCVar("nameplateOverlapV", C.db["Nameplate"]["VerticalSpacing"])
+	SetCVar("nameplateShowOnlyNames", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
+	SetCVar("nameplateShowFriendlyNPCs", C.db["Nameplate"]["CVarShowNPCs"] and 1 or 0)
 end
 
 function UF:UpdateClickableSize()
@@ -66,15 +60,12 @@ function UF:UpdatePlateClickThru()
 end
 
 function UF:SetupCVars()
-	UF:PlateInsideView()
+	UF:UpdatePlateCVars()
 	SetCVar("nameplateOverlapH", .8)
-	UF:UpdatePlateSpacing()
-	UF:UpdatePlateAlpha()
 	SetCVar("nameplateSelectedAlpha", 1)
 	SetCVar("showQuestTrackingTooltips", 1)
 	SetCVar("predictedHealth", 1)
 
-	UF:UpdatePlateScale()
 	SetCVar("nameplateSelectedScale", 1)
 	SetCVar("nameplateLargerScale", 1)
 	SetCVar("nameplateGlobalScale", 1)

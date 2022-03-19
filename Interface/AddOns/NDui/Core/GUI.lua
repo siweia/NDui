@@ -393,6 +393,8 @@ G.DefaultSettings = {
 		NameOnlyTitleSize = 12,
 		NameOnlyTitle = true,
 		NameOnlyGuild = false,
+		CVarOnlyNames = false,
+		CVarShowNPCs = false,
 	},
 	Skins = {
 		DBM = true,
@@ -793,12 +795,8 @@ local function updateToggleDirection()
 	B:GetModule("Skins"):RefreshToggleDirection()
 end
 
-local function updatePlateInsideView()
-	B:GetModule("UnitFrames"):PlateInsideView()
-end
-
-local function updatePlateSpacing()
-	B:GetModule("UnitFrames"):UpdatePlateSpacing()
+local function updatePlateCVars()
+	B:GetModule("UnitFrames"):UpdatePlateCVars()
 end
 
 local function updateClickableSize()
@@ -848,14 +846,6 @@ local function toggleFocusCalculation()
 	if A.ToggleFocusCalculation then
 		A:ToggleFocusCalculation()
 	end
-end
-
-local function updatePlateScale()
-	B:GetModule("UnitFrames"):UpdatePlateScale()
-end
-
-local function updatePlateAlpha()
-	B:GetModule("UnitFrames"):UpdatePlateAlpha()
 end
 
 local function updateUFTextScale()
@@ -1159,7 +1149,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "EnemyThru", L["Enemy ClickThru"].."*", true, nil, updateClickThru},
 		{1, "Nameplate", "CastbarGlow", L["PlateCastbarGlow"].."*", nil, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "CastTarget", L["PlateCastTarget"].."*", true, nil, nil, L["PlateCastTargetTip"]},
-		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, updatePlateInsideView},
+		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, UpdatePlateCVars},
 		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true, nil, nil, L["ExplosivesScaleTip"]},
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
 		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
@@ -1182,12 +1172,14 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
 		{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
 		{},--blank
-		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", false, {.5, 1, .1}, updatePlateScale},
-		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.3, 1, .1}, updatePlateAlpha},
-		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", nil, {.5, 1.5, .1}, updatePlateSpacing},
-		{3, "Nameplate", "HarmWidth", NewTag..L["PlateHarmWidth"].."*", false, {1, 500, 1}, updateClickableSize},
+		{1, "Nameplate", "CVarOnlyNames", NewTag..L["CVarOnlyNames"], nil, nil, updatePlateCVars, L["CVarOnlyNamesTip"]},
+		{1, "Nameplate", "CVarShowNPCs", NewTag..L["CVarShowNPCs"].."*", nil, nil, updatePlateCVars, L["CVarShowNPCsTip"]},
+		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", true, {.5, 1.5, .1}, updatePlateCVars},
+		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", nil, {.5, 1, .1}, updatePlateCVars},
+		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.3, 1, .1}, updatePlateCVars},
+		{3, "Nameplate", "HarmWidth", NewTag..L["PlateHarmWidth"].."*", nil, {1, 500, 1}, updateClickableSize},
 		{3, "Nameplate", "HarmHeight", NewTag..L["PlateHarmHeight"].."*", true, {1, 500, 1}, updateClickableSize},
-		{3, "Nameplate", "HelpWidth", NewTag..L["PlateHelpWidth"].."*", false, {1, 500, 1}, updateClickableSize},
+		{3, "Nameplate", "HelpWidth", NewTag..L["PlateHelpWidth"].."*", nil, {1, 500, 1}, updateClickableSize},
 		{3, "Nameplate", "HelpHeight", NewTag..L["PlateHelpHeight"].."*", true, {1, 500, 1}, updateClickableSize},
 	},
 	[6] = {
