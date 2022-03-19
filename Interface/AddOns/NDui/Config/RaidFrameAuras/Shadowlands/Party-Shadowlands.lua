@@ -46,6 +46,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 356408) -- 大地践踏
 module:RegisterDebuff(TIER, INSTANCE, 0, 347744) -- 迅斩
 module:RegisterDebuff(TIER, INSTANCE, 0, 350134) -- 永恒吐息
 module:RegisterDebuff(TIER, INSTANCE, 0, 355465) -- 投掷巨石
+module:RegisterDebuff(TIER, INSTANCE, 0, 354334, 6) -- 被钩住
 
 INSTANCE = 1187 -- 伤逝剧场
 RegisterSeasonSpells(INSTANCE)
