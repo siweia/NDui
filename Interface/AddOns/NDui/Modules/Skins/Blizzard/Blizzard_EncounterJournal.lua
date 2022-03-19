@@ -391,13 +391,9 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 		hooksecurefunc(itemSetsFrame, "ConfigureItemButton", function(_, button)
 			if not button.bg then
-				button.Border:SetAlpha(0)
 				button.bg = B.ReskinIcon(button.Icon)
+				B.ReskinIconBorder(button.Border, true, true)
 			end
-
-			local quality = select(3, GetItemInfo(button.itemID))
-			local color = DB.QualityColors[quality or 1]
-			button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end)
 	end
 end
