@@ -105,23 +105,26 @@ local function ReskinPowerBarWidget(self)
 	end
 end
 
+local function ReskinWidgetGroups(self)
+	for _, widgetFrame in pairs(self.widgetFrames) do
+		if not widgetFrame:IsForbidden() then
+			local widgetType = widgetFrame.widgetType
+			if widgetType == Type_DoubleStatusBar then
+				ReskinDoubleStatusBarWidget(widgetFrame)
+			elseif widgetType == Type_SpellDisplay then
+				ReskinSpellDisplayWidget(widgetFrame.Spell)
+			elseif widgetType == Type_StatusBar then
+				ReskinWidgetStatusBar(widgetFrame.Bar)
+			end
+		end
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-	hooksecurefunc(_G.UIWidgetTopCenterContainerFrame, "UpdateWidgetLayout", function(self)
-		for _, widgetFrame in pairs(self.widgetFrames) do
-			if not widgetFrame:IsForbidden() then
-				local widgetType = widgetFrame.widgetType
-				if widgetType == Type_DoubleStatusBar then
-					ReskinDoubleStatusBarWidget(widgetFrame)
-				elseif widgetType == Type_SpellDisplay then
-					ReskinSpellDisplayWidget(widgetFrame.Spell)
-				elseif widgetType == Type_StatusBar then
-					ReskinWidgetStatusBar(widgetFrame.Bar)
-				end
-			end
-		end
-	end)
+	hooksecurefunc(_G.UIWidgetTopCenterContainerFrame, "UpdateWidgetLayout", ReskinWidgetGroups)
+	ReskinWidgetGroups(_G.UIWidgetTopCenterContainerFrame)
 
 	hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, "UpdateWidgetLayout", function(self)
 		for _, widgetFrame in pairs(self.widgetFrames) do
