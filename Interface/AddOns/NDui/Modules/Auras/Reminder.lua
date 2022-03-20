@@ -7,6 +7,7 @@ local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, Ge
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
+local GetNumGroupMembers, GetItemCount = GetNumGroupMembers, GetItemCount
 
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = 36
@@ -21,13 +22,15 @@ function A:Reminder_Update(cfg)
 	local pvp = cfg.pvp
 	local itemID = cfg.itemID
 	local equip = cfg.equip
-	local isPlayerSpell, isRightSpec, isEquipped, isInCombat, isInInst, isInPVP = true, true, true
+	local inGroup = cfg.inGroup
+	local isPlayerSpell, isRightSpec, isEquipped, isGrouped, isInCombat, isInInst, isInPVP = true, true, true, true
 	local inInst, instType = IsInInstance()
 	local weaponIndex = cfg.weaponIndex
 
 	if itemID then
+		if inGroup and GetNumGroupMembers() < 2 then isGrouped = false end
 		if equip and not IsEquippedItem(itemID) then isEquipped = false end
-		if GetItemCount(itemID) == 0 or (not isEquipped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+		if GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
 			frame:Hide()
 			return
 		end

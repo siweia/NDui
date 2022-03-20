@@ -182,6 +182,7 @@ DB.ReminderBuffs = {
 			equip = true,
 			instance = true,
 			combat = true,
+			inGroup = true,
 		},
 	},
 	MAGE = {
