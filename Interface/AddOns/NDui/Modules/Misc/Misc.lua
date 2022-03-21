@@ -114,6 +114,27 @@ function M:OnLogin()
 		if owner:GetID() < 1 then return end
 		_AddonTooltip_Update(owner)
 	end
+
+	local f = CreateFrame("Frame", nil, UIParent)
+	f:SetSize(50, 50)
+	f:SetPoint("CENTER")
+	local tex = f:CreateTexture()
+	tex:SetSize(50, 50)
+	tex:SetPoint("CENTER")
+	tex:SetTexture(DB.arrowTex.."2")
+	tex:SetTexCoord(0, 1, .5, 1)
+
+	local times = 0
+	f:SetScript("OnUpdate", function(self, elapsed)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed > .05 then
+			local offset = times*.05
+			tex:SetTexCoord(0, 1, .5-offset, 1-offset)
+			times = times + 1
+			if times == 10 then times = 0 end
+			self.elapsed = 0
+		end
+	end)
 end
 
 -- Hide boss banner
