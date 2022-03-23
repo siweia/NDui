@@ -149,9 +149,9 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 
 	local filterButton = searchBar.FilterButton
 	B.ReskinFilterButton(filterButton)
+	B.ReskinFilterReset(filterButton.ClearFiltersButton)
 	B.ReskinInput(filterButton.LevelRangeFrame.MinLevel)
 	B.ReskinInput(filterButton.LevelRangeFrame.MaxLevel)
-	B.ReskinClose(filterButton.ClearFiltersButton, nil, 0, 17)
 
 	B.StripTextures(AuctionHouseFrame.CategoriesList)
 	B.ReskinScroll(AuctionHouseFrame.CategoriesList.ScrollFrame.ScrollBar)
