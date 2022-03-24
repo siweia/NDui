@@ -75,12 +75,14 @@ function A:ToggleFocusCalculation()
 		B:RegisterEvent("UNIT_SPELLCAST_START", A.StartAimedShot)
 		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 		B:RegisterEvent("PLAYER_DEAD", A.ResetFocusCost)
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", A.ResetFocusCost)
 		B:RegisterEvent("CLEU", A.CheckTrickState)
 	else
 		A.MMFocus:Hide()
 		B:UnregisterEvent("UNIT_SPELLCAST_START", A.StartAimedShot)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 		B:UnregisterEvent("PLAYER_DEAD", A.ResetFocusCost)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.ResetFocusCost)
 		B:UnregisterEvent("CLEU", A.CheckTrickState)
 	end
 	oldSpec = spec
