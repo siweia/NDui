@@ -9,6 +9,10 @@ local POWER_TYPE_FOCUS = 2
 local playerGUID = UnitGUID("player")
 
 local function GetSpellCost(spellID)
+	if spellID == 19434 then -- aimed shot always 35
+		return 35
+	end
+
 	local costTable = GetSpellPowerCost(spellID)
 	if costTable then
 		for _, costInfo in pairs(costTable) do
