@@ -890,3 +890,6 @@ L["CVarOnlyNames"] = "CVar show only names" -- need translation
 L["CVarOnlyNamesTip"] = "|nIf checked, only show names on blizzard nameplates.|nRequire UI reload." -- need translation
 L["CVarShowNPCs"] = "CVar always show npc" -- need translation
 L["CVarShowNPCsTip"] = "|nIf checked, always show npc nameplates. Or only shows when selected." -- need translation
+L["Dispellable"] = "Show dispellable auras" -- need translation
+L["DispellableTip"] = "|nShow and highlight YOUR dispellable auras." -- need translation
+L["ShowInterruptor"] = "Show castbar interruptor" -- need translation
