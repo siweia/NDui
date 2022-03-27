@@ -20,6 +20,7 @@ end
 local function replaceMessage(msg, r, g, b)
 	local hexRGB = B.HexRGB(r, g, b)
 	msg = gsub(msg, "(|TInterface(.*)|t)", "")
+	msg = gsub(msg, "(|T%d+(.*)|t)", "")
 	return format("%s%s|r", hexRGB, msg)
 end
 
