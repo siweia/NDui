@@ -206,7 +206,6 @@ G.DefaultSettings = {
 		SmartRaid = false,
 		Desaturate = true,
 		DebuffColor = false,
-		Dispellable = true,
 		CCName = true,
 		RCCName = true,
 		HideTip = false,
@@ -370,6 +369,7 @@ G.DefaultSettings = {
 		EnemyThru = false,
 		FriendlyThru = false,
 		BlockDBM = true,
+		Dispellable = true,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
