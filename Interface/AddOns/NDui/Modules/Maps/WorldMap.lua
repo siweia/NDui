@@ -122,7 +122,10 @@ function module:WorldMapScale()
 end
 
 local shownMapCache, exploredCache, fileDataIDs = {}, {}, {}
-local coordFormat = "X%dY%d"
+
+local function GetStringFromInfo(info)
+	return format("X%dY%d", info.offsetX, info.offsetY)
+end
 
 local function GetOffsetFromString(str)
 	local x, y = strmatch(str, "X(%d*)Y(%d*)")
@@ -135,6 +138,12 @@ local function RefreshFileIDsByString(str)
 	for fileID in gmatch(str, "%d+") do
 		tinsert(fileDataIDs, fileID)
 	end
+end
+
+local function GetTextureInfoFromString(str)
+	local w, h, fileString = strmatch(str, "W(%d*)H(%d*)T(.+)")
+	RefreshFileIDsByString(fileString)
+	return tonumber(w), tonumber(h)
 end
 
 function module:MapData_RefreshOverlays(fullUpdate)
@@ -151,7 +160,7 @@ function module:MapData_RefreshOverlays(fullUpdate)
 	local exploredMapTextures = C_MapExplorationInfo_GetExploredMapTextures(mapID)
 	if exploredMapTextures then
 		for _, exploredTextureInfo in pairs(exploredMapTextures) do
-			exploredCache[format(coordFormat, exploredTextureInfo.offsetX, exploredTextureInfo.offsetY)] = true
+			exploredCache[GetStringFromInfo(exploredTextureInfo)] = true
 		end
 	end
 
@@ -163,14 +172,13 @@ function module:MapData_RefreshOverlays(fullUpdate)
 	local TILE_SIZE_HEIGHT = layerInfo.tileHeight
 
 	-- Blizzard_SharedMapDataProviders\MapExplorationDataProvider: MapExplorationPinMixin:RefreshOverlays
-	for i, exploredTextureInfo in pairs(mapData) do
+	for i, exploredInfoString in pairs(mapData) do
 		if not exploredCache[i] then
-			local width, height = exploredTextureInfo.width, exploredTextureInfo.height
 			local offsetX, offsetY = GetOffsetFromString(i)
+			local width, height = GetTextureInfoFromString(exploredInfoString)
 			local numTexturesWide = ceil(width/TILE_SIZE_WIDTH)
 			local numTexturesTall = ceil(height/TILE_SIZE_HEIGHT)
 			local texturePixelWidth, textureFileWidth, texturePixelHeight, textureFileHeight
-			RefreshFileIDsByString(exploredTextureInfo.fileIDs)
 
 			for j = 1, numTexturesTall do
 				if j < numTexturesTall then
