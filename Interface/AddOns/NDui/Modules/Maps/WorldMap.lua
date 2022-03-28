@@ -118,8 +118,6 @@ end
 
 function module:SetupWorldMap()
 	if C.db["Map"]["DisableMap"] then return end
-	if IsAddOnLoaded("Mapster") then return end
-	if IsAddOnLoaded("Leatrix_Maps") then return end
 
 	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()
@@ -136,7 +134,6 @@ function module:SetupWorldMap()
 
 	self:WorldMapScale()
 	self:SetupCoords()
-	self:MapReveal()
 end
 
 function module:OnLogin()
