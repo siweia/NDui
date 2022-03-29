@@ -164,6 +164,9 @@ function module:MapData_RefreshOverlays(fullUpdate)
 		end
 	end
 
+	if not self.layerIndex then
+		self.layerIndex = WorldMapFrame.ScrollContainer:GetCurrentLayerIndex()
+	end
 	local layers = C_Map_GetMapArtLayers(mapID)
 	local layerInfo = layers and layers[self.layerIndex]
 	if not layerInfo then return end
