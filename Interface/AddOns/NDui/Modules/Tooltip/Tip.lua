@@ -147,15 +147,6 @@ function TT:OnTooltipSetUnit()
 	if not unit or not UnitExists(unit) then return end
 
 	local isShiftKeyDown = IsShiftKeyDown()
-	local r, g, b = B.UnitColor(unit)
-	local hexColor = B.HexRGB(r, g, b)
-	local ricon = GetRaidTargetIndex(unit)
-	local text = GameTooltipTextLeft1:GetText()
-	if ricon and ricon > 8 then ricon = nil end
-	if ricon and text then
-		GameTooltipTextLeft1:SetFormattedText(("%s %s"), ICON_LIST[ricon].."18|t", text)
-	end
-
 	local isPlayer = UnitIsPlayer(unit)
 	if isPlayer then
 		local name, realm = UnitName(unit)
@@ -216,8 +207,15 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	local line1 = GameTooltipTextLeft1:GetText()
-	GameTooltipTextLeft1:SetFormattedText("%s", hexColor..line1)
+	local r, g, b = B.UnitColor(unit)
+	local hexColor = B.HexRGB(r, g, b)
+	local text = GameTooltipTextLeft1:GetText()
+	if text then
+		local ricon = GetRaidTargetIndex(unit)
+		if ricon and ricon > 8 then ricon = nil end
+		ricon = ricon and ICON_LIST[ricon].."18|t " or ""
+		GameTooltipTextLeft1:SetFormattedText(("%s%s%s"), ricon, hexColor, text)
+	end
 
 	local alive = not UnitIsDeadOrGhost(unit)
 	local level
