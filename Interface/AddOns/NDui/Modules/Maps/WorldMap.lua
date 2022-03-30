@@ -124,11 +124,11 @@ end
 local shownMapCache, exploredCache, fileDataIDs = {}, {}, {}
 
 local function GetStringFromInfo(info)
-	return format("%d:%d:%d:%d", info.textureWidth, info.textureHeight, info.offsetX, info.offsetY)
+	return format("W%dH%dX%dY%d", info.textureWidth, info.textureHeight, info.offsetX, info.offsetY)
 end
 
 local function GetShapesFromString(str)
-	local w, h, x, y = strmatch(str, "(%d*):(%d*):(%d*):(%d*)")
+	local w, h, x, y = strmatch(str, "W(%d*)H(%d*)X(%d*)Y(%d*)")
 	return tonumber(w), tonumber(h), tonumber(x), tonumber(y)
 end
 
