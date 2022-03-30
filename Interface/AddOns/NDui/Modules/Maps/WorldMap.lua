@@ -124,12 +124,12 @@ end
 local shownMapCache, exploredCache, fileDataIDs = {}, {}, {}
 
 local function GetStringFromInfo(info)
-	return format("X%dY%d", info.offsetX, info.offsetY)
+	return format("%d:%d:%d:%d", info.textureWidth, info.textureHeight, info.offsetX, info.offsetY)
 end
 
-local function GetOffsetFromString(str)
-	local x, y = strmatch(str, "X(%d*)Y(%d*)")
-	return tonumber(x), tonumber(y)
+local function GetShapesFromString(str)
+	local w, h, x, y = strmatch(str, "(%d*):(%d*):(%d*):(%d*)")
+	return tonumber(w), tonumber(h), tonumber(x), tonumber(y)
 end
 
 local function RefreshFileIDsByString(str)
@@ -138,12 +138,6 @@ local function RefreshFileIDsByString(str)
 	for fileID in gmatch(str, "%d+") do
 		tinsert(fileDataIDs, fileID)
 	end
-end
-
-local function GetTextureInfoFromString(str)
-	local w, h, fileString = strmatch(str, "W(%d*)H(%d*)T(.+)")
-	RefreshFileIDsByString(fileString)
-	return tonumber(w), tonumber(h)
 end
 
 function module:MapData_RefreshOverlays(fullUpdate)
@@ -177,8 +171,8 @@ function module:MapData_RefreshOverlays(fullUpdate)
 	-- Blizzard_SharedMapDataProviders\MapExplorationDataProvider: MapExplorationPinMixin:RefreshOverlays
 	for i, exploredInfoString in pairs(mapData) do
 		if not exploredCache[i] then
-			local offsetX, offsetY = GetOffsetFromString(i)
-			local width, height = GetTextureInfoFromString(exploredInfoString)
+			local width, height, offsetX, offsetY = GetShapesFromString(i)
+			RefreshFileIDsByString(exploredInfoString)
 			local numTexturesWide = ceil(width/TILE_SIZE_WIDTH)
 			local numTexturesTall = ceil(height/TILE_SIZE_HEIGHT)
 			local texturePixelWidth, textureFileWidth, texturePixelHeight, textureFileHeight
