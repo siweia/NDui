@@ -681,6 +681,31 @@ function UF:SpellInterruptor(self)
 	self:RegisterCombatEvent("SPELL_INTERRUPT", UF.UpdateSpellInterruptor)
 end
 
+function UF:UpdateUnitTargeted()
+	local unit = self.unit
+	if not unit then return end
+	self.tarCounts = 0
+	local numGroups = GetNumGroupMembers()
+	if numGroups <= 5 then
+		for i = 1, numGroups do
+			local member = (IsInRaid() and "raid"..i or "party"..i)
+			if UnitIsUnit(unit, member.."target") and not UnitIsUnit("player", member) and not UnitIsDeadOrGhost(member) then
+				self.tarCounts = self.tarCounts + 1
+				self.tarUnit = member
+			end
+		end
+	end
+	self.tarBy:SetText(self.tarCounts > 0 and self.tarCounts or "")
+end
+
+function UF:ShowUnitTargeted(self)
+	self.tarBy = B.CreateFS(self, 20)
+	self.tarBy:SetPoint("LEFT", self.Health, "RIGHT", 8, 0)
+	self.tarBy:SetTextColor(1, .8, 0)
+	self:RegisterEvent("UNIT_HEALTH", UF.UpdateUnitTargeted)
+	self:RegisterEvent("UNIT_TARGET", UF.UpdateUnitTargeted)
+end
+
 -- Create Nameplates
 local platesList = {}
 function UF:CreatePlates()
@@ -732,6 +757,7 @@ function UF:CreatePlates()
 	UF:AddQuestIcon(self)
 	UF:AddDungeonProgress(self)
 	UF:SpellInterruptor(self)
+	UF:ShowUnitTargeted(self)
 
 	self:RegisterEvent("PLAYER_FOCUS_CHANGED", UF.UpdateFocusColor, true)
 
@@ -965,6 +991,7 @@ function UF:PostUpdatePlates(event, unit)
 
 		self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
 	end
+	UF.UpdateUnitTargeted(self)
 	UF.UpdateExplosives(self, event, unit)
 end
 
