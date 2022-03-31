@@ -683,7 +683,7 @@ end
 
 function UF:ShowUnitTargeted(self)
 	self.tarBy = B.CreateFS(self, 20)
-	self.tarBy:SetPoint("LEFT", self.Health, "RIGHT", 8, 0)
+	self.tarBy:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
 	self.tarBy:SetTextColor(1, .8, 0)
 end
 
