@@ -681,29 +681,10 @@ function UF:SpellInterruptor(self)
 	self:RegisterCombatEvent("SPELL_INTERRUPT", UF.UpdateSpellInterruptor)
 end
 
-function UF:UpdateUnitTargeted()
-	local unit = self.unit
-	if not unit then return end
-	self.tarCounts = 0
-	local numGroups = GetNumGroupMembers()
-	if numGroups <= 5 then
-		for i = 1, numGroups do
-			local member = (IsInRaid() and "raid"..i or "party"..i)
-			if UnitIsUnit(unit, member.."target") and not UnitIsUnit("player", member) and not UnitIsDeadOrGhost(member) then
-				self.tarCounts = self.tarCounts + 1
-				self.tarUnit = member
-			end
-		end
-	end
-	self.tarBy:SetText(self.tarCounts > 0 and self.tarCounts or "")
-end
-
 function UF:ShowUnitTargeted(self)
 	self.tarBy = B.CreateFS(self, 20)
 	self.tarBy:SetPoint("LEFT", self.Health, "RIGHT", 8, 0)
 	self.tarBy:SetTextColor(1, .8, 0)
-	self:RegisterEvent("UNIT_HEALTH", UF.UpdateUnitTargeted)
-	self:RegisterEvent("UNIT_TARGET", UF.UpdateUnitTargeted)
 end
 
 -- Create Nameplates
@@ -955,8 +936,43 @@ function UF:OnUnitFactionChanged(unit)
 	end
 end
 
-function UF:RefreshPlateOnFactionChanged()
+local targetedList = {}
+
+local function GetGroupUnit(index, maxGroups, isInRaid)
+	if isInRaid then
+		return "raid"..index
+	elseif index == maxGroups then
+		return "player"
+	else
+		return "party"..index
+	end
+end
+
+function UF:OnUnitTargetChanged()
+	wipe(targetedList)
+
+	local isInRaid = IsInRaid()
+	local maxGroups = GetNumGroupMembers()
+	for i = 1, maxGroups do
+		local member = GetGroupUnit(i, maxGroups, isInRaid)
+		local memberTarget = member.."target"
+		if not UnitIsDeadOrGhost(member) and UnitExists(memberTarget) then
+			local unitGUID = UnitGUID(memberTarget)
+			targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
+		end
+	end
+
+	for nameplate in pairs(platesList) do
+		nameplate.tarBy:SetText(targetedList[nameplate.unitGUID] or "")
+	end
+end
+
+function UF:RefreshPlateByEvents()
 	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
+
+	UF:OnUnitTargetChanged()
+	B:RegisterEvent("UNIT_TARGET", UF.OnUnitTargetChanged)
+	B:RegisterEvent("PLAYER_TARGET_CHANGED", UF.OnUnitTargetChanged, true)
 end
 
 function UF:PostUpdatePlates(event, unit)
@@ -991,7 +1007,6 @@ function UF:PostUpdatePlates(event, unit)
 
 		self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
 	end
-	UF.UpdateUnitTargeted(self)
 	UF.UpdateExplosives(self, event, unit)
 end
 

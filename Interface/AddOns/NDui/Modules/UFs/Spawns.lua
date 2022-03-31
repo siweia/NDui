@@ -317,7 +317,7 @@ function UF:OnLogin()
 		UF:CheckExplosives()
 		UF:UpdateGroupRoles()
 		UF:QuestIconCheck()
-		UF:RefreshPlateOnFactionChanged()
+		UF:RefreshPlateByEvents()
 		UF:RefreshMajorSpells()
 
 		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
