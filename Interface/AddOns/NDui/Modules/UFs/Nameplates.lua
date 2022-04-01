@@ -970,9 +970,17 @@ end
 function UF:RefreshPlateByEvents()
 	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
 
-	UF:OnUnitTargetChanged()
-	B:RegisterEvent("UNIT_TARGET", UF.OnUnitTargetChanged)
-	B:RegisterEvent("PLAYER_TARGET_CHANGED", UF.OnUnitTargetChanged, true)
+	if C.db["Nameplate"]["UnitTargeted"] then
+		UF:OnUnitTargetChanged()
+		B:RegisterEvent("UNIT_TARGET", UF.OnUnitTargetChanged)
+		B:RegisterEvent("PLAYER_TARGET_CHANGED", UF.OnUnitTargetChanged)
+	else
+		for nameplate in pairs(platesList) do
+			nameplate.tarBy:SetText("")
+		end
+		B:UnregisterEvent("UNIT_TARGET", UF.OnUnitTargetChanged)
+		B:UnregisterEvent("PLAYER_TARGET_CHANGED", UF.OnUnitTargetChanged)
+	end
 end
 
 function UF:PostUpdatePlates(event, unit)
