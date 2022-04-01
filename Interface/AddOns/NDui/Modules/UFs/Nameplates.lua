@@ -382,7 +382,6 @@ function UF:AddTargetIndicator(self)
 	frame.Arrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
 	frame.Arrow:SetSize(50, 50)
 	frame.Arrow:SetTexture(DB.arrowTex)
-	frame.Arrow:SetPoint("BOTTOM", frame, "TOP", 0, 20)
 
 	local animGroup = frame.Arrow:CreateAnimationGroup()
 	animGroup:SetLooping("REPEAT")
@@ -392,7 +391,6 @@ function UF:AddTargetIndicator(self)
 	for i = 1, 5 do
 		anim.points[i] = anim:CreateControlPoint()
 		anim.points[i]:SetOrder(i)
-		anim.points[i]:SetOffset(0, points[i])
 	end
 	frame.ArrowAnim = anim
 	frame.ArrowAnimGroup = animGroup
