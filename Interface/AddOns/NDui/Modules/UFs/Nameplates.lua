@@ -285,13 +285,13 @@ function UF:UpdateTargetChange()
 	if C.db["Nameplate"]["TargetIndicator"] ~= 1 then
 		if UnitIsUnit(unit, "target") and not UnitIsUnit(unit, "player") then
 			element:Show()
-			if element.TopArrow:IsShown() and not element.TopArrowAnim:IsPlaying() then
-				element.TopArrowAnim:Play()
+			if element.Arrow:IsShown() and not element.ArrowAnimGroup:IsPlaying() then
+				element.ArrowAnimGroup:Play()
 			end
 		else
 			element:Hide()
-			if element.TopArrowAnim:IsPlaying() then
-				element.TopArrowAnim:Stop()
+			if element.ArrowAnimGroup:IsPlaying() then
+				element.ArrowAnimGroup:Stop()
 			end
 		end
 	end
@@ -299,6 +299,8 @@ function UF:UpdateTargetChange()
 		UF.UpdateThreatColor(self, _, unit)
 	end
 end
+
+local points = {-15, -5, 0, 5, 0}
 
 function UF:UpdateTargetIndicator()
 	local style = C.db["Nameplate"]["TargetIndicator"]
@@ -308,18 +310,27 @@ function UF:UpdateTargetIndicator()
 		element:Hide()
 	else
 		if style == 2 then
-			element.TopArrow:Show()
-			element.RightArrow:Hide()
+			element.Arrow:ClearAllPoints()
+			element.Arrow:SetPoint("BOTTOM", element, "TOP", 0, 20)
+			element.Arrow:SetRotation(0)
+			element.Arrow:Show()
+			for i = 1, 5 do
+				element.ArrowAnim.points[i]:SetOffset(0, points[i])
+			end
 			element.Glow:Hide()
 			element.nameGlow:Hide()
 		elseif style == 3 then
-			element.TopArrow:Hide()
-			element.RightArrow:Show()
+			element.Arrow:ClearAllPoints()
+			element.Arrow:SetPoint("LEFT", element, "RIGHT", 3, 0)
+			element.Arrow:SetRotation(rad(-90))
+			element.Arrow:Show()
+			for i = 1, 5 do
+				element.ArrowAnim.points[i]:SetOffset(points[i], 0)
+			end
 			element.Glow:Hide()
 			element.nameGlow:Hide()
 		elseif style == 4 then
-			element.TopArrow:Hide()
-			element.RightArrow:Hide()
+			element.Arrow:Hide()
 			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
@@ -328,8 +339,13 @@ function UF:UpdateTargetIndicator()
 				element.nameGlow:Hide()
 			end
 		elseif style == 5 then
-			element.TopArrow:Show()
-			element.RightArrow:Hide()
+			element.Arrow:ClearAllPoints()
+			element.Arrow:SetPoint("BOTTOM", element, "TOP", 0, 20)
+			element.Arrow:SetRotation(0)
+			element.Arrow:Show()
+			for i = 1, 5 do
+				element.ArrowAnim.points[i]:SetOffset(0, points[i])
+			end
 			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
@@ -338,8 +354,13 @@ function UF:UpdateTargetIndicator()
 				element.nameGlow:Hide()
 			end
 		elseif style == 6 then
-			element.TopArrow:Hide()
-			element.RightArrow:Show()
+			element.Arrow:ClearAllPoints()
+			element.Arrow:SetPoint("LEFT", element, "RIGHT", 3, 0)
+			element.Arrow:SetRotation(rad(-90))
+			element.Arrow:Show()
+			for i = 1, 5 do
+				element.ArrowAnim.points[i]:SetOffset(points[i], 0)
+			end
 			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
@@ -352,35 +373,29 @@ function UF:UpdateTargetIndicator()
 	end
 end
 
-local points = {-15, -5, 0, 5, 0}
-
 function UF:AddTargetIndicator(self)
 	local frame = CreateFrame("Frame", nil, self)
 	frame:SetAllPoints()
 	frame:SetFrameLevel(0)
 	frame:Hide()
 
-	frame.TopArrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
-	frame.TopArrow:SetSize(50, 50)
-	frame.TopArrow:SetTexture(DB.arrowTex)
-	frame.TopArrow:SetPoint("BOTTOM", frame, "TOP", 0, 20)
+	frame.Arrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
+	frame.Arrow:SetSize(50, 50)
+	frame.Arrow:SetTexture(DB.arrowTex)
+	frame.Arrow:SetPoint("BOTTOM", frame, "TOP", 0, 20)
 
-	local animGroup = frame.TopArrow:CreateAnimationGroup()
+	local animGroup = frame.Arrow:CreateAnimationGroup()
 	animGroup:SetLooping("REPEAT")
 	local anim = animGroup:CreateAnimation("Path")
 	anim:SetDuration(1)
-	for i = 1, #points do
-		local point = anim:CreateControlPoint()
-		point:SetOrder(i)
-		point:SetOffset(0, points[i])
+	anim.points = {}
+	for i = 1, 5 do
+		anim.points[i] = anim:CreateControlPoint()
+		anim.points[i]:SetOrder(i)
+		anim.points[i]:SetOffset(0, points[i])
 	end
-	frame.TopArrowAnim = animGroup
-
-	frame.RightArrow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
-	frame.RightArrow:SetSize(50, 50)
-	frame.RightArrow:SetTexture(DB.arrowTex)
-	frame.RightArrow:SetPoint("LEFT", frame, "RIGHT", 3, 0)
-	frame.RightArrow:SetRotation(rad(-90))
+	frame.ArrowAnim = anim
+	frame.ArrowAnimGroup = animGroup
 
 	frame.Glow = B.CreateSD(frame, 8, true)
 	frame.Glow:SetOutside(self.Health.backdrop, 8, 8)
