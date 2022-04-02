@@ -48,15 +48,15 @@ do
 	local day, hour, minute = 86400, 3600, 60
 	function B.FormatTime(s)
 		if s >= day then
-			return format("%d"..DB.MyColor.."d", s/day), s%day
+			return format("%d"..DB.MyColor.."d", s/day + .5), s%day
 		elseif s >= hour then
-			return format("%d"..DB.MyColor.."h", s/hour), s%hour
+			return format("%d"..DB.MyColor.."h", s/hour + .5), s%hour
 		elseif s >= minute then
-			return format("%d"..DB.MyColor.."m", s/minute), s%minute
+			return format("%d"..DB.MyColor.."m", s/minute + .5), s%minute
 		elseif s > 10 then
-			return format("|cffcccc33%d|r", s), s - floor(s)
+			return format("|cffcccc33%d|r", s + .5), s - floor(s)
 		elseif s > 3 then
-			return format("|cffffff00%d|r", s), s - floor(s)
+			return format("|cffffff00%d|r", s + .5), s - floor(s)
 		else
 			if C.db["Actionbar"]["DecimalCD"] then
 				return format("|cffff0000%.1f|r", s), s - format("%.1f", s)
@@ -68,15 +68,13 @@ do
 
 	function B.FormatTimeRaw(s)
 		if s >= day then
-			return format("%dd", s/day)
+			return format("%dd", s/day + .5)
 		elseif s >= hour then
-			return format("%dh", s/hour)
+			return format("%dh", s/hour + .5)
 		elseif s >= minute then
-			return format("%dm", s/minute)
-		elseif s >= 3 then
-			return floor(s)
+			return format("%dm", s/minute + .5)
 		else
-			return format("%d", s)
+			return format("%d", s + .5)
 		end
 	end
 
