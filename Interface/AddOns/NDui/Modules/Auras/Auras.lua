@@ -58,15 +58,15 @@ end
 local day, hour, minute = 86400, 3600, 60
 function A:FormatAuraTime(s)
 	if s >= day then
-		return format("%d"..DB.MyColor.."d", s/day), s%day
+		return format("%d"..DB.MyColor.."d", s/day + .5), s%day
 	elseif s >= 2*hour then
-		return format("%d"..DB.MyColor.."h", s/hour), s%hour
+		return format("%d"..DB.MyColor.."h", s/hour + .5), s%hour
 	elseif s >= 10*minute then
-		return format("%d"..DB.MyColor.."m", s/minute), s%minute
+		return format("%d"..DB.MyColor.."m", s/minute + .5), s%minute
 	elseif s >= minute then
 		return format("%d:%.2d", s/minute, s%minute), s - floor(s)
 	elseif s > 10 then
-		return format("%d"..DB.MyColor.."s", s), s - floor(s)
+		return format("%d"..DB.MyColor.."s", s + .5), s - floor(s)
 	elseif s > 5 then
 		return format("|cffffff00%.1f|r", s), s - format("%.1f", s)
 	else
