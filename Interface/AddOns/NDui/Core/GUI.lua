@@ -25,7 +25,6 @@ G.DefaultSettings = {
 		Count = true,
 		Classcolor = false,
 		Cooldown = true,
-		DecimalCD = true,
 		MmssTH = 60,
 		TenthTH = 3,
 		Bar4Fader = false,
@@ -1047,7 +1046,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
 		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
-		{1, "Actionbar", "DecimalCD", L["Decimal Cooldown"].."*"},
 		{3, "Actionbar", "MmssTH", L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
 		{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
 		{},--blank
