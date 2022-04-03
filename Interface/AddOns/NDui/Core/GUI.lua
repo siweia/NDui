@@ -1012,10 +1012,10 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["ShowHealthCurrent"], L["ShowHealthPercent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}
 
 G.TabList = {
-	L["Actionbar"],
+	NewTag..L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
-	NewTag..L["RaidFrame"],
+	L["RaidFrame"],
 	NewTag..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
@@ -1046,8 +1046,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
 		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
-		{3, "Actionbar", "MmssTH", L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
-		{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
+		{3, "Actionbar", "MmssTH", NewTag..L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
+		{3, "Actionbar", "TenthTH", NewTag..L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
 		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
@@ -1101,7 +1101,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
 		{},--blank
-		{1, "UFs", "PartyFrame", NewTag..HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
+		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},
 		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"].."*", nil, nil, updatePartyElements},
