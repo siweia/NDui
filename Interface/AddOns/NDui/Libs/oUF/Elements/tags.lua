@@ -645,10 +645,10 @@ local tagPool = {}
 local funcPool = {}
 local tmp = {}
 
-local function getBracketData(tag)
-	-- full tag syntax: '[prefix$>tag-name<$suffix(a,r,g,s)]'
-	local suffixEnd = (tag:match('()%(') or -1) - 1
 
+-- full tag syntax: '[prefix$>tag-name<$suffix(a,r,g,s)]'
+-- for a small test case see https://github.com/oUF-wow/oUF/pull/602
+local function getBracketData(tag)
 	local prefixEnd, prefixOffset = tag:match('()$>'), 1
 	if(not prefixEnd) then
 		prefixEnd = 1
@@ -657,6 +657,7 @@ local function getBracketData(tag)
 		prefixOffset = 3
 	end
 
+	local suffixEnd = (tag:match('()%(', prefixOffset + 1) or -1) - 1
 	local suffixStart, suffixOffset = tag:match('<$()', prefixEnd), 1
 	if(not suffixStart) then
 		suffixStart = suffixEnd + 1
@@ -664,7 +665,11 @@ local function getBracketData(tag)
 		suffixOffset = 3
 	end
 
-	return tag:sub(prefixEnd + prefixOffset, suffixStart - suffixOffset), prefixEnd, suffixStart, suffixEnd, tag:match('%((.-)%)')
+	return tag:sub(prefixEnd + prefixOffset, suffixStart - suffixOffset),
+		prefixEnd,
+		suffixStart,
+		suffixEnd,
+		tag:match('%((.-)%)', suffixOffset + 1)
 end
 
 local function getTagFunc(tagstr)
