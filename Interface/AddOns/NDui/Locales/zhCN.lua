@@ -893,3 +893,7 @@ L["CVarShowNPCsTip"] = "|n勾选后，将总是显示NPC姓名板。否则只在
 L["Dispellable"] = "显示可驱散法术"
 L["DispellableTip"] = "|n显示并高亮你当前可驱散的法术。"
 L["ShowInterruptor"] = "施法条显示打断者"
+L["MmssThreshold"] = "显示分秒的阈值"
+L["MmssThresholdTip"] = "|n当冷却时间小于所设阈值时，精确显示分秒。|n例如2分半显示为2:30。"
+L["TenthThreshold"] = "显示小数点阈值"
+L["TenthThresholdTip"] = "|n当冷却时间小于所设阈值时，精确显示到小数十分位。|n例如3秒显示为3.0。"

@@ -893,3 +893,7 @@ L["CVarShowNPCsTip"] = "|nIf checked, always show npc nameplates. Or only shows 
 L["Dispellable"] = "Show dispellable auras"
 L["DispellableTip"] = "|nShow and highlight YOUR dispellable auras."
 L["ShowInterruptor"] = "Show castbar interruptor"
+L["MmssThreshold"] = "MMSS Threshold"
+L["MmssThresholdTip"] = "|nIf cooldown less than current threhold, show cooldown in format MM:SS.|nEg. 2 mins and half presents as 2:30."
+L["TenthThreshold"] = "Tenth Threshold"
+L["TenthThresholdTip"] = "|nIf cooldown less than current threhold, show cooldown in format decimal.|nEg. 3 secs will show as 3.0."

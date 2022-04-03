@@ -2,13 +2,36 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Cooldown")
 
+local pairs, format, floor, strfind = pairs, format, floor, strfind
+local GetTime, GetActionCooldown, tonumber = GetTime, GetActionCooldown, tonumber
+
 local FONT_SIZE = 19
 local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
 local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local ICON_SIZE = 36
 local hideNumbers, active, hooked = {}, {}, {}
-local pairs, strfind = pairs, string.find
-local GetTime, GetActionCooldown = GetTime, GetActionCooldown
+
+local day, hour, minute = 86400, 3600, 60
+function module.FormattedTimer(s)
+	if s >= day then
+		return format("%d"..DB.MyColor.."d", s/day + .5), s%day
+	elseif s > hour then
+		return format("%d"..DB.MyColor.."h", s/hour + .5), s%hour
+	elseif s >= minute then
+		if s < C.db["Actionbar"]["MmssTH"] then
+			return format("%d:%.2d", s/minute, s%minute), s - floor(s)
+		else
+			return format("%d"..DB.MyColor.."m", s/minute + .5), s%minute
+		end
+	else
+		local colorStr = (s < 3 and "|cffff0000") or (s < 10 and "|cffffff00") or "|cffcccc33"
+		if s < C.db["Actionbar"]["TenthTH"] then
+			return format(colorStr.."%.1f|r", s), s - format("%.1f", s)
+		else
+			return format(colorStr.."%d|r", s + .5), s - floor(s)
+		end
+	end
+end
 
 function module:StopTimer()
 	self.enabled = nil
@@ -43,7 +66,7 @@ function module:TimerOnUpdate(elapsed)
 	else
 		local remain = self.duration - (GetTime() - self.start)
 		if remain > 0 then
-			local getTime, nextUpdate = B.FormatTime(remain)
+			local getTime, nextUpdate = module.FormattedTimer(remain)
 			self.text:SetText(getTime)
 			self.nextUpdate = nextUpdate
 		else
@@ -89,6 +112,8 @@ function module:StartTimer(start, duration)
 	end
 
 	local parent = self:GetParent()
+    start = tonumber(start) or 0
+    duration = tonumber(duration) or 0
 
 	if start > 0 and duration > MIN_DURATION then
 		local timer = self.timer or module.OnCreate(self)
