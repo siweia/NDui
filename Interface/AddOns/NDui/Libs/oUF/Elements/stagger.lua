@@ -56,18 +56,18 @@ local function UpdateColor(self, event, unit)
 	local colors = self.colors.power[BREWMASTER_POWER_BAR_NAME]
 	local perc = (element.cur or 0) / (element.max or 1)
 
-	local t
+	local color
 	if(perc >= STAGGER_RED_TRANSITION) then
-		t = colors and colors[STAGGER_RED_INDEX]
+		color = colors and colors[STAGGER_RED_INDEX]
 	elseif(perc > STAGGER_YELLOW_TRANSITION) then
-		t = colors and colors[STAGGER_YELLOW_INDEX]
+		color = colors and colors[STAGGER_YELLOW_INDEX]
 	else
-		t = colors and colors[STAGGER_GREEN_INDEX]
+		color = colors and colors[STAGGER_GREEN_INDEX]
 	end
 
 	local r, g, b
-	if(t) then
-		r, g, b = t[1], t[2], t[3]
+	if(color) then
+		r, g, b = color[1], color[2], color[3]
 		if(b) then
 			element:SetStatusBarColor(r, g, b)
 
