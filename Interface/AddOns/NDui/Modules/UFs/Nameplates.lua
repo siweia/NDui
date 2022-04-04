@@ -700,7 +700,7 @@ function UF:ShowUnitTargeted(self)
 	tex:SetPoint("LEFT", self, "RIGHT", 5, 0)
 	tex:SetAtlas("target")
 	tex:Hide()
-	local count = B.CreateFS(self, 20)
+	local count = B.CreateFS(self, 22)
 	count:SetPoint("LEFT", tex, "RIGHT", 1, 0)
 	count:SetTextColor(1, .8, 0)
 
@@ -999,6 +999,7 @@ function UF:RefreshPlateByEvents()
 	else
 		for nameplate in pairs(platesList) do
 			nameplate.tarBy:SetText("")
+			nameplate.tarByTex:Hide()
 		end
 		B:UnregisterEvent("UNIT_TARGET", UF.OnUnitTargetChanged)
 		B:UnregisterEvent("PLAYER_TARGET_CHANGED", UF.OnUnitTargetChanged)
