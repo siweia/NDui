@@ -187,8 +187,9 @@ local function Update(self, _, unit)
 		end
 
 		local instPrio
-		if instName and debuffs[instName] then
-			instPrio = debuffs[instName][spellId]
+		local debuffList = instName and debuffs[instName] or debuffs[0]
+		if debuffList then
+			instPrio = debuffList[spellId]
 		end
 
 		if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then

@@ -173,6 +173,7 @@ function module:OnLogin()
 		end
 	end
 
+	RaidDebuffs[0] = {} -- OTHER spells
 	module:AddDeprecatedGroup()
 	C.AuraWatchList = AuraWatchList
 	C.RaidBuffs = RaidBuffs
