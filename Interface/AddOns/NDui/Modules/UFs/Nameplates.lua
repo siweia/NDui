@@ -695,9 +695,17 @@ function UF:SpellInterruptor(self)
 end
 
 function UF:ShowUnitTargeted(self)
-	self.tarBy = B.CreateFS(self, 20)
-	self.tarBy:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
-	self.tarBy:SetTextColor(1, .8, 0)
+	local tex = self:CreateTexture()
+	tex:SetSize(20, 20)
+	tex:SetPoint("LEFT", self, "RIGHT", 5, 0)
+	tex:SetAtlas("target")
+	tex:Hide()
+	local count = B.CreateFS(self, 20)
+	count:SetPoint("LEFT", tex, "RIGHT", 1, 0)
+	count:SetTextColor(1, .8, 0)
+
+	self.tarByTex = tex
+	self.tarBy = count
 end
 
 -- Create Nameplates
@@ -977,6 +985,7 @@ function UF:OnUnitTargetChanged()
 
 	for nameplate in pairs(platesList) do
 		nameplate.tarBy:SetText(targetedList[nameplate.unitGUID] or "")
+		nameplate.tarByTex:SetShown(targetedList[nameplate.unitGUID])
 	end
 end
 
