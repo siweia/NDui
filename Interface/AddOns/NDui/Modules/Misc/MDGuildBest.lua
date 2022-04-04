@@ -150,7 +150,7 @@ function M:KeystoneInfo_WeeklyRuns()
 		GameTooltip:AddDoubleLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), "("..numRuns..")", .6,.8,1)
 		sort(runHistory, sortHistory)
 
-		for i = 1, WeeklyRunsThreshold do
+		for i = 1, IsShiftKeyDown() and numRuns or WeeklyRunsThreshold do
 			local runInfo = runHistory[i]
 			if not runInfo then break end
 
