@@ -896,3 +896,4 @@ L["MmssThreshold"] = "MMSS Threshold" -- need translation
 L["MmssThresholdTip"] = "|nIf cooldown less than current threhold, show cooldown in format MM:SS.|nEg. 2 mins and half presents as 2:30." -- need translation
 L["TenthThreshold"] = "Tenth Threshold" -- need translation
 L["TenthThresholdTip"] = "|nIf cooldown less than current threhold, show cooldown in format decimal.|nEg. 3 secs will show as 3.0." -- need translation
+L["TargetedByTip"] = "|nShow unit targeted count on the right side of nameplates. Only available in dungeons or raids." -- need translation

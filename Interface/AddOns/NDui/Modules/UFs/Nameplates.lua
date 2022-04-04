@@ -419,8 +419,6 @@ local function CheckInstanceStatus()
 end
 
 function UF:QuestIconCheck()
-	if not C.db["Nameplate"]["QuestIndicator"] then return end
-
 	CheckInstanceStatus()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", CheckInstanceStatus)
 end
@@ -970,6 +968,8 @@ local function GetGroupUnit(index, maxGroups, isInRaid)
 end
 
 function UF:OnUnitTargetChanged()
+	if not isInInstance then return end
+
 	wipe(targetedList)
 
 	local isInRaid = IsInRaid()
