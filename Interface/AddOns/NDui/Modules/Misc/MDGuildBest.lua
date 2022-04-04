@@ -150,7 +150,8 @@ function M:KeystoneInfo_WeeklyRuns()
 		GameTooltip:AddDoubleLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), "("..numRuns..")", .6,.8,1)
 		sort(runHistory, sortHistory)
 
-		for i = 1, IsShiftKeyDown() and numRuns or WeeklyRunsThreshold do
+		local isShiftKeyDown = IsShiftKeyDown()
+		for i = 1, isShiftKeyDown and numRuns or WeeklyRunsThreshold do
 			local runInfo = runHistory[i]
 			if not runInfo then break end
 
@@ -158,6 +159,9 @@ function M:KeystoneInfo_WeeklyRuns()
 			local r,g,b = 0,1,0
 			if not runInfo.completed then r,g,b = 1,0,0 end
 			GameTooltip:AddDoubleLine(name, "Lv."..runInfo.level, 1,1,1, r,g,b)
+		end
+		if not isShiftKeyDown then
+			GameTooltip:AddLine(L["Hold Shift"], .6,.8,1)
 		end
 		GameTooltip:Show()
 	end
