@@ -58,7 +58,7 @@ do
 		elseif s > 3 then
 			return format("|cffffff00%d|r", s + .5), s - floor(s)
 		else
-			return format("|cffff0000%d|r", s + .5), s - floor(s)
+			return format("|cffff0000%.1f|r", s), s - format("%.1f", s)
 		end
 	end
 
