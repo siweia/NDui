@@ -1,4 +1,4 @@
-local _, ns = ...
+slocal _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "frFR" then return end
 -- Credit: Zeddicus40
@@ -93,7 +93,7 @@ L["CombatText OverHealing"] = "Afficher le sur-soin"
 L["CombatText"] = "Textes de combat simple"
 L["UFs SwingBar"] = "Barre de frappe sur CU"
 L["UFs SwingTimer"] = "Temps sur la barre de coup blanc"
-L["UFs ClassPower"] = "Class special resources" -- need translation
+L["UFs ClassPower"] = "Ressource spéciale de classe"
 L["PlayerUF"] = "CU du joueur"
 L["TargetUF"] = "CU Cible"
 L["TotUF"] = "CU cible de la cible"
@@ -875,7 +875,7 @@ L["MMT29X4"] = "Chasseur précision T29 X4"
 L["MMT29X4Tip"] = "|nSi cette option est activée, le coût de la mise au point du chasseur est affiché en haut de la plaque de nom, pour les sets de niveau T29.|n|nLe nombre sera réinitialisé à partir de 0 une fois que vous l'aurez activé, vous devrez peut-être rééquiper vos ensembles d'articles pour correspondre à son calcul."
 L["AutoHide"] = "Cacher automatiquement"
 L["Speed"] = "Vitesse"
-L["OffhandOnTop"] = "Offhand timer on top" -- need translation (can I have the context to translate this one please?)
+L["OffhandOnTop"] = "Minuteur main gauche au dessus"
 L["EnhancedPremade"] = "Groupe pré-fait amélioré"
 L["EnhancedPremadeTip"] = "|nCandidature rapide par double-clic, cacher l'avis de participation à un groupe, rôles de groupe stylisés, invitation automatique des candidats, montrer le score global du leader, abréger nom clé de voûte pour Tazavesh."
 L["PlateHarmWidth"] = "Largeur cliquable de l'ennemi"
