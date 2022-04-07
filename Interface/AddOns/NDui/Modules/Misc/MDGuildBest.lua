@@ -12,6 +12,7 @@ local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeyston
 local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
 local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
+local CHALLENGE_MODE_THIS_WEEK = CHALLENGE_MODE_THIS_WEEK
 local WEEKLY_REWARDS_MYTHIC_TOP_RUNS = WEEKLY_REWARDS_MYTHIC_TOP_RUNS
 
 local hasAngryKeystones
@@ -146,11 +147,12 @@ function M:KeystoneInfo_WeeklyRuns()
 	local runHistory = C_MythicPlus_GetRunHistory(false, true)
 	local numRuns = runHistory and #runHistory
 	if numRuns > 0 then
+		local isShiftKeyDown = IsShiftKeyDown()
+
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), "("..numRuns..")", .6,.8,1)
+		GameTooltip:AddDoubleLine(isShiftKeyDown and CHALLENGE_MODE_THIS_WEEK or format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), "("..numRuns..")", .6,.8,1)
 		sort(runHistory, sortHistory)
 
-		local isShiftKeyDown = IsShiftKeyDown()
 		for i = 1, isShiftKeyDown and numRuns or WeeklyRunsThreshold do
 			local runInfo = runHistory[i]
 			if not runInfo then break end
