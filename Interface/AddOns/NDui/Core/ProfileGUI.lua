@@ -625,6 +625,8 @@ function G:ImportGUIData()
 				local index, name = select(3, strsplit(":", option))
 				NDuiADB[value][tonumber(index)] = name
 			end
+		elseif value == "InfoStrLeft" or value == "InfoStrRight" then
+			C.db[key][value] = arg1
 		elseif tonumber(arg1) then
 			if value == "DBMCount" then
 				C.db[key][value] = arg1
