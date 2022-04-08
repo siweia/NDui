@@ -897,3 +897,5 @@ L["MmssThresholdTip"] = "|nSi le délai d'attente est inférieur au délai d'att
 L["TenthThreshold"] = "Dixième seuil"
 L["TenthThresholdTip"] = "|nSi le temps de recharge est inférieur au seuil actuel, afficher le temps de recharge au format décimal.|nPar exemple, 3 secondes seront affichées comme 3.0."
 L["TargetedByTip"] = "|nAffiche le nombre d'unités ciblées sur le côté droit des plaques de nom. Disponible uniquement dans les donjons ou les raids."
+L["IgnoredButtons"] = "Ignored recycle buttons" -- need translation
+L["IgnoredButtonsTip"] = "|nEnter the names of buttons that exclude from recycle bin. You can type /fstack and mouseover the button for its name. Partial name is acceptable.|nUse space in between for multiple names. UI reload required." -- need translation

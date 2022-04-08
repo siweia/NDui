@@ -226,6 +226,8 @@ function module:RecycleBin()
 		["GatherMatePin"] = true,
 		["HandyNotes.-Pin"] = true,
 	}
+	B.SplitList(ignoredButtons, NDuiADB["IgnoredButtons"])
+
 	local function isButtonIgnored(name)
 		for addonName in pairs(ignoredButtons) do
 			if strmatch(name, addonName) then

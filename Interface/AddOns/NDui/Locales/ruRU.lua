@@ -897,3 +897,5 @@ L["MmssThresholdTip"] = "|nIf cooldown less than current threhold, show cooldown
 L["TenthThreshold"] = "Tenth Threshold" -- need translation
 L["TenthThresholdTip"] = "|nIf cooldown less than current threhold, show cooldown in format decimal.|nEg. 3 secs will show as 3.0." -- need translation
 L["TargetedByTip"] = "|nShow unit targeted count on the right side of nameplates. Only available in dungeons or raids." -- need translation
+L["IgnoredButtons"] = "Ignored recycle buttons" -- need translation
+L["IgnoredButtonsTip"] = "|nEnter the names of buttons that exclude from recycle bin. You can type /fstack and mouseover the button for its name. Partial name is acceptable.|nUse space in between for multiple names. UI reload required." -- need translation
