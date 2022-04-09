@@ -46,6 +46,12 @@ function A:ResetFocusCost()
 	A.MMFocus:SetFormattedText("%d/40", A.MMFocus.cost%40)
 end
 
+function A:ResetOnRaidEncounter(_, _, _, groupSize)
+	if groupSize and groupSize > 5 then
+		A:ResetFocusCost()
+	end
+end
+
 local eventSpentIndex = {
 	["SPELL_AURA_APPLIED"] = 1,
 	["SPELL_AURA_REFRESH"] = 2,
@@ -82,6 +88,7 @@ function A:CheckSetsCount()
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 		B:UnregisterEvent("PLAYER_DEAD", A.ResetFocusCost)
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.ResetFocusCost)
+		B:UnregisterEvent("ENCOUNTER_START", A.ResetOnRaidEncounter)
 		B:UnregisterEvent("CLEU", A.CheckTrickState)
 	else
 		A.MMFocus:Show()
@@ -89,6 +96,7 @@ function A:CheckSetsCount()
 		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
 		B:RegisterEvent("PLAYER_DEAD", A.ResetFocusCost)
 		B:RegisterEvent("PLAYER_ENTERING_WORLD", A.ResetFocusCost)
+		B:RegisterEvent("ENCOUNTER_START", A.ResetOnRaidEncounter)
 		B:RegisterEvent("CLEU", A.CheckTrickState)
 	end
 end
