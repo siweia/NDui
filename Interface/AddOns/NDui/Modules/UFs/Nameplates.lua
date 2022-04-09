@@ -972,14 +972,16 @@ function UF:OnUnitTargetChanged()
 
 	wipe(targetedList)
 
-	local isInRaid = IsInRaid()
 	local maxGroups = GetNumGroupMembers()
-	for i = 1, maxGroups do
-		local member = GetGroupUnit(i, maxGroups, isInRaid)
-		local memberTarget = member.."target"
-		if not UnitIsDeadOrGhost(member) and UnitExists(memberTarget) then
-			local unitGUID = UnitGUID(memberTarget)
-			targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
+	if maxGroups > 1 then
+		local isInRaid = IsInRaid()
+		for i = 1, maxGroups do
+			local member = GetGroupUnit(i, maxGroups, isInRaid)
+			local memberTarget = member.."target"
+			if not UnitIsDeadOrGhost(member) and UnitExists(memberTarget) then
+				local unitGUID = UnitGUID(memberTarget)
+				targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
+			end
 		end
 	end
 
