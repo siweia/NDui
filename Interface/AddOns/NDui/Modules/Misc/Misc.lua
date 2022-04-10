@@ -69,7 +69,7 @@ function M:OnLogin()
 	M:QuickMenuButton()
 	M:BaudErrorFrameHelpTip()
 	M:EnhancedPicker()
-	C_Timer_After(0, M.UpdateMaxZoomLevel)
+	M:UpdateMaxZoomLevel()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then

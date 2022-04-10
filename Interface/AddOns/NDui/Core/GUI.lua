@@ -1383,7 +1383,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
 		{1, "Misc", "QuestTool", L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
 		{1, "Misc", "QuickJoin", NewTag..HeaderTag..L["EnhancedPremade"], nil, nil, nil, L["EnhancedPremadeTip"]},
-		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 2.6, .1}, updateMaxZoomLevel},
+		{3, "Misc", "MaxZoom", NewTag..L["MaxZoom"].."*", true, {1, 2.6, .1}, updateMaxZoomLevel},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
