@@ -517,7 +517,6 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
-	local order = {"8", "7", "6", "5", "4", "3", "2", "1", "NONE"}
 	local menuList = {}
 
 	local function GetMenuTitle(color, text)
@@ -528,18 +527,46 @@ function M:RaidTool_EasyMarker()
 		SetRaidTarget("target", arg1)
 	end
 
-	for index, value in pairs(order) do
-		local blizz = _G.UnitPopupButtons["RAID_TARGET_"..value]
-		menuList[index] = {
-			text = GetMenuTitle(blizz.color, blizz.text),
-			icon = blizz.icon,
-			tCoordLeft = blizz.tCoordLeft,
-			tCoordRight = blizz.tCoordRight,
-			tCoordTop = blizz.tCoordTop,
-			tCoordBottom = blizz.tCoordBottom,
-			arg1 = 9 - index,
-			func = SetRaidTargetByIndex,
+	if DB.isNewPatch then
+		local mixins = {
+			UnitPopupRaidTarget8ButtonMixin,
+			UnitPopupRaidTarget7ButtonMixin,
+			UnitPopupRaidTarget6ButtonMixin,
+			UnitPopupRaidTarget5ButtonMixin, 
+			UnitPopupRaidTarget4ButtonMixin,
+			UnitPopupRaidTarget3ButtonMixin,
+			UnitPopupRaidTarget2ButtonMixin,
+			UnitPopupRaidTarget1ButtonMixin,
+			UnitPopupRaidTargetNoneButtonMixin
 		}
+		for index, mixin in pairs(mixins) do
+			local texCoords = mixin:GetTextureCoords()
+			menuList[index] = {
+				text = GetMenuTitle(mixin:GetColor(), mixin:GetText()),
+				icon = mixin:GetIcon(),
+				tCoordLeft = texCoords.tCoordLeft,
+				tCoordRight = texCoords.tCoordRight,
+				tCoordTop = texCoords.tCoordTop,
+				tCoordBottom = texCoords.tCoordBottom,
+				arg1 = 9 - index,
+				func = SetRaidTargetByIndex,
+			}
+		end
+	else
+		local order = {"8", "7", "6", "5", "4", "3", "2", "1", "NONE"}
+		for index, value in pairs(order) do
+			local blizz = _G.UnitPopupButtons["RAID_TARGET_"..value]
+			menuList[index] = {
+				text = GetMenuTitle(blizz.color, blizz.text),
+				icon = blizz.icon,
+				tCoordLeft = blizz.tCoordLeft,
+				tCoordRight = blizz.tCoordRight,
+				tCoordTop = blizz.tCoordTop,
+				tCoordBottom = blizz.tCoordBottom,
+				arg1 = 9 - index,
+				func = SetRaidTargetByIndex,
+			}
+		end
 	end
 
 	local function GetModifiedState()
