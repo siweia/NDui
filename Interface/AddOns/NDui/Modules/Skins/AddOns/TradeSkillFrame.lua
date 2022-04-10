@@ -197,6 +197,8 @@ function S:EnhancedCraft()
 	CraftFrame.listScrollFrame = _G.CraftListScrollFrame
 	S:EnlargeDefaultUIPanel("CraftFrame", 1)
 
+	_G.CraftDetailScrollFrameScrollBar:SetAlpha(0) -- seems useless
+
 	_G.CRAFTS_DISPLAYED = 22
 	for i = 2, _G.CRAFTS_DISPLAYED do
 		local button = _G["Craft"..i]
