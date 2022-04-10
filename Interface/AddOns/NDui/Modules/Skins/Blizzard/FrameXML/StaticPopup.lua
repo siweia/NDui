@@ -12,6 +12,14 @@ local function clearMinimize(f)
 	f.minimize:SetVertexColor(1, 1, 1)
 end
 
+local function updateMinorButtonState(button)
+	if button:GetChecked() then
+		button.bg:SetBackdropColor(1, .8, 0, .25)
+	else
+		button.bg:SetBackdropColor(0, 0, 0, .25)
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -121,16 +129,42 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(PetBattleQueueReadyFrame.DeclineButton)
 
 	-- PlayerReportFrame
-	PlayerReportFrame:HookScript("OnShow", function(self)
-		if not self.styled then
-			B.StripTextures(self)
-			B.SetBD(self)
-			B.StripTextures(self.Comment)
-			B.ReskinInput(self.Comment)
-			B.Reskin(self.ReportButton)
-			B.Reskin(self.CancelButton)
+	if not DB.isNewPatch then
+		PlayerReportFrame:HookScript("OnShow", function(self)
+			if not self.styled then
+				B.StripTextures(self)
+				B.SetBD(self)
+				B.StripTextures(self.Comment)
+				B.ReskinInput(self.Comment)
+				B.Reskin(self.ReportButton)
+				B.Reskin(self.CancelButton)
 
-			self.styled = true
-		end
-	end)
+				self.styled = true
+			end
+		end)
+	else
+		B.StripTextures(ReportFrame)
+		B.SetBD(ReportFrame)
+		B.ReskinClose(ReportFrame.CloseButton)
+		B.Reskin(ReportFrame.ReportButton)
+		B.ReskinDropDown(ReportFrame.ReportingMajorCategoryDropdown)
+		B.ReskinEditBox(ReportFrame.Comment)
+
+		hooksecurefunc(ReportFrame, "AnchorMinorCategory", function(self)
+			if self.MinorCategoryButtonPool then
+				for button in self.MinorCategoryButtonPool:EnumerateActive() do
+					if not button.styled then
+						B.StripTextures(button)
+						button.bg = B.CreateBDFrame(button, .25)
+						button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+						button:HookScript("OnClick", updateMinorButtonState)
+
+						button.styled = true
+					end
+
+					updateMinorButtonState(button)
+				end
+			end
+		end)
+	end
 end)
