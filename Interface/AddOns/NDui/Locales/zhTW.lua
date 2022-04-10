@@ -896,3 +896,5 @@ L["TargetedByTip"] = "|n在名條右側顯示隊友關注的統計，只在副�
 L["IgnoredButtons"] = "回收站忽略列表"
 L["IgnoredButtonsTip"] = "|n輸入你不想收納進回收站的按鈕名字。你可以輸入/fstack後指向圖標來查看，只需輸入名字的一部分即可。|n對於多個按鈕名字，以空格隔開。需要重載插件後生效。"
 L["MaxZoom"] = "最大视距等级"
+L["BuffClickThru"] = "禁用增益法術提示訊息"
+L["DebuffClickThru"] = "禁用減益法術提示訊息"

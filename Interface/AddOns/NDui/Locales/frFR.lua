@@ -896,3 +896,5 @@ L["TargetedByTip"] = "|nAffiche le nombre d'unités ciblées sur le côté droit
 L["IgnoredButtons"] = "Ignored recycle buttons" -- need translation
 L["IgnoredButtonsTip"] = "|nEnter the names of buttons that exclude from recycle bin. You can type /fstack and mouseover the button for its name. Partial name is acceptable.|nUse space in between for multiple names. UI reload required." -- need translation
 L["MaxZoom"] = "Max Camera Zoom Level" -- need translation
+L["BuffClickThru"] = "Disable buff tooltip" -- need translation
+L["DebuffClickThru"] = "Disable debuff tooltip" -- need translation
