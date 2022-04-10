@@ -16,12 +16,12 @@ local B, C, L, DB = unpack(ns)
 local strfind, format, strsplit = string.find, string.format, string.split
 local gsub, pairs, tonumber, tostring = gsub, pairs, tonumber, tostring
 local floor, ceil = math.floor, math.ceil
-local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 
 DB.Devs = {
-	["寧德-加尔"] = true,
-	["图咿-万色星辰"] = true,
-	["Huniverster-Broxigar"] = true,
+	["箭灵-法尔班克斯"] = true, -- classic
+	["Waro-法尔班克斯"] = true, -- classic
+	["Huniverster-BadgeofJustice"] = true, -- classic beta
+	["Huniverster-ClassicPTRRealm2"] = true, -- classic ptr
 }
 local function isDeveloper()
 	local rawName = gsub(DB.MyFullName, "%s", "")
@@ -130,12 +130,8 @@ do
 
 	SlashCmdList["NDUI_VER_CHECK"] = function(msg)
 		local channel
-		if IsPartyLFG() then
-			channel = "INSTANCE_CHAT"
-		elseif IsInRaid() then
+		if IsInRaid() then
 			channel = "RAID"
-		elseif IsInGroup() then
-			channel = "PARTY"
 		elseif IsInGuild() then
 			channel = "GUILD"
 		end
@@ -144,24 +140,6 @@ do
 	end
 	SLASH_NDUI_VER_CHECK1 = "/nduiver"
 end
-
-SlashCmdList["NDUI_GET_INSTANCES"] = function()
-	if not EncounterJournal then return end
-	local tierID = EJ_GetCurrentTier()
-	print("local _, ns = ...")
-	print("local B, C, L, DB = unpack(ns)")
-	print("local module = B:GetModule(\"AurasTable\")")
-	print("local TIER = "..tierID)
-	print("local INSTANCE")
-	local i = 0
-	while true do
-		i = i + 1
-		local instID, instName = EJ_GetInstanceByIndex(i, false)
-		if not instID then return end
-		print("INSTANCE = "..instID.." -- "..instName)
-	end
-end
-SLASH_NDUI_GET_INSTANCES1 = "/getinst"
 
 SlashCmdList["NDUI_GET_ENCOUNTERS"] = function()
 	if not EncounterJournal then return end

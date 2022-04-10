@@ -1,8 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
----------------------------
--- rButtonTemplate, zork
----------------------------
+
 local Bar = B:GetModule("Actionbar")
 local _G = getfenv(0)
 local pairs, gsub, unpack = pairs, gsub, unpack
@@ -173,13 +171,6 @@ function Bar:UpdateHotKey()
 	end
 end
 
-function Bar:HookHotKey(button)
-	Bar.UpdateHotKey(button)
-	if button.UpdateHotkeys then
-		hooksecurefunc(button, "UpdateHotkeys", Bar.UpdateHotKey)
-	end
-end
-
 function Bar:UpdateEquipItemColor()
 	if not self.__bg then return end
 
@@ -188,11 +179,6 @@ function Bar:UpdateEquipItemColor()
 	else
 		self.__bg:SetBackdropBorderColor(0, 0, 0)
 	end
-end
-
-function Bar:EquipItemColor(button)
-	if not button.Update then return end
-	hooksecurefunc(button, "Update", Bar.UpdateEquipItemColor)
 end
 
 function Bar:StyleActionButton(button, cfg)
@@ -229,7 +215,6 @@ function Bar:StyleActionButton(button, cfg)
 
 	--backdrop
 	SetupBackdrop(icon)
-	Bar:EquipItemColor(button)
 
 	--textures
 	SetupTexture(icon, cfg.icon, "SetTexture", icon)
@@ -262,7 +247,7 @@ function Bar:StyleActionButton(button, cfg)
 	end
 	if hotkey then
 		hotkey:SetParent(overlay)
-		Bar:HookHotKey(button)
+		Bar.UpdateHotKey(button)
 		SetupFontString(hotkey, cfg.hotkey)
 	end
 	if name then
@@ -279,70 +264,13 @@ function Bar:StyleActionButton(button, cfg)
 		autoCastable:SetInside()
 	end
 
-	Bar:RegisterButtonRange(button)
-
-	button.__styled = true
-end
-
-function Bar:StyleExtraActionButton(cfg)
-	local button = ExtraActionButton1
-	if button.__styled then return end
-
-	local buttonName = button:GetName()
-	local icon = _G[buttonName.."Icon"]
-	--local flash = _G[buttonName.."Flash"] --wierd the template has two textures of the same name
-	local hotkey = _G[buttonName.."HotKey"]
-	local count = _G[buttonName.."Count"]
-	local buttonstyle = button.style --artwork around the button
-	local cooldown = _G[buttonName.."Cooldown"]
-
-	button:SetPushedTexture(DB.textures.pushed) --force it to gain a texture
-	local normalTexture = button:GetNormalTexture()
-	local pushedTexture = button:GetPushedTexture()
-	local highlightTexture = button:GetHighlightTexture()
-	local checkedTexture = button:GetCheckedTexture()
-
-	--backdrop
-	SetupBackdrop(icon)
-
-	--textures
-	SetupTexture(icon, cfg.icon, "SetTexture", icon)
-	SetupTexture(buttonstyle, cfg.buttonstyle, "SetTexture", buttonstyle)
-	SetupTexture(normalTexture, cfg.normalTexture, "SetNormalTexture", button)
-	SetupTexture(pushedTexture, cfg.pushedTexture, "SetPushedTexture", button)
-	SetupTexture(highlightTexture, cfg.highlightTexture, "SetHighlightTexture", button)
-	SetupTexture(checkedTexture, cfg.checkedTexture, "SetCheckedTexture", button)
-	highlightTexture:SetColorTexture(1, 1, 1, .25)
-
-	--cooldown
-	SetupCooldown(cooldown, cfg.cooldown)
-
-	--hotkey, count
-	local overlay = CreateFrame("Frame", nil, button)
-	overlay:SetAllPoints()
-
-	hotkey:SetParent(overlay)
-	Bar:HookHotKey(button)
-	cfg.hotkey.font = {DB.Font[1], 13, DB.Font[3]}
-	SetupFontString(hotkey, cfg.hotkey)
-
-	if C.db["Actionbar"]["Count"] then
-		count:SetParent(overlay)
-		cfg.count.font = {DB.Font[1], 16, DB.Font[3]}
-		SetupFontString(count, cfg.count)
-	else
-		count:Hide()
-	end
-
-	Bar:RegisterButtonRange(button)
-
 	button.__styled = true
 end
 
 function Bar:UpdateStanceHotKey()
 	for i = 1, NUM_STANCE_SLOTS do
 		_G["StanceButton"..i.."HotKey"]:SetText(GetBindingKey("SHAPESHIFTBUTTON"..i))
-		Bar:HookHotKey(_G["StanceButton"..i])
+		Bar.UpdateHotKey(_G["StanceButton"..i])
 	end
 end
 
@@ -358,6 +286,8 @@ function Bar:StyleAllActionButtons(cfg)
 	for i = 1, 6 do
 		Bar:StyleActionButton(_G["OverrideActionBarButton"..i], cfg)
 	end
+	--leave vehicle
+	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"], cfg)
 	--petbar buttons
 	for i = 1, NUM_PET_ACTION_SLOTS do
 		Bar:StyleActionButton(_G["PetActionButton"..i], cfg)
@@ -366,28 +296,6 @@ function Bar:StyleAllActionButtons(cfg)
 	for i = 1, NUM_STANCE_SLOTS do
 		Bar:StyleActionButton(_G["StanceButton"..i], cfg)
 	end
-	--possess buttons
-	for i = 1, NUM_POSSESS_SLOTS do
-		Bar:StyleActionButton(_G["PossessButton"..i], cfg)
-	end
-	--leave vehicle
-	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"], cfg)
-	--extra action button
-	Bar:StyleExtraActionButton(cfg)
-	--spell flyout
-	SpellFlyoutBackgroundEnd:SetTexture(nil)
-	SpellFlyoutHorizontalBackground:SetTexture(nil)
-	SpellFlyoutVerticalBackground:SetTexture(nil)
-	local function checkForFlyoutButtons()
-		local i = 1
-		local button = _G["SpellFlyoutButton"..i]
-		while button and button:IsShown() do
-			Bar:StyleActionButton(button, cfg)
-			i = i + 1
-			button = _G["SpellFlyoutButton"..i]
-		end
-	end
-	SpellFlyout:HookScript("OnShow", checkForFlyoutButtons)
 end
 
 function Bar:ReskinBars()
@@ -465,7 +373,10 @@ function Bar:ReskinBars()
 	Bar:StyleAllActionButtons(cfg)
 
 	-- Update hotkeys
+	hooksecurefunc("ActionButton_UpdateHotkeys", Bar.UpdateHotKey)
 	hooksecurefunc("PetActionButton_SetHotkeys", Bar.UpdateHotKey)
 	Bar:UpdateStanceHotKey()
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.UpdateStanceHotKey)
+	-- Equip item
+	hooksecurefunc("ActionButton_Update", Bar.UpdateEquipItemColor)
 end

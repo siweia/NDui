@@ -4,138 +4,14 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "HUNTER" then return end
 
-local pairs, GetSpellPowerCost, IsEquippedItem = pairs, GetSpellPowerCost, IsEquippedItem
-local POWER_TYPE_FOCUS = 2
-local playerGUID = UnitGUID("player")
-
-local function GetSpellCost(spellID)
-	if spellID == 19434 then -- aimed shot always 35
-		return 35
-	end
-
-	local costTable = GetSpellPowerCost(spellID)
-	if costTable then
-		for _, costInfo in pairs(costTable) do
-			if costInfo.type == POWER_TYPE_FOCUS then
-				return costInfo.cost
-			end
-		end
-	end
-end
-
-function A:UpdateFocusCost(unit, _, spellID)
-	if unit ~= "player" then return end
-
-	local focusCal = A.MMFocus
-	local cost = GetSpellCost(spellID)
-	if cost then
-		focusCal.cost = focusCal.cost + cost
-	end
-	if spellID == 19434 then
-		--print("带着技巧读条："..tostring(focusCal.isTrickCast), "消耗技巧层数："..focusCal.trickActive)
-		if (focusCal.isTrickCast and focusCal.trickActive == 1) or (not focusCal.isTrickCast and focusCal.trickActive == 0) then
-			focusCal.cost = 35
-			--print("此时重置集中值为35")
-		end
-	end
-	focusCal:SetFormattedText("%d/40", focusCal.cost%40)
-end
-
-function A:ResetFocusCost()
-	A.MMFocus.cost = 0
-	A.MMFocus:SetFormattedText("%d/40", A.MMFocus.cost%40)
-end
-
-function A:ResetOnRaidEncounter(_, _, _, groupSize)
-	if groupSize and groupSize > 5 then
-		A:ResetFocusCost()
-	end
-end
-
-local eventSpentIndex = {
-	["SPELL_AURA_APPLIED"] = 1,
-	["SPELL_AURA_REFRESH"] = 2,
-	["SPELL_AURA_REMOVED"] = 0,
-}
-
-function A:CheckTrickState(...)
-	local _, eventType, _, sourceGUID, _, _, _, _, _, _, _, spellID = ...
-	if eventSpentIndex[eventType] and spellID == 257622 and sourceGUID == playerGUID then
-		A.MMFocus.trickActive = eventSpentIndex[eventType]
-	end
-end
-
-function A:StartAimedShot(unit, _, spellID)
-	if unit ~= "player" then return end
-	if spellID == 19434 then
-		A.MMFocus.isTrickCast = A.MMFocus.trickActive ~= 0
-	end
-end
-
-local hunterSets = {188856, 188858, 188859, 188860, 188861}
-
-function A:CheckSetsCount()
-	local count = 0
-	for _, itemID in pairs(hunterSets) do
-		if IsEquippedItem(itemID) then
-			count = count + 1
-		end
-	end
-
-	if count < 4 then
-		A.MMFocus:Hide()
-		B:UnregisterEvent("UNIT_SPELLCAST_START", A.StartAimedShot)
-		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
-		B:UnregisterEvent("PLAYER_DEAD", A.ResetFocusCost)
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.ResetFocusCost)
-		B:UnregisterEvent("ENCOUNTER_START", A.ResetOnRaidEncounter)
-		B:UnregisterEvent("CLEU", A.CheckTrickState)
-	else
-		A.MMFocus:Show()
-		B:RegisterEvent("UNIT_SPELLCAST_START", A.StartAimedShot)
-		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
-		B:RegisterEvent("PLAYER_DEAD", A.ResetFocusCost)
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", A.ResetFocusCost)
-		B:RegisterEvent("ENCOUNTER_START", A.ResetOnRaidEncounter)
-		B:RegisterEvent("CLEU", A.CheckTrickState)
-	end
-end
-
-local oldSpec
-function A:ToggleFocusCalculation()
-	if not A.MMFocus then return end
-
-	local spec = GetSpecialization()
-	if C.db["Auras"]["MMT29X4"] and spec == 2 then
-		if self ~= "PLAYER_SPECIALIZATION_CHANGED" or spec ~= oldSpec then -- don't reset when talent changed only
-			A:ResetFocusCost() -- reset calculation when switch on
-		end
-		A.MMFocus:Show()
-		A:CheckSetsCount()
-		B:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", A.CheckSetsCount)
-	else
-		B:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED", A.CheckSetsCount)
-	end
-	oldSpec = spec
-end
-
 function A:PostCreateLumos(self)
-	local iconSize = self.lumos[1]:GetWidth()
+	local iconSize = self.bu[1]:GetWidth()
 	local boom = CreateFrame("Frame", nil, self.Health)
 	boom:SetSize(iconSize, iconSize)
 	boom:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
 	B.AuraIcon(boom)
-	boom:Hide()
 
 	self.boom = boom
-
-	-- MM hunter T29 4sets
-	A.MMFocus = B.CreateFS(self.Health, 16)
-	A.MMFocus:ClearAllPoints()
-	A.MMFocus:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
-	A.MMFocus.trickActive = 0
-	A:ToggleFocusCalculation()
-	B:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", A.ToggleFocusCalculation)
 end
 
 function A:PostUpdateVisibility(self)
@@ -158,15 +34,6 @@ local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
 	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
-local function UpdateSpellStatus(button, spellID)
-	button.Icon:SetTexture(GetSpellTexture(spellID))
-	if IsUsableSpell(spellID) then
-		button.Icon:SetDesaturated(false)
-	else
-		button.Icon:SetDesaturated(true)
-	end
-end
-
 local boomGroups = {
 	[270339] = 186270,
 	[270332] = 259489,
@@ -174,38 +41,73 @@ local boomGroups = {
 }
 
 function A:ChantLumos(self)
-	local spec = GetSpecialization()
-	if spec == 1 then
-		UpdateCooldown(self.lumos[1], 34026, true)
-		UpdateCooldown(self.lumos[2], 217200, true)
-		UpdateBuff(self.lumos[3], 106785, 272790, false, true, "END")
-		UpdateBuff(self.lumos[4], 19574, 19574, true, false, true)
-		UpdateBuff(self.lumos[5], 193530, 193530, true, false, true)
+	if GetSpecialization() == 1 then
+		UpdateCooldown(self.bu[1], 34026, true)
+		UpdateCooldown(self.bu[2], 217200, true)
+		UpdateBuff(self.bu[3], 106785, 272790, false, true, "END")
+		UpdateBuff(self.bu[4], 19574, 19574, true, false, true)
+		UpdateBuff(self.bu[5], 193530, 193530, true, false, true)
 
-	elseif spec == 2 then
-		UpdateCooldown(self.lumos[1], 19434, true)
-		UpdateCooldown(self.lumos[2], 257044, true)
-		UpdateBuff(self.lumos[3], 257622, 257622)
+	elseif GetSpecialization() == 2 then
+		UpdateCooldown(self.bu[1], 19434, true)
 
 		do
-			local button = self.lumos[4]
-			if IsPlayerSpell(260402) then
-				UpdateBuff(button, 260402, 260402, true, false, true)
-			elseif IsPlayerSpell(321460) then
-				UpdateCooldown(button, 53351)
-				UpdateSpellStatus(button, 53351)
+			local button = self.bu[2]
+			if IsPlayerSpell(271788) then
+				UpdateDebuff(button, 271788, 271788)
+			elseif IsPlayerSpell(131894) then
+				UpdateDebuff(button, 131894, 131894, true)
 			else
-				UpdateBuff(button, 260242, 260242)
+				if IsPlayerSpell(260367) then
+					UpdateBuff(button, 260242, 260242)
+				else
+					UpdateCooldown(button, 257044, true)
+				end
 			end
 		end
 
-		UpdateBuff(self.lumos[5], 288613, 288613, true, false, true)
-
-	elseif spec == 3 then
-		UpdateDebuff(self.lumos[1], 259491, 259491, false, "END")
+		do
+			local button = self.bu[3]
+			if IsPlayerSpell(193533) then
+				local name, count, duration, expire, caster, spellID = GetUnitAura("target", 277959, "HARMFUL")
+				if not name then name, count, duration, expire, caster, spellID = GetUnitAura("player", 193534, "HELPFUL") end
+				if name and caster == "player" then
+					button.Count:SetText(count)
+					button.CD:SetCooldown(expire-duration, duration)
+					button.CD:Show()
+					button.Icon:SetDesaturated(false)
+					button.Icon:SetTexture(GetSpellTexture(spellID))
+				else
+					button.Count:SetText("")
+					button.CD:Hide()
+					button.Icon:SetDesaturated(true)
+					button.Icon:SetTexture(GetSpellTexture(193534))
+				end
+			elseif IsPlayerSpell(257284) then
+				UpdateDebuff(button, 257284, 257284)
+			else
+				UpdateCooldown(button, 257044, true)
+			end
+		end
 
 		do
-			local button = self.lumos[2]
+			local button = self.bu[4]
+			if IsPlayerSpell(260402) then
+				UpdateBuff(button, 260402, 260402, true, false, true)
+			elseif IsPlayerSpell(120360) then
+				UpdateCooldown(button, 120360, true)
+			else
+				UpdateBuff(button, 260395, 260395)
+			end
+		end
+
+		UpdateBuff(self.bu[5], 288613, 288613, true, false, true)
+
+	elseif GetSpecialization() == 3 then
+		UpdateDebuff(self.bu[1], 259491, 259491, false, "END")
+
+		do
+			local button = self.bu[2]
 			if IsPlayerSpell(260248) then
 				UpdateBuff(button, 260248, 260249)
 			elseif IsPlayerSpell(162488) then
@@ -216,7 +118,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.lumos[3]
+			local button = self.bu[3]
 			local boom = self.boom
 			if IsPlayerSpell(271014) then
 				boom:Show()
@@ -249,7 +151,7 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.lumos[4]
+			local button = self.bu[4]
 			if IsPlayerSpell(260285) then
 				UpdateBuff(button, 260285, 260286)
 			elseif IsPlayerSpell(269751) then
@@ -259,6 +161,6 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.lumos[5], 266779, 266779, true, false, true)
+		UpdateBuff(self.bu[5], 266779, 266779, true, false, true)
 	end
 end

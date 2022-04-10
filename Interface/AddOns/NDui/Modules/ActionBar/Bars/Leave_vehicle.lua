@@ -22,10 +22,10 @@ end
 function Bar:CreateLeaveVehicle()
 	local buttonList = {}
 
-	local frame = CreateFrame("Frame", "NDui_ActionBarExit", UIParent, "SecureHandlerStateTemplate")
+	local frame = CreateFrame("Frame", "NDui_ActionBarExit", UIParent)
 	frame.mover = B.Mover(frame, L["LeaveVehicle"], "LeaveVehicle", {"BOTTOM", UIParent, "BOTTOM", 320, 100})
 
-	local button = CreateFrame("CheckButton", "NDui_LeaveVehicleButton", frame, "ActionButtonTemplate, SecureHandlerClickTemplate")
+	local button = CreateFrame("CheckButton", "NDui_LeaveVehicleButton", frame, "ActionButtonTemplate")
 	tinsert(buttonList, button)
 	button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 	button:RegisterForClicks("AnyUp")
@@ -34,27 +34,27 @@ function Bar:CreateLeaveVehicle()
 	button.icon:SetDrawLayer("ARTWORK")
 	button.icon.__lockdown = true
 
-	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
-	button:SetScript("OnLeave", B.HideTooltip)
-	button:SetScript("OnClick", function(self)
+	hooksecurefunc("MainMenuBarVehicleLeaveButton_Update", function()
+		if UnitOnTaxi("player") then
+			button:Show()
+		else
+			button:Hide()
+			button:SetChecked(false)
+		end
+	end)
+
+	button:SetScript("OnClick", function()
 		if UnitOnTaxi("player") then
 			TaxiRequestEarlyLanding()
 		else
 			VehicleExit()
 		end
-		self:SetChecked(true)
+		button:SetChecked(true)
 	end)
-	button:SetScript("OnShow", function(self)
-		self:SetChecked(false)
-	end)
+	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
+	button:SetScript("OnLeave", B.HideTooltip)
 
 	frame.buttons = buttonList
-
-	frame.frameVisibility = "[canexitvehicle]c;[mounted]m;n"
-	RegisterStateDriver(frame, "exit", frame.frameVisibility)
-
-	frame:SetAttribute("_onstate-exit", [[ if CanExitVehicle() then self:Show() else self:Hide() end ]])
-	if not CanExitVehicle() then frame:Hide() end
 
 	if cfg.fader then
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)

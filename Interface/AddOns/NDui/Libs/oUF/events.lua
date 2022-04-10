@@ -1,11 +1,10 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
 local argcheck = Private.argcheck
-local validateEvent = Private.validateEvent
+local error = Private.error
 local validateUnit = Private.validateUnit
-local isUnitEvent = Private.isUnitEvent
 local frame_metatable = Private.frame_metatable
 
 -- Original event methods
@@ -17,12 +16,6 @@ local isEventRegistered = frame_metatable.__index.IsEventRegistered
 -- to update unit frames correctly, some events need to be registered for
 -- a specific combination of primary and secondary units
 local secondaryUnits = {
-	UNIT_ENTERED_VEHICLE = {
-		pet = 'player',
-	},
-	UNIT_EXITED_VEHICLE = {
-		pet = 'player',
-	},
 	UNIT_PET = {
 		pet = 'player',
 	},
@@ -105,8 +98,8 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 	argcheck(func, 3, 'function')
 
 	local curev = self[event]
+	local kind = type(curev)
 	if(curev) then
-		local kind = type(curev)
 		if(kind == 'function' and curev ~= func) then
 			self[event] = setmetatable({curev, func}, event_metatable)
 		elseif(kind == 'table') then
@@ -120,12 +113,11 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 		if(unitless or self.__eventless) then
 			-- re-register the event in case we have mixed registration
 			registerEvent(self, event)
-
 			if(self.unitEvents) then
 				self.unitEvents[event] = nil
 			end
 		end
-	elseif(validateEvent(event)) then
+	else
 		self[event] = func
 
 		if(not self:GetScript('OnEvent')) then
@@ -137,7 +129,6 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 		else
 			self.unitEvents = self.unitEvents or {}
 			self.unitEvents[event] = true
-
 			-- UpdateUnits will take care of unit event registration for header
 			-- units in case we don't have a valid unit yet
 			local unit1, unit2 = self.unit
@@ -145,10 +136,6 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 				if(secondaryUnits[event]) then
 					unit2 = secondaryUnits[event][unit1]
 				end
-
-				-- be helpful and throw a custom error when attempting to register
-				-- an event that is unitless
-				assert(isUnitEvent(event, unit1), string.format('Event "%s" is not an unit event', event))
 
 				registerUnitEvent(self, event, unit1, unit2 or '')
 			end

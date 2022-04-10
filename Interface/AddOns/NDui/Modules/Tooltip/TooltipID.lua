@@ -2,14 +2,13 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
-local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
+local strmatch, format, tonumber, select, strfind = string.match, string.format, tonumber, select, string.find
 local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
-local GetItemInfoFromHyperlink, IsPlayerSpell = GetItemInfoFromHyperlink, IsPlayerSpell
-local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
-local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
-local C_MountJournal_GetMountFromSpell = C_MountJournal.GetMountFromSpell
+local GetMouseFocus = GetMouseFocus
 local BAGSLOT, BANK = BAGSLOT, BANK
-local LEARNT_STRING = "|cffff0000"..ALREADY_LEARNED.."|r"
+local SELL_PRICE_TEXT = format("|cffffffff%s%s%%s|r", SELL_PRICE, HEADER_COLON)
+local ITEM_LEVEL_STR = gsub(ITEM_LEVEL_PLUS, "%+", "")
+ITEM_LEVEL_STR = format("|cffffd100%s|r|n%%s", ITEM_LEVEL_STR)
 
 local types = {
 	spell = SPELLS.."ID:",
@@ -21,6 +20,52 @@ local types = {
 	azerite = L["Trait"].."ID:",
 }
 
+local function createIcon(index)
+	return format("|TInterface\\MoneyFrame\\UI-%sIcon:14:14:0:0|t", index)
+end
+
+local function setupMoneyString(money)
+	local g, s, c = floor(money/1e4), floor(money/100) % 100, money % 100
+	local str = ""
+	if g > 0 then str = str.." "..g..createIcon("Gold") end
+	if s > 0 then str = str.." "..s..createIcon("Silver") end
+	if c > 0 then str = str.." "..c..createIcon("Copper") end
+
+	return str
+end
+
+function TT:UpdateItemSellPrice()
+	local frame = GetMouseFocus()
+	if frame and frame.GetName then
+		if frame:IsForbidden() then return end -- Forbidden on blizz store
+
+		local name = frame:GetName()
+		if not MerchantFrame:IsShown() or name and (strfind(name, "Character") or strfind(name, "TradeSkill")) then
+			local link = select(2, self:GetItem())
+			if link then
+				local price = select(11, GetItemInfo(link))
+				if price and price > 0 then
+					local object = frame:GetObjectType()
+					local count
+					if object == "Button" then -- ContainerFrameItem, QuestInfoItem, PaperDollItem
+						count = frame.count
+					elseif object == "CheckButton" then -- MailItemButton or ActionButton
+						count = frame.count or (frame.Count and frame.Count:GetText())
+					end
+
+					local cost = (tonumber(count) or 1) * price
+					self:AddLine(format(SELL_PRICE_TEXT, setupMoneyString(cost)))
+				end
+			end
+		end
+	end
+end
+
+local iLvlItemClassIDs = {
+	[LE_ITEM_CLASS_ARMOR] = true,
+	[LE_ITEM_CLASS_WEAPON] = true,
+}
+
 function TT:AddLineForID(id, linkType, noadd)
 	for i = 1, self:NumLines() do
 		local line = _G[self:GetName().."TextLeft"..i]
@@ -29,8 +74,8 @@ function TT:AddLineForID(id, linkType, noadd)
 		if text and text == linkType then return end
 	end
 
-	if self.__isHoverTip and linkType == types.spell and IsPlayerSpell(id) and C_MountJournal_GetMountFromSpell(id) then
-		self:AddLine(LEARNT_STRING)
+	if linkType == types.item then
+		TT.UpdateItemSellPrice(self)
 	end
 
 	if not noadd then self:AddLine(" ") end
@@ -38,7 +83,7 @@ function TT:AddLineForID(id, linkType, noadd)
 	if linkType == types.item then
 		local bagCount = GetItemCount(id)
 		local bankCount = GetItemCount(id, true) - bagCount
-		local itemStackCount = select(8, GetItemInfo(id))
+		local name, _, _, itemLevel, _, _, _, itemStackCount, _, _, _, classID = GetItemInfo(id)
 		if bankCount > 0 then
 			self:AddDoubleLine(BAGSLOT.."/"..BANK..":", DB.InfoColor..bagCount.."/"..bankCount)
 		elseif bagCount > 0 then
@@ -46,6 +91,18 @@ function TT:AddLineForID(id, linkType, noadd)
 		end
 		if itemStackCount and itemStackCount > 1 then
 			self:AddDoubleLine(L["Stack Cap"]..":", DB.InfoColor..itemStackCount)
+		end
+
+		-- iLvl info like retail
+		if name and itemLevel and itemLevel > 1 and iLvlItemClassIDs[classID] then
+			local tipName = self:GetName()
+			local index = strfind(tipName, "Shopping") and 3 or 2
+			local line = _G[tipName.."TextLeft"..index]
+			local lineText = line and line:GetText()
+			if lineText then
+				line:SetFormattedText(ITEM_LEVEL_STR, itemLevel, lineText)
+				line:SetJustifyH("LEFT")
+			end
 		end
 	end
 
@@ -75,10 +132,12 @@ end
 function TT:SetItemID()
 	local link = select(2, self:GetItem())
 	if link then
-		local id = GetItemInfoFromHyperlink(link)
+		local id = strmatch(link, "item:(%d+):")
 		local keystone = strmatch(link, "|Hkeystone:([0-9]+):")
 		if keystone then id = tonumber(keystone) end
-		if id then TT.AddLineForID(self, id, types.item) end
+		if id then
+			TT.AddLineForID(self, id, types.item)
+		end
 	end
 end
 
@@ -115,45 +174,12 @@ function TT:SetupTooltipID()
 
 	-- Items
 	GameTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
-	GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
-	hooksecurefunc(GameTooltip, "SetToyByItemID", function(self, id)
-		if id then TT.AddLineForID(self, id, types.item) end
-	end)
-	hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, recipeID, reagentIndex)
-		local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
-		local id = link and strmatch(link, "item:(%d+):")
-		if id then TT.AddLineForID(self, id, types.item) end
-	end)
-
-	-- Currencies
-	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
-		local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), "currency:(%d+)"))
-		if id then TT.AddLineForID(self, id, types.currency) end
-	end)
-	hooksecurefunc(GameTooltip, "SetCurrencyByID", function(self, id)
-		if id then TT.AddLineForID(self, id, types.currency) end
-	end)
-	hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
-		if id then TT.AddLineForID(self, id, types.currency) end
-	end)
 
 	-- Spell caster
 	hooksecurefunc(GameTooltip, "SetUnitAura", TT.UpdateSpellCaster)
-
-	-- Azerite traits
-	hooksecurefunc(GameTooltip, "SetAzeritePower", function(self, _, _, id)
-		if id then TT.AddLineForID(self, id, types.azerite, true) end
-	end)
-
-	-- Quests
-	hooksecurefunc("QuestMapLogTitleButton_OnEnter", function(self)
-		if self.questID then
-			TT.AddLineForID(GameTooltip, self.questID, types.quest)
-		end
-	end)
 end

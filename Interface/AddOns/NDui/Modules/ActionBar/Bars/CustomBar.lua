@@ -7,15 +7,39 @@ local mod, min, ceil = mod, min, ceil
 local cfg = C.Bars.bar4
 local margin, padding = C.Bars.margin, C.Bars.padding
 
+local prevPage = 8
+local function ChangeActionPageForDruid()
+	local page = IsPlayerSpell(33891) and 10 or 8
+	if prevPage ~= page then
+		RegisterStateDriver(_G["NDui_ActionBarX"], "page", page)
+		for i = 1, 12 do
+			local button = _G["NDui_ActionBarXButton"..i]
+			button.id = (page-1)*12 + i
+			button:SetAttribute("action", button.id)
+		end
+
+		prevPage = page
+	end
+end
+
+local function UpdatePageBySpells()
+	if InCombatLockdown() then
+		B:RegisterEvent("PLAYER_REGEN_ENABLED", UpdatePageBySpells)
+	else
+		ChangeActionPageForDruid()
+		B:UnregisterEvent("PLAYER_REGEN_ENABLED", UpdatePageBySpells)
+	end
+end
+
 function Bar:CreateCustomBar(anchor)
 	local num = 12
 	local name = "NDui_ActionBarX"
-	local page = 8
+	local page = DB.MyClass == "WARRIOR" and 10 or 8
 
 	local frame = CreateFrame("Frame", name, UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L[name], "CustomBar", anchor)
 
-	RegisterStateDriver(frame, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show")
+--	RegisterStateDriver(frame, "visibility", "[petbattle] hide; show")
 	RegisterStateDriver(frame, "page", page)
 
 	local buttonList = {}
@@ -23,7 +47,6 @@ function Bar:CreateCustomBar(anchor)
 		local button = CreateFrame("CheckButton", "$parentButton"..i, frame, "ActionBarButtonTemplate")
 		button.id = (page-1)*12 + i
 		button.isCustomButton = true
-		button.commandName = L[name]..i
 		button:SetAttribute("action", button.id)
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
@@ -78,7 +101,11 @@ function Bar:UpdateCustomBar()
 end
 
 function Bar:CustomBar()
-	if C.db["Actionbar"]["CustomBar"] then
-		Bar:CreateCustomBar({"BOTTOM", UIParent, "BOTTOM", 0, 140})
+	if not C.db["Actionbar"]["CustomBar"] then return end
+
+	Bar:CreateCustomBar({"BOTTOM", UIParent, "BOTTOM", 0, 140})
+	if DB.MyClass == "DRUID" then
+		UpdatePageBySpells()
+		B:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdatePageBySpells)
 	end
 end

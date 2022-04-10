@@ -398,10 +398,7 @@ function G:ExportGUIData()
 								text = text..";"..KEY..":"..key..":"..k..":"..tostring(v)
 							end
 						elseif key == "IgnoreSpells" then
-							text = text..";"..KEY..":"..key
-							for spellID in pairs(value) do
-								text = text..":"..tostring(spellID)
-							end
+							-- do nothing
 						else
 							for spellID, k in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..spellID
@@ -459,14 +456,6 @@ function G:ExportGUIData()
 						color = color or {"", "", ""}
 						text = text..";ACCOUNT:"..KEY..":"..class..":"..spellID..":"..anchor..":"..color[1]..":"..color[2]..":"..color[3]..":"..tostring(filter or false)
 					end
-				end
-			end
-		elseif KEY == "PartySpells" then
-			text = text..";ACCOUNT:"..KEY
-			for spellID, duration in pairs(VALUE) do
-				local name = GetSpellInfo(spellID)
-				if name then
-					text = text..":"..spellID..":"..duration
 				end
 			end
 		elseif KEY == "ContactList" then
@@ -546,10 +535,7 @@ function G:ImportGUIData()
 				local index, state = select(3, strsplit(":", option))
 				C.db[key][value][tonumber(index)] = toBoolean(state)
 			elseif value == "IgnoreSpells" then
-				local spells = {select(3, strsplit(":", option))}
-				for _, spellID in next, spells do
-					C.db[key][value][tonumber(spellID)] = true
-				end
+				-- do nothing
 			else
 				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
 				value = tonumber(value)
@@ -618,16 +604,6 @@ function G:ImportGUIData()
 				else
 					NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
 				end
-			elseif value == "PartySpells" then
-				local options = {strsplit(":", option)}
-				local index = 3
-				local spellID = options[index]
-				while spellID do
-					local duration = options[index+1]
-					NDuiADB[value][tonumber(spellID)] = tonumber(duration) or 0
-					index = index + 2
-					spellID = options[index]
-				end
 			elseif value == "ContactList" then
 				local name, r, g, b = select(3, strsplit(":", option))
 				NDuiADB[value][name] = r..":"..g..":"..b
@@ -639,7 +615,7 @@ function G:ImportGUIData()
 				NDuiADB[value][tonumber(index)] = name
 			end
 		elseif tonumber(arg1) then
-			if value == "DBMCount" then
+			if value == "DBMCount" or value == "StatOrder" then
 				C.db[key][value] = arg1
 			else
 				C.db[key][value] = tonumber(arg1)

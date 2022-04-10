@@ -2,9 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
-	-- Ready check
 	B.SetBD(ReadyCheckFrame)
 	ReadyCheckPortrait:SetAlpha(0)
 	select(2, ReadyCheckListenerFrame:GetRegions()):Hide()
@@ -17,14 +14,4 @@ tinsert(C.defaultThemes, function()
 
 	B.Reskin(ReadyCheckFrameYesButton)
 	B.Reskin(ReadyCheckFrameNoButton)
-
-	-- Role poll
-	B.StripTextures(RolePollPopup)
-	B.SetBD(RolePollPopup)
-	B.Reskin(RolePollPopupAcceptButton)
-	B.ReskinClose(RolePollPopupCloseButton)
-
-	B.ReskinRole(RolePollPopupRoleButtonTank, "TANK")
-	B.ReskinRole(RolePollPopupRoleButtonHealer, "HEALER")
-	B.ReskinRole(RolePollPopupRoleButtonDPS, "DPS")
 end)

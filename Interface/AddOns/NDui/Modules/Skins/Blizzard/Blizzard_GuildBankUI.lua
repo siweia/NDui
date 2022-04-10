@@ -1,19 +1,21 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+-- /run LoadAddOn'Blizzard_GuildBankUI' GuildBankFrame:Show()
+
 C.themes["Blizzard_GuildBankUI"] = function()
 	B.StripTextures(GuildBankFrame)
-	B.ReskinPortraitFrame(GuildBankFrame)
+	B.SetBD(GuildBankFrame, nil, 10, 0, 0, 6)
+	local closeButton = select(11, GuildBankFrame:GetChildren())
+	if closeButton then B.ReskinClose(closeButton) end
 
-	GuildBankFrame.Emblem:Hide()
-	GuildBankFrame.MoneyFrameBG:Hide()
+	GuildBankFrame.Emblem:SetAlpha(0)
 	B.Reskin(GuildBankFrame.WithdrawButton)
 	B.Reskin(GuildBankFrame.DepositButton)
 	B.ReskinScroll(GuildBankTransactionsScrollFrameScrollBar)
 	B.ReskinScroll(GuildBankInfoScrollFrameScrollBar)
 	B.Reskin(GuildBankFrame.BuyInfo.PurchaseButton)
 	B.Reskin(GuildBankFrame.Info.SaveButton)
-	B.ReskinInput(GuildItemSearchBox)
 
 	GuildBankFrame.WithdrawButton:SetPoint("RIGHT", GuildBankFrame.DepositButton, "LEFT", -2, 0)
 
@@ -43,7 +45,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		end
 	end
 
-	for i = 1, 8 do
+	for i = 1, 6 do
 		local tab = _G["GuildBankTab"..i]
 		local button = tab.Button
 		local icon = button.IconTexture
@@ -63,7 +65,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 	local NUM_GUILDBANK_ICONS_PER_ROW = 10
 	local NUM_GUILDBANK_ICON_ROWS = 9
 
-	GuildBankPopupFrame.BorderBox:Hide()
+	GuildBankPopupFrame:GetChildren():Hide()
 	GuildBankPopupFrame.BG:Hide()
 	B.SetBD(GuildBankPopupFrame)
 	GuildBankPopupEditBox:DisableDrawLayer("BACKGROUND")
@@ -76,13 +78,14 @@ C.themes["Blizzard_GuildBankUI"] = function()
 	GuildBankPopupFrame:HookScript("OnShow", function()
 		for i = 1, NUM_GUILDBANK_ICONS_PER_ROW * NUM_GUILDBANK_ICON_ROWS do
 			local button = _G["GuildBankPopupButton"..i]
+			local icon = _G["GuildBankPopupButton"..i.."Icon"]
 			if not button.styled then
 				button:SetCheckedTexture(DB.textures.pushed)
 				select(2, button:GetRegions()):Hide()
-				B.ReskinIcon(button.Icon)
+				B.ReskinIcon(icon)
 				local hl = button:GetHighlightTexture()
 				hl:SetColorTexture(1, 1, 1, .25)
-				hl:SetAllPoints(button.Icon)
+				hl:SetAllPoints(icon)
 
 				button.styled = true
 			end

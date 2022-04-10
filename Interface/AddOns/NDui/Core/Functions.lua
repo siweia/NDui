@@ -117,18 +117,6 @@ do
 			list[word] = true
 		end
 	end
-
-	-- Atlas info
-	function B:GetTextureStrByAtlas(info, sizeX, sizeY)
-		local file = info and info.file
-		if not file then return end
-
-		local width, height, txLeft, txRight, txTop, txBottom = info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
-		local atlasWidth = width / (txRight-txLeft)
-		local atlasHeight = height / (txBottom-txTop)
-
-		return format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", file, (sizeX or 0), (sizeY or 0), atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-	end
 end
 
 -- Color
@@ -172,10 +160,6 @@ end
 do
 	local iLvlDB = {}
 	local itemLevelString = "^"..gsub(ITEM_LEVEL, "%%d", "")
-	local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
-	local essenceTextureID = 2975691
-	local essenceDescription = GetSpellDescription(277253)
-	local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
 	local RETRIEVING_ITEM_INFO = RETRIEVING_ITEM_INFO
 
 	local tip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
@@ -188,68 +172,15 @@ do
 			wipe(tip.gems)
 		end
 
-		if not tip.essences then
-			tip.essences = {}
-		else
-			for _, essences in pairs(tip.essences) do
-				wipe(essences)
-			end
-		end
-
-		local step = 1
-		for i = 1, 10 do
+		for i = 1, 5 do
 			local tex = _G[tip:GetName().."Texture"..i]
 			local texture = tex and tex:IsShown() and tex:GetTexture()
 			if texture then
-				if texture == essenceTextureID then
-					local selected = (tip.gems[i-1] ~= essenceTextureID and tip.gems[i-1]) or nil
-					if not tip.essences[step] then tip.essences[step] = {} end
-					tip.essences[step][1] = selected		--essence texture if selected or nil
-					tip.essences[step][2] = tex:GetAtlas()	--atlas place 'tooltip-heartofazerothessence-major' or 'tooltip-heartofazerothessence-minor'
-					tip.essences[step][3] = texture			--border texture placed by the atlas
-
-					step = step + 1
-					if selected then tip.gems[i-1] = nil end
-				else
-					tip.gems[i] = texture
-				end
+				tip.gems[i] = texture
 			end
 		end
 
-		return tip.gems, tip.essences
-	end
-
-	function B:InspectItemInfo(text, slotInfo)
-		local itemLevel = strfind(text, itemLevelString) and strmatch(text, "(%d+)%)?$")
-		if itemLevel then
-			slotInfo.iLvl = tonumber(itemLevel)
-		end
-
-		local enchant = strmatch(text, enchantString)
-		if enchant then
-			slotInfo.enchantText = enchant
-		end
-	end
-
-	function B:CollectEssenceInfo(index, lineText, slotInfo)
-		local step = 1
-		local essence = slotInfo.essences[step]
-		if essence and next(essence) and (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
-			for i = 5, 2, -1 do
-				local line = _G[tip:GetName().."TextLeft"..index-i]
-				local text = line and line:GetText()
-
-				if text and (not strmatch(text, "^[ +]")) and essence and next(essence) then
-					local r, g, b = line:GetTextColor()
-					essence[4] = r
-					essence[5] = g
-					essence[6] = b
-
-					step = step + 1
-					essence = slotInfo.essences[step]
-				end
-			end
-		end
+		return tip.gems
 	end
 
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
@@ -260,22 +191,7 @@ do
 			if not tip.slotInfo then tip.slotInfo = {} else wipe(tip.slotInfo) end
 
 			local slotInfo = tip.slotInfo
-			slotInfo.gems, slotInfo.essences = B:InspectItemTextures()
-
-			for i = 1, tip:NumLines() do
-				local line = _G[tip:GetName().."TextLeft"..i]
-				if not line then break end
-
-				local text = line:GetText()
-				if text then
-					if i == 1 and text == RETRIEVING_ITEM_INFO then
-						return "tooSoon"
-					else
-						B:InspectItemInfo(text, slotInfo)
-						B:CollectEssenceInfo(i, text, slotInfo)
-					end
-				end
-			end
+			slotInfo.gems = B:InspectItemTextures()
 
 			return slotInfo
 		else
@@ -397,8 +313,53 @@ end
 -- UI widgets
 do
 	-- HelpTip
-	function B.HelpInfoAcknowledge(callbackArg)
-		NDuiADB["Help"][callbackArg] = true
+	function B:HelpInfoAcknowledge()
+		self.__owner:Hide()
+		NDuiADB["Help"][self.__arg] = true
+		if self.__callback then self.__callback() end
+	end
+
+	local helpTipTable = {}
+	local pointInfo = {
+		["TOP"] = {relF = "BOTTOM", degree = 0, arrowX = 0, arrowY = -5, glowX = 0, glowY = -4},
+		["BOTTOM"] = {relF = "TOP", degree = 180, arrowX = 0, arrowY = 5, glowX = 0, glowY = 4},
+		["LEFT"] = {relF = "RIGHT", degree = 90, arrowX = 5, arrowY = 0, glowX = 4, glowY = 0},
+		["RIGHT"] = {relF = "LEFT", degree = 270, arrowX = -5, arrowY = 0, glowX = -4, glowY = 0},
+	}
+
+	function B:ShowHelpTip(parent, text, targetPoint, offsetX, offsetY, callback, callbackArg, arrowX, arrowY)
+		local info = helpTipTable[callbackArg]
+		if not info then
+			local anchorInfo = pointInfo[targetPoint]
+			info = CreateFrame("Frame", nil, parent, "MicroButtonAlertTemplate")
+			info:SetPoint(anchorInfo.relF, parent, targetPoint, offsetX or 0, offsetY or 0)
+			info.Text:SetText(text.."|n|n|n")
+			info.CloseButton:Hide()
+			info.okay = B.CreateButton(info, 110, 22, L["GotIt"], 14)
+			info.okay:SetPoint("BOTTOM", 0, 12)
+			info.okay.__owner = info
+			info.okay.__arg = callbackArg
+			info.okay.__callback = callback
+			info.okay:SetScript("OnClick", B.HelpInfoAcknowledge)
+
+			info.Arrow:ClearAllPoints()
+			info.Arrow:SetPoint("CENTER", info, anchorInfo.relF, arrowX or anchorInfo.arrowX, arrowY or anchorInfo.arrowY)
+
+			info.Arrow.Glow:ClearAllPoints()
+			info.Arrow.Glow:SetPoint("CENTER", info.Arrow.Arrow, "CENTER", anchorInfo.glowX, anchorInfo.glowY)
+			info.Arrow.Glow:SetRotation(rad(anchorInfo.degree))
+			info.Arrow.Arrow:SetRotation(rad(anchorInfo.degree))
+
+			helpTipTable[callbackArg] = info
+		end
+		info:Show()
+	end
+
+	function B:HideHelpTip(callbackArg)
+		local info = helpTipTable[callbackArg]
+		if info then
+			info:Hide()
+		end
 	end
 
 	-- Dropdown menu
@@ -663,20 +624,17 @@ do
 	end
 
 	local AtlasToQuality = {
-		["error"] = 99,
-		["uncollected"] = LE_ITEM_QUALITY_POOR,
-		["gray"] = LE_ITEM_QUALITY_POOR,
-		["white"] = LE_ITEM_QUALITY_COMMON,
-		["green"] = LE_ITEM_QUALITY_UNCOMMON,
-		["blue"] = LE_ITEM_QUALITY_RARE,
-		["purple"] = LE_ITEM_QUALITY_EPIC,
-		["orange"] = LE_ITEM_QUALITY_LEGENDARY,
-		["artifact"] = LE_ITEM_QUALITY_ARTIFACT,
-		["account"] = LE_ITEM_QUALITY_HEIRLOOM,
+		["auctionhouse-itemicon-border-gray"] = LE_ITEM_QUALITY_POOR,
+		["auctionhouse-itemicon-border-white"] = LE_ITEM_QUALITY_COMMON,
+		["auctionhouse-itemicon-border-green"] = LE_ITEM_QUALITY_UNCOMMON,
+		["auctionhouse-itemicon-border-blue"] = LE_ITEM_QUALITY_RARE,
+		["auctionhouse-itemicon-border-purple"] = LE_ITEM_QUALITY_EPIC,
+		["auctionhouse-itemicon-border-orange"] = LE_ITEM_QUALITY_LEGENDARY,
+		["auctionhouse-itemicon-border-artifact"] = LE_ITEM_QUALITY_ARTIFACT,
+		["auctionhouse-itemicon-border-account"] = LE_ITEM_QUALITY_HEIRLOOM,
 	}
 	local function updateIconBorderColorByAtlas(self, atlas)
-		local atlasAbbr = atlas and strmatch(atlas, "%-(%w+)$")
-		local quality = atlasAbbr and AtlasToQuality[atlasAbbr]
+		local quality = AtlasToQuality[atlas]
 		local color = DB.QualityColors[quality or 1]
 		self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
@@ -686,21 +644,15 @@ do
 		end
 		self.__owner.bg:SetBackdropBorderColor(r, g, b)
 	end
-	local function resetIconBorderColor(self, texture)
-		if not texture then
-			self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
-		end
+	local function resetIconBorderColor(self)
+		self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 	end
-	function B:ReskinIconBorder(needInit, useAtlas)
+	function B:ReskinIconBorder(needInit)
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
 		if not self.__owner.bg then return end
-		if useAtlas or self.__owner.useCircularIconBorder then -- for auction item display
+		if self.__owner.useCircularIconBorder then -- for auction item display
 			hooksecurefunc(self, "SetAtlas", updateIconBorderColorByAtlas)
-			hooksecurefunc(self, "SetTexture", resetIconBorderColor)
-			if needInit then
-				self:SetAtlas(self:GetAtlas()) -- for border with color before hook
-			end
 		else
 			hooksecurefunc(self, "SetVertexColor", updateIconBorderColor)
 			if needInit then
@@ -878,6 +830,8 @@ do
 		hl:ClearAllPoints()
 		hl:SetInside(bg)
 		hl:SetVertexColor(cr, cg, cb, .25)
+
+		return bg
 	end
 
 	function B:ResetTabAnchor()
@@ -1001,7 +955,6 @@ do
 		self:SetPoint("TOPRIGHT", parent, "TOPRIGHT", xOffset, yOffset)
 
 		B.StripTextures(self)
-		if self.Border then self.Border:SetAlpha(0) end
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetAllPoints()
 
@@ -1033,6 +986,7 @@ do
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", -2, 0)
 		bg:SetPoint("BOTTOMRIGHT")
+		self.bg = bg
 
 		if height then self:SetHeight(height) end
 		if width then self:SetWidth(width) end
@@ -1070,31 +1024,13 @@ do
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 	end
 
-	function B:ReskinFilterReset()
-		B.StripTextures(self)
-		self:ClearAllPoints()
-		self:SetPoint("TOPRIGHT", -5, 10)
-
-		local tex = self:CreateTexture(nil, "ARTWORK")
-		tex:SetInside(nil, 2, 2)
-		tex:SetTexture(DB.closeTex)
-		tex:SetVertexColor(1, 0, 0)
-	end
-
 	function B:ReskinFilterButton()
 		B.StripTextures(self)
 		B.Reskin(self)
-		if self.Text then
-			self.Text:SetPoint("CENTER")
-		end
-		if self.Icon then
-			B.SetupArrow(self.Icon, "right")
-			self.Icon:SetPoint("RIGHT")
-			self.Icon:SetSize(14, 14)
-		end
-		if DB.isNewPatch and self.ResetButton then
-			B.ReskinFilterReset(self.ResetButton)
-		end
+		self.Text:SetPoint("CENTER")
+		B.SetupArrow(self.Icon, "right")
+		self.Icon:SetPoint("RIGHT")
+		self.Icon:SetSize(14, 14)
 	end
 
 	function B:ReskinNavBar()
@@ -1206,8 +1142,11 @@ do
 
 	-- Handle collapse
 	local function updateCollapseTexture(texture, collapsed)
-		local atlas = collapsed and "Soulbinds_Collection_CategoryHeader_Expand" or "Soulbinds_Collection_CategoryHeader_Collapse"
-		texture:SetAtlas(atlas, true)
+		if collapsed then
+			texture:SetTexCoord(0, .4375, 0, .4375)
+		else
+			texture:SetTexCoord(.5625, 1, 0, .4375)
+		end
 	end
 
 	local function resetCollapseTexture(self, texture)
@@ -1231,6 +1170,7 @@ do
 	function B:ReskinCollapse(isAtlas)
 		self:SetHighlightTexture("")
 		self:SetPushedTexture("")
+		self:SetDisabledTexture("")
 
 		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
@@ -1240,6 +1180,8 @@ do
 
 		self.__texture = bg:CreateTexture(nil, "OVERLAY")
 		self.__texture:SetPoint("CENTER")
+		self.__texture:SetSize(7, 7)
+		self.__texture:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
 		self.__texture.DoCollapse = updateCollapseTexture
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
@@ -1277,10 +1219,9 @@ do
 	end
 
 	-- UI templates
-	function B:ReskinPortraitFrame()
+	function B:ReskinPortraitFrame(x, y, x2, y2)
 		B.StripTextures(self)
-		local bg = B.SetBD(self)
-		bg:SetAllPoints(self)
+		local bg = B.SetBD(self, nil, x, y, x2, y2)
 		local frameName = self.GetName and self:GetName()
 		local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName.."Portrait"])
 		if portrait then
@@ -1289,6 +1230,8 @@ do
 		local closeButton = self.CloseButton or (frameName and _G[frameName.."CloseButton"])
 		if closeButton then
 			B.ReskinClose(closeButton)
+			closeButton:ClearAllPoints()
+			closeButton:SetPoint("TOPRIGHT", bg, -5, -5)
 		end
 		return bg
 	end
@@ -1338,7 +1281,7 @@ do
 
 			local roleIcon = self.HealthBar.RoleIcon
 			roleIcon:ClearAllPoints()
-			roleIcon:SetPoint("CENTER", self.squareBG, "TOPRIGHT", -2, -2)
+			roleIcon:SetPoint("CENTER", self.squareBG, "TOPRIGHT")
 			replaceFollowerRole(roleIcon, roleIcon:GetAtlas())
 			hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
 
@@ -1362,6 +1305,31 @@ do
 		hl:SetInside()
 	end
 
+	local function reskinRotation(self, direction)
+		self:SetSize(20, 20)
+		B.Reskin(self)
+		local tex = self:CreateTexture(nil, "ARTWORK")
+		tex:SetAllPoints()
+		tex:SetTexture("Interface\\Buttons\\UI-RefreshButton")
+		if direction == "left" then
+			tex:SetTexCoord(1, 0, 0, 1)
+		else
+			tex:SetTexCoord(0, 1, 0, 1)
+		end
+	end
+
+	function B:ReskinRotationButtons()
+		local name = self.GetName and self:GetName() or self
+		local leftButton = _G[name.."RotateRightButton"]
+		reskinRotation(leftButton, "left")
+		local rightButton = _G[name.."RotateLeftButton"]
+		reskinRotation(rightButton, "right")
+
+		leftButton:SetPoint("TOPLEFT", 5, -5)
+		rightButton:ClearAllPoints()
+		rightButton:SetPoint("LEFT", leftButton, "RIGHT", 3, 0)
+	end
+
 	function B:AffixesSetup()
 		for _, frame in ipairs(self.Affixes) do
 			frame.Border:SetTexture(nil)
@@ -1382,43 +1350,26 @@ do
 	-- Role Icons
 	function B:GetRoleTexCoord()
 		if self == "TANK" then
-			return .34/9.03, 2.85/9.03, 3.16/9.03, 5.67/9.03
+			return .34/9.03, 2.86/9.03, 3.16/9.03, 5.68/9.03
 		elseif self == "DPS" or self == "DAMAGER" then
-			return 3.27/9.03, 5.78/9.03, 3.16/9.03, 5.67/9.03
+			return 3.26/9.03, 5.78/9.03, 3.16/9.03, 5.68/9.03
 		elseif self == "HEALER" then
-			return 3.27/9.03, 5.78/9.03, .27/9.03, 2.78/9.03
+			return 3.26/9.03, 5.78/9.03, .28/9.03, 2.78/9.03
 		elseif self == "LEADER" then
-			return .34/9.03, 2.85/9.03, .27/9.03, 2.78/9.03
+			return .34/9.03, 2.86/9.03, .28/9.03, 2.78/9.03
 		elseif self == "READY" then
-			return 6.17/9.03, 8.68/9.03, .27/9.03, 2.78/9.03
+			return 6.17/9.03, 8.75/9.03, .28/9.03, 2.78/9.03
 		elseif self == "PENDING" then
-			return 6.17/9.03, 8.68/9.03, 3.16/9.03, 5.67/9.03
+			return 6.17/9.03, 8.75/9.03, 3.16/9.03, 5.68/9.03
 		elseif self == "REFUSE" then
-			return 3.27/9.03, 5.78/9.03, 6.04/9.03, 8.55/9.03
+			return 3.26/9.03, 5.78/9.03, 6.03/9.03, 8.61/9.03
 		end
-	end
-
-	function B:GetRoleTex()
-		if self == "TANK" then
-			return DB.tankTex
-		elseif self == "DPS" or self == "DAMAGER" then
-			return DB.dpsTex
-		elseif self == "HEALER" then
-			return DB.healTex
-		end
-	end
-
-	function B:ReskinSmallRole(role)
-		self:SetTexture(B.GetRoleTex(role))
-		self:SetTexCoord(0, 1, 0, 1)
 	end
 
 	function B:ReskinRole(role)
 		if self.background then self.background:SetTexture("") end
-
 		local cover = self.cover or self.Cover
 		if cover then cover:SetTexture("") end
-
 		local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
 		if texture then
 			texture:SetTexture(DB.rolesTex)
@@ -1773,9 +1724,10 @@ do
 
 	object = EnumerateFrames()
 	while object do
-		if not object:IsForbidden() and not handled[object:GetObjectType()] then
+		local objectType = object.GetObjectType and object:GetObjectType()
+		if objectType and not handled[objectType] and not object:IsForbidden() then
 			addapi(object)
-			handled[object:GetObjectType()] = true
+			handled[objectType] = true
 		end
 
 		object = EnumerateFrames(object)

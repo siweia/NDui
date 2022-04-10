@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+-- Table Attribute Display
 local function reskinTableAttribute(frame)
 	if frame.styled then return end
 
@@ -32,7 +33,6 @@ local function reskinTableAttribute(frame)
 end
 
 C.themes["Blizzard_DebugTools"] = function()
-	-- Table Attribute Display
 	reskinTableAttribute(TableAttributeDisplay)
 	hooksecurefunc(TableInspectorMixin, "InspectTable", reskinTableAttribute)
 end

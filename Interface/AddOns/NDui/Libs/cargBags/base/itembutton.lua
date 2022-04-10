@@ -21,16 +21,12 @@ local _, ns = ...
 local cargBags = ns.cargBags
 
 local _G = _G
-local ReagentButtonInventorySlot = _G.ReagentButtonInventorySlot
-local ButtonInventorySlot = _G.ButtonInventorySlot
-local BANK_CONTAINER = BANK_CONTAINER or -1
-local REAGENTBANK_CONTAINER = REAGENTBANK_CONTAINER or -3
 
 --[[!
 	@class ItemButton
 		This class serves as the basis for all itemSlots in a container
 ]]
-local ItemButton = cargBags:NewClass("ItemButton", nil, "ItemButton")
+local ItemButton = cargBags:NewClass("ItemButton", nil, "Button")
 
 --[[!
 	Gets a template name for the bagID
@@ -39,14 +35,8 @@ local ItemButton = cargBags:NewClass("ItemButton", nil, "ItemButton")
 ]]
 function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagID
-	return (bagID == REAGENTBANK_CONTAINER and "ReagentBankItemButtonGenericTemplate")
-		or (bagID == BANK_CONTAINER and "BankItemButtonGenericTemplate")
-		or (bagID and "ContainerFrameItemButtonTemplate")
-		or "",
-		(bagID == REAGENTBANK_CONTAINER and ReagentBankFrame)
-		or (bagID == BANK_CONTAINER and BankFrame)
-		or (bagID and _G["ContainerFrame"..(bagID + 1)])
-		or ""
+	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "ItemButtonTemplate",
+      (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or ContainerFrame1;
 end
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
@@ -58,11 +48,7 @@ local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end
 	@return button <ItemButton>
 ]]
 local function BankSplitStack(button, split)
-	SplitContainerItem(BANK_CONTAINER, button:GetID(), split)
-end
-
-local function ReagenBankSplitStack(button, split)
-	SplitContainerItem(REAGENTBANK_CONTAINER, button:GetID(), split)
+	SplitContainerItem(button:GetParent():GetID(), button:GetID(), split)
 end
 
 function ItemButton:New(bagID, slotID)
@@ -76,12 +62,7 @@ function ItemButton:New(bagID, slotID)
 	button:SetID(slotID)
 	button:Show()
 	button:HookScript("OnEnter", button.OnEnter)
-	button:HookScript("OnLeave", button.OnLeave)
-	if bagID == REAGENTBANK_CONTAINER then
-		button.GetInventorySlot = ReagentButtonInventorySlot
-		button.UpdateTooltip = BankFrameItemButton_OnEnter
-		button.SplitStack = ReagenBankSplitStack
-	elseif bagID == BANK_CONTAINER then
+	if bagID == BANK_CONTAINER then
 		button.GetInventorySlot = ButtonInventorySlot
 		button.UpdateTooltip = BankFrameItemButton_OnEnter
 		button.SplitStack = BankSplitStack
@@ -98,25 +79,21 @@ end
 	@return button <ItemButton>
 	@callback button:OnCreate(tpl)
 ]]
-
 function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1
 	local name = ("%sSlot%d"):format(impl.name, impl.numSlots)
 
-	local button = setmetatable(CreateFrame("ItemButton", name, parent, tpl..", BackdropTemplate"), self.__index)
+	local button = setmetatable(CreateFrame("Button", name, parent, tpl..", BackdropTemplate"), self.__index)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
 	if(button.OnCreate) then button:OnCreate(tpl) end
-
 	local btnNT = _G[button:GetName().."NormalTexture"]
 	local btnNIT = button.NewItemTexture
 	local btnBIT = button.BattlepayItemTexture
-	local btnICO = button.ItemContextOverlay
 	if btnNT then btnNT:SetTexture("") end
 	if btnNIT then btnNIT:SetTexture("") end
 	if btnBIT then btnBIT:SetTexture("") end
-	if btnICO then btnICO:SetTexture("") end
 
 	button:RegisterForDrag("LeftButton") -- fix button drag in 9.0
 
@@ -136,6 +113,6 @@ end
 	@param item <table> [optional]
 	@return item <table>
 ]]
-function ItemButton:GetInfo(item)
+function ItemButton:GetItemInfo(item)
 	return self.implementation:GetItemInfo(self.bagID, self.slotID, item)
 end

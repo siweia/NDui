@@ -17,7 +17,6 @@ function Bar:CreateBar5()
 
 	MultiBarLeft:SetParent(frame)
 	MultiBarLeft:EnableMouse(false)
-	MultiBarLeft.QuickKeybindGlow:SetTexture("")
 	hooksecurefunc(MultiBarLeft, "SetScale", function(self, scale, force)
 		if not force and scale ~= 1 then
 			self:SetScale(1, true)

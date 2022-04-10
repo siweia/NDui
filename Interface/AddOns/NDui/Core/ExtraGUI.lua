@@ -6,7 +6,7 @@ local _G = _G
 local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
 local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonumber
 local GetSpellInfo, GetSpellTexture = GetSpellInfo, GetSpellTexture
-local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
+local GetInstanceInfo = GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
 
 local function sortBars(barTable)
@@ -70,11 +70,20 @@ local function updateRaidDebuffs()
 	B:GetModule("UnitFrames"):UpdateRaidDebuffs()
 end
 
-local function AddNewDungeon(dungeons, dungeonID)
-	local name = EJ_GetInstanceInfo(dungeonID)
-	if name then
-		tinsert(dungeons, name)
+local function stripColon(name)
+	name = gsub(name, ".-：", "")
+	name = gsub(name, ".-:", "")
+	return name
+end
+
+local function GetNameFromID(id)
+	local name
+	if id == 0 then
+		name = OTHER
+	else
+		name = GetRealZoneText(id)
 	end
+	return name
 end
 
 function G:SetupRaidDebuffs(parent)
@@ -111,17 +120,38 @@ function G:SetupRaidDebuffs(parent)
 		end)
 	end
 
+	local dungeonIDs = {48, 230, 36, 349, 389, 129, 47, 189, 33, 329, 109, 70, 43, 209}
 	local dungeons = {}
-	for dungeonID = 1182, 1189 do
-		AddNewDungeon(dungeons, dungeonID)
+	for _, id in pairs(dungeonIDs) do
+		local name = GetNameFromID(id)
+		if name then
+			name = stripColon(name)
+			tinsert(dungeons, name)
+		end
 	end
-	AddNewDungeon(dungeons, 1194)
+	local raidIDs = {409, 249, 309, 469, 509, 531, 533}
+	local raids = {}
+	for _, id in pairs(raidIDs) do
+		local name = GetNameFromID(id)
+		if name then
+			name = stripColon(name)
+			tinsert(raids, name)
+		end
+	end
 
-	local raids = {
-		[1] = EJ_GetInstanceInfo(1190),
-		[2] = EJ_GetInstanceInfo(1193),
-		[3] = EJ_GetInstanceInfo(1195),
-	}
+	local IdToName = {}
+	local NameToId = {}
+	for _, group in pairs({dungeonIDs, raidIDs}) do
+		for _, id in pairs(group) do
+			local name = GetNameFromID(id)
+			if name then
+				name = stripColon(name)
+				IdToName[id] = name
+				NameToId[name] = id
+			end
+		end
+	end
+	NameToId[0] = 0 -- OTHER group
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
@@ -138,9 +168,9 @@ function G:SetupRaidDebuffs(parent)
 		return priority
 	end
 
-	local function isAuraExisted(instName, spellID)
-		local localPrio = C.RaidDebuffs[instName][spellID]
-		local savedPrio = NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]
+	local function isAuraExisted(instID, spellID)
+		local localPrio = C.RaidDebuffs[instID][spellID]
+		local savedPrio = NDuiADB["RaidDebuffs"][instID] and NDuiADB["RaidDebuffs"][instID][spellID]
 		if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
 			return false
 		end
@@ -152,12 +182,13 @@ function G:SetupRaidDebuffs(parent)
 		local instName = dungeonName or raidName or (iType.Text:GetText() == OTHER and 0)
 		if not instName or not spellID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 		if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		if isAuraExisted(instName, spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+		local instID = NameToId[instName]
+		if isAuraExisted(instID, spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		priority = analyzePrio(priority)
-		if not NDuiADB["RaidDebuffs"][instName] then NDuiADB["RaidDebuffs"][instName] = {} end
-		NDuiADB["RaidDebuffs"][instName][spellID] = priority
-		setupBars(instName)
+		if not NDuiADB["RaidDebuffs"][instID] then NDuiADB["RaidDebuffs"][instID] = {} end
+		NDuiADB["RaidDebuffs"][instID][spellID] = priority
+		setupBars(instID)
 		G:ClearEdit(options[3])
 		G:ClearEdit(options[4])
 	end
@@ -211,13 +242,14 @@ function G:SetupRaidDebuffs(parent)
 
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			if C.RaidDebuffs[bar.instName][bar.spellID] then
-				if not NDuiADB["RaidDebuffs"][bar.instName] then NDuiADB["RaidDebuffs"][bar.instName] = {} end
-				NDuiADB["RaidDebuffs"][bar.instName][bar.spellID] = 0
+			local instID = bar.instID
+			if C.RaidDebuffs[instID][bar.spellID] then
+				if not NDuiADB["RaidDebuffs"][instID] then NDuiADB["RaidDebuffs"][instID] = {} end
+				NDuiADB["RaidDebuffs"][instID][bar.spellID] = 0
 			else
-				NDuiADB["RaidDebuffs"][bar.instName][bar.spellID] = nil
+				NDuiADB["RaidDebuffs"][instID][bar.spellID] = nil
 			end
-			setupBars(bar.instName)
+			setupBars(instID)
 		end)
 
 		local spellName = B.CreateFS(bar, 14, "", false, "LEFT", 30, 0)
@@ -236,8 +268,9 @@ function G:SetupRaidDebuffs(parent)
 		end)
 		prioBox:HookScript("OnEnterPressed", function(self)
 			local prio = analyzePrio(tonumber(self:GetText()))
-			if not NDuiADB["RaidDebuffs"][bar.instName] then NDuiADB["RaidDebuffs"][bar.instName] = {} end
-			NDuiADB["RaidDebuffs"][bar.instName][bar.spellID] = prio
+			local instID = bar.instID
+			if not NDuiADB["RaidDebuffs"][instID] then NDuiADB["RaidDebuffs"][instID] = {} end
+			NDuiADB["RaidDebuffs"][instID][bar.spellID] = prio
 			self:SetText(prio)
 		end)
 		B.AddTooltip(prioBox, "ANCHOR_TOPRIGHT", L["Prio Editbox"], "info", true)
@@ -246,12 +279,12 @@ function G:SetupRaidDebuffs(parent)
 		return bar
 	end
 
-	local function applyData(index, instName, spellID, priority)
+	local function applyData(index, instID, spellID, priority)
 		local name, _, texture = GetSpellInfo(spellID)
 		if not bars[index] then
 			bars[index] = createBar(index, texture)
 		end
-		bars[index].instName = instName
+		bars[index].instID = instID
 		bars[index].spellID = spellID
 		bars[index].priority = priority
 		bars[index].spellName:SetText(name)
@@ -261,23 +294,23 @@ function G:SetupRaidDebuffs(parent)
 	end
 
 	function setupBars(self)
-		local instName = tonumber(self) or self.text or self
+		local instID = tonumber(self) or NameToId[self.text]
 		local index = 0
 
-		if C.RaidDebuffs[instName] then
-			for spellID, priority in pairs(C.RaidDebuffs[instName]) do
-				if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spellID]) then
+		if C.RaidDebuffs[instID] then
+			for spellID, priority in pairs(C.RaidDebuffs[instID]) do
+				if not (NDuiADB["RaidDebuffs"][instID] and NDuiADB["RaidDebuffs"][instID][spellID]) then
 					index = index + 1
-					applyData(index, instName, spellID, priority)
+					applyData(index, instID, spellID, priority)
 				end
 			end
 		end
 
-		if NDuiADB["RaidDebuffs"][instName] then
-			for spellID, priority in pairs(NDuiADB["RaidDebuffs"][instName]) do
+		if NDuiADB["RaidDebuffs"][instID] then
+			for spellID, priority in pairs(NDuiADB["RaidDebuffs"][instID]) do
 				if priority > 0 then
 					index = index + 1
-					applyData(index, instName, spellID, priority)
+					applyData(index, instID, spellID, priority)
 				end
 			end
 		end
@@ -300,13 +333,13 @@ function G:SetupRaidDebuffs(parent)
 	end
 
 	local function autoSelectInstance()
-		local instName, instType = GetInstanceInfo()
+		local _, instType, _, _, _, _, _, instID = GetInstanceInfo()
 		if instType == "none" then return end
 		for i = 1, 2 do
 			local option = options[i]
 			for j = 1, #option.options do
 				local name = option.options[j].text
-				if instName == name then
+				if IdToName[instID] == name then
 					iType.options[i]:Click()
 					options[i].options[j]:Click()
 				end
@@ -343,7 +376,7 @@ function G:SetupClickCast(parent)
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .25)
+		B.CreateBD(bar, .3)
 		barTable[clickSet] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -427,149 +460,6 @@ function G:SetupClickCast(parent)
 	end
 end
 
-local function updatePartyWatcherSpells()
-	B:GetModule("UnitFrames"):UpdatePartyWatcherSpells()
-end
-
-function G:SetupPartyWatcher(parent)
-	local guiName = "NDuiGUI_PartyWatcher"
-	toggleExtraGUI(guiName)
-	if extraGUIs[guiName] then return end
-
-	local panel = createExtraGUI(parent, guiName, L["AddPartyWatcher"].."*", true)
-	panel:SetScript("OnHide", updatePartyWatcherSpells)
-
-	local barTable = {}
-	local ARCANE_TORRENT = GetSpellInfo(25046)
-
-	local function createBar(parent, spellID, duration)
-		local spellName = GetSpellInfo(spellID)
-		if spellName == ARCANE_TORRENT then return end
-		local texture = GetSpellTexture(spellID)
-
-		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
-		bar:SetSize(220, 30)
-		B.CreateBD(bar, .25)
-		barTable[spellID] = bar
-
-		local icon, close = G:CreateBarWidgets(bar, texture)
-		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID, "system")
-		close:SetScript("OnClick", function()
-			bar:Hide()
-			if C.PartySpells[spellID] then
-				NDuiADB["PartySpells"][spellID] = 0
-			else
-				NDuiADB["PartySpells"][spellID] = nil
-			end
-			barTable[spellID] = nil
-			sortBars(barTable)
-		end)
-
-		local name = B.CreateFS(bar, 14, spellName, false, "LEFT", 30, 0)
-		name:SetWidth(120)
-		name:SetJustifyH("LEFT")
-
-		local timer = B.CreateFS(bar, 14, duration, false, "RIGHT", -30, 0)
-		timer:SetWidth(60)
-		timer:SetJustifyH("RIGHT")
-		timer:SetTextColor(0, 1, 0)
-
-		sortBars(barTable)
-	end
-
-	local frame = panel.bg
-	local options = {}
-
-	options[1] = G:CreateEditbox(frame, "ID*", 10, -30, L["ID Intro"])
-	options[2] = G:CreateEditbox(frame, L["Cooldown*"], 120, -30, L["Cooldown Intro"])
-
-	local scroll = G:CreateScroll(frame, 240, 410)
-	scroll.reset = B.CreateButton(frame, 55, 25, RESET)
-	scroll.reset:SetPoint("TOPLEFT", 10, -80)
-	scroll.reset.text:SetTextColor(1, 0, 0)
-	StaticPopupDialogs["RESET_NDUI_PARTYWATCHER"] = {
-		text = L["Reset your raiddebuffs list?"],
-		button1 = YES,
-		button2 = NO,
-		OnAccept = function()
-			wipe(NDuiADB["PartySpells"])
-			ReloadUI()
-		end,
-		whileDead = 1,
-	}
-	scroll.reset:SetScript("OnClick", function()
-		StaticPopup_Show("RESET_NDUI_PARTYWATCHER")
-	end)
-
-	local function addClick(scroll, options)
-		local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
-		if not spellID or not duration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-		if not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		local modDuration = NDuiADB["PartySpells"][spellID]
-		if modDuration and modDuration ~= 0 or C.PartySpells[spellID] and not modDuration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
-
-		NDuiADB["PartySpells"][spellID] = duration
-		createBar(scroll.child, spellID, duration)
-		clearEdit(options)
-	end
-
-	scroll.add = B.CreateButton(frame, 55, 25, ADD)
-	scroll.add:SetPoint("TOPRIGHT", -10, -80)
-	scroll.add:SetScript("OnClick", function()
-		addClick(scroll, options)
-	end)
-
-	scroll.clear = B.CreateButton(frame, 55, 25, KEY_NUMLOCK_MAC)
-	scroll.clear:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
-	scroll.clear:SetScript("OnClick", function()
-		clearEdit(options)
-	end)
-
-	local menuList = {}
-	local function AddSpellFromPreset(_, spellID, duration)
-		options[1]:SetText(spellID)
-		options[2]:SetText(duration)
-		DropDownList1:Hide()
-	end
-
-	local index = 1
-	for class, value in pairs(C.PartySpellsDB) do
-		local color = B.HexRGB(B.ClassColor(class))
-		local localClassName = LOCALIZED_CLASS_NAMES_MALE[class]
-		menuList[index] = {text = color..localClassName, notCheckable = true, hasArrow = true, menuList = {}}
-
-		for spellID, duration in pairs(value) do
-			local spellName, _, texture = GetSpellInfo(spellID)
-			if spellName then
-				tinsert(menuList[index].menuList, {
-					text = spellName,
-					icon = texture,
-					tCoordLeft = .08,
-					tCoordRight = .92,
-					tCoordTop = .08,
-					tCoordBottom = .92,
-					arg1 = spellID,
-					arg2 = duration,
-					func = AddSpellFromPreset,
-					notCheckable = true,
-				})
-			end
-		end
-		index = index + 1
-	end
-	scroll.preset = B.CreateButton(frame, 55, 25, L["Preset"])
-	scroll.preset:SetPoint("RIGHT", scroll.clear, "LEFT", -5, 0)
-	scroll.preset.text:SetTextColor(1, .8, 0)
-	scroll.preset:SetScript("OnClick", function(self)
-		EasyMenu(menuList, B.EasyMenu, self, -100, 100, "MENU", 1)
-	end)
-
-	local UF = B:GetModule("UnitFrames")
-	for spellID, duration in pairs(UF.PartyWatcherSpells) do
-		createBar(scroll.child, spellID, duration)
-	end
-end
-
 function G:SetupNameplateFilter(parent)
 	local guiName = "NDuiGUI_NameplateFilter"
 	toggleExtraGUI(guiName)
@@ -586,7 +476,7 @@ function G:SetupNameplateFilter(parent)
 		local name, _, texture = GetSpellInfo(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .25)
+		B.CreateBD(bar, .3)
 		frameData[index].barList[spellID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -621,7 +511,7 @@ function G:SetupNameplateFilter(parent)
 		local frame = CreateFrame("Frame", nil, panel, "BackdropTemplate")
 		frame:SetSize(280, 250)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
-		B.CreateBD(frame, .25)
+		B.CreateBD(frame, .3)
 
 		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, 185, 25)
@@ -640,7 +530,11 @@ function G:SetupNameplateFilter(parent)
 end
 
 local function updateCornerSpells()
-	B:GetModule("UnitFrames"):UpdateCornerSpells()
+	local UF = B:GetModule("UnitFrames")
+	if UF then
+		UF:UpdateCornerSpells()
+		UF:BuildNameListFromID()
+	end
 end
 
 function G:SetupBuffIndicator(parent)
@@ -671,7 +565,7 @@ function G:SetupBuffIndicator(parent)
 		local name, _, texture = GetSpellInfo(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .25)
+		B.CreateBD(bar, .3)
 		frameData[index].barList[spellID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -752,7 +646,7 @@ function G:SetupBuffIndicator(parent)
 		local frame = CreateFrame("Frame", nil, panel, "BackdropTemplate")
 		frame:SetSize(280, 250)
 		frame:SetPoint("TOPLEFT", 10, value.offset - 25)
-		B.CreateBD(frame, .25)
+		B.CreateBD(frame, .3)
 
 		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, value.width, 25)
@@ -958,7 +852,7 @@ function G:SetupUnitFrame(parent)
 		UF:UpdateUFAuras()
 	end
 	createOptionGroup(scroll.child, L["Player&Target"], -10, "Player", updatePlayerSize)
-
+--[[
 	local function updateFocusSize()
 		local frame = _G.oUF_Focus
 		if frame then
@@ -967,17 +861,17 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFramePowerTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["FocusUF"], -480, "Focus", updateFocusSize)
+	createOptionGroup(scroll.child, L["FocusUF"], -480, "Focus", updateFocusSize)]]
 
-	local subFrames = {_G.oUF_Pet, _G.oUF_ToT, _G.oUF_FocusTarget}
+	local subFrames = {_G.oUF_Pet, _G.oUF_ToT, _G.oUF_ToToT, _G.oUF_FocusTarget}
 	local function updatePetSize()
 		for _, frame in pairs(subFrames) do
 			SetUnitFrameSize(frame, "Pet")
 			UF.UpdateFrameHealthTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["Pet&*Target"], -950, "Pet", updatePetSize)
-
+	createOptionGroup(scroll.child, L["Pet&*Target"], -480, "Pet", updatePetSize)
+--[[
 	local function updateBossSize()
 		for _, frame in pairs(ns.oUF.objects) do
 			if frame.mystyle == "boss" or frame.mystyle == "arena" then
@@ -987,7 +881,7 @@ function G:SetupUnitFrame(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["Boss&Arena"], -1290, "Boss", updateBossSize)
+	createOptionGroup(scroll.child, L["ArenaFrame"], -1290, "Boss", updateBossSize)]]
 end
 
 function G:SetupRaidFrame(parent)
@@ -999,7 +893,7 @@ function G:SetupRaidFrame(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local UF = B:GetModule("UnitFrames")
 
-	local defaultValue = {80, 32, 2, 6, 1}
+	local defaultValue = {80, 32, 2, 8, 1}
 	local options = {}
 	for i = 1, 8 do
 		options[i] = UF.RaidDirections[i].name
@@ -1104,7 +998,6 @@ function G:SetupPartyFrame(parent)
 		if UF.CreateAndUpdatePartyHeader then
 			UF:CreateAndUpdatePartyHeader()
 		end
-		UF:UpdatePartyElements()
 	end
 
 	local defaultValue = {100, 32, 2}
@@ -1112,12 +1005,10 @@ function G:SetupPartyFrame(parent)
 	for i = 1, 4 do
 		options[i] = UF.PartyDirections[i].name
 	end
-	createOptionCheck(scroll.child, -10, L["UFs PartyAltPower"], "UFs", "PartyAltPower", resizePartyFrame, L["PartyAltPowerTip"])
-	createOptionCheck(scroll.child, -40, L["DescRole"], "UFs", "DescRole", resizePartyFrame, L["DescRoleTip"])
-	createOptionDropdown(scroll.child, L["GrowthDirection"], -100, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
-	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -180, "PartyWidth", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -260, "PartyHeight", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -340, "PartyPowerHeight", resizePartyFrame)
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -30, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
+	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -100, "PartyWidth", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -180, "PartyHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -260, "PartyPowerHeight", resizePartyFrame)
 end
 
 function G:SetupPartyPetFrame(parent)
@@ -1176,9 +1067,9 @@ function G:SetupCastbar(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	createOptionTitle(scroll.child, L["Castbar Colors"], -10)
-	createOptionSwatch(scroll.child, L["PlayerCastingColor"], "UFs", "OwnCastColor", 40, -40)
-	createOptionSwatch(scroll.child, L["Interruptible Color"], "UFs", "CastingColor", 40, -70)
-	createOptionSwatch(scroll.child, L["NotInterruptible Color"], "UFs", "NotInterruptColor", 40, -100)
+	createOptionSwatch(scroll.child, "", "UFs", "CastingColor", 120, -55)
+	--createOptionSwatch(scroll.child, L["Interruptible Color"], "UFs", "CastingColor", 40, -40)
+	--createOptionSwatch(scroll.child, L["NotInterruptible Color"], "UFs", "NotInterruptColor", 40, -70)
 
 	local defaultValue = {
 		["Player"] = {300, 20},
@@ -1215,15 +1106,9 @@ function G:SetupCastbar(parent)
 			_G.oUF_Player.Castbar.Icon:SetSize(height, height)
 			_G.oUF_Player.Castbar.mover:Show()
 			_G.oUF_Player.Castbar.mover:SetSize(width+height+5, height+5)
-			if _G.oUF_Player.QuakeTimer then
-				_G.oUF_Player.QuakeTimer:SetSize(width, height)
-				_G.oUF_Player.QuakeTimer.Icon:SetSize(height, height)
-				_G.oUF_Player.QuakeTimer.mover:Show()
-				_G.oUF_Player.QuakeTimer.mover:SetSize(width+height+5, height+5)
-			end
 		end
 	end
-	createOptionGroup(scroll.child, L["Player Castbar"], -170, "Player", updatePlayerCastbar)
+	createOptionGroup(scroll.child, L["Player Castbar"], -140, "Player", updatePlayerCastbar)
 
 	local function updateTargetCastbar()
 		if _G.oUF_Target then
@@ -1234,8 +1119,8 @@ function G:SetupCastbar(parent)
 			_G.oUF_Target.Castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
-	createOptionGroup(scroll.child, L["Target Castbar"], -390, "Target", updateTargetCastbar)
-
+	createOptionGroup(scroll.child, L["Target Castbar"], -360, "Target", updateTargetCastbar)
+--[[
 	local function updateFocusCastbar()
 		if _G.oUF_Focus then
 			local width, height = C.db["UFs"]["FocusCBWidth"], C.db["UFs"]["FocusCBHeight"]
@@ -1245,15 +1130,12 @@ function G:SetupCastbar(parent)
 			_G.oUF_Focus.Castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
-	createOptionGroup(scroll.child, L["Focus Castbar"], -610, "Focus", updateFocusCastbar)
+	createOptionGroup(scroll.child, L["Focus Castbar"], -580, "Focus", updateFocusCastbar)]]
 
 	panel:HookScript("OnHide", function()
-		if _G.oUF_Player then
-			_G.oUF_Player.Castbar.mover:Hide()
-			if _G.oUF_Player.QuakeTimer then _G.oUF_Player.QuakeTimer.mover:Hide() end
-		end
+		if _G.oUF_Player then _G.oUF_Player.Castbar.mover:Hide() end
 		if _G.oUF_Target then _G.oUF_Target.Castbar.mover:Hide() end
-		if _G.oUF_Focus then _G.oUF_Focus.Castbar.mover:Hide() end
+		--if _G.oUF_Focus then _G.oUF_Focus.Castbar.mover:Hide() end
 	end)
 end
 
@@ -1315,16 +1197,12 @@ function G:SetupBagFilter(parent)
 	local filterOptions = {
 		[1] = "FilterJunk",
 		[2] = "FilterConsumable",
-		[3] = "FilterAzerite",
+		[3] = "FilterAmmo",
 		[4] = "FilterEquipment",
-		[5] = "FilterEquipSet",
-		[6] = "FilterLegendary",
-		[7] = "FilterCollection",
-		[8] = "FilterFavourite",
-		[9] = "FilterGoods",
-		[10] = "FilterQuest",
-		[11] = "FilterAnima",
-		[12] = "FilterRelic",
+		[5] = "FilterLegendary",
+		[6] = "FilterFavourite",
+		[7] = "FilterGoods",
+		[8] = "FilterQuest",
 	}
 
 	local BAG = B:GetModule("Bags")
@@ -1539,11 +1417,10 @@ function G:SetupUFClassPower(parent)
 	local UF = B:GetModule("UnitFrames")
 	local parent, offset = scroll.child, -10
 
-	createOptionCheck(parent, offset, L["UFs RuneTimer"], "UFs", "RuneTimer")
-	createOptionSlider(parent, L["Width"], 100, 400, 150, offset-70, "CPWidth", UF.UpdateUFClassPower)
-	createOptionSlider(parent, L["Height"], 2, 30, 5, offset-140, "CPHeight", UF.UpdateUFClassPower)
-	createOptionSlider(parent, L["xOffset"], -20, 200, 12, offset-210, "CPxOffset", UF.UpdateUFClassPower)
-	createOptionSlider(parent, L["yOffset"], -200, 20, -2, offset-280, "CPyOffset", UF.UpdateUFClassPower)
+	createOptionSlider(parent, L["Width"], 100, 400, 150, offset-30, "CPWidth", UF.UpdateUFClassPower)
+	createOptionSlider(parent, L["Height"], 2, 30, 5, offset-100, "CPHeight", UF.UpdateUFClassPower)
+	createOptionSlider(parent, L["xOffset"], -20, 200, 12, offset-170, "CPxOffset", UF.UpdateUFClassPower)
+	createOptionSlider(parent, L["yOffset"], -200, 20, -2, offset-240, "CPyOffset", UF.UpdateUFClassPower)
 
 	local bar = _G.oUF_Player and _G.oUF_Player.ClassPowerBar
 	panel:HookScript("OnHide", function()
@@ -1597,7 +1474,7 @@ function G:SetupUFAuras(parent)
 	createOptionGroup(parent, L["TotUF"], offset-960, "ToT", UF.UpdateUFAuras)
 	createOptionGroup(parent, L["PetUF"], offset-1370, "Pet", UF.UpdateUFAuras)
 	createOptionGroup(parent, L["FocusUF"], offset-1780, "Focus", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["BossFrame"], offset-2190, "Boss", UF.UpdateUFAuras, true)
+	createOptionGroup(parent, L["ArenaFrame"], offset-2190, "Boss", UF.UpdateUFAuras, true)
 end
 
 function G:SetupActionbarStyle(parent)

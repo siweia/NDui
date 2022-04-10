@@ -4,16 +4,18 @@
 -----------------------------------------------
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF
+local oUF = ns.oUF or oUF
 assert(oUF, "oUF FloatingCombatFeedback was unable to locate oUF install")
 
 local _G = getfenv(0)
 local select, tremove, tinsert, wipe = _G.select, _G.table.remove, _G.table.insert, _G.table.wipe
 local m_cos, m_sin, m_pi, m_random = _G.math.cos, _G.math.sin, _G.math.pi, _G.math.random
+local strupper = strupper
 
 local UnitGUID = _G.UnitGUID
 local GetSpellTexture = _G.GetSpellTexture
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
+local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
 local ENTERING_COMBAT = _G.ENTERING_COMBAT
 local LEAVING_COMBAT = _G.LEAVING_COMBAT
 local PET_ATTACK_TEXTURE = _G.PET_ATTACK_TEXTURE
@@ -157,22 +159,22 @@ local function flush(self)
 end
 
 local eventFilter = {
-	["SWING_DAMAGE"] = {suffix = "DAMAGE", index = 10, iconType = "swing", autoAttack = true},
-	["RANGE_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "range", autoAttack = true},
-	["SPELL_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "spell"},
-	["SPELL_PERIODIC_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "spell", isPeriod = true},
-	["SPELL_BUILDING_DAMAGE"] = {suffix = "DAMAGE", index = 13, iconType = "spell"},
+	["SWING_DAMAGE"] = {suffix = "DAMAGE", index = 12, iconType = "swing", autoAttack = true},
+	["RANGE_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "range", autoAttack = true},
+	["SPELL_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell"},
+	["SPELL_PERIODIC_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell", isPeriod = true},
+	["SPELL_BUILDING_DAMAGE"] = {suffix = "DAMAGE", index = 15, iconType = "spell"},
 
-	["SPELL_HEAL"] = {suffix = "HEAL", index = 13, iconType = "spell"},
-	["SPELL_PERIODIC_HEAL"] = {suffix = "HEAL", index = 13, iconType = "spell", isPeriod = true},
-	["SPELL_BUILDING_HEAL"] = {suffix = "HEAL", index = 13, iconType = "spell"},
+	["SPELL_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell"},
+	["SPELL_PERIODIC_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell", isPeriod = true},
+	["SPELL_BUILDING_HEAL"] = {suffix = "HEAL", index = 15, iconType = "spell"},
 
-	["SWING_MISSED"] = {suffix = "MISS", index = 10, iconType = "swing", autoAttack = true},
-	["RANGE_MISSED"] = {suffix = "MISS", index = 13, iconType = "range", autoAttack = true},
-	["SPELL_MISSED"] = {suffix = "MISS", index = 13, iconType = "spell"},
-	["SPELL_PERIODIC_MISSED"] = {suffix = "MISS", index = 13, iconType = "spell", isPeriod = true},
+	["SWING_MISSED"] = {suffix = "MISS", index = 12, iconType = "swing", autoAttack = true},
+	["RANGE_MISSED"] = {suffix = "MISS", index = 15, iconType = "range", autoAttack = true},
+	["SPELL_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell"},
+	["SPELL_PERIODIC_MISSED"] = {suffix = "MISS", index = 15, iconType = "spell", isPeriod = true},
 
-	["ENVIRONMENTAL_DAMAGE"] = {suffix = "ENVIRONMENT", index = 10, iconType = "env"},
+	["ENVIRONMENTAL_DAMAGE"] = {suffix = "ENVIRONMENT", index = 12, iconType = "env"},
 }
 
 local envTexture = {
@@ -233,7 +235,7 @@ end
 
 local playerGUID = UnitGUID("player")
 
-local function Update(self, event, ...)
+local function onEvent(self, event, ...)
 	local element = self.FloatingCombatFeedback
 	local unit = self.unit
 
@@ -243,16 +245,18 @@ local function Update(self, event, ...)
 		element.unitGUID = unitGUID
 	end
 	local multiplier = 1
-	local text, color, texture, critMark
+	local text, color, texture, critMark, name
 
-	if eventFilter[event] then
-		local _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, _, school = ...
+	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+		local _, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, spellID, spellName, school = ...
 		local isPlayer = playerGUID == sourceGUID
-		local isRightUnit = element.unitGUID == destGUID
+		local atTarget = UnitGUID("target") == destGUID
+		local atPlayer = playerGUID == destGUID
+		local isVehicle = element.showPets and sourceFlags == DB.GuardianFlags
 		local isPet = C.db["UFs"]["PetCombatText"] and DB:IsMyPet(sourceFlags)
 
-		if isRightUnit and (unit == "target" and (isPlayer or isPet) or unit == "player") then
-			local value = eventFilter[event]
+		if (unit == "target" and (isPlayer or isPet or isVehicle) and atTarget) or (unit == "player" and atPlayer) then
+			local value = eventFilter[eventType]
 			if not value then return end
 
 			if value.suffix == "DAMAGE" then
@@ -260,8 +264,9 @@ local function Update(self, event, ...)
 				if value.isPeriod and not C.db["UFs"]["HotsDots"] then return end
 
 				local amount, _, _, _, _, _, critical, _, crushing = select(value.index, ...)
-				texture = getFloatingIconTexture(value.iconType, spellID, (isPet and not isPlayer))
+				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = "-"..formatNumber(self, amount)
+				name = spellName
 
 				if critical or crushing then
 					multiplier = 1.25
@@ -279,6 +284,7 @@ local function Update(self, event, ...)
 				end
 				if amount == 0 and not C.db["UFs"]["FCTOverHealing"] then return end
 				text = "+"..formatNumber(self, amount)..overhealText
+				name = spellName
 
 				if critical then
 					multiplier = 1.25
@@ -288,10 +294,14 @@ local function Update(self, event, ...)
 				local missType = select(value.index, ...)
 				texture = getFloatingIconTexture(value.iconType, spellID, isPet)
 				text = getMissText(missType)
+				name = ATTACK
 			elseif value.suffix == "ENVIRONMENT" then
-				local envType, amount = select(value.index, ...)
-				texture = getFloatingIconTexture(value.iconType, envType)
+				local envType, amount, _, envSchool = select(value.index, ...)
+				texture = nil
 				text = "-"..formatNumber(self, amount)
+				envType = strupper(envType)
+				name = _G["ACTION_ENVIRONMENTAL_DAMAGE_"..envType]
+				school = envSchool
 			end
 
 			color = schoolColors[school] or schoolColors[0]
@@ -310,12 +320,16 @@ local function Update(self, event, ...)
 		critMark = true
 	end
 
-	if text and texture then
+	if text and (texture or name) then
 		local animation = element.defaultMode
 		local string = getAvailableString(element)
 
 		string:SetFont(element.font, C.db["UFs"]["FCTFontSize"] * multiplier, element.fontFlags)
-		string:SetFormattedText(element.format, texture, (critMark and "*" or "")..text)
+		if texture then
+			string:SetFormattedText(element.textureFormat, texture, (critMark and "*" or "")..text)
+		else
+			string:SetFormattedText(element.nameFormat, name, (critMark and "*" or "")..text)
+		end
 		string:SetTextColor(color.r, color.g, color.b)
 		string.elapsed = 0
 		string.GetXY = animations[animation]
@@ -337,6 +351,14 @@ local function Update(self, event, ...)
 	end
 end
 
+local function Update(self, event, ...)
+	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+		onEvent(self, event, CombatLogGetCurrentEventInfo())
+	else
+		onEvent(self, event, ...)
+	end
+end
+
 local function Path(self, ...)
 	return (self.FloatingCombatFeedback.Override or Update) (self, ...)
 end
@@ -352,7 +374,8 @@ local function Enable(self, unit)
 	element.__owner = self
 	element.ForceUpdate = ForceUpdate
 	element.defaultMode = "vertical"
-	element.format = "|T%s:18:18:-2:0:64:64:5:59:5:59|t%s"
+	element.textureFormat = "|T%s:18:18:-2:0:64:64:5:59:5:59|t%s"
+	element.nameFormat = "%s %s"
 	element.xDirection = 1
 	element.yDirection = element.yDirection or 1
 	element.scrollTime = element.scrollTime or 2
@@ -370,10 +393,7 @@ local function Enable(self, unit)
 	element:SetScript("OnHide", flush)
 	element:SetScript("OnShow", flush)
 
-	for event in pairs(eventFilter) do
-		self:RegisterCombatEvent(event, Path)
-	end
-
+	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path, true)
 	if unit == "player" then
 		element.xDirection = -1
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path, true)
@@ -392,9 +412,7 @@ local function Disable(self)
 		element:SetScript("OnShow", nil)
 		element:SetScript("OnUpdate", nil)
 
-		for event in pairs(eventFilter) do
-			self:UnregisterCombatEvent(event, Path)
-		end
+		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_DISABLED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Path)
 	end

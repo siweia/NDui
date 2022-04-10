@@ -5,18 +5,9 @@ local module = B:GetModule("Chat")
 local tinsert, pairs = tinsert, pairs
 local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
 
-local chatSwitchInfo = {
-	text = L["ChatSwitchHelp"],
-	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.TopEdgeCenter,
-	offsetY = 50,
-	onAcknowledgeCallback = B.HelpInfoAcknowledge,
-	callbackArg = "ChatSwitch",
-}
-
 local function chatSwitchTip()
 	if not NDuiADB["Help"]["ChatSwitch"] then
-		HelpTip:Show(ChatFrame1, chatSwitchInfo)
+		B:ShowHelpTip(ChatFrame1, L["ChatSwitchHelp"], "TOP", 0, 50, nil, "ChatSwitch")
 	end
 end
 
@@ -74,11 +65,7 @@ function module:Chatbar()
 		end},
 		{.65, .65, 1, PARTY, function() ChatFrame_OpenChat("/p ", chatFrame) end},
 		{1, .5, 0, INSTANCE.."/"..RAID, function()
-			if IsPartyLFG() then
-				ChatFrame_OpenChat("/i ", chatFrame)
-			else
-				ChatFrame_OpenChat("/raid ", chatFrame)
-			end
+			ChatFrame_OpenChat("/raid ", chatFrame)
 		end},
 		{.25, 1, .25, GUILD.."/"..OFFICER, function(_, btn)
 			if btn == "RightButton" and C_GuildInfo_IsGuildOfficer() then
@@ -123,7 +110,7 @@ function module:Chatbar()
 		end
 		checkChannelStatus()
 		B:RegisterEvent("CHANNEL_UI_UPDATE", checkChannelStatus)
-		hooksecurefunc("ChatConfigChannelSettings_UpdateCheckboxes", checkChannelStatus) -- toggle in chatconfig
+		hooksecurefunc("ChatConfig_UpdateCheckboxes", checkChannelStatus) -- toggle in chatconfig
 
 		wcButton:SetScript("OnClick", function(_, btn)
 			if module.InWorldChannel then

@@ -49,7 +49,10 @@ function Bar:MicroButton_Create(parent, data)
 		button:SetNormalTexture(nil)
 		button:SetPushedTexture(nil)
 		button:SetDisabledTexture(nil)
-		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
+		if tooltip then
+			button.title = "|cffffffff"..tooltip
+			B.AddTooltip(button, "ANCHOR_RIGHT", button.newbieText, "system")
+		end
 
 		local hl = button:GetHighlightTexture()
 		Bar:MicroButton_SetupTexture(hl, texture)
@@ -99,22 +102,20 @@ function Bar:MicroMenu()
 	if not C.db["Actionbar"]["MicroMenu"] then return end
 
 	local menubar = CreateFrame("Frame", nil, UIParent)
-	menubar:SetSize(323, 22)
+	menubar:SetSize(265, 22)
 	B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
 	local buttonInfo = {
-		{"player", "CharacterMicroButton"},
-		{"spellbook", "SpellbookMicroButton"},
-		{"talents", "TalentMicroButton"},
-		{"achievements", "AchievementMicroButton"},
-		{"quests", "QuestLogMicroButton"},
-		{"guild", "GuildMicroButton"},
-		{"LFG", "LFDMicroButton"},
-		{"encounter", "EJMicroButton"},
-		{"collections", "CollectionsMicroButton"},
-		{"store", "StoreMicroButton"},
+		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
+		{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
+		{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
+		{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
+		{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
+		{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
+		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
+		{"collections", "HelpMicroButton", MicroButtonTooltipText(HELP_BUTTON, "TOGGLEHELP")},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
 		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
 	}
@@ -133,7 +134,6 @@ function Bar:MicroMenu()
 
 	-- Default elements
 	B.HideObject(MicroButtonPortrait)
-	B.HideObject(GuildMicroButtonTabard)
 	B.HideObject(MainMenuBarDownload)
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)

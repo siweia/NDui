@@ -2,28 +2,21 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local WorldMapFrame = WorldMapFrame
-	local BorderFrame = WorldMapFrame.BorderFrame
 
-	B.ReskinPortraitFrame(WorldMapFrame)
-	BorderFrame.NineSlice:Hide()
-	BorderFrame.Tutorial.Ring:Hide()
-	B.ReskinMinMax(BorderFrame.MaximizeMinimizeFrame)
+	B.ReskinPortraitFrame(WorldMapFrame, 7, 0, -7, 25)
+	B.ReskinDropDown(WorldMapZoneMinimapDropDown)
+	B.ReskinDropDown(WorldMapContinentDropDown)
+	B.ReskinDropDown(WorldMapZoneDropDown)
+	B.Reskin(WorldMapZoomOutButton)
 
-	local overlayFrames = WorldMapFrame.overlayFrames
-	B.ReskinDropDown(overlayFrames[1])
-	B.StripTextures(overlayFrames[2], 3)
-	B.StripTextures(overlayFrames[3], 3)
-	overlayFrames[3].ActiveTexture:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Toggle")
-
-	local sideToggle = WorldMapFrame.SidePanelToggle
-	sideToggle:SetFrameLevel(3)
-	sideToggle.OpenButton:GetRegions():Hide()
-	B.ReskinArrow(sideToggle.OpenButton, "right")
-	sideToggle.CloseButton:GetRegions():Hide()
-	B.ReskinArrow(sideToggle.CloseButton, "left")
-
-	B.ReskinNavBar(WorldMapFrame.NavBar)
+	C_Timer.After(3, function()
+		if CodexQuestMapDropdown then
+			B.ReskinDropDown(CodexQuestMapDropdown)
+			CodexQuestMapDropdownButton.SetWidth = B.Dummy
+		end
+		if Questie_Toggle then
+			B.Reskin(Questie_Toggle)
+		end
+	end)
 end)

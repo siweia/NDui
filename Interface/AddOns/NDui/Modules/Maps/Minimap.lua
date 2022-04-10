@@ -2,16 +2,12 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Maps")
 
-local _G = _G
 local select, pairs, unpack, next, tinsert = select, pairs, unpack, next, tinsert
 local strmatch, strfind, strupper = strmatch, strfind, strupper
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
+local GetInstanceInfo, GetDifficultyInfo = GetInstanceInfo, GetDifficultyInfo
 local C_Timer_After = C_Timer.After
 local cr, cg, cb = DB.r, DB.g, DB.b
-local LE_GARRISON_TYPE_6_0 = Enum.GarrisonType.Type_6_0
-local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
-local LE_GARRISON_TYPE_8_0 = Enum.GarrisonType.Type_8_0
-local LE_GARRISON_TYPE_9_0 = Enum.GarrisonType.Type_9_0
 
 function module:CreatePulse()
 	if not C.db["Map"]["CombatPulse"] then return end
@@ -31,7 +27,7 @@ function module:CreatePulse()
 			bg:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
 		elseif not InCombatLockdown() then
-			if C_Calendar.GetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
+			if MiniMapMailFrame:IsShown() then
 				bg:SetBackdropBorderColor(1, 1, 0)
 				anim:Play()
 			else
@@ -42,7 +38,6 @@ function module:CreatePulse()
 	end
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", updateMinimapAnim)
 	B:RegisterEvent("PLAYER_REGEN_DISABLED", updateMinimapAnim)
-	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
 	B:RegisterEvent("UPDATE_PENDING_MAIL", updateMinimapAnim)
 
 	MiniMapMailFrame:HookScript("OnHide", function()
@@ -52,80 +47,19 @@ function module:CreatePulse()
 	end)
 end
 
-local function ToggleLandingPage(_, ...)
-	--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-	if not C_Garrison.HasGarrison(...) then
-		UIErrorsFrame:AddMessage(DB.InfoColor..CONTRIBUTION_TOOLTIP_UNLOCKED_WHEN_ACTIVE)
-		return
-	end
-	ShowGarrisonLandingPage(...)
+local function ResetTrackingFrameAnchor()
+	MiniMapTrackingFrame:ClearAllPoints()
+	MiniMapTrackingFrame:SetPoint("BOTTOMRIGHT", Minimap, -5, 5)
 end
 
 function module:ReskinRegions()
-	-- Garrison
-	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(self)
-		self:ClearAllPoints()
-		self:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
-		self:GetNormalTexture():SetTexture(DB.garrTex)
-		self:GetPushedTexture():SetTexture(DB.garrTex)
-		self:GetHighlightTexture():SetTexture(DB.garrTex)
-		self:SetSize(30, 30)
-
-		if RecycleBinToggleButton and not RecycleBinToggleButton.settled then
-			RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
-			RecycleBinToggleButton.settled = true
-		end
-	end)
-
-	local menuList = {
-		{text =	GARRISON_TYPE_9_0_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_9_0, notCheckable = true},
-		{text =	WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_8_0, notCheckable = true},
-		{text =	ORDER_HALL_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_7_0, notCheckable = true},
-		{text =	GARRISON_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_6_0, notCheckable = true},
-	}
-	GarrisonLandingPageMinimapButton:HookScript("OnMouseDown", function(self, btn)
-		if btn == "RightButton" then
-			HideUIPanel(GarrisonLandingPage)
-			EasyMenu(menuList, B.EasyMenu, self, -80, 0, "MENU", 1)
-		end
-	end)
-	GarrisonLandingPageMinimapButton:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-		GameTooltip:SetText(self.title, 1, 1, 1)
-		GameTooltip:AddLine(self.description, nil, nil, nil, true)
-		GameTooltip:AddLine(L["SwitchGarrisonType"], nil, nil, nil, true)
-		GameTooltip:Show();
-	end)
-
-	-- QueueStatus Button
-	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
-	QueueStatusMinimapButtonBorder:Hide()
-	QueueStatusMinimapButtonIconTexture:SetTexture(nil)
-
-	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
-	queueIcon:SetPoint("CENTER", QueueStatusMinimapButton)
-	queueIcon:SetSize(50, 50)
-	queueIcon:SetTexture(DB.eyeTex)
-	local anim = queueIcon:CreateAnimationGroup()
-	anim:SetLooping("REPEAT")
-	anim.rota = anim:CreateAnimation("Rotation")
-	anim.rota:SetDuration(2)
-	anim.rota:SetDegrees(360)
-	hooksecurefunc("QueueStatusFrame_Update", function()
-		queueIcon:SetShown(QueueStatusMinimapButton:IsShown())
-	end)
-	hooksecurefunc("EyeTemplate_StartAnimating", function() anim:Play() end)
-	hooksecurefunc("EyeTemplate_StopAnimating", function() anim:Stop() end)
-
-	-- Difficulty Flags
-	local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
-	for _, v in pairs(flags) do
-		local flag = _G[v]
-		flag:ClearAllPoints()
-		flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
-		flag:SetScale(.9)
-	end
+	-- Tracking icon
+	MiniMapTrackingFrame:SetScale(.7)
+	MiniMapTrackingBorder:Hide()
+	local bg = B.ReskinIcon(MiniMapTrackingIcon)
+	bg:SetBackdropBorderColor(cr, cg, cb)
+	ResetTrackingFrameAnchor()
+	hooksecurefunc("SetLookingForGroupUIAvailable", ResetTrackingFrameAnchor)
 
 	-- Mail icon
 	MiniMapMailFrame:ClearAllPoints()
@@ -134,33 +68,43 @@ function module:ReskinRegions()
 	MiniMapMailIcon:SetSize(21, 21)
 	MiniMapMailIcon:SetVertexColor(1, 1, 0)
 
-	-- Invites Icon
-	GameTimeCalendarInvitesTexture:ClearAllPoints()
-	GameTimeCalendarInvitesTexture:SetParent("Minimap")
-	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
+	-- Battlefield
+	MiniMapBattlefieldFrame:ClearAllPoints()
+	MiniMapBattlefieldFrame:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
+	MiniMapBattlefieldBorder:Hide()
+	MiniMapBattlefieldIcon:SetAlpha(0)
+	BattlegroundShine:SetTexture(nil)
 
-	local Invt = CreateFrame("Button", nil, UIParent)
-	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
-	Invt:SetSize(250, 80)
-	Invt:Hide()
-	B.SetBD(Invt)
-	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
+	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
+	queueIcon:SetPoint("CENTER", MiniMapBattlefieldFrame)
+	queueIcon:SetSize(50, 50)
+	queueIcon:SetTexture(DB.eyeTex)
+	queueIcon:Hide()
+	local anim = queueIcon:CreateAnimationGroup()
+	anim:SetLooping("REPEAT")
+	anim.rota = anim:CreateAnimation("Rotation")
+	anim.rota:SetDuration(2)
+	anim.rota:SetDegrees(360)
 
-	local function updateInviteVisibility()
-		Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
-	end
-	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
+	hooksecurefunc("BattlefieldFrame_UpdateStatus", function()
+		queueIcon:SetShown(MiniMapBattlefieldFrame:IsShown())
 
-	Invt:SetScript("OnClick", function(_, btn)
-		Invt:Hide()
-		--if btn == "LeftButton" and not InCombatLockdown() then -- fix by LibShowUIPanel
-		if btn == "LeftButton" then
-			ToggleCalendar()
+		anim:Play()
+		for i = 1, MAX_BATTLEFIELD_QUEUES do
+			local status = GetBattlefieldStatus(i)
+			if status == "confirm" then
+				anim:Stop()
+				break
+			end
 		end
-		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
 	end)
+
+	-- LFG Icon
+	if MiniMapLFGFrame then
+		MiniMapLFGFrame:ClearAllPoints()
+		MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap, 5, 15)
+		MiniMapLFGBorder:Hide()
+	end
 end
 
 function module:RecycleBin()
@@ -173,6 +117,7 @@ function module:RecycleBin()
 		["MinimapBackdrop"] = true,
 		["TimeManagerClockButton"] = true,
 		["FeedbackUIButton"] = true,
+		["HelpOpenTicketButton"] = true,
 		["MiniMapBattlefieldFrame"] = true,
 		["QueueStatusMinimapButton"] = true,
 		["GarrisonLandingPageMinimapButton"] = true,
@@ -186,8 +131,8 @@ function module:RecycleBin()
 	end
 
 	local bu = CreateFrame("Button", "RecycleBinToggleButton", Minimap)
-	bu:SetSize(30, 30)
-	bu:SetPoint("BOTTOMRIGHT", 4, -6)
+	bu:SetSize(24, 24)
+	bu:SetPoint("BOTTOMLEFT", -15, -15)
 	bu:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
 	bu.Icon:SetAllPoints()
@@ -225,6 +170,8 @@ function module:RecycleBin()
 	local ignoredButtons = {
 		["GatherMatePin"] = true,
 		["HandyNotes.-Pin"] = true,
+		["Guidelime"] = true,
+		["QuestieFrame"] = true,
 	}
 	B.SplitList(ignoredButtons, NDuiADB["IgnoredButtons"])
 
@@ -236,9 +183,7 @@ function module:RecycleBin()
 		end
 	end
 
-	local isGoodLookingIcon = {
-		["Narci_MinimapButton"] = true,
-	}
+	local isGoodLookingIcon = {}
 
 	local iconsPerRow = 10
 	local rowMult = iconsPerRow/2 - 1
@@ -392,7 +337,7 @@ function module:WhoPingsMyMap()
 	anim.fader:SetStartDelay(3)
 
 	B:RegisterEvent("MINIMAP_PING", function(_, unit)
-		if UnitIsUnit(unit, "player") then return end -- ignore player ping
+		if unit == "player" then return end -- ignore player ping
 
 		local class = select(2, UnitClass(unit))
 		local r, g, b = B.ClassColor(class)
@@ -440,87 +385,138 @@ function module:ShowMinimapClock()
 	end
 end
 
-function module:ShowCalendar()
-	if C.db["Map"]["Calendar"] then
-		if not GameTimeFrame.styled then
-			GameTimeFrame:SetNormalTexture(nil)
-			GameTimeFrame:SetPushedTexture(nil)
-			GameTimeFrame:SetHighlightTexture(nil)
-			GameTimeFrame:SetSize(18, 18)
-			GameTimeFrame:SetParent(Minimap)
-			GameTimeFrame:ClearAllPoints()
-			GameTimeFrame:SetPoint("BOTTOMRIGHT", Minimap, 1, 18)
-			GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
+function module:TrackMenu_OnClick(spellID)
+	CastSpellByID(spellID)
+end
 
-			for i = 1, GameTimeFrame:GetNumRegions() do
-				local region = select(i, GameTimeFrame:GetRegions())
-				if region.SetTextColor then
-					region:SetTextColor(cr, cg, cb)
-					region:SetFont(unpack(DB.Font))
-					break
-				end
-			end
+function module:TrackMenu_CheckStatus()
+	local texture = GetSpellTexture(self.arg1)
+	if texture == GetTrackingTexture() then
+		return true
+	end
+end
 
-			GameTimeFrame.styled = true
+function module:EasyTrackMenu()
+	local trackSpells = {
+		2383,	--Find Herbs
+		2580,	--Find Minerals
+		2481,	--Find Treasure
+		1494,	--Track Beasts
+		19883,	--Track Humanoids
+		19884,	--Track Undead
+		19885,	--Track Hidden
+		19880,	--Track Elementals
+		19878,	--Track Demons
+		19882,	--Track Giants
+		19879,	--Track Dragonkin
+		5225,	--Track Humanoids: Druid
+		5500,	--Sense Demons
+		5502,	--Sense Undead
+	}
+
+	local menuList = {
+		[1] = {text = L["TrackMenu"], isTitle = true, notCheckable = true},
+	}
+
+	local function updateMenuList()
+		for i = 2, #menuList do
+			if menuList[i] then wipe(menuList[i]) end
 		end
-		GameTimeFrame:Show()
-	else
-		GameTimeFrame:Hide()
+
+		local index = 2
+		for _, spellID in pairs(trackSpells) do
+			if IsPlayerSpell(spellID) then
+				if not menuList[index] then menuList[index] = {} end
+				local spellName, _, texture = GetSpellInfo(spellID)
+				menuList[index].arg1 = spellID
+				menuList[index].text = spellName
+				menuList[index].func = module.TrackMenu_OnClick
+				menuList[index].checked = module.TrackMenu_CheckStatus
+				menuList[index].icon = texture
+				menuList[index].tCoordLeft = .08
+				menuList[index].tCoordRight = .92
+				menuList[index].tCoordTop = .08
+				menuList[index].tCoordBottom = .92
+
+				index = index + 1
+			end
+		end
+
+		return index
 	end
-end
 
-function module:Minimap_OnMouseWheel(zoom)
-	if zoom > 0 then
-		Minimap_ZoomIn()
-	else
-		Minimap_ZoomOut()
+	local function toggleTrackMenu(self)
+		if DropDownList1:IsShown() then
+			DropDownList1:Hide()
+		else
+			local index = updateMenuList()
+			if index > 2 then
+				local offset = self:GetWidth()*self:GetScale()*.5
+				EasyMenu(menuList, B.EasyMenu, self, -offset, offset, "MENU")
+			end
+		end
 	end
+
+	-- Click Func
+	local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
+	Minimap:SetScript("OnMouseUp", function(self, btn)
+		if btn == "RightButton" then
+			toggleTrackMenu(self)
+		elseif btn == "MiddleButton" and hasAlaCalendar then
+			B:TogglePanel(ALA_CALENDAR)
+		else
+			Minimap_OnClick(self)
+		end
+	end)
 end
-
-local NDuiMiniMapTrackingDropDown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
-NDuiMiniMapTrackingDropDown:SetID(1)
-NDuiMiniMapTrackingDropDown:SetClampedToScreen(true)
-NDuiMiniMapTrackingDropDown:Hide()
-NDuiMiniMapTrackingDropDown.noResize = true
-_G.UIDropDownMenu_Initialize(NDuiMiniMapTrackingDropDown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
-
-function module:Minimap_OnMouseUp(btn)
-	if btn == "MiddleButton" then
-		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-		ToggleCalendar()
-	elseif btn == "RightButton" then
-		ToggleDropDownMenu(1, nil, NDuiMiniMapTrackingDropDown, "cursor")
-	else
-		Minimap_OnClick(self)
-	end
-end
-
-function module:SetupHybridMinimap()
-	HybridMinimap.CircleMask:SetTexture("Interface\\BUTTONS\\WHITE8X8")
-end
-
-function module:HybridMinimapOnLoad(addon)
-	if addon == "Blizzard_HybridMinimap" then
-		module:SetupHybridMinimap()
-		B:UnregisterEvent(self, module.HybridMinimapOnLoad)
-	end
-end
-
-local minimapInfo = {
-	text = L["MinimapHelp"],
-	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.LeftEdgeBottom,
-	onAcknowledgeCallback = B.HelpInfoAcknowledge,
-	callbackArg = "MinimapInfo",
-	alignment = 3,
-}
 
 function module:ShowMinimapHelpInfo()
 	Minimap:HookScript("OnEnter", function()
 		if not NDuiADB["Help"]["MinimapInfo"] then
-			HelpTip:Show(MinimapCluster, minimapInfo)
+			B:ShowHelpTip(MinimapCluster, L["MinimapHelp"], "LEFT", -20, -50, nil, "MinimapInfo")
 		end
 	end)
+end
+
+local function UpdateDifficultyFlag()
+	local frame = _G["NDuiMinimapDifficulty"]
+	local _, instanceType, difficulty, _, _, _, _, _, instanceGroupSize = GetInstanceInfo()
+	local _, _, isHeroic, _, displayHeroic = GetDifficultyInfo(difficulty)
+	if instanceType == "raid" or isHeroic or displayHeroic then
+		if isHeroic or displayHeroic then
+			frame.tex:SetTexCoord(0, .25, .0703125, .4296875)
+		else
+			frame.tex:SetTexCoord(0, .25, .5703125, .9296875)
+		end
+		frame.text:SetText(instanceGroupSize)
+		frame:Show()
+	else
+		frame:Hide()
+	end
+end
+
+function module:MinimapDifficulty()
+	if not C.db["Map"]["DiffFlag"] then return end
+	if _G.MiniMapInstanceDifficulty then return end -- hide flag if blizz makes its own
+
+	local frame = CreateFrame("Frame", "NDuiMinimapDifficulty", Minimap)
+	frame:SetSize(38, 46)
+	frame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+	frame:SetScale(.6)
+	frame:Hide()
+
+	local tex = frame:CreateTexture(nil, "ARTWORK")
+	tex:SetTexture("Interface\\Minimap\\UI-DungeonDifficulty-Button")
+	tex:SetPoint("CENTER")
+	tex:SetSize(64, 46)
+	tex:SetTexCoord(0, .25, .0703125, .4140625)
+	frame.tex = tex
+
+	frame.text = B.CreateFS(frame, 15, "", true, "CENTER", 1, -8)
+
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", UpdateDifficultyFlag)
+	B:RegisterEvent("UPDATE_INSTANCE_INFO", UpdateDifficultyFlag)
+	B:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED", UpdateDifficultyFlag)
 end
 
 function module:SetupMinimap()
@@ -536,12 +532,16 @@ function module:SetupMinimap()
 
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
-	self:ShowCalendar()
 
-	-- Minimap clicks
+	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
-	Minimap:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
+	Minimap:SetScript("OnMouseWheel", function(_, zoom)
+		if zoom > 0 then
+			Minimap_ZoomIn()
+		else
+			Minimap_ZoomOut()
+		end
+	end)
 
 	-- Hide Blizz
 	local frames = {
@@ -553,23 +553,26 @@ function module:SetupMinimap()
 		"MinimapZoomIn",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
-		"MiniMapTracking",
+		"MinimapToggleButton",
+		"GameTimeFrame",
 	}
 
 	for _, v in pairs(frames) do
 		B.HideObject(_G[v])
 	end
 	MinimapCluster:EnableMouse(false)
-	Minimap:SetArchBlobRingScalar(0)
-	Minimap:SetQuestBlobRingScalar(0)
 
 	-- Add Elements
 	self:CreatePulse()
 	self:ReskinRegions()
 	self:RecycleBin()
 	self:WhoPingsMyMap()
+	self:EasyTrackMenu()
 	self:ShowMinimapHelpInfo()
+	self:MinimapDifficulty()
 
-	-- HybridMinimap
-	B:RegisterEvent("ADDON_LOADED", module.HybridMinimapOnLoad)
+	if LibDBIcon10_TownsfolkTracker then
+		LibDBIcon10_TownsfolkTracker:DisableDrawLayer("OVERLAY")
+		LibDBIcon10_TownsfolkTracker:DisableDrawLayer("BACKGROUND")
+	end
 end

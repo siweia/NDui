@@ -1,8 +1,8 @@
-## Interface: 90200
-## Title: |cff0080ffNDui|r
-## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Simpy, Tuller, zork.
+## Interface: 11402
+## Title: |cff0080ffNDui|r |cffffffffClassic|r
+## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
-## Notes: Empty toc for Curseforge
-## Version: 6.22.0
-## X-Support: SL
-## X-Website: https://github.com/siweia/NDui
+## Notes: More than a UI.
+## Version: 1.33.0
+## X-Support: Classic
+## X-Website: https://github.com/siweia/NDuiClassic/tree/era

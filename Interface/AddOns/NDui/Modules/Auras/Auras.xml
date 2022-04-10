@@ -41,7 +41,6 @@
 
 	<Script file="Auras.lua"/>
 	<Script file="Reminder.lua"/>
-	<Script file="Totems.lua"/>
 	<Script file="AuraWatch.lua"/>
 	<Include file="Lumos\Lumos.xml"/>
 </Ui>

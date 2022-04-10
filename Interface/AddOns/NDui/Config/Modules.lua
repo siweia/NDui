@@ -20,7 +20,6 @@ C.Bars = {
 	bar5 = {size = 32, fader = barFader},								-- BAR5 右边动作条2
 	petbar = {size = 26, fader = nil},									-- PETBAR 宠物动作条
 	stancebar = {size = 30, fader = nil},								-- STANCE + POSSESSBAR 姿态条
-	extrabar = {size = 52, fader = nil},								-- EXTRABAR 额外动作条
 	leave_vehicle = {size = 40, fader = nil},							-- VEHICLE EXIT 离开载具按钮
 }
 
@@ -33,7 +32,7 @@ C.Auras = {
 	PlayerAuraPos	= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 309},	-- 玩家光环分组
 	TargetAuraPos 	= {"BOTTOMLEFT", UIParent, "BOTTOM", 200, 309},		-- 目标光环分组
 	SpecialPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 336},	-- 玩家重要光环分组
-	FocusPos		= {"BOTTOMLEFT", UIParent, "LEFT", 5, -130},		-- 焦点光环分组
+	FocusPos		= {"BOTTOMLEFT", UIParent, "LEFT", 5, -130},		-- 侧边光环分组
 	CDPos			= {"BOTTOMRIGHT", UIParent, "BOTTOM", -425, 125},	-- 冷却计时分组
 	EnchantPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 377},	-- 附魔及饰品分组
 	RaidBuffPos		= {"CENTER", UIParent, "CENTER", -220, 200},		-- 团队增益分组
@@ -51,6 +50,7 @@ C.UFs = {
 	PlayerPos		= {"TOPRIGHT", UIParent, "BOTTOM", -200, 300},		-- 玩家框体默认位置
 	TargetPos		= {"TOPLEFT", UIParent, "BOTTOM", 200, 300},		-- 目标框体默认位置
 	ToTPos			= {"BOTTOM", UIParent, "BOTTOM", 136, 250},			-- 目标的目标框体默认位置
+	ToToTPos		= {"BOTTOM", UIParent, "BOTTOM", 0, 250},			-- 目标的目标的目标默认位置
 	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 250},		-- 宠物框体默认位置
 	FocusPos		= {"LEFT", UIParent, "LEFT", 5, -150},				-- 焦点框体默认位置
 	PlayerPlate		= {"BOTTOM", UIParent, "BOTTOM", 0, 400},			-- 玩家姓名板默认位置

@@ -1,9 +1,17 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
+function B:UpdateMoneyDisplay(gold, silver, copper)
+	B.ReskinInput(gold)
+	B.ReskinInput(silver)
+	B.ReskinInput(copper)
+	silver.bg:SetPoint("BOTTOMRIGHT", -10, 0)
+	copper.bg:SetPoint("BOTTOMRIGHT", -10, 0)
+	silver:SetPoint("LEFT", gold, "RIGHT", 18, 0)
+	copper:SetPoint("LEFT", silver, "RIGHT", 8, 0)
+end
 
+tinsert(C.defaultThemes, function()
 	local texL, texR, texT, texB = unpack(DB.TexCoord)
 
 	SendMailMoneyInset:DisableDrawLayer("BORDER")
@@ -32,26 +40,26 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(OpenAllMail)
 	B.ReskinInput(SendMailNameEditBox, 20, 85)
 	B.ReskinInput(SendMailSubjectEditBox, nil, 200)
-	B.ReskinInput(SendMailMoneyGold)
-	B.ReskinInput(SendMailMoneySilver)
-	B.ReskinInput(SendMailMoneyCopper)
-	B.ReskinScroll(SendMailScrollFrameScrollBar)
+	B:UpdateMoneyDisplay(SendMailMoneyGold, SendMailMoneySilver, SendMailMoneyCopper)
 	B.ReskinScroll(OpenMailScrollFrameScrollBar)
+	B.CreateBDFrame(OpenMailScrollFrame, .25)
 	B.ReskinRadio(SendMailSendMoneyButton)
 	B.ReskinRadio(SendMailCODButton)
 	B.ReskinArrow(InboxPrevPageButton, "left")
 	B.ReskinArrow(InboxNextPageButton, "right")
 
-	B.CreateBDFrame(OpenMailScrollFrame, .25)
-	local bg = B.CreateBDFrame(SendMailScrollFrame, .25)
-	bg:SetPoint("TOPLEFT", 6, 0)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(MailEditBoxScrollBar)
+		B.CreateBDFrame(MailEditBox, .25)
+	else
+		B.ReskinScroll(SendMailScrollFrameScrollBar)
+		local bg = B.CreateBDFrame(SendMailScrollFrame, .25)
+		bg:SetPoint("TOPLEFT", 6, 0)
+	end
 
 	SendMailMailButton:SetPoint("RIGHT", SendMailCancelButton, "LEFT", -1, 0)
 	OpenMailDeleteButton:SetPoint("RIGHT", OpenMailCancelButton, "LEFT", -1, 0)
 	OpenMailReplyButton:SetPoint("RIGHT", OpenMailDeleteButton, "LEFT", -1, 0)
-
-	SendMailMoneySilver:SetPoint("LEFT", SendMailMoneyGold, "RIGHT", 1, 0)
-	SendMailMoneyCopper:SetPoint("LEFT", SendMailMoneySilver, "RIGHT", 1, 0)
 
 	SendMailSubjectEditBox:SetPoint("TOPLEFT", SendMailNameEditBox, "BOTTOMLEFT", 0, -1)
 

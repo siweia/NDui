@@ -7,7 +7,7 @@ local info = module:RegisterInfobar("Zone", C.Infobar.LocationPos)
 local mapModule = B:GetModule("Maps")
 
 local format, unpack = string.format, unpack
-local WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat = WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat
+local SELECTED_DOCK_FRAME, ChatFrame_OpenChat = SELECTED_DOCK_FRAME, ChatFrame_OpenChat
 local GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance = GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
@@ -92,11 +92,11 @@ end
 
 info.onMouseUp = function(_, btn)
 	if btn == "LeftButton" then
-		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-		ToggleFrame(WorldMapFrame)
+		ToggleWorldMap()
 	elseif btn == "RightButton" then
 		local hasUnit = UnitExists("target") and not UnitIsPlayer("target")
-		local unitName = hasUnit and UnitName("target") or ""
-		ChatFrame_OpenChat(format("%s: %s (%s) %s", L["My Position"], zone, formatCoords(), unitName), SELECTED_DOCK_FRAME)
+		local unitName = nil
+		if hasUnit then unitName = UnitName("target") end
+		ChatFrame_OpenChat(format("%s: %s (%s) %s", L["My Position"], zone, formatCoords(), unitName or ""), SELECTED_DOCK_FRAME)
 	end
 end

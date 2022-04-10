@@ -11,7 +11,6 @@ local GetInventoryItemQuality, GetInventoryItemTexture, GetWeaponEnchantInfo = G
 function A:OnLogin()
 	A:HideBlizBuff()
 	A:BuildBuffFrame()
-	A:Totems()
 	A:InitReminder()
 end
 
@@ -142,12 +141,17 @@ function A:UpdateAuras(button, index)
 end
 
 function A:UpdateTempEnchant(button, index)
-	local expirationTime = select(button.enchantOffset, GetWeaponEnchantInfo())
+	local expirationTime, count = select(button.enchantOffset, GetWeaponEnchantInfo())
 	if expirationTime then
 		local quality = GetInventoryItemQuality("player", index)
 		local color = DB.QualityColors[quality or 1]
 		button:SetBackdropBorderColor(color.r, color.g, color.b)
 		button.icon:SetTexture(GetInventoryItemTexture("player", index))
+		if count and count > 0 then
+			button.count:SetText(count)
+		else
+			button.count:SetText("")
+		end
 
 		button.expiration = expirationTime
 		button:SetScript("OnUpdate", A.UpdateTimer)
@@ -157,6 +161,7 @@ function A:UpdateTempEnchant(button, index)
 		button.expiration = nil
 		button.timeLeft = nil
 		button.timer:SetText("")
+		button.count:SetText("")
 	end
 end
 
@@ -303,7 +308,7 @@ function A:CreateAuraIcon(button)
 
 	button:RegisterForClicks("RightButtonUp")
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
-	button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
+	--button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
 	button:SetScript("OnEnter", A.Button_OnEnter)
 	button:SetScript("OnLeave", B.HideTooltip)
 end

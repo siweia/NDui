@@ -2,9 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
-	local styled
+	local styled = false
 
 	InterfaceOptionsFrame:HookScript("OnShow", function()
 		if styled then return end
@@ -14,12 +12,12 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(InterfaceOptionsFrameCategories)
 		B.StripTextures(InterfaceOptionsFramePanelContainer)
 		B.StripTextures(InterfaceOptionsFrameAddOns)
-
+		B.StripTextures(InterfaceOptionsFrame)
 		B.SetBD(InterfaceOptionsFrame)
-		InterfaceOptionsFrame.Border:Hide()
-		B.StripTextures(InterfaceOptionsFrame.Header)
-		InterfaceOptionsFrame.Header:ClearAllPoints()
-		InterfaceOptionsFrame.Header:SetPoint("TOP", InterfaceOptionsFrame, 0, 0)
+
+		InterfaceOptionsFrameHeader:SetTexture("")
+		InterfaceOptionsFrameHeader:ClearAllPoints()
+		InterfaceOptionsFrameHeader:SetPoint("TOP", InterfaceOptionsFrame)
 
 		B.Reskin(InterfaceOptionsFrameDefaults)
 		B.Reskin(InterfaceOptionsFrameOkay)
@@ -47,7 +45,6 @@ tinsert(C.defaultThemes, function()
 			"InterfaceOptionsCameraPanel",
 			"InterfaceOptionsMousePanel",
 			"InterfaceOptionsAccessibilityPanel",
-			"InterfaceOptionsColorblindPanel",
 			"CompactUnitFrameProfiles",
 			"CompactUnitFrameProfilesGeneralOptionsFrame",
 		}

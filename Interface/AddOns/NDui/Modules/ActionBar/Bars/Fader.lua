@@ -4,8 +4,6 @@ local Bar = B:GetModule("Actionbar")
 ----------------------------
 -- rLib: framefader, zork
 ----------------------------
-local SpellFlyout = SpellFlyout
-
 local function FaderOnFinished(self)
 	self.__owner:SetAlpha(self.finAlpha)
 end
@@ -58,9 +56,6 @@ end
 
 local function IsMouseOverFrame(frame)
 	if MouseIsOver(frame) then return true end
-	if not SpellFlyout:IsShown() then return false end
-	if not SpellFlyout.__faderParent then return false end
-	if SpellFlyout.__faderParent == frame and MouseIsOver(SpellFlyout) then return true end
 	return false
 end
 
@@ -78,29 +73,6 @@ local function OffFrameHandler(self)
 	if not self.__faderParent then return end
 	FrameHandler(self.__faderParent)
 end
-
-local function SpellFlyoutOnShow(self)
-	local frame = self:GetParent():GetParent():GetParent()
-	if not frame.fader then return end
-	--set new frame parent
-	self.__faderParent = frame
-	if not self.__faderHook then
-		SpellFlyout:HookScript("OnEnter", OffFrameHandler)
-		SpellFlyout:HookScript("OnLeave", OffFrameHandler)
-		self.__faderHook = true
-	end
-	for i = 1, 13 do
-		local button = _G["SpellFlyoutButton"..i]
-		if not button then break end
-		button.__faderParent = frame
-		if not button.__faderHook then
-			button:HookScript("OnEnter", OffFrameHandler)
-			button:HookScript("OnLeave", OffFrameHandler)
-			button.__faderHook = true
-		end
-	end
-end
-SpellFlyout:HookScript("OnShow", SpellFlyoutOnShow)
 
 local function CreateFrameFader(frame, faderConfig)
 	if frame.faderConfig then return end

@@ -8,8 +8,6 @@ local function reskinPanelSection(frame)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local styledOptions = false
 
 	VideoOptionsFrame:HookScript("OnShow", function()
@@ -17,16 +15,13 @@ tinsert(C.defaultThemes, function()
 
 		B.StripTextures(VideoOptionsFrameCategoryFrame)
 		B.StripTextures(VideoOptionsFramePanelContainer)
-		B.StripTextures(VideoOptionsFrame.Header)
-		VideoOptionsFrame.Header:ClearAllPoints()
-		VideoOptionsFrame.Header:SetPoint("TOP", VideoOptionsFrame, 0, 0)
-
 		B.SetBD(VideoOptionsFrame)
-		VideoOptionsFrame.Border:Hide()
-		B.Reskin(VideoOptionsFrameOkay)
-		B.Reskin(VideoOptionsFrameCancel)
-		B.Reskin(VideoOptionsFrameDefaults)
-		B.Reskin(VideoOptionsFrameApply)
+		B.StripTextures(VideoOptionsFrame)
+
+		VideoOptionsFrameHeader:SetTexture("")
+		VideoOptionsFrameHeader:ClearAllPoints()
+		VideoOptionsFrameHeader:SetPoint("TOP", VideoOptionsFrame, 0, 0)
+		VideoOptionsFrameOkay:SetPoint("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
 
 		local line = VideoOptionsFrame:CreateTexture(nil, "ARTWORK")
 		line:SetSize(C.mult, 512)
@@ -49,6 +44,7 @@ tinsert(C.defaultThemes, function()
 		hline:SetColorTexture(1, 1, 1, .2)
 
 		local videoPanels = {
+			"VideoOptionsFrame",
 			"Display_",
 			"Graphics_",
 			"RaidGraphics_",

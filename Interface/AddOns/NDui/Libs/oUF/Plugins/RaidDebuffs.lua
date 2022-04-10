@@ -1,10 +1,12 @@
--------------------------------
--- oUF_RaidDebuffs, by yleaf
--- NDui MOD
--------------------------------
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
+
+-- Libs
+DB.LibClassicDurations = LibStub("LibClassicDurations")
+DB.LibClassicDurations:RegisterFrame("NDui")
+
+local LCD = DB.LibClassicDurations
 
 local debugMode = false
 local class = DB.MyClass
@@ -29,17 +31,11 @@ local DispellFilter
 do
 	local dispellClasses = {
 		["DRUID"] = {
-			["Magic"] = false,
 			["Curse"] = true,
 			["Poison"] = true,
 		},
-		["MONK"] = {
-			["Magic"] = true,
-			["Poison"] = true,
-			["Disease"] = true,
-		},
 		["PALADIN"] = {
-			["Magic"] = false,
+			["Magic"] = true,
 			["Poison"] = true,
 			["Disease"] = true,
 		},
@@ -48,43 +44,18 @@ do
 			["Disease"] = true,
 		},
 		["SHAMAN"] = {
-			["Magic"] = false,
-			["Curse"] = true,
+			["Poison"] = true,
+			["Disease"] = true,
 		},
 		["MAGE"] = {
 			["Curse"] = true,
 		},
+		["WARLOCK"] = {
+			["Magic"] = true,
+		},
 	}
 
 	DispellFilter = dispellClasses[class] or {}
-end
-
-local function checkSpecs()
-	if class == "DRUID" then
-		if GetSpecialization() == 4 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
-	elseif class == "MONK" then
-		if GetSpecialization() == 2 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
-	elseif class == "PALADIN" then
-		if GetSpecialization() == 1 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
-	elseif class == "SHAMAN" then
-		if GetSpecialization() == 3 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
-	end
 end
 
 local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, expiration)
@@ -144,13 +115,9 @@ local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, 
 	end
 end
 
-local instName
+local instID
 local function checkInstance()
-	if IsInInstance() then
-		instName = GetInstanceInfo()
-	else
-		instName = nil
-	end
+	instID = select(8, GetInstanceInfo())
 end
 
 local emptyDebuffs = {}
@@ -172,6 +139,13 @@ local function Update(self, _, unit)
 		local name, icon, count, debuffType, duration, expiration, _, _, _, spellId = UnitAura(unit, i, rd.filter)
 		if not name then break end
 
+		if duration == 0 then
+			local newduration, newexpires = LCD:GetAuraDurationByUnit(unit, spellId, caster, name)
+			if newduration then
+				duration, expiration = newduration, newexpires
+			end
+		end
+
 		if rd.ShowDispellableDebuff and debuffType and (not isCharmed) and (not canAttack) then
 			if C.db["UFs"]["DispellOnly"] then
 				prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or invalidPrio
@@ -187,7 +161,7 @@ local function Update(self, _, unit)
 		end
 
 		local instPrio
-		local debuffList = instName and debuffs[instName] or debuffs[0]
+		local debuffList = instID and debuffs[instID] or debuffs[0]
 		if debuffList then
 			instPrio = debuffList[spellId]
 		end
@@ -200,7 +174,7 @@ local function Update(self, _, unit)
 
 	if debugMode then
 		rd.priority = 6
-		_name, _, _icon = GetSpellInfo(47540)
+		_name, _, _icon = GetSpellInfo(168)
 		_count, _debuffType, _duration, _expiration = 2, "Magic", 10, GetTime()+10, 0
 	end
 
@@ -228,8 +202,6 @@ local function Enable(self)
 		return true
 	end
 
-	checkSpecs()
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs, true)
 	checkInstance()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", checkInstance, true)
 end
@@ -241,7 +213,6 @@ local function Disable(self)
 		self.RaidDebuffs.__owner = nil
 	end
 
-	self:UnregisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD", checkInstance)
 end
 

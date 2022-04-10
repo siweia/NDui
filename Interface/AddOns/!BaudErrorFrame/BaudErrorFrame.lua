@@ -55,7 +55,7 @@ function BaudErrorFrame_OnLoad(self)
 	soundButton:SetScript("OnMouseUp", function(self)
 		BaudErrorFrameConfig.enableSound = not BaudErrorFrameConfig.enableSound
 		updateColor()
-		PlaySound(48942, "Master")
+		PlaySound(1201, "Master")
 		self:GetScript("OnEnter")(self)
 	end)
 	soundButton:SetScript("OnShow", updateColor)
@@ -112,7 +112,7 @@ function BaudErrorFrameShowError(Error)
 	if not BaudErrorFrameConfig.enableSound then return end
 
 	if GetTime() > SoundTime then
-		PlaySound(48942, "Master")
+		PlaySound(1201, "Master")
 		SoundTime = GetTime() + 1
 	end
 end

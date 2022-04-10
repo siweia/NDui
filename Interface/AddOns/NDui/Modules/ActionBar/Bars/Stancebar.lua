@@ -8,7 +8,7 @@ local cfg = C.Bars.stancebar
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 local num = NUM_STANCE_SLOTS
-local NUM_POSSESS_SLOTS = NUM_POSSESS_SLOTS
+--local NUM_POSSESS_SLOTS = NUM_POSSESS_SLOTS
 
 function Bar:UpdateStanceBar()
 	local frame = _G["NDui_ActionBarStance"]
@@ -18,7 +18,7 @@ function Bar:UpdateStanceBar()
 	local fontSize = C.db["Actionbar"]["BarStanceFont"]
 	local perRow = C.db["Actionbar"]["BarStancePerRow"]
 
-	for i = 1, 12 do
+	for i = 1, num do
 		local button = frame.buttons[i]
 		button:SetSize(size, size)
 		if i < 11 then
@@ -63,7 +63,7 @@ function Bar:CreateStancebar()
 	end
 
 	-- PossessBar
-	PossessBarFrame:SetParent(frame)
+--[[	PossessBarFrame:SetParent(frame)
 	PossessBarFrame:EnableMouse(false)
 	PossessBackground1:SetTexture(nil)
 	PossessBackground2:SetTexture(nil)
@@ -73,7 +73,7 @@ function Bar:CreateStancebar()
 		tinsert(buttonList, button)
 		button:ClearAllPoints()
 		button:SetPoint("CENTER", buttonList[i])
-	end
+	end]]
 
 	frame.buttons = buttonList
 
