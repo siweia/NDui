@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
-local gsub, unpack = gsub, unpack
+local gsub, unpack, strfind = gsub, unpack, strfind
 local GetItemIcon, GetSpellTexture = GetItemIcon, GetSpellTexture
 local newString = "0:0:64:64:5:59:5:59"
 
@@ -17,7 +17,7 @@ function TT:SetupTooltipIcon(icon)
 		local line = _G[self:GetName().."TextLeft"..i]
 		if not line then break end
 		local text = line:GetText()
-		if text and text ~= " " then
+		if text and text ~= " " and not strfind(text, "UI%-CharacterCreate%-Classes") then
 			local newText, count = gsub(text, "|T([^:]-):[%d+:]+|t", "|T%1:14:14:"..newString.."|t")
 			if count > 0 then line:SetText(newText) end
 		end
@@ -56,10 +56,23 @@ function TT:HookTooltipMethod()
 	self:HookScript("OnTooltipCleared", TT.HookTooltipCleared)
 end
 
+local function updateBackdropColor(self, r, g, b)
+	self:GetParent().bg:SetBackdropBorderColor(r, g, b)
+end
+
+local function resetBackdropColor(self)
+	self:GetParent().bg:SetBackdropBorderColor(0, 0, 0)
+end
+
 function TT:ReskinRewardIcon()
 	self.Icon:SetTexCoord(unpack(DB.TexCoord))
-	self.bg = B.CreateBDFrame(self.Icon, 0)
-	B.ReskinIconBorder(self.IconBorder)
+	self.bg = B.CreateBDFrame(self, 0)
+	self.bg:SetOutside(self.Icon)
+
+	local iconBorder = self.IconBorder
+	iconBorder:SetAlpha(0)
+	hooksecurefunc(iconBorder, "SetVertexColor", updateBackdropColor)
+	hooksecurefunc(iconBorder, "Hide", resetBackdropColor)
 end
 
 function TT:ReskinTooltipIcons()
@@ -70,14 +83,6 @@ function TT:ReskinTooltipIcons()
 		TT.SetupTooltipIcon(self)
 	end)
 
-	hooksecurefunc(GameTooltip, "SetAzeriteEssence", function(self)
-		TT.SetupTooltipIcon(self)
-	end)
-	hooksecurefunc(GameTooltip, "SetAzeriteEssenceSlot", function(self)
-		TT.SetupTooltipIcon(self)
-	end)
-
 	-- Tooltip rewards icon
-	TT.ReskinRewardIcon(GameTooltip.ItemTooltip)
 	TT.ReskinRewardIcon(EmbeddedItemTooltip.ItemTooltip)
 end

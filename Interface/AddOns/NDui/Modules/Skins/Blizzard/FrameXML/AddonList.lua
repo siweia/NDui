@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local cr, cg, cb = DB.r, DB.g, DB.b
 
 	B.ReskinPortraitFrame(AddonList)

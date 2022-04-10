@@ -2,43 +2,185 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
-local _G = _G
-local strfind = strfind
-local cr, cg, cb = DB.r, DB.g, DB.b
+function S:WhatsTraining()
+	if not IsAddOnLoaded("WhatsTraining") then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-function S:FriendGroups()
-	if not IsAddOnLoaded("FriendGroups") then return end
+	local done
+	SpellBookFrame:HookScript("OnShow", function()
+		if done then return end
 
-	if FriendGroups_UpdateFriendButton then
-		local function replaceButtonStatus(self, texture)
-			self:SetPoint("TOPLEFT", 4, 1)
-			self.bg:Show()
-			if strfind(texture, "PlusButton") then
-				self:SetAtlas("Soulbinds_Collection_CategoryHeader_Collapse", true)
-			elseif strfind(texture, "MinusButton") then
-				self:SetAtlas("Soulbinds_Collection_CategoryHeader_Expand", true)
-			else
-				self:SetPoint("TOPLEFT", 4, -3)
-				self.bg:Hide()
+		B.StripTextures(WhatsTrainingFrame)
+		local bg = B.CreateBDFrame(WhatsTrainingFrameScrollBar, 1)
+		bg:SetPoint("TOPLEFT", 20, 0)
+		bg:SetPoint("BOTTOMRIGHT", 4, 0)
+		B.ReskinScroll(WhatsTrainingFrameScrollBarScrollBar)
+		B:GetModule("Tooltip").ReskinTooltip(WhatsTrainingTooltip)
+
+		for i = 1, 22 do
+			local bar = _G["WhatsTrainingFrameRow"..i.."Spell"]
+			if bar and bar.icon then
+				B.ReskinIcon(bar.icon)
 			end
 		end
 
-		hooksecurefunc("FriendGroups_UpdateFriendButton", function(button)
-			if not button.styled then
-				local bg = B.CreateBDFrame(button.status, .25)
-				bg:SetInside(button.status, 3, 3)
-				button.status.bg = bg
-				hooksecurefunc(button.status, "SetTexture", replaceButtonStatus)
+		done = true
+	end)
+end
 
-				button.styled = true
-			end
-		end)
+function S:ResetRecount()
+	Recount:RestoreMainWindowPosition(797, -405, 320, 220)
+
+	Recount.db.profile.Locked = true
+	Recount:LockWindows(true)
+
+	Recount.db.profile.MainWindowHeight = 320
+	Recount.db.profile.MainWindowWidth = 220
+	Recount:ResizeMainWindow()
+
+	Recount.db.profile.MainWindow.RowHeight = 18
+	Recount:BarsChanged()
+
+	Recount.db.profile.BarTexture = "normTex"
+	Recount.db.profile.Font = nil
+	Recount:UpdateBarTextures()
+
+	C.db["Skins"]["ResetRecount"] = false
+end
+
+function S:ResetRocountFont()
+	for _, row in pairs(Recount.MainWindow.Rows) do
+		local font, fontSize = row.LeftText:GetFont()
+		row.LeftText:SetFont(font, fontSize, DB.Font[3])
+		row.RightText:SetFont(font, fontSize, DB.Font[3])
 	end
 end
 
+function S:RecountSkin()
+	if not C.db["Skins"]["Recount"] then return end
+	if not IsAddOnLoaded("Recount") then return end
+
+	local frame = Recount_MainWindow
+	B.StripTextures(frame)
+	local bg = B.SetBD(frame)
+	bg:SetPoint("TOPLEFT", 0, -10)
+	frame.bg = bg
+
+	local open, close = S:CreateToggle(frame)
+	open:HookScript("OnClick", function()
+		Recount.MainWindow:Show()
+		Recount:RefreshMainWindow()
+	end)
+	close:HookScript("OnClick", function()
+		Recount.MainWindow:Hide()
+	end)
+
+	if C.db["Skins"]["ResetRecount"] then S:ResetRecount() end
+	hooksecurefunc(Recount, "ResetPositions", S.ResetRecount)
+
+	S:ResetRocountFont()
+	hooksecurefunc(Recount, "BarsChanged", S.ResetRocountFont)
+
+	B.ReskinArrow(frame.LeftButton, "left")
+	B.ReskinArrow(frame.RightButton, "right")
+	B.ReskinClose(frame.CloseButton, frame.bg, -2, -2)
+
+	-- Force to show window on init
+	Recount.MainWindow:Show()
+end
+
+function S:BindPad()
+	if not IsAddOnLoaded("BindPad") then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
+
+	BindPadFrame.bg = B.ReskinPortraitFrame(BindPadFrame, 10, -10, -30, 70)
+	for i = 1, 4 do
+		B.ReskinTab(_G["BindPadFrameTab"..i])
+	end
+	B.ReskinScroll(BindPadScrollFrameScrollBar)
+	B.ReskinCheck(BindPadFrameCharacterButton)
+	B.ReskinCheck(BindPadFrameSaveAllKeysButton)
+	B.ReskinCheck(BindPadFrameShowHotkeyButton)
+	B.Reskin(BindPadFrameExitButton)
+	B.ReskinArrow(BindPadShowLessSlotButton, "left")
+	B.ReskinArrow(BindPadShowMoreSlotButton, "right")
+
+	B.StripTextures(BindPadDialogFrame)
+	B.SetBD(BindPadDialogFrame)
+	B.Reskin(BindPadDialogFrame.cancelbutton)
+	B.Reskin(BindPadDialogFrame.okaybutton)
+
+	hooksecurefunc("BindPadSlot_UpdateState", function(slot)
+		if slot.styled then return end
+
+		slot:DisableDrawLayer("ARTWORK")
+		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		slot.icon:SetTexCoord(unpack(DB.TexCoord))
+		B.CreateBDFrame(slot, .25)
+		slot.border:SetTexture()
+
+		B.StripTextures(slot.addbutton)
+		local nt = slot.addbutton:GetNormalTexture()
+		nt:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		nt:SetTexCoord(0, .4375, 0, .4375)
+
+		slot.styled = true
+	end)
+
+	B.StripTextures(BindPadMacroPopupFrame)
+	BindPadMacroPopupFrame:SetPoint("TOPLEFT", BindPadFrame.bg, "TOPRIGHT", 3, -40)
+	B.SetBD(BindPadMacroPopupFrame)
+	B.StripTextures(BindPadMacroPopupEditBox)
+	B.CreateBDFrame(BindPadMacroPopupEditBox, .25)
+	B.ReskinScroll(BindPadMacroPopupScrollFrameScrollBar)
+	B.Reskin(BindPadMacroPopupOkayButton)
+	B.Reskin(BindPadMacroPopupCancelButton)
+
+	hooksecurefunc("BindPadMacroPopupFrame_Update", function()
+		for i = 1, 20 do
+			local bu = _G["BindPadMacroPopupButton"..i]
+			local ic = _G["BindPadMacroPopupButton"..i.."Icon"]
+
+			if not bu.styled then
+				bu:SetCheckedTexture(DB.textures.pushed)
+				select(2, bu:GetRegions()):Hide()
+				local hl = bu:GetHighlightTexture()
+				hl:SetColorTexture(1, 1, 1, .25)
+				hl:SetAllPoints(ic)
+
+				ic:SetPoint("TOPLEFT", C.mult, -C.mult)
+				ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+				ic:SetTexCoord(unpack(DB.TexCoord))
+				B.CreateBDFrame(ic, .25)
+
+				bu.styled = true
+			end
+		end
+	end)
+
+	B.StripTextures(BindPadBindFrame)
+	B.SetBD(BindPadBindFrame)
+	B.ReskinClose(BindPadBindFrameCloseButton)
+	B.ReskinCheck(BindPadBindFrameForAllCharacterButton)
+	B.Reskin(BindPadBindFrameUnbindButton)
+	B.Reskin(BindPadBindFrameExitButton)
+
+	B.ReskinPortraitFrame(BindPadMacroFrame, 10, -10, -30, 70)
+	B.ReskinScroll(BindPadMacroFrameScrollFrameScrollBar)
+	B.Reskin(BindPadMacroFrameEditButton)
+	B.Reskin(BindPadMacroDeleteButton)
+	B.Reskin(BindPadMacroFrameTestButton)
+	B.Reskin(BindPadMacroFrameExitButton)
+	B.StripTextures(BindPadMacroFrameTextBackground)
+	B.CreateBDFrame(BindPadMacroFrameTextBackground, .25)
+	B.StripTextures(BindPadMacroFrameSlotButton)
+	B.ReskinIcon(BindPadMacroFrameSlotButtonIcon)
+end
+
 function S:PostalSkin()
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not IsAddOnLoaded("Postal") then return end
-	if not PostalOpenAllButton then return end -- outdate postal
+	if not PostalOpenAllButton then return end -- update your postal
 
 	B.Reskin(PostalSelectOpenButton)
 	B.Reskin(PostalSelectReturnButton)
@@ -56,23 +198,51 @@ function S:PostalSkin()
 	Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 2, 0)
 end
 
-function S:SoulbindsTalents()
-	if not IsAddOnLoaded("SoulbindsTalents") then return end
+local function DecreaseTextSize(parent)
+	for i = 1, parent:GetNumChildren() do
+		local child = select(i, parent:GetChildren())
+		if child.Label then
+			child.Label:SetFontObject(Game13Font)
 
-	hooksecurefunc("PanelTemplates_SetNumTabs", function(frame, num)
-		if frame == _G.PlayerTalentFrame and num == 4 then
-			if _G.PlayerTalentFrameTab4 then
-				B.ReskinTab(_G.PlayerTalentFrameTab4)
-			end
-		elseif frame == _G.SoulbindAnchor then
-			for i = 1, 4 do
-				local tab = _G["SoulbindViewerTab"..i]
-				if tab then
-					B.ReskinTab(tab)
-				end
+			if child.Label:GetPoint() == "CENTER" and child.BackgroundTex then
+				child.BackgroundTex:Hide()
+
+				local line = child:CreateTexture(nil, "ARTWORK")
+				line:SetSize(130, C.mult)
+				line:SetPoint("BOTTOM", child.BackgroundTex)
+				line:SetColorTexture(1, 1, 1, .25)
 			end
 		end
-	end)
+		if child.Value then child.Value:SetFontObject(Game13Font) end
+	end
+end
+
+function S:CharacterStatsTBC()
+	if not IsAddOnLoaded("CharacterStatsTBC") then return end
+
+	for i = 1, CharacterFrame:GetNumChildren() do
+		local child = select(i, CharacterFrame:GetChildren())
+		if child and child.leftStatsDropDown then
+			B.ReskinDropDown(child.leftStatsDropDown)
+			DecreaseTextSize(child.leftStatsDropDown)
+		end
+		if child and child.rightStatsDropDown then
+			B.ReskinDropDown(child.rightStatsDropDown)
+			DecreaseTextSize(child.rightStatsDropDown)
+		end
+	end
+
+	local sideStatsFrame = _G.CSC_SideStatsFrame
+	if sideStatsFrame then
+		B.StripTextures(sideStatsFrame)
+		B.SetBD(sideStatsFrame)
+		B.ReskinClose(sideStatsFrame.CloseButton)
+		B.ReskinScroll(sideStatsFrame.ScrollFrame.ScrollBar)
+
+		sideStatsFrame:SetHeight(421)
+		sideStatsFrame:SetPoint("LEFT", PaperDollItemsFrame, "RIGHT", -32, 29)
+		DecreaseTextSize(sideStatsFrame.ScrollChild)
+	end
 end
 
 local function restyleMRTWidget(self)
@@ -148,105 +318,13 @@ function S:MRT_Skin()
 			end
 		end)
 	end
-
-	-- Consumables
-	local buttons = MRTConsumables and MRTConsumables.buttons
-	if buttons then
-		for i = 1, 8 do
-			local button = buttons[i]
-			local icon = button and button.texture
-			if icon then
-				B.ReskinIcon(icon)
-			end
-		end
-	end
 end
 
-local function updateSoulshapeButtons(self)
-	local buttons = self.buttons
-	for i = 1, #buttons do
-		local bu = buttons[i]
-		if not bu.bg then
-			local bg = B.CreateBDFrame(bu, .25)
-			bg:SetPoint("TOPLEFT", 3, -1)
-			bg:SetPoint("BOTTOMRIGHT", 0, 1)
-			bu.bg = bg
-
-			B.ReskinIcon(bu.icon)
-			bu.selectedTexture:SetAlpha(0)
-			bu.background:SetTexture(nil)
-			bu:SetHighlightTexture(nil)
-
-			local critterIcon = bu.critterIcon
-			critterIcon:SetTexture("Interface\\ICONS\\Pet_Type_Critter")
-			critterIcon:SetTexCoord(0, 1, 0, 1)
-			critterIcon:SetSize(40, 40)
-			critterIcon:SetAlpha(.5)
-		end
-
-		if bu.selected then
-			bu.bg:SetBackdropColor(cr, cg, cb, .25)
-		else
-			bu.bg:SetBackdropColor(0, 0, 0, .25)
-		end
-	end
-end
-
-function S:SoulshapeJournal()
-	if not IsAddOnLoaded("SoulshapeJournal") then return end
-	if not SoulshapeCollectionPanel then return end
-
-	CollectionsJournalCoverTab:SetAlpha(0)
-	B.ReskinTab(CollectionsJournalSecureTab0)
-
-	local styled
-	SoulshapeCollectionPanel:HookScript("OnShow", function(frame)
-		if styled then return end
-		styled = true
-
-		B.StripTextures(frame)
-		B.SetBD(frame, 1) -- on top of mount journal
-		B.ReskinClose(frame.CloseButton)
-		B.ReskinScroll(frame.ScrollFrame.ScrollBar)
-		B.ReskinArrow(frame.SoulshapeDisplay.ModelScene.RotateLeftButton, "left")
-		B.ReskinArrow(frame.SoulshapeDisplay.ModelScene.RotateRightButton, "right")
-		B.StripTextures(SoulshapeCollectionPanelCount)
-		B.CreateBDFrame(SoulshapeCollectionPanelCount, .25)
-
-		local searchBox, _, filterButton = select(9, frame:GetChildren())
-		B.ReskinInput(searchBox)
-		filterButton.Icon = select(12, filterButton:GetRegions())
-		if filterButton.Icon then
-			B.ReskinFilterButton(filterButton)
-		end
-
-		hooksecurefunc(frame.ScrollFrame, "update", updateSoulshapeButtons)
-		hooksecurefunc(frame.ScrollFrame, "UpdateButtons", updateSoulshapeButtons)
-	end)
-end
-
-function S:ATT()
-	if not IsAddOnLoaded("AllTheThings") then return end
-
-	local frame = _G["AllTheThings-Window-CurrentInstance"]
-	if frame then
-		B.SetBD(frame, nil, 2, -2, -2, 2)
-		B.ReskinClose(frame.CloseButton, nil, -4, -4)
-		B.ReskinScroll(frame.ScrollBar)
-		frame.Grip:SetTexture([[Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up]])
-		local up = frame.ScrollBar:GetChildren()
-		up:ClearAllPoints()
-		up:SetPoint("TOPRIGHT", 0, 10)
-	end
-end
-
-function S:OtherSkins()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
-	S:FriendGroups()
+function S:LoadOtherSkins()
+	S:WhatsTraining()
+	S:RecountSkin()
+	S:BindPad()
 	S:PostalSkin()
-	S:SoulbindsTalents()
+	S:CharacterStatsTBC()
 	S:MRT_Skin()
-	S:SoulshapeJournal()
-	S:ATT()
 end

@@ -1,32 +1,22 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local r, g, b = DB.r, DB.g, DB.b
-
-local function colorMinimize(f)
-	if f:IsEnabled() then
-		f.minimize:SetVertexColor(r, g, b)
-	end
-end
-
-local function clearMinimize(f)
-	f.minimize:SetVertexColor(1, 1, 1)
-end
-
-local function updateMinorButtonState(button)
-	if button:GetChecked() then
-		button.bg:SetBackdropColor(1, .8, 0, .25)
-	else
-		button.bg:SetBackdropColor(0, 0, 0, .25)
-	end
-end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
+	local r, g, b = DB.r, DB.g, DB.b
+
+	local function colourMinimize(f)
+		if f:IsEnabled() then
+			f.minimize:SetVertexColor(r, g, b)
+		end
+	end
+
+	local function clearMinimize(f)
+		f.minimize:SetVertexColor(1, 1, 1)
+	end
 
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local bu = _G["StaticPopup"..i.."ItemFrame"]
-		local icon = _G["StaticPopup"..i.."ItemFrameIconTexture"]
 		local close = _G["StaticPopup"..i.."CloseButton"]
 
 		local gold = _G["StaticPopup"..i.."MoneyInputFrameGold"]
@@ -34,40 +24,32 @@ tinsert(C.defaultThemes, function()
 		local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
 
 		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
+		_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
 		bu:SetNormalTexture("")
 		bu:SetHighlightTexture("")
 		bu:SetPushedTexture("")
-		bu.bg = B.ReskinIcon(icon)
-		B.ReskinIconBorder(bu.IconBorder)
+		B.CreateBDFrame(bu)
+		bu.IconBorder:SetAlpha(0)
 
-		local bg = B.CreateBDFrame(bu, .25)
-		bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 2, 0)
-		bg:SetPoint("BOTTOMRIGHT", bu.bg, 115, 0)
-
-		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
-		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
-
-		frame.Border:Hide()
+		B.StripTextures(frame)
 		B.SetBD(frame)
 		for j = 1, 4 do
 			B.Reskin(frame["button"..j])
 		end
-		B.Reskin(frame.extraButton)
+		B.Reskin(frame["extraButton"])
 		B.ReskinClose(close)
 
 		close.minimize = close:CreateTexture(nil, "OVERLAY")
-		close.minimize:SetSize(9, C.mult)
+		close.minimize:SetSize(9, 1)
 		close.minimize:SetPoint("CENTER")
 		close.minimize:SetTexture(DB.bdTex)
 		close.minimize:SetVertexColor(1, 1, 1)
-		close:HookScript("OnEnter", colorMinimize)
+		close:HookScript("OnEnter", colourMinimize)
 		close:HookScript("OnLeave", clearMinimize)
 
 		B.ReskinInput(_G["StaticPopup"..i.."EditBox"], 20)
-		B.ReskinInput(gold)
-		B.ReskinInput(silver)
-		B.ReskinInput(copper)
+		B:UpdateMoneyDisplay(gold, silver, copper)
 	end
 
 	hooksecurefunc("StaticPopup_Show", function(which, _, _, data)
@@ -111,60 +93,38 @@ tinsert(C.defaultThemes, function()
 			closeButton:SetPushedTexture("")
 
 			if info.closeButtonIsHide then
-				closeButton.__texture:Hide()
+				for _, pixel in pairs(closeButton.pixels) do
+					pixel:Hide()
+				end
 				closeButton.minimize:Show()
 			else
-				closeButton.__texture:Show()
+				for _, pixel in pairs(closeButton.pixels) do
+					pixel:Show()
+				end
 				closeButton.minimize:Hide()
 			end
 		end
 	end)
 
-	-- Pet battle queue popup
-
-	B.SetBD(PetBattleQueueReadyFrame)
-	B.CreateBDFrame(PetBattleQueueReadyFrame.Art)
-	PetBattleQueueReadyFrame.Border:Hide()
-	B.Reskin(PetBattleQueueReadyFrame.AcceptButton)
-	B.Reskin(PetBattleQueueReadyFrame.DeclineButton)
-
 	-- PlayerReportFrame
-	if not DB.isNewPatch then
-		PlayerReportFrame:HookScript("OnShow", function(self)
-			if not self.styled then
-				B.StripTextures(self)
-				B.SetBD(self)
-				B.StripTextures(self.Comment)
-				B.ReskinInput(self.Comment)
-				B.Reskin(self.ReportButton)
-				B.Reskin(self.CancelButton)
+	PlayerReportFrame:HookScript("OnShow", function(self)
+		if not self.styled then
+			B.StripTextures(self)
+			B.SetBD(self)
+			B.StripTextures(self.Comment)
+			B.ReskinInput(self.Comment)
+			B.Reskin(self.ReportButton)
+			B.Reskin(self.CancelButton)
 
-				self.styled = true
-			end
-		end)
-	else
-		B.StripTextures(ReportFrame)
-		B.SetBD(ReportFrame)
-		B.ReskinClose(ReportFrame.CloseButton)
-		B.Reskin(ReportFrame.ReportButton)
-		B.ReskinDropDown(ReportFrame.ReportingMajorCategoryDropdown)
-		B.ReskinEditBox(ReportFrame.Comment)
+			self.styled = true
+		end
+	end)
 
-		hooksecurefunc(ReportFrame, "AnchorMinorCategory", function(self)
-			if self.MinorCategoryButtonPool then
-				for button in self.MinorCategoryButtonPool:EnumerateActive() do
-					if not button.styled then
-						B.StripTextures(button)
-						button.bg = B.CreateBDFrame(button, .25)
-						button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-						button:HookScript("OnClick", updateMinorButtonState)
+	-- PVP ready dialog
+	local PVPReadyDialog = PVPReadyDialog
 
-						button.styled = true
-					end
-
-					updateMinorButtonState(button)
-				end
-			end
-		end)
-	end
+	B.StripTextures(PVPReadyDialog)
+	B.SetBD(PVPReadyDialog)
+	B.Reskin(PVPReadyDialog.enterButton)
+	B.Reskin(PVPReadyDialog.hideButton)
 end)

@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local r, g, b = DB.r, DB.g, DB.b
 
 	local function moveNavButtons(self)
@@ -58,7 +56,6 @@ tinsert(C.defaultThemes, function()
 			navButton.arrowDown:SetAlpha(0)
 			navButton.selected:SetDrawLayer("BACKGROUND", 1)
 			navButton.selected:SetColorTexture(r, g, b, .25)
-			navButton.selected:SetInside(navButton.__bg)
 
 			navButton:HookScript("OnClick", function()
 				moveNavButtons(self)

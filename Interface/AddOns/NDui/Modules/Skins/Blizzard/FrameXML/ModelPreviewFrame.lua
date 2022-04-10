@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local ModelPreviewFrame = ModelPreviewFrame
 	local Display = ModelPreviewFrame.Display
 
@@ -14,8 +12,6 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(ModelPreviewFrame)
 	B.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")
 	B.ReskinArrow(Display.ModelScene.RotateRightButton, "right")
-	B.ReskinArrow(Display.ModelScene.CarouselLeftButton, "left")
-	B.ReskinArrow(Display.ModelScene.CarouselRightButton, "right")
 	B.ReskinClose(ModelPreviewFrameCloseButton)
 	B.Reskin(ModelPreviewFrame.CloseButton)
 

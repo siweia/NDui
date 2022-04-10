@@ -1,0 +1,18 @@
+## Interface: 20504
+## Title: |cff0080ffNDui|r |cff00ff00Classic|r
+## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
+## Author: Siweia
+## Notes: More than a UI.
+## Version: 2.10.0
+## X-Support: BC Classic
+## X-Website: https://github.com/siweia/NDuiClassic
+## SavedVariables: NDuiADB, NDuiPDB
+## SavedVariablesPerCharacter: NDuiDB
+
+Init.lua
+Locales\Locales.xml
+Core\Core.xml
+Config\Config.xml
+Libs\Libs.xml
+Modules\Modules.xml
+Plugins\Plugins.xml

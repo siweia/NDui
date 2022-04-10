@@ -94,7 +94,7 @@ end
 
 function S:BigWigsSkin()
 	if not C.db["Skins"]["Bigwigs"] then return end
-
+--[[
 	if BigWigsLoader and BigWigsLoader.RegisterMessage then
 		BigWigsLoader.RegisterMessage(_, "BigWigs_FrameCreated", function(_, frame, name)
 			if name == "QueueTimer" and not frame.styled then
@@ -105,7 +105,7 @@ function S:BigWigsSkin()
 				frame.styled = true
 			end
 		end)
-	end
+	end]]
 end
 
 S:RegisterSkin("BigWigs", S.BigWigsSkin)

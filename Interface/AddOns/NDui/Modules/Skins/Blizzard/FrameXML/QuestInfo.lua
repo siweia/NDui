@@ -17,35 +17,18 @@ local function setHighlight(self)
 	end
 end
 
-local function QuestInfo_GetQuestID()
-	if QuestInfoFrame.questLog then
-		return C_QuestLog.GetSelectedQuest()
-	else
-		return GetQuestID()
-	end
-end
-
-local function colorObjectivesText()
+local function colourObjectivesText()
 	if not QuestInfoFrame.questLog then return end
 
-	local questID = QuestInfo_GetQuestID()
 	local objectivesTable = QuestInfoObjectivesFrame.Objectives
 	local numVisibleObjectives = 0
-	local objective
-
-	local waypointText = C_QuestLog.GetNextWaypointText(questID);
-	if waypointText then
-		numVisibleObjectives = numVisibleObjectives + 1;
-		objective = objectivesTable[numVisibleObjectives]
-		objective:SetTextColor(1, 1, 1)
-	end
 
 	for i = 1, GetNumQuestLeaderBoards() do
 		local _, type, finished = GetQuestLogLeaderBoard(i)
 
 		if (type ~= "spell" and type ~= "log" and numVisibleObjectives < MAX_OBJECTIVES) then
 			numVisibleObjectives = numVisibleObjectives + 1
-			objective = objectivesTable[numVisibleObjectives]
+			local objective = objectivesTable[numVisibleObjectives]
 
 			if objective then
 				if finished then
@@ -63,7 +46,6 @@ local function restyleSpellButton(bu)
 	local icon = bu.Icon
 
 	_G[name.."NameFrame"]:Hide()
-	_G[name.."SpellBorder"]:Hide()
 
 	icon:SetPoint("TOPLEFT", 3, -2)
 	B.ReskinIcon(icon)
@@ -74,7 +56,8 @@ local function restyleSpellButton(bu)
 end
 
 local function ReskinRewardButton(bu)
-	bu.NameFrame:Hide()
+	if bu.NameFrame then bu.NameFrame:SetAlpha(0) end
+	if bu.IconBorder then bu.IconBorder:SetAlpha(0) end
 	bu.bg = B.ReskinIcon(bu.Icon)
 
 	local bg = B.CreateBDFrame(bu, .25)
@@ -118,16 +101,11 @@ local function SetTextColor_White(font)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	-- Item reward highlight
 	QuestInfoItemHighlight:GetRegions():Hide()
 	hooksecurefunc(QuestInfoItemHighlight, "SetPoint", setHighlight)
 	QuestInfoItemHighlight:HookScript("OnShow", setHighlight)
 	QuestInfoItemHighlight:HookScript("OnHide", clearHighlight)
-
-	-- Quest objective text color
-	hooksecurefunc("QuestMapFrame_ShowQuestDetails", colorObjectivesText)
 
 	-- Reskin rewards
 	restyleSpellButton(QuestInfoSpellObjectiveFrame) -- needs review
@@ -143,11 +121,11 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	MapQuestInfoRewardsFrame.XPFrame.Name:SetShadowOffset(0, 0)
-	for _, name in next, {"HonorFrame", "MoneyFrame", "SkillPointFrame", "XPFrame", "ArtifactXPFrame", "TitleFrame", "WarModeBonusFrame"} do
+	for _, name in next, {"HonorFrame", "MoneyFrame", "SkillPointFrame", "XPFrame", "ArtifactXPFrame", "TitleFrame"} do
 		ReskinRewardButtonWithSize(MapQuestInfoRewardsFrame[name], true)
 	end
 
-	for _, name in next, {"HonorFrame", "SkillPointFrame", "ArtifactXPFrame", "WarModeBonusFrame"} do
+	for _, name in next, {"HonorFrame", "SkillPointFrame", "ArtifactXPFrame"} do
 		ReskinRewardButtonWithSize(QuestInfoRewardsFrame[name])
 	end
 
@@ -167,40 +145,16 @@ tinsert(C.defaultThemes, function()
 
 	-- Others
 	hooksecurefunc("QuestInfo_Display", function()
-		colorObjectivesText()
+		colourObjectivesText()
 
-		local rewardsFrame = QuestInfoFrame.rewardsFrame
-		local isQuestLog = QuestInfoFrame.questLog ~= nil
+        local rewardsFrame = QuestInfoFrame.rewardsFrame
+        local isQuestLog = QuestInfoFrame.questLog ~= nil
 		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
 
 		if numSpellRewards > 0 then
 			-- Spell Headers
 			for spellHeader in rewardsFrame.spellHeaderPool:EnumerateActive() do
 				spellHeader:SetVertexColor(1, 1, 1)
-			end
-			-- Follower Rewards
-			for reward in rewardsFrame.followerRewardPool:EnumerateActive() do
-				local portrait = reward.PortraitFrame
-				if not reward.textBg then
-					B.ReskinGarrisonPortrait(portrait)
-					reward.BG:Hide()
-					reward.textBg = B.CreateBDFrame(reward, .25)
-				end
-
-				if isQuestLog then
-					portrait:SetPoint("TOPLEFT", 2, 0)
-					reward.textBg:SetPoint("TOPLEFT", 0, 1)
-					reward.textBg:SetPoint("BOTTOMRIGHT", 2, -3)
-				else
-					portrait:SetPoint("TOPLEFT", 2, -5)
-					reward.textBg:SetPoint("TOPLEFT", 0, -3)
-					reward.textBg:SetPoint("BOTTOMRIGHT", 2, 7)
-				end
-
-				if portrait then
-					local color = DB.QualityColors[portrait.quality or 1]
-					portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
-				end
 			end
 			-- Spell Rewards
 			for spellReward in rewardsFrame.spellRewardPool:EnumerateActive() do
@@ -246,19 +200,4 @@ tinsert(C.defaultThemes, function()
 	for _, font in pairs(whitish) do
 		SetTextColor_White(font)
 	end
-
-	-- Replace seal signature string
-	local replacedSealColor = {
-		["480404"] = "c20606",
-		["042c54"] = "1c86ee",
-	}
-	hooksecurefunc(QuestInfoSealFrame.Text, "SetText", function(self, text)
-		if text and text ~= "" then
-			local colorStr, rawText = strmatch(text, "|c[fF][fF](%x%x%x%x%x%x)(.-)|r")
-			if colorStr and rawText then
-				colorStr = replacedSealColor[colorStr] or "99ccff"
-				self:SetFormattedText("|cff%s%s|r", colorStr, rawText)
-			end
-		end
-	end)
 end)

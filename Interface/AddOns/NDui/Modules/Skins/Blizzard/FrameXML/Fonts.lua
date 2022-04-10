@@ -14,7 +14,6 @@ local function ReskinFont(font, size)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["FontOutline"] then return end
 
 	ReskinFont(RaidWarningFrame.slot1)
@@ -32,7 +31,6 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(FriendsFont_Small)
 	ReskinFont(FriendsFont_Large)
 	ReskinFont(FriendsFont_UserText)
-	ReskinFont(FriendsFont_11)
 	ReskinFont(GameFont_Gigantic)
 	ReskinFont(InvoiceFont_Small)
 	ReskinFont(InvoiceFont_Med)
@@ -46,28 +44,20 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(NumberFont_Outline_Large)
 	ReskinFont(NumberFont_Shadow_Med)
 	ReskinFont(NumberFont_Shadow_Small)
-	ReskinFont(Number12Font, 12)
-	ReskinFont(Number15Font)
-	ReskinFont(Number16Font)
-	ReskinFont(Number13FontYellow)
-	ReskinFont(Number13FontWhite)
-	ReskinFont(Number13FontGray)
-	ReskinFont(Number14FontWhite)
-	ReskinFont(Number15FontWhite)
-	ReskinFont(Number18FontWhite)
 	ReskinFont(QuestFont_Shadow_Small)
 	ReskinFont(QuestFont_Large)
 	ReskinFont(QuestFont_Shadow_Huge)
 	ReskinFont(QuestFont_Huge)
 	ReskinFont(QuestFont_Super_Huge)
 	ReskinFont(QuestFont_Enormous)
+	ReskinFont(QuestFontNormalSmall)
 	ReskinFont(ReputationDetailFont)
 	ReskinFont(SpellFont_Small)
 	ReskinFont(SystemFont_InverseShadow_Small)
 	ReskinFont(SystemFont_Large)
 	ReskinFont(SystemFont_Huge1)
 	ReskinFont(SystemFont_Huge2)
-	ReskinFont(SystemFont_Med1)
+	--ReskinFont(SystemFont_Med1)
 	ReskinFont(SystemFont_Med2)
 	ReskinFont(SystemFont_Med3)
 	ReskinFont(SystemFont_OutlineThick_WTF)
@@ -75,13 +65,14 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(SystemFont_OutlineThick_Huge4)
 	ReskinFont(SystemFont_Outline_Small)
 	ReskinFont(SystemFont_Outline)
-	ReskinFont(SystemFont_Shadow_Large, 16)
+	ReskinFont(SystemFont_Shadow_Large)
 	ReskinFont(SystemFont_Shadow_Large_Outline)
-	ReskinFont(SystemFont_Shadow_Large2, 18)
+	ReskinFont(SystemFont_Shadow_Large2)
 	ReskinFont(SystemFont_Shadow_Med1)
 	ReskinFont(SystemFont_Shadow_Med1_Outline)
 	ReskinFont(SystemFont_Shadow_Med2)
 	ReskinFont(SystemFont_Shadow_Med3)
+	ReskinFont(SystemFont_Shadow_Outline_Huge2)
 	ReskinFont(SystemFont_Shadow_Huge1)
 	ReskinFont(SystemFont_Shadow_Huge2)
 	ReskinFont(SystemFont_Shadow_Huge3)
@@ -92,9 +83,8 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(SystemFont_Tiny)
 	ReskinFont(SystemFont_Tiny2)
 	ReskinFont(SystemFont_NamePlate, 12)
-	ReskinFont(SystemFont_NamePlateFixed, 12)
-	ReskinFont(SystemFont_NamePlateCastBar, 12)
 	ReskinFont(SystemFont_LargeNamePlate, 12)
+	ReskinFont(SystemFont_NamePlateFixed, 12)
 	ReskinFont(SystemFont_LargeNamePlateFixed, 12)
 	ReskinFont(SystemFont_World, 64)
 	ReskinFont(SystemFont_World_ThickOutline, 64)
@@ -112,7 +102,6 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(Game30Font)
 	ReskinFont(Game32Font)
 	ReskinFont(Game36Font)
-	ReskinFont(Game40Font)
 	ReskinFont(Game42Font)
 	ReskinFont(Game46Font)
 	ReskinFont(Game48Font)
@@ -134,12 +123,8 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(Fancy48Font)
 	ReskinFont(SplashHeaderFont)
 	ReskinFont(ChatBubbleFont, 13)
+	ReskinFont(GameFontNormal)
 	ReskinFont(GameFontNormalHuge2)
-	ReskinFont(PriceFont)
-	ReskinFont(PriceFontWhite)
-	ReskinFont(PriceFontGray)
-	ReskinFont(PriceFontGreen)
-	ReskinFont(PriceFontRed)
 
 	-- Refont RaidFrame Health
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
@@ -160,23 +145,10 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	-- Refont Titles Panel
-	hooksecurefunc("PaperDollTitlesPane_UpdateScrollFrame", function()
-		local bu = PaperDollTitlesPane.buttons
-		for i = 1, #bu do
-			if not bu[i].fontStyled then
-				ReskinFont(bu[i].text, 14)
-				bu[i].fontStyled = true
-			end
-		end
-	end)
-
 	-- WhoFrame LevelText
 	hooksecurefunc("WhoList_Update", function()
-		local buttons = WhoListScrollFrame.buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			local level = button.Level
+		for i = 1, WHOS_TO_DISPLAY, 1 do
+			local level = _G["WhoFrameButton"..i.."Level"]
 			if level and not level.fontStyled then
 				level:SetWidth(32)
 				level:SetJustifyH("LEFT")

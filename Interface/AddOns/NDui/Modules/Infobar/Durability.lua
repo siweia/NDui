@@ -9,9 +9,8 @@ local info = module:RegisterInfobar("Dura", C.Infobar.DurabilityPos)
 local format, sort, floor, select = string.format, table.sort, math.floor, select
 local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture = GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture
 local GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
-local GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney
-local C_Timer_After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair = C_Timer.After, IsShiftKeyDown, InCombatLockdown, CanMerchantRepair
-local HelpTip = HelpTip
+local IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney
+local C_Timer_After, IsShiftKeyDown = C_Timer.After, IsShiftKeyDown
 
 local repairCostString = gsub(REPAIR_COST, HEADER_COLON, ":")
 local lowDurabilityCap = .25
@@ -26,23 +25,11 @@ local localSlots = {
 	[7] = {7, INVTYPE_LEGS, 1000},
 	[8] = {8, L["Feet"], 1000},
 	[9] = {16, INVTYPE_WEAPONMAINHAND, 1000},
-	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000}
+	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000},
+	[11] = {18, INVTYPE_RANGED, 1000}
 }
 
-local function hideAlertWhileCombat()
-	if InCombatLockdown() then
-		info:RegisterEvent("PLAYER_REGEN_ENABLED")
-		info:UnregisterEvent("UPDATE_INVENTORY_DURABILITY")
-	end
-end
-
-local lowDurabilityInfo = {
-	text = L["Low Durability"],
-	buttonStyle = HelpTip.ButtonStyle.Okay,
-	targetPoint = HelpTip.Point.TopEdgeCenter,
-	onAcknowledgeCallback = hideAlertWhileCombat,
-	offsetY = 10,
-}
+local lastClick = 0
 
 local function sortSlots(a, b)
 	if a and b then
@@ -52,7 +39,7 @@ end
 
 local function UpdateAllSlots()
 	local numSlots = 0
-	for i = 1, 10 do
+	for i = 1, #localSlots do
 		localSlots[i][3] = 1000
 		local index = localSlots[i][1]
 		if GetInventoryItemLink("player", index) then
@@ -71,7 +58,7 @@ local function UpdateAllSlots()
 end
 
 local function isLowDurability()
-	for i = 1, 10 do
+	for i = 1, #localSlots do
 		if localSlots[i][3] < lowDurabilityCap then
 			return true
 		end
@@ -84,30 +71,29 @@ local function getDurabilityColor(cur, max)
 end
 
 info.eventList = {
-	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD",
+	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD"
 }
+
+local function SaveClickTime()
+	lastClick = GetTime()
+end
 
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
 		self:UnregisterEvent(event)
 	end
 
-	if event == "PLAYER_REGEN_ENABLED" then
-		self:UnregisterEvent(event)
-		self:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
+	if UpdateAllSlots() > 0 then
+		local r, g, b = getDurabilityColor(floor(localSlots[1][3]*100), 100)
+		self.text:SetFormattedText("%s%%|r"..L["D"], B.HexRGB(r, g, b)..floor(localSlots[1][3]*100))
 	else
-		if UpdateAllSlots() > 0 then
-			local r, g, b = getDurabilityColor(floor(localSlots[1][3]*100), 100)
-			self.text:SetFormattedText("%s%%|r"..L["D"], B.HexRGB(r, g, b)..floor(localSlots[1][3]*100))
-		else
-			self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
-		end
+		self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
 	end
 
-	if isLowDurability() then
-		HelpTip:Show(info, lowDurabilityInfo)
+	if isLowDurability() and ((lastClick == 0) or (GetTime() - lastClick > 60*30)) then -- only half an hour
+		B:ShowHelpTip(info, L["Low Durability"], "TOP", 0, 20, SaveClickTime, "Durability")
 	else
-		HelpTip:Hide(info, L["Low Durability"])
+		B:HideHelpTip("Durability")
 	end
 end
 
@@ -128,15 +114,14 @@ local repairlist = {
 }
 
 info.onEnter = function(self)
-	local total, equipped = GetAverageItemLevel()
 	local _, anchor, offset = module:GetTooltipAnchor(info)
 	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
 	GameTooltip:ClearLines()
-	GameTooltip:AddDoubleLine(DURABILITY, format("%s: %d/%d", STAT_AVERAGE_ITEM_LEVEL, equipped, total), 0,.6,1, 0,.6,1)
+	GameTooltip:AddDoubleLine(DURABILITY, " ", 0,.6,1, 0,.6,1)
 	GameTooltip:AddLine(" ")
 
 	local totalCost = 0
-	for i = 1, 10 do
+	for i = 1, #localSlots do
 		if localSlots[i][3] ~= 1000 then
 			local slot = localSlots[i][1]
 			local cur = floor(localSlots[i][3]*100)

@@ -30,18 +30,16 @@ local function CreatePlayerStyle(self)
 	UF:CreatePrediction(self)
 	UF:CreateFCT(self)
 	UF:CreateAddPower(self)
-	UF:CreateQuestSync(self)
 	UF:CreateClassPower(self)
-	UF:StaggerBar(self)
+	UF:CreateEneryTicker(self)
 	UF:CreateAuras(self)
 	UF:CreateSwing(self)
 
 	if C.db["UFs"]["Castbars"] then
 		UF:ReskinMirrorBars()
-		UF:ReskinTimerTrakcer(self)
+		--UF:ReskinTimerTrakcer(self)
 	end
 	if not C.db["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
-	if C.db["UFs"]["QuakeTimer"] then UF:CreateQuakeTimer(self) end
 end
 
 local function CreateTargetStyle(self)
@@ -77,7 +75,6 @@ local function CreateFocusStyle(self)
 	UF:CreateIcons(self)
 	UF:CreatePrediction(self)
 	UF:CreateAuras(self)
-	UF:DemonicGatewayIcon(self)
 end
 
 local function CreateToTStyle(self)
@@ -90,6 +87,17 @@ local function CreateToTStyle(self)
 	UF:CreatePowerBar(self)
 	UF:CreateRaidMark(self)
 	UF:CreateAuras(self)
+end
+
+local function CreateToToT(self)
+	self.mystyle = "tot"
+	SetUnitFrameSize(self, "Pet")
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateRaidMark(self)
 end
 
 local function CreateFocusTargetStyle(self)
@@ -115,23 +123,6 @@ local function CreatePetStyle(self)
 	UF:CreateAuras(self)
 end
 
-local function CreateBossStyle(self)
-	self.mystyle = "boss"
-	SetUnitFrameSize(self, "Boss")
-
-	UF:CreateHeader(self)
-	UF:CreateHealthBar(self)
-	UF:CreateHealthText(self)
-	UF:CreatePowerBar(self)
-	UF:CreatePowerText(self)
-	UF:CreateCastBar(self)
-	UF:CreateRaidMark(self)
-	UF:CreateAltPower(self)
-	UF:CreateBuffs(self)
-	UF:CreateDebuffs(self)
-	UF:CreateClickSets(self)
-end
-
 local function CreateArenaStyle(self)
 	self.mystyle = "arena"
 	SetUnitFrameSize(self, "Boss")
@@ -145,7 +136,7 @@ local function CreateArenaStyle(self)
 	UF:CreateRaidMark(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
-	UF:CreatePVPClassify(self)
+--	UF:CreatePVPClassify(self)
 end
 
 local function CreateRaidStyle(self)
@@ -180,8 +171,6 @@ end
 local function CreatePartyStyle(self)
 	self.raidType = "party"
 	CreateRaidStyle(self)
-	UF:InterruptIndicator(self)
-	UF:CreatePartyAltPower(self)
 end
 
 local function CreatePartyPetStyle(self)
@@ -291,10 +280,10 @@ local function ResetHeaderPoints(header)
 end
 
 UF.PartyDirections = {
-	[1] = {name = L["GO_DOWN"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT"},
-	[2] = {name = L["GO_UP"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT"},
-	[3] = {name = L["GO_RIGHT"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT"},
-	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT"},
+	[1] = {name = L["GO_DOWN"], point = "TOP", xOffset = 0, yOffset = -5, initAnchor = "TOPLEFT", order = "TANK,HEALER,DAMAGER,NONE"},
+	[2] = {name = L["GO_UP"], point = "BOTTOM", xOffset = 0, yOffset = 5, initAnchor = "BOTTOMLEFT", order = "NONE,DAMAGER,HEALER,TANK"},
+	[3] = {name = L["GO_RIGHT"], point = "LEFT", xOffset = 5, yOffset = 0, initAnchor = "TOPLEFT", order = "TANK,HEALER,DAMAGER,NONE"},
+	[4] = {name = L["GO_LEFT"], point = "RIGHT", xOffset = -5, yOffset = 0, initAnchor = "TOPRIGHT", order = "NONE,DAMAGER,HEALER,TANK"},
 }
 
 UF.RaidDirections = {
@@ -314,8 +303,6 @@ function UF:OnLogin()
 		UF:BlockAddons()
 		UF:CreateUnitTable()
 		UF:CreatePowerUnitTable()
-		UF:CheckExplosives()
-		UF:UpdateGroupRoles()
 		UF:QuestIconCheck()
 		UF:RefreshPlateByEvents()
 		UF:RefreshMajorSpells()
@@ -380,20 +367,11 @@ function UF:OnLogin()
 		local focustarget = oUF:Spawn("focustarget", "oUF_FocusTarget")
 		B.Mover(focustarget, L["FotUF"], "FotUF", {"TOPLEFT", oUF_Focus, "TOPRIGHT", 5, 0})
 
-		oUF:RegisterStyle("Boss", CreateBossStyle)
-		oUF:SetActiveStyle("Boss")
-		local boss = {}
-		for i = 1, 8 do -- MAX_BOSS_FRAMES, 8 in 9.2?
-			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
-			local moverWidth, moverHeight = boss[i]:GetWidth(), boss[i]:GetHeight()+8
-			local title = i > 5 and "Boss"..i or L["BossFrame"]..i
-			if i == 1 then
-				boss[i].mover = B.Mover(boss[i], title, "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, moverWidth, moverHeight)
-			elseif i == 6 then
-				boss[i].mover = B.Mover(boss[i], title, "Boss"..i, {"BOTTOMLEFT", boss[1].mover, "BOTTOMRIGHT", 50, 0}, moverWidth, moverHeight)
-			else
-				boss[i].mover = B.Mover(boss[i], title, "Boss"..i, {"BOTTOMLEFT", boss[i-1], "TOPLEFT", 0, 50}, moverWidth, moverHeight)
-			end
+		if C.db["UFs"]["ToToT"] then
+			oUF:RegisterStyle("ToToT", CreateToToT)
+			oUF:SetActiveStyle("ToToT")
+			local targettargettarget = oUF:Spawn("targettargettarget", "oUF_ToToT")
+			B.Mover(targettargettarget, L["TototUF"], "TototUF", C.UFs.ToToTPos)
 		end
 
 		if C.db["UFs"]["Arena"] then
@@ -402,7 +380,12 @@ function UF:OnLogin()
 			local arena = {}
 			for i = 1, 5 do
 				arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
-				arena[i]:SetPoint("TOPLEFT", boss[i].mover)
+				local moverWidth, moverHeight = arena[i]:GetWidth(), arena[i]:GetHeight()+8
+				if i == 1 then
+					arena[i].mover = B.Mover(arena[i], L["ArenaFrame"]..i, "Arena1", {"RIGHT", UIParent, "RIGHT", -350, -90}, moverWidth, moverHeight)
+				else
+					arena[i].mover = B.Mover(arena[i], L["ArenaFrame"]..i, "Arena"..i, {"BOTTOMLEFT", arena[i-1], "TOPLEFT", 0, 50}, moverWidth, moverHeight)
+				end
 			end
 		end
 
@@ -415,6 +398,7 @@ function UF:OnLogin()
 	if C.db["UFs"]["RaidFrame"] then
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
+		UF:BuildNameListFromID()
 		UF.headers = {}
 
 		-- Hide Default RaidFrame
@@ -428,9 +412,6 @@ function UF:OnLogin()
 		-- Group Styles
 		local partyMover
 		if C.db["UFs"]["PartyFrame"] then
-			UF:SyncWithZenTracker()
-			UF:UpdatePartyWatcherSpells()
-
 			local party
 			oUF:RegisterStyle("Party", CreatePartyStyle)
 			oUF:SetActiveStyle("Party")
@@ -449,9 +430,6 @@ function UF:OnLogin()
 				]]):format(width, height))
 				return group
 			end
-
-			local ascRole = "TANK,HEALER,DAMAGER,NONE"
-			local descRole = "NONE,DAMAGER,HEALER,TANK"
 
 			function UF:CreateAndUpdatePartyHeader()
 				local index = C.db["UFs"]["PartyDirec"]
@@ -477,7 +455,7 @@ function UF:OnLogin()
 				party:SetAttribute("point", sortData.point)
 				party:SetAttribute("xOffset", sortData.xOffset)
 				party:SetAttribute("yOffset", sortData.yOffset)
-				party:SetAttribute("groupingOrder", C.db["UFs"]["DescRole"] and descRole or ascRole)
+				party:SetAttribute("groupingOrder", sortData.order)
 				party:SetAttribute("groupBy", "ASSIGNEDROLE")
 			end
 
@@ -577,8 +555,7 @@ function UF:OnLogin()
 
 			local groupByTypes = {
 				[1] = {"1,2,3,4,5,6,7,8", "GROUP", "INDEX"},
-				[2] = {"DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
-				[3] = {"TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"},
+				[2] = {"WARRIOR,ROGUE,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
 			}
 			function UF:UpdateSimpleModeHeader()
 				ResetHeaderPoints(group)
@@ -749,48 +726,5 @@ function UF:OnLogin()
 		end
 
 		UF:UpdateRaidHealthMethod()
-
-		if C.db["UFs"]["SpecRaidPos"] then
-			local function UpdateSpecPos(event, ...)
-				local unit, _, spellID = ...
-				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "ON_LOGIN" then
-					local specIndex = GetSpecialization()
-					if not specIndex then return end
-
-					if not C.db["Mover"]["RaidPos"..specIndex] then
-						C.db["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
-					end
-					if raidMover then
-						raidMover:ClearAllPoints()
-						raidMover:SetPoint(unpack(C.db["Mover"]["RaidPos"..specIndex]))
-					end
-
-					if not C.db["Mover"]["PartyPos"..specIndex] then
-						C.db["Mover"]["PartyPos"..specIndex] = {"LEFT", "UIParent", "LEFT", 350, 0}
-					end
-					if partyMover then
-						partyMover:ClearAllPoints()
-						partyMover:SetPoint(unpack(C.db["Mover"]["PartyPos"..specIndex]))
-					end
-				end
-			end
-			UpdateSpecPos("ON_LOGIN")
-			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos)
-
-			if raidMover then
-				raidMover:HookScript("OnDragStop", function()
-					local specIndex = GetSpecialization()
-					if not specIndex then return end
-					C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
-				end)
-			end
-			if partyMover then
-				partyMover:HookScript("OnDragStop", function()
-					local specIndex = GetSpecialization()
-					if not specIndex then return end
-					C.db["Mover"]["PartyPos"..specIndex] = C.db["Mover"]["PartyFrame"]
-				end)
-			end
-		end
 	end
 end

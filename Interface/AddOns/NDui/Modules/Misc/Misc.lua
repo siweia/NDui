@@ -3,31 +3,22 @@ local B, C, L, DB = unpack(ns)
 local M = B:RegisterModule("Misc")
 
 local _G = getfenv(0)
-local select, unpack, tonumber, gsub = select, unpack, tonumber, gsub
+local tonumber, strmatch = tonumber, strmatch
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
-local GetNumArchaeologyRaces = GetNumArchaeologyRaces
-local GetNumArtifactsByRace = GetNumArtifactsByRace
-local GetArtifactInfoByRace = GetArtifactInfoByRace
-local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
-local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
-local EquipmentManager_RunAction = EquipmentManager_RunAction
-local GetInventoryItemTexture = GetInventoryItemTexture
+local GetNumAuctionItems, GetAuctionItemInfo = GetNumAuctionItems, GetAuctionItemInfo
+local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
 local GetItemInfo = GetItemInfo
 local BuyMerchantItem = BuyMerchantItem
 local GetMerchantItemLink = GetMerchantItemLink
 local GetMerchantItemMaxStack = GetMerchantItemMaxStack
 local GetItemQualityColor = GetItemQualityColor
-local Screenshot = Screenshot
 local GetTime, GetCVarBool, SetCVar = GetTime, GetCVarBool, SetCVar
 local GetNumLootItems, LootSlot = GetNumLootItems, LootSlot
-local GetNumSavedInstances = GetNumSavedInstances
 local GetInstanceInfo = GetInstanceInfo
-local GetSavedInstanceInfo = GetSavedInstanceInfo
-local SetSavedInstanceExtend = SetSavedInstanceExtend
-local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
-local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
-local C_Map_GetMapInfo, C_Map_GetBestMapForUnit = C_Map.GetMapInfo, C_Map.GetBestMapForUnit
+local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
+local UnitName, GetPetHappiness = UnitName, GetPetHappiness
 local UnitIsPlayer, GuildInvite, C_FriendList_AddFriend = UnitIsPlayer, GuildInvite, C_FriendList.AddFriend
+local TakeTaxiNode, IsMounted, Dismount, C_Timer_After = TakeTaxiNode, IsMounted, Dismount, C_Timer.After
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
@@ -48,37 +39,20 @@ function M:OnLogin()
 	end
 
 	-- Init
-	M:NakedIcon()
-	M:ExtendInstance()
-	M:VehicleSeatMover()
 	M:UIWidgetFrameMover()
-	M:MoveMawBuffsFrame()
 	M:MoveDurabilityFrame()
 	M:MoveTicketStatusFrame()
-	M:UpdateScreenShot()
 	M:UpdateFasterLoot()
+	M:UpdateErrorBlocker()
 	M:TradeTargetInfo()
-	M:MoveQuestTracker()
+	M:ToggleTaxiDismount()
+	M:BidPriceHighlight()
 	M:BlockStrangerInvite()
-	M:ToggleBossBanner()
-	M:ToggleBossEmote()
-	M:FasterMovieSkip()
-	M:EnhanceDressup()
-	M:FuckTrainSound()
-	M:JerryWay()
+	M:TogglePetHappiness()
 	M:QuickMenuButton()
 	M:BaudErrorFrameHelpTip()
 	M:EnhancedPicker()
-	M:UpdateMaxZoomLevel()
-
-	-- Unregister talent event
-	if PlayerTalentFrame then
-		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	else
-		hooksecurefunc("TalentFrame_LoadUI", function()
-			PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		end)
-	end
+	C_Timer_After(0, M.UpdateMaxZoomLevel)
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -108,6 +82,9 @@ function M:OnLogin()
 		end)
 	end
 
+	-- Fix blizz error
+	MAIN_MENU_MICRO_ALERT_PRIORITY = MAIN_MENU_MICRO_ALERT_PRIORITY or {}
+
 	-- Fix blizz bug in addon list
 	local _AddonTooltip_Update = AddonTooltip_Update
 	function AddonTooltip_Update(owner)
@@ -115,79 +92,10 @@ function M:OnLogin()
 		if owner:GetID() < 1 then return end
 		_AddonTooltip_Update(owner)
 	end
-end
 
--- Hide boss banner
-function M:ToggleBossBanner()
-	if C.db["Misc"]["HideBossBanner"] then
-		BossBanner:UnregisterAllEvents()
-	else
-		BossBanner:RegisterEvent("BOSS_KILL")
-		BossBanner:RegisterEvent("ENCOUNTER_LOOT_RECEIVED")
-	end
-end
-
--- Hide boss emote
-function M:ToggleBossEmote()
-	if C.db["Misc"]["HideBossEmote"] then
-		RaidBossEmoteFrame:UnregisterAllEvents()
-	else
-		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
-		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_WHISPER")
-		RaidBossEmoteFrame:RegisterEvent("CLEAR_BOSS_EMOTES")
-	end
-end
-
--- Get Naked
-function M:NakedIcon()
-	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
-	bu:SetSize(31, 34)
-	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -3)
-	B.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
-	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
-
-	local function UnequipItemInSlot(i)
-		local action = EquipmentManager_UnequipItemInSlot(i)
-		EquipmentManager_RunAction(action)
-	end
-
-	bu:SetScript("OnDoubleClick", function()
-		for i = 1, 17 do
-			local texture = GetInventoryItemTexture("player", i)
-			if texture then
-				UnequipItemInSlot(i)
-			end
-		end
-	end)
-end
-
--- Extend Instance
-function M:ExtendInstance()
-	local bu = CreateFrame("Button", nil, RaidInfoFrame)
-	bu:SetPoint("TOPRIGHT", -35, -5)
-	bu:SetSize(25, 25)
-	B.PixelIcon(bu, GetSpellTexture(80353), true)
-	bu.title = L["Extend Instance"]
-	local tipStr = format(L["Extend Instance Tip"], DB.LeftButton, DB.RightButton)
-	B.AddTooltip(bu, "ANCHOR_RIGHT", tipStr, "system")
-
-	bu:SetScript("OnMouseUp", function(_, btn)
-		for i = 1, GetNumSavedInstances() do
-			local _, _, _, _, _, extended, _, isRaid = GetSavedInstanceInfo(i)
-			if isRaid then
-				if btn == "LeftButton" then
-					if not extended then
-						SetSavedInstanceExtend(i, true)		-- extend
-					end
-				else
-					if extended then
-						SetSavedInstanceExtend(i, false)	-- cancel
-					end
-				end
-			end
-		end
-		RequestRaidInfo()
-		RaidInfoFrame_Update()
+	-- Fix MasterLooterFrame anchor issue
+	hooksecurefunc(MasterLooterFrame, "Show", function(self)
+		self:ClearAllPoints()
 	end)
 end
 
@@ -219,25 +127,10 @@ function M:UIWidgetFrameMover()
 	end)
 end
 
--- Reanchor MawBuffsBelowMinimapFrame
-function M:MoveMawBuffsFrame()
-	local frame = CreateFrame("Frame", "NDuiMawBuffsMover", UIParent)
-	frame:SetSize(235, 28)
-	local mover = B.Mover(frame, MAW_POWER_DESCRIPTION, "MawBuffs", {"TOPRIGHT", UIParent, -90, -225})
-	frame:SetPoint("TOPLEFT", mover, 4, 12)
-
-	hooksecurefunc(MawBuffsBelowMinimapFrame, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == MinimapCluster then
-			self:ClearAllPoints()
-			self:SetPoint("TOPRIGHT", frame)
-		end
-	end)
-end
-
 -- Reanchor DurabilityFrame
 function M:MoveDurabilityFrame()
 	hooksecurefunc(DurabilityFrame, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == MinimapCluster then
+		if parent ~= Minimap then
 			self:ClearAllPoints()
 			self:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -30)
 		end
@@ -254,59 +147,18 @@ function M:MoveTicketStatusFrame()
 	end)
 end
 
--- Reanchor ObjectiveTracker
-function M:MoveQuestTracker()
-	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
-	frame:SetSize(240, 50)
-	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
-
-	local tracker = ObjectiveTrackerFrame
-	tracker:ClearAllPoints()
-	tracker:SetPoint("TOPRIGHT", frame)
-	tracker:SetHeight(GetScreenHeight()*.65)
-	tracker:SetClampedToScreen(false)
-	tracker:SetMovable(true)
-	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
-end
-
--- Achievement screenshot
-function M:ScreenShotOnEvent()
-	M.ScreenShotFrame.delay = 1
-	M.ScreenShotFrame:Show()
-end
-
-function M:UpdateScreenShot()
-	if not M.ScreenShotFrame then
-		M.ScreenShotFrame = CreateFrame("Frame")
-		M.ScreenShotFrame:Hide()
-		M.ScreenShotFrame:SetScript("OnUpdate", function(self, elapsed)
-			self.delay = self.delay - elapsed
-			if self.delay < 0 then
-				Screenshot()
-				self:Hide()
-			end
-		end)
-	end
-
-	if C.db["Misc"]["Screenshot"] then
-		B:RegisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
-	else
-		M.ScreenShotFrame:Hide()
-		B:UnregisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
-	end
-end
-
 -- Faster Looting
 local lootDelay = 0
 function M:DoFasterLoot()
-	local thisTime = GetTime()
-	if thisTime - lootDelay >= .3 then
-		lootDelay = thisTime
+	if GetLootMethod() == "master" then return end
+
+	if GetTime() - lootDelay >= .3 then
+		lootDelay = GetTime()
 		if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
 			for i = GetNumLootItems(), 1, -1 do
 				LootSlot(i)
 			end
-			lootDelay = thisTime
+			lootDelay = GetTime()
 		end
 	end
 end
@@ -316,6 +168,60 @@ function M:UpdateFasterLoot()
 		B:RegisterEvent("LOOT_READY", M.DoFasterLoot)
 	else
 		B:UnregisterEvent("LOOT_READY", M.DoFasterLoot)
+	end
+end
+
+-- Hide errors in combat
+local erList = {
+	[ERR_ABILITY_COOLDOWN] = true,
+	[ERR_ATTACK_MOUNTED] = true,
+	[ERR_OUT_OF_ENERGY] = true,
+	[ERR_OUT_OF_FOCUS] = true,
+	[ERR_OUT_OF_HEALTH] = true,
+	[ERR_OUT_OF_MANA] = true,
+	[ERR_OUT_OF_RAGE] = true,
+	[ERR_OUT_OF_RANGE] = true,
+	[ERR_OUT_OF_RUNES] = true,
+	[ERR_OUT_OF_HOLY_POWER] = true,
+	[ERR_OUT_OF_RUNIC_POWER] = true,
+	[ERR_OUT_OF_SOUL_SHARDS] = true,
+	[ERR_OUT_OF_ARCANE_CHARGES] = true,
+	[ERR_OUT_OF_COMBO_POINTS] = true,
+	[ERR_OUT_OF_CHI] = true,
+	[ERR_OUT_OF_POWER_DISPLAY] = true,
+	[ERR_SPELL_COOLDOWN] = true,
+	[ERR_ITEM_COOLDOWN] = true,
+	[SPELL_FAILED_BAD_IMPLICIT_TARGETS] = true,
+	[SPELL_FAILED_BAD_TARGETS] = true,
+	[SPELL_FAILED_CASTER_AURASTATE] = true,
+	[SPELL_FAILED_NO_COMBO_POINTS] = true,
+	[SPELL_FAILED_SPELL_IN_PROGRESS] = true,
+	[SPELL_FAILED_TARGET_AURASTATE] = true,
+	[ERR_NO_ATTACK_TARGET] = true,
+}
+
+local isRegistered = true
+function M:ErrorBlockerOnEvent(_, text)
+	if InCombatLockdown() and erList[text] then
+		if isRegistered then
+			UIErrorsFrame:UnregisterEvent(self)
+			isRegistered = false
+		end
+	else
+		if not isRegistered then
+			UIErrorsFrame:RegisterEvent(self)
+			isRegistered = true
+		end
+	end
+end
+
+function M:UpdateErrorBlocker()
+	if C.db["Misc"]["HideErrors"] then
+		B:RegisterEvent("UI_ERROR_MESSAGE", M.ErrorBlockerOnEvent)
+	else
+		isRegistered = true
+		UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE")
+		B:UnregisterEvent("UI_ERROR_MESSAGE", M.ErrorBlockerOnEvent)
 	end
 end
 
@@ -332,7 +238,7 @@ function M:TradeTargetInfo()
 		local guid = UnitGUID("NPC")
 		if not guid then return end
 		local text = "|cffff0000"..L["Stranger"]
-		if C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
+		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
 			text = "|cffffff00"..FRIEND
 		elseif IsGuildMember(guid) then
 			text = "|cff00ff00"..GUILD
@@ -342,110 +248,47 @@ function M:TradeTargetInfo()
 	hooksecurefunc("TradeFrame_Update", updateColor)
 end
 
--- Block invite from strangers
-function M:BlockStrangerInvite()
-	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, _, _, _, _, _, _, guid)
-		if C.db["Misc"]["BlockInvite"] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
-			DeclineGroup()
-			StaticPopup_Hide("PARTY_INVITE")
-		end
-	end)
-end
-
--- Archaeology counts
-do
-	local function CalculateArches(self)
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine("|c0000FF00"..L["Arch Count"]..":")
-		GameTooltip:AddLine(" ")
-		local total = 0
-		for i = 1, GetNumArchaeologyRaces() do
-			local numArtifacts = GetNumArtifactsByRace(i)
-			local count = 0
-			for j = 1, numArtifacts do
-				local completionCount = select(10, GetArtifactInfoByRace(i, j))
-				count = count + completionCount
-			end
-			local name = GetArchaeologyRaceInfo(i)
-			if numArtifacts > 1 then
-				GameTooltip:AddDoubleLine(name..":", DB.InfoColor..count)
-				total = total + count
-			end
-		end
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine("|c0000ff00"..TOTAL..":", "|cffff0000"..total)
-		GameTooltip:Show()
-	end
-
-	local function AddCalculateIcon()
-		local bu = CreateFrame("Button", nil, ArchaeologyFrameCompletedPage)
-		bu:SetPoint("TOPRIGHT", -45, -45)
-		bu:SetSize(35, 35)
-		B.PixelIcon(bu, "Interface\\ICONS\\Ability_Iyyokuk_Calculate", true)
-		bu:SetScript("OnEnter", CalculateArches)
-		bu:SetScript("OnLeave", B.HideTooltip)
-	end
+-- Show BID and highlight price
+function M:BidPriceHighlight()
+	if IsAddOnLoaded("Auc-Advanced") then return end
 
 	local function setupMisc(event, addon)
-		if addon == "Blizzard_ArchaeologyUI" then
-			AddCalculateIcon()
-			-- Repoint Bar
-			ArcheologyDigsiteProgressBar.ignoreFramePositionManager = true
-			ArcheologyDigsiteProgressBar:SetPoint("BOTTOM", 0, 150)
-			B.CreateMF(ArcheologyDigsiteProgressBar)
+		if addon == "Blizzard_AuctionUI" then
+			hooksecurefunc("AuctionFrameBrowse_Update", function()
+				local numBatchAuctions = GetNumAuctionItems("list")
+				local offset = FauxScrollFrame_GetOffset(BrowseScrollFrame)
+				local name, buyoutPrice, bidAmount, hasAllInfo
+				for i = 1, NUM_BROWSE_TO_DISPLAY do
+					local index = offset + i + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page)
+					local shouldHide = index > (numBatchAuctions + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page))
+					if not shouldHide then
+						name, _, _, _, _, _, _, _, _, buyoutPrice, bidAmount, _, _, _, _, _, _, hasAllInfo = GetAuctionItemInfo("list", offset + i)
+						if not hasAllInfo then shouldHide = true end
+					end
+					if not shouldHide then
+						local alpha = .5
+						local color = "yellow"
+						local buttonName = "BrowseButton"..i
+						local itemName = _G[buttonName.."Name"]
+						local moneyFrame = _G[buttonName.."MoneyFrame"]
+						local buyoutMoney = _G[buttonName.."BuyoutFrameMoney"]
+						if buyoutPrice >= 1e6 then color = "red" end
+						if bidAmount > 0 then
+							name = name.." |cffffff00"..BID.."|r"
+							alpha = 1.0
+						end
+						itemName:SetText(name)
+						moneyFrame:SetAlpha(alpha)
+						SetMoneyFrameColor(buyoutMoney:GetName(), color)
+					end
+				end
+			end)
 
 			B:UnregisterEvent(event, setupMisc)
 		end
 	end
 
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
-
-	local newTitleString = ARCHAEOLOGY_DIGSITE_PROGRESS_BAR_TITLE.." %s/%s"
-	local function updateArcTitle(_, ...)
-		local numFindsCompleted, totalFinds = ...
-		if ArcheologyDigsiteProgressBar then
-			ArcheologyDigsiteProgressBar.BarTitle:SetFormattedText(newTitleString, numFindsCompleted, totalFinds)
-		end
-	end
-	B:RegisterEvent("ARCHAEOLOGY_SURVEY_CAST", updateArcTitle)
-	B:RegisterEvent("ARCHAEOLOGY_FIND_COMPLETE", updateArcTitle)
-end
-
--- Drag AltPowerbar
-do
-	local mover = CreateFrame("Frame", "NDuiAltBarMover", PlayerPowerBarAlt)
-	mover:SetPoint("CENTER", UIParent, 0, -200)
-	mover:SetSize(20, 20)
-	B.CreateMF(PlayerPowerBarAlt, mover)
-
-	hooksecurefunc(PlayerPowerBarAlt, "SetPoint", function(_, _, parent)
-		if parent ~= mover then
-			PlayerPowerBarAlt:ClearAllPoints()
-			PlayerPowerBarAlt:SetPoint("CENTER", mover)
-		end
-	end)
-
-	hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
-		local statusFrame = self.statusFrame
-		if statusFrame.enabled then
-			statusFrame:Show()
-			statusFrame.Hide = statusFrame.Show
-		end
-	end)
-
-	local altPowerInfo = {
-		text = L["Drag AltBar Tip"],
-		buttonStyle = HelpTip.ButtonStyle.GotIt,
-		targetPoint = HelpTip.Point.RightEdgeCenter,
-		onAcknowledgeCallback = B.HelpInfoAcknowledge,
-		callbackArg = "AltPower",
-	}
-	PlayerPowerBarAlt:HookScript("OnEnter", function(self)
-		if not NDuiADB["Help"]["AltPower"] then
-			HelpTip:Show(self, altPowerInfo)
-		end
-	end)
 end
 
 -- ALT+RightClick to buy a stack
@@ -488,29 +331,11 @@ do
 	end
 end
 
--- Fix Drag Collections taint
+-- Temporary taint fix
 do
-	local done
-	local function setupMisc(event, addon)
-		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
-			CollectionsJournal:HookScript("OnShow", function()
-				if not done then
-					if InCombatLockdown() then
-						B:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
-					else
-						B.CreateMF(CollectionsJournal)
-					end
-					done = true
-				end
-			end)
-			B:UnregisterEvent(event, setupMisc)
-		elseif event == "PLAYER_REGEN_ENABLED" then
-			B.CreateMF(CollectionsJournal)
-			B:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	--B:RegisterEvent("ADDON_LOADED", setupMisc) -- FIXME: collections is not dragable atm
+	InterfaceOptionsFrameCancel:SetScript("OnClick", function()
+		InterfaceOptionsFrameOkay:Click()
+	end)
 end
 
 -- Select target when click on raid units
@@ -544,181 +369,6 @@ do
 	end
 
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
-end
-
--- Fix blizz guild news hyperlink error
-do
-	local function fixGuildNews(event, addon)
-		if addon ~= "Blizzard_GuildUI" then return end
-
-		local _GuildNewsButton_OnEnter = GuildNewsButton_OnEnter
-		function GuildNewsButton_OnEnter(self)
-			if not (self.newsInfo and self.newsInfo.whatText) then return end
-			_GuildNewsButton_OnEnter(self)
-		end
-
-		B:UnregisterEvent(event, fixGuildNews)
-	end
-
-	local function fixCommunitiesNews(event, addon)
-		if addon ~= "Blizzard_Communities" then return end
-
-		local _CommunitiesGuildNewsButton_OnEnter = CommunitiesGuildNewsButton_OnEnter
-		function CommunitiesGuildNewsButton_OnEnter(self)
-			if not (self.newsInfo and self.newsInfo.whatText) then return end
-			_CommunitiesGuildNewsButton_OnEnter(self)
-		end
-
-		B:UnregisterEvent(event, fixCommunitiesNews)
-	end
-
-	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
-	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
-end
-
-local function skipOnKeyDown(self, key)
-	if not C.db["Misc"]["FasterSkip"] then return end
-	if key == "ESCAPE" then
-		if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
-			self.closeDialog:Hide()
-		end
-	end
-end
-
-local function skipOnKeyUp(self, key)
-	if not C.db["Misc"]["FasterSkip"] then return end
-	if key == "SPACE" or key == "ESCAPE" or key == "ENTER" then
-		if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
-			self.closeDialog.confirmButton:Click()
-		end
-	end
-end
-
-function M:FasterMovieSkip()
-	MovieFrame.closeDialog = MovieFrame.CloseDialog
-	MovieFrame.closeDialog.confirmButton = MovieFrame.CloseDialog.ConfirmButton
-	CinematicFrame.closeDialog.confirmButton = CinematicFrameCloseDialogConfirmButton
-
-	MovieFrame:HookScript("OnKeyDown", skipOnKeyDown)
-	MovieFrame:HookScript("OnKeyUp", skipOnKeyUp)
-	CinematicFrame:HookScript("OnKeyDown", skipOnKeyDown)
-	CinematicFrame:HookScript("OnKeyUp", skipOnKeyUp)
-end
-
-function M:EnhanceDressup()
-	if not C.db["Misc"]["EnhanceDressup"] then return end
-
-	local parent = _G.DressUpFrameResetButton
-	local button = M:MailBox_CreatButton(parent, 80, 22, L["Undress"], {"RIGHT", parent, "LEFT", -1, 0})
-	button:RegisterForClicks("AnyUp")
-	button:SetScript("OnClick", function(_, btn)
-		local actor = DressUpFrame.ModelScene:GetPlayerActor()
-		if not actor then return end
-
-		if btn == "LeftButton" then
-			actor:Undress()
-		else
-			actor:UndressSlot(19)
-		end
-	end)
-
-	B.AddTooltip(button, "ANCHOR_TOP", format(L["UndressButtonTip"], DB.LeftButton, DB.RightButton))
-
-	DressUpFrame.LinkButton:SetWidth(80)
-	DressUpFrame.LinkButton:SetText(SOCIAL_SHARE_TEXT)
-end
-
-function M:FuckTrainSound()
-	local trainSounds = {
-	--[[Blood Elf]]	"539219", "539203", "1313588", "1306531",
-	--[[Draenei]]	"539516", "539730",
-	--[[Dwarf]]		"539802", "539881",
-	--[[Gnome]]		"540271", "540275",
-	--[[Goblin]]	"541769", "542017",
-	--[[Human]]		"540535", "540734",
-	--[[Night Elf]]	"540870", "540947", "1316209", "1304872",
-	--[[Orc]]		"541157", "541239",
-	--[[Pandaren]]	"636621", "630296", "630298",
-	--[[Tauren]]	"542818", "542896",
-	--[[Troll]] 	"543085", "543093",
-	--[[Undead]]	"542526", "542600",
-	--[[Worgen]]	"542035", "542206", "541463", "541601",
-	--[[Dark Iron]]	"1902030", "1902543",
-	--[[Highmount]]	"1730534", "1730908",
-	--[[Kul Tiran]]	"2531204", "2491898",
-	--[[Lightforg]]	"1731282", "1731656",
-	--[[MagharOrc]] "1951457", "1951458",
-	--[[Mechagnom]] "3107651", "3107182",
-	--[[Nightborn]]	"1732030", "1732405",
-	--[[Void Elf]]	"1732785", "1733163",
-	--[[Vulpera]] 	"3106252", "3106717",
-	--[[Zandalari]]	"1903049", "1903522",
-	}
-	for _, soundID in pairs(trainSounds) do
-		MuteSoundFile(soundID)
-	end
-end
-
-function M:JerryWay()
-	if IsAddOnLoaded("TomTom") then return end
-
-	local pointString = DB.InfoColor.."|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r"
-
-	local function GetCorrectCoord(x)
-		x = tonumber(x)
-		if x then
-			if x > 100 then
-				return 100
-			elseif x < 0 then
-				return 0
-			end
-			return x
-		end
-	end
-
-	SlashCmdList["NDUI_JERRY_WAY"] = function(msg)
-		msg = gsub(msg, "(%d)[%.,] (%d)", "%1 %2")
-		local x, y, z = strmatch(msg, "(%S+)%s(%S+)(.*)")
-		if x and y then
-			local mapID = C_Map_GetBestMapForUnit("player")
-			if mapID then
-				local mapInfo = C_Map_GetMapInfo(mapID)
-				local mapName = mapInfo and mapInfo.name
-				if mapName then
-					x = GetCorrectCoord(x)
-					y = GetCorrectCoord(y)
-					if x and y then
-						print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
-					end
-				end
-			end
-		end
-	end
-	SLASH_NDUI_JERRY_WAY1 = "/way"
-end
-
-function M:BaudErrorFrameHelpTip()
-	if not IsAddOnLoaded("!BaudErrorFrame") then return end
-	local button, count = _G.BaudErrorFrameMinimapButton, _G.BaudErrorFrameMinimapCount
-	if not button then return end
-
-	local errorInfo = {
-		text = L["BaudErrorTip"],
-		buttonStyle = HelpTip.ButtonStyle.GotIt,
-		targetPoint = HelpTip.Point.TopEdgeCenter,
-		alignment = HelpTip.Alignment.Right,
-		offsetX = -15,
-		onAcknowledgeCallback = B.HelpInfoAcknowledge,
-		callbackArg = "BaudError",
-	}
-	hooksecurefunc(count, "SetText", function(_, text)
-		if not NDuiADB["Help"]["BaudError"] then
-			text = tonumber(text)
-			if text and text > 0 then
-				HelpTip:Show(button, errorInfo)
-			end
-		end
-	end)
 end
 
 -- Buttons to enhance popup menu
@@ -766,6 +416,7 @@ function M:QuickMenuButton()
 
 		local name = dropdownMenu.name
 		local unit = dropdownMenu.unit
+		local bnetID = dropdownMenu.bnetIDAccount
 		local isPlayer = unit and UnitIsPlayer(unit)
 		local isFriendMenu = dropdownMenu == FriendsDropDown -- menus on FriendsFrame
 		if not name or (not isPlayer and not dropdownMenu.chatType and not isFriendMenu) then
@@ -773,10 +424,15 @@ function M:QuickMenuButton()
 			return
 		end
 
-		local gameAccountInfo = dropdownMenu.accountInfo and dropdownMenu.accountInfo.gameAccountInfo
-		if gameAccountInfo and gameAccountInfo.characterName and gameAccountInfo.realmName then
-			M.MenuButtonName = gameAccountInfo.characterName.."-"..gameAccountInfo.realmName
-			frame:Show()
+		if bnetID then
+			local gameID = select(6, BNGetFriendInfoByID(bnetID))
+			if gameID then
+				local _, characterName, client, realmName = BNGetGameAccountInfo(gameID)
+				if client == "WoW" and realmName ~= "" then
+					M.MenuButtonName = characterName.."-"..realmName
+					frame:Show()
+				end
+			end
 		else
 			local server = dropdownMenu.server
 			if not server or server == "" then
@@ -784,6 +440,86 @@ function M:QuickMenuButton()
 			end
 			M.MenuButtonName = name.."-"..server
 			frame:Show()
+		end
+	end)
+end
+
+-- Auto dismount on Taxi
+function M:ToggleTaxiDismount()
+	local lastTaxiIndex
+
+	local function retryTaxi()
+		if InCombatLockdown() then return end
+		if lastTaxiIndex then
+			TakeTaxiNode(lastTaxiIndex)
+			lastTaxiIndex = nil
+		end
+	end
+
+	hooksecurefunc("TakeTaxiNode", function(index)
+		if not C.db["Misc"]["AutoDismount"] then return end
+		if not IsMounted() then return end
+
+		Dismount()
+		lastTaxiIndex = index
+		C_Timer_After(.5, retryTaxi)
+	end)
+end
+
+-- Block invite from strangers
+function M:BlockStrangerInvite()
+	B:RegisterEvent("PARTY_INVITE_REQUEST", function(_, _, _, _, _, _, _, guid)
+		if C.db["Misc"]["BlockInvite"] and not (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid)) then
+			DeclineGroup()
+			StaticPopup_Hide("PARTY_INVITE")
+		end
+	end)
+end
+
+-- Hunter pet happiness
+local petHappinessStr, lastHappiness = {
+	[1] = L["PetUnhappy"],
+	[2] = L["PetBadMood"],
+	[3] = L["PetHappy"],
+}
+
+local function CheckPetHappiness(_, unit)
+	if unit ~= "pet" then return end
+
+	local happiness = GetPetHappiness()
+	if not lastHappiness or lastHappiness ~= happiness then
+		local str = petHappinessStr[happiness]
+		if str then
+			local petName = UnitName(unit)
+			UIErrorsFrame:AddMessage(format(str, DB.InfoColor, petName))
+			print(DB.NDuiString, format(str, DB.InfoColor, petName))
+		end
+
+		lastHappiness = happiness
+	end
+end
+
+function M:TogglePetHappiness()
+	if DB.MyClass ~= "HUNTER" then return end
+
+	if C.db["Misc"]["PetHappiness"] then
+		B:RegisterEvent("UNIT_HAPPINESS", CheckPetHappiness)
+	else
+		B:UnregisterEvent("UNIT_HAPPINESS", CheckPetHappiness)
+	end
+end
+
+function M:BaudErrorFrameHelpTip()
+	if not IsAddOnLoaded("!BaudErrorFrame") then return end
+	local button, count = _G.BaudErrorFrameMinimapButton, _G.BaudErrorFrameMinimapCount
+	if not button then return end
+
+	hooksecurefunc(count, "SetText", function(_, text)
+		if not NDuiADB["Help"]["BaudError"] then
+			text = tonumber(text)
+			if text and text > 0 then
+				B:ShowHelpTip(button, L["BaudErrorTip"], "TOP", -90, 15, nil, "BaudError", 80)
+			end
 		end
 	end)
 end
@@ -839,8 +575,10 @@ end
 function M:EnhancedPicker()
 	local pickerFrame = _G.ColorPickerFrame
 	pickerFrame:SetHeight(250)
-	B.CreateMF(pickerFrame.Header, pickerFrame) -- movable by header
 	_G.OpacitySliderFrame:SetPoint("TOPLEFT", _G.ColorSwatch, "TOPRIGHT", 50, 0)
+	local mover = CreateFrame("Frame", nil, pickerFrame)
+	mover:SetAllPoints(_G.ColorPickerFrameHeader)
+	B.CreateMF(mover, pickerFrame) -- movable by header)
 
 	local colorBar = CreateFrame("Frame", nil, pickerFrame)
 	colorBar:SetSize(1, 22)

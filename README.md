@@ -1,42 +1,40 @@
 # ScreenShot
 ![1](http://wx4.sinaimg.cn/large/7112bfffgy1fwr835r4grj21hc0u0kjm.jpg)
 
-# NDui Intro
-- This is not just a UI that changes your ingame appearence.
-- It contains build-in auras watcher and toolbar for all specs and talents.
-- Locales include 简体中文, 繁體中文, English, Russian and French.
+# NDui Classic
+- A classic version of [NDui](https://github.com/siweia/NDui) for World of Warcraft classic.
+- Locales include 简体中文, 繁體中文, koKR and enUS.
 - Published Pages:
-  - NGA: https://bbs.nga.cn/read.php?tid=5483616
-  - Curse: https://www.curseforge.com/wow/addons/ndui
-  - WoWInterface: https://www.wowinterface.com/downloads/info24846-NDui.html
+  - NGA: https://bbs.nga.cn/read.php?tid=18321155
+  - Curse: https://www.curseforge.com/wow/addons/ndui-classic
+  - WoWInterface: https://www.wowinterface.com/downloads/info25188-NDuiClassic.html
 
 # Main Features
 - Reskin default UI skins.
 - Ingame config panel.
 - Auras watcher for all classes with low usage.
 - oUF frameworks, include **PartyFrames**, **RaidFrames** and **Nameplates**.
-  - PartyFrame: simple spells cooldown watcher and buff indicator for group members.
+  - PartyFrame: simple spells cooldown watcher a nd buff indicator for group members.
   - RaidFrame: two mode for differ needs, configurable click cast and raid debuffs.
   - Nameplate: highlight special units, target and mouseover highlight, dispellable auras highlight, tank treat color, auras filter.
 - Chat spam filter, whisper invite.
 - One-container system with filters by cargBags.
 - Classbar with spells for all classes, disabled as default (Console - Auras - Enable Personal Resource).
-- Raid Toolbar with ready check, count down, combat resurrect timer.
+- Raid Toolbar with ready check, count down.
 - Optional event alerts.
-  - Rare alert.
   - Interrupt/dispell alert.
   - Broken spell alert.
   - Quests progress notification.
-  - Dungeons difficulty alert when solo.
   - Placed item alerts.
-- Infobars with auto sell junk, auto repair, invasion timers and quest completion check.
+- Infobars with auto sell junk, auto repair.
 
 # Default AddOns
 - !BaudErrorFrame: Error collecter
-- NDui: Core for NDui.
+- AuroraClassic: Reskin blizzard ui and NDui.
+- NDui: Core for NDui Classic.
 
 # Skins Support
-- BigWigs, DBM, Details, PremadeGroupsFilter, Rematch, Skada, TMW, WeakAuras.
+- BigWigs, DBM, Details, Recount, Skada, TMW, WeakAuras.
 
 # Download & Setup
 1. Download and unzip the file.
@@ -46,7 +44,7 @@
 # FAQ
 
 Please post me with errors (if does, see BOTTOMRIGHT of your screen), addon version and sreenshots if you have any questions.
-You can also contact me via [GitHub](https://github.com/siweia/NDui).
+You can also contact me via [GitHub](https://github.com/siweia/NDuiClassic).
 
 **Q: I find a problem that a...**
 <br>A: Make sure you know the options from GUI panel and **the slash cmd list from /ndui**.</br>

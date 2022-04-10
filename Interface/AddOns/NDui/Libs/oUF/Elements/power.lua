@@ -108,9 +108,9 @@ type and zero for the minimum value.
 --]]
 local function GetDisplayPower(element)
 	local unit = element.__owner.unit
-	local barInfo = GetUnitPowerBarInfo(unit)
-	if(barInfo and barInfo.showOnRaid and (UnitInParty(unit) or UnitInRaid(unit))) then
-		return ALTERNATE_POWER_INDEX, barInfo.minPower
+	local _, min, _, _, _, _, showOnRaid = UnitAlternatePowerInfo(unit)
+	if(showOnRaid) then
+		return ALTERNATE_POWER_INDEX, min
 	end
 end
 
@@ -120,17 +120,20 @@ local function UpdateColor(self, event, unit)
 
 	local pType, pToken, altR, altG, altB = UnitPowerType(unit)
 
-	local r, g, b, color
+	local r, g, b, t
+	local happiness = GetPetHappiness()
 	if(element.colorDisconnected and not UnitIsConnected(unit)) then
-		color = self.colors.disconnected
+		t = self.colors.disconnected
 	elseif(element.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)) then
-		color = self.colors.tapped
+		t = self.colors.tapped
+	elseif(element.colorHappiness and unit == "pet" and happiness) then
+		t = self.colors.happiness[happiness]
 	elseif(element.colorThreat and not UnitPlayerControlled(unit) and UnitThreatSituation('player', unit)) then
-		color =  self.colors.threat[UnitThreatSituation('player', unit)]
+		t =  self.colors.threat[UnitThreatSituation('player', unit)]
 	elseif(element.colorPower) then
 		if(element.displayType ~= ALTERNATE_POWER_INDEX) then
-			color = self.colors.power[pToken]
-			if(not color) then
+			t = self.colors.power[pToken]
+			if(not t) then
 				if(element.GetAlternativeColor) then
 					r, g, b = element:GetAlternativeColor(unit, pType, pToken, altR, altG, altB)
 				elseif(altR) then
@@ -140,28 +143,28 @@ local function UpdateColor(self, event, unit)
 						r, g, b = r / 255, g / 255, b / 255
 					end
 				else
-					color = self.colors.power[pType] or self.colors.power.MANA
+					t = self.colors.power[pType] or self.colors.power.MANA
 				end
 			end
 		else
-			color = self.colors.power[ALTERNATE_POWER_INDEX]
+			t = self.colors.power[ALTERNATE_POWER_INDEX]
 		end
 	elseif(element.colorClass and UnitIsPlayer(unit))
 		or (element.colorClassNPC and not UnitIsPlayer(unit))
 		or (element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
-		color = self.colors.class[class]
+		t = self.colors.class[class]
 	elseif(element.colorSelection and unitSelectionType(unit, element.considerSelectionInCombatHostile)) then
-		color = self.colors.selection[unitSelectionType(unit, element.considerSelectionInCombatHostile)]
+		t = self.colors.selection[unitSelectionType(unit, element.considerSelectionInCombatHostile)]
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then
-		color = self.colors.reaction[UnitReaction(unit, 'player')]
+		t = self.colors.reaction[UnitReaction(unit, 'player')]
 	elseif(element.colorSmooth) then
 		local adjust = 0 - (element.min or 0)
 		r, g, b = self:ColorGradient((element.cur or 1) + adjust, (element.max or 1) + adjust, unpack(element.smoothGradient or self.colors.smooth))
 	end
 
-	if(color) then
-		r, g, b = color[1], color[2], color[3]
+	if(t) then
+		r, g, b = t[1], t[2], t[3]
 	end
 
 	if(b) then
@@ -393,6 +396,7 @@ local function Enable(self)
 		self:RegisterEvent('UNIT_MAXPOWER', Path)
 		self:RegisterEvent('UNIT_POWER_BAR_HIDE', Path)
 		self:RegisterEvent('UNIT_POWER_BAR_SHOW', Path)
+		self:RegisterEvent('UNIT_HAPPINESS', Path)
 
 		if(element:IsObjectType('StatusBar') and not (element:GetStatusBarTexture() or element:GetStatusBarAtlas())) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
@@ -419,6 +423,7 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_POWER_BAR_SHOW', Path)
 		self:UnregisterEvent('UNIT_POWER_FREQUENT', Path)
 		self:UnregisterEvent('UNIT_POWER_UPDATE', Path)
+		self:UnregisterEvent('UNIT_HAPPINESS', Path)
 		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
 		self:UnregisterEvent('UNIT_FACTION', ColorPath)
 		self:UnregisterEvent('UNIT_FLAGS', ColorPath)

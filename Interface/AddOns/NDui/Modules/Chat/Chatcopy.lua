@@ -66,7 +66,7 @@ end
 function module:ChatCopy_CreateMenu()
 	menu = CreateFrame("Frame", nil, UIParent)
 	menu:SetSize(25, 100)
-	menu:SetPoint("TOPRIGHT", _G.ChatFrame1, 22, 0)
+	menu:SetPoint("TOPRIGHT", _G.ChatFrame1, 25, 0)
 	menu:SetShown(C.db["Chat"]["ChatMenu"])
 
 	_G.ChatFrameMenuButton:ClearAllPoints()
@@ -75,9 +75,6 @@ function module:ChatCopy_CreateMenu()
 	_G.ChatFrameChannelButton:ClearAllPoints()
 	_G.ChatFrameChannelButton:SetPoint("TOP", _G.ChatFrameMenuButton, "BOTTOM", 0, -2)
 	_G.ChatFrameChannelButton:SetParent(menu)
-	_G.ChatFrameToggleVoiceDeafenButton:SetParent(menu)
-	_G.ChatFrameToggleVoiceMuteButton:SetParent(menu)
-	_G.QuickJoinToastButton:SetParent(menu)
 
 	_G.ChatAlertFrame:ClearAllPoints()
 	_G.ChatAlertFrame:SetPoint("BOTTOMLEFT", _G.ChatFrame1Tab, "TOPLEFT", 5, 25)

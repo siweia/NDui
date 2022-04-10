@@ -90,7 +90,7 @@ function module:OnCreate()
 	scaler.timer = timer
 
 	local text = timer:CreateFontString(nil, "BACKGROUND")
-	text:SetPoint("CENTER", 1, 0)
+	text:SetPoint("CENTER", 2, 0)
 	text:SetJustifyH("CENTER")
 	timer.text = text
 
@@ -207,7 +207,7 @@ function module:OnLogin()
 			module.RegisterActionButton(frame)
 		end
 	end
-	hooksecurefunc(ActionBarButtonEventsFrameMixin, "RegisterFrame", module.RegisterActionButton)
+	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", module.RegisterActionButton)
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)

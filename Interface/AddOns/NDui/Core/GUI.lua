@@ -16,7 +16,6 @@ G.DefaultSettings = {
 	TempAnchor = {},
 	AuraWatchList = {
 		Switcher = {},
-		IgnoreSpells = {},
 	},
 	Actionbar = {
 		Enable = true,
@@ -39,6 +38,9 @@ G.DefaultSettings = {
 		CustomBarNumPerRow = 12,
 		ShowStance = true,
 		EquipColor = false,
+		AspectBar = true,
+		AspectSize = 25,
+		VerticleAspect = true,
 		VehButtonSize = 34,
 
 		Bar1Size = 34,
@@ -84,32 +86,25 @@ G.DefaultSettings = {
 		SplitCount = 1,
 		SpecialBagsColor = false,
 		iLvlToShow = 1,
-		AutoDeposit = false,
-		PetTrash = true,
 		BagsPerRow = 6,
 		BankPerRow = 10,
 		HideWidgets = true,
 
 		FilterJunk = true,
+		FilterAmmo = true,
 		FilterConsumable = true,
-		FilterAzerite = false,
 		FilterEquipment = true,
 		FilterLegendary = true,
-		FilterCollection = true,
 		FilterFavourite = true,
 		FilterGoods = false,
 		FilterQuest = false,
-		FilterEquipSet = false,
-		FilterAnima = false,
-		FilterRelic = false,
 	},
 	Auras = {
 		Reminder = true,
 		Totems = true,
 		VerticalTotems = true,
 		TotemSize = 32,
-		ClassAuras = true,
-		MMT29X4 = false,
+		ClassAuras = false,
 		BuffFrame = true,
 		HideBlizBuff = false,
 		ReverseBuff = false,
@@ -123,8 +118,7 @@ G.DefaultSettings = {
 		Enable = true,
 		ClickThrough = false,
 		IconScale = 1,
-		DeprecatedAuras = false,
-		QuakeRing = false,
+		WatchSpellRank = true,
 	},
 	UFs = {
 		Enable = true,
@@ -138,8 +132,7 @@ G.DefaultSettings = {
 		SwingTimer = false,
 		OffOnTop = false,
 		RaidFrame = true,
-		AutoRes = true,
-		NumGroups = 6,
+		NumGroups = 8,
 		RaidDirec = 1,
 		RaidRows = 1,
 		SimpleMode = false,
@@ -151,7 +144,6 @@ G.DefaultSettings = {
 		InstanceAuras = true,
 		DispellOnly = false,
 		RaidDebuffScale = 1,
-		SpecRaidPos = false,
 		RaidHealthColor = 1,
 		ShowSolo = false,
 		RaidWidth = 80,
@@ -172,13 +164,10 @@ G.DefaultSettings = {
 		CPHeight = 5,
 		CPxOffset = 12,
 		CPyOffset = -2,
-		QuakeTimer = true,
 		LagString = true,
-		RuneTimer = true,
 		RaidBuffIndicator = true,
 		PartyFrame = true,
 		PartyDirec = 2,
-		PartyWatcher = true,
 		PWOnRight = false,
 		PartyWidth = 100,
 		PartyHeight = 32,
@@ -194,9 +183,9 @@ G.DefaultSettings = {
 		HealthColor = 1,
 		BuffIndicatorType = 1,
 		BuffIndicatorScale = 1,
+		EnergyTicker = false,
 		UFTextScale = 1,
-		PartyAltPower = true,
-		PartyWatcherSync = true,
+		ToToT = false,
 		RaidTextScale = 1,
 		FrequentHealth = false,
 		HealthFrequency = .2,
@@ -212,7 +201,6 @@ G.DefaultSettings = {
 		CCName = true,
 		RCCName = true,
 		HideTip = false,
-		DescRole = true,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -236,9 +224,8 @@ G.DefaultSettings = {
 		BossHPTag = 5,
 		BossMPTag = 5,
 
-		OwnCastColor = {r=.3, g=.7, b=1},
 		CastingColor = {r=.3, g=.7, b=1},
-		NotInterruptColor = {r=1, g=.5, b=.5},
+		--NotInterruptColor = {r=1, g=.5, b=.5},
 		PlayerCB = true,
 		PlayerCBWidth = 300,
 		PlayerCBHeight = 20,
@@ -308,15 +295,15 @@ G.DefaultSettings = {
 		DisableMap = false,
 		Clock = false,
 		CombatPulse = true,
-		MapScale = 1,
-		MaxMapScale = 1,
+		MapScale = .7,
 		MinimapScale = 1.4,
 		MinimapSize = 140,
 		ShowRecycleBin = true,
 		WhoPings = true,
 		MapReveal = true,
 		MapRevealGlow = true,
-		Calendar = false,
+		MapFader = true,
+		DiffFlag = true,
 	},
 	Nameplate = {
 		Enable = true,
@@ -328,7 +315,6 @@ G.DefaultSettings = {
 		HostileCC = true,
 		TankMode = false,
 		TargetIndicator = 5,
-		InsideView = true,
 		CustomUnitColor = true,
 		CustomColor = {r=0, g=.8, b=.3},
 		UnitList = "",
@@ -340,18 +326,16 @@ G.DefaultSettings = {
 		PPHealthHeight = 5,
 		PPPowerHeight = 5,
 		PPPowerText = false,
+		EnergyTicker = true,
 		NameType = 5,
 		HealthType = 2,
 		SecureColor = {r=1, g=0, b=1},
 		TransColor = {r=1, g=.8, b=0},
 		InsecureColor = {r=1, g=0, b=0},
-		OffTankColor = {r=.2, g=.7, b=.5},
-		DPSRevertThreat = false,
-		ExplosivesScale = false,
-		AKSProgress = false,
+		--OffTankColor = {r=.2, g=.7, b=.5},
+		--DPSRevertThreat = false,
 		PPFadeout = true,
 		PPFadeoutAlpha = 0,
-		PPOnFire = false,
 		TargetPower = false,
 		MinScale = 1,
 		MinAlpha = 1,
@@ -359,7 +343,6 @@ G.DefaultSettings = {
 		DebuffColor = false,
 		QuestIndicator = true,
 		NameOnlyMode = false,
-		PPGCDTicker = true,
 		ExecuteRatio = 0,
 		ColoredTarget = false,
 		TargetColor = {r=0, g=.6, b=1},
@@ -368,6 +351,8 @@ G.DefaultSettings = {
 		CastbarGlow = true,
 		CastTarget = false,
 		Interruptor = true,
+		PlateRange = 41,
+		ClampTarget = true,
 		FriendPlate = false,
 		EnemyThru = false,
 		FriendlyThru = false,
@@ -391,10 +376,6 @@ G.DefaultSettings = {
 		FriendNameSize = 14,
 		FriendHealthSize = 16,
 		FriendHealthOffset = 5,
-		HarmWidth = 190,
-		HarmHeight = 60,
-		HelpWidth = 190,
-		HelpHeight = 60,
 		NameOnlyTextSize = 14,
 		NameOnlyTitleSize = 12,
 		NameOnlyTitle = true,
@@ -407,21 +388,21 @@ G.DefaultSettings = {
 		Skada = true,
 		Bigwigs = true,
 		TMW = true,
-		PetBattle = true,
 		WeakAuras = true,
 		InfobarLine = true,
 		ChatbarLine = true,
 		MenuLine = true,
 		ClassLine = true,
 		Details = true,
-		PGFSkin = true,
-		Rematch = true,
+		QuestTracker = true,
+		Recount = true,
+		ResetRecount = true,
 		ToggleDirection = 1,
+		TradeSkills = true,
 		BlizzardSkins = true,
 		SkinAlpha = .5,
-		DefaultBags = true,
+		DefaultBags = false,
 		FlatMode = false,
-		AlertFrames = true,
 		FontOutline = true,
 		Loot = true,
 		Shadow = true,
@@ -436,19 +417,12 @@ G.DefaultSettings = {
 		TipAnchor = 4,
 		HideRank = false,
 		FactionIcon = true,
-		LFDRole = false,
 		TargetBy = true,
 		Scale = 1,
-		SpecLevelByShift = false,
 		HideRealm = false,
 		HideTitle = false,
 		HideJunkGuild = true,
-		AzeriteArmor = true,
-		OnlyArmorIcons = false,
-		ConduitInfo = true,
 		HideAllID = false,
-		MythicScore = true,
-		DomiRank = true,
 	},
 	Misc = {
 		Mail = true,
@@ -456,56 +430,43 @@ G.DefaultSettings = {
 		MailTarget = "",
 		ItemLevel = true,
 		GemNEnchant = true,
-		AzeriteTraits = true,
-		MissingStats = true,
-		SoloInfo = true,
-		RareAlerter = true,
-		RarePrint = true,
+		ShowItemLevel = true,
+		HideErrors = true,
 		Focuser = true,
 		ExpRep = true,
-		Screenshot = true,
-		TradeTabs = true,
 		InterruptAlert = false,
 		OwnInterrupt = true,
 		DispellAlert = false,
 		OwnDispell = true,
 		InstAlertOnly = true,
 		BrokenAlert = false,
+		LoCAlert = false,
 		FasterLoot = true,
 		AutoQuest = false,
 		IgnoreQuestNPC = {},
-		HideTalking = true,
-		HideBossBanner = false,
-		HideBossEmote = false,
-		PetFilter = true,
 		QuestNotification = false,
 		QuestProgress = false,
 		OnlyCompleteRing = false,
-		ExplosiveCount = false,
 		ExplosiveCache = {},
 		PlacedItemAlert = false,
-		RareAlertInWild = false,
-		ParagonRep = true,
+		MenuButton = true,
+		AutoDismount = true,
+		TradeTabs = true,
 		InstantDelete = true,
 		RaidTool = true,
-		RMRune = false,
+		--RMRune = false,
 		DBMCount = "10",
 		EasyMarkKey = 1,
-		ShowMarkerBar = 4,
-		MarkerSize = 28,
+		EasyMarking = true,
 		BlockInvite = false,
-		NzothVision = true,
 		SendActionCD = false,
-		MDGuildBest = true,
-		FasterSkip = false,
-		EnhanceDressup = true,
-		QuestTool = true,
+		StatOrder = "12345",
+		StatExpand = true,
+		PetHappiness = true,
 		InfoStrLeft = "[guild][friend][ping][fps][zone]",
 		InfoStrRight = "[spec][dura][gold][time]",
 		InfoSize = 13,
 		MaxAddOns = 12,
-		MenuButton = true,
-		QuickJoin = true,
 		MaxZoom = 2.6,
 	},
 	Tutorial = {
@@ -523,7 +484,7 @@ G.AccountSettings = {
 	totalGold = {},
 	ShowSlots = false,
 	RepairType = 1,
-	AutoSell = true,
+	AutoSell = false,
 	GuildSortBy = 1,
 	GuildSortOrder = true,
 	DetectVersion = DB.Version,
@@ -535,6 +496,7 @@ G.AccountSettings = {
 	SkadaRequest = false,
 	BWRequest = false,
 	RaidAuraWatch = {},
+	CornerSpells = {},
 	RaidClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},
@@ -545,12 +507,10 @@ G.AccountSettings = {
 	ProfileIndex = {},
 	ProfileNames = {},
 	Help = {},
-	PartySpells = {},
-	CornerSpells = {},
 	CustomTex = "",
 	MajorSpells = {},
 	SmoothAmount = .25,
-	AutoRecycle = true,
+	AutoRecycle = false,
 	IgnoredButtons = "",
 }
 
@@ -577,7 +537,7 @@ local function InitialSettings(source, target, fullClean)
 
 	for i, j in pairs(target) do
 		if source[i] == nil then target[i] = nil end
-		if fullClean and type(j) == "table" then
+		if type(j) == "table" and fullClean then
 			for k, v in pairs(j) do
 				if type(v) ~= "table" and source[i] and source[i][k] == nil then
 					target[i][k] = nil
@@ -678,10 +638,6 @@ local function setupBuffIndicator()
 	G:SetupBuffIndicator(guiPage[4])
 end
 
-local function setupPartyWatcher()
-	G:SetupPartyWatcher(guiPage[4])
-end
-
 local function setupNameplateFilter()
 	G:SetupNameplateFilter(guiPage[5])
 end
@@ -738,19 +694,25 @@ end
 local function updateHotkeys()
 	local Bar = B:GetModule("Actionbar")
 	for _, button in pairs(Bar.buttons) do
-		if button.UpdateHotkeys then
-			button:UpdateHotkeys(button.buttonType)
-		end
+		ActionButton_UpdateHotkeys(button, button.buttonType)
 	end
 end
 
 local function updateEquipColor()
 	local Bar = B:GetModule("Actionbar")
 	for _, button in pairs(Bar.buttons) do
-		if button.Border and button.Update then
+		if button.Border and button.action then
 			Bar.UpdateEquipItemColor(button)
 		end
 	end
+end
+
+local function updateAspectStatus()
+	B:GetModule("Actionbar"):UpdateAspectStatus()
+end
+
+local function toggleAspectBar()
+	B:GetModule("Actionbar"):ToggleAspectBar()
 end
 
 local function toggleBarFader(self)
@@ -807,10 +769,6 @@ local function updatePlateCVars()
 	B:GetModule("UnitFrames"):UpdatePlateCVars()
 end
 
-local function updateClickableSize()
-	B:GetModule("UnitFrames"):UpdateClickableSize()
-end
-
 local function updateCustomUnitList()
 	B:GetModule("UnitFrames"):CreateUnitTable()
 end
@@ -827,10 +785,6 @@ local function updateClickThru()
 	B:GetModule("UnitFrames"):UpdatePlateClickThru()
 end
 
-local function togglePlatePower()
-	B:GetModule("UnitFrames"):TogglePlatePower()
-end
-
 local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
@@ -843,17 +797,6 @@ end
 local function toggleTargetClassPower()
 	refreshNameplates()
 	B:GetModule("UnitFrames"):ToggleTargetClassPower()
-end
-
-local function toggleGCDTicker()
-	B:GetModule("UnitFrames"):ToggleGCDTicker()
-end
-
-local function toggleFocusCalculation()
-	local A = B:GetModule("Auras")
-	if A.ToggleFocusCalculation then
-		A:ToggleFocusCalculation()
-	end
 end
 
 local function updateUFTextScale()
@@ -909,8 +852,8 @@ local function updateTeamIndex()
 	updateRaidTextScale()
 end
 
-local function updatePartyElements()
-	B:GetModule("UnitFrames"):UpdatePartyElements()
+local function updateMapFader()
+	B:GetModule("Maps"):MapFader()
 end
 
 local function refreshPlateByEvents()
@@ -925,48 +868,24 @@ local function showMinimapClock()
 	B:GetModule("Maps"):ShowMinimapClock()
 end
 
-local function showCalendar()
-	B:GetModule("Maps"):ShowCalendar()
-end
-
 local function updateInterruptAlert()
 	B:GetModule("Misc"):InterruptAlert()
-end
-
-local function updateExplosiveAlert()
-	B:GetModule("Misc"):ExplosiveAlert()
-end
-
-local function updateRareAlert()
-	B:GetModule("Misc"):RareAlert()
-end
-
-local function updateSoloInfo()
-	B:GetModule("Misc"):SoloInfo()
 end
 
 local function updateQuestNotification()
 	B:GetModule("Misc"):QuestNotification()
 end
 
-local function updateScreenShot()
-	B:GetModule("Misc"):UpdateScreenShot()
-end
-
 local function updateFasterLoot()
 	B:GetModule("Misc"):UpdateFasterLoot()
 end
 
-local function toggleBossBanner()
-	B:GetModule("Misc"):ToggleBossBanner()
+local function updateErrorBlocker()
+	B:GetModule("Misc"):UpdateErrorBlocker()
 end
 
-local function toggleBossEmote()
-	B:GetModule("Misc"):ToggleBossEmote()
-end
-
-local function updateMarkerGrid()
-	B:GetModule("Misc"):RaidTool_UpdateGrid()
+local function togglePetHappiness()
+	B:GetModule("Misc"):TogglePetHappiness()
 end
 
 local function updateMaxZoomLevel()
@@ -1063,16 +982,19 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateEquipColor},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", true, nil, nil, L["SendActionCDTip"]},
+		{},--blank
+		{1, "Actionbar", "AspectBar", HeaderTag..L["AspectBar"].."*", nil, nil, toggleAspectBar},
+		{1, "Actionbar", "VerticleAspect", L["VerticleAspect"].."*", nil, nil, updateAspectStatus},
+		{3, "Actionbar", "AspectSize", L["AspectSize"].."*", true, {24, 60, 1}, updateAspectStatus},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
 		{},--blank
-		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
-		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", true, nil, updateBagStatus},
+		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", nil, nil, updateBagStatus},
+		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", true, setupBagFilter, updateBagStatus},
 		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"], true},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", nil, nil, updateBagStatus},
-		{1, "Bags", "PetTrash", L["PetTrash"], true, nil, nil, L["PetTrashTip"]},
 		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 500, 1}, nil, L["iLvlToShowTip"]},
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
@@ -1086,6 +1008,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[3] = {
 		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
 		{1, "UFs", "Arena", L["Arena Frame"], true},
+		{1, "UFs", "ToToT", L["TototUF"]},
+		{1, "UFs", "EnergyTicker", L["EnergyTicker"].."*", true, nil, toggleUFClassPower},
 		{1, "UFs", "ShowAuras", L["ShowAuras"].."*", nil, setupUFAuras, toggleAllAuras},
 		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", true, setupClassPower, toggleUFClassPower},
 		{1, "UFs", "Portrait", L["UFs Portrait"]},
@@ -1096,7 +1020,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"].."*", nil, setupSwingBars, toggleSwingBars},
-		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true},
 		{},--blank
 		{1, "UFs", "CombatText", HeaderTag..L["UFs CombatText"]},
 		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"].."*"},
@@ -1109,11 +1032,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
 		{},--blank
-		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
-		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
-		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},
-		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"].."*", nil, nil, updatePartyElements},
-		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], true, nil, nil, L["PartyWatcherSyncTip"]},
+		{1, "UFs", "PartyFrame", L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
+		{1, "UFs", "PartyPetFrame", L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
 		{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, nil, updateRaidAuras, L["ShowRaidDebuffTip"]},
 		{1, "UFs", "ShowRaidBuff", L["ShowRaidBuff"].."*", true, nil, updateRaidAuras, L["ShowRaidBuffTip"]},
@@ -1132,7 +1052,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, refreshRaidFrameIcons},
 		{},--blank
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
-		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidTextScale, L["100PercentTip"]},
@@ -1140,10 +1059,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "SmartRaid", HeaderTag..L["SmartRaid"].."*", nil, nil, updateAllHeaders, L["SmartRaidTip"]},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
 		{1, "UFs", "TeamIndex", L["RaidFrame TeamIndex"].."*", nil, nil, updateTeamIndex},
-		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{1, "UFs", "FrequentHealth", HeaderTag..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
-		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], nil, nil, nil, L["SpecRaidPosTip"]},
+		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
 	},
 	[5] = {
@@ -1154,7 +1072,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
 		{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
-		{1, "Nameplate", "Dispellable", L["Dispellable"].."*", true, nil, refreshNameplates, L["DispellableTip"]},
+		{1, "Nameplate", "Dispellable", NewTag..L["Dispellable"].."*", true, nil, refreshNameplates, L["DispellableTip"]},
 		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", nil, nil, refreshNameplates, L["DebuffColorTip"]},
 		{4, "Nameplate", "AuraFilter", L["NameplateAuraFilter"].."*", true, {L["BlackNWhite"], L["PlayerOnly"], L["IncludeCrowdControl"]}, refreshNameplates},
@@ -1169,12 +1087,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "EnemyThru", L["Enemy ClickThru"].."*", true, nil, updateClickThru},
 		{1, "Nameplate", "CastbarGlow", L["PlateCastbarGlow"].."*", nil, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "CastTarget", L["PlateCastTarget"].."*", true, nil, nil, L["PlateCastTargetTip"]},
-		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, UpdatePlateCVars},
-		{1, "Nameplate", "Interruptor", L["ShowInterruptor"].."*", true},
-		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
-		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true, nil, nil, L["ExplosivesScaleTip"]},
+		{1, "Nameplate", "ClampTarget", L["ClampTargetPlate"].."*", nil, nil, updatePlateCVars, L["ClampTargetPlateTip"]},
+		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"], true, nil, nil, L["QuestIndicatorAddOns"]},
 		{1, "Nameplate", "BlockDBM", L["BlockDBM"], nil, nil, nil, L["BlockDBMTip"]},
-		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
+		{1, "Nameplate", "Interruptor", NewTag..L["ShowInterruptor"].."*", true},
 		{1, "Nameplate", "UnitTargeted", NewTag..L["Show TargetedBy"].."*", nil, nil, refreshPlateByEvents, L["TargetedByTip"]},
 		{},--blank
 		{1, "Nameplate", "ColoredTarget", HeaderTag..L["ColoredTarget"].."*", nil, nil, nil, L["ColoredTargetTip"]},
@@ -1188,33 +1104,28 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"].."*", true, nil, updatePowerUnitList, L["CustomUnitTips"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
-		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true, nil, nil, L["RevertThreatTip"]},
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
 		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
-		{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
+		--{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true},
+		--{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
 		{},--blank
 		{1, "Nameplate", "CVarOnlyNames", NewTag..L["CVarOnlyNames"], nil, nil, updatePlateCVars, L["CVarOnlyNamesTip"]},
-		{1, "Nameplate", "CVarShowNPCs", NewTag..L["CVarShowNPCs"].."*", nil, nil, updatePlateCVars, L["CVarShowNPCsTip"]},
+		{1, "Nameplate", "CVarShowNPCs", NewTag..L["CVarShowNPCs"].."*", true, nil, updatePlateCVars, L["CVarShowNPCsTip"]},
+		{3, "Nameplate", "PlateRange", L["PlateRange"].."*", nil, {0, 41, 1}, updatePlateCVars},
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", true, {.5, 1.5, .1}, updatePlateCVars},
-		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", nil, {.5, 1, .1}, updatePlateCVars},
+		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", false, {.5, 1, .1}, updatePlateCVars},
 		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.3, 1, .1}, updatePlateCVars},
-		{3, "Nameplate", "HarmWidth", L["PlateHarmWidth"].."*", nil, {1, 500, 1}, updateClickableSize},
-		{3, "Nameplate", "HarmHeight", L["PlateHarmHeight"].."*", true, {1, 500, 1}, updateClickableSize},
-		{3, "Nameplate", "HelpWidth", L["PlateHelpWidth"].."*", nil, {1, 500, 1}, updateClickableSize},
-		{3, "Nameplate", "HelpHeight", L["PlateHelpHeight"].."*", true, {1, 500, 1}, updateClickableSize},
 	},
 	[6] = {
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
-		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
-		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
-		{1, "Nameplate", "PPOnFire", L["PlayerPlate OnFire"], nil, nil, nil, L["PPOnFireTip"]},
-		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
+		--{1, "Auras", "ClassAuras", L["Enable ClassAuras"], true},
+		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", nil, nil, togglePlateVisibility},
+		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlayerPlate},
 		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
-		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
-		{1, "Auras", "MMT29X4", L["MMT29X4"].."*", true, nil, toggleFocusCalculation, L["MMT29X4Tip"]},
+		{1, "Nameplate", "EnergyTicker", L["EnergyTicker"].."*", nil, nil, togglePlayerPlate},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["Width"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
@@ -1226,8 +1137,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Auras", "HideBlizBuff", L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
 		{},--blank
 		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
-		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
-		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
+		{1, "AuraWatch", "WatchSpellRank", L["AuraWatch WatchSpellRank"], nil, nil, nil, L["WatchSpellRankTip"]},
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], true, {.8, 2, .1}},
 		{},--blank
@@ -1239,11 +1149,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[8] = {
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},
-		{1, "Misc", "RMRune", L["Runes Check"].."*", true},
+		--{1, "Misc", "RMRune", L["Runes Check"].."*", true},
 		{4, "Misc", "EasyMarkKey", L["EasyMark"].."*", nil, {"CTRL", "ALT", "SHIFT", DISABLE}, nil, L["EasyMarkTip"]},
 		{2, "Misc", "DBMCount", L["DBMCount"].."*", true, nil, nil, L["DBMCountTip"]},
-		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", nil, {L["Grids"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid, L["ShowMarkerBarTip"]},
-		{3, "Misc", "MarkerSize", L["MarkerSize"].."*", true, {20, 50, 1}, updateMarkerGrid},
 		{},--blank
 		{1, "Misc", "QuestNotification", HeaderTag..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},
@@ -1254,16 +1162,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "DispellAlert", HeaderTag..L["DispellAlert"].."*", nil, nil, updateInterruptAlert},
 		{1, "Misc", "OwnDispell", L["OwnDispell"].."*", true},
 		{1, "Misc", "BrokenAlert", HeaderTag..L["BrokenAlert"].."*", nil, nil, updateInterruptAlert, L["BrokenAlertTip"]},
-		{1, "Misc", "InstAlertOnly", L["InstAlertOnly"].."*", true, nil, updateInterruptAlert, L["InstAlertOnlyTip"]},
-		{},--blank
-		{1, "Misc", "ExplosiveCount", L["Explosive Alert"].."*", nil, nil, updateExplosiveAlert, L["ExplosiveAlertTip"]},
-		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
-		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
-		{1, "Misc", "NzothVision", L["NzothVision"], true},
-		{},--blank
-		{1, "Misc", "RareAlerter", HeaderTag..L["Rare Alert"].."*", nil, nil, updateRareAlert},
-		{1, "Misc", "RarePrint", L["Alert In Chat"].."*"},
-		{1, "Misc", "RareAlertInWild", L["RareAlertInWild"].."*", true},
+		{1, "Misc", "LoCAlert", HeaderTag..L["LoCAlert"].."*", true, nil, updateInterruptAlert, L["LoCAlertTip"]},
+		{1, "Misc", "InstAlertOnly", L["InstAlertOnly"].."*", nil, nil, updateInterruptAlert, L["InstAlertOnlyTip"]},
+		--{},--blank
+		--{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*"}, -- fix me: need more data
 	},
 	[9] = {
 		{1, "Chat", "Lock", HeaderTag..L["Lock Chat"]},
@@ -1286,7 +1188,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "BlockSpammer", L["BlockSpammer"].."*", nil, nil, nil, L["BlockSpammerTip"]},
 		{1, "Chat", "BlockStranger", "|cffff0000"..L["BlockStranger"].."*", nil, nil, nil, L["BlockStrangerTip"]},
 		{2, "ACCOUNT", "ChatFilterWhiteList", HeaderTag..L["ChatFilterWhiteList"].."*", true, nil, updateFilterWhiteList, L["ChatFilterWhiteListTip"]},
-		{3, "Chat", "Matches", L["Keyword Match"].."*", false, {1, 3, 1}},
+		{3, "Chat", "Matches", L["Keyword Match"].."*", nil, {1, 3, 1}},
 		{2, "ACCOUNT", "ChatFilterList", L["Filter List"].."*", true, nil, updateFilterList, L["FilterListTip"]},
 		{},--blank
 		{1, "Chat", "Invite", HeaderTag..L["Whisper Invite"]},
@@ -1295,14 +1197,14 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[10] = {
 		{1, "Map", "DisableMap", "|cffff0000"..L["DisableMap"], nil, nil, nil, L["DisableMapTip"]},
-		{1, "Map", "MapRevealGlow", L["MapRevealGlow"].."*", true, nil, nil, L["MapRevealGlowTip"]},
-		{3, "Map", "MapScale", L["Map Scale"].."*", false, {.8, 2, .1}},
-		{3, "Map", "MaxMapScale", L["Maximize Map Scale"].."*", true, {.5, 1, .1}},
+		{1, "Map", "MapRevealGlow", L["MapRevealGlow"].."*", nil, nil, nil, L["MapRevealGlowTip"]},
+		{1, "Map", "MapFader", L["MapFader"].."*", nil, nil, updateMapFader},
+		{3, "Map", "MapScale", L["Map Scale"], true, {.5, 1, .1}},
 		{},--blank
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
 		{3, "Map", "MinimapSize", L["Minimap Size"].."*", true, {100, 500, 1}, updateMinimapScale},
-		{1, "Map", "Calendar", L["MinimapCalendar"].."*", nil, nil, showCalendar, L["MinimapCalendarTip"]},
-		{1, "Map", "Clock", L["Minimap Clock"].."*", true, nil, showMinimapClock},
+		{1, "Map", "Clock", L["Minimap Clock"].."*", nil, nil, showMinimapClock},
+		{1, "Map", "DiffFlag", L["Minimap DiffFlag"], true, nil, nil, L["DiffFlagTip"]},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
@@ -1311,11 +1213,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[11] = {
 		{1, "Skins", "BlizzardSkins", HeaderTag..L["BlizzardSkins"], nil, nil, nil, L["BlizzardSkinsTips"]},
-		{1, "Skins", "AlertFrames", L["ReskinAlertFrames"], true},
+		{1, "Skins", "FlatMode", L["FlatMode"], true},
 		{1, "Skins", "DefaultBags", L["DefaultBags"], nil, nil, nil, L["DefaultBagsTips"]},
 		{1, "Skins", "Loot", L["Loot"], true},
-		{1, "Skins", "PetBattle", L["PetBattle Skin"]},
-		{1, "Skins", "FlatMode", L["FlatMode"], true},
 		{1, "Skins", "Shadow", L["Shadow"]},
 		{1, "Skins", "FontOutline", L["FontOutline"], true},
 		{1, "Skins", "BgTex", L["BgTex"]},
@@ -1328,16 +1228,18 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "ChatbarLine", L["Chat Line"]},
 		{1, "Skins", "MenuLine", L["Menu Line"], true},
 		{},--blank
+		{1, "Skins", "TradeSkills", L["EnhancedTradeSkills"]},
+		{1, "Skins", "QuestTracker", L["EnhancedQuestLog"], true, nil, nil, L["EnhancedQuestLogTips"]},
+		{},--blank
 		{1, "Skins", "Skada", L["Skada Skin"]},
 		{1, "Skins", "Details", L["Details Skin"], nil, resetDetails},
 		{4, "Skins", "ToggleDirection", L["ToggleDirection"].."*", true, {L["LEFT"], L["RIGHT"], L["TOP"], L["BOTTOM"], DISABLE}, updateToggleDirection},
+		{1, "Skins", "Recount", L["Recount Skin"]},
 		{},--blank
 		{1, "Skins", "DBM", L["DBM Skin"]},
 		{1, "Skins", "Bigwigs", L["Bigwigs Skin"], true},
 		{1, "Skins", "TMW", L["TMW Skin"]},
 		{1, "Skins", "WeakAuras", L["WeakAuras Skin"], true},
-		{1, "Skins", "PGFSkin", L["PGF Skin"]},
-		{1, "Skins", "Rematch", L["Rematch Skin"], true},
 	},
 	[12] = {
 		{3, "Tooltip", "Scale", L["Tooltip Scale"].."*", nil, {.5, 1.5, .1}},
@@ -1350,49 +1252,31 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "FactionIcon", L["FactionIcon"].."*"},
 		{1, "Tooltip", "HideJunkGuild", L["HideJunkGuild"].."*", true},
 		{1, "Tooltip", "HideRealm", L["Hide Realm"].."*"},
-		{1, "Tooltip", "SpecLevelByShift", L["Show SpecLevelByShift"].."*", true},
-		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
-		{1, "Tooltip", "MythicScore", L["MDScore"].."*", nil, nil, nil, L["MDScoreTip"]},
-		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
-		{},--blank
-		{1, "Tooltip", "DomiRank", L["DomiRank"], nil, nil, nil, L["DomiRankTip"]},
-		{1, "Tooltip", "ConduitInfo", L["Show ConduitInfo"], true},
-		{},--blank
-		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
-		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
+		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"]},
 	},
 	[13] = {
-		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemLevel"], nil, nil, nil, L["ItemLevelTip"]},
-		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
-		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
+		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemQuality"]},
+		{1, "Misc", "ShowItemLevel", L["Show ItemLevel"].."*"},
+		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*", true},
 		{},--blank
-		{1, "Misc", "HideTalking", L["No Talking"]},
-		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
-		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
-		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
-		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
-		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
-		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
-		{1, "Misc", "FasterSkip", L["FasterMovieSkip"].."*", true, nil, nil, L["FasterMovieSkipTip"]},
-		{1, "Misc", "MissingStats", L["Show MissingStats"]},
-		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
+		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", nil, nil, updateFasterLoot},
+		{1, "Misc", "HideErrors", L["Hide Error"].."*", true, nil, updateErrorBlocker},
 		{1, "Misc", "Mail", L["Mail Tool"]},
-		{1, "Misc", "TradeTabs", L["TradeTabs"], true},
-		{1, "Misc", "PetFilter", L["Show PetFilter"]},
-		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", true, nil, updateScreenShot},
+		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
+		{1, "Misc", "TradeTabs", L["TradeTabs"], nil, nil, nil, L["TradeTabsTips"]},
+		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
 		{1, "Misc", "Focuser", L["Easy Focus"]},
-		{1, "Misc", "MDGuildBest", L["MDGuildBest"], true, nil, nil, L["MDGuildBestTip"]},
+		{1, "Misc", "PetHappiness", L["PetHappiness"].."*", true, nil, togglePetHappiness},
 		{1, "Misc", "MenuButton", L["MenuButton"], nil, nil, nil, L["MenuButtonTip"]},
-		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
-		{1, "Misc", "QuestTool", L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
-		{1, "Misc", "QuickJoin", HeaderTag..L["EnhancedPremade"], nil, nil, nil, L["EnhancedPremadeTip"]},
-		{3, "Misc", "MaxZoom", NewTag..L["MaxZoom"].."*", true, {1, 2.6, .1}, updateMaxZoomLevel},
+		{1, "Misc", "AutoDismount", L["AutoDismount"].."*", nil, nil, nil, L["AutoDismountTip"]},
+		{3, "Misc", "MaxZoom", NewTag..L["MaxZoom"].."*", true, {1, 3.4, .1}, updateMaxZoomLevel},
+		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
 		{1, "ACCOUNT", "LockUIScale", L["Lock UIScale"]},
-		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], true, {.4, 1.15, .01}},
+		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], true, {.4, 1.15, .01}, nil, L["UIScaleTip"]},
 		{},--blank
 		{1, "ACCOUNT", "DisableInfobars", "|cffff0000"..L["DisableInfobars"]},
 		{3, "Misc", "MaxAddOns", L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
@@ -1695,8 +1579,8 @@ function G:AddContactFrame()
 	local lr = B.SetGradient(frame, "H", .7, .7, .7, .5, 0, 80, C.mult)
 	lr:SetPoint("TOP", 40, -32)
 
-	CreateContactBox(frame, "NGA.CN", "https://bbs.nga.cn/read.php?tid=5483616", 1)
-	CreateContactBox(frame, "GitHub", "https://github.com/siweia/NDui", 2)
+	CreateContactBox(frame, "NGA.CN", "https://bbs.nga.cn/read.php?tid=18321155", 1)
+	CreateContactBox(frame, "GitHub", "https://github.com/siweia/NDuiClassic", 2)
 	CreateContactBox(frame, "Discord", "https://discord.gg/WXgrfBm", 3)
 
 	CreateDonationIcon(frame, DB.afdianTex, "afdian", -20)
@@ -1761,10 +1645,7 @@ local function OpenGUI()
 	ok:SetScript("OnClick", function()
 		B:SetupUIScale()
 		f:Hide()
-		if G.needUIReload then
-			StaticPopup_Show("RELOAD_NDUI")
-			G.needUIReload = nil
-		end
+		StaticPopup_Show("RELOAD_NDUI")
 	end)
 
 	for i, name in pairs(G.TabList) do
@@ -1773,7 +1654,7 @@ local function OpenGUI()
 		guiPage[i] = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
 		guiPage[i]:SetPoint("TOPLEFT", 160, -50)
 		guiPage[i]:SetSize(610, 500)
-		B.CreateBDFrame(guiPage[i], .25)
+		B.CreateBDFrame(guiPage[i], .3)
 		guiPage[i]:Hide()
 		guiPage[i].child = CreateFrame("Frame", nil, guiPage[i])
 		guiPage[i].child:SetSize(610, 1)
@@ -1789,16 +1670,6 @@ local function OpenGUI()
 
 	local helpInfo = B.CreateHelpInfo(f, L["Option* Tips"])
 	helpInfo:SetPoint("TOPLEFT", 20, -5)
-	local guiHelpInfo = {
-		text = L["GUIPanelHelp"],
-		buttonStyle = HelpTip.ButtonStyle.GotIt,
-		targetPoint = HelpTip.Point.LeftEdgeCenter,
-		onAcknowledgeCallback = B.HelpInfoAcknowledge,
-		callbackArg = "GUIPanel",
-	}
-	if not NDuiADB["Help"]["GUIPanel"] then
-		HelpTip:Show(helpInfo, guiHelpInfo)
-	end
 
 	local credit = CreateFrame("Button", nil, f)
 	credit:SetPoint("TOPRIGHT", -20, -5)

@@ -26,9 +26,6 @@ host:SetScript("OnEvent", function(_, event, ...)
 end)
 
 function B:RegisterEvent(event, func, unit1, unit2)
-	if event == "CLEU" then
-		event = "COMBAT_LOG_EVENT_UNFILTERED"
-	end
 	if not events[event] then
 		events[event] = {}
 		if unit1 then
@@ -42,9 +39,6 @@ function B:RegisterEvent(event, func, unit1, unit2)
 end
 
 function B:UnregisterEvent(event, func)
-	if event == "CLEU" then
-		event = "COMBAT_LOG_EVENT_UNFILTERED"
-	end
 	local funcs = events[event]
 	if funcs and funcs[func] then
 		funcs[func] = nil
@@ -89,6 +83,9 @@ function B:SetupUIScale(init)
 		local ratio = 768 / DB.ScreenHeight
 		C.mult = (pixel / scale) - ((pixel - ratio) / scale)
 	elseif not InCombatLockdown() then
+		if scale >= .64 then
+			SetCVar("uiscale", scale) -- Fix blizzard chatframe offset
+		end
 		UIParent:SetScale(scale)
 	end
 end
@@ -107,18 +104,9 @@ local function UpdatePixelScale(event)
 	isScaling = false
 end
 
-local function IncorrectExpansion() -- left it for the future
-	local f = CreateFrame("Frame", nil, UIParent)
-	f:SetPoint("CENTER")
-	f:SetSize(10, 10)
-	local text = f:CreateFontString()
-	text:SetPoint("CENTER")
-	text:SetFont(STANDARD_TEXT_FONT, 20, "OUTLINE")
-	text:SetText(L["IncorrectExpansion"])
-end
-
 B:RegisterEvent("PLAYER_LOGIN", function()
 	-- Initial
+	SetCVar("useUiScale", "1") -- Fix blizzard chatframe offset
 	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
 	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])

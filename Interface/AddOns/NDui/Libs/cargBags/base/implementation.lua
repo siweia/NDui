@@ -30,13 +30,10 @@ Implementation.instances = {}
 Implementation.itemKeys = {}
 
 local toBagSlot = cargBags.ToBagSlot
-local LE_ITEM_CLASS_MISCELLANEOUS = Enum.ItemClass.Miscellaneous or 15
-local LE_ITEM_MISCELLANEOUS_COMPANION_PET = Enum.ItemMiscellaneousSubclass.CompanionPet or 2
+local LE_ITEM_CLASS_MISCELLANEOUS = LE_ITEM_CLASS_MISCELLANEOUS or 15
+local LE_ITEM_MISCELLANEOUS_COMPANION_PET = LE_ITEM_MISCELLANEOUS_COMPANION_PET or 2
 local PET_CAGE = 82800
-local MYTHIC_KEYSTONES = {
-	[180653] = true,
-	[187786] = true, -- Timewarped
-}
+local MYTHIC_KEYSTONE = 180653
 
 --[[!
 	Creates a new instance of the class
@@ -258,7 +255,6 @@ function Implementation:Init()
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN", self, self.BAG_UPDATE_COOLDOWN)
 	self:RegisterEvent("ITEM_LOCK_CHANGED", self, self.ITEM_LOCK_CHANGED)
 	self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", self, self.PLAYERBANKSLOTS_CHANGED)
-	self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", self, self.PLAYERREAGENTBANKSLOTS_CHANGED)
 	self:RegisterEvent("UNIT_QUEST_LOG_CHANGED", self, self.UNIT_QUEST_LOG_CHANGED)
 	self:RegisterEvent("BAG_CLOSED", self, self.BAG_CLOSED)
 end
@@ -312,10 +308,9 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	if itemLink then
 		i.texture, i.count, i.locked, i.quality, i.link, i.id = texture, count, locked, quality, itemLink, itemID
 		i.hasPrice = not noValue
-		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
 		i.cdStart, i.cdFinish, i.cdEnable = GetContainerItemCooldown(bagID, slotID)
-		i.isQuestItem, i.questID, i.questActive = GetContainerItemQuestInfo(bagID, slotID)
-		i.name, _, _, _, _, i.type, i.subType, _, i.equipLoc, _, _, i.classID, i.subClassID = GetItemInfo(itemLink)
+		i.name, _, _, i.level, _, i.type, i.subType, _, i.equipLoc, _, _, i.classID, i.subClassID = GetItemInfo(itemLink)
+		i.isQuestItem = i.classID == LE_ITEM_CLASS_QUESTITEM
 		i.equipLoc = _G[i.equipLoc] -- INVTYPE to localized string
 
 		if itemID == PET_CAGE then
@@ -325,7 +320,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.level = tonumber(petLevel) or 0
 			i.classID = LE_ITEM_CLASS_MISCELLANEOUS
 			i.subClassID = LE_ITEM_MISCELLANEOUS_COMPANION_PET
-		elseif MYTHIC_KEYSTONES[itemID] then
+		elseif itemID == MYTHIC_KEYSTONE then
 			i.level, i.name = strmatch(itemLink, "|H%w+:%d+:%d+:(%d+):.-|h%[(.-)%]|h")
 			i.level = tonumber(i.level) or 0
 		end
@@ -472,17 +467,6 @@ function Implementation:PLAYERBANKSLOTS_CHANGED(event, bagID, slotID)
 	else
 		bagID = bagID - NUM_BANKGENERIC_SLOTS
 	end
-
-	self:BAG_UPDATE(event, bagID, slotID)
-end
-
---[[!
-	Fired when reagent bank slots need to be updated
-	@param bagID <number>
-	@param slotID <number> [optional]
-]]
-function Implementation:PLAYERREAGENTBANKSLOTS_CHANGED(event, slotID)
-	local bagID = -3
 
 	self:BAG_UPDATE(event, bagID, slotID)
 end

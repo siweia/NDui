@@ -115,6 +115,23 @@ local function BuildAuraList()
 	wipe(C.AuraWatchList)
 end
 
+local auraListByName = {}
+local function BuildNamesForSpellRank()
+	if not C.db["AuraWatch"]["WatchSpellRank"] then return end
+
+	for KEY, VALUE in pairs(AuraList) do
+		for spellID, value in pairs(VALUE.List) do
+			local name = GetSpellInfo(spellID)
+			if value.AuraID and name then
+				if not auraListByName[KEY] then auraListByName[KEY] = {} end
+				if not auraListByName[KEY][name] then
+					auraListByName[KEY][name] = value
+				end
+			end
+		end
+	end
+end
+
 local function BuildUnitIDTable()
 	for _, VALUE in pairs(AuraList) do
 		for _, value in pairs(VALUE.List) do
@@ -154,7 +171,6 @@ local PetBattleFrameHider = CreateFrame("Frame", nil, UIParent, "SecureHandlerSt
 PetBattleFrameHider:SetAllPoints()
 PetBattleFrameHider:SetFrameStrata("LOW")
 RegisterStateDriver(PetBattleFrameHider, "visibility", "[petbattle] hide; show")
-A.PetBattleFrameHider = PetBattleFrameHider
 
 local function tooltipOnEnter(self)
 	GameTooltip:ClearLines()
@@ -173,13 +189,6 @@ local function tooltipOnEnter(self)
 	GameTooltip:Show()
 end
 
-function A:RemoveSpellFromAuraList()
-	if IsAltKeyDown() and IsControlKeyDown() and self.type == 4 and self.spellID then
-		C.db["AuraWatchList"]["IgnoreSpells"][self.spellID] = true
-		print(format(L["AddToIgnoreList"], DB.NDuiString, self.spellID))
-	end
-end
-
 local function enableTooltip(self)
 	self:EnableMouse(true)
 	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
@@ -187,7 +196,6 @@ local function enableTooltip(self)
 	self.HL:SetAllPoints(self.Icon)
 	self:SetScript("OnEnter", tooltipOnEnter)
 	self:SetScript("OnLeave", B.HideTooltip)
-	self:SetScript("OnMouseDown", A.RemoveSpellFromAuraList)
 end
 
 -- Icon mode
@@ -309,9 +317,10 @@ end
 local function InitSetup()
 	ConvertTable()
 	BuildAuraList()
+	BuildNamesForSpellRank()
 	BuildUnitIDTable()
 	BuildCooldownTable()
-	B:RegisterEvent("PLAYER_TALENT_UPDATE", BuildCooldownTable)
+	B:RegisterEvent("SPELLS_CHANGED", BuildCooldownTable)
 	BuildAura()
 	SetupAnchor()
 end
@@ -381,12 +390,12 @@ function A:AuraWatch_UpdateCD()
 					if group.Mode == "ICON" then name = nil end
 					if charges and maxCharges and maxCharges > 1 and charges < maxCharges then
 						A:AuraWatch_SetupCD(KEY, name, icon, chargeStart, chargeDuration, true, 1, value.SpellID, charges)
-					elseif start and duration > 3 then
+					elseif start and duration > 5 then
 						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, true, 1, value.SpellID)
 					end
 				elseif value.ItemID then
 					local start, duration = GetItemCooldown(value.ItemID)
-					if start and duration > 3 then
+					if start and duration > 5 then
 						local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(value.ItemID)
 						if group.Mode == "ICON" then name = nil end
 						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, false, 2, value.ItemID)
@@ -450,10 +459,11 @@ function A:AuraWatch_SetupAura(KEY, unit, index, filter, name, icon, count, dura
 end
 
 function A:AuraWatch_UpdateAura(unit, index, filter, name, icon, count, duration, expires, caster, spellID, number, inCombat)
-	if C.db["AuraWatchList"]["IgnoreSpells"][spellID] then return end -- ignore spells
-
 	for KEY, VALUE in pairs(AuraList) do
 		local value = VALUE.List[spellID]
+		if not value then
+			value = auraListByName[KEY] and auraListByName[KEY][name]
+		end
 		if value and value.AuraID and value.UnitID == unit then
 			if value.Combat and not inCombat then return end
 			if value.Caster and value.Caster ~= caster then return end
@@ -612,7 +622,6 @@ function A:IsAuraTracking(value, eventType, sourceGUID, sourceName, sourceFlags,
 end
 
 local cache = {}
-local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
 function A:AuraWatch_UpdateInt(event, ...)
 	if not IntCD.List then return end
 
@@ -640,8 +649,6 @@ function A:AuraWatch_UpdateInt(event, ...)
 			if value.OnSuccess then guid, name = sourceGUID, sourceName end
 
 			A:AuraWatch_SetupInt(value.IntID, value.ItemID, value.Duration, value.UnitID, guid, name)
-			if C.db["AuraWatch"]["QuakeRing"] and spellID == 240447 then PlaySound(soundKitID, "Master") end -- 'Ding' on quake
-
 			cache[timestamp] = spellID
 		end
 

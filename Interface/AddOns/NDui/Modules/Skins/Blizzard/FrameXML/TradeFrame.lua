@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	TradePlayerEnchantInset:Hide()
 	TradePlayerItemsInset:Hide()
 	TradeRecipientEnchantInset:Hide()
@@ -18,15 +16,9 @@ tinsert(C.defaultThemes, function()
 	select(4, TradeRecipientItem7:GetRegions()):Hide()
 
 	B.ReskinPortraitFrame(TradeFrame)
-	TradeFrame.RecipientOverlay:Hide()
 	B.Reskin(TradeFrameTradeButton)
 	B.Reskin(TradeFrameCancelButton)
-	B.ReskinInput(TradePlayerInputMoneyFrameGold)
-	B.ReskinInput(TradePlayerInputMoneyFrameSilver)
-	B.ReskinInput(TradePlayerInputMoneyFrameCopper)
-
-	TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
-	TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
+	B:UpdateMoneyDisplay(TradePlayerInputMoneyFrameGold, TradePlayerInputMoneyFrameSilver, TradePlayerInputMoneyFrameCopper)
 
 	local function reskinButton(bu)
 		bu:SetNormalTexture("")
@@ -36,8 +28,6 @@ tinsert(C.defaultThemes, function()
 		hl:SetInside()
 		bu.icon:SetTexCoord(unpack(DB.TexCoord))
 		bu.icon:SetInside()
-		bu.IconOverlay:SetInside()
-		bu.IconOverlay2:SetInside()
 		bu.bg = B.CreateBDFrame(bu.icon, .25)
 		B.ReskinIconBorder(bu.IconBorder)
 	end

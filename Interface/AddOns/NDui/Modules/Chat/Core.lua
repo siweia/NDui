@@ -5,15 +5,13 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 
 local _G = _G
 local pairs, ipairs, strsub, strlower = pairs, ipairs, string.sub, string.lower
-local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
+local IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown, PlaySound = IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown, PlaySound
 local ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime
-local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant
-local CanCooperateWithGameAccount, BNInviteFriend, PlaySound = CanCooperateWithGameAccount, BNInviteFriend, PlaySound
-local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
-local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
-local InviteToGroup = C_PartyInfo.InviteUnit
+local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup
+local BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend = BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend
 local GeneralDockManager = GeneralDockManager
 local messageSoundID = SOUNDKIT.TELL_MESSAGE
+local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
 
 local maxLines = 1024
 local fontOutline
@@ -22,6 +20,8 @@ module.MuteCache = {}
 function module:TabSetAlpha(alpha)
 	if self.glow:IsShown() and alpha ~= 1 then
 		self:SetAlpha(1)
+	elseif alpha < .4 then
+		self:SetAlpha(.4)
 	end
 end
 
@@ -47,6 +47,7 @@ end
 
 local function BlackBackground(self)
 	local frame = B.SetBD(self.Background)
+	frame:SetPoint("BOTTOMRIGHT", 26, -7)
 	frame:SetShown(C.db["Chat"]["ChatBGType"] == 2)
 
 	return frame
@@ -54,7 +55,8 @@ end
 
 local function GradientBackground(self)
 	local frame = CreateFrame("Frame", nil, self)
-	frame:SetOutside(self.Background)
+	frame:SetPoint("TOPLEFT", self.Background)
+	frame:SetPoint("BOTTOMRIGHT", 26, -7)
 	frame:SetFrameLevel(0)
 	frame:SetShown(C.db["Chat"]["ChatBGType"] == 3)
 
@@ -97,6 +99,7 @@ function module:SkinChat()
 	if fontOutline ~= "" then
 		self:SetShadowColor(0, 0, 0, 0)
 	end
+	self:SetShadowColor(0, 0, 0, 0)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 	if self:GetMaxLines() < maxLines then
@@ -129,11 +132,11 @@ function module:SkinChat()
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
 	B.HideObject(self.buttonFrame)
-	B.HideObject(self.ScrollBar)
+	--B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
 	module:ToggleChatFrameTextures(self)
 
-	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error
+	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
 
 	self.styled = true
 end
@@ -166,7 +169,6 @@ local cycles = {
 	{ chatType = "SAY", IsActive = function() return true end },
 	{ chatType = "PARTY", IsActive = function() return IsInGroup() end },
 	{ chatType = "RAID", IsActive = function() return IsInRaid() end },
-	{ chatType = "INSTANCE_CHAT", IsActive = function() return IsPartyLFG() end },
 	{ chatType = "GUILD", IsActive = function() return IsInGuild() end },
 	{ chatType = "OFFICER", IsActive = function() return C_GuildInfo_IsGuildOfficer() end },
 	{ chatType = "CHANNEL", IsActive = function(_, editbox)
@@ -214,17 +216,9 @@ end
 hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
 
 -- Quick Scroll
-local chatScrollInfo = {
-	text = L["ChatScrollHelp"],
-	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.RightEdgeCenter,
-	onAcknowledgeCallback = B.HelpInfoAcknowledge,
-	callbackArg = "ChatScroll",
-}
-
 function module:QuickMouseScroll(dir)
 	if not NDuiADB["Help"]["ChatScroll"] then
-		HelpTip:Show(ChatFrame1, chatScrollInfo)
+		B:ShowHelpTip(ChatFrame1, L["ChatScrollHelp"], "RIGHT", 20, 0, nil, "ChatScroll")
 	end
 
 	if dir > 0 then
@@ -268,16 +262,11 @@ function module.OnChatWhisper(event, ...)
 	for word in pairs(whisperList) do
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
-				local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
-				if accountInfo then
-					local gameAccountInfo = accountInfo.gameAccountInfo
-					local gameID = gameAccountInfo.gameAccountID
-					if gameID then
-						local charName = gameAccountInfo.characterName
-						local realmName = gameAccountInfo.realmName
-						if CanCooperateWithGameAccount(accountInfo) and (not C.db["Chat"]["GuildInvite"] or module:IsUnitInGuild(charName.."-"..realmName)) then
-							BNInviteFriend(gameID)
-						end
+				local gameID = select(6, BNGetFriendInfoByID(presenceID))
+				if gameID then
+					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
+					if CanCooperateWithGameAccount(gameID) and (not C.db["Chat"]["GuildInvite"] or module:IsUnitInGuild(charName.."-"..realmName)) then
+						BNInviteFriend(gameID)
 					end
 				end
 			else
@@ -363,24 +352,6 @@ local function FixLanguageFilterSideEffects()
 	sideEffectFixed = true
 
 	B.CreateFS(HelpFrame, 18, L["LanguageFilterTip"], "system",  "TOP", 0, 30)
-
-	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
-	function C_BattleNet.GetFriendGameAccountInfo(...)
-		local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
-		if gameAccountInfo then
-			gameAccountInfo.isInCurrentRegion = true
-		end
-		return gameAccountInfo
-	end
-
-	local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
-	function C_BattleNet.GetFriendAccountInfo(...)
-		local accountInfo = OLD_GetFriendAccountInfo(...)
-		if accountInfo and accountInfo.gameAccountInfo then
-			accountInfo.gameAccountInfo.isInCurrentRegion = true
-		end
-		return accountInfo
-	end
 end
 
 function module:ToggleLanguageFilter()
@@ -429,7 +400,7 @@ function module:OnLogin()
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
 	SetCVar("chatStyle", "classic")
 	SetCVar("chatMouseScroll", 1) -- enable mousescroll
-	--SetCVar("whisperMode", "inline") -- blizz reset this on NPE
+	SetCVar("chatClassColorOverride", 0)
 	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 

@@ -7,22 +7,14 @@ local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
 
 local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
 local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
-local GetMoney, GetNumWatchedTokens, Ambiguate = GetMoney, GetNumWatchedTokens, Ambiguate
+local GetMoney = GetMoney
 local GetContainerNumSlots, GetContainerItemInfo, UseContainerItem = GetContainerNumSlots, GetContainerItemInfo, UseContainerItem
-local GetContainerItemEquipmentSetInfo = GetContainerItemEquipmentSetInfo
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
 local CalculateTotalNumberOfFreeBagSlots = CalculateTotalNumberOfFreeBagSlots
 local slotString = L["Bags"]..": %s%d"
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
-
-local crossRealms = GetAutoCompleteRealms()
-if not crossRealms or #crossRealms == 0 then
-	crossRealms = {[1]=myRealm}
-end
 
 local function getClassIcon(class)
 	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
@@ -71,9 +63,7 @@ info.onEvent = function(self, event, arg1)
 	end
 
 	if not NDuiADB["totalGold"][myRealm] then NDuiADB["totalGold"][myRealm] = {} end
-	if not NDuiADB["totalGold"][myRealm][myName] then NDuiADB["totalGold"][myRealm][myName] = {} end
-	NDuiADB["totalGold"][myRealm][myName][1] = GetMoney()
-	NDuiADB["totalGold"][myRealm][myName][2] = DB.MyClass
+	NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
 
 	oldMoney = newMoney
 end
@@ -83,11 +73,7 @@ StaticPopupDialogs["RESETGOLD"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		for _, realm in pairs(crossRealms) do
-			if NDuiADB["totalGold"][realm] then
-				wipe(NDuiADB["totalGold"][realm])
-			end
-		end
+		wipe(NDuiADB["totalGold"][myRealm])
 		NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
 	end,
 	whileDead = 1,
@@ -110,8 +96,7 @@ info.onMouseUp = function(self, btn)
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
 		self:onEnter()
 	else
-		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-		ToggleCharacter("TokenFrame")
+		ToggleAllBags()
 	end
 end
 
@@ -134,41 +119,17 @@ info.onEnter = function(self)
 
 	local totalGold = 0
 	GameTooltip:AddLine(L["RealmCharacter"], .6,.8,1)
-	for _, realm in pairs(crossRealms) do
-		local thisRealmList = NDuiADB["totalGold"][realm]
-		if thisRealmList then
-			for k, v in pairs(thisRealmList) do
-				local name = Ambiguate(k.."-"..realm, "none")
-				local gold, class = unpack(v)
-				local r, g, b = B.ClassColor(class)
-				GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
-				totalGold = totalGold + gold
-			end
-		end
+	local thisRealmList = NDuiADB["totalGold"][myRealm]
+	for k, v in pairs(thisRealmList) do
+		local gold, class = unpack(v)
+		local r, g, b = B.ClassColor(class)
+		GameTooltip:AddDoubleLine(getClassIcon(class)..k, module:GetMoneyString(gold), r,g,b, 1,1,1)
+		totalGold = totalGold + gold
 	end
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
-	for i = 1, GetNumWatchedTokens() do
-		local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
-		if not currencyInfo then break end
-		local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
-		if name and i == 1 then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
-		end
-		if name and count then
-			local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
-			local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
-			if total > 0 then
-				GameTooltip:AddDoubleLine(name, count.."/"..total..iconTexture, 1,1,1, 1,1,1)
-			else
-				GameTooltip:AddDoubleLine(name, count..iconTexture, 1,1,1, 1,1,1)
-			end
-		end
-	end
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
-	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Currency Panel"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Switch Mode"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", "CTRL +"..DB.RightButton..L["Reset Gold"].." ", 1,1,1, .6,.8,1)
@@ -178,9 +139,16 @@ end
 info.onLeave = B.HideTooltip
 
 -- Auto selljunk
-local stop, cache = true, {}
+local sellCount, stop, cache = 0, true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
-local BAG = B:GetModule("Bags")
+
+local function stopSelling(tell)
+	stop = true
+	if sellCount > 0 and tell then
+		print(format("|cff99CCFF%s|r%s", L["Selljunk Calculate"], module:GetMoneyString(sellCount, true)))
+	end
+	sellCount = 0
+end
 
 local function startSelling()
 	if stop then return end
@@ -188,8 +156,7 @@ local function startSelling()
 		for slot = 1, GetContainerNumSlots(bag) do
 			if stop then return end
 			local _, _, _, quality, _, _, link, _, noValue, itemID = GetContainerItemInfo(bag, slot)
-			local isInSet = GetContainerItemEquipmentSetInfo(bag, slot)
-			if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
+			if link and not noValue and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
 				cache["b"..bag.."s"..slot] = true
 				UseContainerItem(bag, slot)
 				C_Timer_After(.15, startSelling)
@@ -209,8 +176,10 @@ local function updateSelling(event, ...)
 		wipe(cache)
 		startSelling()
 		B:RegisterEvent("UI_ERROR_MESSAGE", updateSelling)
-	elseif event == "UI_ERROR_MESSAGE" and arg == errorText or event == "MERCHANT_CLOSED" then
-		stop = true
+	elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
+		stopSelling(false)
+	elseif event == "MERCHANT_CLOSED" then
+		stopSelling(true)
 	end
 end
 B:RegisterEvent("MERCHANT_SHOW", updateSelling)
