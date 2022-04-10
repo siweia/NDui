@@ -576,35 +576,33 @@ do
 	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
 end
 
-function M:FasterMovieSkip()
+local function skipOnKeyDown(self, key)
 	if not C.db["Misc"]["FasterSkip"] then return end
-
-	-- Allow space bar, escape key and enter key to cancel cinematic without confirmation
-	if CinematicFrame.closeDialog and not CinematicFrame.closeDialog.confirmButton then
-		CinematicFrame.closeDialog.confirmButton = CinematicFrameCloseDialogConfirmButton
+	if key == "ESCAPE" then
+		if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
+			self.closeDialog:Hide()
+		end
 	end
+end
 
-	CinematicFrame:HookScript("OnKeyDown", function(self, key)
-		if key == "ESCAPE" then
-			if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
-				self.closeDialog:Hide()
-			end
+local function skipOnKeyUp(self, key)
+	if not C.db["Misc"]["FasterSkip"] then return end
+	if key == "SPACE" or key == "ESCAPE" or key == "ENTER" then
+		if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
+			self.closeDialog.confirmButton:Click()
 		end
-	end)
-	CinematicFrame:HookScript("OnKeyUp", function(self, key)
-		if key == "SPACE" or key == "ESCAPE" or key == "ENTER" then
-			if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
-				self.closeDialog.confirmButton:Click()
-			end
-		end
-	end)
-	MovieFrame:HookScript("OnKeyUp", function(self, key)
-		if key == "SPACE" or key == "ESCAPE" or key == "ENTER" then
-			if self:IsShown() and self.CloseDialog and self.CloseDialog.ConfirmButton then
-				self.CloseDialog.ConfirmButton:Click()
-			end
-		end
-	end)
+	end
+end
+
+function M:FasterMovieSkip()
+	MovieFrame.closeDialog = MovieFrame.CloseDialog
+	MovieFrame.closeDialog.confirmButton = MovieFrame.CloseDialog.ConfirmButton
+	CinematicFrame.closeDialog.confirmButton = CinematicFrameCloseDialogConfirmButton
+
+	MovieFrame:HookScript("OnKeyDown", skipOnKeyDown)
+	MovieFrame:HookScript("OnKeyUp", skipOnKeyUp)
+	CinematicFrame:HookScript("OnKeyDown", skipOnKeyDown)
+	CinematicFrame:HookScript("OnKeyUp", skipOnKeyUp)
 end
 
 function M:EnhanceDressup()
@@ -769,18 +767,24 @@ function M:QuickMenuButton()
 		local name = dropdownMenu.name
 		local unit = dropdownMenu.unit
 		local isPlayer = unit and UnitIsPlayer(unit)
-		local isFriendMenu = dropdownMenu == FriendsDropDown and not dropdownMenu.bnetIDAccount -- menus on FriendsFrame
+		local isFriendMenu = dropdownMenu == FriendsDropDown -- menus on FriendsFrame
 		if not name or (not isPlayer and not dropdownMenu.chatType and not isFriendMenu) then
 			frame:Hide()
 			return
 		end
 
-		local server = dropdownMenu.server
-		if not server or server == "" then
-			server = DB.MyRealm
+		local gameAccountInfo = dropdownMenu.accountInfo and dropdownMenu.accountInfo.gameAccountInfo
+		if gameAccountInfo and gameAccountInfo.characterName and gameAccountInfo.realmName then
+			M.MenuButtonName = gameAccountInfo.characterName.."-"..gameAccountInfo.realmName
+			frame:Show()
+		else
+			local server = dropdownMenu.server
+			if not server or server == "" then
+				server = DB.MyRealm
+			end
+			M.MenuButtonName = name.."-"..server
+			frame:Show()
 		end
-		M.MenuButtonName = name.."-"..server
-		frame:Show()
 	end)
 end
 

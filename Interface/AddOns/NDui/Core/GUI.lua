@@ -1374,7 +1374,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
-		{1, "Misc", "FasterSkip", L["FasterMovieSkip"], true, nil, nil, L["FasterMovieSkipTip"]},
+		{1, "Misc", "FasterSkip", L["FasterMovieSkip"].."*", true, nil, nil, L["FasterMovieSkipTip"]},
 		{1, "Misc", "MissingStats", L["Show MissingStats"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
 		{1, "Misc", "Mail", L["Mail Tool"]},
