@@ -5,7 +5,7 @@
 ## Notes: More than a UI.
 ## Version: 2.10.0
 ## X-Support: BC Classic
-## X-Website: https://github.com/siweia/NDuiClassic
+## X-Website: https://github.com/siweia/NDui/tree/TBC
 ## SavedVariables: NDuiADB, NDuiPDB
 ## SavedVariablesPerCharacter: NDuiDB
 
