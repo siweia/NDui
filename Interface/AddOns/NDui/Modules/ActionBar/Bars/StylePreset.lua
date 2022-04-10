@@ -75,7 +75,7 @@ function Bar:ImportActionbarStyle(preset)
 	if values[1] ~= "NAB" then return end -- NDui Actionbar
 
 	local numValues = #values
-	local maxOptions = numValues - 8 -- #Bar.movers will be 7 if stancebar off
+	local maxOptions = #optionValues + 1
 
 	for index = 2, maxOptions do
 		local value = values[index]
