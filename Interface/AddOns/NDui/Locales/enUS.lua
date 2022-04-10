@@ -895,3 +895,4 @@ L["TenthThresholdTip"] = "|nIf cooldown less than current threhold, show cooldow
 L["TargetedByTip"] = "|nShow unit targeted count on the right side of nameplates. Only available in dungeons or raids."
 L["IgnoredButtons"] = "Ignored recycle buttons"
 L["IgnoredButtonsTip"] = "|nEnter the names of buttons that exclude from recycle bin. You can type /fstack and mouseover the button for its name. Partial name is acceptable.|nUse space in between for multiple names. UI reload required."
+L["MaxZoom"] = "Max Camera Zoom Level"

@@ -69,6 +69,7 @@ function M:OnLogin()
 	M:QuickMenuButton()
 	M:BaudErrorFrameHelpTip()
 	M:EnhancedPicker()
+	C_Timer_After(0, M.UpdateMaxZoomLevel)
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -873,4 +874,8 @@ function M:EnhancedPicker()
 		self.__boxB:SetText(b)
 		self.__boxH:SetText(format("%02x%02x%02x", r, g, b))
 	end)
+end
+
+function M:UpdateMaxZoomLevel()
+	SetCVar("cameraDistanceMaxZoomFactor", C.db["Misc"]["MaxZoom"])
 end

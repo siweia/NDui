@@ -895,3 +895,4 @@ L["TenthThresholdTip"] = "|nSi le temps de recharge est inférieur au seuil actu
 L["TargetedByTip"] = "|nAffiche le nombre d'unités ciblées sur le côté droit des plaques de nom. Disponible uniquement dans les donjons ou les raids."
 L["IgnoredButtons"] = "Ignored recycle buttons" -- need translation
 L["IgnoredButtonsTip"] = "|nEnter the names of buttons that exclude from recycle bin. You can type /fstack and mouseover the button for its name. Partial name is acceptable.|nUse space in between for multiple names. UI reload required." -- need translation
+L["MaxZoom"] = "Max Camera Zoom Level" -- need translation

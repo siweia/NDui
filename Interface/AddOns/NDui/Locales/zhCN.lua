@@ -895,3 +895,4 @@ L["TenthThresholdTip"] = "|n当冷却时间小于所设阈值时，精确显示�
 L["TargetedByTip"] = "|n在姓名板右侧显示队友关注的统计，只在副本中生效。"
 L["IgnoredButtons"] = "回收站忽略列表"
 L["IgnoredButtonsTip"] = "|n输入你不想收纳进回收站的按钮名字。你可以输入/fstack后指向图标来查看，只需输入名字的一部分即可。|n对于多个按钮名字，以空格隔开。需要重载插件后生效。"
+L["MaxZoom"] = "最大视距等级"

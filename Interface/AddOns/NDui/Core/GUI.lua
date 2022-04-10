@@ -504,6 +504,7 @@ G.DefaultSettings = {
 		MaxAddOns = 12,
 		MenuButton = true,
 		QuickJoin = true,
+		MaxZoom = 2.6,
 	},
 	Tutorial = {
 		Complete = false,
@@ -966,6 +967,10 @@ local function updateMarkerGrid()
 	B:GetModule("Misc"):RaidTool_UpdateGrid()
 end
 
+local function updateMaxZoomLevel()
+	B:GetModule("Misc"):UpdateMaxZoomLevel()
+end
+
 local function updateInfobarAnchor(self)
 	if self:GetText() == "" then
 		self:SetText(self.__default)
@@ -1377,7 +1382,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MenuButton", L["MenuButton"], nil, nil, nil, L["MenuButtonTip"]},
 		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
 		{1, "Misc", "QuestTool", L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
-		{1, "Misc", "QuickJoin", NewTag..HeaderTag..L["EnhancedPremade"], true, nil, nil, L["EnhancedPremadeTip"]},
+		{1, "Misc", "QuickJoin", NewTag..HeaderTag..L["EnhancedPremade"], nil, nil, nil, L["EnhancedPremadeTip"]},
+		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {2, 3.4, .1}, updateMaxZoomLevel},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
