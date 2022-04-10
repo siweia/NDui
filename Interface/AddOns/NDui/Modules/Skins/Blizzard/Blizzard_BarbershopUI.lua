@@ -30,13 +30,13 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 	ReskinCustomizeButton(frame.SmallButtons.RotateRightButton)
 	ReskinCustomizeButton(frame.RandomizeAppearanceButton)
 
-	hooksecurefunc(frame, "SetSelectedCatgory", function(self)
+	hooksecurefunc(frame, "UpdateOptionButtons", function(self)
 		for button in self.selectionPopoutPool:EnumerateActive() do
 			if not button.styled then
 				B.ReskinArrow(button.DecrementButton, "left")
 				B.ReskinArrow(button.IncrementButton, "right")
 
-				local popoutButton = button.SelectionPopoutButton
+				local popoutButton = button.Button
 				popoutButton.HighlightTexture:SetAlpha(0)
 				popoutButton.NormalTexture:SetAlpha(0)
 				ReskinCustomizeButton(popoutButton)
