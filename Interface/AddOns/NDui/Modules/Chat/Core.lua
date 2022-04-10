@@ -94,7 +94,9 @@ function module:SkinChat()
 	self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
 	self:SetMinResize(100, 50)
 	self:SetFont(DB.Font[1], fontSize, fontOutline)
-	self:SetShadowColor(0, 0, 0, 0)
+	if fontOutline ~= "" then
+		self:SetShadowColor(0, 0, 0, 0)
+	end
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 	if self:GetMaxLines() < maxLines then
