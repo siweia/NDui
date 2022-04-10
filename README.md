@@ -30,7 +30,6 @@
 
 # Default AddOns
 - !BaudErrorFrame: Error collecter
-- AuroraClassic: Reskin blizzard ui and NDui.
 - NDui: Core for NDui Classic.
 
 # Skins Support
