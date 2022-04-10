@@ -1188,6 +1188,20 @@ do
 		thumb:SetTexture(DB.sparkTex)
 		thumb:SetBlendMode("ADD")
 		if vertical then thumb:SetRotation(rad(90)) end
+
+		local bar = CreateFrame("StatusBar", nil, bg)
+		bar:SetStatusBarTexture(DB.normTex)
+		bar:SetStatusBarColor(1, .8, 0, .5)
+		if vertical then
+			bar:SetPoint("BOTTOMLEFT", bg, C.mult, C.mult)
+			bar:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
+			bar:SetPoint("TOP", thumb, "CENTER")
+			bar:SetOrientation("VERTICAL")
+		else
+			bar:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+			bar:SetPoint("BOTTOMLEFT", bg, C.mult, C.mult)
+			bar:SetPoint("RIGHT", thumb, "CENTER")
+		end
 	end
 
 	-- Handle collapse
