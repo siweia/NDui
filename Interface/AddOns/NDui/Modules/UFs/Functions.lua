@@ -813,7 +813,7 @@ function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isS
 			return NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID]
 		elseif NDuiADB["NameplateFilter"][2][spellID] or C.BlackList[spellID] then
 			return false
-		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
+		elseif element.showStealableBuffs and isStealable and UnitCanAttack("player", unit) then
 			return true
 		elseif NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID] then
 			return true
