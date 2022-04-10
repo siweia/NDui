@@ -5,4 +5,4 @@
 ## Notes: More than a UI.
 ## Version: 1.33.0
 ## X-Support: Classic
-## X-Website: https://github.com/siweia/NDuiClassic/tree/era
+## X-Website: https://github.com/siweia/NDui/tree/Era
