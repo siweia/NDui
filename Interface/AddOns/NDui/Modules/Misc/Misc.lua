@@ -205,16 +205,27 @@ function M:VehicleSeatMover()
 	end)
 end
 
--- Reanchor UIWidgetBelowMinimapContainerFrame
+-- Reanchor UIWidgets
 function M:UIWidgetFrameMover()
-	local frame = CreateFrame("Frame", "NDuiUIWidgetMover", UIParent)
-	frame:SetSize(200, 50)
-	B.Mover(frame, L["UIWidgetFrame"], "UIWidgetFrame", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -20})
+	local frame1 = CreateFrame("Frame", "NDuiUIWidgetMover", UIParent)
+	frame1:SetSize(200, 50)
+	B.Mover(frame1, L["UIWidgetFrame"], "UIWidgetFrame", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -20})
 
 	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, "SetPoint", function(self, _, parent)
 		if parent == "MinimapCluster" or parent == MinimapCluster then
 			self:ClearAllPoints()
-			self:SetPoint("TOPRIGHT", frame)
+			self:SetPoint("TOPRIGHT", frame1)
+		end
+	end)
+
+	local frame2 = CreateFrame("Frame", "NDuiUIWidgetPowerBarMover", UIParent)
+	frame2:SetSize(260, 40)
+	B.Mover(frame2, L["UIWidgetPowerBar"], "UIWidgetPowerBar", {"BOTTOM", UIParent, "BOTTOM", 0, 150})
+
+	hooksecurefunc(UIWidgetPowerBarContainerFrame, "SetPoint", function(self, _, parent)
+		if parent == "UIParent" or parent == UIParent then
+			self:ClearAllPoints()
+			self:SetPoint("CENTER", frame2)
 		end
 	end)
 end
