@@ -99,7 +99,6 @@ function module:SkinChat()
 	if fontOutline ~= "" then
 		self:SetShadowColor(0, 0, 0, 0)
 	end
-	self:SetShadowColor(0, 0, 0, 0)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 	if self:GetMaxLines() < maxLines then
