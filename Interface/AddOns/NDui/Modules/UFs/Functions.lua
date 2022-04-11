@@ -862,8 +862,10 @@ local debuffBlackList = {
 	[36893] = true, -- 传送器故障
 	[36895] = true, -- 传送器故障
 	[36897] = true, -- 传送器故障
+	[36899] = true, -- 传送器故障
 	[36900] = true, -- 灵魂分裂：坏蛋
 	[36901] = true, -- 灵魂分裂：好人
+	[36940] = true, -- 传送器故障
 }
 function UF.RaidDebuffFilter(element, _, _, name, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
 	local parent = element.__owner
