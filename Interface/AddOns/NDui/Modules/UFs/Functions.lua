@@ -51,7 +51,7 @@ local function UF_OnLeave(self)
 	self.Highlight:Hide()
 end
 
-function UF:CreateHeader(self)
+function UF:CreateHeader(self, onKeyDown)
 	local hl = self:CreateTexture(nil, "OVERLAY")
 	hl:SetAllPoints()
 	hl:SetTexture("Interface\\PETBATTLES\\PetBattle-SelectedPetGlow")
@@ -61,7 +61,7 @@ function UF:CreateHeader(self)
 	hl:Hide()
 	self.Highlight = hl
 
-	self:RegisterForClicks("AnyUp")
+	self:RegisterForClicks(onKeyDown and "AnyDown" or "AnyUp")
 	self:HookScript("OnEnter", UF_OnEnter)
 	self:HookScript("OnLeave", UF_OnLeave)
 end

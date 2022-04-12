@@ -291,7 +291,6 @@ local function setupClickSets(self)
 	end
 
 	setupMouseWheelCast(self)
-	self:RegisterForClicks("AnyDown")
 
 	self.clickCastRegistered = true
 end
