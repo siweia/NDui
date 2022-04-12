@@ -53,6 +53,10 @@ info.onEvent = function(self, event, arg1)
 	if event == "PLAYER_ENTERING_WORLD" then
 		oldMoney = GetMoney()
 		self:UnregisterEvent(event)
+
+		if NDuiADB["ShowSlots"] then
+			self:RegisterEvent("BAG_UPDATE")
+		end
 	elseif event == "BAG_UPDATE" then
 		if arg1 < 0 or arg1 > 4 then return end
 	end
