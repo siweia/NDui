@@ -67,18 +67,19 @@ function module:AddNewAuraWatch(class, list)
 end
 
 function module:AddDeprecatedGroup()
-	if not C.db["AuraWatch"]["DeprecatedAuras"] then return end
-
-	for name, value in pairs(C.DeprecatedAuras) do
-		for _, list in pairs(AuraWatchList["ALL"]) do
-			if list.Name == name then
-				local newTable = newAuraFormat(value)
-				for spellID, v in pairs(newTable) do
-					list.List[spellID] = v
+	if C.db["AuraWatch"]["DeprecatedAuras"] then
+		for name, value in pairs(C.DeprecatedAuras) do
+			for _, list in pairs(AuraWatchList["ALL"]) do
+				if list.Name == name then
+					local newTable = newAuraFormat(value)
+					for spellID, v in pairs(newTable) do
+						list.List[spellID] = v
+					end
 				end
 			end
 		end
 	end
+
 	wipe(C.DeprecatedAuras)
 end
 
