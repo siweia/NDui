@@ -144,7 +144,7 @@ local function CreateRaidStyle(self)
 	self.Range = UFRangeAlpha
 	self.disableTooltip = C.db["UFs"]["HideTip"]
 
-	UF:CreateHeader(self)
+	UF:CreateHeader(self, true)
 	UF:CreateHealthBar(self)
 	UF:CreateHealthText(self)
 	UF:CreatePowerBar(self)
@@ -179,7 +179,7 @@ local function CreatePartyPetStyle(self)
 	self.Range = UFRangeAlpha
 	self.disableTooltip = C.db["UFs"]["HideTip"]
 
-	UF:CreateHeader(self)
+	UF:CreateHeader(self, true)
 	UF:CreateHealthBar(self)
 	UF:CreateHealthText(self)
 	UF:CreatePowerBar(self)
