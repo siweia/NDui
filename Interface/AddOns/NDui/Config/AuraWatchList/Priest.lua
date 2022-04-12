@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("AurasTable")
 
+if DB.MyClass ~= "PRIEST" then return end
+
 -- 牧师的法术监控
 local list = {
 	["Player Aura"] = {		-- 玩家光环组
