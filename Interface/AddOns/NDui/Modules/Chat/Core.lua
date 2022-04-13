@@ -14,7 +14,7 @@ local messageSoundID = SOUNDKIT.TELL_MESSAGE
 local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
 
 local maxLines = 1024
-local fontOutline
+local fontFile, fontOutline
 module.MuteCache = {}
 
 function module:TabSetAlpha(alpha)
@@ -92,10 +92,10 @@ function module:SkinChat()
 	if not self or self.styled then return end
 
 	local name = self:GetName()
-	local fontSize = select(2, self:GetFont())
+	local font, fontSize = self:GetFont()
 	self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
 	self:SetMinResize(100, 50)
-	self:SetFont(DB.Font[1], fontSize, fontOutline)
+	self:SetFont(fontFile or font, fontSize, fontOutline)
 	if fontOutline ~= "" then
 		self:SetShadowColor(0, 0, 0, 0)
 	end
@@ -125,7 +125,7 @@ function module:SkinChat()
 
 	local tab = _G[name.."Tab"]
 	tab:SetAlpha(1)
-	tab.Text:SetFont(DB.Font[1], DB.Font[2]+2, fontOutline)
+	tab.Text:SetFont(fontFile or font, DB.Font[2]+2, fontOutline)
 	tab.Text:SetShadowColor(0, 0, 0, 0)
 	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
@@ -369,6 +369,7 @@ function module:ToggleLanguageFilter()
 end
 
 function module:OnLogin()
+	fontFile = not C.db["Chat"]["SysFont"] and DB.Font[1]
 	fontOutline = C.db["Skins"]["FontOutline"] and "OUTLINE" or ""
 
 	for i = 1, NUM_CHAT_WINDOWS do

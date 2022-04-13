@@ -798,3 +798,5 @@ L["IgnoredButtonsTip"] = "|n输入你不想收纳进回收站的按钮名字。�
 L["MaxZoom"] = "最大视距等级"
 L["BuffClickThru"] = "禁用增益法术提示信息"
 L["DebuffClickThru"] = "禁用减益法术提示信息"
+L["SysFont"] = "使用系统字体路径"
+L["SysFontTip"] = "|n启用后，聊天窗口将使用系统的字体路径，不再与其他UI元素统一。"
