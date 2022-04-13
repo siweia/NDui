@@ -102,9 +102,13 @@ function A:UpdateTimer(elapsed)
 	if onTooltip then A:Button_SetTooltip(self) end
 end
 
+function A:GetSpellStat(arg16, arg17, arg18)
+	return (arg16 > 0 and L["Versa"]) or (arg17 > 0 and L["Mastery"]) or (arg18 > 0 and L["Haste"]) or L["Crit"]
+end
+
 function A:UpdateAuras(button, index)
 	local unit, filter = button.header:GetAttribute("unit"), button.filter
-	local name, texture, count, debuffType, duration, expirationTime, _, _, _, spellID = UnitAura(unit, index, filter)
+	local name, texture, count, debuffType, duration, expirationTime, _, _, _, spellID, _, _, _, _, _, arg16, arg17, arg18 = UnitAura(unit, index, filter)
 	if not name then return end
 
 	if duration > 0 and expirationTime then
@@ -134,6 +138,11 @@ function A:UpdateAuras(button, index)
 		button:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
 		button:SetBackdropBorderColor(0, 0, 0)
+	end
+
+	-- Show spell stat for 'Soleahs Secret Technique'
+	if spellID == 368512 then
+		button.count:SetText(A:GetSpellStat(arg16, arg17, arg18))
 	end
 
 	button.spellID = spellID
