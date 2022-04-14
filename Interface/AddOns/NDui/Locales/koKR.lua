@@ -798,3 +798,5 @@ L["IgnoredButtonsTip"] = "|nEnter the names of buttons that exclude from recycle
 L["MaxZoom"] = "Max Camera Zoom Level" -- need translation
 L["BuffClickThru"] = "Disable buff tooltip" -- need translation
 L["DebuffClickThru"] = "Disable debuff tooltip" -- need translation
+L["SysFont"] = "Use system font path" -- need translation
+L["SysFontTip"] = "|nIf enabled, chat frame font would follow system default font path, instead of the font used by other UI elements." -- need translation
