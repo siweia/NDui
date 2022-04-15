@@ -4,30 +4,29 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "HUNTER" then return end
 
-local pairs, GetSpellPowerCost, IsEquippedItem = pairs, GetSpellPowerCost, IsEquippedItem
-local POWER_TYPE_FOCUS = 2
+local pairs, IsEquippedItem = pairs, IsEquippedItem
 local playerGUID = UnitGUID("player")
 
-local function GetSpellCost(spellID)
-	if spellID == 19434 then -- aimed shot always 35
-		return 35
-	end
-
-	local costTable = GetSpellPowerCost(spellID)
-	if costTable then
-		for _, costInfo in pairs(costTable) do
-			if costInfo.type == POWER_TYPE_FOCUS then
-				return costInfo.cost
-			end
-		end
-	end
-end
+local GetSpellCost = {
+	[53351]  = 10, -- 杀戮射击
+	[19434]  = 35, -- 瞄准射击
+	[185358] = 20, -- 奥术射击
+	[257620] = 20, -- 多重射击
+	[271788] = 10, -- 毒蛇钉刺
+	[212431] = 20, -- 爆炸射击
+	[186387] = 10, -- 爆裂射击
+	[157863] = 35, -- 复活宠物
+	[131894] = 20, -- 夺命黑鸦
+	[120360] = 30, -- 弹幕射击
+	[342049] = 20, -- 奇美拉射击
+	[355589] = 15, -- 哀痛箭
+}
 
 function A:UpdateFocusCost(unit, _, spellID)
 	if unit ~= "player" then return end
 
 	local focusCal = A.MMFocus
-	local cost = GetSpellCost(spellID)
+	local cost = GetSpellCost[spellID]
 	if cost then
 		focusCal.cost = focusCal.cost + cost
 	end
