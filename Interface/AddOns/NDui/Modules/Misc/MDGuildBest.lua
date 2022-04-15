@@ -17,7 +17,7 @@ local WEEKLY_REWARDS_MYTHIC_TOP_RUNS = WEEKLY_REWARDS_MYTHIC_TOP_RUNS
 
 local hasAngryKeystones
 local frame
-local WeeklyRunsThreshold = 10
+local WeeklyRunsThreshold = 8
 
 function M:GuildBest_UpdateTooltip()
 	local leaderInfo = self.leaderInfo
