@@ -415,7 +415,7 @@ end
 
 -- UpdateAura
 local replacedTexture = {
-	[336892] = 135130,
+	[336892] = 135130, -- 无懈警戒换成瞄准射击图标
 }
 function A:AuraWatch_SetupAura(KEY, unit, index, filter, name, icon, count, duration, expires, spellID, flash)
 	if not KEY then return end
