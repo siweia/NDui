@@ -414,13 +414,18 @@ function A:AuraWatch_UpdateCD()
 end
 
 -- UpdateAura
+local replacedTexture = {
+	[336892] = 135130,
+}
 function A:AuraWatch_SetupAura(KEY, unit, index, filter, name, icon, count, duration, expires, spellID, flash)
 	if not KEY then return end
 
 	local frames = FrameList[KEY]
 	local frame = frames[frames.Index]
 	if frame then frame:Show() end
-	if frame.Icon then frame.Icon:SetTexture(icon) end
+	if frame.Icon then
+		frame.Icon:SetTexture(replacedTexture[spellID] or icon)
+	end
 	if frame.Count then frame.Count:SetText(count > 1 and count) end
 	if frame.Cooldown then
 		frame.Cooldown:SetReverse(true)
