@@ -249,6 +249,18 @@ function M:ItemLevel_UpdateMerchant(link)
 	end
 end
 
+function M.ItemLevel_UpdateTradePlayer(index)
+	local button = _G["TradePlayerItem"..index]
+	local link = GetTradePlayerItemLink(index)
+	M.ItemLevel_UpdateMerchant(button, link)
+end
+
+function M.ItemLevel_UpdateTradeTarget(index)
+	local button = _G["TradeRecipientItem"..index]
+	local link = GetTradeTargetItemLink(index)
+	M.ItemLevel_UpdateMerchant(button, link)
+end
+
 function M:ShowItemLevel()
 	if not C.db["Misc"]["ItemLevel"] then return end
 
@@ -268,5 +280,9 @@ function M:ShowItemLevel()
 
 	-- iLvl on MerchantFrame
 	hooksecurefunc("MerchantFrameItem_UpdateQuality", M.ItemLevel_UpdateMerchant)
+
+	-- iLvl on TradeFrame
+	hooksecurefunc("TradeFrame_UpdatePlayerItem", M.ItemLevel_UpdateTradePlayer)
+	hooksecurefunc("TradeFrame_UpdateTargetItem", M.ItemLevel_UpdateTradeTarget)
 end
 M:RegisterMisc("GearInfo", M.ShowItemLevel)
