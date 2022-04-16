@@ -48,12 +48,12 @@ local function isItemAmmo(item)
 	end
 end
 
-local iLvlClassIDs = {
+DB.iLvlClassIDs = {
 	[LE_ITEM_CLASS_ARMOR] = true,
 	[LE_ITEM_CLASS_WEAPON] = true,
 }
 function module:IsItemHasLevel(item)
-	return iLvlClassIDs[item.classID]
+	return DB.iLvlClassIDs[item.classID]
 end
 
 local function isItemEquipment(item)
