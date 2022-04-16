@@ -227,6 +227,28 @@ function M:ItemLevel_UpdateInspect(...)
 	end
 end
 
+local function GetItemQualityAndLevel(link)
+	local _, _, quality, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
+	if quality and quality > 1 and level > 1 and DB.iLvlClassIDs[classID] then
+		return quality, level
+	end
+end
+
+function M:ItemLevel_UpdateMerchant(link)
+	if not self.iLvl then
+		self.iLvl = B.CreateFS(_G[self:GetName().."ItemButton"], DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
+	end
+	self.iLvl:SetText("")
+	if link then
+		local quality, level = GetItemQualityAndLevel(link)
+		if quality and level then
+			local color = DB.QualityColors[quality]
+			self.iLvl:SetText(level)
+			self.iLvl:SetTextColor(color.r, color.g, color.b)
+		end
+	end
+end
+
 function M:ShowItemLevel()
 	if not C.db["Misc"]["ItemLevel"] then return end
 
@@ -243,5 +265,8 @@ function M:ShowItemLevel()
 	M.QualityUpdater = CreateFrame("Frame")
 	M.QualityUpdater:Hide()
 	M.QualityUpdater:SetScript("OnUpdate", M.RefreshButtonInfo)
+
+	-- iLvl on MerchantFrame
+	hooksecurefunc("MerchantFrameItem_UpdateQuality", M.ItemLevel_UpdateMerchant)
 end
 M:RegisterMisc("GearInfo", M.ShowItemLevel)

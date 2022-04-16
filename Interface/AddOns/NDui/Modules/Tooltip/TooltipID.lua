@@ -61,11 +61,6 @@ function TT:UpdateItemSellPrice()
 	end
 end
 
-local iLvlItemClassIDs = {
-	[LE_ITEM_CLASS_ARMOR] = true,
-	[LE_ITEM_CLASS_WEAPON] = true,
-}
-
 function TT:AddLineForID(id, linkType, noadd)
 	for i = 1, self:NumLines() do
 		local line = _G[self:GetName().."TextLeft"..i]
@@ -94,7 +89,7 @@ function TT:AddLineForID(id, linkType, noadd)
 		end
 
 		-- iLvl info like retail
-		if name and itemLevel and itemLevel > 1 and iLvlItemClassIDs[classID] then
+		if name and itemLevel and itemLevel > 1 and DB.iLvlClassIDs[classID] then
 			local tipName = self:GetName()
 			local index = strfind(tipName, "Shopping") and 3 or 2
 			local line = _G[tipName.."TextLeft"..index]
