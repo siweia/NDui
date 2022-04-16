@@ -804,3 +804,4 @@ L["BuffClickThru"] = "Disable buff tooltip" -- need translation
 L["DebuffClickThru"] = "Disable debuff tooltip" -- need translation
 L["SysFont"] = "Use system font path" -- need translation
 L["SysFontTip"] = "|nIf enabled, chat frame font would follow system default font path, instead of the font used by other UI elements." -- need translation
+L["PlateClickThruTip"] = "|nIf enabled, nameplates cannot be selected or interacted by mouse." -- need translation
