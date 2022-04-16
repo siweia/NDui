@@ -5,6 +5,7 @@ local M = B:GetModule("Misc")
 local pairs, select, next, wipe = pairs, select, next, wipe
 local UnitGUID, GetItemInfo = UnitGUID, GetItemInfo
 local GetInventoryItemLink = GetInventoryItemLink
+local GetTradePlayerItemLink, GetTradeTargetItemLink = GetTradePlayerItemLink, GetTradeTargetItemLink
 
 local inspectSlots = {
 	"Head",
