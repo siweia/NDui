@@ -419,12 +419,12 @@ end
 ]]
 local groupUnits = {["player"] = true, ["pet"] = true}
 for i = 1, 4 do
-	groupUnits["party1"] = true
-	groupUnits["partypet1"] = true
+	groupUnits["party"..i] = true
+	groupUnits["partypet"..i] = true
 end
 for i = 1, 40 do
-	groupUnits["raid1"] = true
-	groupUnits["raidpet1"] = true
+	groupUnits["raid"..i] = true
+	groupUnits["raidpet"..i] = true
 end
 
 local lastTime = 0
