@@ -1032,7 +1032,7 @@ G.TabList = {
 	NewTag..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
-	L["Raid Tools"],
+	NewTag..L["Raid Tools"],
 	NewTag..L["ChatFrame"],
 	NewTag..L["Maps"],
 	L["Skins"],
@@ -1262,7 +1262,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstAlertOnly", L["InstAlertOnly"].."*", true, nil, updateInterruptAlert, L["InstAlertOnlyTip"]},
 		{},--blank
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"].."*", nil, nil, updateExplosiveAlert, L["ExplosiveAlertTip"]},
-		{1, "Misc", "SpellItemAlert", L["SpellItemAlert"].."*", true, nil, updateSpellItemAlert, L["SpellItemAlertTip"]},
+		{1, "Misc", "SpellItemAlert", NewTag..L["SpellItemAlert"].."*", true, nil, updateSpellItemAlert, L["SpellItemAlertTip"]},
 		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
 		{1, "Misc", "NzothVision", L["NzothVision"], true},
 		{},--blank
