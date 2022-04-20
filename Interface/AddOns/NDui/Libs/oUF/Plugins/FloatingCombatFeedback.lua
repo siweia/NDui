@@ -322,31 +322,33 @@ local function onEvent(self, event, ...)
 
 	if text and (texture or name) then
 		local animation = element.defaultMode
-		local string = getAvailableString(element)
-
-		string:SetFont(element.font, C.db["UFs"]["FCTFontSize"] * multiplier, element.fontFlags)
-		if texture then
-			string:SetFormattedText(element.textureFormat, texture, (critMark and "*" or "")..text)
+		if C.db["UFs"]["ScrollingCT"] then
+			local formatStr = texture and element.textureFormat or element.nameFormat
+			element.Scrolling:AddMessage(format(formatStr, texture or name, B.HexRGB(color)..(critMark and "*" or "")..text))
 		else
-			string:SetFormattedText(element.nameFormat, name, (critMark and "*" or "")..text)
-		end
-		string:SetTextColor(color.r, color.g, color.b)
-		string.elapsed = 0
-		string.GetXY = animations[animation]
-		string.radius = element.radius
-		string.scrollTime = element.scrollTime
-		string.xDirection = element.xDirection
-		string.yDirection = element.yDirection
-		string.x = element.xDirection * xOffsetsByAnimation[animation] * (critMark and -1 or 1)
-		string.y = element.yDirection * yOffsetsByAnimation[animation]
-		string:SetPoint("CENTER", element, "CENTER", string.x, string.y)
-		string:SetAlpha(0)
-		string:Show()
+			local string = getAvailableString(element)
 
-		tinsert(element.FeedbackToAnimate, string)
+			string:SetFont(element.font, C.db["UFs"]["FCTFontSize"] * multiplier, element.fontFlags)
+			local formatStr = texture and element.textureFormat or element.nameFormat
+			string:SetFormattedText(formatStr, texture or name, (critMark and "*" or "")..text)
+			string:SetTextColor(color.r, color.g, color.b)
+			string.elapsed = 0
+			string.GetXY = animations[animation]
+			string.radius = element.radius
+			string.scrollTime = element.scrollTime
+			string.xDirection = element.xDirection
+			string.yDirection = element.yDirection
+			string.x = element.xDirection * xOffsetsByAnimation[animation] * (critMark and -1 or 1)
+			string.y = element.yDirection * yOffsetsByAnimation[animation]
+			string:SetPoint("CENTER", element, "CENTER", string.x, string.y)
+			string:SetAlpha(0)
+			string:Show()
 
-		if not element:GetScript("OnUpdate") then
-			element:SetScript("OnUpdate", onUpdate)
+			tinsert(element.FeedbackToAnimate, string)
+
+			if not element:GetScript("OnUpdate") then
+				element:SetScript("OnUpdate", onUpdate)
+			end
 		end
 	end
 end
