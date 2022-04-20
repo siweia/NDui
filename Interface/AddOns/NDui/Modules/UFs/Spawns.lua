@@ -410,6 +410,7 @@ function UF:OnLogin()
 		UF:ToggleUFClassPower()
 		UF:UpdateTextScale()
 		UF:ToggleAllAuras()
+		UF:UpdateScrollingFont()
 	end
 
 	if C.db["UFs"]["RaidFrame"] then

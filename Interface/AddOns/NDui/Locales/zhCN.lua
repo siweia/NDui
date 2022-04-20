@@ -903,3 +903,4 @@ L["PlateClickThruTip"] = "|n启用后，姓名板不再可供交互，鼠标无�
 L["SpellItemAlert"] = "队伍技能物品使用通报"
 L["SpellItemAlertTip"] = "|n启用后，在队伍中通报邮箱、大餐、战复道具、嗜血等使用情况。"
 L["SpellItemAlertStr"] = "%s 使用了 %s"
+L["ScrollingCT"] = "卷轴滚动模式"

@@ -903,3 +903,4 @@ L["PlateClickThruTip"] = "|n啟用後，名條不再可供交互，滑鼠無法�
 L["SpellItemAlert"] = "队伍技能物品使用通报"
 L["SpellItemAlertTip"] = "|n啟用後，在隊伍中通報郵箱、大餐、戰復道具、嗜血等使用情況。"
 L["SpellItemAlertStr"] = "%s 使用了 %s"
+L["ScrollingCT"] = "卷軸滾動模式"

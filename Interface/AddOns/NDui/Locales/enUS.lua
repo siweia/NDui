@@ -903,3 +903,4 @@ L["PlateClickThruTip"] = "|nIf enabled, nameplates cannot be selected or interac
 L["SpellItemAlert"] = "Spell&Item alert in group"
 L["SpellItemAlertTip"] = "|nIf enabled, notify mailbox, feast or bloodlust casting info in your group."
 L["SpellItemAlertStr"] = "%s uses %s"
+L["ScrollingCT"] = "Scrolling Text Mode"
