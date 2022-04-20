@@ -417,6 +417,16 @@ end
 --[[
 	放大餐时叫一叫
 ]]
+local groupUnits = {["player"] = true, ["pet"] = true}
+for i = 1, 4 do
+	groupUnits["party1"] = true
+	groupUnits["partypet1"] = true
+end
+for i = 1, 40 do
+	groupUnits["raid1"] = true
+	groupUnits["raidpet1"] = true
+end
+
 local lastTime = 0
 local itemList = {
 	[54710] = true,		-- 随身邮箱
@@ -429,22 +439,29 @@ local itemList = {
 	[276972] = true,	-- 秘法药锅
 	[286050] = true,	-- 鲜血大餐
 	[265116] = true,	-- 8.0工程战复
-
 	[308458] = true,	-- 惊异怡人大餐
 	[308462] = true,	-- 纵情饕餮盛宴
 	[345130] = true,	-- 9.0工程战复
 	[307157] = true,	-- 永恒药锅
 	[359336] = true,	-- 石头汤锅
 	[324029] = true,	-- 宁心圣典
+
+	[2825]   = true,	-- 嗜血
+	[32182]  = true,	-- 英勇
+	[80353]  = true,	-- 时间扭曲
+	[264667] = true,	-- 原始暴怒，宠物
+	[272678] = true,	-- 原始暴怒，宠物掌控
+	[178207] = true,	-- 狂怒战鼓
+	[230935] = true,	-- 高山战鼓
+	[256740] = true,	-- 漩涡战鼓
+	[292686] = true,	-- 雷皮之槌
+	[309658] = true,	-- 死亡凶蛮战鼓
 }
 
 function M:ItemAlert_Update(unit, _, spellID)
 	local now = GetTime()
-	if (UnitInRaid(unit) or UnitInParty(unit)) and spellID and itemList[spellID] and lastTime ~= now then
-		local who = UnitName(unit)
-		local link = GetSpellLink(spellID)
-		local name = GetSpellInfo(spellID)
-		SendChatMessage(format(L["Place item"], who, link or name), msgChannel())
+	if groupUnits[unit] and itemList[spellID] and lastTime ~= now then
+		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellInfo(spellID)), msgChannel())
 
 		lastTime = now
 	end
@@ -458,8 +475,8 @@ function M:ItemAlert_CheckGroup()
 	end
 end
 
-function M:PlacedItemAlert()
-	if C.db["Misc"]["PlacedItemAlert"] then
+function M:SpellItemAlert()
+	if C.db["Misc"]["SpellItemAlert"] then
 		M:ItemAlert_CheckGroup()
 		B:RegisterEvent("GROUP_LEFT", M.ItemAlert_CheckGroup)
 		B:RegisterEvent("GROUP_JOINED", M.ItemAlert_CheckGroup)
@@ -704,7 +721,7 @@ function M:AddAlerts()
 	M:InterruptAlert()
 	M:VersionCheck()
 	M:ExplosiveAlert()
-	M:PlacedItemAlert()
+	M:SpellItemAlert()
 	M:NVision_Init()
 	M:CheckIncompatible()
 	M:SendCDStatus()
