@@ -402,6 +402,7 @@ local list = {
 		{IntID = 240447, Duration = 20},	-- 大米，践踏
 		{IntID = 114018, Duration = 15, OnSuccess = true, UnitID = "all"},	-- 帷幕
 		{IntID = 316958, Duration = 30, OnSuccess = true, UnitID = "all"},	-- 红土
+		{IntID = 353635, Duration = 30, OnSuccess = true, UnitID = "all"},	-- 坍缩之星
 	},
 }
 
