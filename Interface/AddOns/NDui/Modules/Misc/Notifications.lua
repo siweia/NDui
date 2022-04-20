@@ -65,13 +65,13 @@ end
 
 function M:SoloInfo()
 	if C.db["Misc"]["SoloInfo"] then
-		self:SoloInfo_Update()
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", self.SoloInfo_DelayCheck)
-		B:RegisterEvent("PLAYER_DIFFICULTY_CHANGED", self.SoloInfo_DelayCheck)
+		M:SoloInfo_Update()
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", M.SoloInfo_DelayCheck)
+		B:RegisterEvent("PLAYER_DIFFICULTY_CHANGED", M.SoloInfo_DelayCheck)
 	else
 		if soloInfo then soloInfo:Hide() end
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", self.SoloInfo_DelayCheck)
-		B:UnregisterEvent("PLAYER_DIFFICULTY_CHANGED", self.SoloInfo_DelayCheck)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", M.SoloInfo_DelayCheck)
+		B:UnregisterEvent("PLAYER_DIFFICULTY_CHANGED", M.SoloInfo_DelayCheck)
 	end
 end
 
@@ -143,12 +143,12 @@ function M:RareAlert()
 	M.RareString = "|Hworldmap:%d+:%d+:%d+|h[%s (%.1f, %.1f)%s]|h|r"
 
 	if C.db["Misc"]["RareAlerter"] then
-		self:RareAlert_CheckInstance()
-		B:RegisterEvent("UPDATE_INSTANCE_INFO", self.RareAlert_CheckInstance)
+		M:RareAlert_CheckInstance()
+		B:RegisterEvent("UPDATE_INSTANCE_INFO", M.RareAlert_CheckInstance)
 	else
 		wipe(cache)
-		B:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", self.RareAlert_Update)
-		B:UnregisterEvent("UPDATE_INSTANCE_INFO", self.RareAlert_CheckInstance)
+		B:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", M.RareAlert_Update)
+		B:UnregisterEvent("UPDATE_INSTANCE_INFO", M.RareAlert_CheckInstance)
 	end
 end
 
@@ -247,14 +247,14 @@ function M:InterruptAlert()
 	M:InterruptAlert_Toggle()
 
 	if M:InterruptAlert_IsEnabled() then
-		self:InterruptAlert_CheckGroup()
-		B:RegisterEvent("GROUP_LEFT", self.InterruptAlert_CheckGroup)
-		B:RegisterEvent("GROUP_JOINED", self.InterruptAlert_CheckGroup)
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", self.InterruptAlert_CheckGroup)
+		M:InterruptAlert_CheckGroup()
+		B:RegisterEvent("GROUP_LEFT", M.InterruptAlert_CheckGroup)
+		B:RegisterEvent("GROUP_JOINED", M.InterruptAlert_CheckGroup)
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", M.InterruptAlert_CheckGroup)
 	else
-		B:UnregisterEvent("GROUP_LEFT", self.InterruptAlert_CheckGroup)
-		B:UnregisterEvent("GROUP_JOINED", self.InterruptAlert_CheckGroup)
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", self.InterruptAlert_CheckGroup)
+		B:UnregisterEvent("GROUP_LEFT", M.InterruptAlert_CheckGroup)
+		B:UnregisterEvent("GROUP_JOINED", M.InterruptAlert_CheckGroup)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", M.InterruptAlert_CheckGroup)
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.InterruptAlert_Update)
 	end
 end
@@ -460,12 +460,12 @@ end
 
 function M:PlacedItemAlert()
 	if C.db["Misc"]["PlacedItemAlert"] then
-		self:ItemAlert_CheckGroup()
-		B:RegisterEvent("GROUP_LEFT", self.ItemAlert_CheckGroup)
-		B:RegisterEvent("GROUP_JOINED", self.ItemAlert_CheckGroup)
+		M:ItemAlert_CheckGroup()
+		B:RegisterEvent("GROUP_LEFT", M.ItemAlert_CheckGroup)
+		B:RegisterEvent("GROUP_JOINED", M.ItemAlert_CheckGroup)
 	else
-		B:UnregisterEvent("GROUP_LEFT", self.ItemAlert_CheckGroup)
-		B:UnregisterEvent("GROUP_JOINED", self.ItemAlert_CheckGroup)
+		B:UnregisterEvent("GROUP_LEFT", M.ItemAlert_CheckGroup)
+		B:UnregisterEvent("GROUP_JOINED", M.ItemAlert_CheckGroup)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
 	end
 end
