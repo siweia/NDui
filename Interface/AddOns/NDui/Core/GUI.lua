@@ -946,6 +946,10 @@ local function updateSoloInfo()
 	B:GetModule("Misc"):SoloInfo()
 end
 
+local function updatePlacedItemAlert()
+	B:GetModule("Misc"):PlacedItemAlert()
+end
+
 local function updateQuestNotification()
 	B:GetModule("Misc"):QuestNotification()
 end
@@ -1258,7 +1262,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstAlertOnly", L["InstAlertOnly"].."*", true, nil, updateInterruptAlert, L["InstAlertOnlyTip"]},
 		{},--blank
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"].."*", nil, nil, updateExplosiveAlert, L["ExplosiveAlertTip"]},
-		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true},
+		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true, nil, updatePlacedItemAlert},
 		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
 		{1, "Misc", "NzothVision", L["NzothVision"], true},
 		{},--blank

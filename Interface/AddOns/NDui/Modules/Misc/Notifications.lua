@@ -439,15 +439,14 @@ local itemList = {
 }
 
 function M:ItemAlert_Update(unit, _, spellID)
-	if not C.db["Misc"]["PlacedItemAlert"] then return end
-
-	if (UnitInRaid(unit) or UnitInParty(unit)) and spellID and itemList[spellID] and lastTime ~= GetTime() then
+	local now = GetTime()
+	if (UnitInRaid(unit) or UnitInParty(unit)) and spellID and itemList[spellID] and lastTime ~= now then
 		local who = UnitName(unit)
 		local link = GetSpellLink(spellID)
 		local name = GetSpellInfo(spellID)
 		SendChatMessage(format(L["Place item"], who, link or name), msgChannel())
 
-		lastTime = GetTime()
+		lastTime = now
 	end
 end
 
@@ -460,9 +459,15 @@ function M:ItemAlert_CheckGroup()
 end
 
 function M:PlacedItemAlert()
-	self:ItemAlert_CheckGroup()
-	B:RegisterEvent("GROUP_LEFT", self.ItemAlert_CheckGroup)
-	B:RegisterEvent("GROUP_JOINED", self.ItemAlert_CheckGroup)
+	if C.db["Misc"]["PlacedItemAlert"] then
+		self:ItemAlert_CheckGroup()
+		B:RegisterEvent("GROUP_LEFT", self.ItemAlert_CheckGroup)
+		B:RegisterEvent("GROUP_JOINED", self.ItemAlert_CheckGroup)
+	else
+		B:UnregisterEvent("GROUP_LEFT", self.ItemAlert_CheckGroup)
+		B:UnregisterEvent("GROUP_JOINED", self.ItemAlert_CheckGroup)
+		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
+	end
 end
 
 -- 大幻象水晶及箱子计数
