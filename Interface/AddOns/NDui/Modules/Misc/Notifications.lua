@@ -470,69 +470,6 @@ function M:PlacedItemAlert()
 	end
 end
 
--- Faulty cast of bloodlust
-local groupUnits = {["player"] = true, ["pet"] = true}
-for i = 1, 4 do
-	groupUnits["party1"] = true
-	groupUnits["partypet1"] = true
-end
-for i = 1, 40 do
-	groupUnits["raid1"] = true
-	groupUnits["raidpet1"] = true
-end
-
-local bloodLustSpells = {
-	[2825]   = true, -- 嗜血
-	[32182]  = true, -- 英勇
-	[80353]  = true, -- 时间扭曲
-	[264667] = true, -- 原始暴怒，宠物
-	[272678] = true, -- 原始暴怒，宠物掌控
-	[178207] = true, -- 狂怒战鼓
-	[230935] = true, -- 高山战鼓
-	[256740] = true, -- 漩涡战鼓
-	[292686] = true, -- 雷皮之槌
-	[309658] = true, -- 死亡凶蛮战鼓
-}
-local bloodLustDebuffs = {
-	[57723]  = true,
-	[57724]  = true,
-	[80354]  = true,
-	[264689] = true
-}
-
-function M:FaultyCast_Update(unit, _, spellID)
-	if groupUnits[unit] and spellID and bloodLustSpells[spellID] then
-		for i = 1, 20 do
-			local name, _, _, _, _, _, _, _, _, debuffID = UnitDebuff("player", i)
-			if not name then break end
-			if bloodLustDebuffs[debuffID] then
-				SendChatMessage(format(L["FaultyBloodlustStr"], UnitName(unit), GetSpellLink(debuffID), GetSpellLink(spellID)), msgChannel())
-				return
-			end
-		end
-	end
-end
-
-function M:FaultyCast_CheckGroup()
-	if IsInGroup() then
-		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.FaultyCast_Update)
-	else
-		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.FaultyCast_Update)
-	end
-end
-
-function M:FaultyBloodlust()
-	if C.db["Misc"]["FaultyCast"] then
-		M:FaultyCast_CheckGroup()
-		B:RegisterEvent("GROUP_LEFT", M.FaultyCast_CheckGroup)
-		B:RegisterEvent("GROUP_JOINED", M.FaultyCast_CheckGroup)
-	else
-		B:UnregisterEvent("GROUP_LEFT", M.FaultyCast_CheckGroup)
-		B:UnregisterEvent("GROUP_JOINED", M.FaultyCast_CheckGroup)
-		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.FaultyCast_CheckGroup)
-	end
-end
-
 -- 大幻象水晶及箱子计数
 function M:NVision_Create()
 	if M.VisionFrame then M.VisionFrame:Show() return end
@@ -771,6 +708,5 @@ function M:AddAlerts()
 	M:NVision_Init()
 	M:CheckIncompatible()
 	M:SendCDStatus()
-	M:FaultyBloodlust()
 end
 M:RegisterMisc("Notifications", M.AddAlerts)

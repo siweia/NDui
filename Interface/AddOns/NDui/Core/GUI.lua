@@ -508,7 +508,6 @@ G.DefaultSettings = {
 		MenuButton = true,
 		QuickJoin = true,
 		MaxZoom = 2.6,
-		FaultyCast = false,
 	},
 	Tutorial = {
 		Complete = false,
@@ -951,10 +950,6 @@ local function updatePlacedItemAlert()
 	B:GetModule("Misc"):PlacedItemAlert()
 end
 
-local function updateFaultyBloodlust()
-	B:GetModule("Misc"):FaultyBloodlust()
-end
-
 local function updateQuestNotification()
 	B:GetModule("Misc"):QuestNotification()
 end
@@ -1269,8 +1264,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "ExplosiveCount", L["Explosive Alert"].."*", nil, nil, updateExplosiveAlert, L["ExplosiveAlertTip"]},
 		{1, "Misc", "PlacedItemAlert", L["Placed Item Alert"].."*", true, nil, updatePlacedItemAlert},
 		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
-		{1, "Misc", "FaultyCast", NewTag..L["FaultyCast"].."*", true, nil, updateFaultyBloodlust, L["FaultyCastTip"]},
-		{1, "Misc", "NzothVision", L["NzothVision"]},
+		{1, "Misc", "NzothVision", L["NzothVision"], true},
 		{},--blank
 		{1, "Misc", "RareAlerter", HeaderTag..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "RarePrint", L["Alert In Chat"].."*"},
