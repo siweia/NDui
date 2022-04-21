@@ -106,10 +106,10 @@ local function CastStart(self, event, unit)
 
 	local element = self.Castbar
 
-	local name, _, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit)
+	local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit)
 	event = 'UNIT_SPELLCAST_START'
 	if(not name) then
-		name, _, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit)
+		name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit)
 		event = 'UNIT_SPELLCAST_CHANNEL_START'
 	end
 
@@ -145,7 +145,7 @@ local function CastStart(self, event, unit)
 	if(element.Icon) then element.Icon:SetTexture(texture or FALLBACK_ICON) end
 	if(element.Shield) then element.Shield:SetShown(notInterruptible) end
 	if(element.Spark) then element.Spark:Show() end
-	if(element.Text) then element.Text:SetText(name) end
+	if(element.Text) then element.Text:SetText(text or name) end
 	if(element.Time) then element.Time:SetText() end
 
 	local safeZone = element.SafeZone
