@@ -403,7 +403,7 @@ local list = {
 		{IntID = 352875, Duration = 30},	-- 格里恩，虔敬者之路
 		{IntID = 114018, Duration = 15, OnSuccess = true, UnitID = "all"},	-- 帷幕
 		{IntID = 316958, Duration = 30, OnSuccess = true, UnitID = "all"},	-- 红土
-		{IntID = 353635, Duration = 30, OnSuccess = true, UnitID = "all"},	-- 坍缩之星自爆时间
+		{IntID = 353635, Duration = 27.5, OnSuccess = true, UnitID = "all"},	-- 坍缩之星自爆时间
 	},
 }
 
