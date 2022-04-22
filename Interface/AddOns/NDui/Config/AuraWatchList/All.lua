@@ -139,6 +139,7 @@ local list = {
 		{AuraID = 339928, UnitID = "player", Flash = true},	-- 残酷投射
 		{AuraID = 358404, UnitID = "player", Flash = true},	-- 疑虑试炼
 		{AuraID = 352917, UnitID = "player"},	-- 崭新决心
+		{AuraID = 356263, UnitID = "player"},	-- 灵魂追踪者之契
 		{AuraID = 352875, UnitID = "player", Flash = true},	-- 虔敬者之路
 		-- S2，心能/统御碎片
 		{AuraID = 357852, UnitID = "player"},	-- 激励
