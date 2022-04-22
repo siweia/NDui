@@ -47,15 +47,8 @@ tinsert(C.defaultThemes, function()
 	B.ReskinRadio(SendMailCODButton)
 	B.ReskinArrow(InboxPrevPageButton, "left")
 	B.ReskinArrow(InboxNextPageButton, "right")
-
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(MailEditBoxScrollBar)
-		B.CreateBDFrame(MailEditBox, .25)
-	else
-		B.ReskinScroll(SendMailScrollFrameScrollBar)
-		local bg = B.CreateBDFrame(SendMailScrollFrame, .25)
-		bg:SetPoint("TOPLEFT", 6, 0)
-	end
+	B.ReskinTrimScroll(MailEditBoxScrollBar)
+	B.CreateBDFrame(MailEditBox, .25)
 
 	SendMailMailButton:SetPoint("RIGHT", SendMailCancelButton, "LEFT", -1, 0)
 	OpenMailDeleteButton:SetPoint("RIGHT", OpenMailCancelButton, "LEFT", -1, 0)
