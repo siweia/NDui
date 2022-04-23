@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
-local pairs, wipe, select = pairs, wipe, select
+local pairs, wipe, select, sort = pairs, wipe, select, sort
 local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
@@ -377,7 +377,15 @@ function M:Explosive_Update(...)
 	end
 end
 
+local function sortResult(a, b)
+	if a and b then
+		return a > b
+	end
+end
+
 function M:Explosive_SendResult()
+	sort(C.db["Misc"]["ExplosiveCache"], sortResult)
+
 	local text
 	for name, count in pairs(C.db["Misc"]["ExplosiveCache"]) do
 		text = (text or L["ExplosiveCount"])..name.."("..count..") "
