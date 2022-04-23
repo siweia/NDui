@@ -504,6 +504,12 @@ do
 	local done
 	local function setupMisc(event, addon)
 		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
+			-- Fix undragable issue
+			local checkBox = WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox
+			checkBox.Label:ClearAllPoints()
+			checkBox.Label:SetPoint("LEFT", checkBox, "RIGHT", 2, 1)
+			checkBox.Label:SetWidth(152)
+
 			CollectionsJournal:HookScript("OnShow", function()
 				if not done then
 					if InCombatLockdown() then
@@ -521,7 +527,7 @@ do
 		end
 	end
 
-	--B:RegisterEvent("ADDON_LOADED", setupMisc) -- FIXME: collections is not dragable atm
+	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
 -- Select target when click on raid units
