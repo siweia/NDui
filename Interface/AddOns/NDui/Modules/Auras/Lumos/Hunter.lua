@@ -114,6 +114,14 @@ function A:ToggleFocusCalculation()
 		B:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", A.CheckSetsCount)
 	else
 		B:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED", A.CheckSetsCount)
+		-- if enabled already
+		A.MMFocus:Hide()
+		B:UnregisterEvent("UNIT_SPELLCAST_START", A.StartAimedShot)
+		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.UpdateFocusCost)
+		B:UnregisterEvent("PLAYER_DEAD", A.ResetFocusCost)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.ResetFocusCost)
+		B:UnregisterEvent("ENCOUNTER_START", A.ResetOnRaidEncounter)
+		B:UnregisterEvent("CLEU", A.CheckTrickState)
 	end
 	oldSpec = spec
 end
