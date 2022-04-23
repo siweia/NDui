@@ -26,9 +26,9 @@ function A:UpdateFocusColor(focusCal)
 	if A.MMFocus.trickActive > 0 then
 		A.MMFocus:SetTextColor(0, 1, 0) -- 有技巧绿色
 	elseif A.MMFocus.cost > 0 then
-		A.MMFocus:SetTextColor(1, .8, 0) -- 无技巧，但集中值不为0，则黄色
+		A.MMFocus:SetTextColor(1, 1, 0) -- 无技巧，但集中值不为0，则黄色
 	else
-		A.MMFocus:SetTextColor(1, .8, 0) -- 无技巧，且集中值为0，红色
+		A.MMFocus:SetTextColor(1, 0, 0) -- 无技巧，且集中值为0，红色
 	end
 end
 
@@ -58,6 +58,7 @@ end
 
 function A:ResetFocusCost()
 	A:UpdateFocusText(0)
+	A:UpdateFocusColor()
 end
 
 function A:ResetOnRaidEncounter(_, _, _, groupSize)
