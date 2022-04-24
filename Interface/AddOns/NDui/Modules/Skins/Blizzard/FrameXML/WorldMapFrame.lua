@@ -15,8 +15,13 @@ tinsert(C.defaultThemes, function()
 			B.ReskinDropDown(CodexQuestMapDropdown)
 			CodexQuestMapDropdownButton.SetWidth = B.Dummy
 		end
-		if Questie_Toggle then
-			B.Reskin(Questie_Toggle)
+
+		-- Check all buttons
+		for i = 1, WorldMapFrame:GetNumChildren() do
+			local child = select(i, WorldMapFrame:GetChildren())
+			if child:IsObjectType("Button") and child.Text and not child.__bg then
+				B.Reskin(child)
+			end
 		end
 	end)
 end)
