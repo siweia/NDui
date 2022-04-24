@@ -273,10 +273,45 @@ function S:MRT_Skin()
 	end
 end
 
+function S:CodexLite()
+	if not IsAddOnLoaded("CodexLite") then return end
+
+	local frame = _G.CODEX_LITE_SETTING_UI
+	if frame then
+		local styled
+		hooksecurefunc(frame, "Show", function()
+			if styled then return end
+			frame.BG:Hide()
+			B.SetBD(frame)
+
+			for i = 1, frame:GetNumChildren() do
+				local tab = select(i, frame:GetChildren())
+				local panel = tab and tab.Panel
+				if panel then
+					for j = 1, panel:GetNumChildren() do
+						local child = select(j, panel:GetChildren())
+						if not child.styled then
+							if child:IsObjectType("CheckButton") then
+								B.ReskinCheck(child)
+							elseif child:IsObjectType("Slider") then
+								B.ReskinSlider(child)
+							end
+							child.styled = true
+						end
+					end
+				end
+			end
+
+			styled = true
+		end)
+	end
+end
+
 function S:LoadOtherSkins()
 	S:WhatsTraining()
 	S:RecountSkin()
 	S:BindPad()
 	S:PostalSkin()
 	S:MRT_Skin()
+	S:CodexLite()
 end
