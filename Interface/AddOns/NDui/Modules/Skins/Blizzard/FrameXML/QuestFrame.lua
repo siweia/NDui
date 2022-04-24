@@ -189,12 +189,11 @@ tinsert(C.defaultThemes, function()
 			B.Reskin(CodexQuestReset)
 		end
 
-		if IsAddOnLoaded("CodexLite") then
-			for i = 1, QuestLogDetailScrollChildFrame:GetNumChildren() do
-				local child = select(i, QuestLogDetailScrollChildFrame:GetChildren())
-				if child:IsObjectType("Button") and not child.__bg then
-					B.Reskin(child)
-				end
+		-- Check all buttons on QuestLogDetailScrollChildFrame
+		for i = 1, QuestLogDetailScrollChildFrame:GetNumChildren() do
+			local child = select(i, QuestLogDetailScrollChildFrame:GetChildren())
+			if child:IsObjectType("Button") and not child.__bg then
+				B.Reskin(child)
 			end
 		end
 	end)
