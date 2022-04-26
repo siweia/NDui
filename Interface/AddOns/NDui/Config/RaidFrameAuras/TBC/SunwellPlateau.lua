@@ -30,3 +30,16 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 45342) -- 燃烧
 module:RegisterDebuff(TIER, INSTANCE, 0, 45271) -- 黑暗打击
 module:RegisterDebuff(TIER, INSTANCE, 0, 45345) -- 黑暗烈焰
 module:RegisterDebuff(TIER, INSTANCE, 0, 45347) -- 黑暗触摸
+
+-- 穆鲁
+module:RegisterDebuff(TIER, INSTANCE, 0, 46161) -- 虚空冲击
+module:RegisterDebuff(TIER, INSTANCE, 0, 45996) -- 黑暗
+
+-- 基尔加丹
+module:RegisterDebuff(TIER, INSTANCE, 0, 45641) -- 火焰之花
+module:RegisterDebuff(TIER, INSTANCE, 0, 45740) -- 烈焰之刺
+module:RegisterDebuff(TIER, INSTANCE, 0, 45741) -- 烈焰之刺
+module:RegisterDebuff(TIER, INSTANCE, 0, 45737) -- 烈焰之刺
+module:RegisterDebuff(TIER, INSTANCE, 0, 45885) -- 暗影之刺
+module:RegisterDebuff(TIER, INSTANCE, 0, 45770) -- 暗影箭雨
+module:RegisterDebuff(TIER, INSTANCE, 0, 45442) -- 灵魂鞭笞
