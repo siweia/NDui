@@ -89,10 +89,6 @@ function M:OnLogin()
 		InspectTalentFrameSpentPoints = CreateFrame("Frame")
 	end
 
-	if not TicketStatusFrame.TitleText then
-		TicketStatusFrame.TitleText = TicketStatusTitleText
-	end
-
 	-- Fix blizz bug in addon list
 	local _AddonTooltip_Update = AddonTooltip_Update
 	function AddonTooltip_Update(owner)
