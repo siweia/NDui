@@ -1028,6 +1028,8 @@ function UF:PostUpdatePlates(event, unit)
 		UF.RefreshPlateType(self, unit)
 	elseif event == "NAME_PLATE_UNIT_REMOVED" then
 		self.npcID = nil
+		self.tarBy:SetText("")
+		self.tarByTex:Hide()
 	end
 
 	if event ~= "NAME_PLATE_UNIT_REMOVED" then
