@@ -519,6 +519,29 @@ function module:MinimapDifficulty()
 	B:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED", UpdateDifficultyFlag)
 end
 
+local function GetCurrentVolume()
+	return B:Round(GetCVar("Sound_MasterVolume") * 100)
+end
+
+function module:SoundVolume()
+	local f = CreateFrame("Frame", nil, Minimap)
+	f:SetAllPoints()
+	local text = B.CreateFS(f, 30)
+
+	local anim = f:CreateAnimationGroup()
+	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)
+	anim:SetScript("OnFinished", function() f:SetAlpha(0) end)
+	anim.fader = anim:CreateAnimation("Alpha")
+	anim.fader:SetFromAlpha(1)
+	anim.fader:SetToAlpha(0)
+	anim.fader:SetDuration(3)
+	anim.fader:SetSmoothing("OUT")
+	anim.fader:SetStartDelay(1)
+
+	module.VolumeText = text
+	module.VolumeAnim = anim
+end
+
 function module:SetupMinimap()
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
@@ -536,10 +559,22 @@ function module:SetupMinimap()
 	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
 	Minimap:SetScript("OnMouseWheel", function(_, zoom)
-		if zoom > 0 then
-			Minimap_ZoomIn()
+		if IsControlKeyDown() then
+			local value = GetCurrentVolume()
+			value = value + zoom*5
+			if value > 100 then value = 100 end
+			if value < 0 then value = 0 end
+	
+			SetCVar("Sound_MasterVolume", tostring(value/100))
+			module.VolumeText:SetText(value)
+			module.VolumeAnim:Stop()
+			module.VolumeAnim:Play()
 		else
-			Minimap_ZoomOut()
+			if zoom > 0 then
+				Minimap_ZoomIn()
+			else
+				Minimap_ZoomOut()
+			end
 		end
 	end)
 
@@ -570,6 +605,7 @@ function module:SetupMinimap()
 	self:EasyTrackMenu()
 	self:ShowMinimapHelpInfo()
 	self:MinimapDifficulty()
+	self:SoundVolume()
 
 	if LibDBIcon10_TownsfolkTracker then
 		LibDBIcon10_TownsfolkTracker:DisableDrawLayer("OVERLAY")
