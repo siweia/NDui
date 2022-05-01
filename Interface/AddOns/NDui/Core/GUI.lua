@@ -306,6 +306,7 @@ G.DefaultSettings = {
 		MapRevealGlow = true,
 		MapFader = true,
 		DiffFlag = true,
+		EasyVolume = true,
 	},
 	Nameplate = {
 		Enable = true,
@@ -1215,8 +1216,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "DiffFlag", L["Minimap DiffFlag"], true, nil, nil, L["DiffFlagTip"]},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},
-		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
+		{1, "Map", "EasyVolume", NewTag..L["EasyVolume"], nil, nil, nil, L["EasyVolumeTip"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
+		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
 		{2, "ACCOUNT", "IgnoredButtons", NewTag..L["IgnoredButtons"], nil, nil, nil, L["IgnoredButtonsTip"]},
 	},
 	[11] = {

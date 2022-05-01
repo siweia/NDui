@@ -450,6 +450,8 @@ local function GetCurrentVolume()
 end
 
 function module:SoundVolume()
+	if not C.db["Map"]["EasyVolume"] then return end
+
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
 	local text = B.CreateFS(f, 30)
@@ -485,9 +487,10 @@ function module:SetupMinimap()
 	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
 	Minimap:SetScript("OnMouseWheel", function(_, zoom)
-		if IsControlKeyDown() then
+		if IsControlKeyDown() and module.VolumeText then
 			local value = GetCurrentVolume()
-			value = value + zoom*5
+			local mult = IsAltKeyDown() and 100 or 5
+			value = value + zoom*mult
 			if value > 100 then value = 100 end
 			if value < 0 then value = 0 end
 	
