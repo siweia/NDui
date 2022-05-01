@@ -319,6 +319,7 @@ G.DefaultSettings = {
 		MapReveal = true,
 		MapRevealGlow = true,
 		Calendar = false,
+		EasyVolume = true,
 	},
 	Nameplate = {
 		Enable = true,
@@ -1317,8 +1318,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "Clock", L["Minimap Clock"].."*", true, nil, showMinimapClock},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},
-		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
+		{1, "Map", "EasyVolume", NewTag..L["EasyVolume"], nil, nil, nil, L["EasyVolumeTip"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
+		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
 		{2, "ACCOUNT", "IgnoredButtons", NewTag..L["IgnoredButtons"], nil, nil, nil, L["IgnoredButtonsTip"]},
 	},
 	[11] = {

@@ -904,3 +904,5 @@ L["SpellItemAlert"] = "Spell&Item alert in group" -- need translation
 L["SpellItemAlertTip"] = "|nIf enabled, notify mailbox, feast or bloodlust casting info in your group." -- need translation
 L["SpellItemAlertStr"] = "%s uses %s" -- need translation
 L["ScrollingCT"] = "Scrolling Text Mode" -- need translation
+L["EasyVolume"] = "Easy volume setup" -- need translation
+L["EasyVolumeTip"] = "|nIf enabled, you can change game sound volume by holding key CTRL and mousewheel on minimap.|nHold key CTRL+ALT, the volume will switch from 0 to 100 directly." -- need translation
