@@ -1,5 +1,6 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF
 local module = B:GetModule("Maps")
 
 local select, pairs, unpack, next, tinsert = select, pairs, unpack, next, tinsert
@@ -519,6 +520,11 @@ function module:MinimapDifficulty()
 	B:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED", UpdateDifficultyFlag)
 end
 
+local function GetVolumeColor(cur)
+	local r, g, b = oUF:RGBColorGradient(cur, 100, 1, 1, 1, 1, .8, 0, 1, 0, 0)
+	return r, g, b
+end
+
 local function GetCurrentVolume()
 	return B:Round(GetCVar("Sound_MasterVolume") * 100)
 end
@@ -570,6 +576,7 @@ function module:SetupMinimap()
 	
 			SetCVar("Sound_MasterVolume", tostring(value/100))
 			module.VolumeText:SetText(value)
+			module.VolumeText:SetTextColor(GetVolumeColor(value))
 			module.VolumeAnim:Stop()
 			module.VolumeAnim:Play()
 		else
