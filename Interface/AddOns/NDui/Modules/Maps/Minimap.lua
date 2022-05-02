@@ -1,5 +1,6 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local oUF = ns.oUF
 local module = B:GetModule("Maps")
 
 local _G = _G
@@ -469,6 +470,11 @@ function module:ShowCalendar()
 	end
 end
 
+local function GetVolumeColor(cur)
+	local r, g, b = oUF:RGBColorGradient(cur, 100, 1, 1, 1, 1, .8, 0, 1, 0, 0)
+	return r, g, b
+end
+
 local function GetCurrentVolume()
 	return B:Round(GetCVar("Sound_MasterVolume") * 100)
 end
@@ -504,6 +510,7 @@ function module:Minimap_OnMouseWheel(zoom)
 
 		SetCVar("Sound_MasterVolume", tostring(value/100))
 		module.VolumeText:SetText(value)
+		module.VolumeText:SetTextColor(GetVolumeColor(value))
 		module.VolumeAnim:Stop()
 		module.VolumeAnim:Play()
 	else
