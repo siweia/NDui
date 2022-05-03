@@ -119,6 +119,7 @@ function UF:UpdateColor(_, unit)
 	local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
 	local targetColor = C.db["Nameplate"]["TargetColor"]
 	local focusColor = C.db["Nameplate"]["FocusColor"]
+	local dotColor = C.db["Nameplate"]["DotColor"]
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
@@ -130,6 +131,8 @@ function UF:UpdateColor(_, unit)
 			r, g, b = focusColor.r, focusColor.g, focusColor.b
 		elseif isCustomUnit then
 			r, g, b = customColor.r, customColor.g, customColor.b
+		elseif self.Auras.hasTheDot then
+			r, g, b = dotColor.r, dotColor.g, dotColor.b
 		elseif isPlayer and isFriendly then
 			if C.db["Nameplate"]["FriendlyCC"] then
 				r, g, b = B.UnitColor(unit)

@@ -359,6 +359,9 @@ G.DefaultSettings = {
 		BlockDBM = true,
 		Dispellable = true,
 		UnitTargeted = false,
+		ColorByDot = false,
+		ColorDots = "",
+		DotColor = {r=1, g=.5, b=.2},
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -772,6 +775,10 @@ local function updatePowerUnitList()
 	B:GetModule("UnitFrames"):CreatePowerUnitTable()
 end
 
+local function refreshColorDots()
+	B:GetModule("UnitFrames"):RefreshColorDots()
+end
+
 local function refreshNameplates()
 	B:GetModule("UnitFrames"):RefreshAllPlates()
 end
@@ -1097,6 +1104,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "Nameplate", "ColoredFocus", HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
 		{5, "Nameplate", "TargetColor", L["TargetNP Color"].."*", 2},
 		--{5, "Nameplate", "FocusColor", L["FocusNP Color"].."*", 2},
+		{1, "Nameplate", "ColorByDot", NewTag..HeaderTag..L["ColorByDot"].."*", nil, nil, nil, L["ColorByDotTip"]},
+		{5, "Nameplate", "DotColor", NewTag..L["DotColor"].."*"},
+		{2, "Nameplate", "ColorDots", NewTag..L["ColorDots"].."*", true, nil, refreshColorDots, L["ColorDotsTip"]},
 		{},--blank
 		{1, "Nameplate", "CustomUnitColor", HeaderTag..L["CustomUnitColor"].."*", nil, nil, updateCustomUnitList, L["CustomUnitColorTip"]},
 		{5, "Nameplate", "CustomColor", L["Custom Color"].."*", 2},
