@@ -773,6 +773,7 @@ end
 local function bolsterPreUpdate(element)
 	element.bolster = 0
 	element.bolsterIndex = nil
+	element.hasTheDot = nil
 end
 
 local function bolsterPostUpdate(element)
@@ -788,6 +789,12 @@ function UF.PostUpdateGapIcon(_, _, icon)
 	end
 end
 
+local colorDots = {}
+function UF:RefreshColorDots()
+	wipe(colorDots)
+	B.SplitList(colorDots, C.db["Nameplate"]["ColorDots"])
+end
+
 local isCasterPlayer = {
 	["player"] = true,
 	["pet"] = true,
@@ -795,6 +802,11 @@ local isCasterPlayer = {
 }
 function UF.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
+
+	if C.db["Nameplate"]["ColorByDot"] and style == "nameplate" and caster == "player" and colorDots[spellID] then
+		element.hasTheDot = true
+	end
+
 	if name and spellID == 209859 then
 		element.bolster = element.bolster + 1
 		if not element.bolsterIndex then
