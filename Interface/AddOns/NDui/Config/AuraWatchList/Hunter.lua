@@ -25,6 +25,7 @@ local list = {
 		{AuraID = 203924, UnitID = "player"},	-- 守护屏障
 		{AuraID = 197161, UnitID = "player"},	-- 灵龟守护回血
 		{AuraID = 160007, UnitID = "player"},	-- 上升气流（双头龙）
+		{AuraID = 260249, UnitID = "player"},	-- 掠食者
 		{AuraID = 231390, UnitID = "player", Combat = true},	-- 开拓者
 		{AuraID = 164273, UnitID = "player", Combat = true},	-- 独来独往
 		{AuraID = 209997, UnitID = "pet", Flash = true},		-- 装死
@@ -52,8 +53,8 @@ local list = {
 		{AuraID = 270339, UnitID = "target", Caster = "player"},	-- 散射炸弹
 		{AuraID = 270343, UnitID = "target", Caster = "player"},	-- 内出血
 		{AuraID = 271049, UnitID = "target", Caster = "player"},	-- 动荡炸弹
-		{AuraID = 270332, UnitID = "target", Caster = "player"},	-- 信息素炸弹
-		{AuraID = 259277, UnitID = "target", Caster = "pet"},		-- 杀戮命令
+		{AuraID = 270332, UnitID = "target", Caster = "player", Flash = true},	-- 信息素炸弹
+		--{AuraID = 259277, UnitID = "target", Caster = "pet"},		-- 杀戮命令
 		{AuraID = 277959, UnitID = "target", Caster = "player"},	-- 稳固瞄准
 		{AuraID = 217200, UnitID = "target", Caster = "player"},	-- 倒刺射击
 		{AuraID = 336746, UnitID = "target", Caster = "player"},	-- 魂铸余烬，橙装
@@ -99,7 +100,6 @@ local list = {
 		{AuraID = 260286, UnitID = "player"},	-- 利刃之矛
 		{AuraID = 265898, UnitID = "player"},	-- 接战协定
 		{AuraID = 268552, UnitID = "player"},	-- 蝰蛇毒液
-		{AuraID = 260249, UnitID = "player"},	-- 掠食者
 		{AuraID = 257622, UnitID = "player", Text = "AoE"},	-- 技巧射击
 		{AuraID = 288613, UnitID = "player"},	-- 百发百中
 		{AuraID = 274447, UnitID = "player"},	-- 千里之目
