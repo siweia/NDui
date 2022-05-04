@@ -147,7 +147,7 @@ function A:PostCreateLumos(self)
 	local iconSize = self.lumos[1]:GetWidth()
 	local boom = CreateFrame("Frame", nil, self.Health)
 	boom:SetSize(iconSize, iconSize)
-	boom:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
+	boom:SetPoint("BOTTOM", self.Health, "TOP", 0, C.margin)
 	B.AuraIcon(boom)
 	boom:Hide()
 
@@ -191,10 +191,15 @@ local function UpdateSpellStatus(button, spellID)
 	end
 end
 
-local boomGroups = {
-	[270339] = 186270,
-	[270332] = 259489,
-	[271049] = 259491,
+local boomToAbility = {
+	[270339] = GetSpellTexture(186270),
+	[270332] = GetSpellTexture(259489),
+	[271049] = GetSpellTexture(259491),
+}
+local texToAbility = {
+	[2065635] = GetSpellTexture(259489), -- 红炸弹转杀戮
+	[2065636] = GetSpellTexture(259491), -- 绿炸弹转毒蛇
+	[2065637] = GetSpellTexture(186270), -- 蓝炸弹转猛禽
 }
 
 function A:ChantLumos(self)
@@ -244,25 +249,18 @@ function A:ChantLumos(self)
 			local boom = self.boom
 			if IsPlayerSpell(271014) then
 				boom:Show()
+				boom.Icon:SetTexture(texToAbility[GetSpellTexture(259495)])
+				boom.Icon:SetDesaturated(true)
 
-				local name, _, duration, expire, caster, spellID = GetUnitAura("target", 270339, "HARMFUL")
-				if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 270332, "HARMFUL") end
-				if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 271049, "HARMFUL") end
-				if name and caster == "player" then
-					boom.Icon:SetTexture(GetSpellTexture(boomGroups[spellID]))
-					boom.CD:SetCooldown(expire-duration, duration)
-					boom.CD:Show()
-					boom.Icon:SetDesaturated(false)
-				else
-					local texture = GetSpellTexture(259495)
-					if texture == GetSpellTexture(270323) then
-						boom.Icon:SetTexture(GetSpellTexture(259489))
-					elseif texture == GetSpellTexture(271045) then
-						boom.Icon:SetTexture(GetSpellTexture(259491))
-					else
-						boom.Icon:SetTexture(GetSpellTexture(186270))	-- 270335
+				for i = 1, 40 do
+					local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura("target", i, "HARMFUL")
+					if not name then break end
+					if caster == "player" and boomToAbility[spellID] then
+						boom.Icon:SetTexture(boomToAbility[spellID])
+						boom.CD:SetCooldown(expire-duration, duration)
+						boom.CD:Show()
+						boom.Icon:SetDesaturated(false)
 					end
-					boom.Icon:SetDesaturated(true)
 				end
 
 				UpdateCooldown(button, 259495, true)
