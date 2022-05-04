@@ -144,15 +144,6 @@ function A:ToggleFocusCalculation()
 end
 
 function A:PostCreateLumos(self)
-	local iconSize = self.lumos[1]:GetWidth()
-	local boom = CreateFrame("Frame", nil, self.Health)
-	boom:SetSize(iconSize, iconSize)
-	boom:SetPoint("BOTTOM", self.Health, "TOP", 0, C.margin)
-	B.AuraIcon(boom)
-	boom:Hide()
-
-	self.boom = boom
-
 	-- MM hunter T29 4sets
 	A.MMFocus = B.CreateFS(self.Health, 18)
 	A.MMFocus:ClearAllPoints()
@@ -160,10 +151,6 @@ function A:PostCreateLumos(self)
 	A.MMFocus.trickActive = 0
 	A:ToggleFocusCalculation()
 	B:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", A.ToggleFocusCalculation)
-end
-
-function A:PostUpdateVisibility(self)
-	if self.boom then self.boom:Hide() end
 end
 
 local function GetUnitAura(unit, spell, filter)
@@ -190,17 +177,6 @@ local function UpdateSpellStatus(button, spellID)
 		button.Icon:SetDesaturated(true)
 	end
 end
-
-local boomToAbility = {
-	[270339] = GetSpellTexture(186270),
-	[270332] = GetSpellTexture(259489),
-	[271049] = GetSpellTexture(259491),
-}
-local texToAbility = {
-	[2065635] = GetSpellTexture(259489), -- 红炸弹转杀戮
-	[2065636] = GetSpellTexture(259491), -- 绿炸弹转毒蛇
-	[2065637] = GetSpellTexture(186270), -- 蓝炸弹转猛禽
-}
 
 function A:ChantLumos(self)
 	local spec = GetSpecialization()
@@ -231,41 +207,30 @@ function A:ChantLumos(self)
 		UpdateBuff(self.lumos[5], 288613, 288613, true, false, true)
 
 	elseif spec == 3 then
-		UpdateDebuff(self.lumos[1], 259491, 259491, false, "END")
-
 		do
-			local button = self.lumos[2]
-			if IsPlayerSpell(260248) then
-				UpdateBuff(button, 260248, 260249)
-			elseif IsPlayerSpell(162488) then
-				UpdateDebuff(button, 162488, 162487, true)
+			local button = self.lumos[1]
+			UpdateCooldown(button, 259489, true)
+			local name = GetUnitAura("target", 270332, "HARMFUL") -- 目标红炸弹高亮
+			if name then
+				B.ShowOverlayGlow(button)
 			else
-				UpdateDebuff(button, 131894, 131894, true)
+				B.HideOverlayGlow(button)
 			end
 		end
 
+		UpdateDebuff(self.lumos[2], 259491, 259491, false, "END")
+
 		do
 			local button = self.lumos[3]
-			local boom = self.boom
 			if IsPlayerSpell(271014) then
-				boom:Show()
-				boom.Icon:SetTexture(texToAbility[GetSpellTexture(259495)])
-				boom.Icon:SetDesaturated(true)
-
-				for i = 1, 40 do
-					local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura("target", i, "HARMFUL")
-					if not name then break end
-					if caster == "player" and boomToAbility[spellID] then
-						boom.Icon:SetTexture(boomToAbility[spellID])
-						boom.CD:SetCooldown(expire-duration, duration)
-						boom.CD:Show()
-						boom.Icon:SetDesaturated(false)
-					end
-				end
-
 				UpdateCooldown(button, 259495, true)
+				local name = GetUnitAura("player", 363805, "HELPFUL") -- 有疯狂投弹兵时高亮
+				if name then
+					B.ShowOverlayGlow(button)
+				else
+					B.HideOverlayGlow(button)
+				end
 			else
-				boom:Hide()
 				UpdateDebuff(button, 259495, 269747, true)
 			end
 		end
