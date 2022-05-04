@@ -240,6 +240,39 @@ function S:ATT()
 	end
 end
 
+function S:TrinketMenu()
+	if not IsAddOnLoaded("TrinketMenu") then return end
+
+	local function reskinFrame(frame)
+		if not frame then return end
+		B.StripTextures(frame)
+		B.SetBD(frame):SetInside(nil, 3, 3)
+	end
+
+	local function reskinButton(name)
+		local button = _G[name]
+		if not button then return end
+
+		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		button:SetPushedTexture(DB.textures.pushed)
+		button:GetCheckedTexture():SetColorTexture(1, .8, 0, .5)
+		_G[name.."NormalTexture"]:SetAlpha(0)
+		B.ReskinIcon(_G[name.."Icon"])
+
+		local queue = _G[name.."Queue"]
+		if queue then queue:SetTexCoord(unpack(DB.TexCoord)) end
+	end
+
+	reskinFrame(TrinketMenu_MainFrame)
+	reskinButton("TrinketMenu_Trinket0")
+	reskinButton("TrinketMenu_Trinket1")
+
+	reskinFrame(TrinketMenu_MenuFrame)
+	for i = 1, 30 do
+		reskinButton("TrinketMenu_Menu"..i)
+	end
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -249,4 +282,5 @@ function S:OtherSkins()
 	S:MRT_Skin()
 	S:SoulshapeJournal()
 	S:ATT()
+	S:TrinketMenu()
 end
