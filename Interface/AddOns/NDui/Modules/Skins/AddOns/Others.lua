@@ -273,6 +273,72 @@ function S:TrinketMenu()
 	end
 end
 
+function S:ERT()
+	if not IsAddOnLoaded("EchoRaidTools") then return end
+
+	local function reskinTab(tab)
+		local bg = B.SetBD(tab)
+		bg:SetInside(tab, 2, 2)
+
+		tab:SetNormalTexture("")
+		tab:SetPushedTexture("")
+		tab:SetDisabledTexture("")
+		local hl = tab:GetHighlightTexture()
+		hl:SetColorTexture(cr, cg, cb, .2)
+		hl:SetInside(bg)
+	end
+
+	local function resetButtonBG(self)
+		self.__button:GetScript("OnLeave")(self.__button)
+	end
+
+	S:RegisterSkin("Blizzard_EncounterJournal", function()
+		local encounterInfo = EncounterJournal.encounter.info
+		local ERTTab, ERTFrame
+
+		for i = encounterInfo:GetNumChildren(), 1, -1 do
+			if ERTTab and ERTFrame then break end
+
+			local child = select(i, encounterInfo:GetChildren())
+			if child.unSelected then
+				ERTTab = child
+			elseif child.scrollframe then
+				ERTFrame = child
+			end
+		end
+
+		reskinTab(ERTTab)
+		B.ReskinScroll(ERTFrame.scrollframe.ScrollBar)
+
+		local scrollChild = ERTFrame.scrollframe:GetScrollChild()
+
+		hooksecurefunc(scrollChild, "SetHeight", function(self)
+			for i = self:GetNumChildren(), 1, -1 do
+				local header = select(i, self:GetChildren())
+				if not header.styled then
+					for i = 5, 19 do
+						select(i, header.button:GetRegions()):SetTexture("")
+					end
+					B.Reskin(header.button)
+					header.descriptionBG:SetAlpha(0)
+					header.descriptionBGBottom:SetAlpha(0)
+					header.description:SetTextColor(1, 1, 1)
+					header.button.label:SetTextColor(1, 1, 1)
+					header.button.label.SetTextColor = B.Dummy
+					header.button.expandIcon:SetWidth(20) -- don't wrap the text
+					header.button.waIconbg = B.ReskinIcon(header.button.waIcon)
+					header.glowAnimation.__button = header.button
+					header.glowAnimation:HookScript("OnPlay", resetButtonBG)
+
+					header.styled = true
+				end
+
+				header.button.waIconbg:SetShown(header.button.waIcon:IsShown())
+			end
+		end)
+	end)
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -283,4 +349,5 @@ function S:OtherSkins()
 	S:SoulshapeJournal()
 	S:ATT()
 	S:TrinketMenu()
+	S:ERT()
 end
