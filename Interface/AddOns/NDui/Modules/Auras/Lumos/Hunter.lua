@@ -207,8 +207,10 @@ function A:ChantLumos(self)
 		UpdateBuff(self.lumos[5], 288613, 288613, true, false, true)
 
 	elseif spec == 3 then
+		UpdateDebuff(self.lumos[1], 259491, 259491, false, "END")
+
 		do
-			local button = self.lumos[1]
+			local button = self.lumos[2]
 			UpdateCooldown(button, 259489, true)
 			local name = GetUnitAura("target", 270332, "HARMFUL") -- 目标红炸弹高亮
 			if name then
@@ -218,10 +220,19 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateDebuff(self.lumos[2], 259491, 259491, false, "END")
-
 		do
 			local button = self.lumos[3]
+			if IsPlayerSpell(260285) then
+				UpdateBuff(button, 260285, 260286)
+			elseif IsPlayerSpell(269751) then
+				UpdateCooldown(button, 269751, true)
+			else
+				UpdateBuff(button, 259387, 259388, false, false, "END")
+			end
+		end
+
+		do
+			local button = self.lumos[4]
 			if IsPlayerSpell(271014) then
 				UpdateCooldown(button, 259495, true)
 				local name = GetUnitAura("player", 363805, "HELPFUL") -- 有疯狂投弹兵时高亮
@@ -232,17 +243,6 @@ function A:ChantLumos(self)
 				end
 			else
 				UpdateDebuff(button, 259495, 269747, true)
-			end
-		end
-
-		do
-			local button = self.lumos[4]
-			if IsPlayerSpell(260285) then
-				UpdateBuff(button, 260285, 260286)
-			elseif IsPlayerSpell(269751) then
-				UpdateCooldown(button, 269751, true)
-			else
-				UpdateBuff(button, 259387, 259388, false, false, "END")
 			end
 		end
 
