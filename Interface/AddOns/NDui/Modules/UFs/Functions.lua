@@ -869,19 +869,9 @@ function UF.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, can
 	end
 end
 
-local debuffBlackList = {
-	[23445] = true, -- 邪恶双子
-	[36893] = true, -- 传送器故障
-	[36895] = true, -- 传送器故障
-	[36897] = true, -- 传送器故障
-	[36899] = true, -- 传送器故障
-	[36900] = true, -- 灵魂分裂：坏蛋
-	[36901] = true, -- 灵魂分裂：好人
-	[36940] = true, -- 传送器故障
-}
 function UF.RaidDebuffFilter(element, _, _, name, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
 	local parent = element.__owner
-	if debuffBlackList[spellID] then
+	if C.DebuffBlackList[spellID] then
 		return false
 	elseif (C.db["UFs"]["RaidBuffIndicator"] and UF.CornerSpellsByName[name]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
 		return false
