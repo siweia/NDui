@@ -1100,42 +1100,54 @@ function G:SetupCastbar(parent)
 	end
 
 	local function updatePlayerCastbar()
-		if _G.oUF_Player then
+		local castbar = _G.oUF_Player and _G.oUF_Player.Castbar
+		if castbar then
 			local width, height = C.db["UFs"]["PlayerCBWidth"], C.db["UFs"]["PlayerCBHeight"]
-			_G.oUF_Player.Castbar:SetSize(width, height)
-			_G.oUF_Player.Castbar.Icon:SetSize(height, height)
-			_G.oUF_Player.Castbar.mover:Show()
-			_G.oUF_Player.Castbar.mover:SetSize(width+height+5, height+5)
+			castbar:SetSize(width, height)
+			castbar.Icon:SetSize(height, height)
+			castbar.mover:Show()
+			castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
 	createOptionGroup(scroll.child, L["Player Castbar"], -140, "Player", updatePlayerCastbar)
 
 	local function updateTargetCastbar()
-		if _G.oUF_Target then
+		local castbar = _G.oUF_Target and _G.oUF_Target.Castbar
+		if castbar then
 			local width, height = C.db["UFs"]["TargetCBWidth"], C.db["UFs"]["TargetCBHeight"]
-			_G.oUF_Target.Castbar:SetSize(width, height)
-			_G.oUF_Target.Castbar.Icon:SetSize(height, height)
-			_G.oUF_Target.Castbar.mover:Show()
-			_G.oUF_Target.Castbar.mover:SetSize(width+height+5, height+5)
+			castbar:SetSize(width, height)
+			castbar.Icon:SetSize(height, height)
+			castbar.mover:Show()
+			castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
 	createOptionGroup(scroll.child, L["Target Castbar"], -360, "Target", updateTargetCastbar)
 
 	local function updateFocusCastbar()
-		if _G.oUF_Focus then
+		local castbar = _G.oUF_Focus and _G.oUF_Focus.Castbar
+		if castbar then
 			local width, height = C.db["UFs"]["FocusCBWidth"], C.db["UFs"]["FocusCBHeight"]
-			_G.oUF_Focus.Castbar:SetSize(width, height)
-			_G.oUF_Focus.Castbar.Icon:SetSize(height, height)
-			_G.oUF_Focus.Castbar.mover:Show()
-			_G.oUF_Focus.Castbar.mover:SetSize(width+height+5, height+5)
+			castbar:SetSize(width, height)
+			castbar.Icon:SetSize(height, height)
+			castbar.mover:Show()
+			castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
 	createOptionGroup(scroll.child, L["Focus Castbar"], -580, "Focus", updateFocusCastbar)
 
 	panel:HookScript("OnHide", function()
-		if _G.oUF_Player then _G.oUF_Player.Castbar.mover:Hide() end
-		if _G.oUF_Target then _G.oUF_Target.Castbar.mover:Hide() end
-		if _G.oUF_Focus then _G.oUF_Focus.Castbar.mover:Hide() end
+		local playerCB = _G.oUF_Player and _G.oUF_Player.Castbar
+		if playerCB then
+			playerCB.mover:Hide()
+		end
+		local targetCB = _G.oUF_Target and _G.oUF_Target.Castbar
+		if targetCB then
+			targetCB.mover:Hide()
+		end
+		local focusCB = _G.oUF_Focus and _G.oUF_Focus.Castbar
+		if focusCB then
+			focusCB.mover:Hide()
+		end
 	end)
 end
 
