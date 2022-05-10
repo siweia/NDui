@@ -457,11 +457,10 @@ local itemList = {
 	[309658] = true,	-- 死亡凶蛮战鼓
 }
 
-local lastCastID = 0
 function M:ItemAlert_Update(unit, castID, spellID)
-	if groupUnits[unit] and itemList[spellID] and lastCastID ~= castID then
+	if groupUnits[unit] and itemList[spellID] and (itemList[spellID] ~= castID) then
 		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellInfo(spellID)), msgChannel())
-		lastCastID = castID
+		itemList[spellID] = castID
 	end
 end
 
