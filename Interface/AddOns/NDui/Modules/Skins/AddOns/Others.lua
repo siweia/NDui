@@ -228,16 +228,23 @@ end
 function S:ATT()
 	if not IsAddOnLoaded("AllTheThings") then return end
 
-	local frame = _G["AllTheThings-Window-CurrentInstance"]
-	if frame then
-		B.SetBD(frame, nil, 2, -2, -2, 2)
-		B.ReskinClose(frame.CloseButton, nil, -4, -4)
-		B.ReskinScroll(frame.ScrollBar)
-		frame.Grip:SetTexture([[Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up]])
-		local up = frame.ScrollBar:GetChildren()
-		up:ClearAllPoints()
-		up:SetPoint("TOPRIGHT", 0, 10)
-	end
+	local ATT = _G.AllTheThings
+	if not ATT then return end
+
+	hooksecurefunc(ATT, "GetWindow", function(self, suffix)
+		local frame = self.Windows[suffix]
+		if frame and not frame.styled then
+			B.SetBD(frame, nil, 2, -2, -2, 2)
+			B.ReskinClose(frame.CloseButton, nil, -4, -4)
+			B.ReskinScroll(frame.ScrollBar)
+			frame.Grip:SetTexture([[Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up]])
+			local up = frame.ScrollBar:GetChildren()
+			up:ClearAllPoints()
+			up:SetPoint("TOPRIGHT", 0, 10)
+
+			frame.styled = true
+		end
+	end)
 end
 
 function S:TrinketMenu()
