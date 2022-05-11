@@ -334,6 +334,7 @@ function M:SendCurrentItem(thisTime, itemID, itemLink)
 end
 
 function M:AnalyzeButtonCooldown()
+	if not self.action then return end -- no action for pet actionbar
 	if not C.db["Misc"]["SendActionCD"] then return end
 	if not IsInGroup() then return end
 
