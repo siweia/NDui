@@ -346,6 +346,62 @@ function S:ERT()
 	end)
 end
 
+function S:PSFJ()
+	if not IsAddOnLoaded("ProtoformSynthesisFieldJournal") then return end
+
+	local frame = _G.ProtoformSynthesisFieldJournal
+	B.StripTextures(frame)
+	B.SetBD(frame)
+
+	B.ReskinClose(frame.CloseButton)
+	B.ReskinTab(frame.PanelTabs.PetTab)
+	B.ReskinTab(frame.PanelTabs.MountTab)
+	B.ReskinTab(frame.PanelTabs.SettingsTab)
+
+	frame.List.Background:Hide()
+	B.ReskinScroll(frame.List.ScrollFrame.ScrollBar)
+	frame.Settings.Background:Hide()
+	B.ReskinScroll(frame.Settings.ScrollFrame.ScrollBar)
+
+	local function onEnter(button)
+		button.bg:SetBackdropBorderColor(0, .6, 1)
+	end
+
+	local function onLeave(button)
+		button.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+
+	hooksecurefunc(frame.List, "Update", function(self)
+		local buttons = self.ScrollFrame.Buttons
+		for i = 1, #buttons do
+			local button = buttons[i]
+			if not button.styled then
+				button:HideBackdrop()
+				button.bg = B.CreateBDFrame(button, .25)
+				button.bg:SetInside(nil, 2, 2)
+				button:HookScript("OnEnter", onEnter)
+				button:HookScript("OnLeave", onLeave)
+
+				button.styled = true
+			end
+		end
+	end)
+
+	local done
+	hooksecurefunc(frame.Settings, "Update", function(self)
+		if done then return end
+		done = true
+
+		local buttons = self.ScrollFrame.Buttons
+		for i = 1, #buttons do
+			local button = buttons[i]
+			if button.CheckButton then
+				B.ReskinCheck(button.CheckButton)
+			end
+		end
+	end)
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -357,4 +413,5 @@ function S:OtherSkins()
 	S:ATT()
 	S:TrinketMenu()
 	S:ERT()
+	S:PSFJ()
 end
