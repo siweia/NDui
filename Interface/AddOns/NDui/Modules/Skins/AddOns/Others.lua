@@ -358,10 +358,16 @@ function S:PSFJ()
 	B.ReskinTab(frame.PanelTabs.MountTab)
 	B.ReskinTab(frame.PanelTabs.SettingsTab)
 
+	local function handlePSFJScroll(scrollBar)
+		B.ReskinScroll(scrollBar)
+		S.ReskinScrollEnd(scrollBar.TopButton, "up")
+		S.ReskinScrollEnd(scrollBar.BottomButton, "down")
+	end
+
 	frame.List.Background:Hide()
-	B.ReskinScroll(frame.List.ScrollFrame.ScrollBar)
+	handlePSFJScroll(frame.List.ScrollFrame.ScrollBar)
 	frame.Settings.Background:Hide()
-	B.ReskinScroll(frame.Settings.ScrollFrame.ScrollBar)
+	handlePSFJScroll(frame.Settings.ScrollFrame.ScrollBar)
 
 	local function onEnter(button)
 		button.bg:SetBackdropBorderColor(0, .6, 1)
