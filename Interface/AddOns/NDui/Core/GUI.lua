@@ -1114,7 +1114,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"].."*", nil, setupSwingBars, toggleSwingBars},
-		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true},
+		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true, nil, nil, L["QuakeTimerTip"]},
 		{},--blank
 		{1, "UFs", "CombatText", HeaderTag..L["UFs CombatText"]},
 		{1, "UFs", "ScrollingCT", NewTag..L["ScrollingCT"].."*", true},

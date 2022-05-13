@@ -911,3 +911,4 @@ L["ColorByDotTip"] = "|n啟用後，當目標身上含有來自你的特定法�
 L["DotColor"] = "法術染色顔色"
 L["ColorDots"] = "法術染色列表"
 L["ColorDotsTip"] = "|n輸入染色名條時的法術ID。存在多個法術時，以空格隔開。"
+L["QuakeTimerTip"] = "|n在玩家施法條上方顯示大秘境震蕩詞綴的計時條。"
