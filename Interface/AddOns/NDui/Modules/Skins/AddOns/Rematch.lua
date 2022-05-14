@@ -55,7 +55,7 @@ end
 
 function S:ReskinScrollEnd(direction)
 	B.ReskinArrow(self, direction)
-	self:SetSize(17, 12)
+	self:SetSize(16, 12)
 	self.__texture:SetVertexColor(1, .8, 0)
 	self:HookScript("OnLeave", scrollEndOnLeave)
 end
