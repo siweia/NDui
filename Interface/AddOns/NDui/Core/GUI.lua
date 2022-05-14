@@ -80,7 +80,6 @@ G.DefaultSettings = {
 		BagsiLvl = true,
 		BagSortMode = 1,
 		ItemFilter = true,
-		FavouriteItems = {},
 		CustomItems = {},
 		CustomNames = {},
 		GatherEmpty = false,
@@ -578,6 +577,17 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	else
 		C.db = NDuiPDB[NDuiADB["ProfileIndex"][DB.MyFullName] - 1]
 	end
+	-- Transfer favourite items START
+	if C.db["Bags"] and C.db["Bags"]["FavouriteItems"] and next(C.db["Bags"]["FavouriteItems"]) then
+		for itemID in pairs(C.db["Bags"]["FavouriteItems"]) do
+			if not C.db["Bags"]["CustomItems"] then
+				C.db["Bags"]["CustomItems"] = {}
+			end
+			C.db["Bags"]["CustomItems"][itemID] = 1
+		end
+		C.db["Bags"]["FavouriteItems"] = nil
+	end
+	-- Transfer favourite items END
 	InitialSettings(G.DefaultSettings, C.db, true)
 
 	B:SetupUIScale(true)
