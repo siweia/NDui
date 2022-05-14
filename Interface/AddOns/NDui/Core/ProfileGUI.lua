@@ -563,7 +563,7 @@ function G:ImportGUIData()
 				if not C.db[key][value] then C.db[key][value] = {} end
 				C.db[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
 			end
-		elseif key == "CustomItems" or key == "CustomNames" then
+		elseif value == "CustomItems" or value == "CustomNames" then
 			local results = {select(3, strsplit(":", option))}
 			for i = 1, #results, 2 do
 				C.db[key][value][tonumber(results[i])] = tonumber(results[i+1]) or results[i+1]
