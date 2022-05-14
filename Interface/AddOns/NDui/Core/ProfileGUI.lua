@@ -416,10 +416,10 @@ function G:ExportGUIData()
 						for _, v in ipairs(value) do
 							text = text..":"..tostring(v)
 						end
-					elseif key == "FavouriteItems" then
+					elseif key == "CustomItems" or key == "CustomNames" then
 						text = text..";"..KEY..":"..key
-						for itemID in pairs(value) do
-							text = text..":"..tostring(itemID)
+						for k, v in pairs(value) do
+							text = text..":"..k..":"..v
 						end
 					end
 				else
@@ -563,10 +563,10 @@ function G:ImportGUIData()
 				if not C.db[key][value] then C.db[key][value] = {} end
 				C.db[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
 			end
-		elseif value == "FavouriteItems" then
-			local items = {select(3, strsplit(":", option))}
-			for _, itemID in next, items do
-				C.db[key][value][tonumber(itemID)] = true
+		elseif key == "CustomItems" or key == "CustomNames" then
+			local results = {select(3, strsplit(":", option))}
+			for i = 1, #results, 2 do
+				C.db[key][value][tonumber(results[i])] = tonumber(results[i+1]) or results[i+1]
 			end
 		elseif key == "Mover" or key == "AuraWatchMover" then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
