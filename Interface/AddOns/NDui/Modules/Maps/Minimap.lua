@@ -56,6 +56,7 @@ end
 function module:ReskinRegions()
 	-- Tracking icon
 	MiniMapTrackingFrame:SetScale(.7)
+	MiniMapTrackingFrame:SetFrameLevel(999)
 	MiniMapTrackingBorder:Hide()
 	local bg = B.ReskinIcon(MiniMapTrackingIcon)
 	bg:SetBackdropBorderColor(cr, cg, cb)
@@ -72,6 +73,7 @@ function module:ReskinRegions()
 	-- Battlefield
 	MiniMapBattlefieldFrame:ClearAllPoints()
 	MiniMapBattlefieldFrame:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
+	MiniMapBattlefieldFrame:SetFrameLevel(999)
 	MiniMapBattlefieldBorder:Hide()
 	MiniMapBattlefieldIcon:SetAlpha(0)
 	BattlegroundShine:SetTexture(nil)
@@ -140,6 +142,7 @@ function module:RecycleBin()
 	bu.Icon:SetTexture(DB.binTex)
 	bu:SetHighlightTexture(DB.binTex)
 	bu.title = DB.InfoColor..L["Minimap RecycleBin"]
+	bu:SetFrameLevel(999)
 	B.AddTooltip(bu, "ANCHOR_LEFT")
 	updateRecycleTip(bu)
 
