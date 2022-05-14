@@ -79,12 +79,6 @@ local function isItemLegendary(item)
 	return item.quality == LE_ITEM_QUALITY_LEGENDARY
 end
 
-local function isItemFavourite(item)
-	if not C.db["Bags"]["ItemFilter"] then return end
-	if not C.db["Bags"]["FilterFavourite"] then return end
-	return item.id and C.db["Bags"]["FavouriteItems"][item.id]
-end
-
 local function isItemCustom(item, index)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterFavourite"] then return end
@@ -127,8 +121,6 @@ function module:GetFilters()
 	filters.bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
 	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) end
 	filters.onlyReagent = function(item) return item.bagID == -3 end
-	filters.bagFavourite = function(item) return isItemInBag(item) and isItemFavourite(item) end
-	filters.bankFavourite = function(item) return isItemInBank(item) and isItemFavourite(item) end
 	filters.onlyKeyring = function(item) return isItemKeyRing(item) end
 	filters.bagGoods = function(item) return isItemInBag(item) and isTradeGoods(item) end
 	filters.bankGoods = function(item) return isItemInBank(item) and isTradeGoods(item) end
