@@ -97,12 +97,14 @@ function module:ReskinRegions()
 		GameTooltip:AddLine(L["SwitchGarrisonType"], nil, nil, nil, true)
 		GameTooltip:Show();
 	end)
+	GarrisonLandingPageMinimapButton:SetFrameLevel(999)
 
 	-- QueueStatus Button
 	QueueStatusMinimapButton:ClearAllPoints()
 	QueueStatusMinimapButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
 	QueueStatusMinimapButtonBorder:Hide()
 	QueueStatusMinimapButtonIconTexture:SetTexture(nil)
+	QueueStatusMinimapButton:SetFrameLevel(999)
 
 	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
 	queueIcon:SetPoint("CENTER", QueueStatusMinimapButton)
@@ -195,6 +197,7 @@ function module:RecycleBin()
 	bu.Icon:SetTexture(DB.binTex)
 	bu:SetHighlightTexture(DB.binTex)
 	bu.title = DB.InfoColor..L["Minimap RecycleBin"]
+	bu:SetFrameLevel(999)
 	B.AddTooltip(bu, "ANCHOR_LEFT")
 	updateRecycleTip(bu)
 
