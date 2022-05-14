@@ -125,8 +125,8 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 331847) -- W-00F
 module:RegisterDebuff(TIER, INSTANCE, 0, 327649) -- 粉碎灵魂
 module:RegisterDebuff(TIER, INSTANCE, 0, 331379) -- 润滑剂
 module:RegisterDebuff(TIER, INSTANCE, 0, 332678) -- 龟裂创伤
---module:RegisterDebuff(TIER, INSTANCE, 0, 323687) -- 奥术闪电
-module:RegisterDebuff(TIER, INSTANCE, 0, 323692) -- 奥术易伤
+module:RegisterDebuff(TIER, INSTANCE, 0, 323687) -- 奥术闪电
+--module:RegisterDebuff(TIER, INSTANCE, 0, 323692) -- 奥术易伤
 module:RegisterDebuff(TIER, INSTANCE, 0, 334535) -- 啄裂
 
 INSTANCE = 1186 -- 晋升高塔
