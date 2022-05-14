@@ -600,7 +600,7 @@ do
 		self.bg = B.CreateBDFrame(self)
 		self.bg:SetAllPoints()
 		self.Icon = self:CreateTexture(nil, "ARTWORK")
-		self.Icon:SetInside()
+		self.Icon:SetInside(self.bg)
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 		if texture then
 			local atlas = strmatch(texture, "Atlas:(.+)$")
@@ -614,7 +614,7 @@ do
 			self:EnableMouse(true)
 			self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 			self.HL:SetColorTexture(1, 1, 1, .25)
-			self.HL:SetInside()
+			self.HL:SetInside(self.bg)
 		end
 	end
 
