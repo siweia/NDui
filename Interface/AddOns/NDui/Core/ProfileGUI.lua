@@ -508,12 +508,20 @@ local function reloadDefaultSettings()
 	C.db["BFA"] = true -- don't empty data on next loading
 end
 
+local function IsOldProfileVersion(version)
+	local major, minor, patch = strsplit(".", version)
+	major = tonumber(major)
+	minor = tonumber(minor)
+	patch = tonumber(patch)
+	return major < 3 and minor < 11
+end
+
 function G:ImportGUIData()
 	local profile = G.ProfileDataFrame.editBox:GetText()
 	if B:IsBase64(profile) then profile = B:Decode(profile) end
 	local options = {strsplit(";", profile)}
-	local title, _, _, class = strsplit(":", options[1])
-	if title ~= "NDuiSettings" then
+	local title, version, _, class = strsplit(":", options[1])
+	if title ~= "NDuiSettings" or IsOldProfileVersion(version) then
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Import data error"])
 		return
 	end
@@ -643,6 +651,7 @@ function G:ImportGUIData()
 			end
 		end
 	end
+	ReloadUI()
 end
 
 local function updateTooltip()
@@ -695,7 +704,6 @@ function G:CreateDataFrame()
 		button2 = NO,
 		OnAccept = function()
 			G:ImportGUIData()
-			ReloadUI()
 		end,
 		whileDead = 1,
 	}
