@@ -379,16 +379,18 @@ function S:PSFJ()
 
 	hooksecurefunc(frame.List, "Update", function(self)
 		local buttons = self.ScrollFrame.Buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			if not button.styled then
-				button:HideBackdrop()
-				button.bg = B.CreateBDFrame(button, .25)
-				button.bg:SetInside(nil, 2, 2)
-				button:HookScript("OnEnter", onEnter)
-				button:HookScript("OnLeave", onLeave)
+		if buttons then
+			for i = 1, #buttons do
+				local button = buttons[i]
+				if not button.styled then
+					button:HideBackdrop()
+					button.bg = B.CreateBDFrame(button, .25)
+					button.bg:SetInside(nil, 2, 2)
+					button:HookScript("OnEnter", onEnter)
+					button:HookScript("OnLeave", onLeave)
 
-				button.styled = true
+					button.styled = true
+				end
 			end
 		end
 	end)
