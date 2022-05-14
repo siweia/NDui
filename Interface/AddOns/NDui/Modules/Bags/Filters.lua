@@ -120,12 +120,6 @@ local function isItemCollection(item)
 	return item.id and C_ToyBox_GetToyInfo(item.id) or isMountOrPet(item) or module:IsPetTrashCurrency(item.id)
 end
 
-local function isItemFavourite(item)
-	if not C.db["Bags"]["ItemFilter"] then return end
-	if not C.db["Bags"]["FilterFavourite"] then return end
-	return item.id and C.db["Bags"]["FavouriteItems"][item.id]
-end
-
 local function isItemCustom(item, index)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterFavourite"] then return end
@@ -196,8 +190,6 @@ function module:GetFilters()
 	filters.onlyReagent = function(item) return item.bagID == -3 and not isEmptySlot(item) end
 	filters.bagCollection = function(item) return isItemInBag(item) and isItemCollection(item) end
 	filters.bankCollection = function(item) return isItemInBank(item) and isItemCollection(item) end
-	filters.bagFavourite = function(item) return isItemInBag(item) and isItemFavourite(item) end
-	filters.bankFavourite = function(item) return isItemInBank(item) and isItemFavourite(item) end
 	filters.bagGoods = function(item) return isItemInBag(item) and isTradeGoods(item) end
 	filters.bankGoods = function(item) return isItemInBank(item) and isTradeGoods(item) end
 	filters.bagQuest = function(item) return isItemInBag(item) and isQuestItem(item) end

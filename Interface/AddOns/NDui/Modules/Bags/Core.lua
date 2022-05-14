@@ -780,11 +780,10 @@ function module:OnLogin()
 	end
 
 	function Backpack:OnInit()
-		AddNewContainer("Bag", 16, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 15, "Junk", filters.bagsJunk)
 		for i = 1, 5 do
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
-		AddNewContainer("Bag", 15, "BagFavourite", filters.bagFavourite)
 		AddNewContainer("Bag", 8, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 6, "AzeriteItem", filters.bagAzeriteItem)
 		AddNewContainer("Bag", 7, "Equipment", filters.bagEquipment)
@@ -803,7 +802,6 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
 		end
-		AddNewContainer("Bank", 15, "BankFavourite", filters.bankFavourite)
 		AddNewContainer("Bank", 8, "BankEquipSet", filters.bankEquipSet)
 		AddNewContainer("Bank", 6, "BankAzeriteItem", filters.bankAzeriteItem)
 		AddNewContainer("Bank", 9, "BankLegendary", filters.bankLegendary)
@@ -984,7 +982,7 @@ function module:OnLogin()
 			end
 		end
 
-		if C.db["Bags"]["FavouriteItems"][item.id] and not C.db["Bags"]["ItemFilter"] then
+		if C.db["Bags"]["CustomItems"][item.id] and not C.db["Bags"]["ItemFilter"] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()
@@ -1127,8 +1125,6 @@ function module:OnLogin()
 			label = BAG_FILTER_JUNK
 		elseif strmatch(name, "Collection") then
 			label = COLLECTIONS
-		elseif strmatch(name, "Favourite") then
-			label = PREFERENCES
 		elseif strmatch(name, "Goods") then
 			label = AUCTION_CATEGORY_TRADE_GOODS
 		elseif strmatch(name, "Quest") then
