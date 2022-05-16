@@ -4,7 +4,7 @@
 - Classic: https://github.com/siweia/NDui/tree/Era
 
 # ScreenShot
-![1](http://wx4.sinaimg.cn/large/7112bfffgy1fwr835r4grj21hc0u0kjm.jpg)
+![1](https://cdn-wow.mmoui.com/preview/pvw70637.jpg)
 
 # NDui Intro
 - This is not just a UI that changes your ingame appearence.
