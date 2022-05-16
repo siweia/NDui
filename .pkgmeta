@@ -1,11 +1,9 @@
 package-as: NDui
 
-externals:
+move-folders:
+    NDui/Interface/AddOns/NDui: NDui
 
 ignore:
   - .github/*
   - Interface
   - README.md
-
-move-folders:
-    NDui/Interface/AddOns/NDui: NDui
