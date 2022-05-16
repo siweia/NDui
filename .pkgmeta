@@ -5,5 +5,7 @@ move-folders:
 
 ignore:
   - .github/*
-  - Interface
+  - Interface/AddOns/!BaudErrorFrame
+  - Interface/TargetingFrame
+  - Interface/Tooltips
   - README.md
