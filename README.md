@@ -1,5 +1,10 @@
+# Branches:
+- Retail: https://github.com/siweia/NDui
+- TBC: https://github.com/siweia/NDui/tree/TBC
+- Classic: https://github.com/siweia/NDui/tree/Era
+
 # ScreenShot
-![1](http://wx4.sinaimg.cn/large/7112bfffgy1fwr835r4grj21hc0u0kjm.jpg)
+![1](https://cdn-wow.mmoui.com/preview/pvw70637.jpg)
 
 # NDui Classic
 - A classic version of [NDui](https://github.com/siweia/NDui) for World of Warcraft classic.
@@ -79,7 +84,7 @@ You can also contact me via [GitHub](https://github.com/siweia/NDuiClassic).
 <br>A: ALT+LeftButton=Invite unit, CTRL+LeftButton=Guild invite, SHIFT+LeftButton=Copy name.</br>
 
 # Credits
-- Elv, Freebaser, Haleth, Haste, Leatrix, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
+- Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
 
 # Donate
 [Patreon](https://www.patreon.com/siweia).
