@@ -27,4 +27,4 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@v2
         with:
-          args: -t Interface/Addons/NDui -a 0 -w 0
+          args: -t ./Interface/AddOns/NDui -a 0 -w 0
