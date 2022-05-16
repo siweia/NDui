@@ -1,5 +1,5 @@
 # Branches:
-- Mainline: https://github.com/siweia/NDui
+- Retail: https://github.com/siweia/NDui
 - TBC: https://github.com/siweia/NDui/tree/TBC
 - Classic: https://github.com/siweia/NDui/tree/Era
 
