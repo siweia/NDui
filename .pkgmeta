@@ -4,4 +4,8 @@ externals:
 
 ignore:
   - .github/*
+  - Interface
   - README.md
+
+move-folders:
+    NDui/Interface/AddOns/NDui: NDui
