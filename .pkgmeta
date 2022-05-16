@@ -1,0 +1,7 @@
+package-as: NDui
+
+externals:
+
+ignore:
+  - .github/*
+  - README.md
