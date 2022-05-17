@@ -417,6 +417,7 @@ end
 --[[
 	放大餐时叫一叫
 ]]
+local myGUID = UnitGUID("player")
 local groupUnits = {["player"] = true, ["pet"] = true}
 for i = 1, 4 do
 	groupUnits["party"..i] = true
@@ -464,15 +465,34 @@ function M:ItemAlert_Update(unit, castID, spellID)
 	end
 end
 
+local bloodLustDebuffs = {
+	[57723]  = true, -- 筋疲力尽
+	[57724]  = true, -- 心满意足
+	[80354]  = true, -- 时空错位
+	[264689] = true, -- 疲倦
+}
+
+function M:CheckBloodlustStatus(...)
+	local _, eventType, _, sourceGUID, _, _, _, _, _, _, _, spellID = ...
+	if eventType == "SPELL_AURA_REMOVED" and bloodLustDebuffs[spellID] and sourceGUID == myGUID then
+		SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), GetSpellLink(M.factionSpell), msgChannel())
+	end
+end
+
 function M:ItemAlert_CheckGroup()
 	if IsInGroup() then
 		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
+		B:RegisterEvent("CLEU", M.CheckBloodlustStatus)
 	else
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
+		B:UnregisterEvent("CLEU", M.CheckBloodlustStatus)
 	end
 end
 
 function M:SpellItemAlert()
+	local faction = UnitFactionGroup("player")
+	M.factionSpell = faction == "Alliance" and 32182 or 2825
+
 	if C.db["Misc"]["SpellItemAlert"] then
 		M:ItemAlert_CheckGroup()
 		B:RegisterEvent("GROUP_LEFT", M.ItemAlert_CheckGroup)
