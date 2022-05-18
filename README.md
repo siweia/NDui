@@ -2,15 +2,10 @@
 <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="256" />
 
 
-[![](https://img.shields.io/github/stars/siweia/NDui?style=social)](https://github.com/siweia/NDui) [![](https://img.shields.io/discord/438588126718590996?color=7289DA&label=Discord&logo=discord)](https://discord.gg/WXgrfBm) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-Patreon-orange)](https://www.patreon.com/siweia) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-%E7%88%B1%E5%8F%91%E7%94%B5-8161db)](https://afdian.net/@siweia)
+[![](https://img.shields.io/github/stars/siweia/NDui?style=social)](https://github.com/siweia/NDui) [![](https://img.shields.io/github/last-commit/siweia/NDui?color=c59a6c&label=Retail)](https://github.com/siweia/NDui) [![](https://img.shields.io/github/last-commit/siweia/NDui/TBC?label=TBC)](https://github.com/siweia/NDui/tree/TBC) [![](https://img.shields.io/github/last-commit/siweia/NDui/Era?color=ffffff&label=Classic)](https://github.com/siweia/NDui/tree/Era)
 
 
 </div>
-
-# Branches:
-- Retail: https://github.com/siweia/NDui
-- TBC: https://github.com/siweia/NDui/tree/TBC
-- Classic: https://github.com/siweia/NDui/tree/Era
 
 # ScreenShot
 ![1](https://cdn-wow.mmoui.com/preview/pvw70637.jpg)
@@ -88,3 +83,6 @@
 
 # Credits
 - Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
+
+# Others
+[![](https://img.shields.io/discord/438588126718590996?color=7289DA&label=Discord&logo=discord)](https://discord.gg/WXgrfBm) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-Patreon-orange)](https://www.patreon.com/siweia) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-%E7%88%B1%E5%8F%91%E7%94%B5-8161db)](https://afdian.net/@siweia)
