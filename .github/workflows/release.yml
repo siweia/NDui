@@ -27,4 +27,4 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@v2
         with:
-          args: -a 0 -p 0 -w 0
+          args: -a 0 -p 0
