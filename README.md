@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="512" />
+  <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="256" />
 </div>
 
 # Branches:
