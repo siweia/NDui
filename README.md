@@ -14,7 +14,7 @@
 - This is not just a UI that changes your ingame appearence.
 - It contains build-in auras watcher and toolbar for all specs and talents.
 - Locales include 简体中文, 繁體中文, English, Russian and French.
-- Published Pages: [NGA CN](https://bbs.nga.cn/read.php?tid=5483616) [WowInterface](https://www.wowinterface.com/downloads/info24846-NDui.html) [CurseForge](https://www.curseforge.com/wow/addons/ndui) [WAGO](https://addons.wago.io/addons/ndui)
+- Published Pages: [NGA](https://bbs.nga.cn/read.php?tid=5483616) - [WowInterface](https://www.wowinterface.com/downloads/info24846-NDui.html) - [CurseForge](https://www.curseforge.com/wow/addons/ndui) - [WAGO](https://addons.wago.io/addons/ndui)
 
 # Main Features
 - Reskin default UI skins.
