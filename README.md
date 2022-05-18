@@ -1,5 +1,6 @@
 <div align="center">
   <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="256" />
+  [![](https://img.shields.io/discord/747075771213807707?color=7289DA&label=Discord&logo=discord)](https://discord.gg/WXgrfBm) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-Patreon-orange)](https://www.patreon.com/siweia) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-%E7%88%B1%E5%8F%91%E7%94%B5-8687ed)](https://afdian.net/@siweia)
 </div>
 
 # Branches:
@@ -51,9 +52,6 @@
 
 # FAQ
 
-Please post me with errors (if does, see BOTTOMRIGHT of your screen), addon version and sreenshots if you have any questions.
-You can also contact me via [GitHub](https://github.com/siweia/NDui).
-
 **Q: I find a problem that a...**
 <br>A: Make sure you know the options from GUI panel and **the slash cmd list from /ndui**.</br>
 
@@ -89,7 +87,3 @@ You can also contact me via [GitHub](https://github.com/siweia/NDui).
 
 # Credits
 - Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
-
-# Donate
-[Patreon](https://www.patreon.com/siweia).
-[爱发电](https://afdian.net/@siweia).
