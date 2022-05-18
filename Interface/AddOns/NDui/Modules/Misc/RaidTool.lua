@@ -302,7 +302,7 @@ function M:RaidTool_BuffChecker(parent)
 		if debugMode then
 			print(text)
 		else
-			SendChatMessage(text, IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY")
+			SendChatMessage(text, M:GetMsgChannel())
 		end
 	end
 
