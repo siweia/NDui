@@ -13,7 +13,7 @@
 # NDui Classic
 - A classic version of [NDui](https://github.com/siweia/NDui) for World of Warcraft classic.
 - Locales include 简体中文, 繁體中文, koKR and enUS.
-- Published Pages: [NGA](https://bbs.nga.cn/read.php?tid=18321155) - [WowInterface](https://www.wowinterface.com/downloads/info25188-NDuiClassic.html) - [CurseForge](https://www.curseforge.com/wow/addons/ndui-classic) - [WAGO](https://addons.wago.io/addons/ndui)
+- Published Pages: [NGA](https://bbs.nga.cn/read.php?tid=18321155) - [WowInterface](https://www.wowinterface.com/downloads/info26043-NDuiClassicEra.html) - [CurseForge](https://www.curseforge.com/wow/addons/ndui-classic) - [WAGO](https://addons.wago.io/addons/ndui)
 
 # Main Features
 - Reskin default UI skins.
