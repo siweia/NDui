@@ -2,8 +2,6 @@
 <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="256" />
 </div>
 
-[![](https://img.shields.io/discord/747075771213807707?color=7289DA&label=Discord&logo=discord)](https://discord.gg/WXgrfBm) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-Patreon-orange)](https://www.patreon.com/siweia) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-%E7%88%B1%E5%8F%91%E7%94%B5-8687ed)](https://afdian.net/@siweia)
-
 # Branches:
 - Retail: https://github.com/siweia/NDui
 - TBC: https://github.com/siweia/NDui/tree/TBC
@@ -88,3 +86,6 @@
 
 # Credits
 - Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
+
+# Others
+[![](https://img.shields.io/discord/747075771213807707?color=7289DA&label=Discord&logo=discord)](https://discord.gg/WXgrfBm) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-Patreon-orange)](https://www.patreon.com/siweia) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-%E7%88%B1%E5%8F%91%E7%94%B5-8687ed)](https://afdian.net/@siweia)
