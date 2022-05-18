@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="512" />
+</div>
+
 # Branches:
 - Retail: https://github.com/siweia/NDui
 - TBC: https://github.com/siweia/NDui/tree/TBC
@@ -10,10 +14,7 @@
 - This is not just a UI that changes your ingame appearence.
 - It contains build-in auras watcher and toolbar for all specs and talents.
 - Locales include 简体中文, 繁體中文, English, Russian and French.
-- Published Pages:
-  - NGA: https://bbs.nga.cn/read.php?tid=5483616
-  - Curse: https://www.curseforge.com/wow/addons/ndui
-  - WoWInterface: https://www.wowinterface.com/downloads/info24846-NDui.html
+- Published Pages: [NGA CN](https://bbs.nga.cn/read.php?tid=5483616) [WowInterface](https://www.wowinterface.com/downloads/info24846-NDui.html) [CurseForge](https://www.curseforge.com/wow/addons/ndui) [WAGO](https://addons.wago.io/addons/ndui)
 
 # Main Features
 - Reskin default UI skins.
@@ -41,7 +42,7 @@
 - NDui: Core for NDui.
 
 # Skins Support
-- BigWigs, DBM, Details, PremadeGroupsFilter, Rematch, Skada, TMW, WeakAuras.
+- BigWigs, DBM, Details, PremadeGroupsFilter, Rematch, Skada, TMW, WeakAuras...
 
 # Download & Setup
 1. Download and unzip the file.
