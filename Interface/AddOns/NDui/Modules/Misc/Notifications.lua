@@ -475,7 +475,7 @@ local bloodLustDebuffs = {
 function M:CheckBloodlustStatus(...)
 	local _, eventType, _, sourceGUID, _, _, _, _, _, _, _, spellID = ...
 	if eventType == "SPELL_AURA_REMOVED" and bloodLustDebuffs[spellID] and sourceGUID == myGUID then
-		SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), GetSpellLink(M.factionSpell), msgChannel())
+		SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), GetSpellLink(M.factionSpell), msgChannel()))
 	end
 end
 
