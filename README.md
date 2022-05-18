@@ -1,3 +1,7 @@
+<div align="center">
+<img src="https://i.imgur.com/5CkTA4u.png" width="512" height="256" />
+</div>
+
 # Branches:
 - Retail: https://github.com/siweia/NDui
 - TBC: https://github.com/siweia/NDui/tree/TBC
@@ -6,39 +10,38 @@
 # ScreenShot
 ![1](https://cdn-wow.mmoui.com/preview/pvw70637.jpg)
 
-# NDui Classic
+# NDui Intro
 - A classic version of [NDui](https://github.com/siweia/NDui) for World of Warcraft classic.
 - Locales include 简体中文, 繁體中文, koKR and enUS.
-- Published Pages:
-  - NGA: https://bbs.nga.cn/read.php?tid=18321155
-  - Curse: https://www.curseforge.com/wow/addons/ndui-classic
-  - WoWInterface: https://www.wowinterface.com/downloads/info25188-NDuiClassic.html
+- Published Pages: [NGA](https://bbs.nga.cn/read.php?tid=18321155) - [WowInterface](https://www.wowinterface.com/downloads/info25188-NDuiClassic.html) - [CurseForge](https://www.curseforge.com/wow/addons/ndui-classic) - [WAGO](https://addons.wago.io/addons/ndui)
 
 # Main Features
 - Reskin default UI skins.
 - Ingame config panel.
 - Auras watcher for all classes with low usage.
 - oUF frameworks, include **PartyFrames**, **RaidFrames** and **Nameplates**.
-  - PartyFrame: simple spells cooldown watcher a nd buff indicator for group members.
+  - PartyFrame: simple spells cooldown watcher and buff indicator for group members.
   - RaidFrame: two mode for differ needs, configurable click cast and raid debuffs.
   - Nameplate: highlight special units, target and mouseover highlight, dispellable auras highlight, tank treat color, auras filter.
 - Chat spam filter, whisper invite.
 - One-container system with filters by cargBags.
 - Classbar with spells for all classes, disabled as default (Console - Auras - Enable Personal Resource).
-- Raid Toolbar with ready check, count down.
+- Raid Toolbar with ready check, count down, combat resurrect timer.
 - Optional event alerts.
+  - Rare alert.
   - Interrupt/dispell alert.
   - Broken spell alert.
   - Quests progress notification.
+  - Dungeons difficulty alert when solo.
   - Placed item alerts.
-- Infobars with auto sell junk, auto repair.
+- Infobars with auto sell junk, auto repair, invasion timers and quest completion check.
 
 # Default AddOns
 - !BaudErrorFrame: Error collecter
-- NDui: Core for NDui Classic.
+- NDui: Core for NDui.
 
 # Skins Support
-- BigWigs, DBM, Details, Recount, Skada, TMW, WeakAuras.
+- BigWigs, DBM, Details, PremadeGroupsFilter, Rematch, Skada, TMW, WeakAuras...
 
 # Download & Setup
 1. Download and unzip the file.
@@ -46,9 +49,6 @@
 3. Log into game, and follow the tutorial.
 
 # FAQ
-
-Please post me with errors (if does, see BOTTOMRIGHT of your screen), addon version and sreenshots if you have any questions.
-You can also contact me via [GitHub](https://github.com/siweia/NDuiClassic).
 
 **Q: I find a problem that a...**
 <br>A: Make sure you know the options from GUI panel and **the slash cmd list from /ndui**.</br>
@@ -86,6 +86,5 @@ You can also contact me via [GitHub](https://github.com/siweia/NDuiClassic).
 # Credits
 - Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
 
-# Donate
-[Patreon](https://www.patreon.com/siweia).
-[爱发电](https://afdian.net/@siweia).
+# Others
+[![](https://img.shields.io/discord/438588126718590996?color=7289DA&label=Discord&logo=discord)](https://discord.gg/WXgrfBm) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-Patreon-orange)](https://www.patreon.com/siweia) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-%E7%88%B1%E5%8F%91%E7%94%B5-8687ed)](https://afdian.net/@siweia)
