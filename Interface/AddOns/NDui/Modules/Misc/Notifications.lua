@@ -502,6 +502,7 @@ function M:SpellItemAlert()
 		B:UnregisterEvent("GROUP_LEFT", M.ItemAlert_CheckGroup)
 		B:UnregisterEvent("GROUP_JOINED", M.ItemAlert_CheckGroup)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
+		B:UnregisterEvent("CLEU", M.CheckBloodlustStatus)
 	end
 end
 
