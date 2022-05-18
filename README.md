@@ -10,7 +10,7 @@
 # ScreenShot
 ![1](https://cdn-wow.mmoui.com/preview/pvw70637.jpg)
 
-# NDui Intro
+# NDui Classic
 - A classic version of [NDui](https://github.com/siweia/NDui) for World of Warcraft classic.
 - Locales include 简体中文, 繁體中文, koKR and enUS.
 - Published Pages: [NGA](https://bbs.nga.cn/read.php?tid=18321155) - [WowInterface](https://www.wowinterface.com/downloads/info25188-NDuiClassic.html) - [CurseForge](https://www.curseforge.com/wow/addons/ndui-classic) - [WAGO](https://addons.wago.io/addons/ndui)
@@ -26,22 +26,20 @@
 - Chat spam filter, whisper invite.
 - One-container system with filters by cargBags.
 - Classbar with spells for all classes, disabled as default (Console - Auras - Enable Personal Resource).
-- Raid Toolbar with ready check, count down, combat resurrect timer.
+- Raid Toolbar with ready check, count down.
 - Optional event alerts.
-  - Rare alert.
   - Interrupt/dispell alert.
   - Broken spell alert.
   - Quests progress notification.
-  - Dungeons difficulty alert when solo.
   - Placed item alerts.
-- Infobars with auto sell junk, auto repair, invasion timers and quest completion check.
+- Infobars with auto sell junk, auto repair.
 
 # Default AddOns
 - !BaudErrorFrame: Error collecter
-- NDui: Core for NDui.
+- NDui: Core for NDui Classic.
 
 # Skins Support
-- BigWigs, DBM, Details, PremadeGroupsFilter, Rematch, Skada, TMW, WeakAuras...
+- BigWigs, DBM, Details, Recount, Skada, TMW, WeakAuras...
 
 # Download & Setup
 1. Download and unzip the file.
