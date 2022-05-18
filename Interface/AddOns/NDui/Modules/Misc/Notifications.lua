@@ -475,7 +475,7 @@ local bloodLustDebuffs = {
 function M:CheckBloodlustStatus(...)
 	local _, eventType, _, sourceGUID, _, _, _, _, _, _, _, spellID = ...
 	if eventType == "SPELL_AURA_REMOVED" and bloodLustDebuffs[spellID] and sourceGUID == myGUID then
-		SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), GetSpellLink(M.factionSpell)), msgChannel())
+		SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), M.factionSpell), msgChannel())
 	end
 end
 
@@ -492,6 +492,7 @@ end
 function M:SpellItemAlert()
 	local faction = UnitFactionGroup("player")
 	M.factionSpell = faction == "Alliance" and 32182 or 2825
+	M.factionSpell = GetSpellLink(M.factionSpell)
 
 	if C.db["Misc"]["SpellItemAlert"] then
 		M:ItemAlert_CheckGroup()
