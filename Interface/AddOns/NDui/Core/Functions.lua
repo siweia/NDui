@@ -198,7 +198,7 @@ do
 
 		local step = 1
 		for i = 1, 10 do
-			local tex = _G[tip:GetName().."Texture"..i]
+			local tex = _G["NDui_ScanTooltipTexture"..i]
 			local texture = tex and tex:IsShown() and tex:GetTexture()
 			if texture then
 				if texture == essenceTextureID then
@@ -236,7 +236,7 @@ do
 		local essence = slotInfo.essences[step]
 		if essence and next(essence) and (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
 			for i = 5, 2, -1 do
-				local line = _G[tip:GetName().."TextLeft"..index-i]
+				local line = _G["NDui_ScanTooltipTextLeft"..index-i]
 				local text = line and line:GetText()
 
 				if text and (not strmatch(text, "^[ +]")) and essence and next(essence) then
@@ -263,7 +263,7 @@ do
 			slotInfo.gems, slotInfo.essences = B:InspectItemTextures()
 
 			for i = 1, tip:NumLines() do
-				local line = _G[tip:GetName().."TextLeft"..i]
+				local line = _G["NDui_ScanTooltipTextLeft"..i]
 				if not line then break end
 
 				local text = line:GetText()
@@ -296,7 +296,7 @@ do
 			end
 
 			for i = 2, 5 do
-				local line = _G[tip:GetName().."TextLeft"..i]
+				local line = _G["NDui_ScanTooltipTextLeft"..i]
 				if not line then break end
 
 				local text = line:GetText()
