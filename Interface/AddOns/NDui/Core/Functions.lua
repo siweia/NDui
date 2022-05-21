@@ -173,7 +173,7 @@ do
 		end
 
 		for i = 1, 5 do
-			local tex = _G[tip:GetName().."Texture"..i]
+			local tex = _G["NDui_ScanTooltipTexture"..i]
 			local texture = tex and tex:IsShown() and tex:GetTexture()
 			if texture then
 				tip.gems[i] = texture
@@ -212,7 +212,7 @@ do
 			end
 
 			for i = 2, 5 do
-				local line = _G[tip:GetName().."TextLeft"..i]
+				local line = _G["NDui_ScanTooltipTextLeft"..i]
 				if not line then break end
 
 				local text = line:GetText()
