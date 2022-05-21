@@ -741,7 +741,8 @@ function UF:CreatePlates()
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
 
-	self.Auras.showStealableBuffs = C.db["Nameplate"]["Dispellable"]
+	self.Auras.showStealableBuffs = C.db["Nameplate"]["DispellMode"] == 1
+	self.Auras.alwaysShowStealable = C.db["Nameplate"]["DispellMode"] == 2
 	self.powerText = B.CreateFS(self, 22)
 	self.powerText:ClearAllPoints()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
@@ -793,7 +794,8 @@ function UF:UpdateNameplateAuras()
 	element.numTotal = C.db["Nameplate"]["maxAuras"]
 	element.size = C.db["Nameplate"]["AuraSize"]
 	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
-	element.showStealableBuffs = C.db["Nameplate"]["Dispellable"]
+	element.showStealableBuffs = C.db["Nameplate"]["DispellMode"] == 1
+	element.alwaysShowStealable = C.db["Nameplate"]["DispellMode"] == 2
 	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 	element:SetWidth(self:GetWidth())
 	element:SetHeight((element.size + element.spacing) * 2)
