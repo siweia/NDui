@@ -34,31 +34,29 @@ local function UpdateIconTexCoord(icon)
 	icon.isCutting = nil
 end
 
+local function ReskinWAIcon(icon)
+	UpdateIconTexCoord(icon)
+	hooksecurefunc(icon, "SetTexCoord", UpdateIconTexCoord)
+	icon.bg = B.SetBD(icon, 0)
+	icon.bg:SetFrameLevel(0)
+	hooksecurefunc(icon, "SetAlpha", UpdateIconBgAlpha)
+end
+
 local function Skin_WeakAuras(f, fType)
 	if fType == "icon" then
 		if not f.styled then
-			UpdateIconTexCoord(f.icon)
-			hooksecurefunc(f.icon, "SetTexCoord", UpdateIconTexCoord)
-			f.bg = B.SetBD(f, 0)
-			f.bg:SetFrameLevel(0)
-			f.icon.bg = f.bg
-			hooksecurefunc(f.icon, "SetAlpha", UpdateIconBgAlpha)
-
+			ReskinWAIcon(f.icon)
 			f.styled = true
 		end
 	elseif fType == "aurabar" then
 		if not f.styled then
 			f.bg = B.SetBD(f.bar, 0)
 			f.bg:SetFrameLevel(0)
-			UpdateIconTexCoord(f.icon)
-			hooksecurefunc(f.icon, "SetTexCoord", UpdateIconTexCoord)
-			f.iconFrame:SetAllPoints(f.icon) -- needs review
-			f.iconbg = B.SetBD(f.iconFrame)
-
+			ReskinWAIcon(f.icon)
 			f.styled = true
 		end
 
-		f.iconbg:SetShown(not not f.iconVisible)
+		f.icon.bg:SetShown(not not f.iconVisible)
 	end
 end
 
