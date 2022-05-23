@@ -15,7 +15,7 @@ local InviteToGroup = C_PartyInfo.InviteUnit
 local GeneralDockManager = GeneralDockManager
 local messageSoundID = SOUNDKIT.TELL_MESSAGE
 
-local maxLines = 1024
+local maxLines = 2048
 local fontFile, fontOutline
 module.MuteCache = {}
 
