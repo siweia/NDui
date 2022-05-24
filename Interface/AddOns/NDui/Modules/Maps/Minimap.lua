@@ -207,8 +207,10 @@ function module:RecycleBin()
 					region:SetTexture(nil)
 					region:Hide() -- hide CircleMask
 				end
-				region:ClearAllPoints()
-				region:SetAllPoints()
+				if not region.__ignored then
+					region:ClearAllPoints()
+					region:SetAllPoints()
+				end
 				if not isGoodLookingIcon[name] then
 					region:SetTexCoord(unpack(DB.TexCoord))
 				end
