@@ -307,6 +307,7 @@ function UF:OnLogin()
 		UF:RefreshPlateByEvents()
 		UF:RefreshMajorSpells()
 		UF:RefreshColorDots()
+		UF:RefreshNameplateFilters()
 
 		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
 		oUF:SetActiveStyle("Nameplates")

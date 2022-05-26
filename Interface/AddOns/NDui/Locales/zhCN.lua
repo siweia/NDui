@@ -811,3 +811,4 @@ L["ColorByDotTip"] = "|n启用后，当目标身上含有来自你的特定法�
 L["DotColor"] = "法术染色颜色"
 L["ColorDots"] = "法术染色列表"
 L["ColorDotsTip"] = "|n输入染色姓名板时的法术ID。存在多个法术时，以空格隔开。"
+L["Reset nameplate filter"] = "你想要重置姓名板过滤列表吗？"
