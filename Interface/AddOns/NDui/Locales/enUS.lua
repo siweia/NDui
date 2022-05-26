@@ -815,3 +815,4 @@ L["ColorByDotTip"] = "|nIf enabled, color the unit nameplate that affected by YO
 L["DotColor"] = "Aura highlight color"
 L["ColorDots"] = "Aura highlight list"
 L["ColorDotsTip"] = "|nEnter the spellID that you need for nameplate highlight. Use key space between multi spells."
+L["Reset nameplate filter"] = "Are you sure to reset nameplate filter list?"

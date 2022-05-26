@@ -460,12 +460,17 @@ function G:SetupClickCast(parent)
 	end
 end
 
+local function refreshNameplateFilters()
+	B:GetModule("UnitFrames"):RefreshNameplateFilters()
+end
+
 function G:SetupNameplateFilter(parent)
 	local guiName = "NDuiGUI_NameplateFilter"
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
 	local panel = createExtraGUI(parent, guiName)
+	panel:SetScript("OnHide", refreshNameplateFilters)
 
 	local frameData = {
 		[1] = {text = L["WhiteList"].."*", offset = -25, barList = {}},
@@ -483,7 +488,11 @@ function G:SetupNameplateFilter(parent)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			NDuiADB["NameplateFilter"][index][spellID] = nil
+			if (index == 1 and C.WhiteList[spellID]) or (index == 2 and C.BlackList[spellID]) then
+				NDuiADB["NameplateFilter"][index][spellID] = false
+			else
+				NDuiADB["NameplateFilter"][index][spellID] = nil
+			end
 			frameData[index].barList[spellID] = nil
 			sortBars(frameData[index].barList)
 		end)
@@ -496,15 +505,39 @@ function G:SetupNameplateFilter(parent)
 		sortBars(frameData[index].barList)
 	end
 
+	local function isAuraExisted(index, spellID)
+		local modValue = NDuiADB["NameplateFilter"][index][spellID]
+		local locValue = (index == 1 and C.WhiteList[spellID]) or (index == 2 and C.BlackList[spellID])
+		if modValue then
+			return true
+		elseif modValue == nil and locValue then
+			return true
+		end
+	end
+
 	local function addClick(parent, index)
 		local spellID = tonumber(parent.box:GetText())
 		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		if NDuiADB["NameplateFilter"][index][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+		if isAuraExisted(index, spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		NDuiADB["NameplateFilter"][index][spellID] = true
 		createBar(parent.child, index, spellID)
 		parent.box:SetText("")
 	end
+
+	local UF = B:GetModule("UnitFrames")
+
+	local filterIndex
+	StaticPopupDialogs["RESET_NDUI_NAMEPLATEFILTER"] = {
+		text = "RESET",
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			wipe(NDuiADB["NameplateFilter"][filterIndex])
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
 
 	for index, value in ipairs(frameData) do
 		B.CreateFS(panel, 14, value.text, "system", "TOPLEFT", 20, value.offset)
@@ -514,17 +547,25 @@ function G:SetupNameplateFilter(parent)
 		B.CreateBD(frame, .3)
 
 		local scroll = G:CreateScroll(frame, 240, 200)
-		scroll.box = B.CreateEditBox(frame, 185, 25)
+		scroll.box = B.CreateEditBox(frame, 130, 25)
 		scroll.box:SetPoint("TOPLEFT", 10, -10)
 		B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info", true)
-		scroll.add = B.CreateButton(frame, 70, 25, ADD)
+		scroll.reset = B.CreateButton(frame, 60, 25, RESET)
+		scroll.reset:SetPoint("TOPRIGHT", -73, -10)
+		scroll.reset:SetScript("OnClick", function()
+			filterIndex = index
+			StaticPopup_Show("RESET_NDUI_NAMEPLATEFILTER")
+		end)
+		scroll.add = B.CreateButton(frame, 60, 25, ADD)
 		scroll.add:SetPoint("TOPRIGHT", -8, -10)
 		scroll.add:SetScript("OnClick", function()
 			addClick(scroll, index)
 		end)
 
-		for spellID in pairs(NDuiADB["NameplateFilter"][index]) do
-			createBar(scroll.child, index, spellID)
+		for spellID, value in pairs(UF.NameplateFilter[index]) do
+			if value then
+				createBar(scroll.child, index, spellID)
+			end
 		end
 	end
 end

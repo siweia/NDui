@@ -831,12 +831,12 @@ function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, ca
 		end
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if element.__owner.plateType == "NameOnly" then
-			return NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID]
-		elseif NDuiADB["NameplateFilter"][2][spellID] or C.BlackList[spellID] then
+			return UF.NameplateFilter[1][spellID]
+		elseif UF.NameplateFilter[2][spellID] then
 			return false
 		elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and (not button.isDebuff) then
 			return true
-		elseif NDuiADB["NameplateFilter"][1][spellID] or C.WhiteList[spellID] then
+		elseif UF.NameplateFilter[1][spellID] then
 			return true
 		else
 			local auraFilter = C.db["Nameplate"]["AuraFilter"]
