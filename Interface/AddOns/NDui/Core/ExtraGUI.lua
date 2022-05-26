@@ -525,7 +525,7 @@ function G:SetupNameplateFilter(parent)
 
 	local filterIndex
 	StaticPopupDialogs["RESET_NDUI_NAMEPLATEFILTER"] = {
-		text = "RESET",
+		text = L["Reset nameplate filter"],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
@@ -543,19 +543,21 @@ function G:SetupNameplateFilter(parent)
 		B.CreateBD(frame, .3)
 
 		local scroll = G:CreateScroll(frame, 240, 200)
-		scroll.box = B.CreateEditBox(frame, 130, 25)
+		scroll.box = B.CreateEditBox(frame, 160, 25)
 		scroll.box:SetPoint("TOPLEFT", 10, -10)
 		B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info", true)
-		scroll.reset = B.CreateButton(frame, 60, 25, RESET)
-		scroll.reset:SetPoint("TOPRIGHT", -73, -10)
-		scroll.reset:SetScript("OnClick", function()
-			filterIndex = index
-			StaticPopup_Show("RESET_NDUI_NAMEPLATEFILTER")
-		end)
-		scroll.add = B.CreateButton(frame, 60, 25, ADD)
+
+		scroll.add = B.CreateButton(frame, 45, 25, ADD)
 		scroll.add:SetPoint("TOPRIGHT", -8, -10)
 		scroll.add:SetScript("OnClick", function()
 			addClick(scroll, index)
+		end)
+
+		scroll.reset = B.CreateButton(frame, 45, 25, RESET)
+		scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
+		scroll.reset:SetScript("OnClick", function()
+			filterIndex = index
+			StaticPopup_Show("RESET_NDUI_NAMEPLATEFILTER")
 		end)
 
 		for spellID, value in pairs(UF.NameplateFilter[index]) do
