@@ -618,11 +618,7 @@ function G:SetupNameplateFilter(parent)
 	local function isAuraExisted(index, spellID)
 		local modValue = NDuiADB["NameplateFilter"][index][spellID]
 		local locValue = (index == 1 and C.WhiteList[spellID]) or (index == 2 and C.BlackList[spellID])
-		if modValue then
-			return true
-		elseif modValue == nil and locValue then
-			return true
-		end
+		return modValue or (modValue == nil and locValue)
 	end
 
 	local function addClick(parent, index)
