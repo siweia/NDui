@@ -228,7 +228,7 @@ do
 		end
 	end
 
-	local pendingNPCs, nameCache = {}, {}
+	local pendingNPCs, nameCache, callbacks = {}, {}, {}
 	local pendingFrame = CreateFrame("Frame")
 	pendingFrame:Hide()
 	pendingFrame:SetScript("OnUpdate", function(self, elapsed)
@@ -238,9 +238,12 @@ do
 				for npcID, count in pairs(pendingNPCs) do
 					if count > 2 then
 						nameCache[npcID] = UNKNOWN
+						if callbacks[npcID] then
+							callbacks[npcID](UNKNOWN)
+						end
 						pendingNPCs[npcID] = nil
 					else
-						local name = B.GetNPCName(npcID)
+						local name = B.GetNPCName(npcID, callbacks[npcID])
 						if name and name ~= "tooSoon" then
 							pendingNPCs[npcID] = nil
 						else
@@ -271,7 +274,10 @@ do
 				nameCache[npcID] = name
 			end
 		end
-		if callback then callback(name) end
+		if callback then
+			callback(name)
+			callbacks[npcID] = callback
+		end
 
 		return name
 	end
