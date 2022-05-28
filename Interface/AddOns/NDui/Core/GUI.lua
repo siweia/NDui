@@ -321,7 +321,7 @@ G.DefaultSettings = {
 		TargetIndicator = 5,
 		CustomUnitColor = true,
 		CustomColor = {r=0, g=.8, b=.3},
-		UnitList = "",
+		CustomUnits = {},
 		ShowPowerList = "",
 		VerticalSpacing = .7,
 		ShowPlayerPlate = false,
@@ -587,6 +587,12 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		end
 		C.db["Bags"]["FavouriteItems"] = nil
 	end
+	if C.db["Nameplate"] and C.db["Nameplate"]["UnitList"] then
+		if not C.db["Nameplate"]["CustomItems"] then
+			C.db["Nameplate"]["CustomItems"] = {}
+		end
+		B.SplitList(C.db["Nameplate"]["CustomUnits"], C.db["Nameplate"]["UnitList"])
+	end
 	-- Transfer favourite items END
 	InitialSettings(G.DefaultSettings, C.db, true)
 
@@ -658,6 +664,10 @@ end
 
 local function setupNameplateFilter()
 	G:SetupNameplateFilter(guiPage[5])
+end
+
+local function setupNameplateUnitFilter()
+	G:NameplateUnitFilter(guiPage[5])
 end
 
 local function setupNameplateSize()
@@ -1128,9 +1138,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "DotColor", NewTag..L["DotColor"].."*"},
 		{2, "Nameplate", "ColorDots", NewTag..L["ColorDots"].."*", true, nil, refreshColorDots, L["ColorDotsTip"]},
 		{},--blank
-		{1, "Nameplate", "CustomUnitColor", HeaderTag..L["CustomUnitColor"].."*", nil, nil, updateCustomUnitList, L["CustomUnitColorTip"]},
-		{5, "Nameplate", "CustomColor", L["Custom Color"].."*", 2},
-		{2, "Nameplate", "UnitList", L["UnitColor List"].."*", nil, nil, updateCustomUnitList, L["CustomUnitTips"]},
+		{1, "Nameplate", "CustomUnitColor", HeaderTag..L["CustomUnitColor"].."*", nil, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitColorTip"]},
+		{5, "Nameplate", "CustomColor", L["Custom Color"].."*"},
 		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"].."*", true, nil, updatePowerUnitList, L["CustomUnitTips"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
