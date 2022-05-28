@@ -78,12 +78,6 @@ C.BlackList = {
 	[206930] = true,	-- 心脏打击
 }
 
--- 取自地城手册的段落ID
--- 纯数字则为GUID，选择目标后输入/getnpc获取
-local function GetSectionInfo(id)
-	return C_EncounterJournal.GetSectionInfo(id).title
-end
-
 -- 特殊单位的染色列表
 C.CustomUnits = {
 	[179823] = true,	-- 圣物收集者，刻希亚
@@ -113,7 +107,7 @@ C.CustomUnits = {
 	[101008] = true, 	-- 黑鸦堡垒，针刺虫群
 	-- Raids
 	[175992] = true,	-- 猩红议会，忠实的侍从
-	[GetSectionInfo(21953)] = true,	-- 凯子，灵能灌注者
+	[165762] = true,	-- 凯子，灵能灌注者
 	-- Condemned Demon
 	[169430] = true,
 	[169428] = true,
@@ -127,7 +121,7 @@ C.CustomUnits = {
 -- 显示能量值的单位
 C.ShowPowerList = {
 	[165556] = true,	-- 赤红深渊，瞬息具象
-	[GetSectionInfo(22339)] = true,	-- 猎手阿尔迪莫，巴加斯特之影
+	[171557] = true,	-- 猎手阿尔迪莫，巴加斯特之影
 }
 
 -- 显示姓名板单位的目标
