@@ -166,7 +166,7 @@ function G:SetupRaidDebuffs(parent)
 	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
 	scroll.reset:SetPoint("TOPLEFT", 10, -140)
 	StaticPopupDialogs["RESET_NDUI_RAIDDEBUFFS"] = {
-		text = L["Reset your raiddebuffs list?"],
+		text = L["Reset to default list"],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
@@ -488,7 +488,7 @@ function G:SetupPartyWatcher(parent)
 	scroll.reset:SetPoint("TOPLEFT", 10, -80)
 	scroll.reset.text:SetTextColor(1, 0, 0)
 	StaticPopupDialogs["RESET_NDUI_PARTYWATCHER"] = {
-		text = L["Reset your raiddebuffs list?"],
+		text = L["Reset to default list"],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
@@ -635,7 +635,7 @@ function G:SetupNameplateFilter(parent)
 
 	local filterIndex
 	StaticPopupDialogs["RESET_NDUI_NAMEPLATEFILTER"] = {
-		text = L["Reset nameplate filter"],
+		text = L["Reset to default list"],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
@@ -762,7 +762,7 @@ function G:SetupBuffIndicator(parent)
 
 	local currentIndex
 	StaticPopupDialogs["RESET_NDUI_RaidAuraWatch"] = {
-		text = L["Reset your raiddebuffs list?"],
+		text = L["Reset to default list"],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
@@ -1460,7 +1460,7 @@ function G:PlateCastbarGlow(parent)
 	scroll.reset = B.CreateButton(frame, 45, 25, RESET)
 	scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
 	StaticPopupDialogs["RESET_NDUI_MAJORSPELLS"] = {
-		text = L["Reset your raiddebuffs list?"],
+		text = L["Reset to default list"],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
