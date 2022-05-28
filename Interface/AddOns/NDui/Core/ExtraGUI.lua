@@ -1312,8 +1312,10 @@ function G:PlateCastbarGlow(parent)
 	end
 
 	local frame = panel.bg
-	local scroll = G:CreateScroll(frame, 240, 450)
-	scroll.box = G:CreateEditbox(frame, "ID*", 10, -30, L["ID Intro"], 100, 30)
+	local scroll = G:CreateScroll(frame, 240, 485)
+	scroll.box = B.CreateEditBox(frame, 160, 25)
+	scroll.box:SetPoint("TOPLEFT", 10, -10)
+	B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info", true)
 
 	local function addClick(button)
 		local parent = button.__owner
@@ -1325,13 +1327,13 @@ function G:PlateCastbarGlow(parent)
 		createBar(parent.child, spellID)
 		parent.box:SetText("")
 	end
-	scroll.add = B.CreateButton(frame, 70, 25, ADD)
-	scroll.add:SetPoint("LEFT", scroll.box, "RIGHT", 10, 0)
+	scroll.add = B.CreateButton(frame, 45, 25, ADD)
+	scroll.add:SetPoint("TOPRIGHT", -8, -10)
 	scroll.add.__owner = scroll
 	scroll.add:SetScript("OnClick", addClick)
 
-	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
-	scroll.reset:SetPoint("LEFT", scroll.add, "RIGHT", 10, 0)
+	scroll.reset = B.CreateButton(frame, 45, 25, RESET)
+	scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
 	StaticPopupDialogs["RESET_NDUI_MAJORSPELLS"] = {
 		text = L["Reset your raiddebuffs list?"],
 		button1 = YES,
