@@ -185,6 +185,17 @@ end
 function module:CheckNameplateFilters()
 	checkNameplateFilter(1)
 	checkNameplateFilter(2)
+	-- Custom units
+	for npcID in pairs(C.CustomUnits) do
+		if C.db["Nameplate"]["CustomUnits"][npcID] then
+			C.db["Nameplate"]["CustomUnits"][npcID] = nil
+		end
+	end
+	for npcID, value in pairs(C.db["Nameplate"]["CustomUnits"]) do
+		if value == false and C.CustomUnits[npcID] == nil then
+			C.db["Nameplate"]["CustomUnits"][npcID] = nil
+		end
+	end
 end
 
 function module:OnLogin()

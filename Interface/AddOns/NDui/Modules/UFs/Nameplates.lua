@@ -98,12 +98,21 @@ function UF:BlockAddons()
 end
 
 -- Elements
-local customUnits = {}
+UF.CustomUnits = {}
 function UF:CreateUnitTable()
-	wipe(customUnits)
+	wipe(UF.CustomUnits)
 	if not C.db["Nameplate"]["CustomUnitColor"] then return end
-	B.CopyTable(C.CustomUnits, customUnits)
-	B.SplitList(customUnits, C.db["Nameplate"]["UnitList"])
+
+	for npcID in pairs(C.CustomUnits) do
+		if C.db["Nameplate"]["CustomUnits"][npcID] == nil then
+			UF.CustomUnits[npcID] = true
+		end
+	end
+	for npcID, value in pairs(C.db["Nameplate"]["CustomUnits"]) do
+		if value then
+			UF.CustomUnits[npcID] = true
+		end
+	end
 end
 
 local showPowerList = {}
@@ -173,7 +182,7 @@ function UF:UpdateColor(_, unit)
 	local element = self.Health
 	local name = self.unitName
 	local npcID = self.npcID
-	local isCustomUnit = customUnits[name] or customUnits[npcID]
+	local isCustomUnit = UF.CustomUnits[name] or UF.CustomUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
 	local isOffTank, status = UF:CheckThreatStatus(unit)

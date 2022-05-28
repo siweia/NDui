@@ -1824,3 +1824,97 @@ function G:SetupBuffFrame(parent)
 	createOptionGroup(parent, "Buffs", offset, "Buff", updateBuffFrame)
 	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", updateDebuffFrame)
 end
+
+local function refreshUnitTable()
+	B:GetModule("UnitFrames"):CreateUnitTable()
+end
+
+function G:NameplateUnitFilter(parent)
+	local guiName = "NDuiGUI_NameplateUnitFilter"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["UnitColor List"].."*", true)
+	panel:SetScript("OnHide", refreshUnitTable)
+
+	local barTable = {}
+
+	local function createBar(parent, text, isNew)
+		local npcID = tonumber(text)
+
+		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		bar:SetSize(220, 30)
+		B.CreateBD(bar, .25)
+		barTable[text] = bar
+
+		local icon, close = G:CreateBarWidgets(bar, npcID and 136243 or 132288)
+		if npcID then
+			B.AddTooltip(icon, "ANCHOR_RIGHT", "ID: "..npcID, "system")
+		end
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			barTable[text] = nil
+			if C.CustomUnits[text] then
+				C.db["Nameplate"]["CustomUnits"][text] = false
+			else
+				C.db["Nameplate"]["CustomUnits"][text] = nil
+			end
+			sortBars(barTable)
+		end)
+
+		local name = B.CreateFS(bar, 14, text, false, "LEFT", 30, 0)
+		name:SetWidth(120)
+		name:SetJustifyH("LEFT")
+		if isNew then name:SetTextColor(0, 1, 0) end
+		if npcID then
+			B.GetNPCName(npcID, function(npcName)
+				name:SetText(npcName)
+			end)
+		end
+
+		sortBars(barTable)
+	end
+
+	local frame = panel.bg
+	local scroll = G:CreateScroll(frame, 240, 485)
+	scroll.box = B.CreateEditBox(frame, 160, 25)
+	scroll.box:SetPoint("TOPLEFT", 10, -10)
+	B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["NPCID or Name"], "info", true)
+
+	local function addClick(button)
+		local parent = button.__owner
+		local text = tonumber(parent.box:GetText()) or parent.box:GetText()
+		if text and text ~= "" then
+			local modValue = C.db["Nameplate"]["CustomUnits"][text]
+			if modValue or modValue == nil and C.CustomUnits[text] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+			C.db["Nameplate"]["CustomUnits"][text] = true
+			createBar(parent.child, text, true)
+			parent.box:SetText("")
+		end
+	end
+	scroll.add = B.CreateButton(frame, 45, 25, ADD)
+	scroll.add:SetPoint("TOPRIGHT", -8, -10)
+	scroll.add.__owner = scroll
+	scroll.add:SetScript("OnClick", addClick)
+
+	scroll.reset = B.CreateButton(frame, 45, 25, RESET)
+	scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
+	StaticPopupDialogs["RESET_NDUI_UNITFILTER"] = {
+		text = L["Reset to default list"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			C.db["Nameplate"]["CustomUnits"] = {}
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
+	scroll.reset:SetScript("OnClick", function()
+		StaticPopup_Show("RESET_NDUI_UNITFILTER")
+	end)
+
+	local UF = B:GetModule("UnitFrames")
+	for npcID in pairs(UF.CustomUnits) do
+		createBar(scroll.child, npcID)
+	end
+end
