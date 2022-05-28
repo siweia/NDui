@@ -156,7 +156,7 @@ do
 	end
 end
 
--- Itemlevel
+-- Scan tooltip
 do
 	local iLvlDB = {}
 	local itemLevelString = "^"..gsub(ITEM_LEVEL, "%%d", "")
@@ -226,6 +226,54 @@ do
 
 			return iLvlDB[link]
 		end
+	end
+
+	local pendingNPCs, nameCache = {}, {}
+	local pendingFrame = CreateFrame("Frame")
+	pendingFrame:Hide()
+	pendingFrame:SetScript("OnUpdate", function(self, elapsed)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed > 1 then
+			if next(pendingNPCs) then
+				for npcID, count in pairs(pendingNPCs) do
+					if count > 2 then
+						nameCache[npcID] = UNKNOWN
+						pendingNPCs[npcID] = nil
+					else
+						local name = B.GetNPCName(npcID)
+						if name and name ~= "tooSoon" then
+							pendingNPCs[npcID] = nil
+						else
+							pendingNPCs[npcID] = pendingNPCs[npcID] + 1
+						end
+					end
+				end
+			else
+				self:Hide()
+			end
+
+			self.elapsed = 0
+		end
+	end)
+
+	function B.GetNPCName(npcID, callback)
+		local name = nameCache[npcID]
+		if not name then
+			tip:SetOwner(UIParent, "ANCHOR_NONE")
+			tip:SetHyperlink(format("unit:Creature-0-0-0-0-%d", npcID))
+			name = _G.NDui_ScanTooltipTextLeft1:GetText() or "tooSoon"
+			if name == "tooSoon" then
+				if not pendingNPCs[npcID] then
+					pendingNPCs[npcID] = 1
+					pendingFrame:Show()
+				end
+			else
+				nameCache[npcID] = name
+			end
+		end
+		if callback then callback(name) end
+
+		return name
 	end
 end
 
