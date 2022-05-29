@@ -362,8 +362,8 @@ G.DefaultSettings = {
 		DispellMode = 1,
 		UnitTargeted = false,
 		ColorByDot = false,
-		ColorDots = "",
 		DotColor = {r=1, g=.5, b=.2},
+		DotSpells = {},
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -575,7 +575,7 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	else
 		C.db = NDuiPDB[NDuiADB["ProfileIndex"][DB.MyFullName] - 1]
 	end
-	-- Transfer favourite items START
+	-- Transfer old data START
 	if C.db["Bags"] and C.db["Bags"]["FavouriteItems"] and next(C.db["Bags"]["FavouriteItems"]) then
 		for itemID in pairs(C.db["Bags"]["FavouriteItems"]) do
 			if not C.db["Bags"]["CustomItems"] then
@@ -591,7 +591,13 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		end
 		B.SplitList(C.db["Nameplate"]["CustomUnits"], C.db["Nameplate"]["UnitList"])
 	end
-	-- Transfer favourite items END
+	if C.db["Nameplate"] and C.db["Nameplate"]["ColorDots"] then
+		if not C.db["Nameplate"]["DotSpells"] then
+			C.db["Nameplate"]["DotSpells"] = {}
+		end
+		B.SplitList(C.db["Nameplate"]["DotSpells"], C.db["Nameplate"]["ColorDots"])
+	end
+	-- Transfer old data END
 	InitialSettings(G.DefaultSettings, C.db, true)
 
 	B:SetupUIScale(true)
@@ -662,6 +668,10 @@ end
 
 local function setupNameplateFilter()
 	G:SetupNameplateFilter(guiPage[5])
+end
+
+local function setupNameplateColorDots()
+	G:NameplateColorDots(guiPage[5])
 end
 
 local function setupNameplateUnitFilter()
@@ -800,10 +810,6 @@ end
 
 local function updatePowerUnitList()
 	B:GetModule("UnitFrames"):CreatePowerUnitTable()
-end
-
-local function refreshColorDots()
-	B:GetModule("UnitFrames"):RefreshColorDots()
 end
 
 local function refreshNameplates()
@@ -1131,9 +1137,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "Nameplate", "ColoredFocus", HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
 		{5, "Nameplate", "TargetColor", L["TargetNP Color"].."*", 2},
 		--{5, "Nameplate", "FocusColor", L["FocusNP Color"].."*", 2},
-		{1, "Nameplate", "ColorByDot", NewTag..HeaderTag..L["ColorByDot"].."*", nil, nil, nil, L["ColorByDotTip"]},
-		{5, "Nameplate", "DotColor", NewTag..L["DotColor"].."*"},
-		{2, "Nameplate", "ColorDots", NewTag..L["ColorDots"].."*", true, nil, refreshColorDots, L["ColorDotsTip"]},
+		{1, "Nameplate", "ColorByDot", NewTag..HeaderTag..L["ColorByDot"].."*", nil, setupNameplateColorDots, nil, L["ColorByDotTip"]},
 		{},--blank
 		{1, "Nameplate", "ShowCustomUnits", HeaderTag..L["ShowCustomUnits"].."*", nil, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitsTip"]},
 		{1, "Nameplate", "ShowPowerUnits", HeaderTag..L["ShowPowerUnits"].."*", true, setupNameplatePowerUnits, updatePowerUnitList, L["PowerUnitsTip"]},
