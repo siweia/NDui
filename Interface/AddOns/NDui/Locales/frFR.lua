@@ -915,4 +915,4 @@ L["ColorDots"] = "Aura highlight list" -- need translation
 L["ColorDotsTip"] = "|nEnter the spellID that you need for nameplate highlight. Use key space between multi spells." -- need translation
 L["QuakeTimerTip"] = "|nShow quake timer on top of player castbar, for affix quaking in mythic dungeons." -- need translation
 L["BloodlustStr"] = "%s duration ceased, don't forget to cast %s if necessary." -- need translation
-L["NPCID or Name"] = "|nEnter NPC ID or name directly. You can get NPC ID from GameTooltip by holding key SHIFT." -- need translation
+L["NPCID or Name"] = "|nEnter NPC ID or name directly.|n|nYou can get NPC ID from GameTooltip by holding key SHIFT." -- need translation
