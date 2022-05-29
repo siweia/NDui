@@ -811,4 +811,4 @@ L["ColorByDotTip"] = "|nIf enabled, color the unit nameplate that affected by YO
 L["DotColor"] = "Aura highlight color" -- need translation
 L["ColorDots"] = "Aura highlight list" -- need translation
 L["ColorDotsTip"] = "|nEnter the spellID that you need for nameplate highlight. Use key space between multi spells." -- need translation
-L["NPCID or Name"] = "|nEnter NPC ID or name directly. You can get NPC ID from GameTooltip by holding key SHIFT." -- need translation
+L["NPCID or Name"] = "|nEnter NPC ID or name directly.|n|nYou can get NPC ID from GameTooltip by holding key SHIFT." -- need translation
