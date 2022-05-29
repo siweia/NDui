@@ -319,7 +319,6 @@ function UF:OnLogin()
 		UF:QuestIconCheck()
 		UF:RefreshPlateByEvents()
 		UF:RefreshMajorSpells()
-		UF:RefreshColorDots()
 		UF:RefreshNameplateFilters()
 
 		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
