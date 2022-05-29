@@ -1676,7 +1676,9 @@ do
 		local swatch = CreateFrame("Button", nil, self, "BackdropTemplate")
 		swatch:SetSize(18, 18)
 		B.CreateBD(swatch, 1)
-		swatch.text = B.CreateFS(swatch, 14, name, false, "LEFT", 26, 0)
+		if name then
+			swatch.text = B.CreateFS(swatch, 14, name, false, "LEFT", 26, 0)
+		end
 		local tex = swatch:CreateTexture()
 		tex:SetInside()
 		tex:SetTexture(DB.bdTex)
