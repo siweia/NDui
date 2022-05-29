@@ -1800,3 +1800,101 @@ function G:NameplateUnitFilter(parent)
 		createBar(scroll.child, npcID)
 	end
 end
+
+local function refreshPowerUnitTable()
+	B:GetModule("UnitFrames"):CreatePowerUnitTable()
+end
+
+function G:NameplatePowerUnits(parent)
+	local guiName = "NDuiGUI_NameplatePowerUnits"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["ShowPowerList"].."*", true)
+	panel:SetScript("OnHide", refreshPowerUnitTable)
+
+	local barTable = {}
+
+	local function createBar(parent, text, isNew)
+		local npcID = tonumber(text)
+
+		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		bar:SetSize(220, 30)
+		B.CreateBD(bar, .25)
+		barTable[text] = bar
+
+		local icon, close = G:CreateBarWidgets(bar, npcID and 136243 or 132288)
+		if npcID then
+			B.AddTooltip(icon, "ANCHOR_RIGHT", "ID: "..npcID, "system")
+		end
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			barTable[text] = nil
+			if C.PowerUnits[text] then
+				C.db["Nameplate"]["PowerUnits"][text] = false
+			else
+				C.db["Nameplate"]["PowerUnits"][text] = nil
+			end
+			sortBars(barTable)
+		end)
+
+		local name = B.CreateFS(bar, 14, text, false, "LEFT", 30, 0)
+		name:SetWidth(190)
+		name:SetJustifyH("LEFT")
+		if isNew then name:SetTextColor(0, 1, 0) end
+		if npcID then
+			B.GetNPCName(npcID, function(npcName)
+				name:SetText(npcName)
+				if npcName == UNKNOWN then
+					name:SetTextColor(1, 0, 0)
+				end
+			end)
+		end
+
+		sortBars(barTable)
+	end
+
+	local frame = panel.bg
+
+	local scroll = G:CreateScroll(frame, 240, 485)
+	scroll.box = B.CreateEditBox(frame, 160, 25)
+	scroll.box:SetPoint("TOPLEFT", 10, -10)
+	B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["NPCID or Name"], "info", true)
+
+	local function addClick(button)
+		local parent = button.__owner
+		local text = tonumber(parent.box:GetText()) or parent.box:GetText()
+		if text and text ~= "" then
+			local modValue = C.db["Nameplate"]["PowerUnits"][text]
+			if modValue or modValue == nil and C.PowerUnits[text] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+			C.db["Nameplate"]["PowerUnits"][text] = true
+			createBar(parent.child, text, true)
+			parent.box:SetText("")
+		end
+	end
+	scroll.add = B.CreateButton(frame, 45, 25, ADD)
+	scroll.add:SetPoint("TOPRIGHT", -8, -10)
+	scroll.add.__owner = scroll
+	scroll.add:SetScript("OnClick", addClick)
+
+	scroll.reset = B.CreateButton(frame, 45, 25, RESET)
+	scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
+	StaticPopupDialogs["RESET_NDUI_POWERUNITS"] = {
+		text = L["Reset to default list"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			C.db["Nameplate"]["PowerUnits"] = {}
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
+	scroll.reset:SetScript("OnClick", function()
+		StaticPopup_Show("RESET_NDUI_POWERUNITS")
+	end)
+
+	local UF = B:GetModule("UnitFrames")
+	for npcID in pairs(UF.PowerUnits) do
+		createBar(scroll.child, npcID)
+	end
+end

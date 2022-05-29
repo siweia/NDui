@@ -74,39 +74,37 @@ function UF:BlockAddons()
 end
 
 -- Elements
-UF.CustomUnits = {}
-function UF:CreateUnitTable()
-	wipe(UF.CustomUnits)
-	if not C.db["Nameplate"]["CustomUnitColor"] then return end
+local function refreshNameplateUnits(VALUE)
+	wipe(UF[VALUE])
+	if not C.db["Nameplate"]["Show"..VALUE] then return end
 
-	for npcID in pairs(C.CustomUnits) do
-		if C.db["Nameplate"]["CustomUnits"][npcID] == nil then
-			UF.CustomUnits[npcID] = true
+	for npcID in pairs(C[VALUE]) do
+		if C.db["Nameplate"][VALUE][npcID] == nil then
+			UF[VALUE][npcID] = true
 		end
 	end
-	for npcID, value in pairs(C.db["Nameplate"]["CustomUnits"]) do
+	for npcID, value in pairs(C.db["Nameplate"][VALUE]) do
 		if value then
-			UF.CustomUnits[npcID] = true
+			UF[VALUE][npcID] = true
 		end
 	end
 end
 
-local showPowerList = {}
+UF.CustomUnits = {}
+function UF:CreateUnitTable()
+	refreshNameplateUnits("CustomUnits")
+end
+
+UF.PowerUnits = {}
 function UF:CreatePowerUnitTable()
-	wipe(showPowerList)
-	B.CopyTable(C.ShowPowerList, showPowerList)
-	B.SplitList(showPowerList, C.db["Nameplate"]["ShowPowerList"])
+	refreshNameplateUnits("PowerUnits")
 end
 
 function UF:UpdateUnitPower()
 	local unitName = self.unitName
 	local npcID = self.npcID
-	local shouldShowPower = showPowerList[unitName] or showPowerList[npcID]
-	if shouldShowPower then
-		self.powerText:Show()
-	else
-		self.powerText:Hide()
-	end
+	local shouldShowPower = UF.PowerUnits[unitName] or UF.PowerUnits[npcID]
+	self.powerText:SetShown(shouldShowPower)
 end
 
 -- Update unit color
