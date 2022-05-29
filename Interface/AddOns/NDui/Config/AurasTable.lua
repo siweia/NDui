@@ -168,20 +168,24 @@ local function checkNameplateFilter(index)
 	end
 end
 
+local function cleanupNameplateUnits(VALUE)
+	for npcID in pairs(C[VALUE]) do
+		if C.db["Nameplate"][VALUE][npcID] then
+			C.db["Nameplate"][VALUE][npcID] = nil
+		end
+	end
+	for npcID, value in pairs(C.db["Nameplate"][VALUE]) do
+		if value == false and C[VALUE][npcID] == nil then
+			C.db["Nameplate"][VALUE][npcID] = nil
+		end
+	end
+end
+
 function module:CheckNameplateFilters()
 	checkNameplateFilter(1)
 	checkNameplateFilter(2)
-	-- Custom units
-	for npcID in pairs(C.CustomUnits) do
-		if C.db["Nameplate"]["CustomUnits"][npcID] then
-			C.db["Nameplate"]["CustomUnits"][npcID] = nil
-		end
-	end
-	for npcID, value in pairs(C.db["Nameplate"]["CustomUnits"]) do
-		if value == false and C.CustomUnits[npcID] == nil then
-			C.db["Nameplate"]["CustomUnits"][npcID] = nil
-		end
-	end
+	cleanupNameplateUnits("CustomUnits")
+	cleanupNameplateUnits("PowerUnits")
 end
 
 function module:OnLogin()

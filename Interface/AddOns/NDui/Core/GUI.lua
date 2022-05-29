@@ -316,10 +316,11 @@ G.DefaultSettings = {
 		HostileCC = true,
 		TankMode = false,
 		TargetIndicator = 5,
-		CustomUnitColor = true,
+		ShowCustomUnits = true,
 		CustomColor = {r=0, g=.8, b=.3},
 		CustomUnits = {},
-		ShowPowerList = "",
+		ShowPowerUnits = true,
+		PowerUnits = {},
 		VerticalSpacing = .7,
 		ShowPlayerPlate = false,
 		PPWidth = 175,
@@ -665,6 +666,10 @@ end
 
 local function setupNameplateUnitFilter()
 	G:NameplateUnitFilter(guiPage[5])
+end
+
+local function setupNameplatePowerUnits()
+	G:NameplatePowerUnits(guiPage[5])
 end
 
 local function setupNameplateSize()
@@ -1130,8 +1135,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "DotColor", NewTag..L["DotColor"].."*"},
 		{2, "Nameplate", "ColorDots", NewTag..L["ColorDots"].."*", true, nil, refreshColorDots, L["ColorDotsTip"]},
 		{},--blank
-		{1, "Nameplate", "CustomUnitColor", HeaderTag..L["CustomUnitColor"].."*", nil, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitColorTip"]},
-		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"].."*", nil, nil, updatePowerUnitList, L["CustomUnitTips"]},
+		{1, "Nameplate", "ShowCustomUnits", HeaderTag..L["ShowCustomUnits"].."*", nil, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitsTip"]},
+		{1, "Nameplate", "ShowPowerUnits", HeaderTag..L["ShowPowerUnits"].."*", true, setupNameplatePowerUnits, updatePowerUnitList, L["PowerUnitsTip"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},

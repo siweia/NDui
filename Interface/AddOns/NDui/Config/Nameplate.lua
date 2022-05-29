@@ -23,7 +23,7 @@ C.CustomUnits = {
 }
 
 -- 显示能量值的单位
-C.ShowPowerList = {
+C.PowerUnits = {
 	[155432] = true, -- 魔力使者
 }
 
