@@ -313,6 +313,7 @@ do
 	end
 
 	local pendingNPCs, nameCache, callbacks = {}, {}, {}
+	local loadingStr = "..."
 	local pendingFrame = CreateFrame("Frame")
 	pendingFrame:Hide()
 	pendingFrame:SetScript("OnUpdate", function(self, elapsed)
@@ -328,7 +329,7 @@ do
 						pendingNPCs[npcID] = nil
 					else
 						local name = B.GetNPCName(npcID, callbacks[npcID])
-						if name and name ~= "tooSoon" then
+						if name and name ~= loadingStr then
 							pendingNPCs[npcID] = nil
 						else
 							pendingNPCs[npcID] = pendingNPCs[npcID] + 1
@@ -348,8 +349,8 @@ do
 		if not name then
 			tip:SetOwner(UIParent, "ANCHOR_NONE")
 			tip:SetHyperlink(format("unit:Creature-0-0-0-0-%d", npcID))
-			name = _G.NDui_ScanTooltipTextLeft1:GetText() or "tooSoon"
-			if name == "tooSoon" then
+			name = _G.NDui_ScanTooltipTextLeft1:GetText() or loadingStr
+			if name == loadingStr then
 				if not pendingNPCs[npcID] then
 					pendingNPCs[npcID] = 1
 					pendingFrame:Show()
