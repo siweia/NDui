@@ -798,12 +798,6 @@ function UF.PostUpdateGapIcon(_, _, icon)
 	end
 end
 
-local colorDots = {}
-function UF:RefreshColorDots()
-	wipe(colorDots)
-	B.SplitList(colorDots, C.db["Nameplate"]["ColorDots"])
-end
-
 local isCasterPlayer = {
 	["player"] = true,
 	["pet"] = true,
@@ -812,7 +806,7 @@ local isCasterPlayer = {
 function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 
-	if C.db["Nameplate"]["ColorByDot"] and style == "nameplate" and caster == "player" and colorDots[spellID] then
+	if C.db["Nameplate"]["ColorByDot"] and style == "nameplate" and caster == "player" and C.db["Nameplate"]["DotSpells"][spellID] then
 		element.hasTheDot = true
 	end
 

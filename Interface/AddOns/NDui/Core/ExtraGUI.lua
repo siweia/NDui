@@ -1699,6 +1699,87 @@ function G:SetupBuffFrame(parent)
 	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", updateDebuffFrame)
 end
 
+function G:NameplateColorDots(parent)
+	local guiName = "NDuiGUI_NameplateColorDots"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["ColorDotsList"].."*", true)
+
+	local barTable = {}
+
+	local function createBar(parent, spellID, isNew)
+		local spellName = GetSpellInfo(spellID)
+		local texture = GetSpellTexture(spellID)
+
+		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+		bar:SetSize(220, 30)
+		B.CreateBD(bar, .25)
+		barTable[spellID] = bar
+
+		local icon, close = G:CreateBarWidgets(bar, texture)
+		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID, "system")
+		close:SetScript("OnClick", function()
+			bar:Hide()
+			barTable[spellID] = nil
+			C.db["Nameplate"]["DotSpells"][spellID] = nil
+			sortBars(barTable)
+		end)
+
+		local name = B.CreateFS(bar, 14, spellName, false, "LEFT", 30, 0)
+		name:SetWidth(120)
+		name:SetJustifyH("LEFT")
+		if isNew then name:SetTextColor(0, 1, 0) end
+
+		sortBars(barTable)
+	end
+
+	local frame = panel.bg
+
+	local scroll = G:CreateScroll(frame, 240, 485)
+	scroll.box = B.CreateEditBox(frame, 135, 25)
+	scroll.box:SetPoint("TOPLEFT", 35, -10)
+	B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info", true)
+
+	local swatch = B.CreateColorSwatch(frame, nil, C.db["Nameplate"]["DotColor"])
+	swatch:SetPoint("RIGHT", scroll.box, "LEFT", -5, 0)
+	swatch.__default = G.DefaultSettings["Nameplate"]["DotColor"]
+
+	local function addClick(button)
+		local parent = button.__owner
+		local spellID = tonumber(parent.box:GetText())
+		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if C.db["Nameplate"]["DotSpells"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
+		C.db["Nameplate"]["DotSpells"][spellID] = true
+		createBar(parent.child, spellID, true)
+		parent.box:SetText("")
+	end
+	scroll.add = B.CreateButton(frame, 45, 25, ADD)
+	scroll.add:SetPoint("TOPRIGHT", -8, -10)
+	scroll.add.__owner = scroll
+	scroll.add:SetScript("OnClick", addClick)
+
+	scroll.reset = B.CreateButton(frame, 45, 25, RESET)
+	scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
+	StaticPopupDialogs["RESET_NDUI_DOTSPELLS"] = {
+		text = L["Reset to default list"],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			C.db["Nameplate"]["DotSpells"] = {}
+			ReloadUI()
+		end,
+		whileDead = 1,
+	}
+	scroll.reset:SetScript("OnClick", function()
+		StaticPopup_Show("RESET_NDUI_DOTSPELLS")
+	end)
+
+	for npcID in pairs(C.db["Nameplate"]["DotSpells"]) do
+		createBar(scroll.child, npcID)
+	end
+end
+
 local function refreshUnitTable()
 	B:GetModule("UnitFrames"):CreateUnitTable()
 end
