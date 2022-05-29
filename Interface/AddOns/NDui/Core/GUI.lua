@@ -1139,8 +1139,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{2, "Nameplate", "ColorDots", NewTag..L["ColorDots"].."*", true, nil, refreshColorDots, L["ColorDotsTip"]},
 		{},--blank
 		{1, "Nameplate", "CustomUnitColor", HeaderTag..L["CustomUnitColor"].."*", nil, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitColorTip"]},
-		{5, "Nameplate", "CustomColor", L["Custom Color"].."*"},
-		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"].."*", true, nil, updatePowerUnitList, L["CustomUnitTips"]},
+		{2, "Nameplate", "ShowPowerList", L["ShowPowerList"].."*", nil, nil, updatePowerUnitList, L["CustomUnitTips"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},

@@ -720,7 +720,7 @@ function G:SetupBuffIndicator(parent)
 			end
 			scroll.box:SetPoint("TOPLEFT", scroll.dd, "TOPRIGHT", 5, 0)
 
-			local swatch = B.CreateColorSwatch(frame, "")
+			local swatch = B.CreateColorSwatch(frame)
 			swatch:SetPoint("LEFT", scroll.box, "RIGHT", 5, 0)
 			scroll.swatch = swatch
 
@@ -1753,10 +1753,15 @@ function G:NameplateUnitFilter(parent)
 	end
 
 	local frame = panel.bg
+
 	local scroll = G:CreateScroll(frame, 240, 485)
-	scroll.box = B.CreateEditBox(frame, 160, 25)
-	scroll.box:SetPoint("TOPLEFT", 10, -10)
+	scroll.box = B.CreateEditBox(frame, 135, 25)
+	scroll.box:SetPoint("TOPLEFT", 35, -10)
 	B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["NPCID or Name"], "info", true)
+
+	local swatch = B.CreateColorSwatch(frame, nil, C.db["Nameplate"]["CustomColor"])
+	swatch:SetPoint("RIGHT", scroll.box, "LEFT", -5, 0)
+	swatch.__default = G.DefaultSettings["Nameplate"]["CustomColor"]
 
 	local function addClick(button)
 		local parent = button.__owner
