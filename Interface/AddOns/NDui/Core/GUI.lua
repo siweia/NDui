@@ -629,8 +629,8 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		C.db["Bags"]["FavouriteItems"] = nil
 	end
 	if C.db["Nameplate"] and C.db["Nameplate"]["UnitList"] then
-		if not C.db["Nameplate"]["CustomItems"] then
-			C.db["Nameplate"]["CustomItems"] = {}
+		if not C.db["Nameplate"]["CustomUnits"] then
+			C.db["Nameplate"]["CustomUnits"] = {}
 		end
 		B.SplitList(C.db["Nameplate"]["CustomUnits"], C.db["Nameplate"]["UnitList"])
 	end
