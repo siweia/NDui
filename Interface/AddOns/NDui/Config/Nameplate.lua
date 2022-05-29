@@ -119,7 +119,7 @@ C.CustomUnits = {
 }
 
 -- 显示能量值的单位
-C.ShowPowerList = {
+C.PowerUnits = {
 	[165556] = true,	-- 赤红深渊，瞬息具象
 	[171557] = true,	-- 猎手阿尔迪莫，巴加斯特之影
 }
