@@ -12,5 +12,4 @@ ignore:
   - Interface/AddOns/!BaudErrorFrame
   - Interface/TargetingFrame
   - Interface/Tooltips
-  - Interface/AddOns/NDui/Interface
   - README.md
