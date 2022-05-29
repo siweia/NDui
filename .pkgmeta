@@ -1,5 +1,9 @@
 package-as: NDui
 
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
 move-folders:
     NDui/Interface/AddOns/NDui: NDui
 
