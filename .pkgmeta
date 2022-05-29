@@ -1,4 +1,4 @@
-package-as: NDuiTBC
+package-as: NDui
 
 manual-changelog:
   filename: CHANGELOG.md
