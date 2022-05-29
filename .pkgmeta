@@ -1,0 +1,15 @@
+package-as: NDui
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
+move-folders:
+    NDui/Interface/AddOns/NDui: NDui
+
+ignore:
+  - .github/*
+  - Interface/AddOns/!BaudErrorFrame
+  - Interface/TargetingFrame
+  - Interface/Tooltips
+  - README.md
