@@ -1737,12 +1737,15 @@ function G:NameplateUnitFilter(parent)
 		end)
 
 		local name = B.CreateFS(bar, 14, text, false, "LEFT", 30, 0)
-		name:SetWidth(120)
+		name:SetWidth(190)
 		name:SetJustifyH("LEFT")
 		if isNew then name:SetTextColor(0, 1, 0) end
 		if npcID then
 			B.GetNPCName(npcID, function(npcName)
 				name:SetText(npcName)
+				if npcName == UNKNOWN then
+					name:SetTextColor(1, 0, 0)
+				end
 			end)
 		end
 

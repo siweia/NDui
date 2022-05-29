@@ -815,4 +815,4 @@ L["ColorByDotTip"] = "|n启用后，当目标身上含有来自你的特定法�
 L["DotColor"] = "法术染色颜色"
 L["ColorDots"] = "法术染色列表"
 L["ColorDotsTip"] = "|n输入染色姓名板时的法术ID。存在多个法术时，以空格隔开。"
-L["NPCID or Name"] = "|n输入NPCID或者名字。你可以按住SHIFT键观察目标来获取NPCID。"
+L["NPCID or Name"] = "|n输入NPCID或者名字。|n|n你可以按住SHIFT键观察目标来获取NPCID。"
