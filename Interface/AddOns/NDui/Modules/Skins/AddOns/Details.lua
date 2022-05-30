@@ -79,7 +79,7 @@ function S:ResetDetailsAnchor(force)
 		EmbedWindow(instance1, -3, 24, 320, height)
 	end
 
-	return instance1, instance2
+	return instance1
 end
 
 local function ReskinDetails()
@@ -99,7 +99,7 @@ local function ReskinDetails()
 	end
 
 	-- Reanchor
-	local instance1, instance2 = S:ResetDetailsAnchor()
+	local instance1 = S:ResetDetailsAnchor()
 
 	local listener = Details:CreateEventListener()
 	listener:RegisterEvent("DETAILS_INSTANCE_OPEN")
