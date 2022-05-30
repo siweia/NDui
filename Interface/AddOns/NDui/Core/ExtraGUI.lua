@@ -1198,7 +1198,6 @@ function G:SetupSwingBars(parent)
 	local panel = createExtraGUI(parent, guiName, L["UFs SwingBar"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
 
-	local UF = B:GetModule("UnitFrames")
 	local parent, offset = scroll.child, -10
 	local frame = _G.oUF_Player
 
