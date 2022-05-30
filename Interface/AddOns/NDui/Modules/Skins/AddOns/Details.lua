@@ -68,6 +68,7 @@ function S:ResetDetailsAnchor(force)
 	local Details = _G.Details
 	if not Details then return end
 
+	local height = 190
 	local instance1 = Details:GetInstance(1)
 	local instance2 = Details:GetInstance(2)
 	if instance1 and (force or IsDefaultAnchor(instance1)) then
