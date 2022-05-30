@@ -459,6 +459,17 @@ function TT:ResetUnit(btn)
 	end
 end
 
+function TT:FixStoneSoupError()
+	local blockTooltips = {
+		[556] = true -- Stone Soup
+	}
+	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
+		if self:IsForbidden() and blockTooltips[self.widgetSetID] and self.Bar then
+			self.Bar.tooltip = nil
+		end
+	end)
+end
+
 function TT:OnLogin()
 	GameTooltip.StatusBar = GameTooltipStatusBar
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
@@ -472,6 +483,7 @@ function TT:OnLogin()
 	GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
+	TT:FixStoneSoupError()
 
 	-- Elements
 	TT:ReskinTooltipIcons()
