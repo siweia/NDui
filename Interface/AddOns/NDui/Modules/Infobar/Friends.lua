@@ -237,6 +237,27 @@ local function inviteFunc(_, bnetIDGameAccount, guid)
 	FriendsFrame_InviteOrRequestToJoin(guid, bnetIDGameAccount)
 end
 
+local inviteTypeToButtonText = {
+	["INVITE"] = _G.TRAVEL_PASS_INVITE,
+	["SUGGEST_INVITE"] = _G.SUGGEST_INVITE,
+	["REQUEST_INVITE"] = _G.REQUEST_INVITE,
+	["INVITE_CROSS_FACTION"] = _G.TRAVEL_PASS_INVITE_CROSS_FACTION,
+	["SUGGEST_INVITE_CROSS_FACTION"] = _G.SUGGEST_INVITE_CROSS_FACTION,
+	["REQUEST_INVITE_CROSS_FACTION"] = _G.REQUEST_INVITE_CROSS_FACTION,
+}
+
+local function GetButtonTexFromInviteType(guid, factionName)
+	local inviteType = GetDisplayedInviteType(guid)
+	if factionName and factionName ~= DB.MyFaction then
+		inviteType = inviteType.."_CROSS_FACTION"
+	end
+	return inviteTypeToButtonText[inviteType]
+end
+
+local function GetNameAndInviteType(class, charName, guid, factionName)
+	return format("%s%s|r %s", B.HexRGB(B.ClassColor(DB.ClassList[class])), charName, GetButtonTexFromInviteType(guid, factionName))
+end
+
 local function buttonOnClick(self, btn)
 	if btn == "LeftButton" then
 		if IsAltKeyDown() then
@@ -247,27 +268,26 @@ local function buttonOnClick(self, btn)
 						wipe(menuList[i])
 					end
 				end
+				menuList[1].text = DB.InfoColor..self.data[2]
 
 				local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(self.data[1])
-				local lastGameAccountID, lastGameAccountGUID
 				if numGameAccounts > 0 then
 					for i = 1, numGameAccounts do
 						local gameAccountInfo = C_BattleNet_GetFriendGameAccountInfo(self.data[1], i)
 						local charName = gameAccountInfo.characterName
 						local client = gameAccountInfo.clientProgram
 						local class = gameAccountInfo.className or UNKNOWN
+						local factionName = gameAccountInfo.factionName or UNKNOWN
 						local bnetIDGameAccount = gameAccountInfo.gameAccountID
 						local guid = gameAccountInfo.playerGuid
 						local wowProjectID = gameAccountInfo.wowProjectID
-						if client == BNET_CLIENT_WOW and CanCooperateWithUnit(gameAccountInfo) and wowProjectID == WOW_PROJECT_ID then
+						if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID and guid then
 							if not menuList[index] then menuList[index] = {} end
-							menuList[index].text = B.HexRGB(B.ClassColor(DB.ClassList[class]))..charName
+							menuList[index].text = GetNameAndInviteType(class, charName, guid, factionName)
 							menuList[index].notCheckable = true
 							menuList[index].arg1 = bnetIDGameAccount
 							menuList[index].arg2 = guid
 							menuList[index].func = inviteFunc
-							lastGameAccountID = bnetIDGameAccount
-							lastGameAccountGUID = guid
 
 							index = index + 1
 						end
@@ -275,11 +295,7 @@ local function buttonOnClick(self, btn)
 				end
 
 				if index == 2 then return end
-				if index == 3 then
-					FriendsFrame_InviteOrRequestToJoin(lastGameAccountGUID, lastGameAccountID)
-				else
-					EasyMenu(menuList, B.EasyMenu, self, 0, 0, "MENU", 1)
-				end
+				EasyMenu(menuList, B.EasyMenu, self, 0, 0, "MENU", 1)
 			else
 				InviteToGroup(self.data[1])
 			end
