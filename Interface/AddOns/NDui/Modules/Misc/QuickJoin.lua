@@ -215,6 +215,10 @@ function M:AddAutoAcceptButton()
 	end)
 end
 
+local factionStr = {
+	[0] = "Horde",
+	[1] = "Alliance",
+}
 function M:ShowLeaderOverallScore()
 	local resultID = self.resultID
 	local searchResultInfo = resultID and C_LFGList_GetSearchResultInfo(resultID)
@@ -227,6 +231,22 @@ function M:ShowLeaderOverallScore()
 				local oldName = self.ActivityName:GetText() 
 				oldName = gsub(oldName, ".-"..HEADER_COLON, "") -- Tazavesh
 				self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
+
+				if not self.crossFactionLogo then
+					local logo = self:CreateTexture(nil, "OVERLAY")
+					logo:SetPoint("TOPLEFT", -6, 5)
+					logo:SetSize(24, 24)
+					self.crossFactionLogo = logo
+				end
+			end
+		end
+
+		if self.crossFactionLogo then
+			if searchResultInfo.crossFactionListing then
+				self.crossFactionLogo:Hide()
+			else
+				self.crossFactionLogo:SetTexture("Interface\\Timer\\"..factionStr[searchResultInfo.leaderFactionGroup].."-Logo")
+				self.crossFactionLogo:Show()
 			end
 		end
 	end
