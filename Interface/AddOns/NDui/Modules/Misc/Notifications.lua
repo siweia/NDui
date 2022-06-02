@@ -490,8 +490,7 @@ function M:ItemAlert_CheckGroup()
 end
 
 function M:SpellItemAlert()
-	local faction = UnitFactionGroup("player")
-	M.factionSpell = faction == "Alliance" and 32182 or 2825
+	M.factionSpell = DB.MyFaction == "Alliance" and 32182 or 2825
 	M.factionSpell = GetSpellLink(M.factionSpell)
 
 	if C.db["Misc"]["SpellItemAlert"] then
