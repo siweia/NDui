@@ -129,42 +129,27 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(PetBattleQueueReadyFrame.DeclineButton)
 
 	-- PlayerReportFrame
-	if not DB.isNewPatch then
-		PlayerReportFrame:HookScript("OnShow", function(self)
-			if not self.styled then
-				B.StripTextures(self)
-				B.SetBD(self)
-				B.StripTextures(self.Comment)
-				B.ReskinInput(self.Comment)
-				B.Reskin(self.ReportButton)
-				B.Reskin(self.CancelButton)
+	B.StripTextures(ReportFrame)
+	B.SetBD(ReportFrame)
+	B.ReskinClose(ReportFrame.CloseButton)
+	B.Reskin(ReportFrame.ReportButton)
+	B.ReskinDropDown(ReportFrame.ReportingMajorCategoryDropdown)
+	B.ReskinEditBox(ReportFrame.Comment)
 
-				self.styled = true
-			end
-		end)
-	else
-		B.StripTextures(ReportFrame)
-		B.SetBD(ReportFrame)
-		B.ReskinClose(ReportFrame.CloseButton)
-		B.Reskin(ReportFrame.ReportButton)
-		B.ReskinDropDown(ReportFrame.ReportingMajorCategoryDropdown)
-		B.ReskinEditBox(ReportFrame.Comment)
+	hooksecurefunc(ReportFrame, "AnchorMinorCategory", function(self)
+		if self.MinorCategoryButtonPool then
+			for button in self.MinorCategoryButtonPool:EnumerateActive() do
+				if not button.styled then
+					B.StripTextures(button)
+					button.bg = B.CreateBDFrame(button, .25)
+					button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+					button:HookScript("OnClick", updateMinorButtonState)
 
-		hooksecurefunc(ReportFrame, "AnchorMinorCategory", function(self)
-			if self.MinorCategoryButtonPool then
-				for button in self.MinorCategoryButtonPool:EnumerateActive() do
-					if not button.styled then
-						B.StripTextures(button)
-						button.bg = B.CreateBDFrame(button, .25)
-						button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-						button:HookScript("OnClick", updateMinorButtonState)
-
-						button.styled = true
-					end
-
-					updateMinorButtonState(button)
+					button.styled = true
 				end
+
+				updateMinorButtonState(button)
 			end
-		end)
-	end
+		end
+	end)
 end)

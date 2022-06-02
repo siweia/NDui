@@ -1147,7 +1147,7 @@ do
 			self.Icon:SetPoint("RIGHT")
 			self.Icon:SetSize(14, 14)
 		end
-		if DB.isNewPatch and self.ResetButton then
+		if self.ResetButton then
 			B.ReskinFilterReset(self.ResetButton)
 		end
 	end
