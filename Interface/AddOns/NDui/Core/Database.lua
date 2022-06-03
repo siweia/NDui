@@ -31,6 +31,9 @@ DB.ClassList = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 	DB.ClassList[v] = k
 end
+for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+	DB.ClassList[v] = k
+end
 DB.ClassColors = {}
 local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 for class, value in pairs(colors) do
