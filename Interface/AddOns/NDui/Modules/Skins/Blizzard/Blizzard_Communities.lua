@@ -69,6 +69,22 @@ local function updateNameFrame(self)
 	end
 end
 
+local function replacedRoleTex(icon, x1, x2, y1, y2)
+	if x1 == 0 and x2 == 19/64 and y1 == 22/64 and y2 == 41/64 then
+		B.ReskinSmallRole(icon, "TANK")
+	elseif x1 == 20/64 and x2 == 39/64 and y1 == 1/64 and y2 == 20/64 then
+		B.ReskinSmallRole(icon, "HEALER")
+	elseif x1 == 20/64 and x2 == 39/64 and y1 == 22/64 and y2 == 41/64 then
+		B.ReskinSmallRole(icon, "DAMAGER")
+	end
+end
+
+local function UpdateRoleTexture(icon)
+	if not icon then return end
+	replacedRoleTex(icon, icon:GetTexCoord())
+	hooksecurefunc(icon, "SetTexCoord", replacedRoleTex)
+end
+
 local function updateMemberName(self, info)
 	if not info then return end
 
@@ -569,6 +585,10 @@ C.themes["Blizzard_Communities"] = function()
 				B.Reskin(button.InviteButton)
 				B.Reskin(button.CancelInvitationButton)
 				hooksecurefunc(button, "UpdateMemberInfo", updateMemberName)
+
+				UpdateRoleTexture(button.RoleIcon1)
+				UpdateRoleTexture(button.RoleIcon2)
+				UpdateRoleTexture(button.RoleIcon3)
 
 				button.styled = true
 			end
