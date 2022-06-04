@@ -1,6 +1,15 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+C.themes["Blizzard_NewPlayerExperience"] = function()
+	B.Reskin(KeyboardMouseConfirmButton)
+	NPE_TutorialWalk_Frame.ContainerFrame.TURNLEFT.KeyBind:SetTextColor(1, .8, 0)
+	NPE_TutorialWalk_Frame.ContainerFrame.TURNRIGHT.KeyBind:SetTextColor(1, .8, 0)
+	NPE_TutorialWalk_Frame.ContainerFrame.MOVEFORWARD.KeyBind:SetTextColor(1, .8, 0)
+	NPE_TutorialWalk_Frame.ContainerFrame.MOVEBACKWARD.KeyBind:SetTextColor(1, .8, 0)
+	NPE_TutorialSingleKey_Frame.ContainerFrame.KeyBind.KeyBind:SetTextColor(1, .8, 0)
+end
+
 C.themes["Blizzard_NewPlayerExperienceGuide"] = function()
 	local GuideFrame = GuideFrame
 
