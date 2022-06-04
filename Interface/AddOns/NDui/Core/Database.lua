@@ -175,6 +175,16 @@ DB.ReminderBuffs = {
 			instance = true,
 			pvp = true,
 		},
+		{	spells = {
+				[168] = true,	-- 冰甲术
+				[6117] = true,	-- 法师护甲
+				[30482] = true,	-- 熔岩护甲
+			},
+			depend = 168,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
 	},
 	PRIEST = {
 		{	spells = {	-- 真言术耐
