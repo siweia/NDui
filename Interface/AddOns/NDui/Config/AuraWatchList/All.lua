@@ -45,6 +45,7 @@ local module = B:GetModule("AurasTable")
 -- 全职业的相关监控
 local list = {
 	["Enchant Aura"] = {	-- 附魔及饰品组
+		{AuraID = 341260, UnitID = "player", Flash = true},	-- 学识爆发，传家宝套装
 		{AuraID = 354808, UnitID = "player"},	-- 棱彩之光，1万币的小宠物
 		-- 种族天赋
 		{AuraID = 26297, UnitID = "player"},	-- 狂暴 巨魔
