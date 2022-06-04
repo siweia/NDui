@@ -25,6 +25,6 @@ jobs:
           fetch-depth: 0
 
       - name: Package and release
-        uses: BigWigsMods/packager@v2
+        uses: BigWigsMods/packager@fc4c435f6bdb3ad07fed327563119156363243bb
         with:
-          args: -p 0 -w 0 -g BCC
+          args: -w 0 -g BCC
