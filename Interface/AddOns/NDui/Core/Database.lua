@@ -267,6 +267,7 @@ DB.ReminderBuffs = {
 		{	spells = {
 				[28176] = true,	-- 邪甲术
 				[706] = true,	-- 魔甲术
+				[687] = true,	-- 恶魔皮肤
 			},
 			depend = 28176,
 			combat = true,
