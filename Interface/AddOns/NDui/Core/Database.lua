@@ -254,10 +254,10 @@ DB.ReminderBuffs = {
 	},
 	WARLOCK = {
 		{	spells = {
-				[687] = true,	-- 恶魔皮肤
 				[706] = true,	-- 魔甲术
+				[687] = true,	-- 恶魔皮肤
 			},
-			depend = 687,
+			depend = 706,
 			combat = true,
 			instance = true,
 			pvp = true,
