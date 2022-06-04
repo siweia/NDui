@@ -174,6 +174,15 @@ DB.ReminderBuffs = {
 			instance = true,
 			pvp = true,
 		},
+		{	spells = {
+				[168] = true,	-- 冰甲术
+				[6117] = true,	-- 法师护甲
+			},
+			depend = 168,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
 	},
 	PRIEST = {
 		{	spells = {	-- 真言术耐
@@ -238,6 +247,17 @@ DB.ReminderBuffs = {
 				[20906] = true,
 			},
 			depend = 20906,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+	},
+	WARLOCK = {
+		{	spells = {
+				[687] = true,	-- 恶魔皮肤
+				[706] = true,	-- 魔甲术
+			},
+			depend = 687,
 			combat = true,
 			instance = true,
 			pvp = true,
