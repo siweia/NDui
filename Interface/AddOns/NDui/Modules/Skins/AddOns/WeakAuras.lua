@@ -4,7 +4,7 @@ local S = B:GetModule("Skins")
 
 local pairs, unpack = pairs, unpack
 
-local function UpdateIconBgAlpha(icon, alpha)
+local function UpdateIconBgAlpha(icon, _, _, _, alpha)
 	icon.bg:SetAlpha(alpha)
 	if icon.bg.__shadow then
 		icon.bg.__shadow:SetAlpha(alpha)
@@ -39,7 +39,7 @@ local function ReskinWAIcon(icon)
 	hooksecurefunc(icon, "SetTexCoord", UpdateIconTexCoord)
 	icon.bg = B.SetBD(icon, 0)
 	icon.bg:SetFrameLevel(0)
-	hooksecurefunc(icon, "SetAlpha", UpdateIconBgAlpha)
+	hooksecurefunc(icon, "SetVertexColor", UpdateIconBgAlpha)
 end
 
 local function Skin_WeakAuras(f, fType)
