@@ -231,19 +231,26 @@ function S:ATT()
 	local ATT = _G.AllTheThings
 	if not ATT then return end
 
-	hooksecurefunc(ATT, "GetWindow", function(self, suffix)
-		local frame = self.Windows[suffix]
-		if frame and not frame.styled then
-			B.SetBD(frame, nil, 2, -2, -2, 2)
-			B.ReskinClose(frame.CloseButton, nil, -4, -4)
-			B.ReskinScroll(frame.ScrollBar)
-			frame.Grip:SetTexture([[Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up]])
-			local up = frame.ScrollBar:GetChildren()
-			up:ClearAllPoints()
-			up:SetPoint("TOPRIGHT", 0, 10)
+	local function reskinATTWindow(frame)
+		if not frame or frame.styled then return end
 
-			frame.styled = true
-		end
+		B.SetBD(frame, nil, 2, -2, -2, 2)
+		B.ReskinClose(frame.CloseButton, nil, -4, -4)
+		B.ReskinScroll(frame.ScrollBar)
+		frame.Grip:SetTexture([[Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up]])
+		local up = frame.ScrollBar:GetChildren()
+		up:ClearAllPoints()
+		up:SetPoint("TOPRIGHT", 0, 10)
+
+		frame.styled = true
+	end
+
+	for _, frame in pairs(ATT.Windows) do
+		reskinATTWindow(frame)
+	end
+
+	hooksecurefunc(ATT, "GetWindow", function(self, suffix)
+		reskinATTWindow(self.Windows[suffix])
 	end)
 end
 
