@@ -17,7 +17,6 @@ local function addIcon(texture)
 	return texture
 end
 
-local menuCreated
 local menuList = {
 	{text = CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true},
 	{text = SPECIALIZATION, hasArrow = true, notCheckable = true, menuList = {}},
@@ -117,8 +116,6 @@ local function checkLootSpec(self)
 end
 
 local function BuildSpecMenu()
-	if menuCreated then return end
-
 	local specList = menuList[2].menuList
 	local lootList = menuList[3].menuList
 	lootList[1] = {text = "", arg1 = 0, func = selectLootSpec, checked = checkLootSpec}
@@ -130,7 +127,6 @@ local function BuildSpecMenu()
 			lootList[i+1] = {text = name, arg1 = id, func = selectLootSpec, checked = checkLootSpec}
 		end
 	end
-	menuCreated = true
 end
 
 info.onMouseUp = function(self, btn)
@@ -141,7 +137,10 @@ info.onMouseUp = function(self, btn)
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleTalentFrame(2)
 	else
-		BuildSpecMenu()
+		if not menuList[1].created then
+			BuildSpecMenu()
+			menuList[1].created = true
+		end
 		menuList[3].menuList[1].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(specIndex)))
 		EasyMenu(menuList, B.EasyMenu, self, -80, 100, "MENU", 1)
 		GameTooltip:Hide()
