@@ -24,6 +24,25 @@ if not crossRealms or #crossRealms == 0 then
 	crossRealms = {[1]=myRealm}
 end
 
+StaticPopupDialogs["RESETGOLD"] = {
+	text = L["Are you sure to reset the gold count?"],
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		for _, realm in pairs(crossRealms) do
+			if NDuiADB["totalGold"][realm] then
+				wipe(NDuiADB["totalGold"][realm])
+			end
+		end
+		NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
+	end,
+	whileDead = 1,
+}
+
+local menuList = {
+	{text = B.HexRGB(1, .8, 0)..REMOVE_WORLD_MARKERS.."!!!", notCheckable = true, func = function() StaticPopup_Show("RESETGOLD") end},
+}
+
 local function getClassIcon(class)
 	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
 	c1, c2, c3, c4 = (c1+.03)*50, (c2-.03)*50, (c3+.03)*50, (c4-.03)*50
@@ -82,25 +101,45 @@ info.onEvent = function(self, event, arg1)
 	oldMoney = newMoney
 end
 
-StaticPopupDialogs["RESETGOLD"] = {
-	text = L["Are you sure to reset the gold count?"],
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		for _, realm in pairs(crossRealms) do
-			if NDuiADB["totalGold"][realm] then
-				wipe(NDuiADB["totalGold"][realm])
+local RebuildCharList
+
+local function clearCharGold(_, realm, name)
+	NDuiADB["totalGold"][realm][name] = nil
+	DropDownList1:Hide()
+	RebuildCharList()
+end
+
+function RebuildCharList()
+	for i = 2, #menuList do
+		if menuList[i] then wipe(menuList[i]) end
+	end
+
+	local index = 1
+	for _, realm in pairs(crossRealms) do
+		if NDuiADB["totalGold"][realm] then
+			for name, value in pairs(NDuiADB["totalGold"][realm]) do
+				if not (realm == myRealm and name == myName) then
+					index = index + 1
+					if not menuList[index] then menuList[index] = {} end
+					menuList[index].text = B.HexRGB(B.ClassColor(value[2]))..Ambiguate(name.."-"..realm, "none")
+					menuList[index].notCheckable = true
+					menuList[index].arg1 = realm
+					menuList[index].arg2 = name
+					menuList[index].func = clearCharGold
+				end
 			end
 		end
-		NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
-	end,
-	whileDead = 1,
-}
+	end
+end
 
 info.onMouseUp = function(self, btn)
 	if btn == "RightButton" then
 		if IsControlKeyDown() then
-			StaticPopup_Show("RESETGOLD")
+			if not menuList[1].created then
+				RebuildCharList()
+				menuList[1].created = true
+			end
+			EasyMenu(menuList, B.EasyMenu, self, -80, 100, "MENU", 1)
 		else
 			NDuiADB["ShowSlots"] = not NDuiADB["ShowSlots"]
 			if NDuiADB["ShowSlots"] then
