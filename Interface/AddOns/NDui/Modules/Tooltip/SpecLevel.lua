@@ -250,6 +250,7 @@ function TT:GetUnitSpec(unit)
 			specName = select(2, GetSpecializationInfoByID(specID))
 		end
 	end
+	if specName == "" then specName = NONE end
 
 	return specName
 end
