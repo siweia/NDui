@@ -91,6 +91,12 @@ oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
 end
 oUF.Tags.Events["VariousMP"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
+oUF.Tags.Methods["curAbsorb"] = function(unit)
+	local value = UnitGetTotalAbsorbs(unit)
+	return value > 0 and DB.InfoColor..value.."+|r"
+end
+oUF.Tags.Events["curAbsorb"] = "UNIT_ABSORB_AMOUNT_CHANGED UNIT_HEAL_ABSORB_AMOUNT_CHANGED"
+
 oUF.Tags.Methods["color"] = function(unit)
 	local class = select(2, UnitClass(unit))
 	local reaction = UnitReaction(unit, "player")

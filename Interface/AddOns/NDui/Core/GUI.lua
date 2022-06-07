@@ -215,6 +215,7 @@ G.DefaultSettings = {
 		RCCName = true,
 		HideTip = false,
 		DescRole = true,
+		PlayerAbsorb = false,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -903,6 +904,12 @@ local function updateUFTextScale()
 	B:GetModule("UnitFrames"):UpdateTextScale()
 end
 
+local function togglePlayerAbsorb()
+	if _G.oUF_Player then
+		B:GetModule("UnitFrames").UpdateFrameHealthTag(_G.oUF_Player)
+	end
+end
+
 local function toggleUFClassPower()
 	B:GetModule("UnitFrames"):ToggleUFClassPower()
 end
@@ -1141,6 +1148,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", true, setupClassPower, toggleUFClassPower},
 		{1, "UFs", "Portrait", L["UFs Portrait"]},
 		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
+		{1, "UFs", "PlayerAbsorb", "Player absorb value".."*", nil, nil, togglePlayerAbsorb},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateUFTextScale},
 		{},--blank

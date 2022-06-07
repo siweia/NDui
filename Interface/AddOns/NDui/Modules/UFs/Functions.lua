@@ -184,7 +184,8 @@ function UF:UpdateFrameHealthTag()
 		valueType = UF.VariousTagIndex[C.db["UFs"]["PetHPTag"]]
 	end
 
-	self:Tag(self.healthValue, "[VariousHP("..valueType..")]")
+	local showValue = C.db["UFs"]["PlayerAbsorb"] and mystyle == "player" and "[curAbsorb] " or ""
+	self:Tag(self.healthValue, showValue.."[VariousHP("..valueType..")]")
 	self.healthValue:UpdateTag()
 end
 
