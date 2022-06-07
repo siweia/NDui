@@ -112,7 +112,7 @@ function M:ItemLevel_UpdateGemInfo(link, unit, index, slotFrame)
 					texture:SetTexture(gem)
 					bg:SetBackdropBorderColor(0, 0, 0)
 					bg:Show()
-		
+
 					gemStep = gemStep + 1
 				end
 			end

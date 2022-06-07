@@ -505,7 +505,7 @@ function module:SetupMinimap()
 			value = value + zoom*mult
 			if value > 100 then value = 100 end
 			if value < 0 then value = 0 end
-	
+
 			SetCVar("Sound_MasterVolume", tostring(value/100))
 			module.VolumeText:SetText(value)
 			module.VolumeText:SetTextColor(GetVolumeColor(value))
