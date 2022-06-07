@@ -914,3 +914,6 @@ L["BloodlustStr"] = "%s duration ceased, don't forget to cast %s if necessary." 
 L["NPCID or Name"] = "|nEnter NPC ID or name directly.|n|nYou can get NPC ID from GameTooltip by holding key SHIFT." -- need translation
 L["ShowPowerUnits"] = "Show power units" -- need translation
 L["PowerUnitsTip"] = "|nIf enabled, show unit's current power value under nameplate." -- need translation
+L["PlayerAbsorb"] = "Player absorb value" -- need translation
+L["PlayerAbsorbTip"] = "|nIf enabled, show player absorb value next to current health text." -- need translation
+L["Name Offset"] = "Name Y-Offset" -- need translation
