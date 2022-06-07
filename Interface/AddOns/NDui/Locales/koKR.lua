@@ -814,3 +814,4 @@ L["ColorDotsList"] = "Aura highlight list" -- need translation
 L["NPCID or Name"] = "|nEnter NPC ID or name directly.|n|nYou can get NPC ID from GameTooltip by holding key SHIFT." -- need translation
 L["ShowPowerUnits"] = "Show power units" -- need translation
 L["PowerUnitsTip"] = "|nIf enabled, show unit's current power value under nameplate." -- need translation
+L["Name Offset"] = "Name Y-Offset" -- need translation

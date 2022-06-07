@@ -993,7 +993,7 @@ G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["Sho
 G.TabList = {
 	L["Actionbar"],
 	L["Bags"],
-	L["Unitframes"],
+	NewTag..L["Unitframes"],
 	L["RaidFrame"],
 	NewTag..L["Nameplate"],
 	L["PlayerPlate"],
@@ -1058,7 +1058,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Bags", "BankWidth", L["Bank Width"].."*", true, {10, 40, 1}, updateBagSize},
 	},
 	[3] = {
-		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
+		{1, "UFs", "Enable", NewTag..HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
 		{1, "UFs", "Arena", L["Arena Frame"], true},
 		{1, "UFs", "ToToT", L["TototUF"]},
 		{1, "UFs", "EnergyTicker", L["EnergyTicker"].."*", true, nil, toggleUFClassPower},
