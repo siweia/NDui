@@ -247,8 +247,18 @@ function UF:CreateHealthText(self)
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
 		self:Tag(name, "[nplevel][name]")
+	elseif mystyle == "player" or mystyle == "target" then
+		name:SetPoint("LEFT", 3, C.db["UFs"]["PlayerNameOffset"])
+		name:SetWidth(self:GetWidth()*(C.db["UFs"]["PlayerNameOffset"] == 0 and .55 or 1))
+	elseif mystyle == "focus" then
+		name:SetPoint("LEFT", 3, C.db["UFs"]["FocusNameOffset"])
+		name:SetWidth(self:GetWidth()*(C.db["UFs"]["FocusNameOffset"] == 0 and .55 or 1))
+	elseif mystyle == "boss" or mystyle == "arena" then
+		name:SetPoint("LEFT", 3, C.db["UFs"]["BossNameOffset"])
+		name:SetWidth(self:GetWidth()*(C.db["UFs"]["BossNameOffset"] == 0 and .55 or 1))
 	else
-		name:SetWidth(self:GetWidth()*.55)
+		name:SetPoint("LEFT", 3, C.db["UFs"]["PetNameOffset"])
+		name:SetWidth(self:GetWidth()*(C.db["UFs"]["PetNameOffset"] == 0 and .55 or 1))
 	end
 
 	UF.UpdateFrameNameTag(self)
@@ -384,6 +394,8 @@ function UF:CreatePowerText(self)
 		ppval:SetPoint("RIGHT", -3, C.db["UFs"]["PlayerPowerOffset"])
 	elseif mystyle == "focus" then
 		ppval:SetPoint("RIGHT", -3, C.db["UFs"]["FocusPowerOffset"])
+	elseif mystyle == "boss" or mystyle == "arena" then
+		ppval:SetPoint("RIGHT", -3, C.db["UFs"]["BossPowerOffset"])
 	end
 	self.powerText = ppval
 	UF.UpdateFramePowerTag(self)
