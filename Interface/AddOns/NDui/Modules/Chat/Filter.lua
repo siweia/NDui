@@ -268,7 +268,7 @@ end
 function module:ChatFilter()
 	if C.db["Chat"]["ChatItemLevel"] then
 		GetDungeonScoreInColor = B:GetModule("Tooltip").GetDungeonScore
-	
+
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_LOOT", self.UpdateChatItemLevel)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateChatItemLevel)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateChatItemLevel)

@@ -973,7 +973,7 @@ do
 	local function updateTrimScrollArrow(self, atlas)
 		local arrow = self.__owner
 		if not arrow.__texture then return end
-	
+
 		if atlas == arrow.disabledTexture then
 			arrow.__texture:SetVertexColor(.5, .5, .5)
 		else
@@ -991,7 +991,7 @@ do
 		B.CreateBDFrame(tex, .25)
 		B.SetupArrow(tex, direction)
 		self.__texture = tex
-	
+
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 		self.Texture.__owner = self

@@ -228,7 +228,7 @@ function M:ShowLeaderOverallScore()
 			local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore
 				or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
 			if showScore then
-				local oldName = self.ActivityName:GetText() 
+				local oldName = self.ActivityName:GetText()
 				oldName = gsub(oldName, ".-"..HEADER_COLON, "") -- Tazavesh
 				self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
 
