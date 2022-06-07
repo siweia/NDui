@@ -739,7 +739,7 @@ function module:OnLogin()
 		keyring:SetPoint("TOPRIGHT", f.main, "BOTTOMRIGHT", 0, -5)
 		keyring:Hide()
 		f.main.keyring = keyring
-	
+
 		for i = 1, 5 do
 			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
 		end

@@ -1410,7 +1410,7 @@ function G:SetupActionBar(parent)
 
 	local Bar = B:GetModule("Actionbar")
 	local defaultValues = {
-		-- defaultSize, minButtons, maxButtons, defaultButtons, defaultPerRow 
+		-- defaultSize, minButtons, maxButtons, defaultButtons, defaultPerRow
 		["Bar1"] = {34, 6, 12, 12, 12},
 		["Bar2"] = {34, 1, 12, 12, 12},
 		["Bar3"] = {32, 0, 12, 0, 12},
@@ -1679,7 +1679,7 @@ function G:SetupBuffFrame(parent)
 		A:UpdateHeader(A.BuffFrame)
 		A.BuffFrame.mover:SetSize(A.BuffFrame:GetSize())
 	end
-	
+
 	local function updateDebuffFrame()
 		if not A.settings then return end
 		A:UpdateOptions()
