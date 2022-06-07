@@ -44,7 +44,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 360259) -- 幽影箭
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 361067) -- 晋升堡垒的结界
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 360687) -- 刻符者的死亡之触[可驱散]
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 365041) -- 啸风双翼
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 361608) -- 罪孽烦扰
+--module:RegisterDebuff(TIER, INSTANCE, BOSS, 361608) -- 罪孽烦扰
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 362383) -- 心能箭矢
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 365306) -- 振奋之花
 
