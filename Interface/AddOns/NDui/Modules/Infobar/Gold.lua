@@ -91,7 +91,9 @@ info.onEvent = function(self, event, arg1)
 	end
 
 	if not NDuiADB["totalGold"][myRealm] then NDuiADB["totalGold"][myRealm] = {} end
-	NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
+	if not NDuiADB["totalGold"][myRealm][myName] then NDuiADB["totalGold"][myRealm][myName] = {} end
+	NDuiADB["totalGold"][myRealm][myName][1] = GetMoney()
+	NDuiADB["totalGold"][myRealm][myName][2] = DB.MyClass
 
 	oldMoney = newMoney
 end
@@ -171,12 +173,17 @@ info.onEnter = function(self)
 
 	local totalGold = 0
 	GameTooltip:AddLine(L["RealmCharacter"], .6,.8,1)
-	local thisRealmList = NDuiADB["totalGold"][myRealm]
-	for k, v in pairs(thisRealmList) do
-		local gold, class = unpack(v)
-		local r, g, b = B.ClassColor(class)
-		GameTooltip:AddDoubleLine(getClassIcon(class)..k, module:GetMoneyString(gold), r,g,b, 1,1,1)
-		totalGold = totalGold + gold
+	for _, realm in pairs(crossRealms) do
+		local thisRealmList = NDuiADB["totalGold"][realm]
+		if thisRealmList then
+			for k, v in pairs(thisRealmList) do
+				local name = Ambiguate(k.."-"..realm, "none")
+				local gold, class = unpack(v)
+				local r, g, b = B.ClassColor(class)
+				GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+				totalGold = totalGold + gold
+			end
+		end
 	end
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
