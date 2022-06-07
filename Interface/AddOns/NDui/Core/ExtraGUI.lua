@@ -918,7 +918,7 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFrameHealthTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["Pet&*Target"], -1090, "Pet", updatePetSize)
+	createOptionGroup(scroll.child, L["Pet&*Target"], -550, "Pet", updatePetSize)
 --[[
 	local function updateBossSize()
 		for _, frame in pairs(ns.oUF.objects) do
