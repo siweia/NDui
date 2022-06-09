@@ -415,6 +415,7 @@ function UF:OnLogin()
 	end
 
 	if C.db["UFs"]["RaidFrame"] then
+		SetCVar("predictedHealth", 1)
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
 		UF.headers = {}

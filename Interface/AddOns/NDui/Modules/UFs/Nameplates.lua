@@ -64,7 +64,6 @@ function UF:SetupCVars()
 	SetCVar("nameplateOverlapH", .8)
 	SetCVar("nameplateSelectedAlpha", 1)
 	SetCVar("showQuestTrackingTooltips", 1)
-	SetCVar("predictedHealth", 1)
 
 	SetCVar("nameplateSelectedScale", 1)
 	SetCVar("nameplateLargerScale", 1)
