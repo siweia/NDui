@@ -40,7 +40,6 @@ function UF:SetupCVars()
 	UF:UpdatePlateCVars()
 	SetCVar("nameplateOverlapH", .8)
 	SetCVar("nameplateSelectedAlpha", 1)
-	SetCVar("predictedHealth", 1)
 	UF:UpdatePlateClickThru()
 
 	SetCVar("nameplateSelectedScale", 1)
