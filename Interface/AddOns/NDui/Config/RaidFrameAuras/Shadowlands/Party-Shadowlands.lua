@@ -116,6 +116,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 334913) -- 死亡之主
 module:RegisterDebuff(TIER, INSTANCE, 0, 325725) -- 寰宇操控
 module:RegisterDebuff(TIER, INSTANCE, 0, 328987) -- 狂热
 module:RegisterDebuff(TIER, INSTANCE, 0, 334496) -- 催眠光粉
+module:RegisterDebuff(TIER, INSTANCE, 0, 334505, 6) -- 光尘之梦
 module:RegisterDebuff(TIER, INSTANCE, 0, 339978) -- 安抚迷雾
 module:RegisterDebuff(TIER, INSTANCE, 0, 333250) -- 放血之击
 module:RegisterDebuff(TIER, INSTANCE, 0, 322746) -- 堕落之血
