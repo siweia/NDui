@@ -27,7 +27,7 @@ function S:RematchIcon()
 		local hl = self.GetHighlightTexture and self:GetHighlightTexture() or select(3, self:GetRegions())
 		if hl then
 			hl:SetColorTexture(1, 1, 1, .25)
-			hl:SetAllPoints(self.Icon)
+			hl:SetInside(self.Icon.bg)
 		end
 	end
 	if self.Level then
@@ -424,6 +424,7 @@ function S:ReskinRematchElements()
 	B.ReskinScroll(iconPicker.ScrollFrame.ScrollBar)
 	B.StripTextures(iconPicker)
 	B.CreateBDFrame(iconPicker, .25)
+	S.RematchInput(iconPicker.SearchBox)
 
 	B.ReskinScroll(dialog.MultiLine.ScrollBar)
 	select(2, dialog.MultiLine:GetChildren()):HideBackdrop()
