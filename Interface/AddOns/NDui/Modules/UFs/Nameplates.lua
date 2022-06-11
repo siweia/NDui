@@ -13,7 +13,7 @@ local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyClickThrough
 local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
 local INTERRUPTED = INTERRUPTED
-local _QuestieTooltips, _QuestiePlayer, _QuestieQuest
+local _QuestieTooltips, _QuestiePlayer
 
 -- Init
 function UF:UpdatePlateCVars()
@@ -49,9 +49,19 @@ function UF:SetupCVars()
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesNameplateMaxDistanceSlider) -- Use option in GUI
 
 	if IsAddOnLoaded("Questie") then
-		_QuestieQuest = QuestieLoader:ImportModule("QuestieQuest")
 		_QuestiePlayer = QuestieLoader:ImportModule("QuestiePlayer")
 		_QuestieTooltips = QuestieLoader:ImportModule("QuestieTooltips")
+
+		local _QuestieEventHandler = QuestieLoader:ImportModule("QuestEventHandler")
+		if _QuestieEventHandler and _QuestieEventHandler.private then
+			hooksecurefunc(_QuestieEventHandler.private, "UpdateAllQuests", function()
+				for _, plate in pairs(C_NamePlate.GetNamePlates()) do
+					if plate.unitFrame then
+						UF.UpdateQuestIndicator(plate.unitFrame)
+					end
+				end
+			end)
+		end
 	end
 end
 
@@ -422,19 +432,19 @@ function UF:UpdateForQuestie(npcID)
 	if data then
 		local foundObjective, progressText
 		for _, tooltip in pairs(data) do
-			local questID = tooltip.questId
-			if questID then
-				_QuestieQuest:UpdateQuest(questID)
+			if not tooltip.npc then
+				local questID = tooltip.questId
+				if questID then
+					if _QuestiePlayer.currentQuestlog[questID] then
+						foundObjective = true
 
-				if _QuestiePlayer.currentQuestlog[questID] then
-					foundObjective = true
-
-					if tooltip.objective and tooltip.objective.Needed then
-						progressText = tooltip.objective.Needed - tooltip.objective.Collected
-						if progressText == 0 then
-							foundObjective = nil
+						if tooltip.objective and tooltip.objective.Needed then
+							progressText = tooltip.objective.Needed - tooltip.objective.Collected
+							if progressText == 0 then
+								foundObjective = nil
+							end
+							break
 						end
-						break
 					end
 				end
 			end
@@ -503,7 +513,7 @@ function UF:UpdateQuestIndicator()
 
 	if CodexMap then
 		UF.UpdateCodexQuestUnit(self, self.unitName)
-	elseif _QuestieTooltips then
+	elseif _QuestieTooltips and _QuestiePlayer then
 		UF.UpdateForQuestie(self, self.npcID)
 	end
 end
