@@ -213,13 +213,15 @@ local function GetSocketTexture(socket, count)
 	return strrep("|TInterface\\ItemSocketingFrame\\UI-EmptySocket-"..socket..":0|t", count)
 end
 
-local function isItemHasGem(link)
+function module.IsItemHasGem(link)
 	local text = ""
 	local stats = GetItemStats(link)
-	for stat, count in pairs(stats) do
-		local socket = strmatch(stat, "EMPTY_SOCKET_(%S+)")
-		if socket and socketWatchList[socket] then
-			text = text..GetSocketTexture(socket, count)
+	if stats then
+		for stat, count in pairs(stats) do
+			local socket = strmatch(stat, "EMPTY_SOCKET_(%S+)")
+			if socket and socketWatchList[socket] then
+				text = text..GetSocketTexture(socket, count)
+			end
 		end
 	end
 	return text
@@ -234,7 +236,7 @@ function module.ReplaceChatHyperlink(link, linkType, value)
 		if itemCache[link] then return itemCache[link] end
 		local name, itemLevel = isItemHasLevel(link)
 		if name and itemLevel then
-			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemHasGem(link))
+			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..module.IsItemHasGem(link))
 			itemCache[link] = link
 		end
 		return link

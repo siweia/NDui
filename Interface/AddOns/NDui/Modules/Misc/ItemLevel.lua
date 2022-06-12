@@ -339,6 +339,30 @@ function M.ItemLevel_UpdateTradeTarget(index)
 	M.ItemLevel_UpdateMerchant(button, link)
 end
 
+local itemCache = {}
+local CHAT = B:GetModule("Chat")
+
+function M.ItemLevel_ReplaceItemLink(link, name)
+	if not link then return end
+
+	local modLink = itemCache[link]
+	if not modLink then
+		local itemLevel = B.GetItemLevel(link)
+		if itemLevel then
+			modLink = gsub(link, "|h%[(.-)%]|h", "|h("..itemLevel..CHAT.IsItemHasGem(link)..")"..name.."|h")
+			itemCache[link] = modLink
+		end
+	end
+	return modLink
+end
+
+function M:ItemLevel_ReplaceGuildNews()
+	local newText = gsub(self.text:GetText(), "(|Hitem:%d+:.-|h%[(.-)%]|h)", M.ItemLevel_ReplaceItemLink)
+	if newText then
+		self.text:SetText(newText)
+	end
+end
+
 function M:ShowItemLevel()
 	if not C.db["Misc"]["ItemLevel"] then return end
 
@@ -367,5 +391,8 @@ function M:ShowItemLevel()
 	-- iLvl on TradeFrame
 	hooksecurefunc("TradeFrame_UpdatePlayerItem", M.ItemLevel_UpdateTradePlayer)
 	hooksecurefunc("TradeFrame_UpdateTargetItem", M.ItemLevel_UpdateTradeTarget)
+
+	-- iLvl on GuildNews
+	hooksecurefunc("GuildNewsButton_SetText", M.ItemLevel_ReplaceGuildNews)
 end
 M:RegisterMisc("GearInfo", M.ShowItemLevel)
