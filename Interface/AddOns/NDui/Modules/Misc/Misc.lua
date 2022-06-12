@@ -578,21 +578,7 @@ do
 
 		B:UnregisterEvent(event, fixGuildNews)
 	end
-
-	local function fixCommunitiesNews(event, addon)
-		if addon ~= "Blizzard_Communities" then return end
-
-		local _CommunitiesGuildNewsButton_OnEnter = CommunitiesGuildNewsButton_OnEnter
-		function CommunitiesGuildNewsButton_OnEnter(self)
-			if not (self.newsInfo and self.newsInfo.whatText) then return end
-			_CommunitiesGuildNewsButton_OnEnter(self)
-		end
-
-		B:UnregisterEvent(event, fixCommunitiesNews)
-	end
-
 	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
-	B:RegisterEvent("ADDON_LOADED", fixCommunitiesNews)
 end
 
 local function skipOnKeyDown(self, key)
