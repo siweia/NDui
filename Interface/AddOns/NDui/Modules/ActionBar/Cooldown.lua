@@ -64,7 +64,7 @@ function module:TimerOnUpdate(elapsed)
 	if self.nextUpdate > 0 then
 		self.nextUpdate = self.nextUpdate - elapsed
 	else
-		local remain = self.duration - (GetTime() - self.start)
+		local remain = (self.duration - (GetTime() - self.start)) / self.modRate
 		if remain > 0 then
 			local getTime, nextUpdate = module.FormattedTimer(remain)
 			self.text:SetText(getTime)
@@ -101,7 +101,7 @@ function module:OnCreate()
 	return timer
 end
 
-function module:StartTimer(start, duration)
+function module:StartTimer(start, duration, modRate)
 	if self:IsForbidden() then return end
 	if self.noCooldownCount or hideNumbers[self] then return end
 
@@ -112,13 +112,15 @@ function module:StartTimer(start, duration)
 	end
 
 	local parent = self:GetParent()
-    start = tonumber(start) or 0
-    duration = tonumber(duration) or 0
+	start = tonumber(start) or 0
+	duration = tonumber(duration) or 0
+	modRate = tonumber(modRate) or 1
 
 	if start > 0 and duration > MIN_DURATION then
 		local timer = self.timer or module.OnCreate(self)
 		timer.start = start
 		timer.duration = duration
+		timer.modRate = modRate
 		timer.enabled = true
 		timer.nextUpdate = 0
 
