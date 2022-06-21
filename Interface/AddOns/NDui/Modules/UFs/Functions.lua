@@ -188,9 +188,9 @@ function UF:UpdateFrameNameTag()
 	if mystyle == "player" then
 		self:Tag(name, " "..colorTag.."[name]")
 	elseif mystyle == "target" then
-		self:Tag(name, "[fulllevel] "..colorTag.."[name][afkdnd]")
+		self:Tag(name, " [fulllevel] "..colorTag.."[name][afkdnd]")
 	elseif mystyle == "focus" then
-		self:Tag(name, colorTag.."[name][afkdnd]")
+		self:Tag(name, " "..colorTag.."[name][afkdnd]")
 	elseif mystyle == "arena" then
 		self:Tag(name, colorTag.."[name]")
 	elseif self.raidType == "simple" and C.db["UFs"]["TeamIndex"] then
@@ -497,12 +497,12 @@ function UF:CreateIcons(self)
 	self.PhaseIndicator = phase
 
 	local li = self:CreateTexture(nil, "OVERLAY")
-	li:SetPoint("TOPLEFT", self, 0, 8)
+	li:SetPoint("TOPLEFT", self, -1, 8)
 	li:SetSize(12, 12)
 	self.LeaderIndicator = li
 
 	local ai = self:CreateTexture(nil, "OVERLAY")
-	ai:SetPoint("TOPLEFT", self, 0, 8)
+	ai:SetPoint("TOPLEFT", self, -1, 8)
 	ai:SetSize(12, 12)
 	self.AssistantIndicator = ai
 
