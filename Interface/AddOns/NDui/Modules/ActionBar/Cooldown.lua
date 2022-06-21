@@ -12,7 +12,7 @@ local ICON_SIZE = 36
 local hideNumbers, active, hooked = {}, {}, {}
 
 local day, hour, minute = 86400, 3600, 60
-function module.FormattedTimer(s)
+function module.FormattedTimer(s, modRate)
 	if s >= day then
 		return format("%d"..DB.MyColor.."d", s/day + .5), s%day
 	elseif s > hour then
@@ -26,9 +26,9 @@ function module.FormattedTimer(s)
 	else
 		local colorStr = (s < 3 and "|cffff0000") or (s < 10 and "|cffffff00") or "|cffcccc33"
 		if s < C.db["Actionbar"]["TenthTH"] then
-			return format(colorStr.."%.1f|r", s), s - format("%.1f", s)
+			return format(colorStr.."%.1f|r", s), (s - format("%.1f", s)) / modRate
 		else
-			return format(colorStr.."%d|r", s + .5), s - floor(s)
+			return format(colorStr.."%d|r", s + .5), (s - floor(s)) / modRate
 		end
 	end
 end
@@ -66,7 +66,7 @@ function module:TimerOnUpdate(elapsed)
 	else
 		local remain = (self.duration - (GetTime() - self.start)) / self.modRate
 		if remain > 0 then
-			local getTime, nextUpdate = module.FormattedTimer(remain)
+			local getTime, nextUpdate = module.FormattedTimer(remain, self.modRate)
 			self.text:SetText(getTime)
 			self.nextUpdate = nextUpdate
 		else
