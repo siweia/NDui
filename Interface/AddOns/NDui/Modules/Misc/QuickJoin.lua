@@ -78,7 +78,7 @@ local function GetPartyMemberInfo(index)
 	if not class then return end
 	local role = UnitGroupRolesAssigned(unit)
 	if role == "NONE" then role = "DAMAGER" end
-	return role, class
+	return role, class, (UnitIsGroupLeader(unit) and 1)
 end
 
 local function GetCorrectRoleInfo(frame, i)
@@ -98,14 +98,14 @@ local function UpdateGroupRoles(self)
 
 	local count = 0
 	for i = 1, 5 do
-		local role, class = GetCorrectRoleInfo(self.__owner, i)
+		local role, class, isLeader = GetCorrectRoleInfo(self.__owner, i)
 		local roleIndex = role and roleOrder[role]
 		if roleIndex then
 			count = count + 1
 			if not roleCache[count] then roleCache[count] = {} end
 			roleCache[count][1] = roleIndex
 			roleCache[count][2] = class
-			roleCache[count][3] = i == 1
+			roleCache[count][3] = isLeader == 1 or i == 1
 		end
 	end
 
