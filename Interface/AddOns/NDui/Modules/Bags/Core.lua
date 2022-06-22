@@ -903,8 +903,12 @@ function module:OnLogin()
 		end
 
 		-- Hide empty tooltip
-		if not item.texture and GameTooltip:GetOwner() == self then
-			GameTooltip:Hide()
+		if GameTooltip:GetOwner() == self then
+			if item.texture then
+				self:UpdateTooltip()
+			else
+				GameTooltip:Hide()
+			end
 		end
 
 		-- Support Pawn

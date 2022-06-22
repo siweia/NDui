@@ -67,7 +67,7 @@ function ItemButton:New(bagID, slotID)
 		button.UpdateTooltip = BankFrameItemButton_OnEnter
 		button.SplitStack = BankSplitStack
 	else
-		button.UpdateTooltip = ContainerFrameItemButton_OnUpdate
+		button.UpdateTooltip = ContainerFrameItemButton_OnEnter
 	end
 
 	return button
