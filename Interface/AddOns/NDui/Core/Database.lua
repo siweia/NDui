@@ -175,7 +175,8 @@ DB.ReminderBuffs = {
 			pvp = true,
 		},
 		{	spells = {
-				[168] = true,	-- 冰甲术
+				[168] = true,	-- 霜甲术
+				[7302] = true,	-- 冰甲术
 				[6117] = true,	-- 法师护甲
 			},
 			depend = 168,
