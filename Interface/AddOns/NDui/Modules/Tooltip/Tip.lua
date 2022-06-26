@@ -409,7 +409,7 @@ function TT:ReskinTooltip()
 end
 
 local function TooltipSetFont(font, size)
-	font:SetFont(DB.Font[1], size, DB.Font[3])
+	B.SetFontSize(font, size)
 	font:SetShadowColor(0, 0, 0, 0)
 end
 

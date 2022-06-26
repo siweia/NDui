@@ -8,8 +8,7 @@ local function ReskinFont(font, size)
 	end
 	local oldSize = select(2, font:GetFont())
 	size = size or oldSize
-	local fontSize = size*C.db["Skins"]["FontScale"]
-	font:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	B.SetFontSize(font, size*C.db["Skins"]["FontScale"])
 	font:SetShadowColor(0, 0, 0, 0)
 end
 

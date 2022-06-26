@@ -51,7 +51,7 @@ end
 
 function INFO:UpdateInfobarSize()
 	for _, info in pairs(INFO.modules) do
-		info.text:SetFont(DB.Font[1], C.db["Misc"]["InfoSize"], DB.Font[3])
+		B.SetFontSize(info.text, C.db["Misc"]["InfoSize"])
 	end
 end
 

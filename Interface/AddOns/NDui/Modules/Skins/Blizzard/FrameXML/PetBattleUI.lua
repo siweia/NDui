@@ -225,7 +225,7 @@ tinsert(C.defaultThemes, function()
 				bu.Icon:SetInside()
 			end
 
-			bu.Cooldown:SetFont(DB.Font[1], 26, DB.Font[3])
+			B.SetFontSize(bu.Cooldown, 26)
 			bu.SelectedHighlight:ClearAllPoints()
 			bu.SelectedHighlight:SetPoint("TOPLEFT", bu, -12, 12)
 			bu.SelectedHighlight:SetPoint("BOTTOMRIGHT", bu, 12, -12)

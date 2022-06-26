@@ -21,10 +21,9 @@ function Bar:UpdateAllScale()
 end
 
 function Bar:UpdateFontSize(button, fontSize)
-	local font, fontFlag = DB.Font[1], DB.Font[3]
-	button.Name:SetFont(font, fontSize, fontFlag)
-	button.Count:SetFont(font, fontSize, fontFlag)
-	button.HotKey:SetFont(font, fontSize, fontFlag)
+	B.SetFontSize(button.Name, fontSize)
+	B.SetFontSize(button.Count, fontSize)
+	B.SetFontSize(button.HotKey, fontSize)
 end
 
 function Bar:UpdateActionSize(name)
