@@ -460,9 +460,13 @@ do
 	B.EasyMenu = CreateFrame("Frame", "NDui_EasyMenu", UIParent, "UIDropDownMenuTemplate")
 
 	-- Fontstring
+	function B:SetFontSize(size)
+		self:SetFont(DB.Font[1], size, DB.Font[3])
+	end
+
 	function B:CreateFS(size, text, color, anchor, x, y)
 		local fs = self:CreateFontString(nil, "OVERLAY")
-		fs:SetFont(DB.Font[1], size, DB.Font[3])
+		B.SetFontSize(fs, size)
 		fs:SetText(text)
 		fs:SetWordWrap(false)
 		if color and type(color) == "boolean" then
@@ -1535,7 +1539,7 @@ do
 		eb:SetSize(width, height)
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 0, 0)
-		eb:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
+		B.SetFontSize(eb, DB.Font[2]+2)
 		eb.bg = B.CreateBDFrame(eb, 0, true)
 		eb.bg:SetAllPoints()
 		eb:SetScript("OnEscapePressed", editBoxClearFocus)
