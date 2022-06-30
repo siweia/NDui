@@ -418,7 +418,7 @@ function G:ExportGUIData()
 								end
 							end
 						end
-					elseif KEY == "Mover" or KEY == "RaidClickSets" or KEY == "InternalCD" or KEY == "AuraWatchMover" then
+					elseif KEY == "Mover" or KEY == "InternalCD" or KEY == "AuraWatchMover" then
 						text = text..";"..KEY..":"..key
 						for _, v in ipairs(value) do
 							text = text..":"..tostring(v)
@@ -498,6 +498,15 @@ function G:ExportGUIData()
 			text = text..";ACCOUNT:"..KEY
 			for k, v in pairs(VALUE) do
 				text = text..":"..k..":"..v
+			end
+		elseif KEY == "ClickSets" then
+			text = text..";ACCOUNT:"..KEY
+			if NDuiADB[KEY][DB.MyClass] then
+				text = text..":"..DB.MyClass
+				for fullkey, value in pairs(NDuiADB[KEY][DB.MyClass]) do
+					value = gsub(value, "%:", "`")
+					text = text..":"..fullkey..":"..value
+				end
 			end
 		elseif VALUE == true or VALUE == false or accountStrValues[KEY] then
 			text = text..";ACCOUNT:"..KEY..":"..tostring(VALUE)
@@ -607,10 +616,6 @@ function G:ImportGUIData()
 			x = tonumber(x)
 			y = tonumber(y)
 			C.db[key][value] = {relFrom, parent, relTo, x, y}
-		elseif key == "RaidClickSets" then
-			if DB.MyClass == class then
-				C.db[key][value] = {select(3, strsplit(":", option))}
-			end
 		elseif key == "InternalCD" then
 			local spellID, duration, indicator, unit, itemID = select(3, strsplit(":", option))
 			spellID = tonumber(spellID)
@@ -681,6 +686,15 @@ function G:ImportGUIData()
 				local results = {select(3, strsplit(":", option))}
 				for i = 1, #results, 2 do
 					NDuiADB[value][tonumber(results[i])] = results[i+1]
+				end
+			elseif value == "ClickSets" then
+				if arg1 == DB.MyClass then
+					NDuiADB[value][arg1] = NDuiADB[value][arg1] or {}
+					local results = {select(4, strsplit(":", option))}
+					for i = 1, #results, 2 do
+						results[i+1] = gsub(results[i+1], "`", ":")
+						NDuiADB[value][arg1][results[i]] = tonumber(results[i+1]) or results[i+1]
+					end
 				end
 			end
 		elseif tonumber(arg1) then
