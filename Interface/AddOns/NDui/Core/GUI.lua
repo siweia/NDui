@@ -550,6 +550,7 @@ G.AccountSettings = {
 	BWRequest = false,
 	RaidAuraWatch = {},
 	RaidClickSets = {},
+	ClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},
 	AutoBubbles = false,
