@@ -357,60 +357,79 @@ function G:SetupClickCast(parent)
 
 	local panel = createExtraGUI(parent, guiName, L["Add ClickSets"], true)
 
+	local keyToLocale = {
+		["LMB"] = L["LeftButon"],
+		["RMB"] = L["RightButton"],
+		["MMB"] = L["MiddleButton"],
+		["MB4"] = L["Button4"],
+		["MB5"] = L["Button5"],
+		["MWU"] = L["WheelUp"],
+		["MWD"] = L["WheelDown"],
+	}
 	local textIndex, barTable = {
 		["target"] = TARGET,
 		["focus"] = SET_FOCUS,
 		["follow"] = FOLLOW,
 	}, {}
 
-	local function createBar(parent, data)
-		local key, modKey, value = unpack(data)
-		local clickSet = modKey..key
+	local function createBar(parent, fullkey, value)
+		local key = strsub(fullkey, -3)
+		local modKey = strmatch(fullkey, "(.+)%-%w+")
 		local texture
 		if tonumber(value) then
 			texture = GetSpellTexture(value)
 		else
 			value = textIndex[value] or value
-			texture = 136243
+			local itemID = strmatch(value, "item:(%d+)")
+			if itemID then
+				texture = GetItemIcon(itemID)
+			else
+				texture = 136243
+			end
 		end
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
-		B.CreateBD(bar, .3)
-		barTable[clickSet] = bar
+		B.CreateBD(bar, .25)
+		barTable[fullkey] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", value, "system")
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			NDuiADB["RaidClickSets"][DB.MyClass][clickSet] = nil
-			barTable[clickSet] = nil
+			NDuiADB["ClickSets"][DB.MyClass][fullkey] = nil
+			barTable[fullkey] = nil
 			sortBars(barTable)
 		end)
 
-		local key1 = B.CreateFS(bar, 14, key, false, "LEFT", 35, 0)
+		local key1 = B.CreateFS(bar, 14, keyToLocale[key], false, "LEFT", 30, 0)
 		key1:SetTextColor(.6, .8, 1)
-		modKey = modKey ~= "" and "+ "..modKey or ""
-		local key2 = B.CreateFS(bar, 14, modKey, false, "LEFT", 130, 0)
-		key2:SetTextColor(0, 1, 0)
+		if modKey then
+			local key2 = B.CreateFS(bar, 14, modKey, false, "RIGHT", -25, 0)
+			key2:SetTextColor(0, 1, 0)
+		end
 
 		sortBars(barTable)
 	end
 
 	local frame = panel.bg
-	local keyList, options = {
-		KEY_BUTTON1,
-		KEY_BUTTON2,
-		KEY_BUTTON3,
-		KEY_BUTTON4,
-		KEY_BUTTON5,
-		L["WheelUp"],
-		L["WheelDown"],
-	}, {}
+	local keyList = {"LMB","RMB","MMB","MB4","MB5","MWU","MWD"}
+	local options = {}
+
+	local function optionOnEnter(self)
+		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(keyToLocale[self.text], 1, .8, 0)
+		GameTooltip:Show()
+	end
 
 	options[1] = G:CreateEditbox(frame, L["Action*"], 10, -30, L["Action Intro"], 260, 30)
-	options[2] = G:CreateDropdown(frame, L["Key*"], 10, -90, keyList, L["Key Intro"], 120, 30)
-	options[3] = G:CreateDropdown(frame, L["Modified Key"], 150, -90, {NONE, "ALT", "CTRL", "SHIFT", "ALT-CTRL", "ALT-SHIFT", "CTRL-SHIFT", "ALT-CTRL-SHIFT"}, L["ModKey Intro"], 120, 30)
+	options[2] = G:CreateDropdown(frame, L["Key*"], 10, -90, keyList, L["Key Intro"], 85, 30)
+	for i = 1, #keyList do
+		options[2].options[i]:HookScript("OnEnter", optionOnEnter)
+		options[2].options[i]:HookScript("OnLeave", B.HideTooltip)
+	end
+	options[3] = G:CreateDropdown(frame, L["Modified Key"], 105, -90, {NONE,"ALT","CTRL","SHIFT","ALT-CTRL","ALT-SHIFT","CTRL-SHIFT","ALT-CTRL-SHIFT"}, L["ModKey Intro"], 165, 30)
 
 	local scroll = G:CreateScroll(frame, 240, 350)
 	scroll.reset = B.CreateButton(frame, 70, 25, RESET)
@@ -420,7 +439,7 @@ function G:SetupClickCast(parent)
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			wipe(NDuiADB["RaidClickSets"][DB.MyClass])
+			wipe(NDuiADB["ClickSets"][DB.MyClass])
 			ReloadUI()
 		end,
 		whileDead = 1,
@@ -433,13 +452,13 @@ function G:SetupClickCast(parent)
 		local value, key, modKey = options[1]:GetText(), options[2].Text:GetText(), options[3].Text:GetText()
 		if not value or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
 		if tonumber(value) and not GetSpellInfo(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		if (not tonumber(value)) and value ~= "target" and value ~= "focus" and value ~= "follow" and not strmatch(value, "/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
+		if (not tonumber(value)) and (not textIndex[value]) and not strmatch(value, "/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
 		if not modKey or modKey == NONE then modKey = "" end
-		local clickSet = modKey..key
-		if NDuiADB["RaidClickSets"][DB.MyClass][clickSet] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
+		local fullkey = (modKey == "" and key or modKey.."-"..key)
+		if NDuiADB["ClickSets"][DB.MyClass][fullkey] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
 
-		NDuiADB["RaidClickSets"][DB.MyClass][clickSet] = {key, modKey, value}
-		createBar(scroll.child, NDuiADB["RaidClickSets"][DB.MyClass][clickSet])
+		NDuiADB["ClickSets"][DB.MyClass][fullkey] = tonumber(value) or value
+		createBar(scroll.child, fullkey, value)
 		clearEdit(options)
 	end
 
@@ -455,8 +474,23 @@ function G:SetupClickCast(parent)
 		clearEdit(options)
 	end)
 
-	for _, v in pairs(NDuiADB["RaidClickSets"][DB.MyClass]) do
-		createBar(scroll.child, v)
+	for fullkey, value in pairs(NDuiADB["ClickSets"][DB.MyClass]) do
+		createBar(scroll.child, fullkey, value)
+	end
+
+	if next(NDuiADB["RaidClickSets"][DB.MyClass]) then
+		local oldTip = B.CreateButton(panel, 35, 35, true, 134400)
+		oldTip:SetPoint("TOPRIGHT", -10, -10)
+		oldTip:SetScript("OnEnter", function(self)
+			GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+			GameTooltip:ClearLines()
+			GameTooltip:AddLine("Old data:")
+			for fullkey, v in pairs(NDuiADB["RaidClickSets"][DB.MyClass]) do
+				GameTooltip:AddDoubleLine(fullkey, v[3])
+			end
+			GameTooltip:Show()
+		end)
+		oldTip:SetScript("OnLeave", B.HideTooltip)
 	end
 end
 

@@ -511,6 +511,7 @@ G.AccountSettings = {
 	RaidAuraWatch = {},
 	CornerSpells = {},
 	RaidClickSets = {},
+	ClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},
 	AutoBubbles = false,

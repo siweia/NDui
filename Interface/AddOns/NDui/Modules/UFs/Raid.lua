@@ -144,40 +144,36 @@ function UF:CreateRaidDebuffs(self)
 end
 
 local keyList = {}
-local mouseButtonList = {KEY_BUTTON1,KEY_BUTTON2,KEY_BUTTON3,KEY_BUTTON4,KEY_BUTTON5}
-local modKeyList = {"","ALT","CTRL","SHIFT","ALT-CTRL","ALT-SHIFT","CTRL-SHIFT","ALT-CTRL-SHIFT"}
+local mouseButtonList = {"LMB","RMB","MMB","MB4","MB5"}
+local modKeyList = {"","ALT-","CTRL-","SHIFT-","ALT-CTRL-","ALT-SHIFT-","CTRL-SHIFT-","ALT-CTRL-SHIFT-"}
 local numModKeys = #modKeyList
+
+for i = 1, #mouseButtonList do
+	local button = mouseButtonList[i]
+	for j = 1, numModKeys do
+		local modKey = modKeyList[j]
+		keyList[modKey..button] = modKey.."%s"..i
+	end
+end
 
 local wheelGroupIndex = {}
 for i = 1, numModKeys do
 	local modKey = modKeyList[i]
-	local modString = i == 1 and "" or modKey.."-"
-	wheelGroupIndex[5 + i] = modString.."MOUSEWHEELUP"
-	wheelGroupIndex[numModKeys + 5 + i] = modString.."MOUSEWHEELDOWN"
+	wheelGroupIndex[5 + i] = modKey.."MOUSEWHEELUP"
+	wheelGroupIndex[numModKeys + 5 + i] = modKey.."MOUSEWHEELDOWN"
 end
-
-for i = 1, #mouseButtonList do
-	local button = mouseButtonList[i]
-	for j = 1, #modKeyList do
-		local modKey = modKeyList[j]
-		tinsert(keyList, {button, modKey, (j == 1 and "%s"..i) or (modKey.."-%s"..i)})
-	end
-end
-
-local numKeyList = #keyList
 for keyIndex, keyString in pairs(wheelGroupIndex) do
-	local button = keyIndex < (6 + numModKeys) and L["WheelUp"] or L["WheelDown"]
-	local modString = gsub(keyString, "%-*MOUSEWHEEL%w+", "")
-	keyList[numKeyList + keyIndex - 5] = {button, modString, "%s"..keyIndex}
+	keyString = gsub(keyString, "MOUSEWHEELUP", "MWU")
+	keyString = gsub(keyString, "MOUSEWHEELDOWN", "MWD")
+	keyList[keyString] = "%s"..keyIndex
 end
+hehe=keyList
 
 function UF:DefaultClickSets()
-	if not NDuiADB["RaidClickSets"][DB.MyClass] then NDuiADB["RaidClickSets"][DB.MyClass] = {} end
-
-	if not next(NDuiADB["RaidClickSets"][DB.MyClass]) then
-		for k, v in pairs(C.ClickCastList[DB.MyClass]) do
-			local clickSet = keyList[k][2]..keyList[k][1]
-			NDuiADB["RaidClickSets"][DB.MyClass][clickSet] = {keyList[k][1], keyList[k][2], v}
+	if not NDuiADB["ClickSets"][DB.MyClass] then NDuiADB["ClickSets"][DB.MyClass] = {} end
+	if not next(NDuiADB["ClickSets"][DB.MyClass]) then
+		for fullkey, spellID in pairs(C.ClickCastList[DB.MyClass]) do
+			NDuiADB["ClickSets"][DB.MyClass][fullkey] = spellID
 		end
 	end
 end
@@ -191,8 +187,8 @@ local onMouseString = "if not self:IsUnderMouse(false) then self:ClearBindings()
 
 local function setupMouseWheelCast(self)
 	local found
-	for _, data in pairs(NDuiADB["RaidClickSets"][DB.MyClass]) do
-		if strmatch(data[1], L["Wheel"]) then
+	for fullkey in pairs(NDuiADB["ClickSets"][DB.MyClass]) do
+		if strmatch(fullkey, "MW%w") then
 			found = true
 			break
 		end
@@ -210,28 +206,25 @@ end
 local function setupClickSets(self)
 	if self.clickCastRegistered then return end
 
-	for _, data in pairs(NDuiADB["RaidClickSets"][DB.MyClass]) do
-		local key, modKey, value = unpack(data)
-		if key == KEY_BUTTON1 and modKey == "SHIFT" then self.focuser = true end
+	for fullkey, value in pairs(NDuiADB["ClickSets"][DB.MyClass]) do
+		if fullkey == "SHIFT-LMB" then self.focuser = true end
 
-		for _, v in ipairs(keyList) do
-			if v[1] == key and v[2] == modKey then
-				if tonumber(value) then
-					self:SetAttribute(format(v[3], "type"), "spell")
-					self:SetAttribute(format(v[3], "spell"), value)
-				elseif value == "target" then
-					self:SetAttribute(format(v[3], "type"), "target")
-				elseif value == "focus" then
-					self:SetAttribute(format(v[3], "type"), "focus")
-				elseif value == "follow" then
-					self:SetAttribute(format(v[3], "type"), "macro")
-					self:SetAttribute(format(v[3], "macrotext"), "/follow mouseover")
-				elseif strmatch(value, "/") then
-					self:SetAttribute(format(v[3], "type"), "macro")
-					value = gsub(value, "~", "\n")
-					self:SetAttribute(format(v[3], "macrotext"), value)
-				end
-				break
+		local keyIndex = keyList[fullkey]
+		if keyIndex then
+			if tonumber(value) then
+				self:SetAttribute(format(keyIndex, "type"), "spell")
+				self:SetAttribute(format(keyIndex, "spell"), value)
+			elseif value == "target" then
+				self:SetAttribute(format(keyIndex, "type"), "target")
+			elseif value == "focus" then
+				self:SetAttribute(format(keyIndex, "type"), "focus")
+			elseif value == "follow" then
+				self:SetAttribute(format(keyIndex, "type"), "macro")
+				self:SetAttribute(format(keyIndex, "macrotext"), "/follow mouseover")
+			elseif strmatch(value, "/") then
+				self:SetAttribute(format(keyIndex, "type"), "macro")
+				value = gsub(value, "~", "\n")
+				self:SetAttribute(format(keyIndex, "macrotext"), value)
 			end
 		end
 	end
