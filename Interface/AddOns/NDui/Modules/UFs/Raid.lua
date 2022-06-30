@@ -167,7 +167,6 @@ for keyIndex, keyString in pairs(wheelGroupIndex) do
 	keyString = gsub(keyString, "MOUSEWHEELDOWN", "MWD")
 	keyList[keyString] = "%s"..keyIndex
 end
-hehe=keyList
 
 function UF:DefaultClickSets()
 	if not NDuiADB["ClickSets"][DB.MyClass] then NDuiADB["ClickSets"][DB.MyClass] = {} end
