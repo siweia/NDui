@@ -377,7 +377,7 @@ function G:SetupClickCast(parent)
 
 	options[1] = G:CreateEditbox(frame, L["Action*"], 10, -30, L["Action Intro"], 260, 30)
 	options[2] = G:CreateDropdown(frame, L["Key*"], 10, -90, keyList, L["Key Intro"], 120, 30)
-	options[3] = G:CreateDropdown(frame, L["Modified Key"], 170, -90, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 85, 30)
+	options[3] = G:CreateDropdown(frame, L["Modified Key"], 150, -90, {NONE, "ALT", "CTRL", "SHIFT"}, L["ModKey Intro"], 120, 30)
 
 	local scroll = G:CreateScroll(frame, 240, 350)
 	scroll.reset = B.CreateButton(frame, 70, 25, RESET)

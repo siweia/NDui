@@ -152,111 +152,48 @@ function UF:CreateRaidDebuffs(self)
 	self.RaidDebuffs = bu
 end
 
-local keyList = {
-	[1] = {KEY_BUTTON1, "", "%s1"},					-- 左键
-	[2] = {KEY_BUTTON1, "ALT", "ALT-%s1"},			-- ALT+左键
-	[3] = {KEY_BUTTON1, "CTRL", "CTRL-%s1"},		-- CTRL+左键
-	[4] = {KEY_BUTTON1, "SHIFT", "SHIFT-%s1"},		-- SHIFT+左键
+local keyList = {}
+local mouseButtonList = {KEY_BUTTON1,KEY_BUTTON2,KEY_BUTTON3,KEY_BUTTON4,KEY_BUTTON5}
+local modKeyList = {"","ALT","CTRL","SHIFT","ALT-CTRL","ALT-SHIFT","CTRL-SHIFT","ALT-CTRL-SHIFT"}
+local numModKeys = #modKeyList
 
-	[5] = {KEY_BUTTON2, "", "%s2"},					-- 右键
-	[6] = {KEY_BUTTON2, "ALT", "ALT-%s2"},			-- ALT+右键
-	[7] = {KEY_BUTTON2, "CTRL", "CTRL-%s2"},		-- CTRL+右键
-	[8] = {KEY_BUTTON2, "SHIFT", "SHIFT-%s2"},		-- SHIFT+右键
+local wheelGroupIndex = {}
+for i = 1, numModKeys do
+	local modKey = modKeyList[i]
+	local modString = i == 1 and "" or modKey.."-"
+	wheelGroupIndex[5 + i] = modString.."MOUSEWHEELUP"
+	wheelGroupIndex[numModKeys + 5 + i] = modString.."MOUSEWHEELDOWN"
+end
 
-	[9] = {KEY_BUTTON3, "", "%s3"},					-- 中键
-	[10] = {KEY_BUTTON3, "ALT", "ALT-%s3"},			-- ALT+中键
-	[11] = {KEY_BUTTON3, "CTRL", "CTRL-%s3"},		-- CTRL+中键
-	[12] = {KEY_BUTTON3, "SHIFT", "SHIFT-%s3"},		-- SHIFT+中键
+for i = 1, #mouseButtonList do
+	local button = mouseButtonList[i]
+	for j = 1, #modKeyList do
+		local modKey = modKeyList[j]
+		tinsert(keyList, {button, modKey, (j == 1 and "%s"..i) or (modKey.."-%s"..i)})
+	end
+end
 
-	[13] = {KEY_BUTTON4, "", "%s4"},				-- 鼠标键4
-	[14] = {KEY_BUTTON4, "ALT", "ALT-%s4"},			-- ALT+鼠标键4
-	[15] = {KEY_BUTTON4, "CTRL", "CTRL-%s4"},		-- CTRL+鼠标键4
-	[16] = {KEY_BUTTON4, "SHIFT", "SHIFT-%s4"},		-- SHIFT+鼠标键4
-
-	[17] = {KEY_BUTTON5, "", "%s5"},				-- 鼠标键5
-	[18] = {KEY_BUTTON5, "ALT", "ALT-%s5"},			-- ALT+鼠标键5
-	[19] = {KEY_BUTTON5, "CTRL", "CTRL-%s5"},		-- CTRL+鼠标键5
-	[20] = {KEY_BUTTON5, "SHIFT", "SHIFT-%s5"},		-- SHIFT+鼠标键5
-
-	[21] = {L["WheelUp"], "", "%s6"},				-- 滚轮上
-	[22] = {L["WheelUp"], "ALT", "%s7"},			-- ALT+滚轮上
-	[23] = {L["WheelUp"], "CTRL", "%s8"},			-- CTRL+滚轮上
-	[24] = {L["WheelUp"], "SHIFT", "%s9"},			-- SHIFT+滚轮上
-
-	[25] = {L["WheelDown"], "", "%s10"},			-- 滚轮下
-	[26] = {L["WheelDown"], "ALT", "%s11"},			-- ALT+滚轮下
-	[27] = {L["WheelDown"], "CTRL", "%s12"},		-- CTRL+滚轮下
-	[28] = {L["WheelDown"], "SHIFT", "%s13"},		-- SHIFT+滚轮下
-}
-
-local defaultSpellList = {
-	["DRUID"] = {
-		[2] = 88423,		-- 驱散
-		[5] = 774,			-- 回春术
-		[6] = 33763,		-- 生命绽放
-	},
-	["HUNTER"] = {
-		[21] = 90361,		-- 灵魂治愈
-		[25] = 34477,		-- 误导
-	},
-	["ROGUE"] = {
-		[6] = 57934,		-- 嫁祸
-	},
-	["WARRIOR"] = {
-		[6] = 198304,		-- 拦截
-	},
-	["SHAMAN"] = {
-		[2] = 77130,		-- 驱散
-		[5] = 61295,		-- 激流
-		[6] = 546,			-- 水上行走
-	},
-	["PALADIN"] = {
-		[2] = 4987,			-- 驱散
-		[5] = 20473,		-- 神圣震击
-		[6] = 1022,			-- 保护祝福
-	},
-	["PRIEST"] = {
-		[2] = 527,			-- 驱散
-		[5] = 17,			-- 真言术盾
-		[6] = 1706,			-- 漂浮术
-	},
-	["MONK"] = {
-		[2] = 115450,		-- 驱散
-		[5] = 119611,		-- 复苏之雾
-	},
-	["MAGE"] = {
-		[6] = 130,			-- 缓落
-	},
-	["DEMONHUNTER"] = {},
-	["WARLOCK"] = {},
-	["DEATHKNIGHT"] = {},
-}
+local numKeyList = #keyList
+for keyIndex, keyString in pairs(wheelGroupIndex) do
+	local button = keyIndex < (6 + numModKeys) and L["WheelUp"] or L["WheelDown"]
+	local modString = gsub(keyString, "%-*MOUSEWHEEL%w+", "")
+	keyList[numKeyList + keyIndex - 5] = {button, modString, "%s"..keyIndex}
+end
 
 function UF:DefaultClickSets()
 	if not NDuiADB["RaidClickSets"][DB.MyClass] then NDuiADB["RaidClickSets"][DB.MyClass] = {} end
 
 	if not next(NDuiADB["RaidClickSets"][DB.MyClass]) then
-		for k, v in pairs(defaultSpellList[DB.MyClass]) do
+		for k, v in pairs(C.ClickCastList[DB.MyClass]) do
 			local clickSet = keyList[k][2]..keyList[k][1]
 			NDuiADB["RaidClickSets"][DB.MyClass][clickSet] = {keyList[k][1], keyList[k][2], v}
 		end
 	end
 end
 
-local wheelBindingIndex = {
-	["MOUSEWHEELUP"] = 6,
-	["ALT-MOUSEWHEELUP"] = 7,
-	["CTRL-MOUSEWHEELUP"] = 8,
-	["SHIFT-MOUSEWHEELUP"] = 9,
-	["MOUSEWHEELDOWN"] = 10,
-	["ALT-MOUSEWHEELDOWN"] = 11,
-	["CTRL-MOUSEWHEELDOWN"] = 12,
-	["SHIFT-MOUSEWHEELDOWN"] = 13,
-}
-
 local onEnterString = "self:ClearBindings();"
 local onLeaveString = onEnterString
-for keyString, keyIndex in pairs(wheelBindingIndex) do
+for keyIndex, keyString in pairs(wheelGroupIndex) do
 	onEnterString = format("%sself:SetBindingClick(0, \"%s\", self:GetName(), \"Button%d\");", onEnterString, keyString, keyIndex)
 end
 local onMouseString = "if not self:IsUnderMouse(false) then self:ClearBindings(); end"
