@@ -417,6 +417,41 @@ function S:PSFJ()
 	end)
 end
 
+function S:TLDR()
+	if not IsAddOnLoaded("TLDRMissions") then return end
+
+	local function reskinUIElements(frame)
+		for i = 1, frame:GetNumChildren() do
+			local child = select(i, frame:GetChildren())
+			if child:IsObjectType("CheckButton") then
+				B.ReskinCheck(child)
+				child:SetSize(24, 24)
+			elseif child:IsObjectType("Button") then
+				B.Reskin(child)
+			elseif child:IsObjectType("Slider") then
+				B.ReskinSlider(child)
+			elseif child:IsObjectType("EditBox") then
+				B.ReskinEditBox(child)
+			elseif child:IsObjectType("Frame") and child.Button then
+				B.StripTextures(child)
+				B.ReskinArrow(child.Button, "down")
+			end
+		end
+	end
+
+	B.StripTextures(TLDRMissionsFrame)
+	B.ReskinClose(TLDRMissionsFrame.CloseButton)
+	B.SetBD(TLDRMissionsFrame):SetInside(nil, 2, 2)
+	B.Reskin(TLDRMissionsToggleButton)
+
+	reskinUIElements(TLDRMissionsFrameMainPanel)
+	reskinUIElements(TLDRMissionsFrameAdvancedPanel)
+
+	B.ReskinTab(TLDRMissionsFrameTab1)
+	B.ReskinTab(TLDRMissionsFrameTab2)
+	B.ReskinTab(TLDRMissionsFrameTab3)
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -429,4 +464,5 @@ function S:OtherSkins()
 	S:TrinketMenu()
 	S:ERT()
 	S:PSFJ()
+	S:TLDR()
 end
