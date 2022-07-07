@@ -1060,7 +1060,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end)
 	end
 
-	-- VenturePlan, 4.12a and higher
+	-- VenturePlan, 4.22 and higher
 	if IsAddOnLoaded("VenturePlan") then
 		local ANIMA_TEXTURE = 3528288
 		local ANIMA_SPELLID = {[347555] = 3, [345706] = 5, [336327] = 35, [336456] = 250}
@@ -1205,10 +1205,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					widget.Icon:SetTexCoord(unpack(DB.TexCoord))
 					widget:SetSize(46, 46)
 					tinsert(VPBooks, widget)
-				elseif otype == "FollowerList" then
+				elseif otype == "AdventurerRoster" then
 					B.StripTextures(widget)
 					B.CreateBDFrame(widget, .25)
 					hooksecurefunc(widget, "SetHeight", AdjustFollowerList)
+					B.Reskin(peek("HealAllButton"))
 
 					for i, troop in pairs(VPTroops) do
 						troop:ClearAllPoints()
@@ -1222,7 +1223,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 						book:ClearAllPoints()
 						book:SetPoint("BOTTOMLEFT", 24, -46 + i*50)
 					end
-				elseif otype == "FollowerListButton" then
+				elseif otype == "AdventurerButton" then
 					widget.bg = B.CreateBDFrame(peek("Portrait"), 1)
 					peek("Hi"):SetColorTexture(1, 1, 1, .25)
 					peek("Hi"):SetInside(widget.bg)
@@ -1231,11 +1232,11 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					peek("PortraitT").__owner = widget
 					hooksecurefunc(peek("PortraitT"), "SetShown", updateSelectedBorder)
 
-					if peek("EC") then
-						peek("EC"):SetTexture(nil)
-						peek("EC").__shadow = B.CreateSD(peek("Portrait"), 5, true)
-						peek("EC").__shadow:SetBackdropBorderColor(peek("EC"):GetVertexColor())
-						hooksecurefunc(peek("EC"), "SetShown", updateActiveGlow)
+					if peek("PortraitR"):GetAtlas() == "Adventurers-Followers-Frame" then
+						peek("UsedBorder"):SetTexture(nil)
+						peek("UsedBorder").__shadow = B.CreateSD(peek("Portrait"), 5, true)
+						peek("UsedBorder").__shadow:SetBackdropBorderColor(peek("UsedBorder"):GetVertexColor())
+						hooksecurefunc(peek("UsedBorder"), "SetShown", updateActiveGlow)
 						tinsert(VPFollowers, widget)
 					else
 						tinsert(VPTroops, widget)
@@ -1288,6 +1289,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				elseif otype == "RewardFrame" then
 					widget.Quantity.__owner = widget
 					hooksecurefunc(widget.Quantity, "SetText", SetAnimaActualCount)
+				elseif otype == "MiniHealthBar" then
+					local _, r1, r2 = widget:GetRegions()
+					r1:Hide()
+					r2:Hide()
 				end
 			end
 		end
