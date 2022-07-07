@@ -865,10 +865,6 @@ local function updatePlateCVars()
 	B:GetModule("UnitFrames"):UpdatePlateCVars()
 end
 
-local function updateClickableSize()
-	B:GetModule("UnitFrames"):UpdateClickableSize()
-end
-
 local function updateCustomUnitList()
 	B:GetModule("UnitFrames"):CreateUnitTable()
 end
@@ -1271,10 +1267,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", true, {.5, 1.5, .1}, updatePlateCVars},
 		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", nil, {.5, 1, .1}, updatePlateCVars},
 		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.3, 1, .1}, updatePlateCVars},
-		{3, "Nameplate", "HarmWidth", L["PlateHarmWidth"].."*", nil, {1, 500, 1}, updateClickableSize},
-		{3, "Nameplate", "HarmHeight", L["PlateHarmHeight"].."*", true, {1, 500, 1}, updateClickableSize},
-		{3, "Nameplate", "HelpWidth", L["PlateHelpWidth"].."*", nil, {1, 500, 1}, updateClickableSize},
-		{3, "Nameplate", "HelpHeight", L["PlateHelpHeight"].."*", true, {1, 500, 1}, updateClickableSize},
 	},
 	[6] = {
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
