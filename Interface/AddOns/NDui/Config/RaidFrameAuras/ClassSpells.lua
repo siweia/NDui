@@ -562,8 +562,8 @@ local SEASON_SPELLS = {
 	[366288] = 2, -- 猛力砸击，S3
 	[366297] = 2, -- 解构，S3
 }
-function module:RegisterSeasonSpells(TIER, INSTANCE)
+function module:RegisterSeasonSpells(tier, instance)
 	for spellID, priority in pairs(SEASON_SPELLS) do
-		module:RegisterDebuff(TIER, INSTANCE, 0, spellID, priority)
+		module:RegisterDebuff(tier, instance, 0, spellID, priority)
 	end
 end
