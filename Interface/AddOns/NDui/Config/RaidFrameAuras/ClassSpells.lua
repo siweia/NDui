@@ -547,3 +547,23 @@ local list = {
 }
 
 module:AddClassSpells(list)
+
+-- 大米词缀及赛季相关
+local SEASON_SPELLS = {
+	[209858] = 2, -- 死疽
+	[240443] = 2, -- 爆裂
+	[240559] = 1, -- 重伤
+	[342494] = 2, -- 狂妄吹嘘，S1
+	[355732] = 2, -- 融化灵魂，S2
+	[356666] = 2, -- 刺骨之寒，S2
+	[356667] = 2, -- 刺骨之寒，S2
+	[356925] = 2, -- 屠戮，S2
+	[358777] = 2, -- 痛苦之链，S2
+	[366288] = 2, -- 猛力砸击，S3
+	[366297] = 2, -- 解构，S3
+}
+function module:RegisterSeasonSpells(TIER, INSTANCE)
+	for spellID, priority in pairs(SEASON_SPELLS) do
+		module:RegisterDebuff(TIER, INSTANCE, 0, spellID, priority)
+	end
+end

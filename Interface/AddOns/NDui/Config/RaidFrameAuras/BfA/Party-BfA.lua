@@ -262,14 +262,15 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 267037) -- 力量的低语
 module:RegisterDebuff(TIER, INSTANCE, 0, 276286) -- 切割旋风
 
 INSTANCE = 1178 -- 麦卡贡
-module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
-module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
-module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
-module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
-module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
-module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
-module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
-module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
+--module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
+--module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
+--module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
+--module:RegisterDebuff(TIER, INSTANCE, 0, 240443) -- 爆裂
+--module:RegisterDebuff(TIER, INSTANCE, 0, 288388) -- 夺魂
+--module:RegisterDebuff(TIER, INSTANCE, 0, 288694) -- 暗影碎击
+--module:RegisterDebuff(TIER, INSTANCE, 0, 302420) -- 女王法令：隐藏
+--module:RegisterDebuff(TIER, INSTANCE, 0, 314308) -- 灵魂毁灭
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 298259, 6) -- 束缚粘液
 module:RegisterDebuff(TIER, INSTANCE, 0, 297257) -- 电荷充能
 module:RegisterDebuff(TIER, INSTANCE, 0, 303885) -- 爆裂喷发

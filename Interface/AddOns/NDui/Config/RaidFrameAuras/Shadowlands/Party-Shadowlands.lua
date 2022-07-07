@@ -5,27 +5,8 @@ local module = B:GetModule("AurasTable")
 local TIER = 9
 local INSTANCE -- 5人本
 
-local SEASON_SPELLS = {
-	[209858] = 2, -- 死疽
-	[240443] = 2, -- 爆裂
-	[240559] = 1, -- 重伤
-	[342494] = 2, -- 狂妄吹嘘，S1
-	[355732] = 2, -- 融化灵魂
-	[356666] = 2, -- 刺骨之寒
-	[356667] = 2, -- 刺骨之寒
-	[356925] = 2, -- 屠戮
-	[358777] = 2, -- 痛苦之链
-	[366288] = 2, -- 猛力砸击，S3
-	[366297] = 2, -- 解构，S3
-}
-local function RegisterSeasonSpells(INSTANCE)
-	for spellID, priority in pairs(SEASON_SPELLS) do
-		module:RegisterDebuff(TIER, INSTANCE, 0, spellID, priority)
-	end
-end
-
 INSTANCE = 1194 -- 塔扎维什，帷纱集市
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 356011) -- 光线切分者
 module:RegisterDebuff(TIER, INSTANCE, 0, 347949, 6) -- 审讯
 module:RegisterDebuff(TIER, INSTANCE, 0, 345770) -- 扣押违禁品
@@ -49,7 +30,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 355465) -- 投掷巨石
 module:RegisterDebuff(TIER, INSTANCE, 0, 354334, 6) -- 被钩住
 
 INSTANCE = 1187 -- 伤逝剧场
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 333299) -- 荒芜诅咒
 module:RegisterDebuff(TIER, INSTANCE, 0, 333301) -- 荒芜诅咒
 module:RegisterDebuff(TIER, INSTANCE, 0, 319539) -- 无魂者
@@ -70,7 +51,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 324449) -- 死亡具象
 module:RegisterDebuff(TIER, INSTANCE, 0, 341949) -- 枯萎凋零
 
 INSTANCE = 1183 -- 凋魂之殇
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 336258) -- 落单狩猎
 module:RegisterDebuff(TIER, INSTANCE, 0, 331818) -- 暗影伏击
 module:RegisterDebuff(TIER, INSTANCE, 0, 333353) -- 暗影伏击
@@ -90,7 +71,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 330069) -- 凝结魔药
 module:RegisterDebuff(TIER, INSTANCE, 0, 331399) -- 感染毒雨
 
 INSTANCE = 1184 -- 塞兹仙林的迷雾
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 325027) -- 荆棘爆发
 module:RegisterDebuff(TIER, INSTANCE, 0, 323043) -- 放血
 module:RegisterDebuff(TIER, INSTANCE, 0, 322557) -- 灵魂分裂
@@ -110,7 +91,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 340191) -- 再生辐光
 module:RegisterDebuff(TIER, INSTANCE, 0, 321891) -- 鬼抓人锁定
 
 INSTANCE = 1188 -- 彼界
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 320786) -- 势不可挡
 module:RegisterDebuff(TIER, INSTANCE, 0, 334913) -- 死亡之主
 module:RegisterDebuff(TIER, INSTANCE, 0, 325725) -- 寰宇操控
@@ -131,7 +112,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 323687) -- 奥术闪电
 module:RegisterDebuff(TIER, INSTANCE, 0, 334535) -- 啄裂
 
 INSTANCE = 1186 -- 晋升高塔
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 338729) -- 充能践踏
 module:RegisterDebuff(TIER, INSTANCE, 0, 327481) -- 黑暗长枪
 module:RegisterDebuff(TIER, INSTANCE, 0, 322818) -- 失去信心
@@ -152,7 +133,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 328434) -- 胁迫
 module:RegisterDebuff(TIER, INSTANCE, 0, 27638)  -- 斜掠
 
 INSTANCE = 1185 -- 赎罪大厅
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 335338) -- 哀伤仪式
 module:RegisterDebuff(TIER, INSTANCE, 0, 326891) -- 痛楚
 module:RegisterDebuff(TIER, INSTANCE, 0, 329321) -- 锯齿横扫
@@ -167,7 +148,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 340446) -- 嫉妒之印
 module:RegisterDebuff(TIER, INSTANCE, 0, 323437) -- 傲慢罪印
 
 INSTANCE = 1189 -- 赤红深渊
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 326827) -- 恐惧之缚
 module:RegisterDebuff(TIER, INSTANCE, 0, 326836) -- 镇压诅咒
 module:RegisterDebuff(TIER, INSTANCE, 0, 322554) -- 严惩
@@ -183,7 +164,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 322429) -- 撕裂切割
 module:RegisterDebuff(TIER, INSTANCE, 0, 334653) -- 饱餐
 
 INSTANCE = 1182 -- 通灵战潮
-RegisterSeasonSpells(INSTANCE)
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 321821) -- 作呕喷吐
 module:RegisterDebuff(TIER, INSTANCE, 0, 323365) -- 黑暗纠缠
 module:RegisterDebuff(TIER, INSTANCE, 0, 338353) -- 瘀液喷撒

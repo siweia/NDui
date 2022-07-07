@@ -1,6 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="ClassSpells.lua"/>
 
+	<Script file="WoD\Party-WoD.lua"/>
+
 	<Script file="Legion\PartyDungeons.lua"/>
 	<Script file="Legion\BrokenIsles.lua"/>
 	<Script file="Legion\TheEmeraldNightmare.lua"/>
