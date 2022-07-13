@@ -78,12 +78,13 @@ local function GetPartyMemberInfo(index)
 	if not class then return end
 	local role = UnitGroupRolesAssigned(unit)
 	if role == "NONE" then role = "DAMAGER" end
-	return role, class, (UnitIsGroupLeader(unit) and 1)
+	return role, class, UnitIsGroupLeader(unit)
 end
 
 local function GetCorrectRoleInfo(frame, i)
 	if frame.resultID then
-		return C_LFGList_GetSearchResultMemberInfo(frame.resultID, i)
+		local role, class = C_LFGList_GetSearchResultMemberInfo(frame.resultID, i)
+		return role, class, i == 1
 	elseif frame == ApplicationViewerFrame then
 		return GetPartyMemberInfo(i)
 	end
@@ -105,7 +106,7 @@ local function UpdateGroupRoles(self)
 			if not roleCache[count] then roleCache[count] = {} end
 			roleCache[count][1] = roleIndex
 			roleCache[count][2] = class
-			roleCache[count][3] = isLeader == 1 or i == 1
+			roleCache[count][3] = isLeader
 		end
 	end
 
