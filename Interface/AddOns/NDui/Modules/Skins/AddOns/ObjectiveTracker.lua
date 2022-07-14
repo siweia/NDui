@@ -17,29 +17,35 @@ local headerString = QUESTS_LABEL.." %s/%s"
 local frame
 
 function S:ExtQuestLogFrame()
-	local QuestLogFrame = _G.QuestLogFrame
-	if QuestLogFrame:GetWidth() > 700 then return end
+	if not DB.isNewPatch then
+		local QuestLogFrame = _G.QuestLogFrame
+		if QuestLogFrame:GetWidth() > 700 then return end
 
-	B.StripTextures(QuestLogFrame, 2)
-	QuestLogFrame.TitleText = _G.QuestLogTitleText
-	QuestLogFrame.scrollFrame = _G.QuestLogDetailScrollFrame
-	QuestLogFrame.listScrollFrame = _G.QuestLogListScrollFrame
-	S:EnlargeDefaultUIPanel("QuestLogFrame", 0)
+		B.StripTextures(QuestLogFrame, 2)
+		QuestLogFrame.TitleText = _G.QuestLogTitleText
+		QuestLogFrame.scrollFrame = _G.QuestLogDetailScrollFrame
+		QuestLogFrame.listScrollFrame = _G.QuestLogListScrollFrame
+		S:EnlargeDefaultUIPanel("QuestLogFrame", 0)
 
-	B.StripTextures(_G.EmptyQuestLogFrame)
-	_G.QuestLogNoQuestsText:ClearAllPoints()
-	_G.QuestLogNoQuestsText:SetPoint("CENTER", QuestLogFrame.listScrollFrame)
-	_G.QuestFramePushQuestButton:ClearAllPoints()
-	_G.QuestFramePushQuestButton:SetPoint("LEFT", _G.QuestLogFrameAbandonButton, "RIGHT", 1, 0)
+		B.StripTextures(_G.EmptyQuestLogFrame)
+		_G.QuestLogNoQuestsText:ClearAllPoints()
+		_G.QuestLogNoQuestsText:SetPoint("CENTER", QuestLogFrame.listScrollFrame)
+		_G.QuestFramePushQuestButton:ClearAllPoints()
+		_G.QuestFramePushQuestButton:SetPoint("LEFT", _G.QuestLogFrameAbandonButton, "RIGHT", 1, 0)
 
-	_G.QUESTS_DISPLAYED = 22
-	for i = 7, _G.QUESTS_DISPLAYED do
-		local button = _G["QuestLogTitle"..i]
-		if not button then
-			button = CreateFrame("Button", "QuestLogTitle"..i, QuestLogFrame, "QuestLogTitleButtonTemplate")
-			button:SetPoint("TOPLEFT", _G["QuestLogTitle"..(i-1)], "BOTTOMLEFT", 0, 1)
-			button:SetID(i)
-			button:Hide()
+		_G.QUESTS_DISPLAYED = 22
+		for i = 7, _G.QUESTS_DISPLAYED do
+			local button = _G["QuestLogTitle"..i]
+			if not button then
+				button = CreateFrame("Button", "QuestLogTitle"..i, QuestLogFrame, "QuestLogTitleButtonTemplate")
+				button:SetPoint("TOPLEFT", _G["QuestLogTitle"..(i-1)], "BOTTOMLEFT", 0, 1)
+				button:SetID(i)
+				button:Hide()
+			end
+		end
+
+		if C.db["Skins"]["BlizzardSkins"] then
+			B.CreateBDFrame(QuestLogFrame.scrollFrame, .25)
 		end
 	end
 
@@ -56,10 +62,6 @@ function S:ExtQuestLogFrame()
 	toggleMap:SetScript("OnClick", ToggleWorldMap)
 	toggleMap:SetScript("OnMouseUp", function() tex:SetTexCoord(.125, .875, 0, .5) end)
 	toggleMap:SetScript("OnMouseDown", function() tex:SetTexCoord(.125, .875, .5, 1) end)
-
-	if C.db["Skins"]["BlizzardSkins"] then
-		B.CreateBDFrame(QuestLogFrame.scrollFrame, .25)
-	end
 
 	-- Move ClassicCodex
 	if CodexQuest then
@@ -281,6 +283,18 @@ function S:EnhancedQuestTracker()
 	B:RegisterEvent("QUEST_ACCEPTED", autoQuestWatch)
 end
 
+local function updateMinimizeButton(self)
+	WatchFrameCollapseExpandButton.__texture:DoCollapse(self.collapsed)
+	WatchFrame.header:SetShown(not self.collapsed)
+end
+
+local function reskinMinimizeButton(button)
+	B.ReskinCollapse(button)
+	button:GetNormalTexture():SetAlpha(0)
+	button:GetPushedTexture():SetAlpha(0)
+	button.__texture:DoCollapse(false)
+end
+
 function S:QuestTracker()
 	-- Mover for quest tracker
 	frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
@@ -288,31 +302,68 @@ function S:QuestTracker()
 	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
 
 	--QuestWatchFrame:SetHeight(GetScreenHeight()*.65)
-	QuestWatchFrame:SetClampedToScreen(false)
-	QuestWatchFrame:SetMovable(true)
-	QuestWatchFrame:SetUserPlaced(true)
+	if DB.isNewPatch then
+		WatchFrame:ClearAllPoints()
+		WatchFrame:SetPoint("TOPRIGHT", frame)
+		WatchFrame:SetHeight(GetScreenHeight()*.65)
+		WatchFrame:SetClampedToScreen(false)
+		WatchFrame:SetMovable(true)
+		WatchFrame:SetUserPlaced(true)
 
-	hooksecurefunc(QuestWatchFrame, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == _G.MinimapCluster then
-			self:ClearAllPoints()
-			self:SetPoint("TOPLEFT", frame, 5, -5)
-		end
-	end)
+		hooksecurefunc(WatchFrame, "SetPoint", function(self, _, parent)
+			if parent == "MinimapCluster" or parent == _G.MinimapCluster then
+				self:ClearAllPoints()
+				self:SetPoint("TOPRIGHT", frame)
+			end
+		end)
+	else
+		QuestWatchFrame:SetClampedToScreen(false)
+		QuestWatchFrame:SetMovable(true)
+		QuestWatchFrame:SetUserPlaced(true)
 
-	local timerMover = CreateFrame("Frame", "NDuiQuestTimerMover", UIParent)
-	timerMover:SetSize(150, 30)
-	B.Mover(timerMover, QUEST_TIMERS, "QuestTimer", {"TOPRIGHT", frame, "TOPLEFT", -10, 0})
+		hooksecurefunc(QuestWatchFrame, "SetPoint", function(self, _, parent)
+			if parent == "MinimapCluster" or parent == _G.MinimapCluster then
+				self:ClearAllPoints()
+				self:SetPoint("TOPLEFT", frame, 5, -5)
+			end
+		end)
 
-	hooksecurefunc(QuestTimerFrame, "SetPoint", function(self, _, parent)
-		if parent ~= timerMover then
-			self:ClearAllPoints()
-			self:SetPoint("TOP", timerMover)
-		end
-	end)
+		local timerMover = CreateFrame("Frame", "NDuiQuestTimerMover", UIParent)
+		timerMover:SetSize(150, 30)
+		B.Mover(timerMover, QUEST_TIMERS, "QuestTimer", {"TOPRIGHT", frame, "TOPLEFT", -10, 0})
+	
+		hooksecurefunc(QuestTimerFrame, "SetPoint", function(self, _, parent)
+			if parent ~= timerMover then
+				self:ClearAllPoints()
+				self:SetPoint("TOP", timerMover)
+			end
+		end)
+	end
+
+	if DB.isNewPatch then
+		reskinMinimizeButton(WatchFrameCollapseExpandButton)
+		hooksecurefunc("WatchFrame_Collapse", updateMinimizeButton)
+		hooksecurefunc("WatchFrame_Expand", updateMinimizeButton)
+
+		local header = CreateFrame("Frame", nil, frame)
+		header:SetAllPoints()
+		header:SetParent(WatchFrame)
+		header.Text = B.CreateFS(header, 16, "", true, "TOPLEFT", 0, 15)
+		WatchFrame.header = header
+	
+		local bg = header:CreateTexture(nil, "ARTWORK")
+		bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
+		bg:SetTexCoord(0, .66, 0, .31)
+		bg:SetVertexColor(cr, cg, cb, .8)
+		bg:SetPoint("TOPLEFT")
+		bg:SetSize(250, 30)
+	end
 
 	if not C.db["Skins"]["QuestTracker"] then return end
 
-	S:EnhancedQuestTracker()
 	S:ExtQuestLogFrame()
-	hooksecurefunc("QuestLog_Update", S.QuestLogLevel)
+	if not DB.isNewPatch then
+		S:EnhancedQuestTracker()
+		hooksecurefunc("QuestLog_Update", S.QuestLogLevel)
+	end
 end

@@ -132,15 +132,17 @@ tinsert(C.defaultThemes, function()
 	-- Title Reward, needs review
 	do
 		local frame = QuestInfoPlayerTitleFrame
-		local icon = frame.Icon
-
-		B.ReskinIcon(icon)
 		for i = 2, 4 do
 			select(i, frame:GetRegions()):Hide()
 		end
-		local bg = B.CreateBDFrame(frame, .25)
-		bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)
-		bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 220, -1)
+
+		if not DB.isNewPatch then
+			local icon = frame.Icon
+			B.ReskinIcon(icon)
+			local bg = B.CreateBDFrame(frame, .25)
+			bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)
+			bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 220, -1)
+		end
 	end
 
 	-- Others

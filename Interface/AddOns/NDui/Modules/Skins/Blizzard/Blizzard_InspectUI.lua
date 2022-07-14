@@ -47,7 +47,11 @@ C.themes["Blizzard_InspectUI"] = function()
 
 	-- Talent
 	B.StripTextures(InspectTalentFrame)
-	B.Reskin(InspectTalentFrameCancelButton)
+	if DB.isNewPatch then
+		B.StripTextures(InspectTalentFramePointsBar)
+	else
+		B.Reskin(InspectTalentFrameCancelButton)
+	end
 	B.ReskinScroll(InspectTalentFrameScrollFrameScrollBar)
 	if InspectTalentFrameCloseButton then
 		InspectTalentFrameCloseButton:Hide() -- should be removed by blizzard in future builds

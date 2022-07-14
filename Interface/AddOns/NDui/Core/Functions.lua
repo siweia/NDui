@@ -1406,26 +1406,43 @@ do
 	-- Role Icons
 	function B:GetRoleTexCoord()
 		if self == "TANK" then
-			return .34/9.03, 2.86/9.03, 3.16/9.03, 5.68/9.03
+			return .34/9.03, 2.85/9.03, 3.16/9.03, 5.67/9.03
 		elseif self == "DPS" or self == "DAMAGER" then
-			return 3.26/9.03, 5.78/9.03, 3.16/9.03, 5.68/9.03
+			return 3.27/9.03, 5.78/9.03, 3.16/9.03, 5.67/9.03
 		elseif self == "HEALER" then
-			return 3.26/9.03, 5.78/9.03, .28/9.03, 2.78/9.03
+			return 3.27/9.03, 5.78/9.03, .27/9.03, 2.78/9.03
 		elseif self == "LEADER" then
-			return .34/9.03, 2.86/9.03, .28/9.03, 2.78/9.03
+			return .34/9.03, 2.85/9.03, .27/9.03, 2.78/9.03
 		elseif self == "READY" then
-			return 6.17/9.03, 8.75/9.03, .28/9.03, 2.78/9.03
+			return 6.17/9.03, 8.68/9.03, .27/9.03, 2.78/9.03
 		elseif self == "PENDING" then
-			return 6.17/9.03, 8.75/9.03, 3.16/9.03, 5.68/9.03
+			return 6.17/9.03, 8.68/9.03, 3.16/9.03, 5.67/9.03
 		elseif self == "REFUSE" then
-			return 3.26/9.03, 5.78/9.03, 6.03/9.03, 8.61/9.03
+			return 3.27/9.03, 5.78/9.03, 6.04/9.03, 8.55/9.03
 		end
+	end
+
+	function B:GetRoleTex()
+		if self == "TANK" then
+			return DB.tankTex
+		elseif self == "DPS" or self == "DAMAGER" then
+			return DB.dpsTex
+		elseif self == "HEALER" then
+			return DB.healTex
+		end
+	end
+
+	function B:ReskinSmallRole(role)
+		self:SetTexture(B.GetRoleTex(role))
+		self:SetTexCoord(0, 1, 0, 1)
 	end
 
 	function B:ReskinRole(role)
 		if self.background then self.background:SetTexture("") end
+
 		local cover = self.cover or self.Cover
 		if cover then cover:SetTexture("") end
+
 		local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
 		if texture then
 			texture:SetTexture(DB.rolesTex)

@@ -97,6 +97,19 @@ function M:OnLogin()
 	hooksecurefunc(MasterLooterFrame, "Show", function(self)
 		self:ClearAllPoints()
 	end)
+
+	-- Fix inspect error in wrath beta
+	if DB.isNewPatch then
+		if not InspectTalentFrameSpentPoints then
+			InspectTalentFrameSpentPoints = CreateFrame("Frame")
+		end
+		if not PlayerTalentFrameTalentPoints then
+			PlayerTalentFrameTalentPoints = CreateFrame("Frame")
+		end
+		if not PlayerTalentFrameSpentPoints then
+			PlayerTalentFrameSpentPoints = CreateFrame("Frame")
+		end
+	end
 end
 
 -- Reanchor Vehicle

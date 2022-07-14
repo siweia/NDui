@@ -9,7 +9,7 @@ DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isClassic = select(4, GetBuildInfo()) < 90000
-DB.isNewPatch = select(4, GetBuildInfo()) >= 20504 -- 2.5.4
+DB.isNewPatch = select(4, GetBuildInfo()) >= 30400 -- 3.4.0 WLK
 
 -- Colors
 DB.MyName = UnitName("player")
@@ -59,6 +59,9 @@ DB.bgTex = Media.."bgTex"
 DB.arrowTex = Media.."TargetArrow"
 DB.MicroTex = Media.."Hutu\\Menu\\"
 DB.rolesTex = Media.."Hutu\\RoleIcons"
+DB.tankTex = Media.."Hutu\\Tank"
+DB.healTex = Media.."Hutu\\Healer"
+DB.dpsTex = Media.."Hutu\\DPS"
 DB.chatLogo = Media.."Hutu\\logoSmall"
 DB.logoTex = Media.."Hutu\\logoClassic"
 DB.sortTex = Media.."SortIcon"

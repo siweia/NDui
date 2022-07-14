@@ -86,36 +86,66 @@ tinsert(C.defaultThemes, function()
 	-- Reputation
 	ReputationDetailCorner:Hide()
 	ReputationDetailDivider:Hide()
-	ReputationListScrollFrame:GetRegions():Hide()
-	select(2, ReputationListScrollFrame:GetRegions()):Hide()
-
 	ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", -32, -16)
 
-	local function UpdateFactionSkins()
-		for i = 1, GetNumFactions() do
-			local bar = _G["ReputationBar"..i]
-			local check = _G["ReputationBar"..i.."AtWarCheck"]
-			if bar and not bar.styled then
-				B.StripTextures(bar)
-				bar:SetStatusBarTexture(DB.bdTex)
-				B.CreateBDFrame(bar, .25)
+	if not DB.isNewPatch then
+		ReputationListScrollFrame:GetRegions():Hide()
+		select(2, ReputationListScrollFrame:GetRegions()):Hide()
 
-				local icon = check:GetRegions()
-				icon:SetTexture("Interface\\Buttons\\UI-CheckBox-SwordCheck")
-				icon:SetTexCoord(0, 1, 0, 1)
-				icon:ClearAllPoints()
-				icon:SetPoint("LEFT", check, 0, -3)
-
-				bar.styled = true
+		local function UpdateFactionSkins()
+			for i = 1, GetNumFactions() do
+				local bar = _G["ReputationBar"..i]
+				local check = _G["ReputationBar"..i.."AtWarCheck"]
+				if bar and not bar.styled then
+					B.StripTextures(bar)
+					bar:SetStatusBarTexture(DB.bdTex)
+					B.CreateBDFrame(bar, .25)
+	
+					local icon = check:GetRegions()
+					icon:SetTexture("Interface\\Buttons\\UI-CheckBox-SwordCheck")
+					icon:SetTexCoord(0, 1, 0, 1)
+					icon:ClearAllPoints()
+					icon:SetPoint("LEFT", check, 0, -3)
+	
+					bar.styled = true
+				end
 			end
 		end
-	end
+	
+		ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
+		ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
 
-	ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
-	ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
+		for i = 1, NUM_FACTIONS_DISPLAYED do
+			B.ReskinCollapse(_G["ReputationHeader"..i])
+		end
+	else
+		local function UpdateFactionSkins()
+			for i = 1, GetNumFactions() do
+				local statusbar = _G["ReputationBar"..i.."ReputationBar"]
+				if statusbar then
+					statusbar:SetStatusBarTexture(DB.bdTex)
+	
+					if not statusbar.reskinned then
+						B.CreateBDFrame(statusbar, .25)
+						statusbar.reskinned = true
+					end
+	
+					_G["ReputationBar"..i.."Background"]:SetTexture(nil)
+					_G["ReputationBar"..i.."ReputationBarHighlight1"]:SetTexture(nil)
+					_G["ReputationBar"..i.."ReputationBarHighlight2"]:SetTexture(nil)
+					_G["ReputationBar"..i.."ReputationBarAtWarHighlight1"]:SetTexture(nil)
+					_G["ReputationBar"..i.."ReputationBarAtWarHighlight2"]:SetTexture(nil)
+					_G["ReputationBar"..i.."ReputationBarLeftTexture"]:SetTexture(nil)
+					_G["ReputationBar"..i.."ReputationBarRightTexture"]:SetTexture(nil)
+				end
+			end
+		end
+		ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
+		ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
 
-	for i = 1, NUM_FACTIONS_DISPLAYED do
-		B.ReskinCollapse(_G["ReputationHeader"..i])
+		for i = 1, NUM_FACTIONS_DISPLAYED do
+			B.ReskinCollapse(_G["ReputationBar"..i.."ExpandOrCollapseButton"])
+		end
 	end
 
 	B.StripTextures(ReputationFrame)
@@ -178,6 +208,51 @@ tinsert(C.defaultThemes, function()
 	B.CreateBDFrame(PetAttributesFrame, .25)
 	B.ReskinRotationButtons(PetModelFrame)
 
+	if DB.isNewPatch then
+		for i = 1, 3 do
+			local tab = _G["PetPaperDollFrameTab"..i]
+			if tab then
+				B.ReskinTab(tab)
+			end
+		end
+
+		B.StripTextures(PetPaperDollFrameCompanionFrame)
+		B.Reskin(CompanionSummonButton)
+		B.ReskinRotationButtons(CompanionModelFrame)
+		B.ReskinArrow(CompanionPrevPageButton, "left")
+		B.ReskinArrow(CompanionNextPageButton, "right")
+
+		local function updateCheckState(button, state)
+			if state then
+				button.bg:SetBackdropBorderColor(0, .6, 1)
+			else
+				button.bg:SetBackdropBorderColor(0, 0, 0)
+			end
+		end
+
+		for i = 1, 12 do
+			local button = _G["CompanionButton"..i]
+			button.bg = B.CreateBDFrame(button)
+			button:SetCheckedTexture("")
+			_G["CompanionButton"..i.."ActiveTexture"]:SetAlpha(0)
+
+			button:SetNormalTexture(136243)
+			local nt = button:GetNormalTexture()
+			nt:SetTexCoord(unpack(DB.TexCoord))
+			nt:SetInside(button.bg)
+
+			local dt = button:GetDisabledTexture()
+			dt:SetTexCoord(.22, .75, .22, .75)
+			dt:SetInside(button.bg)
+
+			local hl = button:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetInside(button.bg)
+
+			hooksecurefunc(button, "SetChecked", updateCheckState)
+		end
+	end
+
 	for i = 1, 5 do
 		local bu = _G["PetMagicResFrame"..i]
 		bu:SetSize(25, 25)
@@ -208,7 +283,14 @@ tinsert(C.defaultThemes, function()
 	PetPaperDollPetInfo:SetScript("OnShow", updateHappiness)
 
 	-- PVP
-	B.StripTextures(PVPFrame)
+	if DB.isNewPatch then
+		if not PVPFrame.CloseButton then
+			PVPFrame.CloseButton = PVPParentFrameCloseButton
+		end
+		B.ReskinPortraitFrame(PVPFrame, 15, -15, -35, 73)
+	else
+		B.StripTextures(PVPFrame)
+	end
 	B.ReskinArrow(PVPFrameToggleButton, "right")
 
 	for i = 1, 3 do
@@ -223,5 +305,54 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, 5 do
 		B.StripTextures(_G["PVPTeamDetailsFrameColumnHeader"..i])
+	end
+
+	-- TokenFrame
+	if DB.isNewPatch then
+		B.StripTextures(TokenFrame)
+		B.Reskin(TokenFrameCancelButton)
+		select(4, TokenFrame:GetChildren()):Hide() -- weird close button
+		local r, g, b = DB.r, DB.g, DB.b
+		local function updateButtons()
+			local buttons = TokenFrameContainer.buttons
+			if not buttons then return end
+	
+			for i = 1, #buttons do
+				local bu = buttons[i]
+	
+				if not bu.styled then
+					bu.highlight:SetPoint("TOPLEFT", 1, 0)
+					bu.highlight:SetPoint("BOTTOMRIGHT", -1, 0)
+					bu.highlight.SetPoint = B.Dummy
+					bu.highlight:SetColorTexture(r, g, b, .2)
+					bu.highlight.SetTexture = B.Dummy
+	
+					bu.categoryLeft:SetAlpha(0)
+					bu.categoryRight:SetAlpha(0)
+	
+					bu.bg = B.ReskinIcon(bu.icon)
+	
+					if bu.expandIcon then
+						bu.expBg = B.CreateBDFrame(bu.expandIcon, 0, true)
+						bu.expBg:SetPoint("TOPLEFT", bu.expandIcon, -3, 3)
+						bu.expBg:SetPoint("BOTTOMRIGHT", bu.expandIcon, 3, -3)
+					end
+	
+					bu.styled = true
+				end
+	
+				if bu.isHeader then
+					bu.bg:Hide()
+					bu.expBg:Show()
+				else
+					bu.bg:Show()
+					bu.expBg:Hide()
+				end
+			end
+		end
+	
+		TokenFrame:HookScript("OnShow", updateButtons)
+		hooksecurefunc("TokenFrame_Update", updateButtons)
+		hooksecurefunc(TokenFrameContainer, "update", updateButtons)
 	end
 end)

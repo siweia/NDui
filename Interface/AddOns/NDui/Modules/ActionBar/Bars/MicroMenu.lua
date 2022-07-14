@@ -103,7 +103,6 @@ function Bar:MicroMenu()
 
 	local menubar = CreateFrame("Frame", nil, UIParent)
 	menubar:SetSize(265, 22)
-	B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
@@ -119,9 +118,15 @@ function Bar:MicroMenu()
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
 		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
 	}
+	if DB.isNewPatch then
+		tinsert(buttonInfo, 4, {"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")})
+		tinsert(buttonInfo, 7, {"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")})
+		menubar:SetWidth(323)
+	end
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)
 	end
+	B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 
 	-- Order Positions
 	for i = 1, #buttonList do

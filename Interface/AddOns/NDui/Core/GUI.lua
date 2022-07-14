@@ -310,6 +310,7 @@ G.DefaultSettings = {
 		WhoPings = true,
 		MapReveal = true,
 		MapRevealGlow = true,
+		Calendar = false,
 		MapFader = true,
 		DiffFlag = true,
 		EasyVolume = true,
@@ -929,6 +930,10 @@ local function showMinimapClock()
 	B:GetModule("Maps"):ShowMinimapClock()
 end
 
+local function showCalendar()
+	B:GetModule("Maps"):ShowCalendar()
+end
+
 local function updateInterruptAlert()
 	B:GetModule("Misc"):InterruptAlert()
 end
@@ -1271,6 +1276,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "EasyVolume", L["EasyVolume"], nil, nil, nil, L["EasyVolumeTip"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
+		{1, "Map", "Calendar", L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"]},
 		{2, "ACCOUNT", "IgnoredButtons", L["IgnoredButtons"], nil, nil, nil, L["IgnoredButtonsTip"]},
 	},
 	[11] = {
