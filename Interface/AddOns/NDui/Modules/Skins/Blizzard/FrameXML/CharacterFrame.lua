@@ -309,10 +309,21 @@ tinsert(C.defaultThemes, function()
 
 	-- TokenFrame
 	if DB.isNewPatch then
+		local r, g, b = DB.r, DB.g, DB.b
+
 		B.StripTextures(TokenFrame)
 		B.Reskin(TokenFrameCancelButton)
 		select(4, TokenFrame:GetChildren()):Hide() -- weird close button
-		local r, g, b = DB.r, DB.g, DB.b
+
+		TokenFramePopupCorner:Hide()
+		TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 3, -28)
+		B.StripTextures(TokenFramePopup)
+		B.SetBD(TokenFramePopup)
+		B.ReskinClose(TokenFramePopupCloseButton)
+		B.ReskinCheck(TokenFramePopupInactiveCheckBox)
+		B.ReskinCheck(TokenFramePopupBackpackCheckBox)
+		B.ReskinScroll(TokenFrameContainerScrollBar)
+
 		local function updateButtons()
 			local buttons = TokenFrameContainer.buttons
 			if not buttons then return end
