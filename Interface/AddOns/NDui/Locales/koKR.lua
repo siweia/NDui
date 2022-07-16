@@ -319,6 +319,7 @@ L["Are you sure to reset the gold count?"] = "누적된 골드의 통계를 초�
 L["WoW"] = "WoW"
 L["BN"] = "배틀넷친구"
 L["SpecPanel"] = "특성"
+L["Change Spec"] = "Change talent"
 L["Reset Gold"] = "골드정보리셋"
 L["Toggle Clock"] = "월드시간"
 L["WorldMap"] = "월드맵"

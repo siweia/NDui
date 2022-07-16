@@ -319,6 +319,7 @@ L["Are you sure to reset the gold count?"] = "Вы уверены, что хот
 L["WoW"] = "World of Warcraft"
 L["BN"] = "Battle.NET"
 L["SpecPanel"] = "Окно талантов"
+L["Change Spec"] = "Специальность"
 L["Reset Gold"] = "Сбросить значения"
 L["Toggle Clock"] = "Часы"
 L["WorldMap"] = "Карта"
