@@ -30,6 +30,42 @@ local function DisableAllScripts(frame)
 	end
 end
 
+local function buttonShowGrid(name, showgrid)
+	for i = 1, 12 do
+		local button = _G[name..i]
+		if button then
+			button:SetAttribute("showgrid", showgrid)
+			ActionButton_ShowGrid(button, ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
+		end
+	end
+end
+
+local updateAfterCombat
+local function toggleButtonGrid()
+	if InCombatLockdown() then
+		updateAfterCombat = true
+		B:RegisterEvent("PLAYER_REGEN_ENABLED", toggleButtonGrid)
+	else
+		local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
+		buttonShowGrid("ActionButton", showgrid)
+		buttonShowGrid("MultiBarBottomLeftButton", showgrid)
+		buttonShowGrid("MultiBarBottomRightButton", showgrid)
+		buttonShowGrid("MultiBarRightButton", showgrid)
+		buttonShowGrid("MultiBarLeftButton", showgrid)
+		buttonShowGrid("NDui_ActionBarXButton", showgrid)
+		if updateAfterCombat then
+			B:UnregisterEvent("PLAYER_REGEN_ENABLED", toggleButtonGrid)
+			updateAfterCombat = false
+		end
+	end
+end
+
+local function updateTokenVisibility()
+	TokenFrame_LoadUI()
+	TokenFrame_Update()
+	BackpackTokenFrame_Update()
+end
+
 function Bar:HideBlizz()
 	MainMenuBar:SetMovable(true)
 	MainMenuBar:SetUserPlaced(true)
@@ -45,43 +81,17 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	-- Update button grid
-	local function buttonShowGrid(name, showgrid)
-		for i = 1, 12 do
-			local button = _G[name..i]
-			if button then
-				button:SetAttribute("showgrid", showgrid)
-				ActionButton_ShowGrid(button, ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
-			end
-		end
-	end
-
-	local updateAfterCombat
-	local function ToggleButtonGrid()
-		if InCombatLockdown() then
-			updateAfterCombat = true
-			B:RegisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-		else
-			local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
-			buttonShowGrid("ActionButton", showgrid)
-			buttonShowGrid("MultiBarBottomLeftButton", showgrid)
-			buttonShowGrid("MultiBarBottomRightButton", showgrid)
-			buttonShowGrid("MultiBarRightButton", showgrid)
-			buttonShowGrid("MultiBarLeftButton", showgrid)
-			buttonShowGrid("NDui_ActionBarXButton", showgrid)
-			if updateAfterCombat then
-				B:UnregisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-				updateAfterCombat = false
-			end
-		end
-	end
-	hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
-	hooksecurefunc("MultiActionBar_HideAllGrids", ToggleButtonGrid)
-	B:RegisterEvent("ACTIONBAR_HIDEGRID", ToggleButtonGrid)
-	ToggleButtonGrid()
-
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
 	InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+	-- Update button grid
+	hooksecurefunc("MultiActionBar_UpdateGridVisibility", toggleButtonGrid)
+	hooksecurefunc("MultiActionBar_HideAllGrids", toggleButtonGrid)
+	B:RegisterEvent("ACTIONBAR_HIDEGRID", toggleButtonGrid)
+	toggleButtonGrid()
+	if DB.isNewPatch then
+		-- Update token panel
+		B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
+	end
 end

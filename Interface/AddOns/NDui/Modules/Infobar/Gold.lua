@@ -10,6 +10,8 @@ local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 local GetMoney = GetMoney
 local GetContainerNumSlots, GetContainerItemInfo, UseContainerItem = GetContainerNumSlots, GetContainerItemInfo, UseContainerItem
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
+local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
+local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
 local CalculateTotalNumberOfFreeBagSlots = CalculateTotalNumberOfFreeBagSlots
 local slotString = L["Bags"]..": %s%d"
 
@@ -150,7 +152,12 @@ info.onMouseUp = function(self, btn)
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
 		self:onEnter()
 	else
-		ToggleAllBags()
+		if DB.isNewPatch then
+			--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+			ToggleCharacter("TokenFrame")
+		else
+			ToggleAllBags()
+		end
 	end
 end
 
@@ -188,6 +195,26 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
+	if DB.isNewPatch then
+		for i = 1, GetNumWatchedTokens() do
+			local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
+			if not currencyInfo then break end
+			local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
+			if name and i == 1 then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
+			end
+			if name and count then
+				local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
+				local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
+				if total > 0 then
+					GameTooltip:AddDoubleLine(name, count.."/"..total..iconTexture, 1,1,1, 1,1,1)
+				else
+					GameTooltip:AddDoubleLine(name, count..iconTexture, 1,1,1, 1,1,1)
+				end
+			end
+		end
+	end
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Switch Mode"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)

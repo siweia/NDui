@@ -80,7 +80,8 @@ local function Update(self, event, unit, powerType)
 		powerType = "COMBO_POINTS" -- sometimes powerType return ENERGY for the first combo point
 	end
 
-	if (not (unit and (UnitIsUnit(unit, 'player') and powerType == ClassPowerType))) then
+	if(not (unit and (UnitIsUnit(unit, 'player') and (not powerType or powerType == ClassPowerType)
+		or unit == 'vehicle' and powerType == 'COMBO_POINTS'))) then
 		return
 	end
 
@@ -159,7 +160,10 @@ local function Visibility(self, event, unit)
 	local element = self.ClassPower
 	local shouldEnable
 
-	if(ClassPowerID) then
+	if(UnitHasVehicleUI and UnitHasVehicleUI('player')) then
+		shouldEnable = true -- PlayerVehicleHasComboPoints()
+		unit = 'vehicle'
+	elseif(ClassPowerID) then
 		-- use 'player' instead of unit because 'SPELLS_CHANGED' is a unitless event
 		if(not RequirePower or RequirePower == UnitPowerType('player')) then
 			if(not RequireSpell or IsPlayerSpell(RequireSpell)) then
@@ -217,7 +221,11 @@ do
 
 		self.ClassPower.isEnabled = true
 
-		Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
+		if(UnitHasVehicleUI and UnitHasVehicleUI('player')) then
+			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
+		else
+			Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
+		end
 	end
 
 	function ClassPowerDisable(self)

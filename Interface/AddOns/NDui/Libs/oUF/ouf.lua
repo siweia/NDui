@@ -4,7 +4,7 @@ local _VERSION = '10.1.1'
 if(_VERSION:find('project%-version')) then
 	_VERSION = 'devel'
 end
-
+-- isNewPatch, updates after wlk release
 local oUF = ns.oUF
 local Private = oUF.Private
 
@@ -52,6 +52,10 @@ local function updateActiveUnit(self, event, unit)
 		realUnit = 'pet'
 	elseif(realUnit == 'playertarget') then
 		realUnit = 'target'
+	end
+
+	if(modUnit == 'pet' and realUnit ~= 'pet') then
+		modUnit = 'vehicle'
 	end
 
 	if(not unitExists(modUnit)) then return end

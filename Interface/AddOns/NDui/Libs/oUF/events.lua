@@ -16,6 +16,12 @@ local isEventRegistered = frame_metatable.__index.IsEventRegistered
 -- to update unit frames correctly, some events need to be registered for
 -- a specific combination of primary and secondary units
 local secondaryUnits = {
+	UNIT_ENTERED_VEHICLE = {
+		pet = 'player',
+	},
+	UNIT_EXITED_VEHICLE = {
+		pet = 'player',
+	},
 	UNIT_PET = {
 		pet = 'player',
 	},

@@ -1056,11 +1056,19 @@ function UF:TogglePlateVisibility()
 	if not plate then return end
 
 	if C.db["Nameplate"]["PPFadeout"] then
+		if DB.isNewPatch then
+			plate:RegisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
+			plate:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
+		end
 		plate:RegisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility, true)
 		plate:RegisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility, true)
 		plate:RegisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility, true)
 		UF.PlateVisibility(plate)
 	else
+		if DB.isNewPatch then
+			plate:UnregisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
+			plate:UnregisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
+		end
 		plate:UnregisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility)
 		plate:UnregisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility)
 		plate:UnregisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility)
