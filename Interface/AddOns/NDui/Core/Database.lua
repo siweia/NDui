@@ -279,6 +279,16 @@ DB.ReminderBuffs = {
 			pvp = true,
 		},
 	},
+	DEATHKNIGHT = {
+		{	spells = {	-- 寒冬号角
+				[57330] = true,
+			},
+			depend = 57330,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+	},
 }
 
 -- Deprecated

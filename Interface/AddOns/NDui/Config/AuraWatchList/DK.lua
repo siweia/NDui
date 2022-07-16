@@ -21,7 +21,6 @@ local list = {
 		{AuraID = 63560, UnitID = "pet"},		-- 黑暗突变
 		{AuraID = 47568, UnitID = "player"},	-- 符文武器增效
 		{AuraID = 49039, UnitID = "player"},	-- 巫妖之躯
-		{AuraID = 48265, UnitID = "player"},	-- 死亡脚步
 		{AuraID = 55233, UnitID = "player"},	-- 吸血鬼之血
 		{AuraID = 48707, UnitID = "player"},	-- 反魔法护罩
 		{AuraID = 48792, UnitID = "player"},	-- 冰封之韧

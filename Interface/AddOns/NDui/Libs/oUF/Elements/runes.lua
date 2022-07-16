@@ -5,8 +5,8 @@ local oUF = ns.oUF
 
 oUF.colors.runes = {
 	{1, 0, 0},   -- blood
-	{0, .5, 0},  -- unholy
 	{0, 1, 1},   -- frost
+	{0, .5, 0},  -- unholy
 	{.9, .1, 1}, -- death
 }
 
