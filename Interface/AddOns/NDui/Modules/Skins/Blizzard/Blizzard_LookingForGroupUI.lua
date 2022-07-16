@@ -85,6 +85,12 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 			end
 		end)
 
+		hooksecurefunc("LFGBrowseGroupDataDisplaySolo_Update", function(self)
+			if self.RolesText then
+				self.RolesText:SetText(ROLE)
+			end
+		end)
+
 		-- Role icons in existing groups
 		local GroupAtlasList = {
 			TANK = "groupfinder-icon-role-large-tank",
