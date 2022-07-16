@@ -4,18 +4,6 @@ local B, C, L, DB = unpack(ns)
 C.themes["Blizzard_AchievementUI"] = function()
 	local r, g, b = DB.r, DB.g, DB.b
 
-	for _, button in next, AchievementFrameAchievementsContainer.buttons do
-		if not button.tabard then
-			button.tabard = CreateFrame("Frame")
-		end
-	end
-
-	hooksecurefunc("AchievementButton_Localize", function(button)
-		if not button.tabard then
-			print(123)
-			button.tabard = CreateFrame("Frame")
-		end
-	end)
 	B.StripTextures(AchievementFrame, true)
 	B.SetBD(AchievementFrame)
 	AchievementFrameCategories:HideBackdrop()
