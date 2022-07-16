@@ -345,17 +345,16 @@ function S:QuestTracker()
 		hooksecurefunc("WatchFrame_Collapse", updateMinimizeButton)
 		hooksecurefunc("WatchFrame_Expand", updateMinimizeButton)
 
-		local header = CreateFrame("Frame", nil, frame)
-		header:SetAllPoints()
-		header:SetParent(WatchFrame)
-		header.Text = B.CreateFS(header, 16, "", true, "TOPLEFT", 0, 15)
+		local header = CreateFrame("Frame", nil, WatchFrameHeader)
+		header:SetSize(1, 1)
+		header:SetPoint("TOPLEFT")
 		WatchFrame.header = header
 	
 		local bg = header:CreateTexture(nil, "ARTWORK")
 		bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
 		bg:SetTexCoord(0, .66, 0, .31)
 		bg:SetVertexColor(cr, cg, cb, .8)
-		bg:SetPoint("TOPLEFT")
+		bg:SetPoint("TOPLEFT", -25, 5)
 		bg:SetSize(250, 30)
 	end
 
