@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Blizzard_AchievementUI.lua"/>
 	<Script file="Blizzard_AuctionUI.lua"/>
+	<Script file="Blizzard_BarbershopUI.lua"/>
 	<Script file="Blizzard_BattlefieldMap.lua"/>
 	<Script file="Blizzard_BindingUI.lua"/>
 	<Script file="Blizzard_Calendar.lua"/>
