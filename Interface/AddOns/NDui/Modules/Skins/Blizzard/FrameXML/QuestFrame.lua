@@ -173,9 +173,10 @@ tinsert(C.defaultThemes, function()
 	end
 
 	if DB.isNewPatch then
-		B.ReskinPortraitFrame(QuestLogFrame)
+		B.ReskinPortraitFrame(QuestLogFrame, 10, -10, 0, 5)
 		B.Reskin(QuestLogFrameTrackButton)
 		B.Reskin(QuestLogFrameCancelButton)
+		B.ReskinPortraitFrame(QuestLogDetailFrame, 10, -10, 0, 0)
 
 		hooksecurefunc("QuestLog_Update", function()
 			for _, button in pairs(QuestLogListScrollFrame.buttons) do
