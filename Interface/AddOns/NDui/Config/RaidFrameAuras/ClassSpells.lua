@@ -61,6 +61,7 @@ C.CornerBuffs = {
 		[31224]  = {"TOPRIGHT", {.9, .3, .9}, true},	-- 斗篷
 		[26669]  = {"RIGHT", {1, .8, 0}, true},			-- 闪避
 	},
+	["DEATHKNIGHT"] = {},
 }
 
 -- 团队框体职业相关Buffs

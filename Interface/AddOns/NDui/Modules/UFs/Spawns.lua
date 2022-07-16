@@ -558,7 +558,7 @@ function UF:OnLogin()
 
 			local groupByTypes = {
 				[1] = {"1,2,3,4,5,6,7,8", "GROUP", "INDEX"},
-				[2] = {"WARRIOR,ROGUE,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
+				[2] = {"DEATHKNIGHT,WARRIOR,ROGUE,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
 			}
 			function UF:UpdateSimpleModeHeader()
 				ResetHeaderPoints(group)

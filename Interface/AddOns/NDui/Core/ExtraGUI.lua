@@ -1512,10 +1512,11 @@ function G:SetupUFClassPower(parent)
 	local UF = B:GetModule("UnitFrames")
 	local parent, offset = scroll.child, -10
 
-	createOptionSlider(parent, L["Width"], 100, 400, 150, offset-30, "CPWidth", UF.UpdateUFClassPower)
-	createOptionSlider(parent, L["Height"], 2, 30, 5, offset-100, "CPHeight", UF.UpdateUFClassPower)
-	createOptionSlider(parent, L["xOffset"], -20, 200, 12, offset-170, "CPxOffset", UF.UpdateUFClassPower)
-	createOptionSlider(parent, L["yOffset"], -200, 20, -2, offset-240, "CPyOffset", UF.UpdateUFClassPower)
+	createOptionCheck(parent, offset, L["UFs RuneTimer"], "UFs", "RuneTimer")
+	createOptionSlider(parent, L["Width"], 100, 400, 150, offset-70, "CPWidth", UF.UpdateUFClassPower)
+	createOptionSlider(parent, L["Height"], 2, 30, 5, offset-140, "CPHeight", UF.UpdateUFClassPower)
+	createOptionSlider(parent, L["xOffset"], -20, 200, 12, offset-210, "CPxOffset", UF.UpdateUFClassPower)
+	createOptionSlider(parent, L["yOffset"], -200, 20, -2, offset-280, "CPyOffset", UF.UpdateUFClassPower)
 
 	local bar = _G.oUF_Player and _G.oUF_Player.ClassPowerBar
 	panel:HookScript("OnHide", function()

@@ -1212,6 +1212,33 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 	end
 end
 
+function UF:OnUpdateRunes(elapsed)
+	local duration = self.duration + elapsed
+	self.duration = duration
+	self:SetValue(duration)
+	self.timer:SetText(nil)
+	if C.db["UFs"]["RuneTimer"] then
+		local remain = self.runeDuration - duration
+		if remain > 0 then
+			self.timer:SetText(B.FormatTime(remain))
+		end
+	end
+end
+
+function UF.PostUpdateRunes(element, rune, _, start, duration, runeReady)
+	if rune:IsShown() then
+		if runeReady then
+			rune:SetAlpha(1)
+			rune:SetScript("OnUpdate", nil)
+			rune.timer:SetText(nil)
+		elseif start then
+			rune:SetAlpha(.6)
+			rune.runeDuration = duration
+			rune:SetScript("OnUpdate", UF.OnUpdateRunes)
+		end
+	end
+end
+
 function UF:CreateClassPower(self)
 	local barWidth, barHeight = C.db["UFs"]["CPWidth"], C.db["UFs"]["CPHeight"]
 	local barPoint = {"BOTTOMLEFT", self, "TOPLEFT", C.db["UFs"]["CPxOffset"], C.db["UFs"]["CPyOffset"]}
@@ -1223,14 +1250,18 @@ function UF:CreateClassPower(self)
 		barPoint = {"CENTER", self}
 	end
 
+	local isDK = DB.MyClass == "DEATHKNIGHT"
 	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
 	bar:SetSize(barWidth, barHeight)
 	bar:SetPoint(unpack(barPoint))
+
 	-- show bg while size changed
-	bar.bg = B.SetBD(bar)
-	bar.bg:SetFrameLevel(5)
-	bar.bg:SetBackdropBorderColor(1, .8, 0)
-	bar.bg:Hide()
+	if not isDK then
+		bar.bg = B.SetBD(bar)
+		bar.bg:SetFrameLevel(5)
+		bar.bg:SetBackdropBorderColor(1, .8, 0)
+		bar.bg:Hide()
+	end
 
 	local bars = {}
 	for i = 1, 6 do
@@ -1250,10 +1281,22 @@ function UF:CreateClassPower(self)
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg.multiplier = .25
+
+		if isDK then
+			bars[i].timer = B.CreateFS(bars[i], 13, "")
+		end
 	end
 
-	bars.PostUpdate = UF.PostUpdateClassPower
-	self.ClassPower = bars
+	if isDK then
+		bars.colorSpec = true
+		bars.PostUpdateRune = UF.PostUpdateRunes
+		bars.__max = 6
+		self.Runes = bars
+	else
+		bars.PostUpdate = UF.PostUpdateClassPower
+		self.ClassPower = bars
+	end
+
 	self.ClassPowerBar = bar
 end
 
@@ -1285,7 +1328,7 @@ function UF:UpdateUFClassPower()
 
 	local barWidth, barHeight = C.db["UFs"]["CPWidth"], C.db["UFs"]["CPHeight"]
 	local xOffset, yOffset = C.db["UFs"]["CPxOffset"], C.db["UFs"]["CPyOffset"]
-	local bars = playerFrame.ClassPower
+	local bars = playerFrame.ClassPower or playerFrame.Runes
 	if bars then
 		local bar = playerFrame.ClassPowerBar
 		bar:SetSize(barWidth, barHeight)

@@ -167,6 +167,7 @@ G.DefaultSettings = {
 		CPxOffset = 12,
 		CPyOffset = -2,
 		LagString = true,
+		RuneTimer = true,
 		RaidBuffIndicator = true,
 		PartyFrame = true,
 		PartyDirec = 2,
