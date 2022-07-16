@@ -166,34 +166,38 @@ function S:EnhancedTradeSkill()
 	if C.db["Skins"]["BlizzardSkins"] then
 		TradeSkillFrame:SetHeight(512)
 		TradeSkillCancelButton:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -42, 78)
-		TradeSkillRankFrame:ClearAllPoints()
-		TradeSkillRankFrame:SetPoint("TOPLEFT", TradeSkillFrame, 24, -24)
+		if not DB.isNewPatch then
+			TradeSkillRankFrame:ClearAllPoints()
+			TradeSkillRankFrame:SetPoint("TOPLEFT", TradeSkillFrame, 24, -24)
+		end
 	else
 		TradeSkillFrameCloseButton:ClearAllPoints()
 		TradeSkillFrameCloseButton:SetPoint("TOPRIGHT", TradeSkillFrame, "TOPRIGHT", -30, -8)
 	end
 
 	-- Search widget
-	TradeSearchInputBox:ClearAllPoints()
-	TradeSearchInputBox:SetPoint("TOPLEFT", TradeSkillRankFrame, "BOTTOMLEFT", 1, -6)
-	TradeSearchInputBox:SetWidth(221)
-	TradeSearchInputBox:SetTextInsets(5, 5, 0, 0)
-	TradeSearchInputBox:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
-	TradeSearchInputBox:HookScript("OnEscapePressed", searchBox_OnShow)
+	if not DB.isNewPatch then
+		TradeSearchInputBox:ClearAllPoints()
+		TradeSearchInputBox:SetPoint("TOPLEFT", TradeSkillRankFrame, "BOTTOMLEFT", 1, -6)
+		TradeSearchInputBox:SetWidth(221)
+		TradeSearchInputBox:SetTextInsets(5, 5, 0, 0)
+		TradeSearchInputBox:SetFont(DB.Font[1], DB.Font[2]+2, DB.Font[3])
+		TradeSearchInputBox:HookScript("OnEscapePressed", searchBox_OnShow)
 
-	local searchBox = S:CreateTradeSearchBox(TradeSkillFrame, TradeSkillRankFrame)
+		local searchBox = S:CreateTradeSearchBox(TradeSkillFrame, TradeSkillRankFrame)
 
-	local prevTrade
-	hooksecurefunc("TradeSkillFrame_Update", function()
-		local name = GetTradeSkillLine()
-		if not prevTrade or prevTrade ~= name then
-			searchBox_OnShow(searchBox)
-			searchBox:ClearFocus()
-			prevTrade = name
-		end
-		searchBox:SetShown(not TradeSearchInputBox:IsShown())
-		TradeSkillHighlightFrame:SetWidth(300)
-	end)
+		local prevTrade
+		hooksecurefunc("TradeSkillFrame_Update", function()
+			local name = GetTradeSkillLine()
+			if not prevTrade or prevTrade ~= name then
+				searchBox_OnShow(searchBox)
+				searchBox:ClearFocus()
+				prevTrade = name
+			end
+			searchBox:SetShown(not TradeSearchInputBox:IsShown())
+			TradeSkillHighlightFrame:SetWidth(300)
+		end)
+	end
 end
 
 function S:EnhancedCraft()

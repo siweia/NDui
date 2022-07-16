@@ -56,7 +56,13 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	B.ReskinArrow(TradeSkillDecrementButton, "left")
 	B.ReskinArrow(TradeSkillIncrementButton, "right")
 	B.ReskinInput(TradeSkillInputBox)
-	B.ReskinInput(TradeSearchInputBox)
+	if not DB.isNewPatch then
+		B.ReskinInput(TradeSearchInputBox)
+	else
+		B.ReskinInput(TradeSkillFrameEditBox)
+		TradeSkillFrameBottomLeftTexture:Hide()
+		TradeSkillFrameBottomRightTexture:Hide()
+	end
 
 	B.StripTextures(TradeSkillRankFrameBorder)
 	B.StripTextures(TradeSkillRankFrame)
@@ -70,7 +76,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	TradeSkillExpandButtonFrame:DisableDrawLayer("BACKGROUND")
 	B.ReskinCheck(TradeSkillFrameAvailableFilterCheckButton)
 
-	TradeSkillFrame:HookScript("OnShow", function()
+	hooksecurefunc("TradeSkillFrame_Update", function()
 		for i = 1, 22 do
 			local bu = _G["TradeSkillSkill"..i]
 			if bu and not bu.styled then

@@ -8,6 +8,7 @@ local InCombatLockdown, IsPlayerSpell, IsCurrentSpell = InCombatLockdown, IsPlay
 
 local CAMPFIRE_ID = 818
 local SMELTING_ID = 2656
+local RUNEFORGING_ID = 53428
 
 local tradeList = {
 	["Cooking"] = {
@@ -159,6 +160,10 @@ end
 
 function M:TradeTabs_OnLoad()
 	M:UpdateProfessions()
+
+	if DB.MyClass == "DEATHKNIGHT" then
+		M:TradeTabs_Create(RUNEFORGING_ID)
+	end
 
 	local hasCooking
 
