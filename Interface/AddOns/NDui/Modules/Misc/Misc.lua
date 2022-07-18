@@ -112,7 +112,7 @@ function M:OnLogin()
 	end
 end
 
--- Reanchor Vehicle
+-- Reanchor Vehicle, isNewPatch
 function M:VehicleSeatMover()
 	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
 	frame:SetSize(125, 125)
