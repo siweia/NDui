@@ -91,9 +91,18 @@ end
 
 
 -- Tags
+local function GetAllFreeSlots()
+	local totalFree, freeSlots = 0
+	for i = 0, 4 do
+		freeSlots = GetContainerNumFreeSlots(i)
+		totalFree = totalFree + freeSlots
+	end
+	return totalFree
+end
+
 local function GetNumFreeSlots(name)
 	if name == "Bag" then
-		return CalculateTotalNumberOfFreeBagSlots()
+		return GetAllFreeSlots() -- CalculateTotalNumberOfFreeBagSlots exclude special bags
 	elseif name == "Bank" then
 		local numFreeSlots = GetContainerNumFreeSlots(-1)
 		for bagID = 5, 11 do

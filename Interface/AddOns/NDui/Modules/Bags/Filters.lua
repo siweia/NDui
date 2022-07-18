@@ -50,6 +50,11 @@ end
 local function isItemAmmo(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterAmmo"] then return end
+
+	if C.db["Bags"]["GatherEmpty"] and not item.texture then
+		return false
+	end
+
 	if DB.MyClass == "HUNTER" then
 		return item.equipLoc == AmmoEquipLoc or module.BagsType[item.bagID] == -1
 	elseif DB.MyClass == "WARLOCK" then
@@ -97,7 +102,8 @@ end
 
 local function isEmptySlot(item)
 	if not C.db["Bags"]["GatherEmpty"] then return end
-	return module.initComplete and not item.texture and module.BagsType[item.bagID] == 0
+	--return module.initComplete and not item.texture and module.BagsType[item.bagID] == 0
+	return module.initComplete and not item.texture
 end
 
 local function isItemKeyRing(item)
