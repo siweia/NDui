@@ -160,7 +160,7 @@ local function Visibility(self, event, unit)
 	local element = self.ClassPower
 	local shouldEnable
 
-	if(UnitHasVehicleUI and UnitHasVehicleUI('player')) then
+	if(DB.isNewPatch and UnitHasVehicleUI('player')) then
 		shouldEnable = true -- PlayerVehicleHasComboPoints()
 		unit = 'vehicle'
 	elseif(ClassPowerID) then
@@ -221,7 +221,7 @@ do
 
 		self.ClassPower.isEnabled = true
 
-		if(UnitHasVehicleUI and UnitHasVehicleUI('player')) then
+		if(DB.isNewPatch and UnitHasVehicleUI('player')) then
 			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
 		else
 			Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
