@@ -285,7 +285,7 @@ local function initObject(unit, style, styleFunc, header, ...)
 		object:RegisterEvent('PLAYER_ENTERING_WORLD', evalUnitAndUpdate, true)
 
 		if(not isEventlessUnit(objectUnit)) then
-			if DB.isNewPatch then
+			if ns[4].isNewPatch then
 				object:RegisterEvent('UNIT_ENTERED_VEHICLE', evalUnitAndUpdate)
 				object:RegisterEvent('UNIT_EXITED_VEHICLE', evalUnitAndUpdate)
 			end
@@ -302,7 +302,7 @@ local function initObject(unit, style, styleFunc, header, ...)
 			-- No header means it's a frame created through :Spawn().
 			object:SetAttribute('*type1', 'target')
 			object:SetAttribute('*type2', 'togglemenu')
-			if DB.isNewPatch then
+			if ns[4].isNewPatch then
 				object:SetAttribute('toggleForVehicle', true)
 			end
 
@@ -659,7 +659,7 @@ do
 
 		-- We set it here so layouts can't directly override it.
 		header:SetAttribute('initialConfigFunction', initialConfigFunction)
-		if DB.isNewPatch then
+		if ns[4].isNewPatch then
 			header:SetAttribute('_initialAttributeNames', '_onenter,_onleave,refreshUnitChange,_onstate-vehicleui')
 			header:SetAttribute('_initialAttribute-_onenter', [[
 				local snippet = self:GetAttribute('clickcast_onenter')
