@@ -96,7 +96,7 @@ local function GetNumFreeSlots(self)
 	if bagType == "Bag" then
 		local totalFree = 0
 		for i = 0, 4 do
-			if cargBags.BagsType[i] == self.bagFamily then
+			if cargBags.BagGroups[i] == self.bagGroup then
 				totalFree = totalFree + GetContainerNumFreeSlots(i)
 			end
 		end
@@ -104,7 +104,7 @@ local function GetNumFreeSlots(self)
 	elseif bagType == "Bank" then
 		local totalFree = GetContainerNumFreeSlots(-1)
 		for i = 5, 11 do
-			if cargBags.BagsType[i] == self.bagFamily then
+			if cargBags.BagGroups[i] == self.bagGroup then
 				totalFree = totalFree + GetContainerNumFreeSlots(i)
 			end
 		end
