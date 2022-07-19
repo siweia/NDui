@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Bags")
+local cargBags = ns.cargBags
 
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_LEGENDARY
 local LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT = LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT
@@ -42,9 +43,9 @@ local function isItemAmmo(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterAmmo"] then return end
 	if DB.MyClass == "HUNTER" then
-		return item.equipLoc == AmmoEquipLoc or module.BagsType[item.bagID] == -1
+		return item.equipLoc == AmmoEquipLoc or cargBags.BagsType[item.bagID] == -1
 	elseif DB.MyClass == "WARLOCK" then
-		return item.id == 6265 or module.BagsType[item.bagID] == 1
+		return item.id == 6265 or cargBags.BagsType[item.bagID] == 1
 	end
 end
 
@@ -88,7 +89,7 @@ end
 
 local function isEmptySlot(item)
 	if not C.db["Bags"]["GatherEmpty"] then return end
-	return module.initComplete and not item.texture and module.BagsType[item.bagID] == 0
+	return module.initComplete and not item.texture
 end
 
 local function isItemKeyRing(item)
@@ -111,12 +112,12 @@ function module:GetFilters()
 	local filters = {}
 
 	filters.onlyBags = function(item) return isItemInBag(item) and not isEmptySlot(item) end
-	filters.bagAmmo = function(item) return isItemInBag(item) and isItemAmmo(item) end
+	filters.bagAmmo = function(item) return isItemInBag(item) and isItemAmmo(item) and not isEmptySlot(item) end
 	filters.bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 	filters.bagConsumable = function(item) return isItemInBag(item) and isItemConsumable(item) end
 	filters.bagsJunk = function(item) return isItemInBag(item) and isItemJunk(item) end
 	filters.onlyBank = function(item) return isItemInBank(item) and not isEmptySlot(item) end
-	filters.bankAmmo = function(item) return isItemInBank(item) and isItemAmmo(item) end
+	filters.bankAmmo = function(item) return isItemInBank(item) and isItemAmmo(item) and not isEmptySlot(item) end
 	filters.bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	filters.bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
 	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) end
