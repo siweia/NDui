@@ -43,9 +43,9 @@ local function isItemAmmo(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterAmmo"] then return end
 	if DB.MyClass == "HUNTER" then
-		return item.equipLoc == AmmoEquipLoc or cargBags.BagsType[item.bagID] == -1
+		return item.equipLoc == AmmoEquipLoc or cargBags.BagGroups[item.bagID] == -1
 	elseif DB.MyClass == "WARLOCK" then
-		return item.id == 6265 or cargBags.BagsType[item.bagID] == 1
+		return item.id == 6265 or cargBags.BagGroups[item.bagID] == 1
 	end
 end
 

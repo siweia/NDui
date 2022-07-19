@@ -286,8 +286,8 @@ function module:CreateSortButton(name)
 	return bu
 end
 
-function module:GetContainerEmptySlot(bagID, bagFamily)
-	if cargBags.BagsType[bagID] == bagFamily then
+function module:GetContainerEmptySlot(bagID, bagGroup)
+	if cargBags.BagGroups[bagID] == bagGroup then
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			if not GetContainerItemID(bagID, slotID) then
 				return slotID
@@ -296,21 +296,21 @@ function module:GetContainerEmptySlot(bagID, bagFamily)
 	end
 end
 
-function module:GetEmptySlot(bagType, bagFamily)
+function module:GetEmptySlot(bagType, bagGroup)
 	if bagType == "Bag" then
 		for bagID = 0, NUM_BAG_SLOTS do
-			local slotID = module:GetContainerEmptySlot(bagID, bagFamily)
+			local slotID = module:GetContainerEmptySlot(bagID, bagGroup)
 			if slotID then
 				return bagID, slotID
 			end
 		end
 	elseif bagType == "Bank" then
-		local slotID = module:GetContainerEmptySlot(-1, bagFamily)
+		local slotID = module:GetContainerEmptySlot(-1, bagGroup)
 		if slotID then
 			return -1, slotID
 		end
 		for bagID = NUM_BAG_SLOTS+1, NUM_BAG_SLOTS+NUM_BANKBAGSLOTS do
-			local slotID = module:GetContainerEmptySlot(bagID, bagFamily)
+			local slotID = module:GetContainerEmptySlot(bagID, bagGroup)
 			if slotID then
 				return bagID, slotID
 			end
@@ -319,7 +319,7 @@ function module:GetEmptySlot(bagType, bagFamily)
 end
 
 function module:FreeSlotOnDrop()
-	local bagID, slotID = module:GetEmptySlot(self.__owner.Settings.BagType, self.__owner.bagFamily)
+	local bagID, slotID = module:GetEmptySlot(self.__owner.Settings.BagType, self.__owner.bagGroup)
 	if slotID then
 		PickupContainerItem(bagID, slotID)
 	end
@@ -334,9 +334,9 @@ local freeSlotContainer = {
 
 function module:CreateFreeSlots()
 	local name = self.name
-	local bagFamily = freeSlotContainer[name]
-	if not bagFamily then return end
-	self.bagFamily = bagFamily
+	local bagGroup = freeSlotContainer[name]
+	if not bagGroup then return end
+	self.bagGroup = bagGroup
 
 	local slot = CreateFrame("Button", name.."FreeSlot", self, "BackdropTemplate")
 	slot:SetSize(self.iconSize, self.iconSize)
@@ -708,9 +708,9 @@ function module:OnLogin()
 	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
 	module.Bags = Backpack
-	cargBags.BagsType = {}
-	cargBags.BagsType[0] = 0	-- backpack
-	cargBags.BagsType[-1] = 0	-- bank
+	cargBags.BagGroups = {}
+	cargBags.BagGroups[0] = 0	-- backpack
+	cargBags.BagGroups[-1] = 0	-- bank
 
 	local f = {}
 	local filters = module:GetFilters()
@@ -831,7 +831,7 @@ function module:OnLogin()
 		end
 	end
 
-	local bagTypeColor = {
+	local bagGroupColor = {
 		[-1] = {.67, .83, .45, .25},-- 箭袋/弹药
 		[0] = {.3, .3, .3, .3},		-- 容器
 		[1] = {.53, .53, .93, .25}, -- 灵魂袋
@@ -900,8 +900,8 @@ function module:OnLogin()
 		end
 
 		if C.db["Bags"]["SpecialBagsColor"] then
-			local bagType = cargBags.BagsType[item.bagID]
-			local color = bagTypeColor[bagType] or bagTypeColor[0]
+			local bagType = cargBags.BagGroups[item.bagID]
+			local color = bagGroupColor[bagType] or bagGroupColor[0]
 			self:SetBackdropColor(unpack(color))
 		else
 			self:SetBackdropColor(.3, .3, .3, .3)
@@ -1111,11 +1111,11 @@ function module:OnLogin()
 		end
 
 		if classID == LE_ITEM_CLASS_CONTAINER then
-			cargBags.BagsType[self.bagID] = subClassID or 0
+			cargBags.BagGroups[self.bagID] = subClassID or 0
 		elseif classID == LE_ITEM_CLASS_QUIVER then
-			cargBags.BagsType[self.bagID] = -1
+			cargBags.BagGroups[self.bagID] = -1
 		else
-			cargBags.BagsType[self.bagID] = 0
+			cargBags.BagGroups[self.bagID] = 0
 		end
 	end
 
