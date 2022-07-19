@@ -102,7 +102,7 @@ local function GetNumFreeSlots(self)
 		end
 		return totalFree
 	elseif bagType == "Bank" then
-		local totalFree = GetContainerNumFreeSlots(-1)
+		local totalFree = self.bagGroup == 0 and GetContainerNumFreeSlots(-1) or 0
 		for i = 5, 10 do
 			if cargBags.BagGroups[i] == self.bagGroup then
 				totalFree = totalFree + GetContainerNumFreeSlots(i)
@@ -113,8 +113,9 @@ local function GetNumFreeSlots(self)
 end
 
 tagPool["space"] = function(tag)
-	local str = GetNumFreeSlots(tag.__owner)
-	return str
+	local self = tag.__owner
+	self.totalFree = GetNumFreeSlots(self)
+	return self.totalFree
 end
 
 tagPool["item"] = function(self, item)
