@@ -91,20 +91,29 @@ end
 
 
 -- Tags
-local function GetNumFreeSlots(name)
-	if name == "Bag" then
-		return CalculateTotalNumberOfFreeBagSlots()
-	elseif name == "Bank" then
-		local numFreeSlots = GetContainerNumFreeSlots(-1)
-		for bagID = 5, 11 do
-			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+local function GetNumFreeSlots(self)
+	local bagType = self.Settings.BagType
+	if bagType == "Bag" then
+		local totalFree = 0
+		for i = 0, 4 do
+			if cargBags.BagsType[i] == self.bagFamily then
+				totalFree = totalFree + GetContainerNumFreeSlots(i)
+			end
 		end
-		return numFreeSlots
+		return totalFree
+	elseif bagType == "Bank" then
+		local totalFree = GetContainerNumFreeSlots(-1)
+		for i = 5, 11 do
+			if cargBags.BagsType[i] == self.bagFamily then
+				totalFree = totalFree + GetContainerNumFreeSlots(i)
+			end
+		end
+		return totalFree
 	end
 end
 
-tagPool["space"] = function(self)
-	local str = GetNumFreeSlots(self.__name)
+tagPool["space"] = function(tag)
+	local str = GetNumFreeSlots(tag.__owner)
 	return str
 end
 

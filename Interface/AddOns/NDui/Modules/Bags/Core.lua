@@ -286,30 +286,31 @@ function module:CreateSortButton(name)
 	return bu
 end
 
-function module:GetContainerEmptySlot(bagID)
-	local bagType = module.BagsType[bagID]
-	for slotID = 1, GetContainerNumSlots(bagID) do
-		if not GetContainerItemID(bagID, slotID) and bagType == 0 then
-			return slotID
+function module:GetContainerEmptySlot(bagID, bagFamily)
+	if cargBags.BagsType[bagID] == bagFamily then
+		for slotID = 1, GetContainerNumSlots(bagID) do
+			if not GetContainerItemID(bagID, slotID) then
+				return slotID
+			end
 		end
 	end
 end
 
-function module:GetEmptySlot(name)
-	if name == "Bag" then
+function module:GetEmptySlot(bagType, bagFamily)
+	if bagType == "Bag" then
 		for bagID = 0, NUM_BAG_SLOTS do
-			local slotID = module:GetContainerEmptySlot(bagID)
+			local slotID = module:GetContainerEmptySlot(bagID, bagFamily)
 			if slotID then
 				return bagID, slotID
 			end
 		end
-	elseif name == "Bank" then
-		local slotID = module:GetContainerEmptySlot(-1)
+	elseif bagType == "Bank" then
+		local slotID = module:GetContainerEmptySlot(-1, bagFamily)
 		if slotID then
 			return -1, slotID
 		end
 		for bagID = NUM_BAG_SLOTS+1, NUM_BAG_SLOTS+NUM_BANKBAGSLOTS do
-			local slotID = module:GetContainerEmptySlot(bagID)
+			local slotID = module:GetContainerEmptySlot(bagID, bagFamily)
 			if slotID then
 				return bagID, slotID
 			end
@@ -318,20 +319,24 @@ function module:GetEmptySlot(name)
 end
 
 function module:FreeSlotOnDrop()
-	local bagID, slotID = module:GetEmptySlot(self.__name)
+	local bagID, slotID = module:GetEmptySlot(self.__owner.Settings.BagType, self.__owner.bagFamily)
 	if slotID then
 		PickupContainerItem(bagID, slotID)
 	end
 end
 
 local freeSlotContainer = {
-	["Bag"] = true,
-	["Bank"] = true,
+	["Bag"] = 0,
+	["Bank"] = 0,
+	["AmmoItem"] = DB.MyClass == "WARLOCK" and 1 or DB.MyClass == "HUNTER" and -1,
+	["bankAmmoItem"] = DB.MyClass == "WARLOCK" and 1 or DB.MyClass == "HUNTER" and -1,
 }
 
 function module:CreateFreeSlots()
 	local name = self.name
-	if not freeSlotContainer[name] then return end
+	local bagFamily = freeSlotContainer[name]
+	if not bagFamily then return end
+	self.bagFamily = bagFamily
 
 	local slot = CreateFrame("Button", name.."FreeSlot", self, "BackdropTemplate")
 	slot:SetSize(self.iconSize, self.iconSize)
@@ -343,13 +348,13 @@ function module:CreateFreeSlots()
 	slot:SetScript("OnMouseUp", module.FreeSlotOnDrop)
 	slot:SetScript("OnReceiveDrag", module.FreeSlotOnDrop)
 	B.AddTooltip(slot, "ANCHOR_RIGHT", L["FreeSlots"])
-	slot.__name = name
+	slot.__owner = self
 
 	local tag = self:SpawnPlugin("TagDisplay", "[space]", slot)
 	tag:SetFont(DB.Font[1], C.db["Bags"]["FontSize"] + 2, DB.Font[3])
 	tag:SetTextColor(.6, .8, 1)
 	tag:SetPoint("CENTER", 1, 0)
-	tag.__name = name
+	tag.__owner = self
 	slot.tag = tag
 
 	self.freeSlot = slot
@@ -424,7 +429,7 @@ local function splitOnClick(self)
 	if texture and not locked and itemCount and itemCount > C.db["Bags"]["SplitCount"] then
 		SplitContainerItem(self.bagID, self.slotID, C.db["Bags"]["SplitCount"])
 
-		local bagID, slotID = module:GetEmptySlot("Bag")
+		local bagID, slotID = module:GetEmptySlot("Bag", 0)
 		if slotID then
 			PickupContainerItem(bagID, slotID)
 		end
@@ -703,9 +708,9 @@ function module:OnLogin()
 	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
 	module.Bags = Backpack
-	module.BagsType = {}
-	module.BagsType[0] = 0	-- backpack
-	module.BagsType[-1] = 0	-- bank
+	cargBags.BagsType = {}
+	cargBags.BagsType[0] = 0	-- backpack
+	cargBags.BagsType[-1] = 0	-- bank
 
 	local f = {}
 	local filters = module:GetFilters()
@@ -895,7 +900,7 @@ function module:OnLogin()
 		end
 
 		if C.db["Bags"]["SpecialBagsColor"] then
-			local bagType = module.BagsType[item.bagID]
+			local bagType = cargBags.BagsType[item.bagID]
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self:SetBackdropColor(unpack(color))
 		else
@@ -989,6 +994,9 @@ function module:OnLogin()
 			B.CreateMF(self, nil, true)
 		end
 
+		self.iconSize = iconSize
+		module.CreateFreeSlots(self)
+
 		local label
 		if strmatch(name, "AmmoItem$") then
 			label = DB.MyClass == "HUNTER" and INVTYPE_AMMO or SOUL_SHARDS
@@ -1014,9 +1022,7 @@ function module:OnLogin()
 			return
 		end
 
-		self.iconSize = iconSize
 		module.CreateInfoFrame(self)
-		module.CreateFreeSlots(self)
 
 		local buttons = {}
 		buttons[1] = module.CreateCloseButton(self, f)
@@ -1105,11 +1111,11 @@ function module:OnLogin()
 		end
 
 		if classID == LE_ITEM_CLASS_CONTAINER then
-			module.BagsType[self.bagID] = subClassID or 0
+			cargBags.BagsType[self.bagID] = subClassID or 0
 		elseif classID == LE_ITEM_CLASS_QUIVER then
-			module.BagsType[self.bagID] = -1
+			cargBags.BagsType[self.bagID] = -1
 		else
-			module.BagsType[self.bagID] = 0
+			cargBags.BagsType[self.bagID] = 0
 		end
 	end
 
