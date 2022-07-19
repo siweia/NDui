@@ -1277,7 +1277,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "EasyVolume", L["EasyVolume"], nil, nil, nil, L["EasyVolumeTip"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
-		{1, "Map", "Calendar", L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"]},
+		{1, "Map", "Calendar", L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"], not DB.isNewPatch},
 		{2, "ACCOUNT", "IgnoredButtons", L["IgnoredButtons"], nil, nil, nil, L["IgnoredButtonsTip"]},
 	},
 	[11] = {
@@ -1475,7 +1475,7 @@ local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
 	for _, option in pairs(G.OptionList[i]) do
-		local optType, key, value, name, horizon, data, callback, tooltip = unpack(option)
+		local optType, key, value, name, horizon, data, callback, tooltip, disabled = unpack(option)
 		-- Checkboxes
 		if optType == 1 then
 			local cb = B.CreateCheckBox(parent)
@@ -1501,6 +1501,7 @@ local function CreateOption(i)
 			if tooltip then
 				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info", true)
 			end
+			if disabled then cb:Hide() end
 		-- Editbox
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)
