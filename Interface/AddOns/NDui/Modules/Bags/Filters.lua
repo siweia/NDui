@@ -51,6 +51,11 @@ end
 local function isItemAmmo(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterAmmo"] then return end
+
+	if C.db["Bags"]["GatherEmpty"] and not item.texture then
+		return false
+	end
+
 	if DB.MyClass == "HUNTER" then
 		return item.equipLoc == AmmoEquipLoc or cargBags.BagGroups[item.bagID] == -1
 	elseif DB.MyClass == "WARLOCK" then
@@ -98,7 +103,7 @@ end
 
 local function isEmptySlot(item)
 	if not C.db["Bags"]["GatherEmpty"] then return end
-	return module.initComplete and not item.texture
+	return module.initComplete and not item.texture and (C.db["Bags"]["ItemFilter"] or cargBags.BagGroups[item.bagID] == 0)
 end
 
 local function isItemKeyRing(item)
@@ -121,12 +126,12 @@ function module:GetFilters()
 	local filters = {}
 
 	filters.onlyBags = function(item) return isItemInBag(item) and not isEmptySlot(item) end
-	filters.bagAmmo = function(item) return isItemInBag(item) and isItemAmmo(item) and not isEmptySlot(item) end
+	filters.bagAmmo = function(item) return isItemInBag(item) and isItemAmmo(item) end
 	filters.bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 	filters.bagConsumable = function(item) return isItemInBag(item) and isItemConsumable(item) end
 	filters.bagsJunk = function(item) return isItemInBag(item) and isItemJunk(item) end
 	filters.onlyBank = function(item) return isItemInBank(item) and not isEmptySlot(item) end
-	filters.bankAmmo = function(item) return isItemInBank(item) and isItemAmmo(item) and not isEmptySlot(item) end
+	filters.bankAmmo = function(item) return isItemInBank(item) and isItemAmmo(item) end
 	filters.bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	filters.bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
 	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) end
