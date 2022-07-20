@@ -135,9 +135,9 @@ tinsert(C.defaultThemes, function()
 		for i = 2, 4 do
 			select(i, frame:GetRegions()):Hide()
 		end
-
-		if not DB.isNewPatch then
-			local icon = frame.Icon
+		-- isNewPatch
+		local icon = frame.Icon or QuestInfoPlayerTitleFrameIconTexture
+		if icon then
 			B.ReskinIcon(icon)
 			local bg = B.CreateBDFrame(frame, .25)
 			bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)
