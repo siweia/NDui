@@ -310,8 +310,8 @@ function M:CollectGoldButton()
 
 	local button = M:MailBox_CreatButton(InboxFrame, 120, 24, "", {"LEFT", OpenAllMail, "RIGHT", 3, 0})
 	button:SetScript("OnClick", M.MailBox_CollectAllGold)
-	button:SetScript("OnEnter", M.TotalCash_OnEnter)
-	button:SetScript("OnLeave", M.TotalCash_OnLeave)
+	button:HookScript("OnEnter", M.TotalCash_OnEnter)
+	button:HookScript("OnLeave", M.TotalCash_OnLeave)
 
 	M.GoldButton = button
 	M:UpdateOpeningText()
