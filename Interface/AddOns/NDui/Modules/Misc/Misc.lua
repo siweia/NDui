@@ -120,9 +120,9 @@ function M:NakedIcon()
 	GearManagerToggleButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(EQUIPMENT_MANAGER)
-		GameTooltip:AddLine(NEWBIE_TOOLTIP_EQUIPMENT_MANAGER)
-		GameTooltip:AddLine(L["Get Naked"])
+		GameTooltip:AddLine(EQUIPMENT_MANAGER, 1,1,1)
+		GameTooltip:AddLine(NEWBIE_TOOLTIP_EQUIPMENT_MANAGER, 1,.8,0, 1)
+		GameTooltip:AddLine(L["Get Naked"], .6,.8,1, 1)
 		GameTooltip:Show()
 	end)
 
@@ -143,10 +143,10 @@ function M:NakedIcon()
 	end)
 	GearManagerToggleButton:SetScript("OnClick", function(_, btn)
 		if btn ~= "LeftButton" then return end
-		if ( GearManagerDialog:IsShown() ) then
-			GearManagerDialog:Hide();
+		if GearManagerDialog:IsShown() then
+			GearManagerDialog:Hide()
 		else
-			GearManagerDialog:Show();
+			GearManagerDialog:Show()
 		end
 	end)
 end

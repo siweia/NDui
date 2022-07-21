@@ -219,6 +219,7 @@ L["Targeted By"] = "В цели у: "
 L["NumberCap1"] = "w"
 L["NumberCap2"] = "y"
 L["NumberCap3"] = "z"
+L["Get Naked"] = "Double click right button to unequip all items." -- need translation
 L["Mover Console"] = "NDui Mover"
 L["Grids"] = "Клетки"
 L["Reset Mover Confirm"] = "Вы уверены что хотите сбросить позиции рамок?"

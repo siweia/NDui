@@ -219,6 +219,7 @@ L["Targeted By"] = "주목: "
 L["NumberCap1"] = "만"
 L["NumberCap2"] = "억"
 L["NumberCap3"] = "조"
+L["Get Naked"] = "Double click right button to unequip all items." -- need translation
 L["Mover Console"] = "NDui콘솔이동"
 L["Grids"] = "통신"
 L["Reset Mover Confirm"] = "모든 UI위치를 초기화 하시겠습니까?"
