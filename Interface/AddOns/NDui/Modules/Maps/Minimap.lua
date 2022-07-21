@@ -127,6 +127,11 @@ function module:ReskinRegions()
 	end
 
 	if DB.isNewPatch then
+		-- Difficulty Flags
+		MiniMapInstanceDifficulty:ClearAllPoints()
+		MiniMapInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+		MiniMapInstanceDifficulty:SetScale(.9)
+
 		-- Invites Icon
 		GameTimeCalendarInvitesTexture:ClearAllPoints()
 		GameTimeCalendarInvitesTexture:SetParent("Minimap")
@@ -439,22 +444,6 @@ function module:ShowMinimapClock()
 	end
 end
 
-function module:EasyTrackMenu()
-	local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
-	Minimap:SetScript("OnMouseUp", function(self, btn)
-		if btn == "MiddleButton" then
-			if DB.isNewPatch then -- isNewPatch: correct helptip
-				--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-				ToggleCalendar()
-			elseif hasAlaCalendar then
-				B:TogglePanel(ALA_CALENDAR)
-			end
-		else
-			Minimap_OnClick(self)
-		end
-	end)
-end
-
 function module:ShowMinimapHelpInfo()
 	Minimap:HookScript("OnEnter", function()
 		if not NDuiADB["Help"]["MinimapInfo"] then
@@ -482,7 +471,7 @@ end
 
 function module:MinimapDifficulty()
 	if not C.db["Map"]["DiffFlag"] then return end
-	if _G.MiniMapInstanceDifficulty then return end -- hide flag if blizz makes its own, isNewPatch
+	if _G.MiniMapInstanceDifficulty then return end -- hide flag if blizz makes its own, isNewPatch removed in WLK
 
 	local frame = CreateFrame("Frame", "NDuiMinimapDifficulty", Minimap)
 	frame:SetSize(38, 46)
@@ -565,6 +554,42 @@ function module:SoundVolume()
 	module.VolumeAnim = anim
 end
 
+function module:Minimap_OnMouseWheel(zoom)
+	if IsControlKeyDown() and module.VolumeText then
+		local value = GetCurrentVolume()
+		local mult = IsAltKeyDown() and 100 or 5
+		value = value + zoom*mult
+		if value > 100 then value = 100 end
+		if value < 0 then value = 0 end
+
+		SetCVar("Sound_MasterVolume", tostring(value/100))
+		module.VolumeText:SetText(value)
+		module.VolumeText:SetTextColor(GetVolumeColor(value))
+		module.VolumeAnim:Stop()
+		module.VolumeAnim:Play()
+	else
+		if zoom > 0 then
+			Minimap_ZoomIn()
+		else
+			Minimap_ZoomOut()
+		end
+	end
+end
+
+local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
+function module:Minimap_OnMouseUp(btn)
+	if btn == "MiddleButton" then
+		if DB.isNewPatch then -- isNewPatch: correct helptip
+			--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+			ToggleCalendar()
+		elseif hasAlaCalendar then
+			B:TogglePanel(ALA_CALENDAR)
+		end
+	else
+		Minimap_OnClick(self)
+	end
+end
+
 function module:SetupMinimap()
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
@@ -583,27 +608,8 @@ function module:SetupMinimap()
 
 	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", function(_, zoom)
-		if IsControlKeyDown() and module.VolumeText then
-			local value = GetCurrentVolume()
-			local mult = IsAltKeyDown() and 100 or 5
-			value = value + zoom*mult
-			if value > 100 then value = 100 end
-			if value < 0 then value = 0 end
-
-			SetCVar("Sound_MasterVolume", tostring(value/100))
-			module.VolumeText:SetText(value)
-			module.VolumeText:SetTextColor(GetVolumeColor(value))
-			module.VolumeAnim:Stop()
-			module.VolumeAnim:Play()
-		else
-			if zoom > 0 then
-				Minimap_ZoomIn()
-			else
-				Minimap_ZoomOut()
-			end
-		end
-	end)
+	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	Minimap:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
 
 	-- Hide Blizz
 	local frames = {
@@ -630,7 +636,6 @@ function module:SetupMinimap()
 	self:ReskinRegions()
 	self:RecycleBin()
 	self:WhoPingsMyMap()
-	self:EasyTrackMenu()
 	self:ShowMinimapHelpInfo()
 	self:MinimapDifficulty()
 	self:SoundVolume()
