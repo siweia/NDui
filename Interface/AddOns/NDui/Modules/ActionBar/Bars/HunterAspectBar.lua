@@ -15,7 +15,7 @@ local aspects = {
 	[7] = {spellID = 20043, known = false}, -- 野性
 }
 if DB.isNewPatch then
-	tinsert(aspects, 1, {spellID = 61847, known = false}) -- 龙鹰
+	tinsert(aspects, 1, {spellID = 61846, known = false}) -- 龙鹰
 end
 local numAspects = #aspects
 local knownAspect = {}
