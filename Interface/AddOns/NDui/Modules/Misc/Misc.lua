@@ -39,6 +39,7 @@ function M:OnLogin()
 	end
 
 	-- Init
+	M:NakedIcon()
 	M:UIWidgetFrameMover()
 	M:MoveDurabilityFrame()
 	M:MoveTicketStatusFrame()
@@ -110,6 +111,44 @@ function M:OnLogin()
 			PlayerTalentFrameSpentPoints = CreateFrame("Frame")
 		end
 	end
+end
+
+-- Get Naked
+function M:NakedIcon()
+	if not DB.isNewPatch then return end
+
+	GearManagerToggleButton:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(EQUIPMENT_MANAGER)
+		GameTooltip:AddLine(NEWBIE_TOOLTIP_EQUIPMENT_MANAGER)
+		GameTooltip:AddLine(L["Get Naked"])
+		GameTooltip:Show()
+	end)
+
+	local function UnequipItemInSlot(i)
+		local action = EquipmentManager_UnequipItemInSlot(i)
+		EquipmentManager_RunAction(action)
+	end
+
+	GearManagerToggleButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+	GearManagerToggleButton:SetScript("OnDoubleClick", function(_, btn)
+		if btn ~= "RightButton" then return end
+		for i = 1, 18 do
+			local link = GetInventoryItemLink("player", i)
+			if link then
+				UnequipItemInSlot(i)
+			end
+		end
+	end)
+	GearManagerToggleButton:SetScript("OnClick", function(_, btn)
+		if btn ~= "LeftButton" then return end
+		if ( GearManagerDialog:IsShown() ) then
+			GearManagerDialog:Hide();
+		else
+			GearManagerDialog:Show();
+		end
+	end)
 end
 
 -- Reanchor Vehicle, isNewPatch
