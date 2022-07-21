@@ -1,9 +1,32 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local r, g, b = DB.r, DB.g, DB.b
+
+local function colourPopout(self)
+	self.arrow:SetVertexColor(0, .6, 1)
+end
+
+local function clearPopout(self)
+	self.arrow:SetVertexColor(1, 1, 1)
+end
 
 local function replaceBlueColor(bar, r, g, b)
 	if r == 0 and g == 0 and b > .99 then
 		bar:SetStatusBarColor(0, .6, 1, .5)
+	end
+end
+
+local function setupTexture(tex)
+	tex:SetTexture("Interface\\PaperDollInfoFrame\\PaperDollSidebarTabs")
+	tex:SetTexCoord(0.01562500, 0.53125000, 0.46875000, 0.60546875)
+	tex:SetInside()
+end
+
+local function updateCheckState(button, state)
+	if state then
+		button.bg:SetBackdropBorderColor(0, .6, 1)
+	else
+		button.bg:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
@@ -50,6 +73,27 @@ tinsert(C.defaultThemes, function()
 		slot.SetHighlightTexture = B.Dummy
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
 		slot.bg = B.CreateBDFrame(slot, .25)
+
+		if DB.isNewPatch then
+			local popout = slot.popoutButton
+			popout:SetNormalTexture("")
+			popout:SetHighlightTexture("")
+
+			local arrow = popout:CreateTexture(nil, "OVERLAY")
+			arrow:SetSize(14, 14)
+			if slot.verticalFlyout then
+				B.SetupArrow(arrow, "down")
+				arrow:SetPoint("TOP", slot, "BOTTOM", 0, 1)
+			else
+				B.SetupArrow(arrow, "right")
+				arrow:SetPoint("LEFT", slot, "RIGHT", -1, 0)
+			end
+			popout.arrow = arrow
+
+			colourPopout(popout)
+			popout:HookScript("OnEnter", clearPopout)
+			popout:HookScript("OnLeave", colourPopout)
+		end
 	end
 
 	B.StripTextures(CharacterAmmoSlot)
@@ -58,8 +102,9 @@ tinsert(C.defaultThemes, function()
 	B.CreateBDFrame(CharacterAmmoSlot, .25)
 
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)
-		local icon = button.icon
-		if icon then icon:SetShown(button.hasItem) end
+		if button.icon then
+			button.icon:SetShown(button.hasItem)
+		end
 	end)
 
 	local newResIcons = {136116, 135826, 136074, 135843, 135945}
@@ -222,17 +267,9 @@ tinsert(C.defaultThemes, function()
 		B.ReskinArrow(CompanionPrevPageButton, "left")
 		B.ReskinArrow(CompanionNextPageButton, "right")
 
-		local function updateCheckState(button, state)
-			if state then
-				button.bg:SetBackdropBorderColor(0, .6, 1)
-			else
-				button.bg:SetBackdropBorderColor(0, 0, 0)
-			end
-		end
-
 		for i = 1, 12 do
 			local button = _G["CompanionButton"..i]
-			button.bg = B.CreateBDFrame(button)
+			button.bg = B.CreateBDFrame(button, .25)
 			button:SetCheckedTexture("")
 			_G["CompanionButton"..i.."ActiveTexture"]:SetAlpha(0)
 
@@ -307,10 +344,74 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(_G["PVPTeamDetailsFrameColumnHeader"..i])
 	end
 
-	-- TokenFrame
 	if DB.isNewPatch then
-		local r, g, b = DB.r, DB.g, DB.b
+		-- GearManager
+		local toggleButton = GearManagerToggleButton
+		B.StripTextures(toggleButton)
+		local icon = toggleButton:CreateTexture(nil, "ARTWORK")
+		setupTexture(icon)
+		local hl = toggleButton:CreateTexture(nil, "HIGHLIGHT")
+		setupTexture(hl)
+		hl:SetVertexColor(1, .8, 0)
 
+		B.StripTextures(GearManagerDialog)
+		B.SetBD(GearManagerDialog, nil, 5, -5, 0, 5)
+		B.ReskinClose(GearManagerDialogClose, nil, -6, -9)
+		B.Reskin(GearManagerDialogDeleteSet)
+		B.Reskin(GearManagerDialogEquipSet)
+		B.Reskin(GearManagerDialogSaveSet)
+
+		for i = 1, _G.MAX_EQUIPMENT_SETS_PER_PLAYER do
+			local button = _G["GearSetButton"..i]
+			button.bg = B.CreateBDFrame(button, .25)
+			button:DisableDrawLayer("BACKGROUND")
+			button:SetCheckedTexture("")
+
+			local hl = button:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetInside(button.bg)
+	
+			local icon = button.icon
+			icon:SetTexCoord(unpack(DB.TexCoord))
+			icon:SetInside(button.bg)
+
+			hooksecurefunc(button, "SetChecked", updateCheckState)
+		end
+
+		hooksecurefunc("PaperDollFrameItemFlyout_CreateButton", function()
+			local button = PaperDollFrameItemFlyout.buttons[#PaperDollFrameItemFlyout.buttons]
+	
+			button:SetNormalTexture("")
+			button:SetPushedTexture("")
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			button.bg = B.ReskinIcon(button.icon)
+			B.ReskinIconBorder(button.IconBorder)
+		end)
+
+		PaperDollFrameItemFlyoutButtons.bg1:SetAlpha(0)
+		PaperDollFrameItemFlyoutButtons:DisableDrawLayer("ARTWORK")
+
+		B.StripTextures(GearManagerDialogPopup)
+		B.SetBD(GearManagerDialogPopup, nil, 5, -6, 0, 5)
+		GearManagerDialogPopup:SetHeight(525)
+		B.StripTextures(GearManagerDialogPopupScrollFrame)
+		B.ReskinScroll(GearManagerDialogPopupScrollFrameScrollBar)
+		B.Reskin(GearManagerDialogPopup.OkayButton)
+		B.Reskin(GearManagerDialogPopup.CancelButton)
+		B.ReskinInput(GearManagerDialogPopupEditBox)
+	
+		for i = 1, NUM_GEARSET_ICONS_SHOWN do
+			local bu = _G["GearManagerDialogPopupButton"..i]	
+			bu:SetCheckedTexture(DB.textures.pushed)
+			select(2, bu:GetRegions()):Hide()
+			bu.icon:SetInside()
+			B.ReskinIcon(bu.icon)
+			local hl = bu:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetInside()
+		end
+
+		-- TokenFrame
 		B.StripTextures(TokenFrame)
 		B.Reskin(TokenFrameCancelButton)
 		select(4, TokenFrame:GetChildren()):Hide() -- weird close button

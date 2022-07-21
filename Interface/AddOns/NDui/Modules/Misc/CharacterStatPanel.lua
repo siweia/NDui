@@ -288,7 +288,7 @@ end
 local function ToggleMagicRes()
 	if C.db["Misc"]["StatExpand"] then
 		CharacterResistanceFrame:ClearAllPoints()
-		CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 28, -25)
+		CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 10, -26)
 		CharacterResistanceFrame:SetParent(M.StatPanel2)
 		if not hasOtherAddon then CharacterModelFrame:SetSize(231, 320) end -- size in retail
 
