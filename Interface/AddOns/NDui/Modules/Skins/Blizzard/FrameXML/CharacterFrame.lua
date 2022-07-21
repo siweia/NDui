@@ -366,6 +366,7 @@ tinsert(C.defaultThemes, function()
 			button.bg = B.CreateBDFrame(button, .25)
 			button:DisableDrawLayer("BACKGROUND")
 			button:SetCheckedTexture("")
+			hooksecurefunc(button, "SetChecked", updateCheckState)
 
 			local hl = button:GetHighlightTexture()
 			hl:SetColorTexture(1, 1, 1, .25)
@@ -375,7 +376,8 @@ tinsert(C.defaultThemes, function()
 			icon:SetTexCoord(unpack(DB.TexCoord))
 			icon:SetInside(button.bg)
 
-			hooksecurefunc(button, "SetChecked", updateCheckState)
+			_G["GearSetButton"..i.."Name"]:SetFontObject(Game12Font)
+			_G["GearSetButton"..i.."Name"]:SetWidth(50)
 		end
 
 		hooksecurefunc("PaperDollFrameItemFlyout_CreateButton", function()
