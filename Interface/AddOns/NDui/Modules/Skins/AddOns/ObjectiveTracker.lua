@@ -330,7 +330,7 @@ function S:QuestTracker()
 		local timerMover = CreateFrame("Frame", "NDuiQuestTimerMover", UIParent)
 		timerMover:SetSize(150, 30)
 		B.Mover(timerMover, QUEST_TIMERS, "QuestTimer", {"TOPRIGHT", frame, "TOPLEFT", -10, 0})
-	
+
 		hooksecurefunc(QuestTimerFrame, "SetPoint", function(self, _, parent)
 			if parent ~= timerMover then
 				self:ClearAllPoints()
@@ -348,7 +348,7 @@ function S:QuestTracker()
 		header:SetSize(1, 1)
 		header:SetPoint("TOPLEFT")
 		WatchFrame.header = header
-	
+
 		local bg = header:CreateTexture(nil, "ARTWORK")
 		bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
 		bg:SetTexCoord(0, .66, 0, .31)

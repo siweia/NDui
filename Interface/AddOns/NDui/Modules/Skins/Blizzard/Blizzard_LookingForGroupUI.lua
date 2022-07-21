@@ -24,7 +24,7 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 				bu.Cover:Hide()
 				bu.Icon:SetTexCoord(.01, .99, .01, .99)
 				B.CreateBDFrame(bu.Icon)
-	
+
 				bu.styled = true
 			end
 		end)
@@ -108,27 +108,27 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 			["DAMAGER"] = 3,
 		}
 		local roleTexes = {DB.tankTex, DB.healTex, DB.dpsTex}
-		
+	
 		local function sortRoleOrder(a, b)
 			if a and b then
 				return a[1] < b[1]
 			end
 		end
-		
+	
 		local function GetCorrectRoleInfo(frame, i)
 			if frame.resultID then
 				local _, role, class = C_LFGList.GetSearchResultMemberInfo(frame.resultID, i)
 				return role, class, i == 1
 			end
 		end
-		
+	
 		local function UpdateGroupRoles(self)
 			wipe(roleCache)
-		
+	
 			if not self.__owner then
 				self.__owner = self:GetParent():GetParent()
 			end
-		
+	
 			local count = 0
 			for i = 1, 5 do
 				local role, class, isLeader = GetCorrectRoleInfo(self.__owner, i)
@@ -141,13 +141,13 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 					roleCache[count][3] = isLeader
 				end
 			end
-		
+	
 			sort(roleCache, sortRoleOrder)
 		end
 
 		hooksecurefunc("LFGBrowseGroupDataDisplayEnumerate_Update", function(self, numPlayers, _, disabled)
 			UpdateGroupRoles(self)
-		
+	
 			for i = 1, 5 do
 				local icon = self.Icons[i]
 				if not icon.role then
@@ -158,18 +158,18 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 						icon:SetPoint("RIGHT", self.Icons[i-1], "LEFT", 2, 0)
 					end
 					icon:SetSize(26, 26)
-		
+	
 					icon.role = self:CreateTexture(nil, "OVERLAY", nil, 2)
 					icon.role:SetSize(16, 16)
 					icon.role:SetPoint("TOPLEFT", icon, -3, 3)
-		
+	
 					icon.leader = self:CreateTexture(nil, "OVERLAY", nil, 1)
 					icon.leader:SetSize(14, 14)
 					icon.leader:SetPoint("TOP", icon, 4, 7)
 					icon.leader:SetTexture("Interface\\GroupFrame\\UI-Group-LeaderIcon")
 					icon.leader:SetRotation(rad(-15))
 				end
-		
+	
 				if i > numPlayers then
 					icon.role:Hide()
 				else
@@ -181,7 +181,7 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 				end
 				icon.leader:Hide()
 			end
-		
+	
 			local iconIndex = numPlayers
 			for i = 1, #roleCache do
 				local roleInfo = roleCache[i]
@@ -193,7 +193,7 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 					iconIndex = iconIndex - 1
 				end
 			end
-		
+	
 			for i = 1, iconIndex do
 				self.Icons[i].role:SetTexture(nil)
 			end
@@ -230,7 +230,7 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 		for i = 1, 4 do
 			B.StripTextures(_G["LFMFrameColumnHeader"..i])
 		end
-	
+
 		B.ReskinDropDown(LFMFrameTypeDropDown)
 		B.ReskinDropDown(LFMFrameActivityDropDown)
 		B.Reskin(LFMFrameSearchButton)
@@ -239,7 +239,7 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 		B.StripTextures(LFMFrameInset)
 		local bg = B.CreateBDFrame(LFMFrameInset, .25)
 		bg:SetInside(nil, 2, 2)
-	
+
 		for i = 1, 16 do
 			_G["LFMFrameButton"..i.."Level"]:SetWidth(24)
 		end

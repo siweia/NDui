@@ -145,18 +145,18 @@ tinsert(C.defaultThemes, function()
 					B.StripTextures(bar)
 					bar:SetStatusBarTexture(DB.bdTex)
 					B.CreateBDFrame(bar, .25)
-	
+
 					local icon = check:GetRegions()
 					icon:SetTexture("Interface\\Buttons\\UI-CheckBox-SwordCheck")
 					icon:SetTexCoord(0, 1, 0, 1)
 					icon:ClearAllPoints()
 					icon:SetPoint("LEFT", check, 0, -3)
-	
+
 					bar.styled = true
 				end
 			end
 		end
-	
+
 		ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
 		ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
 
@@ -169,12 +169,12 @@ tinsert(C.defaultThemes, function()
 				local statusbar = _G["ReputationBar"..i.."ReputationBar"]
 				if statusbar then
 					statusbar:SetStatusBarTexture(DB.bdTex)
-	
+
 					if not statusbar.reskinned then
 						B.CreateBDFrame(statusbar, .25)
 						statusbar.reskinned = true
 					end
-	
+
 					_G["ReputationBar"..i.."Background"]:SetTexture(nil)
 					_G["ReputationBar"..i.."ReputationBarHighlight1"]:SetTexture(nil)
 					_G["ReputationBar"..i.."ReputationBarHighlight2"]:SetTexture(nil)
@@ -370,7 +370,7 @@ tinsert(C.defaultThemes, function()
 			local hl = button:GetHighlightTexture()
 			hl:SetColorTexture(1, 1, 1, .25)
 			hl:SetInside(button.bg)
-	
+
 			local icon = button.icon
 			icon:SetTexCoord(unpack(DB.TexCoord))
 			icon:SetInside(button.bg)
@@ -380,7 +380,7 @@ tinsert(C.defaultThemes, function()
 
 		hooksecurefunc("PaperDollFrameItemFlyout_CreateButton", function()
 			local button = PaperDollFrameItemFlyout.buttons[#PaperDollFrameItemFlyout.buttons]
-	
+
 			button:SetNormalTexture("")
 			button:SetPushedTexture("")
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -399,9 +399,9 @@ tinsert(C.defaultThemes, function()
 		B.Reskin(GearManagerDialogPopup.OkayButton)
 		B.Reskin(GearManagerDialogPopup.CancelButton)
 		B.ReskinInput(GearManagerDialogPopupEditBox)
-	
+
 		for i = 1, NUM_GEARSET_ICONS_SHOWN do
-			local bu = _G["GearManagerDialogPopupButton"..i]	
+			local bu = _G["GearManagerDialogPopupButton"..i]
 			bu:SetCheckedTexture(DB.textures.pushed)
 			select(2, bu:GetRegions()):Hide()
 			bu.icon:SetInside()
@@ -428,31 +428,31 @@ tinsert(C.defaultThemes, function()
 		local function updateButtons()
 			local buttons = TokenFrameContainer.buttons
 			if not buttons then return end
-	
+
 			for i = 1, #buttons do
 				local bu = buttons[i]
-	
+
 				if not bu.styled then
 					bu.highlight:SetPoint("TOPLEFT", 1, 0)
 					bu.highlight:SetPoint("BOTTOMRIGHT", -1, 0)
 					bu.highlight.SetPoint = B.Dummy
 					bu.highlight:SetColorTexture(r, g, b, .2)
 					bu.highlight.SetTexture = B.Dummy
-	
+
 					bu.categoryLeft:SetAlpha(0)
 					bu.categoryRight:SetAlpha(0)
-	
+
 					bu.bg = B.ReskinIcon(bu.icon)
-	
+
 					if bu.expandIcon then
 						bu.expBg = B.CreateBDFrame(bu.expandIcon, 0, true)
 						bu.expBg:SetPoint("TOPLEFT", bu.expandIcon, -3, 3)
 						bu.expBg:SetPoint("BOTTOMRIGHT", bu.expandIcon, 3, -3)
 					end
-	
+
 					bu.styled = true
 				end
-	
+
 				if bu.isHeader then
 					bu.bg:Hide()
 					bu.expBg:Show()
@@ -462,7 +462,7 @@ tinsert(C.defaultThemes, function()
 				end
 			end
 		end
-	
+
 		TokenFrame:HookScript("OnShow", updateButtons)
 		hooksecurefunc("TokenFrame_Update", updateButtons)
 		hooksecurefunc(TokenFrameContainer, "update", updateButtons)
