@@ -337,7 +337,7 @@ local function ToggleStatPanel(texture)
 end
 
 local function ExpandCharacterFrame(expand)
-	CharacterFrame:SetWidth(expand and 584 or 384)
+	CharacterFrame:SetWidth(expand and 584 or 384) -- FIXME: unable to expand in wrath during combat
 end
 
 function M:CharacterStatePanel()
