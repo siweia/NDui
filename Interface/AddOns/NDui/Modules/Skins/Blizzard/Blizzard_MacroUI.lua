@@ -43,6 +43,9 @@ C.themes["Blizzard_MacroUI"] = function()
 		ic:SetTexCoord(.08, .92, .08, .92)
 		ic:SetAllPoints()
 		B.CreateBDFrame(bu, .25)
+
+		_G["MacroButton"..i.."Name"]:SetFontObject(Game12Font)
+		_G["MacroButton"..i.."Name"]:SetWidth(50)
 	end
 
 	MacroPopupFrame:HookScript("OnShow", function()
