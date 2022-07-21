@@ -17,7 +17,7 @@ local aspects = {
 if DB.isNewPatch then
 	tinsert(aspects, 1, {spellID = 61847, known = false}) -- 龙鹰
 end
-
+local numAspects = #aspects
 local knownAspect = {}
 local aspectButtons = {}
 local aspectFrame
@@ -117,7 +117,6 @@ function Bar:UpdateAspectStatus()
 	if not aspectFrame then return end
 
 	local size = C.db["Actionbar"]["AspectSize"]
-	local numAspects = #aspectButtons
 	local width, height = size*numAspects + 3*(numAspects+1), size + 3*2
 	if C.db["Actionbar"]["VerticleAspect"] then
 		aspectFrame:SetSize(height, width)
@@ -153,7 +152,6 @@ function Bar:HunterAspectBar()
 	if DB.MyClass ~= "HUNTER" then return end
 
 	local size = C.db["Actionbar"]["AspectSize"] or 50
-	local numAspects = #aspectButtons
 	local width, height = size*numAspects + 3*(numAspects+1), size + 3*2
 
 	aspectFrame = CreateFrame("Frame", "NDuiHunterAspectFrame", UIParent)
