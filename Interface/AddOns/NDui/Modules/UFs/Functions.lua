@@ -462,6 +462,12 @@ function UF:CreatePortrait(self)
 	self.Health.bg:SetParent(self)
 end
 
+local function postUpdateRole(element, role)
+	if element:IsShown() then
+		B.ReskinSmallRole(element, role)
+	end
+end
+
 function UF:CreateIcons(self)
 	local mystyle = self.mystyle
 	if mystyle == "player" then
@@ -495,6 +501,18 @@ function UF:CreateIcons(self)
 	phase:SetPoint("CENTER", self.Health)
 	phase:SetSize(24, 24)
 	self.PhaseIndicator = phase
+
+	if DB.isNewPatch then
+		local ri = self:CreateTexture(nil, "OVERLAY")
+		if mystyle == "raid" then
+			ri:SetPoint("TOPRIGHT", self, 5, 5)
+		else
+			ri:SetPoint("TOPRIGHT", self, 0, 8)
+		end
+		ri:SetSize(15, 15)
+		ri.PostUpdate = postUpdateRole
+		self.GroupRoleIndicator = ri
+	end
 
 	local li = self:CreateTexture(nil, "OVERLAY")
 	li:SetPoint("TOPLEFT", self, -1, 8)
