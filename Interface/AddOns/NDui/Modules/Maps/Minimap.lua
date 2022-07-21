@@ -504,7 +504,7 @@ function module:ShowCalendar()
 			GameTimeFrame:SetSize(18, 18)
 			GameTimeFrame:SetParent(Minimap)
 			GameTimeFrame:ClearAllPoints()
-			GameTimeFrame:SetPoint("BOTTOMRIGHT", Minimap, 1, 18)
+			GameTimeFrame:SetPoint("BOTTOMRIGHT", Minimap, -2, 20)
 			GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
 
 			for i = 1, GameTimeFrame:GetNumRegions() do
