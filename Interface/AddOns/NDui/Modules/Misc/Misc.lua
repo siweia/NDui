@@ -54,6 +54,7 @@ function M:OnLogin()
 	M:BaudErrorFrameHelpTip()
 	M:EnhancedPicker()
 	C_Timer_After(0, M.UpdateMaxZoomLevel)
+	M:AutoEquipBySpec()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -672,4 +673,53 @@ end
 
 function M:UpdateMaxZoomLevel()
 	SetCVar("cameraDistanceMaxZoomFactor", C.db["Misc"]["MaxZoom"])
+end
+
+-- Autoequip in Spec-changing
+function M:AutoEquipBySpec()
+	if not DB.isNewPatch then return end
+
+	local changeSpells = {
+		[63644] = true, -- second spec
+		[63645] = true, -- main spec
+	}
+	local function setupMisc(event, unit, _, spellID)
+		if not NDuiDB["Misc"]["Autoequip"] then
+			B:UnregisterEvent(event, setupMisc)
+			return
+		end
+		if not UnitIsUnit(unit, "player") then return end
+		if not changeSpells[spellID] then return end
+
+		local talentName = ""
+		local higher = 0
+		for i = 1, 3 do
+			local name, _, pointsSpent = GetTalentTabInfo(i)
+			if not name then break end
+			if pointsSpent > higher then
+				higher = pointsSpent
+				talentName = name
+			end
+		end
+		if talentName == "" then return end
+
+		local setID = C_EquipmentSet.GetEquipmentSetID(talentName)
+		if setID then
+			local _, _, _, hasEquipped = C_EquipmentSet.GetEquipmentSetInfo(setID)
+			if not hasEquipped then
+				C_EquipmentSet.UseEquipmentSet(setID)
+				print(format(DB.InfoColor..EQUIPMENT_SETS, talentName))
+			end
+		else
+			for i = 0, C_EquipmentSet.GetNumEquipmentSets()-1 do
+				local name, _, _, isEquipped = C_EquipmentSet.GetEquipmentSetInfo(i)
+				if isEquipped then
+					print(format(DB.InfoColor..EQUIPMENT_SETS, name))
+					break
+				end
+			end
+		end
+	end
+
+	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", setupMisc, "player")
 end

@@ -448,6 +448,7 @@ G.DefaultSettings = {
 		ShowItemLevel = true,
 		HideErrors = true,
 		Focuser = true,
+		Autoequip = true,
 		ExpRep = true,
 		InterruptAlert = false,
 		OwnInterrupt = true,
@@ -1015,10 +1016,10 @@ G.TabList = {
 	L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
-	L["Maps"],
+	NewTag..L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	L["Misc"],
+	NewTag..L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
@@ -1277,7 +1278,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "EasyVolume", L["EasyVolume"], nil, nil, nil, L["EasyVolumeTip"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
-		{1, "Map", "Calendar", L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"], not DB.isNewPatch},
+		{1, "Map", "Calendar", NewTag..L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"], not DB.isNewPatch},
 		{2, "ACCOUNT", "IgnoredButtons", L["IgnoredButtons"], nil, nil, nil, L["IgnoredButtonsTip"]},
 	},
 	[11] = {
@@ -1341,6 +1342,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AutoDismount", L["AutoDismount"].."*", nil, nil, nil, L["AutoDismountTip"]},
 		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 3.4, .1}, updateMaxZoomLevel},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
+		{1, "Misc", "Autoequip", NewTag..L["AutoEquip"].."*", true, nil, nil, L["AutoEquipTip"], not DB.isNewPatch},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

@@ -824,3 +824,5 @@ L["RightButton"] = "Right Mouse Button" -- need translation
 L["MiddleButton"] = "Middle Mouse Button" -- need translation
 L["Button4"] = "Mouse Button 4" -- need translation
 L["Button5"] = "Mouse Button 5" -- need translation
+L["AutoEquip"] = "Auto change equipset by talent" -- need translation
+L["AutoEquipTip"] = "|nIf enabled, auto select the equipset that saved as the same name as your talent." -- need translation
