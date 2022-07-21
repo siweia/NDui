@@ -262,6 +262,33 @@ function M.ItemLevel_UpdateTradeTarget(index)
 	M.ItemLevel_UpdateMerchant(button, link)
 end
 
+function M:ItemLevel_FlyoutUpdate(id)
+	if not self.iLvl then
+		self.iLvl = B.CreateFS(self, DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
+	end
+
+	local quality, level = select(3, GetItemInfo(id))
+	local color = DB.QualityColors[quality or 0]
+	self.iLvl:SetText(level)
+	self.iLvl:SetTextColor(color.r, color.g, color.b)
+	M:ItemBorderSetColor(self, color.r, color.g, color.b)
+end
+
+function M:ItemLevel_FlyoutSetup()
+	if self.iLvl then self.iLvl:SetText("") end
+
+	local location = self.location
+	if not location then return end
+
+	if tonumber(location) then
+		if location >= PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION then return end
+		local id = EquipmentManager_GetItemInfoByLocation(location)
+		if id then
+			M.ItemLevel_FlyoutUpdate(self, id)
+		end
+	end
+end
+
 function M:ShowItemLevel()
 	if not C.db["Misc"]["ItemLevel"] then return end
 
@@ -273,6 +300,17 @@ function M:ShowItemLevel()
 
 	-- iLvl on InspectFrame
 	B:RegisterEvent("INSPECT_READY", M.ItemLevel_UpdateInspect)
+
+	-- iLvl on FlyoutButtons
+	if DB.isNewPatch then
+		hooksecurefunc("PaperDollFrameItemFlyout_Show", function()
+			for _, button in pairs(PaperDollFrameItemFlyout.buttons) do
+				if button:IsShown() then
+					M.ItemLevel_FlyoutSetup(button)
+				end
+			end
+		end)
+	end
 
 	-- Update item quality
 	M.QualityUpdater = CreateFrame("Frame")
