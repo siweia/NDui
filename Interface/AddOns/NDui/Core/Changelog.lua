@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 if DB.Client ~= "zhCN" then return end
+if DB.isNewPatch then return end
 
 local strsplit, pairs = string.split, pairs
 
