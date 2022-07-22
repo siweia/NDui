@@ -94,12 +94,13 @@ function module:AddRaidDebuffs(list)
 	end
 end
 
-function module:RegisterDebuff(_, instID, _, spellID, level)
+function module:RegisterDebuff(tierID, instID, _, spellID, level)
 	local instName = GetRealZoneText(instID)
 	if not instName then
 		if DB.isDeveloper then print("Invalid instance ID: "..instID) end
 		return
 	end
+	if tierID == 3 and not DB.isNewPatch then return end
 
 	if not RaidDebuffs[instID] then RaidDebuffs[instID] = {} end
 	if not level then level = 2 end
