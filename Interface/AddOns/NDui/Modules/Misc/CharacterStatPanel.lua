@@ -212,6 +212,25 @@ local function GetILvlTextColor(level)
 		return 1, 1, 1
 	end
 end
+if DB.isNewPatch then
+	-- P1 174,187,200,213
+	-- P2 200,213,226,239
+	-- P3 200,226,239,252
+	-- P4 200,246,259,272
+	function GetILvlTextColor(level)
+		if level >= 213 then
+			return 1, .5, 0
+		elseif level >= 200 then
+			return .63, .2, .93
+		elseif level >= 187 then
+			return 0, .43, .87
+		elseif level >= 174 then
+			return .12, 1, 0
+		else
+			return 1, 1, 1
+		end
+	end
+end
 
 function M:UpdateUnitILvl(unit, text)
 	if not text then return end
