@@ -541,3 +541,8 @@ TT:RegisterTooltips("Blizzard_LookingForGroupUI", function()
 		TT.ReskinTooltip(LFGBrowseSearchEntryTooltip)
 	end
 end)
+
+TT:RegisterTooltips("Blizzard_Calendar", function()
+	CalendarContextMenu:HookScript("OnShow", TT.ReskinTooltip)
+	CalendarInviteStatusContextMenu:HookScript("OnShow", TT.ReskinTooltip)
+end)

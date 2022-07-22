@@ -89,6 +89,9 @@ info.onEnter = function(self)
 
 	-- Help Info
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
+	if DB.isNewPatch then
+		GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Toggle Calendar"].." ", 1,1,1, .6,.8,1)
+	end
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Toggle Clock"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 end
@@ -101,5 +104,8 @@ info.onMouseUp = function(_, btn)
 		if TimeManager_Toggle then
 			TimeManager_Toggle()
 		end
+	elseif DB.isNewPatch then
+		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+		ToggleCalendar()
 	end
 end
