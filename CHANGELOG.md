@@ -1,14 +1,22 @@
 # NDui Classic
 
-## [3.0.3](https://github.com/siweia/NDui/tree/3.0.3) (2022-7-21)
+## [3.0.4](https://github.com/siweia/NDui/tree/3.0.4) (2022-7-23)
 
-- Several skins updated.
+- Fix Mage armor list.
+- Update default skins.
+- Refactor raidframe clicksets, the old data has been reset.
+- Update infobar talent module.
 - Update oUF core.
-- Update vehicle leave button.
-- Update bag filter and show freeslot for ammo and soulshards.
-- Add GroupRoleIndicator.
-- Re anchor minimap difficulty flag.
-- Updates for GearManager, show iLvl on item flyout buttons.
-- Get naked by double clicking GearManager.
-- Option to auto select equipset by your current talent name.
-- Hunter aspect bar now support 'Aspect of the Dragonhawk'.
+- Show bag freeslot for Ammo and Soulshards filter.
+- Fix skin in mailbox collect gold button.
+- Update LibHealComm.
+- WotLK: Support the new ammo, bullet and soulshard bags.
+- WotLK: Update default skins.
+- WotLK: Replace role icons in LFG tool.
+- WotLK: Option to show toggle calendar icon.
+- WotLK: Support GearManager, and double right click button to undress all items.
+- WotLK: Auto select the equipset by talent name.
+- WotLK: Show ilvl on item flyout buttons.
+- WotLK: Update player stat panel, no longer attach to PaperDollFrame.
+- WotLK: Support hunter 'Aspect of the Dragonhawk'.
+- WotLK: Add new raid debuffs for instances in WotLK.
