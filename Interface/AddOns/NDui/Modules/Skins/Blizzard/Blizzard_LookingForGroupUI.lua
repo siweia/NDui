@@ -86,8 +86,10 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 		end)
 
 		hooksecurefunc("LFGBrowseGroupDataDisplaySolo_Update", function(self)
-			if self.RolesText then
+			if not self.fontReplaced then
 				self.RolesText:SetText(ROLE)
+				self.RolesText:SetFontObject(Game12Font)
+				self.fontReplaced = true
 			end
 		end)
 
@@ -196,6 +198,14 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 	
 			for i = 1, iconIndex do
 				self.Icons[i].role:SetTexture(nil)
+			end
+		end)
+
+		hooksecurefunc("LFGBrowseSearchEntry_Update", function(self)
+			if not self.fontReplaced then
+				self.Name:SetFontObject(Game14Font)
+				self.ActivityName:SetFontObject(Game12Font)
+				self.fontReplaced = true
 			end
 		end)
 	else
