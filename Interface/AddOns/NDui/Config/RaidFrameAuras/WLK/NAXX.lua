@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("AurasTable")
 
-local TIER = 3
+local TIER = 0
 local INSTANCE = 533 -- 纳克萨玛斯
 
 module:RegisterDebuff(TIER, INSTANCE, 0, 18431) -- 低沉咆哮
