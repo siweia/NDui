@@ -624,6 +624,7 @@ function module:SetupMinimap()
 	}
 	if not DB.isNewPatch then
 		tinsert(frames, "MinimapToggleButton")
+		tinsert(frames, "GameTimeFrame")
 	end
 
 	for _, v in pairs(frames) do
