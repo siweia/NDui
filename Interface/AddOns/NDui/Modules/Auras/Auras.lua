@@ -237,7 +237,7 @@ function A:CreateAuraHeader(filter)
 	header:SetAttribute("unit", "player")
 	header:SetAttribute("filter", filter)
 	header.filter = filter
-	RegisterStateDriver(header, "visibility", "[petbattle] hide; show")
+	--RegisterStateDriver(header, "visibility", "[petbattle] hide; show")
 	RegisterAttributeDriver(header, "unit", "[vehicleui] vehicle; player")
 
 	if filter == "HELPFUL" then
