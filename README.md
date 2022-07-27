@@ -82,7 +82,7 @@
 <br>A: ALT+LeftButton=Invite unit, CTRL+LeftButton=Guild invite, SHIFT+LeftButton=Copy name.</br>
 
 # Credits
-- Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork
+- Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Simpy, Tuller, zork.
 
 # Others
 [![](https://img.shields.io/discord/438588126718590996?color=7289DA&label=Discord&logo=discord)](https://discord.gg/WXgrfBm) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-Patreon-orange)](https://www.patreon.com/siweia) [![](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8FDonate-%E7%88%B1%E5%8F%91%E7%94%B5-8161db)](https://afdian.net/@siweia)
