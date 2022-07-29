@@ -861,14 +861,6 @@ function module:OnLogin()
 	end
 
 	function MyButton:OnUpdate(item)
-		if MerchantFrame:IsShown() then
-			if item.isInSet then
-				self:SetAlpha(.5)
-			else
-				self:SetAlpha(1)
-			end
-		end
-
 		if self.JunkIcon then
 			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
 				self.JunkIcon:Show()

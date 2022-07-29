@@ -288,6 +288,7 @@ L["Reset your click sets?"] = "기존 클릭시전설정을 초기화하시겠�
 L["Version Check"] = "NDui버전체크"
 L["Outdated NDui"] = "  고객님의 |cff0080ffNDui|rClassic은 업데이트가 필요합니다.최신버전은: |cff70C0F5%s|r"
 L["Minimap"] = "미니맵"
+L["Equipement Set"] = "EquipmentSet Items" -- need translation
 L["NFG"] = "No guild fund"
 L["AutoSell Junk"] = "잡템 자동판매"
 L["Selljunk Calculate"] = "잡템판매 대금: "
