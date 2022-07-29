@@ -5,6 +5,7 @@ local TT = B:GetModule("Tooltip")
 local strmatch, format, tonumber, select, strfind = string.match, string.format, tonumber, select, string.find
 local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
 local GetMouseFocus = GetMouseFocus
+local GetCurrencyListInfo = GetCurrencyListInfo
 local BAGSLOT, BANK = BAGSLOT, BANK
 local SELL_PRICE_TEXT = format("|cffffffff%s%s%%s|r", SELL_PRICE, HEADER_COLON)
 local ITEM_LEVEL_STR = gsub(ITEM_LEVEL_PLUS, "%+", "")
@@ -179,7 +180,7 @@ function TT:SetupTooltipID()
 	if DB.isNewPatch then
 		-- Currencies
 		hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
-			local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), "currency:(%d+)"))
+			local id = select(12, GetCurrencyListInfo(index))
 			if id then TT.AddLineForID(self, id, types.currency) end
 		end)
 		hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
