@@ -168,9 +168,8 @@ C.themes["Blizzard_AchievementUI"] = function()
 				bu.icon.frame:Hide()
 				B.ReskinIcon(bu.icon.texture)
 
-				local bg = B.CreateBDFrame(bu, 0)
-				bg:SetPoint("TOPLEFT", 2, -2)
-				bg:SetPoint("BOTTOMRIGHT", -2, 2)
+				local bg = B.CreateBDFrame(bu, .25)
+				bg:SetInside(nil, 2, 2)
 
 				bu.styled = true
 			end
