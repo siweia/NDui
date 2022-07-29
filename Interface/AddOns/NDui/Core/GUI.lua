@@ -99,6 +99,7 @@ G.DefaultSettings = {
 		FilterFavourite = true,
 		FilterGoods = false,
 		FilterQuest = false,
+		FilterEquipSet = false,
 	},
 	Auras = {
 		Reminder = true,

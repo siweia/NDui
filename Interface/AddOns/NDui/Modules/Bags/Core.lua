@@ -329,7 +329,7 @@ local freeSlotContainer = {
 	["Bag"] = 0,
 	["Bank"] = 0,
 	["AmmoItem"] = DB.MyClass == "WARLOCK" and 1 or DB.MyClass == "HUNTER" and -1,
-	["bankAmmoItem"] = DB.MyClass == "WARLOCK" and 1 or DB.MyClass == "HUNTER" and -1,
+	["BankAmmoItem"] = DB.MyClass == "WARLOCK" and 1 or DB.MyClass == "HUNTER" and -1,
 }
 
 function module:CreateFreeSlots()
@@ -729,10 +729,11 @@ function module:OnLogin()
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "AmmoItem", filters.bagAmmo)
+		AddNewContainer("Bag", 8, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 7, "Equipment", filters.bagEquipment)
-		AddNewContainer("Bag", 9, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 8, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 10, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 10, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 9, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 11, "BagQuest", filters.bagQuest)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -748,12 +749,13 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
 		end
-		AddNewContainer("Bank", 6, "bankAmmoItem", filters.bankAmmo)
-		AddNewContainer("Bank", 8, "BankLegendary", filters.bankLegendary)
+		AddNewContainer("Bank", 6, "BankAmmoItem", filters.bankAmmo)
+		AddNewContainer("Bank", 8, "BankEquipSet", filters.bankEquipSet)
+		AddNewContainer("Bank", 9, "BankLegendary", filters.bankLegendary)
 		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
-		AddNewContainer("Bank", 10, "BankConsumable", filters.bankConsumable)
-		AddNewContainer("Bank", 9, "BankGoods", filters.bankGoods)
-		AddNewContainer("Bank", 11, "BankQuest", filters.bankQuest)
+		AddNewContainer("Bank", 11, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 10, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 12, "BankQuest", filters.bankQuest)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
@@ -1002,6 +1004,8 @@ function module:OnLogin()
 			label = DB.MyClass == "HUNTER" and INVTYPE_AMMO or SOUL_SHARDS
 		elseif strmatch(name, "Equipment$") then
 			label = BAG_FILTER_EQUIPMENT
+		elseif strmatch(name, "EquipSet$") then
+			label = L["Equipement Set"]
 		elseif name == "BankLegendary" then
 			label = LOOT_JOURNAL_LEGENDARIES
 		elseif strmatch(name, "Consumable$") then
@@ -1094,7 +1098,7 @@ function module:OnLogin()
 
 		self:SetSize(iconSize, iconSize)
 		B.CreateBD(self, .25)
-		self.Icon:SetAllPoints()
+		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 

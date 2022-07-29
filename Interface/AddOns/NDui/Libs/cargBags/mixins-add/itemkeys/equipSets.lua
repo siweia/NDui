@@ -35,9 +35,9 @@ local function initUpdater()
 		setItems = setItems or {}
 		for k in pairs(setItems) do setItems[k] = nil end
 
-		for setID = 1, GetNumEquipmentSets() do
-			local name = GetEquipmentSetInfo(setID)
-			local items = GetEquipmentSetItemIDs(name)
+		for setID = 1, C_EquipmentSet.GetNumEquipmentSets() do
+			local name = C_EquipmentSet.GetEquipmentSetInfo(setID)
+			local items = C_EquipmentSet.GetItemIDs(setID)
 
 			for _, id in pairs(items) do
 				setItems[id] = setID
@@ -63,5 +63,5 @@ end
 
 ItemKeys["set"] = function(i)
 	local setID = i.setID
-	return setID and GetEquipmentSetInfo(setID)
+	return setID and C_EquipmentSet.GetEquipmentSetInfo(setID)
 end

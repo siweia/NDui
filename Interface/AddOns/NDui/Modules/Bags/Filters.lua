@@ -48,6 +48,12 @@ local function isItemJunk(item)
 	return (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice
 end
 
+local function isItemEquipSet(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterEquipSet"] then return end
+	return item.isInSet
+end
+
 local function isItemAmmo(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterAmmo"] then return end
@@ -128,12 +134,14 @@ function module:GetFilters()
 	filters.onlyBags = function(item) return isItemInBag(item) and not isEmptySlot(item) end
 	filters.bagAmmo = function(item) return isItemInBag(item) and isItemAmmo(item) end
 	filters.bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
+	filters.bagEquipSet = function(item) return isItemInBag(item) and isItemEquipSet(item) end
 	filters.bagConsumable = function(item) return isItemInBag(item) and isItemConsumable(item) end
 	filters.bagsJunk = function(item) return isItemInBag(item) and isItemJunk(item) end
 	filters.onlyBank = function(item) return isItemInBank(item) and not isEmptySlot(item) end
 	filters.bankAmmo = function(item) return isItemInBank(item) and isItemAmmo(item) end
 	filters.bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	filters.bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
+	filters.bankEquipSet = function(item) return isItemInBank(item) and isItemEquipSet(item) end
 	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) end
 	filters.onlyReagent = function(item) return item.bagID == -3 end
 	filters.onlyKeyring = function(item) return isItemKeyRing(item) end

@@ -529,6 +529,7 @@ L["BagFilterSetup"] = "배낭필터"
 L["FilterJunk"] = "잡템필터링"
 L["FilterAmmo"] = "탄약과 영석조각 필터링"
 L["FilterEquipment"] = "장비 필터링"
+L["FilterEquipSet"] = "Filter equipment sets" -- need translation
 L["FilterConsumable"] = "소모품 필터링"
 L["FilterLegendary"] = "전설품질템 필터링"
 L["FilterFavourite"] = "나의 필터링"
