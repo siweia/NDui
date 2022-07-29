@@ -301,16 +301,14 @@ function S:QuestTracker()
 	frame:SetSize(240, 50)
 	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
 
-	--QuestWatchFrame:SetHeight(GetScreenHeight()*.65)
 	if DB.isNewPatch then -- FIXME: unable to move WatchFrame atm
 		WatchFrame:ClearAllPoints()
 		WatchFrame:SetPoint("TOPRIGHT", frame)
 		WatchFrame:SetClampedToScreen(false)
-		WatchFrame:SetMovable(true)
-		WatchFrame:SetUserPlaced(true)
+		WatchFrame:SetHeight(GetScreenHeight()*.65)
 
 		hooksecurefunc(WatchFrame, "SetPoint", function(self, _, parent)
-			if parent == "MinimapCluster" or parent == _G.MinimapCluster then
+			if parent ~= frame then
 				self:ClearAllPoints()
 				self:SetPoint("TOPRIGHT", frame)
 			end
