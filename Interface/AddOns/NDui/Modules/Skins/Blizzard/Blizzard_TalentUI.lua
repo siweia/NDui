@@ -27,6 +27,13 @@ C.themes["Blizzard_TalentUI"] = function()
 		B.StripTextures(PlayerTalentFramePointsBar)
 		B.Reskin(PlayerTalentFrameActivateButton)
 
+		B.StripTextures(PlayerTalentFramePreviewBar)
+		B.StripTextures(PlayerTalentFramePreviewBarFiller)
+		B.Reskin(PlayerTalentFrameLearnButton)
+		B.Reskin(PlayerTalentFrameResetButton)
+		PlayerTalentFrameTalentPointsText:ClearAllPoints()
+		PlayerTalentFrameTalentPointsText:SetPoint("RIGHT", PlayerTalentFramePointsBar, "RIGHT", -12, 1)
+
 		for i = 1, 3 do
 			local tab = _G["PlayerSpecTab"..i]
 			if tab then
