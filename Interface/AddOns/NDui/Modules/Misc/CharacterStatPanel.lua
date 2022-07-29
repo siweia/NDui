@@ -8,6 +8,13 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 
 local hasOtherAddon
 
+-- Blizz locales typo in zhTW, build 44832
+CR_DODGE_TOOLTIP = gsub(CR_DODGE_TOOLTIP, "。2", ".2")
+CR_PARRY_TOOLTIP = gsub(CR_PARRY_TOOLTIP, "。2", ".2")
+CR_BLOCK_TOOLTIP = gsub(CR_BLOCK_TOOLTIP, "。2", ".2")
+RESILIENCE_TOOLTIP = gsub(RESILIENCE_TOOLTIP, "。2", ".2")
+DEFAULT_STATDEFENSE_TOOLTIP = gsub(DEFAULT_STATDEFENSE_TOOLTIP, "。2", ".2")
+
 local function SetCharacterStats(statsTable, category)
 	if category == "PLAYERSTAT_BASE_STATS" then
 		PaperDollFrame_SetStat(statsTable[1], 1)
