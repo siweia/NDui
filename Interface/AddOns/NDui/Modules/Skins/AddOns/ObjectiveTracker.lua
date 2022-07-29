@@ -301,7 +301,7 @@ function S:QuestTracker()
 	frame:SetSize(240, 50)
 	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
 
-	if DB.isNewPatch then -- FIXME: unable to move WatchFrame atm
+	if DB.isNewPatch then
 		WatchFrame:ClearAllPoints()
 		WatchFrame:SetPoint("TOPRIGHT", frame)
 		WatchFrame:SetClampedToScreen(false)
