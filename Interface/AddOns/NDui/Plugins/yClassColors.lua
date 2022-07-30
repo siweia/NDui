@@ -145,9 +145,8 @@ local function friendsFrame()
 		if infoText then button.info:SetText(infoText) end
 	end
 end
-if not DB.isDF then
 hooksecurefunc(FriendsListFrameScrollFrame, "update", friendsFrame)
-hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame) end
+hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame)
 
 -- Whoframe
 local columnTable = {}
@@ -188,5 +187,4 @@ local function updateWhoList()
 	end
 end
 hooksecurefunc("WhoList_Update", updateWhoList)
-if not DB.isDF then
-hooksecurefunc(WhoListScrollFrame, "update", updateWhoList) end
+hooksecurefunc(WhoListScrollFrame, "update", updateWhoList)

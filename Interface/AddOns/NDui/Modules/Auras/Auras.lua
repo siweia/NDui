@@ -19,9 +19,7 @@ function A:HideBlizBuff()
 	if not C.db["Auras"]["BuffFrame"] and not C.db["Auras"]["HideBlizBuff"] then return end
 
 	B.HideObject(_G.BuffFrame)
-	if not DB.isDF then
-		B.HideObject(_G.TemporaryEnchantFrame)
-	end
+	B.HideObject(_G.TemporaryEnchantFrame)
 end
 
 function A:BuildBuffFrame()

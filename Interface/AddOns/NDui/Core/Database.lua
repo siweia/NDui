@@ -10,7 +10,6 @@ DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isNewPatch = select(4, GetBuildInfo()) >= 90207 -- 9.2.7
-DB.isDF = select(4, GetBuildInfo()) >= 100000 -- 10.0.0
 
 -- Deprecated
 LE_ITEM_QUALITY_POOR = Enum.ItemQuality.Poor
@@ -68,7 +67,7 @@ local Media = "Interface\\Addons\\NDui\\Media\\"
 DB.bdTex = "Interface\\ChatFrame\\ChatFrameBackground"
 DB.glowTex = Media.."glowTex"
 DB.normTex = Media.."normTex"
-DB.gradTex = "Interface\\ChatFrame\\ChatFrameBackground"
+DB.gradTex = Media.."gradTex"
 DB.flatTex = Media.."flatTex"
 DB.bgTex = Media.."bgTex"
 DB.arrowTex = Media.."TargetArrow"

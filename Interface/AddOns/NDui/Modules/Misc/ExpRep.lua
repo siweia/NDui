@@ -285,7 +285,6 @@ function M:HookParagonRep()
 end
 
 function M:ParagonReputationSetup()
-	if DB.isDF then return end
 	if not C.db["Misc"]["ParagonRep"] then return end
 	hooksecurefunc("ReputationFrame_Update", M.HookParagonRep)
 end

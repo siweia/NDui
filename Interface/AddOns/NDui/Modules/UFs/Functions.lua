@@ -701,7 +701,7 @@ local function reskinTimerBar(bar)
 	if statusbar then
 		statusbar:SetAllPoints()
 		statusbar:SetStatusBarTexture(DB.normTex)
-	elseif bar.SetStatusBarTexture then -- DB.isDF
+	else
 		bar:SetStatusBarTexture(DB.normTex)
 	end
 
@@ -1741,9 +1741,7 @@ function UF:CreateFCT(self)
 
 	-- Default CombatText
 	SetCVar("enableFloatingCombatText", 0)
-	if not DB.isDF then
 	B.HideOption(InterfaceOptionsCombatPanelEnableFloatingCombatText)
-	end
 end
 
 function UF:CreatePVPClassify(self)

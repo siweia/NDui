@@ -13,19 +13,15 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(AddonListOkayButton)
 	B.ReskinCheck(AddonListForceLoad)
 	B.ReskinDropDown(AddonCharacterDropDown)
-	if not DB.isDF then
-		B.ReskinScroll(AddonListScrollFrameScrollBar)
-	end
+	B.ReskinScroll(AddonListScrollFrameScrollBar)
 
 	AddonListForceLoad:SetSize(26, 26)
 	AddonCharacterDropDown:SetWidth(170)
 
-	if not DB.isDF then
-		for i = 1, MAX_ADDONS_DISPLAYED do
-			local checkbox = _G["AddonListEntry"..i.."Enabled"]
-			B.ReskinCheck(checkbox, true)
-			B.Reskin(_G["AddonListEntry"..i.."Load"])
-		end
+	for i = 1, MAX_ADDONS_DISPLAYED do
+		local checkbox = _G["AddonListEntry"..i.."Enabled"]
+		B.ReskinCheck(checkbox, true)
+		B.Reskin(_G["AddonListEntry"..i.."Load"])
 	end
 
 	hooksecurefunc("AddonList_Update", function()
