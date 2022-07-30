@@ -37,13 +37,16 @@ local function reskinTotemArrow(button, direction)
 	button:HookScript("OnEnter", B.Texture_OnEnter)
 	button:HookScript("OnLeave", B.Texture_OnLeave)
 end
-
+-- TODO: Add custom options
 function Bar:TotemBar()
+	if DB.MyClass ~= "SHAMAN" then return end
+	if not C.db["Actionbar"]["TotemBar"] then return end
+
 	local margin = 5
 	local frame = CreateFrame("Frame", nil, UIParent)
 	frame:SetSize(iconSize*6 + margin*7, iconSize + margin*2)
 	frame:SetPoint("CENTER")
-	B.Mover(frame, L["TotemBars"], "TotemBars", {"BOTTOM", UIParent, 0, 275})
+	B.Mover(frame, L["TotemBar"], "TotemBar", {"BOTTOM", UIParent, 0, 275})
 
 	MultiCastActionBarFrame:SetParent(frame)
 	MultiCastActionBarFrame.SetParent = B.Dummy

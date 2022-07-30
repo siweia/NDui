@@ -42,6 +42,7 @@ G.DefaultSettings = {
 		AspectSize = 25,
 		VerticleAspect = true,
 		VehButtonSize = 34,
+		TotemBar = true,
 
 		Bar1Size = 34,
 		Bar1Font = 12,
@@ -1008,7 +1009,7 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["ShowHealthCurrent"], L["ShowHealthPercent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}
 
 G.TabList = {
-	L["Actionbar"],
+	NewTag..L["Actionbar"],
 	L["Bags"],
 	NewTag..L["Unitframes"],
 	L["RaidFrame"],
@@ -1055,6 +1056,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "AspectBar", HeaderTag..L["AspectBar"].."*", nil, nil, toggleAspectBar},
 		{1, "Actionbar", "VerticleAspect", L["VerticleAspect"].."*", nil, nil, updateAspectStatus},
 		{3, "Actionbar", "AspectSize", L["AspectSize"].."*", true, {24, 60, 1}, updateAspectStatus},
+		{1, "Actionbar", "TotemBar", NewTag..HeaderTag..L["TotemBar"], nil, nil, nil, nil, not DB.isNewPatch},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
