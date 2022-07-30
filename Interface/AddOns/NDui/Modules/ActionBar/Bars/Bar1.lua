@@ -158,4 +158,5 @@ function Bar:OnLogin()
 	Bar:ReskinBars()
 	Bar:UpdateAllScale()
 	Bar:HunterAspectBar()
+	Bar:TotemBar()
 end
