@@ -166,42 +166,49 @@ tinsert(C.defaultThemes, function()
 	GearManagerDialogPopup.BG:Hide()
 	B.SetBD(GearManagerDialogPopup)
 	GearManagerDialogPopup:SetHeight(525)
+	if not DB.isDF then
 	B.StripTextures(GearManagerDialogPopupScrollFrame)
 	B.ReskinScroll(GearManagerDialogPopupScrollFrameScrollBar)
+	B.ReskinScroll(PaperDollTitlesPaneScrollBar)
+	B.ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
+	B.Reskin(PaperDollEquipmentManagerPaneEquipSet)
+	B.Reskin(PaperDollEquipmentManagerPaneSaveSet)
+	else
+		B.Reskin(PaperDollFrameEquipSet)
+		B.Reskin(PaperDollFrameSaveSet)
+	end
 	B.Reskin(GearManagerDialogPopupOkay)
 	B.Reskin(GearManagerDialogPopupCancel)
 	B.ReskinInput(GearManagerDialogPopupEditBox)
-	B.ReskinScroll(PaperDollTitlesPaneScrollBar)
-	B.ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
 	B.StripTextures(PaperDollSidebarTabs)
-	B.Reskin(PaperDollEquipmentManagerPaneEquipSet)
-	B.Reskin(PaperDollEquipmentManagerPaneSaveSet)
 
-	for i = 1, NUM_GEARSET_ICONS_SHOWN do
-		local bu = _G["GearManagerDialogPopupButton"..i]
-		local ic = _G["GearManagerDialogPopupButton"..i.."Icon"]
+	if not DB.isDF then
+		for i = 1, NUM_GEARSET_ICONS_SHOWN do
+			local bu = _G["GearManagerDialogPopupButton"..i]
+			local ic = _G["GearManagerDialogPopupButton"..i.."Icon"]
 
-		bu:SetCheckedTexture(DB.textures.pushed)
-		select(2, bu:GetRegions()):Hide()
-		local hl = bu:GetHighlightTexture()
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside()
+			bu:SetCheckedTexture(DB.textures.pushed)
+			select(2, bu:GetRegions()):Hide()
+			local hl = bu:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetInside()
 
-		ic:SetInside()
-		B.ReskinIcon(ic)
-	end
+			ic:SetInside()
+			B.ReskinIcon(ic)
+		end
 
-	for _, bu in pairs(PaperDollEquipmentManagerPane.buttons) do
-		B.HideObject(bu.Stripe)
-		bu.BgTop:SetTexture("")
-		bu.BgMiddle:SetTexture("")
-		bu.BgBottom:SetTexture("")
-		B.ReskinIcon(bu.icon)
+		for _, bu in pairs(PaperDollEquipmentManagerPane.buttons) do
+			B.HideObject(bu.Stripe)
+			bu.BgTop:SetTexture("")
+			bu.BgMiddle:SetTexture("")
+			bu.BgBottom:SetTexture("")
+			B.ReskinIcon(bu.icon)
 
-		bu.HighlightBar:SetColorTexture(1, 1, 1, .25)
-		bu.HighlightBar:SetDrawLayer("BACKGROUND")
-		bu.SelectedBar:SetColorTexture(r, g, b, .25)
-		bu.SelectedBar:SetDrawLayer("BACKGROUND")
+			bu.HighlightBar:SetColorTexture(1, 1, 1, .25)
+			bu.HighlightBar:SetDrawLayer("BACKGROUND")
+			bu.SelectedBar:SetColorTexture(r, g, b, .25)
+			bu.SelectedBar:SetDrawLayer("BACKGROUND")
+		end
 	end
 
 	local titles = false
@@ -214,8 +221,10 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	if not DB.isDF then
 	PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
 	PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
+	end
 	GearManagerDialogPopup:HookScript("OnShow", function(self)
 		self:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 3, 0)
 	end)
@@ -249,9 +258,11 @@ tinsert(C.defaultThemes, function()
 	ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
 	ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
 
+	if not DB.isDF then
 	for i = 1, NUM_FACTIONS_DISPLAYED do
 		local bu = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
 		B.ReskinCollapse(bu)
+	end
 	end
 
 	B.StripTextures(ReputationDetailFrame)
@@ -259,7 +270,9 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(ReputationDetailCloseButton)
 	B.ReskinCheck(ReputationDetailInactiveCheckBox)
 	B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+	if not DB.isDF then
 	B.ReskinScroll(ReputationListScrollFrameScrollBar)
+	end
 
 	local atWarCheck = ReputationDetailAtWarCheckBox
 	B.ReskinCheck(atWarCheck)
@@ -269,14 +282,16 @@ tinsert(C.defaultThemes, function()
 	atWarCheckTex:SetPoint("CENTER")
 
 	-- Token frame
+	if not DB.isDF then
 	TokenFramePopupCorner:Hide()
-	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 3, -28)
-	B.StripTextures(TokenFramePopup)
-	B.SetBD(TokenFramePopup)
 	B.ReskinClose(TokenFramePopupCloseButton)
 	B.ReskinCheck(TokenFramePopupInactiveCheckBox)
 	B.ReskinCheck(TokenFramePopupBackpackCheckBox)
 	B.ReskinScroll(TokenFrameContainerScrollBar)
+	end
+	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 3, -28)
+	B.StripTextures(TokenFramePopup)
+	B.SetBD(TokenFramePopup)
 
 	local function updateButtons()
 		local buttons = TokenFrameContainer.buttons
@@ -319,7 +334,9 @@ tinsert(C.defaultThemes, function()
 
 	TokenFrame:HookScript("OnShow", updateButtons)
 	hooksecurefunc("TokenFrame_Update", updateButtons)
+	if not DB.isDF then
 	hooksecurefunc(TokenFrameContainer, "update", updateButtons)
+	end
 
 	-- Quick Join
 	B.ReskinScroll(QuickJoinScrollFrame.scrollBar)

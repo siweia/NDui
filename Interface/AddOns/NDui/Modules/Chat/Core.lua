@@ -91,8 +91,10 @@ function module:SkinChat()
 
 	local name = self:GetName()
 	local font, fontSize = self:GetFont()
-	self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
-	self:SetMinResize(100, 50)
+	if not DB.isDF then
+		self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
+		self:SetMinResize(100, 50)
+	end
 	self:SetFont(fontFile or font, fontSize, fontOutline)
 	if fontOutline ~= "" then
 		self:SetShadowColor(0, 0, 0, 0)
@@ -431,7 +433,9 @@ function module:OnLogin()
 	SetCVar("chatStyle", "classic")
 	SetCVar("chatMouseScroll", 1) -- enable mousescroll
 	--SetCVar("whisperMode", "inline") -- blizz reset this on NPE
+	if not DB.isDF then
 	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
+	end
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Add Elements

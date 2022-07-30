@@ -27,11 +27,7 @@ function M:MissingStats()
 	CharacterStatsPane:SetParent(stat)
 	CharacterStatsPane:SetAllPoints(stat)
 	hooksecurefunc("PaperDollFrame_UpdateSidebarTabs", function()
-		if (not _G[PAPERDOLL_SIDEBARS[1].frame]:IsShown()) then
-			statPanel:Hide()
-		else
-			statPanel:Show()
-		end
+		statPanel:SetShown(CharacterStatsPane:IsShown())
 	end)
 
 	-- Change default data

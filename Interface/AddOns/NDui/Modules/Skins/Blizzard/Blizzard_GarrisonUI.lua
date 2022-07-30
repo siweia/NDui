@@ -1201,7 +1201,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				elseif otype == "IconButton" then
 					B.ReskinIcon(widget:GetNormalTexture())
 					widget:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-					widget:SetPushedTexture(nil)
+					widget:SetPushedTexture("")
 					widget.Icon:SetTexCoord(unpack(DB.TexCoord))
 					widget:SetSize(46, 46)
 					tinsert(VPBooks, widget)

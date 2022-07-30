@@ -15,6 +15,7 @@ local LE_GARRISON_TYPE_8_0 = Enum.GarrisonType.Type_8_0
 local LE_GARRISON_TYPE_9_0 = Enum.GarrisonType.Type_9_0
 
 function module:CreatePulse()
+	if DB.isDF then return end
 	if not C.db["Map"]["CombatPulse"] then return end
 
 	local bg = B.SetBD(Minimap)
@@ -63,6 +64,7 @@ local function ToggleLandingPage(_, ...)
 end
 
 function module:ReskinRegions()
+if not DB.isDF then
 	-- Garrison
 	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(self)
 		self:ClearAllPoints()
@@ -120,6 +122,9 @@ function module:ReskinRegions()
 	end)
 	hooksecurefunc("EyeTemplate_StartAnimating", function() anim:Play() end)
 	hooksecurefunc("EyeTemplate_StopAnimating", function() anim:Stop() end)
+else
+	MinimapCompassTexture:Hide()
+end
 
 	-- Difficulty Flags
 	local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
@@ -131,15 +136,17 @@ function module:ReskinRegions()
 	end
 
 	-- Mail icon
+	if not DB.isDF then
 	MiniMapMailFrame:ClearAllPoints()
 	MiniMapMailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -3, 3)
+	end
 	MiniMapMailIcon:SetTexture(DB.mailTex)
 	MiniMapMailIcon:SetSize(21, 21)
 	MiniMapMailIcon:SetVertexColor(1, 1, 0)
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
-	GameTimeCalendarInvitesTexture:SetParent("Minimap")
+	GameTimeCalendarInvitesTexture:SetParent(Minimap)
 	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
 	local Invt = CreateFrame("Button", nil, UIParent)
@@ -450,8 +457,8 @@ end
 function module:ShowCalendar()
 	if C.db["Map"]["Calendar"] then
 		if not GameTimeFrame.styled then
-			GameTimeFrame:SetNormalTexture(nil)
-			GameTimeFrame:SetPushedTexture(nil)
+			GameTimeFrame:SetNormalTexture("")
+			GameTimeFrame:SetPushedTexture("")
 			GameTimeFrame:SetHighlightTexture(nil)
 			GameTimeFrame:SetSize(18, 18)
 			GameTimeFrame:SetParent(Minimap)
@@ -608,7 +615,10 @@ function module:SetupMinimap()
 	}
 
 	for _, v in pairs(frames) do
-		B.HideObject(_G[v])
+		local object = _G[v]
+		if object then
+			B.HideObject(object)
+		end
 	end
 	MinimapCluster:EnableMouse(false)
 	Minimap:SetArchBlobRingScalar(0)

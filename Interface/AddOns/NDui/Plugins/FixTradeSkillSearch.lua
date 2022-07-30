@@ -47,5 +47,6 @@ local function hideSplitFrame(_, button)
 		end
 	end
 end
-hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", hideSplitFrame)
+if not DB.isDF then
+hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", hideSplitFrame) end
 hooksecurefunc("MerchantItemButton_OnModifiedClick", hideSplitFrame)

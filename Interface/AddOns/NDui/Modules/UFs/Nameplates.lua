@@ -71,8 +71,10 @@ function UF:SetupCVars()
 
 	SetCVar("nameplateShowSelf", 0)
 	SetCVar("nameplateResourceOnTarget", 0)
+	if not DB.isDF then
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
+	end
 
 	UF:UpdateClickableSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateOptions", UF.UpdateClickableSize)

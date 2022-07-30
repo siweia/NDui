@@ -857,8 +857,8 @@ function module:OnLogin()
 	MyButton:Scaffold("Default")
 
 	function MyButton:OnCreate()
-		self:SetNormalTexture(nil)
-		self:SetPushedTexture(nil)
+		self:SetNormalTexture("")
+		self:SetPushedTexture("")
 		self:SetHighlightTexture(DB.bdTex)
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		self:GetHighlightTexture():SetInside()
@@ -958,7 +958,7 @@ function module:OnLogin()
 		end
 	end
 
-	function MyButton:OnUpdate(item)
+	function MyButton:__OnUpdate(item)
 		if self.JunkIcon then
 			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
 				self.JunkIcon:Show()
@@ -1209,8 +1209,8 @@ function module:OnLogin()
 
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
 	function BagButton:OnCreate()
-		self:SetNormalTexture(nil)
-		self:SetPushedTexture(nil)
+		self:SetNormalTexture("")
+		self:SetPushedTexture("")
 		self:SetHighlightTexture(DB.bdTex)
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		self:GetHighlightTexture():SetInside()

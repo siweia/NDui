@@ -537,7 +537,9 @@ do
 
 		local tex = self:CreateTexture(nil, "BACKGROUND")
 		tex:SetTexture(DB.bdTex)
-		tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+		--if tex.SetGradientAlpha then
+			tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
+		--end
 		if width then tex:SetWidth(width) end
 		if height then tex:SetHeight(height) end
 
@@ -612,7 +614,9 @@ do
 		if C.db["Skins"]["FlatMode"] then
 			tex:SetVertexColor(.3, .3, .3, .25)
 		else
-			tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
+			--if tex.SetGradientAlpha then
+				tex:SetGradient("Vertical", CreateColor(0, 0, 0, .5), CreateColor(.3, .3, .3, .3))
+			--end
 		end
 
 		return tex
@@ -1183,6 +1187,7 @@ do
 
 	-- Handle checkbox and radio
 	function B:ReskinCheck(forceSaturation)
+		B.StripTextures(self)
 		self:SetNormalTexture("")
 		self:SetPushedTexture("")
 
@@ -1236,7 +1241,9 @@ do
 
 	-- Handle slider
 	function B:ReskinSlider(vertical)
-		self:SetBackdrop(nil)
+		if self.SetBackdrop then -- DB.isDF
+			self:SetBackdrop(nil)
+		end
 		B.StripTextures(self)
 
 		local bg = B.CreateBDFrame(self, 0, true)
@@ -1522,7 +1529,7 @@ do
 	end
 
 	function B:CreateCheckBox()
-		local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
+		local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsBaseCheckButtonTemplate")
 		cb:SetScript("OnClick", nil) -- reset onclick handler
 		B.ReskinCheck(cb)
 
