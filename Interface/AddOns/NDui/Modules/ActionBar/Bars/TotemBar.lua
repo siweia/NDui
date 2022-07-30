@@ -51,21 +51,36 @@ function Bar:TotemBar()
 	MultiCastActionBarFrame:SetParent(frame)
 	MultiCastActionBarFrame.SetParent = B.Dummy
 	MultiCastActionBarFrame:ClearAllPoints()
-	MultiCastActionBarFrame:SetPoint("CENTER")
+	MultiCastActionBarFrame:SetPoint("BOTTOMLEFT", 0, margin/2)
 	MultiCastActionBarFrame.SetPoint = B.Dummy
-	MultiCastActionBarFrame:SetScript('OnUpdate', nil)
-	MultiCastActionBarFrame:SetScript('OnShow', nil)
-	MultiCastActionBarFrame:SetScript('OnHide', nil)
+	MultiCastActionBarFrame:SetScript("OnUpdate", nil)
+	MultiCastActionBarFrame:SetScript("OnShow", nil)
+	MultiCastActionBarFrame:SetScript("OnHide", nil)
 
 	reskinTotemButton(MultiCastSummonSpellButton)
 	MultiCastSummonSpellButton:SetSize(iconSize, iconSize)
+	MultiCastSummonSpellButton:ClearAllPoints()
+	MultiCastSummonSpellButton:SetPoint("RIGHT", _G.MultiCastSlotButton1, "LEFT", -margin, 0)
+
 	reskinTotemButton(MultiCastRecallSpellButton)
 	MultiCastRecallSpellButton:SetSize(iconSize, iconSize)
 
+	local old_update = MultiCastRecallSpellButton_Update
+	function MultiCastRecallSpellButton_Update(button)
+		if InCombatLockdown() then return end
+		old_update(button)
+		button:SetPoint("LEFT", _G.MultiCastSlotButton4, "RIGHT", margin, 0)
+	end
+
+	local prevButton
 	for i = 1, 4 do
 		local button = _G["MultiCastSlotButton"..i]
 		reskinTotemButton(button)
 		button:SetSize(iconSize, iconSize)
+		if i ~= 1 then
+			button:SetPoint("LEFT", prevButton, "RIGHT", margin, 0)
+		end
+		prevButton = button
 	end
 
 	for i = 1, 12 do
@@ -80,6 +95,7 @@ function Bar:TotemBar()
 	end)
 
 	hooksecurefunc("MultiCastActionButton_Update", function(button, _, _, slot)
+		if InCombatLockdown() then return end
 		button:ClearAllPoints()
 		button:SetAllPoints(button.slotButton)
 	end)
@@ -90,13 +106,20 @@ function Bar:TotemBar()
 
 	hooksecurefunc(MultiCastFlyoutFrame, "SetHeight", function(frame, height, force)
 		if force then return end
+
+		local buttons = frame.buttons
 		local count = 0
-		for i = 1, #frame.buttons do
-			if frame.buttons[i]:IsShown() then
+		for i = 1, #buttons do
+			local button = buttons[i]
+			if button:IsShown() then
+				if i ~= 1 then
+					button:ClearAllPoints()
+					button:SetPoint("BOTTOM", buttons[i-1], "TOP", 0, margin)
+				end
 				count = count + 1
 			end
 		end
-		frame:SetHeight(count*(iconSize+2) + 22, true)
+		frame:SetHeight(count*(iconSize+margin) + 20, true)
 	end)
 
 	hooksecurefunc("MultiCastFlyoutFrame_ToggleFlyout", function(frame, type, parent)
@@ -113,18 +136,4 @@ function Bar:TotemBar()
 			button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end)
-
-	local buttonList = {
-		MultiCastSummonSpellButton,
-		MultiCastSlotButton1,
-		MultiCastSlotButton2,
-		MultiCastSlotButton3,
-		MultiCastSlotButton4,
-		MultiCastRecallSpellButton,
-	}
-	for i, button in pairs(buttonList) do
-		button:ClearAllPoints()
-		button:SetPoint("LEFT", frame, margin + (iconSize+margin)*(i-1), 0)
-		button.SetPoint = B.Dummy
-	end
 end
