@@ -116,12 +116,10 @@ function G:SetupRaidDebuffs(parent)
 		AddNewDungeon(dungeons, dungeonID)
 	end
 	AddNewDungeon(dungeons, 1194) -- 集市
-	if DB.isNewPatch then
-		AddNewDungeon(dungeons, 536)  -- 恐轨车站
-		AddNewDungeon(dungeons, 558)  -- 钢铁码头
-		AddNewDungeon(dungeons, 860)  -- 重返卡拉赞
-		AddNewDungeon(dungeons, 1178) -- 麦卡贡
-	end
+	AddNewDungeon(dungeons, 536)  -- 恐轨车站
+	AddNewDungeon(dungeons, 558)  -- 钢铁码头
+	AddNewDungeon(dungeons, 860)  -- 重返卡拉赞
+	AddNewDungeon(dungeons, 1178) -- 麦卡贡
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1190),
