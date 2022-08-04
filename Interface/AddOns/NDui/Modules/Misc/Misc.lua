@@ -105,12 +105,6 @@ function M:OnLogin()
 		if not InspectTalentFrameSpentPoints then
 			InspectTalentFrameSpentPoints = CreateFrame("Frame")
 		end
-		if not PlayerTalentFrameTalentPoints then
-			PlayerTalentFrameTalentPoints = CreateFrame("Frame")
-		end
-		if not PlayerTalentFrameSpentPoints then
-			PlayerTalentFrameSpentPoints = CreateFrame("Frame")
-		end
 	end
 end
 
