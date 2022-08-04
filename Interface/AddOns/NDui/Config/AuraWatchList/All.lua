@@ -305,6 +305,7 @@ local list = {
 		-- 大米
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
 		{AuraID = 343502, UnitID = "target"},	-- 鼓舞光环
+		{AuraID = 373724, UnitID = "target", Value = true},	-- S4，鲜血屏障
 		-- 5人本
 		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
 		{AuraID = 343470, UnitID = "target", Value = true},	-- 通灵战潮，碎骨之盾
