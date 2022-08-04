@@ -284,16 +284,14 @@ end
 
 function M:AddDungeonsFilter()
 	local mapData = {
-		[0] = {mapID = 375, aID = 703}, -- 仙林
-		[1] = {mapID = 376, aID = 713}, -- 通灵
-		[2] = {mapID = 377, aID = 695}, -- 彼界
-		[3] = {mapID = 378, aID = 699}, -- 赎罪
-		[4] = {mapID = 379, aID = 691}, -- 凋魂
-		[5] = {mapID = 380, aID = 705}, -- 赤红
-		[6] = {mapID = 381, aID = 709}, -- 晋升
-		[7] = {mapID = 382, aID = 717}, -- 剧场
-		[8] = {mapID = 391, aID = 1016}, -- 街道
-		[9] = {mapID = 392, aID = 1017}, -- 宏图
+		[0] = {mapID = 166, aID = 183},  -- 车站
+		[1] = {mapID = 169, aID = 180},  -- 码头
+		[2] = {mapID = 234, aID = 473},  -- 卡上
+		[3] = {mapID = 227, aID = 471},  -- 卡下
+		[4] = {mapID = 369, aID = 679},  -- 垃圾场
+		[5] = {mapID = 370, aID = 683},  -- 车间
+		[6] = {mapID = 391, aID = 1016}, -- 街道
+		[7] = {mapID = 392, aID = 1017}, -- 宏图
 	}
 
 	local function GetDungeonNameByID(mapID)
@@ -307,7 +305,7 @@ function M:AddDungeonsFilter()
 
 	local function toggleAll()
 		allOn = not allOn
-		for i = 0, 9 do
+		for i = 0, 7 do
 			mapData[i].isOn = allOn
 			filterIDs[mapData[i].aID] = allOn
 		end
@@ -331,7 +329,7 @@ function M:AddDungeonsFilter()
 		return mapData[self.arg1].isOn
 	end
 
-	for i = 0, 9 do
+	for i = 0, 7 do
 		local value = mapData[i]
 		menuList[i+3] = {
 			text = GetDungeonNameByID(value.mapID),
