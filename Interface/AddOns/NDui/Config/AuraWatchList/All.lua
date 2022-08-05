@@ -279,6 +279,8 @@ local list = {
 		{AuraID = 350804, UnitID = "player"},	-- 集市，坍缩能量
 		{AuraID = 349999, UnitID = "player"},	-- 集市，心能引爆
 		{AuraID = 359019, UnitID = "player", Flash = true},	-- 集市，快拍提速
+		{AuraID = 173324, UnitID = "player", Flash = true},	-- 码头，锯齿蒺藜
+		{AuraID = 291937, UnitID = "player", Flash = true},	-- 车间，垃圾掩体
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
@@ -346,8 +348,10 @@ local list = {
 		{AuraID = 347015, UnitID = "target", Flash = true},	-- 集市，强化防御
 		{AuraID = 355934, UnitID = "target", Value = true},	-- 集市，强光屏障
 		{AuraID = 349933, UnitID = "target", Flash = true, Value = true},	-- 集市，狂热鞭笞协议
-		{AuraID = 229495, UnitID = "target"},	-- 卡拉赞国王易伤，S4
-		{AuraID = 227817, UnitID = "target", Value = true},	-- 卡拉赞圣女盾，S4
+		{AuraID = 229495, UnitID = "target"},	-- 卡上，国王易伤
+		{AuraID = 227548, UnitID = "target", Value = true},	-- 卡上，烧蚀护盾
+		{AuraID = 227817, UnitID = "target", Value = true},	-- 卡下，圣女盾
+		{AuraID = 163689, UnitID = "target", Value = true, Flash = true},	-- 钢铁码头，血红之球
 		-- 团本
 		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
 		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
