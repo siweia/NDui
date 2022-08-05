@@ -766,11 +766,12 @@ local filteredStyle = {
 	["arena"] = true,
 }
 
-local replaceEncryptedIcons = {
+UF.ReplacedSpellIcons = {
 	[368078] = 348567, -- 移速
 	[368079] = 348567, -- 移速
 	[368103] = 648208, -- 急速
 	[368243] = 237538, -- CD
+	[373785] = 236293, -- S4，大魔王伪装
 }
 
 local dispellType = {
@@ -818,7 +819,7 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 		end
 	end
 
-	local newTexture = replaceEncryptedIcons[button.spellID]
+	local newTexture = UF.ReplacedSpellIcons[button.spellID]
 	if newTexture then
 		button.icon:SetTexture(newTexture)
 	end
