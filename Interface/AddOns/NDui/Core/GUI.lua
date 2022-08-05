@@ -452,6 +452,7 @@ G.DefaultSettings = {
 		Focuser = true,
 		Autoequip = true,
 		ExpRep = true,
+		Screenshot = true,
 		InterruptAlert = false,
 		OwnInterrupt = true,
 		DispellAlert = false,
@@ -946,6 +947,10 @@ local function updateQuestNotification()
 	B:GetModule("Misc"):QuestNotification()
 end
 
+local function updateScreenShot()
+	B:GetModule("Misc"):UpdateScreenShot()
+end
+
 local function updateFasterLoot()
 	B:GetModule("Misc"):UpdateFasterLoot()
 end
@@ -1346,6 +1351,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 3.4, .1}, updateMaxZoomLevel},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "Autoequip", NewTag..L["AutoEquip"].."*", true, nil, nil, L["AutoEquipTip"], not DB.isNewPatch},
+		{1, "Misc", "Screenshot", NewTag..L["Auto ScreenShot"].."*", nil, nil, updateScreenShot, nil, not DB.isNewPatch},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

@@ -180,6 +180,7 @@ L["Hide Error"] = "전투 중 에러필터"
 L["Language Filter"] = "음성필터금지"
 L["Easy Focus"] = "Shift+좌크릭으로 포커스 설정"
 L["Show Expbar"] = "미니맵에 경험치/평판표시"
+L["Auto ScreenShot"] = "Achievement ScreenShot" -- need translation
 L["InterruptAlert"] = "Interrupt alert in group"
 L["OwnInterrupt"] = "Own interrupt only"
 L["DispellAlert"] = "Dispell alert in group"

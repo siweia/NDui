@@ -55,6 +55,7 @@ function M:OnLogin()
 	M:EnhancedPicker()
 	C_Timer_After(0, M.UpdateMaxZoomLevel)
 	M:AutoEquipBySpec()
+	M:UpdateScreenShot()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -716,4 +717,33 @@ function M:AutoEquipBySpec()
 	end
 
 	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", setupMisc, "player")
+end
+
+-- Achievement screenshot
+function M:ScreenShotOnEvent()
+	M.ScreenShotFrame.delay = 1
+	M.ScreenShotFrame:Show()
+end
+
+function M:UpdateScreenShot()
+	if not DB.isNewPatch then return end
+
+	if not M.ScreenShotFrame then
+		M.ScreenShotFrame = CreateFrame("Frame")
+		M.ScreenShotFrame:Hide()
+		M.ScreenShotFrame:SetScript("OnUpdate", function(self, elapsed)
+			self.delay = self.delay - elapsed
+			if self.delay < 0 then
+				Screenshot()
+				self:Hide()
+			end
+		end)
+	end
+
+	if C.db["Misc"]["Screenshot"] then
+		B:RegisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
+	else
+		M.ScreenShotFrame:Hide()
+		B:UnregisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
+	end
 end
