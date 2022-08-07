@@ -1022,7 +1022,9 @@ function UF:CreatePlayerPlate()
 	UF:CreatePowerBar(self)
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
-	UF:CreateEneryTicker(self)
+	if not DB.isNewPatch then
+		UF:CreateEneryTicker(self)
+	end
 	--if C.db["Auras"]["ClassAuras"] then
 	--	B:GetModule("Auras"):CreateLumos(self)
 	--end

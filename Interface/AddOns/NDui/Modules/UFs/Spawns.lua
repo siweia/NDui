@@ -31,7 +31,9 @@ local function CreatePlayerStyle(self)
 	UF:CreateFCT(self)
 	UF:CreateAddPower(self)
 	UF:CreateClassPower(self)
-	UF:CreateEneryTicker(self)
+	if not DB.isNewPatch then
+		UF:CreateEneryTicker(self)
+	end
 	UF:CreateAuras(self)
 	UF:CreateSwing(self)
 
