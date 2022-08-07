@@ -239,7 +239,7 @@ function S:CharacterStatsTBC()
 		B.ReskinClose(sideStatsFrame.CloseButton)
 		B.ReskinScroll(sideStatsFrame.ScrollFrame.ScrollBar)
 
-		sideStatsFrame:SetHeight(421)
+		sideStatsFrame:SetHeight(422)
 		sideStatsFrame:SetPoint("LEFT", PaperDollItemsFrame, "RIGHT", -32, 29)
 		DecreaseTextSize(sideStatsFrame.ScrollChild)
 	end
