@@ -363,7 +363,7 @@ local function ToggleStatPanel(texture)
 end
 
 local function ExpandCharacterFrame(expand)
-	CharacterFrame:SetWidth(expand and 584 or 384) -- FIXME: unable to expand in wrath during combat
+	CharacterFrame:SetWidth(expand and 584 or 384)
 end
 
 function M:CharacterStatePanel()
@@ -426,6 +426,10 @@ function M:CharacterStatePanel()
 	B.ReskinArrow(bu, "right")
 
 	bu:SetScript("OnClick", function(self)
+		if DB.isNewPatch and InCombatLockdown() then
+			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) -- combat block in wrath, needs review
+			return
+		end
 		C.db["Misc"]["StatExpand"] = not C.db["Misc"]["StatExpand"]
 		ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
 		ToggleStatPanel(self.__texture)
@@ -433,13 +437,7 @@ function M:CharacterStatePanel()
 
 	ToggleStatPanel(bu.__texture)
 
-	PaperDollFrame:HookScript("OnHide", function()
-		ExpandCharacterFrame()
-	end)
-
-	PaperDollFrame:HookScript("OnShow", function()
-		ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
-	end)
+	ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
 
 	-- Block LeatrixPlus toggle
 	if IsAddOnLoaded("Leatrix_Plus") then
