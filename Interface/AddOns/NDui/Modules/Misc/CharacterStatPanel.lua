@@ -468,10 +468,7 @@ function M:CharacterStatePanel()
 	BuildValueFromList()
 	CharacterNameFrame:ClearAllPoints()
 	CharacterNameFrame:SetPoint("TOPLEFT", CharacterFrame, 130, -20)
-	if DB.isNewPatch then
-		PaperDollFrame.__statPanels = {}
-		GearManagerDialog:SetFrameStrata("DIALOG")
-	end
+	PaperDollFrame.__statPanels = {}
 
 	-- Update data
 	hooksecurefunc("ToggleCharacter", UpdateStats)
