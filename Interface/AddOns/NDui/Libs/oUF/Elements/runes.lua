@@ -1,114 +1,192 @@
-if select(2, UnitClass("player")) ~= "DEATHKNIGHT" then return end
+--[[
+# Element: Runes
 
-local parent, ns = ...
+Handles the visibility and updating of Death Knight's runes.
+
+## Widget
+
+Runes - An `table` holding `StatusBar`s.
+
+## Sub-Widgets
+
+.bg - A `Texture` used as a background. It will inherit the color of the main StatusBar.
+
+## Notes
+
+A default texture will be applied if the sub-widgets are StatusBars and don't have a texture set.
+
+## Options
+
+.colorSpec - Use `self.colors.runes[specID]` to color the bar based on player's spec. `specID` is defined by the return
+             value of [GetSpecialization](http://wowprogramming.com/docs/api/GetSpecialization.html) (boolean)
+.sortOrder - Sorting order. Sorts by the remaining cooldown time, 'asc' - from the least cooldown time remaining (fully
+             charged) to the most (fully depleted), 'desc' - the opposite (string?)['asc', 'desc']
+
+## Sub-Widgets Options
+
+.multiplier - Used to tint the background based on the main widgets R, G and B values. Defaults to 1 (number)[0-1]
+
+## Examples
+
+    local Runes = {}
+    for index = 1, 6 do
+        -- Position and size of the rune bar indicators
+        local Rune = CreateFrame('StatusBar', nil, self)
+        Rune:SetSize(120 / 6, 20)
+        Rune:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', index * 120 / 6, 0)
+
+        Runes[index] = Rune
+    end
+
+    -- Register with oUF
+    self.Runes = Runes
+--]]
+
+if(select(2, UnitClass('player')) ~= 'DEATHKNIGHT') then return end
+
+local _, ns = ...
 local oUF = ns.oUF
-
-oUF.colors.runes = {
-	{1, 0, 0},   -- blood
-	{0, 1, 1},   -- frost
-	{0, .5, 0},  -- unholy
-	{.9, .1, 1}, -- death
-}
 
 local runemap = { 1, 2, 5, 6, 3, 4 }
 
-local OnUpdate = function(self, elapsed)
+local function onUpdate(self, elapsed)
 	local duration = self.duration + elapsed
-	if(duration >= self.max) then
-		return self:SetScript("OnUpdate", nil)
-	else
-		self.duration = duration
-		return self:SetValue(duration)
-	end
+	self.duration = duration
+	self:SetValue(duration)
 end
 
-local UpdateType = function(self, event, rid, alt)
-	local runes = self.Runes
-	local rune = runes[runemap[rid]]
-	local colors = self.colors.runes[GetRuneType(rid) or alt]
+local function UpdateColor(self, event, rid, alt)
+	local element = self.Runes
+	local rune = element[runemap[rid]]
+	local index = GetRuneType(rid) or alt
+	local colors = self.colors.runes[index]
+
 	local r, g, b = colors[1], colors[2], colors[3]
 
 	rune:SetStatusBarColor(r, g, b)
 
-	if(rune.bg) then
-		local mu = rune.bg.multiplier or 1
-		rune.bg:SetVertexColor(r * mu, g * mu, b * mu)
+	local bg = rune.bg
+	if(bg) then
+		local mu = bg.multiplier or 1
+		bg:SetVertexColor(r * mu, g * mu, b * mu)
 	end
 
-	if(runes.PostUpdateType) then
-		return runes:PostUpdateType(rune, rid, alt)
-	end
-end
+	--[[ Callback: Runes:PostUpdateColor(r, g, b)
+	Called after the element color has been updated.
 
-local UpdateRune = function(self, event, rid)
-	local runes = self.Runes
-	local rune = runes[runemap[rid]]
-	if(not rune) then return end
-
-	local start, duration, runeReady = GetRuneCooldown(rid)
-	if(runeReady) then
-		rune:SetMinMaxValues(0, 1)
-		rune:SetValue(1)
-		rune:SetScript("OnUpdate", nil)
-	else
-		rune.duration = GetTime() - start
-		rune.max = duration
-		rune:SetMinMaxValues(1, duration)
-		rune:SetScript("OnUpdate", OnUpdate)
-	end
-
-	if(runes.PostUpdateRune) then
-		return runes:PostUpdateRune(rune, rid, start, duration, runeReady)
+	* self - the Runes element
+	* r    - the red component of the used color (number)[0-1]
+	* g    - the green component of the used color (number)[0-1]
+	* b    - the blue component of the used color (number)[0-1]
+	--]]
+	if(element.PostUpdateColor) then
+		element:PostUpdateColor(r, g, b)
 	end
 end
 
-local Update = function(self, event)
-	for i=1, 6 do
-		UpdateRune(self, event, i)
-	end
+local function ColorPath(self, ...)
+	--[[ Override: Runes.UpdateColor(self, event, ...)
+	Used to completely override the internal function for updating the widgets' colors.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	(self.Runes.UpdateColor or UpdateColor) (self, ...)
 end
 
-local ForceUpdate = function(element)
-	return Update(element.__owner, 'ForceUpdate')
-end
+local function Update(self, event)
+	local element = self.Runes
 
-local Enable = function(self, unit)
-	local runes = self.Runes
-	if(runes and unit == 'player') then
-		runes.__owner = self
-		runes.ForceUpdate = ForceUpdate
+	local rune, start, duration, runeReady
+	for index, runeID in next, runemap do
+		rune = element[index]
+		if(not rune) then break end
 
-		for i=1, 6 do
-			local rune = runes[runemap[i]]
-			if(rune:IsObjectType'StatusBar' and not rune:GetStatusBarTexture()) then
-				rune:SetStatusBarTexture[[Interface\TargetingFrame\UI-StatusBar]]
+		if(UnitHasVehicleUI('player')) then
+			rune:Hide()
+		else
+			start, duration, runeReady = GetRuneCooldown(runeID)
+			if(runeReady) then
+				rune:SetMinMaxValues(0, 1)
+				rune:SetValue(1)
+				rune:SetScript('OnUpdate', nil)
+			elseif(start) then
+				rune.duration = GetTime() - start
+				rune:SetMinMaxValues(0, duration)
+				rune:SetValue(0)
+				rune:SetScript('OnUpdate', onUpdate)
 			end
 
-			-- From my minor testing this is a okey solution. A full login always remove
-			-- the death runes, or at least the clients knowledge about them.
-			UpdateType(self, nil, i, math.floor((i+1)/2))
+			rune:Show()
+		end
+	end
+
+	--[[ Callback: Runes:PostUpdate(runemap)
+	Called after the element has been updated.
+
+	* self    - the Runes element
+	* runemap - the ordered list of runes' indices (table)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(runemap)
+	end
+end
+
+local function Path(self, ...)
+	--[[ Override: Runes.Override(self, event, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	(self.Runes.Override or Update) (self, ...)
+end
+
+local function AllPath(...)
+	Path(...)
+end
+
+local function ForceUpdate(element)
+	Path(element.__owner, 'ForceUpdate')
+
+	for i = 1, #element do
+		ColorPath(element.__owner, nil, i, math.floor((i+1)/2))
+	end
+end
+
+local function Enable(self, unit)
+	local element = self.Runes
+	if(element and UnitIsUnit(unit, 'player')) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
+
+		for i = 1, #element do
+			local rune = element[i]
+			if(rune:IsObjectType('StatusBar') and not (rune:GetStatusBarTexture() or rune:GetStatusBarAtlas())) then
+				rune:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			end
+			ColorPath(self, nil, i, math.floor((i+1)/2))
 		end
 
-		self:RegisterEvent("RUNE_POWER_UPDATE", UpdateRune, true)
-		self:RegisterEvent("RUNE_TYPE_UPDATE", UpdateType, true)
-
-		-- oUF leaves the vehicle events registered on the player frame, so
-		-- buffs and such are correctly updated when entering/exiting vehicles.
-		--
-		-- This however makes the code also show/hide the RuneFrame.
-		RuneFrame.Show = RuneFrame.Hide
-		RuneFrame:Hide()
+		self:RegisterEvent('RUNE_TYPE_UPDATE', ColorPath, true)
+		self:RegisterEvent('RUNE_POWER_UPDATE', Path, true)
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	RuneFrame.Show = nil
-	RuneFrame:Show()
+local function Disable(self)
+	local element = self.Runes
+	if(element) then
+		for i = 1, #element do
+			element[i]:Hide()
+		end
 
-	self:UnregisterEvent("RUNE_POWER_UPDATE", UpdateRune)
-	self:UnregisterEvent("RUNE_TYPE_UPDATE", UpdateType)
+		self:UnregisterEvent('RUNE_TYPE_UPDATE', ColorPath)
+		self:UnregisterEvent('RUNE_POWER_UPDATE', Path)
+	end
 end
 
-oUF:AddElement("Runes", Update, Enable, Disable)
+oUF:AddElement('Runes', AllPath, Enable, Disable)

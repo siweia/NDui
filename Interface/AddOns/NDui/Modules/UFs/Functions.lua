@@ -1243,8 +1243,10 @@ function UF:OnUpdateRunes(elapsed)
 	end
 end
 
-function UF.PostUpdateRunes(element, rune, _, start, duration, runeReady)
-	if rune:IsShown() then
+function UF.PostUpdateRunes(element, runemap)
+	for index, runeID in next, runemap do
+		local rune = element[index]
+		local start, duration, runeReady = GetRuneCooldown(runeID)
 		if runeReady then
 			rune:SetAlpha(1)
 			rune:SetScript("OnUpdate", nil)
@@ -1295,7 +1297,7 @@ function UF:CreateClassPower(self)
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", C.margin, 0)
 		end
 
-		bars[i].bg = bar:CreateTexture(nil, "BACKGROUND")
+		bars[i].bg = (isDK and bars[i] or bar):CreateTexture(nil, "BACKGROUND")
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg.multiplier = .25
@@ -1306,8 +1308,7 @@ function UF:CreateClassPower(self)
 	end
 
 	if isDK then
-		bars.colorSpec = true
-		bars.PostUpdateRune = UF.PostUpdateRunes
+		bars.PostUpdate = UF.PostUpdateRunes
 		bars.__max = 6
 		self.Runes = bars
 	else
@@ -1329,10 +1330,21 @@ function UF:ToggleUFClassPower()
 				playerFrame.ClassPower:ForceUpdate()
 			end
 		end
+		if playerFrame.Runes then
+			if not playerFrame:IsElementEnabled("Runes") then
+				playerFrame:EnableElement("Runes")
+				playerFrame.Runes:ForceUpdate()
+			end
+		end
 	else
 		if playerFrame.ClassPower then
 			if playerFrame:IsElementEnabled("ClassPower") then
 				playerFrame:DisableElement("ClassPower")
+			end
+		end
+		if playerFrame.Runes then
+			if playerFrame:IsElementEnabled("Runes") then
+				playerFrame:DisableElement("Runes")
 			end
 		end
 	end
