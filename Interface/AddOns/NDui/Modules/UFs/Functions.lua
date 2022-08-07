@@ -1491,11 +1491,14 @@ function UF:CreateSwing(self)
 	two:SetAllPoints()
 	B.CreateSB(two, true, .8, .8, .8)
 
-	local bg = two:CreateTexture(nil, "BACKGROUND", nil, 1)
-	bg:Hide()
-	bg:SetPoint("TOPRIGHT")
-	bg:SetPoint("BOTTOMRIGHT")
-	bg:SetColorTexture(.9, 0, 0)
+	if not DB.isNewPatch then
+		local bg = two:CreateTexture(nil, "BACKGROUND", nil, 1)
+		bg:Hide()
+		bg:SetPoint("TOPRIGHT")
+		bg:SetPoint("BOTTOMRIGHT")
+		bg:SetColorTexture(.9, 0, 0)
+		bar.bg = bg
+	end
 
 	local main = CreateFrame("StatusBar", nil, bar)
 	main:Hide()
@@ -1525,7 +1528,6 @@ function UF:CreateSwing(self)
 	self.Swing.Twohand = two
 	self.Swing.Mainhand = main
 	self.Swing.Offhand = off
-	self.Swing.bg = bg
 	self.Swing.hideOoc = true
 end
 

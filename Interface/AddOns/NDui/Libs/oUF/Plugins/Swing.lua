@@ -18,7 +18,8 @@ local MainhandID = GetInventoryItemID("player", 16)
 local OffhandID = GetInventoryItemID("player", 17)
 local RangedID = GetInventoryItemID("player", 18)
 local playerGUID = UnitGUID("player")
-local AUTO_CAST_TIME = .65
+local isNewPatch = ns[4].isNewPatch
+local AUTO_CAST_TIME = isNewPatch and 0 or .65
 local delayTime = 0
 
 local function SwingStopped(element)
@@ -114,7 +115,7 @@ do
 			local swingTime = self.max - self.min - AUTO_CAST_TIME
 			local isMoving = IsPlayerMoving()
 
-			if rangeing and currentValue >= swingTime and isMoving then
+			if not isNewPatch and rangeing and currentValue >= swingTime and isMoving then
 				self.swingTime = swingTime
 				self:SetScript("OnUpdate", delayUpdate)
 			else
@@ -138,7 +139,9 @@ do
 				end
 			end
 
-			self.__owner.bg:SetShown(rangeing)
+			if self.__owner.bg then
+				self.__owner.bg:SetShown(rangeing)
+			end
 		end
 	end
 end
@@ -237,7 +240,7 @@ local function RangedChange(self, _, unit)
 	local speed = UnitRangedDamage("player")
 
 	if RangedID ~= NewRangedID then
-		swing.speed = UnitRangedDamage(unit)
+		swing.speed = speed
 		swing.min = now
 		swing.max = swing.min + swing.speed
 		swing:Show()
@@ -266,13 +269,15 @@ local function Ranged(self, _, unit, _, spellID)
 	rangeing = true
 	bar:Show()
 
-	swing.speed = UnitRangedDamage(unit)
+	swing.speed = UnitRangedDamage(unit) * (isNewPatch and .82 or 1)
 	swing.min = GetTime()
 	swing.max = swing.min + swing.speed
 	swing:Show()
 	UpdateBarMinMaxValues(swing)
 	swing:SetScript("OnUpdate", OnDurationUpdate)
-	bar.bg:SetWidth(AUTO_CAST_TIME / (swing.max - swing.min) * bar:GetWidth())
+	if bar.bg then
+		bar.bg:SetWidth(AUTO_CAST_TIME / (swing.max - swing.min) * bar:GetWidth())
+	end
 
 	swingMH:Hide()
 	swingMH:SetScript("OnUpdate", nil)
