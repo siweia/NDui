@@ -198,6 +198,7 @@ tinsert(C.defaultThemes, function()
 		QuestInfoRewardsFrame.ItemReceiveText,
 		QuestInfoRewardsFrame.PlayerTitleText,
 		QuestInfoRewardsFrame.XPFrame.ReceiveText,
+		QuestInfoTalentFrame.ReceiveText,
 	}
 	for _, font in pairs(whitish) do
 		SetTextColor_White(font)
