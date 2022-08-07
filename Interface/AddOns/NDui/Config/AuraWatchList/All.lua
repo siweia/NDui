@@ -88,6 +88,7 @@ local list = {
 		{AuraID = 355333, UnitID = "player"},	-- 回收的聚变增幅器
 		{AuraID = 357185, UnitID = "player"},	-- 忠诚的力量，低语威能碎片
 		{AuraID = 357773, UnitID = "player"},	-- 神圣使命，九武神长柄
+		{AuraID = 165485, UnitID = "player"},	-- 琪拉的注射器
 
 		{AuraID = 367241, UnitID = "player"},	-- 原初印记
 		{AuraID = 363522, UnitID = "player"},	-- 角斗士的永恒结界
