@@ -50,6 +50,7 @@ end
 
 function M:SoloInfo_Update()
 	local name, instType, diffID, diffName, _, _, _, instID = GetInstanceInfo()
+	if diffID == 8 then return end -- don't alert in mythic+
 
 	if (diffName and diffName ~= "") and instType ~= "none" and diffID ~= 24 and instList[instID] and instList[instID] ~= diffID then
 		M:SoloInfo_Create()
