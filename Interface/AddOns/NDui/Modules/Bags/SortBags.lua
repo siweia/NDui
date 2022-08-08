@@ -204,6 +204,7 @@ function LT(a, b)
 end
 
 function Move(src, dst)
+	if InCombatLockdown() then return end -- might block in combat, needs review
 	local texture, _, srcLocked = GetContainerItemInfo(src.container, src.position)
 	local _, _, dstLocked = GetContainerItemInfo(dst.container, dst.position)
 
