@@ -1099,6 +1099,7 @@ function UF:CreateBuffs(self)
 	bu["growth-x"] = "RIGHT"
 	bu["growth-y"] = "UP"
 	bu.spacing = 3
+	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 
 	if self.mystyle == "raid" then
 		bu.initialAnchor = "BOTTOMRIGHT"
