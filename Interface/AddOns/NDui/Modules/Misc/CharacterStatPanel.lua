@@ -314,7 +314,11 @@ end
 local function ToggleMagicRes()
 	if C.db["Misc"]["StatExpand"] then
 		CharacterResistanceFrame:ClearAllPoints()
-		CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 10, -26)
+		if DB.isNewPatch then
+			CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 28, -10)
+		else
+			CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 28, -25)
+		end
 		CharacterResistanceFrame:SetParent(M.StatPanel2)
 		if not hasOtherAddon then CharacterModelFrame:SetSize(231, 320) end -- size in retail
 
@@ -363,7 +367,47 @@ local function ToggleStatPanel(texture)
 end
 
 local function ExpandCharacterFrame(expand)
+	if DB.isNewPatch then return end
 	CharacterFrame:SetWidth(expand and 584 or 384)
+end
+
+M.OtherPanels = {"DCS_StatScrollFrame", "CSC_SideStatsFrame"}
+local found
+function M:FindAddOnPanels()
+	if not DB.isNewPatch then return end
+
+	if not found then
+		for _, name in pairs(M.OtherPanels) do
+			if _G[name] then
+				tinsert(PaperDollFrame.__statPanels, _G[name])
+			end
+		end
+		if PaperDollFrame.inspectFrame then
+			tinsert(PaperDollFrame.__statPanels, PaperDollFrame.inspectFrame)
+		end
+		found = true
+	end
+
+	M:SortAddOnPanels()
+end
+
+function M:SortAddOnPanels()
+	if not DB.isNewPatch then return end
+
+	local prev
+	for _, frame in pairs(PaperDollFrame.__statPanels) do
+		frame:ClearAllPoints()
+		if not prev then
+			if M.StatPanel2:IsShown() then
+				frame:SetPoint("TOPLEFT", M.StatPanel2, "TOPRIGHT", 3, 0)
+			else
+				frame:SetPoint("TOPLEFT", PaperDollFrame, "TOPRIGHT", -32, -15-C.mult)
+			end
+		else
+			frame:SetPoint("TOPLEFT", prev, "TOPRIGHT", 3, 0)
+		end
+		prev = frame
+	end
 end
 
 function M:CharacterStatePanel()
@@ -373,11 +417,20 @@ function M:CharacterStatePanel()
 
 	local statPanel = CreateFrame("Frame", "NDuiStatPanel", PaperDollFrame)
 	statPanel:SetSize(200, 422)
-	statPanel:SetPoint("TOPRIGHT", PaperDollFrame, "TOPRIGHT", -35, -16)
+	if DB.isNewPatch then
+		statPanel:SetPoint("TOPLEFT", PaperDollFrame, "TOPRIGHT", -32, -15-C.mult)
+		B.SetBD(statPanel)
+	else
+		statPanel:SetPoint("TOPRIGHT", PaperDollFrame, "TOPRIGHT", -35, -16)
+	end
 	M.StatPanel2 = statPanel
 
 	local scrollFrame = CreateFrame("ScrollFrame", nil, statPanel, "UIPanelScrollFrameTemplate")
-	scrollFrame:SetPoint("TOPLEFT", 0, -60)
+	if DB.isNewPatch then
+		scrollFrame:SetPoint("TOPLEFT", 0, -45)
+	else
+		scrollFrame:SetPoint("TOPLEFT", 0, -60)
+	end
 	scrollFrame:SetPoint("BOTTOMRIGHT", 0, 2)
 	scrollFrame.ScrollBar:Hide()
 	scrollFrame.ScrollBar.Show = B.Dummy
@@ -415,6 +468,10 @@ function M:CharacterStatePanel()
 	BuildValueFromList()
 	CharacterNameFrame:ClearAllPoints()
 	CharacterNameFrame:SetPoint("TOPLEFT", CharacterFrame, 130, -20)
+	if DB.isNewPatch then
+		PaperDollFrame.__statPanels = {}
+		GearManagerDialog:SetFrameStrata("DIALOG")
+	end
 
 	-- Update data
 	hooksecurefunc("ToggleCharacter", UpdateStats)
@@ -426,18 +483,22 @@ function M:CharacterStatePanel()
 	B.ReskinArrow(bu, "right")
 
 	bu:SetScript("OnClick", function(self)
-		if DB.isNewPatch and InCombatLockdown() then
-			UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) -- combat block in wrath, needs review
-			return
-		end
 		C.db["Misc"]["StatExpand"] = not C.db["Misc"]["StatExpand"]
 		ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
 		ToggleStatPanel(self.__texture)
+		M:SortAddOnPanels()
 	end)
 
 	ToggleStatPanel(bu.__texture)
 
-	ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
+	PaperDollFrame:HookScript("OnHide", function()
+		ExpandCharacterFrame()
+	end)
+
+	PaperDollFrame:HookScript("OnShow", function()
+		ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
+		M:FindAddOnPanels()
+	end)
 
 	-- Block LeatrixPlus toggle
 	if IsAddOnLoaded("Leatrix_Plus") then
