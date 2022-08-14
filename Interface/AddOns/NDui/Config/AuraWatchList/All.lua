@@ -365,6 +365,7 @@ local list = {
 		{AuraID = 341250, UnitID = "target"},	-- 恐怖暴怒，泥拳
 		{AuraID = 329636, UnitID = "target", Flash = true},	-- 坚岩形态，干将
 		{AuraID = 329808, UnitID = "target", Flash = true},	-- 坚岩形态，干将
+		{AuraID = 350857, UnitID = "target", Flash = true},	-- 女妖斗篷，女王
 		{AuraID = 367573, UnitID = "target", Flash = true},	-- 源生壁垒，圣物匠
 		{AuraID = 368684, UnitID = "target", Value = true},	-- 回收，黑伦度斯
 		{AuraID = 361651, UnitID = "target", Value = true},	-- 虹吸屏障，道茜歌妮
