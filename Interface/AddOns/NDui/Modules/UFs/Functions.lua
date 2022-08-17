@@ -483,12 +483,23 @@ function UF:UpdateRaidTextScale()
 end
 
 function UF:CreatePortrait(self)
-	if not C.db["UFs"]["Portrait"] then return end
-
 	local portrait = CreateFrame("PlayerModel", nil, self.Health)
 	portrait:SetAllPoints()
 	portrait:SetAlpha(.2)
 	self.Portrait = portrait
+end
+
+function UF:TogglePortraits()
+	for _, frame in pairs(oUF.objects) do
+		if frame.Portrait then
+			if C.db["UFs"]["Portrait"] and not frame:IsElementEnabled("Portrait") then
+				frame:EnableElement("Portrait")
+				frame.Portrait:ForceUpdate()
+			elseif not C.db["UFs"]["Portrait"] and frame:IsElementEnabled("Portrait") then
+				frame:DisableElement("Portrait")
+			end
+		end
+	end
 end
 
 local function postUpdateRole(element, role)
