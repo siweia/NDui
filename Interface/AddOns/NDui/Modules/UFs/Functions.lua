@@ -97,7 +97,7 @@ function UF:UpdateHealthBarColor(self, force)
 	end
 end
 
-function UF.HealthPostUpdate(element, unit, cur, max)
+function UF.HealthPostUpdate(element, _, cur, max)
 	local self = element.__owner
 	local mystyle = self.mystyle
 	local useGradient
