@@ -76,6 +76,8 @@ local function UpdateHealthColorByIndex(health, index)
 	if index == 1 then
 		health:SetStatusBarColor(.1, .1, .1)
 		health.bg:SetVertexColor(.6, .6, .6)
+	elseif index == 4 then
+		health:SetStatusBarColor(0, 0, 0, 0)
 	end
 end
 
@@ -92,6 +94,22 @@ function UF:UpdateHealthBarColor(self, force)
 
 	if force then
 		health:ForceUpdate()
+	end
+end
+
+function UF.HealthPostUpdate(element, unit, cur, max)
+	local self = element.__owner
+	local mystyle = self.mystyle
+	local useGradient
+	if mystyle == "PlayerPlate" then
+		-- do nothing
+	elseif mystyle == "raid" then
+		useGradient = C.db["UFs"]["RaidHealthColor"] == 4
+	else
+		useGradient = C.db["UFs"]["HealthColor"] == 4
+	end
+	if useGradient then
+		self.Health.bg:SetVertexColor(self:ColorGradient(cur or 1, max or 1, 1,0,0, 1,.7,0, .7,1,0))
 	end
 end
 
@@ -126,14 +144,16 @@ function UF:CreateHealthBar(self)
 	B:SmoothBar(health)
 	health.frequentUpdates = true
 
-	local bg = health:CreateTexture(nil, "BACKGROUND")
-	bg:SetAllPoints()
+	local bg = self:CreateTexture(nil, "BACKGROUND")
+	bg:SetPoint("TOPLEFT", health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	bg:SetPoint("BOTTOMRIGHT", health)
 	bg:SetTexture(DB.bdTex)
 	bg:SetVertexColor(.6, .6, .6)
 	bg.multiplier = .25
 
 	self.Health = health
 	self.Health.bg = bg
+	self.Health.PostUpdate = UF.HealthPostUpdate
 
 	UF:UpdateHealthBarColor(self)
 end
@@ -452,14 +472,9 @@ function UF:CreatePortrait(self)
 	if not C.db["UFs"]["Portrait"] then return end
 
 	local portrait = CreateFrame("PlayerModel", nil, self.Health)
-	portrait:SetInside()
+	portrait:SetAllPoints()
 	portrait:SetAlpha(.2)
 	self.Portrait = portrait
-
-	self.Health.bg:ClearAllPoints()
-	self.Health.bg:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-	self.Health.bg:SetPoint("TOPRIGHT", self.Health)
-	self.Health.bg:SetParent(self)
 end
 
 local function postUpdateRole(element, role)

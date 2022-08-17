@@ -1091,7 +1091,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Portrait", L["UFs Portrait"]},
 		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
-		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateUFTextScale},
+		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"]}, updateUFTextScale},
 		{},--blank
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
@@ -1130,7 +1130,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{},--blank
-		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"]}, updateRaidTextScale},
+		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidTextScale, L["100PercentTip"]},
 		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
 		{1, "UFs", "SmartRaid", HeaderTag..L["SmartRaid"].."*", nil, nil, updateAllHeaders, L["SmartRaidTip"]},
