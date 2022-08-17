@@ -919,3 +919,4 @@ L["Button4"] = "Mouse Button 4" -- need translation
 L["Button5"] = "Mouse Button 5" -- need translation
 L["InteractWidth"] = "Clickable Width" -- need translation
 L["InteractHeight"] = "Clickable Height" -- need translation
+L["ClearHealth"] = "Transparent" -- need translation

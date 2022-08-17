@@ -919,3 +919,4 @@ L["Button4"] = "Bouton 4 de la souris"
 L["Button5"] = "Bouton 5 de la souris"
 L["InteractWidth"] = "Largeur cliquable"
 L["InteractHeight"] = "Hauteur cliquable"
+L["ClearHealth"] = "Transparent" -- need translation
