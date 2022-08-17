@@ -870,6 +870,10 @@ local function toggleUFClassPower()
 	B:GetModule("UnitFrames"):ToggleUFClassPower()
 end
 
+local function togglePortraits()
+	B:GetModule("UnitFrames"):TogglePortraits()
+end
+
 local function toggleAllAuras()
 	B:GetModule("UnitFrames"):ToggleAllAuras()
 end
@@ -1088,7 +1092,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "EnergyTicker", L["EnergyTicker"].."*", true, nil, toggleUFClassPower, nil, DB.isNewPatch},
 		{1, "UFs", "ShowAuras", L["ShowAuras"].."*", nil, setupUFAuras, toggleAllAuras},
 		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", true, setupClassPower, toggleUFClassPower},
-		{1, "UFs", "Portrait", L["UFs Portrait"]},
+		{1, "UFs", "Portrait", L["UFs Portrait"].."*", nil, nil, togglePortraits},
 		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"]}, updateUFTextScale},
