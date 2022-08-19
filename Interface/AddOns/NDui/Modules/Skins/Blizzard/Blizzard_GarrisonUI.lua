@@ -1060,7 +1060,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end)
 	end
 
-	-- VenturePlan, 4.22 and higher
+	-- VenturePlan, 4.30 and higher
 	if IsAddOnLoaded("VenturePlan") then
 		local ANIMA_TEXTURE = 3528288
 		local ANIMA_SPELLID = {[347555] = 3, [345706] = 5, [336327] = 35, [336456] = 250}
@@ -1158,13 +1158,16 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			end
 		end
 
-		local VPFollowers, VPTroops, VPBooks = {}, {}, {}
+		local VPFollowers, VPTroops, VPBooks, numButtons = {}, {}, {}, 0
 		function VPEX_OnUIObjectCreated(otype, widget, peek)
 			if widget:IsObjectType("Frame") then
 				if otype == "MissionButton" then
 					B.Reskin(peek("ViewButton"))
 					B.Reskin(peek("DoomRunButton"))
 					B.Reskin(peek("TentativeClear"))
+					if peek("GroupHints") then
+						B.Reskin(peek("GroupHints"))
+					end
 					reskinWidgetFont(peek("Description"), .8, .8, .8)
 					reskinWidgetFont(peek("enemyHP"), 1, 1, 1)
 					reskinWidgetFont(peek("enemyATK"), 1, 1, 1)
@@ -1189,9 +1192,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					B.StripTextures(widget)
 					B.Reskin(peek("UnButton"))
 					B.Reskin(peek("StartButton"))
-					if peek("StartButton"):GetWidth() < 50 then -- only adjust the unmodified VP
-						peek("StartButton"):SetText("|T"..DB.ArrowUp..":16|t")
-					end
+					peek("StartButton"):SetText("|T"..DB.ArrowUp..":16|t")
 				elseif otype == "ILButton" then
 					widget:DisableDrawLayer("BACKGROUND")
 					local bg = B.CreateBDFrame(widget, .25)
@@ -1199,10 +1200,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					bg:SetPoint("BOTTOMRIGHT", 2, -2)
 					B.CreateBDFrame(widget.Icon, .25)
 				elseif otype == "IconButton" then
-					B.ReskinIcon(widget:GetNormalTexture())
+					B.ReskinIcon(widget.Icon)
 					widget:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 					widget:SetPushedTexture(nil)
-					widget.Icon:SetTexCoord(unpack(DB.TexCoord))
 					widget:SetSize(46, 46)
 					tinsert(VPBooks, widget)
 				elseif otype == "AdventurerRoster" then
@@ -1223,7 +1223,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 						book:ClearAllPoints()
 						book:SetPoint("BOTTOMLEFT", 24, -46 + i*50)
 					end
-				elseif otype == "AdventurerButton" then
+				elseif otype == "AdventurerListButton" then
 					widget.bg = B.CreateBDFrame(peek("Portrait"), 1)
 					peek("Hi"):SetColorTexture(1, 1, 1, .25)
 					peek("Hi"):SetInside(widget.bg)
@@ -1232,7 +1232,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					peek("PortraitT").__owner = widget
 					hooksecurefunc(peek("PortraitT"), "SetShown", updateSelectedBorder)
 
-					if peek("PortraitR"):GetAtlas() == "Adventurers-Followers-Frame" then
+					numButtons = numButtons + 1
+					if numButtons > 2 then
 						peek("UsedBorder"):SetTexture(nil)
 						peek("UsedBorder").__shadow = B.CreateSD(peek("Portrait"), 5, true)
 						peek("UsedBorder").__shadow:SetBackdropBorderColor(peek("UsedBorder"):GetVertexColor())
