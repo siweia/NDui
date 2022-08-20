@@ -161,4 +161,12 @@ tinsert(C.defaultThemes, function()
 			end
 		end)
 	end
+
+	-- QueueReadyCheckPopup
+	if DB.isNewPatch then
+		B.StripTextures(QueueReadyCheckPopup)
+		B.SetBD(QueueReadyCheckPopup)
+		B.Reskin(QueueReadyCheckPopup.YesButton)
+		B.Reskin(QueueReadyCheckPopup.NoButton)
+	end
 end)
