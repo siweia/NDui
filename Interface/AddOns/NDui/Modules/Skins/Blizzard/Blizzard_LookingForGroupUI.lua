@@ -40,6 +40,7 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 		skinBigRole(LFGListingFrame.SoloRoleButtons.Tank, "TANK")
 		skinBigRole(LFGListingFrame.SoloRoleButtons.Healer, "HEALER")
 		skinBigRole(LFGListingFrame.SoloRoleButtons.DPS, "DPS")
+		skinBigRole(LFGListingFrameNewPlayerFriendlyButton, "LEADER")
 
 		local function skinOptions(self)
 			for i = 1, self.ScrollTarget:GetNumChildren() do
