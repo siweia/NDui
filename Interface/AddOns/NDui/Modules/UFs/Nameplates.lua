@@ -570,9 +570,9 @@ local NPClassifies = {
 
 function UF:AddCreatureIcon(self)
 	local icon = self:CreateTexture(nil, "ARTWORK")
-	icon:SetAtlas("auctionhouse-icon-favorite")
+	icon:SetTexture(DB.starTex)
 	icon:SetPoint("RIGHT", self.nameText, "LEFT", 10, 0)
-	icon:SetSize(20, 20)
+	icon:SetSize(18, 18)
 	icon:Hide()
 
 	self.ClassifyIndicator = icon
