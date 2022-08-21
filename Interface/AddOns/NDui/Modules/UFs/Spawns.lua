@@ -415,6 +415,7 @@ function UF:OnLogin()
 		UF:ToggleAllAuras()
 		UF:UpdateScrollingFont()
 		UF:TogglePortraits()
+		UF:CheckPowerBars()
 	end
 
 	if C.db["UFs"]["RaidFrame"] then
