@@ -139,8 +139,13 @@ function UF:CreateHealthBar(self)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
 	health:SetFrameLevel(self:GetFrameLevel() - 2)
-	health.backdrop = B.SetBD(health, 0) -- don't mess up with libs
-	health.shadow = health.backdrop.__shadow
+
+	self.backdrop = B.SetBD(health, 0)
+	if self.backdrop.__shadow then
+		self.backdrop.__shadow:SetOutside(self, 4+C.mult, 4+C.mult)
+		self.backdrop.__shadow:SetFrameLevel(0)
+		self.backdrop.__shadow = nil
+	end
 	B:SmoothBar(health)
 	health.frequentUpdates = true
 
@@ -370,10 +375,6 @@ function UF:CreatePowerBar(self)
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
 	power.backdrop = B.CreateBDFrame(power, 0)
 	B:SmoothBar(power)
-
-	if self.Health.shadow then
-		self.Health.shadow:SetPoint("BOTTOMRIGHT", power.backdrop, C.mult+3, -C.mult-3)
-	end
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
