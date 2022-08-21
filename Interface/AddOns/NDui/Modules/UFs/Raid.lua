@@ -48,11 +48,9 @@ function UF:UpdateTargetBorder()
 end
 
 function UF:CreateTargetBorder(self)
-	local border = B.CreateSD(self, 4, true)
-	border:SetOutside(self.Health.backdrop, C.mult+4, C.mult+4, self.Power.backdrop)
-	border:SetBackdropBorderColor(1, 1, 1)
+	local border = B.CreateBDFrame(self, 0)
+	border:SetBackdropBorderColor(.9, .9, .9)
 	border:Hide()
-	self.__shadow = nil
 
 	self.TargetBorder = border
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetBorder, true)
@@ -75,11 +73,9 @@ function UF:UpdateThreatBorder(_, unit)
 end
 
 function UF:CreateThreatBorder(self)
-	local threatIndicator = B.CreateSD(self, 3, true)
-	threatIndicator:SetOutside(self.Health.backdrop, C.mult+3, C.mult+3, self.Power.backdrop)
-	threatIndicator:SetBackdropBorderColor(.7, .7, .7)
-	threatIndicator:SetFrameLevel(0)
-	self.__shadow = nil
+	local threatIndicator = B.CreateSD(self.backdrop, 4, true)
+	threatIndicator:SetOutside(self, 4+C.mult, 4+C.mult)
+	self.backdrop.__shadow = nil
 
 	self.ThreatIndicator = threatIndicator
 	self.ThreatIndicator.Override = UF.UpdateThreatBorder

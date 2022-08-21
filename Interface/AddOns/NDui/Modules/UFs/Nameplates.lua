@@ -272,9 +272,9 @@ function UF:UpdateThreatColor(_, unit)
 end
 
 function UF:CreateThreatColor(self)
-	local threatIndicator = B.CreateSD(self, 3, true)
-	threatIndicator:SetOutside(self.Health.backdrop, 3, 3)
+	local threatIndicator = B.CreateSD(self.backdrop, nil, true)
 	threatIndicator:Hide()
+	self.backdrop.__shadow = nil
 
 	self.ThreatIndicator = threatIndicator
 	self.ThreatIndicator.Override = UF.UpdateThreatColor
@@ -405,7 +405,7 @@ function UF:AddTargetIndicator(self)
 	frame.ArrowAnimGroup = animGroup
 
 	frame.Glow = B.CreateSD(frame, 8, true)
-	frame.Glow:SetOutside(self.Health.backdrop, 8, 8)
+	frame.Glow:SetOutside(self.backdrop, 8, 8)
 	frame.Glow:SetBackdropBorderColor(1, 1, 1)
 	frame.Glow:SetFrameLevel(0)
 
@@ -726,7 +726,8 @@ function UF:CreatePlates()
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
-	health.backdrop = B.SetBD(health) -- don't mess up with libs
+	self.backdrop = B.SetBD(health)
+	self.backdrop.__shadow = nil
 	B:SmoothBar(health)
 
 	self.Health = health
