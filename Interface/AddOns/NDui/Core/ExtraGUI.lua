@@ -979,16 +979,28 @@ local function SetUnitFrameSize(self, unit)
 	local powerHeight = C.db["UFs"][unit.."PowerHeight"]
 	local nameOffset = C.db["UFs"][unit.."NameOffset"]
 	local powerOffset = C.db["UFs"][unit.."PowerOffset"]
-	local height = healthHeight + powerHeight + C.mult
+	local height = powerHeight == 0 and healthHeight or healthHeight + powerHeight + C.mult
 	self:SetSize(width, height)
 	self.Health:SetHeight(healthHeight)
 	if self.nameText and nameOffset then
 		self.nameText:SetPoint("LEFT", 3, nameOffset)
 		self.nameText:SetWidth(self:GetWidth()*(nameOffset == 0 and .55 or 1))
 	end
-	self.Power:SetHeight(powerHeight)
-	if self.powerText and powerOffset then
-		self.powerText:SetPoint("RIGHT", -3, powerOffset)
+	if powerHeight == 0 then
+		if self:IsElementEnabled("Power") then
+			self:DisableElement("Power")
+			if self.powerText then self.powerText:Hide() end
+		end
+	else
+		if not self:IsElementEnabled("Power") then
+			self:EnableElement("Power")
+			self.Power:ForceUpdate()
+			if self.powerText then self.powerText:Show() end
+		end
+		self.Power:SetHeight(powerHeight)
+		if self.powerText and powerOffset then
+			self.powerText:SetPoint("RIGHT", -3, powerOffset)
+		end
 	end
 end
 
@@ -1024,7 +1036,7 @@ function G:SetupUnitFrame(parent)
 		end
 		createOptionSlider(parent, L["Width"], sliderRange[value][1], sliderRange[value][2], defaultValue[value][1], offset-110-mult, value.."Width", func)
 		createOptionSlider(parent, L["Height"], 15, 50, defaultValue[value][2], offset-180-mult, value.."Height", func)
-		createOptionSlider(parent, L["Power Height"], 2, 30, defaultValue[value][3], offset-250-mult, value.."PowerHeight", func)
+		createOptionSlider(parent, L["Power Height"], 0, 30, defaultValue[value][3], offset-250-mult, value.."PowerHeight", func)
 		if value ~= "Pet" then
 			createOptionSlider(parent, L["Power Offset"], -20, 20, defaultValue[value][6], offset-320-mult, value.."PowerOffset", func)
 			createOptionSlider(parent, L["Name Offset"], -50, 50, defaultValue[value][7], offset-390-mult, value.."NameOffset", func)
@@ -1121,7 +1133,7 @@ function G:SetupRaidFrame(parent)
 	createOptionDropdown(scroll.child, L["GrowthDirection"], -30, options, L["RaidDirectionTip"], "UFs", "RaidDirec", 1, updateRaidDirection)
 	createOptionSlider(scroll.child, L["Width"], 60, 200, defaultValue[1], -100, "RaidWidth", resizeRaidFrame)
 	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -180, "RaidHeight", resizeRaidFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -260, "RaidPowerHeight", resizeRaidFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 0, 30, defaultValue[3], -260, "RaidPowerHeight", resizeRaidFrame)
 	createOptionSlider(scroll.child, L["Num Groups"], 2, 8, defaultValue[4], -340, "NumGroups", updateNumGroups)
 	createOptionSlider(scroll.child, L["RaidRows"], 1, 8, defaultValue[5], -420, "RaidRows", updateNumGroups)
 end
@@ -1203,7 +1215,7 @@ function G:SetupPartyFrame(parent)
 	createOptionDropdown(scroll.child, L["GrowthDirection"], -100, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
 	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -180, "PartyWidth", resizePartyFrame)
 	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -260, "PartyHeight", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 2, 30, defaultValue[3], -340, "PartyPowerHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 0, 30, defaultValue[3], -340, "PartyPowerHeight", resizePartyFrame)
 end
 
 function G:SetupPartyPetFrame(parent)
@@ -1242,7 +1254,7 @@ function G:SetupPartyPetFrame(parent)
 	createOptionDropdown(scroll.child, L["Visibility"], -90, {L["ShowInParty"], L["ShowInRaid"], L["ShowInGroup"]}, nil, "UFs", "PartyPetVsby", 1, UF.UpdateAllHeaders)
 	createOptionSlider(scroll.child, L["Width"], 60, 200, 100, -150, "PartyPetWidth", resizePartyPetFrame)
 	createOptionSlider(scroll.child, L["Height"], 20, 60, 22, -220, "PartyPetHeight", resizePartyPetFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 2, 30, 2, -290, "PartyPetPowerHeight", resizePartyPetFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 0, 30, 2, -290, "PartyPetPowerHeight", resizePartyPetFrame)
 	createOptionSlider(scroll.child, L["UnitsPerColumn"], 5, 40, 5, -360, "PartyPetPerCol", updatePartyPetHeader)
 	createOptionSlider(scroll.child, L["MaxColumns"], 1, 5, 1, -430, "PartyPetMaxCol", updatePartyPetHeader)
 end

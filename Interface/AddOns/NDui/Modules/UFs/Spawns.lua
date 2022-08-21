@@ -10,7 +10,9 @@ local UFRangeAlpha = {insideAlpha = 1, outsideAlpha = .4}
 
 local function SetUnitFrameSize(self, unit)
 	local width = C.db["UFs"][unit.."Width"]
-	local height = C.db["UFs"][unit.."Height"] + C.db["UFs"][unit.."PowerHeight"] + C.mult
+	local healthHeight = C.db["UFs"][unit.."Height"]
+	local powerHeight = C.db["UFs"][unit.."PowerHeight"]
+	local height = powerHeight == 0 and healthHeight or healthHeight + powerHeight + C.mult
 	self:SetSize(width, height)
 end
 
