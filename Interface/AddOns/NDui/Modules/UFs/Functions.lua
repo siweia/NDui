@@ -372,6 +372,7 @@ function UF:CreatePowerBar(self)
 		powerHeight = retVal(self, C.db["UFs"]["PlayerPowerHeight"], C.db["UFs"]["FocusPowerHeight"], C.db["UFs"]["BossPowerHeight"], C.db["UFs"]["PetPowerHeight"])
 	end
 	power:SetHeight(powerHeight)
+	power.wasHidden = powerHeight == 0
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
 	power.backdrop = B.CreateBDFrame(power, 0)
 	B:SmoothBar(power)
@@ -386,6 +387,15 @@ function UF:CreatePowerBar(self)
 
 	power.frequentUpdates = frequentUpdateCheck[mystyle]
 	UF:UpdatePowerBarColor(self)
+end
+
+function UF:CheckPowerBars()
+	for _, frame in pairs(oUF.objects) do
+		if frame.Power and frame.Power.wasHidden then
+			frame:DisableElement("Power")
+			if frame.powerText then frame.powerText:Hide() end
+		end
+	end
 end
 
 function UF:UpdateFramePowerTag()
