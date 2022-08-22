@@ -85,7 +85,10 @@ function Bar:TotemBar()
 	end
 
 	for i = 1, 12 do
-		reskinTotemButton(_G["MultiCastActionButton"..i], true)
+		local button = _G["MultiCastActionButton"..i]
+		reskinTotemButton(button, true)
+		button:SetAttribute("type2", "destroytotem")
+		button:SetAttribute("*totem-slot*", i == 1 and 2 or i == 2 and 1 or i)
 	end
 
 	hooksecurefunc("MultiCastSlotButton_Update", function(button, slot)
