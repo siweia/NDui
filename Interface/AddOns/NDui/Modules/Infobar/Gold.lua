@@ -152,7 +152,7 @@ info.onMouseUp = function(self, btn)
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
 		self:onEnter()
 	else
-		if DB.isNewPatch then
+		if DB.isNewPatch and not NDuiADB["ShowSlots"] then
 			--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 			ToggleCharacter("TokenFrame")
 		else
