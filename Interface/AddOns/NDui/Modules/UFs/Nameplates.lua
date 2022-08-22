@@ -116,6 +116,49 @@ function UF:UpdateUnitPower()
 	self.powerText:SetShown(shouldShowPower)
 end
 
+-- Off-tank threat color
+local groupRoles, isInGroup, myRole = {}
+local function refreshGroupRoles()
+	local isInRaid = IsInRaid()
+	isInGroup = isInRaid or IsInGroup()
+	wipe(groupRoles)
+	myRole = UnitGroupRolesAssigned("player")
+
+	if isInGroup then
+		local numPlayers = (isInRaid and GetNumGroupMembers()) or GetNumSubgroupMembers()
+		local unit = (isInRaid and "raid") or "party"
+		for i = 1, numPlayers do
+			local index = unit..i
+			if UnitExists(index) then
+				groupRoles[UnitName(index)] = UnitGroupRolesAssigned(index)
+			end
+		end
+	end
+end
+
+local function resetGroupRoles()
+	isInGroup = IsInRaid() or IsInGroup()
+	wipe(groupRoles)
+end
+
+function UF:UpdateGroupRoles()
+	refreshGroupRoles()
+	B:RegisterEvent("GROUP_ROSTER_UPDATE", refreshGroupRoles)
+	B:RegisterEvent("GROUP_LEFT", resetGroupRoles)
+end
+
+function UF:CheckThreatStatus(unit)
+	if not UnitExists(unit) then return end
+
+	local unitTarget = unit.."target"
+	local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, "player") and groupRoles[UnitName(unitTarget)] or "NONE"
+	if myRole == "TANK" and unitRole == "TANK" then
+		return true, UnitThreatSituation(unitTarget, unit)
+	else
+		return false, UnitThreatSituation("player", unit)
+	end
+end
+
 -- Update unit color
 function UF:UpdateColor(_, unit)
 	if not unit or self.unit ~= unit then return end
@@ -126,11 +169,16 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = UF.CustomUnits[name] or UF.CustomUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
+	local isOffTank, status
+	if DB.isNewPatch then
+		isOffTank, status = UF:CheckThreatStatus(unit)
+	end
 	local status = UnitThreatSituation("player", unit) or false -- just in case
 	local customColor = C.db["Nameplate"]["CustomColor"]
 	local secureColor = C.db["Nameplate"]["SecureColor"]
 	local transColor = C.db["Nameplate"]["TransColor"]
 	local insecureColor = C.db["Nameplate"]["InsecureColor"]
+	local offTankColor = C.db["Nameplate"]["OffTankColor"]
 	local executeRatio = C.db["Nameplate"]["ExecuteRatio"]
 	local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
 	local targetColor = C.db["Nameplate"]["TargetColor"]
@@ -163,7 +211,11 @@ function UF:UpdateColor(_, unit)
 			r, g, b = UnitSelectionColor(unit, true)
 			if status and C.db["Nameplate"]["TankMode"] then
 				if status == 3 then
-					r, g, b = secureColor.r, secureColor.g, secureColor.b
+					if isOffTank then
+						r, g, b = offTankColor.r, offTankColor.g, offTankColor.b
+					else
+						r, g, b = secureColor.r, secureColor.g, secureColor.b
+					end
 				elseif status == 2 or status == 1 then
 					r, g, b = transColor.r, transColor.g, transColor.b
 				elseif status == 0 then
@@ -177,18 +229,15 @@ function UF:UpdateColor(_, unit)
 		element:SetStatusBarColor(r, g, b)
 	end
 
-	if isCustomUnit or not C.db["Nameplate"]["TankMode"] then
-		if status and status == 3 then
+	self.ThreatIndicator:Hide()
+	if status and (isCustomUnit or not C.db["Nameplate"]["TankMode"]) then
+		if status == 3 then
 			self.ThreatIndicator:SetBackdropBorderColor(1, 0, 0)
 			self.ThreatIndicator:Show()
-		elseif status and (status == 2 or status == 1) then
+		elseif status == 2 or status == 1 then
 			self.ThreatIndicator:SetBackdropBorderColor(1, 1, 0)
 			self.ThreatIndicator:Show()
-		else
-			self.ThreatIndicator:Hide()
 		end
-	else
-		self.ThreatIndicator:Hide()
 	end
 
 	if executeRatio > 0 and healthPerc <= executeRatio then

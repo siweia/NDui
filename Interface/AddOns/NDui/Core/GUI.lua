@@ -346,7 +346,7 @@ G.DefaultSettings = {
 		SecureColor = {r=1, g=0, b=1},
 		TransColor = {r=1, g=.8, b=0},
 		InsecureColor = {r=1, g=0, b=0},
-		--OffTankColor = {r=.2, g=.7, b=.5},
+		OffTankColor = {r=.2, g=.7, b=.5},
 		--DPSRevertThreat = false,
 		PPFadeout = true,
 		PPFadeoutAlpha = 0,
@@ -1022,7 +1022,7 @@ G.TabList = {
 	L["Bags"],
 	NewTag..L["Unitframes"],
 	L["RaidFrame"],
-	L["Nameplate"],
+	NewTag..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
@@ -1186,8 +1186,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
 		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
+		{5, "Nameplate", "OffTankColor", NewTag..L["OffTank Color"].."*", 3, nil, nil, nil, not DB.isNewPatch},
 		--{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true},
-		--{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
 		{},--blank
 		{1, "Nameplate", "CVarOnlyNames", L["CVarOnlyNames"], nil, nil, updatePlateCVars, L["CVarOnlyNamesTip"]},
 		{1, "Nameplate", "CVarShowNPCs", L["CVarShowNPCs"].."*", true, nil, updatePlateCVars, L["CVarShowNPCsTip"]},
@@ -1608,6 +1608,7 @@ local function CreateOption(i)
 				offset = offset + 35
 			end
 			swatch.__default = (key == "ACCOUNT" and G.AccountSettings[value]) or G.DefaultSettings[key][value]
+			if disabled then swatch:Hide() end
 		-- Blank, no optType
 		else
 			if not key then
