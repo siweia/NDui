@@ -1,11 +1,11 @@
 # NDui Classic Era
 
-## [1.36.0](https://github.com/siweia/NDui/tree/1.36.0) (2022-07-23)
+## [1.37.0](https://github.com/siweia/NDui/tree/1.37.0) (2022-08-22)
 
-- Fix Mage armor list.
-- Update default skins.
-- Refactor raidframe clicksets, the old data has been reset.
-- Update infobar talent module.
-- Update oUF core.
-- Show bag freeslot for Ammo and Soulshards filter.
-- Fix skin in mailbox collect gold button.
+- Update buff frame.
+- Update skin for WA.
+- Correct tooltip anchor on unitframe buffs.
+- Option to enable transparent healthbar.
+- Be able to hide power bars by settings 0 height.
+- Live toggle portraits.
+- Replace nameplate elite texture.
