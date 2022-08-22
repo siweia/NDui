@@ -295,6 +295,29 @@ local function reskinMinimizeButton(button)
 	button.__texture:DoCollapse(false)
 end
 
+local function reskinQuestIcon(button)
+	if not button then return end
+	if not button.SetNormalTexture then return end
+
+	if not button.styled then
+		button:SetSize(24, 24)
+		button:SetNormalTexture("")
+		button:SetPushedTexture("")
+		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		local icon = _G[button:GetName().."IconTexture"]
+		if icon then
+			button.bg = B.ReskinIcon(icon, true)
+			icon:SetInside()
+		end
+
+		button.styled = true
+	end
+
+	if button.bg then
+		button.bg:SetFrameLevel(0)
+	end
+end
+
 function S:QuestTracker()
 	-- Mover for quest tracker
 	frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
@@ -312,6 +335,10 @@ function S:QuestTracker()
 				self:ClearAllPoints()
 				self:SetPoint("TOPRIGHT", frame)
 			end
+		end)
+
+		hooksecurefunc("WatchFrameItem_UpdateCooldown", function(button)
+			reskinQuestIcon(button)
 		end)
 	else
 		QuestWatchFrame:SetClampedToScreen(false)
