@@ -309,7 +309,6 @@ L["Outdated NDui"] = "  |cff0080ffNDui|r has been out of date, the latest releas
 L["Minimap"] = "Minimap"
 L["Equipement Set"] = "EquipmentSet Items"
 L["NFG"] = "No guild fund"
-L["Currency Panel"] = "Open Currency"
 L["AutoSell Junk"] = "Autosell Junk"
 L["D"] = "Dur"
 L["Low Durability"] = "You have slots in low durability!"

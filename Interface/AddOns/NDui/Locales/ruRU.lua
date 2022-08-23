@@ -309,7 +309,6 @@ L["Outdated NDui"] = "  |cff0080ffNDui|r устарел, последняя ве
 L["Minimap"] = "Миникарта"
 L["Equipement Set"] = "Предметы комплекта экипировки"
 L["NFG"] = "Не согильдиец"
-L["Currency Panel"] = "Открыть валюты"
 L["AutoSell Junk"] = "Автопродажа хлама"
 L["D"] = "Пр"
 L["Low Durability"] = "Вашим вещам требуется ремонт!"

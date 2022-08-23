@@ -309,7 +309,6 @@ L["Outdated NDui"] = "  你的|cff0080ffNDui|r已經過期，最新正式版為 
 L["Minimap"] = "小地圖"
 L["Equipement Set"] = "裝備配置方案"
 L["NFG"] = "不使用公修"
-L["Currency Panel"] = "貨幣面板"
 L["AutoSell Junk"] = "自動販賣雜物"
 L["D"] = "耐久"
 L["Low Durability"] = "你的裝備耐久度過低！"
