@@ -88,16 +88,14 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Loot Roll Frame
-
+	--/run GroupLootFrame_OpenNewFrame(1,30) GroupLootFrame1.Hide=GroupLootFrame1.Show GroupLootFrame1:Show()
 	hooksecurefunc("GroupLootFrame_OpenNewFrame", function()
 		for i = 1, NUM_GROUP_LOOT_FRAMES do
 			local frame = _G["GroupLootFrame"..i]
 			B.StripTextures(frame)
 			if not frame.styled then
-				frame.bg = B.CreateBDFrame(frame, nil, true)
-				frame.bg:SetPoint("TOPLEFT", 8, -8)
-				frame.bg:SetPoint("BOTTOMRIGHT", -8, 8)
-
+				frame.bg = B.SetBD(frame)
+				frame.bg:SetInside(frame, 8, 8)
 				B.ReskinClose(frame.PassButton, frame.bg, -5, -5)
 
 				B.StripTextures(frame.Timer)
@@ -109,11 +107,11 @@ tinsert(C.defaultThemes, function()
 				local icon = frame.IconFrame.Icon
 				icon:ClearAllPoints()
 				icon:SetPoint("BOTTOMLEFT", frame.Timer, "TOPLEFT", 0, 5)
-
 				icon.bg = B.ReskinIcon(icon)
+
 				local bg = B.CreateBDFrame(frame, .25)
 				bg:SetPoint("TOPLEFT", icon.bg, "TOPRIGHT", 2, 0)
-				bg:SetPoint("BOTTOMRIGHT", frame.Timer, "TOPRIGHT", C.mult, 5)
+				bg:SetPoint("BOTTOMRIGHT", icon.bg, "BOTTOMRIGHT", 118, 0)
 
 				frame.styled = true
 			end
