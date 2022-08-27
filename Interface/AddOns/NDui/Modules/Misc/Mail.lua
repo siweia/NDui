@@ -428,3 +428,35 @@ function M:MailBox()
 	M:LastMailSaver()
 end
 M:RegisterMisc("MailBox", M.MailBox)
+
+-- Temp fix for GM mails
+function OpenAllMail:AdvanceToNextItem()
+	local foundAttachment = false
+	while ( not foundAttachment ) do
+		local _, _, _, _, _, CODAmount, _, _, _, _, _, _, isGM = GetInboxHeaderInfo(self.mailIndex)
+		local itemID = select(2, GetInboxItem(self.mailIndex, self.attachmentIndex))
+		local hasBlacklistedItem = self:IsItemBlacklisted(itemID)
+		local hasCOD = CODAmount and CODAmount > 0
+		local hasMoneyOrItem = C_Mail.HasInboxMoney(self.mailIndex) or HasInboxItem(self.mailIndex, self.attachmentIndex)
+		if ( not hasBlacklistedItem and not isGM and not hasCOD and hasMoneyOrItem ) then
+			foundAttachment = true
+		else
+			self.attachmentIndex = self.attachmentIndex - 1
+			if ( self.attachmentIndex == 0 ) then
+				break
+			end
+		end
+	end
+	
+	if ( not foundAttachment ) then
+		self.mailIndex = self.mailIndex + 1
+		self.attachmentIndex = ATTACHMENTS_MAX
+		if ( self.mailIndex > GetInboxNumItems() ) then
+			return false
+		end
+		
+		return self:AdvanceToNextItem()
+	end
+	
+	return true
+end
