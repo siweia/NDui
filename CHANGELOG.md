@@ -1,11 +1,7 @@
 # NDui Classic Era
 
-## [1.37.0](https://github.com/siweia/NDui/tree/1.37.0) (2022-08-22)
+## [1.37.1](https://github.com/siweia/NDui/tree/1.37.1) (2022-08-27)
 
-- Update buff frame.
-- Update skin for WA.
-- Correct tooltip anchor on unitframe buffs.
-- Option to enable transparent healthbar.
-- Be able to hide power bars by settings 0 height.
-- Live toggle portraits.
-- Replace nameplate elite texture.
+- GroupLootFrame skin tweaks.
+- Fix OpenAllMail error if GM mails exists in mailbox.
+- Fix unitframe auras visibility if power bar disabled.
