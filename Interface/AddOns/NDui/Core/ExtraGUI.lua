@@ -1757,8 +1757,11 @@ function G:SetupBuffFrame(parent)
 		createOptionSlider(parent, L["IconsPerRow"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
 	end
 
-	createOptionGroup(parent, "Buffs", offset, "Buff", updateBuffFrame)
-	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", updateDebuffFrame)
+	if DB.isNewPatch then
+		createOptionCheck(parent, offset, _G.CONSOLIDATE_BUFFS_TEXT, "Auras", "Consolidate", updateBuffFrame)
+	end
+	createOptionGroup(parent, "Buffs", offset-40, "Buff", updateBuffFrame)
+	createOptionGroup(parent, "Debuffs", offset-300, "Debuff", updateDebuffFrame)
 end
 
 function G:NameplateColorDots(parent)
