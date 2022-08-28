@@ -58,6 +58,8 @@ function A:BuildBuffFrame()
 		_G.ConsolidatedBuffsTooltip:HideBackdrop()
 		B.SetBD(_G.ConsolidatedBuffsTooltip)
 		B.HideOption(_G.InterfaceOptionsDisplayPanelConsolidateBuffs)
+
+		B:RegisterEvent("UNIT_AURA", BuffFrame_Update, "player")
 	end
 end
 
