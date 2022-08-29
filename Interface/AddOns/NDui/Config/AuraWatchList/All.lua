@@ -281,6 +281,7 @@ local list = {
 		{AuraID = 350885, UnitID = "player"},	-- 集市，超光速震荡
 		{AuraID = 350804, UnitID = "player"},	-- 集市，坍缩能量
 		{AuraID = 349999, UnitID = "player"},	-- 集市，心能引爆
+		{AuraID = 357042, UnitID = "player"},	-- 集市，凌光炸弹
 		{AuraID = 359019, UnitID = "player", Flash = true},	-- 集市，快拍提速
 		{AuraID = 173324, UnitID = "player", Flash = true},	-- 码头，锯齿蒺藜
 		{AuraID = 160681, UnitID = "player", Flash = true},	-- 车站，火力压制
