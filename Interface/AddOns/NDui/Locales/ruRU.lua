@@ -832,3 +832,4 @@ L["AutoEquip"] = "Auto change equipset by talent" -- need translation
 L["AutoEquipTip"] = "|nIf enabled, auto select the equipset that saved as the same name as your talent." -- need translation
 L["TotemBar"] = "Totem Actionbar" -- need translation
 L["ClearHealth"] = "Transparent" -- need translation
+L["ClearClass"] = "Gradient Class" -- need translation
