@@ -816,3 +816,4 @@ L["MiddleButton"] = "Middle Mouse Button" -- need translation
 L["Button4"] = "Mouse Button 4" -- need translation
 L["Button5"] = "Mouse Button 5" -- need translation
 L["ClearHealth"] = "Transparent" -- need translation
+L["ClearClass"] = "Gradient Class" -- need translation
