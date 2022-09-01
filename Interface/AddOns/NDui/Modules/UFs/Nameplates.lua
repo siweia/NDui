@@ -48,7 +48,7 @@ function UF:SetupCVars()
 
 	--B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesNameplateMaxDistanceSlider) -- Use option in GUI
 
-	if IsAddOnLoaded("Questie") then
+	if IsAddOnLoaded("Questie") and QuestieLoader then
 		_QuestiePlayer = QuestieLoader:ImportModule("QuestiePlayer")
 		_QuestieTooltips = QuestieLoader:ImportModule("QuestieTooltips")
 
