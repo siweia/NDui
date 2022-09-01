@@ -115,6 +115,7 @@ local function CreatePetStyle(self)
 	UF:CreatePowerBar(self)
 	UF:CreateRaidMark(self)
 	UF:CreateAuras(self)
+	UF:CreateSparkleCastBar(self)
 end
 
 local function CreateBossStyle(self)
