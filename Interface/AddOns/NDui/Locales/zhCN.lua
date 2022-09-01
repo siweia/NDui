@@ -830,3 +830,4 @@ L["AutoEquipTip"] = "|n启用后，当你切换天赋时，若存在与该天赋
 L["TotemBar"] = "图腾动作条"
 L["ClearHealth"] = "透明"
 L["ClearClass"] = "渐变职业色"
+L["PetCastbar"] = "宠物施法条"

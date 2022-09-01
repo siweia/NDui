@@ -830,3 +830,4 @@ L["AutoEquipTip"] = "|nIf enabled, auto select the equipset that saved as the sa
 L["TotemBar"] = "Totem Actionbar" -- need translation
 L["ClearHealth"] = "Transparent" -- need translation
 L["ClearClass"] = "Gradient Class" -- need translation
+L["PetCastbar"] = "Pet Castbar" -- need translation
