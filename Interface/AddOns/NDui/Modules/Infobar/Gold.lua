@@ -152,11 +152,11 @@ info.onMouseUp = function(self, btn)
 		NDuiADB["AutoSell"] = not NDuiADB["AutoSell"]
 		self:onEnter()
 	else
-		if DB.isNewPatch and not NDuiADB["ShowSlots"] then
+		if NDuiADB["ShowSlots"] then
+			ToggleAllBags()
+		else
 			--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 			ToggleCharacter("TokenFrame")
-		else
-			ToggleAllBags()
 		end
 	end
 end
@@ -195,23 +195,21 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
-	if DB.isNewPatch then
-		for i = 1, GetNumWatchedTokens() do
-			local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
-			if not currencyInfo then break end
-			local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
-			if name and i == 1 then
-				GameTooltip:AddLine(" ")
-				GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
-			end
-			if name and count then
-				local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
-				local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
-				if total > 0 then
-					GameTooltip:AddDoubleLine(name, count.."/"..total..iconTexture, 1,1,1, 1,1,1)
-				else
-					GameTooltip:AddDoubleLine(name, count..iconTexture, 1,1,1, 1,1,1)
-				end
+	for i = 1, GetNumWatchedTokens() do
+		local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
+		if not currencyInfo then break end
+		local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
+		if name and i == 1 then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
+		end
+		if name and count then
+			local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
+			local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
+			if total > 0 then
+				GameTooltip:AddDoubleLine(name, count.."/"..total..iconTexture, 1,1,1, 1,1,1)
+			else
+				GameTooltip:AddDoubleLine(name, count..iconTexture, 1,1,1, 1,1,1)
 			end
 		end
 	end

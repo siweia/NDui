@@ -553,17 +553,15 @@ function UF:CreateIcons(self)
 	phase:SetSize(24, 24)
 	self.PhaseIndicator = phase
 
-	if DB.isNewPatch then
-		local ri = self:CreateTexture(nil, "OVERLAY")
-		if mystyle == "raid" then
-			ri:SetPoint("TOPRIGHT", self, 5, 5)
-		else
-			ri:SetPoint("TOPRIGHT", self, 0, 8)
-		end
-		ri:SetSize(15, 15)
-		ri.PostUpdate = postUpdateRole
-		self.GroupRoleIndicator = ri
+	local ri = self:CreateTexture(nil, "OVERLAY")
+	if mystyle == "raid" then
+		ri:SetPoint("TOPRIGHT", self, 5, 5)
+	else
+		ri:SetPoint("TOPRIGHT", self, 0, 8)
 	end
+	ri:SetSize(15, 15)
+	ri.PostUpdate = postUpdateRole
+	self.GroupRoleIndicator = ri
 
 	local li = self:CreateTexture(nil, "OVERLAY")
 	li:SetPoint("TOPLEFT", self, -1, 8)
@@ -1530,15 +1528,6 @@ function UF:CreateSwing(self)
 	two:SetAllPoints()
 	B.CreateSB(two, true, .8, .8, .8)
 
-	if not DB.isNewPatch then
-		local bg = two:CreateTexture(nil, "BACKGROUND", nil, 1)
-		bg:Hide()
-		bg:SetPoint("TOPRIGHT")
-		bg:SetPoint("BOTTOMRIGHT")
-		bg:SetColorTexture(.9, 0, 0)
-		bar.bg = bg
-	end
-
 	local main = CreateFrame("StatusBar", nil, bar)
 	main:Hide()
 	main:SetAllPoints()
@@ -1614,17 +1603,6 @@ function UF:CreateFCT(self)
 	-- Default CombatText
 	--SetCVar("enableFloatingCombatText", 0)
 	--B.HideOption(InterfaceOptionsCombatPanelEnableFloatingCombatText)
-end
-
-function UF:CreateEneryTicker(self)
-	if DB.MyClass == "WARRIOR" then return end
-
-	local ticker = CreateFrame("StatusBar", nil, self.Power)
-	ticker:SetFrameLevel(self.Power:GetFrameLevel() + 3)
-	ticker:SetAllPoints()
-	ticker.Spark = ticker:CreateTexture(nil, "OVERLAY")
-
-	self.EnergyManaRegen = ticker
 end
 
 function UF:ToggleEnergyTicker(enable)

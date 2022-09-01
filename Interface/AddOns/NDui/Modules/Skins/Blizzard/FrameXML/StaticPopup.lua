@@ -136,37 +136,33 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(PVPReadyDialog.hideButton)
 
 	-- PlayerReportFrame
-	if DB.isNewPatch then
-		B.StripTextures(ReportFrame)
-		B.SetBD(ReportFrame)
-		B.ReskinClose(ReportFrame.CloseButton)
-		B.Reskin(ReportFrame.ReportButton)
-		B.ReskinDropDown(ReportFrame.ReportingMajorCategoryDropdown)
-		B.ReskinEditBox(ReportFrame.Comment)
+	B.StripTextures(ReportFrame)
+	B.SetBD(ReportFrame)
+	B.ReskinClose(ReportFrame.CloseButton)
+	B.Reskin(ReportFrame.ReportButton)
+	B.ReskinDropDown(ReportFrame.ReportingMajorCategoryDropdown)
+	B.ReskinEditBox(ReportFrame.Comment)
 
-		hooksecurefunc(ReportFrame, "AnchorMinorCategory", function(self)
-			if self.MinorCategoryButtonPool then
-				for button in self.MinorCategoryButtonPool:EnumerateActive() do
-					if not button.styled then
-						B.StripTextures(button)
-						button.bg = B.CreateBDFrame(button, .25)
-						button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-						button:HookScript("OnClick", updateMinorButtonState)
+	hooksecurefunc(ReportFrame, "AnchorMinorCategory", function(self)
+		if self.MinorCategoryButtonPool then
+			for button in self.MinorCategoryButtonPool:EnumerateActive() do
+				if not button.styled then
+					B.StripTextures(button)
+					button.bg = B.CreateBDFrame(button, .25)
+					button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+					button:HookScript("OnClick", updateMinorButtonState)
 
-						button.styled = true
-					end
-
-					updateMinorButtonState(button)
+					button.styled = true
 				end
+
+				updateMinorButtonState(button)
 			end
-		end)
-	end
+		end
+	end)
 
 	-- QueueReadyCheckPopup
-	if DB.isNewPatch then
-		B.StripTextures(QueueReadyCheckPopup)
-		B.SetBD(QueueReadyCheckPopup)
-		B.Reskin(QueueReadyCheckPopup.YesButton)
-		B.Reskin(QueueReadyCheckPopup.NoButton)
-	end
+	B.StripTextures(QueueReadyCheckPopup)
+	B.SetBD(QueueReadyCheckPopup)
+	B.Reskin(QueueReadyCheckPopup.YesButton)
+	B.Reskin(QueueReadyCheckPopup.NoButton)
 end)

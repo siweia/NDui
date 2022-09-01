@@ -102,17 +102,13 @@ function M:OnLogin()
 	end)
 
 	-- Fix inspect error in wrath beta
-	if DB.isNewPatch then
-		if not InspectTalentFrameSpentPoints then
-			InspectTalentFrameSpentPoints = CreateFrame("Frame")
-		end
+	if not InspectTalentFrameSpentPoints then
+		InspectTalentFrameSpentPoints = CreateFrame("Frame")
 	end
 end
 
 -- Get Naked
 function M:NakedIcon()
-	if not DB.isNewPatch then return end
-
 	GearManagerToggleButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:ClearLines()
@@ -672,8 +668,6 @@ end
 
 -- Autoequip in Spec-changing
 function M:AutoEquipBySpec()
-	if not DB.isNewPatch then return end
-
 	local changeSpells = {
 		[63644] = true, -- second spec
 		[63645] = true, -- main spec
@@ -726,8 +720,6 @@ function M:ScreenShotOnEvent()
 end
 
 function M:UpdateScreenShot()
-	if not DB.isNewPatch then return end
-
 	if not M.ScreenShotFrame then
 		M.ScreenShotFrame = CreateFrame("Frame")
 		M.ScreenShotFrame:Hide()

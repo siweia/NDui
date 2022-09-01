@@ -90,8 +90,6 @@ function Bar:HideBlizz()
 	hooksecurefunc("MultiActionBar_HideAllGrids", toggleButtonGrid)
 	B:RegisterEvent("ACTIONBAR_HIDEGRID", toggleButtonGrid)
 	toggleButtonGrid()
-	if DB.isNewPatch then
-		-- Update token panel
-		B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
-	end
+	-- Update token panel
+	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 end

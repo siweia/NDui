@@ -15,9 +15,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	if DB.isNewPatch then
-		B.ReskinCheck(ShowAllSpellRanksCheckBox)
-	end
+	B.ReskinCheck(ShowAllSpellRanksCheckBox)
 
 	for i = 1, 8 do
 		local tab = _G["SpellBookSkillLineTab"..i]

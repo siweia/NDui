@@ -6,17 +6,15 @@ local pairs, sort, tinsert = pairs, sort, tinsert
 local GetSpellInfo, GetSpellCooldown, UnitAura, IsPlayerSpell = GetSpellInfo, GetSpellCooldown, UnitAura, IsPlayerSpell
 
 local aspects = {
-	[1] = {spellID = 13165, known = false}, -- 雄鹰
-	[2] = {spellID = 34074, known = false}, -- 蝰蛇
-	[3] = {spellID = 13163, known = false}, -- 灵猴
-	[4] = {spellID =  5118, known = false}, -- 猎豹
-	[5] = {spellID = 13159, known = false}, -- 豹群
-	[6] = {spellID = 13161, known = false}, -- 野兽
-	[7] = {spellID = 20043, known = false}, -- 野性
+	[1] = {spellID = 61846, known = false}, -- 龙鹰
+	[2] = {spellID = 13165, known = false}, -- 雄鹰
+	[3] = {spellID = 34074, known = false}, -- 蝰蛇
+	[4] = {spellID = 13163, known = false}, -- 灵猴
+	[5] = {spellID =  5118, known = false}, -- 猎豹
+	[6] = {spellID = 13159, known = false}, -- 豹群
+	[7] = {spellID = 13161, known = false}, -- 野兽
+	[8] = {spellID = 20043, known = false}, -- 野性
 }
-if DB.isNewPatch then
-	tinsert(aspects, 1, {spellID = 61846, known = false}) -- 龙鹰
-end
 local numAspects = #aspects
 local knownAspect = {}
 local aspectButtons = {}

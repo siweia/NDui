@@ -56,13 +56,9 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	B.ReskinArrow(TradeSkillDecrementButton, "left")
 	B.ReskinArrow(TradeSkillIncrementButton, "right")
 	B.ReskinInput(TradeSkillInputBox)
-	if not DB.isNewPatch then
-		B.ReskinInput(TradeSearchInputBox)
-	else
-		B.ReskinInput(TradeSkillFrameEditBox)
-		TradeSkillFrameBottomLeftTexture:Hide()
-		TradeSkillFrameBottomRightTexture:Hide()
-	end
+	B.ReskinInput(TradeSkillFrameEditBox)
+	TradeSkillFrameBottomLeftTexture:Hide()
+	TradeSkillFrameBottomRightTexture:Hide()
 
 	B.StripTextures(TradeSkillRankFrameBorder)
 	B.StripTextures(TradeSkillRankFrame)

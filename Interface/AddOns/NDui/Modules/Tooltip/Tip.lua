@@ -537,9 +537,7 @@ TT:RegisterTooltips("Blizzard_EventTrace", function()
 end)
 
 TT:RegisterTooltips("Blizzard_LookingForGroupUI", function()
-	if DB.isNewPatch then
-		TT.ReskinTooltip(LFGBrowseSearchEntryTooltip)
-	end
+	TT.ReskinTooltip(LFGBrowseSearchEntryTooltip)
 end)
 
 TT:RegisterTooltips("Blizzard_Calendar", function()

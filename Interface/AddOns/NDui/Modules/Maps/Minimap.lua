@@ -28,7 +28,7 @@ function module:CreatePulse()
 			bg:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
 		elseif not InCombatLockdown() then
-			if (DB.isNewPatch and C_Calendar.GetNumPendingInvites() > 0) or MiniMapMailFrame:IsShown() then
+			if C_Calendar.GetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
 				bg:SetBackdropBorderColor(1, 1, 0)
 				anim:Play()
 			else
@@ -39,9 +39,7 @@ function module:CreatePulse()
 	end
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", updateMinimapAnim)
 	B:RegisterEvent("PLAYER_REGEN_DISABLED", updateMinimapAnim)
-	if DB.isNewPatch then
-		B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
-	end
+	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
 	B:RegisterEvent("UPDATE_PENDING_MAIL", updateMinimapAnim)
 
 	MiniMapMailFrame:HookScript("OnHide", function()
@@ -53,32 +51,17 @@ end
 
 function module:ReskinRegions()
 	-- Tracking icon
-	if DB.isNewPatch then
-		MiniMapTracking:SetScale(.8)
-		MiniMapTracking:ClearAllPoints()
-		MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, 2, -4)
-		MiniMapTracking:SetFrameLevel(999)
-		MiniMapTrackingBackground:Hide()
-		MiniMapTrackingButtonBorder:Hide()
-		B.ReskinIcon(MiniMapTrackingIcon)
-		MiniMapTrackingIconOverlay:SetAlpha(0)
-		local hl = MiniMapTrackingButton:GetHighlightTexture()
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetAllPoints(MiniMapTrackingIcon)
-	else
-		MiniMapTracking:SetScale(.7)
-		MiniMapTracking:ClearAllPoints()
-		MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, -2, 0)
-		MiniMapTrackingBackground:Hide()
-		B.ReskinIcon(MiniMapTrackingIcon)
-		MiniMapTracking:SetFrameLevel(999)
-		MiniMapTrackingBorder:Hide()
-
-		MiniMapTracking:SetHighlightTexture(DB.bdTex)
-		local hl = MiniMapTracking:GetHighlightTexture()
-		hl:SetVertexColor(1, 1, 1, .25)
-		hl:SetAllPoints(MiniMapTrackingIcon)
-	end
+	MiniMapTracking:SetScale(.8)
+	MiniMapTracking:ClearAllPoints()
+	MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, 2, -4)
+	MiniMapTracking:SetFrameLevel(999)
+	MiniMapTrackingBackground:Hide()
+	MiniMapTrackingButtonBorder:Hide()
+	B.ReskinIcon(MiniMapTrackingIcon)
+	MiniMapTrackingIconOverlay:SetAlpha(0)
+	local hl = MiniMapTrackingButton:GetHighlightTexture()
+	hl:SetColorTexture(1, 1, 1, .25)
+	hl:SetAllPoints(MiniMapTrackingIcon)
 
 	-- Mail icon
 	MiniMapMailFrame:ClearAllPoints()
@@ -122,49 +105,42 @@ function module:ReskinRegions()
 	-- LFG Icon
 	if MiniMapLFGFrame then
 		MiniMapLFGFrame:ClearAllPoints()
-		if DB.isNewPatch then
-			MiniMapLFGFrame:SetPoint("RIGHT", Minimap, 5, 0)
-			MiniMapLFGFrameBorder:Hide()
-		else
-			MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap, 5, 15)
-			MiniMapLFGBorder:Hide()
-		end
+		MiniMapLFGFrame:SetPoint("RIGHT", Minimap, 5, 0)
+		MiniMapLFGFrameBorder:Hide()
 	end
 
-	if DB.isNewPatch then
-		-- Difficulty Flags
-		MiniMapInstanceDifficulty:ClearAllPoints()
-		MiniMapInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
-		MiniMapInstanceDifficulty:SetScale(.9)
+	-- Difficulty Flags
+	MiniMapInstanceDifficulty:ClearAllPoints()
+	MiniMapInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+	MiniMapInstanceDifficulty:SetScale(.9)
 
-		-- Invites Icon
-		GameTimeCalendarInvitesTexture:ClearAllPoints()
-		GameTimeCalendarInvitesTexture:SetParent("Minimap")
-		GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
+	-- Invites Icon
+	GameTimeCalendarInvitesTexture:ClearAllPoints()
+	GameTimeCalendarInvitesTexture:SetParent("Minimap")
+	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
-		local Invt = CreateFrame("Button", nil, UIParent)
-		Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
-		Invt:SetSize(250, 80)
+	local Invt = CreateFrame("Button", nil, UIParent)
+	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
+	Invt:SetSize(250, 80)
+	Invt:Hide()
+	B.SetBD(Invt)
+	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
+
+	local function updateInviteVisibility()
+		Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
+	end
+	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
+
+	Invt:SetScript("OnClick", function(_, btn)
 		Invt:Hide()
-		B.SetBD(Invt)
-		B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
-
-		local function updateInviteVisibility()
-			Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
+		--if btn == "LeftButton" and not InCombatLockdown() then -- fix by LibShowUIPanel
+		if btn == "LeftButton" then
+			ToggleCalendar()
 		end
-		B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
-
-		Invt:SetScript("OnClick", function(_, btn)
-			Invt:Hide()
-			--if btn == "LeftButton" and not InCombatLockdown() then -- fix by LibShowUIPanel
-			if btn == "LeftButton" then
-				ToggleCalendar()
-			end
-			B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-			B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
-		end)
-	end
+		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
+		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
+	end)
 end
 
 function module:RecycleBin()
@@ -499,8 +475,6 @@ function module:MinimapDifficulty()
 end
 
 function module:ShowCalendar()
-	if not DB.isNewPatch then return end
-
 	if C.db["Map"]["Calendar"] then
 		if not GameTimeFrame.styled then
 			GameTimeFrame:SetNormalTexture(nil)
@@ -581,15 +555,10 @@ function module:Minimap_OnMouseWheel(zoom)
 	end
 end
 
-local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
 function module:Minimap_OnMouseUp(btn)
 	if btn == "MiddleButton" then
-		if DB.isNewPatch then -- isNewPatch: correct helptip
-			--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-			ToggleCalendar()
-		elseif hasAlaCalendar then
-			B:TogglePanel(ALA_CALENDAR)
-		end
+		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+		ToggleCalendar()
 	else
 		Minimap_OnClick(self)
 	end
@@ -627,10 +596,6 @@ function module:SetupMinimap()
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
 	}
-	if not DB.isNewPatch then
-		tinsert(frames, "MinimapToggleButton")
-		tinsert(frames, "GameTimeFrame")
-	end
 
 	for _, v in pairs(frames) do
 		B.HideObject(_G[v])

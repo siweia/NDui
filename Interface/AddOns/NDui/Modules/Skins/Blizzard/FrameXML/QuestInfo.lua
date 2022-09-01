@@ -135,7 +135,7 @@ tinsert(C.defaultThemes, function()
 		for i = 2, 4 do
 			select(i, frame:GetRegions()):Hide()
 		end
-		-- isNewPatch
+
 		local icon = frame.Icon or QuestInfoPlayerTitleFrameIconTexture
 		if icon then
 			B.ReskinIcon(icon)
@@ -198,10 +198,8 @@ tinsert(C.defaultThemes, function()
 		QuestInfoRewardsFrame.ItemReceiveText,
 		QuestInfoRewardsFrame.PlayerTitleText,
 		QuestInfoRewardsFrame.XPFrame.ReceiveText,
+		QuestInfoTalentFrame.ReceiveText,
 	}
-	if DB.isNewPatch then
-		tinsert(whitish, QuestInfoTalentFrame.ReceiveText)
-	end
 	for _, font in pairs(whitish) do
 		SetTextColor_White(font)
 	end

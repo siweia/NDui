@@ -22,37 +22,33 @@ C.themes["Blizzard_TalentUI"] = function()
 		end
 	end
 
-	if DB.isNewPatch then
-		B.StripTextures(PlayerTalentFrameStatusFrame)
-		B.StripTextures(PlayerTalentFramePointsBar)
-		B.Reskin(PlayerTalentFrameActivateButton)
+	B.StripTextures(PlayerTalentFrameStatusFrame)
+	B.StripTextures(PlayerTalentFramePointsBar)
+	B.Reskin(PlayerTalentFrameActivateButton)
 
-		B.StripTextures(PlayerTalentFramePreviewBar)
-		B.StripTextures(PlayerTalentFramePreviewBarFiller)
-		B.Reskin(PlayerTalentFrameLearnButton)
-		B.Reskin(PlayerTalentFrameResetButton)
-		PlayerTalentFrameTalentPointsText:ClearAllPoints()
-		PlayerTalentFrameTalentPointsText:SetPoint("RIGHT", PlayerTalentFramePointsBar, "RIGHT", -12, 1)
+	B.StripTextures(PlayerTalentFramePreviewBar)
+	B.StripTextures(PlayerTalentFramePreviewBarFiller)
+	B.Reskin(PlayerTalentFrameLearnButton)
+	B.Reskin(PlayerTalentFrameResetButton)
+	PlayerTalentFrameTalentPointsText:ClearAllPoints()
+	PlayerTalentFrameTalentPointsText:SetPoint("RIGHT", PlayerTalentFramePointsBar, "RIGHT", -12, 1)
 
-		for i = 1, 3 do
-			local tab = _G["PlayerSpecTab"..i]
-			if tab then
-				tab:GetRegions():Hide()
-				tab:SetCheckedTexture(DB.textures.pushed)
-				tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-				tab:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
-				B.CreateBDFrame(tab)
-			end
+	for i = 1, 3 do
+		local tab = _G["PlayerSpecTab"..i]
+		if tab then
+			tab:GetRegions():Hide()
+			tab:SetCheckedTexture(DB.textures.pushed)
+			tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			tab:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+			B.CreateBDFrame(tab)
 		end
-
-		PlayerTalentFrameRoleButton:SetSize(24, 24)
-
-		hooksecurefunc("PlayerTalentFrameRole_UpdateRole", function(button, role)
-			B.ReskinSmallRole(button:GetNormalTexture(), role)
-		end)
-	else
-		B.Reskin(PlayerTalentFrameCancelButton)
 	end
+
+	PlayerTalentFrameRoleButton:SetSize(24, 24)
+
+	hooksecurefunc("PlayerTalentFrameRole_UpdateRole", function(button, role)
+		B.ReskinSmallRole(button:GetNormalTexture(), role)
+	end)
 end
 
 C.themes["Blizzard_GlyphUI"] = function()

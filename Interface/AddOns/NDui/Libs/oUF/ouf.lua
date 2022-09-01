@@ -285,10 +285,8 @@ local function initObject(unit, style, styleFunc, header, ...)
 		object:RegisterEvent('PLAYER_ENTERING_WORLD', evalUnitAndUpdate, true)
 
 		if(not isEventlessUnit(objectUnit)) then
-			if ns[4].isNewPatch then
-				object:RegisterEvent('UNIT_ENTERED_VEHICLE', evalUnitAndUpdate)
-				object:RegisterEvent('UNIT_EXITED_VEHICLE', evalUnitAndUpdate)
-			end
+			object:RegisterEvent('UNIT_ENTERED_VEHICLE', evalUnitAndUpdate)
+			object:RegisterEvent('UNIT_EXITED_VEHICLE', evalUnitAndUpdate)
 
 			-- We don't need to register UNIT_PET for the player unit. We register it
 			-- mainly because UNIT_EXITED_VEHICLE and UNIT_ENTERED_VEHICLE don't always
@@ -302,9 +300,7 @@ local function initObject(unit, style, styleFunc, header, ...)
 			-- No header means it's a frame created through :Spawn().
 			object:SetAttribute('*type1', 'target')
 			object:SetAttribute('*type2', 'togglemenu')
-			if ns[4].isNewPatch then
-				object:SetAttribute('toggleForVehicle', true)
-			end
+			object:SetAttribute('toggleForVehicle', true)
 
 			if(isEventlessUnit(objectUnit)) then
 				oUF:HandleEventlessUnit(object)
@@ -659,37 +655,35 @@ do
 
 		-- We set it here so layouts can't directly override it.
 		header:SetAttribute('initialConfigFunction', initialConfigFunction)
-		if ns[4].isNewPatch then
-			header:SetAttribute('_initialAttributeNames', '_onenter,_onleave,refreshUnitChange,_onstate-vehicleui')
-			header:SetAttribute('_initialAttribute-_onenter', [[
-				local snippet = self:GetAttribute('clickcast_onenter')
-				if(snippet) then
-					self:Run(snippet)
-				end
-			]])
-			header:SetAttribute('_initialAttribute-_onleave', [[
-				local snippet = self:GetAttribute('clickcast_onleave')
-				if(snippet) then
-					self:Run(snippet)
-				end
-			]])
-			header:SetAttribute('_initialAttribute-refreshUnitChange', [[
-				local unit = self:GetAttribute('unit')
-				if(unit) then
-					RegisterStateDriver(self, 'vehicleui', '[@' .. unit .. ',unithasvehicleui]vehicle; novehicle')
-				else
-					UnregisterStateDriver(self, 'vehicleui')
-				end
-			]])
-			header:SetAttribute('_initialAttribute-_onstate-vehicleui', [[
-				local unit = self:GetAttribute('unit')
-				if(newstate == 'vehicle' and unit and UnitPlayerOrPetInRaid(unit) and not UnitTargetsVehicleInRaidUI(unit)) then
-					self:SetAttribute('toggleForVehicle', false)
-				else
-					self:SetAttribute('toggleForVehicle', true)
-				end
-			]])
-		end
+		header:SetAttribute('_initialAttributeNames', '_onenter,_onleave,refreshUnitChange,_onstate-vehicleui')
+		header:SetAttribute('_initialAttribute-_onenter', [[
+			local snippet = self:GetAttribute('clickcast_onenter')
+			if(snippet) then
+				self:Run(snippet)
+			end
+		]])
+		header:SetAttribute('_initialAttribute-_onleave', [[
+			local snippet = self:GetAttribute('clickcast_onleave')
+			if(snippet) then
+				self:Run(snippet)
+			end
+		]])
+		header:SetAttribute('_initialAttribute-refreshUnitChange', [[
+			local unit = self:GetAttribute('unit')
+			if(unit) then
+				RegisterStateDriver(self, 'vehicleui', '[@' .. unit .. ',unithasvehicleui]vehicle; novehicle')
+			else
+				UnregisterStateDriver(self, 'vehicleui')
+			end
+		]])
+		header:SetAttribute('_initialAttribute-_onstate-vehicleui', [[
+			local unit = self:GetAttribute('unit')
+			if(newstate == 'vehicle' and unit and UnitPlayerOrPetInRaid(unit) and not UnitTargetsVehicleInRaidUI(unit)) then
+				self:SetAttribute('toggleForVehicle', false)
+			else
+				self:SetAttribute('toggleForVehicle', true)
+			end
+		]])
 		header:SetAttribute('oUF-headerType', isPetHeader and 'pet' or 'group')
 
 		if(_G.Clique) then

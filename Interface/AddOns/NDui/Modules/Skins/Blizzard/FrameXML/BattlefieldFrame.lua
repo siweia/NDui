@@ -7,10 +7,6 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(BattlefieldFrameJoinButton)
 	B.Reskin(BattlefieldFrameCancelButton)
 	B.Reskin(BattlefieldFrameGroupJoinButton)
-	if not DB.isNewPatch then
-		B.ReskinScroll(BattlefieldListScrollFrameScrollBar)
-		BattlefieldFrameZoneDescription:SetTextColor(1, 1, 1)
-	end
 
 	-- WorldStateScoreFrame
 	B.ReskinPortraitFrame(WorldStateScoreFrame, 13, -15, -108, 70)

@@ -12,104 +12,6 @@ local NotInterruptColor = {r=1, g=.5, b=.5}
 
 local ticks = {}
 local channelingTicks = {
-	--First Aid
-	[23567] = 8, --Warsong Gulch Runecloth Bandage
-	[23696] = 8, --Alterac Heavy Runecloth Bandage
-	[24414] = 8, --Arathi Basin Runecloth Bandage
-	[18610] = 8, --Heavy Runecloth Bandage
-	[18608] = 8, --Runecloth Bandage
-	[10839] = 8, --Heavy Mageweave Bandage
-	[10838] = 8, --Mageweave Bandage
-	[7927] = 8, --Heavy Silk Bandage
-	[7926] = 8, --Silk Bandage
-	[3268] = 7, --Heavy Wool Bandage
-	[3267] = 7, --Wool Bandage
-	[1159] = 6, --Heavy Linen Bandage
-	[746] = 6, --Linen Bandage
-	-- Warlock
-	[1120] = 5, -- Drain Soul(Rank 1)
-	[8288] = 5, -- Drain Soul(Rank 2)
-	[8289] = 5, -- Drain Soul(Rank 3)
-	[11675] = 5, -- Drain Soul(Rank 4)
-	[27217] = 5, -- Drain Soul(Rank 5)
-	[755] = 10, -- Health Funnel(Rank 1)
-	[3698] = 10, -- Health Funnel(Rank 2)
-	[3699] = 10, -- Health Funnel(Rank 3)
-	[3700] = 10, -- Health Funnel(Rank 4)
-	[11693] = 10, -- Health Funnel(Rank 5)
-	[11694] = 10, -- Health Funnel(Rank 6)
-	[11695] = 10, -- Health Funnel(Rank 7)
-	[27259] = 10, -- Health Funnel(Rank 8)
-	[689] = 5, -- Drain Life(Rank 1)
-	[699] = 5, -- Drain Life(Rank 2)
-	[709] = 5, -- Drain Life(Rank 3)
-	[7651] = 5, -- Drain Life(Rank 4)
-	[11699] = 5, -- Drain Life(Rank 5)
-	[11700] = 5, -- Drain Life(Rank 6)
-	[27219] = 5, -- Drain Life(Rank 7)
-	[27220] = 5, -- Drain Life(Rank 8)
-	[5740] =  4, --Rain of Fire(Rank 1)
-	[6219] =  4, --Rain of Fire(Rank 2)
-	[11677] =  4, --Rain of Fire(Rank 3)
-	[11678] =  4, --Rain of Fire(Rank 4)
-	[27212] =  4, --Rain of Fire(Rank 5)
-	[1949] = 15, --Hellfire(Rank 1)
-	[11683] = 15, --Hellfire(Rank 2)
-	[11684] = 15, --Hellfire(Rank 3)
-	[27213] = 15, --Hellfire(Rank 4)
-	[5138] = 5, --Drain Mana(Rank 1)
-	[6226] = 5, --Drain Mana(Rank 2)
-	[11703] = 5, --Drain Mana(Rank 3)
-	[11704] = 5, --Drain Mana(Rank 4)
-	[27221] = 5, --Drain Mana(Rank 5)
-	[30908] = 5, --Drain Mana(Rank 6)
-	-- Priest
-	[15407] = 3, -- Mind Flay(Rank 1)
-	[17311] = 3, -- Mind Flay(Rank 2)
-	[17312] = 3, -- Mind Flay(Rank 3)
-	[17313] = 3, -- Mind Flay(Rank 4)
-	[17314] = 3, -- Mind Flay(Rank 5)
-	[18807] = 3, -- Mind Flay(Rank 6)
-	[25387] = 3, -- Mind Flay(Rank 7)
-	-- Mage
-	[10] = 8, --Blizzard(Rank 1)
-	[6141] = 8, --Blizzard(Rank 2)
-	[8427] = 8, --Blizzard(Rank 3)
-	[10185] = 8, --Blizzard(Rank 4)
-	[10186] = 8, --Blizzard(Rank 5)
-	[10187] = 8, --Blizzard(Rank 6)
-	[27085] = 8, --Blizzard(Rank 7)
-	[5143] = 3, -- Arcane Missiles(Rank 1)
-	[5144] = 4, -- Arcane Missiles(Rank 2)
-	[5145] = 5, -- Arcane Missiles(Rank 3)
-	[8416] = 5, -- Arcane Missiles(Rank 4)
-	[8417] = 5, -- Arcane Missiles(Rank 5)
-	[10211] = 5, -- Arcane Missiles(Rank 6)
-	[10212] = 5, -- Arcane Missiles(Rank 7)
-	[25345] = 5, -- Arcane Missiles(Rank 8)
-	[27075] = 5, -- Arcane Missiles(Rank 9)
-	[38699] = 5, -- Arcane Missiles(Rank 10)
-	[12051] = 4, -- Evocation
-	--Druid
-	[740] = 5, -- Tranquility(Rank 1)
-	[8918] = 5, --Tranquility(Rank 2)
-	[9862] = 5, --Tranquility(Rank 3)
-	[9863] = 5, --Tranquility(Rank 4)
-	[26983] = 5, --Tranquility(Rank 5)
-	[16914] = 10, --Hurricane(Rank 1)
-	[17401] = 10, --Hurricane(Rank 2)
-	[17402] = 10, --Hurricane(Rank 3)
-	[27012] = 10, --Hurricane(Rank 4)
-	--Hunter
-	[1510] = 6, --Volley(Rank 1)
-	[14294] = 6, --Volley(Rank 2)
-	[14295] = 6, --Volley(Rank 3)
-	[27022] = 6, --Volley(Rank 4)
-}
-
-if DB.isNewPatch then
-
-channelingTicks = {
 	-- Death Knight
 	[42650]	= 8, -- Army of the Dead
 	--Druid
@@ -247,8 +149,6 @@ channelingTicks = {
 	[1159]	= 6, -- Heavy Linen Bandage
 	[746]	= 6, -- Linen Bandage
 }
-
-end
 
 function UF:OnCastbarUpdate(elapsed)
 	if self.casting or self.channeling then

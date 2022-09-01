@@ -302,15 +302,13 @@ function M:ShowItemLevel()
 	B:RegisterEvent("INSPECT_READY", M.ItemLevel_UpdateInspect)
 
 	-- iLvl on FlyoutButtons
-	if DB.isNewPatch then
-		hooksecurefunc("PaperDollFrameItemFlyout_Show", function()
-			for _, button in pairs(PaperDollFrameItemFlyout.buttons) do
-				if button:IsShown() then
-					M.ItemLevel_FlyoutSetup(button)
-				end
+	hooksecurefunc("PaperDollFrameItemFlyout_Show", function()
+		for _, button in pairs(PaperDollFrameItemFlyout.buttons) do
+			if button:IsShown() then
+				M.ItemLevel_FlyoutSetup(button)
 			end
-		end)
-	end
+		end
+	end)
 
 	-- Update item quality
 	M.QualityUpdater = CreateFrame("Frame")

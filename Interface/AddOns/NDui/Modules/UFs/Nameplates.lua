@@ -169,10 +169,7 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = UF.CustomUnits[name] or UF.CustomUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	local isOffTank, status
-	if DB.isNewPatch then
-		isOffTank, status = UF:CheckThreatStatus(unit)
-	end
+	local isOffTank, status = UF:CheckThreatStatus(unit)
 	local status = UnitThreatSituation("player", unit) or false -- just in case
 	local customColor = C.db["Nameplate"]["CustomColor"]
 	local secureColor = C.db["Nameplate"]["SecureColor"]
@@ -1072,9 +1069,6 @@ function UF:CreatePlayerPlate()
 	UF:CreatePowerBar(self)
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
-	if not DB.isNewPatch then
-		UF:CreateEneryTicker(self)
-	end
 	--if C.db["Auras"]["ClassAuras"] then
 	--	B:GetModule("Auras"):CreateLumos(self)
 	--end
@@ -1108,19 +1102,15 @@ function UF:TogglePlateVisibility()
 	if not plate then return end
 
 	if C.db["Nameplate"]["PPFadeout"] then
-		if DB.isNewPatch then
-			plate:RegisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
-			plate:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
-		end
+		plate:RegisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
+		plate:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
 		plate:RegisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility, true)
 		plate:RegisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility, true)
 		plate:RegisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility, true)
 		UF.PlateVisibility(plate)
 	else
-		if DB.isNewPatch then
-			plate:UnregisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
-			plate:UnregisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
-		end
+		plate:UnregisterEvent("UNIT_EXITED_VEHICLE", UF.PlateVisibility)
+		plate:UnregisterEvent("UNIT_ENTERED_VEHICLE", UF.PlateVisibility)
 		plate:UnregisterEvent("PLAYER_REGEN_ENABLED", UF.PlateVisibility)
 		plate:UnregisterEvent("PLAYER_REGEN_DISABLED", UF.PlateVisibility)
 		plate:UnregisterEvent("PLAYER_ENTERING_WORLD", UF.PlateVisibility)

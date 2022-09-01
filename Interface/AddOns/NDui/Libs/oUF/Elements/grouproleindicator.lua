@@ -24,7 +24,6 @@ A default texture will be applied if the widget is a Texture and doesn't have a 
 
 local _, ns = ...
 local oUF = ns.oUF
-if not ns[4].isNewPatch then return end
 
 local function Update(self, event)
 	local element = self.GroupRoleIndicator

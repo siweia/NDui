@@ -39,7 +39,6 @@ local function reskinTotemArrow(button, direction)
 end
 -- TODO: Add custom options
 function Bar:TotemBar()
-	if not DB.isNewPatch then return end
 	if DB.MyClass ~= "SHAMAN" then return end
 	if not C.db["Actionbar"]["TotemBar"] then return end
 

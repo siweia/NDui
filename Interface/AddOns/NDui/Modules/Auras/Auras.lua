@@ -196,9 +196,7 @@ function A:UpdateHeader(header)
 	if header.filter == "HELPFUL" then
 		cfg = A.settings.Buffs
 		local isConsolidated = C.db["Auras"]["Consolidate"] and 1 or 0
-		if DB.isNewPatch then
-			SetCVar("consolidateBuffs", isConsolidated)
-		end
+		SetCVar("consolidateBuffs", isConsolidated)
 		header:SetAttribute("consolidateTo", isConsolidated)
 		header:SetAttribute("weaponTemplate", format("NDuiAuraTemplate%d", cfg.size))
 	end
@@ -255,9 +253,7 @@ function A:CreateAuraHeader(filter)
 	if filter == "HELPFUL" then
 		header:SetAttribute("consolidateDuration", -1)
 		header:SetAttribute("includeWeapons", 1)
-		if DB.isNewPatch then
-			header:SetAttribute("consolidateProxy", "NDuiConsolidateTemplate")
-		end
+		header:SetAttribute("consolidateProxy", "NDuiConsolidateTemplate")
 	end
 
 	A:UpdateHeader(header)

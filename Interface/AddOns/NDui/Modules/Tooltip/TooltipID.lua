@@ -177,16 +177,14 @@ function TT:SetupTooltipID()
 	ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
 	ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
 
-	if DB.isNewPatch then
-		-- Currencies
-		hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
-			local id = select(12, GetCurrencyListInfo(index))
-			if id then TT.AddLineForID(self, id, types.currency) end
-		end)
-		hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
-			if id then TT.AddLineForID(self, id, types.currency) end
-		end)
-	end
+	-- Currencies
+	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
+		local id = select(12, GetCurrencyListInfo(index))
+		if id then TT.AddLineForID(self, id, types.currency) end
+	end)
+	hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
+		if id then TT.AddLineForID(self, id, types.currency) end
+	end)
 
 	-- Spell caster
 	hooksecurefunc(GameTooltip, "SetUnitAura", TT.UpdateSpellCaster)

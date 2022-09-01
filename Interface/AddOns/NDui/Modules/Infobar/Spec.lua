@@ -57,7 +57,7 @@ info.onEnter = function(self)
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["SpecPanel"].." ", 1,1,1, .6,.8,1)
-	if DB.isNewPatch and GetNumTalentGroups() > 1 then
+	if GetNumTalentGroups() > 1 then
 		GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Change Spec"].." ", 1,1,1, .6,.8,1)
 	end
 	GameTooltip:Show()
@@ -68,7 +68,7 @@ info.onLeave = B.HideTooltip
 info.onMouseUp = function(_, btn)
 	if UnitLevel("player") < SHOW_SPEC_LEVEL then
 		UIErrorsFrame:AddMessage(DB.InfoColor..format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, SHOW_SPEC_LEVEL))
-	elseif btn == "RightButton" and DB.isNewPatch then
+	elseif btn == "RightButton" then
 		if InCombatLockdown() then return end
 		if GetNumTalentGroups() < 2 then return end
 		local idx = GetActiveTalentGroup()

@@ -102,7 +102,7 @@ function Bar:MicroMenu()
 	if not C.db["Actionbar"]["MicroMenu"] then return end
 
 	local menubar = CreateFrame("Frame", nil, UIParent)
-	menubar:SetSize(265, 22)
+	menubar:SetSize(323, 22)
 	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
@@ -110,19 +110,16 @@ function Bar:MicroMenu()
 		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
 		{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
 		{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
+		{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
 		{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
 		{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
+		{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
 		{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
 		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
 		{"collections", "HelpMicroButton", MicroButtonTooltipText(HELP_BUTTON, "TOGGLEHELP")},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
 		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
 	}
-	if DB.isNewPatch then
-		tinsert(buttonInfo, 4, {"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")})
-		tinsert(buttonInfo, 7, {"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")})
-		menubar:SetWidth(323)
-	end
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)
 	end

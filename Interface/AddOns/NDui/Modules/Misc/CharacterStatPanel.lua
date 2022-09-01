@@ -206,36 +206,21 @@ local function GetItemSlotLevel(unit, index)
 	return tonumber(level) or 0
 end
 
+-- P1 174,187,200,213
+-- P2 200,213,226,239
+-- P3 200,226,239,252
+-- P4 200,246,259,272
 local function GetILvlTextColor(level)
-	if level >= 150 then
+	if level >= 213 then
 		return 1, .5, 0
-	elseif level >= 115 then
+	elseif level >= 200 then
 		return .63, .2, .93
-	elseif level >= 80 then
+	elseif level >= 187 then
 		return 0, .43, .87
-	elseif level >= 45 then
+	elseif level >= 174 then
 		return .12, 1, 0
 	else
 		return 1, 1, 1
-	end
-end
-if DB.isNewPatch then
-	-- P1 174,187,200,213
-	-- P2 200,213,226,239
-	-- P3 200,226,239,252
-	-- P4 200,246,259,272
-	function GetILvlTextColor(level)
-		if level >= 213 then
-			return 1, .5, 0
-		elseif level >= 200 then
-			return .63, .2, .93
-		elseif level >= 187 then
-			return 0, .43, .87
-		elseif level >= 174 then
-			return .12, 1, 0
-		else
-			return 1, 1, 1
-		end
 	end
 end
 
@@ -314,11 +299,7 @@ end
 local function ToggleMagicRes()
 	if C.db["Misc"]["StatExpand"] then
 		CharacterResistanceFrame:ClearAllPoints()
-		if DB.isNewPatch then
-			CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 28, -10)
-		else
-			CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 28, -25)
-		end
+		CharacterResistanceFrame:SetPoint("TOPLEFT", M.StatPanel2, 28, -10)
 		CharacterResistanceFrame:SetParent(M.StatPanel2)
 		if not hasOtherAddon then CharacterModelFrame:SetSize(231, 320) end -- size in retail
 
@@ -366,16 +347,9 @@ local function ToggleStatPanel(texture)
 	ToggleMagicRes()
 end
 
-local function ExpandCharacterFrame(expand)
-	if DB.isNewPatch then return end
-	CharacterFrame:SetWidth(expand and 584 or 384)
-end
-
 M.OtherPanels = {"DCS_StatScrollFrame", "CSC_SideStatsFrame"}
 local found
 function M:FindAddOnPanels()
-	if not DB.isNewPatch then return end
-
 	if not found then
 		for _, name in pairs(M.OtherPanels) do
 			if _G[name] then
@@ -392,8 +366,6 @@ function M:FindAddOnPanels()
 end
 
 function M:SortAddOnPanels()
-	if not DB.isNewPatch then return end
-
 	local prev
 	for _, frame in pairs(PaperDollFrame.__statPanels) do
 		frame:ClearAllPoints()
@@ -417,20 +389,12 @@ function M:CharacterStatePanel()
 
 	local statPanel = CreateFrame("Frame", "NDuiStatPanel", PaperDollFrame)
 	statPanel:SetSize(200, 422)
-	if DB.isNewPatch then
-		statPanel:SetPoint("TOPLEFT", PaperDollFrame, "TOPRIGHT", -32, -15-C.mult)
-		B.SetBD(statPanel)
-	else
-		statPanel:SetPoint("TOPRIGHT", PaperDollFrame, "TOPRIGHT", -35, -16)
-	end
+	statPanel:SetPoint("TOPLEFT", PaperDollFrame, "TOPRIGHT", -32, -15-C.mult)
+	B.SetBD(statPanel)
 	M.StatPanel2 = statPanel
 
 	local scrollFrame = CreateFrame("ScrollFrame", nil, statPanel, "UIPanelScrollFrameTemplate")
-	if DB.isNewPatch then
-		scrollFrame:SetPoint("TOPLEFT", 0, -45)
-	else
-		scrollFrame:SetPoint("TOPLEFT", 0, -60)
-	end
+	scrollFrame:SetPoint("TOPLEFT", 0, -45)
 	scrollFrame:SetPoint("BOTTOMRIGHT", 0, 2)
 	scrollFrame.ScrollBar:Hide()
 	scrollFrame.ScrollBar.Show = B.Dummy
@@ -468,10 +432,8 @@ function M:CharacterStatePanel()
 	BuildValueFromList()
 	CharacterNameFrame:ClearAllPoints()
 	CharacterNameFrame:SetPoint("TOPLEFT", CharacterFrame, 130, -20)
-	if DB.isNewPatch then
-		PaperDollFrame.__statPanels = {}
-		GearManagerDialog:SetFrameStrata("DIALOG")
-	end
+	PaperDollFrame.__statPanels = {}
+	GearManagerDialog:SetFrameStrata("DIALOG")
 
 	-- Update data
 	hooksecurefunc("ToggleCharacter", UpdateStats)
@@ -484,19 +446,13 @@ function M:CharacterStatePanel()
 
 	bu:SetScript("OnClick", function(self)
 		C.db["Misc"]["StatExpand"] = not C.db["Misc"]["StatExpand"]
-		ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
 		ToggleStatPanel(self.__texture)
 		M:SortAddOnPanels()
 	end)
 
 	ToggleStatPanel(bu.__texture)
 
-	PaperDollFrame:HookScript("OnHide", function()
-		ExpandCharacterFrame()
-	end)
-
 	PaperDollFrame:HookScript("OnShow", function()
-		ExpandCharacterFrame(C.db["Misc"]["StatExpand"])
 		M:FindAddOnPanels()
 	end)
 

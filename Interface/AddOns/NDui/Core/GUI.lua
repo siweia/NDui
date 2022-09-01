@@ -1066,7 +1066,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "AspectBar", HeaderTag..L["AspectBar"].."*", nil, nil, toggleAspectBar},
 		{1, "Actionbar", "VerticleAspect", L["VerticleAspect"].."*", nil, nil, updateAspectStatus},
 		{3, "Actionbar", "AspectSize", L["AspectSize"].."*", true, {24, 60, 1}, updateAspectStatus},
-		{1, "Actionbar", "TotemBar", NewTag..HeaderTag..L["TotemBar"], nil, nil, nil, nil, not DB.isNewPatch},
+		{1, "Actionbar", "TotemBar", NewTag..HeaderTag..L["TotemBar"]},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
@@ -1090,7 +1090,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Enable", NewTag..HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
 		{1, "UFs", "Arena", L["Arena Frame"], true},
 		{1, "UFs", "ToToT", L["TototUF"]},
-		{1, "UFs", "EnergyTicker", L["EnergyTicker"].."*", true, nil, toggleUFClassPower, nil, DB.isNewPatch},
+		{1, "UFs", "EnergyTicker", L["EnergyTicker"].."*", true, nil, toggleUFClassPower},
 		{1, "UFs", "ShowAuras", L["ShowAuras"].."*", nil, setupUFAuras, toggleAllAuras},
 		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", true, setupClassPower, toggleUFClassPower},
 		{1, "UFs", "Portrait", L["UFs Portrait"].."*", nil, nil, togglePortraits},
@@ -1187,7 +1187,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
 		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
-		{5, "Nameplate", "OffTankColor", NewTag..L["OffTank Color"].."*", 3, nil, nil, nil, not DB.isNewPatch},
+		{5, "Nameplate", "OffTankColor", NewTag..L["OffTank Color"].."*", 3},
 		--{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true},
 		{},--blank
 		{1, "Nameplate", "CVarOnlyNames", L["CVarOnlyNames"], nil, nil, updatePlateCVars, L["CVarOnlyNamesTip"]},
@@ -1205,7 +1205,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", nil, nil, togglePlateVisibility},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlayerPlate},
 		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
-		{1, "Nameplate", "EnergyTicker", L["EnergyTicker"].."*", nil, nil, togglePlayerPlate, nil, DB.isNewPatch},
+		{1, "Nameplate", "EnergyTicker", L["EnergyTicker"].."*", nil, nil, togglePlayerPlate},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["Width"].."*", false, {150, 300, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
@@ -1291,7 +1291,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "EasyVolume", L["EasyVolume"], nil, nil, nil, L["EasyVolumeTip"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
-		{1, "Map", "Calendar", NewTag..L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"], not DB.isNewPatch},
+		{1, "Map", "Calendar", NewTag..L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"]},
 		{2, "ACCOUNT", "IgnoredButtons", L["IgnoredButtons"], nil, nil, nil, L["IgnoredButtonsTip"]},
 	},
 	[11] = {
@@ -1355,8 +1355,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AutoDismount", L["AutoDismount"].."*", nil, nil, nil, L["AutoDismountTip"]},
 		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 3.4, .1}, updateMaxZoomLevel},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
-		{1, "Misc", "Autoequip", NewTag..L["AutoEquip"].."*", true, nil, nil, L["AutoEquipTip"], not DB.isNewPatch},
-		{1, "Misc", "Screenshot", NewTag..L["Auto ScreenShot"].."*", nil, nil, updateScreenShot, nil, not DB.isNewPatch},
+		{1, "Misc", "Autoequip", NewTag..L["AutoEquip"].."*", true, nil, nil, L["AutoEquipTip"]},
+		{1, "Misc", "Screenshot", NewTag..L["Auto ScreenShot"].."*", nil, nil, updateScreenShot},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

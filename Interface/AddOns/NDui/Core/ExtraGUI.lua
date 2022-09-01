@@ -120,8 +120,10 @@ function G:SetupRaidDebuffs(parent)
 		end)
 	end
 
+	local maxLevel = GetMaxPlayerLevel()
+
 	local dungeonIDs = {540,558,556,555,542,546,545,547,553,554,552,557,269,560,543,585}
-	if DB.isNewPatch then
+	if maxLevel > 70 then
 		dungeonIDs = {619,601,600,604,602,668,599,658,595,632,576,578,608,650,574,575}
 	end
 	local dungeons = {}
@@ -133,7 +135,7 @@ function G:SetupRaidDebuffs(parent)
 		end
 	end
 	local raidIDs = {564,565,534,532,544,548,580,550,568}
-	if DB.isNewPatch then
+	if maxLevel > 70 then
 		raidIDs = {631,533,249,616,615,724,649,603,624}
 	end
 	local raids = {}
@@ -1757,9 +1759,7 @@ function G:SetupBuffFrame(parent)
 		createOptionSlider(parent, L["IconsPerRow"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
 	end
 
-	if DB.isNewPatch then
-		createOptionCheck(parent, offset, _G.CONSOLIDATE_BUFFS_TEXT, "Auras", "Consolidate", updateBuffFrame)
-	end
+	createOptionCheck(parent, offset, _G.CONSOLIDATE_BUFFS_TEXT, "Auras", "Consolidate", updateBuffFrame)
 	createOptionGroup(parent, "Buffs", offset-40, "Buff", updateBuffFrame)
 	createOptionGroup(parent, "Debuffs", offset-300, "Debuff", updateDebuffFrame)
 end
