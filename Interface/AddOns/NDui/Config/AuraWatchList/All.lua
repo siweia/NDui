@@ -290,6 +290,7 @@ local list = {
 		{AuraID = 291937, UnitID = "player", Flash = true},	-- 车间，垃圾掩体
 		{AuraID = 230087, UnitID = "player", Flash = true},	-- 卡上，振作
 		{AuraID = 228993, UnitID = "player", Flash = true},	-- 卡下，腐蚀之池
+		{AuraID = 228331, UnitID = "player", Flash = true},	-- 卡下，爆裂充能
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
