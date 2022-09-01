@@ -40,6 +40,7 @@ do
 		["SHAMAN"] = {
 			["Poison"] = true,
 			["Disease"] = true,
+			["Curse"] = IsSpellKnown(51886),
 		},
 		["MAGE"] = {
 			["Curse"] = true,
