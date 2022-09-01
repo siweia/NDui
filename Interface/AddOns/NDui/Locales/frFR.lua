@@ -920,3 +920,4 @@ L["InteractWidth"] = "Largeur cliquable"
 L["InteractHeight"] = "Hauteur cliquable"
 L["ClearHealth"] = "Transparent" -- need translation
 L["ClearClass"] = "Gradient Class" -- need translation
+L["PetCastbar"] = "Pet Castbar" -- need translation

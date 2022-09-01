@@ -256,6 +256,7 @@ G.DefaultSettings = {
 		FocusCB = true,
 		FocusCBWidth = 320,
 		FocusCBHeight = 20,
+		PetCB = true,
 
 		PlayerNumBuff = 20,
 		PlayerNumDebuff = 20,
@@ -1170,6 +1171,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"].."*", nil, setupSwingBars, toggleSwingBars},
 		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true, nil, nil, L["QuakeTimerTip"]},
+		{1, "UFs", "PetCB", NewTag..L["PetCastbar"]},
 		{},--blank
 		{1, "UFs", "CombatText", HeaderTag..L["UFs CombatText"]},
 		{1, "UFs", "ScrollingCT", L["ScrollingCT"].."*", true},

@@ -735,6 +735,8 @@ function UF:CreateCastBar(self)
 end
 
 function UF:CreateSparkleCastBar(self)
+	if not C.db["UFs"]["PetCB"] then return end
+
 	local bar = CreateFrame("StatusBar", "oUF_SparkleCastbar"..self.mystyle, self)
 	bar:SetAllPoints(self.Power)
 	bar:SetStatusBarTexture(DB.normTex)
