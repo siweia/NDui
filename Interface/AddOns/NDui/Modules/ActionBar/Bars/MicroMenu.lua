@@ -138,6 +138,7 @@ function Bar:MicroMenu()
 	end
 
 	-- Default elements
+	B.HideObject(PVPMicroButtonTexture)
 	B.HideObject(MicroButtonPortrait)
 	B.HideObject(MainMenuBarDownload)
 	B.HideObject(HelpOpenWebTicketButton)
