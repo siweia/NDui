@@ -54,12 +54,17 @@ end
 function module:ReskinRegions()
 	-- Tracking icon
 	if DB.isNewPatch then
+		MiniMapTracking:SetScale(.8)
 		MiniMapTracking:ClearAllPoints()
-		MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, 4, -6)
+		MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, 2, -4)
 		MiniMapTracking:SetFrameLevel(999)
 		MiniMapTrackingBackground:Hide()
 		MiniMapTrackingButtonBorder:Hide()
+		B.ReskinIcon(MiniMapTrackingIcon)
 		MiniMapTrackingIconOverlay:SetAlpha(0)
+		local hl = MiniMapTrackingButton:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetAllPoints(MiniMapTrackingIcon)
 	else
 		MiniMapTracking:SetScale(.7)
 		MiniMapTracking:ClearAllPoints()
