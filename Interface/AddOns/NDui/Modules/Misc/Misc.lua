@@ -56,6 +56,7 @@ function M:OnLogin()
 	C_Timer_After(0, M.UpdateMaxZoomLevel)
 	M:AutoEquipBySpec()
 	M:UpdateScreenShot()
+	M:FlyoutOnKeyAlt()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -738,4 +739,19 @@ function M:UpdateScreenShot()
 		M.ScreenShotFrame:Hide()
 		B:UnregisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
 	end
+end
+
+-- Flyout buttons by holding key ALT
+function M:FlyoutOnKeyAlt()
+	hooksecurefunc("PaperDollItemSlotButton_OnEnter", function(self)
+		PaperDollItemSlotButton_UpdateFlyout(self)
+	end)
+
+	hooksecurefunc("PaperDollItemSlotButton_OnEvent", function(self, event)
+		if event == "MODIFIER_STATE_CHANGED" then
+			if IsModifiedClick("SHOWITEMFLYOUT") and self:IsMouseOver() then
+				PaperDollItemSlotButton_OnEnter(self)
+			end
+		end
+	end)
 end
