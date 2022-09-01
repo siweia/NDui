@@ -7,6 +7,27 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(BattlefieldFrameJoinButton)
 	B.Reskin(BattlefieldFrameCancelButton)
 	B.Reskin(BattlefieldFrameGroupJoinButton)
+	BattlefieldFrameBGTex:Hide()
+	B.CreateBDFrame(BattlefieldFrameInfoScrollFrame, .25)
+
+	local wintergraspIcon = WintergraspTimer.texture
+	wintergraspIcon:SetTexture(135865) -- Spell_Frost_WizardMark
+	B.CreateBDFrame(wintergraspIcon, .25)
+
+	hooksecurefunc(wintergraspIcon, "SetTexCoord", function(self, _, _, y1, y2)
+		if self.isCutting then return end
+		self.isCutting = true
+
+		if y1 == .5 and y2 == 1 then
+			self:SetDesaturated(false) -- can queue
+		elseif y1 == 0 and y2 == .5 then
+			self:SetDesaturated(true) -- can't queue
+		end
+		self:SetTexCoord(unpack(DB.TexCoord))
+
+		self.isCutting = nil
+	end)
+	wintergraspIcon:SetTexCoord(0, 1, 0, .5)
 
 	-- WorldStateScoreFrame
 	B.ReskinPortraitFrame(WorldStateScoreFrame, 13, -15, -108, 70)
