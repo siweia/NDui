@@ -465,8 +465,8 @@ function UF:UpdateTextScale()
 			if frame.powerText then frame.powerText:SetScale(scale) end
 			local castbar = frame.Castbar
 			if castbar then
-				castbar.Text:SetScale(scale)
-				castbar.Time:SetScale(scale)
+				if castbar.Text then castbar.Text:SetScale(scale) end
+				if castbar.Time then castbar.Time:SetScale(scale) end
 				if castbar.Lag then castbar.Lag:SetScale(scale) end
 			end
 			UF:UpdateHealthBarColor(frame, true)
@@ -712,6 +712,23 @@ function UF:CreateCastBar(self)
 	cb.PostCastNotInterruptible = UF.PostUpdateInterruptible
 
 	self.Castbar = cb
+end
+
+function UF:CreateSparkleCastBar(self)
+	local bar = CreateFrame("StatusBar", "oUF_SparkleCastbar"..self.mystyle, self)
+	bar:SetAllPoints(self.Power)
+	bar:SetStatusBarTexture(DB.normTex)
+	bar:SetStatusBarColor(1, 1, 1, .25)
+
+	local spark = bar:CreateTexture(nil, "OVERLAY")
+	spark:SetTexture(DB.sparkTex)
+	spark:SetBlendMode("ADD")
+	spark:SetAlpha(.8)
+	spark:SetPoint("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
+	spark:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -10)
+	bar.Spark = spark
+
+	self.Castbar = bar
 end
 
 function UF:ToggleCastBar(unit)
