@@ -20,7 +20,7 @@ local list = {
 		{AuraID = 1513, UnitID = "target", Caster = "player"},		-- 恐吓野兽
 		{AuraID = 5116, UnitID = "target", Caster = "player"},		-- 震荡射击
 		{AuraID = 27016, UnitID = "target", Caster = "player"},		-- 毒蛇钉刺
-		{AuraID = 27018, UnitID = "target", Caster = "player"},		-- 蝰蛇钉刺
+		--{AuraID = 27018, UnitID = "target", Caster = "player"},		-- 蝰蛇钉刺
 		{AuraID = 19386, UnitID = "target", Caster = "player"},		-- 翼龙钉刺
 		{AuraID = 14268, UnitID = "target", Caster = "player"},		-- 摔绊
 		{AuraID = 13810, UnitID = "target", Caster = "player"},		-- 冰霜陷阱

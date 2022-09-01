@@ -46,9 +46,9 @@ local module = B:GetModule("AurasTable")
 local list = {
 	["Enchant Aura"] = {	-- 附魔及饰品组
 		-- 种族天赋
-		{AuraID = 20580, UnitID = "player"},	-- 影遁 暗夜
+		{AuraID = 58984, UnitID = "player"},	-- 影遁 暗夜
 		{AuraID = 20594, UnitID = "player"},	-- 石像形态 矮人
-		{AuraID = 26635, UnitID = "player"},	-- 狂暴 巨魔
+		{AuraID = 26297, UnitID = "player"},	-- 狂暴 巨魔
 		{AuraID = 20572, UnitID = "player"},	-- 血性狂暴 兽人
 		{AuraID = 33697, UnitID = "player"},	-- 血性狂暴 兽人
 		{AuraID = 33702, UnitID = "player"},	-- 血性狂暴 兽人
