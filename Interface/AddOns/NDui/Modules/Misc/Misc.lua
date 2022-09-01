@@ -673,7 +673,7 @@ function M:AutoEquipBySpec()
 		[63645] = true, -- main spec
 	}
 	local function setupMisc(event, unit, _, spellID)
-		if not NDuiDB["Misc"]["Autoequip"] then
+		if not C.db["Misc"]["Autoequip"] then
 			B:UnregisterEvent(event, setupMisc)
 			return
 		end
