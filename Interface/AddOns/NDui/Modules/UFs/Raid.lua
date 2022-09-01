@@ -190,8 +190,8 @@ local function setupMouseWheelCast(self)
 	end
 
 	if found then
-		self:SetAttribute("_onenter", onEnterString)
-		self:SetAttribute("_onleave", onLeaveString)
+		self:SetAttribute("clickcast_onenter", onEnterString)
+		self:SetAttribute("clickcast_onleave", onLeaveString)
 		self:SetAttribute("_onshow", onLeaveString)
 		self:SetAttribute("_onhide", onLeaveString)
 		self:SetAttribute("_onmousedown", onMouseString)
