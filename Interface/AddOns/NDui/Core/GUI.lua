@@ -315,7 +315,6 @@ G.DefaultSettings = {
 		MapRevealGlow = true,
 		Calendar = false,
 		MapFader = true,
-		DiffFlag = true,
 		EasyVolume = true,
 	},
 	Nameplate = {
@@ -1281,13 +1280,12 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
 		{3, "Map", "MinimapSize", L["Minimap Size"].."*", true, {100, 500, 1}, updateMinimapScale},
 		{1, "Map", "Clock", L["Minimap Clock"].."*", nil, nil, showMinimapClock},
-		{1, "Map", "DiffFlag", L["Minimap DiffFlag"], true, nil, nil, L["DiffFlagTip"]},
+		{1, "Map", "Calendar", NewTag..L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"]},
 		{1, "Map", "CombatPulse", L["Minimap Pulse"]},
 		{1, "Map", "WhoPings", L["Show WhoPings"], true},
 		{1, "Map", "EasyVolume", L["EasyVolume"], nil, nil, nil, L["EasyVolumeTip"]},
 		{1, "Misc", "ExpRep", L["Show Expbar"], true},
 		{1, "Map", "ShowRecycleBin", L["Show RecycleBin"]},
-		{1, "Map", "Calendar", NewTag..L["MinimapCalendar"].."*", true, nil, showCalendar, L["MinimapCalendarTip"]},
 		{2, "ACCOUNT", "IgnoredButtons", L["IgnoredButtons"], nil, nil, nil, L["IgnoredButtonsTip"]},
 	},
 	[11] = {
