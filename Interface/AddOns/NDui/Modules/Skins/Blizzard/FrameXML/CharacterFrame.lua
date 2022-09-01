@@ -351,6 +351,11 @@ tinsert(C.defaultThemes, function()
 
 	PaperDollFrameItemFlyoutButtons.bg1:SetAlpha(0)
 	PaperDollFrameItemFlyoutButtons:DisableDrawLayer("ARTWORK")
+	B.SetBD(PaperDollFrameItemFlyoutButtons)
+	hooksecurefunc(PaperDollFrameItemFlyoutButtons, "SetWidth", function(self, width, force)
+		if force then return end
+		self:SetWidth(width + 3, true)
+	end)
 
 	B.StripTextures(GearManagerDialogPopup)
 	B.SetBD(GearManagerDialogPopup, nil, 5, -6, 0, 5)
