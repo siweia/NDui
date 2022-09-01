@@ -178,6 +178,7 @@ module:RegisterDebuff(TIER, 860, 0, 228526)
 module:RegisterDebuff(TIER, 860, 0, 228576)
 module:RegisterDebuff(TIER, 860, 0, 228280)
 module:RegisterDebuff(TIER, 860, 0, 228829)
+module:RegisterDebuff(TIER, 860, 0, 228993, 6) -- 腐蚀之池
 
 -- 永夜大教堂 (900)
 module:RegisterDebuff(TIER, 900, 0, 209858)

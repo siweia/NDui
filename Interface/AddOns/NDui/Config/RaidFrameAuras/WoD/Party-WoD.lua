@@ -37,3 +37,4 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 173324) -- 锯齿蒺藜
 module:RegisterDebuff(TIER, INSTANCE, 0, 172771) -- 燃烧弹
 module:RegisterDebuff(TIER, INSTANCE, 0, 173307) -- 倒钩长矛
 module:RegisterDebuff(TIER, INSTANCE, 0, 169341) -- 挫志怒吼
+module:RegisterDebuff(TIER, INSTANCE, 0, 172963, 6) -- 破门斩斧
