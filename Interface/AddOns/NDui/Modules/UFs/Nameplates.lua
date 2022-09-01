@@ -1094,7 +1094,6 @@ function UF:TogglePlayerPlate()
 	end
 
 	plate.powerText:SetShown(C.db["Nameplate"]["PPPowerText"])
-	UF.ToggleEnergyTicker(plate, C.db["Nameplate"]["EnergyTicker"])
 end
 
 function UF:TogglePlateVisibility()

@@ -1398,8 +1398,6 @@ function UF:ToggleUFClassPower()
 			end
 		end
 	end
-
-	UF.ToggleEnergyTicker(playerFrame, C.db["UFs"]["EnergyTicker"])
 end
 
 function UF:UpdateUFClassPower()
@@ -1603,17 +1601,4 @@ function UF:CreateFCT(self)
 	-- Default CombatText
 	--SetCVar("enableFloatingCombatText", 0)
 	--B.HideOption(InterfaceOptionsCombatPanelEnableFloatingCombatText)
-end
-
-function UF:ToggleEnergyTicker(enable)
-	if not self.EnergyManaRegen then return end
-	if enable then
-		if not self:IsElementEnabled("EnergyManaRegen") then
-			self:EnableElement("EnergyManaRegen")
-		end
-	else
-		if self:IsElementEnabled("EnergyManaRegen") then
-			self:DisableElement("EnergyManaRegen")
-		end
-	end
 end
