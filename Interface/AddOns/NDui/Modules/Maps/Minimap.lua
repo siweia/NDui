@@ -81,6 +81,7 @@ function module:ReskinRegions()
 	end
 
 	if DB.isNewPatch then
+		updateMinimapButtons(ExpansionLandingPageMinimapButton)
 		hooksecurefunc(ExpansionLandingPageMinimapButton, "UpdateIcon", updateMinimapButtons)
 
 		-- QueueStatus Button
@@ -572,7 +573,11 @@ function module:Minimap_OnMouseUp(btn)
 	elseif btn == "RightButton" then
 		ToggleDropDownMenu(1, nil, NDuiMiniMapTrackingDropDown, "cursor")
 	else
-		Minimap_OnClick(self)
+		if DB.isNewPatch then
+			Minimap:OnClick()
+		else
+			Minimap_OnClick(self)
+		end
 	end
 end
 
@@ -648,6 +653,8 @@ function module:SetupMinimap()
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
 	if DB.isNewPatch then
+		B.HideObject(Minimap.ZoomIn)
+		B.HideObject(Minimap.ZoomOut)
 		MinimapCluster.Tracking:Hide()
 		MinimapCluster.BorderTop:Hide()
 		MinimapCluster.ZoneTextButton:Hide()
@@ -655,8 +662,8 @@ function module:SetupMinimap()
 
 	-- Add Elements
 	self:CreatePulse()
-	self:ReskinRegions()
 	self:RecycleBin()
+	self:ReskinRegions()
 	self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()
 	self:SoundVolume()
