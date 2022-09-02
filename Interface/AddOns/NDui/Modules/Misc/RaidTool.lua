@@ -438,7 +438,7 @@ end
 function M:RaidTool_CreateMenu(parent)
 	local frame = CreateFrame("Frame", nil, parent)
 	frame:SetPoint("TOP", parent, "BOTTOM", 0, -3)
-	frame:SetSize(182, 38)
+	frame:SetSize(182, 70)
 	B.SetBD(frame)
 	frame:Hide()
 
@@ -502,6 +502,14 @@ function M:RaidTool_CreateMenu(parent)
 				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
 			end
 		end},
+		{ROLE_POLL, function()
+			if IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid())) then
+				InitiateRolePoll()
+			else
+				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
+			end
+		end},
+		{RAID_CONTROL, function() B:ToggleFriends(4) end},
 	}
 
 	local bu = {}
