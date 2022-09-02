@@ -69,7 +69,7 @@ tinsert(C.defaultThemes, function()
 	if DB.isNewPatch then
 		B.ReskinTrimScroll(content.scrollBar)
 	else
-		B.ReskinScroll(content.ScrollFrame.ScrollBar)
+		B.ReskinScroll(content.scrollFrame.scrollBar)
 	end
 
 	B.StripTextures(tabContainer)

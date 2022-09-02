@@ -99,7 +99,7 @@ tinsert(C.defaultThemes, function()
 	if DB.isNewPatch then
 		B.ReskinTrimScroll(ChannelFrame.ChannelRoster.ScrollBar)
 	else
-		B.ReskinScroll(ChannelFrame.ChannelRoster.ScrollBar)
+		B.ReskinScroll(ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
 	end
 
 	hooksecurefunc(ChannelFrame.ChannelList, "Update", function(self)
