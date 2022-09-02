@@ -10,6 +10,8 @@ tinsert(C.defaultThemes, function()
 		PetStableCurrentPet,
 		PetStableStabledPet1,
 		PetStableStabledPet2,
+		PetStableStabledPet3,
+		PetStableStabledPet4,
 	}
 
 	for _, bu in pairs(slots) do
@@ -24,7 +26,7 @@ tinsert(C.defaultThemes, function()
 	end
 
 	hooksecurefunc("PetStable_Update", function()
-		for i = 1, 2 do
+		for i = 1, 4 do
 			local bu = _G["PetStableStabledPet"..i]
 			if i <= GetNumStableSlots() then
 				bu.bg:SetBackdropBorderColor(0, 0, 0)
