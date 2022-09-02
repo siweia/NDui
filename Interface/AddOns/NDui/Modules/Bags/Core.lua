@@ -384,10 +384,19 @@ function module:GetEmptySlot(name)
 		if slotID then
 			return -1, slotID
 		end
-		for bagID = 5, 11 do
-			local slotID = module:GetContainerEmptySlot(bagID)
-			if slotID then
-				return bagID, slotID
+		if DB.isNewPatch then
+			for bagID = 6, 12 do
+				local slotID = module:GetContainerEmptySlot(bagID)
+				if slotID then
+					return bagID, slotID
+				end
+			end
+		else
+			for bagID = 5, 11 do
+				local slotID = module:GetContainerEmptySlot(bagID)
+				if slotID then
+					return bagID, slotID
+				end
 			end
 		end
 	elseif name == "Reagent" then
@@ -1149,7 +1158,7 @@ function module:OnLogin()
 		buttons[1] = module.CreateCloseButton(self, f)
 		buttons[2] = module.CreateSortButton(self, name)
 		if name == "Bag" then
-			module.CreateBagBar(self, settings, 4)
+			module.CreateBagBar(self, settings, 5)
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateSplitButton(self)
 			buttons[5] = module.CreateFavouriteButton(self)

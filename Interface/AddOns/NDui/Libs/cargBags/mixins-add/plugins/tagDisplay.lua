@@ -97,8 +97,14 @@ local function GetNumFreeSlots(name)
 		return CalculateTotalNumberOfFreeBagSlots()
 	elseif name == "Bank" then
 		local numFreeSlots = GetContainerNumFreeSlots(-1)
-		for bagID = 5, 11 do
-			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+		if DB.isNewPatch then
+			for bagID = 6, 12 do
+				numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+			end
+		else
+			for bagID = 5, 11 do
+				numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+			end
 		end
 		return numFreeSlots
 	elseif name == "Reagent" then

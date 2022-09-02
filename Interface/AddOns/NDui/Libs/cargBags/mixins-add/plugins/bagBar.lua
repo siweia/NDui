@@ -52,29 +52,9 @@ end
 
 if not BagSlotButton_OnEnter then
 	function BagSlotButton_OnEnter(self)
-		if ( not KeybindFrames_InQuickKeybindMode() ) then
-			GameTooltip:SetOwner(self, "ANCHOR_LEFT");
-			if ( GameTooltip:SetInventoryItem("player", self:GetID()) ) then
-				local bagID = self:GetBagID();
-				local bindingID = 4 - bagID + 1;
-				local bindingKey = GetBindingKey("TOGGLEBAG"..bindingID);
-				if ( bindingKey ) then
-					GameTooltip:AppendText(" "..NORMAL_FONT_COLOR_CODE.."("..bindingKey..")"..FONT_COLOR_CODE_CLOSE);
-				end
-				local bagID = self:GetBagID();
-				if (not IsInventoryItemProfessionBag("player", ContainerIDToInventoryID(bagID))) then
-					for i = 2, 5 do
-						if C_Container.GetBagSlotFlag(bagID, i) then
-							GameTooltip:AddLine(BAG_FILTER_ASSIGNED_TO:format(BAG_FILTER_LABELS[i]));
-							break;
-						end
-					end
-				end
-				GameTooltip:Show();
-			else
-				GameTooltip:SetText(EQUIP_CONTAINER, 1.0, 1.0, 1.0);
-			end
-		end
+		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+		GameTooltip:SetInventoryItem("player", self:GetID())
+		GameTooltip:Show()
 	end
 end
 
@@ -82,7 +62,7 @@ local buttonNum = 0
 function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
-	local isBankBag = (bagID>=5 and bagID<=11)
+	local isBankBag = NDui[4].isNewPatch and bagID > 5 and bagID < 13 or (bagID>=5 and bagID<=11)
 	local button = setmetatable(CreateFrame("ItemButton", name, nil, "BackdropTemplate"), self.__index)
 
 	local invID = (isBankBag and bagID-4) or ContainerIDToInventoryID(bagID)
