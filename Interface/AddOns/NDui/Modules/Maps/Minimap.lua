@@ -559,19 +559,23 @@ function module:Minimap_OnMouseWheel(zoom)
 	end
 end
 
-local NDuiMiniMapTrackingDropDown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
-NDuiMiniMapTrackingDropDown:SetID(1)
-NDuiMiniMapTrackingDropDown:SetClampedToScreen(true)
-NDuiMiniMapTrackingDropDown:Hide()
-NDuiMiniMapTrackingDropDown.noResize = true
-_G.UIDropDownMenu_Initialize(NDuiMiniMapTrackingDropDown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
+function module:BuildMinimapDropDown()
+	local dropdown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
+	dropdown:SetID(1)
+	dropdown:SetClampedToScreen(true)
+	dropdown:Hide()
+	dropdown.noResize = true
+	_G.UIDropDownMenu_Initialize(dropdown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
+
+	module.MinimapTracking = dropdown
+end
 
 function module:Minimap_OnMouseUp(btn)
 	if btn == "MiddleButton" then
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleCalendar()
 	elseif btn == "RightButton" then
-		ToggleDropDownMenu(1, nil, NDuiMiniMapTrackingDropDown, "cursor")
+		ToggleDropDownMenu(1, nil, module.MinimapTracking, "cursor")
 	else
 		if DB.isNewPatch then
 			Minimap:OnClick()
@@ -623,6 +627,7 @@ function module:SetupMinimap()
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
 	self:ShowCalendar()
+	self:BuildMinimapDropDown()
 
 	-- Minimap clicks
 	Minimap:EnableMouseWheel(true)
