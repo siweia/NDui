@@ -831,3 +831,4 @@ L["TotemBar"] = "Totem Actionbar" -- need translation
 L["ClearHealth"] = "Transparent" -- need translation
 L["ClearClass"] = "Gradient Class" -- need translation
 L["PetCastbar"] = "Pet Castbar" -- need translation
+L["ShowGroupRole"] = "Show group roles" -- need translation

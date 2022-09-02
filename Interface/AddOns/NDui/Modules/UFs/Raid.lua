@@ -434,3 +434,20 @@ function UF:RefreshRaidFrameIcons()
 		end
 	end
 end
+
+function UF:ToggleGroupRoles()
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == "raid" and frame.GroupRoleIndicator then
+			if C.db["UFs"]["ShowRole"] then
+				if not frame:IsElementEnabled("GroupRoleIndicator") then
+					frame:EnableElement("GroupRoleIndicator")
+					frame.GroupRoleIndicator:ForceUpdate()
+				end
+			else
+				if frame:IsElementEnabled("GroupRoleIndicator") then
+					frame:DisableElement("GroupRoleIndicator")
+				end
+			end
+		end
+	end
+end

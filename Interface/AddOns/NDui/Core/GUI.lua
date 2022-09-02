@@ -206,6 +206,7 @@ G.DefaultSettings = {
 		CCName = true,
 		RCCName = true,
 		HideTip = false,
+		ShowRole = true,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -893,6 +894,10 @@ local function updateRaidHealthMethod()
 	B:GetModule("UnitFrames"):UpdateRaidHealthMethod()
 end
 
+local function toggleGroupRoles()
+	B:GetModule("UnitFrames"):ToggleGroupRoles()
+end
+
 local function toggleCastBarLatency()
 	B:GetModule("UnitFrames"):ToggleCastBarLatency()
 end
@@ -1111,7 +1116,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
-		{},--blank
 		{1, "UFs", "PartyFrame", L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
@@ -1143,6 +1147,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
+		{1, "UFs", "ShowRole", NewTag..L["ShowGroupRole"].."*", nil, nil, toggleGroupRoles},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},

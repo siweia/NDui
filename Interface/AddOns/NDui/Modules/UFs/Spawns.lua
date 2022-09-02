@@ -733,5 +733,6 @@ function UF:OnLogin()
 		end
 
 		UF:UpdateRaidHealthMethod()
+		UF:ToggleGroupRoles()
 	end
 end
