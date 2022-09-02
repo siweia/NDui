@@ -21,7 +21,9 @@ tinsert(C.defaultThemes, function()
 		GameMenuButtonAddons,
 		GameMenuButtonLogout,
 		GameMenuButtonQuit,
-		GameMenuButtonContinue
+		GameMenuButtonContinue,
+		GameMenuButtonSettings, -- isNewPatch
+		GameMenuButtonEditMode, -- isNewPatch
 	}
 
 	for _, button in next, buttons do

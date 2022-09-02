@@ -16,7 +16,11 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(recruitList.Header)
 	B.CreateBDFrame(recruitList.Header, .25)
 	recruitList.ScrollFrameInset:Hide()
-	B.ReskinScroll(recruitList.ScrollFrame.scrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(recruitList.ScrollBar)
+	else
+		B.ReskinScroll(recruitList.ScrollFrame.scrollBar)
+	end
 
 	local recruitmentFrame = RecruitAFriendRecruitmentFrame
 	B.StripTextures(recruitmentFrame)

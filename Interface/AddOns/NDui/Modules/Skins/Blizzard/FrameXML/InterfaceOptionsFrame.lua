@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if DB.isNewPatch then return end
+	-- todo
 
 	local styled
 

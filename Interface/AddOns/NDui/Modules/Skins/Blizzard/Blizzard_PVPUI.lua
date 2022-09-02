@@ -12,7 +12,7 @@ local function ReskinPvPFrame(frame)
 	B.StripTextures(bar)
 	B.CreateBDFrame(bar, .25)
 	bar:SetStatusBarTexture(DB.bdTex)
-	bar:GetStatusBarTexture():SetGradient("VERTICAL", 1, .8, 0, 6, .4, 0)
+	bar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(1, .8, 0, 1), CreateColor(6, .4, 0, 1))
 
 	local reward = bar.Reward
 	reward.Ring:Hide()
@@ -108,7 +108,11 @@ C.themes["Blizzard_PVPUI"] = function()
 	ReskinPvPFrame(HonorFrame)
 	B.Reskin(HonorFrame.QueueButton)
 	B.ReskinDropDown(HonorFrameTypeDropDown)
-	B.ReskinScroll(HonorFrameSpecificFrameScrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
+	else
+		B.ReskinScroll(HonorFrameSpecificFrameScrollBar)
+	end
 
 	local bonusFrame = HonorFrame.BonusFrame
 	bonusFrame.WorldBattlesTexture:Hide()
@@ -131,23 +135,27 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Honor frame specific
 
-	for _, bu in pairs(HonorFrame.SpecificFrame.buttons) do
-		bu.Bg:Hide()
-		bu.Border:Hide()
-
-		bu:SetNormalTexture("")
-		bu:SetHighlightTexture("")
-
-		local bg = B.CreateBDFrame(bu, 0, true)
-		bg:SetPoint("TOPLEFT", 2, 0)
-		bg:SetPoint("BOTTOMRIGHT", -1, 2)
-
-		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-		bu.SelectedTexture:SetInside(bg)
-
-		B.ReskinIcon(bu.Icon)
-		bu.Icon:SetPoint("TOPLEFT", 5, -3)
+	if DB.isNewPatch then
+		-- todo
+	else
+		for _, bu in pairs(HonorFrame.SpecificFrame.buttons) do
+			bu.Bg:Hide()
+			bu.Border:Hide()
+	
+			bu:SetNormalTexture("")
+			bu:SetHighlightTexture("")
+	
+			local bg = B.CreateBDFrame(bu, 0, true)
+			bg:SetPoint("TOPLEFT", 2, 0)
+			bg:SetPoint("BOTTOMRIGHT", -1, 2)
+	
+			bu.SelectedTexture:SetDrawLayer("BACKGROUND")
+			bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+			bu.SelectedTexture:SetInside(bg)
+	
+			B.ReskinIcon(bu.Icon)
+			bu.Icon:SetPoint("TOPLEFT", 5, -3)
+		end
 	end
 
 	-- Conquest Frame

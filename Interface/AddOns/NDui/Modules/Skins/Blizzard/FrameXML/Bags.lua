@@ -66,6 +66,7 @@ tinsert(C.defaultThemes, function()
 	if C.db["Bags"]["Enable"] then return end
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["DefaultBags"] then return end
+	if DB.isNewPatch then return end
 
 	-- [[ Bags ]]
 

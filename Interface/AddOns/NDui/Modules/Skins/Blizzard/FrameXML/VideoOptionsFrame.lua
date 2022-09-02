@@ -9,6 +9,7 @@ end
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if DB.isNewPatch then return end
 
 	local styledOptions = false
 

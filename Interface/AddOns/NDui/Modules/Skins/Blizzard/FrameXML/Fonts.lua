@@ -159,30 +159,32 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	-- Refont Titles Panel
-	hooksecurefunc("PaperDollTitlesPane_UpdateScrollFrame", function()
-		local bu = PaperDollTitlesPane.buttons
-		for i = 1, #bu do
-			if not bu[i].fontStyled then
-				ReskinFont(bu[i].text, 14)
-				bu[i].fontStyled = true
+	if not DB.isNewPatch then
+		-- Refont Titles Panel
+		hooksecurefunc("PaperDollTitlesPane_UpdateScrollFrame", function()
+			local bu = PaperDollTitlesPane.buttons
+			for i = 1, #bu do
+				if not bu[i].fontStyled then
+					ReskinFont(bu[i].text, 14)
+					bu[i].fontStyled = true
+				end
 			end
-		end
-	end)
+		end)
 
-	-- WhoFrame LevelText
-	hooksecurefunc("WhoList_Update", function()
-		local buttons = WhoListScrollFrame.buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			local level = button.Level
-			if level and not level.fontStyled then
-				level:SetWidth(32)
-				level:SetJustifyH("LEFT")
-				level.fontStyled = true
+		-- WhoFrame LevelText
+		hooksecurefunc("WhoList_Update", function()
+			local buttons = WhoListScrollFrame.buttons
+			for i = 1, #buttons do
+				local button = buttons[i]
+				local level = button.Level
+				if level and not level.fontStyled then
+					level:SetWidth(32)
+					level:SetJustifyH("LEFT")
+					level.fontStyled = true
+				end
 			end
-		end
-	end)
+		end)
+	end
 
 	-- Text color
 	GameFontBlack:SetTextColor(1, 1, 1)

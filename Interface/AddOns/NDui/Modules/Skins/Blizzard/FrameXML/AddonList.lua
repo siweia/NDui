@@ -13,15 +13,34 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(AddonListOkayButton)
 	B.ReskinCheck(AddonListForceLoad)
 	B.ReskinDropDown(AddonCharacterDropDown)
-	B.ReskinScroll(AddonListScrollFrameScrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(AddonList.ScrollBar)
+	else
+		B.ReskinScroll(AddonListScrollFrameScrollBar)
+	end
 
 	AddonListForceLoad:SetSize(26, 26)
 	AddonCharacterDropDown:SetWidth(170)
 
-	for i = 1, MAX_ADDONS_DISPLAYED do
-		local checkbox = _G["AddonListEntry"..i.."Enabled"]
-		B.ReskinCheck(checkbox, true)
-		B.Reskin(_G["AddonListEntry"..i.."Load"])
+	if DB.isNewPatch then
+		-- todo
+		hooksecurefunc(AddonList.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local child = select(i, self.ScrollTarget:GetChildren())
+				if not child.styled then
+					B.ReskinCheck(child.Enabled, true)
+					B.Reskin(child.LoadAddonButton)
+
+					child.styled = true
+				end
+			end
+		end)
+	else
+		for i = 1, MAX_ADDONS_DISPLAYED do
+			local checkbox = _G["AddonListEntry"..i.."Enabled"]
+			B.ReskinCheck(checkbox, true)
+			B.Reskin(_G["AddonListEntry"..i.."Load"])
+		end
 	end
 
 	hooksecurefunc("AddonList_Update", function()

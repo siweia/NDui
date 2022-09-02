@@ -80,9 +80,14 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(searchPanel.BackButton)
 	B.Reskin(searchPanel.BackToGroupButton)
 	B.Reskin(searchPanel.SignUpButton)
-	B.Reskin(searchPanel.ScrollFrame.ScrollChild.StartGroupButton)
+	if DB.isNewPatch then
+		B.Reskin(searchPanel.ScrollBox.StartGroupButton)
+		B.ReskinTrimScroll(searchPanel.ScrollBar)
+	else
+		B.Reskin(searchPanel.ScrollFrame.ScrollChild.StartGroupButton)
+		B.ReskinScroll(searchPanel.ScrollFrame.scrollBar)
+	end
 	B.ReskinInput(searchPanel.SearchBox)
-	B.ReskinScroll(searchPanel.ScrollFrame.scrollBar)
 
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")
@@ -160,7 +165,11 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(applicationViewer.EditButton)
 	B.Reskin(applicationViewer.BrowseGroupsButton)
 	B.ReskinCheck(applicationViewer.AutoAcceptButton)
-	B.ReskinScroll(LFGListApplicationViewerScrollFrameScrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(applicationViewer.ScrollBar)
+	else
+		B.ReskinScroll(LFGListApplicationViewerScrollFrameScrollBar)
+	end
 
 	applicationViewer.RefreshButton:SetSize(24, 24)
 	applicationViewer.RefreshButton.Icon:SetPoint("CENTER")
@@ -254,7 +263,11 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(finderDialog.SelectButton)
 	B.Reskin(finderDialog.CancelButton)
 	B.ReskinInput(finderDialog.EntryBox)
-	B.ReskinScroll(finderDialog.ScrollFrame.scrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(finderDialog.ScrollBar)
+	else
+		B.ReskinScroll(finderDialog.ScrollFrame.scrollBar)
+	end
 
 	-- [[ Application dialog ]]
 

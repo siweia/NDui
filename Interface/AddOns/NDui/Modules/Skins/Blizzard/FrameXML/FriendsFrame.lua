@@ -26,82 +26,86 @@ tinsert(C.defaultThemes, function()
 	FriendsFrameIcon:Hide()
 	B.StripTextures(IgnoreListFrame)
 
-	for i = 1, FRIENDS_TO_DISPLAY do
-		local bu = _G["FriendsListFrameScrollFrameButton"..i]
-		local ic = bu.gameIcon
-
-		bu.background:Hide()
-		bu:SetHighlightTexture(DB.bdTex)
-		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
-		ic:SetSize(22, 22)
-		ic:SetTexCoord(.17, .83, .17, .83)
-
-		bu.bg = CreateFrame("Frame", nil, bu)
-		bu.bg:SetAllPoints(ic)
-		B.CreateBDFrame(bu.bg, 0)
-
-		local travelPass = bu.travelPassButton
-		travelPass:SetSize(22, 22)
-		travelPass:SetPushedTexture("")
-		travelPass:SetDisabledTexture("")
-		travelPass:SetPoint("TOPRIGHT", -3, -6)
-		B.CreateBDFrame(travelPass, 1)
-		local nt = travelPass:GetNormalTexture()
-		nt:SetTexCoord(.1, .9, .1, .9)
-		hooksecurefunc(nt, "SetAtlas", replaceInviteTex)
-		local hl = travelPass:GetHighlightTexture()
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetAllPoints()
-	end
-
-	local function UpdateScroll()
+	if DB.isNewPatch then
+		-- todo
+	else
 		for i = 1, FRIENDS_TO_DISPLAY do
 			local bu = _G["FriendsListFrameScrollFrameButton"..i]
-			if bu.gameIcon:IsShown() then
-				bu.bg:Show()
-				bu.gameIcon:SetPoint("TOPRIGHT", bu.travelPassButton, "TOPLEFT", -4, 0)
-			else
-				bu.bg:Hide()
+			local ic = bu.gameIcon
+
+			bu.background:Hide()
+			bu:SetHighlightTexture(DB.bdTex)
+			bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
+			ic:SetSize(22, 22)
+			ic:SetTexCoord(.17, .83, .17, .83)
+
+			bu.bg = CreateFrame("Frame", nil, bu)
+			bu.bg:SetAllPoints(ic)
+			B.CreateBDFrame(bu.bg, 0)
+
+			local travelPass = bu.travelPassButton
+			travelPass:SetSize(22, 22)
+			travelPass:SetPushedTexture("")
+			travelPass:SetDisabledTexture("")
+			travelPass:SetPoint("TOPRIGHT", -3, -6)
+			B.CreateBDFrame(travelPass, 1)
+			local nt = travelPass:GetNormalTexture()
+			nt:SetTexCoord(.1, .9, .1, .9)
+			hooksecurefunc(nt, "SetAtlas", replaceInviteTex)
+			local hl = travelPass:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetAllPoints()
+		end
+
+		local function UpdateScroll()
+			for i = 1, FRIENDS_TO_DISPLAY do
+				local bu = _G["FriendsListFrameScrollFrameButton"..i]
+				if bu.gameIcon:IsShown() then
+					bu.bg:Show()
+					bu.gameIcon:SetPoint("TOPRIGHT", bu.travelPassButton, "TOPLEFT", -4, 0)
+				else
+					bu.bg:Hide()
+				end
 			end
 		end
-	end
-	hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
-	hooksecurefunc(FriendsListFrameScrollFrame, "update", UpdateScroll)
+		hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
+		hooksecurefunc(FriendsListFrameScrollFrame, "update", UpdateScroll)
 
-	local header = FriendsListFrameScrollFrame.PendingInvitesHeaderButton
-	for i = 1, 11 do
-		select(i, header:GetRegions()):Hide()
-	end
-	local headerBg = B.CreateBDFrame(header, .25)
-	headerBg:SetPoint("TOPLEFT", 2, -2)
-	headerBg:SetPoint("BOTTOMRIGHT", -2, 2)
-
-	local function reskinInvites(self)
-		for invite in self:EnumerateActive() do
-			if not invite.styled then
-				B.Reskin(invite.AcceptButton)
-				B.Reskin(invite.DeclineButton)
-
-				invite.styled = true
+		local header = FriendsListFrameScrollFrame.PendingInvitesHeaderButton
+		for i = 1, 11 do
+			select(i, header:GetRegions()):Hide()
+		end
+		local headerBg = B.CreateBDFrame(header, .25)
+		headerBg:SetPoint("TOPLEFT", 2, -2)
+		headerBg:SetPoint("BOTTOMRIGHT", -2, 2)
+	
+		local function reskinInvites(self)
+			for invite in self:EnumerateActive() do
+				if not invite.styled then
+					B.Reskin(invite.AcceptButton)
+					B.Reskin(invite.DeclineButton)
+	
+					invite.styled = true
+				end
 			end
 		end
-	end
-
-	hooksecurefunc(FriendsListFrameScrollFrame.invitePool, "Acquire", reskinInvites)
-
-	local INVITE_RESTRICTION_NONE = 9
-	hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
-		if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
-			reskinInvites(FriendsListFrameScrollFrame.invitePool)
-		elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
-			local nt = button.travelPassButton:GetNormalTexture()
-			if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
-				nt:SetVertexColor(1, 1, 1)
-			else
-				nt:SetVertexColor(.3, .3, .3)
+	
+		hooksecurefunc(FriendsListFrameScrollFrame.invitePool, "Acquire", reskinInvites)
+	
+		local INVITE_RESTRICTION_NONE = 9
+		hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
+			if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
+				reskinInvites(FriendsListFrameScrollFrame.invitePool)
+			elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+				local nt = button.travelPassButton:GetNormalTexture()
+				if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
+					nt:SetVertexColor(1, 1, 1)
+				else
+					nt:SetVertexColor(.3, .3, .3)
+				end
 			end
-		end
-	end)
+		end)
+	end
 
 	FriendsFrameStatusDropDown:ClearAllPoints()
 	FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
@@ -156,9 +160,17 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(FriendsFrameSendMessageButton)
 	B.Reskin(FriendsFrameIgnorePlayerButton)
 	B.Reskin(FriendsFrameUnsquelchButton)
-	B.ReskinScroll(FriendsListFrameScrollFrame.scrollBar)
-	B.ReskinScroll(IgnoreListFrameScrollFrame.scrollBar)
-	B.ReskinScroll(WhoListScrollFrame.scrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(FriendsListFrame.ScrollBar)
+		B.ReskinTrimScroll(IgnoreListFrame.ScrollBar)
+		B.ReskinTrimScroll(WhoFrame.ScrollBar)
+		B.ReskinTrimScroll(FriendsFriendsFrame.ScrollBar)
+	else
+		B.ReskinScroll(FriendsListFrameScrollFrame.scrollBar)
+		B.ReskinScroll(IgnoreListFrameScrollFrame.scrollBar)
+		B.ReskinScroll(WhoListScrollFrame.scrollBar)
+		B.ReskinScroll(FriendsFriendsScrollFrame.scrollBar)
+	end
 	B.ReskinDropDown(FriendsFrameStatusDropDown)
 	B.ReskinDropDown(WhoFrameDropDown)
 	B.ReskinDropDown(FriendsFriendsFrameDropDown)
@@ -170,7 +182,6 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(FriendsFriendsFrame)
 	B.Reskin(FriendsFriendsFrame.SendRequestButton)
 	B.Reskin(FriendsFriendsFrame.CloseButton)
-	B.ReskinScroll(FriendsFriendsScrollFrame.scrollBar)
 	B.Reskin(WhoFrameWhoButton)
 	B.Reskin(WhoFrameAddFriendButton)
 	B.Reskin(WhoFrameGroupInviteButton)
