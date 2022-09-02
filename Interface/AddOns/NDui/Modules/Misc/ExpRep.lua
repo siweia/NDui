@@ -289,6 +289,7 @@ function M:HookParagonRep()
 end
 
 function M:ParagonReputationSetup()
+	if DB.isNewPatch then return end -- todo
 	if not C.db["Misc"]["ParagonRep"] then return end
 	hooksecurefunc("ReputationFrame_Update", M.HookParagonRep)
 end
