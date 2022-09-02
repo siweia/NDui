@@ -346,6 +346,7 @@ G.DefaultSettings = {
 		SecureColor = {r=1, g=0, b=1},
 		TransColor = {r=1, g=.8, b=0},
 		InsecureColor = {r=1, g=0, b=0},
+		OffTankThreat = false,
 		OffTankColor = {r=.2, g=.7, b=.5},
 		--DPSRevertThreat = false,
 		PPFadeout = true,
@@ -1187,6 +1188,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowPowerUnits", HeaderTag..L["ShowPowerUnits"].."*", true, setupNameplatePowerUnits, updatePowerUnitList, L["PowerUnitsTip"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
+		{1, "Nameplate", "OffTankThreat", NewTag..L["OffTankThreat"].."*", true, nil, nil, L["OffTankThreatTip"]},
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
 		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},

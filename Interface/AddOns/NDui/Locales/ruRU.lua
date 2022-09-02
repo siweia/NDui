@@ -832,3 +832,5 @@ L["ClearHealth"] = "Transparent" -- need translation
 L["ClearClass"] = "Gradient Class" -- need translation
 L["PetCastbar"] = "Pet Castbar" -- need translation
 L["ShowGroupRole"] = "Show group roles" -- need translation
+L["OffTankThreat"] = "Enable offtank threat" -- need translation
+L["OffTankThreatTip"] = "|nBase on party members assigned role, show custom color if unit threat on other tanks.|n|nMake sure all the members are in the right roles." -- need translation

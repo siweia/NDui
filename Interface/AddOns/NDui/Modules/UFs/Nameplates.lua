@@ -169,8 +169,12 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = UF.CustomUnits[name] or UF.CustomUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	local isOffTank, status = UF:CheckThreatStatus(unit)
-	local status = UnitThreatSituation("player", unit) or false -- just in case
+	local isOffTank, status
+	if C.db["Nameplate"]["OffTankThreat"] then
+		isOffTank, status = UF:CheckThreatStatus(unit)
+	else
+		status = UnitThreatSituation("player", unit)
+	end
 	local customColor = C.db["Nameplate"]["CustomColor"]
 	local secureColor = C.db["Nameplate"]["SecureColor"]
 	local transColor = C.db["Nameplate"]["TransColor"]
