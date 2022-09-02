@@ -16,6 +16,12 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 	B.Reskin(LFGListingFrameBackButton)
 	B.Reskin(LFGListingFramePostButton)
 	B.ReskinEditBox(LFGListingComment)
+	B.Reskin(LFGListingFrame.GroupRoleButtons.RolePollButton)
+	B.ReskinDropDown(LFGListingFrame.GroupRoleButtons.RoleDropDown)
+
+	hooksecurefunc("LFGListingRoleIcon_UpdateRoleTexture", function(self)
+		B.ReskinRole(self:GetNormalTexture(), self.roleID)
+	end)
 
 	hooksecurefunc("LFGListingCategorySelection_AddButton", function(self, btnIndex)
 		local bu = self.CategoryButtons[btnIndex]
