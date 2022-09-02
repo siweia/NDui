@@ -1725,6 +1725,8 @@ do
 		if FriendsFrame:IsShown() then
 			if FriendsFrame.selectedTab ~= index then
 				_G["FriendsFrameTab"..index]:Click()
+			else
+				ToggleFrame(FriendsFrame)
 			end
 		else
 			ToggleFrame(FriendsFrame)
