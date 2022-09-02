@@ -505,5 +505,5 @@ info.onMouseUp = function(_, btn)
 
 	if btn ~= "LeftButton" then return end
 	if infoFrame then infoFrame:Hide() end
-	ToggleFrame(FriendsFrame)
+	B:ToggleFriends(1)
 end

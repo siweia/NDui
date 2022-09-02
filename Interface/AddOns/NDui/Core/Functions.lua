@@ -1720,6 +1720,17 @@ do
 			frame:Show()
 		end
 	end
+
+	function B:ToggleFriends(index) -- needs review, maybe taint
+		if FriendsFrame:IsShown() then
+			if FriendsFrame.selectedTab ~= index then
+				_G["FriendsFrameTab"..index]:Click()
+			end
+		else
+			ToggleFrame(FriendsFrame)
+			_G["FriendsFrameTab"..index]:Click()
+		end
+	end
 end
 
 -- Add API
