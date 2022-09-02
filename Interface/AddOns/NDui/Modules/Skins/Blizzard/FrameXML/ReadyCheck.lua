@@ -14,4 +14,14 @@ tinsert(C.defaultThemes, function()
 
 	B.Reskin(ReadyCheckFrameYesButton)
 	B.Reskin(ReadyCheckFrameNoButton)
+
+	-- Role poll
+	B.StripTextures(RolePollPopup)
+	B.SetBD(RolePollPopup)
+	B.Reskin(RolePollPopupAcceptButton)
+	B.ReskinClose(RolePollPopupCloseButton)
+
+	B.ReskinRole(RolePollPopupRoleButtonTank, "TANK")
+	B.ReskinRole(RolePollPopupRoleButtonHealer, "HEALER")
+	B.ReskinRole(RolePollPopupRoleButtonDPS, "DPS")
 end)

@@ -50,7 +50,7 @@ tinsert(C.defaultThemes, function()
 	select(1, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
 	select(4, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
 
-	local bd = B.CreateBDFrame(CompactRaidFrameManager, nil, true)
+	local bd = B.SetBD(CompactRaidFrameManager)
 	bd:SetPoint("TOPLEFT")
 	bd:SetPoint("BOTTOMRIGHT", -9, 9)
 	B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)
