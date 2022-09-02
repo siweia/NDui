@@ -4,19 +4,6 @@ local B, C, L, DB = unpack(ns)
 local MAX_CONTAINER_ITEMS = 36
 
 local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
-local bagIDToInvID = {
-	[1] = 20,
-	[2] = 21,
-	[3] = 22,
-	[4] = 23,
-	[5] = 80,
-	[6] = 81,
-	[7] = 82,
-	[8] = 83,
-	[9] = 84,
-	[10] = 85,
-	[11] = 86,
-}
 
 local function createBagIcon(frame, index)
 	if not frame.bagIcon then
@@ -45,15 +32,24 @@ local function ReskinSortButton(button)
 	highlight:SetAllPoints(button)
 end
 
+local function resetIconBorder(button, quality)
+	if not quality then
+		button.IconBorder:Hide()
+	end
+end
+
 local function ReskinBagSlot(bu)
-	bu:SetNormalTexture("")
-	bu:SetPushedTexture("")
+	bu:SetNormalTexture(DB.blankTex)
+	bu:SetPushedTexture(DB.blankTex)
 	bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	bu.searchOverlay:SetOutside()
 
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
 	bu.bg = B.CreateBDFrame(bu.icon, .25)
 	B.ReskinIconBorder(bu.IconBorder)
+	if bu.SetItemButtonQuality then
+		hooksecurefunc(bu, "SetItemButtonQuality", resetIconBorder)
+	end
 
 	local questTexture = bu.IconQuestTexture
 	if questTexture then
@@ -62,78 +58,141 @@ local function ReskinBagSlot(bu)
 	end
 end
 
+local function updateContainer(frame)
+	local id = frame:GetID()
+	local name = frame:GetName()
+
+	if id == 0 then
+		BagItemSearchBox:ClearAllPoints()
+		BagItemSearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 50, -35)
+		BagItemAutoSortButton:ClearAllPoints()
+		BagItemAutoSortButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -9, -31)
+	end
+
+	for i = 1, frame.size do
+		local itemButton = _G[name.."Item"..i]
+		if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
+			itemButton.IconBorder:SetVertexColor(1, 1, 0)
+		end
+	end
+
+	if frame.bagIcon and id ~= 0 then
+		local invID = ContainerIDToInventoryID(id)
+		if invID then
+			local icon = GetInventoryItemTexture("player", invID)
+			frame.bagIcon:SetTexture(icon or backpackTexture)
+		end
+	end
+end
+
+local function emptySlotBG(button)
+	if button.ItemSlotBackground then
+		button.ItemSlotBackground:Hide()
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if C.db["Bags"]["Enable"] then return end
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["DefaultBags"] then return end
-	if DB.isNewPatch then return end
 
-	-- [[ Bags ]]
-
-	BackpackTokenFrame:GetRegions():Hide()
-
-	for i = 1, 12 do
-		local con = _G["ContainerFrame"..i]
-		local name = _G["ContainerFrame"..i.."Name"]
-
-		B.StripTextures(con, true)
-		con.PortraitButton.Highlight:SetTexture("")
-		createBagIcon(con, i)
-
-		name:ClearAllPoints()
-		name:SetPoint("TOP", 0, -10)
-
-		for k = 1, MAX_CONTAINER_ITEMS do
-			local item = "ContainerFrame"..i.."Item"..k
-			local button = _G[item]
-			if not button.IconQuestTexture then
-				button.IconQuestTexture = _G[item.."IconQuestTexture"]
+	if DB.isNewPatch then
+		for i = 1, 12 do
+			local frame = _G["ContainerFrame"..i]
+			local name = frame.Name
+			name:SetDrawLayer("OVERLAY")
+			name:ClearAllPoints()
+			name:SetPoint("TOP", 0, -10)
+			B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"])
+	
+			frame:DisableDrawLayer("BACKGROUND")
+			frame:DisableDrawLayer("ARTWORK")
+			frame.PortraitButton.Highlight:SetTexture("")
+			createBagIcon(frame, i)
+			hooksecurefunc(frame, "Update", updateContainer)
+	
+			for k = 1, MAX_CONTAINER_ITEMS do
+				local item = "ContainerFrame"..i.."Item"..k
+				local button = _G[item]
+				if not button.IconQuestTexture then
+					button.IconQuestTexture = _G[item.."IconQuestTexture"]
+				end
+				ReskinBagSlot(button)
+				hooksecurefunc(button, "ChangeOwnership", emptySlotBG)
 			end
-			ReskinBagSlot(button)
+	
+			local bg = B.SetBD(frame)
+			bg:SetPoint("TOPLEFT", 8, -4)
+			bg:SetPoint("BOTTOMRIGHT", -4, 3)
 		end
 
-		local f = B.SetBD(con)
-		f:SetPoint("TOPLEFT", 8, -4)
-		f:SetPoint("BOTTOMRIGHT", -4, 3)
+		BackpackTokenFrame.BG:Hide()
+		local bg = B.CreateBDFrame(BackpackTokenFrame, .25)
+		bg:SetPoint("TOPLEFT", 2, -3)
+		bg:SetPoint("BOTTOMRIGHT", -6, 6)
 
-		B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"])
+		hooksecurefunc(BackpackTokenFrame, "Update", function(self)
+			local tokens = self.Tokens
+			if next(tokens) then
+				for i = 1, #tokens do
+					local token = tokens[i]
+					if not token.styled then
+						B.ReskinIcon(token.Icon)
+						token.styled = true
+					end
+				end
+			end
+		end)
+
+		B.ReskinEditBox(BagItemSearchBox)
+		ReskinSortButton(BagItemAutoSortButton)
+
+		-- Combined bags
+		B.ReskinPortraitFrame(ContainerFrameCombinedBags)
+		createBagIcon(ContainerFrameCombinedBags, 1)
+		ContainerFrameCombinedBags.PortraitButton.Highlight:SetTexture("")
+		ContainerFrameCombinedBags.MoneyFrame.BGTemp:Hide()
+	else
+		-- [[ Bags ]]
+	
+		BackpackTokenFrame:GetRegions():Hide()
+	
+		for i = 1, 12 do
+			local con = _G["ContainerFrame"..i]
+			local name = _G["ContainerFrame"..i.."Name"]
+	
+			B.StripTextures(con, true)
+			con.PortraitButton.Highlight:SetTexture("")
+			createBagIcon(con, i)
+	
+			name:ClearAllPoints()
+			name:SetPoint("TOP", 0, -10)
+	
+			for k = 1, MAX_CONTAINER_ITEMS do
+				local item = "ContainerFrame"..i.."Item"..k
+				local button = _G[item]
+				if not button.IconQuestTexture then
+					button.IconQuestTexture = _G[item.."IconQuestTexture"]
+				end
+				ReskinBagSlot(button)
+			end
+	
+			local f = B.SetBD(con)
+			f:SetPoint("TOPLEFT", 8, -4)
+			f:SetPoint("BOTTOMRIGHT", -4, 3)
+	
+			B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"])
+		end
+	
+		for i = 1, 3 do
+			local ic = _G["BackpackTokenFrameToken"..i.."Icon"]
+			B.ReskinIcon(ic)
+		end
+	
+		B.ReskinInput(BagItemSearchBox)
+		ReskinSortButton(BagItemAutoSortButton)
+		hooksecurefunc("ContainerFrame_Update", updateContainer)
 	end
-
-	for i = 1, 3 do
-		local ic = _G["BackpackTokenFrameToken"..i.."Icon"]
-		B.ReskinIcon(ic)
-	end
-
-	B.ReskinInput(BagItemSearchBox)
-
-	hooksecurefunc("ContainerFrame_Update", function(frame)
-		local id = frame:GetID()
-		local name = frame:GetName()
-
-		if id == 0 then
-			BagItemSearchBox:ClearAllPoints()
-			BagItemSearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 50, -35)
-			BagItemAutoSortButton:ClearAllPoints()
-			BagItemAutoSortButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -9, -31)
-		end
-
-		for i = 1, frame.size do
-			local itemButton = _G[name.."Item"..i]
-			if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
-				itemButton.IconBorder:SetVertexColor(1, 1, 0)
-			end
-		end
-
-		if frame.bagIcon then
-			local invID = bagIDToInvID[id]
-			if invID then
-				local icon = GetInventoryItemTexture("player", invID)
-				frame.bagIcon:SetTexture(icon or backpackTexture)
-			end
-		end
-	end)
-
-	ReskinSortButton(BagItemAutoSortButton)
 
 	-- [[ Bank ]]
 
