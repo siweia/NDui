@@ -1230,7 +1230,7 @@ function module:OnLogin()
 		self.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 
-	function BagButton:OnUpdate()
+	function BagButton:OnUpdateButton()
 		self:SetBackdropBorderColor(0, 0, 0)
 
 		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)

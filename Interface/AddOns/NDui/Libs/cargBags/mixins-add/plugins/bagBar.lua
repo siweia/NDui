@@ -103,7 +103,7 @@ function BagButton:Update()
 		end
 	end
 
-	if(self.OnUpdate) then self:OnUpdate() end
+	if(self.OnUpdateButton) then self:OnUpdateButton() end
 end
 
 local function highlight(button, func, bagID)
