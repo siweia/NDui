@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+if DB.isNewPatch then return end
 ------------------------------------
 -- Author: Ketho (EU-Boulderfist)
 -- License: Public Domain

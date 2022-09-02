@@ -6,6 +6,7 @@ local _G = _G
 local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber, table.wipe, next, select, unpack
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, floor, rad = math.min, math.max, math.floor, math.rad
+local CreateColor = CreateColor
 
 -- Math
 do
@@ -84,7 +85,7 @@ do
 				self.timer:SetText(text)
 			else
 				self:SetScript("OnUpdate", nil)
-				self.timer:SetText(nil)
+				self.timer:SetText("")
 			end
 			self.elapsed = 0
 		end
@@ -388,6 +389,7 @@ do
 	end
 
 	function B:HideOption()
+		if not self then return end -- isNewPatch
 		self:SetAlpha(0)
 		self:SetScale(.0001)
 	end
@@ -537,7 +539,11 @@ do
 
 		local tex = self:CreateTexture(nil, "BACKGROUND")
 		tex:SetTexture(DB.bdTex)
-		tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+		if DB.isNewPatch then
+			tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
+		else
+			tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+		end
 		if width then tex:SetWidth(width) end
 		if height then tex:SetHeight(height) end
 
@@ -605,6 +611,7 @@ do
 		if not a then tinsert(C.frames, self) end
 	end
 
+	local gradientFrom, gradientTo = CreateColor(0, 0, 0, .5), CreateColor(.3, .3, .3, .3)
 	function B:CreateGradient()
 		local tex = self:CreateTexture(nil, "BORDER")
 		tex:SetInside()
@@ -612,7 +619,11 @@ do
 		if C.db["Skins"]["FlatMode"] then
 			tex:SetVertexColor(.3, .3, .3, .25)
 		else
-			tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
+			if DB.isNewPatch then
+				tex:SetGradient("Vertical", gradientFrom, gradientTo)
+			else
+				tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
+			end
 		end
 
 		return tex
@@ -878,7 +889,7 @@ do
 	}
 	function B:Reskin(noHighlight, override)
 		if self.SetNormalTexture and not override then self:SetNormalTexture("") end
-		if self.SetHighlightTexture then self:SetHighlightTexture("") end
+		if self.SetHighlightTexture then self:SetHighlightTexture("") self:GetHighlightTexture():SetAlpha(0) end
 		if self.SetPushedTexture then self:SetPushedTexture("") end
 		if self.SetDisabledTexture then self:SetDisabledTexture("") end
 
@@ -1236,7 +1247,7 @@ do
 
 	-- Handle slider
 	function B:ReskinSlider(vertical)
-		self:SetBackdrop(nil)
+		B.HideBackdrop(self)
 		B.StripTextures(self)
 
 		local bg = B.CreateBDFrame(self, 0, true)
@@ -1522,7 +1533,7 @@ do
 	end
 
 	function B:CreateCheckBox()
-		local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
+		local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsBaseCheckButtonTemplate")
 		cb:SetScript("OnClick", nil) -- reset onclick handler
 		B.ReskinCheck(cb)
 

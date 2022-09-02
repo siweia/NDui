@@ -29,12 +29,14 @@ function S:LoadAddOnSkins()
 	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") then return end
 
 	-- Reskin Blizzard UIs
-	for _, func in pairs(C.defaultThemes) do
-		func()
+	if not DB.isNewPatch then
+		for _, func in pairs(C.defaultThemes) do
+			func()
+		end
+		wipe(C.defaultThemes)
 	end
-	wipe(C.defaultThemes)
 
-	if not C.db["Skins"]["BlizzardSkins"] then
+	if DB.isNewPatch or not C.db["Skins"]["BlizzardSkins"] then
 		wipe(C.themes)
 	end
 

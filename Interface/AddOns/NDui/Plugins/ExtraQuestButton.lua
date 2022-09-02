@@ -231,6 +231,7 @@ function ExtraQuestButton:UPDATE_BINDINGS()
 end
 
 function ExtraQuestButton:PLAYER_LOGIN()
+	if DB.isNewPatch then return end
 	RegisterStateDriver(self, "visible", visibilityState)
 	self:SetAttribute("_onattributechanged", onAttributeChanged)
 	self:SetAttribute("type", "item")

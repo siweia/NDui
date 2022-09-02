@@ -16,7 +16,7 @@ C.themes["Blizzard_ItemUpgradeUI"] = function()
 
 	hooksecurefunc(ItemUpgradeFrame, "Update", function(self)
 		if self.upgradeInfo then
-			self.UpgradeItemButton:SetPushedTexture(nil)
+			self.UpgradeItemButton:SetPushedTexture("")
 		end
 	end)
 	local bg = B.CreateBDFrame(ItemUpgradeFrame, .25)

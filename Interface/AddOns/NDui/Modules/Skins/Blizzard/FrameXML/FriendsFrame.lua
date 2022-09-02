@@ -42,8 +42,8 @@ tinsert(C.defaultThemes, function()
 
 		local travelPass = bu.travelPassButton
 		travelPass:SetSize(22, 22)
-		travelPass:SetPushedTexture(nil)
-		travelPass:SetDisabledTexture(nil)
+		travelPass:SetPushedTexture("")
+		travelPass:SetDisabledTexture("")
 		travelPass:SetPoint("TOPRIGHT", -3, -6)
 		B.CreateBDFrame(travelPass, 1)
 		local nt = travelPass:GetNormalTexture()

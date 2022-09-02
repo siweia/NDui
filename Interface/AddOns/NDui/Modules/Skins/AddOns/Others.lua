@@ -175,7 +175,7 @@ local function updateSoulshapeButtons(self)
 			B.ReskinIcon(bu.icon)
 			bu.selectedTexture:SetAlpha(0)
 			bu.background:SetTexture(nil)
-			bu:SetHighlightTexture(nil)
+			bu:SetHighlightTexture("")
 
 			local critterIcon = bu.critterIcon
 			critterIcon:SetTexture("Interface\\ICONS\\Pet_Type_Critter")

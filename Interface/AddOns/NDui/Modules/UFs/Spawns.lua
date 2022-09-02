@@ -226,7 +226,7 @@ local function GetRaidVisibility()
 		end
 	else
 		if C.db["UFs"]["ShowSolo"] then
-			visibility = "show"
+			visibility = "[group,nogroup]show;hide"
 		else
 			visibility = "[group] show;hide"
 		end
@@ -699,7 +699,7 @@ function UF:OnLogin()
 						group.index = i
 						group.groupType = "raid"
 						tinsert(UF.headers, group)
-						RegisterStateDriver(group, "visibility", "show")
+						RegisterStateDriver(group, "visibility", "[group,nogroup]show;hide")
 						RegisterStateDriver(group, "visibility", GetRaidVisibility())
 						CreateTeamIndex(group)
 

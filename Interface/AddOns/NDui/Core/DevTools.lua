@@ -21,7 +21,7 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 DB.Devs = {
 	["寧德-加尔"] = true,
 	["图咿-万色星辰"] = true,
-	["Huniverster-Broxigar"] = true,
+	["Huniverster-Koranos"] = true,
 }
 local function isDeveloper()
 	local rawName = gsub(DB.MyFullName, "%s", "")

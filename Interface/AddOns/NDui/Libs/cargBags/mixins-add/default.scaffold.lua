@@ -59,7 +59,7 @@ local function ItemButton_Update(self, item)
 	self:UpdateLock(item)
 	self:UpdateQuest(item)
 
-	if(self.OnUpdate) then self:OnUpdate(item) end
+	if(self.OnUpdateButton) then self:OnUpdateButton(item) end
 end
 
 --[[!

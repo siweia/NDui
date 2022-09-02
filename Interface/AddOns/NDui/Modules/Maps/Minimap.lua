@@ -14,6 +14,8 @@ local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
 local LE_GARRISON_TYPE_8_0 = Enum.GarrisonType.Type_8_0
 local LE_GARRISON_TYPE_9_0 = Enum.GarrisonType.Type_9_0
 
+local MiniMapMailFrame = DB.isNewPatch and MinimapCluster.MailFrame or MiniMapMailFrame
+
 function module:CreatePulse()
 	if not C.db["Map"]["CombatPulse"] then return end
 
@@ -64,7 +66,7 @@ end
 
 function module:ReskinRegions()
 	-- Garrison
-	hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", function(self)
+	local function updateMinimapButtons(self)
 		self:ClearAllPoints()
 		self:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
 		self:GetNormalTexture():SetTexture(DB.garrTex)
@@ -76,50 +78,78 @@ function module:ReskinRegions()
 			RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
 			RecycleBinToggleButton.settled = true
 		end
-	end)
+	end
 
-	local menuList = {
-		{text =	GARRISON_TYPE_9_0_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_9_0, notCheckable = true},
-		{text =	WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_8_0, notCheckable = true},
-		{text =	ORDER_HALL_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_7_0, notCheckable = true},
-		{text =	GARRISON_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_6_0, notCheckable = true},
-	}
-	GarrisonLandingPageMinimapButton:HookScript("OnMouseDown", function(self, btn)
-		if btn == "RightButton" then
-			HideUIPanel(GarrisonLandingPage)
-			EasyMenu(menuList, B.EasyMenu, self, -80, 0, "MENU", 1)
-		end
-	end)
-	GarrisonLandingPageMinimapButton:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-		GameTooltip:SetText(self.title, 1, 1, 1)
-		GameTooltip:AddLine(self.description, nil, nil, nil, true)
-		GameTooltip:AddLine(L["SwitchGarrisonType"], nil, nil, nil, true)
-		GameTooltip:Show();
-	end)
-	GarrisonLandingPageMinimapButton:SetFrameLevel(999)
+	if DB.isNewPatch then
+		hooksecurefunc(ExpansionLandingPageMinimapButton, "UpdateIcon", updateMinimapButtons)
 
-	-- QueueStatus Button
-	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
-	QueueStatusMinimapButtonBorder:Hide()
-	QueueStatusMinimapButtonIconTexture:SetTexture(nil)
-	QueueStatusMinimapButton:SetFrameLevel(999)
+		-- QueueStatus Button
+		QueueStatusButton:ClearAllPoints()
+		QueueStatusButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
+		QueueStatusButton:Hide()
+		QueueStatusButtonIcon:SetAlpha(0)
+		QueueStatusButton:SetFrameLevel(999)
+	
+		local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
+		queueIcon:SetPoint("CENTER", QueueStatusButton)
+		queueIcon:SetSize(50, 50)
+		queueIcon:SetTexture(DB.eyeTex)
+		local anim = queueIcon:CreateAnimationGroup()
+		anim:SetLooping("REPEAT")
+		anim.rota = anim:CreateAnimation("Rotation")
+		anim.rota:SetDuration(2)
+		anim.rota:SetDegrees(360)
+		hooksecurefunc(QueueStatusFrame, "Update", function()
+			queueIcon:SetShown(QueueStatusButton:IsShown())
+		end)
+		hooksecurefunc(QueueStatusButton.Eye, "PlayAnim", function() anim:Play() end)
+		hooksecurefunc(QueueStatusButton.Eye, "StopAnimating", function() anim:Pause() end)
+	else
+		hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", updateMinimapButtons)
 
-	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
-	queueIcon:SetPoint("CENTER", QueueStatusMinimapButton)
-	queueIcon:SetSize(50, 50)
-	queueIcon:SetTexture(DB.eyeTex)
-	local anim = queueIcon:CreateAnimationGroup()
-	anim:SetLooping("REPEAT")
-	anim.rota = anim:CreateAnimation("Rotation")
-	anim.rota:SetDuration(2)
-	anim.rota:SetDegrees(360)
-	hooksecurefunc("QueueStatusFrame_Update", function()
-		queueIcon:SetShown(QueueStatusMinimapButton:IsShown())
-	end)
-	hooksecurefunc("EyeTemplate_StartAnimating", function() anim:Play() end)
-	hooksecurefunc("EyeTemplate_StopAnimating", function() anim:Stop() end)
+		local menuList = {
+			{text =	GARRISON_TYPE_9_0_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_9_0, notCheckable = true},
+			{text =	WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_8_0, notCheckable = true},
+			{text =	ORDER_HALL_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_7_0, notCheckable = true},
+			{text =	GARRISON_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = LE_GARRISON_TYPE_6_0, notCheckable = true},
+		}
+		GarrisonLandingPageMinimapButton:HookScript("OnMouseDown", function(self, btn)
+			if btn == "RightButton" then
+				HideUIPanel(GarrisonLandingPage)
+				EasyMenu(menuList, B.EasyMenu, self, -80, 0, "MENU", 1)
+			end
+		end)
+		GarrisonLandingPageMinimapButton:SetScript("OnEnter", function(self)
+			GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+			GameTooltip:SetText(self.title, 1, 1, 1)
+			GameTooltip:AddLine(self.description, nil, nil, nil, true)
+			GameTooltip:AddLine(L["SwitchGarrisonType"], nil, nil, nil, true)
+			GameTooltip:Show();
+		end)
+		GarrisonLandingPageMinimapButton:SetFrameLevel(999)
+
+		-- QueueStatus Button
+		QueueStatusMinimapButton:ClearAllPoints()
+		QueueStatusMinimapButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
+		QueueStatusMinimapButtonBorder:Hide()
+		QueueStatusMinimapButtonIconTexture:SetTexture(nil)
+		QueueStatusMinimapButton:SetFrameLevel(999)
+	
+		local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
+		queueIcon:SetPoint("CENTER", QueueStatusMinimapButton)
+		queueIcon:SetSize(50, 50)
+		queueIcon:SetTexture(DB.eyeTex)
+		local anim = queueIcon:CreateAnimationGroup()
+		anim:SetLooping("REPEAT")
+		anim.rota = anim:CreateAnimation("Rotation")
+		anim.rota:SetDuration(2)
+		anim.rota:SetDegrees(360)
+		hooksecurefunc("QueueStatusFrame_Update", function()
+			queueIcon:SetShown(QueueStatusMinimapButton:IsShown())
+		end)
+		hooksecurefunc("EyeTemplate_StartAnimating", function() anim:Play() end)
+		hooksecurefunc("EyeTemplate_StopAnimating", function() anim:Stop() end)
+	end
 
 	-- Difficulty Flags
 	local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
@@ -139,7 +169,7 @@ function module:ReskinRegions()
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
-	GameTimeCalendarInvitesTexture:SetParent("Minimap")
+	GameTimeCalendarInvitesTexture:SetParent(Minimap)
 	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
 	local Invt = CreateFrame("Button", nil, UIParent)
@@ -450,9 +480,9 @@ end
 function module:ShowCalendar()
 	if C.db["Map"]["Calendar"] then
 		if not GameTimeFrame.styled then
-			GameTimeFrame:SetNormalTexture(nil)
-			GameTimeFrame:SetPushedTexture(nil)
-			GameTimeFrame:SetHighlightTexture(nil)
+			GameTimeFrame:SetNormalTexture("")
+			GameTimeFrame:SetPushedTexture("")
+			GameTimeFrame:SetHighlightTexture("")
 			GameTimeFrame:SetSize(18, 18)
 			GameTimeFrame:SetParent(Minimap)
 			GameTimeFrame:ClearAllPoints()
@@ -605,14 +635,23 @@ function module:SetupMinimap()
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
 		"MiniMapTracking",
+		"MinimapCompassTexture", -- isNewPatch
 	}
 
 	for _, v in pairs(frames) do
-		B.HideObject(_G[v])
+		local object = _G[v]
+		if object then
+			B.HideObject(object)
+		end
 	end
 	MinimapCluster:EnableMouse(false)
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
+	if DB.isNewPatch then
+		MinimapCluster.Tracking:Hide()
+		MinimapCluster.BorderTop:Hide()
+		MinimapCluster.ZoneTextButton:Hide()
+	end
 
 	-- Add Elements
 	self:CreatePulse()

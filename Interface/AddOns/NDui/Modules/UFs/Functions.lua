@@ -111,6 +111,7 @@ function UF:UpdateHealthBarColor(self, force)
 	end
 end
 
+local endColor = CreateColor(0, 0, 0, .25)
 function UF.HealthPostUpdate(element, unit, cur, max)
 	local self = element.__owner
 	local mystyle = self.mystyle
@@ -136,7 +137,11 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 			color = self.colors.reaction[UnitReaction(unit, "player")]
 		end
 		if color then
-			element:GetStatusBarTexture():SetGradientAlpha("HORIZONTAL", color[1],color[2],color[3], .75, 0,0,0, .25)
+			if DB.isNewPatch then
+				element:GetStatusBarTexture():SetGradient("HORIZONTAL", CreateColor(color[1], color[2], color[3], .75), endColor)
+			else
+				element:GetStatusBarTexture():SetGradientAlpha("HORIZONTAL", color[1],color[2],color[3], .75, 0,0,0, .25)
+			end
 		end
 	end
 end
@@ -771,7 +776,7 @@ local function reskinTimerBar(bar)
 	if statusbar then
 		statusbar:SetAllPoints()
 		statusbar:SetStatusBarTexture(DB.normTex)
-	else
+	elseif bar.SetStatusBarTexture then -- isNewPatch
 		bar:SetStatusBarTexture(DB.normTex)
 	end
 
@@ -1335,7 +1340,7 @@ function UF:OnUpdateRunes(elapsed)
 	local duration = self.duration + elapsed
 	self.duration = duration
 	self:SetValue(duration)
-	self.timer:SetText(nil)
+	self.timer:SetText("")
 	if C.db["UFs"]["RuneTimer"] then
 		local remain = self.runeDuration - duration
 		if remain > 0 then
@@ -1352,7 +1357,7 @@ function UF.PostUpdateRunes(element, runemap)
 			if runeReady then
 				rune:SetAlpha(1)
 				rune:SetScript("OnUpdate", nil)
-				rune.timer:SetText(nil)
+				rune.timer:SetText("")
 			elseif start then
 				rune:SetAlpha(.6)
 				rune.runeDuration = duration

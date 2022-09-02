@@ -46,9 +46,10 @@ function Bar:MicroButton_Create(parent, data)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
 		button:UnregisterAllEvents()
-		button:SetNormalTexture(nil)
-		button:SetPushedTexture(nil)
-		button:SetDisabledTexture(nil)
+		button:SetNormalTexture("")
+		button:GetNormalTexture():SetAlpha(0) -- isNewPatch
+		button:SetPushedTexture("")
+		button:SetDisabledTexture("")
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
@@ -56,8 +57,10 @@ function Bar:MicroButton_Create(parent, data)
 		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
 		local flash = button.Flash
-		Bar:MicroButton_SetupTexture(flash, texture)
-		if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
+		if flash then
+			Bar:MicroButton_SetupTexture(flash, texture)
+			if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
+		end
 	else
 		bu:SetScript("OnMouseUp", method)
 		B.AddTooltip(bu, "ANCHOR_RIGHT", tooltip)
@@ -132,10 +135,12 @@ function Bar:MicroMenu()
 	end
 
 	-- Default elements
-	B.HideObject(MicroButtonPortrait)
-	B.HideObject(GuildMicroButtonTabard)
-	B.HideObject(MainMenuBarDownload)
+	if not DB.isNewPatch then
+		B.HideObject(MicroButtonPortrait)
+		B.HideObject(GuildMicroButtonTabard)
+		B.HideObject(MainMenuBarDownload)
+		B.HideObject(MainMenuBarPerformanceBar)
+	end
 	B.HideObject(HelpOpenWebTicketButton)
-	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
 end

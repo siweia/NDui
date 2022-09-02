@@ -114,7 +114,7 @@ C.themes["Blizzard_Communities"] = function()
 	local calendarButton = CommunitiesFrame.CommunitiesCalendarButton
 	calendarButton:SetSize(24, 24)
 	calendarButton:SetNormalTexture(1103070)
-	calendarButton:SetPushedTexture(nil)
+	calendarButton:SetPushedTexture("")
 	calendarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	B.ReskinIcon(calendarButton:GetNormalTexture())
 

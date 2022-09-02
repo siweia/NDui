@@ -145,8 +145,10 @@ local function friendsFrame()
 		if infoText then button.info:SetText(infoText) end
 	end
 end
+if not DB.isNewPatch then
 hooksecurefunc(FriendsListFrameScrollFrame, "update", friendsFrame)
 hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame)
+end
 
 -- Whoframe
 local columnTable = {}
@@ -186,5 +188,7 @@ local function updateWhoList()
 		end
 	end
 end
+if not DB.isNewPatch then
 hooksecurefunc("WhoList_Update", updateWhoList)
 hooksecurefunc(WhoListScrollFrame, "update", updateWhoList)
+end

@@ -398,8 +398,13 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			CastingBarFrame_SetUnit(CastingBarFrame, nil)
-			CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
+			if NDui[4].isNewPatch then
+				PlayerCastingBarFrame.SetUnit(PlayerCastingBarFrame, nil)
+				PlayerCastingBarFrame.SetUnit(PetCastingBarFrame, nil)
+			else
+				CastingBarFrame_SetUnit(CastingBarFrame, nil)
+				CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
+			end
 		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then

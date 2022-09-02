@@ -252,6 +252,10 @@ function M:Expbar()
 	bar.restBar = rest
 
 	M:SetupScript(bar)
+
+	if DB.isNewPatch then
+		StatusTrackingBarManager:UnregisterAllEvents()
+	end
 end
 M:RegisterMisc("ExpRep", M.Expbar)
 

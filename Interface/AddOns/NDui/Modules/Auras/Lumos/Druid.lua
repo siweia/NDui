@@ -33,14 +33,14 @@ function A:ChantLumos(self)
 			local button = self.lumos[1]
 			local count = GetSpellCount(190984)
 			UpdateBuff(button, 190984, 48517)
-			button.Count:SetText(count > 0 and count)
+			button.Count:SetText(count > 0 and count or "")
 		end
 
 		do
 			local button = self.lumos[2]
 			local count = GetSpellCount(194153)
 			UpdateBuff(button, 194153, 48518)
-			button.Count:SetText(count > 0 and count)
+			button.Count:SetText(count > 0 and count or "")
 		end
 
 		do
