@@ -46,10 +46,9 @@ function Bar:MicroButton_Create(parent, data)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
 		button:UnregisterAllEvents()
-		button:SetNormalTexture("")
-		button:GetNormalTexture():SetAlpha(0) -- isNewPatch
-		button:SetPushedTexture("")
-		button:SetDisabledTexture("")
+		button:SetNormalTexture(DB.blankTex)
+		button:SetPushedTexture(DB.blankTex)
+		button:SetDisabledTexture(DB.blankTex)
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()

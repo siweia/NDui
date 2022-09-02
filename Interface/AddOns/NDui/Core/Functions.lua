@@ -888,10 +888,10 @@ do
 		"Center",
 	}
 	function B:Reskin(noHighlight, override)
-		if self.SetNormalTexture and not override then self:SetNormalTexture("") end
-		if self.SetHighlightTexture then self:SetHighlightTexture("") self:GetHighlightTexture():SetAlpha(0) end
-		if self.SetPushedTexture then self:SetPushedTexture("") end
-		if self.SetDisabledTexture then self:SetDisabledTexture("") end
+		if self.SetNormalTexture and not override then self:SetNormalTexture(DB.blankTex) end
+		if self.SetHighlightTexture then self:SetHighlightTexture(DB.blankTex) end
+		if self.SetPushedTexture then self:SetPushedTexture(DB.blankTex) end
+		if self.SetDisabledTexture then self:SetDisabledTexture(DB.blankTex) end
 
 		local buttonName = self.GetName and self:GetName()
 		for _, region in pairs(blizzRegions) do
@@ -1022,7 +1022,7 @@ do
 		local thumb = self:GetThumb()
 		if thumb then
 			B.StripTextures(thumb, 0)
-			B.CreateBDFrame(thumb, 0, true):SetBackdropColor(cr, cg, cb, .75)
+			B.CreateBDFrame(thumb, 0):SetBackdropColor(cr, cg, cb, .25)
 		end
 	end
 
@@ -1194,8 +1194,8 @@ do
 
 	-- Handle checkbox and radio
 	function B:ReskinCheck(forceSaturation)
-		self:SetNormalTexture("")
-		self:SetPushedTexture("")
+		self:SetNormalTexture(DB.blankTex)
+		self:SetPushedTexture(DB.blankTex)
 
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetInside(self, 4, 4)
@@ -1247,7 +1247,7 @@ do
 
 	-- Handle slider
 	function B:ReskinSlider(vertical)
-		B.HideBackdrop(self)
+		if self.SetBackdrop then self:SetBackdrop(nil) end -- isNewPatch
 		B.StripTextures(self)
 
 		local bg = B.CreateBDFrame(self, 0, true)
@@ -1283,7 +1283,7 @@ do
 	local function resetCollapseTexture(self, texture)
 		if self.settingTexture then return end
 		self.settingTexture = true
-		self:SetNormalTexture("")
+		self:SetNormalTexture(DB.blankTex)
 
 		if texture and texture ~= "" then
 			if strfind(texture, "Plus") or strfind(texture, "Closed") then
@@ -1299,8 +1299,9 @@ do
 	end
 
 	function B:ReskinCollapse(isAtlas)
-		self:SetHighlightTexture("")
-		self:SetPushedTexture("")
+		self:SetNormalTexture(DB.blankTex)
+		self:SetHighlightTexture(DB.blankTex)
+		self:SetPushedTexture(DB.blankTex)
 
 		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
@@ -1424,8 +1425,11 @@ do
 
 	function B:StyleSearchButton()
 		B.StripTextures(self)
-		if self.icon then B.ReskinIcon(self.icon) end
 		B.CreateBDFrame(self, .25)
+		local icon = self.icon or self.Icon
+		if icon then
+			B.ReskinIcon(icon)
+		end
 
 		self:SetHighlightTexture(DB.bdTex)
 		local hl = self:GetHighlightTexture()
