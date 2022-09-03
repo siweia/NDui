@@ -895,10 +895,6 @@ local function updateRaidHealthMethod()
 	B:GetModule("UnitFrames"):UpdateRaidHealthMethod()
 end
 
-local function toggleGroupRoles()
-	B:GetModule("UnitFrames"):ToggleGroupRoles()
-end
-
 local function toggleCastBarLatency()
 	B:GetModule("UnitFrames"):ToggleCastBarLatency()
 end
@@ -1094,9 +1090,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
 		{1, "UFs", "Arena", L["Arena Frame"], true},
 		{1, "UFs", "ToToT", L["TototUF"]},
+		{1, "UFs", "Portrait", L["UFs Portrait"].."*", true, nil, togglePortraits},
 		{1, "UFs", "ShowAuras", L["ShowAuras"].."*", nil, setupUFAuras, toggleAllAuras},
 		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", true, setupClassPower, toggleUFClassPower},
-		{1, "UFs", "Portrait", L["UFs Portrait"].."*", nil, nil, togglePortraits},
+		{1, "UFs", "ShowRole", NewTag..HeaderTag..L["ShowGroupRole"]},
 		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{4, "UFs", "HealthColor", NewTag..L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateUFTextScale},
@@ -1148,7 +1145,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
-		{1, "UFs", "ShowRole", NewTag..L["ShowGroupRole"].."*", nil, nil, toggleGroupRoles},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},
