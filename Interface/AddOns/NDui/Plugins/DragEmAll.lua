@@ -72,6 +72,7 @@ local lodFrames = {
 	Blizzard_BlackMarketUI		= { ["BlackMarketFrame"] = false },
 	Blizzard_Calendar			= { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true, ["CalendarEventPickerFrame"] = false },
 	Blizzard_ChallengesUI		= { ["ChallengesKeystoneFrame"] = false },
+	Blizzard_ClassTalentUI		= { ["ClassTalentFrame"] = false },
 	Blizzard_ClickBindingUI		= { ["ClickBindingFrame"] = false },
 	Blizzard_Collections		= { ["WardrobeFrame"] = false, ["WardrobeOutfitEditFrame"] = false },
 	Blizzard_CovenantRenown		= { ["CovenantRenownFrame"] = false, },
