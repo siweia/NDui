@@ -1094,8 +1094,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Portrait", L["UFs Portrait"].."*", true, nil, togglePortraits},
 		{1, "UFs", "ShowAuras", L["ShowAuras"].."*", nil, setupUFAuras, toggleAllAuras},
 		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", true, setupClassPower, toggleUFClassPower},
-		{1, "UFs", "ShowRole", NewTag..HeaderTag..L["ShowGroupRole"]},
-		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
+		{1, "UFs", "CCName", L["ClassColor Name"].."*", nil, nil, updateUFTextScale},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{4, "UFs", "HealthColor", NewTag..L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateUFTextScale},
 		{},--blank
@@ -1146,7 +1145,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
-		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], nil, nil, nil, L["SpecRaidPosTip"]},
+		{1, "UFs", "ShowRole", NewTag..L["ShowGroupRole"]},
+		{1, "UFs", "SpecRaidPos", NewTag..L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},
