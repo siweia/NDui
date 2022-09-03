@@ -733,5 +733,52 @@ function UF:OnLogin()
 		end
 
 		UF:UpdateRaidHealthMethod()
+
+		if C.db["UFs"]["SpecRaidPos"] then
+			local changeSpells = {
+				[63644] = true, -- second spec
+				[63645] = true, -- main spec
+			}
+			local function UpdateSpecPos(event, ...)
+				local unit, _, spellID = ...
+				if (event == "UNIT_SPELLCAST_SUCCEEDED" and UnitIsUnit(unit, "player") and changeSpells[spellID]) or event == "ON_LOGIN" then
+					local specIndex = GetActiveTalentGroup()
+					if not specIndex then return end
+
+					if not C.db["Mover"]["RaidPos"..specIndex] then
+						C.db["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
+					end
+					if raidMover then
+						raidMover:ClearAllPoints()
+						raidMover:SetPoint(unpack(C.db["Mover"]["RaidPos"..specIndex]))
+					end
+
+					if not C.db["Mover"]["PartyPos"..specIndex] then
+						C.db["Mover"]["PartyPos"..specIndex] = {"LEFT", "UIParent", "LEFT", 350, 0}
+					end
+					if partyMover then
+						partyMover:ClearAllPoints()
+						partyMover:SetPoint(unpack(C.db["Mover"]["PartyPos"..specIndex]))
+					end
+				end
+			end
+			UpdateSpecPos("ON_LOGIN")
+			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos, "player")
+
+			if raidMover then
+				raidMover:HookScript("OnDragStop", function()
+					local specIndex = GetActiveTalentGroup()
+					if not specIndex then return end
+					C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
+				end)
+			end
+			if partyMover then
+				partyMover:HookScript("OnDragStop", function()
+					local specIndex = GetActiveTalentGroup()
+					if not specIndex then return end
+					C.db["Mover"]["PartyPos"..specIndex] = C.db["Mover"]["PartyFrame"]
+				end)
+			end
+		end
 	end
 end

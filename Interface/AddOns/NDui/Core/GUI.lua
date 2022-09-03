@@ -148,6 +148,7 @@ G.DefaultSettings = {
 		InstanceAuras = true,
 		DispellOnly = false,
 		RaidDebuffScale = 1,
+		SpecRaidPos = false,
 		RaidHealthColor = 1,
 		ShowSolo = false,
 		RaidWidth = 80,
@@ -1145,6 +1146,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
+		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], nil, nil, nil, L["SpecRaidPosTip"]},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},
