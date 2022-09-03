@@ -20,7 +20,12 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 	B.ReskinDropDown(LFGListingFrame.GroupRoleButtons.RoleDropDown)
 
 	hooksecurefunc("LFGListingRoleIcon_UpdateRoleTexture", function(self)
-		B.ReskinRole(self:GetNormalTexture(), self.roleID)
+		if not self.roleID then return end
+
+		if not self.bg then
+			B.ReskinRole(self, self.roleID)
+		end
+		self:GetNormalTexture():SetTexCoord(B.GetRoleTexCoord(self.roleID))
 	end)
 
 	hooksecurefunc("LFGListingCategorySelection_AddButton", function(self, btnIndex)
@@ -40,7 +45,7 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 	local function skinBigRole(roleButton, role)
 		B.ReskinCheck(roleButton.CheckButton)
 		roleButton.CheckButton:SetFrameLevel(6)
-		B.ReskinRole(roleButton:GetNormalTexture(), role)
+		B.ReskinRole(roleButton, role)
 	end
 	skinBigRole(LFGListingFrame.SoloRoleButtons.Tank, "TANK")
 	skinBigRole(LFGListingFrame.SoloRoleButtons.Healer, "HEALER")
