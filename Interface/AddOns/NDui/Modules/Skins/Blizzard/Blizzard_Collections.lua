@@ -651,7 +651,7 @@ C.themes["Blizzard_Collections"] = function()
 			bu.IconCover:SetOutside(bu.Icon)
 
 			bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-			bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+			bu.SelectedTexture:SetColorTexture(cr, cg, cb, .25)
 			bu.SelectedTexture:ClearAllPoints()
 			bu.SelectedTexture:SetPoint("TOPLEFT", 4, -2)
 			bu.SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
