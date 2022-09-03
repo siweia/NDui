@@ -34,6 +34,7 @@ function S:ExtQuestLogFrame()
 	-- Move ClassicCodex
 	if CodexQuest then
 		local buttonShow = CodexQuest.buttonShow
+		if not buttonShow then return end
 		buttonShow:SetWidth(55)
 		buttonShow:SetText(DB.InfoColor..SHOW)
 
