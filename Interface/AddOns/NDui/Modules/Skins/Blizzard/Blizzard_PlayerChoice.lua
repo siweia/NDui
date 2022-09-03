@@ -48,6 +48,8 @@ C.themes["Blizzard_PlayerChoice"] = function()
 
 		self.bg:SetShown(not ignoredTextureKit[self.uiTextureKit])
 
+		if not self.optionFrameTemplate then return end -- isNewPatch
+
 		for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
 			local header = optionFrame.Header
 			if header then

@@ -9,6 +9,7 @@
 	<Script file="ColorPickerFrame.lua"/>
 	<Script file="CompactRaidFrames.lua"/>
 	<Script file="DressUpFrames.lua"/>
+	<Script file="EditModeManager.lua"/>
 	<Script file="EquipmentFlyout.lua"/>
 	<Script file="Fonts.lua"/>
 	<Script file="FriendsFrame.lua"/>
@@ -42,6 +43,7 @@
 	<Script file="QuestInfo.lua"/>
 	<Script file="QuestMapFrame.lua"/>
 	<Script file="QueueStatusFrame.lua"/>
+	<Script file="QuickKeybind.lua"/>
 	<Script file="RaidFrame.lua"/>
 	<Script file="ReadyCheck.lua"/>
 	<Script file="RecruitAFriendFrame.lua"/>
