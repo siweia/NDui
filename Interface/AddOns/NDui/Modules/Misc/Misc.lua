@@ -280,6 +280,14 @@ function M:MoveQuestTracker()
 	tracker:SetClampedToScreen(false)
 	tracker:SetMovable(true)
 	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
+
+	if not DB.isNewPatch then return end
+	hooksecurefunc(tracker, "SetPoint", function(self, _, parent)
+		if parent ~= frame then
+			self:ClearAllPoints()
+			self:SetPoint("TOPRIGHT", frame)
+		end
+	end)
 end
 
 -- Achievement screenshot
