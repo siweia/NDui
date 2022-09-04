@@ -196,6 +196,7 @@ DB.ReminderBuffs = {
 				[1243] = true,
 				[8099] = true,  -- 耐力卷轴
 				[21562] = true, -- 坚韧祷言
+				[46302] = true, -- 基鲁的胜利之歌
 			},
 			depend = 1243,
 			combat = true,
