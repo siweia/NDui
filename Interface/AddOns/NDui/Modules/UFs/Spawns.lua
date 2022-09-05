@@ -766,14 +766,14 @@ function UF:OnLogin()
 			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos, "player")
 
 			if raidMover then
-				raidMover:HookScript("OnDragStop", function()
+				hooksecurefunc(raidMover, "SetPoint", function()
 					local specIndex = GetActiveTalentGroup()
 					if not specIndex then return end
 					C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
 				end)
 			end
 			if partyMover then
-				partyMover:HookScript("OnDragStop", function()
+				hooksecurefunc(partyMover, "SetPoint", function()
 					local specIndex = GetActiveTalentGroup()
 					if not specIndex then return end
 					C.db["Mover"]["PartyPos"..specIndex] = C.db["Mover"]["PartyFrame"]
