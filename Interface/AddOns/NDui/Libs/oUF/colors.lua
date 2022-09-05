@@ -126,6 +126,10 @@ colors.power[16] = colors.power.ARCANE_CHARGES
 colors.power[17] = colors.power.FURY
 colors.power[18] = colors.power.PAIN
 
+-- isNewPatch
+colors.power.ESSENCE = colors.power.ESSENCE or oUF:CreateColor(.2, .58, .5)
+colors.power[19] = colors.power.ESSENCE
+
 -- alternate power, sourced from FrameXML/CompactUnitFrame.lua
 colors.power.ALTERNATE = oUF:CreateColor(0.7, 0.7, 0.6)
 colors.power[10] = colors.power.ALTERNATE
