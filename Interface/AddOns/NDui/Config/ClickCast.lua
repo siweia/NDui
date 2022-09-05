@@ -64,4 +64,5 @@ C.ClickCastList = {
 	},
 	["DEMONHUNTER"] = {},
 	["DEATHKNIGHT"] = {},
+	["EVOKER"] = {},
 }

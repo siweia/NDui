@@ -65,6 +65,7 @@ C.CornerBuffs = {
 	["DEMONHUNTER"] = {},
 	["MAGE"] = {},
 	["DEATHKNIGHT"] = {},
+	["EVOKER"] = {},
 }
 
 -- 小队框体的技能监控CD [spellID] = duration in seconds
