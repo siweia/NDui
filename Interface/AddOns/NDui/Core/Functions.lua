@@ -820,7 +820,7 @@ do
 				if not ticks[i] then
 					ticks[i] = bar:CreateTexture(nil, "OVERLAY")
 					ticks[i]:SetTexture(DB.normTex)
-					ticks[i]:SetVertexColor(0, 0, 0, .7)
+					ticks[i]:SetVertexColor(0, 0, 0)
 					ticks[i]:SetWidth(C.mult)
 					ticks[i]:SetHeight(height)
 				end

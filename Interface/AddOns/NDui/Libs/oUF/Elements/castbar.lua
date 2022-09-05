@@ -92,6 +92,7 @@ local oUF = ns.oUF
 local FALLBACK_ICON = 136243 -- Interface\ICONS\Trade_Engineering
 local FAILED = _G.FAILED or 'Failed'
 local INTERRUPTED = _G.INTERRUPTED or 'Interrupted'
+local isNewPatch = NDui[4].isNewPatch
 
 local function resetAttributes(self)
 	self.castID = nil
@@ -106,11 +107,13 @@ local function CastStart(self, event, unit)
 
 	local element = self.Castbar
 
+	local isChargeSpell, numStages
 	local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit)
 	event = 'UNIT_SPELLCAST_START'
 	if(not name) then
-		name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit)
-		event = 'UNIT_SPELLCAST_CHANNEL_START'
+		name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID, _, numStages = UnitChannelInfo(unit)
+		isChargeSpell = numStages and numStages > 0 -- isNewPatch
+		event = isChargeSpell and 'UNIT_SPELLCAST_EMPOWER_START' or 'UNIT_SPELLCAST_CHANNEL_START'
 	end
 
 	if(not name or (isTradeSkill and element.hideTradeSkills)) then
@@ -126,8 +129,10 @@ local function CastStart(self, event, unit)
 	element.max = endTime - startTime
 	element.startTime = startTime
 	element.delay = 0
-	element.casting = event == 'UNIT_SPELLCAST_START'
+	element.casting = event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_EMPOWER_START' -- isNewPatch
 	element.channeling = event == 'UNIT_SPELLCAST_CHANNEL_START'
+	element.numStages = numStages -- isNewPatch
+	element.isChargeSpell = isChargeSpell -- isNewPatch
 	element.notInterruptible = notInterruptible
 	element.holdTime = 0
 	element.castID = castID
@@ -384,6 +389,11 @@ local function Enable(self, unit)
 
 		self:RegisterEvent('UNIT_SPELLCAST_START', CastStart)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
+		if isNewPatch then
+			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
+			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
+			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
+		end
 		self:RegisterEvent('UNIT_SPELLCAST_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
@@ -439,6 +449,11 @@ local function Disable(self)
 
 		self:UnregisterEvent('UNIT_SPELLCAST_START', CastStart)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
+		if isNewPatch then
+			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
+			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
+			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
+		end
 		self:UnregisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
 		self:UnregisterEvent('UNIT_SPELLCAST_STOP', CastStop)

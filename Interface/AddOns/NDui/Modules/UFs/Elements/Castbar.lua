@@ -32,6 +32,7 @@ local channelingTicks = {
 	[291944] = 6,	-- 再生，赞达拉巨魔
 	[314791] = 4,	-- 变易幻能
 	[324631] = 8,	-- 血肉铸造，盟约
+	[356995] = 3,	-- 裂解，龙希尔
 }
 
 if DB.MyClass == "PRIEST" then
@@ -50,7 +51,7 @@ function UF:OnCastbarUpdate(elapsed)
 		local decimal = self.decimal
 
 		local duration = self.casting and (self.duration + elapsed) or (self.duration - elapsed)
-		if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
+		if (self.casting and duration >= self.max and not self.isChargeSpell) or (self.channeling and duration <= 0) then
 			self.casting = nil
 			self.channeling = nil
 			return
@@ -72,6 +73,16 @@ function UF:OnCastbarUpdate(elapsed)
 		self.duration = duration
 		self:SetValue(duration)
 		self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
+
+		if self.stageString and self.isChargeSpell then
+			self.stageString:SetText("")
+
+			for i = 1, self.numStages, 1 do
+				if duration > ticks[i].duration then
+					self.stageString:SetText(i)
+				end
+			end
+		end
 	elseif self.holdTime > 0 then
 		self.holdTime = self.holdTime - elapsed
 	else
@@ -126,6 +137,35 @@ local function UpdateCastBarColor(self, unit)
 	self:SetStatusBarColor(color.r, color.g, color.b)
 end
 
+function UF:CreateAndUpdateStagePip(bar, ticks, numStages)
+	for i = 1, #ticks do
+		ticks[i]:Hide()
+		ticks[i].duration = 0
+	end
+
+	local width, height = bar:GetSize()
+	local sumDuration = 0
+	local stageMaxValue = bar.max * 1000
+	for i = 1, numStages, 1 do
+		local duration = GetEmpowerStageDuration(i-1)
+		if duration > -1 then
+			sumDuration = sumDuration + duration
+			local portion = sumDuration / stageMaxValue
+			if not ticks[i] then
+				ticks[i] = bar:CreateTexture(nil, "OVERLAY")
+				ticks[i]:SetTexture(DB.normTex)
+				ticks[i]:SetVertexColor(0, 0, 0)
+				ticks[i]:SetWidth(C.mult)
+				ticks[i]:SetHeight(height)
+			end
+			ticks[i].duration = sumDuration / 1000
+			ticks[i]:ClearAllPoints()
+			ticks[i]:SetPoint("LEFT", bar, width * portion, 0 )
+			ticks[i]:Show()
+		end
+	end
+end
+
 function UF:PostCastStart(unit)
 	self:SetAlpha(1)
 	self.Spark:Show()
@@ -154,11 +194,15 @@ function UF:PostCastStart(unit)
 			self.__sendTime = nil
 		end
 
-		local numTicks = 0
-		if self.channeling then
-			numTicks = channelingTicks[self.spellID] or 0
+		if self.isChargeSpell then
+			UF:CreateAndUpdateStagePip(self, ticks, self.numStages)
+		else
+			local numTicks = 0
+			if self.channeling then
+				numTicks = channelingTicks[self.spellID] or 0
+			end
+			B:CreateAndUpdateBarTicks(self, ticks, numTicks)
 		end
-		B:CreateAndUpdateBarTicks(self, ticks, numTicks)
 	end
 
 	UpdateCastBarColor(self, unit)

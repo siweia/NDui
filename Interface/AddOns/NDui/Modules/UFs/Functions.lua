@@ -694,6 +694,13 @@ function UF:CreateCastBar(self)
 		cb.LagString = lagStr
 
 		UF:ToggleCastBarLatency(self)
+
+		if DB.isNewPatch then -- Evoker charge stage
+			local stage = B.CreateFS(cb, 22)
+			stage:ClearAllPoints()
+			stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
+			cb.stageString = stage
+		end
 	elseif mystyle == "nameplate" then
 		name:SetPoint("TOPLEFT", cb, "LEFT", 0, -1)
 		timer:SetPoint("TOPRIGHT", cb, "RIGHT", 0, -1)
