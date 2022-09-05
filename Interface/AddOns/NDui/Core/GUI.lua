@@ -43,6 +43,7 @@ G.DefaultSettings = {
 		VerticleAspect = true,
 		VehButtonSize = 34,
 		TotemBar = true,
+		TotemSize = 40,
 
 		Bar1Size = 34,
 		Bar1Font = 12,
@@ -780,6 +781,10 @@ local function toggleAspectBar()
 	B:GetModule("Actionbar"):ToggleAspectBar()
 end
 
+local function updateTotemSize()
+	B:GetModule("Actionbar"):UpdateTotemSize()
+end
+
 local function toggleBarFader(self)
 	local name = gsub(self.__value, "Fader", "")
 	B:GetModule("Actionbar"):ToggleBarFader(name)
@@ -1066,8 +1071,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "AspectBar", HeaderTag..L["AspectBar"].."*", nil, nil, toggleAspectBar},
 		{1, "Actionbar", "VerticleAspect", L["VerticleAspect"].."*", nil, nil, updateAspectStatus},
-		{3, "Actionbar", "AspectSize", L["AspectSize"].."*", true, {24, 60, 1}, updateAspectStatus},
-		{1, "Actionbar", "TotemBar", NewTag..HeaderTag..L["TotemBar"]},
+		{1, "Actionbar", "TotemBar", NewTag..HeaderTag..L["TotemBar"], true},
+		{3, "Actionbar", "AspectSize", L["AspectSize"].."*", nil, {24, 60, 1}, updateAspectStatus},
+		{3, "Actionbar", "TotemSize", NewTag..L["TotemSize"].."*", true, {24, 60, 1}, updateTotemSize},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},

@@ -1,7 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
-local iconSize = 40
+
+local buttons, margin, iconSize = {}, 5, 40
 
 local colorTable = {
 	summon                = DB.QualityColors[1],
@@ -42,14 +43,15 @@ function Bar:TotemBar()
 	if DB.MyClass ~= "SHAMAN" then return end
 	if not C.db["Actionbar"]["TotemBar"] then return end
 
-	local margin = 5
-	local frame = CreateFrame("Frame", nil, UIParent)
+	iconSize = C.db["Actionbar"]["TotemSize"]
+
+	local frame = CreateFrame("Frame", "NDuiTotemBar", UIParent)
 	frame:SetSize(iconSize*6 + margin*7, iconSize + margin*2)
 	frame:SetPoint("CENTER")
 	B.Mover(frame, L["TotemBar"], "TotemBar", {"BOTTOM", UIParent, 0, 275})
 
 	MultiCastActionBarFrame:SetParent(frame)
-	MultiCastActionBarFrame.SetParent = B.Dummy
+	--MultiCastActionBarFrame.SetParent = B.Dummy
 	MultiCastActionBarFrame:ClearAllPoints()
 	MultiCastActionBarFrame:SetPoint("BOTTOMLEFT", 0, margin/2)
 	MultiCastActionBarFrame.SetPoint = B.Dummy
@@ -61,9 +63,11 @@ function Bar:TotemBar()
 	MultiCastSummonSpellButton:SetSize(iconSize, iconSize)
 	MultiCastSummonSpellButton:ClearAllPoints()
 	MultiCastSummonSpellButton:SetPoint("RIGHT", _G.MultiCastSlotButton1, "LEFT", -margin, 0)
+	tinsert(buttons, MultiCastSummonSpellButton)
 
 	reskinTotemButton(MultiCastRecallSpellButton)
 	MultiCastRecallSpellButton:SetSize(iconSize, iconSize)
+	tinsert(buttons, MultiCastRecallSpellButton)
 
 	local old_update = MultiCastRecallSpellButton_Update
 	function MultiCastRecallSpellButton_Update(button)
@@ -81,13 +85,14 @@ function Bar:TotemBar()
 			button:SetPoint("LEFT", prevButton, "RIGHT", margin, 0)
 		end
 		prevButton = button
+		tinsert(buttons, button)
 	end
 
 	for i = 1, 12 do
 		local button = _G["MultiCastActionButton"..i]
 		reskinTotemButton(button, true)
 		button:SetAttribute("type2", "destroytotem")
-		button:SetAttribute("*totem-slot*", i == 1 and 2 or i == 2 and 1 or i)
+		button:SetAttribute("*totem-slot*", SHAMAN_TOTEM_PRIORITIES[i])
 	end
 
 	hooksecurefunc("MultiCastSlotButton_Update", function(button, slot)
@@ -131,6 +136,7 @@ function Bar:TotemBar()
 			if not button.bg then
 				reskinTotemButton(button, nil, true)
 				button:SetSize(iconSize, iconSize)
+				tinsert(buttons, button)
 			end
 			if not (type == "slot" and i == 1) then
 				button.icon:SetTexCoord(unpack(DB.TexCoord))
@@ -139,4 +145,16 @@ function Bar:TotemBar()
 			button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end)
+end
+
+function Bar:UpdateTotemSize()
+	iconSize = C.db["Actionbar"]["TotemSize"]
+
+	NDuiTotemBar:SetSize(iconSize*6 + margin*7, iconSize + margin*2)
+	MultiCastFlyoutFrameOpenButton:SetWidth(iconSize + C.mult*2)
+	MultiCastFlyoutFrameCloseButton:SetWidth(iconSize + C.mult*2)
+
+	for _, button in pairs(buttons) do
+		button:SetSize(iconSize, iconSize)
+	end
 end
