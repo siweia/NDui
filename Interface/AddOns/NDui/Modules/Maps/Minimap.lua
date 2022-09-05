@@ -74,7 +74,7 @@ function module:ReskinRegions()
 		self:GetHighlightTexture():SetTexture(DB.garrTex)
 		self:SetSize(30, 30)
 
-		if RecycleBinToggleButton and not RecycleBinToggleButton.settled then
+		if self:IsShown() and RecycleBinToggleButton and not RecycleBinToggleButton.settled then
 			RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
 			RecycleBinToggleButton.settled = true
 		end
@@ -466,7 +466,9 @@ function module:ShowMinimapClock()
 		if not TimeManagerClockButton then LoadAddOn("Blizzard_TimeManager") end
 		if not TimeManagerClockButton.styled then
 			TimeManagerClockButton:DisableDrawLayer("BORDER")
-			TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -8)
+			TimeManagerClockButton:ClearAllPoints()
+			TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, DB.isNewPatch and -2 or -8)
+			TimeManagerClockButton:SetFrameLevel(10)
 			TimeManagerClockTicker:SetFont(unpack(DB.Font))
 			TimeManagerClockTicker:SetTextColor(1, 1, 1)
 
@@ -622,6 +624,13 @@ function module:SetupMinimap()
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
+	if DB.isNewPatch then
+		hooksecurefunc(Minimap, "SetPoint", function(frame, _, parent)
+			if parent ~= mover then
+				frame:SetPoint("TOPRIGHT", mover)
+			end
+		end)
+	end
 	Minimap.mover = mover
 
 	self:UpdateMinimapScale()
