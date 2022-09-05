@@ -15,7 +15,6 @@ C.themes["Blizzard_MacroUI"] = function()
 	MacroNewButton:SetPoint("RIGHT", MacroExitButton, "LEFT", -1, 0)
 
 	if DB.isNewPatch then
-		-- todo
 		B.ReskinTrimScroll(MacroFrame.MacroSelector.ScrollBar)
 
 		local function handleMacroButton(button)
