@@ -23,7 +23,7 @@ tinsert(C.defaultThemes, function()
 	AddonCharacterDropDown:SetWidth(170)
 
 	if DB.isNewPatch then
-		-- todo
+		-- needs review on checkbox color
 		hooksecurefunc(AddonList.ScrollBox, "Update", function(self)
 			for i = 1, self.ScrollTarget:GetNumChildren() do
 				local child = select(i, self.ScrollTarget:GetChildren())
@@ -41,23 +41,23 @@ tinsert(C.defaultThemes, function()
 			B.ReskinCheck(checkbox, true)
 			B.Reskin(_G["AddonListEntry"..i.."Load"])
 		end
-	end
 
-	hooksecurefunc("AddonList_Update", function()
-		for i = 1, MAX_ADDONS_DISPLAYED do
-			local entry = _G["AddonListEntry"..i]
-			if entry and entry:IsShown() then
-				local checkbox = _G["AddonListEntry"..i.."Enabled"]
-				if checkbox.forceSaturation then
-					local tex = checkbox:GetCheckedTexture()
-					if checkbox.state == 2 then
-						tex:SetDesaturated(true)
-						tex:SetVertexColor(cr, cg, cb)
-					elseif checkbox.state == 1 then
-						tex:SetVertexColor(1, .8, 0, .8)
+		hooksecurefunc("AddonList_Update", function()
+			for i = 1, MAX_ADDONS_DISPLAYED do
+				local entry = _G["AddonListEntry"..i]
+				if entry and entry:IsShown() then
+					local checkbox = _G["AddonListEntry"..i.."Enabled"]
+					if checkbox.forceSaturation then
+						local tex = checkbox:GetCheckedTexture()
+						if checkbox.state == 2 then
+							tex:SetDesaturated(true)
+							tex:SetVertexColor(cr, cg, cb)
+						elseif checkbox.state == 1 then
+							tex:SetVertexColor(1, .8, 0, .8)
+						end
 					end
 				end
 			end
-		end
-	end)
+		end)
+	end
 end)

@@ -34,7 +34,8 @@ tinsert(C.defaultThemes, function()
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
 		CompactRaidFrameManagerDisplayFrameLockedModeToggle,
 		CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
-		CompactRaidFrameManagerDisplayFrameConvertToRaid
+		CompactRaidFrameManagerDisplayFrameConvertToRaid,
+		CompactRaidFrameManagerDisplayFrameEditMode, -- isNewPatch
 	}
 	for _, button in pairs(buttons) do
 		for i = 1, 9 do

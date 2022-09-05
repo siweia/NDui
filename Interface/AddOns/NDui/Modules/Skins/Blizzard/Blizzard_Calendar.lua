@@ -58,7 +58,11 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarMonthBackground:SetAlpha(0)
 	CalendarYearBackground:SetAlpha(0)
 	CalendarFrameModalOverlay:SetAlpha(.25)
-	CalendarViewHolidayInfoTexture:SetAlpha(0)
+	if DB.isNewPatch then
+		CalendarViewHolidayFrame.Texture:SetAlpha(0)
+	else
+		CalendarViewHolidayInfoTexture:SetAlpha(0)
+	end
 	CalendarTexturePickerAcceptButtonBorder:Hide()
 	CalendarTexturePickerCancelButtonBorder:Hide()
 	B.StripTextures(CalendarClassTotalsButton)
@@ -177,11 +181,19 @@ C.themes["Blizzard_Calendar"] = function()
 	B.ReskinClose(CalendarViewHolidayCloseButton)
 	B.ReskinClose(CalendarViewRaidCloseButton)
 	B.ReskinClose(CalendarMassInviteCloseButton)
-	B.ReskinScroll(CalendarTexturePickerScrollBar)
-	B.ReskinScroll(CalendarViewEventInviteListScrollFrameScrollBar)
-	B.ReskinScroll(CalendarViewEventDescriptionScrollFrameScrollBar)
-	B.ReskinScroll(CalendarCreateEventInviteListScrollFrameScrollBar)
-	B.ReskinScroll(CalendarCreateEventDescriptionScrollFrameScrollBar)
+
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(CalendarTexturePickerFrame.ScrollBar)
+		B.ReskinTrimScroll(CalendarEventPickerFrame.ScrollBar)
+		-- todo
+	else
+		B.ReskinScroll(CalendarTexturePickerScrollBar)
+		B.ReskinScroll(CalendarViewEventInviteListScrollFrameScrollBar)
+		B.ReskinScroll(CalendarViewEventDescriptionScrollFrameScrollBar)
+		B.ReskinScroll(CalendarCreateEventInviteListScrollFrameScrollBar)
+		B.ReskinScroll(CalendarCreateEventDescriptionScrollFrameScrollBar)
+	end
+
 	B.ReskinDropDown(CalendarCreateEventCommunityDropDown)
 	B.ReskinDropDown(CalendarCreateEventTypeDropDown)
 	B.ReskinDropDown(CalendarCreateEventHourDropDown)

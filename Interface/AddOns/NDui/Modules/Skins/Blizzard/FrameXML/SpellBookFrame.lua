@@ -62,8 +62,8 @@ tinsert(C.defaultThemes, function()
 		bu.TextBackground:Hide()
 		bu.TextBackground2:Hide()
 		bu.UnlearnedFrame:SetAlpha(0)
-		bu:SetCheckedTexture("")
-		bu:SetPushedTexture("")
+		bu:SetCheckedTexture(DB.blankTex)
+		bu:SetPushedTexture(DB.blankTex)
 
 		ic.bg = B.ReskinIcon(ic)
 
@@ -143,7 +143,7 @@ tinsert(C.defaultThemes, function()
 		local bu = _G[button]
 		if bu then -- isNewPatch
 			B.StripTextures(bu)
-			bu:SetPushedTexture("")
+			bu:SetPushedTexture(DB.blankTex)
 
 			local icon = bu.iconTexture
 			icon:ClearAllPoints()

@@ -13,6 +13,8 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(frame.CloseButton)
 	B.Reskin(frame.RevertAllChangesButton)
 	B.Reskin(frame.SaveChangesButton)
+	B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
+	B.ReskinCheck(frame.ShowGridCheckButton.Button)
 
 	local dialog = EditModeSystemSettingsDialog
 	B.StripTextures(dialog)
