@@ -22,6 +22,24 @@ function A:HideBlizBuff()
 	B.HideObject(_G.TemporaryEnchantFrame)
 end
 
+function A:ReskinBuffButtons()
+	local buffName, buff
+	for i = 1, BUFF_ACTUAL_DISPLAY do
+		buffName = "BuffButton"..i
+		buff = _G[buffName]
+		if not buff then break end
+		if not buff.styled then
+			B.ReskinIcon(_G[buffName.."Icon"])
+			buff.styled = true
+		end
+	end
+end
+
+function A:UpdateConsolidatedFrame()
+	BuffFrame_Update()
+	A:ReskinBuffButtons()
+end
+
 function A:BuildBuffFrame()
 	if not C.db["Auras"]["BuffFrame"] then return end
 
@@ -59,7 +77,8 @@ function A:BuildBuffFrame()
 		B.SetBD(_G.ConsolidatedBuffsTooltip)
 		B.HideOption(_G.InterfaceOptionsDisplayPanelConsolidateBuffs)
 
-		B:RegisterEvent("UNIT_AURA", BuffFrame_Update, "player")
+		A:ReskinBuffButtons()
+		B:RegisterEvent("UNIT_AURA", A.UpdateConsolidatedFrame, "player")
 	end
 end
 
