@@ -907,6 +907,11 @@ function module:OnLogin()
 			self.canIMogIt:SetSize(13, 13)
 			self.canIMogIt:SetPoint(unpack(CanIMogIt.ICON_LOCATIONS[CanIMogItOptions["iconLocation"]]))
 		end
+
+		if DB.isNewPatch and not self.ProfessionQualityOverlay then
+			self.ProfessionQualityOverlay = self:CreateTexture(nil, "OVERLAY")
+			self.ProfessionQualityOverlay:SetPoint("TOPLEFT", -3, 2)
+		end
 	end
 
 	function MyButton:ItemOnEnter()
@@ -988,6 +993,19 @@ function module:OnLogin()
 				self.IconOverlay:SetVertexColor(color.r, color.g, color.b)
 				self.IconOverlay2:SetAtlas(secondAtlas)
 				self.IconOverlay2:Show()
+			end
+		end
+
+		if self.ProfessionQualityOverlay then -- isNewPatch
+			self.ProfessionQualityOverlay:SetTexture(nil)
+			if item.link then
+				local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(item.link)
+				if not quality then
+					quality = C_TradeSkillUI.GetItemCraftedQualityByItemInfo(item.link)
+				end
+				if quality then
+					self.ProfessionQualityOverlay:SetAtlas(format("Professions-Icon-Quality-Tier%d-Inv", quality), true)
+				end
 			end
 		end
 
