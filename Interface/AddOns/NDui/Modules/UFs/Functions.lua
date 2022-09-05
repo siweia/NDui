@@ -1460,6 +1460,8 @@ function UF:CreateExpRepBar(self)
 end
 
 function UF:CreatePrediction(self)
+	if not C.db["UFs"]["HealPredic"] then return end
+
 	local frame = CreateFrame("Frame", nil, self)
 	frame:SetAllPoints()
 
