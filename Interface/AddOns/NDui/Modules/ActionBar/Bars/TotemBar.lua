@@ -48,7 +48,10 @@ function Bar:TotemBar()
 	local frame = CreateFrame("Frame", "NDuiTotemBar", UIParent)
 	frame:SetSize(iconSize*6 + margin*7, iconSize + margin*2)
 	frame:SetPoint("CENTER")
-	B.Mover(frame, L["TotemBar"], "TotemBar", {"BOTTOM", UIParent, 0, 275})
+	frame.mover = B.Mover(frame, L["TotemBar"], "TotemBar", {"BOTTOM", UIParent, 0, 275})
+	frame.mover:HookScript("OnSizeChanged", function()
+		MultiCastSummonSpellButton_Update(MultiCastSummonSpellButton) -- fix mover anchor
+	end)
 
 	MultiCastActionBarFrame:SetParent(frame)
 	--MultiCastActionBarFrame.SetParent = B.Dummy
@@ -151,6 +154,7 @@ function Bar:UpdateTotemSize()
 	iconSize = C.db["Actionbar"]["TotemSize"]
 
 	NDuiTotemBar:SetSize(iconSize*6 + margin*7, iconSize + margin*2)
+	NDuiTotemBar.mover:SetSize(iconSize*6 + margin*7, iconSize + margin*2)
 	MultiCastFlyoutFrameOpenButton:SetWidth(iconSize + C.mult*2)
 	MultiCastFlyoutFrameCloseButton:SetWidth(iconSize + C.mult*2)
 
