@@ -40,7 +40,8 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 	end)
 
 	B.StripTextures(LFGListingFrameActivityView)
-	B.ReskinTrimScroll(LFGListingFrameActivityViewScrollBar)
+	--B.ReskinTrimScroll(LFGListingFrameActivityViewScrollBar)
+	LFGListingFrameActivityViewScrollBar:SetAlpha(0) -- taint if skinned, so hide it
 
 	local function skinBigRole(roleButton, role)
 		B.ReskinCheck(roleButton.CheckButton)
