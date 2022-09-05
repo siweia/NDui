@@ -471,6 +471,7 @@ local bloodLustDebuffs = {
 	[57724]  = true, -- 心满意足
 	[80354]  = true, -- 时空错位
 	[264689] = true, -- 疲倦
+	[390435]  = true, -- 筋疲力尽，龙希尔
 }
 
 function M:CheckBloodlustStatus(...)

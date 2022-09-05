@@ -27,7 +27,7 @@ local function newAuraFormat(value)
 	local newTable = {}
 	for _, v in pairs(value) do
 		local id = v.AuraID or v.SpellID or v.ItemID or v.SlotID or v.TotemID or v.IntID
-		if id then
+		if id and not v.Disabled then
 			newTable[id] = v
 		end
 	end
@@ -40,7 +40,7 @@ function module:AddNewAuraWatch(class, list)
 			local spellID = v.AuraID or v.SpellID
 			if spellID then
 				local name = GetSpellInfo(spellID)
-				if not name then
+				if not name and not v.Disabled then
 					wipe(v)
 					if DB.isDeveloper then print(format("|cffFF0000Invalid spellID:|r '%s' %s", class, spellID)) end
 				end

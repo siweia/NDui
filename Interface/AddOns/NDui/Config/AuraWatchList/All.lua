@@ -172,6 +172,7 @@ local list = {
 		{AuraID = 32182, UnitID = "player"},	-- 英勇
 		{AuraID = 80353, UnitID = "player"},	-- 时间扭曲
 		{AuraID = 264667, UnitID = "player"},	-- 原始狂怒
+		{AuraID = 390386, UnitID = "player", Disabled = not DB.isNewPatch},	-- 守护之怒，龙希尔
 		{AuraID = 178207, UnitID = "player"},	-- 狂怒战鼓
 		{AuraID = 230935, UnitID = "player"},	-- 高山战鼓
 		{AuraID = 256740, UnitID = "player"},	-- 漩涡战鼓

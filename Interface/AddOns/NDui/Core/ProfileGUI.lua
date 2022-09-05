@@ -370,7 +370,8 @@ local bloodlustFilter = {
 	[57723] = true,
 	[57724] = true,
 	[80354] = true,
-	[264689] = true
+	[264689] = true,
+	[390435] = true, -- evoker
 }
 
 local accountStrValues = {
