@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+
 local r, g, b = DB.r, DB.g, DB.b
+local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
 local function colourPopout(self)
 	self.arrow:SetVertexColor(0, .6, 1)
@@ -28,6 +30,16 @@ local function updateCheckState(button, state)
 	else
 		button.bg:SetBackdropBorderColor(0, 0, 0)
 	end
+end
+
+local function replaceHonorIcon(texture, t1, t2, _, _, force)
+	if force then return end
+
+	if t1 == 0.03125 and t2 == 0.59375 then
+		local faction = UnitFactionGroup("player") or "Horde"
+		button.icon:SetTexture("Interface\\PVPFrame\\PVP-Currency-"..faction)
+	end
+	button.icon:SetTexCoord(x1, x2, y1, y2, true)
 end
 
 tinsert(C.defaultThemes, function()
@@ -240,7 +252,7 @@ tinsert(C.defaultThemes, function()
 
 		button:SetNormalTexture(136243)
 		local nt = button:GetNormalTexture()
-		nt:SetTexCoord(unpack(DB.TexCoord))
+		nt:SetTexCoord(x1, x2, y1, y2)
 		nt:SetInside(button.bg)
 
 		local dt = button:GetDisabledTexture()
@@ -332,7 +344,7 @@ tinsert(C.defaultThemes, function()
 		hl:SetInside(button.bg)
 
 		local icon = button.icon
-		icon:SetTexCoord(unpack(DB.TexCoord))
+		icon:SetTexCoord(x1, x2, y1, y2)
 		icon:SetInside(button.bg)
 
 		_G["GearSetButton"..i.."Name"]:SetFontObject(Game12Font)
@@ -409,6 +421,7 @@ tinsert(C.defaultThemes, function()
 				bu.categoryRight:SetAlpha(0)
 
 				bu.bg = B.ReskinIcon(bu.icon)
+				hooksecurefunc(bu.icon, "SetTexCoord", replaceHonorIcon)
 
 				if bu.expandIcon then
 					bu.expBg = B.CreateBDFrame(bu.expandIcon, 0, true)

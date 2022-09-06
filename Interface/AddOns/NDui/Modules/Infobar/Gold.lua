@@ -161,6 +161,11 @@ info.onMouseUp = function(self, btn)
 	end
 end
 
+local replacedTextures = {
+	[136998] = "Interface\\PVPFrame\\PVP-Currency-Alliance",
+	[137000] = "Interface\\PVPFrame\\PVP-Currency-Horde",
+}
+
 info.onEnter = function(self)
 	local _, anchor, offset = module:GetTooltipAnchor(info)
 	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
@@ -203,6 +208,7 @@ info.onEnter = function(self)
 		end
 		if name and count then
 			local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
+			icon = replacedTextures[icon] or icon -- replace classic honor icons
 			local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
 			if total > 0 then
 				GameTooltip:AddDoubleLine(name, count.."/"..total..iconTexture, 1,1,1, 1,1,1)
