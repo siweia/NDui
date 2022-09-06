@@ -67,6 +67,9 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 		end
 	end
 	hooksecurefunc(LFGListingFrameActivityView.ScrollBox, "Update", skinOptions)
+	hooksecurefunc(LFGListingFrameActivityView, "Show", function(self)
+		skinOptions(self.ScrollBox)
+	end)
 
 	B.StripTextures(LFGBrowseFrame)
 	B.ReskinTrimScroll(LFGBrowseFrameScrollBar)

@@ -1223,6 +1223,7 @@ do
 	end
 
 	function B:ReskinCollapse(isAtlas)
+		self:SetNormalTexture("")
 		self:SetHighlightTexture("")
 		self:SetPushedTexture("")
 		self:SetDisabledTexture("")
