@@ -368,17 +368,19 @@ end
 function M:SortAddOnPanels()
 	local prev
 	for _, frame in pairs(PaperDollFrame.__statPanels) do
-		frame:ClearAllPoints()
-		if not prev then
-			if M.StatPanel2:IsShown() then
-				frame:SetPoint("TOPLEFT", M.StatPanel2, "TOPRIGHT", 3, 0)
+		if frame:IsShown() then
+			frame:ClearAllPoints()
+			if not prev then
+				if M.StatPanel2:IsShown() then
+					frame:SetPoint("TOPLEFT", M.StatPanel2, "TOPRIGHT", 3, 0)
+				else
+					frame:SetPoint("TOPLEFT", PaperDollFrame, "TOPRIGHT", -32, -15-C.mult)
+				end
 			else
-				frame:SetPoint("TOPLEFT", PaperDollFrame, "TOPRIGHT", -32, -15-C.mult)
+				frame:SetPoint("TOPLEFT", prev, "TOPRIGHT", 3, 0)
 			end
-		else
-			frame:SetPoint("TOPLEFT", prev, "TOPRIGHT", 3, 0)
+			prev = frame
 		end
-		prev = frame
 	end
 end
 
