@@ -32,14 +32,17 @@ local function updateCheckState(button, state)
 	end
 end
 
-local function replaceHonorIcon(texture, t1, t2, _, _, force)
-	if force then return end
+local function replaceHonorIcon(texture, t1, t2)
+	if texture.isCutting then return end
+	texture.isCutting = true
 
 	if t1 == 0.03125 and t2 == 0.59375 then
 		local faction = UnitFactionGroup("player") or "Horde"
-		button.icon:SetTexture("Interface\\PVPFrame\\PVP-Currency-"..faction)
+		texture:SetTexture("Interface\\PVPFrame\\PVP-Currency-"..faction)
 	end
-	button.icon:SetTexCoord(x1, x2, y1, y2, true)
+	texture:SetTexCoord(x1, x2, y1, y2)
+
+	texture.isCutting = nil
 end
 
 tinsert(C.defaultThemes, function()
