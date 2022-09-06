@@ -836,4 +836,5 @@ L["PetCastbar"] = "Pet Castbar" -- need translation
 L["ShowGroupRole"] = "Show group roles" -- need translation
 L["OffTankThreat"] = "Enable offtank threat" -- need translation
 L["OffTankThreatTip"] = "|nBase on party members assigned role, show custom color if unit threat on other tanks.|n|nMake sure all the members are in the right roles." -- need translation
-L["HealPrediction"] = "Heal prediction"
+L["HealPrediction"] = "Heal prediction" -- need translation
+L["DemonPage"] = "Warlock demon page" -- need translation

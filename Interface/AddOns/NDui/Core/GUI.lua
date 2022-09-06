@@ -44,6 +44,7 @@ G.DefaultSettings = {
 		VehButtonSize = 34,
 		TotemBar = true,
 		TotemSize = 40,
+		DemonPage = true,
 
 		Bar1Size = 34,
 		Bar1Font = 12,
@@ -1051,6 +1052,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
 		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
+		{1, "Actionbar", "DemonPage", L["DemonPage"]},
 		{},--blank
 		{1, "Actionbar", "CustomBar", HeaderTag..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
 		{1, "Actionbar", "BarXFader", L["CustomBarFader"].."*", nil, nil, toggleBarFader},
