@@ -1021,8 +1021,8 @@ do
 
 		local thumb = self:GetThumb()
 		if thumb then
-			B.StripTextures(thumb, 0)
-			B.CreateBDFrame(thumb, 0):SetBackdropColor(cr, cg, cb, .25)
+			thumb:DisableDrawLayer("BACKGROUND")
+			B.CreateBDFrame(thumb, 0, true):SetBackdropColor(cr, cg, cb, .75)
 		end
 	end
 
