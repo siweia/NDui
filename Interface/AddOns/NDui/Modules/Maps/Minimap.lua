@@ -81,7 +81,7 @@ function module:ReskinRegions()
 	end
 
 	if DB.isNewPatch then
-		updateMinimapButtons(ExpansionLandingPageMinimapButton)
+		ExpansionLandingPageMinimapButton:HookScript("OnShow", updateMinimapButtons)
 		hooksecurefunc(ExpansionLandingPageMinimapButton, "UpdateIcon", updateMinimapButtons)
 
 		-- QueueStatus Button
@@ -106,6 +106,7 @@ function module:ReskinRegions()
 		hooksecurefunc(QueueStatusButton.Eye, "PlayAnim", function() anim:Play() end)
 		hooksecurefunc(QueueStatusButton.Eye, "StopAnimating", function() anim:Pause() end)
 	else
+		GarrisonLandingPageMinimapButton:HookScript("OnShow", updateMinimapButtons)
 		hooksecurefunc("GarrisonLandingPageMinimapButton_UpdateIcon", updateMinimapButtons)
 
 		local menuList = {
