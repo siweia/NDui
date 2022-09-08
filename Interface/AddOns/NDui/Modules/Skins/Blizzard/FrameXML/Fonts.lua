@@ -145,7 +145,7 @@ tinsert(C.defaultThemes, function()
 		if frame:IsForbidden() then return end
 		if not frame.statusText then return end
 
-		local options = DefaultCompactUnitFrameSetupOptions
+		local options = DB.isNewPatch and DefaultCompactMiniFrameSetUpOptions or DefaultCompactUnitFrameSetupOptions
 		frame.statusText:ClearAllPoints()
 		frame.statusText:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 3, options.height/3 - 5)
 		frame.statusText:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -3, options.height/3 - 5)

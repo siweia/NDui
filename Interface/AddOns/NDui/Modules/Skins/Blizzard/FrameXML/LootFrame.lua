@@ -5,46 +5,51 @@ tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["Loot"] then return end
 
-	hooksecurefunc("LootFrame_UpdateButton", function(index)
-		local name = "LootButton"..index
-		local bu = _G[name]
-		if not bu:IsShown() then return end
+	if DB.isNewPatch then
+		-- todo
+	else
+		hooksecurefunc("LootFrame_UpdateButton", function(index)
+			local name = "LootButton"..index
+			local bu = _G[name]
+			if not bu:IsShown() then return end
 
-		local nameFrame = _G[name.."NameFrame"]
-		local questTexture = _G[name.."IconQuestTexture"]
+			local nameFrame = _G[name.."NameFrame"]
+			local questTexture = _G[name.."IconQuestTexture"]
 
-		if not bu.bg then
-			nameFrame:Hide()
-			questTexture:SetAlpha(0)
-			bu:SetNormalTexture("")
-			bu:SetPushedTexture("")
-			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			bu.IconBorder:SetAlpha(0)
-			bu.bg = B.ReskinIcon(bu.icon)
+			if not bu.bg then
+				nameFrame:Hide()
+				questTexture:SetAlpha(0)
+				bu:SetNormalTexture("")
+				bu:SetPushedTexture("")
+				bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+				bu.IconBorder:SetAlpha(0)
+				bu.bg = B.ReskinIcon(bu.icon)
 
-			local bg = B.CreateBDFrame(bu, .25)
-			bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 1, 0)
-			bg:SetPoint("BOTTOMRIGHT", bu.bg, 115, 0)
-		end
+				local bg = B.CreateBDFrame(bu, .25)
+				bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 1, 0)
+				bg:SetPoint("BOTTOMRIGHT", bu.bg, 115, 0)
+			end
 
-		if questTexture:IsShown() then
-			bu.bg:SetBackdropBorderColor(.8, .8, 0)
-		else
-			bu.bg:SetBackdropBorderColor(0, 0, 0)
-		end
-	end)
+			if questTexture:IsShown() then
+				bu.bg:SetBackdropBorderColor(.8, .8, 0)
+			else
+				bu.bg:SetBackdropBorderColor(0, 0, 0)
+			end
+		end)
 
-	LootFrameDownButton:ClearAllPoints()
-	LootFrameDownButton:SetPoint("BOTTOMRIGHT", -8, 6)
-	LootFramePrev:ClearAllPoints()
-	LootFramePrev:SetPoint("LEFT", LootFrameUpButton, "RIGHT", 4, 0)
-	LootFrameNext:ClearAllPoints()
-	LootFrameNext:SetPoint("RIGHT", LootFrameDownButton, "LEFT", -4, 0)
+		LootFrameDownButton:ClearAllPoints()
+		LootFrameDownButton:SetPoint("BOTTOMRIGHT", -8, 6)
+		LootFramePrev:ClearAllPoints()
+		LootFramePrev:SetPoint("LEFT", LootFrameUpButton, "RIGHT", 4, 0)
+		LootFrameNext:ClearAllPoints()
+		LootFrameNext:SetPoint("RIGHT", LootFrameDownButton, "LEFT", -4, 0)
+
+		B.ReskinArrow(LootFrameUpButton, "up")
+		B.ReskinArrow(LootFrameDownButton, "down")
+		LootFramePortraitOverlay:Hide()
+	end
 
 	B.ReskinPortraitFrame(LootFrame)
-	B.ReskinArrow(LootFrameUpButton, "up")
-	B.ReskinArrow(LootFrameDownButton, "down")
-	LootFramePortraitOverlay:Hide()
 
 	-- Bonus roll
 	BonusRollFrame.Background:SetAlpha(0)
