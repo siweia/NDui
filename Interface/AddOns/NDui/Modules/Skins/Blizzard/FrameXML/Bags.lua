@@ -99,34 +99,25 @@ tinsert(C.defaultThemes, function()
 	if DB.isNewPatch then
 		for i = 1, 12 do
 			local frame = _G["ContainerFrame"..i]
-			local name = frame.Name
+			local name = frame.TitleText
 			name:SetDrawLayer("OVERLAY")
 			name:ClearAllPoints()
 			name:SetPoint("TOP", 0, -10)
 			B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"])
 	
-			frame:DisableDrawLayer("BACKGROUND")
-			frame:DisableDrawLayer("ARTWORK")
-			frame.PortraitButton.Highlight:SetTexture("")
+			B.StripTextures(frame)
+			B.SetBD(frame)
+			frame.PortraitContainer:Hide()
 			createBagIcon(frame, i)
 			hooksecurefunc(frame, "Update", updateContainer)
 	
 			for k = 1, MAX_CONTAINER_ITEMS do
-				local item = "ContainerFrame"..i.."Item"..k
-				local button = _G[item]
-				if not button.IconQuestTexture then
-					button.IconQuestTexture = _G[item.."IconQuestTexture"]
-				end
+				local button = _G["ContainerFrame"..i.."Item"..k]
 				ReskinBagSlot(button)
 				hooksecurefunc(button, "ChangeOwnership", emptySlotBG)
 			end
-	
-			local bg = B.SetBD(frame)
-			bg:SetPoint("TOPLEFT", 8, -4)
-			bg:SetPoint("BOTTOMRIGHT", -4, 3)
 		end
 
-		BackpackTokenFrame.BG:Hide()
 		local bg = B.CreateBDFrame(BackpackTokenFrame, .25)
 		bg:SetPoint("TOPLEFT", 2, -3)
 		bg:SetPoint("BOTTOMRIGHT", -6, 6)
@@ -151,7 +142,6 @@ tinsert(C.defaultThemes, function()
 		B.ReskinPortraitFrame(ContainerFrameCombinedBags)
 		createBagIcon(ContainerFrameCombinedBags, 1)
 		ContainerFrameCombinedBags.PortraitButton.Highlight:SetTexture("")
-		ContainerFrameCombinedBags.MoneyFrame.BGTemp:Hide()
 	else
 		-- [[ Bags ]]
 	
