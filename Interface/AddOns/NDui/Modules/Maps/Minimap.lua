@@ -81,6 +81,7 @@ function module:ReskinRegions()
 	end
 
 	if DB.isNewPatch then
+		updateMinimapButtons(ExpansionLandingPageMinimapButton)
 		ExpansionLandingPageMinimapButton:HookScript("OnShow", updateMinimapButtons)
 		hooksecurefunc(ExpansionLandingPageMinimapButton, "UpdateIcon", updateMinimapButtons)
 
