@@ -181,4 +181,15 @@ function S:QuestTracker()
 	S:ExtQuestLogFrame()
 	hooksecurefunc("QuestLog_Update", S.QuestLogLevel)
 	hooksecurefunc(QuestLogListScrollFrame, "update", S.QuestLogLevel)
+
+	-- Extend the wrap text on WatchFrame, needs review
+	hooksecurefunc("WatchFrame_SetLine", function(line)
+		if not line.text then return end
+
+		local height = line:GetHeight()
+		if height > 29 and height < 34 then
+			line:SetHeight(34)
+			line.text:SetHeight(34)
+		end
+	end)
 end
