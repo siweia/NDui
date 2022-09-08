@@ -6,7 +6,37 @@ tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["Loot"] then return end
 
 	if DB.isNewPatch then
-		-- todo
+		B.ReskinClose(LootFrame.ClosePanelButton)
+		B.StripTextures(LootFrame)
+		B.SetBD(LootFrame)
+
+		local function updateHighlight(self)
+			local button = self.__owner
+			if button.HighlightNameFrame:IsShown() then
+				button.bg:SetBackdropBorderColor(1, 1, 1, .5)
+			else
+				button.bg:SetBackdropBorderColor(0, 0, 0)
+			end
+		end
+
+		hooksecurefunc(LootFrame.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local button = select(i, self.ScrollTarget:GetChildren())
+				if not button.styled then
+					B.StripTextures(button.Item, 1)
+					B.ReskinIcon(button.Item.icon)
+
+					button.BorderFrame:SetAlpha(0)
+					button.HighlightNameFrame:SetAlpha(0)
+					button.bg = B.CreateBDFrame(button.HighlightNameFrame, .25)
+					button.Item.__owner = button
+					button.Item:HookScript("OnEnter", updateHighlight)
+					button.Item:HookScript("OnLeave", updateHighlight)
+
+					button.styled = true
+				end
+			end
+		end)
 	else
 		hooksecurefunc("LootFrame_UpdateButton", function(index)
 			local name = "LootButton"..index
@@ -47,9 +77,8 @@ tinsert(C.defaultThemes, function()
 		B.ReskinArrow(LootFrameUpButton, "up")
 		B.ReskinArrow(LootFrameDownButton, "down")
 		LootFramePortraitOverlay:Hide()
+		B.ReskinPortraitFrame(LootFrame)
 	end
-
-	B.ReskinPortraitFrame(LootFrame)
 
 	-- Bonus roll
 	BonusRollFrame.Background:SetAlpha(0)
