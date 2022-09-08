@@ -187,7 +187,7 @@ function S:QuestTracker()
 		if not line.text then return end
 
 		local height = line:GetHeight()
-		if height > 29 and height < 34 then
+		if height > 28 and height < 34 then
 			line:SetHeight(34)
 			line.text:SetHeight(34)
 		end
