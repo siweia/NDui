@@ -10,6 +10,7 @@ local GetQuestIndexForWatch, GetNumQuestLeaderBoards, GetQuestLogLeaderBoard = G
 local FauxScrollFrame_GetOffset = FauxScrollFrame_GetOffset
 
 local cr, cg, cb = DB.r, DB.g, DB.b
+local QUESTS_DISPLAYED = QUESTS_DISPLAYED or 22
 local MAX_QUESTLOG_QUESTS = MAX_QUESTLOG_QUESTS or 20
 local MAX_WATCHABLE_QUESTS = MAX_WATCHABLE_QUESTS or 5
 local headerString = QUESTS_LABEL.." %s/%s"
@@ -62,6 +63,8 @@ function S:QuestLogLevel()
 
 	for i = 1, QUESTS_DISPLAYED, 1 do
 		questLogTitle = buttons[i]
+		if not questLogTitle then break end -- precaution for other addons
+
 		questIndex = i + scrollOffset
 		questTitleTag = questLogTitle.tag
 		questNumGroupMates = questLogTitle.groupMates
