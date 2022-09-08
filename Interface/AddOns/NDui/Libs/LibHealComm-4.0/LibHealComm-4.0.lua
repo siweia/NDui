@@ -1,5 +1,5 @@
 local major = "LibHealComm-4.0"
-local minor = 106
+local minor = 107
 assert(LibStub, format("%s requires LibStub.", major))
 
 local HealComm = LibStub:NewLibrary(major, minor)
@@ -805,6 +805,10 @@ end
 local CalculateHealing, GetHealTargets, AuraHandler, CalculateHotHealing, ResetChargeData, LoadClassData
 
 local function getBaseHealAmount(spellData, spellName, spellID, spellRank)
+	if not spellRank then -- bandage fix
+		print("LibHealComm Error:", spellName, spellID, spellRank)
+		spellRank = 1
+	end
 	if spellID == 37563 then
 		spellData = spellData["37563"]
 	else
