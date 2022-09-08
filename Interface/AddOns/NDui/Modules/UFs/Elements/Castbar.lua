@@ -74,12 +74,13 @@ function UF:OnCastbarUpdate(elapsed)
 		self:SetValue(duration)
 		self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
 
-		if self.stageString and self.isChargeSpell then
+		if self.stageString then
 			self.stageString:SetText("")
-
-			for i = 1, self.numStages, 1 do
-				if duration > ticks[i].duration then
-					self.stageString:SetText(i)
+			if self.isChargeSpell then
+				for i = 1, self.numStages, 1 do
+					if duration > ticks[i].duration then
+						self.stageString:SetText(i)
+					end
 				end
 			end
 		end
