@@ -80,13 +80,21 @@ function Bar:HideBlizz()
 
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
-	InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
-	InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+	if DB.isNewPatch then
+		-- todo
+	else
+		InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
+		InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+	end
 	-- Fix maw block anchor
 	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 	-- Update button grid
-	toggleButtonGrid()
-	hooksecurefunc("MultiActionBar_UpdateGridVisibility", toggleButtonGrid)
+	if DB.isNewPatch then
+		-- todo
+	else
+		toggleButtonGrid()
+		hooksecurefunc("MultiActionBar_UpdateGridVisibility", toggleButtonGrid)
+	end
 	-- Update token panel
 	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 end
