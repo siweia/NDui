@@ -233,6 +233,7 @@ function Bar:StyleActionButton(button, cfg)
 	if button.SlotArt then button.SlotArt:Hide() end
 	if button.RightDivider then button.RightDivider:Hide() end
 	if button.SlotBackground then button.SlotBackground:Hide() end
+	if button.IconMask then button.IconMask:Hide() end
 
 	--backdrop
 	SetupBackdrop(icon)
@@ -431,14 +432,14 @@ function Bar:ReskinBars()
 			},
 		},
 		checkedTexture = {
-			file = "",
+			file = DB.blankTex,
 			points = {
 				{"TOPLEFT", C.mult, -C.mult},
 				{"BOTTOMRIGHT", -C.mult, C.mult},
 			},
 		},
 		highlightTexture = {
-			file = "",
+			file = DB.blankTex,
 			points = {
 				{"TOPLEFT", C.mult, -C.mult},
 				{"BOTTOMRIGHT", -C.mult, C.mult},
