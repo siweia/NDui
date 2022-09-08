@@ -177,4 +177,5 @@ function S:QuestTracker()
 
 	S:ExtQuestLogFrame()
 	hooksecurefunc("QuestLog_Update", S.QuestLogLevel)
+	hooksecurefunc(QuestLogListScrollFrame, "update", S.QuestLogLevel)
 end
