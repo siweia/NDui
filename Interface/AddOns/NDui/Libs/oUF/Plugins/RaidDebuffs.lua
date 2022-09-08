@@ -22,6 +22,7 @@ local DispellPriority = {
 }
 
 local DispellFilter
+local cleanse = IsSpellKnown(51886)
 do
 	local dispellClasses = {
 		["DRUID"] = {
@@ -38,9 +39,9 @@ do
 			["Disease"] = true,
 		},
 		["SHAMAN"] = {
-			["Poison"] = true,
-			["Disease"] = true,
-			["Curse"] = IsSpellKnown(51886),
+			["Poison"] = cleanse,
+			["Disease"] = cleanse,
+			["Curse"] = cleanse,
 		},
 		["MAGE"] = {
 			["Curse"] = true,
