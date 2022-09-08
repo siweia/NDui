@@ -118,6 +118,10 @@ local function IncorrectExpansion() -- left it for the future
 end
 
 B:RegisterEvent("PLAYER_LOGIN", function()
+	if DB.isNewPatch then
+		C.db["Bags"]["Enable"] = false -- todo: why the fuck it taints?
+	end
+
 	-- Initial
 	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
