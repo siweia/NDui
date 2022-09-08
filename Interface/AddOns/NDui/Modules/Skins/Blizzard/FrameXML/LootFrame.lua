@@ -13,7 +13,16 @@ tinsert(C.defaultThemes, function()
 		local function updateHighlight(self)
 			local button = self.__owner
 			if button.HighlightNameFrame:IsShown() then
-				button.bg:SetBackdropBorderColor(1, 1, 1, .5)
+				button.bg:SetBackdropColor(1, 1, 1, .25)
+			else
+				button.bg:SetBackdropColor(0, 0, 0, .25)
+			end
+		end
+
+		local function updatePushed(self)
+			local button = self.__owner
+			if button.PushedNameFrame:IsShown() then
+				button.bg:SetBackdropBorderColor(1, .8, 0, .5)
 			else
 				button.bg:SetBackdropBorderColor(0, 0, 0)
 			end
@@ -23,15 +32,20 @@ tinsert(C.defaultThemes, function()
 			for i = 1, self.ScrollTarget:GetNumChildren() do
 				local button = select(i, self.ScrollTarget:GetChildren())
 				if not button.styled then
-					B.StripTextures(button.Item, 1)
-					B.ReskinIcon(button.Item.icon)
+					local item = button.Item
+					B.StripTextures(item, 1)
+					item.bg = B.ReskinIcon(item.icon)
+					B.ReskinIconBorder(item.IconBorder, true)
 
 					button.BorderFrame:SetAlpha(0)
 					button.HighlightNameFrame:SetAlpha(0)
+					button.PushedNameFrame:SetAlpha(0)
 					button.bg = B.CreateBDFrame(button.HighlightNameFrame, .25)
-					button.Item.__owner = button
-					button.Item:HookScript("OnEnter", updateHighlight)
-					button.Item:HookScript("OnLeave", updateHighlight)
+					item.__owner = button
+					item:HookScript("OnMouseUp", updatePushed)
+					item:HookScript("OnMouseDown", updatePushed)
+					item:HookScript("OnEnter", updateHighlight)
+					item:HookScript("OnLeave", updateHighlight)
 
 					button.styled = true
 				end
