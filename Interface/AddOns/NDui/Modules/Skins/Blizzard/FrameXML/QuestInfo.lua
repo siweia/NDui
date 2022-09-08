@@ -125,7 +125,8 @@ tinsert(C.defaultThemes, function()
 		ReskinRewardButtonWithSize(MapQuestInfoRewardsFrame[name], true)
 	end
 
-	for _, name in next, {"HonorFrame", "SkillPointFrame", "ArtifactXPFrame"} do
+	--for _, name in next, {"HonorFrame", "SkillPointFrame", "ArtifactXPFrame"} do
+	for _, name in next, {"SkillPointFrame", "ArtifactXPFrame"} do -- don't handle honor frame, needs review
 		ReskinRewardButtonWithSize(QuestInfoRewardsFrame[name])
 	end
 
