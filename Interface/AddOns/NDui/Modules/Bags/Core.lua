@@ -997,16 +997,8 @@ function module:OnLogin()
 		end
 
 		if self.ProfessionQualityOverlay then -- isNewPatch
-			self.ProfessionQualityOverlay:SetTexture(nil)
-			if item.link then
-				local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(item.link)
-				if not quality then
-					quality = C_TradeSkillUI.GetItemCraftedQualityByItemInfo(item.link)
-				end
-				if quality then
-					self.ProfessionQualityOverlay:SetAtlas(format("Professions-Icon-Quality-Tier%d-Inv", quality), true)
-				end
-			end
+			self.ProfessionQualityOverlay:SetAtlas(nil)
+			SetItemCraftingQualityOverlay(self, item.link)
 		end
 
 		if C.db["Bags"]["CustomItems"][item.id] and not C.db["Bags"]["ItemFilter"] then
