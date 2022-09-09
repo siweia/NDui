@@ -947,12 +947,7 @@ function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, ca
 			return true
 		end
 	elseif style == "raid" then
-		if C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID] then
-			element.__owner.rawSpellID = spellID
-			return true
-		else
-			element.__owner.rawSpellID = nil
-		end
+		return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if element.__owner.plateType == "NameOnly" then
 			return UF.NameplateFilter[1][spellID]
@@ -1011,7 +1006,7 @@ function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spel
 	local parent = element.__owner
 	if debuffBlackList[spellID] then
 		return false
-	elseif (C.db["UFs"]["RaidBuffIndicator"] and UF.CornerSpells[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
+	elseif (C.db["UFs"]["RaidBuffIndicator"] and UF.CornerSpells[spellID]) or parent.RaidDebuffs.spellID == spellID then
 		return false
 	elseif isBossAura or SpellIsPriorityAura(spellID) then
 		return true
