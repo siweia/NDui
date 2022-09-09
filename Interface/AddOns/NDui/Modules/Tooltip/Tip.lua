@@ -549,6 +549,11 @@ TT:RegisterTooltips("NDui", function()
 		f:HookScript("OnShow", TT.ReskinTooltip)
 	end
 
+	if SettingsTooltip then -- isNewPatch
+		TT.ReskinTooltip(SettingsTooltip)
+		SettingsTooltip:SetScale(UIParent:GetScale())
+	end
+
 	-- DropdownMenu
 	local dropdowns = {"DropDownList", "L_DropDownList", "Lib_DropDownList"}
 	local function reskinDropdown()
