@@ -44,6 +44,9 @@ function module:UpdateChannelNames(text, ...)
 	-- Timestamp
 	if NDuiADB["TimestampFormat"] > 1 then
 		local locTime, realmTime = GetCurrentTime()
+		if not CHAT_TIMESTAMP_FORMAT then
+			CHAT_TIMESTAMP_FORMAT = GetCVar("showTimestamps") -- isNewPatch
+		end
 		local oldTimeStamp = CHAT_TIMESTAMP_FORMAT and gsub(BetterDate(CHAT_TIMESTAMP_FORMAT, locTime), "%[([^]]*)%]", "%%[%1%%]")
 		if oldTimeStamp then
 			text = gsub(text, oldTimeStamp, "")
