@@ -879,17 +879,8 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 	end
 end
 
-local function bolsterPreUpdate(element)
-	element.bolster = 0
-	element.bolsterIndex = nil
+function UF.PreUpdateAura(element)
 	element.hasTheDot = nil
-end
-
-local function bolsterPostUpdate(element)
-	local button = element.bolsterIndex
-	if button then
-		button.count:SetText(element.bolster)
-	end
 end
 
 function UF.PostUpdateGapIcon(_, _, icon)
@@ -906,19 +897,13 @@ local isCasterPlayer = {
 function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 
-	if C.db["Nameplate"]["ColorByDot"] and style == "nameplate" and caster == "player" and C.db["Nameplate"]["DotSpells"][spellID] then
-		element.hasTheDot = true
-	end
-
-	if name and spellID == 209859 then
-		element.bolster = element.bolster + 1
-		if not element.bolsterIndex then
-			element.bolsterIndex = button
-			return true
-		end
-	elseif style == "raid" then
+	if style == "raid" then
 		return C.RaidBuffs["ALL"][name] or NDuiADB["RaidAuraWatch"][spellID]
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
+		if C.db["Nameplate"]["ColorByDot"] and isCasterPlayer[caster] and C.db["Nameplate"]["DotSpells"][spellID] then
+			element.hasTheDot = true
+		end
+
 		if element.__owner.plateType == "NameOnly" then
 			return UF.NameplateFilter[1][spellID]
 		elseif UF.NameplateFilter[2][spellID] then
@@ -1151,8 +1136,7 @@ function UF:CreateAuras(self)
 	bu.PostCreateIcon = UF.PostCreateIcon
 	bu.PostUpdateIcon = UF.PostUpdateIcon
 	bu.PostUpdateGapIcon = UF.PostUpdateGapIcon
-	bu.PreUpdate = bolsterPreUpdate
-	bu.PostUpdate = bolsterPostUpdate
+	bu.PreUpdate = UF.PreUpdateAura
 
 	self.Auras = bu
 end
