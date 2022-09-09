@@ -372,12 +372,10 @@ function info:FriendsPanel_UpdateButton(button)
 		button.zone:SetText(format("%s%s", zoneColor, infoText))
 		if client == CLIENT_WOW_DIFF then
 			button.gameIcon:SetTexture(BNet_GetClientTexture(BNET_CLIENT_WOW))
-			button.gameIcon:SetVertexColor(.3, .3, .3)
 		elseif client == BNET_CLIENT_WOW then
 			button.gameIcon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..factionName)
 		else
 			button.gameIcon:SetTexture(BNet_GetClientTexture(client))
-			button.gameIcon:SetVertexColor(1, 1, 1)
 		end
 
 		button.isBNet = true
