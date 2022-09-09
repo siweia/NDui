@@ -27,6 +27,7 @@ local list = {
 		{AuraID = 51271, UnitID = "player"},	-- 冰霜之柱
 		{AuraID = 51124, UnitID = "player"},	-- 杀戮机器
 		{AuraID = 51460, UnitID = "player"},	-- 符文腐蚀
+		{AuraID = 49796, UnitID = "player", Flash = true},	-- 黑锋冰寒
 		{AuraID = 48743, UnitID = "player", Value = true},	-- 天灾契约
 	},
 	["Focus Aura"] = {		-- 焦点光环组
