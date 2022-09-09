@@ -936,10 +936,6 @@ local isCasterPlayer = {
 function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.mystyle
 
-	if C.db["Nameplate"]["ColorByDot"] and style == "nameplate" and caster == "player" and C.db["Nameplate"]["DotSpells"][spellID] then
-		element.hasTheDot = true
-	end
-
 	if name and spellID == 209859 then
 		element.bolster = element.bolster + 1
 		if not element.bolsterIndex then
@@ -949,6 +945,10 @@ function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, ca
 	elseif style == "raid" then
 		return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
+		if C.db["Nameplate"]["ColorByDot"] and isCasterPlayer[caster] and C.db["Nameplate"]["DotSpells"][spellID] then
+			element.hasTheDot = true
+		end
+
 		if element.__owner.plateType == "NameOnly" then
 			return UF.NameplateFilter[1][spellID]
 		elseif UF.NameplateFilter[2][spellID] then
