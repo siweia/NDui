@@ -295,6 +295,7 @@ local list = {
 		{AuraID = 230087, UnitID = "player", Flash = true},	-- 卡上，振作
 		{AuraID = 228993, UnitID = "player", Flash = true},	-- 卡下，腐蚀之池
 		{AuraID = 228331, UnitID = "player", Flash = true},	-- 卡下，爆裂充能
+		{AuraID = 227480, UnitID = "player", Flash = true},	-- 卡下，烈焰狂风
 		-- 团本
 		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
 		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
