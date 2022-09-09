@@ -13,7 +13,6 @@ local frames = {
 
 	-- Blizz Frames
 	["AddonList"] = false,
-	["AudioOptionsFrame"] = false,
 	["ChannelFrame"] = false,
 	["ChatConfigFrame"] = false,
 	["DressUpFrame"] = false,
@@ -22,7 +21,6 @@ local frames = {
 	["GuildInviteFrame"] = false,
 	["GuildRegistrarFrame"] = false,
 	["HelpFrame"] = false,
-	["InterfaceOptionsFrame"] = false,
 	["ItemTextFrame"] = false,
 	["LootFrame"] = false,
 	["MailFrame"] = false,
@@ -45,8 +43,14 @@ local frames = {
 	["TokenFrame"] = true,
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
-	["VideoOptionsFrame"] = false,
 }
+if DB.isNewPatch then
+	frames["SettingsPanel"] = false
+else
+	frames["AudioOptionsFrame"] = false
+	frames["InterfaceOptionsFrame"] = false
+	frames["VideoOptionsFrame"] = false
+end
 
 -- Frame Existing Check
 local function IsFrameExists()
