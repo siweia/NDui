@@ -34,7 +34,35 @@ tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	QuestFont:SetTextColor(1, 1, 1)
+
 	if DB.isNewPatch then
+		B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
+		B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
+
+		hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local button = select(i, self.ScrollTarget:GetChildren())
+				if not button.styled then
+					local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+					if buttonText and buttonText:IsObjectType("FontString") then
+						replaceGossipText(button, button:GetText())
+						hooksecurefunc(button, "SetText", replaceGossipText)
+						hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+					end
+
+					button.styled = true
+				end
+			end
+		end)
+
+		-- todo
+		for i = 1, 4 do
+			local notch = GossipFrame.FriendshipStatusBar["Notch"..i]
+			if notch then
+				notch:SetColorTexture(0, 0, 0)
+				notch:SetSize(C.mult, 16)
+			end
+		end
 	else
 		GossipGreetingText:SetTextColor(1, 1, 1)
 
