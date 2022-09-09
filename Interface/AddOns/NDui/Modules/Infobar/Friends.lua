@@ -60,8 +60,10 @@ local function buildFriendTable(num)
 end
 
 local function sortBNFriends(a, b)
-	if a[5] and b[5] then
-		return a[5] > b[5]
+	if DB.MyFaction == "Alliance" then
+		return a[5] == b[5] and a[4] < b[4] or a[5] > b[5]
+	else
+		return a[5] == b[5] and a[4] > b[4] or a[5] > b[5]
 	end
 end
 
@@ -71,7 +73,7 @@ local function buildBNetTable(num)
 	for i = 1, num do
 		local _, accountName, battleTag, _, charName, gameID, _, isOnline, _, isAFK, isDND, broadcastText, note, _, broadcastTime = BNGetFriendInfo(i)
 		if isOnline then
-			local _, _, client, realmName, _, _, _, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, _, wowProjectID = BNGetGameAccountInfo(gameID)
+			local _, _, client, realmName, _, factionName, _, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, _, wowProjectID = BNGetGameAccountInfo(gameID)
 
 			charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
 			class = DB.ClassList[class]
@@ -101,7 +103,7 @@ local function buildBNetTable(num)
 			end
 			if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_DIFF end
 
-			tinsert(bnetTable, {i, accountName, charName, gameID, client, realmName, status, class, level, infoText, note, broadcastText, broadcastTime})
+			tinsert(bnetTable, {i, accountName, charName, factionName, client, realmName, status, class, level, infoText, note, broadcastText, broadcastTime})
 		end
 	end
 
@@ -356,16 +358,14 @@ function info:FriendsPanel_UpdateButton(button)
 		button.data = friendTable[index]
 	else
 		local bnetIndex = index-onlineFriends
-		local _, accountName, charName, gameID, client, _, status, class, _, infoText = unpack(bnetTable[bnetIndex])
+		local _, accountName, charName, factionName, client, _, status, class, _, infoText = unpack(bnetTable[bnetIndex])
 
 		button.status:SetTexture(status)
 		local zoneColor = inactiveZone
 		local name = inactiveZone..charName
 		if client == BNET_CLIENT_WOW then
-			if CanCooperateWithGameAccount(gameID) then
-				local color = DB.ClassColors[class] or GetQuestDifficultyColor(1)
-				name = B.HexRGB(color)..charName
-			end
+			local color = DB.ClassColors[class] or GetQuestDifficultyColor(1)
+			name = B.HexRGB(color)..charName
 			zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
 		end
 		button.name:SetText(format("%s%s|r (%s|r)", DB.InfoColor, accountName, name))
@@ -373,6 +373,8 @@ function info:FriendsPanel_UpdateButton(button)
 		if client == CLIENT_WOW_DIFF then
 			button.gameIcon:SetTexture(BNet_GetClientTexture(BNET_CLIENT_WOW))
 			button.gameIcon:SetVertexColor(.3, .3, .3)
+		elseif client == BNET_CLIENT_WOW then
+			button.gameIcon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..factionName)
 		else
 			button.gameIcon:SetTexture(BNet_GetClientTexture(client))
 			button.gameIcon:SetVertexColor(1, 1, 1)
