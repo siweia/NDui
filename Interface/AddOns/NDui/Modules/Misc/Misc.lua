@@ -744,6 +744,7 @@ end
 -- Flyout buttons by holding key ALT
 function M:FlyoutOnKeyAlt()
 	hooksecurefunc("PaperDollItemSlotButton_OnEnter", function(self)
+		if InCombatLockdown() then return end -- taint protect
 		PaperDollItemSlotButton_UpdateFlyout(self)
 	end)
 
