@@ -104,7 +104,7 @@ local function UpdatePixelScale(event)
 	isScaling = false
 end
 
-function B:Initialize()
+B:RegisterEvent("PLAYER_LOGIN", function()
 	-- Initial
 	SetCVar("useUiScale", "1") -- Fix blizzard chatframe offset
 	B:SetupUIScale()
@@ -121,8 +121,8 @@ function B:Initialize()
 	end
 
 	B.Modules = modules
-end
 
-B:RegisterEvent("PLAYER_LOGIN", B.Initialize)
+	if B.InitCallback then B:InitCallback() end
+end)
 
 _G[addonName] = ns
