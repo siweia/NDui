@@ -83,14 +83,6 @@ function module:AddDeprecatedGroup()
 	wipe(C.DeprecatedAuras)
 end
 
--- RaidFrame spells
-local RaidBuffs = {}
-function module:AddClassSpells(list)
-	for class, value in pairs(list) do
-		RaidBuffs[class] = value
-	end
-end
-
 -- RaidFrame debuffs
 local RaidDebuffs = {}
 function module:RegisterDebuff(_, instID, _, spellID, level)
@@ -219,7 +211,6 @@ function module:OnLogin()
 	RaidDebuffs[0] = {} -- OTHER spells
 	module:AddDeprecatedGroup()
 	C.AuraWatchList = AuraWatchList
-	C.RaidBuffs = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
 
 	module:CheckPartySpells()

@@ -942,8 +942,6 @@ function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, ca
 			element.bolsterIndex = button
 			return true
 		end
-	elseif style == "raid" then
-		return C.RaidBuffs["ALL"][spellID] or NDuiADB["RaidAuraWatch"][spellID]
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if C.db["Nameplate"]["ColorByDot"] and isCasterPlayer[caster] and C.db["Nameplate"]["DotSpells"][spellID] then
 			element.hasTheDot = true
@@ -979,43 +977,6 @@ function UF.UnitCustomFilter(element, _, button, name, _, _, _, _, _, _, isSteal
 			return name
 		elseif C.db["UFs"][value.."BuffType"] == 3 then
 			return isStealable
-		end
-	end
-end
-
-function UF.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
-	if isBossAura then
-		return true
-	else
-		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
-		local isPlayerSpell = (caster == "player" or caster == "pet" or caster == "vehicle")
-		if hasCustom then
-			return showForMySpec or (alwaysShowMine and isPlayerSpell)
-		else
-			return isPlayerSpell and canApplyAura and not SpellIsSelfBuff(spellID)
-		end
-	end
-end
-
-local debuffBlackList = {
-	[206151] = true,
-	[296847] = true,
-	[338906] = true,
-}
-function UF.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
-	local parent = element.__owner
-	if debuffBlackList[spellID] then
-		return false
-	elseif (C.db["UFs"]["RaidBuffIndicator"] and UF.CornerSpells[spellID]) or parent.RaidDebuffs.spellID == spellID then
-		return false
-	elseif isBossAura or SpellIsPriorityAura(spellID) then
-		return true
-	else
-		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat("player") and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
-		if hasCustom then
-			return showForMySpec or (alwaysShowMine and (caster == "player" or caster == "pet" or caster == "vehicle"))
-		else
-			return true
 		end
 	end
 end
@@ -1154,16 +1115,6 @@ function UF:CreateAuras(self)
 		bu.__value = "Focus"
 		UF:ConfigureAuras(bu)
 		bu.CustomFilter = UF.UnitCustomFilter
-	elseif mystyle == "raid" then
-		bu.initialAnchor = "LEFT"
-		bu:SetPoint("LEFT", self, 15, 0)
-		bu.size = 18*C.db["UFs"]["SMRScale"]/10
-		bu.numTotal = 1
-		bu.disableCooldown = true
-		bu.gap = false
-		bu.disableMouse = true
-		bu.showDebuffType = nil
-		bu.CustomFilter = UF.CustomFilter
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-y"] = "UP"
@@ -1201,21 +1152,9 @@ function UF:CreateBuffs(self)
 	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 
-	if self.mystyle == "raid" then
-		bu.initialAnchor = "BOTTOMRIGHT"
-		bu["growth-x"] = "LEFT"
-		bu:ClearAllPoints()
-		bu:SetPoint("BOTTOMRIGHT", self.Health, -C.mult, C.mult)
-		bu.num = (self.raidType == "simple" or not C.db["UFs"]["ShowRaidBuff"]) and 0 or 3
-		bu.size = C.db["UFs"]["RaidBuffSize"]
-		bu.CustomFilter = UF.RaidBuffFilter
-		bu.disableMouse = C.db["UFs"]["BuffClickThru"]
-		bu.fontSize = C.db["UFs"]["RaidBuffSize"]-2
-	else -- boss and arena
-		bu.__value = "Boss"
-		UF:ConfigureBuffAndDebuff(bu)
-		bu.CustomFilter = UF.UnitCustomFilter
-	end
+	bu.__value = "Boss"
+	UF:ConfigureBuffAndDebuff(bu)
+	bu.CustomFilter = UF.UnitCustomFilter
 
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.showStealableBuffs = true
@@ -1234,66 +1173,16 @@ function UF:CreateDebuffs(self)
 	bu["growth-y"] = "DOWN"
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 	bu.showDebuffType = true
-	if mystyle == "raid" then
-		bu.initialAnchor = "BOTTOMLEFT"
-		bu["growth-x"] = "RIGHT"
-		bu:SetPoint("BOTTOMLEFT", self.Health, C.mult, C.mult)
-		bu.num = (self.raidType == "simple" or not C.db["UFs"]["ShowRaidDebuff"]) and 0 or 3
-		bu.size = C.db["UFs"]["RaidDebuffSize"]
-		bu.CustomFilter = UF.RaidDebuffFilter
-		bu.disableMouse = C.db["UFs"]["DebuffClickThru"]
-		bu.fontSize = C.db["UFs"]["RaidDebuffSize"]-2
-	else -- boss and arena
-		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
-		bu.__value = "Boss"
-		UF:ConfigureBuffAndDebuff(bu, true)
-		bu.CustomFilter = UF.UnitCustomFilter
-	end
+	bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
+	bu.__value = "Boss"
+	UF:ConfigureBuffAndDebuff(bu, true)
+	bu.CustomFilter = UF.UnitCustomFilter
 
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.PostCreateIcon = UF.PostCreateIcon
 	bu.PostUpdateIcon = UF.PostUpdateIcon
 
 	self.Debuffs = bu
-end
-
-function UF:UpdateRaidAuras()
-	for _, frame in pairs(oUF.objects) do
-		if frame.mystyle == "raid" then
-			local debuffs = frame.Debuffs
-			if debuffs then
-				debuffs.num = (frame.raidType == "simple" or not C.db["UFs"]["ShowRaidDebuff"]) and 0 or 3
-				debuffs.size = C.db["UFs"]["RaidDebuffSize"]
-				debuffs.fontSize = C.db["UFs"]["RaidDebuffSize"]-2
-				debuffs.disableMouse = C.db["UFs"]["DebuffClickThru"]
-				UF:UpdateAuraContainer(frame, debuffs, debuffs.num)
-				debuffs:ForceUpdate()
-			end
-
-			local buffs = frame.Buffs
-			if buffs then
-				buffs.num = (frame.raidType == "simple" or not C.db["UFs"]["ShowRaidBuff"]) and 0 or 3
-				buffs.size = C.db["UFs"]["RaidBuffSize"]
-				buffs.fontSize = C.db["UFs"]["RaidBuffSize"]-2
-				buffs.disableMouse = C.db["UFs"]["BuffClickThru"]
-				UF:UpdateAuraContainer(frame, buffs, buffs.num)
-				buffs:ForceUpdate()
-			end
-		end
-	end
-end
-
-local function refreshAurasElements(self)
-	local buffs = self.Buffs
-	if buffs then buffs:ForceUpdate() end
-
-	local debuffs = self.Debuffs
-	if debuffs then debuffs:ForceUpdate() end
-end
-
-function UF:RefreshAurasByCombat(self)
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", refreshAurasElements, true)
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", refreshAurasElements, true)
 end
 
 -- Class Powers
