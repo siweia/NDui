@@ -1,14 +1,11 @@
 # NDui Classic
 
-## [3.2.1](https://github.com/siweia/NDui/tree/3.2.1) (2022-9-7)
+## [3.2.2](https://github.com/siweia/NDui/tree/3.2.2) (2022-9-10)
 
-- Update reminder for Priest.
-- Update mover for GroupLootContainer.
-- Fix mover anchor when 'SpecRaidPos' on, by using mover control.
-- Reskin buff buttons in the consolidated frame.
-- Option to resize Shaman totembar.
-- Skins: fix taint in LFG frame.
-- Option to disable heal prediction.
-- Fix infobar gold module.
-- Replace honor textures.
-- Option to toggle Warlock demon page.
+- Update LibHealComm.
+- Update default skins.
+- Fix quest level in QuestLog after scrolling.
+- Extend the WatchFrame wrap text into two lines if necessary.
+- Update aura.
+- Update infobar friends module, now sort by faction groups.
+- Item flyouts by holding key ALT now disable in combat.
