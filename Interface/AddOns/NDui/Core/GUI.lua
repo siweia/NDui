@@ -520,7 +520,6 @@ G.AccountSettings = {
 	DBMRequest = false,
 	SkadaRequest = false,
 	BWRequest = false,
-	RaidClickSets = {}, -- deprecated
 	ClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},
