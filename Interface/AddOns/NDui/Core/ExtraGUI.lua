@@ -611,11 +611,7 @@ function G:SetupNameplateFilter(parent)
 end
 
 local function updateCornerSpells()
-	local UF = B:GetModule("UnitFrames")
-	if UF then
-		UF:UpdateCornerSpells()
-		UF:BuildNameListFromID()
-	end
+	B:GetModule("UnitFrames"):UpdateCornerSpells()
 end
 
 function G:SetupSpellsIndicator(parent)

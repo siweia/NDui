@@ -19,6 +19,7 @@ function UF:SpellsIndicator_OnUpdate(elapsed)
 end
 
 UF.CornerSpells = {}
+UF.CornerSpellsByName = {}
 function UF:UpdateCornerSpells()
 	wipe(UF.CornerSpells)
 
@@ -34,6 +35,16 @@ function UF:UpdateCornerSpells()
 		if next(value) then
 			local r, g, b = unpack(value[2])
 			UF.CornerSpells[spellID] = {value[1], {r, g, b}, value[3]}
+		end
+	end
+
+	-- By name
+	wipe(UF.CornerSpellsByName)
+
+	for spellID, value in pairs(UF.CornerSpells) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			UF.CornerSpellsByName[name] = value
 		end
 	end
 end

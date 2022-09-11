@@ -403,7 +403,6 @@ function UF:OnLogin()
 		SetCVar("predictedHealth", 1)
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
-		UF:BuildNameListFromID()
 		UF:UpdateRaidBuffsWhite()
 		UF:UpdateRaidDebuffsBlack()
 		UF.headers = {}
