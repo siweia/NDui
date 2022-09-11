@@ -535,6 +535,7 @@ L["FilterEquipment"] = "장비 필터링"
 L["FilterEquipSet"] = "Filter equipment sets" -- need translation
 L["FilterConsumable"] = "소모품 필터링"
 L["FilterLegendary"] = "전설품질템 필터링"
+L["FilterCollection"] = "Filter collections" -- need translation
 L["FilterFavourite"] = "나의 필터링"
 L["FilterGoods"] = "재료등 잡템 필터링"
 L["FilterQuest"] = "퀘템 필터링"

@@ -100,6 +100,20 @@ local function isItemLegendary(item)
 	return item.quality == LE_ITEM_QUALITY_LEGENDARY
 end
 
+local collectionBlackList = {}
+local collectionIDs = {
+	[LE_ITEM_MISCELLANEOUS_MOUNT] = LE_ITEM_CLASS_MISCELLANEOUS,
+	[LE_ITEM_MISCELLANEOUS_COMPANION_PET] = LE_ITEM_CLASS_MISCELLANEOUS,
+}
+local function isMountOrPet(item)
+	return not collectionBlackList[item.id] and item.subClassID and collectionIDs[item.subClassID] == item.classID
+end
+local function isItemCollection(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterCollection"] then return end
+	return isMountOrPet(item)
+end
+
 local function isItemCustom(item, index)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterFavourite"] then return end
@@ -145,6 +159,8 @@ function module:GetFilters()
 	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) end
 	filters.onlyReagent = function(item) return item.bagID == -3 end
 	filters.onlyKeyring = function(item) return isItemKeyRing(item) end
+	filters.bagCollection = function(item) return isItemInBag(item) and isItemCollection(item) end
+	filters.bankCollection = function(item) return isItemInBank(item) and isItemCollection(item) end
 	filters.bagGoods = function(item) return isItemInBag(item) and isTradeGoods(item) end
 	filters.bankGoods = function(item) return isItemInBank(item) and isTradeGoods(item) end
 	filters.bagQuest = function(item) return isItemInBag(item) and isQuestItem(item) end

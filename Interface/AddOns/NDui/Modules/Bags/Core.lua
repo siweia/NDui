@@ -724,16 +724,17 @@ function module:OnLogin()
 	end
 
 	function Backpack:OnInit()
-		AddNewContainer("Bag", 12, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 13, "Junk", filters.bagsJunk)
 		for i = 1, 5 do
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "AmmoItem", filters.bagAmmo)
 		AddNewContainer("Bag", 8, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 7, "Equipment", filters.bagEquipment)
-		AddNewContainer("Bag", 10, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 9, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 11, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 9, "BagCollection", filters.bagCollection)
+		AddNewContainer("Bag", 11, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 10, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 12, "BagQuest", filters.bagQuest)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -753,9 +754,10 @@ function module:OnLogin()
 		AddNewContainer("Bank", 8, "BankEquipSet", filters.bankEquipSet)
 		AddNewContainer("Bank", 9, "BankLegendary", filters.bankLegendary)
 		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
-		AddNewContainer("Bank", 11, "BankConsumable", filters.bankConsumable)
-		AddNewContainer("Bank", 10, "BankGoods", filters.bankGoods)
-		AddNewContainer("Bank", 12, "BankQuest", filters.bankQuest)
+		AddNewContainer("Bank", 10, "BankCollection", filters.bankCollection)
+		AddNewContainer("Bank", 12, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 11, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 13, "BankQuest", filters.bankQuest)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
@@ -1004,6 +1006,8 @@ function module:OnLogin()
 			label = BAG_FILTER_CONSUMABLES
 		elseif name == "Junk" then
 			label = BAG_FILTER_JUNK
+		elseif strmatch(name, "Collection") then
+			label = COLLECTIONS
 		elseif name == "Keyring" then
 			label = KEYRING
 		elseif strmatch(name, "Goods") then

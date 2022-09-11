@@ -99,6 +99,7 @@ G.DefaultSettings = {
 		FilterConsumable = true,
 		FilterEquipment = true,
 		FilterLegendary = true,
+		FilterCollection = true,
 		FilterFavourite = true,
 		FilterGoods = false,
 		FilterQuest = false,
