@@ -41,6 +41,15 @@ local function handleSpellButton(self)
 	end
 end
 
+local function handleSkillButton(button)
+	if not button then return end
+	button:SetCheckedTexture(DB.blankTex)
+	button:SetPushedTexture(DB.blankTex)
+	button.IconTexture:SetInside()
+	button.bg = B.ReskinIcon(button.IconTexture)
+	button.highlightTexture:SetInside(bg)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -124,24 +133,29 @@ tinsert(C.defaultThemes, function()
 			bu.statusBar:ClearAllPoints()
 			bu.statusBar:SetPoint("BOTTOMLEFT", 16, 3)
 		end
+
+		if DB.isNewPatch then
+			handleSkillButton(bu.SpellButton1)
+			handleSkillButton(bu.SpellButton2)
+		end
 	end
 
-	local professionbuttons = {
-		"PrimaryProfession1SpellButtonTop",
-		"PrimaryProfession1SpellButtonBottom",
-		"PrimaryProfession2SpellButtonTop",
-		"PrimaryProfession2SpellButtonBottom",
-		"SecondaryProfession1SpellButtonLeft",
-		"SecondaryProfession1SpellButtonRight",
-		"SecondaryProfession2SpellButtonLeft",
-		"SecondaryProfession2SpellButtonRight",
-		"SecondaryProfession3SpellButtonLeft",
-		"SecondaryProfession3SpellButtonRight",
-	}
+	if not DB.isNewPatch then
+		local professionbuttons = {
+			"PrimaryProfession1SpellButtonTop",
+			"PrimaryProfession1SpellButtonBottom",
+			"PrimaryProfession2SpellButtonTop",
+			"PrimaryProfession2SpellButtonBottom",
+			"SecondaryProfession1SpellButtonLeft",
+			"SecondaryProfession1SpellButtonRight",
+			"SecondaryProfession2SpellButtonLeft",
+			"SecondaryProfession2SpellButtonRight",
+			"SecondaryProfession3SpellButtonLeft",
+			"SecondaryProfession3SpellButtonRight",
+		}
 
-	for _, button in pairs(professionbuttons) do
-		local bu = _G[button]
-		if bu then -- isNewPatch
+		for _, button in pairs(professionbuttons) do
+			local bu = _G[button]
 			B.StripTextures(bu)
 			bu:SetPushedTexture(DB.blankTex)
 
@@ -198,7 +212,18 @@ tinsert(C.defaultThemes, function()
 		else
 			self.highlightTexture:SetColorTexture(1, 1, 1, .25)
 		end
-		self.spellString:SetTextColor(1, 1, 1);
-		self.subSpellString:SetTextColor(1, 1, 1)
+		if self.spellString then
+			self.spellString:SetTextColor(1, 1, 1)
+		end
+		if self.subSpellString then
+			self.subSpellString:SetTextColor(1, 1, 1)
+		end
+		-- isNewPatch
+		if self.SpellName then
+			self.SpellName:SetTextColor(1, 1, 1)
+		end
+		if self.SpellSubName then
+			self.SpellSubName:SetTextColor(1, 1, 1)
+		end
 	end)
 end)

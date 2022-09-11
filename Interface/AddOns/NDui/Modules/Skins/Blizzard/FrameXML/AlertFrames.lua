@@ -168,7 +168,7 @@ tinsert(C.defaultThemes, function()
 				frame.glow:SetTexture("")
 				frame.shine:SetTexture("")
 			end
-			frame.Icon:SetMask(nil)
+			frame.Icon:SetMask("")
 			frame.Icon:SetTexCoord(unpack(DB.TexCoord))
 		elseif frame.queue == WorldQuestCompleteAlertSystem then
 			if not frame.bg then
