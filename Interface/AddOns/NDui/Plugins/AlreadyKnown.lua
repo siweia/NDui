@@ -136,6 +136,40 @@ local function Hook_UpdateAuctionHouse(self)
 	end
 end
 
+local function Hook_UpdateAuctionItems(self)
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local child = select(i, self.ScrollTarget:GetChildren())
+		if child.cells then
+			local button = child.cells[2]
+			local itemKey = button and button.rowData and button.rowData.itemKey
+			if itemKey and itemKey.itemID then
+				local itemLink
+				if itemKey.itemID == 82800 then
+					itemLink = format("|Hbattlepet:%d::::::|h[Dummy]|h", itemKey.battlePetSpeciesID)
+				else
+					itemLink = format("|Hitem:%d", itemKey.itemID)
+				end
+
+				if itemLink and IsAlreadyKnown(itemLink) then
+					-- Highlight
+					child.SelectedHighlight:Show()
+					child.SelectedHighlight:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
+					child.SelectedHighlight:SetAlpha(.25)
+					-- Icon
+					button.Icon:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
+					button.IconBorder:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
+				else
+					-- Highlight
+					child.SelectedHighlight:SetVertexColor(1, 1, 1)
+					-- Icon
+					button.Icon:SetVertexColor(1, 1, 1)
+					button.IconBorder:SetVertexColor(1, 1, 1)
+				end
+			end
+		end
+	end
+end
+
 -- guild bank frame
 local MAX_GUILDBANK_SLOTS_PER_TAB = MAX_GUILDBANK_SLOTS_PER_TAB or 98
 local NUM_SLOTS_PER_GUILDBANK_GROUP = NUM_SLOTS_PER_GUILDBANK_GROUP or 14
@@ -169,7 +203,11 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(_, event, addon)
 	if addon == "Blizzard_AuctionHouseUI" then
-		hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList, "RefreshScrollFrame", Hook_UpdateAuctionHouse)
+		if DB.isNewPatch then
+			hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList.ScrollBox, "Update", Hook_UpdateAuctionItems)
+		else
+			hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList, "RefreshScrollFrame", Hook_UpdateAuctionHouse)
+		end
 		hookCount = hookCount + 1
 	elseif addon == "Blizzard_GuildBankUI" then
 		hooksecurefunc(GuildBankFrame, "Update", GuildBankFrame_Update)
