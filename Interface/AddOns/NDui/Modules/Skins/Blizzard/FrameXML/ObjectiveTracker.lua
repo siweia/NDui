@@ -257,9 +257,10 @@ tinsert(C.defaultThemes, function()
 		ObjectiveTrackerBlocksFrame.AchievementHeader,
 		ObjectiveTrackerBlocksFrame.ScenarioHeader,
 		ObjectiveTrackerBlocksFrame.CampaignQuestHeader,
+		ObjectiveTrackerBlocksFrame.ProfessionHeader, -- isNewPatch
 		BONUS_OBJECTIVE_TRACKER_MODULE.Header,
 		WORLD_QUEST_TRACKER_MODULE.Header,
-		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader
+		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,
 	}
 	for _, header in pairs(headers) do
 		reskinHeader(header)

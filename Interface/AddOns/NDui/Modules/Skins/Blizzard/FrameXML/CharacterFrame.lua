@@ -87,7 +87,7 @@ tinsert(C.defaultThemes, function()
 	local function UpdateHighlight(self)
 		local highlight = self:GetHighlightTexture()
 		highlight:SetColorTexture(1, 1, 1, .25)
-		highlight:SetInside()
+		highlight:SetInside(self.bg)
 	end
 
 	local function UpdateCosmetic(self)
