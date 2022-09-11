@@ -9,8 +9,6 @@
 	<Script file="units.lua"/>
 	<Script file="colors.lua"/>
 
-	<Script file='Plugins\RaidDebuffs.lua' />
-
 	<Script file="elements\additionalpower.lua"/>
 	<Script file="elements\assistantindicator.lua"/>
 	<Script file="elements\auras.lua"/>
@@ -37,6 +35,7 @@
 
 	<Script file='Plugins\FloatingCombatFeedback.lua' />
 	<Script file='Plugins\Swing.lua' />
+	<Script file='Plugins\RaidAuras.lua' />
 
 	<Script file="finalize.lua"/>
 </Ui>

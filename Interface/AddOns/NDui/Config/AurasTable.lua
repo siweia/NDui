@@ -67,22 +67,6 @@ function module:AddNewAuraWatch(class, list)
 	end
 end
 
--- RaidFrame spells
-local RaidBuffs = {}
-function module:AddClassSpells(list)
-	for class, value in pairs(list) do
-		if class == "ALL" then
-			if not RaidBuffs[class] then RaidBuffs[class] = {} end
-			for spellID in pairs(value) do
-				local name = GetSpellInfo(spellID)
-				if name then
-					RaidBuffs[class][name] = true
-				end
-			end
-		end
-	end
-end
-
 -- RaidFrame debuffs
 local RaidDebuffs = {}
 function module:AddRaidDebuffs(list)
@@ -203,7 +187,6 @@ function module:OnLogin()
 	end
 
 	C.AuraWatchList = AuraWatchList
-	C.RaidBuffs = RaidBuffs
 	C.RaidDebuffs = RaidDebuffs
 
 	module:CheckCornerSpells()

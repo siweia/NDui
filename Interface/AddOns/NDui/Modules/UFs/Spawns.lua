@@ -156,13 +156,10 @@ local function CreateRaidStyle(self)
 	UF:CreateRaidIcons(self)
 	UF:CreatePrediction(self)
 	UF:CreateClickSets(self)
-	UF:CreateRaidDebuffs(self)
 	UF:CreateThreatBorder(self)
-	UF:CreateAuras(self)
-	UF:CreateBuffs(self)
-	UF:CreateDebuffs(self)
-	UF:RefreshAurasByCombat(self)
-	UF:CreateBuffIndicator(self)
+	if self.raidType ~= "simple" then
+		UF:CreateRaidAuras(self)
+	end
 end
 
 local function CreateSimpleRaidStyle(self)
@@ -399,6 +396,7 @@ function UF:OnLogin()
 		UF:UpdateScrollingFont()
 		UF:TogglePortraits()
 		UF:CheckPowerBars()
+		UF:UpdateRaidInfo() -- RaidAuras
 	end
 
 	if C.db["UFs"]["RaidFrame"] then
@@ -406,6 +404,8 @@ function UF:OnLogin()
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
 		UF:BuildNameListFromID()
+		UF:UpdateRaidBuffsWhite()
+		UF:UpdateRaidDebuffsBlack()
 		UF.headers = {}
 
 		-- Hide Default RaidFrame

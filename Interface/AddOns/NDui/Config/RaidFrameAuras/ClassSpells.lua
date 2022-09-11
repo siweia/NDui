@@ -64,19 +64,8 @@ C.CornerBuffs = {
 	["DEATHKNIGHT"] = {},
 }
 
--- 团队框体职业相关Buffs
-local list = {
-	["ALL"] = {			-- 全职业
-		[642] = true,		-- 圣盾术
-		[871] = true,		-- 盾墙
-		[1022] = true,		-- 保护祝福
-		[27827] = true,		-- 救赎之魂
-	},
-}
-module:AddClassSpells(list)
-
--- 团队框体减益指示器忽略列表
-C.DebuffBlackList = {
+-- 团队框体减益指示器黑名单
+C.RaidDebuffsBlack = {
 	[23445] = true, -- 邪恶双子
 	[28274] = true, -- 血蓟消散
 	[36893] = true, -- 传送器故障
@@ -86,4 +75,12 @@ C.DebuffBlackList = {
 	[36900] = true, -- 灵魂分裂：坏蛋
 	[36901] = true, -- 灵魂分裂：好人
 	[36940] = true, -- 传送器故障
+}
+
+-- 团队框体增益指示器白名单
+C.RaidBuffsWhite = {
+	[642] = true,		-- 圣盾术
+	[871] = true,		-- 盾墙
+	[1022] = true,		-- 保护祝福
+	[27827] = true,		-- 救赎之魂
 }
