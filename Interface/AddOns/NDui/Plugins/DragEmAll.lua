@@ -46,6 +46,7 @@ local frames = {
 }
 if DB.isNewPatch then
 	frames["SettingsPanel"] = false
+	frames["ProfessionsFrame"] = false
 else
 	frames["AudioOptionsFrame"] = false
 	frames["InterfaceOptionsFrame"] = false
