@@ -26,20 +26,15 @@ local DispellPriority = {
 }
 
 local DispellFilter
+local cleanse = IsSpellKnown(51886)
 do
 	local dispellClasses = {
 		["DRUID"] = {
-			["Magic"] = false,
 			["Curse"] = true,
 			["Poison"] = true,
 		},
-		["MONK"] = {
-			["Magic"] = true,
-			["Poison"] = true,
-			["Disease"] = true,
-		},
 		["PALADIN"] = {
-			["Magic"] = false,
+			["Magic"] = true,
 			["Poison"] = true,
 			["Disease"] = true,
 		},
@@ -48,11 +43,15 @@ do
 			["Disease"] = true,
 		},
 		["SHAMAN"] = {
-			["Magic"] = false,
-			["Curse"] = true,
+			["Poison"] = cleanse,
+			["Disease"] = cleanse,
+			["Curse"] = cleanse,
 		},
 		["MAGE"] = {
 			["Curse"] = true,
+		},
+		["WARLOCK"] = {
+			["Magic"] = true,
 		},
 	}
 
@@ -112,8 +111,8 @@ end
 function UF:UpdateRaidInfo()
 	checkInstance()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkInstance)
-	checkSpecs()
-	B:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
+	--checkSpecs()
+	--B:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
 	UF:UpdateRaidDebuffs()
 end
 
