@@ -508,7 +508,6 @@ G.AccountSettings = {
 	BWRequest = false,
 	RaidAuraWatch = {},
 	CornerSpells = {},
-	RaidClickSets = {}, -- deprecated
 	ClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},

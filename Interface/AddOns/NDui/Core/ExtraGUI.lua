@@ -477,21 +477,6 @@ function G:SetupClickCast(parent)
 	for fullkey, value in pairs(NDuiADB["ClickSets"][DB.MyClass]) do
 		createBar(scroll.child, fullkey, value)
 	end
-
-	if next(NDuiADB["RaidClickSets"][DB.MyClass]) then
-		local oldTip = B.CreateButton(panel, 35, 35, true, 134400)
-		oldTip:SetPoint("TOPRIGHT", -10, -10)
-		oldTip:SetScript("OnEnter", function(self)
-			GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-			GameTooltip:ClearLines()
-			GameTooltip:AddLine("Old data:")
-			for fullkey, v in pairs(NDuiADB["RaidClickSets"][DB.MyClass]) do
-				GameTooltip:AddDoubleLine(fullkey, v[3])
-			end
-			GameTooltip:Show()
-		end)
-		oldTip:SetScript("OnLeave", B.HideTooltip)
-	end
 end
 
 local function refreshNameplateFilters()
