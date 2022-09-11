@@ -73,6 +73,20 @@ local function reskinSummaryIcon(frame)
 	end
 end
 
+local function reskinSummaryButtons(self)
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local child = select(i, self.ScrollTarget:GetChildren())
+		if child and child.Icon then
+			if not child.styled then
+				child.Icon.bg = B.ReskinIcon(child.Icon)
+				if child.IconBorder then child.IconBorder:SetAlpha(0) end
+				child.styled = true
+			end
+			child.Icon.bg:SetShown(child.Icon:IsShown())
+		end
+	end
+end
+
 local function reskinListHeader(frame)
 	local maxHeaders = frame.HeaderContainer:GetNumChildren()
 	for i = 1, maxHeaders do
@@ -100,12 +114,24 @@ local function reskinSellList(frame, hasHeader)
 	if frame.RefreshFrame then
 		reskinAuctionButton(frame.RefreshFrame.RefreshButton)
 	end
-	B.ReskinScroll(frame.ScrollFrame.scrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(frame.ScrollBar)
+	else
+		B.ReskinScroll(frame.ScrollFrame.scrollBar)
+	end
 	if hasHeader then
-		B.CreateBDFrame(frame.ScrollFrame, .25)
+		if DB.isNewPatch then
+			B.CreateBDFrame(frame.ScrollBox, .25)
+		else
+			B.CreateBDFrame(frame.ScrollFrame, .25)
+		end
 		hooksecurefunc(frame, "RefreshScrollFrame", reskinListHeader)
 	else
-		hooksecurefunc(frame, "RefreshListDisplay", reskinSummaryIcon)
+		if DB.isNewPatch then
+			hooksecurefunc(frame.ScrollBox, "Update", reskinSummaryButtons)
+		else
+			hooksecurefunc(frame, "RefreshListDisplay", reskinSummaryIcon)
+		end
 	end
 end
 
@@ -122,8 +148,13 @@ end
 
 local function reskinItemList(frame, hasHeader)
 	B.StripTextures(frame)
-	B.CreateBDFrame(frame.ScrollFrame, .25)
-	B.ReskinScroll(frame.ScrollFrame.scrollBar)
+	if DB.isNewPatch then
+		B.CreateBDFrame(frame.ScrollBox, .25)
+		B.ReskinTrimScroll(frame.ScrollBar)
+	else
+		B.CreateBDFrame(frame.ScrollFrame, .25)
+		B.ReskinScroll(frame.ScrollFrame.scrollBar)
+	end
 	if frame.RefreshFrame then
 		reskinAuctionButton(frame.RefreshFrame.RefreshButton)
 	end
@@ -154,14 +185,26 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.ReskinInput(filterButton.LevelRangeFrame.MaxLevel)
 
 	B.StripTextures(AuctionHouseFrame.CategoriesList)
-	B.ReskinScroll(AuctionHouseFrame.CategoriesList.ScrollFrame.ScrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(AuctionHouseFrame.CategoriesList.ScrollBar)
+	else
+		B.ReskinScroll(AuctionHouseFrame.CategoriesList.ScrollFrame.ScrollBar)
+	end
 	reskinItemList(AuctionHouseFrame.BrowseResultsFrame.ItemList, true)
 
-	hooksecurefunc("FilterButton_SetUp", function(button)
-		button.NormalTexture:SetAlpha(0)
-		button.SelectedTexture:SetColorTexture(0, .6, 1, .3)
-		button.HighlightTexture:SetColorTexture(1, 1, 1, .1)
-	end)
+	if DB.isNewPatch then
+		hooksecurefunc("AuctionHouseFilterButton_SetUp", function(button)
+			button.NormalTexture:SetAlpha(0)
+			button.SelectedTexture:SetColorTexture(0, .6, 1, .3)
+			button.HighlightTexture:SetColorTexture(1, 1, 1, .1)
+		end)
+	else
+		hooksecurefunc("FilterButton_SetUp", function(button)
+			button.NormalTexture:SetAlpha(0)
+			button.SelectedTexture:SetColorTexture(0, .6, 1, .3)
+			button.HighlightTexture:SetColorTexture(1, 1, 1, .1)
+		end)
+	end
 
 	local itemBuyFrame = AuctionHouseFrame.ItemBuyFrame
 	B.Reskin(itemBuyFrame.BackButton)
@@ -186,7 +229,11 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.StripTextures(wowTokenResults.TokenDisplay)
 	B.CreateBDFrame(wowTokenResults.TokenDisplay, .25)
 	B.Reskin(wowTokenResults.Buyout)
-	B.ReskinScroll(wowTokenResults.DummyScrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(wowTokenResults.DummyScrollBar)
+	else
+		B.ReskinScroll(wowTokenResults.DummyScrollBar)
+	end
 
 	local gameTimeTutorial = wowTokenResults.GameTimeTutorial
 	B.ReskinPortraitFrame(gameTimeTutorial)
@@ -201,7 +248,11 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.Reskin(woWTokenSellFrame.PostButton)
 	B.StripTextures(woWTokenSellFrame.DummyItemList)
 	B.CreateBDFrame(woWTokenSellFrame.DummyItemList, .25)
-	B.ReskinScroll(woWTokenSellFrame.DummyItemList.DummyScrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(woWTokenSellFrame.DummyItemList.DummyScrollBar)
+	else
+		B.ReskinScroll(woWTokenSellFrame.DummyItemList.DummyScrollBar)
+	end
 	reskinAuctionButton(woWTokenSellFrame.DummyRefreshButton)
 	reskinItemDisplay(woWTokenSellFrame.ItemDisplay)
 
