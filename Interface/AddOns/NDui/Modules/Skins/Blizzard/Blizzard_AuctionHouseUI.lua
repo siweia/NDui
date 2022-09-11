@@ -16,7 +16,7 @@ local function reskinSellPanel(frame)
 	local itemButton = itemDisplay.ItemButton
 	if itemButton.IconMask then itemButton.IconMask:Hide() end
 	itemButton.EmptyBackground:Hide()
-	itemButton:SetPushedTexture("")
+	itemButton:SetPushedTexture(DB.blankTex)
 	itemButton.Highlight:SetColorTexture(1, 1, 1, .25)
 	itemButton.Highlight:SetAllPoints(itemButton.Icon)
 	itemButton.bg = B.ReskinIcon(itemButton.Icon)
@@ -135,15 +135,24 @@ local function reskinSellList(frame, hasHeader)
 	end
 end
 
-local function reskinItemDisplay(itemDisplay)
+local function reskinItemDisplay(itemDisplay, needInit)
 	B.StripTextures(itemDisplay)
 	local bg = B.CreateBDFrame(itemDisplay, .25)
 	bg:SetPoint("TOPLEFT", 3, -3)
 	bg:SetPoint("BOTTOMRIGHT", -3, 0)
 	local itemButton = itemDisplay.ItemButton
-	if itemButton.CircleMask then itemButton.CircleMask:Hide() end
+	if itemButton.CircleMask then
+		itemButton.CircleMask:Hide()
+		itemButton.useCircularIconBorder = true
+	end
 	itemButton.bg = B.ReskinIcon(itemButton.Icon)
-	B.ReskinIconBorder(itemButton.IconBorder)
+	B.ReskinIconBorder(itemButton.IconBorder, needInit)
+
+	if DB.isNewPatch then
+		local hl = itemButton:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetInside(itemButton.bg)
+	end
 end
 
 local function reskinItemList(frame, hasHeader)
@@ -226,9 +235,8 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 
 	local wowTokenResults = AuctionHouseFrame.WoWTokenResults
 	B.StripTextures(wowTokenResults)
-	B.StripTextures(wowTokenResults.TokenDisplay)
-	B.CreateBDFrame(wowTokenResults.TokenDisplay, .25)
 	B.Reskin(wowTokenResults.Buyout)
+	reskinItemDisplay(wowTokenResults.TokenDisplay, true)
 	if DB.isNewPatch then
 		B.ReskinTrimScroll(wowTokenResults.DummyScrollBar)
 	else
