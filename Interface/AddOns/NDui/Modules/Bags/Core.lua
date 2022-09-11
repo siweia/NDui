@@ -1274,7 +1274,7 @@ function module:OnLogin()
 
 	-- Update infobar slots
 	local INFO = B:GetModule("Infobar")
-	if INFO.modules then
+	if INFO and INFO.modules then
 		for _, info in pairs(INFO.modules) do
 			if info.name == "Gold" then
 				Backpack.OnOpen = function()
