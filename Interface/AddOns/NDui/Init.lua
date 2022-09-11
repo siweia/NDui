@@ -121,6 +121,8 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 	end
 
 	B.Modules = modules
+
+	if B.InitCallback then B:InitCallback() end
 end)
 
 _G[addonName] = ns
