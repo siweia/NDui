@@ -164,7 +164,7 @@ function M:TradeTabs_FilterIcons()
 		end
 	end
 
-	local parent = DB.isNewPatch and ProfessionsFrame or TradeSkillFrame
+	local parent = DB.isNewPatch and ProfessionsFrame.CraftingPage or TradeSkillFrame
 
 	local buttons = {}
 	for index, value in pairs(buttonList) do
