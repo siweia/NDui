@@ -185,9 +185,9 @@ function UF:AurasIndicator_UpdatePriority(numDebuffs, unit)
 	for i = 1, numDebuffs do
 		local aura = raidAuras.debuffList[i]
 		if dispellType ~= 3 and aura.debuffType and not isCharmed then
-			if dispellType == 1 then -- dispellable first
+			if dispellType == 2 then -- dispellable first
 				aura.priority = DispellFilter[aura.debuffType] and (DispellPriority[aura.debuffType] + 6)
-			elseif dispellType == 2 then -- by dispell type
+			elseif dispellType == 1 then -- by dispell type
 				aura.priority = DispellPriority[aura.debuffType]
 			end
 			aura.priority = aura.priority or invalidPrio
