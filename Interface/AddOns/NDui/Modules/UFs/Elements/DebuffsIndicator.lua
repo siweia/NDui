@@ -37,6 +37,7 @@ function UF:CreateDebuffsIndicator(self)
 		B.PixelIcon(button)
 		button:SetScript("OnEnter", UF.AuraButton_OnEnter)
 		button:SetScript("OnLeave", B.HideTooltip)
+		button:Hide()
 
 		local cd = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
 		cd:SetAllPoints()

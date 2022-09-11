@@ -36,6 +36,7 @@ function UF:CreateBuffsIndicator(self)
 		B.PixelIcon(button)
 		button:SetScript("OnEnter", UF.AuraButton_OnEnter)
 		button:SetScript("OnLeave", B.HideTooltip)
+		button:Hide()
 
 		local parentFrame = CreateFrame("Frame", nil, button)
 		parentFrame:SetAllPoints()

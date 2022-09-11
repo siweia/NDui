@@ -143,6 +143,7 @@ function UF:CreateAurasIndicator(self)
 		B.PixelIcon(button)
 		B.CreateSD(button, 3, true)
 		button.__shadow:SetFrameLevel(self:GetFrameLevel() + 2)
+		button:Hide()
 
 		button:SetScript("OnEnter", UF.AuraButton_OnEnter)
 		button:SetScript("OnLeave", B.HideTooltip)
