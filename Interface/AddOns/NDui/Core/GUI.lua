@@ -658,29 +658,6 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	else
 		C.db = NDuiPDB[NDuiADB["ProfileIndex"][DB.MyFullName] - 1]
 	end
-	-- Transfer old data START
-	if C.db["Bags"] and C.db["Bags"]["FavouriteItems"] and next(C.db["Bags"]["FavouriteItems"]) then
-		for itemID in pairs(C.db["Bags"]["FavouriteItems"]) do
-			if not C.db["Bags"]["CustomItems"] then
-				C.db["Bags"]["CustomItems"] = {}
-			end
-			C.db["Bags"]["CustomItems"][itemID] = 1
-		end
-		C.db["Bags"]["FavouriteItems"] = nil
-	end
-	if C.db["Nameplate"] and C.db["Nameplate"]["UnitList"] then
-		if not C.db["Nameplate"]["CustomUnits"] then
-			C.db["Nameplate"]["CustomUnits"] = {}
-		end
-		B.SplitList(C.db["Nameplate"]["CustomUnits"], C.db["Nameplate"]["UnitList"])
-	end
-	if C.db["Nameplate"] and C.db["Nameplate"]["ColorDots"] then
-		if not C.db["Nameplate"]["DotSpells"] then
-			C.db["Nameplate"]["DotSpells"] = {}
-		end
-		B.SplitList(C.db["Nameplate"]["DotSpells"], C.db["Nameplate"]["ColorDots"])
-	end
-	-- Transfer old data END
 	InitialSettings(G.DefaultSettings, C.db, true)
 
 	B:SetupUIScale(true)
