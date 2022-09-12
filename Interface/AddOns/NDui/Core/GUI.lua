@@ -536,7 +536,7 @@ G.AccountSettings = {
 	SmoothAmount = .25,
 	AutoRecycle = false,
 	IgnoredButtons = "",
-	RaidAuraWatch = {}, -- RaidBuffsWhite
+	RaidBuffsWhite = {},
 	RaidDebuffsBlack = {},
 }
 
@@ -585,6 +585,14 @@ local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
+
+	-- Transfer old data START
+	if NDuiADB["RaidAuraWatch"] then
+		for spellID in pairs(NDuiADB["RaidAuraWatch"]) do
+			NDuiADB["RaidBuffsWhite"][spellID] = true
+		end
+	end
+	-- Transfer old data END
 
 	InitialSettings(G.AccountSettings, NDuiADB)
 	if not next(NDuiPDB) then
