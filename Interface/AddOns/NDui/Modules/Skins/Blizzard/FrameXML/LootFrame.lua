@@ -31,12 +31,14 @@ tinsert(C.defaultThemes, function()
 		hooksecurefunc(LootFrame.ScrollBox, "Update", function(self)
 			for i = 1, self.ScrollTarget:GetNumChildren() do
 				local button = select(i, self.ScrollTarget:GetChildren())
+				local questTexture = button.IconQuestTexture
 				if not button.styled then
 					local item = button.Item
 					B.StripTextures(item, 1)
 					item.bg = B.ReskinIcon(item.icon)
 					B.ReskinIconBorder(item.IconBorder, true)
 
+					questTexture:SetAlpha(0)
 					button.BorderFrame:SetAlpha(0)
 					button.HighlightNameFrame:SetAlpha(0)
 					button.PushedNameFrame:SetAlpha(0)
@@ -48,6 +50,15 @@ tinsert(C.defaultThemes, function()
 					item:HookScript("OnLeave", updateHighlight)
 
 					button.styled = true
+				end
+
+				local itemBG = button.Item and button.Item.bg
+				if itemBG then
+					if questTexture:IsShown() then
+						itemBG:SetBackdropBorderColor(1, .8, 0)
+					else
+						itemBG:SetBackdropBorderColor(0, 0, 0)
+					end
 				end
 			end
 		end)
