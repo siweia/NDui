@@ -903,12 +903,12 @@ function UF.CustomFilter(element, unit, button, name, _, _, debuffType, _, _, ca
 		end
 
 		if element.__owner.plateType == "NameOnly" then
-			return UF.NameplateFilter[1][spellID]
-		elseif UF.NameplateFilter[2][spellID] then
+			return UF.NameplateWhite[spellID]
+		elseif UF.NameplateBlack[spellID] then
 			return false
 		elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and (not button.isDebuff) then
 			return true
-		elseif UF.NameplateFilter[1][spellID] then
+		elseif UF.NameplateWhite[spellID] then
 			return true
 		else
 			local auraFilter = C.db["Nameplate"]["AuraFilter"]

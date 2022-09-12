@@ -503,7 +503,6 @@ G.AccountSettings = {
 	ChatFilterList = "%*",
 	ChatFilterWhiteList = "",
 	TimestampFormat = 4,
-	NameplateFilter = {[1]={}, [2]={}},
 	RaidDebuffs = {},
 	Changelog = {},
 	totalGold = {},
@@ -538,6 +537,8 @@ G.AccountSettings = {
 	IgnoredButtons = "",
 	RaidBuffsWhite = {},
 	RaidDebuffsBlack = {},
+	NameplateWhite = {},
+	NameplateBlack = {},
 }
 
 -- Initial settings
@@ -587,7 +588,22 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
 
 	-- Transfer old data START
+	if NDuiADB["NameplateFilter"] then
+		if NDuiADB["NameplateFilter"][1] then
+			if not NDuiADB["NameplateWhite"] then NDuiADB["NameplateWhite"] = {} end
+			for spellID, value in pairs(NDuiADB["NameplateFilter"][1]) do
+				NDuiADB["NameplateWhite"][spellID] = value
+			end
+		end
+		if NDuiADB["NameplateFilter"][2] then
+			if not NDuiADB["NameplateBlack"] then NDuiADB["NameplateBlack"] = {} end
+			for spellID, value in pairs(NDuiADB["NameplateFilter"][2]) do
+				NDuiADB["NameplateBlack"][spellID] = value
+			end
+		end
+	end
 	if NDuiADB["RaidAuraWatch"] then
+		if not NDuiADB["RaidBuffsWhite"] then NDuiADB["RaidBuffsWhite"] = {} end
 		for spellID in pairs(NDuiADB["RaidAuraWatch"]) do
 			NDuiADB["RaidBuffsWhite"][spellID] = true
 		end

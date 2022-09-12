@@ -380,6 +380,13 @@ local accountStrValues = {
 	["IgnoredButtons"] = true,
 }
 
+local spellBooleanValues = {
+	["RaidBuffsWhite"] = true,
+	["RaidDebuffsBlack"] = true,
+	["NameplateWhite"] = true,
+	["NameplateBlack"] = true,
+}
+
 local booleanTable = {
 	["CustomUnits"] = true,
 	["PowerUnits"] = true,
@@ -441,7 +448,7 @@ function G:ExportGUIData()
 	end
 
 	for KEY, VALUE in pairs(NDuiADB) do
-		if KEY == "RaidBuffsWhite" or KEY == "RaidDebuffsBlack" then
+		if spellBooleanValues[KEY] then
 			text = text..";ACCOUNT:"..KEY
 			for spellID, value in pairs(VALUE) do
 				text = text..":"..spellID..":"..tostring(value)
@@ -450,13 +457,6 @@ function G:ExportGUIData()
 			for instName, value in pairs(VALUE) do
 				for spellID, prio in pairs(value) do
 					text = text..";ACCOUNT:"..KEY..":"..instName..":"..spellID..":"..prio
-				end
-			end
-		elseif KEY == "NameplateFilter" then
-			for index, value in pairs(VALUE) do
-				text = text..";ACCOUNT:"..KEY..":"..index
-				for spellID in pairs(value) do
-					text = text..":"..spellID
 				end
 			end
 		elseif KEY == "CornerSpells" then
@@ -615,7 +615,7 @@ function G:ImportGUIData()
 				C.db[key][value] = arg1
 			end
 		elseif key == "ACCOUNT" then
-			if value == "RaidBuffsWhite" or value == "RaidDebuffsBlack" then
+			if spellBooleanValues[value] then
 				local results = {select(3, strsplit(":", option))}
 				for i = 1, #results, 2 do
 					NDuiADB[value][tonumber(results[i])] = toBoolean(results[i+1])
@@ -624,11 +624,6 @@ function G:ImportGUIData()
 				local instName, spellID, priority = select(3, strsplit(":", option))
 				if not NDuiADB[value][instName] then NDuiADB[value][instName] = {} end
 				NDuiADB[value][instName][tonumber(spellID)] = tonumber(priority)
-			elseif value == "NameplateFilter" then
-				local spells = {select(4, strsplit(":", option))}
-				for _, spellID in next, spells do
-					NDuiADB[value][tonumber(arg1)][tonumber(spellID)] = true
-				end
 			elseif value == "CornerSpells" then
 				local results = {select(3, strsplit(":", option))}
 				local class = results[1]

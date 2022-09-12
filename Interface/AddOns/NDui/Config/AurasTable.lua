@@ -130,24 +130,21 @@ function module:CheckMajorSpells()
 	end
 end
 
-local function checkNameplateFilter(index)
-	local VALUE = (index == 1 and C.WhiteList) or (index == 2 and C.BlackList)
-	if VALUE then
-		for spellID in pairs(VALUE) do
-			local name = GetSpellInfo(spellID)
-			if name then
-				if NDuiADB["NameplateFilter"][index][spellID] then
-					NDuiADB["NameplateFilter"][index][spellID] = nil
-				end
-			else
-				if DB.isDeveloper then print("Invalid nameplate filter ID: "..spellID) end
+local function CheckNameplateFilter(list, key)
+	for spellID in pairs(list) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			if NDuiADB[key][spellID] then
+				NDuiADB[key][spellID] = nil
 			end
+		else
+			if DB.isDeveloper then print("Invalid nameplate filter ID: "..spellID) end
 		end
+	end
 
-		for spellID, value in pairs(NDuiADB["NameplateFilter"][index]) do
-			if value == false and VALUE[spellID] == nil then
-				NDuiADB["NameplateFilter"][index][spellID] = nil
-			end
+	for spellID, value in pairs(NDuiADB[key]) do
+		if value == false and list[spellID] == nil then
+			NDuiADB[key][spellID] = nil
 		end
 	end
 end
@@ -166,8 +163,8 @@ local function cleanupNameplateUnits(VALUE)
 end
 
 function module:CheckNameplateFilters()
-	checkNameplateFilter(1)
-	checkNameplateFilter(2)
+	CheckNameplateFilter(C.WhiteList, "NameplateWhite")
+	CheckNameplateFilter(C.BlackList, "NameplateBlack")
 	cleanupNameplateUnits("CustomUnits")
 	cleanupNameplateUnits("PowerUnits")
 end
