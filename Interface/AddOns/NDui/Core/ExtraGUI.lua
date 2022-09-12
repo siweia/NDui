@@ -772,7 +772,7 @@ function G:SetupSpellsIndicator(parent)
 		parent.box:SetText("")
 	end
 
-	StaticPopupDialogs["RESET_NDUI_RaidAuraWatch"] = {
+	StaticPopupDialogs["RESET_NDUI_RaidBuffsWhite"] = {
 		text = L["Reset to default list"],
 		button1 = YES,
 		button2 = NO,
@@ -810,7 +810,7 @@ function G:SetupSpellsIndicator(parent)
 	scroll.reset = B.CreateButton(frame, 45, 25, RESET)
 	scroll.reset:SetPoint("RIGHT", scroll.add, "LEFT", -5, 0)
 	scroll.reset:SetScript("OnClick", function()
-		StaticPopup_Show("RESET_NDUI_RaidAuraWatch")
+		StaticPopup_Show("RESET_NDUI_RaidBuffsWhite")
 	end)
 
 	scroll.dd = B.CreateDropDown(frame, 60, 25, anchors)
@@ -867,9 +867,9 @@ function G:SetupBuffsIndicator(parent)
 		close:SetScript("OnClick", function()
 			bar:Hide()
 			if C.RaidBuffsWhite[spellID] then
-				NDuiADB["RaidAuraWatch"][spellID] = false
+				NDuiADB["RaidBuffsWhite"][spellID] = false
 			else
-				NDuiADB["RaidAuraWatch"][spellID] = nil
+				NDuiADB["RaidBuffsWhite"][spellID] = nil
 			end
 			barList[spellID] = nil
 			sortBars(barList)
@@ -884,7 +884,7 @@ function G:SetupBuffsIndicator(parent)
 	end
 
 	local function isAuraExisted(spellID)
-		local modValue = NDuiADB["RaidAuraWatch"][spellID]
+		local modValue = NDuiADB["RaidBuffsWhite"][spellID]
 		local locValue = C.RaidBuffsWhite[spellID]
 		return modValue or (modValue == nil and locValue)
 	end
@@ -894,7 +894,7 @@ function G:SetupBuffsIndicator(parent)
 		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if isAuraExisted(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-		NDuiADB["RaidAuraWatch"][spellID] = true
+		NDuiADB["RaidBuffsWhite"][spellID] = true
 		createBar(parent.child, spellID, true)
 		parent.box:SetText("")
 	end
@@ -904,7 +904,7 @@ function G:SetupBuffsIndicator(parent)
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			wipe(NDuiADB["RaidAuraWatch"])
+			wipe(NDuiADB["RaidBuffsWhite"])
 			ReloadUI()
 		end,
 		whileDead = 1,

@@ -445,10 +445,10 @@ function G:ExportGUIData()
 	end
 
 	for KEY, VALUE in pairs(NDuiADB) do
-		if KEY == "RaidAuraWatch" then
+		if KEY == "RaidBuffsWhite" or KEY == "RaidDebuffsBlack" then
 			text = text..";ACCOUNT:"..KEY
-			for spellID in pairs(VALUE) do
-				text = text..":"..spellID
+			for spellID, value in pairs(VALUE) do
+				text = text..":"..spellID..":"..tostring(value)
 			end
 		elseif KEY == "RaidDebuffs" then
 			for instName, value in pairs(VALUE) do
@@ -630,10 +630,10 @@ function G:ImportGUIData()
 				C.db[key][value] = arg1
 			end
 		elseif key == "ACCOUNT" then
-			if value == "RaidAuraWatch" then
-				local spells = {select(3, strsplit(":", option))}
-				for _, spellID in next, spells do
-					NDuiADB[value][tonumber(spellID)] = true
+			if value == "RaidBuffsWhite" or value == "RaidDebuffsBlack" then
+				local results = {select(3, strsplit(":", option))}
+				for i = 1, #results, 2 do
+					NDuiADB[value][tonumber(results[i])] = toBoolean(results[i+1])
 				end
 			elseif value == "RaidDebuffs" then
 				local instName, spellID, priority = select(3, strsplit(":", option))

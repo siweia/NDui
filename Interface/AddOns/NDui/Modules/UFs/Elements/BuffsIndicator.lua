@@ -10,13 +10,13 @@ function UF:UpdateRaidBuffsWhite()
 	for spellID in pairs(C.RaidBuffsWhite) do
 		local name = GetSpellInfo(spellID)
 		if name then
-			if NDuiADB["RaidAuraWatch"][spellID] == nil then
+			if NDuiADB["RaidBuffsWhite"][spellID] == nil then
 				UF.RaidBuffsWhite[spellID] = true
 			end
 		end
 	end
 
-	for spellID, value in pairs(NDuiADB["RaidAuraWatch"]) do
+	for spellID, value in pairs(NDuiADB["RaidBuffsWhite"]) do
 		if value then
 			UF.RaidBuffsWhite[spellID] = true
 		end
