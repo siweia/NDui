@@ -106,6 +106,8 @@ local list = {
 		{AuraID = 260243, UnitID = "player"},	-- 乱射
 		{AuraID = 342076, UnitID = "player"},	-- 行云流水
 		{AuraID = 336892, UnitID = "player", Flash = true},	-- 无懈警戒之秘
+		{AuraID = 388035, UnitID = "player", Disabled = not DB.isNewPatch},	-- 巨熊之韧
+		{AuraID = 388045, UnitID = "player", Flash = true, Disabled = not DB.isNewPatch},	-- 警戒
 
 		{AuraID = 363760, UnitID = "player", Flash = true},	-- 杀戮狂乱，兽王4T
 		{AuraID = 363805, UnitID = "player", Flash = true},	-- 疯狂掷弹兵，生存2T
