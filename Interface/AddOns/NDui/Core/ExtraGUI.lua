@@ -621,10 +621,18 @@ function G:SetupNameplateFilter(parent)
 		B.AddTooltip(icon, "ANCHOR_RIGHT", spellID)
 		close:SetScript("OnClick", function()
 			bar:Hide()
-			if (index == 1 and C.WhiteList[spellID]) or (index == 2 and C.BlackList[spellID]) then
-				NDuiADB["NameplateFilter"][index][spellID] = false
-			else
-				NDuiADB["NameplateFilter"][index][spellID] = nil
+			if index == 1 then
+				if C.WhiteList[spellID] then
+					NDuiADB["NameplateWhite"][spellID] = false
+				else
+					NDuiADB["NameplateWhite"][spellID] = nil
+				end
+			elseif index == 2 then
+				if C.BlackList[spellID] then
+					NDuiADB["NameplateBlack"][spellID] = false
+				else
+					NDuiADB["NameplateBlack"][spellID] = nil
+				end
 			end
 			frameData[index].barList[spellID] = nil
 			sortBars(frameData[index].barList)
@@ -639,7 +647,8 @@ function G:SetupNameplateFilter(parent)
 	end
 
 	local function isAuraExisted(index, spellID)
-		local modValue = NDuiADB["NameplateFilter"][index][spellID]
+		local key = index == 1 and "NameplateWhite" or "NameplateBlack"
+		local modValue = NDuiADB[key][spellID]
 		local locValue = (index == 1 and C.WhiteList[spellID]) or (index == 2 and C.BlackList[spellID])
 		return modValue or (modValue == nil and locValue)
 	end
@@ -649,7 +658,8 @@ function G:SetupNameplateFilter(parent)
 		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if isAuraExisted(index, spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
-		NDuiADB["NameplateFilter"][index][spellID] = true
+		local key = index == 1 and "NameplateWhite" or "NameplateBlack"
+		NDuiADB[key][spellID] = true
 		createBar(parent.child, index, spellID)
 		parent.box:SetText("")
 	end
@@ -662,7 +672,8 @@ function G:SetupNameplateFilter(parent)
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			wipe(NDuiADB["NameplateFilter"][filterIndex])
+			local key = filterIndex == 1 and "NameplateWhite" or "NameplateBlack"
+			wipe(NDuiADB[key])
 			ReloadUI()
 		end,
 		whileDead = 1,
@@ -693,7 +704,8 @@ function G:SetupNameplateFilter(parent)
 			StaticPopup_Show("RESET_NDUI_NAMEPLATEFILTER")
 		end)
 
-		for spellID, value in pairs(UF.NameplateFilter[index]) do
+		local key = index == 1 and "NameplateWhite" or "NameplateBlack"
+		for spellID, value in pairs(UF[key]) do
 			if value then
 				createBar(scroll.child, index, spellID)
 			end

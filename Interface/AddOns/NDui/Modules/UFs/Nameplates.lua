@@ -1346,31 +1346,29 @@ function UF:RefreshMajorSpells()
 	end
 end
 
-UF.NameplateFilter = {[1]={}, [2]={}}
+UF.NameplateWhite = {}
+UF.NameplateBlack = {}
 
-local function refreshNameplateFilter(index)
-	wipe(UF.NameplateFilter[index])
+local function RefreshNameplateFilter(list, key)
+	wipe(UF[key])
 
-	local VALUE = (index == 1 and C.WhiteList) or (index == 2 and C.BlackList)
-	if VALUE then
-		for spellID in pairs(VALUE) do
-			local name = GetSpellInfo(spellID)
-			if name then
-				if NDuiADB["NameplateFilter"][index][spellID] == nil then
-					UF.NameplateFilter[index][spellID] = true
-				end
+	for spellID in pairs(list) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			if NDuiADB[key][spellID] == nil then
+				UF[key][spellID] = true
 			end
 		end
 	end
 
-	for spellID, value in pairs(NDuiADB["NameplateFilter"][index]) do
+	for spellID, value in pairs(NDuiADB[key]) do
 		if value then
-			UF.NameplateFilter[index][spellID] = true
+			UF[key][spellID] = true
 		end
 	end
 end
 
 function UF:RefreshNameplateFilters()
-	refreshNameplateFilter(1)
-	refreshNameplateFilter(2)
+	RefreshNameplateFilter(C.WhiteList, "NameplateWhite")
+	RefreshNameplateFilter(C.BlackList, "NameplateBlack")
 end
