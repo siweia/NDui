@@ -167,6 +167,8 @@ function S:EnhancedTradeSkill()
 		TradeSkillFrame:SetHeight(512)
 		TradeSkillCancelButton:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -42, 78)
 	else
+		TradeSkillFrameBottomLeftTexture:Hide()
+		TradeSkillFrameBottomRightTexture:Hide()
 		TradeSkillFrameCloseButton:ClearAllPoints()
 		TradeSkillFrameCloseButton:SetPoint("TOPRIGHT", TradeSkillFrame, "TOPRIGHT", -30, -8)
 	end
