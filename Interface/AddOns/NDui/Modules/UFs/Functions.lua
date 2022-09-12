@@ -519,6 +519,60 @@ local function postUpdateRole(element, role)
 	end
 end
 
+function UF:CreateRestingIndicator(self)
+	local frame = CreateFrame("Frame", "NDuiRestingFrame", UIParent)
+	frame:SetSize(5, 5)
+	frame:SetPoint("CENTER", self, "LEFT", -2, 4)
+	frame:Hide()
+	frame.str = {}
+
+	local step, stepSpeed = 0, .33
+
+	local stepMaps = {
+		[1] = {true, false, false},
+		[2] = {true, true, false},
+		[3] = {true, true, true},
+		[4] = {false, true, true},
+		[5] = {false, false, true},
+		[6] = {false, false, false},
+	}
+
+	local offsets = {
+		[1] = {4, -4},
+		[2] = {0, 0},
+		[3] = {-5, 5},
+	}
+
+	for i = 1, 3 do
+		local textFrame = CreateFrame("Frame", nil, frame)
+		textFrame:SetAllPoints()
+		textFrame:SetFrameLevel(i)
+		local text = B.CreateFS(textFrame, (7+i*3), "z", nil, "CENTER", offsets[i][1], offsets[i][2])
+		text:SetTextColor(.6, .8, 1)
+		frame.str[i] = text
+	end
+
+	frame:SetScript("OnUpdate", function(self, elapsed)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed > stepSpeed then
+			step = step + 1
+			if step == 7 then step = 1 end
+
+			for i = 1, 3 do
+				frame.str[i]:SetShown(stepMaps[step][i])
+			end
+
+			self.elapsed = 0
+		end
+	end)
+
+	frame:SetScript("OnHide", function()
+		step = 6
+	end)
+
+	self.RestingIndicator = frame
+end
+
 function UF:CreateIcons(self)
 	local mystyle = self.mystyle
 	if mystyle == "player" then
@@ -529,15 +583,6 @@ function UF:CreateIcons(self)
 		combat:SetTexCoord(0, .5, 0, .5)
 		combat:SetVertexColor(.8, 0, 0)
 		self.CombatIndicator = combat
-
-		local rest = self:CreateTexture(nil, "OVERLAY")
-		rest:SetPoint("CENTER", self, "LEFT", -2, 4)
-		rest:SetSize(18, 18)
-		rest:SetTexture("Interface\\PLAYERFRAME\\DruidEclipse")
-		rest:SetTexCoord(.445, .55, .648, .905)
-		rest:SetVertexColor(.6, .8, 1)
-		rest:SetAlpha(.7)
-		self.RestingIndicator = rest
 	elseif mystyle == "target" then
 		local quest = self:CreateTexture(nil, "OVERLAY")
 		quest:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 8)
