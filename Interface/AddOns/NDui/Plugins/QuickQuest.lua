@@ -188,17 +188,12 @@ local ignoreGossipNPC = {
 	[184587] = true, -- 集市，塔皮克斯
 }
 
-local rogueClassHallInsignia = {
-	[97004] = true, -- "Red" Jack Findle
-	[96782] = true, -- Lucian Trias
-	[93188] = true, -- Mongar
-	[107486] = true, -- CoS rumors
+local autoSelectFirstOptionList = {
+	[97004] = true, -- "Red" Jack Findle, Rogue ClassHall
+	[96782] = true, -- Lucian Trias, Rogue ClassHall
+	[93188] = true, -- Mongar, Rogue ClassHall
+	[107486] = true, -- 群星密探
 	[167839] = true, -- 灵魂残渣，爬塔
-}
-
-local followerAssignees = {
-	[138708] = true, -- 半兽人迦罗娜
-	[135614] = true, -- 马迪亚斯·肖尔大师
 }
 
 local autoGossipTypes = {
@@ -222,8 +217,14 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 		for index, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
 			local questID = questInfo.questID
 			local isWorldQuest = questID and C_QuestLog_IsWorldQuest(questID)
-			if questInfo.isComplete and (not questID or not isWorldQuest) then
-				C_GossipInfo_SelectActiveQuest(index)
+			if DB.isNewPatch then
+				if questInfo.isComplete and not isWorldQuest then
+					C_GossipInfo_SelectActiveQuest(questID)
+				end
+			else
+				if questInfo.isComplete and (not questID or not isWorldQuest) then
+					C_GossipInfo_SelectActiveQuest(index)
+				end
 			end
 		end
 	end
@@ -233,33 +234,41 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 		for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
 			local trivial = questInfo.isTrivial
 			if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
-				C_GossipInfo_SelectAvailableQuest(index)
+				if DB.isNewPatch then
+					C_GossipInfo_SelectAvailableQuest(questInfo.questID)
+				else
+					C_GossipInfo_SelectAvailableQuest(index)
+				end
 			end
 		end
 	end
 
-	if rogueClassHallInsignia[npcID] then
-		return C_GossipInfo_SelectOption(1)
+	local gossipInfoTable = C_GossipInfo_GetOptions()
+	if not gossipInfoTable then return end
+
+	local numOptions = #gossipInfoTable
+	local firstOptionID = gossipInfoTable[1] and gossipInfoTable[1].gossipOptionID
+
+	if autoSelectFirstOptionList[npcID] then
+		if DB.isNewPatch then
+			return C_GossipInfo_SelectOption(firstOptionID)
+		else
+			return C_GossipInfo_SelectOption(1)
+		end
 	end
 
-	if available == 0 and active == 0 then
-		local gossipInfoTable = C_GossipInfo_GetOptions()
-		local numOptions = #gossipInfoTable
-		if numOptions == 1 then
-			if npcID == 57850 then
-				return C_GossipInfo_SelectOption(1)
-			end
-
-			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-			if instance ~= "raid" and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
+	if available == 0 and active == 0 and numOptions == 1 then
+		local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+		if instance ~= "raid" and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
+			if DB.isNewPatch then
+				return C_GossipInfo_SelectOption(firstOptionID)
+			else
 				local gType = gossipInfoTable[1] and gossipInfoTable[1].type
 				if gType and autoGossipTypes[gType] then
 					C_GossipInfo_SelectOption(1)
 					return
 				end
 			end
-		elseif followerAssignees[npcID] and numOptions > 1 then
-			return C_GossipInfo_SelectOption(1)
 		end
 	end
 end)
