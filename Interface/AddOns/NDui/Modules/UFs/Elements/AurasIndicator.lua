@@ -243,7 +243,7 @@ function UF:AurasIndicator_UpdateButton(button, aura)
 		button.__shadow:SetBackdropBorderColor(color[1], color[2], color[3])
 	end
 	if button.glowFrame then
-		if button.priority == 6 then
+		if aura.priority == 6 then
 			B.ShowOverlayGlow(button.glowFrame)
 		else
 			B.HideOverlayGlow(button.glowFrame)
