@@ -355,7 +355,7 @@ function Implementation:UpdateSlot(bagID, slotID)
 			container:AddButton(button)
 		end
 
-		button:Update(item)
+		button:ButtonUpdate(item)
 	elseif(button) then
 		button.container:RemoveButton(button)
 		self:SetButton(bagID, slotID, nil)
@@ -431,14 +431,14 @@ function Implementation:BAG_UPDATE_COOLDOWN(_, bagID)
 			local button = self:GetButton(bagID, slotID)
 			if(button) then
 				local item = self:GetItemInfo(bagID, slotID)
-				button:UpdateCooldown(item)
+				button:ButtonUpdateCooldown(item)
 			end
 		end
 	else
 		for _, container in pairs(self.contByID) do
 			for _, button in pairs(container.buttons) do
 				local item = self:GetItemInfo(button.bagID, button.slotID)
-				button:UpdateCooldown(item)
+				button:ButtonUpdateCooldown(item)
 			end
 		end
 	end
@@ -456,7 +456,7 @@ function Implementation:ITEM_LOCK_CHANGED(_, bagID, slotID)
 	local button = self:GetButton(bagID, slotID)
 	if(button) then
 		local item = self:GetItemInfo(bagID, slotID)
-		button:UpdateLock(item)
+		button:ButtonUpdateLock(item)
 	end
 end
 
@@ -494,7 +494,7 @@ function Implementation:UNIT_QUEST_LOG_CHANGED()
 	for _, container in pairs(self.contByID) do
 		for _, button in pairs(container.buttons) do
 			local item = self:GetItemInfo(button.bagID, button.slotID)
-			button:UpdateQuest(item)
+			button:ButtonUpdateQuest(item)
 		end
 	end
 end

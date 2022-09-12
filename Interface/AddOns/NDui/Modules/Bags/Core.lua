@@ -893,7 +893,7 @@ function module:OnLogin()
 		self.Favourite:SetSize(30, 30)
 		self.Favourite:SetPoint("TOPLEFT", -12, 9)
 
-		self.Quest = B.CreateFS(self, 30, "!", "system", "LEFT", 3, 0)
+		self.QuestTag = B.CreateFS(self, 30, "!", "system", "LEFT", 3, 0)
 		self.iLvl = B.CreateFS(self, C.db["Bags"]["FontSize"], "", false, "BOTTOMLEFT", 1, 2)
 
 		if showNewItem then
@@ -1053,9 +1053,9 @@ function module:OnLogin()
 
 	function MyButton:OnUpdateQuest(item)
 		if item.questID and not item.questActive then
-			self.Quest:Show()
+			self.QuestTag:Show()
 		else
-			self.Quest:Hide()
+			self.QuestTag:Hide()
 		end
 
 		if item.questID or item.isQuestItem then

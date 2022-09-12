@@ -32,11 +32,21 @@ local function ItemButton_Scaffold(self)
 	self:SetSize(37, 37)
 
 	local name = self:GetName()
-	self.Icon = _G[name.."IconTexture"]
-	self.Count = _G[name.."Count"]
-	self.Cooldown = _G[name.."Cooldown"]
-	self.Quest = _G[name.."IconQuestTexture"]
-	self.Border = _G[name.."NormalTexture"]
+	if not self.Icon then
+		self.Icon = _G[name.."IconTexture"]
+	end
+	if not self.Count then
+		self.Count = _G[name.."Count"]
+	end
+	if not self.Cooldown then
+		self.Cooldown = _G[name.."Cooldown"]
+	end
+	if not self.Quest then
+		self.Quest = _G[name.."IconQuestTexture"]
+	end
+	if not self.Border then
+		self.Border = _G[name.."NormalTexture"]
+	end
 end
 
 --[[!
@@ -55,9 +65,9 @@ local function ItemButton_Update(self, item)
 	end
 	self.count = item.count -- Thank you Blizz for not using local variables >.> (BankFrame.lua @ 234 )
 
-	self:UpdateCooldown(item)
-	self:UpdateLock(item)
-	self:UpdateQuest(item)
+	self:ButtonUpdateCooldown(item)
+	self:ButtonUpdateLock(item)
+	self:ButtonUpdateQuest(item)
 
 	if(self.OnUpdateButton) then self:OnUpdateButton(item) end
 end
@@ -116,11 +126,11 @@ cargBags:RegisterScaffold("Default", function(self)
 	self.CreateFrame = ItemButton_CreateFrame
 	self.Scaffold = ItemButton_Scaffold
 
-	self.Update = ItemButton_Update
-	self.UpdateCooldown = ItemButton_UpdateCooldown
-	self.UpdateLock = ItemButton_UpdateLock
-	self.UpdateQuest = ItemButton_UpdateQuest
+	self.ButtonUpdate = ItemButton_Update
+	self.ButtonUpdateCooldown = ItemButton_UpdateCooldown
+	self.ButtonUpdateLock = ItemButton_UpdateLock
+	self.ButtonUpdateQuest = ItemButton_UpdateQuest
 
-	self.OnEnter = ItemButton_OnEnter
-	self.OnLeave = ItemButton_OnLeave
+	self.ButtonOnEnter = ItemButton_OnEnter
+	self.ButtonOnLeave = ItemButton_OnLeave
 end)

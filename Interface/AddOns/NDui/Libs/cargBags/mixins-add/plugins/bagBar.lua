@@ -88,7 +88,7 @@ function BagButton:Create(bagID)
 	return button
 end
 
-function BagButton:Update()
+function BagButton:UpdateButton()
 	local icon = GetInventoryItemTexture("player", self.GetInventorySlot and self:GetInventorySlot() or self.invID)
 	self.Icon:SetTexture(icon or self.bgTex)
 	self.Icon:SetDesaturated(IsInventoryItemLocked(self.invID))
@@ -188,7 +188,7 @@ end
 -- Updating the icons
 local function updater(self)
 	for _, button in pairs(self.buttons) do
-		button:Update()
+		button:UpdateButton()
 	end
 end
 
@@ -201,7 +201,7 @@ local function onLock(self, _, bagID, slotID)
 
 	for _, button in pairs(self.buttons) do
 		if(button.invID == bagID) then
-			return button:Update()
+			return button:UpdateButton()
 		end
 	end
 end

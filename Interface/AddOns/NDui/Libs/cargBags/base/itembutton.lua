@@ -75,8 +75,8 @@ function ItemButton:New(bagID, slotID)
 	button.slotID = slotID
 	button:SetID(slotID)
 	button:Show()
-	button:HookScript("OnEnter", button.OnEnter)
-	button:HookScript("OnLeave", button.OnLeave)
+	button:HookScript("OnEnter", button.ButtonOnEnter)
+	button:HookScript("OnLeave", button.ButtonOnLeave)
 	if bagID == REAGENTBANK_CONTAINER then
 		button.GetInventorySlot = ReagentButtonInventorySlot
 		button.UpdateTooltip = BankFrameItemButton_OnEnter
