@@ -17,6 +17,7 @@ local tradeList = {
 		[3413] = true,
 		[18260] = true,
 		[33359] = true,
+		[51296] = true,
 	},
 	["FistAid"] = {
 		[3273] = true,
@@ -24,6 +25,7 @@ local tradeList = {
 		[7924] = true,
 		[10846] = true,
 		[27028] = true,
+		[45542] = true,
 	},
 	["Alchemy"] = {
 		[2259] = true,
@@ -31,6 +33,7 @@ local tradeList = {
 		[3464] = true,
 		[11611] = true,
 		[28596] = true,
+		[51304] = true,
 	},
 	["Blacksmithing"] = {
 		[2018] = true,
@@ -38,6 +41,7 @@ local tradeList = {
 		[3538] = true,
 		[9785] = true,
 		[29844] = true,
+		[51300] = true,
 	},
 	["Enchanting"] = {
 		[7411] = true,
@@ -45,6 +49,7 @@ local tradeList = {
 		[7413] = true,
 		[13920] = true,
 		[28029] = true,
+		[51313] = true,
 	},
 	["Engineering"] = {
 		[4036] = true,
@@ -52,6 +57,7 @@ local tradeList = {
 		[4038] = true,
 		[12656] = true,
 		[30350] = true,
+		[51306] = true,
 	},
 	["Leatherworking"] = {
 		[2108] = true,
@@ -59,6 +65,7 @@ local tradeList = {
 		[3811] = true,
 		[10662] = true,
 		[32549] = true,
+		[51302] = true,
 	},
 	["Mining"] = {
 		[2575] = true,
@@ -66,6 +73,7 @@ local tradeList = {
 		[3564] = true,
 		[10248] = true,
 		[29354] = true,
+		[50310] = true,
 	},
 	["Tailoring"] = {
 		[3908] = true,
@@ -73,6 +81,7 @@ local tradeList = {
 		[3910] = true,
 		[12180] = true,
 		[26790] = true,
+		[51309] = true,
 	},
 	["Jewelcrafting"] = {
 		[25229] = true,
@@ -80,6 +89,7 @@ local tradeList = {
 		[28894] = true,
 		[28895] = true,
 		[28897] = true,
+		[51311] = true,
 	},
 	["Poisons"] = {
 		[2842] = true,
