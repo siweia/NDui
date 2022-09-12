@@ -520,7 +520,7 @@ local function postUpdateRole(element, role)
 end
 
 function UF:CreateRestingIndicator(self)
-	local frame = CreateFrame("Frame", "NDuiRestingFrame", UIParent)
+	local frame = CreateFrame("Frame", "NDuiRestingFrame", self)
 	frame:SetSize(5, 5)
 	frame:SetPoint("CENTER", self, "LEFT", -2, 4)
 	frame:Hide()
@@ -546,7 +546,7 @@ function UF:CreateRestingIndicator(self)
 	for i = 1, 3 do
 		local textFrame = CreateFrame("Frame", nil, frame)
 		textFrame:SetAllPoints()
-		textFrame:SetFrameLevel(i)
+		textFrame:SetFrameLevel(i+5)
 		local text = B.CreateFS(textFrame, (7+i*3), "z", nil, "CENTER", offsets[i][1], offsets[i][2])
 		text:SetTextColor(.6, .8, 1)
 		frame.str[i] = text
