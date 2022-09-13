@@ -31,6 +31,27 @@ function B:RestoreMF()
 	end
 end
 
+local function updateFrameAnchor(self)
+	if InCombatLockdown() then return end
+	if self.isRestoring then return end
+	self.isRestoring = true
+	B.RestoreMF(self)
+	self.isRestoring = nil
+end
+
+local function restorFrameAnchor(self)
+	if IsControlKeyDown() then
+		C.db["TempAnchor"][self:GetName()] = nil
+		UpdateUIPanelPositions(self)
+	end
+end
+
+function B:BlizzFrameMover(frame)
+	B.CreateMF(frame, nil, true)
+	hooksecurefunc(frame, "SetPoint", updateBlizzFrameAnchor)
+	frame:HookScript("OnMouseUp", restorFrameAnchor)
+end
+
 -- Frame Mover
 local MoverList, f = {}
 local updater
