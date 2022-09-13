@@ -425,6 +425,9 @@ function M:ExGearManager()
 		button:ClearAllPoints()
 		button:SetPoint("TOPRIGHT", 35 - 62*i, -9)
 	end
+
+	-- Save anchor for CharacterFrame
+	B:BlizzFrameMover(CharacterFrame)
 end
 
 function M:CharacterStatePanel()
