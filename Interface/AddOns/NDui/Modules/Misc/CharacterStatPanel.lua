@@ -433,6 +433,12 @@ function M:ExGearManager()
 		button:ClearAllPoints()
 		button:SetPoint("TOPRIGHT", 35 - 62*i, -9)
 	end
+
+	GearManagerDialog:HookScript("OnShow", function(self)
+		if not NDuiADB["Help"]["GearManager"] then
+			B:ShowHelpTip(self, L["GearManagerTip"], "RIGHT", 20, 0, nil, "GearManager")
+		end
+	end)
 end
 
 function M:CharacterStatePanel()

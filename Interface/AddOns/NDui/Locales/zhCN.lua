@@ -838,3 +838,4 @@ L["OffTankThreatTip"] = "|n根据队伍成员的职责，当目标仇恨在其�
 L["HealPrediction"] = "显示治疗预估"
 L["DemonPage"] = "术士恶魔形态翻页"
 L["DispellTypeTip"] = "|n总是：始终显示目标身上所有诅咒、魔法、疾病及中毒效果。|n|n过滤：只显示你可以驱散的负面效果，对于你可以驱散的法术，图标边框是带有颜色的。"
+L["GearManagerTip"] = "双击图标即可装备该方案。"
