@@ -330,6 +330,8 @@ local function ExpandCharacterFrame(expand)
 end
 
 function M:CharacterStatePanel()
+	B:BlizzFrameMover(CharacterFrame) -- Save anchor for CharacterFrame
+
 	if not IsAddOnLoaded("CharacterStatsClassic") then return end
 	if not C.db["Skins"]["BlizzardSkins"] then return end   -- disable if skins off, needs review
 
