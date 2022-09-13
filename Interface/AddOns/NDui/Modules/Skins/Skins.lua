@@ -207,5 +207,21 @@ function S:EnlargeDefaultUIPanel(name, pushed)
 		rightTex:SetTexture(309666)
 		rightTex:SetSize(256, 512)
 		rightTex:SetPoint("TOPLEFT", leftTex, "TOPRIGHT")
+
+		local cover1 = frame:CreateTexture(nil, "ARTWORK")
+		cover1:SetPoint("BOTTOMLEFT", 20, 54)
+		cover1:SetSize(301, 25)
+		cover1:SetColorTexture(0, 0, 0)
+
+		local cover2 = frame:CreateTexture(nil, "ARTWORK")
+		cover2:SetPoint("BOTTOMLEFT", cover1, "BOTTOMRIGHT", -1, 0)
+		cover2:SetSize(25, 360)
+		cover2:SetColorTexture(0, 0, 0)
+
+		local cover3 = frame:CreateTexture(nil, "ARTWORK")
+		cover3:SetPoint("BOTTOMRIGHT", -38, 56)
+		cover3:SetSize(25, 360)
+		cover3:SetTexture("Interface\\TradeSkillFrame\\UI-TradeSkill-TopLeft")
+		cover3:SetTexCoord(.3, .4, .15, .25)
 	end
 end
