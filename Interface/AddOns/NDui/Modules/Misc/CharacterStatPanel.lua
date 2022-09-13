@@ -384,6 +384,49 @@ function M:SortAddOnPanels()
 	end
 end
 
+function M:SelectEquipSet()
+	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+
+	local selectedSet = GearManagerDialog.selectedSet
+	local name = selectedSet and selectedSet.id
+	if name then
+		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+		EquipmentManager_EquipSet(name)
+	end
+end
+
+function M:ExGearManager()
+	GearManagerDialog.Title:SetJustifyH("LEFT")
+	GearManagerDialog.Title:SetPoint("TOPLEFT", 12, -12)
+	GearManagerDialog:SetFrameStrata("DIALOG")
+	GearManagerDialog:SetSize(339, 70)
+	GearManagerDialog:ClearAllPoints()
+	GearManagerDialog:SetPoint("BOTTOMLEFT", PaperDollFrame, "TOPLEFT", 10, -18)
+
+	local prevButton
+	for i = 1, 10 do
+		local button = _G["GearSetButton"..i]
+		button:ClearAllPoints()
+		button:SetSize(28, 28)
+		if not prevButton then
+			button:SetPoint("BOTTOMLEFT", 10, 10)
+		else
+			button:SetPoint("LEFT", prevButton, "RIGHT", 5, 0)
+		end
+		prevButton = button
+
+		button:SetScript("OnDoubleClick", M.SelectEquipSet)
+	end
+
+	local names = {"EquipSet", "DeleteSet", "SaveSet"}
+	for i, name in pairs(names) do
+		local button = _G["GearManagerDialog"..name]
+		button:SetSize(60, 20)
+		button:ClearAllPoints()
+		button:SetPoint("TOPRIGHT", 35 - 62*i, -9)
+	end
+end
+
 function M:CharacterStatePanel()
 	if not C.db["Skins"]["BlizzardSkins"] then return end   -- disable if skins off, needs review
 
@@ -435,7 +478,7 @@ function M:CharacterStatePanel()
 	CharacterNameFrame:ClearAllPoints()
 	CharacterNameFrame:SetPoint("TOPLEFT", CharacterFrame, 130, -20)
 	PaperDollFrame.__statPanels = {}
-	GearManagerDialog:SetFrameStrata("DIALOG")
+	M:ExGearManager()
 
 	-- Update data
 	hooksecurefunc("ToggleCharacter", UpdateStats)
