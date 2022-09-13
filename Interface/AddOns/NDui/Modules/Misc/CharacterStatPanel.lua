@@ -425,12 +425,11 @@ function M:ExGearManager()
 		button:ClearAllPoints()
 		button:SetPoint("TOPRIGHT", 35 - 62*i, -9)
 	end
-
-	-- Save anchor for CharacterFrame
-	B:BlizzFrameMover(CharacterFrame)
 end
 
 function M:CharacterStatePanel()
+	B:BlizzFrameMover(CharacterFrame) -- Save anchor for CharacterFrame
+
 	if not C.db["Skins"]["BlizzardSkins"] then return end   -- disable if skins off, needs review
 
 	hasOtherAddon = IsAddOnLoaded("CharacterStatsTBC")
