@@ -48,27 +48,19 @@ function UF:SetupCVars()
 
 	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesNameplateMaxDistanceSlider) -- Use option in GUI
 
-	if IsAddOnLoaded("Questie") then
-		if not QuestieLoader then
-			local frame = CreateFrame("Frame", nil, UIParent)
-			frame:SetSize(800, 200)
-			frame:SetPoint("CENTER")
-			B.SetBD(frame)
-			B.CreateFS(frame, 24, "学会做个正常人，更新或者删除你的Questie。|n|nDelete or update your Questie, be like a human."):SetWordWrap(true)
-		else
-			_QuestiePlayer = QuestieLoader:ImportModule("QuestiePlayer")
-			_QuestieTooltips = QuestieLoader:ImportModule("QuestieTooltips")
+	if IsAddOnLoaded("Questie") and QuestieLoader then
+		_QuestiePlayer = QuestieLoader:ImportModule("QuestiePlayer")
+		_QuestieTooltips = QuestieLoader:ImportModule("QuestieTooltips")
 
-			local _QuestieEventHandler = QuestieLoader:ImportModule("QuestEventHandler")
-			if _QuestieEventHandler and _QuestieEventHandler.private then
-				hooksecurefunc(_QuestieEventHandler.private, "UpdateAllQuests", function()
-					for _, plate in pairs(C_NamePlate.GetNamePlates()) do
-						if plate.unitFrame then
-							UF.UpdateQuestIndicator(plate.unitFrame)
-						end
+		local _QuestieEventHandler = QuestieLoader:ImportModule("QuestEventHandler")
+		if _QuestieEventHandler and _QuestieEventHandler.private then
+			hooksecurefunc(_QuestieEventHandler.private, "UpdateAllQuests", function()
+				for _, plate in pairs(C_NamePlate.GetNamePlates()) do
+					if plate.unitFrame then
+						UF.UpdateQuestIndicator(plate.unitFrame)
 					end
-				end)
-			end
+				end
+			end)
 		end
 	end
 end
