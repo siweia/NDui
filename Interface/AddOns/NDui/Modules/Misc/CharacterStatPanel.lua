@@ -347,6 +347,13 @@ local function ToggleStatPanel(texture)
 	ToggleMagicRes()
 end
 
+local function resetMerInspect(self)
+	if self.isDoing then return end
+	self.isDoing = true
+	M:SortAddOnPanels()
+	self.isDoing = nil
+end
+
 M.OtherPanels = {"DCS_StatScrollFrame", "CSC_SideStatsFrame"}
 local found
 function M:FindAddOnPanels()
@@ -357,6 +364,7 @@ function M:FindAddOnPanels()
 			end
 		end
 		if PaperDollFrame.inspectFrame then
+			hooksecurefunc(PaperDollFrame.inspectFrame, "SetPoint", resetMerInspect)
 			tinsert(PaperDollFrame.__statPanels, PaperDollFrame.inspectFrame)
 		end
 		found = true
