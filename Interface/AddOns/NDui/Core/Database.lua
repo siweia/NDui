@@ -292,6 +292,14 @@ DB.ReminderBuffs = {
 			pvp = true,
 		},
 	},
+	PALADIN = {
+		{	spells = {	-- 正义之怒
+				[25780] = true,
+			},
+			depend = 20925,
+			instance = true,
+		},
+	},
 }
 
 -- Deprecated
