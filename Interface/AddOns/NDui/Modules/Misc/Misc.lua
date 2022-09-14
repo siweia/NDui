@@ -70,6 +70,7 @@ function M:OnLogin()
 	M:BaudErrorFrameHelpTip()
 	M:EnhancedPicker()
 	M:UpdateMaxZoomLevel()
+	M:MoveBlizzFrames()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -895,4 +896,9 @@ end
 
 function M:UpdateMaxZoomLevel()
 	SetCVar("cameraDistanceMaxZoomFactor", C.db["Misc"]["MaxZoom"])
+end
+
+-- Move and save blizz frames
+function M:MoveBlizzFrames()
+	B:BlizzFrameMover(CharacterFrame)
 end
