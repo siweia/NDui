@@ -62,6 +62,7 @@ local list = {
 		{AuraID = 324149, UnitID = "target", Caster = "player"},	-- 劫掠射击
 		{AuraID = 308498, UnitID = "target", Caster = "player"},	-- 共鸣箭
 		{AuraID = 333526, UnitID = "target", Caster = "player"},	-- 尖刺果实
+		{AuraID = 375893, UnitID = "target", Caster = "player", Disabled = not DB.isNewPatch},	-- 死亡飞轮
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 19574, UnitID = "player"},	-- 狂野怒火
