@@ -793,7 +793,7 @@ function UF:OnLogin()
 					C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
 				end
 				raidMover:HookScript("OnDragStop", updateRaidMover)
-				hooksecurefunc(raidMover, "SetPoint", updateRaidMover)
+				raidMover:HookScript("OnHide", updateRaidMover)
 			end
 			if partyMover then
 				local function updatePartyMover()
@@ -802,7 +802,7 @@ function UF:OnLogin()
 					C.db["Mover"]["PartyPos"..specIndex] = C.db["Mover"]["PartyFrame"]
 				end
 				partyMover:HookScript("OnDragStop", updatePartyMover)
-				hooksecurefunc(partyMover, "SetPoint", updatePartyMover)
+				partyMover:HookScript("OnHide", updatePartyMover)
 			end
 		end
 	end
