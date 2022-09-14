@@ -20,7 +20,9 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(frame.SaveChangesButton)
 	B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
 	reskinOptionCheck(frame.ShowGridCheckButton.Button)
-	frame.Tutorial.Ring:Hide()
+	if frame.Tutorial then
+		frame.Tutorial.Ring:Hide()
+	end
 
 	local dialog = EditModeSystemSettingsDialog
 	B.StripTextures(dialog)
