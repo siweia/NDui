@@ -1000,6 +1000,7 @@ do
 
 	local function reskinTrimScrollArrow(self, direction)
 		if not self then return end
+		if not self.Texture then return end -- CovenantMissonFrame, isNewPatch
 
 		self.Texture:SetAlpha(0)
 		self.Overlay:SetAlpha(0)
