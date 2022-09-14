@@ -8,8 +8,6 @@ All rights reserved.
 Permission is hereby granted to distribute unmodified copies of this file.
 ]]
 
-if NDui[4].isNewPatch then return end
-
 local function purgeKey(t, k)
 	t[k] = nil
 	local c = 42
@@ -51,6 +49,8 @@ if (tonumber(UIDROPDOWNMENU_OPEN_PATCH_VERSION) or 0) < 1 then
 		end
 	end)
 end
+
+if NDui[4].isNewPatch then return end
 
 -- https://www.townlong-yak.com/bugs/gXwH4P-IOFrameSelection
 if (tonumber(IOFRAME_SELECTION_PATCH_VERSION) or 0) < 1 then
