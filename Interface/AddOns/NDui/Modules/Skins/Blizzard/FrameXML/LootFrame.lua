@@ -22,7 +22,7 @@ tinsert(C.defaultThemes, function()
 		local function updatePushed(self)
 			local button = self.__owner
 			if button.PushedNameFrame:IsShown() then
-				button.bg:SetBackdropBorderColor(1, .8, 0, .5)
+				button.bg:SetBackdropBorderColor(1, .8, 0)
 			else
 				button.bg:SetBackdropBorderColor(0, 0, 0)
 			end
