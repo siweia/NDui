@@ -241,17 +241,19 @@ end
 
 function M:TradeTabs_QuickEnchanting()
 	if DB.isNewPatch then
-		hooksecurefunc(ProfessionsFrame.CraftingPage, "SetupCraftingButtons", function(self)
-			isEnchanting = nil
-			local currentRecipeInfo = self.SchematicForm:GetRecipeInfo()
-			if currentRecipeInfo and currentRecipeInfo.alternateVerb then
-				local professionInfo = ProfessionsFrame:GetProfessionInfo()
-				if professionInfo and professionInfo.parentProfessionID == 333 then
-					isEnchanting = true
-					self.CreateButton.tooltipText = format(tooltipString, L["UseVellum"], GetItemCount(ENCHANTING_VELLUM))
+		if ProfessionsFrame.CraftingPage.ValidateControls then
+			hooksecurefunc(ProfessionsFrame.CraftingPage, "ValidateControls", function(self)
+				isEnchanting = nil
+				local currentRecipeInfo = self.SchematicForm:GetRecipeInfo()
+				if currentRecipeInfo and currentRecipeInfo.alternateVerb then
+					local professionInfo = ProfessionsFrame:GetProfessionInfo()
+					if professionInfo and professionInfo.parentProfessionID == 333 then
+						isEnchanting = true
+						self.CreateButton.tooltipText = format(tooltipString, L["UseVellum"], GetItemCount(ENCHANTING_VELLUM))
+					end
 				end
-			end
-		end)
+			end)
+		end
 	
 		local createButton = ProfessionsFrame.CraftingPage.CreateButton
 		createButton:RegisterForClicks("AnyUp")
