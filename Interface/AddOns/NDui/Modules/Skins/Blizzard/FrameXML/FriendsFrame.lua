@@ -126,6 +126,10 @@ tinsert(C.defaultThemes, function()
 
 	local broadcastButton = FriendsFrameBattlenetFrame.BroadcastButton
 	broadcastButton:SetSize(20, 20)
+	if DB.isNewPatch then
+		broadcastButton:GetNormalTexture():SetAlpha(0)
+		broadcastButton:GetPushedTexture():SetAlpha(0)
+	end
 	B.Reskin(broadcastButton)
 	local newIcon = broadcastButton:CreateTexture(nil, "ARTWORK")
 	newIcon:SetAllPoints()

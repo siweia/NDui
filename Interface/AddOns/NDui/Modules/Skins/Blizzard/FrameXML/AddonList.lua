@@ -23,13 +23,19 @@ tinsert(C.defaultThemes, function()
 	AddonCharacterDropDown:SetWidth(170)
 
 	if DB.isNewPatch then
-		-- needs review on checkbox color
+		local function forceSaturation(self, _, force)
+			if force then return end
+			self:SetVertexColor(cr, cg, cb)
+			self:SetDesaturated(true, true)
+		end
+
 		hooksecurefunc(AddonList.ScrollBox, "Update", function(self)
 			for i = 1, self.ScrollTarget:GetNumChildren() do
 				local child = select(i, self.ScrollTarget:GetChildren())
 				if not child.styled then
 					B.ReskinCheck(child.Enabled, true)
 					B.Reskin(child.LoadAddonButton)
+					hooksecurefunc(child.Enabled:GetCheckedTexture(), "SetDesaturated", forceSaturation)
 
 					child.styled = true
 				end

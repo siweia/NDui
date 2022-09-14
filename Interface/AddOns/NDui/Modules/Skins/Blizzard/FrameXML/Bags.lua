@@ -5,6 +5,13 @@ local MAX_CONTAINER_ITEMS = 36
 
 local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
 
+local function handleMoneyFrame(frame)
+	if frame.MoneyFrame then
+		B.StripTextures(frame.MoneyFrame)
+		B.CreateBDFrame(frame.MoneyFrame, .25)
+	end
+end
+
 local function createBagIcon(frame, index)
 	if not frame.bagIcon then
 		frame.bagIcon = frame.PortraitButton:CreateTexture()
@@ -15,6 +22,7 @@ local function createBagIcon(frame, index)
 	if index == 1 then
 		frame.bagIcon:SetTexture(backpackTexture) -- backpack
 	end
+	handleMoneyFrame(frame)
 end
 
 local function replaceSortTexture(texture)
@@ -55,6 +63,11 @@ local function ReskinBagSlot(bu)
 	if questTexture then
 		questTexture:SetDrawLayer("BACKGROUND")
 		questTexture:SetSize(1, 1)
+	end
+
+	local hl = bu.SlotHighlightTexture
+	if hl then
+		hl:SetColorTexture(1, .8, 0, .5)
 	end
 end
 
@@ -98,12 +111,13 @@ tinsert(C.defaultThemes, function()
 
 	if DB.isNewPatch then
 		for i = 1, 12 do
-			local frame = _G["ContainerFrame"..i]
-			local name = frame.TitleText
+			local frameName = "ContainerFrame"..i
+			local frame = _G[frameName]
+			local name = frame.TitleText or _G[frameName.."TitleText"]
 			name:SetDrawLayer("OVERLAY")
 			name:ClearAllPoints()
 			name:SetPoint("TOP", 0, -10)
-			B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"])
+			B.ReskinClose(_G[frameName.."CloseButton"])
 	
 			B.StripTextures(frame)
 			B.SetBD(frame)
@@ -112,15 +126,14 @@ tinsert(C.defaultThemes, function()
 			hooksecurefunc(frame, "Update", updateContainer)
 	
 			for k = 1, MAX_CONTAINER_ITEMS do
-				local button = _G["ContainerFrame"..i.."Item"..k]
+				local button = _G[frameName.."Item"..k]
 				ReskinBagSlot(button)
 				hooksecurefunc(button, "ChangeOwnership", emptySlotBG)
 			end
 		end
 
-		local bg = B.CreateBDFrame(BackpackTokenFrame, .25)
-		bg:SetPoint("TOPLEFT", 2, -3)
-		bg:SetPoint("BOTTOMRIGHT", -6, 6)
+		B.StripTextures(BackpackTokenFrame)
+		B.CreateBDFrame(BackpackTokenFrame, .25)
 
 		hooksecurefunc(BackpackTokenFrame, "Update", function(self)
 			local tokens = self.Tokens

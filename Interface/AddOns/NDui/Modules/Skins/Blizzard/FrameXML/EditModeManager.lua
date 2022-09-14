@@ -1,6 +1,11 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function reskinOptionCheck(button)
+	B.ReskinCheck(button)
+	button:SetSize(24, 24)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -14,12 +19,23 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(frame.RevertAllChangesButton)
 	B.Reskin(frame.SaveChangesButton)
 	B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
-	B.ReskinCheck(frame.ShowGridCheckButton.Button)
+	reskinOptionCheck(frame.ShowGridCheckButton.Button)
+	frame.Tutorial.Ring:Hide()
 
 	local dialog = EditModeSystemSettingsDialog
 	B.StripTextures(dialog)
 	B.SetBD(dialog)
 	B.ReskinClose(dialog.CloseButton)
+
+	hooksecurefunc(frame.AccountSettings, "OnEditModeEnter", function(self)
+		for i = 1, self.Settings:GetNumChildren() do
+			local option = select(i, self.Settings:GetChildren())
+			if option.Button and not option.styled then
+				reskinOptionCheck(option.Button)
+				option.styled = true
+			end
+		end
+	end)
 
 	hooksecurefunc(dialog, "UpdateExtraButtons", function(self)
 		local revertButton = self.Buttons and self.Buttons.RevertChangesButton

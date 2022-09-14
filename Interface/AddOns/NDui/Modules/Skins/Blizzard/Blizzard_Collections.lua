@@ -444,7 +444,8 @@ C.themes["Blizzard_Collections"] = function()
 		if PlayerHasToy(itemID) then
 			local quality = select(3, GetItemInfo(itemID))
 			if quality then
-				text:SetTextColor(GetItemQualityColor(quality))
+				local r, g, b = GetItemQualityColor(quality)
+				text:SetTextColor(r, g, b)
 			else
 				text:SetTextColor(1, 1, 1)
 			end

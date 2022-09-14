@@ -1210,7 +1210,11 @@ do
 		hl:SetVertexColor(cr, cg, cb, .25)
 
 		local ch = self:GetCheckedTexture()
-		ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+		if DB.isNewPatch then
+			ch:SetAtlas("checkmark-minimal")
+		else
+			ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+		end
 		ch:SetTexCoord(0, 1, 0, 1)
 		ch:SetDesaturated(true)
 		ch:SetVertexColor(cr, cg, cb)
@@ -1219,8 +1223,8 @@ do
 	end
 
 	function B:ReskinRadio()
-		self:SetNormalTexture("")
-		self:SetHighlightTexture("")
+		self:GetNormalTexture():SetAlpha(0)
+		self:GetHighlightTexture():SetAlpha(0)
 		self:SetCheckedTexture(DB.bdTex)
 
 		local ch = self:GetCheckedTexture()

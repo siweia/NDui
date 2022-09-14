@@ -58,7 +58,11 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 
 	B.StripTextures(ArchaeologyFrameRankBar)
 	ArchaeologyFrameRankBarBar:SetTexture(DB.bdTex)
-	ArchaeologyFrameRankBarBar:SetGradient("VERTICAL", 0, .65, 0, 0, .75, 0)
+	if DB.isNewPatch then
+		ArchaeologyFrameRankBarBar:SetGradient("VERTICAL", CreateColor(0, .65, 0, 1), CreateColor(0, .75, 0, 1))
+	else
+		ArchaeologyFrameRankBarBar:SetGradient("VERTICAL", 0, .65, 0, 0, .75, 0)
+	end
 	ArchaeologyFrameRankBar:SetHeight(14)
 	B.CreateBDFrame(ArchaeologyFrameRankBar, .25)
 	B.ReskinIcon(ArchaeologyFrameArtifactPageIcon)
@@ -67,7 +71,11 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	B.CreateBDFrame(ArchaeologyFrameArtifactPageSolveFrameStatusBar, .25)
 	local barTexture = ArchaeologyFrameArtifactPageSolveFrameStatusBar:GetStatusBarTexture()
 	barTexture:SetTexture(DB.bdTex)
-	barTexture:SetGradient("VERTICAL", .65, .25, 0, .75, .35, .1)
+	if DB.isNewPatch then
+		barTexture:SetGradient("VERTICAL", CreateColor(.65, .25, 0, 1), CreateColor(.75, .35, .1, 1))
+	else
+		barTexture:SetGradient("VERTICAL", .65, .25, 0, .75, .35, .1)
+	end
 
 	-- ArcheologyDigsiteProgressBar
 	B.StripTextures(ArcheologyDigsiteProgressBar)

@@ -26,13 +26,14 @@ C.themes["Blizzard_ClassTalentUI"] = function()
 		end
 	end)
 
-	local dialog = ClassTalentImportDialog
+	local dialog = ClassTalentImportDialog or ClassTalentLoadoutImportDialog
+	if dialog then
+		B.StripTextures(dialog)
+		B.SetBD(dialog)
+		B.Reskin(dialog.AcceptButton)
+		B.Reskin(dialog.CancelButton)
 
-	B.StripTextures(dialog)
-	B.SetBD(dialog)
-	B.Reskin(dialog.AcceptButton)
-	B.Reskin(dialog.CancelButton)
-
-	B.StripTextures(dialog.ImportBox)
-	B.CreateBDFrame(dialog.ImportBox, .25)
+		B.StripTextures(dialog.ImportBox)
+		B.CreateBDFrame(dialog.ImportBox, .25)
+	end
 end
