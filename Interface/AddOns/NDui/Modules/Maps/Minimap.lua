@@ -165,10 +165,15 @@ function module:ReskinRegions()
 
 	-- Mail icon
 	MiniMapMailFrame:ClearAllPoints()
-	MiniMapMailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -3, 3)
-	MiniMapMailIcon:SetTexture(DB.mailTex)
-	MiniMapMailIcon:SetSize(21, 21)
-	MiniMapMailIcon:SetVertexColor(1, 1, 0)
+	if DB.isNewPatch then
+		MiniMapMailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3)
+		MiniMapMailFrame:SetFrameLevel(11)
+	else
+		MiniMapMailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -3, 3)
+		MiniMapMailIcon:SetTexture(DB.mailTex)
+		MiniMapMailIcon:SetSize(21, 21)
+		MiniMapMailIcon:SetVertexColor(1, 1, 0)
+	end
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
