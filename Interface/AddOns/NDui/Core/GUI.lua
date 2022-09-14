@@ -212,6 +212,7 @@ G.DefaultSettings = {
 		HideTip = false,
 		ShowRole = true,
 		HealPredic = true,
+		AutoBuffs = true,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,

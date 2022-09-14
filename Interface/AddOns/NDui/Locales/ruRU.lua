@@ -839,3 +839,4 @@ L["HealPrediction"] = "Heal prediction" -- need translation
 L["DemonPage"] = "Warlock demon page" -- need translation
 L["DispellTypeTip"] = "|nAlways: All the auras from magic, curse, disease and poison would show on raidframe.|n|nFilter: Only show your dispellable debuffs. The icon border would be colored by debuff types." -- need translation
 L["GearManagerTip"] = "You can double click icon to select item set." -- need translation
+L["AutoBuffsTip"] = "|nIf checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3." -- need translation
