@@ -9,8 +9,43 @@ local atlasToTex = {
 local function replaceInviteTex(self, atlas)
 	local tex = atlasToTex[atlas]
 	if tex then
-		self:SetTexture(tex)
+		self.ownerIcon:SetTexture(tex)
 	end
+end
+
+local function reskinFriendButton(button)
+	if not button.styled then
+		local gameIcon = button.gameIcon
+		gameIcon:SetSize(22, 22)
+		gameIcon:SetTexCoord(.17, .83, .17, .83)
+		button.background:Hide()
+		button:SetHighlightTexture(DB.bdTex)
+		button:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
+		button.bg = CreateFrame("Frame", nil, button)
+		button.bg:SetAllPoints(gameIcon)
+		B.CreateBDFrame(button.bg, 0)
+
+		local travelPass = button.travelPassButton
+		travelPass:SetSize(22, 22)
+		travelPass:SetPoint("TOPRIGHT", -3, -6)
+		B.CreateBDFrame(travelPass, 1)
+		travelPass.NormalTexture:SetAlpha(0)
+		travelPass.PushedTexture:SetAlpha(0)
+		travelPass.DisabledTexture:SetAlpha(0)
+		travelPass.HighlightTexture:SetColorTexture(1, 1, 1, .25)
+		travelPass.HighlightTexture:SetAllPoints()
+		gameIcon:SetPoint("TOPRIGHT", travelPass, "TOPLEFT", -4, 0)
+
+		local icon = travelPass:CreateTexture(nil, "ARTWORK")
+		icon:SetTexCoord(.1, .9, .1, .9)
+		icon:SetAllPoints()
+		travelPass.NormalTexture.ownerIcon = icon
+		hooksecurefunc(travelPass.NormalTexture, "SetAtlas", replaceInviteTex)
+
+		button.styled = true
+	end
+
+	button.bg:SetShown(button.gameIcon:IsShown())
 end
 
 tinsert(C.defaultThemes, function()
@@ -28,44 +63,42 @@ tinsert(C.defaultThemes, function()
 
 	if DB.isNewPatch then
 		-- todo
+		hooksecurefunc(FriendsListFrame.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local button = select(i, self.ScrollTarget:GetChildren())
+				reskinFriendButton(button)
+			end
+		end)
+
+		local INVITE_RESTRICTION_NONE = 9
+		hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
+			if button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+				if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
+					button.newIcon:SetVertexColor(1, 1, 1)
+				else
+					button.newIcon:SetVertexColor(.3, .3, .3)
+				end
+			end
+		end)
+
+		hooksecurefunc("FriendsFrame_UpdateFriendInviteButton", function(button)
+			if not button.styled then
+				B.Reskin(button.AcceptButton)
+				B.Reskin(button.DeclineButton)
+
+				button.styled = true
+			end
+		end)
 	else
-		for i = 1, FRIENDS_TO_DISPLAY do
+		for i = 1, 11 do
 			local bu = _G["FriendsListFrameScrollFrameButton"..i]
-			local ic = bu.gameIcon
-
-			bu.background:Hide()
-			bu:SetHighlightTexture(DB.bdTex)
-			bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
-			ic:SetSize(22, 22)
-			ic:SetTexCoord(.17, .83, .17, .83)
-
-			bu.bg = CreateFrame("Frame", nil, bu)
-			bu.bg:SetAllPoints(ic)
-			B.CreateBDFrame(bu.bg, 0)
-
-			local travelPass = bu.travelPassButton
-			travelPass:SetSize(22, 22)
-			travelPass:SetPushedTexture("")
-			travelPass:SetDisabledTexture("")
-			travelPass:SetPoint("TOPRIGHT", -3, -6)
-			B.CreateBDFrame(travelPass, 1)
-			local nt = travelPass:GetNormalTexture()
-			nt:SetTexCoord(.1, .9, .1, .9)
-			hooksecurefunc(nt, "SetAtlas", replaceInviteTex)
-			local hl = travelPass:GetHighlightTexture()
-			hl:SetColorTexture(1, 1, 1, .25)
-			hl:SetAllPoints()
+			reskinFriendButton(bu)
 		end
 
 		local function UpdateScroll()
-			for i = 1, FRIENDS_TO_DISPLAY do
+			for i = 1, 11 do
 				local bu = _G["FriendsListFrameScrollFrameButton"..i]
-				if bu.gameIcon:IsShown() then
-					bu.bg:Show()
-					bu.gameIcon:SetPoint("TOPRIGHT", bu.travelPassButton, "TOPLEFT", -4, 0)
-				else
-					bu.bg:Hide()
-				end
+				bu.bg:SetShown(bu.gameIcon:IsShown())
 			end
 		end
 		hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
@@ -97,11 +130,10 @@ tinsert(C.defaultThemes, function()
 			if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
 				reskinInvites(FriendsListFrameScrollFrame.invitePool)
 			elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
-				local nt = button.travelPassButton:GetNormalTexture()
 				if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
-					nt:SetVertexColor(1, 1, 1)
+					button.newIcon:SetVertexColor(1, 1, 1)
 				else
-					nt:SetVertexColor(.3, .3, .3)
+					button.newIcon:SetVertexColor(.3, .3, .3)
 				end
 			end
 		end)
