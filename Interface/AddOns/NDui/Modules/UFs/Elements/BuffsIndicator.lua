@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
+local SpellGetVisibilityInfo, SpellIsSelfBuff = SpellGetVisibilityInfo, SpellIsSelfBuff
+
 UF.RaidBuffsWhite = {}
 function UF:UpdateRaidBuffsWhite()
 	wipe(UF.RaidBuffsWhite)
@@ -91,8 +93,20 @@ function UF:BuffsIndicator_HideButtons(from, to)
 	end
 end
 
-function UF.BuffsIndicator_Filter(_, aura)
-	return UF.RaidBuffsWhite[aura.spellID] or aura.isBossAura
+function UF.BuffsIndicator_Filter(raidAuras, aura)
+	local spellID = aura.spellID
+	if aura.isBossAura then
+		return true
+	elseif C.db["UFs"]["AutoBuffs"] then
+		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, raidAuras.isInCombat and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
+		if hasCustom then
+			return showForMySpec or (alwaysShowMine and aura.isPlayerAura)
+		else
+			return aura.isPlayerAura and aura.canApply and not SpellIsSelfBuff(spellID)
+		end
+	else
+		return UF.RaidBuffsWhite[spellID]
+	end
 end
 
 function UF:BuffsIndicator_UpdateOptions()

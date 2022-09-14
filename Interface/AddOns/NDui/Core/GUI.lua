@@ -216,6 +216,7 @@ G.DefaultSettings = {
 		HideTip = false,
 		DescRole = true,
 		PlayerAbsorb = false,
+		AutoBuffs = false,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,

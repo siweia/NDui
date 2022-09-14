@@ -950,6 +950,17 @@ function G:SetupBuffsIndicator(parent)
 			createBar(scroll.child, spellID)
 		end
 	end
+
+	local box = B.CreateCheckBox(frame)
+	box:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", 0, 5)
+	box:SetChecked(C.db["UFs"]["AutoBuffs"])
+	box:SetScript("OnClick", function()
+		C.db["UFs"]["AutoBuffs"] = box:GetChecked()
+	end)
+	local text = B.CreateFS(box, 24, "|cffff0000???")
+	text:ClearAllPoints()
+	text:SetPoint("RIGHT", box, "LEFT")
+	B.AddTooltip(box, "ANCHOR_TOPRIGHT", L["AutoBuffsTip"], "info", true)
 end
 
 local function refreshDebuffsIndicator()
@@ -1058,10 +1069,7 @@ local function createOptionTitle(parent, title, offset)
 end
 
 local function toggleOptionCheck(self)
-	local value = C.db[self.__key][self.__value]
-	value = not value
-	self:SetChecked(value)
-	C.db[self.__key][self.__value] = value
+	C.db[self.__key][self.__value] = self:GetChecked()
 	if self.__callback then self:__callback() end
 end
 
