@@ -305,6 +305,11 @@ tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(PVPFrame, 15, -15, -35, 73)
 	B.ReskinArrow(PVPFrameToggleButton, "right")
 
+	for i = 1, 2 do
+		local tab = _G["PVPParentFrameTab"..i]
+		if tab then B.ReskinTab(tab) end
+	end
+
 	for i = 1, 3 do
 		local tName = "PVPTeam"..i
 		B.StripTextures(_G[tName])
