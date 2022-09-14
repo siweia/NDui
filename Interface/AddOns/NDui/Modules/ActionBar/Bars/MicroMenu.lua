@@ -134,7 +134,11 @@ function Bar:MicroMenu()
 	end
 
 	-- Default elements
-	if not DB.isNewPatch then
+	if DB.isNewPatch then
+		if MainMenuMicroButton.MainMenuBarPerformanceBar then
+			B.HideObject(MainMenuMicroButton.MainMenuBarPerformanceBar)
+		end
+	else
 		B.HideObject(MicroButtonPortrait)
 		B.HideObject(GuildMicroButtonTabard)
 		B.HideObject(MainMenuBarDownload)
