@@ -1131,9 +1131,9 @@ do
 
 		self:SetDisabledTexture(DB.bdTex)
 		local dis = self:GetDisabledTexture()
-		dis:SetVertexColor(0, 0, 0, .3)
+		dis:SetVertexColor(0, 0, 0, .5)
 		dis:SetDrawLayer("OVERLAY")
-		dis:SetAllPoints()
+		dis:SetInside()
 
 		local tex = self:CreateTexture(nil, "ARTWORK")
 		tex:SetAllPoints()
@@ -1216,8 +1216,8 @@ do
 		else
 			ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
 		end
-		ch:SetTexCoord(0, 1, 0, 1)
 		ch:SetDesaturated(true)
+		ch:SetTexCoord(0, 1, 0, 1)
 		ch:SetVertexColor(cr, cg, cb)
 
 		self.forceSaturation = forceSaturation

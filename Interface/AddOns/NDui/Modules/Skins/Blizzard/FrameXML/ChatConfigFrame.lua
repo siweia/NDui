@@ -198,7 +198,9 @@ tinsert(C.defaultThemes, function()
 		"UseAlternateVoiceForSystemMessagesCheckButton",
 	}
 	for _, checkbox in pairs(checkboxes) do
-		B.ReskinCheck(TextToSpeechFramePanelContainer[checkbox])
+		local check = TextToSpeechFramePanelContainer[checkbox]
+		B.ReskinCheck(check)
+		check.bg:SetInside(check, 6, 6)
 	end
 
 	hooksecurefunc("TextToSpeechFrame_UpdateMessageCheckboxes", function(frame)
@@ -211,6 +213,7 @@ tinsert(C.defaultThemes, function()
 				checkBox = _G[checkBoxName]
 				if checkBox and not checkBox.styled then
 					B.ReskinCheck(checkBox)
+					checkBox.bg:SetInside(checkBox, 6, 6)
 					checkBox.styled = true
 				end
 			end
