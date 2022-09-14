@@ -250,7 +250,7 @@ local function ReskinFollowerList(followerList)
 	if DB.isNewPatch then
 		hooksecurefunc(followerList.ScrollBox, "Update", ReskinFollowerButtons)
 	else
-		hooksecurefunc(followerList, "UpdateFollowers", UpdateFollowerList)
+		hooksecurefunc(followerList, "UpdateData", UpdateFollowerList)
 	end
 end
 
