@@ -113,8 +113,8 @@ function FilterSet:Check(item)
 	end
 
 	-- check filters of chained sets
-	for table in pairs(self.chained) do
-		if(not table:Check(item)) then
+	for tbl in pairs(self.chained) do
+		if(not tbl:Check(item)) then
 			return nil
 		end
 	end
