@@ -38,7 +38,6 @@
 		All optional
 	-->
 	<Script file='mixins\api-common.lua' />
-	<Script file='mixins\locale.lua' />
 	<Script file='mixins\parseBags.lua' />
 	<Script file='mixins\textFilter.lua' />
 
