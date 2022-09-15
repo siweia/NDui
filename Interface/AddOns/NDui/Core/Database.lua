@@ -285,7 +285,7 @@ DB.ReminderBuffs = {
 	DEATHKNIGHT = {
 		{	spells = {
 				[57330] = true,	-- 寒冬号角
-				[8075] = true, 	-- 大地之力图腾
+				[25527] = true, -- 大地之力图腾
 			},
 			depend = 57330,
 			combat = true,
