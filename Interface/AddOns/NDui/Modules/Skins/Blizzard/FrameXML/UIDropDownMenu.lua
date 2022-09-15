@@ -55,7 +55,11 @@ tinsert(C.defaultThemes, function()
 					-- only reliable way to see if button is radio or or check...
 					local _, co = check:GetTexCoord()
 					if co == 0 then
-						check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+						if DB.isNewPatch then
+							check:SetAtlas("checkmark-minimal")
+						else
+							check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+						end
 						check:SetVertexColor(r, g, b, 1)
 						check:SetSize(20, 20)
 						check:SetDesaturated(true)
