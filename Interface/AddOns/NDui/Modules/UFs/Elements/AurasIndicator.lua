@@ -5,9 +5,9 @@ local UF = B:GetModule("UnitFrames")
 
 local invalidPrio = -1
 
-local class, instName = DB.MyClass
+local class, instID = DB.MyClass
 local function checkInstance()
-	instName = IsInInstance() and GetInstanceInfo()
+	instID = select(8, GetInstanceInfo())
 end
 
 local DispellColor = {
@@ -90,19 +90,19 @@ UF.DebuffList = {}
 
 function UF:UpdateRaidDebuffs()
 	wipe(UF.DebuffList)
-	for instName, value in pairs(C.RaidDebuffs) do
+	for instID, value in pairs(C.RaidDebuffs) do
 		for spell, priority in pairs(value) do
-			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell]) then
-				if not UF.DebuffList[instName] then UF.DebuffList[instName] = {} end
-				UF.DebuffList[instName][spell] = priority
+			if not (NDuiADB["RaidDebuffs"][instID] and NDuiADB["RaidDebuffs"][instID][spell]) then
+				if not UF.DebuffList[instID] then UF.DebuffList[instID] = {} end
+				UF.DebuffList[instID][spell] = priority
 			end
 		end
 	end
-	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
+	for instID, value in pairs(NDuiADB["RaidDebuffs"]) do
 		for spell, priority in pairs(value) do
 			if priority > 0 then
-				if not UF.DebuffList[instName] then UF.DebuffList[instName] = {} end
-				UF.DebuffList[instName][spell] = priority
+				if not UF.DebuffList[instID] then UF.DebuffList[instID] = {} end
+				UF.DebuffList[instID][spell] = priority
 			end
 		end
 	end
@@ -194,7 +194,7 @@ function UF:AurasIndicator_UpdatePriority(numDebuffs, unit)
 
 		if auras.instAura then
 			local instPrio
-			local debuffList = instName and auras.Debuffs[instName] or auras.Debuffs[0]
+			local debuffList = instID and auras.Debuffs[instID] or auras.Debuffs[0]
 			if debuffList then
 				instPrio = debuffList[aura.spellID]
 			end
