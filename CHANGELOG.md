@@ -1,8 +1,16 @@
 # NDui
 
-## [6.27.1](https://github.com/siweia/NDui/tree/6.27.1) (2022-8-27)
+## [6.28.0](https://github.com/siweia/NDui/tree/6.28.0) (2022-9-15)
 
-- Update aura.
-- Update map data for Darkshore.
-- Fix OpenAllMail button error if GM mail exists.
-- Fix unitframe aura visibility if power bar disabled.
+- Update auras and nameplate filters.
+- New layout for unitframes and raidframes.
+- Add pet castbar on top of power.
+- Update infobar friends module for wotlk info.
+- Update spells watcher on player nameplate for Paladin.
+- Update default UI skins.
+- Refactor all aura indicators for raidframes.
+- Refactor resting indicator for playerframe.
+- Now save anchor for CharacterFrame.
+- Remove some invalid data.
+- Remove domination ranks and instant sockets.
+- Plenty updates for 10.0, support to build 45570.
