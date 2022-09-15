@@ -94,11 +94,17 @@ function module:Chatbar()
 	local roll = AddButton(.8, 1, .6, LOOT_ROLL)
 	roll:SetAttribute("type", "macro")
 	roll:SetAttribute("macrotext", "/roll")
+	if DB.isNewPatch then
+		roll:RegisterForClicks("AnyDown")
+	end
 
 	-- COMBATLOG
 	local combat = AddButton(1, 1, 0, BINDING_NAME_TOGGLECOMBATLOG)
 	combat:SetAttribute("type", "macro")
 	combat:SetAttribute("macrotext", "/combatlog")
+	if DB.isNewPatch then
+		combat:RegisterForClicks("AnyDown")
+	end
 
 	-- WORLD CHANNEL
 	if GetCVar("portal") == "CN" then
