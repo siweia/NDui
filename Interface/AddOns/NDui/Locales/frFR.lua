@@ -755,7 +755,6 @@ L["ChatSwitchHelp"] = "Appuyez sur Tab pour changer de canal disponible, il est 
 L["DomiRank"] = "Éclats de domination"
 L["DomiRankTip"] = "|nAfficher le rang sur les éclats de domination et les armures de domination."
 L["Tormentors of Torghast"] = "Tourmenteurs de Torghast"
-L["Drop"] = "Déposer"
 L["MarkerSize"] = "Taille du marqueur du monde"
 L["WhisperSound"] = "Son lors d'un murmure"
 L["WhisperSoundTip"] = "|nJouer un son lorsqu'un nouveau chuchotement est à plus de 5 secondes du précédent."

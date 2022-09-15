@@ -2,7 +2,6 @@
 	<Script file="Misc.lua"/>
 	<Script file="AlertFrames.lua"/>
 	<Script file="Animation.lua"/>
-	<Script file="DominationShards.lua"/>
 	<Script file="ExpRep.lua"/>
 	<Script file="Focuser.lua"/>
 	<Script file="ItemLevel.lua"/>

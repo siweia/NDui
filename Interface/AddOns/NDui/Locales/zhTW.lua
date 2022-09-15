@@ -755,7 +755,6 @@ L["ChatSwitchHelp"] = "按Tab鍵能直接在可用的頻道之間切換，一直
 L["DomiRank"] = "顯示統御裂片等級"
 L["DomiRankTip"] = "|n在統御裂片及統御護甲上顯示當前裂片等級。"
 L["Tormentors of Torghast"] = "托迦司的折磨者"
-L["Drop"] = "取下"
 L["MarkerSize"] = "世界標記圖示大小"
 L["WhisperSound"] = "私聊訊息提示音"
 L["WhisperSoundTip"] = "|n啟用後，當距離上一條私聊訊息超過5秒時，播放訊息提示音。"
