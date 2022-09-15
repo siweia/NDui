@@ -75,4 +75,33 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(dialog.SaveAndProceedButton)
 	B.Reskin(dialog.ProceedButton)
 	B.Reskin(dialog.CancelButton)
+
+	local function ReskinLayoutDialog(dialog)
+		B.StripTextures(dialog)
+		B.SetBD(dialog)
+		B.Reskin(dialog.AcceptButton)
+		B.Reskin(dialog.CancelButton)
+	
+		local check = dialog.CharacterSpecificLayoutCheckButton
+		if check then
+			B.ReskinCheck(check.Button)
+			check.Button.bg:SetInside(nil, 6, 6)
+		end
+
+		local editbox = dialog.LayoutNameEditBox
+		if editbox then
+			B.ReskinEditBox(editbox)
+			editbox.__bg:SetPoint("TOPLEFT", -5, -5)
+			editbox.__bg:SetPoint("BOTTOMRIGHT", 5, 5)
+		end
+
+		local importBox = dialog.ImportBox
+		if importBox then
+			B.StripTextures(importBox)
+			B.CreateBDFrame(importBox, .25)
+		end
+	end
+
+	ReskinLayoutDialog(EditModeNewLayoutDialog)
+	ReskinLayoutDialog(EditModeImportLayoutDialog)
 end)
