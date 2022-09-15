@@ -328,7 +328,7 @@ local function buttonOnEnter(self)
 			local level = gameAccountInfo.characterLevel
 			local gameText = gameAccountInfo.richPresence or ""
 			local wowProjectID = gameAccountInfo.wowProjectID
-			local clientString = BNet_GetClientEmbeddedTexture(client, 16)
+			local clientString = DB.isNewPatch and BNet_GetClientEmbeddedAtlas(client, 16) or BNet_GetClientEmbeddedTexture(client, 16)
 			if client == BNET_CLIENT_WOW then
 				if charName ~= "" then -- fix for weird account
 					realmName = (DB.MyRealm == realmName or realmName == "") and "" or "-"..realmName
