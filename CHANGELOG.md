@@ -1,16 +1,9 @@
 # NDui Classic
 
-## [3.3.0](https://github.com/siweia/NDui/tree/3.3.0) (2022-9-13)
+## [3.3.1](https://github.com/siweia/NDui/tree/3.3.1) (2022-9-15)
 
-- Update LibHealComm.
-- Update reminder.
-- Correct disable LibHealComm if heal prediction off.
-- Update default UI skins.
-- Fix feature to save raidframe anchor by different talents.
-- Refactor raidframe aura indicators.
-- New bag filter to show mounts and pets.
-- Update TradeTabs for the new spell rank in wrath.
-- Better layout for TradeSkillFrame when blizzard skin off.
-- Refactor PlayerFrame resting indicator.
-- Revamp default equipment manager.
-- Be able to save anchor for CharacterFrame.
+- Prevent MerInspect frame from moving.
+- Add hint to select item set by double clicking.
+- Option to re-enable auto buffs indicator.
+- Fix option SpecRaidPos.
+- Update PVPFrame skin and mover.
