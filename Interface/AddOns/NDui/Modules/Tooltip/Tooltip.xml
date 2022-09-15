@@ -8,5 +8,4 @@
 	<Script file="Targeted.lua"/>
 	<Script file="AzeriteArmor.lua"/>
 	<Script file="ConduitData.lua"/>
-	<Script file="DominationRank.lua"/>
 </Ui>
