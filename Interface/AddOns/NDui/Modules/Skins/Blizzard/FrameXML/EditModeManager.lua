@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local function reskinOptionCheck(button)
 	B.ReskinCheck(button)
-	button:SetSize(24, 24)
+	button.bg:SetInside(button, 6, 6)
 end
 
 tinsert(C.defaultThemes, function()
@@ -56,7 +56,15 @@ tinsert(C.defaultThemes, function()
 		for check in self.pools:EnumerateActiveByTemplate("EditModeSettingCheckboxTemplate") do
 			if not check.styled then
 				B.ReskinCheck(check.Button)
+				check.Button.bg:SetInside(nil, 6, 6)
 				check.styled = true
+			end
+		end
+
+		for dropdown in self.pools:EnumerateActiveByTemplate("EditModeSettingDropdownTemplate") do
+			if not dropdown.styled then
+				B.ReskinDropDown(dropdown.Dropdown.DropDownMenu)
+				dropdown.styled = true
 			end
 		end
 	end)
