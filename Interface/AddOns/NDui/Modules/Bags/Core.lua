@@ -509,11 +509,11 @@ end
 local function splitOnClick(self)
 	if not splitEnable then return end
 
-	PickupContainerItem(self.bagID, self.slotID)
+	PickupContainerItem(self.bagId, self.slotId)
 
-	local texture, itemCount, locked = GetContainerItemInfo(self.bagID, self.slotID)
+	local texture, itemCount, locked = GetContainerItemInfo(self.bagId, self.slotId)
 	if texture and not locked and itemCount and itemCount > C.db["Bags"]["SplitCount"] then
-		SplitContainerItem(self.bagID, self.slotID, C.db["Bags"]["SplitCount"])
+		SplitContainerItem(self.bagId, self.slotId, C.db["Bags"]["SplitCount"])
 
 		local bagID, slotID = module:GetEmptySlot("Bag")
 		if slotID then
@@ -619,7 +619,7 @@ end
 local function favouriteOnClick(self)
 	if not favouriteEnable then return end
 
-	local texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
+	local texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
 	if texture and quality > LE_ITEM_QUALITY_POOR then
 		ClearCursor()
 		module.selectItemID = itemID
@@ -679,7 +679,7 @@ end
 local function customJunkOnClick(self)
 	if not customJunkEnable then return end
 
-	local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
+	local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
 	local price = select(11, GetItemInfo(itemID))
 	if texture and price > 0 then
 		if NDuiADB["CustomJunkList"][itemID] then
@@ -727,9 +727,9 @@ end
 local function deleteButtonOnClick(self)
 	if not deleteEnable then return end
 
-	local texture, _, _, quality = GetContainerItemInfo(self.bagID, self.slotID)
+	local texture, _, _, quality = GetContainerItemInfo(self.bagId, self.slotId)
 	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
-		PickupContainerItem(self.bagID, self.slotID)
+		PickupContainerItem(self.bagId, self.slotId)
 		DeleteCursorItem()
 	end
 end
@@ -917,7 +917,7 @@ function module:OnLogin()
 	function MyButton:ItemOnEnter()
 		if self.glowFrame then
 			B.HideOverlayGlow(self.glowFrame)
-			C_NewItems_RemoveNewItem(self.bagID, self.slotID)
+			C_NewItems_RemoveNewItem(self.bagId, self.slotId)
 		end
 	end
 
@@ -954,7 +954,7 @@ function module:OnLogin()
 	local function UpdateCanIMogIt(self, item)
 		if not self.canIMogIt then return end
 
-		local text, unmodifiedText = CanIMogIt:GetTooltipText(nil, item.bagID, item.slotID)
+		local text, unmodifiedText = CanIMogIt:GetTooltipText(nil, item.bagId, item.slotId)
 		if text and text ~= "" then
 			local icon = CanIMogIt.tooltipOverlayIcons[unmodifiedText]
 			self.canIMogIt:SetTexture(icon)
@@ -968,7 +968,7 @@ function module:OnLogin()
 		if not hasPawn then return end
 		if not PawnIsContainerItemAnUpgrade then return end
 		if self.UpgradeIcon then
-			self.UpgradeIcon:SetShown(PawnIsContainerItemAnUpgrade(item.bagID, item.slotID))
+			self.UpgradeIcon:SetShown(PawnIsContainerItemAnUpgrade(item.bagId, item.slotId))
 		end
 	end
 
@@ -1011,7 +1011,7 @@ function module:OnLogin()
 		if C.db["Bags"]["BagsiLvl"] then
 			local level = item.level -- ilvl for keystone and battlepet
 			if not level and isItemNeedsLevel(item) then
-				local ilvl = B.GetItemLevel(item.link, item.bagID ~= -1 and item.bagID, item.slotID) -- SetBagItem return nil for default bank slots
+				local ilvl = B.GetItemLevel(item.link, item.bagId ~= -1 and item.bagId, item.slotId) -- SetBagItem return nil for default bank slots
 				if ilvl and ilvl > C.db["Bags"]["iLvlToShow"] then
 					level = ilvl
 				end
@@ -1024,7 +1024,7 @@ function module:OnLogin()
 		end
 
 		if self.glowFrame then
-			if C_NewItems_IsNewItem(item.bagID, item.slotID) then
+			if C_NewItems_IsNewItem(item.bagId, item.slotId) then
 				B.ShowOverlayGlow(self.glowFrame)
 			else
 				B.HideOverlayGlow(self.glowFrame)
@@ -1032,7 +1032,7 @@ function module:OnLogin()
 		end
 
 		if C.db["Bags"]["SpecialBagsColor"] then
-			local bagType = module.BagsType[item.bagID]
+			local bagType = module.BagsType[item.bagId]
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self:SetBackdropColor(unpack(color))
 		else
@@ -1253,9 +1253,9 @@ function module:OnLogin()
 		end
 
 		if classID == LE_ITEM_CLASS_CONTAINER then
-			module.BagsType[self.bagID] = subClassID or 0
+			module.BagsType[self.bagId] = subClassID or 0
 		else
-			module.BagsType[self.bagID] = 0
+			module.BagsType[self.bagId] = 0
 		end
 	end
 

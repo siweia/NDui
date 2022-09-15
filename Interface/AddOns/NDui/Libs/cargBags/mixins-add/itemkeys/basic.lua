@@ -32,7 +32,7 @@ end
 
 --	Returns the type of the parent bag
 cargBags.itemKeys["bagType"] = function(i)
-	return select(2, GetContainerNumFreeSlots(i.bagID))
+	return select(2, GetContainerNumFreeSlots(i.bagId))
 end
 
 -- Returns the item string (12345:0:0:0)
