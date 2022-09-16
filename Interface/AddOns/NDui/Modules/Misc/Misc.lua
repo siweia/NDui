@@ -108,11 +108,6 @@ function M:OnLogin()
 	end
 
 	-- Fix frame close by esc
-	local _, parent = BattlefieldFrame:GetPoint()
-	if parent == UIParent then
-		BattlefieldFrame:ClearAllPoints()
-		BattlefieldFrame:SetPoint("TOPLEFT", PVPParentFrame)
-	end
 	tinsert(UISpecialFrames, "PVPParentFrame")
 	tinsert(UISpecialFrames, "BattlefieldFrame")
 end
