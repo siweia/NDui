@@ -106,10 +106,6 @@ function M:OnLogin()
 	if not InspectTalentFrameSpentPoints then
 		InspectTalentFrameSpentPoints = CreateFrame("Frame")
 	end
-
-	-- Fix frame close by esc
-	tinsert(UISpecialFrames, "PVPParentFrame")
-	tinsert(UISpecialFrames, "BattlefieldFrame")
 end
 
 -- Get Naked
