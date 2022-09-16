@@ -59,7 +59,7 @@ local function UpdateColor(self, event, rid, alt)
 	local element = self.Runes
 	local rune = element[runemap[rid]]
 	local index = GetRuneType(rid) or alt
-	local colors = self.colors.runes[index]
+	local colors = self.colors.runes[index or 1]
 
 	local r, g, b = colors[1], colors[2], colors[3]
 
