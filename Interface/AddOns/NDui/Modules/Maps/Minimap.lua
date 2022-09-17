@@ -86,11 +86,14 @@ function module:ReskinRegions()
 		hooksecurefunc(ExpansionLandingPageMinimapButton, "UpdateIcon", updateMinimapButtons)
 
 		-- QueueStatus Button
+		QueueStatusButton:SetParent(Minimap)
 		QueueStatusButton:ClearAllPoints()
 		QueueStatusButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
-		QueueStatusButton:Hide()
-		QueueStatusButtonIcon:SetAlpha(0)
 		QueueStatusButton:SetFrameLevel(999)
+		QueueStatusButton:SetSize(33, 33)
+		QueueStatusButtonIcon:SetAlpha(0)
+		QueueStatusFrame:ClearAllPoints()
+		QueueStatusFrame:SetPoint("TOPRIGHT", QueueStatusButton, "TOPLEFT")
 	
 		local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
 		queueIcon:SetPoint("CENTER", QueueStatusButton)
@@ -215,6 +218,7 @@ function module:RecycleBin()
 		["TimeManagerClockButton"] = true,
 		["FeedbackUIButton"] = true,
 		["MiniMapBattlefieldFrame"] = true,
+		["QueueStatusButton"] = true,
 		["QueueStatusMinimapButton"] = true,
 		["GarrisonLandingPageMinimapButton"] = true,
 		["MinimapZoneTextButton"] = true,
