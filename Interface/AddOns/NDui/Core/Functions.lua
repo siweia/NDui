@@ -1294,9 +1294,9 @@ do
 		self:SetNormalTexture(DB.blankTex)
 
 		if texture and texture ~= "" then
-			if strfind(texture, "Plus") or strfind(texture, "Closed") then
+			if strfind(texture, "Plus") or strfind(texture, "[Cc]losed") then
 				self.__texture:DoCollapse(true)
-			elseif strfind(texture, "Minus") or strfind(texture, "Open") then
+			elseif strfind(texture, "Minus") or strfind(texture, "[Oo]pen") then
 				self.__texture:DoCollapse(false)
 			end
 			self.bg:Show()
