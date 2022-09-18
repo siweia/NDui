@@ -14,6 +14,12 @@ end
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+
+	-- Text color
+	GameFontBlack:SetTextColor(1, 1, 1)
+	GameFontBlackMedium:SetTextColor(1, 1, 1)
+	CoreAbilityFont:SetTextColor(1, 1, 1)
+
 	if not C.db["Skins"]["FontOutline"] then return end
 
 	ReskinFont(RaidWarningFrame.slot1)
@@ -185,9 +191,4 @@ tinsert(C.defaultThemes, function()
 			end
 		end)
 	end
-
-	-- Text color
-	GameFontBlack:SetTextColor(1, 1, 1)
-	GameFontBlackMedium:SetTextColor(1, 1, 1)
-	CoreAbilityFont:SetTextColor(1, 1, 1)
 end)
