@@ -744,8 +744,30 @@ end
 -- Flyout buttons by holding key ALT
 function M:FlyoutOnKeyAlt()
 	hooksecurefunc("PaperDollItemSlotButton_OnEnter", function(self)
-		if InCombatLockdown() then return end -- taint protect
-		PaperDollItemSlotButton_UpdateFlyout(self)
+		self:RegisterEvent("MODIFIER_STATE_CHANGED")
+		if not InCombatLockdown() then
+			PaperDollItemSlotButton_UpdateFlyout(self) -- taint in combat
+		end
+		if PaperDollFrameItemFlyout:IsShown() then
+			GameTooltip:SetOwner(PaperDollFrameItemFlyoutButtons, "ANCHOR_RIGHT", 6, -PaperDollFrameItemFlyoutButtons:GetHeight() - 6)
+		else
+			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		end
+		local hasItem, _, repairCost = GameTooltip:SetInventoryItem("player", self:GetID(), nil, true)
+		if not hasItem then
+			local text = _G[strupper(strsub(self:GetName(), 10))]
+			if self.checkRelic and UnitHasRelicSlot("player") then
+				text = RELICSLOT
+			end
+			GameTooltip:SetText(text)
+		end
+		if InRepairMode() and repairCost and (repairCost > 0) then
+			GameTooltip:AddLine(REPAIR_COST, nil, nil, nil, true)
+			SetTooltipMoney(GameTooltip, repairCost)
+			GameTooltip:Show()
+		else
+			CursorUpdate(self)
+		end
 	end)
 
 	hooksecurefunc("PaperDollItemSlotButton_OnEvent", function(self, event)
