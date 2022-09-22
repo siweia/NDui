@@ -228,8 +228,9 @@ DB.ReminderBuffs = {
 		},
 	},
 	WARRIOR = {
-		{	spells = {	-- 战斗怒吼
-				[6673] = true,
+		{	spells = {
+				[6673] = true,	-- 战斗怒吼
+				[19740] = true,	-- 力量祝福
 			},
 			depends = {6673, 5242, 6192, 11549, 11550, 11551, 25289, 2048},
 			gemini = {
