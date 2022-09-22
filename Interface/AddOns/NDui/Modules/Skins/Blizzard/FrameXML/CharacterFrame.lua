@@ -43,9 +43,11 @@ tinsert(C.defaultThemes, function()
 		B.ReskinTab(_G["CharacterFrameTab"..i])
 	end
 
-	CharacterModelFrame:DisableDrawLayer("BACKGROUND")
-	CharacterModelFrame:DisableDrawLayer("BORDER")
-	CharacterModelFrame:DisableDrawLayer("OVERLAY")
+	if not DB.isNewPatch then
+		CharacterModelFrame:DisableDrawLayer("BACKGROUND")
+		CharacterModelFrame:DisableDrawLayer("BORDER")
+		CharacterModelFrame:DisableDrawLayer("OVERLAY")
+	end
 
 	-- [[ Item buttons ]]
 
