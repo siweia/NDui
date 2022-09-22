@@ -361,12 +361,13 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("PaperDollFrameItemFlyout_CreateButton", function()
 		local button = PaperDollFrameItemFlyout.buttons[#PaperDollFrameItemFlyout.buttons]
+		if button.bg then return end
 
 		button:SetNormalTexture("")
 		button:SetPushedTexture("")
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.ReskinIcon(button.icon)
-		B.ReskinIconBorder(button.IconBorder)
+		B.ReskinIconBorder(button.IconBorder, true)
 	end)
 
 	PaperDollFrameItemFlyoutButtons.bg1:SetAlpha(0)
