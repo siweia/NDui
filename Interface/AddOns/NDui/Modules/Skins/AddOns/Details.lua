@@ -26,7 +26,7 @@ local function SetupInstance(instance)
 	bg:SetPoint("TOPLEFT", -1, 18)
 	instance.baseframe.bg = bg
 
-	if instance:GetId() <= 2 then
+	if instance:GetId() < 4 then -- only the top 3 windows
 		local open, close = S:CreateToggle(instance.baseframe)
 		open:HookScript("OnClick", function()
 			instance:ShowWindow()
