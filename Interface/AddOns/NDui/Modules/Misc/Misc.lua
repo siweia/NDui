@@ -720,6 +720,7 @@ end
 
 -- Achievement screenshot
 function M:ScreenShotOnEvent()
+	PlaySound(12891) -- achivement sound
 	M.ScreenShotFrame.delay = 1
 	M.ScreenShotFrame:Show()
 end
