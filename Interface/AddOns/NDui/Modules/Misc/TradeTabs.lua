@@ -11,22 +11,6 @@ local SMELTING_ID = 2656
 local RUNEFORGING_ID = 53428
 
 local tradeList = {
-	["Cooking"] = {
-		[2550] = true,
-		[3102] = true,
-		[3413] = true,
-		[18260] = true,
-		[33359] = true,
-		[51296] = true,
-	},
-	["FistAid"] = {
-		[3273] = true,
-		[3274] = true,
-		[7924] = true,
-		[10846] = true,
-		[27028] = true,
-		[45542] = true,
-	},
 	["Alchemy"] = {
 		[2259] = true,
 		[3101] = true,
@@ -42,6 +26,14 @@ local tradeList = {
 		[9785] = true,
 		[29844] = true,
 		[51300] = true,
+	},
+	["Cooking"] = {
+		[2550] = true,
+		[3102] = true,
+		[3413] = true,
+		[18260] = true,
+		[33359] = true,
+		[51296] = true,
 	},
 	["Enchanting"] = {
 		[7411] = true,
@@ -59,6 +51,30 @@ local tradeList = {
 		[30350] = true,
 		[51306] = true,
 	},
+	["FistAid"] = {
+		[3273] = true,
+		[3274] = true,
+		[7924] = true,
+		[10846] = true,
+		[27028] = true,
+		[45542] = true,
+	},
+	["Inscription"] = {
+		[45357] = true,
+		[45358] = true,
+		[45359] = true,
+		[45360] = true,
+		[45361] = true,
+		[45363] = true,
+	},
+	["Jewelcrafting"] = {
+		[25229] = true,
+		[25230] = true,
+		[28894] = true,
+		[28895] = true,
+		[28897] = true,
+		[51311] = true,
+	},
 	["Leatherworking"] = {
 		[2108] = true,
 		[3104] = true,
@@ -75,6 +91,9 @@ local tradeList = {
 		[29354] = true,
 		[50310] = true,
 	},
+	["Poisons"] = {
+		[2842] = true,
+	},
 	["Tailoring"] = {
 		[3908] = true,
 		[3909] = true,
@@ -82,17 +101,6 @@ local tradeList = {
 		[12180] = true,
 		[26790] = true,
 		[51309] = true,
-	},
-	["Jewelcrafting"] = {
-		[25229] = true,
-		[25230] = true,
-		[28894] = true,
-		[28895] = true,
-		[28897] = true,
-		[51311] = true,
-	},
-	["Poisons"] = {
-		[2842] = true,
 	},
 }
 
