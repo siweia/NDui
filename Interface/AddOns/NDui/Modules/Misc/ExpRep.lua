@@ -14,7 +14,7 @@ function M:ExpBar_Update()
 	local rest = self.restBar
 	if rest then rest:Hide() end
 
-	if UnitLevel("player") < GetMaxPlayerLevel() then
+	if DB.MyLevel < GetMaxPlayerLevel() then
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
 		self:SetStatusBarColor(0, .7, 1)
 		self:SetMinMaxValues(0, mxp)
@@ -40,9 +40,9 @@ end
 function M:ExpBar_UpdateTooltip()
 	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 	GameTooltip:ClearLines()
-	GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), 0,.6,1)
+	GameTooltip:AddLine(LEVEL.." "..DB.MyLevel, 0,.6,1)
 
-	if UnitLevel("player") < GetMaxPlayerLevel() then
+	if DB.MyLevel < GetMaxPlayerLevel() then
 		GameTooltip:AddLine(" ")
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
 		GameTooltip:AddDoubleLine(XP..":", xp.." / "..mxp.." ("..floor(xp/mxp*100).."%)", .6,.8,1, 1,1,1)
