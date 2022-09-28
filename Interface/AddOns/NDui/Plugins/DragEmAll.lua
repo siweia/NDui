@@ -31,28 +31,32 @@ local frames = {
 	["MerchantFrame"] = false,
 	["ModelPreviewFrame"] = false,
 	["OpenMailFrame"] = false,
-	--["PaperDollFrame"] = true,
 	["PetitionFrame"] = false,
-	["PetPaperDollFrameCompanionFrame"] = "CharacterFrame",
-	["PetPaperDollFramePetFrame"] = "CharacterFrame",
 	["PetStableFrame"] = false,
 	["PVPFrame"] = true,
 	["QuestFrame"] = false,
 	["QuestLogDetailFrame"] = false,
 	["QuestLogFrame"] = false,
 	["RaidParentFrame"] = false,
-	["ReputationFrame"] = true,
 	["SendMailFrame"] = true,
-	["SkillFrame"] = true,
 	["SpellBookFrame"] = false,
 	["StackSplitFrame"] = false,
 	["TabardFrame"] = false,
 	["TaxiFrame"] = false,
-	["TokenFrame"] = true,
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
 	["VideoOptionsFrame"] = false,
 }
+
+local function CharacterFrameMoveCheck()
+	if IsAddOnLoaded("RXPGuides") then return end
+
+	frames["PetPaperDollFrameCompanionFrame"] = "CharacterFrame"
+	frames["PetPaperDollFramePetFrame"] = "CharacterFrame"
+	frames["ReputationFrame"] = true
+	frames["SkillFrame"] = true
+	frames["TokenFrame"] = true
+end
 
 -- Frame Existing Check
 local function IsFrameExists()
@@ -184,6 +188,7 @@ end
 
 local function InitSetup()
 	HookFrames(frames)
+	CharacterFrameMoveCheck()
 	IsFrameExists()
 end
 
