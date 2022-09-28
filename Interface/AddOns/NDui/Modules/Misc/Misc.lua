@@ -40,6 +40,7 @@ function M:OnLogin()
 
 	-- Init
 	M:NakedIcon()
+	M:VehicleSeatMover()
 	M:UIWidgetFrameMover()
 	M:MoveDurabilityFrame()
 	M:MoveTicketStatusFrame()
@@ -144,8 +145,10 @@ function M:NakedIcon()
 	end)
 end
 
--- Reanchor Vehicle, isNewPatch
+-- Reanchor Vehicle
 function M:VehicleSeatMover()
+	if not VehicleSeatIndicator then return end
+
 	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
 	frame:SetSize(125, 125)
 	B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
