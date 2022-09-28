@@ -43,6 +43,7 @@ function S:PostalSkin()
 	B.Reskin(PostalSelectOpenButton)
 	B.Reskin(PostalSelectReturnButton)
 	B.Reskin(PostalOpenAllButton)
+	B.Reskin(PostalForwardButton)
 	B.ReskinArrow(Postal_ModuleMenuButton, "down")
 	B.ReskinArrow(Postal_OpenAllMenuButton, "down")
 	B.ReskinArrow(Postal_BlackBookButton, "down")
@@ -54,6 +55,16 @@ function S:PostalSkin()
 	Postal_ModuleMenuButton:SetPoint("RIGHT", MailFrame.CloseButton, "LEFT", -2, 0)
 	Postal_OpenAllMenuButton:SetPoint("LEFT", PostalOpenAllButton, "RIGHT", 2, 0)
 	Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 2, 0)
+
+	for i = 1, 16 do
+		local button = _G["Postal_QuickAttachButton"..i]
+		if button then
+			button:GetNormalTexture():SetAlpha(0)
+			button:GetPushedTexture():SetAlpha(0)
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			B.ReskinIcon(button.icon)
+		end
+	end
 end
 
 function S:SoulbindsTalents()
@@ -456,7 +467,7 @@ function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	S:FriendGroups()
-	S:PostalSkin()
+	C_Timer.After(1, S.PostalSkin)
 	S:SoulbindsTalents()
 	S:MRT_Skin()
 	S:SoulshapeJournal()
