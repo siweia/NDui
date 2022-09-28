@@ -59,7 +59,7 @@ local ClassPowerEnable, ClassPowerDisable
 local RequirePower, RequireSpell
 
 local function UpdateColor(element, powerType)
-	local color = element.__owner.colors.power[powerType]
+	local color = element.__owner.colors.power[powerType or "COMBO_POINTS"]
 	local r, g, b = color[1], color[2], color[3]
 	for i = 1, #element do
 		local bar = element[i]
