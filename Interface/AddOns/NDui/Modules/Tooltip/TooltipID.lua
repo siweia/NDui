@@ -37,28 +37,20 @@ end
 
 function TT:UpdateItemSellPrice()
 	local frame = GetMouseFocus()
-	if frame and frame.GetName then
-		if frame:IsForbidden() then return end -- Forbidden on blizz store
+	if not frame then return end
+	if frame:IsForbidden() then return end -- Forbidden on blizz store
 
-		local name = frame:GetName()
-		if not MerchantFrame:IsShown() or name and (strfind(name, "Character") or strfind(name, "TradeSkill")) then
-			local link = select(2, self:GetItem())
-			if link then
-				local price = select(11, GetItemInfo(link))
-				if price and price > 0 then
-					local object = frame:GetObjectType()
-					local count
-					if object == "Button" then -- ContainerFrameItem, QuestInfoItem, PaperDollItem
-						count = frame.count
-					elseif object == "CheckButton" then -- MailItemButton or ActionButton
-						count = frame.count or (frame.Count and frame.Count:GetText())
-					end
-
-					local cost = (tonumber(count) or 1) * price
-					self:AddLine(format(SELL_PRICE_TEXT, setupMoneyString(cost)))
-				end
+	local name = frame:GetName()
+	if frame.showSellPrice or frame.objectType or name and (strfind(name, "TradeSkill") or strfind(name, "Character")) then
+		local link = select(2, self:GetItem())
+		if link then
+			local price = select(11, GetItemInfo(link))
+			if price and price > 0 then
+				local cost = (tonumber(frame.count) or 1) * price
+				self:AddLine(format(SELL_PRICE_TEXT, setupMoneyString(cost)))
 			end
 		end
+		frame.showSellPrice = true
 	end
 end
 
