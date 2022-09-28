@@ -38,6 +38,7 @@ local frames = {
 	["PetStableFrame"] = false,
 	["PVPFrame"] = true,
 	["QuestFrame"] = false,
+	["QuestLogDetailFrame"] = false,
 	["QuestLogFrame"] = false,
 	["RaidParentFrame"] = false,
 	["ReputationFrame"] = true,
