@@ -7,6 +7,7 @@ local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount,
 local GetMouseFocus = GetMouseFocus
 local GetCurrencyListInfo = GetCurrencyListInfo
 local BAGSLOT, BANK = BAGSLOT, BANK
+local SELL_PRICE_TEXT = format("|cffffffff%s%s%%s|r", SELL_PRICE, HEADER_COLON)
 local ITEM_LEVEL_STR = gsub(ITEM_LEVEL_PLUS, "%+", "")
 ITEM_LEVEL_STR = format("|cffffd100%s|r|n%%s", ITEM_LEVEL_STR)
 
@@ -20,12 +21,57 @@ local types = {
 	azerite = L["Trait"].."ID:",
 }
 
+local function createIcon(index)
+	return format("|TInterface\\MoneyFrame\\UI-%sIcon:14:14:0:0|t", index)
+end
+
+local function setupMoneyString(money)
+	local g, s, c = floor(money/1e4), floor(money/100) % 100, money % 100
+	local str = ""
+	if g > 0 then str = str.." "..g..createIcon("Gold") end
+	if s > 0 then str = str.." "..s..createIcon("Silver") end
+	if c > 0 then str = str.." "..c..createIcon("Copper") end
+
+	return str
+end
+
+function TT:UpdateItemSellPrice()
+	local frame = GetMouseFocus()
+	if frame and frame.GetName then
+		if frame:IsForbidden() then return end -- Forbidden on blizz store
+
+		local name = frame:GetName()
+		if not MerchantFrame:IsShown() or name and (strfind(name, "Character") or strfind(name, "TradeSkill")) then
+			local link = select(2, self:GetItem())
+			if link then
+				local price = select(11, GetItemInfo(link))
+				if price and price > 0 then
+					local object = frame:GetObjectType()
+					local count
+					if object == "Button" then -- ContainerFrameItem, QuestInfoItem, PaperDollItem
+						count = frame.count
+					elseif object == "CheckButton" then -- MailItemButton or ActionButton
+						count = frame.count or (frame.Count and frame.Count:GetText())
+					end
+
+					local cost = (tonumber(count) or 1) * price
+					self:AddLine(format(SELL_PRICE_TEXT, setupMoneyString(cost)))
+				end
+			end
+		end
+	end
+end
+
 function TT:AddLineForID(id, linkType, noadd)
 	for i = 1, self:NumLines() do
 		local line = _G[self:GetName().."TextLeft"..i]
 		if not line then break end
 		local text = line:GetText()
 		if text and text == linkType then return end
+	end
+
+	if linkType == types.item then
+		TT.UpdateItemSellPrice(self)
 	end
 
 	if not noadd then self:AddLine(" ") end
