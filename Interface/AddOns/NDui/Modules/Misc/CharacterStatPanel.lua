@@ -442,10 +442,6 @@ function M:ExGearManager()
 end
 
 function M:CharacterStatePanel()
-	if not IsAddOnLoaded("RXPGuides") then
-		B:BlizzFrameMover(CharacterFrame) -- Save anchor for CharacterFrame
-	end
-
 	if not C.db["Skins"]["BlizzardSkins"] then return end   -- disable if skins off, needs review
 
 	hasOtherAddon = IsAddOnLoaded("CharacterStatsTBC")

@@ -36,7 +36,6 @@ local frames = {
 	["PVPFrame"] = true,
 	["QuestFrame"] = false,
 	["QuestLogDetailFrame"] = false,
-	["QuestLogFrame"] = false,
 	["RaidParentFrame"] = false,
 	["SendMailFrame"] = true,
 	["SpellBookFrame"] = false,

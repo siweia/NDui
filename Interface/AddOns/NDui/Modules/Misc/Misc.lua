@@ -58,6 +58,7 @@ function M:OnLogin()
 	M:AutoEquipBySpec()
 	M:UpdateScreenShot()
 	M:FlyoutOnKeyAlt()
+	M:MoveBlizzFrames()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -780,4 +781,12 @@ function M:FlyoutOnKeyAlt()
 			end
 		end
 	end)
+end
+
+-- Move and save blizz frames
+function M:MoveBlizzFrames()
+	if not IsAddOnLoaded("RXPGuides") then
+		B:BlizzFrameMover(CharacterFrame)
+	end
+	B:BlizzFrameMover(QuestLogFrame)
 end
