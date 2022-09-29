@@ -36,6 +36,8 @@ local addon, ns = ...
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
+local ContainerIDToInventoryID = ns[4].isNewPatch and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+
 function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
 end

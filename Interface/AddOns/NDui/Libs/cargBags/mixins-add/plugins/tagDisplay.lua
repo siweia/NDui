@@ -43,6 +43,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 
+local GetContainerNumFreeSlots = DB.isNewPatch and C_Container.GetContainerNumFreeSlots or GetContainerNumFreeSlots
+
 local tagPool, tagEvents, object = {}, {}
 local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](object, ...) or "" end
 
@@ -90,13 +92,12 @@ local function createIcon(icon, iconValues)
 	return ("|T%s:%s|t"):format(icon, iconValues)
 end
 
-
 -- Tags
 local function GetNumFreeSlots(name)
 	if name == "Bag" then
 		return CalculateTotalNumberOfFreeBagSlots()
 	elseif name == "Bank" then
-		local numFreeSlots = GetContainerNumFreeSlots(-1)
+		local numFreeSlots = DB.isNewPatch and 0 or GetContainerNumFreeSlots(-1) -- todo: bagID not allow to be negative in 45779, wait for blizz to fix itself
 		if DB.isNewPatch then
 			for bagID = 6, 12 do
 				numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
@@ -108,7 +109,11 @@ local function GetNumFreeSlots(name)
 		end
 		return numFreeSlots
 	elseif name == "Reagent" then
-		return GetContainerNumFreeSlots(-3)
+		if DB.isNewPatch then
+			return 0 -- todo: bagID not allow to be negative in 45779, wait for blizz to fix itself
+		else
+			return GetContainerNumFreeSlots(-3)
+		end
 	end
 end
 
