@@ -74,6 +74,7 @@ function A:TotemBar_Update()
 end
 
 function A:Totems()
+	if DB.isNewPatch then return end -- todo: turns into Mixin in 45779
 	if not C.db["Auras"]["Totems"] then return end
 
 	A:TotemBar_Init()

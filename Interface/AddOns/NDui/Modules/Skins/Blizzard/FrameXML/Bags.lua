@@ -2,8 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local MAX_CONTAINER_ITEMS = 36
-
 local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
+local ContainerIDToInventoryID = DB.isNewPatch and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
 
 local function handleMoneyFrame(frame)
 	if frame.MoneyFrame then
@@ -117,7 +117,7 @@ tinsert(C.defaultThemes, function()
 			name:SetDrawLayer("OVERLAY")
 			name:ClearAllPoints()
 			name:SetPoint("TOP", 0, -10)
-			B.ReskinClose(_G[frameName.."CloseButton"])
+			B.ReskinClose(frame.CloseButton)
 	
 			B.StripTextures(frame)
 			B.SetBD(frame)
