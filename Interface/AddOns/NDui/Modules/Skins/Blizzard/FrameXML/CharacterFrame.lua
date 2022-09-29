@@ -43,7 +43,11 @@ tinsert(C.defaultThemes, function()
 		B.ReskinTab(_G["CharacterFrameTab"..i])
 	end
 
-	if not DB.isNewPatch then
+	if DB.isNewPatch then
+		CharacterModelScene:DisableDrawLayer("BACKGROUND")
+		CharacterModelScene:DisableDrawLayer("BORDER")
+		CharacterModelScene:DisableDrawLayer("OVERLAY")
+	else
 		CharacterModelFrame:DisableDrawLayer("BACKGROUND")
 		CharacterModelFrame:DisableDrawLayer("BORDER")
 		CharacterModelFrame:DisableDrawLayer("OVERLAY")

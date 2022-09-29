@@ -33,8 +33,11 @@ C.themes["Blizzard_ClassTalentUI"] = function()
 		B.Reskin(dialog.AcceptButton)
 		B.Reskin(dialog.CancelButton)
 
-		B.StripTextures(dialog.ImportBox)
-		B.CreateBDFrame(dialog.ImportBox, .25)
+		B.StripTextures(dialog.ImportControl.InputContainer)
+		B.CreateBDFrame(dialog.ImportControl.InputContainer, .25)
+		B.ReskinEditBox(dialog.NameControl.EditBox)
+		dialog.NameControl.EditBox.__bg:SetPoint("TOPLEFT", -5, -10)
+		dialog.NameControl.EditBox.__bg:SetPoint("BOTTOMRIGHT", 5, 10)
 	end
 
 	local dialog = ClassTalentLoadoutCreateDialog
@@ -44,9 +47,9 @@ C.themes["Blizzard_ClassTalentUI"] = function()
 		B.Reskin(dialog.AcceptButton)
 		B.Reskin(dialog.CancelButton)
 
-		B.ReskinEditBox(dialog.LoadoutName)
-		dialog.LoadoutName.__bg:SetPoint("TOPLEFT", -5, -5)
-		dialog.LoadoutName.__bg:SetPoint("BOTTOMRIGHT", 5, 5)
+		B.ReskinEditBox(dialog.NameControl.EditBox)
+		dialog.NameControl.EditBox.__bg:SetPoint("TOPLEFT", -5, -10)
+		dialog.NameControl.EditBox.__bg:SetPoint("BOTTOMRIGHT", 5, 10)
 	end
 
 	local dialog = ClassTalentLoadoutEditDialog

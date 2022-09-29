@@ -20,6 +20,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(frame.SaveChangesButton)
 	B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
 	reskinOptionCheck(frame.ShowGridCheckButton.Button)
+	reskinOptionCheck(frame.EnableSnapCheckButton.Button)
 	if frame.Tutorial then
 		frame.Tutorial.Ring:Hide()
 	end

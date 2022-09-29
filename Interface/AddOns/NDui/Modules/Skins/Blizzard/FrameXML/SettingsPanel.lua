@@ -14,6 +14,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinEditBox(frame.SearchBox)
 	B.Reskin(frame.ApplyButton)
 	B.Reskin(frame.CloseButton)
+	if frame.Bg then frame.Bg:Hide() end
 
 	local function resetTabAnchor(tab)
 		tab.Text:SetPoint("BOTTOM", 0, 4)

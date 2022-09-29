@@ -59,6 +59,6 @@ tinsert(C.defaultThemes, function()
 		-- todo
 	else
 		B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)
-		B.ReskinCheck(CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 	end
+	B.ReskinCheck(CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

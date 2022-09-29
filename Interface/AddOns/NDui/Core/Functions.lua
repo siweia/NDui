@@ -940,6 +940,14 @@ do
 	-- Handle tabs
 	function B:ReskinTab()
 		self:DisableDrawLayer("BACKGROUND")
+		if DB.isNewPatch then
+			if self.LeftHighlight then
+				self.LeftHighlight:SetAlpha(0)
+			end
+			if self.RightHighlight then
+				self.RightHighlight:SetAlpha(0)
+			end
+		end
 
 		local bg = B.CreateBDFrame(self)
 		bg:SetPoint("TOPLEFT", 8, -3)
