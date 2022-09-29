@@ -1,6 +1,23 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function reskinSlotButton(button)
+	if button and not button.styled then
+		button:SetNormalTexture(DB.blankTex)
+		button:SetPushedTexture(DB.blankTex)
+		button.bg = B.ReskinIcon(button.Icon)
+		B.ReskinIconBorder(button.IconBorder, true)
+		local hl = button:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetInside(button.bg)
+		if button.SlotBackground then
+			button.SlotBackground:Hide()
+		end
+
+		button.styled = true
+	end
+end
+
 C.themes["Blizzard_Professions"] = function()
 	local frame = ProfessionsFrame
 	local craftingPage = ProfessionsFrame.CraftingPage
@@ -9,6 +26,13 @@ C.themes["Blizzard_Professions"] = function()
 	craftingPage.TutorialButton.Ring:Hide()
 	B.Reskin(craftingPage.CreateButton)
 	B.Reskin(craftingPage.CreateAllButton)
+	B.Reskin(craftingPage.ViewGuildCraftersButton)
+
+	local guildFrame = craftingPage.GuildFrame
+	B.StripTextures(guildFrame)
+	B.CreateBDFrame(guildFrame, .25)
+	B.StripTextures(guildFrame.Container)
+	B.CreateBDFrame(guildFrame.Container, .25)
 
 	local multiBox = craftingPage.CreateMultipleInputBox
 	multiBox:DisableDrawLayer("BACKGROUND")
@@ -70,18 +94,13 @@ C.themes["Blizzard_Professions"] = function()
 
 	hooksecurefunc(form, "Init", function(self)
 		for slot in self.reagentSlotPool:EnumerateActive() do
-			local button = slot.Button
-			if button and not button.styled then
-				button:SetNormalTexture(DB.blankTex)
-				button:SetPushedTexture(DB.blankTex)
-				button.bg = B.ReskinIcon(button.Icon)
-				B.ReskinIconBorder(button.IconBorder, true)
-				local hl = button:GetHighlightTexture()
-				hl:SetColorTexture(1, 1, 1, .25)
-				hl:SetInside(button.bg)
+			reskinSlotButton(slot.Button)
+		end
 
-				button.styled = true
-			end
+		local slot = form.salvageSlot
+		if slot then
+			reskinSlotButton(slot.Button)
+			-- todo: salvage flyout
 		end
 	end)
 

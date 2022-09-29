@@ -109,6 +109,7 @@ tinsert(C.defaultThemes, function()
 			name:ClearAllPoints()
 			name:SetPoint("TOP", 0, -10)
 			B.ReskinClose(frame.CloseButton)
+			if frame.Bg then frame.Bg:Hide() end
 	
 			B.StripTextures(frame)
 			B.SetBD(frame)
@@ -146,6 +147,7 @@ tinsert(C.defaultThemes, function()
 		B.ReskinPortraitFrame(ContainerFrameCombinedBags)
 		createBagIcon(ContainerFrameCombinedBags, 1)
 		ContainerFrameCombinedBags.PortraitButton.Highlight:SetTexture("")
+		if ContainerFrameCombinedBags.Bg then ContainerFrameCombinedBags.Bg:Hide() end
 	else
 		-- [[ Bags ]]
 	
