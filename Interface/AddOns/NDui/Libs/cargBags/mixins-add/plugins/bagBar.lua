@@ -33,10 +33,12 @@ CALLBACKS
 ]]
 
 local addon, ns = ...
+local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
-local ContainerIDToInventoryID = ns[4].isNewPatch and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+local ContainerIDToInventoryID = DB.isNewPatch and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+local maxBagSlots = DB.isNewPatch and 5 or NUM_BAG_SLOTS
 
 function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
@@ -58,10 +60,15 @@ local buttonNum = 0
 function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
-	local isBankBag = NDui[4].isNewPatch and bagID > 5 and bagID < 13 or (bagID>=5 and bagID<=11)
+	local isBankBag
+	if DB.isNewPatch then
+		isBankBag = bagID > 5 and bagID < 13
+	else
+		isBankBag = bagID > 4 and bagID < 12
+	end
 	local button = setmetatable(CreateFrame("ItemButton", name, nil, "BackdropTemplate"), self.__index)
 
-	local invID = (isBankBag and bagID-4) or ContainerIDToInventoryID(bagID)
+	local invID = (isBankBag and bagID - maxBagSlots) or ContainerIDToInventoryID(bagID)
 	button.invID = invID
 	button:SetID(invID)
 	button.bagId = bagID
@@ -88,8 +95,8 @@ function BagButton:UpdateButton()
 	self.Icon:SetTexture(icon or self.bgTex)
 	self.Icon:SetDesaturated(IsInventoryItemLocked(self.invID))
 
-	if(self.bagId > NUM_BAG_SLOTS) then
-		if(self.bagId-NUM_BAG_SLOTS <= GetNumBankSlots()) then
+	if(self.bagId > maxBagSlots) then
+		if(self.bagId - maxBagSlots <= GetNumBankSlots()) then
 			self.Icon:SetVertexColor(1, 1, 1)
 			self.notBought = nil
 		else
@@ -187,7 +194,7 @@ end
 
 local function onLock(self, _, bagID, slotID)
 	if(bagID == -1 and slotID > NUM_BANKGENERIC_SLOTS) then
-		bagID, slotID = ContainerIDToInventoryID(slotID-NUM_BANKGENERIC_SLOTS+NUM_BAG_SLOTS)
+		bagID, slotID = ContainerIDToInventoryID(slotID - NUM_BANKGENERIC_SLOTS + maxBagSlots)
 	end
 
 	if(slotID) then return end

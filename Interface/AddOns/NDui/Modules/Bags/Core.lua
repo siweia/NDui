@@ -980,6 +980,7 @@ function module:OnLogin()
 		[8] = {.8, .8, .8, .25},	-- 铭文包
 		[9] = {.4, .6, 1, .25},		-- 工具箱
 		[10] = {.8, 0, 0, .25},		-- 烹饪包
+		[11] = {.2, .8, .2, .25},	-- 材料包
 	}
 
 	local function isItemNeedsLevel(item)
