@@ -147,7 +147,7 @@ function module:UrlCopy()
 	local orig = ItemRefTooltip.SetHyperlink
 	function ItemRefTooltip:SetHyperlink(link, ...)
 		if link and strsub(link, 0, 3) == "url" then return end
-
+		if link then link = gsub(link, ':6544:', '::') end
 		return orig(self, link, ...)
 	end
 
