@@ -62,6 +62,12 @@ C.themes["Blizzard_Professions"] = function()
 		trackBox:SetSize(24, 24)
 	end
 
+	local checkBox = form.AllocateBestQualityCheckBox
+	if checkBox then
+		B.ReskinCheck(checkBox)
+		checkBox:SetSize(24, 24)
+	end
+
 	hooksecurefunc(form, "Init", function(self)
 		for slot in self.reagentSlotPool:EnumerateActive() do
 			local button = slot.Button

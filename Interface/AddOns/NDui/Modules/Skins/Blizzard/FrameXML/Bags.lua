@@ -40,12 +40,6 @@ local function ReskinSortButton(button)
 	highlight:SetAllPoints(button)
 end
 
-local function resetIconBorder(button, quality)
-	if not quality then
-		button.IconBorder:Hide()
-	end
-end
-
 local function ReskinBagSlot(bu)
 	bu:SetNormalTexture(DB.blankTex)
 	bu:SetPushedTexture(DB.blankTex)
@@ -55,9 +49,6 @@ local function ReskinBagSlot(bu)
 	bu.icon:SetTexCoord(unpack(DB.TexCoord))
 	bu.bg = B.CreateBDFrame(bu.icon, .25)
 	B.ReskinIconBorder(bu.IconBorder)
-	if bu.SetItemButtonQuality then
-		hooksecurefunc(bu, "SetItemButtonQuality", resetIconBorder)
-	end
 
 	local questTexture = bu.IconQuestTexture
 	if questTexture then

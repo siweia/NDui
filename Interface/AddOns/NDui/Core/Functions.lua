@@ -764,6 +764,11 @@ do
 			self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
+	local function resetIconBorder(button, quality)
+		if not quality then
+			button.IconBorder:Hide()
+		end
+	end
 	function B:ReskinIconBorder(needInit, useAtlas)
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
@@ -781,6 +786,10 @@ do
 			end
 		end
 		hooksecurefunc(self, "Hide", resetIconBorderColor)
+
+		if self.__owner.SetItemButtonQuality then
+			hooksecurefunc(self.__owner, "SetItemButtonQuality", resetIconBorder)
+		end
 	end
 
 	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS

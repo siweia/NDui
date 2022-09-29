@@ -67,12 +67,16 @@ C.themes["Blizzard_GuildUI"] = function()
 	B.StripTextures(GuildTextEditContainer)
 	B.CreateBDFrame(GuildTextEditContainer, .25)
 	for i = 1, 5 do
-		B.ReskinTab(_G["GuildFrameTab"..i])
+		local tab = _G["GuildFrameTab"..i]
+		if tab then
+			B.ReskinTab(tab)
+			if i ~= 1 then
+				tab:ClearAllPoints()
+				tab:SetPoint("LEFT", _G["GuildFrameTab"..(i-1)], "RIGHT", -15, 0)
+			end
+		end
 	end
-	if GetLocale() == "zhTW" then
-		GuildFrameTab1:ClearAllPoints()
-		GuildFrameTab1:SetPoint("TOPLEFT", GuildFrame, "BOTTOMLEFT", -7, 2)
-	end
+
 	GuildFrameTabardBackground:Hide()
 	GuildFrameTabardEmblem:Hide()
 	GuildFrameTabardBorder:Hide()
