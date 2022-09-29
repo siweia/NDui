@@ -14,12 +14,14 @@ local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsCosmeticItem = IsCosmeticItem
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
+
 if DB.isNewPatch then
 	GetContainerItemID = C_Container.GetContainerItemID
 	GetContainerNumSlots = C_Container.GetContainerNumSlots
 	SortBags = C_Container.SortBags
 	SortBankBags = C_Container.SortBankBags
 	SortReagentBankBags = C_Container.SortReagentBankBags
+	PickupContainerItem = C_Container.PickupContainerItem
 end
 
 local sortCache = {}

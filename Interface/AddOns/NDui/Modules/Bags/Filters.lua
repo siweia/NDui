@@ -29,11 +29,19 @@ end
 
 -- Default filter
 local function isItemInBag(item)
-	return item.bagId >= 0 and item.bagId <= 4
+	if DB.isNewPatch then
+		return item.bagId >= 0 and item.bagId <= 5
+	else
+		return item.bagId >= 0 and item.bagId <= 4
+	end
 end
 
 local function isItemInBank(item)
-	return item.bagId == -1 or item.bagId >= 5 and item.bagId <= 11
+	if DB.isNewPatch then
+		return item.bagId == -1 or item.bagId >= 6 and item.bagId <= 12
+	else
+		return item.bagId == -1 or item.bagId >= 5 and item.bagId <= 11
+	end
 end
 
 local function isItemJunk(item)
