@@ -48,9 +48,9 @@ local BagButton = cargBags:NewClass("BagButton", nil, "ItemButton")
 BagButton.bgTex = [[Interface\Paperdoll\UI-PaperDoll-Slot-Bag]]
 BagButton.itemFadeAlpha = 0.1
 
-local function UpdateTooltip(self)
+local function UpdateTooltip(self, id)
 	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-	GameTooltip:SetInventoryItem("player", self:GetID())
+	GameTooltip:SetInventoryItem("player", id)
 	GameTooltip:Show()
 end
 
@@ -72,7 +72,7 @@ function BagButton:Create(bagID)
 	end
 
 	button:RegisterForDrag("LeftButton", "RightButton")
-	button:RegisterForClicks("anyUp")
+	button:RegisterForClicks("AnyUp")
 	button:SetSize(37, 37)
 	button.Icon = _G[name.."IconTexture"]
 
@@ -119,11 +119,9 @@ function BagButton:OnEnter()
 	end
 
 	if self.isBankBag then
-		if GameTooltip:SetInventoryItem("player", self:GetInventorySlot()) then
-			BankFrameItemButton_OnEnter(self)
-		end
+		UpdateTooltip(self, self:GetInventorySlot())
 	else
-		UpdateTooltip(self)
+		UpdateTooltip(self, self:GetID())
 	end
 end
 
