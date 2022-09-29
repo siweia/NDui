@@ -55,7 +55,7 @@ function Bar:MicroButton_Create(parent, data)
 		Bar:MicroButton_SetupTexture(hl, texture)
 		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
-		local flash = button.Flash
+		local flash = button.Flash or button.FlashBorder -- isNewPatch
 		if flash then
 			Bar:MicroButton_SetupTexture(flash, texture)
 			if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
