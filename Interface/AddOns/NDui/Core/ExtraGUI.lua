@@ -111,21 +111,34 @@ function G:SetupRaidDebuffs(parent)
 		end)
 	end
 
+	local maxLevel = GetMaxPlayerLevel()
 	local dungeons = {}
-	for dungeonID = 1182, 1189 do
-		AddNewDungeon(dungeons, dungeonID)
+
+	if maxLevel == 70 then
+		for dungeonID = 1196, 1204 do
+			if dungeonID ~= 1200 then
+				AddNewDungeon(dungeons, dungeonID)
+			end
+		end
+	else
+		for dungeonID = 1182, 1189 do
+			AddNewDungeon(dungeons, dungeonID)
+		end
+		AddNewDungeon(dungeons, 1194) -- 集市
+		AddNewDungeon(dungeons, 536)  -- 恐轨车站
+		AddNewDungeon(dungeons, 558)  -- 钢铁码头
+		AddNewDungeon(dungeons, 860)  -- 重返卡拉赞
+		AddNewDungeon(dungeons, 1178) -- 麦卡贡
 	end
-	AddNewDungeon(dungeons, 1194) -- 集市
-	AddNewDungeon(dungeons, 536)  -- 恐轨车站
-	AddNewDungeon(dungeons, 558)  -- 钢铁码头
-	AddNewDungeon(dungeons, 860)  -- 重返卡拉赞
-	AddNewDungeon(dungeons, 1178) -- 麦卡贡
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1190),
 		[2] = EJ_GetInstanceInfo(1193),
 		[3] = EJ_GetInstanceInfo(1195),
 	}
+	if maxLevel == 70 then
+		raids[4] = EJ_GetInstanceInfo(1200)
+	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()

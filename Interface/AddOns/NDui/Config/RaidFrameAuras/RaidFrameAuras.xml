@@ -22,4 +22,7 @@
 	<Script file="Shadowlands\SanctumofDonimation.lua"/>
 	<Script file="Shadowlands\Sepulcher.lua"/>
 	<Script file="Shadowlands\Party-Shadowlands.lua"/>
+
+	<Script file="Dragonflight\Party-DF.lua"/>
+	<Script file="Dragonflight\VaultoftheIncarnates.lua"/>
 </Ui>
