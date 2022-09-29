@@ -208,8 +208,7 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 			end
 
 			local link = GetInventoryItemLink(unit, index)
-			--if link then
-			if link and not strfind(link, ':6544:') then
+			if link then
 				local quality = select(3, GetItemInfo(link))
 				local info = B.GetItemLevel(link, unit, index, C.db["Misc"]["GemNEnchant"])
 				if info == "tooSoon" then

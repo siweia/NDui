@@ -77,8 +77,6 @@ end
 function TT:HyperLink_OnEnter(link, ...)
 	local linkType = strmatch(link, "^([^:]+)")
 	if linkType then
-		if link then link = gsub(link, ':6544:', '::') end
-		
 		if linkType == "battlepet" then
 			TT.HyperLink_SetPet(self, link)
 		elseif linkType == "journal" then

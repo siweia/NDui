@@ -288,7 +288,6 @@ do
 			elseif arg1 and type(arg1) == "number" then
 				tip:SetBagItem(arg1, arg2)
 			else
-				if link then link = gsub(link, ':6544:', '::') end
 				tip:SetHyperlink(link)
 			end
 

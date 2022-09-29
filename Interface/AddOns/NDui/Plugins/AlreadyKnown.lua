@@ -47,7 +47,6 @@ local function IsAlreadyKnown(link, index)
 			if knowns[link] then return true end
 			if not knowables[itemClassID] then return end
 
-			if link then link = gsub(link, ':6544:', '::') end
 			B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
 			B.ScanTip:SetHyperlink(link)
 			for i = 1, B.ScanTip:NumLines() do
