@@ -979,31 +979,35 @@ do
 	hooksecurefunc("PanelTemplates_DeselectTab", B.ResetTabAnchor)
 
 	-- Handle scrollframe
-	local function GrabScrollBarElement(frame, element)
-		local frameName = frame:GetDebugName()
-		return frame[element] or frameName and (_G[frameName..element] or strfind(frameName, element)) or nil
+	local function Thumb_OnEnter(self)
+		local thumb = self.thumb or self
+		thumb.bg:SetBackdropColor(cr, cg, cb, .75)
+	end
+	local function Thumb_OnLeave(self)
+		local thumb = self.thumb or self
+		if thumb.__isActive then return end
+		thumb.bg:SetBackdropColor(cr, cg, cb, .25)
+	end
+	local function Thumb_OnMouseDown(self)
+		local thumb = self.thumb or self
+		thumb.__isActive = true
+		thumb.bg:SetBackdropColor(cr, cg, cb, .75)
+	end
+	local function Thumb_OnMouseUp(self)
+		local thumb = self.thumb or self
+		thumb.__isActive = nil
+		thumb.bg:SetBackdropColor(cr, cg, cb, .25)
 	end
 
-	function B:ReskinScroll()
-		B.StripTextures(self:GetParent())
-		B.StripTextures(self)
+	local function updateScrollArrow(arrow)
+		if not arrow.__texture then return end
 
-		local thumb = GrabScrollBarElement(self, "ThumbTexture") or GrabScrollBarElement(self, "thumbTexture") or self.GetThumbTexture and self:GetThumbTexture()
-		if thumb then
-			thumb:SetAlpha(0)
-			thumb:SetWidth(16)
-			local bg = B.CreateBDFrame(self, 0, true)
-			bg:SetPoint("TOPLEFT", thumb, 0, -2)
-			bg:SetPoint("BOTTOMRIGHT", thumb, 0, 4)
-			bg:SetBackdropColor(cr, cg, cb, .75)
+		if arrow:IsEnabled() then
+			arrow.__texture:SetVertexColor(1, 1, 1)
+		else
+			arrow.__texture:SetVertexColor(.5, .5, .5)
 		end
-
-		local up, down = self:GetChildren()
-		B.ReskinArrow(up, "up")
-		B.ReskinArrow(down, "down")
 	end
-
-	-- WowTrimScrollBar
 	local function updateTrimScrollArrow(self, atlas)
 		local arrow = self.__owner
 		if not arrow.__texture then return end
@@ -1015,34 +1019,77 @@ do
 		end
 	end
 
-	local function reskinTrimScrollArrow(self, direction)
+	local function reskinScrollArrow(self, direction)
 		if not self then return end
-		if not self.Texture then return end -- CovenantMissonFrame, isNewPatch
 
-		self.Texture:SetAlpha(0)
-		self.Overlay:SetAlpha(0)
+		if self.Texture then
+			self.Texture:SetAlpha(0)
+			self.Overlay:SetAlpha(0)
+		else
+			B.StripTextures(self)
+		end
+
 		local tex = self:CreateTexture(nil, "ARTWORK")
 		tex:SetAllPoints()
-		B.CreateBDFrame(tex, .25)
 		B.SetupArrow(tex, direction)
 		self.__texture = tex
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
 		self:HookScript("OnLeave", B.Texture_OnLeave)
-		self.Texture.__owner = self
-		hooksecurefunc(self.Texture, "SetAtlas", updateTrimScrollArrow)
-		self.Texture:SetAtlas(self.Texture:GetAtlas())
+
+		if self.Texture then
+			self.Texture.__owner = self
+			hooksecurefunc(self.Texture, "SetAtlas", updateTrimScrollArrow)
+			updateTrimScrollArrow(self.Texture, self.Texture:GetAtlas())
+		else
+			hooksecurefunc(self, "Enable", updateScrollArrow)
+			hooksecurefunc(self, "Disable", updateScrollArrow)
+		end
 	end
 
+	function B:ReskinScroll()
+		B.StripTextures(self:GetParent())
+		B.StripTextures(self)
+
+		local thumb = self:GetThumbTexture()
+		if thumb then
+			thumb:SetAlpha(0)
+			thumb.bg = B.CreateBDFrame(thumb, .25)
+			thumb.bg:SetBackdropColor(cr, cg, cb, .25)
+			thumb.bg:SetPoint("TOPLEFT", thumb, 4, -1)
+			thumb.bg:SetPoint("BOTTOMRIGHT", thumb, -4, 1)
+			self.thumb = thumb
+
+			self:HookScript("OnEnter", Thumb_OnEnter)
+			self:HookScript("OnLeave", Thumb_OnLeave)
+			self:HookScript("OnMouseDown", Thumb_OnMouseDown)
+			self:HookScript("OnMouseUp", Thumb_OnMouseUp)
+		end
+
+		local up, down = self:GetChildren()
+		reskinScrollArrow(up, "up")
+		reskinScrollArrow(down, "down")
+	end
+
+	-- WowTrimScrollBar
 	function B:ReskinTrimScroll()
 		B.StripTextures(self)
-		reskinTrimScrollArrow(self.Back, "up")
-		reskinTrimScrollArrow(self.Forward, "down")
+		reskinScrollArrow(self.Back, "up")
+		reskinScrollArrow(self.Forward, "down")
 
 		local thumb = self:GetThumb()
 		if thumb then
 			thumb:DisableDrawLayer("BACKGROUND")
-			B.CreateBDFrame(thumb, 0, true):SetBackdropColor(cr, cg, cb, .75)
+			thumb.bg = B.CreateBDFrame(thumb, .25)
+			thumb.bg:SetBackdropColor(cr, cg, cb, .25)
+			thumb.bg:SetPoint("TOPLEFT", 4, -1)
+			thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
+			self.thumb = thumb
+
+			thumb:HookScript("OnEnter", Thumb_OnEnter)
+			thumb:HookScript("OnLeave", Thumb_OnLeave)
+			thumb:HookScript("OnMouseDown", Thumb_OnMouseDown)
+			thumb:HookScript("OnMouseUp", Thumb_OnMouseUp)
 		end
 	end
 
