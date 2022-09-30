@@ -85,7 +85,9 @@ end
 
 -- RaidFrame debuffs
 local RaidDebuffs = {}
-function module:RegisterDebuff(_, instID, _, spellID, level)
+function module:RegisterDebuff(tierID, instID, _, spellID, level)
+	if tierID == 10 and not DB.isNewPatch then return end
+
 	local instName = EJ_GetInstanceInfo(instID)
 	if not instName then
 		if DB.isDeveloper then print("Invalid instance ID: "..instID) end
