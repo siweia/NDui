@@ -806,10 +806,6 @@ end
 local CalculateHealing, GetHealTargets, AuraHandler, CalculateHotHealing, ResetChargeData, LoadClassData
 
 local function getBaseHealAmount(spellData, spellName, spellID, spellRank)
-	if not spellRank then -- bandage fix
-		print("LibHealComm Error:", spellName, spellID, spellRank)
-		spellRank = 1
-	end
 	if spellID == 37563 then
 		spellData = spellData["37563"]
 	else
@@ -1514,6 +1510,14 @@ if( playerClass == "PRIEST" ) then
 
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+			if not spellRank then -- bandage fix
+				print("|cffff0000-------------")
+				print("|cffff0000-------------")
+				print("|cffff0000LibHealComm Error:|r", spellName, spellID, spellRank)
+				print("|cffff0000-------------")
+				print("|cffff0000-------------")
+				spellRank = 1
+			end
 			local healAmount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
