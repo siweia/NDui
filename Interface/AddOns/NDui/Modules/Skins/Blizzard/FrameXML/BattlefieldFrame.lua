@@ -7,6 +7,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(BattlefieldFrameJoinButton)
 	B.Reskin(BattlefieldFrameCancelButton)
 	B.Reskin(BattlefieldFrameGroupJoinButton)
+	B.ReskinScroll(BattlefieldFrameTypeScrollFrameScrollBar)
 	BattlefieldFrameBGTex:Hide()
 	B.CreateBDFrame(BattlefieldFrameInfoScrollFrame, .25)
 
