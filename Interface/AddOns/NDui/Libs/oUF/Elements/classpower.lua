@@ -176,7 +176,7 @@ local function Visibility(self, event, unit)
 		end
 	end
 
-	local isEnabled = element.isEnabled
+	local isEnabled = element.__isEnabled
 	local powerType = unit == 'vehicle' and 'COMBO_POINTS' or ClassPowerType
 
 	if(shouldEnable) then
@@ -219,7 +219,7 @@ do
 		self:RegisterEvent('PLAYER_TARGET_CHANGED', Path, true)
 		self:RegisterEvent('UNIT_MAXPOWER', Path)
 
-		self.ClassPower.isEnabled = true
+		self.ClassPower.__isEnabled = true
 
 		if(UnitHasVehicleUI('player')) then
 			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
@@ -238,7 +238,7 @@ do
 			element[i]:Hide()
 		end
 
-		self.ClassPower.isEnabled = false
+		self.ClassPower.__isEnabled = false
 		Path(self, 'ClassPowerDisable', 'player', ClassPowerType)
 	end
 
