@@ -60,6 +60,7 @@ function Bar:MicroButton_Create(parent, data)
 			Bar:MicroButton_SetupTexture(flash, texture)
 			if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
 		end
+		if button.FlashContent then button.FlashContent:SetTexture(nil) end
 	else
 		bu:SetScript("OnMouseUp", method)
 		B.AddTooltip(bu, "ANCHOR_RIGHT", tooltip)
