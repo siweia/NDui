@@ -672,14 +672,30 @@ C.themes["Blizzard_Communities"] = function()
 	local applicantList = CommunitiesFrame.ApplicantList
 	B.StripTextures(applicantList)
 	B.StripTextures(applicantList.ColumnDisplay)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(applicantList.ScrollBar)
-	else
-		B.ReskinScroll(applicantList.ListScrollFrame.scrollBar)
-	end
+
 	local listBG = B.CreateBDFrame(applicantList, .25)
 	listBG:SetPoint("TOPLEFT", 0, 0)
 	listBG:SetPoint("BOTTOMRIGHT", -15, 0)
+
+	local function reskinApplicant(button)
+		if button.styled then return end
+
+		button:SetPoint("LEFT", listBG, C.mult, 0)
+		button:SetPoint("RIGHT", listBG, -C.mult, 0)
+		button:SetHighlightTexture(DB.bdTex)
+		button:GetHighlightTexture():SetVertexColor(r, g, b, .25)
+		button.InviteButton:SetSize(66, 18)
+		button.CancelInvitationButton:SetSize(20, 18)
+
+		B.Reskin(button.InviteButton)
+		B.Reskin(button.CancelInvitationButton)
+		hooksecurefunc(button, "UpdateMemberInfo", updateMemberName)
+
+		UpdateRoleTexture(button.RoleIcon1)
+		UpdateRoleTexture(button.RoleIcon2)
+		UpdateRoleTexture(button.RoleIcon3)
+		button.styled = true
+	end
 
 	hooksecurefunc(applicantList, "BuildList", function(self)
 		local columnDisplay = self.ColumnDisplay
@@ -701,27 +717,25 @@ C.themes["Blizzard_Communities"] = function()
 			end
 		end
 
+		if DB.isNewPatch then return end
+
 		local buttons = self.ListScrollFrame.buttons
 		for i = 1, #buttons do
-			local button = buttons[i]
-			if not button.styled then
-				button:SetPoint("LEFT", listBG, C.mult, 0)
-				button:SetPoint("RIGHT", listBG, -C.mult, 0)
-				button:SetHighlightTexture(DB.bdTex)
-				button:GetHighlightTexture():SetVertexColor(r, g, b, .25)
-				button.InviteButton:SetSize(66, 18)
-				button.CancelInvitationButton:SetSize(20, 18)
-
-				B.Reskin(button.InviteButton)
-				B.Reskin(button.CancelInvitationButton)
-				hooksecurefunc(button, "UpdateMemberInfo", updateMemberName)
-
-				UpdateRoleTexture(button.RoleIcon1)
-				UpdateRoleTexture(button.RoleIcon2)
-				UpdateRoleTexture(button.RoleIcon3)
-
-				button.styled = true
-			end
+			reskinApplicant(buttons[i])
 		end
 	end)
+
+	if DB.isNewPatch then
+		applicantList.ScrollBar:GetChildren():Hide()
+		B.ReskinTrimScroll(applicantList.ScrollBar)
+
+		hooksecurefunc(applicantList.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local button = select(i, self.ScrollTarget:GetChildren())
+				reskinApplicant(button)
+			end
+		end)
+	else
+		B.ReskinScroll(applicantList.ListScrollFrame.scrollBar)
+	end
 end

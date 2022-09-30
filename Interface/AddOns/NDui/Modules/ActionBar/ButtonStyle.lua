@@ -384,7 +384,7 @@ function Bar:StyleAllActionButtons(cfg)
 	Bar:StyleExtraActionButton(cfg)
 	--spell flyout
 	if DB.isNewPatch then
-		-- todo
+		SpellFlyout.Background:Hide()
 	else
 		SpellFlyoutBackgroundEnd:SetTexture(nil)
 		SpellFlyoutHorizontalBackground:SetTexture(nil)
