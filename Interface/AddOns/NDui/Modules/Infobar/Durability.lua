@@ -210,7 +210,19 @@ local function merchantClose()
 	B:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
 end
 
+local autoRepairInfo = {
+	text = L["AutoRepairInfo"],
+	buttonStyle = HelpTip.ButtonStyle.GotIt,
+	targetPoint = HelpTip.Point.RightEdgeCenter,
+	onAcknowledgeCallback = B.HelpInfoAcknowledge,
+	callbackArg = "AutoRepair",
+}
+
 local function merchantShow()
+	if not NDuiADB["Help"]["AutoRepair"] then
+		HelpTip:Show(MerchantFrame, autoRepairInfo)
+	end
+
 	if IsShiftKeyDown() or NDuiADB["RepairType"] == 0 or not CanMerchantRepair() then return end
 	autoRepair()
 	B:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
