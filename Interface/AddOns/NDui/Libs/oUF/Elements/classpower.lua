@@ -59,7 +59,7 @@ local ClassPowerEnable, ClassPowerDisable
 local RequirePower, RequireSpell
 
 local function UpdateColor(element, powerType)
-	local color = element.__owner.colors.power[powerType or "COMBO_POINTS"]
+	local color = element.__owner.colors.power[powerType]
 	local r, g, b = color[1], color[2], color[3]
 	for i = 1, #element do
 		local bar = element[i]
@@ -98,7 +98,7 @@ local function Update(self, event, unit, powerType)
 
 	local cur, max, mod, oldMax
 	if(event ~= 'ClassPowerDisable') then
-		local powerID = ClassPowerID
+		local powerID = unit == 'vehicle' and SPELL_POWER_COMBO_POINTS or ClassPowerID
 		--cur = UnitPower(unit, powerID, true)
 		cur = GetComboPoints(unit, "target")	-- has to use GetComboPoints in classic
 		max = UnitPowerMax(unit, powerID)
@@ -177,7 +177,7 @@ local function Visibility(self, event, unit)
 	end
 
 	local isEnabled = element.isEnabled
-	local powerType = ClassPowerType
+	local powerType = unit == 'vehicle' and 'COMBO_POINTS' or ClassPowerType
 
 	if(shouldEnable) then
 		--[[ Override: ClassPower:UpdateColor(powerType)
