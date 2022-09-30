@@ -68,7 +68,7 @@ button.isPlayer - indicates if the aura caster is the player or their vehicle (b
     -- Register with oUF
     self.Buffs = Buffs
 --]]
-
+-- todo: update with the newest aura system
 local _, ns = ...
 local oUF = ns.oUF
 
@@ -232,7 +232,7 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 			end
 
 			if(button.icon) then button.icon:SetTexture(texture) end
-			if(button.count) then button.count:SetText(count > 1 and count or "") end
+			if(button.count) then button.count:SetText(count > 1 and count or '') end
 
 			local width = element.width or element.size or 16
 			local height = element.height or element.size or 16

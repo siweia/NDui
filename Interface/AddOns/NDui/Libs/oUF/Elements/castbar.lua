@@ -98,6 +98,7 @@ local function resetAttributes(self)
 	self.castID = nil
 	self.casting = nil
 	self.channeling = nil
+	self.empowering = nil
 	self.notInterruptible = nil
 	self.spellID = nil
 end
@@ -107,13 +108,12 @@ local function CastStart(self, event, unit)
 
 	local element = self.Castbar
 
-	local isChargeSpell, numStages
+	local numStages, _
 	local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit)
 	event = 'UNIT_SPELLCAST_START'
 	if(not name) then
 		name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID, _, numStages = UnitChannelInfo(unit)
-		isChargeSpell = numStages and numStages > 0 -- isNewPatch
-		event = isChargeSpell and 'UNIT_SPELLCAST_EMPOWER_START' or 'UNIT_SPELLCAST_CHANNEL_START'
+		event = (numStages and numStages > 0) and 'UNIT_SPELLCAST_EMPOWER_START' or 'UNIT_SPELLCAST_CHANNEL_START'
 	end
 
 	if(not name or (isTradeSkill and element.hideTradeSkills)) then
@@ -123,25 +123,30 @@ local function CastStart(self, event, unit)
 		return
 	end
 
+	element.casting = event == 'UNIT_SPELLCAST_START'
+	element.channeling = event == 'UNIT_SPELLCAST_CHANNEL_START'
+	element.empowering = event == 'UNIT_SPELLCAST_EMPOWER_START'
+
+	if(element.empowering) then
+		endTime = endTime + GetUnitEmpowerHoldAtMaxTime(unit)
+	end
+
 	endTime = endTime / 1000
 	startTime = startTime / 1000
 
 	element.max = endTime - startTime
 	element.startTime = startTime
 	element.delay = 0
-	element.casting = event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_EMPOWER_START' -- isNewPatch
-	element.channeling = event == 'UNIT_SPELLCAST_CHANNEL_START'
-	element.numStages = numStages -- isNewPatch
-	element.isChargeSpell = isChargeSpell -- isNewPatch
 	element.notInterruptible = notInterruptible
 	element.holdTime = 0
 	element.castID = castID
 	element.spellID = spellID
+	element.numStages = numStages -- isNewPatch
 
-	if(element.casting) then
-		element.duration = GetTime() - startTime
-	else
+	if(element.channeling) then
 		element.duration = endTime - GetTime()
+	else
+		element.duration = GetTime() - startTime
 	end
 
 	element:SetMinMaxValues(0, element.max)
@@ -161,10 +166,10 @@ local function CastStart(self, event, unit)
 		safeZone:SetPoint(isHoriz and 'TOP' or 'LEFT')
 		safeZone:SetPoint(isHoriz and 'BOTTOM' or 'RIGHT')
 
-		if(element.casting) then
-			safeZone:SetPoint(element:GetReverseFill() and (isHoriz and 'LEFT' or 'BOTTOM') or (isHoriz and 'RIGHT' or 'TOP'))
-		else
+		if(element.channeling) then
 			safeZone:SetPoint(element:GetReverseFill() and (isHoriz and 'RIGHT' or 'TOP') or (isHoriz and 'LEFT' or 'BOTTOM'))
+		else
+			safeZone:SetPoint(element:GetReverseFill() and (isHoriz and 'LEFT' or 'BOTTOM') or (isHoriz and 'RIGHT' or 'TOP'))
 		end
 
 		local ratio = (select(4, GetNetStats()) / 1000) / element.max
@@ -205,18 +210,22 @@ local function CastUpdate(self, event, unit, castID, spellID)
 
 	if(not name) then return end
 
+	if(element.empowering) then
+		endTime = endTime + GetUnitEmpowerHoldAtMaxTime(unit)
+	end
+
 	endTime = endTime / 1000
 	startTime = startTime / 1000
 
 	local delta
-	if(element.casting) then
-		delta = startTime - element.startTime
-
-		element.duration = GetTime() - startTime
-	else
+	if(element.channeling) then
 		delta = element.startTime - startTime
 
 		element.duration = endTime - GetTime()
+	else
+		delta = startTime - element.startTime
+
+		element.duration = GetTime() - startTime
 	end
 
 	if(delta < 0) then
@@ -316,8 +325,8 @@ local function CastInterruptible(self, event, unit)
 end
 
 local function onUpdate(self, elapsed)
-	if(self.casting or self.channeling) then
-		local isCasting = self.casting
+	if(self.casting or self.channeling or self.empowering) then
+		local isCasting = self.casting or self.empowering
 		if(isCasting) then
 			self.duration = self.duration + elapsed
 			if(self.duration >= self.max) then
@@ -408,9 +417,10 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			if NDui[4].isNewPatch then
-				PlayerCastingBarFrame.SetUnit(PlayerCastingBarFrame, nil)
-				PlayerCastingBarFrame.SetUnit(PetCastingBarFrame, nil)
+			if isNewPatch then
+				PlayerCastingBarFrame:SetUnit(nil)
+				PetCastingBarFrame:SetUnit(nil)
+				PetCastingBarFrame:UnregisterEvent('UNIT_PET')
 			else
 				CastingBarFrame_SetUnit(CastingBarFrame, nil)
 				CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
@@ -466,7 +476,11 @@ local function Disable(self)
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
+			if isNewPatch then
+				PlayerCastingBarFrame:OnLoad()
+			else
+				CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
+			end
 			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
 		end
 	end

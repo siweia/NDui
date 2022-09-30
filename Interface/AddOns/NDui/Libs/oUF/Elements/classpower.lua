@@ -59,7 +59,7 @@ local SPELL_POWER_SOUL_SHARDS = Enum.PowerType.SoulShards or 7
 local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower or 9
 local SPELL_POWER_CHI = Enum.PowerType.Chi or 12
 local SPELL_POWER_ARCANE_CHARGES = Enum.PowerType.ArcaneCharges or 16
-local SPELL_POWER_ESSENCE = Enum.PowerType.Essence or 19 -- isNewPatch
+local SPELL_POWER_ESSENCE = Enum.PowerType.Essence or 19
 
 -- Holds the class specific stuff.
 local ClassPowerID, ClassPowerType
