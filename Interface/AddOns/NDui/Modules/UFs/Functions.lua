@@ -688,6 +688,7 @@ function UF:CreateCastBar(self)
 	cb:SetHeight(20)
 	cb:SetWidth(self:GetWidth() - 22)
 	B.CreateSB(cb, true, .3, .7, 1)
+	cb.castTicks = {}
 
 	if mystyle == "player" then
 		cb:SetFrameLevel(10)
@@ -740,12 +741,6 @@ function UF:CreateCastBar(self)
 
 		UF:ToggleCastBarLatency(self)
 
-		if DB.isNewPatch then -- Evoker charge stage
-			local stage = B.CreateFS(cb, 22)
-			stage:ClearAllPoints()
-			stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
-			cb.stageString = stage
-		end
 	elseif mystyle == "nameplate" then
 		name:SetPoint("TOPLEFT", cb, "LEFT", 0, -1)
 		timer:SetPoint("TOPRIGHT", cb, "RIGHT", 0, -1)
@@ -771,6 +766,13 @@ function UF:CreateCastBar(self)
 		cb.spellTarget = spellTarget
 
 		self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
+	end
+
+	if DB.isNewPatch then -- Evoker charge stage
+		local stage = B.CreateFS(cb, 22)
+		stage:ClearAllPoints()
+		stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
+		cb.stageString = stage
 	end
 
 	if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then

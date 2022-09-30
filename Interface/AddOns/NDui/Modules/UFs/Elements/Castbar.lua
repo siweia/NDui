@@ -10,7 +10,6 @@ local GetUnitEmpowerStageDuration = GetUnitEmpowerStageDuration
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
 
-local ticks = {}
 local channelingTicks = {
 	[740] = 4,		-- 宁静
 	[755] = 5,		-- 生命通道
@@ -48,13 +47,15 @@ if DB.MyClass == "PRIEST" then
 end
 
 function UF:OnCastbarUpdate(elapsed)
-	if self.casting or self.channeling then
+	if self.casting or self.channeling or self.empowering then
+		local isCasting = self.casting or self.empowering
 		local decimal = self.decimal
 
-		local duration = self.casting and (self.duration + elapsed) or (self.duration - elapsed)
-		if (self.casting and duration >= self.max and not self.isChargeSpell) or (self.channeling and duration <= 0) then
+		local duration = isCasting and (self.duration + elapsed) or (self.duration - elapsed)
+		if (isCasting and duration >= self.max) or (self.channeling and duration <= 0) then
 			self.casting = nil
 			self.channeling = nil
+			self.empowering = nil
 			return
 		end
 
@@ -77,9 +78,9 @@ function UF:OnCastbarUpdate(elapsed)
 
 		if self.stageString then
 			self.stageString:SetText("")
-			if self.isChargeSpell then
+			if self.empowering then
 				for i = 1, self.numStages, 1 do
-					if duration > ticks[i].duration then
+					if duration > self.castTicks[i].duration then
 						self.stageString:SetText(i)
 					end
 				end
@@ -139,17 +140,19 @@ local function UpdateCastBarColor(self, unit)
 	self:SetStatusBarColor(color.r, color.g, color.b)
 end
 
-function UF:CreateAndUpdateStagePip(bar, ticks, numStages)
+function UF:CreateAndUpdateStagePip(bar, ticks, numStages, unit)
 	for i = 1, #ticks do
 		ticks[i]:Hide()
 		ticks[i].duration = 0
 	end
 
+	if numStages == 0 then return end
+
 	local width, height = bar:GetSize()
 	local sumDuration = 0
 	local stageMaxValue = bar.max * 1000
 	for i = 1, numStages, 1 do
-		local duration = GetUnitEmpowerStageDuration("player", i-1)
+		local duration = GetUnitEmpowerStageDuration(unit, i-1)
 		if duration > -1 then
 			sumDuration = sumDuration + duration
 			local portion = sumDuration / stageMaxValue
@@ -196,17 +199,16 @@ function UF:PostCastStart(unit)
 			self.__sendTime = nil
 		end
 
-		if self.isChargeSpell then
-			UF:CreateAndUpdateStagePip(self, ticks, self.numStages)
-		else
-			local numTicks = 0
-			if self.channeling then
-				numTicks = channelingTicks[self.spellID] or 0
-			end
-			B:CreateAndUpdateBarTicks(self, ticks, numTicks)
+		local numTicks = 0
+		if self.channeling then
+			numTicks = channelingTicks[self.spellID] or 0
 		end
+		B:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
 	end
 
+	if DB.isNewPatch then
+		UF:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
+	end
 	UpdateCastBarColor(self, unit)
 
 	if self.__owner.mystyle == "nameplate" then
