@@ -357,8 +357,30 @@ function M:HookParagonRep()
 end
 
 function M:ParagonReputationSetup()
-	if DB.isNewPatch then return end -- todo
 	if not C.db["Misc"]["ParagonRep"] then return end
-	hooksecurefunc("ReputationFrame_Update", M.HookParagonRep)
+	if DB.isNewPatch then
+		hooksecurefunc("ReputationFrame_InitReputationRow", function(factionRow, elementData)
+			local factionID = factionRow.factionID
+			local factionContainer = factionRow.Container
+			local factionBar = factionContainer.ReputationBar
+			local factionStanding = factionBar.FactionStanding
+
+			if factionContainer.Paragon:IsShown() then
+				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+				if currentValue then
+					local barValue = mod(currentValue, threshold)
+					local factionStandingtext = L["Paragon"]..floor(currentValue/threshold)
+
+					factionBar:SetMinMaxValues(0, threshold)
+					factionBar:SetValue(barValue)
+					factionStanding:SetText(factionStandingtext)
+					factionRow.standingText = factionStandingtext
+					factionRow.rolloverText = format(REPUTATION_PROGRESS_FORMAT, BreakUpLargeNumbers(barValue), BreakUpLargeNumbers(threshold))
+				end
+			end
+		end)
+	else
+		hooksecurefunc("ReputationFrame_Update", M.HookParagonRep)
+	end
 end
 M:RegisterMisc("ParagonRep", M.ParagonReputationSetup)
