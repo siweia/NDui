@@ -840,3 +840,4 @@ L["HealPrediction"] = "예측힐량 표시"
 L["DemonPage"] = "흑마: 악마형상 시 액션바 변화" 
 L["DispellTypeTip"] = "|n항상: 타겟에 걸려있는 저주, 마법, 질병과 독효과를 표시합니다.|n|n필터링: 나의 Debuff만 표시합니다. 내가 해제가능한 스킬의 아이콘테두리는 컬러로 표시됩니다."
 L["AutoBuffsTip"] = "|nIf checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3." -- need translation
+L["AutoRepairInfo"] = "You can toggle 'Auto repair' and 'Auto sell junk' on infobar durability and gold module." -- need translation

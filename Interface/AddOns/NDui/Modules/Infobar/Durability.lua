@@ -196,6 +196,10 @@ local function merchantClose()
 end
 
 local function merchantShow()
+	if not NDuiADB["Help"]["AutoRepair"] then
+		B:ShowHelpTip(MerchantFrame, L["AutoRepairInfo"], "RIGHT", 20, 0, nil, "AutoRepair")
+	end
+
 	if IsShiftKeyDown() or NDuiADB["RepairType"] == 0 or not CanMerchantRepair() then return end
 	autoRepair()
 	B:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
