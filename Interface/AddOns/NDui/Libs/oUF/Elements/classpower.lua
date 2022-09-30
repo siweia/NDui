@@ -45,6 +45,7 @@ Supported class powers:
 --]]
 
 local _, ns = ...
+local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 
 local _, PlayerClass = UnitClass('player')
@@ -74,10 +75,10 @@ local function UpdateColor(element, powerType)
 end
 
 local function Update(self, event, unit, powerType)
-	if event == "PLAYER_TARGET_CHANGED" then
-		unit, powerType = "player", "COMBO_POINTS"
-	elseif powerType == "ENERGY" then
-		powerType = "COMBO_POINTS" -- sometimes powerType return ENERGY for the first combo point
+	if event == 'PLAYER_TARGET_CHANGED' then
+		unit, powerType = 'player', 'COMBO_POINTS'
+	elseif powerType == 'ENERGY' then
+		powerType = 'COMBO_POINTS' -- sometimes powerType return ENERGY for the first combo point
 	end
 
 	if(not (unit and (UnitIsUnit(unit, 'player') and (not powerType or powerType == ClassPowerType)
@@ -100,7 +101,7 @@ local function Update(self, event, unit, powerType)
 	if(event ~= 'ClassPowerDisable') then
 		local powerID = unit == 'vehicle' and SPELL_POWER_COMBO_POINTS or ClassPowerID
 		--cur = UnitPower(unit, powerID, true)
-		cur = GetComboPoints(unit, "target")	-- has to use GetComboPoints in classic
+		cur = GetComboPoints(unit, 'target')	-- has to use GetComboPoints in classic
 		max = UnitPowerMax(unit, powerID)
 		mod = UnitPowerDisplayMod(powerID)
 
@@ -156,6 +157,17 @@ local function Path(self, ...)
 	return (self.ClassPower.Override or Update) (self, ...)
 end
 
+-- Pet owns the vehicle in the specifc quest
+-- https://www.wowhead.com/wotlk/quest=13414/aces-high
+local shouldWatchPet
+local function WatchPetCombos(event, unit, powerType)
+	if not shouldWatchPet then return end
+
+	if oUF_Player and unit == 'vehicle' then
+		Path(oUF_Player, event, unit, powerType)
+	end
+end
+
 local function Visibility(self, event, unit)
 	local element = self.ClassPower
 	local shouldEnable
@@ -163,6 +175,7 @@ local function Visibility(self, event, unit)
 	if(UnitHasVehicleUI('player')) then
 		shouldEnable = true -- PlayerVehicleHasComboPoints()
 		unit = 'vehicle'
+		shouldWatchPet = not UnitIsUnit('player', 'pet')
 	elseif(ClassPowerID) then
 		-- use 'player' instead of unit because 'SPELLS_CHANGED' is a unitless event
 		if(not RequirePower or RequirePower == UnitPowerType('player')) then
@@ -223,6 +236,8 @@ do
 
 		if(UnitHasVehicleUI('player')) then
 			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
+
+			B:RegisterEvent('UNIT_POWER_FREQUENT', WatchPetCombos)
 		else
 			Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
 		end
@@ -240,6 +255,9 @@ do
 
 		self.ClassPower.__isEnabled = false
 		Path(self, 'ClassPowerDisable', 'player', ClassPowerType)
+
+		shouldWatchPet = false
+		B:UnregisterEvent('UNIT_POWER_FREQUENT', WatchPetCombos)
 	end
 
 	if(PlayerClass == 'ROGUE' or PlayerClass == 'DRUID') then
