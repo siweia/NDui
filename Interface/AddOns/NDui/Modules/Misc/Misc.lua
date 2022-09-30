@@ -752,6 +752,10 @@ function M:MenuButton_GuildInvite()
 	GuildInvite(M.MenuButtonName)
 end
 
+function M:MenuButton_Whisper()
+	ChatFrame_SendTell(M.MenuButtonName)
+end
+
 function M:QuickMenuButton()
 	if not C.db["Misc"]["MenuButton"] then return end
 
@@ -759,13 +763,14 @@ function M:QuickMenuButton()
 		{text = ADD_FRIEND, func = M.MenuButton_AddFriend, color = {0, .6, 1}},
 		{text = gsub(CHAT_GUILD_INVITE_SEND, HEADER_COLON, ""), func = M.MenuButton_GuildInvite, color = {0, .8, 0}},
 		{text = COPY_NAME, func = M.MenuButton_CopyName, color = {1, 0, 0}},
+		{text = WHISPER, func = M.MenuButton_Whisper, color = {1, .5, 1}},
 	}
 
 	local frame = CreateFrame("Frame", "NDuiMenuButtonFrame", DropDownList1)
 	frame:SetSize(10, 10)
 	frame:SetPoint("TOPLEFT")
 	frame:Hide()
-	for i = 1, 3 do
+	for i = 1, 4 do
 		local button = CreateFrame("Button", nil, frame)
 		button:SetSize(25, 10)
 		button:SetPoint("TOPLEFT", frame, (i-1)*28 + 2, -2)
