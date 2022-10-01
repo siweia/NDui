@@ -1019,12 +1019,13 @@ do
 		end
 	end
 
-	local function reskinScrollArrow(self, direction)
+	local function reskinScrollArrow(self, direction, minimal)
 		if not self then return end
 
 		if self.Texture then
 			self.Texture:SetAlpha(0)
-			self.Overlay:SetAlpha(0)
+			if self.Overlay then self.Overlay:SetAlpha(0) end
+			if minimal then self:SetHeight(17) end
 		else
 			B.StripTextures(self)
 		end
@@ -1038,6 +1039,7 @@ do
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 
 		if self.Texture then
+			if minimal then return end
 			self.Texture.__owner = self
 			hooksecurefunc(self.Texture, "SetAtlas", updateTrimScrollArrow)
 			updateTrimScrollArrow(self.Texture, self.Texture:GetAtlas())
@@ -1072,18 +1074,23 @@ do
 	end
 
 	-- WowTrimScrollBar
-	function B:ReskinTrimScroll()
+	function B:ReskinTrimScroll(minimal)
 		B.StripTextures(self)
-		reskinScrollArrow(self.Back, "up")
-		reskinScrollArrow(self.Forward, "down")
+		reskinScrollArrow(self.Back, "up", minimal)
+		reskinScrollArrow(self.Forward, "down", minimal)
+		if self.Track then
+			self.Track:DisableDrawLayer("ARTWORK")
+		end
 
 		local thumb = self:GetThumb()
 		if thumb then
 			thumb:DisableDrawLayer("BACKGROUND")
 			thumb.bg = B.CreateBDFrame(thumb, .25)
 			thumb.bg:SetBackdropColor(cr, cg, cb, .25)
-			thumb.bg:SetPoint("TOPLEFT", 4, -1)
-			thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
+			if not minimal then
+				thumb.bg:SetPoint("TOPLEFT", 4, -1)
+				thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
+			end
 			self.thumb = thumb
 
 			thumb:HookScript("OnEnter", Thumb_OnEnter)
