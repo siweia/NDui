@@ -6,6 +6,7 @@ local strmatch = string.match
 
 local orig1, orig2 = {}, {}
 local linkTypes = {
+	achievement = true,
 	item = true,
 	enchant = true,
 	spell = true,
@@ -13,6 +14,8 @@ local linkTypes = {
 	unit = true,
 	talent = true,
 	instancelock = true,
+	glyph = true,
+	currency = true,
 }
 
 function TT:HyperLink_SetTypes(link)
