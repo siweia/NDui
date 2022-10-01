@@ -639,7 +639,7 @@ function M:EnhancedPicker()
 	colorBar:SetPoint("BOTTOM", 0, 38)
 
 	local count = 0
-	for name, class in pairs(DB.ClassList) do
+	for class, name in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 		local value = DB.ClassColors[class]
 		if value then
 			local bu = B.CreateButton(colorBar, 22, 22, true)
