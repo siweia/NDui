@@ -1509,6 +1509,8 @@ if( playerClass == "PRIEST" ) then
 		end
 
 		CalculateHotHealing = function(guid, spellID)
+			if spellID == 57669 then return end -- Replenishment shares the same spellName with Renew in zhCN
+
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
 			if not spellRank then -- bandage fix
 				print("|cffff0000-------------")
