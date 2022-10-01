@@ -149,6 +149,9 @@ tinsert(C.defaultThemes, function()
 				if child.PushToTalkKeybindButton then
 					B.Reskin(child.PushToTalkKeybindButton)
 				end
+				if child.SliderWithSteppers then
+					B.ReskinStepperSlider(child.SliderWithSteppers)
+				end
 
 				child.styled = true
 			end

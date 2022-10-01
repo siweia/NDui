@@ -1353,6 +1353,41 @@ do
 		end
 	end
 
+	local function reskinStepper(stepper, direction)
+		B.StripTextures(stepper)
+		stepper:SetWidth(19)
+
+		local tex = stepper:CreateTexture(nil, "ARTWORK")
+		tex:SetAllPoints()
+		B.SetupArrow(tex, direction)
+		stepper.__texture = tex
+
+		stepper:HookScript("OnEnter", B.Texture_OnEnter)
+		stepper:HookScript("OnLeave", B.Texture_OnLeave)
+	end
+
+	function B:ReskinStepperSlider()
+		B.StripTextures(self)
+		reskinStepper(self.Back, "left")
+		reskinStepper(self.Forward, "right")
+		self.Slider:DisableDrawLayer("ARTWORK")
+
+		local thumb = self.Slider.Thumb
+		thumb:SetTexture(DB.sparkTex)
+		thumb:SetBlendMode("ADD")
+		thumb:SetSize(20, 30)
+
+		local bg = B.CreateBDFrame(self.Slider, 0, true)
+		bg:SetPoint("TOPLEFT", 10, -13)
+		bg:SetPoint("BOTTOMRIGHT", -10, 13)
+		local bar = CreateFrame("StatusBar", nil, bg)
+		bar:SetStatusBarTexture(DB.normTex)
+		bar:SetStatusBarColor(1, .8, 0, .5)
+		bar:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+		bar:SetPoint("BOTTOMLEFT", bg, C.mult, C.mult)
+		bar:SetPoint("RIGHT", thumb, "CENTER")
+	end
+
 	-- Handle collapse
 	local function updateCollapseTexture(texture, collapsed)
 		local atlas = collapsed and "Soulbinds_Collection_CategoryHeader_Expand" or "Soulbinds_Collection_CategoryHeader_Collapse"
