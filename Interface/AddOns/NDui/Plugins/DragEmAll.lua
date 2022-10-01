@@ -186,9 +186,9 @@ local function HookFrames(list)
 end
 
 local function InitSetup()
-	HookFrames(frames)
 	CharacterFrameMoveCheck()
 	IsFrameExists()
+	HookFrames(frames)
 end
 
 local function AddonLoaded(_, name)
