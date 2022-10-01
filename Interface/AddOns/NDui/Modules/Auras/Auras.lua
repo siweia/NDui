@@ -80,6 +80,10 @@ function A:BuildBuffFrame()
 		A:ReskinBuffButtons()
 		B:RegisterEvent("UNIT_AURA", A.UpdateConsolidatedFrame, "player")
 	end
+
+	if NDuiPlayerBuffsProxyButton then
+		NDuiPlayerBuffsProxyButton:SetSize(C.db["Auras"]["BuffSize"], C.db["Auras"]["BuffSize"])
+	end
 end
 
 local day, hour, minute = 86400, 3600, 60
