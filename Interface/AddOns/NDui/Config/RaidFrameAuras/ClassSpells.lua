@@ -64,6 +64,11 @@ C.CornerBuffs = {
 	["DEATHKNIGHT"] = {},
 }
 
+-- 角标黑名单
+C.CornerBlackList = {
+	[57669] = true, -- 吸血鬼之触和漫长寒冬触发的恢复
+}
+
 -- 团队框体减益指示器黑名单
 C.RaidDebuffsBlack = {
 	[23445] = true, -- 邪恶双子
