@@ -402,6 +402,7 @@ do
 		"RightInset",
 		"NineSlice",
 		"BG",
+		"Bg",
 		"border",
 		"Border",
 		"Background",
@@ -954,6 +955,9 @@ do
 			end
 			if self.RightHighlight then
 				self.RightHighlight:SetAlpha(0)
+			end
+			if self.MiddleHighlight then
+				self.MiddleHighlight:SetAlpha(0)
 			end
 		end
 

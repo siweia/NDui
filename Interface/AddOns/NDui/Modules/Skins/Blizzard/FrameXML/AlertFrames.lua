@@ -56,8 +56,6 @@ tinsert(C.defaultThemes, function()
 		[GarrisonShipFollowerAlertSystem] = true,
 	}
 
-	if not NewCosmeticAlertFrameSystem then NewCosmeticAlertFrameSystem = 123 end
-
 	local newAlertTemplate = {
 		[NewPetAlertSystem] = true,
 		[NewMountAlertSystem] = true,
@@ -157,7 +155,7 @@ tinsert(C.defaultThemes, function()
 				frame.Background:SetTexture("")
 				frame.IconBorder:SetTexture("")
 			end
-		elseif frame.queue == NewRecipeLearnedAlertSystem then
+		elseif frame.queue == NewRecipeLearnedAlertSystem or frame.queue == SkillLineSpecsUnlockedAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
 				frame.bg:SetPoint("TOPLEFT", 10, -5)

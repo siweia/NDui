@@ -35,9 +35,9 @@ tinsert(C.defaultThemes, function()
 
 		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
 
-		bu:SetNormalTexture("")
-		bu:SetHighlightTexture("")
-		bu:SetPushedTexture("")
+		bu:SetNormalTexture(DB.blankTex)
+		bu:SetHighlightTexture(DB.blankTex)
+		bu:SetPushedTexture(DB.blankTex)
 		bu.bg = B.ReskinIcon(icon)
 		B.ReskinIconBorder(bu.IconBorder)
 
@@ -107,8 +107,8 @@ tinsert(C.defaultThemes, function()
 		if info.closeButton then
 			local closeButton = _G[dialog:GetName().."CloseButton"]
 
-			closeButton:SetNormalTexture("")
-			closeButton:SetPushedTexture("")
+			closeButton:SetNormalTexture(DB.blankTex)
+			closeButton:SetPushedTexture(DB.blankTex)
 
 			if info.closeButtonIsHide then
 				closeButton.__texture:Hide()

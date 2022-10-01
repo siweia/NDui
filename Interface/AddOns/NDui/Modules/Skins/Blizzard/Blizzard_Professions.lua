@@ -18,6 +18,23 @@ local function reskinSlotButton(button)
 	end
 end
 
+local function reskinArrowInput(box)
+	box:DisableDrawLayer("BACKGROUND")
+	B.ReskinEditBox(box)
+	B.ReskinArrow(box.DecrementButton, "left")
+	B.ReskinArrow(box.IncrementButton, "right")
+end
+
+local function reskinQualityContainer(container)
+	local button = container.Button
+	button:SetNormalTexture(DB.blankTex)
+	button:SetPushedTexture(DB.blankTex)
+	button:SetHighlightTexture(DB.blankTex)
+	button.bg = B.ReskinIcon(button.Icon)
+	B.ReskinIconBorder(button.IconBorder, true)
+	reskinArrowInput(container.EditBox)
+end
+
 C.themes["Blizzard_Professions"] = function()
 	local frame = ProfessionsFrame
 	local craftingPage = ProfessionsFrame.CraftingPage
@@ -27,18 +44,13 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(craftingPage.CreateButton)
 	B.Reskin(craftingPage.CreateAllButton)
 	B.Reskin(craftingPage.ViewGuildCraftersButton)
+	reskinArrowInput(craftingPage.CreateMultipleInputBox)
 
 	local guildFrame = craftingPage.GuildFrame
 	B.StripTextures(guildFrame)
 	B.CreateBDFrame(guildFrame, .25)
 	B.StripTextures(guildFrame.Container)
 	B.CreateBDFrame(guildFrame.Container, .25)
-
-	local multiBox = craftingPage.CreateMultipleInputBox
-	multiBox:DisableDrawLayer("BACKGROUND")
-	B.ReskinEditBox(multiBox)
-	B.ReskinArrow(multiBox.DecrementButton, "left")
-	B.ReskinArrow(multiBox.IncrementButton, "right")
 
 	for i = 1, 2 do
 		local tab = select(i, frame.TabSystem:GetChildren())
@@ -60,6 +72,7 @@ C.themes["Blizzard_Professions"] = function()
 
 	local recipeList = craftingPage.RecipeList
 	B.StripTextures(recipeList)
+	B.ReskinTrimScroll(recipeList.ScrollBar, true)
 	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in cast blizz rename
 	B.CreateBDFrame(recipeList, .25):SetInside()
 	B.ReskinEditBox(recipeList.SearchBox)
@@ -92,6 +105,19 @@ C.themes["Blizzard_Professions"] = function()
 		checkBox:SetSize(24, 24)
 	end
 
+	local qDialog = form.QualityDialog
+	if qDialog then
+		B.StripTextures(qDialog)
+		B.SetBD(qDialog)
+		B.ReskinClose(qDialog.ClosePanelButton)
+		B.Reskin(qDialog.AcceptButton)
+		B.Reskin(qDialog.CancelButton)
+
+		reskinQualityContainer(qDialog.Container1)
+		reskinQualityContainer(qDialog.Container2)
+		reskinQualityContainer(qDialog.Container3)
+	end
+
 	hooksecurefunc(form, "Init", function(self)
 		for slot in self.reagentSlotPool:EnumerateActive() do
 			reskinSlotButton(slot.Button)
@@ -100,12 +126,11 @@ C.themes["Blizzard_Professions"] = function()
 		local slot = form.salvageSlot
 		if slot then
 			reskinSlotButton(slot.Button)
-			-- todo: salvage flyout
 		end
+		-- todo: salvage flyout, item flyout, recraft flyout
 	end)
 
 	local rankBar = craftingPage.RankBar
-	rankBar.Mask:Hide()
 	rankBar.Border:Hide()
 	rankBar.Background:Hide()
 	B.CreateBDFrame(rankBar.Fill, 1)
@@ -114,15 +139,81 @@ C.themes["Blizzard_Professions"] = function()
 	craftingPage.LinkButton:SetSize(20, 20)
 	craftingPage.LinkButton:SetPoint("LEFT", rankBar.Fill, "RIGHT", 3, 0)
 
-	-- todo: spec page /run select(2, ProfessionsFrame.TabSystem:GetChildren()):Click()
+	local specPage = frame.SpecPage
+	B.Reskin(specPage.UnlockTabButton)
+	B.Reskin(specPage.ApplyButton)
+	B.StripTextures(specPage.TreeView)
+	specPage.TreeView.Background:Hide()
+	B.CreateBDFrame(specPage.TreeView, .25):SetInside()
 
-	B.Reskin(frame.SpecPage.UnlockTabButton)
-	B.Reskin(frame.SpecPage.ApplyButton)
-	B.StripTextures(frame.SpecPage.TreeView)
-	B.CreateBDFrame(frame.SpecPage.TreeView, .25):SetInside()
+	hooksecurefunc(specPage, "UpdateTabs", function(self)
+		for tab in self.tabsPool:EnumerateActive() do
+			if not tab.styled then
+				tab.styled = true
+				B.ReskinTab(tab)
+			end
+		end
+	end)
 
-	B.StripTextures(frame.SpecPage.DetailedView)
-	B.CreateBDFrame(frame.SpecPage.DetailedView, .25):SetInside()
-	B.Reskin(frame.SpecPage.DetailedView.UnlockPathButton)
-	B.Reskin(frame.SpecPage.DetailedView.SpendPointsButton)
+	local view = specPage.DetailedView
+	B.StripTextures(view)
+	B.CreateBDFrame(view, .25):SetInside()
+	B.Reskin(view.UnlockPathButton)
+	B.Reskin(view.SpendPointsButton)
+	B.ReskinIcon(view.UnspentPoints.Icon)
+
+	-- log
+	local outputLog = craftingPage.CraftingOutputLog
+	B.StripTextures(outputLog)
+	B.SetBD(outputLog)
+	B.ReskinClose(outputLog.ClosePanelButton)
+	B.ReskinTrimScroll(outputLog.ScrollBar, true)
+
+	hooksecurefunc(outputLog.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if not child.styled then
+				local itemContainer = child.ItemContainer
+				if itemContainer then
+					local item = itemContainer.Item
+					item:SetNormalTexture(DB.blankTex)
+					item:SetPushedTexture(DB.blankTex)
+					item:SetHighlightTexture(DB.blankTex)
+
+					local icon = item:GetRegions()
+					item.bg = B.ReskinIcon(icon)
+					B.ReskinIconBorder(item.IconBorder, true)
+					itemContainer.CritFrame:SetAlpha(0)
+					itemContainer.BorderFrame:Hide()
+					itemContainer.HighlightNameFrame:SetAlpha(0)
+					itemContainer.PushedNameFrame:SetAlpha(0)
+					itemContainer.bg = B.CreateBDFrame(itemContainer.HighlightNameFrame, .25)
+				end
+
+				local bonus = child.CreationBonus
+				if bonus then
+					local item = bonus.Item
+					B.StripTextures(item, 1)
+					local icon = item:GetRegions()
+					B.ReskinIcon(icon)
+				end
+
+				child.styled = true
+			end
+
+			local itemContainer = child.ItemContainer
+			if itemContainer then
+				itemContainer.Item.IconBorder:SetAlpha(0)
+
+				local itemBG = itemContainer.bg
+				if itemBG then
+					if itemContainer.CritFrame:IsShown() then
+						itemBG:SetBackdropBorderColor(1, .8, 0)
+					else
+						itemBG:SetBackdropBorderColor(0, 0, 0)
+					end
+				end
+			end
+		end
+	end)
 end
