@@ -1,6 +1,6 @@
 # NDui Classic
 
-## [3.4.0](https://github.com/siweia/NDui/tree/3.4.0) (2022-10-2)
+## [3.4.1](https://github.com/siweia/NDui/tree/3.4.1) (2022-10-2)
 
 - Update default skins.
 - Update skin for Postal.
