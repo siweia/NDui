@@ -192,4 +192,16 @@ function S:QuestTracker()
 			line.text:SetHeight(34)
 		end
 	end)
+
+	-- Allow to send quest name
+	hooksecurefunc("WatchFrameLinkButtonTemplate_OnClick", function(self)
+		if IsModifiedClick("CHATLINK") and ChatEdit_GetActiveWindow() then
+			if self.type == "QUEST" then
+				local name, level = GetQuestLogTitle(GetQuestIndexForWatch(self.index))
+				if name then
+					ChatEdit_InsertLink("["..name.."]")
+				end
+			end
+		end
+	end)
 end
