@@ -804,8 +804,7 @@ function UF:UpdateNameplateAuras()
 	element.showStealableBuffs = C.db["Nameplate"]["DispellMode"] == 1
 	element.alwaysShowStealable = C.db["Nameplate"]["DispellMode"] == 2
 	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
-	element:SetWidth(self:GetWidth())
-	element:SetHeight((element.size + element.spacing) * 2)
+	UF:UpdateAuraContainer(self, element, element.numTotal)
 	element:ForceUpdate()
 end
 
