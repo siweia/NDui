@@ -660,8 +660,10 @@ do
 	end
 
 	-- Handle icons
+	local x1, x2, y1, y2 = unpack(DB.TexCoord)
+
 	function B:ReskinIcon(shadow)
-		self:SetTexCoord(unpack(DB.TexCoord))
+		self:SetTexCoord(x1, x2, y1, y2)
 		local bg = B.CreateBDFrame(self, .25) -- exclude from opacity control
 		if shadow then B.CreateSD(bg) end
 		return bg
@@ -672,7 +674,7 @@ do
 		self.bg:SetAllPoints()
 		self.Icon = self:CreateTexture(nil, "ARTWORK")
 		self.Icon:SetInside(self.bg)
-		self.Icon:SetTexCoord(unpack(DB.TexCoord))
+		self.Icon:SetTexCoord(x1, x2, y1, y2)
 		if texture then
 			local atlas = strmatch(texture, "Atlas:(.+)$")
 			if atlas then
