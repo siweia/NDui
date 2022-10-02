@@ -868,7 +868,14 @@ function UF.PostCreateIcon(element, button)
 	button.overlay:SetTexture(nil)
 	button.stealable:SetAtlas("bags-newitem")
 
-	if element.disableCooldown then button.timer = B.CreateFS(button, 12, "") end
+	if element.disableCooldown then
+		button.timer = B.CreateFS(button, fontSize, "")
+		button.timer:ClearAllPoints()
+		button.timer:SetPoint("LEFT", button, "TOPLEFT")
+		button.count:ClearAllPoints()
+		button.count:SetPoint("RIGHT", button, "BOTTOMRIGHT")
+		button.icon:SetTexCoord(.08, .92, .08 + .25, .92 - .25)
+	end
 end
 
 local filteredStyle = {
@@ -887,7 +894,8 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 
 	local style = element.__owner.mystyle
 	if style == "nameplate" then
-		button:SetSize(element.size, element.size - 4)
+		button:SetSize(element.size, element.size/2)
+		B.SetFontSize(button.timer, element.fontSize or element.size*.6)
 	else
 		button:SetSize(element.size, element.size)
 	end
@@ -1129,6 +1137,8 @@ function UF:CreateAuras(self)
 		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 		bu.gap = false
 		bu.disableMouse = true
+		bu.disableCooldown = true
+		bu.spacing = 5
 		bu.CustomFilter = UF.CustomFilter
 	end
 
