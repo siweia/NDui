@@ -494,9 +494,11 @@ end
 function module:ShowCalendar()
 	if C.db["Map"]["Calendar"] then
 		if not GameTimeFrame.styled then
-			GameTimeFrame:SetNormalTexture("")
-			GameTimeFrame:SetPushedTexture("")
-			GameTimeFrame:SetHighlightTexture("")
+			if not DB.isNewPatch then
+				GameTimeFrame:SetNormalTexture("")
+				GameTimeFrame:SetPushedTexture("")
+				GameTimeFrame:SetHighlightTexture("")
+			end
 			GameTimeFrame:SetSize(18, 18)
 			GameTimeFrame:SetParent(Minimap)
 			GameTimeFrame:ClearAllPoints()

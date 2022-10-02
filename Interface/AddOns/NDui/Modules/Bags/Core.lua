@@ -913,7 +913,7 @@ function module:OnLogin()
 	MyButton:Scaffold("Default")
 
 	function MyButton:OnCreate()
-		self:SetNormalTexture("")
+		self:SetNormalTexture(DB.blankTex)
 		self:SetPushedTexture(DB.blankTex)
 		self:SetHighlightTexture(DB.bdTex)
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
