@@ -51,7 +51,7 @@ function module:OnSizeChanged(width, height)
 	if fontScale < MIN_SCALE then
 		self:Hide()
 	else
-		self.text:SetFont(DB.Font[1], fontScale * FONT_SIZE, DB.Font[3])
+		B.SetFontSize(self.text, fontScale * FONT_SIZE)
 		self.text:SetShadowColor(0, 0, 0, 0)
 
 		if self.enabled then
