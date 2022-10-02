@@ -836,19 +836,20 @@ function module:OnLogin()
 	end
 
 	function Backpack:OnInit()
-		AddNewContainer("Bag", 15, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 1, "BagReagent", filters.onlyBagReagent)
+		AddNewContainer("Bag", 16, "Junk", filters.bagsJunk)
 		for i = 1, 5 do
-			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
+			AddNewContainer("Bag", i+1, "BagCustom"..i, filters["bagCustom"..i])
 		end
-		AddNewContainer("Bag", 8, "EquipSet", filters.bagEquipSet)
-		AddNewContainer("Bag", 6, "AzeriteItem", filters.bagAzeriteItem)
-		AddNewContainer("Bag", 7, "Equipment", filters.bagEquipment)
-		AddNewContainer("Bag", 9, "BagCollection", filters.bagCollection)
-		AddNewContainer("Bag", 13, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 10, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 14, "BagQuest", filters.bagQuest)
-		AddNewContainer("Bag", 11, "BagAnima", filters.bagAnima)
-		AddNewContainer("Bag", 12, "BagRelic", filters.bagRelic)
+		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
+		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)
+		AddNewContainer("Bag", 8, "Equipment", filters.bagEquipment)
+		AddNewContainer("Bag", 10, "BagCollection", filters.bagCollection)
+		AddNewContainer("Bag", 14, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 11, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 15, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 12, "BagAnima", filters.bagAnima)
+		AddNewContainer("Bag", 13, "BagRelic", filters.bagRelic)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -1202,6 +1203,8 @@ function module:OnLogin()
 			label = L["KorthiaRelic"]
 		elseif strmatch(name, "Custom%d") then
 			label = GetCustomGroupTitle(settings.Index)
+		elseif name == "BagReagent" then
+			label = L["ReagentBag"]
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
