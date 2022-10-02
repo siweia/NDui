@@ -51,7 +51,7 @@ BagButton.bgTex = [[Interface\Paperdoll\UI-PaperDoll-Slot-Bag]]
 BagButton.itemFadeAlpha = 0.1
 
 local function UpdateTooltip(self, id)
-	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+	GameTooltip:SetOwner(self.bar, "ANCHOR_RIGHT")
 	GameTooltip:SetInventoryItem("player", id)
 	GameTooltip:Show()
 end
