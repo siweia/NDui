@@ -22,6 +22,7 @@ if DB.isNewPatch then
 	SortBankBags = C_Container.SortBankBags
 	SortReagentBankBags = C_Container.SortReagentBankBags
 	PickupContainerItem = C_Container.PickupContainerItem
+	SplitContainerItem = C_Container.SplitContainerItem
 end
 
 local sortCache = {}
