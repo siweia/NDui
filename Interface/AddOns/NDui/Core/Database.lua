@@ -178,7 +178,7 @@ DB.ReminderBuffs = {
 				[1459] = true,
 				[8096] = true,  -- 智力卷轴
 				[23028] = true, -- 奥术光辉
-				[46302] = true, -- 基鲁的胜利之歌
+				--[46302] = true, -- 基鲁的胜利之歌
 			},
 			depend = 1459,
 			combat = true,
@@ -202,7 +202,7 @@ DB.ReminderBuffs = {
 				[1243] = true,
 				[8099] = true,  -- 耐力卷轴
 				[21562] = true, -- 坚韧祷言
-				[46302] = true, -- 基鲁的胜利之歌
+				--[46302] = true, -- 基鲁的胜利之歌
 			},
 			depend = 1243,
 			combat = true,
@@ -210,9 +210,11 @@ DB.ReminderBuffs = {
 			pvp = true,
 		},
 		{	spells = {	-- 心灵之火
-				[588] = true,
+				[48168] = true,
 			},
-			depend = 588,
+			depend = 48168,
+			combat = true,
+			instance = true,
 			pvp = true,
 		},
 	},
