@@ -849,7 +849,7 @@ end
 
 -- Auras Relevant
 function UF.PostCreateIcon(element, button)
-	local fontSize = element.fontSize or element.size*.6
+	local fontSize = element.size*.6
 	local parentFrame = CreateFrame("Frame", nil, button)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
@@ -895,13 +895,9 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 	local style = element.__owner.mystyle
 	if style == "nameplate" then
 		button:SetSize(element.size, element.size/2)
-		B.SetFontSize(button.timer, element.fontSize or element.size*.6)
 	else
 		button:SetSize(element.size, element.size)
 	end
-
-	local fontSize = element.fontSize or element.size*.6
-	button.count:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
 	if element.desaturateDebuff and button.isDebuff and filteredStyle[style] and not button.isPlayer then
 		button.icon:SetDesaturated(true)
@@ -1000,6 +996,15 @@ function UF:UpdateAuraContainer(parent, element, maxAuras)
 	element.size = iconsPerRow and auraIconSize(width, iconsPerRow, element.spacing) or element.size
 	element:SetWidth(width)
 	element:SetHeight((element.size + element.spacing) * maxLines)
+
+	local fontSize = element.size*.6
+	for i = 1, #element do
+		local button = element[i]
+		if button then
+			if button.timer then B.SetFontSize(button.timer, fontSize) end
+			if button.count then B.SetFontSize(button.count, fontSize) end
+		end
+	end
 end
 
 function UF:ConfigureAuras(element)
