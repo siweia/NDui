@@ -1735,7 +1735,7 @@ local scrolls = {}
 function UF:UpdateScrollingFont()
 	local fontSize = C.db["UFs"]["FCTFontSize"]
 	for _, scroll in pairs(scrolls) do
-		scroll:SetFont(DB.Font[1], fontSize, "OUTLINE")
+		B.SetFontSize(scroll, fontSize)
 		scroll:SetSize(10*fontSize, 10*fontSize)
 	end
 end
