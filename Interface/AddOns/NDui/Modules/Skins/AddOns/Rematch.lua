@@ -236,7 +236,7 @@ function S:ReskinRematchElements()
 	end
 
 	if ALPTRematchOptionButton then
-		ALPTRematchOptionButton:SetPushedTexture("")
+		ALPTRematchOptionButton:SetPushedTexture(DB.blankTex)
 		ALPTRematchOptionButton:SetHighlightTexture(DB.bdTex)
 		ALPTRematchOptionButton:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		local tex = ALPTRematchOptionButton:GetNormalTexture()

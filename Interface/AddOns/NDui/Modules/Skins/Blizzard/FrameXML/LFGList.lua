@@ -109,9 +109,9 @@ tinsert(C.defaultThemes, function()
 				result:SetPoint("TOPRIGHT", AutoCompleteFrame.Results[i-1], "BOTTOMRIGHT", 0, 1)
 			end
 
-			result:SetNormalTexture("")
-			result:SetPushedTexture("")
-			result:SetHighlightTexture("")
+			result:SetNormalTexture(DB.blankTex)
+			result:SetPushedTexture(DB.blankTex)
+			result:SetHighlightTexture(DB.blankTex)
 
 			local bg = B.CreateBDFrame(result, .5)
 			local hl = result:CreateTexture(nil, "BACKGROUND")
@@ -141,7 +141,7 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(header)
 		B.SetFontSize(header.Label, 14)
 		header.Label:SetShadowColor(0, 0, 0, 0)
-		header:SetHighlightTexture("")
+		header:SetHighlightTexture(DB.blankTex)
 
 		local bg = B.CreateBDFrame(header, .25)
 		local hl = header:CreateTexture(nil, "BACKGROUND")

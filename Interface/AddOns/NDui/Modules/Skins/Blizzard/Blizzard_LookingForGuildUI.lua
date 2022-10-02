@@ -48,7 +48,7 @@ C.themes["Blizzard_LookingForGuildUI"] = function()
 		for i = 1, 5 do
 			local bu = _G["LookingForGuildBrowseFrameContainerButton"..i]
 			bu:HideBackdrop()
-			bu:SetHighlightTexture("")
+			bu:SetHighlightTexture(DB.blankTex)
 
 			-- my client crashes if I put this in a var? :x
 			bu:GetRegions():SetTexture(DB.bdTex)

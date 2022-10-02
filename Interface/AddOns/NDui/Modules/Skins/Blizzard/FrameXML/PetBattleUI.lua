@@ -233,7 +233,7 @@ tinsert(C.defaultThemes, function()
 				bu:SetPoint("LEFT", buttonList[i-1], "RIGHT", 3, 0)
 			end
 
-			bu:SetNormalTexture("")
+			bu:SetNormalTexture(DB.blankTex)
 			bu:GetPushedTexture():SetTexture(DB.textures.pushed)
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			if not bu.bg then

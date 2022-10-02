@@ -1287,7 +1287,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				elseif otype == "IconButton" then
 					B.ReskinIcon(widget.Icon)
 					widget:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-					widget:SetPushedTexture("")
+					widget:SetPushedTexture(DB.blankTex)
 					widget:SetSize(46, 46)
 					tinsert(VPBooks, widget)
 				elseif otype == "AdventurerRoster" then

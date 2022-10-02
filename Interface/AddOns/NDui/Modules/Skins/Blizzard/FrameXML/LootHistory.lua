@@ -18,7 +18,7 @@ tinsert(C.defaultThemes, function()
 
 	-- [[ Resize button ]]
 
-	LootHistoryFrame.ResizeButton:SetNormalTexture("")
+	LootHistoryFrame.ResizeButton:SetNormalTexture(DB.blankTex)
 	LootHistoryFrame.ResizeButton:SetHeight(8)
 
 	do

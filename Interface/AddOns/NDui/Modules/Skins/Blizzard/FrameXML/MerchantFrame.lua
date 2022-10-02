@@ -29,7 +29,7 @@ local function reskinMerchantItem(item)
 end
 
 local function reskinMerchantInteract(button)
-	button:SetPushedTexture("")
+	button:SetPushedTexture(DB.blankTex)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	B.CreateBDFrame(button)
 end

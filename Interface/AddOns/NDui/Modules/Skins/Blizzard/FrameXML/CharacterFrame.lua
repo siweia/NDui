@@ -124,8 +124,8 @@ tinsert(C.defaultThemes, function()
 		B.ReskinIconBorder(slot.IconBorder)
 
 		local popout = slot.popoutButton
-		popout:SetNormalTexture("")
-		popout:SetHighlightTexture("")
+		popout:SetNormalTexture(DB.blankTex)
+		popout:SetHighlightTexture(DB.blankTex)
 
 		local arrow = popout:CreateTexture(nil, "OVERLAY")
 		arrow:SetSize(14, 14)

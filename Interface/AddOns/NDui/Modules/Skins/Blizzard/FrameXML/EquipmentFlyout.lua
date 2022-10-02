@@ -8,7 +8,7 @@ tinsert(C.defaultThemes, function()
 		local button = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
 
 		button:SetNormalTexture(DB.blankTex)
-		button:SetPushedTexture("")
+		button:SetPushedTexture(DB.blankTex)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.ReskinIcon(button.icon)
 		B.ReskinIconBorder(button.IconBorder)
