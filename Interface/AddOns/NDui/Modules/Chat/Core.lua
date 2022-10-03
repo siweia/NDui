@@ -12,6 +12,7 @@ local BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BN
 local GeneralDockManager = GeneralDockManager
 local messageSoundID = SOUNDKIT.TELL_MESSAGE
 local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
+local LE_PARTY_CATEGORY_HOME, LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_HOME, LE_PARTY_CATEGORY_INSTANCE
 
 local maxLines = 2048
 local fontFile, fontOutline
@@ -166,8 +167,9 @@ end
 -- Swith channels by Tab
 local cycles = {
 	{ chatType = "SAY", IsActive = function() return true end },
-	{ chatType = "PARTY", IsActive = function() return IsInGroup() end },
-	{ chatType = "RAID", IsActive = function() return IsInRaid() end },
+	{ chatType = "PARTY", IsActive = function() return IsInGroup(LE_PARTY_CATEGORY_HOME) end },
+	{ chatType = "RAID", IsActive = function() return IsInRaid(LE_PARTY_CATEGORY_HOME) end },
+	{ chatType = "INSTANCE_CHAT", IsActive = function() return IsInGroup(LE_PARTY_CATEGORY_INSTANCE) end },
 	{ chatType = "GUILD", IsActive = function() return IsInGuild() end },
 	{ chatType = "OFFICER", IsActive = function() return C_GuildInfo_IsGuildOfficer() end },
 	{ chatType = "CHANNEL", IsActive = function(_, editbox)
