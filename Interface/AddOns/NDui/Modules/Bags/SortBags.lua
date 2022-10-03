@@ -433,7 +433,7 @@ do
 	end
 end
 
-function ContainerClass(container)
+--[[function ContainerClass(container)
 	if container ~= 0 and container ~= BANK_CONTAINER then
 		local name = GetBagName(container)
 		if name then
@@ -446,6 +446,11 @@ function ContainerClass(container)
 			end
 		end
 	end
+end]]
+
+function ContainerClass(container)
+	local _, bagFamily = GetContainerNumFreeSlots(container)
+	return bagFamily ~= 0 and bagFamily
 end
 
 function Item(container, position)
@@ -532,11 +537,15 @@ function Item(container, position)
 		itemStacks[key] = stack
 		itemSortKeys[key] = sortKey
 
-		for class, info in pairs(CLASSES) do
+		--[[for class, info in pairs(CLASSES) do
 			if info.items[itemID] then
 				itemClasses[key] = class
 				break
 			end
+		end]]
+
+		if slot ~= 'INVTYPE_BAG' then
+			itemClasses[key] = GetItemFamily(itemID)
 		end
 
 		return key
