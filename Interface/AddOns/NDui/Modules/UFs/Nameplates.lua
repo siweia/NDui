@@ -787,6 +787,7 @@ function UF:UpdateNameplateAuras()
 	end
 	element.numTotal = C.db["Nameplate"]["maxAuras"]
 	element.size = C.db["Nameplate"]["AuraSize"]
+	element.fontSize = C.db["Nameplate"]["FontSize"]
 	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 	element.showStealableBuffs = C.db["Nameplate"]["DispellMode"] == 1
 	element.alwaysShowStealable = C.db["Nameplate"]["DispellMode"] == 2
