@@ -545,7 +545,8 @@ function Item(container, position)
 		end]]
 
 		if slot ~= 'INVTYPE_BAG' then
-			itemClasses[key] = GetItemFamily(itemID)
+			local itemFamily = GetItemFamily(itemID)
+			itemClasses[key] = itemFamily ~= 0 and itemFamily
 		end
 
 		return key
