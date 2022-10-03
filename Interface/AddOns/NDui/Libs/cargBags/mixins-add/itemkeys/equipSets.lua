@@ -41,7 +41,7 @@ local function initUpdater()
 				for _, location in pairs(locations) do
 					local _, bank, bags, slot, bag = EquipmentManager_UnpackLocation(location)
 					if bags then
-						setItems[bag] = slot
+						setItems[bag..":"..slot] = true
 					end
 				end
 			end
@@ -60,5 +60,5 @@ end
 
 ItemKeys["isInSet"] = function(item)
 	if not setItems then initUpdater() end
-	return setItems[item.bagID] == item.slotID
+	return setItems[item.bagID..":"..item.slotID]
 end
