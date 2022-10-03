@@ -2,19 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
-local bagIDToInvID = {
-	[1] = 20,
-	[2] = 21,
-	[3] = 22,
-	[4] = 23,
-	[5] = 80,
-	[6] = 81,
-	[7] = 82,
-	[8] = 83,
-	[9] = 84,
-	[10] = 85,
-	[11] = 86,
-}
 
 local function createBagIcon(frame, index)
 	if not frame.bagIcon then
@@ -42,6 +29,11 @@ local function styleBankButton(bu)
 	if questTexture then
 		questTexture:SetDrawLayer("BACKGROUND")
 		questTexture:SetSize(1, 1)
+	end
+
+	local highlightTexture = bu.HighlightFrame and bu.HighlightFrame.HighlightTexture
+	if highlightTexture then
+		highlightTexture:SetColorTexture(1, .8, 0, .5)
 	end
 end
 
@@ -97,8 +89,8 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 
-		if frame.bagIcon then
-			local invID = bagIDToInvID[id]
+		if frame.bagIcon and id ~= 0 then
+			local invID = ContainerIDToInventoryID(id)
 			if invID then
 				local icon = GetInventoryItemTexture("player", invID)
 				frame.bagIcon:SetTexture(icon or backpackTexture)
