@@ -5,5 +5,6 @@
 - Refresh button texture while on vehicle.
 - Fix chat channels switch while in battlefield.
 - Fix itemSet filter for bags.
-- Fix reminder for Mage.
+- Update reminder for Priest and Mage.
+- Revamp nameplate auras.
 - Update bag sorting.
