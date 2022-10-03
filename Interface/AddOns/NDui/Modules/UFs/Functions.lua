@@ -867,7 +867,7 @@ end
 
 -- Auras Relevant
 function UF.PostCreateIcon(element, button)
-	local fontSize = element.size*.6
+	local fontSize = element.fontSize or element.size*.6
 	local parentFrame = CreateFrame("Frame", nil, button)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
@@ -890,9 +890,9 @@ function UF.PostCreateIcon(element, button)
 	if element.disableCooldown then
 		button.timer = B.CreateFS(button, fontSize, "")
 		button.timer:ClearAllPoints()
-		button.timer:SetPoint("LEFT", button, "TOPLEFT")
+		button.timer:SetPoint("LEFT", button, "TOPLEFT", -2, 0)
 		button.count:ClearAllPoints()
-		button.count:SetPoint("RIGHT", button, "BOTTOMRIGHT")
+		button.count:SetPoint("RIGHT", button, "BOTTOMRIGHT", 5, 0)
 		button.icon:SetTexCoord(.08, .92, .08 + .25, .92 - .25)
 	end
 end
@@ -1045,7 +1045,7 @@ function UF:UpdateAuraContainer(parent, element, maxAuras)
 	element:SetWidth(width)
 	element:SetHeight((element.size + element.spacing) * maxLines)
 
-	local fontSize = element.size*.6
+	local fontSize = element.fontSize or element.size*.6
 	for i = 1, #element do
 		local button = element[i]
 		if button then
@@ -1186,6 +1186,7 @@ function UF:CreateAuras(self)
 		end
 		bu.numTotal = C.db["Nameplate"]["maxAuras"]
 		bu.size = C.db["Nameplate"]["AuraSize"]
+		bu.fontSize = C.db["Nameplate"]["FontSize"]
 		bu.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 		bu.gap = false

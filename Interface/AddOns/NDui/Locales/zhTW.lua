@@ -920,3 +920,4 @@ L["DispellTypeTip"] = "|n總是：始終顯示魔法、詛咒、疾病及中毒�
 L["AutoBuffsTip"] = "|n勾選後，不再使用白名單過濾，而使用暴雪自帶邏輯顯示增益，上限3個。"
 L["AutoRepairInfo"] = "訊息條的耐久及貨幣模塊，可以調整自動修理和自動出售垃圾。"
 L["ReagentBag"] = "材料包"
+L["AuraFontSize"] = "法術文本大小"

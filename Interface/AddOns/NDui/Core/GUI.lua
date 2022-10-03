@@ -335,6 +335,7 @@ G.DefaultSettings = {
 		maxAuras = 5,
 		PlateAuras = true,
 		AuraSize = 28,
+		FontSize = 14,
 		AuraFilter = 3,
 		FriendlyCC = false,
 		HostileCC = true,
@@ -1239,10 +1240,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
 		{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
-		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
-		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
 		{4, "Nameplate", "DispellMode", L["Dispellable"].."*", nil, {L["Filter"], L["Always"], DISABLE}, refreshNameplates, L["DispellableTip"]},
 		{4, "Nameplate", "AuraFilter", L["NameplateAuraFilter"].."*", true, {L["BlackNWhite"], L["PlayerOnly"], L["IncludeCrowdControl"]}, refreshNameplates},
+		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
+		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", nil, nil, refreshNameplates, L["DebuffColorTip"]},
+		{3, "Nameplate", "FontSize", L["AuraFontSize"].."*", true, {10, 30, 1}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 60, 1}, refreshNameplates},
 		{},--blank

@@ -920,3 +920,4 @@ L["DispellTypeTip"] = "|nAlways: All the auras from magic, curse, disease and po
 L["AutoBuffsTip"] = "|nIf checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3."
 L["AutoRepairInfo"] = "You can toggle 'Auto repair' and 'Auto sell junk' on infobar durability and gold module."
 L["ReagentBag"] = "Reagent Bag"
+L["AuraFontSize"] = "Auras FontSize"
