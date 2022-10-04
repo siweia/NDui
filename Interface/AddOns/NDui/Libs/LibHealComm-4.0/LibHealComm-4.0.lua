@@ -3246,7 +3246,7 @@ function HealComm:OnInitialize()
 
 		local _GetHealTargets = GetHealTargets
 
-		GetHealTargets = function(bitType, guid, spellID)
+		GetHealTargets = function(bitType, guid, spellID, amount)
 			local spellName = GetSpellInfo(spellID)
 
 			if spellName == FirstAid then
@@ -3254,7 +3254,7 @@ function HealComm:OnInitialize()
 			end
 
 			if _GetHealTargets then
-				return _GetHealTargets(bitType, guid, spellID)
+				return _GetHealTargets(bitType, guid, spellID, amount)
 			end
 		end
 
