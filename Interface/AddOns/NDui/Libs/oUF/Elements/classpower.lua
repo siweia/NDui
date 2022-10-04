@@ -159,9 +159,18 @@ end
 
 -- Pet owns the vehicle in the specifc quest
 -- https://www.wowhead.com/wotlk/quest=13414/aces-high
-local function WatchPetCombos(event, unit, powerType)
-	if oUF_Player and unit == 'vehicle' and powerType == 'COMBO_POINTS' then
-		Path(oUF_Player, event, unit, powerType)
+local function updateUnitFrame(frame, event, unit, powerType)
+	if not frame then return end
+	if frame:IsEnabled() and frame:IsElementEnabled("ClassPower") then
+		Path(frame, event, unit, powerType)
+	end
+end
+
+local function WatchVehicleCombos(event, unit, powerType)
+	if unit == 'vehicle' and powerType == 'COMBO_POINTS' then
+		updateUnitFrame(_G.oUF_Player, event, unit, powerType)
+		updateUnitFrame(_G.oUF_PlayerPlate, event, unit, powerType)
+		updateUnitFrame(_G.oUF_TargetPlate, event, unit, powerType)
 	end
 end
 
@@ -233,7 +242,7 @@ do
 		if(UnitHasVehicleUI('player')) then
 			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
 
-			B:RegisterEvent('UNIT_POWER_FREQUENT', WatchPetCombos)
+			B:RegisterEvent('UNIT_POWER_FREQUENT', WatchVehicleCombos)
 		else
 			Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
 		end
@@ -252,7 +261,7 @@ do
 		self.ClassPower.__isEnabled = false
 		Path(self, 'ClassPowerDisable', 'player', ClassPowerType)
 
-		B:UnregisterEvent('UNIT_POWER_FREQUENT', WatchPetCombos)
+		B:UnregisterEvent('UNIT_POWER_FREQUENT', WatchVehicleCombos)
 	end
 
 	if(PlayerClass == 'ROGUE' or PlayerClass == 'DRUID') then
