@@ -159,11 +159,8 @@ end
 
 -- Pet owns the vehicle in the specifc quest
 -- https://www.wowhead.com/wotlk/quest=13414/aces-high
-local shouldWatchPet
 local function WatchPetCombos(event, unit, powerType)
-	if not shouldWatchPet then return end
-
-	if oUF_Player and unit == 'vehicle' then
+	if oUF_Player and unit == 'vehicle' and powerType == 'COMBO_POINTS' then
 		Path(oUF_Player, event, unit, powerType)
 	end
 end
@@ -173,9 +170,8 @@ local function Visibility(self, event, unit)
 	local shouldEnable
 
 	if(UnitHasVehicleUI('player')) then
-		shouldEnable = true -- PlayerVehicleHasComboPoints()
 		unit = 'vehicle'
-		shouldWatchPet = not UnitIsUnit('player', 'pet')
+		shouldEnable = UnitPowerMax(unit, SPELL_POWER_COMBO_POINTS) == 5 -- PlayerVehicleHasComboPoints()
 	elseif(ClassPowerID) then
 		-- use 'player' instead of unit because 'SPELLS_CHANGED' is a unitless event
 		if(not RequirePower or RequirePower == UnitPowerType('player')) then
@@ -256,7 +252,6 @@ do
 		self.ClassPower.__isEnabled = false
 		Path(self, 'ClassPowerDisable', 'player', ClassPowerType)
 
-		shouldWatchPet = false
 		B:UnregisterEvent('UNIT_POWER_FREQUENT', WatchPetCombos)
 	end
 
