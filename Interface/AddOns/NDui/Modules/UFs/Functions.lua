@@ -7,6 +7,7 @@ local UF = B:RegisterModule("UnitFrames")
 local format, floor = string.format, math.floor
 local pairs = pairs
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
+local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
 -- Custom colors
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
@@ -708,7 +709,7 @@ function UF:CreateCastBar(self)
 		cb.Icon = cb:CreateTexture(nil, "ARTWORK")
 		cb.Icon:SetSize(cb:GetHeight(), cb:GetHeight())
 		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -3, 0)
-		cb.Icon:SetTexCoord(unpack(DB.TexCoord))
+		cb.Icon:SetTexCoord(x1, x2, y1, y2)
 		B.SetBD(cb.Icon)
 	end
 
@@ -848,6 +849,12 @@ function UF:ReskinTimerTrakcer(self)
 end
 
 -- Auras Relevant
+function UF:UpdateIconTexCoord(width, height)
+	local ratio = height / width
+	local mult = (1 - ratio) / 2
+	self.icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
+end
+
 function UF.PostCreateIcon(element, button)
 	local fontSize = element.fontSize or element.size*.6
 	local parentFrame = CreateFrame("Frame", nil, button)
@@ -869,12 +876,12 @@ function UF.PostCreateIcon(element, button)
 	button.stealable:SetAtlas("bags-newitem")
 
 	if element.disableCooldown then
+		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
 		button.timer = B.CreateFS(button, fontSize, "")
 		button.timer:ClearAllPoints()
 		button.timer:SetPoint("LEFT", button, "TOPLEFT", -2, 0)
 		button.count:ClearAllPoints()
 		button.count:SetPoint("RIGHT", button, "BOTTOMRIGHT", 5, 0)
-		button.icon:SetTexCoord(.08, .92, .08 + .25, .92 - .25)
 	end
 end
 
@@ -894,7 +901,7 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 
 	local style = element.__owner.mystyle
 	if style == "nameplate" then
-		button:SetSize(element.size, element.size/2)
+		button:SetSize(element.size, element.size * C.db["Nameplate"]["SizeRatio"])
 	else
 		button:SetSize(element.size, element.size)
 	end

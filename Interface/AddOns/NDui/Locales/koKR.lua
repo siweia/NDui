@@ -842,3 +842,4 @@ L["DispellTypeTip"] = "|n항상: 타겟에 걸려있는 저주, 마법, 질병�
 L["AutoBuffsTip"] = "|nIf checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3." -- need translation
 L["AutoRepairInfo"] = "You can toggle 'Auto repair' and 'Auto sell junk' on infobar durability and gold module." -- need translation
 L["AuraFontSize"] = "Auras FontSize" -- need translation
+L["SizeRatio"] = "Icon Size Ratio" -- need translation
