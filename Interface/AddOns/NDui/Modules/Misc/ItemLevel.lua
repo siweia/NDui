@@ -230,7 +230,7 @@ end
 
 local function GetItemQualityAndLevel(link)
 	local _, _, quality, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
-	if quality and quality > 1 and level > 1 and DB.iLvlClassIDs[classID] then
+	if quality and quality > 1 and level and level > 1 and DB.iLvlClassIDs[classID] then
 		return quality, level
 	end
 end
