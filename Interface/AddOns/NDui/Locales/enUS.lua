@@ -921,3 +921,4 @@ L["AutoBuffsTip"] = "|nIf checked, use blizzard API logic to display buffs, no l
 L["AutoRepairInfo"] = "You can toggle 'Auto repair' and 'Auto sell junk' on infobar durability and gold module."
 L["ReagentBag"] = "Reagent Bag"
 L["AuraFontSize"] = "Auras FontSize"
+L["SizeRatio"] = "Icon Size Ratio"

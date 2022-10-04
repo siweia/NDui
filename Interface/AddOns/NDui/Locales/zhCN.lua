@@ -921,3 +921,4 @@ L["AutoBuffsTip"] = "|n勾选后，不再使用下列白名单，而使用暴雪
 L["AutoRepairInfo"] = "信息条的耐久和货币模块，可以调整自动修理和自动出售垃圾。"
 L["ReagentBag"] = "材料包"
 L["AuraFontSize"] = "法术文本大小"
+L["SizeRatio"] = "图标高宽比率"
