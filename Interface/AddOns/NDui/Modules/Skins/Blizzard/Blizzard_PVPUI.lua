@@ -169,18 +169,22 @@ C.themes["Blizzard_PVPUI"] = function()
 	ConquestFrame.RatedBG:HookScript("OnEnter", ConquestFrameButton_OnEnter)
 	B.Reskin(ConquestFrame.JoinButton)
 
-	for _, bu in pairs({ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.RatedBG}) do
-		B.Reskin(bu, true)
-		local reward = bu.Reward
-		if reward then
-			reward.Border:Hide()
-			reward.CircleMask:Hide()
-			reward.Icon.bg = B.ReskinIcon(reward.Icon)
+	local names = {"RatedSoloShuffle", "Arena2v2", "Arena3v3", "RatedBG"}
+	for _, name in pairs(names) do
+		local bu = ConquestFrame[name]
+		if bu then
+			B.Reskin(bu, true)
+			local reward = bu.Reward
+			if reward then
+				reward.Border:Hide()
+				reward.CircleMask:Hide()
+				reward.Icon.bg = B.ReskinIcon(reward.Icon)
+			end
+	
+			bu.SelectedTexture:SetDrawLayer("BACKGROUND")
+			bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+			bu.SelectedTexture:SetInside(bu.__bg)
 		end
-
-		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-		bu.SelectedTexture:SetInside(bu.__bg)
 	end
 
 	-- Item Borders for HonorFrame & ConquestFrame

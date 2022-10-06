@@ -1372,7 +1372,7 @@ do
 		stepper:HookScript("OnLeave", B.Texture_OnLeave)
 	end
 
-	function B:ReskinStepperSlider()
+	function B:ReskinStepperSlider(minimal)
 		B.StripTextures(self)
 		reskinStepper(self.Back, "left")
 		reskinStepper(self.Forward, "right")
@@ -1384,8 +1384,9 @@ do
 		thumb:SetSize(20, 30)
 
 		local bg = B.CreateBDFrame(self.Slider, 0, true)
-		bg:SetPoint("TOPLEFT", 10, -13)
-		bg:SetPoint("BOTTOMRIGHT", -10, 13)
+		local offset = minimal and 10 or 13
+		bg:SetPoint("TOPLEFT", 10, -offset)
+		bg:SetPoint("BOTTOMRIGHT", -10, offset)
 		local bar = CreateFrame("StatusBar", nil, bg)
 		bar:SetStatusBarTexture(DB.normTex)
 		bar:SetStatusBarColor(1, .8, 0, .5)
