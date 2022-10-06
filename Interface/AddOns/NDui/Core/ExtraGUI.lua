@@ -120,6 +120,10 @@ function G:SetupRaidDebuffs(parent)
 				AddNewDungeon(dungeons, dungeonID)
 			end
 		end
+		AddNewDungeon(dungeons, 313)  -- 青龙寺
+		AddNewDungeon(dungeons, 537)  -- 影月墓地
+		AddNewDungeon(dungeons, 721)  -- 英灵殿
+		AddNewDungeon(dungeons, 800)  -- 群星庭院
 	else
 		for dungeonID = 1182, 1189 do
 			AddNewDungeon(dungeons, dungeonID)

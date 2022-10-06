@@ -53,7 +53,8 @@ module:RegisterDebuff(TIER, 777, 0, 205513)
 module:RegisterDebuff(TIER, 777, 0, 204962, 5)
 module:RegisterDebuff(TIER, 777, 0, 202037)
 
--- 群星庭院 (800)
+-- 群星庭院 (800) 10.0 S1
+module:RegisterSeasonSpells(6, INSTANCE)
 module:RegisterDebuff(TIER, 800, 0, 209858)
 module:RegisterDebuff(TIER, 800, 0, 240559)
 module:RegisterDebuff(TIER, 800, 0, 240443)
@@ -78,7 +79,8 @@ module:RegisterDebuff(TIER, 716, 0, 197105)
 module:RegisterDebuff(TIER, 716, 0, 199847)
 module:RegisterDebuff(TIER, 716, 0, 193698, 5)
 
--- 英灵殿 (721)
+-- 英灵殿 (721) 10.0 S1
+module:RegisterSeasonSpells(6, INSTANCE)
 module:RegisterDebuff(TIER, 721, 0, 209858)
 module:RegisterDebuff(TIER, 721, 0, 240559)
 module:RegisterDebuff(TIER, 721, 0, 240443)
@@ -150,7 +152,7 @@ module:RegisterDebuff(TIER, 740, 0, 200261)
 module:RegisterDebuff(TIER, 740, 0, 197546)
 module:RegisterDebuff(TIER, 740, 0, 200248)
 
--- 重返卡拉赞 (860)
+-- 重返卡拉赞 (860) 9.0 S4
 --module:RegisterDebuff(TIER, 860, 0, 209858)
 --module:RegisterDebuff(TIER, 860, 0, 240559)
 --module:RegisterDebuff(TIER, 860, 0, 240443)

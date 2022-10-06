@@ -28,3 +28,10 @@ module:RegisterSeasonSpells(TIER, INSTANCE)
 
 INSTANCE = 1197 -- 奥达曼：提尔的遗产
 module:RegisterSeasonSpells(TIER, INSTANCE)
+
+-- S1
+INSTANCE = 313 -- 青龙寺
+module:RegisterSeasonSpells(5, INSTANCE)
+
+INSTANCE = 537 -- 影月墓地
+module:RegisterSeasonSpells(6, INSTANCE)
