@@ -104,6 +104,7 @@ function TT:Azerite_UpdateItem()
 end
 
 function TT:AzeriteArmor()
+	if DB.isNewPatch then return end -- todo
 	if not C.db["Tooltip"]["AzeriteArmor"] then return end
 	if IsAddOnLoaded("AzeriteTooltip") then return end
 

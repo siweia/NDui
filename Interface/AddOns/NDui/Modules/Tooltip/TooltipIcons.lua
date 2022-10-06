@@ -51,8 +51,10 @@ function TT:HookTooltipSetSpell()
 end
 
 function TT:HookTooltipMethod()
-	self:HookScript("OnTooltipSetItem", TT.HookTooltipSetItem)
-	self:HookScript("OnTooltipSetSpell", TT.HookTooltipSetSpell)
+	if not DB.isNewPatch then
+		self:HookScript("OnTooltipSetItem", TT.HookTooltipSetItem)
+		self:HookScript("OnTooltipSetSpell", TT.HookTooltipSetSpell)
+	end
 	self:HookScript("OnTooltipCleared", TT.HookTooltipCleared)
 end
 
@@ -63,9 +65,11 @@ function TT:ReskinRewardIcon()
 end
 
 function TT:ReskinTooltipIcons()
+	-- Add Icons
 	TT.HookTooltipMethod(GameTooltip)
 	TT.HookTooltipMethod(ItemRefTooltip)
 
+	-- Cut Icons
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self)
 		TT.SetupTooltipIcon(self)
 	end)

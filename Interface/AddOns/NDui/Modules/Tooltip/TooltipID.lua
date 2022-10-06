@@ -82,13 +82,10 @@ function TT:SetItemID()
 	end
 end
 
-function TT:UpdateSpellCaster(...)
-	local unitCaster = select(7, UnitAura(...))
-	if unitCaster then
-		local name = GetUnitName(unitCaster, true)
-		local hexColor = B.HexRGB(B.UnitColor(unitCaster))
-		self:AddDoubleLine(L["From"]..":", hexColor..name)
-		self:Show()
+function TT:SetSpellID()
+	local spellID = select(2, self:GetSpell())
+	if spellID then
+		if spellID then TT.AddLineForID(self, spellID, types.spell) end
 	end
 end
 
@@ -101,34 +98,49 @@ function TT:SetupTooltipID()
 
 	-- Spells
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
-		local id = select(10, UnitAura(...))
-		if id then TT.AddLineForID(self, id, types.spell) end
-	end)
-	GameTooltip:HookScript("OnTooltipSetSpell", function(self)
-		local id = select(2, self:GetSpell())
-		if id then TT.AddLineForID(self, id, types.spell) end
+		local _, icon, _, _, _, _, caster, _, _, id = UnitAura(...)
+		if id then
+			TT.AddLineForID(self, id, types.spell)
+		end
+		if DB.isNewPatch and icon then
+			TT.SetupTooltipIcon(self, icon)
+		end
+		if caster then
+			local name = GetUnitName(caster, true)
+			local hexColor = B.HexRGB(B.UnitColor(caster))
+			self:AddDoubleLine(L["From"]..":", hexColor..name)
+			self:Show()
+		end
 	end)
 	hooksecurefunc("SetItemRef", function(link)
 		local id = tonumber(strmatch(link, "spell:(%d+)"))
 		if id then TT.AddLineForID(ItemRefTooltip, id, types.spell) end
 	end)
+	if not DB.isNewPatch then
+		GameTooltip:HookScript("OnTooltipSetSpell", function(self)
+			local id = select(2, self:GetSpell())
+			if id then TT.AddLineForID(self, id, types.spell) end
+		end)
+	end
 
 	-- Items
-	GameTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
-	GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
-	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
-	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
-	ShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
-	ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
-	ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
-	hooksecurefunc(GameTooltip, "SetToyByItemID", function(self, id)
-		if id then TT.AddLineForID(self, id, types.item) end
-	end)
-	hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, recipeID, reagentIndex)
-		local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
-		local id = link and strmatch(link, "item:(%d+):")
-		if id then TT.AddLineForID(self, id, types.item) end
-	end)
+	if not DB.isNewPatch then
+		GameTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
+		GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
+		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
+		ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
+		ShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
+		ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
+		ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
+		hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, recipeID, reagentIndex)
+			local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
+			local id = link and strmatch(link, "item:(%d+):")
+			if id then TT.AddLineForID(self, id, types.item) end
+		end)
+		hooksecurefunc(GameTooltip, "SetToyByItemID", function(self, id)
+			if id then TT.AddLineForID(self, id, types.item) end
+		end)
+	end
 
 	-- Currencies
 	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
@@ -144,9 +156,6 @@ function TT:SetupTooltipID()
 		end)
 	end
 
-	-- Spell caster
-	hooksecurefunc(GameTooltip, "SetUnitAura", TT.UpdateSpellCaster)
-
 	-- Azerite traits
 	hooksecurefunc(GameTooltip, "SetAzeritePower", function(self, _, _, id)
 		if id then TT.AddLineForID(self, id, types.azerite, true) end
@@ -156,6 +165,50 @@ function TT:SetupTooltipID()
 	hooksecurefunc("QuestMapLogTitleButton_OnEnter", function(self)
 		if self.questID then
 			TT.AddLineForID(GameTooltip, self.questID, types.quest)
+		end
+	end)
+
+	if not DB.isNewPatch then return end
+
+	local isItems = {
+		["GetBagItem"] = true,
+		["GetInventoryItem"] = true,
+		["GetMerchantItem"] = true,
+		["GetBuybackItem"] = true,
+		["GetItemByID"] = true,
+		["GetRecipeResultItem"] = true,
+		["GetRecipeReagentItem"] = true,
+		["GetToyByItemID"] = true,
+		["GetHeirloomByItemID"] = true,
+	}
+
+	local isSpells = {
+		["GetSpellByID"] = true,
+		["GetSpellBookItem"] = true,
+		["GetSpellByID"] = true,
+		["GetTraitEntry"] = true,
+		["GetMountBySpellID"] = true,
+	}
+
+	hooksecurefunc(GameTooltip, "ProcessLines", function(self)
+		local getterName = self.info and self.info.getterName
+		if isSpells[getterName] then
+			TT.HookTooltipSetSpell(self)
+			TT.SetSpellID(self)
+		elseif isItems[getterName] then
+			TT.HookTooltipSetItem(self)
+			TT.SetItemID(self)
+		end
+	end)
+
+	hooksecurefunc(GameTooltip, "SetAction", function(self, action)
+		local actionType, actionID = GetActionInfo(action)
+		if actionType == "spell" or actionType == "companion" then
+			TT.HookTooltipSetSpell(self)
+			TT.AddLineForID(self, actionID, types.spell)
+		elseif actionType == "item" then
+			TT.HookTooltipSetItem(self)
+			TT.AddLineForID(self, actionID, types.item)
 		end
 	end)
 end

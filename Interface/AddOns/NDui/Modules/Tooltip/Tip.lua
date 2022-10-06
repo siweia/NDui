@@ -144,6 +144,7 @@ local passedNames = {
 }
 function TT:RefreshLines()
 	local getterName = self.info and self.info.getterName
+	--print(getterName)
 	if passedNames[getterName] then
 		TT.OnTooltipSetUnit(self)
 	end
@@ -301,12 +302,12 @@ function TT:RefreshStatusBar(value)
 	end
 	local unit = self.guid and UnitTokenFromGUID(self.guid)
 	local unitHealthMax = unit and UnitHealthMax(unit)
-	if unitHealthMax then
+	if unitHealthMax and unitHealthMax ~= 0 then
 		self.text:SetText(B.Numb(value*unitHealthMax).." | "..B.Numb(unitHealthMax))
+		self:SetStatusBarColor(B.UnitColor(unit))
 	else
 		self.text:SetFormattedText("%d%%", value*100)
 	end
-	self:SetStatusBarColor(B.UnitColor(unit))
 end
 
 function TT:ReskinStatusBar()
@@ -516,11 +517,12 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
 	if not DB.isNewPatch then
 		hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
+		-- todo
+		GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
+		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
+		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 	end
 	TT:SetupTooltipFonts()
-	GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
-	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
-	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 	TT:FixStoneSoupError()
 
 	-- Elements
