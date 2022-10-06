@@ -95,7 +95,18 @@ end
 -- Tags
 local function GetNumFreeSlots(name)
 	if name == "Bag" then
-		return CalculateTotalNumberOfFreeBagSlots()
+		if DB.isNewPatch then
+			local totalFree, freeSlots, bagFamily = 0
+			for i = 0, 4 do -- reagent bank excluded
+				freeSlots, bagFamily = GetContainerNumFreeSlots(i)
+				if bagFamily == 0 then
+					totalFree = totalFree + freeSlots
+				end
+			end
+			return totalFree
+		else
+			return CalculateTotalNumberOfFreeBagSlots()
+		end
 	elseif name == "Bank" then
 		local numFreeSlots = GetContainerNumFreeSlots(-1)
 		if DB.isNewPatch then
