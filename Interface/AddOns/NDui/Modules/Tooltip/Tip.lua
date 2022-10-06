@@ -138,6 +138,17 @@ function TT:ShowUnitMythicPlusScore(unit)
 	end
 end
 
+local passedNames = {
+	["GetUnit"] = true,
+	["GetWorldCursor"] = true,
+}
+function TT:RefreshLines()
+	local getterName = self.info and self.info.getterName
+	if passedNames[getterName] then
+		TT.OnTooltipSetUnit(self)
+	end
+end
+
 function TT:OnTooltipSetUnit()
 	if self:IsForbidden() then return end
 	if C.db["Tooltip"]["CombatHide"] and InCombatLockdown() then self:Hide() return end
@@ -257,7 +268,9 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	self.StatusBar:SetStatusBarColor(r, g, b)
+	if not DB.isNewPatch then
+		self.StatusBar:SetStatusBarColor(r, g, b)
+	end
 
 	TT.InspectUnitSpecAndLevel(self, unit)
 	TT.ShowUnitMythicPlusScore(self, unit)
@@ -278,6 +291,20 @@ function TT:StatusBar_OnValueChanged(value)
 	else
 		self.text:SetText(B.Numb(value).." | "..B.Numb(max))
 	end
+end
+
+function TT:RefreshStatusBar(value)
+	if not self.text then
+		self.text = B.CreateFS(self, 12, "")
+	end
+	local unit = self.guid and UnitTokenFromGUID(self.guid)
+	local unitHealthMax = unit and UnitHealthMax(unit)
+	if unitHealthMax then
+		self.text:SetText(B.Numb(value*unitHealthMax).." | "..B.Numb(unitHealthMax))
+	else
+		self.text:SetFormattedText("%d%%", value*100)
+	end
+	self:SetStatusBarColor(B.UnitColor(unit))
 end
 
 function TT:ReskinStatusBar()
@@ -471,10 +498,17 @@ function TT:FixStoneSoupError()
 end
 
 function TT:OnLogin()
-	GameTooltip.StatusBar = GameTooltipStatusBar
+	if not GameTooltip.StatusBar then -- isNewPatch
+		GameTooltip.StatusBar = GameTooltipStatusBar
+	end
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
-	GameTooltip:HookScript("OnTooltipSetUnit", TT.OnTooltipSetUnit)
-	GameTooltip.StatusBar:SetScript("OnValueChanged", TT.StatusBar_OnValueChanged)
+	if DB.isNewPatch then
+		hooksecurefunc(GameTooltip, "ProcessLines", TT.RefreshLines)
+		hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+	else
+		GameTooltip:HookScript("OnTooltipSetUnit", TT.OnTooltipSetUnit)
+		GameTooltip.StatusBar:SetScript("OnValueChanged", TT.StatusBar_OnValueChanged)
+	end
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
