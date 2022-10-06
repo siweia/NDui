@@ -270,6 +270,8 @@ end
 
 -- Reanchor ObjectiveTracker
 function M:MoveQuestTracker()
+	if DB.isNewPatch then return end
+
 	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
 	frame:SetSize(240, 50)
 	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
@@ -282,7 +284,6 @@ function M:MoveQuestTracker()
 	tracker:SetMovable(true)
 	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
 
-	if not DB.isNewPatch then return end
 	hooksecurefunc(tracker, "SetPoint", function(self, _, parent)
 		if parent ~= frame then
 			self:ClearAllPoints()
