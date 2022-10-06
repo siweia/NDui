@@ -87,7 +87,9 @@ tinsert(C.defaultThemes, function()
 		local tab = _G["CombatConfigTab"..i]
 		if tab then
 			B.StripTextures(tab)
-			tab.Text:SetWidth(tab.Text:GetWidth() + 10)
+			if tab.Text then
+				tab.Text:SetWidth(tab.Text:GetWidth() + 10)
+			end
 		end
 	end
 
@@ -147,7 +149,6 @@ tinsert(C.defaultThemes, function()
 		B.ReskinCheck(box)
 	end
 
-	if DB.isNewPatch then
 	hooksecurefunc("ChatConfig_UpdateSwatches", function(frame)
 		if not frame.swatchTable then return end
 
@@ -164,7 +165,6 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end)
-	end
 
 	local bg = B.CreateBDFrame(ChatConfigCombatSettingsFilters, .25)
 	bg:SetPoint("TOPLEFT", 3, 0)

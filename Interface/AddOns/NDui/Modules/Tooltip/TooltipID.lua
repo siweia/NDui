@@ -98,12 +98,9 @@ function TT:SetupTooltipID()
 
 	-- Spells
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
-		local _, icon, _, _, _, _, caster, _, _, id = UnitAura(...)
+		local _, _, _, _, _, _, caster, _, _, id = UnitAura(...)
 		if id then
 			TT.AddLineForID(self, id, types.spell)
-		end
-		if DB.isNewPatch and icon then
-			TT.SetupTooltipIcon(self, icon)
 		end
 		if caster then
 			local name = GetUnitName(caster, true)
