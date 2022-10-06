@@ -144,7 +144,9 @@ info.onEnter = function(self)
 			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], cur.."%", 1,1,1, getDurabilityColor(cur, 100))
 
 			B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
-			totalCost = totalCost + select(3, B.ScanTip:SetInventoryItem("player", slot))
+			local repairCost = select(3, B.ScanTip:SetInventoryItem("player", slot))
+			repairCost = repairCost or 0
+			totalCost = totalCost + repairCost
 		end
 	end
 
