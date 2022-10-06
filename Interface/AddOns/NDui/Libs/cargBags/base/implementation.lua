@@ -419,11 +419,7 @@ function Implementation:UpdateBag(bagID)
 	if(closed) then
 		numSlots, closed = 0
 	else
-		if DB.isNewPatch and bagID < 0 then
-			numSlots = 0 -- todo: bagID not allow to be negative in 45779, wait for blizz to fix itself
-		else
-			numSlots = GetContainerNumSlots(bagID)
-		end
+		numSlots = GetContainerNumSlots(bagID)
 	end
 	local lastSlots = self.bagSizes[bagID] or 0
 	self.bagSizes[bagID] = numSlots

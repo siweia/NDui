@@ -97,7 +97,7 @@ local function GetNumFreeSlots(name)
 	if name == "Bag" then
 		return CalculateTotalNumberOfFreeBagSlots()
 	elseif name == "Bank" then
-		local numFreeSlots = DB.isNewPatch and 0 or GetContainerNumFreeSlots(-1) -- todo: bagID not allow to be negative in 45779, wait for blizz to fix itself
+		local numFreeSlots = GetContainerNumFreeSlots(-1)
 		if DB.isNewPatch then
 			for bagID = 6, 12 do
 				numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
@@ -109,11 +109,7 @@ local function GetNumFreeSlots(name)
 		end
 		return numFreeSlots
 	elseif name == "Reagent" then
-		if DB.isNewPatch then
-			return 0 -- todo: bagID not allow to be negative in 45779, wait for blizz to fix itself
-		else
-			return GetContainerNumFreeSlots(-3)
-		end
+		return GetContainerNumFreeSlots(-3)
 	end
 end
 
