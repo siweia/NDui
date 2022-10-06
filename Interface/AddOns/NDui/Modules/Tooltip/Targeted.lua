@@ -8,11 +8,9 @@ local UnitExists, UnitIsUnit, UnitIsDeadOrGhost, UnitName = UnitExists, UnitIsUn
 
 local targetTable = {}
 
-function TT:ScanTargets()
+function TT:ScanTargets(unit)
 	if not C.db["Tooltip"]["TargetBy"] then return end
 	if not IsInGroup() then return end
-
-	local _, unit = self:GetUnit()
 	if not UnitExists(unit) then return end
 
 	wipe(targetTable)
@@ -30,8 +28,4 @@ function TT:ScanTargets()
 	if #targetTable > 0 then
 		GameTooltip:AddLine(L["Targeted By"]..DB.InfoColor.."("..#targetTable..")|r "..tconcat(targetTable, ", "), nil, nil, nil, 1)
 	end
-end
-
-function TT:TargetedInfo()
-	GameTooltip:HookScript("OnTooltipSetUnit", TT.ScanTargets)
 end

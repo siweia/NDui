@@ -114,6 +114,7 @@ function M:QuestTool()
 	end
 
 	-- Check npc in quests
+	-- todo: isNewPatch, fix this
 	GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
 
 	-- Auto gossip

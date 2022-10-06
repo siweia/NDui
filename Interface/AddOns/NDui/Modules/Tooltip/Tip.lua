@@ -274,6 +274,8 @@ function TT:OnTooltipSetUnit()
 
 	TT.InspectUnitSpecAndLevel(self, unit)
 	TT.ShowUnitMythicPlusScore(self, unit)
+	TT.ScanTargets(self, unit)
+	TT.PetInfo_Setup(self, unit)
 end
 
 function TT:StatusBar_OnValueChanged(value)
@@ -524,7 +526,6 @@ function TT:OnLogin()
 	-- Elements
 	TT:ReskinTooltipIcons()
 	TT:SetupTooltipID()
-	TT:TargetedInfo()
 	TT:AzeriteArmor()
 	TT:ConduitCollectionData()
 	B:RegisterEvent("MODIFIER_STATE_CHANGED", TT.ResetUnit)
