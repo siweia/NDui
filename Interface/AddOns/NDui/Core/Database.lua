@@ -11,16 +11,6 @@ DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isNewPatch = select(4, GetBuildInfo()) >= 100000 -- 10.0
 
--- Deprecated
-LE_ITEM_QUALITY_POOR = Enum.ItemQuality.Poor
-LE_ITEM_QUALITY_COMMON = Enum.ItemQuality.Common
-LE_ITEM_QUALITY_UNCOMMON = Enum.ItemQuality.Uncommon
-LE_ITEM_QUALITY_RARE = Enum.ItemQuality.Rare
-LE_ITEM_QUALITY_EPIC = Enum.ItemQuality.Epic
-LE_ITEM_QUALITY_LEGENDARY = Enum.ItemQuality.Legendary
-LE_ITEM_QUALITY_ARTIFACT = Enum.ItemQuality.Artifact
-LE_ITEM_QUALITY_HEIRLOOM = Enum.ItemQuality.Heirloom
-
 -- Colors
 DB.MyName = UnitName("player")
 DB.MyRealm = GetRealmName()
@@ -53,8 +43,8 @@ for index, value in pairs(qualityColors) do
 	DB.QualityColors[index] = {r = value.r, g = value.g, b = value.b}
 end
 DB.QualityColors[-1] = {r = 0, g = 0, b = 0}
-DB.QualityColors[LE_ITEM_QUALITY_POOR] = {r = COMMON_GRAY_COLOR.r, g = COMMON_GRAY_COLOR.g, b = COMMON_GRAY_COLOR.b}
-DB.QualityColors[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
+DB.QualityColors[Enum.ItemQuality.Poor] = {r = COMMON_GRAY_COLOR.r, g = COMMON_GRAY_COLOR.g, b = COMMON_GRAY_COLOR.b}
+DB.QualityColors[Enum.ItemQuality.Common] = {r = 0, g = 0, b = 0}
 DB.QualityColors[99] = {r = 1, g = 0, b = 0}
 
 -- Fonts

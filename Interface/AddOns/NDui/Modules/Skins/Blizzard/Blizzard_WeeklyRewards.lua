@@ -14,7 +14,7 @@ local function updateSelection(frame)
 	end
 end
 
-local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4] -- epic color only
+local iconColor = DB.QualityColors[Enum.ItemQuality.Epic or 4] -- epic color only
 local function reskinRewardIcon(itemFrame)
 	if not itemFrame.bg then
 		itemFrame:DisableDrawLayer("BORDER")

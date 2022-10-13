@@ -455,7 +455,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	reskinFilterToggle(lootJournal.RuneforgePowerFilterDropDownButton)
 	reskinFilterToggle(lootJournal.ClassDropDownButton)
 
-	local iconColor = DB.QualityColors[LE_ITEM_QUALITY_LEGENDARY or 5] -- legendary color
+	local iconColor = DB.QualityColors[Enum.ItemQuality.Legendary or 5] -- legendary color
 	if DB.isNewPatch then
 		B.ReskinTrimScroll(lootJournal.ScrollBar)
 

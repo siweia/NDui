@@ -175,7 +175,7 @@ end
 
 function M:KeystoneInfo_Create()
 	local texture = select(10, GetItemInfo(158923)) or 525134
-	local iconColor = DB.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
+	local iconColor = DB.QualityColors[Enum.ItemQuality.Epic or 4]
 	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "BackdropTemplate")
 	button:SetPoint("BOTTOMLEFT", 2, 67)
 	button:SetSize(32, 32)
