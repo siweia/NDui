@@ -177,6 +177,7 @@ function TT:SetupTooltipID()
 		["GetRecipeReagentItem"] = true,
 		["GetToyByItemID"] = true,
 		["GetHeirloomByItemID"] = true,
+		["GetHyperlink"] = true,
 	}
 
 	local isSpells = {
