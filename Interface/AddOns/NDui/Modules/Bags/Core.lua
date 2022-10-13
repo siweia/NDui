@@ -132,14 +132,26 @@ function module:CreateInfoFrame()
 	infoFrame:SetPoint("TOPLEFT", 10, 0)
 	infoFrame:SetSize(140, 32)
 	local icon = infoFrame:CreateTexture(nil, "ARTWORK")
-	icon:SetSize(20, 20)
-	icon:SetPoint("LEFT", 0, -1)
-	icon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+	if DB.isNewPatch then
+		icon:SetAtlas("talents-search-match")
+		icon:SetSize(52, 52)
+		icon:SetPoint("LEFT", -15, 0)
+	else
+		icon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+		icon:SetSize(20, 20)
+		icon:SetPoint("LEFT", 0, -1)
+	end
 	icon:SetVertexColor(DB.r, DB.g, DB.b)
 	local hl = infoFrame:CreateTexture(nil, "HIGHLIGHT")
-	hl:SetSize(20, 20)
-	hl:SetPoint("LEFT", 0, -1)
-	hl:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+	if DB.isNewPatch then
+		hl:SetAtlas("talents-search-match")
+		hl:SetSize(52, 52)
+		hl:SetPoint("LEFT", -15, 0)
+	else
+		hl:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+		hl:SetSize(20, 20)
+		hl:SetPoint("LEFT", 0, -1)
+	end
 
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
