@@ -362,6 +362,11 @@ function Bar:StyleAllActionButtons(cfg)
 		Bar:StyleActionButton(_G["MultiBarRightButton"..i], cfg)
 		Bar:StyleActionButton(_G["MultiBarLeftButton"..i], cfg)
 		Bar:StyleActionButton(_G["NDui_ActionBarXButton"..i], cfg)
+		if DB.isNewPatch then
+			Bar:StyleActionButton(_G["MultiBar5Button"..i], cfg)
+			Bar:StyleActionButton(_G["MultiBar6Button"..i], cfg)
+			Bar:StyleActionButton(_G["MultiBar7Button"..i], cfg)
+		end
 	end
 	for i = 1, 6 do
 		Bar:StyleActionButton(_G["OverrideActionBarButton"..i], cfg)
