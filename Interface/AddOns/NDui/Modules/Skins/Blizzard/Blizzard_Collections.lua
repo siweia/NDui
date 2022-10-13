@@ -576,27 +576,43 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
 
-	for index = 1, 2 do
-		local tab = _G["WardrobeCollectionFrameTab"..index]
-		for i = 1, 6 do
-			select(i, tab:GetRegions()):SetAlpha(0)
-		end
-		tab:SetHighlightTexture(DB.blankTex)
-		tab.bg = B.CreateBDFrame(tab, .25)
-		tab.bg:SetPoint("TOPLEFT", 3, -3)
-		tab.bg:SetPoint("BOTTOMRIGHT", -3, -1)
-	end
-
-	hooksecurefunc("WardrobeCollectionFrame_SetTab", function(tabID)
+	if DB.isNewPatch then
+		hooksecurefunc(WardrobeCollectionFrame, "SetTab", function(self, tabID)
+			for index = 1, 2 do
+				local tab = self.Tabs[index]
+				if not tab.bg then
+					B.ReskinTab(tab)
+				end
+				if tabID == index then
+					tab.bg:SetBackdropColor(cr, cg, cb, .25)
+				else
+					tab.bg:SetBackdropColor(0, 0, 0, .25)
+				end
+			end
+		end)
+	else
 		for index = 1, 2 do
 			local tab = _G["WardrobeCollectionFrameTab"..index]
-			if tabID == index then
-				tab.bg:SetBackdropColor(cr, cg, cb, .2)
-			else
-				tab.bg:SetBackdropColor(0, 0, 0, .2)
+			for i = 1, 6 do
+				select(i, tab:GetRegions()):SetAlpha(0)
 			end
+			tab:SetHighlightTexture(DB.blankTex)
+			tab.bg = B.CreateBDFrame(tab, .25)
+			tab.bg:SetPoint("TOPLEFT", 3, -3)
+			tab.bg:SetPoint("BOTTOMRIGHT", -3, -1)
 		end
-	end)
+
+		hooksecurefunc("WardrobeCollectionFrame_SetTab", function(tabID)
+			for index = 1, 2 do
+				local tab = _G["WardrobeCollectionFrameTab"..index]
+				if tabID == index then
+					tab.bg:SetBackdropColor(cr, cg, cb, .2)
+				else
+					tab.bg:SetBackdropColor(0, 0, 0, .2)
+				end
+			end
+		end)
+	end
 
 	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
