@@ -84,6 +84,7 @@ local lodFrames = {
 	Blizzard_CovenantSanctum	= { ["CovenantSanctumFrame"] = false, },
 	Blizzard_Communities		= { ["CommunitiesFrame"] = false, ["CommunitiesSettingsDialog"] = false, ["CommunitiesGuildLogFrame"] = false, ["CommunitiesTicketManagerDialog"] = false, ["CommunitiesAvatarPickerDialog"] = false, ["CommunitiesFrame.NotificationSettingsDialog"] = false, ["ClubFinderCommunityAndGuildFinderFrame.RequestToJoinFrame"] = false},
 	Blizzard_FlightMap			= { ["FlightMapFrame"] = false },
+	Blizzard_GenericTraitUI		= { ["GenericTraitFrame"] = false },
 	Blizzard_GMSurveyUI			= { ["GMSurveyFrame"] = false },
 	Blizzard_GuildBankUI		= { ["GuildBankFrame"] = false, ["GuildBankEmblemFrame"] = true },
 	Blizzard_GuildControlUI		= { ["GuildControlUI"] = false },
