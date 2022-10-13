@@ -144,7 +144,6 @@ local passedNames = {
 }
 function TT:RefreshLines()
 	local getterName = self.info and self.info.getterName
-	--print(getterName)
 	if passedNames[getterName] then
 		TT.OnTooltipSetUnit(self)
 	end

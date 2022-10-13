@@ -178,6 +178,7 @@ function TT:SetupTooltipID()
 		["GetToyByItemID"] = true,
 		["GetHeirloomByItemID"] = true,
 		["GetHyperlink"] = true,
+		["GetItemKey"] = true,
 	}
 
 	local isSpells = {
@@ -196,6 +197,8 @@ function TT:SetupTooltipID()
 		elseif isItems[getterName] then
 			TT.HookTooltipSetItem(self)
 			TT.SetItemID(self)
+		else
+			--print(getterName)
 		end
 	end)
 
