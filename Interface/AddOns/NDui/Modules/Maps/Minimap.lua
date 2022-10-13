@@ -158,12 +158,17 @@ function module:ReskinRegions()
 	end
 
 	-- Difficulty Flags
-	local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
-	for _, v in pairs(flags) do
-		local flag = _G[v]
-		flag:ClearAllPoints()
-		flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
-		flag:SetScale(.9)
+	if MinimapCluster.InstanceDifficulty then -- isNewPatch
+		MinimapCluster.InstanceDifficulty:ClearAllPoints()
+		MinimapCluster.InstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+	else
+		local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
+		for _, v in pairs(flags) do
+			local flag = _G[v]
+			flag:ClearAllPoints()
+			flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+			flag:SetScale(.9)
+		end
 	end
 
 	-- Mail icon
