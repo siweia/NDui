@@ -26,6 +26,7 @@ local CustomFilterList = {
 	[20520] = true,	-- 黑暗符文
 	[16023] = true,	-- 高级活动假人
 	[22797] = true,	-- 梦魇草
+	[39970] = false,-- 火叶
 }
 
 local function isCustomFilter(item)
