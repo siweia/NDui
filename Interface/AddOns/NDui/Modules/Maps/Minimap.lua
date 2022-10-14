@@ -158,12 +158,24 @@ function module:ReskinRegions()
 	end
 
 	-- Difficulty Flags
-	local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
-	for _, v in pairs(flags) do
-		local flag = _G[v]
-		flag:ClearAllPoints()
-		flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
-		flag:SetScale(.9)
+	if MinimapCluster.InstanceDifficulty then -- isNewPatch
+		local function updateFlagAnchor(frame, _, _, _, _, _, force)
+			if force then return end
+			frame:ClearAllPoints()
+			frame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2, true)
+		end
+		MinimapCluster.InstanceDifficulty:SetParent(Minimap)
+		MinimapCluster.InstanceDifficulty:SetScale(.7)
+		updateFlagAnchor(MinimapCluster.InstanceDifficulty)
+		hooksecurefunc(MinimapCluster.InstanceDifficulty, "SetPoint", updateFlagAnchor)
+	else
+		local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
+		for _, v in pairs(flags) do
+			local flag = _G[v]
+			flag:ClearAllPoints()
+			flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+			flag:SetScale(.9)
+		end
 	end
 
 	-- Mail icon
@@ -646,10 +658,10 @@ function module:SetupMinimap()
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
 	if DB.isNewPatch then
-		hooksecurefunc(Minimap, "SetPoint", function(frame, _, parent)
-			if parent ~= mover then
-				frame:SetPoint("TOPRIGHT", mover)
-			end
+		hooksecurefunc(Minimap, "SetPoint", function(frame, _, _, _, _, _, force)
+			if force then return end
+			frame:ClearAllPoints()
+			frame:SetPoint("TOPRIGHT", mover, "TOPRIGHT", 0, 0, true)
 		end)
 	end
 	Minimap.mover = mover

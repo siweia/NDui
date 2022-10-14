@@ -27,6 +27,7 @@
 	<Script file="Blizzard_ExpansionLandingPage.lua"/>
 	<Script file="Blizzard_FlightMap.lua"/>
 	<Script file="Blizzard_GarrisonUI.lua"/>
+	<Script file="Blizzard_GenericTraitUI.lua"/>
 	<Script file="Blizzard_GMChatUI.lua"/>
 	<Script file="Blizzard_GuildBankUI.lua"/>
 	<Script file="Blizzard_GuildControlUI.lua"/>

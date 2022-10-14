@@ -2,11 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Bags")
 
-local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY
-local LE_ITEM_CLASS_GEM, LE_ITEM_GEM_ARTIFACTRELIC = LE_ITEM_CLASS_GEM, LE_ITEM_GEM_ARTIFACTRELIC
-local LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT = LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT
-local LE_ITEM_CLASS_MISCELLANEOUS, LE_ITEM_MISCELLANEOUS_MOUNT, LE_ITEM_MISCELLANEOUS_COMPANION_PET = LE_ITEM_CLASS_MISCELLANEOUS, LE_ITEM_MISCELLANEOUS_MOUNT, LE_ITEM_MISCELLANEOUS_COMPANION_PET
-local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS
 local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
 local C_Item_IsAnimaItemByID = C_Item.IsAnimaItemByID
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
@@ -48,7 +43,7 @@ end
 local function isItemJunk(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterJunk"] then return end
-	return (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice and not module:IsPetTrashCurrency(item.id)
+	return (item.quality == Enum.ItemQuality.Poor or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice and not module:IsPetTrashCurrency(item.id)
 end
 
 local function isItemEquipSet(item)
@@ -65,9 +60,9 @@ local function isAzeriteArmor(item)
 end
 
 local iLvlClassIDs = {
-	[LE_ITEM_CLASS_GEM] = LE_ITEM_GEM_ARTIFACTRELIC,
-	[LE_ITEM_CLASS_ARMOR] = 0,
-	[LE_ITEM_CLASS_WEAPON] = 0,
+	[Enum.ItemClass.Gem] = Enum.ItemGemSubclass.Artifactrelic,
+	[Enum.ItemClass.Armor] = 0,
+	[Enum.ItemClass.Weapon] = 0,
 }
 function module:IsItemHasLevel(item)
 	local index = iLvlClassIDs[item.classID]
@@ -77,12 +72,12 @@ end
 local function isItemEquipment(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterEquipment"] then return end
-	return item.link and item.quality > LE_ITEM_QUALITY_COMMON and module:IsItemHasLevel(item)
+	return item.link and item.quality > Enum.ItemQuality.Common and module:IsItemHasLevel(item)
 end
 
 local consumableIDs = {
-	[LE_ITEM_CLASS_CONSUMABLE] = true,
-	[LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true,
+	[Enum.ItemClass.Consumable] = true,
+	[Enum.ItemClass.ItemEnhancement] = true,
 }
 local function isItemConsumable(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
@@ -94,15 +89,15 @@ end
 local function isItemLegendary(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterLegendary"] then return end
-	return item.quality == LE_ITEM_QUALITY_LEGENDARY
+	return item.quality == Enum.ItemQuality.Legendary
 end
 
 local isPetToy = {
 	[174925] = true,
 }
 local collectionIDs = {
-	[LE_ITEM_MISCELLANEOUS_MOUNT] = LE_ITEM_CLASS_MISCELLANEOUS,
-	[LE_ITEM_MISCELLANEOUS_COMPANION_PET] = LE_ITEM_CLASS_MISCELLANEOUS,
+	[Enum.ItemMiscellaneousSubclass.Mount] = Enum.ItemClass.Miscellaneous,
+	[Enum.ItemMiscellaneousSubclass.CompanionPet] = Enum.ItemClass.Miscellaneous,
 }
 local function isMountOrPet(item)
 	return not isPetToy[item.id] and item.subClassID and collectionIDs[item.subClassID] == item.classID
@@ -145,7 +140,7 @@ local function isTradeGoods(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterGoods"] then return end
 	if isCustomFilter(item) == false then return end
-	return item.classID == LE_ITEM_CLASS_TRADEGOODS
+	return item.classID == Enum.ItemClass.Tradegoods
 end
 
 local function isQuestItem(item)

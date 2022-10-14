@@ -4,8 +4,6 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
-local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM
-local LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
@@ -134,14 +132,26 @@ function module:CreateInfoFrame()
 	infoFrame:SetPoint("TOPLEFT", 10, 0)
 	infoFrame:SetSize(140, 32)
 	local icon = infoFrame:CreateTexture(nil, "ARTWORK")
-	icon:SetSize(20, 20)
-	icon:SetPoint("LEFT", 0, -1)
-	icon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+	if DB.isNewPatch then
+		icon:SetAtlas("talents-search-match")
+		icon:SetSize(52, 52)
+		icon:SetPoint("LEFT", -15, 0)
+	else
+		icon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+		icon:SetSize(20, 20)
+		icon:SetPoint("LEFT", 0, -1)
+	end
 	icon:SetVertexColor(DB.r, DB.g, DB.b)
 	local hl = infoFrame:CreateTexture(nil, "HIGHLIGHT")
-	hl:SetSize(20, 20)
-	hl:SetPoint("LEFT", 0, -1)
-	hl:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+	if DB.isNewPatch then
+		hl:SetAtlas("talents-search-match")
+		hl:SetSize(52, 52)
+		hl:SetPoint("LEFT", -15, 0)
+	else
+		hl:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+		hl:SetSize(20, 20)
+		hl:SetPoint("LEFT", 0, -1)
+	end
 
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
@@ -654,7 +664,7 @@ local function favouriteOnClick(self)
 	else
 		texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
 	end
-	if texture and quality > LE_ITEM_QUALITY_POOR then
+	if texture and quality > Enum.ItemQuality.Poor then
 		ClearCursor()
 		module.selectItemID = itemID
 		module.CustomMenu[1].text = link
@@ -776,7 +786,7 @@ local function deleteButtonOnClick(self)
 	else
 		texture, _, _, quality = GetContainerItemInfo(self.bagId, self.slotId)
 	end
-	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
+	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < Enum.ItemQuality.Rare or quality == Enum.ItemQuality.Heirloom) then
 		PickupContainerItem(self.bagId, self.slotId)
 		DeleteCursorItem()
 	end
@@ -1024,7 +1034,7 @@ function module:OnLogin()
 
 	function MyButton:OnUpdateButton(item)
 		if self.JunkIcon then
-			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == Enum.ItemQuality.Poor or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -1304,7 +1314,7 @@ function module:OnLogin()
 			self:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 
-		if classID == LE_ITEM_CLASS_CONTAINER then
+		if classID == Enum.ItemClass.Container then
 			module.BagsType[self.bagId] = subClassID or 0
 		else
 			module.BagsType[self.bagId] = 0

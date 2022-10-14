@@ -8,7 +8,7 @@ local GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown = G
 local UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi
 local GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel
 local GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID
-local HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
+local HEIRLOOMS = _G.HEIRLOOMS
 
 local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
@@ -153,7 +153,7 @@ function TT:GetUnitItemLevel(unit)
 					if (not quality) or (not level) then
 						delay = true
 					else
-						if quality == LE_ITEM_QUALITY_HEIRLOOM then
+						if quality == Enum.ItemQuality.Heirloom then
 							boa = boa + 1
 						end
 
@@ -166,7 +166,7 @@ function TT:GetUnitItemLevel(unit)
 							level = B.GetItemLevel(itemLink) or level
 							if i < 16 then
 								total = total + level
-							elseif i > 15 and quality == LE_ITEM_QUALITY_ARTIFACT then
+							elseif i > 15 and quality == Enum.ItemQuality.Artifact then
 								local relics = {select(4, strsplit(":", itemLink))}
 								for i = 1, 3 do
 									local relicID = relics[i] ~= "" and relics[i]
@@ -179,7 +179,7 @@ function TT:GetUnitItemLevel(unit)
 							end
 
 							if i == 16 then
-								if quality == LE_ITEM_QUALITY_ARTIFACT then hasArtifact = true end
+								if quality == Enum.ItemQuality.Artifact then hasArtifact = true end
 
 								weapon[1] = level
 								haveWeapon = haveWeapon + 1

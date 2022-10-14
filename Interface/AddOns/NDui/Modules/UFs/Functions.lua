@@ -1199,7 +1199,6 @@ function UF:CreateAuras(self)
 		bu.gap = false
 		bu.disableMouse = true
 		bu.disableCooldown = true
-		bu.spacing = 5
 		bu.CustomFilter = UF.CustomFilter
 	end
 

@@ -23,6 +23,8 @@ local menuList = {
 	{text = SELECT_LOOT_SPECIALIZATION, hasArrow = true, notCheckable = true, menuList = {}},
 }
 
+local newMenu, numSpecs
+
 info.eventList = {
 	"PLAYER_ENTERING_WORLD",
 	"ACTIVE_TALENT_GROUP_CHANGED",
@@ -115,17 +117,43 @@ local function checkLootSpec(self)
 	return GetLootSpecialization() == self.arg1
 end
 
+local seperatorMenu = {
+	text = "",
+	isTitle = true,
+	notCheckable = true,
+	iconOnly = true,
+	icon = "Interface\\Common\\UI-TooltipDivider-Transparent",
+	iconInfo = {
+		tCoordLeft = 0,
+		tCoordRight = 1,
+		tCoordTop = 0,
+		tCoordBottom = 1,
+		tSizeX = 0,
+		tSizeY = 8,
+		tFitDropDownSizeX = true
+	},
+}
 local function BuildSpecMenu()
-	local specList = menuList[2].menuList
-	local lootList = menuList[3].menuList
-	lootList[1] = {text = "", arg1 = 0, func = selectLootSpec, checked = checkLootSpec}
+	if newMenu then return end
+
+	newMenu = {
+		{text = SPECIALIZATION, isTitle = true, notCheckable = true},
+		seperatorMenu,
+		{text = SELECT_LOOT_SPECIALIZATION, isTitle = true, notCheckable = true},
+		{text = "", arg1 = 0, func = selectLootSpec, checked = checkLootSpec},
+	}
 
 	for i = 1, 4 do
 		local id, name = GetSpecializationInfo(i)
 		if id then
-			specList[i] = {text = name, arg1 = i, func = selectSpec, checked = checkSpec}
-			lootList[i+1] = {text = name, arg1 = id, func = selectLootSpec, checked = checkLootSpec}
+			numSpecs = (numSpecs or 0) + 1
+			tinsert(newMenu, i+1, {text = name, arg1 = i, func = selectSpec, checked = checkSpec})
+			tinsert(newMenu, {text = name, arg1 = id, func = selectLootSpec, checked = checkLootSpec})
 		end
+	end
+
+	if DB.isNewPatch then
+		-- todo: add spec config
 	end
 end
 
@@ -137,12 +165,9 @@ info.onMouseUp = function(self, btn)
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleTalentFrame(2)
 	else
-		if not menuList[1].created then
-			BuildSpecMenu()
-			menuList[1].created = true
-		end
-		menuList[3].menuList[1].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(specIndex)))
-		EasyMenu(menuList, B.EasyMenu, self, -80, 100, "MENU", 1)
+		BuildSpecMenu()
+		newMenu[#newMenu - numSpecs].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(specIndex)))
+		EasyMenu(newMenu, B.EasyMenu, self, -80, 100, "MENU", 1)
 		GameTooltip:Hide()
 	end
 end

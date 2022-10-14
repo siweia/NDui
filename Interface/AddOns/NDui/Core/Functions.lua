@@ -737,15 +737,15 @@ do
 
 	local AtlasToQuality = {
 		["error"] = 99,
-		["uncollected"] = LE_ITEM_QUALITY_POOR,
-		["gray"] = LE_ITEM_QUALITY_POOR,
-		["white"] = LE_ITEM_QUALITY_COMMON,
-		["green"] = LE_ITEM_QUALITY_UNCOMMON,
-		["blue"] = LE_ITEM_QUALITY_RARE,
-		["purple"] = LE_ITEM_QUALITY_EPIC,
-		["orange"] = LE_ITEM_QUALITY_LEGENDARY,
-		["artifact"] = LE_ITEM_QUALITY_ARTIFACT,
-		["account"] = LE_ITEM_QUALITY_HEIRLOOM,
+		["uncollected"] = Enum.ItemQuality.Poor,
+		["gray"] = Enum.ItemQuality.Poor,
+		["white"] = Enum.ItemQuality.Common,
+		["green"] = Enum.ItemQuality.Uncommon,
+		["blue"] = Enum.ItemQuality.Rare,
+		["purple"] = Enum.ItemQuality.Epic,
+		["orange"] = Enum.ItemQuality.Legendary,
+		["artifact"] = Enum.ItemQuality.Artifact,
+		["account"] = Enum.ItemQuality.Heirloom,
 	}
 	local function updateIconBorderColorByAtlas(self, atlas)
 		local atlasAbbr = atlas and strmatch(atlas, "%-(%w+)$")

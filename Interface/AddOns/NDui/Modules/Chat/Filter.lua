@@ -10,7 +10,6 @@ local Ambiguate, UnitIsUnit, GetTime, SetCVar = Ambiguate, UnitIsUnit, GetTime, 
 local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
 local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
 
-local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
 local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
 
 -- Filter Chat symbols
@@ -189,7 +188,7 @@ end
 -- Show itemlevel on chat hyperlinks
 local function isItemHasLevel(link)
 	local name, _, rarity, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
-	if name and level and rarity > 1 and (classID == LE_ITEM_CLASS_WEAPON or classID == LE_ITEM_CLASS_ARMOR) then
+	if name and level and rarity > 1 and (classID == Enum.ItemClass.Weapon or classID == Enum.ItemClass.Armor) then
 		local itemLevel = B.GetItemLevel(link)
 		return name, itemLevel
 	end

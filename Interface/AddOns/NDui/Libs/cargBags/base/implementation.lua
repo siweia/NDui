@@ -33,8 +33,6 @@ Implementation.instances = {}
 Implementation.itemKeys = {}
 
 local toBagSlot = cargBags.ToBagSlot
-local LE_ITEM_CLASS_MISCELLANEOUS = Enum.ItemClass.Miscellaneous or 15
-local LE_ITEM_MISCELLANEOUS_COMPANION_PET = Enum.ItemMiscellaneousSubclass.CompanionPet or 2
 local PET_CAGE = 82800
 local MYTHIC_KEYSTONES = {
 	[180653] = true,
@@ -326,8 +324,8 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.name = petName
 			i.id = tonumber(petID) or 0
 			i.level = tonumber(petLevel) or 0
-			i.classID = LE_ITEM_CLASS_MISCELLANEOUS
-			i.subClassID = LE_ITEM_MISCELLANEOUS_COMPANION_PET
+			i.classID = Enum.ItemClass.Miscellaneous
+			i.subClassID = Enum.ItemMiscellaneousSubclass.CompanionPet
 		elseif MYTHIC_KEYSTONES[itemID] then
 			i.level, i.name = strmatch(itemLink, "|H%w+:%d+:%d+:(%d+):.-|h%[(.-)%]|h")
 			i.level = tonumber(i.level) or 0
@@ -365,8 +363,8 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			i.name = petName
 			i.id = tonumber(petID) or 0
 			i.level = tonumber(petLevel) or 0
-			i.classID = LE_ITEM_CLASS_MISCELLANEOUS
-			i.subClassID = LE_ITEM_MISCELLANEOUS_COMPANION_PET
+			i.classID = Enum.ItemClass.Miscellaneous
+			i.subClassID = Enum.ItemMiscellaneousSubclass.CompanionPet
 		elseif MYTHIC_KEYSTONES[i.id] then
 			i.level, i.name = strmatch(i.link, "|H%w+:%d+:%d+:(%d+):.-|h%[(.-)%]|h")
 			i.level = tonumber(i.level) or 0
