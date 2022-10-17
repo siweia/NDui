@@ -520,8 +520,8 @@ function TT:OnLogin()
 		GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
+		TT:SetupTooltipFonts()
 	end
-	TT:SetupTooltipFonts()
 	TT:FixStoneSoupError()
 
 	-- Elements
