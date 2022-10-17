@@ -402,7 +402,7 @@ function module:OnLogin()
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
 	SetCVar("chatStyle", "classic")
 	SetCVar("chatMouseScroll", 1) -- enable mousescroll
-	SetCVar("chatClassColorOverride", 0)
+	--SetCVar("chatClassColorOverride", 0) -- invalid since build 3.4.0.46158
 	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
