@@ -47,9 +47,15 @@ tinsert(C.defaultThemes, function()
 				local bg = B.CreateBDFrame(checkbox, .25)
 				bg:SetInside()
 				B.ReskinCheck(_G[checkBoxName.."Check"])
+
 				local swatch = _G[checkBoxName.."ColorSwatch"]
 				if swatch then
 					B.ReskinColorSwatch(_G[checkBoxName.."ColorSwatch"])
+				end
+
+				local colorCheck = _G[checkBoxName.."ColorClasses"]
+				if colorCheck then
+					B.ReskinCheck(colorCheck)
 				end
 
 				checkbox.styled = true
@@ -161,6 +167,28 @@ tinsert(C.defaultThemes, function()
 	for _, box in pairs(combatBoxes) do
 		B.ReskinCheck(box)
 	end
+
+	B.StripTextures(ChatConfigChatSettingsClassColorLegend)
+	B.CreateBDFrame(ChatConfigChatSettingsClassColorLegend, .25)
+	B.StripTextures(ChatConfigChannelSettingsClassColorLegend)
+	B.CreateBDFrame(ChatConfigChannelSettingsClassColorLegend, .25)
+
+	hooksecurefunc("ChatConfig_UpdateSwatches", function(frame)
+		if not frame.swatchTable then return end
+
+		local nameString = frame:GetName().."Swatch"
+		local baseName, colorSwatch
+		for index in ipairs(frame.swatchTable) do
+			baseName = nameString..index
+			local bu = _G[baseName]
+			if not bu.styled then
+				B.StripTextures(bu)
+				B.CreateBDFrame(bu, .25):SetInside()
+				B.ReskinColorSwatch(_G[baseName.."ColorSwatch"])
+				bu.styled = true
+			end
+		end
+	end)
 
 	local bg = B.CreateBDFrame(ChatConfigCombatSettingsFilters, .25)
 	bg:SetPoint("TOPLEFT", 3, 0)
