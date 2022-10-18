@@ -71,6 +71,7 @@ function M:OnLogin()
 	M:EnhancedPicker()
 	M:UpdateMaxZoomLevel()
 	M:MoveBlizzFrames()
+	M:SpellBookFix()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -907,4 +908,34 @@ end
 -- Move and save blizz frames
 function M:MoveBlizzFrames()
 	B:BlizzFrameMover(CharacterFrame)
+end
+
+-- SpellBook fix in 46157
+function M:SpellBookFix()
+	if not DB.isBeta then return end
+
+	local function replaceOnEnter(self)
+		local slot = SpellBook_GetSpellBookSlot(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	
+		if InClickBindingMode() and not self.canClickBind then
+			GameTooltip:AddLine(CLICK_BINDING_NOT_AVAILABLE, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
+			GameTooltip:Show()
+			return
+		end
+	
+		GameTooltip:SetSpellBookItem(slot, SpellBookFrame.bookType)
+		self.UpdateTooltip = nil
+	
+		if self.SpellHighlightTexture and self.SpellHighlightTexture:IsShown() then
+			GameTooltip:AddLine(SPELLBOOK_SPELL_NOT_ON_ACTION_BAR, LIGHTBLUE_FONT_COLOR.r, LIGHTBLUE_FONT_COLOR.g, LIGHTBLUE_FONT_COLOR.b)
+		end
+		GameTooltip:Show()
+	end
+
+	for i = 1, SPELLS_PER_PAGE do
+		local bu = _G["SpellButton"..i]
+		bu.OnEnter = replaceOnEnter
+		bu:SetScript("OnEnter", replaceOnEnter)
+	end
 end

@@ -183,7 +183,7 @@ function TT:SetupTooltipID()
 
 	local isSpells = {
 		["GetSpellByID"] = true,
-		["GetSpellBookItem"] = true,
+		["GetSpellBookItem"] = true, -- taint in 46092
 		["GetSpellByID"] = true,
 		["GetTraitEntry"] = true,
 		["GetMountBySpellID"] = true,
@@ -198,7 +198,7 @@ function TT:SetupTooltipID()
 			TT.HookTooltipSetItem(self)
 			TT.SetItemID(self)
 		else
-			--print(getterName)
+		--	print(getterName)
 		end
 	end)
 
