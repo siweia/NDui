@@ -54,7 +54,7 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(TALENTS_BUTTON, 0,.6,1)
 	GameTooltip:AddLine(" ")
 
-	local _, specName, _, specIcon = GetSpecializationInfo(currentSpecIndex)
+	local specID, specName, _, specIcon = GetSpecializationInfo(currentSpecIndex)
 	GameTooltip:AddLine(addIcon(specIcon).." "..specName, .6,.8,1)
 
 	for t = 1, MAX_TALENT_TIERS do
@@ -63,6 +63,14 @@ info.onEnter = function(self)
 			if selected then
 				GameTooltip:AddLine(addIcon(icon).." "..name, 1,1,1)
 			end
+		end
+	end
+
+	if DB.isNewPatch then
+		local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
+		local info = configID and C_Traits.GetConfigInfo(configID)
+		if info and info.name then
+			GameTooltip:AddLine("   ("..info.name..")", 1,1,1)
 		end
 	end
 
