@@ -10,6 +10,7 @@ DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isNewPatch = select(4, GetBuildInfo()) >= 100000 -- 10.0
+DB.isBeta = select(4, GetBuildInfo()) == 100002 -- 10.0.2
 
 -- Colors
 DB.MyName = UnitName("player")

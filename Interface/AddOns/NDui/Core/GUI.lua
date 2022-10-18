@@ -778,7 +778,7 @@ local function setupAuraWatch()
 end
 
 local function updateBagSortOrder()
-	if DB.isNewPatch then
+	if DB.isBeta then
 		C_Container.SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
 	else
 		SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)

@@ -245,7 +245,7 @@ local function startSelling()
 	end
 end
 
-if DB.isNewPatch then
+if DB.isBeta then
 
 function startSelling()
 	if stop then return end
