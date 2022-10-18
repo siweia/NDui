@@ -403,7 +403,11 @@ tinsert(C.defaultThemes, function()
 							child.expBg = B.CreateBDFrame(child.ExpandIcon, 0, true)
 							child.expBg:SetInside(child.ExpandIcon, 3, 3)
 						end
-		
+
+						if child.Check then
+							child.Check:SetAtlas("checkmark-minimal")
+						end
+
 						child.styled = true
 					end
 
