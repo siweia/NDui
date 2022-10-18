@@ -31,10 +31,15 @@ local function UpdatePageBySpells()
 	end
 end
 
+local morePagesSpec = {
+	["WARRIOR"] = true,
+	["ROGUE"] = true,
+}
+
 function Bar:CreateCustomBar(anchor)
 	local num = 12
 	local name = "NDui_ActionBarX"
-	local page = DB.MyClass == "WARRIOR" and 10 or 8
+	local page = morePagesSpec[DB.MyClass] and 10 or 8
 
 	local frame = CreateFrame("Frame", name, UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L[name], "CustomBar", anchor)
