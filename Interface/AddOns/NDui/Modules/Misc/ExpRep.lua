@@ -97,7 +97,7 @@ function M:Expbar()
 	if C.db["Map"]["DisableMinimap"] then return end
 	if not C.db["Misc"]["ExpRep"] then return end
 
-	local bar = CreateFrame("StatusBar", nil, MinimapCluster)
+	local bar = CreateFrame("StatusBar", "NDuiExpRepBar", MinimapCluster)
 	bar:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 5, -5)
 	bar:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", -5, -5)
 	bar:SetHeight(5)
