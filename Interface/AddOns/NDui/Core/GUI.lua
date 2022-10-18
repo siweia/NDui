@@ -317,6 +317,7 @@ G.DefaultSettings = {
 	},
 	Map = {
 		DisableMap = false,
+		DisableMinimap = false,
 		Clock = false,
 		CombatPulse = true,
 		MapScale = 1,
@@ -670,6 +671,10 @@ loader:SetScript("OnEvent", function(self, _, addon)
 			NDuiADB["TexStyle"] = 2 -- reset value if not exists
 		end
 		DB.normTex = G.TextureList[NDuiADB["TexStyle"]].texture
+	end
+
+	if not C.db["Map"]["DisableMinimap"] then
+		GetMinimapShape = B.GetMinimapShape
 	end
 
 	self:UnregisterAllEvents()
@@ -1383,6 +1388,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Map", "MapScale", L["Map Scale"].."*", false, {.8, 2, .1}},
 		{3, "Map", "MaxMapScale", L["Maximize Map Scale"].."*", true, {.5, 1, .1}},
 		{},--blank
+		{1, "Map", "DisableMinimap", "|cffff0000"..L["DisableMinimap"], nil, nil, nil, L["DisableMinimapTip"], not DB.isNewPatch},
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
 		{3, "Map", "MinimapSize", L["Minimap Size"].."*", true, {100, 500, 1}, updateMinimapScale},
 		{1, "Map", "Calendar", L["MinimapCalendar"].."*", nil, nil, showCalendar, L["MinimapCalendarTip"]},
@@ -1606,7 +1612,7 @@ local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
 	for _, option in pairs(G.OptionList[i]) do
-		local optType, key, value, name, horizon, data, callback, tooltip = unpack(option)
+		local optType, key, value, name, horizon, data, callback, tooltip, disabled = unpack(option)
 		-- Checkboxes
 		if optType == 1 then
 			local cb = B.CreateCheckBox(parent)
@@ -1632,6 +1638,7 @@ local function CreateOption(i)
 			if tooltip then
 				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info", true)
 			end
+			if disabled then cb:Hide() end
 		-- Editbox
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)
