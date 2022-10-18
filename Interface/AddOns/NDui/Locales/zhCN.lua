@@ -843,3 +843,5 @@ L["AutoBuffsTip"] = "|n勾选后，不再使用下列白名单，而使用暴雪
 L["AutoRepairInfo"] = "信息条的耐久和货币模块，可以调整自动修理和自动出售垃圾。"
 L["AuraFontSize"] = "法术文本大小"
 L["SizeRatio"] = "图标高宽比率"
+L["DisableMinimap"] = "禁用小地图增强"
+L["DisableMinimapTip"] = "|n关闭后，下方小地图的所有模块都将一同被禁用。|n启用SexyMap时，将自动关闭小地图增强。"

@@ -843,3 +843,5 @@ L["AutoBuffsTip"] = "|nIf checked, use blizzard API logic to display buffs, no l
 L["AutoRepairInfo"] = "You can toggle 'Auto repair' and 'Auto sell junk' on infobar durability and gold module." -- need translation
 L["AuraFontSize"] = "Auras FontSize" -- need translation
 L["SizeRatio"] = "Icon Size Ratio" -- need translation
+L["DisableMinimap"] = "Disable Enhanced Minimap" -- need translation
+L["DisableMinimapTip"] = "|nIf checked, all the features below will be disabled as well.|nIf you have addon SexyMap enabled, the enhanced minimap would turn off automatically." -- need translation

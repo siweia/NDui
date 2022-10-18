@@ -391,6 +391,8 @@ function module:WhoPingsMyMap()
 end
 
 function module:UpdateMinimapScale()
+	if C.db["Map"]["DisableMinimap"] then return end
+
 	local size = C.db["Map"]["MinimapSize"]
 	local scale = C.db["Map"]["MinimapScale"]
 	Minimap:SetSize(size, size)
@@ -400,7 +402,7 @@ function module:UpdateMinimapScale()
 	end
 end
 
-function GetMinimapShape() -- LibDBIcon
+function B:GetMinimapShape()
 	if not module.initialized then
 		module:UpdateMinimapScale()
 		module.initialized = true
@@ -409,6 +411,8 @@ function GetMinimapShape() -- LibDBIcon
 end
 
 function module:ShowMinimapClock()
+	if C.db["Map"]["DisableMinimap"] then return end
+
 	if C.db["Map"]["Clock"] then
 		if not TimeManagerClockButton then LoadAddOn("Blizzard_TimeManager") end
 		if not TimeManagerClockButton.styled then
@@ -434,6 +438,8 @@ function module:ShowMinimapHelpInfo()
 end
 
 function module:ShowCalendar()
+	if C.db["Map"]["DisableMinimap"] then return end
+
 	if C.db["Map"]["Calendar"] then
 		if not GameTimeFrame.styled then
 			GameTimeFrame:SetNormalTexture(nil)
@@ -524,6 +530,8 @@ function module:Minimap_OnMouseUp(btn)
 end
 
 function module:SetupMinimap()
+	if C.db["Map"]["DisableMinimap"] then return end
+
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
