@@ -268,7 +268,7 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	if not DB.isNewPatch then
+	if not DB.isBeta then
 		self.StatusBar:SetStatusBarColor(r, g, b)
 	end
 
@@ -504,7 +504,7 @@ function TT:OnLogin()
 		GameTooltip.StatusBar = GameTooltipStatusBar
 	end
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
-	if DB.isNewPatch then
+	if DB.isBeta then
 		hooksecurefunc(GameTooltip, "ProcessLines", TT.RefreshLines)
 		hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
 	else
@@ -514,7 +514,7 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
-	if not DB.isNewPatch then
+	if not DB.isBeta then
 		hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
 		-- todo
 		GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
