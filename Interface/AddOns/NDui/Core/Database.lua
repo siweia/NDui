@@ -181,6 +181,7 @@ DB.ReminderBuffs = {
 				[61316] = true, -- 达拉然光辉
 				--[46302] = true, -- 基鲁的胜利之歌
 			},
+			texture = GetSpellTexture(1459),
 			depend = 1459,
 			combat = true,
 			instance = true,
