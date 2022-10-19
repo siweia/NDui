@@ -115,7 +115,9 @@ function M:QuestTool()
 
 	-- Check npc in quests
 	-- todo: isNewPatch, fix this
-	GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
+	if not DB.isBeta then
+		GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
+	end
 
 	-- Auto gossip
 	local firstStep
