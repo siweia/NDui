@@ -43,7 +43,7 @@ local function CreatePlayerStyle(self)
 		UF:ReskinMirrorBars()
 		UF:ReskinTimerTrakcer(self)
 	end
-	if not C.db["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
+	if C.db["Map"]["DisableMinimap"] or not C.db["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 	if C.db["UFs"]["QuakeTimer"] then UF:CreateQuakeTimer(self) end
 end
 

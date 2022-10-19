@@ -34,9 +34,11 @@ tinsert(C.defaultThemes, function()
 			if not child.styled then
 				if child.Background then
 					child.Background:SetAlpha(0)
-					local bg = B.CreateBDFrame(child.Background, .25)
-					bg:SetPoint("TOPLEFT", 5, -5)
-					bg:SetPoint("BOTTOMRIGHT", -5, 0)
+
+					local line = child:CreateTexture(nil, "ARTWORK")
+					line:SetPoint("BOTTOMRIGHT", child, -15, 3)
+					line:SetAtlas("Options_HorizontalDivider")
+					line:SetSize(170, C.mult)
 				end
 
 				local toggle = child.Toggle

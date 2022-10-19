@@ -467,6 +467,8 @@ function module:WhoPingsMyMap()
 end
 
 function module:UpdateMinimapScale()
+	if C.db["Map"]["DisableMinimap"] then return end
+
 	local size = C.db["Map"]["MinimapSize"]
 	local scale = C.db["Map"]["MinimapScale"]
 	Minimap:SetSize(size, size)
@@ -476,7 +478,7 @@ function module:UpdateMinimapScale()
 	end
 end
 
-function GetMinimapShape() -- LibDBIcon
+function B:GetMinimapShape()
 	if not module.initialized then
 		module:UpdateMinimapScale()
 		module.initialized = true
@@ -649,6 +651,8 @@ function module:ShowMinimapHelpInfo()
 end
 
 function module:SetupMinimap()
+	if C.db["Map"]["DisableMinimap"] then return end
+
 	-- Shape and Position
 	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")

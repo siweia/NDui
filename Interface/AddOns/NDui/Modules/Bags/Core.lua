@@ -13,7 +13,7 @@ local IsCosmeticItem = IsCosmeticItem
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 
-if DB.isNewPatch then
+if DB.isBeta then
 	GetContainerItemID = C_Container.GetContainerItemID
 	GetContainerNumSlots = C_Container.GetContainerNumSlots
 	SortBags = C_Container.SortBags
@@ -29,7 +29,7 @@ function module:ReverseSort()
 		local numSlots = GetContainerNumSlots(bag)
 		for slot = 1, numSlots do
 			local texture, locked
-			if DB.isNewPatch then
+			if DB.isBeta then
 				local info = C_Container.GetContainerItemInfo(bag, slot)
 				texture = info and info.iconFileID
 				locked = info and info.isLocked
@@ -539,7 +539,7 @@ local function splitOnClick(self)
 	PickupContainerItem(self.bagId, self.slotId)
 
 	local texture, itemCount, locked
-	if DB.isNewPatch then
+	if DB.isBeta then
 		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
 		texture = info and info.iconFileID
 		itemCount = info and info.stackCount
@@ -655,7 +655,7 @@ local function favouriteOnClick(self)
 	if not favouriteEnable then return end
 
 	local texture, quality, link, itemID
-	if DB.isNewPatch then
+	if DB.isBeta then
 		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
 		texture = info and info.iconFileID
 		quality = info and info.quality
@@ -724,7 +724,7 @@ local function customJunkOnClick(self)
 	if not customJunkEnable then return end
 
 	local texture, itemID
-	if DB.isNewPatch then
+	if DB.isBeta then
 		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
 		texture = info and info.iconFileID
 		itemID = info and info.itemID
@@ -779,7 +779,7 @@ local function deleteButtonOnClick(self)
 	if not deleteEnable then return end
 
 	local texture, quality
-	if DB.isNewPatch then
+	if DB.isBeta then
 		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
 		texture = info and info.iconFileID
 		quality = info and info.quality
@@ -1322,7 +1322,7 @@ function module:OnLogin()
 	end
 
 	-- Sort order
-	if DB.isNewPatch then
+	if DB.isBeta then
 		C_Container.SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
 		C_Container.SetInsertItemsLeftToRight(false)
 	else

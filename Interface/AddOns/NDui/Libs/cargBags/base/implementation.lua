@@ -21,7 +21,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 
-local GetContainerNumSlots = DB.isNewPatch and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local GetContainerNumSlots = DB.isBeta and C_Container.GetContainerNumSlots or GetContainerNumSlots
 
 --[[!
 	@class Implementation
@@ -334,7 +334,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	return i
 end
 
-if DB.isNewPatch then
+if DB.isBeta then
 
 function Implementation:GetItemInfo(bagID, slotID, i)
 	i = i or defaultItem

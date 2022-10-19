@@ -113,7 +113,7 @@ function TT:SetupTooltipID()
 		local id = tonumber(strmatch(link, "spell:(%d+)"))
 		if id then TT.AddLineForID(ItemRefTooltip, id, types.spell) end
 	end)
-	if not DB.isNewPatch then
+	if not DB.isBeta then
 		GameTooltip:HookScript("OnTooltipSetSpell", function(self)
 			local id = select(2, self:GetSpell())
 			if id then TT.AddLineForID(self, id, types.spell) end
@@ -121,7 +121,7 @@ function TT:SetupTooltipID()
 	end
 
 	-- Items
-	if not DB.isNewPatch then
+	if not DB.isBeta then
 		GameTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 		GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
@@ -147,7 +147,7 @@ function TT:SetupTooltipID()
 	hooksecurefunc(GameTooltip, "SetCurrencyByID", function(self, id)
 		if id then TT.AddLineForID(self, id, types.currency) end
 	end)
-	if not DB.isNewPatch then
+	if not DB.isBeta then
 		hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
 			if id then TT.AddLineForID(self, id, types.currency) end
 		end)
@@ -165,7 +165,7 @@ function TT:SetupTooltipID()
 		end
 	end)
 
-	if not DB.isNewPatch then return end
+	if not DB.isBeta then return end
 
 	local isItems = {
 		["GetBagItem"] = true,
@@ -183,7 +183,7 @@ function TT:SetupTooltipID()
 
 	local isSpells = {
 		["GetSpellByID"] = true,
-		["GetSpellBookItem"] = true,
+		["GetSpellBookItem"] = true, -- taint in 46092
 		["GetSpellByID"] = true,
 		["GetTraitEntry"] = true,
 		["GetMountBySpellID"] = true,
@@ -198,7 +198,7 @@ function TT:SetupTooltipID()
 			TT.HookTooltipSetItem(self)
 			TT.SetItemID(self)
 		else
-			--print(getterName)
+		--	print(getterName)
 		end
 	end)
 

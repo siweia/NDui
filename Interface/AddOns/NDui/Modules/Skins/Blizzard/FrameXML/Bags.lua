@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local MAX_CONTAINER_ITEMS = 36
 local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
-local ContainerIDToInventoryID = DB.isNewPatch and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+local ContainerIDToInventoryID = DB.isBeta and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
 
 local function handleMoneyFrame(frame)
 	if frame.MoneyFrame then

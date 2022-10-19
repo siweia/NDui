@@ -922,3 +922,5 @@ L["AutoRepairInfo"] = "訊息條的耐久及貨幣模塊，可以調整自動修
 L["ReagentBag"] = "材料包"
 L["AuraFontSize"] = "法術文本大小"
 L["SizeRatio"] = "圖示高寬比率"
+L["DisableMinimap"] = "禁用小地圖增强"
+L["DisableMinimapTip"] = "|n關閉後，下方小地圖的所有模塊都將一同被禁用。|n啟用SexyMap時，將自動關閉小地圖增强。"

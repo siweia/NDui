@@ -17,13 +17,7 @@ local function addIcon(texture)
 	return texture
 end
 
-local menuList = {
-	{text = CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true},
-	{text = SPECIALIZATION, hasArrow = true, notCheckable = true, menuList = {}},
-	{text = SELECT_LOOT_SPECIALIZATION, hasArrow = true, notCheckable = true, menuList = {}},
-}
-
-local newMenu, numSpecs
+local currentSpecIndex, currentLootIndex, newMenu, numSpecs, numLocal
 
 info.eventList = {
 	"PLAYER_ENTERING_WORLD",
@@ -32,15 +26,15 @@ info.eventList = {
 }
 
 info.onEvent = function(self)
-	local specIndex = GetSpecialization()
-	if specIndex and specIndex < 5 then
-		local _, name, _, icon = GetSpecializationInfo(specIndex)
+	currentSpecIndex = GetSpecialization()
+	if currentSpecIndex and currentSpecIndex < 5 then
+		local _, name, _, icon = GetSpecializationInfo(currentSpecIndex)
 		if not name then return end
-		local specID = GetLootSpecialization()
-		if specID == 0 then
+		currentLootIndex = GetLootSpecialization()
+		if currentLootIndex == 0 then
 			icon = addIcon(icon)
 		else
-			icon = addIcon(select(4, GetSpecializationInfoByID(specID)))
+			icon = addIcon(select(4, GetSpecializationInfoByID(currentLootIndex)))
 		end
 		self.text:SetText(DB.MyColor..name..icon)
 	else
@@ -52,8 +46,7 @@ local pvpTalents
 local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(104).iconFileID
 
 info.onEnter = function(self)
-	local specIndex = GetSpecialization()
-	if not specIndex or specIndex == 5 then return end
+	if not currentSpecIndex or currentSpecIndex == 5 then return end
 
 	local _, anchor, offset = module:GetTooltipAnchor(info)
 	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
@@ -61,7 +54,7 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(TALENTS_BUTTON, 0,.6,1)
 	GameTooltip:AddLine(" ")
 
-	local _, specName, _, specIcon = GetSpecializationInfo(specIndex)
+	local specID, specName, _, specIcon = GetSpecializationInfo(currentSpecIndex)
 	GameTooltip:AddLine(addIcon(specIcon).." "..specName, .6,.8,1)
 
 	for t = 1, MAX_TALENT_TIERS do
@@ -70,6 +63,14 @@ info.onEnter = function(self)
 			if selected then
 				GameTooltip:AddLine(addIcon(icon).." "..name, 1,1,1)
 			end
+		end
+	end
+
+	if DB.isNewPatch then
+		local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
+		local info = configID and C_Traits.GetConfigInfo(configID)
+		if info and info.name then
+			GameTooltip:AddLine("   ("..info.name..")", 1,1,1)
 		end
 	end
 
@@ -99,13 +100,13 @@ end
 info.onLeave = B.HideTooltip
 
 local function selectSpec(_, specIndex)
-	if GetSpecialization() == specIndex then return end
+	if currentSpecIndex == specIndex then return end
 	SetSpecialization(specIndex)
 	DropDownList1:Hide()
 end
 
 local function checkSpec(self)
-	return GetSpecialization() == self.arg1
+	return currentSpecIndex == self.arg1
 end
 
 local function selectLootSpec(_, index)
@@ -114,7 +115,51 @@ local function selectLootSpec(_, index)
 end
 
 local function checkLootSpec(self)
-	return GetLootSpecialization() == self.arg1
+	return currentLootIndex == self.arg1
+end
+
+local function refreshDefaultLootSpec()
+	if not currentSpecIndex or currentSpecIndex == 5 then return end
+	local mult = DB.isNewPatch and (3 + numSpecs) or numSpecs
+	newMenu[numLocal - mult].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(currentSpecIndex)))
+end
+
+local function selectCurrentConfig(_, configID)
+	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+	if not ClassTalentFrame then LoadAddOn("Blizzard_ClassTalentUI") end
+	if not ClassTalentFrame:IsShown() then
+		ShowUIPanel(ClassTalentFrame)
+	end
+	ClassTalentFrame.TalentsTab:LoadConfigInternal(configID, true)
+end
+
+local function checkCurrentConfig(self)
+	return C_ClassTalents.GetLastSelectedSavedConfigID(self.arg2) == self.arg1
+end
+
+local function refreshAllTraits()
+	local numConfig = numLocal or 0
+	local specID = GetSpecializationInfo(currentSpecIndex)
+	local configIDs = specID and C_ClassTalents.GetConfigIDsBySpecID(specID)
+	if configIDs then
+		for i = 1, #configIDs do
+			local configID = configIDs[i]
+			if configID then
+				local info = C_Traits.GetConfigInfo(configID)
+				numConfig = numConfig + 1
+				if not newMenu[numConfig] then newMenu[numConfig] = {} end
+				newMenu[numConfig].text = info.name
+				newMenu[numConfig].arg1 = configID
+				newMenu[numConfig].arg2 = specID
+				newMenu[numConfig].func = selectCurrentConfig
+				newMenu[numConfig].checked = checkCurrentConfig
+			end
+		end
+	end
+
+	for i = numConfig+1, #newMenu do
+		if newMenu[i] then newMenu[i].text = nil end
+	end
 end
 
 local seperatorMenu = {
@@ -133,6 +178,7 @@ local seperatorMenu = {
 		tFitDropDownSizeX = true
 	},
 }
+
 local function BuildSpecMenu()
 	if newMenu then return end
 
@@ -153,20 +199,34 @@ local function BuildSpecMenu()
 	end
 
 	if DB.isNewPatch then
-		-- todo: add spec config
+		tinsert(newMenu, seperatorMenu)
+		tinsert(newMenu, {text = GetSpellInfo(384255), isTitle = true, notCheckable = true})
+		tinsert(newMenu, {text = BLUE_FONT_COLOR:WrapTextInColorCode(TALENT_FRAME_DROP_DOWN_STARTER_BUILD), func = selectCurrentConfig,
+			arg1 = Constants.TraitConsts.STARTER_BUILD_TRAIT_CONFIG_ID,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
+		})
+	end
+
+	numLocal = #newMenu
+
+	refreshDefaultLootSpec()
+	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", refreshDefaultLootSpec)
+
+	if DB.isNewPatch then
+		refreshAllTraits()
+		B:RegisterEvent("TRAIT_CONFIG_DELETED", refreshAllTraits)
+		B:RegisterEvent("TRAIT_CONFIG_UPDATED", refreshAllTraits)
+		B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", refreshAllTraits)
 	end
 end
 
 info.onMouseUp = function(self, btn)
-	local specIndex = GetSpecialization()
-	if not specIndex or specIndex == 5 then return end
+	if not currentSpecIndex or currentSpecIndex == 5 then return end
 
 	if btn == "LeftButton" then
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleTalentFrame(2)
 	else
 		BuildSpecMenu()
-		newMenu[#newMenu - numSpecs].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(specIndex)))
 		EasyMenu(newMenu, B.EasyMenu, self, -80, 100, "MENU", 1)
 		GameTooltip:Hide()
 	end

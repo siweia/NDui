@@ -44,7 +44,7 @@ function TT:ConduitCollectionData()
 	end
 	B:RegisterEvent("SOULBIND_CONDUIT_COLLECTION_UPDATED", TT.Conduit_UpdateCollection)
 
-	if DB.isNewPatch then return end -- todo
+	if DB.isBeta then return end -- todo
 	if not C.db["Tooltip"]["ConduitInfo"] then return end
 
 	GameTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)

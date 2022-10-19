@@ -51,7 +51,7 @@ function TT:HookTooltipSetSpell()
 end
 
 function TT:HookTooltipMethod()
-	if not DB.isNewPatch then
+	if not DB.isBeta then
 		self:HookScript("OnTooltipSetItem", TT.HookTooltipSetItem)
 		self:HookScript("OnTooltipSetSpell", TT.HookTooltipSetSpell)
 	end
