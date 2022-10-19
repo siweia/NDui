@@ -61,7 +61,7 @@ tinsert(C.defaultThemes, function()
 
 		if slotType == "FUTURESPELL" then
 			local level = GetSpellAvailableLevel(slot, SpellBookFrame.bookType)
-			if level and level > DB.MyLevel then
+			if level and level > UnitLevel("player") then
 				self.SpellName:SetTextColor(.7, .7, .7)
 				subSpellString:SetTextColor(.7, .7, .7)
 			end

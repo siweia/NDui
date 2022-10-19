@@ -199,7 +199,7 @@ oUF.Tags.Events["nppp"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
 oUF.Tags.Methods["nplevel"] = function(unit)
 	local level = UnitLevel(unit)
-	if level and level ~= DB.MyLevel then
+	if level and level ~= UnitLevel("player") then
 		if level > 0 then
 			level = B.HexRGB(GetCreatureDifficultyColor(level))..level.."|r "
 		else

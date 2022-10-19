@@ -66,7 +66,7 @@ end
 info.onLeave = B.HideTooltip
 
 info.onMouseUp = function(_, btn)
-	if DB.MyLevel < SHOW_SPEC_LEVEL then
+	if UnitLevel("player") < SHOW_SPEC_LEVEL then
 		UIErrorsFrame:AddMessage(DB.InfoColor..format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, SHOW_SPEC_LEVEL))
 	elseif btn == "RightButton" then
 		if InCombatLockdown() then return end

@@ -120,12 +120,6 @@ end
 B:RegisterEvent("PLAYER_LOGIN", CheckRole)
 B:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckRole)]]
 
-local function UpdateMyLevel()
-	DB.MyLevel = UnitLevel("player")
-end
-UpdateMyLevel()
-B:RegisterEvent("PLAYER_LEVEL_UP", UpdateMyLevel)
-
 -- Raidbuff Checklist
 DB.BuffList = {
 	[1] = {		-- 合剂
