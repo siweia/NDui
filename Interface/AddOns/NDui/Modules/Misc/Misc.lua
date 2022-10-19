@@ -933,9 +933,19 @@ function M:SpellBookFix()
 		GameTooltip:Show()
 	end
 
+	local function handleSpellButton(button)
+		button.OnEnter = replaceOnEnter
+		button:SetScript("OnEnter", replaceOnEnter)
+	end
+
 	for i = 1, SPELLS_PER_PAGE do
-		local bu = _G["SpellButton"..i]
-		bu.OnEnter = replaceOnEnter
-		bu:SetScript("OnEnter", replaceOnEnter)
+		handleSpellButton(_G["SpellButton"..i])
+	end
+
+	local professions = {"PrimaryProfession1", "PrimaryProfession2", "SecondaryProfession1", "SecondaryProfession2", "SecondaryProfession3"}
+	for _, button in pairs(professions) do
+		local bu = _G[button]
+		handleSpellButton(bu.SpellButton1)
+		handleSpellButton(bu.SpellButton2)
 	end
 end
