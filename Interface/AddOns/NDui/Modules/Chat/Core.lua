@@ -406,6 +406,17 @@ function module:OnLogin()
 	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
+	-- Chat class color
+	for _, info in pairs(CHAT_CONFIG_CHAT_LEFT) do
+		if info.type then
+			SetChatColorNameByClass(info.type, true)
+		end
+	end
+	local channels = {GetChannelList()}
+	for i = 1, #channels, 3 do
+		SetChatColorNameByClass("CHANNEL"..channels[i], true)
+	end
+
 	-- Add Elements
 	module:ChatWhisperSticky()
 	module:ChatFilter()
