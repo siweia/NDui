@@ -20,24 +20,9 @@ function A:HideBlizBuff()
 
 	B.HideObject(_G.BuffFrame)
 	B.HideObject(_G.TemporaryEnchantFrame)
-end
-
-function A:ReskinBuffButtons()
-	local buffName, buff
-	for i = 1, BUFF_ACTUAL_DISPLAY do
-		buffName = "BuffButton"..i
-		buff = _G[buffName]
-		if not buff then break end
-		if not buff.styled then
-			B.ReskinIcon(_G[buffName.."Icon"])
-			buff.styled = true
-		end
-	end
-end
-
-function A:UpdateConsolidatedFrame()
-	BuffFrame_Update()
-	A:ReskinBuffButtons()
+	SetCVar("consolidateBuffs", 0)
+	B.HideObject(_G.ConsolidatedBuffs)
+	B.HideOption(_G.InterfaceOptionsDisplayPanelConsolidateBuffs)
 end
 
 function A:BuildBuffFrame()
@@ -71,21 +56,6 @@ function A:BuildBuffFrame()
 	A.DebuffFrame.mover = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", A.BuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 	A.DebuffFrame:ClearAllPoints()
 	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
-
-	if _G.ConsolidatedBuffsTooltip then
-		_G.ConsolidatedBuffsTooltip:HideBackdrop()
-		B.SetBD(_G.ConsolidatedBuffsTooltip)
-		B.HideOption(_G.InterfaceOptionsDisplayPanelConsolidateBuffs)
-
-		A:ReskinBuffButtons()
-		B:RegisterEvent("UNIT_AURA", A.UpdateConsolidatedFrame, "player")
-	end
-
-	C_Timer.After(1, function()
-		if NDuiPlayerBuffsProxyButton then
-			NDuiPlayerBuffsProxyButton:SetSize(C.db["Auras"]["BuffSize"], C.db["Auras"]["BuffSize"])
-		end
-	end)
 end
 
 local day, hour, minute = 86400, 3600, 60
@@ -220,9 +190,7 @@ function A:UpdateHeader(header)
 	local cfg = A.settings.Debuffs
 	if header.filter == "HELPFUL" then
 		cfg = A.settings.Buffs
-		local isConsolidated = C.db["Auras"]["Consolidate"] and 1 or 0
-		SetCVar("consolidateBuffs", isConsolidated)
-		header:SetAttribute("consolidateTo", isConsolidated)
+		header:SetAttribute("consolidateTo", 0)
 		header:SetAttribute("weaponTemplate", format("NDuiAuraTemplate%d", cfg.size))
 	end
 
@@ -278,7 +246,6 @@ function A:CreateAuraHeader(filter)
 	if filter == "HELPFUL" then
 		header:SetAttribute("consolidateDuration", -1)
 		header:SetAttribute("includeWeapons", 1)
-		header:SetAttribute("consolidateProxy", "NDuiConsolidateTemplate")
 	end
 
 	A:UpdateHeader(header)

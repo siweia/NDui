@@ -39,23 +39,6 @@
 	<Button name="NDuiAuraTemplate49" inherits="NDuiAuraTemplate" virtual="true"><Size x="49" y="49"/></Button>
 	<Button name="NDuiAuraTemplate50" inherits="NDuiAuraTemplate" virtual="true"><Size x="50" y="50"/></Button>
 
-	<Button name="NDuiConsolidateTemplate" inherits="BackdropTemplate" virtual="true" framelevel="4">
-		<Size x="30" y="30"/>
-		<Scripts>
-			<OnLoad>
-				NDui[1]:GetModule("Auras"):CreateAuraIcon(self)
-				ConsolidatedBuffs:SetParent(self)
-				ConsolidatedBuffs:ClearAllPoints()
-				ConsolidatedBuffs:SetAllPoints(self)
-				ConsolidatedBuffsIcon:SetTexture(nil)
-				self.icon:SetTexture(135939)
-			</OnLoad>
-			<OnShow>
-				BuffFrame_Update()
-			</OnShow>
-		</Scripts>
-	</Button>
-
 	<Script file="Auras.lua"/>
 	<Script file="Reminder.lua"/>
 	<Script file="Totems.lua"/>

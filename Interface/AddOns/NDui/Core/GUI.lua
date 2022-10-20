@@ -119,7 +119,6 @@ G.DefaultSettings = {
 		ReverseDebuff = false,
 		DebuffSize = 30,
 		DebuffsPerRow = 16,
-		Consolidate = false,
 	},
 	AuraWatch = {
 		Enable = true,
