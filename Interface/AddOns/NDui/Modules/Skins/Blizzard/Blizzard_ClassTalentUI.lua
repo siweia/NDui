@@ -33,6 +33,19 @@ C.themes["Blizzard_ClassTalentUI"] = function()
 		for specContentFrame in self.SpecContentFramePool:EnumerateActive() do
 			if not specContentFrame.styled then
 				B.Reskin(specContentFrame.ActivateButton)
+
+				local role = GetSpecializationRole(specContentFrame.specIndex)
+				if role then
+					B.ReskinSmallRole(specContentFrame.RoleIcon, role)
+				end
+
+				if specContentFrame.SpellButtonPool then
+					for button in specContentFrame.SpellButtonPool:EnumerateActive() do
+						button.Ring:Hide()
+						B.ReskinIcon(button.Icon)
+					end
+				end
+
 				specContentFrame.styled = true
 			end
 		end
