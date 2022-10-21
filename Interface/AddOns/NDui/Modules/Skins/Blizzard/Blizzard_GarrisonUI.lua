@@ -1219,7 +1219,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		local function reskinFollowerAbility(frame, index, first)
 			local ability = select(index, frame:GetRegions())
-			ability:SetMask(nil)
+			ability:SetMask("")
 			ability:SetSize(14, 14)
 			ability.bg = B.ReskinIcon(ability)
 			ability.bg:SetFrameLevel(4)
