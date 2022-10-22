@@ -1,6 +1,6 @@
 # NDui
 
-## [6.29.0](https://github.com/siweia/NDui/tree/6.29.0) (2022-10-22)
+## [6.29.1](https://github.com/siweia/NDui/tree/6.29.1) (2022-10-22)
 
 - Updates for PTR 46181 and BETA 46144.
 - Update default skins, new layout for scrollbar.
