@@ -28,13 +28,11 @@ C.themes["Blizzard_ExpansionLandingPage"] = function()
 		hooksecurefunc(panel.MajorFactionList.ScrollBox, "Update", function(self)
 			for i = 1, self.ScrollTarget:GetNumChildren() do
 				local child = select(i, self.ScrollTarget:GetChildren())
-				if child.UnlockedState then
-					if not child.styled then
-						B.ReskinCheck(child.UnlockedState.WatchFactionButton)
-						child.UnlockedState.WatchFactionButton:SetSize(32, 32)
-						child.UnlockedState.WatchFactionButton.Label:SetFontObject(Game20Font)
-						child.styled = true
-					end
+				if child.UnlockedState and not child.styled then
+					B.ReskinCheck(child.UnlockedState.WatchFactionButton)
+					child.UnlockedState.WatchFactionButton:SetSize(32, 32)
+					child.UnlockedState.WatchFactionButton.Label:SetFontObject(Game20Font)
+					child.styled = true
 				end
 			end
 		end)
