@@ -1113,7 +1113,7 @@ G.TabList = {
 	L["Bags"],
 	NewTag..L["Unitframes"],
 	NewTag..L["RaidFrame"],
-	L["Nameplate"],
+	NewTag..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
