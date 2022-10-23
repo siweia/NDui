@@ -163,12 +163,7 @@ function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
 
-	if C.db["Actionbar"]["Enable"] and DB.isNewPatch then
-		Bar:ReskinBars()
-	end
-
 	if not C.db["Actionbar"]["Enable"] then return end
-	if DB.isNewPatch then return end -- todo, buttons reparent after grid shows
 
 	Bar.movers = {}
 	Bar:CreateBar1()
