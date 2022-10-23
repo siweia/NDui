@@ -15,4 +15,16 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(RaidParentFrameCloseButton)
 
 	B.ReskinPortraitFrame(RaidParentFrame)
+
+	if RaidInfoInstanceLabel then
+		local function handleHeader(header)
+			B.StripTextures(header)
+			local bg = B.CreateBDFrame(header, .25)
+			bg:SetPoint("TOPLEFT", 2, 0)
+			bg:SetPoint("BOTTOMRIGHT", -2, 0)
+		end
+		handleHeader(RaidInfoInstanceLabel)
+		handleHeader(RaidInfoIDLabel)
+		B.Reskin(RaidInfoCancelButton)
+	end
 end)
