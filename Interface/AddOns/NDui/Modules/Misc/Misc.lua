@@ -907,7 +907,7 @@ end
 
 -- Move and save blizz frames
 function M:MoveBlizzFrames()
-	B:BlizzFrameMover(CharacterFrame)
+	--B:BlizzFrameMover(CharacterFrame)
 end
 
 -- SpellBook fix in 46157
