@@ -1,9 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-if DB.isNewPatch then return end
+tinsert(C.defaultThemes, function()
+	if not DB.isNewPatch then return end
+	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-C.themes["Blizzard_TalkingHeadUI"] = function()
 	local TalkingHeadFrame = TalkingHeadFrame
 	TalkingHeadFrame:SetScale(.9)
 
@@ -32,4 +33,4 @@ C.themes["Blizzard_TalkingHeadUI"] = function()
 	B.ReskinClose(closeButton)
 	closeButton:ClearAllPoints()
 	closeButton:SetPoint("TOPRIGHT", -25, -25)
-end
+end)

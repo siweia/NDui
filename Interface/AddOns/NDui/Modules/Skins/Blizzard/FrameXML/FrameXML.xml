@@ -53,6 +53,7 @@
 	<Script file="SplashFrame.lua"/>
 	<Script file="StaticPopup.lua"/>
 	<Script file="TabardFrame.lua"/>
+	<Script file="TalkingHeadUI.lua"/>
 	<Script file="TaxiFrame.lua"/>
 	<Script file="TimeManager.lua"/>
 	<Script file="TradeFrame.lua"/>
