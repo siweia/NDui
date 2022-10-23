@@ -4,6 +4,7 @@
 	<Script file="Bars\Bar3.lua"/>
 	<Script file="Bars\Bar4.lua"/>
 	<Script file="Bars\Bar5.lua"/>
+	<Script file="Bars\Bar678.lua"/>
 	<Script file="Bars\CustomBar.lua"/>
 	<Script file="Bars\Stancebar.lua"/>
 	<Script file="Bars\Petbar.lua"/>
