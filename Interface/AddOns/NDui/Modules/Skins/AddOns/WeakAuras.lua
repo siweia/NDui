@@ -90,11 +90,14 @@ local function ReskinWA()
 		Skin_WeakAuras(region, "aurabar")
 	end
 
-	for _, regions in pairs(WeakAuras.regions) do
-		if regions.regionType == "icon" or regions.regionType == "aurabar" then
-			Skin_WeakAuras(regions.region, regions.regionType)
-		end
+	local function OnPrototypeCreate(region)
+		Skin_WeakAuras(region, region.regionType)
 	end
+	local function OnPrototypeModifyFinish(_, region)
+		Skin_WeakAuras(region, region.regionType)
+	end
+	hooksecurefunc(WeakAuras.regionPrototype, "create", OnPrototypeCreate)
+	hooksecurefunc(WeakAuras.regionPrototype, "modifyFinish", OnPrototypeModifyFinish)
 end
 
 S:RegisterSkin("WeakAuras", ReskinWA)
