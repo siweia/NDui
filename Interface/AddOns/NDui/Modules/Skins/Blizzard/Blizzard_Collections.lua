@@ -46,8 +46,9 @@ C.themes["Blizzard_Collections"] = function()
 	for i = 1, 5 do
 		local tab = _G["CollectionsJournalTab"..i]
 		B.ReskinTab(tab)
-		if i > 1 then
-			tab:SetPoint("LEFT", _G["CollectionsJournalTab"..(i-1)], "RIGHT", -15, 0)
+		if DB.isNewPatch and i ~= 1 then
+			tab:ClearAllPoints()
+			tab:SetPoint("TOPLEFT", _G["CollectionsJournalTab"..(i-1)], "TOPRIGHT", -15, 0)
 		end
 	end
 

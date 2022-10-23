@@ -22,6 +22,10 @@ C.themes["Blizzard_AchievementUI"] = function()
 			local tab = _G["AchievementFrameTab"..i]
 			if tab then
 				B.ReskinTab(tab)
+				if i ~= 1 then
+					tab:ClearAllPoints()
+					tab:SetPoint("TOPLEFT", _G["AchievementFrameTab"..(i-1)], "TOPRIGHT", -15, 0)
+				end
 			end
 		end
 

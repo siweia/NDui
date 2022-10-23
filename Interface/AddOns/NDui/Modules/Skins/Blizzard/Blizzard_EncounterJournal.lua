@@ -96,10 +96,16 @@ end
 C.themes["Blizzard_EncounterJournal"] = function()
 	-- Tabs
 	if DB.isNewPatch then
-		B.ReskinTab(EncounterJournalSuggestTab)
-		B.ReskinTab(EncounterJournalDungeonTab)
-		B.ReskinTab(EncounterJournalRaidTab)
-		B.ReskinTab(EncounterJournalLootJournalTab)
+		for i = 1, 4 do
+			local tab = EncounterJournal.Tabs[i]
+			if tab then
+				B.ReskinTab(tab)
+				if i ~= 1 then
+					tab:ClearAllPoints()
+					tab:SetPoint("TOPLEFT", EncounterJournal.Tabs[i-1], "TOPRIGHT", -15, 0)
+				end
+			end
+		end
 	else
 		for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab", "LootJournalTab"}) do
 			local tab = EncounterJournal.instanceSelect[tabName]

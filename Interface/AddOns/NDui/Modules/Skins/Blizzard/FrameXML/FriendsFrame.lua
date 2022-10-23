@@ -55,6 +55,10 @@ tinsert(C.defaultThemes, function()
 		if tab then
 			B.ReskinTab(tab)
 			B.ResetTabAnchor(tab)
+			if DB.isNewPatch and i ~= 1 then
+				tab:ClearAllPoints()
+				tab:SetPoint("TOPLEFT", _G["FriendsFrameTab"..(i-1)], "TOPRIGHT", -15, 0)
+			end
 		end
 	end
 	FriendsFrameIcon:Hide()

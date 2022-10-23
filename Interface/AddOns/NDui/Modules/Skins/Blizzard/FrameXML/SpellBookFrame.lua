@@ -62,7 +62,22 @@ tinsert(C.defaultThemes, function()
 	SpellBookFrameTabButton1:SetPoint("TOPLEFT", SpellBookFrame, "BOTTOMLEFT", 0, 2)
 
 	for i = 1, 5 do
-		B.ReskinTab(_G["SpellBookFrameTabButton"..i])
+		local tab = _G["SpellBookFrameTabButton"..i]
+		if tab then
+			B.ReskinTab(tab)
+		end
+	end
+
+	if DB.isNewPatch then
+		hooksecurefunc("SpellBookFrame_Update", function()
+			for i = 2, 5 do
+				local tab = _G["SpellBookFrameTabButton"..i]
+				if tab then
+					tab:ClearAllPoints()
+					tab:SetPoint("TOPLEFT", _G["SpellBookFrameTabButton"..(i-1)], "TOPRIGHT", -15, 0)
+				end
+			end
+		end)
 	end
 
 	for i = 1, SPELLS_PER_PAGE do
