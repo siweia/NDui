@@ -791,8 +791,5 @@ end
 
 -- Move and save blizz frames
 function M:MoveBlizzFrames()
-	if not IsAddOnLoaded("RXPGuides") then
-		B:BlizzFrameMover(CharacterFrame)
-	end
 	B:BlizzFrameMover(QuestLogFrame)
 end
