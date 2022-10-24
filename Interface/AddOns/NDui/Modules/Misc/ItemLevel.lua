@@ -268,6 +268,8 @@ function M:ItemLevel_FlyoutUpdate(id)
 	end
 
 	local quality, level = select(3, GetItemInfo(id))
+	if quality and quality <= 1 then return end
+
 	local color = DB.QualityColors[quality or 0]
 	self.iLvl:SetText(level)
 	self.iLvl:SetTextColor(color.r, color.g, color.b)
