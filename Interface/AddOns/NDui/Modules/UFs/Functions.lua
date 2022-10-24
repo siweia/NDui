@@ -771,9 +771,7 @@ function UF:CreateCastBar(self)
 	cb.PostCastDelayed = UF.PostCastUpdate
 	cb.PostChannelUpdate = UF.PostCastUpdate
 	cb.PostCastFailed = UF.PostCastFailed
-	cb.PostCastInterrupted = UF.PostCastFailed
 	cb.PostCastInterruptible = UF.PostUpdateInterruptible
-	cb.PostCastNotInterruptible = UF.PostUpdateInterruptible
 
 	self.Castbar = cb
 end

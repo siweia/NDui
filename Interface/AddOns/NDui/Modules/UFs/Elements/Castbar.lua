@@ -8,7 +8,6 @@ local UnitIsUnit, UnitExists = UnitIsUnit, UnitExists
 
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
-local NotInterruptColor = {r=1, g=.5, b=.5}
 
 local ticks = {}
 local channelingTicks = {
@@ -223,9 +222,10 @@ end
 
 local function UpdateCastBarColor(self, unit)
 	local color = C.db["UFs"]["CastingColor"]
-	if not UnitIsUnit(unit, "player") and self.notInterruptible then
-		--color = C.db["UFs"]["NotInterruptColor"]
-		color = NotInterruptColor
+	if unit == "player" then
+		color = C.db["UFs"]["OwnCastColor"]
+	elseif not UnitIsUnit(unit, "player") and self.notInterruptible then
+		color = C.db["UFs"]["NotInterruptColor"]
 	end
 	self:SetStatusBarColor(color.r, color.g, color.b)
 end

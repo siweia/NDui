@@ -240,8 +240,9 @@ G.DefaultSettings = {
 		BossHPTag = 5,
 		BossMPTag = 5,
 
+		OwnCastColor = {r=.3, g=.7, b=1},
 		CastingColor = {r=.3, g=.7, b=1},
-		--NotInterruptColor = {r=1, g=.5, b=.5},
+		NotInterruptColor = {r=1, g=.5, b=.5},
 		PlayerCB = true,
 		PlayerCBWidth = 300,
 		PlayerCBHeight = 20,
