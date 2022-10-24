@@ -15,6 +15,9 @@ function Bar:UpdateAllScale()
 	Bar:UpdateActionSize("Bar3")
 	Bar:UpdateActionSize("Bar4")
 	Bar:UpdateActionSize("Bar5")
+	Bar:UpdateActionSize("Bar6")
+	Bar:UpdateActionSize("Bar7")
+	Bar:UpdateActionSize("Bar8")
 	Bar:UpdateActionSize("BarPet")
 	Bar:UpdateStanceBar()
 	Bar:UpdateVehicleButton()
@@ -163,12 +166,7 @@ function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
 
-	if C.db["Actionbar"]["Enable"] and DB.isNewPatch then
-		Bar:ReskinBars()
-	end
-
 	if not C.db["Actionbar"]["Enable"] then return end
-	if DB.isNewPatch then return end -- todo, buttons reparent after grid shows
 
 	Bar.movers = {}
 	Bar:CreateBar1()
@@ -176,6 +174,7 @@ function Bar:OnLogin()
 	Bar:CreateBar3()
 	Bar:CreateBar4()
 	Bar:CreateBar5()
+	Bar:CreateBar678()
 	Bar:CustomBar()
 	Bar:CreateExtrabar()
 	Bar:CreateLeaveVehicle()
@@ -183,5 +182,10 @@ function Bar:OnLogin()
 	Bar:CreateStancebar()
 	Bar:HideBlizz()
 	Bar:ReskinBars()
-	Bar:UpdateAllScale()
+
+	local function delaySize(event)
+		Bar:UpdateAllScale()
+		B:UnregisterEvent(event, delaySize)
+	end
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", delaySize)
 end

@@ -43,7 +43,15 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	B.ReskinPortraitFrame(PVEFrame)
-	B.ReskinTab(PVEFrameTab1)
-	B.ReskinTab(PVEFrameTab2)
-	B.ReskinTab(PVEFrameTab3)
+
+	for i = 1, 3 do
+		local tab = _G["PVEFrameTab"..i]
+		if tab then
+			B.ReskinTab(tab)
+			if DB.isNewPatch and i ~= 1 then
+				tab:ClearAllPoints()
+				tab:SetPoint("TOPLEFT", _G["PVEFrameTab"..(i-1)], "TOPRIGHT", -15, 0)
+			end
+		end
+	end
 end)

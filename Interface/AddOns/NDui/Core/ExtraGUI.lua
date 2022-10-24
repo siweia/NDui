@@ -1795,6 +1795,9 @@ function G:SetupActionBar(parent)
 		["Bar4"] = {32, 1, 12, 12, 1},
 		["Bar5"] = {32, 1, 12, 12, 1},
 		["BarPet"] = {26, 1, 10, 10, 10},
+		["Bar6"] = {34, 1, 12, 12, 12},
+		["Bar7"] = {34, 1, 12, 12, 12},
+		["Bar8"] = {34, 1, 12, 12, 12},
 	}
 	local function createOptionGroup(parent, title, offset, value, color)
 		color = color or ""
@@ -1818,6 +1821,12 @@ function G:SetupActionBar(parent)
 
 	createOptionTitle(scroll.child, L["LeaveVehicle"], -2170)
 	createOptionSlider(scroll.child, L["ButtonSize"], 20, 80, 34, -2230, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
+
+	if DB.isNewPatch then
+		createOptionGroup(scroll.child, L["Actionbar"].."6", -2300, "Bar6")
+		createOptionGroup(scroll.child, L["Actionbar"].."7", -2660, "Bar7")
+		createOptionGroup(scroll.child, L["Actionbar"].."8", -3020, "Bar8")
+	end
 end
 
 function G:SetupStanceBar(parent)
@@ -1908,7 +1917,7 @@ function G:SetupUFAuras(parent)
 	createOptionGroup(parent, L["BossFrame"], offset-2190, "Boss", UF.UpdateUFAuras, true)
 end
 
-function G:SetupActionbarStyle(parent)
+function G:SetupActionbarStyle(parent) -- todo: add bar 678
 	local maxButtons = 6
 	local size, padding = 30, 3
 
