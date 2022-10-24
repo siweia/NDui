@@ -491,6 +491,7 @@ L["TradeTabs"] = "Упрощенное окно обмена"
 L["TradeTabsTips"] = "|nПоказывать закладки профессий.|n|nЗачарованиене входит в TradeSkillUI в ваниле."
 L["Castbar Settings"] = "Настройки полосы заклинаний"
 L["Castbar Colors"] = "Цвета полосы заклинаний"
+L["PlayerCastingColor"] = "Player casting color" -- need translation
 L["Interruptible Color"] = "Цвет прерываемого"
 L["NotInterruptible Color"] = "Цвет не прерываемого"
 L["Castbar Height"] = "Высота полосы заклинаний"
