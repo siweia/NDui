@@ -165,7 +165,9 @@ end
 function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
-
+	if C.db["Actionbar"]["Skins"] then
+		Bar:ReskinBars()
+	end
 	if not C.db["Actionbar"]["Enable"] then return end
 
 	Bar.movers = {}
@@ -181,7 +183,6 @@ function Bar:OnLogin()
 	Bar:CreatePetbar()
 	Bar:CreateStancebar()
 	Bar:HideBlizz()
-	Bar:ReskinBars()
 
 	local function delaySize(event)
 		Bar:UpdateAllScale()
