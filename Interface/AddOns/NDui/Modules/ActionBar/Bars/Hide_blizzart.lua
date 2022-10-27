@@ -60,7 +60,7 @@ end
 local function updateTokenVisibility()
 	TokenFrame_LoadUI()
 	TokenFrame_Update()
-	BackpackTokenFrame_Update()
+	--BackpackTokenFrame_Update()
 end
 
 function Bar:HideBlizz()
