@@ -193,6 +193,8 @@ local function CreatePanel()
 
 	local slotIndex = {
 		[6] = INVTYPE_WAIST,
+		[8] = INVTYPE_FEET,
+		[10] = INVTYPE_HAND,
 		[11] = INVTYPE_FINGER.."1",
 		[12] = INVTYPE_FINGER.."2",
 		[13] = INVTYPE_TRINKET.."1",
@@ -387,7 +389,7 @@ local function CreatePanel()
 			Option[8] = G:CreateCheckBox(tabs[i].Page, L["Combat"], 200, -95, L["Combat Intro"])
 			Option[9] = G:CreateEditbox(tabs[i].Page, L["Text"], 340, -90, L["Text Intro"])
 			Option[10] = G:CreateCheckBox(tabs[i].Page, L["Flash"], 280, -95, L["Flash Intro"])
-			Option[11] = G:CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15]}, L["Slot Intro"])
+			Option[11] = G:CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[8], slotIndex[10], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15]}, L["Slot Intro"])
 			Option[12] = G:CreateDropdown(tabs[i].Page, L["Totem*"], 140, -30, {L["TotemSlot"].."1", L["TotemSlot"].."2", L["TotemSlot"].."3", L["TotemSlot"].."4"}, L["Totem Intro"])
 
 			for j = 2, 12 do Option[j]:Hide() end
@@ -434,7 +436,7 @@ local function CreatePanel()
 			end
 		end)
 
-		local slotTable = {6, 11, 12, 13, 14, 15}
+		local slotTable = {6, 8, 10, 11, 12, 13, 14, 15}
 		local add = B.CreateButton(tabs[i].Page, 60, 25, ADD)
 		add:SetPoint("TOPRIGHT", -30, -90)
 		add:SetScript("OnClick", function()
