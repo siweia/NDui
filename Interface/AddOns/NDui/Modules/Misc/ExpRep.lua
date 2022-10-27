@@ -62,7 +62,7 @@ function M:ExpBar_Update()
 			local friendID, friendRep, friendThreshold, nextFriendThreshold
 			if DB.isNewPatch then
 				local repInfo = C_GossipInfo.GetFriendshipReputation(factionID)
-				friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.reactionThreshold
+				friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold
 			else
 				friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 			end
@@ -70,7 +70,7 @@ function M:ExpBar_Update()
 				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
 				currentValue = mod(currentValue, threshold)
 				barMin, barMax, value = 0, threshold, currentValue
-			elseif friendID then
+			elseif friendID and friendID ~= 0 then
 				if nextFriendThreshold then
 					barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
 				else
@@ -144,10 +144,10 @@ function M:ExpBar_UpdateTooltip()
 				standingtext = RENOWN_LEVEL_LABEL..majorFactionData.renownLevel
 			else
 				local repInfo = C_GossipInfo.GetFriendshipReputation(factionID)
-				local friendID, friendTextLevel, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.text, repInfo.reactionThreshold
+				local friendID, friendTextLevel, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.text, repInfo.nextThreshold
 				local repRankInfo = C_GossipInfo.GetFriendshipReputationRanks(factionID)
 				local currentRank, maxRank = repRankInfo.currentLevel, repRankInfo.maxLevel
-				if friendID ~= 0 then
+				if friendID and friendID ~= 0 then
 					if maxRank > 0 then
 						name = name.." ("..currentRank.." / "..maxRank..")"
 					end
