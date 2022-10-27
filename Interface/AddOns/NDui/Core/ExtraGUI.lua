@@ -111,10 +111,10 @@ function G:SetupRaidDebuffs(parent)
 		end)
 	end
 
-	local maxLevel = GetMaxPlayerLevel()
+	local maxLevel = UnitLevel("player") > 60
 	local dungeons = {}
 
-	if maxLevel == 70 then
+	if maxLevel then
 		for dungeonID = 1196, 1204 do
 			if dungeonID ~= 1200 then
 				AddNewDungeon(dungeons, dungeonID)
@@ -140,7 +140,7 @@ function G:SetupRaidDebuffs(parent)
 		[2] = EJ_GetInstanceInfo(1193),
 		[3] = EJ_GetInstanceInfo(1195),
 	}
-	if maxLevel == 70 then
+	if maxLevel then
 		raids[4] = EJ_GetInstanceInfo(1200)
 	end
 
