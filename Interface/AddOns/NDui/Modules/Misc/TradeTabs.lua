@@ -113,6 +113,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	else
 		name, _, texture = GetSpellInfo(spellID)
 	end
+	if not name then return end -- precaution
 
 	local parent = DB.isNewPatch and ProfessionsFrame or TradeSkillFrame
 
@@ -121,6 +122,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	tab.spellID = spellID
 	tab.itemID = toyID or itemID
 	tab.type = (toyID and "toy") or (itemID and "item") or "spell"
+	tab:RegisterForClicks("AnyDown")
 	if spellID == 818 then -- cooking fire
 		tab:SetAttribute("type", "macro")
 		tab:SetAttribute("macrotext", "/cast [@player]"..name)
@@ -192,7 +194,10 @@ function M:TradeTabs_FilterIcons()
 	B:RegisterEvent("TRADE_SKILL_LIST_UPDATE", updateFilterStatus)
 end
 
+local init
 function M:TradeTabs_OnLoad()
+	init = true
+
 	M:UpdateProfessions()
 
 	M:TradeTabs_Reskin()
@@ -203,21 +208,8 @@ function M:TradeTabs_OnLoad()
 
 	M:TradeTabs_FilterIcons()
 	M:TradeTabs_QuickEnchanting()
-end
 
-function M.TradeTabs_OnEvent(event, addon)
-	if event == "ADDON_LOADED" and addon == "Blizzard_TradeSkillUI" then
-		B:UnregisterEvent(event, M.TradeTabs_OnEvent)
-
-		if InCombatLockdown() then
-			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.TradeTabs_OnEvent)
-		else
-			M:TradeTabs_OnLoad()
-		end
-	elseif event == "PLAYER_REGEN_ENABLED" then
-		B:UnregisterEvent(event, M.TradeTabs_OnEvent)
-		M:TradeTabs_OnLoad()
-	end
+	B:UnregisterEvent("PLAYER_REGEN_ENABLED", M.TradeTabs_OnLoad)
 end
 
 local isEnchanting
@@ -277,13 +269,15 @@ end
 
 function M:TradeTabs()
 	if not C.db["Misc"]["TradeTabs"] then return end
+	if not ProfessionsFrame then return end
 
-	if DB.isNewPatch then
-		if ProfessionsFrame then
+	ProfessionsFrame:HookScript("OnShow", function()
+		if init then return end
+		if InCombatLockdown() then
+			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.TradeTabs_OnLoad)
+		else
 			M:TradeTabs_OnLoad()
 		end
-	else
-		B:RegisterEvent("ADDON_LOADED", M.TradeTabs_OnEvent)
-	end
+	end)
 end
 M:RegisterMisc("TradeTabs", M.TradeTabs)
