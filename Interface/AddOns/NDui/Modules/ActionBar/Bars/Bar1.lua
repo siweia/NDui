@@ -165,28 +165,30 @@ end
 function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
+
+	if C.db["Actionbar"]["Enable"] then
+		Bar.movers = {}
+		Bar:CreateBar1()
+		Bar:CreateBar2()
+		Bar:CreateBar3()
+		Bar:CreateBar4()
+		Bar:CreateBar5()
+		Bar:CreateBar678()
+		Bar:CustomBar()
+		Bar:CreateExtrabar()
+		Bar:CreateLeaveVehicle()
+		Bar:CreatePetbar()
+		Bar:CreateStancebar()
+		Bar:HideBlizz()
+
+		local function delaySize(event)
+			Bar:UpdateAllScale()
+			B:UnregisterEvent(event, delaySize)
+		end
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", delaySize)
+	end
+
 	if C.db["Actionbar"]["Skins"] then
 		Bar:ReskinBars()
 	end
-	if not C.db["Actionbar"]["Enable"] then return end
-
-	Bar.movers = {}
-	Bar:CreateBar1()
-	Bar:CreateBar2()
-	Bar:CreateBar3()
-	Bar:CreateBar4()
-	Bar:CreateBar5()
-	Bar:CreateBar678()
-	Bar:CustomBar()
-	Bar:CreateExtrabar()
-	Bar:CreateLeaveVehicle()
-	Bar:CreatePetbar()
-	Bar:CreateStancebar()
-	Bar:HideBlizz()
-
-	local function delaySize(event)
-		Bar:UpdateAllScale()
-		B:UnregisterEvent(event, delaySize)
-	end
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", delaySize)
 end
