@@ -1258,7 +1258,7 @@ end
 -- Class Powers
 function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowerPoints)
 	if not cur or cur == 0 then
-		for i = 1, 6 do
+		for i = 1, 7 do
 			element[i].bg:Hide()
 		end
 
@@ -1286,12 +1286,12 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 		for i = 1, max do
 			element[i]:SetWidth((element.__owner.ClassPowerBar:GetWidth() - (max-1)*C.margin)/max)
 		end
-		for i = max + 1, 6 do
+		for i = max + 1, 7 do
 			element[i].bg:Hide()
 		end
 	end
 
-	for i = 1, 6 do
+	for i = 1, 7 do
 		local bar = element[i]
 		if not bar.chargeStar then break end
 
@@ -1355,10 +1355,10 @@ function UF:CreateClassPower(self)
 	end
 
 	local bars = {}
-	for i = 1, 6 do
+	for i = 1, 7 do
 		bars[i] = CreateFrame("StatusBar", nil, bar)
 		bars[i]:SetHeight(barHeight)
-		bars[i]:SetWidth((barWidth - 5*C.margin) / 6)
+		bars[i]:SetWidth((barWidth - 6*C.margin) / 7)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 		B.SetBD(bars[i], 0)
