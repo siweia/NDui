@@ -166,8 +166,6 @@ function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
 
-	if not DB.isDeveloper then C.db["Actionbar"]["Enable"] = false end
-
 	if C.db["Actionbar"]["Enable"] then
 		Bar.movers = {}
 		Bar:CreateBar1()

@@ -11,6 +11,7 @@ local GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecia
 local GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
 local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
 local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
+local STARTER_BUILD = Constants.TraitConsts.STARTER_BUILD_TRAIT_CONFIG_ID
 
 local function addIcon(texture)
 	texture = texture and "|T"..texture..":12:16:0:0:50:50:4:46:4:46|t" or ""
@@ -124,13 +125,15 @@ local function refreshDefaultLootSpec()
 	newMenu[numLocal - mult].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(currentSpecIndex)))
 end
 
-local function selectCurrentConfig(_, configID)
+local function selectCurrentConfig(_, configID, specID)
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-	if not ClassTalentFrame then LoadAddOn("Blizzard_ClassTalentUI") end
-	if not ClassTalentFrame:IsShown() then
-		ShowUIPanel(ClassTalentFrame)
+	if configID == STARTER_BUILD then
+		C_ClassTalents.SetStarterBuildActive(true)
+	else
+		C_ClassTalents.LoadConfig(configID, true)
+		C_ClassTalents.SetStarterBuildActive(false)
 	end
-	ClassTalentFrame.TalentsTab:LoadConfigInternal(configID, true)
+	C_ClassTalents.UpdateLastSelectedSavedConfigID(specID or GetSpecializationInfo(currentSpecIndex), configID)
 end
 
 local function checkCurrentConfig(self)
@@ -202,7 +205,7 @@ local function BuildSpecMenu()
 		tinsert(newMenu, seperatorMenu)
 		tinsert(newMenu, {text = GetSpellInfo(384255), isTitle = true, notCheckable = true})
 		tinsert(newMenu, {text = BLUE_FONT_COLOR:WrapTextInColorCode(TALENT_FRAME_DROP_DOWN_STARTER_BUILD), func = selectCurrentConfig,
-			arg1 = Constants.TraitConsts.STARTER_BUILD_TRAIT_CONFIG_ID,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
+			arg1 = STARTER_BUILD,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
 		})
 	end
 
