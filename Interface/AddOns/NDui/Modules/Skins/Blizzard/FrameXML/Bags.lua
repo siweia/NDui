@@ -41,8 +41,8 @@ local function ReskinSortButton(button)
 end
 
 local function ReskinBagSlot(bu)
-	bu:SetNormalTexture(DB.blankTex)
-	bu:SetPushedTexture(DB.blankTex)
+	bu:SetNormalTexture(0)
+	bu:SetPushedTexture(0)
 	bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	bu.searchOverlay:SetOutside()
 

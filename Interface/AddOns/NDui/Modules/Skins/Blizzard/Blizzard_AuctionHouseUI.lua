@@ -16,7 +16,7 @@ local function reskinSellPanel(frame)
 	local itemButton = itemDisplay.ItemButton
 	if itemButton.IconMask then itemButton.IconMask:Hide() end
 	itemButton.EmptyBackground:Hide()
-	itemButton:SetPushedTexture(DB.blankTex)
+	itemButton:SetPushedTexture(0)
 	itemButton.Highlight:SetColorTexture(1, 1, 1, .25)
 	itemButton.Highlight:SetAllPoints(itemButton.Icon)
 	itemButton.bg = B.ReskinIcon(itemButton.Icon)

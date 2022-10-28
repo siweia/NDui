@@ -180,8 +180,8 @@ C.themes["Blizzard_GuildUI"] = function()
 		for i = 1, #buttons do
 			local bu = buttons[i]
 			if not bu.bg then
-				bu:SetNormalTexture(DB.blankTex)
-				bu:SetHighlightTexture(DB.blankTex)
+				bu:SetNormalTexture(0)
+				bu:SetHighlightTexture(0)
 				B.ReskinIcon(bu.icon)
 				bu.disabledBG:Hide()
 				bu.disabledBG.Show = B.Dummy

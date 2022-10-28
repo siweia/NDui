@@ -25,8 +25,8 @@ tinsert(C.defaultThemes, function()
 		local bu = _G["PetStableActivePet"..i]
 		bu.Background:Hide()
 		bu.Border:Hide()
-		bu:SetNormalTexture(DB.blankTex)
-		bu:SetPushedTexture(DB.blankTex)
+		bu:SetNormalTexture(0)
+		bu:SetPushedTexture(0)
 		bu.Checked:SetTexture(DB.textures.pushed)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
@@ -36,8 +36,8 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, NUM_PET_STABLE_SLOTS do
 		local bu = _G["PetStableStabledPet"..i]
-		bu:SetNormalTexture(DB.blankTex)
-		bu:SetPushedTexture(DB.blankTex)
+		bu:SetNormalTexture(0)
+		bu:SetPushedTexture(0)
 		bu.Checked:SetTexture(DB.textures.pushed)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")

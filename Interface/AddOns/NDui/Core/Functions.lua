@@ -902,10 +902,10 @@ do
 		"Center",
 	}
 	function B:Reskin(noHighlight, override)
-		if self.SetNormalTexture and not override then self:SetNormalTexture(DB.blankTex) end
-		if self.SetHighlightTexture then self:SetHighlightTexture(DB.blankTex) end
-		if self.SetPushedTexture then self:SetPushedTexture(DB.blankTex) end
-		if self.SetDisabledTexture then self:SetDisabledTexture(DB.blankTex) end
+		if self.SetNormalTexture and not override then self:SetNormalTexture(0) end
+		if self.SetHighlightTexture then self:SetHighlightTexture(0) end
+		if self.SetPushedTexture then self:SetPushedTexture(0) end
+		if self.SetDisabledTexture then self:SetDisabledTexture(0) end
 
 		local buttonName = self.GetName and self:GetName()
 		for _, region in pairs(blizzRegions) do
@@ -1275,8 +1275,8 @@ do
 
 	-- Handle checkbox and radio
 	function B:ReskinCheck(forceSaturation)
-		self:SetNormalTexture(DB.blankTex)
-		self:SetPushedTexture(DB.blankTex)
+		self:SetNormalTexture(0)
+		self:SetPushedTexture(0)
 
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetInside(self, 4, 4)
@@ -1404,7 +1404,7 @@ do
 	local function resetCollapseTexture(self, texture)
 		if self.settingTexture then return end
 		self.settingTexture = true
-		self:SetNormalTexture(DB.blankTex)
+		self:SetNormalTexture(0)
 
 		if texture and texture ~= "" then
 			if strfind(texture, "Plus") or strfind(texture, "[Cc]losed") then
@@ -1420,9 +1420,9 @@ do
 	end
 
 	function B:ReskinCollapse(isAtlas)
-		self:SetNormalTexture(DB.blankTex)
-		self:SetHighlightTexture(DB.blankTex)
-		self:SetPushedTexture(DB.blankTex)
+		self:SetNormalTexture(0)
+		self:SetHighlightTexture(0)
+		self:SetPushedTexture(0)
 
 		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()

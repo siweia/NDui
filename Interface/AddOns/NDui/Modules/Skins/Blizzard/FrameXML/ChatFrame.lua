@@ -51,7 +51,7 @@ tinsert(C.defaultThemes, function()
 
 	QuickJoinToastButton.FriendsButton:SetTexture(friendTex)
 	QuickJoinToastButton.QueueButton:SetTexture(queueTex)
-	QuickJoinToastButton:SetHighlightTexture(DB.blankTex)
+	QuickJoinToastButton:SetHighlightTexture(0)
 	hooksecurefunc(QuickJoinToastButton, "ToastToFriendFinished", function(self)
 		self.FriendsButton:SetShown(not self.displayedToast)
 	end)
@@ -106,7 +106,7 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.Child:GetNumChildren() do
 			local tab = select(i, self.Child:GetChildren())
 			if not tab.styled and tab:IsHeader() then
-				tab:SetNormalTexture(DB.blankTex)
+				tab:SetNormalTexture(0)
 				tab.bg = B.CreateBDFrame(tab, .25)
 				tab.bg:SetAllPoints()
 

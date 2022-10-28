@@ -43,8 +43,8 @@ end
 
 local function handleSkillButton(button)
 	if not button then return end
-	button:SetCheckedTexture(DB.blankTex)
-	button:SetPushedTexture(DB.blankTex)
+	button:SetCheckedTexture(0)
+	button:SetPushedTexture(0)
 	button.IconTexture:SetInside()
 	button.bg = B.ReskinIcon(button.IconTexture)
 	button.highlightTexture:SetInside(bg)
@@ -89,8 +89,8 @@ tinsert(C.defaultThemes, function()
 		bu.TextBackground:Hide()
 		bu.TextBackground2:Hide()
 		bu.UnlearnedFrame:SetAlpha(0)
-		bu:SetCheckedTexture(DB.blankTex)
-		bu:SetPushedTexture(DB.blankTex)
+		bu:SetCheckedTexture(0)
+		bu:SetPushedTexture(0)
 
 		ic.bg = B.ReskinIcon(ic)
 
@@ -175,7 +175,7 @@ tinsert(C.defaultThemes, function()
 		for _, button in pairs(professionbuttons) do
 			local bu = _G[button]
 			B.StripTextures(bu)
-			bu:SetPushedTexture(DB.blankTex)
+			bu:SetPushedTexture(0)
 
 			local icon = bu.iconTexture
 			icon:ClearAllPoints()

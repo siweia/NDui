@@ -434,14 +434,14 @@ function Bar:ReskinBars()
 			},
 		},
 		checkedTexture = {
-			file = DB.blankTex,
+			file = 0,
 			points = {
 				{"TOPLEFT", C.mult, -C.mult},
 				{"BOTTOMRIGHT", -C.mult, C.mult},
 			},
 		},
 		highlightTexture = {
-			file = DB.blankTex,
+			file = 0,
 			points = {
 				{"TOPLEFT", C.mult, -C.mult},
 				{"BOTTOMRIGHT", -C.mult, C.mult},

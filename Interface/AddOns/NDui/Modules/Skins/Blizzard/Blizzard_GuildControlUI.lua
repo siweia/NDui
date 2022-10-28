@@ -61,8 +61,8 @@ C.themes["Blizzard_GuildControlUI"] = function()
 
 				for _, name in pairs(checkboxes) do
 					local box = ownedTab[name]
-					box:SetNormalTexture(DB.blankTex)
-					box:SetPushedTexture(DB.blankTex)
+					box:SetNormalTexture(0)
+					box:SetPushedTexture(0)
 					box:SetHighlightTexture(DB.bdTex)
 
 					local check = box:GetCheckedTexture()

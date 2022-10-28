@@ -21,7 +21,7 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		local shine = _G["ItemSocketingSocket"..i.."Shine"]
 
 		B.StripTextures(socket)
-		socket:SetPushedTexture(DB.blankTex)
+		socket:SetPushedTexture(0)
 		socket:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		socket.icon:SetTexCoord(unpack(DB.TexCoord))
 		socket.bg = B.ReskinIcon(socket.icon)

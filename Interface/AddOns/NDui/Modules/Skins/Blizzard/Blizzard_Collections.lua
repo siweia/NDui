@@ -7,7 +7,7 @@ local function reskinFrameButton(self)
 		local child = select(i, self.ScrollTarget:GetChildren())
 		if not child.styled then
 			child:GetRegions():Hide()
-			child:SetHighlightTexture(DB.blankTex)
+			child:SetHighlightTexture(0)
 			child.iconBorder:SetTexture("")
 			child.selectedTexture:SetTexture("")
 		
@@ -261,7 +261,7 @@ C.themes["Blizzard_Collections"] = function()
 	local function reskinToolButton(button)
 		local border = _G[button:GetName().."Border"]
 		if border then border:Hide() end
-		button:SetPushedTexture(DB.blankTex)
+		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		B.ReskinIcon(button.texture)
 	end
@@ -373,7 +373,7 @@ C.themes["Blizzard_Collections"] = function()
 		for j = 1, 3 do
 			local spell = bu["spell"..j]
 
-			spell:SetPushedTexture(DB.blankTex)
+			spell:SetPushedTexture(0)
 			spell:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			spell.selected:SetTexture(DB.textures.pushed)
 			spell:GetRegions():Hide()
@@ -405,7 +405,7 @@ C.themes["Blizzard_Collections"] = function()
 		local bu = PetJournal.SpellSelect["Spell"..i]
 
 		bu:SetCheckedTexture(DB.textures.pushed)
-		bu:SetPushedTexture(DB.blankTex)
+		bu:SetPushedTexture(0)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		B.ReskinIcon(bu.icon)
@@ -462,7 +462,7 @@ C.themes["Blizzard_Collections"] = function()
 		local bu = buttons["spellButton"..i]
 		local ic = bu.iconTexture
 
-		bu:SetPushedTexture(DB.blankTex)
+		bu:SetPushedTexture(0)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:GetHighlightTexture():SetAllPoints(ic)
 		bu.cooldown:SetAllPoints(ic)
@@ -510,7 +510,7 @@ C.themes["Blizzard_Collections"] = function()
 			button.slotFrameCollected:SetTexture("")
 			button.slotFrameUncollected:SetTexture("")
 			button.levelBackground:SetAlpha(0)
-			button:SetPushedTexture(DB.blankTex)
+			button:SetPushedTexture(0)
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			button:GetHighlightTexture():SetAllPoints(ic)
 
@@ -597,7 +597,7 @@ C.themes["Blizzard_Collections"] = function()
 			for i = 1, 6 do
 				select(i, tab:GetRegions()):SetAlpha(0)
 			end
-			tab:SetHighlightTexture(DB.blankTex)
+			tab:SetHighlightTexture(0)
 			tab.bg = B.CreateBDFrame(tab, .25)
 			tab.bg:SetPoint("TOPLEFT", 3, -3)
 			tab.bg:SetPoint("BOTTOMRIGHT", -3, -1)
@@ -752,7 +752,7 @@ C.themes["Blizzard_Collections"] = function()
 			end
 
 			if PetJournalBandageButton then
-				PetJournalBandageButton:SetPushedTexture(DB.blankTex)
+				PetJournalBandageButton:SetPushedTexture(0)
 				PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				PetJournalBandageButtonBorder:Hide()
 				PetJournalBandageButton:SetPoint("TOPRIGHT", PetJournalHealPetButton, "TOPLEFT", -3, 0)

@@ -139,7 +139,7 @@ tinsert(C.defaultThemes, function()
 	FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
 
 	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
-		button:SetPushedTexture(DB.blankTex)
+		button:SetPushedTexture(0)
 		button:GetRegions():SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(button, .25)
 	end
