@@ -109,6 +109,7 @@ end
 local function NoTalkingHeads()
 	if not C.db["Misc"]["HideTalking"] then return end
 
+	TalkingHeadFrame:UnregisterAllEvents() -- needs review
 	hooksecurefunc(TalkingHeadFrame, "Show", function(self)
 		self:Hide()
 	end)
