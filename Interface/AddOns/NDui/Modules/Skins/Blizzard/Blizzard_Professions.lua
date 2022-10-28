@@ -127,6 +127,11 @@ C.themes["Blizzard_Professions"] = function()
 		if slot then
 			reskinSlotButton(slot.Button)
 		end
+
+		local slot = form.enchantSlot
+		if slot then
+			reskinSlotButton(slot.Button)
+		end
 		-- todo: salvage flyout, item flyout, recraft flyout
 	end)
 
