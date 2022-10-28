@@ -1,5 +1,6 @@
 # NDui
 
-## [6.29.5](https://github.com/siweia/NDui/tree/6.29.5) (2022-10-27)
+## [6.29.6](https://github.com/siweia/NDui/tree/6.29.6) (2022-10-28)
 
 - Fix errors.
+- Disable actionbar.
