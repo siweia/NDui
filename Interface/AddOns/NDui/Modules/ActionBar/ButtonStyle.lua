@@ -222,6 +222,7 @@ function Bar:StyleActionButton(button, cfg)
 	local checkedTexture
 	if button.GetCheckedTexture then checkedTexture = button:GetCheckedTexture() end
 	local floatingBG = _G[buttonName.."FloatingBG"]
+	local NormalTexture = _G[buttonName.."NormalTexture"]
 
 	--pet stuff
 	local petShine = _G[buttonName.."Shine"]
@@ -234,6 +235,7 @@ function Bar:StyleActionButton(button, cfg)
 	if button.RightDivider then button.RightDivider:Hide() end
 	if button.SlotBackground then button.SlotBackground:Hide() end
 	if button.IconMask then button.IconMask:Hide() end
+	if NormalTexture then NormalTexture:SetAlpha(0) end
 
 	--backdrop
 	SetupBackdrop(icon)
@@ -303,6 +305,7 @@ function Bar:StyleExtraActionButton(cfg)
 	local count = _G[buttonName.."Count"]
 	local buttonstyle = button.style --artwork around the button
 	local cooldown = _G[buttonName.."Cooldown"]
+	local NormalTexture = _G[buttonName.."NormalTexture"]
 
 	button:SetPushedTexture(DB.textures.pushed) --force it to gain a texture
 	local normalTexture = button:GetNormalTexture()
@@ -321,6 +324,7 @@ function Bar:StyleExtraActionButton(cfg)
 	SetupTexture(highlightTexture, cfg.highlightTexture, "SetHighlightTexture", button)
 	SetupTexture(checkedTexture, cfg.checkedTexture, "SetCheckedTexture", button)
 	highlightTexture:SetColorTexture(1, 1, 1, .25)
+	if NormalTexture then NormalTexture:SetAlpha(0) end
 
 	--cooldown
 	SetupCooldown(cooldown, cfg.cooldown)
