@@ -1342,6 +1342,7 @@ function UF:CreateClassPower(self)
 	end
 
 	local isDK = DB.MyClass == "DEATHKNIGHT"
+	local maxBar = isDK and 6 or 7
 	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
 	bar:SetSize(barWidth, barHeight)
 	bar:SetPoint(unpack(barPoint))
@@ -1355,10 +1356,10 @@ function UF:CreateClassPower(self)
 	end
 
 	local bars = {}
-	for i = 1, 7 do
+	for i = 1, maxBar do
 		bars[i] = CreateFrame("StatusBar", nil, bar)
 		bars[i]:SetHeight(barHeight)
-		bars[i]:SetWidth((barWidth - 6*C.margin) / 7)
+		bars[i]:SetWidth((barWidth - (maxBar-1)*C.margin) / maxBar)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 		B.SetBD(bars[i], 0)
