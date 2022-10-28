@@ -77,7 +77,7 @@ local function reskinReforgeUI(frame, index)
 	bg:SetPoint("BOTTOMRIGHT", buttonFrame.MoneyFrameEdge, 0, 2)
 	if buttonFrame.AzeriteRespecButton then B.Reskin(buttonFrame.AzeriteRespecButton) end
 	if buttonFrame.ActionButton then B.Reskin(buttonFrame.ActionButton) end
-	if buttonFrame.Currency then B.ReskinIcon(buttonFrame.Currency.icon) end
+	if buttonFrame.Currency then B.ReskinIcon(buttonFrame.Currency.Icon) end
 
 	if frame.DescriptionCurrencies then
 		hooksecurefunc(frame.DescriptionCurrencies, "SetCurrencies", B.SetCurrenciesHook)

@@ -10,8 +10,8 @@ local function reskinQuestIcon(button)
 
 	if not button.styled then
 		button:SetSize(24, 24)
-		button:SetNormalTexture(DB.blankTex)
-		button:SetPushedTexture(DB.blankTex)
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		local icon = button.icon or button.Icon
 		if icon then
@@ -217,8 +217,8 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ScenarioSpellButton_UpdateCooldown", function(spellButton)
 		if not spellButton.styled then
 			local bg = B.ReskinIcon(spellButton.Icon)
-			spellButton:SetNormalTexture(DB.blankTex)
-			spellButton:SetPushedTexture(DB.blankTex)
+			spellButton:SetNormalTexture(0)
+			spellButton:SetPushedTexture(0)
 			local hl = spellButton:GetHighlightTexture()
 			hl:SetColorTexture(1, 1, 1, .25)
 			hl:SetInside(bg)

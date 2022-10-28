@@ -46,16 +46,16 @@ function Bar:MicroButton_Create(parent, data)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
 		button:UnregisterAllEvents()
-		button:SetNormalTexture(DB.blankTex)
-		button:SetPushedTexture(DB.blankTex)
-		button:SetDisabledTexture(DB.blankTex)
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
+		button:SetDisabledTexture(0)
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
 		Bar:MicroButton_SetupTexture(hl, texture)
 		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
-		local flash = button.Flash or button.FlashBorder -- isNewPatch
+		local flash = button.FlashBorder
 		if flash then
 			Bar:MicroButton_SetupTexture(flash, texture)
 			if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end

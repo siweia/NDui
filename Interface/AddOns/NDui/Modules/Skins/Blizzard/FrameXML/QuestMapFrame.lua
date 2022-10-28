@@ -190,9 +190,9 @@ tinsert(C.defaultThemes, function()
 	}
 
 	hooksecurefunc(QuestMapFrame.QuestSessionManagement, "UpdateExecuteCommandAtlases", function(self, command)
-		self.ExecuteSessionCommand:SetNormalTexture(DB.blankTex)
-		self.ExecuteSessionCommand:SetPushedTexture(DB.blankTex)
-		self.ExecuteSessionCommand:SetDisabledTexture(DB.blankTex)
+		self.ExecuteSessionCommand:SetNormalTexture(0)
+		self.ExecuteSessionCommand:SetPushedTexture(0)
+		self.ExecuteSessionCommand:SetDisabledTexture(0)
 
 		local atlas = sessionCommandToButtonAtlas[command]
 		if atlas then

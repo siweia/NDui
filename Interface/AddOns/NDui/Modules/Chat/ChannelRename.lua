@@ -29,6 +29,7 @@ end
 
 function module:UpdateChannelNames(text, ...)
 	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
+	if strfind(text, "NO QUALITY ") then return end -- blizz forgot to remove debug code
 
 	local r, g, b = ...
 	if C.db["Chat"]["WhisperColor"] and strfind(text, L["Tell"].." |H[BN]*player.+%]") then

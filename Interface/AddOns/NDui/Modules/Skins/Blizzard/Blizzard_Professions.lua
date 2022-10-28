@@ -3,8 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 local function reskinSlotButton(button)
 	if button and not button.styled then
-		button:SetNormalTexture(DB.blankTex)
-		button:SetPushedTexture(DB.blankTex)
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
 		button.bg = B.ReskinIcon(button.Icon)
 		B.ReskinIconBorder(button.IconBorder, true)
 		local hl = button:GetHighlightTexture()
@@ -27,9 +27,9 @@ end
 
 local function reskinQualityContainer(container)
 	local button = container.Button
-	button:SetNormalTexture(DB.blankTex)
-	button:SetPushedTexture(DB.blankTex)
-	button:SetHighlightTexture(DB.blankTex)
+	button:SetNormalTexture(0)
+	button:SetPushedTexture(0)
+	button:SetHighlightTexture(0)
 	button.bg = B.ReskinIcon(button.Icon)
 	B.ReskinIconBorder(button.IconBorder, true)
 	reskinArrowInput(container.EditBox)
@@ -65,8 +65,8 @@ C.themes["Blizzard_Professions"] = function()
 		if button then
 			button.bg = B.ReskinIcon(button.icon)
 			B.ReskinIconBorder(button.IconBorder) -- needs review, maybe no quality at all
-			button:SetNormalTexture(DB.blankTex)
-			button:SetPushedTexture(DB.blankTex)
+			button:SetNormalTexture(0)
+			button:SetPushedTexture(0)
 		end
 	end
 
@@ -127,6 +127,11 @@ C.themes["Blizzard_Professions"] = function()
 		if slot then
 			reskinSlotButton(slot.Button)
 		end
+
+		local slot = form.enchantSlot
+		if slot then
+			reskinSlotButton(slot.Button)
+		end
 		-- todo: salvage flyout, item flyout, recraft flyout
 	end)
 
@@ -176,9 +181,9 @@ C.themes["Blizzard_Professions"] = function()
 				local itemContainer = child.ItemContainer
 				if itemContainer then
 					local item = itemContainer.Item
-					item:SetNormalTexture(DB.blankTex)
-					item:SetPushedTexture(DB.blankTex)
-					item:SetHighlightTexture(DB.blankTex)
+					item:SetNormalTexture(0)
+					item:SetPushedTexture(0)
+					item:SetHighlightTexture(0)
 
 					local icon = item:GetRegions()
 					item.bg = B.ReskinIcon(icon)

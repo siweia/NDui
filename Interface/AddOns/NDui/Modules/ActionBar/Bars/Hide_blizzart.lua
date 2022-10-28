@@ -40,27 +40,9 @@ local function buttonShowGrid(name, showgrid)
 	end
 end
 
-local updateAfterCombat
-local function toggleButtonGrid()
-	if InCombatLockdown() then
-		updateAfterCombat = true
-		B:RegisterEvent("PLAYER_REGEN_ENABLED", toggleButtonGrid)
-	else
-		local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
-		buttonShowGrid("ActionButton", showgrid)
-		buttonShowGrid("MultiBarBottomRightButton", showgrid)
-		buttonShowGrid("NDui_ActionBarXButton", showgrid)
-		if updateAfterCombat then
-			B:UnregisterEvent("PLAYER_REGEN_ENABLED", toggleButtonGrid)
-			updateAfterCombat = false
-		end
-	end
-end
-
 local function updateTokenVisibility()
 	TokenFrame_LoadUI()
 	TokenFrame_Update()
-	--BackpackTokenFrame_Update()
 end
 
 function Bar:HideBlizz()
@@ -80,21 +62,8 @@ function Bar:HideBlizz()
 
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
-	if DB.isNewPatch then
-		-- todo
-	else
-		InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
-		InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
-	end
 	-- Fix maw block anchor
 	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
-	-- Update button grid
-	if DB.isNewPatch then
-		-- todo
-	else
-		toggleButtonGrid()
-		hooksecurefunc("MultiActionBar_UpdateGridVisibility", toggleButtonGrid)
-	end
 	-- Update token panel
 	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 end

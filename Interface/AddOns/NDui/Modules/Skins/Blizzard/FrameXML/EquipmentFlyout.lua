@@ -7,8 +7,8 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("EquipmentFlyout_CreateButton", function()
 		local button = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
 
-		button:SetNormalTexture(DB.blankTex)
-		button:SetPushedTexture(DB.blankTex)
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.ReskinIcon(button.icon)
 		B.ReskinIconBorder(button.IconBorder)

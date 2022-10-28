@@ -56,7 +56,6 @@ DB.NDuiString = "|cff0080ffNDui:|r"
 -- Textures
 local Media = "Interface\\Addons\\NDui\\Media\\"
 DB.bdTex = "Interface\\ChatFrame\\ChatFrameBackground"
-DB.blankTex = Media.."blankTex"
 DB.glowTex = Media.."glowTex"
 DB.normTex = Media.."normTex"
 DB.gradTex = Media.."gradTex"

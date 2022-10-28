@@ -179,7 +179,7 @@ function Bar:HookHotKey(button)
 	if button.UpdateHotkeys then
 		hooksecurefunc(button, "UpdateHotkeys", Bar.UpdateHotKey)
 	end
-	if DB.isNewPatch and button.SetHotkeys then
+	if button.SetHotkeys then
 		hooksecurefunc(button, "SetHotkeys", Bar.UpdateHotKey)
 	end
 end
@@ -366,11 +366,9 @@ function Bar:StyleAllActionButtons(cfg)
 		Bar:StyleActionButton(_G["MultiBarRightButton"..i], cfg)
 		Bar:StyleActionButton(_G["MultiBarLeftButton"..i], cfg)
 		Bar:StyleActionButton(_G["NDui_ActionBarXButton"..i], cfg)
-		if DB.isNewPatch then
-			Bar:StyleActionButton(_G["MultiBar5Button"..i], cfg)
-			Bar:StyleActionButton(_G["MultiBar6Button"..i], cfg)
-			Bar:StyleActionButton(_G["MultiBar7Button"..i], cfg)
-		end
+		Bar:StyleActionButton(_G["MultiBar5Button"..i], cfg)
+		Bar:StyleActionButton(_G["MultiBar6Button"..i], cfg)
+		Bar:StyleActionButton(_G["MultiBar7Button"..i], cfg)
 	end
 	for i = 1, 6 do
 		Bar:StyleActionButton(_G["OverrideActionBarButton"..i], cfg)
@@ -392,13 +390,8 @@ function Bar:StyleAllActionButtons(cfg)
 	--extra action button
 	Bar:StyleExtraActionButton(cfg)
 	--spell flyout
-	if DB.isNewPatch then
-		SpellFlyout.Background:Hide()
-	else
-		SpellFlyoutBackgroundEnd:SetTexture(nil)
-		SpellFlyoutHorizontalBackground:SetTexture(nil)
-		SpellFlyoutVerticalBackground:SetTexture(nil)
-	end
+	SpellFlyout.Background:Hide()
+
 	local function checkForFlyoutButtons()
 		local i = 1
 		local button = _G["SpellFlyoutButton"..i]
@@ -441,14 +434,14 @@ function Bar:ReskinBars()
 			},
 		},
 		checkedTexture = {
-			file = DB.blankTex,
+			file = 0,
 			points = {
 				{"TOPLEFT", C.mult, -C.mult},
 				{"BOTTOMRIGHT", -C.mult, C.mult},
 			},
 		},
 		highlightTexture = {
-			file = DB.blankTex,
+			file = 0,
 			points = {
 				{"TOPLEFT", C.mult, -C.mult},
 				{"BOTTOMRIGHT", -C.mult, C.mult},
@@ -486,9 +479,6 @@ function Bar:ReskinBars()
 	Bar:StyleAllActionButtons(cfg)
 
 	-- Update hotkeys
-	if not DB.isNewPatch then
-		hooksecurefunc("PetActionButton_SetHotkeys", Bar.UpdateHotKey)
-	end
 	Bar:UpdateStanceHotKey()
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.UpdateStanceHotKey)
 end

@@ -50,15 +50,8 @@ function Bar:CreateStancebar()
 	Bar.movers[8] = frame.mover
 
 	-- StanceBar
-	if DB.isNewPatch then
-		-- todo
-	else
-		StanceBarFrame:SetParent(frame)
-		StanceBarFrame:EnableMouse(false)
-		StanceBarLeft:SetTexture(nil)
-		StanceBarMiddle:SetTexture(nil)
-		StanceBarRight:SetTexture(nil)
-	end
+	StanceBar:SetParent(frame)
+	StanceBar:EnableMouse(false)
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
@@ -67,14 +60,8 @@ function Bar:CreateStancebar()
 	end
 
 	-- PossessBar
-	if DB.isNewPatch then
-		-- todo
-	else
-		PossessBarFrame:SetParent(frame)
-		PossessBarFrame:EnableMouse(false)
-		PossessBackground1:SetTexture(nil)
-		PossessBackground2:SetTexture(nil)
-	end
+	PossessActionBar:SetParent(frame)
+	PossessActionBar:EnableMouse(false)
 
 	for i = 1, NUM_POSSESS_SLOTS do
 		local button = _G["PossessButton"..i]

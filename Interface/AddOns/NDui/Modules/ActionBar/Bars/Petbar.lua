@@ -15,16 +15,8 @@ function Bar:CreatePetbar()
 	frame.mover = B.Mover(frame, L["Pet Actionbar"], "PetBar", {"BOTTOM", _G.NDui_ActionBar2, "TOP", 0, margin})
 	Bar.movers[7] = frame.mover
 
-	if DB.isNewPatch then
-		-- todo
-		PetActionBar:SetParent(frame)
-		PetActionBar:EnableMouse(false)
-	else
-		PetActionBarFrame:SetParent(frame)
-		PetActionBarFrame:EnableMouse(false)
-		SlidingActionBarTexture0:SetTexture(nil)
-		SlidingActionBarTexture1:SetTexture(nil)
-	end
+	PetActionBar:SetParent(frame)
+	PetActionBar:EnableMouse(false)
 
 	for i = 1, num do
 		local button = _G["PetActionButton"..i]

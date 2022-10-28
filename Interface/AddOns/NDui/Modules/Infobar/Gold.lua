@@ -196,7 +196,7 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
-	for i = 1, GetNumWatchedTokens() do
+	for i = 1, 10 do -- seems unlimit, but use 10 for now, needs review
 		local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
 		if not currencyInfo then break end
 		local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
