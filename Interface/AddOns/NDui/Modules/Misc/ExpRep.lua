@@ -144,14 +144,16 @@ function M:ExpBar_UpdateTooltip()
 				standingtext = RENOWN_LEVEL_LABEL..majorFactionData.renownLevel
 			else
 				local repInfo = C_GossipInfo.GetFriendshipReputation(factionID)
-				local friendID, friendTextLevel, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.text, repInfo.nextThreshold
+				local friendID, friendRep, friendThreshold, nextFriendThreshold, friendTextLevel = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold, repInfo.text
 				local repRankInfo = C_GossipInfo.GetFriendshipReputationRanks(factionID)
 				local currentRank, maxRank = repRankInfo.currentLevel, repRankInfo.maxLevel
 				if friendID and friendID ~= 0 then
 					if maxRank > 0 then
 						name = name.." ("..currentRank.." / "..maxRank..")"
 					end
-					if not nextFriendThreshold then
+					if nextFriendThreshold then
+						barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
+					else
 						barMax = barMin + 1e3
 						value = barMax - 1
 					end
