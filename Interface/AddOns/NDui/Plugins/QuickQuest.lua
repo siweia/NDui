@@ -532,13 +532,9 @@ end
 
 QuestNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
 QuestNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
-if DB.isNewPatch then
-	local frame = GossipFrame.TitleContainer or GossipFrame.NameFrame
-	if frame then
-		frame:HookScript("OnShow", UnitQuickQuestStatus)
-		frame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
-	end
-else
-	GossipNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
-	GossipNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
+local frame = GossipFrame.TitleContainer
+if frame then
+	GossipFrameCloseButton:SetFrameLevel(frame:GetFrameLevel()+1) -- fix clicking on gossip close button
+	frame:HookScript("OnShow", UnitQuickQuestStatus)
+	frame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
 end
