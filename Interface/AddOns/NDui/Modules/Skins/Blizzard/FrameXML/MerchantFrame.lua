@@ -89,9 +89,13 @@ tinsert(C.defaultThemes, function()
 			local bu = _G["MerchantToken"..i]
 			if bu and not bu.styled then
 				local icon = _G["MerchantToken"..i.."Icon"]
+				if icon then
+					B.ReskinIcon(icon)
+				end
 				local count = _G["MerchantToken"..i.."Count"]
-				count:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)
-				B.ReskinIcon(icon)
+				if count then
+					count:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0) -- needs reveiw
+				end
 
 				bu.styled = true
 			end
