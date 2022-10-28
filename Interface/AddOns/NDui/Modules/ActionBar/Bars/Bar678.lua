@@ -35,7 +35,6 @@ local function createBar(index, offset)
 end
 
 function Bar:CreateBar678()
-	if not DB.isNewPatch then return end
 	createBar(6, 0)
 	createBar(7, 40)
 	createBar(8, 80)
