@@ -472,6 +472,7 @@ function M:DisableBlizzardMover()
 	if isArenaEnable() then mixin.RefreshArenaFrames = B.Dummy end
 	if isPartyEnable() then mixin.RefreshPartyFrames = B.Dummy end
 	if isUnitFrameEnable() then
+		mixin.ResetTargetAndFocus = B.Dummy
 		mixin.RefreshTargetAndFocus = B.Dummy
 		mixin.RefreshBossFrames = B.Dummy
 	end
