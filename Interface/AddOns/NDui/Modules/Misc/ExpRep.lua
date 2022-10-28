@@ -16,19 +16,21 @@ local ARTIFACT_POWER, ARTIFACT_RETIRED = ARTIFACT_POWER, ARTIFACT_RETIRED
 
 local UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled = UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled
 local BreakUpLargeNumbers, GetNumFactions, GetFactionInfo = BreakUpLargeNumbers, GetNumFactions, GetFactionInfo
-local GetWatchedFactionInfo, GetFriendshipReputation, GetFriendshipReputationRanks = GetWatchedFactionInfo, GetFriendshipReputation, GetFriendshipReputationRanks
+local GetWatchedFactionInfo = GetWatchedFactionInfo
 local HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP = HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP
 local IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel = IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel
 local IsPlayerAtEffectiveMaxLevel = IsPlayerAtEffectiveMaxLevel
 local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
-local C_Reputation_IsMajorFaction = C_Reputation.IsMajorFaction or function() end -- isNewPatch
+local C_Reputation_IsMajorFaction = C_Reputation.IsMajorFaction
 local C_AzeriteItem_IsAzeriteItemAtMaxLevel = C_AzeriteItem.IsAzeriteItemAtMaxLevel
 local C_AzeriteItem_FindActiveAzeriteItem = C_AzeriteItem.FindActiveAzeriteItem
 local C_AzeriteItem_GetAzeriteItemXPInfo = C_AzeriteItem.GetAzeriteItemXPInfo
 local C_AzeriteItem_GetPowerLevel = C_AzeriteItem.GetPowerLevel
 local C_ArtifactUI_IsEquippedArtifactDisabled = C_ArtifactUI.IsEquippedArtifactDisabled
 local C_ArtifactUI_GetEquippedArtifactInfo = C_ArtifactUI.GetEquippedArtifactInfo
+local C_GossipInfo_GetFriendshipReputation = C_GossipInfo.GetFriendshipReputation
+local C_GossipInfo_GetFriendshipReputationRanks = C_GossipInfo.GetFriendshipReputationRanks
 
 local function IsAzeriteAvailable()
 	local itemLocation = C_AzeriteItem_FindActiveAzeriteItem()
@@ -59,18 +61,13 @@ function M:ExpBar_Update()
 			barMin, barMax = 0, majorFactionData.renownLevelThreshold
 			standing = majorFactionData.renownLevel
 		else
-			local friendID, friendRep, friendThreshold, nextFriendThreshold
-			if DB.isNewPatch then
-				local repInfo = C_GossipInfo.GetFriendshipReputation(factionID)
-				friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.reactionThreshold
-			else
-				friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-			end
+			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
+			local friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold
 			if C_Reputation_IsFactionParagon(factionID) then
 				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
 				currentValue = mod(currentValue, threshold)
 				barMin, barMax, value = 0, threshold, currentValue
-			elseif friendID then
+			elseif friendID and friendID ~= 0 then
 				if nextFriendThreshold then
 					barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
 				else
@@ -134,67 +131,25 @@ function M:ExpBar_UpdateTooltip()
 
 	if GetWatchedFactionInfo() then
 		local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
-		if DB.isNewPatch then
-			local standingtext
-			if factionID and C_Reputation_IsMajorFaction(factionID) then
-				local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
-				name = majorFactionData.name
-				value = majorFactionData.renownReputationEarned or 0
-				barMin, barMax = 0, majorFactionData.renownLevelThreshold
-				standingtext = RENOWN_LEVEL_LABEL..majorFactionData.renownLevel
-			else
-				local repInfo = C_GossipInfo.GetFriendshipReputation(factionID)
-				local friendID, friendTextLevel, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.text, repInfo.reactionThreshold
-				local repRankInfo = C_GossipInfo.GetFriendshipReputationRanks(factionID)
-				local currentRank, maxRank = repRankInfo.currentLevel, repRankInfo.maxLevel
-				if friendID ~= 0 then
-					if maxRank > 0 then
-						name = name.." ("..currentRank.." / "..maxRank..")"
-					end
-					if not nextFriendThreshold then
-						barMax = barMin + 1e3
-						value = barMax - 1
-					end
-					standingtext = friendTextLevel
-				else
-					if standing == MAX_REPUTATION_REACTION then
-						barMax = barMin + 1e3
-						value = barMax - 1
-					end
-					standingtext = _G["FACTION_STANDING_LABEL"..standing] or UNKNOWN
-				end
-			end
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(name, 0,.6,1)
-			GameTooltip:AddDoubleLine(standingtext, value - barMin.." / "..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", .6,.8,1, 1,1,1)
-	
-			if C_Reputation_IsFactionParagon(factionID) then
-				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-				local paraCount = floor(currentValue/threshold)
-				currentValue = mod(currentValue, threshold)
-				GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
-			end
-	
-			if factionID == 2465 then -- 荒猎团
-				local repInfo = C_GossipInfo.GetFriendshipReputation(2463) -- 玛拉斯缪斯
-				local rep, name, reaction, threshold, nextThreshold = repInfo.standing, repInfo.name, repInfo.reaction, repInfo.reactionThreshold, repInfo.nextThreshold
-				if nextThreshold and rep > 0 then
-					local current = rep - threshold
-					local currentMax = nextThreshold - threshold
-					GameTooltip:AddLine(" ")
-					GameTooltip:AddLine(name, 0,.6,1)
-					GameTooltip:AddDoubleLine(reaction, current.." / "..currentMax.." ("..floor(current/currentMax*100).."%)", .6,.8,1, 1,1,1)
-				end
-			end
+		local standingtext
+		if factionID and C_Reputation_IsMajorFaction(factionID) then
+			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+			name = majorFactionData.name
+			value = majorFactionData.renownReputationEarned or 0
+			barMin, barMax = 0, majorFactionData.renownLevelThreshold
+			standingtext = RENOWN_LEVEL_LABEL..majorFactionData.renownLevel
 		else
-			local friendID, _, _, _, _, _, friendTextLevel, _, nextFriendThreshold = GetFriendshipReputation(factionID)
-			local currentRank, maxRank = GetFriendshipReputationRanks(friendID)
-			local standingtext
-			if friendID then
+			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
+			local friendID, friendRep, friendThreshold, nextFriendThreshold, friendTextLevel = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold, repInfo.text
+			local repRankInfo = C_GossipInfo_GetFriendshipReputationRanks(factionID)
+			local currentRank, maxRank = repRankInfo.currentLevel, repRankInfo.maxLevel
+			if friendID and friendID ~= 0 then
 				if maxRank > 0 then
 					name = name.." ("..currentRank.." / "..maxRank..")"
 				end
-				if not nextFriendThreshold then
+				if nextFriendThreshold then
+					barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
+				else
 					barMax = barMin + 1e3
 					value = barMax - 1
 				end
@@ -206,26 +161,27 @@ function M:ExpBar_UpdateTooltip()
 				end
 				standingtext = _G["FACTION_STANDING_LABEL"..standing] or UNKNOWN
 			end
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(name, 0,.6,1)
-			GameTooltip:AddDoubleLine(standingtext, value - barMin.." / "..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", .6,.8,1, 1,1,1)
-	
-			if C_Reputation_IsFactionParagon(factionID) then
-				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-				local paraCount = floor(currentValue/threshold)
-				currentValue = mod(currentValue, threshold)
-				GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
-			end
-	
-			if factionID == 2465 then -- 荒猎团
-				local _, rep, _, name, _, _, reaction, threshold, nextThreshold = GetFriendshipReputation(2463) -- 玛拉斯缪斯
-				if nextThreshold and rep > 0 then
-					local current = rep - threshold
-					local currentMax = nextThreshold - threshold
-					GameTooltip:AddLine(" ")
-					GameTooltip:AddLine(name, 0,.6,1)
-					GameTooltip:AddDoubleLine(reaction, current.." / "..currentMax.." ("..floor(current/currentMax*100).."%)", .6,.8,1, 1,1,1)
-				end
+		end
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(name, 0,.6,1)
+		GameTooltip:AddDoubleLine(standingtext, value - barMin.." / "..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", .6,.8,1, 1,1,1)
+
+		if C_Reputation_IsFactionParagon(factionID) then
+			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+			local paraCount = floor(currentValue/threshold)
+			currentValue = mod(currentValue, threshold)
+			GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+		end
+
+		if factionID == 2465 then -- 荒猎团
+			local repInfo = C_GossipInfo_GetFriendshipReputation(2463) -- 玛拉斯缪斯
+			local rep, name, reaction, threshold, nextThreshold = repInfo.standing, repInfo.name, repInfo.reaction, repInfo.reactionThreshold, repInfo.nextThreshold
+			if nextThreshold and rep > 0 then
+				local current = rep - threshold
+				local currentMax = nextThreshold - threshold
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddLine(name, 0,.6,1)
+				GameTooltip:AddDoubleLine(reaction, current.." / "..currentMax.." ("..floor(current/currentMax*100).."%)", .6,.8,1, 1,1,1)
 			end
 		end
 	end
@@ -303,9 +259,8 @@ function M:SetupScript(bar)
 end
 
 function M:Expbar()
-	if DB.isNewPatch then
-		StatusTrackingBarManager:UnregisterAllEvents()
-	end
+	-- Hide blizzard expbar
+	StatusTrackingBarManager:UnregisterAllEvents()
 
 	if C.db["Map"]["DisableMinimap"] then return end
 	if not C.db["Misc"]["ExpRep"] then return end
@@ -329,59 +284,28 @@ end
 M:RegisterMisc("ExpRep", M.Expbar)
 
 -- Paragon reputation info
-function M:HookParagonRep()
-	local numFactions = GetNumFactions()
-	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
-	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
-		local factionIndex = factionOffset + i
-		local factionRow = _G["ReputationBar"..i]
-		local factionBar = _G["ReputationBar"..i.."ReputationBar"]
-		local factionStanding = _G["ReputationBar"..i.."ReputationBarFactionStanding"]
-
-		if factionIndex <= numFactions then
-			local factionID = select(14, GetFactionInfo(factionIndex))
-			if factionID and C_Reputation_IsFactionParagon(factionID) then
-				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-				if currentValue then
-					local barValue = mod(currentValue, threshold)
-					local factionStandingtext = L["Paragon"]..floor(currentValue/threshold)
-
-					factionBar:SetMinMaxValues(0, threshold)
-					factionBar:SetValue(barValue)
-					factionStanding:SetText(factionStandingtext)
-					factionRow.standingText = factionStandingtext
-					factionRow.rolloverText = format(REPUTATION_PROGRESS_FORMAT, BreakUpLargeNumbers(barValue), BreakUpLargeNumbers(threshold))
-				end
-			end
-		end
-	end
-end
-
 function M:ParagonReputationSetup()
 	if not C.db["Misc"]["ParagonRep"] then return end
-	if DB.isNewPatch then
-		hooksecurefunc("ReputationFrame_InitReputationRow", function(factionRow, elementData)
-			local factionID = factionRow.factionID
-			local factionContainer = factionRow.Container
-			local factionBar = factionContainer.ReputationBar
-			local factionStanding = factionBar.FactionStanding
 
-			if factionContainer.Paragon:IsShown() then
-				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-				if currentValue then
-					local barValue = mod(currentValue, threshold)
-					local factionStandingtext = L["Paragon"]..floor(currentValue/threshold)
+	hooksecurefunc("ReputationFrame_InitReputationRow", function(factionRow, elementData)
+		local factionID = factionRow.factionID
+		local factionContainer = factionRow.Container
+		local factionBar = factionContainer.ReputationBar
+		local factionStanding = factionBar.FactionStanding
 
-					factionBar:SetMinMaxValues(0, threshold)
-					factionBar:SetValue(barValue)
-					factionStanding:SetText(factionStandingtext)
-					factionRow.standingText = factionStandingtext
-					factionRow.rolloverText = format(REPUTATION_PROGRESS_FORMAT, BreakUpLargeNumbers(barValue), BreakUpLargeNumbers(threshold))
-				end
+		if factionContainer.Paragon:IsShown() then
+			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+			if currentValue then
+				local barValue = mod(currentValue, threshold)
+				local factionStandingtext = L["Paragon"]..floor(currentValue/threshold)
+
+				factionBar:SetMinMaxValues(0, threshold)
+				factionBar:SetValue(barValue)
+				factionStanding:SetText(factionStandingtext)
+				factionRow.standingText = factionStandingtext
+				factionRow.rolloverText = format(REPUTATION_PROGRESS_FORMAT, BreakUpLargeNumbers(barValue), BreakUpLargeNumbers(threshold))
 			end
-		end)
-	else
-		hooksecurefunc("ReputationFrame_Update", M.HookParagonRep)
-	end
+		end
+	end)
 end
 M:RegisterMisc("ParagonRep", M.ParagonReputationSetup)

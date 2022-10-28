@@ -92,7 +92,6 @@ local oUF = ns.oUF
 local FALLBACK_ICON = 136243 -- Interface\ICONS\Trade_Engineering
 local FAILED = _G.FAILED or 'Failed'
 local INTERRUPTED = _G.INTERRUPTED or 'Interrupted'
-local isNewPatch = NDui[4].isNewPatch
 
 local function resetAttributes(self)
 	self.castID = nil
@@ -155,7 +154,7 @@ local function CastStart(self, event, unit)
 	if(element.Icon) then element.Icon:SetTexture(texture or FALLBACK_ICON) end
 	if(element.Shield) then element.Shield:SetShown(notInterruptible) end
 	if(element.Spark) then element.Spark:Show() end
-	if(element.Text) then element.Text:SetText(text or name) end
+	if(element.Text) then element.Text:SetText(text) end
 	if(element.Time) then element.Time:SetText() end
 
 	local safeZone = element.SafeZone
@@ -398,15 +397,13 @@ local function Enable(self, unit)
 
 		self:RegisterEvent('UNIT_SPELLCAST_START', CastStart)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
-		if isNewPatch then
-			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
-			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
-			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
-		end
+		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
 		self:RegisterEvent('UNIT_SPELLCAST_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', CastStop)
+		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
+		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
 		self:RegisterEvent('UNIT_SPELLCAST_FAILED', CastFail)
 		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
 		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
@@ -417,14 +414,9 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			if isNewPatch then
-				PlayerCastingBarFrame:SetUnit(nil)
-				PetCastingBarFrame:SetUnit(nil)
-				PetCastingBarFrame:UnregisterEvent('UNIT_PET')
-			else
-				CastingBarFrame_SetUnit(CastingBarFrame, nil)
-				CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
-			end
+			PlayerCastingBarFrame:SetUnit(nil)
+			PetCastingBarFrame:SetUnit(nil)
+			PetCastingBarFrame:UnregisterEvent('UNIT_PET')
 		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
@@ -459,15 +451,13 @@ local function Disable(self)
 
 		self:UnregisterEvent('UNIT_SPELLCAST_START', CastStart)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
-		if isNewPatch then
-			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
-			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
-			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
-		end
-		self:UnregisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
-		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
 		self:UnregisterEvent('UNIT_SPELLCAST_STOP', CastStop)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', CastStop)
+		self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
+		self:UnregisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
 		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', CastFail)
 		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
 		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
@@ -476,12 +466,8 @@ local function Disable(self)
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			if isNewPatch then
-				PlayerCastingBarFrame:OnLoad()
-			else
-				CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
-			end
-			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
+			PlayerCastingBarFrame:OnLoad()
+			PetCastingBarFrame:OnLoad()
 		end
 	end
 end

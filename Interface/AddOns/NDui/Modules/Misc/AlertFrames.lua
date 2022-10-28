@@ -109,17 +109,10 @@ end
 local function NoTalkingHeads()
 	if not C.db["Misc"]["HideTalking"] then return end
 
+	TalkingHeadFrame:UnregisterAllEvents() -- needs review
 	hooksecurefunc(TalkingHeadFrame, "Show", function(self)
 		self:Hide()
 	end)
-end
-
-local function TalkingHeadOnLoad(event, addon)
-	if addon == "Blizzard_TalkingHeadUI" then
-		MoveTalkingHead()
-		NoTalkingHeads()
-		B:UnregisterEvent(event, TalkingHeadOnLoad)
-	end
 end
 
 function M:AlertFrame_Setup()
@@ -141,11 +134,9 @@ function M:AlertFrame_Setup()
 	hooksecurefunc(AlertFrame, "UpdateAnchors", M.AlertFrame_UpdateAnchor)
 	hooksecurefunc("GroupLootContainer_Update", M.UpdatGroupLootContainer)
 
-	if IsAddOnLoaded("Blizzard_TalkingHeadUI") then
+	if TalkingHeadFrame then
 		MoveTalkingHead()
 		NoTalkingHeads()
-	else
-		B:RegisterEvent("ADDON_LOADED", TalkingHeadOnLoad)
 	end
 end
 M:RegisterMisc("AlertFrame", M.AlertFrame_Setup)

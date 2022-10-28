@@ -87,6 +87,6 @@ function Bar:CreateBar4()
 	end
 
 	-- Fix visibility when leaving vehicle or petbattle
-	Bar:FixSizebarVisibility()
+	--Bar:FixSizebarVisibility()
 	Bar:UpdateFrameClickThru()
 end

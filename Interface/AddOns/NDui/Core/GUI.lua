@@ -20,6 +20,7 @@ G.DefaultSettings = {
 	},
 	Actionbar = {
 		Enable = true,
+		Skins = true,
 		Hotkeys = true,
 		Macro = true,
 		Count = true,
@@ -1142,6 +1143,7 @@ G.TabList = {
 G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
 		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
+		{1, "Actionbar", "Skins", NewTag..NewTag..NewTag.."Actionbar skins"},
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, nil, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},

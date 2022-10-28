@@ -202,7 +202,7 @@ function M:VehicleSeatMover()
 	B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
 
 	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == MinimapCluster then
+		if parent ~= frame then
 			self:ClearAllPoints()
 			self:SetPoint("TOPLEFT", frame)
 		end

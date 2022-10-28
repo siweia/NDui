@@ -120,7 +120,7 @@ function Bar:CreateBar1()
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
-	local actionPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]12;[overridebar]14;[shapeshift]13;[vehicleui]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
+	local actionPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]16;[overridebar]18;[shapeshift]17;[vehicleui]16;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
 	local buttonName = "ActionButton"
 	for i, button in next, buttonList do
 		frame:SetFrameRef(buttonName..i, button)
@@ -166,26 +166,31 @@ function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
 
-	if not C.db["Actionbar"]["Enable"] then return end
+	if not DB.isDeveloper then C.db["Actionbar"]["Enable"] = false end
 
-	Bar.movers = {}
-	Bar:CreateBar1()
-	Bar:CreateBar2()
-	Bar:CreateBar3()
-	Bar:CreateBar4()
-	Bar:CreateBar5()
-	Bar:CreateBar678()
-	Bar:CustomBar()
-	Bar:CreateExtrabar()
-	Bar:CreateLeaveVehicle()
-	Bar:CreatePetbar()
-	Bar:CreateStancebar()
-	Bar:HideBlizz()
-	Bar:ReskinBars()
+	if C.db["Actionbar"]["Enable"] then
+		Bar.movers = {}
+		Bar:CreateBar1()
+		Bar:CreateBar2()
+		Bar:CreateBar3()
+		Bar:CreateBar4()
+		Bar:CreateBar5()
+		Bar:CreateBar678()
+		Bar:CustomBar()
+		Bar:CreateExtrabar()
+		Bar:CreateLeaveVehicle()
+		Bar:CreatePetbar()
+		Bar:CreateStancebar()
+		Bar:HideBlizz()
 
-	local function delaySize(event)
-		Bar:UpdateAllScale()
-		B:UnregisterEvent(event, delaySize)
+		local function delaySize(event)
+			Bar:UpdateAllScale()
+			B:UnregisterEvent(event, delaySize)
+		end
+		B:RegisterEvent("PLAYER_ENTERING_WORLD", delaySize)
 	end
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", delaySize)
+
+	if C.db["Actionbar"]["Skins"] then
+		Bar:ReskinBars()
+	end
 end

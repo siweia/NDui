@@ -1369,9 +1369,4 @@ function module:OnLogin()
 	end
 	local shiftUpdater = CreateFrame("Frame", nil, f.main)
 	shiftUpdater:SetScript("OnUpdate", onUpdate)
-
-	if DB.isNewPatch then
-		MicroButtonAndBagsBar:Hide()
-		MicroButtonAndBagsBar:UnregisterAllEvents()
-	end
 end

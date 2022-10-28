@@ -135,16 +135,12 @@ function Bar:MicroMenu()
 	end
 
 	-- Default elements
-	if DB.isNewPatch then
-		if MainMenuMicroButton.MainMenuBarPerformanceBar then
-			B.HideObject(MainMenuMicroButton.MainMenuBarPerformanceBar)
-		end
-	else
-		B.HideObject(MicroButtonPortrait)
-		B.HideObject(GuildMicroButtonTabard)
-		B.HideObject(MainMenuBarDownload)
-		B.HideObject(MainMenuBarPerformanceBar)
+	if MainMenuMicroButton.MainMenuBarPerformanceBar then
+		B.HideObject(MainMenuMicroButton.MainMenuBarPerformanceBar)
 	end
 	B.HideObject(HelpOpenWebTicketButton)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
+
+	MicroButtonAndBagsBar:Hide()
+	MicroButtonAndBagsBar:UnregisterAllEvents()
 end
