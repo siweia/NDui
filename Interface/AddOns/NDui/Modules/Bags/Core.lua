@@ -132,26 +132,14 @@ function module:CreateInfoFrame()
 	infoFrame:SetPoint("TOPLEFT", 10, 0)
 	infoFrame:SetSize(140, 32)
 	local icon = infoFrame:CreateTexture(nil, "ARTWORK")
-	if DB.isNewPatch then
-		icon:SetAtlas("talents-search-match")
-		icon:SetSize(52, 52)
-		icon:SetPoint("LEFT", -15, 0)
-	else
-		icon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
-		icon:SetSize(20, 20)
-		icon:SetPoint("LEFT", 0, -1)
-	end
+	icon:SetAtlas("talents-search-match")
+	icon:SetSize(52, 52)
+	icon:SetPoint("LEFT", -15, 0)
 	icon:SetVertexColor(DB.r, DB.g, DB.b)
 	local hl = infoFrame:CreateTexture(nil, "HIGHLIGHT")
-	if DB.isNewPatch then
-		hl:SetAtlas("talents-search-match")
-		hl:SetSize(52, 52)
-		hl:SetPoint("LEFT", -15, 0)
-	else
-		hl:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
-		hl:SetSize(20, 20)
-		hl:SetPoint("LEFT", 0, -1)
-	end
+	hl:SetAtlas("talents-search-match")
+	hl:SetSize(52, 52)
+	hl:SetPoint("LEFT", -15, 0)
 
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
@@ -411,19 +399,10 @@ function module:GetEmptySlot(name)
 		if slotID then
 			return -1, slotID
 		end
-		if DB.isNewPatch then
-			for bagID = 6, 12 do
-				local slotID = module:GetContainerEmptySlot(bagID)
-				if slotID then
-					return bagID, slotID
-				end
-			end
-		else
-			for bagID = 5, 11 do
-				local slotID = module:GetContainerEmptySlot(bagID)
-				if slotID then
-					return bagID, slotID
-				end
+		for bagID = 6, 12 do
+			local slotID = module:GetContainerEmptySlot(bagID)
+			if slotID then
+				return bagID, slotID
 			end
 		end
 	elseif name == "Reagent" then
@@ -967,7 +946,7 @@ function module:OnLogin()
 			self.canIMogIt:SetPoint(unpack(CanIMogIt.ICON_LOCATIONS[CanIMogItOptions["iconLocation"]]))
 		end
 
-		if DB.isNewPatch and not self.ProfessionQualityOverlay then
+		if not self.ProfessionQualityOverlay then
 			self.ProfessionQualityOverlay = self:CreateTexture(nil, "OVERLAY")
 			self.ProfessionQualityOverlay:SetPoint("TOPLEFT", -3, 2)
 		end
@@ -1056,7 +1035,7 @@ function module:OnLogin()
 			end
 		end
 
-		if self.ProfessionQualityOverlay then -- isNewPatch
+		if self.ProfessionQualityOverlay then
 			self.ProfessionQualityOverlay:SetAtlas(nil)
 			SetItemCraftingQualityOverlay(self, item.link)
 		end
@@ -1230,7 +1209,7 @@ function module:OnLogin()
 		buttons[1] = module.CreateCloseButton(self, f)
 		buttons[2] = module.CreateSortButton(self, name)
 		if name == "Bag" then
-			module.CreateBagBar(self, settings, DB.isNewPatch and 5 or 4)
+			module.CreateBagBar(self, settings, DB.isBeta and 5 or 4)
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateSplitButton(self)
 			buttons[5] = module.CreateFavouriteButton(self)
