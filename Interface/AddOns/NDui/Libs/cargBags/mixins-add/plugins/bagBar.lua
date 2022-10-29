@@ -38,7 +38,7 @@ local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
 local ContainerIDToInventoryID = DB.isBeta and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
-local maxBagSlots = DB.isNewPatch and 5 or NUM_BAG_SLOTS
+local maxBagSlots = 5
 
 function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
@@ -60,12 +60,7 @@ local buttonNum = 0
 function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
-	local isBankBag
-	if DB.isNewPatch then
-		isBankBag = bagID > 5 and bagID < 13
-	else
-		isBankBag = bagID > 4 and bagID < 12
-	end
+	local isBankBag = bagID > 5 and bagID < 13
 	local button = setmetatable(CreateFrame("ItemButton", name, nil, "BackdropTemplate"), self.__index)
 
 	local invID = (isBankBag and bagID - maxBagSlots) or ContainerIDToInventoryID(bagID)

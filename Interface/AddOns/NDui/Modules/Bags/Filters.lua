@@ -28,16 +28,11 @@ local function isItemInBag(item)
 end
 
 local function isItemInBagReagent(item)
-	if not DB.isNewPatch then return end
 	return item.bagId == 5
 end
 
 local function isItemInBank(item)
-	if DB.isNewPatch then
-		return item.bagId == -1 or item.bagId >= 6 and item.bagId <= 12
-	else
-		return item.bagId == -1 or item.bagId >= 5 and item.bagId <= 11
-	end
+	return item.bagId == -1 or (item.bagId > 5 and item.bagId < 13)
 end
 
 local function isItemJunk(item)
