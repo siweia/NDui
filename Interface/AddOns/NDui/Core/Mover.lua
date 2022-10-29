@@ -406,7 +406,7 @@ local function isCastbarEnable()
 end
 
 local function isPartyEnable()
-	return C.db["UFs"]["PartyFrame"]
+	return C.db["UFs"]["RaidFrame"] and C.db["UFs"]["PartyFrame"]
 end
 
 local function isRaidEnable()
