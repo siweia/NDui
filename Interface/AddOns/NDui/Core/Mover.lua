@@ -417,6 +417,10 @@ local function isArenaEnable()
 	return C.db["UFs"]["Enable"] and C.db["UFs"]["Arena"]
 end
 
+local function isTalkingHeadHidden()
+	return C.db["Misc"]["HideTalking"]
+end
+
 local ignoredFrames = {
 	-- ActionBars
 	["StanceBar"] = isActionbarEnable,
@@ -446,6 +450,7 @@ local ignoredFrames = {
 	-- Misc
 	["MinimapCluster"] = function() return not C.db["Map"]["DisableMinimap"] end,
 	["GameTooltipDefaultContainer"] = function() return true end,
+	["TalkingHeadFrame"] = isTalkingHeadHidden,
 }
 
 function M:DisableBlizzardMover()
@@ -471,6 +476,7 @@ function M:DisableBlizzardMover()
 	if isRaidEnable() then mixin.RefreshRaidFrames = B.Dummy end
 	if isArenaEnable() then mixin.RefreshArenaFrames = B.Dummy end
 	if isPartyEnable() then mixin.RefreshPartyFrames = B.Dummy end
+	if isTalkingHeadHidden() then mixin.RefreshTalkingHeadFrame = B.Dummy end
 	if isUnitFrameEnable() then
 		mixin.ResetTargetAndFocus = B.Dummy
 		mixin.RefreshTargetAndFocus = B.Dummy
