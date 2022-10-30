@@ -183,15 +183,12 @@ function Bar:OnLogin()
 		Bar:CreatePetbar()
 		Bar:CreateStancebar()
 		Bar:HideBlizz()
+		Bar:ReskinBars()
 
 		local function delaySize(event)
 			Bar:UpdateAllScale()
 			B:UnregisterEvent(event, delaySize)
 		end
 		B:RegisterEvent("PLAYER_ENTERING_WORLD", delaySize)
-	end
-
-	if C.db["Actionbar"]["Skins"] then
-		Bar:ReskinBars()
 	end
 end
