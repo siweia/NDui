@@ -1209,7 +1209,7 @@ function module:OnLogin()
 		buttons[1] = module.CreateCloseButton(self, f)
 		buttons[2] = module.CreateSortButton(self, name)
 		if name == "Bag" then
-			module.CreateBagBar(self, settings, DB.isBeta and 5 or 4)
+			module.CreateBagBar(self, settings, 5)
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateSplitButton(self)
 			buttons[5] = module.CreateFavouriteButton(self)
