@@ -408,14 +408,18 @@ end
 function M:QuickJoin()
 	if not C.db["Misc"]["QuickJoin"] then return end
 
-	for i = 1, 10 do
-		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
-		if bu then
-			bu.Name:SetFontObject(Game14Font)
-			bu.ActivityName:SetFontObject(Game12Font)
-			bu:HookScript("OnDoubleClick", M.HookApplicationClick)
+	hooksecurefunc(LFGListFrame.SearchPanel.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if not child.hooked then
+				child.Name:SetFontObject(Game14Font)
+				child.ActivityName:SetFontObject(Game12Font)
+				child:HookScript("OnDoubleClick", M.HookApplicationClick)
+
+				child.hooked = true
+			end
 		end
-	end
+	end)
 	M:QuickJoin_ShowTips()
 
 	hooksecurefunc("LFGListInviteDialog_Accept", function()
