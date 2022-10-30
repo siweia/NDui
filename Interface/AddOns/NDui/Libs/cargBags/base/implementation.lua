@@ -449,7 +449,7 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 	elseif(bagID) then
 		self:UpdateBag(bagID)
 	else
-		for bagID = -3, 11 do
+		for bagID = -3, 12 do
 			self:UpdateBag(bagID)
 		end
 	end
