@@ -390,7 +390,7 @@ function Bar:StyleAllActionButtons(cfg)
 	--extra action button
 	Bar:StyleExtraActionButton(cfg)
 	--spell flyout
-	SpellFlyout.Background:Hide()
+	SpellFlyout.Background:SetAlpha(0)
 
 	local function checkForFlyoutButtons()
 		local i = 1
