@@ -92,25 +92,11 @@ function M:AlertFrame_AdjustPosition()
 	end
 end
 
-local function MoveTalkingHead()
-	local TalkingHeadFrame = _G.TalkingHeadFrame
-
-	TalkingHeadFrame.ignoreFramePositionManager = true
-	TalkingHeadFrame:ClearAllPoints()
-	TalkingHeadFrame:SetPoint("BOTTOM", 0, 220)
-
-	for index, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
-		if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == TalkingHeadFrame then
-			tremove(AlertFrame.alertFrameSubSystems, index)
-		end
-	end
-end
-
 local function NoTalkingHeads()
 	if not C.db["Misc"]["HideTalking"] then return end
 
-	TalkingHeadFrame:UnregisterAllEvents() -- needs review
-	hooksecurefunc(TalkingHeadFrame, "Show", function(self)
+	_G.TalkingHeadFrame:UnregisterAllEvents() -- needs review
+	hooksecurefunc(_G.TalkingHeadFrame, "Show", function(self)
 		self:Hide()
 	end)
 end
@@ -135,7 +121,6 @@ function M:AlertFrame_Setup()
 	hooksecurefunc("GroupLootContainer_Update", M.UpdatGroupLootContainer)
 
 	if TalkingHeadFrame then
-		MoveTalkingHead()
 		NoTalkingHeads()
 	end
 end

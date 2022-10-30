@@ -1131,7 +1131,10 @@ function UF:CreatePlayerPlate()
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
 	if C.db["Auras"]["ClassAuras"] then
-		B:GetModule("Auras"):CreateLumos(self)
+		local AURA = B:GetModule("Auras")
+		if AURA then
+			AURA:CreateLumos(self)
+		end
 	end
 
 	local textFrame = CreateFrame("Frame", nil, self.Power)

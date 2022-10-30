@@ -26,7 +26,8 @@ local C_GossipInfo_GetAvailableQuests = C_GossipInfo.GetAvailableQuests
 local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
 local C_GossipInfo_SelectAvailableQuest = C_GossipInfo.SelectAvailableQuest
 local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
-local GetNumTrackingTypes = DB.isNewPatch and C_Minimap.GetNumTrackingTypes or GetNumTrackingTypes
+local GetTrackingInfo = C_Minimap.GetTrackingInfo
+local GetNumTrackingTypes = C_Minimap.GetNumTrackingTypes
 local MINIMAP_TRACKING_TRIVIAL_QUESTS = MINIMAP_TRACKING_TRIVIAL_QUESTS
 
 local choiceQueue
@@ -217,14 +218,8 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 		for index, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
 			local questID = questInfo.questID
 			local isWorldQuest = questID and C_QuestLog_IsWorldQuest(questID)
-			if DB.isNewPatch then
-				if questInfo.isComplete and not isWorldQuest then
-					C_GossipInfo_SelectActiveQuest(questID)
-				end
-			else
-				if questInfo.isComplete and (not questID or not isWorldQuest) then
-					C_GossipInfo_SelectActiveQuest(index)
-				end
+			if questInfo.isComplete and not isWorldQuest then
+				C_GossipInfo_SelectActiveQuest(questID)
 			end
 		end
 	end
@@ -234,11 +229,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 		for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
 			local trivial = questInfo.isTrivial
 			if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
-				if DB.isNewPatch then
-					C_GossipInfo_SelectAvailableQuest(questInfo.questID)
-				else
-					C_GossipInfo_SelectAvailableQuest(index)
-				end
+				C_GossipInfo_SelectAvailableQuest(questInfo.questID)
 			end
 		end
 	end
@@ -250,25 +241,13 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 	local firstOptionID = gossipInfoTable[1] and gossipInfoTable[1].gossipOptionID
 
 	if autoSelectFirstOptionList[npcID] then
-		if DB.isNewPatch then
-			return C_GossipInfo_SelectOption(firstOptionID)
-		else
-			return C_GossipInfo_SelectOption(1)
-		end
+		return C_GossipInfo_SelectOption(firstOptionID)
 	end
 
 	if available == 0 and active == 0 and numOptions == 1 then
 		local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
 		if instance ~= "raid" and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
-			if DB.isNewPatch then
-				return C_GossipInfo_SelectOption(firstOptionID)
-			else
-				local gType = gossipInfoTable[1] and gossipInfoTable[1].type
-				if gType and autoGossipTypes[gType] then
-					C_GossipInfo_SelectOption(1)
-					return
-				end
-			end
+			return C_GossipInfo_SelectOption(firstOptionID)
 		end
 	end
 end)
