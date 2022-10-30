@@ -210,16 +210,21 @@ C.themes["Blizzard_AchievementUI"] = function()
 	AchievementFrameSummaryAchievementsEmptyText:SetText("")
 
 	hooksecurefunc("AchievementObjectives_DisplayCriteria", function(objectivesFrame, id)
-		if not id then return end
 		local numCriteria = GetAchievementNumCriteria(id)
+		local textStrings, metas, criteria, object = 0, 0
 		for i = 1, numCriteria do
-			local metaCriteria = objectivesFrame:GetMeta(i)
-			if metaCriteria and metaCriteria.Label and select(2, metaCriteria.Label:GetTextColor()) == 0 then
-				metaCriteria.Label:SetTextColor(1, 1, 1)
+			local _, criteriaType, completed, _, _, _, _, assetID = GetAchievementCriteriaInfo(id, i)
+			if assetID and criteriaType == _G.CRITERIA_TYPE_ACHIEVEMENT then
+				metas = metas + 1
+				criteria, object = objectivesFrame:GetMeta(metas), "Label"
+			elseif criteriaType ~= 1 then
+				textStrings = textStrings + 1
+				criteria, object = objectivesFrame:GetCriteria(textStrings), "Name"
 			end
-			local criteria = objectivesFrame:GetCriteria(i)
-			if criteria and criteria.Name and select(2, criteria.Name:GetTextColor()) == 0 then
-				criteria.Name:SetTextColor(1, 1, 1)
+
+			local text = criteria and criteria[object]
+			if text and completed and objectivesFrame.completed then
+				text:SetTextColor(1, 1, 1)
 			end
 		end
 	end)
