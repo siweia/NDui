@@ -125,8 +125,6 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])
 	C.margin = 3
 
-	if not DB.isDeveloper then C.db["Actionbar"]["Enable"] = false end
-
 	for _, module in next, initQueue do
 		if module.OnLogin then
 			module:OnLogin()
