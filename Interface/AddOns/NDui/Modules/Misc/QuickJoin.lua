@@ -403,6 +403,13 @@ function M:AddPGFSortingExpression()
 			bu:SetPoint("BOTTOM", PGFDialog.__sortBu[i-1], "TOP", 0, 3)
 		end
 	end
+
+	if PremadeGroupsFilterSettings then
+		PremadeGroupsFilterSettings.classBar = false
+		PremadeGroupsFilterSettings.classCircle = false
+		PremadeGroupsFilterSettings.leaderCrown = false
+		PremadeGroupsFilterSettings.ratingInfo = false
+	end
 end
 
 function M:QuickJoin()

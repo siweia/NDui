@@ -484,7 +484,7 @@ function M:DisableBlizzardMover()
 	end
 	if isActionbarEnable() then
 		mixin.RefreshEncounterBar = B.Dummy
-		mixin.RefreshActionBarShown = B.Dummy
+	--	mixin.RefreshActionBarShown = B.Dummy -- taint, needs review
 		mixin.RefreshVehicleLeaveButton = B.Dummy
 	end
 end
