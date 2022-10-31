@@ -11,8 +11,8 @@ end
 
 local function SetupStatusbar(bar)
 	B.StripTextures(bar)
-	bu:SetStatusBarTexture(DB.bdTex)
-	bu:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
+	bar:SetStatusBarTexture(DB.bdTex)
+	bar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
 	B.CreateBDFrame(bar, .25)
 end
 
