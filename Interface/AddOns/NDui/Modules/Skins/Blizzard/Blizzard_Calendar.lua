@@ -4,12 +4,18 @@ local B, C, L, DB = unpack(ns)
 local function ReskinEventList(frame)
 	B.StripTextures(frame)
 	B.CreateBDFrame(frame, .25)
+	if frame.ScrollBar then
+		B.ReskinTrimScroll(frame.ScrollBar)
+	end
 end
 
 local function ReskinCalendarPage(frame)
 	B.StripTextures(frame)
 	B.SetBD(frame)
 	B.StripTextures(frame.Header)
+	if frame.ScrollBar then
+		B.ReskinTrimScroll(frame.ScrollBar)
+	end
 end
 
 C.themes["Blizzard_Calendar"] = function()
@@ -181,18 +187,6 @@ C.themes["Blizzard_Calendar"] = function()
 	B.ReskinClose(CalendarViewHolidayCloseButton)
 	B.ReskinClose(CalendarViewRaidCloseButton)
 	B.ReskinClose(CalendarMassInviteCloseButton)
-
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(CalendarTexturePickerFrame.ScrollBar)
-		B.ReskinTrimScroll(CalendarEventPickerFrame.ScrollBar)
-		-- todo
-	else
-		B.ReskinScroll(CalendarTexturePickerScrollBar)
-		B.ReskinScroll(CalendarViewEventInviteListScrollFrameScrollBar)
-		B.ReskinScroll(CalendarViewEventDescriptionScrollFrameScrollBar)
-		B.ReskinScroll(CalendarCreateEventInviteListScrollFrameScrollBar)
-		B.ReskinScroll(CalendarCreateEventDescriptionScrollFrameScrollBar)
-	end
 
 	B.ReskinDropDown(CalendarCreateEventCommunityDropDown)
 	B.ReskinDropDown(CalendarCreateEventTypeDropDown)
