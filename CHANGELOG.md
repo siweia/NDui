@@ -1,9 +1,7 @@
 # NDui
 
-## [6.29.9](https://github.com/siweia/NDui/tree/6.29.9) (2022-10-30)
+## [6.29.10](https://github.com/siweia/NDui/tree/6.29.10) (2022-10-31)
 
-- Re-enable actionbar.
+- Attempt to fix taint.
 - Update default skins.
-- Fix bagbar slots.
-- Fix LFG quick join.
-- Fix ExtraQuestButton clicking.
+- Fix classcolor on friends list and who list.
