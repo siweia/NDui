@@ -7,7 +7,6 @@ local oUF = ns.oUF
 ----------------------------
 local format, ipairs, tinsert = string.format, ipairs, table.insert
 local C_FriendList_GetWhoInfo = C_FriendList.GetWhoInfo
-local C_FriendList_GetNumWhoResults = C_FriendList.GetNumWhoResults
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 
@@ -103,14 +102,10 @@ B:RegisterEvent("ADDON_LOADED", updateGuildUI)
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%$d", "%$s")
 
-local function friendsFrame()
-	local scrollFrame = FriendsListFrameScrollFrame
-	local buttons = scrollFrame.buttons
-	local playerArea = GetRealZoneText()
-
-	for i = 1, #buttons do
+hooksecurefunc(FriendsListFrame.ScrollBox, "Update", function(self)
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local button = select(i, self.ScrollTarget:GetChildren())
 		local nameText, infoText
-		local button = buttons[i]
 		if button:IsShown() then
 			if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
 				local info = C_FriendList_GetFriendInfoByIndex(button.id)
@@ -144,51 +139,36 @@ local function friendsFrame()
 		if nameText then button.name:SetText(nameText) end
 		if infoText then button.info:SetText(infoText) end
 	end
-end
-if not DB.isNewPatch then
-hooksecurefunc(FriendsListFrameScrollFrame, "update", friendsFrame)
-hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame)
-end
+end)
 
 -- Whoframe
 local columnTable = {}
-local function updateWhoList()
-	local scrollFrame = WhoListScrollFrame
-	local offset = HybridScrollFrame_GetOffset(scrollFrame)
-	local buttons = scrollFrame.buttons
-	local numButtons = #buttons
-	local numWhos = C_FriendList_GetNumWhoResults()
 
+hooksecurefunc(WhoFrame.ScrollBox, "Update", function(self)
 	local playerZone = GetRealZoneText()
 	local playerGuild = GetGuildInfo("player")
 	local playerRace = UnitRace("player")
 
-	for i = 1, numButtons do
-		local button = buttons[i]
-		local index = offset + i
-		if index <= numWhos then
-			local nameText = button.Name
-			local levelText = button.Level
-			local variableText = button.Variable
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local button = select(i, self.ScrollTarget:GetChildren())
 
-			local info = C_FriendList_GetWhoInfo(index)
-			local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
-			if zone == playerZone then zone = "|cff00ff00"..zone end
-			if guild == playerGuild then guild = "|cff00ff00"..guild end
-			if race == playerRace then race = "|cff00ff00"..race end
+		local nameText = button.Name
+		local levelText = button.Level
+		local variableText = button.Variable
 
-			wipe(columnTable)
-			tinsert(columnTable, zone)
-			tinsert(columnTable, guild)
-			tinsert(columnTable, race)
+		local info = C_FriendList_GetWhoInfo(button.index)
+		local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
+		if zone == playerZone then zone = "|cff00ff00"..zone end
+		if guild == playerGuild then guild = "|cff00ff00"..guild end
+		if race == playerRace then race = "|cff00ff00"..race end
 
-			nameText:SetTextColor(classColor(class, true))
-			levelText:SetText(diffColor(level)..level)
-			variableText:SetText(columnTable[UIDropDownMenu_GetSelectedID(WhoFrameDropDown)])
-		end
+		wipe(columnTable)
+		tinsert(columnTable, zone)
+		tinsert(columnTable, guild)
+		tinsert(columnTable, race)
+
+		nameText:SetTextColor(classColor(class, true))
+		levelText:SetText(diffColor(level)..level)
+		variableText:SetText(columnTable[UIDropDownMenu_GetSelectedID(WhoFrameDropDown)])
 	end
-end
-if not DB.isNewPatch then
-hooksecurefunc("WhoList_Update", updateWhoList)
-hooksecurefunc(WhoListScrollFrame, "update", updateWhoList)
-end
+end)
