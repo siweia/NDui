@@ -1376,7 +1376,7 @@ function UF:CreateClassPower(self)
 
 		if isDK then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
-		elseif DB.MyClass == "ROGUE" then
+		else
 			if not bar.chargeParent then
 				bar.chargeParent = CreateFrame("Frame", nil, bar)
 				bar.chargeParent:SetAllPoints()
@@ -1385,7 +1385,7 @@ function UF:CreateClassPower(self)
 			local chargeStar = bar.chargeParent:CreateTexture()
 			chargeStar:SetAtlas("VignetteKill")
 			chargeStar:SetDesaturated(true)
-			chargeStar:SetSize(22, 22)
+			chargeStar:SetSize(14, 14)
 			chargeStar:SetPoint("CENTER", bars[i])
 			chargeStar:Hide()
 			bars[i].chargeStar = chargeStar
