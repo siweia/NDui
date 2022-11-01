@@ -403,7 +403,7 @@ C.themes["Blizzard_Communities"] = function()
 		B.Reskin(dialog.CancelButton)
 
 		if DB.isNewPatch then
-			-- todo
+			-- todo, blizzard still buggy atm
 			B.ReskinTrimScroll(CommunitiesAvatarPickerDialog.ScrollBar)
 		else
 			B.ReskinScroll(CommunitiesAvatarPickerDialogScrollBar)
