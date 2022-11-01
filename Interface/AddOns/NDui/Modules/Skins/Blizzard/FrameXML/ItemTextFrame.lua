@@ -17,8 +17,6 @@ tinsert(C.defaultThemes, function()
 	B.ReskinArrow(ItemTextPrevPageButton, "left")
 	B.ReskinArrow(ItemTextNextPageButton, "right")
 	ItemTextFramePageBg:SetAlpha(0)
-	if not DB.isNewPatch then
-		ItemTextPageText:SetTextColor(1, 1, 1)
-		ItemTextPageText.SetTextColor = B.Dummy
-	end
+	ItemTextPageText:SetTextColor("P", 1, 1, 1)
+	ItemTextPageText.SetTextColor = B.Dummy
 end)
