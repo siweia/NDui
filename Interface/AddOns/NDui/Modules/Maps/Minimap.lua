@@ -158,24 +158,29 @@ function module:ReskinRegions()
 	end
 
 	-- Difficulty Flags
-	if MinimapCluster.InstanceDifficulty then -- isNewPatch
+	local instDifficulty = MinimapCluster.InstanceDifficulty
+	if instDifficulty then
 		local function updateFlagAnchor(frame, _, _, _, _, _, force)
 			if force then return end
 			frame:ClearAllPoints()
 			frame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2, true)
 		end
-		MinimapCluster.InstanceDifficulty:SetParent(Minimap)
-		MinimapCluster.InstanceDifficulty:SetScale(.7)
-		updateFlagAnchor(MinimapCluster.InstanceDifficulty)
-		hooksecurefunc(MinimapCluster.InstanceDifficulty, "SetPoint", updateFlagAnchor)
-	else
-		local flags = {"MiniMapInstanceDifficulty", "GuildInstanceDifficulty", "MiniMapChallengeMode"}
-		for _, v in pairs(flags) do
-			local flag = _G[v]
-			flag:ClearAllPoints()
-			flag:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
-			flag:SetScale(.9)
+		instDifficulty:SetParent(Minimap)
+		instDifficulty:SetScale(.7)
+		updateFlagAnchor(instDifficulty)
+		hooksecurefunc(instDifficulty, "SetPoint", updateFlagAnchor)
+
+		local function replaceFlag(self)
+			self:SetTexture(DB.flagTex)
 		end
+		local function reskinDifficulty(frame)
+			frame.Border:Hide()
+			replaceFlag(frame.Background)
+			hooksecurefunc(frame.Background, "SetAtlas", replaceFlag)
+		end
+		reskinDifficulty(instDifficulty.Instance)
+		reskinDifficulty(instDifficulty.Guild)
+		reskinDifficulty(instDifficulty.ChallengeMode)
 	end
 
 	-- Mail icon
