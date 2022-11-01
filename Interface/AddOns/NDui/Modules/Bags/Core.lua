@@ -1192,7 +1192,7 @@ function module:OnLogin()
 		elseif name == "BagRelic" then
 			label = L["KorthiaRelic"]
 		elseif strmatch(name, "Custom%d") then
-			label = GetCustomGroupTitle(settings.Index)
+			label = GetCustomGroupTitle(settings.Index - 1)
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
 		end
