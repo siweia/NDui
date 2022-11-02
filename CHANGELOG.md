@@ -1,9 +1,6 @@
 # NDui Classic Era
 
-## [1.38.0](https://github.com/siweia/NDui/tree/1.38.0) (2022-9-13)
+## [1.38.1](https://github.com/siweia/NDui/tree/1.38.1) (2022-11-3)
 
-- New unitframe layout: gradient class color.
-- Add a sparkle castbar for petframe.
-- Remove old and invalid data.
-- Refactor resting indicator.
-- Save anchor for CharacterFrame.
+- Update skin for Details and WA.
+- Add feet and hands slot into aurawatch GUI.
