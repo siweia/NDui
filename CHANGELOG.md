@@ -1,6 +1,6 @@
 # NDui
 
-## [6.30.1](https://github.com/siweia/NDui/tree/6.30.1) (2022-11-2)
+## [6.30.0](https://github.com/siweia/NDui/tree/6.30.0) (2022-11-2)
 
 - Update skin for WA, PGF, Rematch.
 - Update default skins, remove compatibility to 9.0.
