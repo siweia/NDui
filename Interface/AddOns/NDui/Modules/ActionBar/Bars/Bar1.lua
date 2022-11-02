@@ -109,7 +109,7 @@ function Bar:CreateBar1()
 		local button = _G["ActionButton"..i]
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
-		button:SetParent(frame)
+		--button:SetParent(frame)
 	end
 	frame.buttons = buttonList
 

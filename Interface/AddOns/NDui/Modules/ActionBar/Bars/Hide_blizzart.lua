@@ -11,7 +11,8 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	--MainMenuBar,
+	OverrideActionBar,
 }
 
 local framesToDisable = {
@@ -50,6 +51,11 @@ function Bar:HideBlizz()
 	MainMenuBar:SetUserPlaced(true)
 	MainMenuBar.ignoreFramePositionManager = true
 	MainMenuBar:SetAttribute("ignoreFramePositionManager", true)
+	MainMenuBar:EnableMouse(false)
+	MainMenuBar.EndCaps:SetAlpha(0)
+	MainMenuBar.Background:SetAlpha(0)
+	MainMenuBar.BorderArt:SetAlpha(0)
+	MainMenuBar.ActionBarPageNumber:SetParent(B.HiddenFrame)
 
 	for _, frame in next, framesToHide do
 		frame:SetParent(B.HiddenFrame)
