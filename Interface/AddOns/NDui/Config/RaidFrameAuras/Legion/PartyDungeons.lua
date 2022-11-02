@@ -54,7 +54,7 @@ module:RegisterDebuff(TIER, 777, 0, 204962, 5)
 module:RegisterDebuff(TIER, 777, 0, 202037)
 
 -- 群星庭院 (800) 10.0 S1
-module:RegisterSeasonSpells(6, INSTANCE)
+module:RegisterSeasonSpells(6, 800)
 module:RegisterDebuff(TIER, 800, 0, 209858)
 module:RegisterDebuff(TIER, 800, 0, 240559)
 module:RegisterDebuff(TIER, 800, 0, 240443)
@@ -80,7 +80,7 @@ module:RegisterDebuff(TIER, 716, 0, 199847)
 module:RegisterDebuff(TIER, 716, 0, 193698, 5)
 
 -- 英灵殿 (721) 10.0 S1
-module:RegisterSeasonSpells(6, INSTANCE)
+module:RegisterSeasonSpells(6, 721)
 module:RegisterDebuff(TIER, 721, 0, 209858)
 module:RegisterDebuff(TIER, 721, 0, 240559)
 module:RegisterDebuff(TIER, 721, 0, 240443)
