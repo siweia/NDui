@@ -128,7 +128,9 @@ function module:ReskinRegions()
 		queueIcon:SetShown(QueueStatusButton:IsShown())
 	end)
 	hooksecurefunc(QueueStatusButton.Eye, "PlayAnim", function() anim:Play() end)
-	hooksecurefunc(QueueStatusButton.Eye, "StopAnimating", function() anim:Pause() end)
+	-- default anger red eye
+	hooksecurefunc(QueueStatusButton.Eye, "StartPokeAnimationInitial", function() anim.rota:SetDuration(.5)	end)
+	hooksecurefunc(QueueStatusButton.Eye, "StartPokeAnimationEnd", function() anim.rota:SetDuration(2) end)
 
 	-- Difficulty Flags
 	local instDifficulty = MinimapCluster.InstanceDifficulty
