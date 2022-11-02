@@ -1822,11 +1822,9 @@ function G:SetupActionBar(parent)
 	createOptionTitle(scroll.child, L["LeaveVehicle"], -2170)
 	createOptionSlider(scroll.child, L["ButtonSize"], 20, 80, 34, -2230, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
 
-	if DB.isNewPatch then
-		createOptionGroup(scroll.child, L["Actionbar"].."6", -2300, "Bar6")
-		createOptionGroup(scroll.child, L["Actionbar"].."7", -2660, "Bar7")
-		createOptionGroup(scroll.child, L["Actionbar"].."8", -3020, "Bar8")
-	end
+	createOptionGroup(scroll.child, L["Actionbar"].."6", -2300, "Bar6")
+	createOptionGroup(scroll.child, L["Actionbar"].."7", -2660, "Bar7")
+	createOptionGroup(scroll.child, L["Actionbar"].."8", -3020, "Bar8")
 end
 
 function G:SetupStanceBar(parent)

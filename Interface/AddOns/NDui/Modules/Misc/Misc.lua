@@ -58,7 +58,6 @@ function M:OnLogin()
 	M:UpdateScreenShot()
 	M:UpdateFasterLoot()
 	M:TradeTargetInfo()
-	M:MoveQuestTracker()
 	M:BlockStrangerInvite()
 	M:ToggleBossBanner()
 	M:ToggleBossEmote()
@@ -265,30 +264,6 @@ function M:MoveTicketStatusFrame()
 		if relF == "TOPRIGHT" then
 			self:ClearAllPoints()
 			self:SetPoint("TOP", UIParent, "TOP", -400, -20)
-		end
-	end)
-end
-
--- Reanchor ObjectiveTracker
-function M:MoveQuestTracker()
-	if DB.isNewPatch then return end
-
-	local frame = CreateFrame("Frame", "NDuiQuestMover", UIParent)
-	frame:SetSize(240, 50)
-	B.Mover(frame, L["QuestTracker"], "QuestTracker", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", -70, -55})
-
-	local tracker = ObjectiveTrackerFrame
-	tracker:ClearAllPoints()
-	tracker:SetPoint("TOPRIGHT", frame)
-	tracker:SetHeight(GetScreenHeight()*.65)
-	tracker:SetClampedToScreen(false)
-	tracker:SetMovable(true)
-	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
-
-	hooksecurefunc(tracker, "SetPoint", function(self, _, parent)
-		if parent ~= frame then
-			self:ClearAllPoints()
-			self:SetPoint("TOPRIGHT", frame)
 		end
 	end)
 end

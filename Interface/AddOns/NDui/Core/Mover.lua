@@ -454,8 +454,6 @@ local ignoredFrames = {
 }
 
 function M:DisableBlizzardMover()
-	if not DB.isNewPatch then return end
-
 	local editMode = _G.EditModeManagerFrame
 
 	-- remove the initial registers

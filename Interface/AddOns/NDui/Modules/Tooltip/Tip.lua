@@ -500,7 +500,7 @@ function TT:FixStoneSoupError()
 end
 
 function TT:OnLogin()
-	if not GameTooltip.StatusBar then -- isNewPatch
+	if not GameTooltip.StatusBar then -- isBeta
 		GameTooltip.StatusBar = GameTooltipStatusBar
 	end
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
@@ -586,9 +586,8 @@ TT:RegisterTooltips("NDui", function()
 		f:HookScript("OnShow", TT.ReskinTooltip)
 	end
 
-	if SettingsTooltip then -- isNewPatch
+	if SettingsTooltip then
 		TT.ReskinTooltip(SettingsTooltip)
-		SettingsTooltip:SetScale(UIParent:GetScale())
 	end
 
 	-- DropdownMenu

@@ -115,9 +115,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	end
 	if not name then return end -- precaution
 
-	local parent = DB.isNewPatch and ProfessionsFrame or TradeSkillFrame
-
-	local tab = CreateFrame("CheckButton", nil, parent, "SpellBookSkillLineTabTemplate, SecureActionButtonTemplate")
+	local tab = CreateFrame("CheckButton", nil, ProfessionsFrame, "SpellBookSkillLineTabTemplate, SecureActionButtonTemplate")
 	tab.tooltip = name
 	tab.spellID = spellID
 	tab.itemID = toyID or itemID
@@ -141,7 +139,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	tab.cover:SetAllPoints()
 	tab.cover:EnableMouse(true)
 
-	tab:SetPoint("TOPLEFT", parent, "TOPRIGHT", 3, -index*42)
+	tab:SetPoint("TOPLEFT", ProfessionsFrame, "TOPRIGHT", 3, -index*42)
 	tinsert(tabList, tab)
 	index = index + 1
 end
@@ -163,17 +161,11 @@ function M:TradeTabs_FilterIcons()
 		end
 	end
 
-	local parent = DB.isNewPatch and ProfessionsFrame.CraftingPage or TradeSkillFrame
-
 	local buttons = {}
 	for index, value in pairs(buttonList) do
-		local bu = CreateFrame("Button", nil, parent, "BackdropTemplate")
+		local bu = CreateFrame("Button", nil, ProfessionsFrame.CraftingPage, "BackdropTemplate")
 		bu:SetSize(22, 22)
-		if DB.isNewPatch then
-			bu:SetPoint("BOTTOMRIGHT", ProfessionsFrame.CraftingPage.RecipeList.FilterButton, "TOPRIGHT", -(index-1)*27, 10)
-		else
-			bu:SetPoint("RIGHT", TradeSkillFrame.FilterButton, "LEFT", -5 - (index-1)*27, 0)
-		end
+		bu:SetPoint("BOTTOMRIGHT", ProfessionsFrame.CraftingPage.RecipeList.FilterButton, "TOPRIGHT", -(index-1)*27, 10)
 		B.PixelIcon(bu, value[1], true)
 		B.AddTooltip(bu, "ANCHOR_TOP", value[2])
 		bu.__value = value
@@ -229,42 +221,27 @@ local function IsRecipeEnchanting(self)
 end
 
 function M:TradeTabs_QuickEnchanting()
-	if DB.isNewPatch then
-		if ProfessionsFrame.CraftingPage.ValidateControls then
-			hooksecurefunc(ProfessionsFrame.CraftingPage, "ValidateControls", function(self)
-				isEnchanting = nil
-				local currentRecipeInfo = self.SchematicForm:GetRecipeInfo()
-				if currentRecipeInfo and currentRecipeInfo.alternateVerb then
-					local professionInfo = ProfessionsFrame:GetProfessionInfo()
-					if professionInfo and professionInfo.parentProfessionID == 333 then
-						isEnchanting = true
-						self.CreateButton.tooltipText = format(tooltipString, L["UseVellum"], GetItemCount(ENCHANTING_VELLUM))
-					end
+	if ProfessionsFrame.CraftingPage.ValidateControls then
+		hooksecurefunc(ProfessionsFrame.CraftingPage, "ValidateControls", function(self)
+			isEnchanting = nil
+			local currentRecipeInfo = self.SchematicForm:GetRecipeInfo()
+			if currentRecipeInfo and currentRecipeInfo.alternateVerb then
+				local professionInfo = ProfessionsFrame:GetProfessionInfo()
+				if professionInfo and professionInfo.parentProfessionID == 333 then
+					isEnchanting = true
+					self.CreateButton.tooltipText = format(tooltipString, L["UseVellum"], GetItemCount(ENCHANTING_VELLUM))
 				end
-			end)
-		end
-	
-		local createButton = ProfessionsFrame.CraftingPage.CreateButton
-		createButton:RegisterForClicks("AnyUp")
-		createButton:HookScript("OnClick", function(_, btn)
-			if btn == "RightButton" and isEnchanting then
-				UseItemByName(ENCHANTING_VELLUM)
-			end
-		end)
-	else
-		if not TradeSkillFrame then return end
-	
-		local detailsFrame = TradeSkillFrame.DetailsFrame
-		hooksecurefunc(detailsFrame, "RefreshDisplay", IsRecipeEnchanting)
-	
-		local createButton = detailsFrame.CreateButton
-		createButton:RegisterForClicks("AnyUp")
-		createButton:HookScript("OnClick", function(_, btn)
-			if btn == "RightButton" and isEnchanting then
-				UseItemByName(ENCHANTING_VELLUM)
 			end
 		end)
 	end
+
+	local createButton = ProfessionsFrame.CraftingPage.CreateButton
+	createButton:RegisterForClicks("AnyUp")
+	createButton:HookScript("OnClick", function(_, btn)
+		if btn == "RightButton" and isEnchanting then
+			UseItemByName(ENCHANTING_VELLUM)
+		end
+	end)
 end
 
 function M:TradeTabs()

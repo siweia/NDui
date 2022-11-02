@@ -172,9 +172,9 @@ local list = {
 		{AuraID = 32182, UnitID = "player"},	-- 英勇
 		{AuraID = 80353, UnitID = "player"},	-- 时间扭曲
 		{AuraID = 264667, UnitID = "player"},	-- 原始狂怒
-		{AuraID = 390386, UnitID = "player", Disabled = not DB.isNewPatch},	-- 守护之怒，龙希尔
-		{AuraID = 363534, UnitID = "player", Disabled = not DB.isNewPatch},	-- 回溯，龙希尔
-		{AuraID = 357170, UnitID = "player", Disabled = not DB.isNewPatch},	-- 时间膨胀，龙希尔
+		{AuraID = 390386, UnitID = "player"},	-- 守护之怒，龙希尔
+		{AuraID = 363534, UnitID = "player"},	-- 回溯，龙希尔
+		{AuraID = 357170, UnitID = "player"},	-- 时间膨胀，龙希尔
 		{AuraID = 178207, UnitID = "player"},	-- 狂怒战鼓
 		{AuraID = 230935, UnitID = "player"},	-- 高山战鼓
 		{AuraID = 256740, UnitID = "player"},	-- 漩涡战鼓
@@ -210,7 +210,7 @@ local list = {
 		{AuraID = 207498, UnitID = "player"},	-- 先祖护佑
 		{AuraID = 238698, UnitID = "player"},	-- 吸血光环
 		{AuraID = 209426, UnitID = "player"},	-- 幻影打击
-		{AuraID = 374227, UnitID = "player", Disabled = not DB.isNewPatch},	-- 微风
+		{AuraID = 374227, UnitID = "player"},	-- 微风
 		{AuraID = 114018, UnitID = "player", Flash = true},	-- 帷幕
 		{AuraID = 115834, UnitID = "player", Flash = true},
 	},

@@ -138,11 +138,7 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 			color = self.colors.reaction[UnitReaction(unit, "player")]
 		end
 		if color then
-			if DB.isNewPatch then
-				element:GetStatusBarTexture():SetGradient("HORIZONTAL", CreateColor(color[1], color[2], color[3], .75), endColor)
-			else
-				element:GetStatusBarTexture():SetGradientAlpha("HORIZONTAL", color[1],color[2],color[3], .75, 0,0,0, .25)
-			end
+			element:GetStatusBarTexture():SetGradient("HORIZONTAL", CreateColor(color[1], color[2], color[3], .75), endColor)
 		end
 	end
 end
@@ -769,12 +765,10 @@ function UF:CreateCastBar(self)
 		self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
 	end
 
-	if DB.isNewPatch then -- Evoker charge stage
-		local stage = B.CreateFS(cb, 22)
-		stage:ClearAllPoints()
-		stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
-		cb.stageString = stage
-	end
+	local stage = B.CreateFS(cb, 22)
+	stage:ClearAllPoints()
+	stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
+	cb.stageString = stage
 
 	if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then
 		cb.decimal = "%.1f"
@@ -827,12 +821,9 @@ local function reskinTimerBar(bar)
 	bar:SetSize(280, 15)
 	B.StripTextures(bar)
 
-	local statusbar = bar.StatusBar or _G[bar:GetName().."StatusBar"] -- isNewPatch
+	local statusbar = bar.StatusBar or _G[bar:GetName().."StatusBar"]
 	if statusbar then
 		statusbar:SetAllPoints()
-		if not DB.isNewPatch then
-			statusbar:SetStatusBarTexture(DB.normTex)
-		end
 	elseif bar.SetStatusBarTexture then
 		bar:SetStatusBarTexture(DB.normTex)
 	end

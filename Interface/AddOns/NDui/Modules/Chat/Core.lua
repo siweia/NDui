@@ -101,10 +101,6 @@ function module:SkinChat()
 
 	local name = self:GetName()
 	local font, fontSize = self:GetFont()
-	if not DB.isNewPatch then
-		self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
-		self:SetMinResize(100, 50)
-	end
 	self:SetFont(fontFile or font, fontSize, fontOutline)
 	if fontOutline ~= "" then
 		self:SetShadowColor(0, 0, 0, 0)
@@ -460,11 +456,7 @@ function module:OnLogin()
 	if C.db["Chat"]["Lock"] then
 		module:UpdateChatSize()
 		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
-		if DB.isNewPatch then
-			hooksecurefunc(ChatFrame1, "SetPoint", updateChatAnchor)
-		else
-			hooksecurefunc("FCF_SavePositionAndDimensions", module.UpdateChatSize)
-			FCF_SavePositionAndDimensions(ChatFrame1)
-		end
+		hooksecurefunc(ChatFrame1, "SetPoint", updateChatAnchor)
+		FCF_SavePositionAndDimensions(ChatFrame1)
 	end
 end

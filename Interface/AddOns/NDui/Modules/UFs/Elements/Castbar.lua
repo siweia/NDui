@@ -206,9 +206,7 @@ function UF:PostCastStart(unit)
 		B:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
 	end
 
-	if DB.isNewPatch then
-		UF:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
-	end
+	UF:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
 	UpdateCastBarColor(self, unit)
 
 	if self.__owner.mystyle == "nameplate" then

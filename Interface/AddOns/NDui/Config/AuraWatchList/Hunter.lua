@@ -62,7 +62,7 @@ local list = {
 		{AuraID = 324149, UnitID = "target", Caster = "player"},	-- 劫掠射击
 		{AuraID = 308498, UnitID = "target", Caster = "player"},	-- 共鸣箭
 		{AuraID = 333526, UnitID = "target", Caster = "player"},	-- 尖刺果实
-		{AuraID = 375893, UnitID = "target", Caster = "player", Disabled = not DB.isNewPatch},	-- 死亡飞轮
+		{AuraID = 375893, UnitID = "target", Caster = "player"},	-- 死亡飞轮
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 19574, UnitID = "player"},	-- 狂野怒火
@@ -107,8 +107,8 @@ local list = {
 		{AuraID = 260243, UnitID = "player"},	-- 乱射
 		{AuraID = 342076, UnitID = "player"},	-- 行云流水
 		{AuraID = 336892, UnitID = "player", Flash = true},	-- 无懈警戒之秘
-		{AuraID = 388035, UnitID = "player", Disabled = not DB.isNewPatch},	-- 巨熊之韧
-		{AuraID = 388045, UnitID = "player", Flash = true, Disabled = not DB.isNewPatch},	-- 警戒
+		{AuraID = 388035, UnitID = "player"},	-- 巨熊之韧
+		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
 
 		{AuraID = 363760, UnitID = "player", Flash = true},	-- 杀戮狂乱，兽王4T
 		{AuraID = 363805, UnitID = "player", Flash = true},	-- 疯狂掷弹兵，生存2T

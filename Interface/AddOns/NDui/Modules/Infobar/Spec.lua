@@ -67,12 +67,10 @@ info.onEnter = function(self)
 		end
 	end
 
-	if DB.isNewPatch then
-		local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
-		local info = configID and C_Traits.GetConfigInfo(configID)
-		if info and info.name then
-			GameTooltip:AddLine("   ("..info.name..")", 1,1,1)
-		end
+	local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
+	local info = configID and C_Traits.GetConfigInfo(configID)
+	if info and info.name then
+		GameTooltip:AddLine("   ("..info.name..")", 1,1,1)
 	end
 
 	if C_SpecializationInfo_CanPlayerUsePVPTalentUI() then
@@ -121,7 +119,7 @@ end
 
 local function refreshDefaultLootSpec()
 	if not currentSpecIndex or currentSpecIndex == 5 then return end
-	local mult = DB.isNewPatch and (3 + numSpecs) or numSpecs
+	local mult = 3 + numSpecs
 	newMenu[numLocal - mult].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(currentSpecIndex)))
 end
 
@@ -201,25 +199,21 @@ local function BuildSpecMenu()
 		end
 	end
 
-	if DB.isNewPatch then
-		tinsert(newMenu, seperatorMenu)
-		tinsert(newMenu, {text = GetSpellInfo(384255), isTitle = true, notCheckable = true})
-		tinsert(newMenu, {text = BLUE_FONT_COLOR:WrapTextInColorCode(TALENT_FRAME_DROP_DOWN_STARTER_BUILD), func = selectCurrentConfig,
-			arg1 = STARTER_BUILD,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
-		})
-	end
+	tinsert(newMenu, seperatorMenu)
+	tinsert(newMenu, {text = GetSpellInfo(384255), isTitle = true, notCheckable = true})
+	tinsert(newMenu, {text = BLUE_FONT_COLOR:WrapTextInColorCode(TALENT_FRAME_DROP_DOWN_STARTER_BUILD), func = selectCurrentConfig,
+		arg1 = STARTER_BUILD,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
+	})
 
 	numLocal = #newMenu
 
 	refreshDefaultLootSpec()
 	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", refreshDefaultLootSpec)
 
-	if DB.isNewPatch then
-		refreshAllTraits()
-		B:RegisterEvent("TRAIT_CONFIG_DELETED", refreshAllTraits)
-		B:RegisterEvent("TRAIT_CONFIG_UPDATED", refreshAllTraits)
-		B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", refreshAllTraits)
-	end
+	refreshAllTraits()
+	B:RegisterEvent("TRAIT_CONFIG_DELETED", refreshAllTraits)
+	B:RegisterEvent("TRAIT_CONFIG_UPDATED", refreshAllTraits)
+	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", refreshAllTraits)
 end
 
 info.onMouseUp = function(self, btn)
