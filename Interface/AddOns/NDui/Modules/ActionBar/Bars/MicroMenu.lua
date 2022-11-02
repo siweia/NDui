@@ -143,4 +143,10 @@ function Bar:MicroMenu()
 
 	MicroButtonAndBagsBar:Hide()
 	MicroButtonAndBagsBar:UnregisterAllEvents()
+	if C.db["Map"]["DisableMinimap"] then
+		QueueStatusButton:SetParent(Minimap)
+		QueueStatusButton:ClearAllPoints()
+		QueueStatusButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 30, -10)
+		QueueStatusButton:SetFrameLevel(5)
+	end
 end
