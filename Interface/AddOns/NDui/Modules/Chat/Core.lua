@@ -436,10 +436,9 @@ function module:OnLogin()
 
 	-- Default
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
-	SetCVar("chatStyle", "classic")
+	SetCVar("chatStyle", "classic") -- todo: hide chatStyle option
 	SetCVar("chatMouseScroll", 1) -- enable mousescroll
 	--SetCVar("whisperMode", "inline") -- blizz reset this on NPE
-	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Add Elements

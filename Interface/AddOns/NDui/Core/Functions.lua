@@ -389,7 +389,6 @@ do
 	end
 
 	function B:HideOption()
-		if not self then return end -- isNewPatch
 		self:SetAlpha(0)
 		self:SetScale(.0001)
 	end

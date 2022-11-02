@@ -1773,7 +1773,6 @@ function UF:CreateFCT(self)
 
 	-- Default CombatText
 	SetCVar("enableFloatingCombatText", 0)
-	B.HideOption(InterfaceOptionsCombatPanelEnableFloatingCombatText)
 end
 
 function UF:CreatePVPClassify(self)

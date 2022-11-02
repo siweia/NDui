@@ -384,9 +384,7 @@ SlashCmdList["NDUI"] = HelloWorld
 SLASH_NDUI1 = "/ndui"
 
 function module:OnLogin()
-	-- Hide options
-	B.HideOption(Display_UseUIScale)
-	B.HideOption(Display_UIScaleSlider)
+	-- todo: hide UIScale options
 
 	-- Tutorial and settings
 	ForceAddonSkins()
