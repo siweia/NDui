@@ -3,7 +3,6 @@ local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 tinsert(C.defaultThemes, function()
-	if not DB.isNewPatch then return end
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	local frame = SettingsPanel

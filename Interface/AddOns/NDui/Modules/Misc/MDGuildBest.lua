@@ -127,11 +127,7 @@ end
 
 function M.GuildBest_OnLoad(event, addon)
 	if addon == "Blizzard_ChallengesUI" then
-		if DB.isNewPatch then
-			hooksecurefunc(ChallengesFrame, "Update", M.GuildBest_Update)
-		else
-			hooksecurefunc("ChallengesFrame_Update", M.GuildBest_Update)
-		end
+		hooksecurefunc(ChallengesFrame, "Update", M.GuildBest_Update)
 		M:KeystoneInfo_Create()
 		ChallengesFrame.WeeklyInfo.Child.WeeklyChest:HookScript("OnEnter", M.KeystoneInfo_WeeklyRuns)
 

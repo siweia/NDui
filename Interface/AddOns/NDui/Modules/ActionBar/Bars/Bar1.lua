@@ -76,9 +76,6 @@ function Bar:UpdateActionSize(name)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
 			end
-			if name == "BarPet" then
-				button.SetPoint = B.Dummy
-			end
 			button:SetAttribute("statehidden", false)
 			button:Show()
 			Bar:UpdateFontSize(button, fontSize)
@@ -112,7 +109,7 @@ function Bar:CreateBar1()
 		local button = _G["ActionButton"..i]
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
-		button:SetParent(frame)
+		--button:SetParent(frame)
 	end
 	frame.buttons = buttonList
 

@@ -4,8 +4,6 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-	if not DB.isNewPatch then return end
-
 	local frame = QuickKeybindFrame
 	B.StripTextures(frame)
 	B.StripTextures(frame.Header)

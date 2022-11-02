@@ -108,11 +108,32 @@ C.themes["Blizzard_PVPUI"] = function()
 	ReskinPvPFrame(HonorFrame)
 	B.Reskin(HonorFrame.QueueButton)
 	B.ReskinDropDown(HonorFrameTypeDropDown)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
-	else
-		B.ReskinScroll(HonorFrameSpecificFrameScrollBar)
-	end
+	B.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
+
+	hooksecurefunc(HonorFrame.SpecificScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local button = select(i, self.ScrollTarget:GetChildren())
+			if not button.styled then
+				button.Bg:Hide()
+				button.Border:Hide()
+				button:SetNormalTexture(0)
+				button:SetHighlightTexture(0)
+		
+				local bg = B.CreateBDFrame(button, .25)
+				bg:SetPoint("TOPLEFT", 2, 0)
+				bg:SetPoint("BOTTOMRIGHT", -1, 2)
+		
+				button.SelectedTexture:SetDrawLayer("BACKGROUND")
+				button.SelectedTexture:SetColorTexture(r, g, b, .25)
+				button.SelectedTexture:SetInside(bg)
+		
+				B.ReskinIcon(button.Icon)
+				button.Icon:SetPoint("TOPLEFT", 5, -3)
+
+				button.styled = true
+			end
+		end
+	end)
 
 	local bonusFrame = HonorFrame.BonusFrame
 	bonusFrame.WorldBattlesTexture:Hide()
@@ -130,31 +151,6 @@ C.themes["Blizzard_PVPUI"] = function()
 			reward.Border:Hide()
 			reward.CircleMask:Hide()
 			reward.Icon.bg = B.ReskinIcon(reward.Icon)
-		end
-	end
-
-	-- Honor frame specific
-
-	if DB.isNewPatch then
-		-- todo
-	else
-		for _, bu in pairs(HonorFrame.SpecificFrame.buttons) do
-			bu.Bg:Hide()
-			bu.Border:Hide()
-	
-			bu:SetNormalTexture("")
-			bu:SetHighlightTexture("")
-	
-			local bg = B.CreateBDFrame(bu, 0, true)
-			bg:SetPoint("TOPLEFT", 2, 0)
-			bg:SetPoint("BOTTOMRIGHT", -1, 2)
-	
-			bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-			bu.SelectedTexture:SetColorTexture(r, g, b, .25)
-			bu.SelectedTexture:SetInside(bg)
-	
-			B.ReskinIcon(bu.Icon)
-			bu.Icon:SetPoint("TOPLEFT", 5, -3)
 		end
 	end
 

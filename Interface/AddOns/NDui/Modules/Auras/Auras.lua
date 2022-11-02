@@ -19,11 +19,7 @@ function A:HideBlizBuff()
 	if not C.db["Auras"]["BuffFrame"] and not C.db["Auras"]["HideBlizBuff"] then return end
 
 	B.HideObject(_G.BuffFrame)
-	if DB.isNewPatch then
-		B.HideObject(_G.DebuffFrame)
-	else
-		B.HideObject(_G.TemporaryEnchantFrame)
-	end
+	B.HideObject(_G.DebuffFrame)
 end
 
 function A:BuildBuffFrame()

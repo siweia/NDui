@@ -71,9 +71,7 @@ function UF:SetupCVars()
 
 	SetCVar("nameplateShowSelf", 0)
 	SetCVar("nameplateResourceOnTarget", 0)
-	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
-	B.HideOption(InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
-
+	-- todo: hide nameplate personal resource options
 	UF:UpdateClickableSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateOptions", UF.UpdateClickableSize)
 	UF:UpdatePlateClickThru()

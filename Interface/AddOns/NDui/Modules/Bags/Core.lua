@@ -552,8 +552,8 @@ StaticPopupDialogs["NDUI_RENAMECUSTOMGROUP"] = {
 		C.db["Bags"]["CustomNames"][index] = text ~= "" and text or nil
 
 		module.CustomMenu[index+2].text = GetCustomGroupTitle(index)
-		module.ContainerGroups["Bag"][index+1].label:SetText(GetCustomGroupTitle(index))
-		module.ContainerGroups["Bank"][index+1].label:SetText(GetCustomGroupTitle(index))
+		module.ContainerGroups["Bag"][index].label:SetText(GetCustomGroupTitle(index))
+		module.ContainerGroups["Bank"][index].label:SetText(GetCustomGroupTitle(index))
 	end,
 	EditBoxOnEscapePressed = function(self)
 		self:GetParent():Hide()
@@ -826,10 +826,10 @@ function module:OnLogin()
 	end
 
 	function Backpack:OnInit()
-		AddNewContainer("Bag", 1, "BagReagent", filters.onlyBagReagent)
+		AddNewContainer("Bag", 6, "BagReagent", filters.onlyBagReagent)
 		AddNewContainer("Bag", 16, "Junk", filters.bagsJunk)
 		for i = 1, 5 do
-			AddNewContainer("Bag", i+1, "BagCustom"..i, filters["bagCustom"..i])
+			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)

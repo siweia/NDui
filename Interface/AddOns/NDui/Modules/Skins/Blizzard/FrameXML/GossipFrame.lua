@@ -35,65 +35,33 @@ tinsert(C.defaultThemes, function()
 
 	QuestFont:SetTextColor(1, 1, 1)
 
-	if DB.isNewPatch then
-		B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
-		B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
+	B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
+	B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
 
-		hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local button = select(i, self.ScrollTarget:GetChildren())
-				if not button.styled then
-					local buttonText = select(3, button:GetRegions()) -- no parentKey atm
-					if buttonText and buttonText:IsObjectType("FontString") then
-						replaceGossipText(button, button:GetText())
-						hooksecurefunc(button, "SetText", replaceGossipText)
-						hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
-					end
-
-					button.styled = true
-				end
-			end
-		end)
-
-		-- todo
-		for i = 1, 4 do
-			local notch = GossipFrame.FriendshipStatusBar["Notch"..i]
-			if notch then
-				notch:SetColorTexture(0, 0, 0)
-				notch:SetSize(C.mult, 16)
-			end
-		end
-	else
-		GossipGreetingText:SetTextColor(1, 1, 1)
-
-		NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
-		B.StripTextures(NPCFriendshipStatusBar, 4)
-		NPCFriendshipStatusBar:SetStatusBarTexture(DB.normTex)
-		B.CreateBDFrame(NPCFriendshipStatusBar, .25)
-	
-		for i = 1, 4 do
-			local notch = NPCFriendshipStatusBar["Notch"..i]
-			if notch then
-				notch:SetColorTexture(0, 0, 0)
-				notch:SetSize(C.mult, 16)
-			end
-		end
-
-		B.Reskin(GossipFrameGreetingGoodbyeButton)
-		B.ReskinScroll(GossipGreetingScrollFrameScrollBar)
-
-		hooksecurefunc("GossipFrameUpdate", function()
-			for button in GossipFrame.titleButtonPool:EnumerateActive() do
-				if not button.styled then
+	hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local button = select(i, self.ScrollTarget:GetChildren())
+			if not button.styled then
+				local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+				if buttonText and buttonText:IsObjectType("FontString") then
 					replaceGossipText(button, button:GetText())
 					hooksecurefunc(button, "SetText", replaceGossipText)
 					hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
-	
-					button.styled = true
 				end
+
+				button.styled = true
 			end
-		end)
+		end
+	end)
+
+	for i = 1, 4 do
+		local notch = GossipFrame.FriendshipStatusBar["Notch"..i]
+		if notch then
+			notch:SetColorTexture(0, 0, 0)
+			notch:SetSize(C.mult, 16)
+		end
 	end
+	GossipFrame.FriendshipStatusBar.BarBorder:Hide()
 
 	GossipFrameInset:Hide()
 	if GossipFrame.Background then GossipFrame.Background:Hide() end

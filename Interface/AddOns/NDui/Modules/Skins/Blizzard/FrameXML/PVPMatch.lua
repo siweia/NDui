@@ -42,11 +42,7 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(content)
 	local bg = B.CreateBDFrame(content, .25)
 	bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(content.ScrollBar)
-	else
-		B.ReskinScroll(content.ScrollFrame.ScrollBar)
-	end
+	B.ReskinTrimScroll(content.ScrollBar)
 
 	B.StripTextures(tabContainer)
 	for i = 1, 3 do
@@ -66,11 +62,7 @@ tinsert(C.defaultThemes, function()
 	local bg = B.CreateBDFrame(content, .25)
 	bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
 	B.StripTextures(content.earningsArt)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(content.scrollBar)
-	else
-		B.ReskinScroll(content.scrollFrame.scrollBar)
-	end
+	B.ReskinTrimScroll(content.scrollBar)
 
 	B.StripTextures(tabContainer)
 	for i = 1, 3 do

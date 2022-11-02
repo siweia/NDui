@@ -80,12 +80,7 @@ tinsert(C.defaultThemes, function()
 	LFDRoleCheckPopup.Border:Hide()
 	B.Reskin(LFDRoleCheckPopupAcceptButton)
 	B.Reskin(LFDRoleCheckPopupDeclineButton)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(LFDQueueFrameSpecific.ScrollBar)
-	else
-		B.ReskinScroll(LFDQueueFrameSpecificListScrollFrameScrollBar)
-		LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
-	end
+	B.ReskinTrimScroll(LFDQueueFrameSpecific.ScrollBar)
 	B.StripTextures(LFDQueueFrameRandomScrollFrameScrollBar, 0)
 	B.ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
 	B.ReskinDropDown(LFDQueueFrameTypeDropDown)

@@ -389,7 +389,6 @@ do
 	end
 
 	function B:HideOption()
-		if not self then return end -- isNewPatch
 		self:SetAlpha(0)
 		self:SetScale(.0001)
 	end
@@ -540,11 +539,7 @@ do
 
 		local tex = self:CreateTexture(nil, "BACKGROUND")
 		tex:SetTexture(DB.bdTex)
-		if DB.isNewPatch then
-			tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
-		else
-			tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
-		end
+		tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
 		if width then tex:SetWidth(width) end
 		if height then tex:SetHeight(height) end
 
@@ -620,11 +615,7 @@ do
 		if C.db["Skins"]["FlatMode"] then
 			tex:SetVertexColor(.3, .3, .3, .25)
 		else
-			if DB.isNewPatch then
-				tex:SetGradient("Vertical", gradientFrom, gradientTo)
-			else
-				tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
-			end
+			tex:SetGradient("Vertical", gradientFrom, gradientTo)
 		end
 
 		return tex
@@ -951,16 +942,14 @@ do
 	-- Handle tabs
 	function B:ReskinTab()
 		self:DisableDrawLayer("BACKGROUND")
-		if DB.isNewPatch then
-			if self.LeftHighlight then
-				self.LeftHighlight:SetAlpha(0)
-			end
-			if self.RightHighlight then
-				self.RightHighlight:SetAlpha(0)
-			end
-			if self.MiddleHighlight then
-				self.MiddleHighlight:SetAlpha(0)
-			end
+		if self.LeftHighlight then
+			self.LeftHighlight:SetAlpha(0)
+		end
+		if self.RightHighlight then
+			self.RightHighlight:SetAlpha(0)
+		end
+		if self.MiddleHighlight then
+			self.MiddleHighlight:SetAlpha(0)
 		end
 
 		local bg = B.CreateBDFrame(self)
@@ -1288,11 +1277,7 @@ do
 		hl:SetVertexColor(cr, cg, cb, .25)
 
 		local ch = self:GetCheckedTexture()
-		if DB.isNewPatch then
-			ch:SetAtlas("checkmark-minimal")
-		else
-			ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
-		end
+		ch:SetAtlas("checkmark-minimal")
 		ch:SetDesaturated(true)
 		ch:SetTexCoord(0, 1, 0, 1)
 		ch:SetVertexColor(cr, cg, cb)
@@ -1332,7 +1317,6 @@ do
 
 	-- Handle slider
 	function B:ReskinSlider(vertical)
-		if self.SetBackdrop then self:SetBackdrop(nil) end -- isNewPatch
 		B.StripTextures(self)
 
 		local bg = B.CreateBDFrame(self, 0, true)

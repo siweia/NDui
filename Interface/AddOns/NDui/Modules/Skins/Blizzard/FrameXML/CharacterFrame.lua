@@ -43,22 +43,16 @@ tinsert(C.defaultThemes, function()
 		local tab = _G["CharacterFrameTab"..i]
 		if tab then
 			B.ReskinTab(tab)
-			if DB.isNewPatch and i ~= 1 then
+			if i ~= 1 then
 				tab:ClearAllPoints()
 				tab:SetPoint("TOPLEFT", _G["CharacterFrameTab"..(i-1)], "TOPRIGHT", -15, 0)
 			end
 		end
 	end
 
-	if DB.isNewPatch then
-		CharacterModelScene:DisableDrawLayer("BACKGROUND")
-		CharacterModelScene:DisableDrawLayer("BORDER")
-		CharacterModelScene:DisableDrawLayer("OVERLAY")
-	else
-		CharacterModelFrame:DisableDrawLayer("BACKGROUND")
-		CharacterModelFrame:DisableDrawLayer("BORDER")
-		CharacterModelFrame:DisableDrawLayer("OVERLAY")
-	end
+	CharacterModelScene:DisableDrawLayer("BACKGROUND")
+	CharacterModelScene:DisableDrawLayer("BORDER")
+	CharacterModelScene:DisableDrawLayer("OVERLAY")
 
 	-- [[ Item buttons ]]
 
@@ -204,107 +198,44 @@ tinsert(C.defaultThemes, function()
 	end
 
 	-- [[ Equipment manager ]]
+	B.Reskin(PaperDollFrameEquipSet)
+	B.Reskin(PaperDollFrameSaveSet)
+	B.ReskinTrimScroll(PaperDollFrame.EquipmentManagerPane.ScrollBar)
 
-	if DB.isNewPatch then
-		B.Reskin(PaperDollFrameEquipSet)
-		B.Reskin(PaperDollFrameSaveSet)
-		B.ReskinTrimScroll(PaperDollFrame.EquipmentManagerPane.ScrollBar)
+	hooksecurefunc(PaperDollFrame.EquipmentManagerPane.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if child.icon and not child.styled then
+				B.HideObject(child.Stripe)
+				child.BgTop:SetTexture("")
+				child.BgMiddle:SetTexture("")
+				child.BgBottom:SetTexture("")
+				B.ReskinIcon(child.icon)
+		
+				child.HighlightBar:SetColorTexture(1, 1, 1, .25)
+				child.HighlightBar:SetDrawLayer("BACKGROUND")
+				child.SelectedBar:SetColorTexture(r, g, b, .25)
+				child.SelectedBar:SetDrawLayer("BACKGROUND")
 
-		hooksecurefunc(PaperDollFrame.EquipmentManagerPane.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollTarget:GetChildren())
-				if child.icon and not child.styled then
-					B.HideObject(child.Stripe)
-					child.BgTop:SetTexture("")
-					child.BgMiddle:SetTexture("")
-					child.BgBottom:SetTexture("")
-					B.ReskinIcon(child.icon)
-			
-					child.HighlightBar:SetColorTexture(1, 1, 1, .25)
-					child.HighlightBar:SetDrawLayer("BACKGROUND")
-					child.SelectedBar:SetColorTexture(r, g, b, .25)
-					child.SelectedBar:SetDrawLayer("BACKGROUND")
-
-					child.styled = true
-				end
+				child.styled = true
 			end
-		end)
-
-		B.ReskinIconSelector(GearManagerPopupFrame)
-	else
-		B.StripTextures(GearManagerDialogPopup.BorderBox)
-		GearManagerDialogPopup.BG:Hide()
-		B.SetBD(GearManagerDialogPopup)
-		GearManagerDialogPopup:SetHeight(525)
-		B.StripTextures(GearManagerDialogPopupScrollFrame)
-		B.ReskinScroll(GearManagerDialogPopupScrollFrameScrollBar)
-		B.Reskin(GearManagerDialogPopupOkay)
-		B.Reskin(GearManagerDialogPopupCancel)
-		B.ReskinInput(GearManagerDialogPopupEditBox)
-		B.ReskinScroll(PaperDollTitlesPaneScrollBar)
-		B.ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
-		B.StripTextures(PaperDollSidebarTabs)
-		B.Reskin(PaperDollEquipmentManagerPaneEquipSet)
-		B.Reskin(PaperDollEquipmentManagerPaneSaveSet)
-
-		for i = 1, NUM_GEARSET_ICONS_SHOWN do
-			local bu = _G["GearManagerDialogPopupButton"..i]
-			local ic = _G["GearManagerDialogPopupButton"..i.."Icon"]
-
-			bu:SetCheckedTexture(DB.textures.pushed)
-			select(2, bu:GetRegions()):Hide()
-			local hl = bu:GetHighlightTexture()
-			hl:SetColorTexture(1, 1, 1, .25)
-			hl:SetInside()
-
-			ic:SetInside()
-			B.ReskinIcon(ic)
 		end
+	end)
 
-		for _, bu in pairs(PaperDollEquipmentManagerPane.buttons) do
-			B.HideObject(bu.Stripe)
-			bu.BgTop:SetTexture("")
-			bu.BgMiddle:SetTexture("")
-			bu.BgBottom:SetTexture("")
-			B.ReskinIcon(bu.icon)
-	
-			bu.HighlightBar:SetColorTexture(1, 1, 1, .25)
-			bu.HighlightBar:SetDrawLayer("BACKGROUND")
-			bu.SelectedBar:SetColorTexture(r, g, b, .25)
-			bu.SelectedBar:SetDrawLayer("BACKGROUND")
-		end
-
-		PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
-		PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
-		GearManagerDialogPopup:HookScript("OnShow", function(self)
-			self:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 3, 0)
-		end)
-	end
+	B.ReskinIconSelector(GearManagerPopupFrame)
 
 	-- TitlePane
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(PaperDollFrame.TitleManagerPane.ScrollBar)
+	B.ReskinTrimScroll(PaperDollFrame.TitleManagerPane.ScrollBar)
 
-		hooksecurefunc(PaperDollFrame.TitleManagerPane.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollTarget:GetChildren())
-				if not child.styled then
-					child:DisableDrawLayer("BACKGROUND")
-					child.styled = true
-				end
+	hooksecurefunc(PaperDollFrame.TitleManagerPane.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if not child.styled then
+				child:DisableDrawLayer("BACKGROUND")
+				child.styled = true
 			end
-		end)
-	else
-		local titles = false
-		hooksecurefunc("PaperDollTitlesPane_Update", function()
-			if titles == false then
-				for i = 1, 17 do
-					_G["PaperDollTitlesPaneButton"..i]:DisableDrawLayer("BACKGROUND")
-				end
-				titles = true
-			end
-		end)
-	end
+		end
+	end)
 
 	-- Reputation Frame
 	ReputationDetailCorner:Hide()
@@ -335,38 +266,29 @@ tinsert(C.defaultThemes, function()
 	ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
 	ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
 
-	if DB.isNewPatch then
-		local function updateReputationBars(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollTarget:GetChildren())
-				local container = child and child.Container
-				if container and not container.styled then
-					B.StripTextures(container)
-					if container.ExpandOrCollapseButton then
-						B.ReskinCollapse(container.ExpandOrCollapseButton)
-						container.ExpandOrCollapseButton.__texture:DoCollapse(child.isCollapsed)
-					end
-					if container.ReputationBar then
-						B.StripTextures(container.ReputationBar)
-						container.ReputationBar:SetStatusBarTexture(DB.bdTex)
-						B.CreateBDFrame(container.ReputationBar, .25)
-					end
-		
-					container.styled = true
+	local function updateReputationBars(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			local container = child and child.Container
+			if container and not container.styled then
+				B.StripTextures(container)
+				if container.ExpandOrCollapseButton then
+					B.ReskinCollapse(container.ExpandOrCollapseButton)
+					container.ExpandOrCollapseButton.__texture:DoCollapse(child.isCollapsed)
 				end
+				if container.ReputationBar then
+					B.StripTextures(container.ReputationBar)
+					container.ReputationBar:SetStatusBarTexture(DB.bdTex)
+					B.CreateBDFrame(container.ReputationBar, .25)
+				end
+	
+				container.styled = true
 			end
 		end
-		hooksecurefunc(ReputationFrame.ScrollBox, "Update", updateReputationBars)
-
-		B.ReskinTrimScroll(ReputationFrame.ScrollBar)
-	else
-		for i = 1, NUM_FACTIONS_DISPLAYED do
-			local bu = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
-			B.ReskinCollapse(bu)
-		end
-
-		B.ReskinScroll(ReputationListScrollFrameScrollBar)
 	end
+	hooksecurefunc(ReputationFrame.ScrollBox, "Update", updateReputationBars)
+
+	B.ReskinTrimScroll(ReputationFrame.ScrollBar)
 
 	B.StripTextures(ReputationDetailFrame)
 	B.SetBD(ReputationDetailFrame)
@@ -382,116 +304,61 @@ tinsert(C.defaultThemes, function()
 	atWarCheckTex:SetPoint("CENTER")
 
 	-- Token frame
-	if DB.isNewPatch then
-		if TokenFramePopup.CloseButton then -- needs review, blizz typo
-			B.ReskinClose(TokenFramePopup.CloseButton)
-		end
-		B.ReskinCheck(TokenFramePopup.InactiveCheckBox)
-		B.ReskinCheck(TokenFramePopup.BackpackCheckBox)
-		B.ReskinTrimScroll(TokenFrame.ScrollBar)
+	if TokenFramePopup.CloseButton then -- blizz typo by parentKey "CloseButton" into "$parent.CloseButton"
+		B.ReskinClose(TokenFramePopup.CloseButton)
+	else
+		B.ReskinClose((select(4, TokenFramePopup:GetChildren())))
+	end
+	B.ReskinCheck(TokenFramePopup.InactiveCheckBox)
+	B.ReskinCheck(TokenFramePopup.BackpackCheckBox)
+	B.ReskinTrimScroll(TokenFrame.ScrollBar)
 
-		hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollTarget:GetChildren())
-				if child.Highlight and not child.styled then
-					if not child.styled then
-						child.CategoryLeft:SetAlpha(0)
-						child.CategoryRight:SetAlpha(0)
-						child.CategoryMiddle:SetAlpha(0)
+	hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if child.Highlight and not child.styled then
+				if not child.styled then
+					child.CategoryLeft:SetAlpha(0)
+					child.CategoryRight:SetAlpha(0)
+					child.CategoryMiddle:SetAlpha(0)
 
-						child.Highlight:SetInside()
-						child.Highlight.SetPoint = B.Dummy
-						child.Highlight:SetColorTexture(1, 1, 1, .25)
-						child.Highlight.SetTexture = B.Dummy
-		
-						child.bg = B.ReskinIcon(child.Icon)
-		
-						if child.ExpandIcon then
-							child.expBg = B.CreateBDFrame(child.ExpandIcon, 0, true)
-							child.expBg:SetInside(child.ExpandIcon, 3, 3)
-						end
+					child.Highlight:SetInside()
+					child.Highlight.SetPoint = B.Dummy
+					child.Highlight:SetColorTexture(1, 1, 1, .25)
+					child.Highlight.SetTexture = B.Dummy
+	
+					child.bg = B.ReskinIcon(child.Icon)
+	
+					if child.ExpandIcon then
+						child.expBg = B.CreateBDFrame(child.ExpandIcon, 0, true)
+						child.expBg:SetInside(child.ExpandIcon, 3, 3)
+					end
 
-						if child.Check then
-							child.Check:SetAtlas("checkmark-minimal")
-						end
-
-						child.styled = true
+					if child.Check then
+						child.Check:SetAtlas("checkmark-minimal")
 					end
 
 					child.styled = true
 				end
 
-				if child.isHeader then
-					child.bg:Hide()
-					child.expBg:Show()
-				else
-					child.bg:Show()
-					child.expBg:Hide()
-				end
+				child.styled = true
 			end
-		end)
-	else
-		TokenFramePopupCorner:Hide()
-		B.ReskinClose(TokenFramePopupCloseButton)
-		B.ReskinCheck(TokenFramePopupInactiveCheckBox)
-		B.ReskinCheck(TokenFramePopupBackpackCheckBox)
-		B.ReskinScroll(TokenFrameContainerScrollBar)
-		TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 3, -28)
-	end
+
+			if child.isHeader then
+				child.bg:Hide()
+				child.expBg:Show()
+			else
+				child.bg:Show()
+				child.expBg:Hide()
+			end
+		end
+	end)
+
 	B.StripTextures(TokenFramePopup)
 	B.SetBD(TokenFramePopup)
 
-	local function updateButtons()
-		local buttons = TokenFrameContainer.buttons
-		if not buttons then return end
-
-		for i = 1, #buttons do
-			local bu = buttons[i]
-
-			if not bu.styled then
-				bu.highlight:SetPoint("TOPLEFT", 1, 0)
-				bu.highlight:SetPoint("BOTTOMRIGHT", -1, 0)
-				bu.highlight.SetPoint = B.Dummy
-				bu.highlight:SetColorTexture(r, g, b, .2)
-				bu.highlight.SetTexture = B.Dummy
-
-				bu.categoryMiddle:SetAlpha(0)
-				bu.categoryLeft:SetAlpha(0)
-				bu.categoryRight:SetAlpha(0)
-
-				bu.bg = B.ReskinIcon(bu.icon)
-
-				if bu.expandIcon then
-					bu.expBg = B.CreateBDFrame(bu.expandIcon, 0, true)
-					bu.expBg:SetPoint("TOPLEFT", bu.expandIcon, -3, 3)
-					bu.expBg:SetPoint("BOTTOMRIGHT", bu.expandIcon, 3, -3)
-				end
-
-				bu.styled = true
-			end
-
-			if bu.isHeader then
-				bu.bg:Hide()
-				bu.expBg:Show()
-			else
-				bu.bg:Show()
-				bu.expBg:Hide()
-			end
-		end
-	end
-
-	if not DB.isNewPatch then
-		TokenFrame:HookScript("OnShow", updateButtons)
-		hooksecurefunc("TokenFrame_Update", updateButtons)
-		hooksecurefunc(TokenFrameContainer, "update", updateButtons)
-	end
-
 	-- Quick Join
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(QuickJoinFrame.ScrollBar)
-	else
-		B.ReskinScroll(QuickJoinScrollFrame.scrollBar)
-	end
+	B.ReskinTrimScroll(QuickJoinFrame.ScrollBar)
 	B.Reskin(QuickJoinFrame.JoinQueueButton)
 
 	B.SetBD(QuickJoinRoleSelectionFrame)

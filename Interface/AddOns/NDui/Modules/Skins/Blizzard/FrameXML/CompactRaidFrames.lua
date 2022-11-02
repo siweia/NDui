@@ -35,7 +35,7 @@ tinsert(C.defaultThemes, function()
 		CompactRaidFrameManagerDisplayFrameLockedModeToggle,
 		CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
 		CompactRaidFrameManagerDisplayFrameConvertToRaid,
-		CompactRaidFrameManagerDisplayFrameEditMode, -- isNewPatch
+		CompactRaidFrameManagerDisplayFrameEditMode,
 	}
 	for _, button in pairs(buttons) do
 		for i = 1, 9 do
@@ -55,10 +55,5 @@ tinsert(C.defaultThemes, function()
 	local bd = B.SetBD(CompactRaidFrameManager)
 	bd:SetPoint("TOPLEFT")
 	bd:SetPoint("BOTTOMRIGHT", -9, 9)
-	if DB.isNewPatch then
-		-- todo
-	else
-		B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)
-	end
 	B.ReskinCheck(CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

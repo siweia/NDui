@@ -98,44 +98,6 @@ local function Hook_UpdateBuybackInfo()
 end
 hooksecurefunc("MerchantFrame_UpdateBuybackInfo", Hook_UpdateBuybackInfo)
 
-local function Hook_UpdateAuctionHouse(self)
-	local numResults = self.getNumEntries()
-
-	local buttons = HybridScrollFrame_GetButtons(self.ScrollFrame)
-	local buttonCount = #buttons
-	local offset = self:GetScrollOffset()
-	for i = 1, buttonCount do
-		local visible = i + offset <= numResults
-		local button = buttons[i]
-		if visible then
-			if button.rowData.itemKey.itemID then
-				local itemLink
-				if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-					itemLink = format("|Hbattlepet:%d::::::|h[Dummy]|h", button.rowData.itemKey.battlePetSpeciesID)
-				else -- Normal item
-					itemLink = format("|Hitem:%d", button.rowData.itemKey.itemID)
-				end
-
-				if itemLink and IsAlreadyKnown(itemLink) then
-					-- Highlight
-					button.SelectedHighlight:Show()
-					button.SelectedHighlight:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
-					button.SelectedHighlight:SetAlpha(.25)
-					-- Icon
-					button.cells[2].Icon:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
-					button.cells[2].IconBorder:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
-				else
-					-- Highlight
-					button.SelectedHighlight:SetVertexColor(1, 1, 1)
-					-- Icon
-					button.cells[2].Icon:SetVertexColor(1, 1, 1)
-					button.cells[2].IconBorder:SetVertexColor(1, 1, 1)
-				end
-			end
-		end
-	end
-end
-
 local function Hook_UpdateAuctionItems(self)
 	for i = 1, self.ScrollTarget:GetNumChildren() do
 		local child = select(i, self.ScrollTarget:GetChildren())
@@ -203,11 +165,7 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(_, event, addon)
 	if addon == "Blizzard_AuctionHouseUI" then
-		if DB.isNewPatch then
-			hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList.ScrollBox, "Update", Hook_UpdateAuctionItems)
-		else
-			hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList, "RefreshScrollFrame", Hook_UpdateAuctionHouse)
-		end
+		hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList.ScrollBox, "Update", Hook_UpdateAuctionItems)
 		hookCount = hookCount + 1
 	elseif addon == "Blizzard_GuildBankUI" then
 		hooksecurefunc(GuildBankFrame, "Update", GuildBankFrame_Update)

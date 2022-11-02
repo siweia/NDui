@@ -17,6 +17,8 @@ function Bar:CreatePetbar()
 
 	PetActionBar:SetParent(frame)
 	PetActionBar:EnableMouse(false)
+	PetActionBar.UpdateShownButtons = B.Dummy
+	PetActionBar.UpdateGridLayout = B.Dummy
 
 	for i = 1, num do
 		local button = _G["PetActionButton"..i]

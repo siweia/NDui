@@ -418,7 +418,7 @@ function M:QuickJoin()
 	hooksecurefunc(LFGListFrame.SearchPanel.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
-			if not child.hooked then
+			if child.Name and not child.hooked then
 				child.Name:SetFontObject(Game14Font)
 				child.ActivityName:SetFontObject(Game12Font)
 				child:HookScript("OnDoubleClick", M.HookApplicationClick)

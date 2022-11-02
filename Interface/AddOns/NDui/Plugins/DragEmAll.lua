@@ -30,6 +30,7 @@ local frames = {
 	["PaperDollFrame"] = true,
 	["PetitionFrame"] = false,
 	["PetStableFrame"] = false,
+	["ProfessionsFrame"] = false,
 	["PVEFrame"] = false,
 	["QuestFrame"] = false,
 	["RaidParentFrame"] = false,
@@ -43,15 +44,8 @@ local frames = {
 	["TokenFrame"] = true,
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
+	["SettingsPanel"] = false,
 }
-if DB.isNewPatch then
-	frames["SettingsPanel"] = false
-	frames["ProfessionsFrame"] = false
-else
-	frames["AudioOptionsFrame"] = false
-	frames["InterfaceOptionsFrame"] = false
-	frames["VideoOptionsFrame"] = false
-end
 
 -- Frame Existing Check
 local function IsFrameExists()

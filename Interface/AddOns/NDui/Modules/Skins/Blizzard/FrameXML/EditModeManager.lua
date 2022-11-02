@@ -9,8 +9,6 @@ end
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-	if not DB.isNewPatch then return end
-
 	local frame = EditModeManagerFrame
 
 	B.StripTextures(frame)

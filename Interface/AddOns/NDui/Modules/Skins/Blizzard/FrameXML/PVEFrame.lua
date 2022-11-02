@@ -48,7 +48,7 @@ tinsert(C.defaultThemes, function()
 		local tab = _G["PVEFrameTab"..i]
 		if tab then
 			B.ReskinTab(tab)
-			if DB.isNewPatch and i ~= 1 then
+			if i ~= 1 then
 				tab:ClearAllPoints()
 				tab:SetPoint("TOPLEFT", _G["PVEFrameTab"..(i-1)], "TOPRIGHT", -15, 0)
 			end

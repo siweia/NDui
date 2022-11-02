@@ -101,10 +101,6 @@ function module:SkinChat()
 
 	local name = self:GetName()
 	local font, fontSize = self:GetFont()
-	if not DB.isNewPatch then
-		self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
-		self:SetMinResize(100, 50)
-	end
 	self:SetFont(fontFile or font, fontSize, fontOutline)
 	if fontOutline ~= "" then
 		self:SetShadowColor(0, 0, 0, 0)
@@ -440,10 +436,9 @@ function module:OnLogin()
 
 	-- Default
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
-	SetCVar("chatStyle", "classic")
+	SetCVar("chatStyle", "classic") -- todo: hide chatStyle option
 	SetCVar("chatMouseScroll", 1) -- enable mousescroll
 	--SetCVar("whisperMode", "inline") -- blizz reset this on NPE
-	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Add Elements
@@ -460,11 +455,7 @@ function module:OnLogin()
 	if C.db["Chat"]["Lock"] then
 		module:UpdateChatSize()
 		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
-		if DB.isNewPatch then
-			hooksecurefunc(ChatFrame1, "SetPoint", updateChatAnchor)
-		else
-			hooksecurefunc("FCF_SavePositionAndDimensions", module.UpdateChatSize)
-			FCF_SavePositionAndDimensions(ChatFrame1)
-		end
+		hooksecurefunc(ChatFrame1, "SetPoint", updateChatAnchor)
+		FCF_SavePositionAndDimensions(ChatFrame1)
 	end
 end

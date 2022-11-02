@@ -746,6 +746,9 @@ function S:ReskinRematch()
 
 		B.StripTextures(self)
 		B.SetBD(self)
+		if self.CloseButton then -- todo: handle all widget icons on title bar
+			B.ReskinClose(self.CloseButton)
+		end
 		for _, tab in ipairs(self.PanelTabs.Tabs) do
 			B.ReskinTab(tab)
 		end
@@ -756,7 +759,6 @@ function S:ReskinRematch()
 
 		local titleBar = self.TitleBar
 		B.StripTextures(titleBar)
-		B.ReskinClose(titleBar.CloseButton)
 
 		S:RematchLockButton(titleBar.MinimizeButton)
 		S:RematchLockButton(titleBar.LockButton)
