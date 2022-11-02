@@ -18,11 +18,6 @@ function Bar:CreateBar5()
 	MultiBarLeft:SetParent(frame)
 	MultiBarLeft:EnableMouse(false)
 	MultiBarLeft.QuickKeybindGlow:SetTexture("")
-	hooksecurefunc(MultiBarLeft, "SetScale", function(self, scale, force)
-		if not force and scale ~= 1 then
-			self:SetScale(1, true)
-		end
-	end)
 
 	for i = 1, num do
 		local button = _G["MultiBarLeftButton"..i]

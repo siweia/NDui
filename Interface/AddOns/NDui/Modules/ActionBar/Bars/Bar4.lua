@@ -7,22 +7,6 @@ local tinsert = tinsert
 local InCombatLockdown = InCombatLockdown
 local cfg = C.Bars.bar4
 
-local function updateVisibility(event)
-	if InCombatLockdown() then
-		B:RegisterEvent("PLAYER_REGEN_ENABLED", updateVisibility)
-	else
-		InterfaceOptions_UpdateMultiActionBars()
-		B:UnregisterEvent(event, updateVisibility)
-	end
-end
-
-function Bar:FixSizebarVisibility()
-	B:RegisterEvent("PET_BATTLE_OVER", updateVisibility)
-	B:RegisterEvent("PET_BATTLE_CLOSE", updateVisibility)
-	B:RegisterEvent("UNIT_EXITED_VEHICLE", updateVisibility)
-	B:RegisterEvent("UNIT_EXITING_VEHICLE", updateVisibility)
-end
-
 function Bar:ToggleBarFader(name)
 	local frame = _G["NDui_Action"..name]
 	if not frame then return end
@@ -65,11 +49,6 @@ function Bar:CreateBar4()
 	MultiBarRight:SetParent(frame)
 	MultiBarRight:EnableMouse(false)
 	MultiBarRight.QuickKeybindGlow:SetTexture("")
-	hooksecurefunc(MultiBarRight, "SetScale", function(self, scale, force)
-		if not force and scale ~= 1 then
-			self:SetScale(1, true)
-		end
-	end)
 
 	for i = 1, num do
 		local button = _G["MultiBarRightButton"..i]
@@ -86,7 +65,5 @@ function Bar:CreateBar4()
 		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
-	-- Fix visibility when leaving vehicle or petbattle
-	--Bar:FixSizebarVisibility()
 	Bar:UpdateFrameClickThru()
 end
