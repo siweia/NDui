@@ -236,6 +236,7 @@ function Bar:StyleActionButton(button, cfg)
 	if button.SlotBackground then button.SlotBackground:Hide() end
 	if button.IconMask then button.IconMask:Hide() end
 	if NormalTexture then NormalTexture:SetAlpha(0) end
+	if button.SpellHighlightTexture then button.SpellHighlightTexture:SetOutside() end
 
 	--backdrop
 	SetupBackdrop(icon)
