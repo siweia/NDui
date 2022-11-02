@@ -104,7 +104,7 @@ function TT:Azerite_UpdateItem()
 end
 
 function TT:AzeriteArmor()
-	if DB.isBeta then return end -- todo
+	if DB.isBeta then return end -- todo: via new tooltip system
 	if not C.db["Tooltip"]["AzeriteArmor"] then return end
 	if IsAddOnLoaded("AzeriteTooltip") then return end
 

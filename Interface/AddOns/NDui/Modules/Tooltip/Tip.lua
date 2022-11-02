@@ -516,7 +516,7 @@ function TT:OnLogin()
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
 	if not DB.isBeta then
 		hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
-		-- todo
+		-- todo: via new tooltip system
 		GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
