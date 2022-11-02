@@ -96,11 +96,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(ChannelFrame.NewButton)
 	B.Reskin(ChannelFrame.SettingsButton)
 	B.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(ChannelFrame.ChannelRoster.ScrollBar)
-	else
-		B.ReskinScroll(ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
-	end
+	B.ReskinTrimScroll(ChannelFrame.ChannelRoster.ScrollBar)
 
 	hooksecurefunc(ChannelFrame.ChannelList, "Update", function(self)
 		for i = 1, self.Child:GetNumChildren() do

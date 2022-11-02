@@ -257,7 +257,7 @@ tinsert(C.defaultThemes, function()
 		ObjectiveTrackerBlocksFrame.AchievementHeader,
 		ObjectiveTrackerBlocksFrame.ScenarioHeader,
 		ObjectiveTrackerBlocksFrame.CampaignQuestHeader,
-		ObjectiveTrackerBlocksFrame.ProfessionHeader, -- isNewPatch
+		ObjectiveTrackerBlocksFrame.ProfessionHeader,
 		BONUS_OBJECTIVE_TRACKER_MODULE.Header,
 		WORLD_QUEST_TRACKER_MODULE.Header,
 		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,

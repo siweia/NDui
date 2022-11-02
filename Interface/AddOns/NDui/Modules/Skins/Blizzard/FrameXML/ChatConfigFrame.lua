@@ -186,11 +186,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinRadio(CombatConfigColorsColorizeEntireLineByTarget)
 	B.ReskinColorSwatch(CombatConfigColorsColorizeSpellNamesColorSwatch)
 	B.ReskinColorSwatch(CombatConfigColorsColorizeDamageNumberColorSwatch)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(ChatConfigCombatSettingsFilters.ScrollBar)
-	else
-		B.ReskinScroll(ChatConfigCombatSettingsFiltersScrollFrameScrollBar)
-	end
+	B.ReskinTrimScroll(ChatConfigCombatSettingsFilters.ScrollBar)
 
 	ChatConfigMoveFilterUpButton:SetSize(22, 22)
 	ChatConfigMoveFilterDownButton:SetSize(22, 22)

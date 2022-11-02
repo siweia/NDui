@@ -64,11 +64,7 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarMonthBackground:SetAlpha(0)
 	CalendarYearBackground:SetAlpha(0)
 	CalendarFrameModalOverlay:SetAlpha(.25)
-	if DB.isNewPatch then
-		CalendarViewHolidayFrame.Texture:SetAlpha(0)
-	else
-		CalendarViewHolidayInfoTexture:SetAlpha(0)
-	end
+	CalendarViewHolidayFrame.Texture:SetAlpha(0)
 	CalendarTexturePickerAcceptButtonBorder:Hide()
 	CalendarTexturePickerCancelButtonBorder:Hide()
 	B.StripTextures(CalendarClassTotalsButton)

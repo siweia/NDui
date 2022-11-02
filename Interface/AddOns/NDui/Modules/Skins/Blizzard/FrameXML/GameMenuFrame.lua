@@ -11,22 +11,21 @@ tinsert(C.defaultThemes, function()
 	GameMenuFrame.Border:Hide()
 
 	local buttons = {
-		GameMenuButtonHelp,
-		GameMenuButtonWhatsNew,
-		GameMenuButtonStore,
-		GameMenuButtonOptions,
-		GameMenuButtonUIOptions,
-		GameMenuButtonKeybindings,
-		GameMenuButtonMacros,
-		GameMenuButtonAddons,
-		GameMenuButtonLogout,
-		GameMenuButtonQuit,
-		GameMenuButtonContinue,
-		GameMenuButtonSettings, -- isNewPatch
-		GameMenuButtonEditMode, -- isNewPatch
+		"GameMenuButtonHelp",
+		"GameMenuButtonWhatsNew",
+		"GameMenuButtonStore",
+		"GameMenuButtonMacros",
+		"GameMenuButtonAddons",
+		"GameMenuButtonLogout",
+		"GameMenuButtonQuit",
+		"GameMenuButtonContinue",
+		"GameMenuButtonSettings",
+		"GameMenuButtonEditMode",
 	}
-
-	for _, button in next, buttons do
-		B.Reskin(button)
+	for _, buttonName in next, buttons do
+		local button = _G[buttonName]
+		if button then
+			B.Reskin(button)
+		end
 	end
 end)

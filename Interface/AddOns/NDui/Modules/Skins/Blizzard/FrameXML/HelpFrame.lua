@@ -6,11 +6,7 @@ tinsert(C.defaultThemes, function()
 
 	B.StripTextures(HelpFrame)
 	B.SetBD(HelpFrame)
-	if DB.isNewPatch then
-		B.ReskinClose(HelpFrame.CloseButton)
-	else
-		B.ReskinClose(HelpFrameCloseButton)
-	end
+	B.ReskinClose(HelpFrame.CloseButton)
 	B.StripTextures(HelpBrowser.BrowserInset)
 
 	B.StripTextures(BrowserSettingsTooltip)

@@ -19,9 +19,6 @@ tinsert(C.defaultThemes, function()
 	SendStationeryBackgroundRight:Hide()
 	InboxPrevPageButton:GetRegions():Hide()
 	InboxNextPageButton:GetRegions():Hide()
-	if not DB.isNewPatch then
-		InboxTitleText:SetPoint("CENTER", MailFrame, 0, 195)
-	end
 
 	B.ReskinPortraitFrame(MailFrame)
 	B.ReskinPortraitFrame(OpenMailFrame)

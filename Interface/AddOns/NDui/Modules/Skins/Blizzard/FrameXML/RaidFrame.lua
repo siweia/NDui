@@ -19,11 +19,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(RaidInfoExtendButton)
 	B.Reskin(RaidInfoCancelButton)
 	B.ReskinClose(RaidInfoCloseButton)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(RaidInfoFrame.ScrollBar)
-	else
-		B.ReskinScroll(RaidInfoScrollFrameScrollBar)
-	end
+	B.ReskinTrimScroll(RaidInfoFrame.ScrollBar)
 	B.ReskinClose(RaidParentFrameCloseButton)
 
 	B.ReskinPortraitFrame(RaidParentFrame)

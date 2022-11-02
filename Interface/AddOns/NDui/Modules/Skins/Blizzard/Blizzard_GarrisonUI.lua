@@ -119,17 +119,9 @@ local function ReskinMissionButton(button)
 end
 
 local function ReskinMissionList(self)
-	if DB.isNewPatch then
-		for i = 1, self.ScrollTarget:GetNumChildren() do
-			local button = select(i, self.ScrollTarget:GetChildren())
-			ReskinMissionButton(button)
-		end
-	else
-		local buttons = self.listScroll.buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			ReskinMissionButton(button)
-		end
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local button = select(i, self.ScrollTarget:GetChildren())
+		ReskinMissionButton(button)
 	end
 end
 
@@ -228,17 +220,6 @@ local function ReskinFollowerButton(button)
 	end
 end
 
-local function UpdateFollowerList(self)
-	local followerFrame = self:GetParent()
-	local scrollFrame = followerFrame.FollowerList.listScroll
-	local buttons = scrollFrame.buttons
-
-	for i = 1, #buttons do
-		local button = buttons[i].Follower
-		ReskinFollowerButton(button)
-	end
-end
-
 local function ReskinFollowerButtons(self)
 	for i = 1, self.ScrollTarget:GetNumChildren() do
 		local child = select(i, self.ScrollTarget:GetChildren())
@@ -247,11 +228,7 @@ local function ReskinFollowerButtons(self)
 end
 
 local function ReskinFollowerList(followerList)
-	if DB.isNewPatch then
-		hooksecurefunc(followerList.ScrollBox, "Update", ReskinFollowerButtons)
-	else
-		hooksecurefunc(followerList, "UpdateData", UpdateFollowerList)
-	end
+	hooksecurefunc(followerList.ScrollBox, "Update", ReskinFollowerButtons)
 end
 
 local function UpdateSpellAbilities(self)
@@ -348,28 +325,16 @@ local function ReskinMissionFrame(self)
 
 	local missionList = self.MissionTab.MissionList
 	B.StripTextures(missionList)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(missionList.ScrollBar)
-	else
-		B.ReskinScroll(missionList.listScroll.scrollBar)
-	end
+	B.ReskinTrimScroll(missionList.ScrollBar)
 	ReskinGarrMaterial(missionList)
 	ReskinMissionTabs(missionList)
 	B.Reskin(missionList.CompleteDialog.BorderFrame.ViewButton)
-	if DB.isNewPatch then
-		hooksecurefunc(missionList.ScrollBox, "Update", ReskinMissionList)
-	else
-		hooksecurefunc(missionList, "Update", ReskinMissionList)
-	end
+	hooksecurefunc(missionList.ScrollBox, "Update", ReskinMissionList)
 
 	local FollowerList = self.FollowerList
 	B.StripTextures(FollowerList)
 	if FollowerList.SearchBox then B.ReskinInput(FollowerList.SearchBox) end
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(FollowerList.ScrollBar)
-	else
-		B.ReskinScroll(FollowerList.listScroll.scrollBar)
-	end
+	B.ReskinTrimScroll(FollowerList.ScrollBar)
 	ReskinGarrMaterial(FollowerList)
 	ReskinFollowerList(FollowerList)
 	hooksecurefunc(FollowerList, "ShowFollower", UpdateFollowerAbilities)
@@ -500,11 +465,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	followerList:SetPoint("BOTTOMLEFT", 24, 34)
 	followerList:DisableDrawLayer("BACKGROUND")
 	followerList:DisableDrawLayer("BORDER")
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(followerList.ScrollBar)
-	else
-		B.ReskinScroll(followerList.listScroll.scrollBar)
-	end
+	B.ReskinTrimScroll(followerList.ScrollBar)
 	ReskinFollowerList(followerList)
 	hooksecurefunc(followerList, "ShowFollower", UpdateFollowerAbilities)
 
@@ -598,48 +559,27 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local report = GarrisonLandingPage.Report
 	B.StripTextures(report)
 	B.StripTextures(report.List)
+	B.ReskinTrimScroll(report.List.ScrollBar)
 
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(report.List.ScrollBar)
-
-		hooksecurefunc(report.List.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local button = select(i, self.ScrollTarget:GetChildren())
-				if not button.styled then
-					button.BG:Hide()
-					local bg = B.CreateBDFrame(button, .25)
-					bg:SetPoint("TOPLEFT")
-					bg:SetPoint("BOTTOMRIGHT", 0, 1)
-			
-					for _, reward in pairs(button.Rewards) do
-						reward:GetRegions():Hide()
-						reward.bg = B.ReskinIcon(reward.Icon)
-						B.ReskinIconBorder(reward.IconBorder)
-					end
-
-					button.styled = true
+	hooksecurefunc(report.List.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local button = select(i, self.ScrollTarget:GetChildren())
+			if not button.styled then
+				button.BG:Hide()
+				local bg = B.CreateBDFrame(button, .25)
+				bg:SetPoint("TOPLEFT")
+				bg:SetPoint("BOTTOMRIGHT", 0, 1)
+		
+				for _, reward in pairs(button.Rewards) do
+					reward:GetRegions():Hide()
+					reward.bg = B.ReskinIcon(reward.Icon)
+					B.ReskinIconBorder(reward.IconBorder)
 				end
-			end
-		end)
-	else
-		local scrollFrame = report.List.listScroll
-		B.ReskinScroll(scrollFrame.scrollBar)
 
-		local buttons = scrollFrame.buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			button.BG:Hide()
-			local bg = B.CreateBDFrame(button, .25)
-			bg:SetPoint("TOPLEFT")
-			bg:SetPoint("BOTTOMRIGHT", 0, 1)
-	
-			for _, reward in pairs(button.Rewards) do
-				reward:GetRegions():Hide()
-				reward.bg = B.ReskinIcon(reward.Icon)
-				B.ReskinIconBorder(reward.IconBorder)
+				button.styled = true
 			end
 		end
-	end
+	end)
 
 	for _, tab in pairs({report.InProgress, report.Available}) do
 		tab:SetHighlightTexture(0)
@@ -676,11 +616,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local followerList = GarrisonLandingPage.FollowerList
 	B.StripTextures(followerList)
 	B.ReskinInput(followerList.SearchBox)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(followerList.ScrollBar)
-	else
-		B.ReskinScroll(followerList.listScroll.scrollBar)
-	end
+	B.ReskinTrimScroll(followerList.ScrollBar)
 	ReskinFollowerList(GarrisonLandingPageFollowerList)
 	hooksecurefunc(GarrisonLandingPageFollowerList, "ShowFollower", UpdateFollowerAbilities)
 
@@ -688,11 +624,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local shipFollowerList = GarrisonLandingPage.ShipFollowerList
 	B.StripTextures(shipFollowerList)
 	B.ReskinInput(shipFollowerList.SearchBox)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(shipFollowerList.ScrollBar)
-	else
-		B.ReskinScroll(shipFollowerList.listScroll.scrollBar)
-	end
+	B.ReskinTrimScroll(shipFollowerList.ScrollBar)
 
 	-- Follower tab
 	local followerTab = GarrisonLandingPage.FollowerTab
@@ -873,11 +805,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Follower list
 	local followerList = GarrisonRecruitSelectFrame.FollowerList
 	followerList:DisableDrawLayer("BORDER")
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(followerList.ScrollBar)
-	else
-		B.ReskinScroll(followerList.listScroll.scrollBar)
-	end
+	B.ReskinTrimScroll(followerList.ScrollBar)
 	B.ReskinInput(followerList.SearchBox)
 	ReskinFollowerList(followerList)
 	hooksecurefunc(followerList, "ShowFollower", UpdateFollowerAbilities)
@@ -942,11 +870,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	GarrisonShipyardFrame.BackgroundTile:Hide()
 	B.SetBD(GarrisonShipyardFrame)
 	B.ReskinInput(GarrisonShipyardFrameFollowers.SearchBox)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(GarrisonShipyardFrame.FollowerList.ScrollBar)
-	else
-		B.ReskinScroll(GarrisonShipyardFrameFollowersListScrollFrameScrollBar)
-	end
+	B.ReskinTrimScroll(GarrisonShipyardFrame.FollowerList.ScrollBar)
 	B.StripTextures(GarrisonShipyardFrameFollowers)
 	ReskinGarrMaterial(GarrisonShipyardFrameFollowers)
 
