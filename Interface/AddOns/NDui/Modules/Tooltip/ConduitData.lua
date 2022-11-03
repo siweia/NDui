@@ -39,6 +39,26 @@ function TT:Conduit_CheckStatus()
 	end
 end
 
+function TT:Conduit_CheckStatus2(data)
+	if self:IsForbidden() then return end
+
+	local link = data.hyperlink
+	if not link then return end
+	if not C_Soulbinds_IsItemConduitByItemInfo(link) then return end
+
+	local itemID = data.id
+	local level = select(4, GetItemInfo(link))
+	local knownLevel = itemID and TT.ConduitData[itemID]
+
+	if knownLevel and level and knownLevel >= level then
+		local textLine = _G[self:GetName().."TextLeft1"]
+		local text = textLine and textLine:GetText()
+		if text then
+			textLine:SetText(text..COLLECTED_STRING)
+		end
+	end
+end
+
 function TT:ConduitCollectionData()
 	TT.Conduit_UpdateCollection()
 	if not next(TT.ConduitData) then
@@ -49,8 +69,7 @@ function TT:ConduitCollectionData()
 	if not C.db["Tooltip"]["ConduitInfo"] then return end
 
 	if DB.isBeta then
-		-- todo: update via C_TooltipInfo
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.Conduit_CheckStatus)
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.Conduit_CheckStatus2)
 	else
 		GameTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
 		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
