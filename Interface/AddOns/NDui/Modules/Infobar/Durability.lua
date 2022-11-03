@@ -143,10 +143,24 @@ info.onEnter = function(self)
 			local slotIcon = localSlots[i][4]
 			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], cur.."%", 1,1,1, getDurabilityColor(cur, 100))
 
+			if DB.isBeta then
+
+			local data = C_TooltipInfo.GetInventoryItem("player", slot)
+			if data then
+				local argVal = data.args and data.args[7]
+				if argVal and argVal.field == "repairCost" then
+					totalCost = totalCost + argVal.intVal
+				end
+			end
+
+			else
+
 			B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
 			local repairCost = select(3, B.ScanTip:SetInventoryItem("player", slot))
 			repairCost = repairCost or 0
 			totalCost = totalCost + repairCost
+
+			end
 		end
 	end
 

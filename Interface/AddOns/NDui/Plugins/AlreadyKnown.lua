@@ -39,13 +39,48 @@ local function IsAlreadyKnown(link, index)
 		if not name then return end
 
 		if itemClassID == Enum.ItemClass.Battlepet and index then
+			if DB.isBeta then
+
+			local data = C_TooltipInfo.GetGuildBankItem(GetCurrentGuildBankTab(), index)
+			if data then
+				local argVal = data.args and data.args[2]
+				if argVal.field == "battlePetSpeciesID" then
+					return isPetCollected(argVal.intVal)
+				end
+			end
+
+			else
+
 			local speciesID = B.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
 			return isPetCollected(speciesID)
+
+			end
 		elseif TT.ConduitData[linkID] and TT.ConduitData[linkID] >= level then
 			return true
 		else
 			if knowns[link] then return true end
 			if not knowables[itemClassID] then return end
+
+			if DB.isBeta then
+
+			local data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+			if data then
+				for i = 1, #data.lines do
+					local lineData = data.lines[i]
+					local argVal = lineData and lineData.args
+					if argVal then
+						local text = argVal[2] and argVal[2].stringVal
+						if text then
+							if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
+								knowns[link] = true
+								return true
+							end
+						end
+					end
+				end
+			end
+
+			else
 
 			B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
 			B.ScanTip:SetHyperlink(link)
@@ -55,6 +90,8 @@ local function IsAlreadyKnown(link, index)
 					knowns[link] = true
 					return true
 				end
+			end
+
 			end
 		end
 	end

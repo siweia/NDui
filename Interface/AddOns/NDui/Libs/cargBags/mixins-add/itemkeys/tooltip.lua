@@ -39,6 +39,26 @@ local bindTypeToString = {
 cargBags.itemKeys["bindOn"] = function(i)
 	if not i.link then return end
 
+	if DB.isBeta then
+
+	local data = C_TooltipInfo.GetBagItem(i.bagId, i.slotId)
+	if data then
+		for j = 2, 5 do
+			local lineData = data.lines[j]
+			local argVal = lineData and lineData.args
+			if argVal then
+				local lineText = argVal[2] and argVal[2].stringVal
+				local bindOn = lineText and bindTypeToString[lineText]
+				if bindOn then
+					i.bindOn = bindOn
+					return bindOn
+				end
+			end
+		end
+	end
+
+	else
+
 	local tip = B.ScanTip
 	if not tip then return end
 
@@ -55,5 +75,7 @@ cargBags.itemKeys["bindOn"] = function(i)
 			i.bindOn = bindOn
 			return bindOn
 		end
+	end
+
 	end
 end
