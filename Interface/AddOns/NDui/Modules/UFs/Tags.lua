@@ -249,12 +249,29 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 			return "<"..guildName..">"
 		end
 	elseif not isPlayer and C.db["Nameplate"]["NameOnlyTitle"] then
+		if DB.isBeta then
+
+		local data = C_TooltipInfo.GetUnit(unit)
+		if data then
+			local lineData = data.lines[GetCVarBool("colorblindmode") and 3 or 2]
+			if lineData then
+				local title = lineData.args[2] and lineData.args[2].stringVal
+				if title and not strfind(title, "^"..LEVEL) then
+					return title
+				end
+			end
+		end
+
+		else
+
 		B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
 		B.ScanTip:SetUnit(unit)
 
 		local title = _G[format("NDui_ScanTooltipTextLeft%d", GetCVarBool("colorblindmode") and 3 or 2)]:GetText()
 		if title and not strfind(title, "^"..LEVEL) then
 			return title
+		end
+
 		end
 	end
 end
