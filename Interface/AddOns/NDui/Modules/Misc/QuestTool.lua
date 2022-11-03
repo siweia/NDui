@@ -114,7 +114,9 @@ function M:QuestTool()
 	end
 
 	-- Check npc in quests
-	if not DB.isBeta then -- todo: via new tooltip system
+	if DB.isBeta then
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, M.QuestTool_SetQuestUnit)
+	else
 		GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
 	end
 

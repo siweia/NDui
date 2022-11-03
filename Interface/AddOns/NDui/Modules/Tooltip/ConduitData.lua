@@ -20,6 +20,8 @@ function TT:Conduit_UpdateCollection()
 end
 
 function TT:Conduit_CheckStatus()
+	if not self.GetItem then return end
+
 	local _, link = self:GetItem()
 	if not link then return end
 	if not C_Soulbinds_IsItemConduitByItemInfo(link) then return end
@@ -44,12 +46,16 @@ function TT:ConduitCollectionData()
 	end
 	B:RegisterEvent("SOULBIND_CONDUIT_COLLECTION_UPDATED", TT.Conduit_UpdateCollection)
 
-	if DB.isBeta then return end -- todo: via new tooltip system
 	if not C.db["Tooltip"]["ConduitInfo"] then return end
 
-	GameTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+	if DB.isBeta then
+		-- todo: update via C_TooltipInfo
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.Conduit_CheckStatus)
+	else
+		GameTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+	end
 end

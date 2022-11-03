@@ -41,6 +41,7 @@ end
 function TT:HideLines()
 	for i = 3, self:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i]
+		if not tiptext then break end
 		local linetext = tiptext:GetText()
 		if linetext then
 			if linetext == PVP then
@@ -68,6 +69,7 @@ end
 function TT:GetLevelLine()
 	for i = 2, self:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i]
+		if not tiptext then break end
 		local linetext = tiptext:GetText()
 		if linetext and strfind(linetext, LEVEL) then
 			return tiptext
@@ -135,17 +137,6 @@ function TT:ShowUnitMythicPlusScore(unit)
 	local score = summary and summary.currentSeasonScore
 	if score and score > 0 then
 		GameTooltip:AddLine(format(L["MythicScore"], TT.GetDungeonScore(score)))
-	end
-end
-
-local passedNames = {
-	["GetUnit"] = true,
-	["GetWorldCursor"] = true,
-}
-function TT:RefreshLines()
-	local getterName = self.info and self.info.getterName
-	if passedNames[getterName] then
-		TT.OnTooltipSetUnit(self)
 	end
 end
 
@@ -473,11 +464,13 @@ function TT:SetupTooltipFonts()
 end
 
 function TT:FixRecipeItemNameWidth()
+	if not self.GetName then return end
+
 	local name = self:GetName()
 	for i = 1, self:NumLines() do
 		local line = _G[name.."TextLeft"..i]
 		if line:GetHeight() > 40 then
-			line:SetWidth(line:GetWidth() + 1)
+			line:SetWidth(line:GetWidth() + 2)
 		end
 	end
 end
@@ -505,22 +498,22 @@ function TT:OnLogin()
 	end
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	if DB.isBeta then
-		hooksecurefunc(GameTooltip, "ProcessLines", TT.RefreshLines)
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 		hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 	else
 		GameTooltip:HookScript("OnTooltipSetUnit", TT.OnTooltipSetUnit)
 		GameTooltip.StatusBar:SetScript("OnValueChanged", TT.StatusBar_OnValueChanged)
-	end
-	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
-	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
-	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
-	if not DB.isBeta then
+
 		hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
-		-- todo: via new tooltip system
 		GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
 	end
+	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
+	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
+	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)
 	TT:SetupTooltipFonts()
 	TT:FixStoneSoupError()
 
