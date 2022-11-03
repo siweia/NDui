@@ -22,6 +22,8 @@ local types = {
 }
 
 function TT:AddLineForID(id, linkType, noadd)
+	if self:IsForbidden() then return end
+
 	for i = 1, self:NumLines() do
 		local line = _G[self:GetName().."TextLeft"..i]
 		if not line then break end
@@ -54,6 +56,8 @@ function TT:AddLineForID(id, linkType, noadd)
 end
 
 function TT:SetHyperLinkID(link)
+	if self:IsForbidden() then return end
+
 	local linkType, id = strmatch(link, "^(%a+):(%d+)")
 	if not linkType or not id then return end
 
@@ -73,6 +77,8 @@ function TT:SetHyperLinkID(link)
 end
 
 function TT:SetItemID()
+	if self:IsForbidden() then return end
+
 	local link = select(2, self:GetItem())
 	if link then
 		local id = GetItemInfoFromHyperlink(link)
@@ -91,6 +97,8 @@ function TT:SetupTooltipID()
 
 	-- Spells
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
+		if self:IsForbidden() then return end
+
 		local _, _, _, _, _, _, caster, _, _, id = UnitAura(...)
 		if id then
 			TT.AddLineForID(self, id, types.spell)
@@ -108,6 +116,7 @@ function TT:SetupTooltipID()
 	end)
 	if DB.isBeta then
 		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self, data)
+			if self:IsForbidden() then return end
 			if data.id then
 				TT.AddLineForID(self, data.id, types.spell)
 			end
@@ -122,6 +131,7 @@ function TT:SetupTooltipID()
 	-- Items
 	if DB.isBeta then
 		local function addItemID(self, data)
+			if self:IsForbidden() then return end
 			if data.id then
 				TT.AddLineForID(self, data.id, types.item)
 			end
@@ -143,7 +153,7 @@ function TT:SetupTooltipID()
 		end)
 	end
 
-	-- Currencies
+	-- Currencies, todo: replace via tooltip processor
 	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
 		local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), "currency:(%d+)"))
 		if id then TT.AddLineForID(self, id, types.currency) end
