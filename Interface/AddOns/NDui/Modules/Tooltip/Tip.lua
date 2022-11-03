@@ -66,6 +66,26 @@ function TT:HideLines()
 	end
 end
 
+local FACTION_COLORS = {
+	[FACTION_ALLIANCE] = "|cff4080ff%s|r",
+	[FACTION_HORDE] = "|cffff5040%s|r",
+}
+function TT:UpdateFactionLine(lineData)
+	if self:IsForbidden() then return end
+	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
+
+	local linetext = lineData.leftText
+	if linetext == PVP then
+		return true
+	elseif FACTION_COLORS[linetext] then
+		if C.db["Tooltip"]["FactionIcon"] then
+			return true
+		else
+			lineData.leftText = format(FACTION_COLORS[linetext], linetext)
+		end
+	end
+end
+
 function TT:GetLevelLine()
 	for i = 2, self:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i]
@@ -143,7 +163,8 @@ end
 function TT:OnTooltipSetUnit()
 	if self:IsForbidden() then return end
 	if C.db["Tooltip"]["CombatHide"] and InCombatLockdown() then self:Hide() return end
-	TT.HideLines(self)
+
+	if not DB.isBeta then TT.HideLines(self) end
 
 	local unit = TT.GetUnit(self)
 	if not unit or not UnitExists(unit) then return end
@@ -500,6 +521,7 @@ function TT:OnLogin()
 	if DB.isBeta then
 		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 		hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+		TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
 
 		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 	else
