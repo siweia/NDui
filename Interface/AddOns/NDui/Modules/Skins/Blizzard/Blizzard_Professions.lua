@@ -263,6 +263,8 @@ C.themes["Blizzard_Professions"] = function()
 	end
 
 	-- Order page
+	if not frame.OrdersPage then return end -- not exists in retail yet
+
 	local browseFrame = frame.OrdersPage.BrowseFrame
 	B.Reskin(browseFrame.SearchButton)
 	B.Reskin(browseFrame.FavoritesSearchButton)
