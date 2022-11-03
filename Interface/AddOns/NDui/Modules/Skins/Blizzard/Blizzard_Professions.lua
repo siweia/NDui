@@ -230,14 +230,12 @@ C.themes["Blizzard_Professions"] = function()
 			for i = 1, self.ScrollTarget:GetNumChildren() do
 				local button = select(i, self.ScrollTarget:GetChildren())
 				if button.IconBorder and not button.styled then
-					if not hehe then
-						hehe = button
-					end
 					button.bg = B.ReskinIcon(button.icon)
 					button:SetNormalTexture(0)
 					button:SetPushedTexture(0)
 					button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 					B.ReskinIconBorder(button.IconBorder, true)
+
 					button.styled = true
 				end
 			end
@@ -263,8 +261,7 @@ C.themes["Blizzard_Professions"] = function()
 			end
 		end)
 	end
-	
-	
+
 	-- Order page
 	local browseFrame = frame.OrdersPage.BrowseFrame
 	B.Reskin(browseFrame.SearchButton)
