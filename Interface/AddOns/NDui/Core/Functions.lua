@@ -255,6 +255,7 @@ do
 
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
 		if fullScan then
+			-- todo: replace texture inspector via C_TooltipInfo
 			tip:SetOwner(UIParent, "ANCHOR_NONE")
 			tip:SetInventoryItem(arg1, arg2)
 
@@ -282,6 +283,35 @@ do
 		else
 			if iLvlDB[link] then return iLvlDB[link] end
 
+			if DB.isBeta then
+
+			local data
+			if arg1 and type(arg1) == "string" then
+				data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
+			elseif arg1 and type(arg1) == "number" then
+				data = C_TooltipInfo.GetBagItem(arg1, arg2)
+			else
+				data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+			end
+			if data then
+				for i = 2, 5 do
+					local lineData = data.lines[i]
+					if not lineData then break end
+					local argVal = lineData.args
+					if argVal then
+						local text = argVal[2] and argVal[2].stringVal
+						local found = text and strfind(text, itemLevelString)
+						if found then
+							local level = strmatch(text, "(%d+)%)?$")
+							iLvlDB[link] = tonumber(level)
+							break
+						end
+					end
+				end
+			end
+
+			else
+
 			tip:SetOwner(UIParent, "ANCHOR_NONE")
 			if arg1 and type(arg1) == "string" then
 				tip:SetInventoryItem(arg1, arg2)
@@ -307,6 +337,8 @@ do
 					iLvlDB[link] = tonumber(level)
 					break
 				end
+			end
+
 			end
 
 			return iLvlDB[link]

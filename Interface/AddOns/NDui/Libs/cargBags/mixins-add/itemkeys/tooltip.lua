@@ -45,7 +45,8 @@ cargBags.itemKeys["bindOn"] = function(i)
 	if data then
 		for j = 2, 5 do
 			local lineData = data.lines[j]
-			local argVal = lineData and lineData.args
+			if not lineData then break end
+			local argVal = lineData.args
 			if argVal then
 				local lineText = argVal[2] and argVal[2].stringVal
 				local bindOn = lineText and bindTypeToString[lineText]
