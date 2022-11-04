@@ -18,10 +18,15 @@ function Bar:CreateExtrabar()
 	frame.mover = B.Mover(frame, L["Extrabar"], "Extrabar", {"BOTTOM", UIParent, "BOTTOM", 250, 100})
 
 	ExtraActionBarFrame:EnableMouse(false)
-	ExtraAbilityContainer:SetParent(frame)
-	ExtraAbilityContainer:ClearAllPoints()
-	ExtraAbilityContainer:SetPoint("CENTER", frame, 0, 2*padding)
-	ExtraAbilityContainer.ignoreFramePositionManager = true
+	ExtraActionBarFrame:ClearAllPoints()
+	ExtraActionBarFrame:SetPoint("CENTER", frame)
+	ExtraActionBarFrame.ignoreFramePositionManager = true
+
+	hooksecurefunc(ExtraActionBarFrame, "SetParent", function(self, parent)
+		if parent == ExtraAbilityContainer then
+			self:SetParent(frame)
+		end
+	end)
 
 	local button = ExtraActionButton1
 	tinsert(buttonList, button)
