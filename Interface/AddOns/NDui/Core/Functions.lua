@@ -253,9 +253,50 @@ do
 		end
 	end
 
+	local slotData = {gems={},essence={}}
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
 		if fullScan then
-			-- todo: replace texture inspector via C_TooltipInfo
+			if DB.isBeta then
+
+			local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
+			if data then
+				wipe(slotData.gems)
+				wipe(slotData.essence) -- todo: no chance to test it yet
+				slotData.iLvl = nil
+				slotData.enchantText = nil
+
+				local num = 0
+				for i = 2, #data.lines do
+					local lineData = data.lines[i]
+					local argVal = lineData and lineData.args
+					if argVal then
+						if not slotData.iLvl then
+							local text = argVal[2] and argVal[2].stringVal
+							local found = text and strfind(text, itemLevelString)
+							if found then
+								local level = strmatch(text, "(%d+)%)?$")
+								slotData.iLvl = tonumber(level) or 0
+							end
+						else
+							local lineInfo = argVal[4] and argVal[4].field
+							if lineInfo == "enchantID" then
+								local enchant = argVal[2] and argVal[2].stringVal
+								slotData.enchantText = strmatch(enchant, enchantString)
+							elseif lineInfo == "gemIcon" then
+								num = num + 1
+								slotData.gems[num] = argVal[4].intVal
+							elseif lineInfo == "socketType" then
+								num = num + 1
+								slotData.gems[num] = format("Interface\\ItemSocketingFrame\\UI-EmptySocket-%s", argVal[4].stringVal)
+							end
+						end
+					end
+				end
+				return slotData
+
+				end
+			else
+
 			tip:SetOwner(UIParent, "ANCHOR_NONE")
 			tip:SetInventoryItem(arg1, arg2)
 
@@ -280,6 +321,8 @@ do
 			end
 
 			return slotInfo
+
+			end
 		else
 			if iLvlDB[link] then return iLvlDB[link] end
 
