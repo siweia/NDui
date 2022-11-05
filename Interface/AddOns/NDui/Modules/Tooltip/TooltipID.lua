@@ -22,6 +22,8 @@ local types = {
 }
 
 function TT:AddLineForID(id, linkType, noadd)
+	if self:IsForbidden() then return end
+
 	for i = 1, self:NumLines() do
 		local line = _G[self:GetName().."TextLeft"..i]
 		if not line then break end
@@ -54,6 +56,8 @@ function TT:AddLineForID(id, linkType, noadd)
 end
 
 function TT:SetHyperLinkID(link)
+	if self:IsForbidden() then return end
+
 	local linkType, id = strmatch(link, "^(%a+):(%d+)")
 	if not linkType or not id then return end
 
@@ -73,19 +77,14 @@ function TT:SetHyperLinkID(link)
 end
 
 function TT:SetItemID()
+	if self:IsForbidden() then return end
+
 	local link = select(2, self:GetItem())
 	if link then
 		local id = GetItemInfoFromHyperlink(link)
 		local keystone = strmatch(link, "|Hkeystone:([0-9]+):")
 		if keystone then id = tonumber(keystone) end
 		if id then TT.AddLineForID(self, id, types.item) end
-	end
-end
-
-function TT:SetSpellID()
-	local spellID = select(2, self:GetSpell())
-	if spellID then
-		if spellID then TT.AddLineForID(self, spellID, types.spell) end
 	end
 end
 
@@ -98,6 +97,8 @@ function TT:SetupTooltipID()
 
 	-- Spells
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
+		if self:IsForbidden() then return end
+
 		local _, _, _, _, _, _, caster, _, _, id = UnitAura(...)
 		if id then
 			TT.AddLineForID(self, id, types.spell)
@@ -113,7 +114,14 @@ function TT:SetupTooltipID()
 		local id = tonumber(strmatch(link, "spell:(%d+)"))
 		if id then TT.AddLineForID(ItemRefTooltip, id, types.spell) end
 	end)
-	if not DB.isBeta then
+	if DB.isBeta then
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self, data)
+			if self:IsForbidden() then return end
+			if data.id then
+				TT.AddLineForID(self, data.id, types.spell)
+			end
+		end)
+	else
 		GameTooltip:HookScript("OnTooltipSetSpell", function(self)
 			local id = select(2, self:GetSpell())
 			if id then TT.AddLineForID(self, id, types.spell) end
@@ -121,7 +129,16 @@ function TT:SetupTooltipID()
 	end
 
 	-- Items
-	if not DB.isBeta then
+	if DB.isBeta then
+		local function addItemID(self, data)
+			if self:IsForbidden() then return end
+			if data.id then
+				TT.AddLineForID(self, data.id, types.item)
+			end
+		end
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, addItemID)
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Toy, addItemID)
+	else
 		GameTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 		GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
 		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
@@ -134,12 +151,9 @@ function TT:SetupTooltipID()
 			local id = link and strmatch(link, "item:(%d+):")
 			if id then TT.AddLineForID(self, id, types.item) end
 		end)
-		hooksecurefunc(GameTooltip, "SetToyByItemID", function(self, id)
-			if id then TT.AddLineForID(self, id, types.item) end
-		end)
 	end
 
-	-- Currencies
+	-- Currencies, todo: replace via tooltip processor
 	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
 		local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), "currency:(%d+)"))
 		if id then TT.AddLineForID(self, id, types.currency) end
@@ -162,54 +176,6 @@ function TT:SetupTooltipID()
 	hooksecurefunc("QuestMapLogTitleButton_OnEnter", function(self)
 		if self.questID then
 			TT.AddLineForID(GameTooltip, self.questID, types.quest)
-		end
-	end)
-
-	if not DB.isBeta then return end
-
-	local isItems = {
-		["GetBagItem"] = true,
-		["GetInventoryItem"] = true,
-		["GetMerchantItem"] = true,
-		["GetBuybackItem"] = true,
-		["GetItemByID"] = true,
-		["GetRecipeResultItem"] = true,
-		["GetRecipeReagentItem"] = true,
-		["GetToyByItemID"] = true,
-		["GetHeirloomByItemID"] = true,
-		["GetHyperlink"] = true,
-		["GetItemKey"] = true,
-	}
-
-	local isSpells = {
-		["GetSpellByID"] = true,
-		["GetSpellBookItem"] = true, -- taint in 46092
-		["GetSpellByID"] = true,
-		["GetTraitEntry"] = true,
-		["GetMountBySpellID"] = true,
-	}
-
-	hooksecurefunc(GameTooltip, "ProcessLines", function(self)
-		local getterName = self.info and self.info.getterName
-		if isSpells[getterName] then
-			TT.HookTooltipSetSpell(self)
-			TT.SetSpellID(self)
-		elseif isItems[getterName] then
-			TT.HookTooltipSetItem(self)
-			TT.SetItemID(self)
-		else
-		--	print(getterName)
-		end
-	end)
-
-	hooksecurefunc(GameTooltip, "SetAction", function(self, action)
-		local actionType, actionID = GetActionInfo(action)
-		if actionType == "spell" or actionType == "companion" then
-			TT.HookTooltipSetSpell(self)
-			TT.AddLineForID(self, actionID, types.spell)
-		elseif actionType == "item" then
-			TT.HookTooltipSetItem(self)
-			TT.AddLineForID(self, actionID, types.item)
 		end
 	end)
 end

@@ -57,6 +57,8 @@ tinsert(C.defaultThemes, function()
 	for i = 1, 2 do
 		B.ReskinTab(_G["MailFrameTab"..i])
 	end
+	MailFrameTab2:ClearAllPoints()
+	MailFrameTab2:SetPoint("TOPLEFT", MailFrameTab1, "TOPRIGHT", -15, 0)
 
 	for _, button in pairs({OpenMailLetterButton, OpenMailMoneyButton}) do
 		B.StripTextures(button)

@@ -185,7 +185,7 @@ function A:ChantLumos(self)
 		UpdateCooldown(self.lumos[2], 217200, true)
 		UpdateBuff(self.lumos[3], 106785, 272790, false, true, "END")
 		UpdateBuff(self.lumos[4], 19574, 19574, true, false, true)
-		UpdateBuff(self.lumos[5], 193530, 193530, true, false, true)
+		UpdateBuff(self.lumos[5], 268877, 268877)
 
 	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 19434, true)

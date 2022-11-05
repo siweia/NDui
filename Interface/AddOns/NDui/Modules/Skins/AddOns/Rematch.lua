@@ -475,6 +475,7 @@ function S:ReskinRematch()
 
 		B.StripTextures(RematchJournal)
 		B.ReskinClose(RematchJournal.CloseButton)
+		RematchJournalPortrait:Hide()
 		for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
 			B.ReskinTab(tab)
 		end

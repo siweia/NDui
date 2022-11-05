@@ -326,6 +326,7 @@ function Bar:StyleExtraActionButton(cfg)
 	SetupTexture(checkedTexture, cfg.checkedTexture, "SetCheckedTexture", button)
 	highlightTexture:SetColorTexture(1, 1, 1, .25)
 	if NormalTexture then NormalTexture:SetAlpha(0) end
+	if button.IconMask then button.IconMask:Hide() end
 
 	--cooldown
 	SetupCooldown(cooldown, cfg.cooldown)

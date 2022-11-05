@@ -229,8 +229,15 @@ C.themes["Blizzard_Communities"] = function()
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
 		B.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
-		B.Reskin(dialog.OkayButton)
-		B.Reskin(dialog.CancelButton)
+		if dialog.OkayButton then -- isBeta
+			B.Reskin(dialog.OkayButton)
+			B.Reskin(dialog.CancelButton)
+		end
+		if dialog.Selector then
+			B.StripTextures(dialog.Selector)
+			B.Reskin(dialog.Selector.OkayButton)
+			B.Reskin(dialog.Selector.CancelButton)
+		end
 		B.ReskinCheck(dialog.ScrollFrame.Child.QuickJoinButton)
 		dialog.ScrollFrame.Child.QuickJoinButton:SetSize(25, 25)
 		B.Reskin(dialog.ScrollFrame.Child.AllButton)
@@ -399,9 +406,16 @@ C.themes["Blizzard_Communities"] = function()
 		local dialog = CommunitiesAvatarPickerDialog
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
-		B.Reskin(dialog.OkayButton)
-		B.Reskin(dialog.CancelButton)
+		if dialog.OkayButton then -- isBeta
+			B.Reskin(dialog.OkayButton)
+			B.Reskin(dialog.CancelButton)
+		end
 		B.ReskinTrimScroll(CommunitiesAvatarPickerDialog.ScrollBar)
+		if dialog.Selector then
+			B.StripTextures(dialog.Selector)
+			B.Reskin(dialog.Selector.OkayButton)
+			B.Reskin(dialog.Selector.CancelButton)
+		end
 
 		-- todo, blizzard still buggy atm
 		--[=[hooksecurefunc(CommunitiesAvatarPickerDialog.ScrollFrame, "Refresh", function(self)

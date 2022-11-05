@@ -427,6 +427,9 @@ function UF:OnLogin()
 		UF.headers = {}
 
 		-- Hide Default RaidFrame
+		if CompactPartyFrame then
+			CompactPartyFrame:UnregisterAllEvents()
+		end
 		if CompactRaidFrameManager_SetSetting then
 			CompactRaidFrameManager_SetSetting("IsShown", "0")
 			UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")

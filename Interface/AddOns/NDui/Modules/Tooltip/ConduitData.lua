@@ -20,11 +20,33 @@ function TT:Conduit_UpdateCollection()
 end
 
 function TT:Conduit_CheckStatus()
+	if not self.GetItem then return end
+
 	local _, link = self:GetItem()
 	if not link then return end
 	if not C_Soulbinds_IsItemConduitByItemInfo(link) then return end
 
 	local itemID = GetItemInfoFromHyperlink(link)
+	local level = select(4, GetItemInfo(link))
+	local knownLevel = itemID and TT.ConduitData[itemID]
+
+	if knownLevel and level and knownLevel >= level then
+		local textLine = _G[self:GetName().."TextLeft1"]
+		local text = textLine and textLine:GetText()
+		if text then
+			textLine:SetText(text..COLLECTED_STRING)
+		end
+	end
+end
+
+function TT:Conduit_CheckStatus2(data)
+	if self:IsForbidden() then return end
+
+	local link = data.hyperlink
+	if not link then return end
+	if not C_Soulbinds_IsItemConduitByItemInfo(link) then return end
+
+	local itemID = data.id
 	local level = select(4, GetItemInfo(link))
 	local knownLevel = itemID and TT.ConduitData[itemID]
 
@@ -44,12 +66,15 @@ function TT:ConduitCollectionData()
 	end
 	B:RegisterEvent("SOULBIND_CONDUIT_COLLECTION_UPDATED", TT.Conduit_UpdateCollection)
 
-	if DB.isBeta then return end -- todo: via new tooltip system
 	if not C.db["Tooltip"]["ConduitInfo"] then return end
 
-	GameTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
-	EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+	if DB.isBeta then
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.Conduit_CheckStatus2)
+	else
+		GameTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Conduit_CheckStatus)
+	end
 end
