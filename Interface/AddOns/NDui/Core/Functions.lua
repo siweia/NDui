@@ -265,7 +265,7 @@ do
 				slotData.iLvl = nil
 				slotData.enchantText = nil
 
-				local isHoA = data.args and data.args]2] and data.args]2].intVal == 158075
+				local isHoA = data.args and data.args[2] and data.args[2].intVal == 158075
 				local num = 0
 				for i = 2, #data.lines do
 					local lineData = data.lines[i]
