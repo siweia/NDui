@@ -157,18 +157,20 @@ hooksecurefunc(WhoFrame.ScrollBox, "Update", function(self)
 		local variableText = button.Variable
 
 		local info = C_FriendList_GetWhoInfo(button.index)
-		local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
-		if zone == playerZone then zone = "|cff00ff00"..zone end
-		if guild == playerGuild then guild = "|cff00ff00"..guild end
-		if race == playerRace then race = "|cff00ff00"..race end
+		if info then
+			local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
+			if zone == playerZone then zone = "|cff00ff00"..zone end
+			if guild == playerGuild then guild = "|cff00ff00"..guild end
+			if race == playerRace then race = "|cff00ff00"..race end
 
-		wipe(columnTable)
-		tinsert(columnTable, zone)
-		tinsert(columnTable, guild)
-		tinsert(columnTable, race)
+			wipe(columnTable)
+			tinsert(columnTable, zone)
+			tinsert(columnTable, guild)
+			tinsert(columnTable, race)
 
-		nameText:SetTextColor(classColor(class, true))
-		levelText:SetText(diffColor(level)..level)
-		variableText:SetText(columnTable[UIDropDownMenu_GetSelectedID(WhoFrameDropDown)])
+			nameText:SetTextColor(classColor(class, true))
+			levelText:SetText(diffColor(level)..level)
+			variableText:SetText(columnTable[UIDropDownMenu_GetSelectedID(WhoFrameDropDown)])
+		end
 	end
 end)
