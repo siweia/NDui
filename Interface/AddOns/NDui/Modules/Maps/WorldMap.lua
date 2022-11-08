@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Maps")
 
@@ -85,8 +85,8 @@ function module:UpdateMapID()
 end
 
 function module:SetupCoords()
-	playerCoords = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 60, -6)
-	cursorCoords = B.CreateFS(WorldMapFrame.BorderFrame, 14, "", false, "TOPLEFT", 180, -6)
+	playerCoords = B.CreateFS(WorldMapFrame.BorderFrame.TitleContainer, 14, "", false, "TOPLEFT", 60, -6)
+	cursorCoords = B.CreateFS(WorldMapFrame.BorderFrame.TitleContainer, 14, "", false, "TOPLEFT", 180, -6)
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 
 	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", module.UpdateMapID)
@@ -238,7 +238,7 @@ function module:MapData_ResetTexturePool(texture)
 end
 
 function module:RemoveMapFog()
-	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsBaseCheckButtonTemplate")
+	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame.TitleContainer, "OptionsBaseCheckButtonTemplate")
 	bu:SetHitRectInsets(-5, -5, -5, -5)
 	bu:SetPoint("TOPRIGHT", -270, 0)
 	bu:SetSize(26, 26)

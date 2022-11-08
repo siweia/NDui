@@ -253,7 +253,7 @@ do
 		end
 	end
 
-	local slotData = {gems={},essence={}}
+	local slotData = {gems={},gemsColor={}}
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
 		if fullScan then
 			if DB.isBeta then
@@ -261,10 +261,11 @@ do
 			local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
 			if data then
 				wipe(slotData.gems)
-				wipe(slotData.essence) -- todo: no chance to test it yet
+				wipe(slotData.gemsColor)
 				slotData.iLvl = nil
 				slotData.enchantText = nil
 
+				local isHoA = data.args and data.args[2] and data.args[2].intVal == 158075
 				local num = 0
 				for i = 2, #data.lines do
 					local lineData = data.lines[i]
@@ -276,6 +277,12 @@ do
 							if found then
 								local level = strmatch(text, "(%d+)%)?$")
 								slotData.iLvl = tonumber(level) or 0
+							end
+						elseif isHoA then
+							if argVal[6] and argVal[6].field == "essenceIcon" then
+								num = num + 1
+								slotData.gems[num] = argVal[6].intVal
+								slotData.gemsColor[num] = argVal[3] and argVal[3].colorVal
 							end
 						else
 							local lineInfo = argVal[4] and argVal[4].field
