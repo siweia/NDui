@@ -5,7 +5,7 @@ local TT = B:GetModule("Tooltip")
 
 local pairs, select, next, type, unpack = pairs, select, next, type, unpack
 local UnitGUID, GetItemInfo, GetSpellInfo = UnitGUID, GetItemInfo, GetSpellInfo
-local GetContainerItemLink = DB.isNewPatch and C_Container.GetContainerItemLink or GetContainerItemLink
+local GetContainerItemLink = DB.isBeta and C_Container.GetContainerItemLink or GetContainerItemLink
 local GetInventoryItemLink = GetInventoryItemLink
 local EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation = EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation
 local C_AzeriteEmpoweredItem_IsPowerSelected = C_AzeriteEmpoweredItem.IsPowerSelected
