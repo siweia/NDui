@@ -267,7 +267,6 @@ do
 
 				local isHoA = data.args and data.args]2] and data.args]2].intVal == 158075
 				local num = 0
-				local step = 0
 				for i = 2, #data.lines do
 					local lineData = data.lines[i]
 					local argVal = lineData and lineData.args
