@@ -1,11 +1,11 @@
-﻿local _, ns = ...
+local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 local TT = B:GetModule("Tooltip")
 
 local pairs, select, next, type, unpack = pairs, select, next, type, unpack
 local UnitGUID, GetItemInfo, GetSpellInfo = UnitGUID, GetItemInfo, GetSpellInfo
-local GetContainerItemLink = DB.isBeta and C_Container.GetContainerItemLink or GetContainerItemLink
+local GetContainerItemLink = DB.isNewPatch and C_Container.GetContainerItemLink or GetContainerItemLink
 local GetInventoryItemLink = GetInventoryItemLink
 local EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation = EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation
 local C_AzeriteEmpoweredItem_IsPowerSelected = C_AzeriteEmpoweredItem.IsPowerSelected
@@ -155,10 +155,15 @@ function M:ItemLevel_UpdateInfo(slotFrame, info, quality)
 			local texture = slotFrame["textureIcon"..i]
 			local bg = texture.bg
 			local gem = info.gems and info.gems[gemStep]
+			local color = info.gemsColor and info.gemsColor[gemStep]
 			local essence = not gem and (info.essences and info.essences[essenceStep])
 			if gem then
 				texture:SetTexture(gem)
-				bg:SetBackdropBorderColor(0, 0, 0)
+				if color then
+					bg:SetBackdropBorderColor(color.r, color.g, color.b)
+				else
+					bg:SetBackdropBorderColor(0, 0, 0)
+				end
 				bg:Show()
 
 				gemStep = gemStep + 1
