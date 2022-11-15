@@ -163,7 +163,8 @@ local function Update(self, event, unit, powerType)
 	* ...           - the indices of currently charged power points, if any
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(cur, max, oldMax ~= max, powerType, chargedPoints)
+		--return element:PostUpdate(cur, max, oldMax ~= max, powerType, unpack(chargedPoints or {}))
+		return element:PostUpdate(cur, max, oldMax ~= max, powerType, chargedPoints) -- NDui
 	end
 end
 
@@ -332,7 +333,7 @@ local function Enable(self, unit)
 		for i = 1, #element do
 			local bar = element[i]
 			if(bar:IsObjectType('StatusBar')) then
-				if(not (bar:GetStatusBarTexture() or bar:GetStatusBarAtlas())) then
+				if(not bar:GetStatusBarTexture()) then
 					bar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 				end
 
