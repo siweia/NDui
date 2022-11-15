@@ -960,22 +960,15 @@ function UF.PostUpdateButton(element, button, unit, data)
 	if newTexture then
 		button.Icon:SetTexture(newTexture)
 	end
+
+	if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
+		button.Count:SetText(element.bolsterStacks)
+	end
 end
 
 function UF.AurasPreUpdate(element)
-	element.numBolster = 0
-end
-
-function UF.AurasPostUpdate(element)
-	if element.numBolster == 0 then return end
-
-	for i = 1, #element.sortedBuffs do
-		local button = element[i]
-		if button.spellID == 209859 then
-			button.Count:SetText(element.numBolster)
-			break
-		end
-	end
+	element.bolsterStacks = 0
+	element.bolsterInstanceID = nil
 end
 
 function UF.PostUpdateGapButton(_, _, button)
@@ -994,8 +987,11 @@ function UF.CustomFilter(element, unit, data)
 	local name, debuffType, caster, isStealable, spellID, nameplateShowAll = data.name, data.dispelName, data.sourceUnit, data.isStealable, data.spellId, data.nameplateShowAll
 
 	if name and spellID == 209859 then
-		element.numBolster = element.numBolster + 1
-		return element.numBolster == 1
+		if not element.bolsterInstanceID then
+			element.bolsterInstanceID = data.auraInstanceID
+		end
+		element.bolsterStacks = element.bolsterStacks + 1
+		return element.bolsterStacks == 1
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if C.db["Nameplate"]["ColorByDot"] and isCasterPlayer[caster] and C.db["Nameplate"]["DotSpells"][spellID] then
 			element.hasTheDot = true
@@ -1203,7 +1199,6 @@ function UF:CreateAuras(self)
 	bu.PostUpdateButton = UF.PostUpdateButton
 	bu.PostUpdateGapButton = UF.PostUpdateGapButton
 	bu.PreUpdate = UF.AurasPreUpdate
-	bu.PostUpdate = UF.AurasPostUpdate
 
 	self.Auras = bu
 end
