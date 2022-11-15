@@ -560,6 +560,7 @@ function UF:UpdateQuestIndicator()
 
 	self.questIcon:Hide()
 	self.questCount:SetText("")
+	if isInInstance then return end
 
 	if CodexMap then
 		UF.UpdateCodexQuestUnit(self, self.unitName)
