@@ -102,7 +102,7 @@ function Bar:HideBlizz()
 	end
 
 	-- Fix spellbook button taint with Editmode
-	ReplaceSpellbookButtons()
+	--ReplaceSpellbookButtons()
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	-- Fix maw block anchor
