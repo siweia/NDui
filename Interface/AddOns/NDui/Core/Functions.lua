@@ -186,7 +186,7 @@ do
 	function B:GetEnchantText(link, slotInfo)
 		local enchantID = tonumber(strmatch(link, "item:%d+:(%d+):"))
 		if enchantID then
-			for i = 1, tip:NumLines() do
+			--[[for i = 1, tip:NumLines() do
 				local line = _G["NDui_ScanTooltipTextLeft"..i]
 				if not line then break end
 
@@ -204,7 +204,8 @@ do
 						end
 					end
 				end
-			end
+			end]]
+			return _G.ACTION_ENCHANT_APPLIED
 		end
 	end
 
