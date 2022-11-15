@@ -894,7 +894,7 @@ local dispellType = {
 	[""] = true,
 }
 
-function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuffType)
+function UF.PostUpdateIcon(element, unit, button, _, _, duration, expiration, debuffType)
 	if duration then button.iconbg:Show() end
 
 	local style = element.__owner.mystyle
