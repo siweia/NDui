@@ -917,7 +917,7 @@ local dispellType = {
 }
 
 function UF.PostUpdateButton(element, button, unit, data)
-	local duration, expiration, debuffType = data.duration, data..expirationTime, data.dispelName
+	local duration, expiration, debuffType = data.duration, data.expirationTime, data.dispelName
 
 	if duration then button.iconbg:Show() end
 
@@ -962,24 +962,13 @@ function UF.PostUpdateButton(element, button, unit, data)
 	end
 end
 
-local function bolsterPreUpdate(element)
-	element.bolster = 0
-	element.bolsterIndex = nil
-	element.hasTheDot = nil
-end
-
-local function bolsterPostUpdate(element)
-	local button = element.bolsterIndex
-	if button then
-		button.Count:SetText(element.bolster)
-	end
-end
-
 function UF.AurasPreUpdate(element)
 	element.numBolster = 0
 end
 
 function UF.AurasPostUpdate(element)
+	if element.numBolster == 0 then return end
+
 	for i = 1, #element.sortedBuffs do
 		local button = element[i]
 		if button.spellID == 209859 then
@@ -1006,7 +995,7 @@ function UF.CustomFilter(element, unit, data)
 
 	if name and spellID == 209859 then
 		element.numBolster = element.numBolster + 1
-		return numBolster == 1
+		return element.numBolster == 1
 	elseif style == "nameplate" or style == "boss" or style == "arena" then
 		if C.db["Nameplate"]["ColorByDot"] and isCasterPlayer[caster] and C.db["Nameplate"]["DotSpells"][spellID] then
 			element.hasTheDot = true
@@ -1164,31 +1153,31 @@ function UF:CreateAuras(self)
 		bu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -10)
 		bu.__value = "Player"
 		UF:ConfigureAuras(bu)
-		bu.CustomFilter = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "target" then
 		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 		bu.__value = "Target"
 		UF:ConfigureAuras(bu)
-		bu.CustomFilter = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "tot" then
 		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -5)
 		bu.__value = "ToT"
 		UF:ConfigureAuras(bu)
-		bu.CustomFilter = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "pet" then
 		bu.initialAnchor = "TOPRIGHT"
 		bu["growth-x"] = "LEFT"
 		bu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 		bu.__value = "Pet"
 		UF:ConfigureAuras(bu)
-		bu.CustomFilter = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "focus" then
 		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 		bu.numTotal = 23
 		bu.iconsPerRow = 8
 		bu.__value = "Focus"
 		UF:ConfigureAuras(bu)
-		bu.CustomFilter = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growth-y"] = "UP"
@@ -1205,7 +1194,7 @@ function UF:CreateAuras(self)
 		bu.gap = false
 		bu.disableMouse = true
 		bu.disableCooldown = true
-		bu.CustomFilter = UF.CustomFilter
+		bu.FilterAura = UF.CustomFilter
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
@@ -1230,7 +1219,7 @@ function UF:CreateBuffs(self)
 
 	bu.__value = "Boss"
 	UF:ConfigureBuffAndDebuff(bu)
-	bu.CustomFilter = UF.UnitCustomFilter
+	bu.FilterAura = UF.UnitCustomFilter
 
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.showStealableBuffs = true
@@ -1252,7 +1241,7 @@ function UF:CreateDebuffs(self)
 	bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 	bu.__value = "Boss"
 	UF:ConfigureBuffAndDebuff(bu, true)
-	bu.CustomFilter = UF.UnitCustomFilter
+	bu.FilterAura = UF.UnitCustomFilter
 
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.PostCreateButton = UF.PostCreateButton

@@ -275,7 +275,7 @@ local function Enable(self, unit)
 			element.displayPairs = CopyTable(ALT_MANA_BAR_PAIR_DISPLAY_INFO)
 		end
 
-		if(rune:IsObjectType('StatusBar') and not rune:GetStatusBarTexture()) then
+		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 
