@@ -922,3 +922,5 @@ L["AuraFontSize"] = "Auras FontSize" -- need translation
 L["SizeRatio"] = "Icon Size Ratio" -- need translation
 L["DisableMinimap"] = "Disable Enhanced Minimap" -- need translation
 L["DisableMinimapTip"] = "|nIf checked, all the features below will be disabled as well.|nIf you have addon SexyMap enabled, the enhanced minimap would turn off automatically." -- need translation
+L["ChargesRemaining"] = "%s %s/%s next charge remaining %s" -- need translation
+L["ChargesCompleted"] = "%s %s/%s all charges ready." -- need translation

@@ -922,3 +922,5 @@ L["AuraFontSize"] = "Taille de police des auras"
 L["SizeRatio"] = "Ratio de la taille des icônes"
 L["DisableMinimap"] = "Désactiver la mini-carte améliorée"
 L["DisableMinimapTip"] = "|nSi coché, toutes les fonctions ci-dessous seront également désactivées. Si vous avez activé l'addon SexyMap, la minimap améliorée sera automatiquement désactivée."
+L["ChargesRemaining"] = "%s %s/%s next charge remaining %s" -- need translation
+L["ChargesCompleted"] = "%s %s/%s all charges ready." -- need translation

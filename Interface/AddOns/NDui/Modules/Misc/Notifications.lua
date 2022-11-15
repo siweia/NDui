@@ -678,13 +678,23 @@ end
 
 local lastCDSend = 0
 function M:SendCurrentSpell(thisTime, spellID)
-	local start, duration = GetSpellCooldown(spellID)
 	local spellLink = GetSpellLink(spellID)
-	if start and duration > 0 then
-		local remain = start + duration - thisTime
-		SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())
+	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
+	if charges and maxCharges then
+		if charges ~= maxCharges then
+			local remain = chargeStart + chargeDuration - thisTime
+			SendChatMessage(format(L["ChargesRemaining"], spellLink, charges, maxCharges, GetRemainTime(remain)), M:GetMsgChannel())
+		else
+			SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
+		end
 	else
-		SendChatMessage(format(L["CooldownCompleted"], spellLink), M:GetMsgChannel())
+		local start, duration = GetSpellCooldown(spellID)
+		if start and duration > 0 then
+			local remain = start + duration - thisTime
+			SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())
+		else
+			SendChatMessage(format(L["CooldownCompleted"], spellLink), M:GetMsgChannel())
+		end
 	end
 end
 
