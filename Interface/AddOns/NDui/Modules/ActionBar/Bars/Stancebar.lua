@@ -30,7 +30,6 @@ function Bar:UpdateStanceBar()
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
 			end
-			button.SetPoint = B.Dummy
 		end
 		Bar:UpdateFontSize(button, fontSize)
 	end
@@ -53,9 +52,11 @@ function Bar:CreateStancebar()
 	-- StanceBar
 	StanceBar:SetParent(frame)
 	StanceBar:EnableMouse(false)
+	StanceBar:UnregisterAllEvents()
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
+		button:SetParent(frame)
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
 	end
