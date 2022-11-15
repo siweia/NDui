@@ -80,15 +80,6 @@ function M:OnLogin()
 		end)
 	end
 
-	-- Always show altpower value
-	hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
-		local statusFrame = self.statusFrame
-		if statusFrame.enabled then
-			statusFrame:Show()
-			statusFrame.Hide = statusFrame.Show
-		end
-	end)
-
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
 		local function updateBubble()
@@ -417,6 +408,42 @@ do
 	end
 	B:RegisterEvent("ARCHAEOLOGY_SURVEY_CAST", updateArcTitle)
 	B:RegisterEvent("ARCHAEOLOGY_FIND_COMPLETE", updateArcTitle)
+end
+
+-- Drag AltPowerbar
+do
+	local mover = CreateFrame("Frame", "NDuiAltBarMover", PlayerPowerBarAlt)
+	mover:SetPoint("CENTER", UIParent, 0, -200)
+	mover:SetSize(20, 20)
+	B.CreateMF(PlayerPowerBarAlt, mover)
+
+	hooksecurefunc(PlayerPowerBarAlt, "SetPoint", function(_, _, parent)
+		if parent ~= mover then
+			PlayerPowerBarAlt:ClearAllPoints()
+			PlayerPowerBarAlt:SetPoint("CENTER", mover)
+		end
+	end)
+
+	hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
+		local statusFrame = self.statusFrame
+		if statusFrame.enabled then
+			statusFrame:Show()
+			statusFrame.Hide = statusFrame.Show
+		end
+	end)
+
+	local altPowerInfo = {
+		text = L["Drag AltBar Tip"],
+		buttonStyle = HelpTip.ButtonStyle.GotIt,
+		targetPoint = HelpTip.Point.RightEdgeCenter,
+		onAcknowledgeCallback = B.HelpInfoAcknowledge,
+		callbackArg = "AltPower",
+	}
+	PlayerPowerBarAlt:HookScript("OnEnter", function(self)
+		if not NDuiADB["Help"]["AltPower"] then
+			HelpTip:Show(self, altPowerInfo)
+		end
+	end)
 end
 
 -- ALT+RightClick to buy a stack
