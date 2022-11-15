@@ -430,6 +430,28 @@ do
 	function B.GetNPCName(npcID, callback)
 		local name = nameCache[npcID]
 		if not name then
+			if DB.isBeta then
+
+			name = loadingStr
+			local data = C_TooltipInfo.GetHyperlink(format("unit:Creature-0-0-0-0-%d", npcID))
+			local lineData = data and data.lines
+			if lineData then
+				local argVal = lineData[1] and lineData[1].args
+				if argVal then
+					name = argVal[2] and argVal[2].stringVal
+				end
+			end
+			if name == loadingStr then
+				if not pendingNPCs[npcID] then
+					pendingNPCs[npcID] = 1
+					pendingFrame:Show()
+				end
+			else
+				nameCache[npcID] = name
+			end
+
+			else
+
 			tip:SetOwner(UIParent, "ANCHOR_NONE")
 			tip:SetHyperlink(format("unit:Creature-0-0-0-0-%d", npcID))
 			name = _G.NDui_ScanTooltipTextLeft1:GetText() or loadingStr
@@ -440,6 +462,8 @@ do
 				end
 			else
 				nameCache[npcID] = name
+			end
+
 			end
 		end
 		if callback then

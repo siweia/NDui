@@ -223,7 +223,7 @@ function M:UIWidgetFrameMover()
 	B.Mover(frame1, L["UIWidgetFrame"], "UIWidgetFrame", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -20})
 
 	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == MinimapCluster then
+		if parent ~= frame1 then
 			self:ClearAllPoints()
 			self:SetPoint("TOPRIGHT", frame1)
 		end
@@ -234,7 +234,7 @@ function M:UIWidgetFrameMover()
 	B.Mover(frame2, L["UIWidgetPowerBar"], "UIWidgetPowerBar", {"BOTTOM", UIParent, "BOTTOM", 0, 150})
 
 	hooksecurefunc(UIWidgetPowerBarContainerFrame, "SetPoint", function(self, _, parent)
-		if parent == "UIParent" or parent == UIParent then
+		if parent ~= frame2 then
 			self:ClearAllPoints()
 			self:SetPoint("CENTER", frame2)
 		end

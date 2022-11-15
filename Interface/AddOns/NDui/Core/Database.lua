@@ -264,4 +264,20 @@ DB.ReminderBuffs = {
 			pvp = true,
 		},
 	},
+	EVOKER = {
+		{	spells = {	-- 青铜龙的祝福
+				[381748] = true,
+			},
+			depend = 364342,
+			instance = true,
+		},
+	},
+	DRUID = {
+		{	spells = {	-- 野性印记
+				[1126] = true,
+			},
+			depend = 1126,
+			instance = true,
+		},
+	},
 }

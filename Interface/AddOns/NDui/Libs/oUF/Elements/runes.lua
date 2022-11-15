@@ -206,7 +206,7 @@ local function Enable(self, unit)
 
 		for i = 1, #element do
 			local rune = element[i]
-			if(rune:IsObjectType('StatusBar') and not (rune:GetStatusBarTexture() or rune:GetStatusBarAtlas())) then
+			if(rune:IsObjectType('StatusBar') and not rune:GetStatusBarTexture()) then
 				rune:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 			end
 		end

@@ -54,6 +54,10 @@ do
 		["MAGE"] = {
 			["Curse"] = true,
 		},
+		["EVOKER"] = {
+			["Magic"] = false,
+			["Poison"] = true,
+		},
 	}
 
 	DispellFilter = dispellClasses[class] or {}
@@ -61,29 +65,15 @@ end
 
 local function checkSpecs()
 	if class == "DRUID" then
-		if GetSpecialization() == 4 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 4
 	elseif class == "MONK" then
-		if GetSpecialization() == 2 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 2
 	elseif class == "PALADIN" then
-		if GetSpecialization() == 1 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 1
 	elseif class == "SHAMAN" then
-		if GetSpecialization() == 3 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 3
+	elseif class == "EVOKER" then
+		DispellFilter.Magic = GetSpecialization() == 2
 	end
 end
 

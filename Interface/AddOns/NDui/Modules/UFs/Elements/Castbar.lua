@@ -165,7 +165,7 @@ function UF:CreateAndUpdateStagePip(bar, ticks, numStages, unit)
 			end
 			ticks[i].duration = sumDuration / 1000
 			ticks[i]:ClearAllPoints()
-			ticks[i]:SetPoint("LEFT", bar, width * portion, 0 )
+			ticks[i]:SetPoint("LEFT", bar, width * portion, 0)
 			ticks[i]:Show()
 		end
 	end

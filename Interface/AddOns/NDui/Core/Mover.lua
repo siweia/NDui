@@ -453,17 +453,27 @@ local ignoredFrames = {
 	["TalkingHeadFrame"] = isTalkingHeadHidden,
 }
 
+local shutdownMode = {
+	"OnEditModeEnter",
+	"OnEditModeExit",
+	"HasActiveChanges",
+	"HighlightSystem",
+	"SelectSystem",
+}
+
 function M:DisableBlizzardMover()
 	local editMode = _G.EditModeManagerFrame
 
 	-- remove the initial registers
 	local registered = editMode.registeredSystemFrames
 	for i = #registered, 1, -1 do
-		local name = registered[i]:GetName()
-		local ignore = ignoredFrames[name]
+		local frame = registered[i]
+		local ignore = ignoredFrames[frame:GetName()]
 
 		if ignore and ignore() then
-			tremove(editMode.registeredSystemFrames, i)
+			for _, key in next, shutdownMode do
+				frame[key] = B.Dummy
+			end
 		end
 	end
 
@@ -471,9 +481,15 @@ function M:DisableBlizzardMover()
 	local mixin = editMode.AccountSettings
 	if isCastbarEnable() then mixin.RefreshCastBar = B.Dummy end
 	if isBuffEnable() then mixin.RefreshAuraFrame = B.Dummy end
-	if isRaidEnable() then mixin.RefreshRaidFrames = B.Dummy end
+	if isRaidEnable() then
+		mixin.ResetRaidFrames = B.Dummy
+		mixin.RefreshRaidFrames = B.Dummy
+	end
 	if isArenaEnable() then mixin.RefreshArenaFrames = B.Dummy end
-	if isPartyEnable() then mixin.RefreshPartyFrames = B.Dummy end
+	if isPartyEnable() then
+		mixin.ResetPartyFrames = B.Dummy
+		mixin.RefreshPartyFrames = B.Dummy
+	end
 	if isTalkingHeadHidden() then mixin.RefreshTalkingHeadFrame = B.Dummy end
 	if isUnitFrameEnable() then
 		mixin.ResetTargetAndFocus = B.Dummy
@@ -482,7 +498,8 @@ function M:DisableBlizzardMover()
 	end
 	if isActionbarEnable() then
 		mixin.RefreshEncounterBar = B.Dummy
-	--	mixin.RefreshActionBarShown = B.Dummy -- taint, needs review
+		mixin.RefreshActionBarShown = B.Dummy
 		mixin.RefreshVehicleLeaveButton = B.Dummy
 	end
+	ObjectiveTrackerFrame.IsInDefaultPosition = B.Dummy
 end

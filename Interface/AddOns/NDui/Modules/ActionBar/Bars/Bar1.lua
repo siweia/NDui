@@ -76,9 +76,8 @@ function Bar:UpdateActionSize(name)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
 			end
-			if name == "BarPet" then
-				button.SetPoint = B.Dummy
-			end
+			--if name == "BarPet" then
+			--end
 			button:SetAttribute("statehidden", false)
 			button:Show()
 			Bar:UpdateFontSize(button, fontSize)

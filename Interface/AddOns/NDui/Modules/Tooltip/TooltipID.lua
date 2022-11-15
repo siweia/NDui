@@ -121,6 +121,24 @@ function TT:SetupTooltipID()
 				TT.AddLineForID(self, data.id, types.spell)
 			end
 		end)
+
+		local function UpdateAuraTip(self, unit, auraInstanceID)
+			local data = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+			if not data then return end
+
+			local id, caster = data.spellId, data.sourceUnit
+			if id then
+				TT.AddLineForID(self, id, types.spell)
+			end
+			if caster then
+				local name = GetUnitName(caster, true)
+				local hexColor = B.HexRGB(B.UnitColor(caster))
+				self:AddDoubleLine(L["From"]..":", hexColor..name)
+				self:Show()
+			end
+		end
+		hooksecurefunc(GameTooltip, "SetUnitBuffByAuraInstanceID", UpdateAuraTip)
+		hooksecurefunc(GameTooltip, "SetUnitDebuffByAuraInstanceID", UpdateAuraTip)
 	else
 		GameTooltip:HookScript("OnTooltipSetSpell", function(self)
 			local id = select(2, self:GetSpell())
