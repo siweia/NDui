@@ -173,6 +173,9 @@ tinsert(C.defaultThemes, function()
 	end
 
 	-- [[ Sidebar tabs ]]
+	if PaperDollSidebarTabs.DecorRight then
+		PaperDollSidebarTabs.DecorRight:Hide()
+	end
 
 	for i = 1, #PAPERDOLL_SIDEBARS do
 		local tab = _G["PaperDollSidebarTab"..i]
