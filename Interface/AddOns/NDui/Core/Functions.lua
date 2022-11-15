@@ -183,6 +183,31 @@ do
 		return tip.gems
 	end
 
+	function B:GetEnchantText(link, slotInfo)
+		local enchantID = tonumber(strmatch(link, "item:%d+:(%d+):"))
+		if enchantID then
+			for i = 1, tip:NumLines() do
+				local line = _G["NDui_ScanTooltipTextLeft"..i]
+				if not line then break end
+
+				local text = line:GetText()
+				if text then
+					if i == 1 and text == RETRIEVING_ITEM_INFO then
+						return "tooSoon"
+					elseif i ~= 1 then
+						local r, g, b = line:GetTextColor()
+						r = B:Round(r, 3)
+						g = B:Round(g, 3)
+						b = B:Round(b, 3)
+						if not (r == 1 and g == 1 and b == 1) then
+							return text
+						end
+					end
+				end
+			end
+		end
+	end
+
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
 		if fullScan then
 			tip:SetOwner(UIParent, "ANCHOR_NONE")
@@ -192,6 +217,7 @@ do
 
 			local slotInfo = tip.slotInfo
 			slotInfo.gems = B:InspectItemTextures()
+			slotInfo.enchantText = B:GetEnchantText(link, slotInfo)
 
 			return slotInfo
 		else

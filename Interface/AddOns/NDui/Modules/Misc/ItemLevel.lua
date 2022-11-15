@@ -71,7 +71,11 @@ function M:CreateItemString(frame, strType)
 			slotFrame.iLvlText = B.CreateFS(slotFrame, DB.Font[2]+1)
 			slotFrame.iLvlText:ClearAllPoints()
 			slotFrame.iLvlText:SetPoint("BOTTOMLEFT", slotFrame, 1, 1)
-			local relF, x = M:GetSlotAnchor(index)
+			local relF, x, y = M:GetSlotAnchor(index)
+			slotFrame.enchantText = B.CreateFS(slotFrame, DB.Font[2]+1)
+			slotFrame.enchantText:ClearAllPoints()
+			slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
+			slotFrame.enchantText:SetTextColor(0, 1, 0)
 			for i = 1, 5 do
 				local offset = (i-1)*18 + 5
 				local iconX = x > 0 and x+offset or x-offset
@@ -115,6 +119,11 @@ function M:ItemLevel_UpdateGemInfo(link, unit, index, slotFrame)
 
 					gemStep = gemStep + 1
 				end
+			end
+
+			local enchant = info.enchantText
+			if enchant then
+				slotFrame.enchantText:SetText(enchant)
 			end
 		end
 	end
