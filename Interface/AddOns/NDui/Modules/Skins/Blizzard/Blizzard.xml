@@ -43,7 +43,6 @@
 	<Script file="Blizzard_PartyPoseUI.lua"/>
 	<Script file="Blizzard_PlayerChoice.lua"/>
 	<Script file="Blizzard_Professions.lua"/>
-	<Script file="Blizzard_ProfessionsCustomerOrders.lua"/>
 	<Script file="Blizzard_PVPUI.lua"/>
 	<Script file="Blizzard_RaidUI.lua"/>
 	<Script file="Blizzard_RuneforgeUI.lua"/>
