@@ -119,6 +119,7 @@ end
 
 B:RegisterEvent("PLAYER_LOGIN", function()
 	-- Initial
+	if IsAddOnLoaded("SexyMap") then C.db["Map"]["DisableMinimap"] = true end
 	SetCVar("ActionButtonUseKeyDown", 1)
 	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)

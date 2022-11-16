@@ -110,10 +110,30 @@ function TT:SetupTooltipID()
 			self:Show()
 		end
 	end)
+
+	local function UpdateAuraTip(self, unit, auraInstanceID)
+		local data = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+		if not data then return end
+
+		local id, caster = data.spellId, data.sourceUnit
+		if id then
+			TT.AddLineForID(self, id, types.spell)
+		end
+		if caster then
+			local name = GetUnitName(caster, true)
+			local hexColor = B.HexRGB(B.UnitColor(caster))
+			self:AddDoubleLine(L["From"]..":", hexColor..name)
+			self:Show()
+		end
+	end
+	hooksecurefunc(GameTooltip, "SetUnitBuffByAuraInstanceID", UpdateAuraTip)
+	hooksecurefunc(GameTooltip, "SetUnitDebuffByAuraInstanceID", UpdateAuraTip)
+
 	hooksecurefunc("SetItemRef", function(link)
 		local id = tonumber(strmatch(link, "spell:(%d+)"))
 		if id then TT.AddLineForID(ItemRefTooltip, id, types.spell) end
 	end)
+
 	if DB.isBeta then
 		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self, data)
 			if self:IsForbidden() then return end
@@ -121,24 +141,6 @@ function TT:SetupTooltipID()
 				TT.AddLineForID(self, data.id, types.spell)
 			end
 		end)
-
-		local function UpdateAuraTip(self, unit, auraInstanceID)
-			local data = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-			if not data then return end
-
-			local id, caster = data.spellId, data.sourceUnit
-			if id then
-				TT.AddLineForID(self, id, types.spell)
-			end
-			if caster then
-				local name = GetUnitName(caster, true)
-				local hexColor = B.HexRGB(B.UnitColor(caster))
-				self:AddDoubleLine(L["From"]..":", hexColor..name)
-				self:Show()
-			end
-		end
-		hooksecurefunc(GameTooltip, "SetUnitBuffByAuraInstanceID", UpdateAuraTip)
-		hooksecurefunc(GameTooltip, "SetUnitDebuffByAuraInstanceID", UpdateAuraTip)
 	else
 		GameTooltip:HookScript("OnTooltipSetSpell", function(self)
 			local id = select(2, self:GetSpell())
