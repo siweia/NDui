@@ -158,15 +158,25 @@ function UF:CreateAndUpdateStagePip(bar, ticks, numStages, unit)
 			local portion = sumDuration / stageMaxValue
 			if not ticks[i] then
 				ticks[i] = bar:CreateTexture(nil, "OVERLAY")
-				ticks[i]:SetTexture(DB.normTex)
+				ticks[i]:SetTexture(DB.bdTex)
 				ticks[i]:SetVertexColor(0, 0, 0)
 				ticks[i]:SetWidth(C.mult)
 				ticks[i]:SetHeight(height)
+
+				ticks[i].bg = bar:CreateTexture(nil, "ARTWORK")
+				ticks[i].bg:SetAtlas(("ui-castingbar-tier%d-empower"):format(i))
+				ticks[i].bg:SetPoint("TOPLEFT", ticks[i], "TOPRIGHT")
+				if i > 1 then
+					ticks[i-1].bg:SetPoint("BOTTOMRIGHT", ticks[i], "BOTTOMLEFT")
+				end
 			end
 			ticks[i].duration = sumDuration / 1000
 			ticks[i]:ClearAllPoints()
 			ticks[i]:SetPoint("LEFT", bar, width * portion, 0)
 			ticks[i]:Show()
+			if i == numStages then
+				ticks[i].bg:SetPoint("BOTTOMRIGHT", bar)
+			end
 		end
 	end
 end
