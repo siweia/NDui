@@ -297,10 +297,11 @@ local function reskinFollowerItem(item)
 end
 
 local function ReskinMissionFrame(self)
-	B.StripTextures(self)
+	B.StripTextures(self, 0)
 	B.SetBD(self)
-	B.StripTextures(self.CloseButton)
+	B.StripTextures(self.CloseButton, 0)
 	B.ReskinClose(self.CloseButton)
+	self.CloseButton.SetPoint = B.Dummy -- maybe taint, needs review
 	self.GarrCorners:Hide()
 	if self.OverlayElements then self.OverlayElements:SetAlpha(0) end
 	if self.ClassHallIcon then self.ClassHallIcon:Hide() end
@@ -947,6 +948,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local CovenantMissionFrame = CovenantMissionFrame
 	ReskinMissionFrame(CovenantMissionFrame)
 	CovenantMissionFrame.RaisedBorder:SetAlpha(0)
+	B.StripTextures(CovenantMissionFrameMissions, 0)
 	CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
 
 	hooksecurefunc(CovenantMissionFrame, "SetupTabs", function(self)
@@ -963,6 +965,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	local bg = B.CreateBDFrame(CovenantMissionFrame.FollowerTab, .25)
 	bg:SetPoint("TOPLEFT", 3, 2)
 	bg:SetPoint("BOTTOMRIGHT", -3, -10)
+	B.StripTextures(CovenantMissionFrame.FollowerTab, 0)
 	CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
