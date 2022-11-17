@@ -37,7 +37,7 @@ local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
-local ContainerIDToInventoryID = DB.isBeta and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+local ContainerIDToInventoryID = C_Container.ContainerIDToInventoryID
 local maxBagSlots = 5
 
 function Implementation:GetBagButtonClass()

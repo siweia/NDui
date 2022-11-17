@@ -21,7 +21,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 
-local GetContainerNumSlots = DB.isBeta and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local GetContainerNumSlots = C_Container.GetContainerNumSlots
 
 --[[!
 	@class Implementation
@@ -308,41 +308,6 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	i.bagId = bagID
 	i.slotId = slotID
 
-	local texture, count, locked, quality, _, _, itemLink, _, noValue, itemID = GetContainerItemInfo(bagID, slotID)
-
-	if itemLink then
-		i.texture, i.count, i.locked, i.quality, i.link, i.id = texture, count, locked, quality, itemLink, itemID
-		i.hasPrice = not noValue
-		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
-		i.cdStart, i.cdFinish, i.cdEnable = GetContainerItemCooldown(bagID, slotID)
-		i.isQuestItem, i.questID, i.questActive = GetContainerItemQuestInfo(bagID, slotID)
-		i.name, _, _, _, _, i.type, i.subType, _, i.equipLoc, _, _, i.classID, i.subClassID = GetItemInfo(itemLink)
-		i.equipLoc = _G[i.equipLoc] -- INVTYPE to localized string
-
-		if itemID == PET_CAGE then
-			local petID, petLevel, petName = strmatch(itemLink, "|H%w+:(%d+):(%d+):.-|h%[(.-)%]|h")
-			i.name = petName
-			i.id = tonumber(petID) or 0
-			i.level = tonumber(petLevel) or 0
-			i.classID = Enum.ItemClass.Miscellaneous
-			i.subClassID = Enum.ItemMiscellaneousSubclass.CompanionPet
-		elseif MYTHIC_KEYSTONES[itemID] then
-			i.level, i.name = strmatch(itemLink, "|H%w+:%d+:%d+:(%d+):.-|h%[(.-)%]|h")
-			i.level = tonumber(i.level) or 0
-		end
-	end
-	return i
-end
-
-if DB.isBeta then
-
-function Implementation:GetItemInfo(bagID, slotID, i)
-	i = i or defaultItem
-	for k in pairs(i) do i[k] = nil end
-
-	i.bagId = bagID
-	i.slotId = slotID
-
 	local texture, count, locked, quality, itemLink, noValue, itemID
 	local info = C_Container.GetContainerItemInfo(bagID, slotID)
 	if info then
@@ -372,8 +337,6 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	end
 
 	return i
-end
-
 end
 
 --[[!

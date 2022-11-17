@@ -114,11 +114,7 @@ function M:QuestTool()
 	end
 
 	-- Check npc in quests
-	if DB.isBeta then
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, M.QuestTool_SetQuestUnit)
-	else
-		GameTooltip:HookScript("OnTooltipSetUnit", M.QuestTool_SetQuestUnit)
-	end
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, M.QuestTool_SetQuestUnit)
 
 	-- Auto gossip
 	local firstStep

@@ -4,38 +4,27 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
-local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
-local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
-local IsCosmeticItem = IsCosmeticItem
+local IsCosmeticItem, GetItemInfo = IsCosmeticItem, GetItemInfo
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
-local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
-
-if DB.isBeta then
-	GetContainerItemID = C_Container.GetContainerItemID
-	GetContainerNumSlots = C_Container.GetContainerNumSlots
-	SortBags = C_Container.SortBags
-	SortBankBags = C_Container.SortBankBags
-	SortReagentBankBags = C_Container.SortReagentBankBags
-	PickupContainerItem = C_Container.PickupContainerItem
-	SplitContainerItem = C_Container.SplitContainerItem
-end
+local GetContainerItemID = C_Container.GetContainerItemID
+local GetContainerNumSlots = C_Container.GetContainerNumSlots
+local SortBags = C_Container.SortBags
+local SortBankBags = C_Container.SortBankBags
+local SortReagentBankBags = C_Container.SortReagentBankBags
+local PickupContainerItem = C_Container.PickupContainerItem
+local SplitContainerItem = C_Container.SplitContainerItem
 
 local sortCache = {}
 function module:ReverseSort()
 	for bag = 0, 4 do
 		local numSlots = GetContainerNumSlots(bag)
 		for slot = 1, numSlots do
-			local texture, locked
-			if DB.isBeta then
-				local info = C_Container.GetContainerItemInfo(bag, slot)
-				texture = info and info.iconFileID
-				locked = info and info.isLocked
-			else
-				texture, _, locked = GetContainerItemInfo(bag, slot)
-			end
+			local info = C_Container.GetContainerItemInfo(bag, slot)
+			local texture = info and info.iconFileID
+			local locked = info and info.isLocked
 			if (slot <= numSlots/2) and texture and not locked and not sortCache["b"..bag.."s"..slot] then
 				PickupContainerItem(bag, slot)
 				PickupContainerItem(bag, numSlots+1 - slot)
@@ -517,15 +506,11 @@ local function splitOnClick(self)
 
 	PickupContainerItem(self.bagId, self.slotId)
 
-	local texture, itemCount, locked
-	if DB.isBeta then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		itemCount = info and info.stackCount
-		locked = info and info.isLocked
-	else
-		texture, itemCount, locked = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local itemCount = info and info.stackCount
+	local locked = info and info.isLocked
+
 	if texture and not locked and itemCount and itemCount > C.db["Bags"]["SplitCount"] then
 		SplitContainerItem(self.bagId, self.slotId, C.db["Bags"]["SplitCount"])
 
@@ -633,16 +618,12 @@ end
 local function favouriteOnClick(self)
 	if not favouriteEnable then return end
 
-	local texture, quality, link, itemID
-	if DB.isBeta then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		quality = info and info.quality
-		link = info and info.hyperlink
-		itemID = info and info.itemID
-	else
-		texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local quality = info and info.quality
+	local link = info and info.hyperlink
+	local itemID = info and info.itemID
+
 	if texture and quality > Enum.ItemQuality.Poor then
 		ClearCursor()
 		module.selectItemID = itemID
@@ -702,14 +683,10 @@ end
 local function customJunkOnClick(self)
 	if not customJunkEnable then return end
 
-	local texture, itemID
-	if DB.isBeta then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		itemID = info and info.itemID
-	else
-		texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local itemID = info and info.itemID
+
 	local price = select(11, GetItemInfo(itemID))
 	if texture and price > 0 then
 		if NDuiADB["CustomJunkList"][itemID] then
@@ -757,14 +734,10 @@ end
 local function deleteButtonOnClick(self)
 	if not deleteEnable then return end
 
-	local texture, quality
-	if DB.isBeta then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		quality = info and info.quality
-	else
-		texture, _, _, quality = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local quality = info and info.quality
+
 	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < Enum.ItemQuality.Rare or quality == Enum.ItemQuality.Heirloom) then
 		PickupContainerItem(self.bagId, self.slotId)
 		DeleteCursorItem()
@@ -1301,13 +1274,8 @@ function module:OnLogin()
 	end
 
 	-- Sort order
-	if DB.isBeta then
-		C_Container.SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
-		C_Container.SetInsertItemsLeftToRight(false)
-	else
-		SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
-		SetInsertItemsLeftToRight(false)
-	end
+	C_Container.SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
+	C_Container.SetInsertItemsLeftToRight(false)
 
 	-- Init
 	ToggleAllBags()

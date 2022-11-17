@@ -229,10 +229,6 @@ C.themes["Blizzard_Communities"] = function()
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
 		B.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
-		if dialog.OkayButton then -- isBeta
-			B.Reskin(dialog.OkayButton)
-			B.Reskin(dialog.CancelButton)
-		end
 		if dialog.Selector then
 			B.StripTextures(dialog.Selector)
 			B.Reskin(dialog.Selector.OkayButton)
@@ -406,10 +402,6 @@ C.themes["Blizzard_Communities"] = function()
 		local dialog = CommunitiesAvatarPickerDialog
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
-		if dialog.OkayButton then -- isBeta
-			B.Reskin(dialog.OkayButton)
-			B.Reskin(dialog.CancelButton)
-		end
 		B.ReskinTrimScroll(CommunitiesAvatarPickerDialog.ScrollBar)
 		if dialog.Selector then
 			B.StripTextures(dialog.Selector)

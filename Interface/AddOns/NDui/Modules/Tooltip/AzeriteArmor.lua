@@ -109,14 +109,6 @@ function TT:AzeriteArmor()
 	if not C.db["Tooltip"]["AzeriteArmor"] then return end
 	if IsAddOnLoaded("AzeriteTooltip") then return end
 
-	if DB.isBeta then
-		-- todo: update via C_TooltipInfo, requires on shopping tooltip
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.Azerite_UpdateItem)
-	else
-		GameTooltip:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)
-		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)
-		ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)
-		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)
-		GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.Azerite_UpdateItem)
-	end
+	-- todo: update via C_TooltipInfo, requires on shopping tooltip
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.Azerite_UpdateItem)
 end

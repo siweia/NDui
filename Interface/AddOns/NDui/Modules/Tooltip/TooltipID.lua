@@ -4,7 +4,7 @@ local TT = B:GetModule("Tooltip")
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
 local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
-local GetItemInfoFromHyperlink, IsPlayerSpell = GetItemInfoFromHyperlink, IsPlayerSpell
+local IsPlayerSpell = IsPlayerSpell
 local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeFixedReagentItemLink
 local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
 local C_MountJournal_GetMountFromSpell = C_MountJournal.GetMountFromSpell
@@ -76,18 +76,6 @@ function TT:SetHyperLinkID(link)
 	end
 end
 
-function TT:SetItemID()
-	if self:IsForbidden() then return end
-
-	local link = select(2, self:GetItem())
-	if link then
-		local id = GetItemInfoFromHyperlink(link)
-		local keystone = strmatch(link, "|Hkeystone:([0-9]+):")
-		if keystone then id = tonumber(keystone) end
-		if id then TT.AddLineForID(self, id, types.item) end
-	end
-end
-
 function TT:SetupTooltipID()
 	if C.db["Tooltip"]["HideAllID"] then return end
 
@@ -134,44 +122,22 @@ function TT:SetupTooltipID()
 		if id then TT.AddLineForID(ItemRefTooltip, id, types.spell) end
 	end)
 
-	if DB.isBeta then
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self, data)
-			if self:IsForbidden() then return end
-			if data.id then
-				TT.AddLineForID(self, data.id, types.spell)
-			end
-		end)
-	else
-		GameTooltip:HookScript("OnTooltipSetSpell", function(self)
-			local id = select(2, self:GetSpell())
-			if id then TT.AddLineForID(self, id, types.spell) end
-		end)
-	end
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self, data)
+		if self:IsForbidden() then return end
+		if data.id then
+			TT.AddLineForID(self, data.id, types.spell)
+		end
+	end)
 
 	-- Items
-	if DB.isBeta then
-		local function addItemID(self, data)
-			if self:IsForbidden() then return end
-			if data.id then
-				TT.AddLineForID(self, data.id, types.item)
-			end
+	local function addItemID(self, data)
+		if self:IsForbidden() then return end
+		if data.id then
+			TT.AddLineForID(self, data.id, types.item)
 		end
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, addItemID)
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Toy, addItemID)
-	else
-		GameTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
-		GameTooltipTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
-		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.SetItemID)
-		ShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
-		ShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
-		ItemRefShoppingTooltip1:HookScript("OnTooltipSetItem", TT.SetItemID)
-		ItemRefShoppingTooltip2:HookScript("OnTooltipSetItem", TT.SetItemID)
-		hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, recipeID, reagentIndex)
-			local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
-			local id = link and strmatch(link, "item:(%d+):")
-			if id then TT.AddLineForID(self, id, types.item) end
-		end)
 	end
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, addItemID)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Toy, addItemID)
 
 	-- Currencies, todo: replace via tooltip processor
 	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
@@ -181,11 +147,6 @@ function TT:SetupTooltipID()
 	hooksecurefunc(GameTooltip, "SetCurrencyByID", function(self, id)
 		if id then TT.AddLineForID(self, id, types.currency) end
 	end)
-	if not DB.isBeta then
-		hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
-			if id then TT.AddLineForID(self, id, types.currency) end
-		end)
-	end
 
 	-- Azerite traits
 	hooksecurefunc(GameTooltip, "SetAzeritePower", function(self, _, _, id)
