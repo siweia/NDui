@@ -179,7 +179,7 @@ do
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
 		if fullScan then
 			local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
-			if not data then then return end
+			if not data then return end
 
 			wipe(slotData.gems)
 			wipe(slotData.gemsColor)
