@@ -161,7 +161,7 @@ function TT:ShowUnitMythicPlusScore(unit)
 end
 
 function TT:OnTooltipSetUnit()
-	if self:IsForbidden() then return end
+	if self:IsForbidden() or self ~= GameTooltip then return end
 	if C.db["Tooltip"]["CombatHide"] and InCombatLockdown() then self:Hide() return end
 
 	if not DB.isBeta then TT.HideLines(self) end
