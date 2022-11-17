@@ -868,6 +868,11 @@ do
 			button.IconBorder:Hide()
 		end
 	end
+	local function iconBorderShown(border, show)
+		if not show then
+			resetIconBorderColor(border)
+		end
+	end
 	function B:ReskinIconBorder(needInit, useAtlas)
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
@@ -885,10 +890,12 @@ do
 			end
 		end
 		hooksecurefunc(self, "Hide", resetIconBorderColor)
+		hooksecurefunc(self, "SetShown", iconBorderShown)
 
-		if self.__owner.SetItemButtonQuality then
-			hooksecurefunc(self.__owner, "SetItemButtonQuality", resetIconBorder)
-		end
+		-- disable this and see how it goes, needs review
+		--if self.__owner.SetItemButtonQuality then
+		--	hooksecurefunc(self.__owner, "SetItemButtonQuality", resetIconBorder)
+		--end
 	end
 
 	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
