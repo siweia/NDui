@@ -28,8 +28,5 @@ tinsert(C.defaultThemes, function()
 	text.SetTextColor = B.Dummy
 	text:SetShadowColor(0, 0, 0, 0)
 
-	local closeButton = TalkingHeadFrame.MainFrame.CloseButton
-	B.ReskinClose(closeButton)
-	closeButton:ClearAllPoints()
-	closeButton:SetPoint("TOPRIGHT", -25, -25)
+	B.ReskinClose(TalkingHeadFrame.MainFrame.CloseButton, nil, -25, -25)
 end)

@@ -1243,6 +1243,13 @@ do
 		end
 	end
 
+	local function resetCloseButtonAnchor(button)
+		if button.isSetting then return end
+		button.isSetting = true
+		button:ClearAllPoints()
+		button:SetPoint("TOPRIGHT", button.__owner, "TOPRIGHT", button.__xOffset, button.__yOffset)
+		button.isSetting = nil
+	end
 	function B:ReskinClose(parent, xOffset, yOffset)
 		parent = parent or self:GetParent()
 		xOffset = xOffset or -6
@@ -1251,6 +1258,10 @@ do
 		self:SetSize(16, 16)
 		self:ClearAllPoints()
 		self:SetPoint("TOPRIGHT", parent, "TOPRIGHT", xOffset, yOffset)
+		self.__owner = parent
+		self.__xOffset = xOffset
+		self.__yOffset = yOffset
+		hooksecurefunc(self, "SetPoint", resetCloseButtonAnchor)
 
 		B.StripTextures(self)
 		if self.Border then self.Border:SetAlpha(0) end

@@ -12,9 +12,8 @@ local function ReskinMissionPage(self)
 	if self.StartMissionFrame then B.StripTextures(self.StartMissionFrame) end
 	self.StartMissionButton.Flash:SetTexture("")
 	B.Reskin(self.StartMissionButton)
-	B.ReskinClose(self.CloseButton)
-	self.CloseButton:ClearAllPoints()
-	self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+	B.ReskinClose(self.CloseButton, nil, -10, -5)
+
 	if self.EnemyBackground then self.EnemyBackground:Hide() end
 	if self.FollowerBackground then self.FollowerBackground:Hide() end
 
@@ -301,7 +300,6 @@ local function ReskinMissionFrame(self)
 	B.SetBD(self)
 	B.StripTextures(self.CloseButton, 0)
 	B.ReskinClose(self.CloseButton)
-	self.CloseButton.SetPoint = B.Dummy -- maybe taint, needs review
 	self.GarrCorners:Hide()
 	if self.OverlayElements then self.OverlayElements:SetAlpha(0) end
 	if self.ClassHallIcon then self.ClassHallIcon:Hide() end

@@ -43,7 +43,6 @@ C.themes["Blizzard_PlayerChoice"] = function()
 			self.bg = B.SetBD(self)
 		end
 
-		self.CloseButton:SetPoint("TOPRIGHT", self.bg, -4, -4)
 		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end -- no border for some templates
 
 		self.bg:SetShown(not ignoredTextureKit[self.uiTextureKit])
