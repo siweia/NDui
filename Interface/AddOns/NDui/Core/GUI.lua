@@ -210,7 +210,7 @@ G.DefaultSettings = {
 		RCCName = true,
 		HideTip = false,
 		ShowRole = true,
-		HealPredic = true,
+		LibHealComm = false,
 		AutoBuffs = false,
 
 		PlayerWidth = 245,
@@ -1169,7 +1169,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", true, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{1, "UFs", "ShowRole", L["ShowGroupRole"], true},
-		{1, "UFs", "HealPredic", HeaderTag..L["HealPrediction"]},
+		{1, "UFs", "LibHealComm", HeaderTag..L["HealPrediction"]},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
 	},
 	[5] = {

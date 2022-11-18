@@ -3349,6 +3349,8 @@ end
 
 -- General event handler
 local function OnEvent(self, event, ...)
+	if not NDui[2].db["UFs"]["LibHealComm"] then return end
+
 	if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
 		HealComm[event](HealComm, CombatLogGetCurrentEventInfo())
 	else
@@ -3366,7 +3368,7 @@ HealComm.frame = nil
 -- At PLAYER_LEAVING_WORLD (Actually more like MIRROR_TIMER_STOP but anyway) UnitGUID("player") returns nil, delay registering
 -- events and set a playerGUID/playerName combo for all players on PLAYER_LOGIN not just the healers.
 function HealComm:PLAYER_LOGIN()
-	if not NDui[2].db["UFs"]["HealPredic"] then return end
+	if not NDui[2].db["UFs"]["LibHealComm"] then return end
 
 	playerGUID = UnitGUID("player")
 	playerName = UnitName("player")

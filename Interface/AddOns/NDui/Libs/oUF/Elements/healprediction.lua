@@ -27,8 +27,11 @@ local function Update(self, event, unit)
 
 	local myIncomingHeal = UnitGetIncomingHeals(unit, 'player') or 0
 	local allIncomingHeal = UnitGetIncomingHeals(unit) or 0
-	local allHot = HealComm:GetHealAmount(guid, hp.healType) or 0
-	local myHot = (HealComm:GetHealAmount(guid, hp.healType, nil, myGUID) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
+	local allHot, myHot = 0, 0
+	if HealComm then
+		allHot = HealComm:GetHealAmount(guid, hp.healType) or 0
+		myHot = (HealComm:GetHealAmount(guid, hp.healType, nil, myGUID) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
+	end
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit)
 	local ratio = self.Health:GetWidth() / maxHealth
 
@@ -72,36 +75,39 @@ local function Enable(self)
 	if(hp) then
 		hp.__owner = self
 		hp.ForceUpdate = ForceUpdate
-		hp.healType = hp.healType or HealComm.OVERTIME_AND_BOMB_HEALS
 
 		self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		self:RegisterEvent('UNIT_HEALTH_FREQUENT', Path)
 		self:RegisterEvent('UNIT_HEAL_PREDICTION', Path)
 
-		local function HealCommUpdate(...)
-			if self.HealPredictionAndAbsorb and self:IsVisible() then
-				for i = 1, select('#', ...) do
-					if self.unit and UnitGUID(self.unit) == select(i, ...) then
-						Path(self, nil, self.unit)
+		if HealComm then
+			hp.healType = hp.healType or HealComm.OVERTIME_AND_BOMB_HEALS
+
+			local function HealCommUpdate(...)
+				if self.HealPredictionAndAbsorb and self:IsVisible() then
+					for i = 1, select('#', ...) do
+						if self.unit and UnitGUID(self.unit) == select(i, ...) then
+							Path(self, nil, self.unit)
+						end
 					end
 				end
 			end
-		end
 
-		local function HealComm_Heal_Update(event, casterGUID, spellID, healType, _, ...)
-			HealCommUpdate(...)
-		end
+			local function HealComm_Heal_Update(event, casterGUID, spellID, healType, _, ...)
+				HealCommUpdate(...)
+			end
 
-		local function HealComm_Modified(event, guid)
-			HealCommUpdate(guid)
-		end
+			local function HealComm_Modified(event, guid)
+				HealCommUpdate(guid)
+			end
 
-		HealComm.RegisterCallback(hp, 'HealComm_HealStarted', HealComm_Heal_Update)
-		HealComm.RegisterCallback(hp, 'HealComm_HealUpdated', HealComm_Heal_Update)
-		HealComm.RegisterCallback(hp, 'HealComm_HealDelayed', HealComm_Heal_Update)
-		HealComm.RegisterCallback(hp, 'HealComm_HealStopped', HealComm_Heal_Update)
-		HealComm.RegisterCallback(hp, 'HealComm_ModifierChanged', HealComm_Modified)
-		HealComm.RegisterCallback(hp, 'HealComm_GUIDDisappeared', HealComm_Modified)
+			HealComm.RegisterCallback(hp, 'HealComm_HealStarted', HealComm_Heal_Update)
+			HealComm.RegisterCallback(hp, 'HealComm_HealUpdated', HealComm_Heal_Update)
+			HealComm.RegisterCallback(hp, 'HealComm_HealDelayed', HealComm_Heal_Update)
+			HealComm.RegisterCallback(hp, 'HealComm_HealStopped', HealComm_Heal_Update)
+			HealComm.RegisterCallback(hp, 'HealComm_ModifierChanged', HealComm_Modified)
+			HealComm.RegisterCallback(hp, 'HealComm_GUIDDisappeared', HealComm_Modified)
+		end
 
 		if(not hp.maxOverflow) then
 			hp.maxOverflow = 1.05
@@ -124,12 +130,14 @@ local function Disable(self)
 		hp.myBar:Hide()
 		hp.otherBar:Hide()
 
-		HealComm.UnregisterCallback(hp, 'HealComm_HealStarted')
-		HealComm.UnregisterCallback(hp, 'HealComm_HealUpdated')
-		HealComm.UnregisterCallback(hp, 'HealComm_HealDelayed')
-		HealComm.UnregisterCallback(hp, 'HealComm_HealStopped')
-		HealComm.UnregisterCallback(hp, 'HealComm_ModifierChanged')
-		HealComm.UnregisterCallback(hp, 'HealComm_GUIDDisappeared')
+		if HealComm then
+			HealComm.UnregisterCallback(hp, 'HealComm_HealStarted')
+			HealComm.UnregisterCallback(hp, 'HealComm_HealUpdated')
+			HealComm.UnregisterCallback(hp, 'HealComm_HealDelayed')
+			HealComm.UnregisterCallback(hp, 'HealComm_HealStopped')
+			HealComm.UnregisterCallback(hp, 'HealComm_ModifierChanged')
+			HealComm.UnregisterCallback(hp, 'HealComm_GUIDDisappeared')
+		end
 
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		self:UnregisterEvent('UNIT_HEALTH_FREQUENT', Path)
