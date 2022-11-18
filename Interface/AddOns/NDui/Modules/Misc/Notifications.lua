@@ -98,7 +98,7 @@ function M:InterruptAlert_Update(...)
 				sourceSpellID, destSpellID = spellID, extraskillID
 			end
 
-			if sourceSpellID and destSpellID then
+			if sourceSpellID and destSpellID and sourceName and destName then
 				SendChatMessage(format(infoText, sourceName..GetSpellLink(sourceSpellID), destName..GetSpellLink(destSpellID)), msgChannel())
 			end
 		end
