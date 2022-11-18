@@ -413,7 +413,7 @@ function TT:FixRecipeItemNameWidth()
 	local name = self:GetName()
 	for i = 1, self:NumLines() do
 		local line = _G[name.."TextLeft"..i]
-		if line:GetHeight() > 40 then
+		if line and line:GetHeight() > 40 then
 			line:SetWidth(line:GetWidth() + 2)
 		end
 	end
