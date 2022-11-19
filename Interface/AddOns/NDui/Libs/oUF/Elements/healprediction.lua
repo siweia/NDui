@@ -3,6 +3,7 @@ local oUF = ns.oUF
 
 local myGUID = UnitGUID('player')
 local HealComm = LibStub("LibHealComm-4.0")
+local HealCommEnabled
 
 local function UpdateFillBar(previousTexture, bar, amount, ratio)
 	if amount <= 0 then
@@ -28,7 +29,7 @@ local function Update(self, event, unit)
 	local myIncomingHeal = UnitGetIncomingHeals(unit, 'player') or 0
 	local allIncomingHeal = UnitGetIncomingHeals(unit) or 0
 	local allHot, myHot = 0, 0
-	if HealComm then
+	if HealCommEnabled then
 		allHot = HealComm:GetHealAmount(guid, hp.healType) or 0
 		myHot = (HealComm:GetHealAmount(guid, hp.healType, nil, myGUID) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
 	end
@@ -80,7 +81,8 @@ local function Enable(self)
 		self:RegisterEvent('UNIT_HEALTH_FREQUENT', Path)
 		self:RegisterEvent('UNIT_HEAL_PREDICTION', Path)
 
-		if HealComm then
+		HealCommEnabled = HealComm and NDui[2].db["UFs"]["LibHealComm"]
+		if HealCommEnabled then
 			hp.healType = hp.healType or HealComm.OVERTIME_AND_BOMB_HEALS
 
 			local function HealCommUpdate(...)
@@ -130,7 +132,7 @@ local function Disable(self)
 		hp.myBar:Hide()
 		hp.otherBar:Hide()
 
-		if HealComm then
+		if HealComm and not HealCommEnabled then
 			HealComm.UnregisterCallback(hp, 'HealComm_HealStarted')
 			HealComm.UnregisterCallback(hp, 'HealComm_HealUpdated')
 			HealComm.UnregisterCallback(hp, 'HealComm_HealDelayed')
