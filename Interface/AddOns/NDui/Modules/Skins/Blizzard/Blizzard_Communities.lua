@@ -408,26 +408,6 @@ C.themes["Blizzard_Communities"] = function()
 			B.Reskin(dialog.Selector.OkayButton)
 			B.Reskin(dialog.Selector.CancelButton)
 		end
-
-		-- todo, blizzard still buggy atm
-		--[=[hooksecurefunc(CommunitiesAvatarPickerDialog.ScrollFrame, "Refresh", function(self)
-			for i = 1, 5 do
-				for j = 1, 6 do
-					local avatarButton = self.avatarButtons[i][j]
-					if avatarButton:IsShown() and not avatarButton.bg then
-						avatarButton.bg = B.ReskinIcon(avatarButton.Icon)
-						avatarButton.Selected:SetTexture("")
-						avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-					end
-
-					if avatarButton.Selected:IsShown() then
-						avatarButton.bg:SetBackdropBorderColor(r, g, b)
-					else
-						avatarButton.bg:SetBackdropBorderColor(0, 0, 0)
-					end
-				end
-			end
-		end)]=]
 	end
 
 	hooksecurefunc(CommunitiesFrame.MemberList, "RefreshListDisplay", function(self)
