@@ -205,7 +205,7 @@ do
 					end
 				end
 			end]]
-			return _G.ACTION_ENCHANT_APPLIED
+			return "+"
 		end
 	end
 
