@@ -99,7 +99,7 @@ tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["DefaultBags"] then return end
 
-	for i = 1, 12 do
+	for i = 1, 13 do
 		local frameName = "ContainerFrame"..i
 		local frame = _G[frameName]
 		local name = frame.TitleText or _G[frameName.."TitleText"]
