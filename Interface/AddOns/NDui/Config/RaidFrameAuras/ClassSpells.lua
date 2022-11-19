@@ -29,8 +29,11 @@ C.CornerBuffs = {
 		[200389] = {"BOTTOM", {1, 1, .4}},				-- 栽培
 	},
 	["EVOKER"] = {
+		[355941] = {"TOPLEFT", {.4, .7, .2}},			-- 梦境吐息
 		[364343] = {"TOPRIGHT", {0, .8, .8}},      	    -- 回响
 		[366155] = {"RIGHT", {1,.9, .5}},				-- 逆转
+		[370888] = {"TOP", {0, .4, 1}},					-- 双生护卫
+		[357170] = {"LEFT", {.47, .35, .74}, true},		-- 时间膨胀
 	},
 	["PALADIN"] = {
 		[287280]  = {"TOPLEFT", {1, .8, 0}},			-- 圣光闪烁
@@ -69,7 +72,6 @@ C.CornerBuffs = {
 	["DEMONHUNTER"] = {},
 	["MAGE"] = {},
 	["DEATHKNIGHT"] = {},
-	["EVOKER"] = {},
 }
 
 -- 小队框体的技能监控CD [spellID] = duration in seconds
