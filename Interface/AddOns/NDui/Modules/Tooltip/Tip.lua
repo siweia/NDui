@@ -421,7 +421,7 @@ end
 
 function TT:ResetUnit(btn)
 	if btn == "LSHIFT" and UnitExists("mouseover") then
-		GameTooltip:SetUnit("mouseover")
+		GameTooltip:RefreshData()
 	end
 end
 
