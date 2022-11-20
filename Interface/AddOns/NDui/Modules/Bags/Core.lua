@@ -399,6 +399,11 @@ function module:GetEmptySlot(name)
 		if slotID then
 			return -3, slotID
 		end
+	elseif name == "BagReagent" then
+		local slotID = module:GetContainerEmptySlot(5)
+		if slotID then
+			return 5, slotID
+		end
 	end
 end
 
@@ -413,6 +418,7 @@ local freeSlotContainer = {
 	["Bag"] = true,
 	["Bank"] = true,
 	["Reagent"] = true,
+	["BagReagent"] = true,
 }
 
 function module:CreateFreeSlots()
@@ -1141,6 +1147,9 @@ function module:OnLogin()
 			B.CreateMF(self, nil, true)
 		end
 
+		self.iconSize = iconSize
+		module.CreateFreeSlots(self)
+
 		local label
 		if strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]
@@ -1174,9 +1183,7 @@ function module:OnLogin()
 			return
 		end
 
-		self.iconSize = iconSize
 		module.CreateInfoFrame(self)
-		module.CreateFreeSlots(self)
 
 		local buttons = {}
 		buttons[1] = module.CreateCloseButton(self, f)

@@ -126,9 +126,10 @@ local function isItemCustom(item, index)
 	return customIndex and customIndex == index
 end
 
+local emptyBags = {[0] = true, [11] = true}
 local function isEmptySlot(item)
 	if not C.db["Bags"]["GatherEmpty"] then return end
-	return module.initComplete and not item.texture and module.BagsType[item.bagId] == 0
+	return module.initComplete and not item.texture and emptyBags[module.BagsType[item.bagId]]
 end
 
 local function isTradeGoods(item)
@@ -196,7 +197,7 @@ function module:GetFilters()
 	filters.bagAnima = function(item) return isItemInBag(item) and isAnimaItem(item) end
 	filters.bankAnima = function(item) return isItemInBank(item) and isAnimaItem(item) end
 	filters.bagRelic = function(item) return isItemInBag(item) and isKorthiaRelic(item) end
-	filters.onlyBagReagent = function(item) return isItemInBagReagent(item) end
+	filters.onlyBagReagent = function(item) return isItemInBagReagent(item) and not isEmptySlot(item) end
 
 	for i = 1, 5 do
 		filters["bagCustom"..i] = function(item) return isItemInBag(item) and isItemCustom(item, i) end
