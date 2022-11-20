@@ -39,6 +39,14 @@ end
 
 local anchorCache = {}
 
+local function CheckForBagReagent(name)
+	local pass = true
+	if name == "BagReagent" and GetContainerNumSlots(5) == 0 then
+		pass = false
+	end
+	return pass
+end
+
 function module:UpdateBagsAnchor(parent, bags)
 	wipe(anchorCache)
 
@@ -48,7 +56,7 @@ function module:UpdateBagsAnchor(parent, bags)
 
 	for i = 1, #bags do
 		local bag = bags[i]
-		if bag:GetHeight() > 45 then
+		if bag:GetHeight() > 45 and CheckForBagReagent(bag.name) then
 			bag:Show()
 			index = index + 1
 
