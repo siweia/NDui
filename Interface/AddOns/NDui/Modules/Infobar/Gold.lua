@@ -231,25 +231,6 @@ local BAG = B:GetModule("Bags")
 local function startSelling()
 	if stop then return end
 	for bag = 0, 4 do
-		for slot = 1, GetContainerNumSlots(bag) do
-			if stop then return end
-			local _, _, _, quality, _, _, link, _, noValue, itemID = GetContainerItemInfo(bag, slot)
-			local isInSet = GetContainerItemEquipmentSetInfo(bag, slot)
-			if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
-				cache["b"..bag.."s"..slot] = true
-				UseContainerItem(bag, slot)
-				C_Timer_After(.15, startSelling)
-				return
-			end
-		end
-	end
-end
-
-if DB.isBeta then
-
-function startSelling()
-	if stop then return end
-	for bag = 0, 4 do
 		for slot = 1, C_Container.GetContainerNumSlots(bag) do
 			if stop then return end
 			local info = C_Container.GetContainerItemInfo(bag, slot)
@@ -265,8 +246,6 @@ function startSelling()
 			end
 		end
 	end
-end
-
 end
 
 local function updateSelling(event, ...)

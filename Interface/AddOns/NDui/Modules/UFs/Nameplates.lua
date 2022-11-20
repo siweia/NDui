@@ -448,8 +448,6 @@ function UF:UpdateQuestUnit(_, unit)
 	unit = unit or self.unit
 	local startLooking, isLootQuest, questProgress -- FIXME: isLootQuest in old expansion
 
-	if DB.isBeta then
-
 	local data = C_TooltipInfo.GetUnit(unit)
 	if data then
 		for i = 1, #data.lines do
@@ -474,40 +472,6 @@ function UF:UpdateQuestUnit(_, unit)
 				end
 			end
 		end
-	end
-
-	else
-
-	B.ScanTip:SetOwner(UIParent, "ANCHOR_NONE")
-	B.ScanTip:SetUnit(unit)
-
-	for i = 2, B.ScanTip:NumLines() do
-		local textLine = _G["NDui_ScanTooltipTextLeft"..i]
-		local text = textLine and textLine:GetText()
-		if not text then break end
-
-		if text ~= " " then
-			if isInGroup and text == DB.MyName or (not isInGroup and isQuestTitle(textLine)) then
-				startLooking = true
-			elseif startLooking then
-				local current, goal = strmatch(text, "(%d+)/(%d+)")
-				local progress = strmatch(text, "(%d+)%%")
-				if current and goal then
-					local diff = floor(goal - current)
-					if diff > 0 then
-						questProgress = diff
-						break
-					end
-				elseif progress and not strmatch(text, THREAT_TOOLTIP) then
-					if floor(100 - progress) > 0 then
-						questProgress = progress.."%" -- lower priority on progress, keep looking
-					end
-				else
-					break
-				end
-			end
-		end
-	end
 	end
 
 	if questProgress then

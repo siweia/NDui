@@ -35,6 +35,7 @@ tinsert(C.defaultThemes, function()
 			if item and not button.styled then
 				B.StripTextures(item, 1)
 				item.bg = B.ReskinIcon(item.icon)
+				item.bg:SetFrameLevel(4)
 				B.ReskinIconBorder(item.IconBorder, true)
 
 				questTexture:SetAlpha(0)

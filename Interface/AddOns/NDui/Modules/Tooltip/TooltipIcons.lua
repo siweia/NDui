@@ -28,33 +28,7 @@ function TT:HookTooltipCleared()
 	self.tipModified = false
 end
 
-function TT:HookTooltipSetItem()
-	if not self.tipModified then
-		local _, link = self:GetItem()
-		if link then
-			TT.SetupTooltipIcon(self, GetItemIcon(link))
-		end
-
-		self.tipModified = true
-	end
-end
-
-function TT:HookTooltipSetSpell()
-	if not self.tipModified then
-		local _, id = self:GetSpell()
-		if id then
-			TT.SetupTooltipIcon(self, GetSpellTexture(id))
-		end
-
-		self.tipModified = true
-	end
-end
-
 function TT:HookTooltipMethod()
-	if not DB.isBeta then
-		self:HookScript("OnTooltipSetItem", TT.HookTooltipSetItem)
-		self:HookScript("OnTooltipSetSpell", TT.HookTooltipSetSpell)
-	end
 	self:HookScript("OnTooltipCleared", TT.HookTooltipCleared)
 end
 
@@ -69,24 +43,22 @@ function TT:ReskinTooltipIcons()
 	TT.HookTooltipMethod(GameTooltip)
 	TT.HookTooltipMethod(ItemRefTooltip)
 
-	if DB.isBeta then
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(self)
-			if self == GameTooltip or self == ItemRefTooltip then
-				local _, link = self:GetItem()
-				if link then
-					TT.SetupTooltipIcon(self, GetItemIcon(link))
-				end
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(self)
+		if self == GameTooltip or self == ItemRefTooltip then
+			local _, link = self:GetItem()
+			if link then
+				TT.SetupTooltipIcon(self, GetItemIcon(link))
 			end
-		end)
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
-			if self == GameTooltip or self == ItemRefTooltip then
-				local _, id = self:GetSpell()
-				if id then
-					TT.SetupTooltipIcon(self, GetSpellTexture(id))
-				end
+		end
+	end)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
+		if self == GameTooltip or self == ItemRefTooltip then
+			local _, id = self:GetSpell()
+			if id then
+				TT.SetupTooltipIcon(self, GetSpellTexture(id))
 			end
-		end)
-	end
+		end
+	end)
 
 	-- Cut Icons
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self)

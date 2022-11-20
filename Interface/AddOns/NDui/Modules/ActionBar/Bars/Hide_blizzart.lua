@@ -46,8 +46,6 @@ local function updateTokenVisibility()
 end
 
 local function ReplaceSpellbookButtons()
-	if not DB.isBeta then return end
-
 	local function replaceOnEnter(self)
 		local slot = SpellBook_GetSpellBookSlot(self)
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")

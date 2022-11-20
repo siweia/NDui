@@ -1,6 +1,42 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local flyoutFrame
+
+local function refreshFlyoutButtons(self)
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local button = select(i, self.ScrollTarget:GetChildren())
+		if button.IconBorder and not button.styled then
+			button.bg = B.ReskinIcon(button.icon)
+			button:SetNormalTexture(0)
+			button:SetPushedTexture(0)
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			B.ReskinIconBorder(button.IconBorder, true)
+
+			button.styled = true
+		end
+	end
+end
+
+local function reskinProfessionsFlyout(_, parent)
+	if flyoutFrame then return end
+
+	for i = 1, parent:GetNumChildren() do
+		local child = select(i, parent:GetChildren())
+		if child.HideUnownedCheckBox then
+			flyoutFrame = child
+
+			B.StripTextures(flyoutFrame)
+			B.SetBD(flyoutFrame):SetFrameLevel(2)
+			B.ReskinCheck(flyoutFrame.HideUnownedCheckBox)
+			flyoutFrame.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
+			hooksecurefunc(flyoutFrame.ScrollBox, "Update", refreshFlyoutButtons)
+
+			break
+		end
+	end
+end
+
 local function reskinSlotButton(button)
 	if button and not button.styled then
 		button:SetNormalTexture(0)
@@ -226,40 +262,7 @@ C.themes["Blizzard_Professions"] = function()
 
 	-- Item flyout
 	if OpenProfessionsItemFlyout then
-		local function refreshFlyoutButtons(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local button = select(i, self.ScrollTarget:GetChildren())
-				if button.IconBorder and not button.styled then
-					button.bg = B.ReskinIcon(button.icon)
-					button:SetNormalTexture(0)
-					button:SetPushedTexture(0)
-					button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-					B.ReskinIconBorder(button.IconBorder, true)
-
-					button.styled = true
-				end
-			end
-		end
-
-		local flyout
-		hooksecurefunc("OpenProfessionsItemFlyout", function()
-			if not flyout then
-				for i = 1, frame:GetNumChildren() do
-					local child = select(i, frame:GetChildren())
-					if child.HideUnownedCheckBox then
-						flyout = child
-
-						B.StripTextures(flyout)
-						B.SetBD(flyout):SetFrameLevel(2)
-						B.ReskinCheck(flyout.HideUnownedCheckBox)
-						flyout.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
-						hooksecurefunc(flyout.ScrollBox, "Update", refreshFlyoutButtons)
-
-						break
-					end
-				end
-			end
-		end)
+		hooksecurefunc("OpenProfessionsItemFlyout", reskinProfessionsFlyout)
 	end
 
 	-- Order page

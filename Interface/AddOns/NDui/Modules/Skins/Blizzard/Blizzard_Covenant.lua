@@ -27,7 +27,6 @@ C.themes["Blizzard_CovenantPreviewUI"] = function()
 			B.ReskinClose(self.CloseButton)
 			self.bg = B.SetBD(self)
 		end
-		self.CloseButton:SetPoint("TOPRIGHT", -6, -6)
 	end)
 end
 

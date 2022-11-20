@@ -4,7 +4,7 @@ local module = B:GetModule("AurasTable")
 
 if DB.MyClass ~= "EVOKER" then return end
 
--- 战士的法术监控
+-- 唤魔师的法术监控
 local list = {
 	["Player Aura"] = {		-- 玩家光环组
 		{AuraID = 370454, UnitID = "player"}, -- 聚能冲击

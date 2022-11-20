@@ -38,34 +38,6 @@ function TT:GetUnit()
 	return unit
 end
 
-function TT:HideLines()
-	for i = 3, self:NumLines() do
-		local tiptext = _G["GameTooltipTextLeft"..i]
-		if not tiptext then break end
-		local linetext = tiptext:GetText()
-		if linetext then
-			if linetext == PVP then
-				tiptext:SetText("")
-				tiptext:Hide()
-			elseif linetext == FACTION_HORDE then
-				if C.db["Tooltip"]["FactionIcon"] then
-					tiptext:SetText("")
-					tiptext:Hide()
-				else
-					tiptext:SetText("|cffff5040"..linetext.."|r")
-				end
-			elseif linetext == FACTION_ALLIANCE then
-				if C.db["Tooltip"]["FactionIcon"] then
-					tiptext:SetText("")
-					tiptext:Hide()
-				else
-					tiptext:SetText("|cff4080ff"..linetext.."|r")
-				end
-			end
-		end
-	end
-end
-
 local FACTION_COLORS = {
 	[FACTION_ALLIANCE] = "|cff4080ff%s|r",
 	[FACTION_HORDE] = "|cffff5040%s|r",
@@ -161,10 +133,8 @@ function TT:ShowUnitMythicPlusScore(unit)
 end
 
 function TT:OnTooltipSetUnit()
-	if self:IsForbidden() then return end
+	if self:IsForbidden() or self ~= GameTooltip then return end
 	if C.db["Tooltip"]["CombatHide"] and InCombatLockdown() then self:Hide() return end
-
-	if not DB.isBeta then TT.HideLines(self) end
 
 	local unit = TT.GetUnit(self)
 	if not unit or not UnitExists(unit) then return end
@@ -280,31 +250,10 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	if not DB.isBeta then
-		self.StatusBar:SetStatusBarColor(r, g, b)
-	end
-
 	TT.InspectUnitSpecAndLevel(self, unit)
 	TT.ShowUnitMythicPlusScore(self, unit)
 	TT.ScanTargets(self, unit)
 	TT.PetInfo_Setup(self, unit)
-end
-
-function TT:StatusBar_OnValueChanged(value)
-	if self:IsForbidden() or not value then return end
-	local min, max = self:GetMinMaxValues()
-	if (value < min) or (value > max) then return end
-
-	if not self.text then
-		self.text = B.CreateFS(self, 12, "")
-	end
-
-	if value > 0 and max == 1 then
-		self.text:SetFormattedText("%d%%", value*100)
-		self:SetStatusBarColor(.6, .6, .6) -- Wintergrasp building
-	else
-		self.text:SetText(B.Numb(value).." | "..B.Numb(max))
-	end
 end
 
 function TT:RefreshStatusBar(value)
@@ -387,32 +336,6 @@ function TT:GameTooltip_SetDefaultAnchor(parent)
 	end
 end
 
--- Fix comparison error on cursor
-function TT:GameTooltip_ComparisonFix(anchorFrame, shoppingTooltip1, shoppingTooltip2, _, secondaryItemShown)
-	local point = shoppingTooltip1:GetPoint(2)
-	if secondaryItemShown then
-		if point == "TOP" then
-			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPLEFT", anchorFrame, "TOPRIGHT", 3, 0)
-			shoppingTooltip2:ClearAllPoints()
-			shoppingTooltip2:SetPoint("TOPLEFT", shoppingTooltip1, "TOPRIGHT", 3, 0)
-		elseif point == "RIGHT" then
-			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPRIGHT", anchorFrame, "TOPLEFT", -3, 0)
-			shoppingTooltip2:ClearAllPoints()
-			shoppingTooltip2:SetPoint("TOPRIGHT", shoppingTooltip1, "TOPLEFT", -3, 0)
-		end
-	else
-		if point == "LEFT" then
-			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPLEFT", anchorFrame, "TOPRIGHT", 3, 0)
-		elseif point == "RIGHT" then
-			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPRIGHT", anchorFrame, "TOPLEFT", -3, 0)
-		end
-	end
-end
-
 -- Tooltip skin
 function TT:ReskinTooltip()
 	if not self then
@@ -490,7 +413,7 @@ function TT:FixRecipeItemNameWidth()
 	local name = self:GetName()
 	for i = 1, self:NumLines() do
 		local line = _G[name.."TextLeft"..i]
-		if line:GetHeight() > 40 then
+		if line and line:GetHeight() > 40 then
 			line:SetWidth(line:GetWidth() + 2)
 		end
 	end
@@ -498,7 +421,7 @@ end
 
 function TT:ResetUnit(btn)
 	if btn == "LSHIFT" and UnitExists("mouseover") then
-		GameTooltip:SetUnit("mouseover")
+		GameTooltip:RefreshData()
 	end
 end
 
@@ -514,25 +437,12 @@ function TT:FixStoneSoupError()
 end
 
 function TT:OnLogin()
-	if not GameTooltip.StatusBar then -- isBeta
-		GameTooltip.StatusBar = GameTooltipStatusBar
-	end
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
-	if DB.isBeta then
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
-		hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
-		TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
+	hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+	TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
-	else
-		GameTooltip:HookScript("OnTooltipSetUnit", TT.OnTooltipSetUnit)
-		GameTooltip.StatusBar:SetScript("OnValueChanged", TT.StatusBar_OnValueChanged)
-
-		hooksecurefunc("GameTooltip_AnchorComparisonTooltips", TT.GameTooltip_ComparisonFix)
-		GameTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
-		ItemRefTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
-		EmbeddedItemTooltip:HookScript("OnTooltipSetItem", TT.FixRecipeItemNameWidth)
-	end
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", TT.GameTooltip_SetDefaultAnchor)

@@ -206,7 +206,9 @@ function UF:PostCastStart(unit)
 		B:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
 	end
 
-	UF:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
+	if not self.channeling then
+		UF:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
+	end
 	UpdateCastBarColor(self, unit)
 
 	if self.__owner.mystyle == "nameplate" then

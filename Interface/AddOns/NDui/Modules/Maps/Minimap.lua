@@ -162,6 +162,7 @@ function module:ReskinRegions()
 	MinimapCluster.MailFrame:ClearAllPoints()
 	MinimapCluster.MailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3)
 	MinimapCluster.MailFrame:SetFrameLevel(11)
+	MiniMapMailIcon:SetSize(24, 18)
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
