@@ -190,17 +190,17 @@ function M:AddAutoAcceptButton()
 	B.CreateFS(bu, 14, _G.LFG_LIST_AUTO_ACCEPT, "system", "LEFT", 24, 0)
 
 	local lastTime = 0
+	local function clickInviteButton(button)
+		if button.applicantID and button.InviteButton:IsEnabled() then
+			button.InviteButton:Click()
+		end
+	end
+
 	B:RegisterEvent("LFG_LIST_APPLICANT_LIST_UPDATED", function()
 		if not bu:GetChecked() then return end
 		if not UnitIsGroupLeader("player", LE_PARTY_CATEGORY_HOME) then return end
 
-		local buttons = ApplicationViewerFrame.ScrollFrame.buttons
-		for i = 1, #buttons do
-			local button = buttons[i]
-			if button.applicantID and button.InviteButton:IsEnabled() then
-				button.InviteButton:Click()
-			end
-		end
+		ApplicationViewerFrame.ScrollBox:ForEachFrame(clickInviteButton)
 
 		if ApplicationViewerFrame:IsShown() then
 			local now = GetTime()
