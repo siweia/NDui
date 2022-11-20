@@ -243,6 +243,7 @@ local repairGossipIDs = {
 	[44982] = true, -- 里弗斯
 }
 B:RegisterEvent("GOSSIP_SHOW", function()
+	if IsShiftKeyDown() then return end
 	if not needToRepair then return end
 
 	local options = C_GossipInfo.GetOptions()
