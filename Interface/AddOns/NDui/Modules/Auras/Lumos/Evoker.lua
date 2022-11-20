@@ -35,13 +35,9 @@ function A:ChantLumos(self)
 		UpdateCooldown(self.lumos[1], 370553, true)--扭转天平
 		do
 			local button = self.lumos[2]
-			if IsUsableSpell(357208) then
-				button.Icon:SetDesaturated(false)
-			else
-				UpdateCooldown(button, 357208, true)
-				button.Icon:SetDesaturated(true)
-			end
-			button.Icon:SetTexture(GetSpellTexture(357208))
+			local spellID = IsPlayerSpell(375783) and 382266 or 357208
+			UpdateSpellStatus(button, spellID)
+			UpdateCooldown(button, spellID, true)
 			local name = GetUnitAura("player", 370553, "HELPFUL") --扭转天平高亮
 			if name then
 				B.ShowOverlayGlow(button)
@@ -51,73 +47,47 @@ function A:ChantLumos(self)
 		end
 
 		do
-			local button = self.lumos[3]
-			if IsUsableSpell(356995) then
-				button.Icon:SetDesaturated(false)
+			local button3 = self.lumos[3]
+			local button4 = self.lumos[4]
+			UpdateSpellStatus(button3, 356995)
+			UpdateCooldown(button3, 356995, true)
+			UpdateSpellStatus(button4, 357211)
+			UpdateCooldown(button4, 357211, true)
+
+			local hasBurst = GetUnitAura("player", 359618, "HELPFUL") --高亮精华迸发
+			if hasBurst then
+				B.ShowOverlayGlow(button3)
+				B.ShowOverlayGlow(button3)
 			else
-				button.Icon:SetDesaturated(true)
-				UpdateCooldown(button, 356995, true)
-			end
-			button.Icon:SetTexture(GetSpellTexture(356995))
-			local name = GetUnitAura("player", 359618, "HELPFUL") --高亮精华迸发
-			if name then
-				B.ShowOverlayGlow(button)
-			else
-				B.HideOverlayGlow(button)
+				B.HideOverlayGlow(button4)
+				B.HideOverlayGlow(button4)
 			end
 		end
 
-		do
-			local button = self.lumos[4]
-			button.Icon:SetTexture(GetSpellTexture(357211))
-			if IsUsableSpell(357211) then
-				button.Icon:SetDesaturated(false)
-			else
-				button.Icon:SetDesaturated(true)
-			end
-			local name = GetUnitAura("player", 359618, "HELPFUL") -- 高亮精华迸发
-			if name then
-				B.ShowOverlayGlow(button)
-			else
-				B.HideOverlayGlow(button)
-			end
-		end
 		UpdateCooldown(self.lumos[5], 357210, true)--深呼吸
 
 	elseif spec == 2 then --恩护
-		UpdateCooldown(self.lumos[1], 355936, true)--梦境吐息
+		local spellID = IsPlayerSpell(375783) and 382614 or 355936
+		UpdateCooldown(self.lumos[1], spellID, true)--梦境吐息
+
 		do
-			local button = self.lumos[2]--翡翠之花
-			if IsUsableSpell(355913) then
-				button.Icon:SetDesaturated(false)
+			local button2 = self.lumos[2]--翡翠之花
+			UpdateSpellStatus(button2, 355913)
+			UpdateCooldown(button2, 355913, true)
+			local button3 = self.lumos[3] --回响
+			UpdateSpellStatus(button3, 364343)
+			UpdateCooldown(button3, 364343, true)
+
+			local hasBurst = GetUnitAura("player", 369299, "HELPFUL") --高亮精华迸发
+			if hasBurst then
+				B.ShowOverlayGlow(button2)
+				B.ShowOverlayGlow(button2)
 			else
-				button.Icon:SetDesaturated(true)
-				UpdateCooldown(button, 355913, true)
-			end
-			button.Icon:SetTexture(GetSpellTexture(355913))
-			local name = GetUnitAura("player", 369299, "HELPFUL") --高亮精华迸发
-			if name then
-				B.ShowOverlayGlow(button)
-			else
-				B.HideOverlayGlow(button)
+				B.HideOverlayGlow(button3)
+				B.HideOverlayGlow(button3)
 			end
 		end
-		do
-			local button = self.lumos[3] --回响
-			if IsUsableSpell(364343) then
-				button.Icon:SetDesaturated(false)
-			else
-				button.Icon:SetDesaturated(true)
-				UpdateCooldown(button, 364343, true)
-			end
-			button.Icon:SetTexture(GetSpellTexture(364343))
-			local name = GetUnitAura("player", 369299, "HELPFUL") --高亮精华迸发
-			if name then
-				B.ShowOverlayGlow(button)
-			else
-				B.HideOverlayGlow(button)
-			end
-		end
+
 		UpdateCooldown(self.lumos[4], 366155, true)--逆转
 		UpdateCooldown(self.lumos[5], 360995, true)--清脆之拥
 	end
