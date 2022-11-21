@@ -15,6 +15,7 @@ local HelpTip = HelpTip
 
 local repairCostString = gsub(REPAIR_COST, HEADER_COLON, ":")
 local lowDurabilityCap = .25
+local needToRepair
 
 local localSlots = {
 	[1] = {1, INVTYPE_HEAD, 1000},
@@ -106,8 +107,10 @@ info.onEvent = function(self, event)
 
 	if isLowDurability() then
 		HelpTip:Show(info, lowDurabilityInfo)
+		needToRepair = true
 	else
 		HelpTip:Hide(info, L["Low Durability"])
+		needToRepair = false
 	end
 end
 
@@ -234,3 +237,20 @@ local function merchantShow()
 	B:RegisterEvent("MERCHANT_CLOSED", merchantClose)
 end
 B:RegisterEvent("MERCHANT_SHOW", merchantShow)
+
+local repairGossipIDs = {
+	[37005] = true, -- 基维斯
+	[44982] = true, -- 里弗斯
+}
+B:RegisterEvent("GOSSIP_SHOW", function()
+	if IsShiftKeyDown() then return end
+	if not needToRepair then return end
+
+	local options = C_GossipInfo.GetOptions()
+	for i = 1, #options do
+		local option = options[i]
+		if repairGossipIDs[option.gossipOptionID] then
+			C_GossipInfo.SelectOption(option.gossipOptionID)
+		end
+	end
+end)

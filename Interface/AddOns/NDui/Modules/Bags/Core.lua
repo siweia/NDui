@@ -39,6 +39,14 @@ end
 
 local anchorCache = {}
 
+local function CheckForBagReagent(name)
+	local pass = true
+	if name == "BagReagent" and GetContainerNumSlots(5) == 0 then
+		pass = false
+	end
+	return pass
+end
+
 function module:UpdateBagsAnchor(parent, bags)
 	wipe(anchorCache)
 
@@ -48,7 +56,7 @@ function module:UpdateBagsAnchor(parent, bags)
 
 	for i = 1, #bags do
 		local bag = bags[i]
-		if bag:GetHeight() > 45 then
+		if bag:GetHeight() > 45 and CheckForBagReagent(bag.name) then
 			bag:Show()
 			index = index + 1
 
@@ -399,6 +407,11 @@ function module:GetEmptySlot(name)
 		if slotID then
 			return -3, slotID
 		end
+	elseif name == "BagReagent" then
+		local slotID = module:GetContainerEmptySlot(5)
+		if slotID then
+			return 5, slotID
+		end
 	end
 end
 
@@ -413,6 +426,7 @@ local freeSlotContainer = {
 	["Bag"] = true,
 	["Bank"] = true,
 	["Reagent"] = true,
+	["BagReagent"] = true,
 }
 
 function module:CreateFreeSlots()
@@ -1141,6 +1155,9 @@ function module:OnLogin()
 			B.CreateMF(self, nil, true)
 		end
 
+		self.iconSize = iconSize
+		module.CreateFreeSlots(self)
+
 		local label
 		if strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]
@@ -1174,9 +1191,7 @@ function module:OnLogin()
 			return
 		end
 
-		self.iconSize = iconSize
 		module.CreateInfoFrame(self)
-		module.CreateFreeSlots(self)
 
 		local buttons = {}
 		buttons[1] = module.CreateCloseButton(self, f)
