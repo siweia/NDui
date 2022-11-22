@@ -15,8 +15,8 @@ C.themes["Blizzard_InspectUI"] = function()
 		local slot = _G["Inspect"..slots[i].."Slot"]
 
 		B.StripTextures(slot)
-		slot:SetNormalTexture("")
-		slot:SetPushedTexture("")
+		slot:SetNormalTexture(0)
+		slot:SetPushedTexture(0)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
 		slot.bg = B.CreateBDFrame(slot, .25)

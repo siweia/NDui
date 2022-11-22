@@ -59,7 +59,11 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 	B.StripTextures(AchievementFrameSummaryCategoriesStatusBar)
 	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(DB.bdTex)
-	AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+	if DB.isNewPatch then
+		AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
+	else
+		AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+	end
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetTextColor(1, 1, 1)
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetPoint("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
 	AchievementFrameSummaryCategoriesStatusBarText:SetPoint("RIGHT", AchievementFrameSummaryCategoriesStatusBar, "RIGHT", -5, 0)
@@ -85,8 +89,8 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 		-- can't get a backdrop frame to appear behind the checked texture for some reason
 		local ch = bu.tracked
-		ch:SetNormalTexture("")
-		ch:SetPushedTexture("")
+		ch:SetNormalTexture(0)
+		ch:SetPushedTexture(0)
 		ch:SetHighlightTexture(DB.bdTex)
 
 		local check = ch:GetCheckedTexture()
@@ -182,7 +186,11 @@ C.themes["Blizzard_AchievementUI"] = function()
 		local bu = _G["AchievementFrameSummaryCategoriesCategory"..i]
 		B.StripTextures(bu)
 		bu:SetStatusBarTexture(DB.bdTex)
-		bu:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+		if DB.isNewPatch then
+			bu:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
+		else
+			bu:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+		end
 		B.CreateBDFrame(bu, .25)
 
 		bu.text:SetPoint("RIGHT", bu, "RIGHT", -5, 0)
@@ -215,7 +223,11 @@ C.themes["Blizzard_AchievementUI"] = function()
 	for _, bar in pairs(bars) do
 		B.StripTextures(bar)
 		bar:SetStatusBarTexture(DB.bdTex)
-		bar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+		if DB.isNewPatch then
+			bar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
+		else
+			bar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+		end
 		bar.title:SetTextColor(1, 1, 1)
 		bar.title:SetPoint("LEFT", bar, "LEFT", 6, 0)
 		bar.text:SetPoint("RIGHT", bar, "RIGHT", -5, 0)

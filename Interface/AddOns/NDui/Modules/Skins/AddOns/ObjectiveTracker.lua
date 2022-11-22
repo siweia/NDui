@@ -121,8 +121,8 @@ local function reskinQuestIcon(button)
 
 	if not button.styled then
 		button:SetSize(24, 24)
-		button:SetNormalTexture("")
-		button:SetPushedTexture("")
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		local icon = _G[button:GetName().."IconTexture"]
 		if icon then

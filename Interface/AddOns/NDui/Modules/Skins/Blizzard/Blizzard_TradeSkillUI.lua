@@ -19,7 +19,11 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	B.StripTextures(TradeSkillRankFrame)
 	TradeSkillRankFrame:SetStatusBarTexture(DB.bdTex)
 	TradeSkillRankFrame.SetStatusBarColor = B.Dummy
-	TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+	if DB.isNewPatch then
+		TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(.1, .3, .9, 1), CreateColor(.2, .4, 1, 1))
+	else
+		TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+	end
 	B.CreateBDFrame(TradeSkillRankFrame, .25)
 	TradeSkillRankFrame:SetWidth(220)
 

@@ -36,6 +36,8 @@ local addon, ns = ...
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
+local ContainerIDToInventoryID = C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+
 function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
 end
@@ -47,7 +49,7 @@ BagButton.bgTex = [[Interface\Paperdoll\UI-PaperDoll-Slot-Bag]]
 BagButton.itemFadeAlpha = 0.1
 
 local function hackBagID(button)
-	return button.bagID
+	return button.bagId
 end
 
 local buttonNum = 0
@@ -60,7 +62,7 @@ function BagButton:Create(bagID)
 	local invID = (isBankBag and bagID-4) or ContainerIDToInventoryID(bagID)
 	button.invID = invID
 	button:SetID(invID)
-	button.bagID = bagID
+	button.bagId = bagID
 	button.GetBagID = hackBagID
 	button.isBankBag = isBankBag
 	if isBankBag then
@@ -85,8 +87,8 @@ function BagButton:Update()
 	self.Icon:SetTexture(icon or self.bgTex)
 	self.Icon:SetDesaturated(IsInventoryItemLocked(self.invID))
 
-	if(self.bagID > NUM_BAG_SLOTS) then
-		if(self.bagID-NUM_BAG_SLOTS <= GetNumBankSlots()) then
+	if(self.bagId > NUM_BAG_SLOTS) then
+		if(self.bagId-NUM_BAG_SLOTS <= GetNumBankSlots()) then
 			self.Icon:SetVertexColor(1, 1, 1)
 			self.notBought = nil
 		else
@@ -99,7 +101,7 @@ function BagButton:Update()
 end
 
 local function highlight(button, func, bagID)
-	func(button, not bagID or button.bagID == bagID)
+	func(button, not bagID or button.bagId == bagID)
 end
 
 function BagButton:OnEnter()
@@ -108,10 +110,10 @@ function BagButton:OnEnter()
 	if(hlFunction) then
 		if(self.bar.isGlobal) then
 			for _, container in pairs(self.implementation.contByID) do
-				container:ApplyToButtons(highlight, hlFunction, self.bagID)
+				container:ApplyToButtons(highlight, hlFunction, self.bagId)
 			end
 		else
-			self.bar.container:ApplyToButtons(highlight, hlFunction, self.bagID)
+			self.bar.container:ApplyToButtons(highlight, hlFunction, self.bagId)
 		end
 	end
 
@@ -155,19 +157,19 @@ function BagButton:OnClick(btn)
 	local container = self.bar.container
 	if(container and container.SetFilter) then
 		if(not self.filter) then
-			local bagID = self.bagID
-			self.filter = function(i) return i.bagID ~= bagID end
+			local bagID = self.bagId
+			self.filter = function(i) return i.bagId ~= bagID end
 		end
 		self.hidden = not self.hidden
 
 		if(self.bar.isGlobal) then
 			for _, container in pairs(container.implementation.contByID) do
 				container:SetFilter(self.filter, self.hidden)
-				container.implementation:OnEvent("BAG_UPDATE", self.bagID)
+				container.implementation:OnEvent("BAG_UPDATE", self.bagId)
 			end
 		else
 			container:SetFilter(self.filter, self.hidden)
-			container.implementation:OnEvent("BAG_UPDATE", self.bagID)
+			container.implementation:OnEvent("BAG_UPDATE", self.bagId)
 		end
 	end
 end

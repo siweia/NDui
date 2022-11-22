@@ -60,5 +60,5 @@ end
 
 ItemKeys["isInSet"] = function(item)
 	if not setItems then initUpdater() end
-	return setItems[item.bagID..":"..item.slotID]
+	return setItems[item.bagId..":"..item.slotId]
 end

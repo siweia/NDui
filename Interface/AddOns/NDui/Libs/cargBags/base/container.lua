@@ -66,7 +66,7 @@ end
 ]]
 function Container:AddButton(button)
 	button.container = self
-	button:SetParent(self.bags[button.bagID])
+	button:SetParent(self.bags[button.bagId])
 	self:ScheduleContentCallback()
 	table.insert(self.buttons, button)
 	if(button.OnAdd) then button:OnAdd(self) end

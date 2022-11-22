@@ -15,8 +15,8 @@ tinsert(C.defaultThemes, function()
 	}
 
 	for _, bu in pairs(slots) do
-		bu:SetNormalTexture("")
-		bu:SetPushedTexture("")
+		bu:SetNormalTexture(0)
+		bu:SetPushedTexture(0)
 		bu:SetCheckedTexture(DB.textures.pushed)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")

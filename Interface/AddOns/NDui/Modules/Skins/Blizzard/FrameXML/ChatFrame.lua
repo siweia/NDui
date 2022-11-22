@@ -37,7 +37,7 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.Child:GetNumChildren() do
 			local tab = select(i, self.Child:GetChildren())
 			if not tab.styled and tab:IsHeader() then
-				tab:SetNormalTexture("")
+				tab:SetNormalTexture(0)
 				tab.bg = B.CreateBDFrame(tab, .25)
 				tab.bg:SetAllPoints()
 

@@ -75,7 +75,7 @@ C.themes["Blizzard_Communities"] = function()
 				button.bg:SetPoint("TOPLEFT", 5, -5)
 				button.bg:SetPoint("BOTTOMRIGHT", -10, 5)
 
-				button:SetHighlightTexture("")
+				button:SetHighlightTexture(0)
 				button.IconRing:SetAlpha(0)
 				button.__iconBorder = B.ReskinIcon(button.Icon)
 				button.Background:Hide()

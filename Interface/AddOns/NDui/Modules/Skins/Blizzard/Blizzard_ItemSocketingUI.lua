@@ -23,7 +23,7 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		_G["ItemSocketingSocket"..i.."Background"]:SetAlpha(0)
 		B.StripTextures(bu)
 
-		bu:SetPushedTexture("")
+		bu:SetPushedTexture(0)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu.icon:SetTexCoord(unpack(DB.TexCoord))
 

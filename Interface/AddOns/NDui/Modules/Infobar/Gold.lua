@@ -8,7 +8,9 @@ local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
 local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
 local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 local GetMoney = GetMoney
-local GetContainerNumSlots, GetContainerItemInfo, UseContainerItem = GetContainerNumSlots, GetContainerItemInfo, UseContainerItem
+local GetContainerNumSlots = C_Container.GetContainerNumSlots or GetContainerNumSlots
+local UseContainerItem = C_Container.UseContainerItem or UseContainerItem
+local GetContainerItemInfo = GetContainerItemInfo
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
@@ -249,6 +251,28 @@ local function startSelling()
 				UseContainerItem(bag, slot)
 				C_Timer_After(.15, startSelling)
 				return
+			end
+		end
+	end
+end
+
+if DB.isNewPatch then
+	function startSelling()
+		if stop then return end
+		for bag = 0, 4 do
+			for slot = 1, C_Container.GetContainerNumSlots(bag) do
+				if stop then return end
+				local info = C_Container.GetContainerItemInfo(bag, slot)
+				if info then
+					local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
+					local isInSet = C_Container.GetContainerItemEquipmentSetInfo(bag, slot)
+					if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
+						cache["b"..bag.."s"..slot] = true
+						C_Container.UseContainerItem(bag, slot)
+						C_Timer_After(.15, startSelling)
+						return
+					end
+				end
 			end
 		end
 	end

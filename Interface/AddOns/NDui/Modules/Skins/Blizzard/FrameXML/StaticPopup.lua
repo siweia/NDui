@@ -33,9 +33,9 @@ tinsert(C.defaultThemes, function()
 		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
 		_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
-		bu:SetNormalTexture("")
-		bu:SetHighlightTexture("")
-		bu:SetPushedTexture("")
+		bu:SetNormalTexture(0)
+		bu:SetHighlightTexture(0)
+		bu:SetPushedTexture(0)
 		B.CreateBDFrame(bu)
 		bu.IconBorder:SetAlpha(0)
 
@@ -96,8 +96,8 @@ tinsert(C.defaultThemes, function()
 		if info.closeButton then
 			local closeButton = _G[dialog:GetName().."CloseButton"]
 
-			closeButton:SetNormalTexture("")
-			closeButton:SetPushedTexture("")
+			closeButton:SetNormalTexture(0)
+			closeButton:SetPushedTexture(0)
 
 			if info.closeButtonIsHide then
 				for _, pixel in pairs(closeButton.pixels) do

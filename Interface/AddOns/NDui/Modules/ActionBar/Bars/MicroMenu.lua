@@ -46,9 +46,9 @@ function Bar:MicroButton_Create(parent, data)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
 		button:UnregisterAllEvents()
-		button:SetNormalTexture(nil)
-		button:SetPushedTexture(nil)
-		button:SetDisabledTexture(nil)
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
+		button:SetDisabledTexture(0)
 		if tooltip then
 			button.title = "|cffffffff"..tooltip
 			B.AddTooltip(button, "ANCHOR_RIGHT", button.newbieText, "system")

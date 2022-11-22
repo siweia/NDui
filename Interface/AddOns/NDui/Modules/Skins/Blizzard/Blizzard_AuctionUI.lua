@@ -49,7 +49,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 	B.StripTextures(BidBidButton)
 
 	hooksecurefunc("FilterButton_SetUp", function(button)
-		button:SetNormalTexture("")
+		button:SetNormalTexture(0)
 	end)
 
 	local lastSkinnedTab = 1
@@ -106,8 +106,8 @@ C.themes["Blizzard_AuctionUI"] = function()
 		local ic = _G[button..i.."ItemIconTexture"]
 
 		if bu and it then
-			it:SetNormalTexture("")
-			it:SetPushedTexture("")
+			it:SetNormalTexture(0)
+			it:SetPushedTexture(0)
 			local itemHL = it:GetHighlightTexture()
 			if itemHL then
 				itemHL:SetColorTexture(1, 1, 1, .25)

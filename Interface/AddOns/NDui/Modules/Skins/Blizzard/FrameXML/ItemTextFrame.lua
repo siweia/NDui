@@ -16,7 +16,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinArrow(ItemTextPrevPageButton, "left")
 	B.ReskinArrow(ItemTextNextPageButton, "right")
 	--ItemTextFramePageBg:SetAlpha(0)
-	ItemTextPageText:SetTextColor(1, 1, 1)
+	ItemTextPageText:SetTextColor("P", 1, 1, 1)
 	ItemTextPageText.SetTextColor = B.Dummy
 
 	-- fix scrollbar bg, need reviewed

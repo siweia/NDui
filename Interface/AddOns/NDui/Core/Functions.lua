@@ -84,7 +84,7 @@ do
 				self.timer:SetText(text)
 			else
 				self:SetScript("OnUpdate", nil)
-				self.timer:SetText(nil)
+				self.timer:SetText("")
 			end
 			self.elapsed = 0
 		end
@@ -525,7 +525,11 @@ do
 
 		local tex = self:CreateTexture(nil, "BACKGROUND")
 		tex:SetTexture(DB.bdTex)
-		tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+		if DB.isNewPatch then
+			tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
+		else
+			tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+		end
 		if width then tex:SetWidth(width) end
 		if height then tex:SetHeight(height) end
 
@@ -593,6 +597,7 @@ do
 		if not a then tinsert(C.frames, self) end
 	end
 
+	local gradientFrom, gradientTo = CreateColor(0, 0, 0, .5), CreateColor(.3, .3, .3, .3)
 	function B:CreateGradient()
 		local tex = self:CreateTexture(nil, "BORDER")
 		tex:SetInside()
@@ -600,7 +605,11 @@ do
 		if C.db["Skins"]["FlatMode"] then
 			tex:SetVertexColor(.3, .3, .3, .25)
 		else
-			tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
+			if DB.isNewPatch then
+				tex:SetGradient("Vertical", gradientFrom, gradientTo)
+			else
+				tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
+			end
 		end
 
 		return tex
@@ -858,9 +867,9 @@ do
 		"Center",
 	}
 	function B:Reskin(noHighlight, override)
-		if self.SetNormalTexture and not override then self:SetNormalTexture("") end
-		if self.SetHighlightTexture then self:SetHighlightTexture("") end
-		if self.SetPushedTexture then self:SetPushedTexture("") end
+		if self.SetNormalTexture and not override then self:SetNormalTexture(0) end
+		if self.SetHighlightTexture then self:SetHighlightTexture(0) end
+		if self.SetPushedTexture then self:SetPushedTexture(0) end
 		if self.SetDisabledTexture then self:SetDisabledTexture("") end
 
 		local buttonName = self.GetName and self:GetName()
@@ -1196,8 +1205,8 @@ do
 
 	-- Handle checkbox and radio
 	function B:ReskinCheck(forceSaturation)
-		self:SetNormalTexture("")
-		self:SetPushedTexture("")
+		self:SetNormalTexture(0)
+		self:SetPushedTexture(0)
 
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetInside(self, 4, 4)
@@ -1218,8 +1227,8 @@ do
 	end
 
 	function B:ReskinRadio()
-		self:SetNormalTexture("")
-		self:SetHighlightTexture("")
+		self:SetNormalTexture(0)
+		self:SetHighlightTexture(0)
 		self:SetCheckedTexture(DB.bdTex)
 
 		local ch = self:GetCheckedTexture()
@@ -1249,7 +1258,9 @@ do
 
 	-- Handle slider
 	function B:ReskinSlider(vertical)
-		self:SetBackdrop(nil)
+		if not DB.isNewPatch then
+			self:SetBackdrop(nil)
+		end
 		B.StripTextures(self)
 
 		local bg = B.CreateBDFrame(self, 0, true)
@@ -1288,7 +1299,7 @@ do
 	local function resetCollapseTexture(self, texture)
 		if self.settingTexture then return end
 		self.settingTexture = true
-		self:SetNormalTexture("")
+		self:SetNormalTexture(0)
 
 		if texture and texture ~= "" then
 			if strfind(texture, "Plus") or strfind(texture, "Closed") then
@@ -1304,9 +1315,9 @@ do
 	end
 
 	function B:ReskinCollapse(isAtlas)
-		self:SetNormalTexture("")
-		self:SetHighlightTexture("")
-		self:SetPushedTexture("")
+		self:SetNormalTexture(0)
+		self:SetHighlightTexture(0)
+		self:SetPushedTexture(0)
 		self:SetDisabledTexture("")
 
 		local bg = B.CreateBDFrame(self, .25, true)

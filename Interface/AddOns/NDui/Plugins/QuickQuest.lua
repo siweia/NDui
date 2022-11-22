@@ -491,5 +491,8 @@ end
 
 QuestNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
 QuestNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
-GossipNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
-GossipNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
+local frame = GossipNpcNameFrame or GossipFrame.TitleContainer
+if frame then -- isNewPatch: GossipNpcNameFrame removed
+	frame:HookScript("OnShow", UnitQuickQuestStatus)
+	frame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
+end

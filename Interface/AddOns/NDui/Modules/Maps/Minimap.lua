@@ -116,7 +116,7 @@ function module:ReskinRegions()
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
-	GameTimeCalendarInvitesTexture:SetParent("Minimap")
+	GameTimeCalendarInvitesTexture:SetParent(Minimap)
 	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
 	local Invt = CreateFrame("Button", nil, UIParent)
@@ -442,8 +442,8 @@ function module:ShowCalendar()
 
 	if C.db["Map"]["Calendar"] then
 		if not GameTimeFrame.styled then
-			GameTimeFrame:SetNormalTexture(nil)
-			GameTimeFrame:SetPushedTexture(nil)
+			GameTimeFrame:SetNormalTexture(0)
+			GameTimeFrame:SetPushedTexture(0)
 			GameTimeFrame:SetHighlightTexture(nil)
 			GameTimeFrame:SetSize(18, 18)
 			GameTimeFrame:SetParent(Minimap)

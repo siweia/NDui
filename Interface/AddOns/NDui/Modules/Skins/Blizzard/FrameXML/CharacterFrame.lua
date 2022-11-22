@@ -82,16 +82,16 @@ tinsert(C.defaultThemes, function()
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
 
-		slot:SetNormalTexture("")
-		slot:SetPushedTexture("")
+		slot:SetNormalTexture(0)
+		slot:SetPushedTexture(0)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		slot.SetHighlightTexture = B.Dummy
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
 		slot.bg = B.CreateBDFrame(slot, .25)
 
 		local popout = slot.popoutButton
-		popout:SetNormalTexture("")
-		popout:SetHighlightTexture("")
+		popout:SetNormalTexture(0)
+		popout:SetHighlightTexture(0)
 
 		local arrow = popout:CreateTexture(nil, "OVERLAY")
 		arrow:SetSize(14, 14)
@@ -250,7 +250,7 @@ tinsert(C.defaultThemes, function()
 	for i = 1, 12 do
 		local button = _G["CompanionButton"..i]
 		button.bg = B.CreateBDFrame(button, .25)
-		button:SetCheckedTexture("")
+		button:SetCheckedTexture(0)
 		_G["CompanionButton"..i.."ActiveTexture"]:SetAlpha(0)
 
 		button:SetNormalTexture(136243)
@@ -344,7 +344,7 @@ tinsert(C.defaultThemes, function()
 		local button = _G["GearSetButton"..i]
 		button.bg = B.CreateBDFrame(button, .25)
 		button:DisableDrawLayer("BACKGROUND")
-		button:SetCheckedTexture("")
+		button:SetCheckedTexture(0)
 		hooksecurefunc(button, "SetChecked", updateCheckState)
 
 		local hl = button:GetHighlightTexture()
@@ -363,8 +363,8 @@ tinsert(C.defaultThemes, function()
 		local button = PaperDollFrameItemFlyout.buttons[#PaperDollFrameItemFlyout.buttons]
 		if button.bg then return end
 
-		button:SetNormalTexture("")
-		button:SetPushedTexture("")
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.ReskinIcon(button.icon)
 		B.ReskinIconBorder(button.IconBorder, true)

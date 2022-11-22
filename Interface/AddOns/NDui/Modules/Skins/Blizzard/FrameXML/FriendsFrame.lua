@@ -32,8 +32,8 @@ tinsert(C.defaultThemes, function()
 
 		local travelPass = bu.travelPassButton
 		travelPass:SetSize(22, 22)
-		travelPass:SetPushedTexture(nil)
-		travelPass:SetDisabledTexture(nil)
+		travelPass:SetPushedTexture(0)
+		travelPass:SetDisabledTexture(0)
 		travelPass:SetPoint("TOPRIGHT", -3, -6)
 		B.CreateBDFrame(travelPass, 1)
 		local nt = travelPass:GetNormalTexture()
@@ -96,7 +96,7 @@ tinsert(C.defaultThemes, function()
 	FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
 
 	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
-		button:SetPushedTexture("")
+		button:SetPushedTexture(0)
 		button:GetRegions():SetTexCoord(.08, .92, .08, .92)
 		B.CreateBDFrame(button)
 	end

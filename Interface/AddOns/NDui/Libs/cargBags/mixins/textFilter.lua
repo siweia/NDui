@@ -36,7 +36,7 @@ local defaultFilters = {
 	t = function(i, arg) return (i.type and i.type:lower():match(arg)) or (i.subType and i.subType:lower():match(arg)) or (i.equipLoc and i.equipLoc:lower():match(arg)) end,
 	b = function(i, arg) return i.bindOn and i.bindOn:match(arg) end,
 	q = function(i, arg) return i.quality == tonumber(arg) end,
-	bag = function(i, arg) return i.bagID == tonumber(arg) end,
+	bag = function(i, arg) return i.bagId == tonumber(arg) end,
 	quest = function(i) return i.isQuestItem end,
 
 	_default = "n",
