@@ -2,10 +2,18 @@
 -- SortBags, shirsig
 -- https://github.com/shirsig/SortBags
 -----------------------------------------
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+
 local _G, _M = getfenv(0), {}
 setfenv(1, setmetatable(_M, {__index=_G}))
 
+local GetBagName = C_Container.GetBagName or GetBagName
+local GetBagSlotFlag = C_Container.GetBagSlotFlag or GetBagSlotFlag
+local GetBankBagSlotFlag = C_Container.GetBankBagSlotFlag or GetBankBagSlotFlag
+local PickupContainerItem = C_Container.PickupContainerItem or PickupContainerItem
 local GetContainerNumSlots = C_Container.GetContainerNumSlots or GetContainerNumSlots
+local GetContainerItemInfo = C_Container.GetContainerItemInfo or GetContainerItemInfo
 local GetContainerItemLink = C_Container.GetContainerItemLink or GetContainerItemLink
 
 CreateFrame('GameTooltip', 'SortBagsTooltip', nil, 'GameTooltipTemplate')
@@ -213,8 +221,17 @@ end
 
 function Move(src, dst)
 	if InCombatLockdown() then return end -- might block in combat, needs review
-	local texture, _, srcLocked = GetContainerItemInfo(src.container, src.position)
-	local _, _, dstLocked = GetContainerItemInfo(dst.container, dst.position)
+	local texture, srcLocked, dstLocked, _
+	if DB.isNewPatch then
+		local srcInfo = GetContainerItemInfo(src.container, src.position)
+		texture = srcInfo and srcInfo.iconFileID
+		srcLocked = srcInfo and srcInfo.isLocked
+		local dstInfo = GetContainerItemInfo(dst.container, dst.position)
+		dstLocked = dstInfo and dstInfo.isLocked
+	else
+		texture, _, srcLocked = GetContainerItemInfo(src.container, src.position)
+		_, _, dstLocked = GetContainerItemInfo(dst.container, dst.position)
+	end
 
 	if texture and not srcLocked and not dstLocked then
 		ClearCursor()
@@ -383,7 +400,14 @@ do
 				local slot = {container=container, position=position, class=class}
 				local item = Item(container, position)
 				if item then
-					local _, count, locked = GetContainerItemInfo(container, position)
+					local _, count, locked
+					if DB.isNewPatch then
+						local info = GetContainerItemInfo(container, position)
+						count = info and info.stackCount
+						locked = info and info.isLocked
+					else
+						_, count, locked = GetContainerItemInfo(container, position)
+					end
 					if locked then
 						return false
 					end
