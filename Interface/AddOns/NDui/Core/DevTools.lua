@@ -20,6 +20,7 @@ local floor, ceil = math.floor, math.ceil
 DB.Devs = {
 	["唛喏-寒冰之王"] = true, -- classic
 	["Huniverster-BadgeofJustice"] = true, -- classic beta
+	["Huniverster-ClassicPTRRealm1"] = true, -- classic ptr
 	["Huniverster-ClassicPTRRealm2"] = true, -- classic ptr
 }
 local function isDeveloper()
