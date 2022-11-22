@@ -1,14 +1,28 @@
 # NDui
 
-## [6.30.5](https://github.com/siweia/NDui/tree/6.30.5) (2022-11-15)
+## [6.31.0](https://github.com/siweia/NDui/tree/6.31.0) (2022-11-22)
 
-- Update French locales.
-- Replace all scantooltip by using C_TooltipInfo in 10.0.2.
-- Fix totembar.
-- Fix petbar and stancebar taint.
 - Update default skins.
-- Fix uiwidget mover.
+- Update skin for Rematch.
+- Remove compatibility with 10.0.0.
+- Revamp GameTooltip to the new API in 10.0.2.
+- Fix extrabar anchor issue.
+- Support oUF 11.
+- Update map reveal data.
+- Force to show all minimap options.
+- Increase frame level for enhanced worldmap elements.
+- Update chat copy.
+- Update locales for French and Russian.
+- Fix totembar.
+- Fix taint by petbar and stancebar.
+- Update UIWidget mover.
 - Update reminder for Druid and Evoker.
-- Show item level on LootFrame.
-- Updates for oUF 11.
-- Update actionbar cooldown status sending format.
+- Update auras and dispel priority for Evoker.
+- Show item level on loot frame.
+- New format for sending actionbutton cooldown of charged spells.
+- Correctly disable enhanced minimap if SexyMap enabled.
+- Fix channeling spell ticks.
+- Fix GameTooltip update issue.
+- Fix auto invite in premade groups.
+- Show freeslots in reagent bag.
+- Auto interact Jeeves and Reaves if on low durability.
