@@ -3349,7 +3349,10 @@ end
 
 -- General event handler
 local function OnEvent(self, event, ...)
-	if not NDui[2].db["UFs"]["LibHealComm"] then return end
+	if not NDui[2].db["UFs"]["LibHealComm"] then
+		self:UnregisterAllEvents()
+		return
+	end
 
 	if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
 		HealComm[event](HealComm, CombatLogGetCurrentEventInfo())
