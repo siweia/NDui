@@ -74,7 +74,7 @@ function M:CreateItemString(frame, strType)
 			local relF, x, y = M:GetSlotAnchor(index)
 			slotFrame.enchantText = B.CreateFS(slotFrame, DB.Font[2]+1)
 			slotFrame.enchantText:ClearAllPoints()
-			slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
+			slotFrame.enchantText:SetPoint("TOPRIGHT", slotFrame, 1, 1)
 			slotFrame.enchantText:SetTextColor(0, 1, 0)
 			for i = 1, 5 do
 				local offset = (i-1)*18 + 5
