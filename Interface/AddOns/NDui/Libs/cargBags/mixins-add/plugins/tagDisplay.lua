@@ -42,7 +42,7 @@ CALLBACKS
 local _, ns = ...
 local cargBags = ns.cargBags
 
-local GetContainerNumFreeSlots = C_Container.GetContainerNumFreeSlots or GetContainerNumFreeSlots
+local GetContainerNumFreeSlots = C_Container and C_Container.GetContainerNumFreeSlots or GetContainerNumFreeSlots
 
 local tagPool, tagEvents, object = {}, {}
 local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](object, ...) or "" end

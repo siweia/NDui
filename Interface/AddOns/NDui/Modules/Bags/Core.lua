@@ -11,10 +11,10 @@ local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem = C_NewItems.IsNewItem, C_N
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local SortBankBags, SortBags, InCombatLockdown, ClearCursor = SortBankBags, SortBags, InCombatLockdown, ClearCursor
 -- DB.isNewPatch
-local GetContainerItemID = C_Container.GetContainerItemID or GetContainerItemID
-local GetContainerNumSlots = C_Container.GetContainerNumSlots or GetContainerNumSlots
-local PickupContainerItem = C_Container.PickupContainerItem or PickupContainerItem
-local SplitContainerItem = C_Container.SplitContainerItem or SplitContainerItem
+local GetContainerItemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
+local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local PickupContainerItem = C_Container and C_Container.PickupContainerItem or PickupContainerItem
+local SplitContainerItem = C_Container and C_Container.SplitContainerItem or SplitContainerItem
 
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS or 4
 local NUM_BANKBAGSLOTS = NUM_BANKBAGSLOTS or 7

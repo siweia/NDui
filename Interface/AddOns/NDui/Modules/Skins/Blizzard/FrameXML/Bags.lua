@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local ContainerIDToInventoryID = C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+local ContainerIDToInventoryID = C_Container and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
 
 local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
 

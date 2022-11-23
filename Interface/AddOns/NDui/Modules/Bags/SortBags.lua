@@ -8,13 +8,13 @@ local B, C, L, DB = unpack(ns)
 local _G, _M = getfenv(0), {}
 setfenv(1, setmetatable(_M, {__index=_G}))
 
-local GetBagName = C_Container.GetBagName or GetBagName
-local GetBagSlotFlag = C_Container.GetBagSlotFlag or GetBagSlotFlag
-local GetBankBagSlotFlag = C_Container.GetBankBagSlotFlag or GetBankBagSlotFlag
-local PickupContainerItem = C_Container.PickupContainerItem or PickupContainerItem
-local GetContainerNumSlots = C_Container.GetContainerNumSlots or GetContainerNumSlots
-local GetContainerItemInfo = C_Container.GetContainerItemInfo or GetContainerItemInfo
-local GetContainerItemLink = C_Container.GetContainerItemLink or GetContainerItemLink
+local GetBagName = C_Container and C_Container.GetBagName or GetBagName
+local GetBagSlotFlag = C_Container and C_Container.GetBagSlotFlag or GetBagSlotFlag
+local GetBankBagSlotFlag = C_Container and C_Container.GetBankBagSlotFlag or GetBankBagSlotFlag
+local PickupContainerItem = C_Container and C_Container.PickupContainerItem or PickupContainerItem
+local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local GetContainerItemInfo = C_Container and C_Container.GetContainerItemInfo or GetContainerItemInfo
+local GetContainerItemLink = C_Container and C_Container.GetContainerItemLink or GetContainerItemLink
 
 CreateFrame('GameTooltip', 'SortBagsTooltip', nil, 'GameTooltipTemplate')
 

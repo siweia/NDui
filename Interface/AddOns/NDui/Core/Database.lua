@@ -11,10 +11,6 @@ DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isClassic = select(4, GetBuildInfo()) < 90000
 DB.isNewPatch = select(4, GetBuildInfo()) >= 30401 -- 3.4.1 WLK
 
-if not DB.isNewPatch then
-	if not C_Container then C_Container = {} end
-end
-
 -- Colors
 DB.MyName = UnitName("player")
 DB.MyRealm = GetRealmName()

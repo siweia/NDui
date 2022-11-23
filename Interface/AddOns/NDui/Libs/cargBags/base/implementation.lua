@@ -21,7 +21,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 
-local GetContainerNumSlots = C_Container.GetContainerNumSlots or GetContainerNumSlots
+local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
 
 --[[!
 	@class Implementation
