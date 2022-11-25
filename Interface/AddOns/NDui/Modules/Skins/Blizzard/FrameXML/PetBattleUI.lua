@@ -218,7 +218,7 @@ tinsert(C.defaultThemes, function()
 			end
 
 			bu:SetNormalTexture(0)
-			bu:GetPushedTexture():SetTexture(DB.textures.pushed)
+			bu:GetPushedTexture():SetTexture(DB.pushedTex)
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			if not bu.bg then
 				bu.bg = B.ReskinIcon(bu.Icon, true)
@@ -240,7 +240,7 @@ tinsert(C.defaultThemes, function()
 	B.PixelIcon(skipButton, "Interface\\Icons\\Ability_Foundryraid_Dormant", true)
 	B.CreateSD(skipButton)
 	skipButton.HL:SetAllPoints(skipButton)
-	skipButton:SetPushedTexture(DB.textures.pushed)
+	skipButton:SetPushedTexture(DB.pushedTex)
 
 	local xpbar = PetBattleFrameXPBar
 	B.StripTextures(xpbar)

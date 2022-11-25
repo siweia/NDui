@@ -279,7 +279,7 @@ function S:TrinketMenu()
 		if not button then return end
 
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		button:SetPushedTexture(DB.textures.pushed)
+		button:SetPushedTexture(DB.pushedTex)
 		button:GetCheckedTexture():SetColorTexture(1, .8, 0, .5)
 		_G[name.."NormalTexture"]:SetAlpha(0)
 		B.ReskinIcon(_G[name.."Icon"])

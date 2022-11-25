@@ -63,7 +63,7 @@ function Bar:StyleActionButton(button)
 
 	if normal then normal:SetAlpha(0) end
 	if normal2 then normal2:SetAlpha(0) end
-	if flash then flash:SetTexture(DB.textures.flash) end
+	if flash then flash:SetTexture(nil) end
 	if NewActionTexture then NewActionTexture:SetTexture(nil) end
 	if border then border:SetTexture(nil) end
 	if iconMask then iconMask:Hide() end
@@ -79,7 +79,7 @@ function Bar:StyleActionButton(button)
 	end
 	if pushed then
 		pushed:SetInside()
-		pushed:SetTexture(DB.textures.pushed)
+		pushed:SetTexture(DB.pushedTex)
 	end
 	if checked then
 		checked:SetInside()

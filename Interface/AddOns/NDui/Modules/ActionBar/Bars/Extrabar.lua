@@ -51,7 +51,7 @@ function Bar:CreateExtrabar()
 		for spellButton in self.SpellButtonContainer:EnumerateActive() do
 			if spellButton and not spellButton.styled then
 				spellButton.NormalTexture:SetAlpha(0)
-				spellButton:SetPushedTexture(DB.textures.pushed) --force it to gain a texture
+				spellButton:SetPushedTexture(DB.pushedTex) --force it to gain a texture
 				spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				spellButton:GetHighlightTexture():SetInside()
 				spellButton.Icon:SetInside()

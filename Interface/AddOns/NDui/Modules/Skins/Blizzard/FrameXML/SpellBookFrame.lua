@@ -106,7 +106,7 @@ tinsert(C.defaultThemes, function()
 
 			if not tab.styled then
 				tab:GetRegions():Hide()
-				tab:SetCheckedTexture(DB.textures.pushed)
+				tab:SetCheckedTexture(DB.pushedTex)
 				tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				B.CreateBDFrame(tab, .25)
 

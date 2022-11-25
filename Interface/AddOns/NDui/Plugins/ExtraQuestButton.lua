@@ -252,7 +252,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self.updateTimer = 0
 	self.rangeTimer = 0
 
-	self:SetPushedTexture(DB.textures.pushed)
+	self:SetPushedTexture(DB.pushedTex)
 	local push = self:GetPushedTexture()
 	push:SetBlendMode("ADD")
 	push:SetInside()

@@ -270,7 +270,7 @@ C.themes["Blizzard_Collections"] = function()
 
 			spell:SetPushedTexture(0)
 			spell:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			spell.selected:SetTexture(DB.textures.pushed)
+			spell.selected:SetTexture(DB.pushedTex)
 			spell:GetRegions():Hide()
 
 			local flyoutArrow = spell.FlyoutArrow
@@ -299,7 +299,7 @@ C.themes["Blizzard_Collections"] = function()
 	for i = 1, 2 do
 		local bu = PetJournal.SpellSelect["Spell"..i]
 
-		bu:SetCheckedTexture(DB.textures.pushed)
+		bu:SetCheckedTexture(DB.pushedTex)
 		bu:SetPushedTexture(0)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 

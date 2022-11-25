@@ -59,7 +59,7 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 	for i = 1, 2 do
 		local tab = VoidStorageFrame["Page"..i]
 		tab:GetRegions():Hide()
-		tab:SetCheckedTexture(DB.textures.pushed)
+		tab:SetCheckedTexture(DB.pushedTex)
 		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		tab:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
 		B.CreateBDFrame(tab)

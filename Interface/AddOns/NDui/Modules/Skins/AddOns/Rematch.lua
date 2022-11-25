@@ -35,7 +35,7 @@ function S:RematchIcon()
 		if self.Level.Text then self.Level.Text:SetTextColor(1, 1, 1) end
 	end
 	if self.GetCheckedTexture then
-		self:SetCheckedTexture(DB.textures.pushed)
+		self:SetCheckedTexture(DB.pushedTex)
 	end
 
 	self.styled = true

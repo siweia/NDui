@@ -95,7 +95,7 @@ function M:TradeTabs_Reskin()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	for _, tab in pairs(tabList) do
-		tab:SetCheckedTexture(DB.textures.pushed)
+		tab:SetCheckedTexture(DB.pushedTex)
 		tab:GetRegions():Hide()
 		B.CreateBDFrame(tab)
 		local texture = tab:GetNormalTexture()

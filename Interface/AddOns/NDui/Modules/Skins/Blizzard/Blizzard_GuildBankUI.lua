@@ -52,7 +52,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		button:SetCheckedTexture(DB.textures.pushed)
+		button:SetCheckedTexture(DB.pushedTex)
 		B.CreateBDFrame(button)
 		icon:SetTexCoord(unpack(DB.TexCoord))
 
