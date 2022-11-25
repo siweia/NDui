@@ -447,16 +447,16 @@ function OpenAllMail:AdvanceToNextItem()
 			end
 		end
 	end
-	
+
 	if ( not foundAttachment ) then
 		self.mailIndex = self.mailIndex + 1
 		self.attachmentIndex = ATTACHMENTS_MAX
 		if ( self.mailIndex > GetInboxNumItems() ) then
 			return false
 		end
-		
+
 		return self:AdvanceToNextItem()
 	end
-	
+
 	return true
 end

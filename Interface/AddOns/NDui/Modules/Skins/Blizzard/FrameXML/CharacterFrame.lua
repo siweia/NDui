@@ -214,7 +214,7 @@ tinsert(C.defaultThemes, function()
 				child.BgMiddle:SetTexture("")
 				child.BgBottom:SetTexture("")
 				B.ReskinIcon(child.icon)
-		
+
 				child.HighlightBar:SetColorTexture(1, 1, 1, .25)
 				child.HighlightBar:SetDrawLayer("BACKGROUND")
 				child.SelectedBar:SetColorTexture(r, g, b, .25)
@@ -284,7 +284,7 @@ tinsert(C.defaultThemes, function()
 					container.ReputationBar:SetStatusBarTexture(DB.bdTex)
 					B.CreateBDFrame(container.ReputationBar, .25)
 				end
-	
+
 				container.styled = true
 			end
 		end
@@ -329,9 +329,9 @@ tinsert(C.defaultThemes, function()
 					child.Highlight.SetPoint = B.Dummy
 					child.Highlight:SetColorTexture(1, 1, 1, .25)
 					child.Highlight.SetTexture = B.Dummy
-	
+
 					child.bg = B.ReskinIcon(child.Icon)
-	
+
 					if child.ExpandIcon then
 						child.expBg = B.CreateBDFrame(child.ExpandIcon, 0, true)
 						child.expBg:SetInside(child.ExpandIcon, 3, 3)

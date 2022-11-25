@@ -10,17 +10,17 @@ local function reskinFrameButton(self)
 			child:SetHighlightTexture(0)
 			child.iconBorder:SetTexture("")
 			child.selectedTexture:SetTexture("")
-		
+
 			local bg = B.CreateBDFrame(child, .25)
 			bg:SetPoint("TOPLEFT", 3, -1)
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			child.bg = bg
-		
+
 			local icon = child.icon
 			icon:SetSize(42, 42)
 			icon.bg = B.ReskinIcon(icon)
 			child.name:SetParent(bg)
-		
+
 			if child.DragButton then
 				child.DragButton.ActiveTexture:SetTexture("")
 				child.DragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)

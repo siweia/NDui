@@ -69,7 +69,7 @@ function module:ReskinRegions()
 			self:GetPushedTexture():SetTexture(DB.garrTex)
 			self:GetHighlightTexture():SetTexture(DB.garrTex)
 			self:SetSize(30, 30)
-	
+
 			if self:IsShown() and RecycleBinToggleButton and not RecycleBinToggleButton.settled then
 				RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
 				RecycleBinToggleButton.settled = true
@@ -78,7 +78,7 @@ function module:ReskinRegions()
 		updateMinimapButtons(garrMinimapButton)
 		garrMinimapButton:HookScript("OnShow", updateMinimapButtons)
 		hooksecurefunc(garrMinimapButton, "UpdateIcon", updateMinimapButtons)
-	
+
 		local menuList = {
 			{text =	_G.GARRISON_TYPE_9_0_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = Enum.GarrisonType.Type_9_0, notCheckable = true},
 			{text =	_G.WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = Enum.GarrisonType.Type_8_0, notCheckable = true},

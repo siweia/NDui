@@ -86,7 +86,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				child:SetNormalTexture(0)
 				child:SetHighlightTexture(0)
 				child:SetPushedTexture(0)
-		
+
 				local bg = B.CreateBDFrame(child.bgImage)
 				bg:SetPoint("TOPLEFT", 3, -3)
 				bg:SetPoint("BOTTOMRIGHT", -4, 2)
@@ -122,7 +122,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				local hl = child:GetHighlightTexture()
 				hl:SetColorTexture(r, g, b, .25)
 				hl:SetInside(child.__bg)
-		
+
 				child.text:SetTextColor(1, 1, 1)
 				child.text.SetTextColor = B.Dummy
 				child.creature:SetPoint("TOPLEFT", 0, -4)
@@ -165,7 +165,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				child.IconBorder:SetAlpha(0)
 				child.icon:SetPoint("TOPLEFT", 1, -1)
 				B.ReskinIcon(child.icon)
-		
+
 				local bg = B.CreateBDFrame(child, .25)
 				bg:SetPoint("TOPLEFT")
 				bg:SetPoint("BOTTOMRIGHT", 0, 1)
