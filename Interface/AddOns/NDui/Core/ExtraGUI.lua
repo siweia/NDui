@@ -1820,9 +1820,11 @@ function G:SetupActionBar(parent)
 		end
 		createOptionTitle(parent, title, offset)
 		createOptionSlider(parent, L["ButtonSize"], 20, 80, data[1], offset-60, value.."Size", updateBarScale, "Actionbar")
-		createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-130, value.."Num", updateBarScale, "Actionbar")
-		createOptionSlider(parent, L["ButtonsPerRow"], 1, data[3], data[5], offset-200, value.."PerRow", updateBarScale, "Actionbar")
-		createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-270, value.."Font", updateBarScale, "Actionbar")
+		createOptionSlider(parent, L["ButtonsPerRow"], 1, data[3], data[5], offset-130, value.."PerRow", updateBarScale, "Actionbar")
+		createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, value.."Font", updateBarScale, "Actionbar")
+		if value ~= "BarPet" then
+			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-270, value.."Num", updateBarScale, "Actionbar")
+		end
 	end
 
 	createOptionGroup(scroll.child, L["Actionbar"].."1", -10, "Bar1")

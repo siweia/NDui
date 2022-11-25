@@ -37,6 +37,7 @@ function Bar:UpdateActionSize(name)
 	local fontSize = C.db["Actionbar"][name.."Font"]
 	local num = C.db["Actionbar"][name.."Num"]
 	local perRow = C.db["Actionbar"][name.."PerRow"]
+	if name == "BarPet" then num = 10 end
 
 	if num == 0 then
 		local column = 3
@@ -291,14 +292,14 @@ function Bar:OnLogin()
 	if C.db["Actionbar"]["Enable"] then
 		Bar.movers = {}
 		Bar:CreateBars()
-		Bar:ReskinBars()
-		Bar:UpdateBarConfig()
-		Bar:UpdateVisibility()
 		Bar:CreateExtrabar()
 		Bar:CreateLeaveVehicle()
 		Bar:CreatePetbar()
 		Bar:CreateStancebar()
-		Bar:HideBlizz()
+		Bar:ReskinBars()
+		Bar:UpdateBarConfig()
+		Bar:UpdateVisibility()
 		Bar:UpdateAllSize()
+		Bar:HideBlizz()
 	end
 end

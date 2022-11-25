@@ -63,9 +63,9 @@ G.DefaultSettings = {
 		Bar5Font = 12,
 		Bar5Num = 12,
 		Bar5PerRow = 1,
+
 		BarPetSize = 26,
 		BarPetFont = 12,
-		BarPetNum = 10,
 		BarPetPerRow = 10,
 		BarStanceSize = 30,
 		BarStanceFont = 12,

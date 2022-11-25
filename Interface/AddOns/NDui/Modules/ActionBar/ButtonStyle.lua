@@ -71,7 +71,9 @@ function Bar:StyleActionButton(button)
 
 	if icon then
 		icon:SetInside()
-		icon:SetTexCoord(unpack(DB.TexCoord))
+		if not icon.__lockdown then
+			icon:SetTexCoord(unpack(DB.TexCoord))
+		end
 		button.__bg = B.SetBD(icon, .25)
 	end
 	if cooldown then
