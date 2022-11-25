@@ -924,3 +924,4 @@ L["DisableMinimap"] = "Выключить улучшенную мини-карт
 L["DisableMinimapTip"] = "|nЕсли этот флажок установлен, все перечисленные ниже функции также будут отключены.|nЕсли у вас включен аддон SexyMap, улучшенная мини-карта отключится автоматически."
 L["ChargesRemaining"] = "%s %s/%s следующий оставшийся заряд %s"
 L["ChargesCompleted"] = "%s %s/%s все заряды готовы."
+L["ToggleActionbarTip"] = "|nOption to toggle actionbar, no need to reload UI." -- need translation

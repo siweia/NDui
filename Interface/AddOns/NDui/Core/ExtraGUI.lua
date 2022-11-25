@@ -1810,7 +1810,7 @@ function G:SetupActionBar(parent)
 			box:SetChecked(C.db["Actionbar"][value])
 			box.__value = value
 			box:SetScript("OnClick", toggleBar)
-			B.AddTooltip(box, "ANCHOR_RIGHT", L["ToggleCastbarTip"], "info", true)
+			B.AddTooltip(box, "ANCHOR_RIGHT", L["ToggleActionbarTip"], "info", true)
 		end
 
 		color = color or ""
