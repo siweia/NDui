@@ -412,6 +412,36 @@ function M:AddPGFSortingExpression()
 	end
 end
 
+function M:FixListingTaint() -- From PremadeGroupsFilter
+	if IsAddOnLoaded("PremadeGroupsFilter") then return end
+
+    local activityIdOfArbitraryMythicPlusDungeon = 1160 -- Algeth'ar Academy
+    if not C_LFGList.IsPlayerAuthenticatedForLFG(activityIdOfArbitraryMythicPlusDungeon) then
+        return
+    end
+
+    C_LFGList.GetPlaystyleString = function(playstyle, activityInfo)
+        if not ( activityInfo and playstyle and playstyle ~= 0
+                and C_LFGList.GetLfgCategoryInfo(activityInfo.categoryID).showPlaystyleDropdown ) then
+            return nil
+        end
+        local globalStringPrefix
+        if activityInfo.isMythicPlusActivity then
+            globalStringPrefix = "GROUP_FINDER_PVE_PLAYSTYLE"
+        elseif activityInfo.isRatedPvpActivity then
+            globalStringPrefix = "GROUP_FINDER_PVP_PLAYSTYLE"
+        elseif activityInfo.isCurrentRaidActivity then
+            globalStringPrefix = "GROUP_FINDER_PVE_RAID_PLAYSTYLE"
+        elseif activityInfo.isMythicActivity then
+            globalStringPrefix = "GROUP_FINDER_PVE_MYTHICZERO_PLAYSTYLE"
+        end
+        return globalStringPrefix and _G[globalStringPrefix .. tostring(playstyle)] or nil
+    end
+
+    -- Disable automatic group titles to prevent tainting errors
+    LFGListEntryCreation_SetTitleFromActivityInfo = function(_) end
+end
+
 function M:QuickJoin()
 	if not C.db["Misc"]["QuickJoin"] then return end
 
@@ -443,5 +473,6 @@ function M:QuickJoin()
 	M:ReplaceFindGroupButton()
 	M:AddDungeonsFilter()
 	M:AddPGFSortingExpression()
+	M:FixListingTaint()
 end
 M:RegisterMisc("QuickJoin", M.QuickJoin)
