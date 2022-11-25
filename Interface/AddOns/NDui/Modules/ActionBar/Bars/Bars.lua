@@ -108,7 +108,7 @@ function Bar:UpdateButtonConfig(i)
 	end
 	self.buttonConfig.clickOnDown = true
 	self.buttonConfig.showGrid = C.db["Actionbar"]["Grid"]
-	self.buttonConfig.flyoutDirection = "Up"
+	self.buttonConfig.flyoutDirection = "UP"
 
 	local hotkey = self.buttonConfig.text.hotkey
 	hotkey.font.font = DB.Font[1]
