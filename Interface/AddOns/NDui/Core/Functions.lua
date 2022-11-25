@@ -731,11 +731,6 @@ do
 		end
 		hooksecurefunc(self, "Hide", resetIconBorderColor)
 		hooksecurefunc(self, "SetShown", iconBorderShown)
-
-		-- disable this and see how it goes, needs review
-		--if self.__owner.SetItemButtonQuality then
-		--	hooksecurefunc(self.__owner, "SetItemButtonQuality", resetIconBorder)
-		--end
 	end
 
 	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
