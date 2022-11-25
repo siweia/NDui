@@ -9,7 +9,6 @@
 	<Script file="Bars\MicroMenu.lua"/>
 	<Script file="Bars\StylePreset.lua"/>
 
-	<Script file="ButtonRange.lua"/>
 	<Script file="Keybind.lua"/>
 	<Script file="ButtonStyle.lua"/>
 	<Script file="Cooldown.lua"/>
