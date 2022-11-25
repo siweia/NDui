@@ -1784,21 +1784,22 @@ function G:SetupActionBar(parent)
 	if extraGUIs[guiName] then return end
 
 	local panel = createExtraGUI(parent, guiName, L["ActionbarSetup"].."*")
-	local scroll = G:CreateScroll(panel, 260, 540)
+	local scroll = G:CreateScroll(panel, 260, 500)
 
 	local Bar = B:GetModule("Actionbar")
 	local defaultValues = {
-		-- defaultSize, minButtons, maxButtons, defaultButtons, defaultPerRow
-		["Bar1"] = {34, 6, 12, 12, 12},
-		["Bar2"] = {34, 1, 12, 12, 12},
-		["Bar3"] = {32, 0, 12, 0, 12},
-		["Bar4"] = {32, 1, 12, 12, 1},
-		["Bar5"] = {32, 1, 12, 12, 1},
+		-- defaultSize, minButtons, maxButtons, defaultButtons, defaultPerRow, flyoutDirec
+		["Bar1"] = {34, 6, 12, 12, 12, "UP"},
+		["Bar2"] = {34, 1, 12, 12, 12, "UP"},
+		["Bar3"] = {32, 0, 12, 0, 12, "UP"},
+		["Bar4"] = {32, 1, 12, 12, 1, "LEFT"},
+		["Bar5"] = {32, 1, 12, 12, 1, "LEFT"},
+		["Bar6"] = {34, 1, 12, 12, 12, "UP"},
+		["Bar7"] = {34, 1, 12, 12, 12, "UP"},
+		["Bar8"] = {34, 1, 12, 12, 12, "UP"},
 		["BarPet"] = {26, 1, 10, 10, 10},
-		["Bar6"] = {34, 1, 12, 12, 12},
-		["Bar7"] = {34, 1, 12, 12, 12},
-		["Bar8"] = {34, 1, 12, 12, 12},
 	}
+	local directions = {L["GO_UP"], L["GO_DOWN"], L["GO_LEFT"], L["GO_RIGHT"]}
 	local function toggleBar(self)
 		C.db["Actionbar"][self.__value] = self:GetChecked()
 		Bar:UpdateVisibility()
@@ -1808,6 +1809,7 @@ function G:SetupActionBar(parent)
 			local box = B.CreateCheckBox(parent)
 			box:SetPoint("TOPLEFT", parent, 30, offset + 6)
 			box:SetChecked(C.db["Actionbar"][value])
+			box.bg:SetBackdropBorderColor(1, .8, 0, .5)
 			box.__value = value
 			box:SetScript("OnClick", toggleBar)
 			B.AddTooltip(box, "ANCHOR_RIGHT", L["ToggleActionbarTip"], "info", true)
@@ -1824,22 +1826,47 @@ function G:SetupActionBar(parent)
 		createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, value.."Font", updateBarScale, "Actionbar")
 		if value ~= "BarPet" then
 			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-270, value.."Num", updateBarScale, "Actionbar")
+			createOptionDropdown(parent, L["GrowthDirection"], offset-340, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
 		end
 	end
 
-	createOptionGroup(scroll.child, L["Actionbar"].."1", -10, "Bar1")
-	createOptionGroup(scroll.child, L["Actionbar"].."2", -370, "Bar2")
-	createOptionGroup(scroll.child, L["Actionbar"].."3", -730, "Bar3", "|cffff0000")
-	createOptionGroup(scroll.child, L["Actionbar"].."4", -1090, "Bar4")
-	createOptionGroup(scroll.child, L["Actionbar"].."5", -1450, "Bar5")
-	createOptionGroup(scroll.child, L["Pet Actionbar"], -1810, "BarPet")
+	local options = {}
+	for i = 1, 8 do
+		tinsert(options, L["Actionbar"]..i)
+	end
+	tinsert(options, L["Pet Actionbar"]) -- 9
+	tinsert(options, L["LeaveVehicle"]) -- 10
 
-	createOptionTitle(scroll.child, L["LeaveVehicle"], -2170)
-	createOptionSlider(scroll.child, L["ButtonSize"], 20, 80, 34, -2230, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
+	local dd = G:CreateDropdown(scroll, "", 40, 35, options, nil, 180, 28)
+	dd.Text:SetText(options[1])
+	dd.panels = {}
 
-	createOptionGroup(scroll.child, L["Actionbar"].."6", -2300, "Bar6")
-	createOptionGroup(scroll.child, L["Actionbar"].."7", -2660, "Bar7")
-	createOptionGroup(scroll.child, L["Actionbar"].."8", -3020, "Bar8")
+	local function toggleOptionsPanel(option)
+		for i = 1, #dd.panels do
+			dd.panels[i]:SetShown(i == option.index)
+		end
+	end
+
+	for i = 1, #options do
+		local value = options[i]
+		local panel = CreateFrame("Frame", nil, scroll.child)
+		panel:SetSize(260, 1)
+		panel:SetPoint("TOP")
+		panel:Hide()
+		if i == 9 then
+			createOptionGroup(panel, L["Pet Actionbar"], -10, "BarPet")
+		elseif i == 10 then
+			createOptionTitle(panel, L["LeaveVehicle"], -10)
+			createOptionSlider(panel, L["ButtonSize"], 20, 80, 34, -70, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
+		else
+			createOptionGroup(panel, L["Actionbar"]..i, -10, "Bar"..i)
+		end
+		dd.panels[i] = panel
+
+		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
+	end
+
+	toggleOptionsPanel(dd.options[1])
 end
 
 function G:SetupStanceBar(parent)
