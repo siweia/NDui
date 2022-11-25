@@ -1,19 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
----------------------------
--- rButtonTemplate, zork
----------------------------
 local Bar = B:GetModule("Actionbar")
-
-local function SetupBackdrop(icon)
-	local bg = B.SetBD(icon, .25)
-	if C.db["Actionbar"]["Classcolor"] then
-		bg:SetBackdropColor(DB.r, DB.g, DB.b, .25)
-	else
-		bg:SetBackdropColor(.2, .2, .2, .25)
-	end
-	icon:GetParent().__bg = bg
-end
 
 local keyButton = gsub(KEY_BUTTON4, "%d", "")
 local keyNumpad = gsub(KEY_NUMPAD1, "%d", "")
@@ -84,7 +71,7 @@ function Bar:StyleActionButton(button)
 	if icon then
 		icon:SetInside()
 		icon:SetTexCoord(unpack(DB.TexCoord))
-		SetupBackdrop(icon)
+		button.__bg = B.SetBD(icon, .25)
 	end
 	if cooldown then
 		cooldown:SetAllPoints()

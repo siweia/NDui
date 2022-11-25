@@ -156,6 +156,12 @@ function Bar:UpdateButtonConfig(i)
 		button:SetAttribute("checkselfcast", true)
 		button:SetAttribute("*unit2", "player")
 		button:UpdateConfig(self.buttonConfig)
+
+		if C.db["Actionbar"]["Classcolor"] then
+			button.__bg:SetBackdropColor(DB.r, DB.g, DB.b, .25)
+		else
+			button.__bg:SetBackdropColor(.2, .2, .2, .25)
+		end
 	end
 end
 
@@ -260,6 +266,7 @@ function Bar:OnLogin()
 	if C.db["Actionbar"]["Enable"] then
 		Bar.movers = {}
 		Bar:CreateBars()
+		Bar:ReskinBars()
 		Bar:UpdateBarConfig()
 		Bar:UpdateVisibility()
 		Bar:CustomBar()
@@ -268,7 +275,6 @@ function Bar:OnLogin()
 		Bar:CreatePetbar()
 		Bar:CreateStancebar()
 		Bar:HideBlizz()
-		Bar:ReskinBars()
 
 		local function delaySize(event)
 			Bar:UpdateAllScale()
