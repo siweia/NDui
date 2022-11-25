@@ -11,11 +11,11 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar,
+	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar, PetActionBar,
 }
 
 local framesToDisable = {
-	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, PossessActionBar,
+	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, PossessActionBar, PetActionBar,
 	MicroButtonAndBagsBar, StatusTrackingBarManager, MainMenuBarVehicleLeaveButton,
 	OverrideActionBar,
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
@@ -59,6 +59,7 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
+	PetActionBar.UpdateGridLayout = B.Dummy
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	-- Fix maw block anchor

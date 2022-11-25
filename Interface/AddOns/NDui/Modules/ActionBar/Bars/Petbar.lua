@@ -90,10 +90,6 @@ function Bar:CreatePetbar()
 	frame.mover = B.Mover(frame, L["Pet Actionbar"], "PetBar", {"BOTTOM", _G.NDui_ActionBar2, "TOP", 0, margin})
 	Bar.movers[7] = frame.mover
 
-	PetActionBar:SetParent(frame)
-	PetActionBar:EnableMouse(false)
-	PetActionBar:UnregisterAllEvents()
-
 	for i = 1, num do
 		local button = _G["PetActionButton"..i]
 		button:SetParent(frame)
