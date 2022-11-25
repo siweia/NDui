@@ -5,7 +5,6 @@ local B, C, L, DB = unpack(ns)
 ---------------------------
 local Bar = B:GetModule("Actionbar")
 
-
 local function SetupBackdrop(icon)
 	local bg = B.SetBD(icon, .25)
 	if C.db["Actionbar"]["Classcolor"] then
@@ -52,26 +51,6 @@ function Bar:UpdateHotKey()
 		end
 	end
 	self:SetFormattedText("%s", text)
-end
-
-function Bar:HookHotKey(button)
-	Bar.UpdateHotKey(button)
-	if button.UpdateHotkeys then
-		hooksecurefunc(button, "UpdateHotkeys", Bar.UpdateHotKey)
-	end
-	if button.SetHotkeys then
-		hooksecurefunc(button, "SetHotkeys", Bar.UpdateHotKey)
-	end
-end
-
-function Bar:UpdateEquipItemColor()
-	if not self.__bg then return end
-
-	if C.db["Actionbar"]["EquipColor"] and IsEquippedAction(self.action) then
-		self.__bg:SetBackdropBorderColor(0, .7, .1)
-	else
-		self.__bg:SetBackdropBorderColor(0, 0, 0)
-	end
 end
 
 function Bar:StyleActionButton(button)
@@ -141,30 +120,11 @@ function Bar:StyleExtraActionButton(cfg)
 	button.__styled = true
 end
 
-function Bar:UpdateStanceHotKey()
-	for i = 1, 10 do
-		_G["StanceButton"..i.."HotKey"]:SetText(GetBindingKey("SHAPESHIFTBUTTON"..i))
-		Bar:HookHotKey(_G["StanceButton"..i])
-	end
-end
-
 function Bar:StyleAllActionButtons(cfg)
 	for i = 1, 8 do
 		for j = 1, 12 do
 			Bar:StyleActionButton(_G["NDui_ActionBar"..i.."Button"..j], cfg)
 		end
-	end
-	for i = 1, NUM_ACTIONBAR_BUTTONS do
-		--Bar:StyleActionButton(_G["ActionButton"..i], cfg)
-		--Bar:StyleActionButton(_G["MultiBarBottomLeftButton"..i], cfg)
-		--Bar:StyleActionButton(_G["MultiBarBottomRightButton"..i], cfg)
-		--Bar:StyleActionButton(_G["MultiBarRightButton"..i], cfg)
-		--Bar:StyleActionButton(_G["MultiBarLeftButton"..i], cfg)
-		Bar:StyleActionButton(_G["NDui_ActionBar1Button"..i], cfg)
-		--Bar:StyleActionButton(_G["NDui_ActionBarXButton"..i], cfg)
-		--Bar:StyleActionButton(_G["MultiBar5Button"..i], cfg)
-		--Bar:StyleActionButton(_G["MultiBar6Button"..i], cfg)
-		--Bar:StyleActionButton(_G["MultiBar7Button"..i], cfg)
 	end
 	for i = 1, 6 do
 		Bar:StyleActionButton(_G["OverrideActionBarButton"..i], cfg)
@@ -176,10 +136,6 @@ function Bar:StyleAllActionButtons(cfg)
 	--stancebar buttons
 	for i = 1, 10 do
 		Bar:StyleActionButton(_G["StanceButton"..i], cfg)
-	end
-	--possess buttons
-	for i = 1, NUM_POSSESS_SLOTS do
-		Bar:StyleActionButton(_G["PossessButton"..i], cfg)
 	end
 	--leave vehicle
 	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"], cfg)
@@ -273,8 +229,4 @@ function Bar:ReskinBars()
 	}
 
 	Bar:StyleAllActionButtons(cfg)
-
-	-- Update hotkeys
-	Bar:UpdateStanceHotKey()
-	B:RegisterEvent("UPDATE_BINDINGS", Bar.UpdateStanceHotKey)
 end
