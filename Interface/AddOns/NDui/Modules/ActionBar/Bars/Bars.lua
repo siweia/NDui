@@ -8,7 +8,7 @@ local tinsert, next = tinsert, next
 local GetActionTexture = GetActionTexture
 local margin, padding = C.Bars.margin, C.Bars.padding
 
-function Bar:UpdateAllScale()
+function Bar:UpdateAllSize()
 	if not C.db["Actionbar"]["Enable"] then return end
 	Bar:UpdateActionSize("Bar1")
 	Bar:UpdateActionSize("Bar2")
@@ -299,6 +299,6 @@ function Bar:OnLogin()
 		Bar:CreatePetbar()
 		Bar:CreateStancebar()
 		Bar:HideBlizz()
-		Bar:UpdateAllScale()
+		Bar:UpdateAllSize()
 	end
 end
