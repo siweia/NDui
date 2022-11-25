@@ -218,10 +218,10 @@ function Bar:CreateBars()
 		[8] = {page = 15, bindName = "MULTIACTIONBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
 	}
 
+	local mIndex = 1
 	for index = 1, 8 do
 		local data = BAR_DATA[index]
 		local frame = Bar.headers[index]
-		local mIndex = 1
 		if index == 3 then
 			frame.mover = B.Mover(frame, L["Actionbar"].."3L", "Bar3L", {"RIGHT", _G.NDui_ActionBar1, "TOPLEFT", -margin, -padding/2})
 			local child = CreateFrame("Frame", nil, frame)

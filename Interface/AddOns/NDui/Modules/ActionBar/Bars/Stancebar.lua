@@ -93,7 +93,7 @@ function Bar:CreateStancebar()
 	local buttonList = {}
 	local frame = CreateFrame("Frame", "NDui_ActionBarStance", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["StanceBar"], "StanceBar", {"BOTTOMLEFT", _G.NDui_ActionBar2, "TOPLEFT", 0, margin})
-	Bar.movers[8] = frame.mover
+	Bar.movers[11] = frame.mover
 
 	-- StanceBar
 	StanceBar:SetParent(frame)
