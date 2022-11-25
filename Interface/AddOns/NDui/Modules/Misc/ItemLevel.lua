@@ -426,12 +426,6 @@ function M:ItemLevel_Containers()
 		button.IconBorder.__owner = button
 		hooksecurefunc(button.IconBorder, "SetShown", M.ItemLevel_UpdateBags)
 	end
-
-	for i = 1, 98 do
-		local button = _G["ReagentBankFrameItem"..i]
-		button.IconBorder.__owner = button
-		hooksecurefunc(button.IconBorder, "SetShown", M.ItemLevel_UpdateBags)
-	end
 end
 
 function M:ShowItemLevel()
