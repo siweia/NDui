@@ -6,7 +6,6 @@ local LAB = LibStub("LibActionButton-1.0")
 local _G = _G
 local tinsert, next = tinsert, next
 local GetActionTexture = GetActionTexture
-local cfg = C.Bars.bar1
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 function Bar:UpdateAllScale()

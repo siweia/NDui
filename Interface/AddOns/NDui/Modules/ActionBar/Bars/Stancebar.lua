@@ -4,7 +4,6 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert, mod, min, ceil = tinsert, mod, min, ceil
-local cfg = C.Bars.stancebar
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 local num = NUM_STANCE_SLOTS or 10
@@ -128,8 +127,4 @@ function Bar:CreateStancebar()
 
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
-
-	if cfg.fader then
-		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
-	end
 end

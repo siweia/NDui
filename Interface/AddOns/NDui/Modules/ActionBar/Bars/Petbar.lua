@@ -4,7 +4,6 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert = tinsert
-local cfg = C.Bars.petbar
 local margin = C.Bars.margin
 
 local function hasPetActionHighlightMark(index)
@@ -100,10 +99,6 @@ function Bar:CreatePetbar()
 
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
-
-	if cfg.fader then
-		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
-	end
 
 	-- Fix pet bar updating
 	Bar:PetBarOnEvent()

@@ -5,7 +5,6 @@
 	<Script file="Bars\Extrabar.lua"/>
 	<Script file="Bars\Leave_vehicle.lua"/>
 	<Script file="Bars\Hide_blizzart.lua"/>
-	<Script file="Bars\Fader.lua"/>
 	<Script file="Bars\MicroMenu.lua"/>
 	<Script file="Bars\StylePreset.lua"/>
 

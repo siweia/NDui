@@ -27,8 +27,6 @@ G.DefaultSettings = {
 		Cooldown = true,
 		MmssTH = 60,
 		TenthTH = 3,
-		Bar4Fader = false,
-		Bar5Fader = true,
 		BindType = 1,
 		OverrideWA = false,
 		MicroMenu = true,
@@ -839,11 +837,6 @@ local function updateEquipColor()
 	end
 end
 
-local function toggleBarFader(self)
-	local name = gsub(self.__value, "Fader", "")
-	B:GetModule("Actionbar"):ToggleBarFader(name)
-end
-
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -1139,8 +1132,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, nil, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
-		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
-		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
 		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},

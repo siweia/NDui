@@ -99,7 +99,7 @@ function Bar:StyleActionButton(button)
 	button.__styled = true
 end
 
-function Bar:StyleExtraActionButton(cfg)
+function Bar:StyleExtraActionButton()
 	local button = ExtraActionButton1
 	if button.__styled then return end
 
@@ -107,113 +107,22 @@ function Bar:StyleExtraActionButton(cfg)
 	button.__styled = true
 end
 
-function Bar:StyleAllActionButtons(cfg)
+function Bar:ReskinBars()
 	for i = 1, 8 do
 		for j = 1, 12 do
 			Bar:StyleActionButton(_G["NDui_ActionBar"..i.."Button"..j])
 		end
 	end
-	for i = 1, 6 do
-		Bar:StyleActionButton(_G["OverrideActionBarButton"..i], cfg)
-	end
 	--petbar buttons
 	for i = 1, NUM_PET_ACTION_SLOTS do
-		Bar:StyleActionButton(_G["PetActionButton"..i], cfg)
+		Bar:StyleActionButton(_G["PetActionButton"..i])
 	end
 	--stancebar buttons
 	for i = 1, 10 do
-		Bar:StyleActionButton(_G["StanceButton"..i], cfg)
+		Bar:StyleActionButton(_G["StanceButton"..i])
 	end
 	--leave vehicle
-	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"], cfg)
+	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"])
 	--extra action button
-	Bar:StyleExtraActionButton(cfg)
-	--spell flyout
-	SpellFlyout.Background:SetAlpha(0)
-
-	local function checkForFlyoutButtons()
-		local i = 1
-		local button = _G["SpellFlyoutButton"..i]
-		while button and button:IsShown() do
-			Bar:StyleActionButton(button, cfg)
-			i = i + 1
-			button = _G["SpellFlyoutButton"..i]
-		end
-	end
-	SpellFlyout:HookScript("OnShow", checkForFlyoutButtons)
-end
-
-function Bar:ReskinBars()
-	local cfg = {
-		icon = {
-			texCoord = DB.TexCoord,
-			points = {
-				{"TOPLEFT", C.mult, -C.mult},
-				{"BOTTOMRIGHT", -C.mult, C.mult},
-			},
-		},
-		flyoutBorder = {file = ""},
-		flyoutBorderShadow = {file = ""},
-		border = {file = ""},
-		normalTexture = {
-			file = DB.textures.normal,
-			texCoord = DB.TexCoord,
-			color = {.3, .3, .3},
-			points = {
-				{"TOPLEFT", C.mult, -C.mult},
-				{"BOTTOMRIGHT", -C.mult, C.mult},
-			},
-		},
-		flash = {file = DB.textures.flash},
-		pushedTexture = {
-			file = DB.textures.pushed,
-			points = {
-				{"TOPLEFT", C.mult, -C.mult},
-				{"BOTTOMRIGHT", -C.mult, C.mult},
-			},
-		},
-		checkedTexture = {
-			file = 0,
-			points = {
-				{"TOPLEFT", C.mult, -C.mult},
-				{"BOTTOMRIGHT", -C.mult, C.mult},
-			},
-		},
-		highlightTexture = {
-			file = 0,
-			points = {
-				{"TOPLEFT", C.mult, -C.mult},
-				{"BOTTOMRIGHT", -C.mult, C.mult},
-			},
-		},
-		cooldown = {
-			points = {
-				{"TOPLEFT", 0, 0},
-				{"BOTTOMRIGHT", 0, 0},
-			},
-		},
-		name = {
-			font = DB.Font,
-			points = {
-				{"BOTTOMLEFT", 0, 0},
-				{"BOTTOMRIGHT", 0, 0},
-			},
-		},
-		hotkey = {
-			font = DB.Font,
-			points = {
-				{"TOPRIGHT", 0, 0},
-				{"TOPLEFT", 0, 0},
-			},
-		},
-		count = {
-			font = DB.Font,
-			points = {
-				{"BOTTOMRIGHT", 2, 0},
-			},
-		},
-		buttonstyle = {file = ""},
-	}
-
-	Bar:StyleAllActionButtons(cfg)
+	Bar:StyleExtraActionButton()
 end
