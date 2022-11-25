@@ -1799,7 +1799,20 @@ function G:SetupActionBar(parent)
 		["Bar7"] = {34, 1, 12, 12, 12},
 		["Bar8"] = {34, 1, 12, 12, 12},
 	}
+	local function toggleBar(self)
+		C.db["Actionbar"][self.__value] = self:GetChecked()
+		Bar:UpdateVisibility()
+	end
 	local function createOptionGroup(parent, title, offset, value, color)
+		if value ~= "BarPet" then
+			local box = B.CreateCheckBox(parent)
+			box:SetPoint("TOPLEFT", parent, 30, offset + 6)
+			box:SetChecked(C.db["Actionbar"][value])
+			box.__value = value
+			box:SetScript("OnClick", toggleBar)
+			B.AddTooltip(box, "ANCHOR_RIGHT", L["ToggleCastbarTip"], "info", true)
+		end
+
 		color = color or ""
 		local data = defaultValues[value]
 		local function updateBarScale()

@@ -11,13 +11,12 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar,
 }
 
 local framesToDisable = {
-	MainMenuBar,
-	MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
-	ActionBarDownButton, ActionBarUpButton, MainMenuBarVehicleLeaveButton,
+	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7,
+	MicroButtonAndBagsBar, StatusTrackingBarManager, MainMenuBarVehicleLeaveButton,
 	OverrideActionBar,
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
 }
@@ -45,45 +44,6 @@ local function updateTokenVisibility()
 	TokenFrame_Update()
 end
 
-local function ReplaceSpellbookButtons()
-	local function replaceOnEnter(self)
-		local slot = SpellBook_GetSpellBookSlot(self)
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-
-		if InClickBindingMode() and not self.canClickBind then
-			GameTooltip:AddLine(CLICK_BINDING_NOT_AVAILABLE, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
-			GameTooltip:Show()
-			return
-		end
-
-		GameTooltip:SetSpellBookItem(slot, SpellBookFrame.bookType)
-		self.UpdateTooltip = nil
-
-		if self.SpellHighlightTexture and self.SpellHighlightTexture:IsShown() then
-			GameTooltip:AddLine(SPELLBOOK_SPELL_NOT_ON_ACTION_BAR, LIGHTBLUE_FONT_COLOR.r, LIGHTBLUE_FONT_COLOR.g, LIGHTBLUE_FONT_COLOR.b)
-		end
-		GameTooltip:Show()
-	end
-
-	local function handleSpellButton(button)
-		button.OnEnter = replaceOnEnter
-		button:SetScript("OnEnter", replaceOnEnter)
-		button.OnLeave = B.HideTooltip
-		button:SetScript("OnLeave", B.HideTooltip)
-	end
-
-	for i = 1, SPELLS_PER_PAGE do
-		handleSpellButton(_G["SpellButton"..i])
-	end
-
-	local professions = {"PrimaryProfession1", "PrimaryProfession2", "SecondaryProfession1", "SecondaryProfession2", "SecondaryProfession3"}
-	for _, button in pairs(professions) do
-		local bu = _G[button]
-		handleSpellButton(bu.SpellButton1)
-		handleSpellButton(bu.SpellButton2)
-	end
-end
-
 function Bar:HideBlizz()
 	MainMenuBar:SetMovable(true)
 	MainMenuBar:SetUserPlaced(true)
@@ -99,8 +59,6 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	-- Fix spellbook button taint with Editmode
-	--ReplaceSpellbookButtons()
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	-- Fix maw block anchor
