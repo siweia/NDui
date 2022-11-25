@@ -138,4 +138,17 @@ function Bar:ReskinBars()
 	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"])
 	--extra action button
 	Bar:StyleActionButton(ExtraActionButton1)
+	--spell flyout
+	SpellFlyout.Background:SetAlpha(0)
+	local numFlyouts = 1
+	local function checkForFlyoutButtons()
+		local button = _G["SpellFlyoutButton"..numFlyouts]
+		while button do
+			Bar:StyleActionButton(button)
+			numFlyouts = numFlyouts + 1
+			button = _G["SpellFlyoutButton"..numFlyouts]
+		end
+	end
+	SpellFlyout:HookScript("OnShow", checkForFlyoutButtons)
+	SpellFlyout:HookScript("OnHide", checkForFlyoutButtons)
 end
