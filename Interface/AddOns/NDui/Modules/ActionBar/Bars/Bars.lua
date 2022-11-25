@@ -150,8 +150,8 @@ function Bar:UpdateButtonConfig(i)
 		button.keyBoundTarget = self.buttonConfig.keyBoundTarget
 		button.postKeybind = Bar.UpdateHotKey
 
-		button:SetAttribute("buttonlock", true)
-		button:SetAttribute('checkmouseovercast', true)
+		button:SetAttribute("buttonlock", GetCVarBool("lockActionBars"))
+		button:SetAttribute("checkmouseovercast", true)
 		button:SetAttribute("checkfocuscast", true)
 		button:SetAttribute("checkselfcast", true)
 		button:SetAttribute("*unit2", "player")
@@ -164,17 +164,6 @@ function Bar:UpdateButtonConfig(i)
 		end
 	end
 end
-
-local BAR_DATA = {
-	[1] = {page = 1, bindName = "ACTIONBUTTON", anchor = {"BOTTOM", UIParent, "BOTTOM", 0, 24}},
-	[2] = {page = 6, bindName = "MULTIACTIONBAR1BUTTON", anchor = {"BOTTOM", _G.NDui_ActionBar1, "TOP", 0, -margin}},
-	[3] = {page = 5, bindName = "MULTIACTIONBAR2BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar1, "TOPLEFT", -margin, -padding/2}},
-	[4] = {page = 4, bindName = "MULTIACTIONBAR4BUTTON", anchor = {"RIGHT", UIParent, "RIGHT", -1, 0}},
-	[5] = {page = 3, bindName = "MULTIACTIONBAR3BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar4, "LEFT", margin, 0}},
-	[6] = {page = 13, bindName = "MULTIACTIONBAR5BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 0}},
-	[7] = {page = 14, bindName = "MULTIACTIONBAR6BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 40}},
-	[8] = {page = 15, bindName = "MULTIACTIONBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
-}
 
 local fullPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]16;[overridebar]18;[shapeshift]17;[vehicleui]16;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
 
@@ -213,9 +202,25 @@ function Bar:OnButtonUpdate(button)
 end
 
 function Bar:CreateBars()
+	Bar.headers = {}
+	for index = 1, 8 do
+		Bar.headers[index] = CreateFrame("Frame", "NDui_ActionBar"..index, UIParent, "SecureHandlerStateTemplate")
+	end
+
+	local BAR_DATA = {
+		[1] = {page = 1, bindName = "ACTIONBUTTON", anchor = {"BOTTOM", UIParent, "BOTTOM", 0, 24}},
+		[2] = {page = 6, bindName = "MULTIACTIONBAR1BUTTON", anchor = {"BOTTOM", _G.NDui_ActionBar1, "TOP", 0, -margin}},
+		[3] = {page = 5, bindName = "MULTIACTIONBAR2BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar1, "TOPLEFT", -margin, -padding/2}},
+		[4] = {page = 3, bindName = "MULTIACTIONBAR3BUTTON", anchor = {"RIGHT", UIParent, "RIGHT", -1, 0}},
+		[5] = {page = 4, bindName = "MULTIACTIONBAR4BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar4, "LEFT", margin, 0}},
+		[6] = {page = 13, bindName = "MULTIACTIONBAR5BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 0}},
+		[7] = {page = 14, bindName = "MULTIACTIONBAR6BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 40}},
+		[8] = {page = 15, bindName = "MULTIACTIONBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
+	}
+
 	for index = 1, 8 do
 		local data = BAR_DATA[index]
-		local frame = CreateFrame("Frame", "NDui_ActionBar"..index, UIParent, "SecureHandlerStateTemplate")
+		local frame = Bar.headers[index]
 		local mIndex = 1
 		if index == 3 then
 			frame.mover = B.Mover(frame, L["Actionbar"].."3L", "Bar3L", {"RIGHT", _G.NDui_ActionBar1, "TOPLEFT", -margin, -padding/2})
@@ -257,6 +262,20 @@ function Bar:CreateBars()
 	end
 
 	LAB.RegisterCallback(Bar, "OnButtonUpdate", Bar.OnButtonUpdate)
+
+	local function delayUpdate()
+		Bar:UpdateBarConfig()
+		B:UnregisterEvent("PLAYER_REGEN_ENABLED", delayUpdate)
+	end
+	B:RegisterEvent("CVAR_UPDATE", function(_, var)
+		if var == "lockActionBars" then
+			if InCombatLockdown() then
+				B:RegisterEvent("PLAYER_REGEN_ENABLED", delayUpdate)
+				return
+			end
+			Bar:UpdateBarConfig()
+		end
+	end)
 end
 
 function Bar:OnLogin()
@@ -274,11 +293,6 @@ function Bar:OnLogin()
 		Bar:CreatePetbar()
 		Bar:CreateStancebar()
 		Bar:HideBlizz()
-
-		local function delaySize(event)
-			Bar:UpdateAllScale()
-			B:UnregisterEvent(event, delaySize)
-		end
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", delaySize)
+		Bar:UpdateAllScale()
 	end
 end
