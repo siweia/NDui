@@ -44,6 +44,7 @@ function Bar:StyleActionButton(button)
 	if not button then return end
 	if button.__styled then return end
 
+	local buttonName = button:GetName()
 	local icon = button.icon
 	local cooldown = button.cooldown
 	local hotkey = button.HotKey
@@ -60,6 +61,8 @@ function Bar:StyleActionButton(button)
 	local NewActionTexture = button.NewActionTexture
 	local spellHighlight = button.SpellHighlightTexture
 	local iconMask = button.IconMask
+	local petShine = _G[buttonName.."Shine"]
+	local autoCastable = button.AutoCastable
 
 	if normal then normal:SetAlpha(0) end
 	if normal2 then normal2:SetAlpha(0) end
@@ -68,6 +71,11 @@ function Bar:StyleActionButton(button)
 	if border then border:SetTexture(nil) end
 	if iconMask then iconMask:Hide() end
 	if button.style then button.style:SetAlpha(0) end
+	if petShine then petShine:SetInside() end
+	if autoCastable then
+		autoCastable:SetTexCoord(.217, .765, .217, .765)
+		autoCastable:SetInside()
+	end
 
 	if icon then
 		icon:SetInside()
