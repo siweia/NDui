@@ -1784,7 +1784,7 @@ function G:SetupActionBar(parent)
 	if extraGUIs[guiName] then return end
 
 	local panel = createExtraGUI(parent, guiName, L["ActionbarSetup"].."*")
-	local scroll = G:CreateScroll(panel, 260, 500)
+	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local Bar = B:GetModule("Actionbar")
 	local defaultValues = {
@@ -1804,10 +1804,10 @@ function G:SetupActionBar(parent)
 		C.db["Actionbar"][self.__value] = self:GetChecked()
 		Bar:UpdateVisibility()
 	end
-	local function createOptionGroup(parent, title, offset, value, color)
+	local function createOptionGroup(parent, offset, value, color)
 		if value ~= "BarPet" then
 			local box = B.CreateCheckBox(parent)
-			box:SetPoint("TOPLEFT", parent, 30, offset + 6)
+			box:SetPoint("TOPLEFT", parent, 10, offset + 25)
 			box:SetChecked(C.db["Actionbar"][value])
 			box.bg:SetBackdropBorderColor(1, .8, 0, .5)
 			box.__value = value
@@ -1820,7 +1820,7 @@ function G:SetupActionBar(parent)
 		local function updateBarScale()
 			Bar:UpdateActionSize(value)
 		end
-		createOptionTitle(parent, title, offset)
+		createOptionTitle(parent, "", offset)
 		createOptionSlider(parent, L["ButtonSize"], 20, 80, data[1], offset-60, value.."Size", updateBarScale, "Actionbar")
 		createOptionSlider(parent, L["ButtonsPerRow"], 1, data[3], data[5], offset-130, value.."PerRow", updateBarScale, "Actionbar")
 		createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, value.."Font", updateBarScale, "Actionbar")
@@ -1837,7 +1837,8 @@ function G:SetupActionBar(parent)
 	tinsert(options, L["Pet Actionbar"]) -- 9
 	tinsert(options, L["LeaveVehicle"]) -- 10
 
-	local dd = G:CreateDropdown(scroll, "", 40, 35, options, nil, 180, 28)
+	local dd = G:CreateDropdown(scroll.child, "", 40, -15, options, nil, 180, 28)
+	dd:SetFrameLevel(20)
 	dd.Text:SetText(options[1])
 	dd.panels = {}
 
@@ -1851,15 +1852,15 @@ function G:SetupActionBar(parent)
 		local value = options[i]
 		local panel = CreateFrame("Frame", nil, scroll.child)
 		panel:SetSize(260, 1)
-		panel:SetPoint("TOP")
+		panel:SetPoint("TOP", 0, -30)
 		panel:Hide()
 		if i == 9 then
-			createOptionGroup(panel, L["Pet Actionbar"], -10, "BarPet")
+			createOptionGroup(panel, -10, "BarPet")
 		elseif i == 10 then
-			createOptionTitle(panel, L["LeaveVehicle"], -10)
+			createOptionTitle(panel, "", -10)
 			createOptionSlider(panel, L["ButtonSize"], 20, 80, 34, -70, "VehButtonSize", Bar.UpdateVehicleButton, "Actionbar")
 		else
-			createOptionGroup(panel, L["Actionbar"]..i, -10, "Bar"..i)
+			createOptionGroup(panel, -10, "Bar"..i)
 		end
 		dd.panels[i] = panel
 
