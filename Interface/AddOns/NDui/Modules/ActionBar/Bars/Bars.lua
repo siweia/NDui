@@ -148,7 +148,6 @@ function Bar:UpdateButtonConfig(i)
 	for _, button in next, self.buttons do
 		self.buttonConfig.keyBoundTarget = button.bindName
 		button.keyBoundTarget = self.buttonConfig.keyBoundTarget
-		button.postKeybind = Bar.UpdateHotKey
 
 		button:SetAttribute("buttonlock", GetCVarBool("lockActionBars"))
 		button:SetAttribute("checkmouseovercast", true)
@@ -191,13 +190,27 @@ function Bar:UpdateBarConfig()
 	end
 end
 
-function Bar:OnButtonUpdate(button)
-	if not button.__bg then return end
+function Bar:ReassignBindings()
+	if InCombatLockdown() then return end
 
-	if button.Border:IsShown() then
-		button.__bg:SetBackdropBorderColor(0, .7, .1)
-	else
-		button.__bg:SetBackdropBorderColor(0, 0, 0)
+	for index = 1, 8 do
+		local frame = Bar.headers[index]
+		for _, button in next, frame.buttons do
+			for _, key in next, {GetBindingKey(button.keyBoundTarget)} do
+				if key and key ~= "" then
+					SetOverrideBindingClick(frame, false, key, button:GetName(), "Keybind")
+				end
+			end
+		end
+	end
+end
+
+function Bar:ClearBindings()
+	if InCombatLockdown() then return end
+
+	for index = 1, 8 do
+		local frame = Bar.headers[index]
+		ClearOverrideBindings(frame)
 	end
 end
 
@@ -261,7 +274,7 @@ function Bar:CreateBars()
 		RegisterStateDriver(frame, "page", index == 1 and fullPage or data.page)
 	end
 
-	LAB.RegisterCallback(Bar, "OnButtonUpdate", Bar.OnButtonUpdate)
+	LAB.RegisterCallback(Bar, "OnButtonUpdate", Bar.UpdateEquipedColor)
 
 	if LAB.flyoutHandler then
 		LAB.flyoutHandler.Background:Hide()
@@ -289,17 +302,26 @@ function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
 
-	if C.db["Actionbar"]["Enable"] then
-		Bar.movers = {}
-		Bar:CreateBars()
-		Bar:CreateExtrabar()
-		Bar:CreateLeaveVehicle()
-		Bar:CreatePetbar()
-		Bar:CreateStancebar()
-		Bar:ReskinBars()
-		Bar:UpdateBarConfig()
-		Bar:UpdateVisibility()
-		Bar:UpdateAllSize()
-		Bar:HideBlizz()
+	if not C.db["Actionbar"]["Enable"] then return end
+
+	Bar.movers = {}
+	Bar:CreateBars()
+	Bar:CreateExtrabar()
+	Bar:CreateLeaveVehicle()
+	Bar:CreatePetbar()
+	Bar:CreateStancebar()
+	Bar:ReskinBars()
+	Bar:UpdateBarConfig()
+	Bar:UpdateVisibility()
+	Bar:UpdateAllSize()
+	Bar:HideBlizz()
+
+	if C_PetBattles.IsInBattle() then
+		Bar:ClearBindings()
+	else
+		Bar:ReassignBindings()
 	end
+	B:RegisterEvent("UPDATE_BINDINGS", Bar.ReassignBindings)
+	B:RegisterEvent("PET_BATTLE_CLOSE", Bar.ReassignBindings)
+	B:RegisterEvent("PET_BATTLE_OPENING_DONE", Bar.ClearBindings)
 end

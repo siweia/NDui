@@ -40,6 +40,16 @@ function Bar:UpdateHotKey()
 	self:SetFormattedText("%s", text)
 end
 
+function Bar:UpdateEquipedColor(button)
+	if not button.__bg then return end
+
+	if button.Border:IsShown() then
+		button.__bg:SetBackdropBorderColor(0, .7, .1)
+	else
+		button.__bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
 function Bar:StyleActionButton(button)
 	if not button then return end
 	if button.__styled then return end
