@@ -110,7 +110,7 @@ end
 function Bar:StyleAllActionButtons(cfg)
 	for i = 1, 8 do
 		for j = 1, 12 do
-			Bar:StyleActionButton(_G["NDui_ActionBar"..i.."Button"..j], cfg)
+			Bar:StyleActionButton(_G["NDui_ActionBar"..i.."Button"..j])
 		end
 	end
 	for i = 1, 6 do

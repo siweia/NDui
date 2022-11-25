@@ -263,6 +263,13 @@ function Bar:CreateBars()
 
 	LAB.RegisterCallback(Bar, "OnButtonUpdate", Bar.OnButtonUpdate)
 
+	if LAB.flyoutHandler then
+		LAB.flyoutHandler.Background:Hide()
+		for _, button in next, LAB.FlyoutButtons do
+			Bar:StyleActionButton(button)
+		end
+	end
+
 	local function delayUpdate()
 		Bar:UpdateBarConfig()
 		B:UnregisterEvent("PLAYER_REGEN_ENABLED", delayUpdate)
