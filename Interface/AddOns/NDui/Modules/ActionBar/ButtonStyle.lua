@@ -67,6 +67,7 @@ function Bar:StyleActionButton(button)
 	if NewActionTexture then NewActionTexture:SetTexture(nil) end
 	if border then border:SetTexture(nil) end
 	if iconMask then iconMask:Hide() end
+	if button.style then button.style:SetAlpha(0) end
 
 	if icon then
 		icon:SetInside()
@@ -99,14 +100,6 @@ function Bar:StyleActionButton(button)
 	button.__styled = true
 end
 
-function Bar:StyleExtraActionButton()
-	local button = ExtraActionButton1
-	if button.__styled then return end
-
-
-	button.__styled = true
-end
-
 function Bar:ReskinBars()
 	for i = 1, 8 do
 		for j = 1, 12 do
@@ -124,5 +117,5 @@ function Bar:ReskinBars()
 	--leave vehicle
 	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"])
 	--extra action button
-	Bar:StyleExtraActionButton()
+	Bar:StyleActionButton(ExtraActionButton1)
 end
