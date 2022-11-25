@@ -59,7 +59,6 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	PetActionBar.UpdateGridLayout = B.Dummy
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	-- Fix maw block anchor
