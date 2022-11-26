@@ -88,7 +88,7 @@ tinsert(C.defaultThemes, function()
 		B.SetBD(dialog)
 		B.Reskin(dialog.AcceptButton)
 		B.Reskin(dialog.CancelButton)
-	
+
 		local check = dialog.CharacterSpecificLayoutCheckButton
 		if check then
 			B.ReskinCheck(check.Button)

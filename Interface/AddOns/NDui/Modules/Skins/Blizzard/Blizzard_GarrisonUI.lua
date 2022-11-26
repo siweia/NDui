@@ -568,7 +568,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				local bg = B.CreateBDFrame(button, .25)
 				bg:SetPoint("TOPLEFT")
 				bg:SetPoint("BOTTOMRIGHT", 0, 1)
-		
+
 				for _, reward in pairs(button.Rewards) do
 					reward:GetRegions():Hide()
 					reward.bg = B.ReskinIcon(reward.Icon)

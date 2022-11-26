@@ -10,17 +10,17 @@ local function reskinFrameButton(self)
 			child:SetHighlightTexture(0)
 			child.iconBorder:SetTexture("")
 			child.selectedTexture:SetTexture("")
-		
+
 			local bg = B.CreateBDFrame(child, .25)
 			bg:SetPoint("TOPLEFT", 3, -1)
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			child.bg = bg
-		
+
 			local icon = child.icon
 			icon:SetSize(42, 42)
 			icon.bg = B.ReskinIcon(icon)
 			child.name:SetParent(bg)
-		
+
 			if child.DragButton then
 				child.DragButton.ActiveTexture:SetTexture("")
 				child.DragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -270,7 +270,7 @@ C.themes["Blizzard_Collections"] = function()
 
 			spell:SetPushedTexture(0)
 			spell:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			spell.selected:SetTexture(DB.textures.pushed)
+			spell.selected:SetTexture(DB.pushedTex)
 			spell:GetRegions():Hide()
 
 			local flyoutArrow = spell.FlyoutArrow
@@ -299,7 +299,7 @@ C.themes["Blizzard_Collections"] = function()
 	for i = 1, 2 do
 		local bu = PetJournal.SpellSelect["Spell"..i]
 
-		bu:SetCheckedTexture(DB.textures.pushed)
+		bu:SetCheckedTexture(DB.pushedTex)
 		bu:SetPushedTexture(0)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 

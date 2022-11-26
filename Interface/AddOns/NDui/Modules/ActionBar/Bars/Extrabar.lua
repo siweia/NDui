@@ -4,12 +4,11 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert = tinsert
-local cfg = C.Bars.extrabar
 local padding = C.Bars.padding
 
 function Bar:CreateExtrabar()
 	local buttonList = {}
-	local size = cfg.size
+	local size = 52
 
 	-- ExtraActionButton
 	local frame = CreateFrame("Frame", "NDui_ActionBarExtra", UIParent, "SecureHandlerStateTemplate")
@@ -36,10 +35,6 @@ function Bar:CreateExtrabar()
 	frame.frameVisibility = "[extrabar] show; hide"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	if cfg.fader then
-		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
-	end
-
 	-- ZoneAbility
 	local zoneFrame = CreateFrame("Frame", "NDui_ActionBarZone", UIParent)
 	zoneFrame:SetWidth(size + 2*padding)
@@ -56,7 +51,7 @@ function Bar:CreateExtrabar()
 		for spellButton in self.SpellButtonContainer:EnumerateActive() do
 			if spellButton and not spellButton.styled then
 				spellButton.NormalTexture:SetAlpha(0)
-				spellButton:SetPushedTexture(DB.textures.pushed) --force it to gain a texture
+				spellButton:SetPushedTexture(DB.pushedTex) --force it to gain a texture
 				spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				spellButton:GetHighlightTexture():SetInside()
 				spellButton.Icon:SetInside()

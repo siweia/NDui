@@ -22,65 +22,73 @@ G.DefaultSettings = {
 		Enable = true,
 		Hotkeys = true,
 		Macro = true,
-		Count = true,
+		Grid = true,
 		Classcolor = false,
 		Cooldown = true,
 		MmssTH = 60,
 		TenthTH = 3,
-		Bar4Fader = false,
-		Bar5Fader = true,
 		BindType = 1,
 		OverrideWA = false,
 		MicroMenu = true,
-		CustomBar = false,
-		BarXFader = false,
-		CustomBarButtonSize = 34,
-		CustomBarNumButtons = 12,
-		CustomBarNumPerRow = 12,
 		ShowStance = true,
 		EquipColor = false,
-		VehButtonSize = 34,
 
+		Bar1 = true,
+		Bar1Flyout = 1,
 		Bar1Size = 34,
 		Bar1Font = 12,
 		Bar1Num = 12,
 		Bar1PerRow = 12,
+		Bar2 = true,
+		Bar2Flyout = 1,
 		Bar2Size = 34,
 		Bar2Font = 12,
 		Bar2Num = 12,
 		Bar2PerRow = 12,
+		Bar3 = true,
+		Bar3Flyout = 1,
 		Bar3Size = 32,
 		Bar3Font = 12,
 		Bar3Num = 0,
 		Bar3PerRow = 12,
+		Bar4 = true,
+		Bar4Flyout = 3,
 		Bar4Size = 32,
 		Bar4Font = 12,
 		Bar4Num = 12,
 		Bar4PerRow = 1,
+		Bar5 = true,
+		Bar5Flyout = 3,
 		Bar5Size = 32,
 		Bar5Font = 12,
 		Bar5Num = 12,
 		Bar5PerRow = 1,
-		BarPetSize = 26,
-		BarPetFont = 12,
-		BarPetNum = 10,
-		BarPetPerRow = 10,
-		BarStanceSize = 30,
-		BarStanceFont = 12,
-		BarStancePerRow = 10,
-
+		Bar6 = false,
+		Bar6Flyout = 1,
 		Bar6Size = 34,
 		Bar6Font = 12,
 		Bar6Num = 12,
 		Bar6PerRow = 12,
+		Bar7 = false,
+		Bar7Flyout = 1,
 		Bar7Size = 34,
 		Bar7Font = 12,
 		Bar7Num = 12,
 		Bar7PerRow = 12,
+		Bar8 = false,
+		Bar8Flyout = 1,
 		Bar8Size = 34,
 		Bar8Font = 12,
 		Bar8Num = 12,
 		Bar8PerRow = 12,
+
+		BarPetSize = 26,
+		BarPetFont = 12,
+		BarPetPerRow = 10,
+		BarStanceSize = 30,
+		BarStanceFont = 12,
+		BarStancePerRow = 10,
+		VehButtonSize = 34,
 	},
 	Bags = {
 		Enable = true,
@@ -819,17 +827,8 @@ local function setupStanceBar()
 	G:SetupStanceBar(guiPage[1])
 end
 
-local function updateCustomBar()
-	B:GetModule("Actionbar"):UpdateCustomBar()
-end
-
 local function updateHotkeys()
-	local Bar = B:GetModule("Actionbar")
-	for _, button in pairs(Bar.buttons) do
-		if button.UpdateHotkeys then
-			button:UpdateHotkeys(button.buttonType)
-		end
-	end
+	B:GetModule("Actionbar"):UpdateBarConfig()
 end
 
 local function updateEquipColor()
@@ -839,11 +838,6 @@ local function updateEquipColor()
 			Bar.UpdateEquipItemColor(button)
 		end
 	end
-end
-
-local function toggleBarFader(self)
-	local name = gsub(self.__value, "Fader", "")
-	B:GetModule("Actionbar"):ToggleBarFader(name)
 end
 
 local function updateReminder()
@@ -1118,7 +1112,7 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["ShowHealthCurrent"], L["ShowHealthPercent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}
 
 G.TabList = {
-	L["Actionbar"],
+	NewTag..L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
@@ -1137,18 +1131,10 @@ G.TabList = {
 
 G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
-		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
+		{1, "Actionbar", "Enable", NewTag..HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, nil, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
-		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
-		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
-		{},--blank
-		{1, "Actionbar", "CustomBar", HeaderTag..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
-		{1, "Actionbar", "BarXFader", L["CustomBarFader"].."*", nil, nil, toggleBarFader},
-		{3, "Actionbar", "CustomBarButtonSize", L["ButtonSize"].."*", true, {20, 80, 1}, updateCustomBar},
-		{3, "Actionbar", "CustomBarNumButtons", L["MaxButtons"].."*", nil, {1, 12, 1}, updateCustomBar},
-		{3, "Actionbar", "CustomBarNumPerRow", L["ButtonsPerRow"].."*", true, {1, 12, 1}, updateCustomBar},
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
 		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
@@ -1156,10 +1142,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
 		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"].."*", nil, nil, updateHotkeys},
-		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
-		{1, "Actionbar", "Count", L["Actionbar Item Counts"]},
-		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
-		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateEquipColor},
+		{1, "Actionbar", "Macro", L["Actionbar Macro"].."*", true, nil, updateHotkeys},
+		{1, "Actionbar", "Grid", L["Actionbar Grid"].."*", nil, nil, updateHotkeys},
+		{1, "Actionbar", "Classcolor", L["ClassColor BG"].."*", true, nil, updateHotkeys},
+		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", true, nil, nil, L["SendActionCDTip"]},
 	},
 	[2] = {

@@ -118,15 +118,15 @@ C.themes["Blizzard_PVPUI"] = function()
 				button.Border:Hide()
 				button:SetNormalTexture(0)
 				button:SetHighlightTexture(0)
-		
+
 				local bg = B.CreateBDFrame(button, .25)
 				bg:SetPoint("TOPLEFT", 2, 0)
 				bg:SetPoint("BOTTOMRIGHT", -1, 2)
-		
+
 				button.SelectedTexture:SetDrawLayer("BACKGROUND")
 				button.SelectedTexture:SetColorTexture(r, g, b, .25)
 				button.SelectedTexture:SetInside(bg)
-		
+
 				B.ReskinIcon(button.Icon)
 				button.Icon:SetPoint("TOPLEFT", 5, -3)
 
@@ -176,7 +176,7 @@ C.themes["Blizzard_PVPUI"] = function()
 				reward.CircleMask:Hide()
 				reward.Icon.bg = B.ReskinIcon(reward.Icon)
 			end
-	
+
 			bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 			bu.SelectedTexture:SetColorTexture(r, g, b, .25)
 			bu.SelectedTexture:SetInside(bu.__bg)

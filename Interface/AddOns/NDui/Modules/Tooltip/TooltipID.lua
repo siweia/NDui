@@ -153,13 +153,12 @@ function TT:SetupTooltipID()
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, addItemID)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Toy, addItemID)
 
-	-- Currencies, todo: replace via tooltip processor
-	hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
-		local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), "currency:(%d+)"))
-		if id then TT.AddLineForID(self, id, types.currency) end
-	end)
-	hooksecurefunc(GameTooltip, "SetCurrencyByID", function(self, id)
-		if id then TT.AddLineForID(self, id, types.currency) end
+	-- Currencies
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Currency, function(self, data)
+		if self:IsForbidden() then return end
+		if data.id then
+			TT.AddLineForID(self, data.id, types.currency)
+		end
 	end)
 
 	-- Azerite traits

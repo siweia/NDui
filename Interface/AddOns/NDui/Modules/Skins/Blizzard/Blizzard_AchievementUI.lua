@@ -147,7 +147,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 				child.Icon.frame:Hide()
 				child.Description:SetTextColor(.9, .9, .9)
 				child.Description.SetTextColor = B.Dummy
-	
+
 				local bg = B.CreateBDFrame(child, .25)
 				bg:SetPoint("TOPLEFT", 1, -1)
 				bg:SetPoint("BOTTOMRIGHT", 0, 2)

@@ -79,11 +79,8 @@ C.themes["Blizzard_ClickBindingUI"] = function()
 	reskinPortraitIcon(frame.SpellbookPortrait, 136830)
 	reskinPortraitIcon(frame.MacrosPortrait, 136377)
 
-	frame.TutorialFrame.Bg:Hide()
 	frame.TutorialFrame.NineSlice:Hide()
-	frame.TutorialFrame.TitleBg:Hide()
 	B.SetBD(frame.TutorialFrame)
-	B.ReskinClose(frame.TutorialFrame.CloseButton)
 
 	if frame.EnableMouseoverCastCheckbox then
 		B.ReskinCheck(frame.EnableMouseoverCastCheckbox)

@@ -5,7 +5,6 @@ local Bar = B:GetModule("Actionbar")
 local _G = _G
 local tinsert = tinsert
 local UnitOnTaxi, TaxiRequestEarlyLanding, VehicleExit = UnitOnTaxi, TaxiRequestEarlyLanding, VehicleExit
-local cfg = C.Bars.leave_vehicle
 local padding = C.Bars.padding
 
 function Bar:UpdateVehicleButton()
@@ -55,8 +54,4 @@ function Bar:CreateLeaveVehicle()
 
 	frame:SetAttribute("_onstate-exit", [[ if CanExitVehicle() then self:Show() else self:Hide() end ]])
 	if not CanExitVehicle() then frame:Hide() end
-
-	if cfg.fader then
-		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
-	end
 end

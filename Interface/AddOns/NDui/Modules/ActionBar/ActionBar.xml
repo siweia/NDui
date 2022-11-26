@@ -1,21 +1,13 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="Bars\Bar1.lua"/>
-	<Script file="Bars\Bar2.lua"/>
-	<Script file="Bars\Bar3.lua"/>
-	<Script file="Bars\Bar4.lua"/>
-	<Script file="Bars\Bar5.lua"/>
-	<Script file="Bars\Bar678.lua"/>
-	<Script file="Bars\CustomBar.lua"/>
+	<Script file="Bars\Bars.lua"/>
 	<Script file="Bars\Stancebar.lua"/>
 	<Script file="Bars\Petbar.lua"/>
 	<Script file="Bars\Extrabar.lua"/>
 	<Script file="Bars\Leave_vehicle.lua"/>
 	<Script file="Bars\Hide_blizzart.lua"/>
-	<Script file="Bars\Fader.lua"/>
 	<Script file="Bars\MicroMenu.lua"/>
 	<Script file="Bars\StylePreset.lua"/>
 
-	<Script file="ButtonRange.lua"/>
 	<Script file="Keybind.lua"/>
 	<Script file="ButtonStyle.lua"/>
 	<Script file="Cooldown.lua"/>

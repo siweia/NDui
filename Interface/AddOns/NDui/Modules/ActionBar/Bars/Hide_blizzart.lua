@@ -11,13 +11,12 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar, PetActionBar,
 }
 
 local framesToDisable = {
-	MainMenuBar,
-	MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
-	ActionBarDownButton, ActionBarUpButton, MainMenuBarVehicleLeaveButton,
+	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, PossessActionBar, PetActionBar,
+	MicroButtonAndBagsBar, StatusTrackingBarManager, MainMenuBarVehicleLeaveButton,
 	OverrideActionBar,
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
 }
@@ -30,66 +29,50 @@ local function DisableAllScripts(frame)
 	end
 end
 
-local function buttonShowGrid(name, showgrid)
-	for i = 1, 12 do
-		local button = _G[name..i]
-		if button then
-			button:SetAttribute("showgrid", showgrid)
-			button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
-		end
-	end
-end
-
 local function updateTokenVisibility()
 	TokenFrame_LoadUI()
 	TokenFrame_Update()
 end
 
-local function ReplaceSpellbookButtons()
-	local function replaceOnEnter(self)
-		local slot = SpellBook_GetSpellBookSlot(self)
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+local function buttonEventsRegisterFrame(self, added)
+	local frames = self.frames
+	for index = #frames, 1, -1 do
+		local frame = frames[index]
+		local wasAdded = frame == added
+		if not added or wasAdded then
+			if not strmatch(frame:GetName(), "ExtraActionButton%d") then
+				self.frames[index] = nil
+			end
 
-		if InClickBindingMode() and not self.canClickBind then
-			GameTooltip:AddLine(CLICK_BINDING_NOT_AVAILABLE, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
-			GameTooltip:Show()
-			return
+			if wasAdded then
+				break
+			end
 		end
-
-		GameTooltip:SetSpellBookItem(slot, SpellBookFrame.bookType)
-		self.UpdateTooltip = nil
-
-		if self.SpellHighlightTexture and self.SpellHighlightTexture:IsShown() then
-			GameTooltip:AddLine(SPELLBOOK_SPELL_NOT_ON_ACTION_BAR, LIGHTBLUE_FONT_COLOR.r, LIGHTBLUE_FONT_COLOR.g, LIGHTBLUE_FONT_COLOR.b)
-		end
-		GameTooltip:Show()
-	end
-
-	local function handleSpellButton(button)
-		button.OnEnter = replaceOnEnter
-		button:SetScript("OnEnter", replaceOnEnter)
-		button.OnLeave = B.HideTooltip
-		button:SetScript("OnLeave", B.HideTooltip)
-	end
-
-	for i = 1, SPELLS_PER_PAGE do
-		handleSpellButton(_G["SpellButton"..i])
-	end
-
-	local professions = {"PrimaryProfession1", "PrimaryProfession2", "SecondaryProfession1", "SecondaryProfession2", "SecondaryProfession3"}
-	for _, button in pairs(professions) do
-		local bu = _G[button]
-		handleSpellButton(bu.SpellButton1)
-		handleSpellButton(bu.SpellButton2)
 	end
 end
 
-function Bar:HideBlizz()
-	MainMenuBar:SetMovable(true)
-	MainMenuBar:SetUserPlaced(true)
-	MainMenuBar.ignoreFramePositionManager = true
-	MainMenuBar:SetAttribute("ignoreFramePositionManager", true)
+local function DisableDefaultBarEvents() -- credit: Simpy
+	-- MainMenuBar:ClearAllPoints taint during combat
+	_G.MainMenuBar.SetPositionForStatusBars = B.Dummy
+	-- Spellbook open in combat taint, only happens sometimes
+	_G.MultiActionBar_HideAllGrids = B.Dummy
+	_G.MultiActionBar_ShowAllGrids = B.Dummy
+	-- shut down some events for things we dont use
+	_G.ActionBarController:UnregisterAllEvents()
+	_G.ActionBarController:RegisterEvent("SETTINGS_LOADED") -- this is needed for page controller to spawn properly
+	_G.ActionBarController:RegisterEvent("UPDATE_EXTRA_ACTIONBAR") -- this is needed to let the ExtraActionBar show
+	_G.ActionBarActionEventsFrame:UnregisterAllEvents()
+	-- used for ExtraActionButton and TotemBar (on wrath)
+	_G.ActionBarButtonEventsFrame:UnregisterAllEvents()
+	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- needed to let the ExtraActionButton show and Totems to swap
+	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
+	hooksecurefunc(_G.ActionBarButtonEventsFrame, "RegisterFrame", buttonEventsRegisterFrame)
+	buttonEventsRegisterFrame(_G.ActionBarButtonEventsFrame)
+	-- fix keybind error, this actually just prevents reopen of the GameMenu
+	_G.SettingsPanel.TransitionBackOpeningPanel = _G.HideUIPanel
+end
 
+function Bar:HideBlizz()
 	for _, frame in next, framesToHide do
 		frame:SetParent(B.HiddenFrame)
 	end
@@ -99,8 +82,7 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	-- Fix spellbook button taint with Editmode
-	--ReplaceSpellbookButtons()
+	DisableDefaultBarEvents()
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	-- Fix maw block anchor

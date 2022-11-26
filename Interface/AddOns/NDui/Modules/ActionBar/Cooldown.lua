@@ -212,5 +212,5 @@ function module:OnLogin()
 	hooksecurefunc(ActionBarButtonEventsFrameMixin, "RegisterFrame", module.RegisterActionButton)
 
 	-- Hide Default Cooldown
-	SetCVar("countdownForCooldowns", 0) -- todo: hide default option
+	SetCVar("countdownForCooldowns", 0)
 end

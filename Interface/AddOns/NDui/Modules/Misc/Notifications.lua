@@ -709,7 +709,7 @@ function M:SendCurrentItem(thisTime, itemID, itemLink)
 end
 
 function M:AnalyzeButtonCooldown()
-	if not self.action then return end -- no action for pet actionbar
+	if not self._state_action then return end -- no action for pet actionbar
 	if not C.db["Misc"]["SendActionCD"] then return end
 	if not IsInGroup() then return end
 
@@ -717,7 +717,7 @@ function M:AnalyzeButtonCooldown()
 	if thisTime - lastCDSend < 1.5 then return end
 	lastCDSend = thisTime
 
-	local spellType, id = GetActionInfo(self.action)
+	local spellType, id = GetActionInfo(self._state_action)
 	if spellType == "spell" then
 		M:SendCurrentSpell(thisTime, id)
 	elseif spellType == "item" then

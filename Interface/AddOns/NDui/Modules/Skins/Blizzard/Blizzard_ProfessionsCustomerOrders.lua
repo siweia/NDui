@@ -156,7 +156,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 
 	hooksecurefunc(frame.Form, "Init", function(self)
 		for slot in self.reagentSlotPool:EnumerateActive() do
-			local button = slot.Button		
+			local button = slot.Button
 			if button and not button.styled then
 				button:SetNormalTexture(0)
 				button:SetPushedTexture(0)
@@ -168,7 +168,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 				if button.SlotBackground then
 					button.SlotBackground:Hide()
 				end
-		
+
 				button.styled = true
 			end
 		end

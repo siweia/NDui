@@ -72,7 +72,7 @@ tinsert(C.defaultThemes, function()
 		local button = _G["MailItem"..i.."Button"]
 		B.StripTextures(item)
 		B.StripTextures(button)
-		button:SetCheckedTexture(DB.textures.pushed)
+		button:SetCheckedTexture(DB.pushedTex)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.Icon:SetTexCoord(texL, texR, texT, texB)
 		button.IconBorder:SetAlpha(0)

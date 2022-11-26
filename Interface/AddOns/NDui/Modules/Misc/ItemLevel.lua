@@ -390,6 +390,44 @@ function M:ItemLevel_UpdateLoot()
 	end
 end
 
+function M:ItemLevel_UpdateBags()
+	local button = self.__owner
+	if not button.iLvl then
+		button.iLvl = B.CreateFS(button, DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
+	end
+
+	local bagID = button:GetBagID()
+	local slotID = button:GetID()
+	local info = C_Container.GetContainerItemInfo(bagID, slotID)
+	local link = info and info.hyperlink
+	local quality = info and info.quality
+	if quality and quality > 1 then
+		local level = B.GetItemLevel(link, bagID, slotID)
+		local color = DB.QualityColors[quality]
+		button.iLvl:SetText(level)
+		button.iLvl:SetTextColor(color.r, color.g, color.b)
+	else
+		button.iLvl:SetText("")
+	end
+end
+
+function M:ItemLevel_Containers()
+	if C.db["Bags"]["Enable"] then return end
+
+	for i = 1, 13 do
+		for _, button in _G["ContainerFrame"..i]:EnumerateItems() do
+			button.IconBorder.__owner = button
+			hooksecurefunc(button.IconBorder, "SetShown", M.ItemLevel_UpdateBags)
+		end
+	end
+
+	for i = 1, 28 do
+		local button = _G["BankFrameItem"..i]
+		button.IconBorder.__owner = button
+		hooksecurefunc(button.IconBorder, "SetShown", M.ItemLevel_UpdateBags)
+	end
+end
+
 function M:ShowItemLevel()
 	if not C.db["Misc"]["ItemLevel"] then return end
 
@@ -424,5 +462,8 @@ function M:ShowItemLevel()
 
 	-- iLvl on LootFrame
 	hooksecurefunc(LootFrame.ScrollBox, "Update", M.ItemLevel_UpdateLoot)
+
+	-- iLvl on default Container
+	M:ItemLevel_Containers()
 end
 M:RegisterMisc("GearInfo", M.ShowItemLevel)
