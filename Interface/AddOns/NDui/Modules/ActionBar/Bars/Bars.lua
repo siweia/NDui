@@ -259,6 +259,19 @@ function Bar:CreateBars()
 			for k = 1, 18 do
 				button:SetState(k, "action", (k - 1) * 12 + i)
 			end
+			if i == 12 then
+				button:SetState(GetVehicleBarIndex(), "custom", {
+					func = function()
+						if UnitExists("vehicle") then
+							VehicleExit()
+						else
+							PetDismiss()
+						end
+					end,
+					texture = 136190, -- Spell_Shadow_SacrificialShield
+					tooltip = _G.LEAVE_VEHICLE,
+				})
+			end
 			button.MasqueSkinned = true
 			button.bindName = data.bindName..i
 

@@ -7,7 +7,6 @@ local tinsert, mod, min, ceil = tinsert, mod, min, ceil
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 local num = NUM_STANCE_SLOTS or 10
-local NUM_POSSESS_SLOTS = NUM_POSSESS_SLOTS or 2
 
 function Bar:UpdateStanceBar()
 	local frame = _G["NDui_ActionBarStance"]
@@ -17,18 +16,16 @@ function Bar:UpdateStanceBar()
 	local fontSize = C.db["Actionbar"]["BarStanceFont"]
 	local perRow = C.db["Actionbar"]["BarStancePerRow"]
 
-	for i = 1, 12 do
+	for i = 1, num do
 		local button = frame.buttons[i]
 		button:SetSize(size, size)
-		if i < 11 then
-			button:ClearAllPoints()
-			if i == 1 then
-				button:SetPoint("TOPLEFT", frame, padding, -padding)
-			elseif mod(i-1, perRow) ==  0 then
-				button:SetPoint("TOP", frame.buttons[i-perRow], "BOTTOM", 0, -margin)
-			else
-				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
-			end
+		button:ClearAllPoints()
+		if i == 1 then
+			button:SetPoint("TOPLEFT", frame, padding, -padding)
+		elseif mod(i-1, perRow) ==  0 then
+			button:SetPoint("TOP", frame.buttons[i-perRow], "BOTTOM", 0, -margin)
+		else
+			button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
 		end
 		Bar:UpdateFontSize(button, fontSize)
 	end
@@ -106,24 +103,12 @@ function Bar:CreateStancebar()
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
 	end
+	frame.buttons = buttonList
 
 	-- Fix stance bar updating
 	B:RegisterEvent("UPDATE_SHAPESHIFT_FORMS", Bar.StanceBarOnEvent)
 	B:RegisterEvent("UPDATE_SHAPESHIFT_USABLE", Bar.StanceBarOnEvent)
 	B:RegisterEvent("UPDATE_SHAPESHIFT_COOLDOWN", Bar.StanceBarOnEvent)
-
-	-- PossessBar
-	PossessActionBar:SetParent(frame)
-	PossessActionBar:EnableMouse(false)
-
-	for i = 1, NUM_POSSESS_SLOTS do
-		local button = _G["PossessButton"..i]
-		tinsert(buttonList, button)
-		button:ClearAllPoints()
-		button:SetPoint("CENTER", buttonList[i])
-	end
-
-	frame.buttons = buttonList
 
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)

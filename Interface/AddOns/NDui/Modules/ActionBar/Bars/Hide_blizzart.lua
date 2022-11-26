@@ -29,16 +29,6 @@ local function DisableAllScripts(frame)
 	end
 end
 
-local function buttonShowGrid(name, showgrid)
-	for i = 1, 12 do
-		local button = _G[name..i]
-		if button then
-			button:SetAttribute("showgrid", showgrid)
-			button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
-		end
-	end
-end
-
 local function updateTokenVisibility()
 	TokenFrame_LoadUI()
 	TokenFrame_Update()
