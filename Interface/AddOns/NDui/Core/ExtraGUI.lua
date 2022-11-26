@@ -1958,7 +1958,7 @@ function G:SetupUFAuras(parent)
 	createOptionGroup(parent, L["BossFrame"], offset-2190, "Boss", UF.UpdateUFAuras, true)
 end
 
-function G:SetupActionbarStyle(parent) -- todo: add bar 678
+function G:SetupActionbarStyle(parent)
 	local maxButtons = 6
 	local size, padding = 30, 3
 
