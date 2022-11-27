@@ -409,6 +409,7 @@ function M:AddPGFSortingExpression()
 		PremadeGroupsFilterSettings.classCircle = false
 		PremadeGroupsFilterSettings.leaderCrown = false
 		PremadeGroupsFilterSettings.ratingInfo = false
+		PremadeGroupsFilterSettings.oneClickSignUp = false
 	end
 end
 

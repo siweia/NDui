@@ -72,8 +72,6 @@ function S:PGFSkin()
 					B.ReskinInput(input)
 					B.ReskinInput(frame.Max)
 				end
-			else
-				print(name)
 			end
 		end
 
