@@ -30,15 +30,22 @@ function Bar:Bind_RegisterButton(button)
 	end
 end
 
+local macroInit
 function Bar:Bind_RegisterMacro()
 	if self ~= "Blizzard_MacroUI" then return end
+	if macroInit then return end
 
-	for i = 1, MAX_ACCOUNT_MACROS do
-		local button = _G["MacroButton"..i]
-		if button then
-			button:HookScript("OnEnter", hookMacroButton)
+	hooksecurefunc(MacroFrame.MacroSelector.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local button = select(i, self.ScrollTarget:GetChildren())
+			if not button.bindHooked then
+				button:HookScript("OnEnter", hookMacroButton)
+				button.bindHooked = true
+			end
 		end
-	end
+	end)
+
+	macroInit = true
 end
 
 function Bar:Bind_Create()
@@ -111,13 +118,14 @@ function Bar:Bind_Update(button, spellmacro)
 	frame:Show()
 
 	if spellmacro == "SPELL" then
-		frame.id = SpellBook_GetSpellBookSlot(frame.button)
+		frame.id = SpellBook_GetSpellBookSlot(button)
 		frame.name = GetSpellBookItemName(frame.id, SpellBookFrame.bookType)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "MACRO" then
-		frame.id = frame.button:GetID()
-		local colorIndex = B:Round(select(2, MacroFrameTab1Text:GetTextColor()), 1)
-		if colorIndex == .8 then frame.id = frame.id + MAX_ACCOUNT_MACROS end
+		frame.id = button.selectionIndex or button:GetID()
+		if MacroFrame.selectedTab == 2 then
+			frame.id = frame.id + MAX_ACCOUNT_MACROS
+		end
 		frame.name = GetMacroInfo(frame.id)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "STANCE" or spellmacro == "PET" then
