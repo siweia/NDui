@@ -68,7 +68,7 @@ function Bar:StyleActionButton(button)
 	local pushed = button.PushedTexture
 	local checked = button.CheckedTexture
 	local highlight = button.HighlightTexture
-	local NewActionTexture = button.NewActionTexture
+	local newActionTexture = button.NewActionTexture
 	local spellHighlight = button.SpellHighlightTexture
 	local iconMask = button.IconMask
 	local petShine = _G[buttonName.."Shine"]
@@ -77,8 +77,9 @@ function Bar:StyleActionButton(button)
 	if normal then normal:SetAlpha(0) end
 	if normal2 then normal2:SetAlpha(0) end
 	if flash then flash:SetTexture(nil) end
-	if NewActionTexture then NewActionTexture:SetTexture(nil) end
+	if newActionTexture then newActionTexture:SetTexture(nil) end
 	if border then border:SetTexture(nil) end
+	if slotbg then slotbg:Hide() end
 	if iconMask then iconMask:Hide() end
 	if button.style then button.style:SetAlpha(0) end
 	if petShine then petShine:SetInside() end
