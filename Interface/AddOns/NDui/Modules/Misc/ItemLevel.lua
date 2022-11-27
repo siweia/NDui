@@ -104,20 +104,22 @@ local gemSlotBlackList = {
 	[16]=true, [17]=true, [18]=true,	-- ignore weapons, until I find a better way
 }
 function M:ItemLevel_UpdateGemInfo(link, unit, index, slotFrame)
-	if C.db["Misc"]["GemNEnchant"] and not gemSlotBlackList[index] then
+	if C.db["Misc"]["GemNEnchant"] then
 		local info = B.GetItemLevel(link, unit, index, true)
 		if info then
-			local gemStep = 1
-			for i = 1, 5 do
-				local texture = slotFrame["textureIcon"..i]
-				local bg = texture.bg
-				local gem = info.gems and info.gems[gemStep]
-				if gem then
-					texture:SetTexture(gem)
-					bg:SetBackdropBorderColor(0, 0, 0)
-					bg:Show()
+			if not gemSlotBlackList[index] then
+				local gemStep = 1
+				for i = 1, 5 do
+					local texture = slotFrame["textureIcon"..i]
+					local bg = texture.bg
+					local gem = info.gems and info.gems[gemStep]
+					if gem then
+						texture:SetTexture(gem)
+						bg:SetBackdropBorderColor(0, 0, 0)
+						bg:Show()
 
-					gemStep = gemStep + 1
+						gemStep = gemStep + 1
+					end
 				end
 			end
 
@@ -170,6 +172,7 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 		--if index ~= 4 then
 			local slotFrame = _G[strType..slot.."Slot"]
 			slotFrame.iLvlText:SetText("")
+			slotFrame.enchantText:SetText("")
 			for i = 1, 5 do
 				local texture = slotFrame["textureIcon"..i]
 				texture:SetTexture(nil)
