@@ -35,7 +35,9 @@ function Bar:Bind_RegisterMacro()
 
 	for i = 1, MAX_ACCOUNT_MACROS do
 		local button = _G["MacroButton"..i]
-		button:HookScript("OnEnter", hookMacroButton)
+		if button then
+			button:HookScript("OnEnter", hookMacroButton)
+		end
 	end
 end
 
@@ -136,8 +138,8 @@ function Bar:Bind_Update(button, spellmacro)
 		frame.tipName = button.commandName and GetBindingName(button.commandName)
 
 		frame.action = tonumber(button.action)
-		if frame.keyBoundTarget then
-			frame.bindstring = frame.keyBoundTarget
+		if button.keyBoundTarget then
+			frame.bindstring = button.keyBoundTarget
 		elseif not frame.action or frame.action < 1 or frame.action > 180 then
 			frame.bindstring = "CLICK "..frame.name..":LeftButton"
 		else
@@ -160,7 +162,7 @@ function Bar:Bind_Update(button, spellmacro)
 	end
 
 	-- Refresh tooltip
-	frame:GetScript("OnEnter")(self)
+	frame:GetScript("OnEnter")()
 end
 
 local ignoreKeys = {
