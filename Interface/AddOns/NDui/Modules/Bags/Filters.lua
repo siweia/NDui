@@ -44,7 +44,7 @@ end
 local function isItemEquipSet(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterEquipSet"] then return end
-	return item.isInSet
+	return item.isItemSet
 end
 
 local function isAzeriteArmor(item)
