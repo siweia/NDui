@@ -3242,9 +3242,9 @@ function HealComm:OnInitialize()
 
 		spellData[FirstAid] = {
 			_isChanneled = true,
-			ticks = {6, 6, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+			ticks = {6, 6, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
 			interval = 1,
-			averages = {66, 114, 161, 301, 400, 640, 800, 1104, 1360, 2000, 2800, 3400, 4800, 5800}
+			averages = {66, 114, 161, 301, 400, 640, 800, 1104, 1360, 2000, 2800, 3400, 4800, 3400, 5800, 4100}
 		}
 
 		local _GetHealTargets = GetHealTargets
