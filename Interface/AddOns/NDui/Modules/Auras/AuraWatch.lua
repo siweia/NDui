@@ -490,7 +490,7 @@ function A:UpdateAuraWatchByFilter(unit, filter, inCombat)
 	while true do
 		local name, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, number = UnitAura(unit, index, filter)
 		if not name then break end
-		A:AuraWatch_UpdateAura(unit, index, filter, name, icon, count, duration, expires, caster, spellID, number, inCombat)
+		A:AuraWatch_UpdateAura(unit, index, filter, name, icon, count, duration, expires, caster, spellID, tonumber(number), inCombat)
 
 		index = index + 1
 	end

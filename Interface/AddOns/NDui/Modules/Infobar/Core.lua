@@ -12,7 +12,7 @@ INFO.leftModules, INFO.rightModules = {}, {}
 
 function INFO:GetMoneyString(money, full)
 	if money >= 1e6 and not full then
-		return format(" %.0f%s", money / 1e4, GOLD_AMOUNT_SYMBOL)
+		return BreakUpLargeNumbers(format("%d", money / 1e4))..GOLD_AMOUNT_SYMBOL
 	else
 		if money > 0 then
 			local moneyString = ""
