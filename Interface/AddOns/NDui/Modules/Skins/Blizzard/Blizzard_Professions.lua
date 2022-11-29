@@ -176,6 +176,7 @@ C.themes["Blizzard_Professions"] = function()
 	local rankBar = craftingPage.RankBar
 	rankBar.Border:Hide()
 	rankBar.Background:Hide()
+	rankBar.Rank.Text:SetFontObject(Game12Font)
 	B.CreateBDFrame(rankBar.Fill, 1)
 
 	B.ReskinArrow(craftingPage.LinkButton, "right")
