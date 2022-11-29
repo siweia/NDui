@@ -134,11 +134,11 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("QuestInfo_GetRewardButton", function(rewardsFrame, index)
 		local bu = rewardsFrame.RewardButtons[index]
-		if not bu.restyled then
+		if not bu.styled then
 			ReskinRewardButtonWithSize(bu, rewardsFrame == MapQuestInfoRewardsFrame)
 			B.ReskinIconBorder(bu.IconBorder)
 
-			bu.restyled = true
+			bu.styled = true
 		end
 	end)
 
@@ -209,6 +209,15 @@ tinsert(C.defaultThemes, function()
 
 					spellReward.styled = true
 				end
+			end
+		end
+
+		-- Reputation Rewards
+		for repReward in rewardsFrame.reputationRewardPool:EnumerateActive() do
+			if not repReward.styled then
+				ReskinRewardButton(repReward)
+
+				repReward.styled = true
 			end
 		end
 	end)
