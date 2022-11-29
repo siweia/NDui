@@ -298,6 +298,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(ReputationDetailCloseButton)
 	B.ReskinCheck(ReputationDetailInactiveCheckBox)
 	B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+	B.Reskin(ReputationDetailViewRenownButton)
 
 	local atWarCheck = ReputationDetailAtWarCheckBox
 	B.ReskinCheck(atWarCheck)
