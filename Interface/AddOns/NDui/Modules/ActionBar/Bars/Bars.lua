@@ -173,9 +173,11 @@ function Bar:UpdateVisibility()
 		if frame then
 			if C.db["Actionbar"]["Bar"..i] then
 				frame:Show()
+				frame.mover.isDisable = false
 				RegisterStateDriver(frame, "visibility", frame.visibility)
 			else
 				frame:Hide()
+				frame.mover.isDisable = true
 				UnregisterStateDriver(frame, "visibility")
 			end
 		end
