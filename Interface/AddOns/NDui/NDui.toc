@@ -4,5 +4,5 @@
 ## Author: Siweia
 ## Notes: Empty toc for Curseforge
 ## Version: 7.0.0
-## X-Support: SL
+## X-Support: DF
 ## X-Website: https://github.com/siweia/NDui
