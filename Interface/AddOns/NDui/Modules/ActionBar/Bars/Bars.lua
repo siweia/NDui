@@ -146,11 +146,13 @@ function Bar:UpdateButtonConfig(i)
 	hideElements.macro = not C.db["Actionbar"]["Macro"]
 	hideElements.equipped = not C.db["Actionbar"]["EquipColor"]
 
+	local lockBars = GetCVarBool("lockActionBars")
 	for _, button in next, self.buttons do
 		self.buttonConfig.keyBoundTarget = button.bindName
 		button.keyBoundTarget = self.buttonConfig.keyBoundTarget
 
-		button:SetAttribute("buttonlock", GetCVarBool("lockActionBars"))
+		button:SetAttribute("buttonlock", lockBars)
+		button:SetAttribute("unlockedpreventdrag", not lockBars) -- make sure button can drag without being click
 		button:SetAttribute("checkmouseovercast", true)
 		button:SetAttribute("checkfocuscast", true)
 		button:SetAttribute("checkselfcast", true)
