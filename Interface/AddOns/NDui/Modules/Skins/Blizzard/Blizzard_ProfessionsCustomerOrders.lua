@@ -168,6 +168,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 				if button.SlotBackground then
 					button.SlotBackground:Hide()
 				end
+				B.ReskinCheck(slot.Checkbox)
 
 				button.styled = true
 			end
