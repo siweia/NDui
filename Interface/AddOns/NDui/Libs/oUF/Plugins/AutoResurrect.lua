@@ -19,6 +19,7 @@ local classList = {
 	},
 	["PALADIN"] = {
 		ooc = GetSpellInfo(7328),		-- Redemption
+		combat = GetSpellInfo(391054),	-- 代祷Intercession
 	},
 	["PRIEST"] = {
 		ooc = GetSpellInfo(2006),		-- Resurrection
@@ -29,8 +30,9 @@ local classList = {
 	["WARLOCK"] = {
 		combat = GetSpellInfo(20707),	-- Soulstone
 	},
-	--["HUNTER"] = {},	-- blz has removed hunter res
-}
+	["EVOKER"] = {
+		ooc = GetSpellInfo(361227),		-- 生还Return
+	},
 
 local hunterRes = {
 	[1] = GetSpellInfo(126393),			-- Eternal Guardian
