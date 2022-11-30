@@ -45,15 +45,17 @@ function TT:ReskinTooltipIcons()
 
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(self)
 		if self == GameTooltip or self == ItemRefTooltip then
-			local _, link = self:GetItem()
-			if link then
-				TT.SetupTooltipIcon(self, GetItemIcon(link))
+			local data = self:GetTooltipData()
+			local id = data and data.id
+			if id then
+				TT.SetupTooltipIcon(self, GetItemIcon(id))
 			end
 		end
 	end)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
 		if self == GameTooltip or self == ItemRefTooltip then
-			local _, id = self:GetSpell()
+			local data = self:GetTooltipData()
+			local id = data and data.id
 			if id then
 				TT.SetupTooltipIcon(self, GetSpellTexture(id))
 			end
