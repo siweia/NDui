@@ -129,7 +129,7 @@ function TT:SetupTooltipID()
 		end
 	end)
 
-	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Macro, function(self, data)
+	local function UpdateActionTooltip(self, data)
 		if self:IsForbidden() then return end
 
 		local lineData = data.lines and data.lines[1]
@@ -141,7 +141,9 @@ function TT:SetupTooltipID()
 		elseif tooltipType == 1 then --spell
 			TT.AddLineForID(self, lineData.tooltipID, types.spell)
 		end
-	end)
+	end
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Macro, UpdateActionTooltip)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.PetAction, UpdateActionTooltip)
 
 	-- Items
 	local function addItemID(self, data)
