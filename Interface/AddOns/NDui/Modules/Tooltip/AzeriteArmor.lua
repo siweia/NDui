@@ -57,12 +57,9 @@ function TT:Azerite_UpdateTier(link)
 	return allTierInfo
 end
 
-function TT:Azerite_UpdateItem(data)
+function TT:Azerite_UpdateItem()
 	local data = self:GetTooltipData()
-	if not data then return end
-
-	local argVal = data.args and data.args[3]
-	local guid = argVal and argVal.guidVal
+	local guid = data and data.guid
 	local link = guid and C_Item.GetItemLinkByGUID(guid)
 	if not link then return end
 
