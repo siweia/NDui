@@ -395,6 +395,25 @@ do
 			end
 		end
 	end
+
+	-- lock cvar command
+	local lockedCVars = {}
+
+	function B:LockCVar(name, value)
+		SetCVar(name, value)
+		lockedCVars[name] = value
+	end
+
+	function B:UpdateCVars(var, state)
+		local lockedVar = lockedCVars[var]
+		if lockedVar ~= nil and state ~= lockedVar then
+			SetCVar(var, lockedVar)
+			if DB.isDeveloper then
+				print("CVar reset:", var, lockedVar)
+			end
+		end
+	end
+	B:RegisterEvent("CVAR_UPDATE", B.UpdateCVars)
 end
 
 -- UI widgets

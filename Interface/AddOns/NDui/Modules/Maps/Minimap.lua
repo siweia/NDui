@@ -570,7 +570,7 @@ function module:BuildMinimapDropDown()
 			UIDropDownMenu_RefreshAll(dropdown)
 		end
 	end)
-	SetCVar("minimapTrackingShowAll", 1)
+	B:LockCVar("minimapTrackingShowAll", "1")
 
 	module.MinimapTracking = dropdown
 end
