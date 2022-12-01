@@ -19,6 +19,7 @@ local classList = {
 	},
 	["PALADIN"] = {
 		ooc = GetSpellInfo(7328),		-- Redemption
+		combat = GetSpellInfo(391054),	-- 代祷Intercession
 	},
 	["PRIEST"] = {
 		ooc = GetSpellInfo(2006),		-- Resurrection
@@ -29,36 +30,26 @@ local classList = {
 	["WARLOCK"] = {
 		combat = GetSpellInfo(20707),	-- Soulstone
 	},
-	--["HUNTER"] = {},	-- blz has removed hunter res
-}
-
-local hunterRes = {
-	[1] = GetSpellInfo(126393),			-- Eternal Guardian
-	[2] = GetSpellInfo(159931),			-- Gift of Chiji
-	[3] = GetSpellInfo(159956),			-- Dust of Life
+	["EVOKER"] = {
+		ooc = GetSpellInfo(361227),		-- 生还Return
+	},
 }
 
 local body = ""
 local function macroBody(class)
 	body = "/stopmacro [@mouseover,nodead]\n"
 
-	if class == "HUNTER" then
-		for i = 1, #hunterRes do
-			body = body.."/cast [@mouseover,help,dead]"..hunterRes[i].."\n"
+	local combatSpell = classList[class].combat
+	local oocSpell = classList[class].ooc
+	if combatSpell then
+		if oocSpell then
+			body = body.."/cast [combat,@mouseover,help,dead] "..combatSpell.."; "
+			body = body.."[@mouseover,help,dead] "..oocSpell
+		else
+			body = body.."/cast [@mouseover,help,dead] "..combatSpell
 		end
-	else
-		local combatSpell = classList[class].combat
-		local oocSpell = classList[class].ooc
-		if combatSpell then
-			if oocSpell then
-				body = body.."/cast [combat,@mouseover,help,dead] "..combatSpell.."; "
-				body = body.."[@mouseover,help,dead] "..oocSpell
-			else
-				body = body.."/cast [@mouseover,help,dead] "..combatSpell
-			end
-		elseif oocSpell then
-			body = body.."/cast [@mouseover,help,dead] "..oocSpell
-		end
+	elseif oocSpell then
+		body = body.."/cast [@mouseover,help,dead] "..oocSpell
 	end
 
 	return body
@@ -74,7 +65,7 @@ local function setupAttribute(self)
 	end
 end
 
-local Enable = function(self)
+local function Enable(self)
 	if not C.db["UFs"]["AutoRes"] then return end
 
 	if InCombatLockdown() then
@@ -84,7 +75,7 @@ local Enable = function(self)
 	end
 end
 
-local Disable = function(self)
+local function Disable(self)
 	if C.db["UFs"]["AutoRes"] then return end
 
 	self:SetAttribute("*type3", nil)

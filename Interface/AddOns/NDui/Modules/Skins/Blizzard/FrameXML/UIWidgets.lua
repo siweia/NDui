@@ -47,9 +47,9 @@ local function ReskinWidgetStatusBar(bar)
 			hooksecurefunc(bar.Label, "SetTextColor", ResetLabelColor)
 		end
 		B.SetBD(bar)
-		if bar.GetStatusBarAtlas then
-			B.ReplaceWidgetBarTexture(bar, bar:GetStatusBarAtlas())
-			hooksecurefunc(bar, "SetStatusBarAtlas", B.ReplaceWidgetBarTexture)
+		if bar.GetStatusBarTexture then
+			B.ReplaceWidgetBarTexture(bar, bar:GetStatusBarTexture())
+			hooksecurefunc(bar, "SetStatusBarTexture", B.ReplaceWidgetBarTexture)
 		end
 
 		bar.styled = true

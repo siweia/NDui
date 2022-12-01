@@ -9,7 +9,7 @@ local newString = "0:0:64:64:5:59:5:59"
 function TT:SetupTooltipIcon(icon)
 	local title = icon and _G[self:GetName().."TextLeft1"]
 	local titleText = title and title:GetText()
-	if titleText then
+	if titleText and not strfind(titleText, ":20:20:") then
 		title:SetFormattedText("|T%s:20:20:"..newString..":%d|t %s", icon, 20, titleText)
 	end
 
@@ -45,15 +45,17 @@ function TT:ReskinTooltipIcons()
 
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(self)
 		if self == GameTooltip or self == ItemRefTooltip then
-			local _, link = self:GetItem()
-			if link then
-				TT.SetupTooltipIcon(self, GetItemIcon(link))
+			local data = self:GetTooltipData()
+			local id = data and data.id
+			if id then
+				TT.SetupTooltipIcon(self, GetItemIcon(id))
 			end
 		end
 	end)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
 		if self == GameTooltip or self == ItemRefTooltip then
-			local _, id = self:GetSpell()
+			local data = self:GetTooltipData()
+			local id = data and data.id
 			if id then
 				TT.SetupTooltipIcon(self, GetSpellTexture(id))
 			end

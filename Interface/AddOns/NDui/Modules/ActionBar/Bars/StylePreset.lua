@@ -65,8 +65,8 @@ local moverValues = {
 	[7] = "Bar6",
 	[8] = "Bar7",
 	[9] = "Bar8",
-	[10] = "BarPet",
-	[11] = "BarStance",
+	[10] = "PetBar",
+	[11] = "StanceBar",
 }
 
 local abbrToAnchor = {

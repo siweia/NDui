@@ -164,6 +164,7 @@ DB.ReminderBuffs = {
 				[367405] = true, -- 永久符文buff
 			},
 			instance = true,
+			disable = true, -- 禁用直到出了新符文
 		},
 		{	itemID = 190958, -- 究极秘术
 			spells = {

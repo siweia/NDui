@@ -26,7 +26,9 @@ tinsert(C.defaultThemes, function()
 	reskinSettingsTab(frame.GameTab)
 	reskinSettingsTab(frame.AddOnsTab)
 
-	B.CreateBDFrame(frame.CategoryList, .25):SetInside()
+	local bg = B.CreateBDFrame(frame.CategoryList, .25)
+	bg:SetInside()
+	bg:SetPoint("TOPLEFT", 1, 6)
 	hooksecurefunc(frame.CategoryList.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
@@ -52,7 +54,9 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	B.CreateBDFrame(frame.Container, .25):SetInside()
+	local bg = B.CreateBDFrame(frame.Container, .25)
+	bg:SetInside()
+	bg:SetPoint("TOPLEFT", 1, 6)
 	B.Reskin(frame.Container.SettingsList.Header.DefaultsButton)
 	B.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar, true)
 

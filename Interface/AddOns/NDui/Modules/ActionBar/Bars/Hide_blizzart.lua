@@ -83,8 +83,6 @@ function Bar:HideBlizz()
 	end
 
 	DisableDefaultBarEvents()
-	-- Hide blizz options
-	SetCVar("multiBarRightVerticalLayout", 0)
 	-- Fix maw block anchor
 	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 	-- Update token panel

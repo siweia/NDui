@@ -9,9 +9,9 @@ local PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE = PVP, LEVEL, FACTION_HORDE, F
 local YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE = YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE
 local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
 local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
-local UnitIsPVP, UnitFactionGroup, UnitRealmRelationship, UnitGUID = UnitIsPVP, UnitFactionGroup, UnitRealmRelationship, UnitGUID
+local UnitIsPVP, UnitFactionGroup, UnitRealmRelationship = UnitIsPVP, UnitFactionGroup, UnitRealmRelationship
 local UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction = UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction
-local InCombatLockdown, IsShiftKeyDown, GetMouseFocus, GetItemInfo = InCombatLockdown, IsShiftKeyDown, GetMouseFocus, GetItemInfo
+local InCombatLockdown, IsShiftKeyDown, GetItemInfo = InCombatLockdown, IsShiftKeyDown, GetItemInfo
 local GetCreatureDifficultyColor, UnitCreatureType, UnitClassification = GetCreatureDifficultyColor, UnitCreatureType, UnitClassification
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
 local UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel
@@ -30,12 +30,10 @@ local classification = {
 local npcIDstring = "%s "..DB.InfoColor.."%s"
 
 function TT:GetUnit()
-	local _, unit = self:GetUnit()
-	if not unit then
-		local mFocus = GetMouseFocus()
-		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit")))
-	end
-	return unit
+	local data = self:GetTooltipData()
+	local guid = data and data.guid
+	local unit = guid and UnitTokenFromGUID(guid)
+	return unit, guid
 end
 
 local FACTION_COLORS = {
@@ -136,7 +134,7 @@ function TT:OnTooltipSetUnit()
 	if self:IsForbidden() or self ~= GameTooltip then return end
 	if C.db["Tooltip"]["CombatHide"] and InCombatLockdown() then self:Hide() return end
 
-	local unit = TT.GetUnit(self)
+	local unit, guid = TT.GetUnit(self)
 	if not unit or not UnitExists(unit) then return end
 
 	local isShiftKeyDown = IsShiftKeyDown()
@@ -241,8 +239,7 @@ function TT:OnTooltipSetUnit()
 	end
 
 	if not isPlayer and isShiftKeyDown then
-		local guid = UnitGUID(unit)
-		local npcID = guid and B.GetNPCID(guid)
+		local npcID = B.GetNPCID(guid)
 		if npcID then
 			local reaction = UnitReaction(unit, "player")
 			local standingText = reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction]
@@ -358,23 +355,21 @@ function TT:ReskinTooltip()
 
 		self.tipStyled = true
 	end
-
 	B.SetBorderColor(self.bg)
-	if C.db["Tooltip"]["ItemQuality"] and self.GetTooltipData then
-		local data = self:GetTooltipData()
-		if not data then return end
+end
 
-		local argVal = data.args and data.args[3]
-		if argVal then
-			local guid = argVal.guidVal
-			local link = guid and C_Item.GetItemLinkByGUID(guid)
-			if link then
-				local quality = select(3, GetItemInfo(link))
-				local color = DB.QualityColors[quality or 1]
-				if color then
-					self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-				end
-			end
+function TT:UpdateTooltipBorder()
+	if not self.bg then return end
+	if not C.db["Tooltip"]["ItemQuality"] then return end
+
+	local data = self:GetTooltipData()
+	local guid = data and data.guid
+	local link = guid and C_Item.GetItemLinkByGUID(guid)
+	if link then
+		local quality = select(3, GetItemInfo(link))
+		local color = DB.QualityColors[quality or 1]
+		if color then
+			self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end
 end
@@ -448,6 +443,7 @@ function TT:OnLogin()
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 	hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
 	TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.UpdateTooltipBorder)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
