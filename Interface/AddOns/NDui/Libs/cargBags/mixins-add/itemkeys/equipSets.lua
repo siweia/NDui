@@ -39,8 +39,8 @@ local function initUpdater()
 			local locations = C_EquipmentSet.GetItemLocations(setID)
 			if locations then
 				for _, location in pairs(locations) do
-					local _, _, bags, _, slot, bag = EquipmentManager_UnpackLocation(location)
-					if bags then
+					local _, bank, bags, _, slot, bag = EquipmentManager_UnpackLocation(location)
+					if bank or bags then
 						setItems[bag..":"..slot] = true
 					end
 				end
