@@ -284,14 +284,19 @@ end
 
 function M:AddDungeonsFilter()
 	local mapData = {
-		[0] = {mapID = 166, aID = 183},  -- 车站
-		[1] = {mapID = 169, aID = 180},  -- 码头
-		[2] = {mapID = 234, aID = 473},  -- 卡上
-		[3] = {mapID = 227, aID = 471},  -- 卡下
-		[4] = {mapID = 369, aID = 679},  -- 垃圾场
-		[5] = {mapID = 370, aID = 683},  -- 车间
-		[6] = {mapID = 391, aID = 1016}, -- 街道
-		[7] = {mapID = 392, aID = 1017}, -- 宏图
+		[0] = {mapID = 2,   aID = 1192}, -- 青龙寺
+		[1] = {mapID = 165, aID = 1193}, -- 影月谷
+		[2] = {mapID = 200, aID = 461},  -- 英灵殿
+		[3] = {mapID = 210, aID = 466},  -- 群星庭院
+		[4] = {mapID = 399, aID = 1176}, -- 红玉新生法池
+		[5] = {mapID = 400, aID = 1184}, -- 诺库德狙击战
+		[6] = {mapID = 401, aID = 1180}, -- 碧蓝魔馆
+		[7] = {mapID = 402, aID = 1160}, -- 艾杰斯亚学院
+		-- S2
+		--[4] = {mapID = 403, aID = 1188}, -- 奥丹姆：提尔的遗产
+		--[5] = {mapID = 404, aID = 1172}, -- 奈萨鲁斯
+		--[6] = {mapID = 405, aID = 1164}, -- 蕨皮山谷
+		--[7] = {mapID = 406, aID = 1168}, -- 注能大厅
 	}
 
 	local function GetDungeonNameByID(mapID)
