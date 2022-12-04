@@ -40,13 +40,14 @@ function Bar:UpdateStanceBar()
 end
 
 function Bar:UpdateStance()
+	local inCombat = InCombatLockdown()
 	local numForms = GetNumShapeshiftForms();
 	local texture, isActive, isCastable;
 	local icon, cooldown;
 	local start, duration, enable;
 
 	for i, button in pairs(self.actionButtons) do
-		--button:Hide()
+		if not inCombat then button:Hide() end
 		icon = button.icon;
 		if ( i <= numForms ) then
 			texture, isActive, isCastable = GetShapeshiftFormInfo(i);
@@ -55,7 +56,7 @@ function Bar:UpdateStance()
 			--Cooldown stuffs
 			cooldown = button.cooldown;
 			if ( texture ) then
-				--button:Show()
+				if not inCombat then button:Show() end
 				cooldown:Show();
 			else
 				cooldown:Hide();
@@ -79,7 +80,6 @@ function Bar:UpdateStance()
 end
 
 function Bar:StanceBarOnEvent()
-	--if InCombatLockdown() then return end
 	Bar:UpdateStanceBar()
 	Bar.UpdateStance(StanceBar)
 end
