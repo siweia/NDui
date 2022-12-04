@@ -78,7 +78,7 @@ function M:ExpBar_Update()
 				if standing == MAX_REPUTATION_REACTION then barMin, barMax, value = 0, 1, 1 end
 			end
 		end
-		local color = FACTION_BAR_COLORS[standing or 5]
+		local color = FACTION_BAR_COLORS[standing] or FACTION_BAR_COLORS[5]
 		self:SetStatusBarColor(color.r, color.g, color.b, .85)
 		self:SetMinMaxValues(barMin, barMax)
 		self:SetValue(value)
