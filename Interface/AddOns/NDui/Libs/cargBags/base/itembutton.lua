@@ -25,6 +25,7 @@ local ReagentButtonInventorySlot = _G.ReagentButtonInventorySlot
 local ButtonInventorySlot = _G.ButtonInventorySlot
 local BANK_CONTAINER = BANK_CONTAINER or -1
 local REAGENTBANK_CONTAINER = REAGENTBANK_CONTAINER or -3
+local SplitContainerItem = C_Container.SplitContainerItem
 
 --[[!
 	@class ItemButton
