@@ -246,6 +246,7 @@ tinsert(C.defaultThemes, function()
 		QuestInfoObjectivesText,
 		QuestInfoGroupSize,
 		QuestInfoRewardText,
+		QuestInfoTimerText,
 		QuestInfoSpellObjectiveLearnLabel,
 		QuestInfoRewardsFrame.ItemChooseText,
 		QuestInfoRewardsFrame.ItemReceiveText,

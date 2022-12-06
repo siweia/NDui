@@ -160,7 +160,7 @@ DB.ReminderBuffs = {
 		},
 		{	itemID = 190384, -- 9.0永久属性符文
 			spells = {
-				[347901] = true, -- 普通符文buff
+				[393438] = true, -- 巨龙强化符文 itemID 201325
 				[367405] = true, -- 永久符文buff
 			},
 			instance = true,

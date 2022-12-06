@@ -615,6 +615,7 @@ function module:ShowMinimapHelpInfo()
 end
 
 function module:SetupMinimap()
+	if IsAddOnLoaded("SexyMap") then C.db["Map"]["DisableMinimap"] = true end
 	if C.db["Map"]["DisableMinimap"] then return end
 
 	-- Shape and Position

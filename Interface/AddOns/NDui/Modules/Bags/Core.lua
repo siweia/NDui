@@ -1319,6 +1319,16 @@ function module:OnLogin()
 	BankFrame.GetRight = function() return f.bank:GetRight() end
 	BankFrameItemButton_Update = B.Dummy
 
+	local passedSystems = {
+		["TutorialReagentBag"] = true,
+		["First Time Profession"] = true,
+	}
+	hooksecurefunc(HelpTip, "Show", function(self, _, info)
+		if info and passedSystems[info.system] then
+			self:HideAllSystem(info.system)
+		end
+	end)
+
 	-- Shift key alert
 	local function onUpdate(self, elapsed)
 		if IsShiftKeyDown() then

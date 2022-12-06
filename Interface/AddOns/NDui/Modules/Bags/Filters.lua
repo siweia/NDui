@@ -119,7 +119,7 @@ end
 local function isItemCollection(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterCollection"] then return end
-	return item.id and C_ToyBox_GetToyInfo(item.id) or isMountOrPet(item) or module:IsPetTrashCurrency(item.id)
+	return item.id and C_ToyBox_GetToyInfo(item.id) or isMountOrPet(item)
 end
 
 local function isItemCustom(item, index)

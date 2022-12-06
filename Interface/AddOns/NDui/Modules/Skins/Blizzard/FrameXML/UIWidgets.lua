@@ -6,22 +6,6 @@ local Type_CaptureBar = _G.Enum.UIWidgetVisualizationType.CaptureBar
 local Type_SpellDisplay = _G.Enum.UIWidgetVisualizationType.SpellDisplay
 local Type_DoubleStatusBar = _G.Enum.UIWidgetVisualizationType.DoubleStatusBar
 
-local atlasColors = {
-	["UI-Frame-Bar-Fill-Blue"] = {.2, .6, 1},
-	["UI-Frame-Bar-Fill-Red"] = {.9, .2, .2},
-	["UI-Frame-Bar-Fill-Yellow"] = {1, .6, 0},
-	["objectivewidget-bar-fill-left"] = {.2, .6, 1},
-	["objectivewidget-bar-fill-right"] = {.9, .2, .2},
-	["EmberCourtScenario-Tracker-barfill"] = {.9, .2, .2},
-}
-
-function B:ReplaceWidgetBarTexture(atlas)
-	if atlasColors[atlas] then
-		self:SetStatusBarTexture(DB.normTex)
-		self:SetStatusBarColor(unpack(atlasColors[atlas]))
-	end
-end
-
 local function ResetLabelColor(text, _, _, _, _, force)
 	if not force then
 		text:SetTextColor(1, 1, 1, 1, true)
@@ -47,10 +31,6 @@ local function ReskinWidgetStatusBar(bar)
 			hooksecurefunc(bar.Label, "SetTextColor", ResetLabelColor)
 		end
 		B.SetBD(bar)
-		if bar.GetStatusBarTexture then
-			B.ReplaceWidgetBarTexture(bar, bar:GetStatusBarTexture())
-			hooksecurefunc(bar, "SetStatusBarTexture", B.ReplaceWidgetBarTexture)
-		end
 
 		bar.styled = true
 	end

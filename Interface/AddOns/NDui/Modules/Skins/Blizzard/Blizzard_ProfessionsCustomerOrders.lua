@@ -124,6 +124,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	frame.Form.OrderRecipientTarget.__bg:SetPoint("TOPLEFT", -8, -2)
 	frame.Form.OrderRecipientTarget.__bg:SetPoint("BOTTOMRIGHT", 0, 2)
 	B.ReskinDropDown(frame.Form.OrderRecipientDropDown)
+	B.ReskinDropDown(frame.Form.MinimumQuality.DropDown)
 
 	local paymentContainer = frame.Form.PaymentContainer
 	B.StripTextures(paymentContainer.NoteEditBox)

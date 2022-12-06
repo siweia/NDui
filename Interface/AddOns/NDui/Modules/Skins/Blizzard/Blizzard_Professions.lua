@@ -272,6 +272,7 @@ C.themes["Blizzard_Professions"] = function()
 	local browseFrame = frame.OrdersPage.BrowseFrame
 	B.Reskin(browseFrame.SearchButton)
 	B.Reskin(browseFrame.FavoritesSearchButton)
+	browseFrame.FavoritesSearchButton:SetSize(22, 22)
 
 	local recipeList = browseFrame.RecipeList
 	B.StripTextures(recipeList)
@@ -291,6 +292,7 @@ C.themes["Blizzard_Professions"] = function()
 	B.StripTextures(orderList)
 	orderList.Background:SetAlpha(0)
 	B.CreateBDFrame(orderList, .25):SetInside()
+	B.ReskinTrimScroll(orderList.ScrollBar, true)
 
 	hooksecurefunc(frame.OrdersPage, "SetupTable", function()
 		local maxHeaders = orderList.HeaderContainer:GetNumChildren()
@@ -309,4 +311,5 @@ C.themes["Blizzard_Professions"] = function()
 			end
 		end
 	end)
+	frame.OrdersPage:SetupTable() -- init header
 end

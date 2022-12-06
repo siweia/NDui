@@ -436,16 +436,21 @@ function G:SetupClickCast(parent)
 		StaticPopup_Show("RESET_NDUI_CLICKSETS")
 	end)
 
+	local fixedSpells = {
+		["360823"] = "365585", -- incorrect spellID for Evoker
+	}
 	local function addClick(scroll, options)
 		local value, key, modKey = options[1]:GetText(), options[2].Text:GetText(), options[3].Text:GetText()
+		local numValue = tonumber(value)
 		if not value or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-		if tonumber(value) and not GetSpellInfo(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
-		if (not tonumber(value)) and (not textIndex[value]) and not strmatch(value, "/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
+		if numValue and not GetSpellInfo(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if (not numValue) and (not textIndex[value]) and not strmatch(value, "/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
 		if not modKey or modKey == NONE then modKey = "" end
 		local fullkey = (modKey == "" and key or modKey.."-"..key)
 		if NDuiADB["ClickSets"][DB.MyClass][fullkey] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
 
-		NDuiADB["ClickSets"][DB.MyClass][fullkey] = tonumber(value) or value
+		value = fixedSpells[value] or value
+		NDuiADB["ClickSets"][DB.MyClass][fullkey] = numValue or value
 		createBar(scroll.child, fullkey, value)
 		clearEdit(options)
 	end
