@@ -7,5 +7,4 @@
 	<Script file="Hovertips.lua"/>
 	<Script file="Targeted.lua"/>
 	<Script file="AzeriteArmor.lua"/>
-	<Script file="ConduitData.lua"/>
 </Ui>
