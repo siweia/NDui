@@ -15,14 +15,12 @@ local C_Calendar_SetAbsMonth = C_Calendar.SetAbsMonth
 local C_Calendar_OpenCalendar = C_Calendar.OpenCalendar
 local C_Calendar_GetNumDayEvents = C_Calendar.GetNumDayEvents
 local C_Calendar_GetNumPendingInvites = C_Calendar.GetNumPendingInvites
-local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
 local C_AreaPoiInfo_GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
-local C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo
 local TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR = TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR
 local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES
 local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
 local DUNGEONS, RAID_INFO, QUESTS_LABEL, QUEST_COMPLETE = DUNGEONS, RAID_INFO, QUESTS_LABEL, QUEST_COMPLETE
-local QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT, AVAILABLE = QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT, AVAILABLE
+local QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT = QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT
 local HORRIFIC_VISION = SPLASH_BATTLEFORAZEROTH_8_3_0_FEATURE1_TITLE
 local RequestRaidInfo, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, GetNumSavedWorldBosses, GetSavedWorldBossInfo
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
@@ -91,7 +89,6 @@ end
 local questlist = {
 	{name = L["Mean One"], id = 6983},
 	{name = L["Blingtron"], id = 34774},
-	{name = L["Tormentors of Torghast"], id = 63854},
 	{name = L["Timewarped"], id = 40168, texture = 1129674},	-- TBC
 	{name = L["Timewarped"], id = 40173, texture = 1129686},	-- WotLK
 	{name = L["Timewarped"], id = 40786, texture = 1304688},	-- Cata
@@ -187,20 +184,6 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
--- Torghast
-local TorghastWidgets, TorghastInfo = {
-	{nameID = 2925, levelID = 2930}, -- Fracture Chambers
-	{nameID = 2926, levelID = 2932}, -- Skoldus Hall
-	{nameID = 2924, levelID = 2934}, -- Soulforges
-	{nameID = 2927, levelID = 2936}, -- Coldheart Interstitia
-	{nameID = 2928, levelID = 2938}, -- Mort'regar
-	{nameID = 2929, levelID = 2940}, -- The Upper Reaches
-}
-
-local function CleanupLevelName(text)
-	return gsub(text, "|n", "")
-end
-
 local title
 local function addTitle(text)
 	if not title then
@@ -261,27 +244,6 @@ info.onEnter = function(self)
 			addTitle(RAID_INFO)
 			if extended then r,g,b = .3,1,.3 else r,g,b = 1,1,1 end
 			GameTooltip:AddDoubleLine(name.." - "..diffName, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
-		end
-	end
-
-	-- Torghast
-	if not TorghastInfo then
-		TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
-	end
-	if TorghastInfo and IsQuestFlaggedCompleted(60136) then
-		title = false
-		for _, value in pairs(TorghastWidgets) do
-			local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
-			if nameInfo and nameInfo.shownState == 1 then
-				addTitle(TorghastInfo.name)
-				local nameText = CleanupLevelName(nameInfo.text)
-				local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
-				local levelText = AVAILABLE
-				if levelInfo and levelInfo.shownState == 1 then
-					levelText = CleanupLevelName(levelInfo.text)
-				end
-				GameTooltip:AddDoubleLine(nameText, levelText)
-			end
 		end
 	end
 
