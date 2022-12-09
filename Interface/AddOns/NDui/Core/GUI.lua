@@ -485,7 +485,6 @@ G.DefaultSettings = {
 		HideJunkGuild = true,
 		AzeriteArmor = true,
 		OnlyArmorIcons = false,
-		ConduitInfo = true,
 		HideAllID = false,
 		MythicScore = true,
 	},
@@ -1441,8 +1440,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
 		{1, "Tooltip", "MythicScore", L["MDScore"].."*", nil, nil, nil, L["MDScoreTip"]},
 		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
-		{},--blank
-		{1, "Tooltip", "ConduitInfo", L["Show ConduitInfo"]},
 		{},--blank
 		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},

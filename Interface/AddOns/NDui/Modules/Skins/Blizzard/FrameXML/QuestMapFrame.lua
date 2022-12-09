@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 local function ReskinQuestHeader(header, isCalling)
 	if header.styled then return end
 
-	header.Background:SetAlpha(.7)
+	if header.Background then header.Background:SetAlpha(.7) end
 	if header.Divider then header.Divider:Hide() end
 	if header.TopFiligree then header.TopFiligree:Hide() end
 
@@ -112,6 +112,10 @@ tinsert(C.defaultThemes, function()
 		end
 
 		for header in QuestScrollFrame.campaignHeaderFramePool:EnumerateActive() do
+			ReskinQuestHeader(header)
+		end
+
+		for header in QuestScrollFrame.campaignHeaderMinimalFramePool:EnumerateActive() do
 			ReskinQuestHeader(header)
 		end
 

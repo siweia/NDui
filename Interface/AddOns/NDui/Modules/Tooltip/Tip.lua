@@ -456,7 +456,6 @@ function TT:OnLogin()
 	TT:ReskinTooltipIcons()
 	TT:SetupTooltipID()
 	TT:AzeriteArmor()
-	TT:ConduitCollectionData()
 	B:RegisterEvent("MODIFIER_STATE_CHANGED", TT.ResetUnit)
 end
 

@@ -936,7 +936,7 @@ end
 function UF:RefreshPlateType(unit)
 	self.reaction = UnitReaction(unit, "player")
 	self.isFriendly = self.reaction and self.reaction >= 4 and not UnitCanAttack("player", unit)
-	if C.db["Nameplate"]["NameOnlyMode"] and self.isFriendly or self.widgetsOnly then
+	if C.db["Nameplate"]["NameOnlyMode"] and self.isFriendly or self.widgetsOnly or self.isSoftTarget then
 		self.plateType = "NameOnly"
 	elseif C.db["Nameplate"]["FriendPlate"] and self.isFriendly then
 		self.plateType = "FriendPlate"
@@ -1020,12 +1020,21 @@ function UF:PostUpdatePlates(event, unit)
 		self.isPlayer = UnitIsPlayer(unit)
 		self.npcID = B.GetNPCID(self.unitGUID)
 		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
+		self.isSoftTarget = UnitIsUnit(unit, "softinteract")
 
 		local blizzPlate = self:GetParent().UnitFrame
-		self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
-		if self.widgetContainer then
-			self.widgetContainer:SetParent(self)
-			self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
+		if blizzPlate then
+			self.widgetContainer = blizzPlate.WidgetContainer
+			if self.widgetContainer then
+				self.widgetContainer:SetParent(self)
+				self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
+			end
+
+			self.softTargetFrame = blizzPlate.SoftTargetFrame
+			if self.softTargetFrame then
+				self.softTargetFrame:SetParent(self)
+				self.softTargetFrame:SetScale(1/NDuiADB["UIScale"])
+			end
 		end
 
 		UF.RefreshPlateType(self, unit)

@@ -46,8 +46,6 @@ local function IsAlreadyKnown(link, index)
 					return isPetCollected(argVal.intVal)
 				end
 			end
-		elseif TT.ConduitData[linkID] and TT.ConduitData[linkID] >= level then
-			return true
 		else
 			if knowns[link] then return true end
 			if not knowables[itemClassID] then return end
