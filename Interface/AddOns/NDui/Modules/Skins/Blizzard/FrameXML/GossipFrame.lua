@@ -34,6 +34,7 @@ tinsert(C.defaultThemes, function()
 	QuestFont:SetTextColor(1, 1, 1)
 
 	if DB.isNewPatch then
+		B.StripTextures(GossipFrame.GreetingPanel)
 		B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
 		B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
 	

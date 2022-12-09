@@ -4,6 +4,36 @@ local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
+function B:ReskinIconSelector()
+	B.StripTextures(self)
+	B.SetBD(self):SetInside()
+	B.StripTextures(self.BorderBox)
+	B.StripTextures(self.BorderBox.IconSelectorEditBox, 2)
+	B.ReskinEditBox(self.BorderBox.IconSelectorEditBox)
+	B.StripTextures(self.BorderBox.SelectedIconArea.SelectedIconButton)
+	B.ReskinIcon(self.BorderBox.SelectedIconArea.SelectedIconButton.Icon)
+	B.Reskin(self.BorderBox.OkayButton)
+	B.Reskin(self.BorderBox.CancelButton)
+	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
+
+	hooksecurefunc(self.IconSelector.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if child.Icon and not child.styled then
+				child:DisableDrawLayer("BACKGROUND")
+				child.SelectedTexture:SetColorTexture(1, .8, 0, .5)
+				child.SelectedTexture:SetAllPoints(child.Icon)
+				local hl = child:GetHighlightTexture()
+				hl:SetColorTexture(1, 1, 1, .25)
+				hl:SetAllPoints(child.Icon)
+				B.ReskinIcon(child.Icon)
+
+				child.styled = true
+			end
+		end
+	end)
+end
+
 local function colourPopout(self)
 	self.arrow:SetVertexColor(0, .6, 1)
 end
