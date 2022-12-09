@@ -444,7 +444,7 @@ function module:ShowCalendar()
 		if not GameTimeFrame.styled then
 			GameTimeFrame:SetNormalTexture(0)
 			GameTimeFrame:SetPushedTexture(0)
-			GameTimeFrame:SetHighlightTexture(nil)
+			GameTimeFrame:SetHighlightTexture(0)
 			GameTimeFrame:SetSize(18, 18)
 			GameTimeFrame:SetParent(Minimap)
 			GameTimeFrame:ClearAllPoints()
