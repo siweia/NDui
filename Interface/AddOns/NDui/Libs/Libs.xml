@@ -5,7 +5,6 @@
 	<Script file="LibActionButton-1.0\LibActionButton-1.0.lua"/>
 	<Script file="LibShowUIPanel-1.0\LibShowUIPanel-1.0.lua"/>
 	<Script file="LibBase64\LibBase64.lua"/>
-	<Script file="LibButtonGlow.lua"/>
 
 	<Include file="cargBags\cargBags.xml"/>
 	<Include file="oUF\oUF.xml"/>

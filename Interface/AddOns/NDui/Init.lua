@@ -125,6 +125,10 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])
 	C.margin = 3
 
+	local LBG = LibStub("LibButtonGlow-1.0")
+	B.ShowOverlayGlow = LBG.ShowOverlayGlow
+	B.HideOverlayGlow = LBG.HideOverlayGlow
+
 	for _, module in next, initQueue do
 		if module.OnLogin then
 			module:OnLogin()
