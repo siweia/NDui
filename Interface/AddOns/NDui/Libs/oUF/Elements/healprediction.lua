@@ -34,7 +34,7 @@ local function Update(self, event, unit)
 		myHot = (HealComm:GetHealAmount(guid, hp.healType, nil, myGUID) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
 	end
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit)
-	local ratio = self.Health:GetWidth() / maxHealth
+	local ratio = self.Health:GetWidth() / (maxHealth + 0.00001)
 
 	allIncomingHeal = allIncomingHeal + allHot
 	myIncomingHeal = myIncomingHeal + myHot
