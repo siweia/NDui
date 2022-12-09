@@ -355,7 +355,11 @@ function info:FriendsPanel_UpdateButton(button)
 		local classColor = DB.ClassColors[class] or levelColor
 		button.name:SetText(format("%s%s|r %s%s", levelColor, level, B.HexRGB(classColor), name))
 		button.zone:SetText(format("%s%s", zoneColor, area))
-		button.gameIcon:SetTexture(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
+		if DB.isNewPatch then
+			button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
+		else
+			button.gameIcon:SetTexture(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
+		end
 
 		button.isBNet = nil
 		button.data = friendTable[index]
@@ -373,12 +377,22 @@ function info:FriendsPanel_UpdateButton(button)
 		end
 		button.name:SetText(format("%s%s|r (%s|r)", DB.InfoColor, accountName, name))
 		button.zone:SetText(format("%s%s", zoneColor, infoText))
-		if client == CLIENT_WOW_DIFF then
-			button.gameIcon:SetTexture(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
-		elseif client == BNET_CLIENT_WOW then
-			button.gameIcon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..factionName)
+		if DB.isNewPatch then
+			if client == CLIENT_WOW_DIFF then
+				button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
+			elseif client == BNET_CLIENT_WOW then
+				button.gameIcon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..factionName)
+			else
+				button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(client))
+			end
 		else
-			button.gameIcon:SetTexture(BNet_GetBattlenetClientAtlas(client))
+			if client == CLIENT_WOW_DIFF then
+				button.gameIcon:SetTexture(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
+			elseif client == BNET_CLIENT_WOW then
+				button.gameIcon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..factionName)
+			else
+				button.gameIcon:SetTexture(BNet_GetBattlenetClientAtlas(client))
+			end
 		end
 
 		button.isBNet = true
