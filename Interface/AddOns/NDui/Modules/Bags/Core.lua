@@ -897,7 +897,7 @@ function module:OnLogin()
 		end
 	end
 
-	function MyButton:OnUpdate(item)
+	function MyButton:OnUpdateButton(item)
 		if self.JunkIcon then
 			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
 				self.JunkIcon:Show()
