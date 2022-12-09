@@ -96,7 +96,7 @@ local function buildBNetTable(num)
 	wipe(bnetTable)
 
 	for i = 1, num do
-		local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+		local accountInfo = C_BattleNet_GetFriendAccountInfo(i)
 		if accountInfo then
 			local accountName = accountInfo.accountName
 			local battleTag = accountInfo.battleTag
