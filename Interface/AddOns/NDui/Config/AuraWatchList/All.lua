@@ -97,6 +97,9 @@ local list = {
 		{AuraID = 362699, UnitID = "player"},	-- 角斗士的决心
 		{AuraID = 345231, UnitID = "player"},	-- 角斗士的纹章
 		{AuraID = 368641, UnitID = "player"},	-- 最终符文
+		-- 10.0 饰品
+		{AuraID = 381476, UnitID = "player"},	-- 爆发烈焰
+		{AuraID = 383941, UnitID = "player"},	-- 崩坏之力
 		-- 盟约
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击

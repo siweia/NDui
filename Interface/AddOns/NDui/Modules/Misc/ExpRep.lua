@@ -59,7 +59,6 @@ function M:ExpBar_Update()
 			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
 			value = majorFactionData.renownReputationEarned or 0
 			barMin, barMax = 0, majorFactionData.renownLevelThreshold
-			standing = majorFactionData.renownLevel
 		else
 			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
 			local friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold
