@@ -966,7 +966,6 @@ function UF:OnUnitSoftTargetChanged(previousTarget, currentTarget)
 		local unitFrame = nameplate and nameplate.unitFrame
 		local guid = unitFrame and unitFrame.unitGUID
 		if guid and (guid == previousTarget or guid == currentTarget) then
-			print(previousTarget, currentTarget)
 			unitFrame.previousType = nil
 			UF.RefreshPlateType(unitFrame, unitFrame.unit)
 			UF.UpdateTargetChange(unitFrame)
