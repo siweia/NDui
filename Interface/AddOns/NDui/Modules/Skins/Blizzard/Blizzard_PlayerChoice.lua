@@ -28,6 +28,7 @@ end
 local ignoredTextureKit = {
 	["jailerstower"] = true,
 	["cypherchoice"] = true,
+	["genericplayerchoice"] = true,
 }
 C.themes["Blizzard_PlayerChoice"] = function()
 	hooksecurefunc(PlayerChoiceFrame, "TryShow", function(self)
@@ -41,6 +42,10 @@ C.themes["Blizzard_PlayerChoice"] = function()
 			B.CreateBDFrame(self.Title, .25)
 			B.ReskinClose(self.CloseButton)
 			self.bg = B.SetBD(self)
+
+			if GenericPlayerChoiceToggleButton then
+				B.Reskin(GenericPlayerChoiceToggleButton)
+			end
 		end
 
 		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end -- no border for some templates

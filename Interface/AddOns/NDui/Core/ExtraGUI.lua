@@ -436,9 +436,6 @@ function G:SetupClickCast(parent)
 		StaticPopup_Show("RESET_NDUI_CLICKSETS")
 	end)
 
-	local fixedSpells = {
-		["360823"] = "365585", -- incorrect spellID for Evoker
-	}
 	local function addClick(scroll, options)
 		local value, key, modKey = options[1]:GetText(), options[2].Text:GetText(), options[3].Text:GetText()
 		local numValue = tonumber(value)
@@ -449,7 +446,6 @@ function G:SetupClickCast(parent)
 		local fullkey = (modKey == "" and key or modKey.."-"..key)
 		if NDuiADB["ClickSets"][DB.MyClass][fullkey] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ClickSet"]) return end
 
-		value = fixedSpells[value] or value
 		NDuiADB["ClickSets"][DB.MyClass][fullkey] = numValue or value
 		createBar(scroll.child, fullkey, value)
 		clearEdit(options)

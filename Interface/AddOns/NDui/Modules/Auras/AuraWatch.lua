@@ -368,6 +368,10 @@ function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, ch
 	frames.Index = (frames.Index + 1 > maxFrames) and maxFrames or frames.Index + 1
 end
 
+A.IgnoredItems = {
+	[193757] = true, -- 红玉雏龙蛋壳
+}
+
 function A:AuraWatch_UpdateCD()
 	for KEY, VALUE in pairs(cooldownTable) do
 		for spellID in pairs(VALUE) do
@@ -394,6 +398,9 @@ function A:AuraWatch_UpdateCD()
 				elseif value.SlotID then
 					local link = GetInventoryItemLink("player", value.SlotID)
 					if link then
+						local itemID = GetItemInfoFromHyperlink(link)
+						if A.IgnoredItems[itemID] then return end
+
 						local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(link)
 						local start, duration = GetInventoryItemCooldown("player", value.SlotID)
 						if duration > 1.5 then
