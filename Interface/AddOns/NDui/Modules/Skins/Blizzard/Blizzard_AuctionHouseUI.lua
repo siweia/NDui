@@ -233,6 +233,7 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	local buyDialog = AuctionHouseFrame.BuyDialog
 	B.StripTextures(buyDialog)
 	B.SetBD(buyDialog)
+	B.Reskin(buyDialog.OkayButton)
 	B.Reskin(buyDialog.BuyNowButton)
 	B.Reskin(buyDialog.CancelButton)
 
