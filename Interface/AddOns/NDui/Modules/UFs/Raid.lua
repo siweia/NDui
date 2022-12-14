@@ -140,6 +140,10 @@ local function setupMouseWheelCast(self)
 	end
 end
 
+local fixedSpells = {
+	["360823"] = "365585", -- incorrect spellID for Evoker
+}
+
 local function setupClickSets(self)
 	if self.clickCastRegistered then return end
 
@@ -149,6 +153,7 @@ local function setupClickSets(self)
 		local keyIndex = keyList[fullkey]
 		if keyIndex then
 			if tonumber(value) then
+				value = fixedSpells[value] or value
 				self:SetAttribute(format(keyIndex, "type"), "spell")
 				self:SetAttribute(format(keyIndex, "spell"), value)
 			elseif value == "target" then
