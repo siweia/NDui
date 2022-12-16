@@ -399,13 +399,13 @@ function A:AuraWatch_UpdateCD()
 					local link = GetInventoryItemLink("player", value.SlotID)
 					if link then
 						local itemID = GetItemInfoFromHyperlink(link)
-						if A.IgnoredItems[itemID] then return end
-
-						local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(link)
-						local start, duration = GetInventoryItemCooldown("player", value.SlotID)
-						if duration > 1.5 then
-							if group.Mode == "ICON" then name = nil end
-							A:AuraWatch_SetupCD(KEY, name, icon, start, duration, false, 3, value.SlotID)
+						if not A.IgnoredItems[itemID] then
+							local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(link)
+							local start, duration = GetInventoryItemCooldown("player", value.SlotID)
+							if duration > 1.5 then
+								if group.Mode == "ICON" then name = nil end
+								A:AuraWatch_SetupCD(KEY, name, icon, start, duration, false, 3, value.SlotID)
+							end
 						end
 					end
 				elseif value.TotemID then
