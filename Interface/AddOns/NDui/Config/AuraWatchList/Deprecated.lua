@@ -4,6 +4,54 @@ local B, C, L, DB = unpack(ns)
 -- 旧资料片数据 Auras for old expansions
 C.DeprecatedAuras = {
 	["Enchant Aura"] = {	-- 附魔及饰品组
+		-- SL S2，心能/统御碎片
+		{AuraID = 357852, UnitID = "player"},	-- 激励
+		{AuraID = 356364, UnitID = "player"},	-- 冰冷的心
+		{AuraID = 356043, UnitID = "player"},	-- 森罗万象
+		-- 9.0药水
+		{AuraID = 307159, UnitID = "player"},	-- 幽魂敏捷药水
+		{AuraID = 307162, UnitID = "player"},	-- 幽魂智力药水
+		{AuraID = 307163, UnitID = "player"},	-- 幽魂耐力药水
+		{AuraID = 307164, UnitID = "player"},	-- 幽魂力量药水
+		{AuraID = 307494, UnitID = "player"},	-- 强化驱魔药水
+		{AuraID = 307495, UnitID = "player"},	-- 幻影火焰药水
+		{AuraID = 307496, UnitID = "player"},	-- 神圣觉醒药水
+		{AuraID = 307497, UnitID = "player"},	-- 死亡偏执药水
+		{AuraID = 344314, UnitID = "player"},	-- 心华之速药水
+		{AuraID = 342890, UnitID = "player"},	-- 无拘移动药水
+		{AuraID = 322302, UnitID = "player"},	-- 献祭心能药水
+		{AuraID = 307160, UnitID = "player"},	-- 硬化暗影药水
+		-- 9.0饰品
+		{AuraID = 344231, UnitID = "player"},	-- 赤红陈酿
+		{AuraID = 345228, UnitID = "player"},	-- 角斗士徽章
+		{AuraID = 344662, UnitID = "player"},	-- 碎裂心智
+		{AuraID = 345439, UnitID = "player"},	-- 赤红华尔兹
+		{AuraID = 345019, UnitID = "player"},	-- 潜伏的掠食者
+		{AuraID = 345530, UnitID = "player"},	-- 过载的心能电池
+		{AuraID = 345541, UnitID = "player"},	-- 天域涌动
+		{AuraID = 336588, UnitID = "player"},	-- 唤醒者的复叶
+		{AuraID = 348139, UnitID = "player"},	-- 导师的圣钟
+		{AuraID = 311444, UnitID = "player", Value = true},	-- 不屈套牌
+		{AuraID = 336465, UnitID = "player", Value = true},	-- 脉冲光辉护盾
+		{AuraID = 330366, UnitID = "player", Text = L["Crit"]},	-- 不可思议的量子装置，暴击
+		{AuraID = 330367, UnitID = "player", Text = L["Versa"]},	-- 不可思议的量子装置，全能
+		{AuraID = 330368, UnitID = "player", Text = L["Haste"]},	-- 不可思议的量子装置，急速
+		{AuraID = 330380, UnitID = "player", Text = L["Mastery"]},	-- 不可思议的量子装置，精通
+		{AuraID = 351872, UnitID = "player"},	-- 钢铁尖刺
+		{AuraID = 355316, UnitID = "player"},	-- 安海尔德之盾
+		{AuraID = 356326, UnitID = "player"},	-- 折磨洞察
+		{AuraID = 355333, UnitID = "player"},	-- 回收的聚变增幅器
+		{AuraID = 357185, UnitID = "player"},	-- 忠诚的力量，低语威能碎片
+		{AuraID = 357773, UnitID = "player"},	-- 神圣使命，九武神长柄
+		{AuraID = 165485, UnitID = "player"},	-- 琪拉的注射器
+		{AuraID = 165534, UnitID = "player"},	-- 执行者的晕眩手雷
+		{AuraID = 230152, UnitID = "player"},	-- 命令之眼
+
+		{AuraID = 367241, UnitID = "player"},	-- 原初印记
+		{AuraID = 363522, UnitID = "player"},	-- 角斗士的永恒结界
+		{AuraID = 362699, UnitID = "player"},	-- 角斗士的决心
+		{AuraID = 345231, UnitID = "player"},	-- 角斗士的纹章
+		{AuraID = 368641, UnitID = "player"},	-- 最终符文
 		-- 8.0
 		{AuraID = 229206, UnitID = "player"},	-- 延时之力
 		{AuraID = 251231, UnitID = "player"},	-- 钢肤药水
@@ -152,6 +200,95 @@ C.DeprecatedAuras = {
 		{AuraID = 256836, UnitID = "player"},	-- 诺甘农的威能
 	},
 	["Raid Debuff"] = {		-- 团队减益组
+		-- 9.0赛季词缀
+		{AuraID = 366288, UnitID = "player"},	-- 解构
+		{AuraID = 368239, UnitID = "player", Flash = true, Text = "CD"},	-- 减CD密文
+		{AuraID = 368240, UnitID = "player", Flash = true, Text = L["Haste"]},	-- 急速密文
+		{AuraID = 368241, UnitID = "player", Flash = true, Text = L["Speed"]},	-- 移速密文
+		{AuraID = 358777, UnitID = "player"},	-- 痛苦之链
+		{AuraID = 355732, UnitID = "player"},	-- 融化灵魂
+		{AuraID = 356667, UnitID = "player"},	-- 刺骨之寒
+		{AuraID = 356925, UnitID = "player"},	-- 屠戮
+		{AuraID = 342466, UnitID = "player"},	-- 狂妄吹嘘，S1
+		{AuraID = 340880, UnitID = "player"},	-- 傲慢
+		-- 9.0 5人本
+		{AuraID = 327107, UnitID = "player"},	-- 赤红，闪耀光辉
+		{AuraID = 340433, UnitID = "player"},	-- 赤红，堕罪之赐
+		{AuraID = 324092, UnitID = "player", Flash = true},	-- 赤红，闪耀光辉
+		{AuraID = 328737, UnitID = "player", Flash = true},	-- 赤红，光辉残片
+		{AuraID = 326891, UnitID = "player", Flash = true},	-- 赎罪大厅，痛楚
+		{AuraID = 319603, UnitID = "player", Flash = true},	-- 赎罪大厅，羁石诅咒
+		{AuraID = 333299, UnitID = "player"},	-- 伤逝剧场，荒芜诅咒
+		{AuraID = 319637, UnitID = "player"},	-- 伤逝剧场，魂魄归体
+		{AuraID = 330725, UnitID = "player", Flash = true},	-- 伤逝剧场，暗影易伤
+		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
+		{AuraID = 331399, UnitID = "player"},	-- 凋魂之殇，感染毒雨
+		{AuraID = 333353, UnitID = "player"},	-- 凋魂之殇，暗影伏击
+		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
+		{AuraID = 323471, UnitID = "player", Flash = true},	-- 通灵战潮，切肉飞刀
+		{AuraID = 328181, UnitID = "player"},	-- 通灵战潮，凌冽之寒
+		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
+		{AuraID = 322681, UnitID = "player"},	-- 通灵战潮，肉钩
+		{AuraID = 335161, UnitID = "player"},	-- 通灵战潮，残存心能
+		{AuraID = 345323, UnitID = "player", Flash = true},	-- 通灵战潮，勇士之赐
+		{AuraID = 320366, UnitID = "player", Flash = true},	-- 通灵战潮，防腐剂
+		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
+		{AuraID = 323692, UnitID = "player"},	-- 彼界，奥术易伤
+		{AuraID = 331379, UnitID = "player"},	-- 彼界，润滑剂
+		{AuraID = 320786, UnitID = "player"},	-- 彼界，势不可挡
+		{AuraID = 323687, UnitID = "player", Flash = true},	-- 彼界，奥术闪电
+		{AuraID = 327893, UnitID = "player", Flash = true},	-- 彼界，邦桑迪的热情
+		{AuraID = 339978, UnitID = "player", Flash = true},	-- 彼界，安抚迷雾
+		{AuraID = 323569, UnitID = "player", Flash = true},	-- 彼界，溅洒精魂
+		{AuraID = 334496, UnitID = "player", Stack = 7, Flash = true},	-- 彼界，催眠光粉
+		{AuraID = 328453, UnitID = "player"},	-- 晋升高塔，压迫
+		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
+		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
+		{AuraID = 356011, UnitID = "player"},	-- 集市，光线切分者
+		{AuraID = 353421, UnitID = "player"},	-- 集市，精力
+		{AuraID = 347949, UnitID = "player", Flash = true},	-- 集市，审讯
+		{AuraID = 355915, UnitID = "player"},	-- 集市，约束雕文
+		{AuraID = 347771, UnitID = "player"},	-- 集市，加急
+		{AuraID = 346962, UnitID = "player", Flash = true},	-- 集市，现金汇款
+		{AuraID = 348567, UnitID = "player"},	-- 集市，爵士乐
+		{AuraID = 349627, UnitID = "player"},	-- 集市，暴食
+		{AuraID = 350010, UnitID = "player", Flash = true},	-- 集市，被吞噬的心能
+		{AuraID = 346828, UnitID = "player", Flash = true},	-- 集市，消毒区域
+		{AuraID = 355581, UnitID = "player", Flash = true},	-- 集市，连环爆裂
+		{AuraID = 346961, UnitID = "player", Flash = true},	-- 集市，净化之地
+		{AuraID = 347481, UnitID = "player"},	-- 集市，奥能手里波
+		{AuraID = 350013, UnitID = "player"},	-- 集市，暴食盛宴
+		{AuraID = 350885, UnitID = "player"},	-- 集市，超光速震荡
+		{AuraID = 350804, UnitID = "player"},	-- 集市，坍缩能量
+		{AuraID = 349999, UnitID = "player"},	-- 集市，心能引爆
+		{AuraID = 357042, UnitID = "player"},	-- 集市，凌光炸弹
+		{AuraID = 359019, UnitID = "player", Flash = true},	-- 集市，快拍提速
+		{AuraID = 173324, UnitID = "player", Flash = true},	-- 码头，锯齿蒺藜
+		{AuraID = 172963, UnitID = "player", Flash = true},	-- 码头，破门斩斧
+		{AuraID = 160681, UnitID = "player", Flash = true},	-- 车站，火力压制
+		{AuraID = 166676, UnitID = "player", Flash = true},	-- 车站，榴弹爆破
+		{AuraID = 291937, UnitID = "player", Flash = true},	-- 车间，垃圾掩体
+		{AuraID = 230087, UnitID = "player", Flash = true},	-- 卡上，振作
+		{AuraID = 228993, UnitID = "player", Flash = true},	-- 卡下，腐蚀之池
+		{AuraID = 228331, UnitID = "player", Flash = true},	-- 卡下，爆裂充能
+		{AuraID = 227480, UnitID = "player", Flash = true},	-- 卡下，烈焰狂风
+		-- 9.0 团本
+		{AuraID = 342077, UnitID = "player"},	-- 回声定位，咆翼
+		{AuraID = 329725, UnitID = "player"},	-- 根除，毁灭者
+		{AuraID = 329298, UnitID = "player"},	-- 暴食胀气，毁灭者
+		{AuraID = 325936, UnitID = "player"},	-- 共享认知，勋爵
+		{AuraID = 346035, UnitID = "player"},	-- 眩目步法，猩红议会
+		{AuraID = 331636, UnitID = "player", Flash = true},	-- 黑暗伴舞，猩红议会
+		{AuraID = 335293, UnitID = "player"},	-- 锁链联结，泥拳
+		{AuraID = 333913, UnitID = "player"},	-- 锁链联结，泥拳
+		{AuraID = 327039, UnitID = "player"},	-- 邪恶撕裂，干将
+		{AuraID = 344655, UnitID = "player"},	-- 震荡易伤，干将
+		{AuraID = 327089, UnitID = "player"},	-- 喂食时间，德纳修斯
+		{AuraID = 327796, UnitID = "player"},	-- 午夜猎手，德纳修斯
+		{AuraID = 347283, UnitID = "player"},	-- 捕食者之嚎，塔拉格鲁
+		{AuraID = 347286, UnitID = "player"},	-- 不散之惧，塔拉格鲁
+		{AuraID = 360403, UnitID = "player"},	-- 力场，警戒卫士
+		{AuraID = 361751, UnitID = "player", Flash = true},	-- 衰变光环，道茜歌妮
 		-- 8.0 5人本
 		{AuraID = 314478, UnitID = "player"},	-- 倾泻恐惧
 		{AuraID = 314483, UnitID = "player"},	-- 倾泻恐惧
@@ -764,6 +901,65 @@ C.DeprecatedAuras = {
 		{AuraID = 250669, UnitID = "player", Text = L["Get Out"]},	-- 灵魂爆发
 	},
 	["Warning"] = {			-- 目标重要光环组
+	-- 9.0 词缀
+		{AuraID = 373724, UnitID = "target", Value = true},	-- S4，鲜血屏障
+		-- 5人本
+		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
+		{AuraID = 343470, UnitID = "target", Value = true},	-- 通灵战潮，碎骨之盾
+		{AuraID = 328351, UnitID = "target", Flash = true},	-- 通灵战潮，染血长枪
+		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
+		{AuraID = 333227, UnitID = "target", Flash = true},	-- 彼界，不死之怒
+		{AuraID = 228626, UnitID = "target"},	-- 彼界，怨灵之瓮
+		{AuraID = 324010, UnitID = "target"},	-- 彼界，发射
+		{AuraID = 320132, UnitID = "target"},	-- 彼界，暗影之怒
+		{AuraID = 320293, UnitID = "target", Value = true},	-- 伤逝剧场，融入死亡
+		{AuraID = 331275, UnitID = "target", Flash = true},	-- 伤逝剧场，不灭护卫
+		{AuraID = 336449, UnitID = "target"},	-- 凋魂，玛卓克萨斯之墓
+		{AuraID = 336451, UnitID = "target"},	-- 凋魂，玛卓克萨斯之壁
+		{AuraID = 333737, UnitID = "target"},	-- 凋魂，凝结之疾
+		{AuraID = 328175, UnitID = "target"},	-- 凋魂，凝结之疾
+		{AuraID = 321368, UnitID = "target", Value = true},	-- 凋魂，冰缚之盾
+		{AuraID = 327416, UnitID = "target", Value = true},	-- 晋升，心能回灌
+		{AuraID = 345561, UnitID = "target", Value = true},	-- 晋升，生命连结
+		{AuraID = 339917, UnitID = "target", Value = true},	-- 晋升，命运之矛
+		{AuraID = 323878, UnitID = "target", Flash = true},	-- 晋升，枯竭
+		{AuraID = 317936, UnitID = "target"},	-- 晋升，弃誓信条
+		{AuraID = 327812, UnitID = "target"},	-- 晋升，振奋英气
+		{AuraID = 323149, UnitID = "target"},	-- 仙林，黑暗之拥
+		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
+		{AuraID = 323059, UnitID = "target", Flash = true},	-- 仙林，宗主之怒
+		{AuraID = 336499, UnitID = "target"},	-- 仙林，猜谜游戏
+		{AuraID = 322569, UnitID = "target"},	-- 仙林，兹洛斯之手
+		{AuraID = 326771, UnitID = "target"},	-- 赎罪大厅，岩石监视者
+		{AuraID = 326450, UnitID = "target"},	-- 赎罪大厅，忠心的野兽
+		{AuraID = 322433, UnitID = "target"},	-- 赤红深渊，石肤术
+		{AuraID = 321402, UnitID = "target"},	-- 赤红深渊，饱餐
+		{AuraID = 355640, UnitID = "target"},	-- 集市，重装方阵
+		{AuraID = 355782, UnitID = "target"},	-- 集市，力量增幅器
+		{AuraID = 351086, UnitID = "target"},	-- 集市，势不可挡
+		{AuraID = 347840, UnitID = "target"},	-- 集市，野性
+		{AuraID = 347992, UnitID = "target"},	-- 集市，回旋防弹衣
+		{AuraID = 347840, UnitID = "target"},	-- 集市，野性
+		{AuraID = 347015, UnitID = "target", Flash = true},	-- 集市，强化防御
+		{AuraID = 355934, UnitID = "target", Value = true},	-- 集市，强光屏障
+		{AuraID = 349933, UnitID = "target", Flash = true, Value = true},	-- 集市，狂热鞭笞协议
+		{AuraID = 229495, UnitID = "target"},	-- 卡上，国王易伤
+		{AuraID = 227548, UnitID = "target", Value = true},	-- 卡上，烧蚀护盾
+		{AuraID = 227817, UnitID = "target", Value = true},	-- 卡下，圣女盾
+		{AuraID = 163689, UnitID = "target", Value = true, Flash = true},	-- 钢铁码头，血红之球
+		-- 团本
+		{AuraID = 345902, UnitID = "target"},	-- 破裂的联结，猎手
+		{AuraID = 334695, UnitID = "target"},	-- 动荡的能量，猎手
+		{AuraID = 346792, UnitID = "target"},	-- 罪触之刃，猩红议会
+		{AuraID = 331314, UnitID = "target"},	-- 毁灭冲击，泥拳
+		{AuraID = 341250, UnitID = "target"},	-- 恐怖暴怒，泥拳
+		{AuraID = 329636, UnitID = "target", Flash = true},	-- 坚岩形态，干将
+		{AuraID = 329808, UnitID = "target", Flash = true},	-- 坚岩形态，干将
+		{AuraID = 350857, UnitID = "target", Flash = true},	-- 女妖斗篷，女王
+		{AuraID = 367573, UnitID = "target", Flash = true},	-- 源生壁垒，圣物匠
+		{AuraID = 368684, UnitID = "target", Value = true},	-- 回收，黑伦度斯
+		{AuraID = 361651, UnitID = "target", Value = true},	-- 虹吸屏障，道茜歌妮
+		{AuraID = 362505, UnitID = "target", Flash = true},	-- 统御之握，安度因
 	-- 8.0副本
 		{AuraID = 300011, UnitID = "target"},	-- 力场护盾，麦卡贡
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
