@@ -150,14 +150,6 @@ DB.BuffList = {
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
 	ITEMS = {
-		{	itemID = 178742, -- 瓶装毒素饰品
-			spells = {
-				[345545] = true,
-			},
-			equip = true,
-			instance = true,
-			combat = true,
-		},
 		{	itemID = 190384, -- 9.0永久属性符文
 			spells = {
 				[393438] = true, -- 巨龙强化符文 itemID 201325
@@ -165,6 +157,23 @@ DB.ReminderBuffs = {
 			},
 			instance = true,
 			disable = true, -- 禁用直到出了新符文
+		},
+		{	itemID = 194307, -- 巢穴守护者的诺言
+			spells = {
+				[394457] = true,
+			},
+			equip = true,
+			instance = true,
+			inGroup = true,
+		},
+		--[=[
+		{	itemID = 178742, -- 瓶装毒素饰品
+			spells = {
+				[345545] = true,
+			},
+			equip = true,
+			instance = true,
+			combat = true,
 		},
 		{	itemID = 190958, -- 究极秘术
 			spells = {
@@ -174,6 +183,7 @@ DB.ReminderBuffs = {
 			instance = true,
 			inGroup = true,
 		},
+		]=]
 	},
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
