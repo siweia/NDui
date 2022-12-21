@@ -5,7 +5,7 @@ local UF = B:GetModule("UnitFrames")
 local unpack, min, format, strupper = unpack, min, format, strupper
 local GetTime, IsPlayerSpell, UnitName = GetTime, IsPlayerSpell, UnitName
 local UnitInVehicle, UnitIsUnit, UnitExists = UnitInVehicle, UnitIsUnit, UnitExists
-local GetUnitEmpowerStageDuration = GetUnitEmpowerStageDuration
+local UIFrameFadeIn = UIFrameFadeIn
 
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
@@ -79,9 +79,18 @@ function UF:OnCastbarUpdate(elapsed)
 		if self.stageString then
 			self.stageString:SetText("")
 			if self.empowering then
-				for i = 1, self.numStages, 1 do
-					if duration > self.castTicks[i].duration then
+				for i = self.numStages, 1, -1 do
+					local pip = self.Pips[i]
+					if pip and duration > pip.duration then
 						self.stageString:SetText(i)
+
+						if self.pipStage ~= i then
+							self.pipStage = i
+							local nextStage = self.numStages == i and 1 or i+1
+							local nextPip = self.Pips[nextStage]
+							UIFrameFadeIn(nextPip.tex, .25, .3, 1)
+						end
+						break
 					end
 				end
 			end
@@ -140,37 +149,6 @@ local function UpdateCastBarColor(self, unit)
 	self:SetStatusBarColor(color.r, color.g, color.b)
 end
 
-function UF:CreateAndUpdateStagePip(bar, ticks, numStages, unit)
-	for i = 1, #ticks do
-		ticks[i]:Hide()
-		ticks[i].duration = 0
-	end
-
-	if numStages == 0 then return end
-
-	local width, height = bar:GetSize()
-	local sumDuration = 0
-	local stageMaxValue = bar.max * 1000
-	for i = 1, numStages, 1 do
-		local duration = GetUnitEmpowerStageDuration(unit, i-1)
-		if duration > -1 then
-			sumDuration = sumDuration + duration
-			local portion = sumDuration / stageMaxValue
-			if not ticks[i] then
-				ticks[i] = bar:CreateTexture(nil, "OVERLAY")
-				ticks[i]:SetTexture(DB.normTex)
-				ticks[i]:SetVertexColor(0, 0, 0)
-				ticks[i]:SetWidth(C.mult)
-				ticks[i]:SetHeight(height)
-			end
-			ticks[i].duration = sumDuration / 1000
-			ticks[i]:ClearAllPoints()
-			ticks[i]:SetPoint("LEFT", bar, width * portion, 0)
-			ticks[i]:Show()
-		end
-	end
-end
-
 function UF:PostCastStart(unit)
 	self:SetAlpha(1)
 	self.Spark:Show()
@@ -206,9 +184,6 @@ function UF:PostCastStart(unit)
 		B:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
 	end
 
-	if not self.channeling then
-		UF:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
-	end
 	UpdateCastBarColor(self, unit)
 
 	if self.__owner.mystyle == "nameplate" then
@@ -247,4 +222,46 @@ function UF:PostCastFailed()
 	self.fadeOut = true
 	self:Show()
 	ResetSpellTarget(self)
+end
+
+UF.PipColors = {
+	[1] = {.08, 1, 0, .3},
+	[2] = {1, .1, .1, .3},
+	[3] = {1, .5, 0, .3},
+	[4] = {.1, .9, .9, .3},
+}
+function UF:CreatePip(stage)
+	local _, height = self:GetSize()
+
+	local pip = CreateFrame("Frame", nil, self, "CastingBarFrameStagePipTemplate")
+	pip.BasePip:SetTexture(DB.bdTex)
+	pip.BasePip:SetVertexColor(0, 0, 0)
+	pip.BasePip:SetWidth(C.mult)
+	pip.BasePip:SetHeight(height)
+	pip.tex = pip:CreateTexture(nil, "ARTWORK", nil, 2)
+	pip.tex:SetTexture(DB.normTex)
+	pip.tex:SetVertexColor(unpack(UF.PipColors[stage]))
+
+	return pip
+end
+
+function UF:PostUpdatePip(pip, stage, stageTotalDuration)
+	local pips = self.Pips
+	local pip = pips[stage]
+	local numStages = self.numStages
+	pip.tex:SetAlpha(.3) -- reset pip alpha
+	pip.duration = stageTotalDuration / 1000 -- save pip duration
+
+	if stage == numStages then
+		local firstPip = pips[1]
+		local anchor = pips[numStages]
+		firstPip.tex:SetPoint("BOTTOMRIGHT", self)
+		firstPip.tex:SetPoint("TOPLEFT", anchor.BasePip, "TOPRIGHT")
+	end
+
+	if stage ~= 1 then
+		local anchor = pips[stage-1]
+		pip.tex:SetPoint("BOTTOMRIGHT", pip.BasePip, "BOTTOMLEFT")
+		pip.tex:SetPoint("TOPLEFT", anchor.BasePip, "TOPRIGHT")
+	end
 end

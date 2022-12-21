@@ -123,6 +123,17 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	local function skinCreateButton(button)
+		local child = button:GetChildren()
+		if not child.styled and child:IsObjectType("Button") then
+			B.Reskin(child)
+			child.styled = true
+		end
+	end
+	hooksecurefunc(searchPanel.ScrollBox, "Update", function(self)
+		self:ForEachFrame(skinCreateButton)
+	end)
+
 	-- [[ Application viewer ]]
 
 	local applicationViewer = LFGListFrame.ApplicationViewer
