@@ -5,6 +5,7 @@ local UF = B:GetModule("UnitFrames")
 local unpack, min, format, strupper = unpack, min, format, strupper
 local GetTime, IsPlayerSpell, UnitName = GetTime, IsPlayerSpell, UnitName
 local UnitInVehicle, UnitIsUnit, UnitExists = UnitInVehicle, UnitIsUnit, UnitExists
+local UIFrameFadeIn = UIFrameFadeIn
 
 local CastbarCompleteColor = {.1, .8, 0}
 local CastbarFailColor = {1, .1, 0}
@@ -230,7 +231,7 @@ UF.PipColors = {
 	[4] = {.1, .9, .9, .3},
 }
 function UF:CreatePip(stage)
-	local width, height = self:GetSize()
+	local _, height = self:GetSize()
 
 	local pip = CreateFrame("Frame", nil, self, "CastingBarFrameStagePipTemplate")
 	pip.BasePip:SetTexture(DB.bdTex)
