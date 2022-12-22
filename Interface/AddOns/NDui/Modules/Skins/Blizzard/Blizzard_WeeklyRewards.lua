@@ -77,10 +77,12 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 	B.ReskinClose(WeeklyRewardsFrame.CloseButton)
 	B.StripTextures(WeeklyRewardsFrame.SelectRewardButton)
 	B.Reskin(WeeklyRewardsFrame.SelectRewardButton)
+	WeeklyRewardsFrame.NineSlice:SetAlpha(0)
+	WeeklyRewardsFrame.BackgroundTile:SetAlpha(0)
 
 	local headerFrame = WeeklyRewardsFrame.HeaderFrame
 	B.StripTextures(headerFrame)
-	B.CreateBDFrame(headerFrame, .25)
+	--B.CreateBDFrame(headerFrame, .25)
 	headerFrame:SetPoint("TOP", 1, -42)
 	headerFrame.Text:SetFontObject(SystemFont_Huge1)
 

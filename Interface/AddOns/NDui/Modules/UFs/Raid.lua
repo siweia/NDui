@@ -141,7 +141,7 @@ local function setupMouseWheelCast(self)
 end
 
 local fixedSpells = {
-	["360823"] = "365585", -- incorrect spellID for Evoker
+	[360823] = 365585, -- incorrect spellID for Evoker
 }
 
 local function setupClickSets(self)
