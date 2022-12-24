@@ -967,11 +967,33 @@ function UF.PostUpdateButton(element, button, unit, data)
 	end
 end
 
-function UF.AurasPreUpdate(element, _, isFullUpdate)
-	if not isFullUpdate then return end
+function UF.AurasPostUpdateInfo(element, _, buffsChanged, debuffsChanged)
 	element.bolsterStacks = 0
 	element.bolsterInstanceID = nil
 	element.hasTheDot = nil
+
+	if buffsChanged then
+		for auraInstanceID, data in next, element.allBuffs do
+			if data.spellId == 209859 then
+				if not element.bolsterInstanceID then
+					element.bolsterInstanceID = auraInstanceID
+				end
+				element.bolsterStacks = element.bolsterStacks + 1
+				if element.bolsterStacks > 1 then
+					element.activeBuffs[auraInstanceID] = nil
+				end
+			end
+		end
+	end
+
+	if C.db["Nameplate"]["ColorByDot"] and debuffsChanged then
+		for _, data in next, element.allDebuffs do
+			if data.isPlayerAura and C.db["Nameplate"]["DotSpells"][data.spellId] then
+				element.hasTheDot = true
+				break
+			end
+		end
+	end
 end
 
 function UF.PostUpdateGapButton(_, _, button)
@@ -980,26 +1002,11 @@ function UF.PostUpdateGapButton(_, _, button)
 	end
 end
 
-local isCasterPlayer = {
-	["player"] = true,
-	["pet"] = true,
-	["vehicle"] = true,
-}
 function UF.CustomFilter(element, unit, data)
 	local style = element.__owner.mystyle
-	local name, debuffType, caster, isStealable, spellID, nameplateShowAll = data.name, data.dispelName, data.sourceUnit, data.isStealable, data.spellId, data.nameplateShowAll
+	local name, debuffType, isStealable, spellID, nameplateShowAll = data.name, data.dispelName, data.isStealable, data.spellId, data.nameplateShowAll
 
-	if name and spellID == 209859 then
-		if not element.bolsterInstanceID then
-			element.bolsterInstanceID = data.auraInstanceID
-		end
-		element.bolsterStacks = element.bolsterStacks + 1
-		return element.bolsterStacks == 1
-	elseif style == "nameplate" or style == "boss" or style == "arena" then
-		if C.db["Nameplate"]["ColorByDot"] and isCasterPlayer[caster] and C.db["Nameplate"]["DotSpells"][spellID] then
-			element.hasTheDot = true
-		end
-
+	if style == "nameplate" or style == "boss" or style == "arena" then
 		if element.__owner.plateType == "NameOnly" then
 			return UF.NameplateWhite[spellID]
 		elseif UF.NameplateBlack[spellID] then
@@ -1010,7 +1017,7 @@ function UF.CustomFilter(element, unit, data)
 			return true
 		else
 			local auraFilter = C.db["Nameplate"]["AuraFilter"]
-			return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and isCasterPlayer[caster])
+			return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and data.isPlayerAura)
 		end
 	else
 		return (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
@@ -1201,7 +1208,7 @@ function UF:CreateAuras(self)
 	bu.PostCreateButton = UF.PostCreateButton
 	bu.PostUpdateButton = UF.PostUpdateButton
 	bu.PostUpdateGapButton = UF.PostUpdateGapButton
-	bu.PreUpdate = UF.AurasPreUpdate
+	bu.PostUpdateInfo = UF.AurasPostUpdateInfo
 
 	self.Auras = bu
 end
