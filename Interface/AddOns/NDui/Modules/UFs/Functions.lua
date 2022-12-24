@@ -967,21 +967,29 @@ function UF.PostUpdateButton(element, button, unit, data)
 	end
 end
 
-function UF.AurasPostUpdateInfo(element, _, buffsChanged, debuffsChanged)
+function UF.AurasPostUpdateInfo(element, _, _, debuffsChanged)
 	element.bolsterStacks = 0
 	element.bolsterInstanceID = nil
 	element.hasTheDot = nil
 
-	if buffsChanged then
-		for auraInstanceID, data in next, element.allBuffs do
-			if data.spellId == 209859 then
-				if not element.bolsterInstanceID then
-					element.bolsterInstanceID = auraInstanceID
-				end
-				element.bolsterStacks = element.bolsterStacks + 1
-				if element.bolsterStacks > 1 then
-					element.activeBuffs[auraInstanceID] = nil
-				end
+	for auraInstanceID, data in next, element.allBuffs do
+		if data.spellId == 209859 then
+			if not element.bolsterInstanceID then
+				element.bolsterInstanceID = auraInstanceID
+				element.activeBuffs[auraInstanceID] = true
+			end
+			element.bolsterStacks = element.bolsterStacks + 1
+			if element.bolsterStacks > 1 then
+				element.activeBuffs[auraInstanceID] = nil
+			end
+		end
+	end
+	if element.bolsterStacks > 0 then
+		for i = 1, element.visibleButtons do
+			local button = element[i]
+			if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
+				button.Count:SetText(element.bolsterStacks)
+				break
 			end
 		end
 	end
