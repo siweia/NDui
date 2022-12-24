@@ -1201,6 +1201,7 @@ function UF:CreateAuras(self)
 		bu.disableMouse = true
 		bu.disableCooldown = true
 		bu.FilterAura = UF.CustomFilter
+		bu.PostUpdateInfo = UF.AurasPostUpdateInfo
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
@@ -1208,7 +1209,6 @@ function UF:CreateAuras(self)
 	bu.PostCreateButton = UF.PostCreateButton
 	bu.PostUpdateButton = UF.PostUpdateButton
 	bu.PostUpdateGapButton = UF.PostUpdateGapButton
-	bu.PostUpdateInfo = UF.AurasPostUpdateInfo
 
 	self.Auras = bu
 end
