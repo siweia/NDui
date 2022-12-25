@@ -970,7 +970,6 @@ end
 function UF.AurasPostUpdateInfo(element, _, _, debuffsChanged)
 	element.bolsterStacks = 0
 	element.bolsterInstanceID = nil
-	element.hasTheDot = nil
 
 	for auraInstanceID, data in next, element.allBuffs do
 		if data.spellId == 209859 then
@@ -994,11 +993,14 @@ function UF.AurasPostUpdateInfo(element, _, _, debuffsChanged)
 		end
 	end
 
-	if C.db["Nameplate"]["ColorByDot"] and debuffsChanged then
-		for _, data in next, element.allDebuffs do
-			if data.isPlayerAura and C.db["Nameplate"]["DotSpells"][data.spellId] then
-				element.hasTheDot = true
-				break
+	if debuffsChanged then
+		element.hasTheDot = nil
+		if C.db["Nameplate"]["ColorByDot"] then
+			for _, data in next, element.allDebuffs do
+				if data.isPlayerAura and C.db["Nameplate"]["DotSpells"][data.spellId] then
+					element.hasTheDot = true
+					break
+				end
 			end
 		end
 	end
