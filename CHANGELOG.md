@@ -1,6 +1,6 @@
 # NDui
 
-## [7.1.0.1](https://github.com/siweia/NDui/tree/7.1.0.1) (2022-12-25)
+## [7.1.0](https://github.com/siweia/NDui/tree/7.1.0) (2022-12-25)
 
 - Update auras.
 - Update buff reminder.
