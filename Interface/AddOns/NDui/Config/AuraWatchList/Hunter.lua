@@ -108,6 +108,7 @@ local list = {
 		{AuraID = 342076, UnitID = "player"},	-- 行云流水
 		{AuraID = 336892, UnitID = "player", Flash = true},	-- 无懈警戒之秘
 		{AuraID = 388035, UnitID = "player"},	-- 巨熊之韧
+		{AuraID = 392956, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
 
 		{AuraID = 363760, UnitID = "player", Flash = true},	-- 杀戮狂乱，兽王4T

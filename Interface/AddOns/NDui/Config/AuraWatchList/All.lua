@@ -178,6 +178,8 @@ local list = {
 		{AuraID = 226512, UnitID = "player", Flash = true},	-- 血池
 		{AuraID = 240447, UnitID = "player", Flash = true},	-- 践踏
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
+		-- 5人
+		{AuraID = 395035, UnitID = "player", Flash = true},	-- 粉碎灵魂
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
