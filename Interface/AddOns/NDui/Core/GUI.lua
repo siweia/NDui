@@ -9,7 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
-	BFA = false,
+	Reset = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -674,14 +674,15 @@ loader:SetScript("OnEvent", function(self, _, addon)
 
 	if NDuiADB["ProfileIndex"][DB.MyFullName] == 1 then
 		C.db = NDuiDB
-		if not C.db["BFA"] then
-			wipe(C.db)
-			C.db["BFA"] = true
-		end
 	else
 		C.db = NDuiPDB[NDuiADB["ProfileIndex"][DB.MyFullName] - 1]
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
+
+	if not C.db["Reset"] then
+		C.db["Actionbar"]["Enable"] = true
+		C.db["Reset"] = true
+	end
 
 	B:SetupUIScale(true)
 	if NDuiADB["CustomTex"] ~= "" then
@@ -1115,7 +1116,7 @@ G.TabList = {
 	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
-	NewTag..L["Nameplate"],
+	L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
@@ -1244,8 +1245,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "AuraFilter", L["NameplateAuraFilter"].."*", true, {L["BlackNWhite"], L["PlayerOnly"], L["IncludeCrowdControl"]}, refreshNameplates},
 		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
-		{3, "Nameplate", "FontSize", NewTag..L["AuraFontSize"].."*", nil, {10, 30, 1}, refreshNameplates},
-		{3, "Nameplate", "SizeRatio", NewTag..L["SizeRatio"].."*", true, {.5, 1, .1}, refreshNameplates},
+		{3, "Nameplate", "FontSize", L["AuraFontSize"].."*", nil, {10, 30, 1}, refreshNameplates},
+		{3, "Nameplate", "SizeRatio", L["SizeRatio"].."*", true, {.5, 1, .1}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
 		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 60, 1}, refreshNameplates},
 		{},--blank
