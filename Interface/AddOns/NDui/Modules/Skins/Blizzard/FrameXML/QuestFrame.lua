@@ -100,4 +100,14 @@ tinsert(C.defaultThemes, function()
 		x = x + 6
 		QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
 	end)
+
+	-- Friendship
+	for i = 1, 4 do
+		local notch = QuestFrame.FriendshipStatusBar["Notch"..i]
+		if notch then
+			notch:SetColorTexture(0, 0, 0)
+			notch:SetSize(C.mult, 16)
+		end
+	end
+	QuestFrame.FriendshipStatusBar.BarBorder:Hide()
 end)
