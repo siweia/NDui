@@ -791,6 +791,8 @@ end
 
 -- Move and save blizz frames
 function M:MoveBlizzFrames()
+	if not C.db["Misc"]["BlizzMover"] then return end
+
 	if not IsAddOnLoaded("RXPGuides") then
 		B:BlizzFrameMover(CharacterFrame)
 	end

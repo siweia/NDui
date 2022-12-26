@@ -848,3 +848,5 @@ L["DisableMinimap"] = "Disable Enhanced Minimap" -- need translation
 L["DisableMinimapTip"] = "|nIf checked, all the features below will be disabled as well.|nIf you have addon SexyMap enabled, the enhanced minimap would turn off automatically." -- need translation
 L["ChargesRemaining"] = "%s %s/%s next charge remaining %s" -- need translation
 L["ChargesCompleted"] = "%s %s/%s all charges ready." -- need translation
+L["BlizzMover"] = "Save CharacterFrame anchor" -- need translation
+L["BlizzMoverTip"] = "If enabled, save CharacterFrame anchor after you move it. Hold CTRL and left click to reset its default anchor.|n|nAlso support QuestLogFrame." -- need translation

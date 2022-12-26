@@ -497,6 +497,7 @@ G.DefaultSettings = {
 		InfoSize = 13,
 		MaxAddOns = 12,
 		MaxZoom = 2.6,
+		BlizzMover = false,
 	},
 	Tutorial = {
 		Complete = false,
@@ -1385,6 +1386,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "Autoequip", L["AutoEquip"].."*", true, nil, nil, L["AutoEquipTip"]},
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", nil, nil, updateScreenShot},
+		{1, "Misc", "BlizzMover", NewTag..L["BlizzMover"], true, nil, nil, L["BlizzMoverTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
