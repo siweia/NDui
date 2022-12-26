@@ -386,6 +386,7 @@ G.DefaultSettings = {
 		ColorByDot = false,
 		DotColor = {r=1, g=.5, b=.2},
 		DotSpells = {},
+		TarName = false,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -1202,6 +1203,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"], true, nil, nil, L["QuestIndicatorAddOns"]},
 		{1, "Nameplate", "BlockDBM", L["BlockDBM"], nil, nil, nil, L["BlockDBMTip"]},
 		{1, "Nameplate", "Interruptor", L["ShowInterruptor"].."*", true},
+		{1, "Nameplate", "TarName", NewTag..L["TarName"].."*"},
 		{},--blank
 		{1, "Nameplate", "ColoredTarget", HeaderTag..L["ColoredTarget"].."*", nil, nil, nil, L["ColoredTargetTip"]},
 		{1, "Nameplate", "ColoredFocus", HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
