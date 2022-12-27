@@ -184,6 +184,13 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
+local huntAreaToMapID = {
+	[7341] = 2022, -- 觉醒海岸？
+	[7342] = 2023, -- 欧恩哈拉平原
+	[7343] = 2024, -- 碧蓝林海？
+	[7344] = 2025, -- 索德拉苏斯
+}
+
 local title
 local function addTitle(text)
 	if not title then
@@ -275,6 +282,23 @@ info.onEnter = function(self)
 				GameTooltip:AddDoubleLine(mapInfo.name.."("..elementType..")", format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 				break
 			end
+		end
+	end
+
+	-- Grand hunts
+	title = false
+	local areaPoiIDs = C_AreaPoiInfo.GetAreaPOIForMap(1978) -- Dragon isles
+	for _, areaPoiID in next, areaPoiIDs do
+		local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(1978, areaPoiID)
+		local isHunt = poiInfo and poiInfo.atlasName == "minimap-genericevent-hornicon"
+		if isHunt then
+			addTitle(poiInfo.name)
+			local mapInfo = C_Map_GetMapInfo(huntAreaToMapID[areaPoiID])
+			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
+			timeLeft = timeLeft/60
+			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+			GameTooltip:AddDoubleLine(mapInfo.name, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+			break
 		end
 	end
 
