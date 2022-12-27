@@ -206,6 +206,10 @@ local function GetElementalType(element) -- 获取入侵类型图标
 	return str
 end
 
+local function GetFormattedTimeLeft(timeLeft)
+	return format("%.2d:%.2d", timeLeft/60, timeLeft%60)
+end
+
 local title
 local function addTitle(text)
 	if not title then
@@ -294,7 +298,7 @@ info.onEnter = function(self)
 				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-				GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+				GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
 				break
 			end
 		end
@@ -312,7 +316,7 @@ info.onEnter = function(self)
 			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
 			timeLeft = timeLeft/60
 			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-			GameTooltip:AddDoubleLine(mapInfo.name, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+			GameTooltip:AddDoubleLine(mapInfo.name, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
 			break
 		end
 	end
@@ -354,7 +358,7 @@ info.onEnter = function(self)
 			if timeLeft then
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-				GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+				GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
 			end
 			local nextLocation = GetNextLocation(nextTime, index)
 			GameTooltip:AddDoubleLine(L["Next Invasion"]..nextLocation, date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
