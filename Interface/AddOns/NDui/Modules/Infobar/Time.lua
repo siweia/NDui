@@ -306,13 +306,11 @@ info.onEnter = function(self)
 
 	-- Grand hunts
 	title = false
-	local areaPoiIDs = C_AreaPoiInfo_GetAreaPOIForMap(1978) -- Dragon isles
-	for _, areaPoiID in next, areaPoiIDs do
-		local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(1978, areaPoiID)
-		local isHunt = poiInfo and poiInfo.atlasName == "minimap-genericevent-hornicon"
-		if isHunt then
+	for areaPoiID, mapID in pairs(huntAreaToMapID) do
+		local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(1978, areaPoiID) -- Dragon isles
+		if poiInfo then
 			addTitle(poiInfo.name)
-			local mapInfo = C_Map_GetMapInfo(huntAreaToMapID[areaPoiID])
+			local mapInfo = C_Map_GetMapInfo(mapID)
 			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
 			timeLeft = timeLeft/60
 			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
