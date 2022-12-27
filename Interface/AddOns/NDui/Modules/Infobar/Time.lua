@@ -186,12 +186,25 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
-local huntAreaToMapID = {
+local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
 	[7341] = 2022, -- 觉醒海岸？
 	[7342] = 2023, -- 欧恩哈拉平原
 	[7343] = 2024, -- 碧蓝林海？
 	[7344] = 2025, -- 索德拉苏斯
 }
+
+local atlasCache = {}
+local function GetElementalType(element) -- 获取入侵类型图标
+	local str = atlasCache[element]
+	if not str then
+		local info = C_Texture.GetAtlasInfo("ElementalStorm-Lesser-"..element)
+		if info then
+			str = B:GetTextureStrByAtlas(info, 16, 16)
+			atlasCache[element] = str
+		end
+	end
+	return str
+end
 
 local title
 local function addTitle(text)
@@ -281,7 +294,7 @@ info.onEnter = function(self)
 				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-				GameTooltip:AddDoubleLine(mapInfo.name.."("..elementType..")", format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+				GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 				break
 			end
 		end
