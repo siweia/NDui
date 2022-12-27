@@ -295,7 +295,7 @@ info.onEnter = function(self)
 			if elementType then
 				addTitle(poiInfo.name)
 				local mapInfo = C_Map_GetMapInfo(mapID)
-				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
+				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 				GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
@@ -311,7 +311,7 @@ info.onEnter = function(self)
 		if poiInfo then
 			addTitle(poiInfo.name)
 			local mapInfo = C_Map_GetMapInfo(mapID)
-			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
+			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
 			timeLeft = timeLeft/60
 			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 			GameTooltip:AddDoubleLine(mapInfo.name, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
