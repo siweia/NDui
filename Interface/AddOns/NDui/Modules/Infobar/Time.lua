@@ -5,7 +5,7 @@ if not C.Infobar.Time then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Time", C.Infobar.TimePos)
 local time, date = time, date
-local strfind, format, floor = strfind, format, floor
+local strfind, format, floor, strmatch = strfind, format, floor, strmatch
 local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
 local IsShiftKeyDown = IsShiftKeyDown
 local C_Map_GetMapInfo = C_Map.GetMapInfo
@@ -28,6 +28,8 @@ local GetNumSavedInstances, GetSavedInstanceInfo = GetNumSavedInstances, GetSave
 local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local C_TaskQuest_GetThreatQuests = C_TaskQuest.GetThreatQuests
 local C_TaskQuest_GetQuestInfoByQuestID = C_TaskQuest.GetQuestInfoByQuestID
+local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
+local C_AreaPoiInfo_GetAreaPOIForMap = C_AreaPoiInfo.GetAreaPOIForMap
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool("timeMgrUseMilitaryTime") then
@@ -269,9 +271,9 @@ info.onEnter = function(self)
 	-- Elemental threats
 	title = false
 	for mapID = 2022, 2025 do -- DF main zones
-		local areaPoiIDs = C_AreaPoiInfo.GetAreaPOIForMap(mapID)
+		local areaPoiIDs = C_AreaPoiInfo_GetAreaPOIForMap(mapID)
 		for _, areaPoiID in next, areaPoiIDs do
-			local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(mapID, areaPoiID)
+			local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(mapID, areaPoiID)
 			local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, "ElementalStorm%-Lesser%-(.+)")
 			if elementType then
 				addTitle(poiInfo.name)
@@ -287,9 +289,9 @@ info.onEnter = function(self)
 
 	-- Grand hunts
 	title = false
-	local areaPoiIDs = C_AreaPoiInfo.GetAreaPOIForMap(1978) -- Dragon isles
+	local areaPoiIDs = C_AreaPoiInfo_GetAreaPOIForMap(1978) -- Dragon isles
 	for _, areaPoiID in next, areaPoiIDs do
-		local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(1978, areaPoiID)
+		local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(1978, areaPoiID)
 		local isHunt = poiInfo and poiInfo.atlasName == "minimap-genericevent-hornicon"
 		if isHunt then
 			addTitle(poiInfo.name)
