@@ -460,7 +460,7 @@ function UF:UpdateQuestUnit(_, unit)
 					local progress = strmatch(text, "(%d+)%%")
 					if current and goal then
 						local diff = floor(goal - current)
-						if diff > 0 and diff > prevDiff then
+						if diff > prevDiff then
 							questProgress = diff
 							prevDiff = diff
 						end
