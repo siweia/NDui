@@ -2,8 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
-local gsub, unpack = gsub, unpack
+local gsub, unpack, select = gsub, unpack, select
 local GetItemIcon, GetSpellTexture = GetItemIcon, GetSpellTexture
+local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local newString = "0:0:64:64:5:59:5:59"
 
 function TT:SetupTooltipIcon(icon)
@@ -52,12 +53,30 @@ function TT:ReskinTooltipIcons()
 			end
 		end
 	end)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Toy, function(self)
+		if self == GameTooltip or self == ItemRefTooltip then
+			local data = self:GetTooltipData()
+			local id = data and data.id
+			if id then
+				TT.SetupTooltipIcon(self, GetItemIcon(id))
+			end
+		end
+	end)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
 		if self == GameTooltip or self == ItemRefTooltip then
 			local data = self:GetTooltipData()
 			local id = data and data.id
 			if id then
 				TT.SetupTooltipIcon(self, GetSpellTexture(id))
+			end
+		end
+	end)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Mount, function(self)
+		if self == GameTooltip or self == ItemRefTooltip then
+			local data = self:GetTooltipData()
+			local id = data and data.id
+			if id then
+				TT.SetupTooltipIcon(self, select(3, C_MountJournal_GetMountInfoByID(id)))
 			end
 		end
 	end)
