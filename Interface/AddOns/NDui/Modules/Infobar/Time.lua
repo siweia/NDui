@@ -259,6 +259,25 @@ info.onEnter = function(self)
 		end
 	end
 
+	-- Elemental threats
+	title = false
+	for mapID = 2022, 2025 do -- DF main zones
+		local areaPoiIDs = C_AreaPoiInfo.GetAreaPOIForMap(mapID)
+		for _, areaPoiID in next, areaPoiIDs do
+			local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(mapID, areaPoiID)
+			local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, "ElementalStorm%-Lesser%-(.+)")
+			if elementType then
+				addTitle(poiInfo.name)
+				local mapInfo = C_Map_GetMapInfo(mapID)
+				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
+				timeLeft = timeLeft/60
+				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+				GameTooltip:AddDoubleLine(mapInfo.name.."("..elementType..")", format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+				break
+			end
+		end
+	end
+
 	if IsShiftKeyDown() then
 		-- Nzoth relavants
 		for _, v in ipairs(horrificVisions) do
