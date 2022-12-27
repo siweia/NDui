@@ -464,7 +464,7 @@ function UF:UpdateQuestUnit(_, unit)
 							questProgress = diff
 							prevDiff = diff
 						end
-					elseif progress then
+					elseif progress and prevDiff == 0 then
 						if floor(100 - progress) > 0 then
 							questProgress = progress.."%" -- lower priority on progress, keep looking
 						end
