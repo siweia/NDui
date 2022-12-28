@@ -287,19 +287,20 @@ info.onEnter = function(self)
 
 	-- Elemental threats
 	title = false
+	local poiCache = {}
 	for mapID = 2022, 2025 do -- DF main zones
 		local areaPoiIDs = C_AreaPoiInfo_GetAreaPOIForMap(mapID)
 		for _, areaPoiID in next, areaPoiIDs do
 			local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(mapID, areaPoiID)
 			local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, "ElementalStorm%-Lesser%-(.+)")
-			if elementType then
+			if elementType and not poiCache[areaPoiID] then
+				poiCache[areaPoiID] = true
 				addTitle(poiInfo.name)
 				local mapInfo = C_Map_GetMapInfo(mapID)
 				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 				GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
-				break
 			end
 		end
 	end
