@@ -24,6 +24,7 @@ local linkTypes = {
 	azessence = true,
 	mawpower = true,
 	conduit = true,
+	mount = true,
 }
 
 function TT:HyperLink_SetPet(link)

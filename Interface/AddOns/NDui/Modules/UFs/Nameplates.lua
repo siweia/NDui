@@ -446,6 +446,7 @@ function UF:UpdateQuestUnit(_, unit)
 
 	unit = unit or self.unit
 	local startLooking, isLootQuest, questProgress -- FIXME: isLootQuest in old expansion
+	local prevDiff = 0
 
 	local data = C_TooltipInfo.GetUnit(unit)
 	if data then
@@ -459,11 +460,11 @@ function UF:UpdateQuestUnit(_, unit)
 					local progress = strmatch(text, "(%d+)%%")
 					if current and goal then
 						local diff = floor(goal - current)
-						if diff > 0 then
+						if diff > prevDiff then
 							questProgress = diff
-							break
+							prevDiff = diff
 						end
-					elseif progress then
+					elseif progress and prevDiff == 0 then
 						if floor(100 - progress) > 0 then
 							questProgress = progress.."%" -- lower priority on progress, keep looking
 						end

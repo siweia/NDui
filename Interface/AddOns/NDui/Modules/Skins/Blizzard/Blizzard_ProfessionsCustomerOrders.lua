@@ -59,6 +59,21 @@ local function reskinMoneyInput(box)
 	box.__bg:SetPoint("BOTTOMRIGHT", 0, 3)
 end
 
+local function reskinContainer(container)
+	local button = container.Button
+	button.bg = B.ReskinIcon(button.Icon)
+	B.ReskinIconBorder(button.IconBorder)
+	button:SetNormalTexture(0)
+	button:SetPushedTexture(0)
+	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+
+	local box = container.EditBox
+	box:DisableDrawLayer("BACKGROUND")
+	B.ReskinEditBox(box)
+	B.ReskinArrow(box.DecrementButton, "left")
+	B.ReskinArrow(box.IncrementButton, "right")
+end
+
 C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	local frame = _G.ProfessionsCustomerOrdersFrame
 
@@ -175,6 +190,16 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 			end
 		end
 	end)
+
+	local qualityDialog = frame.Form.QualityDialog
+	B.StripTextures(qualityDialog)
+	B.SetBD(qualityDialog)
+	B.ReskinClose(qualityDialog.ClosePanelButton)
+	B.Reskin(qualityDialog.AcceptButton)
+	B.Reskin(qualityDialog.CancelButton)
+	for i = 1, 3 do
+		reskinContainer(qualityDialog["Container"..i])
+	end
 
 	-- Orders
 	B.Reskin(frame.MyOrdersPage.RefreshButton)

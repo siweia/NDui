@@ -83,6 +83,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
 		if not playerFrame.styled then
 			playerFrame.RollText:SetTextColor(.9, .9, .9)
+			playerFrame.RollText:SetWidth(30) -- needs review, might be too big
 			playerFrame.WinMark:SetDesaturated(true)
 
 			playerFrame.styled = true
