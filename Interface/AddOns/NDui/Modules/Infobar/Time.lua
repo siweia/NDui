@@ -187,10 +187,10 @@ local function GetNzothThreatName(questID)
 end
 
 local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
-	[7341] = 2024, -- 碧蓝林海？
 	[7342] = 2023, -- 欧恩哈拉平原
 	[7343] = 2022, -- 觉醒海岸
 	[7344] = 2025, -- 索德拉苏斯
+	[7345] = 2024, -- 碧蓝林海
 }
 
 local atlasCache = {}
