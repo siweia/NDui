@@ -342,10 +342,6 @@ info.onEnter = function(self)
 	-- Community feast
 	title = false
 	if NDuiADB["FeastTime"] ~= 0 then
-		local currentFeast, feastStatus = GetCurrentFeastTime()
-		if currentFeast then
-			NDuiADB["FeastTime"] = currentFeast
-		end
 		local currentTime = time()
 		local duration = 12600 -- 3.5hrs
 		local elapsed = mod(currentTime - NDuiADB["FeastTime"], duration)
@@ -355,7 +351,7 @@ info.onEnter = function(self)
 		if IsQuestFlaggedCompleted(70893) then
 			GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), QUEST_COMPLETE, 1,1,1, 1,0,0)
 		end
-		if feastStatus == 1 or feastStatus == 2 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
+		if currentTime - (nextTime-duration) < 900 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
 	end
@@ -438,3 +434,13 @@ info.onMouseUp = function(_, btn)
 		ToggleCalendar()
 	end
 end
+
+-- Refresh feast time when questlog update
+local function refreshFeastTime()
+	local currentFeast = GetCurrentFeastTime()
+	if currentFeast then
+		NDuiADB["FeastTime"] = currentFeast
+	end
+end
+B:RegisterEvent("PLAYER_ENTERING_WORLD", refreshFeastTime)
+B:RegisterEvent("QUEST_LOG_UPDATE", refreshFeastTime)
