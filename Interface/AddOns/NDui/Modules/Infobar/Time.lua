@@ -97,7 +97,6 @@ local questlist = {
 	{name = L["Timewarped"], id = 45563, texture = 1530590},	-- MoP
 	{name = L["Timewarped"], id = 55499, texture = 1129683},	-- WoD
 	{name = L["Timewarped"], id = 64710, texture = 1467047},	-- Legion
-	{name = L["CommunityFeast"], id = 70893},
 }
 
 local lesserVisions = {58151, 58155, 58156, 58167, 58168}
@@ -228,6 +227,23 @@ info.onShiftDown = function()
 	end
 end
 
+local function GetCurrentFeastTime()
+	local prepareRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7219)
+	if prepareRemain then -- 准备盛宴，15分钟
+		return prepareRemain + time() -- 开始时间=剩余准备时间+现在时间
+	end
+
+	local cookingRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7218)
+	if cookingRemain then -- 盛宴进行中，15分钟
+		return time() - (15*60 - cookingRemain) -- 开始时间=现在时间-盛宴已进行时长
+	end
+
+	local soupRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7220)
+	if soupRemain then -- 盛宴结束，喝汤1小时
+		return time() - (60*60 - soupRemain) - 15*60 -- 开始时间=现在时间-盛宴已结束时长-盛宴进行时长
+	end
+end
+
 info.onEnter = function(self)
 	self.entered = true
 
@@ -278,7 +294,6 @@ info.onEnter = function(self)
 
 	-- Quests
 	title = false
-
 	for _, v in pairs(questlist) do
 		if v.name and IsQuestFlaggedCompleted(v.id) then
 			if v.name == L["Timewarped"] and isTimeWalker and checkTexture(v.texture) or v.name ~= L["Timewarped"] then
@@ -322,6 +337,26 @@ info.onEnter = function(self)
 			GameTooltip:AddDoubleLine(mapInfo.name, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
 			break
 		end
+	end
+
+	-- Community feast
+	title = false
+	if NDuiADB["FeastTime"] == 0 then
+		NDuiADB["FeastTime"] = GetCurrentFeastTime()
+	end
+	if NDuiADB["FeastTime"] ~= 0 then
+		local currentTime = time()
+		local duration = 12600 -- 3.5hrs
+		local elapsed = mod(currentTime - NDuiADB["FeastTime"], duration)
+		local nextTime = duration - elapsed + currentTime
+
+		addTitle(L["CommunityFeast"])
+		if IsQuestFlaggedCompleted(70893) then
+			GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), QUEST_COMPLETE, 1,1,1, 1,0,0)
+		end
+		if currentTime - (nextTime-duration) < 15*60 then r,g,b = 1,0,0 else r,g,b = .6,.6,.6 end -- if progress show green text
+		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
+		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
 	end
 
 	if IsShiftKeyDown() then
