@@ -193,6 +193,8 @@ local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
 	[7345] = 2024, -- 碧蓝林海
 }
 
+local stormOrders = {2022,2025,2024,2023}
+
 local atlasCache = {}
 local function GetElementalType(element) -- 获取入侵类型图标
 	local str = atlasCache[element]
@@ -288,7 +290,7 @@ info.onEnter = function(self)
 	-- Elemental threats
 	title = false
 	local poiCache = {}
-	for mapID = 2022, 2025 do -- DF main zones
+	for _, mapID in next, stormOrders do
 		local areaPoiIDs = C_AreaPoiInfo_GetAreaPOIForMap(mapID)
 		for _, areaPoiID in next, areaPoiIDs do
 			local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(mapID, areaPoiID)
@@ -301,6 +303,7 @@ info.onEnter = function(self)
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 				GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
+				--print("["..areaPoiID.."] = "..mapID)
 			end
 		end
 	end

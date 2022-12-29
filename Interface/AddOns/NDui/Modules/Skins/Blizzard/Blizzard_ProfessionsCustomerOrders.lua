@@ -185,6 +185,8 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 					button.SlotBackground:Hide()
 				end
 				B.ReskinCheck(slot.Checkbox)
+				button.HighlightTexture:SetColorTexture(1, .8, 0, .5)
+				button.HighlightTexture:SetInside(button.bg)
 
 				button.styled = true
 			end
