@@ -230,17 +230,17 @@ end
 local function GetCurrentFeastTime()
 	local prepareRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7219)
 	if prepareRemain then -- 准备盛宴，15分钟
-		return prepareRemain + time() -- 开始时间=剩余准备时间+现在时间
+		return prepareRemain + time(), 1 -- 开始时间=剩余准备时间+现在时间
 	end
 
 	local cookingRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7218)
 	if cookingRemain then -- 盛宴进行中，15分钟
-		return time() - (15*60 - cookingRemain) -- 开始时间=现在时间-盛宴已进行时长
+		return time() - (15*60 - cookingRemain), 2 -- 开始时间=现在时间-盛宴已进行时长
 	end
 
 	local soupRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7220)
 	if soupRemain then -- 盛宴结束，喝汤1小时
-		return time() - (60*60 - soupRemain) - 15*60 -- 开始时间=现在时间-盛宴已结束时长-盛宴进行时长
+		return time() - (60*60 - soupRemain) - 15*60, 3 -- 开始时间=现在时间-盛宴已结束时长-盛宴进行时长
 	end
 end
 
@@ -341,10 +341,11 @@ info.onEnter = function(self)
 
 	-- Community feast
 	title = false
-	if NDuiADB["FeastTime"] == 0 then
-		NDuiADB["FeastTime"] = GetCurrentFeastTime()
-	end
 	if NDuiADB["FeastTime"] ~= 0 then
+		local currentFeast, feastStatus = GetCurrentFeastTime()
+		if currentFeast then
+			NDuiADB["FeastTime"] = currentFeast
+		end
 		local currentTime = time()
 		local duration = 12600 -- 3.5hrs
 		local elapsed = mod(currentTime - NDuiADB["FeastTime"], duration)
@@ -354,7 +355,7 @@ info.onEnter = function(self)
 		if IsQuestFlaggedCompleted(70893) then
 			GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), QUEST_COMPLETE, 1,1,1, 1,0,0)
 		end
-		if currentTime - (nextTime-duration) < 15*60 then r,g,b = 1,0,0 else r,g,b = .6,.6,.6 end -- if progress show green text
+		if feastStatus == 1 or feastStatus == 2 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
 	end
