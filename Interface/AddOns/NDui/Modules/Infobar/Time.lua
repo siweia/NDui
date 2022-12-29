@@ -97,6 +97,7 @@ local questlist = {
 	{name = L["Timewarped"], id = 45563, texture = 1530590},	-- MoP
 	{name = L["Timewarped"], id = 55499, texture = 1129683},	-- WoD
 	{name = L["Timewarped"], id = 64710, texture = 1467047},	-- Legion
+	{name = L["CommunityFeast"], id = 70893},
 }
 
 local lesserVisions = {58151, 58155, 58156, 58167, 58168}

@@ -918,3 +918,4 @@ L["DisableMinimapTip"] = "|n關閉後，下方小地圖的所有模塊都將一�
 L["ChargesRemaining"] = "%s %s/%s 下層充能剩餘%s"
 L["ChargesCompleted"] = "%s %s/%s 充能完畢"
 L["ToggleActionbarTip"] = "|n快捷列開關，無需重載插件。"
+L["CommunityFeast"] = "社區盛宴"
