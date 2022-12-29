@@ -436,7 +436,12 @@ info.onMouseUp = function(_, btn)
 end
 
 -- Refresh feast time when questlog update
+local lastCheck = 0
 local function refreshFeastTime()
+	local currentTime = GetTime()
+	if currentTime - lastCheck < 60 then return end
+	lastCheck = currentTime
+
 	local currentFeast = GetCurrentFeastTime()
 	if currentFeast then
 		NDuiADB["FeastTime"] = currentFeast
