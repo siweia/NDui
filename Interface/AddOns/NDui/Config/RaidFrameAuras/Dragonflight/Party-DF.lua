@@ -22,6 +22,7 @@ module:RegisterSeasonSpells(TIER, INSTANCE)
 
 INSTANCE = 1203 -- 碧蓝魔馆
 module:RegisterSeasonSpells(TIER, INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 387151, 6) -- 寒冰灭绝者
 
 INSTANCE = 1198 -- 诺库德阻击战
 module:RegisterSeasonSpells(TIER, INSTANCE)

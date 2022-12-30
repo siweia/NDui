@@ -918,3 +918,4 @@ L["DisableMinimapTip"] = "|nIf checked, all the features below will be disabled 
 L["ChargesRemaining"] = "%s %s/%s next charge remaining %s"
 L["ChargesCompleted"] = "%s %s/%s all charges ready."
 L["ToggleActionbarTip"] = "|nOption to toggle actionbar, no need to reload UI."
+L["CommunityFeast"] = "Community Feast"

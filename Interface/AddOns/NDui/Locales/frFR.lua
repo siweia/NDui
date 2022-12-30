@@ -918,3 +918,4 @@ L["DisableMinimapTip"] = "|nSi coché, toutes les fonctions ci-dessous seront é
 L["ChargesRemaining"] = "%s %s/%s prochaine charge restante %s"
 L["ChargesCompleted"] = "%s %s/%s toutes les charges sont prêtes."
 L["ToggleActionbarTip"] = "|nOption pour activer la barre d'action, sans avoir à recharger l'interface utilisateur."
+L["CommunityFeast"] = "Community Feast" -- need translation
