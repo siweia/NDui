@@ -438,6 +438,7 @@ end
 -- Refresh feast time when questlog update
 local lastCheck = 0
 local function refreshFeastTime()
+	if InCombatLockdown() then return end
 	local currentTime = GetTime()
 	if currentTime - lastCheck < 60 then return end
 	lastCheck = currentTime
