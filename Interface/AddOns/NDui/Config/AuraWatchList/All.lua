@@ -183,6 +183,7 @@ local list = {
 		{AuraID = 386881, UnitID = "player"},	-- 冰霜炸弹，碧蓝魔馆
 		{AuraID = 162652, UnitID = "player", Flash = true},	-- 纯净之月，影月墓地
 		{AuraID = 153692, UnitID = "player", Flash = true},	-- 死疽沥青，影月墓地
+		{AuraID = 400474, UnitID = "player"},	-- 能量湍流，阻击战
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
