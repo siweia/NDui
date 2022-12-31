@@ -348,6 +348,7 @@ function TT:ReskinTooltip()
 		self.bg = B.SetBD(self, .7)
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
+		B.SetBorderColor(self.bg)
 
 		if self.StatusBar then
 			TT.ReskinStatusBar(self)
@@ -355,13 +356,13 @@ function TT:ReskinTooltip()
 
 		self.tipStyled = true
 	end
-	B.SetBorderColor(self.bg)
 end
 
 function TT:UpdateTooltipBorder()
 	if not self.bg then return end
 	if not C.db["Tooltip"]["ItemQuality"] then return end
 
+	B.SetBorderColor(self.bg)
 	local data = self:GetTooltipData()
 	local guid = data and data.guid
 	local link = guid and C_Item.GetItemLinkByGUID(guid)
