@@ -193,7 +193,7 @@ local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
 	[7345] = 2024, -- 碧蓝林海
 }
 
-local stormOrders = {2022,2025,2024,2023}
+local stormOrders = {2022,2024,2025,2023}
 
 local atlasCache = {}
 local function GetElementalType(element) -- 获取入侵类型图标
@@ -207,6 +207,13 @@ local function GetElementalType(element) -- 获取入侵类型图标
 	end
 	return str
 end
+
+local fixedStorms = {
+	[7245] = 2025, -- 提尔要塞，风？
+	[7246] = 2025, -- 提尔要塞，土
+	[7247] = 2025, -- 提尔要塞，火
+	[7248] = 2025, -- 提尔要塞，水
+}
 
 local function GetFormattedTimeLeft(timeLeft)
 	return format("%.2d:%.2d", timeLeft/60, timeLeft%60)
@@ -314,12 +321,15 @@ info.onEnter = function(self)
 			if elementType and not poiCache[areaPoiID] then
 				poiCache[areaPoiID] = true
 				addTitle(poiInfo.name)
+				mapID = fixedStorms[areaPoiID] or mapID
 				local mapInfo = C_Map_GetMapInfo(mapID)
 				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
 				GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
-				--print("["..areaPoiID.."] = "..mapID)
+				if IsShiftKeyDown() and DB.isDeveloper then
+					print("["..areaPoiID.."] = "..mapID, elementType)
+				end
 			end
 		end
 	end
