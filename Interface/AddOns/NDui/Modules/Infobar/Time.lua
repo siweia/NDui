@@ -209,10 +209,14 @@ local function GetElementalType(element) -- 获取入侵类型图标
 end
 
 local fixedStorms = {
-	[7245] = 2025, -- 提尔要塞，风？
+	[7245] = 2025, -- 提尔要塞，风
 	[7246] = 2025, -- 提尔要塞，土
 	[7247] = 2025, -- 提尔要塞，火
 	[7248] = 2025, -- 提尔要塞，水
+    [7298] = 2025, -- 拜荒者，风
+    [7299] = 2025, -- 拜荒者，土？
+    [7300] = 2025, -- 拜荒者，火？
+    [7301] = 2025, -- 拜荒者，水？
 }
 
 local function GetFormattedTimeLeft(timeLeft)
@@ -321,8 +325,7 @@ info.onEnter = function(self)
 			if elementType and not poiCache[areaPoiID] then
 				poiCache[areaPoiID] = true
 				addTitle(poiInfo.name)
-				mapID = fixedStorms[areaPoiID] or mapID
-				local mapInfo = C_Map_GetMapInfo(mapID)
+				local mapInfo = C_Map_GetMapInfo(fixedStorms[areaPoiID] or mapID)
 				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
