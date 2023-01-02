@@ -204,6 +204,7 @@ C.themes["Blizzard_Professions"] = function()
 	B.CreateBDFrame(guildFrame, .25)
 	B.StripTextures(guildFrame.Container)
 	B.CreateBDFrame(guildFrame.Container, .25)
+	B.ReskinTrimScroll(guildFrame.Container.ScrollBar, true)
 
 	for i = 1, 3 do
 		local tab = select(i, frame.TabSystem:GetChildren())
