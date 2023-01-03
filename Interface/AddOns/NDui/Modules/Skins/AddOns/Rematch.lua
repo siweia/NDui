@@ -412,6 +412,8 @@ function S:ReskinRematchElements()
 	S.RematchDropdown(dialog.SaveAs.Target)
 	S.RematchDropdown(dialog.TabPicker)
 	S.RematchIcon(dialog.Pet.Pet)
+	B.ReskinRadio(dialog.ConflictRadios.MakeUnique)
+	B.ReskinRadio(dialog.ConflictRadios.Overwrite)
 
 	local preferences = dialog.Preferences
 	S.RematchInput(preferences.MinHP)
@@ -478,6 +480,7 @@ function S:ReskinRematch()
 		RematchJournalPortrait:Hide()
 		for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
 			B.ReskinTab(tab)
+			tab.Highlight:SetAlpha(0)
 		end
 
 		B.ReskinCheck(UseRematchButton)

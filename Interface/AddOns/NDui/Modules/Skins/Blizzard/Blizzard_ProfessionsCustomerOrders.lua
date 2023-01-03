@@ -151,6 +151,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	reskinMoneyInput(paymentContainer.TipMoneyInputFrame.SilverBox)
 	B.ReskinDropDown(paymentContainer.DurationDropDown)
 	B.Reskin(paymentContainer.ListOrderButton)
+	B.Reskin(paymentContainer.CancelOrderButton)
 
 	local viewButton = paymentContainer.ViewListingsButton
 	viewButton:SetAlpha(0)

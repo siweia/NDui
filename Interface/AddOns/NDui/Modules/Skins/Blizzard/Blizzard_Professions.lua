@@ -71,56 +71,7 @@ local function reskinQualityContainer(container)
 	reskinArrowInput(container.EditBox)
 end
 
-C.themes["Blizzard_Professions"] = function()
-	local frame = ProfessionsFrame
-	local craftingPage = ProfessionsFrame.CraftingPage
-
-	B.ReskinPortraitFrame(frame)
-	craftingPage.TutorialButton.Ring:Hide()
-	B.Reskin(craftingPage.CreateButton)
-	B.Reskin(craftingPage.CreateAllButton)
-	B.Reskin(craftingPage.ViewGuildCraftersButton)
-	reskinArrowInput(craftingPage.CreateMultipleInputBox)
-
-	local guildFrame = craftingPage.GuildFrame
-	B.StripTextures(guildFrame)
-	B.CreateBDFrame(guildFrame, .25)
-	B.StripTextures(guildFrame.Container)
-	B.CreateBDFrame(guildFrame.Container, .25)
-
-	for i = 1, 3 do
-		local tab = select(i, frame.TabSystem:GetChildren())
-		if tab then
-			B.ReskinTab(tab)
-		end
-	end
-
-	-- Tools
-	local slots = {"Prof0ToolSlot", "Prof0Gear0Slot", "Prof0Gear1Slot", "Prof1ToolSlot", "Prof1Gear0Slot", "Prof1Gear1Slot",
-		"CookingToolSlot", "CookingGear0Slot", "FishingToolSlot", "FishingGear0Slot", "FishingGear1Slot"}
-	for _, name in pairs(slots) do
-		local button = craftingPage[name]
-		if button then
-			button.bg = B.ReskinIcon(button.icon)
-			B.ReskinIconBorder(button.IconBorder) -- needs review, maybe no quality at all
-			button:SetNormalTexture(0)
-			button:SetPushedTexture(0)
-		end
-	end
-
-	local recipeList = craftingPage.RecipeList
-	B.StripTextures(recipeList)
-	B.ReskinTrimScroll(recipeList.ScrollBar, true)
-	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
-	B.CreateBDFrame(recipeList, .25):SetInside()
-	B.ReskinEditBox(recipeList.SearchBox)
-	B.ReskinFilterButton(recipeList.FilterButton)
-
-	local form = craftingPage.SchematicForm
-	B.StripTextures(form)
-	form.Background:SetAlpha(0)
-	B.CreateBDFrame(form, .25):SetInside()
-
+local function reskinProfessionForm(form)
 	local button = form.OutputIcon
 	if button then
 		button.CircleMask:Hide()
@@ -172,12 +123,125 @@ C.themes["Blizzard_Professions"] = function()
 		end
 		-- todo: salvage flyout, item flyout, recraft flyout
 	end)
+end
 
-	local rankBar = craftingPage.RankBar
+local function reskinOutputButtons(self)
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local child = select(i, self.ScrollTarget:GetChildren())
+		if not child.styled then
+			local itemContainer = child.ItemContainer
+			if itemContainer then
+				local item = itemContainer.Item
+				item:SetNormalTexture(0)
+				item:SetPushedTexture(0)
+				item:SetHighlightTexture(0)
+
+				local icon = item:GetRegions()
+				item.bg = B.ReskinIcon(icon)
+				B.ReskinIconBorder(item.IconBorder, true)
+				itemContainer.CritFrame:SetAlpha(0)
+				itemContainer.BorderFrame:Hide()
+				itemContainer.HighlightNameFrame:SetAlpha(0)
+				itemContainer.PushedNameFrame:SetAlpha(0)
+				itemContainer.bg = B.CreateBDFrame(itemContainer.HighlightNameFrame, .25)
+			end
+
+			local bonus = child.CreationBonus
+			if bonus then
+				local item = bonus.Item
+				B.StripTextures(item, 1)
+				local icon = item:GetRegions()
+				B.ReskinIcon(icon)
+			end
+
+			child.styled = true
+		end
+
+		local itemContainer = child.ItemContainer
+		if itemContainer then
+			itemContainer.Item.IconBorder:SetAlpha(0)
+
+			local itemBG = itemContainer.bg
+			if itemBG then
+				if itemContainer.CritFrame:IsShown() then
+					itemBG:SetBackdropBorderColor(1, .8, 0)
+				else
+					itemBG:SetBackdropBorderColor(0, 0, 0)
+				end
+			end
+		end
+	end
+end
+
+local function reskinOutputLog(outputLog)
+	B.StripTextures(outputLog)
+	B.SetBD(outputLog)
+	B.ReskinClose(outputLog.ClosePanelButton)
+	B.ReskinTrimScroll(outputLog.ScrollBar, true)
+	hooksecurefunc(outputLog.ScrollBox, "Update", reskinOutputButtons)
+end
+
+local function reskinRankBar(rankBar)
 	rankBar.Border:Hide()
 	rankBar.Background:Hide()
 	rankBar.Rank.Text:SetFontObject(Game12Font)
 	B.CreateBDFrame(rankBar.Fill, 1)
+end
+
+C.themes["Blizzard_Professions"] = function()
+	local frame = ProfessionsFrame
+	local craftingPage = ProfessionsFrame.CraftingPage
+
+	B.ReskinPortraitFrame(frame)
+	craftingPage.TutorialButton.Ring:Hide()
+	B.Reskin(craftingPage.CreateButton)
+	B.Reskin(craftingPage.CreateAllButton)
+	B.Reskin(craftingPage.ViewGuildCraftersButton)
+	reskinArrowInput(craftingPage.CreateMultipleInputBox)
+
+	local guildFrame = craftingPage.GuildFrame
+	B.StripTextures(guildFrame)
+	B.CreateBDFrame(guildFrame, .25)
+	B.StripTextures(guildFrame.Container)
+	B.CreateBDFrame(guildFrame.Container, .25)
+	B.ReskinTrimScroll(guildFrame.Container.ScrollBar, true)
+
+	for i = 1, 3 do
+		local tab = select(i, frame.TabSystem:GetChildren())
+		if tab then
+			B.ReskinTab(tab)
+		end
+	end
+
+	-- Tools
+	local slots = {"Prof0ToolSlot", "Prof0Gear0Slot", "Prof0Gear1Slot", "Prof1ToolSlot", "Prof1Gear0Slot", "Prof1Gear1Slot",
+		"CookingToolSlot", "CookingGear0Slot", "FishingToolSlot", "FishingGear0Slot", "FishingGear1Slot"}
+	for _, name in pairs(slots) do
+		local button = craftingPage[name]
+		if button then
+			button.bg = B.ReskinIcon(button.icon)
+			B.ReskinIconBorder(button.IconBorder) -- needs review, maybe no quality at all
+			button:SetNormalTexture(0)
+			button:SetPushedTexture(0)
+		end
+	end
+
+	local recipeList = craftingPage.RecipeList
+	B.StripTextures(recipeList)
+	B.ReskinTrimScroll(recipeList.ScrollBar, true)
+	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
+	B.CreateBDFrame(recipeList, .25):SetInside()
+	B.ReskinEditBox(recipeList.SearchBox)
+	B.ReskinFilterButton(recipeList.FilterButton)
+
+	local form = craftingPage.SchematicForm
+	B.StripTextures(form)
+	form.Background:SetAlpha(0)
+	B.CreateBDFrame(form, .25):SetInside()
+	reskinProfessionForm(form)
+
+	local rankBar = craftingPage.RankBar
+	reskinRankBar(rankBar)
 
 	B.ReskinArrow(craftingPage.LinkButton, "right")
 	craftingPage.LinkButton:SetSize(20, 20)
@@ -207,59 +271,7 @@ C.themes["Blizzard_Professions"] = function()
 	B.ReskinIcon(view.UnspentPoints.Icon)
 
 	-- log
-	local outputLog = craftingPage.CraftingOutputLog
-	B.StripTextures(outputLog)
-	B.SetBD(outputLog)
-	B.ReskinClose(outputLog.ClosePanelButton)
-	B.ReskinTrimScroll(outputLog.ScrollBar, true)
-
-	hooksecurefunc(outputLog.ScrollBox, "Update", function(self)
-		for i = 1, self.ScrollTarget:GetNumChildren() do
-			local child = select(i, self.ScrollTarget:GetChildren())
-			if not child.styled then
-				local itemContainer = child.ItemContainer
-				if itemContainer then
-					local item = itemContainer.Item
-					item:SetNormalTexture(0)
-					item:SetPushedTexture(0)
-					item:SetHighlightTexture(0)
-
-					local icon = item:GetRegions()
-					item.bg = B.ReskinIcon(icon)
-					B.ReskinIconBorder(item.IconBorder, true)
-					itemContainer.CritFrame:SetAlpha(0)
-					itemContainer.BorderFrame:Hide()
-					itemContainer.HighlightNameFrame:SetAlpha(0)
-					itemContainer.PushedNameFrame:SetAlpha(0)
-					itemContainer.bg = B.CreateBDFrame(itemContainer.HighlightNameFrame, .25)
-				end
-
-				local bonus = child.CreationBonus
-				if bonus then
-					local item = bonus.Item
-					B.StripTextures(item, 1)
-					local icon = item:GetRegions()
-					B.ReskinIcon(icon)
-				end
-
-				child.styled = true
-			end
-
-			local itemContainer = child.ItemContainer
-			if itemContainer then
-				itemContainer.Item.IconBorder:SetAlpha(0)
-
-				local itemBG = itemContainer.bg
-				if itemBG then
-					if itemContainer.CritFrame:IsShown() then
-						itemBG:SetBackdropBorderColor(1, .8, 0)
-					else
-						itemBG:SetBackdropBorderColor(0, 0, 0)
-					end
-				end
-			end
-		end
-	end)
+	reskinOutputLog(craftingPage.CraftingOutputLog)
 
 	-- Item flyout
 	if OpenProfessionsItemFlyout then
@@ -312,4 +324,30 @@ C.themes["Blizzard_Professions"] = function()
 		end
 	end)
 	frame.OrdersPage:SetupTable() -- init header
+
+	local orderView = frame.OrdersPage.OrderView
+	B.Reskin(orderView.CreateButton)
+	B.Reskin(orderView.CompleteOrderButton)
+	reskinOutputLog(orderView.CraftingOutputLog)
+	reskinRankBar(orderView.RankBar)
+
+	local orderInfo = orderView.OrderInfo
+	B.StripTextures(orderInfo)
+	B.CreateBDFrame(orderInfo, .25):SetInside()
+	B.Reskin(orderInfo.BackButton)
+	B.Reskin(orderInfo.IgnoreButton)
+	B.Reskin(orderInfo.StartOrderButton)
+	B.Reskin(orderInfo.DeclineOrderButton)
+	B.Reskin(orderInfo.ReleaseOrderButton)
+	B.StripTextures(orderInfo.NoteBox)
+	B.CreateBDFrame(orderInfo.NoteBox, .25)
+
+	local orderDetails = orderView.OrderDetails
+	B.StripTextures(orderDetails)
+	orderDetails.Background:SetAlpha(0)
+	B.CreateBDFrame(orderDetails, .25):SetInside()
+	reskinProfessionForm(orderDetails.SchematicForm)
+
+	B.StripTextures(orderDetails.FulfillmentForm.NoteEditBox)
+	B.CreateBDFrame(orderDetails.FulfillmentForm.NoteEditBox, .25)
 end

@@ -59,7 +59,7 @@ local function buildFriendTable(num)
 				status = FRIENDS_TEXTURE_DND
 			end
 			local class = DB.ClassList[info.className]
-			tinsert(friendTable, {info.name, info.level, class, info.area, status})
+			tinsert(friendTable, {info.name, info.level, class, info.area, status, info.notes})
 		end
 	end
 
@@ -373,10 +373,15 @@ local function buttonOnEnter(self)
 	else
 		GameTooltip:AddLine(L["WoW"], 1,.8,0)
 		GameTooltip:AddLine(" ")
-		local name, level, class, area = unpack(self.data)
+		local name, level, class, area, _, note = unpack(self.data)
 		local classColor = B.HexRGB(B.ClassColor(class))
 		GameTooltip:AddLine(format("%s %s%s", level, classColor, name))
 		GameTooltip:AddLine(format("%s%s", inactiveZone, area))
+
+		if note and note ~= "" then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(format(noteString, note), 1,.8,0)
+		end
 	end
 	GameTooltip:Show()
 end
