@@ -10,6 +10,8 @@ local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
 local C_Timer_After = C_Timer.After
 local cr, cg, cb = DB.r, DB.g, DB.b
 
+local MinimapMailFrame = DB.isNewPatch and MinimapCluster.IndicatorFrame.MailFrame or MinimapCluster.MailFrame
+
 function module:CreatePulse()
 	if not C.db["Map"]["CombatPulse"] then return end
 
@@ -28,7 +30,7 @@ function module:CreatePulse()
 			bg:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
 		elseif not InCombatLockdown() then
-			if C_Calendar.GetNumPendingInvites() > 0 or MinimapCluster.MailFrame:IsShown() then
+			if C_Calendar.GetNumPendingInvites() > 0 or MinimapMailFrame:IsShown() then
 				bg:SetBackdropBorderColor(1, 1, 0)
 				anim:Play()
 			else
@@ -42,7 +44,7 @@ function module:CreatePulse()
 	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
 	B:RegisterEvent("UPDATE_PENDING_MAIL", updateMinimapAnim)
 
-	MinimapCluster.MailFrame:HookScript("OnHide", function()
+	MinimapMailFrame:HookScript("OnHide", function()
 		if InCombatLockdown() then return end
 		anim:Stop()
 		bg:SetBackdropBorderColor(0, 0, 0)
@@ -159,9 +161,9 @@ function module:ReskinRegions()
 	end
 
 	-- Mail icon
-	MinimapCluster.MailFrame:ClearAllPoints()
-	MinimapCluster.MailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3)
-	MinimapCluster.MailFrame:SetFrameLevel(11)
+	MinimapMailFrame:ClearAllPoints()
+	MinimapMailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3)
+	MinimapMailFrame:SetFrameLevel(11)
 	MiniMapMailIcon:SetSize(24, 18)
 
 	-- Invites Icon
