@@ -360,16 +360,16 @@ function TT:ReskinTooltip()
 	B.SetBorderColor(self.bg)
 
 	if not C.db["Tooltip"]["ItemQuality"] then return end
-	if not self.GetTooltipData then return end
 
-	local data = self:GetTooltipData()
-	local guid = data and data.guid
-	local link = guid and C_Item.GetItemLinkByGUID(guid)
-	if link then
-		local quality = select(3, GetItemInfo(link))
-		local color = DB.QualityColors[quality or 1]
-		if color then
-			self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+	local data = self.GetTooltipData and self:GetTooltipData()
+	if data then
+		local link = data.guid and C_Item.GetItemLinkByGUID(data.guid) or data.hyperlink
+		if link then
+			local quality = select(3, GetItemInfo(link))
+			local color = DB.QualityColors[quality or 1]
+			if color then
+				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+			end
 		end
 	end
 end
