@@ -356,21 +356,20 @@ function TT:ReskinTooltip()
 
 		self.tipStyled = true
 	end
-end
-
-function TT:UpdateTooltipBorder()
-	if not self.bg then return end
-	if not C.db["Tooltip"]["ItemQuality"] then return end
 
 	B.SetBorderColor(self.bg)
-	local data = self:GetTooltipData()
-	local guid = data and data.guid
-	local link = guid and C_Item.GetItemLinkByGUID(guid)
-	if link then
-		local quality = select(3, GetItemInfo(link))
-		local color = DB.QualityColors[quality or 1]
-		if color then
-			self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+
+	if not C.db["Tooltip"]["ItemQuality"] then return end
+
+	local data = self.GetTooltipData and self:GetTooltipData()
+	if data then
+		local link = data.guid and C_Item.GetItemLinkByGUID(data.guid) or data.hyperlink
+		if link then
+			local quality = select(3, GetItemInfo(link))
+			local color = DB.QualityColors[quality or 1]
+			if color then
+				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+			end
 		end
 	end
 end
@@ -444,7 +443,6 @@ function TT:OnLogin()
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 	hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
 	TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
-	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.UpdateTooltipBorder)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
