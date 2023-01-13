@@ -975,44 +975,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- Addon supports
 
-	local function buttonOnUpdate(MissionList)
-		local buttons = MissionList.listScroll.buttons
-		for i = 1, #buttons do
-			local bu = select(3, buttons[i]:GetChildren())
-			if bu and bu:IsObjectType("Button") and not bu.styled then
-				B.Reskin(bu)
-				bu:SetSize(60, 45)
-				bu.styled = true
-			end
-		end
-	end
-
-	local function buttonOnShow(MissionPage)
-		for i = 18, 27 do
-			local bu = select(i, MissionPage:GetChildren())
-			if bu and bu:IsObjectType("Button") and not bu.styled then
-				B.Reskin(bu)
-				bu:SetSize(50, 45)
-				bu.styled = true
-			end
-		end
-	end
-
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("ADDON_LOADED")
-	f:SetScript("OnEvent", function(_, event, addon)
-		if addon == "GarrisonMissionManager" then
-			for _, frame in next, {GarrisonMissionFrame, OrderHallMissionFrame, BFAMissionFrame} do
-				if frame then
-					hooksecurefunc(frame.MissionTab.MissionList, "Update", buttonOnUpdate)
-					frame.MissionTab.MissionPage:HookScript("OnShow", buttonOnShow)
-				end
-			end
-
-			f:UnregisterEvent(event)
-		end
-	end)
-
 	local function reskinWidgetFont(font, r, g, b)
 		if not C.db["Skins"]["FontOutline"] then return end
 		if font and font.SetTextColor then
