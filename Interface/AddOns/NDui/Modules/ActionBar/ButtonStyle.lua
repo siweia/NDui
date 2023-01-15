@@ -16,6 +16,7 @@ local replaces = {
 	{KEY_MOUSEWHEELDOWN, "MD"},
 	{KEY_SPACE, "Sp"},
 	{"CAPSLOCK", "CL"},
+	{"Capslock", "CL"},
 	{"BUTTON", "M"},
 	{"NUMPAD", "N"},
 	{"(ALT%-)", "a"},

@@ -73,7 +73,7 @@ local list = {
 		{AuraID = 328622, UnitID = "player"},	-- 暮秋祝福
 		{AuraID = 324867, UnitID = "player", Value = true},	-- 血肉铸造
 		{AuraID = 328204, UnitID = "player"},	-- 征服者之锤
-		{AuraID = 325748, UnitID = "player"},	-- 激变蜂群
+		{AuraID = 391891, UnitID = "player"},	-- 激变蜂群
 		{AuraID = 315443, UnitID = "player"},	-- 憎恶附肢
 		{AuraID = 325299, UnitID = "player"},	-- 屠戮箭
 		{AuraID = 327164, UnitID = "player"},	-- 始源之潮
