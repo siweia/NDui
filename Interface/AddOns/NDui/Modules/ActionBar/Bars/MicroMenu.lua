@@ -143,6 +143,11 @@ function Bar:MicroMenu()
 
 	MicroButtonAndBagsBar:Hide()
 	MicroButtonAndBagsBar:UnregisterAllEvents()
+	if DB.isNewPatch then
+		BagsBar:Hide()
+		BagsBar:UnregisterAllEvents()
+	end
+
 	if C.db["Map"]["DisableMinimap"] then
 		QueueStatusButton:SetParent(Minimap)
 		QueueStatusButton:ClearAllPoints()
