@@ -185,6 +185,7 @@ local list = {
 		{AuraID = 153692, UnitID = "player", Flash = true},	-- 死疽沥青，影月墓地
 		{AuraID = 400474, UnitID = "player"},	-- 能量湍流，阻击战
 		{AuraID = 397911, UnitID = "player"},	-- 毁灭之触，青龙寺
+		{AuraID = 397798, UnitID = "player"},	-- 腐蚀漩涡，青龙寺
 		{AuraID = 381862, UnitID = "player", Flash = true},	-- 地狱火之核，红玉
 	},
 	["Warning"] = { -- 目标重要光环组
@@ -197,6 +198,8 @@ local list = {
 		{AuraID = 343502, UnitID = "target"},	-- 鼓舞光环
 		-- 5人
 		{AuraID = 376780, UnitID = "target", Value = true},	-- 岩浆护盾，奈萨鲁斯
+		{AuraID = 372988, UnitID = "target", Value = true},	-- 寒冰壁垒，红玉
+		{AuraID = 391050, UnitID = "target", Value = true},	-- 暴风骤雨之盾，红玉
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
