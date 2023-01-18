@@ -181,6 +181,7 @@ local list = {
 		-- 5人
 		{AuraID = 395035, UnitID = "player", Flash = true},	-- 粉碎灵魂，阻击战
 		{AuraID = 386881, UnitID = "player"},	-- 冰霜炸弹，碧蓝魔馆
+		{AuraID = 388777, UnitID = "player"},	-- 压制瘴气，碧蓝魔馆
 		{AuraID = 162652, UnitID = "player", Flash = true},	-- 纯净之月，影月墓地
 		{AuraID = 153692, UnitID = "player", Flash = true},	-- 死疽沥青，影月墓地
 		{AuraID = 400474, UnitID = "player"},	-- 能量湍流，阻击战
@@ -200,6 +201,7 @@ local list = {
 		{AuraID = 376780, UnitID = "target", Value = true},	-- 岩浆护盾，奈萨鲁斯
 		{AuraID = 372988, UnitID = "target", Value = true},	-- 寒冰壁垒，红玉
 		{AuraID = 391050, UnitID = "target", Value = true},	-- 暴风骤雨之盾，红玉
+		{AuraID = 384686, UnitID = "target", Flash = true},	-- 能量涌动，狙击战
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
