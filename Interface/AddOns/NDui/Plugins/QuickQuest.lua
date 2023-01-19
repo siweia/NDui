@@ -197,14 +197,6 @@ local autoSelectFirstOptionList = {
 	[167839] = true, -- 灵魂残渣，爬塔
 }
 
-local autoGossipTypes = {
-	["taxi"] = true,
-	["gossip"] = true,
-	["banker"] = true,
-	["vendor"] = true,
-	["trainer"] = true,
-}
-
 local ignoreInstances = {
 	[1571] = true, -- 枯法者
 	[1626] = true, -- 群星庭院
