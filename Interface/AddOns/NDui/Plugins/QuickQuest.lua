@@ -5,6 +5,9 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local GetTrackingInfo = C_Minimap.GetTrackingInfo
+local GetNumTrackingTypes = C_Minimap.GetNumTrackingTypes
+
 local created
 local function setupCheckButton()
 	if created then return end
