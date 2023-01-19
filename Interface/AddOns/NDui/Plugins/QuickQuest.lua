@@ -1,9 +1,10 @@
-local _, ns = ...
-local B, C, L, DB = unpack(ns)
 --------------------------
 -- QuickQuest, by p3lim
 -- NDui MOD
 --------------------------
+local _, ns = ...
+local B, C, L, DB = unpack(ns)
+
 local created
 local function setupCheckButton()
 	if created then return end
@@ -51,6 +52,15 @@ end
 
 local function GetNPCID()
 	return B.GetNPCID(UnitGUID("npc"))
+end
+
+local function IsTrackingHidden()
+	for index = 1, GetNumTrackingTypes() do
+		local name, _, active = GetTrackingInfo(index)
+		if name == MINIMAP_TRACKING_TRIVIAL_QUESTS then
+			return active
+		end
+	end
 end
 
 local ignoreQuestNPC = {
@@ -125,7 +135,7 @@ QuickQuest:Register("QUEST_GREETING", function()
 	if(available > 0) then
 		for index = 1, available do
 			local isTrivial = IsActiveQuestTrivial(index)
-			if not isTrivial then
+			if not isTrivial or IsTrackingHidden() then
 				SelectAvailableQuest(index)
 			end
 		end
@@ -133,12 +143,12 @@ QuickQuest:Register("QUEST_GREETING", function()
 end)
 
 -- This should be part of the API, really
-local function GetAvailableGossipQuestInfo(index)
+local function GetAvailableGossipQuestInfo(index) -- deprecated
 	local name, level, isTrivial, frequency, isRepeatable, isLegendary, isIgnored = select(((index * 7) - 7) + 1, GetGossipAvailableQuests())
 	return name, level, isTrivial, isIgnored, isRepeatable, frequency == 2, frequency == 3, isLegendary
 end
 
-local function GetActiveGossipQuestInfo(index)
+local function GetActiveGossipQuestInfo(index) -- deprecated
 	local name, level, isTrivial, isComplete, isLegendary, isIgnored = select(((index * 6) - 6) + 1, GetGossipActiveQuests())
 	return name, level, isTrivial, isIgnored, isComplete, isLegendary
 end
@@ -177,7 +187,7 @@ local ignoreGossipNPC = {
 	[150131] = true, -- 萨尔玛法师
 }
 
-local rogueClassHallInsignia = {
+local autoSelectFirstOptionList = {
 	[97004] = true, -- "Red" Jack Findle
 	[96782] = true, -- Lucian Trias
 	[93188] = true, -- Mongar
@@ -196,76 +206,107 @@ local autoGossipTypes = {
 	["trainer"] = true,
 }
 
+local ignoreInstances = {
+	[1571] = true, -- 枯法者
+	[1626] = true, -- 群星庭院
+}
 QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
 	if C.IgnoreQuestNPC[npcID] then return end
 
-	local active = GetNumGossipActiveQuests()
-	if(active > 0) then
-		local logQuests = GetQuestLogQuests(true)
-		for index = 1, active do
-			local name, _, _, _, complete = GetActiveGossipQuestInfo(index)
-			if(complete) then
-				local questID = logQuests[name]
-				if(not questID) then
-					SelectGossipActiveQuest(index)
-				else
-					local _, _, worldQuest = GetQuestTagInfo(questID)
-					if(not worldQuest) then
+	if DB.isNewPatch then
+		local active = C_GossipInfo.GetNumActiveQuests()
+		if active > 0 then
+			for index, questInfo in ipairs(C_GossipInfo.GetActiveQuests()) do
+				local questID = questInfo.questID
+				if questInfo.isComplete and questID then
+					C_GossipInfo.SelectActiveQuest(questID)
+				end
+			end
+		end
+
+		local available = C_GossipInfo.GetNumAvailableQuests()
+		if available > 0 then
+			for index, questInfo in ipairs(C_GossipInfo.GetAvailableQuests()) do
+				local trivial = questInfo.isTrivial
+				if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
+					C_GossipInfo.SelectAvailableQuest(questInfo.questID)
+				end
+			end
+		end
+
+		local gossipInfoTable = C_GossipInfo.GetOptions()
+		if not gossipInfoTable then return end
+
+		local numOptions = #gossipInfoTable
+		local firstOptionID = gossipInfoTable[1] and gossipInfoTable[1].gossipOptionID
+
+		if firstOptionID then
+			if autoSelectFirstOptionList[npcID] then
+				return C_GossipInfo.SelectOption(firstOptionID)
+			end
+
+			if available == 0 and active == 0 and numOptions == 1 then
+				local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+				if instance ~= "raid" and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
+					return C_GossipInfo.SelectOption(firstOptionID)
+				end
+			end
+		end
+	else
+		local active = GetNumGossipActiveQuests()
+		if(active > 0) then
+			local logQuests = GetQuestLogQuests(true)
+			for index = 1, active do
+				local name, _, _, _, complete = GetActiveGossipQuestInfo(index)
+				if(complete) then
+					local questID = logQuests[name]
+					if(not questID) then
 						SelectGossipActiveQuest(index)
+					else
+						local _, _, worldQuest = GetQuestTagInfo(questID)
+						if(not worldQuest) then
+							SelectGossipActiveQuest(index)
+						end
 					end
 				end
 			end
 		end
-	end
 
-	local available = GetNumGossipAvailableQuests()
-	if(available > 0) then
-		for index = 1, available do
-			local _, _, trivial, ignored = GetAvailableGossipQuestInfo(index)
-			if(not trivial and not ignored) then
-				SelectGossipAvailableQuest(index)
-			elseif(trivial and npcID == 64337) then
-				SelectGossipAvailableQuest(index)
-			end
-		end
-	end
-
-	if(rogueClassHallInsignia[npcID]) then
-		return SelectGossipOption(1)
-	end
-
-	if(available == 0 and active == 0) then
-		if GetNumGossipOptions() == 1 then
-			if(npcID == 57850) then
-				return SelectGossipOption(1)
-			end
-
-			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-			if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
-				local _, type = GetGossipOptions()
-				if autoGossipTypes[type] then
-					SelectGossipOption(1)
-					return
+		local available = GetNumGossipAvailableQuests()
+		if(available > 0) then
+			for index = 1, available do
+				local _, _, trivial, ignored = GetAvailableGossipQuestInfo(index)
+				if(not trivial and not ignored) then
+					SelectGossipAvailableQuest(index)
+				elseif(trivial and npcID == 64337) then
+					SelectGossipAvailableQuest(index)
 				end
 			end
-		elseif followerAssignees[npcID] and GetNumGossipOptions() > 1 then
+		end
+
+		if(autoSelectFirstOptionList[npcID]) then
 			return SelectGossipOption(1)
 		end
-	end
-end)
 
-local darkmoonNPC = {
-	[57850] = true, -- Teleportologist Fozlebub
-	[55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
-	[54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
-}
+		if(available == 0 and active == 0) then
+			if GetNumGossipOptions() == 1 then
+				if(npcID == 57850) then
+					return SelectGossipOption(1)
+				end
 
-QuickQuest:Register("GOSSIP_CONFIRM", function(index)
-	local npcID = GetNPCID()
-	if(npcID and darkmoonNPC[npcID]) then
-		SelectGossipOption(index, "", true)
-		StaticPopup_Hide("GOSSIP_CONFIRM")
+				local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+				if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
+					local _, type = GetGossipOptions()
+					if autoGossipTypes[type] then
+						SelectGossipOption(1)
+						return
+					end
+				end
+			elseif followerAssignees[npcID] and GetNumGossipOptions() > 1 then
+				return SelectGossipOption(1)
+			end
+		end
 	end
 end)
 
@@ -401,8 +442,9 @@ QuickQuest:Register("QUEST_COMPLETE", function()
 		for index = 1, choices do
 			local link = GetQuestItemLink("choice", index)
 			if(link) then
-				local _, _, _, _, _, _, _, _, _, _, value = GetItemInfo(link)
-				value = cashRewards[tonumber(strmatch(link, "item:(%d+):"))] or value
+				local value = select(11, GetItemInfo(link))
+				local itemID = GetItemInfoFromHyperlink(link)
+				value = cashRewards[itemID] or value
 
 				if(value > bestValue) then
 					bestValue, bestIndex = value, index
