@@ -5,8 +5,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local GetTrackingInfo = C_Minimap.GetTrackingInfo
-local GetNumTrackingTypes = C_Minimap.GetNumTrackingTypes
+local GetTrackingInfo = DB.isNewPatch and C_Minimap.GetTrackingInfo or GetTrackingInfo
+local GetNumTrackingTypes = DB.isNewPatch and C_Minimap.GetNumTrackingTypes or GetNumTrackingTypes
 
 local created
 local function setupCheckButton()
