@@ -223,4 +223,21 @@ C.themes["Blizzard_AuctionUI"] = function()
 		iconBorder:SetOutside(icon)
 		icon:SetTexCoord(.08, .92, .08, .92)
 	end
+
+	if DB.isNewPatch then
+		AuctionFrameBot:Hide()
+
+		B.Reskin(BrowsePriceOptionsButtonFrame.Button)
+		BrowsePriceOptionsButtonFrame.Button.__bg:SetInside(nil, 4, 4)
+
+		B.StripTextures(BrowsePriceOptionsFrame)
+		B.SetBD(BrowsePriceOptionsFrame)
+		for _, child in next, {BrowsePriceOptionsFrame:GetChildren()} do
+			if child:IsObjectType("Button") then
+				B.Reskin(child)
+			elseif child:IsObjectType("CheckButton") then
+				B.ReskinRadio(child)
+			end
+		end
+	end
 end
