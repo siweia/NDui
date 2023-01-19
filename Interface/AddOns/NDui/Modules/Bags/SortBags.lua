@@ -9,8 +9,6 @@ local _G, _M = getfenv(0), {}
 setfenv(1, setmetatable(_M, {__index=_G}))
 
 local GetBagName = C_Container and C_Container.GetBagName or GetBagName
-local GetBagSlotFlag = C_Container and C_Container.GetBagSlotFlag or GetBagSlotFlag
-local GetBankBagSlotFlag = C_Container and C_Container.GetBankBagSlotFlag or GetBankBagSlotFlag
 local PickupContainerItem = C_Container and C_Container.PickupContainerItem or PickupContainerItem
 local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
 local GetContainerItemInfo = C_Container and C_Container.GetContainerItemInfo or GetContainerItemInfo
@@ -23,21 +21,11 @@ BANK_BAG_CONTAINERS = {-1, 5, 6, 7, 8, 9, 10, 11}
 
 function _G.SortBags()
 	CONTAINERS = {unpack(BAG_CONTAINERS)}
-	for i = #CONTAINERS, 1, -1 do
-		if GetBagSlotFlag(i - 1, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP) then
-			tremove(CONTAINERS, i)
-		end
-	end
 	Start()
 end
 
 function _G.SortBankBags()
 	CONTAINERS = {unpack(BANK_BAG_CONTAINERS)}
-	for i = #CONTAINERS, 1, -1 do
-		if GetBankBagSlotFlag(i - 1, LE_BAG_FILTER_FLAG_IGNORE_CLEANUP) then
-			tremove(CONTAINERS, i)
-		end
-	end
 	Start()
 end
 
