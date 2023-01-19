@@ -108,6 +108,9 @@ function M:OnLogin()
 	if not InspectTalentFrameSpentPoints then
 		InspectTalentFrameSpentPoints = CreateFrame("Frame")
 	end
+	if not BrowseBidText then
+		BrowseBidText = CreateFrame("Frame")
+	end
 end
 
 -- Get Naked
