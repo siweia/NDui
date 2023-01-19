@@ -1314,6 +1314,10 @@ do
 		self.settingTexture = nil
 	end
 
+	local function hideCollapseTexture(self)
+		self.bg:Hide()
+	end
+
 	function B:ReskinCollapse(isAtlas)
 		self:SetNormalTexture(0)
 		self:SetHighlightTexture(0)
@@ -1338,6 +1342,9 @@ do
 			hooksecurefunc(self, "SetNormalAtlas", resetCollapseTexture)
 		else
 			hooksecurefunc(self, "SetNormalTexture", resetCollapseTexture)
+			if self.ClearNormalTexture then
+				hooksecurefunc(self, "ClearNormalTexture", hideCollapseTexture)
+			end
 		end
 	end
 
