@@ -610,7 +610,7 @@ end
 local minimapInfo = {
 	text = L["MinimapHelp"],
 	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.LeftEdgeBottom,
+	targetPoint = HelpTip.Point.LeftEdgeCenter,
 	onAcknowledgeCallback = B.HelpInfoAcknowledge,
 	callbackArg = "MinimapInfo",
 	alignment = 3,
