@@ -82,7 +82,9 @@ C.themes["Blizzard_GuildUI"] = function()
 	GuildFrameTabardBorder:Hide()
 	B.StripTextures(GuildInfoFrameInfo)
 	B.StripTextures(GuildInfoFrameTab1)
-	GuildMemberDetailCorner:Hide()
+	if not DB.isNewPatch then
+		GuildMemberDetailCorner:Hide()
+	end
 	B.StripTextures(GuildLogFrame)
 	B.StripTextures(GuildLogContainer)
 	B.StripTextures(GuildNewsFiltersFrame)

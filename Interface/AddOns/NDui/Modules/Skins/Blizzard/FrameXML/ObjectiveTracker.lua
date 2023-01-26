@@ -259,6 +259,7 @@ tinsert(C.defaultThemes, function()
 		ObjectiveTrackerBlocksFrame.ProfessionHeader,
 		BONUS_OBJECTIVE_TRACKER_MODULE.Header,
 		WORLD_QUEST_TRACKER_MODULE.Header,
+		MONTHLY_ACTIVITIES_TRACKER_MODULE.Header,
 		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,
 	}
 	for _, header in pairs(headers) do
