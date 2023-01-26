@@ -10,7 +10,7 @@ local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
 local C_Timer_After = C_Timer.After
 local cr, cg, cb = DB.r, DB.g, DB.b
 
-local MinimapMailFrame = DB.isNewPatch and MinimapCluster.IndicatorFrame.MailFrame or MinimapCluster.MailFrame
+local MinimapMailFrame = MinimapCluster.IndicatorFrame.MailFrame
 
 function module:CreatePulse()
 	if not C.db["Map"]["CombatPulse"] then return end
@@ -166,11 +166,8 @@ function module:ReskinRegions()
 		frame:ClearAllPoints()
 		frame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3, true)
 	end
-	if DB.isNewPatch then
-		hooksecurefunc(MinimapMailFrame, "SetPoint", updateMapAnchor)
-	else
-		updateMapAnchor(updateMapAnchor)
-	end
+	updateMapAnchor(updateMapAnchor)
+	hooksecurefunc(MinimapMailFrame, "SetPoint", updateMapAnchor)
 	MinimapMailFrame:SetFrameLevel(11)
 	MiniMapMailIcon:SetSize(24, 18)
 
