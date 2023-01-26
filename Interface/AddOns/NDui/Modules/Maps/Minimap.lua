@@ -166,7 +166,7 @@ function module:ReskinRegions()
 		frame:ClearAllPoints()
 		frame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3, true)
 	end
-	updateMapAnchor(updateMapAnchor)
+	updateMapAnchor(MinimapMailFrame)
 	hooksecurefunc(MinimapMailFrame, "SetPoint", updateMapAnchor)
 	MinimapMailFrame:SetFrameLevel(11)
 	MiniMapMailIcon:SetSize(24, 18)
