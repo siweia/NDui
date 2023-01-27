@@ -148,7 +148,6 @@ tinsert(C.defaultThemes, function()
 	-- [[ Bank ]]
 
 	BankSlotsFrame:DisableDrawLayer("BORDER")
-	BankPortraitTexture:Hide()
 	BankFrameMoneyFrameInset:Hide()
 	BankFrameMoneyFrameBorder:Hide()
 
