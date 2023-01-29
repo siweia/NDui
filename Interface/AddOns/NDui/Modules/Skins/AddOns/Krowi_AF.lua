@@ -165,6 +165,9 @@ function S:KrowiAF()
 		local icon = button:CreateTexture()
 		icon:SetAllPoints()
 		icon:SetTexture(DB.garrTex)
+
+		button:ClearAllPoints()
+		button:SetPoint("TOPLEFT", AchievementFrame, -12, 12)
 	end
 
 	local frame = KrowiAF_AchievementCalendarFrame
