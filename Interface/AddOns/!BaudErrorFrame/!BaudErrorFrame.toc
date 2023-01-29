@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100005
 ## Title: |cff0080ffBaudErrorFrame|r
 ## Title-zhCN: |cff0080ffBaudErrorFrame|r 报错收集
 ## Title-zhTW: |cff0080ffBaudErrorFrame|r 報錯收集

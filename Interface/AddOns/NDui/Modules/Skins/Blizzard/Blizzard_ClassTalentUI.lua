@@ -19,9 +19,7 @@ C.themes["Blizzard_ClassTalentUI"] = function()
 	B.ReskinPortraitFrame(frame)
 	B.Reskin(frame.TalentsTab.ApplyButton)
 	B.ReskinDropDown(frame.TalentsTab.LoadoutDropDown.DropDownControl.DropDownMenu)
-	if DB.isNewPatch then
-		B.Reskin(frame.TalentsTab.InspectCopyButton)
-	end
+	B.Reskin(frame.TalentsTab.InspectCopyButton)
 
 	B.ReskinEditBox(frame.TalentsTab.SearchBox)
 	frame.TalentsTab.SearchBox.__bg:SetPoint("TOPLEFT", -4, -5)

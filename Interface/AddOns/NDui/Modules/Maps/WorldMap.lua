@@ -110,13 +110,6 @@ function module:UpdateMapAnchor()
 end
 
 function module:WorldMapScale()
-	-- Fix worldmap cursor when scaling
-	WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-		local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-		local scale = WorldMapFrame:GetScale()
-		return x / scale, y / scale
-	end
-
 	B.CreateMF(WorldMapFrame, nil, true)
 	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
 end

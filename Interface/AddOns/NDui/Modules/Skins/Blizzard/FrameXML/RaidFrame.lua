@@ -12,9 +12,6 @@ tinsert(C.defaultThemes, function()
 	RaidInfoFrame:SetPoint("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
 	RaidInfoDetailFooter:Hide()
 	RaidInfoDetailHeader:Hide()
-	if not DB.isNewPatch then
-		RaidInfoDetailCorner:Hide()
-	end
 
 	B.Reskin(RaidFrameRaidInfoButton)
 	B.Reskin(RaidFrameConvertToRaidButton)

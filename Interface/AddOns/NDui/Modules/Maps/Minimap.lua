@@ -10,7 +10,7 @@ local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
 local C_Timer_After = C_Timer.After
 local cr, cg, cb = DB.r, DB.g, DB.b
 
-local MinimapMailFrame = DB.isNewPatch and MinimapCluster.IndicatorFrame.MailFrame or MinimapCluster.MailFrame
+local MinimapMailFrame = MinimapCluster.IndicatorFrame.MailFrame
 
 function module:CreatePulse()
 	if not C.db["Map"]["CombatPulse"] then return end
@@ -161,8 +161,13 @@ function module:ReskinRegions()
 	end
 
 	-- Mail icon
-	MinimapMailFrame:ClearAllPoints()
-	MinimapMailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3)
+	local function updateMapAnchor(frame, _, _, _, _, _, force)
+		if force then return end
+		frame:ClearAllPoints()
+		frame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3, true)
+	end
+	updateMapAnchor(MinimapMailFrame)
+	hooksecurefunc(MinimapMailFrame, "SetPoint", updateMapAnchor)
 	MinimapMailFrame:SetFrameLevel(11)
 	MiniMapMailIcon:SetSize(24, 18)
 
@@ -602,7 +607,7 @@ end
 local minimapInfo = {
 	text = L["MinimapHelp"],
 	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.LeftEdgeBottom,
+	targetPoint = HelpTip.Point.LeftEdgeCenter,
 	onAcknowledgeCallback = B.HelpInfoAcknowledge,
 	callbackArg = "MinimapInfo",
 	alignment = 3,

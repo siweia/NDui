@@ -141,12 +141,10 @@ function Bar:MicroMenu()
 	B.HideObject(HelpOpenWebTicketButton)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
 
+	BagsBar:Hide()
+	BagsBar:UnregisterAllEvents()
 	MicroButtonAndBagsBar:Hide()
 	MicroButtonAndBagsBar:UnregisterAllEvents()
-	if DB.isNewPatch then
-		BagsBar:Hide()
-		BagsBar:UnregisterAllEvents()
-	end
 
 	if C.db["Map"]["DisableMinimap"] then
 		QueueStatusButton:SetParent(Minimap)

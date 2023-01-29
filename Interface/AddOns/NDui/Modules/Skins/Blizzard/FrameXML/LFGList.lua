@@ -83,6 +83,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(searchPanel.ScrollBox.StartGroupButton)
 	B.ReskinTrimScroll(searchPanel.ScrollBar)
 	B.ReskinInput(searchPanel.SearchBox)
+	B.ReskinFilterButton(searchPanel.FilterButton)
 
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")
