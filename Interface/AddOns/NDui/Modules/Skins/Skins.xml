@@ -12,5 +12,6 @@
 	<Script file="AddOns\Details.lua"/>
 	<Script file="AddOns\PremadeGroupsFilter.lua"/>
 	<Script file="AddOns\Rematch.lua"/>
+	<Script file="AddOns\Krowi_AF.lua"/>
 	<Script file="AddOns\Others.lua"/>
 </Ui>
