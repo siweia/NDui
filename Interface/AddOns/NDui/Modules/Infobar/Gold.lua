@@ -230,7 +230,7 @@ local BAG = B:GetModule("Bags")
 
 local function startSelling()
 	if stop then return end
-	for bag = 0, 4 do
+	for bag = 0, 5 do
 		for slot = 1, C_Container.GetContainerNumSlots(bag) do
 			if stop then return end
 			local info = C_Container.GetContainerItemInfo(bag, slot)
