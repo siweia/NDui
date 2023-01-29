@@ -18,8 +18,12 @@ end
 function A:HideBlizBuff()
 	if not C.db["Auras"]["BuffFrame"] and not C.db["Auras"]["HideBlizBuff"] then return end
 
-	B.HideObject(_G.BuffFrame)
-	B.HideObject(_G.DebuffFrame)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", function(_, isLogin, isReload)
+		if isLogin or isReload then
+			B.HideObject(_G.BuffFrame)
+			B.HideObject(_G.DebuffFrame)
+		end
+	end)
 end
 
 function A:BuildBuffFrame()
