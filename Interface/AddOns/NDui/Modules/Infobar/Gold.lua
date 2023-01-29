@@ -12,7 +12,7 @@ local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControl
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
 local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
 local CalculateTotalNumberOfFreeBagSlots = CalculateTotalNumberOfFreeBagSlots
-local IsCosmeticItem = IsCosmeticItem
+local C_TransmogCollection_GetItemInfo = C_TransmogCollection.GetItemInfo
 local C_TransmogCollection_PlayerHasTransmogByItemInfo = C_TransmogCollection.PlayerHasTransmogByItemInfo
 local C_Container_UseContainerItem = C_Container.UseContainerItem
 local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
@@ -242,8 +242,8 @@ local function startSelling()
 			if info then
 				local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
 				local isInSet = C_Container_GetContainerItemEquipmentSetInfo(bag, slot)
-				local hasTransmog = IsCosmeticItem(link) and not C_TransmogCollection_PlayerHasTransmogByItemInfo(link)
-				if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and not hasTransmog and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
+				local hasTransmog = not C_TransmogCollection_GetItemInfo(link) or C_TransmogCollection_PlayerHasTransmogByItemInfo(link)
+				if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and hasTransmog and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
 					cache["b"..bag.."s"..slot] = true
 					C_Container_UseContainerItem(bag, slot)
 					C_Timer_After(.15, startSelling)
