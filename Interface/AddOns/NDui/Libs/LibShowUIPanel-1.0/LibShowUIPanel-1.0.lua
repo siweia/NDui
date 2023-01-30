@@ -5,7 +5,6 @@
 --
 local MAJOR, MINOR = 'LibShowUIPanel-1.0', 6
 
----@class LibShowUIPanel-1.0
 local Lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not Lib then
     return
