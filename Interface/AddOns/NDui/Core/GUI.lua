@@ -22,6 +22,7 @@ G.DefaultSettings = {
 		Hotkeys = true,
 		Macro = true,
 		Count = true,
+		Grid = true,
 		Classcolor = false,
 		Cooldown = true,
 		MmssTH = 60,
@@ -41,38 +42,66 @@ G.DefaultSettings = {
 		AspectBar = true,
 		AspectSize = 25,
 		VerticleAspect = true,
-		VehButtonSize = 34,
 		TotemBar = true,
 		TotemSize = 40,
 		DemonPage = true,
 
+		Bar1 = true,
+		Bar1Flyout = 1,
 		Bar1Size = 34,
 		Bar1Font = 12,
 		Bar1Num = 12,
 		Bar1PerRow = 12,
+		Bar2 = true,
+		Bar2Flyout = 1,
 		Bar2Size = 34,
 		Bar2Font = 12,
 		Bar2Num = 12,
 		Bar2PerRow = 12,
+		Bar3 = true,
+		Bar3Flyout = 1,
 		Bar3Size = 32,
 		Bar3Font = 12,
 		Bar3Num = 0,
 		Bar3PerRow = 12,
+		Bar4 = true,
+		Bar4Flyout = 3,
 		Bar4Size = 32,
 		Bar4Font = 12,
 		Bar4Num = 12,
 		Bar4PerRow = 1,
+		Bar5 = true,
+		Bar5Flyout = 3,
 		Bar5Size = 32,
 		Bar5Font = 12,
 		Bar5Num = 12,
 		Bar5PerRow = 1,
+		Bar6 = false,
+		Bar6Flyout = 1,
+		Bar6Size = 34,
+		Bar6Font = 12,
+		Bar6Num = 12,
+		Bar6PerRow = 12,
+		Bar7 = false,
+		Bar7Flyout = 1,
+		Bar7Size = 34,
+		Bar7Font = 12,
+		Bar7Num = 12,
+		Bar7PerRow = 12,
+		Bar8 = false,
+		Bar8Flyout = 1,
+		Bar8Size = 34,
+		Bar8Font = 12,
+		Bar8Num = 12,
+		Bar8PerRow = 12,
+
 		BarPetSize = 26,
 		BarPetFont = 12,
-		BarPetNum = 10,
 		BarPetPerRow = 10,
 		BarStanceSize = 30,
 		BarStanceFont = 12,
 		BarStancePerRow = 10,
+		VehButtonSize = 34,
 	},
 	Bags = {
 		Enable = true,
@@ -780,19 +809,7 @@ local function updateCustomBar()
 end
 
 local function updateHotkeys()
-	local Bar = B:GetModule("Actionbar")
-	for _, button in pairs(Bar.buttons) do
-		ActionButton_UpdateHotkeys(button, button.buttonType)
-	end
-end
-
-local function updateEquipColor()
-	local Bar = B:GetModule("Actionbar")
-	for _, button in pairs(Bar.buttons) do
-		if button.Border and button.action then
-			Bar.UpdateEquipItemColor(button)
-		end
-	end
+	B:GetModule("Actionbar"):UpdateBarConfig()
 end
 
 local function updateAspectStatus()
@@ -1082,10 +1099,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
 		{},--blank
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"].."*", nil, nil, updateHotkeys},
-		{1, "Actionbar", "Macro", L["Actionbar Macro"], true},
-		{1, "Actionbar", "Count", L["Actionbar Item Counts"]},
-		{1, "Actionbar", "Classcolor", L["ClassColor BG"], true},
-		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateEquipColor},
+		{1, "Actionbar", "Macro", L["Actionbar Macro"].."*", true, nil, updateHotkeys},
+		{1, "Actionbar", "Grid", L["Actionbar Grid"].."*", nil, nil, updateHotkeys},
+		{1, "Actionbar", "Classcolor", L["ClassColor BG"].."*", true, nil, updateHotkeys},
+		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", true, nil, nil, L["SendActionCDTip"]},
 		{},--blank
 		{1, "Actionbar", "AspectBar", HeaderTag..L["AspectBar"].."*", nil, nil, toggleAspectBar},

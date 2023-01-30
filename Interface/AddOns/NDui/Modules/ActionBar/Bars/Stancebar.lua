@@ -4,11 +4,9 @@ local Bar = B:GetModule("Actionbar")
 
 local _G = _G
 local tinsert, mod, min, ceil = tinsert, mod, min, ceil
-local cfg = C.Bars.stancebar
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 local num = NUM_STANCE_SLOTS
---local NUM_POSSESS_SLOTS = NUM_POSSESS_SLOTS
 
 function Bar:UpdateStanceBar()
 	local frame = _G["NDui_ActionBarStance"]
@@ -47,7 +45,7 @@ function Bar:CreateStancebar()
 	local buttonList = {}
 	local frame = CreateFrame("Frame", "NDui_ActionBarStance", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["StanceBar"], "StanceBar", {"BOTTOMLEFT", _G.NDui_ActionBar2, "TOPLEFT", 0, margin})
-	Bar.movers[8] = frame.mover
+	Bar.movers[11] = frame.mover
 
 	-- StanceBar
 	StanceBarFrame:SetParent(frame)
@@ -62,25 +60,8 @@ function Bar:CreateStancebar()
 		tinsert(Bar.buttons, button)
 	end
 
-	-- PossessBar
---[[	PossessBarFrame:SetParent(frame)
-	PossessBarFrame:EnableMouse(false)
-	PossessBackground1:SetTexture(nil)
-	PossessBackground2:SetTexture(nil)
-
-	for i = 1, NUM_POSSESS_SLOTS do
-		local button = _G["PossessButton"..i]
-		tinsert(buttonList, button)
-		button:ClearAllPoints()
-		button:SetPoint("CENTER", buttonList[i])
-	end]]
-
 	frame.buttons = buttonList
 
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
-
-	if cfg.fader then
-		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
-	end
 end

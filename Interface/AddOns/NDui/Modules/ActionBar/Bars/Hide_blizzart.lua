@@ -11,7 +11,7 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	MainMenuBar, OverrideActionBar, MultiBarLeft, MultiBarRight
 }
 
 local framesToDisable = {
@@ -20,6 +20,7 @@ local framesToDisable = {
 	ActionBarDownButton, ActionBarUpButton,
 	OverrideActionBar,
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
+	VerticalMultiBarsContainer,
 }
 
 local function DisableAllScripts(frame)
@@ -30,40 +31,23 @@ local function DisableAllScripts(frame)
 	end
 end
 
-local function buttonShowGrid(name, showgrid)
-	for i = 1, 12 do
-		local button = _G[name..i]
-		if button then
-			button:SetAttribute("showgrid", showgrid)
-			ActionButton_ShowGrid(button, ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
-		end
-	end
-end
-
-local updateAfterCombat
-local function toggleButtonGrid()
-	if InCombatLockdown() then
-		updateAfterCombat = true
-		B:RegisterEvent("PLAYER_REGEN_ENABLED", toggleButtonGrid)
-	else
-		local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
-		buttonShowGrid("ActionButton", showgrid)
-		buttonShowGrid("MultiBarBottomLeftButton", showgrid)
-		buttonShowGrid("MultiBarBottomRightButton", showgrid)
-		buttonShowGrid("MultiBarRightButton", showgrid)
-		buttonShowGrid("MultiBarLeftButton", showgrid)
-		buttonShowGrid("NDui_ActionBarXButton", showgrid)
-		if updateAfterCombat then
-			B:UnregisterEvent("PLAYER_REGEN_ENABLED", toggleButtonGrid)
-			updateAfterCombat = false
-		end
-	end
-end
-
 local function updateTokenVisibility()
 	TokenFrame_LoadUI()
 	TokenFrame_Update()
 	BackpackTokenFrame_Update()
+end
+
+local function DisableDefaultBarEvents() -- credit: Simpy
+	-- Spellbook open in combat taint, only happens sometimes
+	_G.MultiActionBar_HideAllGrids = B.Dummy
+	_G.MultiActionBar_ShowAllGrids = B.Dummy
+	-- shut down some events for things we dont use
+	_G.ActionBarController:UnregisterAllEvents()
+	_G.ActionBarActionEventsFrame:UnregisterAllEvents()
+	-- used for ExtraActionButton and TotemBar (on wrath)
+	_G.ActionBarButtonEventsFrame:UnregisterAllEvents()
+	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- needed to let the ExtraActionButton show and Totems to swap
+	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
 end
 
 function Bar:HideBlizz()
@@ -81,15 +65,11 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
+	DisableDefaultBarEvents()
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
 	InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
-	-- Update button grid
-	hooksecurefunc("MultiActionBar_UpdateGridVisibility", toggleButtonGrid)
-	hooksecurefunc("MultiActionBar_HideAllGrids", toggleButtonGrid)
-	B:RegisterEvent("ACTIONBAR_HIDEGRID", toggleButtonGrid)
-	toggleButtonGrid()
 	-- Update token panel
 	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 end

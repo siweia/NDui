@@ -123,18 +123,20 @@ function Bar:Bind_Update(button, spellmacro)
 	frame:Show()
 
 	if spellmacro == "SPELL" then
-		frame.id = SpellBook_GetSpellBookSlot(frame.button)
+		frame.id = SpellBook_GetSpellBookSlot(button)
 		frame.name = GetSpellBookItemName(frame.id, SpellBookFrame.bookType)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "MACRO" then
-		frame.id = frame.button:GetID()
-		local colorIndex = B:Round(select(2, MacroFrameTab1Text:GetTextColor()), 1)
-		if colorIndex == .8 then frame.id = frame.id + MAX_ACCOUNT_MACROS end
+		frame.id = button.selectionIndex or button:GetID()
+		if MacroFrame.selectedTab == 2 then
+			frame.id = frame.id + MAX_ACCOUNT_MACROS
+		end
 		frame.name = GetMacroInfo(frame.id)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "STANCE" or spellmacro == "PET" then
 		frame.name = button:GetName()
 		if not frame.name then return end
+		frame.tipName = button.commandName and GetBindingName(button.commandName)
 
 		frame.id = tonumber(button:GetID())
 		if not frame.id or frame.id < 1 or frame.id > (spellmacro == "STANCE" and 10 or 12) then
@@ -146,9 +148,12 @@ function Bar:Bind_Update(button, spellmacro)
 	else
 		frame.name = button:GetName()
 		if not frame.name then return end
+		frame.tipName = button.commandName and GetBindingName(button.commandName)
 
 		frame.action = tonumber(button.action)
-		if button.isCustomButton or not frame.action or frame.action < 1 or frame.action > 168 then
+		if button.keyBoundTarget then
+			frame.bindstring = button.keyBoundTarget
+		elseif not frame.action or frame.action < 1 or frame.action > 180 then
 			frame.bindstring = "CLICK "..frame.name..":LeftButton"
 		else
 			local modact = 1+(frame.action-1)%12
@@ -170,7 +175,7 @@ function Bar:Bind_Update(button, spellmacro)
 	end
 
 	-- Refresh tooltip
-	frame:GetScript("OnEnter")(self)
+	frame:GetScript("OnEnter")()
 end
 
 local ignoreKeys = {
