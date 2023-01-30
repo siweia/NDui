@@ -73,7 +73,7 @@ function Bar:StyleActionButton(button)
 	local spellHighlight = button.SpellHighlightTexture
 	local iconMask = button.IconMask
 	local petShine = _G[buttonName.."Shine"]
-	local autoCastable = button.AutoCastable
+	local autoCastable = _G[buttonName.."AutoCastable"]
 
 	if normal then normal:SetAlpha(0) end
 	if normal2 then normal2:SetAlpha(0) end
