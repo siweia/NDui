@@ -491,17 +491,42 @@ function WrapOnClick(button)
 	]])
 end
 
-function Generic:OnButtonEvent(event, ...)
+-- update click handling ~Simpy
+local function UpdateRegisterClicks(self, down)
+	if self.isFlyoutButton then -- the bar button
+		self:RegisterForClicks('AnyUp')
+	elseif self.isFlyout or WoWRetail then -- the flyout spell
+		self:RegisterForClicks('AnyDown', 'AnyUp')
+	else
+		self:RegisterForClicks(self.config.clickOnDown and not down and 'AnyDown' or 'AnyUp')
+	end
+end
+
+-- prevent pickup calling spells ~Simpy
+function Generic:OnButtonEvent(event, key, down)
 	if event == "GLOBAL_MOUSE_UP" then
 		self:SetButtonState("NORMAL")
 		self:UnregisterEvent(event)
 
 		UpdateFlyout(self)
+	elseif self.config.clickOnDown and GetCVarBool('lockActionBars') then -- non-retail only, retail uses ToggleOnDownForPickup method
+		if event == 'MODIFIER_STATE_CHANGED' then
+			if GetModifiedClick('PICKUPACTION') == strsub(key, 2) then
+				UpdateRegisterClicks(self, down == 1)
+			end
+		elseif event == 'OnEnter' then
+			local action = GetModifiedClick('PICKUPACTION')
+			UpdateRegisterClicks(self, action == 'SHIFT' and IsShiftKeyDown() or action == 'ALT' and IsAltKeyDown() or action == 'CTRL' and IsControlKeyDown())
+		elseif event == 'OnLeave' then
+			UpdateRegisterClicks(self)
+		end
 	end
 end
 
 local _LABActionButtonUseKeyDown
 function Generic:ToggleOnDownForPickup(pre)
+	if not WoWRetail then return end
+
 	if pre then
 		if GetCVarBool("ActionButtonUseKeyDown") or _LABActionButtonUseKeyDown then
 			SetCVar("ActionButtonUseKeyDown", false)
@@ -1036,14 +1061,23 @@ function Generic:OnEnter()
 		UpdateNewAction(self)
 	end
 
-	UpdateFlyout(self)
+	if not WoWRetail then
+		Generic.OnButtonEvent(self, 'OnEnter')
+		self:RegisterEvent('MODIFIER_STATE_CHANGED')
+	end
 end
 
 function Generic:OnLeave()
 	UpdateFlyout(self)
 
-	if GameTooltip:IsForbidden() then return end
-	GameTooltip:Hide()
+	if not GameTooltip:IsForbidden() then
+		GameTooltip:Hide()
+	end
+
+	if not WoWRetail then
+		Generic.OnButtonEvent(self, 'OnLeave')
+		self:UnregisterEvent('MODIFIER_STATE_CHANGED')
+	end
 end
 
 -- Insecure drag handler to allow clicking on the button with an action on the cursor
@@ -1165,9 +1199,6 @@ function Generic:UpdateConfig(config)
 	UpdateHotkeys(self)
 	UpdateGrid(self)
 	Update(self)
-	if not WoWRetail then
-		self:RegisterForClicks(self.config.clickOnDown and "AnyDown" or "AnyUp")
-	end
 end
 
 -----------------------------------------------------------

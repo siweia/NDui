@@ -152,7 +152,7 @@ function Bar:UpdateButtonConfig(i)
 		button.keyBoundTarget = self.buttonConfig.keyBoundTarget
 
 		button:SetAttribute("buttonlock", lockBars)
-		button:SetAttribute("unlockedpreventdrag", not lockBars) -- make sure button can drag without being click
+		--button:SetAttribute("unlockedpreventdrag", not lockBars) -- make sure button can drag without being click
 		button:SetAttribute("checkmouseovercast", true)
 		button:SetAttribute("checkfocuscast", true)
 		button:SetAttribute("checkselfcast", true)
@@ -304,7 +304,7 @@ function Bar:CreateBars()
 			Bar:StyleActionButton(button)
 		end
 	end
-
+--[[
 	local function delayUpdate()
 		Bar:UpdateBarConfig()
 		B:UnregisterEvent("PLAYER_REGEN_ENABLED", delayUpdate)
@@ -317,6 +317,9 @@ function Bar:CreateBars()
 			end
 			Bar:UpdateBarConfig()
 		end
+	end)]]
+	InterfaceOptionsActionBarsPanelLockActionBars:HookScript("OnClick", function()
+		Bar:UpdateBarConfig()
 	end)
 end
 
