@@ -67,6 +67,11 @@ function Bar:HideBlizz()
 
 	DisableDefaultBarEvents()
 	-- Hide blizz options
+	B.HideOption(InterfaceOptionsActionBarsPanelBottomLeft)
+	B.HideOption(InterfaceOptionsActionBarsPanelBottomRight)
+	B.HideOption(InterfaceOptionsActionBarsPanelRight)
+	B.HideOption(InterfaceOptionsActionBarsPanelRightTwo)
+	B.HideOption(InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
 	SetCVar("multiBarRightVerticalLayout", 0)
 	InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
 	InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
