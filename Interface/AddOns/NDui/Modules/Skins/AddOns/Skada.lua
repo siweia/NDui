@@ -8,18 +8,24 @@ function S:SkadaSkin()
 
 	local pairs, ipairs, tinsert = pairs, ipairs, table.insert
 	local Skada = Skada
+	if not Skada then return end
+
 	local barSpacing = 0
 	local barmod = Skada.displays["bar"]
 	local function StripOptions(options)
-		options.baroptions.args.barspacing = nil
-		options.titleoptions.args.texture = nil
-		options.titleoptions.args.bordertexture = nil
-		options.titleoptions.args.thickness = nil
-		options.titleoptions.args.margin = nil
-		options.titleoptions.args.color = nil
+		if options.baroptions then
+			options.baroptions.args.barspacing = nil
+			options.baroptions.args.barfont = nil
+		end
+		if options.titleoptions then
+			options.titleoptions.args.texture = nil
+			options.titleoptions.args.bordertexture = nil
+			options.titleoptions.args.thickness = nil
+			options.titleoptions.args.margin = nil
+			options.titleoptions.args.color = nil
+			options.titleoptions.args.font = nil
+		end
 		options.windowoptions = nil
-		options.baroptions.args.barfont = nil
-		options.titleoptions.args.font = nil
 	end
 
 	barmod.AddDisplayOptions_ = barmod.AddDisplayOptions
