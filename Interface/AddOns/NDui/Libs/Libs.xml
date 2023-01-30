@@ -9,6 +9,4 @@
 	<Include file="LibHealComm-4.0\LibHealComm-4.0.xml"/>
 	<Include file="cargBags\cargBags.xml"/>
 	<Include file="oUF\oUF.xml"/>
-
-	<Script file="LibButtonGlow.lua"/>
 </Ui>

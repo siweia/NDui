@@ -824,11 +824,6 @@ local function updateTotemSize()
 	B:GetModule("Actionbar"):UpdateTotemSize()
 end
 
-local function toggleBarFader(self)
-	local name = gsub(self.__value, "Fader", "")
-	B:GetModule("Actionbar"):ToggleBarFader(name)
-end
-
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -1083,12 +1078,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, nil, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
-		{1, "Actionbar", "Bar4Fader", L["Bar4 Fade"].."*", nil, nil, toggleBarFader},
-		{1, "Actionbar", "Bar5Fader", L["Bar5 Fade"].."*", true, nil, toggleBarFader},
 		{1, "Actionbar", "DemonPage", L["DemonPage"]},
 		{},--blank
 		{1, "Actionbar", "CustomBar", HeaderTag..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
-		{1, "Actionbar", "BarXFader", L["CustomBarFader"].."*", nil, nil, toggleBarFader},
+		{1, "Actionbar", "BarXFader", L["CustomBarFader"].."*"},
 		{3, "Actionbar", "CustomBarButtonSize", L["ButtonSize"].."*", true, {20, 80, 1}, updateCustomBar},
 		{3, "Actionbar", "CustomBarNumButtons", L["MaxButtons"].."*", nil, {1, 12, 1}, updateCustomBar},
 		{3, "Actionbar", "CustomBarNumPerRow", L["ButtonsPerRow"].."*", true, {1, 12, 1}, updateCustomBar},
