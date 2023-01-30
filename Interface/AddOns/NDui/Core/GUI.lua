@@ -32,11 +32,6 @@ G.DefaultSettings = {
 		BindType = 1,
 		OverrideWA = false,
 		MicroMenu = true,
-		CustomBar = false,
-		BarXFader = false,
-		CustomBarButtonSize = 34,
-		CustomBarNumButtons = 12,
-		CustomBarNumPerRow = 12,
 		ShowStance = true,
 		EquipColor = false,
 		AspectBar = true,
@@ -804,10 +799,6 @@ local function setupStanceBar()
 	G:SetupStanceBar(guiPage[1])
 end
 
-local function updateCustomBar()
-	B:GetModule("Actionbar"):UpdateCustomBar()
-end
-
 local function updateHotkeys()
 	B:GetModule("Actionbar"):UpdateBarConfig()
 end
@@ -1079,12 +1070,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, nil, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{1, "Actionbar", "DemonPage", L["DemonPage"]},
-		{},--blank
-		{1, "Actionbar", "CustomBar", HeaderTag..L["Enable CustomBar"], nil, nil, nil, L["CustomBarTip"]},
-		{1, "Actionbar", "BarXFader", L["CustomBarFader"].."*"},
-		{3, "Actionbar", "CustomBarButtonSize", L["ButtonSize"].."*", true, {20, 80, 1}, updateCustomBar},
-		{3, "Actionbar", "CustomBarNumButtons", L["MaxButtons"].."*", nil, {1, 12, 1}, updateCustomBar},
-		{3, "Actionbar", "CustomBarNumPerRow", L["ButtonsPerRow"].."*", true, {1, 12, 1}, updateCustomBar},
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
 		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
