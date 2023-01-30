@@ -428,7 +428,7 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, NUM_GEARSET_ICONS_SHOWN do
 		local bu = _G["GearManagerDialogPopupButton"..i]
-		bu:SetCheckedTexture(DB.textures.pushed)
+		bu:SetCheckedTexture(DB.pushedTex)
 		select(2, bu:GetRegions()):Hide()
 		bu.icon:SetInside()
 		B.ReskinIcon(bu.icon)

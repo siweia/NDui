@@ -80,7 +80,7 @@ C.themes["Blizzard_MacroUI"] = function()
 			local bu = _G["MacroButton"..i]
 			local ic = _G["MacroButton"..i.."Icon"]
 
-			bu:SetCheckedTexture(DB.textures.pushed)
+			bu:SetCheckedTexture(DB.pushedTex)
 			select(2, bu:GetRegions()):Hide()
 			local hl = bu:GetHighlightTexture()
 			hl:SetColorTexture(1, 1, 1, .25)
@@ -99,7 +99,7 @@ C.themes["Blizzard_MacroUI"] = function()
 				local ic = _G["MacroPopupButton"..i.."Icon"]
 
 				if not bu.styled then
-					bu:SetCheckedTexture(DB.textures.pushed)
+					bu:SetCheckedTexture(DB.pushedTex)
 					select(2, bu:GetRegions()):Hide()
 					local hl = bu:GetHighlightTexture()
 					hl:SetColorTexture(1, 1, 1, .25)
