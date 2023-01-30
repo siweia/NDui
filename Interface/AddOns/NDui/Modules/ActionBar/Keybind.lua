@@ -44,13 +44,22 @@ function Bar:Bind_RegisterButton(button)
 	end
 end
 
+local macroInit
 function Bar:Bind_RegisterMacro()
 	if self ~= "Blizzard_MacroUI" then return end
+	if macroInit then return end
 
-	for i = 1, MAX_ACCOUNT_MACROS do
-		local button = _G["MacroButton"..i]
-		button:HookScript("OnEnter", hookMacroButton)
-	end
+	hooksecurefunc(MacroFrame.MacroSelector.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local button = select(i, self.ScrollTarget:GetChildren())
+			if not button.bindHooked then
+				button:HookScript("OnEnter", hookMacroButton)
+				button.bindHooked = true
+			end
+		end
+	end)
+
+	macroInit = true
 end
 
 function Bar:Bind_Create()
