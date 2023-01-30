@@ -5,8 +5,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local GetTrackingInfo = DB.isNewPatch and C_Minimap.GetTrackingInfo or GetTrackingInfo
-local GetNumTrackingTypes = DB.isNewPatch and C_Minimap.GetNumTrackingTypes or GetNumTrackingTypes
+local GetTrackingInfo = C_Minimap.GetTrackingInfo
+local GetNumTrackingTypes = C_Minimap.GetNumTrackingTypes
 
 local created
 local function setupCheckButton()
@@ -217,97 +217,41 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
 	if C.IgnoreQuestNPC[npcID] then return end
 
-	if DB.isNewPatch then
-		local active = C_GossipInfo.GetNumActiveQuests()
-		if active > 0 then
-			for index, questInfo in ipairs(C_GossipInfo.GetActiveQuests()) do
-				local questID = questInfo.questID
-				if questInfo.isComplete and questID then
-					C_GossipInfo.SelectActiveQuest(questID)
-				end
+	local active = C_GossipInfo.GetNumActiveQuests()
+	if active > 0 then
+		for index, questInfo in ipairs(C_GossipInfo.GetActiveQuests()) do
+			local questID = questInfo.questID
+			if questInfo.isComplete and questID then
+				C_GossipInfo.SelectActiveQuest(questID)
 			end
 		end
+	end
 
-		local available = C_GossipInfo.GetNumAvailableQuests()
-		if available > 0 then
-			for index, questInfo in ipairs(C_GossipInfo.GetAvailableQuests()) do
-				local trivial = questInfo.isTrivial
-				if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
-					C_GossipInfo.SelectAvailableQuest(questInfo.questID)
-				end
+	local available = C_GossipInfo.GetNumAvailableQuests()
+	if available > 0 then
+		for index, questInfo in ipairs(C_GossipInfo.GetAvailableQuests()) do
+			local trivial = questInfo.isTrivial
+			if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
+				C_GossipInfo.SelectAvailableQuest(questInfo.questID)
 			end
 		end
+	end
 
-		local gossipInfoTable = C_GossipInfo.GetOptions()
-		if not gossipInfoTable then return end
+	local gossipInfoTable = C_GossipInfo.GetOptions()
+	if not gossipInfoTable then return end
 
-		local numOptions = #gossipInfoTable
-		local firstOptionID = gossipInfoTable[1] and gossipInfoTable[1].gossipOptionID
+	local numOptions = #gossipInfoTable
+	local firstOptionID = gossipInfoTable[1] and gossipInfoTable[1].gossipOptionID
 
-		if firstOptionID then
-			if autoSelectFirstOptionList[npcID] then
+	if firstOptionID then
+		if autoSelectFirstOptionList[npcID] then
+			return C_GossipInfo.SelectOption(firstOptionID)
+		end
+
+		if available == 0 and active == 0 and numOptions == 1 then
+			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+			if instance ~= "raid" and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
 				return C_GossipInfo.SelectOption(firstOptionID)
-			end
-
-			if available == 0 and active == 0 and numOptions == 1 then
-				local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-				if instance ~= "raid" and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
-					return C_GossipInfo.SelectOption(firstOptionID)
-				end
-			end
-		end
-	else
-		local active = GetNumGossipActiveQuests()
-		if(active > 0) then
-			local logQuests = GetQuestLogQuests(true)
-			for index = 1, active do
-				local name, _, _, _, complete = GetActiveGossipQuestInfo(index)
-				if(complete) then
-					local questID = logQuests[name]
-					if(not questID) then
-						SelectGossipActiveQuest(index)
-					else
-						local _, _, worldQuest = GetQuestTagInfo(questID)
-						if(not worldQuest) then
-							SelectGossipActiveQuest(index)
-						end
-					end
-				end
-			end
-		end
-
-		local available = GetNumGossipAvailableQuests()
-		if(available > 0) then
-			for index = 1, available do
-				local _, _, trivial, ignored = GetAvailableGossipQuestInfo(index)
-				if(not trivial and not ignored) then
-					SelectGossipAvailableQuest(index)
-				elseif(trivial and npcID == 64337) then
-					SelectGossipAvailableQuest(index)
-				end
-			end
-		end
-
-		if(autoSelectFirstOptionList[npcID]) then
-			return SelectGossipOption(1)
-		end
-
-		if(available == 0 and active == 0) then
-			if GetNumGossipOptions() == 1 then
-				if(npcID == 57850) then
-					return SelectGossipOption(1)
-				end
-
-				local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-				if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
-					local _, type = GetGossipOptions()
-					if autoGossipTypes[type] then
-						SelectGossipOption(1)
-						return
-					end
-				end
-			elseif followerAssignees[npcID] and GetNumGossipOptions() > 1 then
-				return SelectGossipOption(1)
 			end
 		end
 	end
@@ -536,8 +480,8 @@ end
 
 QuestNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
 QuestNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
-local frame = GossipNpcNameFrame or GossipFrame.TitleContainer
-if frame then -- isNewPatch: GossipNpcNameFrame removed
+local frame = GossipFrame.TitleContainer
+if frame then
 	frame:HookScript("OnShow", UnitQuickQuestStatus)
 	frame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
 end

@@ -280,11 +280,7 @@ tinsert(C.defaultThemes, function()
 	for i = 1, 12 do
 		local button = _G["CompanionButton"..i]
 		button.bg = B.CreateBDFrame(button, .25)
-		if DB.isNewPatch then
-			button:SetCheckedTexture(0)
-		else
-			button:SetCheckedTexture("")
-		end
+		button:SetCheckedTexture(0)
 		_G["CompanionButton"..i.."ActiveTexture"]:SetAlpha(0)
 
 		button:SetNormalTexture(136243)
@@ -378,11 +374,7 @@ tinsert(C.defaultThemes, function()
 		local button = _G["GearSetButton"..i]
 		button.bg = B.CreateBDFrame(button, .25)
 		button:DisableDrawLayer("BACKGROUND")
-		if DB.isNewPatch then
-			button:SetCheckedTexture(0)
-		else
-			button:SetCheckedTexture("")
-		end
+		button:SetCheckedTexture(0)
 		hooksecurefunc(button, "SetChecked", updateCheckState)
 
 		local hl = button:GetHighlightTexture()

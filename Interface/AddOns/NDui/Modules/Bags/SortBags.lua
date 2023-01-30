@@ -209,17 +209,12 @@ end
 
 function Move(src, dst)
 	if InCombatLockdown() then return end -- might block in combat, needs review
-	local texture, srcLocked, dstLocked, _
-	if DB.isNewPatch then
-		local srcInfo = GetContainerItemInfo(src.container, src.position)
-		texture = srcInfo and srcInfo.iconFileID
-		srcLocked = srcInfo and srcInfo.isLocked
-		local dstInfo = GetContainerItemInfo(dst.container, dst.position)
-		dstLocked = dstInfo and dstInfo.isLocked
-	else
-		texture, _, srcLocked = GetContainerItemInfo(src.container, src.position)
-		_, _, dstLocked = GetContainerItemInfo(dst.container, dst.position)
-	end
+
+	local srcInfo = GetContainerItemInfo(src.container, src.position)
+	local texture = srcInfo and srcInfo.iconFileID
+	local srcLocked = srcInfo and srcInfo.isLocked
+	local dstInfo = GetContainerItemInfo(dst.container, dst.position)
+	local dstLocked = dstInfo and dstInfo.isLocked
 
 	if texture and not srcLocked and not dstLocked then
 		ClearCursor()
@@ -388,14 +383,10 @@ do
 				local slot = {container=container, position=position, class=class}
 				local item = Item(container, position)
 				if item then
-					local _, count, locked
-					if DB.isNewPatch then
-						local info = GetContainerItemInfo(container, position)
-						count = info and info.stackCount
-						locked = info and info.isLocked
-					else
-						_, count, locked = GetContainerItemInfo(container, position)
-					end
+					local info = GetContainerItemInfo(container, position)
+					local count = info and info.stackCount
+					local locked = info and info.isLocked
+
 					if locked then
 						return false
 					end

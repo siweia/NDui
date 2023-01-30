@@ -59,11 +59,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 	B.StripTextures(AchievementFrameSummaryCategoriesStatusBar)
 	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(DB.bdTex)
-	if DB.isNewPatch then
-		AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
-	else
-		AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
-	end
+	AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetTextColor(1, 1, 1)
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetPoint("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
 	AchievementFrameSummaryCategoriesStatusBarText:SetPoint("RIGHT", AchievementFrameSummaryCategoriesStatusBar, "RIGHT", -5, 0)
@@ -186,11 +182,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		local bu = _G["AchievementFrameSummaryCategoriesCategory"..i]
 		B.StripTextures(bu)
 		bu:SetStatusBarTexture(DB.bdTex)
-		if DB.isNewPatch then
-			bu:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
-		else
-			bu:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
-		end
+		bu:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
 		B.CreateBDFrame(bu, .25)
 
 		bu.text:SetPoint("RIGHT", bu, "RIGHT", -5, 0)
@@ -223,11 +215,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	for _, bar in pairs(bars) do
 		B.StripTextures(bar)
 		bar:SetStatusBarTexture(DB.bdTex)
-		if DB.isNewPatch then
-			bar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
-		else
-			bar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
-		end
+		bar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(0, .4, 0, 1), CreateColor(0, .6, 0, 1))
 		bar.title:SetTextColor(1, 1, 1)
 		bar.title:SetPoint("LEFT", bar, "LEFT", 6, 0)
 		bar.text:SetPoint("RIGHT", bar, "RIGHT", -5, 0)

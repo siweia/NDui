@@ -10,11 +10,10 @@ local LE_ITEM_CLASS_QUIVER, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_QUIVER, LE_I
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local SortBankBags, SortBags, InCombatLockdown, ClearCursor = SortBankBags, SortBags, InCombatLockdown, ClearCursor
--- DB.isNewPatch
-local GetContainerItemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
-local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
-local PickupContainerItem = C_Container and C_Container.PickupContainerItem or PickupContainerItem
-local SplitContainerItem = C_Container and C_Container.SplitContainerItem or SplitContainerItem
+local GetContainerItemID = C_Container.GetContainerItemID
+local GetContainerNumSlots = C_Container.GetContainerNumSlots
+local PickupContainerItem = C_Container.PickupContainerItem
+local SplitContainerItem = C_Container.SplitContainerItem
 
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS or 4
 local NUM_BANKBAGSLOTS = NUM_BANKBAGSLOTS or 7
@@ -429,15 +428,11 @@ local function splitOnClick(self)
 
 	PickupContainerItem(self.bagId, self.slotId)
 
-	local texture, itemCount, locked
-	if DB.isNewPatch then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		itemCount = info and info.stackCount
-		locked = info and info.isLocked
-	else
-		texture, itemCount, locked = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local itemCount = info and info.stackCount
+	local locked = info and info.isLocked
+
 	if texture and not locked and itemCount and itemCount > C.db["Bags"]["SplitCount"] then
 		SplitContainerItem(self.bagId, self.slotId, C.db["Bags"]["SplitCount"])
 
@@ -545,16 +540,12 @@ end
 local function favouriteOnClick(self)
 	if not favouriteEnable then return end
 
-	local texture, quality, link, itemID
-	if DB.isNewPatch then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		quality = info and info.quality
-		link = info and info.hyperlink
-		itemID = info and info.itemID
-	else
-		texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local quality = info and info.quality
+	local link = info and info.hyperlink
+	local itemID = info and info.itemID
+
 	if texture and quality > LE_ITEM_QUALITY_POOR then
 		ClearCursor()
 		module.selectItemID = itemID
@@ -614,14 +605,10 @@ end
 local function customJunkOnClick(self)
 	if not customJunkEnable then return end
 
-	local texture, itemID
-	if DB.isNewPatch then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		itemID = info and info.itemID
-	else
-		texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local itemID = info and info.itemID
+
 	local price = select(11, GetItemInfo(itemID))
 	if texture and price > 0 then
 		if NDuiADB["CustomJunkList"][itemID] then
@@ -669,14 +656,10 @@ end
 local function deleteButtonOnClick(self)
 	if not deleteEnable then return end
 
-	local texture, quality
-	if DB.isNewPatch then
-		local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-		texture = info and info.iconFileID
-		quality = info and info.quality
-	else
-		texture, _, _, quality = GetContainerItemInfo(self.bagId, self.slotId)
-	end
+	local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+	local texture = info and info.iconFileID
+	local quality = info and info.quality
+
 	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE) then
 		PickupContainerItem(self.bagId, self.slotId)
 		DeleteCursorItem()
@@ -1156,11 +1139,7 @@ function module:OnLogin()
 
 	-- Sort order
 	SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
-	if DB.isNewPatch then
-		C_Container.SetInsertItemsLeftToRight(false)
-	else
-		SetInsertItemsLeftToRight(false)
-	end
+	C_Container.SetInsertItemsLeftToRight(false)
 
 	-- Init
 	ToggleAllBags()

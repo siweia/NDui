@@ -124,11 +124,7 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 			color = self.colors.reaction[UnitReaction(unit, "player")]
 		end
 		if color then
-			if DB.isNewPatch then
-				element:GetStatusBarTexture():SetGradient("HORIZONTAL", CreateColor(color[1], color[2], color[3], .75), endColor)
-			else
-				element:GetStatusBarTexture():SetGradientAlpha("HORIZONTAL", color[1],color[2],color[3], .75, 0,0,0, .25)
-			end
+			element:GetStatusBarTexture():SetGradient("HORIZONTAL", CreateColor(color[1], color[2], color[3], .75), endColor)
 		end
 	end
 end

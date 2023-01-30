@@ -243,34 +243,16 @@ end
 local function startSelling()
 	if stop then return end
 	for bag = 0, 4 do
-		for slot = 1, GetContainerNumSlots(bag) do
+		for slot = 1, C_Container.GetContainerNumSlots(bag) do
 			if stop then return end
-			local _, _, _, quality, _, _, link, _, noValue, itemID = GetContainerItemInfo(bag, slot)
-			if link and not noValue and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
-				cache["b"..bag.."s"..slot] = true
-				UseContainerItem(bag, slot)
-				C_Timer_After(.15, startSelling)
-				return
-			end
-		end
-	end
-end
-
-if DB.isNewPatch then
-	function startSelling()
-		if stop then return end
-		for bag = 0, 4 do
-			for slot = 1, C_Container.GetContainerNumSlots(bag) do
-				if stop then return end
-				local info = C_Container.GetContainerItemInfo(bag, slot)
-				if info then
-					local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
-					if link and not noValue and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
-						cache["b"..bag.."s"..slot] = true
-						C_Container.UseContainerItem(bag, slot)
-						C_Timer_After(.15, startSelling)
-						return
-					end
+			local info = C_Container.GetContainerItemInfo(bag, slot)
+			if info then
+				local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
+				if link and not noValue and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
+					cache["b"..bag.."s"..slot] = true
+					C_Container.UseContainerItem(bag, slot)
+					C_Timer_After(.15, startSelling)
+					return
 				end
 			end
 		end

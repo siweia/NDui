@@ -94,10 +94,6 @@ function module:SkinChat()
 
 	local name = self:GetName()
 	local font, fontSize = self:GetFont()
-	if not DB.isNewPatch then
-		self:SetMaxResize(DB.ScreenWidth, DB.ScreenHeight)
-		self:SetMinResize(100, 50)
-	end
 	self:SetFont(fontFile or font, fontSize, fontOutline)
 	if fontOutline ~= "" then
 		self:SetShadowColor(0, 0, 0, 0)

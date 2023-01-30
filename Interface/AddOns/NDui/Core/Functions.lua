@@ -525,11 +525,7 @@ do
 
 		local tex = self:CreateTexture(nil, "BACKGROUND")
 		tex:SetTexture(DB.bdTex)
-		if DB.isNewPatch then
-			tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
-		else
-			tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
-		end
+		tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
 		if width then tex:SetWidth(width) end
 		if height then tex:SetHeight(height) end
 
@@ -605,11 +601,7 @@ do
 		if C.db["Skins"]["FlatMode"] then
 			tex:SetVertexColor(.3, .3, .3, .25)
 		else
-			if DB.isNewPatch then
-				tex:SetGradient("Vertical", gradientFrom, gradientTo)
-			else
-				tex:SetGradientAlpha("Vertical", 0, 0, 0, .5, .3, .3, .3, .3)
-			end
+			tex:SetGradient("Vertical", gradientFrom, gradientTo)
 		end
 
 		return tex
@@ -1258,9 +1250,6 @@ do
 
 	-- Handle slider
 	function B:ReskinSlider(vertical)
-		if not DB.isNewPatch then
-			self:SetBackdrop(nil)
-		end
 		B.StripTextures(self)
 
 		local bg = B.CreateBDFrame(self, 0, true)

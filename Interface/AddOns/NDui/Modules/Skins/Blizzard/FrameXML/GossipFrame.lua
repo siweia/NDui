@@ -33,45 +33,25 @@ end
 tinsert(C.defaultThemes, function()
 	QuestFont:SetTextColor(1, 1, 1)
 
-	if DB.isNewPatch then
-		B.StripTextures(GossipFrame.GreetingPanel)
-		B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
-		B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
-	
-		hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local button = select(i, self.ScrollTarget:GetChildren())
-				if not button.styled then
-					local buttonText = select(3, button:GetRegions()) -- no parentKey atm
-					if buttonText and buttonText:IsObjectType("FontString") then
-						replaceGossipText(button, button:GetText())
-						hooksecurefunc(button, "SetText", replaceGossipText)
-						hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
-					end
-	
-					button.styled = true
-				end
-			end
-		end)
-	else
-		GossipGreetingText:SetTextColor(1, 1, 1)
-		B.Reskin(GossipFrameGreetingGoodbyeButton)
-		B.ReskinScroll(GossipGreetingScrollFrameScrollBar)
-		B.StripTextures(GossipFrameGreetingPanel)
+	B.StripTextures(GossipFrame.GreetingPanel)
+	B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
+	B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
 
-		local NUMGOSSIPBUTTONS = NUMGOSSIPBUTTONS or 32
-	
-		for i = 1, NUMGOSSIPBUTTONS do
-			local button = _G["GossipTitleButton"..i]
-			if button and not button.styled then
-				replaceGossipText(button, button:GetText())
-				hooksecurefunc(button, "SetText", replaceGossipText)
-				hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
-	
+	hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local button = select(i, self.ScrollTarget:GetChildren())
+			if not button.styled then
+				local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+				if buttonText and buttonText:IsObjectType("FontString") then
+					replaceGossipText(button, button:GetText())
+					hooksecurefunc(button, "SetText", replaceGossipText)
+					hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+				end
+
 				button.styled = true
 			end
 		end
-	end
+	end)
 
 	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
 	B.StripTextures(NPCFriendshipStatusBar)
