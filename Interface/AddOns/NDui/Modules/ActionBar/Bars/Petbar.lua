@@ -26,6 +26,6 @@ function Bar:CreatePetbar()
 	end
 	frame.buttons = buttonList
 
-	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide"
+	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; [pet] show; hide"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 end
