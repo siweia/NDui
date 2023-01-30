@@ -94,6 +94,11 @@ function Bar:CreatePetbar()
 		button:SetParent(frame)
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
+		local hotkey = button.HotKey
+		if hotkey then
+			hotkey:ClearAllPoints()
+			hotkey:SetPoint("TOPRIGHT")
+		end
 	end
 	frame.buttons = buttonList
 
