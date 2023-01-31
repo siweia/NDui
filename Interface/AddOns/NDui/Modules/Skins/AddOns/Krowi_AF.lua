@@ -145,6 +145,20 @@ function S:KrowiAF()
 		end)
 	end
 
+	hooksecurefunc(KrowiAF_AchievementsObjectives, "AddTextCriteria", function(self, index, _, _, completed)
+		local criteria = self:GetTextCriteria(index)
+		if self.Completed and completed then
+			criteria.Label:SetTextColor(1, 1, 1)
+		end
+	end)
+
+	hooksecurefunc(KrowiAF_AchievementsObjectives, "AddMeta", function(self, index, completed)
+		local metaCriteria = self:GetMeta(index)
+		if self.Completed and completed then
+			metaCriteria.Label:SetTextColor(1, 1, 1)
+		end
+	end)
+
 	hooksecurefunc(AchievementFrame, "Show", function(self)
 		for i = 1, 10 do
 			local button = _G["AchievementFrameSideButton"..i]
@@ -152,6 +166,7 @@ function S:KrowiAF()
 			if not button.bg then
 				button.Background:SetTexture("")
 				button.Icon.Overlay:SetTexture("")
+				B.ReskinIcon(button.Icon.Texture)
 				button.bg = B.SetBD(button)
 				button.bg:SetPoint("TOPLEFT", 6, -9)
 				button.bg:SetPoint("BOTTOMRIGHT", 2, 12)
