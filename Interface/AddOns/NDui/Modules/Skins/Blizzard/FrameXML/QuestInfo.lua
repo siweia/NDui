@@ -130,7 +130,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("QuestMapFrame_ShowQuestDetails", colorObjectivesText)
 
 	-- Reskin rewards
-	restyleSpellButton(QuestInfoSpellObjectiveFrame) -- needs review
+	restyleSpellButton(QuestInfoSpellObjectiveFrame)
 
 	hooksecurefunc("QuestInfo_GetRewardButton", function(rewardsFrame, index)
 		local bu = rewardsFrame.RewardButtons[index]
@@ -151,7 +151,7 @@ tinsert(C.defaultThemes, function()
 		ReskinRewardButtonWithSize(QuestInfoRewardsFrame[name])
 	end
 
-	-- Title Reward, needs review
+	-- Title Reward
 	do
 		local frame = QuestInfoPlayerTitleFrame
 		local icon = frame.Icon
