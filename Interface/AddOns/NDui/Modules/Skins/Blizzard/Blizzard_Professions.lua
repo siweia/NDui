@@ -220,7 +220,7 @@ C.themes["Blizzard_Professions"] = function()
 		local button = craftingPage[name]
 		if button then
 			button.bg = B.ReskinIcon(button.icon)
-			B.ReskinIconBorder(button.IconBorder) -- needs review, maybe no quality at all
+			B.ReskinIconBorder(button.IconBorder)
 			button:SetNormalTexture(0)
 			button:SetPushedTexture(0)
 		end

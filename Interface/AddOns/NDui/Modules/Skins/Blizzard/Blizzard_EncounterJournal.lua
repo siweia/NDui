@@ -45,7 +45,7 @@ end
 
 C.themes["Blizzard_EncounterJournal"] = function()
 	-- Tabs
-	for i = 1, 4 do
+	for i = 1, 5 do
 		local tab = EncounterJournal.Tabs[i]
 		if tab then
 			B.ReskinTab(tab)
@@ -76,6 +76,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	end
 
 	-- Instance select
+	EncounterJournalInstanceSelectBG:SetAlpha(0)
 	B.ReskinDropDown(EncounterJournal.instanceSelect.tierDropDown)
 	B.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
 
@@ -378,5 +379,12 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				B.ReskinIconBorder(button.Border, true, true)
 			end
 		end)
+	end
+
+	-- Monthly activities
+	local frame = EncounterJournalMonthlyActivitiesFrame
+	if frame then
+		B.StripTextures(frame)
+		B.ReskinTrimScroll(frame.ScrollBar, true)
 	end
 end

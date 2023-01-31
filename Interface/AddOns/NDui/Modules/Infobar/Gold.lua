@@ -8,12 +8,17 @@ local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
 local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
 local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 local GetMoney, GetNumWatchedTokens, Ambiguate = GetMoney, GetNumWatchedTokens, Ambiguate
-local GetContainerNumSlots, GetContainerItemInfo, UseContainerItem = GetContainerNumSlots, GetContainerItemInfo, UseContainerItem
-local GetContainerItemEquipmentSetInfo = GetContainerItemEquipmentSetInfo
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
 local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
 local CalculateTotalNumberOfFreeBagSlots = CalculateTotalNumberOfFreeBagSlots
+local C_TransmogCollection_GetItemInfo = C_TransmogCollection.GetItemInfo
+local C_TransmogCollection_PlayerHasTransmogByItemInfo = C_TransmogCollection.PlayerHasTransmogByItemInfo
+local C_Container_UseContainerItem = C_Container.UseContainerItem
+local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
+local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
+local C_Container_GetContainerItemEquipmentSetInfo = C_Container.GetContainerItemEquipmentSetInfo
+
 local slotString = L["Bags"]..": %s%d"
 
 local profit, spent, oldMoney = 0, 0, 0
@@ -230,16 +235,17 @@ local BAG = B:GetModule("Bags")
 
 local function startSelling()
 	if stop then return end
-	for bag = 0, 4 do
-		for slot = 1, C_Container.GetContainerNumSlots(bag) do
+	for bag = 0, 5 do
+		for slot = 1, C_Container_GetContainerNumSlots(bag) do
 			if stop then return end
-			local info = C_Container.GetContainerItemInfo(bag, slot)
+			local info = C_Container_GetContainerItemInfo(bag, slot)
 			if info then
 				local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
-				local isInSet = C_Container.GetContainerItemEquipmentSetInfo(bag, slot)
-				if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
+				local isInSet = C_Container_GetContainerItemEquipmentSetInfo(bag, slot)
+				local hasTransmog = not C_TransmogCollection_GetItemInfo(link) or C_TransmogCollection_PlayerHasTransmogByItemInfo(link)
+				if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and hasTransmog and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
 					cache["b"..bag.."s"..slot] = true
-					C_Container.UseContainerItem(bag, slot)
+					C_Container_UseContainerItem(bag, slot)
 					C_Timer_After(.15, startSelling)
 					return
 				end

@@ -678,3 +678,10 @@ TT:RegisterTooltips("Blizzard_Calendar", function()
 	CalendarContextMenu:HookScript("OnShow", TT.ReskinTooltip)
 	CalendarInviteStatusContextMenu:HookScript("OnShow", TT.ReskinTooltip)
 end)
+
+TT:RegisterTooltips("Blizzard_PerksProgram", function()
+	if PerksProgramTooltip then
+		TT.ReskinTooltip(PerksProgramTooltip)
+		PerksProgramTooltip:SetScale(UIParent:GetScale())
+	end
+end)
