@@ -342,4 +342,7 @@ function Bar:OnLogin()
 
 	Bar:ReassignBindings()
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.ReassignBindings)
+
+	Bar:HunterAspectBar()
+	Bar:TotemBar()
 end
