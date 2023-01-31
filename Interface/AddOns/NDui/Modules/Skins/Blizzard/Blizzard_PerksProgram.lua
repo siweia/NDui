@@ -6,6 +6,18 @@ local function ReskinCustomizeButton(button)
 	button.__bg:SetInside(nil, 5, 5)
 end
 
+local function ReskinRewardButton(button)
+	if button.styled then return end
+
+	local container = button.ContentsContainer
+	if container then
+		B.ReskinIcon(container.Icon)
+		B.ReplaceIconString(container.Price)
+		hooksecurefunc(container.Price, "SetText", B.ReplaceIconString)
+	end
+	button.styled = true
+end
+
 C.themes["Blizzard_PerksProgram"] = function()
 	local frame = PerksProgramFrame
 	if not frame then return end
@@ -25,20 +37,18 @@ C.themes["Blizzard_PerksProgram"] = function()
 	if productsFrame then
 		ReskinCustomizeButton(productsFrame.PerksProgramFilter.FilterDropDownButton)
 		B.ReskinIcon(productsFrame.PerksProgramCurrencyFrame.Icon)
-		B.ReskinTrimScroll(productsFrame.ProductsScrollBoxContainer.ScrollBar, true)
+		B.StripTextures(productsFrame.PerksProgramProductDetailsContainerFrame)
+		B.SetBD(productsFrame.PerksProgramProductDetailsContainerFrame)
 
-		hooksecurefunc(productsFrame.ProductsScrollBoxContainer.ScrollBox, "Update", function(self)
-			self:ForEachFrame(function(button)
-				if button.styled then return end
+		local productsContainer = productsFrame.ProductsScrollBoxContainer
+		B.StripTextures(productsContainer)
+		B.SetBD(productsContainer)
+		B.ReskinTrimScroll(productsContainer.ScrollBar, true)
+		B.StripTextures(productsContainer.PerksProgramHoldFrame)
+		B.CreateBDFrame(productsContainer.PerksProgramHoldFrame, .25):SetInside(nil, 3, 3)
 
-				local container = button.ContentsContainer
-				if container then
-					B.ReskinIcon(container.Icon)
-					B.ReplaceIconString(container.Price)
-					hooksecurefunc(container.Price, "SetText", B.ReplaceIconString)
-				end
-				button.styled = true
-			end)
+		hooksecurefunc(productsContainer.ScrollBox, "Update", function(self)
+			self:ForEachFrame(ReskinRewardButton)
 		end)
 	end
 end
