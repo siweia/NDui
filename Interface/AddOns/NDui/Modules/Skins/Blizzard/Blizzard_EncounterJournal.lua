@@ -380,4 +380,11 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			end
 		end)
 	end
+
+	-- Monthly activities
+	local frame = EncounterJournalMonthlyActivitiesFrame
+	if frame then
+		B.StripTextures(frame)
+		B.ReskinTrimScroll(frame.ScrollBar, true)
+	end
 end
