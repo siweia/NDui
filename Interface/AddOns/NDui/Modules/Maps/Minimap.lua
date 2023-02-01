@@ -10,10 +10,10 @@ local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
 local C_Timer_After = C_Timer.After
 local cr, cg, cb = DB.r, DB.g, DB.b
 
-local MinimapMailFrame = MinimapCluster.IndicatorFrame.MailFrame
-
 function module:CreatePulse()
 	if not C.db["Map"]["CombatPulse"] then return end
+
+	local MinimapMailFrame = MinimapCluster.IndicatorFrame.MailFrame
 
 	local bg = B.SetBD(Minimap)
 	bg:SetFrameStrata("BACKGROUND")
@@ -160,16 +160,18 @@ function module:ReskinRegions()
 		reskinDifficulty(instDifficulty.ChallengeMode)
 	end
 
-	-- Mail icon
+	-- Mail and crafing icon
 	local function updateMapAnchor(frame, _, _, _, _, _, force)
 		if force then return end
 		frame:ClearAllPoints()
 		frame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3, true)
 	end
-	updateMapAnchor(MinimapMailFrame)
-	hooksecurefunc(MinimapMailFrame, "SetPoint", updateMapAnchor)
-	MinimapMailFrame:SetFrameLevel(11)
-	MiniMapMailIcon:SetSize(24, 18)
+	local indicatorFrame = MinimapCluster.IndicatorFrame
+	if indicatorFrame then
+		updateMapAnchor(indicatorFrame)
+		hooksecurefunc(indicatorFrame, "SetPoint", updateMapAnchor)
+		indicatorFrame:SetFrameLevel(11)
+	end
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
