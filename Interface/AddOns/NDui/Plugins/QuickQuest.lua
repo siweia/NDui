@@ -269,7 +269,7 @@ local darkmoonNPC = {
 QuickQuest:Register("GOSSIP_CONFIRM", function(index)
 	local npcID = GetNPCID()
 	if npcID and darkmoonNPC[npcID] then
-		C_GossipInfo_SelectOption(index, "", true)
+		C_GossipInfo_SelectOption(index, "", true) -- needs review
 		StaticPopup_Hide("GOSSIP_CONFIRM")
 	end
 end)
