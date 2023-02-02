@@ -58,7 +58,7 @@ local function doSearch(self, text)
 		apply(self, self.parent, text)
 	end
 
-	self.parent.implementation:OnEvent("BAG_UPDATE")
+	--self.parent.implementation:OnEvent("BAG_UPDATE") -- shouldn't have to update bags, needs review
 end
 
 local function target_openSearch(target)
