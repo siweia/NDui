@@ -250,6 +250,10 @@ C.themes["Blizzard_Professions"] = function()
 	local specPage = frame.SpecPage
 	B.Reskin(specPage.UnlockTabButton)
 	B.Reskin(specPage.ApplyButton)
+	if DB.isNewPatch then
+		B.Reskin(specPage.ViewTreeButton)
+		B.Reskin(specPage.BackToPreviewButton)
+	end
 	B.StripTextures(specPage.TreeView)
 	specPage.TreeView.Background:Hide()
 	B.CreateBDFrame(specPage.TreeView, .25):SetInside()
@@ -269,6 +273,8 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(view.UnlockPathButton)
 	B.Reskin(view.SpendPointsButton)
 	B.ReskinIcon(view.UnspentPoints.Icon)
+
+	-- todo: specPage.TreePreview, isNewPatch
 
 	-- log
 	reskinOutputLog(craftingPage.CraftingOutputLog)
