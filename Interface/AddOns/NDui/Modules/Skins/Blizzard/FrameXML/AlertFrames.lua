@@ -89,7 +89,7 @@ tinsert(C.defaultThemes, function()
 				frame.bg:SetPoint("TOPLEFT", frame, -2, -17)
 				frame.bg:SetPoint("BOTTOMRIGHT", 2, 12)
 			end
-		elseif frame.queue == CriteriaAlertSystem then
+		elseif frame.queue == CriteriaAlertSystem or frame.queue == MonthlyActivityAlertSystem then
 			if not frame.bg then
 				frame.bg = B.SetBD(frame)
 				frame.bg:SetPoint("TOPLEFT", frame, 5, -7)
