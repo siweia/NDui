@@ -112,6 +112,7 @@ C.themes["Blizzard_Communities"] = function()
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
 	B.ReskinDropDown(CommunitiesFrame.StreamDropDownMenu)
 	B.ReskinMinMax(CommunitiesFrame.MaximizeMinimizeFrame)
+	B.StripTextures(CommunitiesFrame.AddToChatButton)
 	B.ReskinArrow(CommunitiesFrame.AddToChatButton, "down")
 	B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
 
