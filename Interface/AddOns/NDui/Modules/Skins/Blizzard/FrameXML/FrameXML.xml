@@ -45,7 +45,6 @@
 	<Script file="QuickKeybind.lua"/>
 	<Script file="RaidFrame.lua"/>
 	<Script file="ReadyCheck.lua"/>
-	<Script file="RecruitAFriendFrame.lua"/>
 	<Script file="ScriptErrorsFrame.lua"/>
 	<Script file="SettingsPanel.lua"/>
 	<Script file="SpellBookFrame.lua"/>
