@@ -19,7 +19,7 @@ local DAILY, QUEST_COMPLETE, COLLECTED = DAILY, QUEST_COMPLETE, COLLECTED
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 
-local debugMode = true
+local debugMode = false
 local completedQuest, initComplete = {}
 
 local function GetQuestLinkOrName(questID)
@@ -142,7 +142,7 @@ local glyphAchievements = {
 
 function M:FindDragonGlyph(achievementID, criteriaString)
 	if glyphAchievements[achievementID] then
-		sendQuestMsg(criteriaString or COLLECTED)
+		sendQuestMsg(criteriaString.." "..COLLECTED)
 	end
 end
 
