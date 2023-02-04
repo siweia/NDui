@@ -56,7 +56,7 @@ local function initUpdater()
 	local updater = CreateFrame("Frame")
 	updater:RegisterEvent("BAG_UPDATE")
 	updater:RegisterEvent("EQUIPMENT_SETS_CHANGED")
-	updater:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
+	updater:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 	updater:SetScript("OnEvent", updateSets)
 
 	updateSets()
