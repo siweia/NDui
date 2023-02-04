@@ -15,11 +15,11 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
-local DAILY, QUEST_COMPLETE = DAILY, QUEST_COMPLETE
+local DAILY, QUEST_COMPLETE, COLLECTED = DAILY, QUEST_COMPLETE, COLLECTED
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 
-local debugMode = false
+local debugMode = true
 local completedQuest, initComplete = {}
 
 local function GetQuestLinkOrName(questID)
@@ -132,18 +132,45 @@ function M:FindWorldQuestComplete(questID)
 	end
 end
 
+-- Dragon glyph notification
+local rawData = {
+	16065,16068,16064,16069,16673,16672,16070,16072,16067,16066,16073,16071, -- 碧蓝林海
+	16061,16056,16672,16671,16059,16055,16054,16060,16670,16062,16058,16057,16063, -- 欧恩哈拉平原
+	16104,16102,16673,16666,16667,16100,16099,16098,16107,16103,16101,16106,16105, -- 索德拉苏斯
+	15991,16051,16669,16668,15990,15987,16053,15988,16670,16052,15985,15989,15986, -- 觉醒海岸
+}
+local glyphIDs = {}
+
+function M:ConvertGlyphData()
+	if not next(glyphIDs) then
+		for _, glyphID in pairs(rawData) do
+			glyphIDs[glyphID] = true
+		end
+		wipe(rawData)
+	end
+end
+
+function M:FindDragonGlyph(criteriaID, criteriaString)
+	if glyphIDs[criteriaID] then
+		sendQuestMsg(criteriaString or COLLECTED)
+	end
+end
+
 function M:QuestNotification()
 	if C.db["Misc"]["QuestNotification"] then
 		B:RegisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:RegisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
 		B:RegisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
 		B:RegisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
+		M:ConvertGlyphData()
+		B:RegisterEvent("CRITERIA_EARNED", M.FindDragonGlyph)
 	else
 		wipe(completedQuest)
 		B:UnregisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:UnregisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
 		B:UnregisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
 		B:UnregisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
+		B:UnregisterEvent("CRITERIA_EARNED", M.FindDragonGlyph)
 	end
 end
 M:RegisterMisc("QuestNotification", M.QuestNotification)
