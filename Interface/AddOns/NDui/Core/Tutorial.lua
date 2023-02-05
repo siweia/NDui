@@ -20,7 +20,6 @@ local function ForceDefaultSettings()
 	SetCVar("lockActionBars", 1)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
---	SetCVar("AutoPushSpellToActionBar", 0)
 	SetCVar("floatingCombatTextFloatMode", 1)
 	SetCVar("floatingCombatTextCombatDamage", 1)
 	SetCVar("floatingCombatTextCombatHealing", 1)
@@ -37,6 +36,8 @@ local function ForceDefaultSettings()
 		SetCVar("ffxGlow", 0)
 		SetCVar("WorldTextScale", 1.2)
 		SetCVar("SpellQueueWindow", 100)
+		--SetCVar("AutoPushSpellToActionBar", 0)
+		--SetCVar("missingTransmogSourceInItemTooltips", 1)
 	end
 end
 

@@ -115,6 +115,11 @@ function M:OnLogin()
 		if owner:GetID() < 1 then return end
 		_AddonTooltip_Update(owner)
 	end
+
+	-- Fix empty string in party guide promote
+	if not PROMOTE_GUIDE then
+		PROMOTE_GUIDE = PARTY_PROMOTE_GUIDE
+	end
 end
 
 -- Hide boss banner

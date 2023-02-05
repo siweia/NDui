@@ -28,10 +28,13 @@ local cargBags = ns.cargBags
 
 local ItemKeys = cargBags.itemKeys
 
-local setItems
+local setItems, isUpdating
 
 local function initUpdater()
 	local function updateSets()
+		if isUpdating then return end
+		isUpdating = true
+
 		setItems = setItems or {}
 		wipe(setItems)
 
@@ -46,14 +49,15 @@ local function initUpdater()
 				end
 			end
 		end
+
+		isUpdating = nil
 	end
 
 	local updater = CreateFrame("Frame")
 	updater:RegisterEvent("BAG_UPDATE")
 	updater:RegisterEvent("EQUIPMENT_SETS_CHANGED")
-	updater:SetScript("OnEvent", function()
-		updateSets()
-	end)
+	updater:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+	updater:SetScript("OnEvent", updateSets)
 
 	updateSets()
 end

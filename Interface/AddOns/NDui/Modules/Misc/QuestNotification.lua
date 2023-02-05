@@ -15,7 +15,7 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
-local DAILY, QUEST_COMPLETE = DAILY, QUEST_COMPLETE
+local DAILY, QUEST_COMPLETE, COLLECTED = DAILY, QUEST_COMPLETE, COLLECTED
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 
@@ -132,18 +132,34 @@ function M:FindWorldQuestComplete(questID)
 	end
 end
 
+-- Dragon glyph notification
+local glyphAchievements = {
+	[16575] = true, -- 觉醒海岸
+	[16576] = true, -- 欧恩哈拉平原
+	[16577] = true, -- 碧蓝林海
+	[16578] = true, -- 索德拉苏斯
+}
+
+function M:FindDragonGlyph(achievementID, criteriaString)
+	if glyphAchievements[achievementID] then
+		sendQuestMsg(criteriaString.." "..COLLECTED)
+	end
+end
+
 function M:QuestNotification()
 	if C.db["Misc"]["QuestNotification"] then
 		B:RegisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:RegisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
 		B:RegisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
 		B:RegisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
+		B:RegisterEvent("CRITERIA_EARNED", M.FindDragonGlyph)
 	else
 		wipe(completedQuest)
 		B:UnregisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:UnregisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
 		B:UnregisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
 		B:UnregisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
+		B:UnregisterEvent("CRITERIA_EARNED", M.FindDragonGlyph)
 	end
 end
 M:RegisterMisc("QuestNotification", M.QuestNotification)

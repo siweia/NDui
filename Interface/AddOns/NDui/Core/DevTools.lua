@@ -21,6 +21,7 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 DB.Devs = {
 	["寧德-加尔"] = true,
 	["图咿-万色星辰"] = true,
+	["打蛋獵手-地獄吼"] = true,
 	["Huniverster-Koranos"] = true,
 }
 local function isDeveloper()

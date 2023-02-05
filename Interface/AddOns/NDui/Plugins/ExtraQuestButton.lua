@@ -128,6 +128,7 @@ local completeHiddenItems = {
 	[186199] = true, -- Lady Moonberry's Wand
 	[187012] = true, -- Unbalanced Riftstone
 	[187516] = true, -- 菲历姆的锻炉阀门
+	[112681] = true, -- 古怪的水晶碎片，questID 34938
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
