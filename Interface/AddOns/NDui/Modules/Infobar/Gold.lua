@@ -242,7 +242,7 @@ local function startSelling()
 			if info then
 				local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
 				local isInSet = C_Container_GetContainerItemEquipmentSetInfo(bag, slot)
-				local hasTransmog = not C_TransmogCollection_GetItemInfo(link) or C_TransmogCollection_PlayerHasTransmogByItemInfo(link)
+				local hasTransmog = not C_TransmogCollection_GetItemInfo(link) or not B.IsUnknownTransmog(bag, slot)
 				if link and not noValue and not isInSet and not BAG:IsPetTrashCurrency(itemID) and hasTransmog and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
 					cache["b"..bag.."s"..slot] = true
 					C_Container_UseContainerItem(bag, slot)

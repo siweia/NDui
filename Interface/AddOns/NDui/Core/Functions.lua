@@ -313,6 +313,25 @@ do
 
 		return name
 	end
+
+	function B.IsUnknownTransmog(bagID, slotID)
+		local data = C_TooltipInfo.GetBagItem(bagID, slotID)
+		if not data then return end
+
+		local lines = data.lines
+		for i = #lines, 1, -1 do
+			local argVal = lines[i] and lines[i].args
+			if argVal then
+				if argVal[4] and argVal[4].field == "price" then
+					return false
+				end
+				local stringVal = argVal[2] and argVal[2].stringVal
+				if stringVal and stringVal == TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN then
+					return true
+				end
+			end
+		end
+	end
 end
 
 -- Kill regions
