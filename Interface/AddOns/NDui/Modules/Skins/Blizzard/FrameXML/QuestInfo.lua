@@ -144,6 +144,9 @@ tinsert(C.defaultThemes, function()
 			local object = objectivesTable[i]
 			if object.hooked then break end
 			hooksecurefunc(object, "SetTextColor", ReplaceTextColor)
+			local r, g, b = object:GetTextColor()
+			object:SetTextColor(r, g, b)
+
 			object.hooked = true
 		end
 

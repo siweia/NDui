@@ -143,4 +143,6 @@ tinsert(C.defaultThemes, function()
 		if self:IsForbidden() then return end
 		ReskinWidgetStatusBar(self.Bar)
 	end)
+
+	B.Reskin(_G.UIWidgetCenterDisplayFrame.CloseButton)
 end)
