@@ -113,6 +113,10 @@ function TT:OnTooltipCleared()
 	GameTooltip_ClearStatusBars(self)
 	GameTooltip_ClearProgressBars(self)
 	GameTooltip_ClearWidgetSet(self)
+
+	if self.StatusBar then
+		self.StatusBar:ClearWatch()
+	end
 end
 
 function TT.GetDungeonScore(score)
