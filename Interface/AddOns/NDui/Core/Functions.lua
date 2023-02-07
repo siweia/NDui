@@ -174,6 +174,10 @@ do
 	local iLvlDB = {}
 	local itemLevelString = "^"..gsub(ITEM_LEVEL, "%%d", "")
 	local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
+	local isKnownString = {
+		[TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN] = true,
+		[TRANSMOGRIFY_TOOLTIP_ITEM_UNKNOWN_APPEARANCE_KNOWN] = true,
+	}
 
 	local slotData = {gems={},gemsColor={}}
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
@@ -312,6 +316,25 @@ do
 		end
 
 		return name
+	end
+
+	function B.IsUnknownTransmog(bagID, slotID)
+		local data = C_TooltipInfo.GetBagItem(bagID, slotID)
+		local lineData = data and data.lines
+		if not lineData then return end
+
+		for i = #lineData, 1, -1 do
+			local argVal = lineData[i] and lineData[i].args
+			if argVal then
+				if argVal[4] and argVal[4].field == "price" then
+					return false
+				end
+				local stringVal = argVal[2] and argVal[2].stringVal
+				if isKnownString[stringVal] then
+					return true
+				end
+			end
+		end
 	end
 end
 

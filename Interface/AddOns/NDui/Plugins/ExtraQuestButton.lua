@@ -129,6 +129,7 @@ local completeHiddenItems = {
 	[187012] = true, -- Unbalanced Riftstone
 	[187516] = true, -- 菲历姆的锻炉阀门
 	[112681] = true, -- 古怪的水晶碎片，questID 34938
+	[193915] = true, -- 黑龙军团的旗帜，questID 66633
 }
 
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
