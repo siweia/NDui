@@ -174,7 +174,10 @@ do
 	local iLvlDB = {}
 	local itemLevelString = "^"..gsub(ITEM_LEVEL, "%%d", "")
 	local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
-	local uncollectedString = TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN
+	local isKnownString = {
+		[TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN] = true,
+		[TRANSMOGRIFY_TOOLTIP_ITEM_UNKNOWN_APPEARANCE_KNOWN] = true,
+	}
 
 	local slotData = {gems={},gemsColor={}}
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
@@ -327,7 +330,7 @@ do
 					return false
 				end
 				local stringVal = argVal[2] and argVal[2].stringVal
-				if stringVal and stringVal == uncollectedString then
+				if isKnownString[stringVal] then
 					return true
 				end
 			end
