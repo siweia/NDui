@@ -200,7 +200,7 @@ function module:GetFilters()
 	filters.onlyBagReagent = function(item) return isItemInBagReagent(item) and not isEmptySlot(item) end
 
 	for i = 1, 5 do
-		filters["bagCustom"..i] = function(item) return isItemInBag(item) and isItemCustom(item, i) end
+		filters["bagCustom"..i] = function(item) return (isItemInBag(item) or isItemInBagReagent(item)) and isItemCustom(item, i) end
 		filters["bankCustom"..i] = function(item) return isItemInBank(item) and isItemCustom(item, i) end
 	end
 
