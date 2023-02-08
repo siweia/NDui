@@ -110,6 +110,7 @@ local list = {
 		{AuraID = 388035, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 392956, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
+		{AuraID = 388998, UnitID = "player"},	-- 碎刀片
 
 		{AuraID = 363760, UnitID = "player", Flash = true},	-- 杀戮狂乱，兽王4T
 		{AuraID = 363805, UnitID = "player", Flash = true},	-- 疯狂掷弹兵，生存2T
