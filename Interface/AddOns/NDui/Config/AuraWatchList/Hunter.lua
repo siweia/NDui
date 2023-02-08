@@ -96,7 +96,7 @@ local list = {
 		{AuraID = 260395, UnitID = "player"},	-- 致命射击
 		{AuraID = 269502, UnitID = "player"},	-- 致命射击
 		{AuraID = 281036, UnitID = "player"},	-- 凶暴野兽
-		{AuraID = 260402, UnitID = "player"},	-- 二连发
+		{AuraID = 400456, UnitID = "player", Flash = true},	-- 齐射
 		{AuraID = 266779, UnitID = "player"},	-- 协调进攻
 		{AuraID = 260286, UnitID = "player"},	-- 利刃之矛
 		{AuraID = 265898, UnitID = "player"},	-- 接战协定
