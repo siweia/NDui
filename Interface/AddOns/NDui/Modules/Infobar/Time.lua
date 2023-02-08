@@ -363,7 +363,7 @@ info.onEnter = function(self)
 	title = false
 	if NDuiADB["FeastTime"] ~= 0 then
 		local currentTime = time()
-		local duration = 12600 -- 3.5hrs
+		local duration = 5400 -- 1.5hrs
 		local elapsed = mod(currentTime - NDuiADB["FeastTime"], duration)
 		local nextTime = duration - elapsed + currentTime
 
