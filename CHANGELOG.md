@@ -1,8 +1,11 @@
 # NDui Classic
 
-## [3.7.1](https://github.com/siweia/NDui/tree/3.7.1) (2023-1-20)
+## [3.8.0](https://github.com/siweia/NDui/tree/3.8.0) (2023-2-9)
 
 - Update default skins.
-- Fix blizz error when loading auction ui in zhCN client.
-- Correct hide default bank frame.
-- Fix collapse button visibility.
+- Fix error when loading AuctionUI in zhCN client.
+- No longer show default bankframe while bags module enabled.
+- Update skin for Details.
+- Fix Skada skin error with fan updated mod.
+- Refactor actionbar module.
+- Custom bar now has been removed.
