@@ -82,8 +82,11 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
 		if not playerFrame.styled then
+			playerFrame.PlayerName:SetWordWrap(false)
+			playerFrame.PlayerName:SetFontObject(Game13Font)
 			playerFrame.RollText:SetTextColor(.9, .9, .9)
-			playerFrame.RollText:SetWidth(30) -- needs review, might be too big
+			playerFrame.RollText:SetWidth(28)
+			playerFrame.RollText:SetFontObject(Game13Font)
 			playerFrame.WinMark:SetDesaturated(true)
 
 			playerFrame.styled = true
@@ -100,6 +103,16 @@ tinsert(C.defaultThemes, function()
 					playerFrame.WinMark:SetVertexColor(color.r, color.g, color.b)
 				end
 			end
+		end
+	end)
+
+	hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(_, itemFrame)
+		if not itemFrame.styled2 then
+			itemFrame.WinnerName:SetFontObject(Game13Font)
+			itemFrame.WinnerRoll:SetWidth(28)
+			itemFrame.WinnerRoll:SetFontObject(Game13Font)
+
+			itemFrame.styled2 = true
 		end
 	end)
 
