@@ -362,10 +362,37 @@ function M.ItemLevel_ReplaceItemLink(link, name)
 	return modLink
 end
 
-function M:ItemLevel_ReplaceGuildNews()
-	local newText = gsub(self.text:GetText(), "(|Hitem:%d+:.-|h%[(.-)%]|h)", M.ItemLevel_ReplaceItemLink)
-	if newText then
-		self.text:SetText(newText)
+function M:GuildNewsButtonOnClick(btn)
+	if self.isEvent or not self.playerName then return end
+	if btn == "LeftButton" and IsShiftKeyDown() then
+		if MailFrame:IsShown() then
+			MailFrameTab_OnClick(nil, 2)
+			SendMailNameEditBox:SetText(self.playerName)
+			SendMailNameEditBox:HighlightText()
+		else
+			local editBox = ChatEdit_ChooseBoxForSend()
+			local hasText = (editBox:GetText() ~= "")
+			ChatEdit_ActivateChat(editBox)
+			editBox:Insert(self.playerName)
+			if not hasText then editBox:HighlightText() end
+		end
+	end
+end
+
+function M:ItemLevel_ReplaceGuildNews(color, strFormat, playerName, itemName)
+	self.playerName = playerName
+
+	if itemName and not tonumber(itemName) then -- ignore MOTD and date
+		local newText = gsub(itemName, "(|Hitem:%d+:.-|h%[(.-)%]|h)", M.ItemLevel_ReplaceItemLink)
+		if newText then
+			self.text:SetFormattedText(strFormat, playerName, newText)
+		end
+	end
+
+	if not self.hooked then
+		self.text:SetFontObject(Game13Font)
+		self:HookScript("OnClick", M.GuildNewsButtonOnClick) -- copy name by key shift
+		self.hooked = true
 	end
 end
 
