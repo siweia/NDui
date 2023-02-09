@@ -188,6 +188,7 @@ local list = {
 		{AuraID = 397911, UnitID = "player"},	-- 毁灭之触，青龙寺
 		{AuraID = 397798, UnitID = "player"},	-- 腐蚀漩涡，青龙寺
 		{AuraID = 381862, UnitID = "player", Flash = true},	-- 地狱火之核，红玉
+		{AuraID = 376760, UnitID = "player"},	-- 狂风之力，学院
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
