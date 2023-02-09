@@ -172,7 +172,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	current:ClearAllPoints()
 	current:SetPoint("LEFT", frame, "RIGHT", 10, 0)
 
-	hooksecurefunc(frame.Form, "Init", function(self)
+	hooksecurefunc(frame.Form, "UpdateReagentSlots", function(self)
 		for slot in self.reagentSlotPool:EnumerateActive() do
 			local button = slot.Button
 			if button and not button.styled then
