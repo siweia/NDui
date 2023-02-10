@@ -1755,6 +1755,8 @@ function Update(self)
 
 	UpdateSpellHighlight(self)
 
+	UpdateRegisterClicks(self)
+
 	if GameTooltip_GetOwnerForbidden() == self then
 		UpdateTooltip(self)
 	end
