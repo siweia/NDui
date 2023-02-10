@@ -238,6 +238,16 @@ local function GetFormattedTimeLeft(timeLeft)
 	return format("%.2d:%.2d", timeLeft/60, timeLeft%60)
 end
 
+local itemCache = {}
+local function GetItemLink(itemID)
+	local link = itemCache[itemID]
+	if not link then
+		link = select(2, GetItemInfo(itemID))
+		itemCache[itemID] = link
+	end
+	return link
+end
+
 local title
 local function addTitle(text)
 	if not title then
@@ -355,6 +365,9 @@ info.onEnter = function(self)
 		local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(1978, areaPoiID) -- Dragon isles
 		if poiInfo then
 			addTitle(poiInfo.name)
+			if IsQuestFlaggedCompleted(70906) then
+				GameTooltip:AddDoubleLine(GetItemLink(200468), QUEST_COMPLETE, 1,1,1, 1,0,0)
+			end
 			local mapInfo = C_Map_GetMapInfo(mapID)
 			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
 			timeLeft = timeLeft/60
@@ -374,7 +387,7 @@ info.onEnter = function(self)
 
 		addTitle(COMMUNITY_FEAST)
 		if IsQuestFlaggedCompleted(70893) then
-			GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), QUEST_COMPLETE, 1,1,1, 1,0,0)
+			GameTooltip:AddDoubleLine(GetItemLink(200095), QUEST_COMPLETE, 1,1,1, 1,0,0)
 		end
 		if currentTime - (nextTime-duration) < 900 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
