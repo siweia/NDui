@@ -98,7 +98,9 @@ local questlist = {
 	{name = L["Timewarped"], id = 45563, texture = 1530590},	-- MoP
 	{name = L["Timewarped"], id = 55499, texture = 1129683},	-- WoD
 	{name = L["Timewarped"], id = 64710, texture = 1467047},	-- Legion
-	{name = GetSpellInfo(388945), id = 70866},	-- SoDR
+	{name = GetSpellInfo(388945), id = 70866},	-- SoDK
+	{name = "", id = 70906, itemID = 200468},	-- Grand hunt
+	{name = "", id = 70893, itemID = 200095},	-- Community feast
 }
 
 local lesserVisions = {58151, 58155, 58156, 58167, 58168}
@@ -334,7 +336,7 @@ info.onEnter = function(self)
 		if v.name and IsQuestFlaggedCompleted(v.id) then
 			if v.name == L["Timewarped"] and isTimeWalker and checkTexture(v.texture) or v.name ~= L["Timewarped"] then
 				addTitle(QUESTS_LABEL)
-				GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
+				GameTooltip:AddDoubleLine(v.itemID and GetItemLink(v.itemID) or v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
 			end
 		end
 	end
@@ -365,9 +367,6 @@ info.onEnter = function(self)
 		local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(1978, areaPoiID) -- Dragon isles
 		if poiInfo then
 			addTitle(poiInfo.name)
-			if IsQuestFlaggedCompleted(70906) then
-				GameTooltip:AddDoubleLine(GetItemLink(200468), QUEST_COMPLETE, 1,1,1, 1,0,0)
-			end
 			local mapInfo = C_Map_GetMapInfo(mapID)
 			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
 			timeLeft = timeLeft/60
@@ -386,9 +385,6 @@ info.onEnter = function(self)
 		local nextTime = duration - elapsed + currentTime
 
 		addTitle(COMMUNITY_FEAST)
-		if IsQuestFlaggedCompleted(70893) then
-			GameTooltip:AddDoubleLine(GetItemLink(200095), QUEST_COMPLETE, 1,1,1, 1,0,0)
-		end
 		if currentTime - (nextTime-duration) < 900 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
