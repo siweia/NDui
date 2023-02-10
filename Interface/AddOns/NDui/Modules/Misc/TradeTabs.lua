@@ -21,10 +21,11 @@ local tabList = {}
 
 local onlyPrimary = {
 	[171] = true, -- Alchemy
-	[202] = true, -- Engineering
 	[182] = true, -- Herbalism
-	[393] = true, -- Skinning
+	[186] = true, -- Mining
+	[202] = true, -- Engineering
 	[356] = true, -- Fishing
+	[393] = true, -- Skinning
 }
 
 function M:UpdateProfessions()
