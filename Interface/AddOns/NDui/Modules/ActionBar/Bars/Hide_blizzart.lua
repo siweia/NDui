@@ -37,19 +37,6 @@ local function updateTokenVisibility()
 	BackpackTokenFrame_Update()
 end
 
-local function DisableDefaultBarEvents() -- credit: Simpy
-	-- Spellbook open in combat taint, only happens sometimes
-	_G.MultiActionBar_HideAllGrids = B.Dummy
-	_G.MultiActionBar_ShowAllGrids = B.Dummy
-	-- shut down some events for things we dont use
-	_G.ActionBarController:UnregisterAllEvents()
-	_G.ActionBarActionEventsFrame:UnregisterAllEvents()
-	-- used for ExtraActionButton and TotemBar (on wrath)
-	_G.ActionBarButtonEventsFrame:UnregisterAllEvents()
-	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- needed to let the ExtraActionButton show and Totems to swap
-	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
-end
-
 function Bar:HideBlizz()
 	MainMenuBar:SetMovable(true)
 	MainMenuBar:SetUserPlaced(true)
@@ -65,7 +52,6 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	DisableDefaultBarEvents()
 	-- Hide blizz options
 	B.HideOption(InterfaceOptionsActionBarsPanelBottomLeft)
 	B.HideOption(InterfaceOptionsActionBarsPanelBottomRight)
