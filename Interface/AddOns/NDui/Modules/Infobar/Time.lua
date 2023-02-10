@@ -29,6 +29,8 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local C_TaskQuest_GetThreatQuests = C_TaskQuest.GetThreatQuests
 local C_TaskQuest_GetQuestInfoByQuestID = C_TaskQuest.GetQuestInfoByQuestID
 local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
+-- Localized
+local COMMUNITY_FEAST = GetSpellInfo(388961)
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool("timeMgrUseMilitaryTime") then
@@ -186,6 +188,7 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
+-- Grant hunts
 local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
 	[7342] = 2023, -- 欧恩哈拉平原
 	[7343] = 2022, -- 觉醒海岸
@@ -193,6 +196,7 @@ local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
 	[7345] = 2024, -- 碧蓝林海
 }
 
+-- Elemental invasion
 local stormPoiIDs = {
 	[2022] = {
 		{7249, 7250, 7251, 7252},
@@ -368,7 +372,7 @@ info.onEnter = function(self)
 		local elapsed = mod(currentTime - NDuiADB["FeastTime"], duration)
 		local nextTime = duration - elapsed + currentTime
 
-		addTitle(L["CommunityFeast"])
+		addTitle(COMMUNITY_FEAST)
 		if IsQuestFlaggedCompleted(70893) then
 			GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), QUEST_COMPLETE, 1,1,1, 1,0,0)
 		end
