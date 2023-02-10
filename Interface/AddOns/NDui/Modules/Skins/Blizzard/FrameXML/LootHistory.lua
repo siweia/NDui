@@ -66,6 +66,10 @@ tinsert(C.defaultThemes, function()
 			frame.ToggleButton:GetPushedTexture():SetAlpha(0)
 			frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
 
+			frame.WinnerName:SetFontObject(Game13Font)
+			frame.WinnerRoll:SetWidth(28)
+			frame.WinnerRoll:SetFontObject(Game13Font)
+
 			frame.styled = true
 		end
 
@@ -103,16 +107,6 @@ tinsert(C.defaultThemes, function()
 					playerFrame.WinMark:SetVertexColor(color.r, color.g, color.b)
 				end
 			end
-		end
-	end)
-
-	hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(_, itemFrame)
-		if not itemFrame.styled2 then
-			itemFrame.WinnerName:SetFontObject(Game13Font)
-			itemFrame.WinnerRoll:SetWidth(28)
-			itemFrame.WinnerRoll:SetFontObject(Game13Font)
-
-			itemFrame.styled2 = true
 		end
 	end)
 
