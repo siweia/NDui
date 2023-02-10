@@ -469,18 +469,17 @@ info.onMouseUp = function(_, btn)
 	end
 end
 
--- Refresh feast time when questlog update
-local lastCheck = 0
-local function refreshFeastTime()
-	if InCombatLockdown() then return end
-	local currentTime = GetTime()
-	if currentTime - lastCheck < 60 then return end
-	lastCheck = currentTime
+-- Refresh feast time on map open
+local lastTime = 0
+WorldMapFrame:HookScript("OnShow", function()
+	if InCombatLockdown() or IsInInstance() then return end
 
-	local currentFeast = GetCurrentFeastTime()
-	if currentFeast then
-		NDuiADB["FeastTime"] = currentFeast
+	local nowTime = GetTime()
+	if nowTime - lastTime > 60 then
+		local currentFeast = GetCurrentFeastTime()
+		if currentFeast then
+			NDuiADB["FeastTime"] = currentFeast
+		end
+		lastTime = nowTime
 	end
-end
-B:RegisterEvent("PLAYER_ENTERING_WORLD", refreshFeastTime)
-B:RegisterEvent("QUEST_LOG_UPDATE", refreshFeastTime)
+end)
