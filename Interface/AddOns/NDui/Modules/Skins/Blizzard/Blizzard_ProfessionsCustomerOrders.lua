@@ -120,6 +120,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 
 	-- Form
 	B.Reskin(frame.Form.BackButton)
+	B.ReskinCheck(frame.Form.AllocateBestQualityCheckBox)
 	B.ReskinCheck(frame.Form.TrackRecipeCheckBox.Checkbox)
 	frame.Form.RecipeHeader:Hide()
 	B.CreateBDFrame(frame.Form.RecipeHeader, .25)
@@ -171,7 +172,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	current:ClearAllPoints()
 	current:SetPoint("LEFT", frame, "RIGHT", 10, 0)
 
-	hooksecurefunc(frame.Form, "Init", function(self)
+	hooksecurefunc(frame.Form, "UpdateReagentSlots", function(self)
 		for slot in self.reagentSlotPool:EnumerateActive() do
 			local button = slot.Button
 			if button and not button.styled then

@@ -29,6 +29,8 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local C_TaskQuest_GetThreatQuests = C_TaskQuest.GetThreatQuests
 local C_TaskQuest_GetQuestInfoByQuestID = C_TaskQuest.GetQuestInfoByQuestID
 local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
+-- Localized
+local COMMUNITY_FEAST = GetSpellInfo(388961)
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool("timeMgrUseMilitaryTime") then
@@ -96,6 +98,9 @@ local questlist = {
 	{name = L["Timewarped"], id = 45563, texture = 1530590},	-- MoP
 	{name = L["Timewarped"], id = 55499, texture = 1129683},	-- WoD
 	{name = L["Timewarped"], id = 64710, texture = 1467047},	-- Legion
+	{name = GetSpellInfo(388945), id = 70866},	-- SoDK
+	{name = "", id = 70906, itemID = 200468},	-- Grand hunt
+	{name = "", id = 70893, itemID = 200095},	-- Community feast
 }
 
 local lesserVisions = {58151, 58155, 58156, 58167, 58168}
@@ -185,6 +190,7 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
+-- Grant hunts
 local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
 	[7342] = 2023, -- 欧恩哈拉平原
 	[7343] = 2022, -- 觉醒海岸
@@ -192,6 +198,7 @@ local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
 	[7345] = 2024, -- 碧蓝林海
 }
 
+-- Elemental invasion
 local stormPoiIDs = {
 	[2022] = {
 		{7249, 7250, 7251, 7252},
@@ -231,6 +238,16 @@ end
 
 local function GetFormattedTimeLeft(timeLeft)
 	return format("%.2d:%.2d", timeLeft/60, timeLeft%60)
+end
+
+local itemCache = {}
+local function GetItemLink(itemID)
+	local link = itemCache[itemID]
+	if not link then
+		link = select(2, GetItemInfo(itemID))
+		itemCache[itemID] = link
+	end
+	return link
 end
 
 local title
@@ -319,7 +336,7 @@ info.onEnter = function(self)
 		if v.name and IsQuestFlaggedCompleted(v.id) then
 			if v.name == L["Timewarped"] and isTimeWalker and checkTexture(v.texture) or v.name ~= L["Timewarped"] then
 				addTitle(QUESTS_LABEL)
-				GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
+				GameTooltip:AddDoubleLine(v.itemID and GetItemLink(v.itemID) or v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
 			end
 		end
 	end
@@ -363,14 +380,11 @@ info.onEnter = function(self)
 	title = false
 	if NDuiADB["FeastTime"] ~= 0 then
 		local currentTime = time()
-		local duration = 12600 -- 3.5hrs
+		local duration = 5400 -- 1.5hrs
 		local elapsed = mod(currentTime - NDuiADB["FeastTime"], duration)
 		local nextTime = duration - elapsed + currentTime
 
-		addTitle(L["CommunityFeast"])
-		if IsQuestFlaggedCompleted(70893) then
-			GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), QUEST_COMPLETE, 1,1,1, 1,0,0)
-		end
+		addTitle(COMMUNITY_FEAST)
 		if currentTime - (nextTime-duration) < 900 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
 		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
@@ -455,18 +469,17 @@ info.onMouseUp = function(_, btn)
 	end
 end
 
--- Refresh feast time when questlog update
-local lastCheck = 0
-local function refreshFeastTime()
-	if InCombatLockdown() then return end
-	local currentTime = GetTime()
-	if currentTime - lastCheck < 60 then return end
-	lastCheck = currentTime
+-- Refresh feast time on map open
+local lastTime = 0
+WorldMapFrame:HookScript("OnShow", function()
+	if InCombatLockdown() or IsInInstance() then return end
 
-	local currentFeast = GetCurrentFeastTime()
-	if currentFeast then
-		NDuiADB["FeastTime"] = currentFeast
+	local nowTime = GetTime()
+	if nowTime - lastTime > 60 then
+		local currentFeast = GetCurrentFeastTime()
+		if currentFeast then
+			NDuiADB["FeastTime"] = currentFeast
+		end
+		lastTime = nowTime
 	end
-end
-B:RegisterEvent("PLAYER_ENTERING_WORLD", refreshFeastTime)
-B:RegisterEvent("QUEST_LOG_UPDATE", refreshFeastTime)
+end)

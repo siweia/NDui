@@ -16,15 +16,15 @@ local RUNEFORGING_ID = 53428
 local PICK_LOCK = 1804
 local CHEF_HAT = 134020
 local THERMAL_ANVIL = 87216
-local ENCHANTING_VELLUM = 38682
 local tabList = {}
 
 local onlyPrimary = {
 	[171] = true, -- Alchemy
-	[202] = true, -- Engineering
 	[182] = true, -- Herbalism
-	[393] = true, -- Skinning
+	[186] = true, -- Mining
+	[202] = true, -- Engineering
 	[356] = true, -- Fishing
+	[393] = true, -- Skinning
 }
 
 function M:UpdateProfessions()
@@ -199,49 +199,8 @@ function M:TradeTabs_OnLoad()
 	B:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", M.TradeTabs_Update)
 
 	M:TradeTabs_FilterIcons()
-	M:TradeTabs_QuickEnchanting()
 
 	B:UnregisterEvent("PLAYER_REGEN_ENABLED", M.TradeTabs_OnLoad)
-end
-
-local isEnchanting
-local tooltipString = "|cffffffff%s(%d)"
-local function IsRecipeEnchanting(self)
-	isEnchanting = nil
-
-	local recipeID = self.selectedRecipeID
-	local recipeInfo = recipeID and C_TradeSkillUI_GetRecipeInfo(recipeID)
-	if recipeInfo and recipeInfo.alternateVerb then
-		local parentSkillLineID = select(6, C_TradeSkillUI_GetTradeSkillLine())
-		if parentSkillLineID == 333 then
-			isEnchanting = true
-			self.CreateButton.tooltip = format(tooltipString, L["UseVellum"], GetItemCount(ENCHANTING_VELLUM))
-		end
-	end
-end
-
-function M:TradeTabs_QuickEnchanting()
-	if ProfessionsFrame.CraftingPage.ValidateControls then
-		hooksecurefunc(ProfessionsFrame.CraftingPage, "ValidateControls", function(self)
-			isEnchanting = nil
-			local currentRecipeInfo = self.SchematicForm:GetRecipeInfo()
-			if currentRecipeInfo and currentRecipeInfo.alternateVerb then
-				local professionInfo = ProfessionsFrame:GetProfessionInfo()
-				if professionInfo and professionInfo.parentProfessionID == 333 then
-					isEnchanting = true
-					self.CreateButton.tooltipText = format(tooltipString, L["UseVellum"], GetItemCount(ENCHANTING_VELLUM))
-				end
-			end
-		end)
-	end
-
-	local createButton = ProfessionsFrame.CraftingPage.CreateButton
-	createButton:RegisterForClicks("AnyUp")
-	createButton:HookScript("OnClick", function(_, btn)
-		if btn == "RightButton" and isEnchanting then
-			UseItemByName(ENCHANTING_VELLUM)
-		end
-	end)
 end
 
 function M:TradeTabs()

@@ -66,6 +66,10 @@ tinsert(C.defaultThemes, function()
 			frame.ToggleButton:GetPushedTexture():SetAlpha(0)
 			frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
 
+			frame.WinnerName:SetFontObject(Game13Font)
+			frame.WinnerRoll:SetWidth(28)
+			frame.WinnerRoll:SetFontObject(Game13Font)
+
 			frame.styled = true
 		end
 
@@ -82,8 +86,11 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
 		if not playerFrame.styled then
+			playerFrame.PlayerName:SetWordWrap(false)
+			playerFrame.PlayerName:SetFontObject(Game13Font)
 			playerFrame.RollText:SetTextColor(.9, .9, .9)
-			playerFrame.RollText:SetWidth(30) -- needs review, might be too big
+			playerFrame.RollText:SetWidth(28)
+			playerFrame.RollText:SetFontObject(Game13Font)
 			playerFrame.WinMark:SetDesaturated(true)
 
 			playerFrame.styled = true

@@ -72,18 +72,6 @@ C.themes["Blizzard_PlayerChoice"] = function()
 
 			local rewards = optionFrame.Rewards
 			if rewards then
-				for rewardFrame in rewards.rewardsPool:EnumerateActiveByTemplate("PlayerChoiceBaseOptionItemRewardTemplate") do
-					ReskinOptionText(rewardFrame.Name, .9, .8, .5)
-					if not rewardFrame.styled then
-						local itemButton = rewardFrame.itemButton
-						B.StripTextures(itemButton, 1)
-						itemButton.bg = B.ReskinIcon((itemButton:GetRegions()))
-						B.ReskinIconBorder(itemButton.IconBorder, true)
-
-						rewardFrame.styled = true
-					end
-				end
-
 				for rewardFrame in rewards.rewardsPool:EnumerateActive() do
 					local text = rewardFrame.Name or rewardFrame.Text -- .Text for PlayerChoiceBaseOptionReputationRewardTemplate
 					if text then
