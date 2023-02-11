@@ -4,25 +4,25 @@ local M = B:GetModule("Misc")
 
 -- Unregister talent event
 if PlayerTalentFrame then
-    PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 else
-    hooksecurefunc("TalentFrame_LoadUI", function()
-        PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-    end)
+	hooksecurefunc("TalentFrame_LoadUI", function()
+		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	end)
 end
 
 -- Fix blizz bug in addon list
 local _AddonTooltip_Update = AddonTooltip_Update
 function AddonTooltip_Update(owner)
-    if not owner then return end
-    if owner:GetID() < 1 then return end
-    _AddonTooltip_Update(owner)
+	if not owner then return end
+	if owner:GetID() < 1 then return end
+	_AddonTooltip_Update(owner)
 end
 
 -- Fix empty string in party guide promote
 if not PROMOTE_GUIDE then
-    if DB.isDeveloper then print(DB.NDuiString..": Blizzard promote string fixed.") end
-    PROMOTE_GUIDE = PARTY_PROMOTE_GUIDE
+	if DB.isDeveloper then print(DB.NDuiString..": Blizzard promote string fixed.") end
+	PROMOTE_GUIDE = PARTY_PROMOTE_GUIDE
 end
 
 -- Fix Drag Collections taint
@@ -103,4 +103,18 @@ do
 		B:UnregisterEvent(event, fixGuildNews)
 	end
 	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
+end
+
+-- Fix achievement date missing in zhTW
+if GetLocale() == "zhTW" then
+	local function fixAchievementData(event, addon)
+		if addon ~= "Blizzard_AchievementUI" then return end
+
+		hooksecurefunc("AchievementButton_Localize", function(button)
+			button.DateCompleted:SetPoint("TOP", button.Shield, "BOTTOM", -2, 6)
+		end)
+
+		B:UnregisterEvent(event, fixAchievementData)
+	end
+	B:RegisterEvent("ADDON_LOADED", fixAchievementData)
 end
