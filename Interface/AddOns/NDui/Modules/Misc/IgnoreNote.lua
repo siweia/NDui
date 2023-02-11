@@ -104,6 +104,16 @@ function M:IgnoreNote()
 	hooksecurefunc(IgnoreListFrame.ScrollBox, "Update", function(self)
 		self:ForEachFrame(M.IgnoreButton_Hook)
 	end)
+
+	FriendsFrameUnsquelchButton:HookScript("OnClick", function()
+		local name = C_FriendList.GetIgnoreName(C_FriendList.GetSelectedIgnore())
+		if name then
+			if not strmatch(name, "-") then
+				name = name.."-"..DB.MyRealm
+			end
+			NDuiADB["IgnoreNotes"][name] = nil
+		end
+	end)
 end
 
 M:RegisterMisc("IgnoreNote", M.IgnoreNote)
