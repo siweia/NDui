@@ -53,10 +53,12 @@ local list = {
 		{AuraID = 33697, UnitID = "player"},	-- 血性狂怒 兽人
 		{AuraID = 292463, UnitID = "player"},	-- 帕库之拥 赞达拉
 		-- 隐形药水
-		{AuraID = 307195, UnitID = "player"},	-- 隐秘精魂药水
+		{AuraID = 371124, UnitID = "player"},	-- 沉静西风药水
 		-- 10.0 饰品
 		{AuraID = 381476, UnitID = "player"},	-- 爆发烈焰
 		{AuraID = 383941, UnitID = "player"},	-- 崩坏之力
+		{AuraID = 383781, UnitID = "player"},	-- 谜题盒
+		{AuraID = 214980, UnitID = "player", Flash = true},	-- 切割漩涡
 		-- 盟约，TODO: 部分已被整合进天赋，待整理
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
