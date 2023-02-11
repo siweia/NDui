@@ -593,6 +593,7 @@ G.AccountSettings = {
 	NameplateWhite = {},
 	NameplateBlack = {},
 	FeastTime = 0,
+	IgnoreNotes = {},
 }
 
 -- Initial settings

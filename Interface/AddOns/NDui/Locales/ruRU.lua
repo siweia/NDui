@@ -917,3 +917,4 @@ L["DisableMinimapTip"] = "|nЕсли этот флажок установлен,
 L["ChargesRemaining"] = "%s %s/%s следующий оставшийся заряд %s"
 L["ChargesCompleted"] = "%s %s/%s все заряды готовы."
 L["ToggleActionbarTip"] = "|nOption to toggle actionbar, no need to reload UI." -- need translation
+L["IgnoreNoteHelp"] = "You can add note for ignore list by double click." -- need translation
