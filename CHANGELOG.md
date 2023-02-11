@@ -1,6 +1,5 @@
 # NDui Classic
 
-## [3.8.1](https://github.com/siweia/NDui/tree/3.8.1) (2023-2-10)
+## [3.8.2](https://github.com/siweia/NDui/tree/3.8.2) (2023-2-11)
 
-- Fix actionbar not trigger key down.
-- Update skin for LootHistory.
+- Fix stancebar paging.
