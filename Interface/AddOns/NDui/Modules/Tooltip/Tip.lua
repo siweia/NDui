@@ -28,6 +28,7 @@ local classification = {
 	worldboss = " |cffff0000"..BOSS.."|r",
 }
 local npcIDstring = "%s "..DB.InfoColor.."%s"
+local ignoreString = "|cffff0000"..IGNORED..":|r %s"
 
 function TT:GetUnit()
 	local data = self:GetTooltipData()
@@ -143,8 +144,10 @@ function TT:OnTooltipSetUnit()
 
 	local isShiftKeyDown = IsShiftKeyDown()
 	local isPlayer = UnitIsPlayer(unit)
+	local unitFullName
 	if isPlayer then
 		local name, realm = UnitName(unit)
+		unitFullName = name.."-"..(realm or DB.MyRealm)
 		local pvpName = UnitPVPName(unit)
 		local relationship = UnitRealmRelationship(unit)
 		if not C.db["Tooltip"]["HideTitle"] and pvpName then
@@ -255,6 +258,12 @@ function TT:OnTooltipSetUnit()
 	TT.ShowUnitMythicPlusScore(self, unit)
 	TT.ScanTargets(self, unit)
 	TT.PetInfo_Setup(self, unit)
+
+	-- Ignore note
+	local ignoreNote = unitFullName and NDuiADB["IgnoreNotes"][unitFullName]
+	if ignoreNote then
+		self:AddLine(format(ignoreString, ignoreNote), 1,1,1, 1)
+	end
 end
 
 function TT:RefreshStatusBar(value)
