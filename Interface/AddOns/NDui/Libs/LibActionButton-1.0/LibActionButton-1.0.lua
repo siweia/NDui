@@ -1246,6 +1246,17 @@ function InitializeEventHandler()
 	end
 end
 
+local function PlayerHasLockAndLoad()
+	local name, spellID, _
+	for i = 1, 40 do
+		name, _, _, _, _, _, _, _, _, spellID = UnitAura("player", i, "HELPFUL")
+		if not name then break end
+		if spellID == 194594 then
+			return true
+		end
+	end
+end
+
 local _lastFormUpdate = GetTime()
 function OnEvent(frame, event, arg1, ...)
 	if event == "PLAYER_LOGIN" then
@@ -1378,6 +1389,7 @@ function OnEvent(frame, event, arg1, ...)
 		for button in next, ActiveButtons do
 			local spellId = button:GetSpellId()
 			if spellId and spellId == arg1 then
+				if spellId == 19434 and not PlayerHasLockAndLoad() then return end -- NDui: Ignore MM hunter T29x2
 				ShowOverlayGlow(button)
 			else
 				if button._state_type == "action" then

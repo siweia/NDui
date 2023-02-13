@@ -110,10 +110,9 @@ local list = {
 		{AuraID = 388035, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 392956, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
-		{AuraID = 388998, UnitID = "player"},	-- 碎刀片
+		{AuraID = 378770, UnitID = "player", Flash = true},	-- 夺命打击
 
-		{AuraID = 363760, UnitID = "player", Flash = true},	-- 杀戮狂乱，兽王4T
-		{AuraID = 363805, UnitID = "player", Flash = true},	-- 疯狂掷弹兵，生存2T
+		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱
