@@ -495,9 +495,9 @@ function A:UpdateAuraWatchByFilter(unit, filter, inCombat)
 	local index = 1
 
 	while true do
-		local name, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, number = UnitAura(unit, index, filter)
+		local name, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, number1, number2 = UnitAura(unit, index, filter)
 		if not name then break end
-		A:AuraWatch_UpdateAura(unit, index, filter, name, icon, count, duration, expires, caster, spellID, tonumber(number), inCombat)
+		A:AuraWatch_UpdateAura(unit, index, filter, name, icon, count, duration, expires, caster, spellID, (number1 == 0 and tonumber(number2) or tonumber(number1)), inCombat)
 
 		index = index + 1
 	end
