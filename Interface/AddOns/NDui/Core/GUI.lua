@@ -1285,7 +1285,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "CVarOnlyNames", L["CVarOnlyNames"], nil, nil, updatePlateCVars, L["CVarOnlyNamesTip"]},
 		{1, "Nameplate", "CVarShowNPCs", L["CVarShowNPCs"].."*", nil, nil, updatePlateCVars, L["CVarShowNPCsTip"]},
-		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", true, {.5, 1.5, .1}, updatePlateCVars},
+		{3, "Nameplate", "VerticalSpacing", L["NP VerticalSpacing"].."*", true, {.5, 2.5, .1}, updatePlateCVars},
 		{3, "Nameplate", "MinScale", L["Nameplate MinScale"].."*", nil, {.5, 1, .1}, updatePlateCVars},
 		{3, "Nameplate", "MinAlpha", L["Nameplate MinAlpha"].."*", true, {.3, 1, .1}, updatePlateCVars},
 	},
