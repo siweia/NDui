@@ -726,23 +726,24 @@ do
 		["artifact"] = Enum.ItemQuality.Artifact,
 		["account"] = Enum.ItemQuality.Heirloom,
 	}
-	local function updateIconBorderColorByAtlas(self, atlas)
+	local function updateIconBorderColorByAtlas(border, atlas)
 		local atlasAbbr = atlas and strmatch(atlas, "%-(%w+)$")
 		local quality = atlasAbbr and AtlasToQuality[atlasAbbr]
 		local color = DB.QualityColors[quality or 1]
-		self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+		border.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 
 	local greyRGB = DB.QualityColors[0].r
-	local function updateIconBorderColor(self, r, g, b)
+	local function updateIconBorderColor(border, r, g, b)
 		if not r or r == greyRGB or (r>.99 and g>.99 and b>.99) then
 			r, g, b = 0, 0, 0
 		end
-		self.__owner.bg:SetBackdropBorderColor(r, g, b)
+		border.__owner.bg:SetBackdropBorderColor(r, g, b)
+		border:Hide(true) -- fix icon border
 	end
-	local function resetIconBorderColor(self, texture)
+	local function resetIconBorderColor(border, texture)
 		if not texture then
-			self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+			border.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
 	local function resetIconBorder(button, quality)

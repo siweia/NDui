@@ -159,8 +159,6 @@ local function reskinOutputButtons(self)
 
 		local itemContainer = child.ItemContainer
 		if itemContainer then
-			itemContainer.Item.IconBorder:SetAlpha(0)
-
 			local itemBG = itemContainer.bg
 			if itemBG then
 				if itemContainer.CritFrame:IsShown() then
