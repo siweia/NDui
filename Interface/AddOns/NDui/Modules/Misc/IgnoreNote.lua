@@ -7,6 +7,7 @@ local noteString = "|T"..DB.copyTex..":12|t %s"
 
 local function GetButtonName(button)
 	local name = button.name:GetText()
+	if not name then return end
 	if not strmatch(name, "-") then
 		name = name.."-"..DB.MyRealm
 	end

@@ -19,8 +19,10 @@ end
 
 local function replaceMessage(msg, r, g, b)
 	local hexRGB = B.HexRGB(r, g, b)
-	msg = gsub(msg, "|T(.-):.-|t", "%1") -- accept texture path or id
-	msg = gsub(msg, "|A(.-):.-|a", "%1") -- accept atlas path or id, needs review
+	--msg = gsub(msg, "|T(.-):.-|t", "%1") -- accept texture path or id
+	--msg = gsub(msg, "|A(.-):.-|a", "%1") -- accept atlas path or id, needs review
+	msg = gsub(msg, "|T(.-):.-|t", "")
+	msg = gsub(msg, "|A(.-):.-|a", "")
 	return format("%s%s|r", hexRGB, msg)
 end
 
