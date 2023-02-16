@@ -379,14 +379,12 @@ function M:GuildNewsButtonOnClick(btn)
 	end
 end
 
-function M:ItemLevel_ReplaceGuildNews(color, strFormat, playerName, itemName)
+function M:ItemLevel_ReplaceGuildNews(_, _, playerName)
 	self.playerName = playerName
 
-	if itemName and not tonumber(itemName) then -- ignore MOTD and date
-		local newText = gsub(itemName, "(|Hitem:%d+:.-|h%[(.-)%]|h)", M.ItemLevel_ReplaceItemLink)
-		if newText then
-			self.text:SetFormattedText(strFormat, playerName, newText)
-		end
+	local newText = gsub(self.text:GetText(), "(|Hitem:%d+:.-|h%[(.-)%]|h)", M.ItemLevel_ReplaceItemLink)
+	if newText then
+		self.text:SetText(newText)
 	end
 
 	if not self.hooked then
