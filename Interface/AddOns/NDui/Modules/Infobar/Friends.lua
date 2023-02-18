@@ -297,6 +297,21 @@ local function buttonOnClick(self, btn)
 			else
 				InviteToGroup(self.data[1])
 			end
+		elseif IsShiftKeyDown() then
+			local name = self.isBNet and self.data[3] or self.data[1]
+			if name then
+				if MailFrame:IsShown() then
+					MailFrameTab_OnClick(nil, 2)
+					SendMailNameEditBox:SetText(name)
+					SendMailNameEditBox:HighlightText()
+				else
+					local editBox = ChatEdit_ChooseBoxForSend()
+					local hasText = (editBox:GetText() ~= "")
+					ChatEdit_ActivateChat(editBox)
+					editBox:Insert(name)
+					if not hasText then editBox:HighlightText() end
+				end
+			end
 		end
 	else
 		if self.isBNet then
