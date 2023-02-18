@@ -165,6 +165,8 @@ info.onMouseUp = function(self, btn)
 	end
 end
 
+local title
+
 info.onEnter = function(self)
 	local _, anchor, offset = module:GetTooltipAnchor(info)
 	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
@@ -199,15 +201,28 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
+	title = false
+	local chargeInfo = C_CurrencyInfo_GetCurrencyInfo(2167) -- Tier charges
+	if chargeInfo then
+		if not title then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
+			title = true
+		end
+		local iconTexture = " |T"..chargeInfo.iconFileID..":13:15:0:0:50:50:4:46:4:46|t"
+		GameTooltip:AddDoubleLine(chargeInfo.name, chargeInfo.quantity.."/"..chargeInfo.maxQuantity..iconTexture, 1,1,1, 1,1,1)
+	end
+
 	for i = 1, 10 do -- seems unlimit, but use 10 for now, needs review
 		local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
 		if not currencyInfo then break end
 		local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
-		if name and i == 1 then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
-		end
 		if name and count then
+			if not title then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
+				title = true
+			end
 			local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
 			local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
 			if total > 0 then
@@ -217,6 +232,7 @@ info.onEnter = function(self)
 			end
 		end
 	end
+	
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Switch Mode"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)

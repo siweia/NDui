@@ -52,6 +52,8 @@ local function buttonEventsRegisterFrame(self, added)
 end
 
 local function DisableDefaultBarEvents() -- credit: Simpy
+	-- MainMenuBar:ClearAllPoints taint during combat
+	_G.MainMenuBar.SetPositionForStatusBars = B.Dummy
 	-- Spellbook open in combat taint, only happens sometimes
 	_G.MultiActionBar_HideAllGrids = B.Dummy
 	_G.MultiActionBar_ShowAllGrids = B.Dummy
@@ -66,14 +68,11 @@ local function DisableDefaultBarEvents() -- credit: Simpy
 	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
 	hooksecurefunc(_G.ActionBarButtonEventsFrame, "RegisterFrame", buttonEventsRegisterFrame)
 	buttonEventsRegisterFrame(_G.ActionBarButtonEventsFrame)
+	-- fix keybind error, this actually just prevents reopen of the GameMenu
+	_G.SettingsPanel.TransitionBackOpeningPanel = _G.HideUIPanel
 end
 
 function Bar:HideBlizz()
-	MainMenuBar:SetMovable(true)
-	MainMenuBar:SetUserPlaced(true)
-	MainMenuBar.ignoreFramePositionManager = true
-	MainMenuBar:SetAttribute("ignoreFramePositionManager", true)
-
 	for _, frame in next, framesToHide do
 		frame:SetParent(B.HiddenFrame)
 	end
@@ -83,7 +82,7 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	--DisableDefaultBarEvents()
+	DisableDefaultBarEvents()
 	-- Fix maw block anchor
 	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 	-- Update token panel
