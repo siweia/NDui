@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0"
-local MINOR_VERSION = 106
+local MINOR_VERSION = 107
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -1608,6 +1608,29 @@ function Generic:UpdateAction(force)
 	end
 end
 
+local function ClearProfessionQuality(self)
+	if self.ProfessionQualityOverlayFrame then
+		self.ProfessionQualityOverlayFrame:Hide()
+	end
+end
+
+local function UpdateProfessionQuality(self)
+	if IsItemAction(self._state_action) then
+		local quality = C_ActionBar.GetProfessionQuality(self._state_action)
+		if quality then
+			if not self.ProfessionQualityOverlayFrame then
+				self.ProfessionQualityOverlayFrame = CreateFrame("Frame", nil, self, "ActionButtonProfessionOverlayTemplate")
+				self.ProfessionQualityOverlayFrame:SetPoint("TOPLEFT", 14, -14)
+			end
+			local atlas = ("Professions-Icon-Quality-Tier%d-Inv"):format(quality)
+			self.ProfessionQualityOverlayFrame:Show()
+			self.ProfessionQualityOverlayFrame.Texture:SetAtlas(atlas, TextureKitConstants.UseAtlasSize)
+			return
+		end
+	end
+	ClearProfessionQuality(self)
+end
+
 function Update(self)
 	if self:HasAction() then
 		ActiveButtons[self] = true
@@ -1623,6 +1646,7 @@ function Update(self)
 		UpdateUsable(self)
 		UpdateCooldown(self)
 		UpdateFlash(self)
+		UpdateProfessionQuality(self)
 	else
 		ActiveButtons[self] = nil
 		ActionButtons[self] = nil
@@ -1632,6 +1656,7 @@ function Update(self)
 		end
 		self.cooldown:Hide()
 		self:SetChecked(false)
+		ClearProfessionQuality(self)
 
 		if self.chargeCooldown then
 			EndChargeCooldown(self.chargeCooldown)

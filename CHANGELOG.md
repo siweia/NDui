@@ -1,21 +1,19 @@
 # NDui
 
-## [7.3.0](https://github.com/siweia/NDui/tree/7.3.0) (2023-2-9)
+## [7.4.0](https://github.com/siweia/NDui/tree/7.4.0) (2023-2-19)
 
-- Update auras.
-- Fix anchor for minimap mail and order icon.
 - Update default skins.
-- Add skin for addon KrowiAchievementFilter.
-- Update skins for Skada and Details.
-- Remove old patch compatibility.
-- Fix world map scaling.
-- Update junk selling, ignore uncollected transmog trash.
-- Update actionbar presets.
-- Fix anchor for petbar hotkeys.
-- Update quest button ignore list.
-- Fix empty string for guide promote on unit popup menu.
-- Update bag search and filter.
-- Notification for dragon glyphs collection.
-- Update infobar time module.
-- Fix tooltip statusbar visibility.
-- Holding key shift+click on guild news can copy guild member's name.
+- Update auras and nameplate filter.
+- Update infobar time and currency module.
+- You can copy friend name by holding key shift and click from infobar.
+- Update TradeTabs.
+- Add a button on guild mythic record to toggle details key window.
+- Update stancebar.
+- Fix achievement time label in zhTW client.
+- You can add ignore note on your ignored list.
+- Update oUF core.
+- Fix aurawatch target spell value return 0 in mythic+.
+- Update chatcopy.
+- Disable actionbar right click self casting.
+- Update premade taint fix.
+- Show item crafting level on actionbar.

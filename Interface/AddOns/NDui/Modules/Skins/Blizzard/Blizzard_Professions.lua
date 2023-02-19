@@ -332,6 +332,8 @@ C.themes["Blizzard_Professions"] = function()
 
 	local orderView = frame.OrdersPage.OrderView
 	B.Reskin(orderView.CreateButton)
+	B.Reskin(orderView.StartRecraftButton)
+	B.Reskin(orderView.StopRecraftButton)
 	B.Reskin(orderView.CompleteOrderButton)
 	reskinOutputLog(orderView.CraftingOutputLog)
 	reskinRankBar(orderView.RankBar)

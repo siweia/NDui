@@ -113,6 +113,8 @@ local list = {
 		{AuraID = 378770, UnitID = "player", Flash = true},	-- 夺命打击
 
 		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
+		{AuraID = 394384, UnitID = "player", Flash = true},	-- 集中瞄准，射击4T
+		{AuraID = 394388, UnitID = "player", Flash = true},	-- 狂野弹幕，生存4T
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 3355, UnitID = "focus", Caster = "player"},	-- 冰冻陷阱
