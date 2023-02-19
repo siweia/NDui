@@ -1,5 +1,6 @@
 # NDui Classic
 
-## [3.8.2](https://github.com/siweia/NDui/tree/3.8.2) (2023-2-11)
+## [3.8.3](https://github.com/siweia/NDui/tree/3.8.3) (2023-2-19)
 
-- Fix stancebar paging.
+- Update itemlevel calculation.
+- Disable right click self casting.
