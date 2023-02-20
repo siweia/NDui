@@ -213,6 +213,7 @@ local list = {
 		{AuraID = 376781, UnitID = "target", Flash = true},	-- 火焰风暴，学院
 		{AuraID = 113315, UnitID = "target", Stack = 7, Flash = true},	-- 强烈，青龙寺
 		{AuraID = 113309, UnitID = "target", Flash = true},	-- 至高能量，青龙寺
+		{AuraID = 117665, UnitID = "target", Flash = true},	-- 凡尘之羁，青龙寺
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
