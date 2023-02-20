@@ -25,7 +25,7 @@ local function ForceDefaultSettings()
 	SetCVar("floatingCombatTextCombatHealing", 1)
 	SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)
 	SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 10)
-	SetActionBarToggles(1, 1, 1, 1)
+	--SetActionBarToggles(1, 1, 1, 1)
 	if not InCombatLockdown() then
 		SetCVar("nameplateMotion", 1)
 		SetCVar("nameplateShowAll", 1)
