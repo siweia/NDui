@@ -28,6 +28,8 @@ local list = {
 		{AuraID = 260249, UnitID = "player"},	-- 掠食者
 		{AuraID = 231390, UnitID = "player", Combat = true},	-- 开拓者
 		{AuraID = 164273, UnitID = "player", Combat = true},	-- 独来独往
+		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
+		{AuraID = 342076, UnitID = "player"},	-- 行云流水
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 3355, UnitID = "target", Caster = "player"},		-- 冰冻陷阱
@@ -92,7 +94,6 @@ local list = {
 		{AuraID = 235712, UnitID = "player", Combat = true},	-- 回转稳定，橙手
 		{AuraID = 264735, UnitID = "player"},	-- 优胜劣汰
 		{AuraID = 281195, UnitID = "player"},	-- 优胜劣汰
-		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
 		{AuraID = 260395, UnitID = "player"},	-- 致命射击
 		{AuraID = 269502, UnitID = "player"},	-- 致命射击
 		{AuraID = 281036, UnitID = "player"},	-- 凶暴野兽
@@ -105,7 +106,6 @@ local list = {
 		{AuraID = 288613, UnitID = "player"},	-- 百发百中
 		{AuraID = 274447, UnitID = "player"},	-- 千里之目
 		{AuraID = 260243, UnitID = "player"},	-- 乱射
-		{AuraID = 342076, UnitID = "player"},	-- 行云流水
 		{AuraID = 336892, UnitID = "player", Flash = true},	-- 无懈警戒之秘
 		{AuraID = 388035, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 392956, UnitID = "player"},	-- 巨熊之韧

@@ -95,6 +95,7 @@ module:RegisterDebuff(TIER, 721, 0, 198190, 5)
 module:RegisterDebuff(TIER, 721, 0, 196497)
 module:RegisterDebuff(TIER, 721, 0, 193743)
 module:RegisterDebuff(TIER, 721, 0, 199337)
+module:RegisterDebuff(TIER, 721, 0, 193660)
 
 -- 魔法回廊 (726)
 module:RegisterDebuff(TIER, 726, 0, 209858)

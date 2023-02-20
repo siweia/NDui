@@ -195,6 +195,7 @@ local list = {
 		{AuraID = 376760, UnitID = "player"},	-- 狂风之力，学院
 		{AuraID = 391977, UnitID = "player"},	-- 涌动超载，学院
 		{AuraID = 386181, UnitID = "player"},	-- 法力炸弹，学院
+		{AuraID = 197996, UnitID = "player"},	-- 烙印，英灵殿
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
