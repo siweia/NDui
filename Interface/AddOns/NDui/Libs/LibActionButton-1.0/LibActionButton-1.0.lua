@@ -1609,8 +1609,8 @@ function Generic:UpdateAction(force)
 end
 
 local function ClearProfessionQuality(self)
-	if self.ProfessionQualityOverlayFrame then
-		self.ProfessionQualityOverlayFrame:Hide()
+	if self.ProfessionQuality then
+		self.ProfessionQuality:Hide()
 	end
 end
 
@@ -1619,13 +1619,15 @@ local function UpdateProfessionQuality(self)
 	if action and IsItemAction(action) then
 		local quality = C_ActionBar.GetProfessionQuality(action)
 		if quality then
-			if not self.ProfessionQualityOverlayFrame then
-				self.ProfessionQualityOverlayFrame = CreateFrame("Frame", nil, self, "ActionButtonProfessionOverlayTemplate")
-				self.ProfessionQualityOverlayFrame:SetPoint("TOPLEFT", 14, -14)
+			if not self.ProfessionQuality then
+				self.ProfessionQuality = CreateFrame("Frame", nil, self)
+				self.ProfessionQuality:SetInside()
+				local tex = self.ProfessionQuality:CreateTexture(nil, "ARTWORK")
+				tex:SetPoint("TOPLEFT")
+				self.ProfessionQuality.Texture = tex
 			end
-			local atlas = ("Professions-Icon-Quality-Tier%d-Inv"):format(quality)
-			self.ProfessionQualityOverlayFrame:Show()
-			self.ProfessionQualityOverlayFrame.Texture:SetAtlas(atlas, TextureKitConstants.UseAtlasSize)
+			self.ProfessionQuality:Show()
+			self.ProfessionQuality.Texture:SetAtlas(format("Professions-Icon-Quality-Tier%d-Inv", quality), true)
 			return
 		end
 	end
