@@ -1615,8 +1615,9 @@ local function ClearProfessionQuality(self)
 end
 
 local function UpdateProfessionQuality(self)
-	if IsItemAction(self._state_action) then
-		local quality = C_ActionBar.GetProfessionQuality(self._state_action)
+	local action = self._state_action
+	if action and IsItemAction(action) then
+		local quality = C_ActionBar.GetProfessionQuality(action)
 		if quality then
 			if not self.ProfessionQualityOverlayFrame then
 				self.ProfessionQualityOverlayFrame = CreateFrame("Frame", nil, self, "ActionButtonProfessionOverlayTemplate")
