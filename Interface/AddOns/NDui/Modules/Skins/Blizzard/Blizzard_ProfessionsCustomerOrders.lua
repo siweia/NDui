@@ -74,6 +74,17 @@ local function reskinContainer(container)
 	B.ReskinArrow(box.IncrementButton, "right")
 end
 
+local function reskinOrderIcon(child)
+	if child.styled then return end
+
+	local button = child:GetChildren()
+	if button and button.IconBorder then
+		button.bg = B.ReskinIcon(button.Icon)
+		B.ReskinIconBorder(button.IconBorder)
+	end
+	child.styled = true
+end
+
 C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	local frame = _G.ProfessionsCustomerOrdersFrame
 
@@ -208,9 +219,12 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	-- Orders
 	B.Reskin(frame.MyOrdersPage.RefreshButton)
 	frame.MyOrdersPage.RefreshButton.__bg:SetInside(nil, 3, 3)
+	B.StripTextures(frame.MyOrdersPage.OrderList)
+	B.CreateBDFrame(frame.MyOrdersPage.OrderList, .25)
 	reskinListHeader(frame.MyOrdersPage.OrderList.HeaderContainer)
 	B.ReskinTrimScroll(frame.MyOrdersPage.OrderList.ScrollBar, true)
 
-	B.StripTextures(frame.MyOrdersPage.OrderList)
-	B.CreateBDFrame(frame.MyOrdersPage.OrderList, .25)
+	hooksecurefunc(frame.MyOrdersPage.OrderList.ScrollBox, "Update", function(self)
+		self:ForEachFrame(reskinOrderIcon)
+	end)
 end
