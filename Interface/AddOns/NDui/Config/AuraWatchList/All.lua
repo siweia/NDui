@@ -195,6 +195,7 @@ local list = {
 		{AuraID = 376760, UnitID = "player"},	-- 狂风之力，学院
 		{AuraID = 391977, UnitID = "player"},	-- 涌动超载，学院
 		{AuraID = 386181, UnitID = "player"},	-- 法力炸弹，学院
+		{AuraID = 197996, UnitID = "player"},	-- 烙印，英灵殿
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
@@ -212,6 +213,7 @@ local list = {
 		{AuraID = 376781, UnitID = "target", Flash = true},	-- 火焰风暴，学院
 		{AuraID = 113315, UnitID = "target", Stack = 7, Flash = true},	-- 强烈，青龙寺
 		{AuraID = 113309, UnitID = "target", Flash = true},	-- 至高能量，青龙寺
+		{AuraID = 117665, UnitID = "target", Flash = true},	-- 凡尘之羁，青龙寺
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
