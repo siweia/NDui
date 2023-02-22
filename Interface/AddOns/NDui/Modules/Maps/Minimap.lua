@@ -11,12 +11,12 @@ local C_Timer_After = C_Timer.After
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 function module:CreatePulse()
+	local bg = B.SetBD(Minimap)
+	bg:SetFrameStrata("BACKGROUND")
+
 	if not C.db["Map"]["CombatPulse"] then return end
 
 	local MinimapMailFrame = MinimapCluster.IndicatorFrame.MailFrame
-
-	local bg = B.SetBD(Minimap)
-	bg:SetFrameStrata("BACKGROUND")
 	local anim = bg:CreateAnimationGroup()
 	anim:SetLooping("BOUNCE")
 	anim.fader = anim:CreateAnimation("Alpha")
