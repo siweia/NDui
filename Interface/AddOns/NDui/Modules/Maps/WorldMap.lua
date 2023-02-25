@@ -89,15 +89,7 @@ function module:SetupCoords()
 	textParent:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, 0, 9)
 	textParent:SetSize(1, 18)
 	textParent:SetFrameLevel(5)
-
-	local cr, cg, cb = 0, 0, 0
-	if C.db["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
-	local tex = B.SetGradient(textParent, "H", 0,0,0, .5, 0, 450, 18)
-	tex:SetPoint("LEFT")
-	local bottomLine = B.SetGradient(textParent, "H", cr, cg, cb, .5, 0, 450, C.mult)
-	bottomLine:SetPoint("TOP", tex, "BOTTOM")
-	local topLine = B.SetGradient(textParent, "H", cr, cg, cb, .5, 0, 450, C.mult)
-	topLine:SetPoint("BOTTOM", tex, "TOP")
+	B.SetGradient(textParent, "H", 0,0,0, .5, 0, 450, 18):SetPoint("LEFT")
 
 	playerCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 5, 0)
 	playerCoords:SetJustifyH("LEFT")
