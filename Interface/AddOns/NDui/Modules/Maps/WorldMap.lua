@@ -56,8 +56,9 @@ function module:UpdateCoords(elapsed)
 		local cursorX, cursorY = module:GetCursorCoords()
 		if cursorX and cursorY then
 			cursorCoords:SetFormattedText(CoordsFormat(L["Mouse"]), 100 * cursorX, 100 * cursorY)
+			cursorCoords:Show()
 		else
-			cursorCoords:SetText(CoordsFormat(L["Mouse"], true))
+			cursorCoords:Hide()
 		end
 
 		if not currentMapID then
@@ -84,8 +85,24 @@ function module:UpdateMapID()
 end
 
 function module:SetupCoords()
-	playerCoords = B.CreateFS(WorldMapFrame, 14, "", false, "TOPLEFT", 60, -6)
-	cursorCoords = B.CreateFS(WorldMapFrame, 14, "", false, "TOPLEFT", 180, -6)
+	local textParent = CreateFrame("Frame", nil, WorldMapFrame)
+	textParent:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, 0, 9)
+	textParent:SetSize(1, 18)
+	textParent:SetFrameLevel(5)
+
+	local cr, cg, cb = 0, 0, 0
+	if C.db["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
+	local tex = B.SetGradient(textParent, "H", 0,0,0, .5, 0, 450, 18)
+	tex:SetPoint("LEFT")
+	local bottomLine = B.SetGradient(textParent, "H", cr, cg, cb, .5, 0, 450, C.mult)
+	bottomLine:SetPoint("TOP", tex, "BOTTOM")
+	local topLine = B.SetGradient(textParent, "H", cr, cg, cb, .5, 0, 450, C.mult)
+	topLine:SetPoint("BOTTOM", tex, "TOP")
+
+	playerCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 5, 0)
+	playerCoords:SetJustifyH("LEFT")
+	cursorCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 180, 0)
+	cursorCoords:SetJustifyH("LEFT")
 
 	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", module.UpdateMapID)
 	hooksecurefunc(WorldMapFrame, "OnMapChanged", module.UpdateMapID)
