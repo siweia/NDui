@@ -130,3 +130,4 @@ module:RegisterDebuff(6, INSTANCE, 0, 152979) -- 灵魂撕裂
 module:RegisterDebuff(6, INSTANCE, 0, 158061) -- 被祝福的净水
 module:RegisterDebuff(6, INSTANCE, 0, 154442) -- 怨毒
 module:RegisterDebuff(6, INSTANCE, 0, 153501) -- 虚空冲击
+module:RegisterDebuff(6, INSTANCE, 0, 152819, 6) -- 暗言术：虚

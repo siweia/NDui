@@ -214,6 +214,8 @@ local list = {
 		{AuraID = 113315, UnitID = "target", Stack = 7, Flash = true},	-- 强烈，青龙寺
 		{AuraID = 113309, UnitID = "target", Flash = true},	-- 至高能量，青龙寺
 		{AuraID = 117665, UnitID = "target", Flash = true},	-- 凡尘之羁，青龙寺
+		-- 团本
+		{AuraID = 374779, UnitID = "target", Flash = true},	-- 原始屏障，恐怖图腾
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
