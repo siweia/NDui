@@ -87,7 +87,7 @@ end
 
 function module:SetupCoords()
 	local textParent = CreateFrame("Frame", nil, WorldMapFrame)
-	textParent:SetPoint("TOPLEFT", WorldMapFrame.ScrollContainer, 0, 9)
+	textParent:SetPoint("BOTTOMLEFT", WorldMapFrame.ScrollContainer)
 	textParent:SetSize(1, 18)
 	textParent:SetFrameLevel(5)
 	B.SetGradient(textParent, "H", 0,0,0, .5, 0, 450, 18):SetPoint("LEFT")
