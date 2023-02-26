@@ -88,6 +88,10 @@ function M:GuildBest_Create()
 		hl:SetAllPoints()
 		hl:SetTexture(DB.copyTex)
 	end
+
+	if RaiderIO_GuildWeeklyFrame then
+		B.HideObject(RaiderIO_GuildWeeklyFrame)
+	end
 end
 
 function M:GuildBest_SetUp(leaderInfo)
