@@ -36,9 +36,9 @@ local choiceQueue
 local created
 local function setupCheckButton()
 	if created then return end
-	local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame.TitleContainer, "OptionsBaseCheckButtonTemplate")
+	local mono = CreateFrame("CheckButton", nil, QuestMapFrame, "OptionsBaseCheckButtonTemplate")
 	mono:SetHitRectInsets(-5, -5, -5, -5)
-	mono:SetPoint("TOPRIGHT", -140, 0)
+	mono:SetPoint("TOPLEFT", 0, 25)
 	mono:SetSize(26, 26)
 	B.ReskinCheck(mono)
 	mono.text = B.CreateFS(mono, 14, L["AutoQuest"], false, "LEFT", 25, 0)
