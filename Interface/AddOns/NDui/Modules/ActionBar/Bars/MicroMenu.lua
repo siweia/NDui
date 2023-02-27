@@ -7,13 +7,25 @@ local _G = getfenv(0)
 local tinsert, pairs, type = table.insert, pairs, type
 local buttonList = {}
 
-function Bar:MicroButton_SetupTexture(icon, texture)
+local colors = {}
+local colorIndex = 1
+for _, value in pairs(DB.ClassColors) do
+	tinsert(colors, {value.r, value.g, value.b})
+end
+
+function Bar:MicroButton_SetupTexture(icon, texture, colorful)
 	local r, g, b = DB.r, DB.g, DB.b
 	if not C.db["Skins"]["ClassLine"] then r, g, b = 0, 0, 0 end
 
 	icon:SetOutside(nil, 3, 3)
 	icon:SetTexture(DB.MicroTex..texture)
-	icon:SetVertexColor(r, g, b)
+	if colorful then
+		r, g, b = unpack(colors[colorIndex])
+		colorIndex = colorIndex + 1
+		icon:SetVertexColor(r, g, b)
+	else
+		icon:SetVertexColor(r, g, b)
+	end
 end
 
 local function ResetButtonParent(button, parent)
@@ -35,7 +47,7 @@ function Bar:MicroButton_Create(parent, data)
 	bu:SetSize(22, 22)
 
 	local icon = bu:CreateTexture(nil, "ARTWORK")
-	Bar:MicroButton_SetupTexture(icon, texture)
+	Bar:MicroButton_SetupTexture(icon, texture, true)
 
 	if type(method) == "string" then
 		local button = _G[method]
