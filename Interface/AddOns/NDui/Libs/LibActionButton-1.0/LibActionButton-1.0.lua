@@ -1615,6 +1615,8 @@ local function ClearProfessionQuality(self)
 end
 
 local function UpdateProfessionQuality(self)
+	if self._state_type == "custom" then return end
+
 	local action = self._state_action
 	if action and IsItemAction(action) then
 		local quality = C_ActionBar.GetProfessionQuality(action)
