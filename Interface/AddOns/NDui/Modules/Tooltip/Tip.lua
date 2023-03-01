@@ -527,6 +527,7 @@ TT:RegisterTooltips("NDui", function()
 
 	if SettingsTooltip then
 		TT.ReskinTooltip(SettingsTooltip)
+		SettingsTooltip:SetScale(UIParent:GetScale())
 	end
 
 	-- DropdownMenu
