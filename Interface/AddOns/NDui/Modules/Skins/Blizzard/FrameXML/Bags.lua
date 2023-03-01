@@ -111,6 +111,7 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(frame)
 		B.SetBD(frame)
 		frame.PortraitContainer:Hide()
+		if frame.Bg then frame.Bg:Hide() end
 		createBagIcon(frame, i)
 		hooksecurefunc(frame, "Update", updateContainer)
 
