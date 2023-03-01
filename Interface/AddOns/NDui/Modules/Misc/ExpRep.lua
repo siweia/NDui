@@ -259,9 +259,6 @@ function M:SetupScript(bar)
 end
 
 function M:Expbar()
-	-- Hide blizzard expbar
-	StatusTrackingBarManager:UnregisterAllEvents()
-
 	if C.db["Map"]["DisableMinimap"] then return end
 	if not C.db["Misc"]["ExpRep"] then return end
 

@@ -87,4 +87,6 @@ function Bar:HideBlizz()
 	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 	-- Update token panel
 	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
+	-- Hide blizzard expbar
+	StatusTrackingBarManager:UnregisterAllEvents()
 end
