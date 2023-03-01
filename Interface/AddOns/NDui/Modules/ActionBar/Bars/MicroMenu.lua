@@ -45,7 +45,7 @@ function Bar:MicroButton_Create(parent, data)
 		hooksecurefunc(button, "SetParent", ResetButtonParent)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
-		button:UnregisterAllEvents()
+		--button:UnregisterAllEvents() -- statusbar on quest tracker needs this for anchoring
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
