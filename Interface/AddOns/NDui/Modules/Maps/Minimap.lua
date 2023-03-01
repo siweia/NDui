@@ -528,6 +528,7 @@ function module:SoundVolume()
 
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
+	f:SetFrameLevel(999)
 	local text = B.CreateFS(f, 30)
 
 	local anim = f:CreateAnimationGroup()
