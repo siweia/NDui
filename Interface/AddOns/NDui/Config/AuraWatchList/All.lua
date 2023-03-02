@@ -217,6 +217,9 @@ local list = {
 		{AuraID = 117665, UnitID = "target", Flash = true},	-- 凡尘之羁，青龙寺
 		-- 团本
 		{AuraID = 374779, UnitID = "target", Flash = true},	-- 原始屏障，恐怖图腾
+		{AuraID = 382530, UnitID = "target", Value = true},	-- 涌动，莱萨杰斯
+		{AuraID = 388691, UnitID = "target", Value = true},	-- 风暴喷涌，莱萨杰斯
+		{AuraID = 396734, UnitID = "target", Flash = true},	-- 风暴遮罩，莱萨杰斯
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
