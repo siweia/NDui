@@ -73,7 +73,7 @@ local list = {
 		{AuraID = 190515, UnitID = "player"},	-- 适者生存
 		{AuraID = 193534, UnitID = "player"},	-- 稳固集中
 		{AuraID = 194594, UnitID = "player", Flash = true},	-- 荷枪实弹
-		{AuraID = 118455, UnitID = "pet"},		-- 野兽瞬劈斩
+		{AuraID = 118455, UnitID = "pet", Flash = true},		-- 野兽瞬劈斩
 		{AuraID = 207094, UnitID = "pet"},		-- 泰坦之雷
 		{AuraID = 217200, UnitID = "pet"},		-- 凶猛狂暴
 		{AuraID = 272790, UnitID = "pet"},		-- 狂暴
