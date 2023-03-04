@@ -50,6 +50,7 @@ local frames = {
 local function CharacterFrameMoveCheck()
 	if IsAddOnLoaded("RXPGuides") then return end
 
+	frames["PaperDollFrame"] = "CharacterFrame"
 	frames["PetPaperDollFrameCompanionFrame"] = "CharacterFrame"
 	frames["PetPaperDollFramePetFrame"] = "CharacterFrame"
 	frames["ReputationFrame"] = true
