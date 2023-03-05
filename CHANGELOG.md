@@ -1,6 +1,12 @@
 # NDui Classic
 
-## [3.8.3](https://github.com/siweia/NDui/tree/3.8.3) (2023-2-19)
+## [3.9.0](https://github.com/siweia/NDui/tree/3.9.0) (2023-3-6)
 
-- Update itemlevel calculation.
-- Disable right click self casting.
+- Update default skins.
+- Update actionbar.
+- Remove actionbar self casting.
+- Update item level calculation.
+- Update item level quality color gap.
+- Always show minimap border.
+- Update world map elements anchor.
+- Update character frame mover.
