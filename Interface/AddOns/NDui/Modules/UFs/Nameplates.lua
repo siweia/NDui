@@ -669,7 +669,7 @@ function UF:MouseoverIndicator(self)
 	texture:SetColorTexture(1, 1, 1, .35)
 	local glow = B.CreateSD(highlight, 8, true)
 	glow:SetOutside(self.backdrop, 8, 8)
-	glow:SetBackdropBorderColor(0, .6, 1, .75)
+	glow:SetBackdropBorderColor(0, .6, 1)
 	glow:SetFrameLevel(1)
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
