@@ -13,17 +13,21 @@ local function scrollOnLeave(self)
 end
 
 local function ReskinChatScroll(self)
-	local bu = _G[self:GetName().."ThumbTexture"]
-	bu:SetAlpha(0)
-	bu:SetWidth(16)
-	local bg = B.CreateBDFrame(bu, 0, true)
-	local down = self.ScrollToBottomButton
-	B.ReskinArrow(down, "down")
-	down:SetPoint("BOTTOMRIGHT", _G[self:GetName().."ResizeButton"], "TOPRIGHT", -4, -2)
-
-	self.ScrollBar.thumbBG = bg
-	self.ScrollBar:HookScript("OnEnter", scrollOnEnter)
-	self.ScrollBar:HookScript("OnLeave", scrollOnLeave)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(self.ScrollBar)
+	else
+		local bu = _G[self:GetName().."ThumbTexture"]
+		bu:SetAlpha(0)
+		bu:SetWidth(16)
+		local bg = B.CreateBDFrame(bu, 0, true)
+		local down = self.ScrollToBottomButton
+		B.ReskinArrow(down, "down")
+		down:SetPoint("BOTTOMRIGHT", _G[self:GetName().."ResizeButton"], "TOPRIGHT", -4, -2)
+	
+		self.ScrollBar.thumbBG = bg
+		self.ScrollBar:HookScript("OnEnter", scrollOnEnter)
+		self.ScrollBar:HookScript("OnLeave", scrollOnLeave)
+	end
 end
 
 tinsert(C.defaultThemes, function()
@@ -87,10 +91,8 @@ tinsert(C.defaultThemes, function()
 	ChatFrameMenuButton:SetNormalTexture(homeTex)
 	ChatFrameMenuButton:SetPushedTexture(homeTex)
 
-	if not DB.isPatch10_1 then
-		for i = 1, NUM_CHAT_WINDOWS do
-			ReskinChatScroll(_G["ChatFrame"..i])
-		end
+	for i = 1, NUM_CHAT_WINDOWS do
+		ReskinChatScroll(_G["ChatFrame"..i])
 	end
 
 	-- ChannelFrame
