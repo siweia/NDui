@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+if DB.isPatch10_1 then return end -- ui removed in 10.1
 
 C.themes["Blizzard_LookingForGuildUI"] = function()
 	local r, g, b = DB.r, DB.g, DB.b

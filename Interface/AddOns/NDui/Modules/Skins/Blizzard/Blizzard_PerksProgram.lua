@@ -43,7 +43,7 @@ C.themes["Blizzard_PerksProgram"] = function()
 		local productsContainer = productsFrame.ProductsScrollBoxContainer
 		B.StripTextures(productsContainer)
 		B.SetBD(productsContainer)
-		B.ReskinTrimScroll(productsContainer.ScrollBar, true)
+		B.ReskinTrimScroll(productsContainer.ScrollBar)
 		B.StripTextures(productsContainer.PerksProgramHoldFrame)
 		B.CreateBDFrame(productsContainer.PerksProgramHoldFrame, .25):SetInside(nil, 3, 3)
 

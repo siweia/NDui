@@ -84,17 +84,20 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(LFDRoleCheckPopupAcceptButton)
 	B.Reskin(LFDRoleCheckPopupDeclineButton)
 	B.ReskinTrimScroll(LFDQueueFrameSpecific.ScrollBar)
-	B.StripTextures(LFDQueueFrameRandomScrollFrameScrollBar, 0)
-	B.ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(LFDQueueFrameRandomScrollFrame.ScrollBar)
+	else
+		B.StripTextures(LFDQueueFrameRandomScrollFrameScrollBar, 0)
+		B.ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
+		LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
+		LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
+	end
 	B.ReskinDropDown(LFDQueueFrameTypeDropDown)
 	B.Reskin(LFDQueueFrameFindGroupButton)
 	B.Reskin(LFDQueueFramePartyBackfillBackfillButton)
 	B.Reskin(LFDQueueFramePartyBackfillNoBackfillButton)
 	B.Reskin(LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
 	styleRewardButton(LFDQueueFrameRandomScrollFrameChildFrameMoneyReward)
-
-	LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
-	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
 
 	-- LFGFrame
 	hooksecurefunc("LFGRewardsFrame_SetItemButton", function(parentFrame, _, index)
@@ -258,7 +261,11 @@ tinsert(C.defaultThemes, function()
 	-- this fixes right border of second reward being cut off
 	RaidFinderQueueFrameScrollFrame:SetWidth(RaidFinderQueueFrameScrollFrame:GetWidth()+1)
 
-	B.ReskinScroll(RaidFinderQueueFrameScrollFrameScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(RaidFinderQueueFrameScrollFrame.ScrollBar)
+	else
+		B.ReskinScroll(RaidFinderQueueFrameScrollFrameScrollBar)
+	end
 	B.ReskinDropDown(RaidFinderQueueFrameSelectionDropDown)
 	B.Reskin(RaidFinderFrameFindRaidButton)
 	B.Reskin(RaidFinderQueueFrameIneligibleFrameLeaveQueueButton)

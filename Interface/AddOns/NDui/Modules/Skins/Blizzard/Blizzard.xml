@@ -30,7 +30,6 @@
 	<Script file="Blizzard_GMChatUI.lua"/>
 	<Script file="Blizzard_GuildBankUI.lua"/>
 	<Script file="Blizzard_GuildControlUI.lua"/>
-	<Script file="Blizzard_GuildRecruitmentUI.lua"/>
 	<Script file="Blizzard_GuildUI.lua"/>
 	<Script file="Blizzard_InspectUI.lua"/>
 	<Script file="Blizzard_IslandsQueueUI.lua"/>

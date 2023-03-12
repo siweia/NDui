@@ -66,10 +66,17 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(QuestFrameGoodbyeButton)
 	B.Reskin(QuestFrameGreetingGoodbyeButton)
 
-	B.ReskinScroll(QuestProgressScrollFrameScrollBar)
-	B.ReskinScroll(QuestRewardScrollFrameScrollBar)
-	B.ReskinScroll(QuestDetailScrollFrameScrollBar)
-	B.ReskinScroll(QuestGreetingScrollFrameScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(QuestProgressScrollFrame.ScrollBar)
+		B.ReskinTrimScroll(QuestRewardScrollFrame.ScrollBar)
+		B.ReskinTrimScroll(QuestDetailScrollFrame.ScrollBar)
+		B.ReskinTrimScroll(QuestGreetingScrollFrame.ScrollBar)
+	else
+		B.ReskinScroll(QuestProgressScrollFrameScrollBar)
+		B.ReskinScroll(QuestRewardScrollFrameScrollBar)
+		B.ReskinScroll(QuestDetailScrollFrameScrollBar)
+		B.ReskinScroll(QuestGreetingScrollFrameScrollBar)
+	end
 
 	-- Text colour stuff
 

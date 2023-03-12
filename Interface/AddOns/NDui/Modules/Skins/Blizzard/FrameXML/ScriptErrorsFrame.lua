@@ -12,6 +12,10 @@ tinsert(C.defaultThemes, function()
 	B.ReskinArrow(ScriptErrorsFrame.NextError, "right")
 	B.Reskin(ScriptErrorsFrame.Reload)
 	B.Reskin(ScriptErrorsFrame.Close)
-	B.ReskinScroll(ScriptErrorsFrameScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(ScriptErrorsFrame.ScrollFrame.ScrollBar)
+	else
+		B.ReskinScroll(ScriptErrorsFrameScrollBar)
+	end
 	B.ReskinClose(ScriptErrorsFrameClose)
 end)

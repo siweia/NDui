@@ -137,8 +137,10 @@ function module:SkinChat()
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
 	B.HideObject(self.buttonFrame)
-	B.HideObject(self.ScrollBar)
-	B.HideObject(self.ScrollToBottomButton)
+	if not DB.isPatch10_1 then
+		B.HideObject(self.ScrollBar)
+		B.HideObject(self.ScrollToBottomButton)
+	end
 	module:ToggleChatFrameTextures(self)
 
 	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error

@@ -220,10 +220,15 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.Reskin(EncounterJournalEncounterFrameInfoResetButton)
 	B.ReskinInput(EncounterJournalSearchBox)
 	B.ReskinTrimScroll(EncounterJournal.encounter.instance.LoreScrollBar)
-	B.ReskinScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.BossesScrollBar)
-	B.ReskinScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
+		B.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
+	else
+		B.ReskinScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
+		B.ReskinScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
+	end
 
 	local buttons = {
 		EncounterJournalEncounterFrameInfoDifficulty,
@@ -356,7 +361,11 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		B.ReskinDropDown(EncounterJournal.LootJournalViewDropDown)
 
 		local itemSetsFrame = EncounterJournal.LootJournalItems.ItemSetsFrame
-		B.ReskinScroll(itemSetsFrame.scrollBar)
+		if DB.isPatch10_1 then
+			B.ReskinTrimScroll(itemSetsFrame.ScrollBar)
+		else
+			B.ReskinScroll(itemSetsFrame.scrollBar)
+		end
 		reskinFilterToggle(itemSetsFrame.ClassButton)
 
 		hooksecurefunc(itemSetsFrame, "UpdateList", function(self)
@@ -385,6 +394,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	local frame = EncounterJournalMonthlyActivitiesFrame
 	if frame then
 		B.StripTextures(frame)
-		B.ReskinTrimScroll(frame.ScrollBar, true)
+		B.ReskinTrimScroll(frame.ScrollBar)
 	end
 end

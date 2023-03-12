@@ -14,7 +14,11 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(LootHistoryFrame)
 	B.SetBD(LootHistoryFrame)
 	B.ReskinClose(LootHistoryFrame.CloseButton)
-	B.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(LootHistoryFrameScrollFrame.ScrollBar)
+	else
+		B.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
+	end
 
 	-- [[ Resize button ]]
 

@@ -175,7 +175,7 @@ local function reskinOutputLog(outputLog)
 	B.StripTextures(outputLog)
 	B.SetBD(outputLog)
 	B.ReskinClose(outputLog.ClosePanelButton)
-	B.ReskinTrimScroll(outputLog.ScrollBar, true)
+	B.ReskinTrimScroll(outputLog.ScrollBar)
 	hooksecurefunc(outputLog.ScrollBox, "Update", reskinOutputButtons)
 end
 
@@ -196,13 +196,16 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(craftingPage.CreateAllButton)
 	B.Reskin(craftingPage.ViewGuildCraftersButton)
 	reskinArrowInput(craftingPage.CreateMultipleInputBox)
+	if DB.isPatch10_1 then
+		B.ReskinMinMax(frame.MaximizeMinimize)
+	end
 
 	local guildFrame = craftingPage.GuildFrame
 	B.StripTextures(guildFrame)
 	B.CreateBDFrame(guildFrame, .25)
 	B.StripTextures(guildFrame.Container)
 	B.CreateBDFrame(guildFrame.Container, .25)
-	B.ReskinTrimScroll(guildFrame.Container.ScrollBar, true)
+	B.ReskinTrimScroll(guildFrame.Container.ScrollBar)
 
 	for i = 1, 3 do
 		local tab = select(i, frame.TabSystem:GetChildren())
@@ -226,7 +229,7 @@ C.themes["Blizzard_Professions"] = function()
 
 	local recipeList = craftingPage.RecipeList
 	B.StripTextures(recipeList)
-	B.ReskinTrimScroll(recipeList.ScrollBar, true)
+	B.ReskinTrimScroll(recipeList.ScrollBar)
 	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
 	B.CreateBDFrame(recipeList, .25):SetInside()
 	B.ReskinEditBox(recipeList.SearchBox)
@@ -237,6 +240,9 @@ C.themes["Blizzard_Professions"] = function()
 	form.Background:SetAlpha(0)
 	B.CreateBDFrame(form, .25):SetInside()
 	reskinProfessionForm(form)
+	if DB.isPatch10_1 then
+		form.MinimalBackground:SetAlpha(0)
+	end
 
 	local rankBar = craftingPage.RankBar
 	reskinRankBar(rankBar)
@@ -299,7 +305,7 @@ C.themes["Blizzard_Professions"] = function()
 
 	local recipeList = browseFrame.RecipeList
 	B.StripTextures(recipeList)
-	B.ReskinTrimScroll(recipeList.ScrollBar, true)
+	B.ReskinTrimScroll(recipeList.ScrollBar)
 	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
 	B.CreateBDFrame(recipeList, .25):SetInside()
 	B.ReskinEditBox(recipeList.SearchBox)
@@ -315,7 +321,7 @@ C.themes["Blizzard_Professions"] = function()
 	B.StripTextures(orderList)
 	orderList.Background:SetAlpha(0)
 	B.CreateBDFrame(orderList, .25):SetInside()
-	B.ReskinTrimScroll(orderList.ScrollBar, true)
+	B.ReskinTrimScroll(orderList.ScrollBar)
 
 	hooksecurefunc(frame.OrdersPage, "SetupTable", function()
 		local maxHeaders = orderList.HeaderContainer:GetNumChildren()

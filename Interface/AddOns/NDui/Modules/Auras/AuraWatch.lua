@@ -423,6 +423,8 @@ end
 -- UpdateAura
 local replacedTexture = {
 	[336892] = 135130, -- 无懈警戒换成瞄准射击图标
+	[378770] = 236174, -- 夺命打击换成夺命射击图标
+	[389020] = 132330, -- 子弹风暴换成多重射击
 }
 function A:AuraWatch_SetupAura(KEY, unit, index, filter, name, icon, count, duration, expires, spellID, flash)
 	if not KEY then return end

@@ -89,4 +89,5 @@ function Bar:HideBlizz()
 	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 	-- Hide blizzard expbar
 	StatusTrackingBarManager:UnregisterAllEvents()
+	StatusTrackingBarManager:Hide()
 end
