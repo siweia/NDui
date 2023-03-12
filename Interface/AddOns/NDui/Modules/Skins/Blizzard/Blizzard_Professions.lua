@@ -196,6 +196,9 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(craftingPage.CreateAllButton)
 	B.Reskin(craftingPage.ViewGuildCraftersButton)
 	reskinArrowInput(craftingPage.CreateMultipleInputBox)
+	if DB.isPatch10_1 then
+		B.ReskinMinMax(frame.MaximizeMinimize)
+	end
 
 	local guildFrame = craftingPage.GuildFrame
 	B.StripTextures(guildFrame)
@@ -237,6 +240,9 @@ C.themes["Blizzard_Professions"] = function()
 	form.Background:SetAlpha(0)
 	B.CreateBDFrame(form, .25):SetInside()
 	reskinProfessionForm(form)
+	if DB.isPatch10_1 then
+		form.MinimalBackground:SetAlpha(0)
+	end
 
 	local rankBar = craftingPage.RankBar
 	reskinRankBar(rankBar)
