@@ -163,7 +163,7 @@ function M:TradeTabs_FilterIcons()
 
 	local buttons = {}
 	for index, value in pairs(buttonList) do
-		local bu = CreateFrame("Button", nil, ProfessionsFrame.CraftingPage, "BackdropTemplate")
+		local bu = CreateFrame("Button", nil, ProfessionsFrame.CraftingPage.RecipeList, "BackdropTemplate")
 		bu:SetSize(22, 22)
 		bu:SetPoint("BOTTOMRIGHT", ProfessionsFrame.CraftingPage.RecipeList.FilterButton, "TOPRIGHT", -(index-1)*27, 10)
 		B.PixelIcon(bu, value[1], true)
