@@ -84,6 +84,9 @@ function S:PGFSkin()
 		end
 	end)
 
-	B.ReskinCheck(UsePFGButton)
-	UsePFGButton.text:SetWidth(35)
+	local button = UsePFGButton or UsePGFButton
+	if button then
+		B.ReskinCheck(button)
+		button.text:SetWidth(35)
+	end
 end
