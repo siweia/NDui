@@ -12,7 +12,7 @@ local function reskinScrollChild(self)
 		local child = select(i, self.ScrollTarget:GetChildren())
 		local hideButton = child and child.HideButton
 		if hideButton and not hideButton.styled then
-			B.ReskinClose(hideButton)
+			B.ReskinClose(hideButton, nil, nil, nil, true)
 			hideButton:ClearAllPoints()
 			hideButton:SetPoint("LEFT", 3, 0)
 

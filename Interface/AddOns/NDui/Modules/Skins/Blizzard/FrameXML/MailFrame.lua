@@ -34,8 +34,13 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(SendMailMoneyGold)
 	B.ReskinInput(SendMailMoneySilver)
 	B.ReskinInput(SendMailMoneyCopper)
-	B.ReskinScroll(SendMailScrollFrameScrollBar)
-	B.ReskinScroll(OpenMailScrollFrameScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(SendMailScrollFrame.ScrollBar)
+		B.ReskinTrimScroll(OpenMailScrollFrame.ScrollBar)
+	else
+		B.ReskinScroll(SendMailScrollFrameScrollBar)
+		B.ReskinScroll(OpenMailScrollFrameScrollBar)
+	end
 	B.ReskinRadio(SendMailSendMoneyButton)
 	B.ReskinRadio(SendMailCODButton)
 	B.ReskinArrow(InboxPrevPageButton, "left")

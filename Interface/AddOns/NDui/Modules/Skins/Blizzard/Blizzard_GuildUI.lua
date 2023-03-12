@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
+if DB.isPatch10_1 then return end -- the old guild removed in 10.1
+
 local function updateClassIcons()
 	local index
 	local offset = HybridScrollFrame_GetOffset(GuildRosterContainer)

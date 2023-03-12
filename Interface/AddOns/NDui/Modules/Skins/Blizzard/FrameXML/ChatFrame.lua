@@ -87,15 +87,21 @@ tinsert(C.defaultThemes, function()
 	ChatFrameMenuButton:SetNormalTexture(homeTex)
 	ChatFrameMenuButton:SetPushedTexture(homeTex)
 
-	for i = 1, NUM_CHAT_WINDOWS do
-		ReskinChatScroll(_G["ChatFrame"..i])
+	if not DB.isPatch10_1 then
+		for i = 1, NUM_CHAT_WINDOWS do
+			ReskinChatScroll(_G["ChatFrame"..i])
+		end
 	end
 
 	-- ChannelFrame
 	B.ReskinPortraitFrame(ChannelFrame)
 	B.Reskin(ChannelFrame.NewButton)
 	B.Reskin(ChannelFrame.SettingsButton)
-	B.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(ChannelFrame.ChannelList.ScrollBar)
+	else
+		B.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
+	end
 	B.ReskinTrimScroll(ChannelFrame.ChannelRoster.ScrollBar)
 
 	hooksecurefunc(ChannelFrame.ChannelList, "Update", function(self)

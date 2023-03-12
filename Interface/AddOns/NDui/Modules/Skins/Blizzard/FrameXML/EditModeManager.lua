@@ -19,6 +19,9 @@ tinsert(C.defaultThemes, function()
 	B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
 	reskinOptionCheck(frame.ShowGridCheckButton.Button)
 	reskinOptionCheck(frame.EnableSnapCheckButton.Button)
+	if DB.isPatch10_1 then
+		reskinOptionCheck(frame.EnableAdvancedOptionsCheckButton.Button)
+	end
 	B.ReskinStepperSlider(frame.GridSpacingSlider.Slider, true)
 	if frame.Tutorial then
 		frame.Tutorial.Ring:Hide()
@@ -30,8 +33,11 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(dialog.CloseButton)
 
 	hooksecurefunc(frame.AccountSettings, "OnEditModeEnter", function(self)
-		for i = 1, self.Settings:GetNumChildren() do
-			local option = select(i, self.Settings:GetChildren())
+		local settings = DB.isPatch10_1 and self.SettingsContainer.ScrollChild.BasicOptionsContainer or self.Settings
+		if not settings then return end
+
+		for i = 1, settings:GetNumChildren() do
+			local option = select(i, settings:GetChildren())
 			if option.Button and not option.styled then
 				reskinOptionCheck(option.Button)
 				option.styled = true

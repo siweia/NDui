@@ -206,10 +206,15 @@ C.themes["Blizzard_TalentUI"] = function()
 	B.Reskin(select(4, talentList:GetChildren()), nil)
 
 	B.StripTextures(PlayerTalentFrameTalentsPvpTalentFrame)
-	B.ReskinScroll(PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollBar)
+	if DB.isPatch10_1 then
+		B.ReskinTrimScroll(talentList.ScrollBar)
+		-- todo, might removed in the future build
+	else
+		B.ReskinScroll(PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollBar)
 
-	for i = 1, 10 do
-		local bu = _G["PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameButton"..i]
-		hooksecurefunc(bu, "Update", ReskinPvPTalent)
+		for i = 1, 10 do
+			local bu = _G["PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameButton"..i]
+			hooksecurefunc(bu, "Update", ReskinPvPTalent)
+		end
 	end
 end
