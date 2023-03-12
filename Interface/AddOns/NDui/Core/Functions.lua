@@ -1060,8 +1060,8 @@ do
 	end
 
 	-- WowTrimScrollBar
-	function B:ReskinTrimScroll(minimal)
-		if DB.isPatch10_1 then minimal = true end
+	function B:ReskinTrimScroll()
+		local minimal = self:GetWidth() < 10
 
 		B.StripTextures(self)
 		reskinScrollArrow(self.Back, "up", minimal)
@@ -1079,7 +1079,6 @@ do
 				thumb.bg:SetPoint("TOPLEFT", 4, -1)
 				thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
 			end
-			self.thumb = thumb
 
 			thumb:HookScript("OnEnter", Thumb_OnEnter)
 			thumb:HookScript("OnLeave", Thumb_OnLeave)
