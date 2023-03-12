@@ -8,7 +8,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(LootFrame.ClosePanelButton)
 	B.StripTextures(LootFrame)
 	B.SetBD(LootFrame)
-	B.ReskinTrimScroll(LootFrame.ScrollBar, true)
+	B.ReskinTrimScroll(LootFrame.ScrollBar)
 
 	local function updateHighlight(self)
 		local button = self.__owner

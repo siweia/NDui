@@ -58,7 +58,7 @@ tinsert(C.defaultThemes, function()
 	bg:SetInside()
 	bg:SetPoint("TOPLEFT", 1, 6)
 	B.Reskin(frame.Container.SettingsList.Header.DefaultsButton)
-	B.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar, true)
+	B.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar)
 
 	local function ReskinDropDownArrow(button, direction)
 		button.NormalTexture:SetAlpha(0)
