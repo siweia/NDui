@@ -33,17 +33,18 @@ tinsert(C.defaultThemes, function()
 			local button = select(i, self.ScrollTarget:GetChildren())
 			local item = button.Item
 			local questTexture = button.IconQuestTexture
+			local pushedFrame = button.PushedNameFrame
 			if item and not button.styled then
 				B.StripTextures(item, 1)
 				item.bg = B.ReskinIcon(item.icon)
 				item.bg:SetFrameLevel(4)
 				B.ReskinIconBorder(item.IconBorder, true)
 
+				pushedFrame:SetAlpha(0)
 				questTexture:SetAlpha(0)
 				button.NameFrame:SetAlpha(0)
 				button.BorderFrame:SetAlpha(0)
 				button.HighlightNameFrame:SetAlpha(0)
-				button.PushedNameFrame:SetAlpha(0)
 				button.bg = B.CreateBDFrame(button.HighlightNameFrame, .25)
 				button.bg:SetAllPoints()
 				item.__owner = button
@@ -57,7 +58,7 @@ tinsert(C.defaultThemes, function()
 
 			local itemBG = item and item.bg
 			if itemBG then
-				if questTexture:IsShown() then
+				if questTexture:IsShown() or pushedFrame:IsShown() then
 					itemBG:SetBackdropBorderColor(1, .8, 0)
 				else
 					itemBG:SetBackdropBorderColor(0, 0, 0)

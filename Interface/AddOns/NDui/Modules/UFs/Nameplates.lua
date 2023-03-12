@@ -270,6 +270,7 @@ end
 
 function UF:CreateThreatColor(self)
 	local threatIndicator = B.CreateSD(self.backdrop, nil, true)
+	threatIndicator:SetFrameLevel(2)
 	threatIndicator:Hide()
 	self.backdrop.__shadow = nil
 
@@ -286,8 +287,9 @@ end
 -- Target indicator
 function UF:UpdateTargetChange()
 	local element = self.TargetIndicator
-	local unit = self.unit
+	if not element then return end
 
+	local unit = self.unit
 	if C.db["Nameplate"]["TargetIndicator"] ~= 1 then
 		if UnitIsUnit(unit, "target") and not UnitIsUnit(unit, "player") then
 			element:Show()
@@ -309,8 +311,10 @@ end
 local points = {-15, -5, 0, 5, 0}
 
 function UF:UpdateTargetIndicator()
-	local style = C.db["Nameplate"]["TargetIndicator"]
 	local element = self.TargetIndicator
+	if not element then return end
+
+	local style = C.db["Nameplate"]["TargetIndicator"]
 	local isNameOnly = self.plateType == "NameOnly"
 	if style == 1 then
 		element:Hide()
@@ -659,9 +663,14 @@ function UF:MouseoverIndicator(self)
 	local highlight = CreateFrame("Frame", nil, self.Health)
 	highlight:SetAllPoints(self)
 	highlight:Hide()
+
 	local texture = highlight:CreateTexture(nil, "ARTWORK")
 	texture:SetAllPoints()
-	texture:SetColorTexture(1, 1, 1, .25)
+	texture:SetColorTexture(1, 1, 1, .35)
+	local glow = B.CreateSD(highlight, 8, true)
+	glow:SetOutside(self.backdrop, 8, 8)
+	glow:SetBackdropBorderColor(0, .6, 1)
+	glow:SetFrameLevel(1)
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
 

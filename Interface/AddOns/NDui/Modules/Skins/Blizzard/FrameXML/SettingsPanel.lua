@@ -174,6 +174,14 @@ tinsert(C.defaultThemes, function()
 					B.Reskin(child.Button1)
 					B.Reskin(child.Button2)
 				end
+				if child.Controls then
+					for i = 1, #child.Controls do
+						local control = child.Controls[i]
+						if control.SliderWithSteppers then
+							B.ReskinStepperSlider(control.SliderWithSteppers)
+						end
+					end
+				end
 
 				child.styled = true
 			end

@@ -30,6 +30,14 @@ end
 local function reskinQuestIcons(_, block)
 	reskinQuestIcon(block.itemButton)
 	reskinQuestIcon(block.groupFinderButton)
+
+	local check = block.currentLine and block.currentLine.Check
+	if check and not check.styled then
+		check:SetAtlas("checkmark-minimal")
+		check:SetDesaturated(true)
+		check:SetVertexColor(0, 1, 0)
+		check.styled = true
+	end
 end
 
 local function reskinHeader(header)
