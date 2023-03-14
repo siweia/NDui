@@ -39,6 +39,7 @@ C.themes["Blizzard_ExpansionLandingPage"] = function()
 				B.ReskinClose(panel.CloseButton)
 			end
 			if panel.MajorFactionList then
+				B.ReskinTrimScroll(panel.MajorFactionList.ScrollBar)
 				panel.MajorFactionList.ScrollBox:ForEachFrame(SkinFactionCategory)
 				hooksecurefunc(panel.MajorFactionList.ScrollBox, "Update", function(self)
 					self:ForEachFrame(SkinFactionCategory)
