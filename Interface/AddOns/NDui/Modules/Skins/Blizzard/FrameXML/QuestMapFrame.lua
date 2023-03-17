@@ -121,6 +121,13 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 
+		for button in QuestScrollFrame.titleFramePool:EnumerateActive() do
+			if not button.styled then
+				button.Check:SetAtlas("checkmark-minimal")
+				button.styled = true
+			end
+		end
+
 		for header in QuestScrollFrame.campaignHeaderFramePool:EnumerateActive() do
 			ReskinQuestHeader(header)
 		end

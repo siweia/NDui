@@ -30,6 +30,7 @@ local function reskinProfessionsFlyout(_, parent)
 			B.SetBD(flyoutFrame):SetFrameLevel(2)
 			B.ReskinCheck(flyoutFrame.HideUnownedCheckBox)
 			flyoutFrame.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
+			B.ReskinTrimScroll(flyoutFrame.ScrollBar)
 			hooksecurefunc(flyoutFrame.ScrollBox, "Update", refreshFlyoutButtons)
 
 			break

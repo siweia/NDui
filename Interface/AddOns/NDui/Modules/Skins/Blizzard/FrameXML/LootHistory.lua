@@ -96,6 +96,7 @@ tinsert(C.defaultThemes, function()
 			playerFrame.RollText:SetWidth(28)
 			playerFrame.RollText:SetFontObject(Game13Font)
 			playerFrame.WinMark:SetDesaturated(true)
+			playerFrame.WinMark:SetAtlas("checkmark-minimal")
 
 			playerFrame.styled = true
 		end

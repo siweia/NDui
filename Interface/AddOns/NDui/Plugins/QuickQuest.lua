@@ -448,6 +448,7 @@ local function AttemptAutoComplete(event)
 			elseif popUpType == "COMPLETE" then
 				ShowQuestComplete(questID)
 			end
+			RemoveAutoQuestPopUp(questID) -- needs review, taint?
 		end
 	end
 
