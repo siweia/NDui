@@ -23,7 +23,7 @@ local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local C_QuestLog_GetNumWorldQuestWatches = C_QuestLog.GetNumWorldQuestWatches
 local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
 local C_QuestLog_GetQuestIDForWorldQuestWatchIndex = C_QuestLog.GetQuestIDForWorldQuestWatchIndex
-local MAX_DISTANCE_YARDS = 1e4 -- needs review
+local MAX_DISTANCE_YARDS = 1e3 -- needs review
 local onlyCurrentZone = true
 
 -- Warlords of Draenor intro quest items which inspired this addon
