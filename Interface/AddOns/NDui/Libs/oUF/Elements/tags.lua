@@ -108,7 +108,7 @@ local Private = oUF.Private
 
 local nierror = Private.nierror
 local unitExists = Private.unitExists
-local xpcall = Private.xpcall
+local validateEvent = Private.validateEvent
 
 local _PATTERN = '%[..-%]+'
 
@@ -472,7 +472,7 @@ local tagStrings = {
 	end]],
 }
 
-local tags = setmetatable(
+local tagFuncs = setmetatable(
 	{
 		curhp = UnitHealth,
 		curpp = UnitPower,
@@ -506,9 +506,8 @@ local tags = setmetatable(
 
 			-- We don't want to clash with any custom envs
 			if(getfenv(val) == _G) then
-				-- pcall is needed for cases when Blizz functions are passed as
-				-- strings, for intance, 'UnitPowerMax', an attempt to set a
-				-- custom env will result in an error
+				-- pcall is needed for cases when Blizz functions are passed as strings, for
+				-- intance, 'UnitPowerMax', an attempt to set a custom env will result in an error
 				pcall(setfenv, val, _PROXY)
 			end
 
@@ -517,7 +516,7 @@ local tags = setmetatable(
 	}
 )
 
-_ENV._TAGS = tags
+_ENV._TAGS = tagFuncs
 
 local vars = setmetatable({}, {
 	__newindex = function(self, key, val)
@@ -588,31 +587,52 @@ local unitlessEvents = {
 	RUNE_POWER_UPDATE = true,
 }
 
-local events = {}
+local eventFontStrings = {}
+local stringsToUpdate = {}
+
 local eventFrame = CreateFrame('Frame')
 eventFrame:SetScript('OnEvent', function(self, event, unit)
-	local strings = events[event]
+	local strings = eventFontStrings[event]
 	if(strings) then
-		for _, fs in next, strings do
-			if(fs:IsVisible() and (unitlessEvents[event] or fs.parent.unit == unit or (fs.extraUnits and fs.extraUnits[unit]))) then
-				fs:UpdateTag()
+		for fs in next, strings do
+			if(not stringsToUpdate[fs] and fs:IsVisible() and (unitlessEvents[event] or fs.parent.unit == unit or (fs.extraUnits and fs.extraUnits[unit]))) then
+				stringsToUpdate[fs] = true
 			end
 		end
 	end
 end)
 
-local onUpdates = {}
-local eventlessUnits = {}
+local eventTimer = 0
+local eventTimerThreshold = 0.25
 
-local function createOnUpdate(timer)
-	if(not onUpdates[timer]) then
+eventFrame:SetScript('OnUpdate', function(self, elapsed)
+	eventTimer = eventTimer + elapsed
+	if(eventTimer >= eventTimerThreshold) then
+		for fs in next, stringsToUpdate do
+			if(fs:IsVisible()) then
+				fs:UpdateTag()
+			end
+		end
+
+		table.wipe(stringsToUpdate)
+
+		eventTimer = 0
+	end
+end)
+
+local timerFrames = {}
+local timerFontStrings = {}
+
+local function enableTimer(timer)
+	local frame = timerFrames[timer]
+	if(not frame) then
 		local total = timer
-		local frame = CreateFrame('Frame')
-		local strings = eventlessUnits[timer]
+		local strings = timerFontStrings[timer]
 
+		frame = CreateFrame('Frame')
 		frame:SetScript('OnUpdate', function(self, elapsed)
 			if(total >= timer) then
-				for _, fs in next, strings do
+				for fs in next, strings do
 					if(fs.parent:IsShown() and unitExists(fs.parent.unit)) then
 						fs:UpdateTag()
 					end
@@ -624,7 +644,16 @@ local function createOnUpdate(timer)
 			total = total + elapsed
 		end)
 
-		onUpdates[timer] = frame
+		timerFrames[timer] = frame
+	else
+		frame:Show()
+	end
+end
+
+local function disableTimer(timer)
+	local frame = timerFrames[timer]
+	if(frame) then
+		frame:Hide()
 	end
 end
 
@@ -641,54 +670,59 @@ local function Update(self)
 	end
 end
 
-local tagPool = {}
-local funcPool = {}
-local tmp = {}
-
-
 -- full tag syntax: '[prefix$>tag-name<$suffix(a,r,g,s)]'
 -- for a small test case see https://github.com/oUF-wow/oUF/pull/602
-local function getBracketData(tag)
-	local prefixEnd, prefixOffset = tag:match('()$>'), 1
-	if(not prefixEnd) then
-		prefixEnd = 1
-	else
-		prefixEnd = prefixEnd - 1
-		prefixOffset = 3
-	end
+local bracketData = {}
 
-	local suffixEnd = (tag:match('()%(', prefixOffset + 1) or -1) - 1
-	local suffixStart, suffixOffset = tag:match('<$()', prefixEnd), 1
-	if(not suffixStart) then
-		suffixStart = suffixEnd + 1
-	else
-		suffixOffset = 3
-	end
-
-	return tag:sub(prefixEnd + prefixOffset, suffixStart - suffixOffset),
-		prefixEnd,
-		suffixStart,
-		suffixEnd,
-		tag:match('%((.-)%)', suffixOffset + 1)
-end
-
-local function getTagFunc(tagstr)
-	local func = tagPool[tagstr]
-	if(not func) then
-		local format, numTags = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')
-		local args = {}
-		local idx = 1
-
-		local format_ = {}
-		for i = 1, numTags do
-			format_[i] = '%s'
+local function getBracketData(bracket)
+	local data = bracketData[bracket]
+	if(not data) then
+		local prefixEnd, prefixOffset = bracket:match('()$>'), 1
+		if(not prefixEnd) then
+			prefixEnd = 1
+		else
+			prefixEnd = prefixEnd - 1
+			prefixOffset = 3
 		end
 
+		local suffixEnd = (bracket:match('()%(', prefixOffset + 1) or -1) - 1
+		local suffixStart, suffixOffset = bracket:match('<$()', prefixEnd), 1
+		if(not suffixStart) then
+			suffixStart = suffixEnd + 1
+		else
+			suffixOffset = 3
+		end
+
+		data = {
+			bracket:sub(prefixEnd + prefixOffset, suffixStart - suffixOffset),
+			prefixEnd,
+			suffixStart,
+			suffixEnd,
+			bracket:match('%((.-)%)', suffixOffset + 1),
+		}
+
+		bracketData[bracket] = data
+	end
+
+	return data[1], data[2], data[3], data[4], data[5]
+end
+
+local tagStringFuncs = {}
+local bracketFuncs = {}
+local invalidBrackets = {}
+local buffer = {}
+
+local function getTagFunc(tagstr)
+	local func = tagStringFuncs[tagstr]
+	if(not func) then
+		local format, num = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')
+		local funcs = {}
+
 		for bracket in tagstr:gmatch(_PATTERN) do
-			local tagFunc = funcPool[bracket] or tags[bracket:sub(2, -2)]
+			local tagFunc = bracketFuncs[bracket] or tagFuncs[bracket:sub(2, -2)]
 			if(not tagFunc) then
 				local tagName, prefixEnd, suffixStart, suffixEnd, customArgs = getBracketData(bracket)
-				local tag = tags[tagName]
+				local tag = tagFuncs[tagName]
 				if(tag) then
 					if(prefixEnd ~= 1 or suffixStart - suffixEnd ~= 1) then
 						local prefix = prefixEnd ~= 1 and bracket:sub(2, prefixEnd) or ''
@@ -721,23 +755,26 @@ local function getTagFunc(tagstr)
 						end
 					end
 
-					funcPool[bracket] = tagFunc
+					bracketFuncs[bracket] = tagFunc
 				end
 			end
 
-			if(tagFunc) then
-				table.insert(args, tagFunc)
-
-				idx = idx + 1
-			else
+			if(not tagFunc) then
 				nierror(string.format('Attempted to use invalid tag %s.', bracket))
 
-				format_[idx] = bracket
-				format = format:format(unpack(format_, 1, numTags))
-				format_[idx] = '%s'
+				-- don't check for these earlier in the function because a valid tag under the same
+				-- name could've been created at some point
+				tagFunc = invalidBrackets[bracket]
+				if(not tagFunc) then
+					tagFunc = function()
+						return '|cffffffff' .. bracket .. '|r'
+					end
 
-				numTags = numTags - 1
+					invalidBrackets[bracket] = tagFunc
+				end
 			end
+
+			table.insert(funcs, tagFunc)
 		end
 
 		func = function(self)
@@ -750,100 +787,107 @@ local function getTagFunc(tagstr)
 
 			_ENV._COLORS = parent.colors
 			_ENV._FRAME = parent
-			for i, f in next, args do
-				tmp[i] = f(unit, realUnit) or ''
+
+			for i, f in next, funcs do
+				buffer[i] = f(unit, realUnit) or ''
 			end
 
-			-- We do 1, numTags because tmp can hold several unneeded variables.
-			return self:SetFormattedText(format, unpack(tmp, 1, numTags))
+			-- we do 1 to num because buffer is shared by all tags and can hold several unneeded vars
+			self:SetFormattedText(format, unpack(buffer, 1, num))
 		end
 
-		tagPool[tagstr] = func
+		tagStringFuncs[tagstr] = func
 	end
 
 	return func
 end
 
-local function registerEvent(fontstr, event)
-	if(not events[event]) then events[event] = {} end
+local function registerEvent(event, fs)
+	if(validateEvent(event)) then
+		if(not eventFontStrings[event]) then
+			eventFontStrings[event] = {}
+		end
 
-	local isOK = xpcall(eventFrame.RegisterEvent, eventFrame, event)
-	if(isOK) then
-		table.insert(events[event], fontstr)
+		eventFontStrings[event][fs] = true
+
+		eventFrame:RegisterEvent(event)
 	end
 end
 
-local function registerEvents(fontstr, tagstr)
-	for tag in tagstr:gmatch(_PATTERN) do
-		tag = getBracketData(tag)
-		local tagevents = tagEvents[tag]
+local function registerEvents(fs, ts)
+	for tag in ts:gmatch(_PATTERN) do
+		local tagevents = tagEvents[getBracketData(tag)]
 		if(tagevents) then
 			for event in tagevents:gmatch('%S+') do
-				registerEvent(fontstr, event)
+				registerEvent(event, fs)
 			end
 		end
 	end
 end
 
-local function unregisterEvents(fontstr)
-	for event, data in next, events do
-		local index = 1
-		local tagfsstr = data[index]
-		while tagfsstr do
-			if(tagfsstr == fontstr) then
-				if(#data == 1) then
-					eventFrame:UnregisterEvent(event)
-				end
+local function unregisterEvents(fs)
+	for event, strings in next, eventFontStrings do
+		strings[fs] = nil
 
-				table.remove(data, index)
-			else
-				index = index + 1
-			end
-
-			tagfsstr = data[index]
+		if(not next(strings)) then
+			eventFrame:UnregisterEvent(event)
 		end
 	end
 end
 
-local taggedFS = {}
+local function registerTimer(fs, timer)
+	if(not timerFontStrings[timer]) then
+		timerFontStrings[timer] = {}
+	end
 
---[[ Tags: frame:Tag(fs, tagstr, ...)
+	timerFontStrings[timer][fs] = true
+
+	enableTimer(timer)
+end
+
+local function unregisterTimer(fs)
+	for timer, strings in next, timerFontStrings do
+		strings[fs] = nil
+
+		if(not next(strings)) then
+			disableTimer(timer)
+		end
+	end
+end
+
+local taggedFontStrings = {}
+
+--[[ Tags: frame:Tag(fs, ts, ...)
 Used to register a tag on a unit frame.
 
 * self   - the unit frame on which to register the tag
 * fs     - the font string to display the tag (FontString)
-* tagstr - the tag string (string)
+* ts     - the tag string (string)
 * ...    - additional optional unitID(s) the tag should update for
 --]]
-local function Tag(self, fs, tagstr, ...)
-	if(not fs or not tagstr) then return end
+local function Tag(self, fs, ts, ...)
+	if(not fs or not ts) then return end
 
 	if(not self.__tags) then
 		self.__tags = {}
 		table.insert(self.__elements, Update)
 	elseif(self.__tags[fs]) then
-		-- We don't need to remove it from the __tags table as Untag handles
-		-- that for us.
+		-- We don't need to remove it from the __tags table as Untag handles that for us.
 		self:Untag(fs)
 	end
 
 	fs.parent = self
-	fs.UpdateTag = getTagFunc(tagstr)
+	fs.UpdateTag = getTagFunc(ts)
 
 	if(self.__eventless or fs.frequentUpdates) then
-		local timer
+		local timer = 0.5
 		if(type(fs.frequentUpdates) == 'number') then
 			timer = fs.frequentUpdates
-		else
-			timer = .5
 		end
 
-		if(not eventlessUnits[timer]) then eventlessUnits[timer] = {} end
-		table.insert(eventlessUnits[timer], fs)
-
-		createOnUpdate(timer)
+		registerTimer(fs, timer)
 	else
-		registerEvents(fs, tagstr)
+		registerEvents(fs, ts)
 
 		if(...) then
 			if(not fs.extraUnits) then
@@ -856,7 +900,7 @@ local function Tag(self, fs, tagstr, ...)
 		end
 	end
 
-	taggedFS[fs] = tagstr
+	taggedFontStrings[fs] = ts
 	self.__tags[fs] = true
 end
 
@@ -870,23 +914,11 @@ local function Untag(self, fs)
 	if(not fs or not self.__tags) then return end
 
 	unregisterEvents(fs)
-	for _, timers in next, eventlessUnits do
-		local index = 1
-		local fontstr = timers[index]
-		while fontstr do
-			if(fs == fontstr) then
-				table.remove(timers, index)
-			else
-				index = index + 1
-			end
-
-			fontstr = timers[index]
-		end
-	end
+	unregisterTimer(fs)
 
 	fs.UpdateTag = nil
 
-	taggedFS[fs] = nil
+	taggedFontStrings[fs] = nil
 	self.__tags[fs] = nil
 end
 
@@ -896,28 +928,28 @@ local function strip(tag)
 end
 
 oUF.Tags = {
-	Methods = tags,
+	Methods = tagFuncs,
 	Events = tagEvents,
 	SharedEvents = unitlessEvents,
 	Vars = vars,
 	RefreshMethods = function(self, tag)
 		if(not tag) then return end
 
-		-- If a tag's name contains magic chars, there's a chance that
-		-- string.match will fail to find the match.
+		-- if a tag's name contains magic chars, there's a chance that string.match will fail to
+		-- find the match
 		tag = '%[' .. tag:gsub('[%^%$%(%)%%%.%*%+%-%?]', '%%%1') .. '%]'
 
-		for func in next, funcPool do
-			if(strip(func):match(tag)) then
-				funcPool[func] = nil
+		for bracket in next, bracketFuncs do
+			if(strip(bracket):match(tag)) then
+				bracketFuncs[bracket] = nil
 			end
 		end
 
-		for tagstr, func in next, tagPool do
+		for tagstr, func in next, tagStringFuncs do
 			if(strip(tagstr):match(tag)) then
-				tagPool[tagstr] = nil
+				tagStringFuncs[tagstr] = nil
 
-				for fs in next, taggedFS do
+				for fs in next, taggedFontStrings do
 					if(fs.UpdateTag == func) then
 						fs.UpdateTag = getTagFunc(tagstr)
 
@@ -932,12 +964,13 @@ oUF.Tags = {
 	RefreshEvents = function(self, tag)
 		if(not tag) then return end
 
-		-- If a tag's name contains magic chars, there's a chance that
-		-- string.match will fail to find the match.
+		-- if a tag's name contains magic chars, there's a chance that string.match will fail to
+		-- find the match
 		tag = '%[' .. tag:gsub('[%^%$%(%)%%%.%*%+%-%?]', '%%%1') .. '%]'
-		for tagstr in next, tagPool do
+
+		for tagstr in next, tagStringFuncs do
 			if(strip(tagstr):match(tag)) then
-				for fs, ts in next, taggedFS do
+				for fs, ts in next, taggedFontStrings do
 					if(ts == tagstr) then
 						unregisterEvents(fs)
 						registerEvents(fs, tagstr)
@@ -945,6 +978,12 @@ oUF.Tags = {
 				end
 			end
 		end
+	end,
+	SetEventUpdateTimer = function(self, timer)
+		if(not timer) then return end
+		if(not type(timer) == 'number') then return end
+
+		eventTimerThreshold = math.max(0.1, timer)
 	end,
 }
 
