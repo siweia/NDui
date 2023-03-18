@@ -97,17 +97,19 @@ function oUF:DisableBlizzard(unit)
 		end
 
 		-- Blizzard_ArenaUI should not be loaded
-		Arena_LoadUI = function() end
-		GetCVar('showArenaEnemyFrames', '0', 'SHOW_ARENA_ENEMY_FRAMES_TEXT')
-	elseif(unit:match('nameplate%d+$')) then
-		local frame = C_NamePlate.GetNamePlateForUnit(unit)
-		if(frame and frame.UnitFrame) then
-			if(not frame.UnitFrame.isHooked) then
-				frame.UnitFrame:HookScript('OnShow', insecureOnShow)
-				frame.UnitFrame.isHooked = true
-			end
-
-			handleFrame(frame.UnitFrame, true)
-		end
+		_G.Arena_LoadUI = function() end
+		SetCVar('showArenaEnemyFrames', '0', 'SHOW_ARENA_ENEMY_FRAMES_TEXT')
 	end
+end
+
+function oUF:DisableNamePlate(frame)
+	if(not(frame and frame.UnitFrame)) then return end
+	if(frame.UnitFrame:IsForbidden()) then return end
+
+	if(not frame.UnitFrame.isHooked) then
+		frame.UnitFrame:HookScript('OnShow', insecureOnShow)
+		frame.UnitFrame.isHooked = true
+	end
+
+	handleFrame(frame.UnitFrame, true)
 end
