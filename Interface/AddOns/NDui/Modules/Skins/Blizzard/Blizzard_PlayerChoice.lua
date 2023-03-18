@@ -75,6 +75,7 @@ C.themes["Blizzard_PlayerChoice"] = function()
 			if optionBG then
 				if not optionBG.bg then
 					optionBG.bg = B.SetBD(optionBG)
+					optionBG.bg:SetInside(optionBG, 4, 4)
 				end
 				local isUgly = uglyBackground[optionBG:GetAtlas()]
 				optionBG:SetShown(not isUgly)
