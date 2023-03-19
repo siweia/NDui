@@ -30,6 +30,11 @@ local ignoredTextureKit = {
 	["cypherchoice"] = true,
 	["genericplayerchoice"] = true,
 }
+
+local uglyBackground = {
+	["ui-frame-genericplayerchoice-cardparchment"] = true
+}
+
 C.themes["Blizzard_PlayerChoice"] = function()
 	hooksecurefunc(PlayerChoiceFrame, "TryShow", function(self)
 		if not self.bg then
@@ -50,7 +55,8 @@ C.themes["Blizzard_PlayerChoice"] = function()
 
 		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end -- no border for some templates
 
-		self.bg:SetShown(not ignoredTextureKit[self.uiTextureKit])
+		local isIgnored = ignoredTextureKit[self.uiTextureKit]
+		self.bg:SetShown(not isIgnored)
 
 		if not self.optionFrameTemplate then return end
 
@@ -62,6 +68,19 @@ C.themes["Blizzard_PlayerChoice"] = function()
 			end
 			ReskinOptionText(optionFrame.OptionText, 1, 1, 1)
 			B.ReplaceIconString(optionFrame.OptionText.String)
+
+			if optionFrame.Artwork and isIgnored then optionFrame.Artwork:SetSize(64, 64) end -- fix high resolution icons
+
+			local optionBG = optionFrame.Background
+			if optionBG then
+				if not optionBG.bg then
+					optionBG.bg = B.SetBD(optionBG)
+					optionBG.bg:SetInside(optionBG, 4, 4)
+				end
+				local isUgly = uglyBackground[optionBG:GetAtlas()]
+				optionBG:SetShown(not isUgly)
+				optionBG.bg:SetShown(isUgly)
+			end
 
 			local optionButtonsContainer = optionFrame.OptionButtonsContainer
 			if optionButtonsContainer and optionButtonsContainer.buttonPool then
