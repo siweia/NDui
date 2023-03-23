@@ -35,7 +35,7 @@ local bindTypeToString = {
 	[ITEM_BIND_TO_ACCOUNT] = "account",
 	[ITEM_BNETACCOUNTBOUND] = "account",
 }
-
+-- TODO: bonding index for 10.1
 cargBags.itemKeys["bindOn"] = function(i)
 	if not i.link then return end
 

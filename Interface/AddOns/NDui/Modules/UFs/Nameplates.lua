@@ -454,23 +454,47 @@ function UF:UpdateQuestUnit(_, unit)
 
 	local data = C_TooltipInfo.GetUnit(unit)
 	if data then
-		for i = 1, #data.lines do
-			local lineData = data.lines[i]
-			local argVal = lineData and lineData.args
-			if argVal[1] and argVal[1].intVal == 8 then
-				local text = argVal[2] and argVal[2].stringVal -- progress string
-				if text then
-					local current, goal = strmatch(text, "(%d+)/(%d+)")
-					local progress = strmatch(text, "(%d+)%%")
-					if current and goal then
-						local diff = floor(goal - current)
-						if diff > prevDiff then
-							questProgress = diff
-							prevDiff = diff
+		if DB.isPatch10_1 then
+			for i = 1, #data.lines do
+				local lineData = data.lines[i]
+				if lineData.type == 8 then
+					local text = lineData.leftText -- progress string
+					if text then
+						local current, goal = strmatch(text, "(%d+)/(%d+)")
+						local progress = strmatch(text, "(%d+)%%")
+						if current and goal then
+							local diff = floor(goal - current)
+							if diff > prevDiff then
+								questProgress = diff
+								prevDiff = diff
+							end
+						elseif progress and prevDiff == 0 then
+							if floor(100 - progress) > 0 then
+								questProgress = progress.."%" -- lower priority on progress, keep looking
+							end
 						end
-					elseif progress and prevDiff == 0 then
-						if floor(100 - progress) > 0 then
-							questProgress = progress.."%" -- lower priority on progress, keep looking
+					end
+				end
+			end
+		else
+			for i = 1, #data.lines do
+				local lineData = data.lines[i]
+				local argVal = lineData and lineData.args
+				if argVal[1] and argVal[1].intVal == 8 then
+					local text = argVal[2] and argVal[2].stringVal -- progress string
+					if text then
+						local current, goal = strmatch(text, "(%d+)/(%d+)")
+						local progress = strmatch(text, "(%d+)%%")
+						if current and goal then
+							local diff = floor(goal - current)
+							if diff > prevDiff then
+								questProgress = diff
+								prevDiff = diff
+							end
+						elseif progress and prevDiff == 0 then
+							if floor(100 - progress) > 0 then
+								questProgress = progress.."%" -- lower priority on progress, keep looking
+							end
 						end
 					end
 				end

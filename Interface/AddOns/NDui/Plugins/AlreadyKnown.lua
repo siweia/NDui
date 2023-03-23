@@ -25,7 +25,7 @@ local function isPetCollected(speciesID)
 		return true
 	end
 end
-
+-- TODO: adjust for 10.1
 local function IsAlreadyKnown(link, index)
 	if not link then return end
 
