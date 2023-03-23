@@ -255,12 +255,10 @@ C.themes["Blizzard_Professions"] = function()
 	local specPage = frame.SpecPage
 	B.Reskin(specPage.UnlockTabButton)
 	B.Reskin(specPage.ApplyButton)
-	if DB.isNewPatch then
-		B.Reskin(specPage.ViewTreeButton)
-		B.Reskin(specPage.BackToFullTreeButton)
-		B.Reskin(specPage.ViewPreviewButton)
-		B.Reskin(specPage.BackToPreviewButton)
-	end
+	B.Reskin(specPage.ViewTreeButton)
+	B.Reskin(specPage.BackToFullTreeButton)
+	B.Reskin(specPage.ViewPreviewButton)
+	B.Reskin(specPage.BackToPreviewButton)
 	specPage.TopDivider:Hide()
 	specPage.VerticalDivider:Hide()
 	specPage.PanelFooter:Hide()
@@ -355,9 +353,6 @@ C.themes["Blizzard_Professions"] = function()
 	B.StripTextures(orderInfo)
 	B.CreateBDFrame(orderInfo, .25):SetInside()
 	B.Reskin(orderInfo.BackButton)
-	if not DB.isNewPatch then
-		B.Reskin(orderInfo.IgnoreButton)
-	end
 	B.Reskin(orderInfo.StartOrderButton)
 	B.Reskin(orderInfo.DeclineOrderButton)
 	B.Reskin(orderInfo.ReleaseOrderButton)
