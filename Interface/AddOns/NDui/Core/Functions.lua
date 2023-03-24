@@ -358,21 +358,27 @@ do
 
 		return name
 	end
-	-- TODO: update for 10.1
+
 	function B.IsUnknownTransmog(bagID, slotID)
 		local data = C_TooltipInfo.GetBagItem(bagID, slotID)
 		local lineData = data and data.lines
 		if not lineData then return end
 
 		for i = #lineData, 1, -1 do
-			local argVal = lineData[i] and lineData[i].args
-			if argVal then
-				if argVal[4] and argVal[4].field == "price" then
-					return false
-				end
-				local stringVal = argVal[2] and argVal[2].stringVal
-				if isUnknownString[stringVal] then
-					return true
+			if DB.isPatch10_1 then
+				local line = lineData[i]
+				if line.price then return false end
+				return line.leftText and isUnknownString[line.leftText]
+			else
+				local argVal = lineData[i] and lineData[i].args
+				if argVal then
+					if argVal[4] and argVal[4].field == "price" then
+						return false
+					end
+					local stringVal = argVal[2] and argVal[2].stringVal
+					if isUnknownString[stringVal] then
+						return true
+					end
 				end
 			end
 		end
