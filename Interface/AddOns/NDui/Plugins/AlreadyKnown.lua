@@ -25,7 +25,7 @@ local function isPetCollected(speciesID)
 		return true
 	end
 end
--- TODO: adjust for 10.1
+
 local function IsAlreadyKnown(link, index)
 	if not link then return end
 
@@ -41,9 +41,13 @@ local function IsAlreadyKnown(link, index)
 		if itemClassID == Enum.ItemClass.Battlepet and index then
 			local data = C_TooltipInfo.GetGuildBankItem(GetCurrentGuildBankTab(), index)
 			if data then
-				local argVal = data.args and data.args[2]
-				if argVal.field == "battlePetSpeciesID" then
-					return isPetCollected(argVal.intVal)
+				if DB.isPatch10_1 then
+					return data.battlePetSpeciesID and isPetCollected(data.battlePetSpeciesID)
+				else
+					local argVal = data.args and data.args[2]
+					if argVal.field == "battlePetSpeciesID" then
+						return isPetCollected(argVal.intVal)
+					end
 				end
 			end
 		else
@@ -54,13 +58,23 @@ local function IsAlreadyKnown(link, index)
 			if data then
 				for i = 1, #data.lines do
 					local lineData = data.lines[i]
-					local argVal = lineData and lineData.args
-					if argVal then
-						local text = argVal[2] and argVal[2].stringVal
+					if DB.isPatch10_1 then
+						local text = lineData.leftText
 						if text then
 							if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
 								knowns[link] = true
 								return true
+							end
+						end
+					else
+						local argVal = lineData and lineData.args
+						if argVal then
+							local text = argVal[2] and argVal[2].stringVal
+							if text then
+								if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
+									knowns[link] = true
+									return true
+								end
 							end
 						end
 					end
