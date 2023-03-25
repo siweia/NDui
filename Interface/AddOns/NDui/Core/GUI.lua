@@ -124,6 +124,7 @@ G.DefaultSettings = {
 		FilterEquipSet = false,
 		FilterAnima = false,
 		FilterRelic = false,
+		FilterStone = true,
 	},
 	Auras = {
 		Reminder = true,

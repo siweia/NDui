@@ -578,6 +578,7 @@ L["FilterGoods"] = "Filtrer les marchandises commerciales"
 L["FilterQuest"] = "Filtrer les objets de quête"
 L["FilterAnima"] = "Filtrer les objets d'anima"
 L["FilterRelic"] = "Filtrer les reliques Korthiennes"
+L["FilterStone"] = "Filter Primordial Stones" -- needs translation
 L["KorthiaRelic"] = "Reliques Korthiennes"
 L["Max Rank"] = "Rang max"
 L["SmoothAmount"] = "Fluidité de la fréquence"
