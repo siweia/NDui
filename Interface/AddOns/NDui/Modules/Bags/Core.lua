@@ -962,7 +962,7 @@ function module:OnLogin()
 	}
 
 	local function isItemNeedsLevel(item)
-		return item.link and item.quality > 1 and module:IsItemHasLevel(item)
+		return item.link and item.quality > 1 and (module:IsItemHasLevel(item) or item.classID == Enum.ItemClass.Gem)
 	end
 
 	local function GetIconOverlayAtlas(item)
