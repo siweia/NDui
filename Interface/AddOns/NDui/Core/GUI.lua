@@ -592,7 +592,6 @@ G.AccountSettings = {
 	RaidDebuffsBlack = {},
 	NameplateWhite = {},
 	NameplateBlack = {},
-	FeastTime = 0,
 	IgnoreNotes = {},
 }
 
