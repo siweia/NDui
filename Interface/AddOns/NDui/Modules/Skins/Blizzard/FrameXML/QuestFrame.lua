@@ -82,6 +82,7 @@ tinsert(C.defaultThemes, function()
 
 	QuestProgressRequiredItemsText:SetTextColor(1, .8, 0)
 	QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
+	QuestProgressRequiredItemsText.SetTextColor = B.Dummy
 	QuestProgressTitleText:SetTextColor(1, .8, 0)
 	QuestProgressTitleText:SetShadowColor(0, 0, 0)
 	QuestProgressTitleText.SetTextColor = B.Dummy
