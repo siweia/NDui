@@ -30,6 +30,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 272834) -- 粘稠的口水
 module:RegisterDebuff(TIER, INSTANCE, 0, 272713) -- 碾压重击
 
 INSTANCE = 1022 -- 地渊孢林
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤
@@ -161,6 +162,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 268202) -- 死亡棱镜
 module:RegisterDebuff(TIER, INSTANCE, 0, 268086) -- 恐怖光环
 
 INSTANCE = 1001 -- 自由镇
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 314531) -- 撕扯血肉
 module:RegisterDebuff(TIER, INSTANCE, 0, 209858) -- 死疽
 module:RegisterDebuff(TIER, INSTANCE, 0, 240559) -- 重伤

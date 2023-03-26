@@ -206,6 +206,7 @@ local socketWatchList = {
 	["PUNCHCARDRED"] = true,
 	["PUNCHCARDYELLOW"] = true,
 	["DOMINATION"] = true,
+	["PRIMORDIAL"] = true,
 }
 
 local function GetSocketTexture(socket, count)
@@ -219,6 +220,7 @@ function module.IsItemHasGem(link)
 		for stat, count in pairs(stats) do
 			local socket = strmatch(stat, "EMPTY_SOCKET_(%S+)")
 			if socket and socketWatchList[socket] then
+				if socket == "PRIMORDIAL" then socket = "META" end -- primordial texture is missing, use meta instead, needs review
 				text = text..GetSocketTexture(socket, count)
 			end
 		end

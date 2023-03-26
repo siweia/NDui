@@ -53,6 +53,11 @@ local function reskinSlotButton(button)
 
 		button.styled = true
 	end
+
+	if DB.isPatch10_1 then
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
+	end
 end
 
 local function reskinArrowInput(box)

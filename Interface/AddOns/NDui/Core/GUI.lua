@@ -124,6 +124,7 @@ G.DefaultSettings = {
 		FilterEquipSet = false,
 		FilterAnima = false,
 		FilterRelic = false,
+		FilterStone = true,
 	},
 	Auras = {
 		Reminder = true,
@@ -592,7 +593,6 @@ G.AccountSettings = {
 	RaidDebuffsBlack = {},
 	NameplateWhite = {},
 	NameplateBlack = {},
-	FeastTime = 0,
 	IgnoreNotes = {},
 }
 

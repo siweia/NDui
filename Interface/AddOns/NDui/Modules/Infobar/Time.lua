@@ -265,22 +265,13 @@ info.onShiftDown = function()
 	end
 end
 
-local function GetCurrentFeastTime()
-	local prepareRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7219)
-	if prepareRemain then -- 准备盛宴，15分钟
-		return prepareRemain + time(), 1 -- 开始时间=剩余准备时间+现在时间
-	end
-
-	local cookingRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7218)
-	if cookingRemain then -- 盛宴进行中，15分钟
-		return time() - (15*60 - cookingRemain), 2 -- 开始时间=现在时间-盛宴已进行时长
-	end
-
-	local soupRemain = C_AreaPoiInfo_GetAreaPOISecondsLeft(7220)
-	if soupRemain then -- 盛宴结束，喝汤1小时
-		return time() - (60*60 - soupRemain) - 15*60, 3 -- 开始时间=现在时间-盛宴已结束时长-盛宴进行时长
-	end
-end
+local communityFeastTime = {
+	["TW"] = 1679747400, -- 20:30
+	["KR"] = 1679747400, -- 20:30
+	["EU"] = 1679749200, -- 21:00
+	["US"] = 1679751000, -- 21:30
+	["CN"] = 1679751000, -- 21:30
+}
 
 info.onEnter = function(self)
 	self.entered = true
@@ -378,10 +369,11 @@ info.onEnter = function(self)
 
 	-- Community feast
 	title = false
-	if NDuiADB["FeastTime"] ~= 0 then
+	local feastTime = communityFeastTime[region]
+	if feastTime then
 		local currentTime = time()
 		local duration = 5400 -- 1.5hrs
-		local elapsed = mod(currentTime - NDuiADB["FeastTime"], duration)
+		local elapsed = mod(currentTime - feastTime, duration)
 		local nextTime = duration - elapsed + currentTime
 
 		addTitle(COMMUNITY_FEAST)
@@ -468,18 +460,3 @@ info.onMouseUp = function(_, btn)
 		ToggleCalendar()
 	end
 end
-
--- Refresh feast time on map open
-local lastTime = 0
-WorldMapFrame:HookScript("OnShow", function()
-	if InCombatLockdown() or IsInInstance() then return end
-
-	local nowTime = GetTime()
-	if nowTime - lastTime > 60 then
-		local currentFeast = GetCurrentFeastTime()
-		if currentFeast then
-			NDuiADB["FeastTime"] = currentFeast
-		end
-		lastTime = nowTime
-	end
-end)

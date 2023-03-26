@@ -817,16 +817,17 @@ function module:OnLogin()
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "BagReagent", filters.onlyBagReagent)
-		AddNewContainer("Bag", 16, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 17, "Junk", filters.bagsJunk)
 		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)
 		AddNewContainer("Bag", 8, "Equipment", filters.bagEquipment)
 		AddNewContainer("Bag", 10, "BagCollection", filters.bagCollection)
-		AddNewContainer("Bag", 14, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 15, "Consumable", filters.bagConsumable)
 		AddNewContainer("Bag", 11, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 15, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 16, "BagQuest", filters.bagQuest)
 		AddNewContainer("Bag", 12, "BagAnima", filters.bagAnima)
 		AddNewContainer("Bag", 13, "BagRelic", filters.bagRelic)
+		AddNewContainer("Bag", 14, "BagStone", filters.bagStone)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -962,7 +963,7 @@ function module:OnLogin()
 	}
 
 	local function isItemNeedsLevel(item)
-		return item.link and item.quality > 1 and module:IsItemHasLevel(item)
+		return item.link and item.quality > 1 and (module:IsItemHasLevel(item) or item.classID == Enum.ItemClass.Gem)
 	end
 
 	local function GetIconOverlayAtlas(item)
@@ -1185,6 +1186,8 @@ function module:OnLogin()
 			label = GetCustomGroupTitle(settings.Index)
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
+		elseif name == "BagStone" then
+			label = GetSpellInfo(404861)
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

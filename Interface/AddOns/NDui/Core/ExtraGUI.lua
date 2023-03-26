@@ -114,35 +114,26 @@ function G:SetupRaidDebuffs(parent)
 	local maxLevel = UnitLevel("player") > 60
 	local dungeons = {}
 
-	if maxLevel then
-		for dungeonID = 1196, 1204 do
-			if dungeonID ~= 1200 then
-				AddNewDungeon(dungeons, dungeonID)
-			end
-		end
-		AddNewDungeon(dungeons, 313)  -- 青龙寺
-		AddNewDungeon(dungeons, 537)  -- 影月墓地
-		AddNewDungeon(dungeons, 721)  -- 英灵殿
-		AddNewDungeon(dungeons, 800)  -- 群星庭院
-	else
-		for dungeonID = 1182, 1189 do
+	for dungeonID = 1196, 1204 do
+		if dungeonID ~= 1200 then
 			AddNewDungeon(dungeons, dungeonID)
 		end
-		AddNewDungeon(dungeons, 1194) -- 集市
-		AddNewDungeon(dungeons, 536)  -- 恐轨车站
-		AddNewDungeon(dungeons, 558)  -- 钢铁码头
-		AddNewDungeon(dungeons, 860)  -- 重返卡拉赞
-		AddNewDungeon(dungeons, 1178) -- 麦卡贡
+	end
+	AddNewDungeon(dungeons, 313)  -- 青龙寺
+	AddNewDungeon(dungeons, 537)  -- 影月墓地
+	AddNewDungeon(dungeons, 721)  -- 英灵殿
+	AddNewDungeon(dungeons, 800)  -- 群星庭院
+	if DB.isPatch10_1 then
+		AddNewDungeon(dungeons, 68)  -- 旋云之巅
+		AddNewDungeon(dungeons, 767)  -- 耐萨里奥的巢穴
+		AddNewDungeon(dungeons, 1001)  -- 自由镇
+		AddNewDungeon(dungeons, 1022)  -- 地渊孢林
 	end
 
 	local raids = {
-		[1] = EJ_GetInstanceInfo(1190),
-		[2] = EJ_GetInstanceInfo(1193),
-		[3] = EJ_GetInstanceInfo(1195),
+		[1] = EJ_GetInstanceInfo(1200),
+		[2] = EJ_GetInstanceInfo(1208),
 	}
-	if maxLevel then
-		raids[4] = EJ_GetInstanceInfo(1200)
-	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
@@ -1230,8 +1221,8 @@ function G:SetupUnitFrame(parent)
 			createOptionDropdown(parent, L["PowerValueType"], offset-50-mult, G.HealthValues, L["100PercentTip"], "UFs", value.."MPTag", defaultValue[value][5], func)
 		end
 		createOptionSlider(parent, L["Width"], sliderRange[value][1], sliderRange[value][2], defaultValue[value][1], offset-110-mult, value.."Width", func)
-		createOptionSlider(parent, L["Height"], 15, 50, defaultValue[value][2], offset-180-mult, value.."Height", func)
-		createOptionSlider(parent, L["Power Height"], 0, 30, defaultValue[value][3], offset-250-mult, value.."PowerHeight", func)
+		createOptionSlider(parent, L["Height"], 15, 100, defaultValue[value][2], offset-180-mult, value.."Height", func)
+		createOptionSlider(parent, L["Power Height"], 0, 50, defaultValue[value][3], offset-250-mult, value.."PowerHeight", func)
 		if value ~= "Pet" then
 			createOptionSlider(parent, L["Power Offset"], -20, 20, defaultValue[value][6], offset-320-mult, value.."PowerOffset", func)
 			createOptionSlider(parent, L["Name Offset"], -50, 50, defaultValue[value][7], offset-390-mult, value.."NameOffset", func)
@@ -1630,6 +1621,7 @@ function G:SetupBagFilter(parent)
 		[10] = "FilterQuest",
 		[11] = "FilterAnima",
 		[12] = "FilterRelic",
+		[13] = "FilterStone",
 	}
 
 	local BAG = B:GetModule("Bags")

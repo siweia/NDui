@@ -112,6 +112,7 @@ local list = {
 		{AuraID = 392956, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
 		{AuraID = 378770, UnitID = "player", Flash = true},	-- 夺命打击
+		{AuraID = 378747, UnitID = "player", Flash = true},	-- 凶暴兽群
 
 		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
 		{AuraID = 394384, UnitID = "player", Flash = true},	-- 集中瞄准，射击4T

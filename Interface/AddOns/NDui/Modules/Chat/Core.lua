@@ -253,7 +253,7 @@ function module:QuickMouseScroll(dir)
 		end
 	end
 end
-hooksecurefunc("FloatingChatFrame_OnMouseScroll", module.QuickMouseScroll)
+hooksecurefunc("FloatingChatFrame_OnMouseScroll", module.QuickMouseScroll) -- TODO: broken in 10.1
 
 -- Autoinvite by whisper
 local whisperList = {}

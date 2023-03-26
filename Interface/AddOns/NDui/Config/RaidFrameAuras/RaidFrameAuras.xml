@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="ClassSpells.lua"/>
 
+	<Script file="Cata\Party-Cata.lua"/>
 	<Script file="WoD\Party-WoD.lua"/>
 
 	<Script file="Legion\PartyDungeons.lua"/>
@@ -25,4 +26,5 @@
 
 	<Script file="Dragonflight\Party-DF.lua"/>
 	<Script file="Dragonflight\VaultoftheIncarnates.lua"/>
+	<Script file="Dragonflight\Aberrus.lua"/>
 </Ui>

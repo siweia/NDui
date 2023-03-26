@@ -14,6 +14,9 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		PunchcardYellow = {r=0.97, g=0.82, b=0.29},
 		PunchcardBlue = {r=0.47, g=0.67, b=1},
 		Domination = {r=.24, g=.5, b=.7},
+		Cypher = {r=1, g=.8, b=0},
+		Tinker = {r=1, g=.47, b=.47},
+		Primordial = {r=1, g=0, b=1},
 	}
 
 	for i = 1, MAX_NUM_SOCKETS do

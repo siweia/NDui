@@ -578,6 +578,7 @@ L["FilterGoods"] = "Фильтр хозяйственных товаров"
 L["FilterQuest"] = "Фильтр квестовых предметов"
 L["FilterAnima"] = "Фильтр анима вещей"
 L["FilterRelic"] = "Фильтр реликвий Кортии"
+L["FilterStone"] = "Filter Primordial Stones" -- needs translation
 L["KorthiaRelic"] = "Реликвии Кортии"
 L["Max Rank"] = "Макс.ранг"
 L["SmoothAmount"] = "Частота плавности"
