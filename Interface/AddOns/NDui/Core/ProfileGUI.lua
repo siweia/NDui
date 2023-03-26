@@ -494,6 +494,7 @@ function G:ExportGUIData()
 				text = text..":"..DB.MyClass
 				for fullkey, value in pairs(NDuiADB[KEY][DB.MyClass]) do
 					value = gsub(value, "%:", "`")
+					value = gsub(value, ";", "}")
 					text = text..":"..fullkey..":"..value
 				end
 			end
@@ -669,6 +670,7 @@ function G:ImportGUIData()
 					local results = {select(4, strsplit(":", option))}
 					for i = 1, #results, 2 do
 						results[i+1] = gsub(results[i+1], "`", ":")
+						results[i+1] = gsub(results[i+1], "}", ";")
 						NDuiADB[value][arg1][results[i]] = tonumber(results[i+1]) or results[i+1]
 					end
 				end
@@ -676,7 +678,7 @@ function G:ImportGUIData()
 		elseif tonumber(arg1) then
 			if value == "DBMCount" or value == "StatOrder" then
 				C.db[key][value] = arg1
-			else
+			elseif C.db[key] then
 				C.db[key][value] = tonumber(arg1)
 			end
 		end
