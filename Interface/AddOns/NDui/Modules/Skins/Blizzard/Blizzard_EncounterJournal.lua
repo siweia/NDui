@@ -178,11 +178,26 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- Search results
 	EncounterJournalSearchBox:SetFrameLevel(15)
-	for i = 1, 5 do
-		B.StyleSearchButton(EncounterJournalSearchBox["sbutton"..i])
+	local showAllResults = EncounterJournalSearchBox.showAllResults
+	local previewContainer = EncounterJournalSearchBox.searchPreviewContainer
+	B.StripTextures(previewContainer)
+	local bg = B.SetBD(previewContainer)
+	bg:SetPoint("TOPLEFT", -3, 3)
+	bg:SetPoint("BOTTOMRIGHT", showAllResults, 3, -3)
+
+	if DB.isPatch10_1 then
+		for i = 1, EncounterJournalSearchBox:GetNumChildren() do
+			local child = select(i, EncounterJournalSearchBox:GetChildren())
+			if child.iconFrame then
+				B.StyleSearchButton(child)
+			end
+		end
+	else
+		for i = 1, 5 do
+			B.StyleSearchButton(EncounterJournalSearchBox["sbutton"..i])
+		end
 	end
-	B.StyleSearchButton(EncounterJournalSearchBox.showAllResults)
-	B.StripTextures(EncounterJournalSearchBox.searchPreviewContainer)
+	B.StyleSearchButton(showAllResults)
 
 	do
 		local result = EncounterJournalSearchResults
