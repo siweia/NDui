@@ -5,6 +5,7 @@ local bit_band, bit_bor = bit.band, bit.bor
 local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
 local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
+local GetAddOnMetadata = GetAddOnMetadata or C_AddOns.GetAddOnMetadata -- isPatch10_1
 DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()

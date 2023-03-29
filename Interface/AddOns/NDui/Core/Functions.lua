@@ -1119,6 +1119,7 @@ do
 
 		local thumb = self:GetThumb()
 		if thumb then
+			thumb:DisableDrawLayer("ARTWORK")
 			thumb:DisableDrawLayer("BACKGROUND")
 			thumb.bg = B.CreateBDFrame(thumb, .25)
 			thumb.bg:SetBackdropColor(cr, cg, cb, .25)
@@ -1582,7 +1583,8 @@ do
 
 	function B:StyleSearchButton()
 		B.StripTextures(self)
-		B.CreateBDFrame(self, .25)
+		local bg = B.CreateBDFrame(self, .25)
+		bg:SetInside()
 		local icon = self.icon or self.Icon
 		if icon then
 			B.ReskinIcon(icon)
@@ -1591,7 +1593,7 @@ do
 		self:SetHighlightTexture(DB.bdTex)
 		local hl = self:GetHighlightTexture()
 		hl:SetVertexColor(cr, cg, cb, .25)
-		hl:SetInside()
+		hl:SetInside(bg)
 	end
 
 	function B:AffixesSetup()
