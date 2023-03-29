@@ -19,6 +19,7 @@
 	class-generation, helper-functions and the Blizzard-replacement.
 ]]
 local parent, ns = ...
+local GetAddOnMetadata = GetAddOnMetadata or C_AddOns.GetAddOnMetadata -- isPatch10_1
 local global = GetAddOnMetadata(parent, 'X-cargBags')
 
 --- @class table

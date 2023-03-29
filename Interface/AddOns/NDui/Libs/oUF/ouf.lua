@@ -1,4 +1,5 @@
 local parent, ns = ...
+local GetAddOnMetadata = GetAddOnMetadata or C_AddOns.GetAddOnMetadata -- isPatch10_1
 local global = GetAddOnMetadata(parent, 'X-oUF')
 local _VERSION = '10.1.1'
 if(_VERSION:find('project%-version')) then
