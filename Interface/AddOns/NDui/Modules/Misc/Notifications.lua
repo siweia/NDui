@@ -88,6 +88,9 @@ local isIgnoredZone = {
 	[1943] = true,	-- 联盟激流堡
 	[2111] = true,	-- 黑海岸前线
 }
+local isIgnoredIDs = { -- todo: add option for this
+	[5485] = true, -- 海象人工具盒
+}
 
 local function isUsefulAtlas(info)
 	local atlas = info.atlasName
@@ -99,7 +102,7 @@ end
 function M:RareAlert_Update(id)
 	if id and not cache[id] then
 		local info = C_VignetteInfo_GetVignetteInfo(id)
-		if not info or not isUsefulAtlas(info) then return end
+		if not info or not isUsefulAtlas(info) or isIgnoredIDs[info.vignetteID] then return end
 
 		local atlasInfo = C_Texture_GetAtlasInfo(info.atlasName)
 		if not atlasInfo then return end
