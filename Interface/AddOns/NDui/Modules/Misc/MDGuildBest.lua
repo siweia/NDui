@@ -135,9 +135,11 @@ function M:GuildBest_Update()
 		frame:SetPoint("BOTTOMLEFT", schedule.AffixFrame, "TOPLEFT", 0, 10)
 
 		local keystoneText = schedule.KeystoneText
-		keystoneText:SetFontObject(Game13Font)
-		keystoneText:ClearAllPoints()
-		keystoneText:SetPoint("TOP", self.WeeklyInfo.Child.DungeonScoreInfo.Score, "BOTTOM", 0, -3)
+		if keystoneText then
+			keystoneText:SetFontObject(Game13Font)
+			keystoneText:ClearAllPoints()
+			keystoneText:SetPoint("TOP", self.WeeklyInfo.Child.DungeonScoreInfo.Score, "BOTTOM", 0, -3)
+		end
 
 		local affix = self.WeeklyInfo.Child.Affixes[1]
 		if affix then
