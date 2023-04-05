@@ -29,6 +29,36 @@ local function UpdateSpellStatus(button, spellID)
 	end
 end
 
+-- 凶暴野兽层数监控
+local eventList = {
+	["SPELL_AURA_APPLIED"] = true,
+	["SPELL_AURA_REFRESH"] = true,
+}
+local myGUID = UnitGUID("player")
+local currentStack, resetTime = 0, 0
+
+local function CheckDireStacks(_, ...)
+	local timestamp, eventType, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, spellID = ...
+	if sourceGUID ~= myGUID then return end
+
+	if eventType == "SPELL_AURA_APPLIED" or eventType == "SPELL_AURA_REFRESH" then
+		if spellID == 281036 and resetTime ~= GetTime() then
+			currentStack = currentStack + 1
+			if currentStack == 6 then
+				currentStack = 1
+			end
+		elseif spellID == 378747 then
+			resetTime = GetTime()
+			currentStack = 5
+		end
+	elseif eventType == "SPELL_AURA_REMOVED" and spellID == 378747 then
+		if currentStack == 5 then
+			currentStack = 0
+		end
+	end
+end
+B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", CheckDireStacks)
+
 function A:ChantLumos(self)
 	local spec = GetSpecialization()
 	if spec == 1 then
@@ -36,7 +66,16 @@ function A:ChantLumos(self)
 		UpdateCooldown(self.lumos[2], 217200, true)
 		UpdateBuff(self.lumos[3], 106785, 272790, false, true, "END")
 		UpdateBuff(self.lumos[4], 19574, 19574, true, false, true)
-		UpdateBuff(self.lumos[5], 268877, 268877)
+
+		do
+			local button = self.lumos[5]
+			if IsPlayerSpell(378745) then
+				UpdateBuff(button, 281036, 281036)
+				button.Count:SetText(currentStack)
+			else
+				UpdateBuff(button, 268877, 268877)
+			end
+		end
 
 	elseif spec == 2 then
 		UpdateCooldown(self.lumos[1], 19434, true)
