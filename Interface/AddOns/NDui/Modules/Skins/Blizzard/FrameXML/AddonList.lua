@@ -24,16 +24,18 @@ tinsert(C.defaultThemes, function()
 		self:SetDesaturated(true, true)
 	end
 
-	hooksecurefunc(AddonList.ScrollBox, "Update", function(self)
-		for i = 1, self.ScrollTarget:GetNumChildren() do
-			local child = select(i, self.ScrollTarget:GetChildren())
-			if not child.styled then
-				B.ReskinCheck(child.Enabled, true)
-				B.Reskin(child.LoadAddonButton)
-				hooksecurefunc(child.Enabled:GetCheckedTexture(), "SetDesaturated", forceSaturation)
+	hooksecurefunc("AddonList_InitButton", function(entry)
+		if not entry.styled then
+			B.ReskinCheck(entry.Enabled, true)
+			B.Reskin(entry.LoadAddonButton)
+			hooksecurefunc(entry.Enabled:GetCheckedTexture(), "SetDesaturated", forceSaturation)
 
-				child.styled = true
+			if DB.isPatch10_1 then
+				B.ReplaceIconString(entry.Title)
+				hooksecurefunc(entry.Title, "SetText", B.ReplaceIconString)
 			end
+
+			entry.styled = true
 		end
 	end)
 end)

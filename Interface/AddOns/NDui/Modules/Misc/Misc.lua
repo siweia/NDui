@@ -70,6 +70,7 @@ function M:OnLogin()
 	M:EnhancedPicker()
 	M:UpdateMaxZoomLevel()
 	M:MoveBlizzFrames()
+	M:HandleNDuiTitle()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
