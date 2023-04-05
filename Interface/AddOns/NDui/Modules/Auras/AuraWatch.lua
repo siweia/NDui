@@ -421,6 +421,29 @@ function A:AuraWatch_UpdateCD()
 end
 
 -- UpdateAura
+local eventList = {
+	["SPELL_AURA_APPLIED"] = true,
+	["SPELL_AURA_REFRESH"] = true,
+}
+-- 猎人凶暴兽群层数
+local myGUID = UnitGUID("player")
+local currentStack, resetTime = 0, 0
+B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", function(_, ...)
+	local timestamp, eventType, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, spellID = ...
+	if eventList[eventType] and sourceGUID == myGUID then
+		if spellID == 281036 and resetTime ~= GetTime() then
+			currentStack = currentStack + 1
+			if currentStack == 6 then
+				currentStack = 1
+			end
+		elseif spellID == 378747 then
+			resetTime = GetTime()
+			currentStack = 5
+		end
+	end
+end)
+
+
 local replacedTexture = {
 	[336892] = 135130, -- 无懈警戒换成瞄准射击图标
 	[378770] = 236174, -- 夺命打击换成夺命射击图标
@@ -487,6 +510,7 @@ function A:AuraWatch_UpdateAura(unit, index, filter, name, icon, count, duration
 				end
 			end
 			if value.Timeless then duration, expires = 0, 0 end
+			if spellID == 281036 and unit == "player" then count = currentStack end
 
 			A:AuraWatch_SetupAura(KEY, unit, index, filter, name, icon, count, duration, expires, spellID, value.Flash)
 			return
@@ -593,11 +617,6 @@ function A:AuraWatch_SetupInt(intID, itemID, duration, unitID, guid, sourceName)
 		frame:SetScript("OnUpdate", A.AuraWatch_IntTimer)
 	end
 end
-
-local eventList = {
-	["SPELL_AURA_APPLIED"] = true,
-	["SPELL_AURA_REFRESH"] = true,
-}
 
 local function checkPetFlags(sourceFlags, all)
 	if DB:IsMyPet(sourceFlags) or (all and (sourceFlags == DB.PartyPetFlags or sourceFlags == DB.RaidPetFlags)) then
