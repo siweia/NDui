@@ -13,8 +13,10 @@ local CombatLogGetCurrentEventInfo, GetPhysicalScreenSize = CombatLogGetCurrentE
 
 -- Events
 local events = {}
+local unitevents = {}
 
 local host = CreateFrame("Frame")
+local host_unit = CreateFrame("Frame")
 host:SetScript("OnEvent", function(_, event, ...)
 	for func in pairs(events[event]) do
 		if event == "COMBAT_LOG_EVENT_UNFILTERED" then
@@ -24,34 +26,51 @@ host:SetScript("OnEvent", function(_, event, ...)
 		end
 	end
 end)
+host_unit:SetScript("OnEvent", function(_, event, ...)
+	for func in pairs(unitevents[event]) do
+		-- CLEU do not have UnitEvent
+		func(event, ...)
+	end
+end)
 
-function B:RegisterEvent(event, func, unit1, unit2)
+function B:RegisterEvent(event, func)
 	if event == "CLEU" then
 		event = "COMBAT_LOG_EVENT_UNFILTERED"
 	end
 	if not events[event] then
 		events[event] = {}
-		if unit1 then
-			host:RegisterUnitEvent(event, unit1, unit2)
-		else
-			host:RegisterEvent(event)
-		end
+		host:RegisterEvent(event)
 	end
 
 	events[event][func] = true
 end
 
-function B:UnregisterEvent(event, func)
+function B:RegisterUnitEvent(event, func, unit1, unit2)
+	-- CLEU do not have UnitEvent
+	if not unitevents[event] then
+		unitevents[event] = {}
+		host_unit:RegisterUnitEvent(event, unit1, unit2)
+	end
+
+	unitevents[event][func] = true
+end
+
+function B:UnregisterEvent(event, func, isUnitEvent)
 	if event == "CLEU" then
 		event = "COMBAT_LOG_EVENT_UNFILTERED"
 	end
-	local funcs = events[event]
+	local funcs = isUnitEvent and unitevents[event] or events[event]
 	if funcs and funcs[func] then
 		funcs[func] = nil
 
 		if not next(funcs) then
-			events[event] = nil
-			host:UnregisterEvent(event)
+			if isUnitEvent then
+				unitevents[event] = nil
+				host_unit:UnregisterEvent(event)
+			else
+				events[event] = nil
+				host:UnregisterEvent(event)
+			end
 		end
 	end
 end
