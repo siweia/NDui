@@ -42,7 +42,7 @@ local function CheckDireStacks(_, ...)
 	if sourceGUID ~= myGUID then return end
 
 	if eventType == "SPELL_AURA_APPLIED" or eventType == "SPELL_AURA_REFRESH" then
-		if spellID == 281036 and resetTime ~= GetTime() then
+		if spellID == 281036 and GetTime() > resetTime then
 			currentStack = currentStack + 1
 			if currentStack == 6 then
 				currentStack = 1
