@@ -332,6 +332,18 @@ function M:BlockStrangerInvite()
 			StaticPopup_Hide("PARTY_INVITE")
 		end
 	end)
+
+	B:RegisterEvent("GROUP_INVITE_CONFIRMATION", function()
+		if not C.db["Misc"]["BlockRequest"] then return end
+
+		local guid = GetNextPendingInviteConfirmation()
+		if not guid then return end
+
+		if not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
+			RespondToInviteConfirmation(guid, false)
+			StaticPopup_Hide("GROUP_INVITE_CONFIRMATION")
+		end
+	end)
 end
 
 -- Archaeology counts

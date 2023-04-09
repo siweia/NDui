@@ -534,6 +534,7 @@ G.DefaultSettings = {
 		ShowMarkerBar = 4,
 		MarkerSize = 28,
 		BlockInvite = false,
+		BlockRequest = false,
 		NzothVision = true,
 		SendActionCD = true,
 		MDGuildBest = true,
@@ -1127,7 +1128,7 @@ G.TabList = {
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	L["Misc"],
+	NewTag..L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
@@ -1450,6 +1451,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[13] = {
 		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemLevel"], nil, nil, nil, L["ItemLevelTip"]},
+		{1, "Misc", "MissingStats", HeaderTag..L["Show MissingStats"], true},
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
@@ -1461,7 +1463,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "FasterSkip", L["FasterMovieSkip"].."*", true, nil, nil, L["FasterMovieSkipTip"]},
-		{1, "Misc", "MissingStats", L["Show MissingStats"]},
+		{1, "Misc", "BlockRequest", NewTag.."|cffff0000"..L["BlockRequest"].."*", nil, nil, nil, L["BlockRequestTip"]},
 		{1, "Misc", "ParagonRep", L["ParagonRep"], true},
 		{1, "Misc", "Mail", L["Mail Tool"]},
 		{1, "Misc", "TradeTabs", L["TradeTabs"], true},
