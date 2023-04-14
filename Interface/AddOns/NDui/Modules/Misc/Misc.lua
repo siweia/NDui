@@ -218,6 +218,8 @@ end
 
 -- Reanchor MawBuffsBelowMinimapFrame
 function M:MoveMawBuffsFrame()
+	if DB.isPatch10_1 then return end
+
 	local frame = CreateFrame("Frame", "NDuiMawBuffsMover", UIParent)
 	frame:SetSize(235, 28)
 	local mover = B.Mover(frame, MAW_POWER_DESCRIPTION, "MawBuffs", {"TOPRIGHT", UIParent, -90, -225})
