@@ -677,12 +677,13 @@ do
 			end
 		]])
 		header:SetAttribute('_initialAttribute-_onstate-vehicleui', [[
-			local unit = self:GetAttribute('unit')
-			if(newstate == 'vehicle' and unit and UnitPlayerOrPetInRaid(unit) and not UnitTargetsVehicleInRaidUI(unit)) then
-				self:SetAttribute('toggleForVehicle', false)
-			else
-				self:SetAttribute('toggleForVehicle', true)
-			end
+			--local unit = self:GetAttribute('unit')
+			--if(newstate == 'vehicle' and unit and UnitPlayerOrPetInRaid(unit) and not UnitTargetsVehicleInRaidUI(unit)) then
+			--	self:SetAttribute('toggleForVehicle', false)
+			--else
+			--	self:SetAttribute('toggleForVehicle', true)
+			--end
+			self:SetAttribute('toggleForVehicle', true)
 		]])
 		header:SetAttribute('oUF-headerType', isPetHeader and 'pet' or 'group')
 
