@@ -375,34 +375,43 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		B.StripTextures(EncounterJournal.LootJournalItems)
 		B.ReskinDropDown(EncounterJournal.LootJournalViewDropDown)
 
+		local function reskinBar(bar)
+			if not bar.styled then
+				bar.ItemLevel:SetTextColor(1, 1, 1)
+				bar.Background:Hide()
+				B.CreateBDFrame(bar, .25)
+
+				bar.styled = true
+			end
+
+			local itemButtons = bar.ItemButtons
+			for i = 1, #itemButtons do
+				local button = itemButtons[i]
+				if not button.bg then
+					button.bg = B.ReskinIcon(button.Icon)
+					B.ReskinIconBorder(button.Border, true, true)
+				end
+			end
+		end
+
 		local itemSetsFrame = EncounterJournal.LootJournalItems.ItemSetsFrame
 		if DB.isPatch10_1 then
 			B.ReskinTrimScroll(itemSetsFrame.ScrollBar)
+
+			hooksecurefunc(itemSetsFrame.ScrollBox, "Update", function(self)
+				self:ForEachFrame(reskinBar)
+			end)
 		else
 			B.ReskinScroll(itemSetsFrame.scrollBar)
+
+			hooksecurefunc(itemSetsFrame, "UpdateList", function(self)
+				local buttons = self.buttons
+				for i = 1, #buttons do
+					reskinBar(buttons[i])
+				end
+			end)
 		end
 		reskinFilterToggle(itemSetsFrame.ClassButton)
-
-		hooksecurefunc(itemSetsFrame, "UpdateList", function(self)
-			local buttons = self.buttons
-			for i = 1, #buttons do
-				local button = buttons[i]
-				if not button.styled then
-					button.ItemLevel:SetTextColor(1, 1, 1)
-					button.Background:Hide()
-					B.CreateBDFrame(button, .25)
-
-					button.styled = true
-				end
-			end
-		end)
-
-		hooksecurefunc(itemSetsFrame, "ConfigureItemButton", function(_, button)
-			if not button.bg then
-				button.bg = B.ReskinIcon(button.Icon)
-				B.ReskinIconBorder(button.Border, true, true)
-			end
-		end)
 	end
 
 	-- Monthly activities
