@@ -60,6 +60,17 @@ local list = {
 		{AuraID = 383941, UnitID = "player"},	-- 崩坏之力
 		{AuraID = 383781, UnitID = "player"},	-- 谜题盒
 		{AuraID = 214980, UnitID = "player", Flash = true},	-- 切割漩涡
+		{AuraID = 381954, UnitID = "player", Text = L["Crit"]},	-- 奈萨鲁斯战利品
+		{AuraID = 381955, UnitID = "player", Text = L["Haste"]},	-- 奈萨鲁斯战利品
+		{AuraID = 381956, UnitID = "player", Text = L["Mastery"]},	-- 奈萨鲁斯战利品
+		{AuraID = 381957, UnitID = "player", Text = L["Versa"]},	-- 奈萨鲁斯战利品
+		{AuraID = 382126, UnitID = "player"},	-- 威能窃取
+		{AuraID = 395175, UnitID = "player", Value = true},	-- 树木的溃烂裂木
+		{AuraID = 397399, UnitID = "player"},	-- 虚空篡改者的暗影宝石
+		{AuraID = 397400, UnitID = "player"},	-- 骨喉的大脚趾
+		{AuraID = 403380, UnitID = "player"},	-- 统御呼唤
+		{AuraID = 400986, UnitID = "player"},	-- 狱钢装甲
+		{AuraID = 408835, UnitID = "player", Flash = true},	-- 沸腾怒火
 		-- 盟约，TODO: 部分已被整合进天赋，待整理
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
