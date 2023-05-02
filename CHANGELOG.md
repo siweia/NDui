@@ -1,15 +1,8 @@
 # NDui
 
-## [7.7.0](https://github.com/siweia/NDui/tree/7.7.0) (2023-4-14)
+## [7.7.1](https://github.com/siweia/NDui/tree/7.7.1) (2023-5-2)
 
-- Updates for 10.1.0.49092.
+- Updates for 10.1.0.49407.
 - Update default skins.
-- Revamp community feast timer.
-- Show primordial stones item level in bags.
-- Add bag filter for primordial stones.
-- Update data transfer for click cast.
-- Update locales.
+- Add skin for ManuscriptsJournal.
 - Update auras.
-- Update rare notification.
-- Add dire pack stacks to hunter lumos system.
-- Option to ignore group request popout menu from strangers.
