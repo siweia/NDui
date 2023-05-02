@@ -375,13 +375,19 @@ function A:CreatePrivateAuras()
 
 	A.PrivateAuras = {}
 	local prevButton
+
+	local rel1 = reverse and "TOPLEFT" or "TOPRIGHT"
+	local rel2 = reverse and "LEFT" or "RIGHT"
+	local rel3 = reverse and "RIGHT" or "LEFT"
+	local margin = reverse and C.margin or -C.margin
+
 	for i = 1, maxButtons do
 		local button = CreateFrame("Frame", "$parentAnchor"..i, A.PrivateFrame)
 		button:SetSize(buttonSize, buttonSize)
 		if not prevButton then
-			button:SetPoint(reverse and "TOPLEFT" or "TOPRIGHT", A.PrivateFrame)
+			button:SetPoint(rel1, A.PrivateFrame)
 		else
-			button:SetPoint(reverse and "LEFT" or "RIGHT", prevButton, reverse and "RIGHT" or "LEFT", reverse and C.margin or -C.margin, 0)
+			button:SetPoint(rel2, prevButton, rel3, margin, 0)
 		end
 		prevButton = button
 
