@@ -364,7 +364,8 @@ function A:CreatePrivateAuras()
 	if not DB.isPatch10_1 then return end
 
 	local maxButtons = 4 -- only 4 in blzz code, needs review
-	local buttonSize = 30
+	local buttonSize = C.db["Auras"]["PrivateSize"]
+	local reverse = C.db["Auras"]["ReversePrivate"]
 
 	A.PrivateFrame = CreateFrame("Frame", "NDuiPrivateAuras", UIParent)
 	A.PrivateFrame:SetSize((buttonSize + C.margin)*maxButtons - C.margin, buttonSize + 2*C.margin)
@@ -378,15 +379,17 @@ function A:CreatePrivateAuras()
 		local button = CreateFrame("Frame", "$parentAnchor"..i, A.PrivateFrame)
 		button:SetSize(buttonSize, buttonSize)
 		if not prevButton then
-			button:SetPoint("TOPRIGHT", A.PrivateFrame)
+			button:SetPoint(reverse and "TOPLEFT" or "TOPRIGHT", A.PrivateFrame)
 		else
-			button:SetPoint("RIGHT", prevButton, "LEFT", -C.margin, 0)
+			button:SetPoint(reverse and "LEFT" or "RIGHT", prevButton, reverse and "RIGHT" or "LEFT", reverse and C.margin or -C.margin, 0)
 		end
 		prevButton = button
 
 		auraAnchor.auraIndex = i
 		auraAnchor.parent = button
 		auraAnchor.durationAnchor.relativeTo = button
+		auraAnchor.iconInfo.iconWidth = buttonSize
+		auraAnchor.iconInfo.iconHeight = buttonSize
 		auraAnchor.iconInfo.iconAnchor.relativeTo = button
 
 		C_UnitAuras.RemovePrivateAuraAnchor(i)
