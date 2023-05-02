@@ -107,6 +107,7 @@ function Bar:CreateStancebar()
 
 	-- Fix stance bar updating
 	Bar:StanceBarOnEvent()
+	B:RegisterEvent("UPDATE_SHAPESHIFT_FORM", Bar.StanceBarOnEvent)
 	B:RegisterEvent("UPDATE_SHAPESHIFT_FORMS", Bar.StanceBarOnEvent)
 	B:RegisterEvent("UPDATE_SHAPESHIFT_USABLE", Bar.StanceBarOnEvent)
 	B:RegisterEvent("UPDATE_SHAPESHIFT_COOLDOWN", Bar.StanceBarOnEvent)
