@@ -203,12 +203,23 @@ local function updateSoulshapeButtons(self)
 	end
 end
 
+function S:ReskinSecureTabs()
+	for i = 0, 10 do
+		local tab = _G["CollectionsJournalSecureTab"..i]
+		if not tab then break end
+		if not tab.styled then
+			B.ReskinTab(tab)
+			tab.styled = true
+		end
+	end
+end
+
 function S:SoulshapeJournal()
 	if not IsAddOnLoaded("SoulshapeJournal") then return end
 	if not SoulshapeCollectionPanel then return end
 
 	CollectionsJournalCoverTab:SetAlpha(0)
-	B.ReskinTab(CollectionsJournalSecureTab0)
+	S:ReskinSecureTabs()
 
 	local styled
 	SoulshapeCollectionPanel:HookScript("OnShow", function(frame)
@@ -224,7 +235,7 @@ function S:SoulshapeJournal()
 		B.StripTextures(SoulshapeCollectionPanelCount)
 		B.CreateBDFrame(SoulshapeCollectionPanelCount, .25)
 
-		local searchBox, _, filterButton = select(9, frame:GetChildren())
+		local searchBox, _, filterButton = select(11, frame:GetChildren())
 		B.ReskinInput(searchBox)
 		filterButton.Icon = select(12, filterButton:GetRegions())
 		if filterButton.Icon then
@@ -463,6 +474,58 @@ function S:TLDR()
 	B.ReskinTab(TLDRMissionsFrameTab3)
 end
 
+local function handleJournal()
+	local frame = ManuscriptsJournal
+	if not frame or frame.styled then return end
+	frame.styled = true
+
+	local progressBar = frame.progressBar
+	if progressBar then
+		progressBar.border:Hide()
+		progressBar:DisableDrawLayer("BACKGROUND")
+		progressBar.text:SetPoint("CENTER", 0, 1)
+		progressBar:SetStatusBarTexture(DB.bdTex)
+		B.CreateBDFrame(progressBar, 1)
+	end
+
+	B.StripTextures(frame.iconsFrame)
+	B.CreateBDFrame(frame, 1)
+	B.ReskinEditBox(frame.SearchBox)
+	B.ReskinFilterButton(frame.FilterButton)
+	B.ReskinArrow(frame.PagingFrame.PrevPageButton, "left")
+	B.ReskinArrow(frame.PagingFrame.NextPageButton, "right")
+	S:ReskinSecureTabs()
+	if CollectionsJournalCoverTab then
+		CollectionsJournalCoverTab:SetAlpha(0)
+	end
+
+	hooksecurefunc(frame, "UpdateButton", function(_, button)
+		if button.iconTexture and not button.bg then
+			local icon = button.iconTexture
+			button.slotFrameCollected:SetTexture("")
+			button.slotFrameUncollected:SetTexture("")
+			button:SetPushedTexture(0)
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			button:GetHighlightTexture():SetAllPoints(icon)
+			button.iconTextureUncollected:SetTexCoord(unpack(DB.TexCoord))
+			button.bg = B.ReskinIcon(icon)
+		end
+	end)
+end
+
+function S:ManuscriptsJournal()
+	if IsAddOnLoaded("ManuscriptsJournal") then
+		handleJournal()
+	else
+		local hooked
+		S:RegisterSkin("Blizzard_Collections", function()
+			if hooked then return end
+			HeirloomsJournal:HookScript("OnShow", handleJournal)
+			hooked = true
+		end)
+	end
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -476,4 +539,5 @@ function S:OtherSkins()
 	S:ERT()
 	S:PSFJ()
 	S:TLDR()
+	S:ManuscriptsJournal()
 end
