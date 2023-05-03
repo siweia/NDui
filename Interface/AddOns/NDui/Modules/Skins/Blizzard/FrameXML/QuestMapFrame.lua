@@ -66,6 +66,7 @@ tinsert(C.defaultThemes, function()
 	ReskinQuestHeader(campaignOverview.Header)
 
 	if DB.isPatch10_1 then
+		QuestScrollFrame.Edge:Hide()
 		B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 		B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
 	else

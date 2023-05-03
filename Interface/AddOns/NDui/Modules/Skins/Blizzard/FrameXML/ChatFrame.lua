@@ -15,6 +15,11 @@ end
 local function ReskinChatScroll(self)
 	if DB.isPatch10_1 then
 		B.ReskinTrimScroll(self.ScrollBar)
+
+		B.StripTextures(self.ScrollToBottomButton)
+		local flash = self.ScrollToBottomButton.Flash
+		B.SetupArrow(flash, "down")
+		flash:SetVertexColor(1, .8, 0)
 	else
 		local bu = _G[self:GetName().."ThumbTexture"]
 		bu:SetAlpha(0)

@@ -116,6 +116,14 @@ function module:ReskinRegions()
 	QueueStatusButtonIcon:SetAlpha(0)
 	QueueStatusFrame:ClearAllPoints()
 	QueueStatusFrame:SetPoint("TOPRIGHT", QueueStatusButton, "TOPLEFT")
+	if DB.isPatch10_1 then
+		hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x)
+			if x == -15 then
+				button:ClearAllPoints()
+				button:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
+			end
+		end)
+	end
 
 	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
 	queueIcon:SetPoint("CENTER", QueueStatusButton)

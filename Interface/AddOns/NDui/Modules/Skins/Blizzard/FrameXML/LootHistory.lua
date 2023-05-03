@@ -1,14 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-if DB.isPatch10_1 then return end
-
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	local r, g, b = DB.r, DB.g, DB.b
 
-	local LootHistoryFrame = LootHistoryFrame
+	local LootHistoryFrame = GroupLootHistoryFrame or LootHistoryFrame
+	if not LootHistoryFrame then return end
 
 	if not DB.isPatch10_1 then
 		LootHistoryFrame.Label:ClearAllPoints()

@@ -58,6 +58,8 @@ function A:BuildBuffFrame()
 	A.DebuffFrame.mover = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", A.BuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 	A.DebuffFrame:ClearAllPoints()
 	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
+
+	A:CreatePrivateAuras()
 end
 
 local day, hour, minute = 86400, 3600, 60
@@ -328,4 +330,76 @@ function A:CreateAuraIcon(button)
 	button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
 	button:SetScript("OnEnter", A.Button_OnEnter)
 	button:SetScript("OnLeave", B.HideTooltip)
+end
+
+local auraAnchor = {
+	unitToken = "player",
+	auraIndex = 1,
+	parent = UIParent,
+	showCountdownFrame = true,
+	showCountdownNumbers = true,
+
+	iconInfo = {
+		iconWidth = 30,
+		iconHeight = 30,
+		iconAnchor = {
+			point = "CENTER",
+			relativeTo = UIParent,
+			relativePoint = "CENTER",
+			offsetX = 0,
+			offsetY = 0,
+		},
+	},
+
+	durationAnchor = {
+        point = "TOP",
+        relativeTo = UIParent,
+        relativePoint = "BOTTOM",
+        offsetX = 0,
+        offsetY = 0,
+    },
+}
+
+function A:CreatePrivateAuras()
+	if not DB.isPatch10_1 then return end
+
+	local maxButtons = 4 -- only 4 in blzz code, needs review
+	local buttonSize = C.db["Auras"]["PrivateSize"]
+	local reverse = C.db["Auras"]["ReversePrivate"]
+
+	A.PrivateFrame = CreateFrame("Frame", "NDuiPrivateAuras", UIParent)
+	A.PrivateFrame:SetSize((buttonSize + C.margin)*maxButtons - C.margin, buttonSize + 2*C.margin)
+	A.PrivateFrame.mover = B.Mover(A.PrivateFrame, "PrivateAuras", "PrivateAuras", {"TOPRIGHT", A.DebuffFrame.mover, "BOTTOMRIGHT", 0, -12})
+	A.PrivateFrame:ClearAllPoints()
+	A.PrivateFrame:SetPoint("TOPRIGHT", A.PrivateFrame.mover)
+
+	A.PrivateAuras = {}
+	local prevButton
+
+	local rel1 = reverse and "TOPLEFT" or "TOPRIGHT"
+	local rel2 = reverse and "LEFT" or "RIGHT"
+	local rel3 = reverse and "RIGHT" or "LEFT"
+	local margin = reverse and C.margin or -C.margin
+
+	for i = 1, maxButtons do
+		local button = CreateFrame("Frame", "$parentAnchor"..i, A.PrivateFrame)
+		button:SetSize(buttonSize, buttonSize)
+		if not prevButton then
+			button:SetPoint(rel1, A.PrivateFrame)
+		else
+			button:SetPoint(rel2, prevButton, rel3, margin, 0)
+		end
+		prevButton = button
+
+		auraAnchor.auraIndex = i
+		auraAnchor.parent = button
+		auraAnchor.durationAnchor.relativeTo = button
+		auraAnchor.iconInfo.iconWidth = buttonSize
+		auraAnchor.iconInfo.iconHeight = buttonSize
+		auraAnchor.iconInfo.iconAnchor.relativeTo = button
+
+		C_UnitAuras.RemovePrivateAuraAnchor(i)
+		C_UnitAuras.AddPrivateAuraAnchor(auraAnchor)
+		A.PrivateAuras[i] = button
+	end
 end
