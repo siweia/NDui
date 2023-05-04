@@ -1076,13 +1076,13 @@ function UF:PostUpdatePlates(event, unit)
 		if blizzPlate then
 			self.widgetContainer = blizzPlate.WidgetContainer
 			if self.widgetContainer then
-				self.widgetContainer:SetParent(self)
+				--self.widgetContainer:SetParent(self)
 				self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
 			end
 
 			self.softTargetFrame = blizzPlate.SoftTargetFrame
 			if self.softTargetFrame then
-				self.softTargetFrame:SetParent(self)
+				--self.softTargetFrame:SetParent(self)
 				self.softTargetFrame:SetScale(1/NDuiADB["UIScale"])
 			end
 		end
