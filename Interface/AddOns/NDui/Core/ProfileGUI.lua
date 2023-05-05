@@ -405,8 +405,6 @@ function G:ExportGUIData()
 						for k, v in pairs(value) do
 							text = text..":"..k..":"..v
 						end
-					elseif key == "ExplosiveCache" then
-						text = text..";"..KEY..":"..key..":EMPTYTABLE"
 					elseif KEY == "AuraWatchList" then
 						if key == "Switcher" then
 							for k, v in pairs(value) do
