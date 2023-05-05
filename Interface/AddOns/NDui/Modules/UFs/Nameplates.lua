@@ -74,6 +74,8 @@ function UF:SetupCVars()
 	UF:UpdateClickableSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateOptions", UF.UpdateClickableSize)
 	UF:UpdatePlateClickThru()
+	-- fix blizz friendly plate visibility
+	SetCVar("nameplatePlayerMaxDistance", 60)
 end
 
 function UF:BlockAddons()
