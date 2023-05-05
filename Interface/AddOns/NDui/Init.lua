@@ -11,6 +11,8 @@ local pairs, next, tinsert = pairs, next, table.insert
 local min, max = math.min, math.max
 local CombatLogGetCurrentEventInfo, GetPhysicalScreenSize = CombatLogGetCurrentEventInfo, GetPhysicalScreenSize
 
+GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata -- deprecated
+
 -- Events
 local events = {}
 
