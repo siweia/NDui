@@ -388,7 +388,6 @@ G.DefaultSettings = {
 		InsecureColor = {r=1, g=0, b=0},
 		OffTankColor = {r=.2, g=.7, b=.5},
 		DPSRevertThreat = false,
-		ExplosivesScale = false,
 		AKSProgress = false,
 		PPFadeout = true,
 		PPFadeoutAlpha = 0,
@@ -1267,7 +1266,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "InsideView", L["Nameplate InsideView"].."*", nil, nil, UpdatePlateCVars},
 		{1, "Nameplate", "Interruptor", L["ShowInterruptor"].."*", true},
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"]},
-		{1, "Nameplate", "ExplosivesScale", L["ExplosivesScale"], true, nil, nil, L["ExplosivesScaleTip"]},
 		{1, "Nameplate", "BlockDBM", L["BlockDBM"], nil, nil, nil, L["BlockDBMTip"]},
 		{1, "Nameplate", "AKSProgress", L["AngryKeystones Progress"], true},
 		{},--blank

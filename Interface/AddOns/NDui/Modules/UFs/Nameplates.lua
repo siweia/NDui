@@ -617,37 +617,6 @@ function UF:UpdateUnitClassify(unit)
 	end
 end
 
--- Scale plates for explosives
-local hasExplosives
-local EXPLOSIVE_ID = 120651
-function UF:UpdateExplosives(event, unit)
-	if not hasExplosives or unit ~= self.unit then return end
-
-	local npcID = self.npcID
-	if event == "NAME_PLATE_UNIT_ADDED" and npcID == EXPLOSIVE_ID then
-		self:SetScale(NDuiADB["UIScale"]*1.5)
-	elseif event == "NAME_PLATE_UNIT_REMOVED" then
-		self:SetScale(NDuiADB["UIScale"])
-	end
-end
-
-local function checkAffixes(event)
-	local _, affixes = C_ChallengeMode_GetActiveKeystoneInfo()
-	if affixes[3] and affixes[3] == 13 then
-		hasExplosives = true
-	else
-		hasExplosives = false
-	end
-end
-
-function UF:CheckExplosives()
-	if not C.db["Nameplate"]["ExplosivesScale"] then return end
-
-	checkAffixes()
-	B:RegisterEvent("ZONE_CHANGED_NEW_AREA", checkAffixes)
-	B:RegisterEvent("CHALLENGE_MODE_START", checkAffixes)
-end
-
 -- Mouseover indicator
 function UF:IsMouseoverUnit()
 	if not self or not self.unit then return end
@@ -1104,7 +1073,6 @@ function UF:PostUpdatePlates(event, unit)
 
 		self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
 	end
-	UF.UpdateExplosives(self, event, unit)
 end
 
 -- Player Nameplate
