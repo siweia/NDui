@@ -1,6 +1,5 @@
 # NDui Classic
 
-## [3.9.2](https://github.com/siweia/NDui/tree/3.9.2) (2023-4-23)
+## [3.9.3](https://github.com/siweia/NDui/tree/3.9.3) (2023-5-5)
 
-- Fix data transfer for macro clicksets.
-- Fix vehicle updating in raid.
+- Rough updates for 3.4.2.
