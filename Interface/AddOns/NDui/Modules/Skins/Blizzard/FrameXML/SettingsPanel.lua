@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
+if DB.isNewPatch then return end
 
 tinsert(C.defaultThemes, function()
 	local frame = SettingsPanel
