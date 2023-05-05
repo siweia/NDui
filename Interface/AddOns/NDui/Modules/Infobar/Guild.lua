@@ -358,6 +358,6 @@ info.onMouseUp = function()
 
 	if not IsInGuild() then return end
 	infoFrame:Hide()
-	if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
-	if GuildFrame then ToggleFrame(GuildFrame) end -- isPatch10_1: GuildFrame removed
+	if not CommunitiesFrame then LoadAddOn("Blizzard_Communities") end
+	if CommunitiesFrame then ToggleFrame(CommunitiesFrame) end
 end
