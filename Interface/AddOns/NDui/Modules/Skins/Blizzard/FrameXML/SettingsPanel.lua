@@ -196,6 +196,12 @@ tinsert(C.defaultThemes, function()
 					B.Reskin(child.Button1)
 					B.Reskin(child.Button2)
 				end
+				if child.NewButton then
+					B.Reskin(child.NewButton)
+				end
+				if child.DeleteButton then
+					B.Reskin(child.DeleteButton)
+				end
 				if child.Controls then
 					for i = 1, #child.Controls do
 						local control = child.Controls[i]
