@@ -343,6 +343,7 @@ do
 		"RightInset",
 		"NineSlice",
 		"BG",
+		"Bg",
 		"border",
 		"Border",
 		"Background",
@@ -973,12 +974,13 @@ do
 		end
 	end
 
-	local function reskinScrollArrow(self, direction)
+	local function reskinScrollArrow(self, direction, minimal)
 		if not self then return end
 
 		if self.Texture then
 			self.Texture:SetAlpha(0)
-			self.Overlay:SetAlpha(0)
+			if self.Overlay then self.Overlay:SetAlpha(0) end
+			if minimal then self:SetHeight(17) end
 		else
 			B.StripTextures(self)
 		end
@@ -992,6 +994,7 @@ do
 		self:HookScript("OnLeave", B.Texture_OnLeave)
 
 		if self.Texture then
+			if minimal then return end
 			self.Texture.__owner = self
 			hooksecurefunc(self.Texture, "SetAtlas", updateTrimScrollArrow)
 			updateTrimScrollArrow(self.Texture, self.Texture:GetAtlas())
@@ -1027,18 +1030,25 @@ do
 
 	-- WowTrimScrollBar
 	function B:ReskinTrimScroll()
+		local minimal = self:GetWidth() < 10
+
 		B.StripTextures(self)
-		reskinScrollArrow(self.Back, "up")
-		reskinScrollArrow(self.Forward, "down")
+		reskinScrollArrow(self.Back, "up", minimal)
+		reskinScrollArrow(self.Forward, "down", minimal)
+		if self.Track then
+			self.Track:DisableDrawLayer("ARTWORK")
+		end
 
 		local thumb = self:GetThumb()
 		if thumb then
+			thumb:DisableDrawLayer("ARTWORK")
 			thumb:DisableDrawLayer("BACKGROUND")
 			thumb.bg = B.CreateBDFrame(thumb, .25)
 			thumb.bg:SetBackdropColor(cr, cg, cb, .25)
-			thumb.bg:SetPoint("TOPLEFT", 4, -1)
-			thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
-			self.thumb = thumb
+			if not minimal then
+				thumb.bg:SetPoint("TOPLEFT", 4, -1)
+				thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
+			end
 
 			thumb:HookScript("OnEnter", Thumb_OnEnter)
 			thumb:HookScript("OnLeave", Thumb_OnLeave)
@@ -1274,6 +1284,42 @@ do
 			bar:SetPoint("BOTTOMLEFT", bg, C.mult, C.mult)
 			bar:SetPoint("RIGHT", thumb, "CENTER")
 		end
+	end
+
+	local function reskinStepper(stepper, direction)
+		B.StripTextures(stepper)
+		stepper:SetWidth(19)
+
+		local tex = stepper:CreateTexture(nil, "ARTWORK")
+		tex:SetAllPoints()
+		B.SetupArrow(tex, direction)
+		stepper.__texture = tex
+
+		stepper:HookScript("OnEnter", B.Texture_OnEnter)
+		stepper:HookScript("OnLeave", B.Texture_OnLeave)
+	end
+
+	function B:ReskinStepperSlider(minimal)
+		B.StripTextures(self)
+		reskinStepper(self.Back, "left")
+		reskinStepper(self.Forward, "right")
+		self.Slider:DisableDrawLayer("ARTWORK")
+
+		local thumb = self.Slider.Thumb
+		thumb:SetTexture(DB.sparkTex)
+		thumb:SetBlendMode("ADD")
+		thumb:SetSize(20, 30)
+
+		local bg = B.CreateBDFrame(self.Slider, 0, true)
+		local offset = minimal and 10 or 13
+		bg:SetPoint("TOPLEFT", 10, -offset)
+		bg:SetPoint("BOTTOMRIGHT", -10, offset)
+		local bar = CreateFrame("StatusBar", nil, bg)
+		bar:SetStatusBarTexture(DB.normTex)
+		bar:SetStatusBarColor(1, .8, 0, .5)
+		bar:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+		bar:SetPoint("BOTTOMLEFT", bg, C.mult, C.mult)
+		bar:SetPoint("RIGHT", thumb, "CENTER")
 	end
 
 	-- Handle collapse
