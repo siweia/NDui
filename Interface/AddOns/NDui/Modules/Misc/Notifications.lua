@@ -360,68 +360,6 @@ function M:VersionCheck()
 end
 
 --[[
-	大米完成时，通报打球统计
-]]
-local eventList = {
-	["SWING_DAMAGE"] = 13,
-	["RANGE_DAMAGE"] = 16,
-	["SPELL_DAMAGE"] = 16,
-	["SPELL_PERIODIC_DAMAGE"] = 16,
-	["SPELL_BUILDING_DAMAGE"] = 16,
-}
-
-function M:Explosive_Update(...)
-	local _, eventType, _, _, sourceName, _, _, destGUID = ...
-	local index = eventList[eventType]
-	if index and B.GetNPCID(destGUID) == 120651 then
-		local overkill = select(index, ...)
-		if overkill and overkill > 0 then
-			local name = strsplit("-", sourceName or UNKNOWN)
-			local cache = C.db["Misc"]["ExplosiveCache"]
-			if not cache[name] then cache[name] = 0 end
-			cache[name] = cache[name] + 1
-		end
-	end
-end
-
-function M:Explosive_SendResult()
-	local text
-	for name, count in pairs(C.db["Misc"]["ExplosiveCache"]) do
-		text = (text or L["ExplosiveCount"])..name.."("..count..") "
-	end
-	if text then SendChatMessage(text, "PARTY") end
-
-	B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
-end
-
-function M.Explosive_CheckAffixes(event)
-	local _, affixes = C_ChallengeMode_GetActiveKeystoneInfo()
-	if affixes[3] and affixes[3] == 13 then
-		if event == "CHALLENGE_MODE_START" then
-			wipe(C.db["Misc"]["ExplosiveCache"])
-		end
-		B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
-		B:RegisterEvent("CHALLENGE_MODE_COMPLETED", M.Explosive_SendResult)
-	else
-		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
-		B:UnregisterEvent("CHALLENGE_MODE_COMPLETED", M.Explosive_SendResult)
-	end
-end
-
-function M:ExplosiveAlert()
-	if C.db["Misc"]["ExplosiveCount"] then
-		M:Explosive_CheckAffixes()
-		B:RegisterEvent("ZONE_CHANGED_NEW_AREA", M.Explosive_CheckAffixes)
-		B:RegisterEvent("CHALLENGE_MODE_START", M.Explosive_CheckAffixes)
-	else
-		B:UnregisterEvent("ZONE_CHANGED_NEW_AREA", M.Explosive_CheckAffixes)
-		B:UnregisterEvent("CHALLENGE_MODE_START", M.Explosive_CheckAffixes)
-		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", M.Explosive_Update)
-		B:UnregisterEvent("CHALLENGE_MODE_COMPLETED", M.Explosive_SendResult)
-	end
-end
-
---[[
 	放大餐时叫一叫
 ]]
 local myGUID = UnitGUID("player")
@@ -756,7 +694,6 @@ function M:AddAlerts()
 	M:RareAlert()
 	M:InterruptAlert()
 	M:VersionCheck()
-	M:ExplosiveAlert()
 	M:SpellItemAlert()
 	M:NVision_Init()
 	M:CheckIncompatible()
