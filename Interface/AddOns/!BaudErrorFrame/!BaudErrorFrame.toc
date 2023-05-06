@@ -5,6 +5,7 @@
 ## Notes: Improved error reporting
 ## Author: Baudzilla, wolftankk, Siweia
 ## Version: NDui Mod
+## IconTexture: Interface\AddOns\NDui\Media\Hutu\logo
 ## SavedVariables: BaudErrorFrameConfig
 
 BaudErrorFrame.xml
