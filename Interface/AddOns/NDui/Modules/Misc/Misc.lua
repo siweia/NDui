@@ -550,7 +550,7 @@ function M:FuckTrainSound()
 end
 
 function M:JerryWay()
-	if IsAddOnLoaded("TomTom") then return end
+	if hash_SlashCmdList["/WAY"] then return end -- disable this when other addons use Tomtom command
 
 	local pointString = DB.InfoColor.."|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r"
 
