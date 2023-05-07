@@ -13,11 +13,7 @@ tinsert(C.defaultThemes, function()
 	ItemTextMaterialBotRight:SetAlpha(0)
 
 	B.ReskinPortraitFrame(ItemTextFrame)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(ItemTextScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(ItemTextScrollFrameScrollBar)
-	end
+	B.ReskinTrimScroll(ItemTextScrollFrame.ScrollBar)
 	B.ReskinArrow(ItemTextPrevPageButton, "left")
 	B.ReskinArrow(ItemTextNextPageButton, "right")
 	ItemTextFramePageBg:SetAlpha(0)

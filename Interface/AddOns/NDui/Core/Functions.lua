@@ -190,64 +190,31 @@ do
 			slotData.iLvl = nil
 			slotData.enchantText = nil
 
-			local isHoA = DB.isPatch10_1 and data.id == 158075 or data.args and data.args[2] and data.args[2].intVal == 158075
 			local num = 0
 			for i = 2, #data.lines do
 				local lineData = data.lines[i]
-				if DB.isPatch10_1 then
-					if not slotData.iLvl then
-						local text = lineData.leftText
-						local found = text and strfind(text, itemLevelString)
-						if found then
-							local level = strmatch(text, "(%d+)%)?$")
-							slotData.iLvl = tonumber(level) or 0
-						end
-					elseif isHoA then
-						if lineData.essenceIcon then
-							num = num + 1
-							slotData.gems[num] = lineData.essenceIcon
-							slotData.gemsColor[num] = lineData.leftColor
-						end
-					else
-						if lineData.enchantID then
-							slotData.enchantText = strmatch(lineData.leftText, enchantString)
-						elseif lineData.gemIcon then
-							num = num + 1
-							slotData.gems[num] = lineData.gemIcon
-						elseif lineData.socketType then
-							num = num + 1
-							slotData.gems[num] = format("Interface\\ItemSocketingFrame\\UI-EmptySocket-%s", lineData.socketType)
-						end
+				if not slotData.iLvl then
+					local text = lineData.leftText
+					local found = text and strfind(text, itemLevelString)
+					if found then
+						local level = strmatch(text, "(%d+)%)?$")
+						slotData.iLvl = tonumber(level) or 0
+					end
+				elseif data.id == 158075 then -- heart of azeroth
+					if lineData.essenceIcon then
+						num = num + 1
+						slotData.gems[num] = lineData.essenceIcon
+						slotData.gemsColor[num] = lineData.leftColor
 					end
 				else
-					local argVal = lineData and lineData.args
-					if argVal then
-						if not slotData.iLvl then
-							local text = argVal[2] and argVal[2].stringVal
-							local found = text and strfind(text, itemLevelString)
-							if found then
-								local level = strmatch(text, "(%d+)%)?$")
-								slotData.iLvl = tonumber(level) or 0
-							end
-						elseif isHoA then
-							if argVal[6] and argVal[6].field == "essenceIcon" then
-								num = num + 1
-								slotData.gems[num] = argVal[6].intVal
-								slotData.gemsColor[num] = argVal[3] and argVal[3].colorVal
-							end
-						else
-							local lineInfo = argVal[4] and argVal[4].field
-							if lineInfo == "enchantID" then
-								local enchant = argVal[2] and argVal[2].stringVal
-								slotData.enchantText = strmatch(enchant, enchantString)
-							elseif lineInfo == "gemIcon" then
-								num = num + 1
-								slotData.gems[num] = argVal[4].intVal
-							elseif lineInfo == "socketType" then
-								num = num + 1
-								slotData.gems[num] = format("Interface\\ItemSocketingFrame\\UI-EmptySocket-%s", argVal[4].stringVal)
-							end
-						end
+					if lineData.enchantID then
+						slotData.enchantText = strmatch(lineData.leftText, enchantString)
+					elseif lineData.gemIcon then
+						num = num + 1
+						slotData.gems[num] = lineData.gemIcon
+					elseif lineData.socketType then
+						num = num + 1
+						slotData.gems[num] = format("Interface\\ItemSocketingFrame\\UI-EmptySocket-%s", lineData.socketType)
 					end
 				end
 			end
@@ -269,25 +236,12 @@ do
 			for i = 2, 5 do
 				local lineData = data.lines[i]
 				if not lineData then break end
-				if DB.isPatch10_1 then
-					local text = lineData.leftText
-					local found = text and strfind(text, itemLevelString)
-					if found then
-						local level = strmatch(text, "(%d+)%)?$")
-						iLvlDB[link] = tonumber(level)
-						break
-					end
-				else
-					local argVal = lineData.args
-					if argVal then
-						local text = argVal[2] and argVal[2].stringVal
-						local found = text and strfind(text, itemLevelString)
-						if found then
-							local level = strmatch(text, "(%d+)%)?$")
-							iLvlDB[link] = tonumber(level)
-							break
-						end
-					end
+				local text = lineData.leftText
+				local found = text and strfind(text, itemLevelString)
+				if found then
+					local level = strmatch(text, "(%d+)%)?$")
+					iLvlDB[link] = tonumber(level)
+					break
 				end
 			end
 			return iLvlDB[link]
@@ -333,14 +287,7 @@ do
 			local data = C_TooltipInfo.GetHyperlink(format("unit:Creature-0-0-0-0-%d", npcID))
 			local lineData = data and data.lines
 			if lineData then
-				if DB.isPatch10_1 then
-					name = lineData[1] and lineData[1].leftText
-				else
-					local argVal = lineData[1] and lineData[1].args
-					if argVal then
-						name = argVal[2] and argVal[2].stringVal
-					end
-				end
+				name = lineData[1] and lineData[1].leftText
 			end
 			if name == loadingStr then
 				if not pendingNPCs[npcID] then
@@ -365,22 +312,9 @@ do
 		if not lineData then return end
 
 		for i = #lineData, 1, -1 do
-			if DB.isPatch10_1 then
-				local line = lineData[i]
-				if line.price then return false end
-				return line.leftText and isUnknownString[line.leftText]
-			else
-				local argVal = lineData[i] and lineData[i].args
-				if argVal then
-					if argVal[4] and argVal[4].field == "price" then
-						return false
-					end
-					local stringVal = argVal[2] and argVal[2].stringVal
-					if isUnknownString[stringVal] then
-						return true
-					end
-				end
-			end
+			local line = lineData[i]
+			if line.price then return false end
+			return line.leftText and isUnknownString[line.leftText]
 		end
 	end
 end

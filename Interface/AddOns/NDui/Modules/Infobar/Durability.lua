@@ -147,17 +147,8 @@ info.onEnter = function(self)
 			GameTooltip:AddDoubleLine(slotIcon..localSlots[i][2], cur.."%", 1,1,1, getDurabilityColor(cur, 100))
 
 			local data = C_TooltipInfo.GetInventoryItem("player", slot)
-			if data then
-				if DB.isPatch10_1 then
-					if data.repairCost then
-						totalCost = totalCost + data.repairCost
-					end
-				else
-					local argVal = data.args and data.args[7]
-					if argVal and argVal.field == "repairCost" then
-						totalCost = totalCost + argVal.intVal
-					end
-				end
+			if data and data.repairCost then
+				totalCost = totalCost + data.repairCost
 			end
 		end
 	end

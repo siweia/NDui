@@ -22,7 +22,6 @@ function A:HideBlizBuff()
 		if isLogin or isReload then
 			B.HideObject(_G.BuffFrame)
 			B.HideObject(_G.DebuffFrame)
-			BuffFrame.numHideableBuffs = 0 -- isPatch10_1
 		end
 	end)
 end
@@ -361,8 +360,6 @@ local auraAnchor = {
 }
 
 function A:CreatePrivateAuras()
-	if not DB.isPatch10_1 then return end
-
 	local maxButtons = 4 -- only 4 in blzz code, needs review
 	local buttonSize = C.db["Auras"]["PrivateSize"]
 	local reverse = C.db["Auras"]["ReversePrivate"]

@@ -254,7 +254,7 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 
 		local lineData = data.lines[GetCVarBool("colorblindmode") and 3 or 2]
 		if lineData then
-			local title = DB.isPatch10_1 and lineData.leftText or lineData.args[2] and lineData.args[2].stringVal
+			local title = lineData.leftText
 			if title and not strfind(title, "^"..LEVEL) then
 				return title
 			end

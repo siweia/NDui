@@ -5,9 +5,8 @@ local bit_band, bit_bor = bit.band, bit.bor
 local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
 local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
-local GetAddOnMetadata = GetAddOnMetadata or C_AddOns.GetAddOnMetadata -- isPatch10_1
-DB.Version = GetAddOnMetadata("NDui", "Version")
-DB.Support = GetAddOnMetadata("NDui", "X-Support")
+DB.Version = C_AddOns.GetAddOnMetadata("NDui", "Version")
+DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isNewPatch = select(4, GetBuildInfo()) >= 100007 -- 10.0.7

@@ -84,14 +84,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(LFDRoleCheckPopupAcceptButton)
 	B.Reskin(LFDRoleCheckPopupDeclineButton)
 	B.ReskinTrimScroll(LFDQueueFrameSpecific.ScrollBar)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(LFDQueueFrameRandomScrollFrame.ScrollBar)
-	else
-		B.StripTextures(LFDQueueFrameRandomScrollFrameScrollBar, 0)
-		B.ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
-		LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
-		LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
-	end
+	B.ReskinTrimScroll(LFDQueueFrameRandomScrollFrame.ScrollBar)
 	B.ReskinDropDown(LFDQueueFrameTypeDropDown)
 	B.Reskin(LFDQueueFrameFindGroupButton)
 	B.Reskin(LFDQueueFramePartyBackfillBackfillButton)
@@ -261,11 +254,7 @@ tinsert(C.defaultThemes, function()
 	-- this fixes right border of second reward being cut off
 	RaidFinderQueueFrameScrollFrame:SetWidth(RaidFinderQueueFrameScrollFrame:GetWidth()+1)
 
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(RaidFinderQueueFrameScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(RaidFinderQueueFrameScrollFrameScrollBar)
-	end
+	B.ReskinTrimScroll(RaidFinderQueueFrameScrollFrame.ScrollBar)
 	B.ReskinDropDown(RaidFinderQueueFrameSelectionDropDown)
 	B.Reskin(RaidFinderFrameFindRaidButton)
 	B.Reskin(RaidFinderQueueFrameIneligibleFrameLeaveQueueButton)

@@ -75,7 +75,6 @@ end
 
 function S:KrowiAF()
 	if not IsAddOnLoaded("Krowi_AchievementFilter") then return end
-	if not DB.isPatch10_1 then return end
 
 	for i = 4, 8 do
 		local tab = _G["AchievementFrameTab"..i]

@@ -30,10 +30,8 @@ tinsert(C.defaultThemes, function()
 			B.Reskin(entry.LoadAddonButton)
 			hooksecurefunc(entry.Enabled:GetCheckedTexture(), "SetDesaturated", forceSaturation)
 
-			if DB.isPatch10_1 then
-				B.ReplaceIconString(entry.Title)
-				hooksecurefunc(entry.Title, "SetText", B.ReplaceIconString)
-			end
+			B.ReplaceIconString(entry.Title)
+			hooksecurefunc(entry.Title, "SetText", B.ReplaceIconString)
 
 			entry.styled = true
 		end

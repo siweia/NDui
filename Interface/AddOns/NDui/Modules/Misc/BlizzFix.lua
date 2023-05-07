@@ -121,8 +121,6 @@ end
 
 function M:HandleNDuiTitle()
 	-- Square NDui logo texture
-	if not DB.isPatch10_1 then return end
-
 	local function replaceIconString(self, text)
 		if not text then text = self:GetText() end
 		if not text or text == "" then return end

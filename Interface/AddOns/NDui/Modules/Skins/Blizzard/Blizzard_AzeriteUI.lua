@@ -12,11 +12,7 @@ C.themes["Blizzard_AzeriteEssenceUI"] = function()
 
 	B.ReskinPortraitFrame(AzeriteEssenceUI)
 	B.StripTextures(AzeriteEssenceUI.PowerLevelBadgeFrame)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(AzeriteEssenceUI.EssenceList.ScrollBar)
-	else
-		B.ReskinScroll(AzeriteEssenceUI.EssenceList.ScrollBar)
-	end
+	B.ReskinTrimScroll(AzeriteEssenceUI.EssenceList.ScrollBar)
 
 	local headerButton = AzeriteEssenceUI.EssenceList.HeaderButton
 	if headerButton then -- todo: removed in 10.1

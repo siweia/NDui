@@ -40,8 +40,6 @@ end
 
 local function reskinSlotButton(button)
 	if button and not button.styled then
-		button:SetNormalTexture(0)
-		button:SetPushedTexture(0)
 		button.bg = B.ReskinIcon(button.Icon)
 		B.ReskinIconBorder(button.IconBorder, true)
 		local hl = button:GetHighlightTexture()
@@ -54,10 +52,8 @@ local function reskinSlotButton(button)
 		button.styled = true
 	end
 
-	if DB.isPatch10_1 then
-		button:SetNormalTexture(0)
-		button:SetPushedTexture(0)
-	end
+	button:SetNormalTexture(0)
+	button:SetPushedTexture(0)
 end
 
 local function reskinArrowInput(box)
@@ -202,9 +198,7 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(craftingPage.CreateAllButton)
 	B.Reskin(craftingPage.ViewGuildCraftersButton)
 	reskinArrowInput(craftingPage.CreateMultipleInputBox)
-	if DB.isPatch10_1 then
-		B.ReskinMinMax(frame.MaximizeMinimize)
-	end
+	B.ReskinMinMax(frame.MaximizeMinimize)
 
 	local guildFrame = craftingPage.GuildFrame
 	B.StripTextures(guildFrame)
@@ -246,9 +240,7 @@ C.themes["Blizzard_Professions"] = function()
 	form.Background:SetAlpha(0)
 	B.CreateBDFrame(form, .25):SetInside()
 	reskinProfessionForm(form)
-	if DB.isPatch10_1 then
-		form.MinimalBackground:SetAlpha(0)
-	end
+	form.MinimalBackground:SetAlpha(0)
 
 	local rankBar = craftingPage.RankBar
 	reskinRankBar(rankBar)

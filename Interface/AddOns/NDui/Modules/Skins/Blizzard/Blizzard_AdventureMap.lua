@@ -9,11 +9,7 @@ C.themes["Blizzard_AdventureMap"] = function()
 	B.Reskin(dialog.AcceptButton)
 	B.Reskin(dialog.DeclineButton)
 	B.ReskinClose(dialog.CloseButton)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(dialog.Details.ScrollBar)
-	else
-		B.ReskinScroll(dialog.Details.ScrollBar)
-	end
+	B.ReskinTrimScroll(dialog.Details.ScrollBar)
 
 	dialog:HookScript("OnShow", function(self)
 		if self.styled then return end

@@ -185,16 +185,10 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	bg:SetPoint("TOPLEFT", -3, 3)
 	bg:SetPoint("BOTTOMRIGHT", showAllResults, 3, -3)
 
-	if DB.isPatch10_1 then
-		for i = 1, EncounterJournalSearchBox:GetNumChildren() do
-			local child = select(i, EncounterJournalSearchBox:GetChildren())
-			if child.iconFrame then
-				B.StyleSearchButton(child)
-			end
-		end
-	else
-		for i = 1, 5 do
-			B.StyleSearchButton(EncounterJournalSearchBox["sbutton"..i])
+	for i = 1, EncounterJournalSearchBox:GetNumChildren() do
+		local child = select(i, EncounterJournalSearchBox:GetChildren())
+		if child.iconFrame then
+			B.StyleSearchButton(child)
 		end
 	end
 	B.StyleSearchButton(showAllResults)
@@ -237,13 +231,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinTrimScroll(EncounterJournal.encounter.instance.LoreScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.BossesScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
-		B.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
-	else
-		B.ReskinScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
-		B.ReskinScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
-	end
+	B.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
+	B.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
 
 	local buttons = {
 		EncounterJournalEncounterFrameInfoDifficulty,
@@ -395,22 +384,11 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end
 
 		local itemSetsFrame = EncounterJournal.LootJournalItems.ItemSetsFrame
-		if DB.isPatch10_1 then
-			B.ReskinTrimScroll(itemSetsFrame.ScrollBar)
+		B.ReskinTrimScroll(itemSetsFrame.ScrollBar)
 
-			hooksecurefunc(itemSetsFrame.ScrollBox, "Update", function(self)
-				self:ForEachFrame(reskinBar)
-			end)
-		else
-			B.ReskinScroll(itemSetsFrame.scrollBar)
-
-			hooksecurefunc(itemSetsFrame, "UpdateList", function(self)
-				local buttons = self.buttons
-				for i = 1, #buttons do
-					reskinBar(buttons[i])
-				end
-			end)
-		end
+		hooksecurefunc(itemSetsFrame.ScrollBox, "Update", function(self)
+			self:ForEachFrame(reskinBar)
+		end)
 		reskinFilterToggle(itemSetsFrame.ClassButton)
 	end
 
