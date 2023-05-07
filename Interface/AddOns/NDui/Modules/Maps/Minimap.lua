@@ -64,6 +64,7 @@ function module:ReskinRegions()
 	-- Garrison
 	local garrMinimapButton = _G.ExpansionLandingPageMinimapButton
 	if garrMinimapButton then
+		local binSettled
 		local function updateMinimapButtons(self)
 			self:ClearAllPoints()
 			self:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
@@ -72,9 +73,14 @@ function module:ReskinRegions()
 			self:GetHighlightTexture():SetTexture(DB.garrTex)
 			self:SetSize(30, 30)
 
-			if self:IsShown() and RecycleBinToggleButton and not RecycleBinToggleButton.settled then
-				RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
-				RecycleBinToggleButton.settled = true
+			if self:IsShown() and not binSettled then
+				if RecycleBinToggleButton then
+					RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
+				else
+					AddonCompartmentFrame:ClearAllPoints()
+					AddonCompartmentFrame:SetPoint("BOTTOMRIGHT", Minimap, -26, 2)
+				end
+				binSettled = true
 			end
 		end
 		updateMinimapButtons(garrMinimapButton)
