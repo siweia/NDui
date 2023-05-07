@@ -240,8 +240,10 @@ tinsert(C.defaultThemes, function()
 			B.ReskinSmallRole(self.TankIcon, "TANK")
 			B.ReskinSmallRole(self.HealerIcon, "HEALER")
 			B.ReskinSmallRole(self.DamagerIcon, "DPS")
+			-- fix for PGFinder
+			self.DamagerIcon:ClearAllPoints()
+			self.DamagerIcon:SetPoint("RIGHT", -11, 0)
 
-			self.DamagerIcon:ClearAllPoints() -- fix for PGFinder
 			self.HealerIcon:SetPoint("RIGHT", self.DamagerIcon, "LEFT", -22, 0)
 			self.TankIcon:SetPoint("RIGHT", self.HealerIcon, "LEFT", -22, 0)
 
