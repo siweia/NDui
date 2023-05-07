@@ -292,7 +292,7 @@ function M:AddDungeonsFilter()
 		[5] = {mapID = 400, aID = 1184}, -- 诺库德狙击战
 		[6] = {mapID = 401, aID = 1180}, -- 碧蓝魔馆
 		[7] = {mapID = 402, aID = 1160}, -- 艾杰斯亚学院
-		-- S2
+		-- S2 todo
 		--[4] = {mapID = 403, aID = 1188}, -- 奥丹姆：提尔的遗产
 		--[5] = {mapID = 404, aID = 1172}, -- 奈萨鲁斯
 		--[6] = {mapID = 405, aID = 1164}, -- 蕨皮山谷
