@@ -210,6 +210,19 @@ function module:ReskinRegions()
 	end)
 end
 
+function module:BlizzardACF()
+	local frame = AddonCompartmentFrame
+	if C.db["Map"]["ShowRecycleBin"] then
+		B.HideObject(frame)
+	else
+		frame:ClearAllPoints()
+		frame:SetPoint("BOTTOMRIGHT", Minimap, -26, 2)
+		frame:SetFrameLevel(999)
+		B.StripTextures(frame)
+		B.SetBD(frame)
+	end
+end
+
 function module:RecycleBin()
 	if not C.db["Map"]["ShowRecycleBin"] then return end
 
@@ -676,6 +689,7 @@ function module:SetupMinimap()
 	-- Add Elements
 	self:CreatePulse()
 	self:RecycleBin()
+	self:BlizzardACF() -- blizz addons collector
 	self:ReskinRegions()
 	self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()
