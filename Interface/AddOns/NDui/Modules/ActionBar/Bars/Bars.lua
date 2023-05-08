@@ -342,4 +342,8 @@ function Bar:OnLogin()
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.ReassignBindings)
 	B:RegisterEvent("PET_BATTLE_CLOSE", Bar.ReassignBindings)
 	B:RegisterEvent("PET_BATTLE_OPENING_DONE", Bar.ClearBindings)
+
+	if AdiButtonAuras then
+		AdiButtonAuras:RegisterLAB("LibActionButton-1.0")
+	end
 end
