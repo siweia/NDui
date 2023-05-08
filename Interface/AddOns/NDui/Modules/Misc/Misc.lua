@@ -579,6 +579,8 @@ function M:JerryWay()
 					y = GetCorrectCoord(y)
 					if x and y then
 						print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
+						C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x/100, y/100))
+						C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 					end
 				end
 			end
