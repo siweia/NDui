@@ -202,7 +202,7 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
 	title = false
-	local chargeInfo = C_CurrencyInfo_GetCurrencyInfo(2167) -- Tier charges
+	--[=[local chargeInfo = C_CurrencyInfo_GetCurrencyInfo(2167) -- Tier charges
 	if chargeInfo then
 		if not title then
 			GameTooltip:AddLine(" ")
@@ -211,7 +211,7 @@ info.onEnter = function(self)
 		end
 		local iconTexture = " |T"..chargeInfo.iconFileID..":13:15:0:0:50:50:4:46:4:46|t"
 		GameTooltip:AddDoubleLine(chargeInfo.name, chargeInfo.quantity.."/"..chargeInfo.maxQuantity..iconTexture, 1,1,1, 1,1,1)
-	end
+	end]=]
 
 	for i = 1, 10 do -- seems unlimit, but use 10 for now, needs review
 		local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
