@@ -18,31 +18,31 @@ local cache, weapon, currentUNIT, currentGUID = {}, {}
 
 TT.TierSets = {
 	-- HUNTER
-	[200390] = true, [200392] = true, [200387] = true, [200389] = true, [200391] = true,
+	[202479] = true, [202477] = true, [202478] = true, [202480] = true, [202482] = true,
 	-- WARRIOR
-	[200426] = true, [200428] = true, [200423] = true, [200425] = true, [200427] = true,
+	[202441] = true, [202442] = true, [202443] = true, [202444] = true, [202446] = true,
 	-- PALADIN
-	[200417] = true, [200419] = true, [200414] = true, [200416] = true, [200418] = true,
+	[202450] = true, [202451] = true, [202452] = true, [202453] = true, [202455] = true,
 	-- ROGUE
-	[200372] = true, [200374] = true, [200369] = true, [200371] = true, [200373] = true,
+	[202495] = true, [202496] = true, [202497] = true, [202498] = true, [202500] = true,
 	-- PRIEST
-	[200327] = true, [200329] = true, [200324] = true, [200326] = true, [200328] = true,
+	[202540] = true, [202541] = true, [202542] = true, [202543] = true, [202545] = true,
 	-- DK
-	[200408] = true, [200410] = true, [200405] = true, [200407] = true, [200409] = true,
+	[202459] = true, [202460] = true, [202461] = true, [202462] = true, [202464] = true,
 	-- SHAMAN
-	[200399] = true, [200401] = true, [200396] = true, [200398] = true, [200400] = true,
+	[202468] = true, [202469] = true, [202470] = true, [202471] = true, [202473] = true,
 	-- MAGE
-	[200318] = true, [200320] = true, [200315] = true, [200317] = true, [200319] = true,
+	[202549] = true, [202550] = true, [202551] = true, [202552] = true, [202554] = true,
 	-- WARLOCK
-	[200336] = true, [200338] = true, [200333] = true, [200335] = true, [200337] = true,
+	[202531] = true, [202532] = true, [202533] = true, [202534] = true, [202536] = true,
 	-- MONK
-	[200363] = true, [200365] = true, [200360] = true, [200362] = true, [200364] = true,
+	[202504] = true, [202505] = true, [202506] = true, [202507] = true, [202509] = true,
 	-- DRUID
-	[200354] = true, [200356] = true, [200351] = true, [200353] = true, [200355] = true,
+	[202513] = true, [202514] = true, [202515] = true, [202516] = true, [202518] = true,
 	-- DH
-	[200345] = true, [200347] = true, [200342] = true, [200344] = true, [200346] = true,
+	[202522] = true, [202523] = true, [202524] = true, [202525] = true, [202527] = true,
 	-- EVOKER
-	[200381] = true, [200383] = true, [200378] = true, [200380] = true, [200382] = true,
+	[202486] = true, [202487] = true, [202488] = true, [202489] = true, [202491] = true,
 }
 
 local formatSets = {
