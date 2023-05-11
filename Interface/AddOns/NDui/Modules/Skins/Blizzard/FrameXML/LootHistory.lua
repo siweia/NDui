@@ -13,6 +13,13 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(LootHistoryFrame)
 	B.ReskinClose(LootHistoryFrame.ClosePanelButton)
 	B.ReskinTrimScroll(LootHistoryFrame.ScrollBar)
+	B.ReskinDropDown(LootHistoryFrame.EncounterDropDown)
+
+	local bar = LootHistoryFrame.Timer
+	B.StripTextures(bar)
+	B.CreateBDFrame(bar, .25)
+	bar.Fill:SetTexture(DB.normTex)
+	bar.Fill:SetVertexColor(r, g, b)
 
 	-- [[ Resize button ]]
 
@@ -45,89 +52,29 @@ tinsert(C.defaultThemes, function()
 
 	-- [[ Item frame ]]
 
-	if DB.isPatch10_1 then
-		-- todo
-	else
-		hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(self, frame)
-			local rollID, _, _, isDone, winnerIdx = C_LootHistory.GetItem(frame.itemIdx)
-			local expanded = self.expandedRolls[rollID]
-	
-			if not frame.styled then
-				frame.Divider:Hide()
-				frame.NameBorderLeft:Hide()
-				frame.NameBorderRight:Hide()
-				frame.NameBorderMid:Hide()
-				frame.WinnerRoll:SetTextColor(.9, .9, .9)
-	
-				frame.bg = B.ReskinIcon(frame.Icon)
-				B.ReskinIconBorder(frame.IconBorder)
-	
-				B.ReskinCollapse(frame.ToggleButton)
-				frame.ToggleButton:GetNormalTexture():SetAlpha(0)
-				frame.ToggleButton:GetPushedTexture():SetAlpha(0)
-				frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
-	
-				frame.WinnerName:SetFontObject(Game13Font)
-				frame.WinnerRoll:SetWidth(28)
-				frame.WinnerRoll:SetFontObject(Game13Font)
-	
-				frame.styled = true
+	local function ReskinLootButton(button)
+		if not button.styled then
+			if button.NameFrame then
+				button.NameFrame:SetAlpha(0)
 			end
-	
-			if isDone and not expanded and winnerIdx then
-				local name, class = C_LootHistory.GetPlayerInfo(frame.itemIdx, winnerIdx)
-				if name then
-					local color = DB.ClassColors[class]
-					frame.WinnerName:SetVertexColor(color.r, color.g, color.b)
-				end
+			if button.BorderFrame then
+				button.BorderFrame:SetAlpha(0)
+				B.CreateBDFrame(button.BorderFrame, .25)
 			end
-		end)
-	
-		hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
-			if not playerFrame.styled then
-				playerFrame.PlayerName:SetWordWrap(false)
-				playerFrame.PlayerName:SetFontObject(Game13Font)
-				playerFrame.RollText:SetTextColor(.9, .9, .9)
-				playerFrame.RollText:SetWidth(28)
-				playerFrame.RollText:SetFontObject(Game13Font)
-				playerFrame.WinMark:SetDesaturated(true)
-				playerFrame.WinMark:SetAtlas("checkmark-minimal")
-	
-				playerFrame.styled = true
-			end
-	
-			if playerFrame.playerIdx then
-				local name, class, _, _, isWinner = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
-	
-				if name then
-					local color = DB.ClassColors[class]
-					playerFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
-	
-					if isWinner then
-						playerFrame.WinMark:SetVertexColor(color.r, color.g, color.b)
-					end
-				end
-			end
-		end)
 
-		-- [[ Dropdown ]]
-	
-		LootHistoryDropDown.initialize = function(self)
-			local info = UIDropDownMenu_CreateInfo();
-			info.isTitle = 1;
-			info.text = MASTER_LOOTER;
-			info.fontObject = GameFontNormalLeft;
-			info.notCheckable = 1;
-			UIDropDownMenu_AddButton(info);
-	
-			info = UIDropDownMenu_CreateInfo();
-			info.notCheckable = 1;
-			local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx);
-			local classColor = DB.ClassColors[class];
-			local colorCode = classColor.colorStr
-			info.text = string.format(MASTER_LOOTER_GIVE_TO, colorCode..name.."|r");
-			info.func = LootHistoryDropDown_OnClick;
-			UIDropDownMenu_AddButton(info);
+			local item = button.Item
+			if item then
+				B.StripTextures(item, 1)
+				item.bg = B.ReskinIcon(item.icon)
+				item.bg:SetFrameLevel(item.bg:GetFrameLevel() + 1)
+				B.ReskinIconBorder(item.IconBorder, true)
+			end
+
+			button.styled = true
 		end
 	end
+
+	hooksecurefunc(LootHistoryFrame.ScrollBox, "Update", function(self)
+		self:ForEachFrame(ReskinLootButton)
+	end)
 end)
