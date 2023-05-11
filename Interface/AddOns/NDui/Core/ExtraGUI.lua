@@ -119,16 +119,10 @@ function G:SetupRaidDebuffs(parent)
 			AddNewDungeon(dungeons, dungeonID)
 		end
 	end
-	AddNewDungeon(dungeons, 313)  -- 青龙寺
-	AddNewDungeon(dungeons, 537)  -- 影月墓地
-	AddNewDungeon(dungeons, 721)  -- 英灵殿
-	AddNewDungeon(dungeons, 800)  -- 群星庭院
-	if DB.isPatch10_1 then
-		AddNewDungeon(dungeons, 68)  -- 旋云之巅
-		AddNewDungeon(dungeons, 767)  -- 耐萨里奥的巢穴
-		AddNewDungeon(dungeons, 1001)  -- 自由镇
-		AddNewDungeon(dungeons, 1022)  -- 地渊孢林
-	end
+	AddNewDungeon(dungeons, 68)  -- 旋云之巅
+	AddNewDungeon(dungeons, 767)  -- 耐萨里奥的巢穴
+	AddNewDungeon(dungeons, 1001)  -- 自由镇
+	AddNewDungeon(dungeons, 1022)  -- 地渊孢林
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1200),
