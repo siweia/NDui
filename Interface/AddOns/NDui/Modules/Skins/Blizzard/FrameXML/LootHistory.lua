@@ -6,52 +6,48 @@ tinsert(C.defaultThemes, function()
 
 	local r, g, b = DB.r, DB.g, DB.b
 
-	local LootHistoryFrame = GroupLootHistoryFrame or LootHistoryFrame
-	if not LootHistoryFrame then return end
+	local frame = GroupLootHistoryFrame
+	if not frame then return end
 
-	B.StripTextures(LootHistoryFrame)
-	B.SetBD(LootHistoryFrame)
-	B.ReskinClose(LootHistoryFrame.ClosePanelButton)
-	B.ReskinTrimScroll(LootHistoryFrame.ScrollBar)
-	B.ReskinDropDown(LootHistoryFrame.EncounterDropDown)
+	B.StripTextures(frame)
+	B.SetBD(frame)
+	B.ReskinClose(frame.ClosePanelButton)
+	B.ReskinTrimScroll(frame.ScrollBar)
+	B.ReskinDropDown(frame.EncounterDropDown)
 
-	local bar = LootHistoryFrame.Timer
-	B.StripTextures(bar)
-	B.CreateBDFrame(bar, .25)
-	bar.Fill:SetTexture(DB.normTex)
-	bar.Fill:SetVertexColor(r, g, b)
-
-	-- [[ Resize button ]]
-
-	B.StripTextures(LootHistoryFrame.ResizeButton)
-	LootHistoryFrame.ResizeButton:SetHeight(8)
-
-	do
-		local line1 = LootHistoryFrame.ResizeButton:CreateTexture()
-		line1:SetTexture(DB.bdTex)
-		line1:SetVertexColor(.7, .7, .7)
-		line1:SetSize(30, C.mult)
-		line1:SetPoint("TOP", 0, -2)
-
-		local line2 = LootHistoryFrame.ResizeButton:CreateTexture()
-		line2:SetTexture(DB.bdTex)
-		line2:SetVertexColor(.7, .7, .7)
-		line2:SetSize(30, C.mult)
-		line2:SetPoint("TOP", 0, -5)
-
-		LootHistoryFrame.ResizeButton:HookScript("OnEnter", function()
-			line1:SetVertexColor(r, g, b)
-			line2:SetVertexColor(r, g, b)
-		end)
-
-		LootHistoryFrame.ResizeButton:HookScript("OnLeave", function()
-			line1:SetVertexColor(.7, .7, .7)
-			line2:SetVertexColor(.7, .7, .7)
-		end)
+	local bar = frame.Timer
+	if bar then
+		B.StripTextures(bar)
+		B.CreateBDFrame(bar, .25)
+		bar.Fill:SetTexture(DB.normTex)
+		bar.Fill:SetVertexColor(r, g, b)
 	end
 
-	-- [[ Item frame ]]
+	-- Resize button
+	B.StripTextures(frame.ResizeButton)
+	frame.ResizeButton:SetHeight(8)
 
+	local line1 = frame.ResizeButton:CreateTexture()
+	line1:SetTexture(DB.bdTex)
+	line1:SetVertexColor(.7, .7, .7)
+	line1:SetSize(30, C.mult)
+	line1:SetPoint("TOP", 0, -2)
+	local line2 = frame.ResizeButton:CreateTexture()
+	line2:SetTexture(DB.bdTex)
+	line2:SetVertexColor(.7, .7, .7)
+	line2:SetSize(30, C.mult)
+	line2:SetPoint("TOP", 0, -5)
+
+	frame.ResizeButton:HookScript("OnEnter", function()
+		line1:SetVertexColor(r, g, b)
+		line2:SetVertexColor(r, g, b)
+	end)
+	frame.ResizeButton:HookScript("OnLeave", function()
+		line1:SetVertexColor(.7, .7, .7)
+		line2:SetVertexColor(.7, .7, .7)
+	end)
+
+	-- Item frame
 	local function ReskinLootButton(button)
 		if not button.styled then
 			if button.NameFrame then
@@ -61,7 +57,6 @@ tinsert(C.defaultThemes, function()
 				button.BorderFrame:SetAlpha(0)
 				B.CreateBDFrame(button.BorderFrame, .25)
 			end
-
 			local item = button.Item
 			if item then
 				B.StripTextures(item, 1)
@@ -74,7 +69,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	hooksecurefunc(LootHistoryFrame.ScrollBox, "Update", function(self)
+	hooksecurefunc(frame.ScrollBox, "Update", function(self)
 		self:ForEachFrame(ReskinLootButton)
 	end)
 end)
