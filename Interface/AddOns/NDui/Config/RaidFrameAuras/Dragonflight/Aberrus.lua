@@ -1,7 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("AurasTable")
-if DB.isPatch10_1 then return end
 
 local TIER = 10
 local INSTANCE = 1208 -- 亚贝鲁斯，焰影熔炉

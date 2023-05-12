@@ -6,7 +6,6 @@ local unpack, strfind, gsub = unpack, strfind, gsub
 local tonumber, pairs, ipairs, next, type, tinsert = tonumber, pairs, ipairs, next, type, tinsert
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
-local GetAddOnMetadata = GetAddOnMetadata or C_AddOns.GetAddOnMetadata -- isPatch10_1
 
 -- Default Settings
 G.DefaultSettings = {
@@ -1890,7 +1889,7 @@ local function OpenGUI()
 	credit.Icon:SetTexture(DB.creditTex)
 	credit:SetHighlightTexture(DB.creditTex)
 	credit.title = "Credits"
-	B.AddTooltip(credit, "ANCHOR_BOTTOMLEFT", "|n"..GetAddOnMetadata("NDui", "X-Credits"), "info")
+	B.AddTooltip(credit, "ANCHOR_BOTTOMLEFT", "|n"..C_AddOns.GetAddOnMetadata("NDui", "X-Credits"), "info")
 
 	local function showLater(event)
 		if event == "PLAYER_REGEN_DISABLED" then

@@ -69,11 +69,7 @@ end
 function module:ChatCopy_CreateMenu()
 	menu = CreateFrame("Frame", nil, UIParent)
 	menu:SetSize(25, 100)
-	if DB.isPatch10_1 then
-		menu:SetPoint("TOPLEFT", _G.ChatFrame1, "TOPRIGHT", 15, 0)
-	else
-		menu:SetPoint("TOPRIGHT", _G.ChatFrame1, 22, 0)
-	end
+	menu:SetPoint("TOPLEFT", _G.ChatFrame1, "TOPRIGHT", 15, 0)
 	menu:SetShown(C.db["Chat"]["ChatMenu"])
 
 	_G.ChatFrameMenuButton:ClearAllPoints()
@@ -130,13 +126,8 @@ function module:ChatCopy_Create()
 	end)
 
 	local copy = CreateFrame("Button", "NDuiChatCopyButton", UIParent)
-	if DB.isPatch10_1 then
-		copy:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, 15, -6)
-		copy:SetSize(20, 14)
-	else
-		copy:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, 22, 0)
-		copy:SetSize(20, 20)
-	end
+	copy:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, 15, -6)
+	copy:SetSize(20, 14)
 	copy:SetAlpha(.5)
 	copy.Icon = copy:CreateTexture(nil, "ARTWORK")
 	copy.Icon:SetAllPoints()

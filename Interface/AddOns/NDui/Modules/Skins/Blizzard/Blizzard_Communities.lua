@@ -216,11 +216,7 @@ C.themes["Blizzard_Communities"] = function()
 	-- ChatTab
 	B.Reskin(CommunitiesFrame.InviteButton)
 	B.StripTextures(CommunitiesFrame.Chat)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(CommunitiesFrame.Chat.ScrollBar)
-	else
-		B.ReskinScroll(CommunitiesFrame.Chat.MessageFrame.ScrollBar)
-	end
+	B.ReskinTrimScroll(CommunitiesFrame.Chat.ScrollBar)
 	CommunitiesFrame.ChatEditBox:DisableDrawLayer("BACKGROUND")
 	local bg1 = B.CreateBDFrame(CommunitiesFrame.Chat.InsetFrame, .25)
 	bg1:SetPoint("TOPLEFT", 1, -3)
@@ -243,11 +239,7 @@ C.themes["Blizzard_Communities"] = function()
 		dialog.ScrollFrame.Child.QuickJoinButton:SetSize(25, 25)
 		B.Reskin(dialog.ScrollFrame.Child.AllButton)
 		B.Reskin(dialog.ScrollFrame.Child.NoneButton)
-		if DB.isPatch10_1 then
-			B.ReskinTrimScroll(dialog.ScrollFrame.ScrollBar)
-		else
-			B.ReskinScroll(dialog.ScrollFrame.ScrollBar)
-		end
+		B.ReskinTrimScroll(dialog.ScrollFrame.ScrollBar)
 
 		hooksecurefunc(dialog, "Refresh", function(self)
 			local frame = self.ScrollFrame.Child
@@ -466,11 +458,7 @@ C.themes["Blizzard_Communities"] = function()
 	B.Reskin(CommunitiesFrame.GuildLogButton)
 	B.StripTextures(CommunitiesFrameGuildDetailsFrameInfo)
 	B.StripTextures(CommunitiesFrameGuildDetailsFrameNews)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(CommunitiesFrameGuildDetailsFrameInfoMOTDScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(CommunitiesFrameGuildDetailsFrameInfoMOTDScrollFrameScrollBar)
-	end
+	B.ReskinTrimScroll(CommunitiesFrameGuildDetailsFrameInfoMOTDScrollFrame.ScrollBar)
 	local bg3 = B.CreateBDFrame(CommunitiesFrameGuildDetailsFrameInfoMOTDScrollFrame, .25)
 	bg3:SetPoint("TOPLEFT", 0, 3)
 	bg3:SetPoint("BOTTOMRIGHT", -5, -4)
@@ -480,21 +468,13 @@ C.themes["Blizzard_Communities"] = function()
 	CommunitiesGuildTextEditFrameBg:Hide()
 	B.StripTextures(CommunitiesGuildTextEditFrame.Container)
 	B.CreateBDFrame(CommunitiesGuildTextEditFrame.Container, .25)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(CommunitiesGuildTextEditFrame.Container.ScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(CommunitiesGuildTextEditFrameScrollBar)
-	end
+	B.ReskinTrimScroll(CommunitiesGuildTextEditFrame.Container.ScrollFrame.ScrollBar)
 	B.ReskinClose(CommunitiesGuildTextEditFrameCloseButton)
 	B.Reskin(CommunitiesGuildTextEditFrameAcceptButton)
 	local closeButton = select(4, CommunitiesGuildTextEditFrame:GetChildren())
 	B.Reskin(closeButton)
 
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(CommunitiesFrameGuildDetailsFrameInfo.DetailsFrame.ScrollBar)
-	else
-		B.ReskinScroll(CommunitiesFrameGuildDetailsFrameInfoScrollBar)
-	end
+	B.ReskinTrimScroll(CommunitiesFrameGuildDetailsFrameInfo.DetailsFrame.ScrollBar)
 	B.CreateBDFrame(CommunitiesFrameGuildDetailsFrameInfo.DetailsFrame, .25)
 	CommunitiesFrameGuildDetailsFrameNews.ScrollBar:GetChildren():Hide()
 	B.ReskinTrimScroll(CommunitiesFrameGuildDetailsFrameNews.ScrollBar)
@@ -519,11 +499,7 @@ C.themes["Blizzard_Communities"] = function()
 	CommunitiesGuildLogFrameBg:Hide()
 	B.SetBD(CommunitiesGuildLogFrame)
 	B.ReskinClose(CommunitiesGuildLogFrameCloseButton)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(CommunitiesGuildLogFrame.Container.ScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(CommunitiesGuildLogFrameScrollBar)
-	end
+	B.ReskinTrimScroll(CommunitiesGuildLogFrame.Container.ScrollFrame.ScrollBar)
 	B.StripTextures(CommunitiesGuildLogFrame.Container)
 	B.CreateBDFrame(CommunitiesGuildLogFrame.Container, .25)
 	local closeButton = select(3, CommunitiesGuildLogFrame:GetChildren())
@@ -551,11 +527,7 @@ C.themes["Blizzard_Communities"] = function()
 		B.ReskinDropDown(dialog.LanguageDropdown)
 		B.StripTextures(dialog.RecruitmentMessageFrame)
 		B.StripTextures(dialog.RecruitmentMessageFrame.RecruitmentMessageInput)
-		if DB.isPatch10_1 then
-			B.ReskinTrimScroll(dialog.RecruitmentMessageFrame.RecruitmentMessageInput.ScrollBar)
-		else
-			B.ReskinScroll(dialog.RecruitmentMessageFrame.RecruitmentMessageInput.ScrollBar)
-		end
+		B.ReskinTrimScroll(dialog.RecruitmentMessageFrame.RecruitmentMessageInput.ScrollBar)
 		B.ReskinInput(dialog.RecruitmentMessageFrame)
 		B.ReskinInput(dialog.MinIlvlOnly.EditBox)
 		B.Reskin(dialog.Accept)

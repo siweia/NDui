@@ -65,14 +65,9 @@ tinsert(C.defaultThemes, function()
 	campaignOverview.BG:SetAlpha(0)
 	ReskinQuestHeader(campaignOverview.Header)
 
-	if DB.isPatch10_1 then
-		QuestScrollFrame.Edge:Hide()
-		B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
-		B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(QuestScrollFrame.ScrollBar)
-		B.ReskinScroll(campaignOverview.ScrollFrame.ScrollBar)
-	end
+	QuestScrollFrame.Edge:Hide()
+	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
+	B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
 
 	-- Quest details
 
@@ -89,11 +84,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(DetailsFrame.AbandonButton)
 	B.Reskin(DetailsFrame.ShareButton)
 	B.Reskin(DetailsFrame.TrackButton)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(QuestMapDetailsScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(QuestMapDetailsScrollFrame.ScrollBar)
-	end
+	B.ReskinTrimScroll(QuestMapDetailsScrollFrame.ScrollBar)
 
 	DetailsFrame.AbandonButton:ClearAllPoints()
 	DetailsFrame.AbandonButton:SetPoint("BOTTOMLEFT", DetailsFrame, -1, 0)
@@ -158,11 +149,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(QuestLogPopupDetailFrame.TrackButton)
 	B.Reskin(QuestLogPopupDetailFrame.ShareButton)
 	QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(QuestLogPopupDetailFrameScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(QuestLogPopupDetailFrameScrollFrameScrollBar)
-	end
+	B.ReskinTrimScroll(QuestLogPopupDetailFrameScrollFrame.ScrollBar)
 
 	-- Show map button
 

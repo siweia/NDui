@@ -17,11 +17,9 @@ local function reskinFriendButton(button)
 	if not button.styled then
 		local gameIcon = button.gameIcon
 		gameIcon:SetSize(22, 22)
-		gameIcon:SetTexCoord(.17, .83, .17, .83)
 		button.background:Hide()
 		button:SetHighlightTexture(DB.bdTex)
 		button:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
-		button.bg = B.CreateBDFrame(gameIcon, 0)
 
 		local travelPass = button.travelPassButton
 		travelPass:SetSize(22, 22)
@@ -43,8 +41,6 @@ local function reskinFriendButton(button)
 
 		button.styled = true
 	end
-
-	button.bg:SetShown(button.gameIcon:IsShown())
 end
 
 tinsert(C.defaultThemes, function()

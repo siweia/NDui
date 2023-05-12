@@ -52,7 +52,6 @@ function M:OnLogin()
 	M:ExtendInstance()
 	M:VehicleSeatMover()
 	M:UIWidgetFrameMover()
-	M:MoveMawBuffsFrame()
 	M:MoveDurabilityFrame()
 	M:MoveTicketStatusFrame()
 	M:UpdateScreenShot()
@@ -212,23 +211,6 @@ function M:UIWidgetFrameMover()
 		if parent ~= frame2 then
 			self:ClearAllPoints()
 			self:SetPoint("CENTER", frame2)
-		end
-	end)
-end
-
--- Reanchor MawBuffsBelowMinimapFrame
-function M:MoveMawBuffsFrame()
-	if DB.isPatch10_1 then return end
-
-	local frame = CreateFrame("Frame", "NDuiMawBuffsMover", UIParent)
-	frame:SetSize(235, 28)
-	local mover = B.Mover(frame, MAW_POWER_DESCRIPTION, "MawBuffs", {"TOPRIGHT", UIParent, -90, -225})
-	frame:SetPoint("TOPLEFT", mover, 4, 12)
-
-	hooksecurefunc(MawBuffsBelowMinimapFrame, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == MinimapCluster then
-			self:ClearAllPoints()
-			self:SetPoint("TOPRIGHT", frame)
 		end
 	end)
 end
@@ -568,7 +550,7 @@ function M:FuckTrainSound()
 end
 
 function M:JerryWay()
-	if IsAddOnLoaded("TomTom") then return end
+	if hash_SlashCmdList["/WAY"] then return end -- disable this when other addons use Tomtom command
 
 	local pointString = DB.InfoColor.."|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r"
 
@@ -597,6 +579,8 @@ function M:JerryWay()
 					y = GetCorrectCoord(y)
 					if x and y then
 						print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
+						C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x/100, y/100))
+						C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 					end
 				end
 			end

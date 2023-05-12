@@ -64,6 +64,7 @@ function module:ReskinRegions()
 	-- Garrison
 	local garrMinimapButton = _G.ExpansionLandingPageMinimapButton
 	if garrMinimapButton then
+		local binSettled
 		local function updateMinimapButtons(self)
 			self:ClearAllPoints()
 			self:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
@@ -72,9 +73,14 @@ function module:ReskinRegions()
 			self:GetHighlightTexture():SetTexture(DB.garrTex)
 			self:SetSize(30, 30)
 
-			if self:IsShown() and RecycleBinToggleButton and not RecycleBinToggleButton.settled then
-				RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
-				RecycleBinToggleButton.settled = true
+			if self:IsShown() and not binSettled then
+				if RecycleBinToggleButton then
+					RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
+				else
+					AddonCompartmentFrame:ClearAllPoints()
+					AddonCompartmentFrame:SetPoint("BOTTOMRIGHT", Minimap, -26, 2)
+				end
+				binSettled = true
 			end
 		end
 		updateMinimapButtons(garrMinimapButton)
@@ -116,14 +122,13 @@ function module:ReskinRegions()
 	QueueStatusButtonIcon:SetAlpha(0)
 	QueueStatusFrame:ClearAllPoints()
 	QueueStatusFrame:SetPoint("TOPRIGHT", QueueStatusButton, "TOPLEFT")
-	if DB.isPatch10_1 then
-		hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x)
-			if x == -15 then
-				button:ClearAllPoints()
-				button:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
-			end
-		end)
-	end
+
+	hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x)
+		if x == -15 then
+			button:ClearAllPoints()
+			button:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
+		end
+	end)
 
 	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
 	queueIcon:SetPoint("CENTER", QueueStatusButton)
@@ -208,6 +213,19 @@ function module:ReskinRegions()
 		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
 	end)
+end
+
+function module:BlizzardACF()
+	local frame = AddonCompartmentFrame
+	if C.db["Map"]["ShowRecycleBin"] then
+		B.HideObject(frame)
+	else
+		frame:ClearAllPoints()
+		frame:SetPoint("BOTTOMRIGHT", Minimap, -26, 2)
+		frame:SetFrameLevel(999)
+		B.StripTextures(frame)
+		B.SetBD(frame)
+	end
 end
 
 function module:RecycleBin()
@@ -676,6 +694,7 @@ function module:SetupMinimap()
 	-- Add Elements
 	self:CreatePulse()
 	self:RecycleBin()
+	self:BlizzardACF() -- blizz addons collector
 	self:ReskinRegions()
 	self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()

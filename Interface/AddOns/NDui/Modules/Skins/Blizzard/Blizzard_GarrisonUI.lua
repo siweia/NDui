@@ -957,11 +957,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	CombatLog.ElevatedFrame:SetAlpha(0)
 	B.StripTextures(CombatLog.CombatLogMessageFrame)
 	B.CreateBDFrame(CombatLog.CombatLogMessageFrame, .25)
-	if DB.isPatch10_1 then
-		-- todo
-	else
-		B.ReskinScroll(CombatLog.CombatLogMessageFrame.ScrollBar)
-	end
+	-- todo CombatLog.CombatLogMessageFrame.ScrollBar
 
 	B.Reskin(HealFollowerButtonTemplate)
 	local bg = B.CreateBDFrame(CovenantMissionFrame.FollowerTab, .25)

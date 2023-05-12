@@ -2,37 +2,13 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
-local function scrollOnEnter(self)
-	self.thumbBG:SetBackdropColor(r, g, b, .25)
-	self.thumbBG:SetBackdropBorderColor(r, g, b)
-end
-
-local function scrollOnLeave(self)
-	self.thumbBG:SetBackdropColor(0, 0, 0, 0)
-	self.thumbBG:SetBackdropBorderColor(0, 0, 0)
-end
-
 local function ReskinChatScroll(self)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(self.ScrollBar)
+	B.ReskinTrimScroll(self.ScrollBar)
 
-		B.StripTextures(self.ScrollToBottomButton)
-		local flash = self.ScrollToBottomButton.Flash
-		B.SetupArrow(flash, "down")
-		flash:SetVertexColor(1, .8, 0)
-	else
-		local bu = _G[self:GetName().."ThumbTexture"]
-		bu:SetAlpha(0)
-		bu:SetWidth(16)
-		local bg = B.CreateBDFrame(bu, 0, true)
-		local down = self.ScrollToBottomButton
-		B.ReskinArrow(down, "down")
-		down:SetPoint("BOTTOMRIGHT", _G[self:GetName().."ResizeButton"], "TOPRIGHT", -4, -2)
-	
-		self.ScrollBar.thumbBG = bg
-		self.ScrollBar:HookScript("OnEnter", scrollOnEnter)
-		self.ScrollBar:HookScript("OnLeave", scrollOnLeave)
-	end
+	B.StripTextures(self.ScrollToBottomButton)
+	local flash = self.ScrollToBottomButton.Flash
+	B.SetupArrow(flash, "down")
+	flash:SetVertexColor(1, .8, 0)
 end
 
 tinsert(C.defaultThemes, function()
@@ -104,11 +80,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(ChannelFrame)
 	B.Reskin(ChannelFrame.NewButton)
 	B.Reskin(ChannelFrame.SettingsButton)
-	if DB.isPatch10_1 then
-		B.ReskinTrimScroll(ChannelFrame.ChannelList.ScrollBar)
-	else
-		B.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
-	end
+	B.ReskinTrimScroll(ChannelFrame.ChannelList.ScrollBar)
 	B.ReskinTrimScroll(ChannelFrame.ChannelRoster.ScrollBar)
 
 	hooksecurefunc(ChannelFrame.ChannelList, "Update", function(self)

@@ -270,9 +270,6 @@ tinsert(C.defaultThemes, function()
 
 	-- Maw buffs container
 	ReskinMawBuffsContainer(ScenarioBlocksFrame.MawBuffsBlock.Container)
-	if not DB.isPatch10_1 then
-		ReskinMawBuffsContainer(MawBuffsBelowMinimapFrame.Container)
-	end
 
 	-- Reskin Headers
 	local headers = {

@@ -253,11 +253,7 @@ f:SetScript("OnEvent", function()
 		BaudErrorFrameListScrollBoxHighlightTexture:SetVertexColor(DB.r, DB.g, DB.b, .25)
 		B.CreateBDFrame(BaudErrorFrameDetailScrollBox, .25)
 
-		if DB.isPatch10_1 then
-			B.ReskinTrimScroll(BaudErrorFrameDetailScrollFrame.ScrollBar)
-		else
-			B.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
-		end
+		B.ReskinTrimScroll(BaudErrorFrameDetailScrollFrame.ScrollBar)
 		B.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
 		B.Reskin(BaudErrorFrameClearButton)
 		B.Reskin(BaudErrorFrameCloseButton)
