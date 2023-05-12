@@ -112,6 +112,7 @@ local list = {
 		{AuraID = 336892, UnitID = "player", Flash = true},	-- 无懈警戒之秘
 		{AuraID = 388035, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 392956, UnitID = "player"},	-- 巨熊之韧
+		{AuraID = 407405, UnitID = "player"},	-- 弦之韵律
 		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
 		{AuraID = 378770, UnitID = "player", Flash = true},	-- 夺命打击
 		{AuraID = 378747, UnitID = "player", Flash = true},	-- 凶暴兽群
