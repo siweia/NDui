@@ -187,13 +187,8 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 		for slot in self.reagentSlotPool:EnumerateActive() do
 			local button = slot.Button
 			if button and not button.styled then
-				button:SetNormalTexture(0)
-				button:SetPushedTexture(0)
 				button.bg = B.ReskinIcon(button.Icon)
 				B.ReskinIconBorder(button.IconBorder, true)
-				local hl = button:GetHighlightTexture()
-				hl:SetColorTexture(1, 1, 1, .25)
-				hl:SetInside(button.bg)
 				if button.SlotBackground then
 					button.SlotBackground:Hide()
 				end
@@ -203,6 +198,12 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 
 				button.styled = true
 			end
+
+			button:SetNormalTexture(0)
+			button:SetPushedTexture(0)
+			local hl = button:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetInside(button.bg)
 		end
 	end)
 
