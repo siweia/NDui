@@ -214,6 +214,8 @@ local list = {
 		{AuraID = 273226, UnitID = "player"},	-- 腐烂孢子，孢林
 		{AuraID = 259718, UnitID = "player"},	-- 颠覆，孢林
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
+		{AuraID = 88286, UnitID = "player", Flash = true},	-- 减速风，旋云之巅
+		{AuraID = 389179, UnitID = "player", Flash = true},	-- 能量过载，注能大厅
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 	},
