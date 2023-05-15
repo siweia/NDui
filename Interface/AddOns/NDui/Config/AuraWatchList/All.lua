@@ -250,6 +250,8 @@ local list = {
 
 		{AuraID = 403284, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 410654, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
+		{AuraID = 407617, UnitID = "target", Value = true},	-- 时空畸体，里翁苏斯
+		{AuraID = 397383, UnitID = "target", Value = true},	-- 熔火屏障，
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
