@@ -241,6 +241,7 @@ local list = {
 		{AuraID = 257458, UnitID = "target"},	-- 自由镇尾王易伤
 		{AuraID = 372600, UnitID = "target"},	-- 严酷，奥达曼
 		{AuraID = 369725, UnitID = "target"},	-- 震颤，奥达曼
+		{AuraID = 377402, UnitID = "target", Value = true},	-- 液态屏障，注能大厅
 		-- 团本
 		{AuraID = 374779, UnitID = "target", Flash = true},	-- 原始屏障，恐怖图腾
 		{AuraID = 382530, UnitID = "target", Value = true},	-- 涌动，莱萨杰斯
