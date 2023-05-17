@@ -147,6 +147,7 @@ local list = {
 		{AuraID = 309658, UnitID = "player"},	-- 死亡凶蛮战鼓
 		{AuraID = 102364, UnitID = "player"},	-- 青铜龙的祝福
 		{AuraID = 292686, UnitID = "player"},	-- 制皮鼓
+		{AuraID = 381301, UnitID = "player"},	-- 野性皮革战鼓
 		-- 团队增益或减伤
 		{AuraID = 1022, UnitID = "player"},		-- 保护祝福
 		{AuraID = 6940, UnitID = "player"},		-- 牺牲祝福
@@ -245,6 +246,7 @@ local list = {
 		{AuraID = 372600, UnitID = "target"},	-- 严酷，奥达曼
 		{AuraID = 369725, UnitID = "target"},	-- 震颤，奥达曼
 		{AuraID = 377402, UnitID = "target", Value = true},	-- 液态屏障，注能大厅
+		{AuraID = 378022, UnitID = "target", Value = true},	-- 吞噬中，蕨皮
 		-- 团本
 		{AuraID = 374779, UnitID = "target", Flash = true},	-- 原始屏障，恐怖图腾
 		{AuraID = 382530, UnitID = "target", Value = true},	-- 涌动，莱萨杰斯
