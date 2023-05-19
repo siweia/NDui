@@ -220,6 +220,7 @@ local list = {
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
 		{AuraID = 88286, UnitID = "player", Flash = true},	-- 减速风，旋云之巅
 		{AuraID = 389179, UnitID = "player", Flash = true},	-- 能量过载，注能大厅
+		{AuraID = 215898, UnitID = "player", Flash = true},	-- 晶化大地，巢穴
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player", Flash = true},	-- 星界耀斑，萨卡雷斯

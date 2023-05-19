@@ -52,6 +52,7 @@ C.CustomUnits = {
 	[196548] = true,	-- 古树树枝，学院
 	[52019] = true,		-- 坠天新星，旋云之巅
 	[137103] = true,	-- 血面兽，地渊
+	[92538] = true,		-- 喷油蛆虫，巢穴
 	-- Condemned Demon
 	[169430] = true,
 	[169428] = true,
