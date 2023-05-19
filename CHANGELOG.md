@@ -1,16 +1,13 @@
 # NDui
 
-## [7.8.1](https://github.com/siweia/NDui/tree/7.8.1) (2023-5-7)
+## [7.9.0](https://github.com/siweia/NDui/tree/7.9.0) (2023-5-19)
 
 - Update default skins.
-- Add skin for ManuscriptsJournal.
-- Update skin for KrowiAchievementFilter.
-- Fix error with addon PGFinder.
-- Update buff frame with private auras.
-- Update auras
-- Update stancebar.
-- Enable default addon collector if minimap recycle bin disabled.
-- Update oUF.
-- Remove explosives relevant features.
-- Remove compatibility code for 10.0.7.
-- Fix role counts in groups filter.
+- Update auras and nameplate filters.
+- Update stancebar refresh.
+- Track map pin directly with command /way.
+- Actionbar supports addon AdiButtonAuras.
+- Update infobar gold module.
+- Update dungeons list in LFG enhanced.
+- Update tierSets on unit tooltip.
+- Update locales.

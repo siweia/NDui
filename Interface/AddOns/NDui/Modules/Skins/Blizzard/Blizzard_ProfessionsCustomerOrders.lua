@@ -183,23 +183,28 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	current:ClearAllPoints()
 	current:SetPoint("LEFT", frame, "RIGHT", 10, 0)
 
+	local function resetButton(button)
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
+		local hl = button:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetInside(button.bg)
+	end
+
 	hooksecurefunc(frame.Form, "UpdateReagentSlots", function(self)
 		for slot in self.reagentSlotPool:EnumerateActive() do
 			local button = slot.Button
 			if button and not button.styled then
-				button:SetNormalTexture(0)
-				button:SetPushedTexture(0)
 				button.bg = B.ReskinIcon(button.Icon)
 				B.ReskinIconBorder(button.IconBorder, true)
-				local hl = button:GetHighlightTexture()
-				hl:SetColorTexture(1, 1, 1, .25)
-				hl:SetInside(button.bg)
 				if button.SlotBackground then
 					button.SlotBackground:Hide()
 				end
 				B.ReskinCheck(slot.Checkbox)
 				button.HighlightTexture:SetColorTexture(1, .8, 0, .5)
 				button.HighlightTexture:SetInside(button.bg)
+				resetButton(button)
+				button:HookScript("OnShow", resetButton)
 
 				button.styled = true
 			end
