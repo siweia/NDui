@@ -22,6 +22,7 @@ function A:HideBlizBuff()
 		if isLogin or isReload then
 			B.HideObject(_G.BuffFrame)
 			B.HideObject(_G.DebuffFrame)
+			BuffFrame.numHideableBuffs = 0 -- fix error when on editmode
 		end
 	end)
 end

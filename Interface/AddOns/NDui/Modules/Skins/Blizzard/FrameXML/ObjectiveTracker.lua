@@ -286,6 +286,9 @@ tinsert(C.defaultThemes, function()
 	for _, header in pairs(headers) do
 		reskinHeader(header)
 	end
+	if DB.isNewPatch then
+		reskinHeader(ADVENTURE_TRACKER_MODULE.Header)
+	end
 
 	-- Minimize Button
 	local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton

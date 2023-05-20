@@ -194,6 +194,7 @@ local list = {
 		{AuraID = 226512, UnitID = "player", Flash = true},	-- 血池
 		{AuraID = 240447, UnitID = "player", Flash = true},	-- 践踏
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
+		{AuraID = 408556, UnitID = "player", Flash = true},	-- 缠绕
 		-- 5人
 		{AuraID = 395035, UnitID = "player", Flash = true},	-- 粉碎灵魂，阻击战
 		{AuraID = 386881, UnitID = "player"},	-- 冰霜炸弹，碧蓝魔馆
@@ -219,6 +220,7 @@ local list = {
 		{AuraID = 274507, UnitID = "player"},	-- 湿滑肥皂，自由镇
 		{AuraID = 88286, UnitID = "player", Flash = true},	-- 减速风，旋云之巅
 		{AuraID = 389179, UnitID = "player", Flash = true},	-- 能量过载，注能大厅
+		{AuraID = 215898, UnitID = "player", Flash = true},	-- 晶化大地，巢穴
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player", Flash = true},	-- 星界耀斑，萨卡雷斯

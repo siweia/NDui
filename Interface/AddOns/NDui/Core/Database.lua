@@ -9,8 +9,7 @@ DB.Version = C_AddOns.GetAddOnMetadata("NDui", "Version")
 DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isNewPatch = select(4, GetBuildInfo()) >= 100007 -- 10.0.7
-DB.isPatch10_1 = select(4, GetBuildInfo()) >= 100100 -- 10.1.0
+DB.isNewPatch = select(4, GetBuildInfo()) >= 100105 -- 10.1.5
 
 -- Colors
 DB.MyName = UnitName("player")
