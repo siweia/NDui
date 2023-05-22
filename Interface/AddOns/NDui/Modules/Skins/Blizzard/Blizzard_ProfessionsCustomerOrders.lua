@@ -204,7 +204,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 				button.HighlightTexture:SetColorTexture(1, .8, 0, .5)
 				button.HighlightTexture:SetInside(button.bg)
 				resetButton(button)
-				button:HookScript("OnShow", resetButton)
+				hooksecurefunc(button, "Update", resetButton)
 
 				button.styled = true
 			end
