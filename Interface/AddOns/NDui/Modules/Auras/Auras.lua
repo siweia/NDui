@@ -129,6 +129,7 @@ function A:UpdateAuras(button, index)
 		else
 			button.timeLeft = timeLeft
 		end
+		button.nextUpdate = -1
 		A.UpdateTimer(button, 0)
 	else
 		button.timeLeft = nil
