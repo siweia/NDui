@@ -224,6 +224,7 @@ local list = {
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player", Flash = true},	-- 星界耀斑，萨卡雷斯
+		{AuraID = 410642, UnitID = "player", Flash = true},	-- 虚空碎裂，萨卡雷斯
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
