@@ -50,22 +50,26 @@ local function reskinProfessionsFlyout(_, parent)
 	end
 end
 
+local function resetButton(button)
+	button:SetNormalTexture(0)
+	button:SetPushedTexture(0)
+	local hl = button:GetHighlightTexture()
+	hl:SetColorTexture(1, 1, 1, .25)
+	hl:SetInside(button.bg)
+end
+
 local function reskinSlotButton(button)
 	if button and not button.styled then
 		button.bg = B.ReskinIcon(button.Icon)
 		B.ReskinIconBorder(button.IconBorder, true)
-		local hl = button:GetHighlightTexture()
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside(button.bg)
 		if button.SlotBackground then
 			button.SlotBackground:Hide()
 		end
+		resetButton(button)
+		hooksecurefunc(button, "Update", resetButton)
 
 		button.styled = true
 	end
-
-	button:SetNormalTexture(0)
-	button:SetPushedTexture(0)
 end
 
 local function reskinArrowInput(box)
