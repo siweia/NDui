@@ -195,6 +195,7 @@ local list = {
 		{AuraID = 240447, UnitID = "player", Flash = true},	-- 践踏
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		{AuraID = 408556, UnitID = "player", Flash = true},	-- 缠绕
+		{AuraID = 408805, UnitID = "player", Flash = true},	-- 失衡
 		-- 5人
 		{AuraID = 395035, UnitID = "player", Flash = true},	-- 粉碎灵魂，阻击战
 		{AuraID = 386881, UnitID = "player"},	-- 冰霜炸弹，碧蓝魔馆
@@ -223,7 +224,9 @@ local list = {
 		{AuraID = 215898, UnitID = "player", Flash = true},	-- 晶化大地，巢穴
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
-		{AuraID = 407576, UnitID = "player", Flash = true},	-- 星界耀斑，萨卡雷斯
+		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
+		{AuraID = 410642, UnitID = "player", Flash = true},	-- 虚空碎裂，萨卡雷斯
+		{AuraID = 407496, UnitID = "player", Flash = true},	-- 无限压迫，萨卡雷斯
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
