@@ -196,6 +196,7 @@ local list = {
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		{AuraID = 408556, UnitID = "player", Flash = true},	-- 缠绕
 		{AuraID = 408805, UnitID = "player", Flash = true},	-- 失衡
+		{AuraID = 409492, UnitID = "player", Flash = true},	-- 痛苦呼号
 		-- 5人
 		{AuraID = 395035, UnitID = "player", Flash = true},	-- 粉碎灵魂，阻击战
 		{AuraID = 386881, UnitID = "player"},	-- 冰霜炸弹，碧蓝魔馆
@@ -223,6 +224,7 @@ local list = {
 		{AuraID = 389179, UnitID = "player", Flash = true},	-- 能量过载，注能大厅
 		{AuraID = 215898, UnitID = "player", Flash = true},	-- 晶化大地，巢穴
 		{AuraID = 389059, UnitID = "player", Flash = true},	-- 炉渣喷发，奈萨鲁斯
+		{AuraID = 377018, UnitID = "player", Flash = true},	-- 熔火真金，奈萨鲁斯
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
