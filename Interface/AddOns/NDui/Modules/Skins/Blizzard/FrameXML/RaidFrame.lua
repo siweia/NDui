@@ -24,4 +24,8 @@ tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(RaidParentFrame)
 	RaidInfoInstanceLabel:DisableDrawLayer("BACKGROUND")
 	RaidInfoIDLabel:DisableDrawLayer("BACKGROUND")
+
+	B.ReskinSmallRole(RaidFrame.RoleCount.TankIcon, "TANK")
+	B.ReskinSmallRole(RaidFrame.RoleCount.HealerIcon, "HEALER")
+	B.ReskinSmallRole(RaidFrame.RoleCount.DamagerIcon, "DPS")
 end)
