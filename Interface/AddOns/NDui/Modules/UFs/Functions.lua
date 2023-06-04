@@ -834,6 +834,18 @@ local function reskinTimerBar(bar)
 end
 
 function UF:ReskinMirrorBars()
+	if DB.isNewPatch then
+
+	hooksecurefunc(MirrorTimerContainer, "SetupTimer", function(self, timer)
+		local bar = self:GetAvailableTimer(timer)
+		if not bar.styled then
+			reskinTimerBar(bar)
+			bar.styled = true
+		end
+	end)
+
+	else
+
 	local previous
 	for i = 1, 3 do
 		local bar = _G["MirrorTimer"..i]
@@ -843,6 +855,8 @@ function UF:ReskinMirrorBars()
 			bar:SetPoint("TOP", previous, "BOTTOM", 0, -5)
 		end
 		previous = bar
+	end
+
 	end
 end
 
