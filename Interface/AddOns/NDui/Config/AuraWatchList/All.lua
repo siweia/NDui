@@ -258,6 +258,7 @@ local list = {
 		{AuraID = 377014, UnitID = "target", Flash = true},	-- 爆冲，奈萨鲁斯
 		{AuraID = 376780, UnitID = "target", Value = true},	-- 岩浆护盾，奈萨鲁斯
 		{AuraID = 382791, UnitID = "target", Value = true},	-- 熔火屏障，奈萨鲁斯
+		{AuraID = 200672, UnitID = "target", Value = true},	-- 水晶迸裂，巢穴
 		-- 团本
 		{AuraID = 374779, UnitID = "target", Flash = true},	-- 原始屏障，恐怖图腾
 		{AuraID = 382530, UnitID = "target", Value = true},	-- 涌动，莱萨杰斯
