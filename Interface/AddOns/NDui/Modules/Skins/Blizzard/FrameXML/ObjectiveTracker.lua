@@ -255,6 +255,8 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", B.AffixesSetup)
 
 	-- Rewards on bonus tracker
+	if not DB.isNewPatch then
+
 	hooksecurefunc("BonusObjectiveTracker_AnimateReward", function(block)
 		local rewardsFrame = block.module.rewardsFrame
 		local rewards = rewardsFrame.Rewards
@@ -267,6 +269,8 @@ tinsert(C.defaultThemes, function()
 			reward.styled = true
 		end
 	end)
+
+	end
 
 	-- Maw buffs container
 	ReskinMawBuffsContainer(ScenarioBlocksFrame.MawBuffsBlock.Container)
