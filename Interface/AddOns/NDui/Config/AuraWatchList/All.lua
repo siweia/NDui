@@ -196,6 +196,7 @@ local list = {
 		{AuraID = 240443, UnitID = "player", Flash = true},	-- 爆裂
 		{AuraID = 408556, UnitID = "player", Flash = true},	-- 缠绕
 		{AuraID = 408805, UnitID = "player", Flash = true},	-- 失衡
+		{AuraID = 409492, UnitID = "player", Flash = true},	-- 痛苦呼号
 		-- 5人
 		{AuraID = 395035, UnitID = "player", Flash = true},	-- 粉碎灵魂，阻击战
 		{AuraID = 386881, UnitID = "player"},	-- 冰霜炸弹，碧蓝魔馆
@@ -222,6 +223,8 @@ local list = {
 		{AuraID = 88286, UnitID = "player", Flash = true},	-- 减速风，旋云之巅
 		{AuraID = 389179, UnitID = "player", Flash = true},	-- 能量过载，注能大厅
 		{AuraID = 215898, UnitID = "player", Flash = true},	-- 晶化大地，巢穴
+		{AuraID = 389059, UnitID = "player", Flash = true},	-- 炉渣喷发，奈萨鲁斯
+		{AuraID = 377018, UnitID = "player", Flash = true},	-- 熔火真金，奈萨鲁斯
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
@@ -237,7 +240,6 @@ local list = {
 		{AuraID = 226510, UnitID = "target"},	-- 血池回血
 		{AuraID = 343502, UnitID = "target"},	-- 鼓舞光环
 		-- 5人
-		{AuraID = 376780, UnitID = "target", Value = true},	-- 岩浆护盾，奈萨鲁斯
 		{AuraID = 372988, UnitID = "target", Value = true},	-- 寒冰壁垒，红玉
 		{AuraID = 391050, UnitID = "target", Value = true},	-- 暴风骤雨之盾，红玉
 		{AuraID = 384686, UnitID = "target", Flash = true},	-- 能量涌动，狙击战
@@ -252,6 +254,11 @@ local list = {
 		{AuraID = 369725, UnitID = "target"},	-- 震颤，奥达曼
 		{AuraID = 377402, UnitID = "target", Value = true},	-- 液态屏障，注能大厅
 		{AuraID = 378022, UnitID = "target", Value = true},	-- 吞噬中，蕨皮
+		{AuraID = 388523, UnitID = "target", Flash = true},	-- 拘禁，奈萨鲁斯
+		{AuraID = 377014, UnitID = "target", Flash = true},	-- 爆冲，奈萨鲁斯
+		{AuraID = 376780, UnitID = "target", Value = true},	-- 岩浆护盾，奈萨鲁斯
+		{AuraID = 382791, UnitID = "target", Value = true},	-- 熔火屏障，奈萨鲁斯
+		{AuraID = 200672, UnitID = "target", Value = true},	-- 水晶迸裂，巢穴
 		-- 团本
 		{AuraID = 374779, UnitID = "target", Flash = true},	-- 原始屏障，恐怖图腾
 		{AuraID = 382530, UnitID = "target", Value = true},	-- 涌动，莱萨杰斯
