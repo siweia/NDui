@@ -29,9 +29,14 @@ local function reskinMerchantItem(item)
 end
 
 local function reskinMerchantInteract(button)
+	if DB.isNewPatch then
+	button:GetRegions():Hide()
+	B.ReskinIcon(button.Icon)
+	else
+	B.CreateBDFrame(button)
+	end
 	button:SetPushedTexture(0)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	B.CreateBDFrame(button)
 end
 
 tinsert(C.defaultThemes, function()
@@ -73,15 +78,20 @@ tinsert(C.defaultThemes, function()
 	reskinMerchantItem(MerchantBuyBackItem)
 
 	reskinMerchantInteract(MerchantGuildBankRepairButton)
-	MerchantGuildBankRepairButtonIcon:SetTexCoord(.595, .8075, .05, .52)
 
 	reskinMerchantInteract(MerchantRepairAllButton)
-	MerchantRepairAllIcon:SetTexCoord(.31375, .53, .06, .52)
 
 	reskinMerchantInteract(MerchantRepairItemButton)
-	local ic = MerchantRepairItemButton:GetRegions()
-	ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
-	ic:SetTexCoord(unpack(DB.TexCoord))
+
+	if not DB.isNewPatch then
+		MerchantGuildBankRepairButtonIcon:SetTexCoord(.595, .8075, .05, .52)
+		MerchantRepairAllIcon:SetTexCoord(.31375, .53, .06, .52)
+		local ic = MerchantRepairItemButton:GetRegions()
+		ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
+		ic:SetTexCoord(unpack(DB.TexCoord))
+	else
+	reskinMerchantInteract(MerchantSellAllJunkButton)
+	end
 
 	hooksecurefunc("MerchantFrame_UpdateCurrencies", function()
 		for i = 1, MAX_MERCHANT_CURRENCIES do
@@ -101,11 +111,13 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	hooksecurefunc("MerchantFrame_UpdateRepairButtons", function()
-		if CanGuildBankRepair() then
-			MerchantRepairText:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 65, 73)
-		end
-	end)
+	if not DB.isNewPatch then
+		hooksecurefunc("MerchantFrame_UpdateRepairButtons", function()
+			if CanGuildBankRepair() then
+				MerchantRepairText:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 65, 73)
+			end
+		end)
+	end
 
 	-- StackSplitFrame
 
