@@ -72,6 +72,7 @@ local list = {
 		{AuraID = 400986, UnitID = "player"},	-- 狱钢装甲
 		{AuraID = 408835, UnitID = "player", Flash = true},	-- 沸腾怒火
 		{AuraID = 408770, UnitID = "player", Stack = 55},	-- 灵感闪光
+		{AuraID = 410232, UnitID = "player", Value = true},	-- 孢子披风
 		-- 盟约，TODO: 部分已被整合进天赋，待整理
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
@@ -315,8 +316,9 @@ local list = {
 		{AuraID = 228323, UnitID = "target", Value = true},	-- 克罗塔的护盾
 	},
 	["InternalCD"] = { -- 自定义内置冷却组
-		{IntID = 240447, Duration = 20},	-- 大米，践踏
+		{IntID = 410232, Duration = 120},	-- 孢子披风冷却
 		{IntID = 114018, Duration = 15, OnSuccess = true, UnitID = "all"},	-- 帷幕
+		--{IntID = 240447, Duration = 20},	-- 大米，践踏
 		--{IntID = 316958, Duration = 30, OnSuccess = true, UnitID = "all"},	-- 红土
 		--{IntID = 353635, Duration = 27.5, OnSuccess = true, UnitID = "all"},-- 坍缩之星自爆时间
 	},
