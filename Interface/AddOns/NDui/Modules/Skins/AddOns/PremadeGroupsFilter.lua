@@ -8,6 +8,86 @@ function S:PGFSkin()
 	if not C.db["Skins"]["PGFSkin"] then return end
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
+	local DungeonPanel = _G.PremadeGroupsFilterDungeonPanel
+	if not DungeonPanel then return end
+
+	local ArenaPanel = _G.PremadeGroupsFilterArenaPanel
+	local RBGPanel = _G.PremadeGroupsFilterRBGPanel
+	local RaidPanel = _G.PremadeGroupsFilterRaidPanel
+	local ExpressionPanel = _G.PremadeGroupsFilterExpressionPanel
+	local PGFDialog = _G.PremadeGroupsFilterDialog
+
+	local names = {"Difficulty", "MPRating", "Members", "Tanks", "Heals", "DPS", "Partyfit", "BLFit", "BRFit", "Defeated", "MatchingId", "PvPRating"}
+
+	local function handleGroup(panel)
+		for _, name in pairs(names) do
+			local frame = panel.Group[name]
+			if frame then
+				local check = frame.Act
+				if check then
+					check:SetSize(26, 26)
+					check:SetPoint("TOPLEFT", 5, -1)
+					B.ReskinCheck(check)
+				end
+				local input = frame.Min
+				if input then
+					B.ReskinInput(input)
+					B.ReskinInput(frame.Max)
+				end
+				if frame.DropDown then
+					B.ReskinDropDown(frame.DropDown)
+				end
+			end
+		end
+
+		B.ReskinInput(panel.Advanced.Expression)
+	end
+
+	local styled
+	hooksecurefunc(PGFDialog, "Show", function(self)
+		if styled then return end
+		styled = true
+
+		B.StripTextures(self)
+		B.SetBD(self):SetAllPoints()
+		B.ReskinClose(self.CloseButton)
+		B.Reskin(self.ResetButton)
+		B.Reskin(self.RefreshButton)
+
+		B.ReskinInput(ExpressionPanel.Advanced.Expression)
+		B.ReskinInput(ExpressionPanel.Sorting.Expression)
+
+		local button = self.MaxMinButtonFrame
+		if button.MinimizeButton then
+			B.ReskinArrow(button.MinimizeButton, "down")
+			button.MinimizeButton:ClearAllPoints()
+			button.MinimizeButton:SetPoint("RIGHT", self.CloseButton, "LEFT", -3, 0)
+			B.ReskinArrow(button.MaximizeButton, "up")
+			button.MaximizeButton:ClearAllPoints()
+			button.MaximizeButton:SetPoint("RIGHT", self.CloseButton, "LEFT", -3, 0)
+		end
+
+		handleGroup(RaidPanel)
+		handleGroup(DungeonPanel)
+		handleGroup(ArenaPanel)
+		handleGroup(RBGPanel)
+
+		for i = 1, 8 do
+			local dungeon = DungeonPanel.Dungeons["Dungeon"..i]
+			local check = dungeon and dungeon.Act
+			if check then
+				check:SetSize(26, 26)
+				check:SetPoint("TOPLEFT", 5, -1)
+				B.ReskinCheck(check)
+			end
+		end
+	end)
+
+	hooksecurefunc(PGFDialog, "ResetPosition", function(self)
+		self:ClearAllPoints()
+		self:SetPoint("TOPLEFT", PVEFrame, "TOPRIGHT", 2, 0)
+	end)
+--[[
 	local PGFDialog = _G.PremadeGroupsFilterDialog
 
 	local tipStyled
@@ -22,69 +102,8 @@ function S:PGFSkin()
 			end
 		end
 	end)
-
-	hooksecurefunc(PGFDialog, "SetPoint", function(self, _, parent)
-		if parent ~= LFGListFrame then
-			self:ClearAllPoints()
-			self:SetPoint("TOPLEFT", LFGListFrame, "TOPRIGHT", 5, 0)
-		end
-	end)
-
-	local pairs = pairs
-	local styled
-	hooksecurefunc(PGFDialog, "Show", function(self)
-		if styled then return end
-
-		B.StripTextures(self)
-		B.SetBD(self):SetAllPoints()
-		B.ReskinClose(self.CloseButton)
-		B.Reskin(self.ResetButton)
-		B.Reskin(self.RefreshButton)
-		B.ReskinDropDown(self.Difficulty.DropDown)
-		B.ReskinInput(self.Expression)
-		B.ReskinInput(self.Sorting.SortingExpression)
-		if self.MoveableToggle then
-			B.ReskinArrow(self.MoveableToggle, "left")
-			self.MoveableToggle:SetPoint("TOPLEFT", 5, -5)
-		end
-		local button = self.MaxMinButtonFrame
-		if button.MinimizeButton then
-			B.ReskinArrow(button.MinimizeButton, "down")
-			button.MinimizeButton:ClearAllPoints()
-			button.MinimizeButton:SetPoint("RIGHT", self.CloseButton, "LEFT", -3, 0)
-			B.ReskinArrow(button.MaximizeButton, "up")
-			button.MaximizeButton:ClearAllPoints()
-			button.MaximizeButton:SetPoint("RIGHT", self.CloseButton, "LEFT", -3, 0)
-		end
-
-		local names = {"Difficulty", "Defeated", "Members", "Tanks", "Heals", "Dps", "MPRating", "PVPRating"}
-		for _, name in pairs(names) do
-			local frame = self[name]
-			if frame then
-				local check = frame.Act
-				if check then
-					check:SetSize(26, 26)
-					check:SetPoint("TOPLEFT", 5, -3)
-					B.ReskinCheck(check)
-				end
-				local input = frame.Min
-				if input then
-					B.ReskinInput(input)
-					B.ReskinInput(frame.Max)
-				end
-			end
-		end
-
-		styled = true
-	end)
-
-	hooksecurefunc(PGFDialog, "SetSize", function(self, width, height)
-		if height == 427 then
-			self:SetSize(width, 428)
-		end
-	end)
-
-	local button = UsePFGButton or UsePGFButton
+]]
+	local button = UsePGFButton
 	if button then
 		B.ReskinCheck(button)
 		button.text:SetWidth(35)
