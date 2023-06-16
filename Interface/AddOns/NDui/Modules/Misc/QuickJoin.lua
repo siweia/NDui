@@ -283,7 +283,7 @@ function M:ReplaceFindGroupButton()
 end
 
 function M:AddDungeonsFilter()
-	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
+	if IsAddOnLoaded("PremadeGroupsFilter") then return end
 
 	local mapData = {
 		[0] = {mapID = 438, aID = 1195}, -- 旋云之巅
