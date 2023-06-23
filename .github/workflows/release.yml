@@ -3,7 +3,7 @@ name: Package and release
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - 'Classic-[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
 
