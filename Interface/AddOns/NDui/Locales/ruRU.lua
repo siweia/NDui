@@ -916,3 +916,5 @@ L["ChargesRemaining"] = "%s %s/%s следующий оставшийся зар
 L["ChargesCompleted"] = "%s %s/%s все заряды готовы."
 L["ToggleActionbarTip"] = "|nOption to toggle actionbar, no need to reload UI." -- need translation
 L["IgnoreNoteHelp"] = "You can add note for ignore list by double click." -- need translation
+L["RaidTargetX"] = "RaidTarget X Offset" -- need translation
+L["RaidTargetY"] = "RaidTarget Y Offset" -- need translation
