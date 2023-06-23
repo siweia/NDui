@@ -44,7 +44,7 @@ end
 local function updateRoleBonus(roleButton)
 	if not roleButton.bg then return end
 	if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
-		if roleButton.cover:IsShown() then
+		if roleButton.cover and roleButton.cover:IsShown() then -- isNewPatch
 			roleButton.bg:SetBackdropBorderColor(.5, .45, .03)
 		else
 			roleButton.bg:SetBackdropBorderColor(1, .9, .06)
@@ -117,7 +117,9 @@ tinsert(C.defaultThemes, function()
 	local bg = B.CreateBDFrame(iconTexture)
 
 	hooksecurefunc("LFGDungeonReadyPopup_Update", function()
-		LFGDungeonReadyDialog:SetBackdrop(nil)
+		if not DB.isNewPatch then
+			LFGDungeonReadyDialog:SetBackdrop(nil)
+		end
 		leaderFrame:SetShown(LFGDungeonReadyDialogRoleIconLeaderIcon:IsShown())
 
 		if LFGDungeonReadyDialogRoleIcon:IsShown() then
