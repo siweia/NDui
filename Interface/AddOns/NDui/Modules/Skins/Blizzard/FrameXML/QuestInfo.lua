@@ -152,9 +152,10 @@ tinsert(C.defaultThemes, function()
 
         local rewardsFrame = QuestInfoFrame.rewardsFrame
         local isQuestLog = QuestInfoFrame.questLog ~= nil
-		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
+		local questID = QuestInfoFrame.questLog and GetQuestLogSelectedID() or GetQuestID()
+		local spellRewards = C_QuestInfoSystem.GetQuestRewardSpells(questID) or {}
 
-		if numSpellRewards > 0 then
+		if #spellRewards > 0 then
 			-- Spell Headers
 			for spellHeader in rewardsFrame.spellHeaderPool:EnumerateActive() do
 				spellHeader:SetVertexColor(1, 1, 1)
