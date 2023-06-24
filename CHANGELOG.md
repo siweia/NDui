@@ -1,6 +1,6 @@
 # NDui Classic
 
-## [Classic-3.10.0](https://github.com/siweia/NDui/tree/Classic-3.10.0) (2023-6-23)
+## [Classic-3.10.1](https://github.com/siweia/NDui/tree/Classic-3.10.1) (2023-6-24)
 
 - Update skins.
 - Remove support for 3.4.1.
