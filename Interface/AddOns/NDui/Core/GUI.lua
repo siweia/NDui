@@ -416,6 +416,8 @@ G.DefaultSettings = {
 		ColorByDot = false,
 		DotColor = {r=1, g=.5, b=.2},
 		DotSpells = {},
+		RaidTargetX = 0,
+		RaidTargetY = 3,
 
 		PlateWidth = 190,
 		PlateHeight = 8,

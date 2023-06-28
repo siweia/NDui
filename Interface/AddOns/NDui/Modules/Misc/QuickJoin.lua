@@ -283,6 +283,8 @@ function M:ReplaceFindGroupButton()
 end
 
 function M:AddDungeonsFilter()
+	if IsAddOnLoaded("PremadeGroupsFilter") then return end
+
 	local mapData = {
 		[0] = {mapID = 438, aID = 1195}, -- 旋云之巅
 		[1] = {mapID = 206, aID = 462},  -- 奈萨里奥的巢穴
@@ -371,14 +373,15 @@ function M:AddDungeonsFilter()
 end
 
 local function clickSortButton(self)
-	self.__owner.Sorting.SortingExpression:SetText(self.sortStr)
-	self.__owner.RefreshButton:Click()
+	self.__owner.Sorting.Expression:SetText(self.sortStr)
+	self.__parent.RefreshButton:Click()
 end
 
-local function createSortButton(parent, texture, sortStr)
+local function createSortButton(parent, texture, sortStr, panel)
 	local bu = B.CreateButton(parent, 24, 24, true, texture)
 	bu.sortStr = sortStr
-	bu.__owner = parent
+	bu.__parent = parent
+	bu.__owner = panel
 	bu:SetScript("OnClick", clickSortButton)
 	B.AddTooltip(bu, "ANCHOR_RIGHT", CLUB_FINDER_SORT_BY)
 
@@ -389,11 +392,12 @@ function M:AddPGFSortingExpression()
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
 	local PGFDialog = _G.PremadeGroupsFilterDialog
+	local ExpressionPanel = _G.PremadeGroupsFilterExpressionPanel
 	PGFDialog.__sortBu = {}
 
-	createSortButton(PGFDialog, 525134, "mprating desc")
-	createSortButton(PGFDialog, 1455894, "pvprating desc")
-	createSortButton(PGFDialog, 237538, "age asc")
+	createSortButton(PGFDialog, 525134, "mprating desc", ExpressionPanel)
+	createSortButton(PGFDialog, 1455894, "pvprating desc", ExpressionPanel)
+	createSortButton(PGFDialog, 237538, "age asc", ExpressionPanel)
 
 	for i = 1, #PGFDialog.__sortBu do
 		local bu = PGFDialog.__sortBu[i]

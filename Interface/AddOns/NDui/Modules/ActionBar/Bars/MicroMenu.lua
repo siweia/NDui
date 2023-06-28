@@ -49,13 +49,13 @@ function Bar:MicroButton_Create(parent, data)
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
+		if DB.isNewPatch then
+		button:SetHighlightTexture(0)
+		button.SetHighlightAtlas = B.Dummy
+		end
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
-		if not hl then
-			hl = button:CreateTexture(nil, "HIGHLIGHT")
-			hl:SetBlendMode("ADD")
-		end
 		Bar:MicroButton_SetupTexture(hl, texture)
 		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 

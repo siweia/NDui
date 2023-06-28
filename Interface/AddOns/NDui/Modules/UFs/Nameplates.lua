@@ -832,6 +832,7 @@ function UF:UpdateNameplateSize()
 		self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
 		self:Tag(self.healthValue, "[VariousHP("..UF.VariousTagIndex[C.db["Nameplate"]["HealthType"]]..")]")
 		self.healthValue:UpdateTag()
+		self.RaidTargetIndicator:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", C.db["Nameplate"]["RaidTargetX"], C.db["Nameplate"]["RaidTargetY"])
 	end
 	self.nameText:UpdateTag()
 end
@@ -899,7 +900,7 @@ function UF:UpdatePlateByType()
 		hpval:Show()
 		title:Hide()
 
-		raidtarget:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", 0, 3)
+		raidtarget:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", C.db["Nameplate"]["RaidTargetX"], C.db["Nameplate"]["RaidTargetY"])
 		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end
 
 		if self.widgetContainer then

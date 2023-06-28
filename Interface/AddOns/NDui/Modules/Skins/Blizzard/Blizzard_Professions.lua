@@ -380,4 +380,15 @@ C.themes["Blizzard_Professions"] = function()
 
 	B.StripTextures(orderDetails.FulfillmentForm.NoteEditBox)
 	B.CreateBDFrame(orderDetails.FulfillmentForm.NoteEditBox, .25)
+
+	-- InspectRecipeFrame
+	local inspectFrame = InspectRecipeFrame
+	if inspectFrame then
+		B.ReskinPortraitFrame(inspectFrame)
+
+		local form = inspectFrame.SchematicForm
+		reskinProfessionForm(form)
+		form.MinimalBackground:SetAlpha(0)
+		B.CreateBDFrame(form, .25):SetInside()
+	end
 end

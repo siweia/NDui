@@ -1730,7 +1730,7 @@ function G:SetupNameplateSize(parent)
 		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize", "HealthTextSize", "HealthTextOffset", "PlateCBHeight", "CBTextSize", "PlateCBOffset", "HarmWidth", "HarmHeight"},
 		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize", "FriendHealthSize", "FriendHealthOffset", "FriendPlateCBHeight", "FriendCBTextSize", "FriendPlateCBOffset", "HelpWidth", "HelpHeight"},
 	}
-	local function createOptionGroup(parent, title, offset, value, func)
+	local function createOptionGroup(parent, title, offset, value, func, isEnemy)
 		createOptionTitle(parent, title, offset)
 		createOptionSlider(parent, L["Width"], 50, 500, 190, offset-60, optionValues[value][1], func, "Nameplate")
 		createOptionSlider(parent, L["Height"], 5, 50, 8, offset-130, optionValues[value][2], func, "Nameplate")
@@ -1742,11 +1742,15 @@ function G:SetupNameplateSize(parent)
 		createOptionSlider(parent, L["Castbar Height"], 5, 50, 8, offset-550, optionValues[value][6], func, "Nameplate")
 		createOptionSlider(parent, L["CastbarTextSize"], 10, 50, 14, offset-620, optionValues[value][7], func, "Nameplate")
 		createOptionSlider(parent, L["CastbarTextOffset"], -50, 50, -1, offset-690, optionValues[value][8], func, "Nameplate")
+		if isEnemy then
+			createOptionSlider(parent, L["RaidTargetX"], -50, 500, 0, offset-760, "RaidTargetX", func, "Nameplate")
+			createOptionSlider(parent, L["RaidTargetY"], -200, 200, 3, offset-830, "RaidTargetY", func, "Nameplate")
+		end
 	end
 
 	local UF = B:GetModule("UnitFrames")
-	createOptionGroup(scroll.child, L["HostileNameplate"], -10, "enemy", UF.RefreshAllPlates)
-	createOptionGroup(scroll.child, L["FriendlyNameplate"], -790, "friend", UF.RefreshAllPlates)
+	createOptionGroup(scroll.child, L["HostileNameplate"], -10, "enemy", UF.RefreshAllPlates, true)
+	createOptionGroup(scroll.child, L["FriendlyNameplate"], -930, "friend", UF.RefreshAllPlates)
 end
 
 function G:SetupNameOnlySize(parent)
