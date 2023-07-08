@@ -169,7 +169,7 @@ local list = {
 		{AuraID = 223658, UnitID = "player"},	-- 捍卫
 		{AuraID = 115310, UnitID = "player"},	-- 五气归元
 		{AuraID = 116849, UnitID = "player"},	-- 作茧缚命
-		{AuraID = 204018, UnitID = "player"},	-- 破咒祝福
+		{AuraID = 204018, UnitID = "player", Flash = true},	-- 破咒祝福
 		{AuraID = 102342, UnitID = "player"},	-- 铁木树皮
 		{AuraID = 145629, UnitID = "player"},	-- 反魔法领域
 		{AuraID = 156910, UnitID = "player"},	-- 信仰道标
@@ -298,7 +298,7 @@ local list = {
 		{AuraID = 114050, UnitID = "target"},	-- 升腾 元素
 		{AuraID = 114051, UnitID = "target"},	-- 升腾 增强
 		{AuraID = 114052, UnitID = "target"},	-- 升腾 恢复
-		{AuraID = 204018, UnitID = "target"},	-- 破咒祝福
+		{AuraID = 204018, UnitID = "target", Flash = true},	-- 破咒祝福
 		{AuraID = 205191, UnitID = "target"},	-- 以眼还眼 惩戒
 		{AuraID = 104773, UnitID = "target"},	-- 不灭决心
 		{AuraID = 199754, UnitID = "target"},	-- 还击
