@@ -981,7 +981,7 @@ oUF.Tags = {
 	end,
 	SetEventUpdateTimer = function(self, timer)
 		if(not timer) then return end
-		if(not type(timer) == 'number') then return end
+		if(type(timer) ~= 'number') then return end
 
 		eventTimerThreshold = math.max(0.05, timer)
 	end,

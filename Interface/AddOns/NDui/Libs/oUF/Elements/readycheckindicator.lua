@@ -42,6 +42,11 @@ local Private = oUF.Private
 
 local unitExists = Private.unitExists
 
+-- TODO: Replace with atlases in the next major
+local READY_CHECK_READY_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-Ready"
+local READY_CHECK_NOT_READY_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-NotReady"
+local READY_CHECK_WAITING_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-Waiting"
+
 local function OnFinished(self)
 	local element = self:GetParent()
 	element:Hide()
@@ -127,9 +132,9 @@ local function Enable(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		element.readyTexture = element.readyTexture or _G.READY_CHECK_READY_TEXTURE
-		element.notReadyTexture = element.notReadyTexture or _G.READY_CHECK_NOT_READY_TEXTURE
-		element.waitingTexture = element.waitingTexture or _G.READY_CHECK_WAITING_TEXTURE
+		element.readyTexture = element.readyTexture or READY_CHECK_READY_TEXTURE
+		element.notReadyTexture = element.notReadyTexture or READY_CHECK_NOT_READY_TEXTURE
+		element.waitingTexture = element.waitingTexture or READY_CHECK_WAITING_TEXTURE
 
 		local AnimationGroup = element:CreateAnimationGroup()
 		AnimationGroup:HookScript('OnFinished', OnFinished)
