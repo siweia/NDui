@@ -727,11 +727,6 @@ do
 			border.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
-	local function resetIconBorder(button, quality)
-		if not quality then
-			button.IconBorder:Hide()
-		end
-	end
 	local function iconBorderShown(border, show)
 		if not show then
 			resetIconBorderColor(border)
