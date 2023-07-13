@@ -49,10 +49,8 @@ function Bar:MicroButton_Create(parent, data)
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
-		if DB.isNewPatch then
-		button:SetHighlightTexture(0)
-		button.SetHighlightAtlas = B.Dummy
-		end
+		button:SetHighlightTexture(0) -- 10.1.5
+		button.SetHighlightAtlas = B.Dummy -- 10.1.5
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
