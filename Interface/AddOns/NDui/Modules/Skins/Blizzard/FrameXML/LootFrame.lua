@@ -92,7 +92,7 @@ tinsert(C.defaultThemes, function()
 	BONUS_ROLL_COST = BONUS_ROLL_COST:gsub(from, to)
 	BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
-	-- Loot Roll Frame
+	-- Loot Roll Frame, todo
 	if not DB.isNewPatch then
 
 	hooksecurefunc("GroupLootFrame_OpenNewFrame", function()

@@ -117,9 +117,6 @@ tinsert(C.defaultThemes, function()
 	local bg = B.CreateBDFrame(iconTexture)
 
 	hooksecurefunc("LFGDungeonReadyPopup_Update", function()
-		if not DB.isNewPatch then
-			LFGDungeonReadyDialog:SetBackdrop(nil)
-		end
 		leaderFrame:SetShown(LFGDungeonReadyDialogRoleIconLeaderIcon:IsShown())
 
 		if LFGDungeonReadyDialogRoleIcon:IsShown() then
