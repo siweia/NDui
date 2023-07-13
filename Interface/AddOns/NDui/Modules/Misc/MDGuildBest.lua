@@ -141,12 +141,6 @@ function M:GuildBest_Update()
 			keystoneText:SetPoint("TOP", self.WeeklyInfo.Child.DungeonScoreInfo.Score, "BOTTOM", 0, -3)
 		end
 
-		local affix = self.WeeklyInfo.Child.Affixes[1]
-		if affix then
-			affix:ClearAllPoints()
-			affix:SetPoint("TOPLEFT", 20, -55)
-		end
-
 		resize = true
 	end
 end
