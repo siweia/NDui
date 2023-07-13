@@ -21,7 +21,6 @@ local frames = {
 	["GuildInviteFrame"] = false,
 	["GuildRegistrarFrame"] = false,
 	["HelpFrame"] = false,
-	["InspectRecipeFrame"] = false, -- professions
 	["ItemTextFrame"] = false,
 	["LootFrame"] = false,
 	["MailFrame"] = false,
@@ -31,7 +30,6 @@ local frames = {
 	["PaperDollFrame"] = true,
 	["PetitionFrame"] = false,
 	["PetStableFrame"] = false,
-	["ProfessionsFrame"] = false, -- professions
 	["PVEFrame"] = false,
 	["QuestFrame"] = false,
 	["RaidParentFrame"] = false,
@@ -95,6 +93,7 @@ local lodFrames = {
 	Blizzard_ObliterumUI		= { ["ObliterumForgeFrame"] = false },
 	Blizzard_OrderHallUI		= { ["OrderHallTalentFrame"] = false, },
 	Blizzard_ScrappingMachineUI	= { ["ScrappingMachineFrame"] = false },
+	Blizzard_Professions		= { ["InspectRecipeFrame"] = false, ["ProfessionsFrame"] = false },
 	Blizzard_ProfessionsCustomerOrders	= { ["ProfessionsCustomerOrdersFrame"] = false },
 	Blizzard_TalentUI			= { ["PlayerTalentFrame"] = false, ["PVPTalentPrestigeLevelDialog"] = false, },
 	Blizzard_TimeManager		= { ["TimeManagerFrame"] = false },

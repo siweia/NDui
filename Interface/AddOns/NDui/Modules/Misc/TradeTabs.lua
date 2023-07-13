@@ -203,17 +203,25 @@ function M:TradeTabs_OnLoad()
 	B:UnregisterEvent("PLAYER_REGEN_ENABLED", M.TradeTabs_OnLoad)
 end
 
+local function LoadTradeTabs()
+	if init then return end
+	if InCombatLockdown() then
+		B:RegisterEvent("PLAYER_REGEN_ENABLED", M.TradeTabs_OnLoad)
+	else
+		M:TradeTabs_OnLoad()
+	end
+end
+
 function M:TradeTabs()
 	if not C.db["Misc"]["TradeTabs"] then return end
-	if not ProfessionsFrame then return end
-
-	ProfessionsFrame:HookScript("OnShow", function()
-		if init then return end
-		if InCombatLockdown() then
-			B:RegisterEvent("PLAYER_REGEN_ENABLED", M.TradeTabs_OnLoad)
-		else
-			M:TradeTabs_OnLoad()
-		end
-	end)
+	if ProfessionsFrame then
+		ProfessionsFrame:HookScript("OnShow", LoadTradeTabs)
+	else
+		B:RegisterEvent("ADDON_LOADED", function(_, addon)
+			if addon == "Blizzard_Professions" then
+				LoadTradeTabs()
+			end
+		end)
+	end
 end
 M:RegisterMisc("TradeTabs", M.TradeTabs)
