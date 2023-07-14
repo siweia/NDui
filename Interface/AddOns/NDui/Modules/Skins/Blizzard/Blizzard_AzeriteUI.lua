@@ -14,21 +14,6 @@ C.themes["Blizzard_AzeriteEssenceUI"] = function()
 	B.StripTextures(AzeriteEssenceUI.PowerLevelBadgeFrame)
 	B.ReskinTrimScroll(AzeriteEssenceUI.EssenceList.ScrollBar)
 
-	local headerButton = AzeriteEssenceUI.EssenceList.HeaderButton
-	if headerButton then -- todo: removed in 10.1
-		headerButton:DisableDrawLayer("BORDER")
-		headerButton:DisableDrawLayer("BACKGROUND")
-		local bg = B.CreateBDFrame(headerButton, 0, true)
-		bg:SetPoint("TOPLEFT", headerButton.ExpandedIcon, -4, 6)
-		bg:SetPoint("BOTTOMRIGHT", headerButton.ExpandedIcon, 4, -6)
-		headerButton:SetScript("OnEnter", function()
-			bg:SetBackdropColor(r, g, b, .25)
-		end)
-		headerButton:SetScript("OnLeave", function()
-			bg:SetBackdropColor(0, 0, 0, 0)
-		end)
-	end
-
 	for _, milestoneFrame in pairs(AzeriteEssenceUI.Milestones) do
 		if milestoneFrame.LockedState then
 			milestoneFrame.LockedState.UnlockLevelText:SetTextColor(.6, .8, 1)

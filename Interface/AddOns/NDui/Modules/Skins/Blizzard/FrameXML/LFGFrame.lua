@@ -44,11 +44,7 @@ end
 local function updateRoleBonus(roleButton)
 	if not roleButton.bg then return end
 	if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
-		if roleButton.cover and roleButton.cover:IsShown() then -- isNewPatch
-			roleButton.bg:SetBackdropBorderColor(.5, .45, .03)
-		else
-			roleButton.bg:SetBackdropBorderColor(1, .9, .06)
-		end
+		roleButton.bg:SetBackdropBorderColor(1, .9, .06)
 	else
 		roleButton.bg:SetBackdropBorderColor(0, 0, 0)
 	end

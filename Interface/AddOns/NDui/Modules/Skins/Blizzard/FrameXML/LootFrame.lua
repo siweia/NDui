@@ -92,7 +92,7 @@ tinsert(C.defaultThemes, function()
 	BONUS_ROLL_COST = BONUS_ROLL_COST:gsub(from, to)
 	BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
-	-- Loot Roll Frame, todo
+	-- Loot Roll Frame
 	local NUM_GROUP_LOOT_FRAMES = 4
 
 	hooksecurefunc("GroupLootContainer_OpenNewFrame", function()
