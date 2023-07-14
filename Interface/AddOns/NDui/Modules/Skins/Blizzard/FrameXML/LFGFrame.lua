@@ -99,32 +99,6 @@ tinsert(C.defaultThemes, function()
 		styleRewardRole(button.roleIcon2)
 	end)
 
-	LFGDungeonReadyDialogRoleIconLeaderIcon:SetTexture(nil)
-	local leaderFrame = CreateFrame("Frame", nil, LFGDungeonReadyDialog)
-	leaderFrame:SetFrameLevel(5)
-	leaderFrame:SetPoint("TOPLEFT", LFGDungeonReadyDialogRoleIcon, 4, -4)
-	leaderFrame:SetSize(19, 19)
-	local leaderIcon = leaderFrame:CreateTexture(nil, "ARTWORK")
-	leaderIcon:SetAllPoints()
-	B.ReskinRole(leaderIcon, "LEADER")
-
-	local iconTexture = LFGDungeonReadyDialogRoleIconTexture
-	iconTexture:SetTexture(DB.rolesTex)
-	local bg = B.CreateBDFrame(iconTexture)
-
-	hooksecurefunc("LFGDungeonReadyPopup_Update", function()
-		leaderFrame:SetShown(LFGDungeonReadyDialogRoleIconLeaderIcon:IsShown())
-
-		if LFGDungeonReadyDialogRoleIcon:IsShown() then
-			local role = select(7, GetLFGProposal())
-			if not role or role == "NONE" then role = "DAMAGER" end
-			iconTexture:SetTexCoord(B.GetRoleTexCoord(role))
-			bg:Show()
-		else
-			bg:Hide()
-		end
-	end)
-
 	hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
 		reskinDialogReward(button)
 		button.texture:SetTexture("Interface\\Icons\\inv_misc_coin_02")
@@ -220,26 +194,6 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	hooksecurefunc("LFG_EnableRoleButton", updateRoleBonus)
-
-	for i = 1, 5 do
-		local roleButton = _G["LFGDungeonReadyStatusIndividualPlayer"..i]
-		roleButton.texture:SetTexture(DB.rolesTex)
-		B.CreateBDFrame(roleButton)
-		if i == 1 then
-			roleButton:SetPoint("LEFT", 7, 0)
-		else
-			roleButton:SetPoint("LEFT", _G["LFGDungeonReadyStatusIndividualPlayer"..(i-1)], "RIGHT", 4, 0)
-		end
-	end
-
-	hooksecurefunc("LFGDungeonReadyStatusIndividual_UpdateIcon", function(button)
-		local role = select(2, GetLFGProposalMember(button:GetID()))
-		button.texture:SetTexCoord(B.GetRoleTexCoord(role))
-	end)
-
-	hooksecurefunc("LFGDungeonReadyStatusGrouped_UpdateIcon", function(button, role)
-		button.texture:SetTexCoord(B.GetRoleTexCoord(role))
-	end)
 
 	-- RaidFinder
 	RaidFinderFrameBottomInset:Hide()

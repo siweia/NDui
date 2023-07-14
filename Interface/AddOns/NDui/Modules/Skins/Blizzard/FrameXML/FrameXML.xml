@@ -41,7 +41,6 @@
 	<Script file="QuestFrame.lua"/>
 	<Script file="QuestInfo.lua"/>
 	<Script file="QuestMapFrame.lua"/>
-	<Script file="QueueStatusFrame.lua"/>
 	<Script file="QuickKeybind.lua"/>
 	<Script file="RaidFrame.lua"/>
 	<Script file="ReadyCheck.lua"/>
