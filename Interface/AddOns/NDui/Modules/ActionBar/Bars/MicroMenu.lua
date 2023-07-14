@@ -66,6 +66,10 @@ function Bar:MicroButton_Create(parent, data)
 		if button.Portrait then button.Portrait:Hide() end
 		if button.Background then button.Background:SetAlpha(0) end
 		if button.PushedBackground then button.PushedBackground:SetAlpha(0) end
+		if texture == "player" then
+			button.Shadow:Hide()
+			button.PushedShadow:SetAlpha(0)
+		end
 		if texture == "guild" then
 			button:DisableDrawLayer("ARTWORK")
 			button:DisableDrawLayer("OVERLAY")
