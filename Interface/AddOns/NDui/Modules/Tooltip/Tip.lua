@@ -232,9 +232,13 @@ function TT:OnTooltipSetUnit()
 		local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
 		local tiptextLevel, specLine = TT.GetLevelLine(self, isPlayer)
 		if tiptextLevel then
+			local reaction = UnitReaction(unit, "player")
+			local standingText = not isPlayer and reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction].."|r " or ""
+
 			local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
 			local unitRace = isPlayer and (UnitRace(unit) or "") or UnitCreatureType(unit) or ""
-			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, unitRace, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
+
+			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitRace, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 
 			local specText = specLine and specLine:GetText()
 			if specText then
@@ -253,9 +257,7 @@ function TT:OnTooltipSetUnit()
 	if not isPlayer and isShiftKeyDown then
 		local npcID = B.GetNPCID(guid)
 		if npcID then
-			local reaction = UnitReaction(unit, "player")
-			local standingText = reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction]
-			self:AddLine(format(npcIDstring, standingText or "", npcID))
+			self:AddLine(format(npcIDstring, "NpcID:", npcID))
 		end
 	end
 
