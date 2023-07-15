@@ -57,13 +57,13 @@ function TT:UpdateFactionLine(lineData)
 	end
 end
 
-function TT:GetLevelLine()
+function TT:GetLevelLine(isPlayer)
 	for i = 2, self:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i]
 		if not tiptext then break end
 		local linetext = tiptext:GetText()
 		if linetext and strfind(linetext, LEVEL) then
-			return tiptext
+			return tiptext, isPlayer and _G["GameTooltipTextLeft"..(i+1)]
 		end
 	end
 end
@@ -230,11 +230,19 @@ function TT:OnTooltipSetUnit()
 		local diff = GetCreatureDifficultyColor(level)
 		local classify = UnitClassification(unit)
 		local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
-		local tiptextLevel = TT.GetLevelLine(self)
+		local tiptextLevel, specLine = TT.GetLevelLine(self, isPlayer)
 		if tiptextLevel then
 			local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
-			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
-			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
+			local unitRace = isPlayer and (UnitRace(unit) or "") or UnitCreatureType(unit) or ""
+			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, unitRace, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
+
+			local specText = specLine and specLine:GetText()
+			if specText then
+				local newText, count = gsub(specText, "(.-)(%S+)$", DB.InfoColor.."%1"..hexColor.."%2")
+				if count > 0 then
+					specLine:SetText(newText)
+				end
+			end
 		end
 	end
 
@@ -254,7 +262,7 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	TT.InspectUnitSpecAndLevel(self, unit)
+	TT.InspectUnitItemLevel(self, unit)
 	TT.ShowUnitMythicPlusScore(self, unit)
 	TT.ScanTargets(self, unit)
 	TT.PetInfo_Setup(self, unit)
