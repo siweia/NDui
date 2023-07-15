@@ -238,10 +238,7 @@ function TT:OnTooltipSetUnit()
 
 			local specText = specLine and specLine:GetText()
 			if specText then
-				local newText, count = gsub(specText, "(.-)(%S+)$", DB.InfoColor.."%1"..hexColor.."%2")
-				if count > 0 then
-					specLine:SetText(newText)
-				end
+				specLine:SetText(hexColor..specText)
 			end
 		end
 	end

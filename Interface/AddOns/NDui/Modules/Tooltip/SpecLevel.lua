@@ -9,7 +9,6 @@ local UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOr
 local GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel
 local HEIRLOOMS = _G.HEIRLOOMS
 
-local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
