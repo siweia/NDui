@@ -226,6 +226,10 @@ local list = {
 		{AuraID = 215898, UnitID = "player", Flash = true},	-- 晶化大地，巢穴
 		{AuraID = 389059, UnitID = "player", Flash = true},	-- 炉渣喷发，奈萨鲁斯
 		{AuraID = 377018, UnitID = "player", Flash = true},	-- 熔火真金，奈萨鲁斯
+		{AuraID = 413142, UnitID = "player", Flash = true},	-- 万古裂片，永恒黎明
+		{AuraID = 414496, UnitID = "player", Flash = true},	-- 时间线加速，永恒黎明
+		{AuraID = 406543, UnitID = "player", Flash = true},	-- 窃取时间，永恒黎明
+		{AuraID = 410908, UnitID = "player", Flash = true},	-- 永恒新星，永恒黎明
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
@@ -260,6 +264,9 @@ local list = {
 		{AuraID = 376780, UnitID = "target", Value = true},	-- 岩浆护盾，奈萨鲁斯
 		{AuraID = 382791, UnitID = "target", Value = true},	-- 熔火屏障，奈萨鲁斯
 		{AuraID = 200672, UnitID = "target", Value = true},	-- 水晶迸裂，巢穴
+		{AuraID = 413027, UnitID = "target", Flash = true},	-- 泰坦之壁，永恒黎明
+		{AuraID = 410249, UnitID = "target", Value = true},	-- 辐光屏障，永恒黎明
+		{AuraID = 419511, UnitID = "target", Value = true},	-- 时光联结，永恒黎明
 		-- 团本
 		{AuraID = 374779, UnitID = "target", Flash = true},	-- 原始屏障，恐怖图腾
 		{AuraID = 382530, UnitID = "target", Value = true},	-- 涌动，莱萨杰斯

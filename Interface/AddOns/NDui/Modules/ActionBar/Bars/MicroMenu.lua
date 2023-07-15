@@ -49,10 +49,8 @@ function Bar:MicroButton_Create(parent, data)
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
-		if DB.isNewPatch then
-		button:SetHighlightTexture(0)
-		button.SetHighlightAtlas = B.Dummy
-		end
+		button:SetHighlightTexture(0) -- 10.1.5
+		button.SetHighlightAtlas = B.Dummy -- 10.1.5
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
@@ -68,6 +66,15 @@ function Bar:MicroButton_Create(parent, data)
 		if button.Portrait then button.Portrait:Hide() end
 		if button.Background then button.Background:SetAlpha(0) end
 		if button.PushedBackground then button.PushedBackground:SetAlpha(0) end
+		if texture == "player" then
+			button.Shadow:Hide()
+			button.PushedShadow:SetAlpha(0)
+		end
+		if texture == "guild" then
+			button:DisableDrawLayer("ARTWORK")
+			button:DisableDrawLayer("OVERLAY")
+			button.HighlightEmblem:SetAlpha(0)
+		end
 	else
 		bu:SetScript("OnMouseUp", method)
 		B.AddTooltip(bu, "ANCHOR_RIGHT", tooltip)

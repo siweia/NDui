@@ -2,7 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 C.themes["Blizzard_InspectUI"] = function()
-	B.StripTextures(InspectTalentFrame)
 	B.StripTextures(InspectModelFrame, true)
 	InspectGuildFrameBG:Hide()
 	B.Reskin(InspectPaperDollFrame.ViewButton)
@@ -41,13 +40,26 @@ C.themes["Blizzard_InspectUI"] = function()
 		UpdateCosmetic(button)
 	end)
 
-	-- Talents
-	local inspectSpec = InspectTalentFrame.InspectSpec
+	for i = 1, 4 do
+		local tab = _G["InspectFrameTab"..i]
+		if tab then
+			B.ReskinTab(tab)
+			if i ~= 1 then
+				tab:ClearAllPoints()
+				tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
+			end
+		end
+	end
 
+	B.ReskinPortraitFrame(InspectFrame)
+
+	-- Talents
+	--[=[ currently disabled in 10.0
+	B.StripTextures(InspectTalentFrame)
+
+	local inspectSpec = InspectTalentFrame.InspectSpec
 	inspectSpec.ring:Hide()
 	B.ReskinIcon(inspectSpec.specIcon)
-	inspectSpec.roleIcon:SetTexture(DB.rolesTex)
-	B.CreateBDFrame(inspectSpec.roleIcon)
 
 	for i = 1, 7 do
 		local row = InspectTalentFrame.InspectTalents["tier"..i]
@@ -69,7 +81,6 @@ C.themes["Blizzard_InspectUI"] = function()
 			if role1 ~= nil then
 				local _, _, _, icon = GetSpecializationInfoByID(spec)
 				self.specIcon:SetTexture(icon)
-				self.roleIcon:SetTexCoord(B.GetRoleTexCoord(role1))
 			end
 		end
 	end
@@ -81,16 +92,5 @@ C.themes["Blizzard_InspectUI"] = function()
 			updateIcon(self.InspectSpec)
 		end
 	end)
-
-	for i = 1, 4 do
-		local tab = _G["InspectFrameTab"..i]
-		if tab then
-			B.ReskinTab(tab)
-			if i ~= 1 then
-				tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
-			end
-		end
-	end
-
-	B.ReskinPortraitFrame(InspectFrame)
+	]=]
 end

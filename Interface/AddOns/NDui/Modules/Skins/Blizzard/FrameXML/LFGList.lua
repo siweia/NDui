@@ -15,19 +15,6 @@ local function HandleRoleAnchor(self, role)
 	self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
 end
 
-local atlasToRole = {
-	["groupfinder-icon-role-large-tank"] = "TANK",
-	["groupfinder-icon-role-large-heal"] = "HEALER",
-	["groupfinder-icon-role-large-dps"] = "DAMAGER",
-}
-local function ReplaceApplicantRoles(texture, atlas)
-	local role = atlasToRole[atlas]
-	if role then
-		texture:SetTexture(DB.rolesTex)
-		texture:SetTexCoord(B.GetRoleTexCoord(role))
-	end
-end
-
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -192,20 +179,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	hooksecurefunc("LFGListApplicationViewer_UpdateRoleIcons", function(member)
-		if not member.styled then
-			for i = 1, 3 do
-				local button = member["RoleIcon"..i]
-				local texture = button:GetNormalTexture()
-				ReplaceApplicantRoles(texture, LFG_LIST_GROUP_DATA_ATLASES[button.role])
-				hooksecurefunc(texture, "SetAtlas", ReplaceApplicantRoles)
-				B.CreateBDFrame(button)
-			end
-
-			member.styled = true
-		end
-	end)
-
 	-- [[ Entry creation ]]
 
 	local entryCreation = LFGListFrame.EntryCreation
@@ -296,13 +269,4 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(LFGListInviteDialog.AcceptButton)
 	B.Reskin(LFGListInviteDialog.DeclineButton)
 	B.Reskin(LFGListInviteDialog.AcknowledgeButton)
-
-	local roleIcon = LFGListInviteDialog.RoleIcon
-	roleIcon:SetTexture(DB.rolesTex)
-	B.CreateBDFrame(roleIcon)
-
-	hooksecurefunc("LFGListInviteDialog_Show", function(self, resultID)
-		local role = select(5, C_LFGList.GetApplicationInfo(resultID))
-		self.RoleIcon:SetTexCoord(B.GetRoleTexCoord(role))
-	end)
 end)

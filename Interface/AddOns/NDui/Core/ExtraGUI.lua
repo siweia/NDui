@@ -123,6 +123,7 @@ function G:SetupRaidDebuffs(parent)
 	AddNewDungeon(dungeons, 767)  -- 耐萨里奥的巢穴
 	AddNewDungeon(dungeons, 1001)  -- 自由镇
 	AddNewDungeon(dungeons, 1022)  -- 地渊孢林
+	AddNewDungeon(dungeons, 1209)  -- 永恒黎明
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1200),

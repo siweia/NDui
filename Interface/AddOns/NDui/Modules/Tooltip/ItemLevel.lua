@@ -7,10 +7,8 @@ local select, max, strfind, format, strsplit = select, math.max, string.find, st
 local GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown = GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown
 local UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi
 local GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel
-local GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID
 local HEIRLOOMS = _G.HEIRLOOMS
 
-local specPrefix = SPECIALIZATION..": "..DB.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
@@ -86,14 +84,12 @@ function TT:GetInspectInfo(...)
 	elseif self == "INSPECT_READY" then
 		local guid = ...
 		if guid == currentGUID then
-			local spec = TT:GetUnitSpec(currentUNIT)
 			local level = TT:GetUnitItemLevel(currentUNIT)
-			cache[guid].spec = spec
 			cache[guid].level = level
 			cache[guid].getTime = GetTime()
 
-			if spec and level then
-				TT:SetupSpecLevel(spec, level)
+			if level then
+				TT:SetupItemLevel(level)
 			else
 				TT:InspectUnit(currentUNIT, true)
 			end
@@ -103,26 +99,17 @@ function TT:GetInspectInfo(...)
 end
 B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
-function TT:SetupSpecLevel(spec, level)
+function TT:SetupItemLevel(level)
 	local _, unit = GameTooltip:GetUnit()
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
-	local specLine, levelLine
+	local levelLine
 	for i = 2, GameTooltip:NumLines() do
 		local line = _G["GameTooltipTextLeft"..i]
 		local text = line:GetText()
-		if text and strfind(text, specPrefix) then
-			specLine = line
-		elseif text and strfind(text, levelPrefix) then
+		if text and strfind(text, levelPrefix) then
 			levelLine = line
 		end
-	end
-
-	spec = specPrefix..(spec or isPending)
-	if specLine then
-		specLine:SetText(spec)
-	else
-		GameTooltip:AddLine(spec)
 	end
 
 	level = levelPrefix..(level or isPending)
@@ -237,53 +224,31 @@ function TT:GetUnitItemLevel(unit)
 	return ilvl
 end
 
-function TT:GetUnitSpec(unit)
-	if not unit or UnitGUID(unit) ~= currentGUID then return end
-
-	local specName
-	if unit == "player" then
-		local specIndex = GetSpecialization()
-		if specIndex then
-			specName = select(2, GetSpecializationInfo(specIndex))
-		end
-	else
-		local specID = GetInspectSpecialization(unit)
-		if specID and specID > 0 then
-			specName = select(2, GetSpecializationInfoByID(specID))
-		end
-	end
-	if specName == "" then specName = NONE end
-
-	return specName
-end
-
 function TT:InspectUnit(unit, forced)
-	local spec, level
+	local level
 
 	if UnitIsUnit(unit, "player") then
-		spec = self:GetUnitSpec("player")
 		level = self:GetUnitItemLevel("player")
-		self:SetupSpecLevel(spec, level)
+		self:SetupItemLevel(level)
 	else
 		if not unit or UnitGUID(unit) ~= currentGUID then return end
 		if not UnitIsPlayer(unit) then return end
 
 		local currentDB = cache[currentGUID]
-		spec = currentDB.spec
 		level = currentDB.level
-		self:SetupSpecLevel(spec, level)
+		self:SetupItemLevel(level)
 
 		if not C.db["Tooltip"]["SpecLevelByShift"] and IsShiftKeyDown() then forced = true end
-		if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = frequency return end
+		if level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = frequency return end
 		if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
 		if InspectFrame and InspectFrame:IsShown() then return end
 
-		self:SetupSpecLevel()
+		self:SetupItemLevel()
 		updater:Show()
 	end
 end
 
-function TT:InspectUnitSpecAndLevel(unit)
+function TT:InspectUnitItemLevel(unit)
 	if C.db["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
 
 	if not unit or not CanInspect(unit) then return end

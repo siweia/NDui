@@ -29,6 +29,7 @@ local classification = {
 }
 local npcIDstring = "%s "..DB.InfoColor.."%s"
 local ignoreString = "|cffff0000"..IGNORED..":|r %s"
+local specPrefix = "|cffFFCC00"..SPECIALIZATION..": "..DB.InfoColor
 
 function TT:GetUnit()
 	local data = self:GetTooltipData()
@@ -41,9 +42,17 @@ local FACTION_COLORS = {
 	[FACTION_ALLIANCE] = "|cff4080ff%s|r",
 	[FACTION_HORDE] = "|cffff5040%s|r",
 }
+
+local function replaceSpecInfo(str)
+	return strfind(str, "%s") and specPrefix..str or str
+end
+
 function TT:UpdateFactionLine(lineData)
 	if self:IsForbidden() then return end
 	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
+
+	local unit = TT.GetUnit(self)
+	local unitClass = unit and UnitClass(unit)
 
 	local linetext = lineData.leftText
 	if linetext == PVP then
@@ -54,6 +63,8 @@ function TT:UpdateFactionLine(lineData)
 		else
 			lineData.leftText = format(FACTION_COLORS[linetext], linetext)
 		end
+	elseif unitClass and strfind(linetext, unitClass) then
+		lineData.leftText = gsub(linetext, "(.-)%S+$", replaceSpecInfo)
 	end
 end
 
@@ -232,9 +243,13 @@ function TT:OnTooltipSetUnit()
 		local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
 		local tiptextLevel = TT.GetLevelLine(self)
 		if tiptextLevel then
+			local reaction = UnitReaction(unit, "player")
+			local standingText = not isPlayer and reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction].."|r " or ""
+
 			local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
 			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
-			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
+
+			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 		end
 	end
 
@@ -248,14 +263,14 @@ function TT:OnTooltipSetUnit()
 	if not isPlayer and isShiftKeyDown then
 		local npcID = B.GetNPCID(guid)
 		if npcID then
-			local reaction = UnitReaction(unit, "player")
-			local standingText = reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction]
-			self:AddLine(format(npcIDstring, standingText or "", npcID))
+			self:AddLine(format(npcIDstring, "NpcID:", npcID))
 		end
 	end
 
-	TT.InspectUnitSpecAndLevel(self, unit)
-	TT.ShowUnitMythicPlusScore(self, unit)
+	if isPlayer then
+		TT.InspectUnitItemLevel(self, unit)
+		TT.ShowUnitMythicPlusScore(self, unit)
+	end
 	TT.ScanTargets(self, unit)
 	TT.PetInfo_Setup(self, unit)
 

@@ -283,8 +283,6 @@ function M:ReplaceFindGroupButton()
 end
 
 function M:AddDungeonsFilter()
-	if IsAddOnLoaded("PremadeGroupsFilter") then return end
-
 	local mapData = {
 		[0] = {mapID = 438, aID = 1195}, -- 旋云之巅
 		[1] = {mapID = 206, aID = 462},  -- 奈萨里奥的巢穴

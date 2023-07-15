@@ -93,15 +93,15 @@ tinsert(C.defaultThemes, function()
 	BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
 	-- Loot Roll Frame
-	if not DB.isNewPatch then
+	local NUM_GROUP_LOOT_FRAMES = 4
 
-	hooksecurefunc("GroupLootFrame_OpenNewFrame", function()
+	hooksecurefunc("GroupLootContainer_OpenNewFrame", function()
 		for i = 1, NUM_GROUP_LOOT_FRAMES do
 			local frame = _G["GroupLootFrame"..i]
 			if not frame.styled then
-				frame.Border:SetAlpha(0)
 				frame.Background:SetAlpha(0)
 				frame.bg = B.SetBD(frame)
+				B.ReskinIconBorder(frame.Border, true)
 
 				frame.Timer.Bar:SetTexture(DB.bdTex)
 				frame.Timer.Bar:SetVertexColor(1, .8, 0)
@@ -117,16 +117,8 @@ tinsert(C.defaultThemes, function()
 
 				frame.styled = true
 			end
-
-			if frame:IsShown() then
-				local _, _, _, quality = GetLootRollItemInfo(frame.rollID)
-				local color = DB.QualityColors[quality]
-				frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-			end
 		end
 	end)
-
-	end
 
 	-- Bossbanner
 	hooksecurefunc("BossBanner_ConfigureLootFrame", function(lootFrame)

@@ -17,6 +17,11 @@ module:RegisterSeasonSpells(TIER, INSTANCE)
 INSTANCE = 1197 -- 奥达曼：提尔的遗产
 module:RegisterSeasonSpells(TIER, INSTANCE)
 
+INSTANCE = 1209 -- 永恒黎明
+module:RegisterSeasonSpells(TIER, INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 413142) -- 万古裂片
+module:RegisterDebuff(TIER, INSTANCE, 0, 410908) -- 永恒新星
+
 -- S1
 INSTANCE = 1201 -- 艾杰斯亚学院
 module:RegisterSeasonSpells(TIER, INSTANCE)
