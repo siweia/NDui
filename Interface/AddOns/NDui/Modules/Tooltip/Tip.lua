@@ -259,8 +259,10 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	TT.InspectUnitItemLevel(self, unit)
-	TT.ShowUnitMythicPlusScore(self, unit)
+	if isPlayer then
+		TT.InspectUnitItemLevel(self, unit)
+		TT.ShowUnitMythicPlusScore(self, unit)
+	end
 	TT.ScanTargets(self, unit)
 	TT.PetInfo_Setup(self, unit)
 
