@@ -90,5 +90,13 @@ function A:ChantLumos(self)
 
 		UpdateCooldown(self.lumos[4], 366155, true)--逆转
 		UpdateCooldown(self.lumos[5], 360995, true)--清脆之拥
+
+	elseif spec == 3 then --增辉
+		local spellID = IsPlayerSpell(375783) and 382266 or 357208
+		UpdateCooldown(self.lumos[1], spellID, true)
+		UpdateCooldown(self.lumos[2], 409311, true)
+		UpdateCooldown(self.lumos[3], 395152, true)
+		UpdateCooldown(self.lumos[4], 408092, true)
+		UpdateCooldown(self.lumos[5], 403631, true)
 	end
 end
