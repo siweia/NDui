@@ -785,7 +785,7 @@ function UF:CreateCastBar(self)
 	cb.PostCastFail = UF.PostCastFailed
 	cb.PostCastInterruptible = UF.PostUpdateInterruptible
 	cb.CreatePip = UF.CreatePip
-	cb.PostUpdatePip = UF.PostUpdatePip
+	cb.PostUpdatePips = UF.PostUpdatePips
 
 	self.Castbar = cb
 end
