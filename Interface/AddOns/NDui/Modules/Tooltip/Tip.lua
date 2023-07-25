@@ -53,6 +53,7 @@ function TT:UpdateFactionLine(lineData)
 
 	local unit = TT.GetUnit(self)
 	local unitClass = unit and UnitClass(unit)
+	local unitCreature = unit and UnitCreatureType(unit)
 
 	local linetext = lineData.leftText
 	if linetext == PVP then
@@ -65,6 +66,8 @@ function TT:UpdateFactionLine(lineData)
 		end
 	elseif unitClass and strfind(linetext, unitClass) then
 		lineData.leftText = gsub(linetext, "(.-)%S+$", replaceSpecInfo)
+	elseif unitCreature and linetext == unitCreature then
+		return true
 	end
 end
 

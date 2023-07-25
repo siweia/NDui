@@ -50,11 +50,14 @@ function Bar:MicroButton_Create(parent, data)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
 		button:SetHighlightTexture(0) -- 10.1.5
-		button.SetHighlightAtlas = B.Dummy -- 10.1.5
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
 		Bar:MicroButton_SetupTexture(hl, texture)
+		hooksecurefunc(button, "SetHighlightAtlas", function()
+			hl:SetTexture(DB.MicroTex..texture)
+			hl:SetBlendMode("ADD")
+		end)
 		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
 		local flash = button.FlashBorder
