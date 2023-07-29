@@ -402,6 +402,7 @@ local spellList = {
 	[256740] = true,	-- 漩涡战鼓
 	[292686] = true,	-- 雷皮之槌
 	[309658] = true,	-- 死亡凶蛮战鼓
+	[390386] = true,	-- 守护巨龙之怒
 }
 
 function M:ItemAlert_Update(unit, castID, spellID)

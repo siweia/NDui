@@ -84,8 +84,8 @@ function UF:OnCastbarUpdate(elapsed)
 					if pip and duration > pip.duration then
 						self.stageString:SetText(i)
 
-						if self.pipStage ~= i then
-							self.pipStage = i
+						if self.curStage ~= i then
+							self.curStage = i
 							local nextStage = self.numStages == i and 1 or i+1
 							local nextPip = self.Pips[nextStage]
 							UIFrameFadeIn(nextPip.tex, .25, .3, 1)
@@ -245,23 +245,26 @@ function UF:CreatePip(stage)
 	return pip
 end
 
-function UF:PostUpdatePip(pip, stage, stageTotalDuration)
+function UF:PostUpdatePips(numStages)
 	local pips = self.Pips
-	local pip = pips[stage]
 	local numStages = self.numStages
-	pip.tex:SetAlpha(.3) -- reset pip alpha
-	pip.duration = stageTotalDuration / 1000 -- save pip duration
 
-	if stage == numStages then
-		local firstPip = pips[1]
-		local anchor = pips[numStages]
-		firstPip.tex:SetPoint("BOTTOMRIGHT", self)
-		firstPip.tex:SetPoint("TOPLEFT", anchor.BasePip, "TOPRIGHT")
-	end
+	for stage = 1, numStages do
+		local pip = pips[stage]
+		pip.tex:SetAlpha(.3) -- reset pip alpha
+		pip.duration = self.stagePoints[stage]
 
-	if stage ~= 1 then
-		local anchor = pips[stage-1]
-		pip.tex:SetPoint("BOTTOMRIGHT", pip.BasePip, "BOTTOMLEFT")
-		pip.tex:SetPoint("TOPLEFT", anchor.BasePip, "TOPRIGHT")
+		if stage == numStages then
+			local firstPip = pips[1]
+			local anchor = pips[numStages]
+			firstPip.tex:SetPoint("BOTTOMRIGHT", self)
+			firstPip.tex:SetPoint("TOPLEFT", anchor.BasePip, "TOPRIGHT")
+		end
+
+		if stage ~= 1 then
+			local anchor = pips[stage-1]
+			pip.tex:SetPoint("BOTTOMRIGHT", pip.BasePip, "BOTTOMLEFT")
+			pip.tex:SetPoint("TOPLEFT", anchor.BasePip, "TOPRIGHT")
+		end
 	end
 end
