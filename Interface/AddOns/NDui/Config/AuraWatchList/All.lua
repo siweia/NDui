@@ -71,6 +71,7 @@ local list = {
 		{AuraID = 397400, UnitID = "player"},	-- 骨喉的大脚趾
 		{AuraID = 403380, UnitID = "player"},	-- 统御呼唤
 		{AuraID = 400986, UnitID = "player"},	-- 狱钢装甲
+		{AuraID = 418527, UnitID = "player"},	-- 破碎翌日之镜
 		{AuraID = 408835, UnitID = "player", Flash = true},	-- 沸腾怒火
 		{AuraID = 408770, UnitID = "player", Stack = 55},	-- 灵感闪光
 		{AuraID = 410232, UnitID = "player", Value = true},	-- 孢子披风
