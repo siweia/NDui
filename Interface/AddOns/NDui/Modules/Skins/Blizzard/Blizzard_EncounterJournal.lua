@@ -4,7 +4,6 @@ local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
 local function reskinHeader(header)
-	header.flashAnim.Play = B.Dummy
 	for i = 4, 18 do
 		select(i, header.button:GetRegions()):SetTexture("")
 	end
@@ -13,7 +12,6 @@ local function reskinHeader(header)
 	header.descriptionBGBottom:SetAlpha(0)
 	header.description:SetTextColor(1, 1, 1)
 	header.button.title:SetTextColor(1, 1, 1)
-	header.button.title.SetTextColor = B.Dummy
 	header.button.expandedIcon:SetWidth(20) -- don't wrap the text
 end
 
@@ -125,7 +123,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				hl:SetInside(child.__bg)
 
 				child.text:SetTextColor(1, 1, 1)
-				child.text.SetTextColor = B.Dummy
 				child.creature:SetPoint("TOPLEFT", 0, -4)
 
 				child.styled = true
