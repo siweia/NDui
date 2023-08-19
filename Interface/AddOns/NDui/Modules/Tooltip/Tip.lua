@@ -39,18 +39,18 @@ function TT:HideLines()
 		local linetext = tiptext:GetText()
 		if linetext then
 			if linetext == PVP then
-				tiptext:SetText(nil)
+				tiptext:SetText("")
 				tiptext:Hide()
 			elseif linetext == FACTION_HORDE then
 				if C.db["Tooltip"]["FactionIcon"] then
-					tiptext:SetText(nil)
+					tiptext:SetText("")
 					tiptext:Hide()
 				else
 					tiptext:SetText("|cffff5040"..linetext.."|r")
 				end
 			elseif linetext == FACTION_ALLIANCE then
 				if C.db["Tooltip"]["FactionIcon"] then
-					tiptext:SetText(nil)
+					tiptext:SetText("")
 					tiptext:Hide()
 				else
 					tiptext:SetText("|cff4080ff"..linetext.."|r")

@@ -789,8 +789,13 @@ function module:OnLogin()
 	MyButton:Scaffold("Default")
 
 	function MyButton:OnCreate()
-		self:SetNormalTexture(nil)
-		self:SetPushedTexture(nil)
+		if DB.isNewPatch then
+			self:SetNormalTexture(0)
+			self:SetPushedTexture(0)
+		else
+			self:SetNormalTexture(nil)
+			self:SetPushedTexture(nil)
+		end
 		self:SetHighlightTexture(DB.bdTex)
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		self:GetHighlightTexture():SetInside()
@@ -1086,8 +1091,13 @@ function module:OnLogin()
 
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
 	function BagButton:OnCreate()
-		self:SetNormalTexture(nil)
-		self:SetPushedTexture(nil)
+		if DB.isNewPatch then
+			self:SetNormalTexture(0)
+			self:SetPushedTexture(0)
+		else
+			self:SetNormalTexture(nil)
+			self:SetPushedTexture(nil)
+		end
 		self:SetHighlightTexture(DB.bdTex)
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		self:GetHighlightTexture():SetInside()
@@ -1121,7 +1131,11 @@ function module:OnLogin()
 
 	-- Sort order
 	SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
-	SetInsertItemsLeftToRight(false)
+	if DB.isNewPatch then
+		C_Container.SetInsertItemsLeftToRight(false)
+	else
+		SetInsertItemsLeftToRight(false)
+	end
 
 	-- Init
 	ToggleAllBags()

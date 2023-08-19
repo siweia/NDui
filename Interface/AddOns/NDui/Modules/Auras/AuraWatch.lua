@@ -594,7 +594,7 @@ function A:AuraWatch_SetupInt(intID, itemID, duration, unitID, guid, sourceName)
 		class = DB.MyClass
 	end
 	if frame.Icon then frame.Icon:SetTexture(icon) end
-	if frame.Count then frame.Count:SetText(nil) end
+	if frame.Count then frame.Count:SetText("") end
 	if frame.Cooldown then
 		frame.Cooldown:SetReverse(true)
 		frame.Cooldown:SetCooldown(GetTime(), duration)
@@ -669,8 +669,8 @@ function A:AuraWatch_Cleanup()	-- FIXME: there should be a better way to do this
 				frame:SetScript("OnUpdate", nil)
 			end
 			if frame.Icon then frame.Icon:SetTexture(nil) end
-			if frame.Count then frame.Count:SetText(nil) end
-			if frame.Spellname then frame.Spellname:SetText(nil) end
+			if frame.Count then frame.Count:SetText("") end
+			if frame.Spellname then frame.Spellname:SetText("") end
 		end
 		value.Index = 1
 	end
