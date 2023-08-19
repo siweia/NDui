@@ -55,7 +55,7 @@ function BaudErrorFrame_OnLoad(self)
 	soundButton:SetScript("OnMouseUp", function(self)
 		BaudErrorFrameConfig.enableSound = not BaudErrorFrameConfig.enableSound
 		updateColor()
-		PlaySound(1201, "Master")
+		PlaySound(48942, "Master")
 		self:GetScript("OnEnter")(self)
 	end)
 	soundButton:SetScript("OnShow", updateColor)
@@ -112,7 +112,7 @@ function BaudErrorFrameShowError(Error)
 	if not BaudErrorFrameConfig.enableSound then return end
 
 	if GetTime() > SoundTime then
-		PlaySound(1201, "Master")
+		PlaySound(48942, "Master")
 		SoundTime = GetTime() + 1
 	end
 end
@@ -253,7 +253,11 @@ f:SetScript("OnEvent", function()
 		BaudErrorFrameListScrollBoxHighlightTexture:SetVertexColor(DB.r, DB.g, DB.b, .25)
 		B.CreateBDFrame(BaudErrorFrameDetailScrollBox, .25)
 
-		B.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
+		if DB.isNewPatch then
+			B.ReskinTrimScroll(BaudErrorFrameDetailScrollFrame.ScrollBar)
+		else
+			B.ReskinScroll(BaudErrorFrameListScrollBoxScrollBarScrollBar)
+		end
 		B.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
 		B.Reskin(BaudErrorFrameClearButton)
 		B.Reskin(BaudErrorFrameCloseButton)
