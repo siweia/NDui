@@ -316,6 +316,7 @@ do
 		"RightInset",
 		"NineSlice",
 		"BG",
+		"Bg",
 		"border",
 		"Border",
 		"Background",
@@ -1209,7 +1210,11 @@ do
 		hl:SetVertexColor(cr, cg, cb, .25)
 
 		local ch = self:GetCheckedTexture()
-		ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+		if DB.isNewPatch then
+			ch:SetAtlas("checkmark-minimal")
+		else
+			ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+		end
 		ch:SetTexCoord(0, 1, 0, 1)
 		ch:SetDesaturated(true)
 		ch:SetVertexColor(cr, cg, cb)
@@ -1281,6 +1286,42 @@ do
 			bar:SetPoint("BOTTOMLEFT", bg, C.mult, C.mult)
 			bar:SetPoint("RIGHT", thumb, "CENTER")
 		end
+	end
+
+	local function reskinStepper(stepper, direction)
+		B.StripTextures(stepper)
+		stepper:SetWidth(19)
+
+		local tex = stepper:CreateTexture(nil, "ARTWORK")
+		tex:SetAllPoints()
+		B.SetupArrow(tex, direction)
+		stepper.__texture = tex
+
+		stepper:HookScript("OnEnter", B.Texture_OnEnter)
+		stepper:HookScript("OnLeave", B.Texture_OnLeave)
+	end
+
+	function B:ReskinStepperSlider(minimal)
+		B.StripTextures(self)
+		reskinStepper(self.Back, "left")
+		reskinStepper(self.Forward, "right")
+		self.Slider:DisableDrawLayer("ARTWORK")
+
+		local thumb = self.Slider.Thumb
+		thumb:SetTexture(DB.sparkTex)
+		thumb:SetBlendMode("ADD")
+		thumb:SetSize(20, 30)
+
+		local bg = B.CreateBDFrame(self.Slider, 0, true)
+		local offset = minimal and 10 or 13
+		bg:SetPoint("TOPLEFT", 10, -offset)
+		bg:SetPoint("BOTTOMRIGHT", -10, offset)
+		local bar = CreateFrame("StatusBar", nil, bg)
+		bar:SetStatusBarTexture(DB.normTex)
+		bar:SetStatusBarColor(1, .8, 0, .5)
+		bar:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+		bar:SetPoint("BOTTOMLEFT", bg, C.mult, C.mult)
+		bar:SetPoint("RIGHT", thumb, "CENTER")
 	end
 
 	-- Handle collapse
