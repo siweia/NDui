@@ -299,6 +299,48 @@ local defaultItem = cargBags:NewItemTable()
 	@param i <table> [optional]
 	@return i <table>
 ]]
+if NDui[4].isNewPatch then
+
+function Implementation:GetItemInfo(bagID, slotID, i)
+	i = i or defaultItem
+	for k in pairs(i) do i[k] = nil end
+
+	i.bagID = bagID
+	i.slotID = slotID
+
+	local texture, count, locked, quality, itemLink, noValue, itemID
+	local info = C_Container.GetContainerItemInfo(bagID, slotID)
+	if info then
+		i.texture, i.count, i.locked, i.quality, i.link, i.id, i.hasPrice = info.iconFileID, info.stackCount, info.isLocked, (info.quality or 1), info.hyperlink, info.itemID, (not info.hasNoValue)
+
+		--i.isInSet, i.setName = C_Container.GetContainerItemEquipmentSetInfo(bagID, slotID)
+
+		i.cdStart, i.cdFinish, i.cdEnable = C_Container.GetContainerItemCooldown(bagID, slotID)
+
+		local questInfo = C_Container.GetContainerItemQuestInfo(bagID, slotID)
+		i.isQuestItem, i.questID, i.questActive = questInfo.isQuestItem, questInfo.questID, questInfo.isActive
+
+		i.name, _, _, i.level, _, i.type, i.subType, _, i.equipLoc, _, _, i.classID, i.subClassID = GetItemInfo(i.link)
+		i.equipLoc = _G[i.equipLoc] -- INVTYPE to localized string
+
+		if i.id == PET_CAGE then
+			local petID, petLevel, petName = strmatch(i.link, "|H%w+:(%d+):(%d+):.-|h%[(.-)%]|h")
+			i.name = petName
+			i.id = tonumber(petID) or 0
+			i.level = tonumber(petLevel) or 0
+			i.classID = Enum.ItemClass.Miscellaneous
+			i.subClassID = Enum.ItemMiscellaneousSubclass.CompanionPet
+		elseif itemID == MYTHIC_KEYSTONE then
+			i.level, i.name = strmatch(i.link, "|H%w+:%d+:%d+:(%d+):.-|h%[(.-)%]|h")
+			i.level = tonumber(i.level) or 0
+		end
+	end
+
+	return i
+end
+
+else
+
 function Implementation:GetItemInfo(bagID, slotID, i)
 	i = i or defaultItem
 	for k in pairs(i) do i[k] = nil end
@@ -329,6 +371,8 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 		end
 	end
 	return i
+end
+
 end
 
 --[[!
