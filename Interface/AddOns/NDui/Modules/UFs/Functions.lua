@@ -875,7 +875,7 @@ function UF.PostUpdateIcon(element, _, button, _, _, duration, expiration, debuf
 	end
 
 	local fontSize = element.fontSize or element.size*.6
-	button.count:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	B.SetFontSize(button.count, fontSize)
 
 	if element.desaturateDebuff and button.isDebuff and filteredStyle[style] and not button.isPlayer then
 		button.icon:SetDesaturated(true)
@@ -1563,7 +1563,7 @@ local scrolls = {}
 function UF:UpdateScrollingFont()
 	local fontSize = C.db["UFs"]["FCTFontSize"]
 	for _, scroll in pairs(scrolls) do
-		scroll:SetFont(DB.Font[1], fontSize, "OUTLINE")
+		B.SetFontSize(scroll, fontSize)
 		scroll:SetSize(10*fontSize, 10*fontSize)
 	end
 end

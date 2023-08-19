@@ -772,13 +772,13 @@ function UF:UpdateNameplateSize()
 	local nameOnlyTextSize, nameOnlyTitleSize = C.db["Nameplate"]["NameOnlyTextSize"], C.db["Nameplate"]["NameOnlyTitleSize"]
 
 	if self.plateType == "NameOnly" then
-		self.nameText:SetFont(font, nameOnlyTextSize, fontFlag)
+		B.SetFontSize(self.nameText, nameOnlyTextSize)
 		self:Tag(self.nameText, "[nprare][nplevel][color][name]")
 		self.__tagIndex = 6
-		self.npcTitle:SetFont(font, nameOnlyTitleSize, fontFlag)
+		B.SetFontSize(self.npcTitle, nameOnlyTitleSize)
 		self.npcTitle:UpdateTag()
 	else
-		self.nameText:SetFont(font, nameTextSize, fontFlag)
+		B.SetFontSize(self.nameText, nameTextSize)
 		self:Tag(self.nameText, UF.PlateNameTags[nameType])
 		self.__tagIndex = nameType
 
@@ -786,14 +786,14 @@ function UF:UpdateNameplateSize()
 		self.Castbar.Icon:SetSize(iconSize, iconSize)
 		self.Castbar.glowFrame:SetSize(iconSize+8, iconSize+8)
 		self.Castbar:SetHeight(plateCBHeight)
-		self.Castbar.Time:SetFont(font, CBTextSize, fontFlag)
+		B.SetFontSize(self.Castbar.Time, CBTextSize)
 		self.Castbar.Time:SetPoint("TOPRIGHT", self.Castbar, "RIGHT", 0, plateCBOffset)
-		self.Castbar.Text:SetFont(font, CBTextSize, fontFlag)
+		B.SetFontSize(self.Castbar.Text, CBTextSize)
 		self.Castbar.Text:SetPoint("TOPLEFT", self.Castbar, "LEFT", 0, plateCBOffset)
 		self.Castbar.Shield:SetPoint("TOP", self.Castbar, "CENTER", 0, plateCBOffset)
 		self.Castbar.Shield:SetSize(CBTextSize + 4, CBTextSize + 4)
-		self.Castbar.spellTarget:SetFont(font, CBTextSize+3, fontFlag)
-		self.healthValue:SetFont(font, healthTextSize, fontFlag)
+		B.SetFontSize(self.Castbar.spellTarget, CBTextSize+3)
+		B.SetFontSize(self.healthValue, healthTextSize)
 		self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
 		self:Tag(self.healthValue, "[VariousHP("..UF.VariousTagIndex[C.db["Nameplate"]["HealthType"]]..")]")
 		self.healthValue:UpdateTag()

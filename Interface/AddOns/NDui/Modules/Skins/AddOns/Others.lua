@@ -51,8 +51,8 @@ end
 function S:ResetRocountFont()
 	for _, row in pairs(Recount.MainWindow.Rows) do
 		local font, fontSize = row.LeftText:GetFont()
-		row.LeftText:SetFont(font, fontSize, DB.Font[3])
-		row.RightText:SetFont(font, fontSize, DB.Font[3])
+		B.SetFontSize(row.LeftText, fontSize)
+		B.SetFontSize(row.RightText, fontSize)
 	end
 end
 
