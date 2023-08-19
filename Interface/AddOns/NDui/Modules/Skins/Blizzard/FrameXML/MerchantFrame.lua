@@ -27,7 +27,11 @@ local function reskinMerchantItem(item)
 end
 
 local function reskinMerchantInteract(button)
-	button:SetPushedTexture("")
+	if DB.isNewPatch then
+		button:SetPushedTexture(0)
+	else
+		button:SetPushedTexture("")
+	end
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	B.CreateBDFrame(button)
 end

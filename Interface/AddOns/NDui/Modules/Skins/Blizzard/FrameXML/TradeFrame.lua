@@ -21,8 +21,13 @@ tinsert(C.defaultThemes, function()
 	B:UpdateMoneyDisplay(TradePlayerInputMoneyFrameGold, TradePlayerInputMoneyFrameSilver, TradePlayerInputMoneyFrameCopper)
 
 	local function reskinButton(bu)
-		bu:SetNormalTexture("")
-		bu:SetPushedTexture("")
+		if DB.isNewPatch then
+			bu:SetNormalTexture(0)
+			bu:SetPushedTexture(0)
+		else
+			bu:SetNormalTexture("")
+			bu:SetPushedTexture("")
+		end
 		local hl = bu:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)
 		hl:SetInside()

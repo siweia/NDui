@@ -17,8 +17,13 @@ tinsert(C.defaultThemes, function()
 		if not bu.bg then
 			nameFrame:Hide()
 			--questTexture:SetAlpha(0)
-			bu:SetNormalTexture("")
-			bu:SetPushedTexture("")
+			if DB.isNewPatch then
+				bu:SetNormalTexture(0)
+				bu:SetPushedTexture(0)
+			else
+				bu:SetNormalTexture("")
+				bu:SetPushedTexture("")
+			end
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			bu.IconBorder:SetAlpha(0)
 			bu.bg = B.ReskinIcon(bu.icon)

@@ -4,7 +4,11 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	B.StripTextures(HelpFrame)
 	B.SetBD(HelpFrame)
-	B.ReskinClose(HelpFrameCloseButton)
+	if DB.isNewPatch then
+		B.ReskinClose(HelpFrame.CloseButton)
+	else
+		B.ReskinClose(HelpFrameCloseButton)
+	end
 	B.StripTextures(HelpBrowser.BrowserInset)
 
 	B.StripTextures(BrowserSettingsTooltip)

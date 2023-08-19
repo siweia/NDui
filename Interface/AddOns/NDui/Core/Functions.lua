@@ -838,9 +838,15 @@ do
 		"Center",
 	}
 	function B:Reskin(noHighlight, override)
-		if self.SetNormalTexture and not override then self:SetNormalTexture("") end
-		if self.SetHighlightTexture then self:SetHighlightTexture("") end
-		if self.SetPushedTexture then self:SetPushedTexture("") end
+		if DB.isNewPatch then
+			if self.SetNormalTexture and not override then self:SetNormalTexture(0) end
+			if self.SetHighlightTexture then self:SetHighlightTexture(0) end
+			if self.SetPushedTexture then self:SetPushedTexture(0) end
+		else
+			if self.SetNormalTexture and not override then self:SetNormalTexture("") end
+			if self.SetHighlightTexture then self:SetHighlightTexture("") end
+			if self.SetPushedTexture then self:SetPushedTexture("") end
+		end
 		if self.SetDisabledTexture then self:SetDisabledTexture("") end
 
 		local buttonName = self.GetName and self:GetName()
@@ -1185,8 +1191,13 @@ do
 
 	-- Handle checkbox and radio
 	function B:ReskinCheck(forceSaturation)
-		self:SetNormalTexture("")
-		self:SetPushedTexture("")
+		if DB.isNewPatch then
+			self:SetNormalTexture(0)
+			self:SetPushedTexture(0)
+		else
+			self:SetNormalTexture("")
+			self:SetPushedTexture("")
+		end
 
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetInside(self, 4, 4)
@@ -1207,8 +1218,13 @@ do
 	end
 
 	function B:ReskinRadio()
-		self:SetNormalTexture("")
-		self:SetHighlightTexture("")
+		if DB.isNewPatch then
+			self:SetNormalTexture(0)
+			self:SetHighlightTexture(0)
+		else
+			self:SetNormalTexture("")
+			self:SetHighlightTexture("")
+		end
 		self:SetCheckedTexture(DB.bdTex)
 
 		local ch = self:GetCheckedTexture()
@@ -1238,7 +1254,9 @@ do
 
 	-- Handle slider
 	function B:ReskinSlider(vertical)
-		self:SetBackdrop(nil)
+		if not DB.isNewPatch then
+			self:SetBackdrop(nil)
+		end
 		B.StripTextures(self)
 
 		local bg = B.CreateBDFrame(self, 0, true)
@@ -1277,7 +1295,11 @@ do
 	local function resetCollapseTexture(self, texture)
 		if self.settingTexture then return end
 		self.settingTexture = true
-		self:SetNormalTexture("")
+		if DB.isNewPatch then
+			self:SetNormalTexture(0)
+		else
+			self:SetNormalTexture("")
+		end
 
 		if texture and texture ~= "" then
 			if strfind(texture, "Plus") or strfind(texture, "Closed") then
@@ -1293,9 +1315,15 @@ do
 	end
 
 	function B:ReskinCollapse(isAtlas)
-		self:SetHighlightTexture("")
-		self:SetPushedTexture("")
-		self:SetDisabledTexture("")
+		if DB.isNewPatch then
+			self:SetNormalTexture(0)
+			self:SetHighlightTexture(0)
+			self:SetPushedTexture(0)
+		else
+			self:SetHighlightTexture("")
+			self:SetPushedTexture("")
+			self:SetDisabledTexture("")
+		end
 
 		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
