@@ -377,19 +377,27 @@ function GetMinimapShape() -- LibDBIcon
 end
 
 function module:ShowMinimapClock()
+	if C.db["Map"]["DisableMinimap"] then return end
+
+	if not TimeManagerClockButton.styled then
+		TimeManagerClockButton:DisableDrawLayer("BORDER")
+		TimeManagerClockTicker:SetFont(unpack(DB.Font))
+		TimeManagerClockTicker:SetTextColor(1, 1, 1)
+
+		TimeManagerClockButton.styled = true
+	end
+
 	if C.db["Map"]["Clock"] then
 		if not TimeManagerClockButton then LoadAddOn("Blizzard_TimeManager") end
-		if not TimeManagerClockButton.styled then
-			TimeManagerClockButton:DisableDrawLayer("BORDER")
-			TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -8)
-			TimeManagerClockTicker:SetFont(unpack(DB.Font))
-			TimeManagerClockTicker:SetTextColor(1, 1, 1)
-
-			TimeManagerClockButton.styled = true
-		end
+		TimeManagerClockButton:ClearAllPoints()
+		TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -8)
 		TimeManagerClockButton:Show()
 	else
-		if TimeManagerClockButton then TimeManagerClockButton:Hide() end
+		if TimeManagerClockButton then
+			TimeManagerClockButton:ClearAllPoints()
+			TimeManagerClockButton:SetPoint("BOTTOM", B.HiddenFrame)
+			TimeManagerClockButton:Hide()
+		end
 	end
 end
 
