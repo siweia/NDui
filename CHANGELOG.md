@@ -1,6 +1,8 @@
 # NDui Classic Era
 
-## [1.38.1](https://github.com/siweia/NDui/tree/1.38.1) (2022-11-3)
+## [1.39.0](https://github.com/siweia/NDui/tree/1.39.0) (2023-8-24)
 
-- Update skin for Details and WA.
-- Add feet and hands slot into aurawatch GUI.
+- Update default skins.
+- Update oUF.
+- Update looks for scrollbars.
+- Support patch 1.14.4.
