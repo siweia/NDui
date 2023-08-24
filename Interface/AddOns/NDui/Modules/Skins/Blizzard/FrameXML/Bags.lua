@@ -29,13 +29,8 @@ local function createBagIcon(frame, index)
 end
 
 local function styleBankButton(bu)
-	if DB.isNewPatch then
-		bu:SetNormalTexture(0)
-		bu:SetPushedTexture(0)
-	else
-		bu:SetNormalTexture("")
-		bu:SetPushedTexture("")
-	end
+	bu:SetNormalTexture(0)
+	bu:SetPushedTexture(0)
 	bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	bu.searchOverlay:SetOutside()
 
@@ -73,13 +68,8 @@ tinsert(C.defaultThemes, function()
 			questTexture:SetDrawLayer("BACKGROUND")
 			questTexture:SetSize(1, 1)
 
-			if DB.isNewPatch then
-				button:SetNormalTexture(0)
-				button:SetPushedTexture(0)
-			else
-				button:SetNormalTexture("")
-				button:SetPushedTexture("")
-			end
+			button:SetNormalTexture(0)
+			button:SetPushedTexture(0)
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 			button.icon:SetTexCoord(unpack(DB.TexCoord))

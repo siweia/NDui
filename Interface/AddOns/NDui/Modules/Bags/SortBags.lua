@@ -5,8 +5,6 @@
 local _G, _M = getfenv(0), {}
 setfenv(1, setmetatable(_M, {__index=_G}))
 
-local isNewPatch = NDui[4].isNewPatch
-
 local GetBagName = C_Container and C_Container.GetBagName or GetBagName
 local GetBagSlotFlag = C_Container and C_Container.GetBagSlotFlag or GetBagSlotFlag
 local GetBankBagSlotFlag = C_Container and C_Container.GetBankBagSlotFlag or GetBankBagSlotFlag
@@ -213,62 +211,34 @@ function LT(a, b)
 	end
 end
 
-if isNewPatch then
-	function Move(src, dst)
-		if InCombatLockdown() then return end -- might block in combat, needs review
-	
-		local srcInfo = GetContainerItemInfo(src.container, src.position)
-		local texture = srcInfo and srcInfo.iconFileID
-		local srcLocked = srcInfo and srcInfo.isLocked
-		local dstInfo = GetContainerItemInfo(dst.container, dst.position)
-		local dstLocked = dstInfo and dstInfo.isLocked
-	
-		if texture and not srcLocked and not dstLocked then
-			ClearCursor()
-			PickupContainerItem(src.container, src.position)
-			PickupContainerItem(dst.container, dst.position)
-	
-			if src.item == dst.item then
-				local count = min(src.count, itemStacks[dst.item] - dst.count)
-				src.count = src.count - count
-				dst.count = dst.count + count
-				if src.count == 0 then
-					src.item = nil
-				end
-			else
-				src.item, dst.item = dst.item, src.item
-				src.count, dst.count = dst.count, src.count
+function Move(src, dst)
+	if InCombatLockdown() then return end -- might block in combat, needs review
+
+	local srcInfo = GetContainerItemInfo(src.container, src.position)
+	local texture = srcInfo and srcInfo.iconFileID
+	local srcLocked = srcInfo and srcInfo.isLocked
+	local dstInfo = GetContainerItemInfo(dst.container, dst.position)
+	local dstLocked = dstInfo and dstInfo.isLocked
+
+	if texture and not srcLocked and not dstLocked then
+		ClearCursor()
+		PickupContainerItem(src.container, src.position)
+		PickupContainerItem(dst.container, dst.position)
+
+		if src.item == dst.item then
+			local count = min(src.count, itemStacks[dst.item] - dst.count)
+			src.count = src.count - count
+			dst.count = dst.count + count
+			if src.count == 0 then
+				src.item = nil
 			end
-	
-			coroutine.yield()
-			return true
+		else
+			src.item, dst.item = dst.item, src.item
+			src.count, dst.count = dst.count, src.count
 		end
-	end
-else
-	function Move(src, dst)
-		local texture, _, srcLocked = GetContainerItemInfo(src.container, src.position)
-		local _, _, dstLocked = GetContainerItemInfo(dst.container, dst.position)
-	
-		if texture and not srcLocked and not dstLocked then
-			ClearCursor()
-			PickupContainerItem(src.container, src.position)
-			PickupContainerItem(dst.container, dst.position)
-	
-			if src.item == dst.item then
-				local count = min(src.count, itemStacks[dst.item] - dst.count)
-				src.count = src.count - count
-				dst.count = dst.count + count
-				if src.count == 0 then
-					src.item = nil
-				end
-			else
-				src.item, dst.item = dst.item, src.item
-				src.count, dst.count = dst.count, src.count
-			end
-	
-			coroutine.yield()
-			return true
-		end
+
+		coroutine.yield()
+		return true
 	end
 end
 
@@ -421,14 +391,9 @@ do
 				local slot = {container=container, position=position, class=class}
 				local item = Item(container, position)
 				if item then
-					local count, locked
-					if isNewPatch then
-						local info = GetContainerItemInfo(container, position)
-						count = info and info.stackCount
-						locked = info and info.isLocked
-					else
-						_, count, locked = GetContainerItemInfo(container, position)
-					end
+					local info = GetContainerItemInfo(container, position)
+					local count = info and info.stackCount
+					local locked = info and info.isLocked
 					if locked then
 						return false
 					end

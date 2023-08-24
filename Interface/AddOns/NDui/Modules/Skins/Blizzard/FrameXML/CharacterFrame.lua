@@ -49,13 +49,8 @@ tinsert(C.defaultThemes, function()
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
 
-		if DB.isNewPatch then
-			slot:SetNormalTexture(0)
-			slot:SetPushedTexture(0)
-		else
-			slot:SetNormalTexture("")
-			slot:SetPushedTexture("")
-		end
+		slot:SetNormalTexture(0)
+		slot:SetPushedTexture(0)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		slot.SetHighlightTexture = B.Dummy
 		slot.icon:SetTexCoord(.08, .92, .08, .92)

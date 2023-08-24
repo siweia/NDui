@@ -10,7 +10,6 @@ local LE_ITEM_CLASS_QUIVER, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_QUIVER, LE_I
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local SortBankBags, SortBags, InCombatLockdown, ClearCursor = SortBankBags, SortBags, InCombatLockdown, ClearCursor
--- isNewPatch
 local GetContainerItemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
 local GetContainerItemInfo = C_Container and C_Container.GetContainerItemID or GetContainerItemID
 local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
@@ -793,13 +792,8 @@ function module:OnLogin()
 	MyButton:Scaffold("Default")
 
 	function MyButton:OnCreate()
-		if DB.isNewPatch then
-			self:SetNormalTexture(0)
-			self:SetPushedTexture(0)
-		else
-			self:SetNormalTexture(nil)
-			self:SetPushedTexture(nil)
-		end
+		self:SetNormalTexture(0)
+		self:SetPushedTexture(0)
 		self:SetHighlightTexture(DB.bdTex)
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		self:GetHighlightTexture():SetInside()
@@ -1095,13 +1089,8 @@ function module:OnLogin()
 
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
 	function BagButton:OnCreate()
-		if DB.isNewPatch then
-			self:SetNormalTexture(0)
-			self:SetPushedTexture(0)
-		else
-			self:SetNormalTexture(nil)
-			self:SetPushedTexture(nil)
-		end
+		self:SetNormalTexture(0)
+		self:SetPushedTexture(0)
 		self:SetHighlightTexture(DB.bdTex)
 		self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 		self:GetHighlightTexture():SetInside()
@@ -1135,11 +1124,7 @@ function module:OnLogin()
 
 	-- Sort order
 	SetSortBagsRightToLeft(C.db["Bags"]["BagSortMode"] == 1)
-	if DB.isNewPatch then
-		C_Container.SetInsertItemsLeftToRight(false)
-	else
-		SetInsertItemsLeftToRight(false)
-	end
+	C_Container.SetInsertItemsLeftToRight(false)
 
 	-- Init
 	ToggleAllBags()

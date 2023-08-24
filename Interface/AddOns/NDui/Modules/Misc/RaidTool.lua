@@ -526,8 +526,6 @@ function M:RaidTool_EasyMarker()
 		SetRaidTarget("target", arg1)
 	end
 
-	if DB.isNewPatch then
-
 	local mixins = {
 		UnitPopupRaidTarget8ButtonMixin,
 		UnitPopupRaidTarget7ButtonMixin,
@@ -551,23 +549,6 @@ function M:RaidTool_EasyMarker()
 			arg1 = 9 - index,
 			func = SetRaidTargetByIndex,
 		}
-	end
-
-	else
-		local order = {"8", "7", "6", "5", "4", "3", "2", "1", "NONE"}
-		for index, value in pairs(order) do
-			local blizz = _G.UnitPopupButtons["RAID_TARGET_"..value]
-			menuList[index] = {
-				text = GetMenuTitle(blizz.color, blizz.text),
-				icon = blizz.icon,
-				tCoordLeft = blizz.tCoordLeft,
-				tCoordRight = blizz.tCoordRight,
-				tCoordTop = blizz.tCoordTop,
-				tCoordBottom = blizz.tCoordBottom,
-				arg1 = 9 - index,
-				func = SetRaidTargetByIndex,
-			}
-		end
 	end
 
 	local function GetModifiedState()

@@ -75,11 +75,7 @@ C.themes["Blizzard_Communities"] = function()
 				button.bg:SetPoint("TOPLEFT", 5, -5)
 				button.bg:SetPoint("BOTTOMRIGHT", -10, 5)
 
-				if DB.isNewPatch then
-					button:SetHighlightTexture(0)
-				else
-					button:SetHighlightTexture("")
-				end
+				button:SetHighlightTexture(0)
 				button.IconRing:SetAlpha(0)
 				button.__iconBorder = B.ReskinIcon(button.Icon)
 				button.Background:Hide()

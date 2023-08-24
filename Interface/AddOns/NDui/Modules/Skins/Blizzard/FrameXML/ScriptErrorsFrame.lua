@@ -10,10 +10,6 @@ tinsert(C.defaultThemes, function()
 	B.ReskinArrow(select(5, ScriptErrorsFrame:GetChildren()), "left")
 	B.ReskinArrow(select(6, ScriptErrorsFrame:GetChildren()), "right")
 	B.Reskin(select(7, ScriptErrorsFrame:GetChildren()))
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(ScriptErrorsFrame.ScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(ScriptErrorsFrameScrollBar)
-	end
+	B.ReskinTrimScroll(ScriptErrorsFrame.ScrollFrame.ScrollBar)
 	B.ReskinClose(ScriptErrorsFrameClose)
 end)

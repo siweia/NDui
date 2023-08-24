@@ -209,8 +209,6 @@ local autoGossipTypes = {
 	["trainer"] = true,
 }
 
-if DB.isNewPatch then
-
 QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
 	if C.IgnoreQuestNPC[npcID] then return end
@@ -254,68 +252,6 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 		end
 	end
 end)
-
-else
-
-	QuickQuest:Register("GOSSIP_SHOW", function()
-		local npcID = GetNPCID()
-		if C.IgnoreQuestNPC[npcID] then return end
-	
-		local active = GetNumGossipActiveQuests()
-		if(active > 0) then
-			local logQuests = GetQuestLogQuests(true)
-			for index = 1, active do
-				local name, _, _, _, complete = GetActiveGossipQuestInfo(index)
-				if(complete) then
-					local questID = logQuests[name]
-					if(not questID) then
-						SelectGossipActiveQuest(index)
-					else
-						local _, _, worldQuest = GetQuestTagInfo(questID)
-						if(not worldQuest) then
-							SelectGossipActiveQuest(index)
-						end
-					end
-				end
-			end
-		end
-	
-		local available = GetNumGossipAvailableQuests()
-		if(available > 0) then
-			for index = 1, available do
-				local _, _, trivial, ignored = GetAvailableGossipQuestInfo(index)
-				if(not trivial and not ignored) then
-					SelectGossipAvailableQuest(index)
-				elseif(trivial and npcID == 64337) then
-					SelectGossipAvailableQuest(index)
-				end
-			end
-		end
-	
-		if(autoSelectFirstOptionList[npcID]) then
-			return SelectGossipOption(1)
-		end
-	
-		if(available == 0 and active == 0) then
-			if GetNumGossipOptions() == 1 then
-				if(npcID == 57850) then
-					return SelectGossipOption(1)
-				end
-	
-				local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-				if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
-					local _, type = GetGossipOptions()
-					if autoGossipTypes[type] then
-						SelectGossipOption(1)
-						return
-					end
-				end
-			elseif followerAssignees[npcID] and GetNumGossipOptions() > 1 then
-				return SelectGossipOption(1)
-			end
-		end
-	end)
-end
 
 local darkmoonNPC = {
 	[57850] = true, -- Teleportologist Fozlebub
@@ -558,9 +494,4 @@ local frame = GossipFrame.TitleContainer
 if frame then
 	frame:HookScript("OnShow", UnitQuickQuestStatus)
 	frame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
-end
-
-if not DB.isNewPatch then
-	GossipNpcNameFrame:HookScript("OnShow", UnitQuickQuestStatus)
-	GossipNpcNameFrame:HookScript("OnMouseDown", ToggleQuickQuestStatus)
 end
