@@ -290,7 +290,6 @@ function S:QuestTracker()
 	--QuestWatchFrame:SetHeight(GetScreenHeight()*.65)
 	QuestWatchFrame:SetClampedToScreen(false)
 	QuestWatchFrame:SetMovable(true)
-	QuestWatchFrame:SetUserPlaced(true)
 
 	local function QuestFrameReset(self, _, parent)
 		if parent ~= frame then
