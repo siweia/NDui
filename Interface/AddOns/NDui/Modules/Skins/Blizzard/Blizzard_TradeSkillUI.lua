@@ -12,7 +12,7 @@ C.themes["Blizzard_CraftUI"] = function()
 	B.StripTextures(CraftRankFrame)
 	CraftRankFrame:SetStatusBarTexture(DB.bdTex)
 	CraftRankFrame.SetStatusBarColor = B.Dummy
-	CraftRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+	CraftRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(.1, .3, .9, 1), CreateColor(.2, .4, 1, 1))
 	B.CreateBDFrame(CraftRankFrame, .25)
 	CraftRankFrame:SetWidth(220)
 
@@ -61,7 +61,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	B.StripTextures(TradeSkillRankFrame)
 	TradeSkillRankFrame:SetStatusBarTexture(DB.bdTex)
 	TradeSkillRankFrame.SetStatusBarColor = B.Dummy
-	TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+	TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(.1, .3, .9, 1), CreateColor(.2, .4, 1, 1))
 	B.CreateBDFrame(TradeSkillRankFrame, .25)
 	TradeSkillRankFrame:SetWidth(220)
 
