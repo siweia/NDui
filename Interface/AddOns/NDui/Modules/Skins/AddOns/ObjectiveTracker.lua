@@ -292,12 +292,15 @@ function S:QuestTracker()
 	QuestWatchFrame:SetMovable(true)
 	QuestWatchFrame:SetUserPlaced(true)
 
-	hooksecurefunc(QuestWatchFrame, "SetPoint", function(self, _, parent)
+	local function QuestFrameReset(self, _, parent)
 		if parent == "MinimapCluster" or parent == _G.MinimapCluster then
 			self:ClearAllPoints()
 			self:SetPoint("TOPLEFT", frame, 5, -5)
 		end
-	end)
+	end
+
+	QuestFrameReset(QuestWatchFrame, _, "MinimapCluster")
+	hooksecurefunc(QuestWatchFrame, "SetPoint", QuestFrameReset)
 
 	local timerMover = CreateFrame("Frame", "NDuiQuestTimerMover", UIParent)
 	timerMover:SetSize(150, 30)
