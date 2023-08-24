@@ -97,6 +97,7 @@ function UF:UpdateHealthBarColor(self, force)
 	end
 end
 
+local endColor = CreateColor(0, 0, 0, .25)
 function UF.HealthPostUpdate(element, unit, cur, max)
 	local self = element.__owner
 	local mystyle = self.mystyle
@@ -122,7 +123,7 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 			color = self.colors.reaction[UnitReaction(unit, "player")]
 		end
 		if color then
-			element:GetStatusBarTexture():SetGradientAlpha("HORIZONTAL", color[1],color[2],color[3], .75, 0,0,0, .25)
+			element:GetStatusBarTexture():SetGradient("HORIZONTAL", CreateColor(color[1], color[2], color[3], .75), endColor)
 		end
 	end
 end
