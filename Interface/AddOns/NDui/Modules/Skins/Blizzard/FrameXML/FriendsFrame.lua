@@ -23,12 +23,6 @@ tinsert(C.defaultThemes, function()
 		bu.background:Hide()
 		bu:SetHighlightTexture(DB.bdTex)
 		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
-		ic:SetSize(22, 22)
-		ic:SetTexCoord(.17, .83, .17, .83)
-
-		bu.bg = CreateFrame("Frame", nil, bu)
-		bu.bg:SetAllPoints(ic)
-		B.CreateBDFrame(bu.bg, 0)
 
 		local travelPass = bu.travelPassButton
 		travelPass:SetSize(22, 22)
@@ -36,9 +30,10 @@ tinsert(C.defaultThemes, function()
 		travelPass:SetDisabledTexture(0)
 		travelPass:SetPoint("TOPRIGHT", -3, -6)
 		B.CreateBDFrame(travelPass, 1)
-		local nt = travelPass:GetNormalTexture()
+		local nt = travelPass:CreateTexture(nil, "BACKGROUND")
 		nt:SetTexture("Interface\\FriendsFrame\\PlusManz-PlusManz")
 		nt:SetTexCoord(.1, .9, .1, .9)
+		nt:SetAllPoints()
 		local hl = travelPass:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)
 		hl:SetAllPoints()
@@ -49,10 +44,7 @@ tinsert(C.defaultThemes, function()
 			local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
 
 			if bu.gameIcon:IsShown() then
-				bu.bg:Show()
 				bu.gameIcon:SetPoint("TOPRIGHT", bu.travelPassButton, "TOPLEFT", -4, 0)
-			else
-				bu.bg:Hide()
 			end
 		end
 	end
