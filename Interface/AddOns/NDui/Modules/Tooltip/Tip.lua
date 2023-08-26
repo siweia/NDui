@@ -485,6 +485,11 @@ TT:RegisterTooltips("NDui", function()
 
 	B.ReskinClose(ItemRefCloseButton)
 
+	if SettingsTooltip then
+		TT.ReskinTooltip(SettingsTooltip)
+		SettingsTooltip:SetScale(UIParent:GetScale())
+	end
+
 	-- DropdownMenu
 	local function reskinDropdown()
 		for _, name in pairs({"DropDownList", "L_DropDownList", "Lib_DropDownList"}) do
