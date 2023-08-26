@@ -15,6 +15,8 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
+	B.ReskinCheck(ShowAllSpellRanksCheckBox)
+
 	for i = 1, 8 do
 		local tab = _G["SpellBookSkillLineTab"..i]
 		B.CreateBDFrame(tab)
