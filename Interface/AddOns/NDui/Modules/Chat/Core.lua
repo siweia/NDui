@@ -96,6 +96,11 @@ function module:ToggleEditBoxAnchor()
 	end
 end
 
+local function UpdateEditboxFont(editbox)
+	editbox:SetFont(DB.Font[1], 14, "")
+	editbox.header:SetFont(DB.Font[1], 14, "")
+end
+
 function module:SkinChat()
 	if not self or self.styled then return end
 
@@ -121,6 +126,7 @@ function module:SkinChat()
 	UpdateEditBoxAnchor(eb)
 	B.StripTextures(eb, 2)
 	B.SetBD(eb)
+	UpdateEditboxFont(eb)
 	tinsert(chatEditboxes, eb)
 
 	local lang = _G[name.."EditBoxLanguage"]
