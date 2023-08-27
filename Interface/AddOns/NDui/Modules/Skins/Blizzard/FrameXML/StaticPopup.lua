@@ -1,19 +1,26 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local r, g, b = DB.r, DB.g, DB.b
+
+local function colourMinimize(f)
+	if f:IsEnabled() then
+		f.minimize:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearMinimize(f)
+	f.minimize:SetVertexColor(1, 1, 1)
+end
+
+local function updateMinorButtonState(button)
+	if button:GetChecked() then
+		button.bg:SetBackdropColor(1, .8, 0, .25)
+	else
+		button.bg:SetBackdropColor(0, 0, 0, .25)
+	end
+end
 
 tinsert(C.defaultThemes, function()
-	local r, g, b = DB.r, DB.g, DB.b
-
-	local function colourMinimize(f)
-		if f:IsEnabled() then
-			f.minimize:SetVertexColor(r, g, b)
-		end
-	end
-
-	local function clearMinimize(f)
-		f.minimize:SetVertexColor(1, 1, 1)
-	end
-
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local bu = _G["StaticPopup"..i.."ItemFrame"]
@@ -127,4 +134,29 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(PVPReadyDialog)
 	B.Reskin(PVPReadyDialog.enterButton)
 	B.Reskin(PVPReadyDialog.hideButton)
+
+	-- PlayerReportFrame
+	B.StripTextures(ReportFrame)
+	B.SetBD(ReportFrame)
+	B.ReskinClose(ReportFrame.CloseButton)
+	B.Reskin(ReportFrame.ReportButton)
+	B.ReskinDropDown(ReportFrame.ReportingMajorCategoryDropdown)
+	B.ReskinEditBox(ReportFrame.Comment)
+
+	hooksecurefunc(ReportFrame, "AnchorMinorCategory", function(self)
+		if self.MinorCategoryButtonPool then
+			for button in self.MinorCategoryButtonPool:EnumerateActive() do
+				if not button.styled then
+					B.StripTextures(button)
+					button.bg = B.CreateBDFrame(button, .25)
+					button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+					button:HookScript("OnClick", updateMinorButtonState)
+
+					button.styled = true
+				end
+
+				updateMinorButtonState(button)
+			end
+		end
+	end)
 end)
