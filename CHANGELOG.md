@@ -1,7 +1,7 @@
 # NDui Classic Era
 
-## [1.39.1](https://github.com/siweia/NDui/tree/1.39.1) (2023-8-26)
+## [1.39.2](https://github.com/siweia/NDui/tree/1.39.2) (2023-8-27)
 
 - Update default skins.
-- Fix infobar friends module.
-- Fix auras visibility.
+- Fix auto junk selling.
+- Remove font outline on chatframe editboxes.
