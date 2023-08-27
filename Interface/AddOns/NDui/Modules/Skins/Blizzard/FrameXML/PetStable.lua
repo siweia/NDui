@@ -7,14 +7,20 @@ tinsert(C.defaultThemes, function()
 	local class = select(2, UnitClass("player"))
 	if class ~= "HUNTER" then return end
 
+	local x1, x2, y1, y2 = unpack(DB.TexCoord)
+
 	PetStableBottomInset:Hide()
 	PetStableLeftInset:Hide()
-	PetStableModelShadow:Hide()
-	PetStableModelRotateLeftButton:Hide()
-	PetStableModelRotateRightButton:Hide()
+	if not DB.isNewPatch then
+		PetStableModelShadow:Hide()
+		PetStableModelRotateLeftButton:Hide()
+		PetStableModelRotateRightButton:Hide()
+	end
 	PetStableFrameModelBg:Hide()
 	PetStablePrevPageButtonIcon:SetTexture("")
 	PetStableNextPageButtonIcon:SetTexture("")
+	PetStableDietTexture:SetTexture(132165)
+	PetStableDietTexture:SetTexCoord(x1, x2, y1, y2)
 
 	B.ReskinPortraitFrame(PetStableFrame)
 	B.ReskinArrow(PetStablePrevPageButton, "left")
@@ -30,7 +36,7 @@ tinsert(C.defaultThemes, function()
 		bu.Checked:SetTexture(DB.pushedTex)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(unpack(DB.TexCoord))
+		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(x1, x2, y1, y2)
 		B.CreateBDFrame(bu, .25)
 	end
 
@@ -42,7 +48,7 @@ tinsert(C.defaultThemes, function()
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
 
-		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(unpack(DB.TexCoord))
+		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(x1, x2, y1, y2)
 		B.CreateBDFrame(bu, .25)
 	end
 end)
