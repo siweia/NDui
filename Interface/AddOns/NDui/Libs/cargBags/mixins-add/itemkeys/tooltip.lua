@@ -43,7 +43,7 @@ cargBags.itemKeys["bindOn"] = function(i)
 	if not tip then return end
 
 	tip:SetOwner(UIParent, "ANCHOR_NONE")
-	tip:SetBagItem(i.bagID, i.slotID)
+	tip:SetBagItem(i.bagId, i.slotId)
 
 	for j = 2, 5 do
 		local line = _G["NDui_ScanTooltipTextLeft"..j]

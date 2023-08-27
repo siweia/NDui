@@ -303,8 +303,8 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	i = i or defaultItem
 	for k in pairs(i) do i[k] = nil end
 
-	i.bagID = bagID
-	i.slotID = slotID
+	i.bagId = bagID
+	i.slotId = slotID
 
 	local texture, count, locked, quality, itemLink, noValue, itemID
 	local info = C_Container.GetContainerItemInfo(bagID, slotID)
@@ -441,7 +441,7 @@ function Implementation:BAG_UPDATE_COOLDOWN(_, bagID)
 	else
 		for _, container in pairs(self.contByID) do
 			for _, button in pairs(container.buttons) do
-				local item = self:GetItemInfo(button.bagID, button.slotID)
+				local item = self:GetItemInfo(button.bagId, button.slotId)
 				button:UpdateCooldown(item)
 			end
 		end
@@ -486,7 +486,7 @@ end
 function Implementation:UNIT_QUEST_LOG_CHANGED()
 	for _, container in pairs(self.contByID) do
 		for _, button in pairs(container.buttons) do
-			local item = self:GetItemInfo(button.bagID, button.slotID)
+			local item = self:GetItemInfo(button.bagId, button.slotId)
 			button:UpdateQuest(item)
 		end
 	end

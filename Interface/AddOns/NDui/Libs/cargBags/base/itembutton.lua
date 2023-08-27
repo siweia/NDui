@@ -34,7 +34,7 @@ local ItemButton = cargBags:NewClass("ItemButton", nil, "Button")
 	@return tpl <string>
 ]]
 function ItemButton:GetTemplate(bagID)
-	bagID = bagID or self.bagID
+	bagID = bagID or self.bagId
 	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "ItemButtonTemplate",
       (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or ContainerFrame1;
 end
@@ -57,8 +57,8 @@ function ItemButton:New(bagID, slotID)
 	local tpl, parent = self:GetTemplate(bagID)
 	local button = table.remove(self.recycled[tpl]) or self:Create(tpl, parent)
 
-	button.bagID = bagID
-	button.slotID = slotID
+	button.bagId = bagID
+	button.slotId = slotID
 	button:SetID(slotID)
 	button:Show()
 	button:HookScript("OnEnter", button.OnEnter)
@@ -114,5 +114,5 @@ end
 	@return item <table>
 ]]
 function ItemButton:GetItemInfo(item)
-	return self.implementation:GetItemInfo(self.bagID, self.slotID, item)
+	return self.implementation:GetItemInfo(self.bagId, self.slotId, item)
 end
