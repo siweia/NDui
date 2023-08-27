@@ -1,13 +1,11 @@
 # NDui
 
-## [7.11.1](https://github.com/siweia/NDui/tree/7.11.1) (2023-7-16)
+## [7.12.0](https://github.com/siweia/NDui/tree/7.12.0) (2023-8-27)
 
-- Updates for 10.1.5.
 - Update auras.
-- Fix TradeTabs on ProfessionsFrame.
-- Update default skins..
-- Update micro menu buttons.
 - Update oUF.
-- Dungeons filter now works with addon PGF.
-- Reformat unit tooltip info.
-- Fix taint when open encounter journal.
+- Update empower casting bar.
+- Update auras or Evoker.
+- Fix taint in encounter journal.
+- Update locales.
+- Remove font outline in chat editboxes.

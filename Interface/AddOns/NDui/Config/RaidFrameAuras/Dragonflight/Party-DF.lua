@@ -21,6 +21,7 @@ INSTANCE = 1209 -- 永恒黎明
 module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 413142) -- 万古裂片
 module:RegisterDebuff(TIER, INSTANCE, 0, 410908) -- 永恒新星
+module:RegisterDebuff(TIER, INSTANCE, 0, 407406) -- 腐蚀
 
 -- S1
 INSTANCE = 1201 -- 艾杰斯亚学院

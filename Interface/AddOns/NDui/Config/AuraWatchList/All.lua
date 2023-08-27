@@ -232,6 +232,7 @@ local list = {
 		{AuraID = 414496, UnitID = "player", Flash = true},	-- 时间线加速，永恒黎明
 		{AuraID = 406543, UnitID = "player", Flash = true},	-- 窃取时间，永恒黎明
 		{AuraID = 410908, UnitID = "player", Flash = true},	-- 永恒新星，永恒黎明
+		{AuraID = 407406, UnitID = "player", Flash = true},	-- 腐蚀，萨卡雷斯
 
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
