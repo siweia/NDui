@@ -209,6 +209,10 @@ local autoGossipTypes = {
 	["trainer"] = true,
 }
 
+local ignoreInstances = {
+	[1571] = true, -- 枯法者
+	[1626] = true, -- 群星庭院
+}
 QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
 	if C.IgnoreQuestNPC[npcID] then return end
