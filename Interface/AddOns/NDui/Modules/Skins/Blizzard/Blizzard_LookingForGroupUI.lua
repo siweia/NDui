@@ -71,6 +71,12 @@ C.themes["Blizzard_LookingForGroupUI"] = function()
 		skinOptions(self.ScrollBox)
 	end)
 
+	-- needs review, blizzard bug fix
+	local scrollBox = LFGBrowseFrame.ScrollBox
+	if scrollBox and not scrollBox.ClearDataProvider then
+		scrollBox.ClearDataProvider = B.Dummy
+	end
+
 	B.StripTextures(LFGBrowseFrame)
 	B.ReskinTrimScroll(LFGBrowseFrameScrollBar)
 	B.Reskin(LFGBrowseFrameSendMessageButton)
