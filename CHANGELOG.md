@@ -1,6 +1,5 @@
 # NDui Classic
 
-## [Classic-3.10.2](https://github.com/siweia/NDui/tree/Classic-3.10.2) (2023-8-27)
+## [Classic-3.10.3](https://github.com/siweia/NDui/tree/Classic-3.10.3) (2023-8-30)
 
-- Update skins.
-- Update font in chatframe editbox.
+- Initial updates for 3.4.3.
