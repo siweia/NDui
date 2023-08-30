@@ -383,11 +383,33 @@ do
 	end
 end
 
--- Temporary taint fix
+-- Fix Drag Collections taint
 do
-	InterfaceOptionsFrameCancel:SetScript("OnClick", function()
-		InterfaceOptionsFrameOkay:Click()
-	end)
+	if DB.isNewPatch then
+
+	local done
+	local function setupMisc(event, addon)
+		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
+			CollectionsJournal:HookScript("OnShow", function()
+				if not done then
+					if InCombatLockdown() then
+						B:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
+					else
+						B.CreateMF(CollectionsJournal)
+					end
+					done = true
+				end
+			end)
+			B:UnregisterEvent(event, setupMisc)
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			B.CreateMF(CollectionsJournal)
+			B:UnregisterEvent(event, setupMisc)
+		end
+	end
+
+	B:RegisterEvent("ADDON_LOADED", setupMisc)
+
+	end
 end
 
 -- Select target when click on raid units
