@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Bags")
 local cargBags = ns.cargBags
 
+local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_LEGENDARY
 local LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT = LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_TRADEGOODS
@@ -109,10 +110,21 @@ local collectionIDs = {
 local function isMountOrPet(item)
 	return not collectionBlackList[item.id] and item.subClassID and collectionIDs[item.subClassID] == item.classID
 end
+
 local function isItemCollection(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterCollection"] then return end
 	return isMountOrPet(item)
+end
+
+if DB.isNewPatch then
+
+function isItemCollection(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterCollection"] then return end
+	return item.id and C_ToyBox_GetToyInfo(item.id) or isMountOrPet(item)
+end
+
 end
 
 local function isItemCustom(item, index)
