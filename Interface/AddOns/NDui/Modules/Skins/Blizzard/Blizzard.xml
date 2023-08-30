@@ -5,6 +5,7 @@
 	<Script file="Blizzard_BattlefieldMap.lua"/>
 	<Script file="Blizzard_BindingUI.lua"/>
 	<Script file="Blizzard_Calendar.lua"/>
+	<Script file="Blizzard_Collections.lua"/>
 	<Script file="Blizzard_Communities.lua"/>
 	<Script file="Blizzard_DebugTools.lua"/>
 	<Script file="Blizzard_EventTrace.lua"/>
