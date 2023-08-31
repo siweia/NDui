@@ -834,7 +834,7 @@ do
 		if self.SetNormalTexture and not override then self:SetNormalTexture(0) end
 		if self.SetHighlightTexture then self:SetHighlightTexture(0) end
 		if self.SetPushedTexture then self:SetPushedTexture(0) end
-		if self.SetDisabledTexture then self:SetDisabledTexture("") end
+		if self.SetDisabledTexture then self:SetDisabledTexture(0) end
 
 		local buttonName = self.GetName and self:GetName()
 		for _, region in pairs(blizzRegions) do
@@ -1328,7 +1328,7 @@ do
 		self:SetNormalTexture(0)
 		self:SetHighlightTexture(0)
 		self:SetPushedTexture(0)
-		self:SetDisabledTexture("")
+		self:SetDisabledTexture(0)
 
 		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
