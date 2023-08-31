@@ -54,16 +54,19 @@ tinsert(C.defaultThemes, function()
 			frame.NameBorderLeft:Hide()
 			frame.NameBorderRight:Hide()
 			frame.NameBorderMid:Hide()
-			frame.IconBorder:Hide()
-
 			frame.WinnerRoll:SetTextColor(.9, .9, .9)
 
 			frame.bg = B.ReskinIcon(frame.Icon)
+			B.ReskinIconBorder(frame.IconBorder)
 
 			B.ReskinCollapse(frame.ToggleButton)
 			frame.ToggleButton:GetNormalTexture():SetAlpha(0)
 			frame.ToggleButton:GetPushedTexture():SetAlpha(0)
 			frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
+
+			frame.WinnerName:SetFontObject(Game13Font)
+			frame.WinnerRoll:SetWidth(28)
+			frame.WinnerRoll:SetFontObject(Game13Font)
 
 			frame.styled = true
 		end
@@ -75,15 +78,17 @@ tinsert(C.defaultThemes, function()
 				frame.WinnerName:SetVertexColor(color.r, color.g, color.b)
 			end
 		end
-
-		frame.bg:SetBackdropBorderColor(frame.IconBorder:GetVertexColor())
 	end)
 
 	-- [[ Player frame ]]
 
 	hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
 		if not playerFrame.styled then
+			playerFrame.PlayerName:SetWordWrap(false)
+			playerFrame.PlayerName:SetFontObject(Game13Font)
 			playerFrame.RollText:SetTextColor(.9, .9, .9)
+			playerFrame.RollText:SetWidth(28)
+			playerFrame.RollText:SetFontObject(Game13Font)
 			playerFrame.WinMark:SetDesaturated(true)
 
 			playerFrame.styled = true
@@ -93,11 +98,11 @@ tinsert(C.defaultThemes, function()
 			local name, class, _, _, isWinner = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
 
 			if name then
-				local colour = DB.ClassColors[class]
-				playerFrame.PlayerName:SetTextColor(colour.r, colour.g, colour.b)
+				local color = DB.ClassColors[class]
+				playerFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
 
 				if isWinner then
-					playerFrame.WinMark:SetVertexColor(colour.r, colour.g, colour.b)
+					playerFrame.WinMark:SetVertexColor(color.r, color.g, color.b)
 				end
 			end
 		end
@@ -117,7 +122,7 @@ tinsert(C.defaultThemes, function()
 		info.notCheckable = 1;
 		local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx);
 		local classColor = DB.ClassColors[class];
-		local colorCode = string.format("|cFF%02x%02x%02x",  classColor.r*255,  classColor.g*255,  classColor.b*255);
+		local colorCode = classColor.colorStr
 		info.text = string.format(MASTER_LOOTER_GIVE_TO, colorCode..name.."|r");
 		info.func = LootHistoryDropDown_OnClick;
 		UIDropDownMenu_AddButton(info);
