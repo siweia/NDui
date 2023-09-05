@@ -92,7 +92,7 @@ function A:ChantLumos(self)
 		UpdateCooldown(self.lumos[5], 360995, true)--清脆之拥
 
 	elseif spec == 3 then --增辉
-		local spellID = IsPlayerSpell(375783) and 382266 or 357208
+		local spellID = IsPlayerSpell(408083) and 382266 or 357208
 		UpdateCooldown(self.lumos[1], spellID, true)
 		UpdateCooldown(self.lumos[2], 409311, true)
 		UpdateCooldown(self.lumos[3], 395152, true)
