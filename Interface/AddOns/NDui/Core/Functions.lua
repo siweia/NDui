@@ -1234,7 +1234,7 @@ do
 		hl:SetVertexColor(cr, cg, cb, .25)
 
 		local ch = self:GetCheckedTexture()
-		ch:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+		ch:SetAtlas("checkmark-minimal")
 		ch:SetTexCoord(0, 1, 0, 1)
 		ch:SetDesaturated(true)
 		ch:SetVertexColor(cr, cg, cb)
