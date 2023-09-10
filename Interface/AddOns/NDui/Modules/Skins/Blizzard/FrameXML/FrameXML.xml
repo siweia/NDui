@@ -30,6 +30,7 @@
 	<Script file="PetitionFrame.lua"/>
 	<Script file="PetStable.lua"/>
 	<Script file="ProductChoiceFrame.lua"/>
+	<Script file="PVEFrame.lua"/>
 	<Script file="QuestFrame.lua"/>
 	<Script file="QuestInfo.lua"/>
 	<Script file="RaidFrame.lua"/>

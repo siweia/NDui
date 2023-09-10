@@ -477,7 +477,8 @@ TT:RegisterTooltips("NDui", function()
 		GeneralDockManagerOverflowButtonList,
 		NamePlateTooltip,
 		WorldMapTooltip,
-		IMECandidatesFrame
+		IMECandidatesFrame,
+		QueueStatusFrame,
 	}
 	for _, f in pairs(tooltips) do
 		f:HookScript("OnShow", TT.ReskinTooltip)
