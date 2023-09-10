@@ -4,6 +4,31 @@ local r, g, b = DB.r, DB.g, DB.b
 
 if not DB.isNewPatch then return end
 
+local function ReskinRole(self)
+	if self.background then self.background:SetTexture("") end
+
+	local cover = self.cover or self.Cover
+	if cover then cover:SetTexture("") end
+
+	local checkButton = self.checkButton or self.CheckButton or self.CheckBox
+	if checkButton then
+		checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
+		checkButton:SetPoint("BOTTOMLEFT", -2, -2)
+		B.ReskinCheck(checkButton)
+	end
+
+	local shortageBorder = self.shortageBorder
+	if shortageBorder then
+		shortageBorder:SetTexture("")
+		local icon = self.incentiveIcon
+		icon:SetPoint("BOTTOMRIGHT")
+		icon:SetSize(14, 14)
+		icon.texture:SetSize(14, 14)
+		B.ReskinIcon(icon.texture)
+		icon.border:SetTexture("")
+	end
+end
+
 local function styleRewardButton(button)
 	if not button or button.styled then return end
 
@@ -36,12 +61,6 @@ local function reskinDialogReward(button)
 	border:SetDrawLayer("BACKGROUND")
 	border:SetOutside(button.texture)
 	button.styled = true
-end
-
-local function reskinRoleButton(buttons, role)
-	for _, roleButton in pairs(buttons) do
-		B.ReskinRole(roleButton, role)
-	end
 end
 
 local function updateRoleBonus(roleButton)
@@ -180,38 +199,35 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(LFGDungeonReadyDialogCloseButton)
 	B.ReskinClose(LFGDungeonReadyStatusCloseButton)
 
-	local tanks = {
+	local roleButtons = {
 		LFDQueueFrameRoleButtonTank,
 		LFDRoleCheckPopupRoleButtonTank,
 		RaidFinderQueueFrameRoleButtonTank,
 		LFGInvitePopupRoleButtonTank,
 		LFGListApplicationDialog.TankButton,
 		LFGDungeonReadyStatusGroupedTank,
-	}
-	reskinRoleButton(tanks, "TANK")
 
-	local healers = {
 		LFDQueueFrameRoleButtonHealer,
 		LFDRoleCheckPopupRoleButtonHealer,
 		RaidFinderQueueFrameRoleButtonHealer,
 		LFGInvitePopupRoleButtonHealer,
 		LFGListApplicationDialog.HealerButton,
 		LFGDungeonReadyStatusGroupedHealer,
-	}
-	reskinRoleButton(healers, "HEALER")
 
-	local dps = {
 		LFDQueueFrameRoleButtonDPS,
 		LFDRoleCheckPopupRoleButtonDPS,
 		RaidFinderQueueFrameRoleButtonDPS,
 		LFGInvitePopupRoleButtonDPS,
 		LFGListApplicationDialog.DamagerButton,
 		LFGDungeonReadyStatusGroupedDamager,
-	}
-	reskinRoleButton(dps, "DPS")
 
-	B.ReskinRole(LFDQueueFrameRoleButtonLeader, "LEADER")
-	B.ReskinRole(LFGDungeonReadyStatusRolelessReady, "READY")
+		LFDQueueFrameRoleButtonLeader,
+		RaidFinderQueueFrameRoleButtonLeader,
+		LFGDungeonReadyStatusRolelessReady,
+	}
+	for _, roleButton in pairs(roleButtons) do
+		ReskinRole(roleButton)
+	end
 
 	hooksecurefunc("SetCheckButtonIsRadio", function(button)
 		button:SetNormalTexture(0)
