@@ -126,6 +126,22 @@ local function CreatePetStyle(self)
 	UF:CreateSparkleCastBar(self)
 end
 
+local function CreateBossStyle(self)
+	self.mystyle = "boss"
+	SetUnitFrameSize(self, "Boss")
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreatePowerText(self)
+	UF:CreateCastBar(self)
+	UF:CreateRaidMark(self)
+	UF:CreateBuffs(self)
+	UF:CreateDebuffs(self)
+	UF:CreateClickSets(self)
+end
+
 local function CreateArenaStyle(self)
 	self.mystyle = "arena"
 	SetUnitFrameSize(self, "Boss")
@@ -376,18 +392,29 @@ function UF:OnLogin()
 			B.Mover(targettargettarget, L["TototUF"], "TototUF", C.UFs.ToToTPos)
 		end
 
+		oUF:RegisterStyle("Boss", CreateBossStyle)
+		oUF:SetActiveStyle("Boss")
+		local boss = {}
+		for i = 1, 5 do -- MAX_BOSS_FRAMES, 8 in 9.2?
+			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
+			local moverWidth, moverHeight = boss[i]:GetWidth(), boss[i]:GetHeight()+8
+			local title = i > 5 and "Boss"..i or L["BossFrame"]..i
+			if i == 1 then
+				boss[i].mover = B.Mover(boss[i], title, "Boss1", {"RIGHT", UIParent, "RIGHT", -350, -90}, moverWidth, moverHeight)
+			elseif i == 6 then
+				boss[i].mover = B.Mover(boss[i], title, "Boss"..i, {"BOTTOMLEFT", boss[1].mover, "BOTTOMRIGHT", 50, 0}, moverWidth, moverHeight)
+			else
+				boss[i].mover = B.Mover(boss[i], title, "Boss"..i, {"BOTTOMLEFT", boss[i-1], "TOPLEFT", 0, 50}, moverWidth, moverHeight)
+			end
+		end
+
 		if C.db["UFs"]["Arena"] then
 			oUF:RegisterStyle("Arena", CreateArenaStyle)
 			oUF:SetActiveStyle("Arena")
 			local arena = {}
 			for i = 1, 5 do
 				arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
-				local moverWidth, moverHeight = arena[i]:GetWidth(), arena[i]:GetHeight()+8
-				if i == 1 then
-					arena[i].mover = B.Mover(arena[i], L["ArenaFrame"]..i, "Arena1", {"RIGHT", UIParent, "RIGHT", -350, -90}, moverWidth, moverHeight)
-				else
-					arena[i].mover = B.Mover(arena[i], L["ArenaFrame"]..i, "Arena"..i, {"BOTTOMLEFT", arena[i-1], "TOPLEFT", 0, 50}, moverWidth, moverHeight)
-				end
+				arena[i]:SetPoint("TOPLEFT", boss[i].mover)
 			end
 		end
 

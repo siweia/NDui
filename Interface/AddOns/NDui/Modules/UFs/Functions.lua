@@ -455,6 +455,7 @@ local textScaleFrames = {
 	["pet"] = true,
 	["tot"] = true,
 	["focustarget"] = true,
+	["boss"] = true,
 	["arena"] = true,
 }
 function UF:UpdateTextScale()
@@ -887,6 +888,7 @@ end
 local filteredStyle = {
 	["target"] = true,
 	["nameplate"] = true,
+	["boss"] = true,
 	["arena"] = true,
 }
 
