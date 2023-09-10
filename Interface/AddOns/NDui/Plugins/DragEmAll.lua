@@ -33,6 +33,7 @@ local frames = {
 	["OpenMailFrame"] = false,
 	["PetitionFrame"] = false,
 	["PetStableFrame"] = false,
+	["PVEFrame"] = false,
 	["PVPFrame"] = true,
 	["QuestFrame"] = false,
 	["QuestLogDetailFrame"] = false,
