@@ -1561,7 +1561,7 @@ do
 		self:SetTexCoord(0, 1, 0, 1)
 	end
 
-	function B:ReskinRole(role)
+	function B:ReskinRole()
 		if self.background then self.background:SetTexture("") end
 
 		local cover = self.cover or self.Cover
