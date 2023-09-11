@@ -9,7 +9,6 @@ C.themes["Blizzard_MacroUI"] = function()
 	B.StripTextures(MacroPopupFrame)
 	B.StripTextures(MacroPopupFrame.BorderBox)
 	MacroFrameTextBackground:HideBackdrop()
-	B.ReskinDropDown(MacroPopupFrame.BorderBox.IconTypeDropDown.DropDownMenu)
 
 	MacroPopupFrame:SetHeight(525)
 	MacroNewButton:ClearAllPoints()
