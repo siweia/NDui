@@ -1,11 +1,10 @@
 # NDui
 
-## [7.12.0](https://github.com/siweia/NDui/tree/7.12.0) (2023-8-27)
+## [7.13.0](https://github.com/siweia/NDui/tree/7.13.0) (2023-9-11)
 
-- Update auras.
-- Update oUF.
-- Update empower casting bar.
-- Update auras or Evoker.
-- Fix taint in encounter journal.
-- Update locales.
-- Remove font outline in chat editboxes.
+- Update oUF, support ping interaction.
+- Update auras and nameplate filter.
+- Update default skins.
+- Add support for patch 10.2.
+- Update lumos for Evoker.
+- Remove old compatible code for previous patch.
