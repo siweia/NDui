@@ -11,11 +11,6 @@ tinsert(C.defaultThemes, function()
 
 	PetStableBottomInset:Hide()
 	PetStableLeftInset:Hide()
-	if not DB.isNewPatch then
-		PetStableModelShadow:Hide()
-		PetStableModelRotateLeftButton:Hide()
-		PetStableModelRotateRightButton:Hide()
-	end
 	PetStableFrameModelBg:Hide()
 	PetStablePrevPageButtonIcon:SetTexture("")
 	PetStableNextPageButtonIcon:SetTexture("")

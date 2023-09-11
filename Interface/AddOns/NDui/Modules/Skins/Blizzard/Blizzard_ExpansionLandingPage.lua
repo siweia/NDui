@@ -45,6 +45,9 @@ C.themes["Blizzard_ExpansionLandingPage"] = function()
 					self:ForEachFrame(SkinFactionCategory)
 				end)
 			end
+			if panel.ScrollFadeOverlay then
+				panel.ScrollFadeOverlay:SetAlpha(0) -- isNewPatch
+			end
 
 			panel.styled = true
 		end
