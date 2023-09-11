@@ -1573,17 +1573,6 @@ do
 			checkButton:SetPoint("BOTTOMLEFT", -2, -2)
 			B.ReskinCheck(checkButton)
 		end
-
-		local shortageBorder = self.shortageBorder
-		if shortageBorder then
-			shortageBorder:SetTexture("")
-			local icon = self.incentiveIcon
-			icon:SetPoint("BOTTOMRIGHT")
-			icon:SetSize(14, 14)
-			icon.texture:SetSize(14, 14)
-			B.ReskinIcon(icon.texture)
-			icon.border:SetTexture("")
-		end
 	end
 end
 
