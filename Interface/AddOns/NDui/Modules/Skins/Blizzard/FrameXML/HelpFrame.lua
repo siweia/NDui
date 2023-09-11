@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
 	B.StripTextures(HelpFrame)
+	HelpFrameTitleBg:SetAlpha(0)
 	B.SetBD(HelpFrame)
 	B.ReskinClose(HelpFrame.CloseButton)
 	B.StripTextures(HelpBrowser.BrowserInset)
