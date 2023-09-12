@@ -29,6 +29,7 @@ local list = {
 		{AuraID = 370818, UnitID = "player", Flash = true}, -- 瞬焰
 		{AuraID = 362877, UnitID = "player", Stack = 3}, -- 时光压缩
 		{AuraID = 370537, UnitID = "player", Flash = true}, -- 静滞
+		{AuraID = 370562, UnitID = "player", Flash = true}, -- 静滞
 		{AuraID = 371877, UnitID = "player", Value = true}, -- 生生不息
 		{AuraID = 395296, UnitID = "player"}, -- 黑檀之力
 	},

@@ -35,21 +35,6 @@ local function reskinDialogReward(button)
 	button.styled = true
 end
 
-local function reskinRoleButton(buttons, role)
-	for _, roleButton in pairs(buttons) do
-		B.ReskinRole(roleButton, role)
-	end
-end
-
-local function updateRoleBonus(roleButton)
-	if not roleButton.bg then return end
-	if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
-		roleButton.bg:SetBackdropBorderColor(1, .9, .06)
-	else
-		roleButton.bg:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-
 local function styleRewardRole(roleIcon)
 	if roleIcon and roleIcon:IsShown() then
 		B.ReskinSmallRole(roleIcon.texture, roleIcon.role)
@@ -132,39 +117,36 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(LFGDungeonReadyDialogCloseButton)
 	B.ReskinClose(LFGDungeonReadyStatusCloseButton)
 
-	local tanks = {
+	local roleButtons = {
+		-- tank
 		LFDQueueFrameRoleButtonTank,
 		LFDRoleCheckPopupRoleButtonTank,
 		RaidFinderQueueFrameRoleButtonTank,
 		LFGInvitePopupRoleButtonTank,
 		LFGListApplicationDialog.TankButton,
 		LFGDungeonReadyStatusGroupedTank,
-	}
-	reskinRoleButton(tanks, "TANK")
-
-	local healers = {
+		-- healer
 		LFDQueueFrameRoleButtonHealer,
 		LFDRoleCheckPopupRoleButtonHealer,
 		RaidFinderQueueFrameRoleButtonHealer,
 		LFGInvitePopupRoleButtonHealer,
 		LFGListApplicationDialog.HealerButton,
 		LFGDungeonReadyStatusGroupedHealer,
-	}
-	reskinRoleButton(healers, "HEALER")
-
-	local dps = {
+		-- dps
 		LFDQueueFrameRoleButtonDPS,
 		LFDRoleCheckPopupRoleButtonDPS,
 		RaidFinderQueueFrameRoleButtonDPS,
 		LFGInvitePopupRoleButtonDPS,
 		LFGListApplicationDialog.DamagerButton,
 		LFGDungeonReadyStatusGroupedDamager,
+		-- leader
+		LFDQueueFrameRoleButtonLeader,
+		RaidFinderQueueFrameRoleButtonLeader,
+		LFGDungeonReadyStatusRolelessReady,
 	}
-	reskinRoleButton(dps, "DPS")
-
-	B.ReskinRole(LFDQueueFrameRoleButtonLeader, "LEADER")
-	B.ReskinRole(RaidFinderQueueFrameRoleButtonLeader, "LEADER")
-	B.ReskinRole(LFGDungeonReadyStatusRolelessReady, "READY")
+	for _, roleButton in pairs(roleButtons) do
+		B.ReskinRole(roleButton)
+	end
 
 	hooksecurefunc("SetCheckButtonIsRadio", function(button)
 		button:SetNormalTexture(0)
@@ -175,25 +157,6 @@ tinsert(C.defaultThemes, function()
 		button:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
 		button:GetDisabledCheckedTexture():SetTexCoord(0, 1, 0, 1)
 	end)
-
-	hooksecurefunc("LFG_SetRoleIconIncentive", function(roleButton, incentiveIndex)
-		if incentiveIndex then
-			local tex
-			if incentiveIndex == LFG_ROLE_SHORTAGE_PLENTIFUL then
-				tex = "coin-copper"
-			elseif incentiveIndex == LFG_ROLE_SHORTAGE_UNCOMMON then
-				tex = "coin-silver"
-			elseif incentiveIndex == LFG_ROLE_SHORTAGE_RARE then
-				tex = "coin-gold"
-			end
-			roleButton.incentiveIcon.texture:SetInside()
-			roleButton.incentiveIcon.texture:SetAtlas(tex)
-		end
-
-		updateRoleBonus(roleButton)
-	end)
-
-	hooksecurefunc("LFG_EnableRoleButton", updateRoleBonus)
 
 	-- RaidFinder
 	RaidFinderFrameBottomInset:Hide()

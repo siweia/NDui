@@ -27,4 +27,5 @@
 	<Script file="Dragonflight\Party-DF.lua"/>
 	<Script file="Dragonflight\VaultoftheIncarnates.lua"/>
 	<Script file="Dragonflight\Aberrus.lua"/>
+	<Script file="Dragonflight\Amirdrassil.lua"/>
 </Ui>
