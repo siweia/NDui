@@ -51,8 +51,10 @@ local function Update(self, event)
 	local isLeader = UnitIsGroupLeader(unit)
 	if(isLeader) then
 		if(isInLFGInstance) then
-			element:SetTexture([[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]])
-			element:SetTexCoord(0, 0.296875, 0.015625, 0.3125)
+			--element:SetTexture([[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]])
+			--element:SetTexCoord(0, 0.296875, 0.015625, 0.3125)
+			element:SetTexCoord(0, 1, 0, 1)
+			element:SetAtlas("UI-LFG-RoleIcon-Leader")
 		else
 			element:SetTexture([[Interface\GroupFrame\UI-Group-LeaderIcon]])
 			element:SetTexCoord(0, 1, 0, 1)
