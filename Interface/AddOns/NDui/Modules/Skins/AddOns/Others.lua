@@ -142,7 +142,7 @@ function S:BindPad()
 			local ic = _G["BindPadMacroPopupButton"..i.."Icon"]
 
 			if not bu.styled then
-				bu:SetCheckedTexture(DB.textures.pushed)
+				bu:SetCheckedTexture(DB.pushedTex)
 				select(2, bu:GetRegions()):Hide()
 				local hl = bu:GetHighlightTexture()
 				hl:SetColorTexture(1, 1, 1, .25)

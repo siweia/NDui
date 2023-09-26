@@ -311,7 +311,7 @@ function Bar:ReskinBars()
 		flyoutBorderShadow = {file = ""},
 		border = {file = ""},
 		normalTexture = {
-			file = DB.textures.normal,
+			file = ""l,
 			texCoord = DB.TexCoord,
 			color = {.3, .3, .3},
 			points = {
@@ -319,9 +319,9 @@ function Bar:ReskinBars()
 				{"BOTTOMRIGHT", -C.mult, C.mult},
 			},
 		},
-		flash = {file = DB.textures.flash},
+		flash = {file = ""},
 		pushedTexture = {
-			file = DB.textures.pushed,
+			file = DB.pushedTex,
 			points = {
 				{"TOPLEFT", C.mult, -C.mult},
 				{"BOTTOMRIGHT", -C.mult, C.mult},

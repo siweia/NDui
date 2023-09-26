@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 C.themes["Blizzard_TimeManager"] = function()
 	TimeManagerGlobe:Hide()
 	TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
-	TimeManagerStopwatchCheck:SetCheckedTexture(DB.textures.pushed)
+	TimeManagerStopwatchCheck:SetCheckedTexture(DB.pushedTex)
 	B.CreateBDFrame(TimeManagerStopwatchCheck)
 
 	TimeManagerAlarmHourDropDown:SetWidth(80)

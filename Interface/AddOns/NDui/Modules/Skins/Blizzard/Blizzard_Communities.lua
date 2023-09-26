@@ -92,7 +92,7 @@ C.themes["Blizzard_Communities"] = function()
 		local tab = CommunitiesFrame[name]
 		tab:GetRegions():Hide()
 		B.ReskinIcon(tab.Icon)
-		tab:SetCheckedTexture(DB.textures.pushed)
+		tab:SetCheckedTexture(DB.pushedTex)
 		local hl = tab:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)
 		hl:SetAllPoints(tab.Icon)
