@@ -14,8 +14,10 @@ function B:ReskinIconSelector()
 	B.ReskinIcon(self.BorderBox.SelectedIconArea.SelectedIconButton.Icon)
 	B.Reskin(self.BorderBox.OkayButton)
 	B.Reskin(self.BorderBox.CancelButton)
-	B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
 	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
+	if self.BorderBox.IconTypeDropDown then
+		B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
+	end
 
 	hooksecurefunc(self.IconSelector.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
