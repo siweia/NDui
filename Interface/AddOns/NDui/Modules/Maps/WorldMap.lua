@@ -104,8 +104,8 @@ function module:SetupCoords()
 end
 
 function module:UpdateMapScale()
-	if self.isMaximized and self:GetScale() ~= 1 then
-		self:SetScale(1)
+	if self.isMaximized and self:GetScale() ~= C.db["Map"]["MaxMapScale"] then
+		self:SetScale(C.db["Map"]["MaxMapScale"])
 	elseif not self.isMaximized and self:GetScale() ~= C.db["Map"]["MapScale"] then
 		self:SetScale(C.db["Map"]["MapScale"])
 	end
@@ -323,9 +323,13 @@ function module:SetupWorldMap()
 	B.CreateMF(WorldMapFrame, nil, true)
 	self.UpdateMapScale(WorldMapFrame)
 	WorldMapFrame:HookScript("OnShow", self.UpdateMapAnchor)
+	if DB.isNewPatch then
+		hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
+	end
 
 	-- Default elements
-	WorldMapFrame.BlackoutFrame:Hide()
+	WorldMapFrame.BlackoutFrame:SetAlpha(0)
+	WorldMapFrame.BlackoutFrame:EnableMouse(false)
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapFrame.BorderFrame:SetFrameStrata("MEDIUM")
 	WorldMapFrame.BorderFrame:SetFrameLevel(1)

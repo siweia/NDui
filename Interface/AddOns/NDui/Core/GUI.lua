@@ -340,6 +340,7 @@ G.DefaultSettings = {
 		Clock = false,
 		CombatPulse = true,
 		MapScale = .7,
+		MaxMapScale = 1,
 		MinimapScale = 1.4,
 		MinimapSize = 140,
 		ShowRecycleBin = true,
@@ -1305,8 +1306,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[10] = {
 		{1, "Map", "DisableMap", "|cffff0000"..L["DisableMap"], nil, nil, nil, L["DisableMapTip"]},
 		{1, "Map", "MapRevealGlow", L["MapRevealGlow"].."*", nil, nil, nil, L["MapRevealGlowTip"]},
-		{1, "Map", "MapFader", L["MapFader"].."*", nil, nil, updateMapFader},
-		{3, "Map", "MapScale", L["Map Scale"], true, {.5, 1, .1}},
+		{1, "Map", "MapFader", L["MapFader"].."*", true, nil, updateMapFader},
+		{3, "Map", "MapScale", L["Map Scale"], nil, {.5, 1, .1}},
+		{3, "Map", "MaxMapScale", L["Maximize Map Scale"].."*", true, {.5, 1, .1}},
 		{},--blank
 		{1, "Map", "DisableMinimap", "|cffff0000"..L["DisableMinimap"], nil, nil, nil, L["DisableMinimapTip"]},
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
