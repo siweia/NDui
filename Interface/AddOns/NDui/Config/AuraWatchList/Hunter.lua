@@ -31,6 +31,7 @@ local list = {
 		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
 		{AuraID = 342076, UnitID = "player"},	-- 行云流水
 		{AuraID = 389020, UnitID = "player"},	-- 子弹风暴
+		{AuraID = 424571, UnitID = "player", Disabled = not DB.isNewPatch},	-- 风行者的指引
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 3355, UnitID = "target", Caster = "player"},		-- 冰冻陷阱

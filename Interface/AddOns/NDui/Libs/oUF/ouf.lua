@@ -346,6 +346,17 @@ local function initObject(unit, style, styleFunc, header, ...)
 			func(object)
 		end
 
+		--[[ frame.IsPingable
+		This boolean can be set to false to disable the frame from being pingable. Enabled by default.
+		--]]
+		--[[ Override: frame:GetContextualPingType()
+		Used to define which contextual ping is used for the frame.
+
+		By default this wraps `C_Ping.GetContextualPingTypeForUnit(UnitGUID(frame.unit))`.
+		--]]
+		object:SetAttribute('ping-receiver', true)
+		Mixin(object, PingableType_UnitFrameMixin)
+
 		-- Make Clique kinda happy
 		if(not object.isNamePlate) then
 			_G.ClickCastFrames = _G.ClickCastFrames or {}
@@ -360,17 +371,6 @@ local function walkObject(object, unit)
 	local styleFunc = styles[style]
 
 	local header = parent:GetAttribute('oUF-headerType') and parent
-
-	--[[ frame.IsPingable
-	This boolean can be set to false to disable the frame from being pingable. Enabled by default.
-	--]]
-	--[[ Override: frame:GetContextualPingType()
-	Used to define which contextual ping is used for the frame.
-
-	By default this wraps `C_Ping.GetContextualPingTypeForUnit(UnitGUID(frame.unit))`.
-	--]]
-	object:SetAttribute('ping-receiver', true)
-	Mixin(object, PingableType_UnitFrameMixin)
 
 	-- Check if we should leave the main frame blank.
 	if(object:GetAttribute('oUF-onlyProcessChildren')) then
