@@ -8,8 +8,4 @@ C.themes["Blizzard_BattlefieldMap"] = function()
 	B.StripTextures(BorderFrame)
 	B.SetBD(BattlefieldMapFrame, nil, -1, 1, -1, 2)
 	B.ReskinClose(BorderFrame.CloseButton)
-
-	B.StripTextures(OpacityFrame)
-	B.SetBD(OpacityFrame)
-	B.ReskinSlider(OpacityFrameSlider, true)
 end

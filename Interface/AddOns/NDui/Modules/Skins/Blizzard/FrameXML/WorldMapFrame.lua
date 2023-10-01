@@ -4,11 +4,36 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	local WorldMapFrame = WorldMapFrame
 
-	B.ReskinPortraitFrame(WorldMapFrame, 7, 0, -7, 25)
+	local mapBg = B.ReskinPortraitFrame(WorldMapFrame, 7, 0, -7, 25)
+	if DB.isNewPatch then
+		mapBg:SetFrameStrata("BACKGROUND")
+
+		hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", function(map)
+			if map.isMaximized then
+				mapBg:SetPoint("TOPLEFT", 7, 0)
+			else
+				mapBg:SetPoint("TOPLEFT", 18, 0)
+			end
+		end)
+	end
+
 	B.ReskinDropDown(WorldMapZoneMinimapDropDown)
 	B.ReskinDropDown(WorldMapContinentDropDown)
 	B.ReskinDropDown(WorldMapZoneDropDown)
 	B.Reskin(WorldMapZoomOutButton)
+
+	if DB.isNewPatch then
+
+	if MiniBorderLeft then MiniBorderLeft:Hide() end
+	if MiniBorderRight then MiniBorderRight:Hide() end
+	B.ReskinMinMax(WorldMapFrame.MaximizeMinimizeFrame)
+	B.ReskinCheck(WorldMapTrackQuest)
+	B.ReskinCheck(WorldMapQuestShowObjectives)
+
+	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
+	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)
+
+	end
 
 	C_Timer.After(3, function()
 		if CodexQuestMapDropdown then
@@ -24,4 +49,8 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end)
+
+	B.StripTextures(OpacityFrame)
+	B.SetBD(OpacityFrame)
+	B.ReskinSlider(OpacityFrameSlider, true)
 end)
