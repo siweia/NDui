@@ -63,6 +63,7 @@ end
 
 local function ReskinWA()
 	if not C.db["Skins"]["WeakAuras"] then return end
+	if not WeakAuras.regionPrototype then return end -- WA alpha version
 
 	local function OnPrototypeCreate(region)
 		Skin_WeakAuras(region, region.regionType)
