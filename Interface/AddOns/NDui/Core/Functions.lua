@@ -845,6 +845,8 @@ do
 		"TabSpacer2",
 		"_RightSeparator",
 		"_LeftSeparator",
+		"RightSeparator",
+		"LeftSeparator",
 		"Cover",
 		"Border",
 		"Background",
