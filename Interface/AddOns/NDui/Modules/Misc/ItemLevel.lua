@@ -57,6 +57,14 @@ function M:CreateItemTexture(slot, relF, x, y)
 	return icon
 end
 
+function M:ItemString_Expand()
+	self:SetWidth(0)
+end
+
+function M:ItemString_Collapse()
+	self:SetWidth(100)
+end
+
 function M:CreateItemString(frame, strType)
 	if frame.fontCreated then return end
 
@@ -71,6 +79,14 @@ function M:CreateItemString(frame, strType)
 			slotFrame.enchantText:ClearAllPoints()
 			slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
 			slotFrame.enchantText:SetTextColor(0, 1, 0)
+
+			slotFrame.enchantText:SetJustifyH(strsub(relF, 7))
+			slotFrame.enchantText:SetWidth(100)
+			slotFrame.enchantText:EnableMouse(true)
+			slotFrame.enchantText:HookScript("OnEnter", M.ItemString_Expand)
+			slotFrame.enchantText:HookScript("OnLeave", M.ItemString_Collapse)
+			slotFrame.enchantText:HookScript("OnShow", M.ItemString_Collapse)
+
 			for i = 1, 10 do
 				local offset = (i-1)*18 + 5
 				local iconX = x > 0 and x+offset or x-offset

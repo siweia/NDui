@@ -59,6 +59,7 @@ C.CustomUnits = {
 	[92538] = true,		-- 喷油蛆虫，巢穴
 	[190426] = true,	-- 腐朽图腾，蕨皮
 	[190381] = true,	-- 腐爆图腾，蕨皮
+	[186696] = true,	-- 撼地图腾，提尔
 	-- Condemned Demon
 	[169430] = true,
 	[169428] = true,
