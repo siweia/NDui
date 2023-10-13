@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
-if not DB.isNewPatch then return end
-
 local function ReskinRole(self)
 	if self.background then self.background:SetTexture("") end
 

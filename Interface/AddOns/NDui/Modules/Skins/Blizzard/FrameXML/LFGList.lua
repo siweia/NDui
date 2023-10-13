@@ -1,6 +1,5 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-if not DB.isNewPatch then return end
 
 local function Highlight_OnEnter(self)
 	self.hl:Show()

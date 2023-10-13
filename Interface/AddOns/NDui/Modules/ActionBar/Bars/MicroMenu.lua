@@ -106,11 +106,7 @@ function Bar:MicroMenu()
 	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
-	local buttonInfo
-
-	if DB.isNewPatch then
-
-	buttonInfo = {
+	local buttonInfo = {
 		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
 		{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
 		{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
@@ -124,23 +120,6 @@ function Bar:MicroMenu()
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
 		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
 	}
-
-	else
-		buttonInfo = {
-			{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
-			{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
-			{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
-			{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
-			{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
-			{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
-			{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
-			{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
-			{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
-			{"collections", "HelpMicroButton", MicroButtonTooltipText(HELP_BUTTON, "TOGGLEHELP")},
-			{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
-			{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
-		}
-	end
 
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)

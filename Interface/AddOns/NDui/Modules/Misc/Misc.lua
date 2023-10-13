@@ -385,8 +385,6 @@ end
 
 -- Fix Drag Collections taint
 do
-	if DB.isNewPatch then
-
 	local done
 	local function setupMisc(event, addon)
 		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
@@ -408,8 +406,6 @@ do
 	end
 
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
-
-	end
 end
 
 -- Select target when click on raid units

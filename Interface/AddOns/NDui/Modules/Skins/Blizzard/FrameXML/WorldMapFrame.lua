@@ -5,24 +5,20 @@ tinsert(C.defaultThemes, function()
 	local WorldMapFrame = WorldMapFrame
 
 	local mapBg = B.ReskinPortraitFrame(WorldMapFrame, 7, 0, -7, 25)
-	if DB.isNewPatch then
-		mapBg:SetFrameStrata("BACKGROUND")
+	mapBg:SetFrameStrata("BACKGROUND")
 
-		hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", function(map)
-			if map.isMaximized then
-				mapBg:SetPoint("TOPLEFT", 7, 0)
-			else
-				mapBg:SetPoint("TOPLEFT", 18, 0)
-			end
-		end)
-	end
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", function(map)
+		if map.isMaximized then
+			mapBg:SetPoint("TOPLEFT", 7, 0)
+		else
+			mapBg:SetPoint("TOPLEFT", 18, 0)
+		end
+	end)
 
 	B.ReskinDropDown(WorldMapZoneMinimapDropDown)
 	B.ReskinDropDown(WorldMapContinentDropDown)
 	B.ReskinDropDown(WorldMapZoneDropDown)
 	B.Reskin(WorldMapZoomOutButton)
-
-	if DB.isNewPatch then
 
 	if MiniBorderLeft then MiniBorderLeft:Hide() end
 	if MiniBorderRight then MiniBorderRight:Hide() end
@@ -32,8 +28,6 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)
-
-	end
 
 	C_Timer.After(3, function()
 		if CodexQuestMapDropdown then

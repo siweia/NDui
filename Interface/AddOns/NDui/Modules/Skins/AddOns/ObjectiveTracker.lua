@@ -18,22 +18,6 @@ local headerString = QUESTS_LABEL.." %s/%s"
 local frame
 
 function S:ExtQuestLogFrame()
-	if not DB.isNewPatch then
-		local toggleMap = CreateFrame("Button", nil, QuestLogFrame)
-		toggleMap:SetPoint("TOP", 10, -35)
-		toggleMap:SetSize(48, 32)
-		local text = B.CreateFS(toggleMap, 14, SHOW_MAP)
-		text:ClearAllPoints()
-		text:SetPoint("LEFT", toggleMap, "RIGHT")
-		local tex = toggleMap:CreateTexture(nil, "ARTWORK")
-		tex:SetAllPoints()
-		tex:SetTexture(316593)
-		tex:SetTexCoord(.125, .875, 0, .5)
-		toggleMap:SetScript("OnClick", ToggleWorldMap)
-		toggleMap:SetScript("OnMouseUp", function() tex:SetTexCoord(.125, .875, 0, .5) end)
-		toggleMap:SetScript("OnMouseDown", function() tex:SetTexCoord(.125, .875, .5, 1) end)
-	end
-
 	-- Move ClassicCodex
 	if CodexQuest then
 		local buttonShow = CodexQuest.buttonShow
