@@ -43,12 +43,6 @@ C.themes["Blizzard_TalentUI"] = function()
 			B.CreateBDFrame(tab)
 		end
 	end
-
-	PlayerTalentFrameRoleButton:SetSize(24, 24)
-
-	hooksecurefunc("PlayerTalentFrameRole_UpdateRole", function(button, role)
-		B.ReskinSmallRole(button:GetNormalTexture(), role)
-	end)
 end
 
 C.themes["Blizzard_GlyphUI"] = function()
