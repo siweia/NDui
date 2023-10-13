@@ -113,7 +113,7 @@ end
 
 function module:UpdateMapAnchor()
 	module.UpdateMapScale(self)
-	if not self.isMaximized then B.RestoreMF(self) end
+	B.RestoreMF(self)
 end
 
 local function isMouseOverMap()
