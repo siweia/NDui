@@ -132,7 +132,7 @@ function module:StartTimer(start, duration, modRate)
 			module.StopTimer(chargeTimer)
 		end
 
-		if timer.fontScale >= MIN_SCALE then
+		if timer.fontScale and timer.fontScale >= MIN_SCALE then
 			timer:Show()
 		end
 	elseif self.timer then
