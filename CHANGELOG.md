@@ -1,8 +1,12 @@
 # NDui
 
-## [7.13.2](https://github.com/siweia/NDui/tree/7.13.2) (2023-11-8)
+## [7.14.0](https://github.com/siweia/NDui/tree/7.14.0) (2023-11-10)
 
-- Update skin for WA.
-- Fix text color on gossip frame.
-- Update auras.
-- The item enchant string now expand full width when mouseover.
+- Update default skins.
+- Update auras and nameplate filter.
+- Update data for DF S3.
+- Update oUF core.
+- Expand enchant info when mouseover item string.
+- Fix button glow on macro buttons.
+- Update map reveal data.
+- Remove compatibility for old patch.
