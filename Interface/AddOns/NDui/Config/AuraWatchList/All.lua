@@ -75,6 +75,8 @@ local list = {
 		{AuraID = 408835, UnitID = "player", Flash = true},	-- 沸腾怒火
 		{AuraID = 408770, UnitID = "player", Stack = 55},	-- 灵感闪光
 		{AuraID = 410232, UnitID = "player", Value = true},	-- 孢子披风
+		{AuraID = 423611, UnitID = "player"},	-- 灵魂燃烧
+		{AuraID = 429262, UnitID = "player"},	-- 水润滋养
 		-- 盟约，TODO: 部分已被整合进天赋，待整理
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
