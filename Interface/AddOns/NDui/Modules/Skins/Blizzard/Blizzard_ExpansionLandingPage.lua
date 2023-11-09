@@ -46,7 +46,7 @@ C.themes["Blizzard_ExpansionLandingPage"] = function()
 				end)
 			end
 			if panel.ScrollFadeOverlay then
-				panel.ScrollFadeOverlay:SetAlpha(0) -- isNewPatch
+				panel.ScrollFadeOverlay:SetAlpha(0)
 			end
 
 			panel.styled = true

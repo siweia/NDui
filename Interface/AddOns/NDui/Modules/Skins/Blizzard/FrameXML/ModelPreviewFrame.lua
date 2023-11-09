@@ -12,10 +12,6 @@ tinsert(C.defaultThemes, function()
 
 	B.StripTextures(ModelPreviewFrame)
 	B.SetBD(ModelPreviewFrame)
-	if not DB.isNewPatch then
-		B.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")
-		B.ReskinArrow(Display.ModelScene.RotateRightButton, "right")
-	end
 	B.ReskinArrow(Display.ModelScene.CarouselLeftButton, "left")
 	B.ReskinArrow(Display.ModelScene.CarouselRightButton, "right")
 	B.ReskinClose(ModelPreviewFrameCloseButton)
