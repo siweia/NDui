@@ -14,7 +14,7 @@ local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
-TT.TierSets = {
+TT.TierSets = { -- TODO: update to new tier sets
 	-- HUNTER
 	[202479] = true, [202477] = true, [202478] = true, [202480] = true, [202482] = true,
 	-- WARRIOR
