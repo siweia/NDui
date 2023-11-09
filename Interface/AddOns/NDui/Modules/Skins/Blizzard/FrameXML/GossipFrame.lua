@@ -15,7 +15,6 @@ local replacedGossipColor = {
 	["414141"] = "7b8489", -- lighter color for some gossip options
 }
 local function replaceGossipText(button, text)
-	print(text)
 	if text and text ~= "" then
 		local newText, count = gsub(text, ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59") -- replace icon texture
 		if count > 0 then
