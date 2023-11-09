@@ -15,6 +15,7 @@ local replacedGossipColor = {
 	["414141"] = "7b8489", -- lighter color for some gossip options
 }
 local function replaceGossipText(button, text)
+	print(text)
 	if text and text ~= "" then
 		local newText, count = gsub(text, ":32:32:0:0", ":32:32:0:0:64:64:5:59:5:59") -- replace icon texture
 		if count > 0 then
@@ -52,6 +53,14 @@ tinsert(C.defaultThemes, function()
 				if buttonText then
 					buttonText:SetTextColor(1, 1, 1)
 					hooksecurefunc(buttonText, "SetTextColor", replaceTextColor)
+				end
+				if button.SetText then
+					local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+					if buttonText and buttonText:IsObjectType("FontString") then
+						replaceGossipText(button, button:GetText())
+						hooksecurefunc(button, "SetText", replaceGossipText)
+						hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+					end
 				end
 
 				button.styled = true
