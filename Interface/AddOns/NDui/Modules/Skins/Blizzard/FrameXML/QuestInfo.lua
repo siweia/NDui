@@ -25,11 +25,13 @@ local function QuestInfo_GetQuestID()
 	end
 end
 
+local defaultColor = GetMaterialTextColors("Default")
+
 local function ReplaceTextColor(object, r)
-	if r == 0 then
+	if r == 0 or r == defaultColor[1] then
 		object:SetTextColor(1, 1, 1)
 	elseif r == .2 then
-		object:SetTextColor(.8, .8, .8)
+		object:SetTextColor(.7, .7, .7)
 	end
 end
 
@@ -143,9 +145,8 @@ tinsert(C.defaultThemes, function()
 		for i = #objectivesTable, 1, -1 do
 			local object = objectivesTable[i]
 			if object.hooked then break end
+			object:SetTextColor(1, 1, 1)
 			hooksecurefunc(object, "SetTextColor", ReplaceTextColor)
-			local r, g, b = object:GetTextColor()
-			object:SetTextColor(r, g, b)
 
 			object.hooked = true
 		end
