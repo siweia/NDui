@@ -117,6 +117,16 @@ local function IncorrectExpansion() -- left it for the future
 	text:SetText(L["IncorrectExpansion"])
 end
 
+local LCG_GlowList = {
+	[1] = "Pixel Glow",
+	[2] = "Autocast Shine",
+	[3] = "Action Button Glow",
+	[4] = "Proc Glow",
+}
+local function GetGlowType()
+	return LCG_GlowList[NDuiADB["GlowMode"]]
+end
+
 B:RegisterEvent("PLAYER_LOGIN", function()
 	-- Initial
 	SetCVar("ActionButtonUseKeyDown", 1)
@@ -125,9 +135,15 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])
 	C.margin = 3
 
-	local LBG = LibStub("LibButtonGlow-1.0")
-	B.ShowOverlayGlow = LBG.ShowOverlayGlow
-	B.HideOverlayGlow = LBG.HideOverlayGlow
+	local LCG = LibStub("LibCustomGlow-1.0")
+	LCG.ShowOverlayGlow = function(button)
+		LCG.startList[GetGlowType()](button)
+	end
+	B.ShowOverlayGlow = LCG.ShowOverlayGlow
+	LCG.HideOverlayGlow = function(button)
+		LCG.stopList[GetGlowType()](button)
+	end
+	B.HideOverlayGlow = LCG.HideOverlayGlow
 
 	for _, module in next, initQueue do
 		if module.OnLogin then
