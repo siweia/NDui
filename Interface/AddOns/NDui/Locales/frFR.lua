@@ -918,3 +918,4 @@ L["ToggleActionbarTip"] = "|nOption pour activer la barre d'action, sans avoir �
 L["IgnoreNoteHelp"] = "Vous pouvez ajouter une note à la liste des ignorés en double-cliquant dessus."
 L["RaidTargetX"] = "RaidTarget X Offset" -- need translation
 L["RaidTargetY"] = "RaidTarget Y Offset" -- need translation
+L["GlowMode"] = "Button Glow Mode" -- need translation
