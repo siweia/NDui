@@ -292,6 +292,15 @@ function M:AddDungeonsFilter()
 		[5] = {mapID = 404, aID = 1172}, -- 奈萨鲁斯
 		[6] = {mapID = 405, aID = 1164}, -- 蕨皮山谷
 		[7] = {mapID = 406, aID = 1168}, -- 注能大厅
+		-- S3, TODO: update to new dungeons
+		--[0] = { aID = 1247, mapID = 463}, -- 永恒黎明：上
+		--[1] = { aID = 1248, mapID = 464}, -- 永恒黎明：下
+		--[2] = { aID = 530,  mapID = 248}, -- 维克雷斯庄园
+		--[3] = { aID = 502,  mapID = 244}, -- 阿塔达萨
+		--[4] = { aID = 460,  mapID = 198}, -- 黑心林地
+		--[5] = { aID = 463,  mapID = 199}, -- 黑鸦堡垒
+		--[6] = { aID = 184,  mapID = 168}, -- 永茂林地
+		--[7] = { aID = 1274, mapID = 456}, -- 潮汐王座
 	}
 
 	local function GetDungeonNameByID(mapID)

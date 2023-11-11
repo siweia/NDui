@@ -127,8 +127,8 @@ function Bar:UpdateButtonConfig(i)
 	count.font.flags = DB.Font[3]
 	count.position.anchor = "BOTTOMRIGHT"
 	count.position.relAnchor = false
-	count.position.offsetX = 2
-	count.position.offsetY = 0
+	count.position.offsetX = -2
+	count.position.offsetY = 2
 	count.justifyH = "RIGHT"
 
 	local macro = self.buttonConfig.text.macro

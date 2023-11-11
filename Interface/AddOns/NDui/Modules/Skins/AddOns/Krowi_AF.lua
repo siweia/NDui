@@ -23,7 +23,8 @@ local function SetupStatusbar(bar)
 	B.CreateBDFrame(bar, .25)
 end
 
-local function updateAchievementLabel(button)
+local function updateAchievementLabel(frame)
+	local button = frame.__owner
 	if button.DateCompleted:IsShown() then
 		if button.Achievement.IsAccountWide then
 			button.Header:SetTextColor(0, .6, 1)
@@ -53,8 +54,12 @@ local function SetupAchivementButton(button)
 		button.Tracked:SetSize(20, 20)
 		button.Check:SetAlpha(0)
 	end
-	updateAchievementLabel(button)
-	hooksecurefunc(button, "UpdatePlusMinusTexture", updateAchievementLabel)
+	local plusMinus = button.PlusMinus
+	if plusMinus then
+		plusMinus.__owner = button
+		updateAchievementLabel(plusMinus)
+		hooksecurefunc(plusMinus, "SetTexCoord", updateAchievementLabel)
+	end
 	local bg = B.CreateBDFrame(button, .25)
 	bg:SetInside()
 	SetupButtonHighlight(button, bg)
@@ -87,8 +92,6 @@ function S:KrowiAF()
 	KrowiAF_AchievementFrameFilterButton:SetPoint("TOPLEFT", 24, 0)
 	B.ReskinEditBox(KrowiAF_SearchBoxFrame)
 	KrowiAF_SearchOptionsMenuButton:DisableDrawLayer("BACKGROUND")
-	KrowiAF_AchievementFrameSummaryFrameAchievementsHeaderHeader:SetVertexColor(1, 1, 1, .25)
-	KrowiAF_AchievementFrameSummaryFrameCategoriesHeaderTexture:SetVertexColor(1, 1, 1, .25)
 
 	local frame = KrowiAF_CategoriesFrame
 	if frame then
@@ -100,7 +103,7 @@ function S:KrowiAF()
 		end)
 	end
 
-	local frame = KrowiAF_AchievementFrameSummaryFrame
+	local frame = KrowiAF_AchievementFrameSummaryFrame or KrowiAF_SummaryFrame
 	if frame then
 		B.StripTextures(frame)
 		frame:GetChildren():Hide()

@@ -540,8 +540,8 @@ local SEASON_SPELLS = {
 	--[358777] = 2, -- 痛苦之链，S2
 	--[366288] = 2, -- 猛力砸击，S3
 	--[366297] = 2, -- 解构，S3
-	[396364] = 2, -- 狂风标记，DF S1
-	[396369] = 2, -- 闪电标记，DF S1
+	--[396364] = 2, -- 狂风标记，DF S1
+	--[396369] = 2, -- 闪电标记，DF S1
 }
 function module:RegisterSeasonSpells(tier, instance)
 	for spellID, priority in pairs(SEASON_SPELLS) do

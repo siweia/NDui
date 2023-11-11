@@ -596,6 +596,7 @@ G.AccountSettings = {
 	NameplateWhite = {},
 	NameplateBlack = {},
 	IgnoreNotes = {},
+	GlowMode = 3,
 }
 
 -- Initial settings
@@ -1112,7 +1113,7 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["ShowHealthCurrent"], L["ShowHealthPercent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}
 
 G.TabList = {
-	L["Actionbar"],
+	NewTag..L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
@@ -1146,7 +1147,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Grid", L["Actionbar Grid"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"].."*", true, nil, updateHotkeys},
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
-		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", true, nil, nil, L["SendActionCDTip"]},
+		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
+		{4, "ACCOUNT", "GlowMode", NewTag..L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button"}},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},

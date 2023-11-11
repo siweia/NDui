@@ -142,25 +142,15 @@ local staggerIndices = {
 	red = 3
 }
 
-local isNewPatch = NDui[4].isNewPatch
-
 for power, color in next, PowerBarColor do
 	if (type(power) == 'string') then
 		if(type(select(2, next(color))) == 'table') then
 			-- special handling for stagger
 			colors.power[power] = {}
 
-			if isNewPatch then
-
 			for name, color_ in next, color do
 				local index = staggerIndices[name]
 				if(index) then
-					colors.power[power][index] = oUF:CreateColor(color_.r, color_.g, color_.b)
-				end
-			end
-
-			else
-				for index, color_ in next, color do
 					colors.power[power][index] = oUF:CreateColor(color_.r, color_.g, color_.b)
 				end
 			end

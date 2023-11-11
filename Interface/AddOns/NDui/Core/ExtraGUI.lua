@@ -124,6 +124,14 @@ function G:SetupRaidDebuffs(parent)
 	AddNewDungeon(dungeons, 1001)  -- 自由镇
 	AddNewDungeon(dungeons, 1022)  -- 地渊孢林
 	AddNewDungeon(dungeons, 1209)  -- 永恒黎明
+	if DB.isNewPatch then
+		AddNewDungeon(dungeons, 65)  -- 潮汐王座
+		AddNewDungeon(dungeons, 556)  -- 永茂林地
+		AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
+		AddNewDungeon(dungeons, 762)  -- 黑心林地
+		AddNewDungeon(dungeons, 968)  -- 阿塔达萨
+		AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
+	end
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1200),

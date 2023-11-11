@@ -135,10 +135,6 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.ReskinInput(MountJournalSearchBox)
 	B.ReskinInput(PetJournalSearchBox)
-	if not DB.isNewPatch then
-		B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, "left")
-		B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, "right")
-	end
 	B.ReskinFilterButton(PetJournalFilterButton)
 	B.ReskinFilterButton(MountJournalFilterButton)
 

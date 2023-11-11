@@ -82,8 +82,8 @@ function UF:BlockAddons()
 	if not C.db["Nameplate"]["BlockDBM"] then return end
 	if not DBM or not DBM.Nameplate then return end
 
-	function DBM.Nameplate:SupportedNPMod()
-		return true
+	if DBM.Options then
+		DBM.Options.DontShowNameplateIconsCD = true
 	end
 
 	local function showAurasForDBM(_, _, _, spellID)
