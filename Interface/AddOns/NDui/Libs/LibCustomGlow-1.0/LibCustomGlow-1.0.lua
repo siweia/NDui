@@ -613,7 +613,7 @@ function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 	if not r then
 		return
 	end
-	frameLevel = frameLevel or 8;
+	frameLevel = frameLevel or 5; -- NDui: decreased from 8
 	local throttle
 	if frequency and frequency > 0 then
 		throttle = 0.25/frequency*0.01
