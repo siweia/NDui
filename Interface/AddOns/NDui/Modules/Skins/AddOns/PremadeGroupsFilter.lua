@@ -14,7 +14,8 @@ function S:PGFSkin()
 	local ArenaPanel = _G.PremadeGroupsFilterArenaPanel
 	local RBGPanel = _G.PremadeGroupsFilterRBGPanel
 	local RaidPanel = _G.PremadeGroupsFilterRaidPanel
-	local ExpressionPanel = _G.PremadeGroupsFilterExpressionPanel
+	local MiniPanel = _G.PremadeGroupsFilterMiniPanel
+	local RolePanel = _G.PremadeGroupsFilterRolePanel
 	local PGFDialog = _G.PremadeGroupsFilterDialog
 
 	local names = {"Difficulty", "MPRating", "Members", "Tanks", "Heals", "DPS", "Partyfit", "BLFit", "BRFit", "Defeated", "MatchingId", "PvPRating"}
@@ -54,8 +55,8 @@ function S:PGFSkin()
 		B.Reskin(self.ResetButton)
 		B.Reskin(self.RefreshButton)
 
-		B.ReskinInput(ExpressionPanel.Advanced.Expression)
-		B.ReskinInput(ExpressionPanel.Sorting.Expression)
+		B.ReskinInput(MiniPanel.Advanced.Expression)
+		B.ReskinInput(MiniPanel.Sorting.Expression)
 
 		local button = self.MaxMinButtonFrame
 		if button.MinimizeButton then
@@ -71,6 +72,7 @@ function S:PGFSkin()
 		handleGroup(DungeonPanel)
 		handleGroup(ArenaPanel)
 		handleGroup(RBGPanel)
+		handleGroup(RolePanel)
 
 		for i = 1, 8 do
 			local dungeon = DungeonPanel.Dungeons["Dungeon"..i]
@@ -107,5 +109,14 @@ function S:PGFSkin()
 	if button then
 		B.ReskinCheck(button)
 		button.text:SetWidth(35)
+	end
+
+	local popup = PremadeGroupsFilterStaticPopup
+	if popup then
+		B.StripTextures(popup)
+		B.SetBD(popup)
+		B.ReskinInput(popup.EditBox)
+		B.Reskin(popup.Button1)
+		B.Reskin(popup.Button2)
 	end
 end
