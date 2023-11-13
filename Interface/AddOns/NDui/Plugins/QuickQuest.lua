@@ -29,6 +29,7 @@ local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
 local GetTrackingInfo = C_Minimap.GetTrackingInfo
 local GetNumTrackingTypes = C_Minimap.GetNumTrackingTypes
 local MINIMAP_TRACKING_TRIVIAL_QUESTS = MINIMAP_TRACKING_TRIVIAL_QUESTS
+local QuestLabelPrepend = Enum.GossipOptionRecFlags.QuestLabelPrepend
 
 local choiceQueue
 
@@ -251,7 +252,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 	local questGossipID
 	for i = 1, numOptions do
 		local option = gossipInfoTable[i]
-		if option.name and strfind(option.name, "cFF0000FF") then
+		if option.name and option.flags == QuestLabelPrepend then
 			numQuestGossips = numQuestGossips + 1
 			questGossipID = option.gossipOptionID
 		end
