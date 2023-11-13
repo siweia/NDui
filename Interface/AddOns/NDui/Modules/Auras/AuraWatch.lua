@@ -708,6 +708,7 @@ function A:AuraWatch_PostCleanup()
 			if frame.Icon then frame.Icon:SetTexture(nil) end
 			if frame.Count then frame.Count:SetText("") end
 			if frame.Spellname then frame.Spellname:SetText("") end
+			if frame.glowFrame then B.HideOverlayGlow(frame.glowFrame) end
 		end
 	end
 end
