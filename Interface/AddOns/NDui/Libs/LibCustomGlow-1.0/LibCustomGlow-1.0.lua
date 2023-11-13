@@ -12,6 +12,7 @@ local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
 local Masque = LibStub("Masque", true)
 
+local fallbackLevel = 0 -- NDui: decreased from 8
 local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 local textureList = {
 	empty = [[Interface\AdventureMap\BrokenIsles\AM_29]],
@@ -93,7 +94,7 @@ lib.GlowFramePool = GlowFramePool
 
 local function addFrameAndTex(r,color,name,key,N,xOffset,yOffset,texture,texCoord,desaturated,frameLevel)
 	key = key or ""
-	frameLevel = frameLevel or 8
+	frameLevel = frameLevel or fallbackLevel
 	if not r[name..key] then
 		r[name..key] = GlowFramePool:Acquire()
 		r[name..key]:SetParent(r)
@@ -613,7 +614,7 @@ function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 	if not r then
 		return
 	end
-	frameLevel = frameLevel or 5; -- NDui: decreased from 8
+	frameLevel = frameLevel or fallbackLevel;
 	local throttle
 	if frequency and frequency > 0 then
 		throttle = 0.25/frequency*0.01
