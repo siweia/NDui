@@ -493,6 +493,7 @@ do
 		local frame = CreateFrame("Frame", nil, self)
 		frame:SetPoint("CENTER")
 		frame:SetSize(size+8, size+8)
+		frame:SetFrameLevel(frame:GetFrameLevel()+1)
 
 		return frame
 	end
