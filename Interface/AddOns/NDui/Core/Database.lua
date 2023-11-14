@@ -260,6 +260,7 @@ DB.ReminderBuffs = {
 				[2823] = true,		-- 致命药膏
 				[8679] = true,		-- 致伤药膏
 				[315584] = true,	-- 速效药膏
+				[381664] = true,	-- 增效药膏
 			},
 			texture = 132273,
 			depend = 315584,
@@ -270,6 +271,7 @@ DB.ReminderBuffs = {
 		{	spells = {	-- 效果类毒药
 				[3408] = true,		-- 减速药膏
 				[5761] = true,		-- 迟钝药膏
+				[381637] = true,	-- 萎缩药膏
 			},
 			depend = 3408,
 			pvp = true,
