@@ -4,6 +4,7 @@ local TT = B:GetModule("Tooltip")
 
 local UnitBattlePetType, UnitBattlePetSpeciesID = UnitBattlePetType, UnitBattlePetSpeciesID
 local PET, ID, UNKNOWN = PET, ID, UNKNOWN
+local PET_TYPE_SUFFIX = PET_TYPE_SUFFIX
 
 function TT:PetInfo_Update(petType)
 	if not self.petIcon then
@@ -14,8 +15,10 @@ function TT:PetInfo_Update(petType)
 		f:SetTexCoord(.188, .883, 0, .348)
 		self.petIcon = f
 	end
-	self.petIcon:SetTexture("Interface\\PetBattles\\PetIcon-"..PET_TYPE_SUFFIX[petType])
-	self.petIcon:SetAlpha(1)
+	if PET_TYPE_SUFFIX[petType] then
+		self.petIcon:SetTexture("Interface\\PetBattles\\PetIcon-"..PET_TYPE_SUFFIX[petType])
+		self.petIcon:SetAlpha(1)
+	end
 end
 
 function TT:PetInfo_Reset()

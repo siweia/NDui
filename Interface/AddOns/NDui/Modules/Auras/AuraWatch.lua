@@ -689,6 +689,30 @@ function A:AuraWatch_Cleanup()	-- FIXME: there should be a better way to do this
 	end
 end
 
+function A:AuraWatch_PreCleanup()
+	for _, value in pairs(FrameList) do
+		value.Index = 1
+	end
+end
+
+function A:AuraWatch_PostCleanup()
+	for _, value in pairs(FrameList) do
+		local currentIndex = value.Index == maxFrames and maxFrames + 1 or value.Index
+		for i = currentIndex, maxFrames do
+			local frame = value[i]
+			if not frame:IsShown() then break end
+			if frame then
+				frame:Hide()
+				frame:SetScript("OnUpdate", nil)
+			end
+			if frame.Icon then frame.Icon:SetTexture(nil) end
+			if frame.Count then frame.Count:SetText("") end
+			if frame.Spellname then frame.Spellname:SetText("") end
+			if frame.glowFrame then B.HideOverlayGlow(frame.glowFrame) end
+		end
+	end
+end
+
 -- Event
 function A.AuraWatch_OnEvent(event, ...)
 	if not C.db["AuraWatch"]["Enable"] then
@@ -731,7 +755,7 @@ function A:AuraWatch_OnUpdate(elapsed)
 	if self.elapsed > .1 then
 		self.elapsed = 0
 
-		A:AuraWatch_Cleanup()
+		A:AuraWatch_PreCleanup()
 		A:AuraWatch_UpdateCD()
 
 		local inCombat = InCombatLockdown()
@@ -739,6 +763,7 @@ function A:AuraWatch_OnUpdate(elapsed)
 			A:UpdateAuraWatch(value, inCombat)
 		end
 
+		A:AuraWatch_PostCleanup()
 		A:AuraWatch_Centralize()
 	end
 end
