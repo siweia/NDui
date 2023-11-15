@@ -284,23 +284,14 @@ end
 
 function M:AddDungeonsFilter()
 	local mapData = {
-		[0] = {mapID = 438, aID = 1195}, -- 旋云之巅
-		[1] = {mapID = 206, aID = 462},  -- 奈萨里奥的巢穴
-		[2] = {mapID = 251, aID = 507}, -- 地渊孢林
-		[3] = {mapID = 245, aID = 518}, -- 自由镇
-		[4] = {mapID = 403, aID = 1188}, -- 奥丹姆：提尔的遗产
-		[5] = {mapID = 404, aID = 1172}, -- 奈萨鲁斯
-		[6] = {mapID = 405, aID = 1164}, -- 蕨皮山谷
-		[7] = {mapID = 406, aID = 1168}, -- 注能大厅
-		-- S3, TODO: update to new dungeons
-		--[0] = { aID = 1247, mapID = 463}, -- 永恒黎明：上
-		--[1] = { aID = 1248, mapID = 464}, -- 永恒黎明：下
-		--[2] = { aID = 530,  mapID = 248}, -- 维克雷斯庄园
-		--[3] = { aID = 502,  mapID = 244}, -- 阿塔达萨
-		--[4] = { aID = 460,  mapID = 198}, -- 黑心林地
-		--[5] = { aID = 463,  mapID = 199}, -- 黑鸦堡垒
-		--[6] = { aID = 184,  mapID = 168}, -- 永茂林地
-		--[7] = { aID = 1274, mapID = 456}, -- 潮汐王座
+		[0] = { aID = 1247, mapID = 463}, -- 永恒黎明：迦拉克隆的陨落
+		[1] = { aID = 1248, mapID = 464}, -- 永恒黎明：姆诺兹多的崛起
+		[2] = { aID = 530,  mapID = 248}, -- 维克雷斯庄园
+		[3] = { aID = 502,  mapID = 244}, -- 阿塔达萨
+		[4] = { aID = 460,  mapID = 198}, -- 黑心林地
+		[5] = { aID = 463,  mapID = 199}, -- 黑鸦堡垒
+		[6] = { aID = 184,  mapID = 168}, -- 永茂林地
+		[7] = { aID = 1274, mapID = 456}, -- 潮汐王座
 	}
 
 	local function GetDungeonNameByID(mapID)
