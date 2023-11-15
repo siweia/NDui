@@ -1,5 +1,5 @@
 # NDui Classic
 
-## [Classic-3.11.1](https://github.com/siweia/NDui/tree/Classic-3.11.1) (2023-10-18)
+## [Classic-3.11.2](https://github.com/siweia/NDui/tree/Classic-3.11.2) (2023-11-16)
 
-- Correct hide blizzard boss frames.
+- Fix error with DBM.
