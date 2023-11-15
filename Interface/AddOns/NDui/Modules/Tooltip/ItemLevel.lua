@@ -14,24 +14,6 @@ local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
---[=[
-	function hehe()
-		local frame = EncounterJournal.LootJournalItems.ItemSetsFrame
-		local classFilter = frame:GetClassAndSpecFilters()
-		local classInfo = C_CreatureInfo.GetClassInfo(classFilter)
-		local sets = frame.itemSets
-		local setID = sets and sets[1].setID
-		local data = C_LootJournal.GetItemSetItems(setID)
-		local text = ""
-		for i = 1, 5 do
-			local d = data[i]
-			text = "["..d.itemID.."] = true, "..text
-		end
-		print("--", classInfo.classFile)
-		print(text)
-	end
-]=]
-
 TT.TierSets = {
 	-- HUNTER
 	[207221] = true, [207219] = true, [207218] = true, [207217] = true, [207216] = true,
