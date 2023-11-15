@@ -1,8 +1,7 @@
 # NDui
 
-## [7.14.1](https://github.com/siweia/NDui/tree/7.14.1) (2023-11-10)
+## [7.14.2](https://github.com/siweia/NDui/tree/7.14.2) (2023-11-16)
 
-- Update default skins.
-- Update skin for Krowi_AchievementFilter.
-- New way to block DBM nameplate auras.
-- Option to change actionbutton glow mode.
+- Update actionbar.
+- Update libs.
+- Several skins updated.
