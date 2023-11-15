@@ -14,33 +14,51 @@ local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
-TT.TierSets = { -- TODO: update to new tier sets
+--[=[
+	function hehe()
+		local frame = EncounterJournal.LootJournalItems.ItemSetsFrame
+		local classFilter = frame:GetClassAndSpecFilters()
+		local classInfo = C_CreatureInfo.GetClassInfo(classFilter)
+		local sets = frame.itemSets
+		local setID = sets and sets[1].setID
+		local data = C_LootJournal.GetItemSetItems(setID)
+		local text = ""
+		for i = 1, 5 do
+			local d = data[i]
+			text = "["..d.itemID.."] = true, "..text
+		end
+		print("--", classInfo.classFile)
+		print(text)
+	end
+]=]
+
+TT.TierSets = {
 	-- HUNTER
-	[202479] = true, [202477] = true, [202478] = true, [202480] = true, [202482] = true,
+	[207221] = true, [207219] = true, [207218] = true, [207217] = true, [207216] = true,
 	-- WARRIOR
-	[202441] = true, [202442] = true, [202443] = true, [202444] = true, [202446] = true,
+	[207185] = true, [207183] = true, [207182] = true, [207181] = true, [207180] = true,
 	-- PALADIN
-	[202450] = true, [202451] = true, [202452] = true, [202453] = true, [202455] = true,
+	[207194] = true, [207192] = true, [207191] = true, [207190] = true, [207189] = true,
 	-- ROGUE
-	[202495] = true, [202496] = true, [202497] = true, [202498] = true, [202500] = true,
+	[207239] = true, [207237] = true, [207236] = true, [207235] = true, [207234] = true,
 	-- PRIEST
-	[202540] = true, [202541] = true, [202542] = true, [202543] = true, [202545] = true,
-	-- DK
-	[202459] = true, [202460] = true, [202461] = true, [202462] = true, [202464] = true,
+	[207284] = true, [207282] = true, [207281] = true, [207280] = true, [207279] = true,
+	-- DEATHKNIGHT
+	[207203] = true, [207201] = true, [207200] = true, [207199] = true, [207198] = true,
 	-- SHAMAN
-	[202468] = true, [202469] = true, [202470] = true, [202471] = true, [202473] = true,
+	[207212] = true, [207210] = true, [207209] = true, [207208] = true, [207207] = true,
 	-- MAGE
-	[202549] = true, [202550] = true, [202551] = true, [202552] = true, [202554] = true,
+	[207293] = true, [207291] = true, [207290] = true, [207289] = true, [207288] = true,
 	-- WARLOCK
-	[202531] = true, [202532] = true, [202533] = true, [202534] = true, [202536] = true,
+	[207275] = true, [207273] = true, [207272] = true, [207271] = true, [207270] = true,
 	-- MONK
-	[202504] = true, [202505] = true, [202506] = true, [202507] = true, [202509] = true,
+	[207248] = true, [207246] = true, [207245] = true, [207244] = true, [207243] = true,
 	-- DRUID
-	[202513] = true, [202514] = true, [202515] = true, [202516] = true, [202518] = true,
-	-- DH
-	[202522] = true, [202523] = true, [202524] = true, [202525] = true, [202527] = true,
+	[207257] = true, [207255] = true, [207254] = true, [207253] = true, [207252] = true,
+	-- DEMONHUNTER
+	[207266] = true, [207264] = true, [207263] = true, [207262] = true, [207261] = true,
 	-- EVOKER
-	[202486] = true, [202487] = true, [202488] = true, [202489] = true, [202491] = true,
+	[207230] = true, [207228] = true, [207227] = true, [207226] = true, [207225] = true,
 }
 
 local formatSets = {
