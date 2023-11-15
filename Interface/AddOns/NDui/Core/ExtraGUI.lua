@@ -119,27 +119,19 @@ function G:SetupRaidDebuffs(parent)
 			AddNewDungeon(dungeons, dungeonID)
 		end
 	end
-	AddNewDungeon(dungeons, 68)  -- 旋云之巅
-	AddNewDungeon(dungeons, 767)  -- 耐萨里奥的巢穴
-	AddNewDungeon(dungeons, 1001)  -- 自由镇
-	AddNewDungeon(dungeons, 1022)  -- 地渊孢林
 	AddNewDungeon(dungeons, 1209)  -- 永恒黎明
-	if DB.isNewPatch then
-		AddNewDungeon(dungeons, 65)  -- 潮汐王座
-		AddNewDungeon(dungeons, 556)  -- 永茂林地
-		AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
-		AddNewDungeon(dungeons, 762)  -- 黑心林地
-		AddNewDungeon(dungeons, 968)  -- 阿塔达萨
-		AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
-	end
+	AddNewDungeon(dungeons, 65)  -- 潮汐王座
+	AddNewDungeon(dungeons, 556)  -- 永茂林地
+	AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
+	AddNewDungeon(dungeons, 762)  -- 黑心林地
+	AddNewDungeon(dungeons, 968)  -- 阿塔达萨
+	AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1200),
 		[2] = EJ_GetInstanceInfo(1208),
+		[3] = EJ_GetInstanceInfo(1207),
 	}
-	if DB.isNewPatch then
-		raids[3] = EJ_GetInstanceInfo(1207)
-	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
