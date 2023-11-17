@@ -25,10 +25,6 @@ local function UpdateQuestItemQuality(self)
 	if not itemName then
 		itemName, _, _, quality = GetQuestLogChoiceInfo(index)
 	end
-	if not itemName then
-		itemName = GetQuestLogRewardSpell(index)
-		quality = 1
-	end
 	if itemName and quality then
 		local color = DB.QualityColors[quality]
 		button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
