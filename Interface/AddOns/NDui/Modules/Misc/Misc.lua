@@ -696,7 +696,8 @@ function M:EnhancedPicker_UpdateColor()
 	r = translateColor(r)
 	g = translateColor(g)
 	b = translateColor(b)
-	_G.ColorPickerFrame:SetColorRGB(r, g, b)
+	local frame = DB.isNewPatch and _G.ColorPickerFrame.Content.ColorPicker or _G.ColorPickerFrame
+	frame:SetColorRGB(r, g, b)
 end
 
 local function GetBoxColor(box)
@@ -720,10 +721,13 @@ local function updateColorStr(self)
 end
 
 local function createCodeBox(width, index, text)
+	local parent = DB.isNewPatch and ColorPickerFrame.Content.ColorSwatchCurrent or _G.ColorSwatch
+	local offset = DB.isNewPatch and -3 or 2
+
 	local box = B.CreateEditBox(_G.ColorPickerFrame, width, 22)
 	box:SetMaxLetters(index == 4 and 6 or 3)
 	box:SetTextInsets(0, 0, 0, 0)
-	box:SetPoint("TOPLEFT", _G.ColorSwatch, "BOTTOMLEFT", 0, -index*24 + 2)
+	box:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 0, -index*24 + offset)
 	B.CreateFS(box, 14, text, "system", "LEFT", -15, 0)
 	if index == 4 then
 		box:HookScript("OnEnterPressed", updateColorStr)
@@ -737,7 +741,9 @@ function M:EnhancedPicker()
 	local pickerFrame = _G.ColorPickerFrame
 	pickerFrame:SetHeight(250)
 	B.CreateMF(pickerFrame.Header, pickerFrame) -- movable by header
-	_G.OpacitySliderFrame:SetPoint("TOPLEFT", _G.ColorSwatch, "TOPRIGHT", 50, 0)
+	if not DB.isNewPatch then
+		_G.OpacitySliderFrame:SetPoint("TOPLEFT", _G.ColorSwatch, "TOPRIGHT", 50, 0)
+	end
 
 	local colorBar = CreateFrame("Frame", nil, pickerFrame)
 	colorBar:SetSize(1, 22)
@@ -762,19 +768,44 @@ function M:EnhancedPicker()
 	pickerFrame.__boxR = createCodeBox(45, 1, "|cffff0000R")
 	pickerFrame.__boxG = createCodeBox(45, 2, "|cff00ff00G")
 	pickerFrame.__boxB = createCodeBox(45, 3, "|cff0000ffB")
-	pickerFrame.__boxH = createCodeBox(70, 4, "#")
+	if not DB.isNewPatch then
+		pickerFrame.__boxH = createCodeBox(70, 4, "#")
+	else
+		local hexBox = pickerFrame.Content and pickerFrame.Content.HexBox
+		if hexBox then
+			B.ReskinEditBox(hexBox)
+			hexBox:ClearAllPoints()
+			hexBox:SetPoint("BOTTOMRIGHT", -25, 67)
+		end
+	end
 
-	pickerFrame:HookScript("OnColorSelect", function(self)
-		local r, g, b = self:GetColorRGB()
+	if not DB.isNewPatch then
+		pickerFrame:HookScript("OnColorSelect", function(self)
+			local r, g, b = self:GetColorRGB()
+			r = B:Round(r*255)
+			g = B:Round(g*255)
+			b = B:Round(b*255)
+	
+			self.__boxR:SetText(r)
+			self.__boxG:SetText(g)
+			self.__boxB:SetText(b)
+			self.__boxH:SetText(format("%02x%02x%02x", r, g, b))
+		end)
+	else
+
+	pickerFrame.Content.ColorPicker.__owner = pickerFrame
+	pickerFrame.Content.ColorPicker:HookScript("OnColorSelect", function(self)
+		local r, g, b = self.__owner:GetColorRGB()
 		r = B:Round(r*255)
 		g = B:Round(g*255)
 		b = B:Round(b*255)
 
-		self.__boxR:SetText(r)
-		self.__boxG:SetText(g)
-		self.__boxB:SetText(b)
-		self.__boxH:SetText(format("%02x%02x%02x", r, g, b))
+		self.__owner.__boxR:SetText(r)
+		self.__owner.__boxG:SetText(g)
+		self.__owner.__boxB:SetText(b)
 	end)
+
+	end
 end
 
 function M:UpdateMaxZoomLevel()
