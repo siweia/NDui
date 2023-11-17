@@ -10,12 +10,19 @@ tinsert(C.defaultThemes, function()
 	ColorPickerFrame.Border:Hide()
 
 	B.SetBD(ColorPickerFrame)
-	B.Reskin(ColorPickerOkayButton)
-	B.Reskin(ColorPickerCancelButton)
-	B.ReskinSlider(OpacitySliderFrame, true)
+	if not DB.isNewPatch then
+		B.Reskin(ColorPickerOkayButton)
+		B.Reskin(ColorPickerCancelButton)
+		B.ReskinSlider(OpacitySliderFrame, true)
 
-	ColorPickerCancelButton:ClearAllPoints()
-	ColorPickerCancelButton:SetPoint("BOTTOMLEFT", ColorPickerFrame, "BOTTOM", 1, 6)
-	ColorPickerOkayButton:ClearAllPoints()
-	ColorPickerOkayButton:SetPoint("BOTTOMRIGHT", ColorPickerFrame, "BOTTOM", -1, 6)
+		ColorPickerCancelButton:ClearAllPoints()
+		ColorPickerCancelButton:SetPoint("BOTTOMLEFT", ColorPickerFrame, "BOTTOM", 1, 6)
+		ColorPickerOkayButton:ClearAllPoints()
+		ColorPickerOkayButton:SetPoint("BOTTOMRIGHT", ColorPickerFrame, "BOTTOM", -1, 6)
+	else
+
+	B.Reskin(ColorPickerFrame.Footer.OkayButton)
+	B.Reskin(ColorPickerFrame.Footer.CancelButton)
+
+	end
 end)
