@@ -30,6 +30,12 @@ local function replaceGossipText(button, text)
 	end
 end
 
+local function replaceTextColor(text, r)
+	if r ~= 1 then
+		text:SetTextColor(1, 1, 1)
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	QuestFont:SetTextColor(1, 1, 1)
 
@@ -41,11 +47,18 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local button = select(i, self.ScrollTarget:GetChildren())
 			if not button.styled then
-				local buttonText = select(3, button:GetRegions()) -- no parentKey atm
-				if buttonText and buttonText:IsObjectType("FontString") then
-					replaceGossipText(button, button:GetText())
-					hooksecurefunc(button, "SetText", replaceGossipText)
-					hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+				local buttonText = button.GreetingText or button.GetFontString and button:GetFontString()
+				if buttonText then
+					buttonText:SetTextColor(1, 1, 1)
+					hooksecurefunc(buttonText, "SetTextColor", replaceTextColor)
+				end
+				if button.SetText then
+					local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+					if buttonText and buttonText:IsObjectType("FontString") then
+						replaceGossipText(button, button:GetText())
+						hooksecurefunc(button, "SetText", replaceGossipText)
+						hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+					end
 				end
 
 				button.styled = true
