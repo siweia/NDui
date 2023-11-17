@@ -1063,16 +1063,30 @@ do
 		end
 	end
 
-	function B:ReskinClose(parent, xOffset, yOffset)
+	local function resetCloseButtonAnchor(button)
+		if button.isSetting then return end
+		button.isSetting = true
+		button:ClearAllPoints()
+		button:SetPoint("TOPRIGHT", button.__owner, "TOPRIGHT", button.__xOffset, button.__yOffset)
+		button.isSetting = nil
+	end
+	function B:ReskinClose(parent, xOffset, yOffset, override)
 		parent = parent or self:GetParent()
 		xOffset = xOffset or -6
 		yOffset = yOffset or -6
 
 		self:SetSize(16, 16)
-		self:ClearAllPoints()
-		self:SetPoint("TOPRIGHT", parent, "TOPRIGHT", xOffset, yOffset)
+		if not override then
+			self:ClearAllPoints()
+			self:SetPoint("TOPRIGHT", parent, "TOPRIGHT", xOffset, yOffset)
+			self.__owner = parent
+			self.__xOffset = xOffset
+			self.__yOffset = yOffset
+			hooksecurefunc(self, "SetPoint", resetCloseButtonAnchor)
+		end
 
 		B.StripTextures(self)
+		if self.Border then self.Border:SetAlpha(0) end
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetAllPoints()
 
@@ -1391,9 +1405,7 @@ do
 		end
 		local closeButton = self.CloseButton or (frameName and _G[frameName.."CloseButton"])
 		if closeButton then
-			B.ReskinClose(closeButton)
-			closeButton:ClearAllPoints()
-			closeButton:SetPoint("TOPRIGHT", bg, -5, -5)
+			B.ReskinClose(closeButton, bg, -5, -5)
 		end
 		return bg
 	end
