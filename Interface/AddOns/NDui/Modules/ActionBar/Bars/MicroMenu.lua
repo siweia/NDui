@@ -77,6 +77,7 @@ function Bar:MicroButton_Create(parent, data)
 			button:DisableDrawLayer("ARTWORK")
 			button:DisableDrawLayer("OVERLAY")
 			button.HighlightEmblem:SetAlpha(0)
+			button.NotificationOverlay:SetPoint("TOPLEFT", 3, 0)
 		end
 	else
 		bu:SetScript("OnMouseUp", method)
