@@ -847,3 +847,4 @@ L["ToggleActionbarTip"] = "|nOption to toggle actionbar, no need to reload UI." 
 L["BlizzMover"] = "Save CharacterFrame anchor" -- need translation
 L["BlizzMoverTip"] = "If enabled, save CharacterFrame anchor after you move it. Hold CTRL and left click to reset its default anchor.|n|nAlso support QuestLogFrame." -- need translation
 L["TarName"] = "Show target name" -- need translation
+L["Spacing"] = "Spacing" -- need translation
