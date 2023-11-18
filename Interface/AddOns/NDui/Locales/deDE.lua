@@ -919,3 +919,4 @@ L["IgnoreNoteHelp"] = "You can add note for ignore list by double click." -- nee
 L["RaidTargetX"] = "RaidTarget X Offset" -- need translation
 L["RaidTargetY"] = "RaidTarget Y Offset" -- need translation
 L["GlowMode"] = "Button Glow Mode" -- need translation
+L["Spacing"] = "Spacing" -- need translation

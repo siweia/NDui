@@ -196,6 +196,25 @@ SlashCmdList["NDUI_DUMPSPELLS"] = function(arg)
 end
 SLASH_NDUI_DUMPSPELLS1 = "/getss"
 
+SlashCmdList["NDUI_GET_TIERSETS"] = function()
+	if not EncounterJournal then return end
+	local frame = EncounterJournal.LootJournalItems.ItemSetsFrame
+	local classFilter = frame:GetClassAndSpecFilters()
+	local classInfo = C_CreatureInfo.GetClassInfo(classFilter)
+	local sets = frame.itemSets
+	local setID = sets and sets[1].setID
+	if not setID then return end
+	local data = C_LootJournal.GetItemSetItems(setID)
+	local text = ""
+	for i = 1, 5 do
+		local d = data[i]
+		text = "["..d.itemID.."] = true, "..text
+	end
+	print("--", classInfo.classFile)
+	print(text)
+end
+SLASH_NDUI_GET_TIERSETS1 = "/getts"
+
 -- Grids
 local grid
 local boxSize = 32

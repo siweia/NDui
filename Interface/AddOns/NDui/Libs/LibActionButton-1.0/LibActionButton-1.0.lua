@@ -28,7 +28,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
-local MAJOR_VERSION = "LibActionButton-1.0"
+local MAJOR_VERSION = "LibActionButton-1.0-NDui"
 local MINOR_VERSION = 108
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
@@ -50,7 +50,7 @@ local UseCustomFlyout = WoWRetail
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
-local LCG = LibStub("LibCustomGlow-1.0", true)
+local LCG = LibStub("LibCustomGlow-1.0-NDui", true) -- NDui: use LCG mod
 local Masque = LibStub("Masque", true)
 
 lib.eventFrame = lib.eventFrame or CreateFrame("Frame")
@@ -1613,7 +1613,7 @@ function Generic:UpdateAction(force)
 		Update(self)
 	end
 end
-
+-- NDui: add quality border
 local function ClearProfessionQuality(self)
 	if self.ProfessionQuality then
 		self.ProfessionQuality:Hide()

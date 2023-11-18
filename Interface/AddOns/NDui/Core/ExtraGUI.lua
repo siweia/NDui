@@ -119,27 +119,19 @@ function G:SetupRaidDebuffs(parent)
 			AddNewDungeon(dungeons, dungeonID)
 		end
 	end
-	AddNewDungeon(dungeons, 68)  -- 旋云之巅
-	AddNewDungeon(dungeons, 767)  -- 耐萨里奥的巢穴
-	AddNewDungeon(dungeons, 1001)  -- 自由镇
-	AddNewDungeon(dungeons, 1022)  -- 地渊孢林
 	AddNewDungeon(dungeons, 1209)  -- 永恒黎明
-	if DB.isNewPatch then
-		AddNewDungeon(dungeons, 65)  -- 潮汐王座
-		AddNewDungeon(dungeons, 556)  -- 永茂林地
-		AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
-		AddNewDungeon(dungeons, 762)  -- 黑心林地
-		AddNewDungeon(dungeons, 968)  -- 阿塔达萨
-		AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
-	end
+	AddNewDungeon(dungeons, 65)  -- 潮汐王座
+	AddNewDungeon(dungeons, 556)  -- 永茂林地
+	AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
+	AddNewDungeon(dungeons, 762)  -- 黑心林地
+	AddNewDungeon(dungeons, 968)  -- 阿塔达萨
+	AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
 
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1200),
 		[2] = EJ_GetInstanceInfo(1208),
+		[3] = EJ_GetInstanceInfo(1207),
 	}
-	if DB.isNewPatch then
-		raids[3] = EJ_GetInstanceInfo(1207)
-	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
@@ -1871,6 +1863,22 @@ function G:SetupActionBar(parent)
 	end
 
 	toggleOptionsPanel(dd.options[1])
+end
+
+function G:SetupMicroMenu(parent)
+	local guiName = "NDuiGUI_MicroMenuSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["Menubar"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local Bar = B:GetModule("Actionbar")
+	local parent, offset = scroll.child, -10
+	createOptionTitle(parent, L["Menubar"], offset)
+	createOptionSlider(parent, L["ButtonSize"], 20, 40, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar")
+	createOptionSlider(parent, L["ButtonsPerRow"], 1, 12, 12, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
+	createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar")
 end
 
 function G:SetupStanceBar(parent)

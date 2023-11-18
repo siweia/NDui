@@ -5,7 +5,7 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
-local MAJOR_VERSION = "LibCustomGlow-1.0"
+local MAJOR_VERSION = "LibCustomGlow-1.0-NDui"
 local MINOR_VERSION = 17
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)

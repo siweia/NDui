@@ -5,7 +5,7 @@ local Bar = B:GetModule("Actionbar")
 -- Texture credit: 胡里胡涂
 local _G = getfenv(0)
 local tinsert, pairs, type = table.insert, pairs, type
-local buttonList = {}
+local buttonList, menubar = {}
 
 function Bar:MicroButton_SetupTexture(icon, texture)
 	local r, g, b = DB.r, DB.g, DB.b
@@ -77,6 +77,7 @@ function Bar:MicroButton_Create(parent, data)
 			button:DisableDrawLayer("ARTWORK")
 			button:DisableDrawLayer("OVERLAY")
 			button.HighlightEmblem:SetAlpha(0)
+			button.NotificationOverlay:SetPoint("TOPLEFT", 3, 0)
 		end
 	else
 		bu:SetScript("OnMouseUp", method)
@@ -115,12 +116,40 @@ function Bar:MicroMenu_Lines(parent)
 	end
 end
 
+function Bar:MicroMenu_Setup()
+	if not menubar then return end
+
+	local size = C.db["Actionbar"]["MBSize"]
+	local perRow = C.db["Actionbar"]["MBPerRow"]
+	local margin = C.db["Actionbar"]["MBSpacing"]
+
+	for i = 1, #buttonList do
+		local button = buttonList[i]
+		button:SetSize(size, size)
+		button:ClearAllPoints()
+		if i == 1 then
+			button:SetPoint("TOPLEFT")
+		elseif mod(i-1, perRow) == 0 then
+			button:SetPoint("TOP", buttonList[i-perRow], "BOTTOM", 0, -margin)
+		else
+			button:SetPoint("LEFT", buttonList[i-1], "RIGHT", margin, 0)
+		end
+	end
+
+	local column = min(12, perRow)
+	local rows = ceil(12/perRow)
+	local width = column*size + (column-1)*margin
+	local height = size*rows + (rows-1)*margin
+	menubar:SetSize(width, height)
+	menubar.mover:SetSize(width, height)
+end
+
 function Bar:MicroMenu()
 	if not C.db["Actionbar"]["MicroMenu"] then return end
 
-	local menubar = CreateFrame("Frame", nil, UIParent)
+	menubar = CreateFrame("Frame", nil, UIParent)
 	menubar:SetSize(323, 22)
-	B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
+	menubar.mover = B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
@@ -143,13 +172,7 @@ function Bar:MicroMenu()
 	end
 
 	-- Order Positions
-	for i = 1, #buttonList do
-		if i == 1 then
-			buttonList[i]:SetPoint("LEFT")
-		else
-			buttonList[i]:SetPoint("LEFT", buttonList[i-1], "RIGHT", 5, 0)
-		end
-	end
+	Bar:MicroMenu_Setup()
 
 	-- Default elements
 	if MainMenuMicroButton.MainMenuBarPerformanceBar then

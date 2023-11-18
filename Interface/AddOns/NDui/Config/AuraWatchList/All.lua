@@ -280,6 +280,7 @@ local list = {
 		{AuraID = 388691, UnitID = "target", Value = true},	-- 风暴喷涌，莱萨杰斯
 		{AuraID = 396734, UnitID = "target", Flash = true},	-- 风暴遮罩，莱萨杰斯
 		{AuraID = 388431, UnitID = "target", Flash = true},	-- 毁灭帷幕，莱萨杰斯
+		{AuraID = 421013, UnitID = "target", Flash = true},	-- 培植毁灭，瘤根
 
 		{AuraID = 403284, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 410654, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯

@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:RegisterModule("Actionbar")
-local LAB = LibStub("LibActionButton-1.0")
+local LAB = LibStub("LibActionButton-1.0-NDui")
 
 local _G = _G
 local tinsert, next = tinsert, next
@@ -344,6 +344,6 @@ function Bar:OnLogin()
 	B:RegisterEvent("PET_BATTLE_OPENING_DONE", Bar.ClearBindings)
 
 	if AdiButtonAuras then
-		AdiButtonAuras:RegisterLAB("LibActionButton-1.0")
+		AdiButtonAuras:RegisterLAB("LibActionButton-1.0-NDui")
 	end
 end

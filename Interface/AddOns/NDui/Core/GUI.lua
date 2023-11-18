@@ -89,6 +89,9 @@ G.DefaultSettings = {
 		BarStanceFont = 12,
 		BarStancePerRow = 10,
 		VehButtonSize = 34,
+		MBSize = 22,
+		MBPerRow = 12,
+		MBSpacing = 5,
 	},
 	Bags = {
 		Enable = true,
@@ -828,6 +831,10 @@ local function setupActionBar()
 	G:SetupActionBar(guiPage[1])
 end
 
+local function setupMicroMenu()
+	G:SetupMicroMenu(guiPage[1])
+end
+
 local function setupStanceBar()
 	G:SetupStanceBar(guiPage[1])
 end
@@ -1134,7 +1141,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
 		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
-		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, nil, nil, L["MicroMenuTip"]},
+		{1, "Actionbar", "MicroMenu", NewTag..L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},

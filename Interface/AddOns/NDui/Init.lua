@@ -125,7 +125,7 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])
 	C.margin = 3
 
-	local LCG = LibStub("LibCustomGlow-1.0")
+	local LCG = LibStub("LibCustomGlow-1.0-NDui")
 	if LCG then
 		B.ShowOverlayGlow = LCG.ShowOverlayGlow
 		B.HideOverlayGlow = LCG.HideOverlayGlow
