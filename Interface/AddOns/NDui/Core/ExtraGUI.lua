@@ -1865,6 +1865,22 @@ function G:SetupActionBar(parent)
 	toggleOptionsPanel(dd.options[1])
 end
 
+function G:SetupMicroMenu(parent)
+	local guiName = "NDuiGUI_MicroMenuSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["Menubar"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local Bar = B:GetModule("Actionbar")
+	local parent, offset = scroll.child, -10
+	createOptionTitle(parent, L["Menubar"], offset)
+	createOptionSlider(parent, L["ButtonSize"], 20, 40, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar")
+	createOptionSlider(parent, L["ButtonsPerRow"], 1, 12, 12, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
+	createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar")
+end
+
 function G:SetupStanceBar(parent)
 	local guiName = "NDuiGUI_StanceBarSetup"
 	toggleExtraGUI(guiName)
