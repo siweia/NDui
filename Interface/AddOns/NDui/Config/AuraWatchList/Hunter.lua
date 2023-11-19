@@ -66,6 +66,7 @@ local list = {
 		{AuraID = 308498, UnitID = "target", Caster = "player"},	-- 共鸣箭
 		{AuraID = 333526, UnitID = "target", Caster = "player"},	-- 尖刺果实
 		{AuraID = 375893, UnitID = "target", Caster = "player"},	-- 死亡飞轮
+		{AuraID = 424567, UnitID = "target", Caster = "player", Flash = true},	-- 狂野本能
 
 		{AuraID = 410167, UnitID = "target", Caster = "player"},	-- 破甲，生存4T
 	},
