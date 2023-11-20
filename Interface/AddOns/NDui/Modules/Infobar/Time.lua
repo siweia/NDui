@@ -455,6 +455,10 @@ info.onMouseUp = function(_, btn)
 		else
 			ToggleFrame(WeeklyRewardsFrame)
 		end
+		local dialog = WeeklyRewardExpirationWarningDialog
+		if dialog and dialog:IsShown() then
+			dialog:Hide()
+		end
 	else
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleCalendar()
