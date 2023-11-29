@@ -118,8 +118,8 @@ function Bar:MicroMenu_Setup()
 		end
 	end
 
-	local column = min(12, perRow)
-	local rows = ceil(12/perRow)
+	local column = min(10, perRow)
+	local rows = ceil(10/perRow)
 	local width = column*size + (column-1)*margin
 	local height = size*rows + (rows-1)*margin
 	menubar:SetSize(width, height)
