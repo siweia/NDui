@@ -234,14 +234,20 @@ local list = {
 		{AuraID = 414496, UnitID = "player", Flash = true},	-- 时间线加速，永恒黎明
 		{AuraID = 406543, UnitID = "player", Flash = true},	-- 窃取时间，永恒黎明
 		{AuraID = 410908, UnitID = "player", Flash = true},	-- 永恒新星，永恒黎明
-		{AuraID = 401420, UnitID = "player", Flash = true},	-- 永恒新星，黄沙重踏
-		{AuraID = 404141, UnitID = "player", Flash = true},	-- 永恒新星，时光凋零
-		{AuraID = 407406, UnitID = "player", Flash = true},	-- 腐蚀，萨卡雷斯
+		{AuraID = 401420, UnitID = "player", Flash = true},	-- 黄沙重踏，永恒黎明
+		{AuraID = 404141, UnitID = "player", Flash = true},	-- 时光凋零，永恒黎明
 
+		{AuraID = 407406, UnitID = "player", Flash = true},	-- 腐蚀，萨卡雷斯
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
 		{AuraID = 410642, UnitID = "player", Flash = true},	-- 虚空碎裂，萨卡雷斯
 		{AuraID = 407496, UnitID = "player", Flash = true},	-- 无限压迫，萨卡雷斯
+		-- S3
+		{AuraID = 257407, UnitID = "player"},	-- 追踪，阿塔达萨
+		{AuraID = 250585, UnitID = "player", Flash = true},	-- 剧毒之池，阿塔达萨
+		{AuraID = 258723, UnitID = "player", Flash = true},	-- 怪诞之池，阿塔达萨
+		{AuraID = 268086, UnitID = "player", Text = L["Move"]},	-- 恐怖光环，庄园
+
 		{AuraID = 426249, UnitID = "player", Flash = true},	-- 炽焰融合，拉罗达尔
 	},
 	["Warning"] = { -- 目标重要光环组
