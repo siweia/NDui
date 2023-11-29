@@ -5,12 +5,11 @@ if DB.Client ~= "zhCN" then return end
 local strsplit, pairs = string.split, pairs
 
 local hx = {
-	"界面美化更新支持3.4.3；",
-	"移除对3.4.2之前的支持；",
-	"添加Boss框体；",
-	"世界地图调整；",
-	"添加选项以缩放最大化的地图；",
-	"版本号更新。",
+	"正确隐藏自带的boss框体；",
+	"更新DBM法术图标的屏蔽选项；",
+	"部分反馈的问题调整；",
+	"添加选项以调整微型菜单的尺寸和排序；",
+	"控制台及本地文本更新。",
 }
 
 local f
