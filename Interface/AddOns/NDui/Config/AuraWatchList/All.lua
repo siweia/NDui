@@ -281,13 +281,16 @@ local list = {
 		{AuraID = 388691, UnitID = "target", Value = true},	-- 风暴喷涌，莱萨杰斯
 		{AuraID = 396734, UnitID = "target", Flash = true},	-- 风暴遮罩，莱萨杰斯
 		{AuraID = 388431, UnitID = "target", Flash = true},	-- 毁灭帷幕，莱萨杰斯
-		{AuraID = 421013, UnitID = "target", Flash = true},	-- 培植毁灭，瘤根
 
 		{AuraID = 403284, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 410654, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 407617, UnitID = "target", Value = true},	-- 时空畸体，里翁苏斯
 		{AuraID = 397383, UnitID = "target", Value = true},	-- 熔火屏障，
 		{AuraID = 407036, UnitID = "target", Value = true},	-- 隐匿虚空，耐萨里奥的回响
+
+		{AuraID = 421013, UnitID = "target", Flash = true},	-- 培植毁灭，瘤根
+		{AuraID = 424140, UnitID = "target", Value = true},	-- 超级新星，丁达尔
+		{AuraID = 421922, UnitID = "target", Value = true},	-- 腐蚀，菲莱克
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术
