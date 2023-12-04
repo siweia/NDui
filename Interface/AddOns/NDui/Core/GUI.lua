@@ -428,6 +428,7 @@ G.DefaultSettings = {
 		PlateCBOffset = -1,
 		CBTextSize = 14,
 		NameTextSize = 14,
+		NameTextOffset = 5,
 		HealthTextSize = 16,
 		HealthTextOffset = 5,
 		FriendPlateWidth = 190,

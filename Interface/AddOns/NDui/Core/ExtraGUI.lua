@@ -1731,7 +1731,7 @@ function G:SetupNameplateSize(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local optionValues = {
-		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize", "HealthTextSize", "HealthTextOffset", "PlateCBHeight", "CBTextSize", "PlateCBOffset", "HarmWidth", "HarmHeight"},
+		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize", "HealthTextSize", "HealthTextOffset", "PlateCBHeight", "CBTextSize", "PlateCBOffset", "HarmWidth", "HarmHeight", "NameTextOffset"},
 		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize", "FriendHealthSize", "FriendHealthOffset", "FriendPlateCBHeight", "FriendCBTextSize", "FriendPlateCBOffset", "HelpWidth", "HelpHeight"},
 	}
 	local function createOptionGroup(parent, title, offset, value, func, isEnemy)
@@ -1747,14 +1747,15 @@ function G:SetupNameplateSize(parent)
 		createOptionSlider(parent, L["CastbarTextSize"], 10, 50, 14, offset-620, optionValues[value][7], func, "Nameplate")
 		createOptionSlider(parent, L["CastbarTextOffset"], -50, 50, -1, offset-690, optionValues[value][8], func, "Nameplate")
 		if isEnemy then
-			createOptionSlider(parent, L["RaidTargetX"], -50, 500, 0, offset-760, "RaidTargetX", func, "Nameplate")
-			createOptionSlider(parent, L["RaidTargetY"], -200, 200, 3, offset-830, "RaidTargetY", func, "Nameplate")
+			createOptionSlider(parent, L["NameText Offset"], -50, 50, 5, offset-760, optionValues[value][11], func, "Nameplate")
+			createOptionSlider(parent, L["RaidTargetX"], -50, 500, 0, offset-830, "RaidTargetX", func, "Nameplate")
+			createOptionSlider(parent, L["RaidTargetY"], -200, 200, 3, offset-900, "RaidTargetY", func, "Nameplate")
 		end
 	end
 
 	local UF = B:GetModule("UnitFrames")
 	createOptionGroup(scroll.child, L["HostileNameplate"], -10, "enemy", UF.RefreshAllPlates, true)
-	createOptionGroup(scroll.child, L["FriendlyNameplate"], -930, "friend", UF.RefreshAllPlates)
+	createOptionGroup(scroll.child, L["FriendlyNameplate"], -1000, "friend", UF.RefreshAllPlates)
 end
 
 function G:SetupNameOnlySize(parent)
