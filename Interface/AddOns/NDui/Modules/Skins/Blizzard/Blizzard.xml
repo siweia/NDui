@@ -4,6 +4,7 @@
 	<Script file="Blizzard_BindingUI.lua"/>
 	<Script file="Blizzard_Communities.lua"/>
 	<Script file="Blizzard_DebugTools.lua"/>
+	<Script file="Blizzard_EngravingUI.lua"/>
 	<Script file="Blizzard_EventTrace.lua"/>
 	<Script file="Blizzard_FlightMap.lua"/>
 	<Script file="Blizzard_GMChatUI.lua"/>
