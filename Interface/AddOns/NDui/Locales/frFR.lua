@@ -495,6 +495,7 @@ L["ShowChatbar"] = "Afficher la barre de discussion"
 L["Chatbar"] = "Barre de canaux"
 L["UnitFrame Size"] = "Redimensionner le cadre d'unité"
 L["Power Height"] = "Hauteur de la puissance"
+L["NameTextOffset"] = "Name Y-Offset" -- need translation
 L["Health Offset"] = "Décalage Y de la vie"
 L["Power Offset"] = "Décalage de puissance en Y"
 L["Player&Target"] = "CU Joueur&Cible"
