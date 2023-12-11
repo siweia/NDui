@@ -6,7 +6,7 @@ C.themes["Blizzard_EngravingUI"] = function()
 	if EngravingFrame then
 		B.StripTextures(EngravingFrame)
 		B.StripTextures(EngravingFrameSideInset)
-		B.SetBD(EngravingFrame.Border, nil, 2, -2, 2, C.mult)
+		B.SetBD(EngravingFrame.Border, nil, 1, -2)
 		B.ReskinEditBox(EngravingFrameSearchBox)
 		B.ReskinDropDown(EngravingFrameFilterDropDown)
 		B.ReskinScroll(EngravingFrameScrollFrameScrollBar)
