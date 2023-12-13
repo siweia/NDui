@@ -77,6 +77,7 @@ local list = {
 		{AuraID = 410232, UnitID = "player", Value = true},	-- 孢子披风
 		{AuraID = 423611, UnitID = "player"},	-- 灵魂燃烧
 		{AuraID = 429262, UnitID = "player"},	-- 水润滋养
+		{AuraID = 417452, UnitID = "player"},	-- 增速沙漏
 		-- 盟约，TODO: 部分已被整合进天赋，待整理
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
@@ -234,14 +235,21 @@ local list = {
 		{AuraID = 414496, UnitID = "player", Flash = true},	-- 时间线加速，永恒黎明
 		{AuraID = 406543, UnitID = "player", Flash = true},	-- 窃取时间，永恒黎明
 		{AuraID = 410908, UnitID = "player", Flash = true},	-- 永恒新星，永恒黎明
-		{AuraID = 401420, UnitID = "player", Flash = true},	-- 永恒新星，黄沙重踏
-		{AuraID = 404141, UnitID = "player", Flash = true},	-- 永恒新星，时光凋零
-		{AuraID = 407406, UnitID = "player", Flash = true},	-- 腐蚀，萨卡雷斯
+		{AuraID = 401420, UnitID = "player", Flash = true},	-- 黄沙重踏，永恒黎明
+		{AuraID = 404141, UnitID = "player", Flash = true},	-- 时光凋零，永恒黎明
 
+		{AuraID = 407406, UnitID = "player", Flash = true},	-- 腐蚀，萨卡雷斯
 		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
 		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
 		{AuraID = 410642, UnitID = "player", Flash = true},	-- 虚空碎裂，萨卡雷斯
 		{AuraID = 407496, UnitID = "player", Flash = true},	-- 无限压迫，萨卡雷斯
+		-- S3
+		{AuraID = 257407, UnitID = "player"},	-- 追踪，阿塔达萨
+		{AuraID = 250585, UnitID = "player", Flash = true},	-- 剧毒之池，阿塔达萨
+		{AuraID = 258723, UnitID = "player", Flash = true},	-- 怪诞之池，阿塔达萨
+		{AuraID = 268086, UnitID = "player", Text = L["Move"]},	-- 恐怖光环，庄园
+
+		{AuraID = 426249, UnitID = "player", Flash = true},	-- 炽焰融合，拉罗达尔
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
@@ -280,13 +288,16 @@ local list = {
 		{AuraID = 388691, UnitID = "target", Value = true},	-- 风暴喷涌，莱萨杰斯
 		{AuraID = 396734, UnitID = "target", Flash = true},	-- 风暴遮罩，莱萨杰斯
 		{AuraID = 388431, UnitID = "target", Flash = true},	-- 毁灭帷幕，莱萨杰斯
-		{AuraID = 421013, UnitID = "target", Flash = true},	-- 培植毁灭，瘤根
 
 		{AuraID = 403284, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 410654, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 407617, UnitID = "target", Value = true},	-- 时空畸体，里翁苏斯
 		{AuraID = 397383, UnitID = "target", Value = true},	-- 熔火屏障，
 		{AuraID = 407036, UnitID = "target", Value = true},	-- 隐匿虚空，耐萨里奥的回响
+
+		{AuraID = 421013, UnitID = "target", Flash = true},	-- 培植毁灭，瘤根
+		{AuraID = 424140, UnitID = "target", Value = true},	-- 超级新星，丁达尔
+		{AuraID = 421922, UnitID = "target", Value = true},	-- 腐蚀，菲莱克
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术

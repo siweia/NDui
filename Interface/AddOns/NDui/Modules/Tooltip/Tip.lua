@@ -52,7 +52,7 @@ function TT:UpdateFactionLine(lineData)
 	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
 
 	local unit = TT.GetUnit(self)
-	local unitClass = unit and UnitClass(unit)
+	local unitClass = unit and UnitIsPlayer(unit) and UnitClass(unit)
 	local unitCreature = unit and UnitCreatureType(unit)
 
 	local linetext = lineData.leftText

@@ -792,12 +792,14 @@ function UF:UpdateNameplateSize()
 	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
 	local plateCBHeight, plateCBOffset = C.db["Nameplate"]["PlateCBHeight"], C.db["Nameplate"]["PlateCBOffset"]
 	local nameTextSize, CBTextSize = C.db["Nameplate"]["NameTextSize"], C.db["Nameplate"]["CBTextSize"]
+	local nameTextOffset = C.db["Nameplate"]["NameTextOffset"]
 	local healthTextSize = C.db["Nameplate"]["HealthTextSize"]
 	local healthTextOffset = C.db["Nameplate"]["HealthTextOffset"]
 	if C.db["Nameplate"]["FriendPlate"] and self.isFriendly and not C.db["Nameplate"]["NameOnlyMode"] then -- cannot use plateType here
 		plateWidth, plateHeight = C.db["Nameplate"]["FriendPlateWidth"], C.db["Nameplate"]["FriendPlateHeight"]
 		plateCBHeight, plateCBOffset = C.db["Nameplate"]["FriendPlateCBHeight"], C.db["Nameplate"]["FriendPlateCBOffset"]
 		nameTextSize, CBTextSize = C.db["Nameplate"]["FriendNameSize"], C.db["Nameplate"]["FriendCBTextSize"]
+		nameTextOffset = C.db["Nameplate"]["FriendNameOffset"]
 		healthTextSize = C.db["Nameplate"]["FriendHealthSize"]
 		healthTextOffset = C.db["Nameplate"]["FriendHealthOffset"]
 	end
@@ -813,6 +815,8 @@ function UF:UpdateNameplateSize()
 		self.npcTitle:UpdateTag()
 	else
 		B.SetFontSize(self.nameText, nameTextSize)
+		self.nameText:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, nameTextOffset)
+		self.nameText:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, nameTextOffset)
 		self:Tag(self.nameText, UF.PlateNameTags[nameType])
 		self.__tagIndex = nameType
 
@@ -895,8 +899,6 @@ function UF:UpdatePlateByType()
 		end
 
 		name:SetJustifyH("LEFT")
-		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
-		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
 		hpval:Show()
 		title:Hide()
 
