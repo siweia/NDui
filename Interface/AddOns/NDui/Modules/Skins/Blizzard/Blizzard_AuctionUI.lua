@@ -87,12 +87,11 @@ C.themes["Blizzard_AuctionUI"] = function()
 		end
 	end
 
+	BrowseSearchButton:SetPoint("TOPRIGHT", 25, -28)
 	BrowseCloseButton:ClearAllPoints()
 	BrowseCloseButton:SetPoint("BOTTOMRIGHT", AuctionFrameBrowse, "BOTTOMRIGHT", 66, 13)
 	BrowseBuyoutButton:ClearAllPoints()
 	BrowseBuyoutButton:SetPoint("RIGHT", BrowseCloseButton, "LEFT", -1, 0)
-	BrowseBidButton:ClearAllPoints()
-	BrowseBidButton:SetPoint("RIGHT", BrowseBuyoutButton, "LEFT", -1, 0)
 	BidBuyoutButton:ClearAllPoints()
 	BidBuyoutButton:SetPoint("RIGHT", BidCloseButton, "LEFT", -1, 0)
 	BidBidButton:ClearAllPoints()
@@ -193,10 +192,15 @@ C.themes["Blizzard_AuctionUI"] = function()
 	BrowseDropDownButton:HookScript("OnEnter", B.Texture_OnEnter)
 	BrowseDropDownButton:HookScript("OnLeave", B.Texture_OnLeave)
 
-	local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "BrowseBidPriceGold", "BrowseBidPriceSilver", "BrowseBidPriceCopper", "BidBidPriceGold", "BidBidPriceSilver", "BidBidPriceCopper", "StartPriceGold", "StartPriceSilver", "StartPriceCopper", "BuyoutPriceGold", "BuyoutPriceSilver", "BuyoutPriceCopper", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
+	local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
 	for i = 1, #inputs do
 		B.ReskinInput(_G[inputs[i]])
 	end
+
+	B:UpdateMoneyDisplay(BrowseBidPriceGold, BrowseBidPriceSilver, BrowseBidPriceCopper)
+	B:UpdateMoneyDisplay(BidBidPriceGold, BidBidPriceSilver, BidBidPriceCopper)
+	B:UpdateMoneyDisplay(StartPriceGold, StartPriceSilver, StartPriceCopper)
+	B:UpdateMoneyDisplay(BuyoutPriceGold, BuyoutPriceSilver, BuyoutPriceCopper)
 
 	-- [[ WoW token ]]
 
