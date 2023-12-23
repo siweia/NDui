@@ -644,13 +644,13 @@ function M:SendCurrentSpell(thisTime, spellID)
 	end
 end
 
-function M:SendCurrentItem(thisTime, itemID, itemLink)
+function M:SendCurrentItem(thisTime, itemID, itemLink, itemCount)
 	local start, duration = GetItemCooldown(itemID)
 	if start and duration > 0 then
 		local remain = start + duration - thisTime
-		SendChatMessage(format(L["CooldownRemaining"], itemLink, GetRemainTime(remain)), M:GetMsgChannel())
+		SendChatMessage(format(L["CooldownRemaining"], itemLink.." x"..itemCount, GetRemainTime(remain)), M:GetMsgChannel())
 	else
-		SendChatMessage(format(L["CooldownCompleted"], itemLink), M:GetMsgChannel())
+		SendChatMessage(format(L["CooldownCompleted"], itemLink.." x"..itemCount), M:GetMsgChannel())
 	end
 end
 
@@ -663,20 +663,21 @@ function M:AnalyzeButtonCooldown()
 	if thisTime - lastCDSend < 1.5 then return end
 	lastCDSend = thisTime
 
-	local spellType, id = GetActionInfo(self._state_action)
+	local spellType, id, subType = GetActionInfo(self._state_action)
+	local itemCount = GetActionCount(self._state_action)
 	if spellType == "spell" then
 		M:SendCurrentSpell(thisTime, id)
 	elseif spellType == "item" then
 		local itemName, itemLink = GetItemInfo(id)
-		M:SendCurrentItem(thisTime, id, itemLink or itemName)
+		M:SendCurrentItem(thisTime, id, itemLink or itemName, itemCount)
 	elseif spellType == "macro" then
-		local spellID = GetMacroSpell(id)
+		local spellID = subType == "spell" and id or GetMacroSpell(id)
 		local _, itemLink = GetMacroItem(id)
 		local itemID = itemLink and GetItemInfoFromHyperlink(itemLink)
 		if spellID then
 			M:SendCurrentSpell(thisTime, spellID)
 		elseif itemID then
-			M:SendCurrentItem(thisTime, itemID, itemLink)
+			M:SendCurrentItem(thisTime, itemID, itemLink, itemCount)
 		end
 	end
 end
