@@ -120,7 +120,7 @@ end
 local function refreshDefaultLootSpec()
 	if not currentSpecIndex or currentSpecIndex == 5 then return end
 	local mult = 3 + numSpecs
-	newMenu[numLocal - mult].text = format(LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(currentSpecIndex)))
+	newMenu[numLocal - mult].text = format(LOOT_SPECIALIZATION_DEFAULT, (select(2, GetSpecializationInfo(currentSpecIndex))) or NONE)
 end
 
 local function selectCurrentConfig(_, configID, specID)
