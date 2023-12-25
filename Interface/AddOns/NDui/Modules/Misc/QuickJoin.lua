@@ -390,7 +390,7 @@ function M:AddPGFSortingExpression()
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
 	local PGFDialog = _G.PremadeGroupsFilterDialog
-	local ExpressionPanel = _G.PremadeGroupsFilterExpressionPanel
+	local ExpressionPanel = _G.PremadeGroupsFilterMiniPanel
 	PGFDialog.__sortBu = {}
 
 	createSortButton(PGFDialog, 525134, "mprating desc", ExpressionPanel)
