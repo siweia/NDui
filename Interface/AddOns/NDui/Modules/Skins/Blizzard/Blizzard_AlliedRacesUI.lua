@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 C.themes["Blizzard_AlliedRacesUI"] = function()
 	local AlliedRacesFrame = AlliedRacesFrame
 	B.ReskinPortraitFrame(AlliedRacesFrame)
-	select(2, AlliedRacesFrame.ModelFrame:GetRegions()):Hide()
+	select(2, AlliedRacesFrame.ModelScene:GetRegions()):Hide()
 
 	local scrollFrame = AlliedRacesFrame.RaceInfoFrame.ScrollFrame
 	B.ReskinTrimScroll(scrollFrame.ScrollBar)
