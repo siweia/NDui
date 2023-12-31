@@ -141,6 +141,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(FriendsFrameUnsquelchButton)
 	B.ReskinTrimScroll(FriendsListFrame.ScrollBar)
 	B.ReskinTrimScroll(IgnoreListFrame.ScrollBar)
+	B.ReskinTrimScroll(WhoFrame.ScrollBar)
 	B.ReskinTrimScroll(FriendsFriendsFrame.ScrollBar)
 	B.ReskinDropDown(FriendsFrameStatusDropDown)
 	B.ReskinDropDown(WhoFrameDropDown)
@@ -159,14 +160,6 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(AddFriendEntryFrameAcceptButton)
 	B.Reskin(AddFriendEntryFrameCancelButton)
 	B.Reskin(AddFriendInfoFrameContinueButton)
-
-	-- Load skin slight later, to fix error caused by RaiderIO
-	local loaded
-	WhoFrame:HookScript("OnShow", function()
-		if loaded then return end
-		loaded = true
-		B.ReskinTrimScroll(WhoFrame.ScrollBar)
-	end)
 
 	for i = 1, 4 do
 		B.StripTextures(_G["WhoFrameColumnHeader"..i])
