@@ -1,6 +1,6 @@
 # NDui
 
-## [7.16.0](https://github.com/siweia/NDui/tree/7.16.0) (2023-1-1)
+## [7.16.0](https://github.com/siweia/NDui/tree/7.16.0) (2024-1-1)
 
 - Fix tooltip spec info on NPC.
 - Update nameplate filter.
