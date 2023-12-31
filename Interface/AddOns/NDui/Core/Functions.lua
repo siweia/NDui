@@ -1038,11 +1038,9 @@ do
 
 	-- WowTrimScrollBar
 	function B:ReskinTrimScroll()
-		local minimal = self:GetWidth() < 10
-
 		B.StripTextures(self)
-		reskinScrollArrow(self.Back, "up", minimal)
-		reskinScrollArrow(self.Forward, "down", minimal)
+		reskinScrollArrow(self.Back, "up", true)
+		reskinScrollArrow(self.Forward, "down", true)
 		if self.Track then
 			self.Track:DisableDrawLayer("ARTWORK")
 		end
@@ -1053,10 +1051,6 @@ do
 			thumb:DisableDrawLayer("BACKGROUND")
 			thumb.bg = B.CreateBDFrame(thumb, .25)
 			thumb.bg:SetBackdropColor(cr, cg, cb, .25)
-			if not minimal then
-				thumb.bg:SetPoint("TOPLEFT", 4, -1)
-				thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
-			end
 
 			thumb:HookScript("OnEnter", Thumb_OnEnter)
 			thumb:HookScript("OnLeave", Thumb_OnLeave)
