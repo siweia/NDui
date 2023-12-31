@@ -3,8 +3,6 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
-local LCD = DB.LibClassicDurations
-
 local strmatch, format, wipe = string.match, string.format, table.wipe
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
 local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
@@ -323,13 +321,6 @@ function UF:UpdateBuffIndicator(event, unit)
 			if value and (value[3] or caster == "player" or caster == "pet") then
 				local bu = buttons[value[1]]
 				if bu then
-					if duration == 0 then
-						local newduration, newexpires = LCD:GetAuraDurationByUnit(unit, spellID, caster, name)
-						if newduration then
-							duration, expiration = newduration, newexpires
-						end
-					end
-
 					if C.db["UFs"]["BuffIndicatorType"] == 3 then
 						if duration and duration > 0 then
 							bu.expiration = expiration

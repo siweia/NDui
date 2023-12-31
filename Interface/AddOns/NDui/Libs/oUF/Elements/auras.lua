@@ -71,8 +71,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 
-local LCD = DB.LibClassicDurations
-
 local VISIBLE = 1
 local HIDDEN = 0
 
@@ -147,22 +145,7 @@ local function customFilter(element, unit, button, name)
 end
 
 local function updateIcon(element, unit, index, offset, filter, isDebuff, visible)
-	local name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3
-
-	if LCD and not UnitIsUnit('player', unit) then
-		local durationNew, expirationTimeNew
-		name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3 = LCD:UnitAura(unit, index, filter)
-
-		if spellID then
-			durationNew, expirationTimeNew = LCD:GetAuraDurationByUnit(unit, spellID, caster, name)
-		end
-
-		if durationNew and durationNew > 0 then
-			duration, expiration = durationNew, expirationTimeNew
-		end
-	else
-		name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3 = UnitAura(unit, index, filter)
-	end
+	local name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3 = UnitAura(unit, index, filter)
 
 	if(name) then
 		local position = visible + offset + 1
@@ -516,12 +499,6 @@ local function Enable(self)
 			end
 
 			buffs:Show()
-
-			if not UnitIsUnit("player", self.unit) then
-				LCD.RegisterCallback('NDui', "UNIT_BUFF", function(event, unit)
-					Update(buffs, "UNIT_AURA", unit)
-				end)
-			end
 		end
 
 		local debuffs = self.Debuffs

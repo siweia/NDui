@@ -2,8 +2,6 @@
 local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
-local LCD = DB.LibClassicDurations
-
 local maxFrames = 12 -- Max Tracked Auras
 local hasCentralize
 local updater = CreateFrame("Frame")
@@ -477,14 +475,6 @@ function A:AuraWatch_UpdateAura(spellName, spellID, UnitID, index, bool)
 		if value and value.AuraID and value.UnitID == UnitID then
 			local filter = bool and "HELPFUL" or "HARMFUL"
 			local name, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, number = UnitAura(value.UnitID, index, filter)
-
-			if duration == 0 then
-				local newduration, newexpires = LCD:GetAuraDurationByUnit(UnitID, spellID, caster, name)
-				if newduration then
-					duration, expires = newduration, newexpires
-				end
-			end
-
 			if value.Combat and not InCombatLockdown() then return false end
 			if value.Caster and value.Caster:lower() ~= caster then return false end
 			if value.Stack and count and value.Stack > count then return false end
