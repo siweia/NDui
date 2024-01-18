@@ -144,7 +144,13 @@ local staggerIndices = {
 
 for power, color in next, PowerBarColor do
 	if (type(power) == 'string') then
-		if(type(select(2, next(color))) == 'table') then
+		if(color.r) then
+			colors.power[power] = oUF:CreateColor(color.r, color.g, color.b)
+
+			if(color.atlas) then
+				colors.power[power]:SetAtlas(color.atlas)
+			end
+		else
 			-- special handling for stagger
 			colors.power[power] = {}
 
@@ -152,13 +158,11 @@ for power, color in next, PowerBarColor do
 				local index = staggerIndices[name]
 				if(index) then
 					colors.power[power][index] = oUF:CreateColor(color_.r, color_.g, color_.b)
-				end
-			end
-		else
-			colors.power[power] = oUF:CreateColor(color.r, color.g, color.b)
 
-			if(color.atlas) then
-				colors.power[power]:SetAtlas(color.atlas)
+					if(color_.atlas) then
+						colors.power[power][index]:SetAtlas(color_.atlas)
+					end
+				end
 			end
 		end
 	end
