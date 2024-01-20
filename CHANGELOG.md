@@ -1,7 +1,6 @@
 # NDui
 
-## [7.16.1](https://github.com/siweia/NDui/tree/7.16.1) (2024-1-18)
+## [7.16.2](https://github.com/siweia/NDui/tree/7.16.2) (2024-1-20)
 
-- Update oUF core.
-- Update event update in ouf classpower.
-- Bump up toc.
+- Add weapon slots into aurawatch option.
+- Fix color picker in GUI.
