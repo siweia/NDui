@@ -1670,6 +1670,20 @@ function UF:CreateAddPower(self)
 	}
 end
 
+function UF:ToggleAddPower()
+	local frame = _G.oUF_Player
+	if not frame then return end
+
+	if C.db["UFs"]["AddPower"] then
+		if not frame:IsElementEnabled("AdditionalPower") then
+			frame:EnableElement("AdditionalPower")
+			frame.AdditionalPower:ForceUpdate()
+		end
+	elseif frame:IsElementEnabled("AdditionalPower") then
+		frame:DisableElement("AdditionalPower")
+	end
+end
+
 function UF:ToggleSwingBars()
 	local frame = _G.oUF_Player
 	if not frame then return end

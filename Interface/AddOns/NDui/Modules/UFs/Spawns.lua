@@ -407,6 +407,7 @@ function UF:OnLogin()
 			end
 		end
 
+		UF:ToggleAddPower()
 		UF:ToggleSwingBars()
 		UF:ToggleUFClassPower()
 		UF:UpdateTextScale()

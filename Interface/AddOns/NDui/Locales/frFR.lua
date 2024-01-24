@@ -921,3 +921,5 @@ L["RaidTargetX"] = "RaidTarget X Offset" -- need translation
 L["RaidTargetY"] = "RaidTarget Y Offset" -- need translation
 L["GlowMode"] = "Button Glow Mode" -- need translation
 L["Spacing"] = "Spacing" -- need translation
+L["AddPower"] = "Additional Power" -- need translation
+L["AddPowerTip"] = "|nShow additional powerbar for classes like Shadow Priest and Fural Druid." -- need translation

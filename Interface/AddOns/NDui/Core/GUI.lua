@@ -160,6 +160,7 @@ G.DefaultSettings = {
 		ShowAuras = true,
 		Arena = true,
 		Castbars = true,
+		AddPower = true,
 		SwingBar = false,
 		SwingWidth = 275,
 		SwingHeight = 3,
@@ -958,6 +959,10 @@ local function togglePlayerAbsorb()
 	end
 end
 
+local function toggleAddPower()
+	B:GetModule("UnitFrames"):ToggleAddPower()
+end
+
 local function toggleUFClassPower()
 	B:GetModule("UnitFrames"):ToggleUFClassPower()
 end
@@ -1186,6 +1191,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Portrait", L["UFs Portrait"].."*", nil, nil, togglePortraits},
 		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
 		{1, "UFs", "PlayerAbsorb", L["PlayerAbsorb"].."*", nil, nil, togglePlayerAbsorb, L["PlayerAbsorbTip"]},
+		{1, "UFs", "AddPower", L["AddPower"].."*", true, nil, toggleAddPower, L["AddPowerTip"]},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateUFTextScale},
 		{},--blank
