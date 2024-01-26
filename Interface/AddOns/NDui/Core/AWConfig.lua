@@ -200,6 +200,8 @@ local function CreatePanel()
 		[13] = INVTYPE_TRINKET.."1",
 		[14] = INVTYPE_TRINKET.."2",
 		[15] = INVTYPE_CLOAK,
+		[16] = INVTYPE_WEAPONMAINHAND,
+		[17] = INVTYPE_WEAPONOFFHAND,
 	}
 
 	local function iconOnEnter(self)
@@ -389,7 +391,7 @@ local function CreatePanel()
 			Option[8] = G:CreateCheckBox(tabs[i].Page, L["Combat"], 200, -95, L["Combat Intro"])
 			Option[9] = G:CreateEditbox(tabs[i].Page, L["Text"], 340, -90, L["Text Intro"])
 			Option[10] = G:CreateCheckBox(tabs[i].Page, L["Flash"], 280, -95, L["Flash Intro"])
-			Option[11] = G:CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[8], slotIndex[10], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15]}, L["Slot Intro"])
+			Option[11] = G:CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[8], slotIndex[10], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15], slotIndex[16], slotIndex[17]}, L["Slot Intro"])
 			Option[12] = G:CreateDropdown(tabs[i].Page, L["Totem*"], 140, -30, {L["TotemSlot"].."1", L["TotemSlot"].."2", L["TotemSlot"].."3", L["TotemSlot"].."4"}, L["Totem Intro"])
 
 			for j = 2, 12 do Option[j]:Hide() end

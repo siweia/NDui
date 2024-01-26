@@ -256,7 +256,7 @@ end
 do
 	function ClassPowerEnable(self)
 		self:RegisterEvent('UNIT_MAXPOWER', Path)
-		self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
+		self:RegisterEvent('UNIT_POWER_UPDATE', Path)
 
 		-- according to Blizz any class may receive this event due to specific spell auras
 		self:RegisterEvent('UNIT_POWER_POINT_CHARGE', Path)
@@ -271,7 +271,7 @@ do
 	end
 
 	function ClassPowerDisable(self)
-		self:UnregisterEvent('UNIT_POWER_FREQUENT', Path)
+		self:UnregisterEvent('UNIT_POWER_UPDATE', Path)
 		self:UnregisterEvent('UNIT_MAXPOWER', Path)
 		self:UnregisterEvent('UNIT_POWER_POINT_CHARGE', Path)
 
