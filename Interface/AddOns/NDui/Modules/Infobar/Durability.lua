@@ -23,9 +23,9 @@ local localSlots = {
 	[3] = {5, INVTYPE_CHEST, 1000},
 	[4] = {6, INVTYPE_WAIST, 1000},
 	[5] = {9, INVTYPE_WRIST, 1000},
-	[6] = {10, L["Hands"], 1000},
+	[6] = {10, INVTYPE_HAND, 1000},
 	[7] = {7, INVTYPE_LEGS, 1000},
-	[8] = {8, L["Feet"], 1000},
+	[8] = {8, INVTYPE_FEET, 1000},
 	[9] = {16, INVTYPE_WEAPONMAINHAND, 1000},
 	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000}
 }
