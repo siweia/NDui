@@ -55,7 +55,7 @@ function Bar:MicroButton_Create(parent, data)
 		local hl = button:GetHighlightTexture()
 		Bar:MicroButton_SetupTexture(hl, texture)
 		hooksecurefunc(button, "SetHighlightAtlas", function()
-			hl:SetTexture(DB.MicroTex..texture)
+			button:SetHighlightTexture(DB.MicroTex..texture)
 			hl:SetBlendMode("ADD")
 		end)
 		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
