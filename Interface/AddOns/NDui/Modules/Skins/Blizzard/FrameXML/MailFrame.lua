@@ -112,4 +112,8 @@ tinsert(C.defaultThemes, function()
 	MailTextFontNormal:SetShadowColor(0, 0, 0, 0)
 	InvoiceTextFontNormal:SetTextColor(1, 1, 1)
 	InvoiceTextFontSmall:SetTextColor(1, 1, 1)
+
+	if MailEditBox then
+		MailEditBox:SetTextColor(HIGHLIGHT_FONT_COLOR)
+	end
 end)
