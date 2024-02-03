@@ -395,15 +395,17 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		B.StripTextures(frame)
 		B.ReskinTrimScroll(frame.ScrollBar)
 
-		local function replaceTextColor(container)
-			container.NameText:SetTextColor(1, 1, 1)
+		local function replaceBlackColor(text, r, g, b)
+			if r == 0 and g == 0 and b == 0 then
+				text:SetTextColor(.7, .7, .7)
+			end
 		end
 
 		local function handleText(button)
 			local container = button.TextContainer
 			if container and not container.styled then
-				replaceTextColor(container)
-				hooksecurefunc(container, "UpdateTextColor", replaceTextColor)
+				hooksecurefunc(container.NameText, "SetTextColor", replaceBlackColor)
+				hooksecurefunc(container.ConditionsText, "SetTextColor", replaceBlackColor)
 				container.styled = true
 			end
 		end
