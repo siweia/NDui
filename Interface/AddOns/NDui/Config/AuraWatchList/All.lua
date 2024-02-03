@@ -248,6 +248,7 @@ local list = {
 		{AuraID = 250585, UnitID = "player", Flash = true},	-- 剧毒之池，阿塔达萨
 		{AuraID = 258723, UnitID = "player", Flash = true},	-- 怪诞之池，阿塔达萨
 		{AuraID = 268086, UnitID = "player", Text = L["Move"]},	-- 恐怖光环，庄园
+		{AuraID = 427513, UnitID = "player", Flash = true},	-- 剧毒释放，永茂林地
 
 		{AuraID = 426249, UnitID = "player", Flash = true},	-- 炽焰融合，拉罗达尔
 	},
