@@ -234,7 +234,7 @@ C.themes["Blizzard_Communities"] = function()
 		local dialog = CommunitiesAvatarPickerDialog
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
-		select(9, dialog:GetRegions()):Hide()
+		--select(9, dialog:GetRegions()):Hide()
 		CommunitiesAvatarPickerDialogTop:Hide()
 		CommunitiesAvatarPickerDialogMiddle:Hide()
 		CommunitiesAvatarPickerDialogBottom:Hide()
