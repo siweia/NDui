@@ -41,3 +41,4 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 172963, 6) -- 破门斩斧
 
 INSTANCE = 556 -- 永茂林地
 module:RegisterSeasonSpells(TIER, INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 428084, 6) -- 冰川融聚

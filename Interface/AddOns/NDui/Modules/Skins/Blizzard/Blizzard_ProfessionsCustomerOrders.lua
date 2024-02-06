@@ -221,6 +221,8 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 		reskinContainer(qualityDialog["Container"..i])
 	end
 
+	B.Reskin(frame.Form.OrderRecipientDisplay.SocialDropdownButton)
+
 	-- Orders
 	B.Reskin(frame.MyOrdersPage.RefreshButton)
 	frame.MyOrdersPage.RefreshButton.__bg:SetInside(nil, 3, 3)

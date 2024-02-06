@@ -1,6 +1,14 @@
 # NDui
 
-## [7.16.2](https://github.com/siweia/NDui/tree/7.16.2) (2024-1-20)
+## [7.17.0](https://github.com/siweia/NDui/tree/7.17.0) (2024-2-3)
 
-- Add weapon slots into aurawatch option.
-- Fix color picker in GUI.
+- Update oUF.
+- Remove old patch compats.
+- More slots in aurawatch slot group.
+- Fix color picker.
+- Update infobar time module.
+- Update default skins.
+- Option to toggle additional powerbar.
+- Update locales.
+- Fix unit name retrieving in tooltip.
+- Update auras.

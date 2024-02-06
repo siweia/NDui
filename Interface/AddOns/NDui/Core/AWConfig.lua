@@ -438,7 +438,7 @@ local function CreatePanel()
 			end
 		end)
 
-		local slotTable = {6, 8, 10, 11, 12, 13, 14, 15}
+		local slotTable = {6, 8, 10, 11, 12, 13, 14, 15, 16, 17}
 		local add = B.CreateButton(tabs[i].Page, 60, 25, ADD)
 		add:SetPoint("TOPRIGHT", -30, -90)
 		add:SetScript("OnClick", function()

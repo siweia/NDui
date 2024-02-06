@@ -99,9 +99,10 @@ local questlist = {
 	{name = L["Timewarped"], id = 55499, texture = 1129683},	-- WoD
 	{name = L["Timewarped"], id = 64710, texture = 1467047},	-- Legion
 	{name = GetSpellInfo(388945), id = 70866},	-- SoDK
-	{name = "", id = 70906, questName = true},	-- Grand hunt
+	{name = "", id = 70906, itemID = 200468},	-- Grand hunt
 	{name = "", id = 70893, questName = true},	-- Community feast
 	{name = "", id = 79226, questName = true},	-- The big dig
+	{name = "", id = 78319, questName = true},	-- The superbloom
 }
 
 local lesserVisions = {58151, 58155, 58156, 58167, 58168}
@@ -242,7 +243,7 @@ local function GetFormattedTimeLeft(timeLeft)
 end
 
 local itemCache = {}
-local function GetItemLink(itemID) -- deprecated, needs review
+local function GetItemLink(itemID)
 	local link = itemCache[itemID]
 	if not link then
 		link = select(2, GetItemInfo(itemID))
@@ -328,7 +329,7 @@ info.onEnter = function(self)
 		if v.name and IsQuestFlaggedCompleted(v.id) then
 			if v.name == L["Timewarped"] and isTimeWalker and checkTexture(v.texture) or v.name ~= L["Timewarped"] then
 				addTitle(QUESTS_LABEL)
-				GameTooltip:AddDoubleLine(v.questName and QuestUtils_GetQuestName(v.id) or v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
+				GameTooltip:AddDoubleLine((v.itemID and GetItemLink(v.itemID)) or (v.questName and QuestUtils_GetQuestName(v.id)) or v.name, QUEST_COMPLETE, 1,1,1, 1,0,0)
 			end
 		end
 	end
