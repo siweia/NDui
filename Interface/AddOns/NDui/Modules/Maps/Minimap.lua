@@ -198,8 +198,13 @@ function module:ReskinRegions()
 	B.SetBD(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
+	local lastInv = 0
 	local function updateInviteVisibility()
-		Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
+		local thisTime = GetTime()
+		if thisTime - lastInv > 1 then
+			lastInv = thisTime
+			Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
+		end
 	end
 	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
