@@ -1,4 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="ChatThrottleLib.lua"/>
-	<Script file="LibHealComm-4.0.lua"/>
-</Ui>

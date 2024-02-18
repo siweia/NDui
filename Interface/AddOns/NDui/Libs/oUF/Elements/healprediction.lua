@@ -1,9 +1,6 @@
 local _, ns = ...
 local oUF = ns.oUF
 
-local myGUID = UnitGUID('player')
-local HealComm = LibStub("LibHealComm-4.0")
-
 local function UpdateFillBar(previousTexture, bar, amount, ratio)
 	if amount <= 0 then
 		bar:Hide()
@@ -27,13 +24,8 @@ local function Update(self, event, unit)
 
 	local myIncomingHeal = UnitGetIncomingHeals(unit, 'player') or 0
 	local allIncomingHeal = UnitGetIncomingHeals(unit) or 0
-	local allHot = HealComm:GetHealAmount(guid, hp.healType) or 0
-	local myHot = (HealComm:GetHealAmount(guid, hp.healType, nil, myGUID) or 0) * (HealComm:GetHealModifier(myGUID) or 1)
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit)
 	local ratio = self.Health:GetWidth() / maxHealth
-
-	allIncomingHeal = allIncomingHeal + allHot
-	myIncomingHeal = myIncomingHeal + myHot
 
 	if(health + allIncomingHeal > maxHealth * hp.maxOverflow) then
 		allIncomingHeal = maxHealth * hp.maxOverflow - health
