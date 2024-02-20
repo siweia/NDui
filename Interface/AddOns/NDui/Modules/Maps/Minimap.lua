@@ -123,8 +123,8 @@ function module:ReskinRegions()
 	QueueStatusFrame:ClearAllPoints()
 	QueueStatusFrame:SetPoint("TOPRIGHT", QueueStatusButton, "TOPLEFT")
 
-	hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x)
-		if x == -15 then
+	hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x, y)
+		if not (x == -5 and y == -5) then
 			button:ClearAllPoints()
 			button:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
 		end
