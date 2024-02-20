@@ -253,6 +253,7 @@ function A:CreateAuraHeader(filter)
 	RegisterAttributeDriver(header, "unit", "[vehicleui] vehicle; player")
 
 	header.visibility = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
+	header.visibility:RegisterEvent("WEAPON_ENCHANT_CHANGED")
 	SecureHandlerSetFrameRef(header.visibility, "AuraHeader", header)
 	RegisterStateDriver(header.visibility, "customVisibility", "[petbattle] 0;1")
 	header.visibility:SetAttribute("_onstate-customVisibility", [[
