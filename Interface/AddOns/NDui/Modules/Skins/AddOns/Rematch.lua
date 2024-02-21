@@ -438,7 +438,7 @@ function S:ReskinRematch()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["Rematch"] then return end
 
-	local frame = Rematch.frame
+	local frame = Rematch and Rematch.frame
 	if not frame then return end
 
 	if RematchSettings then
