@@ -7,12 +7,13 @@ local GetSpellInfo, GetSpellCooldown, UnitAura, IsPlayerSpell = GetSpellInfo, Ge
 
 local aspects = {
 	[1] = {spellID = 13165, known = false}, -- 雄鹰
-	[2] = {spellID = 34074, known = false}, -- 蝰蛇
+	[2] = {spellID = 415423, known = false}, -- 蝰蛇
 	[3] = {spellID = 13163, known = false}, -- 灵猴
 	[4] = {spellID =  5118, known = false}, -- 猎豹
 	[5] = {spellID = 13159, known = false}, -- 豹群
 	[6] = {spellID = 13161, known = false}, -- 野兽
 	[7] = {spellID = 20043, known = false}, -- 野性
+	[8] = {spellID = 409580, known = false}, -- 雄狮之心
 }
 
 local knownAspect = {}
@@ -114,7 +115,8 @@ function Bar:UpdateAspectStatus()
 	if not aspectFrame then return end
 
 	local size = C.db["Actionbar"]["AspectSize"]
-	local width, height = size*7 + 3*8, size + 3*2
+	local num = #aspects
+	local width, height = size*num + 3*(num+1), size + 3*2
 	if C.db["Actionbar"]["VerticleAspect"] then
 		aspectFrame:SetSize(height, width)
 		aspectFrame.mover:SetSize(height, width)
@@ -149,7 +151,8 @@ function Bar:HunterAspectBar()
 	if DB.MyClass ~= "HUNTER" then return end
 
 	local size = C.db["Actionbar"]["AspectSize"] or 50
-	local width, height = size*7 + 3*8, size + 3*2
+	local num = #aspects
+	local width, height = size*num + 3*(num+1), size + 3*2
 
 	aspectFrame = CreateFrame("Frame", "NDuiHunterAspectFrame", UIParent)
 	if C.db["Actionbar"]["VerticleAspect"] then
