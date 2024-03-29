@@ -115,7 +115,7 @@ local function buildBNetTable(num)
 				local charName = gameAccountInfo.characterName
 				local client = gameAccountInfo.clientProgram
 				local class = gameAccountInfo.className or UNKNOWN
-				local zoneName = gameAccountInfo.areaName or UNKNOWN
+				local zoneName = gameAccountInfo.areaName
 				local level = gameAccountInfo.characterLevel
 				local gameText = gameAccountInfo.richPresence or ""
 				local isGameAFK = gameAccountInfo.isGameAFK
@@ -142,7 +142,7 @@ local function buildBNetTable(num)
 
 				local infoText = GetOnlineInfoText(client, isMobile, rafLinkType, gameText)
 				if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
-					infoText = GetOnlineInfoText(client, isMobile, rafLinkType, zoneName)
+					infoText = GetOnlineInfoText(client, isMobile, rafLinkType, zoneName or gameText)
 				end
 
 				if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_DIFF end

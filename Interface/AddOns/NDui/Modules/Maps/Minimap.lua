@@ -123,8 +123,8 @@ function module:ReskinRegions()
 	QueueStatusFrame:ClearAllPoints()
 	QueueStatusFrame:SetPoint("TOPRIGHT", QueueStatusButton, "TOPLEFT")
 
-	hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x)
-		if x == -15 then
+	hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x, y)
+		if not (x == -5 and y == -5) then
 			button:ClearAllPoints()
 			button:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
 		end
@@ -198,8 +198,13 @@ function module:ReskinRegions()
 	B.SetBD(Invt)
 	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
+	local lastInv = 0
 	local function updateInviteVisibility()
-		Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
+		local thisTime = GetTime()
+		if thisTime - lastInv > 1 then
+			lastInv = thisTime
+			Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
+		end
 	end
 	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
@@ -601,11 +606,12 @@ function module:BuildMinimapDropDown()
 	dropdown.noResize = true
 	_G.UIDropDownMenu_Initialize(dropdown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
 
-	hooksecurefunc(_G.MinimapCluster.Tracking.Button, "Update", function()
+	hooksecurefunc(_G.MinimapCluster.TrackingFrame.Button, "Update", function()
 		if _G.UIDROPDOWNMENU_OPEN_MENU == dropdown then
 			UIDropDownMenu_RefreshAll(dropdown)
 		end
 	end)
+
 	B:LockCVar("minimapTrackingShowAll", "1")
 
 	module.MinimapTracking = dropdown
@@ -682,7 +688,7 @@ function module:SetupMinimap()
 
 	-- Hide Blizz
 	MinimapCluster:EnableMouse(false)
-	MinimapCluster.Tracking:Hide()
+	MinimapCluster.TrackingFrame:Hide()
 	MinimapCluster.BorderTop:Hide()
 	MinimapCluster.ZoneTextButton:Hide()
 	Minimap:SetArchBlobRingScalar(0)

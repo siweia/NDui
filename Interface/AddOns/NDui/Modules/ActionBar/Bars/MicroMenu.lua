@@ -193,4 +193,8 @@ function Bar:MicroMenu()
 		QueueStatusButton:SetFrameLevel(5)
 		QueueStatusButton:SetScale(.9)
 	end
+
+	if MicroMenu and MicroMenu.UpdateHelpTicketButtonAnchor then
+		MicroMenu.UpdateHelpTicketButtonAnchor = B.Dummy
+	end
 end

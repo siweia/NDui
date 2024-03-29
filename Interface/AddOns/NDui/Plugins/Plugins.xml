@@ -5,5 +5,4 @@
 	<Script file="ExtraQuestButton.lua"/>
 	<Script file="QuickQuest.lua"/>
 	<Script file="yClassColors.lua"/>
-	<Script file="FixIMEProfessionsView.lua"/>
 </Ui>

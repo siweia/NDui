@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-NDui"
-local MINOR_VERSION = 109
+local MINOR_VERSION = 110
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -2302,7 +2302,7 @@ Action.GetSpellId              = function(self)
 	end
 end
 Action.GetLossOfControlCooldown = function(self) return GetActionLossOfControlCooldown(self._state_action) end
-if C_UnitAuras then
+if C_UnitAuras and C_UnitAuras.GetCooldownAuraBySpellID and C_ActionBar and C_ActionBar.GetItemActionOnEquipSpellID then
 	Action.GetPassiveCooldownSpellID = function(self)
 		local _actionType, actionID = GetActionInfo(self._state_action)
 		local onEquipPassiveSpellID
