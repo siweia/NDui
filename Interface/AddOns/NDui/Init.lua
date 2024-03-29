@@ -11,6 +11,10 @@ local pairs, next, tinsert = pairs, next, table.insert
 local min, max = math.min, math.max
 local CombatLogGetCurrentEventInfo, GetPhysicalScreenSize = CombatLogGetCurrentEventInfo, GetPhysicalScreenSize
 
+if not GetLocale then
+	GetLocale = function() return GetCVar("textLocale") end
+end
+
 -- Events
 local events = {}
 
