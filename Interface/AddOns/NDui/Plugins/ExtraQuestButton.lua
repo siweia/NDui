@@ -370,7 +370,7 @@ function ExtraQuestButton:SetItem(itemLink)
 	if HasExtraActionBar() then return end
 
 	if itemLink then
-		self.Icon:SetTexture(C_Item.GetItemIcon(itemLink))
+		self.Icon:SetTexture(C_Item.GetItemIconByID(itemLink))
 		local itemID = GetItemInfoFromHyperlink(itemLink)
 		self.itemID = itemID
 		self.itemLink = itemLink
