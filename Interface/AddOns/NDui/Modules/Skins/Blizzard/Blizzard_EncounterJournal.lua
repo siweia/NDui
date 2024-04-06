@@ -394,6 +394,9 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	if frame then
 		B.StripTextures(frame)
 		B.ReskinTrimScroll(frame.ScrollBar)
+		if frame.ThemeContainer then
+			frame.ThemeContainer:SetAlpha(0)
+		end
 
 		local function replaceBlackColor(text, r, g, b)
 			if r == 0 and g == 0 and b == 0 then
