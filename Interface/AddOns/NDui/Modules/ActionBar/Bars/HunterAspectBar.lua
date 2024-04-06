@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local Bar = B:GetModule("Actionbar")
 
 local pairs, sort, tinsert = pairs, sort, tinsert
-local GetSpellInfo, GetSpellCooldown, UnitAura, IsPlayerSpell = GetSpellInfo, GetSpellCooldown, UnitAura, IsPlayerSpell
+local GetSpellInfo, GetSpellCooldown, UnitAura = GetSpellInfo, GetSpellCooldown, UnitAura
 
 local aspects = {
 	[1] = {spellID = 13165, known = false}, -- 雄鹰
@@ -19,6 +19,10 @@ local aspects = {
 local knownAspect = {}
 local aspectButtons = {}
 local aspectFrame
+
+function Bar:IsPlayerSpell(spellID)
+	return IsPlayerSpell(spellID) or IsSpellKnownOrOverridesKnown(spellID)
+end
 
 function Bar:UpdateAspectCooldown()
 	local start, duration = GetSpellCooldown(self.spellID)
@@ -85,7 +89,7 @@ end
 
 function Bar:CheckKnownAspects()
 	for index, value in pairs(aspects) do
-		if not value.known and IsPlayerSpell(value.spellID) then
+		if not value.known and Bar:IsPlayerSpell(value.spellID) then
 			Bar:CreateAspectButton(value.spellID, index)
 			value.known = true
 		end
@@ -94,20 +98,23 @@ function Bar:CheckKnownAspects()
 	Bar:UpdateAspectAnchor()
 end
 
+local foundAspect = {}
+
 function Bar:CheckActiveAspect(unit)
 	if unit ~= "player" then return end
 
-	local foundAspect
+	wipe(foundAspect)
+
 	for i = 1, 40 do
 		local name, _, _, _, _, _, caster = UnitAura("player", i)
 		if not name then break end
 		if knownAspect[name] and caster == "player" then
-			foundAspect = name
+			foundAspect[name] = true
 		end
 	end
 
 	for _, value in pairs(aspectButtons) do
-		value[1].cover:SetShown(value[3] == foundAspect)
+		value[1].cover:SetShown(foundAspect[value[3]])
 	end
 end
 
