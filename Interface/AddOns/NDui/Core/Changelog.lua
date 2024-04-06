@@ -6,11 +6,9 @@ local strsplit, pairs = string.split, pairs
 
 local hx = {
 	"界面美化更新；",
-	"移除部分无效的法术库；",
-	"背包整理更新；",
-	"颜色选择器修正；",
-	"移除LibHealComm；",
-	"Buff框体调整。",
+	"版本号更新；",
+	"回蓝提示调整；",
+	"更新猎人守护动作条。",
 }
 
 local f
