@@ -86,6 +86,10 @@ tinsert(C.defaultThemes, function()
 		slot.SetHighlightTexture = B.Dummy
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
 		slot.bg = B.CreateBDFrame(slot, .25)
+
+		if slot.subicon then
+			slot.subicon:SetTexCoord(.08, .92, .08, .92)
+		end
 	end
 
 	B.StripTextures(CharacterAmmoSlot)
