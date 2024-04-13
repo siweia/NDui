@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+if DB.isNewPatch then return end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -8,22 +10,6 @@ tinsert(C.defaultThemes, function()
 	if class ~= "HUNTER" then return end
 
 	local x1, x2, y1, y2 = unpack(DB.TexCoord)
-
-	if DB.isNewPatch then
-
-	B.ReskinPortraitFrame(StableFrame)
-	B.Reskin(StableFrame.StableTogglePetButton)
-	B.Reskin(StableFrame.ReleasePetButton)
-
-	local stabledPetList = StableFrame.StabledPetList
-	B.StripTextures(stabledPetList)
-	B.StripTextures(stabledPetList.ListCounter)
-	B.CreateBDFrame(stabledPetList.ListCounter, .25)
-	B.ReskinEditBox(stabledPetList.FilterBar.SearchBox)
-	B.ReskinFilterButton(stabledPetList.FilterBar.FilterButton)
-	B.ReskinTrimScroll(stabledPetList.ScrollBar)
-
-	else
 
 	PetStableBottomInset:Hide()
 	PetStableLeftInset:Hide()
@@ -61,6 +47,5 @@ tinsert(C.defaultThemes, function()
 
 		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(x1, x2, y1, y2)
 		B.CreateBDFrame(bu, .25)
-	end
 	end
 end)
