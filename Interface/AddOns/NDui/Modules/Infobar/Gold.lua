@@ -21,6 +21,7 @@ local slotString = L["Bags"]..": %s%d"
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
+myRealm = gsub(myRealm, "%s", "") -- fix for multi words realm name
 
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then

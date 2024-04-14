@@ -140,3 +140,8 @@ function M:HandleNDuiTitle()
 		end
 	end)
 end
+
+-- Fix missing localization file
+if not GuildControlUIRankSettingsFrameRosterLabel then
+	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
+end

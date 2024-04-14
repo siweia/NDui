@@ -48,6 +48,7 @@
 	<Script file="Blizzard_RuneforgeUI.lua"/>
 	<Script file="Blizzard_ScrappingMachineUI.lua"/>
 	<Script file="Blizzard_Soulbinds.lua"/>
+	<Script file="Blizzard_StableUI.lua"/>
 	<Script file="Blizzard_SubscriptionInterstitialUI.lua"/>
 	<Script file="Blizzard_TalentUI.lua"/>
 	<Script file="Blizzard_TorghastLevelPicker.lua"/>

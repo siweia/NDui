@@ -65,7 +65,7 @@ function Bar:MicroButton_Create(parent, data)
 			Bar:MicroButton_SetupTexture(flash, texture)
 			if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
 		end
-		if button.FlashContent then button.FlashContent:SetTexture(nil) end
+		if button.FlashContent then button.FlashContent:SetAlpha(0) end
 		if button.Portrait then button.Portrait:Hide() end
 		if button.Background then button.Background:SetAlpha(0) end
 		if button.PushedBackground then button.PushedBackground:SetAlpha(0) end
