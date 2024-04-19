@@ -16,11 +16,22 @@ C.themes["Blizzard_TalentUI"] = function()
 			B.ReskinTab(tab)
 		end
 
+		B.Reskin(_G["PlayerTalentFramePanel"..i.."SelectTreeButton"])
+
 		for j = 1, 28 do
 			local bu = _G["PlayerTalentFramePanel"..i.."Talent"..j]
 			if bu then
 				bu:GetPushedTexture():SetAlpha(0)
 			end
+		end
+
+		local tab = _G["PlayerSpecTab"..i]
+		if tab then
+			tab:GetRegions():Hide()
+			tab:SetCheckedTexture(DB.pushedTex)
+			tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			tab:GetNormalTexture():SetTexCoord(unpack(DB.TexCoord))
+			B.CreateBDFrame(tab, .25)
 		end
 	end
 
