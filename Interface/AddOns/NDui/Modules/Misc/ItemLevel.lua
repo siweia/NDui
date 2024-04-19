@@ -4,6 +4,7 @@ local M = B:GetModule("Misc")
 
 local pairs, select, next, wipe = pairs, select, next, wipe
 local UnitGUID, GetItemInfo = UnitGUID, GetItemInfo
+local GetContainerItemLink = C_Container.GetContainerItemLink
 local GetInventoryItemLink = GetInventoryItemLink
 local GetTradePlayerItemLink, GetTradeTargetItemLink = GetTradePlayerItemLink, GetTradeTargetItemLink
 
@@ -323,7 +324,28 @@ function M:ItemLevel_ReplaceGuildNews(_, _, playerName)
 	end
 end
 
-function M:ItemLevel_FlyoutUpdate(id)
+function M:ItemLevel_FlyoutUpdate(bag, slot, quality)
+	if not self.iLvl then
+		self.iLvl = B.CreateFS(self, DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
+	end
+
+	if quality and quality <= 1 then return end
+
+	local link
+	if bag then
+		link = GetContainerItemLink(bag, slot)
+	else
+		link = GetInventoryItemLink("player", slot)
+	end
+	local quality, level = select(3, GetItemInfo(link))
+
+	local color = DB.QualityColors[quality or 0]
+	self.iLvl:SetText(level)
+	self.iLvl:SetTextColor(color.r, color.g, color.b)
+	M:ItemBorderSetColor(self, color.r, color.g, color.b)
+end
+
+function M:ItemLevel_FlyoutUpdateByID(id)
 	if not self.iLvl then
 		self.iLvl = B.CreateFS(self, DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
 	end
@@ -347,9 +369,10 @@ function M:ItemLevel_FlyoutSetup()
 	if tonumber(location) then
 		if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then return end
 
-		local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
-		if voidStorage then return end
-		local quality = select(13, EquipmentManager_GetItemInfoByLocation(location))
+		local _, _, bags, slot, bag = EquipmentManager_UnpackLocation(location)
+		local itemLocation = self:GetItemLocation()
+
+		local quality = itemLocation and C_Item.GetItemQuality(itemLocation)
 		if bags then
 			M.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
 		else
@@ -375,7 +398,7 @@ function M:ItemLevel_FlyoutSetup()
 			if location >= PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION then return end
 			local id = EquipmentManager_GetItemInfoByLocation(location)
 			if id then
-				M.ItemLevel_FlyoutUpdate(self, id)
+				M.ItemLevel_FlyoutUpdateByID(self, id)
 			end
 		end
 	end
