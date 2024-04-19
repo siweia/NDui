@@ -59,7 +59,8 @@ function S:LoadAddOnSkins()
 		end
 	end)
 
-	hooksecurefunc("SetItemButtonQuality", function(button, quality)
+	if DB.isCata then return end -- needs review
+	hooksecurefunc("SetItemButtonQuality", function(button, quality, itemID)
 		if quality then
 			if quality >= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality] then
 				button.IconBorder:Show()
