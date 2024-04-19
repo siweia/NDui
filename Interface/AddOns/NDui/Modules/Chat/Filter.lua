@@ -191,7 +191,7 @@ local function GetSocketTexture(socket, count)
 	return strrep("|TInterface\\ItemSocketingFrame\\UI-EmptySocket-"..socket..":0|t", count)
 end
 
-local function isItemHasGem(link)
+function module.IsItemHasGem(link)
 	local text = ""
 	local stats = GetItemStats(link)
 	for stat, count in pairs(stats) do
@@ -211,7 +211,7 @@ local function convertItemLevel(link)
 	if itemLink then
 		local name, itemLevel = isItemHasLevel(itemLink)
 		if name and itemLevel then
-			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemHasGem(itemLink))
+			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..module.IsItemHasGem(itemLink))
 			itemCache[link] = link
 		end
 	end

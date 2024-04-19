@@ -665,7 +665,7 @@ do
 			self:EnableMouse(true)
 			self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 			self.HL:SetColorTexture(1, 1, 1, .25)
-			self.HL:SetInside()
+			self.HL:SetInside(self.bg)
 		end
 	end
 

@@ -10,8 +10,10 @@ tinsert(C.defaultThemes, function()
 
 	B.StripTextures(ModelPreviewFrame)
 	B.SetBD(ModelPreviewFrame)
-	B.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")
-	B.ReskinArrow(Display.ModelScene.RotateRightButton, "right")
+	if not DB.isCata then
+		B.ReskinArrow(Display.ModelScene.RotateLeftButton, "left")
+		B.ReskinArrow(Display.ModelScene.RotateRightButton, "right")
+	end
 	B.ReskinClose(ModelPreviewFrameCloseButton)
 	B.Reskin(ModelPreviewFrame.CloseButton)
 

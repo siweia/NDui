@@ -20,11 +20,18 @@ info.onEvent = function(self)
 	local text = ""
 	local higher = 0
 	for i = 1, 5 do
-		local name, _, pointsSpent = GetTalentTabInfo(i)
+		local name, nameCata, pointsSpent, _, pointsSpentCata = GetTalentTabInfo(i)
 		if not name then break end
-		if pointsSpent > higher then
-			higher = pointsSpent
-			text = name
+		if DB.isCata then
+			if pointsSpentCata > higher then
+				higher = pointsSpentCata
+				text = nameCata
+			end
+		else
+			if pointsSpent > higher then
+				higher = pointsSpent
+				text = name
+			end
 		end
 	end
 	if text == "" then
@@ -45,9 +52,9 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 
 	for i = 1, 5 do
-		local name, _, pointsSpent = GetTalentTabInfo(i)
+		local name, nameCata, pointsSpent, _, pointsSpentCata = GetTalentTabInfo(i)
 		if not name then break end
-		GameTooltip:AddDoubleLine(name, pointsSpent, 1,1,1, 1,.8,0)
+		GameTooltip:AddDoubleLine(DB.isCata and nameCata or name, DB.isCata and pointsSpentCata or pointsSpent, 1,1,1, 1,.8,0)
 	end
 	local points = UnitCharacterPoints("player")
 	if points > 0 then

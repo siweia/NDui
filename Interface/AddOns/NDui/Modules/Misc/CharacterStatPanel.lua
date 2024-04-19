@@ -444,6 +444,7 @@ function M:ExGearManager()
 end
 
 function M:CharacterStatePanel()
+	if DB.isCata then return end -- isCata: no longer available
 	if not C.db["Skins"]["BlizzardSkins"] then return end   -- disable if skins off, needs review
 
 	hasOtherAddon = IsAddOnLoaded("CharacterStatsTBC")

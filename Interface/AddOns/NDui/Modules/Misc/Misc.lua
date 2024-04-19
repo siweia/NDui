@@ -115,6 +115,32 @@ end
 
 -- Get Naked
 function M:NakedIcon()
+	if DB.isCata then
+
+	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
+	bu:SetSize(33, 35)
+	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, 0)
+	B.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
+	bu.bg:SetPoint("TOPLEFT", 2, -3)
+	bu.bg:SetPoint("BOTTOMRIGHT", 0, -2)
+	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
+
+	local function UnequipItemInSlot(i)
+		local action = EquipmentManager_UnequipItemInSlot(i)
+		EquipmentManager_RunAction(action)
+	end
+
+	bu:SetScript("OnDoubleClick", function()
+		for i = 1, 18 do
+			local texture = GetInventoryItemTexture("player", i)
+			if texture then
+				UnequipItemInSlot(i)
+			end
+		end
+	end)
+
+	else
+
 	GearManagerToggleButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:ClearLines()
@@ -147,6 +173,7 @@ function M:NakedIcon()
 			GearManagerDialog:Show()
 		end
 	end)
+end
 end
 
 -- Reanchor Vehicle
@@ -774,6 +801,8 @@ end
 
 -- Flyout buttons by holding key ALT
 function M:FlyoutOnKeyAlt()
+	if DB.isCata then return end -- isCata: removed
+
 	hooksecurefunc("PaperDollItemSlotButton_OnEnter", function(self)
 		self:RegisterEvent("MODIFIER_STATE_CHANGED")
 		if not InCombatLockdown() then
@@ -818,4 +847,13 @@ function M:MoveBlizzFrames()
 		B:BlizzFrameMover(CharacterFrame)
 	end
 	B:BlizzFrameMover(QuestLogFrame)
+end
+
+-- Fix errors in Cata beta
+if not GhostFrame then
+	GhostFrame = CreateFrame("Frame")
+end
+
+if not GuildControlUIRankSettingsFrameRosterLabel then
+	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
 end
