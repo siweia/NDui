@@ -6,7 +6,7 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0-NDui"
-local MINOR_VERSION = 17
+local MINOR_VERSION = 18
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
@@ -610,6 +610,14 @@ end
 
 local ButtonGlowTextures = {["spark"] = true,["innerGlow"] = true,["innerGlowOver"] = true,["outerGlow"] = true,["outerGlowOver"] = true,["ants"] = true}
 
+local function noZero(num)
+	if num == 0 then
+		return 0.001
+	else
+		return num
+	end
+end
+
 function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 	if not r then
 		return
@@ -639,7 +647,7 @@ function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 			for texture in pairs(ButtonGlowTextures) do
 				f[texture]:SetDesaturated(nil)
 				f[texture]:SetVertexColor(1,1,1)
-				local alpha = math.min(f[texture]:GetAlpha()/(f.color and f.color[4] or 1), 1)
+				local alpha = math.min(f[texture]:GetAlpha()/noZero(f.color and f.color[4] or 1), 1)
 				f[texture]:SetAlpha(alpha)
 				updateAlphaAnim(f, 1)
 			end
@@ -648,7 +656,7 @@ function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 			for texture in pairs(ButtonGlowTextures) do
 				f[texture]:SetDesaturated(1)
 				f[texture]:SetVertexColor(color[1],color[2],color[3])
-				local alpha = math.min(f[texture]:GetAlpha()/(f.color and f.color[4] or 1)*color[4], 1)
+				local alpha = math.min(f[texture]:GetAlpha()/noZero(f.color and f.color[4] or 1)*color[4], 1)
 				f[texture]:SetAlpha(alpha)
 				updateAlphaAnim(f,color and color[4] or 1)
 			end
