@@ -169,7 +169,7 @@ function S:KrowiAF()
 			end
 
 			local text = criteria and criteria[object]
-			if text and completed and objectivesFrame.completed then
+			if text and completed and objectivesFrame.Completed then
 				text:SetTextColor(1, 1, 1)
 			end
 		end
@@ -177,7 +177,7 @@ function S:KrowiAF()
 
 	hooksecurefunc(AchievementFrame, "Show", function(self)
 		for i = 1, 10 do
-			local button = _G["AchievementFrameSideButton"..i]
+			local button = _G["KrowiAF_AchievementFrameSideButton"..i]
 			if not button then break end
 			if not button.bg then
 				button.Background:SetTexture("")
