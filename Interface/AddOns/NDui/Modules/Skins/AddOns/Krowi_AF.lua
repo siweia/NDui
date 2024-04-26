@@ -38,9 +38,11 @@ local function updateAchievementLabel(frame)
 			button.Header:SetTextColor(.65, .65, .65)
 		end
 	end
+end
 
-	if button.Description then
-		button.Description:SetTextColor(1, 1, 1)
+local function replaceBlackText(self, r, g, b)
+	if r == 0 and g == 0 and b == 0 then
+		self:SetTextColor(.65, .65, .65)
 	end
 end
 
@@ -63,6 +65,15 @@ local function SetupAchivementButton(button)
 	local bg = B.CreateBDFrame(button, .25)
 	bg:SetInside()
 	SetupButtonHighlight(button, bg)
+
+	if button.Description then
+		button.Description:SetTextColor(.65, .65, .65)
+		hooksecurefunc(button.Description, "SetTextColor", replaceBlackText)
+	end
+
+	if button.HiddenDescription then
+		button.HiddenDescription:SetTextColor(1, 1, 1)
+	end
 
 	button.styled = true
 end
