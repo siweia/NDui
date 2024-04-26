@@ -203,7 +203,7 @@ info.onEnter = function(self)
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
 	title = false
-	local chargeInfo = C_CurrencyInfo_GetCurrencyInfo(2796) -- Tier charges
+	local chargeInfo = C_CurrencyInfo_GetCurrencyInfo(2912) -- Tier charges
 	if chargeInfo then
 		if not title then
 			GameTooltip:AddLine(" ")
