@@ -210,7 +210,9 @@ C.themes["Blizzard_Communities"] = function()
 
 	for _, name in next, {"ChatTab", "RosterTab", "GuildBenefitsTab", "GuildInfoTab"} do
 		local tab = CommunitiesFrame[name]
-		reskinCommunityTab(tab)
+		if tab then
+			reskinCommunityTab(tab)
+		end
 	end
 
 	-- ChatTab

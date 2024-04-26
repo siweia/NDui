@@ -284,14 +284,14 @@ end
 
 function M:AddDungeonsFilter()
 	local mapData = {
-		[0] = { aID = 1247, mapID = 463}, -- 永恒黎明：迦拉克隆的陨落
-		[1] = { aID = 1248, mapID = 464}, -- 永恒黎明：姆诺兹多的崛起
-		[2] = { aID = 530,  mapID = 248}, -- 维克雷斯庄园
-		[3] = { aID = 502,  mapID = 244}, -- 阿塔达萨
-		[4] = { aID = 460,  mapID = 198}, -- 黑心林地
-		[5] = { aID = 463,  mapID = 199}, -- 黑鸦堡垒
-		[6] = { aID = 184,  mapID = 168}, -- 永茂林地
-		[7] = { aID = 1274, mapID = 456}, -- 潮汐王座
+		[0] = {mapID = 399, aID = 1176}, -- 红玉新生法池
+		[1] = {mapID = 400, aID = 1184}, -- 诺库德狙击战
+		[2] = {mapID = 401, aID = 1180}, -- 碧蓝魔馆
+		[3] = {mapID = 402, aID = 1160}, -- 艾杰斯亚学院
+		[4] = {mapID = 405, aID = 1164}, -- 蕨皮山谷
+		[5] = {mapID = 406, aID = 1168}, -- 注能大厅
+		[6] = {mapID = 404, aID = 1172}, -- 奈萨鲁斯
+		[7] = {mapID = 403, aID = 1188}, -- 奥丹姆：提尔的遗产
 	}
 
 	local function GetDungeonNameByID(mapID)

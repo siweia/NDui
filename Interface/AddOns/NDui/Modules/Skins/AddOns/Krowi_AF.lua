@@ -38,9 +38,11 @@ local function updateAchievementLabel(frame)
 			button.Header:SetTextColor(.65, .65, .65)
 		end
 	end
+end
 
-	if button.Description then
-		button.Description:SetTextColor(1, 1, 1)
+local function replaceBlackText(self, r, g, b)
+	if r == 0 and g == 0 and b == 0 then
+		self:SetTextColor(.65, .65, .65)
 	end
 end
 
@@ -63,6 +65,15 @@ local function SetupAchivementButton(button)
 	local bg = B.CreateBDFrame(button, .25)
 	bg:SetInside()
 	SetupButtonHighlight(button, bg)
+
+	if button.Description then
+		button.Description:SetTextColor(.65, .65, .65)
+		hooksecurefunc(button.Description, "SetTextColor", replaceBlackText)
+	end
+
+	if button.HiddenDescription then
+		button.HiddenDescription:SetTextColor(1, 1, 1)
+	end
 
 	button.styled = true
 end
@@ -113,21 +124,8 @@ function S:KrowiAF()
 		hooksecurefunc(frame.AchievementsFrame.ScrollBox, "Update", function(self)
 			self:ForEachFrame(SetupAchivementButton)
 		end)
-	end
 
-	local frame = KrowiAF_AchievementsFrame
-	if frame then
-		B.StripTextures(frame)
-		B.ReskinTrimScroll(frame.ScrollBar)
-
-		hooksecurefunc(frame.ScrollBox, "Update", function(self)
-			self:ForEachFrame(SetupAchivementButton)
-		end)
-	end
-
-	for i = 1, 16 do
-		local bar = _G["Krowi_ProgressBar"..i]
-		if bar then
+		local function skinProgressBar(bar)
 			B.StripTextures(bar)
 			if i ~= 1 then
 				bar.BorderLeftTop:SetPoint("TOPLEFT", -1, 10)
@@ -142,6 +140,26 @@ function S:KrowiAF()
 			end
 			bar:SetColors({R = 0, G = .4, B = 0}, {R = 0, G = .6, B = 0})
 		end
+
+		local numFrames = 1
+		hooksecurefunc(frame, "GetStatusBar", function()
+			local bar = _G["Krowi_ProgressBar"..numFrames]
+			while bar do
+				skinProgressBar(bar)
+				numFrames = numFrames + 1
+				bar = _G["Krowi_ProgressBar"..numFrames]
+			end
+		end)
+	end
+
+	local frame = KrowiAF_AchievementsFrame
+	if frame then
+		B.StripTextures(frame)
+		B.ReskinTrimScroll(frame.ScrollBar)
+
+		hooksecurefunc(frame.ScrollBox, "Update", function(self)
+			self:ForEachFrame(SetupAchivementButton)
+		end)
 	end
 
 	if AchievementButton_LocalizeProgressBar then
@@ -169,7 +187,7 @@ function S:KrowiAF()
 			end
 
 			local text = criteria and criteria[object]
-			if text and completed and objectivesFrame.completed then
+			if text and completed and objectivesFrame.Completed then
 				text:SetTextColor(1, 1, 1)
 			end
 		end
@@ -177,7 +195,7 @@ function S:KrowiAF()
 
 	hooksecurefunc(AchievementFrame, "Show", function(self)
 		for i = 1, 10 do
-			local button = _G["AchievementFrameSideButton"..i]
+			local button = _G["KrowiAF_AchievementFrameSideButton"..i]
 			if not button then break end
 			if not button.bg then
 				button.Background:SetTexture("")
