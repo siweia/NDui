@@ -124,21 +124,8 @@ function S:KrowiAF()
 		hooksecurefunc(frame.AchievementsFrame.ScrollBox, "Update", function(self)
 			self:ForEachFrame(SetupAchivementButton)
 		end)
-	end
 
-	local frame = KrowiAF_AchievementsFrame
-	if frame then
-		B.StripTextures(frame)
-		B.ReskinTrimScroll(frame.ScrollBar)
-
-		hooksecurefunc(frame.ScrollBox, "Update", function(self)
-			self:ForEachFrame(SetupAchivementButton)
-		end)
-	end
-
-	for i = 1, 16 do
-		local bar = _G["Krowi_ProgressBar"..i]
-		if bar then
+		local function skinProgressBar(bar)
 			B.StripTextures(bar)
 			if i ~= 1 then
 				bar.BorderLeftTop:SetPoint("TOPLEFT", -1, 10)
@@ -153,6 +140,26 @@ function S:KrowiAF()
 			end
 			bar:SetColors({R = 0, G = .4, B = 0}, {R = 0, G = .6, B = 0})
 		end
+
+		local numFrames = 1
+		hooksecurefunc(frame, "GetStatusBar", function()
+			local bar = _G["Krowi_ProgressBar"..numFrames]
+			while bar do
+				skinProgressBar(bar)
+				numFrames = numFrames + 1
+				bar = _G["Krowi_ProgressBar"..numFrames]
+			end
+		end)
+	end
+
+	local frame = KrowiAF_AchievementsFrame
+	if frame then
+		B.StripTextures(frame)
+		B.ReskinTrimScroll(frame.ScrollBar)
+
+		hooksecurefunc(frame.ScrollBox, "Update", function(self)
+			self:ForEachFrame(SetupAchivementButton)
+		end)
 	end
 
 	if AchievementButton_LocalizeProgressBar then
