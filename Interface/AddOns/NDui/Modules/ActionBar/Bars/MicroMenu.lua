@@ -39,7 +39,6 @@ function Bar:MicroButton_Create(parent, data)
 
 	if type(method) == "string" then
 		local button = _G[method]
-		if not button then print(method) return end
 		button:SetHitRectInsets(0, 0, 0, 0)
 		button:SetParent(bu)
 		button.__owner = bu
@@ -136,23 +135,24 @@ function Bar:MicroMenu()
 	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
-	local buttonInfo = {
-		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
-		{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
-		{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
-		{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
-		{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
-		{"guild", "GuildMicroButton", MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLEGUILDTAB")},
-		--{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
-		{"encounter", "EJMicroButton", MicroButtonTooltipText(ENCOUNTER_JOURNAL, "TOGGLEENCOUNTERJOURNAL")},
-		{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
-		{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
-		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
-		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
-		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
-	}
-
-	if not DB.isCata then
+	local buttonInfo
+	if DB.isCata then
+		buttonInfo = {
+			{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
+			{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
+			{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
+			{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
+			{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
+			{"guild", "GuildMicroButton", MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLEGUILDTAB")},
+			--{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
+			{"encounter", "EJMicroButton", MicroButtonTooltipText(ENCOUNTER_JOURNAL, "TOGGLEENCOUNTERJOURNAL")},
+			{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
+			{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
+			{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
+			{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
+			{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
+		}
+	else
 		buttonInfo = {
 			{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
 			{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
