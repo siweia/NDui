@@ -300,4 +300,29 @@ C.themes["Blizzard_Collections"] = function()
 			end
 		end
 	end)
+
+	-- [[ WardrobeCollectionFrame ]]
+
+	local WardrobeCollectionFrame = WardrobeCollectionFrame
+	if not WardrobeCollectionFrame then return end
+	local ItemsCollectionFrame = WardrobeCollectionFrame.ItemsCollectionFrame
+
+	B.StripTextures(ItemsCollectionFrame)
+	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
+	B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
+	B.ReskinInput(WardrobeCollectionFrameSearchBox)
+
+	B.ReskinTab(WardrobeCollectionFrameTab1)
+
+	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
+	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
+	ItemsCollectionFrame.BGCornerTopLeft:SetAlpha(0)
+	ItemsCollectionFrame.BGCornerTopRight:SetAlpha(0)
+
+	local progressBar = WardrobeCollectionFrame.progressBar
+	progressBar:DisableDrawLayer("BACKGROUND")
+	select(2, progressBar:GetRegions()):Hide()
+	progressBar.text:SetPoint("CENTER", 0, 1)
+	progressBar:SetStatusBarTexture(DB.bdTex)
+	B.CreateBDFrame(progressBar, .25)
 end
