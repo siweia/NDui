@@ -47,6 +47,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	for i = 1, 5 do
 		local tab = EncounterJournal.Tabs[i]
 		if tab then
+			B.StripTextures(tab)
 			B.ReskinTab(tab)
 			if i ~= 1 then
 				tab:ClearAllPoints()
