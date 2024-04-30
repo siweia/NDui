@@ -340,7 +340,6 @@ C.themes["Blizzard_Communities"] = function()
 				B.Reskin(dialog.Selector.CancelButton)
 			end
 		else
-			select(9, dialog:GetRegions()):Hide()
 			CommunitiesAvatarPickerDialogTop:Hide()
 			CommunitiesAvatarPickerDialogMiddle:Hide()
 			CommunitiesAvatarPickerDialogBottom:Hide()

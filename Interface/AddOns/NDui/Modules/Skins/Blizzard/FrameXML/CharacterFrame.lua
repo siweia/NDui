@@ -622,7 +622,9 @@ tinsert(C.defaultThemes, function()
 
 				bu.categoryLeft:SetAlpha(0)
 				bu.categoryRight:SetAlpha(0)
-				bu.categoryMiddle:SetAlpha(0)
+				if bu.categoryMiddle then
+					bu.categoryMiddle:SetAlpha(0)
+				end
 
 				bu.bg = B.ReskinIcon(bu.icon)
 				hooksecurefunc(bu.icon, "SetTexCoord", replaceHonorIcon)
