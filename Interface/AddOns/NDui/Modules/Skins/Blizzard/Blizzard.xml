@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Blizzard_AchievementUI.lua"/>
+	<Script file="Blizzard_ArchaeologyUI.lua"/>
 	<Script file="Blizzard_AuctionUI.lua"/>
 	<Script file="Blizzard_BarbershopUI.lua"/>
 	<Script file="Blizzard_BattlefieldMap.lua"/>
@@ -18,6 +19,7 @@
 	<Script file="Blizzard_LookingForGroupUI.lua"/>
 	<Script file="Blizzard_MacroUI.lua"/>
 	<Script file="Blizzard_RaidUI.lua"/>
+	<Script file="Blizzard_ReforgingUI.lua"/>
 	<Script file="Blizzard_TalentUI.lua"/>
 	<Script file="Blizzard_TimeManager.lua"/>
 	<Script file="Blizzard_TradeSkillUI.lua"/>
