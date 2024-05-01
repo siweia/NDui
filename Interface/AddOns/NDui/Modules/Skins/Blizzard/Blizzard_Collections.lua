@@ -325,4 +325,27 @@ C.themes["Blizzard_Collections"] = function()
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(DB.bdTex)
 	B.CreateBDFrame(progressBar, .25)
+
+	-- [[ Wardrobe ]]
+
+	local WardrobeFrame = WardrobeFrame
+	local WardrobeTransmogFrame = WardrobeTransmogFrame
+
+	B.ReskinPortraitFrame(WardrobeFrame)
+	B.StripTextures(WardrobeTransmogFrame)
+	B.Reskin(WardrobeTransmogFrame.ApplyButton)
+	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+
+	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand", "Ranged"}
+	for i = 1, #slots do
+		local slot = WardrobeTransmogFrame[slots[i].."Button"]
+		if slot then
+			slot.Border:Hide()
+			B.ReskinIcon(slot.Icon)
+			slot:SetHighlightTexture(DB.bdTex)
+			local hl = slot:GetHighlightTexture()
+			hl:SetVertexColor(1, 1, 1, .25)
+			hl:SetAllPoints(slot.Icon)
+		end
+	end
 end
