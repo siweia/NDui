@@ -61,9 +61,12 @@ C.themes["Blizzard_InspectUI"] = function()
 		local talent = _G["InspectTalentFrameTalent"..i]
 		local icon = _G["InspectTalentFrameTalent"..i.."IconTexture"]
 		if talent then
+			if DB.isCata then
+				talent:GetPushedTexture():SetAlpha(0)
+				talent:GetHighlightTexture():SetAlpha(0)
+			end
 			B.StripTextures(talent)
-			icon:SetTexCoord(.08, .92, .08, .92)
-			B.CreateBDFrame(icon)
+			B.ReskinIcon(icon)
 		end
 	end
 end
