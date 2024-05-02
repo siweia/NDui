@@ -857,10 +857,6 @@ function M:MoveBlizzFrames()
 end
 
 -- Fix errors in Cata beta
-if not GhostFrame then
-	GhostFrame = CreateFrame("Frame")
-end
-
 if not GuildControlUIRankSettingsFrameRosterLabel then
 	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
 end

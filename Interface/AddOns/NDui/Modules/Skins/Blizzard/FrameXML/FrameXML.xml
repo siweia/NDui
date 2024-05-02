@@ -15,6 +15,7 @@
 	<Script file="Fonts.lua"/>
 	<Script file="FriendsFrame.lua"/>
 	<Script file="GameMenuFrame.lua"/>
+	<Script file="GhostFrame.lua"/>
 	<Script file="GossipFrame.lua"/>
 	<Script file="GuildRegistrarFrame.lua"/>
 	<Script file="HelpFrame.lua"/>
