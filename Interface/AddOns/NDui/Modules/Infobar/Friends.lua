@@ -21,10 +21,10 @@ local InviteToGroup = C_PartyInfo.InviteUnit
 local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL
 local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 local RAF_RECRUIT_FRIEND, RAF_RECRUITER_FRIEND = RAF_RECRUIT_FRIEND, RAF_RECRUITER_FRIEND
-local EXPANSION_NAME0, EXPANSION_NAME2 = EXPANSION_NAME0, EXPANSION_NAME2
+local EXPANSION_NAME0, EXPANSION_NAME3 = EXPANSION_NAME0, EXPANSION_NAME3
 local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
 local WOW_PROJECT_60 = WOW_PROJECT_CLASSIC or 2
-local WOW_PROJECT_WRATH = 11
+local WOW_PROJECT_CATA = WOW_PROJECT_CATACLYSM_CLASSIC or 14
 local CLIENT_WOW_DIFF = "WoV" -- for sorting
 
 local r, g, b = DB.r, DB.g, DB.b
@@ -136,8 +136,8 @@ local function buildBNetTable(num)
 
 				if wowProjectID == WOW_PROJECT_60 then
 					gameText = EXPANSION_NAME0
-				elseif wowProjectID == WOW_PROJECT_WRATH then
-					gameText = EXPANSION_NAME2
+				elseif wowProjectID == WOW_PROJECT_CATA then
+					gameText = EXPANSION_NAME3
 				end
 
 				local infoText = GetOnlineInfoText(client, isMobile, rafLinkType, gameText)
@@ -349,7 +349,7 @@ local function buttonOnEnter(self)
 					realmName = (DB.MyRealm == realmName or realmName == "") and "" or "-"..realmName
 
 					-- Get TBC realm name from richPresence
-					if wowProjectID == WOW_PROJECT_WRATH then
+					if wowProjectID == WOW_PROJECT_CATA then
 						local realm, count = gsub(gameText, "^.-%-%s", "")
 						if count > 0 then
 							realmName = "-"..realm
