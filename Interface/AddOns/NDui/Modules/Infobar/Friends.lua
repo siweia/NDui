@@ -19,7 +19,7 @@ local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_
 local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL, CHARACTER_FRIEND = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL, CHARACTER_FRIEND
 local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
 local EXPANSION_NAME0 = EXPANSION_NAME0
-local WOW_PROJECT_ID = WOW_PROJECT_ID or 11
+local WOW_PROJECT_ID = WOW_PROJECT_ID or 14
 local WOW_PROJECT_60 = WOW_PROJECT_CLASSIC or 2
 local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE or 1
 local CLIENT_WOW_DIFF = "WoV"
@@ -30,6 +30,8 @@ local friendTable, bnetTable = {}, {}
 local activeZone, inactiveZone = "|cff4cff4c", DB.GreyColor
 local noteString = "|T"..DB.copyTex..":12|t %s"
 local broadcastString = "|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)"
+local onlineString = gsub(ERR_FRIEND_ONLINE_SS, ".+h", "")
+local offlineString = gsub(ERR_FRIEND_OFFLINE_S, "%%s", "")
 
 local menuList = {
 	[1] = {text = L["Join or Invite"], isTitle = true, notCheckable = true}
@@ -54,7 +56,7 @@ local function buildFriendTable(num)
 				status = FRIENDS_TEXTURE_DND
 			end
 			local class = DB.ClassList[info.className]
-			tinsert(friendTable, {info.name, info.level, class, info.area, status})
+			tinsert(friendTable, {info.name, info.level, class, info.area, status, info.notes})
 		end
 	end
 
@@ -299,10 +301,15 @@ local function buttonOnEnter(self)
 	else
 		GameTooltip:AddLine(L["WoW"], 1,.8,0)
 		GameTooltip:AddLine(" ")
-		local name, level, class, area = unpack(self.data)
+		local name, level, class, area, _, note = unpack(self.data)
 		local classColor = B.HexRGB(B.ClassColor(class))
 		GameTooltip:AddLine(format("%s %s%s", level, classColor, name))
 		GameTooltip:AddLine(format("%s%s", inactiveZone, area))
+
+		if note and note ~= "" then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(format(noteString, note), 1,.8,0)
+		end
 	end
 	GameTooltip:Show()
 end
@@ -444,9 +451,14 @@ info.eventList = {
 	"BN_FRIEND_INFO_CHANGED",
 	"FRIENDLIST_UPDATE",
 	"PLAYER_ENTERING_WORLD",
+	"CHAT_MSG_SYSTEM",
 }
 
-info.onEvent = function(self)
+info.onEvent = function(self, event, arg1)
+	if event == "CHAT_MSG_SYSTEM" then
+		if not strfind(arg1, onlineString) and not strfind(arg1, offlineString) then return end
+	end
+
 	info:FriendsPanel_Refresh()
 	self.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, info.totalOnline))
 
