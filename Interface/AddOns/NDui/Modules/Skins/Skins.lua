@@ -60,6 +60,7 @@ function S:LoadAddOnSkins()
 	end)
 
 	hooksecurefunc("SetItemButtonQuality", function(button, quality, itemID)
+		if type(quality) == "table" then return end
 		if quality then
 			if quality >= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality] then
 				button.IconBorder:Show()
