@@ -1053,7 +1053,7 @@ G.TabList = {
 	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
-	NewTag..L["Nameplate"],
+	L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
@@ -1061,7 +1061,7 @@ G.TabList = {
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	NewTag..L["Misc"],
+	L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
@@ -1201,7 +1201,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "QuestIndicator", L["QuestIndicator"], true, nil, nil, L["QuestIndicatorAddOns"]},
 		{1, "Nameplate", "BlockDBM", L["BlockDBM"], nil, nil, nil, L["BlockDBMTip"]},
 		{1, "Nameplate", "Interruptor", L["ShowInterruptor"].."*", true},
-		{1, "Nameplate", "TarName", NewTag..L["TarName"].."*"},
+		{1, "Nameplate", "TarName", L["TarName"].."*"},
 		{},--blank
 		{1, "Nameplate", "ColoredTarget", HeaderTag..L["ColoredTarget"].."*", nil, nil, nil, L["ColoredTargetTip"]},
 		{1, "Nameplate", "ColoredFocus", HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
@@ -1386,7 +1386,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "Autoequip", L["AutoEquip"].."*", true, nil, nil, L["AutoEquipTip"]},
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", nil, nil, updateScreenShot},
-		{1, "Misc", "BlizzMover", NewTag..L["BlizzMover"], true, nil, nil, L["BlizzMoverTip"]},
+		{1, "Misc", "BlizzMover", L["BlizzMover"], true, nil, nil, L["BlizzMoverTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
