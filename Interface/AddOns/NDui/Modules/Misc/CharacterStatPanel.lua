@@ -247,8 +247,6 @@ function M:UpdateUnitILvl(unit, text)
 	]]
 	if mainhand > 0 and offhand > 0 then
 		total = total + mainhand + offhand
-	elseif mainhand > 0 and ranged > 0 then
-		total = total + mainhand + ranged
 	elseif offhand > 0 and ranged > 0 then
 		total = total + offhand + ranged
 	else
