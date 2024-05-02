@@ -93,8 +93,6 @@ local function UpdateColor(self, event, unit)
 		t = self.colors.disconnected
 	elseif(element.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)) then
 		t = self.colors.tapped
-	elseif(element.colorHappiness and unit == "pet" and GetPetHappiness()) then
-		t = self.colors.happiness[GetPetHappiness()]
 	elseif(element.colorClass and UnitIsPlayer(unit)) or
 		(element.colorClassNPC and not UnitIsPlayer(unit)) or
 		(element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
@@ -251,7 +249,6 @@ local function Enable(self, unit)
 		if(element.colorTapping) then
 			self:RegisterEvent('UNIT_FACTION', ColorPath)
 		end
-		self:RegisterEvent('UNIT_HAPPINESS', ColorPath)
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
@@ -277,7 +274,6 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_FACTION', ColorPath)
 		self:UnregisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
 		self:UnregisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
-		self:UnregisterEvent('UNIT_HAPPINESS', ColorPath)
 	end
 end
 

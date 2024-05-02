@@ -520,7 +520,6 @@ G.DefaultSettings = {
 		SendActionCD = true,
 		StatOrder = "12345",
 		StatExpand = true,
-		PetHappiness = true,
 		InfoStrLeft = "[guild][friend][ping][fps][zone]",
 		InfoStrRight = "[spec][dura][gold][time]",
 		InfoSize = 13,
@@ -999,10 +998,6 @@ local function updateErrorBlocker()
 	B:GetModule("Misc"):UpdateErrorBlocker()
 end
 
-local function togglePetHappiness()
-	B:GetModule("Misc"):TogglePetHappiness()
-end
-
 local function updateMaxZoomLevel()
 	B:GetModule("Misc"):UpdateMaxZoomLevel()
 end
@@ -1385,7 +1380,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "TradeTabs", L["TradeTabs"], nil, nil, nil, L["TradeTabsTips"]},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
 		{1, "Misc", "Focuser", L["Easy Focus"]},
-		{1, "Misc", "PetHappiness", L["PetHappiness"].."*", true, nil, togglePetHappiness},
 		{1, "Misc", "MenuButton", L["MenuButton"], nil, nil, nil, L["MenuButtonTip"]},
 		{1, "Misc", "AutoDismount", L["AutoDismount"].."*", nil, nil, nil, L["AutoDismountTip"]},
 		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 3.4, .1}, updateMaxZoomLevel},

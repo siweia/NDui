@@ -16,7 +16,6 @@ local GetTime, GetCVarBool, SetCVar = GetTime, GetCVarBool, SetCVar
 local GetNumLootItems, LootSlot = GetNumLootItems, LootSlot
 local GetInstanceInfo = GetInstanceInfo
 local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
-local UnitName, GetPetHappiness = UnitName, GetPetHappiness
 local UnitIsPlayer, GuildInvite, C_FriendList_AddFriend = UnitIsPlayer, GuildInvite, C_FriendList.AddFriend
 local TakeTaxiNode, IsMounted, Dismount, C_Timer_After = TakeTaxiNode, IsMounted, Dismount, C_Timer.After
 
@@ -50,7 +49,6 @@ function M:OnLogin()
 	M:ToggleTaxiDismount()
 	M:BidPriceHighlight()
 	M:BlockStrangerInvite()
-	M:TogglePetHappiness()
 	M:QuickMenuButton()
 	M:BaudErrorFrameHelpTip()
 	M:EnhancedPicker()
@@ -576,39 +574,6 @@ function M:BlockStrangerInvite()
 			StaticPopup_Hide("PARTY_INVITE")
 		end
 	end)
-end
-
--- Hunter pet happiness
-local petHappinessStr, lastHappiness = {
-	[1] = L["PetUnhappy"],
-	[2] = L["PetBadMood"],
-	[3] = L["PetHappy"],
-}
-
-local function CheckPetHappiness(_, unit)
-	if unit ~= "pet" then return end
-
-	local happiness = GetPetHappiness()
-	if not lastHappiness or lastHappiness ~= happiness then
-		local str = petHappinessStr[happiness]
-		if str then
-			local petName = UnitName(unit)
-			UIErrorsFrame:AddMessage(format(str, DB.InfoColor, petName))
-			print(DB.NDuiString, format(str, DB.InfoColor, petName))
-		end
-
-		lastHappiness = happiness
-	end
-end
-
-function M:TogglePetHappiness()
-	if DB.MyClass ~= "HUNTER" then return end
-
-	if C.db["Misc"]["PetHappiness"] then
-		B:RegisterEvent("UNIT_HAPPINESS", CheckPetHappiness)
-	else
-		B:UnregisterEvent("UNIT_HAPPINESS", CheckPetHappiness)
-	end
 end
 
 function M:BaudErrorFrameHelpTip()
