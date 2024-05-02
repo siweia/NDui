@@ -361,7 +361,6 @@ end
 
 function M:ItemLevel_FlyoutSetup()
 	if self.iLvl then self.iLvl:SetText("") end
-	if DB.isCata then
 
 	local location = self.location
 	if not location then return end
@@ -389,19 +388,6 @@ function M:ItemLevel_FlyoutSetup()
 			M.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
 		end
 	end
-
-	else
-		local location = self.location
-		if not location then return end
-	
-		if tonumber(location) then
-			if location >= PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION then return end
-			local id = EquipmentManager_GetItemInfoByLocation(location)
-			if id then
-				M.ItemLevel_FlyoutUpdateByID(self, id)
-			end
-		end
-	end
 end
 
 function M:ShowItemLevel()
@@ -410,17 +396,11 @@ function M:ShowItemLevel()
 	-- iLvl on CharacterFrame
 	CharacterFrame:HookScript("OnShow", M.ItemLevel_UpdatePlayer)
 	B:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", M.ItemLevel_UpdatePlayer)
-	if not DB.isCata then
-		CharacterModelFrameRotateRightButton:ClearAllPoints()
-		CharacterModelFrameRotateRightButton:SetPoint("BOTTOMLEFT", CharacterFrameTab1, "TOPLEFT", 0, 2)
-	end
 
 	-- iLvl on InspectFrame
 	B:RegisterEvent("INSPECT_READY", M.ItemLevel_UpdateInspect)
 
 	-- iLvl on FlyoutButtons
-	if DB.isCata then
-
 	hooksecurefunc("EquipmentFlyout_UpdateItems", function()
 		for _, button in pairs(EquipmentFlyoutFrame.buttons) do
 			if button:IsShown() then
@@ -428,16 +408,6 @@ function M:ShowItemLevel()
 			end
 		end
 	end)
-
-	else
-		hooksecurefunc("PaperDollFrameItemFlyout_Show", function()
-			for _, button in pairs(PaperDollFrameItemFlyout.buttons) do
-				if button:IsShown() then
-					M.ItemLevel_FlyoutSetup(button)
-				end
-			end
-		end)
-	end
 
 	-- Update item quality
 	M.QualityUpdater = CreateFrame("Frame")
@@ -451,9 +421,7 @@ function M:ShowItemLevel()
 	hooksecurefunc("TradeFrame_UpdatePlayerItem", M.ItemLevel_UpdateTradePlayer)
 	hooksecurefunc("TradeFrame_UpdateTargetItem", M.ItemLevel_UpdateTradeTarget)
 
-	if DB.isCata then
-		-- iLvl on GuildNews
-		hooksecurefunc("GuildNewsButton_SetText", M.ItemLevel_ReplaceGuildNews)
-	end
+	-- iLvl on GuildNews
+	hooksecurefunc("GuildNewsButton_SetText", M.ItemLevel_ReplaceGuildNews)
 end
 M:RegisterMisc("GearInfo", M.ShowItemLevel)

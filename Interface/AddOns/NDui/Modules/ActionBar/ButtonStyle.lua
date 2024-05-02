@@ -139,7 +139,6 @@ function Bar:ReskinBars()
 	--leave vehicle
 	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"])
 
-	if DB.isCata then
 	--spell flyout
 	SpellFlyoutBackgroundEnd:SetTexture(nil)
 	SpellFlyoutHorizontalBackground:SetTexture(nil)
@@ -154,5 +153,4 @@ function Bar:ReskinBars()
 		end
 	end
 	SpellFlyout:HookScript("OnShow", checkForFlyoutButtons)
-	end
 end

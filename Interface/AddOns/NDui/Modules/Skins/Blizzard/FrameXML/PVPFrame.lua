@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
-if not DB.isCata then return end
-
 tinsert(C.defaultThemes, function()
 	local PVPFrame = PVPFrame
 	if not PVPFrame then return end

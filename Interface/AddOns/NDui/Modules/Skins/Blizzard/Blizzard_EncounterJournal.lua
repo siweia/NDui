@@ -1,7 +1,5 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-
-if not DB.isCata then return end
 local r, g, b = DB.r, DB.g, DB.b
 
 local function reskinHeader(header)

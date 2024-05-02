@@ -55,7 +55,6 @@ function M:OnLogin()
 	C_Timer_After(0, M.UpdateMaxZoomLevel)
 	M:AutoEquipBySpec()
 	M:UpdateScreenShot()
-	M:FlyoutOnKeyAlt()
 	M:MoveBlizzFrames()
 
 	-- Auto chatBubbles
@@ -113,8 +112,6 @@ end
 
 -- Get Naked
 function M:NakedIcon()
-	if DB.isCata then
-
 	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
 	bu:SetSize(33, 35)
 	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, 0)
@@ -136,42 +133,6 @@ function M:NakedIcon()
 			end
 		end
 	end)
-
-	else
-
-	GearManagerToggleButton:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(EQUIPMENT_MANAGER, 1,1,1)
-		GameTooltip:AddLine(NEWBIE_TOOLTIP_EQUIPMENT_MANAGER, 1,.8,0, 1)
-		GameTooltip:AddLine(L["Get Naked"], .6,.8,1, 1)
-		GameTooltip:Show()
-	end)
-
-	local function UnequipItemInSlot(i)
-		local action = EquipmentManager_UnequipItemInSlot(i)
-		EquipmentManager_RunAction(action)
-	end
-
-	GearManagerToggleButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-	GearManagerToggleButton:SetScript("OnDoubleClick", function(_, btn)
-		if btn ~= "RightButton" then return end
-		for i = 1, 18 do
-			local link = GetInventoryItemLink("player", i)
-			if link then
-				UnequipItemInSlot(i)
-			end
-		end
-	end)
-	GearManagerToggleButton:SetScript("OnClick", function(_, btn)
-		if btn ~= "LeftButton" then return end
-		if GearManagerDialog:IsShown() then
-			GearManagerDialog:Hide()
-		else
-			GearManagerDialog:Show()
-		end
-	end)
-end
 end
 
 -- Reanchor Vehicle
@@ -706,18 +667,11 @@ function M:AutoEquipBySpec()
 		local talentName = ""
 		local higher = 0
 		for i = 1, 3 do
-			local name, nameCata, pointsSpent, _, pointsSpentCata = GetTalentTabInfo(i)
-			if not name then break end
-			if DB.isCata then
-				if pointsSpentCata > higher then
-					higher = pointsSpentCata
-					talentName = nameCata
-				end
-			else
-				if pointsSpent > higher then
-					higher = pointsSpent
-					talentName = name
-				end
+			local _, nameCata, _, _, pointsSpentCata = GetTalentTabInfo(i)
+			if not nameCata then break end
+			if pointsSpentCata > higher then
+				higher = pointsSpentCata
+				talentName = nameCata
 			end
 		end
 		if talentName == "" then return end
@@ -769,46 +723,6 @@ function M:UpdateScreenShot()
 		M.ScreenShotFrame:Hide()
 		B:UnregisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
 	end
-end
-
--- Flyout buttons by holding key ALT
-function M:FlyoutOnKeyAlt()
-	if DB.isCata then return end -- isCata: removed
-
-	hooksecurefunc("PaperDollItemSlotButton_OnEnter", function(self)
-		self:RegisterEvent("MODIFIER_STATE_CHANGED")
-		if not InCombatLockdown() then
-			PaperDollItemSlotButton_UpdateFlyout(self) -- taint in combat
-		end
-		if PaperDollFrameItemFlyout:IsShown() then
-			GameTooltip:SetOwner(PaperDollFrameItemFlyoutButtons, "ANCHOR_RIGHT", 6, -PaperDollFrameItemFlyoutButtons:GetHeight() - 6)
-		else
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		end
-		local hasItem, _, repairCost = GameTooltip:SetInventoryItem("player", self:GetID(), nil, true)
-		if not hasItem then
-			local text = _G[strupper(strsub(self:GetName(), 10))]
-			if self.checkRelic and UnitHasRelicSlot("player") then
-				text = RELICSLOT
-			end
-			GameTooltip:SetText(text)
-		end
-		if InRepairMode() and repairCost and (repairCost > 0) then
-			GameTooltip:AddLine(REPAIR_COST, nil, nil, nil, true)
-			SetTooltipMoney(GameTooltip, repairCost)
-			GameTooltip:Show()
-		else
-			CursorUpdate(self)
-		end
-	end)
-
-	hooksecurefunc("PaperDollItemSlotButton_OnEvent", function(self, event)
-		if event == "MODIFIER_STATE_CHANGED" then
-			if IsModifiedClick("SHOWITEMFLYOUT") and self:IsMouseOver() then
-				PaperDollItemSlotButton_OnEnter(self)
-			end
-		end
-	end)
 end
 
 -- Move and save blizz frames
