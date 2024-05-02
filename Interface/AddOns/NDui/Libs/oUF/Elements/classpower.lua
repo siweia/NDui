@@ -53,6 +53,8 @@ local _, PlayerClass = UnitClass('player')
 -- sourced from FrameXML/Constants.lua
 local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
 local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
+local SPELL_POWER_SOUL_SHARDS = Enum.PowerType.SoulShards or 7
+local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower or 9
 
 -- Holds the class specific stuff.
 local ClassPowerID, ClassPowerType
@@ -100,8 +102,7 @@ local function Update(self, event, unit, powerType)
 	local cur, max, mod, oldMax
 	if(event ~= 'ClassPowerDisable') then
 		local powerID = unit == 'vehicle' and SPELL_POWER_COMBO_POINTS or ClassPowerID
-		--cur = UnitPower(unit, powerID, true)
-		cur = GetComboPoints(unit, 'target')	-- has to use GetComboPoints in classic
+		cur = powerID == SPELL_POWER_COMBO_POINTS and GetComboPoints(unit, 'target') or UnitPower(unit, powerID, true) -- has to use GetComboPoints in classic
 		max = UnitPowerMax(unit, powerID)
 		mod = UnitPowerDisplayMod(powerID)
 
@@ -264,7 +265,13 @@ do
 		B:UnregisterEvent('UNIT_POWER_FREQUENT', WatchVehicleCombos)
 	end
 
-	if(PlayerClass == 'ROGUE' or PlayerClass == 'DRUID') then
+	if(PlayerClass == 'PALADIN') then
+		ClassPowerID = SPELL_POWER_HOLY_POWER
+		ClassPowerType = 'HOLY_POWER'
+	elseif(PlayerClass == 'WARLOCK') then
+		ClassPowerID = SPELL_POWER_SOUL_SHARDS
+		ClassPowerType = 'SOUL_SHARDS'
+	elseif(PlayerClass == 'ROGUE' or PlayerClass == 'DRUID') then
 		ClassPowerID = SPELL_POWER_COMBO_POINTS
 		ClassPowerType = 'COMBO_POINTS'
 
