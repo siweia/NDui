@@ -1378,6 +1378,12 @@ function UF:ToggleUFClassPower()
 				playerFrame.Runes:ForceUpdate()
 			end
 		end
+		if playerFrame.EclipseBar then
+			if not playerFrame:IsElementEnabled("EclipseBar") then
+				playerFrame:EnableElement("EclipseBar")
+				playerFrame.EclipseBar:ForceUpdate()
+			end
+		end
 	else
 		if playerFrame.ClassPower then
 			if playerFrame:IsElementEnabled("ClassPower") then
@@ -1387,6 +1393,11 @@ function UF:ToggleUFClassPower()
 		if playerFrame.Runes then
 			if playerFrame:IsElementEnabled("Runes") then
 				playerFrame:DisableElement("Runes")
+			end
+		end
+		if playerFrame.EclipseBar then
+			if playerFrame:IsElementEnabled("EclipseBar") then
+				playerFrame:DisableElement("EclipseBar")
 			end
 		end
 	end
@@ -1409,6 +1420,11 @@ function UF:UpdateUFClassPower()
 			bars[i]:SetHeight(barHeight)
 			bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
 		end
+	end
+
+	if playerFrame.EclipseBar then
+		playerFrame.EclipseBar:SetSize(barWidth, barHeight)
+		playerFrame.EclipseBar:SetPoint("BOTTOMLEFT", playerFrame, "TOPLEFT", xOffset, yOffset)
 	end
 end
 
