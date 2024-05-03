@@ -194,7 +194,7 @@ function S:KrowiAF()
 	end)
 
 	hooksecurefunc(AchievementFrame, "Show", function(self)
-		for i = 1, 10 do
+		for i = 1, 15 do
 			local button = _G["KrowiAF_AchievementFrameSideButton"..i]
 			if not button then break end
 			if not button.bg then
