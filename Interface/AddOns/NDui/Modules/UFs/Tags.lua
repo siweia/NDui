@@ -272,3 +272,12 @@ oUF.Tags.Methods["altpower"] = function(unit)
 	end
 end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
+
+-- Eclipse power for Druid
+local POWERTYPE_BALANCE = Enum.PowerType.Balance or 26
+oUF.Tags.Methods["cureclipse"] = function(unit)
+	local textFormat = GetEclipseDirection() == "sun" and "|cff40bfff%s>" or "|cffffff00<%s"
+	local max = UnitPowerMax("player", POWERTYPE_BALANCE)
+	return format(textFormat, (max == 0 and 0) or math.abs(UnitPower("player", POWERTYPE_BALANCE)))
+end
+oUF.Tags.Events["cureclipse"] = "UNIT_POWER_FREQUENT ECLIPSE_DIRECTION_CHANGE"

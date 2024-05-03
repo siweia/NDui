@@ -1330,6 +1330,37 @@ function UF:CreateClassPower(self)
 	self.ClassPowerBar = bar
 end
 
+function UF:EclipseBar(self)
+	if DB.MyClass ~= "DRUID" then return end
+
+	local barWidth, barHeight = C.db["UFs"]["CPWidth"], C.db["UFs"]["CPHeight"]
+	local barPoint = {"BOTTOMLEFT", self, "TOPLEFT", C.db["UFs"]["CPxOffset"], C.db["UFs"]["CPyOffset"]}
+	if self.mystyle == "PlayerPlate" then
+		barWidth, barHeight = C.db["Nameplate"]["PPWidth"], C.db["Nameplate"]["PPBarHeight"]
+		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, C.margin}
+	end
+
+	local bar = CreateFrame("StatusBar", nil, self.Health)
+	bar:SetSize(barWidth, barHeight)
+	bar:SetPoint(unpack(barPoint))
+	bar:SetFrameLevel(self:GetFrameLevel() + 5)
+	B.CreateSB(bar, true, .25, .75, 1)
+	B:SmoothBar(bar)
+
+	local bg = bar:CreateTexture(nil, "BACKGROUND")
+	bg:SetAllPoints()
+	bg:SetTexture(DB.normTex)
+	bg:SetVertexColor(1, 1, 0)
+	bg.multiplier = .25
+
+	local text = B.CreateFS(bar, 14)
+	text:SetPoint("CENTER", bar, "TOP")
+	self:Tag(text, "[cureclipse]")
+
+	self.EclipseBar = bar
+	self.EclipseBar.bg = bg
+end
+
 function UF:ToggleUFClassPower()
 	local playerFrame = _G.oUF_Player
 	if not playerFrame then return end

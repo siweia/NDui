@@ -1083,6 +1083,7 @@ function UF:CreatePlayerPlate()
 	UF:CreatePowerBar(self)
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
+	UF:EclipseBar(self)
 	--if C.db["Auras"]["ClassAuras"] then
 	--	B:GetModule("Auras"):CreateLumos(self)
 	--end

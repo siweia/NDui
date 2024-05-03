@@ -15,6 +15,7 @@
 	<Script file="elements\castbar.lua"/>
 	<Script file="elements\classpower.lua"/>
 	<Script file="elements\combatindicator.lua"/>
+	<Script file="elements\eclipsebar.lua"/>
 	<Script file="elements\grouproleindicator.lua"/>
 	<Script file="elements\healprediction.lua"/>
 	<Script file="elements\health.lua"/>

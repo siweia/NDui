@@ -36,6 +36,7 @@ local function CreatePlayerStyle(self)
 	UF:CreateClassPower(self)
 	UF:CreateAuras(self)
 	UF:CreateSwing(self)
+	UF:EclipseBar(self)
 
 	if C.db["UFs"]["Castbars"] then
 		UF:ReskinMirrorBars()
