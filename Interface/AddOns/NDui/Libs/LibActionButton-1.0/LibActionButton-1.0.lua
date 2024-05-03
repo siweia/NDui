@@ -2409,7 +2409,7 @@ Custom.RunCustom               = function(self, unit, button) return self._state
 Custom.GetPassiveCooldownSpellID = function(self) return nil end
 
 --- WoW Classic overrides
-if WoWClassic or WoWBCC or WoWWrath or WoWCata then
+if WoWClassic or WoWBCC or WoWWrath then
 	UpdateOverlayGlow = function() end
 end
 
