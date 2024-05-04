@@ -75,6 +75,7 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournal.PetCount:SetWidth(140)
 	B.CreateBDFrame(MountJournal.MountDisplay.ModelScene, .25)
 	B.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
+	B.ReskinModelControl(MountJournal.MountDisplay.ModelScene)
 
 	B.Reskin(MountJournalMountButton)
 	B.Reskin(PetJournalSummonButton)
