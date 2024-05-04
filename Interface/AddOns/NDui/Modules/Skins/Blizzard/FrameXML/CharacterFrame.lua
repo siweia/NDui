@@ -83,6 +83,14 @@ tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(CharacterFrame)
 	B.StripTextures(CharacterFrameInsetRight)
 
+	for i = 1, 5 do
+		local button = select(i, CharacterModelScene.ControlFrame:GetChildren())
+		if button.NormalTexture then
+			button.NormalTexture:SetAlpha(0)
+			button.PushedTexture:SetAlpha(0)
+		end
+	end
+
 	CharacterModelScene:DisableDrawLayer("BACKGROUND")
 	CharacterModelScene:DisableDrawLayer("BORDER")
 	CharacterModelScene:DisableDrawLayer("OVERLAY")
