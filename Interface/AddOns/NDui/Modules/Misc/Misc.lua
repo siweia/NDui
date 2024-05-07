@@ -735,6 +735,76 @@ function M:MoveBlizzFrames()
 	B:BlizzFrameMover(QuestLogFrame)
 end
 
+
+-- Archaeology counts
+do
+	local function CalculateArches(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine("|c0000FF00"..L["Arch Count"]..":")
+		GameTooltip:AddLine(" ")
+		local total = 0
+		for i = 1, GetNumArchaeologyRaces() do
+			local numArtifacts = GetNumArtifactsByRace(i)
+			local count = 0
+			for j = 1, numArtifacts do
+				local completionCount = select(10, GetArtifactInfoByRace(i, j))
+				count = count + completionCount
+			end
+			local name = GetArchaeologyRaceInfo(i)
+			if numArtifacts > 1 then
+				GameTooltip:AddDoubleLine(name..":", DB.InfoColor..count)
+				total = total + count
+			end
+		end
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine("|c0000ff00"..TOTAL..":", "|cffff0000"..total)
+		GameTooltip:Show()
+	end
+
+	local function AddCalculateIcon()
+		local bu = CreateFrame("Button", nil, ArchaeologyFrameCompletedPage)
+		bu:SetPoint("TOPRIGHT", -45, -45)
+		bu:SetSize(35, 35)
+		B.PixelIcon(bu, "Interface\\ICONS\\TRADE_ARCHAEOLOGY_HIGHBORNE_SCROLL", true)
+		bu:SetScript("OnEnter", CalculateArches)
+		bu:SetScript("OnLeave", B.HideTooltip)
+	end
+
+	local function setupMisc(event, addon)
+		if addon == "Blizzard_ArchaeologyUI" then
+			AddCalculateIcon()
+
+			B:UnregisterEvent(event, setupMisc)
+		end
+	end
+
+	B:RegisterEvent("ADDON_LOADED", setupMisc)
+end
+
+-- Drag AltPowerbar
+do
+	local mover = CreateFrame("Frame", "NDuiAltBarMover", PlayerPowerBarAlt)
+	mover:SetPoint("CENTER", UIParent, 0, -200)
+	mover:SetSize(20, 20)
+	B.CreateMF(PlayerPowerBarAlt, mover)
+
+	hooksecurefunc(PlayerPowerBarAlt, "SetPoint", function(_, _, parent)
+		if parent ~= mover then
+			PlayerPowerBarAlt:ClearAllPoints()
+			PlayerPowerBarAlt:SetPoint("CENTER", mover)
+		end
+	end)
+
+	hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
+		local statusFrame = self.statusFrame
+		if statusFrame.enabled then
+			statusFrame:Show()
+			statusFrame.Hide = statusFrame.Show
+		end
+	end)
+end
+
 -- Fix errors in Cata beta
 if not GuildControlUIRankSettingsFrameRosterLabel then
 	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
