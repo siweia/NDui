@@ -78,19 +78,22 @@ local function replaceHonorIcon(texture, t1, t2)
 	texture.isCutting = nil
 end
 
-tinsert(C.defaultThemes, function()
-	B.StripTextures(PaperDollFrame)
-	B.ReskinPortraitFrame(CharacterFrame)
-	B.StripTextures(CharacterFrameInsetRight)
-
+function B:ReskinModelControl()
 	for i = 1, 5 do
-		local button = select(i, CharacterModelScene.ControlFrame:GetChildren())
+		local button = select(i, self.ControlFrame:GetChildren())
 		if button.NormalTexture then
 			button.NormalTexture:SetAlpha(0)
 			button.PushedTexture:SetAlpha(0)
 		end
 	end
+end
 
+tinsert(C.defaultThemes, function()
+	B.StripTextures(PaperDollFrame)
+	B.ReskinPortraitFrame(CharacterFrame)
+	B.StripTextures(CharacterFrameInsetRight)
+
+	B.ReskinModelControl(CharacterModelScene)
 	CharacterModelScene:DisableDrawLayer("BACKGROUND")
 	CharacterModelScene:DisableDrawLayer("BORDER")
 	CharacterModelScene:DisableDrawLayer("OVERLAY")

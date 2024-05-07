@@ -2,37 +2,46 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	B.ReskinPortraitFrame(PetStableFrame, 15, -15, -35, 73)
-	B.Reskin(PetStablePurchaseButton)
-	B.ReskinRotationButtons(PetStableModel)
+	if DB.MyClass ~= "HUNTER" then return end
 
-	local slots = {
-		PetStableCurrentPet,
-		PetStableStabledPet1,
-		PetStableStabledPet2,
-		PetStableStabledPet3,
-		PetStableStabledPet4,
-	}
+	local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
-	for _, bu in pairs(slots) do
+	PetStableBottomInset:Hide()
+	PetStableLeftInset:Hide()
+	PetStableFrameModelBg:Hide()
+	PetStablePrevPageButtonIcon:SetTexture("")
+	PetStableNextPageButtonIcon:SetTexture("")
+	PetStableDietTexture:SetTexture(132165)
+	PetStableDietTexture:SetTexCoord(x1, x2, y1, y2)
+
+	B.ReskinPortraitFrame(PetStableFrame)
+	B.ReskinArrow(PetStablePrevPageButton, "left")
+	B.ReskinArrow(PetStableNextPageButton, "right")
+	B.ReskinIcon(PetStableSelectedPetIcon)
+	B.ReskinModelControl(PetStableModelScene)
+
+	for i = 1, NUM_PET_ACTIVE_SLOTS do
+		local bu = _G["PetStableActivePet"..i]
+		bu.Background:Hide()
+		bu.Border:Hide()
 		bu:SetNormalTexture(0)
 		bu:SetPushedTexture(0)
-		bu:SetCheckedTexture(DB.pushedTex)
+		bu.Checked:SetTexture(DB.pushedTex)
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+
+		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(x1, x2, y1, y2)
+		B.CreateBDFrame(bu, .25)
+	end
+
+	for i = 1, NUM_PET_STABLE_SLOTS do
+		local bu = _G["PetStableStabledPet"..i]
+		bu:SetNormalTexture(0)
+		bu:SetPushedTexture(0)
+		bu.Checked:SetTexture(DB.pushedTex)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
 
-		_G[bu:GetName().."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-		bu.bg = B.CreateBDFrame(bu, .25)
+		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(x1, x2, y1, y2)
+		B.CreateBDFrame(bu, .25)
 	end
-
-	hooksecurefunc("PetStable_Update", function()
-		for i = 1, 4 do
-			local bu = _G["PetStableStabledPet"..i]
-			if i <= GetNumStableSlots() then
-				bu.bg:SetBackdropBorderColor(0, 0, 0)
-			else
-				bu.bg:SetBackdropBorderColor(1, 0, 0)
-			end
-		end
-	end)
 end)
