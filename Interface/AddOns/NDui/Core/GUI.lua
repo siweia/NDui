@@ -515,7 +515,8 @@ G.DefaultSettings = {
 		--RMRune = false,
 		DBMCount = "10",
 		EasyMarkKey = 1,
-		EasyMarking = true,
+		ShowMarkerBar = 4,
+		MarkerSize = 28,
 		BlockInvite = false,
 		SendActionCD = true,
 		StatOrder = "12345",
@@ -998,6 +999,10 @@ local function updateErrorBlocker()
 	B:GetModule("Misc"):UpdateErrorBlocker()
 end
 
+local function updateMarkerGrid()
+	B:GetModule("Misc"):RaidTool_UpdateGrid()
+end
+
 local function updateMaxZoomLevel()
 	B:GetModule("Misc"):UpdateMaxZoomLevel()
 end
@@ -1261,6 +1266,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "Misc", "RMRune", L["Runes Check"].."*", true},
 		{4, "Misc", "EasyMarkKey", L["EasyMark"].."*", nil, {"CTRL", "ALT", "SHIFT", DISABLE}, nil, L["EasyMarkTip"]},
 		{2, "Misc", "DBMCount", L["DBMCount"].."*", true, nil, nil, L["DBMCountTip"]},
+		{4, "Misc", "ShowMarkerBar", L["ShowMarkerBar"].."*", nil, {L["Grids"], L["Horizontal"], L["Vertical"], DISABLE}, updateMarkerGrid, L["ShowMarkerBarTip"]},
+		{3, "Misc", "MarkerSize", L["MarkerSize"].."*", true, {20, 50, 1}, updateMarkerGrid},
 		{},--blank
 		{1, "Misc", "QuestNotification", HeaderTag..L["QuestNotification"].."*", nil, nil, updateQuestNotification},
 		{1, "Misc", "QuestProgress", L["QuestProgress"].."*"},

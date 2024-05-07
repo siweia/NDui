@@ -590,6 +590,80 @@ function M:RaidTool_EasyMarker()
 	end)
 end
 
+function M:RaidTool_WorldMarker()
+	local iconTexture = {
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_6",
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_4",
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_3",
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_7",
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_1",
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_2",
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_5",
+		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_8",
+		"Interface\\Buttons\\UI-GroupLoot-Pass-Up",
+	}
+
+	local frame = CreateFrame("Frame", "NDui_WorldMarkers", UIParent)
+	frame:SetPoint("RIGHT", -100, 0)
+	B.CreateMF(frame, nil, true)
+	B.RestoreMF(frame)
+	B.SetBD(frame)
+	frame.buttons = {}
+
+	for i = 1, 9 do
+		local button = CreateFrame("Button", nil, frame, "SecureActionButtonTemplate")
+		button:SetSize(28, 28)
+		B.PixelIcon(button, iconTexture[i], true)
+		button.Icon:SetTexture(iconTexture[i])
+
+		if i ~= 9 then
+			button:RegisterForClicks("AnyDown")
+			button:SetAttribute("type", "macro")
+			button:SetAttribute("macrotext1", format("/wm %d", i))
+			button:SetAttribute("macrotext2", format("/cwm %d", i))
+		else
+			button:SetScript("OnClick", ClearRaidMarker)
+		end
+		frame.buttons[i] = button
+	end
+
+	M:RaidTool_UpdateGrid()
+end
+
+local markerTypeToRow = {
+	[1] = 3,
+	[2] = 9,
+	[3] = 1,
+	[4] = 3,
+}
+function M:RaidTool_UpdateGrid()
+	local frame = _G["NDui_WorldMarkers"]
+	if not frame then return end
+
+	local size, margin = C.db["Misc"]["MarkerSize"], 5
+	local showType = C.db["Misc"]["ShowMarkerBar"]
+	local perRow = markerTypeToRow[showType]
+
+	for i = 1, 9 do
+		local button = frame.buttons[i]
+		button:SetSize(size, size)
+		button:ClearAllPoints()
+		if i == 1 then
+			button:SetPoint("TOPLEFT", frame, margin, -margin)
+		elseif mod(i-1, perRow) ==  0 then
+			button:SetPoint("TOP", frame.buttons[i-perRow], "BOTTOM", 0, -margin)
+		else
+			button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
+		end
+	end
+
+	local column = min(9, perRow)
+	local rows = ceil(9/perRow)
+	frame:SetWidth(column*size + (column-1)*margin + 2*margin)
+	frame:SetHeight(size*rows + (rows-1)*margin + 2*margin)
+	frame:SetShown(showType ~= 4)
+end
+
 function M:RaidTool_Misc()
 	-- UIWidget reanchor
 	if not UIWidgetTopCenterContainerFrame:IsMovable() then -- can be movable for some addons, eg BattleInfo
@@ -610,6 +684,7 @@ function M:RaidTool_Init()
 	M:RaidTool_CreateMenu(frame)
 
 	M:RaidTool_EasyMarker()
+	M:RaidTool_WorldMarker()
 	M:RaidTool_Misc()
 end
 M:RegisterMisc("RaidTool", M.RaidTool_Init)
