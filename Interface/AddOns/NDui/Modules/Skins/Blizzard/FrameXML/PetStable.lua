@@ -6,6 +6,8 @@ tinsert(C.defaultThemes, function()
 
 	local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
+	if not PetStableBottomInset then return end
+
 	PetStableBottomInset:Hide()
 	PetStableLeftInset:Hide()
 	PetStableFrameModelBg:Hide()
