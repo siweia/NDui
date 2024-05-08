@@ -19,7 +19,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	B.ReskinTrimScroll(PVPHonorFrame.bgTypeScrollBar)
+	B.StripTextures(PVPHonorFrame.bgTypeScrollBar) -- skin this would stop from queue
 	B.ReskinTrimScroll(PVPHonorFrameInfoScrollFrame.ScrollBar)
 	if PVPHonorFrameInfoScrollFrameScrollBar then
 		PVPHonorFrameInfoScrollFrameScrollBar:SetAlpha(0)
@@ -66,4 +66,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	B.ReskinCheck(PVPFrame.TankIcon.checkButton)
+	B.ReskinCheck(PVPFrame.HealerIcon.checkButton)
+	B.ReskinCheck(PVPFrame.DPSIcon.checkButton)
 end)
