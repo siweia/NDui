@@ -256,6 +256,7 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Reputation Frame
+	ReputationDetailFrame:ClearAllPoints()
 	ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 3, -28)
 
 	local function updateReputationBars(self)
