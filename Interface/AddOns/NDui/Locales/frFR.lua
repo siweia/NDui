@@ -921,3 +921,5 @@ L["GlowMode"] = "Button Glow Mode" -- need translation
 L["Spacing"] = "Spacing" -- need translation
 L["AddPower"] = "Additional Power" -- need translation
 L["AddPowerTip"] = "|nShow additional powerbar for classes like Shadow Priest and Fural Druid." -- need translation
+L["AuraWatch MinCD"] = "Min Cooldown" -- need translation
+L["MinCDTip"] = "|nThe Spell cooldown only visible when its cooldown greater then the second value." -- need translation
