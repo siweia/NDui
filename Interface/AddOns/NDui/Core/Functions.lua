@@ -1586,18 +1586,11 @@ do
 		self:SetTexCoord(0, 1, 0, 1)
 	end
 
-	function B:ReskinRole(role)
+	function B:ReskinRole()
 		if self.background then self.background:SetTexture("") end
 
 		local cover = self.cover or self.Cover
 		if cover then cover:SetTexture("") end
-
-		local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
-		if texture then
-			texture:SetTexture(DB.rolesTex)
-			texture:SetTexCoord(B.GetRoleTexCoord(role))
-		end
-		self.bg = B.CreateBDFrame(self)
 
 		local checkButton = self.checkButton or self.CheckButton or self.CheckBox
 		if checkButton then
