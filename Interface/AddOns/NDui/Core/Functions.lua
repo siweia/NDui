@@ -1541,19 +1541,16 @@ do
 	end
 
 	-- Role Icons
-	function B:GetRoleTex()
-		if self == "TANK" then
-			return DB.tankTex
-		elseif self == "DPS" or self == "DAMAGER" then
-			return DB.dpsTex
-		elseif self == "HEALER" then
-			return DB.healTex
-		end
-	end
+	local GroupRoleTex = {
+		TANK = "groupfinder-icon-role-micro-tank",
+		HEALER = "groupfinder-icon-role-micro-heal",
+		DAMAGER = "groupfinder-icon-role-micro-dps",
+		DPS = "groupfinder-icon-role-micro-dps",
+	}
 
 	function B:ReskinSmallRole(role)
-		self:SetTexture(B.GetRoleTex(role))
 		self:SetTexCoord(0, 1, 0, 1)
+		self:SetAtlas(GroupRoleTex[role])
 	end
 
 	function B:ReskinRole()
