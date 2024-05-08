@@ -110,7 +110,7 @@ function TT:InsertRoleFrame(role)
 		f:SetSize(18, 18)
 		self.roleFrame = f
 	end
-	self.roleFrame:SetTexture(B.GetRoleTex(role))
+	B.ReskinSmallRole(self.roleFrame, role)
 	self.roleFrame:Show()
 end
 

@@ -78,6 +78,7 @@ local list = {
 		{AuraID = 423611, UnitID = "player"},	-- 灵魂燃烧
 		{AuraID = 429262, UnitID = "player"},	-- 水润滋养
 		{AuraID = 417452, UnitID = "player"},	-- 增速沙漏
+		{AuraID = 394456, UnitID = "player", Value = true},	-- 巢穴守护者的屏障
 		-- 盟约，TODO: 部分已被整合进天赋，待整理
 		{AuraID = 331937, UnitID = "player", Flash = true},	-- 沉醉
 		{AuraID = 354053, UnitID = "player", Flash = true, Text = L["Crit"]}, -- 致命缺陷，暴击
@@ -266,6 +267,7 @@ local list = {
 		{AuraID = 384686, UnitID = "target", Flash = true},	-- 能量涌动，狙击战
 		{AuraID = 376781, UnitID = "target", Flash = true},	-- 火焰风暴，学院
 		{AuraID = 388084, UnitID = "target", Flash = true},	-- 冰川护盾，碧蓝
+		{AuraID = 396361, UnitID = "target", Value = true},	-- 晶化，碧蓝
 		{AuraID = 113315, UnitID = "target", Stack = 7, Flash = true},	-- 强烈，青龙寺
 		{AuraID = 113309, UnitID = "target", Flash = true},	-- 至高能量，青龙寺
 		{AuraID = 117665, UnitID = "target", Flash = true},	-- 凡尘之羁，青龙寺

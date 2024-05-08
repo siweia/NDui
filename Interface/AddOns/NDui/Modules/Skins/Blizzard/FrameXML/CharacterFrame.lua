@@ -32,6 +32,16 @@ function B:ReskinIconSelector()
 	end)
 end
 
+function B:ReskinModelControl()
+	for i = 1, 5 do
+		local button = select(i, self.ControlFrame:GetChildren())
+		if button.NormalTexture then
+			button.NormalTexture:SetAlpha(0)
+			button.PushedTexture:SetAlpha(0)
+		end
+	end
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -51,6 +61,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
+	B.ReskinModelControl(CharacterModelScene)
 	CharacterModelScene:DisableDrawLayer("BACKGROUND")
 	CharacterModelScene:DisableDrawLayer("BORDER")
 	CharacterModelScene:DisableDrawLayer("OVERLAY")
@@ -245,6 +256,7 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Reputation Frame
+	ReputationDetailFrame:ClearAllPoints()
 	ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 3, -28)
 
 	local function updateReputationBars(self)

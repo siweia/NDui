@@ -32,5 +32,7 @@ C.themes["Blizzard_StableUI"] = function()
 				end
 			end)
 		end
+
+		B.ReskinModelControl(modelScene)
 	end
 end

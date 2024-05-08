@@ -62,7 +62,7 @@ local roleOrder = {
 	["HEALER"] = 2,
 	["DAMAGER"] = 3,
 }
-local roleTexes = {DB.tankTex, DB.healTex, DB.dpsTex}
+local indexToRole = {"TANK", "HEALER", "DAMAGER"}
 
 local function sortRoleOrder(a, b)
 	if a and b then
@@ -126,6 +126,51 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 				icon:SetPoint("RIGHT", self.Icons[i-1], "LEFT", 2, 0)
 			end
 			icon:SetSize(26, 26)
+			icon.ClassCircle:SetSize(26, 26)
+
+			icon.RoleIcon:ClearAllPoints()
+			icon.RoleIcon:SetSize(16, 16)
+			icon.RoleIcon:SetPoint("TOPLEFT", icon, -3, 3)
+
+			icon.leader = self:CreateTexture(nil, "OVERLAY", nil, 1)
+			icon.leader:SetSize(14, 9)
+			icon.leader:SetPoint("TOP", icon, 4, 4)
+			icon.leader:SetAtlas("groupfinder-icon-leader")
+			icon.leader:SetRotation(rad(-15))
+		end
+
+		if i <= numPlayers then
+			icon.leader:SetDesaturated(disabled)
+			icon.leader:SetAlpha(disabled and .5 or 1)
+		end
+		icon.leader:Hide()
+	end
+
+	local iconIndex = numPlayers
+	for i = 1, #roleCache do
+		local roleInfo = roleCache[i]
+		if roleInfo then
+			local icon = self.Icons[iconIndex]
+			icon.ClassCircle:SetAtlas(LFG_LIST_GROUP_DATA_ATLASES[roleInfo[2]])
+			icon.leader:SetShown(roleInfo[3])
+			iconIndex = iconIndex - 1
+		end
+	end
+end
+
+function M:ReplaceGroupRoles_OLD(numPlayers, _, disabled)
+	UpdateGroupRoles(self)
+
+	for i = 1, 5 do
+		local icon = self.Icons[i]
+		if not icon.role then
+			if i == 1 then
+				icon:SetPoint("RIGHT", -5, -2)
+			else
+				icon:ClearAllPoints()
+				icon:SetPoint("RIGHT", self.Icons[i-1], "LEFT", 2, 0)
+			end
+			icon:SetSize(26, 26)
 
 			icon.role = self:CreateTexture(nil, "OVERLAY", nil, 2)
 			icon.role:SetSize(16, 16)
@@ -156,7 +201,7 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 		if roleInfo then
 			local icon = self.Icons[iconIndex]
 			icon:SetAtlas(LFG_LIST_GROUP_DATA_ATLASES[roleInfo[2]])
-			icon.role:SetTexture(roleTexes[roleInfo[1]])
+			B.ReskinSmallRole(icon.role, indexToRole[roleInfo[1]])
 			icon.leader:SetShown(roleInfo[3])
 			iconIndex = iconIndex - 1
 		end
@@ -469,7 +514,11 @@ function M:QuickJoin()
 	hooksecurefunc("StaticPopup_Show", M.HookDialogOnShow)
 	hooksecurefunc("LFGListInviteDialog_Show", M.HookDialogOnShow)
 
-	hooksecurefunc("LFGListGroupDataDisplayEnumerate_Update", M.ReplaceGroupRoles)
+	if DB.isNewPatch then
+		hooksecurefunc("LFGListGroupDataDisplayEnumerate_Update", M.ReplaceGroupRoles)
+	else
+		hooksecurefunc("LFGListGroupDataDisplayEnumerate_Update", M.ReplaceGroupRoles_OLD)
+	end
 	hooksecurefunc("LFGListSearchEntry_Update", M.ShowLeaderOverallScore)
 
 	M:AddAutoAcceptButton()

@@ -49,6 +49,7 @@ tinsert(C.defaultThemes, function()
 	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
 
 	B.ReskinCheck(TransmogAndMountDressupFrame.ShowMountCheckButton)
+	B.ReskinModelControl(DressUpFrame.ModelScene)
 
 	-- SideDressUp
 
