@@ -62,7 +62,7 @@ local roleOrder = {
 	["HEALER"] = 2,
 	["DAMAGER"] = 3,
 }
-local roleTexes = {DB.tankTex, DB.healTex, DB.dpsTex}
+local indexToRole = {"TANK", "HEALER", "DAMAGER"}
 
 local function sortRoleOrder(a, b)
 	if a and b then
@@ -201,7 +201,7 @@ function M:ReplaceGroupRoles_OLD(numPlayers, _, disabled)
 		if roleInfo then
 			local icon = self.Icons[iconIndex]
 			icon:SetAtlas(LFG_LIST_GROUP_DATA_ATLASES[roleInfo[2]])
-			icon.role:SetTexture(roleTexes[roleInfo[1]])
+			B.ReskinSmallRole(icon.role, indexToRole[roleInfo[1]])
 			icon.leader:SetShown(roleInfo[3])
 			iconIndex = iconIndex - 1
 		end
