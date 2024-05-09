@@ -5,7 +5,7 @@ local function reskinHelpTips(self)
 	for frame in self.framePool:EnumerateActive() do
 		if not frame.styled then
 			if frame.OkayButton then B.Reskin(frame.OkayButton) end
-			if frame.CloseButton then B.ReskinClose(frame.CloseButton) end
+			--if frame.CloseButton then B.ReskinClose(frame.CloseButton) end
 
 			frame.styled = true
 		end
