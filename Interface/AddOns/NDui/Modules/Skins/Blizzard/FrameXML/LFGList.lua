@@ -70,11 +70,11 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(searchPanel.SearchBox)
 	searchPanel.SearchBox:SetHeight(22)
 	B.ReskinFilterButton(searchPanel.FilterButton)
-	if DB.isNewPatch then
-		B.ReskinFilterReset(searchPanel.FilterButton.ResetToDefaults)
-		B.ReskinEditBox(MinRatingFrame.MinRating)
-		MinRatingFrame.MinRating:SetHeight(18)
-	end
+
+	B.ReskinFilterReset(searchPanel.FilterButton.ResetToDefaults)
+	B.ReskinEditBox(MinRatingFrame.MinRating)
+	MinRatingFrame.MinRating:SetHeight(18)
+
 
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")

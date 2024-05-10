@@ -52,8 +52,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	if DB.isNewPatch then
-
 	if ScenarioQueueFrame then
 		B.StripTextures(ScenarioFinderFrame)
 		ScenarioQueueFrameBackground:SetAlpha(0)
@@ -63,7 +61,5 @@ tinsert(C.defaultThemes, function()
 		if ScenarioQueueFrameRandomScrollFrameScrollBar then
 			ScenarioQueueFrameRandomScrollFrameScrollBar:SetAlpha(0)
 		end
-	end
-
 	end
 end)

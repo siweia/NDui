@@ -29,7 +29,6 @@ local frames = {
 	["OpenMailFrame"] = false,
 	["PaperDollFrame"] = true,
 	["PetitionFrame"] = false,
-	["PetStableFrame"] = false,
 	["PVEFrame"] = false,
 	["QuestFrame"] = false,
 	["RaidParentFrame"] = false,
