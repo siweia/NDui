@@ -168,94 +168,6 @@ function M:ReplaceFindGroupButton()
 	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(bu) end
 end
 
-function M:AddDungeonsFilter()
-	local mapData = {
-		[0] = {mapID = 399, aID = 1176}, -- 红玉新生法池
-		[1] = {mapID = 400, aID = 1184}, -- 诺库德狙击战
-		[2] = {mapID = 401, aID = 1180}, -- 碧蓝魔馆
-		[3] = {mapID = 402, aID = 1160}, -- 艾杰斯亚学院
-		[4] = {mapID = 405, aID = 1164}, -- 蕨皮山谷
-		[5] = {mapID = 406, aID = 1168}, -- 注能大厅
-		[6] = {mapID = 404, aID = 1172}, -- 奈萨鲁斯
-		[7] = {mapID = 403, aID = 1188}, -- 奥丹姆：提尔的遗产
-	}
-
-	local function GetDungeonNameByID(mapID)
-		local name = C_ChallengeMode_GetMapUIInfo(mapID)
-		name = gsub(name, ".-"..HEADER_COLON, "") -- abbr Tazavesh
-		return name
-	end
-
-	local allOn
-	local filterIDs = {}
-
-	local function toggleAll()
-		allOn = not allOn
-		for i = 0, 7 do
-			mapData[i].isOn = allOn
-			filterIDs[mapData[i].aID] = allOn
-		end
-		UIDropDownMenu_Refresh(B.EasyMenu)
-		LFGListSearchPanel_DoSearch(searchPanel)
-	end
-
-	local menuList = {
-		[1] = {text = _G.SPECIFIC_DUNGEONS, isTitle = true, notCheckable = true},
-		[2] = {text = _G.SWITCH, notCheckable = true, keepShownOnClick = true, func = toggleAll},
-	}
-
-	local function onClick(self, index, aID)
-		allOn = true
-		mapData[index].isOn = not mapData[index].isOn
-		filterIDs[aID] = mapData[index].isOn
-		LFGListSearchPanel_DoSearch(searchPanel)
-	end
-
-	local function onCheck(self)
-		return mapData[self.arg1].isOn
-	end
-
-	for i = 0, 7 do
-		local value = mapData[i]
-		menuList[i+3] = {
-			text = GetDungeonNameByID(value.mapID),
-			arg1 = i,
-			arg2 = value.aID,
-			func = onClick,
-			checked = onCheck,
-			keepShownOnClick = true,
-		}
-		filterIDs[value.aID] = false
-	end
-
-	searchPanel.RefreshButton:HookScript("OnMouseDown", function(self, btn)
-		if btn ~= "RightButton" then return end
-		EasyMenu(menuList, B.EasyMenu, self, 25, 50, "MENU")
-	end)
-
-	searchPanel.RefreshButton:HookScript("OnEnter", function()
-		GameTooltip:AddLine(DB.RightButton.._G.SPECIFIC_DUNGEONS)
-		GameTooltip:Show()
-	end)
-
-	hooksecurefunc("LFGListUtil_SortSearchResults", function(results)
-		if categorySelection.selectedCategory ~= 2 then return end
-		if not allOn then return end
-
-		for i = #results, 1, -1 do
-			local resultID = results[i]
-			local searchResultInfo = C_LFGList_GetSearchResultInfo(resultID)
-			local aID = searchResultInfo and searchResultInfo.activityID
-			if aID and not filterIDs[aID] then
-				tremove(results, i)
-			end
-		end
-		searchPanel.totalResults = #results
-
-		return true
-	end)
-end
-
 local function clickSortButton(self)
 	self.__owner.Sorting.Expression:SetText(self.sortStr)
 	self.__parent.RefreshButton:Click()
@@ -358,7 +270,6 @@ function M:QuickJoin()
 
 	M:AddAutoAcceptButton()
 	M:ReplaceFindGroupButton()
-	M:AddDungeonsFilter()
 	M:AddPGFSortingExpression()
 	M:FixListingTaint()
 end
