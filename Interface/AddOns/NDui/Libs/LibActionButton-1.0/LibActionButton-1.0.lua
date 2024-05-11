@@ -2180,7 +2180,7 @@ else
 			-- based on ActionButton_UpdateFlyout in ActionButton.lua
 			local actionType = GetActionInfo(self._state_action)
 			if actionType == "flyout" then
-				local isMouseOverButton =  GetMouseFocus() == self;
+				local isMouseOverButton =  false;
 
 				local isButtonDown
 				if (isButtonDownOverride ~= nil) then
@@ -2371,9 +2371,9 @@ end
 
 Item.HasAction               = function(self) return true end
 Item.GetActionText           = function(self) return "" end
-Item.GetTexture              = function(self) return GetItemIcon(self._state_action) end
+Item.GetTexture              = function(self) return C_Item.GetItemIconByID(self._state_action) end
 Item.GetCharges              = function(self) return nil end
-Item.GetCount                = function(self) return GetItemCount(self._state_action, nil, true) end
+Item.GetCount                = function(self) return C_Item.GetItemCount(self._state_action, nil, true) end
 Item.GetCooldown             = function(self) return GetItemCooldown(getItemId(self._state_action)) end
 Item.IsAttack                = function(self) return nil end
 Item.IsEquipped              = function(self) return IsEquippedItem(self._state_action) end

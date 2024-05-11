@@ -111,7 +111,7 @@ tinsert(C.defaultThemes, function()
 
 	local function UpdateCosmetic(self)
 		local itemLink = GetInventoryItemLink("player", self:GetID())
-		self.IconOverlay:SetShown(itemLink and IsCosmeticItem(itemLink))
+		self.IconOverlay:SetShown(itemLink and C_Item.IsCosmeticItem(itemLink))
 	end
 
 	local slots = {
@@ -256,8 +256,10 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Reputation Frame
-	ReputationDetailFrame:ClearAllPoints()
-	ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 3, -28)
+	if not DB.isWW then
+		ReputationDetailFrame:ClearAllPoints()
+		ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 3, -28)
+	end
 
 	local function updateReputationBars(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
@@ -283,19 +285,30 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinTrimScroll(ReputationFrame.ScrollBar)
 
-	B.StripTextures(ReputationDetailFrame)
-	B.SetBD(ReputationDetailFrame)
-	B.ReskinClose(ReputationDetailCloseButton)
-	B.ReskinCheck(ReputationDetailInactiveCheckBox)
-	B.ReskinCheck(ReputationDetailMainScreenCheckBox)
-	B.Reskin(ReputationDetailViewRenownButton)
+	if DB.isWW then
+		local detailFrame = ReputationFrame.ReputationDetailFrame
+		B.StripTextures(detailFrame)
+		B.SetBD(detailFrame)
+		B.ReskinClose(detailFrame.CloseButton)
+		B.ReskinCheck(detailFrame.AtWarCheckBox)
+		B.ReskinCheck(detailFrame.MakeInactiveCheckBox)
+		B.ReskinCheck(detailFrame.WatchFactionCheckBox)
+		B.Reskin(detailFrame.ViewRenownButton)
+	else
+		B.StripTextures(ReputationDetailFrame)
+		B.SetBD(ReputationDetailFrame)
+		B.ReskinClose(ReputationDetailCloseButton)
+		B.ReskinCheck(ReputationDetailInactiveCheckBox)
+		B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+		B.Reskin(ReputationDetailViewRenownButton)
 
-	local atWarCheck = ReputationDetailAtWarCheckBox
-	B.ReskinCheck(atWarCheck)
-	local atWarCheckTex = atWarCheck:GetCheckedTexture()
-	atWarCheckTex:ClearAllPoints()
-	atWarCheckTex:SetSize(26, 26)
-	atWarCheckTex:SetPoint("CENTER")
+		local atWarCheck = ReputationDetailAtWarCheckBox
+		B.ReskinCheck(atWarCheck)
+		local atWarCheckTex = atWarCheck:GetCheckedTexture()
+		atWarCheckTex:ClearAllPoints()
+		atWarCheckTex:SetSize(26, 26)
+		atWarCheckTex:SetPoint("CENTER")
+	end
 
 	-- Token frame
 	if TokenFramePopup.CloseButton then -- blizz typo by parentKey "CloseButton" into "$parent.CloseButton"

@@ -55,6 +55,7 @@ end
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if DB.isWW then return end
 
 	B.ReskinPortraitFrame(SpellBookFrame)
 	SpellBookFrame:DisableDrawLayer("BACKGROUND")

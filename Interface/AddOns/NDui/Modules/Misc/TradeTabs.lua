@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
-local GetSpellCooldown, GetSpellInfo, GetItemCooldown, GetItemCount, GetItemInfo = GetSpellCooldown, GetSpellInfo, GetItemCooldown, GetItemCount, GetItemInfo
+local GetSpellCooldown, GetSpellInfo, GetItemCooldown = GetSpellCooldown, GetSpellInfo, GetItemCooldown
 local IsPassiveSpell, IsCurrentSpell, IsPlayerSpell, UseItemByName = IsPassiveSpell, IsCurrentSpell, IsPlayerSpell, UseItemByName
 local GetProfessions, GetProfessionInfo, GetSpellBookItemInfo = GetProfessions, GetProfessionInfo, GetSpellBookItemInfo
 local PlayerHasToy, C_ToyBox_IsToyUsable, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.IsToyUsable, C_ToyBox.GetToyInfo
@@ -61,7 +61,7 @@ function M:UpdateProfessions()
 	if isCook and PlayerHasToy(CHEF_HAT) and C_ToyBox_IsToyUsable(CHEF_HAT) then
 		M:TradeTabs_Create(nil, CHEF_HAT)
 	end
-	if GetItemCount(THERMAL_ANVIL) > 0 then
+	if C_Item.GetItemCount(THERMAL_ANVIL) > 0 then
 		M:TradeTabs_Create(nil, nil, THERMAL_ANVIL)
 	end
 end
@@ -109,7 +109,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	if toyID then
 		_, name, texture = C_ToyBox_GetToyInfo(toyID)
 	elseif itemID then
-		name, _, _, _, _, _, _, _, _, texture = GetItemInfo(itemID)
+		name, _, _, _, _, _, _, _, _, texture = C_Item.GetItemInfo(itemID)
 	else
 		name, _, texture = GetSpellInfo(spellID)
 	end

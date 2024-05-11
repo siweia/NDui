@@ -38,19 +38,17 @@ tinsert(C.defaultThemes, function()
 		CompactRaidFrameManagerDisplayFrameEditMode,
 	}
 	for _, button in pairs(buttons) do
-		for i = 1, 9 do
-			select(i, button:GetRegions()):SetAlpha(0)
-		end
+		B.StripTextures(button, 0)
 		B.Reskin(button)
 	end
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
 
-	for i = 1, 8 do
-		select(i, CompactRaidFrameManager:GetRegions()):SetAlpha(0)
+	B.StripTextures(CompactRaidFrameManager, 0)
+	if not DB.isWW then
+		select(1, CompactRaidFrameManagerDisplayFrameFilterOptions:GetRegions()):SetAlpha(0)
+		select(4, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
 	end
-	select(1, CompactRaidFrameManagerDisplayFrameFilterOptions:GetRegions()):SetAlpha(0)
 	select(1, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
-	select(4, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
 
 	local bd = B.SetBD(CompactRaidFrameManager)
 	bd:SetPoint("TOPLEFT")

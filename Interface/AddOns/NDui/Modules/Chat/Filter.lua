@@ -7,7 +7,8 @@ local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
 local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
 local Ambiguate, UnitIsUnit, GetTime, SetCVar = Ambiguate, UnitIsUnit, GetTime, SetCVar
-local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
+local GetItemInfo = C_Item.GetItemInfo or GetItemInfo
+local GetItemStats = C_Item.GetItemStats or GetItemStats
 local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
 
 local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6

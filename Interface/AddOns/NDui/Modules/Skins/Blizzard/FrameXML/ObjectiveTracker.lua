@@ -169,6 +169,7 @@ local function ReskinMawBuffsContainer(container)
 end
 
 tinsert(C.defaultThemes, function()
+	if DB.isWW then return end
 	if IsAddOnLoaded("!KalielsTracker") then return end
 
 	-- QuestIcons

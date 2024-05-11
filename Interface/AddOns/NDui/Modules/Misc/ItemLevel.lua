@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 local TT = B:GetModule("Tooltip")
 
 local pairs, select, next, type, unpack = pairs, select, next, type, unpack
-local UnitGUID, GetItemInfo, GetSpellInfo = UnitGUID, GetItemInfo, GetSpellInfo
+local UnitGUID, GetItemInfo, GetSpellInfo = UnitGUID, C_Item.GetItemInfo, GetSpellInfo
 local GetContainerItemLink = C_Container.GetContainerItemLink
 local GetInventoryItemLink = GetInventoryItemLink
 local EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation = EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation

@@ -282,6 +282,7 @@ M:RegisterMisc("ExpRep", M.Expbar)
 
 -- Paragon reputation info
 function M:ParagonReputationSetup()
+	if DB.isWW then return end
 	if not C.db["Misc"]["ParagonRep"] then return end
 
 	hooksecurefunc("ReputationFrame_InitReputationRow", function(factionRow, elementData)

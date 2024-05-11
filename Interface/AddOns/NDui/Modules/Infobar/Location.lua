@@ -8,7 +8,8 @@ local mapModule = B:GetModule("Maps")
 
 local format, unpack = string.format, unpack
 local WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat = WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat
-local GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance = GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance
+local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
+local GetSubZoneText, GetZoneText, IsInInstance = GetSubZoneText, GetZoneText, IsInInstance
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
 local zoneInfo = {

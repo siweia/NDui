@@ -53,13 +53,16 @@ tinsert(C.defaultThemes, function()
 
 	local QuestMapFrame = QuestMapFrame
 	QuestMapFrame.VerticalSeparator:SetAlpha(0)
-	QuestMapFrame.Background:SetAlpha(0)
 
 	local QuestScrollFrame = QuestScrollFrame
-	QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
-	QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)
 	ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
+
+	if not DB.isWW then
+		QuestMapFrame.Background:SetAlpha(0)
+		QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
+		QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
+	end
 
 	local campaignOverview = QuestMapFrame.CampaignOverview
 	campaignOverview.BG:SetAlpha(0)
@@ -75,16 +78,19 @@ tinsert(C.defaultThemes, function()
 	local CompleteQuestFrame = DetailsFrame.CompleteQuestFrame
 
 	B.StripTextures(DetailsFrame)
-	B.StripTextures(DetailsFrame.RewardsFrame)
 	B.StripTextures(DetailsFrame.ShareButton)
 	DetailsFrame.Bg:SetAlpha(0)
 	DetailsFrame.SealMaterialBG:SetAlpha(0)
 
-	B.Reskin(DetailsFrame.BackButton)
 	B.Reskin(DetailsFrame.AbandonButton)
 	B.Reskin(DetailsFrame.ShareButton)
 	B.Reskin(DetailsFrame.TrackButton)
 	B.ReskinTrimScroll(QuestMapDetailsScrollFrame.ScrollBar)
+
+	if not DB.isWW then
+		B.StripTextures(DetailsFrame.RewardsFrame)
+		B.Reskin(DetailsFrame.BackButton)
+	end
 
 	DetailsFrame.AbandonButton:ClearAllPoints()
 	DetailsFrame.AbandonButton:SetPoint("BOTTOMLEFT", DetailsFrame, -1, 0)
@@ -115,7 +121,9 @@ tinsert(C.defaultThemes, function()
 
 		for button in QuestScrollFrame.titleFramePool:EnumerateActive() do
 			if not button.styled then
-				button.Check:SetAtlas("checkmark-minimal")
+				if button.Check then -- isWW removed?
+					button.Check:SetAtlas("checkmark-minimal")
+				end
 				button.styled = true
 			end
 		end
@@ -136,9 +144,11 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Complete quest frame
-	B.StripTextures(CompleteQuestFrame)
-	B.StripTextures(CompleteQuestFrame.CompleteButton)
-	B.Reskin(CompleteQuestFrame.CompleteButton)
+	if not DB.isWW then
+		B.StripTextures(CompleteQuestFrame)
+		B.StripTextures(CompleteQuestFrame.CompleteButton)
+		B.Reskin(CompleteQuestFrame.CompleteButton)
+	end
 
 	-- [[ Quest log popup detail frame ]]
 

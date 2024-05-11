@@ -9,7 +9,7 @@ local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable 
 local pairs, select, tinsert, tremove, wipe, strfind = pairs, select, table.insert, table.remove, table.wipe, strfind
 local InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
 local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell = GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell
-local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
+local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, C_Item.GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
 -- DataConvert
 local function DataAnalyze(v)
@@ -715,7 +715,7 @@ end
 
 -- Event
 function A.AuraWatch_OnEvent(event, ...)
-	if not C.db["AuraWatch"]["Enable"] then
+	if DB.isWW or not C.db["AuraWatch"]["Enable"] then
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)

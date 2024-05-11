@@ -12,7 +12,7 @@ local GetTrackingInfo, GetInstanceInfo, GetQuestID = GetTrackingInfo, GetInstanc
 local GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest = GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest
 local IsQuestCompletable, GetNumQuestItems, GetQuestItemLink, QuestIsFromAreaTrigger = IsQuestCompletable, GetNumQuestItems, GetQuestItemLink, QuestIsFromAreaTrigger
 local QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest, AcknowledgeAutoAcceptQuest = QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest, AcknowledgeAutoAcceptQuest
-local GetNumQuestChoices, GetQuestReward, GetItemInfo, GetQuestItemInfo = GetNumQuestChoices, GetQuestReward, GetItemInfo, GetQuestItemInfo
+local GetNumQuestChoices, GetQuestReward, GetQuestItemInfo = GetNumQuestChoices, GetQuestReward, GetQuestItemInfo
 local GetNumAvailableQuests, GetAvailableQuestInfo, SelectAvailableQuest = GetNumAvailableQuests, GetAvailableQuestInfo, SelectAvailableQuest
 local GetNumAutoQuestPopUps, GetAutoQuestPopUp, ShowQuestOffer, ShowQuestComplete = GetNumAutoQuestPopUps, GetAutoQuestPopUp, ShowQuestOffer, ShowQuestComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
@@ -416,7 +416,7 @@ QuickQuest:Register("QUEST_COMPLETE", function()
 		for index = 1, choices do
 			local link = GetQuestItemLink("choice", index)
 			if link then
-				local value = select(11, GetItemInfo(link))
+				local value = select(11, C_Item.GetItemInfo(link))
 				local itemID = GetItemInfoFromHyperlink(link)
 				value = cashRewards[itemID] or value
 
