@@ -9,7 +9,7 @@ local info = module:RegisterInfobar("Fps", C.Infobar.SystemPos)
 local ipairs, tinsert, wipe, sort = ipairs, tinsert, wipe, sort
 local format, floor, min, max = format, floor, min, max
 local GetFramerate, GetTime = GetFramerate, GetTime
-local GetNumAddOns, GetAddOnInfo, GetCVarBool, SetCVar = GetNumAddOns, GetAddOnInfo, GetCVarBool, SetCVar
+local GetCVarBool, SetCVar = GetCVarBool, SetCVar
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
 local UpdateAddOnMemoryUsage, GetAddOnMemoryUsage = UpdateAddOnMemoryUsage, GetAddOnMemoryUsage
 local IsShiftKeyDown = IsShiftKeyDown
@@ -51,12 +51,12 @@ end
 
 local infoTable = {}
 local function BuildAddonList()
-	local numAddons = GetNumAddOns()
+	local numAddons = C_AddOns.GetNumAddOns()
 	if numAddons == #infoTable then return end
 
 	wipe(infoTable)
 	for i = 1, numAddons do
-		local _, title, _, loadable = GetAddOnInfo(i)
+		local _, title, _, loadable = C_AddOns.GetAddOnInfo(i)
 		if loadable then
 			tinsert(infoTable, {i, title, 0, 0})
 		end

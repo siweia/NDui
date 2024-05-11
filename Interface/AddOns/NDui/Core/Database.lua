@@ -26,6 +26,13 @@ if DB.isWW then
 		--name, rank, icon, castTime, minRange, maxRange, spellID, originalIcon
 		return spellInfo.name, nil, spellInfo.iconID, spellInfo.castTime, spellInfo.minRange, spellInfo.maxRange, spellInfo.spellID, spellInfo.originalIconID
 	end
+
+	GetSpellCooldown = function(spellID)
+		local cd = C_Spell.GetSpellCooldown(spellID)
+		if not cd then return end
+		--start, duration, enabled, modRate
+		return cd.startTime, cd.duration, cd.isEnabled, cd.modRate
+	end
 end
 
 -- Colors

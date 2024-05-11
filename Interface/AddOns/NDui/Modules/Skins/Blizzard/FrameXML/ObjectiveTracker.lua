@@ -169,8 +169,23 @@ local function ReskinMawBuffsContainer(container)
 end
 
 tinsert(C.defaultThemes, function()
-	if DB.isWW then return end
 	if C_AddOns.IsAddOnLoaded("!KalielsTracker") then return end
+
+	if DB.isWW then -- TODO
+		--[[
+		SCENARIO_TRACKER_MODULE = ScenarioObjectiveTracker
+		UI_WIDGET_TRACKER_MODULE = UIWidgetObjectiveTracker
+		CAMPAIGN_QUEST_TRACKER_MODULE = CampaignQuestObjectiveTracker
+		QUEST_TRACKER_MODULE = QuestObjectiveTracker
+		ADVENTURE_TRACKER_MODULE = AdventureObjectiveTracker
+		ACHIEVEMENT_TRACKER_MODULE = AchievementObjectiveTracker
+		MONTHLY_ACTIVITIES_TRACKER_MODULE = MonthlyActivitiesObjectiveTracker
+		PROFESSION_RECIPE_TRACKER_MODULE = ProfessionsRecipeTracker
+		BONUS_OBJECTIVE_TRACKER_MODULE = BonusObjectiveTracker
+		WORLD_QUEST_TRACKER_MODULE = WorldQuestObjectiveTracker
+		]]
+		return
+	end
 
 	-- QuestIcons
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)

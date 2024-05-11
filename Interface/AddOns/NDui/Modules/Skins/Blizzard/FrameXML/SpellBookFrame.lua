@@ -47,7 +47,7 @@ local function handleSkillButton(button)
 	button:SetPushedTexture(0)
 	button.IconTexture:SetInside()
 	button.bg = B.ReskinIcon(button.IconTexture)
-	button.highlightTexture:SetInside(bg)
+	button.highlightTexture:SetInside(button.bg)
 
 	local nameFrame = _G[button:GetName().."NameFrame"]
 	if nameFrame then nameFrame:Hide() end

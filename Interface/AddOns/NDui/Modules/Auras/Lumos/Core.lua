@@ -169,7 +169,6 @@ end
 
 function A:CreateLumos(self)
 	if not A.ChantLumos then return end
-	if DB.isWW then return end
 
 	self.lumos = {}
 	self.lumos.onFire = C.db["Nameplate"]["PPOnFire"]

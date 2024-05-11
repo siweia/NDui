@@ -129,7 +129,7 @@ function M:ExpBar_UpdateTooltip()
 		if IsXPUserDisabled() then GameTooltip:AddLine("|cffff0000"..XP..LOCKED) end
 	end
 
-	if GetWatchedFactionInfo() then
+	if not DB.isWW and GetWatchedFactionInfo() then
 		local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local standingtext
 		if factionID and C_Reputation_IsMajorFaction(factionID) then

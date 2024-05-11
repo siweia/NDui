@@ -470,6 +470,9 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
+	if DB.isWW then
+		B.ReskinDropDown(WardrobeCollectionFrame.ClassDropDown)
+	end
 
 	hooksecurefunc(WardrobeCollectionFrame, "SetTab", function(self, tabID)
 		for index = 1, 2 do
@@ -511,9 +514,15 @@ C.themes["Blizzard_Collections"] = function()
 			if not child.styled then
 				child.Background:Hide()
 				child.HighlightTexture:SetTexture("")
-				child.Icon:SetSize(42, 42)
-				B.ReskinIcon(child.Icon)
-				child.IconCover:SetOutside(child.Icon)
+
+				local icon = child.IconFrame and child.IconFrame.Icon or child.Icon
+				if icon then
+					icon:SetSize(42, 42)
+					B.ReskinIcon(icon)
+					if child.IconCover then
+						child.IconCover:SetOutside(icon)
+					end
+				end
 
 				child.SelectedTexture:SetDrawLayer("BACKGROUND")
 				child.SelectedTexture:SetColorTexture(cr, cg, cb, .25)

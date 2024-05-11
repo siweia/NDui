@@ -261,23 +261,70 @@ tinsert(C.defaultThemes, function()
 		ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 3, -28)
 	end
 
+	local oldAtlas = {
+		["Options_ListExpand_Right"] = 1,
+		["Options_ListExpand_Right_Expanded"] = 1,
+	}
+	local function updateCollapse(texture, atlas)
+		if (not atlas) or oldAtlas[atlas] then
+			if not texture.__owner then
+				texture.__owner = texture:GetParent()
+			end
+			if texture.__owner:IsCollapsed() then
+				texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Expand")
+			else
+				texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Collapse")
+			end
+		end
+	end
+
+	local function updateToggleCollapse(button)
+		button:SetNormalTexture(0)
+		button.__texture:DoCollapse(button:GetHeader():IsCollapsed())
+	end
+
 	local function updateReputationBars(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
-			local container = child and child.Container
-			if container and not container.styled then
-				B.StripTextures(container)
-				if container.ExpandOrCollapseButton then
-					B.ReskinCollapse(container.ExpandOrCollapseButton)
-					container.ExpandOrCollapseButton.__texture:DoCollapse(child.isCollapsed)
+			if DB.isWW then
+				if child and not child.styled then
+					if child.Right then
+						B.StripTextures(child)
+						hooksecurefunc(child.Right, "SetAtlas", updateCollapse)
+						hooksecurefunc(child.HighlightRight, "SetAtlas", updateCollapse)
+						updateCollapse(child.Right)
+						updateCollapse(child.HighlightRight)
+						B.CreateBDFrame(child, .25)
+					end
+					if child.ReputationBar then
+						B.StripTextures(child.ReputationBar)
+						child.ReputationBar:SetStatusBarTexture(DB.bdTex)
+						B.CreateBDFrame(child.ReputationBar, .25)
+					end
+					if child.ToggleCollapseButton then
+						B.ReskinCollapse(child.ToggleCollapseButton, true)
+						updateToggleCollapse(child.ToggleCollapseButton)
+						hooksecurefunc(child.ToggleCollapseButton, "RefreshIcon", updateToggleCollapse)
+					end
+	
+					child.styled = true
 				end
-				if container.ReputationBar then
-					B.StripTextures(container.ReputationBar)
-					container.ReputationBar:SetStatusBarTexture(DB.bdTex)
-					B.CreateBDFrame(container.ReputationBar, .25)
+			else
+				local container = child and child.Container
+				if container and not container.styled then
+					B.StripTextures(container)
+					if container.ExpandOrCollapseButton then
+						B.ReskinCollapse(container.ExpandOrCollapseButton)
+						container.ExpandOrCollapseButton.__texture:DoCollapse(child.isCollapsed)
+					end
+					if container.ReputationBar then
+						B.StripTextures(container.ReputationBar)
+						container.ReputationBar:SetStatusBarTexture(DB.bdTex)
+						B.CreateBDFrame(container.ReputationBar, .25)
+					end
+	
+					container.styled = true
 				end
-
-				container.styled = true
 			end
 		end
 	end
@@ -286,6 +333,8 @@ tinsert(C.defaultThemes, function()
 	B.ReskinTrimScroll(ReputationFrame.ScrollBar)
 
 	if DB.isWW then
+		B.ReskinDropDown(ReputationFrame.filterDropDown)
+
 		local detailFrame = ReputationFrame.ReputationDetailFrame
 		B.StripTextures(detailFrame)
 		B.SetBD(detailFrame)
