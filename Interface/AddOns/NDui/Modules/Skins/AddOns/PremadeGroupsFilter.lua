@@ -6,7 +6,7 @@ local TT = B:GetModule("Tooltip")
 function S:PGFSkin()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 	if not C.db["Skins"]["PGFSkin"] then return end
-	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
+	if not C_AddOns.IsAddOnLoaded("PremadeGroupsFilter") then return end
 
 	local DungeonPanel = _G.PremadeGroupsFilterDungeonPanel
 	if not DungeonPanel then return end

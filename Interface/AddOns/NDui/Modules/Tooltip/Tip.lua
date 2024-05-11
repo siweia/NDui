@@ -632,7 +632,7 @@ TT:RegisterTooltips("NDui", function()
 		end
 	end)
 
-	if IsAddOnLoaded("BattlePetBreedID") then
+	if C_AddOns.IsAddOnLoaded("BattlePetBreedID") then
 		hooksecurefunc("BPBID_SetBreedTooltip", function(parent)
 			if parent == FloatingBattlePetTooltip then
 				TT.ReskinTooltip(BPBID_BreedTooltip2)

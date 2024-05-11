@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local S = B:RegisterModule("Skins")
 
 local pairs, wipe = pairs, wipe
-local IsAddOnLoaded = IsAddOnLoaded
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 C.defaultThemes = {}
 C.themes = {}

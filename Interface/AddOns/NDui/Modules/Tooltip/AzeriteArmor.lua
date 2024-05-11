@@ -107,7 +107,7 @@ end
 
 function TT:AzeriteArmor()
 	if not C.db["Tooltip"]["AzeriteArmor"] then return end
-	if IsAddOnLoaded("AzeriteTooltip") then return end
+	if C_AddOns.IsAddOnLoaded("AzeriteTooltip") then return end
 
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.Azerite_UpdateItem)
 end

@@ -292,7 +292,7 @@ function module:ChatFilter()
 
 	hooksecurefunc(BNToastFrame, "ShowToast", self.BlockTrashClub)
 
-	if IsAddOnLoaded("EnhancedChatFilter") then return end
+	if C_AddOns.IsAddOnLoaded("EnhancedChatFilter") then return end
 
 	if C.db["Chat"]["EnableFilter"] then
 		self:UpdateFilterList()

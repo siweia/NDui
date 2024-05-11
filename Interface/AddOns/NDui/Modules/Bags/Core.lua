@@ -15,6 +15,7 @@ local SortBankBags = C_Container.SortBankBags
 local SortReagentBankBags = C_Container.SortReagentBankBags
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local sortCache = {}
 function module:ReverseSort()
@@ -1186,7 +1187,7 @@ function module:OnLogin()
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
 		elseif name == "BagStone" then
-			label = DB.isWW and C_Spell.GetSpellInfo(404861).name or GetSpellInfo(404861)
+			label = GetSpellInfo(404861)
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

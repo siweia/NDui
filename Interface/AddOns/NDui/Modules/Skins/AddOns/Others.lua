@@ -4,6 +4,7 @@ local S = B:GetModule("Skins")
 
 local _G = _G
 local strfind = strfind
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 function S:FriendGroups()

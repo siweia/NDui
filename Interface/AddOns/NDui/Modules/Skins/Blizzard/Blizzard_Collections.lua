@@ -591,7 +591,7 @@ C.themes["Blizzard_Collections"] = function()
 	-- HPetBattleAny
 	local reskinHPet
 	CollectionsJournal:HookScript("OnShow", function()
-		if not IsAddOnLoaded("HPetBattleAny") then return end
+		if not C_AddOns.IsAddOnLoaded("HPetBattleAny") then return end
 		if not reskinHPet then
 			if HPetInitOpenButton then
 				B.Reskin(HPetInitOpenButton)

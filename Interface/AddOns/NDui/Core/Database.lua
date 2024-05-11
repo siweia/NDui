@@ -13,8 +13,20 @@ DB.isNewPatch = select(4, GetBuildInfo()) >= 100207 -- 10.2.7
 DB.isWW = select(4, GetBuildInfo()) >= 110000 -- 11.0.0
 
 -- Deprecated
-GetSpellInfo = C_Spell and C_Spell.GetSpellInfo or GetSpellInfo
-IsAddOnLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded
+if DB.isWW then
+	UnitAura = function(unitToken, index, filter)
+		local auraData = C_UnitAuras.GetAuraDataByIndex(unitToken, index, filter)
+		if not auraData then return nil end
+		return AuraUtil.UnpackAuraData(auraData)
+	end
+
+	GetSpellInfo = function(spellID)
+		local spellInfo = C_Spell.GetSpellInfo(spellID)
+		if not spellInfo then return end
+		--name, rank, icon, castTime, minRange, maxRange, spellID, originalIcon
+		return spellInfo.name, nil, spellInfo.iconID, spellInfo.castTime, spellInfo.minRange, spellInfo.maxRange, spellInfo.spellID, spellInfo.originalIconID
+	end
+end
 
 -- Colors
 DB.MyName = UnitName("player")

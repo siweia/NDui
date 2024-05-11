@@ -170,7 +170,7 @@ end
 
 tinsert(C.defaultThemes, function()
 	if DB.isWW then return end
-	if IsAddOnLoaded("!KalielsTracker") then return end
+	if C_AddOns.IsAddOnLoaded("!KalielsTracker") then return end
 
 	-- QuestIcons
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)

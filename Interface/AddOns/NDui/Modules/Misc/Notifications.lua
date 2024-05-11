@@ -8,7 +8,7 @@ local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
-local GetSpellLink = C_Spell.GetSpellLink or GetSpellLink
+local GetSpellLink = C_Spell and C_Spell.GetSpellLink or GetSpellLink
 local GetSpellInfo, GetSpellCooldown = GetSpellInfo, GetSpellCooldown
 local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
@@ -574,7 +574,7 @@ local AddonDependency = {
 function M:CheckIncompatible()
 	local IncompatibleList = {}
 	for addon in pairs(IncompatibleAddOns) do
-		if IsAddOnLoaded(addon) then
+		if C_AddOns.IsAddOnLoaded(addon) then
 			tinsert(IncompatibleList, addon)
 		end
 	end

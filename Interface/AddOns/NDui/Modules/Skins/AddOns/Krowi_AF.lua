@@ -90,7 +90,7 @@ local function SetupCategory(button)
 end
 
 function S:KrowiAF()
-	if not IsAddOnLoaded("Krowi_AchievementFilter") then return end
+	if not C_AddOns.IsAddOnLoaded("Krowi_AchievementFilter") then return end
 
 	for i = 4, 8 do
 		local tab = _G["AchievementFrameTab"..i]

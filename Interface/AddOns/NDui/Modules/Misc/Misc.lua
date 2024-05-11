@@ -588,7 +588,7 @@ function M:JerryWay()
 end
 
 function M:BaudErrorFrameHelpTip()
-	if not IsAddOnLoaded("!BaudErrorFrame") then return end
+	if not C_AddOns.IsAddOnLoaded("!BaudErrorFrame") then return end
 	local button, count = _G.BaudErrorFrameMinimapButton, _G.BaudErrorFrameMinimapCount
 	if not button then return end
 

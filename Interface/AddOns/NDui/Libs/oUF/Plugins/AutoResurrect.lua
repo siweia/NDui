@@ -58,7 +58,7 @@ end
 local function setupAttribute(self)
 	if InCombatLockdown() then return end
 
-	if classList[DB.MyClass] and not IsAddOnLoaded("Clique") then
+	if classList[DB.MyClass] and not C_AddOns.IsAddOnLoaded("Clique") then
 		self:SetAttribute("*type3", "macro")
 		self:SetAttribute("macrotext3", macroBody(DB.MyClass))
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED", setupAttribute)

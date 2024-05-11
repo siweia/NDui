@@ -115,7 +115,7 @@ function M:OrderHall_OnLoad(addon)
 end
 
 function M:OrderHall_OnInit()
-	if IsAddOnLoaded("Blizzard_OrderHallUI") then
+	if C_AddOns.IsAddOnLoaded("Blizzard_OrderHallUI") then
 		M:OrderHall_CreateIcon()
 	else
 		B:RegisterEvent("ADDON_LOADED", M.OrderHall_OnLoad)

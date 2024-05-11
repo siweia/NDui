@@ -264,7 +264,7 @@ end
 
 function module:SetupWorldMap()
 	if C.db["Map"]["DisableMap"] then return end
-	if IsAddOnLoaded("Mapster") then return end
+	if C_AddOns.IsAddOnLoaded("Mapster") then return end
 
 	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()
