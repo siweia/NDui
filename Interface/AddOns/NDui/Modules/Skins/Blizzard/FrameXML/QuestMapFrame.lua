@@ -58,7 +58,11 @@ tinsert(C.defaultThemes, function()
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)
 	ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
 
-	if not DB.isWW then
+	if DB.isWW then
+		QuestScrollFrame.Background:SetAlpha(0)
+		B.StripTextures(QuestScrollFrame.BorderFrame)
+		B.StripTextures(QuestMapFrame.DetailsFrame.BackFrame)
+	else
 		QuestMapFrame.Background:SetAlpha(0)
 		QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
 		QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
@@ -87,7 +91,10 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(DetailsFrame.TrackButton)
 	B.ReskinTrimScroll(QuestMapDetailsScrollFrame.ScrollBar)
 
-	if not DB.isWW then
+	if DB.isWW then
+		B.Reskin(DetailsFrame.BackFrame.BackButton)
+		B.StripTextures(DetailsFrame.RewardsFrameContainer.RewardsFrame)
+	else
 		B.StripTextures(DetailsFrame.RewardsFrame)
 		B.Reskin(DetailsFrame.BackButton)
 	end
