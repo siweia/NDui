@@ -1,6 +1,6 @@
 # NDui
 
-## [7.19.2](https://github.com/siweia/NDui/tree/7.19.2) (2024-5-9)
+## [7.19.3](https://github.com/siweia/NDui/tree/7.19.3) (2024-5-10)
 
-- Fix errors in enhanced premade.
-- Bump up TOC.
+- Option to change min cooldown for aurawatch.
+- Remove replaced icons in LFG.

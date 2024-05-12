@@ -264,6 +264,53 @@ function S:KrowiAF()
 		bg:SetPoint("BOTTOMRIGHT", showAllResults, 3, -3)
 		B.StyleSearchButton(showAllResults)
 	end
+
+	if KrowiAF_AchievementFrameBrowsingHistoryPrevAchievementButton then
+		B.ReskinArrow(KrowiAF_AchievementFrameBrowsingHistoryPrevAchievementButton, "left")
+	end
+	if KrowiAF_AchievementFrameBrowsingHistoryNextAchievementButton then
+		B.ReskinArrow(KrowiAF_AchievementFrameBrowsingHistoryNextAchievementButton, "right")
+	end
+
+	if KrowiAF_DataManagerFrame then
+		B.ReskinPortraitFrame(KrowiAF_DataManagerFrame)
+		B.Reskin(KrowiAF_DataManagerFrame.Import)
+
+		local characterList = KrowiAF_DataManagerFrame.CharacterList
+		if characterList then
+			local columnDisplay = characterList.ColumnDisplay
+			if columnDisplay then
+				B.StripTextures(columnDisplay)
+				for i = 1, columnDisplay:GetNumChildren() do
+					local child = select(i, columnDisplay:GetChildren())
+					B.StripTextures(child)
+		
+					local bg = B.CreateBDFrame(child, .25)
+					bg:SetPoint("TOPLEFT", 4, -2)
+					bg:SetPoint("BOTTOMRIGHT", 0, 2)
+		
+					child:SetHighlightTexture(DB.bdTex)
+					local hl = child:GetHighlightTexture()
+					hl:SetVertexColor(cr, cg, cb, .25)
+					hl:SetInside(bg)
+				end
+			end
+	
+			hooksecurefunc(characterList.ScrollBox, "Update", function(self)
+				for i = 1, self.ScrollTarget:GetNumChildren() do
+					local button = select(i, self.ScrollTarget:GetChildren())
+					if not button.styled then
+						B.ReskinCheck(button.HeaderTooltip)
+						B.ReskinCheck(button.EarnedByAchievementTooltip)
+						B.ReskinCheck(button.MostProgressAchievementTooltip)
+						B.ReskinCheck(button.IgnoreCharacter)
+	
+						button.styled = true
+					end
+				end
+			end)
+		end
+	end
 end
 
 S:RegisterSkin("Blizzard_AchievementUI", S.KrowiAF)

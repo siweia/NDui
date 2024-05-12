@@ -153,6 +153,7 @@ G.DefaultSettings = {
 		IconScale = 1,
 		DeprecatedAuras = false,
 		QuakeRing = false,
+		MinCD = 3,
 	},
 	UFs = {
 		Enable = true,
@@ -1133,7 +1134,7 @@ G.TabList = {
 	L["RaidFrame"],
 	L["Nameplate"],
 	L["PlayerPlate"],
-	L["Auras"],
+	NewTag..L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
@@ -1327,8 +1328,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
-		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
-		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], true, {.8, 2, .1}},
+		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], true, nil, nil, L["ClickThroughTip"]},
+		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], nil, {.8, 2, .1}},
+		{3, "AuraWatch", "MinCD", NewTag..L["AuraWatch MinCD"].."*", true, {1, 60, 1}, nil, L["MinCDTip"]},
 		{},--blank
 		{1, "Auras", "Totems", HeaderTag..L["Enable Totembar"]},
 		{1, "Auras", "VerticalTotems", L["VerticalTotems"].."*", nil, nil, refreshTotemBar},
