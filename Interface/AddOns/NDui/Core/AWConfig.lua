@@ -275,7 +275,7 @@ local function CreatePanel()
 		local intID, duration, trigger, unit, itemID = unpack(data)
 		local name, _, texture = GetSpellInfo(intID)
 		if itemID then
-			name = GetItemInfo(itemID)
+			name = C_Item.GetItemInfo(itemID)
 		end
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")

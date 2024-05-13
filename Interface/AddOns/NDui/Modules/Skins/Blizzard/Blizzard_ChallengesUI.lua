@@ -25,7 +25,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			end
 		end
 
-		if IsAddOnLoaded("AngryKeystones") and not angryStyle then
+		if C_AddOns.IsAddOnLoaded("AngryKeystones") and not angryStyle then
 			local mod = AngryKeystones.Modules.Schedule
 			local scheduel = mod.AffixFrame
 			if scheduel then

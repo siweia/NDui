@@ -28,4 +28,17 @@ tinsert(C.defaultThemes, function()
 			B.Reskin(button)
 		end
 	end
+
+	if DB.isWW then
+		hooksecurefunc(GameMenuFrame, "InitButtons", function(self)
+			if not self.buttonPool then return end
+
+			for button in self.buttonPool:EnumerateActive() do
+				if not button.styled then
+					B.Reskin(button)
+					button.styled = true
+				end
+			end
+		end)
+	end
 end)

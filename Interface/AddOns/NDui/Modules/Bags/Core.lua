@@ -7,7 +7,6 @@ local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
-local IsCosmeticItem, GetItemInfo = IsCosmeticItem, GetItemInfo
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local GetContainerItemID = C_Container.GetContainerItemID
 local GetContainerNumSlots = C_Container.GetContainerNumSlots
@@ -16,6 +15,7 @@ local SortBankBags = C_Container.SortBankBags
 local SortReagentBankBags = C_Container.SortReagentBankBags
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local sortCache = {}
 function module:ReverseSort()
@@ -701,7 +701,7 @@ local function customJunkOnClick(self)
 	local texture = info and info.iconFileID
 	local itemID = info and info.itemID
 
-	local price = select(11, GetItemInfo(itemID))
+	local price = select(11, C_Item.GetItemInfo(itemID))
 	if texture and price > 0 then
 		if NDuiADB["CustomJunkList"][itemID] then
 			NDuiADB["CustomJunkList"][itemID] = nil
@@ -971,7 +971,7 @@ function module:OnLogin()
 
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			return "AzeriteIconFrame"
-		elseif IsCosmeticItem(item.link) then
+		elseif C_Item.IsCosmeticItem(item.link) then
 			return "CosmeticIconFrame"
 		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
 			return "ConduitIconFrame", "ConduitIconFrame-Corners"
@@ -1277,7 +1277,7 @@ function module:OnLogin()
 
 		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
 		if not id then return end
-		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = GetItemInfo(id)
+		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = C_Item.GetItemInfo(id)
 		if not quality or quality == 1 then quality = 0 end
 		local color = DB.QualityColors[quality]
 		if not self.hidden and not self.notBought then

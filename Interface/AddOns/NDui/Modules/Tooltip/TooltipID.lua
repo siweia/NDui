@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
-local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
+local UnitAura, GetUnitName = UnitAura, GetUnitName
 local IsPlayerSpell = IsPlayerSpell
 local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeFixedReagentItemLink
 local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
@@ -38,9 +38,9 @@ function TT:AddLineForID(id, linkType, noadd)
 	if not noadd then self:AddLine(" ") end
 
 	if linkType == types.item then
-		local bagCount = GetItemCount(id)
-		local bankCount = GetItemCount(id, true) - bagCount
-		local itemStackCount = select(8, GetItemInfo(id))
+		local bagCount = C_Item.GetItemCount(id)
+		local bankCount = C_Item.GetItemCount(id, true) - bagCount
+		local itemStackCount = select(8, C_Item.GetItemInfo(id))
 		if bankCount > 0 then
 			self:AddDoubleLine(BAGSLOT.."/"..BANK..":", DB.InfoColor..bagCount.."/"..bankCount)
 		elseif bagCount > 0 then

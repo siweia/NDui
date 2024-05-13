@@ -89,8 +89,17 @@ local function SetupCategory(button)
 	end
 end
 
+local function ReskinCalendarAchievement(self)
+	for _, bu in pairs(self.AchievementButtons) do
+		if not bu.styled then
+			B.ReskinIcon(bu.Texture)
+			bu.styled = true
+		end
+	end
+end
+
 function S:KrowiAF()
-	if not IsAddOnLoaded("Krowi_AchievementFilter") then return end
+	if not C_AddOns.IsAddOnLoaded("Krowi_AchievementFilter") then return end
 
 	for i = 4, 8 do
 		local tab = _G["AchievementFrameTab"..i]
@@ -238,6 +247,8 @@ function S:KrowiAF()
 				local hl = button:GetHighlightTexture()
 				hl:SetVertexColor(cr, cg, cb, .25)
 				hl:SetInside(bg)
+
+				hooksecurefunc(button, "AddAchievement", ReskinCalendarAchievement)
 			end
 		end
 
@@ -246,6 +257,24 @@ function S:KrowiAF()
 		local bg = B.CreateBDFrame(frame.TodayFrame, 0)
 		bg:SetInside()
 		bg:SetBackdropBorderColor(cr, cg, cb)
+
+		local sideFrame = frame.SideFrame
+		if sideFrame then
+			B.StripTextures(sideFrame)
+			B.StripTextures(sideFrame.Header)
+			B.SetBD(sideFrame)
+			B.ReskinClose(sideFrame.CloseButton)
+	
+			local achesFrame = sideFrame.AchievementsFrame
+			if achesFrame then
+				B.StripTextures(achesFrame)
+				B.ReskinTrimScroll(achesFrame.ScrollBar)
+		
+				hooksecurefunc(achesFrame.ScrollBox, "Update", function(self)
+					self:ForEachFrame(SetupAchivementButton)
+				end)
+			end
+		end
 	end
 
 	local container = KrowiAF_SearchPreviewContainer

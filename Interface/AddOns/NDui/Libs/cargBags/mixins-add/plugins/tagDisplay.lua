@@ -122,12 +122,12 @@ tagPool["space"] = function(self)
 end
 
 tagPool["item"] = function(self, item)
-	local bags = GetItemCount(item, nil)
-	local total = GetItemCount(item, true)
+	local bags = C_Item.GetItemCount(item, nil)
+	local total = C_Item.GetItemCount(item, true)
 	local bank = total-bags
 
 	if(total > 0) then
-		return bags .. (bank and " ("..bank..")") .. createIcon(GetItemIcon(item), self.iconValues)
+		return bags .. (bank and " ("..bank..")") .. createIcon(C_Item.GetItemIconByID(item), self.iconValues)
 	end
 end
 

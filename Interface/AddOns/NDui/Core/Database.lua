@@ -10,6 +10,30 @@ DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isNewPatch = select(4, GetBuildInfo()) >= 100207 -- 10.2.7
+DB.isWW = select(4, GetBuildInfo()) >= 110000 -- 11.0.0
+
+-- Deprecated
+if DB.isWW then
+	UnitAura = function(unitToken, index, filter)
+		local auraData = C_UnitAuras.GetAuraDataByIndex(unitToken, index, filter)
+		if not auraData then return nil end
+		return AuraUtil.UnpackAuraData(auraData)
+	end
+
+	GetSpellInfo = function(spellID)
+		local spellInfo = C_Spell.GetSpellInfo(spellID)
+		if not spellInfo then return end
+		--name, rank, icon, castTime, minRange, maxRange, spellID, originalIcon
+		return spellInfo.name, nil, spellInfo.iconID, spellInfo.castTime, spellInfo.minRange, spellInfo.maxRange, spellInfo.spellID, spellInfo.originalIconID
+	end
+
+	GetSpellCooldown = function(spellID)
+		local cd = C_Spell.GetSpellCooldown(spellID)
+		if not cd then return end
+		--start, duration, enabled, modRate
+		return cd.startTime, cd.duration, cd.isEnabled, cd.modRate
+	end
+end
 
 -- Colors
 DB.MyName = UnitName("player")

@@ -190,7 +190,7 @@ function M:KeystoneInfo_WeeklyRuns()
 end
 
 function M:KeystoneInfo_Create()
-	local texture = select(10, GetItemInfo(158923)) or 525134
+	local texture = select(10, C_Item.GetItemInfo(158923)) or 525134
 	local iconColor = DB.QualityColors[Enum.ItemQuality.Epic or 4]
 	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "BackdropTemplate")
 	button:SetPoint("BOTTOMLEFT", 2, 67)
@@ -241,7 +241,7 @@ end
 function M:GuildBest()
 	if not C.db["Misc"]["MDGuildBest"] then return end
 
-	hasAngryKeystones = IsAddOnLoaded("AngryKeystones")
+	hasAngryKeystones = C_AddOns.IsAddOnLoaded("AngryKeystones")
 	B:RegisterEvent("ADDON_LOADED", M.GuildBest_OnLoad)
 
 	M:KeystoneInfo_Update()

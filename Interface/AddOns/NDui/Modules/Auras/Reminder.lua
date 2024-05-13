@@ -3,11 +3,12 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 local pairs, tinsert, next = pairs, table.insert, next
-local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown
+local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
+local GetSpecialization, GetItemCooldown = GetSpecialization, GetItemCooldown
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
-local GetNumGroupMembers, GetItemCount = GetNumGroupMembers, GetItemCount
+local GetNumGroupMembers = GetNumGroupMembers
 
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = 36
@@ -30,7 +31,7 @@ function A:Reminder_Update(cfg)
 	if itemID then
 		if inGroup and GetNumGroupMembers() < 2 then isGrouped = false end
 		if equip and not IsEquippedItem(itemID) then isEquipped = false end
-		if GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+		if C_Item.GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
 			frame:Hide()
 			return
 		end
@@ -107,9 +108,9 @@ end
 
 function A:Reminder_AddItemGroup()
 	for _, value in pairs(DB.ReminderBuffs["ITEMS"]) do
-		if not value.disable and GetItemCount(value.itemID) > 0 then
+		if not value.disable and C_Item.GetItemCount(value.itemID) > 0 then
 			if not value.texture then
-				value.texture = GetItemIcon(value.itemID)
+				value.texture = C_Item.GetItemIconByID(value.itemID)
 			end
 			if not groups then groups = {} end
 			tinsert(groups, value)

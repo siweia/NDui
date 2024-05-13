@@ -12,11 +12,9 @@ local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
 local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
 local EquipmentManager_RunAction = EquipmentManager_RunAction
 local GetInventoryItemTexture = GetInventoryItemTexture
-local GetItemInfo = GetItemInfo
 local BuyMerchantItem = BuyMerchantItem
 local GetMerchantItemLink = GetMerchantItemLink
 local GetMerchantItemMaxStack = GetMerchantItemMaxStack
-local GetItemQualityColor = GetItemQualityColor
 local Screenshot = Screenshot
 local GetTime, GetCVarBool, SetCVar = GetTime, GetCVarBool, SetCVar
 local GetNumLootItems, LootSlot = GetNumLootItems, LootSlot
@@ -451,10 +449,10 @@ do
 			id = self:GetID()
 			itemLink = GetMerchantItemLink(id)
 			if not itemLink then return end
-			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
+			local name, _, quality, _, _, _, _, maxStack, _, texture = C_Item.GetItemInfo(itemLink)
 			if maxStack and maxStack > 1 then
 				if not cache[itemLink] then
-					local r, g, b = GetItemQualityColor(quality or 1)
+					local r, g, b = C_Item.GetItemQualityColor(quality or 1)
 					StaticPopup_Show("BUY_STACK", " ", " ", {["texture"] = texture, ["name"] = name, ["color"] = {r, g, b, 1}, ["link"] = itemLink, ["index"] = id, ["count"] = maxStack})
 				else
 					BuyMerchantItem(id, GetMerchantItemMaxStack(id))
@@ -590,7 +588,7 @@ function M:JerryWay()
 end
 
 function M:BaudErrorFrameHelpTip()
-	if not IsAddOnLoaded("!BaudErrorFrame") then return end
+	if not C_AddOns.IsAddOnLoaded("!BaudErrorFrame") then return end
 	local button, count = _G.BaudErrorFrameMinimapButton, _G.BaudErrorFrameMinimapCount
 	if not button then return end
 

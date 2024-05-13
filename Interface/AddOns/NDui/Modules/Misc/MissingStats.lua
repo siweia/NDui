@@ -11,7 +11,7 @@ local HIGHLIGHT_FONT_COLOR_CODE, FONT_COLOR_CODE_CLOSE = HIGHLIGHT_FONT_COLOR_CO
 
 function M:MissingStats()
 	if not C.db["Misc"]["MissingStats"] then return end
-	if IsAddOnLoaded("DejaCharacterStats") then return end
+	if C_AddOns.IsAddOnLoaded("DejaCharacterStats") then return end
 
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)

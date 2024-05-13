@@ -246,7 +246,7 @@ local itemCache = {}
 local function GetItemLink(itemID)
 	local link = itemCache[itemID]
 	if not link then
-		link = select(2, GetItemInfo(itemID))
+		link = select(2, C_Item.GetItemInfo(itemID))
 		itemCache[itemID] = link
 	end
 	return link

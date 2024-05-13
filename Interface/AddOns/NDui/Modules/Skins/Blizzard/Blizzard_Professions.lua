@@ -215,6 +215,9 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(craftingPage.ViewGuildCraftersButton)
 	reskinArrowInput(craftingPage.CreateMultipleInputBox)
 	B.ReskinMinMax(frame.MaximizeMinimize)
+	if DB.isWW then
+		B.ReskinEditBox(craftingPage.MinimizedSearchBox)
+	end
 
 	local guildFrame = craftingPage.GuildFrame
 	B.StripTextures(guildFrame)
@@ -260,6 +263,9 @@ C.themes["Blizzard_Professions"] = function()
 
 	local rankBar = craftingPage.RankBar
 	reskinRankBar(rankBar)
+	if DB.isWW then
+		B.ReskinArrow(rankBar.ExpansionDropDownButton, "down")
+	end
 
 	B.ReskinArrow(craftingPage.LinkButton, "right")
 	craftingPage.LinkButton:SetSize(20, 20)

@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local function ReskinMissionPage(self)
 	B.StripTextures(self)

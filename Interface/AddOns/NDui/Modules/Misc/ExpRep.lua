@@ -129,7 +129,7 @@ function M:ExpBar_UpdateTooltip()
 		if IsXPUserDisabled() then GameTooltip:AddLine("|cffff0000"..XP..LOCKED) end
 	end
 
-	if GetWatchedFactionInfo() then
+	if not DB.isWW and GetWatchedFactionInfo() then
 		local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local standingtext
 		if factionID and C_Reputation_IsMajorFaction(factionID) then
@@ -282,6 +282,7 @@ M:RegisterMisc("ExpRep", M.Expbar)
 
 -- Paragon reputation info
 function M:ParagonReputationSetup()
+	if DB.isWW then return end
 	if not C.db["Misc"]["ParagonRep"] then return end
 
 	hooksecurefunc("ReputationFrame_InitReputationRow", function(factionRow, elementData)
