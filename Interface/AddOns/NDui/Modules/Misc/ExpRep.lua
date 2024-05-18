@@ -16,7 +16,6 @@ local ARTIFACT_POWER, ARTIFACT_RETIRED = ARTIFACT_POWER, ARTIFACT_RETIRED
 
 local UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled = UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled
 local BreakUpLargeNumbers, GetNumFactions, GetFactionInfo = BreakUpLargeNumbers, GetNumFactions, GetFactionInfo
-local GetWatchedFactionInfo = GetWatchedFactionInfo
 local HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP = HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP
 local IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel = IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel
 local IsPlayerAtEffectiveMaxLevel = IsPlayerAtEffectiveMaxLevel
@@ -41,6 +40,8 @@ function M:ExpBar_Update()
 	local rest = self.restBar
 	if rest then rest:Hide() end
 
+	local factionData = DB.isWW and C_Reputation.GetWatchedFactionData()
+
 	if not IsPlayerAtEffectiveMaxLevel() then
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
 		self:SetStatusBarColor(0, .7, 1)
@@ -53,7 +54,40 @@ function M:ExpBar_Update()
 			rest:Show()
 		end
 		if IsXPUserDisabled() then self:SetStatusBarColor(.7, 0, 0) end
-	elseif GetWatchedFactionInfo() then
+	elseif factionData then
+		local standing = factionData.reaction
+		local barMin = factionData.currentReactionThreshold
+		local barMax = factionData.nextReactionThreshold
+		local value = factionData.currentStanding
+		local factionID = factionData.factionID
+		if factionID and C_Reputation_IsMajorFaction(factionID) then
+			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+			value = majorFactionData.renownReputationEarned or 0
+			barMin, barMax = 0, majorFactionData.renownLevelThreshold
+		else
+			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
+			local friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold
+			if C_Reputation_IsFactionParagon(factionID) then
+				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+				currentValue = mod(currentValue, threshold)
+				barMin, barMax, value = 0, threshold, currentValue
+			elseif friendID and friendID ~= 0 then
+				if nextFriendThreshold then
+					barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
+				else
+					barMin, barMax, value = 0, 1, 1
+				end
+				standing = 5
+			else
+				if standing == MAX_REPUTATION_REACTION then barMin, barMax, value = 0, 1, 1 end
+			end
+		end
+		local color = FACTION_BAR_COLORS[standing] or FACTION_BAR_COLORS[5]
+		self:SetStatusBarColor(color.r, color.g, color.b, .85)
+		self:SetMinMaxValues(barMin, barMax)
+		self:SetValue(value)
+		self:Show()
+	elseif not DB.isWW and GetWatchedFactionInfo() then
 		local _, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		if factionID and C_Reputation_IsMajorFaction(factionID) then
 			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
@@ -129,7 +163,68 @@ function M:ExpBar_UpdateTooltip()
 		if IsXPUserDisabled() then GameTooltip:AddLine("|cffff0000"..XP..LOCKED) end
 	end
 
-	if not DB.isWW and GetWatchedFactionInfo() then
+	local factionData = DB.isWW and C_Reputation.GetWatchedFactionData()
+	if factionData then
+		local name = factionData.name
+		local standing = factionData.reaction
+		local barMin = factionData.currentReactionThreshold
+		local barMax = factionData.nextReactionThreshold
+		local value = factionData.currentStanding
+		local factionID = factionData.factionID
+		local standingtext
+		if factionID and C_Reputation_IsMajorFaction(factionID) then
+			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+			name = majorFactionData.name
+			value = majorFactionData.renownReputationEarned or 0
+			barMin, barMax = 0, majorFactionData.renownLevelThreshold
+			standingtext = RENOWN_LEVEL_LABEL..majorFactionData.renownLevel
+		else
+			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
+			local friendID, friendRep, friendThreshold, nextFriendThreshold, friendTextLevel = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold, repInfo.text
+			local repRankInfo = C_GossipInfo_GetFriendshipReputationRanks(factionID)
+			local currentRank, maxRank = repRankInfo.currentLevel, repRankInfo.maxLevel
+			if friendID and friendID ~= 0 then
+				if maxRank > 0 then
+					name = name.." ("..currentRank.." / "..maxRank..")"
+				end
+				if nextFriendThreshold then
+					barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
+				else
+					barMax = barMin + 1e3
+					value = barMax - 1
+				end
+				standingtext = friendTextLevel
+			else
+				if standing == MAX_REPUTATION_REACTION then
+					barMax = barMin + 1e3
+					value = barMax - 1
+				end
+				standingtext = _G["FACTION_STANDING_LABEL"..standing] or UNKNOWN
+			end
+		end
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(name, 0,.6,1)
+		GameTooltip:AddDoubleLine(standingtext, value - barMin.." / "..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", .6,.8,1, 1,1,1)
+
+		if C_Reputation_IsFactionParagon(factionID) then
+			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+			local paraCount = floor(currentValue/threshold)
+			currentValue = mod(currentValue, threshold)
+			GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+		end
+
+		if factionID == 2465 then -- 荒猎团
+			local repInfo = C_GossipInfo_GetFriendshipReputation(2463) -- 玛拉斯缪斯
+			local rep, name, reaction, threshold, nextThreshold = repInfo.standing, repInfo.name, repInfo.reaction, repInfo.reactionThreshold, repInfo.nextThreshold
+			if nextThreshold and rep > 0 then
+				local current = rep - threshold
+				local currentMax = nextThreshold - threshold
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddLine(name, 0,.6,1)
+				GameTooltip:AddDoubleLine(reaction, current.." / "..currentMax.." ("..floor(current/currentMax*100).."%)", .6,.8,1, 1,1,1)
+			end
+		end
+	elseif not DB.isWW and GetWatchedFactionInfo() then
 		local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local standingtext
 		if factionID and C_Reputation_IsMajorFaction(factionID) then
