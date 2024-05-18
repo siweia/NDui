@@ -45,21 +45,23 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		end
 	end
 
-	for i = 1, 6 do
+	for i = 1, 8 do
 		local tab = _G["GuildBankTab"..i]
-		local button = tab.Button
-		local icon = button.IconTexture
-
-		B.StripTextures(tab)
-		button:SetNormalTexture(0)
-		button:SetPushedTexture(0)
-		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		button:SetCheckedTexture(DB.pushedTex)
-		B.CreateBDFrame(button)
-		icon:SetTexCoord(unpack(DB.TexCoord))
-
-		local a1, p, a2, x, y = button:GetPoint()
-		button:SetPoint(a1, p, a2, x + C.mult, y)
+		if tab then
+			local button = tab.Button
+			local icon = button.IconTexture
+	
+			B.StripTextures(tab)
+			button:SetNormalTexture(0)
+			button:SetPushedTexture(0)
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			button:SetCheckedTexture(DB.pushedTex)
+			B.CreateBDFrame(button)
+			icon:SetTexCoord(unpack(DB.TexCoord))
+	
+			local a1, p, a2, x, y = button:GetPoint()
+			button:SetPoint(a1, p, a2, x + C.mult, y)
+		end
 	end
 
 	local NUM_GUILDBANK_ICONS_PER_ROW = 10
