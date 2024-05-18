@@ -249,8 +249,8 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 			return "<"..guildName..">"
 		end
 	elseif not isPlayer and C.db["Nameplate"]["NameOnlyTitle"] then
-		local data = C_TooltipInfo.GetUnit(unit)
-		if not data then return end
+		local data = not DB.isWW and C_TooltipInfo.GetUnit(unit)
+		if not data then return "" end
 
 		local lineData = data.lines[GetCVarBool("colorblindmode") and 3 or 2]
 		if lineData then
