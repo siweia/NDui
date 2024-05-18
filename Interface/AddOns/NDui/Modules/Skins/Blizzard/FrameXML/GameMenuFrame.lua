@@ -30,12 +30,20 @@ tinsert(C.defaultThemes, function()
 	end
 
 	if DB.isWW then
+		local cr, cg, cb = DB.r, DB.g, DB.b
+
 		hooksecurefunc(GameMenuFrame, "InitButtons", function(self)
 			if not self.buttonPool then return end
 
 			for button in self.buttonPool:EnumerateActive() do
 				if not button.styled then
-					B.Reskin(button)
+					button:DisableDrawLayer("BACKGROUND")
+					button.bg = B.CreateBDFrame(button, 0, true)
+					local hl = button:GetHighlightTexture()
+					hl:SetColorTexture(cr, cg, cb, .25)
+					hl:SetInside(button.bg)
+					button.bg:SetInside(nil, 3, 3)
+
 					button.styled = true
 				end
 			end

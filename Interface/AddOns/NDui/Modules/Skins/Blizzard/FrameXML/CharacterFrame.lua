@@ -294,7 +294,7 @@ tinsert(C.defaultThemes, function()
 						hooksecurefunc(child.HighlightRight, "SetAtlas", updateCollapse)
 						updateCollapse(child.Right)
 						updateCollapse(child.HighlightRight)
-						B.CreateBDFrame(child, .25)
+						B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
 					end
 					if child.ReputationBar then
 						B.StripTextures(child.ReputationBar)

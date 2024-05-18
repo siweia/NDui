@@ -29,17 +29,37 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(dialog)
 	B.SetBD(dialog)
 	B.ReskinClose(dialog.CloseButton)
+	if DB.isWW then
+		frame.AccountSettings.SettingsContainer.BorderArt:Hide()
+		B.CreateBDFrame(frame.AccountSettings.SettingsContainer, .25)
+		B.ReskinTrimScroll(frame.AccountSettings.SettingsContainer.ScrollBar)
+	end
 
-	hooksecurefunc(frame.AccountSettings, "OnEditModeEnter", function(self)
-		local settings = self.SettingsContainer.ScrollChild.BasicOptionsContainer
-		if not settings then return end
-
+	local function reskinOptionChecks(settings)
 		for i = 1, settings:GetNumChildren() do
 			local option = select(i, settings:GetChildren())
 			if option.Button and not option.styled then
 				reskinOptionCheck(option.Button)
 				option.styled = true
 			end
+		end
+	end
+
+	hooksecurefunc(frame.AccountSettings, "OnEditModeEnter", function(self)
+		local basicOptions = self.SettingsContainer.ScrollChild.BasicOptionsContainer
+		if basicOptions then
+			reskinOptionChecks(basicOptions)
+		end
+
+		local advancedOptions = self.SettingsContainer.ScrollChild.AdvancedOptionsContainer
+		if advancedOptions.FramesContainer then
+			reskinOptionChecks(advancedOptions.FramesContainer)
+		end
+		if advancedOptions.CombatContainer then
+			reskinOptionChecks(advancedOptions.CombatContainer)
+		end
+		if advancedOptions.MiscContainer then
+			reskinOptionChecks(advancedOptions.MiscContainer)
 		end
 	end)
 

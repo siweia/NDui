@@ -41,7 +41,7 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinPortraitFrame(PVEFrame)
 
-	for i = 1, 3 do
+	for i = 1, 4 do
 		local tab = _G["PVEFrameTab"..i]
 		if tab then
 			B.ReskinTab(tab)

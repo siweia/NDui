@@ -1956,5 +1956,16 @@ function G:OnLogin()
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 	end)
 
-	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(gui) end
+	if C.db["Skins"]["BlizzardSkins"] then
+		if DB.isWW then
+			gui:DisableDrawLayer("BACKGROUND")
+			gui.bg = B.CreateBDFrame(gui, 0, true)
+			local hl = gui:GetHighlightTexture()
+			hl:SetColorTexture(cr, cg, cb, .25)
+			hl:SetInside(gui.bg)
+			gui.bg:SetInside(nil, 3, 3)
+		else
+			B.Reskin(gui)
+		end
+	end
 end
