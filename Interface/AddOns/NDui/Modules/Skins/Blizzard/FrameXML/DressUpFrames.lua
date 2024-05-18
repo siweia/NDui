@@ -51,6 +51,26 @@ tinsert(C.defaultThemes, function()
 	B.ReskinCheck(TransmogAndMountDressupFrame.ShowMountCheckButton)
 	B.ReskinModelControl(DressUpFrame.ModelScene)
 
+	local selectionPanel = DressUpFrame.SetSelectionPanel
+	if selectionPanel then
+		B.StripTextures(selectionPanel)
+		B.SetBD(selectionPanel):SetInside(nil, 9, 9)
+
+		local function SetupSetButton(button)
+			if button.styled then return end
+			button.bg = B.ReskinIcon(button.Icon)
+			B.ReskinIconBorder(button.IconBorder, true, true)
+			button.BackgroundTexture:SetAlpha(0)
+			button.SelectedTexture:SetColorTexture(1, .8, 0, .25)
+			button.HighlightTexture:SetColorTexture(1, 1, 1, .25)
+			button.styled = true
+		end
+
+		hooksecurefunc(selectionPanel.ScrollBox, "Update", function(self)
+			self:ForEachFrame(SetupSetButton)
+		end)
+	end
+
 	-- SideDressUp
 
 	B.StripTextures(SideDressUpFrame, 0)

@@ -10,7 +10,7 @@ local C_Timer_After = C_Timer.After
 local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
 local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
-local BNet_GetClientEmbeddedAtlas, BNet_GetBattlenetClientAtlas, BNet_GetValidatedCharacterName = BNet_GetClientEmbeddedAtlas, BNet_GetBattlenetClientAtlas, BNet_GetValidatedCharacterName
+local BNet_GetClientEmbeddedAtlas, BNet_GetBattlenetClientAtlas, FriendsFrame_GetFormattedCharacterName = BNet_GetClientEmbeddedAtlas, BNet_GetBattlenetClientAtlas, FriendsFrame_GetFormattedCharacterName
 local BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor = BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor
 local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_GetOffset, HybridScrollFrame_Update
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
@@ -123,8 +123,9 @@ local function buildBNetTable(num)
 				local wowProjectID = gameAccountInfo.wowProjectID
 				local isMobile = gameAccountInfo.isWowMobile
 				local factionName = gameAccountInfo.factionName or UNKNOWN
+				local timerunningSeasonID = gameAccountInfo.timerunningSeasonID
 
-				charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
+				charName = FriendsFrame_GetFormattedCharacterName(charName, battleTag, client, timerunningSeasonID)
 				class = DB.ClassList[class]
 
 				local status = FRIENDS_TEXTURE_ONLINE
@@ -344,8 +345,12 @@ local function buttonOnEnter(self)
 			local gameText = gameAccountInfo.richPresence or ""
 			local wowProjectID = gameAccountInfo.wowProjectID
 			local clientString = BNet_GetClientEmbeddedAtlas(client, 16)
+			local timerunningSeasonID = gameAccountInfo.timerunningSeasonID
 			if client == BNET_CLIENT_WOW then
 				if charName ~= "" then -- fix for weird account
+					if timerunningSeasonID then
+						charName = TimerunningUtil.AddSmallIcon(charName) -- add timerunning tag on name
+					end
 					realmName = (DB.MyRealm == realmName or realmName == "") and "" or "-"..realmName
 
 					-- Get TBC realm name from richPresence
