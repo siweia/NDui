@@ -65,6 +65,7 @@ local list = {
 		--{AuraID = 28537, UnitID = "player"},	-- 防护暗影药水
 		--{AuraID = 28538, UnitID = "player"},	-- 防护神圣药水
 		-- 饰品
+		{AuraID = 92104, UnitID = "player"},	-- 穿流之亡
 	},
 	["Raid Buff"] = {		-- 团队增益组
 		-- 战鼓

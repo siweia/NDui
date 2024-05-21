@@ -13,9 +13,7 @@ local frames = {
 
 	-- Blizz Frames
 	["AddonList"] = false,
-	["ArenaFrame"] = false,
 	["AudioOptionsFrame"] = false,
-	["BattlefieldFrame"] = true,
 	["ChannelFrame"] = false,
 	["ChatConfigFrame"] = false,
 	["DressUpFrame"] = false,
@@ -52,8 +50,6 @@ local function CharacterFrameMoveCheck()
 	if IsAddOnLoaded("RXPGuides") then return end
 
 	frames["PaperDollFrame"] = "CharacterFrame"
-	frames["PetPaperDollFrameCompanionFrame"] = "CharacterFrame"
-	frames["PetPaperDollFramePetFrame"] = "CharacterFrame"
 	frames["ReputationFrame"] = true
 	frames["SkillFrame"] = true
 	frames["TokenFrame"] = true
