@@ -195,7 +195,7 @@ local function GTFO()
 		local fuckoff = CreateFrame("Frame", nil, UIParent)
 		fuckoff:SetPoint("CENTER")
 		fuckoff:SetSize(500, 300)
-		B.CreateFS(fuckoff, 30, "你改NMB呢")
+		B.CreateFS(fuckoff, 30, "请至Curseforge下载正版插件！")
 	end
 end
 
