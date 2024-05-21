@@ -145,7 +145,7 @@ function Bar:MicroMenu()
 		--{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
 		{"encounter", "EJMicroButton", MicroButtonTooltipText(ENCOUNTER_JOURNAL, "TOGGLEENCOUNTERJOURNAL")},
 		--{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
-		{"LFG", function(_, btn) if btn == "LeftButton" then PVEFrame_ToggleFrame() else TogglePVPFrame() end end, DB.LeftButton..MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG").."|n"..DB.RightButton..MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
+		{"LFG", function(_, btn) if btn == "LeftButton" then PVEFrame_ToggleFrame() else TogglePVPFrame() end end, DB.LeftButton..MicroButtonTooltipText(LFG_BUTTON, "TOGGLEGROUPFINDER").."|n"..DB.RightButton..MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
 		{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
 		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
