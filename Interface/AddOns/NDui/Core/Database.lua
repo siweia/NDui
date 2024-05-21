@@ -166,6 +166,7 @@ DB.ReminderBuffs = {
 				[1459] = true,
 				[8096] = true,  -- 智力卷轴
 				[23028] = true, -- 奥术光辉
+				[11396] = true, -- 奥术光辉
 			},
 			depend = 1459,
 			combat = true,
@@ -176,6 +177,7 @@ DB.ReminderBuffs = {
 				[168] = true,	-- 霜甲术
 				[7302] = true,	-- 冰甲术
 				[6117] = true,	-- 法师护甲
+				[428741] = true,-- 炎甲术
 			},
 			depend = 168,
 			combat = true,
