@@ -136,10 +136,12 @@ function M:VersionCheck_Compare(new, old)
 	local new1, new2 = strsplit(".", new)
 	new1, new2 = tonumber(new1), tonumber(new2)
 	if new1 > 4 then new1, new2 = 0, 0 end
+	if new1 == 4 and new2 >= 4 then new1, new2 = 0, 0 end
 
 	local old1, old2 = strsplit(".", old)
 	old1, old2 = tonumber(old1), tonumber(old2)
 	if old1 > 4 then old1, old2 = 0, 0 end
+	if old1 == 4 and old2 >= 4 then old1, old2 = 0, 0 end
 
 	if new1 > old1 or (new1 == old1 and new2 > old2) then
 		return "IsNew"
@@ -186,6 +188,17 @@ function M:VersionCheck_UpdateGroup()
 	C_ChatInfo_SendAddonMessage("NDuiVersionCheck", DB.Version, msgChannel())
 end
 
+local function GTFO()
+	local v1, v2 = strsplit(".", DB.Version)
+	v1, v2 = tonumber(v1), tonumber(v2)
+	if v1 >= 4 and v2 >= 4 then
+		local fuckoff = CreateFrame("Frame", nil, UIParent)
+		fuckoff:SetPoint("CENTER")
+		fuckoff:SetSize(500, 300)
+		B.CreateFS(fuckoff, 30, "你改NMB呢")
+	end
+end
+
 function M:VersionCheck()
 	hasChecked = not NDuiADB["VersionCheck"]
 
@@ -199,6 +212,8 @@ function M:VersionCheck()
 
 	self:VersionCheck_UpdateGroup()
 	B:RegisterEvent("GROUP_ROSTER_UPDATE", self.VersionCheck_UpdateGroup)
+
+	GTFO()
 end
 
 --[[
