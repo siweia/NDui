@@ -73,7 +73,7 @@ end
 
 function info:GuildPanel_UpdateButton(button)
 	local index = button.index
-	local level, class, name, zone, status = unpack(info.guildTable[index])
+	local level, class, name, zone, status, guid = unpack(info.guildTable[index])
 
 	local levelcolor = B.HexRGB(GetQuestDifficultyColor(level))
 	button.level:SetText(levelcolor..level)
@@ -81,7 +81,9 @@ function info:GuildPanel_UpdateButton(button)
 	B.ClassIconTexCoord(button.class, class)
 
 	local namecolor = B.HexRGB(B.ClassColor(class))
-	button.name:SetText(namecolor..name..status)
+	local isTimerunning = guid and C_ChatInfo.IsTimerunningPlayer(guid)
+	local playerName = isTimerunning and TimerunningUtil.AddSmallIcon(name) or name
+	button.name:SetText(namecolor..playerName..status)
 
 	local zonecolor = DB.GreyColor
 	if UnitInRaid(name) or UnitInParty(name) then
@@ -269,7 +271,7 @@ function info:GuildPanel_Refresh()
 	gRank:SetText(DB.InfoColor..RANK..": "..(guildRank or ""))
 
 	for i = 1, total do
-		local name, _, _, level, _, zone, _, _, connected, status, class, _, _, mobile = GetGuildRosterInfo(i)
+		local name, _, _, level, _, zone, _, _, connected, status, class, _, _, mobile, _, _, guid = GetGuildRosterInfo(i)
 		if connected or mobile then
 			if mobile and not connected then
 				zone = REMOTE_CHAT
@@ -299,6 +301,7 @@ function info:GuildPanel_Refresh()
 			info.guildTable[count][3] = Ambiguate(name, "none")
 			info.guildTable[count][4] = zone
 			info.guildTable[count][5] = status
+			info.guildTable[count][6] = guid
 		end
 	end
 
