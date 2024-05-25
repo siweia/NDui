@@ -134,32 +134,23 @@ C.themes["Blizzard_PlayerSpells"] = function()
 		B.ReskinArrow(spellBook.PagedSpellsFrame.PagingControls.PrevPageButton, "left")
 		B.ReskinArrow(spellBook.PagedSpellsFrame.PagingControls.NextPageButton, "right")
 		spellBook.PagedSpellsFrame.PagingControls.PageText:SetTextColor(1, 1, 1)
+		B.ReskinEditBox(spellBook.SearchBox)
+		B.ReskinCheck(spellBook.HidePassivesCheckButton.Button)
 
-		local function whiteText(text, r, g, b)
-			if not (r == 1 and g == 1 and b == 1) then
-				text:SetTextColor(1, 1, 1)
-			end
-		end
-		local function greyText(text, r, g, b)
-			if not (r == .7 and g == .7 and b == .7) then
-				text:SetTextColor(1, 1, 1)
-			end
-		end
-		hooksecurefunc(spellBook, "UpdateDisplayedSpells", function(self)
-			for _, button in self.PagedSpellsFrame:EnumerateFrames() do
-				if not button.styled then
-					if button.Name then
-						button.Name:SetTextColor(1, 1, 1)
-						hooksecurefunc(button.Name, "SetTextColor", whiteText)
+		hooksecurefunc(spellBook.PagedSpellsFrame, "DisplayViewsForCurrentPage", function(self)
+			for _, frame in self:EnumerateFrames() do
+				if not frame.styled then
+					if frame.Text then
+						frame.Text:SetTextColor(1, .8, 0)
 					end
-					if button.Border then button.Border:SetAlpha(0) end
-					if button.IconMask then button.IconMask:Hide() end
-					if button.Icon then B.ReskinIcon(button.Icon) end
-					if button.SubName then
-						button.SubName:SetTextColor(.7, .7, .7)
-						hooksecurefunc(button.SubName, "SetTextColor", greyText)
+					if frame.Name then
+						frame.Name:SetTextColor(1, 1, 1)
 					end
-					button.styled = true
+					if frame.SubName then
+						frame.SubName:SetTextColor(.7, .7, .7)
+					end
+
+					frame.styled = true
 				end
 			end
 		end)

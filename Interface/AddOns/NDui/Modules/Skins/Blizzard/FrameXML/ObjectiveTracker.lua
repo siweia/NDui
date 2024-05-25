@@ -104,15 +104,21 @@ local function reskinTimerBar(_, _, line)
 end
 
 local function updateMinimizeButton(button, collapsed)
+	button = button.MinimizeButton or button -- isWW
 	button.__texture:DoCollapse(collapsed)
 end
 
-local function reskinMinimizeButton(button)
+local function reskinMinimizeButton(button, header)
 	B.ReskinCollapse(button)
 	button:GetNormalTexture():SetAlpha(0)
 	button:GetPushedTexture():SetAlpha(0)
 	button.__texture:DoCollapse(false)
-	hooksecurefunc(button, "SetCollapsed", updateMinimizeButton)
+	if button.SetCollapsed then
+		hooksecurefunc(button, "SetCollapsed", updateMinimizeButton)
+	end
+	if DB.isWW then
+		hooksecurefunc(header, "SetCollapsed", updateMinimizeButton)
+	end
 end
 
 local function GetMawBuffsAnchor(frame)
@@ -170,6 +176,60 @@ end
 
 tinsert(C.defaultThemes, function()
 	if C_AddOns.IsAddOnLoaded("!KalielsTracker") then return end
+
+	-- Reskin Headers
+	local headers
+	if DB.isWW then
+		headers = {
+			ObjectiveTrackerFrame,
+			ScenarioObjectiveTracker,
+			UIWidgetObjectiveTracker,
+			CampaignQuestObjectiveTracker,	
+			QuestObjectiveTracker,
+			AdventureObjectiveTracker,
+			AchievementObjectiveTracker,
+			MonthlyActivitiesObjectiveTracker,
+			ProfessionsRecipeTracker,
+			BonusObjectiveTracker,
+			WorldQuestObjectiveTracker,
+		}
+		for _, frame in pairs(headers) do
+			reskinHeader(frame.Header)
+		end
+
+		-- Minimize Button
+		local mainMinimize = ObjectiveTrackerFrame.Header.MinimizeButton
+		reskinMinimizeButton(mainMinimize, ObjectiveTrackerFrame.Header)
+		mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
+	else
+		headers = {
+			ObjectiveTrackerBlocksFrame.QuestHeader,
+			ObjectiveTrackerBlocksFrame.AchievementHeader,
+			ObjectiveTrackerBlocksFrame.ScenarioHeader,
+			ObjectiveTrackerBlocksFrame.CampaignQuestHeader,
+			ObjectiveTrackerBlocksFrame.ProfessionHeader,
+			BONUS_OBJECTIVE_TRACKER_MODULE.Header,
+			WORLD_QUEST_TRACKER_MODULE.Header,
+			MONTHLY_ACTIVITIES_TRACKER_MODULE.Header,
+			ADVENTURE_TRACKER_MODULE.Header,
+			ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,
+		}
+		for _, header in pairs(headers) do
+			reskinHeader(header)
+		end
+
+		-- Minimize Button
+		local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
+		reskinMinimizeButton(mainMinimize)
+		mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
+	
+		for _, header in pairs(headers) do
+			local minimize = header.MinimizeButton
+			if minimize then
+				reskinMinimizeButton(minimize)
+			end
+		end
+	end
 
 	if DB.isWW then -- TODO
 		--[[
@@ -288,33 +348,4 @@ tinsert(C.defaultThemes, function()
 
 	-- Maw buffs container
 	ReskinMawBuffsContainer(ScenarioBlocksFrame.MawBuffsBlock.Container)
-
-	-- Reskin Headers
-	local headers = {
-		ObjectiveTrackerBlocksFrame.QuestHeader,
-		ObjectiveTrackerBlocksFrame.AchievementHeader,
-		ObjectiveTrackerBlocksFrame.ScenarioHeader,
-		ObjectiveTrackerBlocksFrame.CampaignQuestHeader,
-		ObjectiveTrackerBlocksFrame.ProfessionHeader,
-		BONUS_OBJECTIVE_TRACKER_MODULE.Header,
-		WORLD_QUEST_TRACKER_MODULE.Header,
-		MONTHLY_ACTIVITIES_TRACKER_MODULE.Header,
-		ADVENTURE_TRACKER_MODULE.Header,
-		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,
-	}
-	for _, header in pairs(headers) do
-		reskinHeader(header)
-	end
-
-	-- Minimize Button
-	local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
-	reskinMinimizeButton(mainMinimize)
-	mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
-
-	for _, header in pairs(headers) do
-		local minimize = header.MinimizeButton
-		if minimize then
-			reskinMinimizeButton(minimize)
-		end
-	end
 end)

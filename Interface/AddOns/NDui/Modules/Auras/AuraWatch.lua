@@ -715,7 +715,7 @@ end
 
 -- Event
 function A.AuraWatch_OnEvent(event, ...)
-	if DB.isWW or not C.db["AuraWatch"]["Enable"] then
+	if not C.db["AuraWatch"]["Enable"] then
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)

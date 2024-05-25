@@ -179,6 +179,22 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end)
 
+	if DB.isWW then
+		local function reskinDynamicButton(button, index)
+			if button.Border then button.Border:Hide() end
+			button:SetPushedTexture(0)
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+			B.ReskinIcon(select(index, button:GetRegions()), nil)
+			button:SetNormalTexture(0)
+		end
+		reskinDynamicButton(MountJournal.MountSpellButtons.ToggleDynamicFlightFlyoutButton, 1)
+
+		local flyout = MountJournal.DynamicFlightFlyout
+		flyout.Background:Hide()
+		reskinDynamicButton(flyout.OpenDynamicFlightSkillTreeButton, 4)
+		reskinDynamicButton(flyout.DynamicFlightModeButton, 4)
+	end
+
 	-- Pet card
 
 	local card = PetJournalPetCard

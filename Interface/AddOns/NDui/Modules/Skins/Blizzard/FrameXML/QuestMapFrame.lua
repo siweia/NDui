@@ -75,6 +75,9 @@ tinsert(C.defaultThemes, function()
 	QuestScrollFrame.Edge:Hide()
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
+	if DB.isWW then
+		B.ReskinEditBox(QuestScrollFrame.SearchBox)
+	end
 
 	-- Quest details
 
@@ -117,9 +120,15 @@ tinsert(C.defaultThemes, function()
 		for button in QuestScrollFrame.headerFramePool:EnumerateActive() do
 			if button.ButtonText then
 				if not button.styled then
-					B.ReskinCollapse(button, true)
-					button:GetPushedTexture():SetAlpha(0)
-					button:GetHighlightTexture():SetAlpha(0)
+					if DB.isWW then
+						B.StripTextures(button)
+						B.CreateBDFrame(button, .25)
+						button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+					else
+						B.ReskinCollapse(button, true)
+						button:GetPushedTexture():SetAlpha(0)
+						button:GetHighlightTexture():SetAlpha(0)
+					end
 
 					button.styled = true
 				end
@@ -128,6 +137,10 @@ tinsert(C.defaultThemes, function()
 
 		for button in QuestScrollFrame.titleFramePool:EnumerateActive() do
 			if not button.styled then
+				if button.CheckBox then
+					button.CheckBox:DisableDrawLayer("BACKGROUND")
+					B.CreateBDFrame(button.CheckBox, 0, true)
+				end
 				if button.Check then -- isWW removed?
 					button.Check:SetAtlas("checkmark-minimal")
 				end
