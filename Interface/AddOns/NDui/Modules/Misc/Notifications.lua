@@ -687,6 +687,7 @@ function M:SendCDStatus()
 	if not C.db["Actionbar"]["Enable"] then return end
 
 	local Bar = B:GetModule("Actionbar")
+	if not Bar then return end
 	for _, button in pairs(Bar.buttons) do
 		button:HookScript("OnMouseWheel", M.AnalyzeButtonCooldown)
 	end

@@ -882,7 +882,9 @@ function UF.PostCreateButton(element, button)
 
 	button.Overlay:SetTexture(nil)
 	button.Stealable:SetAtlas("bags-newitem")
-	button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
+	if AURA then
+		button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
+	end
 
 	if element.disableCooldown then
 		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
