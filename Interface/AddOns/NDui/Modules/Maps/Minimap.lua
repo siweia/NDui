@@ -111,9 +111,17 @@ function module:ReskinRegions()
 	end
 
 	-- Difficulty Flags
-	MiniMapInstanceDifficulty:ClearAllPoints()
-	MiniMapInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
-	MiniMapInstanceDifficulty:SetScale(.9)
+	local function handleFlag(diff)
+		diff:ClearAllPoints()
+		diff:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+		diff:SetScale(.7)
+	end
+	if MiniMapInstanceDifficulty then
+		handleFlag(MiniMapInstanceDifficulty)
+	end
+	if GuildInstanceDifficulty then
+		handleFlag(GuildInstanceDifficulty)
+	end
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
