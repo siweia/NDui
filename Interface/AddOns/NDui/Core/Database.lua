@@ -167,9 +167,9 @@ DB.BuffList = {
 DB.ReminderBuffs = {
 	MAGE = {
 		{	spells = {	-- 奥术智慧
-				[1459] = true,
+				[1459] = true,	-- 奥术光辉
 				[8096] = true,  -- 智力卷轴
-				[79058] = true, -- 奥术光辉
+				[79058] = true, -- 奥术智慧
 				[61024] = true, -- 达拉然智慧
 				[61316] = true, -- 达拉然光辉
 				--[46302] = true, -- 基鲁的胜利之歌
@@ -181,12 +181,11 @@ DB.ReminderBuffs = {
 			pvp = true,
 		},
 		{	spells = {
-				[168] = true,	-- 霜甲术
-				[7302] = true,	-- 冰甲术
+				[7302] = true,	-- 霜甲术
 				[6117] = true,	-- 法师护甲
 				[30482] = true,	-- 熔岩护甲
 			},
-			depend = 168,
+			depend = 7302,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -194,11 +193,14 @@ DB.ReminderBuffs = {
 	},
 	PRIEST = {
 		{	spells = {	-- 真言术耐
-				[1243] = true,
-				[8099] = true,  -- 耐力卷轴
 				[21562] = true, -- 坚韧祷言
-				--[46302] = true, -- 基鲁的胜利之歌
+				[8099] = true,  -- 耐力卷轴
+				[469] = true,	-- 命令怒吼
+				[6307] = true,   -- 血之契印
+				[90364] = true,  -- 其拉虫群坚韧
+				[72590] = true,  -- 坚韧
 			},
+			texture = GetSpellTexture(21562),
 			depend = 1243,
 			combat = true,
 			instance = true,
@@ -216,7 +218,6 @@ DB.ReminderBuffs = {
 	DRUID = {
 		{	spells = {	-- 野性印记
 				[1126] = true,
-				[21849] = true, -- 野性赐福
 			},
 			depend = 1126,
 			combat = true,
@@ -233,9 +234,12 @@ DB.ReminderBuffs = {
 	WARRIOR = {
 		{	spells = {
 				[6673] = true,	-- 战斗怒吼
-				[19740] = true,	-- 力量祝福
+				[8076] = true,  -- 大地之力
+				[57330] = true, -- 寒冬号角
+				[93435] = true, -- 勇气咆哮		
 			},
-			depends = {6673, 5242, 6192, 11549, 11550, 11551, 25289, 2048, 47436},
+			texture = GetSpellTexture(6673),
+			depend = 6673,
 			gemini = {
 				[GetSpellInfo(469)] = true, -- 命令怒吼
 			},
@@ -243,9 +247,14 @@ DB.ReminderBuffs = {
 			instance = true,
 			pvp = true,
 		},
-		{	spells = {	-- 命令怒吼
-				[469] = true,
+		{	spells = {
+				[469] = true,	-- 命令怒吼
+				[6307] = true,   -- 血之契印
+				[90364] = true,  -- 其拉虫群坚韧
+				[72590] = true,  -- 坚韧
+				[21562] = true,  -- 真言术：韧	
 			},
+			texture = GetSpellTexture(469),
 			depend = 469,
 			gemini = {
 				[GetSpellInfo(6673)] = true, -- 战斗怒吼
@@ -277,20 +286,28 @@ DB.ReminderBuffs = {
 	WARLOCK = {
 		{	spells = {
 				[28176] = true,	-- 邪甲术
-				[706] = true,	-- 魔甲术
-				[687] = true,	-- 恶魔皮肤
+				[687] = true,	-- 魔甲术
 			},
 			depend = 28176,
 			combat = true,
 			instance = true,
 			pvp = true,
 		},
+		{	spells = {
+				[85759] = true,	-- 黑暗意图
+			},
+			depend = 85759,
+			instance = true,
+		},
 	},
 	DEATHKNIGHT = {
 		{	spells = {
 				[57330] = true,	-- 寒冬号角
-				[25527] = true, -- 大地之力图腾
+				[8076] = true,  -- 大地之力
+				[6673] = true, 	-- 战斗怒吼
+				[93435] = true, -- 勇气咆哮
 			},
+			texture = GetSpellTexture(57330),
 			depend = 57330,
 			combat = true,
 			instance = true,
@@ -302,6 +319,15 @@ DB.ReminderBuffs = {
 				[25780] = true,
 			},
 			depend = 20925,
+			instance = true,
+		},
+	},
+	SHAMAN = {
+		{	spells = {	-- 护盾
+				[52127] = true, -- 水盾
+				[324] = true,   -- 闪电护盾
+			},
+			depend = 52127,
 			instance = true,
 		},
 	},
