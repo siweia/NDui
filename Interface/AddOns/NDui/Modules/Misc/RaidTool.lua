@@ -262,8 +262,8 @@ function M:RaidTool_Marker(parent)
 	local markerButton = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	if not markerButton then
 		for _, addon in next, {"Blizzard_CUFProfiles", "Blizzard_CompactRaidFrames"} do
-			EnableAddOn(addon)
-			LoadAddOn(addon)
+			C_AddOns.EnableAddOn(addon)
+			C_AddOns.LoadAddOn(addon)
 		end
 	end
 	if markerButton then
@@ -516,6 +516,8 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
+	if DB.isWW then return end
+
 	local menuList = {}
 
 	local function GetMenuTitle(color, text)

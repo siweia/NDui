@@ -1061,6 +1061,8 @@ do
 
 	-- Handle dropdown
 	function B:ReskinDropDown()
+		if DB.isWW then return end
+
 		B.StripTextures(self)
 
 		local frameName = self.GetName and self:GetName()

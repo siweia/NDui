@@ -11,7 +11,11 @@ C.themes["Blizzard_StableUI"] = function()
 	B.StripTextures(stabledPetList.ListCounter)
 	B.CreateBDFrame(stabledPetList.ListCounter, .25)
 	B.ReskinEditBox(stabledPetList.FilterBar.SearchBox)
-	B.ReskinFilterButton(stabledPetList.FilterBar.FilterButton)
+	if DB.isWW then
+		B.ReskinFilterButton(stabledPetList.FilterBar.FilterDropdown)
+	else
+		B.ReskinFilterButton(stabledPetList.FilterBar.FilterButton)
+	end
 	B.ReskinTrimScroll(stabledPetList.ScrollBar)
 
 	local modelScene = StableFrame.PetModelScene

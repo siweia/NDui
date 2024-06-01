@@ -606,7 +606,8 @@ function module:BuildMinimapDropDown()
 	dropdown.noResize = true
 	_G.UIDropDownMenu_Initialize(dropdown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
 
-	hooksecurefunc(_G.MinimapCluster.TrackingFrame.Button, "Update", function()
+	local trackFrame = DB.isWW and _G.MinimapCluster.Tracking or _G.MinimapCluster.TrackingFrame
+	hooksecurefunc(trackFrame.Button, "Update", function()
 		if _G.UIDROPDOWNMENU_OPEN_MENU == dropdown then
 			UIDropDownMenu_RefreshAll(dropdown)
 		end
@@ -688,7 +689,6 @@ function module:SetupMinimap()
 
 	-- Hide Blizz
 	MinimapCluster:EnableMouse(false)
-	MinimapCluster.TrackingFrame:Hide()
 	MinimapCluster.BorderTop:Hide()
 	MinimapCluster.ZoneTextButton:Hide()
 	Minimap:SetArchBlobRingScalar(0)
@@ -696,6 +696,9 @@ function module:SetupMinimap()
 	B.HideObject(Minimap.ZoomIn)
 	B.HideObject(Minimap.ZoomOut)
 	B.HideObject(MinimapCompassTexture)
+
+	local trackFrame = DB.isWW and _G.MinimapCluster.Tracking or _G.MinimapCluster.TrackingFrame
+	trackFrame:Hide()
 
 	-- Add Elements
 	self:CreatePulse()
