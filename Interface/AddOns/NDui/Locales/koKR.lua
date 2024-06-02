@@ -421,6 +421,7 @@ L["GradientHP"] = "차츰 변하는"
 L["DeleteMode Enabled"] = "|n버튼(CTRL+ALT키)누른 상태로 바로 가방내의 레어품질 미만 아이템을 파괴."
 L["ItemDeleteMode"] = "파괴모드"
 L["Trait"] = "특성"
+L["Drag AltBar Tip"] = "You can simply drag the alternative power bar." -- need translation
 L["Data Info"] = "정보"
 L["Version"] = "버전"
 L["Character"] = "캐릭터"

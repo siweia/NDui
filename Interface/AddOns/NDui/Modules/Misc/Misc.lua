@@ -803,6 +803,13 @@ do
 			statusFrame.Hide = statusFrame.Show
 		end
 	end)
+
+	PlayerPowerBarAlt:HookScript("OnEnter", function(self)
+		if not NDuiADB["Help"]["AltPower"] then
+			HelpTip:Show(self, altPowerInfo)
+			B:ShowHelpTip(self, L["Drag AltBar Tip"], "RIGHT", 20, 0, nil, "AltPower")
+		end
+	end)
 end
 
 -- Fix errors in Cata beta
