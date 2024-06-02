@@ -129,10 +129,6 @@ local function isEmptySlot(item)
 	return module.initComplete and not item.texture and (C.db["Bags"]["ItemFilter"] or cargBags.BagGroups[item.bagId] == 0)
 end
 
-local function isItemKeyRing(item)
-	return item.bagId == -2
-end
-
 local function isTradeGoods(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterGoods"] then return end
@@ -161,7 +157,6 @@ function module:GetFilters()
 	filters.bankEquipSet = function(item) return isItemInBank(item) and isItemEquipSet(item) end
 	filters.bankConsumable = function(item) return isItemInBank(item) and isItemConsumable(item) end
 	filters.onlyReagent = function(item) return item.bagId == -3 end
-	filters.onlyKeyring = function(item) return isItemKeyRing(item) end
 	filters.bagCollection = function(item) return isItemInBag(item) and isItemCollection(item) end
 	filters.bankCollection = function(item) return isItemInBank(item) and isItemCollection(item) end
 	filters.bagGoods = function(item) return isItemInBag(item) and isTradeGoods(item) end

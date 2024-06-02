@@ -226,7 +226,6 @@ local function ToggleBackpacks(self)
 	if parent.BagBar:IsShown() then
 		self.bg:SetBackdropBorderColor(1, .8, 0)
 		PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
-		if parent.keyring and parent.keyring:IsShown() then parent.keyToggle:Click() end
 	else
 		B.SetBorderColor(self.bg)
 		PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
@@ -240,26 +239,6 @@ function module:CreateBagToggle()
 	bu.title = BACKPACK_TOOLTIP
 	B.AddTooltip(bu, "ANCHOR_TOP")
 	self.bagToggle = bu
-
-	return bu
-end
-
-function module:CreateKeyToggle()
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\ICONS\\INV_Misc_Key_12")
-	bu:SetScript("OnClick", function()
-		ToggleFrame(self.keyring)
-		if self.keyring:IsShown() then
-			bu.bg:SetBackdropBorderColor(1, .8, 0)
-			PlaySound(SOUNDKIT.KEY_RING_OPEN)
-			if self.BagBar and self.BagBar:IsShown() then self.bagToggle:Click() end
-		else
-			B.SetBorderColor(bu.bg)
-			PlaySound(SOUNDKIT.KEY_RING_CLOSE)
-		end
-	end)
-	bu.title = KEYRING
-	B.AddTooltip(bu, "ANCHOR_TOP")
-	self.keyToggle = bu
 
 	return bu
 end
@@ -759,12 +738,6 @@ function module:OnLogin()
 		f.main:SetPoint(unpack(f.main.__anchor))
 		f.main:SetFilter(filters.onlyBags, true)
 
-		local keyring = MyContainer:New("Keyring", {BagType = "Bag", Parent = f.main})
-		keyring:SetFilter(filters.onlyKeyring, true)
-		keyring:SetPoint("TOPRIGHT", f.main, "BOTTOMRIGHT", 0, -5)
-		keyring:Hide()
-		f.main.keyring = keyring
-
 		for i = 1, 5 do
 			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
 		end
@@ -1026,8 +999,6 @@ function module:OnLogin()
 			label = BAG_FILTER_JUNK
 		elseif strmatch(name, "Collection") then
 			label = COLLECTIONS
-		elseif name == "Keyring" then
-			label = KEYRING
 		elseif strmatch(name, "Goods") then
 			label = AUCTION_CATEGORY_TRADE_GOODS
 		elseif strmatch(name, "Quest") then
@@ -1048,11 +1019,10 @@ function module:OnLogin()
 			module.CreateBagBar(self, settings, NUM_BAG_SLOTS)
 			buttons[2] = module.CreateSortButton(self, name)
 			buttons[3] = module.CreateBagToggle(self)
-			buttons[4] = module.CreateKeyToggle(self)
-			buttons[5] = module.CreateSplitButton(self)
-			buttons[6] = module.CreateFavouriteButton(self)
-			buttons[7] = module.CreateJunkButton(self)
-			buttons[8] = module.CreateDeleteButton(self)
+			buttons[4] = module.CreateSplitButton(self)
+			buttons[5] = module.CreateFavouriteButton(self)
+			buttons[6] = module.CreateJunkButton(self)
+			buttons[7] = module.CreateDeleteButton(self)
 		elseif name == "Bank" then
 			module.CreateBagBar(self, settings, NUM_BANKBAGSLOTS)
 			buttons[2] = module.CreateBagToggle(self)
